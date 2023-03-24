@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-03-04 13:59-0800\n"
+"POT-Creation-Date: 2023-03-24 14:16-0700\n"
 "PO-Revision-Date: 2014-08-19 15:04+0530\n"
 "Last-Translator: Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>\n"
 "Language-Team: Manipuri (Bengali Script) <gistlrc@gmail.com>\n"
@@ -205,7 +205,7 @@ msgid "The current date."
 msgstr "চৎলিবা তারিখ।"
 
 #: bindings/guile/options.scm:388 gnucash/gnome/top-level.c:462
-#: libgnucash/engine/gnc-optiondb.cpp:1103 libgnucash/engine/qofbookslots.h:72
+#: libgnucash/engine/gnc-optiondb.cpp:1104 libgnucash/engine/qofbookslots.h:72
 msgid "Business"
 msgstr "ললোন-ইতিক"
 
@@ -217,41 +217,41 @@ msgstr "ললোন-ইতিক"
 #: gnucash/gtkbuilder/dialog-customer.glade:146
 #: gnucash/gtkbuilder/dialog-vendor.glade:147
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
-#: libgnucash/engine/gnc-optiondb.cpp:1203
+#: libgnucash/engine/gnc-optiondb.cpp:1204
 msgid "Company Name"
 msgstr "কম্পনি মমিং"
 
-#: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1206
+#: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1207
 msgid "Company Address"
 msgstr "কম্পিগী এদ্রেস"
 
-#: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1229
+#: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1230
 msgid "Company ID"
 msgstr "কম্পনিগী ID"
 
-#: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1214
+#: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1215
 msgid "Company Phone Number"
 msgstr "কম্পনিগী ফোন নম্বর"
 
-#: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1218
+#: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1219
 msgid "Company Fax Number"
 msgstr "কম্পনিগী ফেক্স নম্বর"
 
-#: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1226
+#: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1227
 msgid "Company Website URL"
 msgstr "কম্পনিগী ৱেবসাইত URL"
 
-#: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1222
+#: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1223
 msgid "Company Email Address"
 msgstr "কম্পনিগী ইমেইল এদ্রেস"
 
-#: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1210
+#: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1211
 msgid "Company Contact Person"
 msgstr "কম্পনিগী পাউ ফাওনফম মী"
 
 #: bindings/guile/options.scm:397
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
-#: libgnucash/engine/gnc-optiondb.cpp:1249
+#: libgnucash/engine/gnc-optiondb.cpp:1250
 msgid "Fancy Date Format"
 msgstr "ফেন্সি ওইবা তাংগী ফোর্মেত"
 
@@ -264,11 +264,11 @@ msgstr "কস্তম"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
 #: gnucash/report/reports/standard/invoice.scm:497
 #: gnucash/report/reports/standard/new-owner-report.scm:55
-#: libgnucash/engine/gnc-optiondb.cpp:1255
+#: libgnucash/engine/gnc-optiondb.cpp:1256
 msgid "Tax"
 msgstr "তেক্স"
 
-#: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1255
+#: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1256
 msgid "Tax Number"
 msgstr "তেক্স নম্বর"
 
@@ -1115,12 +1115,12 @@ msgid "existing account"
 msgstr "লৈরিবা একাউন্ত"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1259
-#: gnucash/gnome/business-gnome-utils.c:681
+#: gnucash/gnome/business-gnome-utils.c:696
 msgid "Yes"
 msgstr "হোয়"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1262
-#: gnucash/gnome/business-gnome-utils.c:683
+#: gnucash/gnome/business-gnome-utils.c:698
 #: gnucash/report/reports/standard/investment-lots.scm:265
 #: gnucash/report/reports/standard/investment-lots.scm:382
 msgid "No"
@@ -1230,7 +1230,7 @@ msgstr "লোন সিংবগী ওপসন: \"%s\""
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:551
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:562
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
 #: gnucash/import-export/import-main-matcher.c:1506
 #: gnucash/import-export/import-match-picker.c:387
 #: gnucash/import-export/import-match-picker.c:427
@@ -1310,15 +1310,15 @@ msgid "Error adding price."
 msgstr "মমল হাপচিনবদা শোয়রে."
 
 #: gnucash/gnome/assistant-stock-split.c:582
-#: gnucash/gnome/assistant-stock-transaction.cpp:1263
+#: gnucash/gnome/assistant-stock-transaction.cpp:1267
 #: gnucash/gnome/dialog-find-transactions.c:109
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
 #: gnucash/import-export/import-main-matcher.c:1507
 #: gnucash/import-export/import-match-picker.c:386
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
-#: gnucash/register/ledger-core/split-register-model.c:342
+#: gnucash/register/ledger-core/split-register-model.c:346
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1013
 #: gnucash/report/reports/standard/budget-flow.scm:41
 #: gnucash/report/reports/standard/budget.scm:47
@@ -1343,7 +1343,7 @@ msgstr "সিম্বোল"
 
 #: gnucash/gnome/assistant-stock-split.c:594
 #: gnucash/gnome/dialog-find-transactions.c:122
-#: gnucash/register/ledger-core/split-register-model.c:420
+#: gnucash/register/ledger-core/split-register-model.c:424
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1033
 #: gnucash/report/reports/standard/general-journal.scm:98
 #: gnucash/report/reports/standard/general-ledger.scm:78
@@ -1429,7 +1429,7 @@ msgstr ""
 #. into the income split of an investment dividend transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:207
 #: gnucash/gnome/assistant-stock-transaction.cpp:861
-#: gnucash/gnome/assistant-stock-transaction.cpp:1149
+#: gnucash/gnome/assistant-stock-transaction.cpp:1153
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:733
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:778
 #: gnucash/register/ledger-core/split-register.c:2629
@@ -1685,7 +1685,7 @@ msgstr "শেল"
 #. Translators: Designates a page in the stock assistant or inserts the value
 #. into the fees split of an investment transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:849
-#: gnucash/gnome/assistant-stock-transaction.cpp:1136
+#: gnucash/gnome/assistant-stock-transaction.cpp:1140
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:606
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:665
 msgid "Fees"
@@ -1695,8 +1695,8 @@ msgstr ""
 #. into the capital gain/loss income split of an investment transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:876
 #: gnucash/gnome/assistant-stock-transaction.cpp:883
-#: gnucash/gnome/assistant-stock-transaction.cpp:1157
-#: gnucash/gnome/assistant-stock-transaction.cpp:1162
+#: gnucash/gnome/assistant-stock-transaction.cpp:1161
+#: gnucash/gnome/assistant-stock-transaction.cpp:1166
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:846
 #, fuzzy
 #| msgid "Capital"
@@ -1708,7 +1708,7 @@ msgstr "শেল্লেপ"
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:903
+#: gnucash/gnome/assistant-stock-transaction.cpp:906
 msgid "No errors found. Click Apply to create transaction."
 msgstr ""
 
@@ -1720,7 +1720,7 @@ msgstr ""
 # English: The following bill is due:
 # Manipuri: মখাগী বিল অসি দ্যু লৈরি:
 # But, the translation as "মখাগী বিল অসি তোল্লি" is also perfectly meaningful. So, it can be avoided using the English word 'due'.
-#: gnucash/gnome/assistant-stock-transaction.cpp:904
+#: gnucash/gnome/assistant-stock-transaction.cpp:911
 #, fuzzy
 msgid "The following errors must be fixed:"
 msgstr "মখাগী বিল অসি তোল্লি:"
@@ -1733,17 +1733,17 @@ msgstr "মখাগী বিল অসি তোল্লি:"
 # English: The following bill is due:
 # Manipuri: মখাগী বিল অসি দ্যু লৈরি:
 # But, the translation as "মখাগী বিল অসি তোল্লি" is also perfectly meaningful. So, it can be avoided using the English word 'due'.
-#: gnucash/gnome/assistant-stock-transaction.cpp:912
+#: gnucash/gnome/assistant-stock-transaction.cpp:918
 #, fuzzy
 msgid "The following warnings exist:"
 msgstr "মখাগী বিল অসি তোল্লি:"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:956
+#: gnucash/gnome/assistant-stock-transaction.cpp:960
 #, fuzzy
 msgid "Ne_w Balance"
 msgstr "_বেলেন্স য়েংঙো"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:956
+#: gnucash/gnome/assistant-stock-transaction.cpp:960
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:234
 #: gnucash/register/ledger-core/split-register.c:2090
@@ -1751,25 +1751,25 @@ msgstr "_বেলেন্স য়েংঙো"
 msgid "_Shares"
 msgstr "_সেয়ারস"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:959
+#: gnucash/gnome/assistant-stock-transaction.cpp:963
 #, fuzzy
 #| msgid "_Rotation"
 msgid "Ratio"
 msgstr "_কোয়না লৈবা"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:959
+#: gnucash/gnome/assistant-stock-transaction.cpp:963
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
 #, fuzzy
 msgid "Next Balance"
 msgstr "_বেলেন্স য়েংঙো"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:963
+#: gnucash/gnome/assistant-stock-transaction.cpp:967
 #, fuzzy
 #| msgid "Enter the value of shares bought or sold"
 msgid "Enter the new balance of shares after the stock split."
 msgstr "লৈরবা নৎত্রগা য়োল্লবা সেয়রসিংগী ভেল্যু এন্তর তৌ"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:964
+#: gnucash/gnome/assistant-stock-transaction.cpp:968
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
 #, fuzzy
 #| msgid "Enter the number of shares bought or sold"
@@ -1778,29 +1778,29 @@ msgstr "লৈরবা নত্রগা য়োনখ্রবা সেয়া
 
 #. Translators: Inserts the value into action field of the non-currency asset split of
 #. an investment transaction.
-#: gnucash/gnome/assistant-stock-transaction.cpp:1113
-#: libgnucash/engine/Account.cpp:4398
+#: gnucash/gnome/assistant-stock-transaction.cpp:1117
+#: libgnucash/engine/Account.cpp:4404
 msgid "Stock"
 msgstr "স্তোক"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1123
+#: gnucash/gnome/assistant-stock-transaction.cpp:1127
 #, fuzzy
 #| msgid "Cash"
 msgctxt "Stock Assistant:"
 msgid "Cash"
 msgstr "শেল"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1269
+#: gnucash/gnome/assistant-stock-transaction.cpp:1273
 #: gnucash/gnome/dialog-find-transactions.c:153
 #: gnucash/gnome/gnc-split-reg.c:712
 #: gnucash/gtkbuilder/dialog-payment.glade:495
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:566
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
 #: gnucash/import-export/import-main-matcher.c:1511
 #: gnucash/import-export/import-match-picker.c:390
 #: gnucash/import-export/import-match-picker.c:430
-#: gnucash/register/ledger-core/split-register-model.c:356
+#: gnucash/register/ledger-core/split-register-model.c:360
 #: gnucash/report/reports/standard/general-ledger.scm:71
 #: gnucash/report/reports/standard/general-ledger.scm:91
 #: gnucash/report/reports/standard/register.scm:139
@@ -1811,8 +1811,8 @@ msgstr "শেল"
 msgid "Memo"
 msgstr "মেমো"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1277
-#: gnucash/gnome/gnc-plugin-page-register.c:3384
+#: gnucash/gnome/assistant-stock-transaction.cpp:1281
+#: gnucash/gnome/gnc-plugin-page-register.c:3399
 #: gnucash/gtkbuilder/dialog-payment.glade:300
 #: gnucash/register/ledger-core/split-register.c:2440
 #: gnucash/report/reports/standard/general-journal.scm:82
@@ -1823,8 +1823,8 @@ msgstr "মেমো"
 msgid "Debit"
 msgstr "দেবিত"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1284
-#: gnucash/gnome/gnc-plugin-page-register.c:3380
+#: gnucash/gnome/assistant-stock-transaction.cpp:1288
+#: gnucash/gnome/gnc-plugin-page-register.c:3395
 #: gnucash/gtkbuilder/dialog-payment.glade:316
 #: gnucash/register/ledger-core/split-register.c:2463
 #: gnucash/register/ledger-core/split-register.c:2558
@@ -1838,7 +1838,7 @@ msgstr "দেবিত"
 msgid "Credit"
 msgstr "ক্রেদিত"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1291
+#: gnucash/gnome/assistant-stock-transaction.cpp:1295
 #: gnucash/report/reports/standard/portfolio.scm:247
 #: gnucash/report/reports/standard/receipt.scm:52
 #: gnucash/report/reports/standard/receipt.scm:114
@@ -1847,8 +1847,8 @@ msgstr "ক্রেদিত"
 msgid "Units"
 msgstr "য়ুনিতস"
 
-#: gnucash/gnome/business-gnome-utils.c:190
-#: gnucash/gnome/business-gnome-utils.c:377 gnucash/gnome/dialog-invoice.c:1674
+#: gnucash/gnome/business-gnome-utils.c:195
+#: gnucash/gnome/business-gnome-utils.c:392 gnucash/gnome/dialog-invoice.c:1674
 #: gnucash/gnome/dialog-invoice.c:1752
 #: gnucash/gnome-utils/gnc-general-select.c:220
 #, fuzzy
@@ -1856,14 +1856,14 @@ msgstr "য়ুনিতস"
 msgid "Select…"
 msgstr "খনবা"
 
-#: gnucash/gnome/business-gnome-utils.c:194
+#: gnucash/gnome/business-gnome-utils.c:199
 #: gnucash/gnome-utils/gnc-general-select.c:222
 #, fuzzy
 #| msgid "Edit"
 msgid "Edit…"
 msgstr "শেমদোকপা"
 
-#: gnucash/gnome/business-gnome-utils.c:336 gnucash/gnome/dialog-doclink.c:813
+#: gnucash/gnome/business-gnome-utils.c:351 gnucash/gnome/dialog-doclink.c:813
 #: gnucash/gnome/dialog-invoice.c:2801 gnucash/gnome/dialog-invoice.c:3026
 #: gnucash/gnome/dialog-invoice.c:3027 gnucash/gnome/dialog-invoice.c:3748
 #: gnucash/gnome-search/dialog-search.c:1076
@@ -1873,23 +1873,23 @@ msgstr "শেমদোকপা"
 msgid "Bill"
 msgstr "বিল"
 
-#: gnucash/gnome/business-gnome-utils.c:339 gnucash/gnome/dialog-doclink.c:817
+#: gnucash/gnome/business-gnome-utils.c:354 gnucash/gnome/dialog-doclink.c:817
 #: gnucash/gnome/dialog-invoice.c:2807 gnucash/gnome/dialog-invoice.c:3033
 #: gnucash/gnome/dialog-invoice.c:3034
 msgid "Voucher"
 msgstr "ভাউচর"
 
-#: gnucash/gnome/business-gnome-utils.c:342 gnucash/gnome/dialog-doclink.c:821
+#: gnucash/gnome/business-gnome-utils.c:357 gnucash/gnome/dialog-doclink.c:821
 #: gnucash/gnome/dialog-invoice.c:3762
 #: gnucash/gnome/gnc-plugin-page-invoice.c:411
 #: gnucash/gnome/gnc-plugin-page-register.c:407
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1916
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1915
 #: gnucash/gnome-search/dialog-search.c:1092
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:167
 #: gnucash/gtkbuilder/dialog-invoice.glade:8
-#: gnucash/gtkbuilder/dialog-invoice.glade:206
-#: gnucash/gtkbuilder/dialog-invoice.glade:943
-#: gnucash/gtkbuilder/dialog-invoice.glade:967
+#: gnucash/gtkbuilder/dialog-invoice.glade:195
+#: gnucash/gtkbuilder/dialog-invoice.glade:935
+#: gnucash/gtkbuilder/dialog-invoice.glade:959
 #: gnucash/register/ledger-core/split-register.c:2592
 #: gnucash/report/reports/standard/invoice.scm:720
 #: gnucash/report/reports/standard/invoice.scm:739
@@ -1901,11 +1901,11 @@ msgstr "ভাউচর"
 msgid "Invoice"
 msgstr "ইভোইস"
 
-#: gnucash/gnome/business-gnome-utils.c:565 gnucash/gnome/gnc-split-reg.c:691
+#: gnucash/gnome/business-gnome-utils.c:580 gnucash/gnome/gnc-split-reg.c:691
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
 #: gnucash/gtkbuilder/gnc-frequency.glade:657
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:51
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:57
 #: gnucash/import-export/import-pending-matches.c:192
 #: gnucash/report/reports/standard/register.scm:216
 #: gnucash/report/trep-engine.scm:267 gnucash/report/trep-engine.scm:298
@@ -1914,7 +1914,7 @@ msgstr "ইভোইস"
 msgid "None"
 msgstr "অমত্তা লৈতে"
 
-#: gnucash/gnome/business-gnome-utils.c:685
+#: gnucash/gnome/business-gnome-utils.c:700
 msgid "Use Global"
 msgstr "গ্লোবেল ওইনা শিজিন্নৌ"
 
@@ -2038,19 +2038,19 @@ msgstr "কমোদিতি মুত্থৎকদ্রা?"
 #: gnucash/gnome/dialog-price-editor.c:238 gnucash/gnome/dialog-tax-info.c:1189
 #: gnucash/gnome/gnc-plugin-budget.c:329
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1655
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1063
-#: gnucash/gnome/gnc-plugin-page-register.c:1849
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1067
+#: gnucash/gnome/gnc-plugin-page-register.c:1864
 #: gnucash/gnome/gnc-split-reg.c:982 gnucash/gnome/gnc-split-reg.c:1020
 #: gnucash/gnome/gnc-split-reg.c:1242 gnucash/gnome/gnc-split-reg.c:1509
 #: gnucash/gnome/gnc-split-reg.c:1549 gnucash/gnome-search/search-account.c:237
 #: gnucash/gnome-utils/dialog-account.c:820
-#: gnucash/gnome-utils/dialog-options.cpp:113
+#: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gnome-utils/dialog-tax-table.c:667
 #: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
 #: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-gui-query.c:332
-#: gnucash/gnome-utils/gnc-main-window.cpp:1227
-#: gnucash/gnome-utils/gnc-main-window.cpp:1384
+#: gnucash/gnome-utils/gnc-main-window.cpp:1252
+#: gnucash/gnome-utils/gnc-main-window.cpp:1409
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:181
 #: gnucash/gtkbuilder/dialog-account.glade:20
 #: gnucash/gtkbuilder/dialog-account.glade:381
@@ -2077,9 +2077,9 @@ msgstr "কমোদিতি মুত্থৎকদ্রা?"
 #: gnucash/gtkbuilder/dialog-import.glade:328
 #: gnucash/gtkbuilder/dialog-import.glade:885
 #: gnucash/gtkbuilder/dialog-import.glade:1185
-#: gnucash/gtkbuilder/dialog-invoice.glade:646
-#: gnucash/gtkbuilder/dialog-invoice.glade:801
-#: gnucash/gtkbuilder/dialog-invoice.glade:1325
+#: gnucash/gtkbuilder/dialog-invoice.glade:638
+#: gnucash/gtkbuilder/dialog-invoice.glade:793
+#: gnucash/gtkbuilder/dialog-invoice.glade:1317
 #: gnucash/gtkbuilder/dialog-job.glade:41
 #: gnucash/gtkbuilder/dialog-new-user.glade:147
 #: gnucash/gtkbuilder/dialog-options.glade:38
@@ -2119,7 +2119,7 @@ msgstr "কমোদিতি মুত্থৎকদ্রা?"
 #: gnucash/import-export/aqb/dialog-ab.glade:891
 #: gnucash/import-export/aqb/dialog-ab.glade:1012
 #: gnucash/import-export/aqb/dialog-ab.glade:1675
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2053
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2093
 #: gnucash/register/ledger-core/gncEntryLedger.c:920
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
 #: gnucash/register/ledger-core/split-register-control.c:1537
@@ -2133,7 +2133,7 @@ msgstr "_ককথৎপা"
 #: gnucash/gnome/dialog-commodities.c:218
 #: gnucash/gnome/dialog-price-edit-db.cpp:215
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1656
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1064
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1068
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:411
 #: gnucash/gtkbuilder/dialog-account.glade:396
 #: gnucash/gtkbuilder/dialog-billterms.glade:476
@@ -2296,7 +2296,7 @@ msgid "Placeholder account selected. Please try again."
 msgstr "মহুৎসিনবা একাউন্ত খল্লে। চানবীদুনা অমুক হন্না হোৎনবীয়ু।"
 
 #: gnucash/gnome/dialog-doclink.c:160
-#: gnucash/gnome/gnc-plugin-page-register.c:4601
+#: gnucash/gnome/gnc-plugin-page-register.c:4616
 #, fuzzy
 #| msgid "Select Account"
 msgid "Select document"
@@ -2308,7 +2308,7 @@ msgstr "একাউন্ত খল্লো"
 #: gnucash/gnome-utils/gnc-gui-query.c:297
 #: gnucash/gnome-utils/gnc-gui-query.c:331
 #: gnucash/gnome-utils/gnc-gui-query.c:417
-#: gnucash/gnome-utils/gnc-main-window.cpp:1385
+#: gnucash/gnome-utils/gnc-main-window.cpp:1410
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:196
 #: gnucash/gtkbuilder/dialog-account.glade:35
 #: gnucash/gtkbuilder/dialog-account.glade:832
@@ -2333,9 +2333,9 @@ msgstr "একাউন্ত খল্লো"
 #: gnucash/gtkbuilder/dialog-import.glade:343
 #: gnucash/gtkbuilder/dialog-import.glade:899
 #: gnucash/gtkbuilder/dialog-import.glade:1201
-#: gnucash/gtkbuilder/dialog-invoice.glade:660
-#: gnucash/gtkbuilder/dialog-invoice.glade:817
-#: gnucash/gtkbuilder/dialog-invoice.glade:1340
+#: gnucash/gtkbuilder/dialog-invoice.glade:652
+#: gnucash/gtkbuilder/dialog-invoice.glade:809
+#: gnucash/gtkbuilder/dialog-invoice.glade:1332
 #: gnucash/gtkbuilder/dialog-job.glade:57
 #: gnucash/gtkbuilder/dialog-new-user.glade:162
 #: gnucash/gtkbuilder/dialog-object-references.glade:23
@@ -2463,14 +2463,14 @@ msgstr "ত্রাঞ্জেক্সনগী অকুপ্পা ৱা�
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:553
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:564
 #: gnucash/import-export/csv-exp/csv-tree-export.c:156
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/import-main-matcher.c:1510
 #: gnucash/import-export/import-match-picker.c:389
 #: gnucash/import-export/import-match-picker.c:429
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3709
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3760
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
-#: gnucash/register/ledger-core/split-register-model.c:296
+#: gnucash/register/ledger-core/split-register-model.c:300
 #: gnucash/report/reports/standard/account-summary.scm:380
 #: gnucash/report/reports/standard/general-journal.scm:96
 #: gnucash/report/reports/standard/general-ledger.scm:70
@@ -2543,7 +2543,7 @@ msgstr "ইমপ্লোয়িগী মিং"
 msgid "Username"
 msgstr "শিজিন্নরিবগী মিং"
 
-#: gnucash/gnome/dialog-employee.c:708 gnucash/gnome/dialog-sx-editor.c:1818
+#: gnucash/gnome/dialog-employee.c:708 gnucash/gnome/dialog-sx-editor.c:1820
 #: gnucash/gnome/dialog-tax-info.c:1200 gnucash/gnome-utils/gnc-dense-cal.c:350
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:368
@@ -2669,7 +2669,7 @@ msgstr "সেয়র প্রাইস"
 #: gnucash/gnome/dialog-lot-viewer.c:1020
 #: gnucash/gnome/dialog-sx-since-last-run.c:1045
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:79
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1042
 #: gnucash/report/reports/standard/portfolio.scm:249
 #: gnucash/report/reports/standard/register.scm:157
@@ -2700,8 +2700,8 @@ msgstr "রিকনসাইল তৌরবা তাং"
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.c:2314
-#: gnucash/gnome/gnc-plugin-page-register.c:4004
+#: gnucash/gnome/gnc-plugin-page-register.c:2329
+#: gnucash/gnome/gnc-plugin-page-register.c:4019
 #: gnucash/gnome-search/dialog-search.c:878
 #: gnucash/gnome-search/dialog-search.c:884
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:566
@@ -2712,15 +2712,15 @@ msgstr "মসিং/ এক্সন"
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.c:2319
+#: gnucash/gnome/gnc-plugin-page-register.c:2334
 #: gnucash/gnome/gnc-split-reg.c:718 gnucash/gnome-search/dialog-search.c:877
 #: gnucash/gnome-search/dialog-search.c:885
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:103
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:566
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
-#: gnucash/register/ledger-core/split-register-model.c:328
+#: gnucash/register/ledger-core/split-register-model.c:332
 #: gnucash/report/reports/standard/invoice.scm:91
 #: gnucash/report/reports/standard/invoice.scm:198
 msgid "Action"
@@ -2731,8 +2731,8 @@ msgstr "একসন"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.c:2313
-#: gnucash/gnome/gnc-plugin-page-register.c:4003
+#: gnucash/gnome/gnc-plugin-page-register.c:2328
+#: gnucash/gnome/gnc-plugin-page-register.c:4018
 #: gnucash/gnome-search/dialog-search.c:880
 #: gnucash/gnome-search/dialog-search.c:886
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:552
@@ -2744,14 +2744,14 @@ msgstr "ত্রাঞ্জেক্সন নম্বর"
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.c:2318
+#: gnucash/gnome/gnc-plugin-page-register.c:2333
 #: gnucash/gnome/gnc-split-reg.c:706 gnucash/gnome-search/dialog-search.c:879
 #: gnucash/gnome-search/dialog-search.c:887
 #: gnucash/gtkbuilder/dialog-payment.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:99
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:552
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:563
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/report/trep-engine.scm:243
 msgid "Number"
 msgstr "নম্বর"
@@ -2768,8 +2768,8 @@ msgstr "দিস্ক্রিপসন/ নোতসিং/ মেমো"
 #: gnucash/gtkbuilder/assistant-acct-period.glade:143
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:420
 #: gnucash/gtkbuilder/dialog-customer.glade:457
-#: gnucash/gtkbuilder/dialog-invoice.glade:447
-#: gnucash/gtkbuilder/dialog-invoice.glade:1283
+#: gnucash/gtkbuilder/dialog-invoice.glade:439
+#: gnucash/gtkbuilder/dialog-invoice.glade:1275
 #: gnucash/gtkbuilder/dialog-order.glade:353
 #: gnucash/gtkbuilder/dialog-order.glade:702
 #: gnucash/gtkbuilder/dialog-transfer.glade:229
@@ -2778,9 +2778,9 @@ msgstr "দিস্ক্রিপসন/ নোতসিং/ মেমো"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:142
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:564
 #: gnucash/import-export/csv-exp/csv-tree-export.c:157
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:133
-#: gnucash/register/ledger-core/split-register-model.c:492
+#: gnucash/register/ledger-core/split-register-model.c:496
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/receipt.scm:38
@@ -2948,7 +2948,7 @@ msgid "Total Charge:"
 msgstr "অপুনবা চার্জ:"
 
 #: gnucash/gnome/dialog-invoice.c:2069 gnucash/gnome/dialog-payment.c:1358
-#: gnucash/gtkbuilder/dialog-invoice.glade:984
+#: gnucash/gtkbuilder/dialog-invoice.glade:976
 #: gnucash/report/reports/standard/invoice.scm:737
 #: libgnucash/engine/gncInvoice.c:1103
 msgid "Credit Note"
@@ -2971,7 +2971,7 @@ msgstr "অনৌবা ক্রেদিতকী নোত"
 #: gnucash/gnome/dialog-invoice.c:2316
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:230
 #: gnucash/gnome-search/dialog-search.c:1094
-#: gnucash/gtkbuilder/dialog-invoice.glade:768
+#: gnucash/gtkbuilder/dialog-invoice.glade:760
 msgid "New Invoice"
 msgstr "অনৌবা ইনভোইস"
 
@@ -3103,8 +3103,8 @@ msgstr "ইনভোইসকী ৱারোলশিং"
 #: gnucash/gnome/dialog-invoice.c:3553 gnucash/gnome/dialog-invoice.c:3587
 #: gnucash/gnome/dialog-invoice.c:3621 gnucash/gnome/dialog-invoice.c:3650
 #: gnucash/gnome/dialog-job.c:578 gnucash/gnome/dialog-job.c:591
-#: gnucash/gnome/dialog-order.c:885 gnucash/gtkbuilder/dialog-invoice.glade:312
-#: gnucash/gtkbuilder/dialog-invoice.glade:1072
+#: gnucash/gnome/dialog-order.c:885 gnucash/gtkbuilder/dialog-invoice.glade:304
+#: gnucash/gtkbuilder/dialog-invoice.glade:1064
 #: gnucash/gtkbuilder/dialog-job.glade:219
 #: gnucash/report/reports/standard/invoice.scm:274
 msgid "Billing ID"
@@ -3123,7 +3123,7 @@ msgstr "পোস্ত তৌখ্রব্রা?"
 #: gnucash/gnome/dialog-invoice.c:3565 gnucash/gnome/dialog-invoice.c:3599
 #: gnucash/gnome/dialog-invoice.c:3633 gnucash/gnome/dialog-order.c:874
 #: gnucash/gtkbuilder/dialog-invoice.glade:68
-#: gnucash/gtkbuilder/dialog-invoice.glade:889
+#: gnucash/gtkbuilder/dialog-invoice.glade:881
 #: gnucash/gtkbuilder/dialog-order.glade:136
 #: gnucash/gtkbuilder/dialog-order.glade:548
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:139
@@ -3132,7 +3132,7 @@ msgstr "হাংদোকপা তাং"
 
 #: gnucash/gnome/dialog-invoice.c:3575
 #: gnucash/gtkbuilder/dialog-invoice.glade:42
-#: gnucash/gtkbuilder/dialog-invoice.glade:876
+#: gnucash/gtkbuilder/dialog-invoice.glade:868
 msgid "Invoice ID"
 msgstr "ইনভোইস ID"
 
@@ -3162,12 +3162,12 @@ msgstr "ভাউচরগী ৱারোলশিং"
 #: gnucash/gtkbuilder/dialog-doclink.glade:665
 #: gnucash/gtkbuilder/dialog-fincalc.glade:742
 #: gnucash/gtkbuilder/dialog-invoice.glade:146
-#: gnucash/gtkbuilder/dialog-invoice.glade:863
+#: gnucash/gtkbuilder/dialog-invoice.glade:855
 #: gnucash/gtkbuilder/dialog-payment.glade:284
 #: gnucash/gtkbuilder/dialog-tax-info.glade:129
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
 #: gnucash/import-export/csv-imp/csv-account-import.c:154
-#: gnucash/register/ledger-core/split-register-model.c:363
+#: gnucash/register/ledger-core/split-register-model.c:367
 #: gnucash/report/reports/standard/account-summary.scm:379
 #: gnucash/report/reports/standard/new-owner-report.scm:52
 #: gnucash/report/reports/standard/new-owner-report.scm:227
@@ -3175,7 +3175,7 @@ msgid "Type"
 msgstr "মখল"
 
 #: gnucash/gnome/dialog-invoice.c:3654
-#: gnucash/register/ledger-core/split-register-model.c:310
+#: gnucash/register/ledger-core/split-register-model.c:314
 #: gnucash/report/reports/standard/new-owner-report.scm:810
 msgid "Paid"
 msgstr "পীরে"
@@ -3199,8 +3199,8 @@ msgstr "হাংদোক্লে"
 #: gnucash/gnome/reconcile-view.c:479
 #: gnucash/gtkbuilder/dialog-payment.glade:482
 #: gnucash/gtkbuilder/dialog-transfer.glade:155
-#: gnucash/register/ledger-core/split-register-model.c:256
-#: gnucash/register/ledger-core/split-register-model.c:276
+#: gnucash/register/ledger-core/split-register-model.c:260
+#: gnucash/register/ledger-core/split-register-model.c:280
 #: gnucash/report/reports/standard/general-journal.scm:95
 #: gnucash/report/reports/standard/general-ledger.scm:89
 #: gnucash/report/reports/standard/register.scm:135
@@ -3236,7 +3236,7 @@ msgstr "ইনভোইস থিদোকউ"
 #: gnucash/gtkbuilder/dialog-payment.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
 #: gnucash/import-export/import-main-matcher.c:1509
 #: gnucash/import-export/import-match-picker.c:388
 #: gnucash/import-export/import-match-picker.c:428
@@ -3337,7 +3337,7 @@ msgstr "এক্তিভ ওইবতমকলা?"
 
 #: gnucash/gnome/dialog-job.c:580 gnucash/gnome/dialog-job.c:593
 #: gnucash/gtkbuilder/dialog-job.glade:206
-#: gnucash/register/ledger-core/split-register-model.c:370
+#: gnucash/register/ledger-core/split-register-model.c:374
 msgid "Rate"
 msgstr "রেত"
 
@@ -3384,8 +3384,8 @@ msgstr "মিংথোল"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:855
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
-#: gnucash/register/ledger-core/split-register-model.c:321
-#: gnucash/register/ledger-core/split-register-model.c:485
+#: gnucash/register/ledger-core/split-register-model.c:325
+#: gnucash/register/ledger-core/split-register-model.c:489
 #: gnucash/report/reports/standard/account-summary.scm:393
 #: gnucash/report/reports/standard/balance-forecast.scm:245
 #: gnucash/report/reports/standard/new-owner-report.scm:58
@@ -3504,10 +3504,10 @@ msgstr ""
 #: gnucash/gnome-search/dialog-search.c:1080
 #: gnucash/gtkbuilder/dialog-customer.glade:473
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:153
-#: gnucash/gtkbuilder/dialog-invoice.glade:481
-#: gnucash/gtkbuilder/dialog-invoice.glade:1187
+#: gnucash/gtkbuilder/dialog-invoice.glade:473
+#: gnucash/gtkbuilder/dialog-invoice.glade:1179
 #: gnucash/gtkbuilder/dialog-payment.glade:40
-#: gnucash/register/ledger-core/split-register-model.c:292
+#: gnucash/register/ledger-core/split-register-model.c:296
 #: gnucash/report/reports/standard/customer-summary.scm:248
 #: gnucash/report/reports/standard/customer-summary.scm:281
 #: gnucash/report/reports/standard/new-owner-report.scm:89
@@ -3520,7 +3520,7 @@ msgstr "কস্তমর"
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:170
 #: gnucash/gtkbuilder/dialog-payment.glade:44
 #: gnucash/gtkbuilder/dialog-vendor.glade:469
-#: gnucash/register/ledger-core/split-register-model.c:294
+#: gnucash/register/ledger-core/split-register-model.c:298
 #: gnucash/report/reports/standard/new-owner-report.scm:104
 #: libgnucash/engine/gncOwner.c:221
 msgid "Vendor"
@@ -3547,7 +3547,7 @@ msgstr ""
 "নৎত্রগা বিল অমা হান্না সেম্বা পাম্বা ওইবা য়াই?"
 
 #: gnucash/gnome/dialog-payment.c:1574
-#: gnucash/gnome/gnc-plugin-page-register.c:3220
+#: gnucash/gnome/gnc-plugin-page-register.c:3235
 #: gnucash/gnome-search/search-reconciled.c:224
 #: gnucash/gnome-utils/gnc-tree-view-account.c:876
 #: gnucash/report/trep-engine.scm:150
@@ -3555,10 +3555,10 @@ msgid "Cleared"
 msgstr "শেংদোক্লে"
 
 #: gnucash/gnome/dialog-payment.c:1576
-#: gnucash/gnome/gnc-plugin-page-register.c:3222
+#: gnucash/gnome/gnc-plugin-page-register.c:3237
 #: gnucash/gnome-search/search-reconciled.c:227
 #: gnucash/gnome-utils/gnc-tree-view-account.c:890
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
 #: gnucash/import-export/import-match-picker.c:431
 #: gnucash/report/trep-engine.scm:151
 msgid "Reconciled"
@@ -3621,7 +3621,7 @@ msgid "Delete prices?"
 msgstr "মমল মুত্থৎকদ্রা?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:416
-#: gnucash/gtkbuilder/dialog-invoice.glade:617
+#: gnucash/gtkbuilder/dialog-invoice.glade:609
 #: gnucash/report/reports/standard/equity-statement.scm:83
 #: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:85
@@ -3861,11 +3861,11 @@ msgstr ""
 "সেদিউল তৌরবা ত্রান্সেকসনগী ইদিতরনা ত্রান্সেকসন অসি মথন্তনা বেলেন্স তৌবা ঙমদে. "
 "হৌজিকসু মসি চঙশিনগদ্রা?"
 
-#: gnucash/gnome/dialog-sx-editor.c:1407
+#: gnucash/gnome/dialog-sx-editor.c:1409
 msgid "(never)"
 msgstr "(কৈদৌঙৈদা নত্তে)"
 
-#: gnucash/gnome/dialog-sx-editor.c:1569
+#: gnucash/gnome/dialog-sx-editor.c:1571
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
@@ -3873,7 +3873,7 @@ msgstr ""
 "হৌজিক্কী তেমপ্লেত ত্রান্সেকসন অসি হোংদোকখ্রে. অদোম্না অহোংবশিং অসি রেকোর্দ তৌবা "
 "পাম্বিব্রা?"
 
-#: gnucash/gnome/dialog-sx-editor.c:1845
+#: gnucash/gnome/dialog-sx-editor.c:1847
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:234
 msgid "Scheduled Transactions"
 msgstr "সেদিউল ত্রান্সেকসন্স"
@@ -4048,7 +4048,7 @@ msgstr "ভেন্দর থিদোকপা"
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:401
 #: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:177
-#: libgnucash/engine/Account.cpp:4401
+#: libgnucash/engine/Account.cpp:4407
 msgid "Income"
 msgstr "ইনকম"
 
@@ -4065,7 +4065,7 @@ msgstr "চাদিং"
 #: gnucash/gnome/gnc-plugin-page-register.c:394
 #: gnucash/register/ledger-core/split-register.c:2560
 #: gnucash/register/ledger-core/split-register-layout.c:721
-#: gnucash/register/ledger-core/split-register-model.c:349
+#: gnucash/register/ledger-core/split-register-model.c:353
 #: gnucash/report/reports/standard/register.scm:143
 msgid "Transfer"
 msgstr "ত্রান্সফর তৌবা"
@@ -4075,7 +4075,7 @@ msgstr "ত্রান্সফর তৌবা"
 msgid "Remaining to Budget"
 msgstr "লৈরিবা বজেত হাংদোকউ"
 
-#: gnucash/gnome/gnc-budget-view.c:1617 gnucash/gnome/window-reconcile.c:1166
+#: gnucash/gnome/gnc-budget-view.c:1626 gnucash/gnome/window-reconcile.c:1166
 #: gnucash/gnome-utils/gnc-tree-view-account.c:924
 #: gnucash/report/html-acct-table.scm:789
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:279
@@ -4153,8 +4153,8 @@ msgstr "মুত্থৎলো"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:339
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1895
-#: gnucash/gnome/gnc-plugin-page-register.c:1797
-#: gnucash/gnome/gnc-plugin-page-register.c:4935
+#: gnucash/gnome/gnc-plugin-page-register.c:1812
+#: gnucash/gnome/gnc-plugin-page-register.c:4950
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
 
@@ -4209,7 +4209,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1390
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1529
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1046
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1050
 msgid "(no name)"
 msgstr "(মমিং লৈতে)"
 
@@ -4453,7 +4453,8 @@ msgstr "ইনভোইস অসিগী মপুগী কম্পনি �
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
 #: gnucash/gnome/gnc-plugin-page-register.c:274
 #: gnucash/ui/gnc-plugin-page-register.ui:205
-#: gnucash/ui/gnc-plugin-page-register.ui:394
+#: gnucash/ui/gnc-plugin-page-register.ui:393
+#: gnucash/ui/gnc-plugin-page-register.ui:505
 #, fuzzy
 #| msgid "Open imported documents in tabs"
 msgid "_Manage Document Link…"
@@ -4468,7 +4469,8 @@ msgstr "ইম্পোর্ত তৌরবা দোক্যুমেন্�
 #: gnucash/gnome/gnc-plugin-page-invoice.c:285
 #: gnucash/gnome/gnc-plugin-page-register.c:278
 #: gnucash/ui/gnc-plugin-page-register.ui:211
-#: gnucash/ui/gnc-plugin-page-register.ui:399
+#: gnucash/ui/gnc-plugin-page-register.ui:398
+#: gnucash/ui/gnc-plugin-page-register.ui:510
 #, fuzzy
 msgid "_Open Linked Document"
 msgstr "অনৌবা একাউন্ত"
@@ -4846,7 +4848,7 @@ msgstr "ভেন্দরসিং"
 msgid "Employees"
 msgstr "ইমপ্লোয়িসিং"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1054
+#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1058
 #, c-format
 msgid ""
 "The owner %s will be deleted.\n"
@@ -4873,8 +4875,9 @@ msgstr "ত্রান্সেকসন _নপশিল্লো"
 #: gnucash/gnome/gnc-plugin-page-register.c:269
 #: gnucash/ui/gnc-embedded-register-window.ui:111
 #: gnucash/ui/gnc-plugin-page-register.ui:148
-#: gnucash/ui/gnc-plugin-page-register.ui:365
-#: gnucash/ui/gnc-plugin-page-register.ui:532
+#: gnucash/ui/gnc-plugin-page-register.ui:364
+#: gnucash/ui/gnc-plugin-page-register.ui:574
+#: gnucash/ui/gnc-plugin-page-register.ui:722
 msgid "Dup_licate Transaction"
 msgstr "দুপ্লি_কেত ত্রান্সেকসন "
 
@@ -4882,8 +4885,9 @@ msgstr "দুপ্লি_কেত ত্রান্সেকসন "
 #: gnucash/gnome/gnc-split-reg.c:1550
 #: gnucash/ui/gnc-embedded-register-window.ui:116
 #: gnucash/ui/gnc-plugin-page-register.ui:154
-#: gnucash/ui/gnc-plugin-page-register.ui:370
-#: gnucash/ui/gnc-plugin-page-register.ui:547
+#: gnucash/ui/gnc-plugin-page-register.ui:369
+#: gnucash/ui/gnc-plugin-page-register.ui:579
+#: gnucash/ui/gnc-plugin-page-register.ui:737
 msgid "_Delete Transaction"
 msgstr "ত্রান্সেকসন _মুত্থৎলো"
 
@@ -4891,7 +4895,8 @@ msgstr "ত্রান্সেকসন _মুত্থৎলো"
 #. that is posted to the current transaction if there is one.
 #: gnucash/gnome/gnc-plugin-page-register.c:281
 #: gnucash/ui/gnc-plugin-page-register.ui:220
-#: gnucash/ui/gnc-plugin-page-register.ui:406
+#: gnucash/ui/gnc-plugin-page-register.ui:405
+#: gnucash/ui/gnc-plugin-page-register.ui:517
 #, fuzzy
 #| msgid "Edit Invoice"
 msgid "Jump to Invoice"
@@ -4910,11 +4915,15 @@ msgid "_Paste Split"
 msgstr "_স্প্লিত পেস্ত তৌ"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:285
+#: gnucash/ui/gnc-plugin-page-register.ui:476
+#: gnucash/ui/gnc-plugin-page-register.ui:613
 msgid "Dup_licate Split"
 msgstr "স্প্লিত দুপ্লি_কেত সেম্মু"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:286
 #: gnucash/gnome/gnc-split-reg.c:1510
+#: gnucash/ui/gnc-plugin-page-register.ui:481
+#: gnucash/ui/gnc-plugin-page-register.ui:618
 msgid "_Delete Split"
 msgstr "স্প্লিত _মুত্থৎলো"
 
@@ -4941,8 +4950,9 @@ msgstr "ক্লিপবোর্দতগী ত্রান্সেকস�
 #: gnucash/ui/gnc-embedded-register-window.ui:113
 #: gnucash/ui/gnc-embedded-register-window.ui:157
 #: gnucash/ui/gnc-plugin-page-register.ui:150
-#: gnucash/ui/gnc-plugin-page-register.ui:367
-#: gnucash/ui/gnc-plugin-page-register.ui:534
+#: gnucash/ui/gnc-plugin-page-register.ui:366
+#: gnucash/ui/gnc-plugin-page-register.ui:576
+#: gnucash/ui/gnc-plugin-page-register.ui:724
 msgid "Make a copy of the current transaction"
 msgstr "হৌজিক্কী ত্রান্সেকসনগী কোপি অমা শেম্মো"
 
@@ -4951,14 +4961,16 @@ msgstr "হৌজিক্কী ত্রান্সেকসনগী কো�
 #: gnucash/ui/gnc-embedded-register-window.ui:118
 #: gnucash/ui/gnc-embedded-register-window.ui:172
 #: gnucash/ui/gnc-plugin-page-register.ui:156
-#: gnucash/ui/gnc-plugin-page-register.ui:372
-#: gnucash/ui/gnc-plugin-page-register.ui:549
+#: gnucash/ui/gnc-plugin-page-register.ui:371
+#: gnucash/ui/gnc-plugin-page-register.ui:581
+#: gnucash/ui/gnc-plugin-page-register.ui:739
 msgid "Delete the current transaction"
 msgstr "হৌজিক্কী ত্রান্সেকসন মুত্থৎলো"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:292
 #: gnucash/ui/gnc-plugin-page-register.ui:207
-#: gnucash/ui/gnc-plugin-page-register.ui:396
+#: gnucash/ui/gnc-plugin-page-register.ui:395
+#: gnucash/ui/gnc-plugin-page-register.ui:507
 #, fuzzy
 #| msgid "Associate a file with the current transaction"
 msgid "Add, change, or unlink the document linked with the current transaction"
@@ -4967,14 +4979,16 @@ msgstr "ফাইল অমগা হৌজিক্কী ত্রাঞ্জ
 # the word "location" can be translated as "লৈফম" in Manipuri. But, considering the given context, it will be more appropriate if the word be kept as "লোকেসন".
 #: gnucash/gnome/gnc-plugin-page-register.c:293
 #: gnucash/ui/gnc-plugin-page-register.ui:213
-#: gnucash/ui/gnc-plugin-page-register.ui:401
+#: gnucash/ui/gnc-plugin-page-register.ui:400
+#: gnucash/ui/gnc-plugin-page-register.ui:512
 #, fuzzy
 msgid "Open the linked document for the current transaction"
 msgstr "লোকেসন অমগা হৌজিক্কী ত্রাঞ্জেক্সন অসিগা মরি লৈনহল্লু"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:294
 #: gnucash/ui/gnc-plugin-page-register.ui:222
-#: gnucash/ui/gnc-plugin-page-register.ui:408
+#: gnucash/ui/gnc-plugin-page-register.ui:407
+#: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher"
 msgstr ""
 
@@ -4991,10 +5005,14 @@ msgid "Paste the split from the clipboard"
 msgstr "ক্লিপবোর্দতগী স্প্লিত অদু পেস্ত তৌ"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:298
+#: gnucash/ui/gnc-plugin-page-register.ui:478
+#: gnucash/ui/gnc-plugin-page-register.ui:615
 msgid "Make a copy of the current split"
 msgstr "হৌজিক্কী স্প্লিত অদুগী কোপি অমা সেম্মু"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:299
+#: gnucash/ui/gnc-plugin-page-register.ui:483
+#: gnucash/ui/gnc-plugin-page-register.ui:620
 msgid "Delete the current split"
 msgstr "হৌজিক্কী স্প্লিত অদু দিলিত তৌ"
 
@@ -5022,27 +5040,27 @@ msgstr "মথন্ত-শেংদোকপা"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:146
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:251
 #: gnucash/ui/gnc-plugin-page-register.ui:250
-#: gnucash/ui/gnc-plugin-page-register.ui:714
+#: gnucash/ui/gnc-plugin-page-register.ui:904
 #, fuzzy
 #| msgid "Stock Split Assistant"
 msgid "Stock Assistant"
 msgstr "স্তোক স্প্লিত এসিস্তেন্ত"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:660
-#: gnucash/gnome/gnc-plugin-page-register.c:1904
-#: gnucash/gnome/gnc-plugin-page-register.c:3315
+#: gnucash/gnome/gnc-plugin-page-register.c:1919
+#: gnucash/gnome/gnc-plugin-page-register.c:3330
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "জেনরেল জর্নেল"
 
 #. Translators: %s is the name
 #. of the tab page
-#: gnucash/gnome/gnc-plugin-page-register.c:1838
+#: gnucash/gnome/gnc-plugin-page-register.c:1853
 #, c-format
 msgid "Save changes to %s?"
 msgstr "%s দা অহোংবশিং সেভ তৌগদ্রা?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1843
+#: gnucash/gnome/gnc-plugin-page-register.c:1858
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -5052,107 +5070,107 @@ msgstr ""
 "হোংজিনসিং অসি ত্রাঞ্জেক্সন অসিদা সেভ তৌবা, ত্রাঞ্জেক্সন অদু লৌথোকখিবা, নৎত্রগা "
 "ওপরেসন অদু কেন্সেল তৌবা পামগদ্রা?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1846
+#: gnucash/gnome/gnc-plugin-page-register.c:1861
 msgid "_Discard Transaction"
 msgstr "ত্রান্সেকসন _তোকথোকউ"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1850
+#: gnucash/gnome/gnc-plugin-page-register.c:1865
 msgid "_Save Transaction"
 msgstr "ত্রান্সেকসন _সেভ তৌরো"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1883
-#: gnucash/gnome/gnc-plugin-page-register.c:1918
-#: gnucash/gnome/gnc-plugin-page-register.c:1931
-#: gnucash/gnome/gnc-plugin-page-register.c:1988
-#: gnucash/gnome/gnc-plugin-page-register.c:2086
-#: gnucash/gnome/gnc-plugin-page-register.c:2209
+#: gnucash/gnome/gnc-plugin-page-register.c:1898
+#: gnucash/gnome/gnc-plugin-page-register.c:1933
+#: gnucash/gnome/gnc-plugin-page-register.c:1946
+#: gnucash/gnome/gnc-plugin-page-register.c:2003
+#: gnucash/gnome/gnc-plugin-page-register.c:2101
+#: gnucash/gnome/gnc-plugin-page-register.c:2224
 msgid "unknown"
 msgstr "শকখঙদবা"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1906
-#: gnucash/gnome/gnc-plugin-page-register.c:3321
+#: gnucash/gnome/gnc-plugin-page-register.c:1921
+#: gnucash/gnome/gnc-plugin-page-register.c:3336
 msgid "Portfolio"
 msgstr "পোর্তফোলিও"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1908
-#: gnucash/gnome/gnc-plugin-page-register.c:3327
+#: gnucash/gnome/gnc-plugin-page-register.c:1923
+#: gnucash/gnome/gnc-plugin-page-register.c:3342
 msgid "Search Results"
 msgstr "থিবগী ফলশিং"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3193
+#: gnucash/gnome/gnc-plugin-page-register.c:3208
 msgid "Start Date:"
 msgstr "হৌবগী তাং:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3200
+#: gnucash/gnome/gnc-plugin-page-register.c:3215
 #, fuzzy
 msgid "Show previous number of days:"
 msgstr "সেয়ারগী মশিং উৎলো"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3208
+#: gnucash/gnome/gnc-plugin-page-register.c:3223
 msgid "End Date:"
 msgstr "অরোইবা তাং:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3218
+#: gnucash/gnome/gnc-plugin-page-register.c:3233
 #: gnucash/report/trep-engine.scm:149
 #, fuzzy
 msgid "Unreconciled"
 msgstr "_অনরিকনসাইল"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3224
+#: gnucash/gnome/gnc-plugin-page-register.c:3239
 #: gnucash/gnome-search/search-reconciled.c:230
 #: gnucash/report/trep-engine.scm:152
 msgid "Frozen"
 msgstr "ফ্রোজন"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3226
+#: gnucash/gnome/gnc-plugin-page-register.c:3241
 #: gnucash/gnome-search/search-reconciled.c:233
 #: gnucash/report/trep-engine.scm:153
 msgid "Voided"
 msgstr "চৎনবা য়াদ্রবা"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3236
+#: gnucash/gnome/gnc-plugin-page-register.c:3251
 msgid "Show:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3244
+#: gnucash/gnome/gnc-plugin-page-register.c:3259
 msgid "Hide:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3255
+#: gnucash/gnome/gnc-plugin-page-register.c:3270
 #, fuzzy
 msgid "Filter By:"
 msgstr "...না ফিল্তর তৌবা"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3317
-#: gnucash/gnome/gnc-plugin-page-register.c:3335
+#: gnucash/gnome/gnc-plugin-page-register.c:3332
+#: gnucash/gnome/gnc-plugin-page-register.c:3350
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
 msgstr "ত্রান্সেক্সন রিপোর্ত"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3323
+#: gnucash/gnome/gnc-plugin-page-register.c:3338
 msgid "Portfolio Report"
 msgstr "পোর্তফোলিও রিপোর্ত"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3329
+#: gnucash/gnome/gnc-plugin-page-register.c:3344
 msgid "Search Results Report"
 msgstr "থিবগী ফলশিংগী রিপোর্ত"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3333
+#: gnucash/gnome/gnc-plugin-page-register.c:3348
 #: gnucash/gtkbuilder/dialog-preferences.glade:2791
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
 msgstr "রেজিস্তর"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3351
+#: gnucash/gnome/gnc-plugin-page-register.c:3366
 msgid "and subaccounts"
 msgstr "অমসুং সবএকাউন্তস"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3522
+#: gnucash/gnome/gnc-plugin-page-register.c:3537
 msgid "Print checks from multiple accounts?"
 msgstr "মল্তিপল একাউন্তসতগী চেক নমথোক্কদ্রা?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3524
+#: gnucash/gnome/gnc-plugin-page-register.c:3539
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5160,84 +5178,86 @@ msgstr ""
 "মসিগী থিবগী ফল অসিদা একাউন্ত অমদগী হেন্না স্প্লিত য়াওই. মখোয় পুম্নমক চপ মান্নবা "
 "একাউন্তদগী নত্রবসু চেকশিং অসি নমথোকপা পাম্বিব্রা?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3534
+#: gnucash/gnome/gnc-plugin-page-register.c:3549
 msgid "_Print checks"
 msgstr "চেকশিং _নমথোকপা"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3553
+#: gnucash/gnome/gnc-plugin-page-register.c:3568
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr ""
 "বেঙ্ক একাউন্ত রেজিস্তর অমা নত্রগা থিবগী ফলশিংদগী অদোম্না চেকশিংতমক নমথোকপা য়াই."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3769
+#: gnucash/gnome/gnc-plugin-page-register.c:3784
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
 "অদোম্না রিকনসাইল তৌরবা নত্রগা শেংদোক্লবা স্প্লিতনা ত্রান্সেকসন অমা য়াহন্দবা ঙমদে."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3776
+#: gnucash/gnome/gnc-plugin-page-register.c:3791
 #: gnucash/gnome/gnc-split-reg.c:1167
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "ত্রান্সেকসন অসি ৱাফম অসিগা লোয়ননা পাবতমক ওইনা মার্ক তৌরে: '%s'"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3869
+#: gnucash/gnome/gnc-plugin-page-register.c:3884
 #: gnucash/gnome/gnc-split-reg.c:1138
 msgid "A reversing entry has already been created for this transaction."
 msgstr "ত্রান্সেকসন অসিগী রিভর্সিং এন্ত্রি অমা হান্না শেমগৎলে."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3870
+#: gnucash/gnome/gnc-plugin-page-register.c:3885
 #, fuzzy
 msgid "Jump to the transaction?"
 msgstr "হৌজিক্কী ত্রান্সেকসন শেমদোকউ"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3877
+#: gnucash/gnome/gnc-plugin-page-register.c:3892
 #, fuzzy
 msgid "Reverse Transaction"
 msgstr "_রিভর্সিং ত্রান্সেকসন হাপচিল্লো"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3878
+#: gnucash/gnome/gnc-plugin-page-register.c:3893
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
 #, fuzzy
 msgid "New Transaction Information"
 msgstr "ত্রাঞ্জক্সনগী ইনফোর্মেসন"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:3968
+#: gnucash/gnome/gnc-plugin-page-register.c:3983
+#, c-format
 msgid "Sort %s by…"
 msgstr "...না %s সোর্ত তৌরো"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4058
+#: gnucash/gnome/gnc-plugin-page-register.c:4073
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
+#, c-format
 msgid "Filter %s by…"
 msgstr "...না %s ফিল্তর তৌরো"
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4592
+#: gnucash/gnome/gnc-plugin-page-register.c:4607
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4602
+#: gnucash/gnome/gnc-plugin-page-register.c:4617
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4603
+#: gnucash/gnome/gnc-plugin-page-register.c:4618
 #: gnucash/gnome-search/dialog-search.c:323
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:172
 msgid "Select"
 msgstr "খনবা"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4658
+#: gnucash/gnome/gnc-plugin-page-register.c:4673
 #, fuzzy
 #| msgid "Post Date"
 msgid "Go to Date"
 msgstr "পোস্ত তৌবগী তাং"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4960
+#: gnucash/gnome/gnc-plugin-page-register.c:4975
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr ""
@@ -5247,7 +5267,7 @@ msgid "Print"
 msgstr "নমথোকপা"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:224
-#: gnucash/gnome-utils/dialog-file-access.c:318
+#: gnucash/gnome-utils/dialog-file-access.c:328
 #: gnucash/gnome-utils/gnc-file.c:109 gnucash/gnome-utils/gnc-file.c:351
 msgid "Export"
 msgstr "থাদোকপা"
@@ -5274,7 +5294,7 @@ msgstr ""
 msgid "The numeric ID of the report."
 msgstr "রিপোর্তকী নিউমরিক ID"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1263
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1260
 #, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
@@ -5283,7 +5303,7 @@ msgstr ""
 "হৌজিক্কী রিপোর্ত অসিগী সেভ তৌরবা কনফিগুরেসন অদু অপদেত তৌ। রিপোর্ত অদু ফাইল %s অদুদা "
 "সেভ তৌরগনি।"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1266
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1263
 #, c-format
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
@@ -5292,35 +5312,35 @@ msgstr ""
 "হৌজিক্কী রিপোর্তকী কনফিগুরেসন অদু 'সেভ তৌরবা রিপোর্ত কনফিগুরেসনসিং' অদুদা হাপচিল্লু। "
 "রিপোর্ত অদু ফাইল %s দা সেভ তৌরগনি।"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1274
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1271
 #: gnucash/ui/gnc-plugin-page-report.ui:224
 msgid "Save _Report Configuration"
 msgstr "_রিপোর্ত কনফিগুরেসন সেভ তৌ"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1275
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1272
 #: gnucash/ui/gnc-plugin-page-report.ui:239
 msgid "Save Report Configuration As…"
 msgstr "রিপোর্ত কনফিগুরেসন ...…গুম্না সেভ তৌ"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1550
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1583
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1547
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1580
 msgid "HTML"
 msgstr "HTML"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1553
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1550
 msgid "Choose export format"
 msgstr "থাদোকপগী ফোর্মেত খল্লো"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1554
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1551
 msgid "Choose the export format for this report:"
 msgstr "রিপোর্ত অসিগী এক্সপোর্ত ফোর্মেত অপাম্বা খল্লো"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1594
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1591
 #, c-format
 msgid "Save %s To File"
 msgstr "ফাইলদা %s সেভ তৌরো"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1623
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1620
 #, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -5331,40 +5351,40 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1633
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1630
 msgid "You cannot save to that file."
 msgstr "অদোম্না ফাইল অদুদা সেভ তৌবা য়াদে."
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1642
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1639
 #: gnucash/gnome-utils/gnc-file.c:1340 gnucash/gnome-utils/gnc-file.c:1587
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:739
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "ফাইল %s অসি হান্না লৈরে. অদোম্না মসি মথক্তা ইশিনবা পাম্মী হায়বসি শোয়দ্রব্রা?"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1779
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1805
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1776
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1802
 #: gnucash/gnucash-commands.cpp:179 gnucash/gnucash-commands.cpp:207
 msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1816
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1813
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
 msgstr "ফাইল %s হাংদোকপা ঙমদে. অরানবদি: %s নি"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1861
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1858
 msgid "GnuCash-Report"
 msgstr "GnuCash-রিপোর্ত"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1908
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1907
 #: gnucash/report/reports/standard/invoice.scm:849
 msgid "Printable Invoice"
 msgstr "নমথোকপা য়াবা ইনভোইস"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1909
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1908
 #: gnucash/report/reports/standard/taxinvoice.scm:302
 #: gnucash/report/reports/standard/taxinvoice.scm:304
 #: gnucash/report/reports/standard/taxinvoice.scm:316
@@ -5372,12 +5392,12 @@ msgstr "নমথোকপা য়াবা ইনভোইস"
 msgid "Tax Invoice"
 msgstr "তেক্সকী ইনভোইস"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1910
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1909
 #: gnucash/report/reports/standard/invoice.scm:859
 msgid "Easy Invoice"
 msgstr "অরাইবা ইনভোইস"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1911
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1910
 #: gnucash/report/reports/standard/invoice.scm:869
 msgid "Fancy Invoice"
 msgstr "ফেন্সি ইনভোইস"
@@ -5458,7 +5478,7 @@ msgstr "_স্তেন্দার্দ ওর্দর"
 msgid "Date of Entry"
 msgstr "_এন্ত্রিগী তাং"
 
-#: gnucash/gnome/gnc-split-reg.c:703 gnucash/gnome/window-reconcile.c:2046
+#: gnucash/gnome/gnc-split-reg.c:703 gnucash/gnome/window-reconcile.c:2059
 msgid "Statement Date"
 msgstr "স্তেতমেন্তগী তাং"
 
@@ -5785,7 +5805,7 @@ msgstr "ফাইনান্স মেনেজমেন্ত"
 
 #: gnucash/gnome/reconcile-view.c:461
 #: gnucash/register/ledger-core/split-register-layout.c:697
-#: gnucash/register/ledger-core/split-register-model.c:313
+#: gnucash/register/ledger-core/split-register-model.c:317
 #, fuzzy
 msgctxt "Column header for 'Reconciled'"
 msgid "R"
@@ -5820,10 +5840,10 @@ msgid "You have not selected an owner"
 msgstr "অদোম্না মপু অমা খনদ্রে"
 
 #: gnucash/gnome/search-owner.c:214 gnucash/gnome-search/dialog-search.c:1096
-#: gnucash/gtkbuilder/dialog-invoice.glade:286
-#: gnucash/gtkbuilder/dialog-invoice.glade:508
-#: gnucash/gtkbuilder/dialog-invoice.glade:1059
-#: gnucash/gtkbuilder/dialog-invoice.glade:1200
+#: gnucash/gtkbuilder/dialog-invoice.glade:278
+#: gnucash/gtkbuilder/dialog-invoice.glade:500
+#: gnucash/gtkbuilder/dialog-invoice.glade:1051
+#: gnucash/gtkbuilder/dialog-invoice.glade:1192
 #: gnucash/report/reports/standard/new-owner-report.scm:99
 #: libgnucash/engine/gncOwner.c:219
 msgid "Job"
@@ -5929,13 +5949,13 @@ msgstr "_শেন্দোইগী চার্জ চঙশিল্লো…
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr "অদোম্না খল্লবা ত্রান্সেকসন মুত্থৎপা পাম্মী হায়বসি শোয়দ্রব্রা?"
 
-#: gnucash/gnome/window-reconcile.c:1946
+#: gnucash/gnome/window-reconcile.c:1959
 msgid ""
 "WARNING! Account contains splits whose reconcile date is after statement "
 "date. Reconciliation may be difficult."
 msgstr ""
 
-#: gnucash/gnome/window-reconcile.c:1950
+#: gnucash/gnome/window-reconcile.c:1963
 msgid ""
 "This account has splits whose Reconciled Date is after this reconciliation "
 "statement date. These splits may make reconciliation difficult. If this is "
@@ -5943,25 +5963,25 @@ msgid ""
 "reconcile."
 msgstr ""
 
-#: gnucash/gnome/window-reconcile.c:2056
+#: gnucash/gnome/window-reconcile.c:2069
 #: gnucash/gtkbuilder/window-reconcile.glade:106
 msgid "Starting Balance"
 msgstr "অহৌবা বেলেন্স"
 
-#: gnucash/gnome/window-reconcile.c:2066
+#: gnucash/gnome/window-reconcile.c:2079
 msgid "Ending Balance"
 msgstr "অরোইবা বেলেন্স"
 
-#: gnucash/gnome/window-reconcile.c:2076
+#: gnucash/gnome/window-reconcile.c:2089
 msgid "Reconciled Balance"
 msgstr "রিকনসাইল তৌরবা বেলেন্স"
 
-#: gnucash/gnome/window-reconcile.c:2086
+#: gnucash/gnome/window-reconcile.c:2099
 #: gnucash/report/reports/standard/cash-flow.scm:305
 msgid "Difference"
 msgstr "খেন্নবা"
 
-#: gnucash/gnome/window-reconcile.c:2199
+#: gnucash/gnome/window-reconcile.c:2212
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
@@ -5969,11 +5989,11 @@ msgstr ""
 "অদোম্না মসিগী রিকনসাইল ৱিন্দোসিদা অহোংবশিং শেম্লে. অদোম্না মসি শোয়দনা ককথৎপা "
 "পাম্লব্রা?"
 
-#: gnucash/gnome/window-reconcile.c:2333
+#: gnucash/gnome/window-reconcile.c:2346
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr "একাউন্ত অসি বেলেন্স তৌদ্রে. অদোম্না মসি শোয়দনা লোইশিনবা পামলব্রা?"
 
-#: gnucash/gnome/window-reconcile.c:2393
+#: gnucash/gnome/window-reconcile.c:2406
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr ""
 "অদোম্না মসিগী রিকনসিলিয়েসন তৌবা অসি য়ৈথোকপা অমসুং কোন্না লোইশিনবা পাম্বিব্রা?"
@@ -6600,7 +6620,7 @@ msgstr "ক_রেন্সি"
 #: gnucash/gtkbuilder/dialog-transfer.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:431
 #: gnucash/gtkbuilder/dialog-vendor.glade:502
-#: gnucash/report/trep-engine.scm:102 libgnucash/engine/Account.cpp:4400
+#: gnucash/report/trep-engine.scm:102 libgnucash/engine/Account.cpp:4406
 msgid "Currency"
 msgstr "করেন্সি"
 
@@ -6679,13 +6699,13 @@ msgstr ""
 msgid "Action/Number"
 msgstr "এক্সন/মসিং"
 
-#: gnucash/gnome-utils/dialog-file-access.c:302
+#: gnucash/gnome-utils/dialog-file-access.c:312
 #, fuzzy
 #| msgid "Open"
 msgid "Open…"
 msgstr "হাংদোকপা"
 
-#: gnucash/gnome-utils/dialog-file-access.c:303
+#: gnucash/gnome-utils/dialog-file-access.c:313
 #: gnucash/gnome-utils/gnc-file.c:88
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:103
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:106
@@ -6695,19 +6715,19 @@ msgstr "হাংদোকপা"
 msgid "_Open"
 msgstr "হাংদোকপা"
 
-#: gnucash/gnome-utils/dialog-file-access.c:309
+#: gnucash/gnome-utils/dialog-file-access.c:319
 #, fuzzy
 msgid "Save As…"
 msgstr "মসিগুম্না সেভ তৌবা…"
 
-#: gnucash/gnome-utils/dialog-file-access.c:310
-#: gnucash/gnome-utils/dialog-file-access.c:319
+#: gnucash/gnome-utils/dialog-file-access.c:320
+#: gnucash/gnome-utils/dialog-file-access.c:329
 #: gnucash/gtkbuilder/dialog-file-access.glade:40
 #, fuzzy
 msgid "_Save As"
 msgstr "মসিগুম্না সেভ তৌবা..."
 
-#: gnucash/gnome-utils/dialog-options.cpp:113
+#: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
 #: gnucash/gtkbuilder/dialog-commodities.glade:174
 #: gnucash/gtkbuilder/dialog-custom-report.glade:46
@@ -6736,21 +6756,21 @@ msgstr "মসিগুম্না সেভ তৌবা..."
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:267
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:422
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:577
-#: gnucash/ui/gnc-plugin-page-register.ui:482
+#: gnucash/ui/gnc-plugin-page-register.ui:672
 #: gnucash/ui/gnc-plugin-page-report.ui:89
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:97
 msgid "_Close"
 msgstr "_লোইশিল্লো"
 
-#: gnucash/gnome-utils/dialog-options.cpp:284
+#: gnucash/gnome-utils/dialog-options.cpp:306
 msgid "Reset defaults"
 msgstr "দিফোল্ত রিসেত তৌরো"
 
-#: gnucash/gnome-utils/dialog-options.cpp:286
+#: gnucash/gnome-utils/dialog-options.cpp:308
 msgid "Reset all values to their defaults."
 msgstr "মখোয়গী দিফোল্তশিংগী ভেল্যু পুম্নমক রিসেত তৌরো"
 
-#: gnucash/gnome-utils/dialog-options.cpp:538
+#: gnucash/gnome-utils/dialog-options.cpp:560
 msgid "Page"
 msgstr "পেজ"
 
@@ -6956,23 +6976,27 @@ msgstr "নিংশিংবিয়ু অমসুং সেসন অসি �
 msgid "Don't tell me again this _session."
 msgstr "ঐঙোন্দা _সেসন অসি অমুক হন্না হায়বিগু."
 
-#: gnucash/gnome-utils/gnc-account-sel.c:526
+#: gnucash/gnome-utils/gnc-account-sel.c:525
 #, fuzzy
 #| msgid "Selected Accounts"
 msgid "Hide _Placeholder Accounts"
 msgstr "খল্লবা একাউন্ত"
 
-#: gnucash/gnome-utils/gnc-account-sel.c:528
+#: gnucash/gnome-utils/gnc-account-sel.c:527
 #, fuzzy
 #| msgid "Show Hidden Accounts"
 msgid "Hide _Hidden Accounts"
 msgstr "অরোত্পা একাউন্তশিং উৎলো"
 
-#: gnucash/gnome-utils/gnc-account-sel.c:723
+#: gnucash/gnome-utils/gnc-account-sel.c:722
 msgid "Set the visibility of placeholder and hidden accounts."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-account-sel.c:994
+#. Translators: This is a button label displayed in the account selector
+#. * control used in several dialogs. When pressed it opens the New Account
+#. * dialog.
+#.
+#: gnucash/gnome-utils/gnc-account-sel.c:996
 msgid "New…"
 msgstr ""
 
@@ -7165,7 +7189,7 @@ msgid "Import"
 msgstr "পুশিল্লকপা"
 
 #: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
-#: gnucash/gnome-utils/gnc-main-window.cpp:1228
+#: gnucash/gnome-utils/gnc-main-window.cpp:1253
 #: gnucash/html/gnc-html-webkit1.c:1217 gnucash/ui/gnc-main-window.ui:547
 #: gnucash/ui/gnc-plugin-basic-commands.ui:21
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:307
@@ -7174,7 +7198,7 @@ msgstr "পুশিল্লকপা"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:252
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:407
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:562
-#: gnucash/ui/gnc-plugin-page-register.ui:467
+#: gnucash/ui/gnc-plugin-page-register.ui:657
 #: gnucash/ui/gnc-plugin-page-report.ui:74
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:82
 msgid "_Save"
@@ -7460,7 +7484,7 @@ msgid "Save changes to the file?"
 msgstr "অহোংবশিংসি ফাইলদা সেভ তৌগদ্রা?"
 
 #: gnucash/gnome-utils/gnc-file.c:656
-#: gnucash/gnome-utils/gnc-main-window.cpp:1221
+#: gnucash/gnome-utils/gnc-main-window.cpp:1246
 #, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
 msgid_plural ""
@@ -7568,7 +7592,7 @@ msgid ""
 msgstr "ফাইল %s অসি হান্না লৈরে. অদোম্না মসি মথক্তা ইশিনবা পাম্মী হায়বসি শোয়দ্রব্রা?"
 
 #: gnucash/gnome-utils/gnc-file.c:1720
-#: gnucash/gnome-utils/gnc-main-window.cpp:1189
+#: gnucash/gnome-utils/gnc-main-window.cpp:1214
 msgid "<unknown>"
 msgstr "<শকখঙদবা>"
 
@@ -7611,7 +7635,7 @@ msgstr "GnuCashনা মরি লৈনবা URI অদু হাংবা �
 
 #. Translators: %s is a path to a database or any other url,
 #. like mysql://user@server.somewhere/somedb, https://www.somequotes.com/thequotes
-#: gnucash/gnome-utils/gnc-keyring.c:356
+#: gnucash/gnome-utils/gnc-keyring.c:358
 #, c-format
 msgid "Enter a user name and password to connect to: %s"
 msgstr "%s দা মরি শম্ননবা শিজিন্নরিবগী মিং অমসুং পাসৱার্দ চঙশিল্লো:"
@@ -7621,12 +7645,12 @@ msgstr "%s দা মরি শম্ননবা শিজিন্নরিব
 msgid "Changes will be saved automatically in %u seconds"
 msgstr "অহোংবসিংদু সেকেন্দ %uগী মনুংদা মসা মথন্তা সেভ তৌজখিগনি"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1172
+#: gnucash/gnome-utils/gnc-main-window.cpp:1197
 #, c-format
 msgid "Save changes to file %s before closing?"
 msgstr "লোইশিনদ্রিঙৈগী মমাংদা ফাইল %s দা অহোংবশিং অসি সেভ তৌগদ্রা?"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1175
+#: gnucash/gnome-utils/gnc-main-window.cpp:1200
 #, c-format
 msgid ""
 "If you don't save, changes from the past %d hours and %d minutes will be "
@@ -7635,7 +7659,7 @@ msgstr ""
 "অদোম্না সেভ তৌদ্রবদি হৌখিবা পুং %d অমসুং মিনিত %d কী মমাংদা হোংখ্রবশিং অদু "
 "হুন্দোকখ্রগনি."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1177
+#: gnucash/gnome-utils/gnc-main-window.cpp:1202
 #, c-format
 msgid ""
 "If you don't save, changes from the past %d days and %d hours will be "
@@ -7644,15 +7668,15 @@ msgstr ""
 "অদোম্না সেভ তৌদ্রবদি হৌখিবা নুমিৎ %d অমসুং পুং %d কী মমাংদা হোংখ্রবশিং অদু "
 "হুন্দোকখ্রগনি."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1226
+#: gnucash/gnome-utils/gnc-main-window.cpp:1251
 msgid "Close _Without Saving"
 msgstr "_সেভ তৌদনা লোইশিল্লো"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1373
+#: gnucash/gnome-utils/gnc-main-window.cpp:1398
 msgid "This window is closing and will not be restored."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1379
+#: gnucash/gnome-utils/gnc-main-window.cpp:1404
 #, fuzzy
 #| msgid "Close this window"
 msgid "Close Window?"
@@ -7660,44 +7684,44 @@ msgstr "ৱিন্দো অসি লোইশিল্লো"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
-#: gnucash/gnome-utils/gnc-main-window.cpp:1509
+#: gnucash/gnome-utils/gnc-main-window.cpp:1534
 msgid "(read-only)"
 msgstr "(পাবা-খক্কী)"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1517
+#: gnucash/gnome-utils/gnc-main-window.cpp:1542
 msgid "Unsaved Book"
 msgstr "অনসেভ তৌদবা বুক"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:1683
+#: gnucash/gnome-utils/gnc-main-window.cpp:1708
 #, fuzzy
 msgid "Last modified on %a, %b %d, %Y at %I:%M %p"
 msgstr "অরোয়বা ওইনা %a, %b %e, %Yগী %I:%M%Pদা সেমদোক-সেমজিন তৌখি"
 
 #. Translators: This message appears in the status bar after opening the file.
-#: gnucash/gnome-utils/gnc-main-window.cpp:1686
+#: gnucash/gnome-utils/gnc-main-window.cpp:1711
 #, c-format
 msgid "File %s opened. %s"
 msgstr "ফাইল %s হাংলে। %s"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:2896
+#: gnucash/gnome-utils/gnc-main-window.cpp:2921
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:2983
+#: gnucash/gnome-utils/gnc-main-window.cpp:3008
 msgid "Unable to save to database."
 msgstr "দাতাবেজ সেভ তৌবা ঙমদে."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:2985
+#: gnucash/gnome-utils/gnc-main-window.cpp:3010
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "দাতাবেজ সেভ তৌবা ঙমদে: বুক অসি পাবতমক ওইনা মার্ক তৌরে."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4611
+#: gnucash/gnome-utils/gnc-main-window.cpp:4641
 #: gnucash/gtkbuilder/assistant-qif-import.glade:943
 msgid "Book Options"
 msgstr "বুক ওপসন"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4935
+#: gnucash/gnome-utils/gnc-main-window.cpp:4965
 #, fuzzy
 #| msgid "The minimum number of invoice entries to display."
 msgid ""
@@ -7705,28 +7729,28 @@ msgid ""
 "added."
 msgstr "উৎকদবা খ্বাইদগী য়ামদনা ওইবা য়াবা ইনভোইস এন্ত্রিসিং।"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5175
-#: gnucash/gnucash-core-app.cpp:260
+#: gnucash/gnome-utils/gnc-main-window.cpp:5205
+#: gnucash/gnucash-core-app.cpp:252
 msgid "(user modifiable)"
 msgstr ""
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.cpp:5201
+#: gnucash/gnome-utils/gnc-main-window.cpp:5231
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5213
+#: gnucash/gnome-utils/gnc-main-window.cpp:5243
 #: gnucash/gnome-utils/gnc-splash.c:98
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5214
-#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:277
+#: gnucash/gnome-utils/gnc-main-window.cpp:5244
+#: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:269
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5222
+#: gnucash/gnome-utils/gnc-main-window.cpp:5252
 #, fuzzy
 msgid "Accounting for personal and small business finance."
 msgstr "- GnuCash পর্সোনেল অমসুং অপীকপা ব্যুজিনেস ফাইনান্স মেনেজমেন্ত "
@@ -7735,13 +7759,13 @@ msgstr "- GnuCash পর্সোনেল অমসুং অপীকপা �
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.cpp:5231
+#: gnucash/gnome-utils/gnc-main-window.cpp:5261
 msgid "translator-credits"
 msgstr ""
 "Chandrakant Dhutadmal, 2015\n"
 "Manipuri (Bengali Script) <gistlrc@gmail.com>"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5234
+#: gnucash/gnome-utils/gnc-main-window.cpp:5264
 msgid "Visit the GnuCash website."
 msgstr ""
 
@@ -8165,7 +8189,7 @@ msgstr "ই-মেইল"
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:478
 #: gnucash/gtkbuilder/dialog-customer.glade:156
 #: gnucash/gtkbuilder/dialog-employee.glade:132
-#: gnucash/gtkbuilder/dialog-invoice.glade:186
+#: gnucash/gtkbuilder/dialog-invoice.glade:168
 #: gnucash/gtkbuilder/dialog-job.glade:305
 #: gnucash/gtkbuilder/dialog-order.glade:217
 #: gnucash/gtkbuilder/dialog-vendor.glade:185
@@ -8186,9 +8210,9 @@ msgstr "সেক্যুরিতি"
 #: gnucash/gnome-utils/gnc-tree-view-price.c:426
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:390
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
 #: gnucash/register/ledger-core/split-register.c:2626
-#: gnucash/register/ledger-core/split-register-model.c:403
+#: gnucash/register/ledger-core/split-register-model.c:407
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1037
 #: gnucash/report/reports/standard/general-journal.scm:99
 #: gnucash/report/reports/standard/general-ledger.scm:79
@@ -8385,54 +8409,54 @@ msgstr ""
 msgid "Loading user specific Guile extensions…"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:223
+#: gnucash/gnucash-core-app.cpp:215
 #, fuzzy
 msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash পর্সোনেল অমসুং অপীকপা ব্যুজিনেস ফাইনান্স মেনেজমেন্ত "
 
-#: gnucash/gnucash-core-app.cpp:225
+#: gnucash/gnucash-core-app.cpp:217
 msgid "{1} [options] [datafile]"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:254
+#: gnucash/gnucash-core-app.cpp:246
 #, fuzzy
 msgid "GnuCash Paths"
 msgstr "GnuCash"
 
-#: gnucash/gnucash-core-app.cpp:269
+#: gnucash/gnucash-core-app.cpp:261
 #, fuzzy
 msgid "GnuCash {1}"
 msgstr "GnuCash"
 
-#: gnucash/gnucash-core-app.cpp:270
+#: gnucash/gnucash-core-app.cpp:262
 #, fuzzy
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s শেমগৎ-শাগৎলকপগী ভর্সন"
 
-#: gnucash/gnucash-core-app.cpp:295
+#: gnucash/gnucash-core-app.cpp:287
 #, fuzzy
 msgid "Common Options"
 msgstr "বুক ওপসন"
 
-#: gnucash/gnucash-core-app.cpp:298
+#: gnucash/gnucash-core-app.cpp:290
 msgid "Show this help message"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:300
+#: gnucash/gnucash-core-app.cpp:292
 msgid "Show GnuCash version"
 msgstr "GnuCash ভর্সন উৎলো"
 
-#: gnucash/gnucash-core-app.cpp:302
+#: gnucash/gnucash-core-app.cpp:294
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:304
+#: gnucash/gnucash-core-app.cpp:296
 msgid "Enable extra/development/debugging features."
 msgstr "অহেনবা/দিভেলপমেন্ত/দিবগগিংগী মগুনশিং ঙমহনবা."
 
-#: gnucash/gnucash-core-app.cpp:306
+#: gnucash/gnucash-core-app.cpp:298
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -8440,13 +8464,13 @@ msgid ""
 "This can be invoked multiple times."
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:308
+#: gnucash/gnucash-core-app.cpp:300
 #, fuzzy
 #| msgid "Show plot"
 msgid "Show paths"
 msgstr "প্লোত উৎলো"
 
-#: gnucash/gnucash-core-app.cpp:310
+#: gnucash/gnucash-core-app.cpp:302
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
@@ -8454,12 +8478,12 @@ msgstr ""
 "লোগ তৌনবা ফাইল; \"/tmp/gnucash.trace\";দিফোল্তস \"stderr\" নত্রগা \"stdout\" "
 "ওইবা য়াই."
 
-#: gnucash/gnucash-core-app.cpp:312
+#: gnucash/gnucash-core-app.cpp:304
 #, fuzzy
 msgid "Hidden Options"
 msgstr "বজেতকী ওপসনস"
 
-#: gnucash/gnucash-core-app.cpp:315
+#: gnucash/gnucash-core-app.cpp:307
 msgid "[datafile]"
 msgstr "[দেতাফাইল]"
 
@@ -8693,7 +8717,7 @@ msgstr ""
 "উত্তে."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:132
-#: libgnucash/engine/gnc-optiondb.cpp:1234
+#: libgnucash/engine/gnc-optiondb.cpp:1235
 msgid "The invoice report to be used for printing."
 msgstr "প্রিন্ত তৌনবগীদমক্তা সিজিন্ননবা ইনভোইস রিপোর্ত।"
 
@@ -12738,7 +12762,7 @@ msgstr ""
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4394
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4400
 msgid "Cash"
 msgstr "শেল"
 
@@ -13167,7 +13191,7 @@ msgstr "কম্মোদিতি ভেল্যু সিজিন্নৌ"
 #: gnucash/gtkbuilder/dialog-employee.glade:23
 #: gnucash/gtkbuilder/dialog-fincalc.glade:107
 #: gnucash/gtkbuilder/dialog-import.glade:1168
-#: gnucash/gtkbuilder/dialog-invoice.glade:784
+#: gnucash/gtkbuilder/dialog-invoice.glade:776
 #: gnucash/gtkbuilder/dialog-job.glade:24
 #: gnucash/gtkbuilder/dialog-options.glade:21
 #: gnucash/gtkbuilder/dialog-order.glade:25
@@ -13180,7 +13204,7 @@ msgstr "কম্মোদিতি ভেল্যু সিজিন্নৌ"
 #: gnucash/gtkbuilder/dialog-sx.glade:803
 #: gnucash/gtkbuilder/dialog-sx.glade:1494
 #: gnucash/gtkbuilder/dialog-vendor.glade:47
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2102
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2142
 #: gnucash/ui/gnc-main-window.ui:492 gnucash/ui/gnc-reconcile-window.ui:85
 #: gnucash/ui/gnc-reconcile-window.ui:88
 msgid "_Help"
@@ -13521,7 +13545,9 @@ msgstr "ইম্পোর্ত তৌরবা দোক্যুমেন্�
 # Considering the meaning as :
 # "open (but) not yet posted documents in tabs."
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-msgid "Open not yet posted documents in tabs "
+#, fuzzy
+#| msgid "Open not yet posted documents in tabs "
+msgid "Open not yet posted documents in tabs"
 msgstr "হাংলে তেবসিংদা হৌজিক ফাউবা দোক্যুমেন্তসিং পোস্ত তৌদ্রি"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
@@ -13608,8 +13634,8 @@ msgstr "তেবল"
 #: gnucash/gtkbuilder/dialog-billterms.glade:408
 #: gnucash/gtkbuilder/dialog-billterms.glade:433
 #: gnucash/gtkbuilder/dialog-customer.glade:519
-#: gnucash/gtkbuilder/dialog-invoice.glade:338
-#: gnucash/gtkbuilder/dialog-invoice.glade:1085
+#: gnucash/gtkbuilder/dialog-invoice.glade:330
+#: gnucash/gtkbuilder/dialog-invoice.glade:1077
 #: gnucash/gtkbuilder/dialog-vendor.glade:515
 msgid "Terms"
 msgstr "তার্ম"
@@ -13921,8 +13947,8 @@ msgstr "গ্লোবেল তেক্স তেবলগী মথক্ত
 #: gnucash/gtkbuilder/dialog-customer.glade:710
 #: gnucash/gtkbuilder/dialog-employee.glade:649
 #: gnucash/gtkbuilder/dialog-employee.glade:668
-#: gnucash/gtkbuilder/dialog-invoice.glade:366
-#: gnucash/gtkbuilder/dialog-invoice.glade:1159
+#: gnucash/gtkbuilder/dialog-invoice.glade:358
+#: gnucash/gtkbuilder/dialog-invoice.glade:1151
 #: gnucash/gtkbuilder/dialog-order.glade:312
 #: gnucash/gtkbuilder/dialog-order.glade:659
 msgid "Billing Information"
@@ -14639,60 +14665,60 @@ msgstr "জেনেরিক ওইবা পুশিল্লকবা ত্
 msgid "Posted Account"
 msgstr "পোস্ত তৌখ্রবা একাউন্ত"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:232
-#: gnucash/gtkbuilder/dialog-invoice.glade:1017
+#: gnucash/gtkbuilder/dialog-invoice.glade:224
+#: gnucash/gtkbuilder/dialog-invoice.glade:1009
 msgid "Invoice Information"
 msgstr "ইনভোইসগী ঈপাউ"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:260
+#: gnucash/gtkbuilder/dialog-invoice.glade:252
 msgid "(owner)"
 msgstr "(মপু)"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:420
+#: gnucash/gtkbuilder/dialog-invoice.glade:412
 #, fuzzy
 #| msgid "Open imported documents in tabs"
 msgid "Open Document Link"
 msgstr "ইম্পোর্ত তৌরবা দোক্যুমেন্তসিংদু তেবসিংদা হাংদোকউ"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:537
-#: gnucash/gtkbuilder/dialog-invoice.glade:1242
+#: gnucash/gtkbuilder/dialog-invoice.glade:529
+#: gnucash/gtkbuilder/dialog-invoice.glade:1234
 msgid "Default Chargeback Project"
 msgstr "দিফোল্ত চার্জবেক প্রোজেক্ত"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:564
+#: gnucash/gtkbuilder/dialog-invoice.glade:556
 msgid "Additional to Card"
 msgstr "কার্দতা অহেনবা হাপচিনবা"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:593
+#: gnucash/gtkbuilder/dialog-invoice.glade:585
 msgid "Extra Payments"
 msgstr "অহেনবা পেমেন্তশিং"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:633
+#: gnucash/gtkbuilder/dialog-invoice.glade:625
 #, fuzzy
 #| msgid "Report Title"
 msgid "Report template"
 msgstr "রিপোর্ত মমিং"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:695
+#: gnucash/gtkbuilder/dialog-invoice.glade:687
 #, fuzzy
 #| msgid "Show employee report"
 msgid "Use template report"
 msgstr "ইমপ্লোয়ি রিপোর্ত উৎলু"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:723
+#: gnucash/gtkbuilder/dialog-invoice.glade:715
 #, fuzzy
 #| msgid "Choose the export format for this report:"
 msgid "Choose a different report template before timeout"
 msgstr "রিপোর্ত অসিগী এক্সপোর্ত ফোর্মেত অপাম্বা খল্লো"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:915
+#: gnucash/gtkbuilder/dialog-invoice.glade:907
 msgid ""
 "The invoice ID number. If left blank a reasonable number will be chosen for "
 "you."
 msgstr ""
 "ইনভোইসকী ID মসিং। করিগুম্বা হাংনা থম্লবদি নহাক্কীদমক্তা মরম চাবা মসিং অমা খনগনি।"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:1389
+#: gnucash/gtkbuilder/dialog-invoice.glade:1381
 msgid ""
 "Unposting this Invoice will delete the posted transaction.\n"
 "Are you sure you want to unpost it?"
@@ -14700,15 +14726,15 @@ msgstr ""
 "ইনভোইস অসি অনপোস্তিং তৌবনা পোস্ত তৌখ্রবা ত্রন্সেকসন মুত্থখ্রগনি.\n"
 "অদোম্না মসি অনপোস্ত তৌবা শোয়দনা পাম্লব্রা?"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:1418
+#: gnucash/gtkbuilder/dialog-invoice.glade:1410
 msgid "Yes, reset the Tax Tables"
 msgstr "হোয়, তেক্স তেবল রিসেত তৌরো"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:1435
+#: gnucash/gtkbuilder/dialog-invoice.glade:1427
 msgid "No, keep them as they are"
 msgstr "নত্তে, মখোয় লৈরিবা অদুগুম্না থম্মু"
 
-#: gnucash/gtkbuilder/dialog-invoice.glade:1458
+#: gnucash/gtkbuilder/dialog-invoice.glade:1450
 msgid "Reset Tax Tables to present Values?"
 msgstr "হৌজিক্কী ভেল্যুদা তেক্স তেবল রিসেত তৌগদ্রা?"
 
@@ -14956,7 +14982,7 @@ msgid "(USD)"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-payment.glade:698
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:77
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
 msgid "Transfer Account"
 msgstr "ত্রান্সফর একাউন্ত"
 
@@ -15334,8 +15360,8 @@ msgstr ""
 "ৱাহং অমা উৎলি. মসি নত্রবদি অহেনবা ৱারোল অমত্তা উত্তে."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
-#: gnucash/gtkbuilder/dialog-sx.glade:1259
 #, fuzzy
+msgctxt "keep"
 msgid "For"
 msgstr "মফমদগী"
 
@@ -16549,6 +16575,12 @@ msgstr "অমুক হনবা:"
 #: gnucash/gtkbuilder/dialog-sx.glade:1243
 msgid "Until"
 msgstr "তৌদ্রিফাওবা"
+
+#: gnucash/gtkbuilder/dialog-sx.glade:1259
+#, fuzzy
+msgctxt "repeat"
+msgid "For"
+msgstr "মফমদগী"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1278
 msgid "occurrences"
@@ -18447,7 +18479,7 @@ msgid ""
 "period."
 msgstr "ওনলাইন বেঙ্কিংনা খল্লবা মতম অসিগী মনুংদা ত্রান্সেকসন অমত্তা তৌরক্তে."
 
-#: gnucash/import-export/aqb/gnc-ab-transfer.c:61
+#: gnucash/import-export/aqb/gnc-ab-transfer.c:60
 msgid ""
 "You have changed the list of online transfer templates, but you cancelled "
 "the transfer dialog. Do you nevertheless want to store the changes?"
@@ -18524,7 +18556,7 @@ msgid "Unspecified"
 msgstr "শন্দোক্না পীদবা"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:478
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4393
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4399
 msgid "Bank"
 msgstr "বেঙ্ক"
 
@@ -19202,7 +19234,7 @@ msgid "Rate/Price"
 msgstr "রেত/প্রাইসতা"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:562
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
 #, fuzzy
 msgid "Transaction ID"
 msgstr "ত্রান্সেকসন"
@@ -19213,7 +19245,7 @@ msgid "Commodity/Currency"
 msgstr "কমন করেন্সি"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:565
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 msgid "Void Reason"
 msgstr "চৎনদবা মরম"
 
@@ -19224,7 +19256,7 @@ msgid "Full Account Name"
 msgstr "মপুংফাবা একাউন্ত মমিং শিজিন্নৌ"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:570
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
 #, fuzzy
 msgid "Reconcile Date"
 msgstr "রিকনসাইল তৌরবা তাং"
@@ -19288,67 +19320,67 @@ msgstr ""
 "হাপচিনখিবা একাউন্তসিংগী মসিং অদু %uনি অমসুং অপদেত তৌখিবনা %uনি।\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:885
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:853
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:857
 msgid ""
 "There were problems reading some saved settings, continuing to load.\n"
 "Please review and save again."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:908
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:876
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:880
 #, fuzzy
 msgid "Delete the Import Settings."
 msgstr "এক্সপোর্ত সেত্তিংস খল্লু"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:942
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:910
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:914
 msgid "Setting name already exists, overwrite?"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:956
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:924
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:928
 #, fuzzy
 msgid "The settings have been saved."
 msgstr "কেরেক্তর খরদি হুন্দোকখ্রে."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:981
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:949
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:953
 #, fuzzy
 msgid "There was a problem saving the settings, please try again."
 msgstr "ইম্পোর্ত অদুদা প্রোব্লেম অমা লৈরে।"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1152
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1123
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1127
 msgid "Invalid encoding selected"
 msgstr "চুমদবা এনকোদিং খল্লে"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1313
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1233
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1237
 msgid "Merge with column on _left"
 msgstr "_ওইথংবদা কলম পুনশিল্লো"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1317
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1237
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1241
 msgid "Merge with column on _right"
 msgstr "_য়েত্থংবদা কলম পুনশিল্লো"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1322
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1242
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1246
 msgid "_Split this column"
 msgstr "কলম অসি _খায়দোকউ"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1327
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1247
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1251
 msgid "_Widen this column"
 msgstr "কলম অসি _পাকথোকহল্লু"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1331
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1251
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1255
 msgid "_Narrow this column"
 msgstr "কলম অসি _পিকশিলহল্লু"
 
 #. Translators: This is a ngettext(3) message, %d is the number of prices added
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1920
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1921
 #, fuzzy, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
@@ -19356,7 +19388,7 @@ msgstr[0] "অনৌবা মমল অমা হাপচিল্লো."
 msgstr[1] "অনৌবা মমল অমা হাপচিল্লো."
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1925
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1926
 #, fuzzy, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
@@ -19364,14 +19396,14 @@ msgstr[0] "_দুপ্লিকেত ইনভোইস"
 msgstr[1] "_দুপ্লিকেত ইনভোইস"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1930
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1931
 #, fuzzy, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
 msgstr[0] "রেকোর্দ তৌরবা প্রাইসসিং।"
 msgstr[1] "রেকোর্দ তৌরবা প্রাইসসিং।"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1935
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1936
 #, fuzzy, c-format
 msgid ""
 "The prices were imported from file '%s'.\n"
@@ -19382,7 +19414,7 @@ msgid ""
 "- %s"
 msgstr "ত্রাঞ্জেক্সনসিং অদু ফাইল '%s'দগী ইম্পোর্ত তৌরকপনি।"
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1979
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1980
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating prices. Please report this "
@@ -19392,16 +19424,16 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1427
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1431
 msgid "This line has the following parse issues:"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1771
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1775
 #, fuzzy
 msgid "No Linked Account"
 msgstr "অনৌবা একাউন্ত"
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2088
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2128
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating transactions. Please report "
@@ -19411,14 +19443,14 @@ msgid ""
 "%s"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2097
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2137
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr ""
 "হোংদোক হোংজিন তৌনবগীদমক পরেংসিংদা দবল ক্লিক তৌ, অদুদগী ইম্পোর্ত তৌনবগীদমক "
 "এপ্লাইদা ক্লিক তৌ"
 
 #. Translators: {1} will be replaced with a filename
-#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2162
+#: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2202
 #, fuzzy
 msgid "The transactions were imported from file '{1}'."
 msgstr "ত্রাঞ্জেক্সনসিং অদু ফাইল '%s'দগী ইম্পোর্ত তৌরকপনি।"
@@ -19588,21 +19620,21 @@ msgid "From Namespace"
 msgstr "নেমস্পেস"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:69
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:140
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:139
 msgid "Value doesn't appear to contain a valid number."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:82
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:87
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:92
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:153
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:158
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:163
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:152
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:157
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:162
 msgid "Value can't be parsed into a number using the selected currency format."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:124
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:220
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:219
 #, fuzzy
 msgid "Value can't be parsed into a valid commodity."
 msgstr "কমোদিতি অসিগী মমল পারো."
@@ -19634,9 +19666,9 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:237
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:245
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:291
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:550
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:630
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
 msgid "{1}: {2}"
 msgstr ""
 
@@ -19664,114 +19696,114 @@ msgstr "তাংগী কলম লৈতে."
 msgid "Failed to create price from selected columns."
 msgstr "আইতেমশিংসিগী মমল শেমগৎপা ঙমদে:"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
 #, fuzzy
 msgid "Transaction Commodity"
 msgstr "ত্রান্সেকসনগী অমাউন্ত"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 #, fuzzy
 #| msgid "Amount (_words)"
 msgid "Amount (Negated)"
 msgstr "অমাউন্ত (_ৱাহৈদা)"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 msgid "Value (Negated)"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
 #, fuzzy
 msgid "Transfer Action"
 msgstr "ত্রান্সফর একাউন্ত"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:77
 #, fuzzy
 #| msgid "Transfer Account"
 msgid "Transfer Amount"
 msgstr "ত্রান্সফর একাউন্ত"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
 #, fuzzy
 #| msgid "Transfer Account"
 msgid "Transfer Amount (Negated)"
 msgstr "ত্রান্সফর একাউন্ত"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:80
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
 #, fuzzy
 msgid "Transfer Memo"
 msgstr "...দা ত্রান্সফর তৌবা"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:81
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:80
 #, fuzzy
 msgid "Transfer Reconciled"
 msgstr "তারিখ রিকন্সাইল তৌরে"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:82
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:81
 #, fuzzy
 msgid "Transfer Reconcile Date"
 msgstr "অকোনবা রিকনসাইল তৌবগী তাং"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:183
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:182
 msgid "Value can't be parsed into a valid reconcile state."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:246
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:245
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:262
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:261
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:312
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:311
 #, fuzzy
 msgid "No valid date."
 msgstr "_য়াদ্রবা নত্তবা ত্রান্সেকসন"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:315
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:314
 #, fuzzy
 #| msgid "Sort by description."
 msgid "No valid description."
 msgstr "দিস্ক্রিপসন্না সোর্ত তৌ।"
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:448
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:447
 msgid "Account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:453
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:452
 msgid "Account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:459
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:458
 msgid "Transfer account value can't be empty."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:465
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:464
 msgid "Transfer account value can't be mapped back to an account."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:642
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:641
 #, fuzzy
 msgid "No amount or negated amount column."
 msgstr "তাংগী কলম লৈতে."
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:645
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:644
 msgid "Split is reconciled but reconcile date column is missing or invalid."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:648
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:647
 msgid ""
 "Transfer split is reconciled but transfer reconcile date column is missing "
 "or invalid."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:663
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:662
 msgid ""
 "Choice of accounts makes this a multi-currency transaction but price or "
 "(negated) value column is missing or invalid."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:666
+#: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:665
 msgid ""
 "Choice of account makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer column is missing or invalid."
@@ -20395,7 +20427,7 @@ msgstr "শেলেপ অতোংবা (অতেনবা)"
 #: gnucash/report/reports/standard/balance-sheet.scm:468
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1064
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:692
-#: libgnucash/app-utils/gnc-ui-util.c:654 libgnucash/engine/Account.cpp:4403
+#: libgnucash/app-utils/gnc-ui-util.c:654 libgnucash/engine/Account.cpp:4409
 msgid "Equity"
 msgstr "ইকুইতি"
 
@@ -20864,7 +20896,7 @@ msgstr "এন্ত্রিগী মখল চঙশিল্লো"
 #. Translators: This is a date format, see i.e.
 #. https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:577
-#: gnucash/register/ledger-core/split-register-model.c:998
+#: gnucash/register/ledger-core/split-register-model.c:1002
 msgid "%A %d %B %Y"
 msgstr "%A %d %B %Y"
 
@@ -21278,7 +21310,7 @@ msgstr "সেমপল:ত্রান্সেকসনগী দিস্ক�
 
 #. Translators: 'L' is short for Linked Document
 #: gnucash/register/ledger-core/split-register-layout.c:705
-#: gnucash/register/ledger-core/split-register-model.c:335
+#: gnucash/register/ledger-core/split-register-model.c:339
 #: gnucash/report/reports/standard/new-owner-report.scm:209
 #: gnucash/report/reports/standard/new-owner-report.scm:436
 #: gnucash/report/trep-engine.scm:1219 gnucash/report/trep-engine.scm:1220
@@ -21343,64 +21375,68 @@ msgstr ""
 "একাউন্ত করেন্সি অদু খংদোকপা ঙমদ্রে। নহাক্কী সিস্তেম্না পীবা দিফোলত করেন্সি অদু "
 "সিজিন্নদুনা।"
 
-#: gnucash/register/ledger-core/split-register-model.c:254
+#. Translators: Ref is the column header in Accounts Payable and
+#. * Accounts Receivable ledgers for the number of the invoice or bill
+#. * associated with the transaction.
+#.
+#: gnucash/register/ledger-core/split-register-model.c:258
 msgid "Ref"
 msgstr "রিফরেন্স"
 
-#: gnucash/register/ledger-core/split-register-model.c:270
+#: gnucash/register/ledger-core/split-register-model.c:274
 msgid "T-Ref"
 msgstr "T-রেফ"
 
-#: gnucash/register/ledger-core/split-register-model.c:279
+#: gnucash/register/ledger-core/split-register-model.c:283
 #: gnucash/report/reports/standard/register.scm:133
 msgid "T-Num"
 msgstr "T-নম"
 
-#: gnucash/register/ledger-core/split-register-model.c:405
+#: gnucash/register/ledger-core/split-register-model.c:409
 #, fuzzy
 msgid "Exch. Rate"
 msgstr "একচেনজ তৌবগী রেত:"
 
-#: gnucash/register/ledger-core/split-register-model.c:422
+#: gnucash/register/ledger-core/split-register-model.c:426
 msgid "Oth. Curr."
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-model.c:439
-#: gnucash/register/ledger-core/split-register-model.c:463
+#: gnucash/register/ledger-core/split-register-model.c:443
+#: gnucash/register/ledger-core/split-register-model.c:467
 #, c-format
 msgid "Tot %s"
 msgstr "অপুনবা %s"
 
-#: gnucash/register/ledger-core/split-register-model.c:445
+#: gnucash/register/ledger-core/split-register-model.c:449
 msgid "Tot Credit"
 msgstr "অপুনবা ক্রেদিত"
 
-#: gnucash/register/ledger-core/split-register-model.c:469
+#: gnucash/register/ledger-core/split-register-model.c:473
 msgid "Tot Debit"
 msgstr "অপুনবা দেবিত"
 
-#: gnucash/register/ledger-core/split-register-model.c:478
+#: gnucash/register/ledger-core/split-register-model.c:482
 msgid "Tot Shares"
 msgstr "সেয়ার খরা"
 
-#: gnucash/register/ledger-core/split-register-model.c:499
+#: gnucash/register/ledger-core/split-register-model.c:503
 msgid "Debit Formula"
 msgstr "দেবিত ফোর্মুলা"
 
-#: gnucash/register/ledger-core/split-register-model.c:506
+#: gnucash/register/ledger-core/split-register-model.c:510
 msgid "Credit Formula"
 msgstr "ক্রেদিত ফোর্মুলা"
 
-#: gnucash/register/ledger-core/split-register-model.c:528
+#: gnucash/register/ledger-core/split-register-model.c:532
 #, fuzzy, c-format
 msgid "Reconciled on %s"
 msgstr "রিকনসাইল তৌরে"
 
-#: gnucash/register/ledger-core/split-register-model.c:1009
+#: gnucash/register/ledger-core/split-register-model.c:1013
 msgid "Scheduled"
 msgstr "সেদিউল তৌরে"
 
-#: gnucash/register/ledger-core/split-register-model.c:1058
+#: gnucash/register/ledger-core/split-register-model.c:1062
 msgid ""
 "Enter a reference, such as an invoice or check number, common to all entry "
 "lines (splits)"
@@ -21408,7 +21444,7 @@ msgstr ""
 "এন্ত্রি লাইন (স্প্লিতস) লোয়নমক্তা কমন ওইবা, ইনভোইস অমা নৎত্রগা চেক নম্বরগুম্বা, "
 "রেফরেন্স অমা এন্তর তৌ"
 
-#: gnucash/register/ledger-core/split-register-model.c:1060
+#: gnucash/register/ledger-core/split-register-model.c:1064
 msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
@@ -21416,19 +21452,19 @@ msgstr ""
 "এন্ত্রি লাইন (স্প্লিত) খুদিংমক্তা অখন্নবা ওইবা, ইনভোইস অমা নৎত্রগা চেক নম্বরগুম্বা, "
 "রিফরেন্স অমা এন্তর তৌ"
 
-#: gnucash/register/ledger-core/split-register-model.c:1065
+#: gnucash/register/ledger-core/split-register-model.c:1069
 msgid ""
 "Enter a reference, such as a check number, common to all entry lines (splits)"
 msgstr ""
 "এন্ত্রি লাইন (স্প্লিতস) লোয়নমক্তা কমন ওইবা, চেক নম্বর অমগুম্বা, রেফরেন্স অমা এন্তর তৌ"
 
-#: gnucash/register/ledger-core/split-register-model.c:1067
+#: gnucash/register/ledger-core/split-register-model.c:1071
 msgid ""
 "Enter a reference, such as a check number, unique to each entry line (split)"
 msgstr ""
 "এন্ত্রি লাইন (স্প্লিত) খুদিংমক্তা অখন্নবা ওইবা, চেক নম্বর অমগুম্বা, রেফরেন্স অমা এন্তর তৌ"
 
-#: gnucash/register/ledger-core/split-register-model.c:1088
+#: gnucash/register/ledger-core/split-register-model.c:1092
 msgid ""
 "Enter a transaction reference, such as an invoice or check number, common to "
 "all entry lines (splits)"
@@ -21436,36 +21472,36 @@ msgstr ""
 "এন্ত্রি লাইন (স্প্লিতস) লোয়নমক্তা কমন ওইবা, চেক নম্বর নৎত্রগা ইনভোইস অমগুম্বা, "
 "ত্রাঞ্জেক্সন রেফরেন্স অমা এন্তর তৌ"
 
-#: gnucash/register/ledger-core/split-register-model.c:1092
+#: gnucash/register/ledger-core/split-register-model.c:1096
 msgid ""
 "Enter a transaction reference that will be common to all entry lines (splits)"
 msgstr "এন্ত্রি লাইন (স্প্লিতস) লোয়নমক্তা কমন ওইগদবা ত্রাঞ্জেক্সন রেফরেন্স অমা এন্তর তৌ"
 
-#: gnucash/register/ledger-core/split-register-model.c:1128
+#: gnucash/register/ledger-core/split-register-model.c:1132
 msgid "Enter the name of the Customer"
 msgstr "কস্তমরগী মমিং চঙশিল্লো"
 
-#: gnucash/register/ledger-core/split-register-model.c:1131
+#: gnucash/register/ledger-core/split-register-model.c:1135
 msgid "Enter the name of the Vendor"
 msgstr "ভেন্দরগী মমিং চঙশিল্লো"
 
-#: gnucash/register/ledger-core/split-register-model.c:1134
+#: gnucash/register/ledger-core/split-register-model.c:1138
 msgid "Enter a description of the transaction"
 msgstr "ত্রান্সেকসনগী দিস্ক্রিপসন চঙশিল্লো"
 
-#: gnucash/register/ledger-core/split-register-model.c:1165
+#: gnucash/register/ledger-core/split-register-model.c:1169
 msgid "Enter notes for the transaction"
 msgstr "ত্রান্সেকসনগী নোতশিং চঙশিল্লো"
 
-#: gnucash/register/ledger-core/split-register-model.c:1198
+#: gnucash/register/ledger-core/split-register-model.c:1202
 msgid "Reason the transaction was voided"
 msgstr "ত্রান্সেকসন য়াদবগী মরম পীয়ু"
 
-#: gnucash/register/ledger-core/split-register-model.c:1297
+#: gnucash/register/ledger-core/split-register-model.c:1301
 msgid "Enter an action type, or choose one from the list"
 msgstr "এক্সন মখল অমা এন্তর তৌ, নৎত্রগা লিস্ত অদুদগী অমা খল্লু"
 
-#: gnucash/register/ledger-core/split-register-model.c:1298
+#: gnucash/register/ledger-core/split-register-model.c:1302
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
@@ -21473,34 +21509,34 @@ msgstr ""
 "মথংগী চেক নম্বর অদুগুম্বা, রেফরেন্স নম্বর অমা এন্তর তৌ, নৎত্রগা লিস্ত অদুদগী এক্সন মখল "
 "অমা খল্লু।"
 
-#: gnucash/register/ledger-core/split-register-model.c:1326
+#: gnucash/register/ledger-core/split-register-model.c:1330
 msgid "Enter a description of the split"
 msgstr "স্প্লিতগী দিস্ক্রিপসন অমা চঙশিল্লো"
 
-#: gnucash/register/ledger-core/split-register-model.c:1400
+#: gnucash/register/ledger-core/split-register-model.c:1404
 msgid "Enter the effective share price"
 msgstr "ইফেক্তিভ ওইবা সেয়ার প্রাইস চঙশিল্লো"
 
-#: gnucash/register/ledger-core/split-register-model.c:1436
+#: gnucash/register/ledger-core/split-register-model.c:1440
 msgid "Enter the number of shares bought or sold"
 msgstr "লৈরবা নত্রগা য়োনখ্রবা সেয়ারগী মশিং চঙশিল্লো"
 
-#: gnucash/register/ledger-core/split-register-model.c:1488
-#: gnucash/register/ledger-core/split-register-model.c:1555
+#: gnucash/register/ledger-core/split-register-model.c:1492
+#: gnucash/register/ledger-core/split-register-model.c:1559
 msgid "Enter the account to transfer from, or choose one from the list"
 msgstr "ত্রান্সফর তৌগদবা একাউন্ত চঙশিল্লো, নত্রগা পরিং অসিদগী অমা খল্লো"
 
-#: gnucash/register/ledger-core/split-register-model.c:1565
+#: gnucash/register/ledger-core/split-register-model.c:1569
 msgid ""
 "This transaction has multiple splits; press the Split button to see them all"
 msgstr "ত্রান্সেকসন অসি স্প্লিত কয়ামরুম লৈ; মখোয় পুম্নমক য়েংনবা স্প্লিত বতন নম্বিয়ু"
 
-#: gnucash/register/ledger-core/split-register-model.c:1568
+#: gnucash/register/ledger-core/split-register-model.c:1572
 msgid ""
 "This transaction is a stock split; press the Split button to see details"
 msgstr "ত্রান্সেকসন অসি স্তোক স্প্লিতনি; মচাখায়বশিং য়েংনবা স্প্লিত বতন নম্বিয়ু"
 
-#: gnucash/register/ledger-core/split-register-model.c:2086
+#: gnucash/register/ledger-core/split-register-model.c:2090
 #, c-format
 msgid ""
 "Cannot modify or delete this transaction. This transaction is marked read-"
@@ -21513,12 +21549,12 @@ msgstr ""
 "\n"
 "'%s'"
 
-#: gnucash/register/ledger-core/split-register-model.c:2199
+#: gnucash/register/ledger-core/split-register-model.c:2203
 #, fuzzy
 msgid "Change transaction containing a reconciled split?"
 msgstr "রিকন্সাইল তৌরবা স্প্লিত অমদা লিঙ্ক তৌবা স্প্লিত অদু হোংদোক-হোংজিন তৌগদ্রা?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2201
+#: gnucash/register/ledger-core/split-register-model.c:2205
 #, fuzzy, c-format
 msgid ""
 "The transaction you are about to change contains reconciled splits in the "
@@ -21531,11 +21567,11 @@ msgstr ""
 "অসুম্না তৌবনা মতুং তারকপা রিকন্সাইল তৌবা মতমদা লুসিলহনবা য়াই! হোংদোক-হোংজিন "
 "তৌবসিগা লোয়ননা মখা চৎথগদ্রা?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2211
+#: gnucash/register/ledger-core/split-register-model.c:2215
 msgid "Change reconciled split?"
 msgstr "রিকনসাইল তৌরবা স্প্লিত হোংদোক্কদ্রা?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2213
+#: gnucash/register/ledger-core/split-register-model.c:2217
 #, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
@@ -21546,20 +21582,20 @@ msgstr ""
 "অসুম্না তৌবনা মতুং তারকপা রিকন্সাইল তৌবা মতমদা লুসিলহনবা য়াই! হোংদোক-হোংজিন "
 "তৌবসিগা লোয়ননা মখা চৎথগদ্রা?"
 
-#: gnucash/register/ledger-core/split-register-model.c:2235
+#: gnucash/register/ledger-core/split-register-model.c:2239
 msgid "Chan_ge Split"
 msgstr "স্প্লিত হোংদো_কউ"
 
-#: gnucash/register/ledger-core/split-register-model.c:2238
+#: gnucash/register/ledger-core/split-register-model.c:2242
 #, fuzzy
 msgid "Chan_ge Transaction"
 msgstr "ত্রান্সেকসন ক_কথৎলো"
 
-#: gnucash/register/ledger-core/split-register-model.c:2339
+#: gnucash/register/ledger-core/split-register-model.c:2343
 msgid "Enter debit formula for real transaction"
 msgstr "অশেংবা ত্রান্সেকসন দেবিত ফোর্মুলা চঙশিনবিয়ু"
 
-#: gnucash/register/ledger-core/split-register-model.c:2375
+#: gnucash/register/ledger-core/split-register-model.c:2379
 msgid "Enter credit formula for real transaction"
 msgstr "অশেংবা ত্রান্সেকসনগী ক্রেদিত ফোর্মুলা চঙশিনবিয়ু"
 
@@ -23285,11 +23321,6 @@ msgstr "একাউন্ত লৌথোকউ"
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
 msgstr ""
 
-#: gnucash/report/reports/standard/account-summary.scm:296
-#: gnucash/report/reports/standard/trial-balance.scm:370
-msgid "${company-name} ${report-title} ${date}"
-msgstr ""
-
 #: gnucash/report/reports/standard/account-summary.scm:381
 msgid "Account title"
 msgstr "একাউন্ত মমিং"
@@ -24033,12 +24064,12 @@ msgid "missing"
 msgstr "কমিসন"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1057
-#: libgnucash/engine/Account.cpp:4395
+#: libgnucash/engine/Account.cpp:4401
 msgid "Asset"
 msgstr "লন-থুম"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1060
-#: libgnucash/engine/Account.cpp:4397
+#: libgnucash/engine/Account.cpp:4403
 msgid "Liability"
 msgstr "লাইয়বিলিতি"
 
@@ -24067,7 +24098,7 @@ msgstr " দা "
 #: gnucash/report/reports/standard/customer-summary.scm:286
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:401
-#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4402
+#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4408
 #: libgnucash/engine/gncInvoice.c:1099
 msgid "Expense"
 msgstr "চাদিং"
@@ -25318,7 +25349,7 @@ msgstr ""
 "অপুনবা ত্রেদিং একাউন্তগী বেলেন্স তাকপা লাইন অমা য়াউহনগদ্রা নৎত্রগা য়াউহনলোইদ্রা।"
 
 #: gnucash/report/reports/standard/income-statement.scm:477
-#: libgnucash/engine/Account.cpp:4407 libgnucash/engine/Scrub.c:496
+#: libgnucash/engine/Account.cpp:4413 libgnucash/engine/Scrub.c:496
 msgid "Trading"
 msgstr "ত্রেদিং"
 
@@ -25794,11 +25825,6 @@ msgstr ""
 #: gnucash/report/reports/standard/investment-lots.scm:799
 #, scheme-format
 msgid "  End price: ~a~a on ~a"
-msgstr ""
-
-#: gnucash/report/reports/standard/investment-lots.scm:809
-#, scheme-format
-msgid " [~a]"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:813
@@ -27517,6 +27543,10 @@ msgstr "মপুংফাবা পেরিওদকী-অরোইবা ৱ
 msgid "Adjusting Entries"
 msgstr "এন্ত্রিশিং চাশিন্নহনবা"
 
+#: gnucash/report/reports/standard/trial-balance.scm:370
+msgid "${company-name} ${report-title} ${date}"
+msgstr ""
+
 #: gnucash/report/reports/standard/trial-balance.scm:533
 msgid "Adjustments"
 msgstr "চাশিন্নহনবা"
@@ -27655,10 +27685,12 @@ msgid "Credit Lines"
 msgstr "ক্রেদিত লাইনস"
 
 #: gnucash/report/report-utilities.scm:639
+#, scheme-format
 msgid "Building '~a' report …"
 msgstr "'~a' রিপোর্ত শেমগৎ-শাগৎপা …"
 
 #: gnucash/report/report-utilities.scm:645
+#, scheme-format
 msgid "Rendering '~a' report …"
 msgstr "'~a' রিপোর্ত পীরি…"
 
@@ -28445,9 +28477,13 @@ msgid "Display the account name?"
 msgstr "একাউন্ত মমিং ফোঙদোক্কদ্রা?"
 
 #: gnucash/report/trep-engine.scm:949
+#, fuzzy
+#| msgid ""
+#| "Display the other account name? (if this is a split transaction, this "
+#| "parameter is guessed)."
 msgid ""
-"Display the other account name? (if this is a split transaction, this "
-"parameter is guessed)."
+"Display the other account name? If this is a split transaction, this "
+"parameter is guessed."
 msgstr ""
 "অতোপ্পা একাউন্ত মমিং ফোঙদোক্কদ্রা? (স্প্লিত অসি ত্রান্সেকসন অমা ওইরবদি, পেরামিতর অসি "
 "ওইগনি হায়না খল্লি)."
@@ -28547,22 +28583,31 @@ msgstr "_ত্রান্সেকসন"
 #: gnucash/ui/gnc-embedded-register-window.ui:58
 #: gnucash/ui/gnc-embedded-register-window.ui:121
 #: gnucash/ui/gnc-plugin-page-register.ui:160
-#: gnucash/ui/gnc-plugin-page-register.ui:375
+#: gnucash/ui/gnc-plugin-page-register.ui:374
+#: gnucash/ui/gnc-plugin-page-register.ui:486
+#: gnucash/ui/gnc-plugin-page-register.ui:584
+#: gnucash/ui/gnc-plugin-page-register.ui:623
 msgid "Remo_ve Other Splits"
 msgstr "অতোপ্পা স্প্লিতসিং অদু লৌথোক_উ"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:60
 #: gnucash/ui/gnc-embedded-register-window.ui:123
 #: gnucash/ui/gnc-plugin-page-register.ui:162
-#: gnucash/ui/gnc-plugin-page-register.ui:377
+#: gnucash/ui/gnc-plugin-page-register.ui:376
+#: gnucash/ui/gnc-plugin-page-register.ui:488
+#: gnucash/ui/gnc-plugin-page-register.ui:586
+#: gnucash/ui/gnc-plugin-page-register.ui:625
 msgid "Remove all splits in the current transaction"
 msgstr "হৌজিক্কী ত্রান্সেকসনদগী স্প্লতি পুম্নমক লৌথোকউ"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:65
 #: gnucash/ui/gnc-embedded-register-window.ui:128
 #: gnucash/ui/gnc-plugin-page-register.ui:169
-#: gnucash/ui/gnc-plugin-page-register.ui:382
-#: gnucash/ui/gnc-plugin-page-register.ui:572
+#: gnucash/ui/gnc-plugin-page-register.ui:381
+#: gnucash/ui/gnc-plugin-page-register.ui:493
+#: gnucash/ui/gnc-plugin-page-register.ui:591
+#: gnucash/ui/gnc-plugin-page-register.ui:630
+#: gnucash/ui/gnc-plugin-page-register.ui:762
 msgid "_Enter Transaction"
 msgstr "ত্রান্সেকসন _চঙশিল্লো"
 
@@ -28570,16 +28615,22 @@ msgstr "ত্রান্সেকসন _চঙশিল্লো"
 #: gnucash/ui/gnc-embedded-register-window.ui:130
 #: gnucash/ui/gnc-embedded-register-window.ui:197
 #: gnucash/ui/gnc-plugin-page-register.ui:171
-#: gnucash/ui/gnc-plugin-page-register.ui:384
-#: gnucash/ui/gnc-plugin-page-register.ui:574
+#: gnucash/ui/gnc-plugin-page-register.ui:383
+#: gnucash/ui/gnc-plugin-page-register.ui:495
+#: gnucash/ui/gnc-plugin-page-register.ui:593
+#: gnucash/ui/gnc-plugin-page-register.ui:632
+#: gnucash/ui/gnc-plugin-page-register.ui:764
 msgid "Record the current transaction"
 msgstr "হৌজিক্কী ত্রান্সেকসন রেকোর্দ তৌরো"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:70
 #: gnucash/ui/gnc-embedded-register-window.ui:133
 #: gnucash/ui/gnc-plugin-page-register.ui:175
-#: gnucash/ui/gnc-plugin-page-register.ui:387
-#: gnucash/ui/gnc-plugin-page-register.ui:587
+#: gnucash/ui/gnc-plugin-page-register.ui:386
+#: gnucash/ui/gnc-plugin-page-register.ui:498
+#: gnucash/ui/gnc-plugin-page-register.ui:596
+#: gnucash/ui/gnc-plugin-page-register.ui:635
+#: gnucash/ui/gnc-plugin-page-register.ui:777
 msgid "Ca_ncel Transaction"
 msgstr "ত্রান্সেকসন ক_কথৎলো"
 
@@ -28587,8 +28638,11 @@ msgstr "ত্রান্সেকসন ক_কথৎলো"
 #: gnucash/ui/gnc-embedded-register-window.ui:135
 #: gnucash/ui/gnc-embedded-register-window.ui:212
 #: gnucash/ui/gnc-plugin-page-register.ui:177
-#: gnucash/ui/gnc-plugin-page-register.ui:389
-#: gnucash/ui/gnc-plugin-page-register.ui:589
+#: gnucash/ui/gnc-plugin-page-register.ui:388
+#: gnucash/ui/gnc-plugin-page-register.ui:500
+#: gnucash/ui/gnc-plugin-page-register.ui:598
+#: gnucash/ui/gnc-plugin-page-register.ui:637
+#: gnucash/ui/gnc-plugin-page-register.ui:779
 msgid "Cancel the current transaction"
 msgstr "হৌজিক্কী ত্রান্সেকসন ককথৎলো"
 
@@ -28609,7 +28663,7 @@ msgstr "ত্রান্সেকসন খুদিংগী ঈপাউগ�
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:125
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:244
 #: gnucash/ui/gnc-plugin-page-register.ui:229
-#: gnucash/ui/gnc-plugin-page-register.ui:682
+#: gnucash/ui/gnc-plugin-page-register.ui:872
 #: gnucash/ui/gnc-reconcile-window.ui:43
 #, fuzzy
 #| msgid "Transfer"
@@ -28620,15 +28674,18 @@ msgstr "ত্রান্সফর তৌবা"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:128
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:246
 #: gnucash/ui/gnc-plugin-page-register.ui:232
-#: gnucash/ui/gnc-plugin-page-register.ui:684
+#: gnucash/ui/gnc-plugin-page-register.ui:874
 msgid "Transfer funds from one account to another"
 msgstr "একাউন্ত অমদগী অতোপ্পদা ফন্দশিং ত্রান্সফর তৌরো"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:98
 #: gnucash/ui/gnc-embedded-register-window.ui:140
 #: gnucash/ui/gnc-plugin-page-register.ui:269
-#: gnucash/ui/gnc-plugin-page-register.ui:413
-#: gnucash/ui/gnc-plugin-page-register.ui:612
+#: gnucash/ui/gnc-plugin-page-register.ui:412
+#: gnucash/ui/gnc-plugin-page-register.ui:524
+#: gnucash/ui/gnc-plugin-page-register.ui:603
+#: gnucash/ui/gnc-plugin-page-register.ui:642
+#: gnucash/ui/gnc-plugin-page-register.ui:802
 msgid "_Blank Transaction"
 msgstr "_অহাংবা ত্রান্সেকসন"
 
@@ -28636,8 +28693,11 @@ msgstr "_অহাংবা ত্রান্সেকসন"
 #: gnucash/ui/gnc-embedded-register-window.ui:142
 #: gnucash/ui/gnc-embedded-register-window.ui:227
 #: gnucash/ui/gnc-plugin-page-register.ui:272
-#: gnucash/ui/gnc-plugin-page-register.ui:415
-#: gnucash/ui/gnc-plugin-page-register.ui:614
+#: gnucash/ui/gnc-plugin-page-register.ui:414
+#: gnucash/ui/gnc-plugin-page-register.ui:526
+#: gnucash/ui/gnc-plugin-page-register.ui:605
+#: gnucash/ui/gnc-plugin-page-register.ui:644
+#: gnucash/ui/gnc-plugin-page-register.ui:804
 msgid "Move to the blank transaction at the bottom of the register"
 msgstr "রেজিস্তরগী মখাদা ব্লেঙ্ক ত্রান্সেকসনদা চৎলো"
 
@@ -28668,7 +28728,7 @@ msgstr "হৌজিক্কী ফাইলগী প্রোপরতিস 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:269
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:424
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:579
-#: gnucash/ui/gnc-plugin-page-register.ui:484
+#: gnucash/ui/gnc-plugin-page-register.ui:674
 #: gnucash/ui/gnc-plugin-page-report.ui:91
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:99
 msgid "Close the currently active page"
@@ -28767,7 +28827,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:145
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:179
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:213
-#: gnucash/ui/gnc-plugin-page-register.ui:358
+#: gnucash/ui/gnc-plugin-page-register.ui:357
+#: gnucash/ui/gnc-plugin-page-register.ui:469
 msgid "Re_name Page"
 msgstr "লামায় ম_মিং ওন্থোকউ"
 
@@ -28777,7 +28838,8 @@ msgstr "লামায় ম_মিং ওন্থোকউ"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:147
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:215
-#: gnucash/ui/gnc-plugin-page-register.ui:360
+#: gnucash/ui/gnc-plugin-page-register.ui:359
+#: gnucash/ui/gnc-plugin-page-register.ui:471
 #, fuzzy
 #| msgid "Rename this page."
 msgid "Rename this page"
@@ -28850,7 +28912,7 @@ msgstr "GnuCash গী মরমদা"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:254
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:409
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:564
-#: gnucash/ui/gnc-plugin-page-register.ui:469
+#: gnucash/ui/gnc-plugin-page-register.ui:659
 #: gnucash/ui/gnc-plugin-page-report.ui:76
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:84
 msgid "Save the current file"
@@ -28863,7 +28925,7 @@ msgstr "হৌজিক্কী ফাইল অসি সেভ তৌরো"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:294
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:449
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:604
-#: gnucash/ui/gnc-plugin-page-register.ui:509
+#: gnucash/ui/gnc-plugin-page-register.ui:699
 #: gnucash/ui/gnc-plugin-page-report.ui:116
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:124
 msgid "Open the New Invoice dialog"
@@ -28878,7 +28940,7 @@ msgstr "অনৌবা ইনভোইস দাইলোগ হাংদোক
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:357
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:447
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:602
-#: gnucash/ui/gnc-plugin-page-register.ui:507
+#: gnucash/ui/gnc-plugin-page-register.ui:697
 #: gnucash/ui/gnc-plugin-page-report.ui:114
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:122
 #, fuzzy
@@ -29522,6 +29584,7 @@ msgstr "খল্লবা একাউন্ত অমসুং মসিগী
 #: gnucash/ui/gnc-plugin-page-budget.ui:79
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:86
 #: gnucash/ui/gnc-plugin-page-register.ui:353
+#: gnucash/ui/gnc-plugin-page-register.ui:465
 #, fuzzy
 msgid "_Filter By…"
 msgstr "...না ফিল্তর তৌবা"
@@ -29561,7 +29624,7 @@ msgstr "অনৌবা একাউন্ত মখলগী কাংলুপ
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:132
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:234
 #: gnucash/ui/gnc-plugin-page-register.ui:236
-#: gnucash/ui/gnc-plugin-page-register.ui:697
+#: gnucash/ui/gnc-plugin-page-register.ui:887
 #, fuzzy
 #| msgid "_Reconcile"
 msgid "_Reconcile…"
@@ -29570,7 +29633,7 @@ msgstr "_রিকনসাইল তৌবা"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
 #: gnucash/ui/gnc-plugin-page-register.ui:238
-#: gnucash/ui/gnc-plugin-page-register.ui:699
+#: gnucash/ui/gnc-plugin-page-register.ui:889
 msgid "Reconcile the selected account"
 msgstr "খল্লবা একাউন্ত রিকনসাইল তৌরো"
 
@@ -29624,6 +29687,7 @@ msgid "_Check & Repair"
 msgstr "_অশোয়বা য়েংশিল্লু অমসুং শেমজিল্লু"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:169
+#: gnucash/ui/gnc-plugin-page-account-tree.ui:281
 msgid "Check & Repair A_ccount"
 msgstr "এ_কাউন্ত অশোয়বা য়েংশিল্লু অমসুং শেমজিল্লু"
 
@@ -29660,8 +29724,6 @@ msgstr ""
 
 # Considering as an imperative sentence.
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
-#: gnucash/ui/gnc-plugin-page-register.ui:350
-#: gnucash/ui/gnc-plugin-page-register.ui:355
 #, fuzzy
 #| msgid "Filter account."
 msgid "Filter accounts"
@@ -29688,12 +29750,6 @@ msgstr "একাউন্ত মুত্থৎলো"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:429
 msgid "Delete selected account"
 msgstr "খল্লবা একাউন্ত মুত্থৎলো"
-
-#: gnucash/ui/gnc-plugin-page-account-tree.ui:281
-#, fuzzy
-#| msgid "Check & Repair A_ccount"
-msgid "_Check & Repair A_ccount"
-msgstr "এ_কাউন্ত অশোয়বা য়েংশিল্লু অমসুং শেমজিল্লু"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:291
 msgid "Check & Repair A_ll"
@@ -29970,27 +30026,31 @@ msgstr "অনৌবা ভাউচর অমা সেম্মু"
 #: gnucash/ui/gnc-plugin-page-register.ui:6
 #, fuzzy
 #| msgid "_Print checks"
-msgid "_Print Cheques"
+msgid "_Print Checks…"
 msgstr "চেকশিং _নমথোকপা"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
-#: gnucash/ui/gnc-plugin-page-register.ui:445
+#: gnucash/ui/gnc-plugin-page-register.ui:444
+#: gnucash/ui/gnc-plugin-page-register.ui:556
 msgid "Assign as payment…"
 msgstr "পেমেন্তগুম্না এসাইন তৌ…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:17
-#: gnucash/ui/gnc-plugin-page-register.ui:447
+#: gnucash/ui/gnc-plugin-page-register.ui:446
+#: gnucash/ui/gnc-plugin-page-register.ui:558
 msgid "Assign the selected transaction as payment"
 msgstr "খল্লবা ত্রাঞ্জেক্সন অদু পেমেন্তগুম্না এসাইন তৌ"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
-#: gnucash/ui/gnc-plugin-page-register.ui:451
+#: gnucash/ui/gnc-plugin-page-register.ui:450
+#: gnucash/ui/gnc-plugin-page-register.ui:562
 #, fuzzy
 msgid "Edit payment…"
 msgstr "পেমেন্তগুম্না এসাইন তৌ…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:24
-#: gnucash/ui/gnc-plugin-page-register.ui:453
+#: gnucash/ui/gnc-plugin-page-register.ui:452
+#: gnucash/ui/gnc-plugin-page-register.ui:564
 #, fuzzy
 msgid "Edit the payment this transaction is a part of"
 msgstr "হৌজিক্কী ত্রান্সেকসন শেমদোকউ"
@@ -30050,59 +30110,67 @@ msgid "Add a reversing transaction"
 msgstr "_রিভর্সিং ত্রান্সেকসন হাপচিল্লো"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:248
-#: gnucash/ui/gnc-plugin-page-register.ui:712
+#: gnucash/ui/gnc-plugin-page-register.ui:902
 #, fuzzy
 #| msgid "Stock Split Assistant"
 msgid "Stock Ass_istant…"
 msgstr "স্তোক স্প্লিত এসিস্তেন্ত"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
-#: gnucash/ui/gnc-plugin-page-register.ui:418
+#: gnucash/ui/gnc-plugin-page-register.ui:417
+#: gnucash/ui/gnc-plugin-page-register.ui:529
 #, fuzzy
 #| msgid "Post Date"
 msgid "_Go to Date"
 msgstr "পোস্ত তৌবগী তাং"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:279
-#: gnucash/ui/gnc-plugin-page-register.ui:420
+#: gnucash/ui/gnc-plugin-page-register.ui:419
+#: gnucash/ui/gnc-plugin-page-register.ui:531
 #, fuzzy
 #| msgid "Do not print transactions out of specified dates."
 msgid "Move to the split at the specified date"
 msgstr "সেংনা পীরবা তারিখসিংগী ৱাংমদা ত্রাঞ্জেক্সনসিং প্রিন্ত তৌগনু।"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:283
-#: gnucash/ui/gnc-plugin-page-register.ui:423
-#: gnucash/ui/gnc-plugin-page-register.ui:627
+#: gnucash/ui/gnc-plugin-page-register.ui:422
+#: gnucash/ui/gnc-plugin-page-register.ui:534
+#: gnucash/ui/gnc-plugin-page-register.ui:817
 msgid "S_plit Transaction"
 msgstr "ত্রান্সেকসন খা_য়দোকউ"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:285
-#: gnucash/ui/gnc-plugin-page-register.ui:425
-#: gnucash/ui/gnc-plugin-page-register.ui:629
+#: gnucash/ui/gnc-plugin-page-register.ui:424
+#: gnucash/ui/gnc-plugin-page-register.ui:536
+#: gnucash/ui/gnc-plugin-page-register.ui:819
 msgid "Show all splits in the current transaction"
 msgstr "হৌজিক্কী ত্রান্সেকসনদা খায়দোকপা পুম্নমক উৎলো"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:289
-#: gnucash/ui/gnc-plugin-page-register.ui:428
+#: gnucash/ui/gnc-plugin-page-register.ui:427
+#: gnucash/ui/gnc-plugin-page-register.ui:539
 msgid "Edit E_xchange Rate"
 msgstr "এ_কচেনজগী রেত শেমদোকউ"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:291
-#: gnucash/ui/gnc-plugin-page-register.ui:430
+#: gnucash/ui/gnc-plugin-page-register.ui:429
+#: gnucash/ui/gnc-plugin-page-register.ui:541
 msgid "Edit the exchange rate for the current transaction"
 msgstr "হৌজিক্কী ত্রান্সেকসনগী একচেনজ তৌবগী রেত শেংদোকউ"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:295
-#: gnucash/ui/gnc-plugin-page-register.ui:433
-#: gnucash/ui/gnc-plugin-page-register.ui:657
+#: gnucash/ui/gnc-plugin-page-register.ui:432
+#: gnucash/ui/gnc-plugin-page-register.ui:544
+#: gnucash/ui/gnc-plugin-page-register.ui:847
 #, fuzzy
 #| msgid "Schedule"
 msgid "Sche_dule…"
 msgstr "সেদিউল"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:297
-#: gnucash/ui/gnc-plugin-page-register.ui:435
-#: gnucash/ui/gnc-plugin-page-register.ui:659
+#: gnucash/ui/gnc-plugin-page-register.ui:434
+#: gnucash/ui/gnc-plugin-page-register.ui:546
+#: gnucash/ui/gnc-plugin-page-register.ui:849
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template"
 msgstr "হৌজিক্কী ত্রান্সেকসনগা লোয়ননা সেদিউল ত্রান্সেকসন তেমপ্লেত ওইনা শেমগৎলো"
@@ -30111,16 +30179,18 @@ msgstr "হৌজিক্কী ত্রান্সেকসনগা লো�
 #. account of the first other account in the current transaction's split list
 #. with focus on the current transaction's entry in that register.
 #: gnucash/ui/gnc-plugin-page-register.ui:304
-#: gnucash/ui/gnc-plugin-page-register.ui:438
-#: gnucash/ui/gnc-plugin-page-register.ui:642
+#: gnucash/ui/gnc-plugin-page-register.ui:437
+#: gnucash/ui/gnc-plugin-page-register.ui:549
+#: gnucash/ui/gnc-plugin-page-register.ui:832
 #, fuzzy
 #| msgid "Display the other account code?"
 msgid "_Jump to the other account"
 msgstr "অতোপ্পা একাউন্ত কোদ অদু উৎকদ্রা?"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:306
-#: gnucash/ui/gnc-plugin-page-register.ui:440
-#: gnucash/ui/gnc-plugin-page-register.ui:644
+#: gnucash/ui/gnc-plugin-page-register.ui:439
+#: gnucash/ui/gnc-plugin-page-register.ui:551
+#: gnucash/ui/gnc-plugin-page-register.ui:834
 #, fuzzy
 #| msgid "Open a register report for the selected Transaction"
 msgid ""
@@ -30155,7 +30225,8 @@ msgstr "একাউন্ত রিপোর্ত - সিঙ্গল ত্�
 msgid "Open a register report for the selected Transaction"
 msgstr "খল্লবা ত্রান্সেকসন অসিগী রেজিস্তর রিপোর্ত হাংদোকউ"
 
-#: gnucash/ui/gnc-plugin-page-register.ui:348
+#: gnucash/ui/gnc-plugin-page-register.ui:349
+#: gnucash/ui/gnc-plugin-page-register.ui:461
 #, fuzzy
 #| msgid "Sort By"
 msgid "_Sort By…"
@@ -30420,85 +30491,85 @@ msgstr ""
 msgid "No Finance::Quote Version"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:282
+#: libgnucash/app-utils/gnc-quotes.cpp:297
 msgid "GncQuotes::Fetch called with no book."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:300
+#: libgnucash/app-utils/gnc-quotes.cpp:315
 msgid "GncQuotes::Fetch called with no commodities."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:314
+#: libgnucash/app-utils/gnc-quotes.cpp:329
 #, fuzzy
 #| msgid "There are no options for this report."
 msgid "There were no commodities for which to retrieve quotes."
 msgstr "রিপোর্ত অসিগী ওপসন অমত্তা লৈতে."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:328
+#: libgnucash/app-utils/gnc-quotes.cpp:343
 msgid "Finance::Quote retrieval failed with error "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:346
-#: libgnucash/app-utils/gnc-quotes.cpp:810
+#: libgnucash/app-utils/gnc-quotes.cpp:361
+#: libgnucash/app-utils/gnc-quotes.cpp:825
 msgid "Finance::Quote returned no data and set no error."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:348
+#: libgnucash/app-utils/gnc-quotes.cpp:363
 msgid "Finance::Quote returned an error: "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:352
+#: libgnucash/app-utils/gnc-quotes.cpp:367
 msgid "Finance::Quote reported failure set no error."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:354
-msgid "Finance::Quote reported failure with  error: "
+#: libgnucash/app-utils/gnc-quotes.cpp:369
+msgid "Finance::Quote reported failure with error: "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:357
+#: libgnucash/app-utils/gnc-quotes.cpp:372
 msgid "Finance::Quote returned a quote with no currency."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:360
+#: libgnucash/app-utils/gnc-quotes.cpp:375
 msgid ""
 "Finance::Quote returned a quote with a currency GnuCash doesn't know about."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:363
+#: libgnucash/app-utils/gnc-quotes.cpp:378
 msgid "Finance::Quote returned a quote with no price element."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:366
+#: libgnucash/app-utils/gnc-quotes.cpp:381
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:370
+#: libgnucash/app-utils/gnc-quotes.cpp:385
 #, fuzzy
 #| msgid "There was an error accessing %s."
 msgid "The quote has no error set."
 msgstr "%s এক্সেস তৌবদা অশোয়বা অমা লৈখ্রে."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:379
+#: libgnucash/app-utils/gnc-quotes.cpp:394
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:456
+#: libgnucash/app-utils/gnc-quotes.cpp:471
 msgid "Currency quotes requires at least two currencies"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:721
-#: libgnucash/app-utils/gnc-quotes.cpp:726
+#: libgnucash/app-utils/gnc-quotes.cpp:736
+#: libgnucash/app-utils/gnc-quotes.cpp:741
 msgid "Failed to parse result returned by Finance::Quote."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:728
+#: libgnucash/app-utils/gnc-quotes.cpp:743
 msgid "Error message:"
 msgstr ""
 
 #. Translators: Means that the preceding element is required
-#: libgnucash/app-utils/gnc-quotes.cpp:770
+#: libgnucash/app-utils/gnc-quotes.cpp:785
 #, fuzzy
 #| msgid "Date required."
 msgctxt "Finance::Quote"
@@ -30506,14 +30577,14 @@ msgid "required"
 msgstr "তাং তঙাইফদনা চঙই,"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
-#: libgnucash/app-utils/gnc-quotes.cpp:772
+#: libgnucash/app-utils/gnc-quotes.cpp:787
 #, fuzzy
 msgctxt "Finance::Quote"
 msgid "recommended"
 msgstr "_অনরিকনসাইল"
 
 #. Translators: Means that one of the indicated elements is required
-#: libgnucash/app-utils/gnc-quotes.cpp:774
+#: libgnucash/app-utils/gnc-quotes.cpp:789
 #, fuzzy
 #| msgid "End of this year"
 msgctxt "Finance::Quote"
@@ -30521,18 +30592,18 @@ msgid "one of these"
 msgstr "চহী অসিগী অরোইবা"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
-#: libgnucash/app-utils/gnc-quotes.cpp:776
+#: libgnucash/app-utils/gnc-quotes.cpp:791
 #, fuzzy
 msgctxt "Finance::Quote"
 msgid "**missing**"
 msgstr "কমিসন"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:783
+#: libgnucash/app-utils/gnc-quotes.cpp:798
 msgid "Finance::Quote fields GnuCash uses:"
 msgstr ""
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
-#: libgnucash/app-utils/gnc-quotes.cpp:785
+#: libgnucash/app-utils/gnc-quotes.cpp:800
 #, fuzzy
 #| msgid "Symbol"
 msgctxt "Finance::Quote"
@@ -30540,7 +30611,7 @@ msgid "symbol: "
 msgstr "সিম্বোল"
 
 #. Translators: The date of the quote.
-#: libgnucash/app-utils/gnc-quotes.cpp:787
+#: libgnucash/app-utils/gnc-quotes.cpp:802
 #, fuzzy
 #| msgid "Date: "
 msgctxt "Finance::Quote"
@@ -30548,7 +30619,7 @@ msgid "date: "
 msgstr "তাং:"
 
 #. Translators: The quote currency
-#: libgnucash/app-utils/gnc-quotes.cpp:789
+#: libgnucash/app-utils/gnc-quotes.cpp:804
 #, fuzzy
 #| msgid "Currency"
 msgctxt "Finance::Quote"
@@ -30556,7 +30627,7 @@ msgid "currency: "
 msgstr "করেন্সি"
 
 #. Translators: The quote is for the most recent trade on the exchange
-#: libgnucash/app-utils/gnc-quotes.cpp:795
+#: libgnucash/app-utils/gnc-quotes.cpp:810
 #, fuzzy
 #| msgid "last %s"
 msgctxt "Finance::Quote"
@@ -30564,39 +30635,39 @@ msgid "last: "
 msgstr "অরোইবা %s"
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
-#: libgnucash/app-utils/gnc-quotes.cpp:797
+#: libgnucash/app-utils/gnc-quotes.cpp:812
 msgctxt "Finance::Quote"
 msgid "nav: "
 msgstr ""
 
 #. Translators: The quote is neither a last trade nor an NAV.
-#: libgnucash/app-utils/gnc-quotes.cpp:799
+#: libgnucash/app-utils/gnc-quotes.cpp:814
 #, fuzzy
 #| msgid "Price"
 msgctxt "Finance::Quote"
 msgid "price: "
 msgstr "মমল"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:819
+#: libgnucash/app-utils/gnc-quotes.cpp:834
 msgid "Finance::Quote reported a failure for symbol "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:822
+#: libgnucash/app-utils/gnc-quotes.cpp:837
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:885
+#: libgnucash/app-utils/gnc-quotes.cpp:900
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:891
+#: libgnucash/app-utils/gnc-quotes.cpp:906
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:897
+#: libgnucash/app-utils/gnc-quotes.cpp:912
 #, fuzzy
 #| msgid "Unrecognized or inconsistent format."
 msgid "Unrecognized Finance::Quote Error: "
@@ -30761,36 +30832,36 @@ msgstr ""
 "মখাদা অদোম্না চুমদবা একাউন্ত মমিংশিংগী পরিং অমা ফংগনি:\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4396
+#: libgnucash/engine/Account.cpp:4402
 msgid "Credit Card"
 msgstr "ক্রেদিত কার্দ"
 
-#: libgnucash/engine/Account.cpp:4399
+#: libgnucash/engine/Account.cpp:4405
 msgid "Mutual Fund"
 msgstr "ম্যুচুয়েল ফন্দ"
 
-#: libgnucash/engine/Account.cpp:4404
+#: libgnucash/engine/Account.cpp:4410
 msgid "A/Receivable"
 msgstr "A/ফংগদবা"
 
-#: libgnucash/engine/Account.cpp:4405
+#: libgnucash/engine/Account.cpp:4411
 msgid "A/Payable"
 msgstr "A/শেল পীগদবা"
 
-#: libgnucash/engine/Account.cpp:4406
+#: libgnucash/engine/Account.cpp:4412
 msgid "Root"
 msgstr "মরু"
 
-#: libgnucash/engine/Account.cpp:5118
+#: libgnucash/engine/Account.cpp:5124
 msgid "Orphaned Gains"
 msgstr "ওর্ফান ওইবা অতোংবা"
 
-#: libgnucash/engine/Account.cpp:5132 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:5138 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "ফংলবা অতোংবা/অমাংবা"
 
-#: libgnucash/engine/Account.cpp:5134
+#: libgnucash/engine/Account.cpp:5140
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -31002,11 +31073,11 @@ msgstr "মথং চহীগী অরোইবা"
 msgid "Last day of the next calendar year."
 msgstr "মথংগী কেলেন্দর চহিগী অরোয়বা নুমিৎ।"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1104
+#: libgnucash/engine/gnc-optiondb.cpp:1105
 msgid "Counters"
 msgstr "কাউন্তর"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1111
+#: libgnucash/engine/gnc-optiondb.cpp:1112
 msgid ""
 "Choose the number of days after which transactions will be read-only and "
 "cannot be edited anymore. This threshold is marked by a red line in the "
@@ -31018,7 +31089,7 @@ msgstr ""
 "তৌই। করিগুম্বা জিরো ওইরবদি, ত্রাঞ্জেক্সন লোয়নমক এদিত তৌবা য়াই অমসুং পাবা-খক্কী "
 "অমত্তা নত্তে।"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1116
+#: libgnucash/engine/gnc-optiondb.cpp:1117
 msgid ""
 "Check to have split action field used in registers for 'Num' field in place "
 "of transaction number; transaction number shown as 'T-Num' on second line of "
@@ -31030,7 +31101,7 @@ msgstr ""
 "চেক তৌ। ব্যুজিনেস ফিচরসিং, রিপোর্ত তৌবা অমসুং ইম্পোর্তসিং/এক্সপোর্তসিংদা মদুগী চান্নবা "
 "ফলসিং লৈ।"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1120
+#: libgnucash/engine/gnc-optiondb.cpp:1121
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
@@ -31038,15 +31109,15 @@ msgstr ""
 "করেন্সি নৎত্রগা কোম্মোদিতি অমদগী হেন্না য়াউবা ত্রাঞ্জেক্সনসিংগীদমক সিজিন্নবা ত্রেদিং "
 "একাউন্তসিং লৈনবা চেক তৌ।"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1127
+#: libgnucash/engine/gnc-optiondb.cpp:1128
 msgid "Budget to be used when none has been otherwise specified."
 msgstr "তোঙানবা মওংদা করিগুম্বা অমত্তা তাক্তবা মতমদা সিজিন্নগদবা বদজেত।"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1133
+#: libgnucash/engine/gnc-optiondb.cpp:1134
 msgid "Customer number"
 msgstr "কস্তমর নম্বর"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1134
+#: libgnucash/engine/gnc-optiondb.cpp:1135
 msgid ""
 "The previous customer number generated. This number will be incremented to "
 "generate the next customer number."
@@ -31054,11 +31125,11 @@ msgstr ""
 "মমাংগী কস্তমর নম্বর শেমগৎলে. মথংগী কস্তমর নম্বর শেমগৎপদা মসিগী নম্বর অসিদগী মখা "
 "চত্থগনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1137
+#: libgnucash/engine/gnc-optiondb.cpp:1138
 msgid "Customer number format"
 msgstr "কস্তমর নম্বর ফোর্মেত"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1139
+#: libgnucash/engine/gnc-optiondb.cpp:1140
 msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
@@ -31066,11 +31137,11 @@ msgstr ""
 "কস্তমর নম্বর শেমগৎপদা শিজিন্নগদবা ফোর্মেত স্ত্রিং. মসি printf-style ফোর্মেত স্ত্রিং "
 "অমনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1142
+#: libgnucash/engine/gnc-optiondb.cpp:1143
 msgid "Employee number"
 msgstr "ইমপ্লোয়ি নম্বর"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1143
+#: libgnucash/engine/gnc-optiondb.cpp:1144
 msgid ""
 "The previous employee number generated. This number will be incremented to "
 "generate the next employee number."
@@ -31078,11 +31149,11 @@ msgstr ""
 "মমাংগী ইমপ্লোয়ি নম্বর শেমগৎলে. মসিগি নম্বর অসি মথংগী ইমপ্লোয়ি নম্বর শেমগৎপদা "
 "হেনগৎলগনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1146
+#: libgnucash/engine/gnc-optiondb.cpp:1147
 msgid "Employee number format"
 msgstr "ইমপ্লোয়ি নম্বর ফোর্মেত"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1148
+#: libgnucash/engine/gnc-optiondb.cpp:1149
 msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
@@ -31090,11 +31161,11 @@ msgstr ""
 "ইমপ্লোয়ি নম্বরশিং শেমগৎপগী শিজিন্নগদবা ফোর্মেত স্ত্রিং. মসি printf-style ফোর্মেত "
 "স্ত্রিংনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1151
+#: libgnucash/engine/gnc-optiondb.cpp:1152
 msgid "Invoice number"
 msgstr "ইনভোইস নম্বর"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1152
+#: libgnucash/engine/gnc-optiondb.cpp:1153
 msgid ""
 "The previous invoice number generated. This number will be incremented to "
 "generate the next invoice number."
@@ -31102,11 +31173,11 @@ msgstr ""
 "মমাংগী ইভোইস নম্বর শেমগৎলে. মথংগী ইনভোইস নম্বর শেমগৎপদা মসিগী নম্বর অসিদগী মখা "
 "চত্থগনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1155
+#: libgnucash/engine/gnc-optiondb.cpp:1156
 msgid "Invoice number format"
 msgstr "ইনভোইস নম্বর ফোর্মেত"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1157
+#: libgnucash/engine/gnc-optiondb.cpp:1158
 msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
@@ -31114,11 +31185,11 @@ msgstr ""
 "ইনভোইস নম্বর শেমগৎপদা শিজিন্নগদবা ফোর্মেত স্ত্রিং. মসি printf-style ফোর্মেত স্ত্রিং "
 "অমনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1160
+#: libgnucash/engine/gnc-optiondb.cpp:1161
 msgid "Bill number"
 msgstr "বিল নম্বর"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1161
+#: libgnucash/engine/gnc-optiondb.cpp:1162
 msgid ""
 "The previous bill number generated. This number will be incremented to "
 "generate the next bill number."
@@ -31126,11 +31197,11 @@ msgstr ""
 "মমাংগী বিল নম্বর শেমগৎলে. মথংগী বিল নম্বর শেমগৎপদা মসিগী নম্বর অসিদগী মখা "
 "চত্থগনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1164
+#: libgnucash/engine/gnc-optiondb.cpp:1165
 msgid "Bill number format"
 msgstr "বিল নম্বর ফোর্মেত"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1165
+#: libgnucash/engine/gnc-optiondb.cpp:1166
 msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
@@ -31138,11 +31209,11 @@ msgstr ""
 "বিল নম্বর শেমগৎপদা শিজিন্নগদবা ফোর্মেত স্ত্রিং. মসি printf-style ফোর্মেত স্ত্রিং "
 "অমনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1168
+#: libgnucash/engine/gnc-optiondb.cpp:1169
 msgid "Expense voucher number"
 msgstr "শেল শিজিন্নবগী ভাউচর নম্বর"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1169
+#: libgnucash/engine/gnc-optiondb.cpp:1170
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
@@ -31150,11 +31221,11 @@ msgstr ""
 "মমাংগী চাদিংগী ভাউচর নম্বর শেমগৎলে. মথংগী ভাউচর নম্বর শেমগৎপদা মসিগী নম্বর "
 "অসিদগী মখা চত্থগনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1172
+#: libgnucash/engine/gnc-optiondb.cpp:1173
 msgid "Expense voucher number format"
 msgstr "শেল শিজিন্নবগী ভাউচর নম্বর ফোর্মেত"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1174
+#: libgnucash/engine/gnc-optiondb.cpp:1175
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
@@ -31162,11 +31233,11 @@ msgstr ""
 "চাদিংগী ভাউচর নম্বর শেমগৎপদা শিজিন্নগদবা ফোর্মেত স্ত্রিং. মসি printf-style ফোর্মেত "
 "স্ত্রিং অমনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1177
+#: libgnucash/engine/gnc-optiondb.cpp:1178
 msgid "Job number"
 msgstr "থবক্কী নম্বরগী"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1178
+#: libgnucash/engine/gnc-optiondb.cpp:1179
 msgid ""
 "The previous job number generated. This number will be incremented to "
 "generate the next job number."
@@ -31174,11 +31245,11 @@ msgstr ""
 "মমাংগী থবক্কী নম্বর শেমগৎলে. মথংগী থবক্কী নম্বর শেমগৎপদা মসিগী নম্বর অসিদগী মখা "
 "চত্থগনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1181
+#: libgnucash/engine/gnc-optiondb.cpp:1182
 msgid "Job number format"
 msgstr "থবক্কী নম্বরগী ফোর্মেত"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1182
+#: libgnucash/engine/gnc-optiondb.cpp:1183
 msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
@@ -31186,11 +31257,11 @@ msgstr ""
 "থবক্কী নম্বর শেমগৎপদা শিজিন্নগদবা ফোর্মেত স্ত্রিং. মসি printf-style ফোর্মেত স্ত্রিং "
 "অমনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1185
+#: libgnucash/engine/gnc-optiondb.cpp:1186
 msgid "Order number"
 msgstr "ওর্দর নম্বর"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1186
+#: libgnucash/engine/gnc-optiondb.cpp:1187
 msgid ""
 "The previous order number generated. This number will be incremented to "
 "generate the next order number."
@@ -31198,11 +31269,11 @@ msgstr ""
 "মমাংগী ওর্দর নম্বর শেমগৎলে. মথংগী ওর্দর নম্বর শেমগৎপদা মসিগী নম্বর অসিদগী মখা "
 "চত্থগনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1189
+#: libgnucash/engine/gnc-optiondb.cpp:1190
 msgid "Order number format"
 msgstr "ওর্দর নম্বর ফোর্মেত"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1190
+#: libgnucash/engine/gnc-optiondb.cpp:1191
 msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
@@ -31210,11 +31281,11 @@ msgstr ""
 "ওর্দর নম্বর শেমগৎপদা শিজিন্নগদবা ফোর্মেত স্ত্রিং. মসি printf-style ফোর্মেত স্ত্রিং "
 "অমনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1193
+#: libgnucash/engine/gnc-optiondb.cpp:1194
 msgid "Vendor number"
 msgstr "ভেন্দর নম্বর"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1194
+#: libgnucash/engine/gnc-optiondb.cpp:1195
 msgid ""
 "The previous vendor number generated. This number will be incremented to "
 "generate the next vendor number."
@@ -31222,11 +31293,11 @@ msgstr ""
 "মমাংগী ভেন্দর নম্বর শেমগৎলে. মসিগী নম্বর অসি মথংগী ভেন্দর নম্বর শেমগৎনবা "
 "হেনগৎহনগনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1197
+#: libgnucash/engine/gnc-optiondb.cpp:1198
 msgid "Vendor number format"
 msgstr "ভেন্দর নম্বর ফোর্মেত"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1198
+#: libgnucash/engine/gnc-optiondb.cpp:1199
 msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
@@ -31234,62 +31305,62 @@ msgstr ""
 "ভেন্দর নম্বর শেমগৎপদা শিজিন্নগদবা ফোর্মেত স্ত্রিং. মসি printf-style ফোর্মেত স্ত্রিং "
 "অমনি."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1204
+#: libgnucash/engine/gnc-optiondb.cpp:1205
 msgid "The name of your business."
 msgstr "নহাক্কী ব্যুজিনেসকী মমীং"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1207
+#: libgnucash/engine/gnc-optiondb.cpp:1208
 msgid "The address of your business."
 msgstr "নহাক্কী ব্যুজিনেসকী এদ্রেস"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1211
-#: libgnucash/engine/gnc-optiondb.cpp:1215
+#: libgnucash/engine/gnc-optiondb.cpp:1212
+#: libgnucash/engine/gnc-optiondb.cpp:1216
 msgid "The contact person to print on invoices."
 msgstr "ইনভোইসসিং প্রিন্ত তৌনবগীদমক পাউ ফাউনগদবা মীওই"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1219
+#: libgnucash/engine/gnc-optiondb.cpp:1220
 msgid "The fax number of your business."
 msgstr "নহাক্কী ব্যুজিনেস অদুগী ফেক্স নম্বর।"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1223
+#: libgnucash/engine/gnc-optiondb.cpp:1224
 msgid "The email address of your business."
 msgstr "নহাক্কী ব্যুজিনেস অদুগী ইমেইল এদ্রেস।"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1227
+#: libgnucash/engine/gnc-optiondb.cpp:1228
 msgid "The URL address of your website."
 msgstr "নহাক্কী ৱেবসাইত অদুগী URL এদ্রেস"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1230
+#: libgnucash/engine/gnc-optiondb.cpp:1231
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
 msgstr "নহাক্কী কম্পনি অদুগী ID (খুদম ওইনা 'তেক্স-ID: 00-000000)।"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1238
+#: libgnucash/engine/gnc-optiondb.cpp:1239
 msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
 msgstr ""
 
-#: libgnucash/engine/gnc-optiondb.cpp:1241
+#: libgnucash/engine/gnc-optiondb.cpp:1242
 msgid "Default Customer TaxTable"
 msgstr "দিফোল্ত কস্তমর তেক্সতেবল"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1242
+#: libgnucash/engine/gnc-optiondb.cpp:1243
 msgid "The default tax table to apply to customers."
 msgstr "কস্তমরসদা শিজিন্নগদবা দিফোল্ত তেক্স তেবল."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1245
+#: libgnucash/engine/gnc-optiondb.cpp:1246
 msgid "Default Vendor TaxTable"
 msgstr "দিফোল্ত ভেন্দর তেক্সতেবল"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1246
+#: libgnucash/engine/gnc-optiondb.cpp:1247
 msgid "The default tax table to apply to vendors."
 msgstr "ভেন্দরদা শিজিন্নগদবা দিফোল্ত তেক্স তেবল."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1250
+#: libgnucash/engine/gnc-optiondb.cpp:1251
 msgid "The default date format used for fancy printed dates."
 msgstr "ৱাখলনা সেম্বা প্রিন্ত তৌরবা তারিখসিংদা সিজিন্নবা দিফোলত তারিখ ফোর্মেত।"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1256
+#: libgnucash/engine/gnc-optiondb.cpp:1257
 msgid "The electronic tax number of your business"
 msgstr "অদোমগী ললোন-ইতিক তৌবগী ইলেক্ত্রোনিক তেক্স নম্বর"
 

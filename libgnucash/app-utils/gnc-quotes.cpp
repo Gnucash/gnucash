@@ -366,7 +366,7 @@ explain(GncQuoteError err, const std::string& errmsg)
         if (errmsg.empty())
             retval += _("Finance::Quote reported failure set no error.");
         else
-            retval += _("Finance::Quote reported failure with  error: ") + errmsg;
+            retval += _("Finance::Quote reported failure with error: ") + errmsg;
         break;
     case GncQuoteError::NO_CURRENCY:
         retval += _("Finance::Quote returned a quote with no currency.");
