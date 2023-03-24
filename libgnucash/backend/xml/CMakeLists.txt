@@ -125,9 +125,3 @@ install(TARGETS gncmod-backend-xml
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
 # ----
-
-# Special normal (non-MODULE) library for cutecash only
-add_library(gncmod-backend-xml-utils ${libgncmod_backend_xml_SOURCES})
-target_link_libraries(gncmod-backend-xml-utils gnc-backend-xml-utils gnc-engine
-                        gnc-core-utils ${LIBXML2_LDFLAGS} PkgConfig::GLIB2 ${ZLIB_LIBRARY})
-target_compile_definitions (gncmod-backend-xml-utils PRIVATE -DG_LOG_DOMAIN=\"gnc.backend.xml\" -DU_SHOW_CPLUSPLUS_API=0)

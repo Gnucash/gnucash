@@ -334,8 +334,3 @@
 #cmakedefine WEBKIT2 1
 #cmakedefine WEBKIT1 1
 
-/* Definitions for all OS */
-/* From cutecash */
-//#define HAVE_LIBQOF /**/
-//#define QOF_DISABLE_DEPRECATED 1
-//#define GNC_NO_LOADABLE_MODULES 1
