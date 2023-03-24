@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-24 13:38+0000\n"
+"PO-Revision-Date: 2023-03-24 15:40+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -21463,11 +21463,11 @@ msgstr "Najnoviji"
 
 #: gnucash/report/options-utilities.scm:158
 msgid "Width of plot, 10 - 100 in percent, above in pixels."
-msgstr "Širina dijagrama, 10 – 100 %, iznad u pikselima."
+msgstr "Širina dijagrama, 10 – 100 u postocima, više od 100 u pikselima."
 
 #: gnucash/report/options-utilities.scm:164
 msgid "Height of plot, 10 - 100 in percent, above in pixels."
-msgstr "Visina dijagrama, 10 – 100 %, iznad u pikselima."
+msgstr "Visina dijagrama, 10 – 100 u postocima, više od 100 u pikselima."
 
 #: gnucash/report/options-utilities.scm:173
 msgid "Choose the marker for each data point."
