@@ -42,7 +42,6 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "engine-helpers.h"
-#include "gnc-ofx-import.h"
 #include "gnc-file.h"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
@@ -52,6 +51,13 @@
 #include "dialog-account.h"
 #include "dialog-utils.h"
 #include "window-reconcile.h"
+#include "gnc-ofx-import.h"
+
+#include <algorithm>
+#include <unordered_map>
+#include <vector>
+#include <string>
+#include <sstream>
 
 #define GNC_PREFS_GROUP "dialogs.import.ofx"
 #define GNC_PREF_AUTO_COMMODITY "auto-create-commodity"
@@ -68,8 +74,18 @@ static Account *ofx_parent_account = NULL;
 
 typedef struct OfxTransactionData OfxTransactionData;
 
+using StringVec = std::vector<std::string>;
+
+static StringVec gslist_to_stringvec (GSList *slist)
+{
+    StringVec rv;
+    for (GSList *n = slist; n; n = n->next)
+        rv.emplace_back (static_cast<char*>(n->data));
+    return rv;
+}
+
 // Structure we use to gather information about statement balance/account etc.
-typedef struct _ofx_info
+struct OfxInfo
 {
     GtkWindow* parent;
     GNCImportMainMatcher *gnc_ofx_importer_gui;
@@ -78,13 +94,26 @@ typedef struct _ofx_info
     Account *last_income_account;
     gint num_trans_processed;               // Number of transactions processed
     GList* statement;     // Statement, if any
-    gboolean run_reconcile;                 // If TRUE the reconcile window is opened after matching.
-    GSList* file_list;                      // List of OFX files to import
-    GList* trans_list;                      // We store the processed ofx transactions here
+    bool run_reconcile;                 // If TRUE the reconcile window is opened after matching.
+    StringVec file_list;                      // List of OFX files to import
+    std::vector<Transaction*> trans_list;                      // We store the processed ofx transactions here
     gint response;                          // Response sent by the match gui
-} ofx_info ;
 
-static void runMatcher(ofx_info* info, char * selected_filename, gboolean go_to_next_file);
+    OfxInfo (GtkWindow *parent, GSList *file_names)
+        : parent (parent)
+        , last_import_account (nullptr)
+        , last_investment_account (nullptr)
+        , last_income_account (nullptr)
+        , num_trans_processed (0)
+        , statement (nullptr)
+        , run_reconcile (false)
+        , file_list (gslist_to_stringvec (file_names))
+        , response (0)
+        {};
+};
+
+static void runMatcher (OfxInfo* info, const char* selected_filename,
+                        bool go_to_next_file);
 
 /*
 int ofx_proc_status_cb(struct OfxStatusData data)
@@ -104,8 +133,7 @@ get_associated_income_account(const Account* investment_account)
     qof_instance_get (QOF_INSTANCE (investment_account),
                       PROP_OFX_INCOME_ACCOUNT, &income_guid,
                       NULL);
-    acct = xaccAccountLookup (income_guid,
-                              gnc_account_get_book(investment_account));
+    acct = xaccAccountLookup (income_guid, gnc_account_get_book(investment_account));
     guid_free (income_guid);
     return acct;
 }
@@ -238,32 +266,24 @@ sanitize_string (gchar* str)
     return str;
 }
 
-int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user_data)
+int
+ofx_proc_security_cb (const struct OfxSecurityData data, void *security_user_data)
 {
     char* cusip = NULL;
     char* default_fullname = NULL;
     char* default_mnemonic = NULL;
 
     if (data.unique_id_valid)
-    {
         cusip = gnc_utf8_strip_invalid_strdup (data.unique_id);
-    }
     if (data.secname_valid)
-    {
         default_fullname = gnc_utf8_strip_invalid_strdup (data.secname);
-    }
     if (data.ticker_valid)
-    {
         default_mnemonic = gnc_utf8_strip_invalid_strdup (data.ticker);
-    }
 
     if (auto_create_commodity)
     {
-        gnc_commodity *commodity =
-            gnc_import_select_commodity(cusip,
-                                        FALSE,
-                                        default_fullname,
-                                        default_mnemonic);
+        auto commodity{gnc_import_select_commodity(cusip, false, default_fullname,
+                                                   default_mnemonic)};
 
         if (!commodity)
         {
@@ -280,12 +300,8 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
 
             g_warning("Creating a new commodity, cusip=%s", cusip);
             /* Create the new commodity */
-            commodity = gnc_commodity_new(book,
-                                          default_fullname,
-                                          commodity_namespace,
-                                          default_mnemonic,
-                                          cusip,
-                                          fraction);
+            commodity = gnc_commodity_new (book, default_fullname, commodity_namespace,
+                                           default_mnemonic, cusip, fraction);
 
             /* Also set a single quote source */
             gnc_commodity_begin_edit(commodity);
@@ -302,12 +318,7 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
         }
     }
     else
-    {
-        gnc_import_select_commodity(cusip,
-                                    TRUE,
-                                    default_fullname,
-                                    default_mnemonic);
-    }
+        gnc_import_select_commodity (cusip, true, default_fullname, default_mnemonic);
 
     g_free (cusip);
     g_free (default_mnemonic);
@@ -315,69 +326,67 @@ int ofx_proc_security_cb(const struct OfxSecurityData data, void * security_user
     return 0;
 }
 
-static void gnc_ofx_set_split_memo(const OfxTransactionData* data, Split *split)
+static void
+gnc_ofx_set_split_memo (const OfxTransactionData* data, Split *split)
 {
     g_assert(data);
     g_assert(split);
+
     /* Also put the ofx transaction name in
      * the splits memo field, or ofx memo if
      * name is unavailable */
     if (data->name_valid)
-    {
         xaccSplitSetMemo(split, data->name);
-    }
     else if (data->memo_valid)
-    {
         xaccSplitSetMemo(split, data->memo);
-    }
 }
-static gnc_numeric gnc_ofx_numeric_from_double(double value, const gnc_commodity *commodity)
+
+static gnc_numeric
+gnc_ofx_numeric_from_double (double value, const gnc_commodity *commodity)
 {
-    return double_to_gnc_numeric (value,
-                                  gnc_commodity_get_fraction(commodity),
+    return double_to_gnc_numeric (value, gnc_commodity_get_fraction(commodity),
                                   GNC_HOW_RND_ROUND_HALF_UP);
 }
-static gnc_numeric gnc_ofx_numeric_from_double_txn(double value, const Transaction* txn)
+
+static gnc_numeric
+gnc_ofx_numeric_from_double_txn (double value, const Transaction* txn)
 {
-    return gnc_ofx_numeric_from_double(value, xaccTransGetCurrency(txn));
+    return gnc_ofx_numeric_from_double (value, xaccTransGetCurrency(txn));
 }
 
 /* Opens the dialog to create a new account with given name, commodity, parent, type.
  * Returns the new account, or NULL if it couldn't be created.. */
-static Account *gnc_ofx_new_account(GtkWindow* parent,
-                                    const char* name,
-                                    const gnc_commodity * account_commodity,
-                                    Account *parent_account,
-                                    GNCAccountType new_account_default_type)
+static Account *
+gnc_ofx_new_account (GtkWindow* parent,
+                     const char* name,
+                     const gnc_commodity * account_commodity,
+                     Account *parent_account,
+                     GNCAccountType new_account_default_type)
 {
-    Account *result;
-    GList * valid_types = NULL;
-
     g_assert(name);
     g_assert(account_commodity);
     g_assert(parent_account);
 
+    GList * valid_types = NULL;
     if (new_account_default_type != ACCT_TYPE_NONE)
     {
         // Passing the types as gpointer
         valid_types =
             g_list_prepend(valid_types,
                            GINT_TO_POINTER(new_account_default_type));
-        if (!xaccAccountTypesCompatible(xaccAccountGetType(parent_account), new_account_default_type))
-        {
+
+        auto parent_type{xaccAccountGetType (parent_account)};
+        if (!xaccAccountTypesCompatible (parent_type, new_account_default_type))
             // Need to add the parent's account type
-            valid_types =
-                g_list_prepend(valid_types,
-                               GINT_TO_POINTER(xaccAccountGetType(parent_account)));
-        }
+            valid_types = g_list_prepend (valid_types, GINT_TO_POINTER(parent_type));
     }
-    result = gnc_ui_new_accounts_from_name_with_defaults (parent, name,
-                                                          valid_types,
-                                                          account_commodity,
-                                                          parent_account);
+    auto result = gnc_ui_new_accounts_from_name_with_defaults
+        (parent, name, valid_types, account_commodity, parent_account);
+
     g_list_free(valid_types);
     return result;
 }
+
 /* LibOFX has a daylight time handling bug,
  * https://sourceforge.net/p/libofx/bugs/39/, which causes it to adjust the
  * timestamp for daylight time even when daylight time is not in
@@ -451,113 +460,80 @@ fill_transaction_description(Transaction *transaction, OfxTransactionData *data)
 {
     /* Put transaction name in Description, or memo if name unavailable */
     if (data->name_valid)
-    {
         xaccTransSetDescription(transaction, data->name);
-    }
     else if (data->memo_valid)
-    {
         xaccTransSetDescription(transaction, data->memo);
-    }
 }
 
 static void
 fill_transaction_notes(Transaction *transaction, OfxTransactionData *data)
 {
     /* Put everything else in the Notes field */
-    char *notes = g_strdup_printf("OFX ext. info: ");
+    std::ostringstream notes;
+    notes << "OFX ext. info: ";
 
     if (data->transactiontype_valid)
-    {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Trans type:",
-                                gnc_ofx_ttype_to_string(data->transactiontype));
-        g_free(tmp);
-    }
+        notes << '|' << _("Trans type:")
+              << gnc_ofx_ttype_to_string(data->transactiontype);
 
     if (data->invtransactiontype_valid)
-    {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Investment Trans type:",
-                                gnc_ofx_invttype_to_str(data->invtransactiontype));
-        g_free(tmp);
-    }
-    if (data->memo_valid && data->name_valid) /* Copy only if memo wasn't put in Description */
-    {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Memo:", data->memo);
-        g_free(tmp);
-    }
+        notes << '|' << _("Investment Trans type:")
+              << gnc_ofx_invttype_to_str (data->invtransactiontype);
+
+    /* Copy only if memo wasn't put in Description */
+    if (data->memo_valid && data->name_valid)
+        notes << '|' << _("Memo:") << data->memo;
+
     if (data->date_funds_available_valid)
     {
         char dest_string[MAX_DATE_LENGTH];
-        time64 time = data->date_funds_available;
-        char *tmp = notes;
-
-        gnc_time64_to_iso8601_buff (time, dest_string);
-        notes = g_strdup_printf("%s%s%s", tmp,
-				"|Date funds available:", dest_string);
-        g_free(tmp);
+        gnc_time64_to_iso8601_buff (data->date_funds_available, dest_string);
+        notes << '|' << _("Date funds available:") << dest_string;
     }
+
     if (data->server_transaction_id_valid)
-    {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp,
-				"|Server trans ID (conf. number):",
-				sanitize_string (data->server_transaction_id));
-        g_free(tmp);
-    }
-    if (data->standard_industrial_code_valid)
-    {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%ld", tmp,
-				"|Standard Industrial Code:",
-                                data->standard_industrial_code);
-        g_free(tmp);
+        notes << '|' << _("Server trans ID (conf. number):")
+              << data->server_transaction_id;
 
-    }
+    if (data->standard_industrial_code_valid)
+        notes << '|' << _("Standard Industrial Code:")
+              << data->standard_industrial_code;
+
     if (data->payee_id_valid)
-    {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Payee ID:",
-				sanitize_string (data->payee_id));
-        g_free(tmp);
-    }
+        notes << '|' << _("Payee ID:") << sanitize_string (data->payee_id);
+
     //PERR("WRITEME: GnuCash ofx_proc_transaction():Add PAYEE and ADDRESS here once supported by libofx! Notes=%s\n", notes);
 
     /* Ideally, gnucash should process the corrected transactions */
     if (data->fi_id_corrected_valid)
     {
-        char *tmp = notes;
         PERR("WRITEME: GnuCash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
-        notes = g_strdup_printf("%s%s%s%s", tmp,
-				"|This corrects transaction #",
-				sanitize_string (data->fi_id_corrected),
-				"but GnuCash didn't process the correction!");
-        g_free(tmp);
+        auto tmpl{N_("This corrects transaction #%s but GnuCash didn't process the correction!")};
+        auto msg{g_strdup_printf (_(tmpl), sanitize_string (data->fi_id_corrected))};
+        notes << '|' << msg;
+        g_free (msg);
     }
-    xaccTransSetNotes(transaction, notes);
-    g_free(notes);
 
+    xaccTransSetNotes (transaction, notes.str().c_str());
 }
 
 static void
 process_bank_transaction(Transaction *transaction, Account *import_account,
-                         OfxTransactionData *data, ofx_info *info)
+                         OfxTransactionData *data, OfxInfo *info)
 {
-    Split *split;
-    gnc_numeric gnc_amount;
-    QofBook *book = qof_instance_get_book(QOF_INSTANCE(transaction));
-    double amount = data->amount;
+    auto book{qof_instance_get_book(QOF_INSTANCE(transaction))};
+    auto amount = data->amount;
 #ifdef HAVE_LIBOFX_VERSION_0_10
     if (data->currency_ratio_valid && data->currency_ratio != 0)
         amount *= data->currency_ratio;
 #endif
     /***** Process a normal transaction ******/
     DEBUG("Adding split; Ordinary banking transaction, money flows from or into the source account");
-    split = xaccMallocSplit(book);
+    auto split{xaccMallocSplit(book)};
     xaccTransAppendSplit(transaction, split);
     xaccAccountInsertSplit(import_account, split);
-    gnc_amount = gnc_ofx_numeric_from_double_txn(amount, transaction);
+
+    auto gnc_amount = gnc_ofx_numeric_from_double_txn(amount, transaction);
     xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
     /* set tran-num and/or split-action per book option */
@@ -567,15 +543,13 @@ process_bank_transaction(Transaction *transaction, Account *import_account,
          * the transaction num field is declared to be
          * non-null so substitute the empty string.
          */
-        const char *num_value =
-            strcasecmp (data->check_number, "null") == 0 ? "" :
+        auto num_value = strcasecmp (data->check_number, "null") == 0 ? "" :
             data->check_number;
         gnc_set_num_action(transaction, split, num_value, NULL);
     }
     else if (data->reference_number_valid)
     {
-        const char *num_value =
-            strcasecmp (data->reference_number, "null") == 0 ? "" :
+        auto num_value = strcasecmp (data->reference_number, "null") == 0 ? "" :
             data->check_number;
         gnc_set_num_action(transaction, split, num_value, NULL);
     }
@@ -592,20 +566,20 @@ process_bank_transaction(Transaction *transaction, Account *import_account,
     }
 }
 
-typedef struct
+struct InvestmentAcctData
 {
     gnc_commodity *commodity;
     char *online_id;
     char *acct_text;
     gboolean choosing;
-} InvestmentAcctData;
+};
 
 static Account*
 create_investment_subaccount(GtkWindow *parent, Account* parent_acct,
                              InvestmentAcctData *inv_data)
 {
 
-    Account *investment_account =
+    auto investment_account =
         gnc_ofx_new_account(parent,
                             inv_data->acct_text,
                             inv_data->commodity,
@@ -629,22 +603,21 @@ continue_account_selection(GtkWidget* parent, Account* account,
                            gnc_commodity* commodity)
 {
     gboolean keep_going =
-        gnc_verify_dialog(
-            GTK_WINDOW (parent), TRUE,
-            "The chosen account \"%s\" does not have the correct "
-            "currency/security \"%s\" (it has \"%s\" instead). "
-            "This account cannot be used. "
-            "Do you want to choose again?",
-            xaccAccountGetName(account),
-            gnc_commodity_get_fullname(commodity),
-            gnc_commodity_get_fullname(xaccAccountGetCommodity(account)));
+        gnc_verify_dialog (GTK_WINDOW (parent), true,
+                           _("The chosen account \"%s\" does not have the correct "
+                             "currency/security \"%s\" (it has \"%s\" instead). "
+                             "This account cannot be used. "
+                             "Do you want to choose again?"),
+                           xaccAccountGetName(account),
+                           gnc_commodity_get_fullname(commodity),
+                           gnc_commodity_get_fullname(xaccAccountGetCommodity(account)));
     // We must also delete the online_id that was set in gnc_import_select_account()
     gnc_import_set_acc_online_id(account, "");
     return keep_going;
 }
 
 static Account*
-choose_investment_account_helper(OfxTransactionData *data, ofx_info *info,
+choose_investment_account_helper(OfxTransactionData *data, OfxInfo *info,
                                  InvestmentAcctData *inv_data)
 {
     Account *investment_account, *parent_account;
@@ -697,7 +670,7 @@ choose_investment_account_helper(OfxTransactionData *data, ofx_info *info,
 }
 
 static Account*
-choose_investment_account(OfxTransactionData *data, ofx_info *info,
+choose_investment_account(OfxTransactionData *data, OfxInfo *info,
                           gnc_commodity *commodity)
 {
     Account* investment_account = NULL;
@@ -731,42 +704,36 @@ choose_investment_account(OfxTransactionData *data, ofx_info *info,
 
 static Account*
 choose_income_account(Account* investment_account, Transaction *transaction,
-                      OfxTransactionData *data, ofx_info *info)
+                      OfxTransactionData *data, OfxInfo *info)
 {
-    Account *income_account = NULL;
     DEBUG("Now let's find an account for the destination split");
-    income_account =
-        get_associated_income_account(investment_account);
+    auto income_account = get_associated_income_account(investment_account);
 
     if (income_account == NULL)
     {
-        char *income_account_text;
-        gnc_commodity *currency = xaccTransGetCurrency(transaction);
         DEBUG("Couldn't find an associated income account");
-        /* Translators: This string is a default account
-         * name. It MUST NOT contain the character ':' anywhere
-         * in it or in any translations.  */
-        income_account_text = g_strdup_printf(
-            _("Income account for security \"%s\""),
-            sanitize_string (data->security_data_ptr->secname));
-        income_account =
-            gnc_import_select_account(GTK_WIDGET(info->parent), NULL, TRUE,
-                                      income_account_text, currency,
-                                      ACCT_TYPE_INCOME,
-                                      info->last_income_account, NULL);
 
-        if (income_account != NULL)
+        auto income_account_text = g_strdup_printf
+            /* Translators: This string is a default account
+             * name. It MUST NOT contain the character ':' anywhere
+             * in it or in any translations.  */
+            (_("Income account for security \"%s\""),
+             sanitize_string (data->security_data_ptr->secname));
+        income_account = gnc_import_select_account
+            (GTK_WIDGET(info->parent), nullptr, true, income_account_text,
+             xaccTransGetCurrency(transaction), ACCT_TYPE_INCOME,
+             info->last_income_account, nullptr);
+
+        if (income_account)
         {
             info->last_income_account = income_account;
-            set_associated_income_account(investment_account,
-                                          income_account);
+            set_associated_income_account (investment_account, income_account);
             DEBUG("KVP written");
         }
+        g_free (income_account_text);
     }
     else
-    {
         DEBUG("Found at least one associated income account");
-    }
 
     return income_account;
 }
@@ -775,58 +742,45 @@ static void
 add_investment_split(Transaction* transaction, Account* account,
                              OfxTransactionData *data)
 {
-    Split *split;
     QofBook *book = gnc_account_get_book(account);
-    gnc_numeric gnc_amount, gnc_units;
     gnc_commodity *commodity = xaccAccountGetCommodity(account);
+
     DEBUG("Adding investment split; Money flows from or into the stock account");
-    split = xaccMallocSplit(book);
+    auto split = xaccMallocSplit(book);
     xaccTransAppendSplit(transaction, split);
     xaccAccountInsertSplit(account, split);
 
-    gnc_amount =
-        gnc_ofx_numeric_from_double_txn(ofx_get_investment_amount(data),
-                                        transaction);
-    gnc_units = gnc_ofx_numeric_from_double (data->units, commodity);
+    auto gnc_amount = gnc_ofx_numeric_from_double_txn (ofx_get_investment_amount(data),
+                                                       transaction);
+    auto gnc_units = gnc_ofx_numeric_from_double (data->units, commodity);
     xaccSplitSetAmount(split, gnc_units);
     xaccSplitSetValue(split, gnc_amount);
 
     /* set tran-num and/or split-action per book option */
     if (data->check_number_valid)
-    {
-        gnc_set_num_action(transaction, split, data->check_number, NULL);
-    }
+        gnc_set_num_action (transaction, split, data->check_number, NULL);
     else if (data->reference_number_valid)
-    {
-        gnc_set_num_action(transaction, split,
-                           data->reference_number, NULL);
-    }
+        gnc_set_num_action (transaction, split, data->reference_number, NULL);
+
     if (data->security_data_ptr->memo_valid)
-    {
-        xaccSplitSetMemo(split,
-                         sanitize_string (data->security_data_ptr->memo));
-    }
-    if (data->fi_id_valid &&
-        xaccAccountTypesCompatible(xaccAccountGetType(account),
-                                   ACCT_TYPE_ASSET))
-    {
-        gnc_import_set_split_online_id(split,
-                                       sanitize_string (data->fi_id));
-    }
+        xaccSplitSetMemo(split, sanitize_string (data->security_data_ptr->memo));
+
+    if (data->fi_id_valid && xaccAccountTypesCompatible (xaccAccountGetType(account),
+                                                         ACCT_TYPE_ASSET))
+        gnc_import_set_split_online_id (split, sanitize_string (data->fi_id));
 }
 
 static void
 add_currency_split(Transaction *transaction, Account* account,
                  double amount, OfxTransactionData *data)
 {
-    Split *split;
     QofBook *book = gnc_account_get_book(account);
-    gnc_numeric gnc_amount;
 
-    split = xaccMallocSplit(book);
+    auto split = xaccMallocSplit (book);
     xaccTransAppendSplit(transaction, split);
     xaccAccountInsertSplit(account, split);
-    gnc_amount = gnc_ofx_numeric_from_double_txn(amount, transaction);
+
+    auto gnc_amount = gnc_ofx_numeric_from_double_txn (amount, transaction);
     xaccSplitSetBaseValue(split, gnc_amount, xaccTransGetCurrency(transaction));
 
     // Set split memo from ofx transaction name or memo
@@ -842,17 +796,13 @@ add_currency_split(Transaction *transaction, Account* account,
 
 static void
 process_investment_transaction(Transaction *transaction, Account *import_account,
-                               OfxTransactionData *data, ofx_info *info)
+                               OfxTransactionData *data, OfxInfo *info)
 {
-    Account *investment_account = NULL;
-    Account *income_account = NULL;
-    gnc_commodity *investment_commodity;
     double amount = data->amount;
 
     g_return_if_fail(data->invtransactiontype_valid);
 
     gnc_utf8_strip_invalid (data->unique_id);
-
 
     // Set the cash split unless it's a reinvestment, which doesn't have one.
     if (data->invtransactiontype != OFX_REINVEST)
@@ -862,16 +812,16 @@ process_investment_transaction(Transaction *transaction, Account *import_account
                            -ofx_get_investment_amount(data), data);
     }
 
-    investment_commodity = gnc_import_select_commodity(data->unique_id,
-                                                       FALSE, NULL, NULL);
+    auto investment_commodity = gnc_import_select_commodity (data->unique_id,
+                                                             FALSE, NULL, NULL);
     if (!investment_commodity)
     {
         PERR("Commodity not found for the investment transaction");
         return;
     }
-    investment_account = choose_investment_account(data, info,
-                                                   investment_commodity);
 
+    auto investment_account = choose_investment_account (data, info,
+                                                         investment_commodity);
     if (!investment_account)
     {
         PERR("Failed to determine an investment asset account.");
@@ -895,8 +845,8 @@ process_investment_transaction(Transaction *transaction, Account *import_account
     if (data->currency_ratio_valid && data->currency_ratio != 0)
         amount *= data->currency_ratio;
 #endif
-    income_account = choose_income_account(investment_account,
-                                           transaction, data, info);
+    auto income_account = choose_income_account (investment_account,
+                                                 transaction, data, info);
     g_return_if_fail(income_account);
 
     DEBUG("Adding investment income split.");
@@ -908,11 +858,8 @@ process_investment_transaction(Transaction *transaction, Account *import_account
 
 int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
 {
-    Account *import_account;
     gnc_commodity *currency = NULL;
-    QofBook *book;
-    Transaction *transaction;
-    ofx_info* info = (ofx_info*) user_data;
+    auto info = static_cast<OfxInfo*>(user_data);
 
     g_assert(info->parent);
 
@@ -930,16 +877,16 @@ int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
 
     gnc_utf8_strip_invalid (data.account_id);
 
-    import_account = gnc_import_select_account(GTK_WIDGET(info->parent),
-                                        data.account_id,
-					0, NULL, NULL, ACCT_TYPE_NONE,
-					info->last_import_account, NULL);
+    auto import_account = gnc_import_select_account
+        (GTK_WIDGET(info->parent), data.account_id, 0, nullptr, nullptr,
+         ACCT_TYPE_NONE, info->last_import_account, NULL);
     if (import_account == NULL)
     {
         PERR("Unable to find account for id %s", data.account_id);
         return 0;
     }
     info->last_import_account = import_account;
+
     /***** Validate the input strings to ensure utf8 *****/
     if (data.name_valid)
         gnc_utf8_strip_invalid(data.name);
@@ -951,8 +898,8 @@ int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
         gnc_utf8_strip_invalid(data.reference_number);
 
     /***** Create the transaction and setup transaction data *******/
-    book = gnc_account_get_book(import_account);
-    transaction = xaccMallocTransaction(book);
+    auto book = gnc_account_get_book(import_account);
+    auto transaction = xaccMallocTransaction(book);
     xaccTransBeginEdit(transaction);
 
     set_transaction_dates(transaction, &data);
@@ -999,7 +946,7 @@ int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
     {
         DEBUG("%d splits sent to the importer gui",
               xaccTransCountSplits(transaction));
-        info->trans_list = g_list_prepend (info->trans_list, transaction);
+        info->trans_list.emplace_back (transaction);
     }
     else
     {
@@ -1015,7 +962,7 @@ int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
 
 int ofx_proc_statement_cb (struct OfxStatementData data, void * statement_user_data)
 {
-    ofx_info* info = (ofx_info*) statement_user_data;
+    auto info = static_cast<OfxInfo*>(statement_user_data);
     struct OfxStatementData *statement = g_new (struct OfxStatementData, 1);
     *statement = data;
     info->statement = g_list_prepend (info->statement, statement);
@@ -1034,7 +981,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
     /* In order to trigger a book options display on the creation of a new book,
      * we need to detect when we are dealing with a new book. */
     gboolean new_book = gnc_is_new_book();
-    ofx_info* info = (ofx_info*) account_user_data;
+    auto info = static_cast<OfxInfo*>(account_user_data);
     Account* account = NULL;
 
     const gchar * account_type_name = _("Unknown OFX account");
@@ -1058,32 +1005,32 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
         {
             switch (data.account_type)
             {
-            case OFX_CHECKING :
+            case OfxAccountData::OFX_CHECKING:
                 default_type = ACCT_TYPE_BANK;
                 account_type_name = _("Unknown OFX checking account");
                 break;
-            case OFX_SAVINGS :
+            case OfxAccountData::OFX_SAVINGS:
                 default_type = ACCT_TYPE_BANK;
                 account_type_name = _("Unknown OFX savings account");
                 break;
-            case OFX_MONEYMRKT :
+            case OfxAccountData::OFX_MONEYMRKT:
                 default_type = ACCT_TYPE_MONEYMRKT;
                 account_type_name = _("Unknown OFX money market account");
                 break;
-            case OFX_CREDITLINE :
+            case OfxAccountData::OFX_CREDITLINE:
                 default_type = ACCT_TYPE_CREDITLINE;
                 account_type_name = _("Unknown OFX credit line account");
                 break;
-            case OFX_CMA :
+            case OfxAccountData::OFX_CMA:
                 default_type = ACCT_TYPE_NONE;
                 /* Cash Management Account */
                 account_type_name = _("Unknown OFX CMA account");
                 break;
-            case OFX_CREDITCARD :
+            case OfxAccountData::OFX_CREDITCARD:
                 default_type = ACCT_TYPE_CREDIT;
                 account_type_name = _("Unknown OFX credit card account");
                 break;
-            case OFX_INVESTMENT :
+            case OfxAccountData::OFX_INVESTMENT:
                 default_type = ACCT_TYPE_BANK;
                 account_type_name = _("Unknown OFX investment account");
                 break;
@@ -1172,40 +1119,37 @@ double ofx_get_investment_amount(const OfxTransactionData* data)
 
 // Forward declaration, required because several static functions depend on one-another.
 static void
-gnc_file_ofx_import_process_file (ofx_info* info);
+gnc_file_ofx_import_process_file (OfxInfo*, std::string);
 
 // gnc_ofx_process_next_file processes the next file in the info->file_list.
 static void
 gnc_ofx_process_next_file (GtkDialog *dialog, gpointer user_data)
 {
-    ofx_info* info = (ofx_info*) user_data;
+    auto info = static_cast<OfxInfo*>(user_data);
+
     // Free the statement (if it was allocated)
     g_list_free_full (info->statement, g_free);
     info->statement = NULL;
 
-    // Done with the previous OFX file, process the next one if any.
-    info->file_list = g_slist_delete_link (info->file_list, info->file_list);
-    if (info->file_list)
-        gnc_file_ofx_import_process_file (info);
-    else
-    {
-        // Final cleanup.
-        g_free (info);
-    }
+    // Process the OFX files one by one.
+    for (const auto& file : info->file_list)
+        gnc_file_ofx_import_process_file (info, file);
+
+    delete info;
 }
 
 static void
 gnc_ofx_on_match_click (GtkDialog *dialog, gint response_id, gpointer user_data)
 {
     // Record the response of the user. If cancel we won't go to the next file, etc.
-    ofx_info* info = (ofx_info*)user_data;
+    auto info = static_cast<OfxInfo*>(user_data);
     info->response = response_id;
 }
 
 static void
 gnc_ofx_match_done (GtkDialog *dialog, gpointer user_data)
 {
-    ofx_info* info = (ofx_info*) user_data;
+    auto info{static_cast<OfxInfo*>(user_data)};
 
     /* The the user did not click OK, don't process the rest of the
      * transaction, don't go to the next of xfile.
@@ -1213,7 +1157,7 @@ gnc_ofx_match_done (GtkDialog *dialog, gpointer user_data)
     if (info->response != GTK_RESPONSE_OK)
         return;
 
-    if (info->trans_list)
+    if (!info->trans_list.empty())
     {
          /* Re-run the match dialog if there are transactions
           * remaining in our list (happens if several accounts exist
@@ -1226,7 +1170,7 @@ gnc_ofx_match_done (GtkDialog *dialog, gpointer user_data)
 
     if (info->run_reconcile && info->statement && info->statement->data)
     {
-        struct OfxStatementData* statement = info->statement->data;
+        auto statement{static_cast<OfxStatementData*>(info->statement->data)};
         // Open a reconcile window.
         Account* account = gnc_import_select_account (gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
                                                       statement->account_id,
@@ -1273,76 +1217,81 @@ gnc_ofx_match_done (GtkDialog *dialog, gpointer user_data)
 // This callback is triggered when the user checks or unchecks the reconcile after match
 // check box in the matching dialog.
 static void
-reconcile_when_close_toggled_cb (GtkToggleButton *togglebutton, ofx_info* info)
+reconcile_when_close_toggled_cb (GtkToggleButton *togglebutton, OfxInfo* info)
 {
     info->run_reconcile = gtk_toggle_button_get_active (togglebutton);
 }
 
-static gchar* make_date_amount_key (time64 date, gnc_numeric amount)
+static const gchar*
+make_date_amount_key (time64 date, gnc_numeric amount)
 {
     // Create a string that combines date and amount, we'll use that for our hash
-    gchar buf[64];
+    static gchar buf[64];
     gnc_numeric _amount = gnc_numeric_reduce(amount);
     g_snprintf (buf, sizeof(buf), "%" PRId64 "%" PRId64 "%" PRId64, _amount.num , _amount.denom, date);
-    return g_strdup (buf);
+    return buf;
 }
 
 static void
-runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
+runMatcher (OfxInfo* info, const char* selected_filename,
+            bool go_to_next_file)
 {
-    GtkWindow *parent = info->parent;
-    GList* trans_list_remain = NULL;
+    auto parent{GTK_WINDOW (info->parent)};
+    std::vector<Transaction*> trans_list_remain;
+    std::unordered_map<std::string, Account*> trans_map;
 
     /* If we have multiple accounts in the ofx file, we need to
      * avoid processing transfers between accounts together because this will
      * create duplicate entries.
      */
-    GHashTable* trans_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                    g_free, NULL);
     info->num_trans_processed = 0;
-    // Add transactions, but verify that there isn't one that was already added with identical
-    // amounts and date, and a different account. To do that, create a hash table whose key is
-    // a hash of amount and date, and whose value is the account in which they appear.
-    for(GList* node = info->trans_list; node; node=node->next)
+
+    /* Add transactions, but verify that there isn't one that was
+     * already added with identical amounts and date, and a different
+     * account. To do that, create a hash table whose key is a hash of
+     * amount and date, and whose value is the account in which they
+     * appear. */
+    for (const auto& trans : info->trans_list)
     {
-        Transaction* trans = node->data;
-        Split* split = xaccTransGetSplit (trans, 0);
-        Account* account = xaccSplitGetAccount (split);
-        gchar *date_amount_key = make_date_amount_key (xaccTransGetDate (trans),
-                                                      gnc_numeric_abs (xaccSplitGetAmount (split)));
+        auto split = xaccTransGetSplit (trans, 0);
+        auto account = xaccSplitGetAccount (split);
+        auto date_amount_key = make_date_amount_key (xaccTransGetDate (trans),
+                                                     gnc_numeric_abs (xaccSplitGetAmount (split)));
+
         // Test if date_amount_key is already in trans_hash.
-        Account* _account = g_hash_table_lookup (trans_hash, date_amount_key);
-        if (_account && _account != account)
+        auto iter = trans_map.find (date_amount_key);
+        if (iter != trans_map.end () && iter->second != account)
         {
             if (qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG))
             {
                 // There is a transaction with identical amounts and
                 // dates, but a different account.  That's a potential
                 // transfer so process this transaction in a later call.
-                gchar *name1 = gnc_account_get_full_name (account);
-                gchar *name2 = gnc_account_get_full_name (_account);
-                gchar *amtstr = gnc_numeric_to_string (xaccSplitGetAmount (split));
-                gchar *datestr = qof_print_date (xaccTransGetDate (trans));
+                auto name1 = gnc_account_get_full_name (account);
+                auto name2 = gnc_account_get_full_name (iter->second);
+                auto amtstr = gnc_numeric_to_string (xaccSplitGetAmount (split));
+                auto datestr = qof_print_date (xaccTransGetDate (trans));
                 DEBUG ("Potential transfer %s %s %s %s\n", name1, name2, amtstr, datestr);
                 g_free (name1);
                 g_free (name2);
                 g_free (amtstr);
                 g_free (datestr);
             }
-            trans_list_remain = g_list_prepend (trans_list_remain, trans);
-            g_free (date_amount_key);
+            trans_list_remain.push_back (trans);
         }
         else
         {
-            g_hash_table_insert (trans_hash, date_amount_key, account);
+            trans_map.emplace (date_amount_key, account);
             gnc_gen_trans_list_add_trans (info->gnc_ofx_importer_gui, trans);
             info->num_trans_processed ++;
         }
     }
-    g_list_free (info->trans_list);
-    g_hash_table_destroy (trans_hash);
-    info->trans_list = g_list_reverse (trans_list_remain);
-    DEBUG("%d transactions remaining to process in file %s\n", g_list_length (info->trans_list), selected_filename);
+
+    std::reverse (trans_list_remain.begin(), trans_list_remain.end());
+    info->trans_list = std::move (trans_list_remain);
+
+    DEBUG("%ld transactions remaining to process in file %s\n",
+          info->trans_list.size(), selected_filename);
 
     // See whether the view has anything in it and warn the user if not.
     if (gnc_gen_trans_list_empty (info->gnc_ofx_importer_gui))
@@ -1383,26 +1332,18 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
 
 // Aux function to process the OFX file in info->file_list
 static void
-gnc_file_ofx_import_process_file (ofx_info* info)
+gnc_file_ofx_import_process_file (OfxInfo* info, std::string filename)
 {
     LibofxContextPtr libofx_context;
-    char* filename = NULL;
-    char * selected_filename = NULL;
-    GtkWindow *parent = info->parent;
+    auto parent{GTK_WINDOW (info->parent)};
 
-    if (info->file_list == NULL)
-        return;
-
-    filename = info->file_list->data;
     libofx_context = libofx_get_new_context();
 
 #ifdef G_OS_WIN32
-    selected_filename = g_win32_locale_filename_from_utf8 (filename);
-    g_free (filename);
-#else
-    selected_filename = filename;
+    filename = g_win32_locale_filename_from_utf8 (filename.c_str());
 #endif
-    DEBUG("Filename found: %s", selected_filename);
+
+    DEBUG("Filename found: %s", filename.c_str());
 
     // Reset the reconciliation information.
     info->num_trans_processed = 0;
@@ -1417,12 +1358,11 @@ gnc_file_ofx_import_process_file (ofx_info* info)
 
     // Create the match dialog, and run the ofx file through the importer.
     info->gnc_ofx_importer_gui = gnc_gen_trans_list_new (GTK_WIDGET(parent), NULL, FALSE, 42, FALSE);
-    libofx_proc_file (libofx_context, selected_filename, AUTODETECT);
+    libofx_proc_file (libofx_context, filename.c_str(), AUTODETECT);
 
     // Free the libofx context before recursing to process the next file
     libofx_free_context(libofx_context);
-    runMatcher(info, selected_filename,true);
-    g_free(selected_filename);
+    runMatcher(info, filename.c_str(), true);
 }
 
 // The main import function. Starts the chain of file imports (if there are several)
@@ -1437,7 +1377,6 @@ void gnc_file_ofx_import (GtkWindow *parent)
     GSList* selected_filenames = NULL;
     char *default_dir;
     GList *filters = NULL;
-    ofx_info* info = NULL;
     GtkFileFilter* filter = gtk_file_filter_new ();
 
 
@@ -1465,7 +1404,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
     if (selected_filenames)
     {
         /* Remember the directory as the default. */
-        default_dir = g_path_get_dirname(selected_filenames->data);
+        default_dir = g_path_get_dirname(static_cast<char*>(selected_filenames->data));
         gnc_set_default_directory(GNC_PREFS_GROUP, default_dir);
         g_free(default_dir);
 
@@ -1475,19 +1414,13 @@ void gnc_file_ofx_import (GtkWindow *parent)
 
         DEBUG("Opening selected file(s)");
         // Create the structure that holds the list of files to process and the statement info.
-        info = g_new(ofx_info,1);
-        info->num_trans_processed = 0;
-        info->statement = NULL;
-        info->last_investment_account = NULL;
-        info->last_import_account = NULL;
-        info->last_income_account = NULL;
-        info->parent = parent;
-        info->run_reconcile = FALSE;
-        info->file_list = selected_filenames;
-        info->trans_list = NULL;
-        info->response = 0;
+
+        auto info = new OfxInfo (parent, selected_filenames);
+
         // Call the aux import function.
-        gnc_file_ofx_import_process_file (info);
+        gnc_file_ofx_import_process_file (info, info->file_list[0]);
+
+        g_slist_free_full (selected_filenames, g_free);
     }
 }
 
