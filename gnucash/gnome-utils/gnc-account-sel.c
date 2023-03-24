@@ -326,7 +326,7 @@ completion_function (GtkEntryCompletion *completion, const char *key,
 }
 
 static char*
-normalize_and_lower (char* utf8_string)
+normalize_and_lower (const char* utf8_string)
 {
     char *normalized, *lowered;
     g_return_val_if_fail (utf8_string && *utf8_string, NULL);
@@ -413,7 +413,7 @@ entry_insert_text_cb (GtkEntry *entry, const gchar *text, gint length,
     GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
     GtkTreeModel *fmodel = gtk_combo_box_get_model (GTK_COMBO_BOX(gas->combo));
     const gchar *sep_char = gnc_get_account_separator_string ();
-    gchar *entered_text, *lower_entered_text;
+    gchar *lower_entered_text;
     glong entered_len;
     gunichar sep_unichar;
     gint sep_key_prefix_len = G_MAXINT;
@@ -425,7 +425,7 @@ entry_insert_text_cb (GtkEntry *entry, const gchar *text, gint length,
 
     memset (gas->sep_key_prefix, 0, BUFLEN);
 
-    entered_text = gtk_editable_get_chars (GTK_EDITABLE(entry), 0, -1);
+    const gchar *entered_text = gtk_entry_get_text (entry);
 
     if (!(entered_text && *entered_text))
         return;
@@ -469,7 +469,6 @@ entry_insert_text_cb (GtkEntry *entry, const gchar *text, gint length,
         g_utf8_strncpy (gas->sep_key_prefix, entered_text, entered_len);
 
     g_free (lower_entered_text);
-    g_free (entered_text);
 
     if (gas->sep_key_prefix[0] != 0)
     {
