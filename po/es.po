@@ -84,7 +84,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-04 13:59-0800\n"
-"PO-Revision-Date: 2023-03-19 15:41+0000\n"
+"PO-Revision-Date: 2023-03-20 17:40+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/es/>\n"
@@ -864,10 +864,10 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"Puede importar fácilmente sus datos financieros existentes desde Quicken, MS "
-"Money u otros programas que exportan archivos QIF o archivos OFX. En el menú "
-"Archivo, haga clic en el submenú Importar y haga clic en el archivo QIF u "
-"OFX, respectivamente. Luego, siga las instrucciones proporcionadas."
+"Puede importar fácilmente su información financiera existente desde Quicken, "
+"MS Money u otros programas que exporten ficheros QIF o OFX. En el menú "
+"Archivo, pulse en la opción Importar y pulse en QIF o OFX, respectivamente. "
+"Después siga las instrucciones mostradas."
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -3776,12 +3776,12 @@ msgstr "Debe introducir una cantidad válida."
 
 #: gnucash/gnome/dialog-print-check.c:823
 msgid "Cannot save check format file."
-msgstr "El archivo del formulario de cheque no se puede guardar."
+msgstr "No se puede guardar el formato del fichero comprobante."
 
 #: gnucash/gnome/dialog-print-check.c:825
 #, c-format
 msgid "Cannot open file %s"
-msgstr "No se puede abrir %s"
+msgstr "No puede abrir el fichero %s"
 
 #: gnucash/gnome/dialog-print-check.c:1513
 msgid "There is a duplicate check format file."
@@ -3859,7 +3859,7 @@ msgstr "Filas"
 
 #: gnucash/gnome/dialog-report-column-view.cpp:392
 msgid "Cols"
-msgstr "Columna"
+msgstr "Col."
 
 #: gnucash/gnome/dialog-report-style-sheet.cpp:175
 #, c-format
@@ -7813,6 +7813,7 @@ msgstr "Contabilidad financiara personal y pequeños negocios."
 msgid "translator-credits"
 msgstr ""
 "Francisco Javier Serrador, 2018 - 2022\n"
+"\n"
 "Adolfo Jayme Barrientos, 2021\n"
 "Carlos Manrique Enguita, 2021\n"
 "Eneko Lacunza, 2003 - 2008\n"
@@ -21511,7 +21512,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/split-register-model.c:254
 msgid "Ref"
-msgstr "Referencia"
+msgstr "Ref"
 
 #: gnucash/register/ledger-core/split-register-model.c:270
 msgid "T-Ref"
@@ -28724,7 +28725,7 @@ msgstr "_Planificado"
 # Letra modificada_OK
 #: gnucash/ui/gnc-main-window.ui:403
 msgid "_Reports"
-msgstr "_Informes"
+msgstr "_Notificaciones"
 
 #: gnucash/ui/gnc-main-window.ui:422
 msgid "_Tools"
