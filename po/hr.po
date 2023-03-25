@@ -5,19 +5,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-24 15:40+0000\n"
+"PO-Revision-Date: 2023-03-25 15:38+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
-"Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/program-"
-"beta/hr/>\n"
+"Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
+"program-beta/hr/>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.17-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -13342,10 +13342,8 @@ msgid "Open imported documents in tabs"
 msgstr "Otvori uvezene dokumente u karticama"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
-#| msgid "Open not yet posted documents in tabs "
 msgid "Open not yet posted documents in tabs"
-msgstr "Otvori još neuknjižene dokumente u karticama "
+msgstr "Otvori još neobjavljene dokumente u karticama"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -15124,8 +15122,6 @@ msgstr ""
 "objašnjenja."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
-#, fuzzy
-#| msgid "For"
 msgctxt "keep"
 msgid "For"
 msgstr "Za"
@@ -16327,8 +16323,6 @@ msgid "Until"
 msgstr "Do"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
-#, fuzzy
-#| msgid "For"
 msgctxt "repeat"
 msgid "For"
 msgstr "Za"
@@ -21814,7 +21808,7 @@ msgstr "Isključi transakcije između odabranih konta"
 #: gnucash/report/reports/standard/net-charts.scm:53
 #: gnucash/report/reports/standard/price-scatter.scm:48
 msgid "Plot Width"
-msgstr "Širina iscrtavanja"
+msgstr "Širina dijagrama"
 
 #: gnucash/report/reports/example/average-balance.scm:48
 #: gnucash/report/reports/example/daily-reports.scm:63
@@ -21826,7 +21820,7 @@ msgstr "Širina iscrtavanja"
 #: gnucash/report/reports/standard/net-charts.scm:54
 #: gnucash/report/reports/standard/price-scatter.scm:49
 msgid "Plot Height"
-msgstr "Visina iscrtavanja"
+msgstr "Visina dijagrama"
 
 #: gnucash/report/reports/example/average-balance.scm:75
 #: gnucash/report/reports/example/daily-reports.scm:84
@@ -21873,7 +21867,7 @@ msgstr "Prikaži dijagram za odabrane podatke."
 #: gnucash/report/reports/example/average-balance.scm:113
 #: gnucash/report/reports/example/average-balance.scm:287
 msgid "Plot Type"
-msgstr "Vrsta iscrtavanja"
+msgstr "Vrsta dijagrama"
 
 #: gnucash/report/reports/example/average-balance.scm:114
 msgid "The type of graph to generate."
@@ -22545,24 +22539,24 @@ msgstr "Obveze (kružni dijagram)"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
-msgstr "Prikazuje kružni dijagram s prihodima po zadanom razdoblju"
+msgstr "Prikazuje kružni dijagram s prihodima u zadanom razdoblju"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
-msgstr "Prikazuje kružni dijagram s rashodima po zadanom razdoblju"
+msgstr "Prikazuje kružni dijagram s rashodima u zadanom razdoblju"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:49
 msgid "Shows a piechart with the Assets balance at a given time"
-msgstr "Prikazuje kružni dijagram sa saldom imovine u određenom trenutku"
+msgstr "Prikazuje kružni dijagram sa saldom imovine u zadanom trenutku"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:51
 msgid "Shows a piechart with distribution of assets over securities"
 msgstr ""
-"Prikazuje kružni dijagram s distribucijom imovine po vrijednosnim papirima"
+"Prikazuje kružni dijagram s raspodjelom imovine po vrijednosnim papirima"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:53
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr "Prikazuje kružni dijagram sa saldom obveza u određenom trenutku"
+msgstr "Prikazuje kružni dijagram sa saldom obveza u zadanom trenutku"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:59
 #: gnucash/report/reports/standard/customer-summary.scm:48
@@ -23600,12 +23594,12 @@ msgstr "Konvertiraj sve vrijednosti u jednu valutu."
 #: gnucash/report/reports/standard/balsheet-pnl.scm:116
 #: gnucash/report/trep-engine.scm:105
 msgid "Show original currency amount"
-msgstr "Prikaži izvorni iznos valute"
+msgstr "Prikaži iznos izvorne valute"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:117
 #: gnucash/report/trep-engine.scm:547
 msgid "Also show original currency amounts"
-msgstr "Također prikaži izvorni iznos valute"
+msgstr "Također prikaži iznose izvorne valute"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:119
 msgid "If more than 1 period column, include overall period?"
@@ -24313,7 +24307,7 @@ msgstr "Prikazati dijagrame kao složene dijagrame?"
 
 #: gnucash/report/reports/standard/category-barchart.scm:160
 msgid "Maximum number of stacks in the chart."
-msgstr "Najveći broj naslaganja u stupčanom dijagramu."
+msgstr "Najveći broj složenih stupaca u dijagramu."
 
 #: gnucash/report/reports/standard/category-barchart.scm:173
 #: gnucash/report/reports/standard/category-barchart.scm:245
@@ -24912,10 +24906,8 @@ msgstr "Provjera"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163
-#, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include accounts with no lots"
-msgstr "Uključi konta bez dionica"
+msgstr "Uključi konta bez paketa"
 
 #: gnucash/report/reports/standard/investment-lots.scm:50
 msgid "Show Chart"
@@ -24931,11 +24923,11 @@ msgstr "Mjesto dijagrama"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
 msgid "Plot width"
-msgstr "Širina iscrtavanja"
+msgstr "Širina dijagrama"
 
 #: gnucash/report/reports/standard/investment-lots.scm:54
 msgid "Plot height"
-msgstr "Visina iscrtavanja"
+msgstr "Visina dijagrama"
 
 #: gnucash/report/reports/standard/investment-lots.scm:57
 msgid "Show lot GUID column"
@@ -25177,6 +25169,8 @@ msgstr "Napomene za konto"
 #: gnucash/report/reports/standard/investment-lots.scm:171
 msgid "Include a chart that shows lot gains, grouped by account and gain type"
 msgstr ""
+"Uključi dijagram koji prikazuje dobitke paketa, grupirane po računu i vrsti "
+"dobitka"
 
 #: gnucash/report/reports/standard/investment-lots.scm:186
 msgid "What kind of chart to include"
@@ -25188,7 +25182,7 @@ msgstr "Složen stupčasti dijagram"
 
 #: gnucash/report/reports/standard/investment-lots.scm:195
 msgid "Where to place the chart"
-msgstr "Gdje smjestiti dijuagram"
+msgstr "Gdje smjestiti dijagram"
 
 #: gnucash/report/reports/standard/investment-lots.scm:214
 msgid "Show the lot GUID table column"
@@ -26223,7 +26217,7 @@ msgstr "Boja oznake"
 
 #: gnucash/report/reports/standard/price-scatter.scm:67
 msgid "Calculate the price of this commodity."
-msgstr "Izračunaj iznos za ovu robu."
+msgstr "Izračunaj cijenu ove robe."
 
 #: gnucash/report/reports/standard/price-scatter.scm:74
 msgid "Weighted Average"
@@ -26281,8 +26275,8 @@ msgid ""
 "There was only one single price found for the selected commodities in the "
 "selected time period. This doesn't give a useful plot."
 msgstr ""
-"Postoji samo jedna jedina pronađena cijena za odabranu robu u odabranom "
-"razdoblju. Time se neće prikazati upotrebljiv dijagram."
+"Pronađena je samo jedna cijena za odabranu robu u odabranom razdoblju. Time "
+"se ne dobiva upotrebljiv dijagram."
 
 #: gnucash/report/reports/standard/price-scatter.scm:263
 msgid "All Prices equal"
@@ -26293,8 +26287,8 @@ msgid ""
 "All the prices found are equal. This would result in a plot with one "
 "straight line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
-"Sve pronađene cijene su jednake. To bi rezultiralo iscrtavanjem jedne ravne "
-"crte. Nažalost, crtači alat to ne može odraditi."
+"Sve pronađene cijene su jednake. Rezultat bi bila jedna ravna crta u "
+"dijagramu. Nažalost, alat za iscrtavanje to ne može odraditi."
 
 #: gnucash/report/reports/standard/price-scatter.scm:270
 msgid "All Prices at the same date"
@@ -26305,8 +26299,8 @@ msgid ""
 "All the prices found are from the same date. This would result in a plot "
 "with one straight line. Unfortunately, the plotting tool can't handle that."
 msgstr ""
-"Sve pronađene cijene imaju isti datum. To bi rezultiralo iscrtavanjem jedne "
-"ravne crte. Nažalost, crtači alat to ne može odraditi."
+"Sve pronađene cijene imaju isti datum. Rezultat bi bila jedna ravna crta u "
+"dijagramu. Nažalost, alat za iscrtavanje to ne može odraditi."
 
 #: gnucash/report/reports/standard/price-scatter.scm:303
 msgid "Price Scatterplot"
@@ -29254,10 +29248,8 @@ msgid "Create a new voucher"
 msgstr "Stvori novi vaučer"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Checks…"
-msgstr "_Ispiši čekove"
+msgstr "_Ispiši čekove …"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:444
