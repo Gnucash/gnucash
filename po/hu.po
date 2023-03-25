@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -7712,6 +7712,8 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-main-window.cpp:5252
 msgid "Accounting for personal and small business finance."
 msgstr ""
+"Ez megnehezítheti a későbbi egyeztetéseket ezen a számlán. Kérjük, "
+"ellenőrizze, hogy biztosan ezt a dátumot szeretné használni."
 
 #. Translators: the following string will be shown in Help->About->Credits
 #. Enter your name or that of your team and an email contact for feedback.
@@ -19574,6 +19576,9 @@ msgstr "A"
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr ""
+"Ez az eszköz lassú vagy nem is működik, amikor az el nem számolt felosztások "
+"száma kb. 20 fölé emelkedik. Ilyenkor próbáljon kézzel elszámoltnak "
+"megjelölni legalább néhány felosztást."
 
 #: gnucash/import-export/import-main-matcher.c:1520
 msgctxt "Column header for 'Clearing transaction'"
