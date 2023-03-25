@@ -84,7 +84,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-19 15:40+0000\n"
+"PO-Revision-Date: 2023-03-25 17:26+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -93,7 +93,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
@@ -7182,7 +7182,7 @@ msgstr "_Quita"
 
 #: gnucash/gnome-search/dialog-search.c:1100
 msgid "Order"
-msgstr "Operación"
+msgstr "Orden"
 
 #: gnucash/gnome-search/dialog-search.c:1102
 #: gnucash/gtkbuilder/dialog-order.glade:421
@@ -27819,7 +27819,7 @@ msgstr "Nombre de ejercicio:"
 
 #: gnucash/report/reports/standard/invoice.scm:683
 msgid "REF"
-msgstr "REF"
+msgstr "REF."
 
 #: gnucash/report/reports/standard/invoice.scm:764
 msgid ""
