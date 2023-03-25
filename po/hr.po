@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-25 15:38+0000\n"
+"PO-Revision-Date: 2023-03-25 17:34+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hr/>\n"
@@ -24972,26 +24972,20 @@ msgid "Show mnemonic in amounts"
 msgstr "_Prikaži podređena konta"
 
 #: gnucash/report/reports/standard/investment-lots.scm:73
-#, fuzzy
-#| msgid "Include assets total"
 msgid "Include closed lots"
-msgstr "Uključi ukupni iznos imovine"
+msgstr "Uključi zatvorene pakete"
 
 #: gnucash/report/reports/standard/investment-lots.scm:75
 msgid "Show blanks instead of zeros in table cells"
 msgstr "Prikaži praznine umjesto nula u poljima tablice"
 
 #: gnucash/report/reports/standard/investment-lots.scm:76
-#, fuzzy
-#| msgid "Show _log window"
 msgid "Show lot split rows"
-msgstr "Prikaži prozor _log-podataka"
+msgstr "Prikaži retke dijelova paketa"
 
 #: gnucash/report/reports/standard/investment-lots.scm:79
-#, fuzzy
-#| msgid "Investments"
 msgid "Investment Lots"
-msgstr "Ulaganja"
+msgstr "Paketi ulaganja"
 
 #: gnucash/report/reports/standard/investment-lots.scm:80
 msgid "Start date"
@@ -25244,7 +25238,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:307
 msgid "Include closed lots in addition to open lots"
-msgstr ""
+msgstr "Uključi zatvorene pakete dodatno s otvorenim paketima"
 
 #: gnucash/report/reports/standard/investment-lots.scm:314
 msgid ""
