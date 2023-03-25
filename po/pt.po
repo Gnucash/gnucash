@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-21 06:21+0000\n"
+"PO-Revision-Date: 2023-03-25 07:19+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/pt/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -13415,10 +13415,8 @@ msgid "Open imported documents in tabs"
 msgstr "Abrir documentos importados em separadores"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
-#| msgid "Open not yet posted documents in tabs "
 msgid "Open not yet posted documents in tabs"
-msgstr "Abrir documentos ainda não emitidos em separadores "
+msgstr "Abrir documentos ainda não emitidos em separadores"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -15194,8 +15192,6 @@ msgstr ""
 "nenhuma explicação."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
-#, fuzzy
-#| msgid "For"
 msgctxt "keep"
 msgid "For"
 msgstr "Durante"
@@ -16402,8 +16398,6 @@ msgid "Until"
 msgstr "Até"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
-#, fuzzy
-#| msgid "For"
 msgctxt "repeat"
 msgid "For"
 msgstr "Durante"
@@ -21817,7 +21811,7 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
-"Um dos seus relatórios tem uma identidade duplicada. Por favor, procure no "
+"Um dos relatórios tem uma identidade duplicada. Por favor, procure no "
 "sistema de relatórios, especialmente nos relatórios gravados, um que tenha "
 "esta identidade: "
 
@@ -25302,7 +25296,7 @@ msgstr "Mostrar colunas de ganhos não realizados para acções não-vendidas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:263
 msgid "Group gains (and sales?) by long-term (LT) and short-term (ST)"
-msgstr "Agrupar ganhos (e vendas) por longo prazo (LP) e curto prazo (CP)"
+msgstr "Agrupar ganhos (e/ou vendas) por longo prazo (LP) e curto prazo (CP)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:266
 msgid "Gains Only"
@@ -27092,7 +27086,7 @@ msgstr "Factura nº."
 
 #: gnucash/report/reports/support/receipt.eguile.scm:144
 msgid "Descr."
-msgstr "Descr."
+msgstr "Desc."
 
 #: gnucash/report/reports/support/receipt.eguile.scm:278
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:425
@@ -27937,10 +27931,6 @@ msgid "Display the account name?"
 msgstr "Mostrar o nome da conta?"
 
 #: gnucash/report/trep-engine.scm:949
-#, fuzzy
-#| msgid ""
-#| "Display the other account name? (if this is a split transaction, this "
-#| "parameter is guessed)."
 msgid ""
 "Display the other account name? If this is a split transaction, this "
 "parameter is guessed."
@@ -29371,10 +29361,8 @@ msgid "Create a new voucher"
 msgstr "Criar um novo vale"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Checks…"
-msgstr "Im_primir cheques"
+msgstr "Im_primir cheques…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:444
@@ -29826,8 +29814,6 @@ msgid "Finance::Quote reported failure set no error."
 msgstr "A falha do Finance::Quote não definiu nenhum erro."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:369
-#, fuzzy
-#| msgid "Finance::Quote reported failure with  error: "
 msgid "Finance::Quote reported failure with error: "
 msgstr "A falha do Finance::Quote devolveu o erro: "
 
@@ -30421,8 +30407,8 @@ msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de cliente. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de cliente. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1143
 msgid "Employee number"
@@ -30445,8 +30431,8 @@ msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de empregado. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de empregado. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1152
 msgid "Invoice number"
@@ -30469,8 +30455,8 @@ msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de factura. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de factura. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1161
 msgid "Bill number"
@@ -30493,8 +30479,8 @@ msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de pagamento. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de pagamento. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1169
 msgid "Expense voucher number"
@@ -30517,8 +30503,8 @@ msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de vales de despesa. É uma "
-"cadeia de estilo printf."
+"A cadeia de formato a usar para gerar números de vales de despesa. É um "
+"formato de impressão, um modelo."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1178
 msgid "Job number"
@@ -30541,8 +30527,8 @@ msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de tarefas. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de tarefas. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1186
 msgid "Order number"
@@ -30565,8 +30551,8 @@ msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de encomendas. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de encomendas. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1194
 msgid "Vendor number"
@@ -30589,8 +30575,8 @@ msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de fornecedores. É uma cadeia "
-"de estilo printf."
+"A cadeia de formato a usar para gerar números de fornecedores. É um formato "
+"de impressão, um modelo."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1205
 msgid "The name of your business."
