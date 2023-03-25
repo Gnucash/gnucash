@@ -42,6 +42,9 @@
 #undef __G_IR_SCANNER__
 #endif
 #include <gdk/gdkkeysyms.h>
+#ifdef G_OS_WIN32
+# include <gdk/gdkwin32.h>
+#endif
 #include <glib/gi18n.h>
 #include "gnc-date-edit.h"
 
