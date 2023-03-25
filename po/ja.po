@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-25 04:46+0000\n"
+"PO-Revision-Date: 2023-03-25 15:38+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/ja/>\n"
@@ -8053,6 +8053,17 @@ msgid ""
 "or more symbols, the first of which is the currency in which exchange rates "
 "for the rest will be quoted.\n"
 msgstr ""
+"相場価格関連のコマンドを実行する。 次のコマンドをサポートする。\n"
+"\n"
+"  info: \tFinance::Quote のバージョンと 公開されている相場表情報源を "
+"表示する。\n"
+"   get: \t現在の相場表を指定の GnuCash データファイル内の全海外通貨 "
+"および株式に対して取得する。\n"
+"  dump: \t現在の相場表を指定された通貨や 株式に対して "
+"指定された名前空間から取得し 結果をコンソールへ 出力する。\n"
+"        \tこの後には情報源と 1 つ以上の 記号の入力が必須。 ただし "
+"その情報源を \"currency\" にした場合はその後に 2 つ以上の 記号が必須で、1 "
+"つ目の記号が 通貨で それ以外との為替レートを 取得する。\n"
 
 #: gnucash/gnucash-cli.cpp:103
 msgid ""
@@ -8066,6 +8077,8 @@ msgid ""
 "When using the dump command list all of the parameters Finance::Quote "
 "returns for the symbol instead of the ones that Gnucash requires."
 msgstr ""
+"dump コマンド使用時に、記号に対して Finance::Quote が返すパラメータすべてを "
+"Gnucash に必須のものの代わりに 一覧表示する。"
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
@@ -8104,10 +8117,8 @@ msgid "Missing data file parameter"
 msgstr "データファイルパラメータがありません。"
 
 #: gnucash/gnucash-cli.cpp:158
-#, fuzzy
-#| msgid "Not enough information for Blank Transaction?"
 msgid "Not enough information for quotes dump"
-msgstr "空白取引に情報が不足していませんか?"
+msgstr "quotes dump のための情報が不足しています。"
 
 #: gnucash/gnucash-cli.cpp:168
 msgid "Unknown quotes command '{1}'"
@@ -18727,21 +18738,21 @@ msgstr "この列の幅を狭める(_N)"
 #, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
-msgstr[0] "価格を %d 件追加しました。"
+msgstr[0] "価格を %d 件追加"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1926
 #, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
-msgstr[0] "価格が %d 件重複しました。"
+msgstr[0] "価格が %d 件重複"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1931
 #, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
-msgstr[0] "価格を %d 件置換しました。"
+msgstr[0] "価格を %d 件置換"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1936
 #, c-format
@@ -18776,7 +18787,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1431
 msgid "This line has the following parse issues:"
-msgstr ""
+msgstr "この行には次のような解析上の問題があります:"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1775
 msgid "No Linked Account"
@@ -18931,16 +18942,15 @@ msgid "Please select a description column."
 msgstr "説明の列を選択してください。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:507
-#, fuzzy
-#| msgid "Please select an amount column."
 msgid "Please select a (negated) amount column."
-msgstr "金額の列を選択してください。"
+msgstr "(符号反転) 金額の列を選択してください。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
 msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value."
-msgstr ""
+msgstr "現在選択されている勘定科目では複数通貨の取引を生成します。次の列のいずれかを"
+"選択してください: 価格、(符号反転) 価値。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:531
 msgid ""
@@ -18948,18 +18958,15 @@ msgid ""
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
 msgstr ""
+"現在選択されている勘定科目では複数通貨の取引を生成します。次の列のいずれかを"
+"選択してください: 価格、(符号反転) 価値、(符号反転) 資金移動先金額。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
-#, fuzzy
-#| msgid ""
-#| "No 'Currency to' column selected and no selected Currency specified "
-#| "either.\n"
-#| "This should never happen. Please report this as a bug."
 msgid ""
 "Current line still has parse errors.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"'交換先通貨' 列が選択されておらず、通貨の選択もされていません。\n"
+"現在の行にまだ解析エラーがあります。\n"
 "発生しないはずのことが起きました。このバグを報告してください。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:682
@@ -18975,10 +18982,8 @@ msgid "Parse Error"
 msgstr "解析エラー"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:702
-#, fuzzy
-#| msgid "Select matching existing transaction"
 msgid "Problem creating preliminary transaction"
-msgstr "既存の一致する取引を選択する"
+msgstr "仮の取引を作成中に問題が発生しました"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:54
 msgid "From Symbol"
@@ -19037,7 +19042,7 @@ msgstr "種類が通貨の列で、値を有効な通貨に解析できません
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
 msgid "{1}: {2}"
-msgstr ""
+msgstr "{1}: {2}"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:279
 msgid "No date column."
@@ -19064,30 +19069,24 @@ msgid "Transaction Commodity"
 msgstr "取引商品"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
-#, fuzzy
-#| msgid "Amount (_words)"
 msgid "Amount (Negated)"
-msgstr "合計 (単語)(_W)"
+msgstr "金額 (符号反転)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 msgid "Value (Negated)"
-msgstr ""
+msgstr "価値 (符号反転)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
 msgid "Transfer Action"
 msgstr "資金移動先アクション"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:77
-#, fuzzy
-#| msgid "Transfer Account"
 msgid "Transfer Amount"
-msgstr "資金移動先勘定科目"
+msgstr "資金移動先金額"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
-#, fuzzy
-#| msgid "Transfer Account"
 msgid "Transfer Amount (Negated)"
-msgstr "資金移動先勘定科目"
+msgstr "資金移動先金額 (符号反転)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
 msgid "Transfer Memo"
@@ -19143,10 +19142,8 @@ msgstr ""
 "資金移動先勘定科目の値から勘定科目にマッピングし直すことができませんでした。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:641
-#, fuzzy
-#| msgid "No amount column."
 msgid "No amount or negated amount column."
-msgstr "金額の列がありません。"
+msgstr "金額または符号反転金額の列がありません。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:644
 msgid "Split is reconciled but reconcile date column is missing or invalid."
@@ -21517,7 +21514,7 @@ msgstr "プロットを表示する"
 
 #: gnucash/report/reports/example/average-balance.scm:110
 msgid "Display a graph of the selected data."
-msgstr "選択されたデータのグラフを表示する"
+msgstr "選択されたデータのグラフを表示します。"
 
 #: gnucash/report/reports/example/average-balance.scm:113
 #: gnucash/report/reports/example/average-balance.scm:287
@@ -21672,7 +21669,7 @@ msgstr "この帳票のタイトルです。"
 #: gnucash/report/reports/example/sample-report.scm:119
 #: gnucash/report/reports/example/sample-report.scm:131
 msgid "Tab B"
-msgstr ""
+msgstr "タブ B"
 
 #: gnucash/report/reports/example/sample-report.scm:61
 msgid "Boolean Option"
@@ -21764,7 +21761,7 @@ msgstr "これは色オプションです。"
 #: gnucash/report/reports/example/sample-report.scm:147
 #: gnucash/report/reports/example/sample-report.scm:158
 msgid "Tab A"
-msgstr ""
+msgstr "タブ A"
 
 #: gnucash/report/reports/example/sample-report.scm:147
 msgid "An account list option"
@@ -24504,16 +24501,12 @@ msgid "Profit & Loss"
 msgstr "損益計算書 (P/L)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:40
-#, fuzzy
-#| msgid "Charge"
 msgid "Chart"
-msgstr "請求"
+msgstr "チャート"
 
 #: gnucash/report/reports/standard/investment-lots.scm:41
-#, fuzzy
-#| msgid "Two Columns"
 msgid "Columns"
-msgstr "2 列"
+msgstr "列"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
@@ -24521,38 +24514,26 @@ msgstr "検証"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163
-#, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include accounts with no lots"
-msgstr "株式が無い科目も含める"
+msgstr "ロットが無い科目も含める"
 
 #: gnucash/report/reports/standard/investment-lots.scm:50
-#, fuzzy
-#| msgid "Show date"
 msgid "Show Chart"
-msgstr "日付を表示する"
+msgstr "チャートを表示する"
 
 #: gnucash/report/reports/standard/investment-lots.scm:51
-#, fuzzy
-#| msgid "Chart Type"
 msgid "Chart type"
 msgstr "チャートの種類"
 
 #: gnucash/report/reports/standard/investment-lots.scm:52
-#, fuzzy
-#| msgid "Old location:"
 msgid "Chart location"
-msgstr "古い場所:"
+msgstr "チャートの位置"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
-#, fuzzy
-#| msgid "Plot Width"
 msgid "Plot width"
 msgstr "プロット幅"
 
 #: gnucash/report/reports/standard/investment-lots.scm:54
-#, fuzzy
-#| msgid "Plot Height"
 msgid "Plot height"
 msgstr "プロット高"
 
@@ -24635,20 +24616,14 @@ msgid "Investment Lots"
 msgstr "投資ロット"
 
 #: gnucash/report/reports/standard/investment-lots.scm:80
-#, fuzzy
-#| msgid "Start Date"
 msgid "Start date"
 msgstr "開始日付"
 
 #: gnucash/report/reports/standard/investment-lots.scm:81
-#, fuzzy
-#| msgid "End Date"
 msgid "End date"
 msgstr "終了日付"
 
 #: gnucash/report/reports/standard/investment-lots.scm:83
-#, fuzzy
-#| msgid "Price Source"
 msgid "Price source"
 msgstr "価格の情報源"
 
@@ -24838,10 +24813,8 @@ msgid "What kind of chart to include"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:189
-#, fuzzy
-#| msgid "Use Stacked Charts"
 msgid "Stacked Bar Chart"
-msgstr "積み上げチャートを使用する"
+msgstr "積み上げ棒グラフ"
 
 #: gnucash/report/reports/standard/investment-lots.scm:195
 #, fuzzy
@@ -29409,85 +29382,67 @@ msgstr ""
 
 #. Translators: Means that the preceding element is required
 #: libgnucash/app-utils/gnc-quotes.cpp:785
-#, fuzzy
-#| msgid "Date required."
 msgctxt "Finance::Quote"
 msgid "required"
-msgstr "日付が必要です。"
+msgstr "必須"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
 #: libgnucash/app-utils/gnc-quotes.cpp:787
-#, fuzzy
-#| msgid "Unreconciled"
 msgctxt "Finance::Quote"
 msgid "recommended"
-msgstr "未照合"
+msgstr "推奨"
 
 #. Translators: Means that one of the indicated elements is required
 #: libgnucash/app-utils/gnc-quotes.cpp:789
-#, fuzzy
-#| msgid "End of this year"
 msgctxt "Finance::Quote"
 msgid "one of these"
-msgstr "今年の終了日"
+msgstr "これらのいずれか"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
 #: libgnucash/app-utils/gnc-quotes.cpp:791
-#, fuzzy
-#| msgid "missing"
 msgctxt "Finance::Quote"
 msgid "**missing**"
-msgstr "不明"
+msgstr "**不明**"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:798
 msgid "Finance::Quote fields GnuCash uses:"
-msgstr ""
+msgstr "GnuCash が使う Finance::Quote のフィールド:"
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
 #: libgnucash/app-utils/gnc-quotes.cpp:800
-#, fuzzy
-#| msgid "Symbol"
 msgctxt "Finance::Quote"
 msgid "symbol: "
-msgstr "記号"
+msgstr "記号: "
 
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:802
-#, fuzzy
-#| msgid "Date: "
 msgctxt "Finance::Quote"
 msgid "date: "
 msgstr "日付: "
 
 #. Translators: The quote currency
 #: libgnucash/app-utils/gnc-quotes.cpp:804
-#, fuzzy
-#| msgid "Currency"
 msgctxt "Finance::Quote"
 msgid "currency: "
-msgstr "通貨"
+msgstr "通貨: "
 
 #. Translators: The quote is for the most recent trade on the exchange
 #: libgnucash/app-utils/gnc-quotes.cpp:810
-#, fuzzy
-#| msgid "last %s"
 msgctxt "Finance::Quote"
 msgid "last: "
-msgstr "最終 %s"
+msgstr "終値: "
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
 #: libgnucash/app-utils/gnc-quotes.cpp:812
 msgctxt "Finance::Quote"
 msgid "nav: "
-msgstr ""
+msgstr "総資産高: "
 
 #. Translators: The quote is neither a last trade nor an NAV.
 #: libgnucash/app-utils/gnc-quotes.cpp:814
-#, fuzzy
-#| msgid "Price"
 msgctxt "Finance::Quote"
 msgid "price: "
-msgstr "価格"
+msgstr "価格: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:834
 msgid "Finance::Quote reported a failure for symbol "
