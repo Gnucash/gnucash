@@ -14,19 +14,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-17 03:47+0000\n"
+"PO-Revision-Date: 2023-03-25 04:46+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/program-"
-"beta/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/"
+"program-beta/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -1761,10 +1761,8 @@ msgid "_Shares"
 msgstr "_Andelar"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:963
-#, fuzzy
-#| msgid "_Rotation"
 msgid "Ratio"
-msgstr "Proportion"
+msgstr "Fördelning"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:963
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
@@ -13445,10 +13443,8 @@ msgid "Open imported documents in tabs"
 msgstr "Öppna importerade dokument i flikar"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
-#| msgid "Open not yet posted documents in tabs "
 msgid "Open not yet posted documents in tabs"
-msgstr "Öppna ej ännu registrerade dokument i flikar "
+msgstr "Öppna, ej ännu registrerade dokument i flikar"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -15221,8 +15217,6 @@ msgstr ""
 "autospara körs. Annars visas ingen ytterligare förklaring."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
-#, fuzzy
-#| msgid "For"
 msgctxt "keep"
 msgid "For"
 msgstr "Upp till"
@@ -16430,8 +16424,6 @@ msgid "Until"
 msgstr "Tills"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
-#, fuzzy
-#| msgid "For"
 msgctxt "repeat"
 msgid "For"
 msgstr "Upp till"
@@ -27929,16 +27921,12 @@ msgid "Display the account name?"
 msgstr "Visa kontonamnet?"
 
 #: gnucash/report/trep-engine.scm:949
-#, fuzzy
-#| msgid ""
-#| "Display the other account name? (if this is a split transaction, this "
-#| "parameter is guessed)."
 msgid ""
 "Display the other account name? If this is a split transaction, this "
 "parameter is guessed."
 msgstr ""
-"Visa det andra kontonamnet? (Om detta är en delad transaktion så gissas "
-"värdet på denna parameter.)"
+"Visa det andra kontonamnet? Om detta är en delad transaktion så gissas "
+"värdet på denna parameter."
 
 #: gnucash/report/trep-engine.scm:956
 msgid "Amount of detail to display per transaction."
@@ -29360,10 +29348,8 @@ msgid "Create a new voucher"
 msgstr "Skapa ett nytt traktamente"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Checks…"
-msgstr "_Skriv ut checkar"
+msgstr "_Skriv ut checkar…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:444
@@ -29817,10 +29803,8 @@ msgid "Finance::Quote reported failure set no error."
 msgstr "Finance::Quote rapporterade misslyckande angav inget fel."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:369
-#, fuzzy
-#| msgid "Finance::Quote reported failure with  error: "
 msgid "Finance::Quote reported failure with error: "
-msgstr "Finance::Quote rapporterade misslyckande med  fel: "
+msgstr "Finance::Quote rapporterade misslyckande med fel: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:372
 msgid "Finance::Quote returned a quote with no currency."
