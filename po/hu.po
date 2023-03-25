@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-23 17:39+0000\n"
+"PO-Revision-Date: 2023-03-25 15:38+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/hu/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -5527,7 +5527,7 @@ msgstr "Tét_el dátuma"
 
 #: gnucash/gnome/gnc-split-reg.c:703 gnucash/gnome/window-reconcile.c:2059
 msgid "Statement Date"
-msgstr "Számlakivonat _dátuma"
+msgstr "Számlakivonat dátuma"
 
 #: gnucash/gnome/gnc-split-reg.c:726
 #: gnucash/report/reports/standard/customer-summary.scm:118
@@ -5844,7 +5844,7 @@ msgstr "E"
 #: gnucash/gnome/report-menus.scm:57
 #, scheme-format
 msgid "Display the ~a report"
-msgstr "~a jelentés megjelenítése"
+msgstr "~a kimutatás megjelenítése"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
@@ -5918,24 +5918,26 @@ msgstr "Elszámolt tranzakciók"
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
-msgstr[0] ""
+msgstr[0] "A számlakivonat dátuma a mai nap után van %d nappal."
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:387
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
-msgstr[0] ""
+msgstr[0] "A számlakivonat megadott dátuma a mai nap után van %d nappal."
 
 #: gnucash/gnome/window-reconcile.c:392
 msgid ""
 "This may cause issues for future reconciliation actions on this account. "
 "Please double-check this is the date you intended."
 msgstr ""
+"Ez megnehezítheti a későbbi egyeztetéseket ezen a számlán. Kérjük, "
+"ellenőrizze, hogy biztosan ezt a dátumot szeretné használni."
 
 #: gnucash/gnome/window-reconcile.c:481
 msgid "Interest Payment"
-msgstr "Jóváírt kamat"
+msgstr "Folyószámlakamat"
 
 #: gnucash/gnome/window-reconcile.c:484
 msgid "Interest Charge"
@@ -5945,17 +5947,17 @@ msgstr "Terhelt kamat"
 #: gnucash/gtkbuilder/dialog-vendor.glade:630
 #: gnucash/gtkbuilder/dialog-vendor.glade:652
 msgid "Payment Information"
-msgstr "Fizetési információ"
+msgstr "Kifizetés adatai"
 
 #: gnucash/gnome/window-reconcile.c:502
 #: gnucash/gtkbuilder/assistant-loan.glade:571
 #: gnucash/gtkbuilder/assistant-loan.glade:772
 msgid "Payment From"
-msgstr "Befizetési innen"
+msgstr "Fizetés innen"
 
 #: gnucash/gnome/window-reconcile.c:508 gnucash/gnome/window-reconcile.c:518
 msgid "Reconcile Account"
-msgstr "Számlaegyeztetés"
+msgstr "Egyeztetendő számla"
 
 #: gnucash/gnome/window-reconcile.c:523
 #: gnucash/gtkbuilder/assistant-loan.glade:824
@@ -5991,9 +5993,9 @@ msgid ""
 "reconcile."
 msgstr ""
 "Ezen a számlán egyes felosztások egyeztetési dátuma későbbi, mint a "
-"számlakivonat dátuma. Ezek miatt az egyeztetés nehézségekbe ütközhet. Ha ez "
-"a helyzet, a Tranzakciók keresésével megkeresheti őket, eltávolíthatja az "
-"egyeztetést, majd újra egyeztetheti őket."
+"számlakivonat dátuma. Emiatt az egyeztetés nehézségekbe ütközhet. Ilyen "
+"esetben a Tranzakciók keresésével megkeresheti a felosztásokat, "
+"visszavonhatja az egyeztetésüket, majd újra próbálkozhat az egyeztetéssel."
 
 #: gnucash/gnome/window-reconcile.c:2069
 #: gnucash/gtkbuilder/window-reconcile.glade:106
@@ -6017,15 +6019,15 @@ msgstr "Eltérés"
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
-msgstr "Ezen egyeztetési ablak a tartalma megváltozott. Biztosan elhagyja?"
+msgstr "Megváltoztatta az egyeztetési ablak tartalmát. Biztosan bezárja?"
 
 #: gnucash/gnome/window-reconcile.c:2346
 msgid "The account is not balanced. Are you sure you want to finish?"
-msgstr "A bankszámlán eltérés van. Biztosan be kívánja fejezni?"
+msgstr "A bankszámlán eltérés van. Biztosan véglegesíti az egyeztetést?"
 
 #: gnucash/gnome/window-reconcile.c:2406
 msgid "Do you want to postpone this reconciliation and finish it later?"
-msgstr "Kívánja elhalasztani ezt az egyeztetést és később befejezni?"
+msgstr "Szeretné későbbre halasztani az egyeztetés véglegesítését?"
 
 #: gnucash/gnome/window-report.cpp:109
 msgid "Set the report options you want using this dialog."
@@ -13175,7 +13177,7 @@ msgstr "<b>Nyitóegyenleg átutalása</b>"
 #: gnucash/ui/gnc-reconcile-window.ui:58 gnucash/ui/gnc-reconcile-window.ui:98
 #: gnucash/ui/gnc-reconcile-window.ui:129
 msgid "_Balance"
-msgstr "_Egyenleg"
+msgstr "_Kiegyenlítés"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1862
 msgid "_Use equity 'Opening Balances' account"
@@ -17406,7 +17408,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/window-reconcile.glade:71
 msgid "<b>Reconcile Information</b>"
-msgstr "<b>Információ egyeztetése</b>"
+msgstr "<b>Egyeztetés beállításai</b>"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:93
 msgid "Statement _Date"
@@ -17421,11 +17423,12 @@ msgid ""
 "Include all descendant accounts in the reconcile. All of them must use the "
 "same commodity as this one."
 msgstr ""
+"Az összes alárendelt számla belevétele az egyeztetésbe. Mindegyiknek ezzel a "
+"számlával azonos árut kell használnia."
 
 #: gnucash/gtkbuilder/window-reconcile.glade:258
-#, fuzzy
 msgid "Statement Date is after today"
-msgstr "Számlakivonat _dátuma"
+msgstr "A nyilatkozat dátuma a mai nap után van"
 
 #: gnucash/html/gnc-html-webkit1.c:80 gnucash/html/gnc-html-webkit2.c:89
 msgid "Not found"
@@ -28054,7 +28057,7 @@ msgstr "Átutalás"
 #: gnucash/ui/gnc-plugin-page-register.ui:232
 #: gnucash/ui/gnc-plugin-page-register.ui:874
 msgid "Transfer funds from one account to another"
-msgstr "Pénz átvezetése egyik folyószámlák a másikra"
+msgstr "Pénz átvezetése egyik számláról a másikra"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:98
 #: gnucash/ui/gnc-embedded-register-window.ui:140
@@ -29086,8 +29089,8 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
 msgstr ""
-"Kiegyenlítetlen tranzakciók és árva felosztások ellenőrzése és kijavítása a "
-"számlán"
+"Kiegyenlítetlen tranzakciók és árva felosztások megkeresése és kijavítása "
+"ezen a számlán"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:175
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:286
@@ -29764,38 +29767,35 @@ msgstr "_Információ egyeztetése…"
 
 #: gnucash/ui/gnc-reconcile-window.ui:14 gnucash/ui/gnc-reconcile-window.ui:247
 msgid "_Finish"
-msgstr "Be_fejezés"
+msgstr "_Véglegesítés"
 
 #: gnucash/ui/gnc-reconcile-window.ui:19 gnucash/ui/gnc-reconcile-window.ui:263
 msgid "_Postpone"
-msgstr "_Halaszt"
+msgstr "Később _folytat"
 
 #: gnucash/ui/gnc-reconcile-window.ui:33
 msgid "_Open Account"
 msgstr "Számla _megnyitása"
 
 #: gnucash/ui/gnc-reconcile-window.ui:68 gnucash/ui/gnc-reconcile-window.ui:106
-#, fuzzy
 msgid "_Reconcile Selection"
-msgstr "Számlaegyeztetés"
+msgstr "Kiválasztott _egyezik"
 
 #: gnucash/ui/gnc-reconcile-window.ui:73 gnucash/ui/gnc-reconcile-window.ui:110
-#, fuzzy
 msgid "_Unreconcile Selection"
-msgstr "Nem egyeztet"
+msgstr "Kiválasztott _nem egyezik"
 
 #: gnucash/ui/gnc-reconcile-window.ui:127
 msgid "Add a new balancing entry to the account"
-msgstr "Új kiegyenlítő bejegyzés felvétele a folyószámlára"
+msgstr "Új kiegyenlítő tranzakció felvétele a folyószámlára"
 
 #: gnucash/ui/gnc-reconcile-window.ui:144
 msgid "Edit the current transaction"
 msgstr "A jelenlegi tranzakció szerkesztése"
 
 #: gnucash/ui/gnc-reconcile-window.ui:159
-#, fuzzy
 msgid "Reconcile the selected transactions"
-msgstr "A kiválasztott tranzakció törlése"
+msgstr "A kiválasztott tranzakció egyeztetése"
 
 #: gnucash/ui/gnc-reconcile-window.ui:161
 #, fuzzy
@@ -29803,9 +29803,8 @@ msgid "Reconcile Selection"
 msgstr "Számlaegyeztetés"
 
 #: gnucash/ui/gnc-reconcile-window.ui:175
-#, fuzzy
 msgid "Unreconcile the selected transactions"
-msgstr "A kiválasztott tranzakció törlése"
+msgstr "A kiválasztott tranzakció egyeztetésének törlése"
 
 #: gnucash/ui/gnc-reconcile-window.ui:177
 #, fuzzy
@@ -29822,7 +29821,7 @@ msgstr "Folyószámla megnyitása"
 
 #: gnucash/ui/gnc-reconcile-window.ui:245
 msgid "Finish the reconciliation of this account"
-msgstr "A számlaegyeztetés befejezése"
+msgstr "A számlaegyeztetés véglegesítése"
 
 #: gnucash/ui/gnc-reconcile-window.ui:261
 msgid "Postpone the reconciliation of this account"
@@ -29830,7 +29829,7 @@ msgstr "A jelenlegi számla egyeztetésének elhalasztása"
 
 #: gnucash/ui/gnc-reconcile-window.ui:277
 msgid "Cancel the reconciliation of this account"
-msgstr "E számlaegyeztetés félbehagyása"
+msgstr "A számlaegyeztetés megszakítása"
 
 #: libgnucash/app-utils/gnc-exp-parser.c:622
 msgid "Illegal variable in expression."
