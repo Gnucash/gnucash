@@ -20,7 +20,7 @@
 # Alois Spitzbart <spitz234@hotmail.com>, 2020, 2021.
 # Christian Wehling <christian.wehling@web.de>, 2020-2022.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021.
-# Christian Stimming <christian@cstimming.de>, 2021.
+# Christian Stimming <christian@cstimming.de>, 2021, 2023.
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
 # Christoph Franzen <christoph@alte-pflasterei.de>, 2021.
 # Thomas Kriegel <warrel040@gmx.de>, 2021.
@@ -36,11 +36,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.13-pre1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2022-09-13 03:53+0000\n"
-"Last-Translator: Frank H. Ellenberger <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2023-03-20 21:25+0000\n"
+"Last-Translator: Christian Stimming <christian@cstimming.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -48,7 +48,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1-dev\n"
+"X-Generator: Weblate 4.16.2-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
