@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-19 09:38+0000\n"
+"PO-Revision-Date: 2023-03-25 08:40+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -595,8 +595,8 @@ msgid ""
 msgstr ""
 "Escreva a primeira letra de um nome de conta existente na coluna de "
 "transferências e o GnuCash completará o resto a partir da sua lista de "
-"contas. Para sub-contas, faça o descrito atrás seguido de \":\" e a primeira "
-"letra da sub-conta (ex.: D:O para Despesas:Outras despesas)."
+"contas. Para subcontas, faça o descrito atrás seguido de \":\" e a primeira "
+"letra da subconta (ex.: D:O para Despesas:Outras despesas)."
 
 #: doc/tip_of_the_day.list.c:71
 msgid ""
@@ -604,9 +604,9 @@ msgid ""
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
 msgstr ""
-"Quer ver todas as transacções das suas sub-contas num diário? No separador "
-"de contas da página principal, realce a conta-mãe e seleccione Editar -> "
-"Abrir sub-contas."
+"Quer ver todas as transacções das suas subcontas num diário? No separador de "
+"contas da página principal, realce a conta-mãe e seleccione Editar -> Abrir "
+"subcontas."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -2295,7 +2295,7 @@ msgstr "Total:"
 
 #: gnucash/gnome/dialog-invoice.c:1425
 msgid "Subtotal:"
-msgstr "Sub-total:"
+msgstr "Subtotal:"
 
 #: gnucash/gnome/dialog-invoice.c:1426
 msgid "Tax:"
@@ -4004,13 +4004,13 @@ msgstr "Abrir o diário da conta seleccionada no estilo antigo"
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:240
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:350
 msgid "Open _SubAccounts"
-msgstr "Abrir _sub-contas"
+msgstr "Abrir _subcontas"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:230
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:241
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:351
 msgid "Open the selected account and all its subaccounts"
-msgstr "Abrir a conta seleccionada e todas as suas sub-contas"
+msgstr "Abrir a conta seleccionada e todas as suas subcontas"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:234
 msgid "Open Old St_yle Subaccounts"
@@ -4152,7 +4152,7 @@ msgstr "_Desdobramento de acções..."
 #: gnucash/gnome/gnc-plugin-page-register2.c:368
 #: gnucash/gnome/gnc-plugin-page-register.c:496
 msgid "Record a stock split or a stock merger"
-msgstr "Registar uma divisão ou união de acções"
+msgstr "Registar um desdobramento ou incorporação de acções"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:322
 #: gnucash/gnome/gnc-plugin-page-register2.c:372
@@ -4176,19 +4176,19 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account"
 msgstr ""
-"Identificar e corrigir transacções não saldadas e parcelas orfãs nesta conta"
+"Identificar e corrigir transacções não saldadas e parcelas órfãs nesta conta"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:332
 msgid "Check & Repair Su_baccounts"
-msgstr "Verificar e corrigir su_b-contas"
+msgstr "Verificar e corrigir su_bcontas"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:333
 msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
 msgstr ""
-"Identificar e corrigir transacções não saldadas e parcelas orfãs nesta conta "
-"e suas sub-contas"
+"Identificar e corrigir transacções não saldadas e parcelas órfãs nesta conta "
+"e suas subcontas"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:338
 msgid "Check & Repair A_ll"
@@ -4199,7 +4199,7 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in all "
 "accounts"
 msgstr ""
-"Identificar e corrigir transacções não saldadas e parcelas orfãs em todas as "
+"Identificar e corrigir transacções não saldadas e parcelas órfãs em todas as "
 "contas"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:343
@@ -4334,9 +4334,9 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
-"A conta \"%s\" tem mais de uma sub-conta.\n"
+"A conta \"%s\" tem mais de uma subconta.\n"
 "\n"
-"Mova as sub-contas ou elimine-as antes de eliminar a conta."
+"Mova as subcontas ou elimine-as antes de eliminar a conta."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1714
 #, c-format
@@ -4356,22 +4356,22 @@ msgstr "Todas as transacções nesta conta serão eliminadas."
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1739
 #, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr "A sua sub-conta será movida para a conta %s."
+msgstr "A sua subconta será movida para a conta %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1745
 #, c-format
 msgid "Its subaccount will be deleted."
-msgstr "A sua sub-conta será eliminada."
+msgstr "A sua subconta será eliminada."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1749
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
-msgstr "Todas as transacções da sub-conta serão movidas para a conta %s."
+msgstr "Todas as transacções da subconta serão movidas para a conta %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1756
 #, c-format
 msgid "All sub-account transactions will be deleted."
-msgstr "Todas as transacções da sub-conta serão eliminadas."
+msgstr "Todas as transacções da subconta serão eliminadas."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1762
 msgid "Are you sure you want to do this?"
@@ -5521,8 +5521,7 @@ msgstr "Livro razão de parcelas _automáticas"
 #: gnucash/gnome/gnc-plugin-page-register.c:587
 msgid ""
 "Show transactions on one or two lines and expand the current transaction"
-msgstr ""
-"Mostrar transacções em uma ou duas linhas e expandir a transacção actual"
+msgstr "Mostrar transacções numa ou duas linhas e expandir a transacção actual"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:458
 #: gnucash/gnome/gnc-plugin-page-register.c:591
@@ -5662,7 +5661,7 @@ msgstr "Relatório de diário"
 #: gnucash/gnome/gnc-plugin-page-register2.c:2452
 #: gnucash/gnome/gnc-plugin-page-register.c:3562
 msgid "and subaccounts"
-msgstr "e sub-contas"
+msgstr "e subcontas"
 
 #: gnucash/gnome/gnc-plugin-page-register2.c:2484
 #: gnucash/gnome/gnc-plugin-page-register.c:3591
@@ -6515,7 +6514,7 @@ msgid ""
 "have mismatched commodities or currencies.\n"
 "You need to open each account individually to edit transactions."
 msgstr ""
-"As transacções nesta conta não podem ser editadas por as suas sub-contas "
+"As transacções nesta conta não podem ser editadas por as suas subcontas "
 "terem mercadorias ou moedas trocadas.\n"
 "Tem de abrir cada conta individualmente para editar transacções."
 
@@ -6536,9 +6535,9 @@ msgid ""
 "account options and turn off the placeholder checkbox.\n"
 "You may also open an individual account instead of a set of accounts."
 msgstr ""
-"As transacções numa das sub-contas seleccionadas não podem ser editadas.\n"
-"Se quiser editar transacções neste diário, por favor abra as opções da sub-"
-"conta e desmarque a opção Marcador de posição.\n"
+"As transacções numa das subcontas seleccionadas não podem ser editadas.\n"
+"Se quiser editar transacções neste diário, por favor abra as opções da "
+"subconta e desmarque a opção Marcador de posição.\n"
 "Opcionalmente pode também abrir uma conta individual em vez de um conjunto "
 "de contas."
 
@@ -7466,28 +7465,28 @@ msgstr "Nova conta"
 #: gnucash/gnome-utils/dialog-account.c:2193
 #, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "Renumerar sub-contas imediatas de %s?"
+msgstr "Renumerar subcontas imediatas de %s?"
 
 #: gnucash/gnome-utils/dialog-account.c:2299
 #, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
-msgstr "Definir a cor da conta \"%s\" e todas as suas sub-contas"
+msgstr "Definir a cor da conta \"%s\" e todas as suas subcontas"
 
 #: gnucash/gnome-utils/dialog-account.c:2326
 #, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
 msgstr ""
-"Definir a conta \"%s\", incluindo todas as suas sub-contas, como Marcador de "
+"Definir a conta \"%s\", incluindo todas as suas subcontas, como Marcador de "
 "posição"
 
 #: gnucash/gnome-utils/dialog-account.c:2340
 #, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
-msgstr "Definir a conta \"%s\" como oculta, incluindo todas as suas sub-contas"
+msgstr "Definir a conta \"%s\" como oculta, incluindo todas as suas subcontas"
 
 #: gnucash/gnome-utils/dialog-book-close.c:294
 msgid "Please select an Equity account to hold the total Period Income."
@@ -8446,7 +8445,7 @@ msgid ""
 msgstr ""
 "Tentou gravar em\n"
 "%s\n"
-"ou numa sua sub-pasta. Isto não é permitido, uma vez que o %s reserva essa "
+"ou numa sua subpasta. Isto não é permitido, uma vez que o %s reserva essa "
 "pasta para uso interno.\n"
 "\n"
 "Por favor, tente novamente numa pasta diferente."
@@ -13132,7 +13131,7 @@ msgstr "Contas seleccionadas:"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:367
 #: gnucash/gtkbuilder/dialog-tax-info.glade:422
 msgid "_Select Subaccounts"
-msgstr "_Seleccionar sub-contas"
+msgstr "_Seleccionar subcontas"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:382
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:625
@@ -13722,8 +13721,8 @@ msgstr ""
 "\n"
 "Pode escolher aqui um conjunto que pareça próximo das suas necessidades. "
 "Após terminar o assistente, poderá adicionar, remover e modificar as contas "
-"quando desejar. Poderá também adicionar sub-contas, assim como mover contas "
-"(e suas sub-contas) de uma conta-mãe para outra.\n"
+"quando desejar. Poderá também adicionar subcontas, assim como mover contas ("
+"e suas subcontas) de uma conta-mãe para outra.\n"
 "\n"
 "Clique em \"Cancelar\" caso não queira criar novas contas agora."
 
@@ -14319,9 +14318,9 @@ msgstr ""
 "Note que o GnuCash estará a criar muitas contas que não existiam no seu "
 "outro programa de finanças, incluindo uma conta separada para cada acção que "
 "possua, contas separadas para comissões, contas especiais de capital próprio "
-"(sub-contas de ganhos retidos, por pré-definição) que serão a origem dos "
-"seus saldos iniciais, etc. Todas estas contas aparecerão na página seguinte "
-"para que as possa alterar se quiser, mas é seguro mantê-las tal como estão.\n"
+"(subcontas de ganhos retidos, por pré-definição) que serão a origem dos seus "
+"saldos iniciais, etc. Todas estas contas aparecerão na página seguinte para "
+"que as possa alterar se quiser, mas é seguro mantê-las tal como estão.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:524
 msgid "Accounts and stock holdings"
@@ -14928,11 +14927,11 @@ msgstr "Eliminar conta"
 
 #: gnucash/gtkbuilder/dialog-account.glade:447
 msgid "<b>Sub-accounts</b>"
-msgstr "<b>Sub-contas</b>"
+msgstr "<b>Subcontas</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:469
 msgid "This account has a sub-account. What would you like to do with it?"
-msgstr "Esta conta tem uma sub-conta. O que deseja fazer com ela?"
+msgstr "Esta conta tem uma subconta. O que deseja fazer com ela?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:480
 msgid "_Move to"
@@ -14940,7 +14939,7 @@ msgstr "_Mover para"
 
 #: gnucash/gtkbuilder/dialog-account.glade:498
 msgid "Delete the _subaccount"
-msgstr "Eliminar a _sub-conta"
+msgstr "Eliminar a _subconta"
 
 #: gnucash/gtkbuilder/dialog-account.glade:574
 #: gnucash/gtkbuilder/dialog-account.glade:693
@@ -14965,14 +14964,14 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:674
 msgid "<b>Sub-account Transactions</b>"
-msgstr "<b>Transacções da sub-conta</b>"
+msgstr "<b>Transacções da subconta</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:730
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
 msgstr ""
-"Ordenou a eliminação da sub-conta, mas ela contém transacções. O que deseja "
+"Ordenou a eliminação da subconta, mas ela contém transacções. O que deseja "
 "fazer com elas?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:744
@@ -14980,7 +14979,7 @@ msgid ""
 "One or more sub-accounts contain read-only transactions which may not be "
 "deleted."
 msgstr ""
-"Uma ou mais sub-contas contém transacções só de leitura que não podem ser "
+"Uma ou mais subcontas contém transacções só de leitura que não podem ser "
 "eliminadas."
 
 #: gnucash/gtkbuilder/dialog-account.glade:801
@@ -15073,7 +15072,7 @@ msgid ""
 "account."
 msgstr ""
 "Esta conta existe apenas como um marcador na hierarquia. Não podem ser "
-"feitas transacções nesta conta, só nas suas sub-contas."
+"feitas transacções nesta conta, só nas suas subcontas."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1468
 msgid "H_idden"
@@ -15149,7 +15148,7 @@ msgstr "_Seleccionar conta de transferência"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1909
 msgid "Renumber sub-accounts"
-msgstr "Renumerar sub-contas"
+msgstr "Renumerar subcontas"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1942
 msgid "_Renumber"
@@ -19124,7 +19123,7 @@ msgstr "An_ulada"
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:609
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:454
 msgid "_Frozen"
-msgstr "_Suspensa"
+msgstr "_Congelada"
 
 #. Filter By Dialog, below tabs
 #: gnucash/gtkbuilder/gnc-plugin-page-register2.glade:688
@@ -19350,7 +19349,7 @@ msgstr "_Data do extracto"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:128
 msgid "Include _subaccounts"
-msgstr "Incluir _sub-contas"
+msgstr "Incluir _subcontas"
 
 #: gnucash/gtkbuilder/window-reconcile.glade:132
 msgid ""
@@ -22586,7 +22585,7 @@ msgstr "Facturado?"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:117
 #: gnucash/report/reports/standard/invoice.scm:249
 msgid "Subtotal"
-msgstr "Sub-total"
+msgstr "Subtotal"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
 #: gnucash/report/reports/standard/invoice.scm:538
@@ -22696,7 +22695,7 @@ msgstr "Tipo de diário de transacções desconhecido"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
 msgid "The subtotal value of this entry"
-msgstr "O sub-total desta transacção"
+msgstr "O subtotal desta transacção"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:774
 msgid "The total tax of this entry "
@@ -23222,7 +23221,7 @@ msgstr "Mostrar contas até este nível, ignorando qualquer outra opção."
 msgid ""
 "Override account-selection and show sub-accounts of all selected accounts?"
 msgstr ""
-"Ignorar a selecção de contas e mostrar sub-contas de todas as contas "
+"Ignorar a selecção de contas e mostrar subcontas de todas as contas "
 "seleccionadas?"
 
 #: gnucash/report/options-utilities.scm:121
@@ -23336,7 +23335,7 @@ msgstr "Como mostrar saldos de contas-mãe."
 
 #: gnucash/report/options-utilities.scm:224
 msgid "Account Balance in the parent account, excluding any subaccounts."
-msgstr "Saldo na conta-mãe, excluindo quaisquer sub-contas."
+msgstr "Saldo na conta-mãe, excluindo quaisquer subcontas."
 
 #: gnucash/report/options-utilities.scm:225
 msgid "Do not show any balances of parent accounts."
@@ -23349,7 +23348,7 @@ msgstr "Saldo de conta"
 
 #: gnucash/report/options-utilities.scm:229
 msgid "Calculate Subtotal"
-msgstr "Calcular sub-total"
+msgstr "Calcular subtotal"
 
 #: gnucash/report/options-utilities.scm:230
 #: gnucash/report/options-utilities.scm:246
@@ -23358,19 +23357,19 @@ msgstr "Não mostrar"
 
 #: gnucash/report/options-utilities.scm:240
 msgid "How to show account subtotals for parent accounts."
-msgstr "Como mostrar sub-totais de conta para contas-mãe."
+msgstr "Como mostrar subtotais de conta para contas-mãe."
 
 #: gnucash/report/options-utilities.scm:241
 msgid "Show subtotals for selected parent accounts which have subaccounts."
-msgstr "Mostrar sub-totais das contas-mãe seleccionadas que tenham sub-contas."
+msgstr "Mostrar subtotais das contas-mãe seleccionadas que tenham subcontas."
 
 #: gnucash/report/options-utilities.scm:242
 msgid "Do not show any subtotals for parent accounts."
-msgstr "Não mostrar sub-totais para contas-mãe."
+msgstr "Não mostrar subtotais para contas-mãe."
 
 #: gnucash/report/options-utilities.scm:245
 msgid "Show subtotals"
-msgstr "Mostrar sub-totais"
+msgstr "Mostrar subtotais"
 
 #: gnucash/report/report-core.scm:151
 msgid "_Assets & Liabilities"
@@ -23453,7 +23452,7 @@ msgid ""
 "report system, especially your saved reports, for a report with this report-"
 "guid: "
 msgstr ""
-"Um dos seus relatórios tem uma identidade duplicada. Por favor, procure no "
+"Um dos relatórios tem uma identidade duplicada. Por favor, procure no "
 "sistema de relatórios, especialmente nos relatórios gravados, um que tenha "
 "esta identidade: "
 
@@ -23751,7 +23750,7 @@ msgstr "Tamanho do passo"
 #: gnucash/report/reports/example/average-balance.scm:45
 #: gnucash/report/reports/example/daily-reports.scm:59
 msgid "Include Sub-Accounts"
-msgstr "Incluir sub-contas"
+msgstr "Incluir subcontas"
 
 #: gnucash/report/reports/example/average-balance.scm:46
 msgid "Exclude transactions between selected accounts"
@@ -23784,7 +23783,7 @@ msgstr "Altura de desenho"
 #: gnucash/report/reports/example/average-balance.scm:80
 #: gnucash/report/reports/example/daily-reports.scm:88
 msgid "Include sub-accounts of all selected accounts."
-msgstr "Incluir sub-contas de todas as contas seleccionadas."
+msgstr "Incluir subcontas de todas as contas seleccionadas."
 
 #: gnucash/report/reports/example/average-balance.scm:86
 msgid ""
@@ -23901,7 +23900,7 @@ msgstr "Mostra um gráfico circular com a despesa total para cada dia da semana"
 #: gnucash/report/reports/standard/income-statement.scm:64
 #: gnucash/report/reports/standard/trial-balance.scm:79
 msgid "Levels of Subaccounts"
-msgstr "Nível de sub-contas"
+msgstr "Nível de subcontas"
 
 #: gnucash/report/reports/example/daily-reports.scm:61
 #: gnucash/report/reports/standard/account-piecharts.scm:74
@@ -24730,7 +24729,7 @@ msgid ""
 "Show the total balance, including balances in subaccounts, of any account at "
 "the depth limit."
 msgstr ""
-"Mostrar o saldo total, incluindo saldos em sub-contas, de qualquer conta no "
+"Mostrar o saldo total, incluindo saldos em subcontas, de qualquer conta no "
 "limite de profundidade."
 
 #: gnucash/report/reports/standard/account-summary.scm:97
@@ -24756,7 +24755,7 @@ msgstr "Saldos de contas-mãe"
 #: gnucash/report/reports/standard/budget-income-statement.scm:85
 #: gnucash/report/reports/standard/income-statement.scm:72
 msgid "Parent account subtotals"
-msgstr "Sub-totais de contas-mãe"
+msgstr "Subtotais de contas-mãe"
 
 #: gnucash/report/reports/standard/account-summary.scm:103
 #: gnucash/report/reports/standard/balance-sheet.scm:99
@@ -25384,7 +25383,7 @@ msgstr "Excluir contas com saldos totais zero"
 msgid ""
 "Exclude non-top-level accounts with zero balance and no non-zero sub-"
 "accounts."
-msgstr "Excluir contas não de topo com saldo zero e sem sub-contas não zero."
+msgstr "Excluir contas não de topo com saldo zero e sem subcontas não zero."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:161
 msgid "Negative amount format"
@@ -25492,7 +25491,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-eg.scm:373
 #: libgnucash/engine/Scrub.c:126
 msgid "Orphan"
-msgstr "Orfã"
+msgstr "Órfã"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:548
 msgid "Balance Sheet using eguile-gnc"
@@ -25580,10 +25579,10 @@ msgid ""
 "account. If this option is disabled, subtotals are displayed below parent "
 "and children groups."
 msgstr ""
-"Se esta opção estiver activa, os sub-totais são mostrados dentro das "
-"quantias-mãe e, se a conta-mãe tiver a sua própria quantia, é mostrada na "
-"linha seguinte como conta-filho. Se não, os sub-totais são mostrados abaixo "
-"dos grupos de contas-mãe e filho."
+"Se esta opção estiver activa, os subtotais são mostrados dentro das quantias-"
+"mãe e, se a conta-mãe tiver a sua própria quantia, é mostrada na linha "
+"seguinte como conta-filho. Se não, os subtotais são mostrados abaixo dos "
+"grupos de contas-mãe e filho."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:102
 msgid "Display amounts as hyperlinks"
@@ -26065,7 +26064,7 @@ msgstr "Profundidade do plano de contas"
 #: gnucash/report/reports/standard/budget.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:46
 msgid "Always show sub-accounts"
-msgstr "Mostrar sempre sub-contas"
+msgstr "Mostrar sempre subcontas"
 
 #: gnucash/report/reports/standard/budget.scm:49
 msgid "Show Budget"
@@ -26244,12 +26243,12 @@ msgstr "Mostrar nomes de conta completos (incluindo contas-mãe)."
 #: gnucash/report/reports/standard/cash-flow.scm:205
 #, scheme-format
 msgid "~a and subaccounts"
-msgstr "~a e sub-contas"
+msgstr "~a e subcontas"
 
 #: gnucash/report/reports/standard/cash-flow.scm:206
 #, scheme-format
 msgid "~a and selected subaccounts"
-msgstr "~a e sub-contas seleccionadas"
+msgstr "~a e subcontas seleccionadas"
 
 #: gnucash/report/reports/standard/cash-flow.scm:270
 msgid "Money into selected accounts comes from"
@@ -26645,12 +26644,12 @@ msgstr "Mostrar nome completo de conta"
 #: gnucash/report/reports/standard/general-ledger.scm:127
 #: gnucash/report/trep-engine.scm:79
 msgid "Primary Subtotal"
-msgstr "Sub-total primário"
+msgstr "Subtotal primário"
 
 #: gnucash/report/reports/standard/general-ledger.scm:128
 #: gnucash/report/trep-engine.scm:81
 msgid "Primary Subtotal for Date Key"
-msgstr "Sub-total primário para chave de data"
+msgstr "Subtotal primário para chave de data"
 
 #: gnucash/report/reports/standard/general-ledger.scm:129
 #: gnucash/report/trep-engine.scm:80
@@ -26665,12 +26664,12 @@ msgstr "Chave secundária"
 #: gnucash/report/reports/standard/general-ledger.scm:131
 #: gnucash/report/trep-engine.scm:90
 msgid "Secondary Subtotal"
-msgstr "Sub-total secundário"
+msgstr "Subtotal secundário"
 
 #: gnucash/report/reports/standard/general-ledger.scm:132
 #: gnucash/report/trep-engine.scm:92
 msgid "Secondary Subtotal for Date Key"
-msgstr "Sub-total secundário para chave de data"
+msgstr "Subtotal secundário para chave de data"
 
 #: gnucash/report/reports/standard/general-ledger.scm:133
 #: gnucash/report/trep-engine.scm:91
@@ -27068,7 +27067,7 @@ msgstr "Mostrar data de prazo?"
 
 #: gnucash/report/reports/standard/invoice.scm:250
 msgid "Display the subtotals?"
-msgstr "Mostrar os sub-totais?"
+msgstr "Mostrar os subtotais?"
 
 #: gnucash/report/reports/standard/invoice.scm:254
 msgid "Payable to"
@@ -27872,7 +27871,7 @@ msgstr "Taxa de imposto"
 #: gnucash/report/reports/standard/taxinvoice.scm:110
 #: gnucash/report/reports/standard/taxinvoice.scm:185
 msgid "Sub-total"
-msgstr "Sub-total"
+msgstr "Subtotal"
 
 #: gnucash/report/reports/standard/receipt.scm:63
 #: gnucash/report/reports/standard/taxinvoice.scm:112
@@ -28476,7 +28475,7 @@ msgstr "Factura nº."
 
 #: gnucash/report/reports/support/receipt.eguile.scm:144
 msgid "Descr."
-msgstr "Descr."
+msgstr "Desc."
 
 #: gnucash/report/reports/support/receipt.eguile.scm:279
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:424
@@ -29146,7 +29145,7 @@ msgid ""
 "match both Expenses:Car and Expenses:Flights. Use a period (.) to match a "
 "single character e.g. '20../.' will match 'Travel 2017/1 London'. "
 msgstr ""
-"Por pré-definição, o filtro de conta só procura a sub-cadeia. Defina como "
+"Por pré-definição, o filtro de conta só procura a subcadeia. Defina como "
 "verdadeiro para activar todas as capacidades das expressões regulares POSIX. "
 "\"Carro|Voos\" corresponde a: Carro Despesas: Voos. Use um ponto (.) para "
 "corresponder a um único carácter \"20 ../. \" corresponde a \"Viagem 2017/1 "
@@ -29176,7 +29175,7 @@ msgid ""
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
 "will match both tags within description, notes or memo."
 msgstr ""
-"Por pré-definição, o filtro de transacção só procura a sub-cadeia. Defina "
+"Por pré-definição, o filtro de transacção só procura a subcadeia. Defina "
 "como verdadeiro para activar todas as capacidades das expressões regulares "
 "POSIX. \"#trabalho|#família\" corresponde a ambas as etiquetas dentro de "
 "descrição, notas ou memorando."
@@ -29428,8 +29427,8 @@ msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de cliente. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de cliente. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/app-utils/business-prefs.scm:43
 msgid ""
@@ -29452,8 +29451,8 @@ msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de empregado. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de empregado. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/app-utils/business-prefs.scm:47
 msgid ""
@@ -29476,8 +29475,8 @@ msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de factura. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de factura. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/app-utils/business-prefs.scm:51
 msgid ""
@@ -29500,8 +29499,8 @@ msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de pagamento. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de pagamento. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/app-utils/business-prefs.scm:55
 msgid ""
@@ -29524,8 +29523,8 @@ msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de vales de despesa. É uma "
-"cadeia de estilo printf."
+"A cadeia de formato a usar para gerar números de vales de despesa. É um "
+"formato de impressão, um modelo."
 
 #: libgnucash/app-utils/business-prefs.scm:59
 msgid ""
@@ -29548,8 +29547,8 @@ msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de tarefas. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de tarefas. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/app-utils/business-prefs.scm:63
 msgid ""
@@ -29572,8 +29571,8 @@ msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de encomendas. É uma cadeia de "
-"estilo printf."
+"A cadeia de formato a usar para gerar números de encomendas. É um formato de "
+"impressão, um modelo."
 
 #: libgnucash/app-utils/business-prefs.scm:67
 msgid ""
@@ -29596,8 +29595,8 @@ msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
 msgstr ""
-"A cadeia de formato a usar para gerar números de fornecedores. É uma cadeia "
-"de estilo printf."
+"A cadeia de formato a usar para gerar números de fornecedores. É um formato "
+"de impressão, um modelo."
 
 #: libgnucash/app-utils/business-prefs.scm:71
 msgid ""
@@ -29637,7 +29636,7 @@ msgstr "O endereço URL da sua página web."
 
 #: libgnucash/app-utils/business-prefs.scm:116
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "O número de contribuinte da sua empresa."
+msgstr "O número de contribuinte da sua empresa (e.g. 000 000 000)."
 
 #: libgnucash/app-utils/business-prefs.scm:121
 msgid "Default Customer TaxTable"
@@ -30046,7 +30045,7 @@ msgstr "Não sujeita a imposto; %s%s: %s (código %s, tipo de imposto %s)"
 #: libgnucash/app-utils/gnc-ui-util.c:853
 #, c-format
 msgid "(Tax-related subaccounts: %d)"
-msgstr "(Sub-contas sujeitas a imposto: %d)"
+msgstr "(Subcontas sujeitas a imposto: %d)"
 
 #: libgnucash/app-utils/gnc-ui-util.c:873
 msgctxt "Reconciled flag 'not cleared'"
@@ -30066,7 +30065,7 @@ msgstr "r"
 #: libgnucash/app-utils/gnc-ui-util.c:879
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
-msgstr "f"
+msgstr "g"
 
 #: libgnucash/app-utils/gnc-ui-util.c:881
 msgctxt "Reconciled flag 'void'"
@@ -30123,7 +30122,7 @@ msgstr "Aviso"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:679
 msgid "Your gnucash metadata has been migrated."
-msgstr "Os seus meta-dados GnuCash foram migrados."
+msgstr "Os seus metadados GnuCash foram migrados."
 
 #. Translators: this refers to a directory name.
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:681
