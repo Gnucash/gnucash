@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-14 03:46+0000\n"
+"PO-Revision-Date: 2023-03-25 17:26+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -9617,12 +9617,12 @@ msgstr "Dividendo"
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2938
 #: gnucash/register/ledger-core/split-register.c:2633
 msgid "LTCG"
-msgstr "Ganho de capital de longo prazo"
+msgstr "Ganhos de capital a longo prazo"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2940
 #: gnucash/register/ledger-core/split-register.c:2635
 msgid "STCG"
-msgstr "Ganho de capital de curto prazo"
+msgstr "Ganhos de capital a curto prazo"
 
 #: gnucash/gnome-utils/gnc-tree-model-split-reg.c:2943
 #: gnucash/register/ledger-core/split-register.c:2638
