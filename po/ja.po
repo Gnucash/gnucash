@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2022-12-04 19:47-0800\n"
-"PO-Revision-Date: 2023-03-12 05:41+0000\n"
+"PO-Revision-Date: 2023-03-25 17:26+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: borrowed/goffice/go-charmap-sel.c:70
@@ -7749,7 +7749,7 @@ msgstr "画像を選択"
 
 #: gnucash/gnome-utils/dialog-options.c:2881
 msgid "Select an image file."
-msgstr "画像ファイルを選択する"
+msgstr "画像ファイルを選択します。"
 
 #: gnucash/gnome-utils/dialog-options.c:3061
 msgid "Pixels"
@@ -20633,21 +20633,21 @@ msgstr "この列の幅を狭める(_N)"
 #, c-format
 msgid "%d added price"
 msgid_plural "%d added prices"
-msgstr[0] "価格を %d 件追加しました。"
+msgstr[0] "価格を %d 件追加"
 
 #. Translators: This is a ngettext(3) message, %d is the number of duplicate prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1890
 #, c-format
 msgid "%d duplicate price"
 msgid_plural "%d duplicate prices"
-msgstr[0] "価格が %d 件重複しました。"
+msgstr[0] "価格が %d 件重複"
 
 #. Translators: This is a ngettext(3) message, %d is the number of replaced prices
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1895
 #, c-format
 msgid "%d replaced price"
 msgid_plural "%d replaced prices"
-msgstr[0] "価格を %d 件置換しました。"
+msgstr[0] "価格を %d 件置換"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1900
 #, c-format
@@ -23335,7 +23335,7 @@ msgstr "プロットを表示する"
 
 #: gnucash/report/reports/example/average-balance.scm:122
 msgid "Display a graph of the selected data."
-msgstr "選択されたデータのグラフを表示する"
+msgstr "選択されたデータのグラフを表示します。"
 
 #: gnucash/report/reports/example/average-balance.scm:126
 #: gnucash/report/reports/example/average-balance.scm:301
@@ -28577,9 +28577,9 @@ msgid ""
 msgstr ""
 "デフォルトではこの勘定科目フィルターは文字列の部分一致のみで検索します。これ"
 "を設定すると、完全な POSIX 正規表現の機能が使えるようになります。'Car|"
-"Flights' は Expenses:Car や Expenses:Flights の両方に合致します。ピリオド "
-"(.) を使うと単一文字に合致します、例えば '20../.' は 'Travel 2017/1 London' "
-"に合致します。"
+"Flights' は Expenses:Car や Expenses:Flights の両方に合致します。ピリオド (.)"
+" を使うと単一文字に合致します、例えば '20../.' は 'Travel 2017/1 London' "
+"に合致します。 "
 
 #: gnucash/report/trep-engine.scm:600
 msgid "If this option is selected, accounts matching filter are excluded."
@@ -29719,11 +29719,11 @@ msgstr ""
 
 #: libgnucash/engine/gncInvoice.c:2219
 msgid " (posted)"
-msgstr " (記帳済) "
+msgstr " (記帳済)"
 
 #: libgnucash/engine/gncOrder.c:546
 msgid " (closed)"
-msgstr "(締切済)"
+msgstr " (締切済)"
 
 #: libgnucash/engine/gncOwner.c:1015
 msgid "Offset between documents: "
