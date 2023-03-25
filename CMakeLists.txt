@@ -6,7 +6,7 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL 3.14.0)
 endif()
 
 project (gnucash
-    VERSION 4.13
+    VERSION 4.14
 )
 
 enable_testing()

@@ -1,5 +1,83 @@
 Version history:
 ------- -------
+4.13 - 26 March 2023
+
+Between 4.13 and 4.14, the following bugfixes were accomplished:
+
+    Bug 797477 - Manual foreign transaction from APAR to another doesn't
+        trigger price input
+    Bug 797725 - Untranslatable string "For Period Covering ~a to ~a"
+    Bug 797903 - Transaction window: The 'blue line' is always (erroneously)
+        topmost when t. sorting order is inverted.
+    Bug 798570 - Totals for the income, expenses and remaining to budget
+        incorrect for one specific date.
+    Bug 798625 - "Last up through report date" changed in 4.12
+                 Don't adjust report dates with time64CanonicalDayTime. They're
+                 set to 23:59:59 local which is always >= neutral time at which
+                 prices and transactions are timestamped. Local noon is before
+                 neutral time for all time zones east of UTC+2.
+    Bug 798679 - Unicode normalization should be used for comparison but not
+        stored.
+                 Change to NFC normalization for all comparisons because the
+                 Unicode meaning of compatible might collide with the user's
+                 intent.
+    Bug 798702 - Crash in gnc_plugin_page_focus_idle_destroy() closing a report
+        before it completes.
+    Bug 798705 - ] New: UI string mismatch: OK vs. Next
+    Bug 798712 - Regional Decimal Point not recognized in budgets
+    Bug 798717 - Reports > Business > Fancy Invoice duplicates company details
+    Bug 798732 - : Type of balance carry forward accounts for german skr49
+        account template fixed
+    Bug 798734 - Aging Reports don't handle mixed currency payments and
+        invoices without Trading Accounts
+    Bug 798737 - Minor grammatical error - 'for' missing in 'You will be asked
+        a conversion rate for each.'
+    Bug 798740 - Build fails with gcc 13
+    Bug 798747 - Crash in Investment Portfolio report
+    Bug 798748 - Transaction Notes field's value does not appear in reverse
+        transaction.
+    Bug 798754 - Build fails with gcc 13 and glib > 2.76
+    Bug 798759 - Register widths for 'with sub-account' not saved
+    Bug 798765 - Increase the limit for Maximum Slices in the Expense Piechart
+
+The following fixes and improvements were not associated with bug reports:
+
+    Budget totals for one period would be wrong when increasing the number of
+        periods.
+    Allow C decls after statements, legal since C99.
+    [kvp] Use static strings and boxed in gvalue_from_kvp_value. Saves
+        allocating and copying complex values, avoiding potential memory leaks.
+    L10N:DE:Updating accounts from 0001 to 8000 DATEV-SKR04 2022-01-01.
+    Payment dialog - always list all possible post accounts. Before only the
+        post account in the currency of the selected vendor or customer was
+        available.
+    Revisit invoice payment in multi-currency context:
+        * Show proper amount in dialog when applying or editing an existing
+          transaction as payment
+        * Be more careful not to waste the existing payment split
+        * If the user changed the payment amount while starting from an
+          existing transaction unreconcile the changed payment split
+        * Avoid needlessly changing transaction currency (only do so if the
+          user chose a new transfer account and the old currency is neither the
+          new transfer account's currency nor the post account's currency)
+    Edit/assign payment - be more prudent not to lose data
+    We can't handle the case where a transaction has splits in more than one
+        APAR account. Instead of only warning that some of them will be lost
+        refuse to continue and leave it to the user to fix the transaction
+        first.
+    Multi-currency - show split amount rather than transaction value
+    Activate feature GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE
+    [balsheet-pnl] move out of experimental into regular menu. After 4 years it
+        can finally graduate.
+    [dialog-sx-editor]Allow a daily SX to show all recurrences in the calendar
+        instead of only 6 months.
+    Update Form/Schedule line references for 2022 for the US Income Tax Report
+
+New and Updated Translations: Chinese (Simplified), Croatian, Czech,
+    English (Australia), English (New Zealand), English (United Kingdom),
+    French, Hebrew, Hungarian, Italian, Japanese, Macedonian, Polish,
+    Portuguese, Portuguese (Brazil), Russian, Spanish, Swedish, Ukrainian
+
 4.13 - 18 December 2022
 Between 4.12 and 4.13, the following bugfixes were accomplished:
 
