@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-25 15:38+0000\n"
+"PO-Revision-Date: 2023-03-25 17:34+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/"
 "program-beta/ja/>\n"
@@ -7597,7 +7597,7 @@ msgstr "画像を選択"
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1526
 msgid "Select an image file."
-msgstr "画像ファイルを選択する"
+msgstr "画像ファイルを選択します。"
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1731
 msgid "Pixels"
@@ -7632,23 +7632,20 @@ msgid "End of previous accounting period"
 msgstr "前の会計期間の終了日"
 
 #: gnucash/gnome-utils/gnc-report-combo.c:259
-#, fuzzy
-#| msgid " Report is missing a GUID."
 msgid "Selected Report is Missing"
-msgstr " 帳票に GUID がありません。"
+msgstr "選択された帳票がありません"
 
 #. Translators: %s is the report name.
 #: gnucash/gnome-utils/gnc-report-combo.c:314
-#, fuzzy, c-format
-#| msgid "missing"
+#, c-format
 msgid "'%s' is missing"
-msgstr "不明"
+msgstr "'%s' が不明です"
 
 #. Translators: %s is the internal report guid.
 #: gnucash/gnome-utils/gnc-report-combo.c:318
 #, c-format
 msgid "Report with GUID '%s' is missing"
-msgstr ""
+msgstr "GUID '%s' の帳票が不明です"
 
 #: gnucash/gnome-utils/gnc-splash.c:113
 msgid "Loading…"
@@ -19302,18 +19299,13 @@ msgstr "無効"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1331
-#, fuzzy
-#| msgid "_Select transfer account"
 msgid "_Assign transfer account"
-msgstr "資金移動させる勘定科目を選択(_S)"
+msgstr "資金移動先勘定科目を選択(_A)"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1341
-#, fuzzy
-#| msgid "Exchange rate"
-#| msgid_plural "Exchange rates"
 msgid "Assign e_xchange rate"
-msgstr "為替レート"
+msgstr "為替レートを選択(_X)"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1349
@@ -19375,10 +19367,9 @@ msgstr "新規、%s を (自動) \"%s\" に資金移動"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:1976
-#, fuzzy, c-format
-#| msgid "New, UNBALANCED (need acct to transfer %s)!"
+#, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
-msgstr "新規、貸借不一致 (%s を資金移動する勘定科目が必要)!"
+msgstr "新規、貸借不一致 (%s を勘定科目 %s へ資金移動するための価格が必要)!"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:1992
@@ -24996,10 +24987,9 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:1425
-#, fuzzy, scheme-format
-#| msgid "Amount / Value"
+#, scheme-format
 msgid ": amount ~a, value ~a"
-msgstr "金額 / 価値"
+msgstr ": 金額 ~a、価値 ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1445
 #, scheme-format
