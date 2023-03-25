@@ -40,6 +40,10 @@
 
 #include "import-parse.h"
 
+/* Set and clear flags in bit-flags */
+#define import_set_flag(i,f) (i = static_cast<GncImportFormat>(static_cast<int>(i) | static_cast<int>(f)))
+#define import_clear_flag(i,f) (i = static_cast<GncImportFormat>(static_cast<int>(i) & static_cast<int>(~f)))
+
 static QofLogModule log_module = GNC_MOD_IMPORT;
 
 /* numeric regular expressions */
@@ -104,7 +108,7 @@ my_strntol(const char *str, int len)
 static GncImportFormat
 check_date_format(const char * str, regmatch_t *match, GncImportFormat fmts)
 {
-    GncImportFormat res = 0;
+    GncImportFormat res = GNCIF_NONE;
     int len0 = 0, len1 = 0, len2 = 0;
     int val0 = 0, val1 = 0, val2 = 0;
 
@@ -179,7 +183,7 @@ check_date_format(const char * str, regmatch_t *match, GncImportFormat fmts)
 GncImportFormat
 gnc_import_test_numeric(const char* str, GncImportFormat fmts)
 {
-    GncImportFormat res = 0;
+    GncImportFormat res = GNCIF_NONE;
 
     g_return_val_if_fail(str, fmts);
 
@@ -187,10 +191,10 @@ gnc_import_test_numeric(const char* str, GncImportFormat fmts)
         compile_regex();
 
     if ((fmts & GNCIF_NUM_PERIOD) && !regexec(&decimal_radix_regex, str, 0, NULL, 0))
-        res |= GNCIF_NUM_PERIOD;
+        import_set_flag (res, GNCIF_NUM_PERIOD);
 
     if ((fmts & GNCIF_NUM_COMMA) && !regexec(&comma_radix_regex, str, 0, NULL, 0))
-        res |= GNCIF_NUM_COMMA;
+        import_set_flag (res, GNCIF_NUM_COMMA);
 
     return res;
 }
@@ -200,7 +204,7 @@ GncImportFormat
 gnc_import_test_date(const char* str, GncImportFormat fmts)
 {
     regmatch_t match[5];
-    GncImportFormat res = 0;
+    GncImportFormat res = GNCIF_NONE;
 
     g_return_val_if_fail(str, fmts);
     g_return_val_if_fail(strlen(str) > 1, fmts);
@@ -230,11 +234,11 @@ gnc_import_test_date(const char* str, GncImportFormat fmts)
             /* then check it against the ymd or mdy formats, as necessary */
             if (((fmts & GNCIF_DATE_YDM) || (fmts & GNCIF_DATE_YMD)) &&
                     !regexec(&date_ymd_regex, temp, 4, match, 0))
-                res |= check_date_format(temp, match, fmts);
+                import_set_flag (res, check_date_format(temp, match, fmts));
 
             if (((fmts & GNCIF_DATE_DMY) || (fmts & GNCIF_DATE_MDY)) &&
                     !regexec(&date_mdy_regex, temp, 4, match, 0))
-                res |= check_date_format(temp, match, fmts);
+                import_set_flag (res, check_date_format(temp, match, fmts));
         }
     }
 

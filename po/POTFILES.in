@@ -355,7 +355,7 @@ gnucash/import-export/import-commodity-matcher.cpp
 gnucash/import-export/import-format-dialog.cpp
 gnucash/import-export/import-main-matcher.cpp
 gnucash/import-export/import-match-picker.cpp
-gnucash/import-export/import-parse.c
+gnucash/import-export/import-parse.cpp
 gnucash/import-export/import-pending-matches.cpp
 gnucash/import-export/import-settings.cpp
 gnucash/import-export/import-utilities.cpp
