@@ -1,5 +1,20 @@
 Version history:
 ------- -------
+5.0  - 26 March 2023
+
+Between 4.904 and 5.0, the following bugfixes were accomplished:
+    Bug 798792 - "Delete Split" missing from context menu
+    Bug 798793 - Cursor jumps to the end of the field.
+
+The following fixes and improvements were not associated with bug reports:
+    Fix crash in gnc_owner_get_owner
+    [gnc-account-sel] fix entered_text leak
+    Fix missing statusbar tooltips for popup menus
+    Popup menu missing from sx template transactions window
+
+New and Updated Translations: Chinese (Simplified), Croatian, Hungarian,
+    Japanese, Portuguese, Portuguese (Brazil), Spanish, Swedish
+
 4.14 - 26 March 2023
 
 Between 4.13 and 4.14, the following bugfixes were accomplished:
@@ -112,7 +127,8 @@ The following fixes and improvements were not associated with bug reports:
         found in a preset, replace it with a NONE column, rather than not
         inserting a column at all.
 
-New and Updated Translations: Chinese (Simplified), Croatian, Hungarian, Japanese, Portuguese, Portuguese (Brazil), Spanish, Swedish
+New and Updated Translations: Chinese (Simplified), Croatian, Hungarian,
+    Japanese, Portuguese, Portuguese (Brazil), Spanish, Swedish
 
 4.903 - 12 March 2023
 Between 4.902 and 4.903, the following bugfixes were accomplished:
@@ -136,7 +152,9 @@ The following fixes and improvements were not associated with bug reports:
         Avoids crash at reload due to unknown variable.
     [c++options]Really fix the gnc_option_db_lookup_string_value leak
 
-New and Updated Translations: Chinese (Simplified), Croatian, English (Australia), English (New Zealand), English (United Kingdom), Hungarian, Macedonian, Polish, Portuguese, Russian, Ukrainian
+New and Updated Translations: Chinese (Simplified), Croatian,
+    English (Australia), English (New Zealand), English (United Kingdom),
+    Hungarian, Macedonian, Polish, Portuguese, Russian, Ukrainian
 
 
 4.902 - 5 March 2023
@@ -225,6 +243,7 @@ The following fixes and improvements were not associated with bug reports:
        Good for declaring variables at point of use
 
 New and Updated Translations: Czech, Hungarian
+
 4.901 - 5 February 2023
 Between 4.900 and 4.901, the following bugfixes were accomplished:
 The following fixes will also appear in GnuCash 4.14:
@@ -295,7 +314,7 @@ The following fixes and improvements were not associated with bug reports:
         included without wrapping the include statements.
 
 New and Updated Translations: French, Hebrew, Hungarian, Italian,
-Russian, Ukrainian
+    Russian, Ukrainian
 
 4.900 - 8 January 2023
 New Features
