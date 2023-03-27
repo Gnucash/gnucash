@@ -10,11 +10,9 @@ J. Alex Aycinena: Tax Reports, General Development
 Derek Atkins: Infrastructure, User Support
 Mike Alexander: Pricing/Exchange Rates, Lots, Advanced Portfolio Report
 Frank Ellenberger: Internationalization and  Assistance for Localizations
-Rob Gowin: CMake build system
 Robert Fewell: GUI Development
 Geert Janssens: General Development and Maintenance
-Christopher Lam: Scheme Development and Maintenance
-Aaron Laws: General Development
+Christopher Lam: General Development and Maintenance
 John Ralls: General Development and Maintenance
 Christian Stimming: Administration
 Linas Vepstas: Administration and Website Hosting
@@ -24,7 +22,7 @@ Dependencies:
 We'd like to acknowledge the contributions of some specialty packages
 that are incorporated into GnuCash and are critical to some of its
 features:
-Erik Colson: Finance::Quote
+Erik Colson, Bruce Schuck: Finance::Quote
 Benoit Gregoire: libofx
 Martin Preuss: AQBanking
 
@@ -184,6 +182,7 @@ Christoph Franzen  German account template for Wohnungswirtschaft business
 Dave Freese  for leap-year fix
 Todd T. Fries  OpenBSD fix
 John Goerzen  file i/o fix for 64-bit architectures
+Rob Gowin CMake build system
 Jeff Green  Python bindings, with grant funding from
   <a href="https://assiniboine.mb.ca/">Assiniboine Credit Union</a>
 Hans de Graaff  XML patches
@@ -223,6 +222,7 @@ Sven Kuenzler  for SuSE README file
 Fabrice Kurz  French translation
 Eneko Lacunza  Spanish Translation
 Bryan Larsen  guile budget report
+Aaron Laws General Development
 Chris J (Oakton) Leach  autoconf patch
 Nicholas Lee  scheme bug fix
 Graham Leggett  for fixing a hang
