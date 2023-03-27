@@ -26,6 +26,10 @@
 
 #include "Account.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /* Note: make sure to update the help text for this in prefs.scm if these
  * change!  These macros define the account types for which an auto interest
  * xfer dialog could pop up, if the user's preferences allow it.
@@ -179,6 +183,10 @@ void gnc_ui_register_account_destroy_callback (void (*cb)(Account *));
 void gnc_account_renumber_create_dialog (GtkWidget *window, Account *account);
 
 void gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account);
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */
 /** @} */

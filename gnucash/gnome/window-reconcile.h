@@ -27,6 +27,10 @@
 #include "Account.h"
 #include <gtk/gtk.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 
 /** STRUCTS *********************************************************/
 typedef struct _RecnWindow RecnWindow;
@@ -65,5 +69,9 @@ RecnWindow *recnWindowWithBalance (GtkWidget *parent, Account *account,
 void gnc_ui_reconcile_window_raise (RecnWindow * recnData);
 
 GtkWindow *gnc_ui_reconcile_window_get_window (RecnWindow * recnData);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* WINDOW_RECONCILE_H */
