@@ -368,13 +368,14 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
     if (gnc_query_view_get_num_entries(GNC_QUERY_VIEW(sw->result_view)) < max_count)
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON (sw->new_rb), TRUE);
 
-    /* If there is only one item then select it */
-    if (gnc_query_view_get_num_entries (GNC_QUERY_VIEW(sw->result_view)) == 1)
+    /* If there are results then select the first, and grab focus */
+    if (gnc_query_view_get_num_entries (GNC_QUERY_VIEW(sw->result_view)) > 0)
     {
         GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(sw->result_view));
         GtkTreePath *path = gtk_tree_path_new_first ();
         gtk_tree_selection_select_path (selection, path);
         gtk_tree_path_free (path);
+        gtk_widget_grab_focus (sw->result_view);
     }
 }
 
