@@ -121,3 +121,14 @@ TEST_F(PathTest, gnc_path_get_sysconfdir)
     g_free(sysconfpath);
 #endif
 }
+
+TEST_F (PathTest, gnc_filename_is_backup)
+{
+    EXPECT_EQ (gnc_filename_is_backup (""), false);
+    EXPECT_EQ (gnc_filename_is_backup ("a.gnucash"), false);
+    EXPECT_EQ (gnc_filename_is_backup ("a.gnucash.20201131010203.gnucash"), true);
+
+    EXPECT_EQ (gnc_filename_is_datafile (""), false);
+    EXPECT_EQ (gnc_filename_is_datafile ("a.gnucash"), true);
+    EXPECT_EQ (gnc_filename_is_datafile ("a.gnucash.20201131010203.gnucash"), false);
+}
