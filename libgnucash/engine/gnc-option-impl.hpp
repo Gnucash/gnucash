@@ -328,12 +328,12 @@ template<class OptType,
                                      is_RangeValue_v<OptType>), int> = 0>
 std::istream& operator>>(std::istream& iss, OptType& opt)
 {
-    std::decay_t<decltype(opt.get_value())> value;
     if constexpr (std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _gncOwner*> ||
                   std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _QofQuery*>)
         return iss;
     else
     {
+        std::decay_t<decltype(opt.get_value())> value;
         iss >> value;
         opt.set_value(value);
         return iss;

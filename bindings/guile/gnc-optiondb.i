@@ -1192,9 +1192,9 @@ inline SCM return_scm_value(ValueType value)
 
     SCM save_scm_value()
     {
-        static const SCM plain_format_str{scm_from_utf8_string("~s")};
-        static const SCM ticked_format_str{scm_from_utf8_string("'~a")};
-        static const SCM list_format_str{scm_from_utf8_string("'~s")};
+        [[maybe_unused]] static const SCM plain_format_str{scm_from_utf8_string("~s")};
+        [[maybe_unused]] static const SCM ticked_format_str{scm_from_utf8_string("'~a")};
+        [[maybe_unused]] static const SCM list_format_str{scm_from_utf8_string("'~s")};
 //scm_simple_format needs a scheme list of arguments to match the format
 //placeholders.
         return std::visit([$self] (auto &option) -> SCM {
@@ -1460,7 +1460,7 @@ inline SCM return_scm_value(ValueType value)
                         if (scm_is_string(new_value))
                         {
                             auto strval{scm_to_utf8_string(new_value)};
-                            GncGUID guid;
+                            GncGUID guid{};
                             string_to_guid(strval, &guid);
                             auto book{get_current_book()};
                             option.set_value(xaccAccountLookup(&guid, book));
@@ -1573,7 +1573,7 @@ inline SCM return_scm_value(ValueType value)
                         if (scm_is_string(new_value))
                         {
                             auto strval{scm_to_utf8_string(new_value)};
-                            GncGUID guid;
+                            GncGUID guid{};
                             string_to_guid(strval, &guid);
                             auto book{get_current_book()};
                             option.set_default_value(xaccAccountLookup(&guid, book));
