@@ -30,6 +30,7 @@
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
 (use-modules (srfi srfi-1))
+(use-modules (sw_expressions))
 
 ; Name definitions
 (define reportname           (N_ "Balance Forecast"))
