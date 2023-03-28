@@ -65,10 +65,13 @@ header = N_("This Dataset contains features not supported "
 gchar *gnc_features_test_unknown (QofBook *book)
 {
     auto unknowns {qof_book_get_unknown_features (book, features_table)};
+    if (unknowns.empty())
+        return nullptr;
+
     auto accum = [](const auto& a, const auto& b){ return a + "\n* " + b; };
-    return unknowns.empty() ? nullptr :
-        g_strdup (std::accumulate (unknowns.begin(), unknowns.end(),
-                                   std::string (_(header)), accum).c_str());
+    auto msg {std::accumulate (unknowns.begin(), unknowns.end(),
+                                   std::string (_(header)), accum)};
+    return g_strdup (msg.c_str());
 }
 
 void gnc_features_set_used (QofBook *book, const gchar *feature)

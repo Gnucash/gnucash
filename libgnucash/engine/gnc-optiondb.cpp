@@ -459,7 +459,10 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
                              * have to store. */
                             kvp = new KvpValue(option.template get_value<double>());
                         else
-                            kvp = new KvpValue{g_strdup(option.template get_value<std::string>().c_str())};
+                        {
+                            auto str{option.template get_value<std::string>()};
+                            kvp = new KvpValue{g_strdup(str.c_str())};
+                        }
                         qof_book_set_option(book, kvp, &list_head);
                     }
                 });

@@ -1101,7 +1101,8 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
 gchar *
 gnc_date_timestamp (void)
 {
-    return g_strdup(GncDateTime::timestamp().c_str());
+    auto timestamp = GncDateTime::timestamp();
+    return g_strdup(timestamp.c_str());
 }
 
 /********************************************************************\
