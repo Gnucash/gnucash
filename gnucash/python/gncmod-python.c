@@ -57,6 +57,11 @@ libgncmod_python_gnc_module_description(void)
     return g_strdup("An embedded Python interpreter");
 }
 
+#if PY_VERSION_HEX >= 0x030b0000
+// PySys_SetArgv is deprecated in 3.11
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
+
 int
 libgncmod_python_gnc_module_init(int refcount)
 {
