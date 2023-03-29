@@ -60,17 +60,15 @@ libgncmod_python_gnc_module_description(void)
 int
 libgncmod_python_gnc_module_init(int refcount)
 {
-    FILE *fp;
-    gchar *pkgdatadir, *init_filename;
-    wchar_t* argv = NULL;
-
     Py_Initialize();
+
+    wchar_t* argv = NULL;
     PySys_SetArgv(0, &argv);
 
-    pkgdatadir = gnc_path_get_pkgdatadir();
-    init_filename = g_build_filename(pkgdatadir, "python/init.py", (char*)NULL);
-    g_debug("Looking for python init script at %s", (init_filename ? init_filename : "<null>"));
-    fp = fopen(init_filename, "r");
+    gchar *pkgdatadir = gnc_path_get_pkgdatadir();
+    gchar *init_filename = g_build_filename(pkgdatadir, "python/init.py", (char*)NULL);
+    g_debug("Looking for python init script at %s", init_filename);
+    FILE *fp = fopen(init_filename, "r");
     if (fp)
     {
         PyRun_SimpleFile(fp, init_filename);
