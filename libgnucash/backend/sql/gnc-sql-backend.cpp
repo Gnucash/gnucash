@@ -455,8 +455,6 @@ GncSqlBackend::write_schedXactions()
     return is_ok;
 }
 
-#pragma GCC diagnostic warning "-Wformat-nonliteral"
-
 void
 GncSqlBackend::sync(QofBook* book)
 {
