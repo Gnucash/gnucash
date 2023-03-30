@@ -237,8 +237,13 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
             std::istream is(&sb);
 
             while (std::getline(is, line) && !line.empty())
+	    {
+#ifdef __WIN32
+		if (line.back() == '\r')
+		    line.pop_back();
+#endif
                 out_vec.push_back (std::move(line));
-
+	    }
             raw = err_buf.get();
             bio::stream_buffer<bio::array_source> eb(raw.data(), raw.size());
             std::istream es(&eb);
