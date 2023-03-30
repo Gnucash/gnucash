@@ -479,8 +479,9 @@ GncQuotesImpl::query_fq (const char* source, const StrVec& commodities)
                   commodities.cend(),
                   [source, &pt](auto sym)
                       {
-                          std::string key{source};
-                          key += "." + sym;
+                          using Path = bpt::ptree::path_type;
+                          Path key{source, '|'};
+                          key /= Path{sym, '|'};
                           pt.put(key, "");
                       });
     std::ostringstream result;
