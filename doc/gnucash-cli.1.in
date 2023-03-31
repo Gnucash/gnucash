@@ -23,6 +23,8 @@ mode.
 .SH Quotes Mode (activated with --quotes <cmd>)
 This mode has options to get online quotes for foreign currencies and stocks
 in the given data file. It supports the following command:
+.IP info
+Shows Finance::Quote version and exposed quote sources.
 .IP get
 Retrieves online quotes. Note this requires Finance::Quote to be properly
 configured for your system.
@@ -32,6 +34,22 @@ The
 command takes the following options:
 .IP --namespace=REGEXP
 Regular expression determining which namespace commodities will be retrieved.
+
+.IP dump
+Fetches current quotes for specified currencies or stocks from a specified
+namespace and print the results to the console. This must be followed with
+a source and one or more symbols, unless the source is "currency" in which
+case it must be followed with two or more symbols, the first of which is
+the currency in which exchange rates for the rest will be quoted.
+
+The
+.B dump
+command takes the option
+.IP -v
+.IP --verbose
+Lists all of the parameters Finance::Quote returns for the symbol instead of
+only the ones that Gnucash requires.
+
 .SH Report Mode (activated with --report <cmd>)
 This mode has options to work with reports in the given data file.
 It supports the following command:
