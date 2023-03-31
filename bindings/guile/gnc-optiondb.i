@@ -466,6 +466,9 @@ scm_to_value<GncOptionAccountList>(SCM new_value)
     GncOptionAccountList retval{};
     if (scm_is_false(scm_list_p(new_value)) || scm_is_null(new_value))
         return retval;
+
+    retval.reserve(scm_to_size_t(scm_length(new_value)));
+
     auto next{new_value};
     while (!scm_is_null(next) && scm_car(next))
     {
@@ -491,6 +494,8 @@ scm_to_value<GncOptionAccountList>(SCM new_value)
         }
         next = scm_cdr(next);
     }
+
+    std::reverse(retval.begin(), retval.end());
     return retval;
 }
 
