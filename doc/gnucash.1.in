@@ -33,7 +33,8 @@ Enable extra/development/debugging features.
 Log level overrides, of the form "log.ger.path={debug,info,warn,crit,error}"
 This option can be specified multiple times.
 .IP --logto
-File to log into; defaults to "/tmp/gnucash.trace"; can be "stderr" or "stdout".
+File to log into; defaults to "$TMPDIR/gnucash.trace"; use "stderr" or "stdout"
+to write to the terminal.
 .IP --nofile
 Do not load the last file opened
 .IP "--add-price-quotes FILE"
