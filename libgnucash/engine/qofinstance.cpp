@@ -1102,8 +1102,8 @@ qof_instance_compare_kvp (const QofInstance *a, const QofInstance *b)
 char*
 qof_instance_kvp_as_string (const QofInstance *inst)
 {
-    //The std::string is a local temporary and doesn't survive this function.
-    return g_strdup(inst->kvp_data->to_string().c_str());
+    auto str{inst->kvp_data->to_string()};
+    return g_strdup(str.c_str());
 }
 
 void

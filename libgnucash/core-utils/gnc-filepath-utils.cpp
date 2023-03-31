@@ -211,7 +211,10 @@ gchar *gnc_file_path_relative_part (const gchar *prefix, const gchar *path)
 {
     std::string p{path};
     if (p.find(prefix) == 0)
-        return g_strdup(p.substr(strlen(prefix)).c_str());
+    {
+        auto str = p.substr(strlen(prefix));
+        return g_strdup(str.c_str());
+    }
     return g_strdup(path);
 }
 

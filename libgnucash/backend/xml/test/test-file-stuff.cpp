@@ -261,13 +261,10 @@ equals_node_val_vs_kvp_frame (xmlNodePtr node, const KvpFrame* frm)
     }
     else
     {
-        auto frm1str = g_strdup (frm->to_string ().c_str ());
-        auto frm2str = g_strdup (cmpfrm->to_string ().c_str ());
+        auto frmstr = frm->to_string ();
+        auto cmpfrmstr = cmpfrm->to_string ();
 
-        printf ("%s vs %s\n", frm1str, frm2str);
-
-        g_free (frm1str);
-        g_free (frm2str);
+        printf ("%s vs %s\n", frmstr.c_str(), cmpfrmstr.c_str());
 
         delete cmpfrm;
         return FALSE;
