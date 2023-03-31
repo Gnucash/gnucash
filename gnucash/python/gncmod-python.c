@@ -57,44 +57,23 @@ libgncmod_python_gnc_module_description(void)
     return g_strdup("An embedded Python interpreter");
 }
 
-//extern PyObject* PyInit__sw_app_utils(void);
-//extern PyObject* PyInit__sw_core_utils(void);
+#if PY_VERSION_HEX >= 0x030b0000
+// PySys_SetArgv is deprecated in 3.11
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#endif
 
 int
 libgncmod_python_gnc_module_init(int refcount)
 {
-    /* There isn't yet a python module to init.
-    PyObject *pName, *pModule;
-    */
-    FILE *fp;
-    gchar *pkgdatadir, *init_filename;
-    wchar_t* argv = NULL;
-
     Py_Initialize();
+
+    wchar_t* argv = NULL;
     PySys_SetArgv(0, &argv);
-    // I don't quite understand why these are loaded here
-    // - these are python modules so should be able to just import them
-    // in init.py
-    //PyInit__sw_app_utils();
-    //PyInit__sw_core_utils();
 
-    /* There isn't yet a python module to init.
-    pName = PyString_FromString("path/to/init.py");
-    pModule = PyImport_Import(pName);
-
-    if (!pModule) {
-        PyErr_Print();
-        return FALSE;
-    }
-
-    Py_DECREF(pName);
-    Py_DECREF(pModule);
-    */
-
-    pkgdatadir = gnc_path_get_pkgdatadir();
-    init_filename = g_build_filename(pkgdatadir, "python/init.py", (char*)NULL);
-    g_debug("Looking for python init script at %s", (init_filename ? init_filename : "<null>"));
-    fp = fopen(init_filename, "r");
+    gchar *pkgdatadir = gnc_path_get_pkgdatadir();
+    gchar *init_filename = g_build_filename(pkgdatadir, "python/init.py", (char*)NULL);
+    g_debug("Looking for python init script at %s", init_filename);
+    FILE *fp = fopen(init_filename, "r");
     if (fp)
     {
         PyRun_SimpleFile(fp, init_filename);
