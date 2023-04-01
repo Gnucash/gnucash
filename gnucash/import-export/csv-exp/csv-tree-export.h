@@ -29,10 +29,18 @@
 
 #include "assistant-csv-export.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** The csv_tree_export() will let the user export the
  *  account tree to a delimited file.
  */
 void csv_tree_export (CsvExportInfo *info);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 
