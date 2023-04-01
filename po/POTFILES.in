@@ -326,6 +326,7 @@ gnucash/import-export/bi-import/dialog-bi-import-gui.c
 gnucash/import-export/bi-import/dialog-bi-import-helper.c
 gnucash/import-export/bi-import/gnc-plugin-bi-import.c
 gnucash/import-export/csv-exp/assistant-csv-export.c
+gnucash/import-export/csv-exp/csv-export-helpers.cpp
 gnucash/import-export/csv-exp/csv-transactions-export.c
 gnucash/import-export/csv-exp/csv-tree-export.c
 gnucash/import-export/csv-exp/gnc-plugin-csv-export.c

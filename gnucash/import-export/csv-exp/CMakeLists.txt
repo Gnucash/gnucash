@@ -1,5 +1,9 @@
+
+add_subdirectory(test)
+
 set(csv_export_SOURCES
   gnc-plugin-csv-export.c
+  csv-export-helpers.cpp
   assistant-csv-export.c
   csv-tree-export.c
   csv-transactions-export.c
@@ -11,6 +15,7 @@ set_source_files_properties (${csv_export_SOURCES} PROPERTIES OBJECT_DEPENDS ${C
 set(csv_export_noinst_HEADERS
   gnc-plugin-csv-export.h
   assistant-csv-export.h
+  csv-export-helpers.hpp
   csv-tree-export.h
   csv-transactions-export.h
 )
