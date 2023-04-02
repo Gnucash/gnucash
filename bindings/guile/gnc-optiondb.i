@@ -985,8 +985,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                         const GncOptionMultichoiceValue& option)
     {
         static const auto uint16_t_max = std::numeric_limits<uint16_t>::max();
-        static const char* empty{""};
         auto scm_to_str = [](auto item)->const char* {
+                static const char* empty{""};
                 if (scm_is_integer(item))
                     item = scm_number_to_string(item, scm_from_uint(10u));
                 else if (scm_is_symbol(item))
