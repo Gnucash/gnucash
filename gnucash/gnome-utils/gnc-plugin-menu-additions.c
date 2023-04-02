@@ -440,7 +440,7 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
 
     g_hash_table_insert (per_window->item_hash, g_strdup (ext_info->action_name), cb_data);
 
-    if (g_str_has_suffix (ext_info->path, "_Custom"))
+    if (g_str_has_suffix (ext_info->path, _("_Custom")))
         return;
 
     full_path = g_strconcat (ext_info->path, "/", ext_info->action_label, NULL);
