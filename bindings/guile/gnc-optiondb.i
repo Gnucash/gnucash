@@ -470,6 +470,7 @@ scm_to_value<GncOptionAccountList>(SCM new_value)
     retval.reserve(scm_to_size_t(scm_length(new_value)));
 
     auto next{new_value};
+    auto from_report{true};
     while (!scm_is_null(next) && scm_car(next))
     {
 /* If the incoming scheme is from a report then it will contain an Account*, if
@@ -478,6 +479,7 @@ scm_to_value<GncOptionAccountList>(SCM new_value)
         if (scm_is_string(scm_car(next)))
         {
             auto guid_str{scm_to_utf8_string(scm_car(next))};
+            from_report = false;
             GncGUID guid;
             string_to_guid(guid_str, &guid);
             retval.push_back(guid);
@@ -495,7 +497,8 @@ scm_to_value<GncOptionAccountList>(SCM new_value)
         next = scm_cdr(next);
     }
 
-    std::reverse(retval.begin(), retval.end());
+    if (!from_report)
+        std::reverse(retval.begin(), retval.end());
     return retval;
 }
 
