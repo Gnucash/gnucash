@@ -1047,6 +1047,7 @@ gnc_plugin_page_register_ui_update (gpointer various,
 
         gsm->search_action_label = NULL;
         gsm->search_action_name = *iter;
+        gsm->search_action_target = NULL;
 
         found = gnc_menubar_model_find_item (gnc_window_get_menubar_model (gnc_window), gsm);
 

@@ -520,6 +520,7 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
     // add the report menu to the window
     gsm->search_action_label = NULL;
     gsm->search_action_name = "ReportsPlaceholder0";
+    gsm->search_action_target = NULL;
 
     if (gnc_menubar_model_find_item (menubar_model, gsm))
     {

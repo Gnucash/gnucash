@@ -83,6 +83,7 @@ struct _GncMenuModelSearch
 {
     const gchar *search_action_name;
     const gchar *search_action_label;
+    const gchar *search_action_target;
     const gchar *tooltip;
     GMenuModel  *model;
     gint         index;

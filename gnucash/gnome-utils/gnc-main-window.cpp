@@ -1813,6 +1813,7 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
 
     gsm->search_action_label = nullptr;
     gsm->search_action_name = "WindowsPlaceholder1";  // placeholder
+    gsm->search_action_target = nullptr;
 
     if (!gnc_menubar_model_find_item (priv->menubar_model, gsm))
     {
@@ -3457,6 +3458,7 @@ update_menu_model (GncMainWindow *window, const gchar *ui_filename,
 
         gsm->search_action_label = nullptr;
         gsm->search_action_name = ui_updates[i];
+        gsm->search_action_target = nullptr;
 
         if (gnc_menubar_model_find_item (priv->menubar_model, gsm))
             g_menu_insert_section (G_MENU(gsm->model), gsm->index, NULL, G_MENU_MODEL(menu_model_part));
@@ -3820,6 +3822,7 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
 
         gsm->search_action_label = nullptr;
         gsm->search_action_name = ui_updates[i];
+        gsm->search_action_target = nullptr;
 
         if (gnc_menubar_model_find_item (priv->menubar_model, gsm))
             g_menu_insert_section (G_MENU(gsm->model), gsm->index,

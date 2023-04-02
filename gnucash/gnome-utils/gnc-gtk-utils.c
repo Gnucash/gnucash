@@ -633,6 +633,8 @@ extract_items_from_model (GMenuModel *model,
     const gchar *action = NULL;
     const gchar *label = NULL;
     const gchar *tooltip = NULL;
+    const gchar *target_char = NULL;
+    gint         target_int = -1;
 
     iter = g_menu_model_iterate_item_attributes (model, item);
     while (g_menu_attribute_iter_get_next (iter, &key, &value))
@@ -646,8 +648,30 @@ extract_items_from_model (GMenuModel *model,
         else if (g_str_equal (key, G_MENU_ATTRIBUTE_ACTION) &&
                  g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
             action = g_variant_get_string (value, NULL);
-
+        else if (g_str_equal (key, G_MENU_ATTRIBUTE_TARGET) &&
+                 g_variant_is_of_type (value, G_VARIANT_TYPE_STRING))
+            target_char = g_variant_get_string (value, NULL);
+        else if (g_str_equal (key, G_MENU_ATTRIBUTE_TARGET) &&
+                 g_variant_is_of_type (value, G_VARIANT_TYPE_INT32))
+            target_int = g_variant_get_int32 (value);
         g_variant_unref (value);
+    }
+
+    if (gsm->search_action_target)
+    {
+        gboolean target_test = FALSE;
+
+        if (target_int != -1 && target_int == atoi (gsm->search_action_target))
+            target_test = TRUE;
+
+        if (target_char && g_strcmp0 (target_char, gsm->search_action_target) == 0)
+            target_test = TRUE;
+
+        if (!target_test)
+        {
+            g_object_unref (iter);
+            return;
+        }
     }
 
     if (action && gsm->search_action_name)
@@ -759,6 +783,7 @@ gnc_menubar_model_find_menu_item (GMenuModel *menu_model, GtkWidget *menu, const
 
     gsm->search_action_label = NULL;
     gsm->search_action_name = action_name;
+    gsm->search_action_target = NULL;
 
     if (gnc_menubar_model_find_item (menu_model, gsm))
         menu_item = gnc_find_menu_item_by_action_label (menu, gsm->search_action_label);
