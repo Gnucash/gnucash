@@ -95,8 +95,8 @@ gboolean gnc_menubar_model_find_item (GMenuModel *menu_model, GncMenuModelSearch
 GtkWidget *gnc_menubar_model_find_menu_item (GMenuModel *menu_model, GtkWidget *menu, const gchar *action_name);
 
 gboolean gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
-                                        const gchar *label, const gchar *accel_name,
-                                        const gchar *tooltip);
+                                        const gchar *target, const gchar *label,
+                                        const gchar *accel_name, const gchar *tooltip);
 
 void gnc_menubar_model_remove_items_with_attrib (GMenuModel *menu_model, const gchar *attrib);
 

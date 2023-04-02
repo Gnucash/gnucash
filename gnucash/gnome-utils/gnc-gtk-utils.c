@@ -799,6 +799,8 @@ gnc_menubar_model_find_menu_item (GMenuModel *menu_model, GtkWidget *menu, const
  *  @param menu_model The GMenuModel of the menu.
  *
  *  @param action_name The action name to update.
+ * 
+ *  @param target The action target if required, else NULL.
  *
  *  @param label The new menu label text.
  *
@@ -810,8 +812,8 @@ gnc_menubar_model_find_menu_item (GMenuModel *menu_model, GtkWidget *menu, const
  */
 gboolean
 gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
-                               const gchar *label, const gchar *accel_name,
-                               const gchar *tooltip)
+                               const gchar *target, const gchar *label,
+                               const gchar *accel_name, const gchar *tooltip)
 {
     GncMenuModelSearch *gsm;
     gboolean found = FALSE;
@@ -823,6 +825,7 @@ gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
 
     gsm->search_action_label = NULL;
     gsm->search_action_name = action_name;
+    gsm->search_action_target = target;
 
     if (gnc_menubar_model_find_item (menu_model, gsm))
     {
