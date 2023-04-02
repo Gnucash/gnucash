@@ -367,17 +367,22 @@ accel_map_foreach_func (gpointer user_data, const gchar* accel_path, guint accel
     GMenuModel *menu_model = user_data;
     gchar **accel_path_parts = NULL;
     guint  accel_size = 0;
+    gchar *target = NULL;
     gchar *accel_name_tmp = gtk_accelerator_name (accel_key, accel_mods);
     gchar *accel_name = g_strescape (accel_name_tmp, NULL);
 
     accel_path_parts = g_strsplit (accel_path, "/", -1);
     accel_size = g_strv_length (accel_path_parts);
 
-    if (accel_size == 3)
+    if (accel_size == 4)
+        target = g_strdup (accel_path_parts[3]);
+
+    if (accel_size >=3)
         gnc_menubar_model_update_item (menu_model, accel_path_parts[2],
-                                       NULL, accel_name, NULL);
+                                       target, NULL, accel_name, NULL);
 
     g_strfreev (accel_path_parts);
+    g_free (target);
     g_free (accel_name_tmp);
     g_free (accel_name);
 }
