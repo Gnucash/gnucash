@@ -5436,7 +5436,7 @@ gnc_main_window_get_toolbar (GncWindow *window)
     return priv->toolbar;
 }
 
-/** Retrieve the display hash table associated with a main window object.
+/** Retrieve the menubar model associated with a main window object.
  *  This function is called via a vector off a generic window
  *  interface.
  *
@@ -5453,6 +5453,22 @@ gnc_main_window_get_menubar_model (GncWindow *window)
     return priv->menubar_model;
 }
 
+/** Retrieve the accelerator group associated with a main window object.
+ *  This function is called via a vector off a generic window
+ *  interface.
+ *
+ *  @param window_in A pointer to a generic window. */
+static GtkAccelGroup *
+gnc_main_window_get_accel_group (GncWindow *window)
+{
+    GncMainWindowPrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
+    return priv->accel_group;
+}
 
 /** Initialize the generic window interface for a main window.
  *
@@ -5467,6 +5483,7 @@ gnc_window_main_window_init (GncWindowIface *iface)
     iface->get_menubar         = gnc_main_window_get_menubar;
     iface->get_toolbar         = gnc_main_window_get_toolbar;
     iface->get_menubar_model   = gnc_main_window_get_menubar_model;
+    iface->get_accel_group     = gnc_main_window_get_accel_group;
 }
 
 

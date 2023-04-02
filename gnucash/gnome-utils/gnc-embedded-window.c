@@ -85,10 +85,14 @@ typedef struct GncEmbeddedWindowPrivate
      *  the status bar. */
     GtkWidget *statusbar;
 
-    /** The group of all actions provided by the main window itself.
+    /** The group of all actions provided by the embedded window itself.
      *  This does not include any action provided by menu or content
      *  plugins. */
     GSimpleActionGroup *simple_action_group;
+
+    /** The accelerator group of all actions provided by the embedded
+     *  window. */
+    GtkAccelGroup *accel_group;
 
     /** The currently selected page. */
     GncPluginPage *page;
@@ -331,7 +335,6 @@ gnc_embedded_window_new (const gchar *action_group_name,
     gchar *ui_fullname;
     GError *error = NULL;
     GtkBuilder *builder;
-    GtkAccelGroup *accel_group;
 
     ENTER("group %s, first %p, num %d, ui file %s, parent %p, add accelerators %d, user data %p",
           action_group_name, action_entries, n_action_entries, ui_filename,
@@ -380,9 +383,9 @@ gnc_embedded_window_new (const gchar *action_group_name,
     priv->parent_window = enclosing_win;
 
     // need to add the accelerator keys
-    accel_group = gtk_accel_group_new ();
-    gtk_window_add_accel_group (GTK_WINDOW(enclosing_win), accel_group);
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->menubar_model, accel_group);
+    priv->accel_group = gtk_accel_group_new ();
+    gtk_window_add_accel_group (GTK_WINDOW(enclosing_win), priv->accel_group);
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(priv->menubar), priv->menubar_model, priv->accel_group);
 
     g_free (ui_fullname);
     LEAVE("window %p", window);
@@ -462,7 +465,7 @@ gnc_embedded_window_get_toolbar (GncWindow *window)
     return priv->toolbar;
 }
 
-/** Retrieve the display hash table associated with an embedded window object.
+/** Retrieve the menubar model associated with an embedded window object.
  *  This function is called via a vector off a generic window
  *  interface.
  *
@@ -479,6 +482,22 @@ gnc_embedded_window_get_menubar_model (GncWindow *window)
     return priv->menubar_model;
 }
 
+/** Retrieve the accelerator group associated with an embedded window object.
+ *  This function is called via a vector off a generic window
+ *  interface.
+ *
+ *  @param window_in A pointer to a generic window. */
+static GtkAccelGroup *
+gnc_embedded_window_get_accel_group (GncWindow *window)
+{
+    GncEmbeddedWindowPrivate *priv;
+
+    g_return_val_if_fail (GNC_IS_EMBEDDED_WINDOW(window), NULL);
+
+    priv = GNC_EMBEDDED_WINDOW_GET_PRIVATE(window);
+
+    return priv->accel_group;
+}
 
 /** Initialize the generic window interface for an embedded window.
  *
@@ -492,4 +511,5 @@ gnc_window_embedded_window_init (GncWindowIface *iface)
     iface->get_menubar         = gnc_embedded_window_get_menubar;
     iface->get_toolbar         = gnc_embedded_window_get_toolbar;
     iface->get_menubar_model   = gnc_embedded_window_get_menubar_model;
+    iface->get_accel_group     = gnc_embedded_window_get_accel_group;
 }

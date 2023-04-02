@@ -137,6 +137,17 @@ gnc_window_get_menubar_model (GncWindow *window)
     return GNC_WINDOW_GET_IFACE(window)->get_menubar_model (window);
 }
 
+GtkAccelGroup *
+gnc_window_get_accel_group (GncWindow *window)
+{
+    g_return_val_if_fail (GNC_WINDOW(window), NULL);
+
+    /* optional */
+    if (GNC_WINDOW_GET_IFACE(window)->get_accel_group == NULL)
+        return NULL;
+
+    return GNC_WINDOW_GET_IFACE(window)->get_accel_group (window);
+}
 /************************************************************
  *              Auxiliary status bar functions              *
  ************************************************************/

@@ -1103,6 +1103,11 @@ gnc_plugin_page_register_ui_update (gpointer various,
         gnc_plugin_add_menu_tooltip_callbacks (gnc_window_get_menubar (gnc_window),
                                                gnc_window_get_menubar_model (gnc_window),
                                                gnc_window_get_statusbar (gnc_window));
+
+        // need to add any accelerator keys, default or user added
+        gnc_add_accelerator_keys_for_menu (gnc_window_get_menubar (gnc_window),
+                                           gnc_window_get_menubar_model (gnc_window),
+                                           gnc_window_get_accel_group (gnc_window));
     }
 }
 
