@@ -30,10 +30,18 @@
 
 #include "assistant-csv-export.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** The csv_transactions_export() will let the user export the
  *  transactions to a delimited file.
  */
 void csv_transactions_export (CsvExportInfo *info);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 

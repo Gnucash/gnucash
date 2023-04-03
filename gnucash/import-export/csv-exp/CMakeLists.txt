@@ -6,7 +6,7 @@ set(csv_export_SOURCES
   csv-export-helpers.cpp
   assistant-csv-export.c
   csv-tree-export.cpp
-  csv-transactions-export.c
+  csv-transactions-export.cpp
 )
 
 # Add dependency on config.h
