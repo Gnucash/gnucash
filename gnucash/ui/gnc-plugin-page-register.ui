@@ -269,7 +269,7 @@
       <attribute name="label" translatable="yes">_Blank Transaction</attribute>
       <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
       <attribute name="accel">&lt;Primary&gt;b</attribute>
-      <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
+      <attribute name="tooltip" translatable="yes">Move to the blank transaction in the register</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
@@ -411,7 +411,7 @@
       <item>
         <attribute name="label" translatable="yes">_Blank Transaction</attribute>
         <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
-        <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
+        <attribute name="tooltip" translatable="yes">Move to the blank transaction in the register</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Go to Date</attribute>
@@ -523,7 +523,7 @@
       <item>
         <attribute name="label" translatable="yes">_Blank Transaction</attribute>
         <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
-        <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
+        <attribute name="tooltip" translatable="yes">Move to the blank transaction in the register</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Go to Date</attribute>
@@ -602,7 +602,7 @@
       <item>
         <attribute name="label" translatable="yes">_Blank Transaction</attribute>
         <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
-        <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
+        <attribute name="tooltip" translatable="yes">Move to the blank transaction in the register</attribute>
       </item>
     </section>
   </menu>
@@ -641,7 +641,7 @@
       <item>
         <attribute name="label" translatable="yes">_Blank Transaction</attribute>
         <attribute name="action">GncPluginPageRegisterActions.BlankTransactionAction</attribute>
-        <attribute name="tooltip" translatable="yes">Move to the blank transaction at the bottom of the register</attribute>
+        <attribute name="tooltip" translatable="yes">Move to the blank transaction in the register</attribute>
       </item>
     </section>
   </menu>
@@ -801,7 +801,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">_Blank Transaction</property>
         <property name="action-name">GncPluginPageRegisterActions.BlankTransactionAction</property>
-        <property name="tooltip-text" translatable="yes">Move to the blank transaction at the bottom of the register</property>
+        <property name="tooltip-text" translatable="yes">Move to the blank transaction in the register</property>
         <property name="use-underline">True</property>
         <property name="icon-name">go-jump</property>
       </object>
