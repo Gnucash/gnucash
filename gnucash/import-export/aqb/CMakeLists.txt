@@ -58,7 +58,7 @@ if(WITH_AQBANKING)
     set(AQB_EXPORT_SYMBOLS "-Wl,--export-all-symbols")
   endif()
   set(AQB_LIBSTDCXX "")
-  if (MINGW)
+  if (WIN32)
     set(AQB_LIBSTDCXX "-lstdc++")
   endif()
 
