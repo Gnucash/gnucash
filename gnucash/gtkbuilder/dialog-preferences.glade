@@ -2762,13 +2762,13 @@ many months before the current month</property>
                 </child>
                 <child>
                   <object class="GtkCheckButton" id="pref/general.register/future-after-blank-transaction">
-                    <property name="label" translatable="yes">_Future transactions after blank transaction</property>
+                    <property name="label" translatable="yes">_Placement of future transactions</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">If checked, transactions with a date in the future will be displayed at the bottom of the register after the blank transaction. If clear, the blank transaction will be at the bottom of the register after all transactions.</property>
-                    <property name="tooltip-text" translatable="yes">If checked, transactions with a date in the future will be displayed at the bottom of the register after the blank transaction. If clear, the blank transaction will be at the bottom of the register after all transactions.</property>
+                    <property name="tooltip-markup">If checked, transactions with a date in the future will be displayed at the bottom of the register after the blank transaction unless in reverse sort order when they are displayed at the top before the blank transaction. If clear, the blank transaction will be at the bottom of the register after all transactions unless in reverse sort order when it will be at the top.</property>
+                    <property name="tooltip-text" translatable="yes">If checked, transactions with a date in the future will be displayed at the bottom of the register after the blank transaction unless in reverse sort order when they are displayed at the top before the blank transaction. If clear, the blank transaction will be at the bottom of the register after all transactions unless in reverse sort order when it will be at the top.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
