@@ -27,8 +27,18 @@ if (WITH_OFX)
     ${ofx_noinst_HEADERS}
   )
 
+  set(OFX_EXPORT_SYMBOLS "")
+  if (WIN32)
+    set(OFX_EXPORT_SYMBOLS "-Wl,--export-all-symbols")
+  endif()
+  set(OFX_LIBSTDCXX "")
+  if (WIN32)
+    set(OFX_LIBSTDCXX "-lstdc++")
+  endif()
+
   target_link_libraries(gncmod-ofx gnc-generic-import gnc-engine gnc-app-utils gnc-core-utils
-                    gnc-gnome-utils gnc-gnome gnc-module ${LIBOFX_LDFLAGS})
+                        gnc-gnome-utils gnc-gnome gnc-module
+                        ${OFX_EXPORT_SYMBOLS} ${LIBOFX_LDFLAGS} ${OFX_LIBSTDCXX})
 
   target_compile_definitions(gncmod-ofx PRIVATE -DG_LOG_DOMAIN=\"gnc.import.ofx\")
 
