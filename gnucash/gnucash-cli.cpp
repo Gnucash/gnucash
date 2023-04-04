@@ -139,6 +139,8 @@ Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **a
         }
         else if (m_quotes_cmd.front() == "get")
         {
+            if (!m_file_to_load && m_quotes_cmd.size() == 2)
+                m_file_to_load = m_quotes_cmd[1];
 
             if (!m_file_to_load || m_file_to_load->empty())
             {
