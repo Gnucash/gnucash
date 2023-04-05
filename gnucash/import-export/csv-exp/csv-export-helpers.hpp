@@ -1,8 +1,4 @@
 /*******************************************************************\
- * csv-tree-export.h -- Export Account Tree to a file               *
- *                                                                  *
- * Copyright (C) 2012 Robert Fewell                                 *
- *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
  * published by the Free Software Foundation; either version 2 of   *
@@ -20,27 +16,24 @@
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
-/** @file csv-tree-export.h
-    @brief CSV Export Account Tree
-    @author Copyright (c) 2012 Robert Fewell
-*/
-#ifndef CSV_TREE_EXPORT
-#define CSV_TREE_EXPORT
 
-#include "assistant-csv-export.h"
+#ifndef CSV_EXPORT_HELPERS
+#define CSV_EXPORT_HELPERS
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <string>
+#include <cstdio>
+#include <fstream>
+#include <vector>
 
-/** The csv_tree_export() will let the user export the
- *  account tree to a delimited file.
- */
-void csv_tree_export (CsvExportInfo *info);
+using StringVec = std::vector<std::string>;
 
-#ifdef __cplusplus
-}
-#endif
+// add a csv-formatted line onto output stream. charsvec is the vector
+// of std::strings, sep is the separator string. use_quotes to always
+// "quote"; some strings may be quoted anyway if contains separator
+// string, quote, \r or \n. This function returns a bool indicating
+// success.
+bool gnc_csv_add_line (std::ostream& ss, const StringVec& charsvec,
+                       bool use_quotes, const char* sep);
 
 #endif
 
