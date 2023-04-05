@@ -115,7 +115,11 @@ get_available_reports ()
     StrVec sv;
     auto scm_list{scm_call_0(scm_c_eval_string("gnc:all-report-template-guids"))};
     for (auto next{scm_list}; !scm_is_null(next); next = scm_cdr(next))
-        sv.emplace_back(scm_to_utf8_string(scm_car(next)));
+    {
+        auto guid{scm_to_utf8_string(scm_car(next))};
+        sv.emplace_back(guid);
+        g_free (guid);
+    }
     return sv;
 }
 
