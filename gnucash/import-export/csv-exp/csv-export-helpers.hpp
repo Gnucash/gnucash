@@ -20,6 +20,9 @@
 #ifndef CSV_EXPORT_HELPERS
 #define CSV_EXPORT_HELPERS
 
+#include <config.h>
+#include "Account.h"
+
 #include <string>
 #include <cstdio>
 #include <fstream>
