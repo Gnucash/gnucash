@@ -40,15 +40,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
-static std::string
-account_get_fullname_str (Account *account)
-{
-    auto name{gnc_account_get_full_name (account)};
-    auto rv{std::string(name)};
-    g_free (name);
-    return rv;
-}
-
 /*******************************************************
  * csv_tree_export
  *

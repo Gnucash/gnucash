@@ -82,3 +82,12 @@ gnc_csv_add_line (std::ostream& ss, const StringVec& str_vec,
 
     return !ss.fail();
 }
+
+std::string
+account_get_fullname_str (Account *account)
+{
+    auto name{gnc_account_get_full_name (account)};
+    auto rv{std::string(name)};
+    g_free (name);
+    return rv;
+}

@@ -35,5 +35,7 @@ using StringVec = std::vector<std::string>;
 bool gnc_csv_add_line (std::ostream& ss, const StringVec& charsvec,
                        bool use_quotes, const char* sep);
 
+std::string account_get_fullname_str (Account*);
+
 #endif
 

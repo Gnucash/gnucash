@@ -83,15 +83,7 @@ static std::string
 get_account_name (Split *split, bool full)
 {
     auto account{xaccSplitGetAccount (split)};
-    if (full)
-    {
-        auto name{gnc_account_get_full_name (account)};
-        auto rv{std::string(name)};
-        g_free (name);
-        return rv;
-    }
-    else
-        return xaccAccountGetName (account);
+    return full ? account_get_fullname_str (account) : xaccAccountGetName (account);
 }
 
 // Number
