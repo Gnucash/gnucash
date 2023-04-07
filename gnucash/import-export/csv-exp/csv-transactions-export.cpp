@@ -130,15 +130,8 @@ get_memo (Split *split)
 static std::string
 get_category (Split *split, bool full)
 {
-    if (full)
-    {
-        auto cat{xaccSplitGetCorrAccountFullName (split)};
-        auto rv{std::string (cat)};
-        g_free (cat);
-        return rv;
-    }
-    else
-        return xaccSplitGetCorrAccountName (split);
+    auto other{xaccSplitGetOtherSplit(split)};
+    return other ? get_account_name (other, full) : _("-- Split Transaction --");
 }
 
 // Action
