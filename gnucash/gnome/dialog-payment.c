@@ -1598,6 +1598,7 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
      * The only exception would be a lot link transaction
      */
     GList *payment_splits = xaccTransGetPaymentAcctSplitList (txn);
+    Split *selected_split = NULL;
     if (!payment_splits)
     {
         GtkWidget *dialog;
@@ -1620,8 +1621,6 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
 
     if (g_list_length(payment_splits) > 1)
     {
-        Split *selected_split = NULL;
-        GList *node;
         GtkWidget *first_rb = NULL;
         int answer = GTK_BUTTONS_OK;
         const char *message = _("While this transaction has multiple splits that can be considered\n"
@@ -1639,7 +1638,7 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
         gtk_box_pack_start (GTK_BOX(content), label, FALSE, TRUE, 0);
 
         /* Add splits as selectable options to the dialog */
-        for (node = payment_splits; node; node = node->next)
+        for (GList *node = payment_splits; node; node = node->next)
         {
             GtkWidget *rbutton;
             Split *split = node->data;
@@ -1679,10 +1678,12 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
         }
 
         gtk_widget_destroy (GTK_WIDGET(dialog));
-        return selected_split;
     }
     else
-        return payment_splits->data;
+        selected_split = payment_splits->data;
+
+    g_list_free (payment_splits);
+    return selected_split;
 }
 
 static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **post_acct, gboolean *abort)
@@ -1726,13 +1727,11 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
         else
             apar_splits_no_lot = g_list_prepend (apar_splits_no_lot, post_split);
     }
-    g_list_free (apar_splits);
 
     /* If no post_acct was selected from the postlots, fall back to the first apar split's
      * account if there is one. */
     if (!*post_acct && apar_splits_no_lot)
         *post_acct = xaccSplitGetAccount (apar_splits_no_lot->data);
-    g_list_free (apar_splits_no_lot);
 
     /* Abort if the txn has splits in more than one APAR account
      * GnuCash can only handle one post account per payment transaction.
@@ -1771,6 +1770,9 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
         txn_lots = NULL;
     }
 
+    g_list_free (apar_splits);
+    g_list_free (apar_splits_no_lot);
+    g_list_free (unique_apar_accts);
     return txn_lots;
 }
 
