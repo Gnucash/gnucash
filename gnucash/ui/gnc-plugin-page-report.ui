@@ -40,14 +40,14 @@
 
   <menu id="ReportsPlaceholder1">
     <item>
-      <attribute name="label" translatable="no">Save _Report Configuration</attribute>
+      <attribute name="label" translatable="yes">Save _Report Configuration</attribute>
       <attribute name="action">GncPluginPageReportActions.ReportSaveAction</attribute>
       <attribute name="accel">&lt;Primary&gt;&lt;Alt&gt;s</attribute>
       <attribute name="tooltip" translatable="yes">Update the current report's saved configuration</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="no">Save Report Configuration As…</attribute>
+      <attribute name="label" translatable="yes">Save Report Configuration As…</attribute>
       <attribute name="action">GncPluginPageReportActions.ReportSaveAsAction</attribute>
       <attribute name="accel">&lt;Primary&gt;&lt;Alt&gt;&lt;Shift&gt;s</attribute>
       <attribute name="tooltip" translatable="yes">Add the current report's configuration to the 'Reports->Saved Report Configurations' menu</attribute>

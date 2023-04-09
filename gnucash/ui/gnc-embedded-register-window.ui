@@ -74,7 +74,7 @@
       </section>
     </submenu>
     <submenu>
-      <attribute name="label" translatable="no">_View</attribute>
+      <attribute name="label" translatable="yes">_View</attribute>
       <attribute name="action">embeddedwin.ViewAction</attribute>
       <section>
         <item>

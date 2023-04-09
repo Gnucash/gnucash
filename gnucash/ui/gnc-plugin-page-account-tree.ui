@@ -141,7 +141,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="no">Stock Ass_istant…</attribute>
+      <attribute name="label" translatable="yes">Stock Ass_istant…</attribute>
       <attribute name="action">GncPluginPageAccountTreeActions.ActionsStockAssistantAction</attribute>
       <attribute name="tooltip" translatable="yes">Stock Assistant</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -178,7 +178,7 @@
         <attribute name="tempx" translatable="no">yes</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="no">Check &amp; Repair A_ll</attribute>
+        <attribute name="label" translatable="yes">Check &amp; Repair A_ll</attribute>
         <attribute name="action">GncPluginPageAccountTreeActions.ScrubAllAction</attribute>
         <attribute name="tooltip" translatable="yes">Check for and repair unbalanced transactions and orphan splits in all accounts</attribute>
         <attribute name="tempx" translatable="no">yes</attribute>
@@ -246,7 +246,7 @@
         <attribute name="tooltip" translatable="yes">Transfer funds from one account to another</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="no">Stock Ass_istant…</attribute>
+        <attribute name="label" translatable="yes">Stock Ass_istant…</attribute>
         <attribute name="action">GncPluginPageAccountTreeActions.ActionsStockAssistantAction</attribute>
         <attribute name="tooltip" translatable="yes">Stock Assistant</attribute>
       </item>

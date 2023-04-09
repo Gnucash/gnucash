@@ -122,7 +122,7 @@
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="no">Vendor Listing</attribute>
+      <attribute name="label" translatable="yes">Vendor Listing</attribute>
       <attribute name="action">GncPluginPageOwnerTreeActions.OTVendorListingReportAction</attribute>
       <attribute name="tooltip" translatable="yes">Show vendor aging overview for all vendors</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
@@ -131,7 +131,7 @@
 
   <menu id="ReportsPlaceholder1-e">
     <item>
-      <attribute name="label" translatable="no">Employee Report</attribute>
+      <attribute name="label" translatable="yes">Employee Report</attribute>
       <attribute name="action">GncPluginPageOwnerTreeActions.OTEmployeeReportAction</attribute>
       <attribute name="tooltip" translatable="yes">Show employee report</attribute>
       <attribute name="temp" translatable="no">yes</attribute>

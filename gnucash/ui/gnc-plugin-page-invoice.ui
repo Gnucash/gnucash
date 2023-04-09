@@ -204,7 +204,7 @@
 
   <menu id="ReportsPlaceholder1">
     <item>
-      <attribute name="label" translatable="no">_Company Report</attribute>
+      <attribute name="label" translatable="yes">_Company Report</attribute>
       <attribute name="action">GncPluginPageInvoiceActions.ReportsCompanyReportAction</attribute>
       <attribute name="tooltip" translatable="yes">Open a company report window for the owner of this invoice</attribute>
       <attribute name="temp" translatable="no">yes</attribute>

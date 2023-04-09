@@ -104,12 +104,12 @@
 
   <menu id="ViewPlaceholder3">
     <item>
-      <attribute name="label" translatable="no">_Sort By…</attribute>
+      <attribute name="label" translatable="yes">_Sort By…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ViewSortByAction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="no">_Filter By…</attribute>
+      <attribute name="label" translatable="yes">_Filter By…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ViewFilterByAction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
