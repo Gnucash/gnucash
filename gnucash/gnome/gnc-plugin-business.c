@@ -43,6 +43,7 @@
 #include "gnc-plugin-page-invoice.h"
 #include "gnc-plugin-page-owner-tree.h"
 #include "gncOwner.h"
+#include "gnc-ui.h"
 #include "gnc-ui-util.h"
 #include "gnc-date.h"
 #include "gnc-file.h"
@@ -714,6 +715,13 @@ gnc_business_assign_payment (GtkWindow *parent,
     // Do nothing if we don't have more than one split (e.g. in the empty line at the end of the register)
     if (xaccTransCountSplits(trans) <= 1)
         return;
+
+    if (xaccTransGetFirstAPARAcctSplit (trans, FALSE) == NULL)
+    {
+        gnc_warning_dialog (parent, "%s",
+                            _("There must be an A/P or A/R transfer account."));
+        return;
+    }
 
     //PINFO("Creating payment dialog with trans %p", trans);
     gnc_ui_payment_new_with_txn(parent, owner, trans);
