@@ -643,8 +643,10 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
     }
 
     if (!matched)
-        gtk_tree_model_get_iter_first(model, &match);
-    gtk_combo_box_set_active_iter(combo_box, &match);
+        matched = gtk_tree_model_get_iter_first (model, &match);
+
+    if (matched)
+        gtk_combo_box_set_active_iter (combo_box, &match);
     g_list_free(namespaces);
 }
 
