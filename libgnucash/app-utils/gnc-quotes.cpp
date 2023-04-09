@@ -21,6 +21,7 @@
 \ *******************************************************************/
 
 #include <config.h>
+#include <qoflog.h>
 
 #include <algorithm>
 #include <stdexcept>
@@ -409,11 +410,21 @@ GncQuotesImpl::report_failures() noexcept
 
 /* **** Private function implementations ****/
 
+using Path = bpt::ptree::path_type;
+static inline Path make_quote_path(const std::string &name_space,
+                                   const std::string &symbol)
+{
+  using Path = bpt::ptree::path_type;
+  Path key{name_space, '|'};
+  key /= Path{symbol, '|'};
+  return key;
+};
+
 std::string
-GncQuotesImpl::comm_vec_to_json_string (const CommVec& comm_vec) const
+GncQuotesImpl::comm_vec_to_json_string(const CommVec &comm_vec) const
 {
     bpt::ptree pt, pt_child;
-    pt.put ("defaultcurrency", gnc_commodity_get_mnemonic (m_dflt_curr));
+    pt.put("defaultcurrency", gnc_commodity_get_mnemonic(m_dflt_curr));
 
     std::for_each (comm_vec.cbegin(), comm_vec.cend(),
                    [this, &pt] (auto comm)
@@ -423,14 +434,13 @@ GncQuotesImpl::comm_vec_to_json_string (const CommVec& comm_vec) const
                        if (gnc_commodity_is_currency (comm))
                        {
                            if (gnc_commodity_equiv(comm, m_dflt_curr) ||
-                               (!comm_mnemonic || (strcmp (comm_mnemonic, "XXX") == 0)))
+                               (!comm_mnemonic || (strcmp(comm_mnemonic, "XXX") == 0)))
                                return;
                        }
                        else
-                           comm_ns = gnc_quote_source_get_internal_name (gnc_commodity_get_quote_source (comm));
+                           comm_ns = gnc_quote_source_get_internal_name(gnc_commodity_get_quote_source(comm));
 
-                       auto key = comm_ns + "." + comm_mnemonic;
-                       pt.put (key, "");
+                       pt.put (make_quote_path(comm_ns, comm_mnemonic), "");
                    }
     );
 
@@ -484,13 +494,12 @@ GncQuotesImpl::query_fq (const char* source, const StrVec& commodities)
                   commodities.cend(),
                   [source, &pt](auto sym)
                       {
-                          using Path = bpt::ptree::path_type;
-                          Path key{source, '|'};
-                          key /= Path{sym, '|'};
-                          pt.put(key, "");
+                          pt.put(make_quote_path(source, sym), "");
                       });
     std::ostringstream result;
     bpt::write_json(result, pt);
+    auto result_str{result.str()};
+    PINFO("Query JSON: %s\n", result_str.c_str());
     return get_quotes(result.str(), m_quotesource);
 }
 
@@ -498,6 +507,7 @@ std::string
 GncQuotesImpl::query_fq (const CommVec& comm_vec)
 {
     auto json_str{comm_vec_to_json_string(comm_vec)};
+    PINFO("Query JSON: %s\n", json_str.c_str());
     return get_quotes(json_str, m_quotesource);
 }
 
