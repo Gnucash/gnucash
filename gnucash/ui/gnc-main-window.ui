@@ -140,7 +140,7 @@
       </section>
       <section>
         <item>
-          <attribute name="label" translatable="no">Pr_eferences</attribute>
+          <attribute name="label" translatable="yes">Pr_eferences</attribute>
           <attribute name="action">mainwin.EditPreferencesAction</attribute>
           <attribute name="tooltip" translatable="yes">Edit the global preferences of GnuCash</attribute>
           <attribute name="hidden-when">action-disabled</attribute>
@@ -515,7 +515,7 @@
           <attribute name="tooltip" translatable="yes">Open the GnuCash Help</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="no">_About</attribute>
+          <attribute name="label" translatable="yes">_About</attribute>
           <attribute name="action">mainwin.HelpAboutAction</attribute>
           <attribute name="tooltip" translatable="yes">About GnuCash</attribute>
         </item>
