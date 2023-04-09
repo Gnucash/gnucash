@@ -171,7 +171,7 @@ update_all_balances (GNCImportMainMatcher *info)
 {
     for (GSList* iter = info->edited_accounts; iter; iter=iter->next)
     {
-        gnc_account_set_defer_bal_computation (iter->data,false);
+        xaccAccountCommitEdit (iter->data);
         xaccAccountRecomputeBalance (iter->data);
     }
     g_slist_free (info->edited_accounts);
@@ -181,9 +181,9 @@ update_all_balances (GNCImportMainMatcher *info)
 static void
 defer_bal_computation (GNCImportMainMatcher *info, Account* acc)
 {
-    if (!gnc_account_get_defer_bal_computation (acc))
+    if (!g_slist_find (info->edited_accounts, acc))
     {
-        gnc_account_set_defer_bal_computation (acc, true);
+        xaccAccountBeginEdit (acc);
         info->edited_accounts = g_slist_prepend (info->edited_accounts, acc);
     }
 }
