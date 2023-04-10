@@ -8,10 +8,10 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-25 17:34+0000\n"
+"PO-Revision-Date: 2023-04-05 15:51+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
-"Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/"
-"program-beta/hr/>\n"
+"Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"hr/>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4989,7 +4989,7 @@ msgstr "Zamrznuto"
 #: gnucash/gnome-search/search-reconciled.c:233
 #: gnucash/report/trep-engine.scm:153
 msgid "Voided"
-msgstr "Stornirano"
+msgstr "Anulirano"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3251
 msgid "Show:"
@@ -5053,7 +5053,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3784
 msgid "You cannot void a transaction with reconciled or cleared splits."
-msgstr "Ne možeš stornirati transakciju s usklađenim ili potvrđenim stavkama."
+msgstr "Ne možeš anulirati transakciju s usklađenim ili potvrđenim stavkama."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3791
 #: gnucash/gnome/gnc-split-reg.c:1167
@@ -5637,7 +5637,7 @@ msgstr ""
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
 msgid "Set up scheduled transactions to avoid repeated data entry"
-msgstr "Postavi terminirane transakcije i izbjegni višestruko unositi datume"
+msgstr "Postavi terminirane transakcije i izbjegni ponavljajuće unose datuma"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
 msgid ""
@@ -17197,7 +17197,7 @@ msgstr "_Potvrđeno"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:438
 msgid "_Voided"
-msgstr "_Stornirano"
+msgstr "_Anulirano"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:454
 msgid "_Frozen"
@@ -17322,11 +17322,11 @@ msgstr "Razvrstaj silaznim redoslijedom."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1109
 msgid "Void Transaction"
-msgstr "Storniraj transakciju"
+msgstr "Anuliraj transakciju"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1173
 msgid "Reason for voiding transaction"
-msgstr "Razlog za storniranje transakcije"
+msgstr "Razlog za anuliranje transakcije"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:12
 msgid "day(s)"
@@ -18944,7 +18944,7 @@ msgstr "Roba/Valuta"
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:565
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 msgid "Void Reason"
-msgstr "Razlog storniranja"
+msgstr "Razlog anuliranja"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.c:567
 #: gnucash/import-export/csv-exp/csv-tree-export.c:155
@@ -21150,7 +21150,7 @@ msgstr "Upiši napomenu za transakciju"
 
 #: gnucash/register/ledger-core/split-register-model.c:1202
 msgid "Reason the transaction was voided"
-msgstr "Razlog, zbog kojeg je transakcija stornirana"
+msgstr "Razlog anuliranja transakcije"
 
 #: gnucash/register/ledger-core/split-register-model.c:1301
 msgid "Enter an action type, or choose one from the list"
@@ -27516,7 +27516,7 @@ msgstr "Usklađeno stanje"
 
 #: gnucash/report/trep-engine.scm:123
 msgid "Void Transactions"
-msgstr "Stornirane transakcije"
+msgstr "Anulirane transakcije"
 
 #: gnucash/report/trep-engine.scm:124
 msgid "Closing transactions"
@@ -27548,15 +27548,15 @@ msgstr "Isključi transakcije u/iz filtriranih konta"
 
 #: gnucash/report/trep-engine.scm:354
 msgid "Non-void only"
-msgstr "Samo nestornirane"
+msgstr "Samo neanulirane"
 
 #: gnucash/report/trep-engine.scm:358
 msgid "Void only"
-msgstr "Samo stornirane"
+msgstr "Samo anulirane"
 
 #: gnucash/report/trep-engine.scm:362
 msgid "Both (and include void transactions in totals)"
-msgstr "Obje (i uključi stornirane transakcije u ukupne iznose)"
+msgstr "Obje (i uključi anunirane transakcije u ukupne iznose)"
 
 #: gnucash/report/trep-engine.scm:367
 msgid "Exclude closing transactions"
@@ -27695,7 +27695,7 @@ msgstr "Filtriraj po stanju usklađenosti."
 
 #: gnucash/report/trep-engine.scm:629
 msgid "How to handle void transactions."
-msgstr "Što raditi sa storniranim transakcijama."
+msgstr "Što raditi sa anuliranim transakcijama."
 
 #: gnucash/report/trep-engine.scm:635
 msgid ""
@@ -29294,19 +29294,19 @@ msgstr "Prikaži transakcije rasklopljeno sa svim stavkama"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
-msgstr "_Storniraj transakciju"
+msgstr "_Anuliraj transakciju"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
 msgid "Void the current transaction"
-msgstr "Storniraj trenutačnu transakciju"
+msgstr "Anuliraj trenutačnu transakciju"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
 msgid "_Unvoid Transaction"
-msgstr "_Poništi storniranje transakcije"
+msgstr "_Poništi anuliranje transakcije"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
 msgid "Unvoid the current transaction"
-msgstr "Poništi storniranje trenutačne transakcije"
+msgstr "Poništi anuliranje trenutačne transakcije"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
@@ -29889,7 +29889,7 @@ msgstr "z"
 #: libgnucash/app-utils/gnc-ui-util.c:489
 msgctxt "Reconciled flag 'void'"
 msgid "v"
-msgstr "s"
+msgstr "a"
 
 #: libgnucash/app-utils/gnc-ui-util.c:529
 msgctxt "Document Link flag for 'web'"
@@ -30677,11 +30677,11 @@ msgstr "Podjela"
 
 #: libgnucash/engine/Transaction.c:2733
 msgid "Voided transaction"
-msgstr "Stornirana transakcija"
+msgstr "Anulirana transakcija"
 
 #: libgnucash/engine/Transaction.c:2746
 msgid "Transaction Voided"
-msgstr "Transakcija je stornirana"
+msgstr "Transakcija je anulirana"
 
 #. Translators: This and the following strings appear on
 #. the account tab if the Tax Info column is displayed,

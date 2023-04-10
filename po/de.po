@@ -18,7 +18,7 @@
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020, 2021.
-# Christian Wehling <christian.wehling@web.de>, 2020-2022.
+# Christian Wehling <christian.wehling@web.de>, 2020-2022, 2023.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021.
 # Christian Stimming <christian@cstimming.de>, 2021, 2023.
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
@@ -36,19 +36,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-20 21:25+0000\n"
-"Last-Translator: Christian Stimming <christian@cstimming.de>\n"
-"Language-Team: German <https://hosted.weblate.org/projects/gnucash/program-"
-"beta/de/>\n"
+"PO-Revision-Date: 2023-04-05 18:49+0000\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1024,18 +1024,13 @@ msgstr ""
 "ist nicht notwendig, GnuCash neu zu starten."
 
 #: doc/tip_of_the_day.list.c:121
-#, fuzzy
-#| msgid ""
-#| "To search through all your transactions, start a search (Edit->Find...) "
-#| "from the main accounts hierarchy page. To limit your search to a single "
-#| "account, start the search from that account's register."
 msgid ""
 "To search through all your transactions, start a search (Edit->Find…) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
 "Um eine Buchung in allen Konten zu suchen, starten Sie eine Suche vom "
-"Fenster mit der Kontenhierarchie (Bearbeiten->Suchen ...). Wenn Sie eine "
+"Fenster mit der Kontenhierarchie (Bearbeiten->Suchen…). Wenn Sie eine "
 "Buchung in einem bestimmten Konto suchen, starten Sie diese Suche vom "
 "Kontofenster dieses Kontos."
 
@@ -1636,10 +1631,9 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:537
-#, fuzzy, c-format
-#| msgid "Split"
+#, c-format
 msgid "%s Split"
-msgstr "Vollständig"
+msgstr "%s Buchungsteil"
 
 #. Translators: StockAssistant: N/A denotes stock price is not computable
 #: gnucash/gnome/assistant-stock-transaction.cpp:565
@@ -2438,7 +2432,7 @@ msgstr "URL ergänzen"
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
 msgid "Enter an URL like \"%s\""
-msgstr ""
+msgstr "Eine URL wie \"%s\" eingeben"
 
 #: gnucash/gnome/dialog-doclink.c:264
 msgid "Existing Document Link is"
@@ -2913,6 +2907,8 @@ msgstr ""
 #: gnucash/gnome/dialog-invoice.c:920
 msgid "Choose a different report template or Printable Invoice will be used"
 msgstr ""
+"Wählen Sie eine andere Berichtsvorlage, oder es wird eine druckbare Rechnung "
+"verwendet."
 
 #: gnucash/gnome/dialog-invoice.c:1034 gnucash/gnome/dialog-invoice.c:3568
 #: gnucash/gnome/dialog-invoice.c:3602 gnucash/gnome/dialog-invoice.c:3636
@@ -3596,19 +3592,13 @@ msgstr ""
 "können."
 
 #: gnucash/gnome/dialog-payment.c:1627
-#, fuzzy
-#| msgid ""
-#| "While this transaction has multiple splits that can be considered\n"
-#| "as 'the payment split', gnucash only knows how to handle one.\n"
-#| "Please select one, the others will be ignored.\n"
-#| "\n"
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', GnuCash only knows how to handle one.\n"
 "Please select one, the others will be discarded.\n"
 "\n"
 msgstr ""
-"Diese Transaktion hat mehrere Splits,\n"
+"Diese Buchung enthält mehrere Splits,\n"
 "die man als 'Zahlungssplit' bezeichnen kann; GnuCash weiß nur, wie man mit "
 "einem umgeht.\n"
 "Bitte wählen Sie einen aus, die anderen werden ignoriert.\n"
@@ -3641,6 +3631,14 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
+"Diese Buchung hat Splits in mehreren Geschäftskonten:\n"
+"\n"
+"%s\n"
+"GnuCash kann nur Buchungen verarbeiten, die auf ein einziges Konto gebucht "
+"werden.\n"
+"\n"
+"Bitte korrigieren Sie dies manuell, indem Sie die Buchung direkt bearbeiten "
+"und dann erneut versuchen."
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.cpp:201
@@ -3669,10 +3667,9 @@ msgstr "Sind Sie sicher, dass Sie den gewählten Kurswert löschen wollen?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:572
 #: gnucash/gnome-utils/dialog-transfer.cpp:1797
-#, fuzzy, c-format
-#| msgid "Price Quotes Retrieval Options"
+#, c-format
 msgid "Price retrieval failed: %s"
-msgstr "Online-Kursabfrage Optionen"
+msgstr "Kursabfrage fehlgeschlagen: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
@@ -7022,7 +7019,7 @@ msgstr "Versteckte Konten verbergen"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:722
 msgid "Set the visibility of placeholder and hidden accounts."
-msgstr ""
+msgstr "Legt die Sichtbarkeit von Platzhalter- und versteckten Konten fest."
 
 #. Translators: This is a button label displayed in the account selector
 #. * control used in several dialogs. When pressed it opens the New Account
@@ -7967,16 +7964,15 @@ msgstr " -Bericht hat keine GUID."
 
 #. Translators: %s is the report name.
 #: gnucash/gnome-utils/gnc-report-combo.c:314
-#, fuzzy, c-format
-#| msgid "missing"
+#, c-format
 msgid "'%s' is missing"
-msgstr "fehlt"
+msgstr "'%s' fehlt"
 
 #. Translators: %s is the internal report guid.
 #: gnucash/gnome-utils/gnc-report-combo.c:318
 #, c-format
 msgid "Report with GUID '%s' is missing"
-msgstr ""
+msgstr "Der Bericht mit der GUID '%s' fehlt"
 
 #: gnucash/gnome-utils/gnc-splash.c:113
 msgid "Loading…"
@@ -8381,6 +8377,19 @@ msgid ""
 "or more symbols, the first of which is the currency in which exchange rates "
 "for the rest will be quoted.\n"
 msgstr ""
+"Ausführen von Befehlen, die sich auf Kursnotierungen beziehen. Die folgenden "
+"Befehle werden unterstützt.\n"
+"\n"
+"  info: \tZeigt die Version von Finance::Quote und die unterstützen "
+"Kursquellen an.\n"
+"   get: \tHolt die aktuellen Kurse für alle Fremdwährungen und Aktien "
+"schreibt sie in die angegebene GnuCash-Datendatei.\n"
+"  dump: \tHolt aktuelle Kurse für bestimmte Währungen oder Aktien aus einem "
+"bestimmten Namensraum und gibt die Ergebnisse auf der Konsole aus.\n"
+"        \tEs muss eine Quelle und ein oder mehrere Symbole angegeben werden, "
+"es sei denn, die Quelle ist \"Währung\". In diesem Fall müssen zwei oder "
+"mehr Symbole angegeben werden, von denen das erste die Währung ist, in der "
+"die Wechselkurse für den Rest angegeben werden.\n"
 
 #: gnucash/gnucash-cli.cpp:103
 #, fuzzy
@@ -8398,6 +8407,9 @@ msgid ""
 "When using the dump command list all of the parameters Finance::Quote "
 "returns for the symbol instead of the ones that Gnucash requires."
 msgstr ""
+"Wenn Sie den Dump-Befehl verwenden, werden alle Parameter aufgelistet, die "
+"Finance::Quote für das Symbol zurückgibt. Das sind meistens mehr, als "
+"GnuCash benötigt."
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
@@ -8473,7 +8485,7 @@ msgstr "Finance::Quote Version ~A wurde gefunden."
 
 #: gnucash/gnucash-commands.cpp:364 gnucash/gnucash-commands.cpp:388
 msgid "Price retrieval failed: "
-msgstr ""
+msgstr "Kursabfrage fehlgeschlagen: "
 
 #: gnucash/gnucash-core-app.cpp:79
 msgid "This is a development version. It may or may not work."
@@ -11615,16 +11627,6 @@ msgid "Skip alternate lines"
 msgstr "Jede 2. Zeile überspringen"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:728
-#, fuzzy
-#| msgid ""
-#| "Starting from the first line that is actually imported every second line "
-#| "will be skipped. This option will take the leading lines to skip into "
-#| "account as well.\n"
-#| "For example\n"
-#| "* if \"Leading Lines to Skip\" is set to 3, the first line to import will "
-#| "be line 4. Lines 5, 7, 9,... will be skipped.\n"
-#| "* if \"Leading Lines to Skip\" is set to 4, the first line to import will "
-#| "be line 5. Lines 6, 8, 10,... will be skipped."
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -11640,10 +11642,10 @@ msgstr ""
 "das Konto zu springen.\n"
 "Zum Beispiel\n"
 "* Wenn 'Führende Zeilen überspringen' auf 3 gesetzt ist, ist die erste "
-"Zeile, die importiert werden soll, Zeile 4. Die Zeilen 5, 7, 9,... werden "
+"Zeile, die importiert werden soll, Zeile 4. Die Zeilen 5, 7, 9, … werden "
 "übersprungen.\n"
 "* Wenn 'Führende Zeilen überspringen' auf 4 gesetzt ist, ist die erste "
-"Zeile, die importiert werden soll, Zeile 5. Die Zeilen 6, 8, 10,... werden "
+"Zeile, die importiert werden soll, Zeile 5. Die Zeilen 6, 8, 10, … werden "
 "übersprungen."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:781
@@ -11786,16 +11788,6 @@ msgstr ""
 "derselben Transaktion betrachten."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:746
-#, fuzzy
-#| msgid ""
-#| "Starting from the first line that is actually imported every second line "
-#| "will be skipped. This option will take the leading lines to skip into "
-#| "account as well.\n"
-#| "For example\n"
-#| "* if 'Leading Lines to Skip' is set to 3, the first line to import will "
-#| "be line 4. Lines 5, 7, 9,... will be skipped.\n"
-#| "* if 'Leading Lines to Skip' is set to 4, the first line to import will "
-#| "be line 5. Lines 6, 8, 10,... will be skipped."
 msgid ""
 "Starting from the first line that is actually imported every second line "
 "will be skipped. This option will take the leading lines to skip into "
@@ -11811,10 +11803,10 @@ msgstr ""
 "das Konto zu springen.\n"
 "Zum Beispiel\n"
 "* Wenn 'Führende Zeilen überspringen' auf 3 gesetzt ist, ist die erste "
-"Zeile, die importiert werden soll, Zeile 4. Zeilen 5, 7, 9,... werden "
+"Zeile, die importiert werden soll, Zeile 4. Zeilen 5, 7, 9, … werden "
 "übersprungen.\n"
 "* Wenn 'Führende Zeilen überspringen' auf 4 gesetzt ist, ist die erste "
-"Zeile, die importiert werden soll, Zeile 5. Die Zeilen 6, 8, 10,... werden "
+"Zeile, die importiert werden soll, Zeile 5. Die Zeilen 6, 8, 10, … werden "
 "übersprungen."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:815
@@ -11827,16 +11819,12 @@ msgstr "Wählen Sie eine Zeile, um die Zuordnungen zu ändern"
 
 # Todo: Bedeutung "Button..."
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:960
-#, fuzzy
-#| msgid ""
-#| "To change mapping, double click on a row or select a row and press the "
-#| "button..."
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button…"
 msgstr ""
 "Zum Ändern der Zuordnungen bitte auf eine Zeile doppelklicken oder eine "
-"Zeile auswählen und den Knopf drücken..."
+"Zeile auswählen und den Knopf drücken…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:971
 #: gnucash/import-export/import-account-matcher.c:166
@@ -13612,6 +13600,16 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Wenn Sie einen Schwellwert eingetragen haben, kann im Kontenplan ein Hinweis "
+"angezeigt werden, wenn der heutige Saldo über diesem Wert liegt.\n"
+"\n"
+"z.B.\n"
+"Bei einem heutigen Saldo von -90 wird das Symbol angezeigt, wenn das Limit "
+"auf -100 gesetzt ist.\n"
+"Bei einem heutigen Saldo von 100 wird ein Symbol angezeigt, wenn das Limit "
+"auf 90 gesetzt ist.\n"
+"\n"
+"Löschen Sie den Eintrag, wenn Sie keine Warnung erhalten wollen."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1670
 msgid ""
@@ -13624,6 +13622,16 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Wenn Sie einen Schwellwert eingetragen haben, kann im Kontenplan ein Hinweis "
+"angezeigt werden, wenn der heutige Saldo unter diesem Wert liegt.\n"
+"\n"
+"z.B.\n"
+"Bei einem heutigen Saldo von -100 wird das Symbol angezeigt, wenn das Limit "
+"auf -90 gesetzt ist.\n"
+"Bei einem heutigen Saldo von 90 wird ein Symbol angezeigt, wenn das Limit "
+"auf 100 gesetzt ist.\n"
+"\n"
+"Löschen Sie den Eintrag, wenn Sie keine Warnung erhalten wollen."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1692
 #, fuzzy
@@ -18487,6 +18495,9 @@ msgid ""
 "profile list contains specializations and is populated according to which "
 "format you select in this list."
 msgstr ""
+"Diese Liste enthält die Dateiformate, die AqBanking importieren kann. Die "
+"Profilliste rechts enthält angepasste Vorlagen und wird je nachdem, welches "
+"Format Sie in dieser Liste auswählen, ausgefüllt."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1733
 msgid "File Format"
@@ -18497,6 +18508,9 @@ msgid ""
 "This lists one or more specialization templates that adjust the import for "
 "different banks' uses of fields in the selected import format."
 msgstr ""
+"Diese Liste enthält eine oder mehrere spezielle Vorlagen, die den Import an "
+"die unterschiedlichen Verwendungen der Feldern für das gewählte Importformat "
+"der Banken anpassen."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
 msgid "Profiles"
@@ -19601,13 +19615,7 @@ msgstr ""
 "anzeigen.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
-#, fuzzy, c-format
-#| msgid ""
-#| "Import completed but with errors!\n"
-#| "\n"
-#| "The number of Accounts added was %u and %u were updated.\n"
-#| "\n"
-#| "See below for errors..."
+#, c-format
 msgid ""
 "Import completed but with errors!\n"
 "\n"
@@ -19619,7 +19627,7 @@ msgstr ""
 "\n"
 "%u Konten wurden hinzugefügt und %u aktualisiert.\n"
 "\n"
-"Folgende Fehler traten auf..."
+"Folgende Fehler traten auf…"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:466
 #, c-format
@@ -19752,7 +19760,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1431
 msgid "This line has the following parse issues:"
-msgstr ""
+msgstr "In dieser Zeile gibt es die folgenden Verarbeitungsfehler:"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1775
 msgid "No Linked Account"
@@ -19924,6 +19932,8 @@ msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value."
 msgstr ""
+"Die Auswahl des aktuellen Kontos erzeugt Buchungen in mehreren Währungen. "
+"Bitte wählen Sie eine der folgenden Spalten: Preis, (negierter) Wert."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:531
 msgid ""
@@ -19931,6 +19941,9 @@ msgid ""
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
 msgstr ""
+"Die Auswahl des aktuellen Kontos erzeugt Buchungen in mehreren Währungen. "
+"Bitte wählen Sie eine der folgenden Spalten: Preis, (negierter) Wert, "
+"(negierter) Überweisungsbetrag."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
 #, fuzzy
@@ -20025,7 +20038,7 @@ msgstr "Wert ergibt keine gültige Währung für eine Währungsspalte"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
 msgid "{1}: {2}"
-msgstr ""
+msgstr "{1}: {2}"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:279
 msgid "No date column."
@@ -20059,7 +20072,7 @@ msgstr "Betrag (in _Worten)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 msgid "Value (Negated)"
-msgstr ""
+msgstr "Wert (negiert)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
 msgid "Transfer Action"
@@ -20096,10 +20109,14 @@ msgstr "Wert kann nicht zu einem gültigen Abgleichszustand verarbeitet werden."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:245
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"Das Datumsfeld kann nicht leer sein, wenn die Option \"Multi-Split\" nicht "
+"gesetzt ist.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:261
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"Das Beschreibungsfeld kann nicht leer bleiben, wenn die Option \"Multi-"
+"Split\" nicht ausgewählt ist.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:311
 #, fuzzy
@@ -20157,12 +20174,18 @@ msgid ""
 "Choice of accounts makes this a multi-currency transaction but price or "
 "(negated) value column is missing or invalid."
 msgstr ""
+"Durch die Wahl der Konten handelt es sich um eine Buchung in mehreren "
+"Währungen, aber die Spalte Preis oder (negierter) Wert fehlt oder ist "
+"ungültig."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:665
 msgid ""
 "Choice of account makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer column is missing or invalid."
 msgstr ""
+"Durch die Wahl des Kontos handelt es sich um eine Buchung in mehreren "
+"Währungen, aber die Spalten Preis, (negierter) Wert oder (negierter) "
+"Transfer fehlen oder sind ungültig."
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
 msgid "No Settings"
@@ -20372,10 +20395,10 @@ msgstr "Neu (%s nach »%s«, automatisch gewählt)"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:1976
-#, fuzzy, c-format
-#| msgid "New, UNBALANCED (need acct to transfer %s)!"
+#, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
-msgstr "Neu (verbleibende %s benötigen Konto, nicht ausgeglichen)!"
+msgstr ""
+"Neu, NICHT ausgeglichen (benötigt Preis für Überweisung von %s auf Konto %s)!"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:1992
@@ -20926,7 +20949,7 @@ msgstr "Duplizierte Buchungen finden..."
 #: gnucash/import-export/qif-imp/qif-parse.scm:174
 #, scheme-format
 msgid "The account type ~s is unknown, using Bank instead."
-msgstr ""
+msgstr "Der Typ des Kontos ~s ist unbekannt, verwenden Sie stattdessen Bank."
 
 #. Translators: This is an error message about actions like buy, sell …
 #: gnucash/import-export/qif-imp/qif-parse.scm:238
@@ -20939,6 +20962,8 @@ msgstr "Unbekannte Aktion »~a«."
 #, scheme-format
 msgid "The unknown reconciliation status '~a' will be replaced by 'uncleared'."
 msgstr ""
+"Der unbekannte Abstimmungsstatus \"~a\" wird durch \"nicht abgeglichen\" "
+"ersetzt."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
@@ -22718,7 +22743,7 @@ msgstr "Der Titel des Berichts."
 #: gnucash/report/reports/example/sample-report.scm:119
 #: gnucash/report/reports/example/sample-report.scm:131
 msgid "Tab B"
-msgstr ""
+msgstr "Reiter B"
 
 #: gnucash/report/reports/example/sample-report.scm:61
 msgid "Boolean Option"
@@ -22812,7 +22837,7 @@ msgstr "Dies ist eine Farb-Option."
 #: gnucash/report/reports/example/sample-report.scm:147
 #: gnucash/report/reports/example/sample-report.scm:158
 msgid "Tab A"
-msgstr ""
+msgstr "Reiter A"
 
 #: gnucash/report/reports/example/sample-report.scm:147
 msgid "An account list option"
@@ -25835,7 +25860,7 @@ msgstr "Berichtstitel"
 
 #: gnucash/report/reports/standard/investment-lots.scm:104
 msgid "GUID"
-msgstr ""
+msgstr "GUID"
 
 #: gnucash/report/reports/standard/investment-lots.scm:105
 #, fuzzy
@@ -26122,10 +26147,8 @@ msgid "No price found"
 msgstr "Nicht gefunden"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1230
-#, fuzzy
-#| msgid "(split)"
 msgid "split"
-msgstr "(Buchungsteil)"
+msgstr "Buchungsteil"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1351
 #, scheme-format
@@ -26166,10 +26189,9 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:1425
-#, fuzzy, scheme-format
-#| msgid "Amount / Value"
+#, scheme-format
 msgid ": amount ~a, value ~a"
-msgstr "Betrag / Wert"
+msgstr ": Betrag ~a, Wert ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1445
 #, scheme-format
@@ -30132,10 +30154,8 @@ msgid "Create a new voucher"
 msgstr "Neuen Auslagenbeleg erfassen"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Checks…"
-msgstr "Schecks _drucken"
+msgstr "Schecks _drucken…"
 
 # Fixme: Source Accelerator missing
 #: gnucash/ui/gnc-plugin-page-register.ui:15

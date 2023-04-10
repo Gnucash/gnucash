@@ -6,24 +6,24 @@
 # Nigel Titley <nigel@titley.com>, 2002 - 2007.
 # Neil Williams <linux@codehelp.co.uk>, 2006.
 # Adithya K <adithyak04@gmail.com>, 2021.
-# Simon Arlott <weblate.simon@arlott.org>, 2022.
+# Simon Arlott <weblate.simon@arlott.org>, 2022, 2023.
 # John Ralls <jralls@ceridwen.us>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-05 00:52+0000\n"
+"PO-Revision-Date: 2023-03-27 19:34+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
-"gnucash/program-beta/en_AU/>\n"
+"gnucash/gnucash/en_AU/>\n"
 "Language: en_AU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -13373,10 +13373,8 @@ msgid "Open imported documents in tabs"
 msgstr "Open imported documents in tabs"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
-#| msgid "Open not yet posted documents in tabs "
 msgid "Open not yet posted documents in tabs"
-msgstr "Open not yet posted documents in tabs "
+msgstr "Open not yet posted documents in tabs"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -15143,8 +15141,6 @@ msgstr ""
 "feature is started. Otherwise no extra explanation is shown."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
-#, fuzzy
-#| msgid "For"
 msgctxt "keep"
 msgid "For"
 msgstr "For"
@@ -16338,8 +16334,6 @@ msgid "Until"
 msgstr "Until"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
-#, fuzzy
-#| msgid "For"
 msgctxt "repeat"
 msgid "For"
 msgstr "For"
@@ -27799,16 +27793,12 @@ msgid "Display the account name?"
 msgstr "Display the account name?"
 
 #: gnucash/report/trep-engine.scm:949
-#, fuzzy
-#| msgid ""
-#| "Display the other account name? (if this is a split transaction, this "
-#| "parameter is guessed)."
 msgid ""
 "Display the other account name? If this is a split transaction, this "
 "parameter is guessed."
 msgstr ""
-"Display the other account name? (if this is a split transaction, this "
-"parameter is guessed)."
+"Display the other account name? If this is a split transaction, this "
+"parameter is guessed."
 
 #: gnucash/report/trep-engine.scm:956
 msgid "Amount of detail to display per transaction."
@@ -29225,10 +29215,8 @@ msgid "Create a new voucher"
 msgstr "Create a new voucher"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Checks…"
-msgstr "_Print cheques"
+msgstr "_Print Cheques…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:444
@@ -29683,8 +29671,6 @@ msgid "Finance::Quote reported failure set no error."
 msgstr "Finance::Quote reported failure set no error."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:369
-#, fuzzy
-#| msgid "Finance::Quote reported failure with  error: "
 msgid "Finance::Quote reported failure with error: "
 msgstr "Finance::Quote reported failure with error: "
 

@@ -8,14 +8,15 @@
 # Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>, 2021.
 # udo pton <udopton@gmail.com>, 2021.
 # Bora <boratici@gmail.com>, 2021, 2022.
+# Bora Atıcı <boratici.acc@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2022-01-02 14:44+0000\n"
-"Last-Translator: Bora <boratici@gmail.com>\n"
+"PO-Revision-Date: 2023-04-02 17:39+0000\n"
+"Last-Translator: Bora Atıcı <boratici.acc@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
 "Language: tr\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-POOTLE-MTIME: 1497808015.000000\n"
 
@@ -1842,17 +1843,13 @@ msgstr "Birimler"
 #: gnucash/gnome/business-gnome-utils.c:392 gnucash/gnome/dialog-invoice.c:1674
 #: gnucash/gnome/dialog-invoice.c:1752
 #: gnucash/gnome-utils/gnc-general-select.c:220
-#, fuzzy
-#| msgid "Select"
 msgid "Select…"
-msgstr "Seç"
+msgstr "Seç…"
 
 #: gnucash/gnome/business-gnome-utils.c:199
 #: gnucash/gnome-utils/gnc-general-select.c:222
-#, fuzzy
-#| msgid "Edit"
 msgid "Edit…"
-msgstr "Düzenle"
+msgstr "Düzenle…"
 
 #: gnucash/gnome/business-gnome-utils.c:351 gnucash/gnome/dialog-doclink.c:813
 #: gnucash/gnome/dialog-invoice.c:2801 gnucash/gnome/dialog-invoice.c:3026
@@ -4415,10 +4412,8 @@ msgstr "Fatura sahibi için bir firma raporu penceresi aç"
 #: gnucash/ui/gnc-plugin-page-register.ui:205
 #: gnucash/ui/gnc-plugin-page-register.ui:393
 #: gnucash/ui/gnc-plugin-page-register.ui:505
-#, fuzzy
-#| msgid "Manage Document Link"
 msgid "_Manage Document Link…"
-msgstr "Belge Bağlantısını Yönetin"
+msgstr "_Belge Bağlantısını Yönet…"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4745,10 +4740,8 @@ msgid "Open a company report window for the owner of this credit note"
 msgstr "Fatura sahibi için bir firma raporu penceresi aç"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
-#, fuzzy
-#| msgid "Manage Document Link"
 msgid "Manage Document Link…"
-msgstr "Belge Bağlantısını Yönetin"
+msgstr "Belge Bağlantısını Yönet…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:292
 #: gnucash/gnome/gnc-plugin-page-register.c:395
@@ -5157,7 +5150,7 @@ msgstr ""
 #: gnucash/gnome/gnc-split-reg.c:1167
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr "Bu işlem şu yorumla salt-okunur olarak işaretlenmiş: '%s'"
+msgstr "Bu işlem şu yorumla salt okunur olarak işaretlendi: '%s'"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3884
 #: gnucash/gnome/gnc-split-reg.c:1138
@@ -5236,7 +5229,7 @@ msgstr "Dışa aktar"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:228
 msgid "Save Config"
-msgstr ""
+msgstr "Yapılandırmayı Kaydet"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
 #. to be used as toolbar button label.
@@ -5533,8 +5526,8 @@ msgid ""
 "The date of this transaction is older than the \"Read-Only Threshold\" set "
 "for this book. This setting can be changed in File->Properties->Accounts."
 msgstr ""
-"Bu işlemin tarihi, bu kitap için belirlenen \"Salt Okunur Eşiği\" değerinden "
-"eski. Bu ayar Dosya->Özellikler->Hesaplar'dan değiştirilebilir."
+"Bu işlemin tarihi, bu defter için ayarlanan \"Salt Okunur Eşiği\"nden daha "
+"eski. Bu ayar, Dosya->Özellikler->Hesaplar'dan değiştirilebilir."
 
 #: gnucash/gnome/gnc-split-reg.c:1215
 msgid "Remove the splits from this transaction?"
@@ -5653,10 +5646,9 @@ msgid "This account register is read-only."
 msgstr "Bu salt okunur bir hesaptır."
 
 #: gnucash/gnome/gnc-split-reg.c:2459
-#, fuzzy, c-format
-#| msgid "This account register is read-only."
+#, c-format
 msgid "The '%s' account register is read-only."
-msgstr "Bu salt okunur bir hesaptır."
+msgstr "'%s' hesap kaydı salt okunurdur."
 
 #: gnucash/gnome/gnc-split-reg.c:2518
 msgid ""
@@ -5899,7 +5891,7 @@ msgstr "_Faiz Ödemesi ekle…"
 
 #: gnucash/gnome/window-reconcile.c:787
 msgid "Enter _Interest Charge…"
-msgstr "Fa_iz Ücreti Girin"
+msgstr "Fa_iz Ücretini Girin…"
 
 #: gnucash/gnome/window-reconcile.c:1389
 msgid "Are you sure you want to delete the selected transaction?"
@@ -6440,10 +6432,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:1456
-#, fuzzy
-#| msgid "Cancel the current entry"
 msgid "Cannot change currency"
-msgstr "Mevcut girdiyi iptal et"
+msgstr "Para birimi değiştirilemiyor"
 
 #: gnucash/gnome-utils/dialog-account.c:1545
 msgid ""
@@ -6653,10 +6643,8 @@ msgid "Action/Number"
 msgstr "Eylem/Numara"
 
 #: gnucash/gnome-utils/dialog-file-access.c:312
-#, fuzzy
-#| msgid "Open"
 msgid "Open…"
-msgstr "Aç"
+msgstr "Aç…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:313
 #: gnucash/gnome-utils/gnc-file.c:88
@@ -7025,7 +7013,7 @@ msgstr "_Evet, bu kez"
 
 #: gnucash/gnome-utils/gnc-autosave.c:124
 msgid "Yes, _always"
-msgstr "Evet, _daima"
+msgstr "Evet, her z_aman"
 
 #: gnucash/gnome-utils/gnc-autosave.c:125
 msgid "No, n_ever"
@@ -7244,14 +7232,15 @@ msgstr ""
 "edilsin mi?"
 
 #: gnucash/gnome-utils/gnc-file.c:377
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "GnuCash could not write to %s. That database may be on a read-only file "
 "system, you may not have write permission for the directory or your anti-"
 "virus software is preventing this action."
 msgstr ""
-"%s yazılamadı. Veri tabanı salt okunur bir dosya sisteminde olabilir, veya "
-"ilgili klasöre yazma izniniz olmayabilir."
+"GnuCash %s'ye yazamadı. Bu veri tabanı salt okunur bir dosya sisteminde "
+"olabilir, dizin için yazma izniniz olmayabilir veya virüsten koruma "
+"yazılımınız bu eylemi engelliyor olabilir."
 
 #: gnucash/gnome-utils/gnc-file.c:385
 #, c-format
@@ -7365,10 +7354,10 @@ msgid ""
 "but cannot safely save to it. It will be marked read-only until you do File-"
 ">Save As, but data may be lost in writing to the old version."
 msgstr ""
-"Bu veri tabanı GnuCash'in daha yeni bir sürümünden alınmıştır. Bu sürüm onu "
-"okuyabilir, ancak güvenli bir şekilde kaydedemez. Dosya->Farklı Kaydet "
-"komutunu alana kadar salt okunur olarak işaretlenir, ancak eski sürüme "
-"yazarken veriler kaybolabilir."
+"Bu veri tabanı, GnuCash'in daha yeni bir sürümündendir. Bu sürüm onu "
+"okuyabilir ancak güvenli bir şekilde ona kaydedemez. Dosya->Farklı Kaydet'i "
+"yapana kadar salt okunur olarak işaretlenir, ancak eski sürüme yazarken "
+"veriler kaybolabilir."
 
 #: gnucash/gnome-utils/gnc-file.c:505
 msgid ""
@@ -7462,16 +7451,16 @@ msgstr ""
 "olmayabilir. Ne yapmak istersiniz?"
 
 #: gnucash/gnome-utils/gnc-file.c:849
-#, fuzzy
 msgid ""
 "That database may be on a read-only file system, you may not have write "
 "permission for the directory, or your anti-virus software is preventing this "
 "action. If you proceed you may not be able to save any changes. What would "
 "you like to do?"
 msgstr ""
-"Veri tabanı salt okunur bir dosya sisteminde olabilir, veya ilgili klasöre "
-"yazma izniniz olmayabilir. Devam ederseniz değişiklikleri kayıt "
-"edemeyebilirsiniz. Ne yapmak istersiniz?"
+"Bu veri tabanı salt okunur bir dosya sisteminde olabilir, dizin için yazma "
+"izniniz olmayabilir veya virüsten koruma yazılımınız bu eylemi engelliyor "
+"olabilir. Devam ederseniz, herhangi bir değişikliği kaydedemeyebilirsiniz. "
+"Ne yapmak istersin?"
 
 #: gnucash/gnome-utils/gnc-file.c:872
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
@@ -7662,7 +7651,7 @@ msgstr "Veri tabanına kaydedilemedi."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:3010
 msgid "Unable to save to database: Book is marked read-only."
-msgstr "Veri tabanına kaydedilemiyor: Defter salt-okunur olarak işaretli."
+msgstr "Veri tabanına kaydedilemiyor: Defter salt okunur olarak işaretlendi."
 
 # Book teriminin burada dosya(file) yerine kullanıldığı kabul edildi.
 #: gnucash/gnome-utils/gnc-main-window.cpp:4641
@@ -7711,6 +7700,7 @@ msgstr "- GnuCash kişisel ve küçük işletme finansmanı yönetimi"
 #: gnucash/gnome-utils/gnc-main-window.cpp:5261
 msgid "translator-credits"
 msgstr ""
+"Bora Atıcı, 2023\n"
 "Emin Tufan Çetin, 2018\n"
 "Mesutcan Kurt, 2017"
 
@@ -7742,7 +7732,7 @@ msgstr "Alt hesapları seç"
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1006
 msgid "Select all descendents of selected account."
-msgstr "Seçili hesabın tüm alt hesaplarını seç."
+msgstr "Seçili hesabın tüm alt öğelerini seçin."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1012
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1241
@@ -8360,10 +8350,8 @@ msgid "{1} [options] [datafile]"
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:246
-#, fuzzy
-#| msgid "GnuCash "
 msgid "GnuCash Paths"
-msgstr "GnuCash "
+msgstr "GnuCash Yolları"
 
 #: gnucash/gnucash-core-app.cpp:261
 msgid "GnuCash {1}"
@@ -10575,7 +10563,7 @@ msgstr "Salt okunur kayıt"
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:55
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:178
 msgid "This dialog is presented when a read-only register is opened."
-msgstr "Bu pencere bir salt-okunur kayıt açıldığında görüntülenir."
+msgstr "Bu iletişim kutusu, salt okunur bir kayıt açıldığında görüntülenir."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:59
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:182
@@ -11038,14 +11026,8 @@ msgid "Import Account Assistant"
 msgstr "Hesap İçe Aktarma Asistanı"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Enter file name and location for the Import...\n"
 msgid "Enter file name and location for the Import…"
-msgstr ""
-"\n"
-"İçe aktarma için bir dosya adı veya konumu girin...\n"
+msgstr "İçe Aktarma için dosya adını ve konumunu girin…"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:77
 msgid "Choose File to Import"
@@ -11235,14 +11217,8 @@ msgid "Account Selection"
 msgstr "Hesap Seçimi"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:687
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Enter file name and location for the Export...\n"
 msgid "Enter file name and location for the Export…"
-msgstr ""
-"\n"
-"Dışa Aktarma için dosya adı ve konumu girin...\n"
+msgstr "Dışa Aktarma için dosya adını ve konumunu girin…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:698
 msgid "Choose File Name for Export"
@@ -11341,9 +11317,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:193
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:183
-#, fuzzy
 msgid "<b>Load and Save Settings</b>"
-msgstr "Ayarları Kaydet"
+msgstr "<b>Ayarları Yükle ve Kaydet</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:242
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:231
@@ -11447,9 +11422,8 @@ msgstr "<b>Bileşik:</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:886
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:56
-#, fuzzy
 msgid "Currency To"
-msgstr "Para birimi: "
+msgstr "Para Birimi"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:953
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:882
@@ -11468,13 +11442,12 @@ msgid "Import Preview"
 msgstr "Fiyatları Şimdi İçe Aktar"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1014
-#, fuzzy
 msgid ""
 "<b>Press \"Apply\" to add the Prices.\n"
 "\"Cancel\" to abort.</b>"
 msgstr ""
-"Aktarma dosyası oluşturmak için Uygula'ya basın.\n"
-"Durdurmak için İptal'e."
+"<b>Fiyatları eklemek için \"Uygula\",\n"
+"iptal etmek için \"İptal\" basın.</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1029
 msgid "Import Prices Now"
@@ -12126,10 +12099,8 @@ msgstr ""
 "birden çok dosyada olup olmadığını merak etmeyin.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:86
-#, fuzzy
-#| msgid "Select"
 msgid "_Select…"
-msgstr "Seç"
+msgstr "_Seç…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:109
 msgid "Select a QIF file to load"
@@ -12201,7 +12172,6 @@ msgstr "Varsayılan QIF hesap adını ayarla"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:439
-#, fuzzy
 msgid ""
 "Click \"Load another file\" if you have more data to import at this time. Do "
 "this if you have saved your accounts to separate QIF files.\n"
@@ -12209,11 +12179,11 @@ msgid ""
 "Click \"Next\" to finish loading files and move to the next step of the QIF "
 "import process."
 msgstr ""
-"Şu anda içe aktarmak için daha çok veri varsa \"Başka bir dosya yükle\"yi "
-"tıklayın. Hesaplarınızı ayrı QIF dosyalarına kaydettiyseniz bunu yapın.\n"
+"Şu anda içe aktarılacak daha fazla veriniz varsa \"Başka bir dosya yükle\"yi "
+"tıklayın. Hesaplarınızı ayrı QIF dosyalarına kaydettiyseniz bunu yapın. \n"
 "\n"
-"Dosyaları yüklemeyi bitirmek için \"İleri\"i tıklayın ve QIF içe aktarma "
-"işleminin bir sonraki adımına geçin. "
+"Dosyaları yüklemeyi bitirmek ve QIF içe aktarma işleminin bir sonraki "
+"adımına geçmek için \"İleri\" düğmesini tıklayın."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:458
 msgid "_Unload selected file"
@@ -12313,17 +12283,6 @@ msgid "Match QIF categories with GnuCash accounts"
 msgstr "QIF kategorilerini GnuCash hesapları ile eşleştir"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:771
-#, fuzzy
-#| msgid ""
-#| "QIF files downloaded from banks and other financial institutions may not "
-#| "have information about Accounts and Categories which would allow them to "
-#| "be correctly assigned to GnuCash accounts.\n"
-#| "\n"
-#| "In the following page, you will see the text that appears in the Payee "
-#| "and Memo fields of transactions with no QIF Account or Category. By "
-#| "default these transactions are assigned to the 'Unspecified' account in "
-#| "GnuCash. If you select a different account, it will be remembered for "
-#| "future QIF files. "
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
@@ -12334,14 +12293,14 @@ msgid ""
 "these transactions are assigned to the 'Unspecified' account in GnuCash. If "
 "you select a different account, it will be remembered for future QIF files."
 msgstr ""
-"Bankalardan ve diğer finans kuruluşlarından indirilen QIF dosyaları, "
-"Hesaplar ve Kategoriler hakkında GnuCash hesaplarına doğru bir şekilde "
-"atanmalarına izin verecek bilgiler içermeyebilir.\n"
+"Bankalardan ve diğer finansal kurumlardan indirilen QIF dosyaları, GnuCash "
+"hesaplarına doğru şekilde atanmalarına izin verecek Hesaplar ve Kategoriler "
+"hakkında bilgi içermeyebilir.\n"
 "\n"
-"Sonraki sayfada, herhangi bir QIF Hesabı veya Kategorisi olmayan işlemlerin "
-"Alacaklı ve Not alanlarında görünen metinleri göreceksiniz. Varsayılan "
-"olarak, bu işlemler GnuCash'deki 'Belirtilmemiş' hesaba atanır. Farklı bir "
-"hesap seçerseniz, gelecek QIF dosyaları için hatırlanacaktır. "
+"Bir sonraki sayfada QIF Hesabı veya Kategorisi olmayan işlemlerde Alacaklı "
+"ve Dekont alanlarında çıkan yazıları göreceksiniz. Varsayılan olarak bu "
+"işlemler, GnuCash'teki 'Belirtilmemiş' hesaba atanır. Farklı bir hesap "
+"seçerseniz, gelecekteki QIF dosyaları için hatırlanacaktır."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:784
 msgid "Payees and memos"
@@ -12417,9 +12376,8 @@ msgstr ""
 "hiçbiri uygun değilse, yeni bir tane girebilirsiniz."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1008
-#, fuzzy
 msgid "Enter Information about…"
-msgstr "Hakkında bilgi girin"
+msgstr "Hakkında Bilgi Girin…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1034
 msgid "All fields must be complete to continue…"
@@ -12789,15 +12747,15 @@ msgid "Capital Gains"
 msgstr "Sermaye"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:908
-#, fuzzy
 msgid ""
 "A summary of splits is shown as follows. If the summary is correct, and "
 "there are no errors, please press \"Apply\". You may also press \"Back\" to "
 "review your choices, or \"Cancel\" to quit without making any changes. "
 msgstr ""
-"Stok bölünmesini veya birleşmesini tamamlamış iseniz, 'Uygula'ya basın. "
-"Seçimlerinizi incelemek için 'Geri'ye basabilir ya da herhangi bir "
-"değişiklik yapmadan çıkmak için 'İptal' düğmesine basabilirsiniz."
+"Bölünmelerin bir özeti aşağıda gösterilmiştir. Özet doğruysa ve herhangi bir "
+"hata yoksa lütfen \"Uygula\" düğmesine basın. Ayrıca seçimlerinizi gözden "
+"geçirmek için \"Geri\", herhangi bir değişiklik yapmadan çıkmak için \"İptal"
+"\" düğmesine basabilirsiniz. "
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:956
 #, fuzzy
@@ -13078,7 +13036,7 @@ msgstr "Bu hesabın işlemleri vardır. İşlemlere ne yapılsın?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:625
 msgid "This account contains read-only transactions which may not be deleted."
-msgstr "Bu hesapta salt-okunur işlemler ve bunlar silinemez."
+msgstr "Bu hesap, silinemeyecek salt okunur işlemler içermektedir."
 
 #: gnucash/gtkbuilder/dialog-account.glade:674
 msgid "<b>Sub-account Transactions</b>"
@@ -13098,7 +13056,7 @@ msgid ""
 "One or more sub-accounts contain read-only transactions which may not be "
 "deleted."
 msgstr ""
-"Bir veya daha çok alt hesapta salt-okunur işlemler ve bunlar silinemez."
+"Bir veya daha fazla alt hesap, silinemeyecek salt okunur işlemler içerir."
 
 #: gnucash/gtkbuilder/dialog-account.glade:801
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
@@ -13507,10 +13465,8 @@ msgid "Open imported documents in tabs"
 msgstr "İçe aktarılan belgeleri sekmelerde aç"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
-#| msgid "Open not yet posted documents in tabs "
 msgid "Open not yet posted documents in tabs"
-msgstr "Henüz gönderilmeyen belgeleri sekmelerde aç "
+msgstr "Henüz gönderilmemiş belgeleri sekmelerde aç"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -13995,7 +13951,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
 msgid "Note: Only Document Links that are not read-only will be changed."
-msgstr ""
+msgstr "Not: Yalnızca salt okunur olmayan Belge Bağlantıları değiştirilecektir."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:276
 #, fuzzy
@@ -14310,10 +14266,8 @@ msgid "All _accounts"
 msgstr "Tüm hesaplar"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
-#, fuzzy
-#| msgid " Search "
 msgid "Search scope"
-msgstr " Ara "
+msgstr "Arama kapsamı"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
 msgid "Account Full Name"
@@ -14406,10 +14360,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:266
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:412
-#, fuzzy
-#| msgid "New Account"
 msgid "New _Account…"
-msgstr "Yeni Hesap"
+msgstr "Yeni _Hesap…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -15262,9 +15214,8 @@ msgid "days"
 msgstr "gün"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1523
-#, fuzzy
 msgid "<b>_Retain log/backup files</b>"
-msgstr "Günlük/yedek dosyala_rını sakla:"
+msgstr "<b>_Günlük/yedekleme dosyala_rını sakla</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1535
 msgid "Com_press files"
@@ -18882,14 +18833,8 @@ msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr ""
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:645
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Processing...\n"
 msgid "Processing…"
-msgstr ""
-"\n"
-"İşleniyor...\n"
+msgstr "İşleme…"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:714
 #, fuzzy, c-format
@@ -19252,7 +19197,7 @@ msgstr ""
 "iletişim kutusu gösterilmeyecektir.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Import completed but with errors!\n"
 "\n"
@@ -19260,11 +19205,11 @@ msgid ""
 "\n"
 "See below for errors…"
 msgstr ""
-"İçe aktarma hatalar ile sonlandı!\n"
+"İçe aktarma hatalar ile tamamlandı!\n"
 "\n"
-"Eklenen Hesap sayısı %u ve güncellenen %u'dur.\n"
+"%u hesap eklendi ve %u tane güncellendi.\n"
 "\n"
-"Hatalar için aşağıya bakınız..."
+"Hatalar için aşağıya bakın…"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:466
 #, fuzzy, c-format
@@ -20741,10 +20686,9 @@ msgid "TI"
 msgstr "V"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:141
-#, fuzzy
 msgctxt "sample for 'Tax Table'"
 msgid "Tax Table 1"
-msgstr "Vergi Tablosu: "
+msgstr "Vergi Tablosu 1"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:149
 #, fuzzy
@@ -21492,8 +21436,8 @@ msgid ""
 "\n"
 "'%s'"
 msgstr ""
-"Bu işlemi değiştiremez veya silebilirsiniz. Bu işlem salt okunur olarak "
-"işaretlenmiştir, çünkü:\n"
+"Bu işlem değiştirilemez veya silinemez. Bu işlem salt okunur olarak "
+"işaretlendi çünkü:\n"
 "\n"
 "'%s'"
 
@@ -21545,14 +21489,14 @@ msgid "Enter credit formula for real transaction"
 msgstr "Gerçek işlem için kredi formülünü girin"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
-#, fuzzy
 msgid ""
 "The entered date of the transaction is older than the \"Read-Only Threshold"
 "\" set for this book. This setting can be changed in File->Properties-"
 ">Accounts, resetting to the threshold."
 msgstr ""
-"Yeni işlemin girilen tarihi, bu defter için belirlenen \"Salt Okunur Eşiği"
-"\"nden eski. Bu ayar Dosya->Özellikler->Hesaplar'dan değiştirilebilir."
+"Girilen işlem tarihi, bu defter için ayarlanan \"Salt Okunur Eşiği\"nden "
+"daha eski. Bu ayar, Dosya->Özellikler->Hesaplar'da eşiğe sıfırlanarak "
+"değiştirilebilir."
 
 #: gnucash/register/register-gnome/gnucash-item-list.c:534
 #: gnucash/report/reports/standard/investment-lots.scm:384
@@ -22021,9 +21965,8 @@ msgstr ""
 "raporlarınızı denetleyin: "
 
 #: gnucash/report/report-core.scm:217
-#, fuzzy
 msgid "Wrong report definition: "
-msgstr "Rapor yapılandırmasını yükle"
+msgstr "Yanlış rapor tanımı: "
 
 #: gnucash/report/report-core.scm:218
 msgid " Report is missing a GUID."
@@ -24020,9 +23963,8 @@ msgid "Barchart"
 msgstr "Varlık Sütun grafiği"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1169
-#, fuzzy
 msgid " to "
-msgstr "%s %s'e"
+msgstr " ile "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1228
 #: gnucash/report/reports/standard/customer-summary.scm:110
@@ -24422,7 +24364,7 @@ msgstr "Hesap Görüntüleme Derinliği"
 #: gnucash/report/reports/standard/budget.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:46
 msgid "Always show sub-accounts"
-msgstr "Alt-hesaplari daima göster"
+msgstr "Her zaman alt hesapları göster"
 
 #: gnucash/report/reports/standard/budget.scm:49
 msgid "Show Budget"
@@ -27185,15 +27127,15 @@ msgstr "Başlığın yanında fatura numarası"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:90
 msgid "table-border-collapse"
-msgstr "table-border-collapse"
+msgstr "tablo-kenarlığı-daraltma"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:91
 msgid "table-header-border-color"
-msgstr "table-header-border-color"
+msgstr "tablo-başlık-kenarlık-renk"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:92
 msgid "table-cell-border-color"
-msgstr "table-cell-border-color"
+msgstr "tablo-hücre-kenarlık-renk"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:93
 msgid "Embedded CSS"
@@ -27275,10 +27217,8 @@ msgstr ""
 "ölçeklendirilir."
 
 #: gnucash/report/reports/standard/taxinvoice.scm:206
-#, fuzzy
-#| msgid "Invoice number: "
 msgid "Invoice number:"
-msgstr "Fatura numarası: "
+msgstr "Fatura numarası:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:209
 #, fuzzy
@@ -27286,10 +27226,8 @@ msgid "To:"
 msgstr "_Araçlar"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:212
-#, fuzzy
-#| msgid "Your ref: "
 msgid "Your ref:"
-msgstr "Referansınız: "
+msgstr "Referansınız:"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:227
 msgid "Embedded CSS."
@@ -27325,7 +27263,7 @@ msgstr "Fatura #: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:322
 msgid "Reference: "
-msgstr "Referans:"
+msgstr "Referans: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:323
 #, fuzzy
@@ -27864,7 +27802,7 @@ msgstr "Hazırlayan: "
 #: gnucash/report/stylesheets/head-or-tail.scm:393
 #: gnucash/report/stylesheets/head-or-tail.scm:487
 msgid "Prepared for: "
-msgstr "Müşteri:"
+msgstr "İçin hazırlanmıştır: "
 
 #: gnucash/report/stylesheets/footer.scm:380
 #: gnucash/report/stylesheets/footer.scm:396
@@ -27963,7 +27901,7 @@ msgstr ""
 #: gnucash/report/stylesheets/head-or-tail.scm:496
 #: gnucash/report/stylesheets/head-or-tail.scm:503
 msgid "Report Creation Date: "
-msgstr "Rapor Oluşturma Tarihi:"
+msgstr "Rapor Oluşturma Tarihi: "
 
 #: gnucash/report/stylesheets/head-or-tail.scm:511
 msgid "GnuCash "
@@ -28695,10 +28633,8 @@ msgid "_Actions"
 msgstr "Eyle_mler"
 
 #: gnucash/ui/gnc-main-window.ui:344
-#, fuzzy
-#| msgid "Reset Warnings"
 msgid "Reset _Warnings…"
-msgstr "Uyarıları Sıfırla"
+msgstr "Uyarıları _Sıfırla…"
 
 #: gnucash/ui/gnc-main-window.ui:346
 #, fuzzy
@@ -28851,10 +28787,8 @@ msgid "Create a new file"
 msgstr "Yeni bir dosya oluştur"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:12
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open…"
-msgstr "_Aç"
+msgstr "_Aç…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:15
 msgid "Open an existing GnuCash file"
@@ -28904,10 +28838,8 @@ msgstr "Hesap planını yeni bir GnuCash dosyasına aktar"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:65
 #: gnucash/ui/gnc-plugin-page-register.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:16
-#, fuzzy
-#| msgid "_Find"
 msgid "_Find…"
-msgstr "_Bul"
+msgstr "_Bul…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:62
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:70
@@ -28990,10 +28922,8 @@ msgid "Use the loan/mortgage repayment calculator"
 msgstr "Borç/ipotek yeniden ödeme hesaplayıcısını kullan"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:119
-#, fuzzy
-#| msgid "_Close Book"
 msgid "_Close Book…"
-msgstr "_Hesapları Kapat"
+msgstr "_Defteri Kapat…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:121
 msgid "Close the Book at the end of the Period"
@@ -29090,20 +29020,16 @@ msgstr "Müşterilere Genel Bakış sayfası aç"
 #: gnucash/ui/gnc-plugin-business.ui:14
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:23
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:317
-#, fuzzy
-#| msgid "New Customer"
 msgid "_New Customer…"
-msgstr "Yeni Müşteri"
+msgstr "_Yeni Müşteri…"
 
 #: gnucash/ui/gnc-plugin-business.ui:16
 msgid "Open the New Customer dialog"
 msgstr "Yeni Müşteri kutusunu göster"
 
 #: gnucash/ui/gnc-plugin-business.ui:19
-#, fuzzy
-#| msgid "Find Customer"
 msgid "_Find Customer…"
-msgstr "Müşteri Ara"
+msgstr "_Müşteri Bul…"
 
 #: gnucash/ui/gnc-plugin-business.ui:21
 msgid "Open the Find Customer dialog"
@@ -29176,20 +29102,16 @@ msgstr "Sağlayıcılara Genel Bakış sayfası aç"
 #: gnucash/ui/gnc-plugin-business.ui:63
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:472
-#, fuzzy
-#| msgid "New Vendor"
 msgid "_New Vendor…"
-msgstr "Yeni Satıcı"
+msgstr "_Yeni Satıcı…"
 
 #: gnucash/ui/gnc-plugin-business.ui:65
 msgid "Open the New Vendor dialog"
 msgstr "Yeni Satıcı ekranını aç"
 
 #: gnucash/ui/gnc-plugin-business.ui:68
-#, fuzzy
-#| msgid "Find Vendor"
 msgid "_Find Vendor…"
-msgstr "Satıcı Ara"
+msgstr "_Satıcı Bul…"
 
 #: gnucash/ui/gnc-plugin-business.ui:70
 msgid "Open the Find Vendor dialog"
@@ -29422,9 +29344,8 @@ msgstr "Bir hesap bul"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:37
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:222
-#, fuzzy
 msgid "_Cascade Account Properties…"
-msgstr "Hesap Rengi"
+msgstr "_Kademeli Hesap Özellikleri…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:224
@@ -29627,10 +29548,8 @@ msgstr "Temizlenmiş tutarda otomatik olarak bireysel işlemleri temizleyin"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:271
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:427
-#, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account…"
-msgstr "Hesap Sil"
+msgstr "_Hesabı Sil…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:273
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:429
@@ -29643,15 +29562,13 @@ msgstr "Tü_münün Denetim/Onarımı"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
-#, fuzzy
 msgid "Esti_mate Budget…"
-msgstr "Tahmini Bütçe"
+msgstr "Tahmini Bütçe…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
-#, fuzzy
 msgid "_All Periods…"
-msgstr "Dönem"
+msgstr "_Tüm Dönemler…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:24
 #: gnucash/ui/gnc-plugin-page-budget.ui:227
@@ -29662,10 +29579,8 @@ msgstr "Geçmiş işlemlerden seçilen hesaplar için bir bütçe değeri tahmin
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
-#, fuzzy
-#| msgid "_Delete Budget"
 msgid "_Delete Budget…"
-msgstr "Bütçeyi _Sil"
+msgstr "_Bütçeyi Sil…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:30
 #: gnucash/ui/gnc-plugin-page-budget.ui:257
@@ -29693,10 +29608,8 @@ msgstr "Cari raporu yazdır"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:70
 #: gnucash/ui/gnc-plugin-page-budget.ui:200
-#, fuzzy
-#| msgid "Budget Options"
 msgid "Budget _Options…"
-msgstr "Bütçe Seçenekleri"
+msgstr "Bütçe _Seçenekleri…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:72
 #: gnucash/ui/gnc-plugin-page-budget.ui:202
@@ -29997,10 +29910,8 @@ msgstr "Ge_ri Verme İşlemi Ekleme"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:248
 #: gnucash/ui/gnc-plugin-page-register.ui:902
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Ass_istant…"
-msgstr "Stok Bölüm Asistanı"
+msgstr "Stok Yardımcısı…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:417
@@ -30113,10 +30024,8 @@ msgstr "Seçilen İşlem için bir kayıt raporu açın"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:349
 #: gnucash/ui/gnc-plugin-page-register.ui:461
-#, fuzzy
-#| msgid "Sort By"
 msgid "_Sort By…"
-msgstr "Sırala"
+msgstr "_Göre Sırala…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
@@ -30149,10 +30058,8 @@ msgid "Export the current report as a PDF document"
 msgstr "Mevcut raporu PDF belgesi olarak dışa aktar"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:34
-#, fuzzy
-#| msgid "Export _Report"
 msgid "Export _Report…"
-msgstr "_Raporu Dışa Aktar"
+msgstr "_Raporu Dışa Aktar…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:36
 #: gnucash/ui/gnc-plugin-page-report.ui:256
@@ -30506,19 +30413,15 @@ msgstr "Tarih: "
 
 #. Translators: The quote currency
 #: libgnucash/app-utils/gnc-quotes.cpp:804
-#, fuzzy
-#| msgid "Currency"
 msgctxt "Finance::Quote"
 msgid "currency: "
-msgstr "Para Birimi"
+msgstr "para birimi: "
 
 #. Translators: The quote is for the most recent trade on the exchange
 #: libgnucash/app-utils/gnc-quotes.cpp:810
-#, fuzzy
-#| msgid "last %s"
 msgctxt "Finance::Quote"
 msgid "last: "
-msgstr "son %s"
+msgstr "son: "
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
 #: libgnucash/app-utils/gnc-quotes.cpp:812
@@ -30967,9 +30870,9 @@ msgid ""
 "account register windows. If zero, all transactions can be edited and none "
 "are read-only."
 msgstr ""
-"İşlemlerin salt okunur olacağı ve artık düzenlenemeyeceği gün sayısını "
-"seçin. Bu eşik, hesap kayıt pencerelerinde kırmızı bir çizgi ile "
-"işaretlenmiştir. Sıfır ise, tüm işlemler düzenlenebilir ve hiçbiri salt "
+"İşlemlerin kaç gün sonra salt okunur hale geleceğini ve artık "
+"düzenlenemeyeceğini seçin. Bu eşik, hesap kayıt pencerelerinde kırmızı bir "
+"çizgi ile işaretlenir. Sıfırsa, tüm işlemler düzenlenebilir ve hiçbiri salt "
 "okunur değildir."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1117
@@ -31290,7 +31193,7 @@ msgstr "Ticaret Hesaplarını Kullan"
 
 #: libgnucash/engine/qofbookslots.h:66
 msgid "Day Threshold for Read-Only Transactions (red line)"
-msgstr "Salt Okunur İşlemler İçin Günlük Eşik Sayısı (kırmızı çizgi)"
+msgstr "Salt Okunur İşlemler için Gün Eşiği (kırmızı çizgi)"
 
 #: libgnucash/engine/qofbookslots.h:67
 msgid "Use Split Action Field for Number"

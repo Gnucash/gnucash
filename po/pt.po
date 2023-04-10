@@ -9,10 +9,10 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-25 07:19+0000\n"
+"PO-Revision-Date: 2023-03-31 05:59+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
-"program-beta/pt/>\n"
+"gnucash/pt/>\n"
 "Language: pt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1371,7 +1371,7 @@ msgstr "Abrir compra"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:148
 msgid "Initial stock long purchase."
-msgstr "Compra inicial de acções."
+msgstr "Compra inicial longa de acções."
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
@@ -1381,7 +1381,7 @@ msgstr "Abrir curta"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:162
 msgid "Initial stock short sale."
-msgstr "Venda inicial de acções."
+msgstr "Venda inicial curta de acções."
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
@@ -1401,7 +1401,7 @@ msgstr "Compra"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:180
 msgid "Buying stock long."
-msgstr "Comprar acções."
+msgstr "Comprar acções a longo."
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
@@ -1421,7 +1421,7 @@ msgstr "Venda"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:194
 msgid "Selling stock long, and record capital gain/loss."
-msgstr "Vender acções e registar perdas/ganhos de capital."
+msgstr "Vender acções a longo e registar perdas/ganhos de capital."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1523,23 +1523,23 @@ msgstr ""
 #. shorting of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:285
 msgid "Short sell"
-msgstr "Venda a descoberto"
+msgstr "Venda a curto"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:286
 msgid "Selling stock short."
-msgstr "Vender acções a descoberto."
+msgstr "Vender acções a curto."
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
 #: gnucash/gnome/assistant-stock-transaction.cpp:299
 msgid "Buy to cover short"
-msgstr "Comprar para cobrir descoberto"
+msgstr "Comprar para cobrir curto"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:300
 msgid "Buy back stock to cover short position, and record capital gain/loss."
 msgstr ""
-"Voltar a comprar acções para cobrir uma posição a descoberto, registando "
-"perdas/ganhos de capital."
+"Voltar a comprar acções para cobrir uma posição a curto, registando perdas/"
+"ganhos de capital."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
@@ -1552,8 +1552,8 @@ msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
 msgstr ""
-"A empresa emite dividendos e o accionista a descoberto tem de fazer um "
-"pagamento compensatório para o dividendo."
+"A empresa emite dividendos e o accionista a curto tem de fazer um pagamento "
+"compensatório para o dividendo."
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
@@ -1567,9 +1567,9 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
-"A empresa devolve capital e o accionista a descoberto deve fazer um "
-"pagamento compensatório pelo capital devolvido. Isto reduz a base de custos "
-"(menos negativo, tendendo para 0,00) sem afectar o número de unidades."
+"A empresa devolve capital e o accionista a curto deve fazer um pagamento "
+"compensatório pelo capital devolvido. Isto reduz a base de custos (menos "
+"negativo, tendendo para 0,00) sem afectar o número de unidades."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution when shorting stock
@@ -1584,11 +1584,11 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
-"A empresa emite uma distribuição nocional e o accionista a descoberto deve "
-"fazer um pagamento compensatório pela distribuição nocional. Isto é "
-"registado como um montante de rendimento de dividendos perdidos/negativos e "
-"aumenta a base do custo (mais negativo, tendendo para longe de 0,00 valor) "
-"sem afectar o número de unidades."
+"A empresa emite uma distribuição nocional e o accionista a curto deve fazer "
+"um pagamento compensatório pela distribuição nocional. Isto é registado como "
+"um montante de rendimento de dividendos perdidos/negativos e aumenta a base "
+"do custo (mais negativo, tendendo para longe de 0,00 valor) sem afectar o "
+"número de unidades."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:370
 msgid ""
@@ -3561,10 +3561,10 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
-"Esta transacção tem parcelas em múltiplas contas comerciais:\n"
+"Esta transacção tem parcelas em múltiplas contas empresariais:\n"
 "\n"
 "%s\n"
-"O GnuCash só pode tratar de transacções publicadas numa única conta.\n"
+"O GnuCash só pode tratar de transacções emitidas numa única conta.\n"
 "\n"
 "Por favor, corrija isto manualmente editando a transacção directamente e "
 "tente novamente."
@@ -7636,7 +7636,7 @@ msgstr "Contabilidade de finanças pessoais e micro empresas."
 #. contributors.
 #: gnucash/gnome-utils/gnc-main-window.cpp:5261
 msgid "translator-credits"
-msgstr "Pedro Albuquerque <pmra@protonmail.com>"
+msgstr "Pedro Albuquerque <pmra@gmx.com>"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5264
 msgid "Visit the GnuCash website."
@@ -7666,7 +7666,7 @@ msgstr "Seleccionar filhos"
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1006
 msgid "Select all descendents of selected account."
-msgstr "Seleccionar todas as contas-filho da conta seleccionada."
+msgstr "Seleccionar todas as contas-filho das contas seleccionadas."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1012
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1241
@@ -11351,8 +11351,8 @@ msgid ""
 "line 5. Lines 6, 8, 10,… will be skipped."
 msgstr ""
 "A partir da primeira linha que é realmente importada, cada segunda linha "
-"será ignorada. Esta opção também levará as linhas iniciais a saltar em "
-"conta.\n"
+"será ignorada. Esta opção também levará as linhas iniciais a saltar em conta."
+"\n"
 "Por exemplo\n"
 "* Se \"Linhas iniciais a saltar\" estiver definido como 3, a primeira linha "
 "a importar será a linha 4. As linhas 5, 7, 9,… serão ignoradas.\n"
@@ -11507,8 +11507,8 @@ msgid ""
 "line 5. Lines 6, 8, 10,… will be skipped."
 msgstr ""
 "A partir da primeira linha que é realmente importada, cada segunda linha "
-"será ignorada. Esta opção também levará as linhas iniciais a saltar em "
-"conta.\n"
+"será ignorada. Esta opção também levará as linhas iniciais a saltar em conta."
+"\n"
 "Por exemplo\n"
 "* Se \"Linhas iniciais a saltar\" estiver definido como 3, a primeira linha "
 "a importar será a linha 4. As linhas 5, 7, 9, … serão ignoradas.\n"
@@ -18013,8 +18013,8 @@ msgid ""
 "This lists one or more specialization templates that adjust the import for "
 "different banks' uses of fields in the selected import format."
 msgstr ""
-"Isto lista um ou mais modelos de especialização que ajustam a importação "
-"para diferentes utilizações bancárias dos campos no formato de importação "
+"Isto lista um ou mais modelos de especialização, que ajustam a importação "
+"para diferentes utilizações bancárias dos campos, no formato de importação "
 "seleccionado."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
@@ -19555,8 +19555,7 @@ msgstr "O valor não pode ser convertido num estado válido de reconciliação."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:245
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
-msgstr ""
-"A data não pode estar vazia sem a opção de parcelas múltiplas activa.\n"
+msgstr "A data não pode estar vazia sem a opção de parcelas múltiplas activa.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:261
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
@@ -22258,9 +22257,9 @@ msgid ""
 "the scm/report directory for details on writing your own reports, or "
 "extending existing reports."
 msgstr ""
-"Este é um relatório ~a exemplo do GnuCash. Veja o código-fonte guile "
-"(scheme) na pasta scm/report para detalhes sobre como escrever os seus "
-"próprios relatórios ou alterar os existentes."
+"Este é um relatório ~a exemplo do GnuCash. Veja o código-fonte guile (scheme)"
+" na pasta scm/report para detalhes sobre como escrever os seus próprios "
+"relatórios ou alterar os existentes."
 
 #: gnucash/report/reports/example/sample-report.scm:292
 #, scheme-format
@@ -25260,7 +25259,7 @@ msgstr "Tipo de gráfico a incluir"
 
 #: gnucash/report/reports/standard/investment-lots.scm:189
 msgid "Stacked Bar Chart"
-msgstr "Gráficos de barra empilhados"
+msgstr "Gráficos de barra empilhadas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:195
 msgid "Where to place the chart"
@@ -25284,7 +25283,7 @@ msgstr "Mostrar colunas relacionadas com vendas"
 
 #: gnucash/report/reports/standard/investment-lots.scm:242
 msgid "Show end date amount and value table columns"
-msgstr "Mostrar colunas de data final de montante e valor"
+msgstr "Mostrar colunas de montante e valor na data final"
 
 #: gnucash/report/reports/standard/investment-lots.scm:249
 msgid "Show realized gain table column(s) for sold shares"
@@ -25403,7 +25402,7 @@ msgid ""
 "Warning: Above lot has ~a bought splits. Consider separating them into their "
 "own lots."
 msgstr ""
-"Aviso: o lote acima tem ~a parcelas de venda. Considere separá-las em lotes "
+"Aviso: o lote acima tem ~a parcelas de compra. Considere separá-las em lotes "
 "próprios."
 
 #: gnucash/report/reports/standard/investment-lots.scm:1360
@@ -25417,7 +25416,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:1369
 msgid "Warning: Above lot's title is blank."
-msgstr "Warning: o título do lote acima está vazio."
+msgstr "Aviso: o título do lote acima está vazio."
 
 #: gnucash/report/reports/standard/investment-lots.scm:1384
 #, scheme-format
@@ -28220,19 +28219,19 @@ msgstr "P_osição do separador"
 
 #: gnucash/ui/gnc-main-window.ui:198
 msgid "Display the notebook tabs at the top of the window"
-msgstr "Mostrar os separadores de apontamentos ao cimo da janela"
+msgstr "Mostrar os separadores de notas ao cimo da janela"
 
 #: gnucash/ui/gnc-main-window.ui:204
 msgid "Display the notebook tabs at the bottom of the window"
-msgstr "Mostrar os separadores de apontamentos no fundo da janela"
+msgstr "Mostrar os separadores de notas no fundo da janela"
 
 #: gnucash/ui/gnc-main-window.ui:210
 msgid "Display the notebook tabs at the left of the window"
-msgstr "Mostrar os separadores de apontamentos à esquerda da janela"
+msgstr "Mostrar os separadores de notas à esquerda da janela"
 
 #: gnucash/ui/gnc-main-window.ui:216
 msgid "Display the notebook tabs at the right of the window"
-msgstr "Mostrar os separadores de apontamentos à direita da janela"
+msgstr "Mostrar os separadores de notas à direita da janela"
 
 #: gnucash/ui/gnc-main-window.ui:256
 msgid "Tra_nsaction"
