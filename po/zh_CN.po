@@ -30,19 +30,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2023-03-20 11:11+0000\n"
-"Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
+"PO-Revision-Date: 2023-03-28 04:37+0000\n"
+"Last-Translator: YTX <ytx.cash@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
-"gnucash/program-beta/zh_Hans/>\n"
+"gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -937,16 +937,11 @@ msgid ""
 msgstr "通宵工作，应在零时后重启标签页，以更新日期，并不需重启 GnuCash。"
 
 #: doc/tip_of_the_day.list.c:121
-#, fuzzy
-#| msgid ""
-#| "To search through all your transactions, start a search (Edit->Find...) "
-#| "from the main accounts hierarchy page. To limit your search to a single "
-#| "account, start the search from that account's register."
 msgid ""
 "To search through all your transactions, start a search (Edit->Find…) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
-msgstr "搜索交易，Ctrl + F；搜索科目，Ctrl + i。"
+msgstr "搜索交易，Ctrl + F；搜索科目，Ctrl + I。"
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -1146,8 +1141,7 @@ msgstr "杂项付款"
 #. Translators: %s is "Taxes",
 #. "Insurance", or similar.
 #: gnucash/gnome/assistant-loan.cpp:766
-#, fuzzy, c-format
-#| msgid "... pay \"%s\"?"
+#, c-format
 msgid "… pay \"%s\"?"
 msgstr "支付“%s”"
 
@@ -1424,10 +1418,8 @@ msgstr "公司作出一个名义分配，把它记作股息分红并增加成本
 #. split when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:250
 #: gnucash/gnome/assistant-stock-transaction.cpp:355
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock split"
-msgstr "股票拆分"
+msgstr "股票分割"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:251
 #: gnucash/gnome/assistant-stock-transaction.cpp:356
@@ -1532,10 +1524,9 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:537
-#, fuzzy, c-format
-#| msgid "Split"
+#, c-format
 msgid "%s Split"
-msgstr "分录"
+msgstr "%s 分割"
 
 #. Translators: StockAssistant: N/A denotes stock price is not computable
 #: gnucash/gnome/assistant-stock-transaction.cpp:565
@@ -1545,10 +1536,8 @@ msgstr ""
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
 #: gnucash/gnome/assistant-stock-transaction.cpp:655
-#, fuzzy
-#| msgid "missing"
 msgid "(missing)"
-msgstr "交易"
+msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:670
 #, c-format
@@ -1586,10 +1575,8 @@ msgstr ""
 #. the currency value of a non-currency asset.
 #: gnucash/gnome/assistant-stock-transaction.cpp:764
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:425
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock Value"
-msgstr "股票拆分"
+msgstr "股票价值"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:783
 #, fuzzy
@@ -1599,19 +1586,15 @@ msgstr "选择了无效的编码"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:785
 msgid "New balance must be higher than old balance."
-msgstr ""
+msgstr "新余额必须高于旧余额。"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:787
-#, fuzzy
-#| msgid "Start date must be earlier than End date"
 msgid "New balance must be lower than old balance."
-msgstr "开始日期必须早于结束日期"
+msgstr "新余额必须低于旧余额。"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:796
-#, fuzzy
-#| msgid "Stock Accounts to report on."
 msgid "Stock amount must be positive."
-msgstr "股票账户报告。"
+msgstr "股票金额必须为正数。"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:804
 msgid "Cannot sell more units than owned."
@@ -1778,15 +1761,11 @@ msgstr "单位"
 #: gnucash/gnome/business-gnome-utils.c:392 gnucash/gnome/dialog-invoice.c:1674
 #: gnucash/gnome/dialog-invoice.c:1752
 #: gnucash/gnome-utils/gnc-general-select.c:220
-#, fuzzy
-#| msgid "Select"
 msgid "Select…"
-msgstr "选择"
+msgstr "查找"
 
 #: gnucash/gnome/business-gnome-utils.c:199
 #: gnucash/gnome-utils/gnc-general-select.c:222
-#, fuzzy
-#| msgid "Edit"
 msgid "Edit…"
 msgstr "编辑"
 
@@ -2291,15 +2270,13 @@ msgid "_OK"
 msgstr "确认(_O)"
 
 #: gnucash/gnome/dialog-doclink.c:241
-#, fuzzy
-#| msgid "Amend URL:"
 msgid "Amend the URL"
-msgstr "修改网址："
+msgstr "修改网址"
 
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
 msgid "Enter an URL like \"%s\""
-msgstr ""
+msgstr "输入一个网址，如 \"%s\""
 
 #: gnucash/gnome/dialog-doclink.c:264
 msgid "Existing Document Link is"
@@ -2799,15 +2776,10 @@ msgid "Do you really want to post the invoice?"
 msgstr "您确定要入账这张发票吗？"
 
 #: gnucash/gnome/dialog-invoice.c:1167
-#, fuzzy
-#| msgid ""
-#| "One or more of the entries are for accounts different from the invoice/"
-#| "bill currency. You will be asked a conversion rate for each."
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked to enter a conversion rate for each."
-msgstr ""
-"科目内一笔或多笔交易发票/账单货币不同。您将被要求为每笔交易设置一个汇率。"
+msgstr "本科目涉及跨币种交易，请录入汇率。"
 
 #: gnucash/gnome/dialog-invoice.c:1300
 msgid "The post action was canceled because not all exchange rates were given."
@@ -3014,7 +2986,7 @@ msgstr "已入账"
 #: gnucash/gtkbuilder/dialog-order.glade:548
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:139
 msgid "Date Opened"
-msgstr "打开日期"
+msgstr "日期"
 
 #: gnucash/gnome/dialog-invoice.c:3575
 #: gnucash/gtkbuilder/dialog-invoice.glade:42
