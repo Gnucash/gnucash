@@ -496,16 +496,13 @@ endif()
 # ############################################################
 
 if (WITH_PYTHON)
-  find_package(PythonInterp 3)
+  set (PYTHON_MIN_VERSION 3.6.0)
+  find_package(PythonInterp ${PYTHON_MIN_VERSION})
   if (NOT PYTHONINTERP_FOUND)
     message(SEND_ERROR "Python support enabled, but Python interpreter not found.")
   endif()
 
-  if (PYTHON_VERSION_STRING VERSION_LESS "3.2.0")
-    message(SEND_ERROR "Found python version ${PYTHON_VERSION_STRING}, but it's too old. Need python >= 3.2.0")
-  endif()
-
-  find_package(PythonLibs 3)
+  find_package(PythonLibs ${PYTHON_MIN_VERSION})
   if (NOT PYTHONLIBS_FOUND)
     message(SEND_ERROR "Python support enabled, but Python libraries not found.")
   endif()
