@@ -6,14 +6,15 @@
 # Zdenko Podobny <zdenop@gmail.com>, 2009, 2010, 2011, 2018
 # Dullus <dullus@gmail.com>, 2022.
 # Zdenko Podobný <zdenop@gmail.com>, 2022.
+# ZdPo Ster <zdposter@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-03-24 14:16-0700\n"
-"PO-Revision-Date: 2022-03-14 20:55+0000\n"
-"Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
+"PO-Revision-Date: 2023-03-28 19:40+0000\n"
+"Last-Translator: ZdPo Ster <zdposter@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
 "Language: sk\n"
@@ -21,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.12-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-Language: Slovak\n"
 "X-Poedit-Country: SLOVAKIA\n"
@@ -7435,7 +7436,7 @@ msgstr "Minimálny počet položiek faktúry pre zobrazenie. (-1)"
 #: gnucash/gnome-utils/gnc-main-window.cpp:5205
 #: gnucash/gnucash-core-app.cpp:252
 msgid "(user modifiable)"
-msgstr ""
+msgstr "(upraviteľné používateľom)"
 
 #. Translators: %s will be replaced with the current year
 #: gnucash/gnome-utils/gnc-main-window.cpp:5231
@@ -7469,7 +7470,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5264
 msgid "Visit the GnuCash website."
-msgstr "Navštívne GnuCash webstránku."
+msgstr "Navštívte GnuCash webstránku."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:990
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1227
@@ -7528,7 +7529,7 @@ msgstr "Zvoliť štandardný výber."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1523
 msgid "Clear any selected image file."
-msgstr ""
+msgstr "Vymazať každý označený obrázkový súbor."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1524
 msgid "Select image"
@@ -11427,7 +11428,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:35
 msgid "Import QIF files"
-msgstr "Importovať QIF súborov"
+msgstr "Importovať QIF súbory"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:50
@@ -11655,9 +11656,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1008
-#, fuzzy
 msgid "Enter Information about…"
-msgstr "Vložte informácie o \"%s\""
+msgstr "Vložte informácie o…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1034
 #, fuzzy
@@ -14321,9 +14321,8 @@ msgstr ""
 "veľa mesiacov pred aktuálnym mesiacom"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1168
-#, fuzzy
 msgid "Enter number of months."
-msgstr "Zvoľte číslo (<Enter> zruší): "
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1189
 msgid "Use the date format specified by the system locale."
