@@ -8,14 +8,15 @@
 # udo pton <udopton@gmail.com>, 2021.
 # T. E. Kalaycı <tekrei@gmail.com>, 2021.
 # Tur <tur+translate@simplelogin.fr>, 2021.
+# Bora Atıcı <boratici.acc@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-01-02 22:54+0000\n"
-"Last-Translator: Anonymous <noreply@weblate.org>\n"
+"PO-Revision-Date: 2023-04-02 17:39+0000\n"
+"Last-Translator: Bora Atıcı <boratici.acc@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "tr/>\n"
 "Language: tr\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -287,7 +288,7 @@ msgstr ""
 
 #. "Money in coins or notes"
 msgid "cash"
-msgstr ""
+msgstr "nakit"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
@@ -339,9 +340,10 @@ msgstr ""
 
 #. "The system of money used in a country"
 msgid "currency"
-msgstr ""
+msgstr "para birimi"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
+#, fuzzy
 msgid "Custom"
 msgstr "Özel biçim"
 
@@ -351,7 +353,7 @@ msgstr ""
 
 #. "The backend where the data is stored."
 msgid "database"
-msgstr ""
+msgstr "veri tabanı"
 
 #. "A specific numbered day of the month"
 msgid "Date"
@@ -359,11 +361,11 @@ msgstr "Tarih"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
 msgid "date format"
-msgstr ""
+msgstr "tarih biçimi"
 
 #. "A range in time that is delimited by two distinct dates."
 msgid "date range"
-msgstr ""
+msgstr "tarih aralığı"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
@@ -371,7 +373,7 @@ msgstr ""
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
-msgstr ""
+msgstr "varsayılan"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
@@ -403,7 +405,7 @@ msgstr ""
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "e-posta"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
@@ -451,7 +453,7 @@ msgstr ""
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "ücretsiz yazılım"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -463,7 +465,7 @@ msgstr ""
 
 #. "Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
 msgid "import"
-msgstr ""
+msgstr "içe aktar"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
@@ -515,7 +517,7 @@ msgstr ""
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
-msgstr ""
+msgstr "işaretleyici"
 
 #. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 msgid "markup"
@@ -543,7 +545,7 @@ msgstr ""
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
-msgstr ""
+msgstr "ulusal para birimi"
 
 #. "(of money) remaining when nothing more is to be taken away"
 msgid "net"
@@ -579,7 +581,7 @@ msgstr ""
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
-msgstr ""
+msgstr "seçenekler"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
@@ -603,15 +605,15 @@ msgstr ""
 
 #. "A person to whom sth is paid"
 msgid "payee"
-msgstr ""
+msgstr "alacaklı"
 
 #. "A person who pays or who has to pay for sth"
 msgid "payer"
-msgstr ""
+msgstr "borçlu"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
-msgstr ""
+msgstr "ödeme"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
@@ -627,7 +629,7 @@ msgstr ""
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
-msgstr ""
+msgstr "tercihler"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
 msgid "principal payment"
@@ -867,13 +869,15 @@ msgstr "değer (paylaşırken)"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
-msgstr "sağlayıcı"
+msgstr "satıcı"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
+#, fuzzy
 msgid "voucher"
 msgstr "makbuz"
 
 #. "see debit"
+#, fuzzy
 msgid "withdraw (in the reconcile dialog)"
 msgstr "çek"
 
