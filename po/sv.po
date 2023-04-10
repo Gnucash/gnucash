@@ -14,13 +14,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-03-24 14:16-0700\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2023-04-10 12:35-0700\n"
 "PO-Revision-Date: 2023-03-25 15:39+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
-"Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/"
-"program-beta/sv/>\n"
+"Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/program-"
+"beta/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,7 +32,7 @@ msgstr ""
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
 #: gnucash/report/reports/standard/account-piecharts.scm:514
-#: gnucash/report/reports/standard/balance-forecast.scm:273
+#: gnucash/report/reports/standard/balance-forecast.scm:274
 #: gnucash/report/reports/standard/balsheet-pnl.scm:875
 #: gnucash/report/reports/standard/budget.scm:441
 #: gnucash/report/reports/standard/cashflow-barchart.scm:259
@@ -218,7 +218,7 @@ msgid "The current date."
 msgstr "Dagens datum."
 
 #: bindings/guile/options.scm:388 gnucash/gnome/top-level.c:462
-#: libgnucash/engine/gnc-optiondb.cpp:1104 libgnucash/engine/qofbookslots.h:72
+#: libgnucash/engine/gnc-optiondb.cpp:1107 libgnucash/engine/qofbookslots.h:72
 msgid "Business"
 msgstr "Företag"
 
@@ -230,41 +230,41 @@ msgstr "Företag"
 #: gnucash/gtkbuilder/dialog-customer.glade:146
 #: gnucash/gtkbuilder/dialog-vendor.glade:147
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
-#: libgnucash/engine/gnc-optiondb.cpp:1204
+#: libgnucash/engine/gnc-optiondb.cpp:1207
 msgid "Company Name"
 msgstr "Företagsnamn"
 
-#: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1207
+#: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1210
 msgid "Company Address"
 msgstr "Företagsadress"
 
-#: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1230
+#: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1233
 msgid "Company ID"
 msgstr "Företags-ID"
 
-#: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1215
+#: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1218
 msgid "Company Phone Number"
 msgstr "Företagets telefonnummer"
 
-#: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1219
+#: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1222
 msgid "Company Fax Number"
 msgstr "Företagets faxnummer"
 
-#: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1227
+#: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1230
 msgid "Company Website URL"
 msgstr "Företagets webbadress"
 
-#: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1223
+#: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1226
 msgid "Company Email Address"
 msgstr "Företagets e-postadress"
 
-#: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1211
+#: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1214
 msgid "Company Contact Person"
 msgstr "Företagets kontaktperson"
 
 #: bindings/guile/options.scm:397
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
-#: libgnucash/engine/gnc-optiondb.cpp:1250
+#: libgnucash/engine/gnc-optiondb.cpp:1253
 msgid "Fancy Date Format"
 msgstr "Vackert datumformat"
 
@@ -276,11 +276,11 @@ msgstr "anpassad"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
 #: gnucash/report/reports/standard/invoice.scm:497
 #: gnucash/report/reports/standard/new-owner-report.scm:55
-#: libgnucash/engine/gnc-optiondb.cpp:1256
+#: libgnucash/engine/gnc-optiondb.cpp:1259
 msgid "Tax"
 msgstr "Skatt"
 
-#: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1256
+#: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1259
 msgid "Tax Number"
 msgstr "Skattenummer"
 
@@ -926,8 +926,8 @@ msgid ""
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Du kan förena flera rapporter i ett enda fönster, för att få all information "
-"du vill ha snabbt tillgänglig. Använd rapporten Exempel & anpassade->”"
-"Anpassad flerkolumnsrapport”."
+"du vill ha snabbt tillgänglig. Använd rapporten Exempel & anpassade-"
+">”Anpassad flerkolumnsrapport”."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -1140,7 +1140,7 @@ msgstr "Nej"
 #: gnucash/gnome/assistant-hierarchy.cpp:1339
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1005
 #: gnucash/gtkbuilder/dialog-account.glade:273
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
 msgid "Placeholder"
 msgstr "Platshållare"
 
@@ -1222,8 +1222,6 @@ msgstr "Lån"
 msgid "Loan Repayment Option: \"%s\""
 msgstr "Avbetalningsalternativ: ”%s”"
 
-#. Translators: The following symbols will build the *
-#. * header line of exported CSV files:
 #: gnucash/gnome/assistant-loan.cpp:1877 gnucash/gnome/dialog-lot-viewer.c:984
 #: gnucash/gnome/gnc-split-reg.c:697 gnucash/gnome/reconcile-view.c:483
 #: gnucash/gnome-utils/gnc-tree-view-price.c:408
@@ -1234,8 +1232,8 @@ msgstr "Avbetalningsalternativ: ”%s”"
 #: gnucash/gtkbuilder/dialog-transfer.glade:128
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:368
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:144
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:551
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:562
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:365
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:380
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
 #: gnucash/import-export/import-main-matcher.c:1506
@@ -1341,7 +1339,7 @@ msgstr "Konto"
 
 #: gnucash/gnome/assistant-stock-split.c:588
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:362
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1025
 #: gnucash/report/reports/standard/portfolio.scm:245
 msgid "Symbol"
@@ -1791,7 +1789,7 @@ msgstr "Kontant"
 #: gnucash/gnome/gnc-split-reg.c:712
 #: gnucash/gtkbuilder/dialog-payment.glade:495
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:566
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:388
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
 #: gnucash/import-export/import-main-matcher.c:1511
 #: gnucash/import-export/import-match-picker.c:390
@@ -1808,7 +1806,7 @@ msgid "Memo"
 msgstr "Minnesanteckning"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1281
-#: gnucash/gnome/gnc-plugin-page-register.c:3399
+#: gnucash/gnome/gnc-plugin-page-register.c:3405
 #: gnucash/gtkbuilder/dialog-payment.glade:300
 #: gnucash/register/ledger-core/split-register.c:2440
 #: gnucash/report/reports/standard/general-journal.scm:82
@@ -1820,7 +1818,7 @@ msgid "Debit"
 msgstr "Debet"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1288
-#: gnucash/gnome/gnc-plugin-page-register.c:3395
+#: gnucash/gnome/gnc-plugin-page-register.c:3401
 #: gnucash/gtkbuilder/dialog-payment.glade:316
 #: gnucash/register/ledger-core/split-register.c:2463
 #: gnucash/register/ledger-core/split-register.c:2558
@@ -1858,7 +1856,7 @@ msgstr "Redigera…"
 #: gnucash/gnome/business-gnome-utils.c:351 gnucash/gnome/dialog-doclink.c:813
 #: gnucash/gnome/dialog-invoice.c:2801 gnucash/gnome/dialog-invoice.c:3026
 #: gnucash/gnome/dialog-invoice.c:3027 gnucash/gnome/dialog-invoice.c:3748
-#: gnucash/gnome-search/dialog-search.c:1076
+#: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:731
 #: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1097
@@ -1876,7 +1874,7 @@ msgstr "Traktamente"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:411
 #: gnucash/gnome/gnc-plugin-page-register.c:407
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1915
-#: gnucash/gnome-search/dialog-search.c:1092
+#: gnucash/gnome-search/dialog-search.c:1093
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:167
 #: gnucash/gtkbuilder/dialog-invoice.glade:8
 #: gnucash/gtkbuilder/dialog-invoice.glade:195
@@ -2031,7 +2029,7 @@ msgstr "Ta bort produkten?"
 #: gnucash/gnome/gnc-plugin-budget.c:329
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1655
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1067
-#: gnucash/gnome/gnc-plugin-page-register.c:1864
+#: gnucash/gnome/gnc-plugin-page-register.c:1870
 #: gnucash/gnome/gnc-split-reg.c:982 gnucash/gnome/gnc-split-reg.c:1020
 #: gnucash/gnome/gnc-split-reg.c:1242 gnucash/gnome/gnc-split-reg.c:1509
 #: gnucash/gnome/gnc-split-reg.c:1549 gnucash/gnome-search/search-account.c:237
@@ -2166,7 +2164,7 @@ msgid "Edit Customer"
 msgstr "Redigera kund"
 
 #: gnucash/gnome/dialog-customer.c:408
-#: gnucash/gnome-search/dialog-search.c:1082
+#: gnucash/gnome-search/dialog-search.c:1083
 #: gnucash/gtkbuilder/dialog-customer.glade:31
 msgid "New Customer"
 msgstr "Ny kund"
@@ -2261,7 +2259,7 @@ msgstr "Du måste välja en rapportkonfiguration att ta bort."
 msgid "Unable to change report configuration name."
 msgstr "Kunde inte ändra rapportkonfigurationens namn."
 
-#: gnucash/gnome/dialog-custom-report.c:492
+#: gnucash/gnome/dialog-custom-report.c:494
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
@@ -2269,15 +2267,15 @@ msgstr ""
 "En sparad rapportkonfiguration med detta namn finns redan, välj ett annat "
 "namn."
 
-#: gnucash/gnome/dialog-custom-report.c:518
+#: gnucash/gnome/dialog-custom-report.c:520
 msgid "Load report configuration"
 msgstr "Läs in rapportkonfiguration"
 
-#: gnucash/gnome/dialog-custom-report.c:520
+#: gnucash/gnome/dialog-custom-report.c:522
 msgid "Edit report configuration name"
 msgstr "Redigera rapportkonfigurationens namn"
 
-#: gnucash/gnome/dialog-custom-report.c:522
+#: gnucash/gnome/dialog-custom-report.c:524
 msgid "Delete report configuration"
 msgstr "Ta bort rapportkonfiguration"
 
@@ -2290,7 +2288,7 @@ msgid "Placeholder account selected. Please try again."
 msgstr "Platshållarkonto valdes. Försök igen."
 
 #: gnucash/gnome/dialog-doclink.c:160
-#: gnucash/gnome/gnc-plugin-page-register.c:4616
+#: gnucash/gnome/gnc-plugin-page-register.c:4622
 msgid "Select document"
 msgstr "Välj dokument"
 
@@ -2441,9 +2439,9 @@ msgstr "Transaktionens dokumentlänkar"
 #: gnucash/import-export/aqb/dialog-ab.glade:1744
 #: gnucash/import-export/aqb/dialog-ab.glade:1798
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:145
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:553
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:564
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:368
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:383
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:60
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
 #: gnucash/import-export/import-main-matcher.c:1510
 #: gnucash/import-export/import-match-picker.c:389
@@ -2493,7 +2491,7 @@ msgid "Edit Employee"
 msgstr "Redigera personal"
 
 #: gnucash/gnome/dialog-employee.c:289
-#: gnucash/gnome-search/dialog-search.c:1086
+#: gnucash/gnome-search/dialog-search.c:1087
 #: gnucash/gtkbuilder/dialog-employee.glade:7
 msgid "New Employee"
 msgstr "Ny personal"
@@ -2588,7 +2586,7 @@ msgstr "Platshållare"
 #: gnucash/gnome/dialog-find-account.c:426
 #: gnucash/gnome-utils/gnc-tree-view-account.c:997
 #: gnucash/gtkbuilder/dialog-account.glade:323
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
 msgid "Hidden"
 msgstr "Dold"
 
@@ -2631,8 +2629,8 @@ msgstr "Avslutande poster"
 #: gnucash/gnome/dialog-find-transactions.c:118
 #: gnucash/gnome/gnc-plugin-page-register.c:403
 #: gnucash/gnome/window-reconcile.c:1444
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:554
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:570
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:370
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:395
 msgid "Reconcile"
 msgstr "Stäm av"
 
@@ -2673,11 +2671,11 @@ msgstr "Avstämningsdatum"
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.c:2329
-#: gnucash/gnome/gnc-plugin-page-register.c:4019
-#: gnucash/gnome-search/dialog-search.c:878
-#: gnucash/gnome-search/dialog-search.c:884
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:566
+#: gnucash/gnome/gnc-plugin-page-register.c:2335
+#: gnucash/gnome/gnc-plugin-page-register.c:4025
+#: gnucash/gnome-search/dialog-search.c:879
+#: gnucash/gnome-search/dialog-search.c:885
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:387
 #: gnucash/report/trep-engine.scm:237
 msgid "Number/Action"
 msgstr "Nummer/Åtgärd"
@@ -2685,12 +2683,12 @@ msgstr "Nummer/Åtgärd"
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.c:2334
-#: gnucash/gnome/gnc-split-reg.c:718 gnucash/gnome-search/dialog-search.c:877
-#: gnucash/gnome-search/dialog-search.c:885
+#: gnucash/gnome/gnc-plugin-page-register.c:2340
+#: gnucash/gnome/gnc-split-reg.c:718 gnucash/gnome-search/dialog-search.c:878
+#: gnucash/gnome-search/dialog-search.c:886
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:103
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:566
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:387
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
 #: gnucash/register/ledger-core/split-register-model.c:332
@@ -2702,12 +2700,12 @@ msgstr "Åtgärd"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.c:2328
-#: gnucash/gnome/gnc-plugin-page-register.c:4018
-#: gnucash/gnome-search/dialog-search.c:880
-#: gnucash/gnome-search/dialog-search.c:886
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:552
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:563
+#: gnucash/gnome/gnc-plugin-page-register.c:2334
+#: gnucash/gnome/gnc-plugin-page-register.c:4024
+#: gnucash/gnome-search/dialog-search.c:881
+#: gnucash/gnome-search/dialog-search.c:887
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:367
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/report/trep-engine.scm:249
 msgid "Transaction Number"
 msgstr "Transaktionsnummer"
@@ -2715,13 +2713,13 @@ msgstr "Transaktionsnummer"
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.c:2333
-#: gnucash/gnome/gnc-split-reg.c:706 gnucash/gnome-search/dialog-search.c:879
-#: gnucash/gnome-search/dialog-search.c:887
+#: gnucash/gnome/gnc-plugin-page-register.c:2339
+#: gnucash/gnome/gnc-split-reg.c:706 gnucash/gnome-search/dialog-search.c:880
+#: gnucash/gnome-search/dialog-search.c:888
 #: gnucash/gtkbuilder/dialog-payment.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:99
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:552
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:563
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:367
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/report/trep-engine.scm:243
 msgid "Number"
@@ -2746,8 +2744,8 @@ msgstr "Beskrivning, Anteckningar, eller Minnesanteckning"
 #: gnucash/gtkbuilder/dialog-vendor.glade:453
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:503
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:142
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:564
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:384
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:133
 #: gnucash/register/ledger-core/split-register-model.c:496
@@ -2762,7 +2760,7 @@ msgid "Notes"
 msgstr "Anteckningar"
 
 #: gnucash/gnome/dialog-find-transactions.c:201
-#: gnucash/gnome-search/dialog-search.c:1485
+#: gnucash/gnome-search/dialog-search.c:1486
 msgid "Find Transaction"
 msgstr "Sök transaktion"
 
@@ -2939,7 +2937,7 @@ msgstr "Ny kreditnotering"
 
 #: gnucash/gnome/dialog-invoice.c:2316
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:230
-#: gnucash/gnome-search/dialog-search.c:1094
+#: gnucash/gnome-search/dialog-search.c:1095
 #: gnucash/gtkbuilder/dialog-invoice.glade:760
 msgid "New Invoice"
 msgstr "Ny faktura"
@@ -2964,7 +2962,7 @@ msgstr "Visa faktura"
 
 #: gnucash/gnome/dialog-invoice.c:2335
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:229
-#: gnucash/gnome-search/dialog-search.c:1078
+#: gnucash/gnome-search/dialog-search.c:1079
 msgid "New Bill"
 msgstr "Ny räkning"
 
@@ -2977,7 +2975,7 @@ msgid "View Bill"
 msgstr "Visa räkning"
 
 #: gnucash/gnome/dialog-invoice.c:2354
-#: gnucash/gnome-search/dialog-search.c:1090
+#: gnucash/gnome-search/dialog-search.c:1091
 msgid "New Expense Voucher"
 msgstr "Nytt traktamente"
 
@@ -3134,7 +3132,7 @@ msgstr "Traktamentets anteckningar"
 #: gnucash/gtkbuilder/dialog-invoice.glade:855
 #: gnucash/gtkbuilder/dialog-payment.glade:284
 #: gnucash/gtkbuilder/dialog-tax-info.glade:129
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:59
 #: gnucash/import-export/csv-imp/csv-account-import.c:154
 #: gnucash/register/ledger-core/split-register-model.c:367
 #: gnucash/report/reports/standard/account-summary.scm:379
@@ -3188,7 +3186,7 @@ msgid "Find Expense Voucher"
 msgstr "Sök traktamente"
 
 #: gnucash/gnome/dialog-invoice.c:3755
-#: gnucash/gnome-search/dialog-search.c:1088
+#: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/report/reports/standard/invoice.scm:733
 msgid "Expense Voucher"
 msgstr "Traktamente"
@@ -3265,7 +3263,7 @@ msgstr "Kursbeloppet måste vara giltigt eller lämnas tomt."
 msgid "Edit Job"
 msgstr "Redigera jobb"
 
-#: gnucash/gnome/dialog-job.c:246 gnucash/gnome-search/dialog-search.c:1098
+#: gnucash/gnome/dialog-job.c:246 gnucash/gnome-search/dialog-search.c:1099
 msgid "New Job"
 msgstr "Nytt jobb"
 
@@ -3334,7 +3332,7 @@ msgstr "Rubrik"
 #: gnucash/register/ledger-core/split-register-model.c:325
 #: gnucash/register/ledger-core/split-register-model.c:489
 #: gnucash/report/reports/standard/account-summary.scm:393
-#: gnucash/report/reports/standard/balance-forecast.scm:245
+#: gnucash/report/reports/standard/balance-forecast.scm:246
 #: gnucash/report/reports/standard/new-owner-report.scm:58
 #: gnucash/report/reports/standard/new-owner-report.scm:555
 #: gnucash/report/reports/standard/register.scm:163
@@ -3448,7 +3446,7 @@ msgstr ""
 "konverteringskursen."
 
 #: gnucash/gnome/dialog-payment.c:1288 gnucash/gnome/search-owner.c:211
-#: gnucash/gnome-search/dialog-search.c:1080
+#: gnucash/gnome-search/dialog-search.c:1081
 #: gnucash/gtkbuilder/dialog-customer.glade:473
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:153
 #: gnucash/gtkbuilder/dialog-invoice.glade:473
@@ -3463,7 +3461,7 @@ msgid "Customer"
 msgstr "Kund"
 
 #: gnucash/gnome/dialog-payment.c:1292 gnucash/gnome/search-owner.c:212
-#: gnucash/gnome-search/dialog-search.c:1112
+#: gnucash/gnome-search/dialog-search.c:1113
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:170
 #: gnucash/gtkbuilder/dialog-payment.glade:44
 #: gnucash/gtkbuilder/dialog-vendor.glade:469
@@ -3474,7 +3472,7 @@ msgid "Vendor"
 msgstr "Leverantör"
 
 #: gnucash/gnome/dialog-payment.c:1296 gnucash/gnome/search-owner.c:213
-#: gnucash/gnome-search/dialog-search.c:1084
+#: gnucash/gnome-search/dialog-search.c:1085
 #: gnucash/gtkbuilder/dialog-employee.glade:504
 #: gnucash/gtkbuilder/dialog-payment.glade:48
 #: gnucash/report/reports/standard/new-owner-report.scm:94
@@ -3494,7 +3492,7 @@ msgstr ""
 "faktura eller en räkning först?"
 
 #: gnucash/gnome/dialog-payment.c:1574
-#: gnucash/gnome/gnc-plugin-page-register.c:3235
+#: gnucash/gnome/gnc-plugin-page-register.c:3241
 #: gnucash/gnome-search/search-reconciled.c:224
 #: gnucash/gnome-utils/gnc-tree-view-account.c:876
 #: gnucash/report/trep-engine.scm:150
@@ -3502,7 +3500,7 @@ msgid "Cleared"
 msgstr "Rensat"
 
 #: gnucash/gnome/dialog-payment.c:1576
-#: gnucash/gnome/gnc-plugin-page-register.c:3237
+#: gnucash/gnome/gnc-plugin-page-register.c:3243
 #: gnucash/gnome-search/search-reconciled.c:227
 #: gnucash/gnome-utils/gnc-tree-view-account.c:890
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
@@ -3511,7 +3509,7 @@ msgstr "Rensat"
 msgid "Reconciled"
 msgstr "Avstämd"
 
-#: gnucash/gnome/dialog-payment.c:1613
+#: gnucash/gnome/dialog-payment.c:1614
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
@@ -3519,7 +3517,7 @@ msgstr ""
 "Den markerade transaktionen har inga delningar som kan tilldelas som "
 "betalningar"
 
-#: gnucash/gnome/dialog-payment.c:1627
+#: gnucash/gnome/dialog-payment.c:1626
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', GnuCash only knows how to handle one.\n"
@@ -3531,15 +3529,15 @@ msgstr ""
 "Välj en; de andra kommer att kastas.\n"
 "\n"
 
-#: gnucash/gnome/dialog-payment.c:1631
+#: gnucash/gnome/dialog-payment.c:1630
 msgid "Warning"
 msgstr "Varning"
 
-#: gnucash/gnome/dialog-payment.c:1634
+#: gnucash/gnome/dialog-payment.c:1633
 msgid "Continue"
 msgstr "Fortsätt"
 
-#: gnucash/gnome/dialog-payment.c:1635
+#: gnucash/gnome/dialog-payment.c:1634
 #: gnucash/gnome/gnc-plugin-page-invoice.c:293
 #: gnucash/gnome/gnc-plugin-page-register.c:396
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:160
@@ -3547,7 +3545,7 @@ msgstr "Fortsätt"
 msgid "Cancel"
 msgstr "Avbryt"
 
-#: gnucash/gnome/dialog-payment.c:1759
+#: gnucash/gnome/dialog-payment.c:1758
 #, c-format
 msgid ""
 "This transaction has splits in multiple business accounts:\n"
@@ -3690,21 +3688,21 @@ msgstr "(pausad)"
 msgid "Complete"
 msgstr "Komplett"
 
-#: gnucash/gnome/dialog-report-column-view.cpp:352
+#: gnucash/gnome/dialog-report-column-view.cpp:356
 msgid "Contents"
 msgstr "Innehåll"
 
-#: gnucash/gnome/dialog-report-column-view.cpp:380
+#: gnucash/gnome/dialog-report-column-view.cpp:384
 #: gnucash/report/reports/standard/customer-summary.scm:251
 #: gnucash/report/reports/standard/new-owner-report.scm:1030
 msgid "Report"
 msgstr "Rapport"
 
-#: gnucash/gnome/dialog-report-column-view.cpp:386
+#: gnucash/gnome/dialog-report-column-view.cpp:390
 msgid "Rows"
 msgstr "Rader"
 
-#: gnucash/gnome/dialog-report-column-view.cpp:392
+#: gnucash/gnome/dialog-report-column-view.cpp:396
 msgid "Cols"
 msgstr "Kolumner"
 
@@ -3904,7 +3902,7 @@ msgstr[1] ""
 "transaktioner har skapats automatiskt)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:999
-#: gnucash/gnome-search/dialog-search.c:1104
+#: gnucash/gnome-search/dialog-search.c:1105
 msgid "Transaction"
 msgstr "Transaktion"
 
@@ -3963,7 +3961,7 @@ msgstr "Formulär"
 msgid "Edit Vendor"
 msgstr "Redigera leverantör"
 
-#: gnucash/gnome/dialog-vendor.c:276 gnucash/gnome-search/dialog-search.c:1114
+#: gnucash/gnome/dialog-vendor.c:276 gnucash/gnome-search/dialog-search.c:1115
 #: gnucash/gtkbuilder/dialog-vendor.glade:31
 msgid "New Vendor"
 msgstr "Ny leverantör"
@@ -3992,7 +3990,7 @@ msgstr "Leverantörsnummer"
 msgid "Find Vendor"
 msgstr "Sök leverantör"
 
-#: gnucash/gnome/gnc-budget-view.c:500
+#: gnucash/gnome/gnc-budget-view.c:504
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:70
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:76
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:85
@@ -4009,7 +4007,7 @@ msgstr "Sök leverantör"
 msgid "Income"
 msgstr "Inkomst"
 
-#: gnucash/gnome/gnc-budget-view.c:503
+#: gnucash/gnome/gnc-budget-view.c:507
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
 #: gnucash/report/reports/standard/budget-income-statement.scm:481
@@ -4018,7 +4016,7 @@ msgstr "Inkomst"
 msgid "Expenses"
 msgstr "Utgifter"
 
-#: gnucash/gnome/gnc-budget-view.c:506
+#: gnucash/gnome/gnc-budget-view.c:510
 #: gnucash/gnome/gnc-plugin-page-register.c:394
 #: gnucash/register/ledger-core/split-register.c:2560
 #: gnucash/register/ledger-core/split-register-layout.c:721
@@ -4027,11 +4025,11 @@ msgstr "Utgifter"
 msgid "Transfer"
 msgstr "Överföring"
 
-#: gnucash/gnome/gnc-budget-view.c:509
+#: gnucash/gnome/gnc-budget-view.c:513
 msgid "Remaining to Budget"
 msgstr "Kvarstår att budgetera"
 
-#: gnucash/gnome/gnc-budget-view.c:1626 gnucash/gnome/window-reconcile.c:1166
+#: gnucash/gnome/gnc-budget-view.c:1644 gnucash/gnome/window-reconcile.c:1166
 #: gnucash/gnome-utils/gnc-tree-view-account.c:924
 #: gnucash/report/html-acct-table.scm:789
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:279
@@ -4109,8 +4107,8 @@ msgstr "Ta bort"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:339
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1895
-#: gnucash/gnome/gnc-plugin-page-register.c:1812
-#: gnucash/gnome/gnc-plugin-page-register.c:4950
+#: gnucash/gnome/gnc-plugin-page-register.c:1818
+#: gnucash/gnome/gnc-plugin-page-register.c:4956
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr "'Kontrollera & reparera' körs just nu, vill du avbryta processen?"
 
@@ -4125,7 +4123,7 @@ msgstr "'Kontrollera & reparera' körs just nu, vill du avbryta processen?"
 #: gnucash/report/reports/standard/account-piecharts.scm:532
 #: gnucash/report/reports/standard/account-summary.scm:79
 #: gnucash/report/reports/standard/advanced-portfolio.scm:126
-#: gnucash/report/reports/standard/balance-forecast.scm:37
+#: gnucash/report/reports/standard/balance-forecast.scm:38
 #: gnucash/report/reports/standard/balance-sheet.scm:80
 #: gnucash/report/reports/standard/balsheet-pnl.scm:74
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:49
@@ -4387,6 +4385,7 @@ msgstr "Mata in en betalning för ägaren av fakturan"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:233
 #: gnucash/gnome/gnc-plugin-page-invoice.c:258
 #: gnucash/gnome/gnc-plugin-page-invoice.c:283
+#: gnucash/ui/gnc-plugin-page-invoice.ui:207
 msgid "_Company Report"
 msgstr "För_etagsrapport"
 
@@ -4724,6 +4723,7 @@ msgstr "Nytt traktamente"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:232
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:866
+#: gnucash/ui/gnc-plugin-page-owner-tree.ui:125
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:527
 msgid "Vendor Listing"
 msgstr "Leverantörslista"
@@ -4920,7 +4920,7 @@ msgid "Delete the current split"
 msgstr "Ta bort aktuell transaktionsdel"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:399
-#: gnucash/gnome-search/dialog-search.c:1108
+#: gnucash/gnome-search/dialog-search.c:1109
 msgid "Split"
 msgstr "Delar"
 
@@ -4946,20 +4946,20 @@ msgid "Stock Assistant"
 msgstr "Aktieassistent"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:660
-#: gnucash/gnome/gnc-plugin-page-register.c:1919
-#: gnucash/gnome/gnc-plugin-page-register.c:3330
+#: gnucash/gnome/gnc-plugin-page-register.c:1925
+#: gnucash/gnome/gnc-plugin-page-register.c:3336
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "Allmän journal"
 
 #. Translators: %s is the name
 #. of the tab page
-#: gnucash/gnome/gnc-plugin-page-register.c:1853
+#: gnucash/gnome/gnc-plugin-page-register.c:1859
 #, c-format
 msgid "Save changes to %s?"
 msgstr "Spara ändringar till %s?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1858
+#: gnucash/gnome/gnc-plugin-page-register.c:1864
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -4969,104 +4969,104 @@ msgstr ""
 "ändringarna till denna transaktion, kasta transaktionen, eller avbryta "
 "åtgärden?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1861
+#: gnucash/gnome/gnc-plugin-page-register.c:1867
 msgid "_Discard Transaction"
 msgstr "_Kasta transaktion"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1865
+#: gnucash/gnome/gnc-plugin-page-register.c:1871
 msgid "_Save Transaction"
 msgstr "_Spara transaktion"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1898
-#: gnucash/gnome/gnc-plugin-page-register.c:1933
-#: gnucash/gnome/gnc-plugin-page-register.c:1946
-#: gnucash/gnome/gnc-plugin-page-register.c:2003
-#: gnucash/gnome/gnc-plugin-page-register.c:2101
-#: gnucash/gnome/gnc-plugin-page-register.c:2224
+#: gnucash/gnome/gnc-plugin-page-register.c:1904
+#: gnucash/gnome/gnc-plugin-page-register.c:1939
+#: gnucash/gnome/gnc-plugin-page-register.c:1952
+#: gnucash/gnome/gnc-plugin-page-register.c:2009
+#: gnucash/gnome/gnc-plugin-page-register.c:2107
+#: gnucash/gnome/gnc-plugin-page-register.c:2230
 msgid "unknown"
 msgstr "okänd"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1921
-#: gnucash/gnome/gnc-plugin-page-register.c:3336
+#: gnucash/gnome/gnc-plugin-page-register.c:1927
+#: gnucash/gnome/gnc-plugin-page-register.c:3342
 msgid "Portfolio"
 msgstr "Portfölj"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1923
-#: gnucash/gnome/gnc-plugin-page-register.c:3342
+#: gnucash/gnome/gnc-plugin-page-register.c:1929
+#: gnucash/gnome/gnc-plugin-page-register.c:3348
 msgid "Search Results"
 msgstr "Sökresultat"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3208
+#: gnucash/gnome/gnc-plugin-page-register.c:3214
 msgid "Start Date:"
 msgstr "Startdatum:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3215
+#: gnucash/gnome/gnc-plugin-page-register.c:3221
 msgid "Show previous number of days:"
 msgstr "Visa antal föregående dagar:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3223
+#: gnucash/gnome/gnc-plugin-page-register.c:3229
 msgid "End Date:"
 msgstr "Slutdatum:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3233
+#: gnucash/gnome/gnc-plugin-page-register.c:3239
 #: gnucash/report/trep-engine.scm:149
 msgid "Unreconciled"
 msgstr "Ej avstämd"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3239
+#: gnucash/gnome/gnc-plugin-page-register.c:3245
 #: gnucash/gnome-search/search-reconciled.c:230
 #: gnucash/report/trep-engine.scm:152
 msgid "Frozen"
 msgstr "Frusen"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3241
+#: gnucash/gnome/gnc-plugin-page-register.c:3247
 #: gnucash/gnome-search/search-reconciled.c:233
 #: gnucash/report/trep-engine.scm:153
 msgid "Voided"
 msgstr "Annullerad"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3251
+#: gnucash/gnome/gnc-plugin-page-register.c:3257
 msgid "Show:"
 msgstr "Visa:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3259
+#: gnucash/gnome/gnc-plugin-page-register.c:3265
 msgid "Hide:"
 msgstr "Dölj:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3270
+#: gnucash/gnome/gnc-plugin-page-register.c:3276
 msgid "Filter By:"
 msgstr "Filtrera efter:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3332
-#: gnucash/gnome/gnc-plugin-page-register.c:3350
+#: gnucash/gnome/gnc-plugin-page-register.c:3338
+#: gnucash/gnome/gnc-plugin-page-register.c:3356
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
 msgstr "Transaktionsrapport"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3338
+#: gnucash/gnome/gnc-plugin-page-register.c:3344
 msgid "Portfolio Report"
 msgstr "Portföljsrapport"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3344
+#: gnucash/gnome/gnc-plugin-page-register.c:3350
 msgid "Search Results Report"
 msgstr "Sökresultatsrapport"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3348
+#: gnucash/gnome/gnc-plugin-page-register.c:3354
 #: gnucash/gtkbuilder/dialog-preferences.glade:2791
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
 msgstr "Register"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3366
+#: gnucash/gnome/gnc-plugin-page-register.c:3372
 msgid "and subaccounts"
 msgstr "och underkonton"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3537
+#: gnucash/gnome/gnc-plugin-page-register.c:3543
 msgid "Print checks from multiple accounts?"
 msgstr "Skriv ut checkar från flera konton?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3539
+#: gnucash/gnome/gnc-plugin-page-register.c:3545
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5074,53 +5074,53 @@ msgstr ""
 "Det här sökresultatet innehåller delar från fler än ett konto. Vill du "
 "skriva ut checkarna även om de inte kommer från samma konto?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3549
+#: gnucash/gnome/gnc-plugin-page-register.c:3555
 msgid "_Print checks"
 msgstr "_Skriv ut checkar"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3568
+#: gnucash/gnome/gnc-plugin-page-register.c:3574
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr ""
 "Du kan endast skriva ut checkar från ett bankkontoregister eller sökresultat."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3784
+#: gnucash/gnome/gnc-plugin-page-register.c:3790
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
 "Du kan inte annullera en transaktion med avstämda eller clearade delar."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3791
+#: gnucash/gnome/gnc-plugin-page-register.c:3797
 #: gnucash/gnome/gnc-split-reg.c:1167
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "Denna transaktion är markerad som skrivskyddad med kommentaren: '%s'"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3884
+#: gnucash/gnome/gnc-plugin-page-register.c:3890
 #: gnucash/gnome/gnc-split-reg.c:1138
 msgid "A reversing entry has already been created for this transaction."
 msgstr "En omvänd post har redan skapats för den här transaktionen."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3885
+#: gnucash/gnome/gnc-plugin-page-register.c:3891
 msgid "Jump to the transaction?"
 msgstr "Hoppa till transaktion?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3892
+#: gnucash/gnome/gnc-plugin-page-register.c:3898
 msgid "Reverse Transaction"
 msgstr "Omvänd transaktion"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3893
+#: gnucash/gnome/gnc-plugin-page-register.c:3899
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
 msgid "New Transaction Information"
 msgstr "Ny transaktionsinformation"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:3983
+#: gnucash/gnome/gnc-plugin-page-register.c:3989
 #, c-format
 msgid "Sort %s by…"
 msgstr "Sortera %s efter…"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4073
+#: gnucash/gnome/gnc-plugin-page-register.c:4079
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
 msgid "Filter %s by…"
@@ -5129,26 +5129,26 @@ msgstr "Filtrera %s efter…"
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4607
+#: gnucash/gnome/gnc-plugin-page-register.c:4613
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr "%s %s från %s, registrerad %s, belopp %s"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4617
+#: gnucash/gnome/gnc-plugin-page-register.c:4623
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr "Flera dokument är länkade med den här transaktionen. Välj ett av dem:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4618
+#: gnucash/gnome/gnc-plugin-page-register.c:4624
 #: gnucash/gnome-search/dialog-search.c:323
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:172
 msgid "Select"
 msgstr "Välj"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4673
+#: gnucash/gnome/gnc-plugin-page-register.c:4679
 msgid "Go to Date"
 msgstr "Gå till datum"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4975
+#: gnucash/gnome/gnc-plugin-page-register.c:4981
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr "Kontrollerar delningar i aktuellt register: %u av %u"
@@ -5158,7 +5158,7 @@ msgid "Print"
 msgstr "Skriv ut"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:224
-#: gnucash/gnome-utils/dialog-file-access.c:328
+#: gnucash/gnome-utils/dialog-file-access.c:339
 #: gnucash/gnome-utils/gnc-file.c:109 gnucash/gnome-utils/gnc-file.c:351
 msgid "Export"
 msgstr "Export"
@@ -5204,11 +5204,13 @@ msgstr ""
 "att sparas i filen %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1271
+#: gnucash/ui/gnc-plugin-page-report.ui:43
 #: gnucash/ui/gnc-plugin-page-report.ui:224
 msgid "Save _Report Configuration"
 msgstr "Spara _rapportkonfiguration"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1272
+#: gnucash/ui/gnc-plugin-page-report.ui:50
 #: gnucash/ui/gnc-plugin-page-report.ui:239
 msgid "Save Report Configuration As…"
 msgstr "Spara rapportkonfiguration som…"
@@ -5725,7 +5727,7 @@ msgstr "En enkel översikt för dina bokföringsdata"
 msgid "You have not selected an owner"
 msgstr "Du har inte valt någon ägare"
 
-#: gnucash/gnome/search-owner.c:214 gnucash/gnome-search/dialog-search.c:1096
+#: gnucash/gnome/search-owner.c:214 gnucash/gnome-search/dialog-search.c:1097
 #: gnucash/gtkbuilder/dialog-invoice.glade:278
 #: gnucash/gtkbuilder/dialog-invoice.glade:500
 #: gnucash/gtkbuilder/dialog-invoice.glade:1051
@@ -5902,7 +5904,7 @@ msgstr "Det finns inga alternativ för denna rapport."
 msgid "You must select an item from the list"
 msgstr "Du måste välja ett val i listan"
 
-#: gnucash/gnome-search/dialog-search.c:705
+#: gnucash/gnome-search/dialog-search.c:706
 #: gnucash/gnome-utils/gnc-recurrence.c:547
 #: gnucash/gtkbuilder/dialog-commodities.glade:138
 #: gnucash/gtkbuilder/dialog-doclink.glade:215
@@ -5910,42 +5912,42 @@ msgstr "Du måste välja ett val i listan"
 msgid "_Remove"
 msgstr "Ta bo_rt"
 
-#: gnucash/gnome-search/dialog-search.c:1100
+#: gnucash/gnome-search/dialog-search.c:1101
 msgid "Order"
 msgstr "Order"
 
-#: gnucash/gnome-search/dialog-search.c:1102
+#: gnucash/gnome-search/dialog-search.c:1103
 #: gnucash/gtkbuilder/dialog-order.glade:421
 msgid "New Order"
 msgstr "Ny order"
 
-#: gnucash/gnome-search/dialog-search.c:1106
+#: gnucash/gnome-search/dialog-search.c:1107
 msgid "New Transaction"
 msgstr "Ny transaktion"
 
-#: gnucash/gnome-search/dialog-search.c:1110
+#: gnucash/gnome-search/dialog-search.c:1111
 msgid "New Split"
 msgstr "Ny delning"
 
-#: gnucash/gnome-search/dialog-search.c:1119
+#: gnucash/gnome-search/dialog-search.c:1120
 msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,…)!"
 msgid "New item"
 msgstr "Ny post"
 
-#: gnucash/gnome-search/dialog-search.c:1162
+#: gnucash/gnome-search/dialog-search.c:1163
 #: gnucash/gnome-utils/gnc-recurrence.c:544
 #: gnucash/gtkbuilder/dialog-commodities.glade:121
 #: gnucash/gtkbuilder/dialog-price.glade:848
 msgid "_Add"
 msgstr "_Lägg till"
 
-#: gnucash/gnome-search/dialog-search.c:1172
+#: gnucash/gnome-search/dialog-search.c:1173
 msgid "all criteria are met"
 msgstr "alla kriterier uppfylls"
 
-#: gnucash/gnome-search/dialog-search.c:1173
+#: gnucash/gnome-search/dialog-search.c:1174
 msgid "any criteria are met"
 msgstr "något kriterium uppfylls"
 
@@ -6502,7 +6504,7 @@ msgstr "Välj valuta"
 msgid "Cu_rrency"
 msgstr "Va_luta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:760
+#: gnucash/gnome-utils/dialog-commodity.c:762
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:412
 #: gnucash/gnome-utils/gnc-tree-view-price.c:402
 #: gnucash/gtkbuilder/dialog-customer.glade:506
@@ -6514,45 +6516,45 @@ msgstr "Va_luta"
 msgid "Currency"
 msgstr "Valuta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:855
+#: gnucash/gnome-utils/dialog-commodity.c:857
 msgid "Use local time"
 msgstr "Använd lokal tid"
 
-#: gnucash/gnome-utils/dialog-commodity.c:985
+#: gnucash/gnome-utils/dialog-commodity.c:987
 msgid "Edit currency"
 msgstr "Redigera valuta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:986
+#: gnucash/gnome-utils/dialog-commodity.c:988
 msgid "Currency Information"
 msgstr "Valutainformation"
 
-#: gnucash/gnome-utils/dialog-commodity.c:991
+#: gnucash/gnome-utils/dialog-commodity.c:993
 msgid "Edit security"
 msgstr "Redigera värdepapper"
 
-#: gnucash/gnome-utils/dialog-commodity.c:991
+#: gnucash/gnome-utils/dialog-commodity.c:993
 msgid "New security"
 msgstr "Nytt värdepapper"
 
-#: gnucash/gnome-utils/dialog-commodity.c:992
+#: gnucash/gnome-utils/dialog-commodity.c:994
 #: gnucash/gtkbuilder/dialog-commodity.glade:229
 msgid "Security Information"
 msgstr "Värdepappersinformation"
 
-#: gnucash/gnome-utils/dialog-commodity.c:1269
+#: gnucash/gnome-utils/dialog-commodity.c:1271
 msgid "You may not create a new national currency."
 msgstr "Du kan inte skapa en ny nationell valuta."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1279
+#: gnucash/gnome-utils/dialog-commodity.c:1281
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
 msgstr "%s är en reserverad produkttyp. Använd något annat."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1294
+#: gnucash/gnome-utils/dialog-commodity.c:1296
 msgid "That commodity already exists."
 msgstr "Den produkten finns redan."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1345
+#: gnucash/gnome-utils/dialog-commodity.c:1347
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
 "\" for the commodity."
@@ -6585,11 +6587,11 @@ msgstr "Du kan skriva '+' eller '-' för att öka eller minska numret."
 msgid "Action/Number"
 msgstr "Åtgärd/Nummer"
 
-#: gnucash/gnome-utils/dialog-file-access.c:312
+#: gnucash/gnome-utils/dialog-file-access.c:323
 msgid "Open…"
 msgstr "Öppna…"
 
-#: gnucash/gnome-utils/dialog-file-access.c:313
+#: gnucash/gnome-utils/dialog-file-access.c:324
 #: gnucash/gnome-utils/gnc-file.c:88
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:103
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:106
@@ -6598,15 +6600,32 @@ msgstr "Öppna…"
 msgid "_Open"
 msgstr "_Öppna"
 
-#: gnucash/gnome-utils/dialog-file-access.c:319
+#: gnucash/gnome-utils/dialog-file-access.c:330
 msgid "Save As…"
 msgstr "Spara som…"
 
-#: gnucash/gnome-utils/dialog-file-access.c:320
-#: gnucash/gnome-utils/dialog-file-access.c:329
+#: gnucash/gnome-utils/dialog-file-access.c:331
+#: gnucash/gnome-utils/dialog-file-access.c:340
 #: gnucash/gtkbuilder/dialog-file-access.glade:40
 msgid "_Save As"
 msgstr "_Spara som"
+
+#: gnucash/gnome-utils/dialog-file-access.c:359
+#: gnucash/gnome-utils/gnc-file.c:147
+msgid "All files"
+msgstr "Alla filer"
+
+#. Translators: *.gnucash and *.xac are file patterns and must not
+#. be translated
+#: gnucash/gnome-utils/dialog-file-access.c:366
+msgid "Datafiles only (*.gnucash, *.xac)"
+msgstr ""
+
+#. Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
+#. patterns and must not be translated
+#: gnucash/gnome-utils/dialog-file-access.c:376
+msgid "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
+msgstr ""
 
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
@@ -6933,8 +6952,8 @@ msgstr[0] ""
 "GnuCash har en funktion för att spara filen automatiskt var %d:a minut, som "
 "om du trycker på ”Spara”-knappen varje gång.\n"
 "\n"
-"Du kan ändra tidsintervallet eller stänga av funktionen under "
-"Redigera->Inställningar->Allmänt->Tidsintervall för autospara.\n"
+"Du kan ändra tidsintervallet eller stänga av funktionen under Redigera-"
+">Inställningar->Allmänt->Tidsintervall för autospara.\n"
 "\n"
 "Ska din fil sparas automatiskt?"
 msgstr[1] ""
@@ -6942,8 +6961,8 @@ msgstr[1] ""
 "GnuCash har en funktion för att spara filen automatiskt var %d:e minut, "
 "precis som om du tryckte på ”Spara”-knappen varje gång.\n"
 "\n"
-"Du kan ändra tidsintervallet eller stänga av funktionen under "
-"Redigera->Inställningar->Allmänt->Tidsintervall för autospara.\n"
+"Du kan ändra tidsintervallet eller stänga av funktionen under Redigera-"
+">Inställningar->Allmänt->Tidsintervall för autospara.\n"
 "\n"
 "Ska din fil sparas automatiskt?"
 
@@ -7081,10 +7100,6 @@ msgstr "Spara"
 #: gnucash/gnome-utils/gnc-file.c:106 gnucash/ui/gnc-main-window.ui:51
 msgid "_Export"
 msgstr "E_xportera"
-
-#: gnucash/gnome-utils/gnc-file.c:147
-msgid "All files"
-msgstr "Alla filer"
 
 #: gnucash/gnome-utils/gnc-file.c:261
 msgid "(null)"
@@ -7341,8 +7356,8 @@ msgid ""
 msgstr ""
 "GnuCash kunde inte slutföra ett kritiskt test för att hitta ett fel i "
 "biblioteket ”libdbi”. Det kan ha orsakats av felkonfigurerade "
-"åtkomsträttigheter för din SQL-databas. Se https://bugs.gnucash.org/"
-"show_bug.cgi?id=645216 för vidare information."
+"åtkomsträttigheter för din SQL-databas. Se https://bugs.gnucash.org/show_bug."
+"cgi?id=645216 för vidare information."
 
 #: gnucash/gnome-utils/gnc-file.c:537
 msgid ""
@@ -7580,25 +7595,25 @@ msgstr "Senast ändrad på %a, %b %d, %Y %I:%M %p"
 msgid "File %s opened. %s"
 msgstr "Filen %s öppnades. %s"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:2921
+#: gnucash/gnome-utils/gnc-main-window.cpp:2922
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr "k"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:3008
+#: gnucash/gnome-utils/gnc-main-window.cpp:3009
 msgid "Unable to save to database."
 msgstr "Kunde inte spara till databas."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:3010
+#: gnucash/gnome-utils/gnc-main-window.cpp:3011
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "Kunde inte spara till databas: Boken är märkt som skrivskyddad."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4641
+#: gnucash/gnome-utils/gnc-main-window.cpp:4644
 #: gnucash/gtkbuilder/assistant-qif-import.glade:943
 msgid "Book Options"
 msgstr "Bokinställningar"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4965
+#: gnucash/gnome-utils/gnc-main-window.cpp:4968
 msgid ""
 "The maximum number of window menu entries reached, no more entries will be "
 "added."
@@ -7606,28 +7621,28 @@ msgstr ""
 "Högsta antal fönstermenyposter har uppnåtts, inga fler poster kommer att "
 "läggas till."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5205
+#: gnucash/gnome-utils/gnc-main-window.cpp:5208
 #: gnucash/gnucash-core-app.cpp:252
 msgid "(user modifiable)"
 msgstr "(justerbar)"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.cpp:5231
+#: gnucash/gnome-utils/gnc-main-window.cpp:5234
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr "Copyright © 1997-%s GnuCash:s gemenskap."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5243
+#: gnucash/gnome-utils/gnc-main-window.cpp:5246
 #: gnucash/gnome-utils/gnc-splash.c:98
 msgid "Version"
 msgstr "Version"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5244
+#: gnucash/gnome-utils/gnc-main-window.cpp:5247
 #: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:269
 msgid "Build ID"
 msgstr "Bygges-ID"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5252
+#: gnucash/gnome-utils/gnc-main-window.cpp:5255
 msgid "Accounting for personal and small business finance."
 msgstr "Bokföring för privat bruk och småföretag."
 
@@ -7635,7 +7650,7 @@ msgstr "Bokföring för privat bruk och småföretag."
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.cpp:5261
+#: gnucash/gnome-utils/gnc-main-window.cpp:5264
 msgid "translator-credits"
 msgstr ""
 "Översättning av\n"
@@ -7646,7 +7661,7 @@ msgstr ""
 "Erik Johansson <erik@ejohansson.se>, 2014, 2016\n"
 "Arve Eriksson <031299870@telia.com>, 2021"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5264
+#: gnucash/gnome-utils/gnc-main-window.cpp:5267
 msgid "Visit the GnuCash website."
 msgstr "Besök GnuCash:s webbplats."
 
@@ -7749,6 +7764,11 @@ msgstr "Slutet på denna räkenskapsperioden"
 msgid "End of previous accounting period"
 msgstr "Slutet på föregående räkenskapsperioden"
 
+#: gnucash/gnome-utils/gnc-plugin-menu-additions.c:443
+#: gnucash/report/report-core.scm:161
+msgid "_Custom"
+msgstr "_Anpassade"
+
 #: gnucash/gnome-utils/gnc-report-combo.c:259
 msgid "Selected Report is Missing"
 msgstr "Vald rapport saknas"
@@ -7779,9 +7799,9 @@ msgstr "Nytt huvudkonto"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:806
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:983
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:551
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:567
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:366
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:390
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:59
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:276
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
@@ -7797,7 +7817,7 @@ msgid "Commodity"
 msgstr "Vara"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:823
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:60
 #: gnucash/report/reports/standard/account-summary.scm:114
 #: gnucash/report/reports/standard/account-summary.scm:378
 #: gnucash/report/reports/standard/general-ledger.scm:74
@@ -7863,7 +7883,7 @@ msgstr "F"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:955
 #: gnucash/gnome-utils/gnc-tree-view-account.c:958
 #: gnucash/gtkbuilder/dialog-preferences.glade:816
-#: gnucash/import-export/csv-exp/csv-tree-export.c:156
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:60
 msgid "Account Color"
 msgstr "Kontofärg"
 
@@ -7879,7 +7899,7 @@ msgid "Balance Limit"
 msgstr "Saldogräns"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:984
-#: gnucash/import-export/csv-exp/csv-tree-export.c:158
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
 msgid "Tax Info"
 msgstr "Skatteinfo"
 
@@ -7942,7 +7962,7 @@ msgid "Filter %s by..."
 msgstr "Filtrera %s efter..."
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
-#: gnucash/import-export/csv-exp/csv-tree-export.c:157
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 msgid "Namespace"
 msgstr "Namnrymd"
 
@@ -8223,27 +8243,27 @@ msgstr "Ange exporttyp\n"
 msgid "Output file for report\n"
 msgstr "Utdatafil för rapport\n"
 
-#: gnucash/gnucash-cli.cpp:145 gnucash/gnucash-cli.cpp:180
+#: gnucash/gnucash-cli.cpp:147 gnucash/gnucash-cli.cpp:182
 msgid "Missing data file parameter"
 msgstr "Saknar datafilparameter"
 
-#: gnucash/gnucash-cli.cpp:158
+#: gnucash/gnucash-cli.cpp:160
 msgid "Not enough information for quotes dump"
 msgstr "För lite information för prisdump"
 
-#: gnucash/gnucash-cli.cpp:168
+#: gnucash/gnucash-cli.cpp:170
 msgid "Unknown quotes command '{1}'"
 msgstr "Okänt kurskommando '{1}'"
 
-#: gnucash/gnucash-cli.cpp:204
+#: gnucash/gnucash-cli.cpp:206
 msgid "Missing --name parameter"
 msgstr "Saknar --name-parameter"
 
-#: gnucash/gnucash-cli.cpp:212
+#: gnucash/gnucash-cli.cpp:214
 msgid "Unknown report command '{1}'"
 msgstr "Okänt rapportkommando '{1}'"
 
-#: gnucash/gnucash-cli.cpp:218
+#: gnucash/gnucash-cli.cpp:220
 msgid "Missing command or option"
 msgstr "Saknar kommando eller alternativ"
 
@@ -8338,8 +8358,8 @@ msgid ""
 "Examples: \"--log qof=debug\" or \"--log gnc.backend.file.sx=info\"\n"
 "This can be invoked multiple times."
 msgstr ""
-"Åsidosättningar för loggnivå, i formen "
-"”modulename={debug,info,warn,crit,error}”\n"
+"Åsidosättningar för loggnivå, i formen ”modulename={debug,info,warn,crit,"
+"error}”\n"
 "Exempel: ”--log qof=debug” eller ”--log gnc.backend.file.sx=info”\n"
 "Detta kan anropas flera gånger."
 
@@ -8573,8 +8593,8 @@ msgid ""
 "active."
 msgstr ""
 "Detta fält styr antalet dagar i förväg som GnuCash kommer att kontrollera om "
-"det finns förfallande fakturor. Värdet används bara om inställningen ”"
-"Avisera vid förfallodatum” är aktiv."
+"det finns förfallande fakturor. Värdet används bara om inställningen "
+"”Avisera vid förfallodatum” är aktiv."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:127
 msgid "Enable extra toolbar buttons for business"
@@ -8591,7 +8611,7 @@ msgstr ""
 "inte."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:132
-#: libgnucash/engine/gnc-optiondb.cpp:1235
+#: libgnucash/engine/gnc-optiondb.cpp:1238
 msgid "The invoice report to be used for printing."
 msgstr "Fakturarapporten som ska användas vid utskrift."
 
@@ -8668,8 +8688,8 @@ msgid ""
 "active."
 msgstr ""
 "Fältet definierar antal dagar innan som GnuCash kommer att kontrollera om "
-"det finns förfallande räkningar. Dess värde används endast om inställningen ”"
-"Avisera vid förfallodatum” är aktiv."
+"det finns förfallande räkningar. Dess värde används endast om inställningen "
+"”Avisera vid förfallodatum” är aktiv."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
@@ -9303,8 +9323,8 @@ msgid ""
 "show the dialog, otherwise it is not shown."
 msgstr ""
 "Inställningen styr huruvida dialogrutan som endast aviserar schemalagda "
-"transaktioner ”sedan senaste körningen” visas när en datafil öppnas (om ”"
-"sedan senaste körningen”-behandling är aktiverat vid öppning av filer). "
+"transaktioner ”sedan senaste körningen” visas när en datafil öppnas (om "
+"”sedan senaste körningen”-behandling är aktiverat vid öppning av filer). "
 "Detta inkluderar öppning av datafiler när GnuCash först startas. Om "
 "inställningen är aktiv visas dialogen, annars visas den inte."
 
@@ -9438,8 +9458,8 @@ msgid ""
 msgstr ""
 "Inställningen bestämmer vilket tecken som används mellan element i ett "
 "kontonamn. Möjliga värden är ett enstaka godtyckligt icke-alfanumeriskt "
-"unicode-tecken, eller en av följande strängar: ”colon”, ”slash”, ”backslash”"
-", ”dash” och ”period”."
+"unicode-tecken, eller en av följande strängar: ”colon”, ”slash”, "
+"”backslash”, ”dash” och ”period”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 msgid "Transaction Linked Files head path"
@@ -9695,8 +9715,8 @@ msgid ""
 msgstr ""
 "Om det är aktivt kommer en ”stäng”-knapp att visas på alla "
 "anteckningsblocksflikar som kan stängas. Annars visas ingen sådan knapp på "
-"fliken. Oavsett inställning kan sidor alltid stängas via menyobjektet ”stäng”"
-" eller ”stäng”-knappen på verktygsfältet."
+"fliken. Oavsett inställning kan sidor alltid stängas via menyobjektet "
+"”stäng” eller ”stäng”-knappen på verktygsfältet."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:130
 msgid "Width of notebook tabs"
@@ -9786,9 +9806,9 @@ msgid ""
 "for United Kingdom style dates, and \"us\" for United States style dates."
 msgstr ""
 "Inställningen väljer hur datum visas i GnuCash. Möjliga värden för "
-"inställningen är ”Lokal” för att använda systemets lokalinställning, ”Europa”"
-" för kontinentaleuropeisk stil, ”ISO” för ISO 8601-standard, ”Storbritannien”"
-" för brittisk stil, och ”USA” för amerikansk stil."
+"inställningen är ”Lokal” för att använda systemets lokalinställning, "
+"”Europa” för kontinentaleuropeisk stil, ”ISO” för ISO 8601-standard, "
+"”Storbritannien” för brittisk stil, och ”USA” för amerikansk stil."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1125
@@ -11192,8 +11212,8 @@ msgstr ""
 "som visas för att ange kolumnbredd, högerklicka sedan för att ändra vid "
 "behov.\n"
 "\n"
-"Exempel är ”FTSE”,”RR.L”,”21/11/2016”,5.345,”GBP” och "
-"CURRENCY;USD;2016-11-21;1.56;GBP\n"
+"Exempel är ”FTSE”,”RR.L”,”21/11/2016”,5.345,”GBP” och CURRENCY;"
+"USD;2016-11-21;1.56;GBP\n"
 "\n"
 "Det finns ett alternativ för att specificera startrad, slutrad, och ett "
 "alternativ för att hoppa över alternerande rader från startraden vilket kan "
@@ -11861,7 +11881,7 @@ msgstr ""
 #: gnucash/report/reports/example/daily-reports.scm:52
 #: gnucash/report/reports/standard/account-piecharts.scm:65
 #: gnucash/report/reports/standard/account-summary.scm:73
-#: gnucash/report/reports/standard/balance-forecast.scm:40
+#: gnucash/report/reports/standard/balance-forecast.scm:41
 #: gnucash/report/reports/standard/balsheet-pnl.scm:52
 #: gnucash/report/reports/standard/cashflow-barchart.scm:55
 #: gnucash/report/reports/standard/cash-flow.scm:42
@@ -12016,7 +12036,7 @@ msgstr "Intervall"
 #: gnucash/report/reports/example/daily-reports.scm:53
 #: gnucash/report/reports/standard/account-piecharts.scm:66
 #: gnucash/report/reports/standard/account-summary.scm:74
-#: gnucash/report/reports/standard/balance-forecast.scm:41
+#: gnucash/report/reports/standard/balance-forecast.scm:42
 #: gnucash/report/reports/standard/balsheet-pnl.scm:53
 #: gnucash/report/reports/standard/cashflow-barchart.scm:56
 #: gnucash/report/reports/standard/cash-flow.scm:43
@@ -12067,8 +12087,8 @@ msgstr ""
 "Importprocessen består av flera steg. Dina GnuCash-konton kommer inte att "
 "ändras förrän du klickar på ”Verkställ” i slutet av processen.\n"
 "\n"
-"Klicka på ”Nästa” för att starta inläsningen av dina QIF-data, eller ”Avbryt”"
-" för att avbryta processen."
+"Klicka på ”Nästa” för att starta inläsningen av dina QIF-data, eller "
+"”Avbryt” för att avbryta processen."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:35
 msgid "Import QIF files"
@@ -12171,8 +12191,8 @@ msgid ""
 "import process."
 msgstr ""
 "Klicka på ”Läs in ytterligare en fil” om du har mer data som du vill "
-"importera nu. Gör detta om du har sparat dina konton till separata QIF-filer."
-"\n"
+"importera nu. Gör detta om du har sparat dina konton till separata QIF-"
+"filer.\n"
 "\n"
 "Klicka på ”Nästa” för att avsluta inläsningen av filer och gå vidare till "
 "nästa steg i QIF-importprocessen."
@@ -12595,9 +12615,9 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
-"Om du är klar med aktiespliten eller -sammanslagningen, klicka på ”Verkställ”"
-". Du kan också klicka på ”Bakåt” för att kontrollera dina val, eller ”Avbryt”"
-" för att avbryta utan att göra några ändringar."
+"Om du är klar med aktiespliten eller -sammanslagningen, klicka på "
+"”Verkställ”. Du kan också klicka på ”Bakåt” för att kontrollera dina val, "
+"eller ”Avbryt” för att avbryta utan att göra några ändringar."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:418
 msgid "Stock Split Finish"
@@ -13308,7 +13328,7 @@ msgid "Examples"
 msgstr "Exempel"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2105
-#: gnucash/report/reports/standard/balance-forecast.scm:42
+#: gnucash/report/reports/standard/balance-forecast.scm:43
 msgid "Interval"
 msgstr "Intervall"
 
@@ -13629,8 +13649,8 @@ msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr ""
-"Ange det fullständiga namnet för varan. Exempel: ”Cisco Systems Inc.” eller ”"
-"Apple Computer, Inc.”."
+"Ange det fullständiga namnet för varan. Exempel: ”Cisco Systems Inc.” eller "
+"”Apple Computer, Inc.”."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:138
 msgid ""
@@ -18632,8 +18652,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Den här inställningen anger vilket dataformat som ska användas vid import av "
-"SWIFT MT940-filer. AqBanking-biblioteket erbjuder diverse importformat ("
-"kallas ”profiler”) som du kan välja bland här."
+"SWIFT MT940-filer. AqBanking-biblioteket erbjuder diverse importformat "
+"(kallas ”profiler”) som du kan välja bland här."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:50
 msgid "SWIFT MT942 import data format"
@@ -18646,8 +18666,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Den här inställningen anger vilket dataformat som ska användas vid import av "
-"SWIFT MT942-filer. AqBanking-biblioteket erbjuder diverse importformat ("
-"kallas ”profiler”) som du kan välja bland här."
+"SWIFT MT942-filer. AqBanking-biblioteket erbjuder diverse importformat "
+"(kallas ”profiler”) som du kan välja bland här."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
 #, c-format
@@ -18947,8 +18967,8 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Kontoträdet kommer att exporteras till filen ’%s’ när du klickar ”Verkställ”."
-"\n"
+"Kontoträdet kommer att exporteras till filen ’%s’ när du klickar "
+"”Verkställ”.\n"
 "\n"
 "Du kan också verifiera dina val genom att klicka på ”Bakåt” eller ”Avbryt” "
 "för att avbryta exporten.\n"
@@ -19001,55 +19021,62 @@ msgstr ""
 msgid "File exported successfully!\n"
 msgstr "Filen exporterades!\n"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:553
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:134
+#: gnucash/import-export/import-main-matcher.c:1814
+#: gnucash/report/reports/standard/register.scm:217
+#: libgnucash/engine/Split.c:1603 libgnucash/engine/Split.c:1620
+msgid "-- Split Transaction --"
+msgstr "-- Delad transaktion --"
+
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:369
 msgid "Full Category Path"
 msgstr "Fullständig kategorisökväg"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:555
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:568
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:371
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:391
 msgid "Amount With Sym"
 msgstr "Belopp med sym"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:555
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:568
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:372
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:392
 msgid "Amount Num."
 msgstr "Belopp num."
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:556
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:569
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:373
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:393
 msgid "Value With Sym"
 msgstr "Värde med sym"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:556
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:569
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:374
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:394
 msgid "Value Num."
 msgstr "Värde num."
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:557
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:570
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:375
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:397
 msgid "Rate/Price"
 msgstr "Kurs/pris"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:562
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
 msgid "Transaction ID"
 msgstr "Transaktions-ID"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:565
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:385
 msgid "Commodity/Currency"
 msgstr "Produkt/valuta"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:565
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:386
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 msgid "Void Reason"
 msgstr "Annulleringsskäl"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:567
-#: gnucash/import-export/csv-exp/csv-tree-export.c:155
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:389
+#: gnucash/import-export/csv-exp/csv-tree-export.cpp:59
 msgid "Full Account Name"
 msgstr "Fullständigt kontonamn"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.c:570
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:396
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
 msgid "Reconcile Date"
 msgstr "Avstämningsdatum"
@@ -19794,12 +19821,6 @@ msgstr "Info"
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 msgid "Additional Comments"
 msgstr "Ytterligare kommentarer"
-
-#: gnucash/import-export/import-main-matcher.c:1814
-#: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.c:1603 libgnucash/engine/Split.c:1620
-msgid "-- Split Transaction --"
-msgstr "-- Delad transaktion --"
 
 #: gnucash/import-export/import-main-matcher.c:1933
 msgid "New, already balanced"
@@ -20804,8 +20825,8 @@ msgid ""
 ">Properties->Accounts."
 msgstr ""
 "Angivet datum för den duplicerade transaktionen är äldre än den "
-"”skrivskyddströskel” som satts för boken. Inställningen kan ändras i "
-"Arkiv->Egenskaper->Konton."
+"”skrivskyddströskel” som satts för boken. Inställningen kan ändras i Arkiv-"
+">Egenskaper->Konton."
 
 #: gnucash/register/ledger-core/split-register.c:947
 msgid ""
@@ -21745,10 +21766,6 @@ msgstr "_Experimentell"
 msgid "_Multicolumn"
 msgstr "Flerkolu_mnsvy"
 
-#: gnucash/report/report-core.scm:161
-msgid "_Custom"
-msgstr "_Anpassade"
-
 #: gnucash/report/report-core.scm:164
 #: gnucash/report/reports/standard/invoice.scm:226
 #: gnucash/report/reports/standard/invoice.scm:230
@@ -21844,7 +21861,7 @@ msgstr "Stegstorlek"
 #: gnucash/report/reports/standard/account-piecharts.scm:67
 #: gnucash/report/reports/standard/account-summary.scm:124
 #: gnucash/report/reports/standard/advanced-portfolio.scm:71
-#: gnucash/report/reports/standard/balance-forecast.scm:44
+#: gnucash/report/reports/standard/balance-forecast.scm:45
 #: gnucash/report/reports/standard/balance-sheet.scm:130
 #: gnucash/report/reports/standard/balsheet-eg.scm:178
 #: gnucash/report/reports/standard/balsheet-pnl.scm:112
@@ -21870,7 +21887,7 @@ msgstr "Valuta för rapporten"
 #: gnucash/report/reports/standard/account-piecharts.scm:68
 #: gnucash/report/reports/standard/account-summary.scm:125
 #: gnucash/report/reports/standard/advanced-portfolio.scm:40
-#: gnucash/report/reports/standard/balance-forecast.scm:45
+#: gnucash/report/reports/standard/balance-forecast.scm:46
 #: gnucash/report/reports/standard/balance-sheet.scm:131
 #: gnucash/report/reports/standard/balsheet-eg.scm:179
 #: gnucash/report/reports/standard/balsheet-pnl.scm:114
@@ -21902,7 +21919,7 @@ msgstr "Uteslut transaktioner mellan valda konton"
 #: gnucash/report/reports/example/average-balance.scm:47
 #: gnucash/report/reports/example/daily-reports.scm:62
 #: gnucash/report/reports/standard/account-piecharts.scm:77
-#: gnucash/report/reports/standard/balance-forecast.scm:47
+#: gnucash/report/reports/standard/balance-forecast.scm:48
 #: gnucash/report/reports/standard/budget-barchart.scm:43
 #: gnucash/report/reports/standard/cashflow-barchart.scm:52
 #: gnucash/report/reports/standard/category-barchart.scm:88
@@ -21914,7 +21931,7 @@ msgstr "Grafbredd"
 #: gnucash/report/reports/example/average-balance.scm:48
 #: gnucash/report/reports/example/daily-reports.scm:63
 #: gnucash/report/reports/standard/account-piecharts.scm:78
-#: gnucash/report/reports/standard/balance-forecast.scm:48
+#: gnucash/report/reports/standard/balance-forecast.scm:49
 #: gnucash/report/reports/standard/budget-barchart.scm:44
 #: gnucash/report/reports/standard/cashflow-barchart.scm:53
 #: gnucash/report/reports/standard/category-barchart.scm:89
@@ -22000,7 +22017,7 @@ msgid "Maximum"
 msgstr "Maximum"
 
 #: gnucash/report/reports/example/average-balance.scm:137
-#: gnucash/report/reports/standard/balance-forecast.scm:234
+#: gnucash/report/reports/standard/balance-forecast.scm:235
 msgid "Minimum"
 msgstr "Minimum"
 
@@ -23186,11 +23203,11 @@ msgstr "Om du använder flera olika valutor kan växelkurserna vara felaktiga."
 msgid "** this commodity has no price and a price of 1 has been used."
 msgstr "** denna produkt saknar pris och priset 1 har använts."
 
-#: gnucash/report/reports/standard/balance-forecast.scm:35
+#: gnucash/report/reports/standard/balance-forecast.scm:36
 msgid "Balance Forecast"
 msgstr "Saldoprognos"
 
-#: gnucash/report/reports/standard/balance-forecast.scm:38
+#: gnucash/report/reports/standard/balance-forecast.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:116
 #: gnucash/report/reports/standard/budget-flow.scm:82
 #: gnucash/report/reports/standard/cashflow-barchart.scm:84
@@ -23201,39 +23218,39 @@ msgstr "Saldoprognos"
 msgid "Report on these accounts."
 msgstr "Skapa rapport på dessa konton."
 
-#: gnucash/report/reports/standard/balance-forecast.scm:49
+#: gnucash/report/reports/standard/balance-forecast.scm:50
 #: gnucash/report/reports/standard/net-charts.scm:59
 msgid "Data markers?"
 msgstr "Datamarkörer?"
 
-#: gnucash/report/reports/standard/balance-forecast.scm:50
+#: gnucash/report/reports/standard/balance-forecast.scm:51
 #: gnucash/report/reports/standard/net-charts.scm:146
 msgid "Display a mark for each data point."
 msgstr "Visa markering för varje datapunkt."
 
-#: gnucash/report/reports/standard/balance-forecast.scm:52
 #: gnucash/report/reports/standard/balance-forecast.scm:53
+#: gnucash/report/reports/standard/balance-forecast.scm:54
 msgid "Show reserve line"
 msgstr "Visa reservrad"
 
-#: gnucash/report/reports/standard/balance-forecast.scm:55
+#: gnucash/report/reports/standard/balance-forecast.scm:56
 msgid "Reserve amount"
 msgstr "Reservbelopp"
 
-#: gnucash/report/reports/standard/balance-forecast.scm:56
+#: gnucash/report/reports/standard/balance-forecast.scm:57
 msgid "The reserve amount is set to a minimum balance desired"
 msgstr "Reservbeloppet är satt till det minsta önskade saldot"
 
-#: gnucash/report/reports/standard/balance-forecast.scm:59
 #: gnucash/report/reports/standard/balance-forecast.scm:60
+#: gnucash/report/reports/standard/balance-forecast.scm:61
 msgid "Show target line"
 msgstr "Visa rad för riktbelopp"
 
-#: gnucash/report/reports/standard/balance-forecast.scm:62
+#: gnucash/report/reports/standard/balance-forecast.scm:63
 msgid "Target amount above reserve"
 msgstr "Riktbelopp över reserv"
 
-#: gnucash/report/reports/standard/balance-forecast.scm:63
+#: gnucash/report/reports/standard/balance-forecast.scm:64
 msgid ""
 "The target is used to plan for a future large purchase, which will be added "
 "as a line above the reserve amount."
@@ -23241,11 +23258,11 @@ msgstr ""
 "Riktbeloppet används för att planera inför ett stort framtida inköp, vilket "
 "kommer att läggas till som en rad ovanför reservbeloppet."
 
-#: gnucash/report/reports/standard/balance-forecast.scm:67
+#: gnucash/report/reports/standard/balance-forecast.scm:68
 msgid "Show future minimum"
 msgstr "Visa framtida minimum"
 
-#: gnucash/report/reports/standard/balance-forecast.scm:68
+#: gnucash/report/reports/standard/balance-forecast.scm:69
 msgid ""
 "The future minimum will add, for each date point, a projected minimum "
 "balance including scheduled transactions."
@@ -23253,11 +23270,11 @@ msgstr ""
 "Framtida minimum kommer att lägga till, för varje datumpunkt, ett projicerat "
 "minsta saldo inklusive schemalagda transaktioner."
 
-#: gnucash/report/reports/standard/balance-forecast.scm:253
+#: gnucash/report/reports/standard/balance-forecast.scm:254
 msgid "Target"
 msgstr "Riktbelopp"
 
-#: gnucash/report/reports/standard/balance-forecast.scm:263
+#: gnucash/report/reports/standard/balance-forecast.scm:264
 msgid "Reserve"
 msgstr "Reserv"
 
@@ -26261,6 +26278,7 @@ msgid "Vendor Report"
 msgstr "Leverantörsrapport"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1183
+#: gnucash/ui/gnc-plugin-page-owner-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:232
 msgid "Employee Report"
 msgstr "Rapport över personal"
@@ -28057,6 +28075,11 @@ msgstr "_Avbryt transaktion"
 msgid "Cancel the current transaction"
 msgstr "Avbryt den aktuella transaktionen"
 
+#: gnucash/ui/gnc-embedded-register-window.ui:77
+#: gnucash/ui/gnc-main-window.ui:169
+msgid "_View"
+msgstr "_Visa"
+
 #: gnucash/ui/gnc-embedded-register-window.ui:81
 #: gnucash/ui/gnc-plugin-page-register.ui:97
 msgid "_Double Line"
@@ -28148,13 +28171,15 @@ msgstr "Stäng den nuvarande fliken"
 msgid "Quit this application"
 msgstr "Avsluta programmet"
 
+#: gnucash/ui/gnc-main-window.ui:143
+#, fuzzy
+#| msgid "Preferences"
+msgid "Pr_eferences"
+msgstr "Inställningar"
+
 #: gnucash/ui/gnc-main-window.ui:145
 msgid "Edit the global preferences of GnuCash"
 msgstr "Redigera GnuCashs allmänna inställningar"
-
-#: gnucash/ui/gnc-main-window.ui:169
-msgid "_View"
-msgstr "_Visa"
 
 #: gnucash/ui/gnc-main-window.ui:178
 msgid "_Toolbar"
@@ -28291,6 +28316,12 @@ msgstr "_Innehåll"
 #: gnucash/ui/gnc-main-window.ui:515
 msgid "Open the GnuCash Help"
 msgstr "Öppna GnuCash manual"
+
+#: gnucash/ui/gnc-main-window.ui:518
+#, fuzzy
+#| msgid "_Abort"
+msgid "_About"
+msgstr "_Avbryt"
 
 #: gnucash/ui/gnc-main-window.ui:520
 msgid "About GnuCash"
@@ -28909,6 +28940,7 @@ msgstr "Öppna det valda kontot och alla dess underkonton"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:195
 #: gnucash/ui/gnc-plugin-page-budget.ui:79
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:86
+#: gnucash/ui/gnc-plugin-page-register.ui:112
 #: gnucash/ui/gnc-plugin-page-register.ui:353
 #: gnucash/ui/gnc-plugin-page-register.ui:465
 msgid "_Filter By…"
@@ -28975,6 +29007,13 @@ msgstr ""
 "Cleara automatiskt individuella transaktioner för att nå ett bestämt clearat "
 "belopp"
 
+#: gnucash/ui/gnc-plugin-page-account-tree.ui:144
+#: gnucash/ui/gnc-plugin-page-account-tree.ui:249
+#: gnucash/ui/gnc-plugin-page-register.ui:248
+#: gnucash/ui/gnc-plugin-page-register.ui:902
+msgid "Stock Ass_istant…"
+msgstr "Aktiea_ssistent…"
+
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:150
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
 #: gnucash/ui/gnc-plugin-page-register.ui:254
@@ -29035,6 +29074,11 @@ msgstr ""
 "Leta efter och reparera obalanserade transaktioner och föräldralösa "
 "delningar i detta konto och dess underkonton"
 
+#: gnucash/ui/gnc-plugin-page-account-tree.ui:181
+#: gnucash/ui/gnc-plugin-page-account-tree.ui:291
+msgid "Check & Repair A_ll"
+msgstr "Kontrollera och reparera a_lla"
+
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:183
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:293
 msgid ""
@@ -29067,10 +29111,6 @@ msgstr "_Ta bort konto…"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:429
 msgid "Delete selected account"
 msgstr "Ta bort det valda kontot"
-
-#: gnucash/ui/gnc-plugin-page-account-tree.ui:291
-msgid "Check & Repair A_ll"
-msgstr "Kontrollera och reparera a_lla"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
@@ -29374,6 +29414,12 @@ msgstr "Visa transaktioner på två rader och expandera nuvarande transaktion"
 msgid "Show expanded transactions with all splits"
 msgstr "Visa utökade transaktioner med alla delar"
 
+#: gnucash/ui/gnc-plugin-page-register.ui:107
+#: gnucash/ui/gnc-plugin-page-register.ui:349
+#: gnucash/ui/gnc-plugin-page-register.ui:461
+msgid "_Sort By…"
+msgstr "_Sortera efter…"
+
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
 msgstr "_Annullera transaktion"
@@ -29397,11 +29443,6 @@ msgstr "Lägg till _omvänd transaktion"
 #: gnucash/ui/gnc-plugin-page-register.ui:198
 msgid "Add a reversing transaction"
 msgstr "Lägg till en omvänd transaktion"
-
-#: gnucash/ui/gnc-plugin-page-register.ui:248
-#: gnucash/ui/gnc-plugin-page-register.ui:902
-msgid "Stock Ass_istant…"
-msgstr "Aktiea_ssistent…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:417
@@ -29499,11 +29540,6 @@ msgstr "Kontorapport - Enstaka transaktion"
 #: gnucash/ui/gnc-plugin-page-register.ui:340
 msgid "Open a register report for the selected Transaction"
 msgstr "Öppna en registerrapport för vald transaktion"
-
-#: gnucash/ui/gnc-plugin-page-register.ui:349
-#: gnucash/ui/gnc-plugin-page-register.ui:461
-msgid "_Sort By…"
-msgstr "_Sortera efter…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
@@ -29737,67 +29773,67 @@ msgstr "Slut på minne"
 msgid "Numeric error"
 msgstr "Numeriskt fel"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:156
+#: libgnucash/app-utils/gnc-quotes.cpp:157
 msgid "Failed to initialize Finance::Quote: "
 msgstr "Kunde inte initialisera Finance::Quote: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:163
+#: libgnucash/app-utils/gnc-quotes.cpp:164
 msgid "Finance::Quote check returned error "
 msgstr "Finance::Quote-kontroll returnerade fel "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:171
+#: libgnucash/app-utils/gnc-quotes.cpp:172
 msgid "No Finance::Quote Version"
 msgstr "Finance::Quote version saknas"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:297
+#: libgnucash/app-utils/gnc-quotes.cpp:303
 msgid "GncQuotes::Fetch called with no book."
 msgstr "GncQuote::Fetch anropades utan bok."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:315
+#: libgnucash/app-utils/gnc-quotes.cpp:321
 msgid "GncQuotes::Fetch called with no commodities."
 msgstr "GncQuotes::Fetch anropades utan produkter."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:329
+#: libgnucash/app-utils/gnc-quotes.cpp:335
 msgid "There were no commodities for which to retrieve quotes."
 msgstr "Det fanns inga produkter att hämta priser för."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:343
+#: libgnucash/app-utils/gnc-quotes.cpp:349
 msgid "Finance::Quote retrieval failed with error "
 msgstr "Finance::Quote-hämtning misslyckades med fel "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:361
-#: libgnucash/app-utils/gnc-quotes.cpp:825
+#: libgnucash/app-utils/gnc-quotes.cpp:367
+#: libgnucash/app-utils/gnc-quotes.cpp:841
 msgid "Finance::Quote returned no data and set no error."
 msgstr "Finance::Quote returnerade ingen data och angav inget fel."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:363
+#: libgnucash/app-utils/gnc-quotes.cpp:369
 msgid "Finance::Quote returned an error: "
 msgstr "Finance::Quote returnerade ett fel: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:367
+#: libgnucash/app-utils/gnc-quotes.cpp:373
 msgid "Finance::Quote reported failure set no error."
 msgstr "Finance::Quote rapporterade misslyckande angav inget fel."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:369
+#: libgnucash/app-utils/gnc-quotes.cpp:375
 msgid "Finance::Quote reported failure with error: "
 msgstr "Finance::Quote rapporterade misslyckande med fel: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:372
+#: libgnucash/app-utils/gnc-quotes.cpp:378
 msgid "Finance::Quote returned a quote with no currency."
 msgstr "Finance::Quote returnerade ett pris utan valuta."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:375
+#: libgnucash/app-utils/gnc-quotes.cpp:381
 msgid ""
 "Finance::Quote returned a quote with a currency GnuCash doesn't know about."
 msgstr ""
 "Finance::Quote returnerade ett pris med en valuta som GnuCash inte känner "
 "till."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:378
+#: libgnucash/app-utils/gnc-quotes.cpp:384
 msgid "Finance::Quote returned a quote with no price element."
 msgstr "Finance::Quote returnerade ett pris utan priselement."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:381
+#: libgnucash/app-utils/gnc-quotes.cpp:387
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
@@ -29805,108 +29841,108 @@ msgstr ""
 "Finance::Quote returnerade en prisuppgift med ett pris som GnuCash inte "
 "kunde konvertera till siffror."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:385
+#: libgnucash/app-utils/gnc-quotes.cpp:391
 msgid "The quote has no error set."
 msgstr "Prisuppgiften har inget fel."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:394
+#: libgnucash/app-utils/gnc-quotes.cpp:400
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr ""
 "Prisuppgifter för följande produkter var otillgängliga eller kunde inte "
 "användas:\n"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:471
+#: libgnucash/app-utils/gnc-quotes.cpp:486
 msgid "Currency quotes requires at least two currencies"
 msgstr "Valutauppgifter kräver minst två valutor"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:736
-#: libgnucash/app-utils/gnc-quotes.cpp:741
+#: libgnucash/app-utils/gnc-quotes.cpp:752
+#: libgnucash/app-utils/gnc-quotes.cpp:757
 msgid "Failed to parse result returned by Finance::Quote."
 msgstr "Kunde inte tolka resultatet som returnerades av Finance::Quote."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:743
+#: libgnucash/app-utils/gnc-quotes.cpp:759
 msgid "Error message:"
 msgstr "Felmeddelande:"
 
 #. Translators: Means that the preceding element is required
-#: libgnucash/app-utils/gnc-quotes.cpp:785
+#: libgnucash/app-utils/gnc-quotes.cpp:801
 msgctxt "Finance::Quote"
 msgid "required"
 msgstr "krävs"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
-#: libgnucash/app-utils/gnc-quotes.cpp:787
+#: libgnucash/app-utils/gnc-quotes.cpp:803
 msgctxt "Finance::Quote"
 msgid "recommended"
 msgstr "rekommenderas"
 
 #. Translators: Means that one of the indicated elements is required
-#: libgnucash/app-utils/gnc-quotes.cpp:789
+#: libgnucash/app-utils/gnc-quotes.cpp:805
 msgctxt "Finance::Quote"
 msgid "one of these"
 msgstr "en av dessa"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
-#: libgnucash/app-utils/gnc-quotes.cpp:791
+#: libgnucash/app-utils/gnc-quotes.cpp:807
 msgctxt "Finance::Quote"
 msgid "**missing**"
 msgstr "**saknas**"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:798
+#: libgnucash/app-utils/gnc-quotes.cpp:814
 msgid "Finance::Quote fields GnuCash uses:"
 msgstr "Finance::Quote-fält som GnuCash använder:"
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
-#: libgnucash/app-utils/gnc-quotes.cpp:800
+#: libgnucash/app-utils/gnc-quotes.cpp:816
 msgctxt "Finance::Quote"
 msgid "symbol: "
 msgstr "symbol: "
 
 #. Translators: The date of the quote.
-#: libgnucash/app-utils/gnc-quotes.cpp:802
+#: libgnucash/app-utils/gnc-quotes.cpp:818
 msgctxt "Finance::Quote"
 msgid "date: "
 msgstr "datum: "
 
 #. Translators: The quote currency
-#: libgnucash/app-utils/gnc-quotes.cpp:804
+#: libgnucash/app-utils/gnc-quotes.cpp:820
 msgctxt "Finance::Quote"
 msgid "currency: "
 msgstr "valuta: "
 
 #. Translators: The quote is for the most recent trade on the exchange
-#: libgnucash/app-utils/gnc-quotes.cpp:810
+#: libgnucash/app-utils/gnc-quotes.cpp:826
 msgctxt "Finance::Quote"
 msgid "last: "
 msgstr "senaste: "
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
-#: libgnucash/app-utils/gnc-quotes.cpp:812
+#: libgnucash/app-utils/gnc-quotes.cpp:828
 msgctxt "Finance::Quote"
 msgid "nav: "
 msgstr "ntv: "
 
 #. Translators: The quote is neither a last trade nor an NAV.
-#: libgnucash/app-utils/gnc-quotes.cpp:814
+#: libgnucash/app-utils/gnc-quotes.cpp:830
 msgctxt "Finance::Quote"
 msgid "price: "
 msgstr "pris: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:834
+#: libgnucash/app-utils/gnc-quotes.cpp:850
 msgid "Finance::Quote reported a failure for symbol "
 msgstr "Finance::Quote rapporterade ett misslyckande för symbolen "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:837
+#: libgnucash/app-utils/gnc-quotes.cpp:853
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr "Finance::Quote misslyckades tyst att hämta prisuppgifter för symbolen "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:900
+#: libgnucash/app-utils/gnc-quotes.cpp:916
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
 "GnuCash skickade ogiltig json till Finance::Quote. Detaljerna loggades."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:906
+#: libgnucash/app-utils/gnc-quotes.cpp:922
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
@@ -29914,7 +29950,7 @@ msgstr ""
 "Perl saknar följande moduler. Se https://wiki.gnucash.org/wiki/"
 "Online_Quotes#Finance::Quote för detaljerade åtgärder. "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:912
+#: libgnucash/app-utils/gnc-quotes.cpp:928
 msgid "Unrecognized Finance::Quote Error: "
 msgstr "Okänt Finance::Quote-fel: "
 
@@ -29981,30 +30017,30 @@ msgid "Opening Balances"
 msgstr "Ingående saldon"
 
 #. Translators: this string refers to a file name that gets renamed
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:645
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:649
 msgid "Renamed to:"
 msgstr "Omdöpt till:"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:670
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:674
 msgid "Notice"
 msgstr "Observandum"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:675
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:679
 msgid "Your gnucash metadata has been migrated."
 msgstr "Din gnucash-metadata har migrerats."
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:677
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:681
 msgid "Old location:"
 msgstr "Gammal plats:"
 
 #. Translators: this refers to a directory name.
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:679
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:683
 msgid "New location:"
 msgstr "Ny plats:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:681
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:685
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -30012,27 +30048,27 @@ msgstr ""
 "Om du inte längre avser att använda {1} 2.6.x eller äldre på detta system "
 "kan du ta bort den gamla katalogen."
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:688
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:692
 msgid "In addition:"
 msgstr "Dessutom:"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:694
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:698
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "Följande fil har kopierats till {1} istället:"
 msgstr[1] "Följande filer har kopierats till {1} istället:"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:698
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:702
 msgid "The following file in {1} has been renamed:"
 msgstr "Följande fil i {1} har döpts om:"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:708
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:712
 msgid "The following file has become obsolete and will be ignored:"
 msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] "Följande fil är för gammal och kommer att ignoreras:"
 msgstr[1] "Följande filer är för gamla och kommer att ignoreras:"
 
-#: libgnucash/core-utils/gnc-filepath-utils.cpp:718
+#: libgnucash/core-utils/gnc-filepath-utils.cpp:722
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Följande fil kunder inte flyttas till {1}:"
@@ -30311,11 +30347,11 @@ msgstr "Slutet av nästa år"
 msgid "Last day of the next calendar year."
 msgstr "Sista dagen på nästa kalenderår."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1105
+#: libgnucash/engine/gnc-optiondb.cpp:1108
 msgid "Counters"
 msgstr "Räknare"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1112
+#: libgnucash/engine/gnc-optiondb.cpp:1115
 msgid ""
 "Choose the number of days after which transactions will be read-only and "
 "cannot be edited anymore. This threshold is marked by a red line in the "
@@ -30327,7 +30363,7 @@ msgstr ""
 "registerfönster. Om noll kan alla transaktioner redigeras och inga "
 "skrivskyddas."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1117
+#: libgnucash/engine/gnc-optiondb.cpp:1120
 msgid ""
 "Check to have split action field used in registers for 'Num' field in place "
 "of transaction number; transaction number shown as 'T-Num' on second line of "
@@ -30339,7 +30375,7 @@ msgstr ""
 "registrets andra rad. Har motsvarande effekt på företagsfunktioner, "
 "rapporter och importer/exporter."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1121
+#: libgnucash/engine/gnc-optiondb.cpp:1124
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
@@ -30347,15 +30383,15 @@ msgstr ""
 "Markera för att använda handelskonton för transaktioner som använder fler än "
 "en valuta eller produkt."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1128
+#: libgnucash/engine/gnc-optiondb.cpp:1131
 msgid "Budget to be used when none has been otherwise specified."
 msgstr "Budget att använda när ingen har specificerats på annat sätt."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1134
+#: libgnucash/engine/gnc-optiondb.cpp:1137
 msgid "Customer number"
 msgstr "Kundnummer"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1135
+#: libgnucash/engine/gnc-optiondb.cpp:1138
 msgid ""
 "The previous customer number generated. This number will be incremented to "
 "generate the next customer number."
@@ -30363,11 +30399,11 @@ msgstr ""
 "Föregående genererat kundnummer. Detta nummer kommer att ökas stegvis för "
 "att generera nästa kundnummer."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1138
+#: libgnucash/engine/gnc-optiondb.cpp:1141
 msgid "Customer number format"
 msgstr "Kundnummerformat"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1140
+#: libgnucash/engine/gnc-optiondb.cpp:1143
 msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
@@ -30375,11 +30411,11 @@ msgstr ""
 "Formatsträngen som ska användas för att generera kundnummer. Detta är en "
 "formatsträng i printf-stil."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1143
+#: libgnucash/engine/gnc-optiondb.cpp:1146
 msgid "Employee number"
 msgstr "Personalnummer"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1144
+#: libgnucash/engine/gnc-optiondb.cpp:1147
 msgid ""
 "The previous employee number generated. This number will be incremented to "
 "generate the next employee number."
@@ -30387,11 +30423,11 @@ msgstr ""
 "Föregående genererat personalnummer. Detta nummer kommer att ökas stegvis "
 "för att generera nästa personalnummer."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1147
+#: libgnucash/engine/gnc-optiondb.cpp:1150
 msgid "Employee number format"
 msgstr "Personalnummerformat"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1149
+#: libgnucash/engine/gnc-optiondb.cpp:1152
 msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
@@ -30399,11 +30435,11 @@ msgstr ""
 "Formatsträng att använda för att generera personalnummer. Detta är en "
 "formatsträng i printf-stil."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1152
+#: libgnucash/engine/gnc-optiondb.cpp:1155
 msgid "Invoice number"
 msgstr "Fakturanummer"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1153
+#: libgnucash/engine/gnc-optiondb.cpp:1156
 msgid ""
 "The previous invoice number generated. This number will be incremented to "
 "generate the next invoice number."
@@ -30411,11 +30447,11 @@ msgstr ""
 "Föregående genererat fakturanummer. Detta nummer kommer att ökas stegvis för "
 "att generera nästa fakturanummer."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1156
+#: libgnucash/engine/gnc-optiondb.cpp:1159
 msgid "Invoice number format"
 msgstr "Fakturanummerformat"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1158
+#: libgnucash/engine/gnc-optiondb.cpp:1161
 msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
@@ -30423,11 +30459,11 @@ msgstr ""
 "Formatsträng att använda för att generera fakturanummer. Detta är en "
 "formatsträng i printf-stil."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1161
+#: libgnucash/engine/gnc-optiondb.cpp:1164
 msgid "Bill number"
 msgstr "Räkningsnummer"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1162
+#: libgnucash/engine/gnc-optiondb.cpp:1165
 msgid ""
 "The previous bill number generated. This number will be incremented to "
 "generate the next bill number."
@@ -30435,11 +30471,11 @@ msgstr ""
 "Föregående genererat räkningsnummer. Detta nummer kommer att ökas stegvis "
 "för att generera nästa räkningsnummer."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1165
+#: libgnucash/engine/gnc-optiondb.cpp:1168
 msgid "Bill number format"
 msgstr "Räkningsnummerformat"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1166
+#: libgnucash/engine/gnc-optiondb.cpp:1169
 msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
@@ -30447,11 +30483,11 @@ msgstr ""
 "Formatsträng att använda för att generera räkningsnummer. Detta är en "
 "formatsträng i printf-stil."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1169
+#: libgnucash/engine/gnc-optiondb.cpp:1172
 msgid "Expense voucher number"
 msgstr "Traktamentenummer"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1170
+#: libgnucash/engine/gnc-optiondb.cpp:1173
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
@@ -30459,11 +30495,11 @@ msgstr ""
 "Föregående genererat traktamentenummer. Detta nummer kommer att ökas stegvis "
 "för att generera nästa traktamentenummer."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1173
+#: libgnucash/engine/gnc-optiondb.cpp:1176
 msgid "Expense voucher number format"
 msgstr "Nummerformat för traktamente"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1175
+#: libgnucash/engine/gnc-optiondb.cpp:1178
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
@@ -30471,11 +30507,11 @@ msgstr ""
 "Formatsträng att använda för att generera traktamentenummer. Detta är en "
 "formatsträng i printf-stil."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1178
+#: libgnucash/engine/gnc-optiondb.cpp:1181
 msgid "Job number"
 msgstr "Jobbnummer"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1179
+#: libgnucash/engine/gnc-optiondb.cpp:1182
 msgid ""
 "The previous job number generated. This number will be incremented to "
 "generate the next job number."
@@ -30483,11 +30519,11 @@ msgstr ""
 "Föregående genererat jobbnummer. Detta nummer kommer att ökas stegvis för "
 "att generera nästa jobbnummer."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1182
+#: libgnucash/engine/gnc-optiondb.cpp:1185
 msgid "Job number format"
 msgstr "Jobbnummerformat"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1183
+#: libgnucash/engine/gnc-optiondb.cpp:1186
 msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
@@ -30495,11 +30531,11 @@ msgstr ""
 "Formatsträng att använda för att generera jobbnummer. Detta är en "
 "formatsträng i printf-stil."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1186
+#: libgnucash/engine/gnc-optiondb.cpp:1189
 msgid "Order number"
 msgstr "Ordernummer"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1187
+#: libgnucash/engine/gnc-optiondb.cpp:1190
 msgid ""
 "The previous order number generated. This number will be incremented to "
 "generate the next order number."
@@ -30507,11 +30543,11 @@ msgstr ""
 "Föregående genererat ordernummer. Detta nummer kommer att ökas stegvis för "
 "att generera nästa ordernummer."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1190
+#: libgnucash/engine/gnc-optiondb.cpp:1193
 msgid "Order number format"
 msgstr "Ordernummerformat"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1191
+#: libgnucash/engine/gnc-optiondb.cpp:1194
 msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
@@ -30519,11 +30555,11 @@ msgstr ""
 "Formatsträng att använda för att generera ordernummer. Detta är en "
 "formatsträng i printf-stil."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1194
+#: libgnucash/engine/gnc-optiondb.cpp:1197
 msgid "Vendor number"
 msgstr "Leverantörsnummer"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1195
+#: libgnucash/engine/gnc-optiondb.cpp:1198
 msgid ""
 "The previous vendor number generated. This number will be incremented to "
 "generate the next vendor number."
@@ -30531,11 +30567,11 @@ msgstr ""
 "Föregående genererat leverantörsnummer. Detta nummer kommer att ökas stegvis "
 "för att generera nästa leverantörsnummer."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1198
+#: libgnucash/engine/gnc-optiondb.cpp:1201
 msgid "Vendor number format"
 msgstr "Leverantörsnummerformat"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1199
+#: libgnucash/engine/gnc-optiondb.cpp:1202
 msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
@@ -30543,36 +30579,36 @@ msgstr ""
 "Formatsträng att använda för att generera leverantörsnummer. Detta är en "
 "formatsträng i printf-stil."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1205
+#: libgnucash/engine/gnc-optiondb.cpp:1208
 msgid "The name of your business."
 msgstr "Namnet på ditt företag."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1208
+#: libgnucash/engine/gnc-optiondb.cpp:1211
 msgid "The address of your business."
 msgstr "Adressen till ditt företag."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1212
-#: libgnucash/engine/gnc-optiondb.cpp:1216
+#: libgnucash/engine/gnc-optiondb.cpp:1215
+#: libgnucash/engine/gnc-optiondb.cpp:1219
 msgid "The contact person to print on invoices."
 msgstr "Kontaktpersonen som visas på fakturor."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1220
+#: libgnucash/engine/gnc-optiondb.cpp:1223
 msgid "The fax number of your business."
 msgstr "Faxnumret för ditt företag."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1224
+#: libgnucash/engine/gnc-optiondb.cpp:1227
 msgid "The email address of your business."
 msgstr "E-postadressen för ditt företag."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1228
+#: libgnucash/engine/gnc-optiondb.cpp:1231
 msgid "The URL address of your website."
 msgstr "Webbadressen för ditt företag."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1231
+#: libgnucash/engine/gnc-optiondb.cpp:1234
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
 msgstr "ID för ditt företag (t.ex. ”TIN-nummer: 000000-0000”)."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1239
+#: libgnucash/engine/gnc-optiondb.cpp:1242
 msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
@@ -30580,27 +30616,27 @@ msgstr ""
 "Tidsrymd för att ändra den använda fakturarapporten. Värdet 0 innebär att "
 "det avaktiveras."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1242
+#: libgnucash/engine/gnc-optiondb.cpp:1245
 msgid "Default Customer TaxTable"
 msgstr "Förvald kundskattetabell"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1243
+#: libgnucash/engine/gnc-optiondb.cpp:1246
 msgid "The default tax table to apply to customers."
 msgstr "Förvald skattetabell att tillämpa på kunder."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1246
+#: libgnucash/engine/gnc-optiondb.cpp:1249
 msgid "Default Vendor TaxTable"
 msgstr "Förvald leverantörsskattetabell"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1247
+#: libgnucash/engine/gnc-optiondb.cpp:1250
 msgid "The default tax table to apply to vendors."
 msgstr "Förvald skattetabell att tillämpa på leverantörer."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1251
+#: libgnucash/engine/gnc-optiondb.cpp:1254
 msgid "The default date format used for fancy printed dates."
 msgstr "Förvalt datumformat att använda för vackra utskrivna datum."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1257
+#: libgnucash/engine/gnc-optiondb.cpp:1260
 msgid "The electronic tax number of your business"
 msgstr "Elektroniskt skattenummer för ditt företag"
 
