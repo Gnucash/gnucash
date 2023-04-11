@@ -81,7 +81,6 @@ typedef struct _GncPluginMenuAdditionsPerWindow
     /** The menu/toolbar action information associated with a specific
         window.  This plugin must maintain its own data because of the
         way the menus are currently built. */
-    GncMainWindow  *window;
     GHashTable     *item_hash;
     GHashTable     *build_menu_hash;
     GMenu          *report_menu;
@@ -187,27 +186,30 @@ gnc_plugin_menu_additions_action_new_cb (GSimpleAction *simple,
                                          GVariant      *parameter,
                                          gpointer       user_data)
 {
-    GncMainWindowActionData *data = user_data;
+    GncMainWindowActionData *cb_data = user_data;
+    GncPlugin *plugin = cb_data->data;
     GncPluginMenuAdditionsPrivate *priv;
-    GncMainWindowActionData *cb_data;
+
+    SCM extension;
     gsize length;
     const gchar *action_name;
 
     g_return_if_fail (G_IS_SIMPLE_ACTION(simple));
 
     ENTER("");
-    priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(data->data);
+
+    priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(plugin);
 
     action_name = g_variant_get_string (parameter, &length);
 
     PINFO("action name is '%s'", action_name);
 
-    cb_data = g_hash_table_lookup (priv->item_hash, action_name);
+    extension = g_hash_table_lookup (priv->item_hash, action_name);
 
-    if (cb_data)
+    if (extension)
     {
         PINFO("Found action in table");
-        gnc_extension_invoke_cb (cb_data->data, gnc_main_window_to_scm (cb_data->window));
+        gnc_extension_invoke_cb (extension, gnc_main_window_to_scm (cb_data->window));
     }
     LEAVE("");
 }
@@ -390,7 +392,7 @@ gnc_menu_additions_assign_accel (ExtensionInfo *info, GHashTable *table)
 }
 
 static GMenuItem *
-setup_tooltip_for_gmenu_item (ExtensionInfo *ext_info)
+setup_gmenu_item_with_tooltip (ExtensionInfo *ext_info)
 {
     GMenuItem *gmenu_item = NULL;
 
@@ -426,7 +428,6 @@ static void
 gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
                                    GncPluginMenuAdditionsPerWindow *per_window)
 {
-    GncMainWindowActionData *cb_data;
     GMenuItem *item_path, *item_with_full_path;
     gchar *full_path = NULL;
     GMenuItem *gmenu_item = NULL;
@@ -434,11 +435,7 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
     DEBUG("Adding %s/%s [%s] as [%s]", ext_info->path, ext_info->action_label,
            ext_info->action_name, ext_info->typeStr );
 
-    cb_data = g_new0 (GncMainWindowActionData, 1);
-    cb_data->window = per_window->window;
-    cb_data->data = ext_info->extension;
-
-    g_hash_table_insert (per_window->item_hash, g_strdup (ext_info->action_name), cb_data);
+    g_hash_table_insert (per_window->item_hash, g_strdup (ext_info->action_name), ext_info->extension);
 
     if (g_str_has_suffix (ext_info->path, _("_Custom")))
         return;
@@ -450,7 +447,7 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
 
     if (!item_path && !item_with_full_path)
     {
-        gmenu_item = setup_tooltip_for_gmenu_item (ext_info);
+        gmenu_item = setup_gmenu_item_with_tooltip (ext_info);
 
         g_menu_append_item (G_MENU(per_window->report_menu), gmenu_item);
     }
@@ -459,7 +456,7 @@ gnc_menu_additions_menu_setup_one (ExtensionInfo *ext_info,
     {
         GMenuModel *sub_menu = G_MENU_MODEL(g_object_get_data (G_OBJECT(item_path), "sub-menu"));
 
-        gmenu_item = setup_tooltip_for_gmenu_item (ext_info);
+        gmenu_item = setup_gmenu_item_with_tooltip (ext_info);
 
         g_menu_append_item (G_MENU(sub_menu), gmenu_item);
     }
@@ -496,9 +493,10 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
 
     ENTER(" ");
 
-    per_window.window = window;
-    per_window.item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+    if (!priv->item_hash)
+        priv->item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
+    per_window.item_hash = priv->item_hash;
     per_window.build_menu_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
     per_window.report_menu = g_menu_new ();
 
@@ -511,11 +509,9 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
                     (GFunc)gnc_menu_additions_do_preassigned_accel, table);
     g_slist_foreach (menu_list, (GFunc)gnc_menu_additions_assign_accel, table);
 
-    /* Add to window. */
+    /* Create the menu. */
     g_slist_foreach (menu_list, (GFunc)gnc_menu_additions_menu_setup_one,
                      &per_window);
-
-    priv->item_hash = per_window.item_hash;
 
     // add the report menu to the window
     gsm->search_action_label = NULL;
