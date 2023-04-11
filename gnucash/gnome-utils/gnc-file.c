@@ -35,11 +35,13 @@
 #include "gnc-file.h"
 #include "gnc-features.h"
 #include "gnc-filepath-utils.h"
+#include "gnc-glib-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-hooks.h"
 #include "gnc-keyring.h"
 #include "gnc-splash.h"
 #include "gnc-ui.h"
+#include "gnc-ui-balances.h"
 #include "gnc-ui-util.h"
 #include "gnc-uri-utils.h"
 #include "gnc-window.h"
@@ -706,21 +708,37 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 static void
 run_post_load_scrubs (GtkWindow *parent, QofBook *book)
 {
+    const char *budget_warning =
+        _("This book has budgets. The internal representation of "
+          "budget amounts no longer depends on the Reverse Balanced "
+          "Accounts preference. Please review the budgets and amend "
+          "signs if necessary.");
+
+    GList *infos = NULL;
+
     qof_event_suspend();
 
     /* If feature GNC_FEATURE_BUDGET_UNREVERSED is not set, and there
        are budgets, fix signs */
     if (gnc_maybe_scrub_all_budget_signs (book))
-        gnc_info_dialog (parent, "%s", _(
-                             "This book has budgets. The internal representation of "
-                             "budget amounts no longer depends on the Reverse Balanced "
-                             "Accounts preference. Please review the budgets and amend "
-                             "signs if necessary."));
+        infos = g_list_prepend (infos, g_strdup (budget_warning));
 
     // Fix account color slots being set to 'Not Set', should run once on a book
     xaccAccountScrubColorNotSet (book);
 
     qof_event_resume();
+
+    if (!infos)
+        return;
+
+    const char *header = N_("The following are noted in this file:");
+    infos = g_list_reverse (infos);
+    infos = g_list_prepend (infos, g_strdup (_(header)));
+    char *final = gnc_g_list_stringjoin (infos, "\n\n• ");
+    gnc_info_dialog (parent, "%s", final);
+
+    g_free (final);
+    g_list_free_full (infos, g_free);
 }
 
 static gboolean
