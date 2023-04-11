@@ -186,6 +186,7 @@ gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
 
     ssinfo->odialog->set_apply_cb(gnc_style_sheet_options_apply_cb, ssinfo);
     ssinfo->odialog->set_close_cb(gnc_style_sheet_options_close_cb, ssinfo);
+    ssinfo->odialog->set_style_sheet_help_cb();
     auto window = ssinfo->odialog->get_widget();
     gtk_window_set_transient_for (GTK_WINDOW(window),
                                   GTK_WINDOW(gnc_style_sheet_dialog->toplevel));
