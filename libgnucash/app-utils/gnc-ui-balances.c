@@ -250,16 +250,20 @@ gnc_ui_account_get_reconciled_balance_as_of_date (Account *account,
                                            xaccAccountGetReconciledBalanceAsOfDate);
 }
 
+// retrieve account's balance to compare against the limit.
+// we use today's date because account may have future dated splits
+static gnc_numeric
+account_balance_for_limit (const Account *account)
+{
+    return gnc_ui_account_get_balance_as_of_date
+        ((Account*)account, gnc_time64_get_day_end (gnc_time (NULL)),
+         xaccAccountGetIncludeSubAccountBalances (account));
+}
+
 static gint
 account_balance_limit_reached (const Account *account, gnc_numeric balance_limit)
 {
-    gboolean inc_sub = xaccAccountGetIncludeSubAccountBalances (account);
-
-    // we use today's date because account may have future dated splits
-    gnc_numeric balance = gnc_ui_account_get_balance_as_of_date (
-                              (Account*)account,
-                              gnc_time64_get_day_end (gnc_time (NULL)),
-                              inc_sub);
+    gnc_numeric balance = account_balance_for_limit (account);
 
     if (gnc_numeric_zero_p (balance))
         return 0;
@@ -269,6 +273,16 @@ account_balance_limit_reached (const Account *account, gnc_numeric balance_limit
 
     // Returns 1 if a>b, -1 if b>a, 0 if a == b
     return gnc_numeric_compare (balance, balance_limit);
+}
+
+static gboolean
+get_limit_info (const Account *account, gnc_numeric *limit, gboolean higher)
+{
+    gboolean reverse = gnc_reverse_balance (account);
+    if ((higher && reverse) || (!higher && !reverse))
+        return xaccAccountGetLowerBalanceLimit (account, limit);
+    else
+        return xaccAccountGetHigherBalanceLimit (account, limit);
 }
 
 gboolean
@@ -281,10 +295,7 @@ gnc_ui_account_is_higher_balance_limit_reached (const Account *account,
 
     g_return_val_if_fail (GNC_IS_ACCOUNT(account), FALSE);
 
-    if (gnc_reverse_balance (account))
-        limit_valid = xaccAccountGetLowerBalanceLimit (account, &balance_limit);
-    else
-        limit_valid = xaccAccountGetHigherBalanceLimit (account, &balance_limit);
+    limit_valid = get_limit_info (account, &balance_limit, TRUE);
 
     if (!limit_valid)
         return retval;
@@ -308,10 +319,7 @@ gnc_ui_account_is_lower_balance_limit_reached (const Account *account,
 
     g_return_val_if_fail (GNC_IS_ACCOUNT(account), FALSE);
 
-    if (gnc_reverse_balance (account))
-        limit_valid = xaccAccountGetHigherBalanceLimit (account, &balance_limit);
-    else
-        limit_valid = xaccAccountGetLowerBalanceLimit (account, &balance_limit);
+    limit_valid = get_limit_info (account, &balance_limit, FALSE);
 
     if (!limit_valid)
         return retval;
@@ -325,33 +333,76 @@ gnc_ui_account_is_lower_balance_limit_reached (const Account *account,
     return retval;
 }
 
-gchar *
-gnc_ui_account_get_balance_limit_icon_name (const Account *account)
+static gchar *
+make_limit_explanation (const Account *account, const char* template_str,
+                        gboolean zero, gboolean higher)
+{
+    gnc_commodity *currency = xaccAccountGetCommodity (account);
+    GNCPrintAmountInfo pinfo = gnc_commodity_print_info (currency, TRUE);
+    gnc_numeric acct_bal = account_balance_for_limit (account);
+    char *fullname = gnc_account_get_full_name (account);
+    char *bal_str = g_strdup (xaccPrintAmount (acct_bal, pinfo));
+    char *rv;
+    if (zero)
+        rv = g_strdup_printf (_(template_str), fullname, bal_str);
+    else
+    {
+        gnc_numeric limit;
+        get_limit_info (account, &limit, higher);
+        if (gnc_reverse_balance (account))
+            limit = gnc_numeric_neg (limit);
+        char *lim_str = g_strdup (xaccPrintAmount (limit, pinfo));
+        rv = g_strdup_printf (_(template_str), fullname, bal_str, lim_str);
+        g_free (lim_str);
+    }
+    g_free (bal_str);
+    g_free (fullname);
+    return rv;
+}
+
+static gchar *
+get_balance_limit_info (const Account *account, gboolean icon)
 {
     gboolean lower_limit_reached, higher_limit_reached;
     gboolean lower_is_zero = FALSE;
     gboolean higher_is_zero = FALSE;
+    const char *higher_template = N_("%s balance is %s, exceeds limit of %s.");
+    const char *lower_template = N_("%s balance is %s, subceeds limit of %s.");
+    const char *zero_template = N_("%s balance is %s, and should be zero.");
 
-    g_return_val_if_fail (GNC_IS_ACCOUNT(account), g_strdup (""));
+    g_return_val_if_fail (GNC_IS_ACCOUNT(account), NULL);
 
     higher_limit_reached = gnc_ui_account_is_higher_balance_limit_reached (account, &higher_is_zero);
 
     // assume the higher value will be set mostly so test that first
     if (higher_limit_reached && !higher_is_zero)
-        return g_strdup ("go-top");
+        return icon ? g_strdup ("go-top") : make_limit_explanation (account, higher_template, FALSE, TRUE);
 
     lower_limit_reached = gnc_ui_account_is_lower_balance_limit_reached (account, &lower_is_zero);
 
     if (lower_limit_reached && (!lower_is_zero || !higher_is_zero))
-        return g_strdup ("go-bottom");
+        return icon ? g_strdup ("go-bottom") : make_limit_explanation (account, lower_template, FALSE, FALSE);
 
     if (higher_limit_reached && !lower_is_zero)
-        return g_strdup ("go-top");
+        return icon ? g_strdup ("go-top") : make_limit_explanation (account, higher_template, FALSE, TRUE);
 
     if ((lower_limit_reached || higher_limit_reached ) && lower_is_zero && higher_is_zero)
-        return g_strdup ("dialog-warning");
+        return icon ? g_strdup ("dialog-warning") : make_limit_explanation (account, zero_template, TRUE, FALSE);
 
-    return g_strdup ("");
+    return NULL;
+}
+
+gchar *
+gnc_ui_account_get_balance_limit_icon_name (const Account *account)
+{
+    char *icon = get_balance_limit_info (account, TRUE);
+    return icon ? icon : g_strdup ("");
+}
+
+gchar *
+gnc_ui_account_get_balance_limit_explanation (const Account *account)
+{
+    return get_balance_limit_info (account, FALSE);
 }
 
 /********************************************************************

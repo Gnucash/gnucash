@@ -186,4 +186,15 @@ gboolean gnc_ui_account_is_lower_balance_limit_reached (const Account *account, 
  */
 gchar * gnc_ui_account_get_balance_limit_icon_name (const Account *account);
 
+
+/** Test the account balance as of today for it passing the
+ *  lower and higher limits if set.
+ *
+ *  @param account A pointer to the account.
+ *
+ *  @return An explanation for balance limit warning, or NULL if there
+ *  are no limits, or balance is within limits.
+ */
+gchar * gnc_ui_account_get_balance_limit_explanation (const Account *account);
+
 #endif /* GNC_UI_BALANCES_H_ */
