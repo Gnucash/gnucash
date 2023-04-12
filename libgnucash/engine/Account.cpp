@@ -329,6 +329,12 @@ gnc_account_init(Account* acc)
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
 
+    priv->higher_balance_limit = gnc_numeric_create (1,0);
+    priv->higher_balance_cached = false;
+    priv->lower_balance_limit = gnc_numeric_create (1,0);
+    priv->lower_balance_cached = false;
+    priv->include_sub_account_balances = TriState::Unset;
+
     priv->splits = NULL;
     priv->sort_dirty = FALSE;
 }
