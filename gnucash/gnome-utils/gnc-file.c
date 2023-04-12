@@ -695,6 +695,20 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 }
 
 
+
+static char*
+get_account_sep_warning (QofBook *book)
+{
+    const char *sep = gnc_get_account_separator_string ();
+    GList *violation_accts = gnc_account_list_name_violations (book, sep);
+    if (!violation_accts)
+        return NULL;
+
+    gchar *rv = gnc_account_name_violations_errmsg (sep, violation_accts);
+    g_list_free_full (violation_accts, g_free);
+    return rv;
+}
+
 /* private utilities for file open; done in two stages */
 
 #define RESPONSE_NEW 1
@@ -726,6 +740,12 @@ run_post_load_scrubs (GtkWindow *parent, QofBook *book)
     // Fix account color slots being set to 'Not Set', should run once on a book
     xaccAccountScrubColorNotSet (book);
 
+    /* Check for account names that may contain the current separator character
+     * and inform the user if there are any */
+    char *sep_warning = get_account_sep_warning (book);
+    if (sep_warning)
+        infos = g_list_prepend (infos, sep_warning);
+
     qof_event_resume();
 
     if (!infos)
@@ -745,8 +765,6 @@ static gboolean
 gnc_post_file_open (GtkWindow *parent, const char * filename, gboolean is_readonly)
 {
     QofSession *new_session;
-    QofBook *new_book;
-    GList *invalid_account_names;
     gboolean uh_oh = FALSE;
     char * newfile;
     QofBackendError io_err = ERR_BACKEND_NO_ERR;
@@ -1130,21 +1148,7 @@ RESTART:
     /* Call this after re-enabling events. */
     gnc_book_opened ();
 
-    /* Check for account names that may contain the current separator character
-     * and inform the user if there are any */
-    new_book = gnc_get_current_book();
-    invalid_account_names = gnc_account_list_name_violations ( new_book,
-                            gnc_get_account_separator_string() );
-    if ( invalid_account_names )
-    {
-        gchar *message = gnc_account_name_violations_errmsg ( gnc_get_account_separator_string(),
-                         invalid_account_names );
-        gnc_warning_dialog(parent, "%s", message);
-        g_free ( message );
-        g_list_free_full (invalid_account_names, g_free);
-    }
-
-    run_post_load_scrubs (parent, new_book);
+    run_post_load_scrubs (parent, gnc_get_current_book ());
 
     return TRUE;
 }
