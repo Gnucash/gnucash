@@ -477,7 +477,7 @@
        (lambda (name)
          (set-option! options "Display" name #f))
        (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
-             "Account Name" "Other Account Name" "Shares" "Price" "Running Balance"
+             "Account Name" "Other Account Name" "Shares" "Price" "Account Balance"
              "Totals"))
       (let ((sxml (options->sxml options "all columns off")))
         (test-assert "all display columns off, except amount and subtotals are enabled, there should be 2 columns"
@@ -535,12 +535,12 @@
        (lambda (name)
          (set-option! options "Display" name #t))
        (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
-             "Account Name" "Other Account Name" "Shares" "Price" "Running Balance"
+             "Account Name" "Other Account Name" "Shares" "Price" "Account Balance"
              "Totals" "Use Full Other Account Name" "Use Full Account Name"))
       (let* ((sxml (options->sxml options "all columns on")))
         (test-equal "all display columns on, displays correct columns"
           (list "Date" "Reconciled Date" "Num" "Description" "Memo/Notes" "Account"
-                "Transfer from/to" "Shares" "Price" "Amount" "Running Balance")
+                "Transfer from/to" "Shares" "Price" "Amount" "Account Balance")
           (get-row-col sxml 0 #f))
         (test-assert "reconciled dates must be 01/03/70 or whitespace"
           (and-map
@@ -679,6 +679,27 @@
         (test-equal "dual amount column, first transaction correct"
           (list "$103 income" "Root.Asset.Bank" "$103.00" "$103.00")
           (cdr (get-row-col sxml 1 #f))))
+
+      ;; test account balance displayed as running balance
+      (set! options (default-testing-options))
+      (set-option! options "Display" "Account Balance" #t)
+      (let* ((sxml (options->sxml options "running balance, default options")))
+        (test-equal "running balance, default sort"
+          (list "Date" "Num" "Description" "Memo/Notes" "Account" "Amount" "Running Balance")
+          (get-row-col sxml 0 #f))
+        (test-equal "running balance, showing Balance b/f"
+          (list "Bank: Balance b/f" "-$99.00")
+          (get-row-col sxml 1 #f)))
+
+      (set-option! options "Sorting" "Primary Key" 'account-code)
+      (set-option! options "Sorting" "Secondary Key" 'date)
+      (let* ((sxml (options->sxml options "running balance, primary sort by account code, secondary sort by date")))
+        (test-equal "running balance, secondary sort by date"
+          (list "Date" "Num" "Description" "Memo/Notes" "Account" "Amount" "Running Balance")
+          (get-row-col sxml 0 #f))
+        (test-equal "running balance, showing Balance b/f"
+          (list "Bank: Balance b/f" "-$99.00")
+          (get-row-col sxml 1 #f)))
       )
 
     (test-end "display options")

@@ -918,7 +918,7 @@ be excluded from periodic reporting.")
       (list (N_ "Price")                        "l"  (G_ "Display the shares price?") #f)
       ;; note the "Amount" multichoice option in between here
       (list optname-grid                        "m5" (G_ "Display a subtotal summary table.") #f)
-      (list (N_ "Running Balance")              "n"  (G_ "Display a running balance?") #f)
+      (list (N_ "Account Balance")              "n"  (G_ "Display the balance of the underlying account on each line?") #f)
       (list (N_ "Totals")                       "o"  (G_ "Display the totals?") #t)))
 
     (when BOOK-SPLIT-ACTION
@@ -1033,7 +1033,7 @@ be excluded from periodic reporting.")
                 (and (opt-val pagename-sorting optname-show-subtotals-only)
                      (or (primary-get-info 'renderer-fn)
                          (secondary-get-info 'renderer-fn))))
-          (cons 'running-balance (opt-val gnc:pagename-display (N_ "Running Balance")))
+          (cons 'running-balance (opt-val gnc:pagename-display (N_ "Account Balance")))
           (cons 'account-full-name
                 (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
           (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
@@ -1090,6 +1090,26 @@ be excluded from periodic reporting.")
 
     (define (column-uses? param)
       (assq-ref used-columns param))
+
+    ; Helper function to decide if an account balance can be displayed
+    ; as a running balance with a balance forward at the top.
+    ; It implies most default options are maintained :
+    ; - Detail level is set to one transaction per line,
+    ; - Date filter is set to date posted
+    ; - Filtering on transactions is kept as per default
+    ; - The primary sort is set to account name (or code)
+    ; - The primary subtotals are displayed (to separate accounts)
+    ; - The secondary sort is set to register order or date ascending.
+    (define show-bal-bf?
+      (and (eq? (opt-val gnc:pagename-display optname-detail-level) 'single)
+           (eq? (opt-val gnc:pagename-general optname-date-source) 'posted)
+           (string-null? (opt-val pagename-filter optname-transaction-matcher))
+           (eq? (opt-val pagename-filter optname-reconcile-status) 'all)
+           (eq? (opt-val pagename-filter optname-void-transactions) 'non-void-only)
+           (memq (opt-val pagename-sorting optname-prime-sortkey) '(account-name account-code))
+           (memq (opt-val pagename-sorting optname-sec-sortkey) '(register-order date))
+           (opt-val pagename-sorting optname-prime-subtotal)
+           (eq? (opt-val pagename-sorting optname-sec-sortorder) 'ascend)))
 
     (define exchange-fn
       (if (column-uses? 'common-currency)
@@ -1274,6 +1294,13 @@ be excluded from periodic reporting.")
            (converted-credit-amount (lambda (s)
                                       (and (not (positive? (split-amount s)))
                                            (gnc:monetary-neg (converted-amount s)))))
+           (converted-account-balance (lambda (s)
+                                        (exchange-fn
+                                          (gnc:make-gnc-monetary (split-currency s)
+                                                                (xaccSplitGetBalance s))
+                                          (row-currency s)
+                                          (time64CanonicalDayTime
+                                          (xaccTransGetDate (xaccSplitGetParent s))))))
            (original-amount (lambda (s)
                               (gnc:make-gnc-monetary
                                (split-currency s) (split-amount s))))
@@ -1283,7 +1310,7 @@ be excluded from periodic reporting.")
            (original-credit-amount (lambda (s)
                                      (and (not (positive? (split-amount s)))
                                           (gnc:monetary-neg (original-amount s)))))
-           (running-balance (lambda (s)
+           (original-account-balance (lambda (s)
                               (gnc:make-gnc-monetary
                                (split-currency s) (xaccSplitGetBalance s)))))
         (append
@@ -1299,6 +1326,8 @@ be excluded from periodic reporting.")
          ;;         friendly-heading-fn (friendly-heading-fn account) to retrieve
          ;;                             friendly name for account debit/credit
          ;;                             or 'bal-bf for balance-brought-forward
+         ;;                             or 'original-bal-bf for bal-bf in original currency
+         ;;                             when currency conversion is used
          ;;         start-dual-column?  #t: merge with next cell for subtotal table.
 
          (if (column-uses? 'amount-single)
@@ -1314,6 +1343,16 @@ be excluded from periodic reporting.")
                    (vector (header-commodity (G_ "Credit"))
                            converted-credit-amount #f #t #f
                            friendly-credit #f))
+             '())
+
+         (if (column-uses? 'running-balance)
+             (if show-bal-bf?
+                 (list (vector (header-commodity (G_ "Running Balance"))
+                           converted-account-balance #t #f #f
+                           'bal-bf #f))
+                 (list (vector (header-commodity (G_ "Account Balance"))
+                           converted-account-balance #t #f #f
+                           #f #f)))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
@@ -1333,10 +1372,15 @@ be excluded from periodic reporting.")
                            friendly-credit #f))
              '())
 
-         (if (column-uses? 'running-balance)
-             (list (vector (G_ "Running Balance")
-                           running-balance #t #f #f
-                           'bal-bf #f))
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'running-balance))
+             (if show-bal-bf?
+                 (list (vector (G_ "Running Balance")
+                           original-account-balance #t #f #f
+                           'original-bal-bf #f))
+                 (list (vector (G_ "Account Balance")
+                           original-account-balance #t #f #f
+                           #f #f)))
              '()))))
 
     (define calculated-cells
@@ -1411,6 +1455,21 @@ be excluded from periodic reporting.")
                (match (vector-ref cell 5)
                  (#f #f)
                  ('bal-bf
+                  (let* ((acc (xaccSplitGetAccount split))
+                         (bal (exchange-fn
+                                (gnc:make-gnc-monetary 
+                                      (xaccAccountGetCommodity acc)
+                                      (xaccAccountGetBalanceAsOfDate acc begindate))
+                                (if (column-uses? 'common-currency)
+                                      (opt-val pagename-currency optname-currency)
+                                      (xaccAccountGetCommodity acc))
+                                (time64CanonicalDayTime
+                                 (xaccTransGetDate (xaccSplitGetParent split))))))
+                    (and (memq sortkey ACCOUNT-SORTING-TYPES)
+                         (gnc:make-html-table-cell/markup
+                          "number-cell"
+                          (if (acc-reverse? acc) (gnc:monetary-neg bal) bal)))))
+                 ('original-bal-bf
                   (let* ((acc (xaccSplitGetAccount split))
                          (bal (xaccAccountGetBalanceAsOfDate acc begindate)))
                     (and (memq sortkey ACCOUNT-SORTING-TYPES)
