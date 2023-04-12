@@ -37,6 +37,11 @@
 #include <gtk/gtk.h>
 #include "gnc-commodity.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /** The dialog commodity types are used to determine what commodity
  *  namespaces the currency dialog will present to a user.  These
  *  values can be safely changed from one release to the next.  Note
@@ -247,6 +252,10 @@ void gnc_ui_update_commodity_picker(GtkWidget *cbwe,
                                     const gchar *name_space,
                                     const gchar *sel);
 /** @} */
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /** @} */
