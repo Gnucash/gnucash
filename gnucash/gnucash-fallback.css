@@ -21,15 +21,15 @@
 }
 
 .gnc-class-intervention-required-dark {
-  background-color: shade (@intervention-required_bg_color, 0.7);
+  background-color: shade(@intervention-required_bg_color, 0.7);
 }
 
 .gnc-class-intervention-probably-required-dark {
-  background-color: shade (@intervention-probably-required_bg_color, 0.8);
+  background-color: shade(@intervention-probably-required_bg_color, 0.8);
 }
 
 .gnc-class-intervention-not-required-dark {
-  background-color: shade (@intervention-not-required_bg_color, 0.3);
+  background-color: shade(@intervention-not-required_bg_color, 0.3);
 }
 
 /* Negative value label colors */
@@ -63,7 +63,7 @@ font-style: italic;
 }
 
 *.primary-dark {
-  background-color: shade (@primary_bg_color, 0.7);
+  background-color: shade(@primary_bg_color, 0.7);
 }
 
 *.secondary {
@@ -71,7 +71,7 @@ font-style: italic;
 }
 
 *.secondary-dark {
-  background-color: shade (@secondary_bg_color, 0.7);
+  background-color: shade(@secondary_bg_color, 0.7);
 }
 
 *.markers {
@@ -79,5 +79,5 @@ font-style: italic;
 }
 
 *.markers-dark {
-  background-color: shade (@marker_bg_color, 0.8);
+  background-color: shade(@marker_bg_color, 0.8);
 }
