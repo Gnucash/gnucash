@@ -24,6 +24,7 @@
 
 #include <config.h>
 
+#include <stdbool.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
@@ -90,6 +91,9 @@ static void acc_color_data_func (GtkTreeViewColumn *col,
 static void gnc_tree_view_account_color_update (gpointer gsettings,
          gchar *key, gpointer user_data);
 
+static gboolean
+gnc_tree_view_tooltip_cb (GtkWidget *widget, gint x, gint y, gboolean keyboard_tip,
+                          GtkTooltip *tooltip, gpointer user_data);
 
 typedef struct GncTreeViewAccountPrivate
 {
@@ -770,6 +774,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     ENTER(" ");
     /* Create our view */
     view = g_object_new (GNC_TYPE_TREE_VIEW_ACCOUNT,
+                         "has-tooltip", true,
                          "name", "gnc-id-account-tree", NULL);
 
     priv = GNC_TREE_VIEW_ACCOUNT_GET_PRIVATE(GNC_TREE_VIEW_ACCOUNT (view));
@@ -1048,6 +1053,9 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
 
     /* Set account find-as-you-type search function */
     gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW(view), gnc_tree_view_search_compare, NULL, NULL);
+
+    g_signal_connect (G_OBJECT(view), "query-tooltip",
+                      G_CALLBACK(gnc_tree_view_tooltip_cb), NULL);
 
     gtk_widget_show(GTK_WIDGET(view));
     LEAVE("%p", view);
@@ -2890,4 +2898,55 @@ void gnc_tree_view_account_set_editing_finished_cb(GncTreeViewAccount *view,
 {
     gnc_tree_view_set_editing_finished_cb (GNC_TREE_VIEW(view),
             editing_finished_cb, editing_cb_data);
+}
+
+
+static gboolean
+gnc_tree_view_tooltip_cb (GtkWidget *widget, gint x, gint y, gboolean keyboard_tip,
+                          GtkTooltip *tooltip, gpointer user_data)
+{
+    GtkTreeView *tree_view = GTK_TREE_VIEW(widget);
+    GtkTreePath *path  = NULL;
+    GtkTreeViewColumn *column = NULL;
+    gtk_tree_view_convert_widget_to_bin_window_coords (tree_view, x, y, &x, &y);
+    if (keyboard_tip || !gtk_tree_view_get_path_at_pos (tree_view, x, y, &path,
+                                                        &column, NULL, NULL))
+    {
+        gtk_tree_path_free (path);
+        return false;
+    }
+
+    // Get the iter pointing to our current column
+    gboolean show_tooltip = false;
+    GtkTreeModel *model = gtk_tree_view_get_model (tree_view);
+    GtkTreeIter iter;
+    if (gtk_tree_model_get_iter (model, &iter, path) && column)
+    {
+        gchar *ttip = NULL;
+
+        // Select text based on column
+        switch (gtk_tree_view_column_get_sort_column_id (column))
+        {
+        case GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_LIMIT:
+            gtk_tree_model_get (model, &iter,
+                                GNC_TREE_MODEL_ACCOUNT_COL_BALANCE_LIMIT_EXPLANATION, &ttip,
+                                -1);
+            break;
+        default:
+            break;
+        }
+
+        // Did we select any text? If yes, display the tooltip
+        if (ttip && *ttip)
+        {
+            show_tooltip = true;
+            gtk_tooltip_set_text (tooltip, ttip);
+            gtk_tree_view_set_tooltip_cell (tree_view, tooltip, path, column, NULL);
+        }
+        g_free (ttip);
+    }
+
+    // Clean up the object
+    gtk_tree_path_free (path);
+    return show_tooltip;
 }
