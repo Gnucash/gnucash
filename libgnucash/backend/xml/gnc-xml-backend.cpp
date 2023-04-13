@@ -297,7 +297,7 @@ GncXmlBackend::load(QofBook* book, QofBackendLoadType loadType)
 void
 GncXmlBackend::sync(QofBook* book)
 {
-        /* We make an important assumption here, that we might want to change
+    /* We make an important assumption here, that we might want to change
      * in the future: when the user says 'save', we really save the one,
      * the only, the current open book, and nothing else. In any case the plans
      * for multiple books have been removed in the meantime and there is just one
@@ -652,7 +652,7 @@ GncXmlBackend::get_file_lock (SessionOpenMode mode)
         case EEXIST:
             be_err = ERR_BACKEND_LOCKED;
             break;
-        default: 
+        default:
             PWARN ("Unable to create the lockfile %s: %s",
                    m_lockfile.c_str(), strerror(errno));
             set_message("Lockfile creation failed. Please see the tracefile for details.");
