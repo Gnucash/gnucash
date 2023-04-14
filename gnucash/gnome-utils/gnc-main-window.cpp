@@ -5165,7 +5165,9 @@ static gboolean
 link_button_cb (GtkLinkButton *button, gpointer user_data)
 {
    const gchar *uri = gtk_link_button_get_uri (button);
-   gnc_launch_doclink (GTK_WINDOW(user_data), uri);
+   gchar *escaped_uri = g_uri_escape_string (uri, ":/.\\", true);
+   gnc_launch_doclink (GTK_WINDOW(user_data), escaped_uri);
+   g_free (escaped_uri);
    return TRUE;
 }
 
