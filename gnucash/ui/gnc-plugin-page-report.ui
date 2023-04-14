@@ -218,7 +218,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkToggleToolButton" id="but8">
+      <object class="GtkToolButton" id="but8">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">Save _Report Configuration</property>
