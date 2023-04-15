@@ -47,7 +47,7 @@ template <typename ValueType> ValueType
 GncOption::get_value() const
 {
     return std::visit(
-        [](const auto option)->ValueType {
+        [](const auto& option)->ValueType {
             if constexpr (is_same_decayed_v<decltype(option.get_value()),
                           ValueType>)
                 return option.get_value();
@@ -80,7 +80,7 @@ template <typename ValueType> ValueType
 GncOption::get_default_value() const
 {
     return std::visit(
-        [](const auto option)->ValueType {
+        [](const auto& option)->ValueType {
             if constexpr (is_same_decayed_v<decltype(option.get_value()),
                           ValueType>)
                 return option.get_default_value();
