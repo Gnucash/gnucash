@@ -402,6 +402,13 @@
             report-title
             (G_ "Reporting range end period cannot be less than start period."))))
 
+     ((and use-budget-period-range?
+           (< (gnc-budget-get-num-periods budget) user-budget-period-end))
+      (gnc:html-document-add-object!
+       doc (gnc:html-make-generic-simple-warning
+            report-title
+            (G_ "Reporting range end period cannot exceed number of periods in budget"))))
+
      (else
       ;; Get all the balances for each of the account types.
       (let* ((revenue-account-balances
