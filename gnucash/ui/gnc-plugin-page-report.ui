@@ -11,11 +11,42 @@
     </item>
   </menu>
 
-  <menu id="EditPlaceholder6">
+  <menu id="EditPlaceholder3">
+    <item>
+      <attribute name="label" translatable="yes">_Find…</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.EditFindTransactionsAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;f</attribute>
+      <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder5">
     <item>
       <attribute name="label" translatable="yes">_Report Options</attribute>
       <attribute name="action">GncPluginPageReportActions.ReportOptionsAction</attribute>
       <attribute name="tooltip" translatable="yes">Edit report style sheets</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="EditPlaceholder6">
+    <item>
+<!-- Translators: remember to reuse this translation in dialog-account.glade -->
+      <attribute name="label" translatable="yes">Ta_x Report Options</attribute>
+      <attribute name="action">GncPluginPageReportActions.EditTaxOptionsAction</attribute>
+<!-- Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string -->
+      <attribute name="tooltip" translatable="yes">Setup relevant accounts for tax reports, e.g. US income tax</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+  </menu>
+
+  <menu id="ViewPlaceholder4">
+    <item>
+      <attribute name="label" translatable="yes">_Refresh</attribute>
+      <attribute name="action">GncPluginPageReportActions.ViewRefreshAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;r</attribute>
+      <attribute name="tooltip" translatable="yes">Refresh this window</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>

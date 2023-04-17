@@ -212,7 +212,10 @@ static const gchar *gnc_plugin_load_ui_items [] =
     "FilePlaceholder3",
     "FilePlaceholder4",
     "FilePlaceholder5",
+    "EditPlaceholder3",
+    "EditPlaceholder5",
     "EditPlaceholder6",
+    "ViewPlaceholder4",
     "ReportsPlaceholder1",
     NULL,
 };
