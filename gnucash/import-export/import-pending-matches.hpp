@@ -33,15 +33,16 @@
 
 struct GNCPendingMatches
 {
-    gint num_manual_matches;
-    gint num_auto_matches;
+    gint m_num_manual_matches;
+    gint m_num_auto_matches;
     GNCPendingMatches () :
-        num_manual_matches{0},
-        num_auto_matches{0}
+        m_num_manual_matches{0},
+        m_num_auto_matches{0}
     {};
+    bool all_zero () { return (!m_num_manual_matches && !m_num_auto_matches); }
 };
 
-using GNCImportPendingMatches = std::unordered_map<const GncGUID*,GNCPendingMatches>;
+using GNCImportPendingMatches = std::unordered_map<const GncGUID*, GNCPendingMatches>;
 
 typedef enum _import_match_type {
     GNCImportPending_NONE,
@@ -50,17 +51,17 @@ typedef enum _import_match_type {
 } GNCImportPendingMatchType;
 
 void
-gnc_import_PendingMatches_add_match(GNCImportPendingMatches&,
-                                    GNCImportMatchInfo *match_info,
-                                    gboolean selected_manually);
+gnc_import_PendingMatches_add_match (GNCImportPendingMatches& map,
+                                     GNCImportMatchInfo *match_info,
+                                     gboolean selected_manually);
 
 void
-gnc_import_PendingMatches_remove_match(GNCImportPendingMatches&,
+gnc_import_PendingMatches_remove_match(GNCImportPendingMatches& map,
                                        GNCImportMatchInfo *match_info,
                                        gboolean selected_manually);
 
 GNCImportPendingMatchType
-gnc_import_PendingMatches_get_match_type(GNCImportPendingMatches&,
+gnc_import_PendingMatches_get_match_type(const GNCImportPendingMatches& map,
                                          GNCImportMatchInfo *match_info);
 
 const char *

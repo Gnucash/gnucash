@@ -33,19 +33,13 @@
 #include "import-pending-matches.hpp"
 #include "import-backend.h"
 
+[[maybe_unused]] static QofLogModule log_module = GNC_MOD_IMPORT;
+
 static const GncGUID *
 gnc_import_PendingMatches_get_key (GNCImportMatchInfo *match_info)
 {
     g_return_val_if_fail (match_info, NULL);
     return qof_instance_get_guid (gnc_import_MatchInfo_get_split (match_info));
-}
-
-static GNCPendingMatches&
-gnc_import_PendingMatches_get_value (GNCImportPendingMatches& map,
-                                     GNCImportMatchInfo *match_info)
-{
-    auto match_guid = gnc_import_PendingMatches_get_key (match_info);
-    return map[match_guid];
 }
 
 void
@@ -55,12 +49,13 @@ gnc_import_PendingMatches_add_match (GNCImportPendingMatches& map,
 {
     g_return_if_fail (match_info);
 
-    auto& pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
+    auto match_guid = gnc_import_PendingMatches_get_key (match_info);
+    auto& pending_matches = map[match_guid];
 
     if (selected_manually)
-        pending_matches.num_manual_matches++;
+        pending_matches.m_num_manual_matches++;
     else
-        pending_matches.num_auto_matches++;
+        pending_matches.m_num_auto_matches++;
 }
 
 void
@@ -70,29 +65,42 @@ gnc_import_PendingMatches_remove_match (GNCImportPendingMatches& map,
 {
     g_return_if_fail (match_info);
 
-    auto& pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
+    auto match_guid = gnc_import_PendingMatches_get_key (match_info);
+
+    auto iter = map.find (match_guid);
+    g_return_if_fail (iter != map.end());
+
+    auto& pending_matches = iter->second;
 
     if (selected_manually)
-        pending_matches.num_manual_matches--;
+        pending_matches.m_num_manual_matches--;
     else
-        pending_matches.num_auto_matches--;
+        pending_matches.m_num_auto_matches--;
+
+    if (pending_matches.all_zero())
+        map.erase (iter);
 }
 
 GNCImportPendingMatchType
-gnc_import_PendingMatches_get_match_type (GNCImportPendingMatches& map,
+gnc_import_PendingMatches_get_match_type (const GNCImportPendingMatches& map,
                                           GNCImportMatchInfo *match_info)
 {
     g_return_val_if_fail (match_info, GNCImportPending_NONE);
 
-    auto& pending_matches = gnc_import_PendingMatches_get_value (map, match_info);
+    auto match_guid = gnc_import_PendingMatches_get_key (match_info);
 
-    if (pending_matches.num_manual_matches > 0)
+    auto iter = map.find (match_guid);
+    if (iter == map.end())
+        return GNCImportPending_NONE;
+
+    const auto& pending_matches = iter->second;
+    if (pending_matches.m_num_manual_matches > 0)
         return GNCImportPending_MANUAL;
 
-    if (pending_matches.num_auto_matches > 0)
+    if (pending_matches.m_num_auto_matches > 0)
         return GNCImportPending_AUTO;
 
-    return GNCImportPending_NONE;
+    g_assert_not_reached();
 }
 
 const char *
