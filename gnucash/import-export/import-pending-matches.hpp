@@ -18,7 +18,7 @@
  \ *********************************************************************/
 /** @addtogroup Import_Export
     @{ */
-/** @file import-pending-matches.h
+/** @file import-pending-matches.hpp
     @brief Tracking container for pending match status.
     @author Copyright (C) 2016 Jesse Olmer
 */
@@ -29,11 +29,19 @@
 #include <glib.h>
 #include "import-backend.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <unordered_map>
 
-typedef GHashTable GNCImportPendingMatches;
+struct GNCPendingMatches
+{
+    gint num_manual_matches;
+    gint num_auto_matches;
+    GNCPendingMatches () :
+        num_manual_matches{0},
+        num_auto_matches{0}
+    {};
+};
+
+using GNCImportPendingMatches = std::unordered_map<const GncGUID*,GNCPendingMatches>;
 
 typedef enum _import_match_type {
     GNCImportPending_NONE,
@@ -41,30 +49,22 @@ typedef enum _import_match_type {
     GNCImportPending_MANUAL
 } GNCImportPendingMatchType;
 
-GNCImportPendingMatches * gnc_import_PendingMatches_new(void);
-
-void gnc_import_PendingMatches_delete(GNCImportPendingMatches *map);
-
 void
-gnc_import_PendingMatches_add_match(GNCImportPendingMatches *map,
+gnc_import_PendingMatches_add_match(GNCImportPendingMatches&,
                                     GNCImportMatchInfo *match_info,
                                     gboolean selected_manually);
 
 void
-gnc_import_PendingMatches_remove_match(GNCImportPendingMatches *map,
+gnc_import_PendingMatches_remove_match(GNCImportPendingMatches&,
                                        GNCImportMatchInfo *match_info,
                                        gboolean selected_manually);
 
 GNCImportPendingMatchType
-gnc_import_PendingMatches_get_match_type(GNCImportPendingMatches *map,
+gnc_import_PendingMatches_get_match_type(GNCImportPendingMatches&,
                                          GNCImportMatchInfo *match_info);
 
 const char *
 gnc_import_PendingMatches_get_type_str(GNCImportPendingMatchType type);
-
-#ifdef __cplusplus
-}
-#endif
 
 #endif
 /** @} */

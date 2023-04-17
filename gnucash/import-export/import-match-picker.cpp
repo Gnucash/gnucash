@@ -33,7 +33,7 @@
 
 #include "import-backend.h"
 #include "import-match-picker.hpp"
-#include "import-pending-matches.h"
+#include "import-pending-matches.hpp"
 
 #include "qof.h"
 #include "gnc-ui-util.h"
@@ -89,7 +89,7 @@ struct _transpickerdialog
     GNCImportSettings * user_settings;
     struct _transactioninfo * selected_trans_info;
     GNCImportMatchInfo * selected_match_info;
-    GNCImportPendingMatches * pending_matches;
+    GNCImportPendingMatches pending_matches;
 };
 
 
@@ -503,7 +503,7 @@ init_match_picker_gui(GtkWidget *parent, GNCImportMatchPicker * matcher)
  */
 void
 gnc_import_match_picker_run_and_close (GtkWidget *parent, GNCImportTransInfo *transaction_info,
-                                       GNCImportPendingMatches *pending_matches)
+                                       GNCImportPendingMatches& pending_matches)
 {
     GNCImportMatchPicker *matcher;
     gint response;

@@ -48,6 +48,7 @@
 
 #include "import-main-matcher.h"
 #include "import-match-picker.hpp"
+#include "import-pending-matches.hpp"
 
 extern "C"
 {
@@ -61,7 +62,6 @@ extern "C"
 #include "import-settings.h"
 #include "import-backend.h"
 #include "import-account-matcher.h"
-#include "import-pending-matches.h"
 #include "gnc-component-manager.h"
 #include "guid.h"
 #include "gnc-session.h"
@@ -85,7 +85,7 @@ struct _main_matcher_info
     bool dark_theme;
     GNCTransactionProcessedCB transaction_processed_cb;
     gpointer user_data;
-    GNCImportPendingMatches *pending_matches;
+    GNCImportPendingMatches  pending_matches;
     GtkTreeViewColumn       *account_column;
     GtkTreeViewColumn       *memo_column;
     GtkWidget               *show_account_column;
@@ -246,8 +246,6 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 
     // We've deferred balance computations on many accounts. Let's do it now that we're done.
     update_all_balances (info);
-
-    gnc_import_PendingMatches_delete (info->pending_matches);
 
     delete info;
 }
@@ -1583,8 +1581,6 @@ gnc_gen_trans_common_setup (GNCImportMainMatcher *info,
                             bool all_from_same_account,
                             gint match_date_hardlimit)
 {
-    info->pending_matches = gnc_import_PendingMatches_new ();
-
     /* Initialize user Settings. */
     info->user_settings = gnc_import_Settings_new ();
     gnc_import_Settings_set_match_date_hardlimit (info->user_settings, match_date_hardlimit);
