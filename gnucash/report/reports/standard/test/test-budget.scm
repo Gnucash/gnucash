@@ -179,7 +179,7 @@
          sxml))
 
       (test-equal "net loss for budget"
-        '("Net loss for Budget test budget" "$285.00")
+        '("Net income for Budget test budget" "$105.00")
         ((sxpath '(// table // (tr 2) // table // (tr 5) // *text*))
          sxml)))))
 

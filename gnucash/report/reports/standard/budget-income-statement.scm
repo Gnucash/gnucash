@@ -428,7 +428,11 @@
               (gnc:get-assoc-account-balances-total expense-account-balances))
 
              (net-income
-              (gnc:collector- revenue-total expense-total))
+              (gnc:collector-
+               (gnc:get-assoc-account-balances-total
+                (get-assoc-account-balances-budget
+                 budget (append revenue-accounts expense-accounts)
+                 period-start period-end gnc:budget-account-get-net))))
 
              (table-env
               (list
