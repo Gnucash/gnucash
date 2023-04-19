@@ -102,6 +102,7 @@
       (list (N_ "Running Balance") #f)
       (list (N_ "Totals") #f)))
 
+    (set-option! gnc:pagename-general gnc:optname-reportname (G_ reportname))
     (set-option! gnc:pagename-general "Title" (G_ reportname))
     options))
 
