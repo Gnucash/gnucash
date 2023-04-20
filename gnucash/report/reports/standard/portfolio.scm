@@ -95,9 +95,9 @@
                                 exchange-fn price-fn include-empty collector)
 
    (let ((share-print-info
-	  (gnc-share-print-info-places
-	   (inexact->exact (get-option gnc:pagename-general
-				       optname-shares-digits)))))
+          (gnc-share-print-info-places
+           (inexact->exact (get-option gnc:pagename-general
+                                       optname-shares-digits)))))
 
     (define (table-add-stock-rows-internal accounts odd-row?)
       (if (null? accounts) collector
@@ -123,30 +123,30 @@
                  (value (exchange-fn (gnc:make-gnc-monetary commodity units)
                                      currency)))
 
-	    (set! work-done (+ 1 work-done))
-	    (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
-	    (if (or include-empty (not (gnc-numeric-zero-p units)))
-		(begin (collector 'add currency (gnc:gnc-monetary-amount value))
-		       (gnc:html-table-append-row/markup!
-			table
-			row-style
-			(list (gnc:html-account-anchor current)
-			      (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol)
-			      (gnc:make-html-table-header-cell/markup "text-cell" listing)
-			      (gnc:make-html-table-header-cell/markup
-			       "number-cell"
-			       (xaccPrintAmount units share-print-info))
-			      (gnc:make-html-table-header-cell/markup
-			       "number-cell"
+            (set! work-done (+ 1 work-done))
+            (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
+            (if (or include-empty (not (gnc-numeric-zero-p units)))
+                (begin (collector 'add currency (gnc:gnc-monetary-amount value))
+                       (gnc:html-table-append-row/markup!
+                        table
+                        row-style
+                        (list (gnc:html-account-anchor current)
+                              (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol)
+                              (gnc:make-html-table-header-cell/markup "text-cell" listing)
+                              (gnc:make-html-table-header-cell/markup
+                               "number-cell"
+                               (xaccPrintAmount units share-print-info))
+                              (gnc:make-html-table-header-cell/markup
+                               "number-cell"
                                (gnc:html-price-anchor price price-monetary))
-			      (gnc:make-html-table-header-cell/markup
-			       "number-cell" value)))
-		       ;;(display (format #f "Shares: ~6d  " (gnc-numeric-to-double units)))
-		       ;;(display units) (newline)
-		       (if price (gnc-price-unref price))
-		       (table-add-stock-rows-internal rest (not odd-row?)))
-		(begin (if price (gnc-price-unref price))
-		       (table-add-stock-rows-internal rest odd-row?))))))
+                              (gnc:make-html-table-header-cell/markup
+                               "number-cell" value)))
+                       ;;(display (format #f "Shares: ~6d  " (gnc-numeric-to-double units)))
+                       ;;(display units) (newline)
+                       (if price (gnc-price-unref price))
+                       (table-add-stock-rows-internal rest (not odd-row?)))
+                (begin (if price (gnc-price-unref price))
+                       (table-add-stock-rows-internal rest odd-row?))))))
 
     (set! work-to-do (length accounts))
     (table-add-stock-rows-internal accounts #t)))
@@ -185,7 +185,7 @@
                                 (gnc-accounts-and-all-descendants accounts)
                                 currency))
                (pricedb (gnc-pricedb-get-db (gnc-get-current-book)))
-	       (exchange-fn (gnc:case-exchange-fn price-source currency to-date))
+               (exchange-fn (gnc:case-exchange-fn price-source currency to-date))
                (price-fn
                 (case price-source
                   ((weighted-average average-cost)
@@ -277,8 +277,8 @@
                                         ;if no accounts selected.
         (gnc:html-document-add-object!
          document
-	 (gnc:html-make-no-account-warning
-	  report-title (gnc:report-id report-obj))))
+         (gnc:html-make-no-account-warning
+          report-title (gnc:report-id report-obj))))
 
     (gnc:report-finished)
     document)))

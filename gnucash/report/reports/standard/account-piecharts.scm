@@ -1,19 +1,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; account-piecharts.scm: shows piechart of accounts
-;;  
-;; By Robert Merkel (rgmerk@mira.net) 
+;;
+;; By Robert Merkel (rgmerk@mira.net)
 ;; and Christian Stimming <stimming@tu-harburg.de>
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -43,13 +43,13 @@
 ;; The menu statusbar tips.
 (define menutip-income
   (N_ "Shows a piechart with the Income per given time interval"))
-(define menutip-expense 
+(define menutip-expense
   (N_ "Shows a piechart with the Expenses per given time interval"))
-(define menutip-assets 
+(define menutip-assets
   (N_ "Shows a piechart with the Assets balance at a given time"))
 (define menutip-securities
   (N_ "Shows a piechart with distribution of assets over securities"))
-(define menutip-liabilities 
+(define menutip-liabilities
   (N_ "Shows a piechart with the Liabilities \
 balance at a given time"))
 
@@ -298,14 +298,14 @@ balance at a given time"))
   (gnc:report-starting reportname)
 
   ;; Get all options
-  (let ((to-date (gnc:time64-end-day-time 
+  (let ((to-date (gnc:time64-end-day-time
                      (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general optname-to-date))))
         (from-date (if do-intervals?
-                          (gnc:time64-start-day-time 
-                           (gnc:date-option-absolute-time 
-                            (get-option gnc:pagename-general 
-					optname-from-date)))
+                          (gnc:time64-start-day-time
+                           (gnc:date-option-absolute-time
+                            (get-option gnc:pagename-general
+                                        optname-from-date)))
                           '()))
         (accounts (get-option gnc:pagename-accounts optname-accounts))
         (account-levels
@@ -313,11 +313,11 @@ balance at a given time"))
             (get-option gnc:pagename-accounts optname-levels)
             'all))
         (report-currency (get-option gnc:pagename-general
-				     optname-report-currency))
+                                     optname-report-currency))
         (price-source (get-option gnc:pagename-general
                                   optname-price-source))
-        (report-title (get-option gnc:pagename-general 
-				  gnc:optname-reportname))
+        (report-title (get-option gnc:pagename-general
+                                  gnc:optname-reportname))
         (averaging-selection (if do-intervals?
                                  (get-option gnc:pagename-general
                                              optname-averaging)
@@ -327,14 +327,14 @@ balance at a given time"))
         (show-total? (get-option gnc:pagename-display optname-show-total))
         (show-percent? (get-option gnc:pagename-display optname-show-percent))
         (max-slices (inexact->exact
-		     (get-option gnc:pagename-display optname-slices)))
+                     (get-option gnc:pagename-display optname-slices)))
         (height (get-option gnc:pagename-display optname-plot-height))
         (width (get-option gnc:pagename-display optname-plot-width))
-	(sort-method (get-option gnc:pagename-display optname-sort-method))
+        (sort-method (get-option gnc:pagename-display optname-sort-method))
 
         (document (gnc:make-html-document))
         (chart (gnc:make-html-chart))
-        (topl-accounts (gnc:filter-accountlist-type 
+        (topl-accounts (gnc:filter-accountlist-type
                         account-types
                         (gnc-account-get-children-sorted
                          (gnc-get-current-root-account)))))
@@ -343,7 +343,7 @@ balance at a given time"))
     ;; selection option.
     (define (show-acct? a)
       (member a accounts))
-    
+
     ;; Calculates the net balance (profit or loss) of an account
     ;; over the selected reporting period. If subaccts? == #t, all
     ;; subaccount's balances are included as well. Returns a
@@ -356,7 +356,7 @@ balance at a given time"))
            account to-date subaccts?)))
 
     ;; Define more helper variables.
-    (let* ((exchange-fn (gnc:case-exchange-fn 
+    (let* ((exchange-fn (gnc:case-exchange-fn
                          price-source report-currency to-date))
            (tree-depth (if (equal? account-levels 'all)
                            (gnc:get-current-account-tree-depth)
@@ -410,7 +410,7 @@ balance at a given time"))
         (collector->amount (profit-fn a subaccts?)))
 
       (define (count-accounts current-depth accts)
-	(if (< current-depth tree-depth)
+        (if (< current-depth tree-depth)
             (let iter ((sum 0)
                        (remaining accts))
               (if (null? remaining)
@@ -420,11 +420,11 @@ balance at a given time"))
                          (subaccts (count-accounts (1+ current-depth)
                                                    (gnc-account-get-children cur))))
                     (iter (+ sum (1+ subaccts)) tail))))
-	    (length (filter show-acct? accts))))
+            (length (filter show-acct? accts))))
 
       ;; Get base data to be plotted.
       (define work-to-do (lambda () (count-accounts 1 topl-accounts)))
- 
+
       (define base-data (lambda ()
         (get-data account-balance show-acct? work-to-do tree-depth
                   0 1 topl-accounts)))
@@ -434,15 +434,15 @@ balance at a given time"))
                (if reverse-balance?
                    (cons (- (car pair)) (cdr pair))
                    pair))
-	     combined))
+             combined))
 
       ;; Now do the work here.
 
       (if (not (null? accounts))
           (begin
             (set! combined
-		  (sort (filter (lambda (pair) (not (>= 0.0 (car pair))))
-				(fix-signs (cdr (base-data))))
+                  (sort (filter (lambda (pair) (not (>= 0.0 (car pair))))
+                                (fix-signs (cdr (base-data))))
                         (sort-comparator sort-method show-fullname?)))
 
             ;; if too many slices, condense them to an 'other' slice
@@ -468,8 +468,8 @@ balance at a given time"))
                       (set! id (gnc:make-report report-guid options))
                       ;; set the URL.
                       (set! other-anchor (gnc:report-anchor-text id))))))
-            
-            (if 
+
+            (if
              (not (null? combined))
              (let ((urls (and depth-based?
                               (map
@@ -562,13 +562,13 @@ balance at a given time"))
 
              (gnc:html-document-add-object!
               document
-	      (gnc:html-make-empty-data-warning
-	       report-title (gnc:report-id report-obj)))))
+              (gnc:html-make-empty-data-warning
+               report-title (gnc:report-id report-obj)))))
 
           (gnc:html-document-add-object!
            document
-	   (gnc:html-make-no-account-warning 
-	    report-title (gnc:report-id report-obj))))
+           (gnc:html-make-no-account-warning
+            report-title (gnc:report-id report-obj))))
 
       (gnc:report-finished)
       document)))

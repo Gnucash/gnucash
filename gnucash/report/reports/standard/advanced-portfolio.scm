@@ -28,7 +28,7 @@
 (define-module (gnucash reports standard advanced-portfolio))
 
 (use-modules (gnucash engine))
-(use-modules (gnucash utilities)) 
+(use-modules (gnucash utilities))
 (use-modules (gnucash core-utils))
 (use-modules (gnucash app-utils))
 (use-modules (gnucash report))
@@ -97,19 +97,19 @@ by preventing negative stock balances.<br/>")
             (vector 'ignore-brokerage (N_ "Omit from report"))))
 
     (gnc-register-simple-boolean-option options
-	gnc:pagename-display optname-show-symbol "a"
-	(N_ "Display the ticker symbols.")
-	#t)
+        gnc:pagename-display optname-show-symbol "a"
+        (N_ "Display the ticker symbols.")
+        #t)
 
     (gnc-register-simple-boolean-option options
-	gnc:pagename-display optname-show-listing "b"
-	(N_ "Display exchange listings.")
-	#t)
+        gnc:pagename-display optname-show-listing "b"
+        (N_ "Display exchange listings.")
+        #t)
 
     (gnc-register-simple-boolean-option options
-	gnc:pagename-display optname-show-shares "c"
-	(N_ "Display numbers of shares in accounts.")
-	#t)
+        gnc:pagename-display optname-show-shares "c"
+        (N_ "Display numbers of shares in accounts.")
+        #t)
 
     (gnc-register-number-range-option options
       gnc:pagename-display optname-shares-digits
@@ -117,9 +117,9 @@ by preventing negative stock balances.<br/>")
       0 9 1)
 
     (gnc-register-simple-boolean-option options
-	gnc:pagename-display optname-show-price "e"
-	(N_ "Display share prices.")
-	#t)
+        gnc:pagename-display optname-show-price "e"
+        (N_ "Display share prices.")
+        #t)
 
     ;; Account tab
     (gnc-register-account-list-limited-option options
@@ -169,30 +169,30 @@ by preventing negative stock balances.<br/>")
   ;; sum up the contents of the b-list built by basis-builder below
   (define (sum-basis b-list currency-frac)
     (if (not (eqv? b-list '()))
-	(gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) currency-frac GNC-RND-ROUND)
-			 (sum-basis (cdr b-list) currency-frac) currency-frac GNC-RND-ROUND)
-	(gnc-numeric-zero)
-	)
+        (gnc-numeric-add (gnc-numeric-mul (caar b-list) (cdar b-list) currency-frac GNC-RND-ROUND)
+                         (sum-basis (cdr b-list) currency-frac) currency-frac GNC-RND-ROUND)
+        (gnc-numeric-zero)
+        )
     )
 
   ;; sum up the total number of units in the b-list built by basis-builder below
   (define (units-basis b-list)
     (if (not (eqv? b-list '()))
-	(gnc-numeric-add (caar b-list) (units-basis (cdr b-list))
-			 units-denom GNC-RND-ROUND)
-	(gnc-numeric-zero)
-	)
+        (gnc-numeric-add (caar b-list) (units-basis (cdr b-list))
+                         units-denom GNC-RND-ROUND)
+        (gnc-numeric-zero)
+        )
     )
 
   ;; apply a ratio to an existing basis-list, useful for splits/mergers and spinoffs
   ;; I need to get a brain and use (map) for this.
   (define (apply-basis-ratio b-list units-ratio value-ratio)
     (if (not (eqv? b-list '()))
-	(cons (cons (gnc-numeric-mul units-ratio (caar b-list) units-denom GNC-RND-ROUND)
-		    (gnc-numeric-mul value-ratio (cdar b-list) price-denom GNC-RND-ROUND))
-	      (apply-basis-ratio (cdr b-list) units-ratio value-ratio))
-	'()
-	)
+        (cons (cons (gnc-numeric-mul units-ratio (caar b-list) units-denom GNC-RND-ROUND)
+                    (gnc-numeric-mul value-ratio (cdar b-list) price-denom GNC-RND-ROUND))
+              (apply-basis-ratio (cdr b-list) units-ratio value-ratio))
+        '()
+        )
     )
 
   ;; this builds a list for basis calculation and handles average, fifo and lifo methods
@@ -209,34 +209,34 @@ by preventing negative stock balances.<br/>")
 
      ;; we have value and positive units, add units to basis
      ((and (not (gnc-numeric-zero-p b-value))
-	   (gnc-numeric-positive-p b-units))
+           (gnc-numeric-positive-p b-units))
       (case b-method
-	((average-basis)
-	 (if (not (eqv? b-list '()))
-	     (list (cons (gnc-numeric-add b-units
-					  (caar b-list) units-denom GNC-RND-ROUND)
-			 (gnc-numeric-div
-			  (gnc-numeric-add b-value
-					   (gnc-numeric-mul (caar b-list)
-							    (cdar b-list)
-							    GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-					   GNC-DENOM-AUTO GNC-DENOM-REDUCE)
-			  (let ((denom (gnc-numeric-add b-units
+        ((average-basis)
+         (if (not (eqv? b-list '()))
+             (list (cons (gnc-numeric-add b-units
+                                          (caar b-list) units-denom GNC-RND-ROUND)
+                         (gnc-numeric-div
+                          (gnc-numeric-add b-value
+                                           (gnc-numeric-mul (caar b-list)
+                                                            (cdar b-list)
+                                                            GNC-DENOM-AUTO GNC-DENOM-REDUCE)
+                                           GNC-DENOM-AUTO GNC-DENOM-REDUCE)
+                          (let ((denom (gnc-numeric-add b-units
                                                         (caar b-list) GNC-DENOM-AUTO GNC-DENOM-REDUCE)))
                             (if (zero? denom)
                                 (throw 'div/0 (format #f "buying ~0,4f share units" b-units))
                                 denom))
-			  price-denom GNC-RND-ROUND)))
-	     (append b-list
+                          price-denom GNC-RND-ROUND)))
+             (append b-list
                      (list (cons b-units (gnc-numeric-div
                                           b-value b-units price-denom GNC-RND-ROUND))))))
-	(else (append b-list
+        (else (append b-list
                       (list (cons b-units (gnc-numeric-div
                                            b-value b-units price-denom GNC-RND-ROUND)))))))
 
      ;; we have value and negative units, remove units from basis
      ((and (not (gnc-numeric-zero-p b-value))
-	   (gnc-numeric-negative-p b-units))
+           (gnc-numeric-negative-p b-units))
       (if (not (eqv? b-list '()))
           (case b-method
             ((fifo-basis)
@@ -278,38 +278,38 @@ by preventing negative stock balances.<br/>")
 
      ;; no value, just units, this is a split/merge...
      ((and (gnc-numeric-zero-p b-value)
-	   (not (gnc-numeric-zero-p b-units)))
-	(let* ((current-units (units-basis b-list))
+           (not (gnc-numeric-zero-p b-units)))
+        (let* ((current-units (units-basis b-list))
                ;; If current-units is zero then so should be everything else.
-	       (units-ratio (if (zero? current-units) (gnc-numeric-zero)
+               (units-ratio (if (zero? current-units) (gnc-numeric-zero)
                                 (gnc-numeric-div (gnc-numeric-add b-units current-units GNC-DENOM-AUTO GNC-DENOM-REDUCE)
                                                  current-units GNC-DENOM-AUTO GNC-DENOM-REDUCE)))
                ;; If the units ratio is zero the stock is worthless and the value should be zero too
-	       (value-ratio (if (gnc-numeric-zero-p units-ratio)
-	                        (gnc-numeric-zero)
+               (value-ratio (if (gnc-numeric-zero-p units-ratio)
+                                (gnc-numeric-zero)
                                 (gnc-numeric-div 1/1 units-ratio GNC-DENOM-AUTO GNC-DENOM-REDUCE))))
 
-	  (gnc:debug "blist is " b-list " current units is "
-	             (gnc-numeric-to-string current-units)
-	             " value ratio is " (gnc-numeric-to-string value-ratio)
-	             " units ratio is " (gnc-numeric-to-string units-ratio))
-	  (apply-basis-ratio b-list units-ratio value-ratio)
-	  ))
+          (gnc:debug "blist is " b-list " current units is "
+                     (gnc-numeric-to-string current-units)
+                     " value ratio is " (gnc-numeric-to-string value-ratio)
+                     " units ratio is " (gnc-numeric-to-string units-ratio))
+          (apply-basis-ratio b-list units-ratio value-ratio)
+          ))
 
-	;; If there are no units, just a value, then its a spin-off,
-	;; calculate a ratio for the values, but leave the units alone
-	;; with a ratio of 1
+        ;; If there are no units, just a value, then its a spin-off,
+        ;; calculate a ratio for the values, but leave the units alone
+        ;; with a ratio of 1
      ((and (gnc-numeric-zero-p b-units)
-	   (not (gnc-numeric-zero-p b-value)))
+           (not (gnc-numeric-zero-p b-value)))
       (let* ((current-value (sum-basis b-list GNC-DENOM-AUTO))
             (value-ratio (if (zero? current-value)
                              (throw 'div/0 (format #f "spinoff of ~,2f currency units" current-value))
                              (gnc-numeric-div (gnc-numeric-add b-value current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE)
                                               current-value GNC-DENOM-AUTO GNC-DENOM-REDUCE))))
 
-	(gnc:debug "this is a spinoff")
-	(gnc:debug "blist is " b-list " value ratio is " (gnc-numeric-to-string value-ratio))
-	(apply-basis-ratio b-list 1/1 value-ratio))
+        (gnc:debug "this is a spinoff")
+        (gnc:debug "blist is " b-list " value ratio is " (gnc-numeric-to-string value-ratio))
+        (apply-basis-ratio b-list 1/1 value-ratio))
       )
 
      ;; when all else fails, just send the b-list back
@@ -358,23 +358,23 @@ by preventing negative stock balances.<br/>")
 
 (define (table-add-stock-rows table accounts to-date
                                 currency price-fn exchange-fn price-source
-				include-empty show-symbol show-listing show-shares show-price
+                                include-empty show-symbol show-listing show-shares show-price
                                 basis-method prefer-pricelist handle-brokerage-fees
                                 total-basis total-value
                                 total-moneyin total-moneyout total-income total-gain
                                 total-ugain total-brokerage)
 
    (let ((share-print-info
-	  (gnc-share-print-info-places
-	   (inexact->exact (get-option gnc:pagename-display
-      			       optname-shares-digits)))))
+          (gnc-share-print-info-places
+           (inexact->exact (get-option gnc:pagename-display
+                               optname-shares-digits)))))
 
     (define (table-add-stock-rows-internal accounts odd-row?)
       (if (null? accounts) total-value
           (let* ((row-style (if odd-row? "normal-row" "alternate-row"))
                  (current (car accounts))
                  (rest (cdr accounts))
-		 ;; commodity is the actual stock/thing we are looking at
+                 ;; commodity is the actual stock/thing we are looking at
                  (commodity (xaccAccountGetCommodity current))
                  (ticker-symbol (gnc-commodity-get-mnemonic commodity))
                  (listing (gnc-commodity-get-namespace commodity))
@@ -390,23 +390,23 @@ by preventing negative stock balances.<br/>")
                  (gaincoll      (gnc:make-commodity-collector))
 
 
-		 ;; the price of the commodity at the time of the report
+                 ;; the price of the commodity at the time of the report
                  (price (price-fn commodity currency to-date))
-		 ;; the value of the commodity, expressed in terms of
-		 ;; the report's currency.
+                 ;; the value of the commodity, expressed in terms of
+                 ;; the report's currency.
                  (value (gnc:make-gnc-monetary currency (gnc-numeric-zero)))  ;; Set later
                  (currency-frac (gnc-commodity-get-fraction currency))
 
-		 (pricing-txn #f)
-		 (use-txn #f)
-		 (basis-list '())
-		 ;; setup an alist for the splits we've already seen.
-		 (seen_trans '())
-		 ;; Account used to hold remainders from income reinvestments and
-		 ;; running total of amount moved there
-		 (drp-holding-account #f)
-		 (drp-holding-amount (gnc-numeric-zero))
-		 )
+                 (pricing-txn #f)
+                 (use-txn #f)
+                 (basis-list '())
+                 ;; setup an alist for the splits we've already seen.
+                 (seen_trans '())
+                 ;; Account used to hold remainders from income reinvestments and
+                 ;; running total of amount moved there
+                 (drp-holding-account #f)
+                 (drp-holding-amount (gnc-numeric-zero))
+                 )
 
             (define (my-exchange-fn fromunits tocurrency)
               (if (and (gnc-commodity-equiv currency tocurrency)
@@ -495,40 +495,40 @@ by preventing negative stock balances.<br/>")
                        " from " (gnc:monetary->string
                                  (gnc:make-gnc-monetary commodity units)))
 
-	    (for-each
-	     ;; we're looking at each split we find in the account. these splits
-	     ;; could refer to the same transaction, so we have to examine each
-	     ;; split, determine what kind of split it is and then act accordingly.
-	     (lambda (split)
-	       (set! work-done (+ 1 work-done))
-	       (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
+            (for-each
+             ;; we're looking at each split we find in the account. these splits
+             ;; could refer to the same transaction, so we have to examine each
+             ;; split, determine what kind of split it is and then act accordingly.
+             (lambda (split)
+               (set! work-done (+ 1 work-done))
+               (gnc:report-percent-done (* 100 (/ work-done work-to-do)))
 
-	       (let* ((parent (xaccSplitGetParent split))
-		      (txn-date (xaccTransGetDate parent))
-		      (commod-currency (xaccTransGetCurrency parent))
-		      (commod-currency-frac (gnc-commodity-get-fraction commod-currency)))
+               (let* ((parent (xaccSplitGetParent split))
+                      (txn-date (xaccTransGetDate parent))
+                      (commod-currency (xaccTransGetCurrency parent))
+                      (commod-currency-frac (gnc-commodity-get-fraction commod-currency)))
 
-		 (if (and (<= txn-date to-date)
-		          (not (assoc-ref seen_trans (gncTransGetGUID parent))))
-		     (let ((trans-income (gnc-numeric-zero))
-		           (trans-brokerage (gnc-numeric-zero))
-		           (trans-shares (gnc-numeric-zero))
-		           (shares-bought (gnc-numeric-zero))
-		           (trans-sold (gnc-numeric-zero))
-		           (trans-bought (gnc-numeric-zero))
-		           (trans-spinoff (gnc-numeric-zero))
-		           (trans-drp-residual (gnc-numeric-zero))
-		           (trans-drp-account #f))
+                 (if (and (<= txn-date to-date)
+                          (not (assoc-ref seen_trans (gncTransGetGUID parent))))
+                     (let ((trans-income (gnc-numeric-zero))
+                           (trans-brokerage (gnc-numeric-zero))
+                           (trans-shares (gnc-numeric-zero))
+                           (shares-bought (gnc-numeric-zero))
+                           (trans-sold (gnc-numeric-zero))
+                           (trans-bought (gnc-numeric-zero))
+                           (trans-spinoff (gnc-numeric-zero))
+                           (trans-drp-residual (gnc-numeric-zero))
+                           (trans-drp-account #f))
 
-		       (gnc:debug "Transaction " (xaccTransGetDescription parent))
-		       ;; Add this transaction to the list of processed transactions so we don't
-		       ;; do it again if there is another split in it for this account
-		       (set! seen_trans (acons (gncTransGetGUID parent) #t seen_trans))
+                       (gnc:debug "Transaction " (xaccTransGetDescription parent))
+                       ;; Add this transaction to the list of processed transactions so we don't
+                       ;; do it again if there is another split in it for this account
+                       (set! seen_trans (acons (gncTransGetGUID parent) #t seen_trans))
 
-		       ;; Go through all the splits in the transaction to get an overall idea of
-		       ;; what it does in terms of income, money in or out, shares bought or sold, etc.
-		       (for-each
-		         (lambda (s)
+                       ;; Go through all the splits in the transaction to get an overall idea of
+                       ;; what it does in terms of income, money in or out, shares bought or sold, etc.
+                       (for-each
+                         (lambda (s)
                            (let ((split-units (xaccSplitGetAmount s))
                                  (split-value (xaccSplitGetValue s)))
 
@@ -587,32 +587,32 @@ by preventing negative stock balances.<br/>")
                                            (set! trans-drp-residual (gnc-numeric-add trans-drp-residual split-value
                                                                                      commod-currency-frac GNC-RND-ROUND))
                                            (set! trans-drp-account 'none))))))
-		         ))
-		         (xaccTransGetSplitList parent)
-		       )
+                         ))
+                         (xaccTransGetSplitList parent)
+                       )
 
-		       (gnc:debug "Income: " (gnc-numeric-to-string trans-income)
-		                  " Brokerage: " (gnc-numeric-to-string trans-brokerage)
-		                  " Shares traded: " (gnc-numeric-to-string trans-shares)
-		                  " Shares bought: " (gnc-numeric-to-string shares-bought))
-		       (gnc:debug " Value sold: " (gnc-numeric-to-string trans-sold)
-		                  " Value purchased: " (gnc-numeric-to-string trans-bought)
-		                  " Spinoff value " (gnc-numeric-to-string trans-spinoff)
-		                  " Trans DRP residual: " (gnc-numeric-to-string trans-drp-residual))
+                       (gnc:debug "Income: " (gnc-numeric-to-string trans-income)
+                                  " Brokerage: " (gnc-numeric-to-string trans-brokerage)
+                                  " Shares traded: " (gnc-numeric-to-string trans-shares)
+                                  " Shares bought: " (gnc-numeric-to-string shares-bought))
+                       (gnc:debug " Value sold: " (gnc-numeric-to-string trans-sold)
+                                  " Value purchased: " (gnc-numeric-to-string trans-bought)
+                                  " Spinoff value " (gnc-numeric-to-string trans-spinoff)
+                                  " Trans DRP residual: " (gnc-numeric-to-string trans-drp-residual))
 
-		       ;; We need to calculate several things for this transaction:
-		       ;; 1. Total income: this is already in trans-income
-		       ;; 2. Change in basis: calculated by loop below that looks at every
-		       ;;    that acquires or disposes of shares
-		       ;; 3. Realized gain: also calculated below while calculating basis
-		       ;; 4. Money in to the account: this is the value of shares bought
-		       ;;    except those purchased with reinvested income
-		       ;; 5. Money out: the money received by disposing of shares.   This
-		       ;;    is in trans-sold plus trans-spinoff
-		       ;; 6. Brokerage fees: this is in trans-brokerage
+                       ;; We need to calculate several things for this transaction:
+                       ;; 1. Total income: this is already in trans-income
+                       ;; 2. Change in basis: calculated by loop below that looks at every
+                       ;;    that acquires or disposes of shares
+                       ;; 3. Realized gain: also calculated below while calculating basis
+                       ;; 4. Money in to the account: this is the value of shares bought
+                       ;;    except those purchased with reinvested income
+                       ;; 5. Money out: the money received by disposing of shares.   This
+                       ;;    is in trans-sold plus trans-spinoff
+                       ;; 6. Brokerage fees: this is in trans-brokerage
 
-		       ;; Income
-		       (dividendcoll 'add commod-currency trans-income)
+                       ;; Income
+                       (dividendcoll 'add commod-currency trans-income)
 
                        ;; Brokerage fees.  May be either ignored or part of basis, but that
                        ;; will be dealt with elsewhere.
@@ -677,8 +677,8 @@ by preventing negative stock balances.<br/>")
                        (moneyoutcoll 'add commod-currency trans-spinoff)
 
                        ;; Look at splits again to handle changes in basis and realized gains
-		       (for-each
-		         (lambda (s)
+                       (for-each
+                         (lambda (s)
                            (let
                               ;; get the split's units and value
                               ((split-units (xaccSplitGetAmount s))
@@ -693,30 +693,30 @@ by preventing negative stock balances.<br/>")
                                      (same-account? current (xaccSplitGetAccount s)))
                                 ;; Split into subject account with non-zero amount.  This is a purchase
                                 ;; or a sale, adjust the basis
-				(let* ((split-value-currency (gnc:gnc-monetary-amount
-								(my-exchange-fn (gnc:make-gnc-monetary
-								   commod-currency split-value) currency)))
-			               (orig-basis (sum-basis basis-list currency-frac))
-			               ;; proportion of the fees attributable to this split
-			               (fee-ratio (gnc-numeric-div (gnc-numeric-abs split-units) trans-shares
-			                                           GNC-DENOM-AUTO GNC-DENOM-REDUCE))
-			               ;; Fees for this split in report currency
-			               (fees-currency (gnc:gnc-monetary-amount (my-exchange-fn
-			                               (gnc:make-gnc-monetary commod-currency
-			                                 (gnc-numeric-mul fee-ratio trans-brokerage
-			                                                commod-currency-frac GNC-RND-ROUND))
-			                                currency)))
-			               (split-value-with-fees (if (eq? handle-brokerage-fees 'include-in-basis)
-			                                          ;; Include brokerage fees in basis
-			                                          (gnc-numeric-add split-value-currency fees-currency
-			                                                        currency-frac GNC-RND-ROUND)
-			                                          split-value-currency)))
+                                (let* ((split-value-currency (gnc:gnc-monetary-amount
+                                                                (my-exchange-fn (gnc:make-gnc-monetary
+                                                                   commod-currency split-value) currency)))
+                                       (orig-basis (sum-basis basis-list currency-frac))
+                                       ;; proportion of the fees attributable to this split
+                                       (fee-ratio (gnc-numeric-div (gnc-numeric-abs split-units) trans-shares
+                                                                   GNC-DENOM-AUTO GNC-DENOM-REDUCE))
+                                       ;; Fees for this split in report currency
+                                       (fees-currency (gnc:gnc-monetary-amount (my-exchange-fn
+                                                       (gnc:make-gnc-monetary commod-currency
+                                                         (gnc-numeric-mul fee-ratio trans-brokerage
+                                                                        commod-currency-frac GNC-RND-ROUND))
+                                                        currency)))
+                                       (split-value-with-fees (if (eq? handle-brokerage-fees 'include-in-basis)
+                                                                  ;; Include brokerage fees in basis
+                                                                  (gnc-numeric-add split-value-currency fees-currency
+                                                                                currency-frac GNC-RND-ROUND)
+                                                                  split-value-currency)))
                                   (gnc:debug "going in to basis list " basis-list " " (gnc-numeric-to-string split-units) " "
                                              (gnc-numeric-to-string split-value-with-fees))
 
-				  ;; adjust the basis
-				  (set! basis-list (basis-builder basis-list split-units split-value-with-fees
-								  basis-method currency-frac))
+                                  ;; adjust the basis
+                                  (set! basis-list (basis-builder basis-list split-units split-value-with-fees
+                                                                  basis-method currency-frac))
                                   (gnc:debug  "coming out of basis list " basis-list)
 
                                   ;; If it's a sale or the stock is worthless, calculate the gain
@@ -752,110 +752,110 @@ by preventing negative stock balances.<br/>")
                                                                                                        currency-frac))
                                   (gnc:debug "after spin-off basis list "  basis-list))
                              )
-		         ))
-		         (xaccTransGetSplitList parent)
-		       )
-		      )
-		   )
-		 )
-	       )
-	     (xaccAccountGetSplitList current)
-	     )
+                         ))
+                         (xaccTransGetSplitList parent)
+                       )
+                      )
+                   )
+                 )
+               )
+             (xaccAccountGetSplitList current)
+             )
 
-	    ;; Look for income and expense transactions that don't have a split in the
-	    ;; the account we're processing.  We do this as follow
-	    ;; 1. Make sure the parent account is a currency-valued asset or bank account
-	    ;; 2. If so go through all the splits in that account
-	    ;; 3. If a split is part of a two split transaction where the other split is
-	    ;;    to an income or expense account and the leaf name of that account is the
-	    ;;    same as the leaf name of the account we're processing, add it to the
-	    ;;    income or expense accumulator
-	    ;;
-	    ;; In other words with an account structure like
-	    ;;
-	    ;;   Assets (type ASSET)
-	    ;;     Broker (type ASSET)
-	    ;;       Widget Stock (type STOCK)
-	    ;;   Income (type INCOME)
-	    ;;     Dividends (type INCOME)
-	    ;;       Widget Stock (type INCOME)
-	    ;;
-	    ;; If you are producing a report on "Assets:Broker:Widget Stock" a
-	    ;; transaction that debits the Assets:Broker account and credits the
-	    ;; "Income:Dividends:Widget Stock" account will count as income in
-	    ;; the report even though it doesn't have a split in the account
-	    ;; being reported on.
+            ;; Look for income and expense transactions that don't have a split in the
+            ;; the account we're processing.  We do this as follow
+            ;; 1. Make sure the parent account is a currency-valued asset or bank account
+            ;; 2. If so go through all the splits in that account
+            ;; 3. If a split is part of a two split transaction where the other split is
+            ;;    to an income or expense account and the leaf name of that account is the
+            ;;    same as the leaf name of the account we're processing, add it to the
+            ;;    income or expense accumulator
+            ;;
+            ;; In other words with an account structure like
+            ;;
+            ;;   Assets (type ASSET)
+            ;;     Broker (type ASSET)
+            ;;       Widget Stock (type STOCK)
+            ;;   Income (type INCOME)
+            ;;     Dividends (type INCOME)
+            ;;       Widget Stock (type INCOME)
+            ;;
+            ;; If you are producing a report on "Assets:Broker:Widget Stock" a
+            ;; transaction that debits the Assets:Broker account and credits the
+            ;; "Income:Dividends:Widget Stock" account will count as income in
+            ;; the report even though it doesn't have a split in the account
+            ;; being reported on.
 
-	    (let ((parent-account (gnc-account-get-parent current))
-	          (account-name (xaccAccountGetName current)))
-	      (if (and (not (null? parent-account))
-	               (member (xaccAccountGetType parent-account) (list ACCT-TYPE-ASSET ACCT-TYPE-BANK))
-	               (gnc-commodity-is-currency (xaccAccountGetCommodity parent-account)))
-	        (for-each
-	          (lambda (split)
-	            (let* ((other-split (xaccSplitGetOtherSplit split))
-	                   ;; This is safe because xaccSplitGetAccount returns null for a null split
-	                   (other-acct (xaccSplitGetAccount other-split))
-	                   (parent (xaccSplitGetParent split))
-	                   (txn-date (xaccTransGetDate parent)))
-	              (if (and (not (null? other-acct))
-	                       (<= txn-date to-date)
-	                       (string=? (xaccAccountGetName other-acct) account-name)
-	                       (gnc-commodity-is-currency (xaccAccountGetCommodity other-acct)))
-	                ;; This is a two split transaction where the other split is to an
-	                ;; account with the same name as the current account.  If it's an
-	                ;; income or expense account accumulate the value of the transaction
-	                (let ((val (xaccSplitGetValue split))
-	                      (curr (xaccAccountGetCommodity other-acct)))
+            (let ((parent-account (gnc-account-get-parent current))
+                  (account-name (xaccAccountGetName current)))
+              (if (and (not (null? parent-account))
+                       (member (xaccAccountGetType parent-account) (list ACCT-TYPE-ASSET ACCT-TYPE-BANK))
+                       (gnc-commodity-is-currency (xaccAccountGetCommodity parent-account)))
+                (for-each
+                  (lambda (split)
+                    (let* ((other-split (xaccSplitGetOtherSplit split))
+                           ;; This is safe because xaccSplitGetAccount returns null for a null split
+                           (other-acct (xaccSplitGetAccount other-split))
+                           (parent (xaccSplitGetParent split))
+                           (txn-date (xaccTransGetDate parent)))
+                      (if (and (not (null? other-acct))
+                               (<= txn-date to-date)
+                               (string=? (xaccAccountGetName other-acct) account-name)
+                               (gnc-commodity-is-currency (xaccAccountGetCommodity other-acct)))
+                        ;; This is a two split transaction where the other split is to an
+                        ;; account with the same name as the current account.  If it's an
+                        ;; income or expense account accumulate the value of the transaction
+                        (let ((val (xaccSplitGetValue split))
+                              (curr (xaccAccountGetCommodity other-acct)))
                           (cond ((split-account-type? other-split ACCT-TYPE-INCOME)
-	                         (gnc:debug "More income " (gnc-numeric-to-string val))
-	                         (dividendcoll 'add curr val))
+                                 (gnc:debug "More income " (gnc-numeric-to-string val))
+                                 (dividendcoll 'add curr val))
                                 ((split-account-type? other-split ACCT-TYPE-EXPENSE)
                                  (gnc:debug "More expense " (gnc-numeric-to-string
                                                              (gnc-numeric-neg val)))
                                  (brokeragecoll 'add curr (gnc-numeric-neg val)))
-	                  )
-	                )
-	              )
-	            )
-	          )
-	          (xaccAccountGetSplitList parent-account)
-	        )
-	      )
-	    )
+                          )
+                        )
+                      )
+                    )
+                  )
+                  (xaccAccountGetSplitList parent-account)
+                )
+              )
+            )
 
-	    (gnc:debug "pricing txn is " pricing-txn)
-	    (gnc:debug "use txn is " use-txn)
-	    (gnc:debug "prefer-pricelist is " prefer-pricelist)
-	    (gnc:debug "price is " price)
+            (gnc:debug "pricing txn is " pricing-txn)
+            (gnc:debug "use txn is " use-txn)
+            (gnc:debug "prefer-pricelist is " prefer-pricelist)
+            (gnc:debug "price is " price)
 
-	    (gnc:debug "basis we're using to build rows is " (gnc-numeric-to-string (sum-basis basis-list
-	                                                            currency-frac)))
-	    (gnc:debug "but the actual basis list is " basis-list)
+            (gnc:debug "basis we're using to build rows is " (gnc-numeric-to-string (sum-basis basis-list
+                                                                    currency-frac)))
+            (gnc:debug "but the actual basis list is " basis-list)
 
             (if (eq? handle-brokerage-fees 'include-in-gain)
-	      (gaincoll 'minusmerge brokeragecoll #f))
+              (gaincoll 'minusmerge brokeragecoll #f))
 
-	  (if (or include-empty (not (gnc-numeric-zero-p units)))
-	    (let* ((moneyin (gnc:sum-collector-commodity moneyincoll currency my-exchange-fn))
-		  (moneyout (gnc:sum-collector-commodity moneyoutcoll currency my-exchange-fn))
+          (if (or include-empty (not (gnc-numeric-zero-p units)))
+            (let* ((moneyin (gnc:sum-collector-commodity moneyincoll currency my-exchange-fn))
+                  (moneyout (gnc:sum-collector-commodity moneyoutcoll currency my-exchange-fn))
                   (brokerage (gnc:sum-collector-commodity brokeragecoll currency my-exchange-fn))
-		  (income (gnc:sum-collector-commodity dividendcoll currency my-exchange-fn))
-		  ;; just so you know, gain == realized gain, ugain == un-realized gain, bothgain, well..
-		  (gain (gnc:sum-collector-commodity gaincoll currency my-exchange-fn))
-		  (ugain (gnc:make-gnc-monetary currency
-						(gnc-numeric-sub (gnc:gnc-monetary-amount (my-exchange-fn value currency))
-								 (sum-basis basis-list (gnc-commodity-get-fraction currency))
-								 currency-frac GNC-RND-ROUND)))
-		  (bothgain (gnc:make-gnc-monetary currency  (gnc-numeric-add (gnc:gnc-monetary-amount gain)
-									      (gnc:gnc-monetary-amount ugain)
-									      currency-frac GNC-RND-ROUND)))
-		  (totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount bothgain)
-										    (gnc:gnc-monetary-amount income)
-										currency-frac GNC-RND-ROUND)))
+                  (income (gnc:sum-collector-commodity dividendcoll currency my-exchange-fn))
+                  ;; just so you know, gain == realized gain, ugain == un-realized gain, bothgain, well..
+                  (gain (gnc:sum-collector-commodity gaincoll currency my-exchange-fn))
+                  (ugain (gnc:make-gnc-monetary currency
+                                                (gnc-numeric-sub (gnc:gnc-monetary-amount (my-exchange-fn value currency))
+                                                                 (sum-basis basis-list (gnc-commodity-get-fraction currency))
+                                                                 currency-frac GNC-RND-ROUND)))
+                  (bothgain (gnc:make-gnc-monetary currency  (gnc-numeric-add (gnc:gnc-monetary-amount gain)
+                                                                              (gnc:gnc-monetary-amount ugain)
+                                                                              currency-frac GNC-RND-ROUND)))
+                  (totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount bothgain)
+                                                                                    (gnc:gnc-monetary-amount income)
+                                                                                currency-frac GNC-RND-ROUND)))
 
-		  (activecols (list (gnc:html-account-anchor current)))
-		  )
+                  (activecols (list (gnc:html-account-anchor current)))
+                  )
 
               ;; If we're using the txn, warn the user
               (if use-txn
@@ -864,80 +864,80 @@ by preventing negative stock balances.<br/>")
                       (set! warn-no-price #t)
                   ))
 
-	      (total-value 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))
-	      (total-moneyin 'merge moneyincoll #f)
-	      (total-moneyout 'merge moneyoutcoll #f)
+              (total-value 'add (gnc:gnc-monetary-commodity value) (gnc:gnc-monetary-amount value))
+              (total-moneyin 'merge moneyincoll #f)
+              (total-moneyout 'merge moneyoutcoll #f)
               (total-brokerage 'merge brokeragecoll #f)
-	      (total-income 'merge dividendcoll #f)
-	      (total-gain 'merge gaincoll #f)
-	      (total-ugain 'add (gnc:gnc-monetary-commodity ugain) (gnc:gnc-monetary-amount ugain))
-	      (total-basis 'add currency (sum-basis basis-list currency-frac))
+              (total-income 'merge dividendcoll #f)
+              (total-gain 'merge gaincoll #f)
+              (total-ugain 'add (gnc:gnc-monetary-commodity ugain) (gnc:gnc-monetary-amount ugain))
+              (total-basis 'add currency (sum-basis basis-list currency-frac))
 
-	      ;; build a list for the row  based on user selections
-	      (if show-symbol (append! activecols (list (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol))))
-	      (if show-listing (append! activecols (list (gnc:make-html-table-header-cell/markup "text-cell" listing))))
-	      (if show-shares (append! activecols (list (gnc:make-html-table-header-cell/markup
- 	        "number-cell" (xaccPrintAmount units share-print-info)))))
-	      (if show-price (append! activecols (list (gnc:make-html-table-header-cell/markup
-	        "number-cell"
-	        (if use-txn
-	            (if pricing-txn
+              ;; build a list for the row  based on user selections
+              (if show-symbol (append! activecols (list (gnc:make-html-table-header-cell/markup "text-cell" ticker-symbol))))
+              (if show-listing (append! activecols (list (gnc:make-html-table-header-cell/markup "text-cell" listing))))
+              (if show-shares (append! activecols (list (gnc:make-html-table-header-cell/markup
+                "number-cell" (xaccPrintAmount units share-print-info)))))
+              (if show-price (append! activecols (list (gnc:make-html-table-header-cell/markup
+                "number-cell"
+                (if use-txn
+                    (if pricing-txn
                         (gnc:html-transaction-anchor pricing-txn price)
                         price)
-	 	    (gnc:html-price-anchor
-	 	     price (gnc:default-price-renderer
+                    (gnc:html-price-anchor
+                     price (gnc:default-price-renderer
                             (gnc-price-get-currency price)
                             (gnc-price-get-value price))))))))
- 	      (append! activecols (list (if use-txn (if pricing-txn "*" "**") " ")
-					(gnc:make-html-table-header-cell/markup
-					 "number-cell" (gnc:make-gnc-monetary currency (sum-basis basis-list
-					                         currency-frac)))
-					(gnc:make-html-table-header-cell/markup "number-cell" value)
-					(gnc:make-html-table-header-cell/markup "number-cell" moneyin)
-					(gnc:make-html-table-header-cell/markup "number-cell" moneyout)
-					(gnc:make-html-table-header-cell/markup "number-cell" gain)
-					(gnc:make-html-table-header-cell/markup "number-cell" ugain)
-					(gnc:make-html-table-header-cell/markup "number-cell" bothgain)
-					(gnc:make-html-table-header-cell/markup "number-cell"
-					    (let* ((moneyinvalue (gnc-numeric-to-double
-								  (gnc:gnc-monetary-amount moneyin)))
-					           (bothgainvalue (gnc-numeric-to-double
-								   (gnc:gnc-monetary-amount bothgain)))
+              (append! activecols (list (if use-txn (if pricing-txn "*" "**") " ")
+                                        (gnc:make-html-table-header-cell/markup
+                                         "number-cell" (gnc:make-gnc-monetary currency (sum-basis basis-list
+                                                                 currency-frac)))
+                                        (gnc:make-html-table-header-cell/markup "number-cell" value)
+                                        (gnc:make-html-table-header-cell/markup "number-cell" moneyin)
+                                        (gnc:make-html-table-header-cell/markup "number-cell" moneyout)
+                                        (gnc:make-html-table-header-cell/markup "number-cell" gain)
+                                        (gnc:make-html-table-header-cell/markup "number-cell" ugain)
+                                        (gnc:make-html-table-header-cell/markup "number-cell" bothgain)
+                                        (gnc:make-html-table-header-cell/markup "number-cell"
+                                            (let* ((moneyinvalue (gnc-numeric-to-double
+                                                                  (gnc:gnc-monetary-amount moneyin)))
+                                                   (bothgainvalue (gnc-numeric-to-double
+                                                                   (gnc:gnc-monetary-amount bothgain)))
                                              )
-					      (if (= 0.0 moneyinvalue)
-						  ""
-						  (format #f "~,2f%" (* 100 (/ bothgainvalue moneyinvalue)))))
-					)
-					(gnc:make-html-table-header-cell/markup "number-cell" income)))
-	      (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
-		  (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" brokerage))))
-	      (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" totalreturn)
-					(gnc:make-html-table-header-cell/markup "number-cell"
-					    (let* ((moneyinvalue (gnc-numeric-to-double
-								  (gnc:gnc-monetary-amount moneyin)))
-					           (totalreturnvalue (gnc-numeric-to-double
-								      (gnc:gnc-monetary-amount totalreturn)))
+                                              (if (= 0.0 moneyinvalue)
+                                                  ""
+                                                  (format #f "~,2f%" (* 100 (/ bothgainvalue moneyinvalue)))))
+                                        )
+                                        (gnc:make-html-table-header-cell/markup "number-cell" income)))
+              (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
+                  (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" brokerage))))
+              (append! activecols (list (gnc:make-html-table-header-cell/markup "number-cell" totalreturn)
+                                        (gnc:make-html-table-header-cell/markup "number-cell"
+                                            (let* ((moneyinvalue (gnc-numeric-to-double
+                                                                  (gnc:gnc-monetary-amount moneyin)))
+                                                   (totalreturnvalue (gnc-numeric-to-double
+                                                                      (gnc:gnc-monetary-amount totalreturn)))
                                              )
-					      (if (= 0.0 moneyinvalue)
-						  ""
-						  (format #f "~,2f%" (* 100 (/ totalreturnvalue moneyinvalue))))))
-					 )
-			)
+                                              (if (= 0.0 moneyinvalue)
+                                                  ""
+                                                  (format #f "~,2f%" (* 100 (/ totalreturnvalue moneyinvalue))))))
+                                         )
+                        )
 
-	      (gnc:html-table-append-row/markup!
-	       table
-	       row-style
-	       activecols)
+              (gnc:html-table-append-row/markup!
+               table
+               row-style
+               activecols)
 
               (if (and (not use-txn) price) (gnc-price-unref price))
-	      (table-add-stock-rows-internal rest (not odd-row?))
-	      )
-	    (begin
-	      (if (and (not use-txn) price) (gnc-price-unref price))
-	      (table-add-stock-rows-internal rest odd-row?)
-	      )
+              (table-add-stock-rows-internal rest (not odd-row?))
+              )
+            (begin
+              (if (and (not use-txn) price) (gnc-price-unref price))
+              (table-add-stock-rows-internal rest odd-row?)
+              )
             )
-	    )))
+            )))
 
     (set! work-to-do (gnc:accounts-count-splits accounts))
     (table-add-stock-rows-internal accounts #t)))
@@ -959,30 +959,30 @@ by preventing negative stock balances.<br/>")
                                   gnc:optname-reportname))
         (include-empty (get-option gnc:pagename-accounts
                                   optname-zero-shares))
-	(show-symbol (get-option gnc:pagename-display
-				  optname-show-symbol))
-	(show-listing (get-option gnc:pagename-display
-				  optname-show-listing))
-	(show-shares (get-option gnc:pagename-display
-				  optname-show-shares))
-	(show-price (get-option gnc:pagename-display
-				  optname-show-price))
-	(basis-method (get-option gnc:pagename-general
-				  optname-basis-method))
-	(prefer-pricelist (get-option gnc:pagename-general
-				      optname-prefer-pricelist))
-	(handle-brokerage-fees (get-option gnc:pagename-general
-				  optname-brokerage-fees))
+        (show-symbol (get-option gnc:pagename-display
+                                  optname-show-symbol))
+        (show-listing (get-option gnc:pagename-display
+                                  optname-show-listing))
+        (show-shares (get-option gnc:pagename-display
+                                  optname-show-shares))
+        (show-price (get-option gnc:pagename-display
+                                  optname-show-price))
+        (basis-method (get-option gnc:pagename-general
+                                  optname-basis-method))
+        (prefer-pricelist (get-option gnc:pagename-general
+                                      optname-prefer-pricelist))
+        (handle-brokerage-fees (get-option gnc:pagename-general
+                                  optname-brokerage-fees))
 
-	(total-basis (gnc:make-commodity-collector))
+        (total-basis (gnc:make-commodity-collector))
         (total-value    (gnc:make-commodity-collector))
         (total-moneyin  (gnc:make-commodity-collector))
         (total-moneyout (gnc:make-commodity-collector))
         (total-income   (gnc:make-commodity-collector))
         (total-gain     (gnc:make-commodity-collector)) ;; realized gain
-	(total-ugain (gnc:make-commodity-collector))    ;; unrealized gain
+        (total-ugain (gnc:make-commodity-collector))    ;; unrealized gain
         (total-brokerage (gnc:make-commodity-collector))
-	;;document will be the HTML document that we return.
+        ;;document will be the HTML document that we return.
         (table (gnc:make-html-table))
         (document (gnc:make-html-document)))
 
@@ -1004,61 +1004,61 @@ by preventing negative stock balances.<br/>")
                   ((pricedb-before)
                    (lambda (foreign domestic date)
                     (find-price (gnc-pricedb-lookup-nearest-before-any-currency-t64
-		                 pricedb foreign (time64CanonicalDayTime date))
+                                 pricedb foreign (time64CanonicalDayTime date))
                                 domestic)))
                   ((pricedb-nearest)
                    (lambda (foreign domestic date)
                     (find-price (gnc-pricedb-lookup-nearest-in-time-any-currency-t64
-		     pricedb foreign (time64CanonicalDayTime date)) domestic)))))
-	       (headercols (list (G_ "Account")))
-	       (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (G_ "Total"))))
-	       (sum-total-moneyin (gnc-numeric-zero))
-	       (sum-total-income (gnc-numeric-zero))
-	       (sum-total-both-gains (gnc-numeric-zero))
-	       (sum-total-gain (gnc-numeric-zero))
-	       (sum-total-ugain (gnc-numeric-zero))
-	       (sum-total-brokerage (gnc-numeric-zero))
-	       (sum-total-totalreturn (gnc-numeric-zero))) ;;end of let
+                     pricedb foreign (time64CanonicalDayTime date)) domestic)))))
+               (headercols (list (G_ "Account")))
+               (totalscols (list (gnc:make-html-table-cell/markup "total-label-cell" (G_ "Total"))))
+               (sum-total-moneyin (gnc-numeric-zero))
+               (sum-total-income (gnc-numeric-zero))
+               (sum-total-both-gains (gnc-numeric-zero))
+               (sum-total-gain (gnc-numeric-zero))
+               (sum-total-ugain (gnc-numeric-zero))
+               (sum-total-brokerage (gnc-numeric-zero))
+               (sum-total-totalreturn (gnc-numeric-zero))) ;;end of let
 
-	  ;;begin building lists for which columns to display
+          ;;begin building lists for which columns to display
           (if show-symbol
-	      (begin (append! headercols (list (G_ "Symbol")))
-		     (append! totalscols (list " "))))
+              (begin (append! headercols (list (G_ "Symbol")))
+                     (append! totalscols (list " "))))
 
-	  (if show-listing
-	      (begin (append! headercols (list (G_ "Listing")))
-		     (append! totalscols (list " "))))
+          (if show-listing
+              (begin (append! headercols (list (G_ "Listing")))
+                     (append! totalscols (list " "))))
 
-	  (if show-shares
-	      (begin (append! headercols (list (G_ "Shares")))
-		     (append! totalscols (list " "))))
+          (if show-shares
+              (begin (append! headercols (list (G_ "Shares")))
+                     (append! totalscols (list " "))))
 
-	  (if show-price
-	      (begin (append! headercols (list (G_ "Price")))
-		     (append! totalscols (list " "))))
+          (if show-price
+              (begin (append! headercols (list (G_ "Price")))
+                     (append! totalscols (list " "))))
 
-	  (append! headercols (list " "
-				    (G_ "Basis")
-				    (G_ "Value")
-				    (G_ "Money In")
-				    (G_ "Money Out")
-				    (G_ "Realized Gain")
-				    (G_ "Unrealized Gain")
-				    (G_ "Total Gain")
-				    (G_ "Rate of Gain")
-				    (G_ "Income")))
+          (append! headercols (list " "
+                                    (G_ "Basis")
+                                    (G_ "Value")
+                                    (G_ "Money In")
+                                    (G_ "Money Out")
+                                    (G_ "Realized Gain")
+                                    (G_ "Unrealized Gain")
+                                    (G_ "Total Gain")
+                                    (G_ "Rate of Gain")
+                                    (G_ "Income")))
 
-	  (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
-	      (append! headercols (list (G_ "Brokerage Fees"))))
+          (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
+              (append! headercols (list (G_ "Brokerage Fees"))))
 
-	  (append! headercols (list (G_ "Total Return")
-				    (G_ "Rate of Return")))
+          (append! headercols (list (G_ "Total Return")
+                                    (G_ "Rate of Return")))
 
           (append! totalscols (list " "))
 
           (gnc:html-table-set-col-headers!
            table
-	   headercols)
+           headercols)
 
           (catch 'div/0
             (lambda ()
@@ -1073,17 +1073,17 @@ by preventing negative stock balances.<br/>")
                document (format #f OVERFLOW-ERROR reason))))
 
 
-	  (set! sum-total-moneyin (gnc:sum-collector-commodity total-moneyin currency exchange-fn))
-	  (set! sum-total-income (gnc:sum-collector-commodity total-income currency exchange-fn))
-	  (set! sum-total-gain (gnc:sum-collector-commodity total-gain currency exchange-fn))
-	  (set! sum-total-ugain (gnc:sum-collector-commodity total-ugain currency exchange-fn))
-	  (set! sum-total-both-gains (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-gain)
-										      (gnc:gnc-monetary-amount sum-total-ugain)
-										      (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
-	  (set! sum-total-brokerage (gnc:sum-collector-commodity total-brokerage currency exchange-fn))
-	  (set! sum-total-totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-both-gains)
-										           (gnc:gnc-monetary-amount sum-total-income)
-										       (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
+          (set! sum-total-moneyin (gnc:sum-collector-commodity total-moneyin currency exchange-fn))
+          (set! sum-total-income (gnc:sum-collector-commodity total-income currency exchange-fn))
+          (set! sum-total-gain (gnc:sum-collector-commodity total-gain currency exchange-fn))
+          (set! sum-total-ugain (gnc:sum-collector-commodity total-ugain currency exchange-fn))
+          (set! sum-total-both-gains (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-gain)
+                                                                                      (gnc:gnc-monetary-amount sum-total-ugain)
+                                                                                      (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
+          (set! sum-total-brokerage (gnc:sum-collector-commodity total-brokerage currency exchange-fn))
+          (set! sum-total-totalreturn (gnc:make-gnc-monetary currency (gnc-numeric-add (gnc:gnc-monetary-amount sum-total-both-gains)
+                                                                                           (gnc:gnc-monetary-amount sum-total-income)
+                                                                                       (gnc-commodity-get-fraction currency) GNC-RND-ROUND)))
 
           (gnc:html-table-append-row/markup!
            table
@@ -1092,52 +1092,52 @@ by preventing negative stock balances.<br/>")
             (gnc:make-html-table-cell/size
              1 17 (gnc:make-html-text (gnc:html-markup-hr)))))
 
-	  ;; finish building the totals columns, now that totals are complete
-	  (append! totalscols (list
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" (gnc:sum-collector-commodity total-basis currency exchange-fn))
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" (gnc:sum-collector-commodity total-value currency exchange-fn))
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-moneyin)
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" (gnc:sum-collector-commodity total-moneyout currency exchange-fn))
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-gain)
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-ugain)
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-both-gains)
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell"
-				(let* ((totalinvalue (gnc-numeric-to-double
-						      (gnc:gnc-monetary-amount sum-total-moneyin)))
-				       (totalgainvalue (gnc-numeric-to-double
-							(gnc:gnc-monetary-amount sum-total-both-gains)))
-				       )
-				  (if (= 0.0 totalinvalue)
-				      ""
-				      (format #f "~,2f%" (* 100 (/ totalgainvalue totalinvalue))))))
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell" sum-total-income)))
-	  (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
-	      (append! totalscols (list
-			       (gnc:make-html-table-cell/markup
+          ;; finish building the totals columns, now that totals are complete
+          (append! totalscols (list
+                               (gnc:make-html-table-cell/markup
+                                "total-number-cell" (gnc:sum-collector-commodity total-basis currency exchange-fn))
+                               (gnc:make-html-table-cell/markup
+                                "total-number-cell" (gnc:sum-collector-commodity total-value currency exchange-fn))
+                               (gnc:make-html-table-cell/markup
+                                "total-number-cell" sum-total-moneyin)
+                               (gnc:make-html-table-cell/markup
+                                "total-number-cell" (gnc:sum-collector-commodity total-moneyout currency exchange-fn))
+                               (gnc:make-html-table-cell/markup
+                                "total-number-cell" sum-total-gain)
+                               (gnc:make-html-table-cell/markup
+                                "total-number-cell" sum-total-ugain)
+                               (gnc:make-html-table-cell/markup
+                                "total-number-cell" sum-total-both-gains)
+                               (gnc:make-html-table-cell/markup
+                                "total-number-cell"
+                                (let* ((totalinvalue (gnc-numeric-to-double
+                                                      (gnc:gnc-monetary-amount sum-total-moneyin)))
+                                       (totalgainvalue (gnc-numeric-to-double
+                                                        (gnc:gnc-monetary-amount sum-total-both-gains)))
+                                       )
+                                  (if (= 0.0 totalinvalue)
+                                      ""
+                                      (format #f "~,2f%" (* 100 (/ totalgainvalue totalinvalue))))))
+                               (gnc:make-html-table-cell/markup
+                                "total-number-cell" sum-total-income)))
+          (if (not (eq? handle-brokerage-fees 'ignore-brokerage))
+              (append! totalscols (list
+                               (gnc:make-html-table-cell/markup
                                 "total-number-cell" sum-total-brokerage))))
-	  (append! totalscols (list
-			       (gnc:make-html-table-cell/markup
+          (append! totalscols (list
+                               (gnc:make-html-table-cell/markup
                                 "total-number-cell" sum-total-totalreturn)
-			       (gnc:make-html-table-cell/markup
-				"total-number-cell"
-				(let* ((totalinvalue (gnc-numeric-to-double
-						      (gnc:gnc-monetary-amount sum-total-moneyin)))
-				       (totalreturnvalue (gnc-numeric-to-double
-						          (gnc:gnc-monetary-amount sum-total-totalreturn)))
-				 )
-				  (if (= 0.0 totalinvalue)
-				      ""
-				      (format #f "~,2f%" (* 100 (/ totalreturnvalue totalinvalue))))))
-			       ))
+                               (gnc:make-html-table-cell/markup
+                                "total-number-cell"
+                                (let* ((totalinvalue (gnc-numeric-to-double
+                                                      (gnc:gnc-monetary-amount sum-total-moneyin)))
+                                       (totalreturnvalue (gnc-numeric-to-double
+                                                          (gnc:gnc-monetary-amount sum-total-totalreturn)))
+                                 )
+                                  (if (= 0.0 totalinvalue)
+                                      ""
+                                      (format #f "~,2f%" (* 100 (/ totalreturnvalue totalinvalue))))))
+                               ))
 
 
           (gnc:html-table-append-row/markup!
@@ -1150,8 +1150,8 @@ by preventing negative stock balances.<br/>")
           (if warn-price-dirty
               (gnc:html-document-append-objects! document
                                                  (list (gnc:make-html-text (G_ "* this commodity data was built using transaction pricing instead of the price list."))
-						       (gnc:make-html-text (gnc:html-markup-br))
-						       (gnc:make-html-text (G_ "If you are in a multi-currency situation, the exchanges may not be correct.")))))
+                                                       (gnc:make-html-text (gnc:html-markup-br))
+                                                       (gnc:make-html-text (G_ "If you are in a multi-currency situation, the exchanges may not be correct.")))))
 
           (if warn-no-price
               (gnc:html-document-append-objects! document
@@ -1159,11 +1159,11 @@ by preventing negative stock balances.<br/>")
                                                        (gnc:make-html-text (G_ "** this commodity has no price and a price of 1 has been used.")))))
 )
 
-					;if no accounts selected.
+                                        ;if no accounts selected.
         (gnc:html-document-add-object!
          document
-	 (gnc:html-make-no-account-warning
-	  report-title (gnc:report-id report-obj))))
+         (gnc:html-make-no-account-warning
+          report-title (gnc:report-id report-obj))))
 
     (gnc:report-finished)
     document)))

@@ -1,4 +1,3 @@
-
 ;; $Author: chris $ $Date: 2009/07/29 09:31:44 $ $Revision: 1.33 $
 ;; Modified by Dmitry Smirnov <onlyjob@member.fsf.org>  16 Feb 2012
 ;;
@@ -69,48 +68,48 @@
 (define headingpage2 (N_ "Headings 2"))
 (define notespage    (N_ "Notes"))
 (define displaypage  (N_ "Display"))
-(define elementspage			(N_ "Elements"))
-; option names 
-(define optname-col-date		(N_ "column: Date"))
-(define optname-col-taxrate		(N_ "column: Tax Rate"))
-(define optname-col-units		(N_ "column: Units"))
-(define optname-row-address		(N_ "row: Address"))
-(define optname-row-contact		(N_ "row: Contact"))
-(define optname-row-invoice-number	(N_ "row: Invoice Number"))
-(define optname-row-company-name	(N_ "row: Company Name"))
-(define optname-invoice-number-text	(N_ "Invoice number text"))
-(define optname-to-text			(N_ "To text"))
-(define optname-ref-text		(N_ "Ref text"))
-(define optname-jobname-text		(N_ "Job Name text"))
-(define optname-jobnumber-text		(N_ "Job Number text"))
-(define optname-jobname-show		(N_ "Show Job name"))
-(define optname-jobnumber-show		(N_ "Show Job number"))
-(define optname-netprice		(N_ "Show net price"))
-(define optname-invnum-next-to-title	(N_ "Invoice number next to title"))
-(define optname-border-collapse		(N_ "table-border-collapse"))
-(define optname-border-color-th		(N_ "table-header-border-color"))
-(define optname-border-color-td		(N_ "table-cell-border-color"))
-(define optname-extra-css		(N_ "Embedded CSS"))
-(define optname-report-title		(N_ "Report Title"))
-(define optname-template-file		(N_ "Template file"))
-(define optname-css-file	        (N_ "CSS stylesheet file"))
-(define optname-heading-font		(N_ "Heading font"))
-(define optname-text-font		(N_ "Text font"))
-(define optname-logofile	        (N_ "Logo filename"))
-(define optname-logo-width     		(N_ "Logo width"))
-(define optname-units          		(N_ "Units"))
-(define optname-qty            		(N_ "Qty"))
-(define optname-unit-price     		(N_ "Unit Price"))
-(define optname-disc-rate      		(N_ "Discount Rate"))
-(define optname-disc-amount    		(N_ "Discount Amount"))
-(define optname-net-price      		(N_ "Net Price"))
-(define optname-tax-rate       		(N_ "Tax Rate"))
-(define optname-tax-amount     		(N_ "Tax Amount"))
-(define optname-total-price    		(N_ "Total Price"))
-(define optname-subtotal       		(N_ "Sub-total"))
-(define optname-amount-due     		(N_ "Amount Due"))
-(define optname-payment-recd   		(N_ "Payment received text"))
-(define optname-extra-notes    		(N_ "Extra Notes"))
+(define elementspage                    (N_ "Elements"))
+; option names
+(define optname-col-date                (N_ "column: Date"))
+(define optname-col-taxrate             (N_ "column: Tax Rate"))
+(define optname-col-units               (N_ "column: Units"))
+(define optname-row-address             (N_ "row: Address"))
+(define optname-row-contact             (N_ "row: Contact"))
+(define optname-row-invoice-number      (N_ "row: Invoice Number"))
+(define optname-row-company-name        (N_ "row: Company Name"))
+(define optname-invoice-number-text     (N_ "Invoice number text"))
+(define optname-to-text                 (N_ "To text"))
+(define optname-ref-text                (N_ "Ref text"))
+(define optname-jobname-text            (N_ "Job Name text"))
+(define optname-jobnumber-text          (N_ "Job Number text"))
+(define optname-jobname-show            (N_ "Show Job name"))
+(define optname-jobnumber-show          (N_ "Show Job number"))
+(define optname-netprice                (N_ "Show net price"))
+(define optname-invnum-next-to-title    (N_ "Invoice number next to title"))
+(define optname-border-collapse         (N_ "table-border-collapse"))
+(define optname-border-color-th         (N_ "table-header-border-color"))
+(define optname-border-color-td         (N_ "table-cell-border-color"))
+(define optname-extra-css               (N_ "Embedded CSS"))
+(define optname-report-title            (N_ "Report Title"))
+(define optname-template-file           (N_ "Template file"))
+(define optname-css-file                (N_ "CSS stylesheet file"))
+(define optname-heading-font            (N_ "Heading font"))
+(define optname-text-font               (N_ "Text font"))
+(define optname-logofile                (N_ "Logo filename"))
+(define optname-logo-width              (N_ "Logo width"))
+(define optname-units                   (N_ "Units"))
+(define optname-qty                     (N_ "Qty"))
+(define optname-unit-price              (N_ "Unit Price"))
+(define optname-disc-rate               (N_ "Discount Rate"))
+(define optname-disc-amount             (N_ "Discount Amount"))
+(define optname-net-price               (N_ "Net Price"))
+(define optname-tax-rate                (N_ "Tax Rate"))
+(define optname-tax-amount              (N_ "Tax Amount"))
+(define optname-total-price             (N_ "Total Price"))
+(define optname-subtotal                (N_ "Sub-total"))
+(define optname-amount-due              (N_ "Amount Due"))
+(define optname-payment-recd            (N_ "Payment received text"))
+(define optname-extra-notes             (N_ "Extra Notes"))
 
 (define (options-generator)
   ;; Options
@@ -122,55 +121,55 @@
 
   ;; Elements page options
   (gnc-register-simple-boolean-option options
-                 elementspage	optname-col-date		"a" (N_ "Display the date?") #t)
+                 elementspage   optname-col-date                "a" (N_ "Display the date?") #t)
 (gnc-register-simple-boolean-option options
-               elementspage	optname-col-taxrate		"b" (N_ "Display the Tax Rate?") #t)
+               elementspage     optname-col-taxrate             "b" (N_ "Display the Tax Rate?") #t)
 (gnc-register-simple-boolean-option options
-               elementspage	optname-col-units		"c" (N_ "Display the Units?") #t)
+               elementspage     optname-col-units               "c" (N_ "Display the Units?") #t)
 (gnc-register-simple-boolean-option options
-               elementspage	optname-row-contact		"d" (N_ "Display the contact?") #t)
+               elementspage     optname-row-contact             "d" (N_ "Display the contact?") #t)
 (gnc-register-simple-boolean-option options
-               elementspage	optname-row-address		"e" (N_ "Display the address?") #t)
+               elementspage     optname-row-address             "e" (N_ "Display the address?") #t)
 (gnc-register-simple-boolean-option options
-               elementspage	optname-row-invoice-number	"f" (N_ "Display the Invoice Number?") #t)
+               elementspage     optname-row-invoice-number      "f" (N_ "Display the Invoice Number?") #t)
 (gnc-register-simple-boolean-option options
-               elementspage	optname-row-company-name	"g" (N_ "Display the Company Name?") #t)
+               elementspage     optname-row-company-name        "g" (N_ "Display the Company Name?") #t)
 (gnc-register-simple-boolean-option options
-               elementspage	optname-invnum-next-to-title	"h" (N_ "Invoice Number next to title?") #f)
+               elementspage     optname-invnum-next-to-title    "h" (N_ "Invoice Number next to title?") #f)
 (gnc-register-simple-boolean-option options
-               elementspage	optname-jobname-show		"i" (N_ "Display Job name?") #t)
+               elementspage     optname-jobname-show            "i" (N_ "Display Job name?") #t)
 (gnc-register-simple-boolean-option options
-               elementspage	optname-jobnumber-show		"j" (N_ "Invoice Job number?") #f)
+               elementspage     optname-jobnumber-show          "j" (N_ "Invoice Job number?") #f)
 (gnc-register-simple-boolean-option options
-               elementspage	optname-netprice		"k" (N_ "Show net price?") #f)
+               elementspage     optname-netprice                "k" (N_ "Show net price?") #f)
 
   ;; Display options
 (gnc-register-string-option options
-               displaypage optname-template-file "a" 
+               displaypage optname-template-file "a"
     (N_ "The file name of the eguile template part of this report. This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories.")
     "taxinvoice.eguile.scm")
   (gnc-register-string-option options
-                 displaypage optname-css-file "b" 
-    (N_ "The file name of the CSS stylesheet to use with this report. This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories.") 
+                 displaypage optname-css-file "b"
+    (N_ "The file name of the CSS stylesheet to use with this report. This file should either be in your .gnucash directory, or else in its proper place within the GnuCash installation directories.")
     "taxinvoice.css")
   (gnc-register-font-option  options
-                displaypage optname-heading-font "c" 
+                displaypage optname-heading-font "c"
                 (N_ "Font to use for the main heading.") "Sans Bold 18")
   (gnc-register-font-option  options
-                displaypage optname-text-font "d" 
+                displaypage optname-text-font "d"
                 (N_ "Font to use for everything else.") "Sans 10")
   (gnc-register-pixmap-option options
-                displaypage optname-logofile "e" 
-                (N_ "Name of a file containing a logo to be used on the report.") 
+                displaypage optname-logofile "e"
+                (N_ "Name of a file containing a logo to be used on the report.")
                 "")
   (gnc-register-string-option options
                 displaypage optname-logo-width "f" (N_ "Width of the logo in CSS format, e.g. 10% or 32px. Leave blank to display the logo at its natural width. The height of the logo will be scaled accordingly.") "")
   (gnc-register-simple-boolean-option options
-                 displaypage	optname-border-collapse	"g" (N_ "Border-collapse?") #f)
+                 displaypage    optname-border-collapse "g" (N_ "Border-collapse?") #f)
 (gnc-register-string-option options
-               displaypage	optname-border-color-th "h" (N_ "CSS color.") "black")
+               displaypage      optname-border-color-th "h" (N_ "CSS color.") "black")
 (gnc-register-string-option options
-               displaypage	optname-border-color-td "i" (N_ "CSS color.") "black")
+               displaypage      optname-border-color-td "i" (N_ "CSS color.") "black")
 
   ;; Heading options
   (gnc-register-string-option options
@@ -199,32 +198,32 @@
   (gnc-register-string-option options
                 headingpage2 optname-amount-due "b" "" (G_ "Amount Due"))
   (gnc-register-string-option options
-                headingpage2 optname-payment-recd "c" "" 
+                headingpage2 optname-payment-recd "c" ""
                 (G_ "Payment received, thank you!"))
   (gnc-register-string-option options
-                 headingpage2	optname-invoice-number-text
+                 headingpage2   optname-invoice-number-text
     "d" "" (G_ "Invoice number:"))
   (gnc-register-string-option options
-                 headingpage2	optname-to-text
+                 headingpage2   optname-to-text
     "e" "" (G_ "To:"))
   (gnc-register-string-option options
-                 headingpage2	optname-ref-text
+                 headingpage2   optname-ref-text
     "f" "" (G_ "Your ref:"))
   (gnc-register-string-option options
-                 headingpage2	optname-jobnumber-text
+                 headingpage2   optname-jobnumber-text
     "g" "" (G_ "Job number:"))
   (gnc-register-string-option options
-                 headingpage2	optname-jobname-text
+                 headingpage2   optname-jobname-text
     "h" "" (G_ "Job name:"))
 
   (gnc-register-text-option options
                 notespage optname-extra-notes "a"
-                (G_ "Notes added at end of invoice -- may contain HTML markup.") 
+                (G_ "Notes added at end of invoice -- may contain HTML markup.")
                 (G_ "Thank you for your patronage!"))
 
   (gnc-register-text-option options
                  notespage optname-extra-css "b"
-                (N_ "Embedded CSS.")	"h1.coyname { text-align: left; }")
+                (N_ "Embedded CSS.")    "h1.coyname { text-align: left; }")
   (gnc:options-set-default-section options gnc:pagename-general)
 
   options))
@@ -233,7 +232,7 @@
 ;;; Create the report
 
 (define (report-renderer report-obj)
-  ;; Create and return the report as either an HTML string 
+  ;; Create and return the report as either an HTML string
   ;; or an <html-document>
   (define (opt-value section name)
     (gnc-optiondb-lookup-value  (gnc:report-options report-obj) section name))
@@ -249,8 +248,8 @@
                                       (opt-value displaypage optname-heading-font)))
          (opt-text-font             (font-name-to-style-info-eguile
                                       (opt-value displaypage optname-text-font)))
-         (opt-logofile              (opt-value displaypage  optname-logofile)) 
-         (opt-logo-width            (opt-value displaypage  optname-logo-width)) 
+         (opt-logofile              (opt-value displaypage  optname-logofile))
+         (opt-logo-width            (opt-value displaypage  optname-logo-width))
          (opt-col-date              (opt-value elementspage  optname-col-date))
          (opt-col-taxrate           (opt-value elementspage  optname-col-taxrate))
          (opt-col-units             (opt-value elementspage  optname-col-units))
@@ -284,8 +283,8 @@
          (opt-ref-text              (opt-value headingpage2 optname-ref-text))
          (opt-jobnumber-text        (opt-value headingpage2 optname-jobnumber-text))
          (opt-jobname-text          (opt-value headingpage2 optname-jobname-text))
-         (opt-extra-css             (opt-value notespage    optname-extra-css)) 
-         (opt-extra-notes           (opt-value notespage    optname-extra-notes)) 
+         (opt-extra-css             (opt-value notespage    optname-extra-css))
+         (opt-extra-notes           (opt-value notespage    optname-extra-notes))
          (html (eguile-file-to-string
                  opt-template-file
                  (the-environment))))

@@ -1,41 +1,41 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; equity-statement.scm: statement of owner's equity (net worth)
-;; 
+;;
 ;; By David Montenegro 2004.06.23 <sunrise2000@comcast.net>
-;;  
+;;
 ;;  * Based on balance-sheet.scm by Robert Merkel <rgmerk@mira.net>
-;;  
+;;
 ;;  * BUGS:
-;;    
+;;
 ;;    The multicurrency support has NOT been tested and IS ALPHA.  I
 ;;    really don't if I used the correct exchange functions.  Search
 ;;    code for regexp "*exchange-fn".
-;;    
+;;
 ;;    I have also made the educated assumption <grin> that a decrease
 ;;    in the value of a liability or equity also represents an
 ;;    unrealized loss.  I *think* that is right, but am not sure.
-;;    
+;;
 ;;    This code makes the assumption that you want your equity
 ;;    statement to no more than daily resolution.
-;;    
+;;
 ;;    The Accounts option panel needs a way to select (and select by
 ;;    default) capital and draw accounts. There really should be a
 ;;    contra account type or attribute....
-;;    
+;;
 ;;    The variables in this code could use more consistent naming.
-;;    
+;;
 ;;    See also any "FIXME"s in the code.
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -96,22 +96,22 @@
 ;; options generator
 (define (equity-statement-options-generator)
   (let* ((options (gnc-new-optiondb)))
-    
+
     (gnc-register-string-option options
       (N_ "General") optname-report-title
       "a" opthelp-report-title (G_ reportname))
-    
+
     ;; date at which to report balance
     (gnc:options-add-date-interval!
-     options gnc:pagename-general 
+     options gnc:pagename-general
      optname-start-date optname-end-date "c")
-    
+
     ;; accounts to work on
     (gnc-register-account-list-option options
       gnc:pagename-accounts optname-accounts
       "a"
       opthelp-accounts
-      (gnc:filter-accountlist-type 
+      (gnc:filter-accountlist-type
          (list ACCT-TYPE-BANK ACCT-TYPE-CASH ACCT-TYPE-CREDIT
                ACCT-TYPE-ASSET ACCT-TYPE-LIABILITY
                ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL ACCT-TYPE-CURRENCY
@@ -119,31 +119,31 @@
                ACCT-TYPE-EQUITY ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE
                ACCT-TYPE-TRADING)
          (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
-    
+
     ;; all about currencies
     (gnc:options-add-currency!
      options pagename-commodities
      optname-report-commodity "a")
-    
-    (gnc:options-add-price-source! 
+
+    (gnc:options-add-price-source!
      options pagename-commodities
      optname-price-source "b" 'pricedb-nearest)
-    
+
     (gnc-register-simple-boolean-option options
-      pagename-commodities optname-show-foreign 
+      pagename-commodities optname-show-foreign
       "c" opthelp-show-foreign #t)
-    
+
     (gnc-register-simple-boolean-option options
       pagename-commodities optname-show-rates
       "d" opthelp-show-rates #f)
-    
+
     ;; some detailed formatting options
     (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-use-rules
       "f" opthelp-use-rules #f)
-    
+
     ;; closing entry match criteria
-    ;; 
+    ;;
     ;; N.B.: transactions really should have a field where we can put
     ;; transaction types like "Adjusting/Closing/Correcting Entries"
     (gnc-register-string-option options
@@ -155,10 +155,10 @@
     (gnc-register-simple-boolean-option options
       pagename-entries optname-closing-regexp
       "c" opthelp-closing-regexp #f)
-    
+
     ;; Set the accounts page as default option tab
     (gnc:options-set-default-section options gnc:pagename-accounts)
-    
+
     options))
 
 (define (account-get-total-flow direction target-account-list from-date to-date)
@@ -190,30 +190,30 @@
   (define (get-option pagename optname)
     (gnc-optiondb-lookup-value
       (gnc:report-options report-obj) pagename optname))
-  
+
   (gnc:report-starting reportname)
-  
+
   ;; get all option's values
   (let* (
-	 (report-title (get-option gnc:pagename-general optname-report-title))
-	 (company-name (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
-	 ;; this code makes the assumption that you want your equity
-	 ;; statement to no more than daily resolution
+         (report-title (get-option gnc:pagename-general optname-report-title))
+         (company-name (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
+         ;; this code makes the assumption that you want your equity
+         ;; statement to no more than daily resolution
          (start-date-printable (gnc:date-option-absolute-time
-				(get-option gnc:pagename-general
-					    optname-start-date)))
+                                (get-option gnc:pagename-general
+                                            optname-start-date)))
          (start-date (gnc:time64-end-day-time
-			 (gnc:time64-previous-day start-date-printable)))
-         (end-date (gnc:time64-end-day-time 
-		       (gnc:date-option-absolute-time
-			(get-option gnc:pagename-general
-				    optname-end-date))))
+                         (gnc:time64-previous-day start-date-printable)))
+         (end-date (gnc:time64-end-day-time
+                       (gnc:date-option-absolute-time
+                        (get-option gnc:pagename-general
+                                    optname-end-date))))
          ;;(end-date-printable (gnc:date-option-absolute-time
          ;;                      (get-option gnc:pagename-general
          ;;                                  optname-end-date)))
-	 ;; why dont we use this?  why use any -printable at all?
+         ;; why dont we use this?  why use any -printable at all?
          (accounts (get-option gnc:pagename-accounts
-                               optname-accounts))	 
+                               optname-accounts))
          (report-commodity (get-option pagename-commodities
                                       optname-report-commodity))
          (price-source (get-option pagename-commodities
@@ -221,14 +221,14 @@
          (show-rates? (get-option pagename-commodities
                                   optname-show-rates))
          (use-rules? (get-option gnc:pagename-display
-				    optname-use-rules))
-	 (closing-str (get-option pagename-entries
-				  optname-closing-pattern))
-	 (closing-cased (get-option pagename-entries
-				    optname-closing-casing))
-	 (closing-regexp (get-option pagename-entries
-				     optname-closing-regexp))
-	 
+                                    optname-use-rules))
+         (closing-str (get-option pagename-entries
+                                  optname-closing-pattern))
+         (closing-cased (get-option pagename-entries
+                                    optname-closing-casing))
+         (closing-regexp (get-option pagename-entries
+                                     optname-closing-regexp))
+
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
          (asset-accounts
@@ -242,28 +242,28 @@
          (equity-accounts
           (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
 
-	 (closing-pattern
-	  (list (list 'str closing-str)
-		(list 'cased closing-cased)
-		(list 'regexp closing-regexp)
-		(list 'positive #f)
-		(list 'closing #t)))
+         (closing-pattern
+          (list (list 'str closing-str)
+                (list 'cased closing-cased)
+                (list 'regexp closing-regexp)
+                (list 'positive #f)
+                (list 'closing #t)))
 
          (doc (gnc:make-html-document))
          ;; exchange rates calculation parameters
-	 (start-exchange-fn
-	  (gnc:case-exchange-fn
-	   price-source report-commodity start-date))
-	 (end-exchange-fn
-	  (gnc:case-exchange-fn
-	   price-source report-commodity end-date))
+         (start-exchange-fn
+          (gnc:case-exchange-fn
+           price-source report-commodity start-date))
+         (end-exchange-fn
+          (gnc:case-exchange-fn
+           price-source report-commodity end-date))
 
          (start-price-fn (gnc:case-price-fn price-source report-commodity start-date))
          (end-price-fn (gnc:case-price-fn price-source report-commodity end-date)))
 
     (define (unrealized-gains-at-date book-balance exchange-fn date)
       (define cost-fn
-	(gnc:case-exchange-fn 'average-cost report-commodity date))
+        (gnc:case-exchange-fn 'average-cost report-commodity date))
       (gnc:monetaries-add
        (gnc:sum-collector-commodity book-balance report-commodity exchange-fn)
        (gnc:monetary-neg
@@ -275,23 +275,23 @@
     (define (get-end-balance-fn account)
       (gnc:account-get-comm-balance-at-date account end-date #f))
 
-    (gnc:html-document-set-title! 
+    (gnc:html-document-set-title!
      doc (gnc:format (G_ "${company-name} ${report-title} For Period Covering ${start} to ${end}")
                      'company-name company-name
                      'report-title report-title
                      'start (qof-print-date start-date-printable)
                      'end (qof-print-date end-date)))
-    
+
     (if (null? accounts)
-	
+
         ;; error condition: no accounts specified is this *really*
-	;; necessary??  i'd be fine with an all-zero income statement
-	;; that would, technically, be correct....
-        (gnc:html-document-add-object! 
-         doc 
-         (gnc:html-make-no-account-warning 
-	  reportname (gnc:report-id report-obj)))
-	
+        ;; necessary??  i'd be fine with an all-zero income statement
+        ;; that would, technically, be correct....
+        (gnc:html-document-add-object!
+         doc
+         (gnc:html-make-no-account-warning
+          reportname (gnc:report-id report-obj)))
+
         ;; Get all the balances for each account group.
         (let* ((start-asset-balance
                 (gnc:accounts-get-comm-total-assets
@@ -311,11 +311,11 @@
 
                (neg-pre-start-retained-earnings
                 (gnc:accountlist-get-comm-balance-at-date-with-closing
-		 income-expense-accounts start-date))
+                 income-expense-accounts start-date))
 
                (neg-pre-end-retained-earnings
                 (gnc:accountlist-get-comm-balance-at-date-with-closing
-		 income-expense-accounts end-date))
+                 income-expense-accounts end-date))
 
                (income-expense-closing
                 (gnc:account-get-trans-type-balance-interval-with-closing
@@ -324,7 +324,7 @@
                (net-income
                 (gnc:collector-
                  income-expense-closing
-	         (gnc:accountlist-get-comm-balance-interval-with-closing
+                 (gnc:accountlist-get-comm-balance-interval-with-closing
                   income-expense-accounts start-date end-date)))
 
                (neg-start-equity-balance
@@ -337,9 +337,9 @@
 
                (start-book-balance
                 (gnc:collector+ start-asset-balance
-	                        neg-start-liability-balance
-	                        neg-start-equity-balance
-	                        neg-pre-start-retained-earnings))
+                                neg-start-liability-balance
+                                neg-start-equity-balance
+                                neg-pre-start-retained-earnings))
 
                (end-book-balance
                 (gnc:collector+ end-asset-balance
@@ -347,18 +347,18 @@
                                 neg-end-equity-balance
                                 neg-pre-end-retained-earnings))
 
-	       (start-unrealized-gains
+               (start-unrealized-gains
                 (unrealized-gains-at-date start-book-balance
-				          start-exchange-fn
-				          start-date))
+                                          start-exchange-fn
+                                          start-date))
 
-	       (net-unrealized-gains
+               (net-unrealized-gains
                 (gnc:collector- (unrealized-gains-at-date end-book-balance
                                                           end-exchange-fn
                                                           end-date)
                                 start-unrealized-gains))
 
-	       (equity-closing
+               (equity-closing
                 (gnc:account-get-trans-type-balance-interval-with-closing
                  equity-accounts closing-pattern start-date end-date))
 
@@ -366,16 +366,16 @@
                 (gnc:collector- neg-end-equity-balance
                                 equity-closing))
 
-	       (net-investment
+               (net-investment
                 (gnc:collector- neg-start-equity-balance
                                 neg-pre-closing-equity))
 
                ;; calculate investments & draws...
-	       ;; do a transaction query and classify the splits by dr/cr.
-	       ;; assume that positive shares on an equity account are debits
-	       ;;   withdrawals = investments - (investments - withdrawals)
-	       ;;   investments = withdrawals + (investments - withdrawals)
-	       (withdrawals
+               ;; do a transaction query and classify the splits by dr/cr.
+               ;; assume that positive shares on an equity account are debits
+               ;;   withdrawals = investments - (investments - withdrawals)
+               ;;   investments = withdrawals + (investments - withdrawals)
+               (withdrawals
                 (account-get-total-flow 'in equity-accounts start-date end-date))
 
                (investments
@@ -387,37 +387,37 @@
                                 net-unrealized-gains
                                 (gnc:collector- withdrawals)))
 
-	       (start-total-equity
+               (start-total-equity
                 (gnc:collector- start-unrealized-gains
                                 neg-start-equity-balance
                                 neg-pre-start-retained-earnings))
 
-	       (end-total-equity
+               (end-total-equity
                 (gnc:collector+ start-total-equity
                                 capital-increase))
 
-	       ;; Create the account table below where its
-	       ;; percentage time can be tracked.
-	       (build-table (gnc:make-html-table)) ;; gnc:html-table
-	       (period-for (string-append " " (G_ "for Period"))))
+               ;; Create the account table below where its
+               ;; percentage time can be tracked.
+               (build-table (gnc:make-html-table)) ;; gnc:html-table
+               (period-for (string-append " " (G_ "for Period"))))
 
-	  ;; a helper to add a line to our report
-	  (define (add-report-line
+          ;; a helper to add a line to our report
+          (define (add-report-line
                    table pos-label neg-label amount col
-		   exchange-fn rule? row-style)
-	    (let* ((neg? (and amount neg-label
-			      (negative?
-			       (gnc:gnc-monetary-amount
-				(gnc:sum-collector-commodity
-				 amount report-commodity exchange-fn)))))
-		   (label (if neg? (or neg-label pos-label) pos-label))
-		   (pos-bal (if neg? (gnc:collector- amount) amount)))
-	      (gnc:html-table-add-labeled-amount-line!
+                   exchange-fn rule? row-style)
+            (let* ((neg? (and amount neg-label
+                              (negative?
+                               (gnc:gnc-monetary-amount
+                                (gnc:sum-collector-commodity
+                                 amount report-commodity exchange-fn)))))
+                   (label (if neg? (or neg-label pos-label) pos-label))
+                   (pos-bal (if neg? (gnc:collector- amount) amount)))
+              (gnc:html-table-add-labeled-amount-line!
                table 3 row-style rule? label 0 1 "text-cell"
-	       (gnc:sum-collector-commodity pos-bal report-commodity exchange-fn)
+               (gnc:sum-collector-commodity pos-bal report-commodity exchange-fn)
                (1+ col) 1 "number-cell")))
 
-	  (gnc:report-percent-done 30)
+          (gnc:report-percent-done 30)
 
           (gnc:html-table-append-row!
            build-table (make-list 2 (gnc:make-html-table-cell/min-width 60)))
@@ -467,38 +467,38 @@
            1 end-exchange-fn #f "primary-subheading")
 
           (gnc:html-document-add-object! doc build-table)
-	  
+
           ;; add currency information if requested
-	  (gnc:report-percent-done 90)
+          (gnc:report-percent-done 90)
           (when show-rates?
-	    (let* ((curr-tbl (gnc:make-html-table))
-		   (headers (list
-			     (qof-print-date start-date-printable)
-			     (qof-print-date end-date)))
-		   (then (gnc:html-make-rates-table
-			  report-commodity start-price-fn accounts))
-		   (now (gnc:html-make-rates-table
+            (let* ((curr-tbl (gnc:make-html-table))
+                   (headers (list
+                             (qof-print-date start-date-printable)
+                             (qof-print-date end-date)))
+                   (then (gnc:html-make-rates-table
+                          report-commodity start-price-fn accounts))
+                   (now (gnc:html-make-rates-table
                          report-commodity end-price-fn accounts)))
-	      (gnc:html-table-set-col-headers! curr-tbl headers)
-	      (gnc:html-table-set-style!
-	       curr-tbl "table" 'attribute '("border" "1"))
-	      (gnc:html-table-set-style!
-	       then "table" 'attribute '("border" "0"))
-	      (gnc:html-table-set-style!
-	       now "table" 'attribute '("border" "0"))
-	      (gnc:html-table-append-ruler! build-table 3)
-	      (gnc:html-table-append-row! curr-tbl (list then now))
-	      (gnc:html-document-add-object! doc curr-tbl)))
-	  
-	  (gnc:report-percent-done 100)))
-    
+              (gnc:html-table-set-col-headers! curr-tbl headers)
+              (gnc:html-table-set-style!
+               curr-tbl "table" 'attribute '("border" "1"))
+              (gnc:html-table-set-style!
+               then "table" 'attribute '("border" "0"))
+              (gnc:html-table-set-style!
+               now "table" 'attribute '("border" "0"))
+              (gnc:html-table-append-ruler! build-table 3)
+              (gnc:html-table-append-row! curr-tbl (list then now))
+              (gnc:html-document-add-object! doc curr-tbl)))
+
+          (gnc:report-percent-done 100)))
+
     (gnc:report-finished)
-    
+
     doc
     )
   )
 
-(gnc:define-report 
+(gnc:define-report
  'version 1
  'name reportname
  'report-guid "c2a996c8970f43448654ca84f17dda24"

@@ -1,33 +1,33 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; income-statement.scm: income statement (a.k.a. Profit & Loss)
-;; 
+;;
 ;; By David Montenegro <sunrise2000@comcast.net>
 ;;  2004.07.13 - 2004.07.14
 ;;
 ;;  * BUGS:
-;;    
+;;
 ;;    This code makes the assumption that you want your income
 ;;    statement to no more than daily resolution.
-;;    
+;;
 ;;    Line & column alignments may still not conform with
 ;;    textbook accounting practice (they're close though!).
-;;    
+;;
 ;;    Progress bar functionality is currently mostly broken.
-;;    
+;;
 ;;    The variables in this code could use more consistent naming.
-;;    
+;;
 ;;    See also all the "FIXME"s in the code.
-;;    
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -135,21 +135,21 @@
     (gnc-register-string-option options
       gnc:pagename-general optname-report-title
       "a" opthelp-report-title (G_ reportname))
-    
+
     ;; period over which to report income
     (gnc:options-add-date-interval!
-     options gnc:pagename-general 
+     options gnc:pagename-general
      optname-start-date optname-end-date "c")
-    
+
     ;; accounts to work on
     (gnc-register-account-list-option options
       gnc:pagename-accounts optname-accounts
       "a"
       opthelp-accounts
-	(gnc:filter-accountlist-type
-	 ;; select, by default, only income and expense accounts
-	 (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
-	 (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
+        (gnc:filter-accountlist-type
+         ;; select, by default, only income and expense accounts
+         (list ACCT-TYPE-INCOME ACCT-TYPE-EXPENSE)
+         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))))
 
     (gnc:options-add-account-levels!
      options gnc:pagename-accounts optname-depth-limit
@@ -157,20 +157,20 @@
     (gnc-register-simple-boolean-option options
       gnc:pagename-accounts optname-bottom-behavior
       "c" opthelp-bottom-behavior #f)
-    
+
     ;; all about currencies
     (gnc:options-add-currency!
      options pagename-commodities
      optname-report-commodity "a")
-    
-    (gnc:options-add-price-source! 
+
+    (gnc:options-add-price-source!
      options pagename-commodities
      optname-price-source "b" 'pricedb-nearest)
 
     (gnc-register-simple-boolean-option options
-      pagename-commodities optname-show-foreign 
+      pagename-commodities optname-show-foreign
       "c" opthelp-show-foreign #t)
-    
+
     (gnc-register-simple-boolean-option options
       pagename-commodities optname-show-rates
       "d" opthelp-show-rates #f)
@@ -195,21 +195,21 @@
     (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-use-rules
       "f" opthelp-use-rules #f)
-    
+
     (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-label-revenue
       "g" opthelp-label-revenue #t)
     (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-total-revenue
       "h" opthelp-total-revenue #t)
-    
+
     (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-label-trading
       "h1" opthelp-label-trading #t)
     (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-total-trading
       "h2" opthelp-total-trading #t)
-    
+
     (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-label-expense
       "i" opthelp-label-expense #t)
@@ -224,9 +224,9 @@
     (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-standard-order
       "l" opthelp-standard-order #t)
-    
+
     ;; closing entry match criteria
-    ;; 
+    ;;
     ;; N.B.: transactions really should have a field where we can put
     ;; transaction types like "Adjusting/Closing/Correcting Entries"
     (gnc-register-string-option options
@@ -238,10 +238,10 @@
     (gnc-register-simple-boolean-option options
       pagename-entries optname-closing-regexp
       "c" opthelp-closing-regexp #f)
-    
+
     ;; Set the accounts page as default option tab
     (gnc:options-set-default-section options gnc:pagename-accounts)
-    
+
     options))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -255,28 +255,28 @@
       (gnc:report-options report-obj) pagename optname))
 
   (gnc:report-starting reportname)
-  
+
   ;; get all option's values
   (let* (
-	 (report-title (get-option gnc:pagename-general optname-report-title))
-	 (company-name (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
+         (report-title (get-option gnc:pagename-general optname-report-title))
+         (company-name (or (gnc:company-info (gnc-get-current-book) gnc:*company-name*) ""))
          (start-date-printable (gnc:date-option-absolute-time
-				(get-option gnc:pagename-general
-					    optname-start-date)))
+                                (get-option gnc:pagename-general
+                                            optname-start-date)))
          (start-date (gnc:time64-start-day-time
-			 (gnc:date-option-absolute-time
-			  (get-option gnc:pagename-general
-				      optname-start-date))))
+                         (gnc:date-option-absolute-time
+                          (get-option gnc:pagename-general
+                                      optname-start-date))))
          (end-date (gnc:time64-end-day-time
-		       (gnc:date-option-absolute-time
-			(get-option gnc:pagename-general
-				    optname-end-date))))
+                       (gnc:date-option-absolute-time
+                        (get-option gnc:pagename-general
+                                    optname-end-date))))
          (accounts (get-option gnc:pagename-accounts
-                               optname-accounts))	 
-	 (depth-limit (get-option gnc:pagename-accounts 
-				  optname-depth-limit))
-	 (bottom-behavior (get-option gnc:pagename-accounts 
-				  optname-bottom-behavior))
+                               optname-accounts))
+         (depth-limit (get-option gnc:pagename-accounts
+                                  optname-depth-limit))
+         (bottom-behavior (get-option gnc:pagename-accounts
+                                  optname-bottom-behavior))
          (report-commodity (get-option pagename-commodities
                                       optname-report-commodity))
          (price-source (get-option pagename-commodities
@@ -288,63 +288,63 @@
          (parent-balance-mode (get-option gnc:pagename-display
                                            optname-parent-balance-mode))
          (parent-total-mode
-	  (assq-ref '((t . #t) (f . #f))
-		    (get-option gnc:pagename-display
-				optname-parent-total-mode)))
+          (assq-ref '((t . #t) (f . #f))
+                    (get-option gnc:pagename-display
+                                optname-parent-total-mode)))
          (show-zb-accts? (get-option gnc:pagename-display
-				     optname-show-zb-accts))
+                                     optname-show-zb-accts))
          (omit-zb-bals? (get-option gnc:pagename-display
-				    optname-omit-zb-bals))
+                                    optname-omit-zb-bals))
          (label-revenue? (get-option gnc:pagename-display
-				    optname-label-revenue))
+                                    optname-label-revenue))
          (total-revenue? (get-option gnc:pagename-display
-				    optname-total-revenue))
+                                    optname-total-revenue))
          (label-trading? (get-option gnc:pagename-display
-				    optname-label-trading))
+                                    optname-label-trading))
          (total-trading? (get-option gnc:pagename-display
-				    optname-total-trading))
+                                    optname-total-trading))
          (label-expense? (get-option gnc:pagename-display
-				    optname-label-expense))
+                                    optname-label-expense))
          (total-expense? (get-option gnc:pagename-display
-				    optname-total-expense))
+                                    optname-total-expense))
          (use-links? (get-option gnc:pagename-display
-				     optname-account-links))
+                                     optname-account-links))
          (use-rules? (get-option gnc:pagename-display
-				    optname-use-rules))
-	 (closing-str (get-option pagename-entries
-				  optname-closing-pattern))
-	 (closing-cased (get-option pagename-entries
-				    optname-closing-casing))
-	 (closing-regexp (get-option pagename-entries
-				     optname-closing-regexp))
-	 (two-column? (get-option gnc:pagename-display
-				  optname-two-column))
-	 (standard-order? (get-option gnc:pagename-display
-				      optname-standard-order))
-	 (closing-pattern
-	  (list (list 'str closing-str)
-		(list 'cased closing-cased)
-		(list 'regexp closing-regexp)
-		(list 'closing #t)))
+                                    optname-use-rules))
+         (closing-str (get-option pagename-entries
+                                  optname-closing-pattern))
+         (closing-cased (get-option pagename-entries
+                                    optname-closing-casing))
+         (closing-regexp (get-option pagename-entries
+                                     optname-closing-regexp))
+         (two-column? (get-option gnc:pagename-display
+                                  optname-two-column))
+         (standard-order? (get-option gnc:pagename-display
+                                      optname-standard-order))
+         (closing-pattern
+          (list (list 'str closing-str)
+                (list 'cased closing-cased)
+                (list 'regexp closing-regexp)
+                (list 'closing #t)))
 
          ;; decompose the account list
          (split-up-accounts (gnc:decompose-accountlist accounts))
-	 (revenue-accounts (assoc-ref split-up-accounts ACCT-TYPE-INCOME))
-	 (trading-accounts (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
-	 (expense-accounts (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE))
-	 
+         (revenue-accounts (assoc-ref split-up-accounts ACCT-TYPE-INCOME))
+         (trading-accounts (assoc-ref split-up-accounts ACCT-TYPE-TRADING))
+         (expense-accounts (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE))
+
          (doc (gnc:make-html-document))
-	 ;; this can occasionally put extra (blank) columns in our
-	 ;; table (when there is one account at the maximum depth and
-	 ;; it has at least one of its ancestors deselected), but this
-	 ;; is the only simple way to ensure that both tables
-	 ;; (revenue, expense) have the same width.
+         ;; this can occasionally put extra (blank) columns in our
+         ;; table (when there is one account at the maximum depth and
+         ;; it has at least one of its ancestors deselected), but this
+         ;; is the only simple way to ensure that both tables
+         ;; (revenue, expense) have the same width.
          (tree-depth (if (equal? depth-limit 'all)
-                         (gnc:get-current-account-tree-depth) 
-			 depth-limit))
+                         (gnc:get-current-account-tree-depth)
+                         depth-limit))
          ;; exchange rates calculation parameters
-	 (exchange-fn
-	  (gnc:case-exchange-fn price-source report-commodity end-date))
+         (exchange-fn
+          (gnc:case-exchange-fn price-source report-commodity end-date))
          (price-fn (gnc:case-price-fn price-source report-commodity end-date)))
 
     ;; Wrapper to call gnc:html-table-add-labeled-amount-line!
@@ -563,7 +563,7 @@
   (income-statement-renderer-internal report-obj pnl-reportname))
 
 
-(gnc:define-report 
+(gnc:define-report
  'version 1
  'name is-reportname
  'report-guid "0b81a3bdfd504aff849ec2e8630524bc"
@@ -573,7 +573,7 @@
 
 ;; Also make a "Profit & Loss" report, even if it's the exact same one,
 ;; just relabeled.
-(gnc:define-report 
+(gnc:define-report
  'version 1
  'name pnl-reportname
  'report-guid "8758ba23984c40dea5527f5f0ca2779e"

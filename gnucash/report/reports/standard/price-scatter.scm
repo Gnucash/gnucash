@@ -154,7 +154,7 @@
          (currency-accounts
           (filter gnc:account-has-shares? (gnc-account-get-descendants-sorted
                                            (gnc-get-current-root-account))))
-	 (invert (get-option pagename-price optname-invert))
+         (invert (get-option pagename-price optname-invert))
          (amount-commodity (if invert price-commodity report-currency))
          (base-commodity (if invert report-currency price-commodity))
          (int-label (car (assq-ref intervals interval)))
