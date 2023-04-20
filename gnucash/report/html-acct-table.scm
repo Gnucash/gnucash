@@ -1,22 +1,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; html-acct-table.scm : generate a multi-columnar list of accounts
 ;; including utilities to convert to <html-table> form
-;; 
+;;
 ;; By David Montenegro 2004.06.23 <sunrise2000@comcast.net>
-;; 
+;;
 ;; Borrowed largely from html-table.scm by Bill Gribble <grib@gnumatic.com>
 ;; and html-utilities.scm by Christian Stimming <stimming@tu-harburg.de>
-;; 
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -25,19 +25,19 @@
 ;; Boston, MA  02110-1301,  USA       gnu@gnu.org
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; 
+;;
 ;;
 ;; DESCRIPTION
-;; 
+;;
 ;; The html-acct-table object is a utility object, not an html object.
 ;; It is used to collect and then render a table whose leftmost column(s)
 ;; are a list or chart of accounts.
-;; 
+;;
 ;; You start by creating the object and initializing it with a list of
 ;; accounts and a few assorted parameters.  It generates a table, which
 ;; can be read using accessor functions, containing information which
 ;; makes it easy(ier) to create a great variety of html-table forms.
-;; 
+;;
 ;;               add-accounts            add-account-balances
 ;;  account-list ------------> html-acct-table ----------> html-table
 ;;
@@ -71,7 +71,7 @@
 ;;
 ;;
 ;; ARGUMENTS
-;; 
+;;
 ;; For boolean arguments, #t and #f have their usual meanings.  If a
 ;; boolean argument is not set, a default value may be assumed.  For
 ;; non-boolean arguments, values may be specified.  When #f is
@@ -80,20 +80,20 @@
 ;; specified for such an argument, it generally means to use that
 ;; functionality, but just accept whatever default functionality that
 ;; option may have.
-;; 
+;;
 ;; The list of accounts which are to be placed in the
 ;; gnc:html-acct-table object can be controlled with the
 ;; gnc:make-html-acct-table/accts, gnc:make-html-acct-table/env/accts,
 ;; and gnc:html-table-add-accts!  functions.  But you should only use
 ;; one of these methods to add accounts.
-;; 
+;;
 ;; The gnc:html-acct-table parameters should be set BEFORE adding the
 ;; account list.  They can be set with gnc:make-html-acct-table/env
 ;; or gnc:make-html-acct-table/accts/env and fetched with
 ;; gnc:html-acct-table-env; accept the following parameters:
-;; 
+;;
 ;;     display-tree-depth: integer 'unlimited ['all] #f
-;; 
+;;
 ;;         the number of levels of accounts to display
 ;;         'unlimited, 'all, and #f impose no depth limit.
 ;;         the default is 'all.  [CAS: ISTM, the default is actually #f,
@@ -102,9 +102,9 @@
 ;;         parameter to a large integer value has the strange side-effect
 ;;         of pushing the balances column far right, even when the account
 ;;         tree is relatively shallow.]
-;; 
+;;
 ;;     depth-limit-behavior: ['summarize] 'flatten 'truncate
-;; 
+;;
 ;;         when the display tree reaches its depth limit, this option
 ;;         tells gnc:html-acct-table what to do.  'summarize tells it
 ;;         to omit accounts below the depth limit and summarize their
@@ -113,13 +113,13 @@
 ;;         subaccount, all the way down the tree, but to position
 ;;         them, in the chart, at the depth limit. the default value
 ;;         is 'summarize
-;; 
+;;
 ;;     initial-indent: integer
-;; 
+;;
 ;;         the number of table cells to indent the first level of
 ;;         accounts displayed. this is merely a convenience.  the
 ;;         default initial-indent is 0.
-;; 
+;;
 ;;     account-less-p: binary_predicate #t #f
 ;;
 ;;         used for sorting accounts, below each parent account, into
@@ -130,14 +130,14 @@
 ;;         default sorting function is gnc:account-code-less-p.
 ;;
 ;;     start-date: time64
-;; 
+;;
 ;;         the starting date of the reporting period over which to
 ;;         report balances for this account.  if start-date is #f,
 ;;         will be no limit on how early a counted transaction may
 ;;         occur.
-;; 
+;;
 ;;     end-date: time64
-;; 
+;;
 ;;         the ending date of the reporting period over which to
 ;;         report balances for this account.  if end-date is #f, there
 ;;         will be no limit on how late a counted transaction may
@@ -146,9 +146,9 @@
 ;;         possibility that this may match transactions which haven't
 ;;         occurred, yet. [CAS: I don't think end-date of #f works.
 ;;         It bombs.]
-;; 
+;;
 ;;     report-commodity: commodity
-;; 
+;;
 ;;         the commodity into which to convert any balances containing
 ;;         foreign currencies.  the balance will be converted using
 ;;         the exchange function exchange-fn. the default is the
@@ -173,7 +173,7 @@
 ;; account's exchange-fn.
 ;;
 ;;     exchange-fn: commodity_exchange_function
-;; 
+;;
 ;;         the commodity exchange function (you know, that weighted
 ;;         average, most recent, nearest in time fun stuff) used to
 ;;         convert balances which are not exclusively in the report
@@ -199,37 +199,37 @@
 ;;          header cell will be automatically set appropriately. this
 ;;          is for convenience only; gnc:html-acct-table does not use
 ;;          this data.
-;; 
+;;
 ;;     account-label-mode: 'name 'anchor
-;; 
+;;
 ;;          tells whether to render account labels as hyperlinks or
 ;;          text.  stylesheets, really, should be able to remove
 ;;          link markup.
-;; 
+;;
 ;;     parent-account-subtotal-mode: #t #f
-;; 
+;;
 ;;          indicates whether or not to add a line, recursively
 ;;          subtotalling an account and its descendents, for any
 ;;          account with children (non-leaf account).  if #t, a
 ;;          subtotal row will be created for each non-leaf account.
 ;;          if #f, no non-leaf account subtotal rows will be
 ;;          created. the default is #f.
-;; 
+;;
 ;;     zero-balance-mode: 'show-leaf-acct 'omit-leaf-acct
-;; 
+;;
 ;;          indicates what to do with accounts with zero balance. if
 ;;          'omit-leaf-acct, no account row will be generated for any
 ;;          account having a balance of zero. otherwise, a row will be
 ;;          generated for the account.
-;; 
+;;
 ;;     balance-mode: 'pre-closing 'post-closing
 ;;
 ;;          indicates whether or not to ignore adjusting/closing
 ;;          entries when computing account balances. 'pre-closing
 ;;          ignores, 'post-closing counts closing entries.
-;; 
+;;
 ;;     closing-pattern: alist of 'str 'cased 'regexp
-;; 
+;;
 ;;          a pattern alist, as accepted by
 ;;          gnc:account-get-trans-type-balance-interval, matching
 ;;          closing transactions to be ignored when balance-mode is
@@ -237,47 +237,47 @@
 ;;
 ;;     report-budget: budget
 ;;
-;;	    (optional) a budget used to ignore accounts with zero 
-;;	    budget or balance (if zb-balance-mode is set to omit).
-;; 
+;;          (optional) a budget used to ignore accounts with zero
+;;          budget or balance (if zb-balance-mode is set to omit).
+;;
 ;;     account-type: unimplemented
 ;;     account-class: unimplemented
 ;;     row-thunk: unimplemented (for gnc:html-acct-table-render)
 ;;     row-list: unimplemented (list of all the rows ever added)
-;; 
+;;
 ;; The html-acct-table object lets you generate, store, and access the
 ;; following parameters:
-;; 
+;;
 ;;     account: Account
-;; 
+;;
 ;;         the account in the current row
-;; 
+;;
 ;;     account-parent: Account #f
-;; 
+;;
 ;;         the parent account of the current account, if one exists.
 ;;         #f if the current account has no parent.
-;; 
+;;
 ;;     account-guid: guid
-;; 
+;;
 ;;         the guid of the account in the current row, as returned by
 ;;         gncAccountGetGUID.
-;; 
+;;
 ;;     account-desc: string?
-;; 
+;;
 ;;         the account description of the account in the current row,
 ;;         as returned by xaccAccountGetDescription.
-;; 
+;;
 ;;     account-notes: string?
-;; 
+;;
 ;;         the account notes of the account in the current row, as
 ;;         returned by xaccAccountGetNotes.
-;; 
+;;
 ;;     account-path: string
-;; 
+;;
 ;;         the full name of the account in the current row. i.e., if
 ;;         the name of the account is "Assets:Current Assets:Cash",
 ;;         the value will be "Assets:Current Assets:Cash".
-;; 
+;;
 ;;     account-name: string
 ;;
 ;;         the "basename" of the account in the current row. i.e., if
@@ -285,31 +285,31 @@
 ;;         the value will be "Cash".
 ;;
 ;;     account-code: string
-;; 
+;;
 ;;         the account of the account in the current row, as returned
 ;;         by xaccAccountGetCode.
-;; 
+;;
 ;;     account-anchor: text(maybe?)
-;; 
+;;
 ;;         a link to the account in the current row
-;; 
+;;
 ;;     account-label: string
-;; 
+;;
 ;;         the text used to label the account in the current row.  if
 ;;         account-label-mode is 'name, this consists of account-name
 ;;         prepended, if row-type is 'subtotal-row, by "Total ".  if
 ;;         account-label-mode is 'anchor, this consists of
 ;;         account-anchor prepended, if row-type is 'subtotal-row, by
 ;;         "Total ".
-;; 
+;;
 ;;     account-depth: integer
-;; 
+;;
 ;;         the depth at which the account in the current row resides
 ;;         in the account tree. note that this may differ from
 ;;         display-depth when depth-limit-behavior is 'flatten.
 ;;         unlike in gnc:html-build-acct-table, the first level of
 ;;         accounts is level 0.
-;; 
+;;
 ;;     logical-depth: integer
 ;;
 ;;         the depth at which the account in the current row resides
@@ -319,7 +319,7 @@
 ;;         selected account has an unselected ancestor.
 ;;
 ;;     display-depth: integer
-;; 
+;;
 ;;         the depth at which the account in the current row resides
 ;;         in the display tree. note that this may differ from
 ;;         account-depth when depth-limit-behavior is 'flatten.
@@ -327,18 +327,18 @@
 ;;         accounts is level 0. this means that display-depth is also
 ;;         the number of empty cells which should precede the account
 ;;         name in the gnc:html-table being generated.
-;; 
+;;
 ;;     indented-depth: integer
-;; 
+;;
 ;;         the depth at which the account in the current row resides
 ;;         in the indented display tree. also account-depth plus
 ;;         indent.  CAS: I think *display-depth* plus indent would
 ;;         make more sense.  Then it's like an absolute column index.
-;; 
+;;
 ;;     logical-cols: integer
-;; 
+;;
 ;;         the number of columns in which account labels were placed.
-;; 
+;;
 ;;     label-cols: integer
 ;;
 ;;         the number of columns in the group of account columns to
@@ -347,74 +347,74 @@
 ;;         table.
 ;;
 ;;     account-cols: integer
-;; 
+;;
 ;;         the number of columns in the group of account columns.  if
 ;;         display-tree-depth is #f, this is the value of label-cols
 ;;         plus any indent.  if display-tree-depth is set, this is the
 ;;         value of display-tree-depth, plus indent.
-;; 
+;;
 ;;     account-colspan: integer
-;; 
+;;
 ;;         the number of table columns which the account label of the
 ;;         account in the current row should span in the
 ;;         gnc:html-table being generated.
-;; 
+;;
 ;;     account-children: list of Accounts
-;; 
+;;
 ;;         a list of all children of the account in the current row.
-;; 
+;;
 ;;     account-bal: commodity-collector
-;; 
+;;
 ;;         the balance of the account in the current row, exclusive of
 ;;         any balances in any subaccounts.  this is for convenience.
-;; 
+;;
 ;;     recursive-bal: commodity-collector
-;; 
+;;
 ;;         the balance of the account in the current row, recursively
 ;;         including all balances in any *selected* subaccounts.  this
 ;;         is for convenience.
-;; 
+;;
 ;; CAS: I think these next two are wrong because they are really of
 ;; type gnc:monetary, not commodity-collectors.
 ;;
 ;;     report-comm-account-bal: commodity-collector
-;; 
+;;
 ;;         the balance of the account in the current row, exclusive of
 ;;         any balances in any subaccounts, converted to
 ;;         report-commodity using exchange-fn.  this is for
 ;;         convenience.
-;; 
+;;
 ;;     report-comm-recursive-bal: commodity-collector
-;; 
+;;
 ;;         the balance of the account in the current row, recursively
 ;;         including all balances in any *selected* subaccounts,
 ;;         converted to report-commodity using exchange-fn.  this is
 ;;         for convenience.
-;; 
+;;
 ;;     account-commodity: commodity
-;; 
+;;
 ;;         returns the default commodity of the account in the current
-;;         row, as returned by xaccAccountGetCommodity. 
-;; 
+;;         row, as returned by xaccAccountGetCommodity.
+;;
 ;;     account-type: account_type
-;; 
+;;
 ;;         returns the type of the account in the current row
-;; 
+;;
 ;;     account-type-string: string
-;; 
+;;
 ;;         returns the type of the account in the current row as a
 ;;         string
-;; 
-;;     row-type: 'account-row 'subtotal-row 
-;; 
+;;
+;;     row-type: 'account-row 'subtotal-row
+;;
 ;;         indicates the nature of the current row.  'account-row
 ;;         indicates that the current row represents an account
 ;;         balance.  'subtotal-row indicates that it represents a
 ;;         subtotal.
-;; 
-;; 
+;;
+;;
 ;; DIFFERENCES FROM PARAMETERS USED BY gnc:html-build-acct-table
-;; 
+;;
 ;; The show-subaccounts? option of gnc:html-build-acct-table, which
 ;; used to select an accounts recursively like the "-R" option to ls,
 ;; has been removed.  I find it both confusing, as a user, and
@@ -431,7 +431,7 @@
 ;; selection that which is closest to what the report user is likely
 ;; to select.  It is my hope that a recursive account selection widget
 ;; will soon be implemented.
-;; 
+;;
 ;; The group-types? option of gnc:html-build-acct-table, which
 ;; would display accounts by account type and supply header and
 ;; total lines for each type (see source), has been removed.
@@ -450,10 +450,10 @@
 ;; project.  Since much of the code for this has already been written
 ;; (in gnc:html-build-acct-table), when the time comes, this
 ;; functionality should not be difficult to add.
-;; 
-;; 
+;;
+;;
 ;; INTERNALS
-;; 
+;;
 ;; Internally, html-acct-table uses an html-table object to store
 ;; data.  Since the html-acct-table object is arguably a more general
 ;; class than html-table, one might think that the html-table object
@@ -461,7 +461,7 @@
 ;; manipulation, and access.  The html-table class, as it happens, was
 ;; written first, so the decision was made to use it rather than
 ;; redesign the horse around the carriage.
-;; 
+;;
 ;; It may also be possible to have made html-acct-table a markup/style
 ;; sheet pair.  To do this, the html-acct-table (which would
 ;; essentially be a markup object) would have to store thunks and call
@@ -471,12 +471,12 @@
 ;; object means that one can use it in a report generator in a
 ;; programmatic manner, keeping clear the separation between report
 ;; generation and stylization.
-;; 
+;;
 ;; The first cell in each row of the html-table consist of an a-list
 ;; of row-parameters.  These parameters are described in PARAMETERS
 ;; above.  Any remaining cells in the row represent data set by the
 ;; user.  This class simply maps its contents to the html-table.
-;; 
+;;
 
 (define-module (gnucash report html-acct-table))
 
@@ -547,13 +547,13 @@
 
 
 (define (gnc:html-acct-table-add-accounts! acct-table accounts)
-  ;; 
+  ;;
   ;; This is where most of the html-acct-table functionality ends up....
-  ;; 
+  ;;
   ;; This function traverses the (current) account tree, adding
   ;; information about the selected accounts to acct-table.
-  ;; 
-  
+  ;;
+
   ;; helper for fetching values from the key/val environment alist
   (define (get-val alist key)
     (let ((lst (assoc-ref alist key)))
@@ -572,45 +572,45 @@
       (append (gnc:html-acct-table-get-row-env acct-table row) env)))
 
   (let* ((env (gnc:_html-acct-table-env_ acct-table))
-	 ;; establish all input parameters and their defaults 
-	 (depth-limit (let ((lim (get-val env 'display-tree-depth)))
+         ;; establish all input parameters and their defaults
+         (depth-limit (let ((lim (get-val env 'display-tree-depth)))
                         (and (number? lim) lim)))
-	 (limit-behavior (or (get-val env 'depth-limit-behavior) 'summarize))
-	 (indent (or (get-val env 'initial-indent) 0))
-	 (less-p (let ((pred (get-val env 'account-less-p)))
-		   (if (eq? pred #t) gnc:account-code-less-p pred)))
-	 (start-date (get-val env 'start-date))
-	 (end-date (or (get-val env 'end-date)
-		       (gnc:get-today)))
-	 (report-commodity (or (get-val env 'report-commodity)
-			       (gnc-default-report-currency)))
+         (limit-behavior (or (get-val env 'depth-limit-behavior) 'summarize))
+         (indent (or (get-val env 'initial-indent) 0))
+         (less-p (let ((pred (get-val env 'account-less-p)))
+                   (if (eq? pred #t) gnc:account-code-less-p pred)))
+         (start-date (get-val env 'start-date))
+         (end-date (or (get-val env 'end-date)
+                       (gnc:get-today)))
+         (report-commodity (or (get-val env 'report-commodity)
+                               (gnc-default-report-currency)))
          ;; BUG: other code expects a real function here, maybe
          ;; someone was thinking price-source?
-	 (exchange-fn (get-val env 'exchange-fn))
+         (exchange-fn (get-val env 'exchange-fn))
          (get-balance-fn (get-val env 'get-balance-fn))
-	 (column-header (let ((cell (get-val env 'column-header)))
-			  (if (eq? cell #t)
-			      (gnc:make-html-table-cell "Account name")
-			      cell)))
-	 (subtotal-mode (get-val env 'parent-account-subtotal-mode))
-	 (zero-mode (let ((mode (get-val env 'zero-balance-mode)))
-		      (if (boolean? mode) 'show-leaf-acct mode)))
-	 (label-mode (or (get-val env 'account-label-mode) 'anchor))
-	 (balance-mode (or (get-val env 'balance-mode) 'post-closing))
-	 (closing-pattern (or (get-val env 'closing-pattern)
-			      (list
-			       (list 'str (G_ "Closing Entries"))
-			       (list 'cased #f)
-			       (list 'regexp #f)
-			       (list 'closing #t))))
-	 (report-budget (or (get-val env 'report-budget) #f))
-	 ;; local variables
-	 (toplvl-accts
-	  (gnc-account-get-children-sorted (gnc-get-current-root-account)))
-	 (acct-depth-reached 0)
-	 (logi-depth-reached (if depth-limit (- depth-limit 1) 0))
-	 (disp-depth-reached 0)
-	 )
+         (column-header (let ((cell (get-val env 'column-header)))
+                          (if (eq? cell #t)
+                              (gnc:make-html-table-cell "Account name")
+                              cell)))
+         (subtotal-mode (get-val env 'parent-account-subtotal-mode))
+         (zero-mode (let ((mode (get-val env 'zero-balance-mode)))
+                      (if (boolean? mode) 'show-leaf-acct mode)))
+         (label-mode (or (get-val env 'account-label-mode) 'anchor))
+         (balance-mode (or (get-val env 'balance-mode) 'post-closing))
+         (closing-pattern (or (get-val env 'closing-pattern)
+                              (list
+                               (list 'str (G_ "Closing Entries"))
+                               (list 'cased #f)
+                               (list 'regexp #f)
+                               (list 'closing #t))))
+         (report-budget (or (get-val env 'report-budget) #f))
+         ;; local variables
+         (toplvl-accts
+          (gnc-account-get-children-sorted (gnc-get-current-root-account)))
+         (acct-depth-reached 0)
+         (logi-depth-reached (if depth-limit (- depth-limit 1) 0))
+         (disp-depth-reached 0)
+         )
 
     ;; the following function was adapted from html-utilities.scm
 
@@ -849,9 +849,9 @@
 (define (gnc:html-acct-table-set-row-env! acct-table row env)
   (gnc:html-acct-table-set-cell! acct-table row -1 env))
 
-;; 
+;;
 ;; Here are some standard functions to help process gnc:html-acct-tables.
-;; 
+;;
 
 (define (gnc:html-make-nbsps n)
   (let lp ((n n) (res '()))
@@ -872,57 +872,57 @@
 (define (gnc:html-table-add-labeled-amount-line!
          ;; function to add a label and/or amount (which we'll call a "line")
          ;; to the end of a gnc:html-table. all depths are zero-indexed.
-	 html-table
+         html-table
          table-width       ;; if #f defaults to (amount-depth + amount-colspan)
          row-markup        ;; optional
          total-rule?       ;; Place an <hr> in the cell previous to label?
-	 label             ;; the actual label text
+         label             ;; the actual label text
          label-depth       ;; defaults to zero
          label-colspan     ;; defaults to one
          label-markup      ;; optional
-	 amount            ;; a <gnc:monetary> or #f
+         amount            ;; a <gnc:monetary> or #f
          amount-depth      ;; defaults to (label-depth + label-colspan)
          amount-colspan    ;; defaults to one
          amount-markup)    ;; optional
   (let* ((lbl-depth (or label-depth 0))
-	 (lbl-colspan 1)
-	 (amt-depth (or amount-depth (+ lbl-depth lbl-colspan)))
-	 (amt-colspan 1)
-	 (tbl-width (or table-width (+ amt-depth amt-colspan)))
-	 (row
-	  (append
-	   (list
-	    (if label-markup                      ;; the actual label
-		(gnc:make-html-table-cell/size/markup
-		 1 1 label-markup (gnc:make-html-text (gnc:html-make-nbsps lbl-depth)) label)
-		(gnc:make-html-table-cell/size
-		 1 1 (gnc:make-html-text (gnc:html-make-nbsps lbl-depth)) label))
-	    )
-	   (gnc:html-make-empty-cells             ;; padding after label
+         (lbl-colspan 1)
+         (amt-depth (or amount-depth (+ lbl-depth lbl-colspan)))
+         (amt-colspan 1)
+         (tbl-width (or table-width (+ amt-depth amt-colspan)))
+         (row
+          (append
+           (list
+            (if label-markup                      ;; the actual label
+                (gnc:make-html-table-cell/size/markup
+                 1 1 label-markup (gnc:make-html-text (gnc:html-make-nbsps lbl-depth)) label)
+                (gnc:make-html-table-cell/size
+                 1 1 (gnc:make-html-text (gnc:html-make-nbsps lbl-depth)) label))
+            )
+           (gnc:html-make-empty-cells             ;; padding after label
             (+ (- amt-depth (floor (/ tbl-width 2)))
                (if total-rule? -1 0)
                )
             )
-	   (if total-rule?                        ;; include <hr>?
-	       (list (gnc:make-html-table-cell
-		      (gnc:make-html-text (gnc:html-markup-hr))))
-	       (list)
-	       )
-	   (list
-	    (if amount-markup                     ;; the amount
-		(gnc:make-html-table-cell/size/markup
-		 1 amt-colspan amount-markup amount)
-		(gnc:make-html-table-cell/size
-		 1 amt-colspan amount))
-	    )
-	   (gnc:html-make-empty-cells             ;; padding out to full width
-	    (- tbl-width (+ amt-depth amt-colspan)))
-	   )
+           (if total-rule?                        ;; include <hr>?
+               (list (gnc:make-html-table-cell
+                      (gnc:make-html-text (gnc:html-markup-hr))))
+               (list)
+               )
+           (list
+            (if amount-markup                     ;; the amount
+                (gnc:make-html-table-cell/size/markup
+                 1 amt-colspan amount-markup amount)
+                (gnc:make-html-table-cell/size
+                 1 amt-colspan amount))
+            )
+           (gnc:html-make-empty-cells             ;; padding out to full width
+            (- tbl-width (+ amt-depth amt-colspan)))
+           )
           ) ;; end of row
-	 )
+         )
     (if row-markup
-	(gnc:html-table-append-row/markup! html-table row-markup row)
-	(gnc:html-table-append-row! html-table row))))
+        (gnc:html-table-append-row/markup! html-table row-markup row)
+        (gnc:html-table-append-row! html-table row))))
 
 (define (gnc-commodity-table amount report-commodity exchange-fn)
   ;; this creates a small two-column table listing each commodity
@@ -939,9 +939,9 @@
     (for-each
      (lambda (bal)
        (gnc:html-table-append-row!
-	table (list (gnc:make-html-table-cell/markup "number-cell" bal)
+        table (list (gnc:make-html-table-cell/markup "number-cell" bal)
                     spacer
-	            (gnc:make-html-table-cell/markup
+                    (gnc:make-html-table-cell/markup
                      "number-cell" (exchange-fn bal report-commodity)))))
      list-of-balances)
     (gnc:html-table-set-style! table "table"
@@ -949,60 +949,60 @@
                                'attribute (list "cellpadding" "0"))
     table))
 
-;; 
+;;
 ;; This function adds all the lines from a gnc:html-acct-table to a
 ;; gnc:html-table in "labeled amount" form.  IOW, it uses
 ;; gnc:html-table-add-labeled-amount-line!
-;; 
+;;
 ;; The returned gnc:html-table is similar to what
 ;; gnc:html-build-acct-table used to (and still should) produce.
-;; 
+;;
 ;; this function accepts the following additional parameters:
 ;; parent-account-balance-mode: 'immediate-bal 'recursive-bal ['omit-bal/#f]
 ;; zero-balance-display-mode: ['show-balance] 'omit-balance
 ;; multicommodity-mode: [#f] 'table/#t
 ;; rule-mode: #t [#f]  (not meant to affect subtotal rules)
-;; 
+;;
 (define (gnc:html-table-add-account-balances
          html-table  ;; can be #f to create a new table
          acct-table
          params)
   (let* ((num-rows (gnc:html-acct-table-num-rows acct-table))
-	 (rownum 0)
-	 (html-table (or html-table (gnc:make-html-table)))
-	 (get-val (lambda (alist key)
-		    (let ((lst (assoc-ref alist key)))
-		      (if lst (car lst) lst))))
-	 )
-    
+         (rownum 0)
+         (html-table (or html-table (gnc:make-html-table)))
+         (get-val (lambda (alist key)
+                    (let ((lst (assoc-ref alist key)))
+                      (if lst (car lst) lst))))
+         )
+
     (while (< rownum num-rows)
-	   (let* ((env (append
-			(gnc:html-acct-table-get-row-env acct-table rownum)
-			params))
-		  (acct (get-val env 'account))
-		  (children (get-val env 'account-children))
-		  (label (get-val env 'account-label))
-		  (acct-name (get-val env 'account-name)) ;; for diagnostics...
-		  (report-commodity  (get-val env 'report-commodity))
-		  (exchange-fn (get-val env 'exchange-fn))
-		  (account-cols (get-val env 'account-cols))
-		  (logical-cols (get-val env 'logical-cols))
-		  (label-cols (get-val env 'label-cols))
-		  (logical-depth (get-val env 'logical-depth))
-		  (display-depth (get-val env 'display-depth))
-		  (display-tree-depth (get-val env 'display-tree-depth))
-		  (row-type (get-val env 'row-type))
-		  (rule-mode (and (equal? row-type 'subtotal-row)
-				  (get-val env 'rule-mode)))
-		  (row-markup (and (equal? row-type 'subtotal-row)
-				   "primary-subheading"))
-		  (multicommodity-mode (get-val env 'multicommodity-mode))
-		  (limit-behavior
-		   (or (get-val env 'depth-limit-behavior)
-		       'summarize))
-		  (parent-acct-bal-mode
-		   (or (get-val env 'parent-account-balance-mode)
-		       'omit-bal))
+           (let* ((env (append
+                        (gnc:html-acct-table-get-row-env acct-table rownum)
+                        params))
+                  (acct (get-val env 'account))
+                  (children (get-val env 'account-children))
+                  (label (get-val env 'account-label))
+                  (acct-name (get-val env 'account-name)) ;; for diagnostics...
+                  (report-commodity  (get-val env 'report-commodity))
+                  (exchange-fn (get-val env 'exchange-fn))
+                  (account-cols (get-val env 'account-cols))
+                  (logical-cols (get-val env 'logical-cols))
+                  (label-cols (get-val env 'label-cols))
+                  (logical-depth (get-val env 'logical-depth))
+                  (display-depth (get-val env 'display-depth))
+                  (display-tree-depth (get-val env 'display-tree-depth))
+                  (row-type (get-val env 'row-type))
+                  (rule-mode (and (equal? row-type 'subtotal-row)
+                                  (get-val env 'rule-mode)))
+                  (row-markup (and (equal? row-type 'subtotal-row)
+                                   "primary-subheading"))
+                  (multicommodity-mode (get-val env 'multicommodity-mode))
+                  (limit-behavior
+                   (or (get-val env 'depth-limit-behavior)
+                       'summarize))
+                  (parent-acct-bal-mode
+                   (or (get-val env 'parent-account-balance-mode)
+                       'omit-bal))
 
                   (bal-method
                    ;; figure out how to calculate our balance:
@@ -1041,31 +1041,31 @@
                      (gnc:sum-collector-commodity amt report-commodity exchange-fn))))
 
                   (indented-depth (get-val env 'indented-depth))
-		  (account-colspan (get-val env 'account-colspan))
-		  )
+                  (account-colspan (get-val env 'account-colspan))
+                  )
 
              ;; for each row do:
 
-	     (gnc:html-table-add-labeled-amount-line!
-	      html-table
-	      (+ account-cols logical-cols) ;; table-width
-	      row-markup                    ;; row-markup
+             (gnc:html-table-add-labeled-amount-line!
+              html-table
+              (+ account-cols logical-cols) ;; table-width
+              row-markup                    ;; row-markup
               rule-mode
-	      label
+              label
               indented-depth
               account-colspan               ;; label-colspan
               "anchor-cell"                 ;; label-markup
-	      amount
-	      (+ account-cols (- 0 1)
-		 (- logical-cols display-depth)
-		 )                          ;; amount-depth
-	      1                             ;; amount-colspan
+              amount
+              (+ account-cols (- 0 1)
+                 (- logical-cols display-depth)
+                 )                          ;; amount-depth
+              1                             ;; amount-colspan
               "number-cell"                 ;; amount-markup
               )
 
-	     (set! rownum (+ rownum 1)) ;; increment rownum
-	     )
-	   ) ;; end of while
+             (set! rownum (+ rownum 1)) ;; increment rownum
+             )
+           ) ;; end of while
     html-table
     )
   )

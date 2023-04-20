@@ -1,20 +1,20 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; html-table.scm : generate HTML programmatically, with support
-;; for simple style elements. 
+;; for simple style elements.
 ;; Copyright 2000 Bill Gribble <grib@gnumatic.com>
-;; 
+;;
 ;; * 2004.06.18: David Montenegro, added gnc:html-table-get-cell
-;; 
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;;
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -100,13 +100,13 @@
 (export gnc:html-table-render)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; 
+;;
 ;; NB: In this code, "markup" and "/markup" *do not* refer to
 ;; style information.  Rather, they let you override the tag
 ;; associated with an html-table row or cell.  Style
 ;; information is stored in addition to this "markup" (in
 ;; an entirely different record field).
-;; 
+;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-record-type <html-table>
@@ -171,7 +171,7 @@
 (define gnc:html-table-cell-set-style-internal! html-table-cell-set-style!)
 
 (define (gnc:make-html-table-cell . objects)
-  (gnc:make-html-table-cell-internal 1 1 "td" objects 
+  (gnc:make-html-table-cell-internal 1 1 "td" objects
                                      (gnc:make-html-style-table)))
 
 (define (gnc:make-html-table-cell/size rowspan colspan . objects)
@@ -179,7 +179,7 @@
                                      objects (gnc:make-html-style-table)))
 
 (define (gnc:make-html-table-cell/markup markup . objects)
-  (gnc:make-html-table-cell-internal 1 1 markup objects 
+  (gnc:make-html-table-cell-internal 1 1 markup objects
                                      (gnc:make-html-style-table)))
 
 (define (gnc:make-html-table-cell/size/markup rowspan colspan markup . objects)
@@ -193,11 +193,11 @@
     cell))
 
 (define (gnc:make-html-table-header-cell . objects)
-  (gnc:make-html-table-cell-internal 1 1 "th" objects 
+  (gnc:make-html-table-cell-internal 1 1 "th" objects
                                      (gnc:make-html-style-table)))
 
 (define (gnc:make-html-table-header-cell/markup markup . objects)
-  (gnc:make-html-table-cell-internal 1 1 markup objects 
+  (gnc:make-html-table-cell-internal 1 1 markup objects
                                      (gnc:make-html-style-table)))
 
 (define (gnc:make-html-table-header-cell/size rowspan colspan . objects)
@@ -212,7 +212,7 @@
     (gnc:html-style-table-set! styletable tag newstyle)))
 
 (define (gnc:html-table-cell-append-objects! cell . objects)
-  (gnc:html-table-cell-set-data-internal! 
+  (gnc:html-table-cell-set-data-internal!
    cell (append (gnc:html-table-cell-data cell) objects)))
 
 (define (gnc:html-table-cell-render cell doc)
@@ -253,14 +253,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (gnc:make-html-table)
-  (gnc:make-html-table-internal 
-   #f                    ;; col-headers 
-   #f                    ;; row-headers 
-   #f                    ;; caption 
+  (gnc:make-html-table-internal
+   #f                    ;; col-headers
+   #f                    ;; row-headers
+   #f                    ;; caption
    '()                   ;; data (stored in reverse row-major order)
    0                     ;; num-rows
    (gnc:make-html-style-table) ;; style
-   (make-hash-table 21)  ;; hash of col number to col-style 
+   (make-hash-table 21)  ;; hash of col number to col-style
    (make-hash-table 21)  ;; hash of row number to row-style
    (make-hash-table 21)  ;; hash of row number to row markup
    (gnc:make-html-style-table) ;; col-headers-style
@@ -337,11 +337,11 @@
 (define (gnc:html-table-prepend-row/markup! table markup newrow)
   (gnc:html-table-prepend-row! table newrow)
   (gnc:html-table-set-row-markup! table 0 markup))
-    
+
 
 (define (gnc:html-table-append-row! table newrow)
   (let* ((current-num-rows (gnc:html-table-num-rows table))
-	 (new-num-rows (1+ current-num-rows)))
+         (new-num-rows (1+ current-num-rows)))
     (gnc:html-table-set-num-rows-internal! table new-num-rows)
     (gnc:html-table-set-data! table
                               (cons (if (list? newrow) newrow (list newrow))

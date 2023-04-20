@@ -1,19 +1,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; html-utilities.scm: Useful functions when using the HTML generator.
-;; 
+;;
 ;; Modified slightly by David Montenegro 2004.06.18.
-;; 
+;;
 ;; Copyright 2001 Christian Stimming <stimming@tu-harburg.de>
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -72,7 +72,7 @@
 (export gnc:html-js-include)
 (export gnc:html-css-include)
 
-;; returns a list with n #f (empty cell) values 
+;; returns a list with n #f (empty cell) values
 (define (gnc:html-make-empty-cell) #f)
 (define (gnc:html-make-empty-cells n)
   (if (> n 0)
@@ -101,13 +101,13 @@
 
 (define (gnc:report-anchor-text report-id)
   (gnc-build-url URL-TYPE-REPORT
-		      (string-append "id=" (number->string report-id))
-		      ""))
+                      (string-append "id=" (number->string report-id))
+                      ""))
 
 (define (gnc:price-anchor-text price)
   (gnc-build-url URL-TYPE-PRICE
-		      (string-append "price-guid=" (gncPriceGetGUID price))
-		      ""))
+                      (string-append "price-guid=" (gncPriceGetGUID price))
+                      ""))
 
 (define (guid-ref idstr type guid)
   (gnc-build-url type (string-append idstr guid) ""))
@@ -166,19 +166,19 @@
 ;; according to 'optionlist'. Each element of optionlist is a list of
 ;; section, name, and value of the function.
 (define (gnc:make-report-anchor reportname src-report
-				optionlist)
+                                optionlist)
   (let ((src-options (gnc:report-options src-report))
-	(options (gnc:make-report-options reportname)))
+        (options (gnc:make-report-options reportname)))
     (if options
-	(begin
-	  (gnc:options-copy-values src-options options)
-	  (for-each
-	   (lambda (l)
+        (begin
+          (gnc:options-copy-values src-options options)
+          (for-each
+           (lambda (l)
              (gnc-set-option (gnc:optiondb options) (car l) (cadr l) (caddr l)))
-	   optionlist)
-	  (let ((id (gnc:make-report reportname options)))
-	    (gnc:report-anchor-text id)))
-	(warn "gnc:make-report-anchor: No such report: " reportname))))
+           optionlist)
+          (let ((id (gnc:make-report reportname options)))
+            (gnc:report-anchor-text id)))
+        (warn "gnc:make-report-anchor: No such report: " reportname))))
 
 
 ;; returns the account name as html-text and anchor to the register.
@@ -215,9 +215,9 @@
   (gnc:make-html-text (if price
                           (gnc:html-markup-anchor
                            (gnc:price-anchor-text price)
-			   (if value
-			       value
-			       (gnc-price-get-value price)))
+                           (if value
+                               value
+                               (gnc-price-get-value price)))
                           value)))
 
 (define (gnc:assign-colors num-colors)
@@ -400,6 +400,3 @@
   (format #f
           "<link rel=\"stylesheet\" type=\"text/css\" href=~s />\n"
           (make-uri (gnc-resolve-file-path file))))
-
-
-

@@ -1,18 +1,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; options-utilities.scm: Useful option helper functions.
-;; 
+;;
 ;; By Christian Stimming <stimming@tu-harburg.de>
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -46,21 +46,21 @@
 
 ;; This is one single end-date of a report.
 (define (gnc:options-add-report-date!
-	 options pagename optname sort-tag)
+         options pagename optname sort-tag)
   (gnc-register-end-date-option (gnc:optiondb options) pagename optname sort-tag
-			      (N_ "Select a date to report on.")))
+                              (N_ "Select a date to report on.")))
 
 ;; This is a date-interval for a report.
 (define (gnc:options-add-date-interval!
-	 options pagename name-from name-to sort-tag)
+         options pagename name-from name-to sort-tag)
   (gnc:options-make-date-interval! options pagename
-				   name-from (N_ "Start of reporting period.")
-				   name-to (N_ "End of reporting period.")
-				   sort-tag))
+                                   name-from (N_ "Start of reporting period.")
+                                   name-to (N_ "End of reporting period.")
+                                   sort-tag))
 
 ;; A date interval multichoice option.
-(define (gnc:options-add-interval-choice! 
-	 options pagename optname sort-tag default)
+(define (gnc:options-add-interval-choice!
+         options pagename optname sort-tag default)
   (gnc-register-multichoice-option (gnc:optiondb options)
     pagename optname
     sort-tag (N_ "The amount of time between data points.")
@@ -76,9 +76,9 @@
 ;; A multichoice option intended to chose the account level. Different
 ;; from the other functions the help string can still be given. Used
 ;; below.
-(define (gnc:options-add-account-levels! 
-	 options pagename name-display-depth 
-	 sort-tag help-string default-depth)
+(define (gnc:options-add-account-levels!
+         options pagename name-display-depth
+         sort-tag help-string default-depth)
   (gnc-register-multichoice-option
    (gnc:optiondb options)
    pagename name-display-depth sort-tag help-string
@@ -93,20 +93,20 @@
           (vector 6 "6"))))
 
 ;; These help for selecting a bunch of accounts.
-(define (gnc:options-add-account-selection! 
-	 options pagename 
-	 name-display-depth name-show-subaccounts name-accounts
-	 sort-tag default-depth default-accounts default-show-subaccounts)
+(define (gnc:options-add-account-selection!
+         options pagename
+         name-display-depth name-show-subaccounts name-accounts
+         sort-tag default-depth default-accounts default-show-subaccounts)
   (gnc:options-add-account-levels!
-   options pagename name-display-depth 
+   options pagename name-display-depth
    (string-append sort-tag "a")
-   (N_ "Show accounts to this depth, overriding any other option.") 
+   (N_ "Show accounts to this depth, overriding any other option.")
    default-depth)
-    
+
   (gnc-register-simple-boolean-option (gnc:optiondb options)
     pagename name-show-subaccounts
     (string-append sort-tag "b")
-    (N_ "Override account-selection and show sub-accounts of all selected accounts?") 
+    (N_ "Override account-selection and show sub-accounts of all selected accounts?")
     default-show-subaccounts)
 
   ;; Semantics of the account selection, as used in the
@@ -122,7 +122,7 @@
 
 ;; To let the user select a currency for the report.
 (define (gnc:options-add-currency!
-	 options pagename name-report-currency sort-tag)
+         options pagename name-report-currency sort-tag)
   (gnc-register-currency-option (gnc:optiondb options)
     pagename name-report-currency
     sort-tag
@@ -131,7 +131,7 @@
 
 ;; A multichoice option for the source of prices
 (define (gnc:options-add-price-source!
-	 options pagename optname sort-tag default)
+         options pagename optname sort-tag default)
   (gnc-register-multichoice-option
    (gnc:optiondb options)
     pagename optname
@@ -145,9 +145,9 @@
 
 ;; The width- and height- options for charts
 (define (gnc:options-add-plot-size!
-	 options pagename 
-	 name-width name-height sort-tag 
-	 default-width default-height)
+         options pagename
+         name-width name-height sort-tag
+         default-width default-height)
   (let* ((widthv (evaluate default-width))
          (heightv (evaluate default-height))
          (width (if (pair? widthv) (cdr widthv) widthv))
@@ -166,9 +166,9 @@
 
 ;; A multicoice option for the marker of a scatter plot.
 (define (gnc:options-add-marker-choice!
-	 options pagename optname sort-tag default)
+         options pagename optname sort-tag default)
   (gnc-register-multichoice-option (gnc:optiondb options)
-    pagename optname 
+    pagename optname
     sort-tag
     (N_ "Choose the marker for each data point.")
     (symbol->string (evaluate default))
@@ -184,9 +184,9 @@
      (vector 'filledsquare (N_ "Filled square")))))
 
 (define (gnc:options-add-sort-method!
-	 options pagename optname sort-tag default)
+         options pagename optname sort-tag default)
   (gnc-register-multichoice-option (gnc:optiondb options)
-    pagename optname 
+    pagename optname
     sort-tag
     (N_ "Choose the method for sorting accounts.")
     (symbol->string (evaluate default))
@@ -198,12 +198,12 @@
 
 ;; These control the calculation and view mode of subtotal balances
 (define (gnc:options-add-subtotal-view!
-	 options pagename 
-	 optname-parent-balance-mode optname-parent-total-mode
-	 sort-tag)
+         options pagename
+         optname-parent-balance-mode optname-parent-total-mode
+         sort-tag)
   ;; what to show for non-leaf accounts
   (gnc-register-multichoice-option (gnc:optiondb options)
-    pagename 
+    pagename
     ;; usually the option name is: (N_ "Parent account balances")
     optname-parent-balance-mode
     (string-append sort-tag "a")

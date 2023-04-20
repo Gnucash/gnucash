@@ -1,15 +1,15 @@
 ;; report-utilities.scm -- Reporting utilities
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -126,7 +126,7 @@
 ;; html-renderer.
 (define (gnc:monetary->string value)
   (xaccPrintAmount
-   (gnc:gnc-monetary-amount value) 
+   (gnc:gnc-monetary-amount value)
    (gnc-commodity-print-info (gnc:gnc-monetary-commodity value) #t)))
 
 ;; True if the account is of type currency, stock, or mutual-fund
@@ -160,9 +160,9 @@
 ;; Returns only those accounts out of the list <accounts> which have
 ;; one of the type identifiers in typelist.
 (define (gnc:filter-accountlist-type typelist accounts)
-  (filter (lambda (a) 
-	    (and (not (null? a)) (member (xaccAccountGetType a) typelist)))
-	  accounts))
+  (filter (lambda (a)
+            (and (not (null? a)) (member (xaccAccountGetType a) typelist)))
+          accounts))
 
 ;; Decompose a given list of accounts 'accounts' into an alist
 ;; according to their types. Each element of alist is a list, whose
@@ -171,29 +171,29 @@
 ;; category.
 (define (gnc:decompose-accountlist accounts)
   (map (lambda (x) (cons
-		    (car x)
-		    (gnc:filter-accountlist-type (cdr x) accounts)))
+                    (car x)
+                    (gnc:filter-accountlist-type (cdr x) accounts)))
        (list
-	(cons ACCT-TYPE-ASSET
-	      (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH
+        (cons ACCT-TYPE-ASSET
+              (list ACCT-TYPE-ASSET ACCT-TYPE-BANK ACCT-TYPE-CASH
                     ACCT-TYPE-CHECKING ACCT-TYPE-SAVINGS
                     ACCT-TYPE-MONEYMRKT ACCT-TYPE-RECEIVABLE
                     ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL
                     ACCT-TYPE-CURRENCY))
-	(cons ACCT-TYPE-LIABILITY
+        (cons ACCT-TYPE-LIABILITY
               (list ACCT-TYPE-LIABILITY ACCT-TYPE-PAYABLE ACCT-TYPE-CREDIT
                     ACCT-TYPE-CREDITLINE))
-	(cons ACCT-TYPE-EQUITY (list ACCT-TYPE-EQUITY))
-	(cons ACCT-TYPE-INCOME (list ACCT-TYPE-INCOME))
-	(cons ACCT-TYPE-EXPENSE (list ACCT-TYPE-EXPENSE))
-	(cons ACCT-TYPE-TRADING (list ACCT-TYPE-TRADING)))))
+        (cons ACCT-TYPE-EQUITY (list ACCT-TYPE-EQUITY))
+        (cons ACCT-TYPE-INCOME (list ACCT-TYPE-INCOME))
+        (cons ACCT-TYPE-EXPENSE (list ACCT-TYPE-EXPENSE))
+        (cons ACCT-TYPE-TRADING (list ACCT-TYPE-TRADING)))))
 
 ;; Returns the name of the account type as a string, and in its plural
 ;; form (as opposed to xaccAccountGetTypeStr which gives the
 ;; singular form of the word).
 (define (gnc:account-get-type-string-plural type)
   (assoc-ref
-   (list 
+   (list
     (cons ACCT-TYPE-BANK (G_ "Bank"))
     (cons ACCT-TYPE-CASH (G_ "Cash"))
     (cons ACCT-TYPE-CREDIT (G_ "Credits"))
@@ -218,7 +218,7 @@
 ;; 'accounts', excluding the 'exclude-commodity'.
 (define (gnc:accounts-get-commodities accounts exclude-commodity)
   (delete exclude-commodity
-	  (sort-and-delete-duplicates
+          (sort-and-delete-duplicates
            (map xaccAccountGetCommodity accounts)
            (lambda (a b)
              (gnc:string-locale<? (gnc-commodity-get-unique-name a)
@@ -266,10 +266,10 @@
   (let ((value 0))
     (lambda (action amount)
       (case action
-	((add) (if (number? amount)
+        ((add) (if (number? amount)
                    (set! value (+ amount value))))
-	((total) value)
-	(else (gnc:warn "bad value-collector action: " action))))))
+        ((total) value)
+        (else (gnc:warn "bad value-collector action: " action))))))
 
 ;; A commodity collector. This is intended to handle multiple
 ;; currencies' amounts. The amounts are accumulated via 'add, the
@@ -287,7 +287,7 @@
 ;; Note amounts are rounded to the commodity's SCU.
 ;;
 ;; The functions:
-;;   'add <commodity> <amount>: Add the given amount to the 
+;;   'add <commodity> <amount>: Add the given amount to the
 ;;       appropriate currencies' total balance.
 ;;   'format <fn> #f: Call the function <fn> (where fn takes two
 ;;       arguments) for each commodity with the arguments <commodity>
@@ -296,11 +296,11 @@
 ;;   'merge <commodity-collector> #f: Merge the given other
 ;;       commodity-collector into this one, adding all currencies'
 ;;       balances, respectively.
-;;   'minusmerge <commodity-collector> #f: Merge the given other 
+;;   'minusmerge <commodity-collector> #f: Merge the given other
 ;;       commodity-collector into this one (like above) but subtract
 ;;       the other's currencies' balance from this one's balance,
 ;;       respectively.
-;;   'reset #f #f: Delete everything that has been accumulated 
+;;   'reset #f #f: Delete everything that has been accumulated
 ;;       (even the fact that any commodity showed up at all).
 ;;   'getpair <commodity> signreverse?: Returns the two-element-list
 ;;       with the <commodity> and its corresponding balance. If
@@ -316,32 +316,32 @@
 (define (gnc:make-commodity-collector)
   ;; the association list of (commodity . value-collector) pairs.
   (let ((commoditylist '()))
-    
+
     ;; helper function to add a (commodity . value) pair to our list.
     ;; If no pair with this commodity exists, we will create one.
     (define (add-commodity-value commodity value)
       (let ((pair (assoc commodity commoditylist)))
-	(unless pair
-	  (set! pair (list commodity (gnc:make-value-collector)))
-	  (set! commoditylist (cons pair commoditylist)))
-	((cadr pair) 'add value)))
-    
+        (unless pair
+          (set! pair (list commodity (gnc:make-value-collector)))
+          (set! commoditylist (cons pair commoditylist)))
+        ((cadr pair) 'add value)))
+
     ;; helper function to walk an association list, adding each
     ;; (commodity . collector) pair to our list at the appropriate
     ;; place
     (define (add-commodity-clist clist)
       (cond ((null? clist) '())
-	    (else (add-commodity-value 
-		   (caar clist) 
-		   ((cadar clist) 'total #f))
-		  (add-commodity-clist (cdr clist)))))
+            (else (add-commodity-value
+                   (caar clist)
+                   ((cadar clist) 'total #f))
+                  (add-commodity-clist (cdr clist)))))
 
     (define (minus-commodity-clist clist)
       (cond ((null? clist) '())
-	    (else (add-commodity-value 
-		   (caar clist) 
-		   (- ((cadar clist) 'total #f)))
-		  (minus-commodity-clist (cdr clist)))))
+            (else (add-commodity-value
+                   (caar clist)
+                   (- ((cadar clist) 'total #f)))
+                  (minus-commodity-clist (cdr clist)))))
 
     ;; helper function walk the association list doing a callback on
     ;; each key-value pair.
@@ -356,29 +356,29 @@
     (define (getpair c sign?)
       (let* ((pair (assoc c commoditylist))
              (total (if pair ((cadr pair) 'total #f) 0)))
-	(list c (if sign? (- total) total))))
+        (list c (if sign? (- total) total))))
 
     ;; helper function which is given a commodity and returns a
     ;; <gnc:monetary> value, whose amount may be 0.
     (define (getmonetary c sign?)
       (let* ((pair (assoc c commoditylist))
              (total (if pair ((cadr pair) 'total #f) 0)))
-	(gnc:make-gnc-monetary c (if sign? (- total) total))))
-    
+        (gnc:make-gnc-monetary c (if sign? (- total) total))))
+
     ;; Dispatch function
     (lambda (action commodity amount)
       (case action
-	((add) (add-commodity-value commodity amount))
-	((merge) (add-commodity-clist
+        ((add) (add-commodity-value commodity amount))
+        ((merge) (add-commodity-clist
                   (commodity 'list #f #f)))
-	((minusmerge) (minus-commodity-clist
+        ((minusmerge) (minus-commodity-clist
                        (commodity 'list #f #f)))
-	((format) (process-commodity-list commodity commoditylist))
-	((reset) (set! commoditylist '()))
-	((getpair) (getpair commodity amount))
-	((getmonetary) (getmonetary commodity amount))
-	((list) commoditylist) ; this one is only for internal use
-	(else (gnc:warn "bad commodity-collector action: " action))))))
+        ((format) (process-commodity-list commodity commoditylist))
+        ((reset) (set! commoditylist '()))
+        ((getpair) (getpair commodity amount))
+        ((getmonetary) (getmonetary commodity amount))
+        ((list) commoditylist) ; this one is only for internal use
+        (else (gnc:warn "bad commodity-collector action: " action))))))
 
 (define (gnc:commodity-collector-get-negated collector)
   (let ((negated (gnc:make-commodity-collector)))
@@ -508,7 +508,7 @@
          (let ((head-result (split->elt (car splits))))
            (lp (cdr splits) rest (cons head-result result) head-result))))))))
 
-;; This works similar as above but returns a commodity-collector, 
+;; This works similar as above but returns a commodity-collector,
 ;; thus takes care of children accounts with different currencies.
 (define (gnc:account-get-comm-balance-at-date
          account date include-children?)
@@ -575,10 +575,10 @@
 ;; (e.g. gnc-reverse-balance) should return #t if the
 ;; account's balance sign should get reversed. Returns a
 ;; commodity-collector.
-(define (gnc:accounts-get-balance-helper 
-	 accounts get-balance-fn reverse-balance-fn)
+(define (gnc:accounts-get-balance-helper
+         accounts get-balance-fn reverse-balance-fn)
   (let ((collector (gnc:make-commodity-collector)))
-    (for-each 
+    (for-each
      (lambda (acct)
        (collector
         (if (reverse-balance-fn acct) 'minusmerge 'merge)
@@ -592,11 +592,11 @@
 ;; the get-balance-fn. Intended for usage with a balance sheet, hence
 ;; a) the income/expense accounts are ignored, and b) no signs are
 ;; reversed at all. Returns a commodity-collector.
-(define (gnc:accounts-get-comm-total-assets accounts 
-					    get-balance-fn)
+(define (gnc:accounts-get-comm-total-assets accounts
+                                            get-balance-fn)
   (gnc:accounts-get-balance-helper
    (filter (lambda (a) (not (gnc:account-is-inc-exp? a)))
-	   accounts)
+           accounts)
    get-balance-fn
    (lambda(x) #f)))
 
@@ -636,17 +636,17 @@
 
 (define (gnc:report-starting report-name)
   (gnc-window-show-progress (format #f
-				     (G_ "Building '~a' report …")
-				     (G_ report-name))
-			    0))
+                                     (G_ "Building '~a' report …")
+                                     (G_ report-name))
+                            0))
 
 (define (gnc:report-render-starting report-name)
   (gnc-window-show-progress (format #f
-				     (G_ "Rendering '~a' report …")
-				     (if (string-null? report-name)
-					 (G_ "Untitled")
-					 (G_ report-name)))
-			    0))
+                                     (G_ "Rendering '~a' report …")
+                                     (if (string-null? report-name)
+                                         (G_ "Untitled")
+                                         (G_ report-name)))
+                            0))
 
 (define (gnc:report-percent-done percent)
   (if (> percent 100)
@@ -702,7 +702,7 @@
 ;; Return the splits that match an account list, date range, and (optionally) type
 ;; where type is defined as an alist like:
 ;; '((str "match me") (cased #f) (regexp #f) (closing #f))
-;; where str, cased, and regexp define a pattern match on transaction deseriptions 
+;; where str, cased, and regexp define a pattern match on transaction deseriptions
 ;; and "closing" matches transactions created by the book close command.  If "closing"
 ;; is given as #t then only closing transactions will be returned, if it is #f then
 ;; only non-closing transactions will be returned, and if it is omitted then both
