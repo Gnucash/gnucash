@@ -28,12 +28,12 @@
 (define (test-create-account-structure)
   (let ((env (create-test-env)))
     (let ((accounts (env-create-account-structure env (list "Assets"
-							    (list (cons 'type ACCT-TYPE-ASSET))
-							    (list "Bank Account")
-							    (list "Savings"
-								  (list "Instant")
-								  (list "30 day notice"))))))
+                                                            (list (cons 'type ACCT-TYPE-ASSET))
+                                                            (list "Bank Account")
+                                                            (list "Savings"
+                                                                  (list "Instant")
+                                                                  (list "30 day notice"))))))
       (format #t "Accounts ~a\n" accounts)
       (and (= 3 (length accounts))
-	   (equal? "Assets" (xaccAccountGetName (car accounts)))
-	   ))))
+           (equal? "Assets" (xaccAccountGetName (car accounts)))
+           ))))

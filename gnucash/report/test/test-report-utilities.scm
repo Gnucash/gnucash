@@ -50,19 +50,19 @@
          (q-start-date (NDayDelta q-start-date 5)))
 
     (let* ((accounts (env-create-account-structure-alist env (list "Assets"
-								   (list (cons 'type ACCT-TYPE-ASSET))
-								   (list "Bank Account")
-								   (list "Wallet"))))
-	   (bank-account (cdr (assoc "Bank Account" accounts)))
-	   (wallet (cdr (assoc "Wallet" accounts))))
+                                                                   (list (cons 'type ACCT-TYPE-ASSET))
+                                                                   (list "Bank Account")
+                                                                   (list "Wallet"))))
+           (bank-account (cdr (assoc "Bank Account" accounts)))
+           (wallet (cdr (assoc "Wallet" accounts))))
 
       (env-create-daily-transactions env start-date end-date bank-account wallet)
       (format #t "Created transactions for each day from ~a to ~a~%" (gnc-ctime start-date) (gnc-ctime end-date))
       (let ((splits (gnc:account-get-trans-type-splits-interval (list bank-account wallet)
-							      ACCT-TYPE-ASSET
-							      q-start-date q-end-date)))
-	;; 10 is the right number (5 days, two splits per tx)
-	(test-equal "length splits = 10"
+                                                              ACCT-TYPE-ASSET
+                                                              q-start-date q-end-date)))
+        ;; 10 is the right number (5 days, two splits per tx)
+        (test-equal "length splits = 10"
           10
           (length splits)))))
   (teardown)))
