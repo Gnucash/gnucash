@@ -2,7 +2,7 @@
 ;; average-balance.scm
 ;; Report history of account balance and other info
 ;;
-;; Author makes no implicit or explicit guarantee of accuracy of 
+;; Author makes no implicit or explicit guarantee of accuracy of
 ;;  these calculations and accepts no responsibility for direct
 ;;  or indirect losses incurred as a result of using this software.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -86,7 +86,7 @@
       "c" (N_ "Do transaction report on this account.")
       (let ((current-accounts '()))
         ;; If some accounts were selected, use those
-        (cond ((not (null? current-accounts)) 
+        (cond ((not (null? current-accounts))
                current-accounts)
               (else
                ;; otherwise get some accounts -- here as an
@@ -112,7 +112,7 @@
      (gnc-register-list-option options
       gnc:pagename-display (N_ "Plot Type")
       "c" (N_ "The type of graph to generate.") "AvgBalPlot"
-      (list 
+      (list
        (vector 'AvgBalPlot (N_ "Average"))
        (vector 'GainPlot (N_ "Profit"))
        (vector 'GLPlot (N_ "Gain/Loss"))))
@@ -127,14 +127,14 @@
     options))
 
   ;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Some utilities for generating the data 
+;; Some utilities for generating the data
   ;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define columns
   ;; Watch out -- these names should be consistent with the display
   ;; option where you choose them, otherwise users are confused.
-  (list (G_ "Period start") (G_ "Period end") (G_ "Average") 
-        (G_ "Maximum") (G_ "Minimum") (G_ "Gain") 
+  (list (G_ "Period start") (G_ "Period end") (G_ "Average")
+        (G_ "Maximum") (G_ "Minimum") (G_ "Gain")
         (G_ "Loss") (G_ "Profit") ))
 
 
@@ -263,17 +263,17 @@
     (gnc-optiondb-lookup-value (gnc:report-options report-obj) section name))
 
   (gnc:report-starting reportname)
-  (let* ((report-title (get-option gnc:pagename-general 
+  (let* ((report-title (get-option gnc:pagename-general
                                    gnc:optname-reportname))
          (begindate (gnc:time64-start-day-time
-                     (gnc:date-option-absolute-time 
+                     (gnc:date-option-absolute-time
                       (get-option gnc:pagename-general optname-from-date))))
-         (enddate (gnc:time64-end-day-time 
-                   (gnc:date-option-absolute-time 
+         (enddate (gnc:time64-end-day-time
+                   (gnc:date-option-absolute-time
                     (get-option gnc:pagename-general optname-to-date))))
          (stepsize (gnc:deltasym-to-delta
                     (get-option gnc:pagename-general optname-stepsize)))
-         (report-currency (get-option gnc:pagename-general 
+         (report-currency (get-option gnc:pagename-general
                                       optname-report-currency))
          (price-source (get-option gnc:pagename-general
                                    optname-price-source))
@@ -290,8 +290,8 @@
 
          (document   (gnc:make-html-document))
 
-	 (commodity-list #f)
-	 (exchange-fn #f)
+         (commodity-list #f)
+         (exchange-fn #f)
          (all-zeros? #t))
 
     ;;(warn commodity-list)
@@ -307,40 +307,40 @@
           ;; routine needs to send progress reports, or the price
           ;; lookup should be distributed and done when actually
           ;; needed so as to amortize the cpu time properly.
-	  (gnc:report-percent-done 1)
-	  (set! commodity-list (gnc:accounts-get-commodities
+          (gnc:report-percent-done 1)
+          (set! commodity-list (gnc:accounts-get-commodities
                                 accounts report-currency))
 
-	  (gnc:report-percent-done 5)
-	  (set! exchange-fn (gnc:case-exchange-time-fn 
-                             price-source report-currency 
+          (gnc:report-percent-done 5)
+          (set! exchange-fn (gnc:case-exchange-time-fn
+                             price-source report-currency
                              commodity-list enddate
-			     5 20))
-	  (gnc:report-percent-done 20)
+                             5 20))
+          (gnc:report-percent-done 20)
 
-          ;; initialize the query to find splits in the right 
+          ;; initialize the query to find splits in the right
           ;; date range and accounts
           (qof-query-set-book query (gnc-get-current-book))
 
-	  ;; for balance purposes, we don't need to do this, but it cleans up
-	  ;; the table display.
+          ;; for balance purposes, we don't need to do this, but it cleans up
+          ;; the table display.
           (xaccQueryAddClearedMatch
            query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
-          ;; add accounts to the query (include subaccounts 
+          ;; add accounts to the query (include subaccounts
           ;; if requested)
-	  (gnc:report-percent-done 25)
+          (gnc:report-percent-done 25)
 
           (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-          
-          ;; match splits between start and end dates 
+
+          ;; match splits between start and end dates
           (xaccQueryAddDateMatchTT
            query #t begindate #t enddate QOF-QUERY-AND)
           (qof-query-set-sort-order query
-				    (list SPLIT-TRANS TRANS-DATE-POSTED)
-				    (list QUERY-DEFAULT-SORT)
-				    '())
-          
-	  (gnc:report-percent-done 40)
+                                    (list SPLIT-TRANS TRANS-DATE-POSTED)
+                                    (list QUERY-DEFAULT-SORT)
+                                    '())
+
+          (gnc:report-percent-done 40)
 
           (let* ((splits (qof-query-run query))
                  (daily-dates (gnc:make-date-list begindate enddate DayDelta))
@@ -380,9 +380,9 @@
                                 internal-included exchange-fn report-currency))))
 
           (gnc:report-percent-done 70)
-          
-          ;; make a plot (optionally)... if both plot and table, 
-          ;; plot comes first. 
+
+          ;; make a plot (optionally)... if both plot and table,
+          ;; plot comes first.
           (if show-plot?
               (let ((barchart (gnc:make-html-chart))
                     (height (get-option gnc:pagename-display optname-plot-height))
@@ -391,7 +391,7 @@
                 (if (memq 'AvgBalPlot plot-type)
                     (let
                         ((number-data
-                          (map 
+                          (map
                            (lambda (row) (list-ref row 2)) data)))
                       (if (not (every zero? number-data))
                           (begin
@@ -402,7 +402,7 @@
                             (set! all-zeros? #f)))))
 
                 (if (memq 'GainPlot plot-type)
-                    (let ((number-data 
+                    (let ((number-data
                            (map (lambda (row) (list-ref row 7)) data)))
                       (if (not (every zero? number-data))
                           (begin
@@ -413,11 +413,11 @@
                             (set! all-zeros? #f)))))
 
                 (if (memq 'GLPlot plot-type)
-                    (let ((debit-data 
+                    (let ((debit-data
                            (map (lambda (row) (list-ref row 5)) data))
                           (credit-data
                            (map (lambda (row) (list-ref row 6)) data)))
-                      ;; debit column 
+                      ;; debit column
                       (if (not (and
                                 (every zero? debit-data)
                                 (every zero? credit-data)))
@@ -431,7 +431,7 @@
                                                              credit-data
                                                              "#FF4136")
                             (set! all-zeros? #f)))))
-                
+
                 (if (not all-zeros?)
                     (begin
                       (gnc:html-chart-set-currency-iso!
@@ -447,12 +447,12 @@
                       (gnc:html-document-add-object! document barchart))
                     (gnc:html-document-add-object!
                      document
-                     (gnc:html-make-empty-data-warning 
+                     (gnc:html-make-empty-data-warning
                       report-title (gnc:report-id report-obj))))))
-          
+
           ;; make a table (optionally)
-	  (gnc:report-percent-done 80)
-          (if show-table? 
+          (gnc:report-percent-done 80)
+          (if show-table?
               (let ((table (gnc:make-html-table))
                     (scu (gnc-commodity-get-fraction report-currency)))
                 (gnc:html-table-set-col-headers!
@@ -478,10 +478,10 @@
                 (gnc:html-document-add-object! document table))))
 
         ;; if there are no accounts selected...
-        (gnc:html-document-add-object! 
+        (gnc:html-document-add-object!
          document
-         (gnc:html-make-no-account-warning 
-	  report-title (gnc:report-id report-obj))))
+         (gnc:html-make-no-account-warning
+          report-title (gnc:report-id report-obj))))
     (gnc:report-finished)
     document))
 

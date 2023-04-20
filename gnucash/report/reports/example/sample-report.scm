@@ -169,7 +169,7 @@
       "c" opthelp-report-title (N_ "Report Title Default"))
 
     ;; Setting a default section is optional but set in most reports.
-	;; If not set, the default section will be the first section.
+    ;; If not set, the default section will be the first section.
     (gnc:options-set-default-section options "Tab B")      
     (GncOptionDBPtr-set-default-section optiondb "Tab B")
  ;; We still need to return the function wrapper instead of the GncOptionDBPtr for all of the options functions in the reports system.

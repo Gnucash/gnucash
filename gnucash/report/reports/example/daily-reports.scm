@@ -6,16 +6,16 @@
 ;; based on account-piecharts.scm by Robert Merkel (rgmerk@mira.net)
 ;; and Christian Stimming <stimming@tu-harburg.de>
 ;;
-;; This program is free software; you can redistribute it and/or    
-;; modify it under the terms of the GNU General Public License as   
-;; published by the Free Software Foundation; either version 2 of   
-;; the License, or (at your option) any later version.              
-;;                                                                  
-;; This program is distributed in the hope that it will be useful,  
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of   
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    
-;; GNU General Public License for more details.                     
-;;                                                                  
+;; This program is free software; you can redistribute it and/or
+;; modify it under the terms of the GNU General Public License as
+;; published by the Free Software Foundation; either version 2 of
+;; the License, or (at your option) any later version.
+;;
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+;;
 ;; You should have received a copy of the GNU General Public License
 ;; along with this program; if not, contact:
 ;;
@@ -40,7 +40,7 @@
 ;; The menu statusbar tips.
 (define menutip-income
   (N_ "Shows a piechart with the total income for each day of the week"))
-(define menutip-expense 
+(define menutip-expense
   (N_ "Shows a piechart with the total expenses for each day of the week"))
 
 ;; The names here are used 1. for internal identification, 2. as
@@ -171,8 +171,8 @@
           ;; routine needs to send progress reports, or the price
           ;; lookup should be distributed and done when actually
           ;; needed so as to amortize the cpu time properly.
-	  (gnc:report-percent-done 1)
-	  (set! commodity-list (gnc:accounts-get-commodities
+          (gnc:report-percent-done 1)
+          (set! commodity-list (gnc:accounts-get-commodities
                                 (gnc-accounts-and-all-descendants accounts)
                                 report-currency))
           (gnc:report-percent-done 5)
@@ -212,7 +212,7 @@
           ;; get the query results
           (set! splits (qof-query-run query))
           (qof-query-destroy query)
-	  (gnc:report-percent-done 40)
+          (gnc:report-percent-done 40)
 
           ;; each split is analyzed... the amount is converted to
           ;; report-currency, and the date modulo 7 used to find
@@ -232,7 +232,7 @@
 
           (gnc:report-percent-done 60)
 
-          (let* ((zipped-list (filter (lambda (p) 
+          (let* ((zipped-list (filter (lambda (p)
                                         (not (zero? (cadr p))))
                                       (zip days-of-week daily-totals)))
                  (labels (map (lambda (p)
