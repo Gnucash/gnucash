@@ -654,7 +654,7 @@
                                         USD-currency
                      ;; Use midday as the transaction time so it matches a price
                      ;; on the same day.  Otherwise it uses midnight which will
-	                 ;; likely match a price on the previous day
+                         ;; likely match a price on the previous day
                                         (time64CanonicalDayTime lookup-date))
                               )
                               (begin ;; otherwise set flag and set to zero
@@ -1039,7 +1039,7 @@
 (define (process-account-transaction-detail table account split-list
                 split-details? full-names? currency-conversion-date to-value
                 transaction-details? suppress-action-memo?
-				shade-alternate-transactions? splits-period full-year? from-value
+                                shade-alternate-transactions? splits-period full-year? from-value
                 tax-mode? show-TXF-data? USD-currency account-type
                 tax-code acct-full-name acct-beg-bal-collector
                 acct-end-bal-collector copy tax-entity-type)
