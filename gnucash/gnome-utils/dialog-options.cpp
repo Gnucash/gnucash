@@ -629,6 +629,13 @@ GncOptionsDialog::~GncOptionsDialog()
     gnc_unregister_gui_component_by_data(m_component_class, this);
     g_signal_handlers_disconnect_by_func(m_window, (gpointer)dialog_destroy_cb, this);
     g_signal_handlers_disconnect_by_func(m_window, (gpointer)dialog_window_key_press_cb, this);
+    m_option_db->foreach_section([](GncOptionSectionPtr& section)
+    {
+        section->foreach_option([](GncOption& option)
+        {
+            option.set_ui_item(std::unique_ptr<GncOptionUIItem>(nullptr));
+        });
+    });
     g_object_unref(m_window);
 }
 

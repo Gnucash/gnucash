@@ -221,7 +221,8 @@ GncOption::set_ui_item(GncOptionUIItemPtr&& ui_item)
                                       return option.get_ui_type();
                                   }, *m_option);
 
-    if (ui_item->get_ui_type() != opt_ui_type)
+    //ui_item may be nullptr to free the old m_ui_item.
+    if (ui_item && ui_item->get_ui_type() != opt_ui_type)
     {
         PERR("Setting option %s:%s UI element failed, mismatched UI types.",
               get_section().c_str(), get_name().c_str());
