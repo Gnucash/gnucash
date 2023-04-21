@@ -365,6 +365,8 @@
              (total (if pair ((cadr pair) 'total #f) 0)))
         (gnc:make-gnc-monetary c (if sign? (- total) total))))
 
+    (define (not-zero? l) (not (zero? ((cadr l) 'total #f))))
+
     ;; Dispatch function
     (lambda (action commodity amount)
       (case action
@@ -377,6 +379,7 @@
         ((reset) (set! commoditylist '()))
         ((getpair) (getpair commodity amount))
         ((getmonetary) (getmonetary commodity amount))
+        ((remove-zeros) (set! commoditylist (filter not-zero? commoditylist)))
         ((list) commoditylist) ; this one is only for internal use
         (else (gnc:warn "bad commodity-collector action: " action))))))
 

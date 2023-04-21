@@ -261,6 +261,17 @@
       (coll-A 'add GBP -1)
       (test-equal "gnc-commodity-collector does not round inappropriately"
         '(("GBP" . 0))
+        (collector->list coll-A))
+
+      ;; the following tests the remove-zeros action
+      (coll-A 'add USD 1)
+      (coll-A 'add EUR 0)
+      (test-equal "gnc-commodity-collector before remove-zeros"
+        '(("EUR" . 0) ("USD" . 1) ("GBP" . 0))
+        (collector->list coll-A))
+      (coll-A 'remove-zeros #f #f)
+      (test-equal "gnc-commodity-collector after remove-zeros"
+        '(("USD" . 1))
         (collector->list coll-A)))
     (teardown)))
 

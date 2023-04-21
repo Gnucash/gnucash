@@ -1023,6 +1023,8 @@
                                               (omit-bal . #f)))
                                   (bal-sym (assq-ref bal-syms bal-method))
                                   (comm-amt (get-val env bal-sym)))
+                         (when (eq? zero-mode 'omit-balance)
+                           (comm-amt 'remove-zeros #f #f))
                          (cond
                           ((and (eq? zero-mode 'omit-balance)
                                 (gnc-commodity-collector-allzero? comm-amt)) #f)
