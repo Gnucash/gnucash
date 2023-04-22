@@ -514,6 +514,15 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
     gnc_gen_trans_list_show_accounts_column (info);
 }
 
+static void acc_begin_edit (GList **accounts_modified, Account *acc)
+{
+    if (!acc || !accounts_modified || g_list_find (*accounts_modified, acc))
+        return;
+
+    DEBUG ("xaccAccountBeginEdit for acc %s", xaccAccountGetName (acc));
+    xaccAccountBeginEdit (acc);
+    *accounts_modified = g_list_prepend (*accounts_modified, acc);
+}
 void
 on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 {
@@ -535,12 +544,19 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     gnc_suspend_gui_refresh ();
     bool first_tran = true;
     bool append_text = gtk_toggle_button_get_active ((GtkToggleButton*) info->append_text);
+    GList *accounts_modified = NULL;
     do
     {
         GNCImportTransInfo *trans_info;
         gtk_tree_model_get (model, &iter,
                             DOWNLOADED_COL_DATA, &trans_info,
                             -1);
+
+        Split* first_split = gnc_import_TransInfo_get_fsplit (trans_info);
+        Transaction *trans = xaccSplitGetParent (first_split);
+
+        for (GList *n = xaccTransGetSplitList (trans); n; n = g_list_next (n))
+            acc_begin_edit (&accounts_modified, xaccSplitGetAccount (n->data));
 
         // Allow the backend to know if the Append checkbox is ticked or unticked
         // by propagating info->append_text to every trans_info->append_text
@@ -552,12 +568,12 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
         // Get the import account from the first split.
         if (first_tran)
         {
-            Split* first_split = gnc_import_TransInfo_get_fsplit (trans_info);
             xaccAccountSetAppendText (xaccSplitGetAccount(first_split), append_text);
             first_tran = false;
         }
-        // Note: if there's only 1 split (unbalanced) one will be created with the unbalanced account,
-        // and for that account the defer balance will not be set. So things will be slow.
+
+        Account *dest_acc = gnc_import_TransInfo_get_destacc (trans_info);
+        acc_begin_edit (&accounts_modified, dest_acc);
 
         if (gnc_import_process_trans_item (NULL, trans_info))
         {
@@ -576,6 +592,7 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     gnc_resume_gui_refresh ();
 
     /* DEBUG ("End") */
+    g_list_free_full (accounts_modified, (GDestroyNotify)xaccAccountCommitEdit);
 }
 
 void
