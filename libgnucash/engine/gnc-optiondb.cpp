@@ -115,6 +115,8 @@ const OptionAliases Aliases::c_option_aliases
     // ... replaced to …, Dec 2022
     {"Filter By...", {nullptr, "Filter By…"}},
     {"Specify date to filter by...", {nullptr, "Specify date to filter by…"}},
+    // trep-engine:
+    {"Running Balance", {nullptr, "Account Balance"}},
 };
 
 static bool
