@@ -57,54 +57,33 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
 {
     const gnc_commodity_table * commodity_table = gnc_get_current_commodities ();
     gnc_commodity * retval = NULL;
-    gnc_commodity * tmp_commodity = NULL;
-    char * tmp_namespace = NULL;
-    GList * commodity_list = NULL;
-    GList * namespace_list = NULL;
-    DEBUG("Default fullname received: %s",
-          default_fullname ? default_fullname : "(null)");
-    DEBUG("Default mnemonic received: %s",
-          default_mnemonic ? default_mnemonic : "(null)");
+    DEBUG("Default fullname received: %s", default_fullname);
+    DEBUG("Default mnemonic received: %s", default_mnemonic);
 
     g_return_val_if_fail(cusip, NULL);
     DEBUG("Looking for commodity with exchange_code: %s", cusip);
 
     g_assert(commodity_table);
-    namespace_list = gnc_commodity_table_get_namespaces(commodity_table);
+    GList *namespace_list = gnc_commodity_table_get_namespaces(commodity_table);
 
-
-    namespace_list = g_list_first(namespace_list);
-    while ( namespace_list != NULL && retval == NULL)
+    for (GList *n = namespace_list; !retval && n; n = g_list_next (n))
     {
-        tmp_namespace = namespace_list->data;
-        DEBUG("Looking at namespace %s", tmp_namespace);
-        commodity_list = gnc_commodity_table_get_commodities(commodity_table,
-                                                             tmp_namespace);
-        commodity_list  = g_list_first(commodity_list);
-        while ( commodity_list != NULL && retval == NULL)
+        const char *ns = n->data;
+        DEBUG("Looking at namespace %s", ns);
+        GList *comm_list = gnc_commodity_table_get_commodities (commodity_table, ns);
+        for (GList *m = comm_list; !retval && m; m = g_list_next (m))
         {
-            const char* tmp_cusip = NULL;
-            tmp_commodity = commodity_list->data;
-            DEBUG("Looking at commodity %s",
-                  gnc_commodity_get_fullname(tmp_commodity));
-            tmp_cusip = gnc_commodity_get_cusip(tmp_commodity);
-            if  (tmp_cusip != NULL && cusip != NULL)
+            gnc_commodity *com = comm_list->data;
+            DEBUG("Looking at commodity %s", gnc_commodity_get_fullname (com));
+            if (!g_strcmp0 (gnc_commodity_get_cusip (com), cusip))
             {
-                int len = strlen(cusip) > strlen(tmp_cusip) ? strlen(cusip) :
-                    strlen(tmp_cusip);
-                if (strncmp(tmp_cusip, cusip, len) == 0)
-                {
-                    retval = tmp_commodity;
-                    DEBUG("Commodity %s%s",
-                          gnc_commodity_get_fullname(retval), " matches.");
-                }
+                retval = com;
+                DEBUG("Commodity %s matches.", gnc_commodity_get_fullname (com));
             }
-            commodity_list = g_list_next(commodity_list);
         }
-        namespace_list = g_list_next(namespace_list);
+        g_list_free (comm_list);
     }
 
-    g_list_free(commodity_list);
     g_list_free(namespace_list);
 
     if (retval == NULL && ask_on_unknown != 0)
