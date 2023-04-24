@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-04-10 12:35-0700\n"
+"POT-Creation-Date: 2023-04-24 14:48-0700\n"
 "PO-Revision-Date: 2014-10-19 16:37-0500\n"
 "Last-Translator: Ronak Shah <ronaks@cdac.in>\n"
 "Language-Team: NONE\n"
@@ -220,7 +220,7 @@ msgid "The current date."
 msgstr "વર્તમાન તારીખ"
 
 #: bindings/guile/options.scm:388 gnucash/gnome/top-level.c:462
-#: libgnucash/engine/gnc-optiondb.cpp:1107 libgnucash/engine/qofbookslots.h:72
+#: libgnucash/engine/gnc-optiondb.cpp:1109 libgnucash/engine/qofbookslots.h:72
 msgid "Business"
 msgstr "વ્યવસાય"
 
@@ -232,41 +232,41 @@ msgstr "વ્યવસાય"
 #: gnucash/gtkbuilder/dialog-customer.glade:146
 #: gnucash/gtkbuilder/dialog-vendor.glade:147
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
-#: libgnucash/engine/gnc-optiondb.cpp:1207
+#: libgnucash/engine/gnc-optiondb.cpp:1209
 msgid "Company Name"
 msgstr "કંપનીનું નામ"
 
-#: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1210
+#: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1212
 msgid "Company Address"
 msgstr "કંપનીનું સરનામું"
 
-#: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1233
+#: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1235
 msgid "Company ID"
 msgstr "કંપની ID"
 
-#: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1218
+#: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1220
 msgid "Company Phone Number"
 msgstr "કંપનીનો ફોન નંબર"
 
-#: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1222
+#: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1224
 msgid "Company Fax Number"
 msgstr "કંપનીનો ફેક્સ નંબર"
 
-#: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1230
+#: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1232
 msgid "Company Website URL"
 msgstr "કંપનીની વેબસાઇટનું URL"
 
-#: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1226
+#: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1228
 msgid "Company Email Address"
 msgstr "કંપનીનું ઇમેઇલ સરનામું"
 
-#: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1214
+#: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1216
 msgid "Company Contact Person"
 msgstr "કંપનીની સંપર્ક વ્યક્તિ"
 
 #: bindings/guile/options.scm:397
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
-#: libgnucash/engine/gnc-optiondb.cpp:1253
+#: libgnucash/engine/gnc-optiondb.cpp:1255
 msgid "Fancy Date Format"
 msgstr "ફેન્સી તારીખ ફોર્મેટ"
 
@@ -279,11 +279,11 @@ msgstr "જકાત"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
 #: gnucash/report/reports/standard/invoice.scm:497
 #: gnucash/report/reports/standard/new-owner-report.scm:55
-#: libgnucash/engine/gnc-optiondb.cpp:1259
+#: libgnucash/engine/gnc-optiondb.cpp:1261
 msgid "Tax"
 msgstr "કરવેરો"
 
-#: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1259
+#: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1261
 msgid "Tax Number"
 msgstr "ટેક્સ ક્રમાંક"
 
@@ -1079,7 +1079,7 @@ msgid "Selected"
 msgstr "પસંદ થયેલ"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:772
-#: gnucash/gnome-utils/gnc-tree-view-account.c:2368
+#: gnucash/gnome-utils/gnc-tree-view-account.c:2376
 msgid "Account Types"
 msgstr "ખાતાનો પ્રકાર"
 
@@ -1119,7 +1119,7 @@ msgid "No"
 msgstr "ના"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1339
-#: gnucash/gnome-utils/gnc-tree-view-account.c:1005
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1010
 #: gnucash/gtkbuilder/dialog-account.glade:273
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
 msgid "Placeholder"
@@ -1127,7 +1127,7 @@ msgstr "ખાતાધારક"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1356
 #: gnucash/gnome-utils/dialog-account.c:402
-#: gnucash/gnome-utils/gnc-tree-view-account.c:1013
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1018
 #: gnucash/gtkbuilder/dialog-account.glade:1945
 #: libgnucash/app-utils/gnc-ui-util.c:715
 msgid "Opening Balance"
@@ -1220,7 +1220,7 @@ msgstr "ઋણ પુનઃચુકવણી ગણક"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:380
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.c:1506
+#: gnucash/import-export/import-main-matcher.c:1564
 #: gnucash/import-export/import-match-picker.c:387
 #: gnucash/import-export/import-match-picker.c:427
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3699
@@ -1249,7 +1249,7 @@ msgstr "ઋણ પુનઃચુકવણી ગણક"
 #: gnucash/report/reports/support/receipt.eguile.scm:143
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:268
 #: gnucash/report/trep-engine.scm:183 gnucash/report/trep-engine.scm:902
-#: gnucash/report/trep-engine.scm:1011 gnucash/report/trep-engine.scm:1107
+#: gnucash/report/trep-engine.scm:1011 gnucash/report/trep-engine.scm:1127
 msgid "Date"
 msgstr "તારીખ"
 
@@ -1304,7 +1304,7 @@ msgstr "મૂલ્ય ઉમેરવામાં ખામી"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.c:1507
+#: gnucash/import-export/import-main-matcher.c:1565
 #: gnucash/import-export/import-match-picker.c:386
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
@@ -1318,7 +1318,7 @@ msgstr "મૂલ્ય ઉમેરવામાં ખામી"
 #: gnucash/report/reports/standard/portfolio.scm:244
 #: gnucash/report/reports/standard/register.scm:142
 #: gnucash/report/reports/standard/register.scm:366
-#: gnucash/report/trep-engine.scm:1179
+#: gnucash/report/trep-engine.scm:1199
 msgid "Account"
 msgstr "ખાતું"
 
@@ -1340,7 +1340,7 @@ msgstr "સંકેત"
 #: gnucash/report/reports/standard/register.scm:145
 #: gnucash/report/reports/standard/register.scm:370
 #: gnucash/report/trep-engine.scm:916 gnucash/report/trep-engine.scm:1022
-#: gnucash/report/trep-engine.scm:1201
+#: gnucash/report/trep-engine.scm:1221
 msgid "Shares"
 msgstr "શેરની સંખ્યા"
 
@@ -1749,7 +1749,7 @@ msgstr "વેચાયેલા અથવા ખરીદાયેલા શે
 #. Translators: Inserts the value into action field of the non-currency asset split of
 #. an investment transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:1117
-#: libgnucash/engine/Account.cpp:4404
+#: libgnucash/engine/Account.cpp:4410
 msgid "Stock"
 msgstr "સ્ટોક"
 
@@ -1767,7 +1767,7 @@ msgstr "રોકડ"
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:388
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.c:1511
+#: gnucash/import-export/import-main-matcher.c:1569
 #: gnucash/import-export/import-match-picker.c:390
 #: gnucash/import-export/import-match-picker.c:430
 #: gnucash/register/ledger-core/split-register-model.c:360
@@ -1776,8 +1776,8 @@ msgstr "રોકડ"
 #: gnucash/report/reports/standard/register.scm:139
 #: gnucash/report/reports/standard/register.scm:362
 #: gnucash/report/trep-engine.scm:255 gnucash/report/trep-engine.scm:932
-#: gnucash/report/trep-engine.scm:1039 gnucash/report/trep-engine.scm:1169
-#: gnucash/report/trep-engine.scm:1170
+#: gnucash/report/trep-engine.scm:1039 gnucash/report/trep-engine.scm:1189
+#: gnucash/report/trep-engine.scm:1190
 msgid "Memo"
 msgstr "મેમો"
 
@@ -1788,7 +1788,7 @@ msgstr "મેમો"
 #: gnucash/report/reports/standard/general-journal.scm:82
 #: gnucash/report/reports/standard/register.scm:336
 #: gnucash/report/reports/standard/trial-balance.scm:555
-#: gnucash/report/trep-engine.scm:1311 gnucash/report/trep-engine.scm:1328
+#: gnucash/report/trep-engine.scm:1341 gnucash/report/trep-engine.scm:1368
 #: libgnucash/engine/Account.cpp:164
 msgid "Debit"
 msgstr "ઉધાર"
@@ -1803,7 +1803,7 @@ msgstr "ઉધાર"
 #: gnucash/report/reports/standard/general-journal.scm:83
 #: gnucash/report/reports/standard/register.scm:338
 #: gnucash/report/reports/standard/trial-balance.scm:558
-#: gnucash/report/trep-engine.scm:1314 gnucash/report/trep-engine.scm:1331
+#: gnucash/report/trep-engine.scm:1344 gnucash/report/trep-engine.scm:1371
 #: libgnucash/engine/Account.cpp:184
 msgid "Credit"
 msgstr "જમા"
@@ -1812,8 +1812,8 @@ msgstr "જમા"
 #: gnucash/report/reports/standard/portfolio.scm:247
 #: gnucash/report/reports/standard/receipt.scm:52
 #: gnucash/report/reports/standard/receipt.scm:114
-#: gnucash/report/reports/standard/taxinvoice.scm:101
-#: gnucash/report/reports/standard/taxinvoice.scm:180
+#: gnucash/report/reports/standard/taxinvoice.scm:100
+#: gnucash/report/reports/standard/taxinvoice.scm:179
 msgid "Units"
 msgstr "એકમો"
 
@@ -1853,7 +1853,7 @@ msgstr "પહોંચ"
 #: gnucash/gnome/dialog-invoice.c:3762
 #: gnucash/gnome/gnc-plugin-page-invoice.c:411
 #: gnucash/gnome/gnc-plugin-page-register.c:407
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1915
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1918
 #: gnucash/gnome-search/dialog-search.c:1093
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:167
 #: gnucash/gtkbuilder/dialog-invoice.glade:8
@@ -1864,7 +1864,7 @@ msgstr "પહોંચ"
 #: gnucash/report/reports/standard/invoice.scm:720
 #: gnucash/report/reports/standard/invoice.scm:739
 #: gnucash/report/reports/standard/receipt.scm:112
-#: gnucash/report/reports/standard/taxinvoice.scm:178
+#: gnucash/report/reports/standard/taxinvoice.scm:177
 #: gnucash/report/reports/support/receipt.eguile.scm:91
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
 #: libgnucash/engine/Account.cpp:160 libgnucash/engine/gncInvoice.c:1095
@@ -2016,8 +2016,8 @@ msgstr "કોમોડિટીને દૂર કરીએ?"
 #: gnucash/gnome-utils/dialog-account.c:820
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gnome-utils/dialog-tax-table.c:667
-#: gnucash/gnome-utils/gnc-file.c:118 gnucash/gnome-utils/gnc-file.c:366
-#: gnucash/gnome-utils/gnc-file.c:664 gnucash/gnome-utils/gnc-gui-query.c:300
+#: gnucash/gnome-utils/gnc-file.c:120 gnucash/gnome-utils/gnc-file.c:368
+#: gnucash/gnome-utils/gnc-file.c:666 gnucash/gnome-utils/gnc-gui-query.c:300
 #: gnucash/gnome-utils/gnc-gui-query.c:332
 #: gnucash/gnome-utils/gnc-main-window.cpp:1252
 #: gnucash/gnome-utils/gnc-main-window.cpp:1409
@@ -2046,7 +2046,7 @@ msgstr "કોમોડિટીને દૂર કરીએ?"
 #: gnucash/gtkbuilder/dialog-import.glade:46
 #: gnucash/gtkbuilder/dialog-import.glade:328
 #: gnucash/gtkbuilder/dialog-import.glade:885
-#: gnucash/gtkbuilder/dialog-import.glade:1185
+#: gnucash/gtkbuilder/dialog-import.glade:1221
 #: gnucash/gtkbuilder/dialog-invoice.glade:638
 #: gnucash/gtkbuilder/dialog-invoice.glade:793
 #: gnucash/gtkbuilder/dialog-invoice.glade:1317
@@ -2308,7 +2308,7 @@ msgstr "ખાતું પસંદ કરો"
 #: gnucash/gtkbuilder/dialog-import.glade:188
 #: gnucash/gtkbuilder/dialog-import.glade:343
 #: gnucash/gtkbuilder/dialog-import.glade:899
-#: gnucash/gtkbuilder/dialog-import.glade:1201
+#: gnucash/gtkbuilder/dialog-import.glade:1237
 #: gnucash/gtkbuilder/dialog-invoice.glade:652
 #: gnucash/gtkbuilder/dialog-invoice.glade:809
 #: gnucash/gtkbuilder/dialog-invoice.glade:1332
@@ -2426,7 +2426,7 @@ msgstr "સોદાનો અહેવાલ"
 #: gnucash/gnome/dialog-lot-viewer.c:1000 gnucash/gnome/dialog-tax-info.c:1397
 #: gnucash/gnome/gnc-split-reg.c:715 gnucash/gnome/reconcile-view.c:471
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
-#: gnucash/gnome-utils/gnc-tree-view-account.c:829
+#: gnucash/gnome-utils/gnc-tree-view-account.c:834
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:79
 #: gnucash/gtkbuilder/dialog-book-close.glade:164
 #: gnucash/gtkbuilder/dialog-choose-owner.glade:98
@@ -2439,7 +2439,7 @@ msgstr "સોદાનો અહેવાલ"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:383
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:60
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.c:1510
+#: gnucash/import-export/import-main-matcher.c:1568
 #: gnucash/import-export/import-match-picker.c:389
 #: gnucash/import-export/import-match-picker.c:429
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3709
@@ -2458,7 +2458,7 @@ msgstr "સોદાનો અહેવાલ"
 #: gnucash/report/reports/standard/register.scm:358
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:270
 #: gnucash/report/trep-engine.scm:230 gnucash/report/trep-engine.scm:908
-#: gnucash/report/trep-engine.scm:1017 gnucash/report/trep-engine.scm:1159
+#: gnucash/report/trep-engine.scm:1017 gnucash/report/trep-engine.scm:1179
 msgid "Description"
 msgstr "વર્ણન"
 
@@ -2580,7 +2580,7 @@ msgid "Place Holder"
 msgstr "ખાતાધારક"
 
 #: gnucash/gnome/dialog-find-account.c:426
-#: gnucash/gnome-utils/gnc-tree-view-account.c:997
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1002
 #: gnucash/gtkbuilder/dialog-account.glade:323
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
 #, fuzzy
@@ -2665,7 +2665,7 @@ msgstr "મોકલવાની તારીખ"
 #: gnucash/report/reports/standard/general-ledger.scm:88
 #: gnucash/report/trep-engine.scm:189 gnucash/report/trep-engine.scm:531
 #: gnucash/report/trep-engine.scm:903 gnucash/report/trep-engine.scm:1012
-#: gnucash/report/trep-engine.scm:1126
+#: gnucash/report/trep-engine.scm:1146
 msgid "Reconciled Date"
 msgstr "સંગત તારીખ"
 
@@ -2734,7 +2734,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-find-transactions.c:155
 #: gnucash/gnome/gnc-split-reg.c:721
-#: gnucash/gnome-utils/gnc-tree-view-account.c:977
+#: gnucash/gnome-utils/gnc-tree-view-account.c:982
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:473
 #: gnucash/gtkbuilder/assistant-acct-period.glade:143
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:420
@@ -2755,10 +2755,10 @@ msgstr ""
 #: gnucash/report/reports/standard/account-summary.scm:408
 #: gnucash/report/reports/standard/balsheet-eg.scm:188
 #: gnucash/report/reports/standard/receipt.scm:38
-#: gnucash/report/reports/standard/taxinvoice.scm:70
+#: gnucash/report/reports/standard/taxinvoice.scm:69
 #: gnucash/report/trep-engine.scm:261 gnucash/report/trep-engine.scm:892
 #: gnucash/report/trep-engine.scm:909 gnucash/report/trep-engine.scm:1052
-#: gnucash/report/trep-engine.scm:1169
+#: gnucash/report/trep-engine.scm:1189
 msgid "Notes"
 msgstr "નોંધ"
 
@@ -3131,7 +3131,7 @@ msgstr "પહોંચની નોંધ"
 
 #: gnucash/gnome/dialog-invoice.c:3652 gnucash/gnome/dialog-invoice.c:3811
 #: gnucash/gnome/dialog-lot-viewer.c:907 gnucash/gnome/dialog-tax-info.c:1235
-#: gnucash/gnome-utils/gnc-tree-view-account.c:812
+#: gnucash/gnome-utils/gnc-tree-view-account.c:817
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:401
 #: gnucash/gnome-utils/gnc-tree-view-price.c:420
 #: gnucash/gtkbuilder/assistant-loan.glade:275
@@ -3183,7 +3183,7 @@ msgstr "ખોલેલું"
 #: gnucash/report/reports/standard/register.scm:135
 #: gnucash/report/reports/standard/register.scm:354
 #: gnucash/report/trep-engine.scm:907 gnucash/report/trep-engine.scm:1016
-#: gnucash/report/trep-engine.scm:1141
+#: gnucash/report/trep-engine.scm:1161
 msgid "Num"
 msgstr "નંબર"
 
@@ -3214,7 +3214,7 @@ msgstr "ચલણ શોધવું"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.c:1509
+#: gnucash/import-export/import-main-matcher.c:1567
 #: gnucash/import-export/import-match-picker.c:388
 #: gnucash/import-export/import-match-picker.c:428
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3720
@@ -3226,8 +3226,8 @@ msgstr "ચલણ શોધવું"
 #: gnucash/report/reports/standard/register.scm:382
 #: gnucash/report/reports/standard/register.scm:627
 #: gnucash/report/trep-engine.scm:223 gnucash/report/trep-engine.scm:965
-#: gnucash/report/trep-engine.scm:1010 gnucash/report/trep-engine.scm:1305
-#: gnucash/report/trep-engine.scm:1321 gnucash/report/trep-engine.scm:2014
+#: gnucash/report/trep-engine.scm:1010 gnucash/report/trep-engine.scm:1335
+#: gnucash/report/trep-engine.scm:1361 gnucash/report/trep-engine.scm:2074
 msgid "Amount"
 msgstr "રકમ"
 
@@ -3343,7 +3343,7 @@ msgid "Title"
 msgstr "અધિકાર"
 
 #: gnucash/gnome/dialog-lot-viewer.c:940 gnucash/gnome/dialog-lot-viewer.c:1032
-#: gnucash/gnome-utils/gnc-tree-view-account.c:855
+#: gnucash/gnome-utils/gnc-tree-view-account.c:860
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:457
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:465
 #: gnucash/register/ledger-core/split-register-model.c:325
@@ -3513,7 +3513,7 @@ msgstr ""
 #: gnucash/gnome/dialog-payment.c:1574
 #: gnucash/gnome/gnc-plugin-page-register.c:3241
 #: gnucash/gnome-search/search-reconciled.c:224
-#: gnucash/gnome-utils/gnc-tree-view-account.c:876
+#: gnucash/gnome-utils/gnc-tree-view-account.c:881
 #: gnucash/report/trep-engine.scm:150
 msgid "Cleared"
 msgstr "મંજૂર"
@@ -3521,7 +3521,7 @@ msgstr "મંજૂર"
 #: gnucash/gnome/dialog-payment.c:1576
 #: gnucash/gnome/gnc-plugin-page-register.c:3243
 #: gnucash/gnome-search/search-reconciled.c:227
-#: gnucash/gnome-utils/gnc-tree-view-account.c:890
+#: gnucash/gnome-utils/gnc-tree-view-account.c:895
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
 #: gnucash/import-export/import-match-picker.c:431
 #: gnucash/report/trep-engine.scm:151
@@ -3722,11 +3722,11 @@ msgstr "કોલમ"
 msgid "HTML Style Sheet Properties: %s"
 msgstr "HTML સ્ટાઇલ શીટ પ્રોપર્ટીઝ: %s"
 
-#: gnucash/gnome/dialog-report-style-sheet.cpp:263
+#: gnucash/gnome/dialog-report-style-sheet.cpp:264
 msgid "You must provide a name for the new style sheet."
 msgstr "નવી સ્ટાઇલ શીટ માટે તમારે એક નામ આપવું પડશે."
 
-#: gnucash/gnome/dialog-report-style-sheet.cpp:513
+#: gnucash/gnome/dialog-report-style-sheet.cpp:514
 msgid "Style Sheet Name"
 msgstr "સ્ટાઇલ શીટનું નામ"
 
@@ -4005,14 +4005,14 @@ msgstr "વિક્રેતાને શોધો"
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:401
 #: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:177
-#: libgnucash/engine/Account.cpp:4407
+#: libgnucash/engine/Account.cpp:4413
 msgid "Income"
 msgstr "આવક"
 
 #: gnucash/gnome/gnc-budget-view.c:507
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:122
-#: gnucash/report/reports/standard/budget-income-statement.scm:481
+#: gnucash/report/reports/standard/budget-income-statement.scm:492
 #: gnucash/report/reports/standard/income-statement.scm:469
 #: gnucash/report/report-utilities.scm:206
 msgid "Expenses"
@@ -4033,7 +4033,7 @@ msgid "Remaining to Budget"
 msgstr "અસ્તિત્વમાં હોય તેવું બજેટ ખોલો"
 
 #: gnucash/gnome/gnc-budget-view.c:1644 gnucash/gnome/window-reconcile.c:1166
-#: gnucash/gnome-utils/gnc-tree-view-account.c:924
+#: gnucash/gnome-utils/gnc-tree-view-account.c:929
 #: gnucash/report/html-acct-table.scm:789
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:279
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1014
@@ -4050,7 +4050,7 @@ msgstr "અસ્તિત્વમાં હોય તેવું બજેટ
 #: gnucash/report/reports/standard/new-owner-report.scm:311
 #: gnucash/report/reports/standard/portfolio.scm:269
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
-#: gnucash/report/trep-engine.scm:1881
+#: gnucash/report/trep-engine.scm:1941
 msgid "Total"
 msgstr "કુલ"
 
@@ -4079,8 +4079,8 @@ msgid "Select a Budget"
 msgstr "એક બજેટ પસંદ કરો"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:291
-#: gnucash/gnome/gnc-plugin-page-budget.c:180 gnucash/gnome-utils/gnc-file.c:90
-#: gnucash/gnome-utils/gnc-file.c:327 gnucash/gnome-utils/gnc-file.c:1160
+#: gnucash/gnome/gnc-plugin-page-budget.c:180 gnucash/gnome-utils/gnc-file.c:92
+#: gnucash/gnome-utils/gnc-file.c:329 gnucash/gnome-utils/gnc-file.c:1182
 msgid "Open"
 msgstr "ખોલો"
 
@@ -4229,7 +4229,7 @@ msgid "Are you sure you want to do this?"
 msgstr "તમે ખરેખર એવું કરવા માંગો છો?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:182
-#: gnucash/gnome/gnc-plugin-page-report.cpp:225
+#: gnucash/gnome/gnc-plugin-page-report.cpp:228
 #: gnucash/gtkbuilder/assistant-csv-export.glade:99
 #: gnucash/gtkbuilder/dialog-print-check.glade:641
 #: gnucash/gtkbuilder/dialog-sx.glade:932
@@ -5225,39 +5225,39 @@ msgstr "મોકલવાની તારીખ"
 msgid "Checking splits in current register: %u of %u"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:223
+#: gnucash/gnome/gnc-plugin-page-report.cpp:226
 msgid "Print"
 msgstr "પ્રિન્ટ કરો"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:224
+#: gnucash/gnome/gnc-plugin-page-report.cpp:227
 #: gnucash/gnome-utils/dialog-file-access.c:339
-#: gnucash/gnome-utils/gnc-file.c:109 gnucash/gnome-utils/gnc-file.c:351
+#: gnucash/gnome-utils/gnc-file.c:111 gnucash/gnome-utils/gnc-file.c:353
 msgid "Export"
 msgstr "એક્સપોર્ટ કરો"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration"
 #. to be used as toolbar button label.
-#: gnucash/gnome/gnc-plugin-page-report.cpp:228
+#: gnucash/gnome/gnc-plugin-page-report.cpp:231
 msgid "Save Config"
 msgstr ""
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
 #. to be used as toolbar button label.
-#: gnucash/gnome/gnc-plugin-page-report.cpp:231
+#: gnucash/gnome/gnc-plugin-page-report.cpp:234
 #, fuzzy
 msgid "Save Config As…"
 msgstr "ના રૂપમાં સેવ કરો…"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:232
+#: gnucash/gnome/gnc-plugin-page-report.cpp:235
 msgid "Make Pdf"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:368
-#: gnucash/gnome/gnc-plugin-page-report.cpp:369
+#: gnucash/gnome/gnc-plugin-page-report.cpp:371
+#: gnucash/gnome/gnc-plugin-page-report.cpp:372
 msgid "The numeric ID of the report."
 msgstr "અહેવાલનો આંકડાકીય ID."
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1260
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1263
 #, fuzzy, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
@@ -5267,7 +5267,7 @@ msgstr ""
 "કરવામાં આવશે. આ GnuCashના આગળના સ્ટાર્ટઅપમાં અહેવાલ મેનુમાં મેનુ પ્રવિષ્ટિના રૂપમાં પહોંચને "
 "યોગ્ય હશે."
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1263
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1266
 #, fuzzy, c-format
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
@@ -5277,39 +5277,39 @@ msgstr ""
 "કરવામાં આવશે. આ GnuCashના આગળના સ્ટાર્ટઅપમાં અહેવાલ મેનુમાં મેનુ પ્રવિષ્ટિના રૂપમાં પહોંચને "
 "યોગ્ય હશે."
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1271
-#: gnucash/ui/gnc-plugin-page-report.ui:43
-#: gnucash/ui/gnc-plugin-page-report.ui:224
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1274
+#: gnucash/ui/gnc-plugin-page-report.ui:74
+#: gnucash/ui/gnc-plugin-page-report.ui:255
 #, fuzzy
 msgid "Save _Report Configuration"
 msgstr "અહેવાલમાં તફાવત"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1272
-#: gnucash/ui/gnc-plugin-page-report.ui:50
-#: gnucash/ui/gnc-plugin-page-report.ui:239
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1275
+#: gnucash/ui/gnc-plugin-page-report.ui:81
+#: gnucash/ui/gnc-plugin-page-report.ui:270
 #, fuzzy
 msgid "Save Report Configuration As…"
 msgstr "કરવેરા_અહેવાલનો વિકલ્પ"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1547
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1580
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1550
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1583
 msgid "HTML"
 msgstr "HTML"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1550
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1553
 msgid "Choose export format"
 msgstr "નિકાસનું ફોર્મેટ પસંદ કરો"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1551
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1554
 msgid "Choose the export format for this report:"
 msgstr "આ અહેવાલ માટે નિકાસ ફોર્મેટ પસંદ કરો:"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1591
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1594
 #, c-format
 msgid "Save %s To File"
 msgstr "%sને ફાઈલમાં સેવ કરો"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1620
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1623
 #, c-format
 msgid ""
 "You cannot save to that filename.\n"
@@ -5320,53 +5320,53 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1630
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1633
 msgid "You cannot save to that file."
 msgstr "તમે તે ફાઈલમાં સેવ નહીં કરી શકો"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1639
-#: gnucash/gnome-utils/gnc-file.c:1340 gnucash/gnome-utils/gnc-file.c:1587
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1642
+#: gnucash/gnome-utils/gnc-file.c:1362 gnucash/gnome-utils/gnc-file.c:1609
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:739
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr "ફાઈલ %s થી પહેલા અસ્તિત્ત્વમાં છે. શું તમે ખરેખર આને દૂર કરીને લખવા માગો છો?"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1776
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1802
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1779
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1805
 #: gnucash/gnucash-commands.cpp:179 gnucash/gnucash-commands.cpp:207
 msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1813
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1816
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
 msgstr "%s ફાઈલ નહીં ખોલી શકાય, તે ક્ષતિ છે: %s"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1858
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1861
 msgid "GnuCash-Report"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1907
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1910
 #: gnucash/report/reports/standard/invoice.scm:849
 msgid "Printable Invoice"
 msgstr "પ્રિન્ટ કરવા પાત્ર ચલણ"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1908
-#: gnucash/report/reports/standard/taxinvoice.scm:302
-#: gnucash/report/reports/standard/taxinvoice.scm:304
-#: gnucash/report/reports/standard/taxinvoice.scm:316
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1911
+#: gnucash/report/reports/standard/taxinvoice.scm:301
+#: gnucash/report/reports/standard/taxinvoice.scm:303
+#: gnucash/report/reports/standard/taxinvoice.scm:315
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:424
 msgid "Tax Invoice"
 msgstr "કર ચલણ"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1909
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1912
 #: gnucash/report/reports/standard/invoice.scm:859
 msgid "Easy Invoice"
 msgstr "સરળ ચલણ"
 
-#: gnucash/gnome/gnc-plugin-page-report.cpp:1910
+#: gnucash/gnome/gnc-plugin-page-report.cpp:1913
 #: gnucash/report/reports/standard/invoice.scm:869
 msgid "Fancy Invoice"
 msgstr "ફેન્સી ચલણ"
@@ -6368,7 +6368,7 @@ msgid "There was an error parsing the file."
 msgstr "ફાઈલને સમજવામાં ત્રુટિ સર્જાઇ હતી."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1429 gnucash/gnome-utils/gnc-file.c:1668
+#: gnucash/gnome-utils/gnc-file.c:1451 gnucash/gnome-utils/gnc-file.c:1690
 msgid "Writing file…"
 msgstr "ફાઈલ રાઈટ થઈ રહી છે…"
 
@@ -6589,7 +6589,7 @@ msgstr "ચ_લણ"
 #: gnucash/gtkbuilder/dialog-transfer.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:431
 #: gnucash/gtkbuilder/dialog-vendor.glade:502
-#: gnucash/report/trep-engine.scm:102 libgnucash/engine/Account.cpp:4406
+#: gnucash/report/trep-engine.scm:102 libgnucash/engine/Account.cpp:4412
 msgid "Currency"
 msgstr "ચલણ"
 
@@ -6674,7 +6674,7 @@ msgid "Open…"
 msgstr "ખોલો"
 
 #: gnucash/gnome-utils/dialog-file-access.c:324
-#: gnucash/gnome-utils/gnc-file.c:88
+#: gnucash/gnome-utils/gnc-file.c:90
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:103
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:106
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:784
@@ -6696,7 +6696,7 @@ msgid "_Save As"
 msgstr "ના રૂપમાં સેવ કરો..."
 
 #: gnucash/gnome-utils/dialog-file-access.c:359
-#: gnucash/gnome-utils/gnc-file.c:147
+#: gnucash/gnome-utils/gnc-file.c:149
 msgid "All files"
 msgstr "તમામ ફાઇલો"
 
@@ -6742,7 +6742,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:422
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:577
 #: gnucash/ui/gnc-plugin-page-register.ui:672
-#: gnucash/ui/gnc-plugin-page-report.ui:89
+#: gnucash/ui/gnc-plugin-page-report.ui:120
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:97
 msgid "_Close"
 msgstr "_બંધ કરો"
@@ -6853,7 +6853,7 @@ msgid "Show the income and expense accounts"
 msgstr "આવક અને ખર્ચના ખાતા દર્શાવો"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:674
-#: gnucash/report/trep-engine.scm:2085 gnucash/report/trep-engine.scm:2091
+#: gnucash/report/trep-engine.scm:2145 gnucash/report/trep-engine.scm:2151
 msgid "Error"
 msgstr "ખામી"
 
@@ -7162,17 +7162,17 @@ msgstr "આવૃત્તિ"
 msgid "(unnamed)"
 msgstr "(નામ રહિત)"
 
-#: gnucash/gnome-utils/gnc-file.c:94 gnucash/ui/gnc-main-window.ui:17
+#: gnucash/gnome-utils/gnc-file.c:96 gnucash/ui/gnc-main-window.ui:17
 msgid "_Import"
 msgstr "_આયાત કરો"
 
-#: gnucash/gnome-utils/gnc-file.c:96 gnucash/gnome-utils/gnc-file.c:335
+#: gnucash/gnome-utils/gnc-file.c:98 gnucash/gnome-utils/gnc-file.c:337
 #: gnucash/gtkbuilder/dialog-preferences.glade:2371
 #: gnucash/import-export/qif-imp/gnc-plugin-qif-import.c:146
 msgid "Import"
 msgstr "આયાત કરો"
 
-#: gnucash/gnome-utils/gnc-file.c:100 gnucash/gnome-utils/gnc-file.c:666
+#: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:668
 #: gnucash/gnome-utils/gnc-main-window.cpp:1253
 #: gnucash/html/gnc-html-webkit1.c:1217 gnucash/ui/gnc-main-window.ui:547
 #: gnucash/ui/gnc-plugin-basic-commands.ui:21
@@ -7183,50 +7183,50 @@ msgstr "આયાત કરો"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:407
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:562
 #: gnucash/ui/gnc-plugin-page-register.ui:657
-#: gnucash/ui/gnc-plugin-page-report.ui:74
+#: gnucash/ui/gnc-plugin-page-report.ui:105
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:82
 msgid "_Save"
 msgstr "_સેવ"
 
-#: gnucash/gnome-utils/gnc-file.c:102 gnucash/gnome-utils/gnc-file.c:343
-#: gnucash/gnome-utils/gnc-file.c:1214 gnucash/gnome-utils/gnc-file.c:1486
+#: gnucash/gnome-utils/gnc-file.c:104 gnucash/gnome-utils/gnc-file.c:345
+#: gnucash/gnome-utils/gnc-file.c:1236 gnucash/gnome-utils/gnc-file.c:1508
 msgid "Save"
 msgstr "સેવ કરો"
 
-#: gnucash/gnome-utils/gnc-file.c:106 gnucash/ui/gnc-main-window.ui:51
+#: gnucash/gnome-utils/gnc-file.c:108 gnucash/ui/gnc-main-window.ui:51
 msgid "_Export"
 msgstr "_એક્સપોર્ટ કરો"
 
-#: gnucash/gnome-utils/gnc-file.c:261
+#: gnucash/gnome-utils/gnc-file.c:263
 msgid "(null)"
 msgstr "(કંઈ નહીં)"
 
-#: gnucash/gnome-utils/gnc-file.c:280
+#: gnucash/gnome-utils/gnc-file.c:282
 #, c-format
 msgid "No suitable backend was found for %s."
 msgstr "%s માટે કોઇ યોગ્ય બેકેન્ડ મળ્યા નથી."
 
-#: gnucash/gnome-utils/gnc-file.c:285
+#: gnucash/gnome-utils/gnc-file.c:287
 #, c-format
 msgid "The URL %s is not supported by this version of GnuCash."
 msgstr "URL %s GnuCash ની આવૃત્તિ દ્વારા ટેકો આપતા નથી."
 
-#: gnucash/gnome-utils/gnc-file.c:290
+#: gnucash/gnome-utils/gnc-file.c:292
 #, c-format
 msgid "Can't parse the URL %s."
 msgstr "URL %sને સમજી શકાતા નથી."
 
-#: gnucash/gnome-utils/gnc-file.c:295
+#: gnucash/gnome-utils/gnc-file.c:297
 #, c-format
 msgid "Can't connect to %s. The host, username or password were incorrect."
 msgstr "%sથી સંપર્ક કરી શકાય છે. હોસ્ટ, યુઝરનેમ અથવા પાસવર્ડ ખોટા હતા."
 
-#: gnucash/gnome-utils/gnc-file.c:301
+#: gnucash/gnome-utils/gnc-file.c:303
 #, c-format
 msgid "Can't connect to %s. Connection was lost, unable to send data."
 msgstr "%sથી સંપર્ક કરી શકાતો નથી. સપર્ક તૂટી ગયો હતો, ડેટા મોકલવામાં અસમર્થ."
 
-#: gnucash/gnome-utils/gnc-file.c:307
+#: gnucash/gnome-utils/gnc-file.c:309
 msgid ""
 "This file/URL appears to be from a newer version of GnuCash. You must "
 "upgrade your version of GnuCash to work with this data."
@@ -7234,12 +7234,12 @@ msgstr ""
 "એવું લાગે છે કે આ ફાઈલ /URL GnuCashની એક નવી આવૃત્તિ સંબંધિત છે. આ ડેટા સાથે કાર્ય કરવા "
 "માટે તમારે તમારી GnuCashની આવૃત્તિને અપગ્રેડ કરવાની રહેશે."
 
-#: gnucash/gnome-utils/gnc-file.c:314
+#: gnucash/gnome-utils/gnc-file.c:316
 #, c-format
 msgid "The database %s doesn't seem to exist. Do you want to create it?"
 msgstr "એવું લાગે છે કે ડેટાબેઝ %s અસ્તિત્ત્વમાં નથી. શું તમે તેને બનાવવા માગો છો?"
 
-#: gnucash/gnome-utils/gnc-file.c:328
+#: gnucash/gnome-utils/gnc-file.c:330
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -7250,7 +7250,7 @@ msgstr ""
 "ઉપયોગ કરી રહ્યા છે, જે સ્થિતિમાં તમારે ડેટાબેઝ ખોલવો જોઇએ નહીં. શું તમે ડેટાબેઝ ખોલવાની "
 "પ્રક્રિયાને આગળ વધારવા માગો છો ?"
 
-#: gnucash/gnome-utils/gnc-file.c:336
+#: gnucash/gnome-utils/gnc-file.c:338
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -7261,7 +7261,7 @@ msgstr ""
 "ઉપયોગ કરી રહ્યો છે, જે સ્થિતિમાં તમારે ડેટાને આયાત કરવો જોઇએ નહીં. શું તમે ડેટાબેઝ આયાત "
 "કરવાની પ્રક્રિયાને આગળ વધારવા માગો છો?"
 
-#: gnucash/gnome-utils/gnc-file.c:344
+#: gnucash/gnome-utils/gnc-file.c:346
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -7272,7 +7272,7 @@ msgstr ""
 "ઉપયોગ કરી રહ્યો છે, જે સ્થિતિમાં તમારે ડેટાબેઝને સેવ કરવો જોઇએ નહીં. શું તમે ડેટાબેઝને સેવ "
 "કરવાની પ્રક્રિયાને આગળ વધારવા માગો છો?"
 
-#: gnucash/gnome-utils/gnc-file.c:352
+#: gnucash/gnome-utils/gnc-file.c:354
 #, c-format
 msgid ""
 "GnuCash could not obtain the lock for %s. That database may be in use by "
@@ -7283,7 +7283,7 @@ msgstr ""
 "ઉપયોગ કરી રહ્યા છે, જે સ્થિતિમાં તમારે ડેટાબેઝને એક્સપોર્ટ કરવો ન જોઇએ. શું તમે એક્સપોર્ટ "
 "કરવાની પ્રક્રિયા આગળ વધારવા માગો છો?"
 
-#: gnucash/gnome-utils/gnc-file.c:377
+#: gnucash/gnome-utils/gnc-file.c:379
 #, fuzzy, c-format
 msgid ""
 "GnuCash could not write to %s. That database may be on a read-only file "
@@ -7293,42 +7293,42 @@ msgstr ""
 "GnuCash %sમાં લખી શકાયું નથી. આ ડેટાબેઝ કદાચ એક રીડ-ઓન્લી ફાઈલ સિસ્ટમમાં છે અથવા કદાચ "
 "તે ડિરેક્ટરી માટે લખવાની મંજૂરી નથી."
 
-#: gnucash/gnome-utils/gnc-file.c:385
+#: gnucash/gnome-utils/gnc-file.c:387
 #, c-format
 msgid "The file/URL %s does not contain GnuCash data or the data is corrupt."
 msgstr "ફાઈલ /URL %sમાં GnuCash ડેટા સામેલ નથી અથવા ડેટા ખરાબ થયા છે."
 
-#: gnucash/gnome-utils/gnc-file.c:391
+#: gnucash/gnome-utils/gnc-file.c:393
 #, c-format
 msgid ""
 "The server at URL %s experienced an error or encountered bad or corrupt data."
 msgstr "URL %sમાં સર્વરમાં એક ત્રુટિ પેદા થઈ છે અથવા ખરાબ અથવા ખામીયુક્ત ડેટા મળ્યા છે."
 
-#: gnucash/gnome-utils/gnc-file.c:397
+#: gnucash/gnome-utils/gnc-file.c:399
 #, c-format
 msgid "You do not have permission to access %s."
 msgstr "તમારે %s સુધી પહોંચવાની મંજૂરી નથી."
 
-#: gnucash/gnome-utils/gnc-file.c:402
+#: gnucash/gnome-utils/gnc-file.c:404
 #, c-format
 msgid "An error occurred while processing %s."
 msgstr "%sની પ્રક્રિયાને આગળ વધારવા માટે એક ત્રુટિ પેદા થઈ છે."
 
-#: gnucash/gnome-utils/gnc-file.c:407
+#: gnucash/gnome-utils/gnc-file.c:409
 msgid "There was an error reading the file. Do you want to continue?"
 msgstr "આ ફાઈલને વાંચતી વખતે એક ત્રુટિ પેદા થઈ છે. શું તમે આગળ વધવા માગો છો?"
 
-#: gnucash/gnome-utils/gnc-file.c:416
+#: gnucash/gnome-utils/gnc-file.c:418
 #, c-format
 msgid "There was an error parsing the file %s."
 msgstr "%s ફાઈલને સમજાવવામાં એક ત્રુટિ ઉત્પન્ન થઈ છે."
 
-#: gnucash/gnome-utils/gnc-file.c:421
+#: gnucash/gnome-utils/gnc-file.c:423
 #, c-format
 msgid "The file %s is empty."
 msgstr "ફાઈલ %s ખાલી છે."
 
-#: gnucash/gnome-utils/gnc-file.c:434
+#: gnucash/gnome-utils/gnc-file.c:436
 #, c-format
 msgid ""
 "The file/URI %s could not be found.\n"
@@ -7336,26 +7336,26 @@ msgid ""
 "The file is in the history list, do you want to remove it?"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:440
+#: gnucash/gnome-utils/gnc-file.c:442
 #, fuzzy, c-format
 msgid "The file/URI %s could not be found."
 msgstr "ફાઈલ %s શોધી શકાતી નથી."
 
-#: gnucash/gnome-utils/gnc-file.c:447
+#: gnucash/gnome-utils/gnc-file.c:449
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
 msgstr "આ ફાઈલ GnuCashની એક જૂની આવૃત્તિ સાથે સંબંધિત છે. શું તમે આગળ વધવા માગો છો?"
 
-#: gnucash/gnome-utils/gnc-file.c:456
+#: gnucash/gnome-utils/gnc-file.c:458
 #, c-format
 msgid "The file type of file %s is unknown."
 msgstr "ફાઈલ %sનો ફાઈલ પ્રકાર અજાણ્યો છે."
 
-#: gnucash/gnome-utils/gnc-file.c:461
+#: gnucash/gnome-utils/gnc-file.c:463
 #, c-format
 msgid "Could not make a backup of the file %s"
 msgstr "ફાઈલ %sનું બેકઅપ બનાવી શકાતું નથી."
 
-#: gnucash/gnome-utils/gnc-file.c:466
+#: gnucash/gnome-utils/gnc-file.c:468
 #, fuzzy, c-format
 msgid ""
 "Could not write to file %s. Check that you have permission to write to this "
@@ -7364,14 +7364,14 @@ msgstr ""
 "ફાઈલ %sમાં લખી શકાતું નથી. કૃપા કરીને તમને આ ફાઈલમાં લખવાની મંજૂરી આપવામાં આવી છે કે નહીં "
 "એ અંગે અને તેને બનાવવા માટે આવશ્યક સ્થાન ઉપલબ્ધ છે કે કેમ એ અંગે તપાસ કરો."
 
-#: gnucash/gnome-utils/gnc-file.c:473
+#: gnucash/gnome-utils/gnc-file.c:475
 #, c-format
 msgid "No read permission to read from file %s."
 msgstr "ફાઈલ %s વાંચવા માટે વાંચવાની મંજૂરી નથી."
 
 #. Translators: the first %s is a path in the filesystem,
 #. the second %s is PACKAGE_NAME, which by default is "GnuCash"
-#: gnucash/gnome-utils/gnc-file.c:480
+#: gnucash/gnome-utils/gnc-file.c:482
 #, fuzzy, c-format
 msgid ""
 "You attempted to save in\n"
@@ -7388,7 +7388,7 @@ msgstr ""
 "\n"
 "કૃપા કરીને એક નવી ડિરેક્ટરીમાં પ્રયત્ન કરો."
 
-#: gnucash/gnome-utils/gnc-file.c:487
+#: gnucash/gnome-utils/gnc-file.c:489
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
@@ -7396,7 +7396,7 @@ msgstr ""
 "આ ડેટાબેઝ GnuCashની એક જૂની આવૃત્તિ સાથે સંબંધિત છે. તેને હાલની આવૃત્તિમાં અપડેટ કરવા માટે "
 "OK પસંદ કરો, માત્ર વાંચવા માટે ચિહ્ન કરવા માટે કેન્સલ પસંદ કરો."
 
-#: gnucash/gnome-utils/gnc-file.c:496
+#: gnucash/gnome-utils/gnc-file.c:498
 #, fuzzy
 msgid ""
 "This database is from a newer version of GnuCash. This version can read it, "
@@ -7407,7 +7407,7 @@ msgstr ""
 "સેવ કરી શકાતા નથી. તેને જ્યાં સુધી ફાઈલ->સેવ એઝ ન કરવામાં આવે ત્યાં સુધી માત્ર વાંચવા માટે "
 "ચિહ્ન કરવામાં આવશે."
 
-#: gnucash/gnome-utils/gnc-file.c:505
+#: gnucash/gnome-utils/gnc-file.c:507
 msgid ""
 "The SQL database is in use by other users, and the upgrade cannot be "
 "performed until they logoff. If there are currently no other users, consult "
@@ -7417,7 +7417,7 @@ msgstr ""
 "લોગઓફ ન થાય ત્યાં સુધી અપગ્રેડનું કાર્ય પૂરું થઈ શકશે નહીં. જો હાલમાં કોઇ અન્ય વપરાશકાર ન "
 "હોય તો લંબિત લોગિન સૂત્રોને કેવી રીતે પૂરા કરવા એ અંગે શીખવા માટે દસ્તાવેજીકરણની સલાહ લો."
 
-#: gnucash/gnome-utils/gnc-file.c:515
+#: gnucash/gnome-utils/gnc-file.c:517
 #, fuzzy
 msgid ""
 "The library \"libdbi\" installed on your system doesn't correctly store "
@@ -7431,7 +7431,7 @@ msgstr ""
 "કરવામાં નહીં આવે ત્યાં સુધી SQL ડેટાબેઝોમાં ખોલી કે સેવ કરી શકાશે નહીં. વધુ જાણકારી માટે "
 "કૃપા કરીને https://bugs.gnucash.org/show_bug.cgi?id=611936 જુઓ."
 
-#: gnucash/gnome-utils/gnc-file.c:527
+#: gnucash/gnome-utils/gnc-file.c:529
 msgid ""
 "GnuCash could not complete a critical test for the presence of a bug in the "
 "\"libdbi\" library. This may be caused by a permissions misconfiguration of "
@@ -7439,7 +7439,7 @@ msgid ""
 "id=645216 for more information."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:537
+#: gnucash/gnome-utils/gnc-file.c:539
 msgid ""
 "This file is from an older version of GnuCash and will be upgraded when "
 "saved by this version. You will not be able to read the saved file from the "
@@ -7447,16 +7447,16 @@ msgid ""
 "you wish to preserve the old version, exit without saving."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:548
+#: gnucash/gnome-utils/gnc-file.c:550
 #, c-format
 msgid "An unknown I/O error (%d) occurred."
 msgstr "એક અજાણી I/O ત્રુટિ (%d) સર્જાઇ છે."
 
-#: gnucash/gnome-utils/gnc-file.c:643
+#: gnucash/gnome-utils/gnc-file.c:645
 msgid "Save changes to the file?"
 msgstr "ફેરફારોને ફાઈલમાં સેવ કરો?"
 
-#: gnucash/gnome-utils/gnc-file.c:656
+#: gnucash/gnome-utils/gnc-file.c:658
 #: gnucash/gnome-utils/gnc-main-window.cpp:1246
 #, fuzzy, c-format
 msgid "If you don't save, changes from the past %d minute will be discarded."
@@ -7465,23 +7465,28 @@ msgid_plural ""
 msgstr[0] "જો તમે સેવ કરશો નહીં, તો પાછળના %d મિનિટોના ફેરફારોને રદ કરવામાં આવશે."
 msgstr[1] "જો તમે સેવ કરશો નહીં, તો પાછળના %d મિનિટોના ફેરફારોને રદ કરવામાં આવશે."
 
-#: gnucash/gnome-utils/gnc-file.c:660
+#: gnucash/gnome-utils/gnc-file.c:662
 msgid "Continue _Without Saving"
 msgstr "સેવ કર્યા વિના_આગળ વધો"
 
-#: gnucash/gnome-utils/gnc-file.c:715
+#: gnucash/gnome-utils/gnc-file.c:726
 msgid ""
 "This book has budgets. The internal representation of budget amounts no "
 "longer depends on the Reverse Balanced Accounts preference. Please review "
 "the budgets and amend signs if necessary."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:844
+#: gnucash/gnome-utils/gnc-file.c:754
+#, fuzzy
+msgid "The following are noted in this file:"
+msgstr "નીચેના %d બિલ બાકી છે:"
+
+#: gnucash/gnome-utils/gnc-file.c:880
 #, c-format
 msgid "GnuCash could not obtain the lock for %s."
 msgstr "GnuCash %s માટે લોકને પ્રાપ્ત કરી શકાયું નથી."
 
-#: gnucash/gnome-utils/gnc-file.c:846
+#: gnucash/gnome-utils/gnc-file.c:882
 msgid ""
 "That database may be in use by another user, in which case you should not "
 "open the database. What would you like to do?"
@@ -7489,7 +7494,7 @@ msgstr ""
 "કદાચ ડેટાબેઝનો ઉપયોગ અન્ય વપરાશકાર દ્વારા કરવામાં આવી રહ્યો છે, જે કિસ્સામાં તમે ડેટાબેઝ "
 "ઓપન કરવો ન જોઇએ. તમે શું પસંદ કરશો?"
 
-#: gnucash/gnome-utils/gnc-file.c:849
+#: gnucash/gnome-utils/gnc-file.c:885
 #, fuzzy
 msgid ""
 "That database may be on a read-only file system, you may not have write "
@@ -7501,44 +7506,44 @@ msgstr ""
 "હોઇ શકે. જો તમે આગળ વધવા માગતા હોય તો તમે કોઇ ફેરફારોને સેવ કરી શકશો નહીં. તમે શું પસંદ "
 "કરશો?"
 
-#: gnucash/gnome-utils/gnc-file.c:872
+#: gnucash/gnome-utils/gnc-file.c:908
 #: gnucash/gtkbuilder/dialog-file-access.glade:98
 msgid "Open _Read-Only"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-file.c:875
+#: gnucash/gnome-utils/gnc-file.c:911
 #, fuzzy
 #| msgid "_Create New File"
 msgid "Create _New File"
 msgstr "_નવી ફાઈલ બનાવો"
 
-#: gnucash/gnome-utils/gnc-file.c:878
+#: gnucash/gnome-utils/gnc-file.c:914
 #, fuzzy
 msgid "Open _Anyway"
 msgstr "_ખોલો"
 
-#: gnucash/gnome-utils/gnc-file.c:881
+#: gnucash/gnome-utils/gnc-file.c:917
 #, fuzzy
 msgid "Open _Folder"
 msgstr "ખાતાધારક"
 
-#: gnucash/gnome-utils/gnc-file.c:887 gnucash/ui/gnc-main-window.ui:83
+#: gnucash/gnome-utils/gnc-file.c:923 gnucash/ui/gnc-main-window.ui:83
 msgid "_Quit"
 msgstr "_છોડી દો"
 
-#: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
+#: gnucash/gnome-utils/gnc-file.c:1009 gnucash/gnome-utils/gnc-file.c:1029
 msgid "Loading user data…"
 msgstr "વપરાશકર્તાના ડેટા લોડ થઈ રહ્યા છે…"
 
-#: gnucash/gnome-utils/gnc-file.c:1009
+#: gnucash/gnome-utils/gnc-file.c:1045
 msgid "Re-saving user data…"
 msgstr "વપરાશકર્તાના ડેટાને ફરી સેવ કરવામાં આવી રહ્યા છે…"
 
-#: gnucash/gnome-utils/gnc-file.c:1369
+#: gnucash/gnome-utils/gnc-file.c:1391
 msgid "Exporting file…"
 msgstr "ફાઈલ શોધવામાં આવી રહી છે…"
 
-#: gnucash/gnome-utils/gnc-file.c:1382
+#: gnucash/gnome-utils/gnc-file.c:1404
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -7549,21 +7554,21 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome-utils/gnc-file.c:1417
+#: gnucash/gnome-utils/gnc-file.c:1439
 #, fuzzy
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
 msgstr "એવું લાગે છે કે ડેટાબેઝ %s અસ્તિત્ત્વમાં નથી. શું તમે તેને બનાવવા માગો છો?"
 
-#: gnucash/gnome-utils/gnc-file.c:1712
+#: gnucash/gnome-utils/gnc-file.c:1734
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed?"
 msgstr "ફાઈલ %s થી પહેલા અસ્તિત્ત્વમાં છે. શું તમે ખરેખર આને દૂર કરીને લખવા માગો છો?"
 
-#: gnucash/gnome-utils/gnc-file.c:1720
+#: gnucash/gnome-utils/gnc-file.c:1742
 #: gnucash/gnome-utils/gnc-main-window.cpp:1214
 msgid "<unknown>"
 msgstr "(અજ્ઞાત)"
@@ -7698,28 +7703,28 @@ msgid ""
 "added."
 msgstr "પ્રદર્શન માટે ચલણ એન્ટ્રીની લઘુત્તમ સંખ્યા. (-1)"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5208
+#: gnucash/gnome-utils/gnc-main-window.cpp:5210
 #: gnucash/gnucash-core-app.cpp:252
 msgid "(user modifiable)"
 msgstr ""
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.cpp:5234
+#: gnucash/gnome-utils/gnc-main-window.cpp:5236
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5246
+#: gnucash/gnome-utils/gnc-main-window.cpp:5248
 #: gnucash/gnome-utils/gnc-splash.c:98
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5247
+#: gnucash/gnome-utils/gnc-main-window.cpp:5249
 #: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:269
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5255
+#: gnucash/gnome-utils/gnc-main-window.cpp:5257
 msgid "Accounting for personal and small business finance."
 msgstr ""
 
@@ -7727,11 +7732,11 @@ msgstr ""
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.cpp:5264
+#: gnucash/gnome-utils/gnc-main-window.cpp:5266
 msgid "translator-credits"
 msgstr "Ronak Shah <ronaks@cdac.in>, 2014"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5267
+#: gnucash/gnome-utils/gnc-main-window.cpp:5269
 msgid "Visit the GnuCash website."
 msgstr ""
 
@@ -7775,6 +7780,7 @@ msgid "Show Hidden Accounts"
 msgstr "છુપાયેલા ખાતાને પસંદ કરો"
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1033
+#: gnucash/gtkbuilder/dialog-account.glade:972
 msgid "Show accounts that have been marked hidden."
 msgstr "છુપાવેલા ચિહ્ન આપવામાં આવ્યા હોય તેવા ખાતાઓને પસંદ કરો."
 
@@ -7837,7 +7843,7 @@ msgstr "પ્રવર્તમાન ખાતાકીય અવધિની 
 msgid "End of previous accounting period"
 msgstr "પાછલી ખાતાકીય અવધિની સમાપ્ત"
 
-#: gnucash/gnome-utils/gnc-plugin-menu-additions.c:443
+#: gnucash/gnome-utils/gnc-plugin-menu-additions.c:440
 #: gnucash/report/report-core.scm:161
 msgid "_Custom"
 msgstr "_કસ્ટમ"
@@ -7868,11 +7874,11 @@ msgstr "લોડ થઈ રહ્યું છે…"
 msgid "never"
 msgstr "ક્યારેય નહીં"
 
-#: gnucash/gnome-utils/gnc-tree-model-account.c:760
+#: gnucash/gnome-utils/gnc-tree-model-account.c:761
 msgid "New top level account"
 msgstr "નવું ટોચનું સ્તરીય ખાતું"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:806
+#: gnucash/gnome-utils/gnc-tree-view-account.c:811
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:983
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:366
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:390
@@ -7886,12 +7892,12 @@ msgstr "નવું ટોચનું સ્તરીય ખાતું"
 msgid "Account Name"
 msgstr "ખાતાનું નામ"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:817
+#: gnucash/gnome-utils/gnc-tree-view-account.c:822
 #: gnucash/gtkbuilder/dialog-price.glade:580
 msgid "Commodity"
 msgstr "કોમોડિટી"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:823
+#: gnucash/gnome-utils/gnc-tree-view-account.c:828
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:60
 #: gnucash/report/reports/standard/account-summary.scm:114
 #: gnucash/report/reports/standard/account-summary.scm:378
@@ -7902,139 +7908,139 @@ msgstr "કોમોડિટી"
 msgid "Account Code"
 msgstr "ખાતાનો કોડ"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:835
+#: gnucash/gnome-utils/gnc-tree-view-account.c:840
 msgid "Last Num"
 msgstr "આખરી નંબર"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:841
+#: gnucash/gnome-utils/gnc-tree-view-account.c:846
 msgid "Present"
 msgstr "પ્રવર્તમાન"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:848
+#: gnucash/gnome-utils/gnc-tree-view-account.c:853
 msgid "Present (Report)"
 msgstr "પ્રવર્તમાન (અહેવાલ)"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:862
+#: gnucash/gnome-utils/gnc-tree-view-account.c:867
 msgid "Balance (Report)"
 msgstr "બેલેન્સ (અહેવાલ)"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:869
+#: gnucash/gnome-utils/gnc-tree-view-account.c:874
 msgid "Balance (Period)"
 msgstr "બેલેન્સ (અવધિ)"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:883
+#: gnucash/gnome-utils/gnc-tree-view-account.c:888
 msgid "Cleared (Report)"
 msgstr "માન્ય (અહેવાલ)"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:897
+#: gnucash/gnome-utils/gnc-tree-view-account.c:902
 msgid "Reconciled (Report)"
 msgstr "મેળવણી કરવામાં આવી છે (અહેવાલ)"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:904
+#: gnucash/gnome-utils/gnc-tree-view-account.c:909
 msgid "Last Reconcile Date"
 msgstr "આખરી મેળવણીની તારીખ"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:910
+#: gnucash/gnome-utils/gnc-tree-view-account.c:915
 msgid "Future Minimum"
 msgstr "ભવિષ્ય લઘુત્તમ"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:917
+#: gnucash/gnome-utils/gnc-tree-view-account.c:922
 msgid "Future Minimum (Report)"
 msgstr "ભવિષ્ય લઘુત્તમ (અહેવાલ)"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:931
+#: gnucash/gnome-utils/gnc-tree-view-account.c:936
 msgid "Total (Report)"
 msgstr "કુલ (અહેવાલ)"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:938
+#: gnucash/gnome-utils/gnc-tree-view-account.c:943
 msgid "Total (Period)"
 msgstr "કુલ (અવધિ)"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:947
+#: gnucash/gnome-utils/gnc-tree-view-account.c:952
 msgctxt "Column header for 'Color'"
 msgid "C"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:955
-#: gnucash/gnome-utils/gnc-tree-view-account.c:958
+#: gnucash/gnome-utils/gnc-tree-view-account.c:960
+#: gnucash/gnome-utils/gnc-tree-view-account.c:963
 #: gnucash/gtkbuilder/dialog-preferences.glade:816
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:60
 #, fuzzy
 msgid "Account Color"
 msgstr "ખાતાનો_રંગ:"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:962
+#: gnucash/gnome-utils/gnc-tree-view-account.c:967
 msgctxt "Column header for 'Balance Limit'"
 msgid "L"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:971
-#: gnucash/gnome-utils/gnc-tree-view-account.c:974
+#: gnucash/gnome-utils/gnc-tree-view-account.c:976
+#: gnucash/gnome-utils/gnc-tree-view-account.c:979
 #: gnucash/gtkbuilder/dialog-account.glade:1705
 #, fuzzy
 #| msgid "Balance"
 msgid "Balance Limit"
 msgstr "બેલેન્સ"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:984
+#: gnucash/gnome-utils/gnc-tree-view-account.c:989
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
 msgid "Tax Info"
 msgstr "વેરાની માહિતી"
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:998
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1003
 msgctxt "Column header for 'Hidden'"
 msgid "H"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:1006
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1011
 msgctxt "Column header for 'Placeholder'"
 msgid "P"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-tree-view-account.c:1014
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1019
 msgctxt "Column header for 'Opening Balance'"
 msgid "O"
 msgstr ""
 
 #. Translators: %s is a currency mnemonic.
-#: gnucash/gnome-utils/gnc-tree-view-account.c:1819
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1827
 #, c-format
 msgid "Present (%s)"
 msgstr "પ્રવર્તમાન (%s)"
 
 #. Translators: %s is a currency mnemonic.
-#: gnucash/gnome-utils/gnc-tree-view-account.c:1822
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1830
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:924
 #, c-format
 msgid "Balance (%s)"
 msgstr "બેલેન્સ (%s)"
 
 #. Translators: %s is a currency mnemonic.
-#: gnucash/gnome-utils/gnc-tree-view-account.c:1825
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1833
 #, c-format
 msgid "Cleared (%s)"
 msgstr "માન્ય (%s)"
 
 #. Translators: %s is a currency mnemonic.
-#: gnucash/gnome-utils/gnc-tree-view-account.c:1828
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1836
 #, c-format
 msgid "Reconciled (%s)"
 msgstr "મેળવણી કરવામાં આવી છે (%s)"
 
 #. Translators: %s is a currency mnemonic.
-#: gnucash/gnome-utils/gnc-tree-view-account.c:1831
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1839
 #, c-format
 msgid "Future Minimum (%s)"
 msgstr "ભવિષ્ય લઘુત્તમ (%s)"
 
 #. Translators: %s is a currency mnemonic.
-#: gnucash/gnome-utils/gnc-tree-view-account.c:1834
+#: gnucash/gnome-utils/gnc-tree-view-account.c:1842
 #, c-format
 msgid "Total (%s)"
 msgstr "કુલ (%s)"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome-utils/gnc-tree-view-account.c:2329
+#: gnucash/gnome-utils/gnc-tree-view-account.c:2337
 #, c-format
 msgid "Filter %s by..."
 msgstr "....દ્વારા %sને ફિલ્ટર કરો"
@@ -8202,7 +8208,7 @@ msgstr "સિક્યુરિટી"
 #: gnucash/report/reports/standard/register.scm:149
 #: gnucash/report/reports/standard/register.scm:378
 #: gnucash/report/trep-engine.scm:918 gnucash/report/trep-engine.scm:1023
-#: gnucash/report/trep-engine.scm:1223
+#: gnucash/report/trep-engine.scm:1243
 msgid "Price"
 msgstr "કિંમત"
 
@@ -8685,7 +8691,7 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:132
-#: libgnucash/engine/gnc-optiondb.cpp:1238
+#: libgnucash/engine/gnc-optiondb.cpp:1240
 msgid "The invoice report to be used for printing."
 msgstr ""
 
@@ -9994,7 +10000,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
-#: gnucash/gtkbuilder/dialog-preferences.glade:1445
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -10113,7 +10118,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:286
-#: gnucash/gtkbuilder/dialog-preferences.glade:2850
 #, fuzzy
 #| msgid "Show all transactions on one line. (Two in double line mode.)"
 msgid "Show all transactions on one line or in double line mode on two."
@@ -10136,7 +10140,6 @@ msgstr ""
 "દેખાડવા માટે ફક્ત વર્તમાન લેવડદેવડનો વિસ્તાર પણ કરે છે."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
-#: gnucash/gtkbuilder/dialog-preferences.glade:2869
 #, fuzzy
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
@@ -10989,23 +10992,26 @@ msgid "Number of rows for the Header"
 msgstr "નંબર હેડર"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:143
-#, fuzzy
-msgid "Comma Separated"
+#: gnucash/gtkbuilder/dialog-bi-import-gui.glade:234
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:234
+msgid "Comma separated"
 msgstr "કોમા અલગ કરવામાં આવ્યું"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:159
-#, fuzzy
-msgid "Semicolon Separated"
+#: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
+msgid "Semicolon separated"
 msgstr "સેમીકોલોન અલગ કરવામાં આવ્યું"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:175
-#, fuzzy
-msgid "Custom regular Expression"
+#: gnucash/gtkbuilder/dialog-bi-import-gui.glade:288
+#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:288
+msgid "Custom regular expression"
 msgstr "કસ્ટમ નિયમિત અભિવ્યક્તિ"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:191
 #, fuzzy
-msgid "Colon Separated"
+msgid "Colon separated"
 msgstr "સેમીકોલોન અલગ કરવામાં આવ્યું"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:217
@@ -12623,7 +12629,7 @@ msgstr ""
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4400
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4406
 msgid "Cash"
 msgstr "રોકડ"
 
@@ -13016,11 +13022,6 @@ msgstr "ખાતાનો પ્રકાર"
 msgid "Show _hidden accounts"
 msgstr "છુપાયેલા_ખાતાને દેખાડો"
 
-#: gnucash/gtkbuilder/dialog-account.glade:972
-#, fuzzy
-msgid "Show accounts which have the option \"Hidden\" checked."
-msgstr "છુપાવેલા ચિહ્ન આપવામાં આવ્યા હોય તેવા ખાતાઓને પસંદ કરો."
-
 #: gnucash/gtkbuilder/dialog-account.glade:986
 #, fuzzy
 msgid "Show _unused accounts"
@@ -13056,7 +13057,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-custom-report.glade:29
 #: gnucash/gtkbuilder/dialog-employee.glade:23
 #: gnucash/gtkbuilder/dialog-fincalc.glade:107
-#: gnucash/gtkbuilder/dialog-import.glade:1168
+#: gnucash/gtkbuilder/dialog-import.glade:1204
 #: gnucash/gtkbuilder/dialog-invoice.glade:776
 #: gnucash/gtkbuilder/dialog-job.glade:24
 #: gnucash/gtkbuilder/dialog-options.glade:21
@@ -13365,16 +13366,6 @@ msgstr "ચલણ CSV ડેટા આયાત કરો"
 msgid "2. Select import type"
 msgstr "2. આયાતનો પ્રકાર પસંદ કરો"
 
-#: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
-msgid "Semicolon separated"
-msgstr "સેમીકોલોન અલગ કરવામાં આવ્યું"
-
-#: gnucash/gtkbuilder/dialog-bi-import-gui.glade:234
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:234
-msgid "Comma separated"
-msgstr "કોમા અલગ કરવામાં આવ્યું"
-
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:252
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:252
 msgid "Semicolon separated with quotes"
@@ -13384,11 +13375,6 @@ msgstr "અવતરણ સાથે સેમી કોલોન અલગ ક�
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:270
 msgid "Comma separated with quotes"
 msgstr "અવતરણ સાથે કોમા અલગ કરવામાં આવ્યું"
-
-#: gnucash/gtkbuilder/dialog-bi-import-gui.glade:288
-#: gnucash/gtkbuilder/dialog-customer-import-gui.glade:288
-msgid "Custom regular expression"
-msgstr "કસ્ટમ નિયમિત અભિવ્યક્તિ"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:310
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:310
@@ -14483,47 +14469,47 @@ msgstr "લેવડદેવડનું વિવરણ પ્રિન્ટ 
 msgid "_Notes"
 msgstr "_નોટ્સ"
 
-#: gnucash/gtkbuilder/dialog-import.glade:1022
+#: gnucash/gtkbuilder/dialog-import.glade:1058
 #, fuzzy
 msgid ""
 "List of downloaded transactions (source split and matched information shown)"
 msgstr "ડાઉનલોડ કરવામાં આવેલી લેવડદેવડની યાદી (સ્રોત વિભાજન દર્શાવાયું)"
 
-#: gnucash/gtkbuilder/dialog-import.glade:1064
+#: gnucash/gtkbuilder/dialog-import.glade:1100
 #, fuzzy
 msgid "Show _Account column"
 msgstr "સોર્સ કોલમ દેખાડો"
 
-#: gnucash/gtkbuilder/dialog-import.glade:1080
+#: gnucash/gtkbuilder/dialog-import.glade:1116
 #, fuzzy
 #| msgid "Show the symbol column"
 msgid "Show _Memo column"
 msgstr "સંકેત કોલમ દેખાડો"
 
-#: gnucash/gtkbuilder/dialog-import.glade:1096
+#: gnucash/gtkbuilder/dialog-import.glade:1132
 #, fuzzy
 msgid "Show matched _information"
 msgstr "ચલણની સૂચના"
 
-#: gnucash/gtkbuilder/dialog-import.glade:1111
+#: gnucash/gtkbuilder/dialog-import.glade:1147
 #, fuzzy
 #| msgid "Spend"
 msgid "A_ppend"
 msgstr "ખર્ચ"
 
-#: gnucash/gtkbuilder/dialog-import.glade:1115
+#: gnucash/gtkbuilder/dialog-import.glade:1151
 msgid ""
 "When Updating and Clearing a matched transaction, append the imported "
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
 msgstr ""
 
-#: gnucash/gtkbuilder/dialog-import.glade:1127
+#: gnucash/gtkbuilder/dialog-import.glade:1163
 #, fuzzy
 msgid "_Reconcile after match"
 msgstr "મિલાન (ઓટો) મેળ"
 
-#: gnucash/gtkbuilder/dialog-import.glade:1150
+#: gnucash/gtkbuilder/dialog-import.glade:1186
 msgid "Generic import transaction matcher"
 msgstr "સામાન્ય આયાત મેચર લેવડદેવડ"
 
@@ -15165,6 +15151,16 @@ msgstr ""
 "જ્યારે તમે \"ફાઈલ\" મેનુમાંથી \"નવી ફાઈલ\" પસંદ કરો તો નવી ખાતાની યાદી વાતચીત રજૂ કરે "
 "છે"
 
+#: gnucash/gtkbuilder/dialog-preferences.glade:1445
+msgid ""
+"If selected, the default book option for new files is set so that the 'Num' "
+"cell on registers shows/updates the split 'action' field and the transaction "
+"'num' field is shown on the second line in double line view (and is not "
+"visible in single line mode). Otherwise, the default book option for new "
+"files is set so that the 'Num' cell on registers shows/updates the "
+"transaction 'num' field."
+msgstr ""
+
 #: gnucash/gtkbuilder/dialog-preferences.glade:1458
 msgid "Display \"_tip of the day\" dialog"
 msgstr "\"_દિવસની ટિપ \" વાતચીત દર્શાવો"
@@ -15603,9 +15599,24 @@ msgstr "<b>અન્ય ડિફોલ્ટ</b>"
 msgid "_Basic ledger"
 msgstr "_મૂળ લેજર"
 
+#: gnucash/gtkbuilder/dialog-preferences.glade:2850
+#, fuzzy
+#| msgid "Show all transactions on one line. (Two in double line mode.)"
+msgid "Show all transactions on one line or in double line view on two."
+msgstr "તમામ લેવડદેવડને એક લાઇનમાં દબાવો. (બે ડબલ લાઇન મોડમાં)"
+
 #: gnucash/gtkbuilder/dialog-preferences.glade:2863
 msgid "_Auto-split ledger"
 msgstr "_સ્વયંસંચાલિત સ્પ્લિટ લેજર"
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:2869
+#, fuzzy
+msgid ""
+"Automatically expand the current transaction to show all splits. All other "
+"transactions are shown on one line or in double line view on two."
+msgstr ""
+"તમામ વિભાજનોને દર્શાવવા માટે વર્તમાન લેવડદેવડને આપમેળે વિસતૃત્ત કરો. અન્ય તમામ લેવડદેવડને "
+"એક હરોળમાં દર્શાવવામાં આવે છે. (બે ડબલ લાઇન મોડમાં)"
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/gtkbuilder/dialog-preferences.glade:2882
@@ -15618,15 +15629,19 @@ msgid "Number of _transactions"
 msgstr "લેવડદેવડની_સંખ્યા"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2937
-msgid "_Double line mode"
+#, fuzzy
+#| msgid "_Double line mode"
+msgid "_Double line view"
 msgstr "_ડબલ લાઇન મોડ"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2943
+#: gnucash/ui/gnc-embedded-register-window.ui:83
+#: gnucash/ui/gnc-plugin-page-register.ui:99
 #, fuzzy
 msgid ""
-"Show two lines of information for each transaction instead of one. Does not "
-"affect expanded transactions."
-msgstr "દરેક લેવડદેવડ માટે એકને સ્થાને જાણકારીને બેમાં દર્શાવો."
+"Show a second line with Action, Notes, and Linked Document fields for each "
+"transaction."
+msgstr "દરેક લેવડદેવડ માટે જાણકારીની બે લાઇન દેખાડો"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
@@ -18505,7 +18520,7 @@ msgid "Unspecified"
 msgstr "નિર્દેશિત નથી"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:478
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4399
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4405
 msgid "Bank"
 msgstr "બેન્ક"
 
@@ -19115,7 +19130,7 @@ msgid "File exported successfully!\n"
 msgstr ""
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:134
-#: gnucash/import-export/import-main-matcher.c:1814
+#: gnucash/import-export/import-main-matcher.c:1872
 #: gnucash/report/reports/standard/register.scm:217
 #: libgnucash/engine/Split.c:1603 libgnucash/engine/Split.c:1620
 msgid "-- Split Transaction --"
@@ -19817,7 +19832,7 @@ msgstr ""
 msgid "(Full account ID: "
 msgstr "(પૂર્ણ ખાતા ID: "
 
-#: gnucash/import-export/import-commodity-matcher.c:113
+#: gnucash/import-export/import-commodity-matcher.c:92
 msgid ""
 "Please select a commodity to match the following exchange specific code. "
 "Please note that the exchange code of the commodity you select will be "
@@ -19847,134 +19862,130 @@ msgstr "y/d/m"
 msgid "No new transactions were found in this import."
 msgstr "વર્તમાન લેવડદેવડ સંતુલિત નથી."
 
-#: gnucash/import-export/import-main-matcher.c:775
+#: gnucash/import-export/import-main-matcher.c:792
 msgid "Destination account for the auto-balance split."
 msgstr "ઓટો બેલેન્સ વિભાજન માટે લક્ષ્ય ખાતું"
 
-#: gnucash/import-export/import-main-matcher.c:937
-#: gnucash/report/html-utilities.scm:309
-#: gnucash/report/reports/standard/balsheet-pnl.scm:143
-#: gnucash/report/reports/standard/new-owner-report.scm:924
-#, fuzzy
-msgid "Disabled"
-msgstr "સક્ષમ"
+#: gnucash/import-export/import-main-matcher.c:979
+msgid "Click Edit to modify"
+msgstr ""
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.c:1331
+#: gnucash/import-export/import-main-matcher.c:1389
 #, fuzzy
 #| msgid "_Select transfer account"
 msgid "_Assign transfer account"
 msgstr "_ટ્રાન્સફર ખાતાને પસંદ કરો"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.c:1341
+#: gnucash/import-export/import-main-matcher.c:1399
 #, fuzzy
 #| msgid "Exchange rate"
 msgid "Assign e_xchange rate"
 msgstr "વિનિમય દર"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.c:1349
+#: gnucash/import-export/import-main-matcher.c:1407
 #, fuzzy
 msgid "_Edit description, notes, or memo"
 msgstr "વર્ણન"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.c:1358
+#: gnucash/import-export/import-main-matcher.c:1416
 #, fuzzy
 #| msgid "Reset defaults"
 msgid "_Reset all edits"
 msgstr "ડિફોલ્ટને રિસેટ કરો"
 
-#: gnucash/import-export/import-main-matcher.c:1512
+#: gnucash/import-export/import-main-matcher.c:1570
 #, fuzzy
 #| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.c:1516
+#: gnucash/import-export/import-main-matcher.c:1574
 #, fuzzy
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "U+R"
 
-#: gnucash/import-export/import-main-matcher.c:1520
+#: gnucash/import-export/import-main-matcher.c:1578
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.c:1527
+#: gnucash/import-export/import-main-matcher.c:1585
 msgid "Info"
 msgstr "ઇન્ફો"
 
-#: gnucash/import-export/import-main-matcher.c:1534
+#: gnucash/import-export/import-main-matcher.c:1592
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 #, fuzzy
 msgid "Additional Comments"
 msgstr "કાર્ડમાં વધારાનું:"
 
-#: gnucash/import-export/import-main-matcher.c:1933
+#: gnucash/import-export/import-main-matcher.c:1991
 msgid "New, already balanced"
 msgstr "નવું, પહેલેથી સંતુલિત"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.c:1955
+#: gnucash/import-export/import-main-matcher.c:2013
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "નવું, ટ્રાન્સફર %s to (મેન્યુઅલ) \"%s\""
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.c:1963
+#: gnucash/import-export/import-main-matcher.c:2021
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "નવું, ટ્રાન્સફર %s to (ઓટો) \"%s\""
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1976
+#: gnucash/import-export/import-main-matcher.c:2034
 #, fuzzy, c-format
 #| msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr "નવું, UNBALANCED (%sને ટ્રાન્સફર કરવા માટે ખાતાની જરૂર છે)!"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.c:1992
+#: gnucash/import-export/import-main-matcher.c:2050
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "નવું, UNBALANCED (%sને ટ્રાન્સફર કરવા માટે ખાતાની જરૂર છે)!"
 
-#: gnucash/import-export/import-main-matcher.c:2010
+#: gnucash/import-export/import-main-matcher.c:2068
 #, fuzzy, c-format
 #| msgid "Reconcile (manual) match"
 msgid "Reconcile (manual) match to %s"
 msgstr "મિલાન (મેન્યુઅલ) મેળ"
 
-#: gnucash/import-export/import-main-matcher.c:2015
+#: gnucash/import-export/import-main-matcher.c:2073
 #, fuzzy, c-format
 #| msgid "Reconcile (auto) match"
 msgid "Reconcile (auto) match to %s"
 msgstr "મિલાન (ઓટો) મેળ"
 
-#: gnucash/import-export/import-main-matcher.c:2024
-#: gnucash/import-export/import-main-matcher.c:2053
+#: gnucash/import-export/import-main-matcher.c:2082
+#: gnucash/import-export/import-main-matcher.c:2111
 msgid "Match missing!"
 msgstr "મેળ ઉપલબ્ધ નથી"
 
-#: gnucash/import-export/import-main-matcher.c:2039
+#: gnucash/import-export/import-main-matcher.c:2097
 #, fuzzy, c-format
 #| msgid "Update and reconcile (manual) match"
 msgid "Update and reconcile (manual) match to %s"
 msgstr "મેળને અપડેટ કરો અને મિલાન કરો (મેન્યુઅલ)"
 
-#: gnucash/import-export/import-main-matcher.c:2044
+#: gnucash/import-export/import-main-matcher.c:2102
 #, fuzzy, c-format
 #| msgid "Update and reconcile (auto) match"
 msgid "Update and reconcile (auto) match to %s"
 msgstr "મેળને અપડેટ કરો અને મિલાન કરો (ઓટો)"
 
-#: gnucash/import-export/import-main-matcher.c:2061
+#: gnucash/import-export/import-main-matcher.c:2119
 msgid "Do not import (no action selected)"
 msgstr "આયાત ન કરો (કોઇ ગતિવિધિ પસંદ ન કરાઇ)"
 
@@ -20329,7 +20340,7 @@ msgstr "મૂડી પ્રાપ્તિ (ટૂંકુ)"
 #: gnucash/report/reports/standard/balance-sheet.scm:468
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1064
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:692
-#: libgnucash/app-utils/gnc-ui-util.c:654 libgnucash/engine/Account.cpp:4409
+#: libgnucash/app-utils/gnc-ui-util.c:654 libgnucash/engine/Account.cpp:4415
 msgid "Equity"
 msgstr "હિસ્સો"
 
@@ -20760,8 +20771,8 @@ msgstr "કેવી રીતે વળતર"
 #: gnucash/report/reports/standard/invoice.scm:95
 #: gnucash/report/reports/standard/receipt.scm:54
 #: gnucash/report/reports/standard/receipt.scm:118
-#: gnucash/report/reports/standard/taxinvoice.scm:103
-#: gnucash/report/reports/standard/taxinvoice.scm:184
+#: gnucash/report/reports/standard/taxinvoice.scm:102
+#: gnucash/report/reports/standard/taxinvoice.scm:183
 msgid "Unit Price"
 msgstr "એકમદીઠ મૂલ્ય"
 
@@ -21211,7 +21222,7 @@ msgstr "નમુંનોઃ એક લેવડદેવડનું વર્
 #: gnucash/register/ledger-core/split-register-model.c:339
 #: gnucash/report/reports/standard/new-owner-report.scm:209
 #: gnucash/report/reports/standard/new-owner-report.scm:436
-#: gnucash/report/trep-engine.scm:1219 gnucash/report/trep-engine.scm:1220
+#: gnucash/report/trep-engine.scm:1239 gnucash/report/trep-engine.scm:1240
 msgctxt "Column header for 'Document Link'"
 msgid "L"
 msgstr ""
@@ -21611,9 +21622,16 @@ msgid "No budgets exist. You must create at least one budget."
 msgstr "કોઇ બજેટ ઉપલબ્ધ નથી. તમારે ઓછામાં ઓછું એક બજેટ બનાવવું પડશે."
 
 #: gnucash/report/html-utilities.scm:293
-#: gnucash/ui/gnc-plugin-page-report.ui:211
+#: gnucash/ui/gnc-plugin-page-report.ui:242
 msgid "Edit report options"
 msgstr "અહેવાલના વિકલ્પોને સંપાદિત કરો"
+
+#: gnucash/report/html-utilities.scm:309
+#: gnucash/report/reports/standard/balsheet-pnl.scm:143
+#: gnucash/report/reports/standard/new-owner-report.scm:924
+#, fuzzy
+msgid "Disabled"
+msgstr "સક્ષમ"
 
 #: gnucash/report/html-utilities.scm:361
 msgid "This report requires you to specify certain report options."
@@ -21846,6 +21864,8 @@ msgstr "મૂળ ખાતામાં કોઇ પણ બેલેન્સ�
 
 #: gnucash/report/options-utilities.scm:217
 #: gnucash/report/reports/standard/account-summary.scm:112
+#: gnucash/report/trep-engine.scm:921 gnucash/report/trep-engine.scm:1354
+#: gnucash/report/trep-engine.scm:1382
 msgid "Account Balance"
 msgstr "ખાતા બેલેન્સ"
 
@@ -21938,7 +21958,7 @@ msgstr "અનેક કોલમોમાં પ્રદર્શન"
 #: gnucash/report/reports/standard/register.scm:390
 #: gnucash/report/reports/standard/register.scm:394
 #: gnucash/report/reports/standard/register.scm:398
-#: gnucash/report/reports/standard/taxinvoice.scm:71
+#: gnucash/report/reports/standard/taxinvoice.scm:70
 msgid "Display"
 msgstr "ડિસ્પ્લે"
 
@@ -22139,7 +22159,7 @@ msgstr "બનાવવા માટે ગ્રાફનો પ્રકાર
 
 #: gnucash/report/reports/example/average-balance.scm:116
 #: gnucash/report/reports/example/average-balance.scm:136
-#: gnucash/report/trep-engine.scm:1882 libgnucash/engine/policy.c:58
+#: gnucash/report/trep-engine.scm:1942 libgnucash/engine/policy.c:58
 msgid "Average"
 msgstr "સરેરાશ"
 
@@ -22255,7 +22275,7 @@ msgstr ""
 #: gnucash/report/reports/standard/equity-statement.scm:60
 #: gnucash/report/reports/standard/income-statement.scm:49
 #: gnucash/report/reports/standard/receipt.scm:43
-#: gnucash/report/reports/standard/taxinvoice.scm:94
+#: gnucash/report/reports/standard/taxinvoice.scm:93
 #: gnucash/report/reports/standard/trial-balance.scm:62
 msgid "Report Title"
 msgstr "અહેવાલ શીર્ષક"
@@ -23742,7 +23762,7 @@ msgstr "CSS ફોન્ટ આકાર ફોર્મેટમાં ફો�
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:169
 #: gnucash/report/reports/standard/receipt.scm:44
-#: gnucash/report/reports/standard/taxinvoice.scm:95
+#: gnucash/report/reports/standard/taxinvoice.scm:94
 msgid "Template file"
 msgstr "ટેમ્પલેટ ફાઈલ"
 
@@ -23758,7 +23778,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:172
 #: gnucash/report/reports/standard/receipt.scm:45
-#: gnucash/report/reports/standard/taxinvoice.scm:96
+#: gnucash/report/reports/standard/taxinvoice.scm:95
 msgid "CSS stylesheet file"
 msgstr "CSS સ્ટાઇલ શીટ ફાઈલ"
 
@@ -23776,12 +23796,12 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-eg.scm:175
 #: gnucash/report/reports/standard/invoice.scm:294
 #: gnucash/report/reports/standard/receipt.scm:64
-#: gnucash/report/reports/standard/taxinvoice.scm:113
+#: gnucash/report/reports/standard/taxinvoice.scm:112
 msgid "Extra Notes"
 msgstr "વધારાની નોંધ"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:176
-#: gnucash/report/reports/standard/taxinvoice.scm:222
+#: gnucash/report/reports/standard/taxinvoice.scm:221
 #, fuzzy
 msgid "Notes added at end of invoice -- may contain HTML markup."
 msgstr "ચલણના અંતમાં જોડવામાં આવેલી ટિપ્પણીઓ- તેમાં HTML માર્ક અપ સામેલ થઇ શકે છે."
@@ -23983,7 +24003,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:437
 #: gnucash/report/reports/standard/balsheet-pnl.scm:595
-#: gnucash/report/trep-engine.scm:1542
+#: gnucash/report/trep-engine.scm:1602
 msgid "Total For "
 msgstr "ના માટે સરવાળો "
 
@@ -23993,12 +24013,12 @@ msgid "missing"
 msgstr "કમિશન"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1057
-#: libgnucash/engine/Account.cpp:4401
+#: libgnucash/engine/Account.cpp:4407
 msgid "Asset"
 msgstr "સંપત્તિ"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1060
-#: libgnucash/engine/Account.cpp:4403
+#: libgnucash/engine/Account.cpp:4409
 msgid "Liability"
 msgstr "જવાબદારી"
 
@@ -24028,7 +24048,7 @@ msgstr "%s to %s"
 #: gnucash/report/reports/standard/customer-summary.scm:286
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:401
-#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4408
+#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4414
 #: libgnucash/engine/gncInvoice.c:1099
 msgid "Expense"
 msgstr "ખર્ચ"
@@ -24356,37 +24376,43 @@ msgstr "તેના કારણે અહેવાલને એક ધોર�
 msgid "Reporting range end period cannot be less than start period."
 msgstr "રિપોર્ટિગ સીમા સમાપ્તિ, સમયગાળાની શરૂઆતના ગાળાથી ઓછું ન હોઇ શકે."
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:471
+#: gnucash/report/reports/standard/budget-income-statement.scm:410
+#, fuzzy
+#| msgid "Reporting range end period cannot be less than start period."
+msgid "Reporting range end period cannot exceed number of periods in budget"
+msgstr "રિપોર્ટિગ સીમા સમાપ્તિ, સમયગાળાની શરૂઆતના ગાળાથી ઓછું ન હોઇ શકે."
+
+#: gnucash/report/reports/standard/budget-income-statement.scm:482
 #: gnucash/report/reports/standard/income-statement.scm:461
 msgid "Revenues"
 msgstr "નફો"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:474
+#: gnucash/report/reports/standard/budget-income-statement.scm:485
 #: gnucash/report/reports/standard/income-statement.scm:464
 msgid "Total Revenue"
 msgstr "કુલ નફો"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:484
+#: gnucash/report/reports/standard/budget-income-statement.scm:495
 #: gnucash/report/reports/standard/income-statement.scm:472
 msgid "Total Expenses"
 msgstr "કુલ ખર્ચ"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:492
+#: gnucash/report/reports/standard/budget-income-statement.scm:503
 #, scheme-format
 msgid "for Budget ~a"
 msgstr "બજેટ ~a માટે"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:494
+#: gnucash/report/reports/standard/budget-income-statement.scm:505
 #, scheme-format
 msgid "for Budget ~a Period ~d"
 msgstr "બજેટ ~a માટે અવધિ ~d"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:497
+#: gnucash/report/reports/standard/budget-income-statement.scm:508
 #, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
 msgstr "બજેટ ~a માટે અવધિ ~d - ~d"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:525
+#: gnucash/report/reports/standard/budget-income-statement.scm:536
 #: gnucash/report/reports/standard/equity-statement.scm:434
 #: gnucash/report/reports/standard/income-statement.scm:497
 #: gnucash/report/reports/standard/income-statement.scm:515
@@ -24394,7 +24420,7 @@ msgstr "બજેટ ~a માટે અવધિ ~d - ~d"
 msgid "Net income"
 msgstr "શુદ્ધ આવક"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:526
+#: gnucash/report/reports/standard/budget-income-statement.scm:537
 #: gnucash/report/reports/standard/equity-statement.scm:435
 #: gnucash/report/reports/standard/income-statement.scm:498
 #: gnucash/report/reports/standard/income-statement.scm:516
@@ -24402,11 +24428,11 @@ msgstr "શુદ્ધ આવક"
 msgid "Net loss"
 msgstr "શુદ્ધ નુક્શાન"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:566
+#: gnucash/report/reports/standard/budget-income-statement.scm:577
 msgid "Budget Income Statement"
 msgstr "બજેટ આવકનું નિવેદન \t"
 
-#: gnucash/report/reports/standard/budget-income-statement.scm:567
+#: gnucash/report/reports/standard/budget-income-statement.scm:578
 msgid "Budget Profit & Loss"
 msgstr "બજેટ લાભ અને નુક્શાન"
 
@@ -24746,7 +24772,7 @@ msgstr "બેંલેંસ ~a થી ~a"
 #: gnucash/report/reports/standard/category-barchart.scm:654
 #: gnucash/report/reports/standard/category-barchart.scm:674
 #: gnucash/report/reports/standard/investment-lots.scm:132
-#: gnucash/report/trep-engine.scm:1611 gnucash/report/trep-engine.scm:1867
+#: gnucash/report/trep-engine.scm:1671 gnucash/report/trep-engine.scm:1927
 msgid "Grand Total"
 msgstr "કુલ સરવાળો"
 
@@ -24965,8 +24991,7 @@ msgstr "એક્શન"
 #: gnucash/report/reports/standard/general-ledger.scm:82
 #: gnucash/report/reports/standard/general-ledger.scm:102
 #: gnucash/report/reports/standard/register.scm:394
-#: gnucash/report/trep-engine.scm:921 gnucash/report/trep-engine.scm:1036
-#: gnucash/report/trep-engine.scm:1337
+#: gnucash/report/trep-engine.scm:1351 gnucash/report/trep-engine.scm:1379
 msgid "Running Balance"
 msgstr "ચાલુ બેલેન્સ"
 
@@ -24989,8 +25014,8 @@ msgid "Sorting"
 msgstr "સોર્ટિંગ"
 
 #: gnucash/report/reports/standard/general-ledger.scm:69
-#: gnucash/report/trep-engine.scm:926 gnucash/report/trep-engine.scm:1139
-#: gnucash/report/trep-engine.scm:1148
+#: gnucash/report/trep-engine.scm:926 gnucash/report/trep-engine.scm:1159
+#: gnucash/report/trep-engine.scm:1168
 #, fuzzy
 msgid "Trans Number"
 msgstr "ટેક્સ ક્રમાંક"
@@ -25290,7 +25315,7 @@ msgid ""
 msgstr "ટ્રેડિંગ ખાતાના કુલ બેલેન્સને નિર્દેશિત કરવાવાળી લાઈનને સમાવિષ્ટ કરવી કે ન કરવી"
 
 #: gnucash/report/reports/standard/income-statement.scm:477
-#: libgnucash/engine/Account.cpp:4413 libgnucash/engine/Scrub.c:496
+#: libgnucash/engine/Account.cpp:4419 libgnucash/engine/Scrub.c:496
 msgid "Trading"
 msgstr "ટ્રેડિંગ"
 
@@ -25844,8 +25869,8 @@ msgstr "ખાતાની ટિપ્પણી"
 #: gnucash/report/reports/standard/invoice.scm:218
 #: gnucash/report/reports/standard/receipt.scm:59
 #: gnucash/report/reports/standard/receipt.scm:128
-#: gnucash/report/reports/standard/taxinvoice.scm:108
-#: gnucash/report/reports/standard/taxinvoice.scm:194
+#: gnucash/report/reports/standard/taxinvoice.scm:107
+#: gnucash/report/reports/standard/taxinvoice.scm:193
 msgid "Tax Amount"
 msgstr "કર રકમ"
 
@@ -25933,7 +25958,7 @@ msgstr "કોલમોને દર્શાવો"
 
 #: gnucash/report/reports/standard/invoice.scm:191
 #: gnucash/report/reports/standard/register.scm:347
-#: gnucash/report/reports/standard/taxinvoice.scm:125
+#: gnucash/report/reports/standard/taxinvoice.scm:124
 #: gnucash/report/trep-engine.scm:902
 msgid "Display the date?"
 msgstr "તારીખ દર્શાવવી છે?"
@@ -26107,7 +26132,7 @@ msgid "Extra notes to put on the invoice."
 msgstr "ચલણ પર લખવા માટે વધારાની ટિપ્પણીઓ"
 
 #: gnucash/report/reports/standard/invoice.scm:296
-#: gnucash/report/reports/standard/taxinvoice.scm:223
+#: gnucash/report/reports/standard/taxinvoice.scm:222
 #, fuzzy
 msgid "Thank you for your patronage!"
 msgstr "આપની સહાયતા બદલ આભાર"
@@ -26152,24 +26177,24 @@ msgstr "T"
 #: gnucash/report/reports/standard/invoice.scm:484
 #: gnucash/report/reports/standard/receipt.scm:57
 #: gnucash/report/reports/standard/receipt.scm:124
-#: gnucash/report/reports/standard/taxinvoice.scm:106
-#: gnucash/report/reports/standard/taxinvoice.scm:190
+#: gnucash/report/reports/standard/taxinvoice.scm:105
+#: gnucash/report/reports/standard/taxinvoice.scm:189
 msgid "Net Price"
 msgstr "ચોખ્ખું મૂલ્ય"
 
 #: gnucash/report/reports/standard/invoice.scm:500
 #: gnucash/report/reports/standard/receipt.scm:60
 #: gnucash/report/reports/standard/receipt.scm:130
-#: gnucash/report/reports/standard/taxinvoice.scm:109
-#: gnucash/report/reports/standard/taxinvoice.scm:196
+#: gnucash/report/reports/standard/taxinvoice.scm:108
+#: gnucash/report/reports/standard/taxinvoice.scm:195
 msgid "Total Price"
 msgstr "કુલ મૂલ્ય"
 
 #: gnucash/report/reports/standard/invoice.scm:520
 #: gnucash/report/reports/standard/receipt.scm:62
 #: gnucash/report/reports/standard/receipt.scm:134
-#: gnucash/report/reports/standard/taxinvoice.scm:111
-#: gnucash/report/reports/standard/taxinvoice.scm:200
+#: gnucash/report/reports/standard/taxinvoice.scm:110
+#: gnucash/report/reports/standard/taxinvoice.scm:199
 msgid "Amount Due"
 msgstr "બાકી નીકળતી રકમ"
 
@@ -26189,13 +26214,13 @@ msgid "Terms:"
 msgstr "શરતો:"
 
 #: gnucash/report/reports/standard/invoice.scm:590
-#: gnucash/report/reports/standard/taxinvoice.scm:215
+#: gnucash/report/reports/standard/taxinvoice.scm:214
 #, fuzzy
 msgid "Job number:"
 msgstr "જોબ ક્રમાંક"
 
 #: gnucash/report/reports/standard/invoice.scm:595
-#: gnucash/report/reports/standard/taxinvoice.scm:218
+#: gnucash/report/reports/standard/taxinvoice.scm:217
 #, fuzzy
 msgid "Job name:"
 msgstr "કામગીરીનું નામ"
@@ -26657,7 +26682,6 @@ msgstr "એન્ટ્રીના વળતરને દર્શાવો"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:911
 #: gnucash/report/reports/standard/register.scm:395
-#: gnucash/report/trep-engine.scm:921
 #, fuzzy
 msgid "Display a running balance?"
 msgstr "એક ચાલુ બેલેન્સ દર્શાવો"
@@ -26854,22 +26878,22 @@ msgid "Price Scatterplot"
 msgstr "મૂલ્ય સ્કેટરપ્લોટ"
 
 #: gnucash/report/reports/standard/receipt.scm:36
-#: gnucash/report/reports/standard/taxinvoice.scm:68
+#: gnucash/report/reports/standard/taxinvoice.scm:67
 msgid "Headings 1"
 msgstr "શીર્ષક 1"
 
 #: gnucash/report/reports/standard/receipt.scm:37
-#: gnucash/report/reports/standard/taxinvoice.scm:69
+#: gnucash/report/reports/standard/taxinvoice.scm:68
 msgid "Headings 2"
 msgstr "શીર્ષક 2"
 
 #: gnucash/report/reports/standard/receipt.scm:46
-#: gnucash/report/reports/standard/taxinvoice.scm:97
+#: gnucash/report/reports/standard/taxinvoice.scm:96
 msgid "Heading font"
 msgstr "શીર્ષકના ફોન્ટ"
 
 #: gnucash/report/reports/standard/receipt.scm:47
-#: gnucash/report/reports/standard/taxinvoice.scm:98
+#: gnucash/report/reports/standard/taxinvoice.scm:97
 msgid "Text font"
 msgstr "લખાણના ફોન્ટ"
 
@@ -26895,41 +26919,41 @@ msgstr "લોગોની પહોળાઇ"
 
 #: gnucash/report/reports/standard/receipt.scm:53
 #: gnucash/report/reports/standard/receipt.scm:116
-#: gnucash/report/reports/standard/taxinvoice.scm:102
-#: gnucash/report/reports/standard/taxinvoice.scm:182
+#: gnucash/report/reports/standard/taxinvoice.scm:101
+#: gnucash/report/reports/standard/taxinvoice.scm:181
 msgid "Qty"
 msgstr "પ્રમાણ"
 
 #: gnucash/report/reports/standard/receipt.scm:55
 #: gnucash/report/reports/standard/receipt.scm:120
-#: gnucash/report/reports/standard/taxinvoice.scm:104
-#: gnucash/report/reports/standard/taxinvoice.scm:186
+#: gnucash/report/reports/standard/taxinvoice.scm:103
+#: gnucash/report/reports/standard/taxinvoice.scm:185
 msgid "Discount Rate"
 msgstr "રાહત દર"
 
 #: gnucash/report/reports/standard/receipt.scm:56
 #: gnucash/report/reports/standard/receipt.scm:122
-#: gnucash/report/reports/standard/taxinvoice.scm:105
-#: gnucash/report/reports/standard/taxinvoice.scm:188
+#: gnucash/report/reports/standard/taxinvoice.scm:104
+#: gnucash/report/reports/standard/taxinvoice.scm:187
 msgid "Discount Amount"
 msgstr "રાહતની રકમ"
 
 #: gnucash/report/reports/standard/receipt.scm:58
 #: gnucash/report/reports/standard/receipt.scm:126
-#: gnucash/report/reports/standard/taxinvoice.scm:107
-#: gnucash/report/reports/standard/taxinvoice.scm:192
+#: gnucash/report/reports/standard/taxinvoice.scm:106
+#: gnucash/report/reports/standard/taxinvoice.scm:191
 msgid "Tax Rate"
 msgstr "કરનો દર"
 
 #: gnucash/report/reports/standard/receipt.scm:61
 #: gnucash/report/reports/standard/receipt.scm:132
-#: gnucash/report/reports/standard/taxinvoice.scm:110
-#: gnucash/report/reports/standard/taxinvoice.scm:198
+#: gnucash/report/reports/standard/taxinvoice.scm:109
+#: gnucash/report/reports/standard/taxinvoice.scm:197
 msgid "Sub-total"
 msgstr "પૂર્ણ-યોગ"
 
 #: gnucash/report/reports/standard/receipt.scm:63
-#: gnucash/report/reports/standard/taxinvoice.scm:112
+#: gnucash/report/reports/standard/taxinvoice.scm:111
 msgid "Payment received text"
 msgstr "ચુકવણી પ્રાપ્તિ લખાણ"
 
@@ -26939,7 +26963,7 @@ msgid "Today date format"
 msgstr "આજની તારીખનું ફોર્મેટ"
 
 #: gnucash/report/reports/standard/receipt.scm:77
-#: gnucash/report/reports/standard/taxinvoice.scm:150
+#: gnucash/report/reports/standard/taxinvoice.scm:149
 #, fuzzy
 msgid ""
 "The file name of the eguile template part of this report. This file should "
@@ -26950,7 +26974,7 @@ msgstr ""
 "અથવા GnuCash ઇન્સ્ટોલેશન ડિરેક્ટરીમાં તેના ઉચિત સ્થાને ક્યાંક હોવી જોઇએ."
 
 #: gnucash/report/reports/standard/receipt.scm:81
-#: gnucash/report/reports/standard/taxinvoice.scm:154
+#: gnucash/report/reports/standard/taxinvoice.scm:153
 #, fuzzy
 msgid ""
 "The file name of the CSS stylesheet to use with this report. This file "
@@ -26962,13 +26986,13 @@ msgstr ""
 "ક્યાંક હોવી જોઇએ."
 
 #: gnucash/report/reports/standard/receipt.scm:85
-#: gnucash/report/reports/standard/taxinvoice.scm:158
+#: gnucash/report/reports/standard/taxinvoice.scm:157
 #, fuzzy
 msgid "Font to use for the main heading."
 msgstr "મુખ્ય શીર્ષક માટે ઉપયોગમાં લેવાનો ફોન્ટ"
 
 #: gnucash/report/reports/standard/receipt.scm:88
-#: gnucash/report/reports/standard/taxinvoice.scm:161
+#: gnucash/report/reports/standard/taxinvoice.scm:160
 #, fuzzy
 msgid "Font to use for everything else."
 msgstr "અન્ય દરેક ચીજો માટે ઉપયોગમાં લેવાનો ફોન્ટ"
@@ -27015,7 +27039,7 @@ msgid "%l:%M %P, %e %B %Y"
 msgstr "%B %#d, %Y"
 
 #: gnucash/report/reports/standard/receipt.scm:137
-#: gnucash/report/reports/standard/taxinvoice.scm:203
+#: gnucash/report/reports/standard/taxinvoice.scm:202
 #, fuzzy
 msgid "Payment received, thank you!"
 msgstr "ચુકવણી પ્રાપ્ત થઇ, આભાર"
@@ -27158,172 +27182,172 @@ msgstr "ચોખ્ખો ફેરફાર"
 msgid "Value Change"
 msgstr "મૂલ્ય ફેરફાર"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:54
+#: gnucash/report/reports/standard/taxinvoice.scm:53
 msgid "n/a"
 msgstr "n/a"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:72
+#: gnucash/report/reports/standard/taxinvoice.scm:71
 #, fuzzy
 msgid "Elements"
 msgstr "રોકાણો"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:74
+#: gnucash/report/reports/standard/taxinvoice.scm:73
 #, fuzzy
 msgid "column: Date"
 msgstr "નિશ્વિત તારીખ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:75
+#: gnucash/report/reports/standard/taxinvoice.scm:74
 #, fuzzy
 msgid "column: Tax Rate"
 msgstr "કરનો દર"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:76
+#: gnucash/report/reports/standard/taxinvoice.scm:75
 msgid "column: Units"
 msgstr ""
 
-#: gnucash/report/reports/standard/taxinvoice.scm:77
+#: gnucash/report/reports/standard/taxinvoice.scm:76
 #, fuzzy
 msgid "row: Address"
 msgstr "_સરનામું"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:78
+#: gnucash/report/reports/standard/taxinvoice.scm:77
 #, fuzzy
 msgid "row: Contact"
 msgstr "સંપર્ક"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:79
+#: gnucash/report/reports/standard/taxinvoice.scm:78
 #, fuzzy
 msgid "row: Invoice Number"
 msgstr "ચલણ સંખ્યા"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:80
+#: gnucash/report/reports/standard/taxinvoice.scm:79
 #, fuzzy
 msgid "row: Company Name"
 msgstr "કંપનીનું નામ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:81
+#: gnucash/report/reports/standard/taxinvoice.scm:80
 #, fuzzy
 msgid "Invoice number text"
 msgstr "ચલણ સંખ્યા"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:82
+#: gnucash/report/reports/standard/taxinvoice.scm:81
 msgid "To text"
 msgstr ""
 
-#: gnucash/report/reports/standard/taxinvoice.scm:83
+#: gnucash/report/reports/standard/taxinvoice.scm:82
 msgid "Ref text"
 msgstr ""
 
-#: gnucash/report/reports/standard/taxinvoice.scm:84
+#: gnucash/report/reports/standard/taxinvoice.scm:83
 #, fuzzy
 msgid "Job Name text"
 msgstr "કામગીરીનું નામ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:85
+#: gnucash/report/reports/standard/taxinvoice.scm:84
 #, fuzzy
 msgid "Job Number text"
 msgstr "કાર્યનો ક્રમ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:86
+#: gnucash/report/reports/standard/taxinvoice.scm:85
 #, fuzzy
 msgid "Show Job name"
 msgstr "કામગીરીનું નામ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:87
+#: gnucash/report/reports/standard/taxinvoice.scm:86
 #, fuzzy
 msgid "Show Job number"
 msgstr "જોબ ક્રમાંક"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:88
+#: gnucash/report/reports/standard/taxinvoice.scm:87
 #, fuzzy
 msgid "Show net price"
 msgstr "મૂલ્યોને દર્શાવો"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:89
+#: gnucash/report/reports/standard/taxinvoice.scm:88
 #, fuzzy
 msgid "Invoice number next to title"
 msgstr "ચલણ સંખ્યાનું ફોર્મેટ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:90
+#: gnucash/report/reports/standard/taxinvoice.scm:89
 msgid "table-border-collapse"
 msgstr ""
 
-#: gnucash/report/reports/standard/taxinvoice.scm:91
+#: gnucash/report/reports/standard/taxinvoice.scm:90
 msgid "table-header-border-color"
 msgstr ""
 
-#: gnucash/report/reports/standard/taxinvoice.scm:92
+#: gnucash/report/reports/standard/taxinvoice.scm:91
 msgid "table-cell-border-color"
 msgstr ""
 
-#: gnucash/report/reports/standard/taxinvoice.scm:93
+#: gnucash/report/reports/standard/taxinvoice.scm:92
 msgid "Embedded CSS"
 msgstr ""
 
-#: gnucash/report/reports/standard/taxinvoice.scm:99
+#: gnucash/report/reports/standard/taxinvoice.scm:98
 msgid "Logo filename"
 msgstr "લોગો ફાઈલનેમ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:100
+#: gnucash/report/reports/standard/taxinvoice.scm:99
 msgid "Logo width"
 msgstr "લોગોની પહોળાઇ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:127
+#: gnucash/report/reports/standard/taxinvoice.scm:126
 #, fuzzy
 msgid "Display the Tax Rate?"
 msgstr "તારીખ દર્શાવવી છે?"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:129
+#: gnucash/report/reports/standard/taxinvoice.scm:128
 #, fuzzy
 msgid "Display the Units?"
 msgstr "કુલ સંખ્યા દર્શાવવી છે?"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:131
+#: gnucash/report/reports/standard/taxinvoice.scm:130
 #, fuzzy
 msgid "Display the contact?"
 msgstr "ખાતા દર્શાવવા છે?"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:133
+#: gnucash/report/reports/standard/taxinvoice.scm:132
 #, fuzzy
 msgid "Display the address?"
 msgstr "તારીખ દર્શાવવી છે?"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:135
+#: gnucash/report/reports/standard/taxinvoice.scm:134
 #, fuzzy
 msgid "Display the Invoice Number?"
 msgstr "ચેક નંબર દર્શાવવો છે?"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:137
+#: gnucash/report/reports/standard/taxinvoice.scm:136
 #, fuzzy
 msgid "Display the Company Name?"
 msgstr "ખાતાના નામ દર્શાવવા છે?"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:139
+#: gnucash/report/reports/standard/taxinvoice.scm:138
 #, fuzzy
 msgid "Invoice Number next to title?"
 msgstr "ચલણ સંખ્યા"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:141
+#: gnucash/report/reports/standard/taxinvoice.scm:140
 #, fuzzy
 msgid "Display Job name?"
 msgstr "ખાતાના નામ દર્શાવવા છે?"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:143
+#: gnucash/report/reports/standard/taxinvoice.scm:142
 #, fuzzy
 msgid "Invoice Job number?"
 msgstr "ચલણ સંખ્યા"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:145
+#: gnucash/report/reports/standard/taxinvoice.scm:144
 #, fuzzy
 msgid "Show net price?"
 msgstr "મૂલ્યોને દર્શાવો"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:164
+#: gnucash/report/reports/standard/taxinvoice.scm:163
 #, fuzzy
 msgid "Name of a file containing a logo to be used on the report."
 msgstr "એક ફાઈલનું નામ જેમાં અહેવાલ પર ઉપયોગ કરવામાં આવતો એક લોગો સામેલ છે."
 
-#: gnucash/report/reports/standard/taxinvoice.scm:167
+#: gnucash/report/reports/standard/taxinvoice.scm:166
 #, fuzzy
 msgid ""
 "Width of the logo in CSS format, e.g. 10% or 32px. Leave blank to display "
@@ -27333,80 +27357,80 @@ msgstr ""
 "CSS ફોર્મેટમાં લોગોની પહોળાઇ, જેમ કે 10% અથવા 32px. લોગોને તેની સ્વભાવિક પહોળાઇમાં "
 "પ્રદર્શિત કરવા માટે ખાલી છોડી દો. લોગોની ઊંચાઇનું માપ તે પ્રમાણમાં જ હશે."
 
-#: gnucash/report/reports/standard/taxinvoice.scm:169
+#: gnucash/report/reports/standard/taxinvoice.scm:168
 msgid "Border-collapse?"
 msgstr ""
 
-#: gnucash/report/reports/standard/taxinvoice.scm:171
-#: gnucash/report/reports/standard/taxinvoice.scm:173
+#: gnucash/report/reports/standard/taxinvoice.scm:170
+#: gnucash/report/reports/standard/taxinvoice.scm:172
 #, fuzzy
 msgid "CSS color."
 msgstr "રંગ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:206
+#: gnucash/report/reports/standard/taxinvoice.scm:205
 #, fuzzy
 msgid "Invoice number:"
 msgstr "ચલણ સંખ્યા: "
 
-#: gnucash/report/reports/standard/taxinvoice.scm:209
+#: gnucash/report/reports/standard/taxinvoice.scm:208
 #, fuzzy
 #| msgid "_To:"
 msgid "To:"
 msgstr "_સુધી:"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:212
+#: gnucash/report/reports/standard/taxinvoice.scm:211
 msgid "Your ref:"
 msgstr ""
 
-#: gnucash/report/reports/standard/taxinvoice.scm:227
+#: gnucash/report/reports/standard/taxinvoice.scm:226
 msgid "Embedded CSS."
 msgstr ""
 
-#: gnucash/report/reports/standard/taxinvoice.scm:305
+#: gnucash/report/reports/standard/taxinvoice.scm:304
 msgid "Display a customer invoice with tax columns (using eguile template)"
 msgstr "ટેક્સ કોલમો સાથે એક ગ્રાહક ચલણ પ્રદર્શિત કરો. (એગ્વિલ ટેમ્પલેટનો ઉપયોગ કરો)"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:317
+#: gnucash/report/reports/standard/taxinvoice.scm:316
 #, fuzzy
 msgid "Unit"
 msgstr "એકમો"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:318
+#: gnucash/report/reports/standard/taxinvoice.scm:317
 #, fuzzy
 msgid "GST Rate"
 msgstr "કરનો દર"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:319
+#: gnucash/report/reports/standard/taxinvoice.scm:318
 #, fuzzy
 msgid "GST Amount"
 msgstr "રકમમાઃ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:320
+#: gnucash/report/reports/standard/taxinvoice.scm:319
 #, fuzzy
 msgid "Amount Due (inc GST)"
 msgstr "બાકી નીકળતી રકમ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:321
+#: gnucash/report/reports/standard/taxinvoice.scm:320
 #, fuzzy
 msgid "Invoice #: "
 msgstr "ચલણ: "
 
-#: gnucash/report/reports/standard/taxinvoice.scm:322
+#: gnucash/report/reports/standard/taxinvoice.scm:321
 msgid "Reference: "
 msgstr "સંદર્ભ: "
 
-#: gnucash/report/reports/standard/taxinvoice.scm:323
+#: gnucash/report/reports/standard/taxinvoice.scm:322
 #, fuzzy
 msgid "Engagement: "
 msgstr "રોકાણો: "
 
-#: gnucash/report/reports/standard/taxinvoice.scm:329
-#: gnucash/report/reports/standard/taxinvoice.scm:331
+#: gnucash/report/reports/standard/taxinvoice.scm:328
+#: gnucash/report/reports/standard/taxinvoice.scm:330
 #, fuzzy
 msgid "Australian Tax Invoice"
 msgstr "કર ચલણ"
 
-#: gnucash/report/reports/standard/taxinvoice.scm:332
+#: gnucash/report/reports/standard/taxinvoice.scm:331
 #, fuzzy
 msgid ""
 "Display an Australian customer invoice with tax columns (using eguile "
@@ -27657,17 +27681,17 @@ msgstr "ચૂકવવાપાત્ર ખાતા"
 msgid "Credit Lines"
 msgstr "ક્રેડિટ લાઇનો"
 
-#: gnucash/report/report-utilities.scm:639
+#: gnucash/report/report-utilities.scm:642
 #, scheme-format
 msgid "Building '~a' report …"
 msgstr "'~a' અહેવાલ બની રહ્યો છે…"
 
-#: gnucash/report/report-utilities.scm:645
+#: gnucash/report/report-utilities.scm:648
 #, scheme-format
 msgid "Rendering '~a' report …"
 msgstr "'~a' અહેવાલનું રેન્ડરિંગ કરવામાં આવી રહ્યું છે…"
 
-#: gnucash/report/report-utilities.scm:647
+#: gnucash/report/report-utilities.scm:650
 #, fuzzy
 msgid "Untitled"
 msgstr "જ્યાં સુધી:"
@@ -28264,7 +28288,7 @@ msgid "Specify date to filter by…"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:532 gnucash/report/trep-engine.scm:904
-#: gnucash/report/trep-engine.scm:1013 gnucash/report/trep-engine.scm:1117
+#: gnucash/report/trep-engine.scm:1013 gnucash/report/trep-engine.scm:1137
 #, fuzzy
 msgid "Date Entered"
 msgstr "મોકલવાની તારીખ"
@@ -28458,6 +28482,11 @@ msgstr "લેવડદેવડની રકમ દર્શાવવી છે
 msgid "Display a subtotal summary table."
 msgstr "સમગ્રતઃ કુલ સંખ્યા દર્શાવવી છે?"
 
+#: gnucash/report/trep-engine.scm:921
+#, fuzzy
+msgid "Display the balance of the underlying account on each line?"
+msgstr "અન્ય ખાતાના કોડ દર્શાવો"
+
 #: gnucash/report/trep-engine.scm:927
 #, fuzzy
 msgid "Display the trans number?"
@@ -28508,31 +28537,31 @@ msgstr "અહેવાલોમાં હાઈપરલિંક્સને �
 msgid "Reverse amount display for certain account types."
 msgstr "થોડા ખાસ ખાતાના પ્રકારો માટે રકમના ડિસ્પ્લેને ઉલટું કરી દો"
 
-#: gnucash/report/trep-engine.scm:1140
+#: gnucash/report/trep-engine.scm:1160
 msgid "Num/T-Num"
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:1189
+#: gnucash/report/trep-engine.scm:1209
 msgid "Transfer from/to"
 msgstr "તરફથી/ને હસ્તાંતરણ"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
-#: gnucash/report/trep-engine.scm:1386
+#: gnucash/report/trep-engine.scm:1431
 #, fuzzy
 msgid "Balance b/f"
 msgstr "બેલેન્સ"
 
-#: gnucash/report/trep-engine.scm:1553
+#: gnucash/report/trep-engine.scm:1613
 msgid "Split Transaction"
 msgstr "વિભાજીત સોદા"
 
-#: gnucash/report/trep-engine.scm:1801
+#: gnucash/report/trep-engine.scm:1861
 msgid "CSV disabled for double column amounts"
 msgstr ""
 
 #. Translators: Both ~a's are dates
-#: gnucash/report/trep-engine.scm:2200
+#: gnucash/report/trep-engine.scm:2260
 #, scheme-format
 msgid "From ~a to ~a"
 msgstr "~a થી ~a સુધી"
@@ -28649,14 +28678,6 @@ msgstr "_વ્યૂ"
 msgid "_Double Line"
 msgstr "_ડબલ લાઇન"
 
-#: gnucash/ui/gnc-embedded-register-window.ui:83
-#: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-msgid ""
-"Show a second line with Action, Notes, and Linked Document fields for each "
-"transaction"
-msgstr "દરેક લેવડદેવડ માટે જાણકારીની બે લાઇન દેખાડો"
-
 #: gnucash/ui/gnc-embedded-register-window.ui:92
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:125
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:244
@@ -28727,7 +28748,7 @@ msgstr "પ્રવર્તમાન ફાઈલની પ્રોપર્�
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:424
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:579
 #: gnucash/ui/gnc-plugin-page-register.ui:674
-#: gnucash/ui/gnc-plugin-page-report.ui:91
+#: gnucash/ui/gnc-plugin-page-report.ui:122
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:99
 msgid "Close the currently active page"
 msgstr "પ્રવર્તમાનમાં સક્રિય પૃષ્ઠને બંધ કરો"
@@ -28917,7 +28938,7 @@ msgstr "GnuCash અંગે"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:409
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:564
 #: gnucash/ui/gnc-plugin-page-register.ui:659
-#: gnucash/ui/gnc-plugin-page-report.ui:76
+#: gnucash/ui/gnc-plugin-page-report.ui:107
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:84
 msgid "Save the current file"
 msgstr "હાલની ફાઈલને સેવ કરો"
@@ -28930,7 +28951,7 @@ msgstr "હાલની ફાઈલને સેવ કરો"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:449
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:604
 #: gnucash/ui/gnc-plugin-page-register.ui:699
-#: gnucash/ui/gnc-plugin-page-report.ui:116
+#: gnucash/ui/gnc-plugin-page-report.ui:147
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:124
 msgid "Open the New Invoice dialog"
 msgstr "નવા ચલણનું ડાયલોગ ખોલો"
@@ -28945,7 +28966,7 @@ msgstr "નવા ચલણનું ડાયલોગ ખોલો"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:447
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:602
 #: gnucash/ui/gnc-plugin-page-register.ui:697
-#: gnucash/ui/gnc-plugin-page-report.ui:114
+#: gnucash/ui/gnc-plugin-page-report.ui:145
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:122
 #, fuzzy
 #| msgid "New _Invoice"
@@ -29017,6 +29038,7 @@ msgstr "એક નવી GnuCash ડેટાફાઈલમાં ખાતા�
 #: gnucash/ui/gnc-plugin-page-invoice.ui:43
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:65
 #: gnucash/ui/gnc-plugin-page-register.ui:49
+#: gnucash/ui/gnc-plugin-page-report.ui:16
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:16
 #, fuzzy
 msgid "_Find…"
@@ -29028,6 +29050,7 @@ msgstr "_ફાઇન્ડ (શોધો)…"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:46
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:68
 #: gnucash/ui/gnc-plugin-page-register.ui:52
+#: gnucash/ui/gnc-plugin-page-report.ui:19
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:19
 msgid "Find transactions with a search"
 msgstr "એક સર્ચ સાથે લેણદેણને શોધો"
@@ -29039,6 +29062,7 @@ msgstr "એક સર્ચ સાથે લેણદેણને શોધો"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:54
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:76
 #: gnucash/ui/gnc-plugin-page-register.ui:60
+#: gnucash/ui/gnc-plugin-page-report.ui:36
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:27
 msgid "Ta_x Report Options"
 msgstr "કરવેરા_અહેવાલનો વિકલ્પ"
@@ -29050,6 +29074,7 @@ msgstr "કરવેરા_અહેવાલનો વિકલ્પ"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:57
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:79
 #: gnucash/ui/gnc-plugin-page-register.ui:63
+#: gnucash/ui/gnc-plugin-page-report.ui:39
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:30
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
 msgstr "કરેવરા અહેવાલ માટે સુસંગત ખાતાઓને સેટઅપ કરો, દાખલા તરીકે US આવકવેરો"
@@ -29608,6 +29633,7 @@ msgstr "દ્વારા ફિલ્ટર કરો…"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:125
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:94
 #: gnucash/ui/gnc-plugin-page-register.ui:120
+#: gnucash/ui/gnc-plugin-page-report.ui:46
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:37
 msgid "_Refresh"
 msgstr "_રિફ્રેશ"
@@ -29617,6 +29643,7 @@ msgstr "_રિફ્રેશ"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:128
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:97
 #: gnucash/ui/gnc-plugin-page-register.ui:123
+#: gnucash/ui/gnc-plugin-page-report.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:40
 msgid "Refresh this window"
 msgstr "આ વિન્ડોને રિફ્રેશ કરો"
@@ -30263,57 +30290,57 @@ msgid "Open a register report for the selected Transaction"
 msgstr "પસંદ કરેલ લેવડદેવડ માટે એક રજિસ્ટર રીપોર્ટ ખોલો"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
-#: gnucash/ui/gnc-plugin-page-report.ui:269
+#: gnucash/ui/gnc-plugin-page-report.ui:300
 msgid "_Print Report…"
 msgstr "_અહેવાલને પ્રિન્ટ કરો…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:9
-#: gnucash/ui/gnc-plugin-page-report.ui:271
+#: gnucash/ui/gnc-plugin-page-report.ui:302
 msgid "Print the current report"
 msgstr "વર્તમાન અહેવાલને પ્રિન્ટ કરો"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:16
-#: gnucash/ui/gnc-plugin-page-report.ui:209
+#: gnucash/ui/gnc-plugin-page-report.ui:26
+#: gnucash/ui/gnc-plugin-page-report.ui:240
 msgid "_Report Options"
 msgstr "_અહેવાલના વિકલ્પ"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:18
+#: gnucash/ui/gnc-plugin-page-report.ui:28
 #: gnucash/ui/gnc-plugin-report-system.ui:8
 #, fuzzy
 msgid "Edit report style sheets"
 msgstr "અહેવાલ સ્ટાઇલ શીટ્સને સંપાદિત કરો."
 
-#: gnucash/ui/gnc-plugin-page-report.ui:25
-#: gnucash/ui/gnc-plugin-page-report.ui:284
+#: gnucash/ui/gnc-plugin-page-report.ui:56
+#: gnucash/ui/gnc-plugin-page-report.ui:315
 #, fuzzy
 msgid "Export as P_DF…"
 msgstr "QIF_આયાત કરો…"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:27
-#: gnucash/ui/gnc-plugin-page-report.ui:286
+#: gnucash/ui/gnc-plugin-page-report.ui:58
+#: gnucash/ui/gnc-plugin-page-report.ui:317
 #, fuzzy
 msgid "Export the current report as a PDF document"
 msgstr "વર્તમાન અહેવાલને પ્રિન્ટ કરો"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:34
+#: gnucash/ui/gnc-plugin-page-report.ui:65
 #, fuzzy
 #| msgid "Export _Report"
 msgid "Export _Report…"
 msgstr "અહેવાલ _નિકાસ કરો"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:36
-#: gnucash/ui/gnc-plugin-page-report.ui:256
+#: gnucash/ui/gnc-plugin-page-report.ui:67
+#: gnucash/ui/gnc-plugin-page-report.ui:287
 msgid "Export HTML-formatted report to file"
 msgstr "HTML-ફોર્મેટેડ અહેવાલને ફાઈલમાં નિકાસ કરો"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:46
-#: gnucash/ui/gnc-plugin-page-report.ui:226
+#: gnucash/ui/gnc-plugin-page-report.ui:77
+#: gnucash/ui/gnc-plugin-page-report.ui:257
 #, fuzzy
 msgid "Update the current report's saved configuration"
 msgstr "અહેવાલના વિકલ્પોને સંપાદિત કરો"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:53
-#: gnucash/ui/gnc-plugin-page-report.ui:241
+#: gnucash/ui/gnc-plugin-page-report.ui:84
+#: gnucash/ui/gnc-plugin-page-report.ui:272
 #, fuzzy
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
@@ -30323,39 +30350,39 @@ msgstr ""
 "કરવામાં આવશે. આ GnuCashના આગળના સ્ટાર્ટઅપમાં અહેવાલ મેનુમાં મેનુ પ્રવિષ્ટિના રૂપમાં પહોંચને "
 "યોગ્ય હશે."
 
-#: gnucash/ui/gnc-plugin-page-report.ui:139
+#: gnucash/ui/gnc-plugin-page-report.ui:170
 msgid "Back"
 msgstr "પાછળ"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:141
+#: gnucash/ui/gnc-plugin-page-report.ui:172
 msgid "Move back one step in the history"
 msgstr "ઇતિહાસમાં એક પગલું પાછળ જાવ"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:154
+#: gnucash/ui/gnc-plugin-page-report.ui:185
 msgid "Forward"
 msgstr "આગળ"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:156
+#: gnucash/ui/gnc-plugin-page-report.ui:187
 msgid "Move forward one step in the history"
 msgstr "ઇતિહાસમાં એક પગલું આગળ જાવ"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:169
+#: gnucash/ui/gnc-plugin-page-report.ui:200
 msgid "Reload"
 msgstr "ફરી લોડ કરો"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:171
+#: gnucash/ui/gnc-plugin-page-report.ui:202
 msgid "Reload the current page"
 msgstr "વર્તમાન પેજને લોડ કરો"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:184
+#: gnucash/ui/gnc-plugin-page-report.ui:215
 msgid "Stop"
 msgstr "અટકાવો"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:186
+#: gnucash/ui/gnc-plugin-page-report.ui:217
 msgid "Cancel outstanding HTML requests"
 msgstr "અસાધારણ HTML વિનંતિઓને રદ કરો"
 
-#: gnucash/ui/gnc-plugin-page-report.ui:254
+#: gnucash/ui/gnc-plugin-page-report.ui:285
 msgid "Export _Report"
 msgstr "અહેવાલ _નિકાસ કરો"
 
@@ -30727,6 +30754,21 @@ msgstr ""
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr ""
 
+#: libgnucash/app-utils/gnc-ui-balances.c:369
+#, c-format
+msgid "%s balance is %s, exceeds limit of %s."
+msgstr ""
+
+#: libgnucash/app-utils/gnc-ui-balances.c:370
+#, c-format
+msgid "%s balance is %s, subceeds limit of %s."
+msgstr ""
+
+#: libgnucash/app-utils/gnc-ui-balances.c:371
+#, c-format
+msgid "%s balance is %s, and should be zero."
+msgstr ""
+
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
 msgid "n"
@@ -30863,36 +30905,36 @@ msgstr ""
 "નીચે તમને માન્યતા ન ધરાવતા ખાતાના નામોની યાદી મળશે:\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4402
+#: libgnucash/engine/Account.cpp:4408
 msgid "Credit Card"
 msgstr "ક્રેડિટ કાર્ડ"
 
-#: libgnucash/engine/Account.cpp:4405
+#: libgnucash/engine/Account.cpp:4411
 msgid "Mutual Fund"
 msgstr "મ્યુચ્યુઅલ ફંડ"
 
-#: libgnucash/engine/Account.cpp:4410
+#: libgnucash/engine/Account.cpp:4416
 msgid "A/Receivable"
 msgstr "A/પ્રાપ્ત કરી શકાય તેવું"
 
-#: libgnucash/engine/Account.cpp:4411
+#: libgnucash/engine/Account.cpp:4417
 msgid "A/Payable"
 msgstr "A/ચૂકવી શકાય તેવું"
 
-#: libgnucash/engine/Account.cpp:4412
+#: libgnucash/engine/Account.cpp:4418
 msgid "Root"
 msgstr "સ્રોત"
 
-#: libgnucash/engine/Account.cpp:5124
+#: libgnucash/engine/Account.cpp:5130
 msgid "Orphaned Gains"
 msgstr "આધાર વિનાનો લાભ"
 
-#: libgnucash/engine/Account.cpp:5138 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:5144 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "વાસ્તવિક લાભ/નુક્શાન"
 
-#: libgnucash/engine/Account.cpp:5140
+#: libgnucash/engine/Account.cpp:5146
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -31122,11 +31164,11 @@ msgstr "આગળના વર્ષની સમાપ્તિ"
 msgid "Last day of the next calendar year."
 msgstr "આગળના કેલેન્ડર વર્ષનો છેલ્લો દિવસ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1108
+#: libgnucash/engine/gnc-optiondb.cpp:1110
 msgid "Counters"
 msgstr "કાઉન્ટર"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1115
+#: libgnucash/engine/gnc-optiondb.cpp:1117
 msgid ""
 "Choose the number of days after which transactions will be read-only and "
 "cannot be edited anymore. This threshold is marked by a red line in the "
@@ -31134,7 +31176,7 @@ msgid ""
 "are read-only."
 msgstr ""
 
-#: libgnucash/engine/gnc-optiondb.cpp:1120
+#: libgnucash/engine/gnc-optiondb.cpp:1122
 msgid ""
 "Check to have split action field used in registers for 'Num' field in place "
 "of transaction number; transaction number shown as 'T-Num' on second line of "
@@ -31142,7 +31184,7 @@ msgid ""
 "imports/exports."
 msgstr ""
 
-#: libgnucash/engine/gnc-optiondb.cpp:1124
+#: libgnucash/engine/gnc-optiondb.cpp:1126
 #, fuzzy
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
@@ -31151,16 +31193,16 @@ msgstr ""
 "એકથી વધુ મુદ્રા કે વસ્તુને સામેલ કરતા લેવડદેવડમાં ઉપયોગમાં લેવાતા ટ્રેડિંગ ખાતા રાખવા માટે "
 "તપાસ કરો."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1131
+#: libgnucash/engine/gnc-optiondb.cpp:1133
 #, fuzzy
 msgid "Budget to be used when none has been otherwise specified."
 msgstr "ઉપયોગમાં કરવામાં આવતું બજેટ, જ્યારે કોઇને તે સિવાયની સૂચના આપવામાં આવી ન હોય."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1137
+#: libgnucash/engine/gnc-optiondb.cpp:1139
 msgid "Customer number"
 msgstr "ગ્રાહક સંખ્યા"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1138
+#: libgnucash/engine/gnc-optiondb.cpp:1140
 msgid ""
 "The previous customer number generated. This number will be incremented to "
 "generate the next customer number."
@@ -31168,11 +31210,11 @@ msgstr ""
 "પાછળનો ગ્રાહક ક્રમાંક ઉત્પન્ન કરવામાં આવ્યો. આ સંખ્યાને આગળનો ગ્રાહક ક્રમાંક ઉત્પન્ન કરવા "
 "માટે વધારવામાં આવશે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1141
+#: libgnucash/engine/gnc-optiondb.cpp:1143
 msgid "Customer number format"
 msgstr "ગ્રાહક સંખ્યા ફોર્મેટ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1143
+#: libgnucash/engine/gnc-optiondb.cpp:1145
 msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
@@ -31180,11 +31222,11 @@ msgstr ""
 "ગ્રાહક સંખ્યા ઉત્પન્ન કરવા માટે ઉપયોગમાં લેવાતા ફોર્મેટ સ્ટ્રીંગ, આ એક પ્રિન્ટએફ સ્ટાઇલ "
 "ફોર્મેટ સ્ટ્રીંગ છે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1146
+#: libgnucash/engine/gnc-optiondb.cpp:1148
 msgid "Employee number"
 msgstr "કર્મચારી સંખ્યા"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1147
+#: libgnucash/engine/gnc-optiondb.cpp:1149
 msgid ""
 "The previous employee number generated. This number will be incremented to "
 "generate the next employee number."
@@ -31192,11 +31234,11 @@ msgstr ""
 "પાછળનો કર્મચારી ક્રમાંક ઉત્પન્ન કરવામાં આવ્યો. આ સંખ્યાને આગળનો કર્મચારી ક્રમાંક ઉત્પન્ન "
 "કરવા માટે વધારવામાં આવશે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1150
+#: libgnucash/engine/gnc-optiondb.cpp:1152
 msgid "Employee number format"
 msgstr "કર્મચારી સંખ્યાનું ફોર્મેટ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1152
+#: libgnucash/engine/gnc-optiondb.cpp:1154
 msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
@@ -31204,11 +31246,11 @@ msgstr ""
 "કર્મચારી સંખ્યા ઉત્પન્ન કરવા માટે ઉપયોગમાં લેવાતું ફોર્મેટ સ્ટ્રીંગ. આ એક પ્રિન્ટએફ-સ્ટાઇલ "
 "ફોર્મેટ સ્ટ્રીંગ છે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1155
+#: libgnucash/engine/gnc-optiondb.cpp:1157
 msgid "Invoice number"
 msgstr "ચલણ સંખ્યા"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1156
+#: libgnucash/engine/gnc-optiondb.cpp:1158
 msgid ""
 "The previous invoice number generated. This number will be incremented to "
 "generate the next invoice number."
@@ -31216,11 +31258,11 @@ msgstr ""
 "પાછળનો ચલણ ક્રમાંક ઉત્પન્ન કરવામાં આવ્યો. આ સંખ્યાને આગળનો ચલણ ક્રમાંક ઉત્પન્ન કરવા માટે "
 "વધારવામાં આવશે"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1159
+#: libgnucash/engine/gnc-optiondb.cpp:1161
 msgid "Invoice number format"
 msgstr "ચલણ સંખ્યાનું ફોર્મેટ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1161
+#: libgnucash/engine/gnc-optiondb.cpp:1163
 msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
@@ -31228,11 +31270,11 @@ msgstr ""
 "ચલણ સંખ્યા ઉત્પન્ન કરવા માટે ઉપયોગમાં લેવાતું ફોર્મેટ સ્ટ્રીંગ. આ એક પ્રિન્ટએફ-સ્ટાઇલ ફોર્મેટ "
 "સ્ટ્રીંગ છે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1164
+#: libgnucash/engine/gnc-optiondb.cpp:1166
 msgid "Bill number"
 msgstr "બિલ ક્રમાંક"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1165
+#: libgnucash/engine/gnc-optiondb.cpp:1167
 msgid ""
 "The previous bill number generated. This number will be incremented to "
 "generate the next bill number."
@@ -31240,11 +31282,11 @@ msgstr ""
 "પાછળનો બિલ ક્રમાંક ઉત્પન્ન કરવામાં આવ્યો. આ સંખ્યાને આગળનો બિલ ક્રમાંક ઉત્પન્ન કરવા માટે "
 "વધારવામાં આવશે"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1168
+#: libgnucash/engine/gnc-optiondb.cpp:1170
 msgid "Bill number format"
 msgstr "બિલ ક્રમાંકનું ફોર્મેટ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1169
+#: libgnucash/engine/gnc-optiondb.cpp:1171
 msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
@@ -31252,11 +31294,11 @@ msgstr ""
 "બિલ ક્રમાંક ઉત્પન્ન કરવા માટે ઉપયોગમાં લેવાતું ફોર્મેટ સ્ટ્રીંગ. આ એક પ્રિન્ટએફ-સ્ટાઇલ ફોર્મેટ "
 "સ્ટ્રીંગ છે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1172
+#: libgnucash/engine/gnc-optiondb.cpp:1174
 msgid "Expense voucher number"
 msgstr "ખર્ચ પહોંચ સંખ્યા"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1173
+#: libgnucash/engine/gnc-optiondb.cpp:1175
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
@@ -31264,11 +31306,11 @@ msgstr ""
 "પાછળનો ખર્ચ પહોંચ ક્રમાંક ઉત્પન્ન કરવામાં આવ્યો. આ સંખ્યાને આગળનો ખર્ચ પહોંચ ક્રમાંક ઉત્પન્ન "
 "કરવા માટે વધારવામાં આવશે"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1176
+#: libgnucash/engine/gnc-optiondb.cpp:1178
 msgid "Expense voucher number format"
 msgstr "ખર્ચ પહોંચ ક્રમાંકનું ફોર્મેટ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1178
+#: libgnucash/engine/gnc-optiondb.cpp:1180
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
@@ -31276,11 +31318,11 @@ msgstr ""
 "ખર્ચ પહોંચ ક્રમાંક ઉત્પન્ન કરવા માટે ઉપયોગમાં લેવાતું ફોર્મેટ સ્ટ્રીંગ. આ એક પ્રિન્ટએફ-સ્ટાઇલ "
 "ફોર્મેટ સ્ટ્રીંગ છે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1181
+#: libgnucash/engine/gnc-optiondb.cpp:1183
 msgid "Job number"
 msgstr "જોબ ક્રમાંક"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1182
+#: libgnucash/engine/gnc-optiondb.cpp:1184
 msgid ""
 "The previous job number generated. This number will be incremented to "
 "generate the next job number."
@@ -31288,11 +31330,11 @@ msgstr ""
 "પાછળનો જોબ ક્રમાંક ઉત્પન્ન કરવામાં આવ્યો. આ સંખ્યાને આગળનો જોબ ક્રમાંક ઉત્પન્ન કરવા માટે "
 "વધારવામાં આવશે"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1185
+#: libgnucash/engine/gnc-optiondb.cpp:1187
 msgid "Job number format"
 msgstr "જોબ ક્રમાંકનું ફોર્મેટ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1186
+#: libgnucash/engine/gnc-optiondb.cpp:1188
 msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
@@ -31300,11 +31342,11 @@ msgstr ""
 "જોબ ક્રમાંક ઉત્પન્ન કરવા માટે ઉપયોગમાં લેવાતું ફોર્મેટ સ્ટ્રીંગ. આ એક પ્રિન્ટએફ-સ્ટાઇલ ફોર્મેટ "
 "સ્ટ્રીંગ છે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1189
+#: libgnucash/engine/gnc-optiondb.cpp:1191
 msgid "Order number"
 msgstr "ઓર્ડર ક્રમાંક"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1190
+#: libgnucash/engine/gnc-optiondb.cpp:1192
 msgid ""
 "The previous order number generated. This number will be incremented to "
 "generate the next order number."
@@ -31312,11 +31354,11 @@ msgstr ""
 "પાછળનો ઓર્ડર ક્રમાંક ઉત્પન્ન કરવામાં આવ્યો. આ સંખ્યાને આગળનો ઓર્ડર ક્રમાંક ઉત્પન્ન કરવા માટે "
 "વધારવામાં આવશે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1193
+#: libgnucash/engine/gnc-optiondb.cpp:1195
 msgid "Order number format"
 msgstr "ઓર્ડર ક્રમાંક ફોર્મેટ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1194
+#: libgnucash/engine/gnc-optiondb.cpp:1196
 msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
@@ -31324,11 +31366,11 @@ msgstr ""
 "ઓર્ડર ક્રમાંક ઉત્પન્ન કરવા માટે ઉપયોગમાં લેવાતું ફોર્મેટ સ્ટ્રીંગ. આ એક પ્રિન્ટએફ-સ્ટાઇલ ફોર્મેટ "
 "સ્ટ્રીંગ છે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1197
+#: libgnucash/engine/gnc-optiondb.cpp:1199
 msgid "Vendor number"
 msgstr "વિક્રેતા ક્રમાંક"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1198
+#: libgnucash/engine/gnc-optiondb.cpp:1200
 msgid ""
 "The previous vendor number generated. This number will be incremented to "
 "generate the next vendor number."
@@ -31336,11 +31378,11 @@ msgstr ""
 "પાછળનો વિક્રેતા ક્રમાંક ઉત્પન્ન કરવામાં આવ્યો. આ સંખ્યાને આગળનો વિક્રેતા ક્રમાંક ઉત્પન્ન કરવા "
 "માટે વધારવામાં આવશે"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1201
+#: libgnucash/engine/gnc-optiondb.cpp:1203
 msgid "Vendor number format"
 msgstr "વિક્રેતા ક્રમાંક ફોર્મેટ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1202
+#: libgnucash/engine/gnc-optiondb.cpp:1204
 msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
@@ -31348,70 +31390,70 @@ msgstr ""
 "વિક્રેતા ક્રમાંક ઉત્પન્ન કરવા માટે ઉપયોગમાં લેવાતું ફોર્મેટ સ્ટ્રીંગ. આ એક પ્રિન્ટએફ-સ્ટાઇલ "
 "ફોર્મેટ સ્ટ્રીંગ છે."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1208
+#: libgnucash/engine/gnc-optiondb.cpp:1210
 #, fuzzy
 msgid "The name of your business."
 msgstr "આપના વ્યવસાયનું નામ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1211
+#: libgnucash/engine/gnc-optiondb.cpp:1213
 #, fuzzy
 msgid "The address of your business."
 msgstr "આપના વ્યવસાયનું સરનામું"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1215
-#: libgnucash/engine/gnc-optiondb.cpp:1219
+#: libgnucash/engine/gnc-optiondb.cpp:1217
+#: libgnucash/engine/gnc-optiondb.cpp:1221
 #, fuzzy
 msgid "The contact person to print on invoices."
 msgstr "ચલણો પર પ્રિન્ટ કરવા માટે સંપર્ક વ્યક્તિ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1223
+#: libgnucash/engine/gnc-optiondb.cpp:1225
 #, fuzzy
 msgid "The fax number of your business."
 msgstr "આપના વ્યવસાયનો ફેક્સ નંબર"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1227
+#: libgnucash/engine/gnc-optiondb.cpp:1229
 #, fuzzy
 msgid "The email address of your business."
 msgstr "આપના વ્યવસાયનું ઇમેઇલ સરનામું"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1231
+#: libgnucash/engine/gnc-optiondb.cpp:1233
 #, fuzzy
 msgid "The URL address of your website."
 msgstr "આપની વેબસાઇટનું URL સરનામું"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1234
+#: libgnucash/engine/gnc-optiondb.cpp:1236
 #, fuzzy
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
 msgstr "આપની કંપની માટે ID (જેમ કે 'ટેક્સ-ID: 00-000000)"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1242
+#: libgnucash/engine/gnc-optiondb.cpp:1244
 msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
 msgstr ""
 
-#: libgnucash/engine/gnc-optiondb.cpp:1245
+#: libgnucash/engine/gnc-optiondb.cpp:1247
 msgid "Default Customer TaxTable"
 msgstr "ડિફોલ્ટ ગ્રાહક ટેક્સ કોષ્ટક"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1246
+#: libgnucash/engine/gnc-optiondb.cpp:1248
 msgid "The default tax table to apply to customers."
 msgstr "ગ્રાહકોને લાગુ થતું ડિફોલ્ટ ટેક્સ કોષ્ટક"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1249
+#: libgnucash/engine/gnc-optiondb.cpp:1251
 msgid "Default Vendor TaxTable"
 msgstr "ડિફોલ્ટ વિક્રેતાનું ટેક્સ કોષ્ટક"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1250
+#: libgnucash/engine/gnc-optiondb.cpp:1252
 msgid "The default tax table to apply to vendors."
 msgstr "વિક્રેતાઓ માટે લાગુ થતું ડિફોલ્ટ ટેક્સ કોષ્ટક"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1254
+#: libgnucash/engine/gnc-optiondb.cpp:1256
 #, fuzzy
 msgid "The default date format used for fancy printed dates."
 msgstr "ફેન્સી મુદ્રિત તારીખો માટે ઉપયોગમાં લેવાતું ડિફોલ્ટ તારીખ ફોર્મેટ"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1260
+#: libgnucash/engine/gnc-optiondb.cpp:1262
 msgid "The electronic tax number of your business"
 msgstr "આપના વ્યવસાયનો ઇલેક્ટ્રોનિક ટેક્સ ક્રમાંક"
 
