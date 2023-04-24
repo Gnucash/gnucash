@@ -969,7 +969,7 @@
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
-                    <property name="tooltip-text" translatable="yes">Show accounts which have the option "Hidden" checked.</property>
+                    <property name="tooltip-text" translatable="yes">Show accounts that have been marked hidden.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>

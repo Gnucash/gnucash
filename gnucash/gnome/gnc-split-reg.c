@@ -2223,7 +2223,7 @@ gnc_split_reg_enter( GNCSplitReg *gsr, gboolean next_transaction )
     goto_blank = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
                                     GNC_PREF_ENTER_MOVES_TO_END);
 
-    /* If we are in single or double line mode and we hit enter
+    /* If we are in single or double line view and we hit enter
      * on the blank split, go to the blank split instead of the
      * next row. This prevents the cursor from jumping around
      * when you are entering transactions. */
