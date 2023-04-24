@@ -81,10 +81,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-10 12:35-0700\n"
-"PO-Revision-Date: 2023-03-30 15:40+0000\n"
+"PO-Revision-Date: 2023-04-16 17:48+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -96,8 +96,8 @@ msgstr ""
 "X-Generator: Weblate 4.17-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -6817,13 +6817,13 @@ msgstr "Todos los archivos"
 #. be translated
 #: gnucash/gnome-utils/dialog-file-access.c:366
 msgid "Datafiles only (*.gnucash, *.xac)"
-msgstr ""
+msgstr "Sólo archivos de datos (*.gnucash, *.xac)"
 
 #. Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
 #. patterns and must not be translated
 #: gnucash/gnome-utils/dialog-file-access.c:376
 msgid "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
-msgstr ""
+msgstr "Sólo copias de seguridad (*.gnucash.*.gnucash, *.xac.*.xac)"
 
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
@@ -11581,7 +11581,7 @@ msgstr "Espacio"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:300
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:289
 msgid "Tab"
-msgstr "Lengüeta"
+msgstr "Pestaña"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:365
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:354
@@ -28708,10 +28708,8 @@ msgid "Quit this application"
 msgstr "Sale de esta aplicación"
 
 #: gnucash/ui/gnc-main-window.ui:143
-#, fuzzy
-#| msgid "Preferences"
 msgid "Pr_eferences"
-msgstr "Preferencias"
+msgstr "Pr_eferencias"
 
 #: gnucash/ui/gnc-main-window.ui:145
 msgid "Edit the global preferences of GnuCash"
@@ -28857,10 +28855,8 @@ msgid "Open the GnuCash Help"
 msgstr "Abre la ayuda de GnuCash"
 
 #: gnucash/ui/gnc-main-window.ui:518
-#, fuzzy
-#| msgid "_Abort"
 msgid "_About"
-msgstr "_Interrumpir"
+msgstr "_Acerca de"
 
 #: gnucash/ui/gnc-main-window.ui:520
 msgid "About GnuCash"
@@ -29977,7 +29973,7 @@ msgstr "_Ordenar por…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
-msgstr "_Anular la transacción"
+msgstr "_Cancelar la transacción"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
 msgid "Void the current transaction"
