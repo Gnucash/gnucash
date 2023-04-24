@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-10 12:35-0700\n"
-"PO-Revision-Date: 2023-04-03 22:39+0000\n"
+"PO-Revision-Date: 2023-04-15 01:52+0000\n"
 "Last-Translator: Rauno Ots <rots00@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "et/>\n"
@@ -34,7 +34,7 @@ msgstr ""
 #: gnucash/report/reports/standard/price-scatter.scm:186
 #, scheme-format
 msgid "~a to ~a"
-msgstr ""
+msgstr "~a kuni ~a"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -47,34 +47,34 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-period-select.c:75
 #: libgnucash/engine/gnc-option-date.cpp:263
 msgid "Start of this year"
-msgstr ""
+msgstr "Selle aasta algus"
 
 #: bindings/guile/date-utilities.scm:720
 #: libgnucash/engine/gnc-option-date.cpp:264
 msgid "First day of the current calendar year."
-msgstr ""
+msgstr "Jooksva kalendriaasta esimene päev."
 
 #: bindings/guile/date-utilities.scm:724
 #: gnucash/gnome-utils/gnc-period-select.c:91
 #: libgnucash/engine/gnc-option-date.cpp:271
 msgid "End of this year"
-msgstr ""
+msgstr "Selle aasta lõpp"
 
 #: bindings/guile/date-utilities.scm:727
 #: libgnucash/engine/gnc-option-date.cpp:272
 msgid "Last day of the current calendar year."
-msgstr ""
+msgstr "Jooksva kalendriaasta viimane päev."
 
 #: bindings/guile/date-utilities.scm:731
 #: gnucash/gnome-utils/gnc-period-select.c:76
 #: libgnucash/engine/gnc-option-date.cpp:279
 msgid "Start of previous year"
-msgstr ""
+msgstr "Eelmise aasta algus"
 
 #: bindings/guile/date-utilities.scm:734
 #: libgnucash/engine/gnc-option-date.cpp:280
 msgid "First day of the previous calendar year."
-msgstr ""
+msgstr "Eelmise kalendriaasta esimene päev."
 
 #: bindings/guile/date-utilities.scm:738
 #: gnucash/gnome-utils/gnc-period-select.c:92
@@ -677,7 +677,7 @@ msgstr "Teisendamise suund"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr "See väärtus määrab, millist iconv testi sooritada"
+msgstr "See väärtus määrab, millist iconv testi sooritada."
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "Menu"
@@ -709,6 +709,9 @@ msgid ""
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
 msgstr ""
+"GnuCash arendajatega on lihtne ühendust võtta. Lisaks mitmetele "
+"meililistidele saate nendega otse IRCs vestelda! Liituge nendega #gnucash "
+"serveris irc.gnome.org"
 
 #: doc/tip_of_the_day.list.c:15
 msgid ""
@@ -717,6 +720,10 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
+"Saate hõlpsasti importida oma olemasolevaid finantsandmeid Quickenist, MS "
+"Money'ist või muudest programmidest, mis ekspordivad QIF- või OFX -faile. "
+"Klõpsake menüüs Fail alammenüüd Import ja vastavalt QIF- või OFX-faili. "
+"Seejärel järgige antud juhiseid."
 
 #: doc/tip_of_the_day.list.c:20
 msgid ""
@@ -733,6 +740,10 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
+"Kui olete tuttav teiste finantsprogrammidega, nagu Quicken, pange tähele, et "
+"GnuCash kasutab tulude ja kulude jälgimiseks kategooriate asemel kontosid. "
+"Tulude ja kulude kontode kohta lisateabe saamiseks vaadake GnuCashi "
+"veebijuhendit."
 
 #: doc/tip_of_the_day.list.c:29
 msgid ""
@@ -1481,10 +1492,9 @@ msgid "Amount for %s must be positive."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:702
-#, fuzzy, c-format
-#| msgid "Account"
+#, c-format
 msgid "Account for %s is missing."
-msgstr "Konto"
+msgstr "Konto %s jaoks puudub."
 
 #. Translators: the first %s is the new transaction date;
 #. the second %s is the current stock account's latest
@@ -1502,10 +1512,8 @@ msgstr ""
 #. the currency value of a non-currency asset.
 #: gnucash/gnome/assistant-stock-transaction.cpp:764
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:425
-#, fuzzy
-#| msgid "Value"
 msgid "Stock Value"
-msgstr "Väärtus"
+msgstr "Aktsia väärtus"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:783
 msgid "Invalid stock new balance."
@@ -1574,24 +1582,16 @@ msgid "No errors found. Click Apply to create transaction."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:911
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following errors must be fixed:"
-msgstr "Järgmine hankija dokument on ületanud maksetähtpäeva:"
+msgstr "Järgmised vead tuleb parandada:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:918
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following warnings exist:"
-msgstr "Järgmine hankija dokument on ületanud maksetähtpäeva:"
+msgstr "On olemas järgmised hoiatused:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:960
-#, fuzzy
-#| msgid "Balance"
 msgid "Ne_w Balance"
-msgstr "Bilanss"
+msgstr "Uus saldo"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:960
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
@@ -1607,10 +1607,8 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:963
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
-#, fuzzy
-#| msgid "Balance"
 msgid "Next Balance"
-msgstr "Bilanss"
+msgstr "Järgmine saldo"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:967
 msgid "Enter the new balance of shares after the stock split."
@@ -1699,10 +1697,8 @@ msgstr "Vali…"
 
 #: gnucash/gnome/business-gnome-utils.c:199
 #: gnucash/gnome-utils/gnc-general-select.c:222
-#, fuzzy
-#| msgid "_Edit"
 msgid "Edit…"
-msgstr "_Redigeeri"
+msgstr "Redigeeri…"
 
 #: gnucash/gnome/business-gnome-utils.c:351 gnucash/gnome/dialog-doclink.c:813
 #: gnucash/gnome/dialog-invoice.c:2801 gnucash/gnome/dialog-invoice.c:3026
@@ -2127,7 +2123,7 @@ msgstr "Ühtegi Kontot pole valitud. Palun proovi uuesti."
 
 #: gnucash/gnome/dialog-date-close.c:82
 msgid "Placeholder account selected. Please try again."
-msgstr "Valitud kohatäitekonto. Palun vali uuesti"
+msgstr "Valitud kohatäitekonto. Palun vali uuesti."
 
 #: gnucash/gnome/dialog-doclink.c:160
 #: gnucash/gnome/gnc-plugin-page-register.c:4622
@@ -2208,10 +2204,8 @@ msgid "_OK"
 msgstr "_Olgu"
 
 #: gnucash/gnome/dialog-doclink.c:241
-#, fuzzy
-#| msgid "Amend URL:"
 msgid "Amend the URL"
-msgstr "Paranda URL:"
+msgstr "Muuda URL-i"
 
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
@@ -2266,10 +2260,8 @@ msgstr "Määramata"
 #. Translators: This is the label of a dialog box that lists all of the
 #. transaction that have files or URIs linked with them.
 #: gnucash/gnome/dialog-doclink.c:1083
-#, fuzzy
-#| msgid "Transaction Number"
 msgid "Transaction Document Links"
-msgstr "Tehingu Number"
+msgstr "Tehingudokumendi lingid"
 
 #: gnucash/gnome/dialog-doclink.c:1086
 #: gnucash/gnome/dialog-find-transactions.c:157
@@ -2325,8 +2317,6 @@ msgid "Business Document Links"
 msgstr ""
 
 #: gnucash/gnome/dialog-employee.c:203
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
 msgstr "Pead sisestama juriidilise aadressi."
 
@@ -2717,16 +2707,12 @@ msgid "Do you really want to post the invoice?"
 msgstr "Kas tahad tõesti müügiarve väljastada?"
 
 #: gnucash/gnome/dialog-invoice.c:1167
-#, fuzzy
-#| msgid ""
-#| "One or more of the entries are for accounts different from the invoice/"
-#| "bill currency. You will be asked a conversion rate for each."
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked to enter a conversion rate for each."
 msgstr ""
-"Üks või rohkem kirjet on tehtud kontodele, mille valuuta on erinev arve "
-"valuutast. Sult küsitakse iga kirje kohta ümberarvestuskursse."
+"Üks või rohkem kannet on tehtud kontodele, mille valuuta on erinev arve "
+"valuutast. Sult küsitakse iga kande kohta konverteerimiskurss."
 
 #: gnucash/gnome/dialog-invoice.c:1300
 msgid "The post action was canceled because not all exchange rates were given."
@@ -3094,11 +3080,8 @@ msgid "You must choose an owner for this job."
 msgstr "Sellele tööle tuleb valida omanik."
 
 #: gnucash/gnome/dialog-job.c:154
-#, fuzzy
-#| msgid ""
-#| "Discount percentage must be between 0-100 or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr "Allahindluse protsent peab olema 0-100 või jäetud tühjaks."
+msgstr "Allahindluse protsent peab olema korrektne või jäetud tühjaks."
 
 #: gnucash/gnome/dialog-job.c:246
 msgid "Edit Job"
@@ -3146,17 +3129,13 @@ msgid "Find Job"
 msgstr "Leia Töö"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "Tühi ruum"
+msgstr "Tühi"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
-#, fuzzy
-#| msgid "Open"
 msgctxt "Adjective"
 msgid "Open"
-msgstr "Avatud"
+msgstr "Ava"
 
 #: gnucash/gnome/dialog-lot-viewer.c:923 gnucash/gnome/dialog-order.c:890
 #: gnucash/report/reports/standard/investment-lots.scm:103
@@ -3335,7 +3314,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-account.c:876
 #: gnucash/report/trep-engine.scm:150
 msgid "Cleared"
-msgstr ""
+msgstr "kinnitatud"
 
 #: gnucash/gnome/dialog-payment.c:1576
 #: gnucash/gnome/gnc-plugin-page-register.c:3243
@@ -3407,7 +3386,7 @@ msgstr "Kustuta hinnad?"
 #: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:85
 msgid "Entries"
-msgstr "Kirjed"
+msgstr "kanded"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:446
 msgid "Are you sure you want to delete these prices?"
@@ -3519,7 +3498,7 @@ msgstr "Sisu"
 #: gnucash/report/reports/standard/customer-summary.scm:251
 #: gnucash/report/reports/standard/new-owner-report.scm:1030
 msgid "Report"
-msgstr "Raport"
+msgstr "Aruanne"
 
 #: gnucash/gnome/dialog-report-column-view.cpp:390
 msgid "Rows"
@@ -3876,14 +3855,14 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-budget.c:180 gnucash/gnome-utils/gnc-file.c:90
 #: gnucash/gnome-utils/gnc-file.c:327 gnucash/gnome-utils/gnc-file.c:1160
 msgid "Open"
-msgstr "Avatud"
+msgstr "Ava"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:292
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:223
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:224
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:225
 msgid "Edit"
-msgstr ""
+msgstr "Redigeeri"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:293
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
@@ -3891,7 +3870,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:228
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "New"
-msgstr ""
+msgstr "Uus"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:294
 #: gnucash/gnome/gnc-plugin-page-budget.c:181
@@ -4042,10 +4021,8 @@ msgid "Note"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:186
-#, fuzzy
-#| msgid "Report"
 msgid "Run Report"
-msgstr "Raport"
+msgstr "Käivita aruanne"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:269
 #: gnucash/gnome/gnc-plugin-page-budget.c:310
@@ -4138,7 +4115,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.c:205
 #: gnucash/ui/gnc-plugin-page-invoice.ui:352
 msgid "New _Invoice"
-msgstr ""
+msgstr "Uus arve"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:205
 #: gnucash/ui/gnc-plugin-page-invoice.ui:354
@@ -4193,10 +4170,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:205
 #: gnucash/ui/gnc-plugin-page-register.ui:393
 #: gnucash/ui/gnc-plugin-page-register.ui:505
-#, fuzzy
-#| msgid "Transaction Number"
 msgid "_Manage Document Link…"
-msgstr "Tehingu Number"
+msgstr "Halda dokumendi linki…"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4471,10 +4446,8 @@ msgid "Open a company report window for the owner of this credit note"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
-#, fuzzy
-#| msgid "Transaction Number"
 msgid "Manage Document Link…"
-msgstr "Tehingu Number"
+msgstr "Halda dokumendi linki…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:292
 #: gnucash/gnome/gnc-plugin-page-register.c:395
@@ -4583,10 +4556,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:220
 #: gnucash/ui/gnc-plugin-page-register.ui:405
 #: gnucash/ui/gnc-plugin-page-register.ui:517
-#, fuzzy
-#| msgid "Edit Invoice"
 msgid "Jump to Invoice"
-msgstr "Redigeeri Müügiarvet"
+msgstr "Liigu müügiarve juurde"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:282
 msgid "Cu_t Split"
@@ -4873,10 +4844,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3891
-#, fuzzy
-#| msgid "Display the action?"
 msgid "Jump to the transaction?"
-msgstr "Kuva tegevus?"
+msgstr "Kas liikuda tehingu juurde?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3898
 msgid "Reverse Transaction"
@@ -4919,10 +4888,8 @@ msgid "Select"
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4679
-#, fuzzy
-#| msgid "Post Date"
 msgid "Go to Date"
-msgstr "Väljastamise Kuupäev"
+msgstr "Liigu kuupäevale"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4981
 #, c-format
@@ -5209,7 +5176,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:1165
 msgid "Cannot modify or delete this transaction."
-msgstr ""
+msgstr "Seda tehingut ei saa muuta ega kustutada."
 
 #: gnucash/gnome/gnc-split-reg.c:1179
 msgid ""
@@ -5488,10 +5455,8 @@ msgid "No such price: %s"
 msgstr ""
 
 #: gnucash/gnome/window-autoclear.c:115
-#, fuzzy
-#| msgid "Scheduled Transactions"
 msgid "Cleared Transactions"
-msgstr "Plaanilised Tehingud"
+msgstr "Kinnitatud tehingud"
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:380
@@ -5641,13 +5606,11 @@ msgid "New Split"
 msgstr ""
 
 #: gnucash/gnome-search/dialog-search.c:1120
-#, fuzzy
-#| msgid "New _File"
 msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,…)!"
 msgid "New item"
-msgstr "Uus _Fail"
+msgstr "Uus kirje"
 
 #: gnucash/gnome-search/dialog-search.c:1163
 #: gnucash/gnome-utils/gnc-recurrence.c:544
@@ -6070,7 +6033,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-account.c:1752
 msgid "Edit Account"
-msgstr ""
+msgstr "Redigeeri kontot"
 
 #: gnucash/gnome-utils/dialog-account.c:1755
 #, c-format
@@ -6190,7 +6153,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-commodity.c:987
 msgid "Edit currency"
-msgstr ""
+msgstr "Redigeeri valuutat"
 
 #: gnucash/gnome-utils/dialog-commodity.c:988
 msgid "Currency Information"
@@ -6254,10 +6217,8 @@ msgid "Action/Number"
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-file-access.c:323
-#, fuzzy
-#| msgid "Open"
 msgid "Open…"
-msgstr "Avatud"
+msgstr "Ava…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:324
 #: gnucash/gnome-utils/gnc-file.c:88
@@ -6481,7 +6442,7 @@ msgstr ""
 #: gnucash/gnome-utils/dialog-transfer.cpp:1914
 #: gnucash/gtkbuilder/dialog-employee.glade:629
 msgid "Credit Account"
-msgstr ""
+msgstr "Krediidi konto"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1918
 msgid "Debit Account"
@@ -7023,7 +6984,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:887 gnucash/ui/gnc-main-window.ui:83
 msgid "_Quit"
-msgstr ""
+msgstr "Sulge"
 
 #: gnucash/gnome-utils/gnc-file.c:973 gnucash/gnome-utils/gnc-file.c:993
 msgid "Loading user data…"
@@ -7064,10 +7025,8 @@ msgid "<unknown>"
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-general-select.c:224
-#, fuzzy
-#| msgid "_View"
 msgid "View…"
-msgstr "_Vaata"
+msgstr "Vaade…"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:69
 msgid "GnuCash could not find the files of the help documentation."
@@ -7133,10 +7092,8 @@ msgid "This window is closing and will not be restored."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:1404
-#, fuzzy
-#| msgid "Closed"
 msgid "Close Window?"
-msgstr "Suletud"
+msgstr "Sulge aken?"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
@@ -7365,7 +7322,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:171 gnucash/report/trep-engine.scm:940
 #: gnucash/report/trep-engine.scm:1018
 msgid "Account Name"
-msgstr ""
+msgstr "Konto"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:817
 #: gnucash/gtkbuilder/dialog-price.glade:580
@@ -10618,10 +10575,9 @@ msgstr ""
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, fuzzy, c-format
-#| msgid "Account"
+#, c-format
 msgid "Accounts in %s"
-msgstr "Konto"
+msgstr "Kontod mallis %s"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:470
 msgid ""
@@ -11023,7 +10979,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:352
 msgid "Account name"
-msgstr ""
+msgstr "Konto"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:401
 msgid "Set the default QIF account name"
@@ -11175,10 +11131,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1008
-#, fuzzy
-#| msgid "Voucher Information"
 msgid "Enter Information about…"
-msgstr "Vautšeri Info"
+msgstr "Sisestage teave…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1034
 msgid "All fields must be complete to continue…"
@@ -12153,10 +12107,8 @@ msgid "Open imported documents in tabs"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
-#| msgid "Display the action?"
 msgid "Open not yet posted documents in tabs"
-msgstr "Kuva tegevus?"
+msgstr "Veel postitamata dokumentide avamine sakkides"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -12500,7 +12452,7 @@ msgstr "Allahindlus"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:545
 msgid "Credit Limit"
-msgstr ""
+msgstr "Krediidi limiit"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:558
 #: gnucash/gtkbuilder/dialog-vendor.glade:528
@@ -12615,10 +12567,8 @@ msgid "(none)"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:409
-#, fuzzy
-#| msgid "Enter URL like http://www.gnucash.org:"
 msgid "Enter an URL like \"https://www.gnucash.org\""
-msgstr "Sisesta URL nagu http://www.gnucash.org:"
+msgstr "Sisesta URL nagu \"https://www.gnucash.org\""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:454
 msgid "Location does not start with a valid scheme"
@@ -12989,10 +12939,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:266
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:412
-#, fuzzy
-#| msgid "Account"
 msgid "New _Account…"
-msgstr "Konto"
+msgstr "Uus konto…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -13608,7 +13556,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 msgid "C_redit accounts"
-msgstr ""
+msgstr "Krediidikontod"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:688
 msgid "_Income & expense"
@@ -15070,7 +15018,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-totd.glade:26
 msgid "_Previous"
-msgstr ""
+msgstr "Eelmine"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:41
 msgid "_Next"
@@ -16006,10 +15954,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/window-autoclear.glade:101
-#, fuzzy
-#| msgid "Fraction"
 msgid "Caution!"
-msgstr "Murd"
+msgstr "Ettevaatust!"
 
 #: gnucash/gtkbuilder/window-autoclear.glade:116
 msgid ""
@@ -16921,10 +16867,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
-#, fuzzy
-#| msgid "Invalid Transactions"
 msgid "_Internal Transaction…"
-msgstr "Vigased Tehingud"
+msgstr "Sisemine tehing…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
@@ -21604,7 +21548,7 @@ msgstr ""
 #: gnucash/report/reports/standard/receipt.scm:44
 #: gnucash/report/reports/standard/taxinvoice.scm:95
 msgid "Template file"
-msgstr ""
+msgstr "Malli fail"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:171
 msgid ""
@@ -23690,7 +23634,7 @@ msgstr "Lause ettevõtte kontaktisiku tutvustamiseks."
 
 #: gnucash/report/reports/standard/invoice.scm:254
 msgid "Please direct all enquiries to"
-msgstr "Palun esitada kõik päringud "
+msgstr "Palun esitada kõik päringud"
 
 #: gnucash/report/reports/standard/invoice.scm:257
 msgid "Minimum # of entries"
@@ -25051,7 +24995,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/view-column.scm:123
 msgid "Edit Options"
-msgstr ""
+msgstr "Redigeeri valikuid"
 
 #: gnucash/report/reports/standard/view-column.scm:130
 msgid "Single Report"
@@ -26122,7 +26066,7 @@ msgstr ""
 
 #: gnucash/ui/gnc-main-window.ui:8
 msgid "_File"
-msgstr ""
+msgstr "_Fail"
 
 #: gnucash/ui/gnc-main-window.ui:40
 msgid "Pa_ge Setup"
@@ -26155,13 +26099,11 @@ msgstr ""
 
 #: gnucash/ui/gnc-main-window.ui:86
 msgid "Quit this application"
-msgstr ""
+msgstr "Sulge rakendus"
 
 #: gnucash/ui/gnc-main-window.ui:143
-#, fuzzy
-#| msgid "References"
 msgid "Pr_eferences"
-msgstr "Viited"
+msgstr "Eelistused"
 
 #: gnucash/ui/gnc-main-window.ui:145
 msgid "Edit the global preferences of GnuCash"
@@ -26349,10 +26291,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:697
 #: gnucash/ui/gnc-plugin-page-report.ui:114
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:122
-#, fuzzy
-#| msgid "New Invoice"
 msgid "New _Invoice…"
-msgstr "Uus Müügiarve"
+msgstr "Uus arve"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:6
 msgid "New Accounts _Page"
@@ -26371,10 +26311,8 @@ msgid "Create a new file"
 msgstr "Loo uus fail"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:12
-#, fuzzy
-#| msgid "_Open"
 msgid "_Open…"
-msgstr "_Ava"
+msgstr "_Ava…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:15
 msgid "Open an existing GnuCash file"
@@ -26600,30 +26538,24 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-business.ui:14
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:23
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:317
-#, fuzzy
-#| msgid "New Customer"
 msgid "_New Customer…"
-msgstr "Uus Klient"
+msgstr "Uus klient…"
 
 #: gnucash/ui/gnc-plugin-business.ui:16
 msgid "Open the New Customer dialog"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-business.ui:19
-#, fuzzy
-#| msgid "Find Customer"
 msgid "_Find Customer…"
-msgstr "Leia Klient"
+msgstr "Leia klient…"
 
 #: gnucash/ui/gnc-plugin-business.ui:21
 msgid "Open the Find Customer dialog"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-business.ui:29
-#, fuzzy
-#| msgid "Find Invoice"
 msgid "Find In_voice…"
-msgstr "Leia Müügiarve"
+msgstr "Leia müügiarve…"
 
 #: gnucash/ui/gnc-plugin-business.ui:31
 msgid "Open the Find Invoice dialog"
@@ -26651,10 +26583,8 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-business.ui:44 gnucash/ui/gnc-plugin-business.ui:93
 #: gnucash/ui/gnc-plugin-business.ui:132
-#, fuzzy
-#| msgid "Process Payment"
 msgid "_Process Payment…"
-msgstr "Menetle Makset"
+msgstr "Menetle makset…"
 
 #: gnucash/ui/gnc-plugin-business.ui:46 gnucash/ui/gnc-plugin-business.ui:95
 #: gnucash/ui/gnc-plugin-business.ui:134
@@ -26684,20 +26614,16 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-business.ui:63
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:472
-#, fuzzy
-#| msgid "New Vendor"
 msgid "_New Vendor…"
-msgstr "Uus Hankija"
+msgstr "Uus hankija…"
 
 #: gnucash/ui/gnc-plugin-business.ui:65
 msgid "Open the New Vendor dialog"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-business.ui:68
-#, fuzzy
-#| msgid "Find Vendor"
 msgid "_Find Vendor…"
-msgstr "Leia Hankija"
+msgstr "Leia hankija…"
 
 #: gnucash/ui/gnc-plugin-business.ui:70
 msgid "Open the Find Vendor dialog"
@@ -26706,20 +26632,16 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-business.ui:73
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:193
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:512
-#, fuzzy
-#| msgid "New Bill"
 msgid "New _Bill…"
-msgstr "Uus Ostuarve"
+msgstr "Uus ostuarve…"
 
 #: gnucash/ui/gnc-plugin-business.ui:75
 msgid "Open the New Bill dialog"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-business.ui:78
-#, fuzzy
-#| msgid "Find Bill"
 msgid "Find Bi_ll…"
-msgstr "Leia Ostuarve"
+msgstr "Leia ostuarve…"
 
 #: gnucash/ui/gnc-plugin-business.ui:80
 msgid "Open the Find Bill dialog"
@@ -26748,40 +26670,32 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-business.ui:112
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:55
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:627
-#, fuzzy
-#| msgid "New Employee"
 msgid "_New Employee…"
-msgstr "Uus Töötaja"
+msgstr "Uus töötaja…"
 
 #: gnucash/ui/gnc-plugin-business.ui:114
 msgid "Open the New Employee dialog"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-business.ui:117
-#, fuzzy
-#| msgid "Find Employee"
 msgid "_Find Employee…"
-msgstr "Leia Töötaja"
+msgstr "Leia töötaja…"
 
 #: gnucash/ui/gnc-plugin-business.ui:119
 msgid "Open the Find Employee dialog"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-business.ui:122
-#, fuzzy
-#| msgid "New Expense Voucher"
 msgid "New _Expense Voucher…"
-msgstr "Uus Kuluvautšer"
+msgstr "Uus kuluvautšer…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
 msgid "Open the New Voucher dialog"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-business.ui:127
-#, fuzzy
-#| msgid "Find Expense Voucher"
 msgid "Find Expense _Voucher…"
-msgstr "Leia Kuluvautšer"
+msgstr "Leia kuluvautšer…"
 
 #: gnucash/ui/gnc-plugin-business.ui:129
 msgid "Open the Find Expense Voucher dialog"
@@ -26889,7 +26803,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:32
 #: gnucash/ui/gnc-reconcile-window.ui:37
 msgid "_Edit Account"
-msgstr ""
+msgstr "Redigeeri kontot"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:19
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:26
@@ -27113,7 +27027,7 @@ msgstr "Kõik Kontod"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:217
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:387
 msgid "Edit _Account"
-msgstr ""
+msgstr "Redifeeri kontot"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:241
 msgid "Automatically clear individual transactions, given a cleared amount"
@@ -27121,10 +27035,8 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:271
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:427
-#, fuzzy
-#| msgid "All Accounts"
 msgid "_Delete Account…"
-msgstr "Kõik Kontod"
+msgstr "Kustuta konto…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:273
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:429
@@ -27375,10 +27287,8 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:227
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:667
-#, fuzzy
-#| msgid "New Expense Voucher"
 msgid "New _Voucher…"
-msgstr "Uus Kuluvautšer"
+msgstr "Uus kuluvautšer…"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:229
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:669
@@ -27577,10 +27487,8 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:269
-#, fuzzy
-#| msgid "Printable Report"
 msgid "_Print Report…"
-msgstr "Prinditav Raport"
+msgstr "Prindi aruanne…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:9
 #: gnucash/ui/gnc-plugin-page-report.ui:271
@@ -27924,11 +27832,9 @@ msgstr ""
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
 #: libgnucash/app-utils/gnc-quotes.cpp:816
-#, fuzzy
-#| msgid "Symbol"
 msgctxt "Finance::Quote"
 msgid "symbol: "
-msgstr "Sümbol"
+msgstr "sümbol: "
 
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:818
@@ -27956,11 +27862,9 @@ msgstr ""
 
 #. Translators: The quote is neither a last trade nor an NAV.
 #: libgnucash/app-utils/gnc-quotes.cpp:830
-#, fuzzy
-#| msgid "Price"
 msgctxt "Finance::Quote"
 msgid "price: "
-msgstr "Hind"
+msgstr "hind: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:850
 msgid "Finance::Quote reported a failure for symbol "

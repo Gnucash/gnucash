@@ -7,27 +7,29 @@
 # Даниил Морозюк <morozdan2003@gmail.com>, 2021.
 # Nikita Samoilov <n.p.samoilov@gmail.com>, 2022.
 # Vik <k3kelm4vw@mozmail.com>, 2022.
+# Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2022-09-26 12:24+0000\n"
-"Last-Translator: Vik <k3kelm4vw@mozmail.com>\n"
+"PO-Revision-Date: 2023-04-23 21:48+0000\n"
+"Last-Translator: Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail."
+"com>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgstr ""
+msgstr "Термин"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
@@ -35,7 +37,7 @@ msgstr "«»"
 
 #. "A detailed record of money spent and received"
 msgid "account"
-msgstr "счет"
+msgstr "счёт"
 
 #. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
 msgid "account code"
@@ -418,7 +420,7 @@ msgstr "собственные средства"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
-msgstr ""
+msgstr "Отчёт о собственных средствах"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
@@ -479,7 +481,7 @@ msgstr "процент"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr "счет-фактура"
+msgstr "счёт-фактура"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
@@ -646,11 +648,11 @@ msgstr "цена"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr "price type: спрос"
+msgstr "спрос"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr "price type: предложение"
+msgstr "предложение"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
@@ -690,8 +692,9 @@ msgid "register entry: split transaction"
 msgstr "register entry: разделенная проводка"
 
 #. "-"
+#, fuzzy
 msgid "register entry: stock split"
-msgstr ""
+msgstr "дробление акций"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
@@ -707,15 +710,16 @@ msgstr ""
 
 #. "another form of register"
 msgid "register: transaction journal"
-msgstr ""
+msgstr "История проводок"
 
 #. "reload the current document"
 msgid "reload, to"
 msgstr "перезагрузить"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
+#, fuzzy
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "Форма \"самолётик\" (Т-форма)"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
@@ -731,7 +735,7 @@ msgstr "обратная проводка"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "выручка"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
@@ -767,13 +771,13 @@ msgstr "часть"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "акции"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
 #, fuzzy
 #| msgid "split"
 msgid "stock split"
-msgstr "часть"
+msgstr "Дробление акций"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
@@ -786,7 +790,7 @@ msgstr "предварительный итог"
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 #, fuzzy
 msgid "tax code"
-msgstr "информация о налоге"
+msgstr "ИНН (налоговый номер)"
 
 #. "field of an account"
 #, fuzzy
@@ -794,10 +798,8 @@ msgid "tax info"
 msgstr "информация о налоге"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
-#, fuzzy
-#| msgid "account type: Income"
 msgid "tax type: income tax"
-msgstr "account type: Доход"
+msgstr "Подоходный налог"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
@@ -809,7 +811,7 @@ msgstr ""
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "НДС"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
@@ -892,8 +894,9 @@ msgstr "товарный чек"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "снятие"
 
+#, fuzzy
 msgid "stock"
-msgstr ""
+msgstr "ценные бумаги"
 
 msgid "due"
 msgstr ""
