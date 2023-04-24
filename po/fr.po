@@ -28,17 +28,18 @@
 # Laurent Bigonville <bigon@bigon.be>, 2022.
 # Simon Arlott <weblate.simon@arlott.org>, 2022.
 # Philippe Lamare <ph.lamare@free.fr>, 2022.
+# Dyf_Tfh <n.zhao@hotmail.fr>, 2023.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-10 12:35-0700\n"
-"PO-Revision-Date: 2023-01-19 16:49+0000\n"
-"Last-Translator: Christopher Lam <christopher.lck@gmail.com>\n"
+"PO-Revision-Date: 2023-04-22 15:51+0000\n"
+"Last-Translator: Dyf_Tfh <n.zhao@hotmail.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -46,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15.1\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1287,8 +1288,7 @@ msgstr "Divers paiements"
 #. Translators: %s is "Taxes",
 #. "Insurance", or similar.
 #: gnucash/gnome/assistant-loan.cpp:766
-#, fuzzy, c-format
-#| msgid "... pay \"%s\"?"
+#, c-format
 msgid "… pay \"%s\"?"
 msgstr "... payez \"%s\" ?"
 
