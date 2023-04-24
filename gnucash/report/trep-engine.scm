@@ -74,6 +74,11 @@
 ;;Display
 (define optname-detail-level (N_ "Detail Level"))
 (define optname-grid (N_ "Subtotal Table"))
+;; Translators: a running total is a total that is continually adjusted on every line.
+;; To be consistent, also consider how the term "Running Balance" is translated.
+;; "Running Totals" is the plural form as it refers to the running total and running subtotals.
+;; To be consistent, also consider how the singular form "Running Total" is translated.
+(define optname-running-totals (N_ "Running Totals"))
 
 ;;Sorting
 (define pagename-sorting (N_ "Sorting"))
@@ -983,7 +988,16 @@ be excluded from periodic reporting.")
       gnc:pagename-display (N_ "Sign Reverses")
       "m1" (G_ "Reverse amount display for certain account types.")
       "global"
-      (keylist->vectorlist sign-reverse-list)))
+      (keylist->vectorlist sign-reverse-list))
+
+    (gnc-register-multichoice-option options
+      gnc:pagename-display optname-running-totals
+      "o2" (G_ "Display running totals as per report sort order?")
+      "none"
+      (list (vector 'none  (G_ "None"))
+            (vector 'all   (G_ "Grand Total and Subtotals"))
+            (vector 'grand (G_ "Grand Total Only"))
+            (vector 'sub   (G_ "Subtotals Only")))))
 
   ;; this hidden option will toggle whether the default
   ;; qof-query is run, or a different query which ensures
@@ -1058,6 +1072,17 @@ be excluded from periodic reporting.")
                      (or (primary-get-info 'renderer-fn)
                          (secondary-get-info 'renderer-fn))))
           (cons 'running-balance (opt-val gnc:pagename-display "Account Balance"))
+          (cons 'running-grand-total
+                (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'grand)
+                    (eq? (opt-val gnc:pagename-display optname-running-totals) 'all)))
+          (cons 'running-prime
+                (and (primary-get-info 'renderer-fn)
+                     (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'sub)
+                         (eq? (opt-val gnc:pagename-display optname-running-totals) 'all))))
+          (cons 'running-sec
+                (and (secondary-get-info 'renderer-fn)
+                     (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'sub)
+                         (eq? (opt-val gnc:pagename-display optname-running-totals) 'all))))
           (cons 'account-full-name
                 (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
           (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
@@ -1142,6 +1167,18 @@ be excluded from periodic reporting.")
            (opt-val pagename-currency optname-currency)
            (gnc:accounts-get-commodities c_account_1 #f) enddate #f #f)
           gnc:exchange-by-pricedb-nearest))
+
+    ;; Returns #t if a calculated-cell definition has the subtotal flag
+    (define (cell-with-subtotals? cell)
+      (assq-ref cell 'subtotal?))
+
+    ;; Collectors for running total and subtotals
+    (define converted-running-total-collector (gnc:make-commodity-collector))
+    (define original-running-total-collector (gnc:make-commodity-collector))
+    (define converted-running-prime-collector (gnc:make-commodity-collector))
+    (define original-running-prime-collector (gnc:make-commodity-collector))
+    (define converted-running-sec-collector (gnc:make-commodity-collector))
+    (define original-running-sec-collector (gnc:make-commodity-collector))
 
     (define left-columns
       (let* ((add-if (lambda (pred? . items) (if pred? items '())))
@@ -1347,7 +1384,46 @@ be excluded from periodic reporting.")
                                           (gnc:monetary-neg (original-amount s tr?)))))
            (original-account-balance (lambda (s tr?)
                                        (gnc:make-gnc-monetary
-                                        (split-currency s) (xaccSplitGetBalance s)))))
+                                        (split-currency s) (xaccSplitGetBalance s))))
+           ;; Helper function to add the splits to the running total collectors.
+           ;; Third argument is the function that returns converted or original amount.
+           ;; Returns current monetary from specified running total collector.
+           (add-split-to-collector (lambda (s tr? coll amt-fn)
+                                        (coll 'add
+                                          (gnc:gnc-monetary-commodity (amt-fn s tr?))
+                                          (gnc:gnc-monetary-amount (amt-fn s tr?)))
+                                        (coll 'getmonetary
+                                          (gnc:gnc-monetary-commodity (amt-fn s tr?)) #f)))
+           (converted-running-total (lambda (s tr?)
+                                      (and tr?
+                                        (add-split-to-collector s tr?
+                                          converted-running-total-collector
+                                          converted-amount))))
+           (converted-running-prime (lambda (s tr?)
+                                      (and tr?
+                                        (add-split-to-collector s tr?
+                                          converted-running-prime-collector
+                                          converted-amount))))
+           (converted-running-sec (lambda (s tr?)
+                                      (and tr?
+                                        (add-split-to-collector s tr?
+                                          converted-running-sec-collector
+                                          converted-amount))))
+           (original-running-total (lambda (s tr?)
+                                      (and tr?
+                                        (add-split-to-collector s tr?
+                                          original-running-total-collector
+                                          original-amount))))
+           (original-running-prime (lambda (s tr?)
+                                      (and tr?
+                                        (add-split-to-collector s tr?
+                                          original-running-prime-collector
+                                          original-amount))))
+           (original-running-sec (lambda (s tr?)
+                                      (and tr?
+                                        (add-split-to-collector s tr?
+                                          original-running-sec-collector
+                                          original-amount)))))
         (append
          ;; each column will be a list of pairs whose car is a metadata header,
          ;; and whose cdr is the procedure, string or bool to obtain the metadata
@@ -1411,6 +1487,63 @@ be excluded from periodic reporting.")
                              (cons 'merge-dual-column? #f))))
              '())
 
+         (if (column-uses? 'running-sec)
+             (list (list (cons 'heading (header-commodity
+                           ;; Translators: this is the running total for the secondary subtotal.
+                           ;; For translation to be consistent, make sure it follows the same
+                           ;; pattern as for these other strings: “Running Totals”,
+                           ;; "Secondary Subtotal” and "Running Primary Subtotal"
+                           (G_ "Running Secondary Subtotal")))
+                         (cons 'calc-fn converted-running-sec)
+                         (cons 'reverse-column? #f)
+                         (cons 'subtotal? #f)
+                         (cons 'start-dual-column? #f)
+                         (cons 'friendly-heading-fn (const ""))
+                         (cons 'merge-dual-column? #f)))
+             '())
+
+         (if (column-uses? 'running-prime)
+             (list (list (cons 'heading (header-commodity
+                           (if (secondary-get-info 'renderer-fn)
+                               ;; Translators: this is the running total for the primary subtotal.
+                               ;; For translation to be consistent, make sure it follows the same
+                               ;; pattern as for these other strings: “Running Totals” and
+                               ;; “Primary Subtotal”
+                               (G_ "Running Primary Subtotal")
+                               ;; Translators: "Running Subtotal" is a shorter version of
+                               ;; "Running Primary Subtotal" used when a running primary subtotal
+                               ;; is displayed without a secondary subtotal.
+                               (G_ "Running Subtotal"))))
+                         (cons 'calc-fn converted-running-prime)
+                         (cons 'reverse-column? #f)
+                         (cons 'subtotal? #f)
+                         (cons 'start-dual-column? #f)
+                         (cons 'friendly-heading-fn (const ""))
+                         (cons 'merge-dual-column? #f)))
+             '())
+
+         (if (column-uses? 'running-grand-total)
+             (list (list (cons 'heading (header-commodity
+                           (if (or (primary-get-info 'renderer-fn)
+                                   (secondary-get-info 'renderer-fn))
+                               ;; Translators: this is the running total for the grand total.
+                               ;; For translation to be consistent, make sure it follows the same
+                               ;; pattern as for these other strings: “Running Totals” and
+                               ;; "Grand Total”
+                               (G_ "Running Grand Total")
+                               ;; Translators: "Running Total" is a shorter version of
+                               ;; "Running Grand Total" used when the running grand total is
+                               ;; displayed without subtotals. To be consistent, also consider
+                               ;; how the plural form "Running Totals" is translated.
+                               (G_ "Running Total"))))
+                         (cons 'calc-fn converted-running-total)
+                         (cons 'reverse-column? #f)
+                         (cons 'subtotal? #f)
+                         (cons 'start-dual-column? #f)
+                         (cons 'friendly-heading-fn (const ""))
+                         (cons 'merge-dual-column? #f)))
+             '())
+
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-single))
              (list (list (cons 'heading (G_ "Amount"))
@@ -1457,6 +1590,46 @@ be excluded from periodic reporting.")
                              (cons 'start-dual-column? #f)
                              (cons 'friendly-heading-fn #f)
                              (cons 'merge-dual-column? #f))))
+             '())
+
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'running-sec))
+             (list (list (cons 'heading (G_ "Running Secondary Subtotal"))
+                         (cons 'calc-fn original-running-sec)
+                         (cons 'reverse-column? #f)
+                         (cons 'subtotal? #f)
+                         (cons 'start-dual-column? #f)
+                         (cons 'friendly-heading-fn (const ""))
+                         (cons 'merge-dual-column? #f)))
+             '())
+
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'running-prime))
+             (list (list (cons 'heading
+                           (if (secondary-get-info 'renderer-fn)
+                               (G_ "Running Primary Subtotal")
+                               (G_ "Running Subtotal")))
+                         (cons 'calc-fn original-running-prime)
+                         (cons 'reverse-column? #f)
+                         (cons 'subtotal? #f)
+                         (cons 'start-dual-column? #f)
+                         (cons 'friendly-heading-fn (const ""))
+                         (cons 'merge-dual-column? #f)))
+             '())
+
+         (if (and (column-uses? 'amount-original-currency)
+                  (column-uses? 'running-grand-total))
+             (list (list (cons 'heading
+                           (if (or (primary-get-info 'renderer-fn)
+                                   (secondary-get-info 'renderer-fn))
+                               (G_ "Running Grand Total")
+                               (G_ "Running Total")))
+                         (cons 'calc-fn original-running-total)
+                         (cons 'reverse-column? #f)
+                         (cons 'subtotal? #f)
+                         (cons 'start-dual-column? #f)
+                         (cons 'friendly-heading-fn (const ""))
+                         (cons 'merge-dual-column? #f)))
              '()))))
 
     (define calculated-cells
@@ -1770,7 +1943,13 @@ be excluded from periodic reporting.")
                      (and cell-content
                           (gnc:make-html-table-cell/markup
                            "number-cell"
-                           (if opt-use-links?
+                           ;; If link option is enabled, to avoid cluttering, we show links
+                           ;; only on number cells that are set to show a subtotal,
+                           ;; unless no columns are set to show a subtotal, in which case links
+                           ;; are shown on all number cells.
+                           (if (and opt-use-links? (or (cell-with-subtotals? cell)
+                                                       (not (any cell-with-subtotals?
+                                                                 cell-calculators))))
                                (gnc:html-split-anchor split cell-content)
                                cell-content)))))
                  cell-calculators))))
@@ -1902,7 +2081,11 @@ be excluded from periodic reporting.")
                 (when secondary-subtotal-comparator
                   (add-subheading (render-summary next 'secondary #t)
                                   def:secondary-subtotal-style next
-                                  'secondary))))
+                                  'secondary))
+                (converted-running-prime-collector 'reset #f #f)
+                (original-running-prime-collector 'reset #f #f)
+                (converted-running-sec-collector 'reset #f #f)
+                (original-running-sec-collector 'reset #f #f)))
 
              (else
               (when (and secondary-subtotal-comparator
@@ -1926,7 +2109,9 @@ be excluded from periodic reporting.")
                  secondary-subtotal-collectors)
                 (when next
                   (add-subheading (render-summary next 'secondary #t)
-                                  def:secondary-subtotal-style next 'secondary)))))
+                                  def:secondary-subtotal-style next 'secondary)
+                  (converted-running-sec-collector 'reset #f #f)
+                  (original-running-sec-collector 'reset #f #f)))))
 
             (loop rest (not odd-row?) (1+ work-done)))))
 

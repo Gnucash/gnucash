@@ -299,7 +299,16 @@
         (test-equal "month total present, and is $190 in original-currency"
           '("$190.00")
           (get-row-col sxml 6 -1))
-        ))
+        )
+
+      ;; dual columns with all running totals
+      (set-option! options "Display" "Running Totals" 'all)
+      (let ((sxml (options->sxml options "test column headers with original currency and running totals")))
+        (test-equal "default headers with all running totals, indented, includes common-currency"
+          '("Date" "Num" "Description" "Memo/Notes" "Account" "Amount (USD)"
+            "Running Secondary Subtotal (USD)" "Running Primary Subtotal (USD)" "Running Grand Total (USD)"
+            "Amount" "Running Secondary Subtotal" "Running Primary Subtotal" "Running Grand Total")
+          (get-row-col sxml 0 #f))))
 
     (test-end "general options")
 
@@ -537,10 +546,11 @@
        (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
              "Account Name" "Other Account Name" "Shares" "Price" "Account Balance"
              "Totals" "Use Full Other Account Name" "Use Full Account Name"))
+      (set-option! options "Display" "Running Totals" 'grand)
       (let* ((sxml (options->sxml options "all columns on")))
         (test-equal "all display columns on, displays correct columns"
           (list "Date" "Reconciled Date" "Num" "Description" "Memo/Notes" "Account"
-                "Transfer from/to" "Shares" "Price" "Amount" "Account Balance")
+                "Transfer from/to" "Shares" "Price" "Amount" "Account Balance" "Running Grand Total")
           (get-row-col sxml 0 #f))
         (test-assert "reconciled dates must be 01/03/70 or whitespace"
           (and-map
@@ -700,6 +710,20 @@
         (test-equal "running balance, showing Balance b/f"
           (list "Bank: Balance b/f" "-$99.00")
           (get-row-col sxml 1 #f)))
+
+      ;; test running grand total
+      (set! options (default-testing-options))
+      (set-option! options "Display" "Running Totals" 'grand)
+      (set-option! options "Sorting" "Primary Subtotal" #f)
+      (let* ((sxml (options->sxml options "running grand total"))
+             (cs (char-set-adjoin! (char-set-copy char-set:digit) #\-)))
+        (test-equal "Last running grand total equals grand total"
+          (get-row-col sxml -3 -1)
+          (get-row-col sxml -1 -2))
+        (test-equal "Row 9 running grand total matches row 8 running grand total + row 9 amount"
+          (+ (string->number (string-filter cs (car (get-row-col sxml 8 -1))))
+             (string->number (string-filter cs (car (get-row-col sxml 9 -2)))))
+          (string->number (string-filter cs (car (get-row-col sxml 9 -1))))))
       )
 
     (test-end "display options")
@@ -840,7 +864,52 @@
           (get-row-col sxml #f 4))
         (test-equal "weekly subtotals are correct (2)"
           '("$15.00" "$8.00" "$100.00")
-          (get-row-col sxml #f 5))))
+          (get-row-col sxml #f 5)))
+
+      ;; test running subtotals
+      (set! options (default-testing-options))
+      (set-option! options "Display" "Totals" #f)
+      (set-option! options "Display" "Running Totals" 'sub)
+      (set-option! options "Sorting" "Primary Key" 'account-name)
+      (set-option! options "Sorting" "Primary Subtotal" #t)
+      (set-option! options "Sorting" "Secondary Key" 'date)
+      (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
+      (let* ((sxml (options->sxml options "running subtotals"))
+             (cs (char-set-adjoin! (char-set-copy char-set:digit) #\-)))
+        (test-equal "Running subtotal columns are present"
+          (list "Date" "Num" "Description" "Memo/Notes" "Account" "Amount"
+                "Running Secondary Subtotal" "Running Primary Subtotal")
+          (get-row-col sxml 0 #f))
+        (test-equal "Last running primary subtotal equals primary subtotal"
+          (get-row-col sxml -3 -1)
+          (get-row-col sxml -1 -3))
+        (test-equal "Row 10 running primary subtotal matches row 9 running primary subtotal + row 10 amount"
+          (+ (string->number (string-filter cs (car (get-row-col sxml 9 -1))))
+             (string->number (string-filter cs (car (get-row-col sxml 10 -3)))))
+          (string->number (string-filter cs (car (get-row-col sxml 10 -1)))))
+        (test-equal "In first secondary group, last running secondary subtotal equals secondary subtotal"
+          (get-row-col sxml 5 -2)
+          (get-row-col sxml 6 -3))
+        (test-equal "Row 10 running secondary subtotal matches row 9 running secondary subtotal + row 10 amount"
+          (+ (string->number (string-filter cs (car (get-row-col sxml 9 -2))))
+             (string->number (string-filter cs (car (get-row-col sxml 10 -3)))))
+          (string->number (string-filter cs (car (get-row-col sxml 10 -2))))))
+      ;; test all running totals shown
+      (set-option! options "Display" "Running Totals" 'all)
+      (let* ((sxml (options->sxml options "all running totals"))
+             (cs (char-set-adjoin! (char-set-copy char-set:digit) #\-)))
+        (test-equal "All running total columns are present"
+          (list "Date" "Num" "Description" "Memo/Notes" "Account" "Amount"
+                "Running Secondary Subtotal" "Running Primary Subtotal" "Running Grand Total")
+          (get-row-col sxml 0 #f)))
+      ;; test no running totals shown
+      (set-option! options "Display" "Running Totals" 'none)
+      (let* ((sxml (options->sxml options "no running totals"))
+             (cs (char-set-adjoin! (char-set-copy char-set:digit) #\-)))
+        (test-equal "No running total columns are present"
+          (list "Date" "Num" "Description" "Memo/Notes" "Account" "Amount")
+          (get-row-col sxml 0 #f)))
+      )
 
     (test-end "sorting options")
 
