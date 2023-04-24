@@ -3,14 +3,15 @@
 # Parimal Khade <parimal.khade@gmail.com>, 2014.
 # Hindi and Sanskrit Speaker <ifiotsbywzpamtrbbk@wqcefp.com>, 2021.
 # Hemanshu Kumar <hemanshusubs@gmail.com>, 2022.
+# Carsten Hütter <Carsten.Huetter@gmx.de>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-10 12:35-0700\n"
-"PO-Revision-Date: 2022-06-13 11:14+0000\n"
-"Last-Translator: Hemanshu Kumar <hemanshusubs@gmail.com>\n"
+"PO-Revision-Date: 2023-04-15 15:51+0000\n"
+"Last-Translator: Carsten Hütter <Carsten.Huetter@gmx.de>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/gnucash/gnucash/hi/"
 ">\n"
 "Language: hi\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13-dev\n"
+"X-Generator: Weblate 4.17-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1489,10 +1490,8 @@ msgstr ""
 #. split when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:250
 #: gnucash/gnome/assistant-stock-transaction.cpp:355
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock split"
-msgstr "स्टॉक विभाजन "
+msgstr "स्टॉक विभाजन"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:251
 #: gnucash/gnome/assistant-stock-transaction.cpp:356
