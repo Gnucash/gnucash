@@ -1821,7 +1821,14 @@ PaymentWindow * gnc_ui_payment_new_with_txn (GtkWindow* parent, GncOwner *owner,
         gnc_ui_payment_window_set_date(pw, &txn_date);
     }
 
-    gnc_ui_payment_window_set_amount(pw, xaccSplitConvertAmount (payment_split, post_acct));
+    gnc_numeric amount = xaccSplitGetAmount (payment_split);
+    /* Note: at this point post account selected in newly created payment dialog
+     * may differ from what we got from select_txn_lots above.
+     * Use the dialog's post account commodity to optionally convert the amount
+     * to to display to the user */
+    if (pw->post_acct)
+        amount = xaccSplitConvertAmount (payment_split, pw->post_acct);
+    gnc_ui_payment_window_set_amount(pw, amount);
     if (payment_split)
         gnc_ui_payment_window_set_xferaccount(pw, xaccSplitGetAccount(payment_split));
     return pw;
