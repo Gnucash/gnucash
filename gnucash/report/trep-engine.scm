@@ -1445,12 +1445,12 @@ be excluded from periodic reporting.")
             (gnc:html-make-empty-cells left-indent)
             (if export?
                 (cons
-                 (gnc:make-html-table-cell data)
+                 (gnc:make-html-table-cell/markup "total-label-cell" data)
                  (gnc:html-make-empty-cells
                   (+ right-indent width-left-columns -1)))
                 (list
-                 (gnc:make-html-table-cell/size
-                  1 (+ right-indent width-left-columns) data)))
+                 (gnc:make-html-table-cell/size/markup
+                  1 (+ right-indent width-left-columns) "total-label-cell" data)))
             (map
              (lambda (cell)
                (match (vector-ref cell 5)
