@@ -813,8 +813,11 @@ void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncT
                     col_it++)
                 if (*col_it == old_type)
                 {
-                    auto col_num = col_it - m_settings.m_column_types.cbegin();
-                    auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
+                    auto value = std::string();
+                    auto col_num = static_cast<uint32_t>(col_it - m_settings.m_column_types.cbegin());
+
+                    if (col_num < std::get<PL_INPUT>(m_parsed_lines[row]).size())
+                        value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
                     split_props->add (old_type, value);
                 }
         }
@@ -833,14 +836,19 @@ void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncT
                     col_it++)
                 if (*col_it == new_type)
                 {
-                    auto col_num = col_it - m_settings.m_column_types.cbegin();
-                    auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
+                    auto value = std::string();
+                    auto col_num = static_cast<uint32_t>(col_it - m_settings.m_column_types.cbegin());
+
+                    if (col_num < std::get<PL_INPUT>(m_parsed_lines[row]).size())
+                        value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col_num);
                     split_props->add (new_type, value);
                 }
         }
         else
         {
-            auto value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
+            auto value = std::string();
+            if (col < std::get<PL_INPUT>(m_parsed_lines[row]).size())
+                value = std::get<PL_INPUT>(m_parsed_lines[row]).at(col);
             split_props->set(new_type, value);
         }
     }
