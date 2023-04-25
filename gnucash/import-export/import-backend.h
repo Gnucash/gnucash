@@ -182,8 +182,8 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info);
 /** Returns the stored list of possible matches. */
 GList *gnc_import_TransInfo_get_match_list (const GNCImportTransInfo *info);
 
-/** Assigns the list of possible matches. */
-void gnc_import_TransInfo_set_match_list (GNCImportTransInfo *info, GList* match_list);
+/** Remove the first match in the list of possible matches  */
+void gnc_import_TransInfo_remove_top_match (GNCImportTransInfo *info);
 
 /** Returns the transaction of this TransInfo. */
 Transaction *gnc_import_TransInfo_get_trans (const GNCImportTransInfo *info);

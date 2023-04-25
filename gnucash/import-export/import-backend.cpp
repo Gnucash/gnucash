@@ -128,7 +128,7 @@ gnc_import_TransInfo_get_match_list (const GNCImportTransInfo *info)
     return info->match_list;
 }
 
-void
+static void
 gnc_import_TransInfo_set_match_list (GNCImportTransInfo *info, GList* match_list)
 {
     g_assert (info);
@@ -140,6 +140,14 @@ gnc_import_TransInfo_set_match_list (GNCImportTransInfo *info, GList* match_list
         info->selected_match_info.selected_match = nullptr;
         gnc_import_TransInfo_set_action (info, GNCImport_ADD);
     }
+}
+
+void
+gnc_import_TransInfo_remove_top_match (GNCImportTransInfo *info)
+{
+    GList* match_trans = gnc_import_TransInfo_get_match_list (info);
+    match_trans = g_list_remove (match_trans, static_cast<gpointer>(match_trans->data));
+    gnc_import_TransInfo_set_match_list (info, match_trans);
 }
 
 Transaction *
