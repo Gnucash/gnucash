@@ -4891,6 +4891,23 @@ gnc_plugin_page_register_cmd_schedule (GSimpleAction *simple,
     LEAVE (" ");
 }
 
+static gboolean
+strip_text (const gchar *text_in, gchar **text_out)
+{
+    if (text_in)
+    {
+        *text_out = g_strdup (text_in);
+        gnc_utf8_strip_invalid_and_controls (*text_out);
+        g_strstrip (*text_out);
+
+        if (g_strcmp0 (text_in, *text_out) != 0)
+            return TRUE;
+
+        g_free (*text_out);
+    }
+    return FALSE;
+}
+
 static void
 scrub_split (Split *split)
 {
@@ -4903,6 +4920,28 @@ scrub_split (Split *split)
     trans = xaccSplitGetParent (split);
     lot = xaccSplitGetLot (split);
     g_return_if_fail (trans);
+
+    const gchar *desc_text = xaccTransGetDescription (trans);
+    gchar *text_out = NULL;
+    if (strip_text (desc_text, &text_out))
+    {
+        xaccTransSetDescription (trans, text_out);
+        g_free (text_out);
+    }
+
+    const gchar *notes_text = xaccTransGetNotes (trans);
+    if (strip_text (notes_text, &text_out))
+    {
+        xaccTransSetNotes (trans, text_out);
+        g_free (text_out);
+    }
+
+    const gchar *memo_text = xaccSplitGetMemo (split);
+    if (strip_text (memo_text, &text_out))
+    {
+        xaccSplitSetMemo (split, text_out);
+        g_free (text_out);
+    }
 
     xaccTransScrubOrphans (trans);
     xaccTransScrubImbalance (trans, gnc_get_current_root_account(), NULL);
