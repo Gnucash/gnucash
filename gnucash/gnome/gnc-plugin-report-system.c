@@ -137,6 +137,24 @@ gnc_report_system_file_stream_cb (const char *location, char ** data, int *len)
     return (*len > 0);
 }
 
+static char *
+html_sanitize (const char *str)
+{
+    GString *gs = g_string_sized_new (strlen (str));
+    for (const char *c = str; *c; c++)
+    {
+        if (*c == '&')
+            gs = g_string_append (gs, "&amp;");
+        else if (*c == '<')
+            gs = g_string_append (gs, "&lt;");
+        else if (*c == '>')
+            gs = g_string_append (gs, "&gt;");
+        else
+            gs = g_string_append_c (gs, *c);
+    }
+    return g_string_free (gs, FALSE);
+}
+
 static gboolean
 gnc_report_system_report_stream_cb (const char *location, char ** data, int *len)
 {
@@ -147,12 +165,14 @@ gnc_report_system_report_stream_cb (const char *location, char ** data, int *len
 
     if (!ok)
     {
+        char *sanitized = html_sanitize (captured_str);
         *data = g_strdup_printf ("<html><body><h3>%s</h3>"
                                  "<p>%s</p><pre>%s</pre></body></html>",
                                  _("Report error"),
                                  _("An error occurred while running the report."),
-                                 captured_str);
+                                 sanitized);
 
+        g_free (sanitized);
         g_free(captured_str);
 
         /* Make sure the progress bar is finished, which will also
