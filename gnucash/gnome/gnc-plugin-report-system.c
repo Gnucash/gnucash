@@ -140,6 +140,7 @@ gnc_report_system_file_stream_cb (const char *location, char ** data, int *len)
 static char *
 html_sanitize (const char *str)
 {
+    g_return_val_if_fail (str, NULL);
     GString *gs = g_string_sized_new (strlen (str));
     for (const char *c = str; *c; c++)
     {
