@@ -2262,11 +2262,13 @@ void gnc_gen_trans_list_add_trans_with_split_data (GNCImportMainMatcher *gui,
     gnc_gen_trans_list_add_trans_internal (gui, trans, 0, lsplit);
 }
 
-/* Query the accounts used by the imported transactions to find a list of
- * candidate matching transactions.
+/* Return a list of splits from already existing transactions for
+ * which the account matches an account used by the transactions to
+ * import. The matching range is also date-limited (configurable
+ * via preferences) to not go too far in the past or future.
  */
 static GList*
-query_imported_transaction_accounts (GNCImportMainMatcher *gui)
+filter_existing_splits_on_account_and_date (GNCImportMainMatcher *gui)
 {
     static const int secs_per_day = 86400;
     gint match_date_limit =
@@ -2312,10 +2314,10 @@ query_imported_transaction_accounts (GNCImportMainMatcher *gui)
  * transactions based on their account and date and organized per account.
  */
 static GHashTable*
-create_hash_of_potential_matches (GList *candidate_txns,
+create_hash_of_potential_matches (GList *candidate_splits,
                                   GHashTable *account_hash)
 {
-    for (GList* candidate = candidate_txns; candidate != NULL;
+    for (GList* candidate = candidate_splits; candidate != NULL;
          candidate = g_list_next (candidate))
     {
         if (gnc_import_split_has_online_id (candidate->data))
@@ -2408,12 +2410,12 @@ gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
         g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
                               (GDestroyNotify)g_slist_free);
     g_assert (gui);
-    GList *candidate_txns = query_imported_transaction_accounts (gui);
+    GList *candidate_splits = filter_existing_splits_on_account_and_date (gui);
 
-    create_hash_of_potential_matches (candidate_txns, account_hash);
+    create_hash_of_potential_matches (candidate_splits, account_hash);
     perform_matching (gui, account_hash);
 
-    g_list_free (candidate_txns);
+    g_list_free (candidate_splits);
     g_hash_table_destroy (account_hash);
     return;
 }
