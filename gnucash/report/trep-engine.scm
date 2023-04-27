@@ -56,6 +56,8 @@
              (gnucash report html-text))
 (use-modules (srfi srfi-11))
 (use-modules (srfi srfi-1))
+(use-modules (srfi srfi-9))
+(use-modules (srfi srfi-26))
 (use-modules (ice-9 match))
 
 (export gnc:trep-options-generator)
@@ -992,6 +994,28 @@ be excluded from periodic reporting.")
   (GncOptionDBPtr-set-default-section options gnc:pagename-general)
     options))
 
+(define (upgrade-vector-to-assoclist list-of-columns)
+  (map (lambda (col)
+         (list (cons 'heading (vector-ref col 0))
+               (cons 'calc-fn (lambda (s tr?) ((vector-ref col 1) s)))
+               (cons 'reverse-column? (vector-ref col 2))
+               (cons 'subtotal? (vector-ref col 3))
+               (cons 'start-dual-column? (vector-ref col 4))
+               (cons 'friendly-heading-fn (vector-ref col 5))
+               ;; the following is a backward-compatibility hack
+               ;; being used by income-gst-statement.scm
+               (cons 'merge-dual-column? (and (<= 7 (vector-length col))
+                                              (vector-ref col 6)))))
+       list-of-columns))
+
+(define (invalid-cell? cell)
+  (let lp ((fields '(heading calc-fn reverse-column? subtotal? start-dual-column?
+                             friendly-heading-fn merge-dual-column?)))
+    (match fields
+      (() #f)
+      (((? (cut assq <> cell)) . rest) (lp rest))
+      ((fld . _) (gnc:error "field " fld " missing in cell " cell) #t))))
+
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
 
@@ -1283,18 +1307,18 @@ be excluded from periodic reporting.")
                                                       optname-currency)))
                                     ""))))
            ;; For conversion to row-currency.
-           (converted-amount (lambda (s)
+           (converted-amount (lambda (s tr?)
                                (exchange-fn
                                 (gnc:make-gnc-monetary (split-currency s)
                                                        (split-amount s))
                                 (row-currency s)
                                 (xaccTransGetDate (xaccSplitGetParent s)))))
-           (converted-debit-amount (lambda (s) (and (positive? (split-amount s))
-                                                    (converted-amount s))))
-           (converted-credit-amount (lambda (s)
+           (converted-debit-amount (lambda (s tr?) (and (positive? (split-amount s))
+                                                        (converted-amount s tr?))))
+           (converted-credit-amount (lambda (s tr?)
                                       (and (not (positive? (split-amount s)))
-                                           (gnc:monetary-neg (converted-amount s)))))
-           (converted-account-balance (lambda (s)
+                                           (gnc:monetary-neg (converted-amount s tr?)))))
+           (converted-account-balance (lambda (s tr?)
                                         (exchange-fn
                                          (gnc:make-gnc-monetary
                                           (split-currency s)
@@ -1302,94 +1326,140 @@ be excluded from periodic reporting.")
                                          (row-currency s)
                                          (time64CanonicalDayTime
                                           (xaccTransGetDate (xaccSplitGetParent s))))))
-           (original-amount (lambda (s)
+           (original-amount (lambda (s tr?)
                               (gnc:make-gnc-monetary
                                (split-currency s) (split-amount s))))
-           (original-debit-amount (lambda (s)
+           (original-debit-amount (lambda (s tr?)
                                     (and (positive? (split-amount s))
-                                         (original-amount s))))
-           (original-credit-amount (lambda (s)
+                                         (original-amount s tr?))))
+           (original-credit-amount (lambda (s tr?)
                                      (and (not (positive? (split-amount s)))
-                                          (gnc:monetary-neg (original-amount s)))))
-           (original-account-balance (lambda (s)
+                                          (gnc:monetary-neg (original-amount s tr?)))))
+           (original-account-balance (lambda (s tr?)
                                        (gnc:make-gnc-monetary
                                         (split-currency s) (xaccSplitGetBalance s)))))
         (append
-         ;; each column will be a vector
-         ;; (vector heading
-         ;;         calculator-function (calculator-function split) to obtain amount
-         ;;         reverse-column?     #t to allow reverse signs
-         ;;         subtotal?           #t to allow subtotals (ie must be #f for
-         ;;                             running balance)
-         ;;         start-dual-column?  #t for the debit side of a dual column
-         ;;                             (i.e. debit/credit) which means the next
-         ;;                             column must be the credit side
-         ;;         friendly-heading-fn (friendly-heading-fn account) to retrieve
-         ;;                             friendly name for account debit/credit
-         ;;                             or 'bal-bf for balance-brought-forward
-         ;;                             or 'original-bal-bf for bal-bf in original currency
-         ;;                             when currency conversion is used
-         ;;         start-dual-column?  #t: merge with next cell for subtotal table.
+         ;; each column will be a list of pairs whose car is a metadata header,
+         ;; and whose cdr is the procedure, string or bool to obtain the metadata
+         ;;   'heading            the heading string
+         ;;   'calc-fn            (calc-fn split transaction-row?) to obtain gnc:monetary
+         ;;   'reverse-column?    #t to allow reverse signs
+         ;;   'subtotal?          #t to allow subtotals (ie must be #f for
+         ;;                       running balance)
+         ;;   'start-dual-column? #t for the debit side of a dual column
+         ;;                       (i.e. debit/credit) which means the next
+         ;;                       column must be the credit side
+         ;;   'friendly-heading-fn (friendly-heading-fn account) to retrieve
+         ;;                       friendly name for account debit/credit
+         ;;                       or 'bal-bf for balance-brought-forward
+         ;;                       or 'original-bal-bf for bal-bf in original currency
+         ;;                       when currency conversion is used
+         ;;   'merge-dual-column?  #t: merge with next cell.
 
          (if (column-uses? 'amount-single)
-             (list (vector (header-commodity (G_ "Amount"))
-                           converted-amount #t #t #f
-                           (lambda (a) "") #f))
+             (list (list (cons 'heading (header-commodity (G_ "Amount")))
+                         (cons 'calc-fn converted-amount)
+                         (cons 'reverse-column? #t)
+                         (cons 'subtotal? #t)
+                         (cons 'start-dual-column? #f)
+                         (cons 'friendly-heading-fn (const ""))
+                         (cons 'merge-dual-column? #f)))
              '())
 
          (if (column-uses? 'amount-double)
-             (list (vector (header-commodity (G_ "Debit"))
-                           converted-debit-amount #f #t #t
-                           friendly-debit #t)
-                   (vector (header-commodity (G_ "Credit"))
-                           converted-credit-amount #f #t #f
-                           friendly-credit #f))
+             (list (list (cons 'heading (header-commodity (G_ "Debit")))
+                         (cons 'calc-fn converted-debit-amount)
+                         (cons 'reverse-column? #f)
+                         (cons 'subtotal? #t)
+                         (cons 'start-dual-column? #t)
+                         (cons 'friendly-heading-fn friendly-debit)
+                         (cons 'merge-dual-column? #t))
+                   (list (cons 'heading (header-commodity (G_ "Credit")))
+                         (cons 'calc-fn converted-credit-amount)
+                         (cons 'reverse-column? #f)
+                         (cons 'subtotal? #t)
+                         (cons 'start-dual-column? #f)
+                         (cons 'friendly-heading-fn friendly-credit)
+                         (cons 'merge-dual-column? #f)))
              '())
 
          (if (column-uses? 'running-balance)
              (if show-bal-bf?
-                 (list (vector (header-commodity (G_ "Running Balance"))
-                               converted-account-balance #t #f #f
-                               'bal-bf #f))
-                 (list (vector (header-commodity (G_ "Account Balance"))
-                               converted-account-balance #t #f #f
-                               #f #f)))
+                 (list (list (cons 'heading (header-commodity (G_ "Running Balance")))
+                             (cons 'calc-fn converted-account-balance)
+                             (cons 'reverse-column? #t)
+                             (cons 'subtotal? #f)
+                             (cons 'start-dual-column? #f)
+                             (cons 'friendly-heading-fn 'bal-bf)
+                             (cons 'merge-dual-column? #f)))
+                 (list (list (cons 'heading (header-commodity (G_ "Account Balance")))
+                             (cons 'calc-fn converted-account-balance)
+                             (cons 'reverse-column? #t)
+                             (cons 'subtotal? #f)
+                             (cons 'start-dual-column? #f)
+                             (cons 'friendly-heading-fn #f)
+                             (cons 'merge-dual-column? #f))))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-single))
-             (list (vector (G_ "Amount")
-                           original-amount #t #t #f
-                           (lambda (a) "") #f))
+             (list (list (cons 'heading (G_ "Amount"))
+                         (cons 'calc-fn original-amount)
+                         (cons 'reverse-column? #t)
+                         (cons 'subtotal? #t)
+                         (cons 'start-dual-column? #f)
+                         (cons 'friendly-heading-fn (const ""))
+                         (cons 'merge-dual-column? #f)))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'amount-double))
-             (list (vector (G_ "Debit")
-                           original-debit-amount #f #t #t
-                           friendly-debit #t)
-                   (vector (G_ "Credit")
-                           original-credit-amount #f #t #f
-                           friendly-credit #f))
+             (list (list (cons 'heading (G_ "Debit"))
+                         (cons 'calc-fn original-debit-amount)
+                         (cons 'reverse-column? #f)
+                         (cons 'subtotal? #t)
+                         (cons 'start-dual-column? #t)
+                         (cons 'friendly-heading-fn friendly-debit)
+                         (cons 'merge-dual-column? #t))
+                   (list (cons 'heading (G_ "Credit"))
+                         (cons 'calc-fn original-credit-amount)
+                         (cons 'reverse-column? #f)
+                         (cons 'subtotal? #t)
+                         (cons 'start-dual-column? #f)
+                         (cons 'friendly-heading-fn friendly-credit)
+                         (cons 'merge-dual-column? #f)))
              '())
 
          (if (and (column-uses? 'amount-original-currency)
                   (column-uses? 'running-balance))
              (if show-bal-bf?
-                 (list (vector (G_ "Running Balance")
-                               original-account-balance #t #f #f
-                               'original-bal-bf #f))
-                 (list (vector (G_ "Account Balance")
-                               original-account-balance #t #f #f
-                               #f #f)))
+                 (list (list (cons 'heading (G_ "Running Balance"))
+                             (cons 'calc-fn original-account-balance)
+                             (cons 'reverse-column? #t)
+                             (cons 'subtotal? #f)
+                             (cons 'start-dual-column? #f)
+                             (cons 'friendly-heading-fn 'original-bal-bf)
+                             (cons 'merge-dual-column? #f)))
+                 (list (list (cons 'heading (G_ "Account Balance"))
+                             (cons 'calc-fn original-account-balance)
+                             (cons 'reverse-column? #t)
+                             (cons 'subtotal? #f)
+                             (cons 'start-dual-column? #f)
+                             (cons 'friendly-heading-fn #f)
+                             (cons 'merge-dual-column? #f))))
              '()))))
 
     (define calculated-cells
       ;; this part will check whether custom-calculated-cells were specified. this
       ;; describes a custom function which consumes an options list, and generates
-      ;; a vectorlist similar to default-calculated-cells as above.
+      ;; an association list similar to default-calculated-cells as above.
       (if custom-calculated-cells
-          (custom-calculated-cells options)
+          (let ((cc (custom-calculated-cells options)))
+            (cond
+             ((not (pair? cc)) (gnc:error "welp" cc) default-calculated-cells)
+             ((vector? (car cc)) (upgrade-vector-to-assoclist cc))
+             ((any invalid-cell? cc) (gnc:error "welp" cc) default-calculated-cells)
+             (else cc)))
           default-calculated-cells))
 
     (define headings-left-columns
@@ -1398,9 +1468,7 @@ be excluded from periodic reporting.")
            left-columns))
 
     (define headings-right-columns
-      (map (lambda (column)
-             (vector-ref column 0))
-           calculated-cells))
+      (map (cut assq-ref <> 'heading) calculated-cells))
 
     (define width-left-columns (length left-columns))
     (define width-right-columns (length calculated-cells))
@@ -1423,7 +1491,7 @@ be excluded from periodic reporting.")
                                (case level
                                  ((primary) optname-prime-sortkey)
                                  ((secondary) optname-sec-sortkey))))
-             (data (if (and (any (lambda (c) (eq? 'bal-bf (vector-ref c 5)))
+             (data (if (and (any (lambda (c) (eq? 'bal-bf (assq-ref c 'friendly-heading-fn)))
                                  calculated-cells)
                             (memq sortkey ACCOUNT-SORTING-TYPES))
                        ;; Translators: Balance b/f stands for "Balance
@@ -1453,7 +1521,7 @@ be excluded from periodic reporting.")
                   1 (+ right-indent width-left-columns) "total-label-cell" data)))
             (map
              (lambda (cell)
-               (match (vector-ref cell 5)
+               (match (assq-ref cell 'friendly-heading-fn)
                  (#f #f)
                  ('bal-bf
                   (let* ((acc (xaccSplitGetAccount split))
@@ -1488,14 +1556,10 @@ be excluded from periodic reporting.")
                          (fn (xaccSplitGetAccount split))))))))
              calculated-cells))))))
 
-    ;; check first calculated-cell vector's 7th cell. originally these
-    ;; had only 6 cells. backward-compatible upgrade. useful for the
-    ;; next function, add-subtotal-row.
+    ;; check first calculated-cell merge-dual-column status.
     (define first-column-merge?
-      (let ((first-cell (and (pair? calculated-cells) (car calculated-cells))))
-        (and first-cell
-             (<= 7 (vector-length first-cell))
-             (vector-ref first-cell 6))))
+      (and (pair? calculated-cells)
+           (assq-ref (car calculated-cells) 'merge-dual-column?)))
 
     (define (add-subtotal-row subtotal-string subtotal-collectors
                               subtotal-style level row col)
@@ -1504,7 +1568,7 @@ be excluded from periodic reporting.")
                             ((primary) primary-indent)
                             ((secondary) (+ primary-indent secondary-indent))))
              (right-indent (- indent-level left-indent))
-             (merge-list (map (lambda (cell) (vector-ref cell 4)) calculated-cells))
+             (merge-list (map (cut assq-ref <> 'start-dual-column?) calculated-cells))
              (columns (map (lambda (coll)
                              (coll 'format gnc:make-gnc-monetary #f))
                            subtotal-collectors))
@@ -1688,8 +1752,10 @@ be excluded from periodic reporting.")
                     split transaction-row?))
                  left-columns)
             (map (lambda (cell)
-                   (let* ((cell-monetary ((vector-ref cell 1) split))
-                          (reverse? (and (vector-ref cell 2) reversible-account?))
+                   (let* ((cell-monetary ((assq-ref cell 'calc-fn)
+                                          split transaction-row?))
+                          (reverse? (and (assq-ref cell 'reverse-column?)
+                                         reversible-account?))
                           (cell-content (and cell-monetary
                                              (if reverse?
                                                  (gnc:monetary-neg cell-monetary)
@@ -1702,7 +1768,9 @@ be excluded from periodic reporting.")
                                cell-content)))))
                  cell-calculators))))
 
-        (map (lambda (cell) (and (vector-ref cell 3) ((vector-ref cell 1) split)))
+        (map (lambda (cell)
+               (and (assq-ref cell 'subtotal?)
+                    ((assq-ref cell 'calc-fn) split transaction-row?)))
              cell-calculators)))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1856,14 +1924,14 @@ be excluded from periodic reporting.")
             (loop rest (not odd-row?) (1+ work-done)))))
 
     (let ((csvlist (cond
-                    ((any (lambda (cell) (vector-ref cell 4)) calculated-cells)
+                    ((any (cut assq-ref <> 'start-dual-column?) calculated-cells)
                      ;; there are mergeable cells. don't return a list.
                      (N_ "CSV disabled for double column amounts"))
 
                     (else
                      (map
                       (lambda (cell coll)
-                        (cons (vector-ref cell 0)
+                        (cons (assq-ref cell 'heading)
                               (coll 'format gnc:make-gnc-monetary #f)))
                       calculated-cells total-collectors)))))
       (values table grid csvlist))))
@@ -1964,7 +2032,7 @@ be excluded from periodic reporting.")
   ;; the report object
   ;;
   ;; the optional arguments are:
-  ;; #:custom-calculated-cells - a list of vectors to define customized data columns
+  ;; #:custom-calculated-cells - a list of pairs to define customized data columns
   ;; #:empty-report-message - a str or html-object displayed at the initial run
   ;; #:custom-split-filter - a split->bool function to add to the split filter
   ;; #:split->date - a split->time64 which overrides the default posted date filter
