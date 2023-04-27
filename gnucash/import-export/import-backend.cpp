@@ -301,11 +301,7 @@ gnc_import_TransInfo_set_last_split_info (GNCImportTransInfo *info,
             info->lsplit_amount = lsplit->amount;
             info->lsplit_amount_selected_manually = true;
         }
-        /* Bayesian matching may have already set a candidate destination
-         * account. However if the csv data also provides one, the one from the
-         * csv data is preferred. */
-        if (lsplit->account)
-            info->dest_acc = lsplit->account;
+        info->dest_acc = lsplit->account;
         info->lsplit_rec_state = lsplit->rec_state;
         info->lsplit_rec_date = lsplit->rec_date;
     }
