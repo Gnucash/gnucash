@@ -2178,7 +2178,7 @@ be excluded from periodic reporting.")
          query
          (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) primary-key 'sortkey)
          (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) secondary-key 'sortkey)
-         '())
+         (list QUERY-DEFAULT-SORT))
         (qof-query-set-sort-increasing
          query (eq? primary-order 'ascend) (eq? secondary-order 'ascend)
          #t))
