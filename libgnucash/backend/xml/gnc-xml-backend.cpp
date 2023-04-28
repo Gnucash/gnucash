@@ -28,6 +28,9 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <regex.h>
+#if COMPILER(MSVC)
+# define g_fopen fopen
+#endif
 
 #include <gnc-engine.h> //for GNC_MOD_BACKEND
 #include <gnc-uri-utils.h>
@@ -337,7 +340,7 @@ GncXmlBackend::save_may_clobber_data()
 void
 GncXmlBackend::export_coa(QofBook* book)
 {
-    auto out = fopen(m_fullpath.c_str(), "w");
+    auto out = g_fopen(m_fullpath.c_str(), "w");
     if (out == NULL)
     {
         set_error(ERR_FILEIO_WRITE_ERROR);
