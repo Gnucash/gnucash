@@ -648,7 +648,6 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
     gnc_entry_ledger_set_parent (entry_ledger, ow->dialog);
 
     vbox = GTK_WIDGET(gtk_builder_get_object (builder, "ledger_vbox"));
-    // gtk_box_pack_start (GTK_BOX(vbox), toolbar, FALSE, FALSE, 2);
     gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
 
     /* Setup signals */
