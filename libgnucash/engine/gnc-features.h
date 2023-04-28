@@ -36,9 +36,15 @@
 #ifndef GNC_FEATURES_H
 #define GNC_FEATURES_H
 
-#include "qof.h"
-
 #ifdef __cplusplus
+#include <string_view>
+#include <unordered_map>
+#include <vector>
+
+using Feature = std::pair<std::string_view, std::string_view>;
+using FeaturesTable = std::unordered_map<std::string_view, std::string_view>;
+using FeatureSet = std::vector<Feature>;
+
 extern "C" {
 #endif
 

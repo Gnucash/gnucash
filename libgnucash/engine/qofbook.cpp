@@ -1267,14 +1267,14 @@ qof_book_set_feature (QofBook *book, const gchar *key, const gchar *descr)
     }
 }
 
-std::vector<std::string>
+FeatureSet
 qof_book_get_unknown_features (QofBook *book, const FeaturesTable& features)
 {
-    std::vector<std::string> rv;
+    FeatureSet rv;
     auto test_feature = [&](const KvpFrameImpl::map_type::value_type& feature)
     {
         if (features.find (feature.first) == features.end ())
-            rv.push_back (feature.second->get<const char*>());
+            rv.emplace_back (feature.first, feature.second->get<const char*>());
     };
     auto frame = qof_instance_get_slots (QOF_INSTANCE (book));
     auto slot = frame->get_slot({GNC_FEATURES});

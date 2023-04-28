@@ -69,7 +69,7 @@ gchar *gnc_features_test_unknown (QofBook *book)
     if (unknowns.empty())
         return nullptr;
 
-    auto accum = [](const auto& a, const auto& b){ return a + "\n* " + b; };
+    auto accum = [](const auto& a, const auto& b){ return a + "\n* " + b.second.data(); };
     auto msg {std::accumulate (unknowns.begin(), unknowns.end(),
                                    std::string (_(header)), accum)};
     return g_strdup (msg.c_str());
@@ -88,7 +88,7 @@ void gnc_features_set_used (QofBook *book, const gchar *feature)
         return;
     }
 
-    qof_book_set_feature (book, feature, iter->second.c_str());
+    qof_book_set_feature (book, feature, iter->second.data());
 }
 
 

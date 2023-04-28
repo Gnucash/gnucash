@@ -26,10 +26,9 @@
 #include <string>
 
 #include "qof.h"
+#include "gnc-features.h"
 
-using FeaturesTable = std::unordered_map<std::string,std::string>;
-
-std::vector<std::string>
+FeatureSet
 qof_book_get_unknown_features (QofBook *book, const FeaturesTable& features);
 bool qof_book_test_feature (QofBook*, const char*);
 
