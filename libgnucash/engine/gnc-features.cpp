@@ -27,6 +27,7 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
+#include "qofbook.h"
 #include "qofbook.hpp"
 
 #include "gnc-features.h"
@@ -36,7 +37,6 @@ static const FeaturesTable features_table
     { GNC_FEATURE_CREDIT_NOTES, "Customer and vendor credit notes (requires at least GnuCash 2.5.0)" },
     { GNC_FEATURE_NUM_FIELD_SOURCE, "User specifies source of 'num' field'; either transaction number or split action (requires at least GnuCash 2.5.0)" },
     { GNC_FEATURE_KVP_EXTRA_DATA, "Extra data for addresses, jobs or invoice entries (requires at least GnuCash 2.6.4)" },
-    { GNC_FEATURE_BOOK_CURRENCY, "User-specified book currency stored in KVP. Never implemented but some user managed to get it set anyway. (requires at least GnuCash 2.7.0)" },
     { GNC_FEATURE_GUID_BAYESIAN, "Use account GUID as key for Bayesian data (requires at least GnuCash 2.6.12)" },
     { GNC_FEATURE_GUID_FLAT_BAYESIAN, "Use account GUID as key for bayesian data and store KVP flat (requires at least Gnucash 2.6.19)" },
     { GNC_FEATURE_SQLITE3_ISO_DATES, "Use ISO formatted date-time strings in SQLite3 databases (requires at least GnuCash 2.6.20)"},
@@ -44,6 +44,21 @@ static const FeaturesTable features_table
     { GNC_FEATURE_BUDGET_UNREVERSED, "Store budget amounts unreversed (i.e. natural) signs (requires at least Gnucash 3.8)"},
     { GNC_FEATURE_BUDGET_SHOW_EXTRA_ACCOUNT_COLS, "Show extra account columns in the Budget View (requires at least Gnucash 3.8)"},
     { GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE, GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE " (requires at least Gnucash 4.3)" },
+};
+
+/* To obsolete a feature leave the #define in gnc-features.h and move the
+ * feature from features_table to obsolete_features after removing all of the
+ * code that depends on the feature. The feature will be removed from the book's
+ * KVP, allowing the book to be opened with GnuCash versions that don't support
+ * the feature.
+ *
+ * Do this only if the book's data is restored to compatibility with older
+ * GnuCash versions lacking the feature. In general this can be used only in
+ * cases where a feature was created but never implemented in a way that affects
+ * the book's data.
+ */
+static const FeaturesTable obsolete_features{
+    {GNC_FEATURE_BOOK_CURRENCY, "User-specified book currency stored in KVP. Never implemented but some user managed to get it set anyway. (requires at least GnuCash 2.7.0)"},
 };
 
 /* This static indicates the debugging module that this .o belongs to.  */
@@ -66,6 +81,19 @@ header = N_("This Dataset contains features not supported "
 gchar *gnc_features_test_unknown (QofBook *book)
 {
     auto unknowns {qof_book_get_unknown_features (book, features_table)};
+    if (unknowns.empty())
+        return nullptr;
+
+    auto obsolete = std::remove_if(unknowns.begin(), unknowns.end(),
+                                   [](auto& unknown){
+                                       return obsolete_features.find(unknown.first) != obsolete_features.end();
+                                   });
+    while (obsolete != unknowns.end())
+    {
+        qof_book_unset_feature(book, obsolete->first.data());
+        obsolete = unknowns.erase(obsolete);
+    }
+
     if (unknowns.empty())
         return nullptr;
 

@@ -784,6 +784,11 @@ test_book_features (Fixture *fixture, gconstpointer pData)
     g_assert_null (gnc_features_test_unknown (fixture->book));
     g_assert_false (gnc_features_check_used (fixture->book, "Credit Notes"));
 
+    qof_book_set_feature(fixture->book, "Use a Book-Currency", "Random string, doesn't matter");
+    g_assert_null (gnc_features_test_unknown (fixture->book));
+    g_assert_false (gnc_features_check_used (fixture->book, "Use a Book-Currency"));
+
+
     /* cannot use gnc_features_set_used to set an unknown feature: it bails out.
      * use qof_book_set_feature instead. */
     qof_book_set_feature (fixture->book, "Nanotech", "With Quantum Computing");
