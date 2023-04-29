@@ -3933,6 +3933,50 @@ xaccAccountGetNoclosingBalanceChangeForPeriod (Account *acc, time64 t1,
     return gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
 }
 
+typedef struct
+{
+    const gnc_commodity *currency;
+    gnc_numeric balanceChange;
+    time64 t1;
+    time64 t2;
+} CurrencyBalanceChange;
+
+static void
+xaccAccountBalanceChangeHelper (Account *acc, gpointer data)
+{
+    CurrencyBalanceChange *cbdiff = static_cast<CurrencyBalanceChange*>(data);
+
+    gnc_numeric b1, b2;
+    b1 = GetBalanceAsOfDate(acc, cbdiff->t1, TRUE);
+    b2 = GetBalanceAsOfDate(acc, cbdiff->t2, TRUE);
+    gnc_numeric balanceChange = gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+    gnc_numeric balanceChange_conv = xaccAccountConvertBalanceToCurrencyAsOfDate(acc, balanceChange, xaccAccountGetCommodity(acc), cbdiff->currency, cbdiff->t2);
+    cbdiff->balanceChange = gnc_numeric_add (cbdiff->balanceChange, balanceChange_conv,
+                                gnc_commodity_get_fraction (cbdiff->currency),
+                                GNC_HOW_RND_ROUND_HALF_UP);
+}
+
+gnc_numeric
+xaccAccountGetNoclosingBalanceChangeInCurrencyForPeriod (Account *acc, time64 t1,
+                                               time64 t2, gboolean recurse)
+{
+    
+
+    gnc_numeric b1, b2;
+    b1 = GetBalanceAsOfDate(acc, t1, TRUE);
+    b2 = GetBalanceAsOfDate(acc, t2, TRUE);
+    gnc_numeric balanceChange = gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+
+    gnc_commodity *report_commodity = xaccAccountGetCommodity(acc);
+    CurrencyBalanceChange cbdiff = { report_commodity, balanceChange, t1, t2 };
+
+    if(recurse)
+    {
+        gnc_account_foreach_descendant (acc, xaccAccountBalanceChangeHelper, &cbdiff);
+        balanceChange = cbdiff.balanceChange;
+    }
+    return balanceChange;
+}
 
 /********************************************************************\
 \********************************************************************/

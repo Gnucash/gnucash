@@ -618,6 +618,8 @@ typedef enum
 
     gnc_numeric xaccAccountGetNoclosingBalanceChangeForPeriod (
         Account *acc, time64 date1, time64 date2, gboolean recurse);
+    gnc_numeric xaccAccountGetNoclosingBalanceChangeInCurrencyForPeriod (
+        Account *acc, time64 date1, time64 date2, gboolean recurse);          
     gnc_numeric xaccAccountGetBalanceChangeForPeriod (
         Account *acc, time64 date1, time64 date2, gboolean recurse);
 
