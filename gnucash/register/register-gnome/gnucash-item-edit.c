@@ -306,6 +306,9 @@ gnc_item_edit_focus_out (GncItemEdit *item_edit)
     g_return_if_fail (item_edit != NULL);
     g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
+    if (item_edit->show_popup)
+        return; // Prevent recursion
+
     ev.type = GDK_FOCUS_CHANGE;
     ev.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
     ev.in = FALSE;
