@@ -6,6 +6,10 @@
 ;; Will reuse the Transaction Report with customised options
 ;; and calculated cells.
 ;;
+;; Note: it uses a customised calculated-cells parameter when
+;; calling the trep-engine renderer, with a legacy (vector...) form
+;; instead of the modern association list preferred by trep-engine.
+;;
 ;; This program is free software; you can redistribute it and/or
 ;; modify it under the terms of the GNU General Public License as
 ;; published by the Free Software Foundation; either version 2 of
