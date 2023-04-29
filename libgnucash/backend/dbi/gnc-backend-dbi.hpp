@@ -24,15 +24,8 @@
 #define GNC_BACKEND_DBI_HPP
 
 #include <dbi/dbi.h>
-#ifdef G_OS_WIN32
-#include <winsock2.h>
-#define GETPID() GetCurrentProcessId()
-#else
-#include <limits.h>
-#include <unistd.h>
-#define GETPID() getpid()
-#endif
 
+#include "../gnc-backend.hpp"
 #include <gnc-sql-backend.hpp>
 #include <gnc-sql-connection.hpp>
 
