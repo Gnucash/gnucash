@@ -205,12 +205,8 @@ double_to_string (double value)
 static void
 add_text_to_node (xmlNodePtr node, const gchar* type, gchar* val)
 {
-    gchar* newtype = g_strdup (type);
-    gchar* newval = g_strdup (val);
     xmlSetProp (node, BAD_CAST "type", BAD_CAST type);
     xmlNodeSetContent (node, checked_char_cast (val));
-    g_free (newtype);
-    g_free (newval);
 }
 
 static void add_kvp_slot (const char* key, KvpValue* value, void* data);

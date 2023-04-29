@@ -123,7 +123,7 @@ private:
 class GncFQQuoteSource final : public GncQuoteSource
 {
     const bfs::path c_cmd;
-    const std::string c_fq_wrapper;
+    std::string c_fq_wrapper;
     std::string m_version;
     StrVec m_sources;
     std::string m_api_key;
@@ -146,11 +146,12 @@ static const std::string empty_string{};
 
 GncFQQuoteSource::GncFQQuoteSource() :
 c_cmd{bp::search_path("perl")},
-c_fq_wrapper{std::string(gnc_path_get_bindir()) + "/finance-quote-wrapper"},
 m_version{}, m_sources{}, m_api_key{}
 {
+    char *bindir = gnc_path_get_bindir();
+    c_fq_wrapper = std::string(bindir) + "/finance-quote-wrapper";
+    g_free(bindir);
     StrVec args{"-w", c_fq_wrapper, "-v"};
-    const std::string empty_string;
     auto [rv, sources, errors] = run_cmd(args, empty_string);
     if (rv)
     {

@@ -99,26 +99,6 @@ KvpValueImpl::get_type() const noexcept
     return KvpValue::Type::INVALID;
 }
 
-KvpFrame *
-KvpValueImpl::replace_frame_nc (KvpFrame * new_value) noexcept
-{
-    if (datastore.type() != type_id<KvpFrame *>())
-        return {};
-    auto ret = boost::get<KvpFrame *>(datastore);
-    datastore = new_value;
-    return ret;
-}
-
-GList *
-KvpValueImpl::replace_glist_nc (GList * new_value) noexcept
-{
-    if (datastore.type() != type_id<GList *>())
-        return {};
-    auto ret = boost::get<GList *>(datastore);
-    datastore = new_value;
-    return ret;
-}
-
 struct to_string_visitor : boost::static_visitor<void>
 {
     std::ostringstream & output;

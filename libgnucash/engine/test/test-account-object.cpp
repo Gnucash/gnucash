@@ -80,8 +80,7 @@ run_test (void)
 
     /*****/
 
-    qof_session_end (sess);
-
+    qof_session_destroy (sess);
 }
 
 int

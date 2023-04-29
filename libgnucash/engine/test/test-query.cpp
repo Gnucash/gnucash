@@ -36,12 +36,12 @@ test_trans_query (Transaction *trans, gpointer data)
 {
     QofBook *book = QOF_BOOK(data);
     GList *list;
-    QofQuery *q;
 
-    q = make_trans_query (trans, ALL_QT);
+    QofQuery *q = make_trans_query (trans, ALL_QT);
     qof_query_set_book (q, book);
-
     list = xaccQueryGetTransactions (q, QUERY_TXN_MATCH_ANY);
+    qof_query_destroy (q);
+
     if (g_list_length (list) != 1)
     {
         failure_args ("test number returned", __FILE__, __LINE__,
@@ -59,7 +59,6 @@ test_trans_query (Transaction *trans, gpointer data)
     }
 
     success ("found right transaction");
-    qof_query_destroy (q);
     g_list_free (list);
 
     return 0;
@@ -80,7 +79,7 @@ run_test (void)
 
     xaccAccountTreeForEachTransaction (root, test_trans_query, book);
 
-    qof_session_end (session);
+    qof_session_destroy (session);
 }
 
 int

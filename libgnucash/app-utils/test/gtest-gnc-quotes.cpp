@@ -90,10 +90,15 @@ protected:
     m_book{qof_session_get_book(gnc_get_current_session())}
     {
         qof_init();
-        gnc_commodity_table_register();
-        gnc_pricedb_register();
+
+        /* By setting an empty commodity table on the book before registering
+         * the commodity_table type we avoid adding the default commodities */
         auto comm_table{gnc_commodity_table_new()};
         qof_book_set_data(m_book, GNC_COMMODITY_TABLE, comm_table);
+
+        gnc_commodity_table_register();
+        gnc_pricedb_register();
+
         auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
         auto source{gnc_quote_source_lookup_by_internal("currency")};
         gnc_commodity_begin_edit(eur);
@@ -101,8 +106,7 @@ protected:
         gnc_commodity_set_quote_source(eur, source);
         gnc_commodity_commit_edit(eur);
         gnc_commodity_table_insert(comm_table, eur);
-        auto usd = gnc_commodity_new(m_book, "United States Dollar", "CURRENCY",
-                                  "USD", NULL, 100);
+        auto usd = gnc_commodity_new(m_book, "United States Dollar", "CURRENCY", "USD", NULL, 100);
         gnc_commodity_table_insert(comm_table, usd);
         source = gnc_quote_source_lookup_by_internal("yahoo_json");
         auto aapl = gnc_commodity_new(m_book, "Apple", "NASDAQ", "AAPL", NULL, 1);
@@ -111,8 +115,7 @@ protected:
         gnc_commodity_set_quote_source(aapl, source);
         gnc_commodity_commit_edit(aapl);
         gnc_commodity_table_insert(comm_table, aapl);
-        auto hpe = gnc_commodity_new(m_book, "Hewlett Packard", "NYSE", "HPE",
-                                  NULL, 1);
+        auto hpe = gnc_commodity_new(m_book, "Hewlett Packard", "NYSE", "HPE", NULL, 1);
         gnc_commodity_begin_edit(hpe);
         gnc_commodity_set_quote_flag(hpe, TRUE);
         gnc_commodity_set_quote_source(hpe, source);
@@ -124,10 +127,13 @@ protected:
         gnc_commodity_set_quote_source(fkcm, source);
         gnc_commodity_commit_edit(fkcm);
         gnc_commodity_table_insert(comm_table, fkcm);
-        gnc_quote_source_set_fq_installed("TestSuite", g_list_prepend(nullptr, (void*)"yahoo_json"));
+        GList *sources = g_list_prepend(nullptr, (void*)"yahoo_json");
+        gnc_quote_source_set_fq_installed("TestSuite", sources);
+        g_list_free(sources);
     }
     ~GncQuotesTest() {
         gnc_clear_current_session();
+        qof_close();
     }
 
     QofSession* m_session;
@@ -269,6 +275,7 @@ TEST_F(GncQuotesTest, fetch_one_commodity)
                                   gnc_price_get_value(price)));
     EXPECT_STREQ("Finance::Quote", gnc_price_get_source_string(price));
     EXPECT_STREQ("last", gnc_price_get_typestr(price));
+    gnc_price_unref(price);
 }
 
 TEST_F(GncQuotesTest, fetch_one_currency)
@@ -299,6 +306,7 @@ TEST_F(GncQuotesTest, fetch_one_currency)
                                   gnc_price_get_value(price)));
     EXPECT_STREQ("Finance::Quote", gnc_price_get_source_string(price));
     EXPECT_STREQ("last", gnc_price_get_typestr(price));
+    gnc_price_unref(price);
 }
 
 TEST_F(GncQuotesTest, no_currency)
@@ -365,6 +373,7 @@ TEST_F(GncQuotesTest, no_date)
                                   gnc_price_get_value(price)));
     EXPECT_STREQ("Finance::Quote", gnc_price_get_source_string(price));
     EXPECT_STREQ("last", gnc_price_get_typestr(price));
+    gnc_price_unref(price);
 }
 
 TEST_F(GncQuotesTest, test_version)

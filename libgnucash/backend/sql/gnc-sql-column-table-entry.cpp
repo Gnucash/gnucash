@@ -99,9 +99,11 @@ GncSqlColumnTableEntry::add_objectref_guid_to_query (QofIdTypeConst obj_name,
     auto inst = get_row_value_from_object<QofInstance*>(obj_name, pObject);
     if (inst == nullptr) return;
     auto guid = qof_instance_get_guid (inst);
-    if (guid != nullptr)
-        vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                          quote_string(guid_to_string(guid))));
+    if (guid != nullptr) {
+        gchar *guid_s = guid_to_string(guid);
+        vec.emplace_back (std::make_pair (std::string{m_col_name}, quote_string(guid_s)));
+        g_free(guid_s);
+    }
 }
 
 void
@@ -356,9 +358,9 @@ GncSqlColumnTableEntryImpl<CT_GUID>::add_to_query(QofIdTypeConst obj_name,
 
     if (s != nullptr)
     {
-
-        vec.emplace_back (std::make_pair (std::string{m_col_name},
-                                          quote_string(guid_to_string(s))));
+        gchar *guid_s = guid_to_string(s);
+        vec.emplace_back (std::make_pair (std::string{m_col_name}, quote_string(guid_s)));
+        g_free(guid_s);
         return;
     }
 }
