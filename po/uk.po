@@ -11,20 +11,20 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-24 14:48-0700\n"
-"PO-Revision-Date: 2023-03-25 07:19+0000\n"
+"PO-Revision-Date: 2023-04-25 19:49+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
-"program-beta/uk/>\n"
+"gnucash/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Project-Style: default\n"
 
@@ -6677,13 +6677,13 @@ msgstr "Усі файли"
 #. be translated
 #: gnucash/gnome-utils/dialog-file-access.c:366
 msgid "Datafiles only (*.gnucash, *.xac)"
-msgstr ""
+msgstr "лише файли даних (*.gnucash, *.xac)"
 
 #. Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
 #. patterns and must not be translated
 #: gnucash/gnome-utils/dialog-file-access.c:376
 msgid "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
-msgstr ""
+msgstr "лише резервні копії (*.gnucash.*.gnucash, *.xac.*.xac)"
 
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
@@ -7501,10 +7501,8 @@ msgstr ""
 "перегляньте бюджети і змініть знаки, якщо це потрібно."
 
 #: gnucash/gnome-utils/gnc-file.c:754
-#, fuzzy
-#| msgid "The following warnings exist:"
 msgid "The following are noted in this file:"
-msgstr "Маємо такі попередження:"
+msgstr "Маємо такі зауваження у цьому файлі:"
 
 #: gnucash/gnome-utils/gnc-file.c:880
 #, c-format
@@ -11132,8 +11130,6 @@ msgid "Custom regular expression"
 msgstr "Нетиповий формальний вираз"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:191
-#, fuzzy
-#| msgid "Colon Separated"
 msgid "Colon separated"
 msgstr "Відокремлені двокрапкою"
 
@@ -15325,14 +15321,6 @@ msgstr ""
 "«Файл»."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1445
-#, fuzzy
-#| msgid ""
-#| "If selected, the default book option for new files is set so that the "
-#| "'Num' cell on registers shows/updates the split 'action' field and the "
-#| "transaction 'num' field is shown on the second line in double line mode "
-#| "(and is not visible in single line mode). Otherwise, the default book "
-#| "option for new files is set so that the 'Num' cell on registers shows/"
-#| "updates the transaction 'num' field."
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -15796,11 +15784,9 @@ msgid "_Basic ledger"
 msgstr "_Основна книга"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2850
-#, fuzzy
-#| msgid "Show all transactions on one line or in double line mode on two."
 msgid "Show all transactions on one line or in double line view on two."
 msgstr ""
-"Показувати усі транзакції в одному рядку або двох у режимі з подвійним "
+"Показувати усі транзакції в одному рядку або двох у перегляді з подвійним "
 "рядком."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2863
@@ -15808,16 +15794,12 @@ msgid "_Auto-split ledger"
 msgstr "_Автоматично розділювати книгу"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line or in double line mode on two."
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line view on two."
 msgstr ""
 "Автоматично розгортати поточну транзакцію для показу усіх дроблень. Усі інші "
-"транзакції буде показано у один рядок. У два рядки, якщо увімкнено режим "
+"транзакції буде показано у один рядок. У два рядки, якщо увімкнено перегляд "
 "подвійних рядків."
 
 #. Translators: This is a menu item in the View menu
@@ -15831,24 +15813,18 @@ msgid "Number of _transactions"
 msgstr "Кількість _транзакцій"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2937
-#, fuzzy
-#| msgid "_Double line mode"
 msgid "_Double line view"
-msgstr "_Подвійний рядок"
+msgstr "Перегляд із _подвійним рядком"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2943
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with Action, Notes, and Linked Document fields for "
-#| "each transaction"
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
 msgstr ""
-"Показувати другий рядок із записами «Дія», «Примітки» і «Пов'язані "
-"документи» для усіх транзакцій"
+"Показувати другий рядок із записами «Дія», «Примітки» і «Пов'язані документи»"
+" для усіх транзакцій."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
@@ -20067,7 +20043,7 @@ msgstr "Рахунок призначення для дроблення для �
 
 #: gnucash/import-export/import-main-matcher.c:979
 msgid "Click Edit to modify"
-msgstr ""
+msgstr "Натисніть «Редагувати», щоб змінити"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1389
@@ -24394,10 +24370,9 @@ msgid "Reporting range end period cannot be less than start period."
 msgstr "Кінець діапазону періодів не може перебувати його початку."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:410
-#, fuzzy
-#| msgid "Reporting range end period cannot be less than start period."
 msgid "Reporting range end period cannot exceed number of periods in budget"
-msgstr "Кінець діапазону періодів не може перебувати його початку."
+msgstr ""
+"Кінець діапазону періодів не може перевищувати кількість періодів у бюджеті"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:482
 #: gnucash/report/reports/standard/income-statement.scm:461
@@ -28243,10 +28218,8 @@ msgid "Display a subtotal summary table."
 msgstr "Показувати таблицю проміжних підсумків."
 
 #: gnucash/report/trep-engine.scm:921
-#, fuzzy
-#| msgid "Display the other account code?"
 msgid "Display the balance of the underlying account on each line?"
-msgstr "Показувати код іншого рахунку?"
+msgstr "Показувати баланс базового рахунку у кожному рядку?"
 
 #: gnucash/report/trep-engine.scm:927
 msgid "Display the trans number?"
@@ -28505,10 +28478,8 @@ msgid "Quit this application"
 msgstr "Завершити виконання програми"
 
 #: gnucash/ui/gnc-main-window.ui:143
-#, fuzzy
-#| msgid "Preferences"
 msgid "Pr_eferences"
-msgstr "Параметри"
+msgstr "П_араметри"
 
 #: gnucash/ui/gnc-main-window.ui:145
 msgid "Edit the global preferences of GnuCash"
@@ -28650,10 +28621,8 @@ msgid "Open the GnuCash Help"
 msgstr "Відкрити довідку з GnuCash"
 
 #: gnucash/ui/gnc-main-window.ui:518
-#, fuzzy
-#| msgid "_Abort"
 msgid "_About"
-msgstr "_Перервати"
+msgstr "_Відомості"
 
 #: gnucash/ui/gnc-main-window.ui:520
 msgid "About GnuCash"
@@ -29219,7 +29188,7 @@ msgstr "Змінити параметри обраного рахунку"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:23
 msgid "_Delete Account"
-msgstr "В_илучити рахунок…"
+msgstr "В_илучити рахунок"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:30
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:227
@@ -29472,7 +29441,7 @@ msgstr "Оцінити обсяг бюджету для вибраних рах�
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
 msgid "_Delete Budget…"
-msgstr "В_илучити бюджет"
+msgstr "В_илучити бюджет…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:30
 #: gnucash/ui/gnc-plugin-page-budget.ui:257
@@ -29934,7 +29903,7 @@ msgid ""
 "Configurations' menu"
 msgstr ""
 "Додати налаштування поточного звіту до меню «Звіти → Збережені налаштування "
-"звіту»."
+"звіту»"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:170
 msgid "Back"
@@ -30328,17 +30297,17 @@ msgstr ""
 #: libgnucash/app-utils/gnc-ui-balances.c:369
 #, c-format
 msgid "%s balance is %s, exceeds limit of %s."
-msgstr ""
+msgstr "Баланс %s дорівнює %s, перевищує обмеження %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, c-format
 msgid "%s balance is %s, subceeds limit of %s."
-msgstr ""
+msgstr "Баланс %s дорівнює %s, нижче обмеження %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
 #, c-format
 msgid "%s balance is %s, and should be zero."
-msgstr ""
+msgstr "Баланс %s дорівнює %s, а має бути нульовим."
 
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
