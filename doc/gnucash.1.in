@@ -35,16 +35,10 @@ This option can be specified multiple times.
 .IP --logto
 File to log into; defaults to "$TMPDIR/gnucash.trace"; use "stderr" or "stdout"
 to write to the terminal.
+.IP --paths
+Show installation and configuration paths.
 .IP --nofile
 Do not load the last file opened
-.IP "--add-price-quotes FILE"
-Add price quotes to the given data file. Note this option has been deprecated
-and will be removed in GnuCash 5.0. Instead use 'gnucash-cli --quotes get'.
-.IP --namespace=REGEXP
-Regular expression determining which namespace commodities will be retrieved.
-This is only relevant for the --add-price-quotes option. And as with that option
-it is deprecated and will be removed in GnuCash 5.0. The same option can be
-passed to 'gnucash-cli --quotes get' to achieve the same result.
 .SH FILES
 .I ~/.gnucash/config.auto
 .RS
