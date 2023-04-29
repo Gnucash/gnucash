@@ -17,7 +17,7 @@ execute_process(
 
 file(STRINGS ${TOTD}.tmp TIP_OF_THE_DAY_LINES)
 set(TOTD_OUTPUT "")
-foreach(line ${TIP_OF_THE_DAY_LINES})
+foreach(line ${TIP_OF_THE_DAY_LINES} ENCODING UTF-8)
   string(REGEX REPLACE "^ *\"" "" line2 "${line}")
   string(REGEX REPLACE "\" *$" "" line3 "${line2}")
   file(APPEND ${DST_DIR}/${TOTD} "${line3}\n")
