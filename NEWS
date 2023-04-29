@@ -1,5 +1,84 @@
 Version history:
 ------- -------
+5.1  - 30 April 2023
+Between 5.0 and 5.1, the following bugfixes were accomplished:
+
+    Bug 765920 - Running balance not accurate when sorted different ways
+
+        Renamed option to "Account Balance" to avoid confusion with running total.
+        Added helper function to ensure running balance and balance forward are only shown when transaction are grouped by account and sorted as in register. In that case column heading remains "Running Balance" and balance forward is shown. Otherwwise column heading is renamed "Account Balance" and balance forward is not shown.
+        Also added missing code for Common Currency conversion.
+
+    Bug 797879 - [Transaction Report] running balance column not consistent with amount column for SAME transaction date
+    Bug 798461 - balance sheet shows positions with zero balances despite report options
+    Bug 798775 - Why is General Journal called "Register" in the tabs?
+    Bug 798802 - Online Price quote - Stocks not working GNU 5.0 Windows Bis
+    Bug 798802 - Online Price quote - Stocks not working GNU 5.0 Windows
+    Bug 798807 - Keyboard shortcuts not working
+    Bug 798808 - Saved reports shown on main menu
+    Bug 798810 - Income Statement (multicolumn) - account sorting is 'reversed' each time you restart.
+    Bug 798812 - crashes after I open a customer report and select…
+    Bug 798813 - Under File->Import, Missing OFX/QFX menu item
+    Bug 798815 - flatpak run --command=gnucash-cli cannot download quotes since 5.0.
+    Bug 798821 - Crash when running report in window
+    Bug 798834 - CSS-based Stylesheet Help Button not working
+    Bug 798839 - Edit -> Preferences string not translatable
+    Bug 798844 - "Assign as Payment" does nothing in 4.14 & 5.0
+    Bug 798845 - User Config and User Data link broken
+    Bug 798851 - Account Balance 'include subaccounts' not saved
+    Bug 798854 - Softkey 'Save Config' remains dark
+    Bug 798862 - Merge identical strings
+    Bug 798863 - Crash on clicking Settings button second time
+    Bug 798864 - Budget Reporting on select reports are wrong
+    Bug 798869 - Transaction Import MAP
+    Bug 798872 - Reload inoperative for reports
+    Bug 798877 - Program crashes upon selection of CSV profile
+    Bug 798885 - Accented character in folder name on Account Export
+    Bug 798886 - [Transaction Report] Subtotal upper headings do not follow font style of lower headings
+    Bug 798893 - several menu tip messages in reports are marked translatable but unused.
+    Bug 798894 - TOTD with ellipsis broken.
+
+The following fixes and improvements were not associated with bug reports:
+
+    Add filters to the File>Open dialog in File mode to show only files with
+        GnuCash extensions, only those matching GnuCash's backup file pattern,
+        or any extension.
+    Select the first result in the Customer/Vendor search dialog. This allows
+        faster keyboard navigation -- Find Customer, input search string, press
+        ENTER, use up/down to select desired object, press ENTER to open object.
+    Improve foreign currency handling in budget report
+    Improve handling of the blank transaction when the register is sorted in
+        reverse:
+        * Change the preference option 'Future transactions after blank
+          transaction'
+        * Change tooltip for 'Blank Transaction' in register to mention moving
+          to the blank transaction.
+        * Show the blank transaction at top of register
+    Prevent infinite recursion from gnucash_item_edit_focus_out when using an
+        input method.
+    Create obsolete features list with first member book_currency.
+    Obsolete features set in the book will be removed from the book's KVP and
+        ignored.
+    Restore existence, but not implementation, of GNC_FEATURE_BOOK_CURRENCY.
+        At least one user has managed to get it set on their book so even
+        though it was supposed to be unimplemented it got through somehow.
+        Restoring it allows books with it set to load.
+    Offer to force edit non-identical fields when multiple matches are selected
+        in the import matcher window. Previously, only identical
+        Desc/Notes/Memo were unlocked for editing.
+    Guard against there being no namespaces in the new security dialog
+    Fix Finance::Quote use on Win32 by dealing with Win32 \r\n newlines on
+        return from finance-quote-wrapper.
+    Fix some menu labels that were not marked for translation
+    Fix category in CSV export with simple layout.
+        If Trading accounts is enabled, and the transaction is a transfer
+        between two accounts of differing commodities, the CSV simple-layout
+        export would incorrectly show "--Split Transaction--" as the category.
+    When configuring Guile use pkg-config before searching for binaries.
+
+
+New and Updated Translations: Chinese (Simplified), Croatian, English (Australia), English (New Zealand), English (United Kingdom), Estonian, French, German, Hindi, Hungarian, Japanese, Portuguese, Slovak, Spanish, Swedish, Turkish, Ukrainian
+
 5.0  - 26 March 2023
 
 Between 4.904 and 5.0, the following bugfixes were accomplished:
