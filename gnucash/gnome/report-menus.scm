@@ -53,7 +53,7 @@
      (let* ((menu-name (car item))
             (template (cdr item))
             (report-guid (gnc:report-template-report-guid template))
-            (menu-tip (or (gnc:report-template-menu-tip template)
+            (menu-tip (or (let ((t (gnc:report-template-menu-tip template))) (and t (G_ t)))
                           (format #f (G_ "Display the ~a report") (G_ menu-name))))
             (menu-path (append (list gnc:menuname-reports)
                                (or (gnc:report-template-menu-path template)
@@ -89,7 +89,7 @@
    (gnc:make-menu-item
     (N_ "Saved Report Configurations")
     "4d3dcdc8890b11df99dd94cddfd72085"
-    (N_ "Manage and run saved report configurations")
+    (G_ "Manage and run saved report configurations")
     (list "Reports/ZSavedReportConfigs") ;; Added Z so it is last in list
     (lambda (window)
       (gnc:debug "called into custom report dialog, window is " window)
@@ -115,7 +115,7 @@
    (gnc:make-menu-item
     (N_ "Dashboard")
     "ad80271c890b11dfa79f2dcedfd72085"
-    (N_ "A basic dashboard for your accounting data")
+    (G_ "A basic dashboard for your accounting data")
     (list gnc:menuname-reports gnc:menuname-multicolumn)
     (lambda (window)
       (gnc-main-window-open-report (gnc:make-dashboard) window)))))
