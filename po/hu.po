@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-24 14:48-0700\n"
-"PO-Revision-Date: 2023-04-24 20:45+0000\n"
+"PO-Revision-Date: 2023-04-29 15:50+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -11374,6 +11374,17 @@ msgid ""
 "information is empty or the same as the first transaction line the importer "
 "will consider this line part of the same transaction."
 msgstr ""
+"Alapesetben a bemeneti fájl minden sorát egy tranzakciónak tekintjük. Egy "
+"sor tartalmazza egy tranzakció és egy vagy két felosztás adatait.\n"
+"\n"
+"Ha a Felosztások több sorban be van kapcsolva, úgy tekintjük, hogy a "
+"tranzakciók adatait több egymást követő sor együttesen tartalmazza. Minden "
+"sor pontosan egy osztásnak felel meg, a tranzakció adatait pedig az első sor "
+"tartalmazza.\n"
+"Annak megállapításához, hogy mely sorok tartoznak ugyanahhoz a "
+"tranzakcióhoz, összehasonlítjuk az egyes sorokban megadott információkat. Ha "
+"az információ üres vagy megegyezik az első sorral, az importőr úgy tekinti, "
+"hogy ez a sor ugyanahhoz a tranzakcióhoz tartozik."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:746
 msgid ""
@@ -15328,8 +15339,6 @@ msgid "_Basic ledger"
 msgstr "Felosztások _bezárva"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2850
-#, fuzzy
-#| msgid "Show all transactions on one line or in double line mode on two."
 msgid "Show all transactions on one line or in double line view on two."
 msgstr "Minden tranzakció egy sorban vagy kétsoros nézet esetén kettőben."
 
@@ -15338,10 +15347,6 @@ msgid "_Auto-split ledger"
 msgstr "_Szerkesztett felosztás kinyitva"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line or in double line mode on two."
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line view on two."
@@ -15360,8 +15365,6 @@ msgid "Number of _transactions"
 msgstr "_Tranzakciók száma"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2937
-#, fuzzy
-#| msgid "_Double line mode"
 msgid "_Double line view"
 msgstr "_Kétsoros nézet"
 
@@ -19429,7 +19432,7 @@ msgstr "é/n/h"
 
 #: gnucash/import-export/import-main-matcher.c:501
 msgid "No new transactions were found in this import."
-msgstr ""
+msgstr "Az importált fájlban nem voltak új tranzakciók."
 
 #: gnucash/import-export/import-main-matcher.c:792
 msgid "Destination account for the auto-balance split."

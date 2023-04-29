@@ -20,19 +20,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-24 14:48-0700\n"
-"PO-Revision-Date: 2023-03-25 17:34+0000\n"
+"PO-Revision-Date: 2023-04-29 06:48+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
-"Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/program-"
-"beta/ja/>\n"
+"Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"ja/>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -6535,13 +6535,13 @@ msgstr "全ファイル"
 #. be translated
 #: gnucash/gnome-utils/dialog-file-access.c:366
 msgid "Datafiles only (*.gnucash, *.xac)"
-msgstr ""
+msgstr "データファイルのみ (*.gnucash, *.xac)"
 
 #. Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
 #. patterns and must not be translated
 #: gnucash/gnome-utils/dialog-file-access.c:376
 msgid "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
-msgstr ""
+msgstr "バックアップのみ (*.gnucash.*.gnucash, *.xac.*.xac)"
 
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
@@ -10695,8 +10695,6 @@ msgid "Custom regular expression"
 msgstr "カスタム正規表現"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:191
-#, fuzzy
-#| msgid "Colon Separated"
 msgid "Colon separated"
 msgstr "コロン(:)区切り"
 
@@ -14796,14 +14794,6 @@ msgstr ""
 "表示します。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1445
-#, fuzzy
-#| msgid ""
-#| "If selected, the default book option for new files is set so that the "
-#| "'Num' cell on registers shows/updates the split 'action' field and the "
-#| "transaction 'num' field is shown on the second line in double line mode "
-#| "(and is not visible in single line mode). Otherwise, the default book "
-#| "option for new files is set so that the 'Num' cell on registers shows/"
-#| "updates the transaction 'num' field."
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -14812,12 +14802,12 @@ msgid ""
 "files is set so that the 'Num' cell on registers shows/updates the "
 "transaction 'num' field."
 msgstr ""
-"選択した場合、新規作成するファイルのデフォルトの帳簿オプションとして、記録簿"
-"の '番号' セルはスプリットの 'アクション' 欄を表示・更新するように、また取引"
-"の '番号' 欄は 2 行モードでの 2 行目に表示する (そして 1 行モードでは非表示に"
-"する) ように設定します。選択しない場合、新規作成するファイルのデフォルトの帳"
-"簿オプションとして、記録簿の '番号' セルは取引の '番号' 欄を表示・更新するよ"
-"うに設定します。"
+"選択した場合、新規作成するファイルのデフォルトの帳簿オプションとして、"
+"記録簿の '番号' セルはスプリットの 'アクション' 欄を表示・更新するように、"
+"また取引の '番号' 欄は 2 行表示での 2 行目に表示する (そして 1 "
+"行モードでは非表示にする) ように設定します。選択しない場合、新規作成するファ"
+"イルのデフォルトの帳簿オプションとして、記録簿の '番号' セルは取引の '番号' "
+"欄を表示・更新するように設定します。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1458
 msgid "Display \"_tip of the day\" dialog"
@@ -15245,26 +15235,19 @@ msgid "_Basic ledger"
 msgstr "基本元帳(_B)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2850
-#, fuzzy
-#| msgid "Show all transactions on one line or in double line mode on two."
 msgid "Show all transactions on one line or in double line view on two."
-msgstr "すべての取引を1行、または2行モードなら2行で表示します。"
+msgstr "すべての取引を 1 行、または 2 行表示なら 2 行で表示します。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2863
 msgid "_Auto-split ledger"
 msgstr "自動スプリット元帳(_A)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line or in double line mode on two."
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line view on two."
-msgstr ""
-"自動的に現在の取引を展開してスプリットを表示します。他の取引は1行、または2行"
-"モードなら2行で表示されます。"
+msgstr "自動的に現在の取引を展開して全スプリットを表示します。他の全取引は 1 行、"
+"または 2 行表示なら 2 行で表示されます。"
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/gtkbuilder/dialog-preferences.glade:2882
@@ -15277,23 +15260,16 @@ msgid "Number of _transactions"
 msgstr "取引数(_T)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2937
-#, fuzzy
-#| msgid "_Double line mode"
 msgid "_Double line view"
-msgstr "2 行モード(_D)"
+msgstr "2 行表示(_D)"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2943
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with Action, Notes, and Linked Document fields for "
-#| "each transaction"
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
-msgstr ""
-"各取引のアクション、備考、およびリンクされた文書欄を 2 行目に表示します。"
+msgstr "各取引のアクション、備考、およびリンクされた文書欄を 2 行目に表示します。"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
@@ -21977,10 +21953,8 @@ msgid "Sample Report"
 msgstr "サンプル帳票"
 
 #: gnucash/report/reports/example/sample-report.scm:457
-#, fuzzy
-#| msgid "Show employee report"
 msgid "An options example report."
-msgstr "従業員帳票を表示します。"
+msgstr "オプションのサンプル帳票です。"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
@@ -23343,9 +23317,8 @@ msgid "Barchart"
 msgstr "棒グラフ"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1169
-#, fuzzy
 msgid " to "
-msgstr "~a ～ ~a"
+msgstr " ～ "
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1228
 #: gnucash/report/reports/standard/customer-summary.scm:110
@@ -27772,10 +27745,8 @@ msgid "Quit this application"
 msgstr "このアプリケーションを終了します。"
 
 #: gnucash/ui/gnc-main-window.ui:143
-#, fuzzy
-#| msgid "Preferences"
 msgid "Pr_eferences"
-msgstr "設定"
+msgstr "設定(_E)"
 
 #: gnucash/ui/gnc-main-window.ui:145
 msgid "Edit the global preferences of GnuCash"
@@ -27917,10 +27888,8 @@ msgid "Open the GnuCash Help"
 msgstr "GnuCash のヘルプを開きます。"
 
 #: gnucash/ui/gnc-main-window.ui:518
-#, fuzzy
-#| msgid "_Abort"
 msgid "_About"
-msgstr "中止(_A)"
+msgstr "GnuCash について(_A)"
 
 #: gnucash/ui/gnc-main-window.ui:520
 msgid "About GnuCash"
@@ -29549,10 +29518,8 @@ msgid ""
 msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:928
-#, fuzzy
-#| msgid "Found Finance::Quote version ~A."
 msgid "Unrecognized Finance::Quote Error: "
-msgstr "Finance::Quote バージョン ~A が見つかりました。"
+msgstr "未知の Finance::Quote エラー: "
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".

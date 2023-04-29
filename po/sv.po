@@ -14,10 +14,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-24 14:48-0700\n"
-"PO-Revision-Date: 2023-04-12 04:46+0000\n"
+"PO-Revision-Date: 2023-04-26 04:48+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -7409,10 +7409,8 @@ msgstr ""
 "och justera tecken vid behov."
 
 #: gnucash/gnome-utils/gnc-file.c:754
-#, fuzzy
-#| msgid "The following warnings exist:"
 msgid "The following are noted in this file:"
-msgstr "Följande varningar finns:"
+msgstr "Följande har noterats i filen:"
 
 #: gnucash/gnome-utils/gnc-file.c:880
 #, c-format
@@ -10987,8 +10985,6 @@ msgid "Custom regular expression"
 msgstr "Anpassat regeluttryck"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:191
-#, fuzzy
-#| msgid "Colon Separated"
 msgid "Colon separated"
 msgstr "Kolonavdelad"
 
@@ -15140,14 +15136,6 @@ msgid "Present the new account list dialog when you choose File->New File."
 msgstr "Visa dialogrutan för ny kontolista när du väljer Arkiv->Ny fil."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1445
-#, fuzzy
-#| msgid ""
-#| "If selected, the default book option for new files is set so that the "
-#| "'Num' cell on registers shows/updates the split 'action' field and the "
-#| "transaction 'num' field is shown on the second line in double line mode "
-#| "(and is not visible in single line mode). Otherwise, the default book "
-#| "option for new files is set so that the 'Num' cell on registers shows/"
-#| "updates the transaction 'num' field."
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -15158,10 +15146,10 @@ msgid ""
 msgstr ""
 "Om det väljs kommer förvalda bokalternativ för nya filer att ställas in så "
 "att 'Nr'-cellen på register visar/uppdaterar delningsåtgärdsfältet och så "
-"att transaktionens 'nr'-fält visas på den andra raden i dubbelbokföringsläge "
-"(och är osynligt i enkelbokföringsläge). Annars ställs förvalda "
-"bokalternativ för nya filer in så att 'Nr'-cellen på register visar/"
-"uppdaterar transaktionens 'nr'-fält."
+"att transaktionens 'nr'-fält visas på den andra raden i dubbelbokföringsvyn ("
+"och är osynligt i enkelbokföringsläge). Annars ställs förvalda bokalternativ "
+"för nya filer in så att 'Nr'-cellen på register visar/uppdaterar "
+"transaktionens 'nr'-fält."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1458
 msgid "Display \"_tip of the day\" dialog"
@@ -15601,27 +15589,20 @@ msgid "_Basic ledger"
 msgstr "_Standardliggare"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2850
-#, fuzzy
-#| msgid "Show all transactions on one line or in double line mode on two."
 msgid "Show all transactions on one line or in double line view on two."
-msgstr "Visa alla transaktioner på en rad eller i dubbelradsläge på två rader."
+msgstr "Visa alla transaktioner på en rad eller i dubbelradsvy på två rader."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2863
 msgid "_Auto-split ledger"
 msgstr "_Autodelningsliggare"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line or in double line mode on two."
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line view on two."
 msgstr ""
 "Expandera automatiskt aktuell transaktion för att visa alla delningar. Alla "
-"andra transaktioner visas på en rad eller i dubbelbokföringsläge på två "
-"rader."
+"andra transaktioner visas på en rad eller i dubbelbokföringsvy på två rader."
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/gtkbuilder/dialog-preferences.glade:2882
@@ -15634,24 +15615,18 @@ msgid "Number of _transactions"
 msgstr "Antal _transaktioner"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2937
-#, fuzzy
-#| msgid "_Double line mode"
 msgid "_Double line view"
-msgstr "_Läge med dubbla rader"
+msgstr "_Vy med dubbla rader"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2943
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with Action, Notes, and Linked Document fields for "
-#| "each transaction"
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
 msgstr ""
 "Visa en andra rad med Åtgärds-, Antecknings- och Länkade dokumentfält för "
-"varje transaktion"
+"varje transaktion."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
@@ -19817,7 +19792,7 @@ msgstr "Destinationskonto för auto-saldodelning."
 
 #: gnucash/import-export/import-main-matcher.c:979
 msgid "Click Edit to modify"
-msgstr ""
+msgstr "Klicka Redigera för att ändra"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1389
@@ -24129,12 +24104,10 @@ msgstr ""
 "perioden."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:410
-#, fuzzy
-#| msgid "Reporting range end period cannot be less than start period."
 msgid "Reporting range end period cannot exceed number of periods in budget"
 msgstr ""
-"Rapporterat intervalls avslutande period får inte vara lägre än inledande "
-"perioden."
+"Rapporterat intervalls avslutande period får inte överskrida antalet "
+"perioder i budgeten"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:482
 #: gnucash/report/reports/standard/income-statement.scm:461
@@ -27962,10 +27935,8 @@ msgid "Display a subtotal summary table."
 msgstr "Visa en sammanfattningstabell för delsummor."
 
 #: gnucash/report/trep-engine.scm:921
-#, fuzzy
-#| msgid "Display the other account code?"
 msgid "Display the balance of the underlying account on each line?"
-msgstr "Visa den andra kontokoden?"
+msgstr "Visa saldo för underliggande konto på varje rad?"
 
 #: gnucash/report/trep-engine.scm:927
 msgid "Display the trans number?"
@@ -30034,17 +30005,17 @@ msgstr "Ingen växelkurs tillgänglig i SX [%s] för %s -> %s, värdet är noll.
 #: libgnucash/app-utils/gnc-ui-balances.c:369
 #, c-format
 msgid "%s balance is %s, exceeds limit of %s."
-msgstr ""
+msgstr "%s saldo är %s, överskrider gränsen på %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, c-format
 msgid "%s balance is %s, subceeds limit of %s."
-msgstr ""
+msgstr "%s saldo är %s, underskrider gränsen på %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
 #, c-format
 msgid "%s balance is %s, and should be zero."
-msgstr ""
+msgstr "%s saldo är %s, och bör vara noll."
 
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
