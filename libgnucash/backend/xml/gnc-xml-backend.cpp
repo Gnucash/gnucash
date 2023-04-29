@@ -39,6 +39,7 @@
 
 #include <sstream>
 
+#include "../gnc-backend.hpp"
 #include "gnc-xml-backend.hpp"
 #include "gnc-backend-xml.h"
 #include "io-gncxml-v2.h"
@@ -661,10 +662,41 @@ GncXmlBackend::get_file_lock (SessionOpenMode mode)
             set_message("Lockfile creation failed. Please see the tracefile for details.");
             be_err = ERR_FILEIO_FILE_LOCKERR;
         }
-        if (!(mode == SESSION_BREAK_LOCK && be_err == ERR_BACKEND_LOCKED))
+        if (mode == SESSION_BREAK_LOCK && be_err == ERR_BACKEND_LOCKED)
+        {
+            /* Open existing file so we can overwrite host name and PID */
+            m_lockfd = g_open (m_lockfile.c_str(), O_RDWR);
+        }
+        else
         {
             set_error(be_err);
             m_lockfile.clear();
+        }
+    }
+    if (m_lockfd != -1)
+    {
+        /* Make a best effort to write host name, PID, and date into lock file.
+           Warn on failure but don't treat as an error. */
+        FILE *file = fdopen(m_lockfd, "w");
+        if (file)
+        {
+#ifdef HAVE_GETHOSTNAME
+            char hostname[256];
+            if (0 == gethostname(hostname, sizeof hostname))
+            {
+                fprintf(file, "hostname=%s\n", hostname);
+            }
+            else
+            {
+                PWARN ("gethostname(256) failed: %s", strerror(errno));
+            }
+#endif
+            fprintf(file, "pid=%d\n", GETPID());
+            fflush(file);
+        }
+        else
+        {
+            PWARN ("Unable to fdopen the lockfile: %s", strerror(errno));
         }
     }
 }
