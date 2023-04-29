@@ -1148,136 +1148,146 @@ be excluded from periodic reporting.")
              (left-cols-list
               (append
                (add-if (column-uses? 'date)
-                       (vector (G_ "Date")
-                               (lambda (split transaction-row?)
-                                 (and transaction-row?
-                                      (gnc:make-html-table-cell/markup
-                                       "date-cell"
-                                       (qof-print-date
-                                        (xaccTransGetDate
-                                         (xaccSplitGetParent split))))))))
+                       (list (cons 'heading (G_ "Date"))
+                             (cons 'renderer-fn
+                                   (lambda (split transaction-row?)
+                                     (and transaction-row?
+                                          (gnc:make-html-table-cell/markup
+                                           "date-cell"
+                                           (qof-print-date
+                                            (xaccTransGetDate
+                                             (xaccSplitGetParent split)))))))))
 
                (add-if (column-uses? 'entered)
-                       (vector (G_ "Date Entered")
-                               (lambda (split transaction-row?)
-                                 (and transaction-row?
-                                      (gnc:make-html-table-cell/markup
-                                       "date-cell" (qof-print-date
-                                                    (xaccTransRetDateEntered
-                                                     (xaccSplitGetParent split))))))))
+                       (list (cons 'heading (G_ "Date Entered"))
+                             (cons 'renderer-fn (lambda (split transaction-row?)
+                                                  (and transaction-row?
+                                                       (gnc:make-html-table-cell/markup
+                                                        "date-cell" (qof-print-date
+                                                                     (xaccTransRetDateEntered
+                                                                      (xaccSplitGetParent split)))))))))
 
                (add-if (column-uses? 'reconciled-date)
-                       (vector (G_ "Reconciled Date")
-                               (lambda (split transaction-row?)
-                                 (let ((reconcile-date
-                                        (and (char=? (xaccSplitGetReconcile split) #\y)
-                                             (xaccSplitGetDateReconciled split))))
-                                   (and reconcile-date
-                                        (gnc:make-html-table-cell/markup
-                                         "date-cell"
-                                         (qof-print-date reconcile-date)))))))
+                       (list (cons 'heading (G_ "Reconciled Date"))
+                             (cons 'renderer-fn
+                                   (lambda (split transaction-row?)
+                                     (let ((reconcile-date
+                                            (and (char=? (xaccSplitGetReconcile split) #\y)
+                                                 (xaccSplitGetDateReconciled split))))
+                                       (and reconcile-date
+                                            (gnc:make-html-table-cell/markup
+                                             "date-cell"
+                                             (qof-print-date reconcile-date))))))))
 
                (add-if (column-uses? 'num)
-                       (vector (if (and BOOK-SPLIT-ACTION
-                                        (opt-val gnc:pagename-display
-                                                 (N_ "Trans Number")))
-                                   (G_ "Num/T-Num")
-                                   (G_ "Num"))
-                               (lambda (split transaction-row?)
-                                 (let* ((trans (xaccSplitGetParent split))
-                                        (num (gnc-get-num-action trans split))
-                                        (t-num (if (and BOOK-SPLIT-ACTION
-                                                        (opt-val
-                                                         gnc:pagename-display
-                                                         (N_ "Trans Number")))
-                                                   (gnc-get-num-action trans #f)
-                                                   ""))
-                                        (num-string (if (string-null? t-num)
-                                                        num
-                                                        (string-append num "/" t-num))))
-                                   (and transaction-row?
-                                        (gnc:make-html-table-cell/markup
-                                         "text-cell" num-string))))))
+                       (list (cons 'heading (if (and BOOK-SPLIT-ACTION
+                                                     (opt-val gnc:pagename-display
+                                                              (N_ "Trans Number")))
+                                                (G_ "Num/T-Num")
+                                                (G_ "Num")))
+                             (cons 'renderer-fn
+                                   (lambda (split transaction-row?)
+                                     (let* ((trans (xaccSplitGetParent split))
+                                            (num (gnc-get-num-action trans split))
+                                            (t-num (if (and BOOK-SPLIT-ACTION
+                                                            (opt-val
+                                                             gnc:pagename-display
+                                                             (N_ "Trans Number")))
+                                                       (gnc-get-num-action trans #f)
+                                                       ""))
+                                            (num-string (if (string-null? t-num)
+                                                            num
+                                                            (string-append num "/" t-num))))
+                                       (and transaction-row?
+                                            (gnc:make-html-table-cell/markup
+                                             "text-cell" num-string)))))))
 
                (add-if (column-uses? 'description)
-                       (vector (G_ "Description")
-                               (lambda (split transaction-row?)
-                                 (define trans (xaccSplitGetParent split))
-                                 (and transaction-row?
-                                      (gnc:make-html-table-cell/markup
-                                       "text-cell"
-                                       (xaccTransGetDescription trans))))))
+                       (list (cons 'heading (G_ "Description"))
+                             (cons 'renderer-fn
+                                   (lambda (split transaction-row?)
+                                     (define trans (xaccSplitGetParent split))
+                                     (and transaction-row?
+                                          (gnc:make-html-table-cell/markup
+                                           "text-cell"
+                                           (xaccTransGetDescription trans)))))))
 
                (add-if (column-uses? 'memo)
-                       (vector (if (column-uses? 'notes)
-                                   (string-append (G_ "Memo") "/" (G_ "Notes"))
-                                   (G_ "Memo"))
-                               (lambda (split transaction-row?)
-                                 (define trans (xaccSplitGetParent split))
-                                 (define memo (xaccSplitGetMemo split))
-                                 (if (and (string-null? memo) (column-uses? 'notes))
-                                     (xaccTransGetNotes trans)
-                                     memo))))
+                       (list (cons 'heading (if (column-uses? 'notes)
+                                                (string-append (G_ "Memo") "/" (G_ "Notes"))
+                                                (G_ "Memo")))
+                             (cons 'renderer-fn
+                                   (lambda (split transaction-row?)
+                                     (define trans (xaccSplitGetParent split))
+                                     (define memo (xaccSplitGetMemo split))
+                                     (if (and (string-null? memo) (column-uses? 'notes))
+                                         (xaccTransGetNotes trans)
+                                         memo)))))
 
                (add-if (or (column-uses? 'account-name) (column-uses? 'account-code))
-                       (vector (G_ "Account")
-                               (lambda (split transaction-row?)
-                                 (account-namestring
-                                  (xaccSplitGetAccount split)
-                                  (column-uses? 'account-code)
-                                  (column-uses? 'account-name)
-                                  (column-uses? 'account-full-name)))))
+                       (list (cons 'heading (G_ "Account"))
+                             (cons 'renderer-fn
+                                   (lambda (split transaction-row?)
+                                     (account-namestring
+                                      (xaccSplitGetAccount split)
+                                      (column-uses? 'account-code)
+                                      (column-uses? 'account-name)
+                                      (column-uses? 'account-full-name))))))
 
                (add-if (or (column-uses? 'other-account-name)
                            (column-uses? 'other-account-code))
-                       (vector (G_ "Transfer from/to")
-                               (lambda (split transaction-row?)
-                                 (and (< 1 (xaccTransCountSplits
-                                            (xaccSplitGetParent split)))
-                                      (account-namestring
-                                       (xaccSplitGetAccount
-                                        (xaccSplitGetOtherSplit split))
-                                       (column-uses? 'other-account-code)
-                                       (column-uses? 'other-account-name)
-                                       (column-uses? 'other-account-full-name))))))
+                       (list (cons 'heading (G_ "Transfer from/to"))
+                             (cons 'renderer-fn
+                                   (lambda (split transaction-row?)
+                                     (and (< 1 (xaccTransCountSplits
+                                                (xaccSplitGetParent split)))
+                                          (account-namestring
+                                           (xaccSplitGetAccount
+                                            (xaccSplitGetOtherSplit split))
+                                           (column-uses? 'other-account-code)
+                                           (column-uses? 'other-account-name)
+                                           (column-uses? 'other-account-full-name)))))))
 
                (add-if (column-uses? 'shares)
-                       (vector (G_ "Shares")
-                               (lambda (split transaction-row?)
-                                 (gnc:make-html-table-cell/markup
-                                  "number-cell"
-                                  (xaccSplitGetAmount split)))))
+                       (list (cons 'heading (G_ "Shares"))
+                             (cons 'renderer-fn
+                                   (lambda (split transaction-row?)
+                                     (gnc:make-html-table-cell/markup
+                                      "number-cell"
+                                      (xaccSplitGetAmount split))))))
 
                (add-if (column-uses? 'link)
-                       (vector ""
-                               (lambda (split transaction-row?)
-                                 (let ((url (xaccTransGetDocLink
-                                             (xaccSplitGetParent split))))
-                                   (and (not (string-null? url))
-                                        (gnc:make-html-table-cell/markup
-                                         "text-cell"
-                                         (if opt-use-links?
-                                             (gnc:html-transaction-doclink-anchor
-                                              (xaccSplitGetParent split)
-                                              ;; Translators: 'L' is short for Linked Document
-                                              (C_ "Column header for 'Document Link'" "L"))
-                                             (C_ "Column header for 'Document Link'" "L"))))))))
+                       (list (cons 'heading "")
+                             (cons 'renderer-fn
+                                   (lambda (split transaction-row?)
+                                     (let ((url (xaccTransGetDocLink
+                                                 (xaccSplitGetParent split))))
+                                       (and (not (string-null? url))
+                                            (gnc:make-html-table-cell/markup
+                                             "text-cell"
+                                             (if opt-use-links?
+                                                 (gnc:html-transaction-doclink-anchor
+                                                  (xaccSplitGetParent split)
+                                                  ;; Translators: 'L' is short for Linked Document
+                                                  (C_ "Column header for 'Document Link'" "L"))
+                                                 (C_ "Column header for 'Document Link'" "L")))))))))
 
                (add-if (column-uses? 'price)
-                       (vector (G_ "Price")
-                               (lambda (split transaction-row?)
-                                 (gnc:make-html-table-cell/markup
-                                  "number-cell"
-                                  (gnc:default-price-renderer
-                                   (xaccTransGetCurrency (xaccSplitGetParent split))
-                                   (xaccSplitGetSharePrice split)))))))))
+                       (list (cons 'heading (G_ "Price"))
+                             (cons 'renderer-fn
+                                   (lambda (split transaction-row?)
+                                     (gnc:make-html-table-cell/markup
+                                      "number-cell"
+                                      (gnc:default-price-renderer
+                                       (xaccTransGetCurrency (xaccSplitGetParent split))
+                                       (xaccSplitGetSharePrice split))))))))))
 
         (if (or (column-uses? 'subtotals-only)
                 (and (null? left-cols-list)
                      (or (opt-val gnc:pagename-display "Totals")
                          (primary-get-info 'renderer-fn)
                          (secondary-get-info 'renderer-fn))))
-            (list (vector "" (lambda (s t) #f)))
+            `(((heading . "") (renderer-fn . ,(const #f))))
             left-cols-list)))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1463,9 +1473,7 @@ be excluded from periodic reporting.")
           default-calculated-cells))
 
     (define headings-left-columns
-      (map (lambda (column)
-             (vector-ref column 0))
-           left-columns))
+      (map (cut assq-ref <> 'heading) left-columns))
 
     (define headings-right-columns
       (map (cut assq-ref <> 'heading) calculated-cells))
@@ -1748,8 +1756,7 @@ be excluded from periodic reporting.")
            (append
             (gnc:html-make-empty-cells indent-level)
             (map (lambda (left-col)
-                   ((vector-ref left-col 1)
-                    split transaction-row?))
+                   ((assq-ref left-col 'renderer-fn) split transaction-row?))
                  left-columns)
             (map (lambda (cell)
                    (let* ((cell-monetary ((assq-ref cell 'calc-fn)
