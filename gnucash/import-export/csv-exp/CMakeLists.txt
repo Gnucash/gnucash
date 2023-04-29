@@ -49,5 +49,14 @@ install(TARGETS gnc-csv-export
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
-set_dist_list (csv_export_DIST CMakeLists.txt
-        ${csv_export_SOURCES} ${csv_export_noinst_HEADERS})
+set_local_dist (csv_export_DIST_local
+  CMakeLists.txt
+  ${csv_export_SOURCES}
+  ${csv_export_noinst_HEADERS}
+)
+
+set (csv_export_DIST
+  ${csv_export_DIST_local}
+  ${test_csv_export_DIST}
+  PARENT_SCOPE
+)

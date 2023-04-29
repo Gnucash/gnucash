@@ -19,7 +19,7 @@ gnc_add_test (test-csv-export-helpers
   test-csv-export-helpers_LIBS
 )
 
-set_dist_list (test-csv-export_DIST
+set_dist_list (test_csv_export_DIST
   CMakeLists.txt
   ${test-csv-export-helpers_SOURCES}
 )
