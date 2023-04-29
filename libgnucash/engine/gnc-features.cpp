@@ -22,6 +22,7 @@
 #include <unordered_map>
 #include <string>
 #include <numeric>
+#include <algorithm>
 
 #include <config.h>
 
