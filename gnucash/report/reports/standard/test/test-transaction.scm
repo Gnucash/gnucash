@@ -946,7 +946,43 @@
         (test-equal "csv output is valid"
           "\"from\",\"1969-01-01\"\n\"to\",\"1970-12-31\"\n\"Amount (GBP)\",2.15\n\"Amount\",3.0"
           (gnc:html-document-export-string document))))
-    (test-end "csv-export")))
+    (test-end "csv-export")
+
+    (test-begin "minus-even row issue")
+      ;; test minus odd and even rows
+      ;; using a very simple table with date, description, account, amount
+      ;; With no grouping or totals or subtotals
+      ;; Yet "minus even" rows (-2, -4, -6) fails by returning #f instead of their content
+    (let ((options (default-testing-options)))
+      (set-option! options "Display" "Totals" #f)
+      (set-option! options "Display" "Num" #f)
+      (set-option! options "Display" "Memo" #f)
+      (set-option! options "Display" "Notes" #f)
+      (set-option! options "Sorting" "Primary Subtotal" #f)
+      (set-option! options "Sorting" "Primary Subtotal for Date Key" 'none)
+      (set-option! options "Sorting" "Secondary Key" 'none)
+      (set-option! options "Sorting" "Secondary Subtotal" #f)      
+      (let* ((sxml (options->sxml options "read rows from the bottom")))
+        (test-equal "Row -6"
+          (list "11/03/23" "$103 income" "Root.Asset.Bank" "$103.00")
+          (get-row-col sxml -6 #f))      
+        (test-equal "Row -5"
+          (list "11/09/23" "$109 income" "Root.Asset.Bank" "$109.00")
+          (get-row-col sxml -5 #f))
+        (test-equal "Row -4"
+          (list "11/15/23" "$22 expense" "Root.Asset.Bank" "-$22.00")
+          (get-row-col sxml -4 #f))
+        (test-equal "Row -3"
+          (list "12/03/23" "$103 income" "Root.Asset.Bank" "$103.00")
+          (get-row-col sxml -3 #f))
+        (test-equal "Row -2"
+          (list "12/09/23" "$109 income" "Root.Asset.Bank" "$109.00")
+          (get-row-col sxml -2 #f))          
+        (test-equal "Row -1"
+          (list "12/15/23" "$22 expense" "Root.Asset.Bank" "-$22.00")
+          (get-row-col sxml -1 #f)))
+      )
+    (test-end "minus-even row issue")))
 
 (define (csv-tests)
   (test-begin "csv tests")
