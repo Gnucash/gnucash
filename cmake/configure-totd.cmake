@@ -15,9 +15,9 @@ execute_process(
     COMMAND ${CMAKE_C_COMPILER} -E -P -x c -DN_\(x\)=x -o ${TOTD}.tmp ${SRC}
 )
 
-file(STRINGS ${TOTD}.tmp TIP_OF_THE_DAY_LINES)
+file(STRINGS ${TOTD}.tmp TIP_OF_THE_DAY_LINES ENCODING UTF-8)
 set(TOTD_OUTPUT "")
-foreach(line ${TIP_OF_THE_DAY_LINES} ENCODING UTF-8)
+foreach(line ${TIP_OF_THE_DAY_LINES})
   string(REGEX REPLACE "^ *\"" "" line2 "${line}")
   string(REGEX REPLACE "\" *$" "" line3 "${line2}")
   file(APPEND ${DST_DIR}/${TOTD} "${line3}\n")
