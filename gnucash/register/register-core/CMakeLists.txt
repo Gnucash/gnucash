@@ -24,6 +24,7 @@ set (register_core_HEADERS
   cell-factory.h
   cellblock.h
   combocell.h
+  completioncell.h
   datecell.h
   formulacell.h
   gtable.h

@@ -71,6 +71,7 @@
 #define QUICKFILL_CELL_TYPE_NAME "quickfill-cell"
 #define FORMULA_CELL_TYPE_NAME   "formula-cell"
 #define CHECKBOX_CELL_TYPE_NAME	 "checkbox-cell"
+#define COMPLETION_CELL_TYPE_NAME "completion-cell"
 
 void gnc_register_init (void);
 void gnc_register_shutdown (void);

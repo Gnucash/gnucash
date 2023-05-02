@@ -27,6 +27,7 @@
 #include "basiccell.h"
 #include "cell-factory.h"
 #include "combocell.h"
+#include "completioncell.h"
 #include "datecell.h"
 #include "formulacell.h"
 #include "numcell.h"
