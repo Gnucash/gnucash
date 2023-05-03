@@ -291,6 +291,8 @@ static void cs_set_property(GObject *object, guint prop_id, const GValue *value,
 static void cs_get_property(GObject *object, guint prop_id, GValue *value,
         GParamSpec *pspec);
 
+G_DEFINE_TYPE (GOCharmapSel, go_charmap_sel, GTK_TYPE_BOX)
+
 static gboolean iconv_supported(const char *to, const char *from)
 {
     GIConv ic = g_iconv_open(to, from);
@@ -359,7 +361,7 @@ static void cs_emphasize_label(GtkLabel *label)
     g_free(text);
 }
 
-static void cs_init(GOCharmapSel *cs)
+static void go_charmap_sel_init(GOCharmapSel *cs)
 {
     gtk_orientable_set_orientation (GTK_ORIENTABLE(cs), GTK_ORIENTATION_HORIZONTAL);
 
@@ -455,12 +457,13 @@ static void cs_build_menu(GOCharmapSel *cs)
     set_menu_to_default(cs, lg_cnt);
 }
 
-static void cs_class_init(GtkWidgetClass *widget_klass)
+static void go_charmap_sel_class_init(GOCharmapSelClass *klass)
 {
     CharsetInfo *ci;
     size_t i;
 
-    GObjectClass *gobject_class = G_OBJECT_CLASS(widget_klass);
+    GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
+    GtkWidgetClass *widget_klass = GTK_WIDGET_CLASS(klass);
     widget_klass->mnemonic_activate = cs_mnemonic_activate;
 
     gobject_class->set_property = cs_set_property;
@@ -584,34 +587,6 @@ static void cs_class_init(GtkWidgetClass *widget_klass)
 
         g_free(autoaliases);
     }
-}
-
-GType
-go_charmap_sel_get_type (void)
-{
-    static GType go_charmap_sel_type = 0;
-
-    if (go_charmap_sel_type == 0)
-    {
-        GTypeInfo go_charmap_sel_info =
-        {
-            sizeof (GOCharmapSelClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) cs_class_init,
-            NULL,
-            NULL,
-            sizeof (GOCharmapSel),
-            0,
-            (GInstanceInitFunc) cs_init
-        };
-
-        go_charmap_sel_type = g_type_register_static (GTK_TYPE_BOX,
-                           "GOCharmapSel",
-                           &go_charmap_sel_info, 0);
-    }
-
-    return go_charmap_sel_type;
 }
 
 GtkWidget *
