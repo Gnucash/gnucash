@@ -411,10 +411,10 @@ void GncPreSplit::UpdateCrossSplitCounters ()
             curr = gnc_account_get_currency_or_parent (acct);
 
         auto has_curr = [curr] (const gnc_commodity *vec_curr) { return gnc_commodity_equiv (curr, vec_curr); };
-        if (curr && std::none_of (alt_currs.cbegin(), alt_currs.cbegin(), has_curr))
+        if (curr && std::none_of (alt_currs.cbegin(), alt_currs.cend(), has_curr))
             m_pre_trans->m_alt_currencies.push_back(curr);
         auto has_comm = [comm] (const gnc_commodity *vec_comm) { return gnc_commodity_equiv (comm, vec_comm); };
-        if (comm && std::none_of (acct_comms.cbegin(), acct_comms.cbegin(), has_comm))
+        if (comm && std::none_of (acct_comms.cbegin(), acct_comms.cend(), has_comm))
             m_pre_trans->m_alt_currencies.push_back(comm);
     }
 }
