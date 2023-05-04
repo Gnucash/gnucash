@@ -286,28 +286,15 @@ gnc_guid_to_string (const GValue *src, GValue *dest)
     g_value_set_string (dest, str);
 }
 
-GType
-gnc_guid_get_type (void)
-{
-    static GType type = 0;
-
-    if (G_UNLIKELY (type == 0))
-    {
-        type = g_boxed_type_register_static ("GncGUID",
-                                             (GBoxedCopyFunc)guid_copy,
-                                             (GBoxedFreeFunc)guid_free);
-
+G_DEFINE_BOXED_TYPE_WITH_CODE (GncGUID, gnc_guid, guid_copy, guid_free,
         g_value_register_transform_func (G_TYPE_STRING,
-                                         type,
+                                         g_define_type_id,
                                          gnc_string_to_guid);
 
-        g_value_register_transform_func (type,
+        g_value_register_transform_func (g_define_type_id,
                                          G_TYPE_STRING,
                                          gnc_guid_to_string);
-    }
-
-    return type;
-}
+    )
 
 namespace gnc
 {
