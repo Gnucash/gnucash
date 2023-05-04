@@ -66,12 +66,9 @@ enum
     LAST_SIGNAL
 };
 
-static GObjectClass *parent_class = NULL;
+static void gsltma_tree_model_interface_init (GtkTreeModelIface *tree_model);
+static void gsltma_tree_sortable_interface_init (GtkTreeSortableIface *tree_sortable);
 
-static void gnc_sx_list_tree_model_adapter_class_init (GncSxListTreeModelAdapterClass *klass);
-static void gsltma_tree_model_interface_init (gpointer g_iface, gpointer iface_data);
-static void gsltma_tree_sortable_interface_init (gpointer g_iface, gpointer iface_data);
-static void gnc_sx_list_tree_model_adapter_init (GTypeInstance *instance, gpointer klass);
 static void gnc_sx_list_tree_model_adapter_dispose (GObject *obj);
 static void gnc_sx_list_tree_model_adapter_finalize (GObject *obj);
 
@@ -79,56 +76,14 @@ static guint gnc_sx_list_tree_model_adapter_signals[LAST_SIGNAL] = {0};
 
 static GncSxInstances* gsltma_get_sx_instances_from_orig_iter (GncSxListTreeModelAdapter *model, GtkTreeIter *orig_iter);
 
-GType
-gnc_sx_list_tree_model_adapter_get_type (void)
-{
-    static GType type = 0;
-    if (type == 0)
-    {
-        static const GTypeInfo info =
-        {
-            sizeof (GncSxListTreeModelAdapterClass),
-            NULL,   /* base_init */
-            NULL,   /* base_finalize */
-            (GClassInitFunc)gnc_sx_list_tree_model_adapter_class_init,   /* class_init */
-            NULL,   /* class_finalize */
-            NULL,   /* class_data */
-            sizeof (GncSxListTreeModelAdapter),
-            0,      /* n_preallocs */
-            (GInstanceInitFunc)gnc_sx_list_tree_model_adapter_init    /* instance_init */
-        };
-        static const GInterfaceInfo itree_model_info =
-        {
-            (GInterfaceInitFunc) gsltma_tree_model_interface_init,    /* interface_init */
-            NULL,               /* interface_finalize */
-            NULL                /* interface_data */
-        };
-        static const GInterfaceInfo itree_sortable_info =
-        {
-            (GInterfaceInitFunc) gsltma_tree_sortable_interface_init,    /* interface_init */
-            NULL,               /* interface_finalize */
-            NULL                /* interface_data */
-        };
-
-        type = g_type_register_static (G_TYPE_OBJECT,
-                                       "GncSxListTreeModelAdapterType",
-                                       &info, 0);
-        g_type_add_interface_static (type,
-                                     GTK_TYPE_TREE_MODEL,
-                                     &itree_model_info);
-        g_type_add_interface_static (type,
-                                     GTK_TYPE_TREE_SORTABLE,
-                                     &itree_sortable_info);
-    }
-    return type;
-}
+G_DEFINE_TYPE_WITH_CODE (GncSxListTreeModelAdapter, gnc_sx_list_tree_model_adapter, G_TYPE_OBJECT,
+    G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, gsltma_tree_model_interface_init)
+    G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_SORTABLE, gsltma_tree_sortable_interface_init))
 
 static void
 gnc_sx_list_tree_model_adapter_class_init (GncSxListTreeModelAdapterClass *klass)
 {
     GObjectClass *obj_class = G_OBJECT_CLASS(klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     obj_class->dispose = gnc_sx_list_tree_model_adapter_dispose;
     obj_class->finalize = gnc_sx_list_tree_model_adapter_finalize;
@@ -248,9 +203,8 @@ gsltma_unref_node (GtkTreeModel *tree_model,
 }
 
 static void
-gsltma_tree_model_interface_init (gpointer g_iface, gpointer iface_data)
+gsltma_tree_model_interface_init (GtkTreeModelIface *tree_model)
 {
-    GtkTreeModelIface *tree_model = (GtkTreeModelIface*)g_iface;
     tree_model->get_flags = gsltma_get_flags;
     tree_model->get_n_columns = gsltma_get_n_columns;
     tree_model->get_column_type = gsltma_get_column_type;
@@ -320,9 +274,8 @@ gsltma_has_default_sort_func (GtkTreeSortable  *sortable)
 }
 
 static void
-gsltma_tree_sortable_interface_init (gpointer g_iface, gpointer iface_data)
+gsltma_tree_sortable_interface_init (GtkTreeSortableIface *tree_sortable)
 {
-    GtkTreeSortableIface *tree_sortable = (GtkTreeSortableIface*)g_iface;
     tree_sortable->get_sort_column_id = gsltma_get_sort_column_id;
     tree_sortable->set_sort_column_id = gsltma_set_sort_column_id;
     tree_sortable->set_sort_func = gsltma_set_sort_func;
@@ -485,9 +438,8 @@ _enabled_comparator (GtkTreeModel *model, GtkTreeIter *a, GtkTreeIter *b, gpoint
 }
 
 static void
-gnc_sx_list_tree_model_adapter_init (GTypeInstance *instance, gpointer klass)
+gnc_sx_list_tree_model_adapter_init (GncSxListTreeModelAdapter *adapter)
 {
-    GncSxListTreeModelAdapter *adapter = GNC_SX_LIST_TREE_MODEL_ADAPTER(instance);
     adapter->orig = gtk_tree_store_new (5, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
     adapter->real = GTK_TREE_MODEL_SORT(gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL(adapter->orig)));
 
@@ -642,12 +594,12 @@ gnc_sx_list_tree_model_adapter_dispose (GObject *obj)
     g_object_unref (G_OBJECT(adapter->orig));
     adapter->orig = NULL;
 
-    G_OBJECT_CLASS(parent_class)->dispose (obj);
+    G_OBJECT_CLASS(gnc_sx_list_tree_model_adapter_parent_class)->dispose (obj);
 }
 
 static void
 gnc_sx_list_tree_model_adapter_finalize (GObject *obj)
 {
     g_return_if_fail (obj != NULL);
-    G_OBJECT_CLASS(parent_class)->finalize (obj);
+    G_OBJECT_CLASS(gnc_sx_list_tree_model_adapter_parent_class)->finalize (obj);
 }
