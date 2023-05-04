@@ -41,9 +41,6 @@ enum {
     LAST_SIGNAL
 };
 
-static void      gcrp_init               (GncCellRendererPopup      *popup);
-static void      gcrp_class_init         (GncCellRendererPopupClass *klass);
-
 static GtkCellEditable *gcrp_start_editing (GtkCellRenderer          *cell,
                                             GdkEvent                 *event,
                                             GtkWidget                *widget,
@@ -89,40 +86,14 @@ void gnc_marshal_VOID__STRING_INT_INT_INT_INT (GClosure              *closure,
                                                gpointer               marshal_data);
 
 
-static GtkCellRendererTextClass *parent_class;
 static guint signals[LAST_SIGNAL];
 
 #define GNC_CELL_RENDERER_POPUP_PATH "gnc-cell-renderer-popup-path"
 
-GType
-gnc_cell_renderer_popup_get_type (void)
-{
-    static GType cell_text_type = 0;
-
-    if (!cell_text_type) {
-        static const GTypeInfo cell_text_info = {
-            sizeof (GncCellRendererPopupClass),
-            NULL,           /* base_init */
-            NULL,           /* base_finalize */
-            (GClassInitFunc) gcrp_class_init,
-            NULL,           /* class_finalize */
-            NULL,           /* class_data */
-            sizeof (GncCellRendererPopup),
-            0,              /* n_preallocs */
-            (GInstanceInitFunc) gcrp_init,
-        };
-
-        cell_text_type = g_type_register_static (GTK_TYPE_CELL_RENDERER_TEXT,
-                                                 "GncCellRendererPopup",
-                                                 &cell_text_info,
-                                                 0);
-    }
-
-    return cell_text_type;
-}
+G_DEFINE_TYPE (GncCellRendererPopup, gnc_cell_renderer_popup, GTK_TYPE_CELL_RENDERER_TEXT);
 
 static void
-gcrp_init (GncCellRendererPopup *popup)
+gnc_cell_renderer_popup_init (GncCellRendererPopup *popup)
 {
     popup->popup_window = gtk_window_new (GTK_WINDOW_POPUP);
 
@@ -145,11 +116,9 @@ gcrp_init (GncCellRendererPopup *popup)
 }
 
 static void
-gcrp_class_init (GncCellRendererPopupClass *klass)
+gnc_cell_renderer_popup_class_init (GncCellRendererPopupClass *klass)
 {
     GtkCellRendererClass *cell_class = GTK_CELL_RENDERER_CLASS(klass);
-
-    parent_class = GTK_CELL_RENDERER_TEXT_CLASS(g_type_class_peek_parent (klass));
 
     cell_class->start_editing = gcrp_start_editing;
     cell_class->get_size      = gcrp_get_size;
@@ -454,8 +423,8 @@ gcrp_get_size (GtkCellRenderer    *cell,
 {
     GncCellRendererPopup *popup = GNC_CELL_RENDERER_POPUP (cell);
 
-    if (GTK_CELL_RENDERER_CLASS(parent_class)->get_size) {
-        (* GTK_CELL_RENDERER_CLASS(parent_class)->get_size) (cell,
+    if (GTK_CELL_RENDERER_CLASS(gnc_cell_renderer_popup_parent_class)->get_size) {
+        (* GTK_CELL_RENDERER_CLASS(gnc_cell_renderer_popup_parent_class)->get_size) (cell,
                                       widget,
                                       cell_area,
                                       x_offset,
