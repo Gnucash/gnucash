@@ -47,48 +47,12 @@ enum
 };
 
 
-static void gnc_general_select_init         (GNCGeneralSelect      *gsl);
-static void gnc_general_select_class_init   (GNCGeneralSelectClass *klass);
 static void gnc_general_select_dispose      (GObject               *object);
 static void gnc_general_select_finalize     (GObject               *object);
 
-static GtkBoxClass *parent_class;
 static guint general_select_signals[LAST_SIGNAL];
 
-
-/**
- * gnc_general_select_get_type:
- *
- * Returns the GType for the GNCGeneralSelect widget
- */
-GType
-gnc_general_select_get_type (void)
-{
-    static GType general_select_type = 0;
-
-    if (general_select_type == 0)
-    {
-        static const GTypeInfo general_select_info =
-        {
-            sizeof (GNCGeneralSelectClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_general_select_class_init,
-            NULL,
-            NULL,
-            sizeof (GNCGeneralSelect),
-            0,
-            (GInstanceInitFunc) gnc_general_select_init,
-            NULL,
-        };
-
-        general_select_type = g_type_register_static(GTK_TYPE_BOX,
-                              "GNCGeneralSelect",
-                              &general_select_info, 0);
-    }
-
-    return general_select_type;
-}
+G_DEFINE_TYPE (GNCGeneralSelect, gnc_general_select, GTK_TYPE_BOX)
 
 static void
 gnc_general_select_forall (GtkContainer *container, gboolean include_internals,
@@ -103,10 +67,10 @@ gnc_general_select_forall (GtkContainer *container, gboolean include_internals,
     if (!include_internals)
         return;
 
-    if (!GTK_CONTAINER_CLASS (parent_class)->forall)
+    if (!GTK_CONTAINER_CLASS (gnc_general_select_parent_class)->forall)
         return;
 
-    GTK_CONTAINER_CLASS (parent_class)->forall (container,
+    GTK_CONTAINER_CLASS (gnc_general_select_parent_class)->forall (container,
             include_internals,
             callback,
             callback_data);
@@ -119,8 +83,6 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
     GtkContainerClass *container_class = (GtkContainerClass *) klass;
 
     object_class = (GObjectClass*) klass;
-
-    parent_class = g_type_class_ref(GTK_TYPE_BOX);
 
     general_select_signals[SELECTION_CHANGED] =
         g_signal_new("changed",
@@ -158,8 +120,7 @@ gnc_general_select_finalize (GObject *object)
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_GENERAL_SELECT (object));
 
-    if (G_OBJECT_CLASS (parent_class)->finalize)
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_general_select_parent_class)->finalize (object);
 }
 
 static void
@@ -184,9 +145,7 @@ gnc_general_select_dispose (GObject *object)
     gtk_widget_destroy(GTK_WIDGET(gsl->button));
     gsl->button = NULL;
 
-
-    if (G_OBJECT_CLASS (parent_class)->dispose)
-        G_OBJECT_CLASS (parent_class)->dispose (object);
+    G_OBJECT_CLASS (gnc_general_select_parent_class)->dispose (object);
 }
 
 static void
