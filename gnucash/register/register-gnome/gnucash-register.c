@@ -69,7 +69,6 @@ enum
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_REGISTER;
-static GtkGrid *register_parent_class;
 static guint register_signals[LAST_SIGNAL];
 
 
@@ -94,6 +93,8 @@ struct _GnucashRegisterClass
 };
 
 /** Implementation *****************************************************/
+
+G_DEFINE_TYPE (GnucashRegister, gnucash_register, GTK_TYPE_GRID)
 
 void
 gnucash_register_add_cell_types (void)
@@ -367,8 +368,6 @@ gnucash_register_class_init (GnucashRegisterClass *klass)
 
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "gnc-id-register");
 
-    register_parent_class = g_type_class_peek_parent (klass);
-
     register_signals[ACTIVATE_CURSOR] =
         g_signal_new("activate_cursor",
                      G_TYPE_FROM_CLASS(gobject_class),
@@ -427,37 +426,6 @@ gnucash_register_init (GnucashRegister *g_reg)
     gtk_grid_set_row_homogeneous (GTK_GRID(table), FALSE);
     gtk_grid_set_column_homogeneous (GTK_GRID(table), FALSE);
 }
-
-
-GType
-gnucash_register_get_type (void)
-{
-    static GType gnucash_register_type = 0;
-
-    if (!gnucash_register_type)
-    {
-        static const GTypeInfo gnucash_register_info =
-        {
-            sizeof (GnucashRegisterClass),
-            NULL,       /* base_init */
-            NULL,       /* base_finalize */
-            (GClassInitFunc) gnucash_register_class_init,
-            NULL,       /* class_finalize */
-            NULL,       /* class_data */
-            sizeof (GnucashRegister),
-            0,      /* n_preallocs */
-            (GInstanceInitFunc) gnucash_register_init,
-        };
-
-        gnucash_register_type = g_type_register_static
-                                (gtk_grid_get_type (),
-                                 "GnucashRegister",
-                                 &gnucash_register_info, 0);
-    }
-
-    return gnucash_register_type;
-}
-
 
 void
 gnucash_register_attach_popup (GnucashRegister *reg,
