@@ -154,7 +154,7 @@ static void gnc_main_window_finalize (GObject *object);
 static void gnc_main_window_destroy (GtkWidget *widget);
 
 static void gnc_main_window_setup_window (GncMainWindow *window);
-static void gnc_window_main_window_init (GncWindowIface *iface);
+static void gnc_window_main_window_init (GncWindowInterface *iface);
 #ifndef MAC_INTEGRATION
 static void gnc_main_window_update_all_menu_items (void);
 #endif
@@ -5453,7 +5453,7 @@ gnc_main_window_get_accel_group (GncWindow *window)
  *  @param iface A pointer to the interface data structure to
  *  populate. */
 static void
-gnc_window_main_window_init (GncWindowIface *iface)
+gnc_window_main_window_init (GncWindowInterface *iface)
 {
     iface->get_gtk_window      = gnc_main_window_get_gtk_window;
     iface->get_statusbar       = gnc_main_window_get_statusbar;
