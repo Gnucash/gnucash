@@ -44,11 +44,12 @@ enum
     LAST_SIGNAL
 };
 
-static GtkEventBoxClass* gnc_item_list_parent_class;
 static guint gnc_item_list_signals[LAST_SIGNAL];
 
 gboolean _gnc_item_find_selection (GtkTreeModel* model, GtkTreePath* path,
                                    GtkTreeIter* iter, gpointer data);
+
+G_DEFINE_TYPE (GncItemList, gnc_item_list, GTK_TYPE_EVENT_BOX);
 
 gint
 gnc_item_list_num_entries (GncItemList* item_list)
@@ -390,8 +391,6 @@ gnc_item_list_class_init (GncItemListClass* item_list_class)
 {
     GObjectClass*  object_class = G_OBJECT_CLASS (item_list_class);
 
-    gnc_item_list_parent_class = g_type_class_peek_parent (item_list_class);
-
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(item_list_class), "gnc-id-sheet-list");
 
     gnc_item_list_signals[SELECT_ITEM] =
@@ -428,36 +427,6 @@ gnc_item_list_class_init (GncItemListClass* item_list_class)
     item_list_class->change_item = NULL;
     item_list_class->activate_item = NULL;
 }
-
-
-GType
-gnc_item_list_get_type (void)
-{
-    static GType gnc_item_list_type = 0;
-
-    if (gnc_item_list_type == 0)
-    {
-        static const GTypeInfo gnc_item_list_info =
-        {
-            sizeof (GncItemListClass),
-            NULL,
-            NULL,
-            (GClassInitFunc)  gnc_item_list_class_init,
-            NULL,
-            NULL,
-            sizeof (GncItemList),
-            0,
-            (GInstanceInitFunc) gnc_item_list_init
-        };
-
-        gnc_item_list_type =
-            g_type_register_static (GTK_TYPE_EVENT_BOX, "GncItemList",
-                                    &gnc_item_list_info, 0);
-    }
-
-    return gnc_item_list_type;
-}
-
 
 static void
 tree_view_selection_changed (GtkTreeSelection* selection,
