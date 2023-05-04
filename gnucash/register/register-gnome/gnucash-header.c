@@ -40,14 +40,14 @@
 
 #include "gnucash-header.h"
 
-static GtkLayout *parent_class;
-
 enum
 {
     PROP_0,
     PROP_SHEET,       /*  the sheet this header is associated with */
     PROP_CURSOR_NAME, /* the name of the current cursor */
 };
+
+G_DEFINE_TYPE (GncHeader, gnc_header, GTK_TYPE_LAYOUT)
 
 static void
 gnc_header_draw_offscreen (GncHeader *header)
@@ -261,8 +261,8 @@ gnc_header_unrealize (GtkWidget *widget)
         g_object_unref (header->normal_cursor);
     header->normal_cursor = NULL;
 
-    if (GTK_WIDGET_CLASS(parent_class)->unrealize)
-        GTK_WIDGET_CLASS(parent_class)->unrealize (GTK_WIDGET(header));
+    if (GTK_WIDGET_CLASS(gnc_header_parent_class)->unrealize)
+        GTK_WIDGET_CLASS(gnc_header_parent_class)->unrealize (GTK_WIDGET(header));
 }
 
 
@@ -276,7 +276,7 @@ gnc_header_finalize (GObject *object)
     g_free (header->cursor_name);
     header->cursor_name = NULL;
 
-    G_OBJECT_CLASS(parent_class)->finalize (object);
+    G_OBJECT_CLASS(gnc_header_parent_class)->finalize (object);
 }
 
 
@@ -645,8 +645,6 @@ gnc_header_class_init (GncHeaderClass *header_class)
 
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(header_class), "gnc-id-header");
 
-    parent_class = g_type_class_peek_parent (header_class);
-
     object_class->finalize = gnc_header_finalize;
     object_class->get_property = gnc_header_get_property;
     object_class->set_property = gnc_header_set_property;
@@ -671,36 +669,6 @@ gnc_header_class_init (GncHeaderClass *header_class)
     item_class->draw      = gnc_header_draw;
     item_class->event     = gnc_header_event;
 }
-
-
-GType
-gnc_header_get_type (void)
-{
-    static GType gnc_header_type = 0;
-
-    if (!gnc_header_type)
-    {
-        static const GTypeInfo gnc_header_info =
-        {
-            sizeof (GncHeaderClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_header_class_init,
-            NULL,
-            NULL,
-            sizeof (GncHeader),
-            0,
-            (GInstanceInitFunc) gnc_header_init
-        };
-
-        gnc_header_type = g_type_register_static (GTK_TYPE_LAYOUT,
-                          "GncHeader",
-                          &gnc_header_info, 0);
-    }
-
-    return gnc_header_type;
-}
-
 
 GtkWidget *
 gnc_header_new (GnucashSheet *sheet)
