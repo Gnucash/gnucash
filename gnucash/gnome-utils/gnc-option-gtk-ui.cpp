@@ -522,7 +522,7 @@ RelativeDateEntry::RelativeDateEntry(GncOption& option)
         GtkTreeIter  iter;
         gtk_list_store_append (store, &iter);
         gtk_list_store_set (store, &iter, 0,
-                            option.permissible_value_name(index), -1);
+                            _(option.permissible_value_name(index)), -1);
     }
 
     /* Create the new Combo with tooltip and add the store */
