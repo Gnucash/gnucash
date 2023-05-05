@@ -1442,7 +1442,7 @@ many months before the current month</property>
                     <property name="receives-default">False</property>
                     <property name="has-tooltip">True</property>
                     <property name="tooltip-markup">If selected, the default book option for new files is set so that the &amp;quot;Num&amp;quot; cell on registers shows/updates the split &amp;quot;action&amp;quot; field and the transaction &amp;quot;num&amp;quot; field is shown on the second line in double line view (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the &amp;quot;Num&amp;quot; cell on registers shows/updates the transaction &amp;quot;num&amp;quot; field.</property>
-                    <property name="tooltip-text" translatable="yes">If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line view (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</property>
+                    <property name="tooltip-text" translatable="yes">If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line view (and is not visible if that's not set). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>
@@ -2846,8 +2846,8 @@ many months before the current month</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Show all transactions on one line or in double line view on two.</property>
-                    <property name="tooltip-text" translatable="yes">Show all transactions on one line or in double line view on two.</property>
+                    <property name="tooltip-markup">Hide splits in all transactions.</property>
+                    <property name="tooltip-text" translatable="yes">Hide splits in all transactions.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="active">True</property>
@@ -2865,8 +2865,8 @@ many months before the current month</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Automatically expand the current transaction to show all splits. All other transactions are shown on one line or in double line view on two.</property>
-                    <property name="tooltip-text" translatable="yes">Automatically expand the current transaction to show all splits. All other transactions are shown on one line or in double line view on two.</property>
+                    <property name="tooltip-markup">Automatically expand the current transaction to show all splits. All other transactions are shown on one or two lines depending on whether Double line view is set.</property>
+                    <property name="tooltip-text" translatable="yes">Automatically expand the current transaction to show all splits. All other transactions are shown on one or two lines depending on whether Double line view is set.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
                     <property name="draw-indicator">True</property>

@@ -228,7 +228,7 @@
     <key name="num-source" type="b">
       <default>false</default>
       <summary>Set book option on new files to use split "action" field for "Num" field on registers/reports</summary>
-      <description>If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line mode (and is not visible in single line mode). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</description>
+      <description>If selected, the default book option for new files is set so that the 'Num' cell on registers shows/updates the split 'action' field and the transaction 'num' field is shown on the second line in double line view (and is not visible if that's not set). Otherwise, the default book option for new files is set so that the 'Num' cell on registers shows/updates the transaction 'num' field.</description>
     </key>
 
     <child name="register" schema="org.gnucash.GnuCash.general.register"/>
@@ -283,18 +283,18 @@
     </key>
     <key name="default-style-ledger" type="b">
       <default>true</default>
-      <summary>Show all transactions on one line or in double line mode on two.</summary>
-      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
+      <summary>Hide splits in all transactions.</summary>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "Basic ledger", "Auto-split ledger" and "Transaction journal". The "Basic ledger" setting says to show each transaction on one or two lines depending on whether Double line view is set. The "Auto-split ledger" setting does the same, but also expands only the current transaction to show all splits. The "Transaction journal" setting shows all transactions in expanded form.</description>
     </key>
     <key name="default-style-autoledger" type="b">
       <default>false</default>
-      <summary>Automatically expand the current transaction to show all splits. All other transactions are shown on one line or in double line mode on two.</summary>
-      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
+      <summary>Automatically expand the current transaction to show all splits. All other transactions are shown on one or two lines depending on whether Double line view is set.</summary>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "Basic ledger", "Auto-split ledger" and "Transaction journal". The "Basic ledger" setting says to show each transaction on one or two lines depending on whether Double line view is set. The "Auto-split ledger" setting does the same, but also expands only the current transaction to show all splits. The "Transaction journal" setting shows all transactions in expanded form.</description>
     </key>
     <key name="default-style-journal" type="b">
       <default>false</default>
       <summary>All transactions are expanded to show all splits.</summary>
-      <description>This field specifies the default view style when opening a new register window. Possible values are "ledger", "auto-ledger" and "journal". The "ledger" setting says to show each transaction on one or two lines. The "auto-ledger" setting does the same, but also expands only the current transaction to show all splits. The "journal" setting shows all transactions in expanded form.</description>
+      <description>This field specifies the default view style when opening a new register window. Possible values are "Basic ledger", "Auto-split ledger" and "Transaction journal". The "Basic ledger" setting says to show each transaction on one or two lines depending on whether Double line view is set. The "Auto-split ledger" setting does the same, but also expands only the current transaction to show all splits. The "Transaction journal" setting shows all transactions in expanded form.</description>
     </key>
     <key name="double-line-mode" type="b">
       <default>false</default>

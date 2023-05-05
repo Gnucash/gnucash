@@ -45,7 +45,7 @@ N_( "Every transaction has a \"Notes\" field where you can put useful \
 information.\n\n\
 To make it visible\n\
 select \"View\" in the menu bar and check \"Double Line\" or\n\
-check \"Double Line Mode\" in Preferences:Register Defaults.")
+check \"Double Line View\" in Preferences:Register Defaults.")
 
  N_( "To enter multiple-split transactions such as a paycheck with \
 multiple deductions, click the Split button in the tool bar. \
