@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-24 14:48-0700\n"
-"PO-Revision-Date: 2023-05-05 19:30+0000\n"
+"PO-Revision-Date: 2023-05-05 21:10+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -14074,7 +14074,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register.c:2554
 #: gnucash/register/ledger-core/split-register.c:2580
 msgid "Online"
-msgstr "Online"
+msgstr "Internetre csatlakozott"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:193
 #, fuzzy

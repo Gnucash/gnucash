@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2023-05-05 19:30+0000\n"
+"PO-Revision-Date: 2023-05-05 21:10+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hu/>\n"
@@ -221,11 +221,11 @@ msgstr "egyenleg"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
 msgid "balance b/f"
-msgstr "egyensúly b/f"
+msgstr "egyenleg b/f"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
 msgid "balance c/f"
-msgstr "egyensúly c/f"
+msgstr "egyenleg c/f"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -681,11 +681,11 @@ msgstr "részvényfelosztás"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "nyilvántartás: automatikusan osztott főkönyv"
+msgstr "automatikusan osztott főkönyv"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr "nyilvántartás: alap főkönyv"
+msgstr "alap főkönyv"
 
 #. "another form of register"
 msgid "register: general ledger"
@@ -701,11 +701,11 @@ msgstr "újra betölt"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr "jelentési űrlap: T-számlaűrlap"
+msgstr "T számlaűrlap"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr "jelentési űrlap: vízszintes elrendezés"
+msgstr "vízszintes elrendezés"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -713,7 +713,7 @@ msgstr "Eredménytartalék"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
-msgstr "fordított tranzakció (lenullázza a nyilvántartásba vett tranzakciót)"
+msgstr "fordított tranzakció létrehozása"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
@@ -721,7 +721,7 @@ msgstr "értékesítés"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
-msgstr "mentés (fájlba)"
+msgstr "mentés"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
@@ -733,15 +733,15 @@ msgstr "ellenőrzés és javítás"
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
-msgstr "bizonyíték"
+msgstr "értékpapir"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "Osztalékegyenleg"
+msgstr "Részvényegyenleg"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr "részvény(ek darabszáma)"
+msgstr "részvények darabszáma"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
@@ -769,7 +769,7 @@ msgstr "részösszeg"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
-msgstr "adónem (?)"
+msgstr "adónem"
 
 #. "field of an account"
 msgid "tax info"
@@ -777,19 +777,19 @@ msgstr "adóinformáció"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
-msgstr "adótípus: jövedelemadó"
+msgstr "jövedelemadó"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr "adótípus: forgalmi adó"
+msgstr "forgalmi adó"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr "adótípus: áruk és szolgáltatások adója"
+msgstr "áruk és szolgáltatások adója"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr "adótípus: ÁFA"
+msgstr "ÁFA"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
@@ -813,19 +813,19 @@ msgstr "tranzakció"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "tranzakció állapota: jóváhagyott"
+msgstr "érvényesített"
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr "tranzakció állapota: rögzítve"
+msgstr "rögzítve"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr "tranzakció állapota: egyeztetve"
+msgstr "egyeztetve"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "tranzakció állapota: érvénytelen"
+msgstr "érvénytelen"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
@@ -837,7 +837,7 @@ msgstr "átutalási számla"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr "átvitel ide (nyilvántartás-eszköztár)"
+msgstr "átvitel ide"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
@@ -857,7 +857,7 @@ msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr "érték (egy felosztásban)"
+msgstr "érték"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
@@ -865,11 +865,11 @@ msgstr "beszállító"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr "utalvány"
+msgstr "bizonylat"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr "visszavonás(az egyeztető párbeszédpanelen)"
+msgstr "visszavonás"
 
 msgid "stock"
 msgstr "részvény"
@@ -878,7 +878,7 @@ msgid "due"
 msgstr "esedékes"
 
 msgid "Online"
-msgstr "Online"
+msgstr "Internetre csatlakozott"
 
 msgid "Direct Debit"
 msgstr "Csoportos beszedési megbízás"
