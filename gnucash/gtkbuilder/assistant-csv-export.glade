@@ -211,7 +211,7 @@ Select the type of Export required and the separator that will be used.
               <object class="GtkLabel" id="label2">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Separators</property>
+                <property name="label" translatable="yes">Select Separator Character</property>
                 <attributes>
                   <attribute name="weight" value="bold"/>
                 </attributes>
