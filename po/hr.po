@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-24 14:48-0700\n"
-"PO-Revision-Date: 2023-04-05 15:51+0000\n"
+"PO-Revision-Date: 2023-04-30 20:47+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -16,9 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -15562,16 +15562,12 @@ msgstr "_Dvoredni prikaz"
 #: gnucash/gtkbuilder/dialog-preferences.glade:2943
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with Action, Notes, and Linked Document fields for "
-#| "each transaction"
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
 msgstr ""
 "Prikaži drugi redak s poljima „Radnja”, „Napomene” i „Povezani dokumenti” za "
-"svaku transakciju"
+"svaku transakciju."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
@@ -24041,12 +24037,10 @@ msgstr ""
 "vremena."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:410
-#, fuzzy
-#| msgid "Reporting range end period cannot be less than start period."
 msgid "Reporting range end period cannot exceed number of periods in budget"
 msgstr ""
-"Krajnje vrijeme u rasponu izvještavanja ne može biti manje od početnog "
-"vremena."
+"Krajnje vrijeme u rasponu izvještavanja ne može prekoračiti vremena u "
+"proračunu"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:482
 #: gnucash/report/reports/standard/income-statement.scm:461
