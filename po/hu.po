@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-24 14:48-0700\n"
-"PO-Revision-Date: 2023-04-29 15:50+0000\n"
+"PO-Revision-Date: 2023-05-03 08:50+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1029,8 +1029,8 @@ msgid ""
 "Edit->Open Subaccounts from the menu."
 msgstr ""
 "Egyetlen főkönyvben szeretné látni egy számla összes alszámlájának "
-"tranzakcióit? A Folyószámlák fülön jelölje ki a kiinduló számlát, majd "
-"válassza a Szerkesztés->Alszámlák megnyitása menüpontot."
+"tranzakcióit? A Számlák fülön jelölje ki a kiinduló számlát, majd válassza a "
+"Szerkesztés->Alszámlák megnyitása menüpontot."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -2031,7 +2031,7 @@ msgstr "Kimenő számla"
 #: libgnucash/engine/gncOwner.c:213 libgnucash/engine/Recurrence.c:502
 #: libgnucash/engine/Recurrence.c:691
 msgid "None"
-msgstr "Nincs"
+msgstr "Nincs beállítva"
 
 #: gnucash/gnome/business-gnome-utils.c:700
 msgid "Use Global"
@@ -2787,7 +2787,7 @@ msgstr "Részvényárfolyam"
 #: gnucash/report/reports/standard/register.scm:157
 #: gnucash/report/reports/standard/register.scm:390
 msgid "Value"
-msgstr "Aktuális érték"
+msgstr "Érték"
 
 #: gnucash/gnome/dialog-find-transactions.c:126
 #: gnucash/gnome/dialog-invoice.c:3559 gnucash/gnome/dialog-invoice.c:3593
@@ -2847,7 +2847,7 @@ msgstr "Művelet"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/report/trep-engine.scm:249
 msgid "Transaction Number"
-msgstr "Tranzakció száma"
+msgstr "Tranzakciószám"
 
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
@@ -3362,7 +3362,7 @@ msgstr "Számla keresése"
 #: gnucash/report/trep-engine.scm:1010 gnucash/report/trep-engine.scm:1335
 #: gnucash/report/trep-engine.scm:1361 gnucash/report/trep-engine.scm:2074
 msgid "Amount"
-msgstr "Érték"
+msgstr "Mennyiség"
 
 # msgid_plural "The following %d bills are due:"
 #. Translators: %d is the number of bills/credit notes due. This is a
@@ -7724,11 +7724,11 @@ msgstr "Pénzügyi-számviteli program magánszemélyeknek és kisvállalkozáso
 #: gnucash/gnome-utils/gnc-main-window.cpp:5266
 msgid "translator-credits"
 msgstr ""
-"Molnár Csaba, 2022-2023\n"
-"Kárász Attila, 2022\n"
-"Kornel Tako, 2007\n"
-"SULYOK Péter, 2003-2006\n"
-"HOSSZÚ Péter, 2001-2003"
+"Molnár, Csaba (2022-2023)\n"
+"Kárász, Attila (2022)\n"
+"Tako, Kornel (2007)\n"
+"Sulyok, Péter (2003-2006)\n"
+"Hosszú, Péter (2001-2003)"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5269
 msgid "Visit the GnuCash website."
@@ -11276,7 +11276,7 @@ msgstr "Állítsa be az összes importálandó oszlop típusát."
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:975
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:904
 msgid "Skip Errors"
-msgstr "Hibák átugrása"
+msgstr "Hibák sorok importálásának kihagyása"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:998
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:927
@@ -11335,9 +11335,9 @@ msgstr ""
 "A sikeres importáláshoz a fájlnak három oszlopot kell tartalmaznia:\n"
 "• Dátum\n"
 "• Leírás\n"
-"• Betét vagy kivét\n"
+"• Betét vagy kivét összege\n"
 "\n"
-"Ha a fájl nem határozza meg a tranzakciók számláját, kiválaszthatja, melyik "
+"Ha a fájl nem tartalmazza a tranzakciók számláját, kiválaszthatja, melyik "
 "számlára importálódjon az összes tranzakció.\n"
 "\n"
 "Az elválasztójeleken kívül egyéb beállításokat is megváltoztathat. Például "
@@ -11374,17 +11374,17 @@ msgid ""
 "information is empty or the same as the first transaction line the importer "
 "will consider this line part of the same transaction."
 msgstr ""
-"Alapesetben a bemeneti fájl minden sorát egy tranzakciónak tekintjük. Egy "
-"sor tartalmazza egy tranzakció és egy vagy két felosztás adatait.\n"
+"Alapesetben úgy tekintjük, hogy a bemeneti fájl minden sora egy tranzakció "
+"és egy vagy két felosztás adatait tartalmazza.\n"
 "\n"
-"Ha a Felosztások több sorban be van kapcsolva, úgy tekintjük, hogy a "
-"tranzakciók adatait több egymást követő sor együttesen tartalmazza. Minden "
-"sor pontosan egy osztásnak felel meg, a tranzakció adatait pedig az első sor "
-"tartalmazza.\n"
-"Annak megállapításához, hogy mely sorok tartoznak ugyanahhoz a "
-"tranzakcióhoz, összehasonlítjuk az egyes sorokban megadott információkat. Ha "
-"az információ üres vagy megegyezik az első sorral, az importőr úgy tekinti, "
-"hogy ez a sor ugyanahhoz a tranzakcióhoz tartozik."
+"Ha a Felosztások több sorban be van kapcsolva, akkor úgy tekintjük, hogy a "
+"tranzakciók adatait több egymást követő sor együttesen tartalmazza. Ilyenkor "
+"minden sor egy osztásnak felel meg, a tranzakció adatai pedig az első sorban "
+"találhatók.\n"
+"Onnan tudjuk, mely sorok tartoznak ugyanahhoz a tranzakcióhoz, hogy "
+"összehasonlítjuk az egyes sorok tartalmát. Ha egy oszlop üres vagy a "
+"tartalma megegyezik az első sorral, akkor az ugyanahhoz a tranzakcióhoz "
+"tartozik."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:746
 msgid ""
@@ -11406,19 +11406,20 @@ msgstr ""
 "ötödik. A 6., 8., 10. és további sorok ki lesznek hagyva."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:815
-#, fuzzy
 msgid "<b>Account</b>"
-msgstr "<b>_Számlák</b>"
+msgstr "<b>Számla</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:942
 msgid "Select a row to change the mappings"
-msgstr ""
+msgstr "Az összerendelés megváltoztatásához jelöljön ki egy sort"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:960
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button…"
 msgstr ""
+"Az összerendelés megváltoztatásához kattintson duplán egy sorra, vagy "
+"jelölje ki a sort, és nyomja meg a gombot…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:971
 #: gnucash/import-export/import-account-matcher.c:166
@@ -11434,12 +11435,11 @@ msgstr "Hiba."
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
 msgid "Change GnuCash _Account…"
-msgstr "GnuCash-_számla cseréje…"
+msgstr "GnuCash-_számla megváltoztatása…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1044
-#, fuzzy
 msgid "Match Import and GnuCash accounts"
-msgstr "QIF és GnuCash számlák összevetése"
+msgstr "Importált és GnuCash számlák egyeztetése"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1060
 msgid ""
@@ -11464,16 +11464,34 @@ msgid ""
 "\n"
 "More information can be displayed by using the help button."
 msgstr ""
+"Ha a \"Következő\" gombra kattint, a Gnucash számos ellenőrzést fog "
+"végrehajtani.\n"
+"\n"
+"Ha <i>az ellenőrzések egyike sikertelen</i>, a rendszer automatikusan "
+"átirányítja az előnézeti oldalra, ahol megpróbálhatja kijavítani a hibákat.\n"
+"\n"
+"A következő oldalon minden tranzakciót egy kategóriához társíthat.\n"
+"\n"
+"Ha <i>üres fájlba importálja</i> a tranzakciókat, akkor meg fog nyílni a "
+"Könyv beállításai ablak, mert az ottani beállítások befolyásolják, hogy az "
+"importált adatokból hogyan jönnek létre a GnuCash tranzakciók. Ha a fájl nem "
+"üres, az ablak nem jelenik meg.\n"
+"\n"
+"Ha ez az <i>első importálása</i>, akkor előfordulhat, hogy minden sort "
+"társítania kell. A későbbi importálások során megpróbáljuk újrahasználni "
+"ezeket a társításokat.\n"
+"\n"
+"A társítás megbízhatósági szintje színes sávként jelenik meg.\n"
+"\n"
+"További információt a Súgó gombra kattintva kaphat."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1085
-#, fuzzy
 msgid "Transaction Information"
-msgstr "<b>Új tranzakció-információ</b>"
+msgstr "Tranzakciók importálása"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1112
-#, fuzzy
 msgid "Match Transactions"
-msgstr "Tranzakció beillesztése"
+msgstr "Tranzakciók egyeztetése"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:21
 msgid ""
@@ -13185,7 +13203,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-account-picker.glade:159
 #: gnucash/gtkbuilder/dialog-import.glade:12
 msgid "Select Account"
-msgstr "Folyószámla kiválasztása"
+msgstr "Számla kiválasztása"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:237
 msgid "_Select or add a GnuCash account:"
@@ -14114,11 +14132,11 @@ msgstr "Új s_zámla…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
-msgstr "Válasszon vagy hozzon létre GnuCash-számlát ehhez:"
+msgstr "Válasszon vagy hozzon létre GnuCash számlát ehhez:"
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
 msgid "Online account ID here…"
-msgstr "Online számla azonosító…"
+msgstr "Online számlaazonosító…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:170
 #: gnucash/gtkbuilder/dialog-import.glade:278
@@ -14137,14 +14155,13 @@ msgstr "Meglévő illeszkedő tranzakció kiválasztása"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:313
-#, fuzzy
 msgid "Show Reconciled"
-msgstr "Egyeztetett"
+msgstr "Egyeztetettek megjelenítése"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:374
 msgid "Imported transaction's first split"
-msgstr "Importált tranzakciók első felosztása"
+msgstr "Importált tranzakció első felosztása"
 
 #. Dialog Select matching transactions
 #: gnucash/gtkbuilder/dialog-import.glade:408
@@ -14163,19 +14180,21 @@ msgstr ""
 msgid ""
 "This transaction probably requires your intervention or it will be imported "
 "unbalanced."
-msgstr "E tranzakció talán beavatkozást igényel, vagy eltéréssel importálódik."
+msgstr ""
+"Ez a tranzakció valószínűleg beavatkozást igényel, különben "
+"kiegyenlítetlenül fog importálódni."
 
 #: gnucash/gtkbuilder/dialog-import.glade:459
 msgid ""
 "This transaction will be imported balanced (you may still want to double "
 "check the match or destination account)."
 msgstr ""
-"E tranzakciót kiegyenlítve importálja (még mindig érdemes újra ellenőrizni "
-"az illeszkedést vagy a célszámlát)."
+"Ez a tranzakció kiegyenlítve lesz importálva (továbbra is érdemes "
+"ellenőrizni az egyeztetést és a célszámlát)."
 
 #: gnucash/gtkbuilder/dialog-import.glade:462
 msgid "This transaction requires your intervention or it will NOT be imported."
-msgstr "E tranzakció beavatkozást igényel, vagy nem importálódik."
+msgstr "Ez a tranzakció beavatkozást igényel, enélkül nem lesz importálva."
 
 #: gnucash/gtkbuilder/dialog-import.glade:465
 msgid ""
@@ -14215,33 +14234,36 @@ msgstr "<b>Események</b>"
 
 #: gnucash/gtkbuilder/dialog-import.glade:648
 msgid "\"A\""
-msgstr "\"A\""
+msgstr "\"Ú\""
 
 #: gnucash/gtkbuilder/dialog-import.glade:659
 msgid "\"U+C\""
-msgstr ""
+msgstr "\"F+E\""
 
 #: gnucash/gtkbuilder/dialog-import.glade:670
-#, fuzzy
 msgid "\"C\""
-msgstr "\"A\""
+msgstr "\"E\""
 
 #: gnucash/gtkbuilder/dialog-import.glade:682
 msgid "Select \"A\" to add the transaction as new."
-msgstr "Válaszd az \"A\" a tranzakció létrehozásához."
+msgstr "Új tranzakció létrehozásához válassza az \"Ú\" lehetőséget."
 
 #: gnucash/gtkbuilder/dialog-import.glade:694
 msgid ""
 "Select \"U+C\" to update a matching transaction and mark it as cleared (c)."
 msgstr ""
+"Egy egyező tranzakció frissítéséhez és elszámolásához (e) válassza az \"F+E\""
+" lehetőséget."
 
 #: gnucash/gtkbuilder/dialog-import.glade:706
 msgid "Select \"C\" to mark a matching transaction as cleared (c)."
-msgstr ""
+msgstr "Egy egyező tranzakció elszámolásához (e) válassza az \"E\" lehetőséget."
 
 #: gnucash/gtkbuilder/dialog-import.glade:718
 msgid "Select neither to skip the transaction (it won't be imported at all)."
-msgstr "Minden tranzakció kihagyása (egyáltalán nem importálják)."
+msgstr ""
+"A tranzakció kihagyásához egyiket se válassza (ekkor nem történik "
+"importálás)."
 
 #: gnucash/gtkbuilder/dialog-import.glade:776
 msgid "Red"
@@ -14256,10 +14278,8 @@ msgid "Green"
 msgstr "Zöld"
 
 #: gnucash/gtkbuilder/dialog-import.glade:871
-#, fuzzy
-#| msgid "Do not print transaction detail"
 msgid "Edit imported transaction details"
-msgstr "Do not print transaction detail"
+msgstr "Importált tranzakció adatainak szerkesztése"
 
 #: gnucash/gtkbuilder/dialog-import.glade:944
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:151
@@ -14272,24 +14292,24 @@ msgstr "_Megjegyzések"
 msgid ""
 "List of downloaded transactions (source split and matched information shown)"
 msgstr ""
+"Letöltött tranzakciók listája (a kiinduló felosztással és a hozzá tartozó "
+"információkkal)"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1100
-#, fuzzy
 msgid "Show _Account column"
-msgstr "Számlakód megjelenítése"
+msgstr "_Számla oszlop megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1116
 msgid "Show _Memo column"
-msgstr ""
+msgstr "_Felosztás jegyzete oszlop megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1132
-#, fuzzy
 msgid "Show matched _information"
-msgstr "Számlainformáció"
+msgstr "_Társított információ megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1147
 msgid "A_ppend"
-msgstr "_Összefűzés"
+msgstr "_Hozzáfűzés"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1151
 msgid ""
@@ -14297,11 +14317,12 @@ msgid ""
 "Description and Notes to the matched Description and Notes instead of "
 "replacing them."
 msgstr ""
+"Egyező tranzakció frissítése és elszámolásakor a Leírás és a Felosztás "
+"jegyzete felülírás helyett hozzáfűződik a tranzakcióhoz."
 
 #: gnucash/gtkbuilder/dialog-import.glade:1163
-#, fuzzy
 msgid "_Reconcile after match"
-msgstr "(auto) egyezés"
+msgstr "_Egyezés után egyeztetettnek jelölés"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1186
 msgid "Generic import transaction matcher"
@@ -18701,19 +18722,18 @@ msgid "-- Split Transaction --"
 msgstr "-- Felosztott tranzakció --"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:369
-#, fuzzy
 msgid "Full Category Path"
-msgstr "QIF-kategória neve"
+msgstr ""
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:371
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:391
 msgid "Amount With Sym"
-msgstr ""
+msgstr "Érték szimbólummal"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:372
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:392
 msgid "Amount Num."
-msgstr ""
+msgstr "Érték számmal"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:373
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:393
@@ -18732,32 +18752,27 @@ msgstr "Árfolyam/Ár"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
-#, fuzzy
 msgid "Transaction ID"
-msgstr "Tranzakciók"
+msgstr "Tranzakcióazonosító"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:385
-#, fuzzy
 msgid "Commodity/Currency"
-msgstr "Közös pénznem"
+msgstr "Áru/pénznem"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:386
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
-#, fuzzy
 msgid "Void Reason"
-msgstr "Csak érvénytelen"
+msgstr ""
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:389
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:59
-#, fuzzy
 msgid "Full Account Name"
-msgstr "Teljes számlanév használata"
+msgstr "Teljes számlanév"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:396
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
-#, fuzzy
 msgid "Reconcile Date"
-msgstr "Egyeztetett dátum"
+msgstr "Egyeztetés napja"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:69
 #, c-format
@@ -18862,12 +18877,12 @@ msgstr "Érvénytelen kódolás lett kiválasztva"
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1313
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1237
 msgid "Merge with column on _left"
-msgstr "Egyesítés a _bal oldali szomszéddal"
+msgstr "Egyesítés a _baloldali szomszéddal"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1317
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1241
 msgid "Merge with column on _right"
-msgstr "Egyesítés a _jobb oldali szomszéddal"
+msgstr "Egyesítés a _jobboldali szomszéddal"
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1322
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1246
@@ -18939,12 +18954,11 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1431
 msgid "This line has the following parse issues:"
-msgstr ""
+msgstr "Ebben a sorban a következő elemzési problémák vannak:"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1775
-#, fuzzy
 msgid "No Linked Account"
-msgstr "Új folyószámla"
+msgstr "Nincs kapcsolódó számla"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2128
 #, c-format
@@ -18955,16 +18969,22 @@ msgid ""
 "Error message:\n"
 "%s"
 msgstr ""
+"A tranzakciók létrehozása közben váratlan hiba történt. Kérjük, küldjön róla "
+"egy hibajelentést.\n"
+"\n"
+"Hibaüzenet:\n"
+"%s"
 
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2137
 msgid "Double click on rows to change, then click on Apply to Import"
 msgstr ""
+"Kattintson duplán a módosítani kívánt sorokra, majd az importáláshoz "
+"kattintson az Alkalmazás gombra"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2202
-#, fuzzy
 msgid "The transactions were imported from file '{1}'."
-msgstr "%s fájl elemzése során hiba történt."
+msgstr "{1} fájlból megtörtént a tranzakciók importálása."
 
 #: gnucash/import-export/csv-imp/csv-account-import.c:253
 #, c-format
@@ -19196,7 +19216,7 @@ msgstr "Nincs dátum oszlop."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:281
 msgid "No amount column."
-msgstr "Nincs Érték oszlop."
+msgstr "Nincs Mennyiség oszlop."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:283
 msgid "No 'Currency to'."
@@ -19211,72 +19231,70 @@ msgid "Failed to create price from selected columns."
 msgstr "A kiválasztott oszlopokból nem sikerült árat létrehozni."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
-#, fuzzy
 msgid "Transaction Commodity"
-msgstr "Tranzakció összeg"
+msgstr "Tranzakciószimbólum"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 msgid "Amount (Negated)"
-msgstr "Összeg (negált)"
+msgstr "Mennyiség (negált)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 msgid "Value (Negated)"
-msgstr ""
+msgstr "Érték (negált)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
-#, fuzzy
 msgid "Transfer Action"
-msgstr "Származási folyószámla"
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:77
 msgid "Transfer Amount"
-msgstr "Átutalási összeg"
+msgstr "Átutalt összeg"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
 msgid "Transfer Amount (Negated)"
-msgstr "Átutalási összeg (negált)"
+msgstr "Átutalt összeg (negált)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
 msgid "Transfer Memo"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:80
-#, fuzzy
 msgid "Transfer Reconciled"
-msgstr "Egyeztetett"
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:81
-#, fuzzy
 msgid "Transfer Reconcile Date"
-msgstr "Utolsó egyeztetési dátum"
+msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:182
 msgid "Value can't be parsed into a valid reconcile state."
-msgstr ""
+msgstr "Az érték nem érvényes egyeztetettségi állapot."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:245
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"A dátum nem lehet üres, amikor a Felosztások több sorban ki van kapcsolva.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:261
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"A Leírás nem lehet üres, amikor a Felosztások több sorban ki van kapcsolva.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:311
 msgid "No valid date."
-msgstr ""
+msgstr "Hiányzik a dátum."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:314
 msgid "No valid description."
-msgstr "Nincs érvényes magyarázat."
+msgstr "Nincs érvényes leírás."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:447
 msgid "Account value can't be empty."
-msgstr ""
+msgstr "A Számla nem lehet üres."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:452
 msgid "Account value can't be mapped back to an account."
-msgstr ""
+msgstr "A Számla nem felel meg egy létező számlának."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:458
 msgid "Transfer account value can't be empty."
@@ -19288,11 +19306,11 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:641
 msgid "No amount or negated amount column."
-msgstr "Nincs vagy negált összeg oszlop."
+msgstr "Nincs Mennyiség vagy Mennyiség (negált) oszlop."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:644
 msgid "Split is reconciled but reconcile date column is missing or invalid."
-msgstr ""
+msgstr "A felosztás egyeztetett, de az Egyeztetés napja hiányzik vagy hibás."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:647
 msgid ""
@@ -19305,6 +19323,8 @@ msgid ""
 "Choice of accounts makes this a multi-currency transaction but price or "
 "(negated) value column is missing or invalid."
 msgstr ""
+"A kiválasztott számlák miatt ez egy több sorba felosztott tranzakció, de az "
+"Árfolyam vagy a (negált) Érték oszlop hiányzik vagy hibás."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:665
 msgid ""
@@ -19436,11 +19456,11 @@ msgstr "Az importált fájlban nem voltak új tranzakciók."
 
 #: gnucash/import-export/import-main-matcher.c:792
 msgid "Destination account for the auto-balance split."
-msgstr "Auto-kiegyenlítő felosztás célszámlája."
+msgstr "Kiegyenlítő felosztás célszámlája."
 
 #: gnucash/import-export/import-main-matcher.c:979
 msgid "Click Edit to modify"
-msgstr ""
+msgstr "A módosításhoz kattintson a Szerkesztés gombra"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1389
@@ -19459,27 +19479,23 @@ msgstr "Leírás, megjegyzések vagy felosztás jegyzetének s_zerkesztése"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1416
-#, fuzzy
-#| msgid "Reset defaults"
 msgid "_Reset all edits"
-msgstr "Alaphelyzetbe"
+msgstr "Szerkesztések _elvetése"
 
 #: gnucash/import-export/import-main-matcher.c:1570
-#, fuzzy
-#| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
-msgstr "A"
+msgstr "Ú"
 
 #: gnucash/import-export/import-main-matcher.c:1574
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
-msgstr ""
+msgstr "F+E"
 
 #: gnucash/import-export/import-main-matcher.c:1578
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
-msgstr ""
+msgstr "E"
 
 #: gnucash/import-export/import-main-matcher.c:1585
 msgid "Info"
@@ -19488,47 +19504,47 @@ msgstr "Információ"
 #: gnucash/import-export/import-main-matcher.c:1592
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 msgid "Additional Comments"
-msgstr ""
+msgstr "További megjegyzések"
 
 #: gnucash/import-export/import-main-matcher.c:1991
 msgid "New, already balanced"
-msgstr "Új, már kiegyenlített"
+msgstr "Új, kiegyenlített"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
 #: gnucash/import-export/import-main-matcher.c:2013
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
-msgstr "Új, %s (kézi) átutalása ?%s? számlára"
+msgstr "Új, %s (kézi) átutalása \"%s\" számlára"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
 #: gnucash/import-export/import-main-matcher.c:2021
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
-msgstr "Új, %s (auto) átutalása ?%s? számlára"
+msgstr "Új, %s (automatikus) átutalása \"%s\" számlára"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:2034
 #, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
-msgstr "Új, kiegyenlítetlen (%s átutalásához %s számlára ár szükséges)!"
+msgstr "Új, KIEGYENLÍTETLEN (ár szükséges %s átutalásához %s számlára)!"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:2050
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
-msgstr "Új, kiegyenlítetlen (szükséges %s átutalásához)!"
+msgstr "Új, KIEGYENLÍTETLEN (%s átutalásához számlára van szükség)!"
 
 #: gnucash/import-export/import-main-matcher.c:2068
 #, c-format
 msgid "Reconcile (manual) match to %s"
-msgstr "Egyezés a következővel: %s (kézileg kiválasztott feladat)"
+msgstr "Egyezés (kézi) egyeztetése ezzel: %s"
 
 #: gnucash/import-export/import-main-matcher.c:2073
 #, c-format
 msgid "Reconcile (auto) match to %s"
-msgstr "Egyezés a következővel: %s (automatikusan kiválasztott feladat)"
+msgstr "Egyezés (automatikus) egyeztetése ezzel: %s"
 
 #: gnucash/import-export/import-main-matcher.c:2082
 #: gnucash/import-export/import-main-matcher.c:2111
@@ -19538,19 +19554,16 @@ msgstr "Nincs egyező!"
 #: gnucash/import-export/import-main-matcher.c:2097
 #, c-format
 msgid "Update and reconcile (manual) match to %s"
-msgstr ""
-"Frissítés és egyeztetés a következővel: %s (kézileg kiválasztott feladat)"
+msgstr "Frissítés és egyeztetés (kézileg) a következővel: %s"
 
 #: gnucash/import-export/import-main-matcher.c:2102
 #, c-format
 msgid "Update and reconcile (auto) match to %s"
-msgstr ""
-"Frissítés és egyeztetés a következővel: %s (automatikusan kiválasztott "
-"feladat)"
+msgstr "Frissítés és egyeztetés (automatikus) a következővel: %s"
 
 #: gnucash/import-export/import-main-matcher.c:2119
 msgid "Do not import (no action selected)"
-msgstr "Nincs import (nincs kiválasztott művelet)"
+msgstr "Nem lesz importálva (nincs kiválasztott művelet)"
 
 #: gnucash/import-export/import-match-picker.c:417
 msgid "Confidence"
@@ -28504,9 +28517,8 @@ msgid "Business Linked Documents"
 msgstr "Vállalkozáshoz kapcsolódó dokumentumok"
 
 #: gnucash/ui/gnc-plugin-business.ui:140
-#, fuzzy
 msgid "View all Linked Business Documents"
-msgstr "<b>Új tranzakció-információ</b>"
+msgstr ""
 
 #: gnucash/ui/gnc-plugin-business.ui:146
 msgid "Sales _Tax Table"
@@ -28546,7 +28558,7 @@ msgstr "_Tranzakciók CSV-fájlba…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:13
 msgid "Export the Transactions to a CSV file"
-msgstr ""
+msgstr "Tranzakciók exportálása CSV-fájlba"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
 msgid "Export A_ctive Register to CSV…"
