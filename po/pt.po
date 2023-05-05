@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-24 14:48-0700\n"
-"PO-Revision-Date: 2023-03-31 05:59+0000\n"
+"PO-Revision-Date: 2023-04-30 05:15+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -6625,13 +6625,13 @@ msgstr "Todos os ficheiros"
 #. be translated
 #: gnucash/gnome-utils/dialog-file-access.c:366
 msgid "Datafiles only (*.gnucash, *.xac)"
-msgstr ""
+msgstr "Só ficheiros de dados (*.gnucash, *.xac)"
 
 #. Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
 #. patterns and must not be translated
 #: gnucash/gnome-utils/dialog-file-access.c:376
 msgid "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
-msgstr ""
+msgstr "Só salvaguardas (*.gnucash.*.gnucash, *.xac.*.xac)"
 
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
@@ -7410,8 +7410,6 @@ msgstr ""
 "corrija os sinais, se necessário."
 
 #: gnucash/gnome-utils/gnc-file.c:754
-#, fuzzy
-#| msgid "The following warnings exist:"
 msgid "The following are noted in this file:"
 msgstr "Existem os seguintes avisos:"
 
@@ -10975,8 +10973,6 @@ msgid "Custom regular expression"
 msgstr "Expressão regular personalizada"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:191
-#, fuzzy
-#| msgid "Colon Separated"
 msgid "Colon separated"
 msgstr "Separado por dois pontos"
 
@@ -15126,14 +15122,6 @@ msgstr ""
 "ficheiro."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1445
-#, fuzzy
-#| msgid ""
-#| "If selected, the default book option for new files is set so that the "
-#| "'Num' cell on registers shows/updates the split 'action' field and the "
-#| "transaction 'num' field is shown on the second line in double line mode "
-#| "(and is not visible in single line mode). Otherwise, the default book "
-#| "option for new files is set so that the 'Num' cell on registers shows/"
-#| "updates the transaction 'num' field."
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -15593,8 +15581,6 @@ msgid "_Basic ledger"
 msgstr "Razão _básico"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2850
-#, fuzzy
-#| msgid "Show all transactions on one line or in double line mode on two."
 msgid "Show all transactions on one line or in double line view on two."
 msgstr ""
 "Mostrar todas as transacções numa linha, ou duas, em modo de linha dupla."
@@ -15604,10 +15590,6 @@ msgid "_Auto-split ledger"
 msgstr "Razão de parcelas _automáticas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line or in double line mode on two."
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one line or in double line view on two."
@@ -15627,24 +15609,18 @@ msgid "Number of _transactions"
 msgstr "Número de _transacções"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2937
-#, fuzzy
-#| msgid "_Double line mode"
 msgid "_Double line view"
 msgstr "Modo de linha _dupla"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2943
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with Action, Notes, and Linked Document fields for "
-#| "each transaction"
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
 msgstr ""
 "Mostrar uma segunda linha com \"Acção\", \"Notas\" e \"Documentos ligados\" "
-"para cada transacção"
+"para cada transacção."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
@@ -19152,8 +19128,8 @@ msgstr ""
 "Se esta for a sua importação inicial para um novo ficheiro, verá primeiro um "
 "diálogo com as opções do livro, dado que estas podem afectar a forma como os "
 "dados são convertidos para transacções do GnuCash.\n"
-"<b>Nota</b>: após importar, pode ter de usar <i>Ver -> Filtrar por -> "
-"Outros</i> e escolher mostrar contas não usadas.\n"
+"Nota: após importar, pode ter de usar \"Ver -> Filtrar por -> Outros\" e "
+"escolher mostrar contas não usadas.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
 #, c-format
@@ -19819,7 +19795,7 @@ msgstr "Conta destino da parcela de saldo automático."
 
 #: gnucash/import-export/import-main-matcher.c:979
 msgid "Click Edit to modify"
-msgstr ""
+msgstr "Clique Editar para modificar"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1389
@@ -24149,11 +24125,8 @@ msgstr ""
 "O final do período do relatório não pode ser anterior ao início do período."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:410
-#, fuzzy
-#| msgid "Reporting range end period cannot be less than start period."
 msgid "Reporting range end period cannot exceed number of periods in budget"
-msgstr ""
-"O final do período do relatório não pode ser anterior ao início do período."
+msgstr "O período final do relatório não pode exceder o número de períodos"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:482
 #: gnucash/report/reports/standard/income-statement.scm:461
@@ -27996,10 +27969,8 @@ msgid "Display a subtotal summary table."
 msgstr "Mostrar uma tabela resumo do subtotal."
 
 #: gnucash/report/trep-engine.scm:921
-#, fuzzy
-#| msgid "Display the other account code?"
 msgid "Display the balance of the underlying account on each line?"
-msgstr "Mostrar o outro código de conta?"
+msgstr "Mostrar o saldo da conta subsequente em cada linha?"
 
 #: gnucash/report/trep-engine.scm:927
 msgid "Display the trans number?"
@@ -28258,10 +28229,8 @@ msgid "Quit this application"
 msgstr "Sair da aplicação"
 
 #: gnucash/ui/gnc-main-window.ui:143
-#, fuzzy
-#| msgid "Preferences"
 msgid "Pr_eferences"
-msgstr "Preferências"
+msgstr "Pr_eferências"
 
 #: gnucash/ui/gnc-main-window.ui:145
 msgid "Edit the global preferences of GnuCash"
@@ -28404,10 +28373,8 @@ msgid "Open the GnuCash Help"
 msgstr "Abrir a ajuda do GnuCash"
 
 #: gnucash/ui/gnc-main-window.ui:518
-#, fuzzy
-#| msgid "_Abort"
 msgid "_About"
-msgstr "_Abortar"
+msgstr "_Acerca"
 
 #: gnucash/ui/gnc-main-window.ui:520
 msgid "About GnuCash"
@@ -30071,17 +30038,17 @@ msgstr "Sem taxa de câmbio disponível em [%s] para %s -> %s, o valor é zero."
 #: libgnucash/app-utils/gnc-ui-balances.c:369
 #, c-format
 msgid "%s balance is %s, exceeds limit of %s."
-msgstr ""
+msgstr "O saldo de %s é %s, é superior ao limite de %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, c-format
 msgid "%s balance is %s, subceeds limit of %s."
-msgstr ""
+msgstr "O saldo de %s é %s, é inferior ao limite de %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
 #, c-format
 msgid "%s balance is %s, and should be zero."
-msgstr ""
+msgstr "O saldo de %s é %s, devia ser zero."
 
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
