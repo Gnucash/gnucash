@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-04-24 14:48-0700\n"
-"PO-Revision-Date: 2023-05-03 08:50+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2023-05-05 19:30+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -24695,7 +24695,7 @@ msgstr "Bevételi kimutatás"
 
 #: gnucash/report/reports/standard/income-statement.scm:553
 msgid "Profit & Loss"
-msgstr "Eredménykimutatás (?)"
+msgstr "Nyereség és Veszteség"
 
 #: gnucash/report/reports/standard/investment-lots.scm:40
 msgid "Chart"
@@ -26292,7 +26292,7 @@ msgstr "Egyeztetési státusz"
 #: gnucash/report/reports/standard/register.scm:374
 #: libgnucash/engine/gnc-lot.c:791
 msgid "Lot"
-msgstr "Köteg (Gyüjtemény)"
+msgstr "Gyüjtemény"
 
 #: gnucash/report/reports/standard/register.scm:159
 msgid "Debit Value"
