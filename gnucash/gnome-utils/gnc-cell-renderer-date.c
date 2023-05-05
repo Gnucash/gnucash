@@ -44,9 +44,7 @@ enum {
     PROP_USE_BUTTONS,
 };
 
-static void     gcrd_init                  (GncCellRendererDate      *date);
 
-static void     gcrd_class_init            (GncCellRendererDateClass *klass);
 
 static void     gcrd_set_property          (GObject                  *object,
                                             guint                     param_id,
@@ -99,38 +97,10 @@ static time64 gcrd_dmy2time (gint day, gint month, gint year);
 static gchar * gcrd_time2dmy_string (time64 raw_time);
 static time64 gcrd_string_dmy2time (const gchar *date_string);
 
-
-static GncCellRendererPopupClass *parent_class;
-
-GType
-gnc_cell_renderer_date_get_type (void)
-{
-    static GType cell_text_type = 0;
-
-    if (!cell_text_type) {
-        static const GTypeInfo cell_text_info = {
-            sizeof (GncCellRendererDateClass),
-            NULL,           /* base_init */
-            NULL,           /* base_finalize */
-            (GClassInitFunc) gcrd_class_init,
-            NULL,           /* class_finalize */
-            NULL,           /* class_data */
-            sizeof (GncCellRendererDate),
-            0,              /* n_preallocs */
-            (GInstanceInitFunc) gcrd_init,
-        };
-
-        cell_text_type = g_type_register_static (GNC_TYPE_CELL_RENDERER_POPUP,
-                                                 "GncCellRendererDate",
-                                                 &cell_text_info,
-                                                 0);
-    }
-
-    return cell_text_type;
-}
+G_DEFINE_TYPE (GncCellRendererDate, gnc_cell_renderer_date, GNC_TYPE_CELL_RENDERER_POPUP);
 
 static void
-gcrd_init (GncCellRendererDate *date)
+gnc_cell_renderer_date_init (GncCellRendererDate *date)
 {
     GncCellRendererPopup     *popup;
     GtkWidget                *frame;
@@ -189,7 +159,7 @@ gcrd_init (GncCellRendererDate *date)
 }
 
 static void
-gcrd_class_init (GncCellRendererDateClass *klass)
+gnc_cell_renderer_date_class_init (GncCellRendererDateClass *klass)
 {
     GncCellRendererPopupClass     *popup_class;
     GtkCellRendererClass          *cell_class;
@@ -197,7 +167,6 @@ gcrd_class_init (GncCellRendererDateClass *klass)
 
     popup_class = GNC_CELL_RENDERER_POPUP_CLASS(klass);
     cell_class = GTK_CELL_RENDERER_CLASS(klass);
-    parent_class = GNC_CELL_RENDERER_POPUP_CLASS(g_type_class_peek_parent (klass));
     gobject_class = G_OBJECT_CLASS(klass);
 
     gobject_class->set_property = gcrd_set_property;
@@ -274,8 +243,8 @@ gcrd_start_editing (GtkCellRenderer      *cell,
 {
     GNC_CELL_RENDERER_POPUP(cell)->editing_canceled = FALSE;
 
-    if (GTK_CELL_RENDERER_CLASS(parent_class)->start_editing) {
-        return GTK_CELL_RENDERER_CLASS(parent_class)->start_editing (
+    if (GTK_CELL_RENDERER_CLASS(gnc_cell_renderer_date_parent_class)->start_editing) {
+        return GTK_CELL_RENDERER_CLASS(gnc_cell_renderer_date_parent_class)->start_editing (
                             cell,
                             event,
                             widget,
@@ -292,8 +261,8 @@ gcrd_start_editing (GtkCellRenderer      *cell,
 static void
 gcrd_hide (GncCellRendererPopup *cell)
 {
-    if (parent_class->hide_popup) {
-        parent_class->hide_popup (cell);
+    if (GNC_CELL_RENDERER_POPUP_CLASS (gnc_cell_renderer_date_parent_class)->hide_popup) {
+        GNC_CELL_RENDERER_POPUP_CLASS (gnc_cell_renderer_date_parent_class)->hide_popup (cell);
     }
 }
 
@@ -311,8 +280,8 @@ gcrd_show (GncCellRendererPopup *cell,
     gint                     day = 0;
     const gchar             *text;
 
-    if (parent_class->show_popup) {
-        parent_class->show_popup (cell,
+    if (GNC_CELL_RENDERER_POPUP_CLASS (gnc_cell_renderer_date_parent_class)->show_popup) {
+        GNC_CELL_RENDERER_POPUP_CLASS (gnc_cell_renderer_date_parent_class)->show_popup (cell,
                       path,
                       x1, y1,
                       x2, y2);
