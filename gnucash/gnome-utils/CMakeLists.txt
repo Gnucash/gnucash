@@ -59,7 +59,6 @@ set (gnome_utils_SOURCES
   gnc-commodity-edit.c
   gnc-component-manager.c
   gnc-currency-edit.c
-  gnc-date-delta.c
   gnc-date-edit.c
   gnc-date-format.c
   gnc-dense-cal.c
@@ -149,7 +148,6 @@ set (gnome_utils_HEADERS
   gnc-commodity-edit.h
   gnc-component-manager.h
   gnc-currency-edit.h
-  gnc-date-delta.h
   gnc-date-edit.h
   gnc-date-format.h
   gnc-dense-cal.h

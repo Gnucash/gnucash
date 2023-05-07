@@ -158,7 +158,6 @@ gnucash/gnome-utils/gnc-cell-view.c
 gnucash/gnome-utils/gnc-commodity-edit.c
 gnucash/gnome-utils/gnc-component-manager.c
 gnucash/gnome-utils/gnc-currency-edit.c
-gnucash/gnome-utils/gnc-date-delta.c
 gnucash/gnome-utils/gnc-date-edit.c
 gnucash/gnome-utils/gnc-date-format.c
 gnucash/gnome-utils/gnc-dense-cal.c
