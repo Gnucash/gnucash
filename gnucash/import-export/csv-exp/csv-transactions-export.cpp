@@ -32,6 +32,7 @@
 #include <string>
 #include <unordered_set>
 
+#include <gnc-filepath-utils.h>
 #include "gnc-commodity.h"
 #include "gnc-ui-util.h"
 #include "Query.h"
@@ -350,9 +351,6 @@ void csv_transactions_export (CsvExportInfo *info)
     ENTER("");
     DEBUG("File name is : %s", info->file_name);
 
-    /* Open File for writing */
-    auto ss{std::ofstream (info->file_name, std::ofstream::out)};
-
     StringVec headers;
     bool num_action = qof_book_use_split_action_for_num_field (gnc_get_current_book());
 
@@ -398,6 +396,7 @@ void csv_transactions_export (CsvExportInfo *info)
         };
 
     /* Write header line */
+    auto ss{gnc_open_filestream(info->file_name)};
     info->failed = !gnc_csv_add_line (ss, headers, info->use_quotes, info->separator_str);
 
     /* Go through list of accounts */

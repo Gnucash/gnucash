@@ -32,6 +32,7 @@
 #include "gnucash-commands.hpp"
 #include "gnucash-core-app.hpp"
 
+#include <gnc-filepath-utils.h>
 #include <gnc-engine-guile.h>
 #include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
@@ -107,7 +108,7 @@ static inline void
 write_report_file (const char *html, const char* file)
 {
     if (!file || !html || !*html) return;
-    std::ofstream ofs{file};
+    auto ofs{gnc_open_filestream(file)};
     if (!ofs)
     {
         std::cerr << "Failed to open file " << file << " for writing\n";

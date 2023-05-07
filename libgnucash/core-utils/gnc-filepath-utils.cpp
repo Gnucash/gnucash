@@ -1347,4 +1347,11 @@ gboolean gnc_filename_is_datafile (const char *filename)
         std::regex_match (filename, datafile_regex);
 }
 
+std::ofstream
+gnc_open_filestream(const char* path)
+{
+    bfs::path bfs_path(path, cvt);
+    bfs_path.imbue(bfs_locale);
+    return std::ofstream(bfs_path.c_str());
+}
 /* =============================== END OF FILE ========================== */

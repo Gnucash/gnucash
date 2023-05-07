@@ -29,6 +29,8 @@
 #ifndef GNC_FILEPATH_UTILS_H
 #define GNC_FILEPATH_UTILS_H
 
+#include <glib-2.0/glib.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -199,7 +201,22 @@ gboolean gnc_filename_is_backup (const char *filename);
 gboolean gnc_filename_is_datafile (const char *filename);
 
 #ifdef __cplusplus
-}
+} //extern "C"
+
+#include <fstream>
+
+/** Open std::ofstream from a UTF-8 encoded path. This is harder than
+ * it should because std::ofstream's constructor needs to be tricked
+ * into taking a wchar_t filename: Simply converting path to a
+ * wchar_t* with g_utf8_to_utf16() wouldn't compile. The workaround
+ * came from https://github.com/boostorg/filesystem/issues/181. As
+ * noted there passing the boost path directly to
+ * boost::filesystem::fstream doesn't work either.
+ * @param path UTF-8 path to the file
+ * @return a std::ofstream on the stack.
+ */
+std::ofstream gnc_open_filestream(const char *path);
+
 #endif
 
 #endif /* GNC_FILEPATH_UTILS_H */

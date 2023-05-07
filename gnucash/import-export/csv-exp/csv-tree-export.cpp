@@ -32,6 +32,7 @@
 #include <vector>
 #include <algorithm>
 
+#include <gnc-filepath-utils.h>
 #include "gnc-commodity.h"
 #include "gnc-ui-util.h"
 #include "csv-tree-export.h"
@@ -52,7 +53,7 @@ csv_tree_export (CsvExportInfo *info)
     DEBUG("File name is : %s", info->file_name);
 
     /* Open File for writing */
-    auto ss{std::ofstream (info->file_name, std::ofstream::out)};
+    auto ss{gnc_open_filestream(info->file_name)};
 
     /* Header string */
     StringVec headervec = {
