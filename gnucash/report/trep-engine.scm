@@ -59,6 +59,7 @@
 (use-modules (srfi srfi-9))
 (use-modules (srfi srfi-26))
 (use-modules (ice-9 match))
+(use-modules (ice-9 regex))
 
 (export gnc:trep-options-generator)
 (export gnc:trep-renderer)
@@ -98,6 +99,13 @@
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-sortorder  (N_ "Secondary Sort Order"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
+
+;;Tags
+(define pagename-tags (N_ "Tags"))
+(define optname-tag-prefix (N_ "Tag Prefix"))
+(define optname-remove-tp (N_ "Remove Tag Prefix from Headings"))
+(define optname-no-match-heading (N_ "No-Match Heading"))
+(define optname-append-tp (N_ "Append Tag to No-Match Heading"))
 
 ;;General
 (define optname-startdate (N_ "Start Date"))
@@ -159,6 +167,40 @@ in the Options panel."))
         (cons #\y (G_ "Reconciled"))
         (cons #\f (G_ "Frozen"))
         (cons #\v (G_ "Voided"))))
+
+;; Create a function which helps find a split's tag as per
+;; various user-defined options in pagename-tags section.
+;; Memorize both the sortvalue and rendering in hashtable
+;; for later retrieval because get-tag-from-split is slow.
+;; Returns either the sort value or rendered value as per sortvalue?
+(define (split-tag split parameters sortvalue?)
+  (let* ((tag-htable (assq-ref parameters 'tag/htable)))
+  (cond
+   ((hash-ref tag-htable split) =>
+    (lambda (found) (if sortvalue? (car found) (cadr found))))
+   (else
+    (let ((tag (get-tag-from-split split parameters)))
+      (hash-set! tag-htable split tag)
+          (if sortvalue? (car tag) (cadr tag)))))))
+
+;; Finds a split's tag as per user-defined options.
+;; Returns a list with both (tag-sortvalue tag-rendered)
+(define (get-tag-from-split split parameters)
+  (let* ((tag-prefix (assq-ref parameters 'tag/prefix))
+         (remove-tp? (assq-ref parameters 'tag/remove-tp))
+         (no-match-heading (assq-ref parameters 'tag/no-match-heading))
+         (append-tp? (assq-ref parameters 'tag/append-tp))
+         (regexp (assq-ref parameters 'tag/regexp))
+         (sm (or (regexp-exec regexp (xaccSplitGetMemo split))
+                 (regexp-exec regexp ((compose xaccTransGetNotes xaccSplitGetParent) split))
+                 (regexp-exec regexp ((compose xaccTransGetDescription xaccSplitGetParent) split))))
+         (tag-matched (and sm (match:substring sm))))
+    (cond ((not tag-matched) (list 'infinity-string
+                                    (string-append
+                                     (if (string-null? no-match-heading) "No Match" no-match-heading)
+                                     (if append-tp? (string-append " " tag-prefix) ""))))
+          (remove-tp? (list tag-matched (string-drop tag-matched (string-length tag-prefix))))
+          (else (list tag-matched tag-matched)))))
 
 (define (sortkey-list parameters)
   ;; Defines the different sorting keys, as an association-list
@@ -268,6 +310,12 @@ in the Options panel."))
               (cons 'split-sortvalue (compose xaccTransGetNotes xaccSplitGetParent))
               (cons 'text (G_ "Notes"))
               (cons 'renderer-fn (compose xaccTransGetNotes xaccSplitGetParent)))
+
+        (list 'tags
+              (cons 'sortkey #f)
+              (cons 'split-sortvalue (lambda (s) (split-tag s parameters #t)))
+              (cons 'text (G_ "Tags"))
+              (cons 'renderer-fn (lambda (s) (split-tag s parameters #f))))
 
         (list 'none
               (cons 'sortkey '())
@@ -1000,6 +1048,36 @@ be excluded from periodic reporting.")
             (vector 'all   (G_ "Grand Total and Subtotals"))
             (vector 'grand (G_ "Grand Total Only"))
             (vector 'sub   (G_ "Subtotals Only")))))
+
+  ;; Tags options
+
+  (gnc-register-string-option options
+    pagename-tags optname-tag-prefix
+    "a"
+    (G_ "Use this option along with the Tags primary or secondary key \
+and subtotals in the sorting options. \
+By default tags start with # but you can use any other prefix of any \
+length starting with any character. \
+The report engine will attempt to find a match in the split memo first, \
+then the transaction notes, and finally the transaction description. \
+The pattern is case sensitive, so it will match uppercase and lowercase \
+letters separately.")
+    "#")
+
+  (gnc-register-simple-boolean-option options
+    pagename-tags optname-remove-tp
+    "c" (G_ "Remove tag prefix from the subtotal headings displayed in report?") #f)
+
+  (gnc-register-string-option options
+    pagename-tags optname-no-match-heading
+    "e"
+    (G_ "The heading that should be displayed for the subtotal group that \
+contains the transactions with no matching tags. Default is 'No Match'.")
+    "No Match")
+
+  (gnc-register-simple-boolean-option options
+    pagename-tags optname-append-tp
+    "g" (G_ "Append tag prefix to no-match heading specified above?") #t)
 
   ;; this hidden option will toggle whether the default
   ;; qof-query is run, or a different query which ensures
@@ -2219,6 +2297,10 @@ be excluded from periodic reporting.")
                                (memq (opt-val gnc:pagename-display (N_ "Amount"))
                                      '(single double))))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
+         (sort-by-tags? (or (eq? primary-key 'tags) (eq? secondary-key 'tags)))
+         (tag-prefix-raw (opt-val pagename-tags optname-tag-prefix))
+         (tag-prefix (if (string-null? (string-trim tag-prefix-raw))
+                      "#" (string-trim tag-prefix-raw)))
          (query (qof-query-create-for-splits)))
 
     ;; define a preprocessed alist of report parameters.
@@ -2300,6 +2382,21 @@ be excluded from periodic reporting.")
                 (cons 'sort-account-description
                       (opt-val pagename-sorting (N_ "Show Account Description")))
                 (cons 'informal-headers (opt-val pagename-sorting optname-show-informal-headers))
+                ;; parameters based on tag options
+                (cons 'tag/prefix (and sort-by-tags? tag-prefix))
+                (cons 'tag/remove-tp (and sort-by-tags?
+                                    (opt-val pagename-sorting optname-remove-tp)))
+                (cons 'tag/no-match-heading (and sort-by-tags?
+                                          (opt-val pagename-sorting optname-no-match-heading)))
+                (cons 'tag/append-tp (and sort-by-tags? (opt-val pagename-sorting optname-append-tp)))
+                (cons 'tag/regexp (and sort-by-tags?
+                                (make-regexp
+                                  (string-append
+                                    (regexp-substitute/global
+                                      #f "[#-.]|[[-^]|[?|{}]" tag-prefix
+                                      'pre (lambda (m) (string-append "\\" (match:substring m))) 'post)
+                                    "[^ ]*"))))
+                (cons 'tag/htable (and sort-by-tags? (make-hash-table)))
                 ;; Parameters based on a mix of options
                 ;; This parameter is set to #t if an account balance can be displayed
                 ;; as a running balance with a balance forward at the top.
