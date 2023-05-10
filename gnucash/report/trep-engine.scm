@@ -1032,6 +1032,14 @@ be excluded from periodic reporting.")
       (((? (cut assq <> cell)) . rest) (lp rest))
       ((fld . _) (gnc:error "field " fld " missing in cell " cell) #t))))
 
+(define (stringplus< a b)
+  (cond
+    ((eq? a 'infinity-string) #f)
+    ((eq? b 'infinity-string) #t)
+    (else (gnc:string-locale<? a b))))
+
+(define (stringplus> a b) (stringplus< b a))
+
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
 
@@ -2037,7 +2045,8 @@ be excluded from periodic reporting.")
   (cons (vector row col data) grid))
 (define (grid->html-table grid)
   (define (<? a b)
-    (cond ((string? (car a)) (gnc:string-locale<? (car a) (car b)))
+    (cond ((or (symbol? (car a)) (string? (car a)) (symbol? (car b)) (string? (car b)))
+           (stringplus< (car a) (car b)))
           ((number? (car a)) (< (car a) (car b)))
           (else (gnc:error "unknown sortvalue"))))
   (define list-of-rows (sort (delete 'row-total (grid-rows grid)) <?))
@@ -2388,8 +2397,8 @@ be excluded from periodic reporting.")
                       (lambda (s) #f))))
              (value-of-X (comparator-function split-X))
              (value-of-Y (comparator-function split-Y))
-             (op (if (string? value-of-X)
-                     (if ascend? gnc:string-locale<? gnc:string-locale>?)
+             (op (if (or (string? value-of-X) (symbol? value-of-X))
+                     (if ascend? stringplus< stringplus>)
                      (if ascend? < >))))
         (and value-of-X (op value-of-X value-of-Y))))
 
