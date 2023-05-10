@@ -99,9 +99,6 @@
 (define optname-sec-subtotal (N_ "Secondary Subtotal"))
 (define optname-sec-sortorder  (N_ "Secondary Sort Order"))
 (define optname-sec-date-subtotal (N_ "Secondary Subtotal for Date Key"))
-
-;;Tags
-(define pagename-tags (N_ "Tags"))
 (define optname-tag-prefix (N_ "Tag Prefix"))
 (define optname-remove-tp (N_ "Remove Tag Prefix from Headings"))
 (define optname-no-match-heading (N_ "No-Match Heading"))
@@ -169,7 +166,7 @@ in the Options panel."))
         (cons #\v (G_ "Voided"))))
 
 ;; Create a function which helps find a split's tag as per
-;; various user-defined options in pagename-tags section.
+;; various user-defined options in pagename-sorting section.
 ;; Memorize both the sortvalue and rendering in hashtable
 ;; for later retrieval because get-tag-from-split is slow.
 ;; Returns either the sort value or rendered value as per sortvalue?
@@ -744,7 +741,9 @@ be excluded from periodic reporting.")
              (sec-sortkey-enabled (not (eq? sec-sortkey 'none)))
              (sec-sortkey-subtotal-enabled
               (SUBTOTAL-ENABLED? sec-sortkey parameters))
-             (sec-date-sortingtype-enabled (memq sec-sortkey DATE-SORTING-TYPES)))
+             (sec-date-sortingtype-enabled (memq sec-sortkey DATE-SORTING-TYPES))
+             (tag-sortingtype-enabled
+              (or (eq? prime-sortkey 'tags) (eq? sec-sortkey 'tags))))
 
         (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-prime-subtotal
@@ -802,7 +801,23 @@ be excluded from periodic reporting.")
 
         (gnc-optiondb-set-option-selectable-by-name
          options pagename-sorting optname-sec-date-subtotal
-         sec-date-sortingtype-enabled)))
+         sec-date-sortingtype-enabled)
+
+        (gnc-optiondb-set-option-selectable-by-name
+         options pagename-sorting optname-tag-prefix
+         tag-sortingtype-enabled)
+
+         (gnc-optiondb-set-option-selectable-by-name
+         options pagename-sorting optname-remove-tp
+         tag-sortingtype-enabled)
+
+         (gnc-optiondb-set-option-selectable-by-name
+         options pagename-sorting optname-no-match-heading
+         tag-sortingtype-enabled)
+
+         (gnc-optiondb-set-option-selectable-by-name
+         options pagename-sorting optname-append-tp
+         tag-sortingtype-enabled)))
 
     ;; primary sorting criterion
     (gnc-register-multichoice-callback-option options
@@ -905,7 +920,37 @@ be excluded from periodic reporting.")
       pagename-sorting optname-sec-sortorder
       "i" (G_ "Order of Secondary sorting.")
       "ascend"
-      ascending-choice-list))
+      ascending-choice-list)
+
+    ;; Tags options
+
+    (gnc-register-string-option options
+      pagename-sorting optname-tag-prefix
+      "k1"
+      (G_ "Use this option along with the Tags primary or secondary key \
+and subtotals in the sorting options. \
+By default tags start with # but you can use any other prefix of any \
+length starting with any character. \
+The report engine will attempt to find a match in the split memo first, \
+then the transaction notes, and finally the transaction description. \
+The pattern is case sensitive, so it will match uppercase and lowercase \
+letters separately.")
+      "#")
+
+    (gnc-register-simple-boolean-option options
+      pagename-sorting optname-remove-tp
+      "k2" (G_ "Remove tag prefix from the subtotal headings displayed in report?") #f)
+
+    (gnc-register-string-option options
+      pagename-sorting optname-no-match-heading
+      "k3"
+      (G_ "The heading that should be displayed for the subtotal group that \
+contains the transactions with no matching tags. Default is 'No Match'.")
+      "No Match")
+
+    (gnc-register-simple-boolean-option options
+      pagename-sorting optname-append-tp
+      "k4" (G_ "Append tag prefix to no-match heading specified above?") #t))
 
   ;; Display options
 
@@ -1048,36 +1093,6 @@ be excluded from periodic reporting.")
             (vector 'all   (G_ "Grand Total and Subtotals"))
             (vector 'grand (G_ "Grand Total Only"))
             (vector 'sub   (G_ "Subtotals Only")))))
-
-  ;; Tags options
-
-  (gnc-register-string-option options
-    pagename-tags optname-tag-prefix
-    "a"
-    (G_ "Use this option along with the Tags primary or secondary key \
-and subtotals in the sorting options. \
-By default tags start with # but you can use any other prefix of any \
-length starting with any character. \
-The report engine will attempt to find a match in the split memo first, \
-then the transaction notes, and finally the transaction description. \
-The pattern is case sensitive, so it will match uppercase and lowercase \
-letters separately.")
-    "#")
-
-  (gnc-register-simple-boolean-option options
-    pagename-tags optname-remove-tp
-    "c" (G_ "Remove tag prefix from the subtotal headings displayed in report?") #f)
-
-  (gnc-register-string-option options
-    pagename-tags optname-no-match-heading
-    "e"
-    (G_ "The heading that should be displayed for the subtotal group that \
-contains the transactions with no matching tags. Default is 'No Match'.")
-    "No Match")
-
-  (gnc-register-simple-boolean-option options
-    pagename-tags optname-append-tp
-    "g" (G_ "Append tag prefix to no-match heading specified above?") #t)
 
   ;; this hidden option will toggle whether the default
   ;; qof-query is run, or a different query which ensures
@@ -2298,7 +2313,7 @@ contains the transactions with no matching tags. Default is 'No Match'.")
                                      '(single double))))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (sort-by-tags? (or (eq? primary-key 'tags) (eq? secondary-key 'tags)))
-         (tag-prefix-raw (opt-val pagename-tags optname-tag-prefix))
+         (tag-prefix-raw (opt-val pagename-sorting optname-tag-prefix))
          (tag-prefix (if (string-null? (string-trim tag-prefix-raw))
                       "#" (string-trim tag-prefix-raw)))
          (query (qof-query-create-for-splits)))
