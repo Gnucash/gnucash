@@ -29,7 +29,7 @@
 #ifndef GNC_FILEPATH_UTILS_H
 #define GNC_FILEPATH_UTILS_H
 
-#include <glib-2.0/glib.h>
+#include <glib.h>
 
 #ifdef __cplusplus
 extern "C" {
