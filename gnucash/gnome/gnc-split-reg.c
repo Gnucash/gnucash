@@ -171,41 +171,13 @@ void gnc_split_reg_size_allocate( GtkWidget *widget,
                                   gpointer user_data );
 
 
-static void gnc_split_reg_class_init( GNCSplitRegClass *klass );
-static void gnc_split_reg_init( GNCSplitReg *gsr );
 static void gnc_split_reg_init2( GNCSplitReg *gsr );
 void gnc_split_reg_dispose(GObject *obj);
 
 FROM_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
 AS_STRING_FUNC(SortType, ENUM_LIST_SORTTYPE)
 
-GType
-gnc_split_reg_get_type( void )
-{
-    static GType gnc_split_reg_type = 0;
-
-    if (!gnc_split_reg_type)
-    {
-        GTypeInfo type_info =
-        {
-            sizeof(GNCSplitRegClass),      /* class_size */
-            NULL,               /* base_init */
-            NULL,               /* base_finalize */
-            (GClassInitFunc)gnc_split_reg_class_init,
-            NULL,               /* class_finalize */
-            NULL,               /* class_data */
-            sizeof(GNCSplitReg),        /* */
-            0,                  /* n_preallocs */
-            (GInstanceInitFunc)gnc_split_reg_init,
-        };
-
-        gnc_split_reg_type = g_type_register_static( GTK_TYPE_BOX,
-                             "GNCSplitReg",
-                             &type_info, 0 );
-    }
-
-    return gnc_split_reg_type;
-}
+G_DEFINE_TYPE (GNCSplitReg, gnc_split_reg, GTK_TYPE_BOX)
 
 /* SIGNALS */
 enum gnc_split_reg_signal_enum
