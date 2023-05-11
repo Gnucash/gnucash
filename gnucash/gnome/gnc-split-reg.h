@@ -123,7 +123,6 @@ struct _GNCSplitRegClass
     void (*reverse_txn_cb)     ( GNCSplitReg *w, gpointer user_data );
     void (*help_changed_cb)    ( GNCSplitReg *w, gpointer user_data );
     void (*show_popup_menu_cb) ( GNCSplitReg *w, gpointer user_data );
-    void (*include_date_cb)    ( GNCSplitReg *w, time64 date, gpointer user_data );
 };
 /* Something somewhere sets these to silly values and causes problems */
 #undef DELETE
