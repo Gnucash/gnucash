@@ -262,7 +262,11 @@ sub fetch {
 
 sub features {
     use JSON;
+    # Get FQ Features as JSON
     my %info = Finance::Quote::get_features();
+    # Add a version key
+    $info{'version'} = $Finance::Quote::VERSION;
+    # Print info as json
     print encode_json \%info;
     STDOUT->flush();
 }

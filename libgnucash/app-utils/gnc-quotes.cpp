@@ -69,6 +69,8 @@ namespace bpt = boost::property_tree;
 namespace bio = boost::iostreams;
 
 using QuoteResult = std::tuple<int, StrVec, StrVec>;
+using ListMap = std::map<std::string, std::vector<std::string>>;
+using KeyMap = std::map<std::string, ListMap>;
 
 struct GncQuoteSourceError : public std::runtime_error
 {
@@ -151,35 +153,77 @@ GncFQQuoteSource::GncFQQuoteSource() :
 c_cmd{bp::search_path("perl")},
 m_version{}, m_sources{}, m_api_key{}
 {
-    char *bindir = gnc_path_get_bindir();
-    c_fq_wrapper = std::string(bindir) + "/finance-quote-wrapper";
-    g_free(bindir);
-    StrVec args{"-w", c_fq_wrapper, "-v"};
-    auto [rv, sources, errors] = run_cmd(args, empty_string);
-    if (rv)
     {
-        std::string err{bl::translate("Failed to initialize Finance::Quote: ")};
-        for (const auto& err_line : errors)
-            err += err_line.empty() ? "" : err_line + "\n";
-        throw(GncQuoteSourceError(err));
+        // Call Finance::Quote wrapper with info flag
+        char *bindir = gnc_path_get_bindir();
+        c_fq_wrapper = std::string(bindir) + "/finance-quote-wrapper";
+        g_free(bindir);
+        StrVec args{"-w", c_fq_wrapper, "-i"};
+        auto [rv, info, errors] = run_cmd(args, empty_string);
+
+        // Check for 0 exit code and exactly one line from wrapper
+        if (rv || info.size() != 1)
+        {
+            std::string err{bl::translate("Failed to initialize Finance::Quote: ")};
+            for (const auto& err_line : errors)
+                err += err_line.empty() ? "" : err_line + "\n";
+            throw(GncQuoteSourceError(err));
+        }
+        // errors should be empty too
+        if (!errors.empty())
+        {
+            std::string err{bl::translate("Finance::Quote check returned error ")};
+            for(const auto& err_line : errors)
+                err += err.empty() ? "" : err_line + "\n";
+            throw(GncQuoteSourceError(err));
+        }
+
+        // Parse JSON
+        try 
+        {
+            std::istringstream is(info.front());
+            bpt::ptree root;
+            bpt::read_json(is, root);
+
+            // Get version and remove it from the tree
+            auto version = root.get<std::string>("version");
+            root.erase("version");
+
+            // Remaining entries look like: key : {key : [value, ...], ...}
+            // Parse as KeyMap, which is string -> ListMap (string -> vec)
+            KeyMap info;
+            for (auto& [outer_k, outer_v]: root) {
+                auto& outer_entry = info[outer_k];
+                for (auto& [inner_k, inner_v]: outer_v) {
+                    auto& inner_entry = outer_entry[inner_k];
+                    for (auto& value : inner_v) {
+                        inner_entry.push_back(value.second.data());
+                    }
+                }
+            }
+
+            // info["currency_modules"] = { "name" : ["feature_name", ...] }
+            // info["quote_methods"]    = { "name" : ["module_name", ...] }
+            // info["quote_modules"]    = { "name" : ["feature_name", ...] }
+            //
+            // A quote_method is the name for one more quote sources, such as NYSE
+            // A quote_module is a single source with option "features"
+            // A "feature_name" is something like "API_KEY", a need value for the source
+
+            PWARN("TAG: %s", info["currency_modules"]["AlphaVantage"][0].c_str());
+            m_version = std::move(version);
+            for (auto& it : info["quote_methods"]) {
+                m_sources.push_back(it.first);
+            }
+            std::sort (m_sources.begin(), m_sources.end());
+        }
+        catch (std::exception &e)
+        {
+            std::string err{bl::translate("Finance::Quote failed in parsing quote sources ")};
+            err += e.what();
+            throw(GncQuoteException(err));
+        }
     }
-    if (!errors.empty())
-    {
-        std::string err{bl::translate("Finance::Quote check returned error ")};
-        for(const auto& err_line : errors)
-            err += err.empty() ? "" : err_line + "\n";
-        throw(GncQuoteSourceError(err));
-    }
-    auto version{sources.front()};
-    if (version.empty())
-    {
-        std::string err{bl::translate("No Finance::Quote Version")};
-        throw(GncQuoteSourceError(err));
-    }
-    m_version = std::move(version);
-    sources.erase(sources.begin());
-    m_sources = std::move(sources);
-    std::sort (m_sources.begin(), m_sources.end());
 
     auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
     if (!(av_key && *av_key))
