@@ -1249,10 +1249,9 @@ string_to_gnc_numeric(const gchar* str, gnc_numeric *n)
 /* *******************************************************************
  *  GValue handling
  ********************************************************************/
-static gpointer
-gnc_numeric_boxed_copy_func( gpointer in_ptr )
+static gnc_numeric*
+gnc_numeric_boxed_copy_func( gnc_numeric *in_gnc_numeric )
 {
-    auto in_gnc_numeric = static_cast<gnc_numeric*>(in_ptr);
     if (!in_gnc_numeric)
         return nullptr;
 
@@ -1264,25 +1263,12 @@ gnc_numeric_boxed_copy_func( gpointer in_ptr )
 }
 
 static void
-gnc_numeric_boxed_free_func( gpointer in_gnc_numeric )
+gnc_numeric_boxed_free_func( gnc_numeric *in_gnc_numeric )
 {
     g_free( in_gnc_numeric );
 }
 
-GType
-gnc_numeric_get_type( void )
-{
-    static GType type = 0;
-
-    if ( type == 0 )
-    {
-        type = g_boxed_type_register_static( "gnc_numeric",
-                                             gnc_numeric_boxed_copy_func,
-                                             gnc_numeric_boxed_free_func );
-    }
-
-    return type;
-}
+G_DEFINE_BOXED_TYPE (gnc_numeric, gnc_numeric, gnc_numeric_boxed_copy_func, gnc_numeric_boxed_free_func)
 
 /* *******************************************************************
  *  gnc_numeric misc testing
