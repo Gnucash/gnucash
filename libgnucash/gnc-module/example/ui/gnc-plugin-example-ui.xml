@@ -1,9 +1,9 @@
-<ui>
-  <menubar>
-    <menu name="Tools" action="ToolsAction">
-      <placeholder name="ToolsPlaceholder">
-        <menuitem name="example" action="exampleAction"/>
-     </placeholder>
-    </menu>
-  </menubar>
-</ui>
+<interface>
+  <menu id="ToolsPlaceholder0">
+    <item>
+      <attribute name="label" translatable="yes">_Example</attribute>
+      <attribute name="action">gnc-plugin-example-actions.exampleAction</attribute>
+      <attribute name="tooltip" translatable="yes">Example tooltip</attribute>
+    </item>
+  </menu>
+</interface>
