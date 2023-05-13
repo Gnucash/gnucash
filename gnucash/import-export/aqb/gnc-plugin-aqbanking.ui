@@ -62,7 +62,7 @@
     <item>
       <attribute name="label" translatable="yes">_Online Banking Setup…</attribute>
       <attribute name="action">gnc-plugin-aqbanking-actions.ABSetupAction</attribute>
-      <attribute name="tt" translatable="yes">Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using AqBanking)</attribute>
+      <attribute name="tooltip" translatable="yes">Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using AqBanking)</attribute>
     </item>
   </menu>
 
