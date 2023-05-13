@@ -735,7 +735,7 @@
                     <property name="hexpand">True</property>
                     <property name="vexpand">True</property>
                     <property name="icon-name">image-missing</property>
-                    <property name="icon_size">6</property>
+                    <property name="icon-size">6</property>
                   </object>
                   <packing>
                     <property name="expand">False</property>
