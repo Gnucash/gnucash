@@ -192,7 +192,7 @@ day_selected_double_click (GtkCalendar *calendar, GNCDateEdit *gde)
 }
 
 static gint
-delete_popup (GtkWidget *widget, gpointer data)
+delete_popup (GtkWidget *widget, GdkEvent *event, gpointer data)
 {
     GNCDateEdit *gde;
 
