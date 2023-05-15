@@ -142,7 +142,7 @@ test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
     gchar *ab_acct_id = "1234-5678-9087";
     gchar *ab_bank_code = "0032340";
     gchar *online_id_r, *ab_acct_id_r, *ab_bank_code_r;
-    GncGUID *ofx_income_acct = guid_malloc ();
+    GncGUID *ofx_income_acct = guid_new ();
     GncGUID *ofx_income_acct_r;
     Time64 trans_retr = {gnc_time(NULL)};
     Time64 *trans_retr_r;
@@ -186,8 +186,8 @@ test_account_kvp_properties (Fixture *fixture, gconstpointer pData)
 static void
 test_trans_kvp_properties (Fixture *fixture, gconstpointer pData)
 {
-    GncGUID *invoice = guid_malloc ();
-    GncGUID *from_sx = guid_malloc ();
+    GncGUID *invoice = guid_new ();
+    GncGUID *from_sx = guid_new ();
     GncGUID *invoice_r, *from_sx_r;
     gchar *online_id = "my online id";
     gchar *online_id_r;
@@ -227,7 +227,7 @@ test_split_kvp_properties (Fixture *fixture, gconstpointer pData)
     gchar *online_id = "my_online_id";
     gchar *debit_formula_r, *credit_formula_r, *sx_shares_r;
     gchar *online_id_r;
-    GncGUID *sx_account = guid_malloc ();
+    GncGUID *sx_account = guid_new ();
     GncGUID *sx_account_r;
     gnc_numeric debit_numeric = gnc_numeric_create (123, 456);
     gnc_numeric credit_numeric = gnc_numeric_create (789, 456);
@@ -285,11 +285,11 @@ test_split_kvp_properties (Fixture *fixture, gconstpointer pData)
 static void
 test_lot_kvp_properties (Fixture *fixture, gconstpointer pData)
 {
-    GncGUID *invoice = guid_malloc ();
+    GncGUID *invoice = guid_new ();
     GncGUID *invoice_r;
     gint64 owner_type = 47;
     gint64 owner_type_r;
-    GncGUID *owner = guid_malloc ();
+    GncGUID *owner = guid_new ();
     GncGUID *owner_r;
 
     qof_begin_edit (QOF_INSTANCE (fixture->lot));
@@ -322,8 +322,8 @@ test_customer_kvp_properties (Fixture *fixture, gconstpointer pData)
 {
     gchar *pdf_dir = "/foo/bar/baz";
     gchar *pdf_dir_r;
-    GncGUID *inv_acct = guid_malloc ();
-    GncGUID *pmt_acct = guid_malloc ();
+    GncGUID *inv_acct = guid_new ();
+    GncGUID *pmt_acct = guid_new ();
     GncGUID *inv_acct_r, *pmt_acct_r;
 
     qof_begin_edit (QOF_INSTANCE (fixture->cust));
@@ -358,8 +358,8 @@ test_employee_kvp_properties (Fixture *fixture, gconstpointer pData)
 {
     gchar *pdf_dir = "/foo/bar/baz";
     gchar *pdf_dir_r;
-    GncGUID *inv_acct = guid_malloc ();
-    GncGUID *pmt_acct = guid_malloc ();
+    GncGUID *inv_acct = guid_new ();
+    GncGUID *pmt_acct = guid_new ();
     GncGUID *inv_acct_r, *pmt_acct_r;
 
     qof_begin_edit (QOF_INSTANCE (fixture->emp));
@@ -417,8 +417,8 @@ test_vendor_kvp_properties (Fixture *fixture, gconstpointer pData)
 {
     gchar *pdf_dir = "/foo/bar/baz";
     gchar *pdf_dir_r;
-    GncGUID *inv_acct = guid_malloc ();
-    GncGUID *pmt_acct = guid_malloc ();
+    GncGUID *inv_acct = guid_new ();
+    GncGUID *pmt_acct = guid_new ();
     GncGUID *inv_acct_r, *pmt_acct_r;
 
     qof_begin_edit (QOF_INSTANCE (fixture->vend));
