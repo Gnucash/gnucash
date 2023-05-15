@@ -760,12 +760,13 @@ void gncInvoiceSortEntries (GncInvoice *invoice)
 
 void gncInvoiceRemoveEntries (GncInvoice *invoice)
 {
-    GList *node;
-
     if (!invoice) return;
 
-    for (node = invoice->entries; node; node = node->next)
+    // gnc{Bill,Invoice}RemoveEntry free the "entry" node.
+    // Make sure to save "next" first.
+    for (GList *next, *node = invoice->entries; node; node = next)
     {
+        next = node->next;
         GncEntry *entry = node->data;
 
         switch (gncInvoiceGetOwnerType (invoice))
