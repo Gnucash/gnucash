@@ -30,20 +30,9 @@ extern "C" {
 #endif
 
 #define GNC_TYPE_SEARCH_CORE_TYPE		(gnc_search_core_type_get_type ())
-#define GNC_SEARCH_CORE_TYPE(o)			(G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreType))
-#define GNC_SEARCH_CORE_TYPE_CLASS(k)		(G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypeClass))
-#define GNC_IS_SEARCH_CORE_TYPE(o)		(G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_CORE_TYPE))
-#define GNC_SEARCH_CORE_TYPE_GET_CLASS(o)	(G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_SEARCH_CORE_TYPE, GNCSearchCoreTypeClass))
+G_DECLARE_DERIVABLE_TYPE (GNCSearchCoreType, gnc_search_core_type, GNC, SEARCH_CORE_TYPE, GObject)
 
-typedef struct
-{
-    GObject parent;
-
-    /* This appears to be unused */
-    GNCSearchParam *	param;
-} GNCSearchCoreType;
-
-typedef struct
+struct _GNCSearchCoreTypeClass
 {
     GObjectClass parent_class;
 
@@ -55,12 +44,9 @@ typedef struct
     GNCSearchCoreType *	(*clone) (GNCSearchCoreType *fe);
     GtkWidget *		(*get_widget) (GNCSearchCoreType *);
     QofQueryPredData*	(*get_predicate) (GNCSearchCoreType *);
-
-    /* signals */
-} GNCSearchCoreTypeClass;
+};
 
 /* These are internal functions */
-GType			gnc_search_core_type_get_type (void);
 GNCSearchCoreType *	gnc_search_core_type_new (void);
 
 /* Create a new search core_type */
