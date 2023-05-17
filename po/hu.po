@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-05-05 21:10+0000\n"
+"PO-Revision-Date: 2023-05-14 14:49+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3826,7 +3826,7 @@ msgstr "Egyéni"
 #: gnucash/gtkbuilder/dialog-print-check.glade:261
 #: gnucash/report/reports/standard/investment-lots.scm:197
 msgid "Top"
-msgstr "Tetejére"
+msgstr "Felül"
 
 #: gnucash/gnome/dialog-progress.c:484 gnucash/gnome/dialog-progress.c:533
 msgid "(paused)"
@@ -9379,11 +9379,11 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:40
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:41
 msgid "How many days in advance to notify the user."
-msgstr "Hány nappal előre figyelmeztessen."
+msgstr "Hány nappal előtte figyelmeztessen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:52
 msgid "Set the \"notify\" flag by default"
-msgstr ""
+msgstr "Az értesítési lehetőség alapértelmezettként lesz beállítva"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:53
 msgid ""
@@ -9401,7 +9401,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:6
 msgid "The next tip to show."
-msgstr "A következő megjelenítendő tipp."
+msgstr "A következő tipp megjelenítése."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:17
 msgid "Show \"Tip Of The Day\" at GnuCash start"
@@ -9503,11 +9503,13 @@ msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
 msgstr ""
+"Ennyi perc után indul el az adatfájl automatikus mentése a merevlemezre. "
+"Nullára állítva nem történik automatikus mentés."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:45
 #: gnucash/gtkbuilder/dialog-preferences.glade:1791
 msgid "Enable timeout on \"Save changes on closing\" question"
-msgstr ""
+msgstr "Időkorlát a \"Módosítások mentése bezáráskor?\" kérdésnél"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:46
 #: gnucash/gtkbuilder/dialog-preferences.glade:1795
@@ -9517,10 +9519,13 @@ msgid ""
 "that time, the changes will be saved automatically and the question window "
 "closed."
 msgstr ""
+"Ha be van jelölve, a \"Módosítások mentése bezáráskor?\" ablak csak "
+"korlátozott ideig fog válaszra várni. Ha a felhasználó nem válaszol, a "
+"változtatások mentésre kerülnek és az ablak bezárul."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:50
 msgid "Time to wait for answer"
-msgstr ""
+msgstr "Várakozás válaszra"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:1830
@@ -9528,6 +9533,8 @@ msgid ""
 "The number of seconds to wait before the question window will be closed and "
 "the changes saved automatically."
 msgstr ""
+"Ennyi másodpercet várunk, mielőtt az ablak bezárul és a változtatások "
+"mentésre kerülnek."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:55
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:56
@@ -9676,7 +9683,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:125
 msgid "Show close buttons on notebook tabs"
-msgstr "Bezárás gombok feltüntetése a füleken"
+msgstr "Bezárás gomb feltüntetése a füleken"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:126
 msgid ""
@@ -9740,12 +9747,14 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:155
 msgid "Use 24 hour time format"
-msgstr "24 órás időalak használata"
+msgstr "24 órás időformátum használata"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:156
 msgid ""
 "If active, use a 24 hour time format. Otherwise use a 12 hour time format."
-msgstr "Aktiválva 24 órás időalak használata. Különben 12 órás."
+msgstr ""
+"Ha aktív, használjon 24 órás időformátumot. Más esetben használjon 12 órás "
+"időformátumot."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:160
 msgid "Date format choice"
@@ -9860,7 +9869,7 @@ msgstr "Fülek megjelenítése az ablak jobb oldalán."
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:215
 #: gnucash/gtkbuilder/dialog-preferences.glade:3466
 msgid "Display the summary bar at the top of the page."
-msgstr "Összegzősor a lap tetején jelenjen meg."
+msgstr "Az összegzősor a lap tetején jelenjen meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:216
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:221
@@ -9873,12 +9882,12 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:220
 #: gnucash/gtkbuilder/dialog-preferences.glade:3485
 msgid "Display the summary bar at the bottom of the page."
-msgstr "Összegzősor a lap alján jelenjen meg."
+msgstr "Az összegzősor a lap alján jelenjen meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:225
 #: gnucash/gtkbuilder/dialog-preferences.glade:3335
 msgid "Closing a tab moves to the most recently visited tab."
-msgstr ""
+msgstr "Fül bezárásakor a legutóbb használt fül aktiválódik."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:226
 msgid ""
@@ -9892,6 +9901,7 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
+"Új fájloknál legyen bekapcsolva a Felosztás Művelet mezője Számként használva"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1445
@@ -9903,6 +9913,12 @@ msgid ""
 "is set so that the 'Num' cell on registers shows/updates the transaction "
 "'num' field."
 msgstr ""
+"Bekapcsolásakor minden új fájlban a Könyvbeállítások között aktiválódik a "
+"Felosztás Művelet mezője Számként használva lehetőség. Ilyenkor a regiszter "
+"Szám mezőjében a felosztás Műveletét lehet kezelni, a tranzakció Száma pedig "
+"csak kétsoros nézetben fog látszódni a második sorban. Kikapcsolásakor nem "
+"aktiválódik ez a lehetőség és a regiszter Szám mezőjében a tranzakció Számát "
+"lehet kezelni."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
 #, fuzzy
@@ -10014,10 +10030,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:286
 #: gnucash/gtkbuilder/dialog-preferences.glade:2850
-#, fuzzy
-#| msgid "Delete all _transactions"
 msgid "Hide splits in all transactions."
-msgstr "Minden _tranzakció törlése"
+msgstr "Felosztások elrejtése az összes tranzakcióban."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:287
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
@@ -10782,9 +10796,8 @@ msgid "Press 'Close' to Exit."
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:248
-#, fuzzy
 msgid "Summary Page"
-msgstr "Összegzősor"
+msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:13
 msgid "CSV Import Assistant"
@@ -11024,9 +11037,8 @@ msgid "Export Now…"
 msgstr "Exportálás fájlba…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:720
-#, fuzzy
 msgid "Summary"
-msgstr "Összegzősor"
+msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:725
 #, fuzzy
@@ -12314,9 +12326,8 @@ msgid "Update your GnuCash accounts"
 msgstr "GnuCash-számlák frissítése"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1352
-#, fuzzy
 msgid "Summary Text"
-msgstr "Összegzősor"
+msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1357
 #, fuzzy
@@ -14031,9 +14042,8 @@ msgstr "Kiegyenlítés dátuma"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:25
 #: gnucash/gtkbuilder/dialog-find-account.glade:96
-#, fuzzy
 msgid "Search the Account List"
-msgstr "Szülő számla"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
 msgid "Close _on Jump"
@@ -14941,11 +14951,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1421
 msgid "Perform account list _setup on new file"
-msgstr "Szám_lalista beállítása az új fájlban"
+msgstr "Szám_lafa létrehozásának felajánlása új fájl készítésekor"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1427
 msgid "Present the new account list dialog when you choose File->New File."
-msgstr ""
+msgstr "Számlakategóriák létrehozásának felajánlása a Fájl->Új menüpontban."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1458
 msgid "Display \"_tip of the day\" dialog"
@@ -14969,7 +14979,7 @@ msgstr "nap"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1523
 msgid "<b>_Retain log/backup files</b>"
-msgstr "<b>Napló-/mentési fájlok _megőrzése</b>"
+msgstr "<b>Naplók/biztonsági mentések _megőrzése</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1535
 msgid "Com_press files"
@@ -15013,13 +15023,15 @@ msgstr "perc"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1709
 msgid "Show auto-save confirmation _question"
-msgstr ""
+msgstr "Rá_kérdezés automatikus mentéskor"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1715
 msgid ""
 "If active, GnuCash shows a confirmation question each time the auto-save "
 "feature is started. Otherwise no extra explanation is shown."
 msgstr ""
+"Ha be van jelölve, a GnuCash minden automatikus mentéskor megerősítést fog "
+"kérni. Ha nincs bejelölve, akkor nem fog rákérdezni."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
 #, fuzzy
@@ -15034,11 +15046,11 @@ msgstr "Mindig"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1812
 msgid "Time to _wait for answer"
-msgstr ""
+msgstr "Várakozás vá_laszra"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1849
 msgid "seconds"
-msgstr ""
+msgstr "másodpercig"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1877
 #: gnucash/gtkbuilder/dialog-preferences.glade:1895
@@ -15047,23 +15059,27 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1924
 msgid "Enable horizontal grid lines on table displays"
-msgstr ""
+msgstr "Vízszintes rácsvonalak engedélyezése táblázatokban"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1928
 msgid ""
 "Enable horizontal grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
 msgstr ""
+"Vízszintes rácsvonalak engedélyezése táblázatokban, azaz főként fa "
+"nézetekben, mint amilyen a Számlák fül."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1941
 msgid "Enable vertical grid lines on table displays"
-msgstr ""
+msgstr "Függőleges rácsvonalak engedélyezése táblázatokban"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1945
 msgid ""
 "Enable vertical grid lines on table displays. These will mainly be tree "
 "views like the Accounts page."
 msgstr ""
+"Függőleges rácsvonalak engedélyezése táblázatokban, azaz főként fa "
+"nézetekben, mint amilyen a Számlák fül."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1961
 #, fuzzy
@@ -15469,7 +15485,7 @@ msgstr "Ablakméret és hely elmentése bezáráskor."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3329
 msgid "Bring the most _recent tab to the front"
-msgstr ""
+msgstr "Váltás a _legutóbb használt fülre"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3361
 msgid "<b>Tab Position</b>"
@@ -15497,13 +15513,13 @@ msgstr "_Jobboldalt"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3450
 msgid "<b>Summary Bar Position</b>"
-msgstr "<b>Összegzősor tartalma</b>"
+msgstr "<b>Összegzősor elhelyezése</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3479
 #: gnucash/gtkbuilder/dialog-print-check.glade:267
 #: gnucash/report/reports/standard/investment-lots.scm:198
 msgid "Bottom"
-msgstr "A lap alján"
+msgstr "Alul"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3511
 msgid "<b>Tabs</b>"
@@ -15518,6 +15534,8 @@ msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr ""
+"Bezárás gomb megjelenítése az egyes füleken, ami a \"Bezárás\" menüponttal "
+"azonos módon működik."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3548
 msgid ""
@@ -15527,20 +15545,19 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3568
 msgid "characters"
-msgstr "karakterek"
+msgstr "karakter"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3587
-#, fuzzy
 msgid "_Width"
-msgstr "Szélesség"
+msgstr "_Szélesség"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3598
 msgid "Open new tabs _adjacent to current tab"
-msgstr ""
+msgstr "Új fül az aktív fül _mellett nyíljon meg"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3604
 msgid "Opens new tab adjacent to current tab instead of at the end."
-msgstr ""
+msgstr "Az új fül nem a jobb szélen, hanem az aktív fül mellett nyílik meg."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3643
 msgid "Windows"
@@ -20842,7 +20859,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-model.c:283
 #: gnucash/report/reports/standard/register.scm:133
 msgid "T-Num"
-msgstr ""
+msgstr "Tr. Szám"
 
 #: gnucash/register/ledger-core/split-register-model.c:409
 msgid "Exch. Rate"
@@ -23857,15 +23874,15 @@ msgstr "A tervezett összegek oszlopának megjelenítése."
 
 #: gnucash/report/reports/standard/budget.scm:51
 msgid "Show Budget Notes"
-msgstr ""
+msgstr "Költségvetési feljegyzések megjelenítése"
 
 #: gnucash/report/reports/standard/budget.scm:52
 msgid "Display a column for the budget notes."
-msgstr ""
+msgstr "A költségvetési feljegyzések oszlopának megjelenítése."
 
 #: gnucash/report/reports/standard/budget.scm:53
 msgid "Show Actual"
-msgstr ""
+msgstr "A jelenlegi megjelenítése"
 
 #: gnucash/report/reports/standard/budget.scm:54
 msgid "Display a column for the actual values."
@@ -27690,7 +27707,7 @@ msgstr "Bizonyos számlatípusoknál inverz összegek megjelenítése."
 
 #: gnucash/report/trep-engine.scm:1186
 msgid "Num/T-Num"
-msgstr ""
+msgstr "Szám/Tr. Szám"
 
 #: gnucash/report/trep-engine.scm:1239
 msgid "Transfer from/to"
@@ -30133,6 +30150,10 @@ msgid ""
 "register. Has corresponding effect on business features, reporting and "
 "imports/exports."
 msgstr ""
+"Bekapcsolásakor a regiszter Szám mezőjében a felosztás Művelet értékét lehet "
+"kezelni, a tranzakció Száma pedig \"Tr. Szám\" néven a regiszter második "
+"sorában jelenik meg. A beállítás hatással van a vállalkozási funkciókra, a "
+"kimutatásokra és az importálásra/exportálásra."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1126
 msgid ""
@@ -30443,7 +30464,7 @@ msgstr "Ennyi nap után a tranzakciók írásvédetté válnak (vörös vonal je
 
 #: libgnucash/engine/qofbookslots.h:67
 msgid "Use Split Action Field for Number"
-msgstr ""
+msgstr "Felosztás Művelet mezője Számként használva"
 
 #: libgnucash/engine/qofbookslots.h:69
 msgid "Budgeting"

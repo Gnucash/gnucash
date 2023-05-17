@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-04-25 19:49+0000\n"
+"PO-Revision-Date: 2023-05-06 06:50+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/uk/>\n"
@@ -22,8 +22,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Generator: Weblate 4.18-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Project-Style: default\n"
@@ -801,14 +801,6 @@ msgstr ""
 "GnuCash."
 
 #: doc/tip_of_the_day.list.c:44
-#, fuzzy
-#| msgid ""
-#| "Every transaction has a \"Notes\" field where you can put useful "
-#| "information.\n"
-#| "\n"
-#| "To make it visible\n"
-#| "select \"View\" in the menu bar and check \"Double Line\" or\n"
-#| "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -822,8 +814,8 @@ msgstr ""
 "\n"
 "Щоб побачити вміст поля,\n"
 "відкрийте меню «Перегляд» і позначте пункт «Подвійний рядок» або\n"
-"позначте пункт «Режим подвійного рядка» на сторінці «Налаштування -> Типові "
-"параметри журналу»."
+"позначте пункт «Перегляд подвійного рядка» на сторінці «Налаштування -> "
+"Типові параметри журналу»."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -10093,14 +10085,6 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1445
-#, fuzzy
-#| msgid ""
-#| "If selected, the default book option for new files is set so that the "
-#| "'Num' cell on registers shows/updates the split 'action' field and the "
-#| "transaction 'num' field is shown on the second line in double line view "
-#| "(and is not visible in single line mode). Otherwise, the default book "
-#| "option for new files is set so that the 'Num' cell on registers shows/"
-#| "updates the transaction 'num' field."
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -10112,7 +10096,7 @@ msgstr ""
 "Якщо позначено, типовий параметр книги для нових файлів буде встановлено "
 "так, що комірка «Num» в облікових книгах буде показувати або оновлювати поле "
 "«action» поділу, а поле «num» буде показано у другому рядку у режимі "
-"подвійного рядка (його не буде показано у режимі одинарного рядка). Інакше, "
+"подвійного рядка (його не буде показано, якщо не встановлено). Інакше, "
 "типовий параметр для нових файлів буде встановлено так, що комірка «Num» у "
 "облікових книгах показує або оновлює поле транзакції «num»."
 
@@ -10241,22 +10225,12 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:286
 #: gnucash/gtkbuilder/dialog-preferences.glade:2850
-#, fuzzy
-#| msgid "Delete all _transactions"
 msgid "Hide splits in all transactions."
-msgstr "Вилучити всі _транзакції"
+msgstr "Приховати поділи в усіх транзакціях."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:287
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
-#, fuzzy
-#| msgid ""
-#| "This field specifies the default view style when opening a new register "
-#| "window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". "
-#| "The \"ledger\" setting says to show each transaction on one or two lines. "
-#| "The \"auto-ledger\" setting does the same, but also expands only the "
-#| "current transaction to show all splits. The \"journal\" setting shows all "
-#| "transactions in expanded form."
 msgid ""
 "This field specifies the default view style when opening a new register "
 "window. Possible values are \"Basic ledger\", \"Auto-split ledger\" and "
@@ -10267,18 +10241,16 @@ msgid ""
 "setting shows all transactions in expanded form."
 msgstr ""
 "Це поле визначає типовий стиль перегляду при відкритті нового вікна "
-"бухгалтерської книги. Можливими значеннями є «ledger», «auto-ledger» та "
-"«journal». У режимі «ledger» кожен запис транзакції буде показано у одному "
-"або двох рядках. У режимі «auto-ledger» показ буде таким самим, але "
-"розгорнуто буде лише поточну транзакцію із показом усіх поділів. У режимі "
-"«journal» усі транзакції буде показано у розгорнутій формі."
+"бухгалтерської книги. Можливими значеннями є «Базова книга обліку», «Книга "
+"обліку з автоматичним поділом» та «Журнал транзакцій». У режимі «ledger» "
+"кожен запис транзакції буде показано у одному або двох рядках, залежно від "
+"того, чи встановлено режим перегляду з подвійним рядком. У режимі «auto-"
+"ledger» показ буде таким самим, але розгорнуто буде лише поточну транзакцію "
+"із показом усіх поділів. У режимі «Журнал транзакцій» усі транзакції буде "
+"показано у розгорнутій формі."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line or in double line view on two."
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one or two lines depending on whether Double line "
@@ -11173,10 +11145,8 @@ msgstr "Двокрапка (:)"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:217
 #: gnucash/gtkbuilder/assistant-csv-export.glade:214
-#, fuzzy
-#| msgid "Select Separator Type"
 msgid "Select Separator Character"
-msgstr "Виберіть тип роздільника"
+msgstr "Виберіть символ-роздільник"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:255
 msgid "Preview"
@@ -11464,10 +11434,8 @@ msgstr "<b>Завантаження і збереження параметрів
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:225
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:214
-#, fuzzy
-#| msgid "Comma separated"
 msgid "Character-separated"
-msgstr "Відокремлені комами"
+msgstr "Відокремлені символом"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:242
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:231
@@ -15775,18 +15743,10 @@ msgid "Layout"
 msgstr "Компонування"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2765
-#, fuzzy
-#| msgid "Number of _transactions"
 msgid "_Placement of future transactions"
-msgstr "Кількість _транзакцій"
+msgstr "_Місце майбутніх транзакцій"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2771
-#, fuzzy
-#| msgid ""
-#| "If checked, transactions with a date in the future will be displayed at "
-#| "the bottom of the register after the blank transaction. If clear, the "
-#| "blank transaction will be at the bottom of the register after all "
-#| "transactions."
 msgid ""
 "If checked, transactions with a date in the future will be displayed at the "
 "bottom of the register after the blank transaction unless in reverse sort "
@@ -15795,9 +15755,11 @@ msgid ""
 "transactions unless in reverse sort order when it will be at the top."
 msgstr ""
 "Якщо позначено, транзакції із датами у майбутньому буде показано у нижній "
-"частині реєстру після порожньої транзакції. Якщо не позначено, порожня "
-"транзакція розташовуватимуться у нижній частині реєстру після усіх "
-"транзакцій."
+"частині реєстру після порожньої транзакції, якщо не встановлено режим "
+"зворотного порядку, коли їх буде показано на початку, до порожньої "
+"транзакції. Якщо не позначено, порожня транзакція розташовуватимуться у "
+"нижній частині реєстру після усіх транзакцій, окрім режиму зворотного "
+"порядку, коли її буде показано згори."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2811
 msgid "<b>Default Style</b>"
@@ -29766,10 +29728,8 @@ msgstr "Додати зворотню транзакцію"
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
 #: gnucash/ui/gnc-plugin-page-register.ui:804
-#, fuzzy
-#| msgid "Move to the blank transaction at the bottom of the register"
 msgid "Move to the blank transaction in the register"
-msgstr "Перейти до порожньої транзакції внизу журналу"
+msgstr "Перейти до порожньої транзакції у списку"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:417
