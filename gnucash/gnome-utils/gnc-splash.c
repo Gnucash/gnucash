@@ -175,7 +175,7 @@ gnc_update_splash_screen (const gchar *string, double percentage)
               round(gtk_progress_bar_get_fraction(GTK_PROGRESS_BAR(progress_bar)) * 100.0);
          if (percentage >= 0 && percentage <= 100.0 &&
              round(percentage) == curr_fraction)
-              return; // No change so don't wast time running the main loop
+              return; // No change so don't waste time running the main loop
 
         if (percentage <= 0)
         {

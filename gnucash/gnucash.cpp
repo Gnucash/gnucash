@@ -158,7 +158,7 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     Gnucash::gnc_load_scm_config();
 
     /* Setting-up the report menu must come after the module
-     loading but before the gui initializat*ion. */
+     loading but before the gui initialization. */
     gnc_plugin_report_system_new();
 
     /* TODO: After some more guile-extraction, this should happen even

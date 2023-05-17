@@ -164,7 +164,7 @@
     (N_ "Height of plot, 10 - 100 in percent, above in pixels.")
     height)))
 
-;; A multicoice option for the marker of a scatter plot.
+;; A multichoice option for the marker of a scatter plot.
 (define (gnc:options-add-marker-choice!
          options pagename optname sort-tag default)
   (gnc-register-multichoice-option (gnc:optiondb options)

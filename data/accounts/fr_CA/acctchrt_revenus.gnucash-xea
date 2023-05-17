@@ -77,7 +77,7 @@
 		<act:parent type="new">e5e6414e2da9abb0d11a675a1244e380</act:parent>
 	</gnc:account>
 	<gnc:account version="2.0.0">
-		<act:name>Commisssions</act:name>
+		<act:name>Commissions</act:name>
 		<act:id type="new">4dbd931cbbd8483c717a98897f00a65b</act:id>
 		<act:type>INCOME</act:type>
 		<act:commodity>

@@ -622,7 +622,7 @@ gnc_prefs_move_grid_entry (GtkWidget *child,
 
 
 /** At dialog creation time, this function will be called once per
- *  adds-in.  It performs the work of adding the page into the main
+ *  add-in.  It performs the work of adding the page into the main
  *  dialog.  It handles both the case of a full page being added to
  *  the dialog, and a partial page being added.
  *

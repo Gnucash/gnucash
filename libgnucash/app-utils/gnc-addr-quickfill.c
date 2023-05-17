@@ -134,7 +134,7 @@ static void address_cb(gpointer data, gpointer user_data)
 
 /** Creates a new query that searches for all GncAddress items in the
  * current book. */
-static QofQuery *new_query_for_addresss(QofBook *book)
+static QofQuery *new_query_for_address(QofBook *book)
 {
     QofQuery *query = qof_query_create_for (GNC_ID_ADDRESS);
     g_assert(book);
@@ -148,7 +148,7 @@ static QofQuery *new_query_for_addresss(QofBook *book)
 static AddressQF* build_shared_quickfill (QofBook *book, const char * key)
 {
     AddressQF *result;
-    QofQuery *query = new_query_for_addresss(book);
+    QofQuery *query = new_query_for_address(book);
     GList *entries = qof_query_run(query);
 
     /*     g_warning("Found %d GncAddress items", g_list_length (entries)); */

@@ -298,7 +298,7 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 }
 
 /********************************************************************\
- * Sets the alignament of a Label Widget, GTK3 version specific.    *
+ * Sets the alignment of a Label Widget, GTK3 version specific.    *
  *                                                                  *
  * Args: widget - the label widget to set alignment on              *
  *       xalign - x alignment                                       *
@@ -431,7 +431,7 @@ gnc_gdate_in_valid_range (GDate *test_date, gboolean warn)
 
     if (warn && !ret)
     {
-            // Transators: Use your locale date format here!
+            // Translators: Use your locale date format here!
         gchar *dialog_msg = _("The entered date is out of the range "
                   "01/01/1400 - 31/12/9999, resetting to this year");
         gchar *dialog_title = _("Date out of range");
