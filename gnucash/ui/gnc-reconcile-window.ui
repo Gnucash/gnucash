@@ -251,7 +251,7 @@
       <packing>
         <property name="expand">False</property>
         <property name="homogeneous">True</property>
-     </packing>
+      </packing>
     </child>
 
     <child>

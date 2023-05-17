@@ -35,7 +35,7 @@
       <attribute name="action">GncPluginPageInvoiceActions.EditUnpostInvoiceAction</attribute>
       <attribute name="tooltip" translatable="yes">Unpost this invoice and make it editable</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
-     </item>
+    </item>
   </menu>
 
   <menu id="EditPlaceholder3">
@@ -55,7 +55,7 @@
       <attribute name="action">GncPluginPageAccountTreeActions.EditTaxOptionsAction</attribute>
 <!-- Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string -->
       <attribute name="tooltip" translatable="yes">Setup relevant accounts for tax reports, e.g. US income tax</attribute>
-        <attribute name="temp" translatable="no">yes</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
     </item>
   </menu>
 

@@ -537,7 +537,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="icon-name">dialog-warning</property>
-                        <property name="icon_size">2</property>
+                        <property name="icon-size">2</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -564,7 +564,7 @@
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="icon-name">dialog-warning</property>
-                        <property name="icon_size">2</property>
+                        <property name="icon-size">2</property>
                       </object>
                       <packing>
                         <property name="expand">False</property>

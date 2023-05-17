@@ -52,7 +52,7 @@
       <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
-   </menu>
+  </menu>
 
   <menu id="EditPlaceholder5">
     <item>
@@ -80,7 +80,7 @@
       <attribute name="action">GncPluginPageRegisterActions.ViewStyleRadioAction</attribute>
       <attribute name="target" type="i">1</attribute>
       <attribute name="tooltip" translatable="yes">Show transactions on one or two lines and expand the current transaction</attribute>
-       <attribute name="temp" translatable="no">yes</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
 <!--  Translators: This is a menu item in the View menu -->
@@ -94,10 +94,10 @@
 
   <menu id="ViewPlaceholder2">
     <item>
-       <attribute name="label" translatable="yes">_Double Line</attribute>
-       <attribute name="action">GncPluginPageRegisterActions.ViewStyleDoubleLineAction</attribute>
-       <attribute name="tooltip" translatable="yes">Show a second line with Action, Notes, and Linked Document fields for each transaction.</attribute>
-       <attribute name="temp" translatable="no">yes</attribute>
+      <attribute name="label" translatable="yes">_Double Line</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.ViewStyleDoubleLineAction</attribute>
+      <attribute name="tooltip" translatable="yes">Show a second line with Action, Notes, and Linked Document fields for each transaction.</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
     </item>
 
   </menu>
@@ -113,7 +113,7 @@
       <attribute name="action">GncPluginPageRegisterActions.ViewFilterByAction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
-   </menu>
+  </menu>
 
   <menu id="ViewPlaceholder4">
     <item>
@@ -177,7 +177,7 @@
       <attribute name="tooltip" translatable="yes">Cancel the current transaction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
-  </menu>  
+  </menu>
 
   <menu id="TransPlaceholder2">
     <item>
@@ -201,18 +201,18 @@
   </menu>
 
   <menu id="TransPlaceholder3">
-      <item>
-        <attribute name="label" translatable="yes">_Manage Document Link…</attribute>
-        <attribute name="action">GncPluginPageRegisterActions.LinkTransactionAction</attribute>
-        <attribute name="tooltip" translatable="yes">Add, change, or unlink the document linked with the current transaction</attribute>
-        <attribute name="temp" translatable="no">yes</attribute>
-      </item>
-      <item>
-        <attribute name="label" translatable="yes">_Open Linked Document</attribute>
-        <attribute name="action">GncPluginPageRegisterActions.LinkedTransactionOpenAction</attribute>
-        <attribute name="tooltip" translatable="yes">Open the linked document for the current transaction</attribute>
-        <attribute name="temp" translatable="no">yes</attribute>
-      </item>
+    <item>
+      <attribute name="label" translatable="yes">_Manage Document Link…</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.LinkTransactionAction</attribute>
+      <attribute name="tooltip" translatable="yes">Add, change, or unlink the document linked with the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
+      <attribute name="label" translatable="yes">_Open Linked Document</attribute>
+      <attribute name="action">GncPluginPageRegisterActions.LinkedTransactionOpenAction</attribute>
+      <attribute name="tooltip" translatable="yes">Open the linked document for the current transaction</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
   </menu>
 
   <menu id="TransPlaceholder4">
@@ -262,7 +262,7 @@
       <attribute name="tooltip" translatable="yes">Bring up the lot viewer/editor window</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
-   </menu>
+  </menu>
 
   <menu id="ActionsPlaceholder5">
     <item>
@@ -440,18 +440,18 @@
       </item>
     </section>
     <section>
-        <item>
-          <attribute name="label" translatable="yes">Assign as payment…</attribute>
-          <attribute name="action">gnc-plugin-business-actions.RegisterAssignPayment</attribute>
-          <attribute name="tooltip" translatable="yes">Assign the selected transaction as payment</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Edit payment…</attribute>
-          <attribute name="action">gnc-plugin-business-actions.RegisterEditPayment</attribute>
-          <attribute name="tooltip" translatable="yes">Edit the payment this transaction is a part of</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
-        </item>
+      <item>
+        <attribute name="label" translatable="yes">Assign as payment…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.RegisterAssignPayment</attribute>
+        <attribute name="tooltip" translatable="yes">Assign the selected transaction as payment</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Edit payment…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.RegisterEditPayment</attribute>
+        <attribute name="tooltip" translatable="yes">Edit the payment this transaction is a part of</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
     </section>
   </menu>
 
@@ -552,18 +552,18 @@
       </item>
     </section>
     <section>
-        <item>
-          <attribute name="label" translatable="yes">Assign as payment…</attribute>
-          <attribute name="action">gnc-plugin-business-actions.RegisterAssignPayment</attribute>
-          <attribute name="tooltip" translatable="yes">Assign the selected transaction as payment</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
-        </item>
-        <item>
-          <attribute name="label" translatable="yes">Edit payment…</attribute>
-          <attribute name="action">gnc-plugin-business-actions.RegisterEditPayment</attribute>
-          <attribute name="tooltip" translatable="yes">Edit the payment this transaction is a part of</attribute>
-          <attribute name="hidden-when">action-disabled</attribute>
-        </item>
+      <item>
+        <attribute name="label" translatable="yes">Assign as payment…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.RegisterAssignPayment</attribute>
+        <attribute name="tooltip" translatable="yes">Assign the selected transaction as payment</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">Edit payment…</attribute>
+        <attribute name="action">gnc-plugin-business-actions.RegisterEditPayment</attribute>
+        <attribute name="tooltip" translatable="yes">Edit the payment this transaction is a part of</attribute>
+        <attribute name="hidden-when">action-disabled</attribute>
+      </item>
     </section>
   </menu>
 

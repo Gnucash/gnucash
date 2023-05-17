@@ -18,21 +18,21 @@
 
   <menu id="FilePlaceholder2">
     <item>
-       <attribute name="label" translatable="yes">_Save</attribute>
-       <attribute name="action">gnc-plugin-basic-commands-actions.FileSaveAction</attribute>
-       <attribute name="accel">&lt;Primary&gt;s</attribute>
-       <attribute name="tooltip" translatable="yes">Save the current file</attribute>
+      <attribute name="label" translatable="yes">_Save</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.FileSaveAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;s</attribute>
+      <attribute name="tooltip" translatable="yes">Save the current file</attribute>
     </item>
     <item>
-       <attribute name="label" translatable="yes">Save _As…</attribute>
-       <attribute name="action">gnc-plugin-basic-commands-actions.FileSaveAsAction</attribute>
-       <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;s</attribute>
-       <attribute name="tooltip" translatable="yes">Save this file with a different name</attribute>
+      <attribute name="label" translatable="yes">Save _As…</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.FileSaveAsAction</attribute>
+      <attribute name="accel">&lt;Primary&gt;&lt;Shift&gt;s</attribute>
+      <attribute name="tooltip" translatable="yes">Save this file with a different name</attribute>
     </item>
     <item>
-       <attribute name="label" translatable="yes">Re_vert</attribute>
-       <attribute name="action">gnc-plugin-basic-commands-actions.FileRevertAction</attribute>
-       <attribute name="tooltip" translatable="yes">Reload the current database, reverting all unsaved changes</attribute>
+      <attribute name="label" translatable="yes">Re_vert</attribute>
+      <attribute name="action">gnc-plugin-basic-commands-actions.FileRevertAction</attribute>
+      <attribute name="tooltip" translatable="yes">Reload the current database, reverting all unsaved changes</attribute>
     </item>
   </menu>
 
@@ -62,7 +62,7 @@
       <attribute name="tooltip" translatable="yes">Find transactions with a search</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
-   </menu>
+  </menu>
 
   <menu id="EditPlaceholder5">
     <item>
@@ -95,7 +95,7 @@
           <attribute name="action">gnc-plugin-basic-commands-actions.ActionsMortgageLoanAction</attribute>
           <attribute name="tooltip" translatable="yes">Setup scheduled transactions for repayment of a loan</attribute>
         </item>
-     </section>
+      </section>
     </submenu>
   </menu>
 
