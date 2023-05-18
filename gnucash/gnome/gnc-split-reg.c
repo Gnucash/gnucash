@@ -124,7 +124,6 @@ static void gsr_default_doclink_from_sheet_handler ( GNCSplitReg *w );
 static void gsr_emit_simple_signal       ( GNCSplitReg *gsr, const char *sigName );
 static void gsr_emit_help_changed        ( GnucashRegister *reg, gpointer user_data );
 static void gsr_emit_show_popup_menu     ( GnucashRegister *reg, gpointer user_data );
-static void gsr_emit_include_date_signal ( GNCSplitReg *gsr, time64 date );
 
 void gnc_split_reg_cut_cb(GtkWidget *w, gpointer data);
 void gnc_split_reg_copy_cb(GtkWidget *w, gpointer data);
@@ -269,13 +268,12 @@ gnc_split_reg_class_init( GNCSplitRegClass *klass )
         { REVERSE_TXN_SIGNAL,     "reverse_txn",     G_STRUCT_OFFSET( GNCSplitRegClass, reverse_txn_cb ) },
         { HELP_CHANGED_SIGNAL,    "help-changed",    G_STRUCT_OFFSET( GNCSplitRegClass, help_changed_cb ) },
         { SHOW_POPUP_MENU_SIGNAL, "show-popup-menu", G_STRUCT_OFFSET( GNCSplitRegClass, show_popup_menu_cb ) },
-        { INCLUDE_DATE_SIGNAL,    "include-date",    G_STRUCT_OFFSET( GNCSplitRegClass, include_date_cb ) },
         { LAST_SIGNAL, NULL, 0 }
     };
 
     object_class = (GObjectClass*) klass;
 
-    for ( i = 0; signals[i].s != INCLUDE_DATE_SIGNAL; i++ )
+    for ( i = 0; signals[i].s != LAST_SIGNAL; i++ )
     {
         gnc_split_reg_signals[ signals[i].s ] =
             g_signal_new( signals[i].signal_name,
@@ -286,18 +284,6 @@ gnc_split_reg_class_init( GNCSplitRegClass *klass )
                           g_cclosure_marshal_VOID__VOID,
                           G_TYPE_NONE, 0 );
     }
-    /* Setup the non-default-marshalled signals; 'i' is still valid, here. */
-    /* "include-date" */
-    gnc_split_reg_signals[ INCLUDE_DATE_SIGNAL ] =
-        g_signal_new( "include-date",
-                      G_TYPE_FROM_CLASS(object_class),
-                      G_SIGNAL_RUN_LAST,
-                      signals[i++].defaultOffset,
-                      NULL, NULL,
-                      g_cclosure_marshal_VOID__INT, /* time64 == int */
-                      G_TYPE_NONE, 1, G_TYPE_INT );
-
-    g_assert( i == LAST_SIGNAL );
 
     /* Setup the default handlers. */
     klass->enter_ent_cb    = gsr_default_enter_handler;
@@ -321,7 +307,6 @@ gnc_split_reg_class_init( GNCSplitRegClass *klass )
 
     klass->help_changed_cb = NULL;
     klass->show_popup_menu_cb = NULL;
-    klass->include_date_cb = NULL;
 
     object_class->dispose = gnc_split_reg_dispose;
 }
@@ -1736,18 +1721,11 @@ gnc_split_reg_clear_filter_for_split (GNCSplitReg *gsr, Split *split)
 void
 gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split)
 {
-    Transaction *trans;
-    VirtualCellLocation vcell_loc;
-    SplitRegister *reg;
-
     if (!gsr) return;
 
-    trans = xaccSplitGetParent(split);
+    SplitRegister *reg = gnc_ledger_display_get_split_register( gsr->ledger );
 
-    gsr_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
-
-    reg = gnc_ledger_display_get_split_register( gsr->ledger );
-
+    VirtualCellLocation vcell_loc;
     if (gnc_split_register_get_split_virt_loc(reg, split, &vcell_loc))
         gnucash_register_goto_virt_cell( gsr->reg, vcell_loc );
 
@@ -1760,17 +1738,11 @@ gnc_split_reg_jump_to_split(GNCSplitReg *gsr, Split *split)
 void
 gnc_split_reg_jump_to_split_amount(GNCSplitReg *gsr, Split *split)
 {
-    VirtualLocation virt_loc;
-    SplitRegister *reg;
-    Transaction *trans;
-
     if (!gsr) return;
 
-    trans = xaccSplitGetParent(split);
-    gsr_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
+    SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
-    reg = gnc_ledger_display_get_split_register (gsr->ledger);
-
+    VirtualLocation virt_loc;
     if (gnc_split_register_get_split_amount_virt_loc (reg, split, &virt_loc))
         gnucash_register_goto_virt_loc (gsr->reg, virt_loc);
 
@@ -2165,21 +2137,15 @@ gnc_split_reg_set_sort_reversed(GNCSplitReg *gsr, gboolean rev, gboolean refresh
 static gboolean
 gnc_split_reg_record (GNCSplitReg *gsr)
 {
-    SplitRegister *reg;
-    Transaction *trans;
-
     ENTER("gsr=%p", gsr);
 
-    reg = gnc_ledger_display_get_split_register (gsr->ledger);
-    trans = gnc_split_register_get_current_trans (reg);
+    SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
     if (!gnc_split_register_save (reg, TRUE))
     {
         LEAVE("no save");
         return FALSE;
     }
-
-    gsr_emit_include_date_signal( gsr, xaccTransGetDate(trans) );
 
     /* Explicit redraw shouldn't be needed,
      * since gui_refresh events should handle this. */
@@ -2589,13 +2555,6 @@ void
 gsr_emit_show_popup_menu( GnucashRegister *reg, gpointer user_data )
 {
     gsr_emit_simple_signal( (GNCSplitReg*)user_data, "show-popup-menu" );
-}
-
-static
-void
-gsr_emit_include_date_signal( GNCSplitReg *gsr, time64 date )
-{
-    g_signal_emit_by_name( gsr, "include-date", date, NULL );
 }
 
 static

@@ -82,14 +82,6 @@ static void gnc_plugin_ab_cmd_aqb_import (GSimpleAction *simple, GVariant *param
 
 #define MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW "ABViewLogwindowAction"
 
-static void
-change_state_logwindow (GSimpleAction *simple,
-                        GVariant      *state,
-                        gpointer       user_data)
-{
-   g_simple_action_set_state (simple, state);
-}
-
 static GActionEntry gnc_plugin_actions [] =
 {
     { "OnlineActionsAction", NULL, NULL, NULL, NULL },
@@ -101,7 +93,7 @@ static GActionEntry gnc_plugin_actions [] =
     { "ABIssueIntTransAction", gnc_plugin_ab_cmd_issue_inttransaction, NULL, NULL, NULL },
     { "ABIssueSepaDirectDebitAction", gnc_plugin_ab_cmd_issue_sepa_direct_debit, NULL, NULL, NULL },
     { "AQBankingImportAction", gnc_plugin_ab_cmd_aqb_import, NULL, NULL, NULL },
-    { MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW, gnc_plugin_ab_cmd_view_logwindow, NULL, "true", change_state_logwindow },
+    { MENU_TOGGLE_ACTION_AB_VIEW_LOGWINDOW, gnc_plugin_ab_cmd_view_logwindow, NULL, "true", NULL },
 };
 /** The number of actions provided by this plugin. */
 static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);

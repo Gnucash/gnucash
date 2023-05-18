@@ -96,15 +96,6 @@ static void gnc_plugin_page_invoice_cmd_edit_tax (GSimpleAction *simple, GVarian
 static void gnc_plugin_page_redraw_help_cb (GnucashRegister *gsr, GncPluginPageInvoice *invoice_page);
 static void gnc_plugin_page_invoice_refresh_cb (GHashTable *changes, gpointer user_data);
 
-
-static void
-radio_change_state (GSimpleAction *simple,
-                    GVariant      *state,
-                    gpointer       user_data)
-{
-   g_simple_action_set_state (simple, state);
-}
-
 /************************************************************
  *                          Actions                         *
  ************************************************************/
@@ -135,7 +126,7 @@ static GActionEntry gnc_plugin_page_invoice_actions [] =
     { "BusinessLinkOpenAction", gnc_plugin_page_invoice_cmd_link_open, NULL, NULL, NULL },
     { "ToolsProcessPaymentAction", gnc_plugin_page_invoice_cmd_pay_invoice, NULL, NULL, NULL },
     { "ReportsCompanyReportAction", gnc_plugin_page_invoice_cmd_company_report, NULL, NULL, NULL },
-    { "SortOrderRadioAction", gnc_plugin_page_invoice_cmd_sort_changed, "i", "@i 0", radio_change_state },
+    { "SortOrderRadioAction", gnc_plugin_page_invoice_cmd_sort_changed, "i", "@i 0", NULL },
 };
 static guint gnc_plugin_page_invoice_n_actions = G_N_ELEMENTS(gnc_plugin_page_invoice_actions);
 
