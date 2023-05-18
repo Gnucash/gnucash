@@ -569,7 +569,7 @@ parse_quote_json(PriceParams& p, const bpt::ptree& comm_pt)
     PINFO("     Time: %s", (p.time ? p.time->c_str() : "missing"));
     PINFO(" Currency: %s", (p.currency ? p.currency->c_str() : "missing"));
     PINFO("    Price: %s", (p.price ? p.price->c_str() : "missing"));
-    PINFO(" Inverted: %s\n", (inverted ? "yes" : "no"));
+    PINFO(" Inverted: %s\n", (p.inverted ? "yes" : "no"));
 }
 
 static time64
