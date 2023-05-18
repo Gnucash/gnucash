@@ -48,9 +48,9 @@ static const int64_t pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
                                INT64_C(10000000000), INT64_C(100000000000),
                                INT64_C(1000000000000), INT64_C(10000000000000),
                                INT64_C(100000000000000),
+                               INT64_C(1000000000000000),
                                INT64_C(10000000000000000),
-                               INT64_C(100000000000000000),
-                               INT64_C(1000000000000000000)};
+                               INT64_C(100000000000000000)};
 #define POWTEN_OVERFLOW -5
 
 int64_t
@@ -175,9 +175,18 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
         GncInt128 high((neg && m[1].length() > 1) || (!neg && m[1].length()) ?
                        stoll(m[1].str()) : 0);
         GncInt128 low(stoll(m[2].str()));
-        int64_t d = powten(m[2].str().length());
+        auto exp10 = m[2].str().length();
+        int64_t d = powten(exp10);
         GncInt128 n = high * d + (neg ? -low : low);
-
+        while (exp10 > max_leg_digits)
+        {
+            /* If the arg to powten is bigger than max_leg_digits
+               it returns 10**max_leg_digits so reduce exp10 by
+               that amount */
+            n = n / powten(exp10 - max_leg_digits);
+            exp10 -= max_leg_digits;
+        }
+        
         if (!autoround && n.isBig())
         {
             std::ostringstream errmsg;
