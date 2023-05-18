@@ -385,16 +385,10 @@ get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gi
 }
 
 static void
-remove_top_matches (GNCImportMainMatcher* gui, GtkTreeModel* model, GList* conflicts)
+remove_top_matches (GList* conflicts)
 {
-    GList* iter = conflicts;
-    for (; iter && iter->data; iter=iter->next)
-    {
-        GNCImportTransInfo* trans_info = iter->data;
-        GList* match_trans = gnc_import_TransInfo_get_match_list (trans_info);
-        match_trans = g_list_remove (match_trans, match_trans->data);
-        gnc_import_TransInfo_set_match_list (trans_info, match_trans);
-    }
+    for (GList* iter = conflicts; iter && iter->data; iter=iter->next)
+        gnc_import_TransInfo_remove_top_match (iter->data);
 }
 
 static void
@@ -426,7 +420,7 @@ resolve_conflicts (GNCImportMainMatcher *info)
 
         if (conflicts)
         {
-            remove_top_matches (info, model, conflicts);
+            remove_top_matches (conflicts);
             /* Go back to the beginning here, because a nth choice
              * could now conflict with a previously assigned first choice. */
             valid = gtk_tree_model_get_iter_first (model, &import_iter);
