@@ -692,14 +692,6 @@ install(FILES ${gnucash_DOCS} DESTINATION ${CMAKE_INSTALL_DOCDIR})
 
 # Create config.h
 
-if (WIN32)
-  if (MINGW)
-    set (HAVE_SCANF_LLD 1)
-  else ()
-    set (HAVE_SCANF_I64D 1)
-  endif()
-endif()
-
 check_include_files (dirent.h HAVE_DIRENT_H)
 check_include_files (dlfcn.h HAVE_DLFCN_H)
 check_include_files (glob.h HAVE_GLOB_H)
@@ -764,7 +756,6 @@ set (HAVE_LINK 1)
 set (HAVE_LOCALTIME_R 1)
 set (HAVE_PTHREAD_MUTEX_INIT 1)
 set (HAVE_PTHREAD_PRIO_INHERIT 1)
-set (HAVE_SCANF_LLD 1)
 set (HAVE_SETENV 1)
 set (HAVE_STPCPY 1)
 set (HAVE_STRPTIME 1)
