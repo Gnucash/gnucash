@@ -881,6 +881,7 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
     frame->set({"qux", "quux", "corge"}, new KvpValue(123.456));
     xaccTransCommitEdit (clone);
     g_free (cleanup->msg);
+    cleanup->msg = NULL;
     g_free (check->msg);
     check->msg = g_strdup ("[xaccSplitEqual] GUIDs differ");
     auto split1 = xaccTransGetSplit (clone, 0);
