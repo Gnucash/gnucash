@@ -25,12 +25,7 @@
 #include "search-core-type.h"
 
 #define GNC_TYPE_SEARCH_STRING		(gnc_search_string_get_type ())
-#define GNCSEARCH_STRING(obj)		G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_STRING, GNCSearchString)
-#define GNCSEARCH_STRING_CLASS(klass)	G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_STRING, GNCSearchStringClass)
-#define IS_GNCSEARCH_STRING(obj)	G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_STRING)
-
-typedef struct _GNCSearchString	GNCSearchString;
-typedef struct _GNCSearchStringClass	GNCSearchStringClass;
+G_DECLARE_FINAL_TYPE (GNCSearchString, gnc_search_string, GNC, SEARCH_STRING, GNCSearchCoreType)
 
 typedef enum _search_string_how
 {
@@ -51,16 +46,6 @@ struct _GNCSearchString
     char *		value;
 };
 
-struct _GNCSearchStringClass
-{
-    GNCSearchCoreTypeClass parent_class;
-
-    /* virtual methods */
-
-    /* signals */
-};
-
-GType		gnc_search_string_get_type	(void);
 GNCSearchString	*gnc_search_string_new	(void);
 
 /* methods */

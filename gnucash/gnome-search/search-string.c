@@ -92,7 +92,7 @@ static void
 gnc_search_string_finalize (GObject *obj)
 {
     GNCSearchString *o = (GNCSearchString *)obj;
-    g_assert (IS_GNCSEARCH_STRING (o));
+    g_assert (GNC_IS_SEARCH_STRING (o));
 
     g_free (o->value);
 
@@ -117,7 +117,7 @@ void
 gnc_search_string_set_value (GNCSearchString *fi, const char *value)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_STRING (fi));
+    g_return_if_fail (GNC_IS_SEARCH_STRING (fi));
 
     if (fi->value)
         g_free (fi->value);
@@ -129,7 +129,7 @@ void
 gnc_search_string_set_how (GNCSearchString *fi, GNCSearchString_Type how)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_STRING (fi));
+    g_return_if_fail (GNC_IS_SEARCH_STRING (fi));
     fi->how = how;
 }
 
@@ -137,7 +137,7 @@ void
 gnc_search_string_set_case (GNCSearchString *fi, gboolean ignore_case)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_STRING (fi));
+    g_return_if_fail (GNC_IS_SEARCH_STRING (fi));
     fi->ign_case = ignore_case;
 }
 
@@ -149,7 +149,7 @@ gncs_validate (GNCSearchCoreType *fe)
     gboolean valid = TRUE;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_STRING (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_STRING (fi), FALSE);
 
     priv = _PRIVATE(fi);
 
@@ -253,7 +253,7 @@ grab_focus (GNCSearchCoreType *fe)
     GNCSearchStringPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_STRING (fi));
+    g_return_if_fail (GNC_IS_SEARCH_STRING (fi));
 
     priv = _PRIVATE(fi);
     if (priv->entry)
@@ -267,7 +267,7 @@ editable_enters (GNCSearchCoreType *fe)
     GNCSearchStringPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_STRING (fi));
+    g_return_if_fail (GNC_IS_SEARCH_STRING (fi));
 
     priv = _PRIVATE(fi);
     if (priv->entry)
@@ -281,7 +281,7 @@ pass_parent (GNCSearchCoreType *fe, gpointer parent)
     GNCSearchStringPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_STRING (fi));
+    g_return_if_fail (GNC_IS_SEARCH_STRING (fi));
 
     priv = _PRIVATE(fi);
     priv->parent = GTK_WINDOW(parent);
@@ -295,7 +295,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     GNCSearchStringPrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_STRING (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_STRING (fi), NULL);
 
     priv = _PRIVATE(fi);
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
@@ -330,7 +330,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     gboolean is_regex = FALSE;
 
     g_return_val_if_fail (ss, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_STRING (ss), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_STRING (ss), NULL);
 
     switch (ss->how)
     {
@@ -368,7 +368,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     GNCSearchString *se, *fse = (GNCSearchString *)fe;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_STRING (fse), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_STRING (fse), NULL);
 
     se = gnc_search_string_new ();
     gnc_search_string_set_value (se, fse->value);
