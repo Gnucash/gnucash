@@ -26,12 +26,7 @@
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_INT64		(gnc_search_int64_get_type ())
-#define GNCSEARCH_INT64(obj)		G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_INT64, GNCSearchInt64)
-#define GNCSEARCH_INT64_CLASS(klass)	G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_INT64, GNCSearchInt64Class)
-#define IS_GNCSEARCH_INT64(obj)		G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_INT64)
-
-typedef struct _GNCSearchInt64	GNCSearchInt64;
-typedef struct _GNCSearchInt64Class	GNCSearchInt64Class;
+G_DECLARE_FINAL_TYPE (GNCSearchInt64, gnc_search_int64, GNC, SEARCH_INT64, GNCSearchCoreType)
 
 struct _GNCSearchInt64
 {
@@ -41,16 +36,6 @@ struct _GNCSearchInt64
     gint64		value;
 };
 
-struct _GNCSearchInt64Class
-{
-    GNCSearchCoreTypeClass parent_class;
-
-    /* virtual methods */
-
-    /* signals */
-};
-
-GType		gnc_search_int64_get_type	(void);
 GNCSearchInt64	*gnc_search_int64_new	(void);
 
 /* methods */

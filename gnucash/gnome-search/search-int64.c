@@ -92,7 +92,7 @@ static void
 gnc_search_int64_finalize (GObject *obj)
 {
     GNCSearchInt64 *o = (GNCSearchInt64 *)obj;
-    g_assert (IS_GNCSEARCH_INT64 (o));
+    g_assert (GNC_IS_SEARCH_INT64 (o));
 
     G_OBJECT_CLASS (gnc_search_int64_parent_class)->finalize(obj);
 }
@@ -115,7 +115,7 @@ void
 gnc_search_int64_set_value (GNCSearchInt64 *fi, gint64 value)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_INT64 (fi));
+    g_return_if_fail (GNC_IS_SEARCH_INT64 (fi));
 
     fi->value = value;
 }
@@ -124,7 +124,7 @@ void
 gnc_search_int64_set_how (GNCSearchInt64 *fi, QofQueryCompare how)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_INT64 (fi));
+    g_return_if_fail (GNC_IS_SEARCH_INT64 (fi));
     fi->how = how;
 }
 
@@ -135,7 +135,7 @@ pass_parent (GNCSearchCoreType *fe, gpointer parent)
     GNCSearchInt64Private *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_INT64 (fi));
+    g_return_if_fail (GNC_IS_SEARCH_INT64 (fi));
 
     priv = _PRIVATE(fi);
     priv->parent = GTK_WINDOW(parent);
@@ -150,7 +150,7 @@ gncs_validate (GNCSearchCoreType *fe)
     GError *error = NULL;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_INT64 (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_INT64 (fi), FALSE);
 
     priv = _PRIVATE(fi);
 
@@ -198,7 +198,7 @@ grab_focus (GNCSearchCoreType *fe)
     GNCSearchInt64Private *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_INT64 (fi));
+    g_return_if_fail (GNC_IS_SEARCH_INT64 (fi));
 
     priv = _PRIVATE(fi);
     if (priv->entry)
@@ -212,7 +212,7 @@ editable_enters (GNCSearchCoreType *fe)
     GNCSearchInt64Private *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_INT64 (fi));
+    g_return_if_fail (GNC_IS_SEARCH_INT64 (fi));
 
     priv = _PRIVATE(fi);
     if (priv->entry)
@@ -227,7 +227,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     GNCSearchInt64Private *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_INT64 (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_INT64 (fi), NULL);
 
     priv = _PRIVATE(fi);
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
@@ -261,7 +261,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     GNCSearchInt64Private *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_INT64 (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_INT64 (fi), NULL);
 
     /* force the computation of the entry, because we may not get the signal */
     priv = _PRIVATE(fi);
@@ -275,7 +275,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     GNCSearchInt64 *se, *fse = (GNCSearchInt64 *)fe;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_INT64 (fse), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_INT64 (fse), NULL);
 
     se = gnc_search_int64_new ();
     gnc_search_int64_set_value (se, fse->value);
