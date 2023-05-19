@@ -393,6 +393,17 @@ void xaccSplitMergePeerSplits (Split *split, const Split *other_split);
  */
 Split * xaccSplitGetOtherSplit (const Split *split);
 
+/**
+ * xaccSplitGetOtherSplitExtended() is similar to accSplitGetOtherSplit()
+ * but more aggressive in its match.
+ * Multiple splits on the same credit/debit side as main split are excluded.
+ * Splits with zero value are exluded unless main split is zero as well.
+ * A Split on the other side with same value (opposite sign) is matched
+ * unless there is more than one.
+ * If not split is found with these extra rules, it still returns NULL.
+ */
+Split * xaccSplitGetOtherSplitExtended (const Split *split);
+
 /** The xaccIsPeerSplit() is a convenience routine that returns TRUE
  * (a non-zero value) if the two splits share a common parent
  * transaction, else it returns FALSE (zero).

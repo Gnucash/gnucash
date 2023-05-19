@@ -211,13 +211,13 @@ in the Options panel."))
               (cons 'sortkey (list SPLIT-CORR-ACCT-NAME))
               (cons 'split-sortvalue xaccSplitGetCorrAccountFullName)
               (cons 'text (G_ "Other Account Name"))
-              (cons 'renderer-fn (compose xaccSplitGetAccount xaccSplitGetOtherSplit)))
+              (cons 'renderer-fn (compose xaccSplitGetAccount xaccSplitGetOtherSplitExtended)))
 
         (list 'corresponding-acc-code
               (cons 'sortkey (list SPLIT-CORR-ACCT-CODE))
               (cons 'split-sortvalue xaccSplitGetCorrAccountCode)
               (cons 'text (G_ "Other Account Code"))
-              (cons 'renderer-fn (compose xaccSplitGetAccount xaccSplitGetOtherSplit)))
+              (cons 'renderer-fn (compose xaccSplitGetAccount xaccSplitGetOtherSplitExtended)))
 
         (list 'amount
               (cons 'sortkey (list SPLIT-VALUE))
@@ -1243,7 +1243,7 @@ be excluded from periodic reporting.")
                                                 (xaccSplitGetParent split)))
                                           (account-namestring
                                            (xaccSplitGetAccount
-                                            (xaccSplitGetOtherSplit split))
+                                            (xaccSplitGetOtherSplitExtended split))
                                            (column-uses? 'other-account-code)
                                            (column-uses? 'other-account-name)
                                            (column-uses? 'other-account-full-name)))))))
