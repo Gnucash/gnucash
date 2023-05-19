@@ -27,12 +27,7 @@
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_NUMERIC		(gnc_search_numeric_get_type ())
-#define GNCSEARCH_NUMERIC(obj)		G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumeric)
-#define GNCSEARCH_NUMERIC_CLASS(klass)	G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_NUMERIC, GNCSearchNumericClass)
-#define IS_GNCSEARCH_NUMERIC(obj)	G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_NUMERIC)
-
-typedef struct _GNCSearchNumeric	GNCSearchNumeric;
-typedef struct _GNCSearchNumericClass	GNCSearchNumericClass;
+G_DECLARE_FINAL_TYPE (GNCSearchNumeric, gnc_search_numeric, GNC, SEARCH_NUMERIC, GNCSearchCoreType)
 
 struct _GNCSearchNumeric
 {
@@ -44,16 +39,6 @@ struct _GNCSearchNumeric
     QofNumericMatch	option;
 };
 
-struct _GNCSearchNumericClass
-{
-    GNCSearchCoreTypeClass parent_class;
-
-    /* virtual methods */
-
-    /* signals */
-};
-
-GType		gnc_search_numeric_get_type	(void);
 GNCSearchNumeric	*gnc_search_numeric_new	(void);
 GNCSearchNumeric	*gnc_search_numeric_debcred_new (void);
 

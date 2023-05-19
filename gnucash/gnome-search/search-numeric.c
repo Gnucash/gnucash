@@ -94,7 +94,7 @@ static void
 gnc_search_numeric_finalize (GObject *obj)
 {
     GNCSearchNumeric *o = (GNCSearchNumeric *)obj;
-    g_assert (IS_GNCSEARCH_NUMERIC (o));
+    g_assert (GNC_IS_SEARCH_NUMERIC (o));
 
     G_OBJECT_CLASS (gnc_search_numeric_parent_class)->finalize(obj);
 }
@@ -136,7 +136,7 @@ void
 gnc_search_numeric_set_value (GNCSearchNumeric *fi, gnc_numeric value)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
 
     fi->value = value;
 }
@@ -145,7 +145,7 @@ void
 gnc_search_numeric_set_how (GNCSearchNumeric *fi, QofQueryCompare how)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
     fi->how = how;
 }
 
@@ -153,7 +153,7 @@ void
 gnc_search_numeric_set_option (GNCSearchNumeric *fi, QofNumericMatch option)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
     fi->option = option;
 }
 
@@ -164,7 +164,7 @@ pass_parent (GNCSearchCoreType *fe, gpointer parent)
     GNCSearchNumericPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
 
     priv = _PRIVATE(fi);
     priv->parent = GTK_WINDOW(parent);
@@ -179,7 +179,7 @@ gncs_validate (GNCSearchCoreType *fe)
     GError *error = NULL;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_NUMERIC (fi), FALSE);
 
     priv = _PRIVATE(fi);
 
@@ -258,7 +258,7 @@ grab_focus (GNCSearchCoreType *fe)
     GNCSearchNumericPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
 
     priv = _PRIVATE(fi);
     if (priv->entry)
@@ -272,7 +272,7 @@ editable_enters (GNCSearchCoreType *fe)
     GNCSearchNumericPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
 
     priv = _PRIVATE(fi);
     if (priv->entry)
@@ -287,7 +287,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     GNCSearchNumericPrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_NUMERIC (fi), NULL);
 
     priv = _PRIVATE(fi);
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
@@ -321,7 +321,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     GNCSearchNumericPrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_NUMERIC (fi), NULL);
 
     /* force the computation of the entry, because we may not get the signal */
     priv = _PRIVATE(fi);
@@ -336,7 +336,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     GNCSearchNumericPrivate *se_priv, *fse_priv;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fse), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_NUMERIC (fse), NULL);
     fse_priv = _PRIVATE(fse);
 
     se = gnc_search_numeric_new ();
