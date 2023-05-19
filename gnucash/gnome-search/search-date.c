@@ -93,9 +93,9 @@ gnc_search_date_finalize (GObject *obj)
     GNCSearchDate *o;
     GNCSearchDatePrivate *priv;
 
-    g_assert (IS_GNCSEARCH_DATE (obj));
+    g_assert (GNC_IS_SEARCH_DATE (obj));
 
-    o = GNCSEARCH_DATE(obj);
+    o = GNC_SEARCH_DATE(obj);
     priv = _PRIVATE(o);
     if (priv->entry)
         gtk_widget_destroy (priv->entry);
@@ -121,7 +121,7 @@ void
 gnc_search_date_set_date (GNCSearchDate *fi, time64 tt)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_DATE (fi));
+    g_return_if_fail (GNC_IS_SEARCH_DATE (fi));
 
     fi->tt = tt;
 }
@@ -130,7 +130,7 @@ void
 gnc_search_date_set_how (GNCSearchDate *fi, QofQueryCompare how)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_DATE (fi));
+    g_return_if_fail (GNC_IS_SEARCH_DATE (fi));
     fi->how = how;
 }
 
@@ -141,7 +141,7 @@ pass_parent (GNCSearchCoreType *fe, gpointer parent)
     GNCSearchDatePrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_DATE (fi));
+    g_return_if_fail (GNC_IS_SEARCH_DATE (fi));
 
     priv = _PRIVATE(fi);
     priv->parent = GTK_WINDOW(parent);
@@ -154,7 +154,7 @@ gncs_validate (GNCSearchCoreType *fe)
     gboolean valid = TRUE;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_DATE (fi), FALSE);
 
     /* XXX */
 
@@ -207,7 +207,7 @@ grab_focus (GNCSearchCoreType *fe)
     GNCSearchDatePrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_DATE (fi));
+    g_return_if_fail (GNC_IS_SEARCH_DATE (fi));
 
     priv = _PRIVATE(fi);
     if (priv->entry)
@@ -221,7 +221,7 @@ editable_enters (GNCSearchCoreType *fe)
     GNCSearchDatePrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_DATE (fi));
+    g_return_if_fail (GNC_IS_SEARCH_DATE (fi));
 
     priv = _PRIVATE(fi);
     if (priv->entry)
@@ -236,7 +236,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     GNCSearchDatePrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_DATE (fi), NULL);
 
     priv = _PRIVATE(fi);
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
@@ -263,7 +263,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     GNCSearchDatePrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_DATE (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_DATE (fi), NULL);
 
     /* Make sure we actually use the currently-entered date */
     priv = _PRIVATE(fi);
@@ -281,7 +281,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     GNCSearchDate *se, *fse = (GNCSearchDate *)fe;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_DATE (fse), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_DATE (fse), NULL);
 
     se = gnc_search_date_new ();
     gnc_search_date_set_date (se, fse->tt);
