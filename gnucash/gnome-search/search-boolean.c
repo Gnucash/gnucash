@@ -84,7 +84,7 @@ static void
 gnc_search_boolean_finalize (GObject *obj)
 {
     GNCSearchBoolean *o = (GNCSearchBoolean *)obj;
-    g_assert (IS_GNCSEARCH_BOOLEAN (o));
+    g_assert (GNC_IS_SEARCH_BOOLEAN (o));
 
     G_OBJECT_CLASS (gnc_search_boolean_parent_class)->finalize(obj);
 }
@@ -107,7 +107,7 @@ void
 gnc_search_boolean_set_value (GNCSearchBoolean *fi, gboolean value)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_BOOLEAN (fi));
+    g_return_if_fail (GNC_IS_SEARCH_BOOLEAN (fi));
 
     fi->value = value;
 }
@@ -119,7 +119,7 @@ pass_parent (GNCSearchCoreType *fe, gpointer parent)
     GNCSearchBooleanPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_BOOLEAN (fi));
+    g_return_if_fail (GNC_IS_SEARCH_BOOLEAN (fi));
 
     priv = _PRIVATE(fi);
     priv->parent = GTK_WINDOW(parent);
@@ -132,7 +132,7 @@ gncs_validate (GNCSearchCoreType *fe)
     gboolean valid = TRUE;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_BOOLEAN (fi), FALSE);
 
     /* XXX */
 
@@ -152,7 +152,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_BOOLEAN (fi), NULL);
 
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
@@ -172,7 +172,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_BOOLEAN (fi), NULL);
 
     return qof_query_boolean_predicate (QOF_COMPARE_EQUAL, fi->value);
 }
@@ -182,7 +182,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     GNCSearchBoolean *se, *fse = (GNCSearchBoolean *)fe;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_BOOLEAN (fse), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_BOOLEAN (fse), NULL);
 
     se = gnc_search_boolean_new ();
     gnc_search_boolean_set_value (se, fse->value);
