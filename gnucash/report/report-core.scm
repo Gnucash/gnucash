@@ -582,7 +582,7 @@ not found.")))
              "      (let*\n"
              "        (\n"
              "          (option (gnc-lookup-option (gnc:optiondb options) \"__general\" \"report-list\"))\n"
-             "          (saved-report-list (GncOption-set-value option))\n"
+             "          (saved-report-list (GncOption-get-value option))\n"
              "        )\n"
              "        (\n"
              "          (lambda (option)\n"
