@@ -95,7 +95,7 @@ gnc_search_owner_init (GNCSearchOwner *o)
 static void
 gnc_search_owner_finalize (GObject *obj)
 {
-    g_assert (IS_GNCSEARCH_OWNER (obj));
+    g_assert (GNC_IS_SEARCH_OWNER (obj));
 
     G_OBJECT_CLASS (gnc_search_owner_parent_class)->finalize(obj);
 }
@@ -122,7 +122,7 @@ gncs_validate (GNCSearchCoreType *fe)
     gboolean valid = TRUE;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_OWNER (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_OWNER (fi), FALSE);
 
     priv = _PRIVATE(fi);
     if (priv->owner.owner.undefined == NULL)
@@ -238,7 +238,7 @@ pass_parent (GNCSearchCoreType *fe, gpointer parent)
     GNCSearchOwnerPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_OWNER (fi));
+    g_return_if_fail (GNC_IS_SEARCH_OWNER (fi));
 
     priv = _PRIVATE(fi);
     priv->parent = GTK_WINDOW(parent);
@@ -252,7 +252,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     GNCSearchOwnerPrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_OWNER (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_OWNER (fi), NULL);
 
     priv = _PRIVATE(fi);
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
@@ -288,7 +288,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     GList *l = NULL;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_OWNER (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_OWNER (fi), NULL);
 
     priv = _PRIVATE(fi);
     guid = gncOwnerGetGUID (&(priv->owner));
@@ -303,7 +303,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     GNCSearchOwnerPrivate *se_priv, *fse_priv;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_OWNER (fse), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_OWNER (fse), NULL);
 
     se = gnc_search_owner_new ();
     se->how = fse->how;
