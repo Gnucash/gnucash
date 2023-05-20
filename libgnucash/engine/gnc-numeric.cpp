@@ -79,7 +79,7 @@ GncNumeric::GncNumeric(GncRational rr)
 
 GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
 {
-    static uint64_t max_leg_value{INT64_C(1000000000000000000)};
+    static uint64_t max_leg_value{INT64_C(100000000000000000)};
     if (std::isnan(d) || fabs(d) > max_leg_value)
     {
         std::ostringstream msg;
@@ -91,7 +91,7 @@ GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
     int64_t den;
     uint8_t den_digits;
     if (logval > 0.0)
-        den_digits = (max_leg_digits + 1) - static_cast<int>(floor(logval) + 1.0);
+        den_digits = (max_leg_digits + 1) - static_cast<int>(floor(logval));
     else
         den_digits = max_leg_digits;
     den = powten(den_digits);
