@@ -45,8 +45,6 @@ static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget (GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_date_class_init (GNCSearchDateClass *klass);
-static void gnc_search_date_init (GNCSearchDate *gspaper);
 static void gnc_search_date_finalize (GObject *obj);
 
 typedef struct _GNCSearchDatePrivate GNCSearchDatePrivate;
@@ -62,8 +60,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchDate, gnc_search_date, GNC_TYPE_SEARCH_CORE_
 #define _PRIVATE(o) \
    ((GNCSearchDatePrivate*)gnc_search_date_get_instance_private((GNCSearchDate*)o))
 
-static GNCSearchCoreTypeClass *parent_class;
-
 static void
 gnc_search_date_class_init (GNCSearchDateClass *klass)
 {
@@ -71,7 +67,6 @@ gnc_search_date_class_init (GNCSearchDateClass *klass)
     GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)klass;
 
     object_class = G_OBJECT_CLASS (klass);
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_date_finalize;
 
@@ -105,7 +100,7 @@ gnc_search_date_finalize (GObject *obj)
     if (priv->entry)
         gtk_widget_destroy (priv->entry);
 
-    G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (gnc_search_date_parent_class)->finalize(obj);
 }
 
 /**

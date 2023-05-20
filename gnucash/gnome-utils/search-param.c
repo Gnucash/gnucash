@@ -33,16 +33,10 @@
 
 #include "search-param.h"
 
-static void gnc_search_param_class_init (GNCSearchParamClass *klass);
-static void gnc_search_param_init (GNCSearchParam *gspaper);
 static void gnc_search_param_finalize (GObject *obj);
 
-static void gnc_search_param_simple_class_init (GNCSearchParamSimpleClass *klass);
-static void gnc_search_param_simple_init (GNCSearchParamSimple *gspaper);
 static void gnc_search_param_simple_finalize (GObject *obj);
 
-static void gnc_search_param_compound_class_init (GNCSearchParamCompoundClass *klass);
-static void gnc_search_param_compound_init (GNCSearchParamCompound *gspaper);
 static void gnc_search_param_compound_finalize (GObject *obj);
 
 typedef struct _GNCSearchParamPrivate GNCSearchParamPrivate;
@@ -82,9 +76,6 @@ struct _GNCSearchParamCompoundPrivate
 #define GNC_SEARCH_PARAM_COMPOUND_GET_PRIVATE(o) \
    ((GNCSearchParamCompoundPrivate*)gnc_search_param_compound_get_instance_private ((GNCSearchParamCompound*)o))
 
-static GObjectClass *parent_gobject_class;
-static GNCSearchParamClass *parent_search_param_class;
-
 enum
 {
     LAST_SIGNAL
@@ -103,8 +94,6 @@ gnc_search_param_class_init (GNCSearchParamClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
 
-    parent_gobject_class = g_type_class_peek_parent (klass);
-
     object_class->finalize = gnc_search_param_finalize;
 }
 
@@ -119,7 +108,7 @@ gnc_search_param_finalize (GObject *obj)
     g_return_if_fail (obj != NULL);
     g_return_if_fail (GNC_IS_SEARCH_PARAM(obj));
 
-    G_OBJECT_CLASS(parent_gobject_class)->finalize (obj);
+    G_OBJECT_CLASS(gnc_search_param_parent_class)->finalize (obj);
 }
 
 /* subclass for simple searches of a single element */
@@ -130,8 +119,6 @@ static void
 gnc_search_param_simple_class_init (GNCSearchParamSimpleClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
-
-    parent_search_param_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_param_simple_finalize;
 }
@@ -158,7 +145,7 @@ gnc_search_param_simple_finalize (GObject *obj)
     g_slist_free (priv->converters);
     priv->converters = NULL;
 
-    G_OBJECT_CLASS(parent_search_param_class)->finalize (obj);
+    G_OBJECT_CLASS(gnc_search_param_simple_parent_class)->finalize (obj);
 }
 
 /* Subclass for compound searches consisting of AND/OR of several elements */
@@ -169,8 +156,6 @@ static void
 gnc_search_param_compound_class_init (GNCSearchParamCompoundClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
-
-    parent_search_param_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_param_compound_finalize;
 }
@@ -195,7 +180,7 @@ gnc_search_param_compound_finalize (GObject *obj)
     g_list_free (priv->sub_search);
     priv->sub_search = NULL;
 
-    G_OBJECT_CLASS (parent_search_param_class)->finalize (obj);
+    G_OBJECT_CLASS (gnc_search_param_compound_parent_class)->finalize (obj);
 }
 
 /**

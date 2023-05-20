@@ -42,8 +42,6 @@
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static void gnc_plugin_budget_class_init (GncPluginBudgetClass *klass);
-static void gnc_plugin_budget_init (GncPluginBudget *plugin);
 static void gnc_plugin_budget_finalize (GObject *object);
 
 /* Command Callbacks */
@@ -87,8 +85,6 @@ typedef struct GncPluginBudgetPrivate
 
 #define GNC_PLUGIN_BUDGET_GET_PRIVATE(o)  \
    ((GncPluginBudgetPrivate*)gnc_plugin_budget_get_instance_private((GncPluginBudget*)o))
-
-static GObjectClass *parent_class = NULL;
 
 GncPlugin * 
 gnc_plugin_budget_new (void)
@@ -137,7 +133,6 @@ gnc_plugin_budget_class_init (GncPluginBudgetClass *klass)
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS(klass);
 
     ENTER (" ");
-    parent_class = g_type_class_peek_parent (klass);
     object_class->finalize = gnc_plugin_budget_finalize;
 
     plugin_class->plugin_name        = GNC_PLUGIN_BUDGET_NAME;
@@ -163,7 +158,7 @@ gnc_plugin_budget_finalize (GObject *object)
     g_return_if_fail (GNC_IS_PLUGIN_BUDGET(object));
 
     ENTER(" ");
-    (parent_class->finalize)(object);
+    G_OBJECT_CLASS (gnc_plugin_budget_parent_class)->finalize(object);
     LEAVE(" ");
 
 }

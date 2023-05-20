@@ -37,8 +37,6 @@
 #include "gnc-engine.h"
 #include "window-report.h"
 
-static void gnc_plugin_report_system_class_init (GncPluginReportSystemClass *klass);
-static void gnc_plugin_report_system_init (GncPluginReportSystem *plugin);
 static void gnc_plugin_report_system_finalize (GObject *object);
 
 
@@ -73,8 +71,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginReportSystem, gnc_plugin_report_system, GNC_
 #define GNC_PLUGIN_REPORT_SYSTEM_GET_PRIVATE(o)  \
    (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_REPORT_SYSTEM, GncPluginReportSystemPrivate))
 
-static GObjectClass *parent_class = NULL;
-
 /************************************************************
  *                   Object Implementation                  *
  ************************************************************/
@@ -84,8 +80,6 @@ gnc_plugin_report_system_class_init (GncPluginReportSystemClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_plugin_report_system_finalize;
 
@@ -110,7 +104,7 @@ gnc_plugin_report_system_finalize (GObject *object)
 {
     g_return_if_fail (GNC_IS_PLUGIN_REPORT_SYSTEM (object));
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_report_system_parent_class)->finalize (object);
 }
 
 /************************************************************

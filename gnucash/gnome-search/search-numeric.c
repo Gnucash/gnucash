@@ -45,8 +45,6 @@ static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_numeric_class_init	(GNCSearchNumericClass *klass);
-static void gnc_search_numeric_init	(GNCSearchNumeric *gspaper);
 static void gnc_search_numeric_finalize	(GObject *obj);
 
 typedef struct _GNCSearchNumericPrivate GNCSearchNumericPrivate;
@@ -64,8 +62,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchNumeric, gnc_search_numeric, GNC_TYPE_SEARCH
 #define _PRIVATE(o) \
    ((GNCSearchNumericPrivate*)gnc_search_numeric_get_instance_private((GNCSearchNumeric*)o))
 
-static GNCSearchCoreTypeClass *parent_class;
-
 static void
 gnc_search_numeric_class_init (GNCSearchNumericClass *klass)
 {
@@ -73,7 +69,6 @@ gnc_search_numeric_class_init (GNCSearchNumericClass *klass)
     GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)klass;
 
     object_class = G_OBJECT_CLASS (klass);
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_numeric_finalize;
 
@@ -101,7 +96,7 @@ gnc_search_numeric_finalize (GObject *obj)
     GNCSearchNumeric *o = (GNCSearchNumeric *)obj;
     g_assert (IS_GNCSEARCH_NUMERIC (o));
 
-    G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (gnc_search_numeric_parent_class)->finalize(obj);
 }
 
 /**

@@ -47,10 +47,6 @@
 #include "gnc-menu-extensions.h"
 #include "gnc-gtk-utils.h"
 
-static GObjectClass *parent_class = NULL;
-
-static void gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass);
-static void gnc_plugin_menu_additions_init (GncPluginMenuAdditions *plugin);
 static void gnc_plugin_menu_additions_finalize (GObject *object);
 
 static void gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
@@ -108,8 +104,6 @@ gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
 
-    parent_class = g_type_class_peek_parent (klass);
-
     object_class->finalize = gnc_plugin_menu_additions_finalize;
 
     /* plugin info */
@@ -142,7 +136,7 @@ gnc_plugin_menu_additions_finalize (GObject *object)
 
     g_hash_table_destroy (priv->item_hash);
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_menu_additions_parent_class)->finalize (object);
     LEAVE("");
 }
 

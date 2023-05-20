@@ -27,9 +27,6 @@
 #include "gnc-cell-renderer-text-view.h"
 #include "gnc-cell-view.h"
 
-static void      gnc_cell_renderer_text_view_init       (GncCellRendererTextView      *self);
-static void      gnc_cell_renderer_text_view_class_init (GncCellRendererTextViewClass *klass);
-
 static GtkCellEditable *gcrtv_start_editing (GtkCellRenderer          *cell,
                                              GdkEvent                 *event,
                                              GtkWidget                *widget,

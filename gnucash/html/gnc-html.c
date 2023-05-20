@@ -68,7 +68,6 @@ extern GHashTable* gnc_html_object_handlers;
 
 G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, GTK_TYPE_BIN)
 
-static void gnc_html_class_init( GncHtmlClass* klass );
 static void gnc_html_dispose( GObject* obj );
 static void gnc_html_finalize( GObject* obj );
 /*

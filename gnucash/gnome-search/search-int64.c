@@ -45,8 +45,6 @@ static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_int64_class_init	(GNCSearchInt64Class *klass);
-static void gnc_search_int64_init	(GNCSearchInt64 *gspaper);
 static void gnc_search_int64_finalize	(GObject *obj);
 
 
@@ -64,8 +62,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchInt64, gnc_search_int64, GNC_TYPE_SEARCH_COR
 #define _PRIVATE(o) \
    ((GNCSearchInt64Private*)gnc_search_int64_get_instance_private((GNCSearchInt64*)o))
 
-static GNCSearchCoreTypeClass *parent_class;
-
 static void
 gnc_search_int64_class_init (GNCSearchInt64Class *klass)
 {
@@ -73,7 +69,6 @@ gnc_search_int64_class_init (GNCSearchInt64Class *klass)
     GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)klass;
 
     object_class = G_OBJECT_CLASS (klass);
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_int64_finalize;
 
@@ -99,7 +94,7 @@ gnc_search_int64_finalize (GObject *obj)
     GNCSearchInt64 *o = (GNCSearchInt64 *)obj;
     g_assert (IS_GNCSEARCH_INT64 (o));
 
-    G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (gnc_search_int64_parent_class)->finalize(obj);
 }
 
 /**

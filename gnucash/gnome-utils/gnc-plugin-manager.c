@@ -32,8 +32,6 @@
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static void gnc_plugin_manager_class_init (GncPluginManagerClass *klass);
-static void gnc_plugin_manager_init (GncPluginManager *plugin);
 static void gnc_plugin_manager_dispose (GObject *object);
 static void gnc_plugin_manager_finalize (GObject *object);
 static void gnc_plugin_manager_shutdown (gpointer dummy, gpointer dummy2);
@@ -58,8 +56,6 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 static GncPluginManager *singleton = NULL;
-
-static GObjectClass *parent_class = NULL;
 
 GncPluginManager *
 gnc_plugin_manager_get (void)
@@ -158,8 +154,6 @@ gnc_plugin_manager_class_init (GncPluginManagerClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-    parent_class = g_type_class_peek_parent (klass);
-
     object_class->dispose = gnc_plugin_manager_dispose;
     object_class->finalize = gnc_plugin_manager_finalize;
 
@@ -211,7 +205,7 @@ gnc_plugin_manager_dispose (GObject *object)
         priv->plugins = NULL;
     }
 
-    G_OBJECT_CLASS (parent_class)->dispose (object);
+    G_OBJECT_CLASS (gnc_plugin_manager_parent_class)->dispose (object);
 }
 
 static void
@@ -219,7 +213,7 @@ gnc_plugin_manager_finalize (GObject *object)
 {
     g_return_if_fail (GNC_IS_PLUGIN_MANAGER (object));
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_manager_parent_class)->finalize (object);
 }
 
 static void

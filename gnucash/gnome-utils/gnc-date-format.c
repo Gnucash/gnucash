@@ -81,14 +81,10 @@ struct _GNCDateFormatPrivate
 
 static guint date_format_signals [LAST_SIGNAL] = { 0 };
 
-static void gnc_date_format_init         (GNCDateFormat      *gdf);
-static void gnc_date_format_class_init   (GNCDateFormatClass *klass);
 static void gnc_date_format_finalize     (GObject            *object);
 static void gnc_date_format_compute_format(GNCDateFormat *gdf);
 
 void gnc_ui_date_format_changed_cb(GtkWidget *unused, gpointer user_data);
-
-static GtkBoxClass *parent_class;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GNCDateFormat, gnc_date_format, GTK_TYPE_BOX)
 
@@ -96,8 +92,6 @@ static void
 gnc_date_format_class_init (GNCDateFormatClass *klass)
 {
     GObjectClass   *gobject_class = (GObjectClass *) klass;
-
-    parent_class = g_type_class_peek_parent(klass);
 
     gobject_class->finalize = gnc_date_format_finalize;
 
@@ -179,8 +173,7 @@ gnc_date_format_finalize (GObject *object)
     g_return_if_fail(object != NULL);
     g_return_if_fail(GNC_IS_DATE_FORMAT(object));
 
-    if (G_OBJECT_CLASS(parent_class)->finalize)
-        (* G_OBJECT_CLASS(parent_class)->finalize) (object);
+    G_OBJECT_CLASS(gnc_date_format_parent_class)->finalize (object);
 }
 
 

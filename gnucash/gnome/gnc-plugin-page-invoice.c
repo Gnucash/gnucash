@@ -52,8 +52,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static void gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass);
-static void gnc_plugin_page_invoice_init (GncPluginPageInvoice *plugin_page);
 static void gnc_plugin_page_invoice_finalize (GObject *object);
 
 static GtkWidget *gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page);
@@ -313,8 +311,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageInvoice, gnc_plugin_page_invoice, GNC_TY
 #define GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(o)  \
    ((GncPluginPageInvoicePrivate*)gnc_plugin_page_invoice_get_instance_private((GncPluginPageInvoice*)o))
 
-static GObjectClass *parent_class = NULL;
-
 /************************************************************/
 /*                      Implementation                      */
 /************************************************************/
@@ -374,8 +370,6 @@ gnc_plugin_page_invoice_class_init (GncPluginPageInvoiceClass *klass)
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginPageClass *gnc_plugin_class = GNC_PLUGIN_PAGE_CLASS(klass);
 
-    parent_class = g_type_class_peek_parent (klass);
-
     object_class->finalize = gnc_plugin_page_invoice_finalize;
 
     gnc_plugin_class->tab_icon        = NULL;
@@ -421,7 +415,7 @@ gnc_plugin_page_invoice_finalize (GObject *object)
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE (object));
 
     ENTER("object %p", object);
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_page_invoice_parent_class)->finalize (object);
     LEAVE(" ");
 }
 

@@ -89,8 +89,6 @@ enum
 
 static guint account_sel_signals [LAST_SIGNAL] = { 0 };
 
-static void gnc_account_sel_init (GNCAccountSel *gas);
-static void gnc_account_sel_class_init (GNCAccountSelClass *klass);
 static void gnc_account_sel_finalize (GObject *object);
 static void gnc_account_sel_dispose (GObject *object);
 
@@ -105,8 +103,6 @@ static void gas_get_property (GObject    *object,
                               GParamSpec *pspec);
 
 static void gas_new_account_click (GtkButton *b, gpointer ud);
-
-static GtkBox *parent_class;
 
 #define GNC_ACCOUNT_SEL_PATH "gnc-account-sel-path"
 
@@ -203,8 +199,6 @@ static void
 gnc_account_sel_class_init (GNCAccountSelClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_account_sel_finalize;
     object_class->dispose = gnc_account_sel_dispose;
@@ -938,7 +932,7 @@ gnc_account_sel_finalize (GObject *object)
     if (gas->acctExcludeList)
         g_list_free (gas->acctExcludeList);
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_account_sel_parent_class)->finalize (object);
 }
 
 static void
@@ -963,7 +957,7 @@ gnc_account_sel_dispose (GObject *object)
         gtk_tree_row_reference_free (gas->saved_account_ref);
     gas->saved_account_ref = NULL;
 
-    G_OBJECT_CLASS (parent_class)->dispose (object);
+    G_OBJECT_CLASS (gnc_account_sel_parent_class)->dispose (object);
 }
 
 void

@@ -102,14 +102,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageSxList, gnc_plugin_page_sx_list, GNC_TYP
 #define GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(o)  \
    ((GncPluginPageSxListPrivate*)gnc_plugin_page_sx_list_get_instance_private((GncPluginPageSxList*)o))
 
-static GObjectClass *parent_class = NULL;
-
 /************************************************************
  *                        Prototypes                        *
  ************************************************************/
 /* Plugin Actions */
-static void gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass);
-static void gnc_plugin_page_sx_list_init (GncPluginPageSxList *plugin_page);
 static void gnc_plugin_page_sx_list_dispose (GObject *object);
 static void gnc_plugin_page_sx_list_finalize (GObject *object);
 
@@ -207,8 +203,6 @@ gnc_plugin_page_sx_list_class_init (GncPluginPageSxListClass *klass)
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
     GncPluginPageClass *gnc_plugin_class = GNC_PLUGIN_PAGE_CLASS(klass);
 
-    parent_class = g_type_class_peek_parent(klass);
-
     object_class->dispose = gnc_plugin_page_sx_list_dispose;
     object_class->finalize = gnc_plugin_page_sx_list_finalize;
 
@@ -265,7 +259,7 @@ gnc_plugin_page_sx_list_dispose (GObject *object)
     g_object_unref (G_OBJECT(priv->instances));
     priv->instances = NULL;
 
-    G_OBJECT_CLASS(parent_class)->dispose (object);
+    G_OBJECT_CLASS(gnc_plugin_page_sx_list_parent_class)->dispose (object);
 }
 
 
@@ -280,7 +274,7 @@ gnc_plugin_page_sx_list_finalize (GObject *object)
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(page);
     g_return_if_fail (priv != NULL);
 
-    G_OBJECT_CLASS(parent_class)->finalize (object);
+    G_OBJECT_CLASS(gnc_plugin_page_sx_list_parent_class)->finalize (object);
 }
 
 

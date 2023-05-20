@@ -53,8 +53,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-static void gnc_plugin_aqbanking_class_init(GncPluginAqBankingClass *klass);
-static void gnc_plugin_aqbanking_init(GncPluginAqBanking *plugin);
 static void gnc_plugin_aqbanking_add_to_window(GncPlugin *plugin, GncMainWindow *window, GQuark type);
 static void gnc_plugin_aqbanking_remove_from_window(GncPlugin *plugin, GncMainWindow *window, GQuark type);
 

@@ -29,8 +29,6 @@
 
 #include "gnc-tree-model-selection.h"
 
-static void gnc_tree_model_selection_class_init (GncTreeModelSelectionClass *klass);
-static void gnc_tree_model_selection_init (GncTreeModelSelection *model);
 static void gnc_tree_model_selection_finalize (GObject *object);
 
 static void gnc_tree_model_selection_tree_model_init (GtkTreeModelIface *iface);
@@ -99,8 +97,6 @@ typedef struct GncTreeModelSelectionPrivate
 #define GNC_TREE_MODEL_SELECTION_GET_PRIVATE(o)  \
    ((GncTreeModelSelectionPrivate*)gnc_tree_model_selection_get_instance_private((GncTreeModelSelection*)o))
 
-static GObjectClass *parent_class = NULL;
-
 G_DEFINE_TYPE_WITH_CODE(GncTreeModelSelection, gnc_tree_model_selection, G_TYPE_OBJECT
                         G_ADD_PRIVATE(GncTreeModelSelection)
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
@@ -110,8 +106,6 @@ static void
 gnc_tree_model_selection_class_init (GncTreeModelSelectionClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_tree_model_selection_finalize;
 }
@@ -145,7 +139,7 @@ gnc_tree_model_selection_finalize (GObject *object)
     g_object_unref (priv->child_model);
     g_hash_table_destroy (priv->selections);
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_tree_model_selection_parent_class)->finalize (object);
 }
 
 GtkTreeModel *

@@ -34,8 +34,6 @@
 #include "gnc-prefs.h"
 
 
-static void gnc_plugin_register_class_init (GncPluginRegisterClass *klass);
-static void gnc_plugin_register_init (GncPluginRegister *plugin);
 static void gnc_plugin_register_finalize (GObject *object);
 
 static void gnc_plugin_register_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
@@ -71,7 +69,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginRegister, gnc_plugin_register, GNC_TYPE_PLUG
 #define GNC_PLUGIN_REGISTER_GET_PRIVATE(o)  \
    ((GncPluginRegisterPrivate*)gnc_plugin_register_get_instance_private((GncPluginRegister*)o))
 
-static GObjectClass *parent_class = NULL;
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /************************************************************
@@ -124,8 +121,6 @@ gnc_plugin_register_class_init (GncPluginRegisterClass *klass)
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
 
-    parent_class = g_type_class_peek_parent (klass);
-
     object_class->finalize = gnc_plugin_register_finalize;
 
     /* plugin info */
@@ -154,7 +149,7 @@ gnc_plugin_register_finalize (GObject *object)
 {
     g_return_if_fail (GNC_IS_PLUGIN_REGISTER (object));
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_register_parent_class)->finalize (object);
 }
 
 /************************************************************

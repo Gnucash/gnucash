@@ -139,8 +139,6 @@ extern gboolean gnc_book_options_dialog_apply_helper(GncOptionDB * options);
 
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
-/** A pointer to the parent class of an embedded window. */
-static GObjectClass *parent_class = nullptr;
 /** An identifier that indicates a "main" window. */
 static GQuark window_type = 0;
 /** A list of all extant main windows. This is for convenience as the
@@ -152,9 +150,6 @@ static guint secs_to_save = 0;
 #define MSG_AUTO_SAVE _("Changes will be saved automatically in %u seconds")
 
 /* Declarations *********************************************************/
-static void gnc_main_window_class_init (GncMainWindowClass *klass);
-static void gnc_main_window_init (GncMainWindow *window,
-                                  void *data);
 static void gnc_main_window_finalize (GObject *object);
 static void gnc_main_window_destroy (GtkWidget *widget);
 
@@ -2625,8 +2620,6 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GtkWidgetClass *gtkwidget_class = GTK_WIDGET_CLASS(klass);
 
-    parent_class = static_cast<GObjectClass*>(g_type_class_peek_parent (klass));
-
     window_type = g_quark_from_static_string ("gnc-main-window");
 
     object_class->finalize = gnc_main_window_finalize;
@@ -2780,7 +2773,7 @@ gnc_main_window_finalize (GObject *object)
     }
 
     gnc_gobject_tracking_forget(object);
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_main_window_parent_class)->finalize (object);
 }
 
 
@@ -2885,7 +2878,8 @@ gnc_main_window_destroy (GtkWidget *widget)
         g_list_foreach (plugins, gnc_main_window_remove_plugin, window);
         g_list_free (plugins);
     }
-    GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+
+    GTK_WIDGET_CLASS (gnc_main_window_parent_class)->destroy (widget);
 }
 
 

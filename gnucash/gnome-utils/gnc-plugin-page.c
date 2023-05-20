@@ -42,12 +42,7 @@
 
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
-/** A pointer to the parent class of a plugin page. */
-static gpointer parent_class = NULL;
 
-static void gnc_plugin_page_class_init (GncPluginPageClass *klass);
-static void gnc_plugin_page_init       (GncPluginPage *plugin_page,
-                                        void *data);
 static void gnc_plugin_page_finalize   (GObject *object);
 static void gnc_plugin_page_set_property (GObject      *object,
                                           guint         prop_id,
@@ -356,7 +351,6 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
-    parent_class = g_type_class_peek_parent (klass);
     gobject_class->finalize = gnc_plugin_page_finalize;
     gobject_class->set_property = gnc_plugin_page_set_property;
     gobject_class->get_property = gnc_plugin_page_get_property;
@@ -527,7 +521,7 @@ gnc_plugin_page_finalize (GObject *object)
     page->window = NULL; // Don't need to free it.
 
     gnc_gobject_tracking_forget (object);
-    G_OBJECT_CLASS(parent_class)->finalize (object);
+    G_OBJECT_CLASS(gnc_plugin_page_parent_class)->finalize (object);
 }
 
 /************************************************************/

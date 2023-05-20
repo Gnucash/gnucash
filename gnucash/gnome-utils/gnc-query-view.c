@@ -58,13 +58,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(GNCQueryView, gnc_query_view, GTK_TYPE_TREE_VIEW)
    ((GNCQueryViewPrivate*)gnc_query_view_get_instance_private((GNCQueryView*)o))
 
 /** Static Globals ****************************************************/
-static GtkTreeViewClass *parent_class = NULL;
 static guint query_view_signals[LAST_SIGNAL] = {0};
 
 /** Static function declarations **************************************/
-static void gnc_query_view_init (GNCQueryView *qview);
 static void gnc_query_view_init_view (GNCQueryView *qview);
-static void gnc_query_view_class_init (GNCQueryViewClass *klass);
 static void gnc_query_view_select_row_cb (GtkTreeSelection *selection,
                                           gpointer user_data);
 static void gnc_query_view_toggled_cb (GtkCellRendererToggle *cell_renderer,
@@ -403,8 +400,6 @@ gnc_query_view_class_init (GNCQueryViewClass *klass)
 {
     GtkWidgetClass *widget_class = (GtkWidgetClass*) klass;
 
-    parent_class = g_type_class_peek (GTK_TYPE_TREE_VIEW);
-
     query_view_signals[COLUMN_TOGGLED] =
         g_signal_new("column_toggled",
                      G_TYPE_FROM_CLASS(widget_class),
@@ -530,8 +525,8 @@ gnc_query_view_destroy (GtkWidget *widget)
         qof_query_destroy (qview->query);
         qview->query = NULL;
     }
-    if (GTK_WIDGET_CLASS(parent_class)->destroy)
-        GTK_WIDGET_CLASS(parent_class)->destroy (widget);
+
+    GTK_WIDGET_CLASS(gnc_query_view_parent_class)->destroy (widget);
 }
 
 gint

@@ -78,8 +78,6 @@ enum
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /**** Declarations ******************************************************/
-static void gnc_tree_view_class_init (GncTreeViewClass *klass);
-static void gnc_tree_view_init (GncTreeView *view, void *data);
 static void gnc_tree_view_finalize (GObject *object);
 static void gnc_tree_view_destroy (GtkWidget *widget);
 static void gnc_tree_view_set_property (GObject         *object,
@@ -143,8 +141,6 @@ GNC_DEFINE_TYPE_WITH_CODE(GncTreeView, gnc_tree_view, GTK_TYPE_TREE_VIEW,
 /** @name Gnc Tree View Object Implementation
  @{ */
 
-static GObjectClass *parent_class = NULL;
-
 /** Initialize the class for the new base gnucash tree view.  This
  *  will set up any function pointers that override functions in the
  *  parent class, and also installs the properties that are unique to
@@ -159,8 +155,6 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
 {
     GObjectClass *gobject_class;
     GtkWidgetClass *gtkwidget_class;
-
-    parent_class = g_type_class_peek_parent (klass);
 
     gobject_class = G_OBJECT_CLASS(klass);
     gtkwidget_class = GTK_WIDGET_CLASS(klass);
@@ -348,8 +342,7 @@ gnc_tree_view_finalize (GObject *object)
 
     gnc_gobject_tracking_forget (object);
 
-    if (G_OBJECT_CLASS(parent_class)->finalize)
-        G_OBJECT_CLASS(parent_class)->finalize (object);
+    G_OBJECT_CLASS(gnc_tree_view_parent_class)->finalize (object);
     LEAVE(" ");
 }
 
@@ -397,8 +390,7 @@ gnc_tree_view_destroy (GtkWidget *widget)
         priv->column_menu = NULL;
     }
 
-    if (GTK_WIDGET_CLASS(parent_class)->destroy)
-        GTK_WIDGET_CLASS(parent_class)->destroy (widget);
+    GTK_WIDGET_CLASS(gnc_tree_view_parent_class)->destroy (widget);
     LEAVE(" ");
 }
 

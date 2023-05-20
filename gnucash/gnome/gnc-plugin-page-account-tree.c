@@ -118,14 +118,10 @@ typedef struct GncPluginPageAccountTreePrivate
 #define GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(o)  \
      ((GncPluginPageAccountTreePrivate*)gnc_plugin_page_account_tree_get_instance_private((GncPluginPageAccountTree*)o))
 
-static GObjectClass *parent_class = NULL;
-
 /************************************************************
  *                        Prototypes                        *
  ************************************************************/
 /* Plugin Actions */
-static void gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass);
-static void gnc_plugin_page_account_tree_init (GncPluginPageAccountTree *plugin_page);
 static void gnc_plugin_page_account_tree_finalize (GObject *object);
 static void gnc_plugin_page_account_tree_selected (GObject *object, gpointer user_data);
 
@@ -363,8 +359,6 @@ gnc_plugin_page_account_tree_class_init (GncPluginPageAccountTreeClass *klass)
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginPageClass *gnc_plugin_class = GNC_PLUGIN_PAGE_CLASS(klass);
 
-    parent_class = g_type_class_peek_parent (klass);
-
     object_class->finalize = gnc_plugin_page_account_tree_finalize;
 
     gnc_plugin_class->tab_icon        = GNC_ICON_ACCOUNT;
@@ -449,7 +443,7 @@ gnc_plugin_page_account_tree_finalize (GObject *object)
     priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
     g_return_if_fail (priv != NULL);
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_page_account_tree_parent_class)->finalize (object);
     LEAVE(" ");
 }
 

@@ -57,12 +57,7 @@ enum
 static guint signals[LAST_SIGNAL] = { 0 };
 
 /** Declarations *********************************************************/
-static void gnc_period_select_init         (GncPeriodSelect      *gce);
-static void gnc_period_select_class_init   (GncPeriodSelectClass *klass);
 static void gnc_period_select_finalize     (GObject *object);
-
-static GtkComboBoxClass *parent_class;
-
 
 const gchar *start_strings[GNC_ACCOUNTING_PERIOD_LAST] =
 {
@@ -514,8 +509,6 @@ gnc_period_select_class_init (GncPeriodSelectClass *klass)
 {
     GObjectClass *gobject_class;
 
-    parent_class = g_type_class_peek_parent(klass);
-
     gobject_class = G_OBJECT_CLASS(klass);
     gobject_class->set_property = gnc_period_select_set_property;
     gobject_class->get_property = gnc_period_select_get_property;
@@ -621,8 +614,7 @@ gnc_period_select_finalize (GObject *object)
     /* Do not free the private data structure. It is part of a larger
      * memory block allocated by the type system. */
 
-    if (G_OBJECT_CLASS(parent_class)->finalize)
-        (* G_OBJECT_CLASS(parent_class)->finalize) (object);
+    G_OBJECT_CLASS(gnc_period_select_parent_class)->finalize (object);
 }
 
 

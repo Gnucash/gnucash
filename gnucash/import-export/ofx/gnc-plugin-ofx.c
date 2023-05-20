@@ -29,8 +29,6 @@
 #include "gnc-plugin-ofx.h"
 #include "gnc-plugin-manager.h"
 
-static void gnc_plugin_ofx_class_init (GncPluginOfxClass *klass);
-static void gnc_plugin_ofx_init (GncPluginOfx *plugin);
 static void gnc_plugin_ofx_finalize (GObject *object);
 
 /* Command callbacks */
@@ -64,8 +62,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginOfx, gnc_plugin_ofx, GNC_TYPE_PLUGIN)
 #define GNC_PLUGIN_OFX_GET_PRIVATE(o)  \
    ((GncPluginOfxPrivate*)gnc_plugin_ofx_get_instance_private((GncPluginOfx*)o))
 
-static GObjectClass *parent_class = NULL;
-
 GncPlugin *
 gnc_plugin_ofx_new (void)
 {
@@ -77,8 +73,6 @@ gnc_plugin_ofx_class_init (GncPluginOfxClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_plugin_ofx_finalize;
 
@@ -103,7 +97,7 @@ gnc_plugin_ofx_finalize (GObject *object)
 {
     g_return_if_fail (GNC_IS_PLUGIN_OFX (object));
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_ofx_parent_class)->finalize (object);
 }
 
 /************************************************************
