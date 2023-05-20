@@ -86,25 +86,14 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN            (gnc_plugin_get_type ())
-#define GNC_PLUGIN(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PLUGIN, GncPlugin))
-#define GNC_PLUGIN_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN, GncPluginClass))
-#define GNC_IS_PLUGIN(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PLUGIN))
-#define GNC_IS_PLUGIN_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN))
-#define GNC_PLUGIN_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_PLUGIN, GncPluginClass))
+G_DECLARE_DERIVABLE_TYPE (GncPlugin, gnc_plugin, GNC, PLUGIN, GObject)
 
 #define GNC_PLUGIN_NAME "GncPlugin"
 
 /* typedefs & structures */
 
-/** The instance data structure for a menu-only plugin. */
-typedef struct
-{
-    /** The parent object for this widget */
-    GObject gobject;
-} GncPlugin;
-
 /** The class data structure for a menu-only plugin. */
-typedef struct
+struct _GncPluginClass
 {
     /** The parent class for this widget. */
     GObjectClass gobject;
@@ -163,16 +152,9 @@ typedef struct
      *  window. */
     void (* remove_from_window)
     (GncPlugin *plugin, GncMainWindow *window, GQuark type);
-} GncPluginClass;
+};
 
 /* function prototypes */
-
-/** Get the type of a menu-only plugin.
- *
- *  @return A GType.
- */
-GType gnc_plugin_get_type (void);
-
 
 /** Add the specified plugin to the specified window.  This function
  *  will add the page's user interface from the window and call the
