@@ -35,27 +35,17 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_BUDGET            (gnc_plugin_budget_get_type ())
-#define GNC_PLUGIN_BUDGET(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_BUDGET, GncPluginBudget))
-#define GNC_PLUGIN_BUDGET_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN_BUDGET, GncPluginBudgetClass))
-#define GNC_IS_PLUGIN_BUDGET(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_PLUGIN_BUDGET))
-#define GNC_IS_PLUGIN_BUDGET_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_BUDGET))
-#define GNC_PLUGIN_BUDGET_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_BUDGET, GncPluginBudgetClass))
+G_DECLARE_FINAL_TYPE (GncPluginBudget, gnc_plugin_budget, GNC, PLUGIN_BUDGET, GncPlugin)
 
 #define GNC_PLUGIN_BUDGET_NAME "gnc-plugin-budget"
 
 /* typedefs & structures */
-typedef struct
+struct _GncPluginBudget
 {
     GncPlugin gnc_plugin;
-} GncPluginBudget;
-
-typedef struct
-{
-    GncPluginClass gnc_plugin;
-} GncPluginBudgetClass;
+};
 
 /* function prototypes */
-GType gnc_plugin_budget_get_type (void);
 GncPlugin *gnc_plugin_budget_new (void);
 
 /* Launch the budget list dialog.*/
