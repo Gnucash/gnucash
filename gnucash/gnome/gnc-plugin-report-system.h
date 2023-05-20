@@ -31,27 +31,17 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_REPORT_SYSTEM            (gnc_plugin_report_system_get_type ())
-#define GNC_PLUGIN_REPORT_SYSTEM(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_REPORT_SYSTEM, GncPluginReportSystem))
-#define GNC_PLUGIN_REPORT_SYSTEM_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN_REPORT_SYSTEM, GncPluginReportSystemClass))
-#define GNC_IS_PLUGIN_REPORT_SYSTEM(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_PLUGIN_REPORT_SYSTEM))
-#define GNC_IS_PLUGIN_REPORT_SYSTEM_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_REPORT_SYSTEM))
-#define GNC_PLUGIN_REPORT_SYSTEM_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_REPORT_SYSTEM, GncPluginReportSystemClass))
+G_DECLARE_FINAL_TYPE (GncPluginReportSystem, gnc_plugin_report_system, GNC, PLUGIN_REPORT_SYSTEM, GncPlugin)
 
 #define GNC_PLUGIN_REPORT_SYSTEM_NAME "gnc-plugin-report-system"
 
 /* typedefs & structures */
-typedef struct
+struct _GncPluginReportSystem
 {
     GncPlugin gnc_plugin;
-} GncPluginReportSystem;
-
-typedef struct
-{
-    GncPluginClass gnc_plugin;
-} GncPluginReportSystemClass;
+};
 
 /* function prototypes */
-GType      gnc_plugin_report_system_get_type   (void);
 void       gnc_plugin_report_system_new  (void);
 
 G_END_DECLS
