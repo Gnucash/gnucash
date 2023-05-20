@@ -42,37 +42,18 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_ACCOUNT_TREE            (gnc_plugin_account_tree_get_type ())
-#define GNC_PLUGIN_ACCOUNT_TREE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_ACCOUNT_TREE, GncPluginAccountTree))
-#define GNC_PLUGIN_ACCOUNT_TREE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN_ACCOUNT_TREE, GncPluginAccountTreeClass))
-#define GNC_IS_PLUGIN_ACCOUNT_TREE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_PLUGIN_ACCOUNT_TREE))
-#define GNC_IS_PLUGIN_ACCOUNT_TREE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_ACCOUNT_TREE))
-#define GNC_PLUGIN_ACCOUNT_TREE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_ACCOUNT_TREE, GncPluginAccountTreeClass))
+G_DECLARE_FINAL_TYPE (GncPluginAccountTree, gnc_plugin_account_tree, GNC, PLUGIN_ACCOUNT_TREE, GncPlugin)
 
 #define GNC_PLUGIN_ACCOUNT_TREE_NAME "gnc-plugin-account-tree"
 
 /* typedefs & structures */
 
 /** The instance data structure for an account tree menu plugin. */
-typedef struct
+struct _GncPluginAccountTree
 {
     /** The parent object for this widget */
     GncPlugin gnc_plugin;
-} GncPluginAccountTree;
-
-/** The class data structure for an account tree menu plugin. */
-typedef struct
-{
-    /** The parent class for this widget. */
-    GncPluginClass gnc_plugin;
-} GncPluginAccountTreeClass;
-
-
-/** Get the type of the account tree menu plugin.
- *
- *  @return A GType.
- */
-GType gnc_plugin_account_tree_get_type (void);
-
+};
 
 /** Create a new account tree menu plugin.
  *
