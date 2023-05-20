@@ -261,15 +261,6 @@ struct _GOCharmapSel
     GOCharmapSelTestDirection test;
 };
 
-typedef struct
-{
-    GtkBoxClass parent_class;
-
-    gboolean (*charmap_changed)(GOCharmapSel *cs, char const *new_charmap);
-} GOCharmapSelClass;
-
-typedef GOCharmapSel Cs;
-typedef GOCharmapSelClass CsClass;
 
 /* Signals we emit */
 enum
@@ -471,7 +462,7 @@ static void go_charmap_sel_class_init(GOCharmapSelClass *klass)
 
     cs_signals[CHARMAP_CHANGED] = g_signal_new("charmap_changed",
     GO_TYPE_CHARMAP_SEL, G_SIGNAL_RUN_LAST,
-            G_STRUCT_OFFSET(GOCharmapSelClass, charmap_changed),
+            0,
             NULL, NULL, g_cclosure_marshal_VOID__POINTER, G_TYPE_NONE, 1,
             G_TYPE_POINTER);
 

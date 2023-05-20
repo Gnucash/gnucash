@@ -30,10 +30,7 @@
 G_BEGIN_DECLS
 
 #define GO_TYPE_CHARMAP_SEL        (go_charmap_sel_get_type ())
-#define GO_CHARMAP_SEL(obj)        (G_TYPE_CHECK_INSTANCE_CAST((obj), GO_TYPE_CHARMAP_SEL, GOCharmapSel))
-#define GO_IS_CHARMAP_SEL(obj)     (G_TYPE_CHECK_INSTANCE_TYPE((obj), GO_TYPE_CHARMAP_SEL))
-
-typedef struct _GOCharmapSel GOCharmapSel;
+G_DECLARE_FINAL_TYPE (GOCharmapSel, go_charmap_sel, GO, CHARMAP_SEL, GtkBox);
 
 typedef enum
 {
@@ -41,7 +38,6 @@ typedef enum
     GO_CHARMAP_SEL_FROM_UTF8
 } GOCharmapSelTestDirection;
 
-GType go_charmap_sel_get_type(void);
 GtkWidget * go_charmap_sel_new(GOCharmapSelTestDirection test);
 
 gchar const *go_charmap_sel_get_encoding(GOCharmapSel *cs);
