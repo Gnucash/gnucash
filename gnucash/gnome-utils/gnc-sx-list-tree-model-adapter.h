@@ -44,14 +44,7 @@
 G_BEGIN_DECLS
 
 #define GNC_TYPE_SX_LIST_TREE_MODEL_ADAPTER            (gnc_sx_list_tree_model_adapter_get_type ())
-#define GNC_SX_LIST_TREE_MODEL_ADAPTER(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GNC_TYPE_SX_LIST_TREE_MODEL_ADAPTER, GncSxListTreeModelAdapter))
-#define GNC_SX_LIST_TREE_MODEL_ADAPTER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GNC_TYPE_SX_LIST_TREE_MODEL_ADAPTER, GncSxListTreeModelAdapterClass))
-#define GNC_IS_SX_LIST_TREE_MODEL_ADAPTER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GNC_TYPE_SX_LIST_TREE_MODEL_ADAPTER))
-#define GNC_IS_SX_LIST_TREE_MODEL_ADAPTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GNC_TYPE_SX_LIST_TREE_MODEL_ADAPTER))
-#define GNC_SX_LIST_TREE_MODEL_ADAPTER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GNC_TYPE_SX_LIST_TREE_MODEL_ADAPTER, GncSxListTreeModelAdapterClass))
-
-typedef struct _GncSxListTreeModelAdapter GncSxListTreeModelAdapter;
-typedef struct _GncSxListTreeModelAdapterClass GncSxListTreeModelAdapterClass;
+G_DECLARE_FINAL_TYPE (GncSxListTreeModelAdapter, gnc_sx_list_tree_model_adapter, GNC, SX_LIST_TREE_MODEL_ADAPTER, GObject)
 
 // model columns
 enum
@@ -63,7 +56,6 @@ enum
     SXLTMA_COL_NEXT_OCCUR
 };
 
-GType gnc_sx_list_tree_model_adapter_get_type (void);
 GncSxListTreeModelAdapter* gnc_sx_list_tree_model_adapter_new (GncSxInstanceModel *instances);
 
 GncSxInstances* gnc_sx_list_tree_model_adapter_get_sx_instances (GncSxListTreeModelAdapter *model, GtkTreeIter *iter);
