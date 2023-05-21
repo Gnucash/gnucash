@@ -1219,9 +1219,6 @@ bgv_get_total_for_account (Account *account, GncBudget *budget, gnc_commodity *n
         }
     }
 
-    if (gnc_reverse_balance (account))
-        total = gnc_numeric_neg (total);
-
     return total;
 }
 
@@ -1317,7 +1314,6 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
     gint period_num;
     gnc_numeric value; // used to assist in adding and subtracting
     gchar amtbuff[100]; //FIXME: overkill, where's the #define?
-    gboolean neg;
     GNCPriceDB *pdb;
     gnc_commodity *total_currency, *currency;
     gnc_numeric total = gnc_numeric_zero ();
@@ -1342,8 +1338,6 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
         currency = gnc_account_get_currency_or_parent (account);
         acctype = xaccAccountTypeGetFundamental (xaccAccountGetType (account));
 
-        neg = gnc_reverse_balance (account);
-
         switch (row_type)
         {
             case TOTALS_TYPE_ASSET_LIAB_EQ:
@@ -1351,7 +1345,6 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
                     (acctype != ACCT_TYPE_LIABILITY) &&
                     (acctype != ACCT_TYPE_EQUITY))
                     continue;
-                neg = !neg;
                 break;
             case TOTALS_TYPE_EXPENSES:
                 if (acctype != ACCT_TYPE_EXPENSE)
@@ -1360,10 +1353,8 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
             case TOTALS_TYPE_INCOME:
                 if (acctype != ACCT_TYPE_INCOME)
                     continue;
-                neg = !neg;
                 break;
             case TOTALS_TYPE_REMAINDER:
-                neg = !neg;
                 break;
             default:
                 continue;       /* don't count if unexpected total row type is passed in... */
@@ -1383,11 +1374,13 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
                         gnc_budget_get_period_start_date (priv->budget, period_num));
         }
 
-        if (neg)
-            value = gnc_numeric_neg (value);
-
         total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
     }
+
+    /* because we want income to be positive, expense and transfer to
+       be negative. i.e. income adds to the budget, expense and
+       transfer deducts from budget */
+    total = gnc_numeric_neg (total);
 
     xaccSPrintAmount (amtbuff, total,
                       gnc_commodity_print_info (total_currency,
