@@ -36,6 +36,8 @@
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 match))
 
+(define trep-uuid "2fe3b9833af044abb929a88d5a59620f")
+
 (define reportname (N_ "Budget Report"))
 
 ;; define all option's names so that they are properly defined
@@ -52,6 +54,8 @@
 (define opthelp-show-notes (N_ "Display a column for the budget notes."))
 (define optname-show-actual (N_ "Show Actual"))
 (define opthelp-show-actual (N_ "Display a column for the actual values."))
+(define optname-show-trep (N_ "Link to actual transactions"))
+(define opthelp-show-trep (N_ "Show the actual transactions for the budget period"))
 (define optname-show-difference (N_ "Show Difference"))
 (define opthelp-show-difference (N_ "Display the difference as budget - actual."))
 (define optname-accumulate (N_ "Use accumulated amounts"))
@@ -209,9 +213,15 @@
     (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-notes
       "s15" opthelp-show-notes #t)
-    (gnc-register-simple-boolean-option options
+    (gnc-register-complex-boolean-option options
       gnc:pagename-display optname-show-actual
-      "s2" opthelp-show-actual #t)
+      "s2" opthelp-show-actual #t
+      (lambda (x)
+        (gnc-optiondb-set-option-selectable-by-name
+         options gnc:pagename-display optname-show-trep x)))
+    (gnc-register-simple-boolean-option options
+      gnc:pagename-display optname-show-trep
+      "s25" opthelp-show-trep #f)
     (gnc-register-simple-boolean-option options
       gnc:pagename-display optname-show-difference
       "s3" opthelp-show-difference #f)
@@ -256,11 +266,12 @@
 ;;   budget - budget to use
 ;;   params - report parameters
 (define (gnc:html-table-add-budget-values!
-         html-table acct-table budget params)
+         html-table acct-table budget params report-obj)
   (let* ((get-val (lambda (alist key)
                     (let ((lst (assoc-ref alist key)))
                       (and lst (car lst)))))
          (show-actual? (get-val params 'show-actual))
+         (show-trep? (get-val params 'show-trep))
          (show-budget? (get-val params 'show-budget))
          (show-diff? (get-val params 'show-difference))
          (show-note? (get-val params 'show-note))
@@ -346,7 +357,7 @@
         ;;
         ;; Returns
         ;;   col - next column
-        (define (disp-cols style-tag col0
+        (define (disp-cols style-tag col0 acct start-date end-date
                            bgt-val act-val dif-val note)
           (let* ((col1 (+ col0 (if show-budget? 1 0)))
                  (col2 (+ col1 (if show-actual? 1 0)))
@@ -361,7 +372,19 @@
                 (gnc:html-table-set-cell/tag!
                  html-table rownum col1
                  style-tag
-                 (gnc:make-gnc-monetary comm act-val)))
+                 (if show-trep?
+                     (gnc:make-html-text
+                      (gnc:html-markup-anchor
+                       (gnc:make-report-anchor
+                        trep-uuid report-obj
+                        (list
+                         (list "General" "Start Date" (cons 'absolute start-date))
+                         (list "General" "End Date" (cons 'absolute end-date))
+                         (list "Accounts" "Accounts" (gnc-accounts-and-all-descendants (list acct)))
+                         (list "Currency" "Common Currency" #t)
+                         (list "Currency" "Report's currency" (gnc-account-get-currency-or-parent acct))))
+                       (gnc:make-gnc-monetary comm act-val)))
+                     (gnc:make-gnc-monetary comm act-val))))
             (if show-diff?
                 (gnc:html-table-set-cell/tag!
                  html-table rownum col2
@@ -386,7 +409,9 @@
                                 budget acct total-periods)))
                    (dif-total (- bgt-total act-total)))
               (loop (cdr column-list)
-                    (disp-cols "total-number-cell" current-col
+                    (disp-cols "total-number-cell" current-col acct
+                               (gnc-budget-get-period-start-date budget (car total-periods))
+                               (gnc-budget-get-period-end-date budget (last total-periods))
                                bgt-total act-total dif-total #f))))
 
            (else
@@ -405,7 +430,9 @@
                               budget acct period-list)))
                    (dif-val (- bgt-val act-val)))
               (loop (cdr column-list)
-                    (disp-cols "number-cell" current-col
+                    (disp-cols "number-cell" current-col acct
+                               (gnc-budget-get-period-start-date budget (car period-list))
+                               (gnc-budget-get-period-end-date budget (car period-list))
                                bgt-val act-val dif-val note))))))))
 
     ;; Adds header rows to the budget report.  The columns are
@@ -668,6 +695,8 @@
               (list
                (list 'show-actual
                      (get-option gnc:pagename-display optname-show-actual))
+               (list 'show-trep
+                     (get-option gnc:pagename-display optname-show-trep))
                (list 'show-budget
                      (get-option gnc:pagename-display optname-show-budget))
                (list 'show-difference
@@ -712,7 +741,8 @@
         (let ((html-table (gnc:html-table-add-account-balances #f acct-table '())))
 
           ;; ... then the budget values
-          (gnc:html-table-add-budget-values! html-table acct-table budget paramsBudget)
+          (gnc:html-table-add-budget-values! html-table acct-table budget
+                                             paramsBudget report-obj)
 
           ;; hmmm... I expected that add-budget-values would have to
           ;; clear out any unused columns to the right, out to the
