@@ -47,6 +47,7 @@
 #include "gnucash-sheetP.h"
 #include "table-allgui.h"
 #include "Account.h"
+#include "gnc-glib-utils.h"
 
 #define GNC_PREF_AUTO_RAISE_LISTS "auto-raise-lists"
 
@@ -489,11 +490,13 @@ gnc_combo_cell_add_menu_item_unique (ComboCell* cell, const char* menustr)
 
         g_hash_table_insert (box->item_hash, g_strdup (menustr), NULL);
 
-        gnc_item_list_append (box->item_list, menustr);
+        gchar *menustr_temp = g_strdup (menustr);
+        gnc_utf8_strip_invalid_and_controls (menustr_temp);
+        gnc_item_list_append (box->item_list, menustr_temp);
         if (cell->cell.value &&
-            (strcmp (menustr, cell->cell.value) == 0))
-            gnc_item_list_select (box->item_list, menustr);
-
+            (strcmp (menustr_temp, cell->cell.value) == 0))
+            gnc_item_list_select (box->item_list, menustr_temp);
+        g_free (menustr_temp);
         unblock_list_signals (cell);
     }
     else
@@ -513,8 +516,12 @@ gnc_combo_cell_add_menu_item_unique (ComboCell* cell, const char* menustr)
             return;
 
         g_hash_table_insert (box->item_hash, g_strdup (menustr), NULL);
+
+        gchar *menustr_temp = g_strdup (menustr);
+        gnc_utf8_strip_invalid_and_controls (menustr_temp);
         gtk_list_store_append (cell->shared_store, &iter);
-        gtk_list_store_set (cell->shared_store, &iter, 0, menustr, -1);
+        gtk_list_store_set (cell->shared_store, &iter, 0, menustr_temp, -1);
+        g_free (menustr_temp);
     }
 
     /* If we're going to be using a pre-fab quickfill,
