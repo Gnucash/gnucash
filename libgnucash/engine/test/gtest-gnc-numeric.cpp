@@ -185,12 +185,12 @@ TEST(gncnumeric_constructors, test_string_constructor)
     GncNumeric neg_decimal_frac_nozero("-.12345");
     EXPECT_EQ(-12345, neg_decimal_frac_nozero.num());
     EXPECT_EQ(100000, neg_decimal_frac_nozero.denom());
-    GncNumeric big_denom(".12345678901234567");
-    EXPECT_EQ(12345678901234567, big_denom.num());
-    EXPECT_EQ(100000000000000000, big_denom.denom());
-    GncNumeric too_big_denom(".123456789012345678");
-    EXPECT_EQ(12345678901234567, too_big_denom.num());
-    EXPECT_EQ(100000000000000000, too_big_denom.denom());
+    GncNumeric big_denom(".123456789012345678");
+    EXPECT_EQ(123456789012345678, big_denom.num());
+    EXPECT_EQ(1000000000000000000, big_denom.denom());
+    GncNumeric too_big_denom(".1234567890123456789");
+    EXPECT_EQ(123456789012345678, too_big_denom.num());
+    EXPECT_EQ(1000000000000000000, too_big_denom.denom());
 }
 
 TEST(gncnumeric_output, string_output)

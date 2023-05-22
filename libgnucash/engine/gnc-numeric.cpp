@@ -42,7 +42,7 @@
 
 static QofLogModule log_module = "qof";
 
-static const uint8_t max_leg_digits{17};
+static const uint8_t max_leg_digits{18};
 static const int64_t pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
                                10000000, 100000000, 1000000000,
                                INT64_C(10000000000), INT64_C(100000000000),
@@ -50,7 +50,8 @@ static const int64_t pten[] = { 1, 10, 100, 1000, 10000, 100000, 1000000,
                                INT64_C(100000000000000),
                                INT64_C(1000000000000000),
                                INT64_C(10000000000000000),
-                               INT64_C(100000000000000000)};
+                               INT64_C(100000000000000000),
+                               INT64_C(1000000000000000000)};
 #define POWTEN_OVERFLOW -5
 
 int64_t
@@ -79,7 +80,7 @@ GncNumeric::GncNumeric(GncRational rr)
 
 GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
 {
-    static uint64_t max_leg_value{INT64_C(100000000000000000)};
+    static uint64_t max_leg_value{INT64_C(1000000000000000000)};
     if (std::isnan(d) || fabs(d) > max_leg_value)
     {
         std::ostringstream msg;
