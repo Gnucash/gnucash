@@ -64,9 +64,6 @@ enum
 static QofLogModule log_module = GNC_MOD_GUI;
 static guint date_edit_signals [LAST_SIGNAL] = { 0 };
 
-
-static void gnc_date_edit_init         (GNCDateEdit      *gde);
-static void gnc_date_edit_class_init   (GNCDateEditClass *klass);
 static void gnc_date_edit_dispose      (GObject          *object);
 static void gnc_date_edit_finalize     (GObject          *object);
 static void gnc_date_edit_forall       (GtkContainer       *container,
@@ -78,43 +75,7 @@ static int date_accel_key_press(GtkWidget *widget,
                                 GdkEventKey *event,
                                 gpointer data);
 
-
-static GtkBoxClass *parent_class;
-
-/**
- * gnc_date_edit_get_type:
- *
- * Returns the GType for the GNCDateEdit widget
- */
-GType
-gnc_date_edit_get_type (void)
-{
-    static GType date_edit_type = 0;
-
-    if (date_edit_type == 0)
-    {
-        static const GTypeInfo date_edit_info =
-        {
-            sizeof (GNCDateEditClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_date_edit_class_init,
-            NULL,
-            NULL,
-            sizeof (GNCDateEdit),
-            0, /* n_preallocs */
-            (GInstanceInitFunc) gnc_date_edit_init,
-            NULL,
-        };
-
-        date_edit_type = g_type_register_static (GTK_TYPE_BOX,
-                         "GNCDateEdit",
-                         &date_edit_info, 0);
-    }
-
-    return date_edit_type;
-}
-
+G_DEFINE_TYPE (GNCDateEdit, gnc_date_edit, GTK_TYPE_BOX)
 
 static char *
 gnc_strtok_r (char *s, const char *delim, char **save_ptr)
@@ -631,8 +592,6 @@ gnc_date_edit_class_init (GNCDateEditClass *klass)
     object_class->dispose = gnc_date_edit_dispose;
     object_class->finalize = gnc_date_edit_finalize;
 
-    parent_class = g_type_class_ref(GTK_TYPE_BOX);
-
     date_edit_signals [TIME_CHANGED] =
         g_signal_new ("time_changed",
                       G_TYPE_FROM_CLASS (object_class),
@@ -688,8 +647,7 @@ gnc_date_edit_finalize (GObject *object)
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_DATE_EDIT (object));
 
-    if (G_OBJECT_CLASS (parent_class)->finalize)
-        (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+    G_OBJECT_CLASS (gnc_date_edit_parent_class)->finalize (object);
 }
 
 static void
@@ -721,8 +679,7 @@ gnc_date_edit_dispose (GObject *object)
     gtk_widget_destroy (GTK_WIDGET(gde->time_combo));
     gde->time_combo = NULL;
 
-    if (G_OBJECT_CLASS (parent_class)->dispose)
-        (* G_OBJECT_CLASS (parent_class)->dispose) (object);
+    G_OBJECT_CLASS (gnc_date_edit_parent_class)->dispose (object);
 }
 
 static void
@@ -738,10 +695,10 @@ gnc_date_edit_forall (GtkContainer *container, gboolean include_internals,
     if (!include_internals)
         return;
 
-    if (!GTK_CONTAINER_CLASS (parent_class)->forall)
+    if (!GTK_CONTAINER_CLASS (gnc_date_edit_parent_class)->forall)
         return;
 
-    GTK_CONTAINER_CLASS (parent_class)->forall (container,
+    GTK_CONTAINER_CLASS (gnc_date_edit_parent_class)->forall (container,
             include_internals,
             callback,
             callback_data);
