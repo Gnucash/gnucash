@@ -2372,6 +2372,17 @@ xaccTransGetDocLink (const Transaction *trans)
 }
 
 const char *
+xaccTransGetDocLinkFullPath (const Transaction *trans)
+{
+    g_return_val_if_fail (trans, NULL);
+
+    const char* doclink = xaccTransGetDocLink (trans);
+    const char* doclinkfp = gnc_doclink_get_unescaped_just_uri (doclink);
+
+    return doclinkfp;
+}
+
+const char *
 xaccTransGetNotes (const Transaction *trans)
 {
     g_return_val_if_fail (trans, NULL);
