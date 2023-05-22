@@ -57,8 +57,7 @@ static guint gnc_frequency_signals[LAST_SIGNAL] = { 0 };
 
 /** Private Prototypes ********************/
 
-static void gnc_frequency_class_init( GncFrequencyClass *klass );
-static void gnc_frequency_class_destroy( GtkWidget *widget );
+static void gnc_frequency_destroy( GtkWidget *widget );
 
 static void freq_combo_changed( GtkComboBox *b, gpointer d );
 static void start_date_changed( GNCDateEdit *gde, gpointer d );
@@ -70,8 +69,6 @@ static void monthly_sel_changed( GtkButton *b, gpointer d );
 static void semimonthly_sel_changed( GtkButton *b, gpointer d );
 
 /** Static Inits ********************/
-
-static GObjectClass *parent_class = NULL;
 
 enum
 {
@@ -97,41 +94,13 @@ static const char *CHECKBOX_NAMES[] =
 
 /** Implementations ********************/
 
-GType
-gnc_frequency_get_type()
-{
-    static GType gncfreq_type = 0;
-    if (gncfreq_type == 0)
-    {
-        static GTypeInfo gncfreq_info =
-        {
-            sizeof(GncFrequencyClass),
-            NULL,
-            NULL,
-            (GClassInitFunc)gnc_frequency_class_init,
-            NULL,
-            NULL,
-            sizeof(GncFrequency),
-            0,
-            (GInstanceInitFunc)gnc_frequency_init
-        };
-
-        gncfreq_type = g_type_register_static (GTK_TYPE_BOX,
-                                               "GncFrequency",
-                                               &gncfreq_info, 0);
-    }
-
-    return gncfreq_type;
-}
-
+G_DEFINE_TYPE (GncFrequency, gnc_frequency, GTK_TYPE_BOX)
 
 static void
 gnc_frequency_class_init( GncFrequencyClass *klass )
 {
     GObjectClass *object_class;
     GtkWidgetClass *gtkwidget_class;
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class = G_OBJECT_CLASS (klass);
     gtkwidget_class = GTK_WIDGET_CLASS (klass);
@@ -148,11 +117,11 @@ gnc_frequency_class_init( GncFrequencyClass *klass )
                       0);
 
     /* GtkWidget signals */
-    gtkwidget_class->destroy = gnc_frequency_class_destroy;
+    gtkwidget_class->destroy = gnc_frequency_destroy;
 }
 
 
-void
+static void
 gnc_frequency_init(GncFrequency *gf)
 {
     int i;
@@ -277,7 +246,7 @@ gnc_frequency_init(GncFrequency *gf)
  *  @internal
  */
 static void
-gnc_frequency_class_destroy (GtkWidget *widget)
+gnc_frequency_destroy (GtkWidget *widget)
 {
     GncFrequency *gf;
 
@@ -294,8 +263,7 @@ gnc_frequency_class_destroy (GtkWidget *widget)
         gf->builder = NULL;
     }
 
-    if (GTK_WIDGET_CLASS (parent_class)->destroy)
-        GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+    GTK_WIDGET_CLASS (gnc_frequency_parent_class)->destroy (widget);
     LEAVE(" ");
 }
 
