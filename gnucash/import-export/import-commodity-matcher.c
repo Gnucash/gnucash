@@ -73,7 +73,7 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
         GList *comm_list = gnc_commodity_table_get_commodities (commodity_table, ns);
         for (GList *m = comm_list; !retval && m; m = g_list_next (m))
         {
-            gnc_commodity *com = comm_list->data;
+            gnc_commodity *com = m->data;
             DEBUG("Looking at commodity %s", gnc_commodity_get_fullname (com));
             if (!g_strcmp0 (gnc_commodity_get_cusip (com), cusip))
             {
