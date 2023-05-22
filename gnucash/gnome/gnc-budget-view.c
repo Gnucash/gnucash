@@ -1307,95 +1307,63 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
                    GtkTreeModel *s_model, GtkTreeIter *s_iter,
                    gpointer user_data)
 {
-    GncBudgetView *budget_view;
-    GncBudgetViewPrivate *priv;
-    gint row_type;
-    GList *top_level_accounts;
-    gint period_num;
-    gnc_numeric value; // used to assist in adding and subtracting
-    gchar amtbuff[100]; //FIXME: overkill, where's the #define?
-    GNCPriceDB *pdb;
-    gnc_commodity *total_currency, *currency;
     gnc_numeric total = gnc_numeric_zero ();
-
-    budget_view = GNC_BUDGET_VIEW(user_data);
-    priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+    GncBudgetView *budget_view = GNC_BUDGET_VIEW(user_data);
+    GncBudgetViewPrivate *priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
+    gint period_num = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(col), "period_num"));
+    GNCPriceDB *pdb = gnc_pricedb_get_db (gnc_get_current_book ());
+    gnc_commodity *total_currency = gnc_default_currency ();
+    GList *top_level_accounts = gnc_account_get_children (priv->rootAcct);
+    gint row_type;
 
     gtk_tree_model_get (s_model, s_iter, 1, &row_type, -1);
-    period_num = GPOINTER_TO_INT(g_object_get_data (G_OBJECT(col), "period_num"));
 
-    pdb = gnc_pricedb_get_db (gnc_get_current_book ());
-    total_currency = gnc_default_currency ();
-    top_level_accounts = gnc_account_get_children (priv->rootAcct);
-
-    // step through each child account of the root, find the total income, expenses, liabilities, and assets.
-
+    // step through each child account of the root, find the total
+    // income, expenses, liabilities, and assets.
     for (GList *node = top_level_accounts; node; node = g_list_next (node))
     {
         Account *account = node->data;
-        GNCAccountType acctype;
+        GNCAccountType acctype = xaccAccountTypeGetFundamental (xaccAccountGetType (account));
 
-        currency = gnc_account_get_currency_or_parent (account);
-        acctype = xaccAccountTypeGetFundamental (xaccAccountGetType (account));
-
-        switch (row_type)
+        if ((row_type == TOTALS_TYPE_INCOME && acctype == ACCT_TYPE_INCOME) ||
+            (row_type == TOTALS_TYPE_EXPENSES && acctype == ACCT_TYPE_EXPENSE) ||
+            (row_type == TOTALS_TYPE_REMAINDER) ||
+            (row_type == TOTALS_TYPE_ASSET_LIAB_EQ &&
+             (acctype == ACCT_TYPE_ASSET || acctype == ACCT_TYPE_LIABILITY ||
+              acctype == ACCT_TYPE_EQUITY)))
         {
-            case TOTALS_TYPE_ASSET_LIAB_EQ:
-                if ((acctype != ACCT_TYPE_ASSET) &&
-                    (acctype != ACCT_TYPE_LIABILITY) &&
-                    (acctype != ACCT_TYPE_EQUITY))
-                    continue;
-                break;
-            case TOTALS_TYPE_EXPENSES:
-                if (acctype != ACCT_TYPE_EXPENSE)
-                    continue;
-                break;
-            case TOTALS_TYPE_INCOME:
-                if (acctype != ACCT_TYPE_INCOME)
-                    continue;
-                break;
-            case TOTALS_TYPE_REMAINDER:
-                break;
-            default:
-                continue;       /* don't count if unexpected total row type is passed in... */
-        }
-        // find the total for this account
+            gnc_numeric value; // used to assist in adding and subtracting
+            // find the total for this account
+            if (period_num < 0)
+                value = bgv_get_total_for_account (account, priv->budget, total_currency);
+            else
+            {
+                gnc_commodity *currency = gnc_account_get_currency_or_parent (account);
+                value = gbv_get_accumulated_budget_amount
+                    (priv->budget, account, period_num);
 
-        if (period_num < 0)
-        {
-            value = bgv_get_total_for_account (account, priv->budget, total_currency);
-        }
-        else
-        {
-            value = gbv_get_accumulated_budget_amount (priv->budget, account, period_num);
+                value = gnc_pricedb_convert_balance_nearest_price_t64
+                    (pdb, value, currency, total_currency,
+                     gnc_budget_get_period_start_date (priv->budget, period_num));
+            }
 
-            value = gnc_pricedb_convert_balance_nearest_price_t64 (
-                        pdb, value, currency, total_currency,
-                        gnc_budget_get_period_start_date (priv->budget, period_num));
+            total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
         }
-
-        total = gnc_numeric_add (total, value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
     }
 
-    /* because we want income to be positive, expense and transfer to
-       be negative. i.e. income adds to the budget, expense and
-       transfer deducts from budget */
     total = gnc_numeric_neg (total);
 
-    xaccSPrintAmount (amtbuff, total,
-                      gnc_commodity_print_info (total_currency,
-                                                period_num < 0 ? TRUE : FALSE));
-    if (priv->use_red_color && gnc_numeric_negative_p (total))
-    {
-        gchar *color = gnc_get_negative_color ();
-        g_object_set (cell, "foreground", color, NULL);
-        g_free (color);
-    }
-    else
-        g_object_set (cell, "foreground", NULL, NULL);
+    GNCPrintAmountInfo pinfo = gnc_commodity_print_info (total_currency, period_num < 0);
+    gchar *color = (priv->use_red_color && gnc_numeric_negative_p (total)) ?
+        gnc_get_negative_color () : NULL;
 
-    g_object_set (G_OBJECT(cell), "text", amtbuff, "xalign", 1.0, NULL);
+    g_object_set (G_OBJECT(cell),
+                  "text", xaccPrintAmount (total, pinfo),
+                  "xalign", 1.0,
+                  "foreground", color,
+                  NULL);
 
+    g_free (color);
     g_list_free (top_level_accounts);
 }
 
