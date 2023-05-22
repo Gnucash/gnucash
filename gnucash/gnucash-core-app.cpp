@@ -242,17 +242,14 @@ Gnucash::CoreApp::parse_command_line (int argc, char **argv)
 
     if (m_show_paths)
     {
-        auto paths { gnc_list_all_paths ()};
         std::cout << _("GnuCash Paths") << '\n';
-        for (auto n = paths; n; n = n->next)
+        for (const auto& ep : gnc_list_all_paths ())
         {
-            auto it = static_cast<EnvPaths*>(n->data);
-            std::cout << it->env_name << ": " << it->env_path;
-            if (it->modifiable)
+            std::cout << ep.env_name << ": " << ep.env_path;
+            if (ep.modifiable)
                 std::cout << ' ' << _("(user modifiable)");
             std::cout << '\n';
         }
-        g_list_free_full (paths, g_free);
         exit (0);
     }
 

@@ -5160,7 +5160,6 @@ add_about_paths (GtkDialog *dialog)
 {
     GtkWidget *page_vbox = gnc_get_dialog_widget_from_id (dialog, "page_vbox");
     GtkWidget *grid;
-    GList *paths;
     gint i = 0;
 
     if (!page_vbox)
@@ -5170,15 +5169,12 @@ add_about_paths (GtkDialog *dialog)
     }
 
     grid = gtk_grid_new ();
-    paths = gnc_list_all_paths ();
 
-    for (GList *path_node = paths; path_node; path_node = g_list_next (path_node))
+    for (const auto& ep : gnc_list_all_paths ())
     {
-        EnvPaths *ep = (EnvPaths*)path_node->data;
-
-        gchar *env_name = g_strconcat (ep->env_name, ":", NULL);
+        gchar *env_name = g_strconcat (ep.env_name, ":", NULL);
         GtkWidget *label = gtk_label_new (env_name);
-        const gchar *uri = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, ep->env_path);
+        const gchar *uri = gnc_uri_create_uri ("file", NULL, 0, NULL, NULL, ep.env_path);
         gchar *display_uri = gnc_doclink_get_unescaped_just_uri (uri);
         GtkWidget *widget = gtk_link_button_new_with_label (uri, display_uri);
 
@@ -5189,7 +5185,7 @@ add_about_paths (GtkDialog *dialog)
         gtk_widget_set_margin_top (widget, 0);
         gtk_widget_set_margin_bottom (widget, 0);
 
-        if (ep->modifiable)
+        if (ep.modifiable)
         {
             GtkWidget *mod_lab = gtk_label_new (_("(user modifiable)"));
             gtk_grid_attach (GTK_GRID(grid), mod_lab, 2, i, 1, 1);
@@ -5205,7 +5201,6 @@ add_about_paths (GtkDialog *dialog)
     gtk_container_add_with_properties (GTK_CONTAINER(page_vbox), grid,
                                        "position", 1, NULL);
     gtk_widget_show_all (grid);
-    g_list_free_full (paths, g_free);
 }
 
 /** Create and display the "about" dialog for gnucash.
