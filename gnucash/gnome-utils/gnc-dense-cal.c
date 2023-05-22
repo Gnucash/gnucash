@@ -76,8 +76,6 @@ static const int COL_BORDER_SIZE = 3;
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.gui.dense-cal"
 
-static void gnc_dense_cal_class_init(GncDenseCalClass *klass);
-static void gnc_dense_cal_init(GncDenseCal *dcal);
 static void gnc_dense_cal_finalize(GObject *object);
 static void gnc_dense_cal_dispose(GObject *object);
 static void gnc_dense_cal_realize(GtkWidget *widget, gpointer user_data);
@@ -147,7 +145,7 @@ static void gdc_add_tag_markings(GncDenseCal *cal, guint tag);
 static void gdc_add_markings(GncDenseCal *cal);
 static void gdc_remove_markings(GncDenseCal *cal);
 
-static GObject *parent_class = NULL;
+G_DEFINE_TYPE (GncDenseCal, gnc_dense_cal, GTK_TYPE_BOX)
 
 #define MONTH_NAME_BUFSIZE 10
 
@@ -187,35 +185,6 @@ day_label(gchar *buf, int buf_len, int dow)
     }
 }
 
-GType
-gnc_dense_cal_get_type()
-{
-    static GType dense_cal_type = 0;
-
-    if (dense_cal_type == 0)
-    {
-        static const GTypeInfo dense_cal_info =
-        {
-            sizeof (GncDenseCalClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_dense_cal_class_init,
-            NULL,
-            NULL,
-            sizeof (GncDenseCal),
-            0,
-            (GInstanceInitFunc) gnc_dense_cal_init,
-            NULL
-        };
-
-        dense_cal_type = g_type_register_static(GTK_TYPE_BOX,
-                                                "GncDenseCal",
-                                                &dense_cal_info, 0);
-    }
-
-    return dense_cal_type;
-}
-
 static void
 gnc_dense_cal_class_init(GncDenseCalClass *klass)
 {
@@ -226,8 +195,6 @@ gnc_dense_cal_class_init(GncDenseCalClass *klass)
     widget_class = GTK_WIDGET_CLASS (klass);
 
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "calendar");
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_dense_cal_finalize;
     object_class->dispose = gnc_dense_cal_dispose;
@@ -684,8 +651,7 @@ gnc_dense_cal_dispose (GObject *object)
 
     g_object_unref(G_OBJECT(dcal->model));
 
-    if (G_OBJECT_CLASS (parent_class)->dispose)
-        G_OBJECT_CLASS(parent_class)->dispose(object);
+    G_OBJECT_CLASS(gnc_dense_cal_parent_class)->dispose(object);
 }
 
 static void
@@ -694,8 +660,7 @@ gnc_dense_cal_finalize (GObject *object)
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_DENSE_CAL (object));
 
-    if (G_OBJECT_CLASS (parent_class)->finalize)
-        G_OBJECT_CLASS(parent_class)->finalize(object);
+    G_OBJECT_CLASS(gnc_dense_cal_parent_class)->finalize(object);
 }
 
 static void
