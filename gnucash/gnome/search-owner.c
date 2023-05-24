@@ -45,8 +45,6 @@ static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_owner_class_init (GNCSearchOwnerClass *klass);
-static void gnc_search_owner_init   (GNCSearchOwner *gspaper);
 static void gnc_search_owner_finalize   (GObject *obj);
 
 typedef struct _GNCSearchOwnerPrivate
@@ -61,8 +59,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchOwner, gnc_search_owner, GNC_TYPE_SEARCH_COR
 
 #define _PRIVATE(o)  \
    ((GNCSearchOwnerPrivate*)gnc_search_owner_get_instance_private((GNCSearchOwner*)o))
-
-static GNCSearchCoreTypeClass *parent_class;
 
 enum
 {
@@ -80,7 +76,6 @@ gnc_search_owner_class_init (GNCSearchOwnerClass *klass)
     GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)klass;
 
     object_class = G_OBJECT_CLASS (klass);
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_owner_finalize;
 
@@ -102,7 +97,7 @@ gnc_search_owner_finalize (GObject *obj)
 {
     g_assert (IS_GNCSEARCH_OWNER (obj));
 
-    G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (gnc_search_owner_parent_class)->finalize(obj);
 }
 
 /**

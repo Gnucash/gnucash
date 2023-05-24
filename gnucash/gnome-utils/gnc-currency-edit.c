@@ -64,16 +64,12 @@
 /** The debugging module used by this file. */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static void gnc_currency_edit_init         (GNCCurrencyEdit      *gce);
-static void gnc_currency_edit_class_init   (GNCCurrencyEditClass *klass);
 static void gnc_currency_edit_finalize     (GObject *object);
 static void gnc_currency_edit_mnemonic_changed (GObject    *gobject,
         GParamSpec *pspec,
         gpointer    user_data);
 static void gnc_currency_edit_active_changed (GtkComboBox *gobject,
         gpointer     user_data);
-
-static GtkComboBoxClass *parent_class;
 
 /** The instance private data for a content plugin. */
 typedef struct _GNCCurrencyEditPrivate
@@ -156,7 +152,6 @@ static void
 gnc_currency_edit_class_init (GNCCurrencyEditClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-    parent_class = g_type_class_peek_parent (klass);
 
     gobject_class->set_property = gnc_currency_edit_set_property;
     gobject_class->get_property = gnc_currency_edit_get_property;
@@ -221,8 +216,7 @@ gnc_currency_edit_finalize (GObject *object)
     /* Do not free the private data structure itself. It is part of
      * a larger memory block allocated by the type system. */
 
-    if (G_OBJECT_CLASS(parent_class)->finalize)
-        (* G_OBJECT_CLASS(parent_class)->finalize) (object);
+    G_OBJECT_CLASS(gnc_currency_edit_parent_class)->finalize (object);
 }
 
 

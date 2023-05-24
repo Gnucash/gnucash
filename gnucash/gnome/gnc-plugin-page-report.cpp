@@ -84,8 +84,6 @@ a gnucash- prefix will do. Then just set a log level
 with qof_log_set_level().*/
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static GObjectClass *parent_class = nullptr;
-
 // A static GHashTable to record the usage count for each printer
 // output name. FIXME: Currently this isn't cleaned up at program
 // shutdown because there isn't a place to easily insert a finalize()
@@ -140,8 +138,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageReport, gnc_plugin_page_report, GNC_TYPE
 #define GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(o)  \
    ((GncPluginPageReportPrivate*)gnc_plugin_page_report_get_instance_private((GncPluginPageReport*)o))
 
-static void gnc_plugin_page_report_class_init( GncPluginPageReportClass *klass );
-static void gnc_plugin_page_report_init( GncPluginPageReport *plugin_page );
 static GObject *gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectConstructParam *properties);
 static void gnc_plugin_page_report_finalize (GObject *object);
 static void gnc_plugin_page_report_setup( GncPluginPage *ppage );
@@ -343,8 +339,6 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginPageClass *gnc_plugin_page_class = GNC_PLUGIN_PAGE_CLASS(klass);
 
-    parent_class = static_cast<GObjectClass*>(g_type_class_peek_parent (klass));
-
     object_class->constructor = gnc_plugin_page_report_constructor;
     object_class->finalize = gnc_plugin_page_report_finalize;
 
@@ -385,7 +379,7 @@ gnc_plugin_page_report_finalize (GObject *object)
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REPORT (object));
 
     ENTER("object %p", object);
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_page_report_parent_class)->finalize (object);
     LEAVE(" ");
 }
 
@@ -1199,16 +1193,9 @@ gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 static GObject*
 gnc_plugin_page_report_constructor(GType this_type, guint n_properties, GObjectConstructParam *properties)
 {
-    GObject *obj;
-    GncPluginPageReportClass *our_class;
-    GObjectClass *parent_class;
+    GObject *obj = G_OBJECT_CLASS (gnc_plugin_page_report_parent_class)->constructor(this_type, n_properties, properties);
+
     gint reportId = -42;
-
-    our_class = GNC_PLUGIN_PAGE_REPORT_CLASS (
-                    g_type_class_peek (GNC_TYPE_PLUGIN_PAGE_REPORT));
-    parent_class = G_OBJECT_CLASS (g_type_class_peek_parent (our_class));
-    obj = parent_class->constructor(this_type, n_properties, properties);
-
     for (decltype(n_properties) i = 0; i < n_properties; i++)
     {
         GObjectConstructParam prop = properties[i];

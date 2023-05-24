@@ -95,9 +95,6 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #define DEFAULT_LINES_AMOUNT         50
 #define DEFAULT_FILTER_NUM_DAYS_GL  "30"
 
-static void gnc_plugin_page_register_class_init (GncPluginPageRegisterClass*
-                                                 klass);
-static void gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page);
 static void gnc_plugin_page_register_finalize (GObject* object);
 
 /* static Account *gnc_plugin_page_register_get_current_account (GncPluginPageRegister *page); */
@@ -478,8 +475,6 @@ G_DEFINE_TYPE_WITH_PRIVATE (GncPluginPageRegister, gnc_plugin_page_register,
 #define GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE(o)  \
    ((GncPluginPageRegisterPrivate*)gnc_plugin_page_register_get_instance_private((GncPluginPageRegister*)o))
 
-static GObjectClass* parent_class = NULL;
-
 /************************************************************/
 /*                      Implementation                      */
 /************************************************************/
@@ -606,8 +601,6 @@ gnc_plugin_page_register_class_init (GncPluginPageRegisterClass* klass)
     GObjectClass* object_class = G_OBJECT_CLASS (klass);
     GncPluginPageClass* gnc_plugin_class = GNC_PLUGIN_PAGE_CLASS (klass);
 
-    parent_class = g_type_class_peek_parent (klass);
-
     object_class->finalize = gnc_plugin_page_register_finalize;
 
     gnc_plugin_class->tab_icon        = GNC_ICON_ACCOUNT;
@@ -669,7 +662,7 @@ gnc_plugin_page_register_finalize (GObject* object)
 
     ENTER ("object %p", object);
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_page_register_parent_class)->finalize (object);
     LEAVE (" ");
 }
 
@@ -1176,7 +1169,7 @@ gnc_plugin_page_register_focus (GncPluginPage* plugin_page,
 
         // Chain up to use parent version of 'focus_page' which will
         // use an idle_add as the page changed signal is emitted multiple times.
-        GNC_PLUGIN_PAGE_CLASS (parent_class)->focus_page (plugin_page, TRUE);
+        GNC_PLUGIN_PAGE_CLASS (gnc_plugin_page_register_parent_class)->focus_page (plugin_page, TRUE);
     }
     else
         priv->page_focus = FALSE;

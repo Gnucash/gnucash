@@ -53,8 +53,6 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
-static void gnc_tree_model_commodity_class_init (GncTreeModelCommodityClass *klass);
-static void gnc_tree_model_commodity_init (GncTreeModelCommodity *model);
 static void gnc_tree_model_commodity_finalize (GObject *object);
 static void gnc_tree_model_commodity_dispose (GObject *object);
 
@@ -104,9 +102,6 @@ typedef struct GncTreeModelCommodityPrivate
 #define GNC_TREE_MODEL_COMMODITY_GET_PRIVATE(o)  \
    ((GncTreeModelCommodityPrivate*)gnc_tree_model_commodity_get_instance_private((GncTreeModelCommodity*)o))
 
-/** A pointer to the parent class of a commodity tree model. */
-static GObjectClass *parent_class = NULL;
-
 G_DEFINE_TYPE_WITH_CODE(GncTreeModelCommodity, gnc_tree_model_commodity, GNC_TYPE_TREE_MODEL,
                         G_ADD_PRIVATE(GncTreeModelCommodity)
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
@@ -116,8 +111,6 @@ static void
 gnc_tree_model_commodity_class_init (GncTreeModelCommodityClass *klass)
 {
     GObjectClass *o_class = G_OBJECT_CLASS (klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     o_class->finalize = gnc_tree_model_commodity_finalize;
     o_class->dispose = gnc_tree_model_commodity_dispose;
@@ -148,7 +141,7 @@ gnc_tree_model_commodity_finalize (GObject *object)
     priv->book = NULL;
     priv->commodity_table = NULL;
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_tree_model_commodity_parent_class)->finalize (object);
     LEAVE(" ");
 }
 
@@ -171,8 +164,7 @@ gnc_tree_model_commodity_dispose (GObject *object)
         priv->event_handler_id = 0;
     }
 
-    if (G_OBJECT_CLASS (parent_class)->dispose)
-        G_OBJECT_CLASS (parent_class)->dispose (object);
+    G_OBJECT_CLASS (gnc_tree_model_commodity_parent_class)->dispose (object);
     LEAVE(" ");
 }
 

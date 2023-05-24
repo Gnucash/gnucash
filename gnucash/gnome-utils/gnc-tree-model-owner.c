@@ -45,8 +45,6 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
-static void gnc_tree_model_owner_class_init (GncTreeModelOwnerClass *klass);
-static void gnc_tree_model_owner_init (GncTreeModelOwner *model);
 static void gnc_tree_model_owner_finalize (GObject *object);
 static void gnc_tree_model_owner_dispose (GObject *object);
 
@@ -135,15 +133,10 @@ gnc_tree_model_owner_update_color (gpointer gsettings, gchar *key, gpointer user
 /*               g_object required functions                */
 /************************************************************/
 
-/** A pointer to the parent class of an owner tree model. */
-static GObjectClass *parent_class = NULL;
-
 static void
 gnc_tree_model_owner_class_init (GncTreeModelOwnerClass *klass)
 {
     GObjectClass *o_class;
-
-    parent_class = g_type_class_peek_parent (klass);
 
     o_class = G_OBJECT_CLASS (klass);
 
@@ -199,8 +192,7 @@ gnc_tree_model_owner_finalize (GObject *object)
     priv->book       = NULL;
     priv->owner_list = NULL;
 
-    if (G_OBJECT_CLASS (parent_class)->finalize)
-        G_OBJECT_CLASS(parent_class)->finalize (object);
+    G_OBJECT_CLASS(gnc_tree_model_owner_parent_class)->finalize (object);
     LEAVE(" ");
 }
 
@@ -228,8 +220,7 @@ gnc_tree_model_owner_dispose (GObject *object)
                                 gnc_tree_model_owner_update_color,
                                 model);
 
-    if (G_OBJECT_CLASS (parent_class)->dispose)
-        G_OBJECT_CLASS (parent_class)->dispose (object);
+    G_OBJECT_CLASS (gnc_tree_model_owner_parent_class)->dispose (object);
     LEAVE(" ");
 }
 

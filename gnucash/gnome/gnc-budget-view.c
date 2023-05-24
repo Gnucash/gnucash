@@ -113,8 +113,6 @@ This enum is used to specify the specific type of account that the
  *                        Prototypes                        *
  ************************************************************/
 /* Plugin Actions */
-static void gnc_budget_view_class_init (GncBudgetViewClass *klass);
-static void gnc_budget_view_init (GncBudgetView *budget_view);
 static void gnc_budget_view_finalize (GObject *object);
 
 static void gbv_create_widget (GncBudgetView *budget_view);
@@ -214,8 +212,6 @@ static void
 gnc_budget_view_class_init (GncBudgetViewClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
-
-    gnc_budget_view_parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_budget_view_finalize;
 

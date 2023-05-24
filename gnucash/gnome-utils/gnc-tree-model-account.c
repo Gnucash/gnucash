@@ -49,8 +49,6 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
-static void gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass);
-static void gnc_tree_model_account_init (GncTreeModelAccount *model);
 static void gnc_tree_model_account_finalize (GObject *object);
 static void gnc_tree_model_account_dispose (GObject *object);
 
@@ -156,15 +154,10 @@ gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer us
 /*               g_object required functions                */
 /************************************************************/
 
-/** A pointer to the parent class of an account tree model. */
-static GObjectClass *parent_class = NULL;
-
 static void
 gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
 {
     GObjectClass *o_class;
-
-    parent_class = g_type_class_peek_parent (klass);
 
     o_class = G_OBJECT_CLASS(klass);
 
@@ -226,8 +219,7 @@ gnc_tree_model_account_finalize (GObject *object)
 
     priv->book = NULL;
 
-    if (G_OBJECT_CLASS(parent_class)->finalize)
-        G_OBJECT_CLASS(parent_class)->finalize (object);
+    G_OBJECT_CLASS(gnc_tree_model_account_parent_class)->finalize (object);
     LEAVE(" ");
 }
 
@@ -261,8 +253,7 @@ gnc_tree_model_account_dispose (GObject *object)
                                  gnc_tree_model_account_update_color,
                                  model);
 
-    if (G_OBJECT_CLASS(parent_class)->dispose)
-        G_OBJECT_CLASS(parent_class)->dispose (object);
+    G_OBJECT_CLASS(gnc_tree_model_account_parent_class)->dispose (object);
     LEAVE(" ");
 }
 

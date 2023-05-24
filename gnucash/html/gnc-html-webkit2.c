@@ -62,8 +62,6 @@ G_DEFINE_TYPE(GncHtmlWebkit, gnc_html_webkit, GNC_TYPE_HTML )
 
 static void gnc_html_webkit_dispose( GObject* obj );
 static void gnc_html_webkit_finalize( GObject* obj );
-static void gnc_html_webkit_class_init( GncHtmlWebkitClass* klass );
-static void gnc_html_webkit_init( GncHtmlWebkit* gs );
 
 #define GNC_HTML_WEBKIT_GET_PRIVATE(o) (GNC_HTML_WEBKIT(o)->priv)
 

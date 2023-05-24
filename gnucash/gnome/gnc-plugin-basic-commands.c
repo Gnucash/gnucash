@@ -63,8 +63,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI;
 
-static void gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass);
-static void gnc_plugin_basic_commands_init (GncPluginBasicCommands *plugin);
 static void gnc_plugin_basic_commands_finalize (GObject *object);
 
 static void gnc_plugin_basic_commands_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
@@ -187,9 +185,6 @@ typedef struct GncPluginBasicCommandsPrivate
 #define GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE(o)  \
    ((GncPluginBasicCommandsPrivate*)gnc_plugin_basic_commands_get_instance_private ((GncPluginBasicCommands*)o))
 
-/** A pointer to the parent class of a plugin page. */
-static GObjectClass *parent_class = NULL;
-
 /** Create a new basic commands menu plugin. */
 GncPlugin *
 gnc_plugin_basic_commands_new (void)
@@ -291,8 +286,6 @@ gnc_plugin_basic_commands_class_init (GncPluginBasicCommandsClass *klass)
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
 
-    parent_class = g_type_class_peek_parent (klass);
-
     object_class->finalize = gnc_plugin_basic_commands_finalize;
 
     /* plugin info */
@@ -334,7 +327,7 @@ gnc_plugin_basic_commands_finalize (GObject *object)
 {
     g_return_if_fail (GNC_IS_PLUGIN_BASIC_COMMANDS(object));
 
-    G_OBJECT_CLASS(parent_class)->finalize (object);
+    G_OBJECT_CLASS(gnc_plugin_basic_commands_parent_class)->finalize (object);
 }
 
 /************************************************************

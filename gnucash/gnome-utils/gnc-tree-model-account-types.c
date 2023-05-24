@@ -39,10 +39,6 @@ static GtkTreeModel *account_types_tree_model = NULL;
 
 /* Functions for the type system */
 static void
-gnc_tree_model_account_types_class_init (GncTreeModelAccountTypesClass *klass);
-static void
-gnc_tree_model_account_types_init (GncTreeModelAccountTypes * model);
-static void
 gnc_tree_model_account_types_finalize (GObject * object);
 
 
@@ -58,8 +54,6 @@ typedef struct GncTreeModelAccountTypesPrivate
 #define GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(o)  \
    ((GncTreeModelAccountTypesPrivate*)gnc_tree_model_account_types_get_instance_private((GncTreeModelAccountTypes*)o))
 
-static GObjectClass *parent_class = NULL;
-
 G_DEFINE_TYPE_WITH_CODE(GncTreeModelAccountTypes, gnc_tree_model_account_types, G_TYPE_OBJECT,
 			G_ADD_PRIVATE(GncTreeModelAccountTypes)
 			G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
@@ -69,8 +63,6 @@ static void
 gnc_tree_model_account_types_class_init (GncTreeModelAccountTypesClass * klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_tree_model_account_types_finalize;
 }
@@ -90,7 +82,7 @@ gnc_tree_model_account_types_finalize (GObject * object)
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT_TYPES (object));
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_tree_model_account_types_parent_class)->finalize (object);
 }
 
 GtkTreeModel *

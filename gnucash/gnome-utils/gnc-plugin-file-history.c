@@ -46,16 +46,12 @@
 #include "gnc-uri-utils.h"
 #include "gnc-gtk-utils.h"
 
-static GObjectClass *parent_class = NULL;
-
 #define FILENAME_STRING "filename"
 #define MAX_HISTORY_FILES 10    /* May be any number up to 10 */
 #define GNC_PREFS_GROUP_HISTORY   "history"
 #define GNC_PREF_HISTORY_MAXFILES "maxfiles"
 #define HISTORY_STRING_FILE_N   "file%d"
 
-static void gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass);
-static void gnc_plugin_file_history_init (GncPluginFileHistory *plugin);
 static void gnc_plugin_file_history_finalize (GObject *object);
 
 static void gnc_plugin_file_history_add_to_window (GncPlugin *plugin, GncMainWindow *window, GQuark type);
@@ -550,14 +546,14 @@ gnc_plugin_history_list_changed (gpointer prefs,
  *                  Object Implementation                   *
  ************************************************************/
 
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginFileHistory, gnc_plugin_file_history, GNC_TYPE_PLUGIN)
+
 /** Initialize the file history plugin class. */
 static void
 gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_plugin_file_history_finalize;
 
@@ -576,7 +572,6 @@ gnc_plugin_file_history_class_init (GncPluginFileHistoryClass *klass)
     plugin_class->ui_updates    = gnc_plugin_load_ui_items;
 }
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginFileHistory, gnc_plugin_file_history, GNC_TYPE_PLUGIN)
 
 /** Initialize an instance of the file history plugin. */
 static void
@@ -594,7 +589,7 @@ gnc_plugin_file_history_finalize (GObject *object)
     g_return_if_fail (GNC_IS_PLUGIN_FILE_HISTORY (object));
 
     ENTER("plugin %p", object);
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_file_history_parent_class)->finalize (object);
     LEAVE("");
 }
 

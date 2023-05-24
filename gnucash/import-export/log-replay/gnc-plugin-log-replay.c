@@ -31,8 +31,6 @@
 #include "gnc-plugin-manager.h"
 #include "gnc-component-manager.h"
 
-static void gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass);
-static void gnc_plugin_log_replay_init (GncPluginLogreplay *plugin);
 static void gnc_plugin_log_replay_finalize (GObject *object);
 
 /* Command callbacks */
@@ -66,8 +64,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginLogreplay, gnc_plugin_log_replay, GNC_TYPE_P
 #define GNC_PLUGIN_LOG_REPLAY_GET_PRIVATE(o)  \
    ((GncPluginLogreplayPrivate*)gnc_plugin_log_replay_get_instance_private((GncPluginLogReplay*)o))
 
-static GObjectClass *parent_class = NULL;
-
 GncPlugin *
 gnc_plugin_log_replay_new (void)
 {
@@ -79,8 +75,6 @@ gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_plugin_log_replay_finalize;
 
@@ -105,7 +99,7 @@ gnc_plugin_log_replay_finalize (GObject *object)
 {
     g_return_if_fail (GNC_IS_PLUGIN_LOG_REPLAY (object));
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_log_replay_parent_class)->finalize (object);
 }
 
 /************************************************************

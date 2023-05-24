@@ -58,8 +58,6 @@ enum
     GSL_N_COLUMNS
 };
 
-static void gnc_general_search_init         (GNCGeneralSearch      *gsl);
-static void gnc_general_search_class_init   (GNCGeneralSearchClass *klass);
 static void gnc_general_search_destroy      (GtkWidget             *widget);
 
 typedef struct _GNCGeneralSearchPrivate GNCGeneralSearchPrivate;
@@ -80,7 +78,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GNCGeneralSearch, gnc_general_search, GTK_TYPE_BOX)
 #define _PRIVATE(o) \
    ((GNCGeneralSearchPrivate*)gnc_general_search_get_instance_private((GNCGeneralSearch*)o))
 
-static GtkBoxClass *parent_class;
 static guint general_search_signals[LAST_SIGNAL];
 
 static void
@@ -88,7 +85,6 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
 {
     GtkWidgetClass *object_class = (GtkWidgetClass *) klass;
 
-    parent_class = g_type_class_peek_parent (klass);
 
     general_search_signals[SELECTION_CHANGED] =
         g_signal_new("changed",
@@ -141,8 +137,7 @@ gnc_general_search_destroy (GtkWidget *widget)
         priv->component_id = 0;
     }
 
-    if (GTK_WIDGET_CLASS (parent_class)->destroy)
-        GTK_WIDGET_CLASS (parent_class)->destroy (widget);
+    GTK_WIDGET_CLASS (gnc_general_search_parent_class)->destroy (widget);
 }
 
 /* The "selection" contents have changed.  Change the text. */

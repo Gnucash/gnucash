@@ -46,12 +46,7 @@
 
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
-/** A pointer to the parent class of a plugin. */
-static gpointer parent_class = NULL;
 
-static void gnc_plugin_class_init (GncPluginClass *klass);
-static void gnc_plugin_init       (GncPlugin *plugin_page,
-                                   void *data);
 static void gnc_plugin_finalize   (GObject *object);
 
 
@@ -80,7 +75,6 @@ gnc_plugin_class_init (GncPluginClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
-    parent_class = g_type_class_peek_parent (klass);
     gobject_class->finalize = gnc_plugin_finalize;
 }
 
@@ -116,7 +110,7 @@ gnc_plugin_finalize (GObject *object)
     g_return_if_fail (GNC_IS_PLUGIN (object));
 
     gnc_gobject_tracking_forget(object);
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_parent_class)->finalize (object);
 }
 
 

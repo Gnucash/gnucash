@@ -36,9 +36,6 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
-static void gnc_tree_model_class_init (GncTreeModelClass *klass);
-static void gnc_tree_model_init (GncTreeModel *model,
-		                 void *data);
 static void gnc_tree_model_finalize (GObject *object);
 
 /** The instance private data for a generic tree model. */
@@ -58,15 +55,10 @@ GNC_DEFINE_TYPE_WITH_CODE(GncTreeModel, gnc_tree_model, G_TYPE_OBJECT,
 /*               g_object required functions                */
 /************************************************************/
 
-/** A pointer to the parent class of a generic tree model. */
-static GObjectClass *parent_class = NULL;
-
 static void
 gnc_tree_model_class_init (GncTreeModelClass *klass)
 {
     GObjectClass *o_class;
-
-    parent_class = g_type_class_peek_parent (klass);
 
     o_class = G_OBJECT_CLASS (klass);
 
@@ -95,7 +87,6 @@ gnc_tree_model_finalize (GObject *object)
 
     gnc_gobject_tracking_forget(object);
 
-    if (G_OBJECT_CLASS (parent_class)->finalize)
-        G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_tree_model_parent_class)->finalize (object);
     LEAVE(" ");
 }

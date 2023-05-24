@@ -34,8 +34,6 @@
 /** The debugging module used by this file. */
 __attribute__((unused)) static QofLogModule log_module = GNC_MOD_GUI;
 
-static void gnc_report_combo_init       (GncReportCombo      *grc);
-static void gnc_report_combo_class_init (GncReportComboClass *klass);
 static void gnc_report_combo_dispose    (GObject *object);
 static void gnc_report_combo_finalize   (GObject *object);
 

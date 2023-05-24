@@ -82,8 +82,6 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
-static void gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass);
-static void gnc_tree_model_price_init (GncTreeModelPrice *model);
 static void gnc_tree_model_price_finalize (GObject *object);
 static void gnc_tree_model_price_dispose (GObject *object);
 
@@ -134,9 +132,6 @@ typedef struct GncTreeModelPricePrivate
 #define GNC_TREE_MODEL_PRICE_GET_PRIVATE(o)  \
    ((GncTreeModelPricePrivate*)gnc_tree_model_price_get_instance_private((GncTreeModelPrice*)o))
 
-/** A pointer to the parent class of a price tree model. */
-static GObjectClass *parent_class = NULL;
-
 G_DEFINE_TYPE_WITH_CODE(GncTreeModelPrice, gnc_tree_model_price, GNC_TYPE_TREE_MODEL,
                         G_ADD_PRIVATE(GncTreeModelPrice)
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
@@ -146,8 +141,6 @@ static void
 gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass)
 {
     GObjectClass *o_class = G_OBJECT_CLASS (klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     o_class->finalize = gnc_tree_model_price_finalize;
     o_class->dispose = gnc_tree_model_price_dispose;
@@ -184,7 +177,7 @@ gnc_tree_model_price_finalize (GObject *object)
     priv->book = NULL;
     priv->price_db = NULL;
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_tree_model_price_parent_class)->finalize (object);
     LEAVE(" ");
 }
 
@@ -207,8 +200,7 @@ gnc_tree_model_price_dispose (GObject *object)
         priv->event_handler_id = 0;
     }
 
-    if (G_OBJECT_CLASS (parent_class)->dispose)
-        G_OBJECT_CLASS (parent_class)->dispose (object);
+    G_OBJECT_CLASS (gnc_tree_model_price_parent_class)->dispose (object);
     LEAVE(" ");
 }
 

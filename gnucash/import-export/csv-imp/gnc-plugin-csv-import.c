@@ -32,8 +32,6 @@
 #include "assistant-csv-trans-import.h"
 #include "assistant-csv-price-import.h"
 
-static void gnc_plugin_csv_import_class_init (GncPluginCsvImportClass *klass);
-static void gnc_plugin_csv_import_init (GncPluginCsvImport *plugin);
 static void gnc_plugin_csv_import_finalize (GObject *object);
 
 /* Command callbacks */
@@ -70,8 +68,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginCsvImport, gnc_plugin_csv_import, GNC_TYPE_P
 #define GNC_PLUGIN_CSV_IMPORT_GET_PRIVATE(o)  \
    ((GncPluginCsvImportPrivate*)gnc_plugin_csv_import_get_instance_private((GncPluginCsvImport*)o))
 
-static GObjectClass *parent_class = NULL;
-
 GncPlugin *
 gnc_plugin_csv_import_new (void)
 {
@@ -83,8 +79,6 @@ gnc_plugin_csv_import_class_init (GncPluginCsvImportClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_plugin_csv_import_finalize;
 
@@ -109,7 +103,7 @@ gnc_plugin_csv_import_finalize (GObject *object)
 {
     g_return_if_fail (GNC_IS_PLUGIN_CSV_IMPORT (object));
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_csv_import_parent_class)->finalize (object);
 }
 
 /************************************************************

@@ -27,8 +27,6 @@
 
 #include "gnc-cell-view.h"
 
-static void     gnc_cell_view_init          (GncCellView          *cv);
-static void     gnc_cell_view_class_init    (GncCellViewClass     *klass);
 static void     gnc_cell_view_editable_init (GtkCellEditableIface *iface);
 
 static void     gnc_cell_view_set_property  (GObject              *object,

@@ -52,12 +52,9 @@ enum
 
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
-/** A pointer to the parent class of an embedded window. */
-static GObjectClass *parent_class = NULL;
 
 
 /* Declarations *********************************************************/
-static void gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass);
 static void gnc_embedded_window_finalize (GObject *object);
 static void gnc_embedded_window_dispose (GObject *object);
 
@@ -190,8 +187,6 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
     ENTER("klass %p", klass);
     object_class = G_OBJECT_CLASS (klass);
 
-    parent_class = g_type_class_peek_parent (klass);
-
     object_class->finalize = gnc_embedded_window_finalize;
     object_class->dispose = gnc_embedded_window_dispose;
 
@@ -257,7 +252,7 @@ gnc_embedded_window_finalize (GObject *object)
 
     ENTER("object %p", object);
     gnc_gobject_tracking_forget(object);
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_embedded_window_parent_class)->finalize (object);
     LEAVE(" ");
 }
 
@@ -287,7 +282,7 @@ gnc_embedded_window_dispose (GObject *object)
         priv->page = NULL;
     }
 
-    G_OBJECT_CLASS (parent_class)->dispose (object);
+    G_OBJECT_CLASS (gnc_embedded_window_parent_class)->dispose (object);
     LEAVE(" ");
 }
 

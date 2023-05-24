@@ -45,8 +45,6 @@ static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_string_class_init	(GNCSearchStringClass *klass);
-static void gnc_search_string_init	(GNCSearchString *gspaper);
 static void gnc_search_string_finalize	(GObject *obj);
 
 typedef struct _GNCSearchStringPrivate GNCSearchStringPrivate;
@@ -62,8 +60,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchString, gnc_search_string, GNC_TYPE_SEARCH_C
 #define _PRIVATE(o) \
    ((GNCSearchStringPrivate*)gnc_search_string_get_instance_private((GNCSearchString*)o))
 
-static GNCSearchCoreTypeClass *parent_class;
-
 static void
 gnc_search_string_class_init (GNCSearchStringClass *klass)
 {
@@ -71,7 +67,6 @@ gnc_search_string_class_init (GNCSearchStringClass *klass)
     GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)klass;
 
     object_class = G_OBJECT_CLASS (klass);
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_string_finalize;
 
@@ -101,7 +96,7 @@ gnc_search_string_finalize (GObject *obj)
 
     g_free (o->value);
 
-    G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (gnc_search_string_parent_class)->finalize(obj);
 }
 
 /**

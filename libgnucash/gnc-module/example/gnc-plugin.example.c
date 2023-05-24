@@ -35,8 +35,6 @@
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = G_LOG_DOMAIN;
 
-static void gnc_plugin_example_class_init         (GncPluginexampleClass *klass);
-static void gnc_plugin_example_init               (GncPluginexample *plugin);
 static void gnc_plugin_example_finalize           (GObject *object);
 
 /* Command callbacks */

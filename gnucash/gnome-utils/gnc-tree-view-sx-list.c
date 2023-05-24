@@ -47,8 +47,6 @@ static QofLogModule log_module = LOG_MOD;
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN LOG_MOD
 
-static void gnc_tree_view_sx_list_class_init(GncTreeViewSxListClass *klass);
-static void gnc_tree_view_sx_list_init(GncTreeViewSxList *view);
 static void gnc_tree_view_sx_list_dispose(GObject *object);
 static void gnc_tree_view_sx_list_finalize(GObject *object);
 
@@ -61,8 +59,6 @@ typedef struct GncTreeViewSxListPrivate
 #define GNC_TREE_VIEW_SX_LIST_GET_PRIVATE(o)  \
    ((GncTreeViewSxListPrivate*)gnc_tree_view_sx_list_get_instance_private((GncTreeViewSxList*)o))
 
-static GObjectClass *parent_class = NULL;
-
 G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewSxList, gnc_tree_view_sx_list, GNC_TYPE_TREE_VIEW)
 
 static void
@@ -70,7 +66,6 @@ gnc_tree_view_sx_list_class_init(GncTreeViewSxListClass *klass)
 {
     GObjectClass *o_class;
 
-    parent_class = g_type_class_peek_parent (klass);
 
     o_class = G_OBJECT_CLASS (klass);
 
@@ -103,8 +98,7 @@ gnc_tree_view_sx_list_dispose(GObject *object)
     g_object_unref(G_OBJECT(priv->tree_model));
     priv->tree_model = NULL;
 
-    if (G_OBJECT_CLASS (parent_class)->dispose)
-        (* G_OBJECT_CLASS (parent_class)->dispose) (object);
+    G_OBJECT_CLASS (gnc_tree_view_sx_list_parent_class)->dispose (object);
 }
 
 static void
@@ -113,8 +107,7 @@ gnc_tree_view_sx_list_finalize(GObject *object)
     gnc_leave_return_if_fail(object != NULL);
     gnc_leave_return_if_fail(GNC_IS_TREE_VIEW_SX_LIST (object));
 
-    if (G_OBJECT_CLASS(parent_class)->finalize)
-        (* G_OBJECT_CLASS(parent_class)->finalize) (object);
+    G_OBJECT_CLASS(gnc_tree_view_sx_list_parent_class)->finalize (object);
 }
 
 GtkTreeView*

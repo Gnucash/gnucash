@@ -44,8 +44,6 @@ static void grab_focus (GNCSearchCoreType *fe);
 static void editable_enters (GNCSearchCoreType *fe);
 static gboolean validate (GNCSearchCoreType *fe);
 
-static void gnc_search_core_type_class_init	(GNCSearchCoreTypeClass *klass);
-static void gnc_search_core_type_init	(GNCSearchCoreType *gspaper);
 static void gnc_search_core_type_finalize	(GObject *obj);
 
 typedef struct _GNCSearchCoreTypePrivate GNCSearchCoreTypePrivate;
@@ -60,8 +58,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchCoreType, gnc_search_core_type, G_TYPE_OBJEC
 #define _PRIVATE(o) \
    ((GNCSearchCoreTypePrivate*)gnc_search_core_type_get_instance_private((GNCSearchCoreType*)o))
 
-static GObjectClass *parent_class;
-
 static GHashTable *typeTable = NULL;
 
 static void
@@ -70,7 +66,6 @@ gnc_search_core_type_class_init (GNCSearchCoreTypeClass *klass)
     GObjectClass *object_class;
 
     object_class = G_OBJECT_CLASS (klass);
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_core_type_finalize;
 
@@ -91,7 +86,7 @@ gnc_search_core_type_finalize (GObject *obj)
     GNCSearchCoreType *o = (GNCSearchCoreType *)obj;
     g_assert (GNC_IS_SEARCH_CORE_TYPE (o));
 
-    G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (gnc_search_core_type_parent_class)->finalize(obj);
 }
 
 /**

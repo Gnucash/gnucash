@@ -61,8 +61,6 @@
 G_GNUC_UNUSED static QofLogModule log_module = G_LOG_DOMAIN;
 
 /* g_object functions */
-static void gnc_plugin_business_class_init (GncPluginBusinessClass *klass);
-static void gnc_plugin_business_init (GncPluginBusiness *plugin);
 static void gnc_plugin_business_finalize (GObject *object);
 static void gnc_plugin_business_add_to_window (GncPlugin *plugin,
                                                GncMainWindow *window,
@@ -186,8 +184,6 @@ typedef struct GncPluginBusinessPrivate
 #define GNC_PLUGIN_BUSINESS_GET_PRIVATE(o)  \
    ((GncPluginBusinessPrivate*)gnc_plugin_business_get_instance_private((GncPluginBusiness*)o))
 
-static GObjectClass *parent_class = NULL;
-
 GncPlugin *
 gnc_plugin_business_new (void)
 {
@@ -211,8 +207,6 @@ gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_plugin_business_finalize;
 
@@ -251,7 +245,7 @@ gnc_plugin_business_finalize (GObject *object)
 {
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (object));
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_business_parent_class)->finalize (object);
 }
 
 /************************************************************

@@ -47,8 +47,6 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
-static void gnc_tree_view_price_class_init (GncTreeViewPriceClass *klass);
-static void gnc_tree_view_price_init (GncTreeViewPrice *view);
 static void gnc_tree_view_price_finalize (GObject *object);
 static void gnc_tree_view_price_destroy (GtkWidget *widget);
 
@@ -65,8 +63,6 @@ typedef struct GncTreeViewPricePrivate
 /*               g_object required functions                */
 /************************************************************/
 
-static GObjectClass *parent_class = NULL;
-
 G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewPrice, gnc_tree_view_price, GNC_TYPE_TREE_VIEW)
 
 static void
@@ -74,8 +70,6 @@ gnc_tree_view_price_class_init (GncTreeViewPriceClass *klass)
 {
     GObjectClass *o_class;
     GtkWidgetClass *widget_class;
-
-    parent_class = g_type_class_peek_parent (klass);
 
     o_class = G_OBJECT_CLASS (klass);
     widget_class = GTK_WIDGET_CLASS (klass);
@@ -99,8 +93,7 @@ gnc_tree_view_price_finalize (GObject *object)
     gnc_leave_return_if_fail (object != NULL);
     gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_PRICE (object));
 
-    if (G_OBJECT_CLASS (parent_class)->finalize)
-        (* G_OBJECT_CLASS (parent_class)->finalize) (object);
+    G_OBJECT_CLASS (gnc_tree_view_price_parent_class)->finalize (object);
     LEAVE(" ");
 }
 
@@ -111,8 +104,7 @@ gnc_tree_view_price_destroy (GtkWidget *widget)
     gnc_leave_return_if_fail (widget != NULL);
     gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_PRICE (widget));
 
-    if (GTK_WIDGET_CLASS (parent_class)->destroy)
-        (* GTK_WIDGET_CLASS (parent_class)->destroy) (widget);
+    GTK_WIDGET_CLASS (gnc_tree_view_price_parent_class)->destroy (widget);
     LEAVE(" ");
 }
 

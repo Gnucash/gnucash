@@ -43,8 +43,6 @@ static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_reconciled_class_init	(GNCSearchReconciledClass *klass);
-static void gnc_search_reconciled_init	(GNCSearchReconciled *gspaper);
 static void gnc_search_reconciled_finalize	(GObject *obj);
 
 typedef struct _GNCSearchReconciledPrivate GNCSearchReconciledPrivate;
@@ -60,8 +58,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchReconciled, gnc_search_reconciled, GNC_TYPE_
 #define _PRIVATE(o) \
    ((GNCSearchReconciledPrivate*)gnc_search_reconciled_get_instance_private((GNCSearchReconciled*)o))
 
-static GNCSearchCoreTypeClass *parent_class;
-
 static void
 gnc_search_reconciled_class_init (GNCSearchReconciledClass *klass)
 {
@@ -69,7 +65,6 @@ gnc_search_reconciled_class_init (GNCSearchReconciledClass *klass)
     GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)klass;
 
     object_class = G_OBJECT_CLASS (klass);
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_reconciled_finalize;
 
@@ -94,7 +89,7 @@ gnc_search_reconciled_finalize (GObject *obj)
     GNCSearchReconciled *o = (GNCSearchReconciled *)obj;
     g_assert (IS_GNCSEARCH_RECONCILED (o));
 
-    G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (gnc_search_reconciled_parent_class)->finalize(obj);
 }
 
 /**

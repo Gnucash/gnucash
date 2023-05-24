@@ -84,9 +84,6 @@ static QofLogModule log_module = GNC_MOD_BUDGET;
  *                        Prototypes                        *
  ************************************************************/
 /* Plugin Actions */
-static void
-gnc_plugin_page_budget_class_init (GncPluginPageBudgetClass *klass);
-static void gnc_plugin_page_budget_init (GncPluginPageBudget *plugin_page);
 static void gnc_plugin_page_budget_finalize (GObject *object);
 
 static GtkWidget *
@@ -233,8 +230,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageBudget, gnc_plugin_page_budget, GNC_TYPE
 #define GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(o)  \
    ((GncPluginPageBudgetPrivate*)gnc_plugin_page_budget_get_instance_private((GncPluginPageBudget*)o))
 
-static GObjectClass *parent_class = NULL;
-
 GncPluginPage *
 gnc_plugin_page_budget_new (GncBudget *budget)
 {
@@ -279,8 +274,6 @@ gnc_plugin_page_budget_class_init (GncPluginPageBudgetClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
     GncPluginPageClass *gnc_plugin_class = GNC_PLUGIN_PAGE_CLASS(klass);
-
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_plugin_page_budget_finalize;
 
@@ -350,7 +343,7 @@ gnc_plugin_page_budget_finalize (GObject *object)
     page = GNC_PLUGIN_PAGE_BUDGET(object);
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
 
-    G_OBJECT_CLASS (parent_class)->finalize (object);
+    G_OBJECT_CLASS (gnc_plugin_page_budget_parent_class)->finalize (object);
     LEAVE(" ");
 }
 

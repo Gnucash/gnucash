@@ -41,8 +41,6 @@ static gboolean gncs_validate (GNCSearchCoreType *fe);
 static GtkWidget *gncs_get_widget(GNCSearchCoreType *fe);
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
-static void gnc_search_boolean_class_init	(GNCSearchBooleanClass *klass);
-static void gnc_search_boolean_init	(GNCSearchBoolean *gspaper);
 static void gnc_search_boolean_finalize	(GObject *obj);
 
 typedef struct _GNCSearchBooleanPrivate GNCSearchBooleanPrivate;
@@ -58,8 +56,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchBoolean, gnc_search_boolean, GNC_TYPE_SEARCH
 #define _PRIVATE(o) \
    ((GNCSearchBooleanPrivate*)gnc_search_boolean_get_instance_private((GNCSearchBoolean*)o))
 
-static GNCSearchCoreTypeClass *parent_class;
-
 static void
 gnc_search_boolean_class_init (GNCSearchBooleanClass *klass)
 {
@@ -67,7 +63,6 @@ gnc_search_boolean_class_init (GNCSearchBooleanClass *klass)
     GNCSearchCoreTypeClass *gnc_search_core_type = (GNCSearchCoreTypeClass *)klass;
 
     object_class = G_OBJECT_CLASS (klass);
-    parent_class = g_type_class_peek_parent (klass);
 
     object_class->finalize = gnc_search_boolean_finalize;
 
@@ -91,7 +86,7 @@ gnc_search_boolean_finalize (GObject *obj)
     GNCSearchBoolean *o = (GNCSearchBoolean *)obj;
     g_assert (IS_GNCSEARCH_BOOLEAN (o));
 
-    G_OBJECT_CLASS (parent_class)->finalize(obj);
+    G_OBJECT_CLASS (gnc_search_boolean_parent_class)->finalize(obj);
 }
 
 /**
