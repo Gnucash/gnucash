@@ -465,6 +465,7 @@ static void removeClicked(GtkButton *b, gpointer data)
         removeRecurrence(grc);
 }
 
+G_DEFINE_TYPE (GncRecurrenceComp, gnc_recurrence_comp, GTK_TYPE_SCROLLED_WINDOW)
 
 void
 gnc_recurrence_comp_set_list(GncRecurrenceComp *grc, const GList *rlist)
@@ -560,34 +561,8 @@ gnc_recurrence_comp_class_init( GncRecurrenceCompClass *klass )
 		  G_TYPE_NONE,
 		  0);
 
-    //parent_class = g_type_class_peek_parent (klass);
     //object_class->finalize = gnc_recurrence_finalize;
 }
-
-
-GType
-gnc_recurrence_comp_get_type()
-{
-    static GType type = 0;
-    if (type == 0)
-    {
-        static GTypeInfo typeinfo =
-        {
-            sizeof(GncRecurrenceCompClass),
-            NULL, NULL,
-            (GClassInitFunc)gnc_recurrence_comp_class_init,
-            NULL, NULL,
-            sizeof(GncRecurrenceComp),
-            0,
-            (GInstanceInitFunc)gnc_recurrence_comp_init
-        };
-
-        type = g_type_register_static (GTK_TYPE_SCROLLED_WINDOW,
-                                       "GncRecurrenceComp", &typeinfo, 0);
-    }
-    return type;
-}
-
 
 GtkWidget *
 gnc_recurrence_comp_new()
