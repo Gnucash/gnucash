@@ -40,7 +40,7 @@
 #define G_LOG_DOMAIN "gnc.gui.sx.adapter.sx-dense-cal"
 static const QofLogModule log_module = G_LOG_DOMAIN;
 
-static void gnc_sx_instance_dense_cal_adapter_interface_init(GncDenseCalModelIface *iface);
+static void gnc_sx_instance_dense_cal_adapter_interface_init(GncDenseCalModelInterface *iface);
 static void gnc_sx_instance_dense_cal_adapter_dispose(GObject *obj);
 static void gnc_sx_instance_dense_cal_adapter_finalize(GObject *obj);
 
@@ -82,7 +82,7 @@ gnc_sx_instance_dense_cal_adapter_init(GncSxInstanceDenseCalAdapter *instance)
 }
 
 static void
-gnc_sx_instance_dense_cal_adapter_interface_init(GncDenseCalModelIface *iface)
+gnc_sx_instance_dense_cal_adapter_interface_init(GncDenseCalModelInterface *iface)
 {
     iface->get_contained = gsidca_get_contained;
     iface->get_name = gsidca_get_name;

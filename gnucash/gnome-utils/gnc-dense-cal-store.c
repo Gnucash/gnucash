@@ -59,7 +59,7 @@ struct _GncDenseCalStoreClass
     GObjectClass parent_class;
 };
 
-static void gnc_dense_cal_store_iface_init(GncDenseCalModelIface *iface);
+static void gnc_dense_cal_store_iface_init(GncDenseCalModelInterface *iface);
 static void gnc_dense_cal_store_finalize(GObject *obj);
 
 static GList* gdcs_get_contained(GncDenseCalModel *model);
@@ -85,7 +85,7 @@ gnc_dense_cal_store_init(GncDenseCalStore *self)
 }
 
 static void
-gnc_dense_cal_store_iface_init(GncDenseCalModelIface *iface)
+gnc_dense_cal_store_iface_init(GncDenseCalModelInterface *iface)
 {
     iface->get_contained = gdcs_get_contained;
     iface->get_name = gdcs_get_name;
