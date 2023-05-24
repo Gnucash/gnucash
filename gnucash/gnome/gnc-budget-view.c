@@ -1344,7 +1344,7 @@ totals_col_source (GtkTreeViewColumn *col, GtkCellRenderer *cell,
         GNCAccountType acctype;
 
         currency = gnc_account_get_currency_or_parent (account);
-        acctype = xaccAccountGetType (account);
+        acctype = xaccAccountTypeGetFundamental (xaccAccountGetType (account));
 
         neg = gnc_reverse_balance (account);
 
