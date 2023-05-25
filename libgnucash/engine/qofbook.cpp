@@ -59,8 +59,6 @@
 #include "qofbook.hpp"
 
 static QofLogModule log_module = QOF_MOD_ENGINE;
-#define AB_KEY "hbci"
-#define AB_TEMPLATES "template-list"
 
 enum
 {
@@ -72,7 +70,6 @@ enum
     PROP_OPT_NUM_FIELD_SOURCE,              /* KVP */
     PROP_OPT_DEFAULT_BUDGET,                /* KVP */
     PROP_OPT_FY_END,                        /* KVP */
-    PROP_AB_TEMPLATES,                      /* KVP */
 };
 
 static void
@@ -180,9 +177,6 @@ qof_book_get_property (GObject* object,
     case PROP_OPT_FY_END:
         qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {"fy_end"});
         break;
-    case PROP_AB_TEMPLATES:
-          qof_instance_get_path_kvp (QOF_INSTANCE (book), value, {"AB_KEY", "AB_TEMPLATES"});
-        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
         break;
@@ -221,9 +215,6 @@ qof_book_set_property (GObject      *object,
         break;
     case PROP_OPT_FY_END:
         qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {"fy_end"});
-        break;
-    case PROP_AB_TEMPLATES:
-        qof_instance_set_path_kvp (QOF_INSTANCE (book), value, {AB_KEY, AB_TEMPLATES});
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -289,14 +280,6 @@ qof_book_class_init (QofBookClass *klass)
                         "A GDate with a bogus year having the last Month and "
                         "Day of the Fiscal year for the book.",
                         G_TYPE_DATE,
-                        G_PARAM_READWRITE));
-    g_object_class_install_property
-    (gobject_class,
-     PROP_AB_TEMPLATES,
-     g_param_spec_boxed("ab-templates",
-                        "AQBanking Template List",
-                        "A GList of AQBanking Templates",
-                        GNC_TYPE_VALUE_LIST,
                         G_PARAM_READWRITE));
 }
 
