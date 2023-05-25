@@ -1379,36 +1379,22 @@ gnc_dow_abbrev(gchar *buf, int buf_len, int dow)
  *  GValue handling
  ********************************************************************/
 
-static gpointer
-time64_boxed_copy_func (gpointer in_time64)
+static Time64*
+time64_boxed_copy_func (Time64 *in_time64)
 {
-    Time64* newvalue;
-
-    newvalue = static_cast<Time64*>(g_malloc (sizeof (Time64)));
-    memcpy (newvalue, in_time64, sizeof(Time64));
+    Time64* newvalue = g_new (Time64, 1);
+    *newvalue = *in_time64;
 
     return newvalue;
 }
 
 static void
-time64_boxed_free_func (gpointer in_time64)
+time64_boxed_free_func (Time64 *in_time64)
 {
     g_free (in_time64);
 }
 
-GType
-time64_get_type( void )
-{
-    static GType type = 0;
-
-    if ( type == 0 )
-    {
-        type = g_boxed_type_register_static( "time64",
-                                             time64_boxed_copy_func,
-                                             time64_boxed_free_func );
-    }
-    return type;
-}
+G_DEFINE_BOXED_TYPE (Time64, time64, time64_boxed_copy_func, time64_boxed_free_func)
 
 /* ================================================= */
 
