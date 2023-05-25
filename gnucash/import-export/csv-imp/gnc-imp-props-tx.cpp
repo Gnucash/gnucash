@@ -52,6 +52,46 @@ namespace bl = boost::locale;
 
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_IMPORT;
 
+/* This map contains a set of strings representing the AMOUNT column informal
+ * names for different account types. */
+std::map<GNCAccountType, const char*> gnc_imp_amount_strs = {
+    { ACCT_TYPE_NONE,       N_("Amount (sign-standard)") },
+    { ACCT_TYPE_BANK,       N_("Amount: +Deposit -Withdrawal") },
+    { ACCT_TYPE_CASH,       N_("Amount: +Receive -Spend") },
+    { ACCT_TYPE_CREDIT,     N_("Amount: +Payment -Charge") },
+    { ACCT_TYPE_ASSET,      N_("Amount: +Increase -Decrease") },
+    { ACCT_TYPE_LIABILITY,  N_("Amount: +Decrease -Increase") },
+    { ACCT_TYPE_STOCK,      N_("Amount: +Buy -Sell") },
+    { ACCT_TYPE_MUTUAL,     N_("Amount: +Buy -Sell") },
+    { ACCT_TYPE_CURRENCY,   N_("Amount: +Buy -Sell") },
+    { ACCT_TYPE_INCOME,     N_("Amount: +Charge -Income") },
+    { ACCT_TYPE_EXPENSE,    N_("Amount: +Expense -Rebate") },
+    { ACCT_TYPE_PAYABLE,    N_("Amount: +Payment -Bill") },
+    { ACCT_TYPE_RECEIVABLE, N_("Amount: +Invoice -Payment") },
+    { ACCT_TYPE_TRADING,    N_("Amount: +Decrease -Increase") },
+    { ACCT_TYPE_EQUITY,     N_("Amount: +Decrease -Increase") },
+};
+
+/* This map contains a set of strings representing the AMOUNT_NEG column informal
+ * names for different account types. */
+std::map<GNCAccountType, const char*> gnc_imp_amtneg_strs = {
+    { ACCT_TYPE_NONE,       N_("Amount (sign-reversed)") },
+    { ACCT_TYPE_BANK,       N_("Amount: +Withdrawal -Deposit") },
+    { ACCT_TYPE_CASH,       N_("Amount: +Spend -Receive") },
+    { ACCT_TYPE_CREDIT,     N_("Amount: +Charge -Payment") },
+    { ACCT_TYPE_ASSET,      N_("Amount: +Decrease -Increase") },
+    { ACCT_TYPE_LIABILITY,  N_("Amount: +Increase -Decrease") },
+    { ACCT_TYPE_STOCK,      N_("Amount: +Sell -Buy") },
+    { ACCT_TYPE_MUTUAL,     N_("Amount: +Sell -Buy") },
+    { ACCT_TYPE_CURRENCY,   N_("Amount: +Sell -Buy") },
+    { ACCT_TYPE_INCOME,     N_("Amount: +Income -Charge") },
+    { ACCT_TYPE_EXPENSE,    N_("Amount: +Rebate -Expense") },
+    { ACCT_TYPE_PAYABLE,    N_("Amount: +Bill -Payment") },
+    { ACCT_TYPE_RECEIVABLE, N_("Amount: +Payment -Invoice") },
+    { ACCT_TYPE_TRADING,    N_("Amount: +Increase -Decrease") },
+    { ACCT_TYPE_EQUITY,     N_("Amount: +Increase -Decrease") },
+};
+
 /* This map contains a set of strings representing the different column types. */
 std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::NONE, N_("None") },
@@ -64,10 +104,10 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::VOID_REASON, N_("Void Reason") },
         { GncTransPropType::ACTION, N_("Action") },
         { GncTransPropType::ACCOUNT, N_("Account") },
-        { GncTransPropType::AMOUNT, N_("Amount") },
-        { GncTransPropType::AMOUNT_NEG, N_("Amount (Negated)") },
+        { GncTransPropType::AMOUNT,  gnc_imp_amount_strs[ACCT_TYPE_NONE] },
+        { GncTransPropType::AMOUNT_NEG, gnc_imp_amtneg_strs[ACCT_TYPE_NONE] },
         { GncTransPropType::VALUE, N_("Value") },
-        { GncTransPropType::VALUE_NEG, N_("Value (Negated)") },
+        { GncTransPropType::VALUE_NEG, N_("Value (sign-reversed)") },
         { GncTransPropType::PRICE, N_("Price") },
         { GncTransPropType::MEMO, N_("Memo") },
         { GncTransPropType::REC_STATE, N_("Reconciled") },
@@ -75,7 +115,7 @@ std::map<GncTransPropType, const char*> gnc_csv_col_type_strs = {
         { GncTransPropType::TACTION, N_("Transfer Action") },
         { GncTransPropType::TACCOUNT, N_("Transfer Account") },
         { GncTransPropType::TAMOUNT, N_("Transfer Amount") },
-        { GncTransPropType::TAMOUNT_NEG, N_("Transfer Amount (Negated)") },
+        { GncTransPropType::TAMOUNT_NEG, N_("Transfer Amount (sign-reversed)") },
         { GncTransPropType::TMEMO, N_("Transfer Memo") },
         { GncTransPropType::TREC_STATE, N_("Transfer Reconciled") },
         { GncTransPropType::TREC_DATE, N_("Transfer Reconcile Date") }
@@ -659,10 +699,10 @@ StrVec GncPreSplit::verify_essentials()
     if (m_pre_trans->is_multi_currency())
     {
         if (m_pre_trans->m_multi_split && !m_price && !m_value && !m_value_neg)
-            err_msg.emplace_back( _("Choice of accounts makes this a multi-currency transaction but price or (negated) value column is missing or invalid."));
+            err_msg.emplace_back( _("Choice of accounts makes this a multi-currency transaction but price or value column is missing or invalid."));
         else if (!m_pre_trans->m_multi_split &&
             !m_price && !m_value && !m_value_neg && !m_tamount && !m_tamount_neg )
-            err_msg.emplace_back( _("Choice of account makes this a multi-currency transaction but price, (negated) value or (negated) transfer column is missing or invalid."));
+            err_msg.emplace_back( _("Choice of account makes this a multi-currency transaction but price, value or transfer column is missing or invalid."));
     }
 
     return err_msg;
