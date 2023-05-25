@@ -232,17 +232,6 @@ int compare(const KvpFrameImpl & one, const KvpFrameImpl & two) noexcept
     return 0;
 }
 
-static void
-kvp_value_list_from_gvalue (GValue *gval, gpointer pList)
-{
-    GList **kvplist = (GList**)pList;
-    KvpValue *kvp;
-    if (!(gval && G_VALUE_TYPE (gval)))
-        return;
-    kvp = kvp_value_from_gvalue (gval);
-    *kvplist = g_list_prepend (*kvplist, kvp);
-}
-
 GValue*
 gvalue_from_kvp_value (const KvpValue *kval, GValue* val)
 {
@@ -283,14 +272,12 @@ gvalue_from_kvp_value (const KvpValue *kval, GValue* val)
             g_value_set_static_boxed (val, kval->get_ptr<GDate>());
             break;
         case KvpValue::Type::GLIST:
-        {
-            g_value_init (val, GNC_TYPE_VALUE_LIST);
-            g_value_set_static_boxed (val, kval->get<GList*>());
-            break;
-        }
+            PWARN ("Error! Attempt to transfer KvpGList!");
+            [[fallthrough]];
 /* No transfer of KVP frames outside of QofInstance-derived classes! */
         case KvpValue::Type::FRAME:
             PWARN ("Error! Attempt to transfer KvpFrame!");
+            [[fallthrough]];
         default:
             PWARN ("Error! Invalid KVP Transfer Request!");
             g_slice_free (GValue, val);
@@ -338,67 +325,11 @@ kvp_value_from_gvalue (const GValue *gval)
         val = new KvpValue(*(Time64*)g_value_get_boxed (gval));
     else if (type == G_TYPE_DATE)
         val = new KvpValue(*(GDate*)g_value_get_boxed (gval));
-    else if (type == GNC_TYPE_VALUE_LIST)
-    {
-        GList *gvalue_list = (GList*)g_value_get_boxed (gval);
-        GList *kvp_list = NULL;
-        g_list_foreach (gvalue_list, (GFunc)kvp_value_list_from_gvalue,
-                        &kvp_list);
-        kvp_list = g_list_reverse (kvp_list);
-        val = new KvpValue(kvp_list);
-//      g_list_free_full (gvalue_list, (GDestroyNotify)g_value_unset);
-//      gvalue_list = NULL;
-    }
     else
         PWARN ("Error! Don't know how to make a KvpValue from a %s",
                G_VALUE_TYPE_NAME (gval));
 
     return val;
-}
-/* The following are required for using KvpValue GLists as GValues */
-static void
-gnc_gvalue_copy (GValue *src, gpointer uData)
-{
-    GList **new_list = (GList**)uData;
-    GValue *dest = g_value_init (g_slice_new0 (GValue), G_VALUE_TYPE (src));
-    g_value_copy (src, dest);
-    *new_list = g_list_prepend(*new_list, dest);
-}
-
-void
-gnc_gvalue_free (GValue *val)
-{
-    if (val == NULL || ! G_IS_VALUE (val)) return;
-    g_value_unset (val);
-    g_slice_free (GValue, val);
-}
-
-static GList*
-gnc_value_list_copy (GList *list)
-{
-    GList *new_list = NULL;
-    g_list_foreach (list, (GFunc)gnc_gvalue_copy, &new_list);
-    new_list = g_list_reverse (new_list);
-    return new_list;
-}
-
-static void
-gnc_value_list_free (GList *list)
-{
-    g_list_free_full (list, (GDestroyNotify)gnc_gvalue_free);
-}
-
-GType
-gnc_value_list_get_type (void)
-{
-    static GType type = 0;
-    if (type == 0)
-    {
-        type = g_boxed_type_register_static ("gnc_value_list",
-                                             (GBoxedCopyFunc)gnc_value_list_copy,
-                                             (GBoxedFreeFunc)gnc_value_list_free);
-    }
-    return type;
 }
 
 void

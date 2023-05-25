@@ -185,15 +185,7 @@ GValue* gvalue_from_kvp_value (const KvpValue *kval, GValue* val = nullptr);
  */
 KvpValue* kvp_value_from_gvalue (const GValue *gval);
 
-/**
- * \brief Convenience function to release the value in a GValue
- * acquired by kvp_frame_get_gvalue and to free the GValue.
- * \param value: A GValue* created by kvp_frame_get_gvalue
- */
-void gnc_gvalue_free (GValue *value);
 /** @} Close Doxygen Internal */
 /** @} Close Doxygen Group */
-extern "C" GType gnc_value_list_get_type (void);
-#define GNC_TYPE_VALUE_LIST (gnc_value_list_get_type ())
 
 #endif
