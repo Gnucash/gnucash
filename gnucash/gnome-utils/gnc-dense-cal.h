@@ -103,7 +103,7 @@ struct _GncDenseCal
 
 struct _GncDenseCalClass
 {
-    GtkVBoxClass parent_class;
+    GtkBoxClass parent_class;
 };
 
 typedef struct _gdc_mark_data

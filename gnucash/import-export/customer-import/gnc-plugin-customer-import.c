@@ -28,8 +28,6 @@
 
 #include <config.h>
 
-//#include <glade/glade.h>
-//#include <glade/glade-xml.h>
 #include <glib/gi18n.h>
 
 #include "dialog-utils.h"

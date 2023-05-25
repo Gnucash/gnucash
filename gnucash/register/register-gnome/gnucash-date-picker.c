@@ -37,7 +37,7 @@ enum
     LAST_SIGNAL
 };
 
-static GtkHBox *gnc_date_picker_parent_class;
+static GtkBoxClass *gnc_date_picker_parent_class;
 static guint gnc_date_picker_signals[LAST_SIGNAL];
 
 
@@ -118,12 +118,10 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 static void
 gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
 {
-    GObjectClass  *object_class;
-
     gnc_date_picker_parent_class =
-        g_type_class_peek_parent (date_picker_class);
+        GTK_BOX_CLASS (g_type_class_peek_parent (date_picker_class));
 
-    object_class = G_OBJECT_CLASS (date_picker_class);
+    GObjectClass  *object_class = G_OBJECT_CLASS (date_picker_class);
 
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(date_picker_class), "gnc-id-date-picker");
 

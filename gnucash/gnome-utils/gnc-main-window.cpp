@@ -3010,7 +3010,7 @@ gnc_main_window_engine_commit_error_callback( gpointer data,
  *
  *  @param tab_hbox The widget that should be added into the notebook
  *  tab for this page.  Generally this is a GtkLabel, but could also
- *  be a GtkHBox containing an icon and a label.
+ *  be a GtkBox containing an icon and a label.
  *
  *  @param menu_label The widget that should be added into the
  *  notebook popup menu for this page.  This should be a GtkLabel.

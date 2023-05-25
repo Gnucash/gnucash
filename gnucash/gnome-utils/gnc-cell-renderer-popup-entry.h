@@ -31,7 +31,7 @@
 #define __GNC_POPUP_ENTRY_H__
 
 #include <pango/pango.h>
-#include <gtk/gtkeventbox.h>
+#include <gtk/gtk.h>
 
 #define GNC_TYPE_POPUP_ENTRY            (gnc_popup_entry_get_type ())
 #define GNC_POPUP_ENTRY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_POPUP_ENTRY, GncPopupEntry))
