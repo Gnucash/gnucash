@@ -487,7 +487,7 @@
          (set-option! options "Display" name #f))
        (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
              "Account Name" "Other Account Name" "Shares" "Price" "Account Balance"
-             "Totals"))
+             "Grand Total"))
       (let ((sxml (options->sxml options "all columns off")))
         (test-assert "all display columns off, except amount and subtotals are enabled, there should be 2 columns"
           (= (length ((sxpath '(// (table 1) // (tr 1) // th)) sxml))
@@ -545,7 +545,7 @@
          (set-option! options "Display" name #t))
        (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
              "Account Name" "Other Account Name" "Shares" "Price" "Account Balance"
-             "Totals" "Use Full Other Account Name" "Use Full Account Name"))
+             "Grand Total" "Use Full Other Account Name" "Use Full Account Name"))
       (set-option! options "Display" "Running Totals" 'grand)
       (let* ((sxml (options->sxml options "all columns on")))
         (test-equal "all display columns on, displays correct columns"
@@ -571,7 +571,7 @@
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 13 02 1971)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 15 02 1971)))
       (set-option! options "Display" "Detail Level" 'multi-line)
-      (set-option! options "Display" "Totals" #f)
+      (set-option! options "Display" "Grand Total" #f)
       (set-option! options "Sorting" "Primary Subtotal" #f)
       (set-option! options "Sorting" "Primary Subtotal for Date Key" 'none)
       (set-option! options "Sorting" "Secondary Subtotal" #f)
@@ -735,7 +735,7 @@
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))
       ;;(set-option! options "Accounts" "Accounts" (gnc-account-get-descendants (gnc-account-get-root bank)))
       (set-option! options "Accounts" "Accounts" (list bank))
-      (set-option! options "Display" "Totals" #f)
+      (set-option! options "Display" "Grand Total" #f)
       (set-option! options "Display" "Other Account Name" #t)
       (set-option! options "Filter" "Void Transactions" 'both)
       (set-option! options "Sorting" "Primary Subtotal" #f)
@@ -797,7 +797,7 @@
       (set-option! options "Sorting" "Primary Subtotal" #t)
       (set-option! options "Sorting" "Secondary Key" 'date)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
-      (set-option! options "Display" "Totals" #t)
+      (set-option! options "Display" "Grand Total" #t)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'quarterly)
       (set-option! options "Sorting" "Show subtotals only (hide transactional data)" #t)
       (let* ((sxml (options->sxml options "sorting=account-name, date-quarterly, subtotals only")))
@@ -807,7 +807,7 @@
 
       (set! options (default-testing-options))
       (set-option! options "Accounts" "Accounts" (gnc-account-get-descendants (gnc-account-get-root bank)))
-      (set-option! options "Display" "Totals" #t)
+      (set-option! options "Display" "Grand Total" #t)
       (set-option! options "Display" "Amount" 'double)
       (set-option! options "Currency" "Show original currency amount" #t)
       (set-option! options "General" "Table for Exporting" #f)
@@ -827,7 +827,7 @@
           (get-row-col sxml 91 #f)))
 
       (set-option! options "Accounts" "Accounts" (list bank))
-      (set-option! options "Display" "Totals" #f)
+      (set-option! options "Display" "Grand Total" #f)
       (set-option! options "Sorting" "Show subtotals only (hide transactional data)" #t)
       (let* ((sxml (options->sxml options "sorting=date quarterly")))
         (test-equal "quarterly subtotals are correct"
@@ -868,7 +868,7 @@
 
       ;; test running subtotals
       (set! options (default-testing-options))
-      (set-option! options "Display" "Totals" #f)
+      (set-option! options "Display" "Grand Total" #f)
       (set-option! options "Display" "Running Totals" 'sub)
       (set-option! options "Sorting" "Primary Key" 'account-name)
       (set-option! options "Sorting" "Primary Subtotal" #t)
@@ -918,7 +918,7 @@
         (set-option! options "Display" name #t))
       (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
             "Account Name" "Other Account Name" "Shares" "Price" "Account Balance"
-            "Totals" "Use Full Other Account Name" "Use Full Account Name"))
+            "Grand Total" "Use Full Other Account Name" "Use Full Account Name"))
       (set-option! options "Display" "Running Totals" 'all)
       (set-option! options "Sorting" "Primary Key" 'account-name)
       (set-option! options "Sorting" "Primary Subtotal" #t)

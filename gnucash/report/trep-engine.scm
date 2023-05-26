@@ -74,6 +74,7 @@
 ;;Display
 (define optname-detail-level (N_ "Detail Level"))
 (define optname-grid (N_ "Subtotal Table"))
+(define optname-grand-total (N_ "Grand Total"))
 ;; Translators: a running total is a total that is continually adjusted on every line.
 ;; To be consistent, also consider how the term "Running Balance" is translated.
 ;; "Running Totals" is the plural form as it refers to the running total and running subtotals.
@@ -926,7 +927,7 @@ be excluded from periodic reporting.")
       ;; note the "Amount" multichoice option in between here
       (list optname-grid                        "m5" (G_ "Display a subtotal summary table.") #f)
       (list (N_ "Account Balance")              "n"  (G_ "Display the balance of the underlying account on each line?") #f)
-      (list (N_ "Totals")                       "o"  (G_ "Display the totals?") #t)))
+      (list optname-grand-total                 "o"  (G_ "Display a grand total section at the bottom?") #t)))
 
     (when BOOK-SPLIT-ACTION
       (gnc-register-simple-boolean-option options
@@ -1321,7 +1322,7 @@ be excluded from periodic reporting.")
 
         (if (or (column-uses? 'subtotals-only)
                 (and (null? left-cols-list)
-                     (or (opt-val gnc:pagename-display "Totals")
+                     (or (opt-val gnc:pagename-display optname-grand-total)
                          (primary-get-info 'renderer-fn)
                          (secondary-get-info 'renderer-fn))))
             `(((heading . "") (renderer-fn . ,(const #f))))
@@ -2005,7 +2006,7 @@ be excluded from periodic reporting.")
 
       (if (null? splits)
 
-          (when (opt-val gnc:pagename-display "Totals")
+          (when (opt-val gnc:pagename-display optname-grand-total)
             (gnc:html-table-append-row/markup!
              table def:grand-total-style
              (list
