@@ -28,14 +28,15 @@
 # Carlson Mak <hbmaak@gmail.com>, 2023.
 # Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023.
 # yu0A <yuhongbo@member.fsf.org>, 2023.
+# yuht <yuht@qq.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-05-18 08:47+0000\n"
-"Last-Translator: yu0A <yuhongbo@member.fsf.org>\n"
+"PO-Revision-Date: 2023-05-19 08:47+0000\n"
+"Last-Translator: yuht <yuht@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -2935,7 +2936,7 @@ msgstr "副本"
 #: gnucash/gnome/dialog-invoice.c:3536
 #: gnucash/gnome/gnc-plugin-page-invoice.c:299
 msgid "Post"
-msgstr "邮寄；交付；快递"
+msgstr "邮寄"
 
 #: gnucash/gnome/dialog-invoice.c:3517 gnucash/gnome/dialog-invoice.c:3526
 #: gnucash/gnome/dialog-invoice.c:3537
@@ -4552,7 +4553,7 @@ msgstr "取消入账"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:301
 msgid "Pay"
-msgstr "支付；偿付"
+msgstr "支付"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 msgid "New Voucher"
@@ -4947,14 +4948,14 @@ msgstr "新交易信息"
 #: gnucash/gnome/gnc-plugin-page-register.c:3989
 #, c-format
 msgid "Sort %s by…"
-msgstr "排序 %s"
+msgstr "按…对 %s 排序"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4079
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1175
 #, c-format
 msgid "Filter %s by…"
-msgstr "筛选 %s"
+msgstr "按…对 %s 筛选"
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
@@ -5003,7 +5004,7 @@ msgstr "保存模板"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:234
 msgid "Save Config As…"
-msgstr "另存模板"
+msgstr "另存模板为"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:235
 msgid "Make Pdf"
@@ -10616,9 +10617,7 @@ msgstr "科目选择"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:687
 msgid "Enter file name and location for the Export…"
-msgstr ""
-"输入文件名称和位置用于导出\n"
-"…"
+msgstr "输入文件名称和位置用于导出"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:698
 msgid "Choose File Name for Export"
@@ -10626,7 +10625,7 @@ msgstr "文件"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
 msgid "Export Now…"
-msgstr "导出"
+msgstr "现在导出…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:720
 msgid "Summary"
