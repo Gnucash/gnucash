@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-05-18 13:48+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2023-05-22 01:48+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -14101,7 +14101,7 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register.c:2554
 #: gnucash/register/ledger-core/split-register.c:2580
 msgid "Online"
-msgstr "Internetre csatlakozott"
+msgstr "Online"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:193
 #, fuzzy
@@ -20634,7 +20634,7 @@ msgstr "Vezeték"
 
 #: gnucash/register/ledger-core/split-register.c:2559
 msgid "Direct Debit"
-msgstr "Csoportos beszedési megbízás"
+msgstr "Fizetési megbízás (bejövő számlák automatikus fizetése)"
 
 #: gnucash/register/ledger-core/split-register.c:2571
 #: gnucash/register/ledger-core/split-register.c:2578
