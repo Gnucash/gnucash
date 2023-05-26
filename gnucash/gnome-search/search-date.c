@@ -47,6 +47,14 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_date_finalize (GObject *obj);
 
+struct _GNCSearchDate
+{
+    GNCSearchCoreType parent;
+
+    QofQueryCompare   how;
+    time64            tt;
+};
+
 typedef struct _GNCSearchDatePrivate GNCSearchDatePrivate;
 
 struct _GNCSearchDatePrivate

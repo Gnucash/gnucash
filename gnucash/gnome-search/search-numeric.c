@@ -47,6 +47,16 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_numeric_finalize	(GObject *obj);
 
+struct _GNCSearchNumeric
+{
+    GNCSearchCoreType parent;
+    struct _GNCSearchNumericPrivate *priv;
+
+    QofQueryCompare	how;
+    gnc_numeric		value;
+    QofNumericMatch	option;
+};
+
 typedef struct _GNCSearchNumericPrivate GNCSearchNumericPrivate;
 
 struct _GNCSearchNumericPrivate

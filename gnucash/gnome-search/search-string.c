@@ -47,6 +47,15 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_string_finalize	(GObject *obj);
 
+struct _GNCSearchString
+{
+    GNCSearchCoreType parent;
+
+    GNCSearchString_Type	how;
+    gboolean		ign_case;
+    char *		value;
+};
+
 typedef struct _GNCSearchStringPrivate GNCSearchStringPrivate;
 
 struct _GNCSearchStringPrivate

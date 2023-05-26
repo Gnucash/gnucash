@@ -45,6 +45,14 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_reconciled_finalize	(GObject *obj);
 
+struct _GNCSearchReconciled
+{
+    GNCSearchCoreType parent;
+
+    QofCharMatch      how;
+    cleared_match_t   value;
+};
+
 typedef struct _GNCSearchReconciledPrivate GNCSearchReconciledPrivate;
 
 struct _GNCSearchReconciledPrivate

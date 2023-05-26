@@ -28,13 +28,6 @@
 #define GNC_TYPE_SEARCH_ACCOUNT 	(gnc_search_account_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchAccount, gnc_search_account, GNC, SEARCH_ACCOUNT, GNCSearchCoreType)
 
-struct _GNCSearchAccount
-{
-    GNCSearchCoreType parent;
-
-    QofGuidMatch	how;
-};
-
 GNCSearchAccount	*gnc_search_account_new	(void);
 GNCSearchAccount	*gnc_search_account_matchall_new	(void);
 

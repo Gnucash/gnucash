@@ -28,14 +28,6 @@
 #define GNC_TYPE_SEARCH_INT64		(gnc_search_int64_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchInt64, gnc_search_int64, GNC, SEARCH_INT64, GNCSearchCoreType)
 
-struct _GNCSearchInt64
-{
-    GNCSearchCoreType parent;
-
-    QofQueryCompare	how;
-    gint64		value;
-};
-
 GNCSearchInt64	*gnc_search_int64_new	(void);
 
 /* methods */

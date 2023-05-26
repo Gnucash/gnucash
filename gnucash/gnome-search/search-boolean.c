@@ -43,6 +43,13 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_boolean_finalize	(GObject *obj);
 
+struct _GNCSearchBoolean
+{
+    GNCSearchCoreType parent;
+
+    gboolean            value;
+};
+
 typedef struct _GNCSearchBooleanPrivate GNCSearchBooleanPrivate;
 
 struct _GNCSearchBooleanPrivate

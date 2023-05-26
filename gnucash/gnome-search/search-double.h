@@ -28,14 +28,6 @@
 #define GNC_TYPE_SEARCH_DOUBLE		(gnc_search_double_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchDouble, gnc_search_double, GNC, SEARCH_DOUBLE, GNCSearchCoreType)
 
-struct _GNCSearchDouble
-{
-    GNCSearchCoreType parent;
-
-    QofQueryCompare	how;
-    double		value;
-};
-
 GNCSearchDouble	*gnc_search_double_new	(void);
 
 /* methods */

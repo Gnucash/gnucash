@@ -47,6 +47,14 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_double_finalize	(GObject *obj);
 
+struct _GNCSearchDouble
+{
+    GNCSearchCoreType parent;
+
+    QofQueryCompare     how;
+    double              value;
+};
+
 typedef struct _GNCSearchDoublePrivate GNCSearchDoublePrivate;
 
 struct _GNCSearchDoublePrivate

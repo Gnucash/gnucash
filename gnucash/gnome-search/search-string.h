@@ -37,15 +37,6 @@ typedef enum _search_string_how
     SEARCH_STRING_NOT_EQUAL
 } GNCSearchString_Type;
 
-struct _GNCSearchString
-{
-    GNCSearchCoreType parent;
-
-    GNCSearchString_Type	how;
-    gboolean		ign_case;
-    char *		value;
-};
-
 GNCSearchString	*gnc_search_string_new	(void);
 
 /* methods */

@@ -29,16 +29,6 @@
 #define GNC_TYPE_SEARCH_NUMERIC		(gnc_search_numeric_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchNumeric, gnc_search_numeric, GNC, SEARCH_NUMERIC, GNCSearchCoreType)
 
-struct _GNCSearchNumeric
-{
-    GNCSearchCoreType parent;
-    struct _GNCSearchNumericPrivate *priv;
-
-    QofQueryCompare	how;
-    gnc_numeric		value;
-    QofNumericMatch	option;
-};
-
 GNCSearchNumeric	*gnc_search_numeric_new	(void);
 GNCSearchNumeric	*gnc_search_numeric_debcred_new (void);
 

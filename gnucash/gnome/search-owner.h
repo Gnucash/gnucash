@@ -28,13 +28,6 @@
 #define GNC_TYPE_SEARCH_OWNER             (gnc_search_owner_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchOwner, gnc_search_owner, GNC, SEARCH_OWNER, GNCSearchCoreType)
 
-struct _GNCSearchOwner
-{
-    GNCSearchCoreType parent;
-
-    QofGuidMatch    how;
-};
-
 GNCSearchOwner  *gnc_search_owner_new   (void);
 
 /* methods */

@@ -29,14 +29,6 @@
 #define GNC_TYPE_SEARCH_DATE		(gnc_search_date_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchDate, gnc_search_date, GNC, SEARCH_DATE, GNCSearchCoreType)
 
-struct _GNCSearchDate
-{
-    GNCSearchCoreType parent;
-
-    QofQueryCompare   how;
-    time64            tt;
-};
-
 GNCSearchDate	*gnc_search_date_new	(void);
 
 /* methods */

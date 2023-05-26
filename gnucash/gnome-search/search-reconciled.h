@@ -28,14 +28,6 @@
 #define GNC_TYPE_SEARCH_RECONCILED	  (gnc_search_reconciled_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchReconciled, gnc_search_reconciled, GNC, SEARCH_RECONCILED, GNCSearchCoreType)
 
-struct _GNCSearchReconciled
-{
-    GNCSearchCoreType parent;
-
-    QofCharMatch      how;
-    cleared_match_t   value;
-};
-
 GNCSearchReconciled	*gnc_search_reconciled_new	(void);
 
 /* methods */

@@ -28,13 +28,6 @@
 #define GNC_TYPE_SEARCH_BOOLEAN		(gnc_search_boolean_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchBoolean, gnc_search_boolean, GNC, SEARCH_BOOLEAN, GNCSearchCoreType)
 
-struct _GNCSearchBoolean
-{
-    GNCSearchCoreType parent;
-
-    gboolean		value;
-};
-
 GNCSearchBoolean	*gnc_search_boolean_new	(void);
 
 /* methods */
