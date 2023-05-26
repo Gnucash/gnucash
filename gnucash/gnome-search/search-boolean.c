@@ -45,23 +45,14 @@ static void gnc_search_boolean_finalize	(GObject *obj);
 
 struct _GNCSearchBoolean
 {
-    GNCSearchCoreType parent;
+    GNCSearchCoreType parent_instance;
 
     gboolean            value;
-};
 
-typedef struct _GNCSearchBooleanPrivate GNCSearchBooleanPrivate;
-
-struct _GNCSearchBooleanPrivate
-{
     GtkWindow *parent;
-    gpointer dummy;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchBoolean, gnc_search_boolean, GNC_TYPE_SEARCH_CORE_TYPE)
-
-#define _PRIVATE(o) \
-   ((GNCSearchBooleanPrivate*)gnc_search_boolean_get_instance_private((GNCSearchBoolean*)o))
+G_DEFINE_TYPE(GNCSearchBoolean, gnc_search_boolean, GNC_TYPE_SEARCH_CORE_TYPE)
 
 static void
 gnc_search_boolean_class_init (GNCSearchBooleanClass *klass)
@@ -123,13 +114,11 @@ static void
 pass_parent (GNCSearchCoreType *fe, gpointer parent)
 {
     GNCSearchBoolean *fi = (GNCSearchBoolean *)fe;
-    GNCSearchBooleanPrivate *priv;
 
     g_return_if_fail (fi);
     g_return_if_fail (GNC_IS_SEARCH_BOOLEAN (fi));
 
-    priv = _PRIVATE(fi);
-    priv->parent = GTK_WINDOW(parent);
+    fi->parent = GTK_WINDOW(parent);
 }
 
 static gboolean

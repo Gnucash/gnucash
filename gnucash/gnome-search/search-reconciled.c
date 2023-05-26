@@ -47,24 +47,15 @@ static void gnc_search_reconciled_finalize	(GObject *obj);
 
 struct _GNCSearchReconciled
 {
-    GNCSearchCoreType parent;
+    GNCSearchCoreType parent_instance;
 
     QofCharMatch      how;
     cleared_match_t   value;
-};
 
-typedef struct _GNCSearchReconciledPrivate GNCSearchReconciledPrivate;
-
-struct _GNCSearchReconciledPrivate
-{
     GtkWindow *parent;
-    gpointer dummy;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchReconciled, gnc_search_reconciled, GNC_TYPE_SEARCH_CORE_TYPE)
-
-#define _PRIVATE(o) \
-   ((GNCSearchReconciledPrivate*)gnc_search_reconciled_get_instance_private((GNCSearchReconciled*)o))
+G_DEFINE_TYPE(GNCSearchReconciled, gnc_search_reconciled, GNC_TYPE_SEARCH_CORE_TYPE)
 
 static void
 gnc_search_reconciled_class_init (GNCSearchReconciledClass *klass)
@@ -135,13 +126,11 @@ static void
 pass_parent (GNCSearchCoreType *fe, gpointer parent)
 {
     GNCSearchReconciled *fi = (GNCSearchReconciled *)fe;
-    GNCSearchReconciledPrivate *priv;
 
     g_return_if_fail (fi);
     g_return_if_fail (GNC_IS_SEARCH_RECONCILED (fi));
 
-    priv = _PRIVATE(fi);
-    priv->parent = GTK_WINDOW(parent);
+    fi->parent = GTK_WINDOW(parent);
 }
 
 static gboolean

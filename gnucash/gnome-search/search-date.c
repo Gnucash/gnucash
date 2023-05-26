@@ -49,24 +49,16 @@ static void gnc_search_date_finalize (GObject *obj);
 
 struct _GNCSearchDate
 {
-    GNCSearchCoreType parent;
+    GNCSearchCoreType parent_instance;
 
     QofQueryCompare   how;
     time64            tt;
-};
 
-typedef struct _GNCSearchDatePrivate GNCSearchDatePrivate;
-
-struct _GNCSearchDatePrivate
-{
     GtkWidget *entry;
     GtkWindow *parent;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchDate, gnc_search_date, GNC_TYPE_SEARCH_CORE_TYPE)
-
-#define _PRIVATE(o) \
-   ((GNCSearchDatePrivate*)gnc_search_date_get_instance_private((GNCSearchDate*)o))
+G_DEFINE_TYPE(GNCSearchDate, gnc_search_date, GNC_TYPE_SEARCH_CORE_TYPE)
 
 static void
 gnc_search_date_class_init (GNCSearchDateClass *klass)
@@ -99,14 +91,12 @@ static void
 gnc_search_date_finalize (GObject *obj)
 {
     GNCSearchDate *o;
-    GNCSearchDatePrivate *priv;
 
     g_assert (GNC_IS_SEARCH_DATE (obj));
 
     o = GNC_SEARCH_DATE(obj);
-    priv = _PRIVATE(o);
-    if (priv->entry)
-        gtk_widget_destroy (priv->entry);
+    if (o->entry)
+        gtk_widget_destroy (o->entry);
 
     G_OBJECT_CLASS (gnc_search_date_parent_class)->finalize(obj);
 }
@@ -146,13 +136,11 @@ static void
 pass_parent (GNCSearchCoreType *fe, gpointer parent)
 {
     GNCSearchDate *fi = (GNCSearchDate *)fe;
-    GNCSearchDatePrivate *priv;
 
     g_return_if_fail (fi);
     g_return_if_fail (GNC_IS_SEARCH_DATE (fi));
 
-    priv = _PRIVATE(fi);
-    priv->parent = GTK_WINDOW(parent);
+    fi->parent = GTK_WINDOW(parent);
 }
 
 static gboolean
@@ -212,28 +200,24 @@ static void
 grab_focus (GNCSearchCoreType *fe)
 {
     GNCSearchDate *fi = (GNCSearchDate *)fe;
-    GNCSearchDatePrivate *priv;
 
     g_return_if_fail (fi);
     g_return_if_fail (GNC_IS_SEARCH_DATE (fi));
 
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gtk_widget_grab_focus (GNC_DATE_EDIT(priv->entry)->date_entry);
+    if (fi->entry)
+        gtk_widget_grab_focus (GNC_DATE_EDIT(fi->entry)->date_entry);
 }
 
 static void
 editable_enters (GNCSearchCoreType *fe)
 {
     GNCSearchDate *fi = (GNCSearchDate *)fe;
-    GNCSearchDatePrivate *priv;
 
     g_return_if_fail (fi);
     g_return_if_fail (GNC_IS_SEARCH_DATE (fi));
 
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gnc_date_activates_default (GNC_DATE_EDIT (priv->entry), TRUE);
+    if (fi->entry)
+        gnc_date_activates_default (GNC_DATE_EDIT (fi->entry), TRUE);
 }
 
 static GtkWidget *
@@ -241,12 +225,10 @@ gncs_get_widget (GNCSearchCoreType *fe)
 {
     GtkWidget *entry, *menu, *box;
     GNCSearchDate *fi = (GNCSearchDate *)fe;
-    GNCSearchDatePrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (GNC_IS_SEARCH_DATE (fi), NULL);
 
-    priv = _PRIVATE(fi);
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
@@ -259,7 +241,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     g_signal_connect (G_OBJECT (entry), "date_changed", G_CALLBACK (date_changed), fe);
     gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
     g_object_ref (entry);
-    priv->entry = entry;
+    fi->entry = entry;
 
     /* And return the box */
     return box;
@@ -268,15 +250,13 @@ gncs_get_widget (GNCSearchCoreType *fe)
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchDate *fi = (GNCSearchDate *)fe;
-    GNCSearchDatePrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (GNC_IS_SEARCH_DATE (fi), NULL);
 
     /* Make sure we actually use the currently-entered date */
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gnc_search_date_set_date_from_edit (fi, GNC_DATE_EDIT (priv->entry));
+    if (fi->entry)
+        gnc_search_date_set_date_from_edit (fi, GNC_DATE_EDIT (fi->entry));
 
     if (fi->how == QOF_COMPARE_EQUAL || fi->how == QOF_COMPARE_NEQ)
         return qof_query_date_predicate (fi->how, QOF_DATE_MATCH_DAY, fi->tt);

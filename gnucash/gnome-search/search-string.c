@@ -49,25 +49,17 @@ static void gnc_search_string_finalize	(GObject *obj);
 
 struct _GNCSearchString
 {
-    GNCSearchCoreType parent;
+    GNCSearchCoreType parent_instance;
 
     GNCSearchString_Type	how;
     gboolean		ign_case;
     char *		value;
-};
 
-typedef struct _GNCSearchStringPrivate GNCSearchStringPrivate;
-
-struct _GNCSearchStringPrivate
-{
     GtkWidget *entry;
     GtkWindow *parent;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchString, gnc_search_string, GNC_TYPE_SEARCH_CORE_TYPE)
-
-#define _PRIVATE(o) \
-   ((GNCSearchStringPrivate*)gnc_search_string_get_instance_private((GNCSearchString*)o))
+G_DEFINE_TYPE(GNCSearchString, gnc_search_string, GNC_TYPE_SEARCH_CORE_TYPE)
 
 static void
 gnc_search_string_class_init (GNCSearchStringClass *klass)
@@ -154,18 +146,15 @@ static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
     GNCSearchString *fi = (GNCSearchString *)fe;
-    GNCSearchStringPrivate *priv;
     gboolean valid = TRUE;
 
     g_return_val_if_fail (fi, FALSE);
     g_return_val_if_fail (GNC_IS_SEARCH_STRING (fi), FALSE);
 
-    priv = _PRIVATE(fi);
-
     if (!fi->value || *(fi->value) == '\0')
     {
         GtkWidget *dialog;
-        dialog = gtk_message_dialog_new (GTK_WINDOW(priv->parent),
+        dialog = gtk_message_dialog_new (GTK_WINDOW(fi->parent),
                                          GTK_DIALOG_MODAL,
                                          GTK_MESSAGE_ERROR,
                                          GTK_BUTTONS_OK,
@@ -203,7 +192,7 @@ gncs_validate (GNCSearchCoreType *fe)
                                       fi->value, regmsg);
             g_free (regmsg);
 
-            dialog = gtk_message_dialog_new (GTK_WINDOW(priv->parent),
+            dialog = gtk_message_dialog_new (GTK_WINDOW(fi->parent),
                                              GTK_DIALOG_MODAL,
                                              GTK_MESSAGE_ERROR,
                                              GTK_BUTTONS_OK,
@@ -259,41 +248,35 @@ static void
 grab_focus (GNCSearchCoreType *fe)
 {
     GNCSearchString *fi = (GNCSearchString *)fe;
-    GNCSearchStringPrivate *priv;
 
     g_return_if_fail (fi);
     g_return_if_fail (GNC_IS_SEARCH_STRING (fi));
 
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gtk_widget_grab_focus (priv->entry);
+    if (fi->entry)
+        gtk_widget_grab_focus (fi->entry);
 }
 
 static void
 editable_enters (GNCSearchCoreType *fe)
 {
     GNCSearchString *fi = (GNCSearchString *)fe;
-    GNCSearchStringPrivate *priv;
 
     g_return_if_fail (fi);
     g_return_if_fail (GNC_IS_SEARCH_STRING (fi));
 
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gtk_entry_set_activates_default(GTK_ENTRY (priv->entry), TRUE);
+    if (fi->entry)
+        gtk_entry_set_activates_default(GTK_ENTRY (fi->entry), TRUE);
 }
 
 static void
 pass_parent (GNCSearchCoreType *fe, gpointer parent)
 {
     GNCSearchString *fi = (GNCSearchString *)fe;
-    GNCSearchStringPrivate *priv;
 
     g_return_if_fail (fi);
     g_return_if_fail (GNC_IS_SEARCH_STRING (fi));
 
-    priv = _PRIVATE(fi);
-    priv->parent = GTK_WINDOW(parent);
+    fi->parent = GTK_WINDOW(parent);
 }
 
 static GtkWidget *
@@ -301,12 +284,10 @@ gncs_get_widget (GNCSearchCoreType *fe)
 {
     GtkWidget *entry, *toggle, *menu, *box;
     GNCSearchString *fi = (GNCSearchString *)fe;
-    GNCSearchStringPrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
     g_return_val_if_fail (GNC_IS_SEARCH_STRING (fi), NULL);
 
-    priv = _PRIVATE(fi);
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
@@ -320,7 +301,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
         gtk_entry_set_text (GTK_ENTRY (entry), fi->value);
     g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), fe);
     gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
-    priv->entry = entry;
+    fi->entry = entry;
 
     /* Build and connect the case-sensitive check button; defaults to off */
     toggle = gtk_check_button_new_with_label (_("Match case"));
