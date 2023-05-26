@@ -909,7 +909,35 @@
         (test-equal "No running total columns are present"
           (list "Date" "Num" "Description" "Memo/Notes" "Account" "Amount")
           (get-row-col sxml 0 #f)))
-      )
+
+      ;; test that only columns with subtotals are displayed when
+      ;; "Show subtotals only (hide transactional data)" is selected
+      (set! options (default-testing-options))
+      (for-each
+      (lambda (name)
+        (set-option! options "Display" name #t))
+      (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
+            "Account Name" "Other Account Name" "Shares" "Price" "Account Balance"
+            "Totals" "Use Full Other Account Name" "Use Full Account Name"))
+      (set-option! options "Display" "Running Totals" 'all)
+      (set-option! options "Sorting" "Primary Key" 'account-name)
+      (set-option! options "Sorting" "Primary Subtotal" #t)
+      (set-option! options "Sorting" "Secondary Key" 'date)
+      (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
+      (set-option! options "Sorting" "Show subtotals only (hide transactional data)" #t)
+      (set-option! options "Currency" "Common Currency" #t)
+      (set-option! options "Currency" "Show original currency amount" #t)
+      (let* ((sxml (options->sxml options "show subtotals only, single column")))
+        (test-equal "all display columns on with single amount; show subtotals only, so only amount columns are shown"
+          (list "Amount (USD)" "Amount")
+          (get-row-col sxml 0 #f)))
+
+      (set-option! options "Display" "Amount" 'double)
+      (let* ((sxml (options->sxml options "show subtotals only, dual column")))
+        (test-equal "all display columns on with dual amount; show subtotals only, so only debit/credit columns are shown"
+          (list "Debit (USD)" "Credit (USD)" "Debit" "Credit")
+          (get-row-col sxml 0 #f)))
+    )
 
     (test-end "sorting options")
 

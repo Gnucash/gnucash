@@ -1636,14 +1636,19 @@ be excluded from periodic reporting.")
       ;; this part will check whether custom-calculated-cells were specified. this
       ;; describes a custom function which consumes an options list, and generates
       ;; an association list similar to default-calculated-cells as above.
-      (if custom-calculated-cells
-          (let ((cc (custom-calculated-cells options)))
-            (cond
-             ((not (pair? cc)) (gnc:error "welp" cc) default-calculated-cells)
-             ((vector? (car cc)) (upgrade-vector-to-assoclist cc))
-             ((any invalid-cell? cc) (gnc:error "welp" cc) default-calculated-cells)
-             (else cc)))
-          default-calculated-cells))
+      (let ((cc (if custom-calculated-cells
+                    (let ((ccc (custom-calculated-cells options)))
+                      (cond
+                        ((not (pair? ccc)) (gnc:error "welp" ccc)
+                          default-calculated-cells)
+                        ((vector? (car ccc)) (upgrade-vector-to-assoclist ccc))
+                        ((any invalid-cell? ccc) (gnc:error "welp" ccc)
+                          default-calculated-cells)
+                        (else ccc)))
+                    default-calculated-cells)))
+        ;; Only keep cells with subtotals when "Show subtotals only" is selected
+        ;; otherwise leave all calculated-cells as is.
+        (if (column-uses? 'subtotals-only) (filter cell-with-subtotals? cc) cc)))
 
     (define headings-left-columns
       (map (cut assq-ref <> 'heading) left-columns))
