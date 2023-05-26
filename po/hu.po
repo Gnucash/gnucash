@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-05-14 14:49+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-05-18 13:48+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -52,23 +52,23 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-period-select.c:75
 #: libgnucash/engine/gnc-option-date.cpp:263
 msgid "Start of this year"
-msgstr "Jelen év kezdete"
+msgstr "Folyó év kezdete"
 
 #: bindings/guile/date-utilities.scm:720
 #: libgnucash/engine/gnc-option-date.cpp:264
 msgid "First day of the current calendar year."
-msgstr "Idei naptári év első napja."
+msgstr "Jelenlegi naptári év első napja."
 
 #: bindings/guile/date-utilities.scm:724
 #: gnucash/gnome-utils/gnc-period-select.c:91
 #: libgnucash/engine/gnc-option-date.cpp:271
 msgid "End of this year"
-msgstr "Jelen naptári év vége"
+msgstr "Folyó év vége"
 
 #: bindings/guile/date-utilities.scm:727
 #: libgnucash/engine/gnc-option-date.cpp:272
 msgid "Last day of the current calendar year."
-msgstr "Idei naptári év utolsó napja."
+msgstr "Jelenlegi naptári év utolsó napja."
 
 #: bindings/guile/date-utilities.scm:731
 #: gnucash/gnome-utils/gnc-period-select.c:76
@@ -85,7 +85,7 @@ msgstr "Előző naptári év első napja."
 #: gnucash/gnome-utils/gnc-period-select.c:92
 #: libgnucash/engine/gnc-option-date.cpp:287
 msgid "End of previous year"
-msgstr "Előző naptári év vége"
+msgstr "Előző év vége"
 
 #: bindings/guile/date-utilities.scm:741
 #: libgnucash/engine/gnc-option-date.cpp:288
@@ -100,46 +100,45 @@ msgstr "Könyvelési időszak kezdete"
 #: bindings/guile/date-utilities.scm:748
 #: libgnucash/engine/gnc-option-date.cpp:312
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr "Számviteli időszak első napja, a globális beállításoknak megfelelően."
+msgstr "Könyvelési időszak első napja, a globális beállításoknak megfelelően."
 
 #: bindings/guile/date-utilities.scm:752
 #: libgnucash/engine/gnc-option-date.cpp:319
 msgid "End of accounting period"
-msgstr "Számviteli időszak vége"
+msgstr "Könyvelési időszak vége"
 
 #: bindings/guile/date-utilities.scm:755
 #: libgnucash/engine/gnc-option-date.cpp:320
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr ""
-"Számviteli időszak utolsó napja, a globális beállításoknak megfelelően."
+msgstr "Könyvelési időszak utolsó napja, a globális beállításoknak megfelelően."
 
 #: bindings/guile/date-utilities.scm:759
 #: gnucash/gnome-utils/gnc-period-select.c:71
 #: libgnucash/engine/gnc-option-date.cpp:167
 msgid "Start of this month"
-msgstr "A hónap kezdete"
+msgstr "Folyó hó kezdete"
 
 #: bindings/guile/date-utilities.scm:762
 #: libgnucash/engine/gnc-option-date.cpp:168
 msgid "First day of the current month."
-msgstr "A jelen hónap első napja."
+msgstr "A jelenlegi hónap első napja."
 
 #: bindings/guile/date-utilities.scm:766
 #: gnucash/gnome-utils/gnc-period-select.c:87
 #: libgnucash/engine/gnc-option-date.cpp:175
 msgid "End of this month"
-msgstr "Jelen hónap vége"
+msgstr "Folyó hó vége"
 
 #: bindings/guile/date-utilities.scm:769
 #: libgnucash/engine/gnc-option-date.cpp:176
 msgid "Last day of the current month."
-msgstr "A jelen hónap utolsó napja."
+msgstr "A jelenlegi hónap utolsó napja."
 
 #: bindings/guile/date-utilities.scm:773
 #: gnucash/gnome-utils/gnc-period-select.c:72
 #: libgnucash/engine/gnc-option-date.cpp:183
 msgid "Start of previous month"
-msgstr "Előző hónap kezdete"
+msgstr "Előző hó kezdete"
 
 #: bindings/guile/date-utilities.scm:776
 #: libgnucash/engine/gnc-option-date.cpp:184
@@ -150,7 +149,7 @@ msgstr "Az előző hónap első napja."
 #: gnucash/gnome-utils/gnc-period-select.c:88
 #: libgnucash/engine/gnc-option-date.cpp:191
 msgid "End of previous month"
-msgstr "Előző hónap vége"
+msgstr "Előző hó vége"
 
 #: bindings/guile/date-utilities.scm:783
 #: libgnucash/engine/gnc-option-date.cpp:192
@@ -160,22 +159,22 @@ msgstr "Az előző hónap utolsó napja."
 #: bindings/guile/date-utilities.scm:787
 #: libgnucash/engine/gnc-option-date.cpp:215
 msgid "Start of current quarter"
-msgstr "Jelen negyedév kezdete"
+msgstr "Folyó negyedév kezdete"
 
 #: bindings/guile/date-utilities.scm:790
 #: libgnucash/engine/gnc-option-date.cpp:216
 msgid "First day of the current quarterly accounting period."
-msgstr "Az aktuális negyedéves könyvelési időszak első napja."
+msgstr "A jelenlegi negyedéves könyvelési időszak első napja."
 
 #: bindings/guile/date-utilities.scm:794
 #: libgnucash/engine/gnc-option-date.cpp:223
 msgid "End of current quarter"
-msgstr "Jelen negyedév vége"
+msgstr "Folyó negyedév vége"
 
 #: bindings/guile/date-utilities.scm:797
 #: libgnucash/engine/gnc-option-date.cpp:224
 msgid "Last day of the current quarterly accounting period."
-msgstr "Az aktuális negyedéves könyvelési időszak utolsó napja."
+msgstr "A jelenlegi negyedéves könyvelési időszak utolsó napja."
 
 #: bindings/guile/date-utilities.scm:801
 #: gnucash/gnome-utils/gnc-period-select.c:74
