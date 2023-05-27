@@ -512,10 +512,25 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
                     auto kvp = qof_book_get_option(book, &list_head);
                     if (!kvp)
                         return;
+
+                    auto set_double = [&option, kvp, &list_head]() {
+                        /*counters might have been set as doubles
+                         * because of
+                         * https://bugs.gnucash.org/show_bug.cgi?id=798930. They
+                         * should be int64_t.
+                         */
+                            constexpr const char *counters{"counters"};
+                            auto value{kvp->get<double>()};
+                            if (strcmp(static_cast<char*>(list_head.data), counters) == 0)
+                                option.set_value(static_cast<int64_t>(value));
+                            else
+                                option.set_value(value);
+                    };
+
                     switch (kvp->get_type())
                     {
                         case KvpValue::Type::DOUBLE:
-                            option.set_value(kvp->get<double>());
+                            set_double();
                             break;
                         case KvpValue::Type::INT64:
                             option.set_value(kvp->get<int64_t>());

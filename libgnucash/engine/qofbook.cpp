@@ -591,8 +591,13 @@ qof_book_get_counter (QofBook *book, const char *counter_name)
     value = kvp->get_slot({"counters", counter_name});
     if (value)
     {
-        /* found it */
-        return value->get<int64_t>();
+        auto int_value{value->get<int64_t>()};
+        /* Might be a double because of
+         * https://bugs.gnucash.org/show_bug.cgi?id=798930
+         */
+        if (!int_value)
+            int_value = static_cast<int64_t>(value->get<double>());
+        return int_value;
     }
     else
     {
