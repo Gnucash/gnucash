@@ -353,6 +353,7 @@ gnc_GWEN_Gui_show_dialog()
     if (!gui)
     {
         gnc_GWEN_Gui_get(NULL);
+        gui = full_gui;
     }
 
     if (gui)
@@ -364,6 +365,8 @@ gnc_GWEN_Gui_show_dialog()
         gtk_toggle_button_set_active(
             GTK_TOGGLE_BUTTON(gui->close_checkbutton),
             gnc_prefs_get_bool (GNC_PREFS_GROUP_AQBANKING, GNC_PREF_CLOSE_ON_FINISH));
+
+        gtk_widget_set_sensitive(gui->close_button, TRUE);
 
         show_dialog(gui, FALSE);
 
@@ -1665,7 +1668,7 @@ ggg_close_clicked_cb(GtkButton *button, gpointer user_data)
     GncGWENGui *gui = user_data;
 
     g_return_if_fail(gui);
-    g_return_if_fail(gui->state == FINISHED || gui->state == ABORTED);
+    g_return_if_fail(gui->state == INIT || gui->state == FINISHED || gui->state == ABORTED);
 
     ENTER("gui=%p", gui);
 
