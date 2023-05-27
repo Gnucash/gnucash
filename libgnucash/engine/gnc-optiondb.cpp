@@ -457,9 +457,11 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
                         else if (is_qofinstance_ui_type(type))
                             kvp = kvp_value_from_qof_instance_option(option);
                         else if (type == GncOptionUIType::NUMBER_RANGE)
-                            /* The Gtk control uses a double so that's what we
-                             * have to store. */
-                            kvp = new KvpValue(option.template get_value<double>());
+                        {
+                            auto d_value{option.template get_value<double>()};
+                            auto value{static_cast<int64_t>(d_value)};
+                            kvp = new KvpValue(value);
+                        }
                         else
                         {
                             auto str{option.template get_value<std::string>()};
