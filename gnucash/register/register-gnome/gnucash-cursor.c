@@ -36,13 +36,14 @@
 #include "gnucash-sheetP.h"
 #include "gnucash-style.h"
 
-static GObjectClass *gnucash_cursor_parent_class;
-
 enum
 {
     PROP_0,
     PROP_SHEET,
 };
+
+
+G_DEFINE_TYPE (GnucashCursor, gnucash_cursor, G_TYPE_OBJECT)
 
 
 static void
@@ -269,13 +270,17 @@ gnucash_cursor_get_property (GObject         *object,
 
 
 static void
+gnucash_cursor_init (GnucashCursor *instance)
+{
+}
+
+
+static void
 gnucash_cursor_class_init (GnucashCursorClass *klass)
 {
     GObjectClass  *object_class;
 
     object_class = G_OBJECT_CLASS (klass);
-
-    gnucash_cursor_parent_class = g_type_class_peek_parent (klass);
 
     /* GObject method overrides */
     object_class->set_property = gnucash_cursor_set_property;
@@ -290,36 +295,6 @@ gnucash_cursor_class_init (GnucashCursorClass *klass)
                           "Sheet Value",
                           GNUCASH_TYPE_SHEET,
                           G_PARAM_READWRITE));
-}
-
-
-GType
-gnucash_cursor_get_type (void)
-{
-    static GType gnucash_cursor_type = 0;
-
-    if (!gnucash_cursor_type)
-    {
-        static const GTypeInfo gnucash_cursor_info =
-        {
-            sizeof (GnucashCursorClass),
-            NULL,		/* base_init */
-            NULL,		/* base_finalize */
-            (GClassInitFunc) gnucash_cursor_class_init,
-            NULL,		/* class_finalize */
-            NULL,		/* class_data */
-            sizeof (GnucashCursor),
-            0,		/* n_preallocs */
-            NULL        /* instance initialization */
-        };
-
-        gnucash_cursor_type =
-            g_type_register_static (G_TYPE_OBJECT,
-                                    "GnucashCursor",
-                                    &gnucash_cursor_info, 0);
-    }
-
-    return gnucash_cursor_type;
 }
 
 

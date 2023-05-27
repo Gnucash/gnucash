@@ -48,8 +48,9 @@ enum
     PROP_MENU
 };
 
-static GtkButtonClass *parent_class = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
+
+G_DEFINE_TYPE (GOOptionMenu, go_option_menu, GTK_TYPE_BUTTON)
 
 GtkWidget*
 go_option_menu_new(void)
@@ -315,15 +316,13 @@ static void go_option_menu_destroy(GtkWidget *widget)
     }
     option_menu->selected = NULL;
 
-    GTK_WIDGET_CLASS(parent_class)->destroy(widget);
+    GTK_WIDGET_CLASS(go_option_menu_parent_class)->destroy(widget);
 }
 
 static void go_option_menu_class_init(GOOptionMenuClass *class)
 {
     GObjectClass *gobject_class = (GObjectClass*) class;
     GtkWidgetClass *widget_class = (GtkWidgetClass*) class;
-
-    parent_class = g_type_class_peek_parent(class);
 
     signals[CHANGED] = g_signal_new("changed", G_OBJECT_CLASS_TYPE(class),
             G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET(GOOptionMenuClass, changed),
@@ -366,25 +365,4 @@ static void go_option_menu_init(GOOptionMenu *option_menu)
     gtk_box_pack_end(GTK_BOX(box), sep, FALSE, FALSE, 0);
 
     gtk_container_add(GTK_CONTAINER(option_menu), GTK_WIDGET(box));
-}
-
-GType go_option_menu_get_type(void)
-{
-    static GType option_menu_type = 0;
-
-    if (!option_menu_type)
-    {
-        static const GTypeInfo option_menu_info =
-        { sizeof(GOOptionMenuClass), NULL, /* base_init */
-        NULL, /* base_finalize */
-        (GClassInitFunc) go_option_menu_class_init, NULL, /* class_finalize */
-        NULL, /* class_data */
-        sizeof(GOOptionMenu), 0, /* n_preallocs */
-        (GInstanceInitFunc) go_option_menu_init, };
-
-        option_menu_type = g_type_register_static(GTK_TYPE_BUTTON,
-                "GOOptionMenu", &option_menu_info, 0);
-    }
-
-    return option_menu_type;
 }

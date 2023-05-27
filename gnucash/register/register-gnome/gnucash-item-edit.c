@@ -61,10 +61,13 @@ enum
 #define MIN_BUTT_WIDTH 20 // minimum size for a button excluding border
 
 static QofLogModule log_module = G_LOG_DOMAIN;
-static GtkBoxClass *gnc_item_edit_parent_class;
 
-static GtkToggleButtonClass *gnc_item_edit_tb_parent_class;
 static void gnc_item_edit_destroying (GtkWidget *this, gpointer data);
+
+G_DEFINE_TYPE (GncItemEdit, gnc_item_edit, GTK_TYPE_BOX)
+
+G_DEFINE_TYPE (GncItemEditTb, gnc_item_edit_tb, GTK_TYPE_TOGGLE_BUTTON)
+
 static void
 gnc_item_edit_tb_init (GncItemEditTb *item_edit_tb)
 {
@@ -151,8 +154,6 @@ gnc_item_edit_tb_class_init (GncItemEditTbClass *gnc_item_edit_tb_class)
 
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_tb_class), "button");
 
-    gnc_item_edit_tb_parent_class = g_type_class_peek_parent (gnc_item_edit_tb_class);
-
     object_class = G_OBJECT_CLASS(gnc_item_edit_tb_class);
     widget_class = GTK_WIDGET_CLASS(gnc_item_edit_tb_class);
 
@@ -170,34 +171,6 @@ gnc_item_edit_tb_class_init (GncItemEditTbClass *gnc_item_edit_tb_class)
     /* GtkWidget method overrides */
     widget_class->get_preferred_width = gnc_item_edit_tb_get_preferred_width;
     widget_class->get_preferred_height = gnc_item_edit_tb_get_preferred_height;
-}
-
-GType
-gnc_item_edit_tb_get_type (void)
-{
-    static GType gnc_item_edit_tb_type = 0;
-
-    if (!gnc_item_edit_tb_type)
-    {
-        static const GTypeInfo gnc_item_edit_tb_info =
-        {
-            sizeof (GncItemEditTbClass),
-            NULL,
-            NULL,
-            (GClassInitFunc)gnc_item_edit_tb_class_init,
-            NULL,
-            NULL,
-            sizeof (GncItemEditTb),
-            0, /* n_preallocs */
-            (GInstanceInitFunc)gnc_item_edit_tb_init,
-            NULL,
-        };
-        gnc_item_edit_tb_type =
-            g_type_register_static (GTK_TYPE_TOGGLE_BUTTON,
-                                    "GncItemEditTb",
-                                    &gnc_item_edit_tb_info, 0);
-    }
-    return gnc_item_edit_tb_type;
 }
 
 GtkWidget *
@@ -775,8 +748,6 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
 
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(gnc_item_edit_class), "gnc-id-cursor");
 
-    gnc_item_edit_parent_class = g_type_class_peek_parent (gnc_item_edit_class);
-
     object_class = G_OBJECT_CLASS(gnc_item_edit_class);
     widget_class = GTK_WIDGET_CLASS(gnc_item_edit_class);
 
@@ -794,39 +765,6 @@ gnc_item_edit_class_init (GncItemEditClass *gnc_item_edit_class)
     /* GtkWidget method overrides */
     widget_class->get_preferred_width = gnc_item_edit_get_preferred_width;
     widget_class->get_preferred_height = gnc_item_edit_get_preferred_height;
-}
-
-/* FIXME: This way of initializing GObjects is obsolete. We should be
- * using G_DECLARE_FINAL_TYPE instead of rolling _get_type by hand.
- */
-GType
-gnc_item_edit_get_type (void)
-{
-    static GType gnc_item_edit_type = 0;
-
-    if (!gnc_item_edit_type)
-    {
-        static const GTypeInfo gnc_item_edit_info =
-        {
-            sizeof (GncItemEditClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_item_edit_class_init,
-            NULL,
-            NULL,
-            sizeof (GncItemEdit),
-            0, /* n_preallocs */
-            (GInstanceInitFunc) gnc_item_edit_init,
-            NULL,
-        };
-
-        gnc_item_edit_type =
-            g_type_register_static (GTK_TYPE_BOX,
-                                    "GncItemEdit",
-                                    &gnc_item_edit_info, 0);
-    }
-
-    return gnc_item_edit_type;
 }
 
 gint

@@ -65,8 +65,6 @@ static QofLogModule log_module = G_LOG_DOMAIN;
         *list = g_list_append(*list, g_strdup_printf(_(format), __VA_ARGS__)); \
 } while (0)
 
-static GObjectClass *parent_class = NULL;
-
 typedef struct _SxTxnCreationData
 {
     GncSxInstance *instance;
@@ -74,8 +72,6 @@ typedef struct _SxTxnCreationData
     GList **creation_errors;
 } SxTxnCreationData;
 
-static void gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass);
-static void gnc_sx_instance_model_init(GTypeInstance *instance, gpointer klass);
 static GncSxInstanceModel* gnc_sx_instance_model_new(void);
 
 static GncSxInstance* gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *date, void *temporal_state, gint sequence_num);
@@ -584,35 +580,13 @@ gnc_sx_get_instances(const GDate *range_end, gboolean include_disabled)
 
     return instances;
 }
+
+G_DEFINE_TYPE (GncSxInstanceModel, gnc_sx_instance_model, G_TYPE_OBJECT)
+
 static GncSxInstanceModel*
 gnc_sx_instance_model_new(void)
 {
     return GNC_SX_INSTANCE_MODEL(g_object_new(GNC_TYPE_SX_INSTANCE_MODEL, NULL));
-}
-
-GType
-gnc_sx_instance_model_get_type(void)
-{
-    static GType type = 0;
-    if (type == 0)
-    {
-        static const GTypeInfo info =
-            {
-                sizeof (GncSxInstanceModelClass),
-                NULL,   /* base_init */
-                NULL,   /* base_finalize */
-                (GClassInitFunc)gnc_sx_instance_model_class_init,   /* class_init */
-                NULL,   /* class_finalize */
-                NULL,   /* class_data */
-                sizeof (GncSxInstanceModel),
-                0,      /* n_preallocs */
-                (GInstanceInitFunc)gnc_sx_instance_model_init    /* instance_init */
-            };
-        type = g_type_register_static (G_TYPE_OBJECT,
-                                       "GncSxInstanceModelType",
-                                       &info, 0);
-    }
-    return type;
 }
 
 static void
@@ -627,7 +601,7 @@ gnc_sx_instance_model_dispose(GObject *object)
 
     qof_event_unregister_handler(model->qof_event_handler_id);
 
-    G_OBJECT_CLASS(parent_class)->dispose(object);
+    G_OBJECT_CLASS(gnc_sx_instance_model_parent_class)->dispose(object);
 }
 
 static void
@@ -685,15 +659,13 @@ gnc_sx_instance_model_finalize (GObject *object)
     g_list_free(model->sx_instance_list);
     model->sx_instance_list = NULL;
 
-    G_OBJECT_CLASS(parent_class)->finalize(object);
+    G_OBJECT_CLASS(gnc_sx_instance_model_parent_class)->finalize(object);
 }
 
 static void
 gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
-
-    parent_class = g_type_class_peek_parent(klass);
 
     object_class->dispose = gnc_sx_instance_model_dispose;
     object_class->finalize = gnc_sx_instance_model_finalize;
@@ -736,10 +708,8 @@ gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass)
 }
 
 static void
-gnc_sx_instance_model_init(GTypeInstance *instance, gpointer klass)
+gnc_sx_instance_model_init(GncSxInstanceModel *inst)
 {
-    GncSxInstanceModel *inst = (GncSxInstanceModel*)instance;
-
     g_date_clear(&inst->range_end, 1);
     inst->sx_instance_list = NULL;
     inst->qof_event_handler_id = qof_event_register_handler(_gnc_sx_instance_event_handler, inst);

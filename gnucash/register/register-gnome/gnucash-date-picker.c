@@ -28,7 +28,6 @@
 #include <gdk/gdkkeysyms.h>
 #include "gnucash-date-picker.h"
 
-
 /* Item list signals */
 enum
 {
@@ -37,9 +36,9 @@ enum
     LAST_SIGNAL
 };
 
-static GtkBoxClass *gnc_date_picker_parent_class;
 static guint gnc_date_picker_signals[LAST_SIGNAL];
 
+G_DEFINE_TYPE (GNCDatePicker, gnc_date_picker, GTK_TYPE_BOX)
 
 void
 gnc_date_picker_set_date (GNCDatePicker *date_picker,
@@ -118,9 +117,6 @@ gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
 static void
 gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
 {
-    gnc_date_picker_parent_class =
-        GTK_BOX_CLASS (g_type_class_peek_parent (date_picker_class));
-
     GObjectClass  *object_class = G_OBJECT_CLASS (date_picker_class);
 
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(date_picker_class), "gnc-id-date-picker");
@@ -145,35 +141,6 @@ gnc_date_picker_class_init (GNCDatePickerClass *date_picker_class)
 
     date_picker_class->date_selected = NULL;
     date_picker_class->date_picked = NULL;
-}
-
-GType
-gnc_date_picker_get_type (void)
-{
-    static GType gnc_date_picker_type = 0;
-
-    if (gnc_date_picker_type == 0)
-    {
-        GTypeInfo type_info =
-        {
-            sizeof(GNCDatePickerClass),       /* class_size */
-            NULL,   				/* base_init */
-            NULL,				/* base_finalize */
-            (GClassInitFunc)gnc_date_picker_class_init,
-            NULL,				/* class_finalize */
-            NULL,				/* class_data */
-            sizeof(GNCDatePicker),		/* */
-            0,				/* n_preallocs */
-            (GInstanceInitFunc)gnc_date_picker_init,
-        };
-
-        gnc_date_picker_type =
-            g_type_register_static (GTK_TYPE_BOX,
-                                    "GNCDatePicker",
-                                    &type_info, 0);
-    }
-
-    return gnc_date_picker_type;
 }
 
 

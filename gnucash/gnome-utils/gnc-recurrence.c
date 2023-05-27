@@ -70,8 +70,7 @@ typedef enum
     GNCR_YEAR,
 } UIPeriodType;
 
-static GObjectClass *parent_class = NULL;
-
+G_DEFINE_TYPE (GncRecurrence, gnc_recurrence, GTK_TYPE_BOX)
 
 static UIPeriodType get_pt_ui(GncRecurrence *gr)
 {
@@ -341,7 +340,7 @@ gnc_recurrence_finalize(GObject *o)
     GncRecurrence *gr = GNC_RECURRENCE(o);
 
     if (gr)
-        G_OBJECT_CLASS (parent_class)->finalize (o);
+        G_OBJECT_CLASS (gnc_recurrence_parent_class)->finalize (o);
 }
 
 
@@ -361,34 +360,8 @@ gnc_recurrence_class_init( GncRecurrenceClass *klass )
 		  G_TYPE_NONE,
 		  0);
 
-    parent_class = g_type_class_peek_parent (klass);
     object_class->finalize = gnc_recurrence_finalize;
 }
-
-
-GType
-gnc_recurrence_get_type()
-{
-    static GType type = 0;
-    if (type == 0)
-    {
-        static GTypeInfo typeinfo =
-        {
-            sizeof(GncRecurrenceClass),
-            NULL, NULL,
-            (GClassInitFunc)gnc_recurrence_class_init,
-            NULL, NULL,
-            sizeof(GncRecurrence),
-            0,
-            (GInstanceInitFunc)gnc_recurrence_init
-        };
-
-        type = g_type_register_static (GTK_TYPE_BOX, "GncRecurrence",
-                                       &typeinfo, 0);
-    }
-    return type;
-}
-
 
 GtkWidget *
 gnc_recurrence_new()
@@ -492,6 +465,7 @@ static void removeClicked(GtkButton *b, gpointer data)
         removeRecurrence(grc);
 }
 
+G_DEFINE_TYPE (GncRecurrenceComp, gnc_recurrence_comp, GTK_TYPE_SCROLLED_WINDOW)
 
 void
 gnc_recurrence_comp_set_list(GncRecurrenceComp *grc, const GList *rlist)
@@ -587,34 +561,8 @@ gnc_recurrence_comp_class_init( GncRecurrenceCompClass *klass )
 		  G_TYPE_NONE,
 		  0);
 
-    //parent_class = g_type_class_peek_parent (klass);
     //object_class->finalize = gnc_recurrence_finalize;
 }
-
-
-GType
-gnc_recurrence_comp_get_type()
-{
-    static GType type = 0;
-    if (type == 0)
-    {
-        static GTypeInfo typeinfo =
-        {
-            sizeof(GncRecurrenceCompClass),
-            NULL, NULL,
-            (GClassInitFunc)gnc_recurrence_comp_class_init,
-            NULL, NULL,
-            sizeof(GncRecurrenceComp),
-            0,
-            (GInstanceInitFunc)gnc_recurrence_comp_init
-        };
-
-        type = g_type_register_static (GTK_TYPE_SCROLLED_WINDOW,
-                                       "GncRecurrenceComp", &typeinfo, 0);
-    }
-    return type;
-}
-
 
 GtkWidget *
 gnc_recurrence_comp_new()

@@ -59,10 +59,7 @@ struct _GncDenseCalStoreClass
     GObjectClass parent_class;
 };
 
-static GObjectClass *parent_class = NULL;
-
-static void gnc_dense_cal_store_class_init(GncDenseCalStoreClass *klass);
-
+static void gnc_dense_cal_store_iface_init(GncDenseCalModelIface *iface);
 static void gnc_dense_cal_store_finalize(GObject *obj);
 
 static GList* gdcs_get_contained(GncDenseCalModel *model);
@@ -71,56 +68,30 @@ static gchar* gdcs_get_info(GncDenseCalModel *model, guint tag);
 static gint gdcs_get_instance_count(GncDenseCalModel *model, guint tag);
 static void gdcs_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
 
+G_DEFINE_TYPE_WITH_CODE (GncDenseCalStore, gnc_dense_cal_store, G_TYPE_OBJECT,
+    G_IMPLEMENT_INTERFACE (GNC_TYPE_DENSE_CAL_MODEL, gnc_dense_cal_store_iface_init))
+
 static void
 gnc_dense_cal_store_class_init(GncDenseCalStoreClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
-    parent_class = g_type_class_peek_parent(klass);
 
     object_class->finalize = gnc_dense_cal_store_finalize;
 }
 
 static void
-gnc_dense_cal_store_iface_init(gpointer g_iface, gpointer iface_data)
+gnc_dense_cal_store_init(GncDenseCalStore *self)
 {
-    GncDenseCalModelIface *iface = (GncDenseCalModelIface*)g_iface;
+}
+
+static void
+gnc_dense_cal_store_iface_init(GncDenseCalModelIface *iface)
+{
     iface->get_contained = gdcs_get_contained;
     iface->get_name = gdcs_get_name;
     iface->get_info = gdcs_get_info;
     iface->get_instance_count = gdcs_get_instance_count;
     iface->get_instance = gdcs_get_instance;
-}
-
-GType
-gnc_dense_cal_store_get_type(void)
-{
-    static GType type = 0;
-    if (type == 0)
-    {
-        static const GTypeInfo info =
-        {
-            sizeof (GncDenseCalStoreClass),
-            NULL,   /* base_init */
-            NULL,   /* base_finalize */
-            (GClassInitFunc)gnc_dense_cal_store_class_init,   /* class_init */
-            NULL,   /* class_finalize */
-            NULL,   /* class_data */
-            sizeof(GncDenseCalStore),
-            0,      /* n_preallocs */
-            NULL    /* instance_init */
-        };
-        static const GInterfaceInfo iDenseCalModelInfo =
-        {
-            (GInterfaceInitFunc)gnc_dense_cal_store_iface_init,
-            NULL, /* interface finalize */
-            NULL, /* interface data */
-        };
-        type = g_type_register_static(G_TYPE_OBJECT, "GncDenseCalStore", &info, 0);
-        g_type_add_interface_static(type,
-                                    GNC_TYPE_DENSE_CAL_MODEL,
-                                    &iDenseCalModelInfo);
-    }
-    return type;
 }
 
 GncDenseCalStore*
@@ -303,5 +274,5 @@ gnc_dense_cal_store_finalize(GObject *obj)
         store->cal_marks = NULL;
     }
 
-    G_OBJECT_CLASS(parent_class)->finalize(obj);
+    G_OBJECT_CLASS(gnc_dense_cal_store_parent_class)->finalize(obj);
 }

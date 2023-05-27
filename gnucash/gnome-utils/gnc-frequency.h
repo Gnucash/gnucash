@@ -76,8 +76,6 @@ GType gnc_frequency_get_type(void);
 GtkWidget* gnc_frequency_new(GList *recurrences, const GDate *start_date);
 GtkWidget* gnc_frequency_new_from_recurrence(GList *recurrences, const GDate *start_date);
 
-void gnc_frequency_init(GncFrequency *gf);
-
 /**
  * Change the given GncFrequency with the given FreqSpec and GDate.
  * If the FreqSpec is NULL, then no change is made to the widget menus.

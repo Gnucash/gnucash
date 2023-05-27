@@ -72,7 +72,6 @@ struct _GncSxSinceLastRunDialog
 
 /* ------------------------------------------------------------ */
 
-static GObjectClass *parent_class = NULL;
 
 struct _GncSxSlrTreeModelAdapter
 {
@@ -92,9 +91,7 @@ typedef struct _GncSxSlrTreeModelAdapterClass
 } GncSxSlrTreeModelAdapterClass;
 
 GType gnc_sx_slr_tree_model_adapter_get_type (void);
-static void gnc_sx_slr_tree_model_adapter_class_init (GncSxSlrTreeModelAdapterClass *klass);
-static void gnc_sx_slr_tree_model_adapter_interface_init (gpointer g_iface, gpointer iface_data);
-static void gnc_sx_slr_tree_model_adapter_init (GTypeInstance *instance, gpointer klass);
+static void gnc_sx_slr_tree_model_adapter_interface_init (GtkTreeModelIface *tree_model);
 GncSxSlrTreeModelAdapter* gnc_sx_slr_tree_model_adapter_new (GncSxInstanceModel *instances);
 static void gnc_sx_slr_tree_model_adapter_dispose (GObject *obj);
 static void gnc_sx_slr_tree_model_adapter_finalize (GObject *obj);
@@ -149,49 +146,13 @@ _var_numeric_to_string (gnc_numeric *value, GString **str)
 
 /* ------------------------------------------------------------ */
 
-GType
-gnc_sx_slr_tree_model_adapter_get_type (void)
-{
-    static GType gsstma_type = 0;
-    if (gsstma_type == 0)
-    {
-        static const GTypeInfo info =
-        {
-            sizeof (GncSxSlrTreeModelAdapterClass),
-            NULL,                                                       /* base_init */
-            NULL,                                                       /* base_finalize */
-            (GClassInitFunc)gnc_sx_slr_tree_model_adapter_class_init,   /* class_init */
-            NULL,                                                       /* class_finalize */
-            NULL,                                                       /* class_data */
-            sizeof (GncSxSlrTreeModelAdapter),
-            0,                                                          /* n_preallocs */
-            (GInstanceInitFunc)gnc_sx_slr_tree_model_adapter_init       /* instance_init */
-        };
-        static const GInterfaceInfo itreeModel_info =
-        {
-            (GInterfaceInitFunc) gnc_sx_slr_tree_model_adapter_interface_init,    /* interface_init */
-            NULL,                                                                 /* interface_finalize */
-            NULL                                                                  /* interface_data */
-        };
-
-        gsstma_type = g_type_register_static (G_TYPE_OBJECT,
-                                              "GncSxSlrTreeModelAdapterType",
-                                              &info, 0);
-        g_type_add_interface_static (gsstma_type,
-                                     GTK_TYPE_TREE_MODEL,
-                                     &itreeModel_info);
-    }
-    return gsstma_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GncSxSlrTreeModelAdapter, gnc_sx_slr_tree_model_adapter, G_TYPE_OBJECT,
+     G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL, gnc_sx_slr_tree_model_adapter_interface_init))
 
 static void
 gnc_sx_slr_tree_model_adapter_class_init (GncSxSlrTreeModelAdapterClass *klass)
 {
-    GObjectClass *obj_class;
-
-    parent_class = g_type_class_peek_parent (klass);
-
-    obj_class = G_OBJECT_CLASS(klass);
+    GObjectClass *obj_class = G_OBJECT_CLASS(klass);
 
     obj_class->dispose = gnc_sx_slr_tree_model_adapter_dispose;
     obj_class->finalize = gnc_sx_slr_tree_model_adapter_finalize;
@@ -300,10 +261,8 @@ gsslrtma_unref_node (GtkTreeModel *tree_model,
 }
 
 static void
-gnc_sx_slr_tree_model_adapter_interface_init (gpointer g_iface, gpointer iface_data)
+gnc_sx_slr_tree_model_adapter_interface_init (GtkTreeModelIface *tree_model)
 {
-    GtkTreeModelIface *tree_model = (GtkTreeModelIface*)g_iface;
-
     tree_model->get_flags = gsslrtma_get_flags;
     tree_model->get_n_columns = gsslrtma_get_n_columns;
     tree_model->get_column_type = gsslrtma_get_column_type;
@@ -377,9 +336,8 @@ enum
 };
 
 static void
-gnc_sx_slr_tree_model_adapter_init (GTypeInstance *instance, gpointer klass)
+gnc_sx_slr_tree_model_adapter_init (GncSxSlrTreeModelAdapter *adapter)
 {
-    GncSxSlrTreeModelAdapter *adapter = GNC_SX_SLR_TREE_MODEL_ADAPTER(instance);
     // columns:    thing-name, instance-state, variable-value, instance-visible, variable-visible, instance_state_sensitivity
     // at depth=0: <sx>,       N/A,            N/A,            N/A               N/A,              N/A
     // at depth=1: <instance>, <state>,        N/A,            <valid>,          N/A,              <valid>
@@ -777,14 +735,14 @@ gnc_sx_slr_tree_model_adapter_dispose (GObject *obj)
     g_object_unref (G_OBJECT(adapter->real));
     adapter->real = NULL;
 
-    G_OBJECT_CLASS(parent_class)->dispose (obj);
+    G_OBJECT_CLASS(gnc_sx_slr_tree_model_adapter_parent_class)->dispose (obj);
 }
 
 static void
 gnc_sx_slr_tree_model_adapter_finalize (GObject *obj)
 {
     g_return_if_fail (obj != NULL);
-    G_OBJECT_CLASS(parent_class)->finalize (obj);
+    G_OBJECT_CLASS(gnc_sx_slr_tree_model_adapter_parent_class)->finalize (obj);
 }
 
 GncSxSlrTreeModelAdapter*

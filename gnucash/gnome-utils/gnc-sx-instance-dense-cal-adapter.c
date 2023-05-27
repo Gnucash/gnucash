@@ -40,6 +40,7 @@
 #define G_LOG_DOMAIN "gnc.gui.sx.adapter.sx-dense-cal"
 static const QofLogModule log_module = G_LOG_DOMAIN;
 
+static void gnc_sx_instance_dense_cal_adapter_interface_init(GncDenseCalModelIface *iface);
 static void gnc_sx_instance_dense_cal_adapter_dispose(GObject *obj);
 static void gnc_sx_instance_dense_cal_adapter_finalize(GObject *obj);
 
@@ -48,8 +49,6 @@ static gchar* gsidca_get_name(GncDenseCalModel *model, guint tag);
 static gchar* gsidca_get_info(GncDenseCalModel *model, guint tag);
 static gint gsidca_get_instance_count(GncDenseCalModel *model, guint tag);
 static void gsidca_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
-
-static GObjectClass *parent_class = NULL;
 
 struct _GncSxInstanceDenseCalAdapterClass
 {
@@ -63,6 +62,9 @@ struct _GncSxInstanceDenseCalAdapter
     GncSxInstanceModel *instances;
 };
 
+G_DEFINE_TYPE_WITH_CODE (GncSxInstanceDenseCalAdapter, gnc_sx_instance_dense_cal_adapter, G_TYPE_OBJECT,
+    G_IMPLEMENT_INTERFACE (GNC_TYPE_DENSE_CAL_MODEL, gnc_sx_instance_dense_cal_adapter_interface_init))
+
 static void
 gnc_sx_instance_dense_cal_adapter_class_init(GncSxInstanceDenseCalAdapterClass *klass)
 {
@@ -70,21 +72,18 @@ gnc_sx_instance_dense_cal_adapter_class_init(GncSxInstanceDenseCalAdapterClass *
 
     obj_class->dispose = gnc_sx_instance_dense_cal_adapter_dispose;
     obj_class->finalize = gnc_sx_instance_dense_cal_adapter_finalize;
-
-    parent_class = g_type_class_peek_parent(klass);
 }
 
 static void
-gnc_sx_instance_dense_cal_adapter_init(GTypeInstance *instance, gpointer klass)
+gnc_sx_instance_dense_cal_adapter_init(GncSxInstanceDenseCalAdapter *instance)
 {
     /*GncSxInstanceDenseCalAdapter *adapter = GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(instance);*/
     ; /* nop */
 }
 
 static void
-gnc_sx_instance_dense_cal_adapter_interface_init(gpointer g_iface, gpointer iface_data)
+gnc_sx_instance_dense_cal_adapter_interface_init(GncDenseCalModelIface *iface)
 {
-    GncDenseCalModelIface *iface = (GncDenseCalModelIface*)g_iface;
     iface->get_contained = gsidca_get_contained;
     iface->get_name = gsidca_get_name;
     iface->get_info = gsidca_get_info;
@@ -139,41 +138,6 @@ gnc_sx_instance_dense_cal_adapter_new(GncSxInstanceModel *instances)
     g_signal_connect(instances, "updated", (GCallback)gsidca_instances_updated_cb, adapter);
     g_signal_connect(instances, "removing", (GCallback)gsidca_instances_removing_cb, adapter);
     return adapter;
-}
-
-GType
-gnc_sx_instance_dense_cal_adapter_get_type(void)
-{
-    static GType type = 0;
-    if (type == 0)
-    {
-        static const GTypeInfo info =
-        {
-            sizeof (GncSxInstanceDenseCalAdapterClass),
-            NULL, /* base init */
-            NULL, /* base finalize */
-            (GClassInitFunc)gnc_sx_instance_dense_cal_adapter_class_init,
-            NULL, /* class finalize */
-            NULL, /* class data */
-            sizeof(GncSxInstanceDenseCalAdapter),
-            0, /* n_preallocs */
-            (GInstanceInitFunc)gnc_sx_instance_dense_cal_adapter_init
-        };
-        static const GInterfaceInfo iDenseCalModelInfo =
-        {
-            (GInterfaceInitFunc)gnc_sx_instance_dense_cal_adapter_interface_init,
-            NULL, /* interface finalize */
-            NULL, /* interface data */
-        };
-
-        type = g_type_register_static (G_TYPE_OBJECT,
-                                       "GncSxInstanceDenseCalAdapterType",
-                                       &info, 0);
-        g_type_add_interface_static(type,
-                                    GNC_TYPE_DENSE_CAL_MODEL,
-                                    &iDenseCalModelInfo);
-    }
-    return type;
 }
 
 static gint
@@ -267,12 +231,12 @@ gnc_sx_instance_dense_cal_adapter_dispose(GObject *obj)
     g_object_unref(G_OBJECT(adapter->instances));
     adapter->instances = NULL;
 
-    G_OBJECT_CLASS(parent_class)->dispose(obj);
+    G_OBJECT_CLASS(gnc_sx_instance_dense_cal_adapter_parent_class)->dispose(obj);
 }
 
 static void gnc_sx_instance_dense_cal_adapter_finalize(GObject *obj)
 {
     g_return_if_fail(obj != NULL);
     // nop
-    G_OBJECT_CLASS(parent_class)->finalize(obj);
+    G_OBJECT_CLASS(gnc_sx_instance_dense_cal_adapter_parent_class)->finalize(obj);
 }

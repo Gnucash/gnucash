@@ -52,12 +52,9 @@ enum
 
 
 /** Static Globals ****************************************************/
-static GNCQueryViewClass *parent_class = NULL;
 static guint reconcile_view_signals[LAST_SIGNAL] = {0};
 
 /** Static function declarations **************************************/
-static void gnc_reconcile_view_init (GNCReconcileView *view);
-static void gnc_reconcile_view_class_init (GNCReconcileViewClass *klass);
 static void gnc_reconcile_view_finalize (GObject *object);
 static gpointer gnc_reconcile_view_is_reconciled (gpointer item,
                                                   gpointer user_data);
@@ -79,34 +76,7 @@ static gboolean gnc_reconcile_view_tooltip_cb (GNCQueryView *qview,
                                                GtkTooltip* tooltip,
                                                gpointer* user_data);
 
-GType
-gnc_reconcile_view_get_type (void)
-{
-    static GType gnc_reconcile_view_type = 0;
-
-    if (gnc_reconcile_view_type == 0)
-    {
-        static const GTypeInfo gnc_reconcile_view_info =
-        {
-            sizeof (GNCReconcileViewClass),
-            NULL,
-            NULL,
-            (GClassInitFunc) gnc_reconcile_view_class_init,
-            NULL,
-            NULL,
-            sizeof (GNCReconcileView),
-            0,
-            (GInstanceInitFunc) gnc_reconcile_view_init
-        };
-
-        gnc_reconcile_view_type = g_type_register_static (GNC_TYPE_QUERY_VIEW,
-                                                          "GncReconcileView",
-                                                          &gnc_reconcile_view_info,
-                                                          0);
-    }
-    return gnc_reconcile_view_type;
-}
-
+G_DEFINE_TYPE (GNCReconcileView, gnc_reconcile_view, GNC_TYPE_QUERY_VIEW)
 
 static gboolean
 gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
@@ -495,8 +465,6 @@ gnc_reconcile_view_class_init (GNCReconcileViewClass *klass)
 
     object_class =  G_OBJECT_CLASS(klass);
 
-    parent_class = g_type_class_peek_parent (klass);
-
     reconcile_view_signals[TOGGLE_RECONCILED] =
         g_signal_new ("toggle_reconciled",
                       G_OBJECT_CLASS_TYPE(object_class),
@@ -822,7 +790,7 @@ gnc_reconcile_view_finalize (GObject *object)
         g_hash_table_destroy (view->reconciled);
         view->reconciled = NULL;
     }
-    G_OBJECT_CLASS(parent_class)->finalize (object);
+    G_OBJECT_CLASS(gnc_reconcile_view_parent_class)->finalize (object);
 }
 
 gint

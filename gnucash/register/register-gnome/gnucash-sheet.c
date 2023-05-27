@@ -70,8 +70,6 @@ enum
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = G_LOG_DOMAIN;
-static GtkLayout *sheet_parent_class;
-
 
 /** Prototypes *********************************************************/
 
@@ -91,6 +89,7 @@ gboolean gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr,
 
 /** Implementation *****************************************************/
 
+G_DEFINE_TYPE (GnucashSheet, gnucash_sheet, GTK_TYPE_LAYOUT);
 
 /* gtk_editable_set_position sets both current_pos and selection_bound to the
  * supplied value. gtk_editable_select_region(start, end) sets current_pos to
@@ -802,8 +801,7 @@ gnucash_sheet_finalize (GObject *object)
 
     g_object_unref (sheet->cursor);
 
-    if (G_OBJECT_CLASS(sheet_parent_class)->finalize)
-        (*G_OBJECT_CLASS(sheet_parent_class)->finalize)(object);
+    (*G_OBJECT_CLASS(gnucash_sheet_parent_class)->finalize)(object);
 }
 
 
@@ -1209,8 +1207,8 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 
     ENTER("widget=%p, allocation=%p", widget, allocation);
 
-    if (GTK_WIDGET_CLASS(sheet_parent_class)->size_allocate)
-        (*GTK_WIDGET_CLASS(sheet_parent_class)->size_allocate)
+    if (GTK_WIDGET_CLASS(gnucash_sheet_parent_class)->size_allocate)
+        (*GTK_WIDGET_CLASS(gnucash_sheet_parent_class)->size_allocate)
         (widget, allocation);
 
     if (allocation->height == sheet->window_height &&
@@ -1254,8 +1252,8 @@ gnucash_sheet_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 {
     GnucashSheet *sheet = GNUCASH_SHEET(widget);
 
-    if (GTK_WIDGET_CLASS(sheet_parent_class)->focus_in_event)
-        (*GTK_WIDGET_CLASS(sheet_parent_class)->focus_in_event)
+    if (GTK_WIDGET_CLASS(gnucash_sheet_parent_class)->focus_in_event)
+        (*GTK_WIDGET_CLASS(gnucash_sheet_parent_class)->focus_in_event)
         (widget, event);
 
     gnc_item_edit_focus_in (GNC_ITEM_EDIT(sheet->item_editor));
@@ -1268,8 +1266,8 @@ gnucash_sheet_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
 {
     GnucashSheet *sheet = GNUCASH_SHEET(widget);
 
-    if (GTK_WIDGET_CLASS(sheet_parent_class)->focus_out_event)
-        (*GTK_WIDGET_CLASS(sheet_parent_class)->focus_out_event)
+    if (GTK_WIDGET_CLASS(gnucash_sheet_parent_class)->focus_out_event)
+        (*GTK_WIDGET_CLASS(gnucash_sheet_parent_class)->focus_out_event)
         (widget, event);
 
     gnc_item_edit_focus_out (GNC_ITEM_EDIT(sheet->item_editor));
@@ -2329,8 +2327,6 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
 
     gtk_widget_class_set_css_name (GTK_WIDGET_CLASS(klass), "gnc-id-sheet");
 
-    sheet_parent_class = g_type_class_peek_parent (klass);
-
     /* Method override */
     gobject_class->finalize = gnucash_sheet_finalize;
 
@@ -2392,37 +2388,6 @@ gnucash_sheet_init (GnucashSheet *sheet)
     sheet->keyval_state = 0;
     sheet->bound = sheet->pos = 0;
 }
-
-
-GType
-gnucash_sheet_get_type (void)
-{
-    static GType gnucash_sheet_type = 0;
-
-    if (!gnucash_sheet_type)
-    {
-        static const GTypeInfo gnucash_sheet_info =
-        {
-            sizeof (GnucashSheetClass),
-            NULL,       /* base_init */
-            NULL,       /* base_finalize */
-            (GClassInitFunc) gnucash_sheet_class_init,
-            NULL,       /* class_finalize */
-            NULL,       /* class_data */
-            sizeof (GnucashSheet),
-            0,      /* n_preallocs */
-            (GInstanceInitFunc) gnucash_sheet_init
-        };
-
-        gnucash_sheet_type =
-            g_type_register_static (GTK_TYPE_LAYOUT,
-                                    "GnucashSheet",
-                                    &gnucash_sheet_info, 0);
-    }
-
-    return gnucash_sheet_type;
-}
-
 
 static gboolean
 gnucash_sheet_tooltip (GtkWidget  *widget, gint x, gint y,

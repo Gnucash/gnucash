@@ -37,8 +37,6 @@
 #include "dialog-utils.h"
 #include "gnc-date.h"
 
-static void     gnc_popup_entry_init       (GncPopupEntry        *entry);
-static void     gnc_popup_entry_class_init (GncPopupEntryClass   *klass);
 static void     gpw_cell_editable_init     (GtkCellEditableIface *iface);
 static gboolean gpw_key_press_event        (GtkWidget            *box,
                                             GdkEventKey          *key_event);
@@ -65,48 +63,10 @@ enum
     PROP_EDITING_CANCELED,
 };
 
-static GtkEventBoxClass *parent_class;
 static guint signals[LAST_SIGNAL];
 
-GType
-gnc_popup_entry_get_type (void)
-{
-    static GType widget_type = 0;
-
-    if (!widget_type)
-    {
-        static const GTypeInfo widget_info =
-        {
-            sizeof (GncPopupEntryClass),
-            NULL,           /* base_init */
-            NULL,           /* base_finalize */
-            (GClassInitFunc) gnc_popup_entry_class_init,
-            NULL,           /* class_finalize */
-            NULL,           /* class_data */
-            sizeof (GncPopupEntry),
-            0,              /* n_preallocs */
-            (GInstanceInitFunc) gnc_popup_entry_init,
-        };
-
-        static const GInterfaceInfo cell_editable_info =
-        {
-            (GInterfaceInitFunc) gpw_cell_editable_init,    /* interface_init */
-            NULL,                                           /* interface_finalize */
-            NULL                                            /* interface_data */
-        };
-
-        widget_type = g_type_register_static (GTK_TYPE_EVENT_BOX,
-                                              "GncPopupEntry",
-                                              &widget_info,
-                                              0);
-
-        g_type_add_interface_static (widget_type,
-                                     GTK_TYPE_CELL_EDITABLE,
-                                     &cell_editable_info);
-    }
-
-    return widget_type;
-}
+G_DEFINE_TYPE_WITH_CODE (GncPopupEntry, gnc_popup_entry, GTK_TYPE_EVENT_BOX,
+    G_IMPLEMENT_INTERFACE (GTK_TYPE_EDITABLE, gpw_cell_editable_init))
 
 static void
 gnc_popup_entry_init (GncPopupEntry *widget)
@@ -166,8 +126,6 @@ gnc_popup_entry_class_init (GncPopupEntryClass *klass)
 
     gobject_class->set_property = gpw_set_property;
     gobject_class->get_property = gpw_get_property;
-
-    parent_class = GTK_EVENT_BOX_CLASS (g_type_class_peek_parent (klass));
 
     g_object_class_override_property (gobject_class,
                                       PROP_EDITING_CANCELED,
@@ -317,7 +275,7 @@ gpw_key_press_event (GtkWidget   *box,
 
     gtk_widget_event (widget->entry, &tmp_event);
 
-    return GTK_WIDGET_CLASS (parent_class)->key_press_event (GTK_WIDGET(widget),
+    return GTK_WIDGET_CLASS (gnc_popup_entry_parent_class)->key_press_event (GTK_WIDGET(widget),
                                                              key_event);
 }
 
