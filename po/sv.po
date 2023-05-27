@@ -17,7 +17,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-05-06 04:46+0000\n"
+"PO-Revision-Date: 2023-05-18 13:48+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
@@ -1367,7 +1367,7 @@ msgstr "Du har inga aktiekonton med saldon!"
 #. Initial stock long purchase
 #: gnucash/gnome/assistant-stock-transaction.cpp:147
 msgid "Open buy"
-msgstr "Öppna köp"
+msgstr "Öppet köp"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:148
 msgid "Initial stock long purchase."
@@ -1377,7 +1377,7 @@ msgstr "Inledande långsiktigt aktieinköp."
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:161
 msgid "Open short"
-msgstr "Öppna kort"
+msgstr "Öppet kort"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:162
 msgid "Initial stock short sale."
