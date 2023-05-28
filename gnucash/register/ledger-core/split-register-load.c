@@ -32,6 +32,7 @@
 #include "Transaction.h"
 #include "account-quickfill.h"
 #include "combocell.h"
+#include "completioncell.h"
 #include "gnc-component-manager.h"
 #include "qof.h"
 #include "gnc-ui-util.h"
@@ -54,7 +55,6 @@ static QofLogModule log_module = GNC_MOD_LEDGER;
 static void gnc_split_register_load_xfer_cells (SplitRegister* reg,
                                                 Account* base_account);
 
-static void gnc_split_register_load_desc_cells (SplitRegister* reg);
 static void
 gnc_split_register_load_recn_cells (SplitRegister* reg)
 {
@@ -111,6 +111,21 @@ gnc_split_register_load_type_cells (SplitRegister* reg)
     gnc_recn_cell_set_valid_flags (cell, "IP?", 'I');
     gnc_recn_cell_set_flag_order (cell, "IP");
     gnc_recn_cell_set_read_only (cell, TRUE);
+}
+
+static void
+gnc_split_register_load_desc_cells (SplitRegister* reg)
+{
+    CompletionCell *cell;
+
+    if (!reg) return;
+
+    cell = (CompletionCell *)
+           gnc_table_layout_get_cell (reg->table->layout, DESC_CELL);
+
+    if (!cell) return;
+
+    gnc_completion_cell_set_sort_enabled (cell, TRUE);
 }
 
 /** Add a transaction to the register.
@@ -609,6 +624,13 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
         added_blank_trans = TRUE;
     }
 
+    gnc_completion_cell_clear_menu (
+        (CompletionCell*) gnc_table_layout_get_cell (reg->table->layout, DESC_CELL));
+
+    gnc_completion_cell_reverse_sort (
+        (CompletionCell*) gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
+          table->model->reverse_sort);
+
     /* populate the table */
     for (node = slist; node; node = node->next)
     {
@@ -729,9 +751,10 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
         if (info->first_pass)
             add_quickfill_completions (reg->table->layout, trans, split, has_last_num);
 
-        gnc_combo_cell_add_menu_item_unique (
-            (ComboCell*) gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
-            xaccTransGetDescription (trans));
+        gnc_completion_cell_add_menu_item (
+            (CompletionCell*) gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
+             xaccTransGetDescription (trans));
+
 
         if (trans == find_trans)
             new_trans_row = vcell_loc.virt_row;
@@ -936,17 +959,4 @@ gnc_split_register_load_xfer_cells (SplitRegister* reg, Account* base_account)
     gnc_combo_cell_use_list_store_cache (cell, store);
 }
 
-static void
-gnc_split_register_load_desc_cells (SplitRegister* reg)
-{
-    ComboCell* cell;
-    GtkListStore* store = gtk_list_store_new (1, G_TYPE_STRING);
-
-    cell = (ComboCell*)
-           gnc_table_layout_get_cell (reg->table->layout, DESC_CELL);
-
-    gnc_combo_cell_use_type_ahead_only (cell);
-
-    gnc_combo_cell_use_list_store_cache (cell, store);
-}
 /* ====================== END OF FILE ================================== */
