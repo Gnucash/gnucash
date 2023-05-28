@@ -367,7 +367,7 @@ gnc_combo_cell_set_sort_enabled (ComboCell* cell, gboolean enabled)
         return;
 
     block_list_signals (cell);
-    gnc_item_list_set_sort_enabled (box->item_list, enabled);
+    gnc_item_list_set_sort_column (box->item_list, 0);
     unblock_list_signals (cell);
 }
 

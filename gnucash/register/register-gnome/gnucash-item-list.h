@@ -77,7 +77,7 @@ void gnc_item_list_clear (GncItemList *item_list);
 
 void gnc_item_list_append (GncItemList *item_list, const char *string);
 
-void gnc_item_list_set_sort_enabled(GncItemList *item_list, gboolean enabled);
+void gnc_item_list_set_sort_column (GncItemList *item_list, gint column_id);
 
 gboolean gnc_item_in_list (GncItemList *item_list, const char *string);
 
@@ -97,6 +97,10 @@ int gnc_item_list_autosize (GncItemList *item_list);
 void gnc_item_list_set_temp_store (GncItemList *item_list, GtkListStore *store);
 
 gboolean gnc_item_list_using_temp (GncItemList *item_list);
+
+GtkListStore * gnc_item_list_disconnect_store (GncItemList *item_list);
+
+void gnc_item_list_connect_store (GncItemList *item_list, GtkListStore *store);
 
 /** @} */
 #endif /* GNUCASH_ITEM_LIST_H */
