@@ -71,6 +71,8 @@ typedef struct _PopBox
 
 } PopBox;
 
+#define DONT_TEXT N_("Don't autocomplete")
+
 /** Enumeration for the list-store */
 enum GncCompletionColumn
 {
@@ -599,6 +601,11 @@ populate_list_store (CompletionCell* cell, const gchar* str)
 
     gtk_list_store_clear (box->item_store);
 
+    // add the don't first entry
+    gchar *markup = g_markup_printf_escaped ("<i>%s</i>", DONT_TEXT);
+    list_store_append (box->item_store, DONT_TEXT, markup, 0);
+    g_free (markup);
+
     // add to the list store
     g_hash_table_foreach (box->item_hash, add_item, box);
 
@@ -642,6 +649,8 @@ gnc_completion_cell_modify_verify (BasicCell* bcell,
 
     if (box->in_list_select)
     {
+        if (g_strcmp0 (newval, DONT_TEXT) == 0)
+            return;
         gnc_basic_cell_set_value_internal (bcell, newval);
         *cursor_position = -1;
         *start_selection = 0;
