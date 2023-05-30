@@ -117,6 +117,7 @@ const OptionAliases Aliases::c_option_aliases
     {"Specify date to filter by...", {nullptr, "Specify date to filter by…"}},
     // trep-engine:
     {"Running Balance", {nullptr, "Account Balance"}},
+    {"Totals", {nullptr, "Grand Total"}},
 };
 
 static bool

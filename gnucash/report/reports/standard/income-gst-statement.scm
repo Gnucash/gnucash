@@ -226,6 +226,7 @@ with *EUGOODS* in the account description."))
   (GncOptionDBPtr-make-internal options gnc:pagename-display "Amount")
   (GncOptionDBPtr-make-internal options gnc:pagename-display "Sign Reverses")
   (GncOptionDBPtr-make-internal options gnc:pagename-display "Running Balance")
+  (GncOptionDBPtr-make-internal options gnc:pagename-display "Running Totals")
   ;; No multilines allowed
   (GncOptionDBPtr-make-internal options gnc:pagename-display "Detail Level")
   (GncOptionDBPtr-make-internal options pagename-sorting "Show Informal Debit/Credit Headers")

@@ -299,7 +299,16 @@
         (test-equal "month total present, and is $190 in original-currency"
           '("$190.00")
           (get-row-col sxml 6 -1))
-        ))
+        )
+
+      ;; dual columns with all running totals
+      (set-option! options "Display" "Running Totals" 'all)
+      (let ((sxml (options->sxml options "test column headers with original currency and running totals")))
+        (test-equal "default headers with all running totals, indented, includes common-currency"
+          '("Date" "Num" "Description" "Memo/Notes" "Account" "Amount (USD)"
+            "Running Secondary Subtotal (USD)" "Running Primary Subtotal (USD)" "Running Grand Total (USD)"
+            "Amount" "Running Secondary Subtotal" "Running Primary Subtotal" "Running Grand Total")
+          (get-row-col sxml 0 #f))))
 
     (test-end "general options")
 
@@ -478,7 +487,7 @@
          (set-option! options "Display" name #f))
        (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
              "Account Name" "Other Account Name" "Shares" "Price" "Account Balance"
-             "Totals"))
+             "Grand Total"))
       (let ((sxml (options->sxml options "all columns off")))
         (test-assert "all display columns off, except amount and subtotals are enabled, there should be 2 columns"
           (= (length ((sxpath '(// (table 1) // (tr 1) // th)) sxml))
@@ -536,11 +545,12 @@
          (set-option! options "Display" name #t))
        (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
              "Account Name" "Other Account Name" "Shares" "Price" "Account Balance"
-             "Totals" "Use Full Other Account Name" "Use Full Account Name"))
+             "Grand Total" "Use Full Other Account Name" "Use Full Account Name"))
+      (set-option! options "Display" "Running Totals" 'grand)
       (let* ((sxml (options->sxml options "all columns on")))
         (test-equal "all display columns on, displays correct columns"
           (list "Date" "Reconciled Date" "Num" "Description" "Memo/Notes" "Account"
-                "Transfer from/to" "Shares" "Price" "Amount" "Account Balance")
+                "Transfer from/to" "Shares" "Price" "Amount" "Account Balance" "Running Grand Total")
           (get-row-col sxml 0 #f))
         (test-assert "reconciled dates must be 01/03/70 or whitespace"
           (and-map
@@ -561,7 +571,7 @@
       (set-option! options "General" "Start Date" (cons 'absolute (gnc-dmy2time64 13 02 1971)))
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 15 02 1971)))
       (set-option! options "Display" "Detail Level" 'multi-line)
-      (set-option! options "Display" "Totals" #f)
+      (set-option! options "Display" "Grand Total" #f)
       (set-option! options "Sorting" "Primary Subtotal" #f)
       (set-option! options "Sorting" "Primary Subtotal for Date Key" 'none)
       (set-option! options "Sorting" "Secondary Subtotal" #f)
@@ -700,6 +710,20 @@
         (test-equal "running balance, showing Balance b/f"
           (list "Bank: Balance b/f" "-$99.00")
           (get-row-col sxml 1 #f)))
+
+      ;; test running grand total
+      (set! options (default-testing-options))
+      (set-option! options "Display" "Running Totals" 'grand)
+      (set-option! options "Sorting" "Primary Subtotal" #f)
+      (let* ((sxml (options->sxml options "running grand total"))
+             (cs (char-set-adjoin! (char-set-copy char-set:digit) #\-)))
+        (test-equal "Last running grand total equals grand total"
+          (get-row-col sxml -3 -1)
+          (get-row-col sxml -1 -2))
+        (test-equal "Row 9 running grand total matches row 8 running grand total + row 9 amount"
+          (+ (string->number (string-filter cs (car (get-row-col sxml 8 -1))))
+             (string->number (string-filter cs (car (get-row-col sxml 9 -2)))))
+          (string->number (string-filter cs (car (get-row-col sxml 9 -1))))))
       )
 
     (test-end "display options")
@@ -711,7 +735,7 @@
       (set-option! options "General" "End Date" (cons 'absolute (gnc-dmy2time64 31 12 1970)))
       ;;(set-option! options "Accounts" "Accounts" (gnc-account-get-descendants (gnc-account-get-root bank)))
       (set-option! options "Accounts" "Accounts" (list bank))
-      (set-option! options "Display" "Totals" #f)
+      (set-option! options "Display" "Grand Total" #f)
       (set-option! options "Display" "Other Account Name" #t)
       (set-option! options "Filter" "Void Transactions" 'both)
       (set-option! options "Sorting" "Primary Subtotal" #f)
@@ -773,7 +797,7 @@
       (set-option! options "Sorting" "Primary Subtotal" #t)
       (set-option! options "Sorting" "Secondary Key" 'date)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
-      (set-option! options "Display" "Totals" #t)
+      (set-option! options "Display" "Grand Total" #t)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'quarterly)
       (set-option! options "Sorting" "Show subtotals only (hide transactional data)" #t)
       (let* ((sxml (options->sxml options "sorting=account-name, date-quarterly, subtotals only")))
@@ -783,7 +807,7 @@
 
       (set! options (default-testing-options))
       (set-option! options "Accounts" "Accounts" (gnc-account-get-descendants (gnc-account-get-root bank)))
-      (set-option! options "Display" "Totals" #t)
+      (set-option! options "Display" "Grand Total" #t)
       (set-option! options "Display" "Amount" 'double)
       (set-option! options "Currency" "Show original currency amount" #t)
       (set-option! options "General" "Table for Exporting" #f)
@@ -803,7 +827,7 @@
           (get-row-col sxml 91 #f)))
 
       (set-option! options "Accounts" "Accounts" (list bank))
-      (set-option! options "Display" "Totals" #f)
+      (set-option! options "Display" "Grand Total" #f)
       (set-option! options "Sorting" "Show subtotals only (hide transactional data)" #t)
       (let* ((sxml (options->sxml options "sorting=date quarterly")))
         (test-equal "quarterly subtotals are correct"
@@ -840,7 +864,80 @@
           (get-row-col sxml #f 4))
         (test-equal "weekly subtotals are correct (2)"
           '("$15.00" "$8.00" "$100.00")
-          (get-row-col sxml #f 5))))
+          (get-row-col sxml #f 5)))
+
+      ;; test running subtotals
+      (set! options (default-testing-options))
+      (set-option! options "Display" "Grand Total" #f)
+      (set-option! options "Display" "Running Totals" 'sub)
+      (set-option! options "Sorting" "Primary Key" 'account-name)
+      (set-option! options "Sorting" "Primary Subtotal" #t)
+      (set-option! options "Sorting" "Secondary Key" 'date)
+      (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
+      (let* ((sxml (options->sxml options "running subtotals"))
+             (cs (char-set-adjoin! (char-set-copy char-set:digit) #\-)))
+        (test-equal "Running subtotal columns are present"
+          (list "Date" "Num" "Description" "Memo/Notes" "Account" "Amount"
+                "Running Secondary Subtotal" "Running Primary Subtotal")
+          (get-row-col sxml 0 #f))
+        (test-equal "Last running primary subtotal equals primary subtotal"
+          (get-row-col sxml -3 -1)
+          (get-row-col sxml -1 -3))
+        (test-equal "Row 10 running primary subtotal matches row 9 running primary subtotal + row 10 amount"
+          (+ (string->number (string-filter cs (car (get-row-col sxml 9 -1))))
+             (string->number (string-filter cs (car (get-row-col sxml 10 -3)))))
+          (string->number (string-filter cs (car (get-row-col sxml 10 -1)))))
+        (test-equal "In first secondary group, last running secondary subtotal equals secondary subtotal"
+          (get-row-col sxml 5 -2)
+          (get-row-col sxml 6 -3))
+        (test-equal "Row 10 running secondary subtotal matches row 9 running secondary subtotal + row 10 amount"
+          (+ (string->number (string-filter cs (car (get-row-col sxml 9 -2))))
+             (string->number (string-filter cs (car (get-row-col sxml 10 -3)))))
+          (string->number (string-filter cs (car (get-row-col sxml 10 -2))))))
+      ;; test all running totals shown
+      (set-option! options "Display" "Running Totals" 'all)
+      (let* ((sxml (options->sxml options "all running totals"))
+             (cs (char-set-adjoin! (char-set-copy char-set:digit) #\-)))
+        (test-equal "All running total columns are present"
+          (list "Date" "Num" "Description" "Memo/Notes" "Account" "Amount"
+                "Running Secondary Subtotal" "Running Primary Subtotal" "Running Grand Total")
+          (get-row-col sxml 0 #f)))
+      ;; test no running totals shown
+      (set-option! options "Display" "Running Totals" 'none)
+      (let* ((sxml (options->sxml options "no running totals"))
+             (cs (char-set-adjoin! (char-set-copy char-set:digit) #\-)))
+        (test-equal "No running total columns are present"
+          (list "Date" "Num" "Description" "Memo/Notes" "Account" "Amount")
+          (get-row-col sxml 0 #f)))
+
+      ;; test that only columns with subtotals are displayed when
+      ;; "Show subtotals only (hide transactional data)" is selected
+      (set! options (default-testing-options))
+      (for-each
+      (lambda (name)
+        (set-option! options "Display" name #t))
+      (list "Date" "Reconciled Date" "Num" "Description" "Memo" "Notes"
+            "Account Name" "Other Account Name" "Shares" "Price" "Account Balance"
+            "Grand Total" "Use Full Other Account Name" "Use Full Account Name"))
+      (set-option! options "Display" "Running Totals" 'all)
+      (set-option! options "Sorting" "Primary Key" 'account-name)
+      (set-option! options "Sorting" "Primary Subtotal" #t)
+      (set-option! options "Sorting" "Secondary Key" 'date)
+      (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'monthly)
+      (set-option! options "Sorting" "Show subtotals only (hide transactional data)" #t)
+      (set-option! options "Currency" "Common Currency" #t)
+      (set-option! options "Currency" "Show original currency amount" #t)
+      (let* ((sxml (options->sxml options "show subtotals only, single column")))
+        (test-equal "all display columns on with single amount; show subtotals only, so only amount columns are shown"
+          (list "Amount (USD)" "Amount")
+          (get-row-col sxml 0 #f)))
+
+      (set-option! options "Display" "Amount" 'double)
+      (let* ((sxml (options->sxml options "show subtotals only, dual column")))
+        (test-equal "all display columns on with dual amount; show subtotals only, so only debit/credit columns are shown"
+          (list "Debit (USD)" "Credit (USD)" "Debit" "Credit")
+          (get-row-col sxml 0 #f)))
+    )
 
     (test-end "sorting options")
 
