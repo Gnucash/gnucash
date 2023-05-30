@@ -43,6 +43,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "Account.h"
 #include "AccountP.h"
@@ -52,6 +53,8 @@
 #include "gnc-commodity.h"
 #include "qofinstance-p.h"
 #include "gnc-session.h"
+#include "qofquery.h"
+#include "Query.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.scrub"
@@ -84,6 +87,22 @@ gboolean
 gnc_get_ongoing_scrub (void)
 {
     return scrub_depth > 0;
+}
+
+/* ================================================================ */
+
+static GList*
+get_all_transactions (Account *account, bool descendants)
+{
+    GList *accounts = descendants ? gnc_account_get_descendants (account) : NULL;
+    accounts = g_list_prepend (accounts, account);
+    QofQuery *q = qof_query_create_for (GNC_ID_TRANS);
+    QofBook *book = qof_session_get_book (gnc_get_current_session ());
+    qof_query_set_book (q, book);
+    xaccQueryAddAccountMatch (q, accounts, QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
+    GList *transactions = g_list_copy (qof_query_run (q));
+    qof_query_destroy (q);
+    return transactions;
 }
 
 /* ================================================================ */
@@ -331,78 +350,59 @@ xaccSplitScrub (Split *split)
 
 /* ================================================================ */
 
+
+static void
+AccountScrubImbalance (Account *acc, bool descendants,
+                       QofPercentageFunc percentagefunc)
+{
+    const char *message = _( "Looking for imbalances in transaction date %s: %u of %u");
+
+    if (!acc) return;
+
+    QofBook *book = qof_session_get_book (gnc_get_current_session ());
+    Account *root = gnc_book_get_root_account (book);
+    GList *transactions = get_all_transactions (acc, descendants);
+    guint count = g_list_length (transactions), curr_trans = 0;
+
+    scrub_depth++;
+    for (GList *node = transactions; node; node = node->next, curr_trans++)
+    {
+        Transaction *trans = node->data;
+        if (abort_now) break;
+
+        PINFO("Start processing transaction %d of %d", curr_trans + 1, count);
+
+        if (curr_trans % 10 == 0)
+        {
+            char *date = qof_print_date (xaccTransGetDate (trans));
+            char *progress_msg = g_strdup_printf (message, date, curr_trans, count);
+            (percentagefunc)(progress_msg, (100 * curr_trans) / count);
+            g_free (progress_msg);
+            g_free (date);
+        }
+
+        TransScrubOrphansFast (trans, root);
+        xaccTransScrubCurrency(trans);
+        xaccTransScrubImbalance (trans, root, NULL);
+
+        PINFO("Finished processing transaction %d of %d", curr_trans + 1, count);
+    }
+    (percentagefunc)(NULL, -1.0);
+    scrub_depth--;
+
+    g_list_free (transactions);
+}
+
 void
 xaccAccountTreeScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
 {
-    if (!acc) return;
-
-    if (abort_now)
-        (percentagefunc)(NULL, -1.0);
-
-    scrub_depth++;
-    xaccAccountScrubImbalance (acc, percentagefunc);
-    gnc_account_foreach_descendant(acc,
-                                   (AccountCb)xaccAccountScrubImbalance, percentagefunc);
-    scrub_depth--;
+    AccountScrubImbalance (acc, true, percentagefunc);
 }
 
 void
 xaccAccountScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
 {
-    GList *node, *splits;
-    const char *str;
-    const char *message = _( "Looking for imbalances in account %s: %u of %u");
-    gint split_count = 0, curr_split_no = 0;
-
-    if (!acc) return;
-    /* If it's a trading account and an imbalanced transaction is
-     * found the trading splits will be replaced, invalidating the
-     * split list in mid-traversal, see
-     * https://bugs.gnucash.org/show_bug.cgi?id=798346. Also the
-     * transactions will get scrubbed at least twice from their "real"
-     * accounts anyway so doing so from the trading accounts is wasted
-     * effort.
-     */
-    if (xaccAccountGetType(acc) == ACCT_TYPE_TRADING)
-         return;
-
-    scrub_depth++;
-
-    str = xaccAccountGetName(acc);
-    str = str ? str : "(null)";
-    PINFO ("Looking for imbalances in account %s\n", str);
-
-    splits = xaccAccountGetSplitList(acc);
-    split_count = g_list_length (splits);
-    for (node = splits; node; node = node->next)
-    {
-        Split *split = node->data;
-        Transaction *trans = xaccSplitGetParent(split);
-        if (abort_now) break;
-
-        PINFO("Start processing split %d of %d",
-              curr_split_no + 1, split_count);
-
-        if (curr_split_no % 10 == 0)
-        {
-            char *progress_msg = g_strdup_printf (message, str, curr_split_no, split_count);
-            (percentagefunc)(progress_msg, (100 * curr_split_no) / split_count);
-            g_free (progress_msg);
-        }
-
-        TransScrubOrphansFast (xaccSplitGetParent (split),
-                               gnc_account_get_root (acc));
-
-        xaccTransScrubCurrency(trans);
-
-        xaccTransScrubImbalance (trans, gnc_account_get_root (acc), NULL);
-
-        PINFO("Finished processing split %d of %d",
-              curr_split_no + 1, split_count);
-        curr_split_no++;
-    }
-    (percentagefunc)(NULL, -1.0);
-    scrub_depth--;
+    AccountScrubImbalance (acc, false, percentagefunc);
 }
 
 static Split *
