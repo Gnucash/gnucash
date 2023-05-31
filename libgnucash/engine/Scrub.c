@@ -107,47 +107,27 @@ get_all_transactions (Account *account, bool descendants)
 
 /* ================================================================ */
 
-void
-xaccAccountTreeScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
-{
-    if (!acc) return;
-
-    if (abort_now)
-        (percentagefunc)(NULL, -1.0);
-
-    scrub_depth ++;
-    xaccAccountScrubOrphans (acc, percentagefunc);
-    gnc_account_foreach_descendant(acc,
-                                   (AccountCb)xaccAccountScrubOrphans, percentagefunc);
-    scrub_depth--;
-}
-
 static void
 TransScrubOrphansFast (Transaction *trans, Account *root)
 {
-    GList *node;
-    gchar *accname;
+    g_return_if_fail (trans && trans->common_currency && root);
 
-    if (!trans) return;
-    g_return_if_fail (root);
-    g_return_if_fail (trans->common_currency);
-
-    for (node = trans->splits; node; node = node->next)
+    for (GList *node = trans->splits; node; node = node->next)
     {
         Split *split = node->data;
-        Account *orph;
         if (abort_now) break;
 
         if (split->acc) continue;
 
         DEBUG ("Found an orphan\n");
 
-        accname = g_strconcat (_("Orphan"), "-",
-                               gnc_commodity_get_mnemonic (trans->common_currency),
-                               NULL);
-        orph = xaccScrubUtilityGetOrMakeAccount (root, trans->common_currency,
-                                                 accname, ACCT_TYPE_BANK,
-                                                 FALSE, TRUE);
+        gchar *accname = g_strconcat
+            (_("Orphan"), "-", gnc_commodity_get_mnemonic (trans->common_currency),
+             NULL);
+
+        Account *orph = xaccScrubUtilityGetOrMakeAccount
+            (root, trans->common_currency, accname, ACCT_TYPE_BANK, false, true);
+
         g_free (accname);
         if (!orph) continue;
 
@@ -155,43 +135,47 @@ TransScrubOrphansFast (Transaction *trans, Account *root)
     }
 }
 
-void
-xaccAccountScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
+static void
+AccountScrubOrphans (Account *acc, bool descendants, QofPercentageFunc percentagefunc)
 {
-    GList *node, *splits;
-    const char *str;
-    const char *message = _( "Looking for orphans in account %s: %u of %u");
-    guint total_splits = 0;
-    guint current_split = 0;
-
     if (!acc) return;
     scrub_depth++;
 
-    str = xaccAccountGetName (acc);
-    str = str ? str : "(null)";
-    PINFO ("Looking for orphans in account %s\n", str);
-    splits = xaccAccountGetSplitList(acc);
-    total_splits = g_list_length (splits);
+    GList *transactions = get_all_transactions (acc, descendants);
+    gint total_trans = g_list_length (transactions);
+    const char *message = _( "Looking for orphans in transaction: %u of %u");
+    guint current_trans = 0;
 
-    for (node = splits; node; node = node->next)
+    for (GList *node = transactions; node; current_trans++, node = node->next)
     {
-        Split *split = node->data;
-        if (current_split % 10 == 0)
+        Transaction *trans = node->data;
+        if (current_trans % 10 == 0)
         {
-            char *progress_msg = g_strdup_printf (message, str, current_split, total_splits);
-            (percentagefunc)(progress_msg, (100 * current_split) / total_splits);
+            char *progress_msg = g_strdup_printf (message, current_trans, total_trans);
+            (percentagefunc)(progress_msg, (100 * current_trans) / total_trans);
             g_free (progress_msg);
             if (abort_now) break;
         }
 
-        TransScrubOrphansFast (xaccSplitGetParent (split),
-                               gnc_account_get_root (acc));
-        current_split++;
+        TransScrubOrphansFast (trans, gnc_account_get_root (acc));
     }
     (percentagefunc)(NULL, -1.0);
     scrub_depth--;
+
+    g_list_free (transactions);
 }
 
+void
+xaccAccountScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
+{
+    AccountScrubOrphans (acc, false, percentagefunc);
+}
+
+void
+xaccAccountTreeScrubOrphans (Account *acc, QofPercentageFunc percentagefunc)
+{
+    AccountScrubOrphans (acc, true, percentagefunc);
+}
 
 void
 xaccTransScrubOrphans (Transaction *trans)
