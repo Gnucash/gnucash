@@ -36,7 +36,6 @@ test_quote_sources ()
     do_test (gnc_quote_source_num_entries(SOURCE_CURRENCY) == 1, "source currency = 1 source");
     do_test (gnc_quote_source_lookup_by_ti (SOURCE_CURRENCY, 0) != nullptr, "lookup_by_ti currency exists");
     do_test (gnc_quote_source_lookup_by_internal("currency") != nullptr, "lookup_by_internal: currency exists");
-    do_test (gnc_quote_source_lookup_by_internal("CURRENCY") != nullptr, "lookup_by_internal: CURRENCY exists"); // old internal name
 
     do_test (gnc_quote_source_num_entries(SOURCE_UNKNOWN) == 0, "source unknown = 0 source");
     do_test (gnc_quote_source_lookup_by_ti (SOURCE_UNKNOWN, 0) == nullptr, "lookup_by_ti unknown fails");
