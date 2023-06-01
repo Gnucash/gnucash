@@ -43,6 +43,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "Account.h"
 #include "AccountP.h"
@@ -231,8 +232,10 @@ xaccAccountScrubSplits (Account *account)
     scrub_depth--;
 }
 
-void
-xaccSplitScrub (Split *split)
+/* if dry_run is true, this function will analyze the split and
+   return true if the split will be modified during the actual scrub. */
+static bool
+split_scrub_or_dry_run (Split *split, bool dry_run)
 {
     Account *account;
     Transaction *trans;
@@ -240,14 +243,14 @@ xaccSplitScrub (Split *split)
     gnc_commodity *currency, *acc_commodity;
     int scu;
 
-    if (!split) return;
+    if (!split) return false;
     ENTER ("(split=%p)", split);
 
     trans = xaccSplitGetParent (split);
     if (!trans)
     {
         LEAVE("no trans");
-        return;
+        return false;
     }
 
     account = xaccSplitGetAccount (split);
@@ -257,7 +260,10 @@ xaccSplitScrub (Split *split)
      */
     if (!account)
     {
-        xaccTransScrubOrphans (trans);
+        if (dry_run)
+            return true;
+        else
+            xaccTransScrubOrphans (trans);
         account = xaccSplitGetAccount (split);
     }
 
@@ -269,7 +275,7 @@ xaccSplitScrub (Split *split)
     {
         PINFO ("Free Floating Transaction!");
         LEAVE ("no account");
-        return;
+        return false;
     }
 
     /* Split amounts and values should be valid numbers */
@@ -277,14 +283,20 @@ xaccSplitScrub (Split *split)
     if (gnc_numeric_check (value))
     {
         value = gnc_numeric_zero();
-        xaccSplitSetValue (split, value);
+        if (dry_run)
+            return true;
+        else
+            xaccSplitSetValue (split, value);
     }
 
     amount = xaccSplitGetAmount (split);
     if (gnc_numeric_check (amount))
     {
         amount = gnc_numeric_zero();
-        xaccSplitSetAmount (split, amount);
+        if (dry_run)
+            return true;
+        else
+            xaccSplitSetAmount (split, amount);
     }
 
     currency = xaccTransGetCurrency (trans);
@@ -295,12 +307,15 @@ xaccSplitScrub (Split *split)
     acc_commodity = xaccAccountGetCommodity(account);
     if (!acc_commodity)
     {
-        xaccAccountScrubCommodity (account);
+        if (dry_run)
+            return true;
+        else
+            xaccAccountScrubCommodity (account);
     }
     if (!acc_commodity || !gnc_commodity_equiv(acc_commodity, currency))
     {
         LEAVE ("(split=%p) inequiv currency", split);
-        return;
+        return false;
     }
 
     scu = MIN (xaccAccountGetCommoditySCU (account),
@@ -309,8 +324,11 @@ xaccSplitScrub (Split *split)
     if (gnc_numeric_same (amount, value, scu, GNC_HOW_RND_ROUND_HALF_UP))
     {
         LEAVE("(split=%p) different values", split);
-        return;
+        return false;
     }
+
+    if (dry_run)
+        return true;
 
     /*
      * This will be hit every time you answer yes to the dialog "The
@@ -327,6 +345,7 @@ xaccSplitScrub (Split *split)
     xaccSplitSetAmount (split, value);
     xaccTransCommitEdit (trans);
     LEAVE ("(split=%p)", split);
+    return true;
 }
 
 /* ================================================================ */
@@ -340,6 +359,15 @@ xaccTransScrubSplits (Transaction *trans)
     if (!currency)
         PERR ("Transaction doesn't have a currency!");
 
+    bool must_scrub = false;
+
+    for (GList *n = xaccTransGetSplitList (trans); !must_scrub && n; n = g_list_next (n))
+        if (split_scrub_or_dry_run (n->data, true))
+            must_scrub = true;
+
+    if (!must_scrub)
+        return;
+
     xaccTransBeginEdit(trans);
     /* The split scrub expects the transaction to have a currency! */
 
@@ -349,6 +377,13 @@ xaccTransScrubSplits (Transaction *trans)
     xaccTransCommitEdit(trans);
 }
 
+/* ================================================================ */
+
+void
+xaccSplitScrub (Split *split)
+{
+    split_scrub_or_dry_run (split, false);
+}
 
 /* ================================================================ */
 
