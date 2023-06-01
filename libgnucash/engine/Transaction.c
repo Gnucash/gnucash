@@ -2868,23 +2868,6 @@ xaccTransGetReversedBy(const Transaction *trans)
     return retval;
 }
 
-void
-xaccTransScrubSplits (Transaction *trans)
-{
-    gnc_commodity *currency;
-
-    if (!trans) return;
-
-    xaccTransBeginEdit(trans);
-    /* The split scrub expects the transaction to have a currency! */
-    currency = xaccTransGetCurrency (trans);
-    if (!currency)
-        PERR ("Transaction doesn't have a currency!");
-
-    FOR_EACH_SPLIT(trans, xaccSplitScrub(s));
-    xaccTransCommitEdit(trans);
-}
-
 /* ============================================================== */
 /** The xaccTransScrubGainsDate() routine is used to keep the posted date
  *    of gains splits in sync with the posted date of the transaction

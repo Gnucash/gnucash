@@ -332,6 +332,28 @@ xaccSplitScrub (Split *split)
 /* ================================================================ */
 
 void
+xaccTransScrubSplits (Transaction *trans)
+{
+    if (!trans) return;
+
+    gnc_commodity *currency = xaccTransGetCurrency (trans);
+    if (!currency)
+        PERR ("Transaction doesn't have a currency!");
+
+    xaccTransBeginEdit(trans);
+    /* The split scrub expects the transaction to have a currency! */
+
+    for (GList *n = xaccTransGetSplitList (trans); n; n = g_list_next (n))
+        xaccSplitScrub (n->data);
+
+    xaccTransCommitEdit(trans);
+}
+
+
+/* ================================================================ */
+
+
+void
 xaccAccountTreeScrubImbalance (Account *acc, QofPercentageFunc percentagefunc)
 {
     if (!acc) return;
