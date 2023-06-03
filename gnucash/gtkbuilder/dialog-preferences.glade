@@ -2578,7 +2578,9 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Reconciling&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;"Jump" for multiple accounts&lt;/b&gt;</property>
+                    <property name="tooltip-markup">"Jump" behaviour when there are multiple other accounts.</property>
+                    <property name="tooltip-text" translatable="yes">"Jump" behaviour when there are multiple other accounts.</property>
                     <property name="use-markup">True</property>
                   </object>
                   <packing>
@@ -2587,16 +2589,17 @@ many months before the current month</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/check-cleared">
-                    <property name="label" translatable="yes">Check cleared _transactions</property>
+                  <object class="GtkRadioButton" id="pref/general.register/jump-multiple-splits=0">
+                    <property name="label" translatable="yes">Do _nothing</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Pre-check cleared transactions when creating a reconcile dialog.</property>
-                    <property name="tooltip-text" translatable="yes">Pre-check cleared transactions when creating a reconcile dialog.</property>
+                    <property name="tooltip-markup">Do nothing.</property>
+                    <property name="tooltip-text" translatable="yes">Do nothing.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
+                    <property name="active">True</property>
                     <property name="draw-indicator">True</property>
                   </object>
                   <packing>
@@ -2605,17 +2608,19 @@ many months before the current month</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/auto-cc-payment">
-                    <property name="label" translatable="yes">Automatic credit card _payment</property>
+                  <object class="GtkRadioButton" id="pref/general.register/jump-multiple-splits=1">
+                    <property name="label" translatable="yes">Use the first split with the _largest value</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">After reconciling a credit card statement, prompt the user to enter a credit card payment.</property>
-                    <property name="tooltip-text" translatable="yes">After reconciling a credit card statement, prompt the user to enter a credit card payment.</property>
+                    <property name="tooltip-markup">Use the first split with the largest value to determine the other account.</property>
+                    <property name="tooltip-text" translatable="yes">Use the first split with the largest value to determine the other account.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
+                    <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <property name="group">pref/general.register/jump-multiple-splits=0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -2623,17 +2628,19 @@ many months before the current month</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/always-reconcile-to-today">
-                    <property name="label" translatable="yes">Always reconcile to t_oday</property>
+                  <object class="GtkRadioButton" id="pref/general.register/jump-multiple-splits=2">
+                    <property name="label" translatable="yes">Use the first split with the _smallest value</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
                     <property name="receives-default">False</property>
                     <property name="has-tooltip">True</property>
-                    <property name="tooltip-markup">Always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations.</property>
-                    <property name="tooltip-text" translatable="yes">Always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations.</property>
+                    <property name="tooltip-markup">Use the first split with the smallest value to determine the other account.</property>
+                    <property name="tooltip-text" translatable="yes">Use the first split with the smallest value to determine the other account.</property>
                     <property name="halign">start</property>
                     <property name="use-underline">True</property>
+                    <property name="active">True</property>
                     <property name="draw-indicator">True</property>
+                    <property name="group">pref/general.register/jump-multiple-splits=0</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
@@ -2655,12 +2662,89 @@ many months before the current month</property>
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Graphics&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Reconciling&lt;/b&gt;</property>
                     <property name="use-markup">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
                     <property name="top-attach">10</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/check-cleared">
+                    <property name="label" translatable="yes">Check cleared _transactions</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-markup">Pre-check cleared transactions when creating a reconcile dialog.</property>
+                    <property name="tooltip-text" translatable="yes">Pre-check cleared transactions when creating a reconcile dialog.</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">11</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/auto-cc-payment">
+                    <property name="label" translatable="yes">Automatic credit card _payment</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-markup">After reconciling a credit card statement, prompt the user to enter a credit card payment.</property>
+                    <property name="tooltip-text" translatable="yes">After reconciling a credit card statement, prompt the user to enter a credit card payment.</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">12</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="pref/dialogs.reconcile/always-reconcile-to-today">
+                    <property name="label" translatable="yes">Always reconcile to t_oday</property>
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="receives-default">False</property>
+                    <property name="has-tooltip">True</property>
+                    <property name="tooltip-markup">Always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations.</property>
+                    <property name="tooltip-text" translatable="yes">Always open the reconcile dialog using today's date for the statement date, regardless of previous reconciliations.</property>
+                    <property name="halign">start</property>
+                    <property name="use-underline">True</property>
+                    <property name="draw-indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">13</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">14</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">&lt;b&gt;Graphics&lt;/b&gt;</property>
+                    <property name="use-markup">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">15</property>
                   </packing>
                 </child>
                 <child>
@@ -2678,7 +2762,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">11</property>
+                    <property name="top-attach">16</property>
                   </packing>
                 </child>
                 <child>
@@ -2696,7 +2780,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">12</property>
+                    <property name="top-attach">17</property>
                   </packing>
                 </child>
                 <child>
@@ -2714,7 +2798,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">13</property>
+                    <property name="top-attach">18</property>
                   </packing>
                 </child>
                 <child>
@@ -2732,7 +2816,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">14</property>
+                    <property name="top-attach">19</property>
                   </packing>
                 </child>
                 <child>
@@ -2742,7 +2826,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">15</property>
+                    <property name="top-attach">20</property>
                   </packing>
                 </child>
                 <child>
@@ -2757,7 +2841,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">16</property>
+                    <property name="top-attach">21</property>
                   </packing>
                 </child>
                 <child>
@@ -2775,7 +2859,7 @@ many months before the current month</property>
                   </object>
                   <packing>
                     <property name="left-attach">0</property>
-                    <property name="top-attach">17</property>
+                    <property name="top-attach">22</property>
                   </packing>
                 </child>
               </object>
