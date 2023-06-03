@@ -79,6 +79,7 @@
 #define GNC_PREF_USE_GNUCASH_COLOR_THEME "use-gnucash-color-theme"
 #define GNC_PREF_TAB_TRANS_MEMORISED "tab-to-transfer-on-memorised"
 #define GNC_PREF_FUTURE_AFTER_BLANK  "future-after-blank-transaction"
+#define GNC_PREF_JUMP_MULT_SPLITS    "jump-multiple-splits"
 /* Date preferences */
 #define GNC_PREF_START_CHOICE_ABS    "start-choice-absolute"
 #define GNC_PREF_START_CHOICE_REL    "start-choice-relative"

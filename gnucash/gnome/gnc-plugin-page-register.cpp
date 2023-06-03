@@ -91,6 +91,14 @@
 #include "qofbookslots.h"
 #include "gnc-gtk-utils.h"
 
+/* gschema: org.gnucash.GnuCash.general.register.JumpMultipleSplits */
+typedef enum : gint
+{
+    JUMP_DEFAULT = 0, /* Do nothing */
+    JUMP_LARGEST_VALUE_FIRST_SPLIT = 1,
+    JUMP_SMALLEST_VALUE_FIRST_SPLIT = 2,
+} GncPrefJumpMultSplits;
+
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -4810,6 +4818,68 @@ gnc_plugin_page_register_cmd_exchange_rate (GSimpleAction *simple,
     LEAVE (" ");
 }
 
+static Split*
+jump_multiple_splits_by_value (Account *account, Split *split, gboolean largest)
+{
+    Transaction *trans;
+    SplitList *splits;
+    Split *other_split = NULL;
+    gnc_numeric best;
+    int cmp = largest ? 1 : -1;
+
+    trans = xaccSplitGetParent(split);
+    if (!trans)
+        return NULL;
+
+    for (splits = xaccTransGetSplitList(trans); splits; splits = splits->next)
+    {
+        Split *s = (Split*)splits->data;
+        gnc_numeric value;
+
+        if (!xaccTransStillHasSplit(trans, s))
+            continue;
+
+        if (xaccSplitGetAccount(s) == account)
+            continue;
+
+        value = gnc_numeric_abs(xaccSplitGetValue(s));
+        if (gnc_numeric_check(value))
+            continue;
+
+        /* For splits with the same value as the best, the first split
+         * encountered is used.
+         */
+        if (other_split && gnc_numeric_compare(value, best) != cmp)
+            continue;
+
+        best = value;
+        other_split = s;
+    }
+
+    return other_split;
+}
+
+static Split*
+jump_multiple_splits (Account* account, Split *split)
+{
+    GncPrefJumpMultSplits mode = (GncPrefJumpMultSplits)gnc_prefs_get_enum(GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_JUMP_MULT_SPLITS);
+
+    switch (mode)
+    {
+    case JUMP_LARGEST_VALUE_FIRST_SPLIT:
+        return jump_multiple_splits_by_value (account, split, TRUE);
+
+    case JUMP_SMALLEST_VALUE_FIRST_SPLIT:
+        return jump_multiple_splits_by_value (account, split, FALSE);
+
+    case JUMP_DEFAULT:
+    default:
+        break;
+    }
+
+    return NULL;
+}
+
 static void
 gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
                                    GVariant      *paramter,
@@ -4867,7 +4937,9 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
              *
              * If you've selected a split for this account, for consistency with
              * selecting the split of another account we should do nothing.
-             * You're already on the account for the split you selected.
+             * You're already on the account for the split you selected. Jumping
+             * to the "other" account now would make the "multiple split"
+             * options confusing.
              *
              * We could jump to a different anchoring split but that'll be very
              * subtle and only cause problems because it'll have to save any
@@ -4877,12 +4949,18 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
             return;
         }
 
-        split = xaccSplitGetOtherSplit (split);
-        if (split == NULL)
+        Split* other_split = xaccSplitGetOtherSplit (split);
+        if (other_split == NULL)
+        {
+            other_split = jump_multiple_splits (account, split);
+        }
+        if (other_split == NULL)
         {
             LEAVE ("no split (2)");
             return;
         }
+
+        split = other_split;
 
         account = xaccSplitGetAccount (split);
         if (account == NULL)
