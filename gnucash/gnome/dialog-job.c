@@ -237,27 +237,13 @@ void
 gnc_job_name_changed_cb (GtkWidget *widget, gpointer data)
 {
     JobWindow *jw = data;
-    char *title;
-
     if (!jw)
         return;
 
-    const char *header = (jw->dialog_type == EDIT_JOB) ?
-        _("Edit Job") : _("New Job");
-
-    const char *name = gtk_entry_get_text (GTK_ENTRY (jw->name_entry));
-    if (!name || *name == '\0')
-        name = _("<No name>");
-
-    const char *id = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
-    if (id && *id)
-        title = g_strdup_printf ("%s - %s (%s)", header, name, id);
-    else
-        title = g_strdup_printf ("%s - %s", header, name);
-
-    gtk_window_set_title (GTK_WINDOW (jw->dialog), title);
-
-    g_free (title);
+    gnc_owner_window_set_title (GTK_WINDOW (jw->dialog),
+                                (jw->dialog_type == EDIT_JOB) ?
+                                _("Edit Job") : _("New Job"),
+                                jw->name_entry, jw->id_entry);
 }
 
 static void

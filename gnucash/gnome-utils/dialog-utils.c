@@ -832,3 +832,22 @@ gnc_get_negative_color (void)
 
     return gdk_rgba_to_string (&color);
 }
+
+void
+gnc_owner_window_set_title (GtkWindow *window, const char *header,
+                            GtkWidget *owner_entry, GtkWidget *id_entry)
+{
+    const char *name = gtk_entry_get_text (GTK_ENTRY (owner_entry));
+    if (!name || *name == '\0')
+        name = _("<No name>");
+
+    const char *id = gtk_entry_get_text (GTK_ENTRY (id_entry));
+
+    char *title = (id && *id) ?
+        g_strdup_printf ("%s - %s (%s)", header, name, id) :
+        g_strdup_printf ("%s - %s", header, name);
+
+    gtk_window_set_title (window, title);
+
+    g_free (title);
+}

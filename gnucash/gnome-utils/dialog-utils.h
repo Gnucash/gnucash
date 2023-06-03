@@ -169,6 +169,12 @@ gnc_cost_policy_select_new (void);
  */
 gchar* gnc_get_negative_color (void);
 
+
+
+/** This function sets the title of an owner dialog */
+void gnc_owner_window_set_title (GtkWindow*, const char*, GtkWidget*, GtkWidget*);
+
+
 #ifdef __cplusplus
 }
 #endif

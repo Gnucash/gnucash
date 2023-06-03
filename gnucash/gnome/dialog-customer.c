@@ -399,27 +399,13 @@ void
 gnc_customer_name_changed_cb (GtkWidget *widget, gpointer data)
 {
     CustomerWindow *cw = data;
-    char *title;
-
     if (!cw)
         return;
 
-    const char *header = (cw->dialog_type == EDIT_CUSTOMER) ?
-        _("Edit Customer") : _("New Customer");
-
-    const char *name = gtk_entry_get_text (GTK_ENTRY (cw->company_entry));
-    if (!name || *name == '\0')
-        name = _("<No name>");
-
-    const char *id = gtk_entry_get_text (GTK_ENTRY (cw->id_entry));
-    if (id && *id)
-        title = g_strdup_printf ("%s - %s (%s)", header, name, id);
-    else
-        title = g_strdup_printf ("%s - %s", header, name);
-
-    gtk_window_set_title (GTK_WINDOW (cw->dialog), title);
-
-    g_free (title);
+    gnc_owner_window_set_title (GTK_WINDOW (cw->dialog),
+                                (cw->dialog_type == EDIT_CUSTOMER) ?
+                                _("Edit Customer") : _("New Customer"),
+                                cw->company_entry, cw->id_entry);
 }
 
 void

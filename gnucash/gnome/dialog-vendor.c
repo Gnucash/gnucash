@@ -267,27 +267,13 @@ void
 gnc_vendor_name_changed_cb (GtkWidget *widget, gpointer data)
 {
     VendorWindow *vw = data;
-    char *title;
-
     if (!vw)
         return;
 
-    const char *header = (vw->dialog_type == EDIT_VENDOR) ?
-        _("Edit Vendor") : _("New Vendor");
-
-    const char *name = gtk_entry_get_text (GTK_ENTRY (vw->company_entry));
-    if (!name || *name == '\0')
-        name = _("<No name>");
-
-    const char *id = gtk_entry_get_text (GTK_ENTRY (vw->id_entry));
-    if (id && *id)
-        title = g_strdup_printf ("%s - %s (%s)", header, name, id);
-    else
-        title = g_strdup_printf ("%s - %s", header, name);
-
-    gtk_window_set_title (GTK_WINDOW (vw->dialog), title);
-
-    g_free (title);
+    gnc_owner_window_set_title (GTK_WINDOW (vw->dialog),
+                                (vw->dialog_type == EDIT_VENDOR) ?
+                                _("Edit Vendor") : _("New Vendor"),
+                                vw->company_entry, vw->id_entry);
 }
 
 void
