@@ -888,7 +888,8 @@ gnc_plugin_page_inserted_cb (GncPluginPage *page, gpointer user_data)
                                               page);
 
     // on initial load try and set the page focus
-    (GNC_PLUGIN_PAGE_GET_CLASS(page)->focus_page)(page, TRUE);
+    if (!gnc_main_window_is_restoring_pages (GNC_MAIN_WINDOW(page->window)))
+        (GNC_PLUGIN_PAGE_GET_CLASS(page)->focus_page)(page, TRUE);
 }
 
 

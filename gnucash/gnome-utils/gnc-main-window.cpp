@@ -3035,7 +3035,8 @@ gnc_main_window_connect (GncMainWindow *window,
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     notebook = GTK_NOTEBOOK (priv->notebook);
 
-    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_OPEN_ADJACENT))
+    if (!priv->restoring_pages
+            && gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_OPEN_ADJACENT))
         current_position = g_list_index (priv->installed_pages, priv->current_page) + 1;
 
     priv->installed_pages = g_list_insert (priv->installed_pages, page, current_position);
@@ -3044,7 +3045,8 @@ gnc_main_window_connect (GncMainWindow *window,
                                    tab_hbox, menu_label, current_position);
     gtk_notebook_set_tab_reorderable (notebook, page->notebook_page, TRUE);
     gnc_plugin_page_inserted (page);
-    gtk_notebook_set_current_page (notebook, current_position);
+    if (!priv->restoring_pages)
+        gtk_notebook_set_current_page (notebook, current_position);
 
     if (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)
         (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)(page, GTK_WIDGET(window));
@@ -3187,7 +3189,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 
     if (gnc_main_window_page_exists(page))
     {
-        gnc_main_window_display_page(page);
+        if (!gnc_main_window_is_restoring_pages (window))
+            gnc_main_window_display_page (page);
         return;
     }
 
