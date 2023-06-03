@@ -200,6 +200,11 @@ gtest-qofevent.cpp)
 gnc_add_test(test-qofevent "${test_qofevent_SOURCES}"
   gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
+set(test_gnc_option_SOURCES
+  gtest-gnc-option.cpp
+  gtest-gnc-optiondb.cpp)
+gnc_add_test(test-gnc-option "${test_gnc_option_SOURCES}"
+  gtest_engine_INCLUDES gtest_old_engine_LIBS)
 
 set(test_engine_SOURCES_DIST
         gtest-gnc-euro.cpp

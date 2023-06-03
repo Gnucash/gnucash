@@ -536,7 +536,6 @@ protected:
             return account;
         };
         auto assets = create_account(m_root, ACCT_TYPE_ASSET, "Assets");
-        auto liabilities = create_account(m_root, ACCT_TYPE_LIABILITY, "Liabilities");
         auto expenses = create_account(m_root, ACCT_TYPE_EXPENSE, "Expenses");
         create_account(assets, ACCT_TYPE_BANK, "Bank");
         auto broker = create_account(assets, ACCT_TYPE_ASSET, "Broker");
@@ -568,12 +567,6 @@ protected:
     QofBook* m_book;
     Account* m_root;
 };
-
-static bool
-operator==(const GncGUID& l, const GncGUID& r)
-{
-    return guid_equal(&l, &r);
-}
 
 TEST_F(GncOptionAccountTest, test_test_constructor_and_destructor)
 {
@@ -777,9 +770,9 @@ TEST_F(GncMultichoiceOption, test_permissible_value_stuff)
             EXPECT_STREQ("waldo", m_option.permissible_value(1));
             EXPECT_STREQ("sausage", m_option.permissible_value_name(2));
         });
-    EXPECT_THROW({ auto result = m_option.permissible_value(7); },
+    EXPECT_THROW({ m_option.permissible_value(7); },
                  std::out_of_range);
-    EXPECT_THROW({ auto result = m_option.permissible_value_name(9); },
+    EXPECT_THROW({ m_option.permissible_value_name(9); },
         std::out_of_range);
     EXPECT_EQ(std::numeric_limits<uint16_t>::max(),
               m_option.permissible_value_index("xyzzy"));
