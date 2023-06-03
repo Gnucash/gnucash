@@ -1456,6 +1456,57 @@ xaccSplitConvertAmount (const Split *split, const Account * account)
                             GNC_HOW_RND_ROUND_HALF_UP);
 }
 
+/* Similar to xaccSplitGetOtherSplit but more aggressive in its match. */
+Split *
+xaccSplitGetOtherSplitExtended (const Split *split)
+{
+    Transaction *trans;
+    Split *other_side_match = NULL;
+    Split *opposite_value_match = NULL;
+    gboolean multiple_others = FALSE;
+    gboolean split_is_zero;
+    gboolean split_is_positive;
+    gnc_numeric opposite_split_value;
+
+    if (!split) return NULL;
+    trans = split->parent;
+    if (!trans) return NULL;
+    split_is_zero = gnc_numeric_zero_p(split->value);
+    split_is_positive = gnc_numeric_positive_p(split->value);
+    opposite_split_value = gnc_numeric_neg(split->value);
+
+    for (GList *n = xaccTransGetSplitList(trans); n; n = n->next)
+    {
+        Split *s = n->data;
+        if ((s == split) ||
+            (!split_is_zero && (gnc_numeric_zero_p(s->value) ||
+                (gnc_numeric_positive_p(s->value) == split_is_positive))) ||
+            (!xaccTransStillHasSplit(trans, s)) ||
+            (xaccAccountGetType(xaccSplitGetAccount(s)) == ACCT_TYPE_TRADING) ||
+            (qof_instance_has_slot(QOF_INSTANCE (s), "lot-split")))
+            continue;
+
+        if (!split_is_zero && gnc_numeric_eq(s->value, opposite_split_value))
+        {
+            if (opposite_value_match)
+            {
+                return NULL;
+            }
+            else
+            {
+                opposite_value_match = s;
+            }
+        }
+
+        if (other_side_match) multiple_others = TRUE;
+
+        other_side_match = s;
+    }
+    if (opposite_value_match) return opposite_value_match;
+    if (!multiple_others) return other_side_match;
+    return NULL;
+}
+
 /********************************************************************\
 \********************************************************************/
 
