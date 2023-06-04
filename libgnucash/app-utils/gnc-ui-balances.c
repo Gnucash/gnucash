@@ -366,9 +366,9 @@ get_balance_limit_info (const Account *account, gboolean icon)
     gboolean lower_limit_reached, higher_limit_reached;
     gboolean lower_is_zero = FALSE;
     gboolean higher_is_zero = FALSE;
-    const char *higher_template = N_("%s balance is %s, exceeds limit of %s.");
-    const char *lower_template = N_("%s balance is %s, subceeds limit of %s.");
-    const char *zero_template = N_("%s balance is %s, and should be zero.");
+    const char *higher_template = N_("%s balance of %s is above the upper limit %s.");
+    const char *lower_template = N_("%s balance of %s is below the lower limit %s.");
+    const char *zero_template = N_("%s balance of %s should be zero.");
 
     g_return_val_if_fail (GNC_IS_ACCOUNT(account), NULL);
 
