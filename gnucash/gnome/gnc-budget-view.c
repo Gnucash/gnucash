@@ -1219,6 +1219,9 @@ bgv_get_total_for_account (Account *account, GncBudget *budget, gnc_commodity *n
         }
     }
 
+    if (gnc_reverse_balance (account))
+        total = gnc_numeric_neg (total);
+
     return total;
 }
 

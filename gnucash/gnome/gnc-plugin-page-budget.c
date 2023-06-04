@@ -1109,7 +1109,9 @@ allperiods_budget_helper (GtkTreeModel *model, GtkTreePath *path,
     acct = gnc_budget_view_get_account_from_path (priv->budget_view, path);
     num_periods = gnc_budget_get_num_periods (priv->budget);
     allvalue = priv->allValue;
-    allvalue = gnc_numeric_neg (allvalue);
+
+    if (gnc_reverse_balance (acct))
+        allvalue = gnc_numeric_neg (priv->allValueallvalue);
 
     for (i = 0; i < num_periods; i++)
     {
