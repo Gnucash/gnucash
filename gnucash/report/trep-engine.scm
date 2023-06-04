@@ -160,7 +160,7 @@ in the Options panel."))
         (cons #\f (G_ "Frozen"))
         (cons #\v (G_ "Voided"))))
 
-(define (sortkey-list split-action?)
+(define (sortkey-list parameters)
   ;; Defines the different sorting keys, as an association-list
   ;; together with the subtotal functions. Each entry:
   ;;  'sortkey             - sort parameter sent via qof-query
@@ -238,7 +238,7 @@ in the Options panel."))
               (cons 'text (G_ "Description"))
               (cons 'renderer-fn (compose xaccTransGetDescription xaccSplitGetParent)))
 
-        (if split-action?
+        (if (assq-ref parameters 'split-action)
             (list 'number
                   (cons 'sortkey (list SPLIT-ACTION))
                   (cons 'split-sortvalue xaccSplitGetAction)
@@ -441,20 +441,20 @@ in the Options panel."))
       (keylist-get-info keylist (car item) 'text)))
    keylist))
 
-(define (SUBTOTAL-ENABLED? sortkey split-action?)
+(define (SUBTOTAL-ENABLED? sortkey parameters)
   ;; this returns whether sortkey *can* be subtotalled/grouped.
   ;; it checks whether a renderer-fn is defined.
-  (keylist-get-info (sortkey-list split-action?) sortkey 'renderer-fn))
+  (keylist-get-info (sortkey-list parameters) sortkey 'renderer-fn))
 
-(define (CUSTOM-SORTING? sortkey split-action?)
+(define (CUSTOM-SORTING? sortkey parameters)
   ;; sortkey -> bool
   ;;
   ;; this returns which sortkeys which *must* use the custom sorter.
   ;; it filters whereby a split-sortvalue is defined (i.e. the splits
   ;; can be compared according to their 'sortvalue) but the QofQuery
   ;; sortkey is not defined (i.e. their 'sortkey is #f).
-  (and (keylist-get-info (sortkey-list split-action?) sortkey 'split-sortvalue)
-       (not (keylist-get-info (sortkey-list split-action?) sortkey 'sortkey))))
+  (and (keylist-get-info (sortkey-list parameters) sortkey 'split-sortvalue)
+       (not (keylist-get-info (sortkey-list parameters) sortkey 'sortkey))))
 
 (define (lists->csv lst)
   ;; converts a list of lists into CSV
@@ -512,8 +512,9 @@ in the Options panel."))
 ;; Default Transaction Report
 ;;
 (define (gnc:trep-options-generator)
-  (define BOOK-SPLIT-ACTION
-    (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
+  (define parameters
+    (list
+      (cons 'split-action (qof-book-use-split-action-for-num-field (gnc-get-current-book)))))
 
   ;; (Feb 2018) Note to future hackers - this gnc:trep-options-generator
   ;; defines a long set of options to be assigned as an object in
@@ -678,7 +679,7 @@ be excluded from periodic reporting.")
   ;; Sorting options
 
   (let ((ascending-choice-list (keylist->vectorlist ascending-list))
-        (key-choice-list (keylist->vectorlist (sortkey-list BOOK-SPLIT-ACTION)))
+        (key-choice-list (keylist->vectorlist (sortkey-list parameters)))
         (date-subtotal-choice-list (keylist->vectorlist date-subtotal-list))
         (prime-sortkey 'account-name)
         (prime-sortkey-subtotal-true #t)
@@ -690,11 +691,11 @@ be excluded from periodic reporting.")
     (define (apply-selectable-by-name-sorting-options)
       (let* ((prime-sortkey-enabled (not (eq? prime-sortkey 'none)))
              (prime-sortkey-subtotal-enabled
-              (SUBTOTAL-ENABLED? prime-sortkey BOOK-SPLIT-ACTION))
+              (SUBTOTAL-ENABLED? prime-sortkey parameters))
              (prime-date-sortingtype-enabled (memq prime-sortkey DATE-SORTING-TYPES))
              (sec-sortkey-enabled (not (eq? sec-sortkey 'none)))
              (sec-sortkey-subtotal-enabled
-              (SUBTOTAL-ENABLED? sec-sortkey BOOK-SPLIT-ACTION))
+              (SUBTOTAL-ENABLED? sec-sortkey parameters))
              (sec-date-sortingtype-enabled (memq sec-sortkey DATE-SORTING-TYPES)))
 
         (gnc-optiondb-set-option-selectable-by-name
@@ -910,7 +911,7 @@ be excluded from periodic reporting.")
       (list (N_ "Date")                         "a"  (G_ "Display the date?") #t)
       (list (N_ "Reconciled Date")              "a2" (G_ "Display the reconciled date?") #f)
       (list (N_ "Date Entered")                 "a3" (G_ "Display the entered date?") #f)
-      (if BOOK-SPLIT-ACTION
+      (if (assq-ref parameters 'split-action)
           (list (N_ "Num/Action")               "b"  (G_ "Display the check number?") #t)
           (list (N_ "Num")                      "b"  (G_ "Display the check number?") #t))
       (list (N_ "Description")                  "c"  (G_ "Display the description?") #t)
@@ -929,7 +930,7 @@ be excluded from periodic reporting.")
       (list (N_ "Account Balance")              "n"  (G_ "Display the balance of the underlying account on each line?") #f)
       (list optname-grand-total                 "o"  (G_ "Display a grand total section at the bottom?") #t)))
 
-    (when BOOK-SPLIT-ACTION
+    (when (assq-ref parameters 'split-action)
       (gnc-register-simple-boolean-option options
         gnc:pagename-display (N_ "Trans Number")
         "b2" (G_ "Display the trans number?") #f))
@@ -1034,139 +1035,30 @@ be excluded from periodic reporting.")
 ;; ;;;;;;;;;;;;;;;;;;;;
 ;; Here comes the big function that builds the whole table.
 
-(define (make-split-table splits options custom-calculated-cells
-                          begindate enddate c_account_1)
+(define (make-split-table splits options parameters custom-calculated-cells)
 
-  (define (opt-val section name)
-    (gnc-optiondb-lookup-value (gnc:optiondb options) section name))
-
-  (define BOOK-SPLIT-ACTION
-    (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
-
-  (define (build-columns-used)
-    (define detail-is-single?
-      (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
-    (define amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
-    (list (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
-          (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
-          (cons 'entered (opt-val gnc:pagename-display (N_ "Date Entered")))
-          (cons 'num (if BOOK-SPLIT-ACTION
-                         (opt-val gnc:pagename-display (N_ "Num/Action"))
-                         (opt-val gnc:pagename-display (N_ "Num"))))
-          (cons 'description (opt-val gnc:pagename-display (N_ "Description")))
-          (cons 'account-name (opt-val gnc:pagename-display (N_ "Account Name")))
-          (cons 'other-account-name
-                (and detail-is-single?
-                     (opt-val gnc:pagename-display (N_ "Other Account Name"))))
-          (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
-          (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
-          (cons 'link (opt-val gnc:pagename-display (N_ "Link")))
-          (cons 'amount-single (eq? amount-setting 'single))
-          (cons 'amount-double (eq? amount-setting 'double))
-          (cons 'common-currency (opt-val pagename-currency optname-common-currency))
-          (cons 'amount-original-currency
-                (and (opt-val pagename-currency optname-common-currency)
-                     (opt-val pagename-currency optname-orig-currency)))
-          (cons 'indenting (opt-val pagename-sorting optname-indenting))
-          (cons 'subtotals-only
-                (and (opt-val pagename-sorting optname-show-subtotals-only)
-                     (or (primary-get-info 'renderer-fn)
-                         (secondary-get-info 'renderer-fn))))
-          (cons 'running-balance (opt-val gnc:pagename-display "Account Balance"))
-          (cons 'running-grand-total
-                (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'grand)
-                    (eq? (opt-val gnc:pagename-display optname-running-totals) 'all)))
-          (cons 'running-prime
-                (and (primary-get-info 'renderer-fn)
-                     (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'sub)
-                         (eq? (opt-val gnc:pagename-display optname-running-totals) 'all))))
-          (cons 'running-sec
-                (and (secondary-get-info 'renderer-fn)
-                     (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'sub)
-                         (eq? (opt-val gnc:pagename-display optname-running-totals) 'all))))
-          (cons 'account-full-name
-                (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
-          (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
-          (cons 'account-code (opt-val gnc:pagename-display (N_ "Account Code")))
-          (cons 'other-account-code
-                (and detail-is-single?
-                     (opt-val gnc:pagename-display (N_ "Other Account Code"))))
-          (cons 'other-account-full-name
-                (and detail-is-single?
-                     (opt-val gnc:pagename-display (N_ "Use Full Other Account Name"))))
-          (cons 'sort-account-code (opt-val pagename-sorting (N_ "Show Account Code")))
-          (cons 'sort-account-full-name
-                (opt-val pagename-sorting (N_ "Show Full Account Name")))
-          (cons 'sort-account-description
-                (opt-val pagename-sorting (N_ "Show Account Description")))
-          (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))))
-
-  (define (primary-get-info info)
-    (let ((sortkey (opt-val pagename-sorting optname-prime-sortkey)))
-      (if (memq sortkey DATE-SORTING-TYPES)
-          (keylist-get-info
-           date-subtotal-list
-           (opt-val pagename-sorting optname-prime-date-subtotal) info)
-          (and (SUBTOTAL-ENABLED? sortkey BOOK-SPLIT-ACTION)
-               (opt-val pagename-sorting optname-prime-subtotal)
-               (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey info)))))
-
-  (define (secondary-get-info info)
-    (let ((sortkey (opt-val pagename-sorting optname-sec-sortkey)))
-      (if (memq sortkey DATE-SORTING-TYPES)
-          (keylist-get-info
-           date-subtotal-list
-           (opt-val pagename-sorting optname-sec-date-subtotal) info)
-          (and (SUBTOTAL-ENABLED? sortkey BOOK-SPLIT-ACTION)
-               (opt-val pagename-sorting optname-sec-subtotal)
-               (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey info)))))
+  (define (report-uses? param)
+    (assq-ref parameters param))
 
   (let* ((work-to-do (length splits))
          (table (gnc:make-html-table))
-         (used-columns (build-columns-used))
-         (opt-use-links? (opt-val gnc:pagename-display "Enable Links"))
          (account-types-to-reverse
           (keylist-get-info sign-reverse-list
-                            (opt-val gnc:pagename-display (N_ "Sign Reverses"))
-                            'acct-types))
-         (is-multiline? (eq? (opt-val gnc:pagename-display optname-detail-level)
-                             'multi-line))
-         (export? (opt-val gnc:pagename-general optname-table-export)))
+                            (report-uses? 'reversed-signs)
+                            'acct-types)))
 
     (define (acc-reverse? acc)
       (if account-types-to-reverse
           (memv (xaccAccountGetType acc) account-types-to-reverse)
           (gnc-reverse-balance acc)))
 
-    (define (column-uses? param)
-      (assq-ref used-columns param))
-
-    ;; Helper function to decide if an account balance can be displayed
-    ;; as a running balance with a balance forward at the top.
-    ;; It implies most default options are maintained :
-    ;; - Detail level is set to one transaction per line,
-    ;; - Date filter is set to date posted
-    ;; - Filtering on transactions is kept as per default
-    ;; - The primary sort is set to account name (or code)
-    ;; - The primary subtotals are displayed (to separate accounts)
-    ;; - The secondary sort is set to register order or date ascending.
-    (define show-bal-bf?
-      (and (eq? (opt-val gnc:pagename-display optname-detail-level) 'single)
-           (eq? (opt-val gnc:pagename-general optname-date-source) 'posted)
-           (string-null? (opt-val pagename-filter optname-transaction-matcher))
-           (eq? (opt-val pagename-filter optname-reconcile-status) 'all)
-           (eq? (opt-val pagename-filter optname-void-transactions) 'non-void-only)
-           (memq (opt-val pagename-sorting optname-prime-sortkey) '(account-name account-code))
-           (memq (opt-val pagename-sorting optname-sec-sortkey) '(register-order date))
-           (opt-val pagename-sorting optname-prime-subtotal)
-           (eq? (opt-val pagename-sorting optname-sec-sortorder) 'ascend)))
-
     (define exchange-fn
-      (if (column-uses? 'common-currency)
+      (if (report-uses? 'common-currency)
           (gnc:case-exchange-time-fn
-           (opt-val pagename-currency optname-price-source)
-           (opt-val pagename-currency optname-currency)
-           (gnc:accounts-get-commodities c_account_1 #f) enddate #f #f)
+           (report-uses? 'common-currency/price-source)
+           (report-uses? 'common-currency)
+           (gnc:accounts-get-commodities (report-uses? 'accounts-matched) #f)
+           (report-uses? 'enddate) #f #f)
           gnc:exchange-by-pricedb-nearest))
 
     ;; Returns #t if a calculated-cell definition has the subtotal flag
@@ -1185,7 +1077,7 @@ be excluded from periodic reporting.")
       (let* ((add-if (lambda (pred? . items) (if pred? items '())))
              (left-cols-list
               (append
-               (add-if (column-uses? 'date)
+               (add-if (report-uses? 'date)
                        (list (cons 'heading (G_ "Date"))
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
@@ -1196,7 +1088,7 @@ be excluded from periodic reporting.")
                                             (xaccTransGetDate
                                              (xaccSplitGetParent split)))))))))
 
-               (add-if (column-uses? 'entered)
+               (add-if (report-uses? 'entered)
                        (list (cons 'heading (G_ "Date Entered"))
                              (cons 'renderer-fn (lambda (split transaction-row?)
                                                   (and transaction-row?
@@ -1205,7 +1097,7 @@ be excluded from periodic reporting.")
                                                                      (xaccTransRetDateEntered
                                                                       (xaccSplitGetParent split)))))))))
 
-               (add-if (column-uses? 'reconciled-date)
+               (add-if (report-uses? 'reconciled-date)
                        (list (cons 'heading (G_ "Reconciled Date"))
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
@@ -1217,20 +1109,15 @@ be excluded from periodic reporting.")
                                              "date-cell"
                                              (qof-print-date reconcile-date))))))))
 
-               (add-if (column-uses? 'num)
-                       (list (cons 'heading (if (and BOOK-SPLIT-ACTION
-                                                     (opt-val gnc:pagename-display
-                                                              (N_ "Trans Number")))
+               (add-if (report-uses? 'num)
+                       (list (cons 'heading (if (report-uses? 'trans-number)
                                                 (G_ "Num/T-Num")
                                                 (G_ "Num")))
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
                                      (let* ((trans (xaccSplitGetParent split))
                                             (num (gnc-get-num-action trans split))
-                                            (t-num (if (and BOOK-SPLIT-ACTION
-                                                            (opt-val
-                                                             gnc:pagename-display
-                                                             (N_ "Trans Number")))
+                                            (t-num (if (report-uses? 'trans-number)
                                                        (gnc-get-num-action trans #f)
                                                        ""))
                                             (num-string (if (string-null? t-num)
@@ -1240,7 +1127,7 @@ be excluded from periodic reporting.")
                                             (gnc:make-html-table-cell/markup
                                              "text-cell" num-string)))))))
 
-               (add-if (column-uses? 'description)
+               (add-if (report-uses? 'description)
                        (list (cons 'heading (G_ "Description"))
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
@@ -1250,30 +1137,30 @@ be excluded from periodic reporting.")
                                            "text-cell"
                                            (xaccTransGetDescription trans)))))))
 
-               (add-if (column-uses? 'memo)
-                       (list (cons 'heading (if (column-uses? 'notes)
+               (add-if (report-uses? 'memo)
+                       (list (cons 'heading (if (report-uses? 'notes)
                                                 (string-append (G_ "Memo") "/" (G_ "Notes"))
                                                 (G_ "Memo")))
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
                                      (define trans (xaccSplitGetParent split))
                                      (define memo (xaccSplitGetMemo split))
-                                     (if (and (string-null? memo) (column-uses? 'notes))
+                                     (if (and (string-null? memo) (report-uses? 'notes))
                                          (xaccTransGetNotes trans)
                                          memo)))))
 
-               (add-if (or (column-uses? 'account-name) (column-uses? 'account-code))
+               (add-if (or (report-uses? 'account-name) (report-uses? 'account-code))
                        (list (cons 'heading (G_ "Account"))
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
                                      (account-namestring
                                       (xaccSplitGetAccount split)
-                                      (column-uses? 'account-code)
-                                      (column-uses? 'account-name)
-                                      (column-uses? 'account-full-name))))))
+                                      (report-uses? 'account-code)
+                                      (report-uses? 'account-name)
+                                      (report-uses? 'account-full-name))))))
 
-               (add-if (or (column-uses? 'other-account-name)
-                           (column-uses? 'other-account-code))
+               (add-if (or (report-uses? 'other-account-name)
+                           (report-uses? 'other-account-code))
                        (list (cons 'heading (G_ "Transfer from/to"))
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
@@ -1282,11 +1169,11 @@ be excluded from periodic reporting.")
                                           (account-namestring
                                            (xaccSplitGetAccount
                                             (xaccSplitGetOtherSplit split))
-                                           (column-uses? 'other-account-code)
-                                           (column-uses? 'other-account-name)
-                                           (column-uses? 'other-account-full-name)))))))
+                                           (report-uses? 'other-account-code)
+                                           (report-uses? 'other-account-name)
+                                           (report-uses? 'other-account-full-name)))))))
 
-               (add-if (column-uses? 'shares)
+               (add-if (report-uses? 'shares)
                        (list (cons 'heading (G_ "Shares"))
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
@@ -1294,7 +1181,7 @@ be excluded from periodic reporting.")
                                       "number-cell"
                                       (xaccSplitGetAmount split))))))
 
-               (add-if (column-uses? 'link)
+               (add-if (report-uses? 'doclink)
                        (list (cons 'heading "")
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
@@ -1303,14 +1190,14 @@ be excluded from periodic reporting.")
                                        (and (not (string-null? url))
                                             (gnc:make-html-table-cell/markup
                                              "text-cell"
-                                             (if opt-use-links?
+                                             (if (report-uses? 'links)
                                                  (gnc:html-transaction-doclink-anchor
                                                   (xaccSplitGetParent split)
                                                   ;; Translators: 'L' is short for Linked Document
                                                   (C_ "Column header for 'Document Link'" "L"))
                                                  (C_ "Column header for 'Document Link'" "L")))))))))
 
-               (add-if (column-uses? 'price)
+               (add-if (report-uses? 'price)
                        (list (cons 'heading (G_ "Price"))
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
@@ -1320,11 +1207,11 @@ be excluded from periodic reporting.")
                                        (xaccTransGetCurrency (xaccSplitGetParent split))
                                        (xaccSplitGetSharePrice split))))))))))
 
-        (if (or (column-uses? 'subtotals-only)
+        (if (or (report-uses? 'subtotals-only)
                 (and (null? left-cols-list)
-                     (or (opt-val gnc:pagename-display optname-grand-total)
-                         (primary-get-info 'renderer-fn)
-                         (secondary-get-info 'renderer-fn))))
+                     (or (report-uses? 'grand-total)
+                         (report-uses? 'primary-key/renderer-fn)
+                         (report-uses? 'secondary-key/renderer-fn))))
             `(((heading . "") (renderer-fn . ,(const #f))))
             left-cols-list)))
 
@@ -1340,19 +1227,17 @@ be excluded from periodic reporting.")
                                          (xaccSplitVoidFormerAmount s)
                                          (xaccSplitGetAmount s))))
            (split-currency (compose xaccAccountGetCommodity xaccSplitGetAccount))
-           (row-currency (lambda (s) (if (column-uses? 'common-currency)
-                                         (opt-val pagename-currency optname-currency)
+           (row-currency (lambda (s) (or (report-uses? 'common-currency)
                                          (split-currency s))))
            (friendly-debit (lambda (a) (gnc-account-get-debit-string (xaccAccountGetType a))))
            (friendly-credit (lambda (a) (gnc-account-get-credit-string (xaccAccountGetType a))))
            (header-commodity (lambda (str)
                                (string-append
                                 str
-                                (if (column-uses? 'common-currency)
+                                (if (report-uses? 'common-currency)
                                     (format #f " (~a)"
                                             (gnc-commodity-get-mnemonic
-                                             (opt-val pagename-currency
-                                                      optname-currency)))
+                                             (report-uses? 'common-currency)))
                                     ""))))
            ;; For conversion to row-currency.
            (converted-amount (lambda (s tr?)
@@ -1443,7 +1328,7 @@ be excluded from periodic reporting.")
          ;;                       when currency conversion is used
          ;;   'merge-dual-column?  #t: merge with next cell.
 
-         (if (column-uses? 'amount-single)
+         (if (report-uses? 'amount-single)
              (list (list (cons 'heading (header-commodity (G_ "Amount")))
                          (cons 'calc-fn converted-amount)
                          (cons 'reverse-column? #t)
@@ -1453,7 +1338,7 @@ be excluded from periodic reporting.")
                          (cons 'merge-dual-column? #f)))
              '())
 
-         (if (column-uses? 'amount-double)
+         (if (report-uses? 'amount-double)
              (list (list (cons 'heading (header-commodity (G_ "Debit")))
                          (cons 'calc-fn converted-debit-amount)
                          (cons 'reverse-column? #f)
@@ -1470,8 +1355,8 @@ be excluded from periodic reporting.")
                          (cons 'merge-dual-column? #f)))
              '())
 
-         (if (column-uses? 'running-balance)
-             (if show-bal-bf?
+         (if (report-uses? 'running-balance)
+             (if (report-uses? 'bal-bf)
                  (list (list (cons 'heading (header-commodity (G_ "Running Balance")))
                              (cons 'calc-fn converted-account-balance)
                              (cons 'reverse-column? #t)
@@ -1488,7 +1373,7 @@ be excluded from periodic reporting.")
                              (cons 'merge-dual-column? #f))))
              '())
 
-         (if (column-uses? 'running-sec)
+         (if (report-uses? 'running-sec)
              (list (list (cons 'heading (header-commodity
                            ;; Translators: this is the running total for the secondary subtotal.
                            ;; For translation to be consistent, make sure it follows the same
@@ -1503,9 +1388,9 @@ be excluded from periodic reporting.")
                          (cons 'merge-dual-column? #f)))
              '())
 
-         (if (column-uses? 'running-prime)
+         (if (report-uses? 'running-prime)
              (list (list (cons 'heading (header-commodity
-                           (if (secondary-get-info 'renderer-fn)
+                           (if (report-uses? 'secondary-key/renderer-fn)
                                ;; Translators: this is the running total for the primary subtotal.
                                ;; For translation to be consistent, make sure it follows the same
                                ;; pattern as for these other strings: “Running Totals” and
@@ -1523,10 +1408,10 @@ be excluded from periodic reporting.")
                          (cons 'merge-dual-column? #f)))
              '())
 
-         (if (column-uses? 'running-grand-total)
+         (if (report-uses? 'running-grand-total)
              (list (list (cons 'heading (header-commodity
-                           (if (or (primary-get-info 'renderer-fn)
-                                   (secondary-get-info 'renderer-fn))
+                           (if (or (report-uses? 'primary-key/renderer-fn)
+                                   (report-uses? 'secondary-key/renderer-fn))
                                ;; Translators: this is the running total for the grand total.
                                ;; For translation to be consistent, make sure it follows the same
                                ;; pattern as for these other strings: “Running Totals” and
@@ -1545,8 +1430,8 @@ be excluded from periodic reporting.")
                          (cons 'merge-dual-column? #f)))
              '())
 
-         (if (and (column-uses? 'amount-original-currency)
-                  (column-uses? 'amount-single))
+         (if (and (report-uses? 'common-currency/original)
+                  (report-uses? 'amount-single))
              (list (list (cons 'heading (G_ "Amount"))
                          (cons 'calc-fn original-amount)
                          (cons 'reverse-column? #t)
@@ -1556,8 +1441,8 @@ be excluded from periodic reporting.")
                          (cons 'merge-dual-column? #f)))
              '())
 
-         (if (and (column-uses? 'amount-original-currency)
-                  (column-uses? 'amount-double))
+         (if (and (report-uses? 'common-currency/original)
+                  (report-uses? 'amount-double))
              (list (list (cons 'heading (G_ "Debit"))
                          (cons 'calc-fn original-debit-amount)
                          (cons 'reverse-column? #f)
@@ -1574,9 +1459,9 @@ be excluded from periodic reporting.")
                          (cons 'merge-dual-column? #f)))
              '())
 
-         (if (and (column-uses? 'amount-original-currency)
-                  (column-uses? 'running-balance))
-             (if show-bal-bf?
+         (if (and (report-uses? 'common-currency/original)
+                  (report-uses? 'running-balance))
+             (if (report-uses? 'bal-bf)
                  (list (list (cons 'heading (G_ "Running Balance"))
                              (cons 'calc-fn original-account-balance)
                              (cons 'reverse-column? #t)
@@ -1593,8 +1478,8 @@ be excluded from periodic reporting.")
                              (cons 'merge-dual-column? #f))))
              '())
 
-         (if (and (column-uses? 'amount-original-currency)
-                  (column-uses? 'running-sec))
+         (if (and (report-uses? 'common-currency/original)
+                  (report-uses? 'running-sec))
              (list (list (cons 'heading (G_ "Running Secondary Subtotal"))
                          (cons 'calc-fn original-running-sec)
                          (cons 'reverse-column? #f)
@@ -1604,10 +1489,10 @@ be excluded from periodic reporting.")
                          (cons 'merge-dual-column? #f)))
              '())
 
-         (if (and (column-uses? 'amount-original-currency)
-                  (column-uses? 'running-prime))
+         (if (and (report-uses? 'common-currency/original)
+                  (report-uses? 'running-prime))
              (list (list (cons 'heading
-                           (if (secondary-get-info 'renderer-fn)
+                           (if (report-uses? 'secondary-key/renderer-fn)
                                (G_ "Running Primary Subtotal")
                                (G_ "Running Subtotal")))
                          (cons 'calc-fn original-running-prime)
@@ -1618,11 +1503,11 @@ be excluded from periodic reporting.")
                          (cons 'merge-dual-column? #f)))
              '())
 
-         (if (and (column-uses? 'amount-original-currency)
-                  (column-uses? 'running-grand-total))
+         (if (and (report-uses? 'common-currency/original)
+                  (report-uses? 'running-grand-total))
              (list (list (cons 'heading
-                           (if (or (primary-get-info 'renderer-fn)
-                                   (secondary-get-info 'renderer-fn))
+                           (if (or (report-uses? 'primary-key/renderer-fn)
+                                   (report-uses? 'secondary-key/renderer-fn))
                                (G_ "Running Grand Total")
                                (G_ "Running Total")))
                          (cons 'calc-fn original-running-total)
@@ -1649,7 +1534,7 @@ be excluded from periodic reporting.")
                     default-calculated-cells)))
         ;; Only keep cells with subtotals when "Show subtotals only" is selected
         ;; otherwise leave all calculated-cells as is.
-        (if (column-uses? 'subtotals-only) (filter cell-with-subtotals? cc) cc)))
+        (if (report-uses? 'subtotals-only) (filter cell-with-subtotals? cc) cc)))
 
     (define headings-left-columns
       (map (cut assq-ref <> 'heading) left-columns))
@@ -1661,23 +1546,22 @@ be excluded from periodic reporting.")
     (define width-right-columns (length calculated-cells))
 
     (define primary-indent
-      (if (and (column-uses? 'indenting)
-               (primary-get-info 'renderer-fn))
+      (if (and (report-uses? 'indenting)
+               (report-uses? 'primary-key/renderer-fn))
           1 0))
 
     (define secondary-indent
-      (if (and (column-uses? 'indenting)
-               (secondary-get-info 'renderer-fn))
+      (if (and (report-uses? 'indenting)
+               (report-uses? 'secondary-key/renderer-fn))
           1 0))
 
     (define indent-level
       (+ primary-indent secondary-indent))
 
     (define (add-subheading data subheading-style split level)
-      (let* ((sortkey (opt-val pagename-sorting
-                               (case level
-                                 ((primary) optname-prime-sortkey)
-                                 ((secondary) optname-sec-sortkey))))
+      (let* ((sortkey (case level
+                        ((primary) (report-uses? 'primary-key))
+                        ((secondary) (report-uses? 'secondary-key))))
              (data (if (and (any (lambda (c) (eq? 'bal-bf (assq-ref c 'friendly-heading-fn)))
                                  calculated-cells)
                             (memq sortkey ACCOUNT-SORTING-TYPES))
@@ -1686,19 +1570,19 @@ be excluded from periodic reporting.")
                        (string-append data ": " (G_ "Balance b/f"))
                        data))
              (renderer-fn (keylist-get-info
-                           (sortkey-list BOOK-SPLIT-ACTION)
+                           (sortkey-list parameters)
                            sortkey 'renderer-fn))
              (left-indent (case level
                             ((primary total) 0)
                             ((secondary) primary-indent)))
              (right-indent (- indent-level left-indent)))
 
-        (unless (column-uses? 'subtotals-only)
+        (unless (report-uses? 'subtotals-only)
           (gnc:html-table-append-row/markup!
            table subheading-style
            (append
             (gnc:html-make-empty-cells left-indent)
-            (if export?
+            (if (report-uses? 'export-table)
                 (cons
                  (gnc:make-html-table-cell/markup "total-label-cell" data)
                  (gnc:html-make-empty-cells
@@ -1715,9 +1599,8 @@ be excluded from periodic reporting.")
                          (bal (exchange-fn
                                (gnc:make-gnc-monetary
                                 (xaccAccountGetCommodity acc)
-                                (xaccAccountGetBalanceAsOfDate acc begindate))
-                               (if (column-uses? 'common-currency)
-                                   (opt-val pagename-currency optname-currency)
+                                (xaccAccountGetBalanceAsOfDate acc (report-uses? 'begindate)))
+                               (or (report-uses? 'common-currency)
                                    (xaccAccountGetCommodity acc))
                                (time64CanonicalDayTime
                                 (xaccTransGetDate (xaccSplitGetParent split))))))
@@ -1727,7 +1610,7 @@ be excluded from periodic reporting.")
                           (if (acc-reverse? acc) (gnc:monetary-neg bal) bal)))))
                  ('original-bal-bf
                   (let* ((acc (xaccSplitGetAccount split))
-                         (bal (xaccAccountGetBalanceAsOfDate acc begindate)))
+                         (bal (xaccAccountGetBalanceAsOfDate acc (report-uses? 'begindate))))
                     (and (memq sortkey ACCOUNT-SORTING-TYPES)
                          (gnc:make-html-table-cell/markup
                           "number-cell"
@@ -1735,8 +1618,8 @@ be excluded from periodic reporting.")
                            (xaccAccountGetCommodity acc)
                            (if (acc-reverse? acc) (- bal) bal))))))
                  (fn
-                  (and (opt-val pagename-sorting optname-show-informal-headers)
-                       (column-uses? 'amount-double)
+                  (and (report-uses? 'informal-headers)
+                       (report-uses? 'amount-double)
                        (memq sortkey SORTKEY-INFORMAL-HEADERS)
                        (gnc:make-html-text
                         (gnc:html-markup-b
@@ -1770,7 +1653,7 @@ be excluded from periodic reporting.")
                 list-of-monetary))
 
         (define (first-column string)
-          (if export?
+          (if (report-uses? 'export-table)
               (cons
                (gnc:make-html-table-cell/markup "total-label-cell" string)
                (gnc:html-make-empty-cells (+ right-indent width-left-columns -1)))
@@ -1879,18 +1762,18 @@ be excluded from periodic reporting.")
 
     ;; generate account name, optionally with anchor to account register
     (define (render-account sortkey split anchor?)
-      (let* ((account ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION)
+      (let* ((account ((keylist-get-info (sortkey-list parameters)
                                          sortkey 'renderer-fn) split))
              (name (account-namestring account
-                                       (column-uses? 'sort-account-code)
+                                       (report-uses? 'sort-account-code)
                                        #t
-                                       (column-uses? 'sort-account-full-name)))
-             (description (if (and (column-uses? 'sort-account-description)
+                                       (report-uses? 'sort-account-full-name)))
+             (description (if (and (report-uses? 'sort-account-description)
                                    (not (string-null?
                                          (xaccAccountGetDescription account))))
                               (string-append ": " (xaccAccountGetDescription account))
                               "")))
-        (if (and anchor? opt-use-links?
+        (if (and anchor? (report-uses? 'links)
                  (pair? account)) ;html anchor for 2-split transactions only
             (gnc:make-html-text
              (gnc:html-markup-anchor (gnc:account-anchor-text account) name)
@@ -1899,17 +1782,15 @@ be excluded from periodic reporting.")
 
     ;; generic renderer. retrieve renderer-fn which should return a str
     (define (render-generic sortkey split)
-      ((keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) sortkey 'renderer-fn) split))
+      ((keylist-get-info (sortkey-list parameters) sortkey 'renderer-fn) split))
 
     (define (render-summary split level anchor?)
-      (let ((sortkey (opt-val pagename-sorting
-                              (case level
-                                ((primary) optname-prime-sortkey)
-                                ((secondary) optname-sec-sortkey))))
-            (date-subtotal-key (opt-val pagename-sorting
-                                        (case level
-                                          ((primary) optname-prime-date-subtotal)
-                                          ((secondary) optname-sec-date-subtotal)))))
+      (let ((sortkey (case level
+                      ((primary) (report-uses? 'primary-key))
+                      ((secondary) (report-uses? 'secondary-key))))
+            (date-subtotal-key (case level
+                                ((primary) (report-uses? 'primary-date-subtotal))
+                                ((secondary) (report-uses? 'secondary-date-subtotal)))))
         (cond
          ((memq sortkey DATE-SORTING-TYPES)
           (render-date date-subtotal-key split))
@@ -1929,7 +1810,7 @@ be excluded from periodic reporting.")
       (let* ((account (xaccSplitGetAccount split))
              (reversible-account? (acc-reverse? account)))
 
-        (unless (column-uses? 'subtotals-only)
+        (unless (report-uses? 'subtotals-only)
           (gnc:html-table-append-row/markup!
            table row-style
            (append
@@ -1953,9 +1834,9 @@ be excluded from periodic reporting.")
                            ;; only on number cells that are set to show a subtotal,
                            ;; unless no columns are set to show a subtotal, in which case links
                            ;; are shown on all number cells.
-                           (if (and opt-use-links? (or (cell-with-subtotals? cell)
-                                                       (not (any cell-with-subtotals?
-                                                                 cell-calculators))))
+                           (if (and (report-uses? 'links) (or (cell-with-subtotals? cell)
+                                                              (not (any cell-with-subtotals?
+                                                                        cell-calculators))))
                                (gnc:html-split-anchor split cell-content)
                                cell-content)))))
                  cell-calculators))))
@@ -1981,8 +1862,8 @@ be excluded from periodic reporting.")
       (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))
 
     (define grid (make-grid))
-    (define primary-subtotal-comparator (primary-get-info 'split-sortvalue))
-    (define secondary-subtotal-comparator (secondary-get-info 'split-sortvalue))
+    (define primary-subtotal-comparator (report-uses? 'primary-key/split-sortvalue))
+    (define secondary-subtotal-comparator (report-uses? 'secondary-key/split-sortvalue))
 
     (gnc:html-table-set-col-headers!
      table (concatenate (list
@@ -1990,11 +1871,11 @@ be excluded from periodic reporting.")
                          headings-left-columns
                          headings-right-columns)))
 
-    (when (primary-get-info 'renderer-fn)
+    (when (report-uses? 'primary-key/renderer-fn)
       (add-subheading (render-summary (car splits) 'primary #t)
                       def:primary-subtotal-style (car splits) 'primary))
 
-    (when (secondary-get-info 'renderer-fn)
+    (when (report-uses? 'secondary-key/renderer-fn)
       (add-subheading (render-summary (car splits) 'secondary #t)
                       def:secondary-subtotal-style (car splits) 'secondary))
 
@@ -2006,7 +1887,7 @@ be excluded from periodic reporting.")
 
       (if (null? splits)
 
-          (when (opt-val gnc:pagename-display optname-grand-total)
+          (when (report-uses? 'grand-total)
             (gnc:html-table-append-row/markup!
              table def:grand-total-style
              (list
@@ -2024,12 +1905,12 @@ be excluded from periodic reporting.")
                  (split-values (add-split-row
                                 current
                                 calculated-cells
-                                (if (or odd-row? is-multiline?)
+                                (if (or odd-row? (report-uses? 'multiline))
                                     def:normal-row-style
                                     def:alternate-row-style)
                                 #t)))
 
-            (when is-multiline?
+            (when (report-uses? 'multiline)
               (for-each
                (lambda (othersplit)
                  (add-split-row othersplit calculated-cells
@@ -2246,17 +2127,6 @@ be excluded from periodic reporting.")
   (define options (gnc:report-options report-obj))
   (define (opt-val section name)
     (gnc-optiondb-lookup-value (gnc:optiondb options) section name))
-  (define BOOK-SPLIT-ACTION
-    (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
-  (define (is-filter-member split account-list)
-    (define (same-split? s) (equal? s split))
-    (define (from-account? s) (member (xaccSplitGetAccount s) account-list))
-    (let lp ((splits (xaccTransGetSplitList (xaccSplitGetParent split))))
-      (match splits
-        (() #f)
-        (((? same-split?) . rest) (lp rest))
-        (((? from-account?) . _) #t)
-        ((_ . rest) (lp rest)))))
 
   (gnc:report-starting (opt-val gnc:pagename-general gnc:optname-reportname))
 
@@ -2315,12 +2185,33 @@ be excluded from periodic reporting.")
            (keylist-get-info reconcile-status-list reconcile-filter 'filter-types)
            (keylist-get-info show-void-list void-filter 'how)))
          (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
+         (detail-is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
+         (split-action? (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
+         (preparam (list (cons 'split-action split-action?)))
+         (amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
+         (reversed-signs (opt-val gnc:pagename-display (N_ "Sign Reverses")))
          (primary-key (opt-val pagename-sorting optname-prime-sortkey))
          (primary-order (opt-val pagename-sorting optname-prime-sortorder))
+         (primary-subtotal (opt-val pagename-sorting optname-prime-subtotal))
          (primary-date-subtotal (opt-val pagename-sorting optname-prime-date-subtotal))
+         (primary-get-info (lambda (info)
+                             (if (memq primary-key DATE-SORTING-TYPES)
+                                 (keylist-get-info date-subtotal-list primary-date-subtotal info)
+                                 (and (SUBTOTAL-ENABLED? primary-key preparam)
+                                      primary-subtotal
+                                      (keylist-get-info (sortkey-list preparam) primary-key info)))))
+         (primary-key/renderer-fn (primary-get-info 'renderer-fn))
          (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
          (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
+         (secondary-subtotal (opt-val pagename-sorting optname-sec-subtotal))
          (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
+         (secondary-get-info (lambda (info)
+                               (if (memq secondary-key DATE-SORTING-TYPES)
+                                   (keylist-get-info date-subtotal-list secondary-date-subtotal info)
+                                   (and (SUBTOTAL-ENABLED? secondary-key preparam)
+                                        secondary-subtotal
+                                        (keylist-get-info (sortkey-list preparam) secondary-key info)))))
+         (secondary-key/renderer-fn (secondary-get-info 'renderer-fn))
          (closing-match (keylist-get-info
                          show-closing-list
                          (opt-val pagename-filter optname-closing-transactions)
@@ -2330,17 +2221,129 @@ be excluded from periodic reporting.")
                                 (not (eq? primary-date-subtotal 'none)))
                            (and (memq secondary-key DATE-SORTING-TYPES)
                                 (not (eq? secondary-date-subtotal 'none)))
-                           (or (CUSTOM-SORTING? primary-key BOOK-SPLIT-ACTION)
-                               (CUSTOM-SORTING? secondary-key BOOK-SPLIT-ACTION))))
+                           (or (CUSTOM-SORTING? primary-key preparam)
+                               (CUSTOM-SORTING? secondary-key preparam))))
          (subtotal-table? (and (opt-val gnc:pagename-display optname-grid)
                                (if (memq primary-key DATE-SORTING-TYPES)
                                    (keylist-get-info date-subtotal-list
                                                      primary-date-subtotal 'renderer-fn)
-                                   (opt-val pagename-sorting optname-prime-subtotal))
+                                   primary-subtotal)
                                (memq (opt-val gnc:pagename-display (N_ "Amount"))
                                      '(single double))))
          (infobox-display (opt-val gnc:pagename-general optname-infobox-display))
          (query (qof-query-create-for-splits)))
+
+    ;; define a preprocessed alist of report parameters.
+    ;; each key returns either the parameter value or #f is the parameter is not used.
+    (define parameters
+      (list
+        ;; parameters based on file properties
+        (cons 'split-action split-action?)
+        ;; parameters based on account and filter options
+        (cons 'accounts-matched (or (null? c_account_1) c_account_1))
+        ;; parameters based on common currency options
+        (cons 'common-currency
+              (and (opt-val pagename-currency optname-common-currency)
+                  (opt-val pagename-currency optname-currency)))
+        (cons 'common-currency/original
+              (and (opt-val pagename-currency optname-common-currency)
+                  (opt-val pagename-currency optname-orig-currency)))
+        (cons 'common-currency/price-source
+              (and (opt-val pagename-currency optname-common-currency)
+                  (opt-val pagename-currency optname-price-source)))
+        ;; parameters based on display options
+        (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
+        (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
+        (cons 'entered (opt-val gnc:pagename-display (N_ "Date Entered")))
+        (cons 'num (if split-action?
+                        (opt-val gnc:pagename-display (N_ "Num/Action"))
+                        (opt-val gnc:pagename-display (N_ "Num"))))
+        (cons 'description (opt-val gnc:pagename-display (N_ "Description")))
+        (cons 'account-name (opt-val gnc:pagename-display (N_ "Account Name")))
+        (cons 'other-account-name
+              (and detail-is-single?
+                    (opt-val gnc:pagename-display (N_ "Other Account Name"))))
+        (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
+        (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
+        (cons 'doclink (opt-val gnc:pagename-display (N_ "Link")))
+        (cons 'amount-single (eq? amount-setting 'single))
+        (cons 'amount-double (eq? amount-setting 'double))
+        (cons 'running-balance (opt-val gnc:pagename-display "Account Balance"))
+        (cons 'account-full-name
+              (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
+        (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
+        (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))
+        (cons 'account-code (opt-val gnc:pagename-display (N_ "Account Code")))
+        (cons 'other-account-code
+              (and detail-is-single?
+                    (opt-val gnc:pagename-display (N_ "Other Account Code"))))
+        (cons 'other-account-full-name
+              (and detail-is-single?
+                    (opt-val gnc:pagename-display (N_ "Use Full Other Account Name"))))
+        (cons 'trans-number (and split-action?
+                                (opt-val gnc:pagename-display (N_ "Trans Number"))))
+        (cons 'links (opt-val gnc:pagename-display "Enable Links"))
+        (cons 'reversed-signs (or (eq? reversed-signs 'none) reversed-signs))
+        (cons 'multiline (eq? (opt-val gnc:pagename-display optname-detail-level)
+                              'multi-line))
+        (cons 'grand-total (opt-val gnc:pagename-display optname-grand-total))
+        (cons 'running-grand-total
+              (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'grand)
+                  (eq? (opt-val gnc:pagename-display optname-running-totals) 'all)))
+        (cons 'running-prime
+              (and (primary-get-info 'renderer-fn)
+                    (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'sub)
+                        (eq? (opt-val gnc:pagename-display optname-running-totals) 'all))))
+        (cons 'running-sec
+              (and (secondary-get-info 'renderer-fn)
+                    (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'sub)
+                        (eq? (opt-val gnc:pagename-display optname-running-totals) 'all))))
+        ;; parameters based on general options
+        (cons 'begindate begindate)
+        (cons 'enddate enddate)
+        (cons 'export-table (opt-val gnc:pagename-general optname-table-export))
+        ;; parameters based on sorting options
+        (cons 'primary-key primary-key)
+        (cons 'primary-key/renderer-fn primary-key/renderer-fn)
+        (cons 'primary-key/split-sortvalue (primary-get-info 'split-sortvalue))
+        (cons 'primary-date-subtotal (if (memq primary-key DATE-SORTING-TYPES)
+                                        primary-date-subtotal))
+        (cons 'secondary-key secondary-key)
+        (cons 'secondary-key/renderer-fn secondary-key/renderer-fn)
+        (cons 'secondary-key/split-sortvalue (secondary-get-info 'split-sortvalue))
+        (cons 'secondary-date-subtotal (if (memq secondary-key DATE-SORTING-TYPES)
+                                          secondary-date-subtotal))
+        (cons 'indenting (opt-val pagename-sorting optname-indenting))
+        (cons 'subtotals-only
+              (and (opt-val pagename-sorting optname-show-subtotals-only)
+                    (or primary-key/renderer-fn secondary-key/renderer-fn)))
+        (cons 'sort-account-code (opt-val pagename-sorting (N_ "Show Account Code")))
+        (cons 'sort-account-full-name
+              (opt-val pagename-sorting (N_ "Show Full Account Name")))
+        (cons 'sort-account-description
+              (opt-val pagename-sorting (N_ "Show Account Description")))
+        (cons 'informal-headers (opt-val pagename-sorting optname-show-informal-headers))
+        ;; Parameters based on a mix of options
+        ;; This parameter is set to #t if an account balance can be displayed
+        ;; as a running balance with a balance forward at the top.
+        ;; It implies most default options are maintained :
+        ;; - Detail level is set to one transaction per line,
+        ;; - Date filter is set to date posted
+        ;; - Filtering on transactions is kept as per default
+        ;; - The primary sort is set to account name (or code)
+        ;; - The primary subtotals are displayed (to separate accounts)
+        ;; - The secondary sort is set to register order or date ascending.
+        (cons 'bal-bf
+          (and detail-is-single?
+               (eq? (opt-val gnc:pagename-general optname-date-source) 'posted)
+               (string-null? transaction-matcher)
+               (eq? reconcile-filter 'all)
+               (eq? void-filter 'non-void-only)
+               (memq primary-key '(account-name account-code))
+               (memq secondary-key '(register-order date))
+               primary-subtotal
+               (eq? secondary-order 'ascend)))
+      ))
 
     (define (match? str)
       (cond
@@ -2358,14 +2361,14 @@ be excluded from periodic reporting.")
       (let* ((comparator-function
               (if (memq sortkey DATE-SORTING-TYPES)
                   (let ((date (keylist-get-info
-                               (sortkey-list BOOK-SPLIT-ACTION)
+                               (sortkey-list parameters)
                                sortkey 'split-sortvalue))
                         (date-comparator
                          (keylist-get-info date-subtotal-list
                                            date-subtotal-key 'date-sortvalue)))
                     (lambda (s)
                       (and date-comparator (date-comparator (date s)))))
-                  (or (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION)
+                  (or (keylist-get-info (sortkey-list parameters)
                                         sortkey 'split-sortvalue)
                       (lambda (s) #f))))
              (value-of-X (comparator-function split-X))
@@ -2393,6 +2396,16 @@ be excluded from periodic reporting.")
       (or (match? (xaccTransGetDescription (xaccSplitGetParent split)))
           (match? (xaccTransGetNotes (xaccSplitGetParent split)))
           (match? (xaccSplitGetMemo split))))
+
+    (define (is-filter-member split account-list)
+      (define (same-split? s) (equal? s split))
+      (define (from-account? s) (member (xaccSplitGetAccount s) account-list))
+      (let lp ((splits (xaccTransGetSplitList (xaccSplitGetParent split))))
+        (match splits
+          (() #f)
+          (((? same-split?) . rest) (lp rest))
+          (((? from-account?) . _) #t)
+          ((_ . rest) (lp rest)))))
 
     (cond
      ((or (null? c_account_1)
@@ -2442,8 +2455,8 @@ be excluded from periodic reporting.")
       (unless custom-sort?
         (qof-query-set-sort-order
          query
-         (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) primary-key 'sortkey)
-         (keylist-get-info (sortkey-list BOOK-SPLIT-ACTION) secondary-key 'sortkey)
+         (keylist-get-info (sortkey-list parameters) primary-key 'sortkey)
+         (keylist-get-info (sortkey-list parameters) secondary-key 'sortkey)
          (list QUERY-DEFAULT-SORT))
         (qof-query-set-sort-increasing
          query (eq? primary-order 'ascend) (eq? secondary-order 'ascend)
@@ -2512,8 +2525,8 @@ be excluded from periodic reporting.")
 
        (else
         (let-values (((table grid csvlist)
-                      (make-split-table splits options custom-calculated-cells
-                                        begindate enddate c_account_1)))
+                      (make-split-table splits options parameters
+                                        custom-calculated-cells)))
 
           (gnc:html-document-set-title! document report-title)
 
