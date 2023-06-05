@@ -4855,6 +4855,28 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
     leader = gnc_ledger_display_leader (priv->ledger);
     if (account == leader)
     {
+        CursorClass cursor_class = gnc_split_register_get_current_cursor_class (reg);
+        if (cursor_class == CURSOR_CLASS_SPLIT)
+        {
+            /* If you've selected the transaction itself, we jump to the "other"
+             * account corresponding to the anchoring split.
+             *
+             * If you've selected the split for another account, we jump to that
+             * split's account (account != leader, so this block is never
+             * reached).
+             *
+             * If you've selected a split for this account, for consistency with
+             * selecting the split of another account we should do nothing.
+             * You're already on the account for the split you selected.
+             *
+             * We could jump to a different anchoring split but that'll be very
+             * subtle and only cause problems because it'll have to save any
+             * modifications to the current register.
+             */
+            LEAVE ("split for this account");
+            return;
+        }
+
         split = xaccSplitGetOtherSplit (split);
         if (split == NULL)
         {
