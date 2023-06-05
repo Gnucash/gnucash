@@ -514,6 +514,7 @@ by preventing negative stock balances.<br/>")
                            (trans-brokerage (gnc-numeric-zero))
                            (trans-shares (gnc-numeric-zero))
                            (shares-bought (gnc-numeric-zero))
+                           (shares-sold (gnc-numeric-zero))
                            (trans-sold (gnc-numeric-zero))
                            (trans-bought (gnc-numeric-zero))
                            (trans-spinoff (gnc-numeric-zero))
@@ -570,8 +571,11 @@ by preventing negative stock balances.<br/>")
                                                   (gnc-numeric-add trans-bought split-value commod-currency-frac GNC-RND-ROUND))
                                              (set! shares-bought
                                                   (gnc-numeric-add shares-bought split-units units-denom GNC-RND-ROUND)))
-                                          (set! trans-sold
-                                               (gnc-numeric-sub trans-sold split-value commod-currency-frac GNC-RND-ROUND)))))
+                                          (begin
+                                             (set! trans-sold
+                                                  (gnc-numeric-sub trans-sold split-value commod-currency-frac GNC-RND-ROUND))
+                                             (set! shares-sold
+                                                  (gnc-numeric-add shares-sold split-units units-denom GNC-RND-ROUND))))))
 
                                 ((split-account-type? s ACCT-TYPE-ASSET)
                                  ;; If all the asset accounts mentioned in the transaction are siblings of each other
@@ -594,7 +598,8 @@ by preventing negative stock balances.<br/>")
                        (gnc:debug "Income: " (gnc-numeric-to-string trans-income)
                                   " Brokerage: " (gnc-numeric-to-string trans-brokerage)
                                   " Shares traded: " (gnc-numeric-to-string trans-shares)
-                                  " Shares bought: " (gnc-numeric-to-string shares-bought))
+                                  " Shares bought: " (gnc-numeric-to-string shares-bought)
+                                  " Shares sold " (gnc-numeric-to-string shares-sold))
                        (gnc:debug " Value sold: " (gnc-numeric-to-string trans-sold)
                                   " Value purchased: " (gnc-numeric-to-string trans-bought)
                                   " Spinoff value " (gnc-numeric-to-string trans-spinoff)
@@ -625,6 +630,14 @@ by preventing negative stock balances.<br/>")
                            (let* ((fee-frac (gnc-numeric-div shares-bought trans-shares GNC-DENOM-AUTO GNC-DENOM-REDUCE))
                                   (fees (gnc-numeric-mul trans-brokerage fee-frac commod-currency-frac GNC-RND-ROUND)))
                                  (set! trans-bought (gnc-numeric-add trans-bought fees commod-currency-frac GNC-RND-ROUND))))
+
+                       ;; Add brokerage fees to trans-sold if not ignoring them and there are any
+                       (if (and (not (eq? handle-brokerage-fees 'ignore-brokerage))
+                                (gnc-numeric-positive-p trans-brokerage)
+                                (gnc-numeric-positive-p trans-shares))
+                           (let* ((fee-frac (gnc-numeric-div shares-sold trans-shares GNC-DENOM-AUTO GNC-DENOM-REDUCE))
+                                  (fees (gnc-numeric-mul trans-brokerage fee-frac commod-currency-frac GNC-RND-ROUND)))
+                                 (set! trans-sold (gnc-numeric-add trans-sold fees commod-currency-frac GNC-RND-ROUND))))
 
                        ;; Update the running total of the money in the DRP residual account.  This is relevant
                        ;; if this is a reinvestment transaction (both income and purchase) and there seems to

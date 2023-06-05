@@ -103,7 +103,7 @@
       (let ((sxml (options->sxml advanced-uuid options "basic average")))
         (test-equal "advanced: average basis"
           '("AAPL" "AAPL" "NASDAQ" "42.00" "$6.0000" "$484.88" "$252.00" "$800.00"
-            "$553.00" "$227.88" "-$232.88" "-$5.00" "-0.63%" "$4.00"
+            "$543.00" "$227.88" "-$232.88" "-$5.00" "-0.63%" "$4.00"
             "$10.00" "-$1.00" "-0.13%")
           (sxml->table-row-col sxml 1 1 #f)))
 
@@ -111,7 +111,7 @@
       (let ((sxml (options->sxml advanced-uuid options "basic fifo")))
         (test-equal "advanced: fifo basis"
           '("AAPL" "AAPL" "NASDAQ" "42.00" "$6.0000" "$543.94" "$252.00" "$800.00"
-            "$553.00" "$286.94" "-$291.94" "-$5.00" "-0.63%" "$4.00" "$10.00"
+            "$543.00" "$286.94" "-$291.94" "-$5.00" "-0.63%" "$4.00" "$10.00"
             "-$1.00" "-0.13%")
           (sxml->table-row-col sxml 1 1 #f)))
 
@@ -119,7 +119,7 @@
       (let ((sxml (options->sxml advanced-uuid options "basic filo")))
         (test-equal "advanced: filo basis"
           '("AAPL" "AAPL" "NASDAQ" "42.00" "$6.0000" "$400.00" "$252.00" "$800.00"
-            "$553.00" "$143.00" "-$148.00" "-$5.00" "-0.63%" "$4.00" "$10.00"
+            "$543.00" "$143.00" "-$148.00" "-$5.00" "-0.63%" "$4.00" "$10.00"
             "-$1.00" "-0.13%")
           (sxml->table-row-col sxml 1 1 #f))))
     (teardown)))
