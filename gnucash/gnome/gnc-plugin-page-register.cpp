@@ -4819,6 +4819,44 @@ gnc_plugin_page_register_cmd_exchange_rate (GSimpleAction *simple,
 }
 
 static Split*
+jump_multiple_splits_by_single_account (Account *account, Split *split)
+{
+    Transaction *trans;
+    SplitList *splits;
+    Account *other_account = NULL;
+    Split *other_split = NULL;
+
+    trans = xaccSplitGetParent(split);
+    if (!trans)
+        return NULL;
+
+    for (splits = xaccTransGetSplitList(trans); splits; splits = splits->next)
+    {
+        Split *s = (Split*)splits->data;
+        Account *a = xaccSplitGetAccount(s);
+
+        if (!xaccTransStillHasSplit(trans, s))
+            continue;
+
+        if (a == account)
+            continue;
+
+        if (other_split)
+        {
+            if (other_account != a)
+                return NULL;
+
+            continue;
+        }
+
+        other_account = a;
+        other_split = s;
+    }
+
+    return other_split;
+}
+
+static Split*
 jump_multiple_splits_by_value (Account *account, Split *split, gboolean largest)
 {
     Transaction *trans;
@@ -4877,7 +4915,8 @@ jump_multiple_splits (Account* account, Split *split)
         break;
     }
 
-    return NULL;
+    // If there's only one other account, use that one
+    return jump_multiple_splits_by_single_account (account, split);
 }
 
 static void
