@@ -124,6 +124,16 @@
       <summary>Commit changes to a transaction</summary>
       <description>This dialog is presented when you attempt to move out of a modified transaction. The changed data must be either saved or discarded.</description>
     </key>
+    <key name="reg-trans-jump-multiple-splits" type="i">
+      <default>0</default>
+      <summary>Jump when there are multiple other accounts</summary>
+      <description>This dialog is presented when you are unable to jump on a transaction because it has splits for multiple other accounts. A specific split must be selected to jump to the other account.</description>
+    </key>
+    <key name="reg-trans-jump-single-account" type="i">
+      <default>0</default>
+      <summary>Jump when there are no other accounts</summary>
+      <description>This dialog is presented when you are unable to jump on a transaction because it only has splits for the current account.</description>
+    </key>
   </schema>
   
   <schema id="org.gnucash.GnuCash.warnings.temporary" path="/org/gnucash/GnuCash/warnings/temporary/">
@@ -246,6 +256,16 @@
       <default>0</default>
       <summary>Commit changes to a transaction</summary>
       <description>This dialog is presented when you attempt to move out of a modified transaction. The changed data must be either saved or discarded.</description>
+    </key>
+    <key name="reg-trans-jump-multiple-splits" type="i">
+      <default>0</default>
+      <summary>Jump when there are multiple other accounts</summary>
+      <description>This dialog is presented when you are unable to jump on a transaction because it has splits for multiple other accounts. A specific split must be selected to jump to the other account.</description>
+    </key>
+    <key name="reg-trans-jump-single-account" type="i">
+      <default>0</default>
+      <summary>Jump when there are no other accounts</summary>
+      <description>This dialog is presented when you are unable to jump on a transaction because it only has splits for the current account.</description>
     </key>
   </schema>
 </schemalist>
