@@ -4825,6 +4825,10 @@ jump_multiple_splits_by_single_account (Account *account, Split *split)
         other_split = s;
     }
 
+    // Jump to the same account so that the right warning is triggered
+    if (!other_split)
+        other_split = split;
+
     return other_split;
 }
 
@@ -4865,6 +4869,10 @@ jump_multiple_splits_by_value (Account *account, Split *split, gboolean largest)
         best = value;
         other_split = s;
     }
+
+    // Jump to the same account so that the right warning is triggered
+    if (!other_split)
+        other_split = split;
 
     return other_split;
 }
@@ -4967,6 +4975,20 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
         }
         if (other_split == NULL)
         {
+            GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+                                             GTK_DIALOG_MODAL
+                                             | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                             GTK_MESSAGE_ERROR,
+                                             GTK_BUTTONS_NONE,
+                                             "%s",
+                                             _("Unable to jump to other account"));
+
+            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                    "%s", _("This transaction involves more than one other account. Select a specific split to jump to that account."));
+            gtk_dialog_add_button (GTK_DIALOG(dialog), _("_OK"), GTK_RESPONSE_OK);
+            gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_MULTIPLE_SPLITS);
+            gtk_widget_destroy (dialog);
+
             LEAVE ("no split (2)");
             return;
         }
@@ -4982,6 +5004,20 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
 
         if (account == leader)
         {
+            GtkWidget *dialog = gtk_message_dialog_new (GTK_WINDOW(window),
+                                             GTK_DIALOG_MODAL
+                                             | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                             GTK_MESSAGE_ERROR,
+                                             GTK_BUTTONS_NONE,
+                                             "%s",
+                                             _("Unable to jump to other account"));
+
+            gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
+                    "%s", _("This transaction only involves the current account so there is no other account to jump to."));
+            gtk_dialog_add_button (GTK_DIALOG(dialog), _("_OK"), GTK_RESPONSE_OK);
+            gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_JUMP_SINGLE_ACCOUNT);
+            gtk_widget_destroy (dialog);
+
             LEAVE ("register open for account");
             return;
         }
