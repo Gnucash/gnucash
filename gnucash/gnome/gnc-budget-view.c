@@ -1219,9 +1219,6 @@ bgv_get_total_for_account (Account *account, GncBudget *budget, gnc_commodity *n
         }
     }
 
-    if (gnc_reverse_balance (account))
-        total = gnc_numeric_neg (total);
-
     return total;
 }
 
@@ -1240,6 +1237,9 @@ budget_total_col_source (Account *account, GtkTreeViewColumn *col,
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
     total = bgv_get_total_for_account (account, priv->budget, NULL);
+    if (gnc_reverse_balance (account))
+        total = gnc_numeric_neg (total);
+
     xaccSPrintAmount (amtbuff, total, gnc_account_print_info (account, TRUE));
 
     if (priv->use_red_color && gnc_numeric_negative_p (total))
