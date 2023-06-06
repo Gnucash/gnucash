@@ -118,7 +118,6 @@ struct GncOptionDBAccountTest : public ::testing::Test
             return account;
         };
         auto assets = create_account(m_root, ACCT_TYPE_ASSET, "Assets");
-        auto liabilities = create_account(m_root, ACCT_TYPE_LIABILITY, "Liabilities");
         auto expenses = create_account(m_root, ACCT_TYPE_EXPENSE, "Expenses");
         create_account(assets, ACCT_TYPE_BANK, "Bank");
         auto broker = create_account(assets, ACCT_TYPE_ASSET, "Broker");
@@ -288,12 +287,6 @@ TEST_F(GncOptionDBTest, test_register_start_date_option)
 
 }
 
-static bool
-operator==(const GncGUID& l, const GncGUID& r)
-{
-    return guid_equal(&l, &r);
-}
-
 class GncOptionDBIOTest : public ::testing::Test
 {
 protected:
@@ -315,7 +308,6 @@ protected:
             return account;
         };
         auto assets = create_account(m_root, ACCT_TYPE_ASSET, "Assets");
-        auto liabilities = create_account(m_root, ACCT_TYPE_LIABILITY, "Liabilities");
         auto expenses = create_account(m_root, ACCT_TYPE_EXPENSE, "Expenses");
         create_account(assets, ACCT_TYPE_BANK, "Bank");
         auto broker = create_account(assets, ACCT_TYPE_ASSET, "Broker");
@@ -384,14 +376,12 @@ TEST_F(GncOptionDBIOTest, test_option_kvp_save)
     auto bar = "bar";
     auto sausage = "sausage";
     auto grault = "grault";
-    auto garply = "garply";
     GSList foo_bar_tail{(void*)bar, nullptr};
     GSList foo_bar_head{(void*)foo, &foo_bar_tail};
     GSList foo_sausage_tail{(void*)sausage, nullptr};
     GSList foo_sausage_head{(void*)foo, &foo_sausage_tail};
     GSList qux_grault_tail{(void*)grault, nullptr};
     GSList qux_grault_head{(void*)foo, &qux_grault_tail};
-    GSList qux_garply_tail{(void*)garply, nullptr};
     GSList qux_garply_head{(void*)foo, &qux_grault_tail};
     m_db->set_option("foo", "sausage", std::string{"pepper"});
     m_db->save_to_kvp(m_book, true);
