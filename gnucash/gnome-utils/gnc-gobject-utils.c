@@ -120,25 +120,16 @@ gnc_gobject_tracking_dump (void)
 /** Tell gnucash to remember this object in the database.
  */
 void
-gnc_gobject_tracking_remember (GObject *object, GObjectClass *klass)
+gnc_gobject_tracking_remember (GObject *object)
 {
-    GHashTable *table;
-    GList *list;
-    const gchar *name;
-
     g_return_if_fail(G_IS_OBJECT(object));
 
-    /* Little dance here to handle startup conditions. During object
-     * initialization the object type changes as each parent class
-     * is initialized.  The class passed to the initialization function
-     * is always the ultimate class of the object. */
-    if (klass == NULL)
-        klass = G_OBJECT_GET_CLASS(object);
-    name = g_type_name(G_TYPE_FROM_CLASS(klass));
+    GObjectClass *klass = G_OBJECT_GET_CLASS(object);
+    const gchar *name = g_type_name(G_TYPE_FROM_CLASS(klass));
 
     //printf("Enter %s: object %p of type %s\n", G_STRFUNC, object, name);
-    table = gnc_gobject_tracking_table();
-    list = g_hash_table_lookup(table, name);
+    GHashTable *table = gnc_gobject_tracking_table();
+    GList *list = g_hash_table_lookup(table, name);
 
     if (g_list_index(list, object) != -1)
     {
