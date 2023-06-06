@@ -271,15 +271,9 @@ gvalue_from_kvp_value (const KvpValue *kval, GValue* val)
             g_value_init (val, G_TYPE_DATE);
             g_value_set_static_boxed (val, kval->get_ptr<GDate>());
             break;
-        case KvpValue::Type::GLIST:
-            PWARN ("Error! Attempt to transfer KvpGList!");
-            [[fallthrough]];
-/* No transfer of KVP frames outside of QofInstance-derived classes! */
-        case KvpValue::Type::FRAME:
-            PWARN ("Error! Attempt to transfer KvpFrame!");
-            [[fallthrough]];
         default:
-            PWARN ("Error! Invalid KVP Transfer Request!");
+/* No transfer outside of QofInstance-derived classes! */
+            PWARN ("Error! Invalid attempt to transfer Kvp type %d", kval->get_type());
             g_slice_free (GValue, val);
             val = NULL;
             break;
