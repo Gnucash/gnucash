@@ -2187,42 +2187,21 @@ be excluded from periodic reporting.")
          (report-title (opt-val gnc:pagename-general gnc:optname-reportname))
          (detail-is-single? (eq? (opt-val gnc:pagename-display optname-detail-level) 'single))
          (split-action? (qof-book-use-split-action-for-num-field (gnc-get-current-book)))
-         (preparam (list (cons 'split-action split-action?)))
          (amount-setting (opt-val gnc:pagename-display (N_ "Amount")))
          (reversed-signs (opt-val gnc:pagename-display (N_ "Sign Reverses")))
          (primary-key (opt-val pagename-sorting optname-prime-sortkey))
          (primary-order (opt-val pagename-sorting optname-prime-sortorder))
          (primary-subtotal (opt-val pagename-sorting optname-prime-subtotal))
          (primary-date-subtotal (opt-val pagename-sorting optname-prime-date-subtotal))
-         (primary-get-info (lambda (info)
-                             (if (memq primary-key DATE-SORTING-TYPES)
-                                 (keylist-get-info date-subtotal-list primary-date-subtotal info)
-                                 (and (SUBTOTAL-ENABLED? primary-key preparam)
-                                      primary-subtotal
-                                      (keylist-get-info (sortkey-list preparam) primary-key info)))))
-         (primary-key/renderer-fn (primary-get-info 'renderer-fn))
          (secondary-key (opt-val pagename-sorting optname-sec-sortkey))
          (secondary-order (opt-val pagename-sorting optname-sec-sortorder))
          (secondary-subtotal (opt-val pagename-sorting optname-sec-subtotal))
          (secondary-date-subtotal (opt-val pagename-sorting optname-sec-date-subtotal))
-         (secondary-get-info (lambda (info)
-                               (if (memq secondary-key DATE-SORTING-TYPES)
-                                   (keylist-get-info date-subtotal-list secondary-date-subtotal info)
-                                   (and (SUBTOTAL-ENABLED? secondary-key preparam)
-                                        secondary-subtotal
-                                        (keylist-get-info (sortkey-list preparam) secondary-key info)))))
-         (secondary-key/renderer-fn (secondary-get-info 'renderer-fn))
          (closing-match (keylist-get-info
                          show-closing-list
                          (opt-val pagename-filter optname-closing-transactions)
                          'closing-match))
          (splits '())
-         (custom-sort? (or (and (memq primary-key DATE-SORTING-TYPES)
-                                (not (eq? primary-date-subtotal 'none)))
-                           (and (memq secondary-key DATE-SORTING-TYPES)
-                                (not (eq? secondary-date-subtotal 'none)))
-                           (or (CUSTOM-SORTING? primary-key preparam)
-                               (CUSTOM-SORTING? secondary-key preparam))))
          (subtotal-table? (and (opt-val gnc:pagename-display optname-grid)
                                (if (memq primary-key DATE-SORTING-TYPES)
                                    (keylist-get-info date-subtotal-list
@@ -2236,114 +2215,150 @@ be excluded from periodic reporting.")
     ;; define a preprocessed alist of report parameters.
     ;; each key returns either the parameter value or #f is the parameter is not used.
     (define parameters
-      (list
-        ;; parameters based on file properties
-        (cons 'split-action split-action?)
-        ;; parameters based on account and filter options
-        (cons 'accounts-matched (or (null? c_account_1) c_account_1))
-        ;; parameters based on common currency options
-        (cons 'common-currency
-              (and (opt-val pagename-currency optname-common-currency)
-                  (opt-val pagename-currency optname-currency)))
-        (cons 'common-currency/original
-              (and (opt-val pagename-currency optname-common-currency)
-                  (opt-val pagename-currency optname-orig-currency)))
-        (cons 'common-currency/price-source
-              (and (opt-val pagename-currency optname-common-currency)
-                  (opt-val pagename-currency optname-price-source)))
-        ;; parameters based on display options
-        (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
-        (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
-        (cons 'entered (opt-val gnc:pagename-display (N_ "Date Entered")))
-        (cons 'num (if split-action?
-                        (opt-val gnc:pagename-display (N_ "Num/Action"))
-                        (opt-val gnc:pagename-display (N_ "Num"))))
-        (cons 'description (opt-val gnc:pagename-display (N_ "Description")))
-        (cons 'account-name (opt-val gnc:pagename-display (N_ "Account Name")))
-        (cons 'other-account-name
-              (and detail-is-single?
-                    (opt-val gnc:pagename-display (N_ "Other Account Name"))))
-        (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
-        (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
-        (cons 'doclink (opt-val gnc:pagename-display (N_ "Link")))
-        (cons 'amount-single (eq? amount-setting 'single))
-        (cons 'amount-double (eq? amount-setting 'double))
-        (cons 'running-balance (opt-val gnc:pagename-display "Account Balance"))
-        (cons 'account-full-name
-              (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
-        (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
-        (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))
-        (cons 'account-code (opt-val gnc:pagename-display (N_ "Account Code")))
-        (cons 'other-account-code
-              (and detail-is-single?
-                    (opt-val gnc:pagename-display (N_ "Other Account Code"))))
-        (cons 'other-account-full-name
-              (and detail-is-single?
-                    (opt-val gnc:pagename-display (N_ "Use Full Other Account Name"))))
-        (cons 'trans-number (and split-action?
-                                (opt-val gnc:pagename-display (N_ "Trans Number"))))
-        (cons 'links (opt-val gnc:pagename-display "Enable Links"))
-        (cons 'reversed-signs (or (eq? reversed-signs 'none) reversed-signs))
-        (cons 'multiline (eq? (opt-val gnc:pagename-display optname-detail-level)
-                              'multi-line))
-        (cons 'grand-total (opt-val gnc:pagename-display optname-grand-total))
-        (cons 'running-grand-total
-              (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'grand)
-                  (eq? (opt-val gnc:pagename-display optname-running-totals) 'all)))
-        (cons 'running-prime
-              (and (primary-get-info 'renderer-fn)
-                    (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'sub)
-                        (eq? (opt-val gnc:pagename-display optname-running-totals) 'all))))
-        (cons 'running-sec
-              (and (secondary-get-info 'renderer-fn)
-                    (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'sub)
-                        (eq? (opt-val gnc:pagename-display optname-running-totals) 'all))))
-        ;; parameters based on general options
-        (cons 'begindate begindate)
-        (cons 'enddate enddate)
-        (cons 'export-table (opt-val gnc:pagename-general optname-table-export))
-        ;; parameters based on sorting options
-        (cons 'primary-key primary-key)
-        (cons 'primary-key/renderer-fn primary-key/renderer-fn)
-        (cons 'primary-key/split-sortvalue (primary-get-info 'split-sortvalue))
-        (cons 'primary-date-subtotal (if (memq primary-key DATE-SORTING-TYPES)
-                                        primary-date-subtotal))
-        (cons 'secondary-key secondary-key)
-        (cons 'secondary-key/renderer-fn secondary-key/renderer-fn)
-        (cons 'secondary-key/split-sortvalue (secondary-get-info 'split-sortvalue))
-        (cons 'secondary-date-subtotal (if (memq secondary-key DATE-SORTING-TYPES)
-                                          secondary-date-subtotal))
-        (cons 'indenting (opt-val pagename-sorting optname-indenting))
-        (cons 'subtotals-only
-              (and (opt-val pagename-sorting optname-show-subtotals-only)
-                    (or primary-key/renderer-fn secondary-key/renderer-fn)))
-        (cons 'sort-account-code (opt-val pagename-sorting (N_ "Show Account Code")))
-        (cons 'sort-account-full-name
-              (opt-val pagename-sorting (N_ "Show Full Account Name")))
-        (cons 'sort-account-description
-              (opt-val pagename-sorting (N_ "Show Account Description")))
-        (cons 'informal-headers (opt-val pagename-sorting optname-show-informal-headers))
-        ;; Parameters based on a mix of options
-        ;; This parameter is set to #t if an account balance can be displayed
-        ;; as a running balance with a balance forward at the top.
-        ;; It implies most default options are maintained :
-        ;; - Detail level is set to one transaction per line,
-        ;; - Date filter is set to date posted
-        ;; - Filtering on transactions is kept as per default
-        ;; - The primary sort is set to account name (or code)
-        ;; - The primary subtotals are displayed (to separate accounts)
-        ;; - The secondary sort is set to register order or date ascending.
-        (cons 'bal-bf
-          (and detail-is-single?
-               (eq? (opt-val gnc:pagename-general optname-date-source) 'posted)
-               (string-null? transaction-matcher)
-               (eq? reconcile-filter 'all)
-               (eq? void-filter 'non-void-only)
-               (memq primary-key '(account-name account-code))
-               (memq secondary-key '(register-order date))
-               primary-subtotal
-               (eq? secondary-order 'ascend)))
-      ))
+      ;; define parameters-tail, the main set of parameters.
+      ;; additional variables and parameters that require this first set of parameters
+      ;; wll be prepended further down.
+      (let* ((parameters-tail
+              (list
+                ;; parameters based on file properties
+                (cons 'split-action split-action?)
+                ;; parameters based on account and filter options
+                (cons 'accounts-matched (or (null? c_account_1) c_account_1))
+                ;; parameters based on common currency options
+                (cons 'common-currency
+                      (and (opt-val pagename-currency optname-common-currency)
+                          (opt-val pagename-currency optname-currency)))
+                (cons 'common-currency/original
+                      (and (opt-val pagename-currency optname-common-currency)
+                          (opt-val pagename-currency optname-orig-currency)))
+                (cons 'common-currency/price-source
+                      (and (opt-val pagename-currency optname-common-currency)
+                          (opt-val pagename-currency optname-price-source)))
+                ;; parameters based on display options
+                (cons 'date (opt-val gnc:pagename-display (N_ "Date")))
+                (cons 'reconciled-date (opt-val gnc:pagename-display (N_ "Reconciled Date")))
+                (cons 'entered (opt-val gnc:pagename-display (N_ "Date Entered")))
+                (cons 'num (if split-action?
+                                (opt-val gnc:pagename-display (N_ "Num/Action"))
+                                (opt-val gnc:pagename-display (N_ "Num"))))
+                (cons 'description (opt-val gnc:pagename-display (N_ "Description")))
+                (cons 'account-name (opt-val gnc:pagename-display (N_ "Account Name")))
+                (cons 'other-account-name
+                      (and detail-is-single?
+                            (opt-val gnc:pagename-display (N_ "Other Account Name"))))
+                (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
+                (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
+                (cons 'doclink (opt-val gnc:pagename-display (N_ "Link")))
+                (cons 'amount-single (eq? amount-setting 'single))
+                (cons 'amount-double (eq? amount-setting 'double))
+                (cons 'running-balance (opt-val gnc:pagename-display "Account Balance"))
+                (cons 'account-full-name
+                      (opt-val gnc:pagename-display (N_ "Use Full Account Name")))
+                (cons 'memo (opt-val gnc:pagename-display (N_ "Memo")))
+                (cons 'notes (opt-val gnc:pagename-display (N_ "Notes")))
+                (cons 'account-code (opt-val gnc:pagename-display (N_ "Account Code")))
+                (cons 'other-account-code
+                      (and detail-is-single?
+                            (opt-val gnc:pagename-display (N_ "Other Account Code"))))
+                (cons 'other-account-full-name
+                      (and detail-is-single?
+                            (opt-val gnc:pagename-display (N_ "Use Full Other Account Name"))))
+                (cons 'trans-number (and split-action?
+                                        (opt-val gnc:pagename-display (N_ "Trans Number"))))
+                (cons 'links (opt-val gnc:pagename-display "Enable Links"))
+                (cons 'reversed-signs (or (eq? reversed-signs 'none) reversed-signs))
+                (cons 'multiline (eq? (opt-val gnc:pagename-display optname-detail-level)
+                                      'multi-line))
+                (cons 'grand-total (opt-val gnc:pagename-display optname-grand-total))
+                (cons 'running-grand-total
+                      (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'grand)
+                          (eq? (opt-val gnc:pagename-display optname-running-totals) 'all)))
+                ;; parameters based on general options
+                (cons 'begindate begindate)
+                (cons 'enddate enddate)
+                (cons 'export-table (opt-val gnc:pagename-general optname-table-export))
+                ;; parameters based on sorting options
+                (cons 'primary-key primary-key)
+                (cons 'primary-date-subtotal (if (memq primary-key DATE-SORTING-TYPES)
+                                                primary-date-subtotal))
+                (cons 'secondary-key secondary-key)
+                (cons 'secondary-date-subtotal (if (memq secondary-key DATE-SORTING-TYPES)
+                                                  secondary-date-subtotal))
+                (cons 'indenting (opt-val pagename-sorting optname-indenting))
+                (cons 'sort-account-code (opt-val pagename-sorting (N_ "Show Account Code")))
+                (cons 'sort-account-full-name
+                      (opt-val pagename-sorting (N_ "Show Full Account Name")))
+                (cons 'sort-account-description
+                      (opt-val pagename-sorting (N_ "Show Account Description")))
+                (cons 'informal-headers (opt-val pagename-sorting optname-show-informal-headers))
+                ;; Parameters based on a mix of options
+                ;; This parameter is set to #t if an account balance can be displayed
+                ;; as a running balance with a balance forward at the top.
+                ;; It implies most default options are maintained :
+                ;; - Detail level is set to one transaction per line,
+                ;; - Date filter is set to date posted
+                ;; - Filtering on transactions is kept as per default
+                ;; - The primary sort is set to account name (or code)
+                ;; - The primary subtotals are displayed (to separate accounts)
+                ;; - The secondary sort is set to register order or date ascending.
+                (cons 'bal-bf
+                  (and detail-is-single?
+                      (eq? (opt-val gnc:pagename-general optname-date-source) 'posted)
+                      (string-null? transaction-matcher)
+                      (eq? reconcile-filter 'all)
+                      (eq? void-filter 'non-void-only)
+                      (memq primary-key '(account-name account-code))
+                      (memq secondary-key '(register-order date))
+                      primary-subtotal
+                      (eq? secondary-order 'ascend)))
+                ))
+             ;; additional variables that call sortkey-list and therefore
+             ;; whose definition requires the existing parameters-tail alist
+             (primary-get-info (lambda (info)
+                                (if (memq primary-key DATE-SORTING-TYPES)
+                                    (keylist-get-info date-subtotal-list primary-date-subtotal info)
+                                    (and (SUBTOTAL-ENABLED? primary-key parameters-tail)
+                                          primary-subtotal
+                                          (keylist-get-info (sortkey-list parameters-tail) primary-key info)))))
+             (primary-key/renderer-fn (primary-get-info 'renderer-fn))
+             (secondary-get-info (lambda (info)
+                                  (if (memq secondary-key DATE-SORTING-TYPES)
+                                      (keylist-get-info date-subtotal-list secondary-date-subtotal info)
+                                      (and (SUBTOTAL-ENABLED? secondary-key parameters-tail)
+                                          secondary-subtotal
+                                          (keylist-get-info (sortkey-list parameters-tail) secondary-key info)))))
+             (secondary-key/renderer-fn (secondary-get-info 'renderer-fn)))
+
+        ;; prepend additional parameters that rely on sortkey-list and therefore
+        ;; whose definition requires the existing parameters-tail alist
+        (cons*
+          ;; additional parameters based on display options
+          (cons 'running-prime
+                (and primary-key/renderer-fn
+                      (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'sub)
+                          (eq? (opt-val gnc:pagename-display optname-running-totals) 'all))))
+          (cons 'running-sec
+                (and secondary-key/renderer-fn
+                      (or (eq? (opt-val gnc:pagename-display optname-running-totals) 'sub)
+                          (eq? (opt-val gnc:pagename-display optname-running-totals) 'all))))
+          ;; additional parameters based on sorting options
+          (cons 'primary-key/renderer-fn primary-key/renderer-fn)
+          (cons 'primary-key/split-sortvalue (primary-get-info 'split-sortvalue))
+          (cons 'secondary-key/renderer-fn secondary-key/renderer-fn)
+          (cons 'secondary-key/split-sortvalue (secondary-get-info 'split-sortvalue))
+          (cons 'subtotals-only
+                (and (opt-val pagename-sorting optname-show-subtotals-only)
+                      (or primary-key/renderer-fn secondary-key/renderer-fn)))
+          ;; parameters-tail comes at the end
+          parameters-tail)))
+
+    (define custom-sort?
+        (or (and (memq primary-key DATE-SORTING-TYPES)
+                (not (eq? primary-date-subtotal 'none)))
+            (and (memq secondary-key DATE-SORTING-TYPES)
+                (not (eq? secondary-date-subtotal 'none)))
+            (or (CUSTOM-SORTING? primary-key parameters)
+                (CUSTOM-SORTING? secondary-key parameters))))
 
     (define (match? str)
       (cond
