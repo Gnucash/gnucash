@@ -941,6 +941,13 @@ TEST(GncOptionDate, test_gnc_relative_date_from_storage_string)
     EXPECT_EQ(RelativeDatePeriod::END_ACCOUNTING_PERIOD,  gnc_relative_date_from_storage_string("end-prev-fin-year"));
 }
 
+TEST(GncOptionDate, test_not_using_32bit_time_t_in_2038)
+{
+    // tests below call time() to initialize GDate.
+    // make sure the tests fail if that could cause a problem
+    EXPECT_FALSE(sizeof (time_t) == 4 && time(nullptr) <= 0) << "Time to upgrade 32bit time_t!";
+}
+
 TEST(GncOptionDate, test_gnc_relative_date_to_time64)
 {
     GDate date;
