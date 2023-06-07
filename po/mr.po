@@ -2,14 +2,15 @@
 # Copyright (C) 2014, C-DAC, GIST, Pune, India.
 # Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>, 2014.
 # Hemant More <hemantrmore@tutanota.com>, 2022.
+# Rahul Shirke <sabretou@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2022-07-08 19:19+0000\n"
-"Last-Translator: Hemant More <hemantrmore@tutanota.com>\n"
+"PO-Revision-Date: 2023-06-01 04:46+0000\n"
+"Last-Translator: Rahul Shirke <sabretou@gmail.com>\n"
 "Language-Team: Marathi <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "mr/>\n"
 "Language: mr\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.13.1-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -690,7 +691,7 @@ msgstr ""
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "Menu"
-msgstr ""
+msgstr "मेन्यू"
 
 #: borrowed/goffice/go-optionmenu.c:339
 #, fuzzy
