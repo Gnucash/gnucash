@@ -10,10 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-03-27 20:40+0000\n"
+"PO-Revision-Date: 2023-06-04 15:48+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (New Zealand) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_NZ/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -793,14 +793,6 @@ msgstr ""
 "accounts, please see the GnuCash online manual."
 
 #: doc/tip_of_the_day.list.c:44
-#, fuzzy
-#| msgid ""
-#| "Every transaction has a \"Notes\" field where you can put useful "
-#| "information.\n"
-#| "\n"
-#| "To make it visible\n"
-#| "select \"View\" in the menu bar and check \"Double Line\" or\n"
-#| "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -809,12 +801,12 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line View\" in Preferences:Register Defaults."
 msgstr ""
-"Every transaction has a \"Notes\" field where you can put useful "
-"information.\n"
+"Every transaction has a \"Notes\" field where you can put useful information."
+"\n"
 "\n"
 "To make it visible\n"
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
-"check \"Double Line Mode\" in Preferences:Register Defaults."
+"check \"Double Line View\" in Preferences:Register Defaults."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -6617,13 +6609,13 @@ msgstr "All files"
 #. be translated
 #: gnucash/gnome-utils/dialog-file-access.c:366
 msgid "Datafiles only (*.gnucash, *.xac)"
-msgstr ""
+msgstr "Datafiles only (*.gnucash, *.xac)"
 
 #. Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
 #. patterns and must not be translated
 #: gnucash/gnome-utils/dialog-file-access.c:376
 msgid "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
-msgstr ""
+msgstr "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
 
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
@@ -7396,10 +7388,8 @@ msgstr ""
 "the budgets and amend signs if necessary."
 
 #: gnucash/gnome-utils/gnc-file.c:754
-#, fuzzy
-#| msgid "The following warnings exist:"
 msgid "The following are noted in this file:"
-msgstr "The following warnings exist:"
+msgstr "The following are noted in this file:"
 
 #: gnucash/gnome-utils/gnc-file.c:880
 #, c-format
@@ -9937,14 +9927,6 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1445
-#, fuzzy
-#| msgid ""
-#| "If selected, the default book option for new files is set so that the "
-#| "'Num' cell on registers shows/updates the split 'action' field and the "
-#| "transaction 'num' field is shown on the second line in double line mode "
-#| "(and is not visible in single line mode). Otherwise, the default book "
-#| "option for new files is set so that the 'Num' cell on registers shows/"
-#| "updates the transaction 'num' field."
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -9955,10 +9937,10 @@ msgid ""
 msgstr ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
-"'num' field is shown on the second line in double line mode (and is not "
-"visible in single line mode). Otherwise, the default book option for new "
-"files is set so that the 'Num' cell on registers shows/updates the "
-"transaction 'num' field."
+"'num' field is shown on the second line in double line view (and is not "
+"visible if that's not set). Otherwise, the default book option for new files "
+"is set so that the 'Num' cell on registers shows/updates the transaction "
+"'num' field."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
 msgid "Color the register using a gnucash specific color theme"
@@ -10081,22 +10063,12 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:286
 #: gnucash/gtkbuilder/dialog-preferences.glade:2850
-#, fuzzy
-#| msgid "Delete all _transactions"
 msgid "Hide splits in all transactions."
-msgstr "Delete all _transactions"
+msgstr "Hide splits in all transactions."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:287
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
-#, fuzzy
-#| msgid ""
-#| "This field specifies the default view style when opening a new register "
-#| "window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". "
-#| "The \"ledger\" setting says to show each transaction on one or two lines. "
-#| "The \"auto-ledger\" setting does the same, but also expands only the "
-#| "current transaction to show all splits. The \"journal\" setting shows all "
-#| "transactions in expanded form."
 msgid ""
 "This field specifies the default view style when opening a new register "
 "window. Possible values are \"Basic ledger\", \"Auto-split ledger\" and "
@@ -10107,25 +10079,23 @@ msgid ""
 "setting shows all transactions in expanded form."
 msgstr ""
 "This field specifies the default view style when opening a new register "
-"window. Possible values are \"ledger\", \"auto-ledger\" and \"journal\". The "
-"\"ledger\" setting says to show each transaction on one or two lines. The "
-"\"auto-ledger\" setting does the same, but also expands only the current "
-"transaction to show all splits. The \"journal\" setting shows all "
-"transactions in expanded form."
+"window. Possible values are \"Basic ledger\", \"Auto-split ledger\" and "
+"\"Transaction journal\". The \"Basic ledger\" setting says to show each "
+"transaction on one or two lines depending on whether Double line view is "
+"set. The \"Auto-split ledger\" setting does the same, but also expands only "
+"the current transaction to show all splits. The \"Transaction journal\" "
+"setting shows all transactions in expanded form."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line or in double line mode on two."
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one or two lines depending on whether Double line "
 "view is set."
 msgstr ""
 "Automatically expand the current transaction to show all splits. All other "
-"transactions are shown on one line or in double line mode on two."
+"transactions are shown on one or two lines depending on whether Double line "
+"view is set."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:296
 #: gnucash/gtkbuilder/dialog-preferences.glade:2888
@@ -10991,10 +10961,8 @@ msgstr "Colon (:)"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:217
 #: gnucash/gtkbuilder/assistant-csv-export.glade:214
-#, fuzzy
-#| msgid "Select Separator Type"
 msgid "Select Separator Character"
-msgstr "Select Separator Type"
+msgstr "Select Separator Character"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:255
 msgid "Preview"
@@ -11275,10 +11243,8 @@ msgstr "<b>Load and Save Settings</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:225
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:214
-#, fuzzy
-#| msgid "Comma separated"
 msgid "Character-separated"
-msgstr "Comma separated"
+msgstr "Character-separated"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:242
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:231
@@ -15517,18 +15483,10 @@ msgid "Layout"
 msgstr "Layout"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2765
-#, fuzzy
-#| msgid "Number of _transactions"
 msgid "_Placement of future transactions"
-msgstr "Number of _transactions"
+msgstr "_Placement of future transactions"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2771
-#, fuzzy
-#| msgid ""
-#| "If checked, transactions with a date in the future will be displayed at "
-#| "the bottom of the register after the blank transaction. If clear, the "
-#| "blank transaction will be at the bottom of the register after all "
-#| "transactions."
 msgid ""
 "If checked, transactions with a date in the future will be displayed at the "
 "bottom of the register after the blank transaction unless in reverse sort "
@@ -15537,8 +15495,10 @@ msgid ""
 "transactions unless in reverse sort order when it will be at the top."
 msgstr ""
 "If checked, transactions with a date in the future will be displayed at the "
-"bottom of the register after the blank transaction. If clear, the blank "
-"transaction will be at the bottom of the register after all transactions."
+"bottom of the register after the blank transaction unless in reverse sort "
+"order when they are displayed at the top before the blank transaction. If "
+"clear, the blank transaction will be at the bottom of the register after all "
+"transactions unless in reverse sort order when it will be at the top."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2811
 msgid "<b>Default Style</b>"
@@ -15567,24 +15527,18 @@ msgid "Number of _transactions"
 msgstr "Number of _transactions"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2937
-#, fuzzy
-#| msgid "_Double line mode"
 msgid "_Double line view"
-msgstr "_Double line mode"
+msgstr "_Double line view"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2943
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with Action, Notes, and Linked Document fields for "
-#| "each transaction"
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
 msgstr ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
-"transaction"
+"transaction."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
@@ -19742,7 +19696,7 @@ msgstr "Destination account for the auto-balance split."
 
 #: gnucash/import-export/import-main-matcher.c:979
 msgid "Click Edit to modify"
-msgstr ""
+msgstr "Click Edit to modify"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1389
@@ -24045,10 +23999,8 @@ msgid "Reporting range end period cannot be less than start period."
 msgstr "Reporting range end period cannot be less than start period."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:410
-#, fuzzy
-#| msgid "Reporting range end period cannot be less than start period."
 msgid "Reporting range end period cannot exceed number of periods in budget"
-msgstr "Reporting range end period cannot be less than start period."
+msgstr "Reporting range end period cannot exceed number of periods in budget"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:482
 #: gnucash/report/reports/standard/income-statement.scm:461
@@ -27856,10 +27808,8 @@ msgid "Display a subtotal summary table."
 msgstr "Display a subtotal summary table."
 
 #: gnucash/report/trep-engine.scm:923
-#, fuzzy
-#| msgid "Display the other account code?"
 msgid "Display the balance of the underlying account on each line?"
-msgstr "Display the other account code?"
+msgstr "Display the balance of the underlying account on each line?"
 
 #: gnucash/report/trep-engine.scm:929
 msgid "Display the trans number?"
@@ -28112,10 +28062,8 @@ msgid "Quit this application"
 msgstr "Quit this application"
 
 #: gnucash/ui/gnc-main-window.ui:143
-#, fuzzy
-#| msgid "Preferences"
 msgid "Pr_eferences"
-msgstr "Preferences"
+msgstr "Pr_eferences"
 
 #: gnucash/ui/gnc-main-window.ui:145
 msgid "Edit the global preferences of GnuCash"
@@ -28256,10 +28204,8 @@ msgid "Open the GnuCash Help"
 msgstr "Open the GnuCash Help"
 
 #: gnucash/ui/gnc-main-window.ui:518
-#, fuzzy
-#| msgid "_Abort"
 msgid "_About"
-msgstr "_Abort"
+msgstr "_About"
 
 #: gnucash/ui/gnc-main-window.ui:520
 msgid "About GnuCash"
@@ -29392,10 +29338,8 @@ msgstr "Add a reversing transaction"
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
 #: gnucash/ui/gnc-plugin-page-register.ui:804
-#, fuzzy
-#| msgid "Move to the blank transaction at the bottom of the register"
 msgid "Move to the blank transaction in the register"
-msgstr "Move to the blank transaction at the bottom of the register"
+msgstr "Move to the blank transaction in the register"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:417
@@ -29930,17 +29874,17 @@ msgstr "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 #: libgnucash/app-utils/gnc-ui-balances.c:369
 #, c-format
 msgid "%s balance is %s, exceeds limit of %s."
-msgstr ""
+msgstr "%s balance is %s, exceeds limit of %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, c-format
 msgid "%s balance is %s, subceeds limit of %s."
-msgstr ""
+msgstr "%s balance is %s, below minimum of %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
 #, c-format
 msgid "%s balance is %s, and should be zero."
-msgstr ""
+msgstr "%s balance is %s, and should be zero."
 
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
