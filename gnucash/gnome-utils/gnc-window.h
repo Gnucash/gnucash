@@ -48,14 +48,10 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_WINDOW            (gnc_window_get_type ())
-#define GNC_WINDOW(o)            (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_WINDOW, GncWindow))
-#define GNC_IS_WINDOW(o)         (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_WINDOW))
-#define GNC_WINDOW_GET_IFACE(o)  (G_TYPE_INSTANCE_GET_INTERFACE ((o), GNC_TYPE_WINDOW, GncWindowIface))
+G_DECLARE_INTERFACE (GncWindow, gnc_window, GNC, WINDOW, GObject)
 
 /* typedefs & structures */
-typedef struct GncWindow GncWindow; /* dummy typedef */
-
-typedef struct
+struct _GncWindowInterface
 {
     GTypeInterface parent;
 
@@ -68,11 +64,9 @@ typedef struct
     GMenuModel  * (* get_menubar_model) (GncWindow *window);
     GtkAccelGroup * (* get_accel_group) (GncWindow *window);
     void (* ui_set_sensitive) (GncWindow *window, gboolean sensitive);
-} GncWindowIface;
+};
 
 /* function prototypes */
-GType          gnc_window_get_type (void);
-
 GtkWindow     *gnc_window_get_gtk_window (GncWindow *window);
 
 void           gnc_window_update_status (GncWindow *window, GncPluginPage *page);

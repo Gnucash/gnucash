@@ -58,7 +58,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_embedded_window_finalize (GObject *object);
 static void gnc_embedded_window_dispose (GObject *object);
 
-static void gnc_window_embedded_window_init (GncWindowIface *iface);
+static void gnc_window_embedded_window_init (GncWindowInterface *iface);
 
 static void gnc_embedded_window_setup_window (GncEmbeddedWindow *window);
 
@@ -499,7 +499,7 @@ gnc_embedded_window_get_accel_group (GncWindow *window)
  *  @param iface A pointer to the interface data structure to
  *  populate. */
 static void
-gnc_window_embedded_window_init (GncWindowIface *iface)
+gnc_window_embedded_window_init (GncWindowInterface *iface)
 {
     iface->get_gtk_window      = gnc_embedded_window_get_gtk_window;
     iface->get_statusbar       = gnc_embedded_window_get_statusbar;

@@ -34,33 +34,11 @@
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
-GType
-gnc_window_get_type (void)
+G_DEFINE_INTERFACE (GncWindow, gnc_window, G_TYPE_OBJECT)
+
+static void
+gnc_window_default_init (GncWindowInterface *klass)
 {
-    static GType gnc_window_type = 0;
-
-    if (gnc_window_type == 0)
-    {
-        static const GTypeInfo our_info =
-        {
-            sizeof (GncWindowIface),
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            NULL,
-            0,
-            0,
-            NULL
-        };
-
-        gnc_window_type = g_type_register_static (G_TYPE_INTERFACE,
-                          "GncWindow",
-                          &our_info, 0);
-        g_type_interface_add_prerequisite (gnc_window_type, G_TYPE_OBJECT);
-    }
-
-    return gnc_window_type;
 }
 
 /************************************************************

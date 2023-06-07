@@ -30,19 +30,11 @@
 G_BEGIN_DECLS
 
 #define GNC_TYPE_DENSE_CAL_MODEL (gnc_dense_cal_model_get_type())
-#define GNC_DENSE_CAL_MODEL(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_DENSE_CAL_MODEL, GncDenseCalModel))
-#define GNC_IS_DENSE_CAL_MODEL(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_DENSE_CAL_MODEL))
-#define GNC_DENSE_CAL_MODEL_GET_INTERFACE(inst) (G_TYPE_INSTANCE_GET_INTERFACE ((inst), GNC_TYPE_DENSE_CAL_MODEL, GncDenseCalModelIface))
+G_DECLARE_INTERFACE (GncDenseCalModel, gnc_dense_cal_model, GNC, DENSE_CAL_MODEL, GObject)
 
-typedef struct _GncDenseCalModel GncDenseCalModel; /* non existent */
-typedef struct _GncDenseCalModelIface
+struct _GncDenseCalModelInterface
 {
     GTypeInterface parent;
-
-    /* signals */
-    void (*insert)(GncDenseCalModel *mdl, gint tag);
-    void (*update)(GncDenseCalModel *mdl, gint tag);
-    void (*remove)(GncDenseCalModel *mdl, gint tag);
 
     /* virtual table */
     GList* (*get_contained)(GncDenseCalModel *model);
@@ -50,9 +42,7 @@ typedef struct _GncDenseCalModelIface
     gchar* (*get_info)(GncDenseCalModel *model, guint tag);
     gint (*get_instance_count)(GncDenseCalModel *model, guint tag);
     void (*get_instance)(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
-} GncDenseCalModelIface;
-
-GType gnc_dense_cal_model_get_type(void);
+};
 
 /** @return Caller-owned GList (but not elements).  The Model-user will free. **/
 GList* gnc_dense_cal_model_get_contained(GncDenseCalModel *model);

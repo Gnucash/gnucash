@@ -9,7 +9,6 @@ include (GncFindLibm)
 set (app_utils_HEADERS
   QuickFill.h
   file-utils.h
-  gnc-basic-gobject.h
   gnc-account-merge.h
   gnc-addr-quickfill.h
   gnc-entry-quickfill.h
