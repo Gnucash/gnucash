@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-05-22 01:48+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-05-28 13:51+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -2933,9 +2933,8 @@ msgstr ""
 
 #: gnucash/gnome/dialog-imap-editor.c:368
 #: gnucash/gnome/dialog-imap-editor.c:589
-#, fuzzy
 msgid "Map Account NOT found"
-msgstr "Folyószámla száma"
+msgstr ""
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 msgid "(Note, if there is a large number, it may take a while)"
@@ -7902,7 +7901,7 @@ msgstr "Áru"
 #: gnucash/report/trep-engine.scm:179 gnucash/report/trep-engine.scm:914
 #: gnucash/report/trep-engine.scm:1064
 msgid "Account Code"
-msgstr "Folyószámla száma"
+msgstr "Számlaszám"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:840
 msgid "Last Num"
@@ -10879,8 +10878,6 @@ msgstr "Kettőspont (:)"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:217
 #: gnucash/gtkbuilder/assistant-csv-export.glade:214
-#, fuzzy
-#| msgid "Select Separator Type"
 msgid "Select Separator Character"
 msgstr "Válassza ki az elválasztójelet"
 
@@ -10909,12 +10906,11 @@ msgstr "Importálás"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1057
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1139
 msgid "Import Summary"
-msgstr "Összefoglalás"
+msgstr "Importálás eredménye"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:8
-#, fuzzy
 msgid "CSV Export Assistant"
-msgstr "Jelzálog/kölcsön tündér"
+msgstr "CSV Exportáló Segéd"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:25
 msgid ""
@@ -10923,27 +10919,26 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:65
-#, fuzzy
 msgid "Use Quotes"
-msgstr "Adatszerzés"
+msgstr "Idézőjelek használata"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:80
 msgid "Simple Layout"
 msgstr "Egyszerű elrendezés"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:230
-#, fuzzy
 msgid "Choose Export Settings"
-msgstr "Exportformátum kiválasztása"
+msgstr "Exportálás beállításai"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:245
 msgid "Select the accounts to be exported and date range if required."
 msgstr ""
+"Válassza ki az exportálandó számlákat és szükség esetén a dátumtartományt."
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:320
 #: gnucash/gtkbuilder/dialog-tax-info.glade:376
 msgid "Accounts Selected:"
-msgstr "Kiválasztott számlák:"
+msgstr "kiválasztott számla:"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:367
 #: gnucash/gtkbuilder/dialog-tax-info.glade:422
@@ -10966,7 +10961,7 @@ msgstr "Dátumtartomány"
 #: gnucash/gtkbuilder/dialog-account.glade:890
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:104
 msgid "_Select All"
-msgstr "_Összes kijelölése"
+msgstr "_Összes dátum"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:456
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
@@ -10977,26 +10972,26 @@ msgstr "_Tartomány kiválasztása"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:484
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:170
 msgid "Start"
-msgstr "Kezdés"
+msgstr "Eleje"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:493
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:179
 msgid "_Earliest"
-msgstr "L_egkorábbi"
+msgstr "L_egelső dátum"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:510
 msgid "Cho_ose Date"
-msgstr "D_átum választás"
+msgstr "Kiválasztott d_átum"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:527
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:211
 msgid "Toda_y"
-msgstr "M_a"
+msgstr "M_ai nap"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:544
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:228
 msgid "_Latest"
-msgstr "Uto_lsó"
+msgstr "Uto_lsó dátum"
 
 #. Filter By Dialog, Date Tab, End section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:566
@@ -11004,45 +10999,41 @@ msgstr "Uto_lsó"
 #: gnucash/gtkbuilder/dialog-sx.glade:422
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:258
 msgid "End"
-msgstr "Záró"
+msgstr "Vége"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:575
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:267
 msgid "C_hoose Date"
-msgstr "D_átum választás"
+msgstr "Kiválasztott d_átum"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:592
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:284
 msgid "_Today"
-msgstr "_Ma"
+msgstr "_Mai nap"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:673
-#, fuzzy
 msgid "Account Selection"
-msgstr "Azonosító törlése"
+msgstr "Számlák kiválasztása"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:687
 msgid "Enter file name and location for the Export…"
 msgstr "Adja meg az exportálni kívánt fájl helyét és nevét…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:698
-#, fuzzy
 msgid "Choose File Name for Export"
-msgstr "Importálandó fájl kiválasztása"
+msgstr "Exportált fájl nevének megadása"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
-#, fuzzy
 msgid "Export Now…"
-msgstr "Exportálás fájlba…"
+msgstr "Exportálás…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:720
 msgid "Summary"
-msgstr ""
+msgstr "Végeredmény"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:725
-#, fuzzy
 msgid "Export Summary"
-msgstr "Számla-összefoglaló"
+msgstr "Exportálás eredménye"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:38
 #, fuzzy
@@ -11492,9 +11483,9 @@ msgstr ""
 "A következő oldalon minden tranzakciót egy kategóriához társíthat.\n"
 "\n"
 "Ha <i>üres fájlba importálja</i> a tranzakciókat, akkor meg fog nyílni a "
-"Könyv beállításai ablak, mert az ottani beállítások befolyásolják, hogy az "
-"importált adatokból hogyan jönnek létre a GnuCash tranzakciók. Ha a fájl nem "
-"üres, az ablak nem jelenik meg.\n"
+"Könyv beállításai ablak, mert az ottani beállítások befolyásolják, hogyan "
+"jönnek létre GnuCash tranzakciók az importált adatokból. Ha a fájl nem üres, "
+"az ablak nem jelenik meg.\n"
 "\n"
 "Ha ez az <i>első importálása</i>, akkor előfordulhat, hogy minden sort "
 "társítania kell. A későbbi importálások során megpróbáljuk újrahasználni "
@@ -11934,9 +11925,8 @@ msgid "Schedule added successfully."
 msgstr "A könyvelés lezárása sikeres volt."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1258
-#, fuzzy
 msgid "Loan Summary"
-msgstr "Számla-összefoglaló"
+msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:14
 #, fuzzy
@@ -12329,9 +12319,8 @@ msgid "Summary Text"
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1357
-#, fuzzy
 msgid "Qif Import Summary"
-msgstr "Számla-összefoglaló"
+msgstr "Qif importálás eredménye"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:9
 #: gnucash/gtkbuilder/assistant-stock-split.glade:28
@@ -18652,6 +18641,11 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
+"Ezzel a segéddel a teljes számlakészletet exportálhatja fájlba, az alább "
+"kiválasztott elválasztójel használatával.\n"
+"\n"
+"Alább végezze el a fájlformátum beállítását, majd kattintson a \"Következő\" "
+"gombra, vagy a \"Mégse\" gombra az exportálás megszakításához.\n"
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
@@ -18672,18 +18666,36 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
+"Ezzel a segéddel a tranzakciókat exportálhat fájlba, az alább kiválasztott "
+"elválasztójel használatával.\n"
+"\n"
+"%s\n"
+"\n"
+"Bár egy tranzakciónak több kiválasztott számlán is lehet felosztása, mégis "
+"csak egyszer lesz exportálva. Az első olyan feldolgozott számla alatt fog "
+"megjelenni, amelyben felosztása van.\n"
+"\n"
+"Az árak/árfolyamok formátumát a Beállítások -> \"Numbers, Date, Time\" ->\n"
+"\"Force Prices to display as decimals\" kapcsoló határozza meg.\n"
+"\n"
+"Alább végezze el a fájlformátum beállítását, majd kattintson a \"Következő\" "
+"gombra, vagy a \"Mégse\" gombra az exportálás megszakításához.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:99
 msgid ""
 "There will be multiple rows for each transaction with each row representing "
 "one split."
 msgstr ""
+"A fájlban minden tranzakció annyi sort fog elfoglalni, ahány felosztása van."
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:103
 msgid ""
 "There will be one row for each transaction, equivalent to a single row in a "
 "register in 'Basic Ledger' mode. As such some transfer detail could be lost."
 msgstr ""
+"A fájlban minden tranzakció egy sort fog elfoglalni, hasonlóan a regiszter "
+"\"Felosztások bezárva\" nézetéhez. Emiatt a többszörös felosztások "
+"elveszhetnek."
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
@@ -18695,6 +18707,11 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
+"Az \"Alkalmaz\" gombra kattintva megtörténik a teljes számlakészlet "
+"exportálása a \"%s\" fájlba.\n"
+"\n"
+"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégse\" gombbal "
+"pedig megszakíthatja az importálást.\n"
 
 #. Translators: %s is the file name and %u the number of accounts.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:114
@@ -18706,6 +18723,11 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
+"Az \"Alkalmaz\" gombra kattintva megtörténik a tranzakciók exportálása a \"%"
+"s\" fájlba, összesen %u számláról.\n"
+"\n"
+"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégse\" gombbal "
+"pedig megszakíthatja az importálást.\n"
 
 #. Translators: %s is the file name.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:120
@@ -18717,6 +18739,11 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
+"Az \"Alkalmaz\" gombra kattintva megtörténik a tranzakciók exportálása a \"%"
+"s\" fájlba.\n"
+"\n"
+"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégse\" gombbal "
+"pedig megszakíthatja az importálást.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:760
 msgid ""
@@ -18725,10 +18752,14 @@ msgid ""
 "logging!\n"
 "You may need to enable debugging.\n"
 msgstr ""
+"Probléma adódott az exportálással. Ennek oka lehet a túl kevés tárhely, "
+"hiányzó jogosultságok vagy a mappa elérhetetlensége. A trace fájlban további "
+"naplóüzeneteket találhat.\n"
+"Lehet, hogy engedélyeznie kell a hibakeresést.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:764
 msgid "File exported successfully!\n"
-msgstr ""
+msgstr "A fájl exportálása sikerült!\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:134
 #: gnucash/import-export/import-main-matcher.c:1872
@@ -18825,8 +18856,8 @@ msgstr ""
 "pedig megszakíthatja az importálást.\n"
 "\n"
 "Ha üres fájlba importálja a számlákat, akkor meg fog nyílni a Könyv "
-"beállításai ablak, mert az ottani beállítások befolyásolják, hogy az "
-"importált adatokból hogyan jönnek létre a GnuCash tranzakciók.\n"
+"beállításai ablak, mert az ottani beállítások befolyásolják, hogyan jönnek "
+"létre GnuCash tranzakciók az importált adatokból.\n"
 "Figyelem: Importálás után lehet, hogy a \"Nézet > Szűrés… > egyéb\" fülön be "
 "kell kapcsolnia a Rejtett számlák megjelenítését.\n"
 
@@ -18948,7 +18979,7 @@ msgid ""
 msgstr ""
 "Az árak importálása '%s' fájlból megtörtént.\n"
 "\n"
-"Az importálás összefoglalója:\n"
+"Az importálás eredménye:\n"
 "- %s\n"
 "- %s\n"
 "- %s"
@@ -19123,6 +19154,8 @@ msgstr "Állítsa be, melyik a Számla oszlop."
 msgid ""
 "Please select an account column or set a base account in the Account field."
 msgstr ""
+"Állítsa be, melyik a Számla oszlop vagy válasszon egy számlát a fenti Számla "
+"mezőben."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:501
 msgid "Please select a description column."
@@ -19481,7 +19514,7 @@ msgstr "A módosításhoz kattintson a Szerkesztés gombra"
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1389
 msgid "_Assign transfer account"
-msgstr "_Átutalási számla _hozzárendelése"
+msgstr "Átutalási számla _hozzárendelése"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1399
@@ -28160,7 +28193,7 @@ msgstr "A jelenleg aktív lap nyomtatása"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:51
 msgid "Export _Accounts"
-msgstr "Számlahierarchia GnuCash fájlba"
+msgstr "Számla_hierarchia GnuCash fájlba"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:53
 msgid "Export the account hierarchy to a new GnuCash datafile"

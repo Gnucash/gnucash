@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-05-07 23:52+0000\n"
-"Last-Translator: Andi Chandler <andi@gowling.com>\n"
+"PO-Revision-Date: 2023-06-04 15:48+0000\n"
+"Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_GB/>\n"
 "Language: en_GB\n"
@@ -29880,7 +29880,7 @@ msgstr "%s balance is %s, exceeds limit of %s."
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, c-format
 msgid "%s balance is %s, subceeds limit of %s."
-msgstr "%s balance is %s, subceeds limit of %s."
+msgstr "%s balance is %s, below minimum of %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
 #, c-format

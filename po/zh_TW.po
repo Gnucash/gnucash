@@ -5,14 +5,15 @@
 # Barlos Lee <barlos.lee@gmail.com>, 2010
 # Brian Hsu <brianhsu.hsu@gmail.com>, 2021, 2023.
 # cjh <cjh@cjh0613.com>, 2021.
+# Newson Parker <2434843612@qq.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-05-15 11:51+0000\n"
-"Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-31 09:52+0000\n"
+"Last-Translator: Newson Parker <2434843612@qq.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -428,15 +429,15 @@ msgstr "簡體中文 (Windows-936)"
 
 #: borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr "正體中文 (Big5)"
+msgstr "繁體中文 (Big5)"
 
 #: borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr "正體中文 (Big5-HKSCS)"
+msgstr "繁體中文 (Big5-HKSCS)"
 
 #: borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr "正體中文 (EUC-TW)"
+msgstr "繁體中文 (EUC-TW)"
 
 #: borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"

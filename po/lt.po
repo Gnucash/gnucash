@@ -1,27 +1,28 @@
 # translation of GnuCash to lithuanian
 # Translation of gnucash messages to Lithuanian.
 # Copyright (C) 2009 Free Software Foundation, Inc.
-# Tadas Masiulionis <tadzikaz@gmail.com>, 2009.
+# Tadas Masiulionis <tadzikaz@gmail.com>, 2009, 2023.
 # Mantas Kriaučiūnas <mantas@akl.lt>, 2011.
 # Aurimas Fišeras <aurimas@members.fsf.org>, 2011, 2012, 2013.
 # Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2021-02-21 11:50+0000\n"
-"Last-Translator: Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>\n"
+"PO-Revision-Date: 2023-06-06 21:50+0000\n"
+"Last-Translator: Tadas Masiulionis <tadzikaz@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/lt/>\n"
 "Language: lt\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 4.5\n"
+"Plural-Forms: nplurals=3; plural=(n % 10 == 1 && (n % 100 < 11 || n % 100 > "
+"19)) ? 0 : ((n % 10 >= 2 && n % 10 <= 9 && (n % 100 < 11 || n % 100 > 19)) ? "
+"1 : 2);\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -37,7 +38,7 @@ msgstr ""
 #: gnucash/report/reports/standard/price-scatter.scm:186
 #, scheme-format
 msgid "~a to ~a"
-msgstr ""
+msgstr "~a iki ~a"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -45,6 +46,8 @@ msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
+"Bandyta surasti neapibrėžto datos simbolio '~a'. Šią ataskaitą tikriausiai "
+"išsaugojo vėlesnė GnuCash versija. Numatytoji iki šiandien."
 
 #: bindings/guile/date-utilities.scm:717
 #: gnucash/gnome-utils/gnc-period-select.c:75
@@ -631,9 +634,8 @@ msgid "Unicode (UTF-32LE)"
 msgstr "Unikodas (UTF-32LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:214
-#, fuzzy
 msgid "User Defined"
-msgstr "Naudotojo vardas"
+msgstr "Naudotojo pasirinktas"
 
 #: borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
@@ -680,22 +682,20 @@ msgid "Locale: "
 msgstr "Lokalė: "
 
 #: borrowed/goffice/go-charmap-sel.c:476
-#, fuzzy
 msgid "Conversion Direction"
-msgstr "Konvertavimas baigtas"
+msgstr "Konvertavimo kryptis"
 
 #: borrowed/goffice/go-charmap-sel.c:477
 msgid "This value determines which iconv test to perform."
-msgstr ""
+msgstr "Ši reikšmė nustato, kurį iconv testą atlikti."
 
 #: borrowed/goffice/go-optionmenu.c:339
 msgid "Menu"
 msgstr "Meniu"
 
 #: borrowed/goffice/go-optionmenu.c:339
-#, fuzzy
 msgid "The menu of options"
-msgstr "Skaičiaus parinktis yra „%s“."
+msgstr "Parinkčių meniu"
 
 #: doc/tip_of_the_day.list.c:3
 msgid ""
@@ -712,6 +712,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
+"Pašto sąrašai yra pageidaujama bendravimo forma GnuCash bendruomenėje. "
+"Pranešimus apie naujus leidimus, vartotojų grupes ir pan. rasite lentelėje "
+"nuorodoje https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:11
 msgid ""
@@ -721,7 +724,7 @@ msgid ""
 msgstr ""
 "Su GnuCash kūrėjais lengva susisiekti. Kaip ir per el. pašto grupes, taip ir "
 "per IRC galite bendrauti gyvai! Prisijunkite prie jų kanalo #gnucash "
-"serveryje irc.gnome.org."
+"serveryje irc.gnome.org"
 
 #: doc/tip_of_the_day.list.c:15
 msgid ""
@@ -742,6 +745,10 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Jei norite sužinoti, kuriuose kataloguose yra saugomi jūsų naujausi GnuCash "
+"failai, užveskite pelės žymeklį virš vieno ant įrašų istorijos meniu\n"
+"(Failas[->Naujausių naudojimų sąrašas]).\n"
+"Visas kelias rodomas būsenos juostoje."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -761,18 +768,21 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
+"Galima keisti, kurie stulpeliai bus rodomi sąskaitų plane. Tiesiog suraskite "
+"trikampį dešinėje stulpelių antraščių pusėje ir spustelėkite jį, kad "
+"pamatytumėte skirtingus galimus stulpelius."
 
 #: doc/tip_of_the_day.list.c:33
-#, fuzzy
 msgid ""
 "Click the right mouse button (control-click in Mac OS X) in the Accounts tab "
 "of the main window to bring up the account menu options. Within each "
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
-"Spauskite dešinįjį pelės klavišą pagrindiniame lange norėdami pamatyti "
-"sąskaitos meniu parinktis. Kiekviename registre dešiniojo pelės klavišo "
-"paspaudimas parodo operacijos meniu parinkti."
+"Pagrindinio lango skirtuke Sąskaitos spustelėkite dešinįjį pelės mygtuką ("
+"spustelėkite Control ir spustelėkite Mac OS X), kad būtų rodomos paskyros "
+"meniu parinktys. Kiekviename registre dešiniuoju pelės mygtuku spustelėjus "
+"atidaromos sandorių meniu parinktys."
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -795,6 +805,12 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line View\" in Preferences:Register Defaults."
 msgstr ""
+"Kiekvienas sandoris turi pastabų lauką, kuriame galima įrašyti naudingos "
+"informacijos.\n"
+"\n"
+"Kad būtų matomas\n"
+"pasirinkti \"Rodymas\" meniu juostoje ir pažymėti \"Dviguba linija\" arba\n"
+"pažymėti \"Dvigubos linijos rodymas\" Registrų nuostatose."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -847,15 +863,14 @@ msgstr ""
 "– Turtas: Grynieji)."
 
 #: doc/tip_of_the_day.list.c:71
-#, fuzzy
 msgid ""
 "Want to see all your subaccount transactions in one register? From the "
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
 msgstr ""
-"Norite pamatyti visas antrinių sąskaitų operacijas viename registre? "
-"Pagrindiniame meniu pažymėkite pirminę sąskaitą, spauskite dešinįjį pelės "
-"klavišą ir iš meniu pasirinkite „Atverti antrines sąskaitas“."
+"Norite pamatyti visas antrinių sąskaitų sandorius viename registre? "
+"Pagrindinio lango skirtuke Sąskaitos pažymėkite pagrindinę sąskaitą ir iš "
+"meniu pasirinkite Taisa -> Atverti antrines sąskaitas."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -957,30 +972,24 @@ msgstr ""
 "pagrindinį dažnumą ir nustatyti „Kas 12 mėnesių“."
 
 #: doc/tip_of_the_day.list.c:117
-#, fuzzy
 msgid ""
 "If you work overnight, you should close and reopen your working registers "
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
-"Jei dirbate per naktį, turėtumėte užverti ir iš naujo atverti registrą su "
-"kuriuo dirbate po vidurnakčio, kad gautumėte naują numatytąją datą naujoms "
-"operacijoms. Dėl to nereikia paleisti GnuCash iš naujo."
+"Jei dirbate per naktį, po vidurnakčio turėtumėte užverti ir vėl atverti "
+"darbo registrus, kad naujiems sandoriams būtų nustatyta nauja data. Nebūtina "
+"iš naujo paleisti GnuCash."
 
 #: doc/tip_of_the_day.list.c:121
-#, fuzzy
-#| msgid ""
-#| "To search through all your transactions, start a search (Edit->Find...) "
-#| "from the main accounts hierarchy page. To limit your search to a single "
-#| "account, start the search from that account's register."
 msgid ""
 "To search through all your transactions, start a search (Edit->Find…) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Norėdami ieškoti tarp visų operacijų, paleiskite paiešką (Taisa->ieškoti...) "
+"Norėdami ieškoti tarp visų sandorių, paleiskite paiešką (Taisa->Ieškoti...) "
 "pagrindiniame sąskaitų hierarchijos puslapyje. Norėdami apriboti paiešką "
-"vienoje sąskaitoje, paleiskite paieškos formą iš tos sąskaitos registro."
+"vienoje sąskaitoje, paleiskite paiešką iš tos sąskaitos registro."
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -988,6 +997,9 @@ msgid ""
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
+"Norėdami vizualiai palyginti 2 skirtukų turinį ekrane, viename iš skirtukų "
+"meniu pasirinkite Langas->Naujas langas su puslapiu, kad tą skirtuką "
+"kopijuotumėte į naują langą."
 
 #: doc/tip_of_the_day.list.c:129
 msgid ""
@@ -1032,7 +1044,7 @@ msgstr[2] ""
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have asked for a book to be created. This book will contain all "
 "transactions up to midnight %s (for a total of %d transactions spread over "
@@ -1041,11 +1053,11 @@ msgid ""
 "Amend the Title and Notes or Click on \"Next\" to proceed.\n"
 "Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
-"Paprašėte sukurti knygą. Šioje knygoje bus visos operacijos iki %s "
-"vidurnakčio (iš viso operacijų: %d, sąskaitų: %d).\n"
+"Paprašėte sukurti knygą. Šioje knygoje bus visi sandoriai iki %s vidurnakčio "
+"(iš viso sandorių: %d paskirstytų tarp %d sąskaitų).\n"
 "\n"
 "Pataisykite pavadinimą ir pastabas arba spauskite „Pirmyn“ norėdami tęsti.\n"
-"Spauskite „Atgal“ datoms pareguliuoti arba „Atsisakyti“."
+"Spauskite „Atgal“, jei norite keisti datas, arba „Atsisakyti“."
 
 #: gnucash/gnome/assistant-acct-period.c:388
 #, c-format
@@ -1053,13 +1065,13 @@ msgid "Period %s - %s"
 msgstr "Laikotarpis %s - %s"
 
 #: gnucash/gnome/assistant-acct-period.c:406
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
-"Kai paspausite „Pritaikyti“ bus sukurta knyga pavadinimu „%s“. Spauskite "
-"„Atgal“ koregavimui arba „Atsisakyti“ knygai nekurti."
+"Paspaudus „Taikyti“ bus sukurta knyga pavadinimu „%s“. Spauskite „Atgal“, "
+"jei norite taisyti, arba „Atsisakyti“, jei neorite kurti knygos."
 
 #: gnucash/gnome/assistant-acct-period.c:525
 #, c-format
@@ -1192,10 +1204,9 @@ msgstr "Įvairūs mokėjimai"
 #. Translators: %s is "Taxes",
 #. "Insurance", or similar.
 #: gnucash/gnome/assistant-loan.cpp:766
-#, fuzzy, c-format
-#| msgid "... pay \"%s\"?"
+#, c-format
 msgid "… pay \"%s\"?"
-msgstr "... mokate „%s“?"
+msgstr "...mokate „%s“?"
 
 #: gnucash/gnome/assistant-loan.cpp:778
 msgid "via Escrow account?"
@@ -1438,31 +1449,36 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"Bendrovė savininkui išleidžia grynuosius dividendus.\n"
+"\n"
+"Bet koks reinvestuojamas dividendas vėliau turi būti įrašytas kaip įprastas "
+"akcijų pirkimas."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:222
-#, fuzzy
-#| msgid "Decrease in capital"
 msgid "Return of capital"
-msgstr "Kapitalo sumažėjimas"
+msgstr "Kapitalo grąža"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:223
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"Įmonė grąžina kapitalą, sumažindama sąnaudų bazę nepaveikdama # vienetų."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution
 #: gnucash/gnome/assistant-stock-transaction.cpp:236
 msgid "Notional distribution"
-msgstr ""
+msgstr "Sąlyginis paskirstymas"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:237
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Bendrovė išleidžia sąlyginį paskirstymą, kuris įrašomas kaip dividendų "
+"pajamos ir padidina sąnaudų bazę nepaveikdama # vienetų."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1470,10 +1486,8 @@ msgstr ""
 #. split when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:250
 #: gnucash/gnome/assistant-stock-transaction.cpp:355
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock split"
-msgstr "Akcijų skaidymas"
+msgstr "Akcijos skaidymas"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:251
 #: gnucash/gnome/assistant-stock-transaction.cpp:356
@@ -1482,16 +1496,16 @@ msgid ""
 "divisor, while keeping the total monetary value of the overall investment "
 "constant."
 msgstr ""
+"Bendrovė išleidžia papildomus vienetus, taip sumažindama akcijų kainą "
+"dalikliu, išlaikant pastovią bendros investicijos piniginę vertę."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
 #. reverse split when shorting stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:263
 #: gnucash/gnome/assistant-stock-transaction.cpp:369
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Reverse split"
-msgstr "_Peržiūrėti sukurtas operacijas"
+msgstr "Atvirkštinis skaidymas"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:264
 msgid ""
@@ -1502,6 +1516,12 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"Bendrovė išperka investicinius vienetus, taip padidindama akcijų kainą kelis "
+"kartus, išlaikant pastovią bendros investicijos piniginę vertę.\n"
+"\n"
+"Jei dėl atvirkštinio padalijimo vietoj likusių vienetų gaunami grynieji "
+"pinigai, pirmiausia užregistruokite pardavimą naudodami akcijų sandorių "
+"asistentą, tada įrašykite atvirkštinį padalijimą."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
@@ -1529,19 +1549,21 @@ msgstr ""
 #. dividends retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:313
 msgid "Compensatory dividend"
-msgstr ""
+msgstr "Kompensacinis dividendas"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:314
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
 msgstr ""
+"Bendrovė išleidžia dividendus, o trumpųjų akcijų savininkas privalo sumokėti "
+"dividendų kompensaciją."
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:327
 msgid "Compensatory return of capital"
-msgstr ""
+msgstr "Kompensacinė kapitalo grąža"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:328
 msgid ""
@@ -1549,12 +1571,15 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
+"Bendrovė grąžina kapitalą, o trumpųjų akcijų savininkas turi sumokėti "
+"kompensaciją už grąžintą kapitalą. Tai sumažina sąnaudų bazę (mažiau "
+"neigiamą, link 0,00 vertės) nepaveikdama # vienetų."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:341
 msgid "Compensatory notional distribution"
-msgstr ""
+msgstr "Kompensacinis sąlyginis paskirstymas"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:342
 msgid ""
@@ -1563,6 +1588,10 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
+"Bendrovė išleidžia sąlyginį paskirstymą, o trumpųjų akcijų savininkas turi "
+"sumokėti kompensacinį mokėjimą už tariamą paskirstymą. Tai įrašoma kaip "
+"nuostolių / neigiamų dividendų pajamų suma ir padidina sąnaudų bazę (labiau "
+"neigiamą, nuo 0,00 vertės), nepaveikdama # vienetų."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:370
 msgid ""
@@ -1573,24 +1602,28 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"Bendrovė išperka investicinius vienetus, taip padidindama akcijų kainą kelis "
+"kartus, išlaikant pastovią bendros investicijos piniginę vertę.\n"
+"\n"
+"Jei dėl atvirkštinio padalijimo vietoj likusių vienetų gaunami grynieji "
+"pinigai, pirmiausia užrašykite padengimo pirkimą naudodami akcijų sandorių "
+"asistentą, tada įrašykite atvirkštinį padalijimą."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:537
-#, fuzzy, c-format
-#| msgid "Split"
+#, c-format
 msgid "%s Split"
-msgstr "Skaidymas"
+msgstr "%s skaidymas"
 
 #. Translators: StockAssistant: N/A denotes stock price is not computable
 #: gnucash/gnome/assistant-stock-transaction.cpp:565
 msgid "N/A"
-msgstr ""
+msgstr "Netaikoma"
 
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
 #: gnucash/gnome/assistant-stock-transaction.cpp:655
-#, fuzzy
 msgid "(missing)"
-msgstr "Komisiniai"
+msgstr "(trūksta)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:670
 #, c-format
@@ -1605,7 +1638,7 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:681
 #, c-format
 msgid "Amount for %s must be positive."
-msgstr ""
+msgstr "%s suma turi būti teigiama."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:702
 #, fuzzy, c-format
@@ -1629,10 +1662,8 @@ msgstr ""
 #. the currency value of a non-currency asset.
 #: gnucash/gnome/assistant-stock-transaction.cpp:764
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:425
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock Value"
-msgstr "Akcijų skaidymas"
+msgstr "Akcijų vertė"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:783
 #, fuzzy
@@ -1645,7 +1676,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:787
 msgid "New balance must be lower than old balance."
-msgstr ""
+msgstr "Naujasis likutis privalo būti mažesnis nei senasis."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:796
 #, fuzzy
@@ -1705,7 +1736,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:906
 msgid "No errors found. Click Apply to create transaction."
-msgstr ""
+msgstr "Klaidų nerasta. Spauskite Taikyti, kad sukurtumėte sandorį."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:911
 #, fuzzy
@@ -1830,17 +1861,13 @@ msgstr "Vienetai"
 #: gnucash/gnome/business-gnome-utils.c:392 gnucash/gnome/dialog-invoice.c:1674
 #: gnucash/gnome/dialog-invoice.c:1752
 #: gnucash/gnome-utils/gnc-general-select.c:220
-#, fuzzy
-#| msgid "Select"
 msgid "Select…"
-msgstr "Pasirinkti"
+msgstr "Pasirinkti…"
 
 #: gnucash/gnome/business-gnome-utils.c:199
 #: gnucash/gnome-utils/gnc-general-select.c:222
-#, fuzzy
-#| msgid "Edit"
 msgid "Edit…"
-msgstr "Redaguoti"
+msgstr "Taisa…"
 
 #: gnucash/gnome/business-gnome-utils.c:351 gnucash/gnome/dialog-doclink.c:813
 #: gnucash/gnome/dialog-invoice.c:2801 gnucash/gnome/dialog-invoice.c:3026
@@ -1925,7 +1952,7 @@ msgstr "Objekto tipas neatitinka „%s“: „%s“"
 
 #: gnucash/gnome/dialog-billterms.c:270
 msgid "Discount days cannot be more than due days."
-msgstr ""
+msgstr "Nuolaidų dienos negali būti ilgesnės už terminą."
 
 #: gnucash/gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
@@ -2137,6 +2164,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"Įmonės pavadinimo laukas negali būti tuščias, įveskite įmonės pavadinimą "
+"arba asmens vardą."
 
 #: gnucash/gnome/dialog-customer.c:322
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -2205,7 +2234,7 @@ msgstr "Atsiskaitymo kontaktas"
 
 #: gnucash/gnome/dialog-customer.c:903
 msgid "Customer ID"
-msgstr "Kliento ID"
+msgstr "Kliento nr."
 
 #: gnucash/gnome/dialog-customer.c:914 gnucash/gnome/dialog-vendor.c:714
 msgid "Contact"
@@ -2223,55 +2252,48 @@ msgstr "Įmonė"
 #: gnucash/gnome/dialog-job.c:599 gnucash/gnome/dialog-vendor.c:718
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:349
 msgid "ID #"
-msgstr "ID Nr."
+msgstr "Nr."
 
 #: gnucash/gnome/dialog-customer.c:941
 msgid "Find Customer"
 msgstr "Ieškoti kliento"
 
 #: gnucash/gnome/dialog-custom-report.c:330
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %s?"
-msgstr "Ar tikrai norite pašalinti \"%s“?"
+msgstr "Ar tikrai norite ištrinti %s?"
 
 #: gnucash/gnome/dialog-custom-report.c:435
-#, fuzzy
 msgid "You must select a report configuration to load."
-msgstr "Privalote pasirinkti ataskaitą vykdymui."
+msgstr "Turite pasirinkti ataskaitos konfigūraciją, kurią norite įkelti."
 
 #: gnucash/gnome/dialog-custom-report.c:450
-#, fuzzy
 msgid "You must select a report configuration to delete."
-msgstr "Privalote pasirinkti ataskaitą šalinimui."
+msgstr "Turite pasirinkti ataskaitos konfigūraciją, kurią norite ištrinti."
 
 #: gnucash/gnome/dialog-custom-report.c:464
-#, fuzzy
 msgid "Unable to change report configuration name."
-msgstr "Nepavyko pakeisti ataskaitos pavadinimo."
+msgstr "Nepavyko pakeisti ataskaitos konfigūracijos pavadinimo."
 
 #: gnucash/gnome/dialog-custom-report.c:494
-#, fuzzy
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
 msgstr ""
-"Adaptuota ataskaita su šiuo pavadinimu jau egzistuoja, pasirinkite kitą "
-"pavadinimą."
+"Išsaugota ataskaitos konfigūracija tokiu pavadinimu jau yra, pasirinkite "
+"kitą pavadinimą."
 
 #: gnucash/gnome/dialog-custom-report.c:520
-#, fuzzy
 msgid "Load report configuration"
-msgstr "Redaguoti konfigūracijos pavadinimą"
+msgstr "Įkelti ataskaitos konfigūraciją"
 
 #: gnucash/gnome/dialog-custom-report.c:522
-#, fuzzy
 msgid "Edit report configuration name"
-msgstr "Redaguoti konfigūracijos pavadinimą"
+msgstr "Keisti ataskaitos konfigūracijos pavadinimą"
 
 #: gnucash/gnome/dialog-custom-report.c:524
-#, fuzzy
 msgid "Delete report configuration"
-msgstr "Pašalinti anksčiau išsaugotą ataskaitą"
+msgstr "Ištrinti ataskaitos konfigūraciją"
 
 #: gnucash/gnome/dialog-date-close.c:75
 msgid "No Account selected. Please try again."
@@ -2283,10 +2305,8 @@ msgstr "Pasirinkta aplanko sąskaita. Bandykite dar kartą."
 
 #: gnucash/gnome/dialog-doclink.c:160
 #: gnucash/gnome/gnc-plugin-page-register.c:4622
-#, fuzzy
-#| msgid "Select Account"
 msgid "Select document"
-msgstr "Pasirinkite sąskaitą"
+msgstr "Pasirinkti dokumentą"
 
 #: gnucash/gnome/dialog-doclink.c:163 gnucash/gnome/gnc-plugin-budget.c:330
 #: gnucash/gnome-search/search-account.c:238
@@ -2359,51 +2379,44 @@ msgstr "Pasirinkite sąskaitą"
 #: gnucash/import-export/aqb/dialog-ab.glade:906
 #: gnucash/import-export/aqb/dialog-ab.glade:1690
 msgid "_OK"
-msgstr ""
+msgstr "_Gerai"
 
 #: gnucash/gnome/dialog-doclink.c:241
-#, fuzzy
 msgid "Amend the URL"
-msgstr "Įvesti"
+msgstr "Pakeisti URL adresą"
 
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
 msgid "Enter an URL like \"%s\""
-msgstr ""
+msgstr "Įvesti URL adresą, pvz., \"%s\""
 
 #: gnucash/gnome/dialog-doclink.c:264
-#, fuzzy
 msgid "Existing Document Link is"
-msgstr "Esamas turtas"
+msgstr "Esamo dokumento nuoroda yra"
 
 #: gnucash/gnome/dialog-doclink.c:535 gnucash/gnome/dialog-doclink.c:580
 msgid "File Found"
-msgstr ""
+msgstr "Rinkmena rasta"
 
 #: gnucash/gnome/dialog-doclink.c:537
-#, fuzzy
 msgid "File Not Found"
-msgstr "Nerasta"
+msgstr "Rinkmena nerasta"
 
 #: gnucash/gnome/dialog-doclink.c:550
-#, fuzzy
 msgid "Address Found"
-msgstr "Adresas 1"
+msgstr "Adresas rastas"
 
 #: gnucash/gnome/dialog-doclink.c:552
-#, fuzzy
 msgid "Address Not Found"
-msgstr "Adreso pavadinimas"
+msgstr "Adresas nerastas"
 
 #: gnucash/gnome/dialog-doclink.c:602 gnucash/gnome/dialog-imap-editor.c:867
-#, fuzzy
 msgid "Total Entries"
-msgstr "Bendra suma"
+msgstr "Iš viso"
 
 #: gnucash/gnome/dialog-doclink.c:659
-#, fuzzy
 msgid "Business item can not be modified."
-msgstr "Įvedimo failas negali būti atvertas."
+msgstr "Verslo elemento keisti negalima."
 
 #: gnucash/gnome/dialog-doclink.c:668 gnucash/gnome/dialog-doclink.c:769
 #: gnucash/gnome/gnc-plugin-page-invoice.c:209
@@ -2412,25 +2425,21 @@ msgstr "Įvedimo failas negali būti atvertas."
 #: gnucash/gnome/gnc-plugin-page-invoice.c:1276
 #: gnucash/gnome/gnc-plugin-page-register.c:405
 msgid "Manage Document Link"
-msgstr ""
+msgstr "Valdyti dokumento nuorodą"
 
 #: gnucash/gnome/dialog-doclink.c:763
-#, fuzzy
 msgid "Transaction can not be modified."
-msgstr "Operacijos suma"
+msgstr "Sandorio keisti negalima."
 
 #: gnucash/gnome/dialog-doclink.c:824 libgnucash/engine/gncOwner.c:215
-#, fuzzy
 msgid "Undefined"
-msgstr "Naudotojo vardas"
+msgstr "Neapibrėžtas"
 
 #. Translators: This is the label of a dialog box that lists all of the
 #. transaction that have files or URIs linked with them.
 #: gnucash/gnome/dialog-doclink.c:1083
-#, fuzzy
-#| msgid "Transaction Details"
 msgid "Transaction Document Links"
-msgstr "Operacijos detalės"
+msgstr "Sandorio dokumento nuorodos"
 
 #: gnucash/gnome/dialog-doclink.c:1086
 #: gnucash/gnome/dialog-find-transactions.c:157
@@ -2480,17 +2489,20 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
+"Dukart spustelėkite įrašą stulpelyje Nr., kad pereitumėte prie verslo "
+"elemento.\n"
+"Dukart spustelėkite įrašą stulpelyje Nuoroda, kad atvertumėte susietą "
+"dokumentą.\n"
+"Dukart spustelėkite įrašą stulpelyje Galimas, kad pakeistumėte dokumento "
+"nuorodą."
 
 #: gnucash/gnome/dialog-doclink.c:1106
-#, fuzzy
 msgid "Business Document Links"
-msgstr "Operacijos informacija"
+msgstr "Verslo dokumento nuorodos"
 
 #: gnucash/gnome/dialog-employee.c:203
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
-msgstr "Privalote įvesti mokėjimo adresą."
+msgstr "Turite įvesti mokėjimo adreso pavadinimą."
 
 #: gnucash/gnome/dialog-employee.c:289
 msgid "Edit Employee"
@@ -2582,9 +2594,8 @@ msgid "The number of payments cannot be negative."
 msgstr "Mokėjimų skaičius negali būti neigiamas."
 
 #: gnucash/gnome/dialog-find-account.c:378
-#, fuzzy
 msgid "Find Account"
-msgstr "_Redaguoti sąskaitą"
+msgstr "Rasti sąskaitą"
 
 #: gnucash/gnome/dialog-find-account.c:415
 #, fuzzy
@@ -2595,24 +2606,20 @@ msgstr "Aplankas"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:1002
 #: gnucash/gtkbuilder/dialog-account.glade:323
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
-#, fuzzy
 msgid "Hidden"
-msgstr "_Paslėpta"
+msgstr "Paslėpta"
 
 #: gnucash/gnome/dialog-find-account.c:437
-#, fuzzy
 msgid "Not Used"
-msgstr "Nesuplanuota"
+msgstr "Nenaudojama"
 
 #: gnucash/gnome/dialog-find-account.c:448
-#, fuzzy
 msgid "Balance Zero"
-msgstr "Balansas (laikotarpis)"
+msgstr "Nulinis likutis"
 
 #: gnucash/gnome/dialog-find-account.c:459
-#, fuzzy
 msgid "Tax related"
-msgstr "Susijusi su _mokesčiais"
+msgstr "Susiję mokesčiai"
 
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
@@ -2739,9 +2746,8 @@ msgid "Number"
 msgstr "Numeris"
 
 #: gnucash/gnome/dialog-find-transactions.c:149
-#, fuzzy
 msgid "Description, Notes, or Memo"
-msgstr "Aprašas / pastabos / užrašas"
+msgstr "Aprašas, pastabos, užrašai"
 
 #: gnucash/gnome/dialog-find-transactions.c:155
 #: gnucash/gnome/gnc-split-reg.c:721
@@ -2776,7 +2782,7 @@ msgstr "Pastabos"
 #: gnucash/gnome/dialog-find-transactions.c:201
 #: gnucash/gnome-search/dialog-search.c:1486
 msgid "Find Transaction"
-msgstr "Ieškoti operacijos"
+msgstr "Rasti sandorį"
 
 #. Translators: This is a ngettext(3) message, %d is the number of maps missing
 #: gnucash/gnome/dialog-imap-editor.c:363
@@ -2815,26 +2821,24 @@ msgstr "Sąskaitos kodas"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 msgid "(Note, if there is a large number, it may take a while)"
-msgstr ""
+msgstr "(Atminkite, kad jei yra didelis skaičius, tai gali šiek tiek užtrukti)"
 
 #: gnucash/gnome/dialog-imap-editor.c:688
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
 msgid "Bayesian"
-msgstr ""
+msgstr "Bajeso"
 
 #: gnucash/gnome/dialog-imap-editor.c:703
-#, fuzzy
 msgid "Description Field"
-msgstr "Aprašas"
+msgstr "Aprašo laukas"
 
 #: gnucash/gnome/dialog-imap-editor.c:706
 msgid "Memo Field"
-msgstr ""
+msgstr "Užrašų laukas"
 
 #: gnucash/gnome/dialog-imap-editor.c:709
-#, fuzzy
 msgid "CSV Account Map"
-msgstr "Sąskaitos pavadinimas"
+msgstr "CSV sąskaitos žemėlapis"
 
 #: gnucash/gnome/dialog-imap-editor.c:749
 #, fuzzy
@@ -2867,6 +2871,8 @@ msgstr "Šis įrašas prikabintas prie užsakymo ir taip pat bus iš jo pašalin
 #: gnucash/gnome/dialog-invoice.c:920
 msgid "Choose a different report template or Printable Invoice will be used"
 msgstr ""
+"Pasirinkite kitą ataskaitos šabloną arba bus naudojama spausdinamoji "
+"sąskaita-faktūra"
 
 #: gnucash/gnome/dialog-invoice.c:1034 gnucash/gnome/dialog-invoice.c:3568
 #: gnucash/gnome/dialog-invoice.c:3602 gnucash/gnome/dialog-invoice.c:3636
@@ -2904,17 +2910,12 @@ msgid "Do you really want to post the invoice?"
 msgstr "Ar tikrai norite registruoti sąskaitą faktūrą?"
 
 #: gnucash/gnome/dialog-invoice.c:1167
-#, fuzzy
-#| msgid ""
-#| "One or more of the entries are for accounts different from the invoice/"
-#| "bill currency. You will be asked a conversion rate for each."
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked to enter a conversion rate for each."
 msgstr ""
-"Vienas ar daugiau įrašų yra sąskaitoms su skirtingomis valiutomis nuo "
-"išrašomos/gautos sąskaitos. Būsite paprašyti įvesti konvertavimo kursą "
-"kiekvienai sąskaitai."
+"Vienas ar daugiau sąskaitų įrašų, kurių išrašomų ir gautų sąskaitų valiutos "
+"skiriasi. Jūsų bus paprašyta įvesti kiekvieno konversijos koeficientą."
 
 #: gnucash/gnome/dialog-invoice.c:1300
 msgid "The post action was canceled because not all exchange rates were given."
@@ -2939,7 +2940,7 @@ msgstr "Iš viso grynųjų:"
 
 #: gnucash/gnome/dialog-invoice.c:1596
 msgid "Total Charge:"
-msgstr ""
+msgstr "Iš viso mokėti:"
 
 #: gnucash/gnome/dialog-invoice.c:2069 gnucash/gnome/dialog-payment.c:1358
 #: gnucash/gtkbuilder/dialog-invoice.glade:976
@@ -2950,12 +2951,12 @@ msgstr "Kreditinė sąskaita"
 
 #: gnucash/gnome/dialog-invoice.c:2265
 msgid "PAID"
-msgstr ""
+msgstr "SUMOKĖTA"
 
 #: gnucash/gnome/dialog-invoice.c:2267
 #: gnucash/report/reports/standard/new-owner-report.scm:574
 msgid "UNPAID"
-msgstr ""
+msgstr "NESUMOKĖTA"
 
 #: gnucash/gnome/dialog-invoice.c:2315 gnucash/gnome/dialog-invoice.c:2334
 #: gnucash/gnome/dialog-invoice.c:2353
@@ -3337,9 +3338,8 @@ msgid "Find Job"
 msgstr "Ieškoti užduoties"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
 msgid "Empty"
-msgstr "Vardų sritis"
+msgstr "Tuščias"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
 #, fuzzy
@@ -3414,7 +3414,7 @@ msgstr "Uždarymo data"
 
 #: gnucash/gnome/dialog-order.c:859
 msgid "View/Edit Order"
-msgstr "Peržiūrėti/redaguoti užsakymą"
+msgstr "Peržiūrėti / keisti užsakymą"
 
 #: gnucash/gnome/dialog-order.c:868
 msgid "Order Notes"
@@ -3450,10 +3450,8 @@ msgid "You must select a company for payment processing."
 msgstr "Privalote pasirinkti įmonę mokėjimo apdorojimui."
 
 #: gnucash/gnome/dialog-payment.c:260
-#, fuzzy
-#| msgid "There was a problem with the import."
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "Yra problema su importu."
+msgstr "Iškilo problema dėl mokėjimo arba grąžinimo sumos."
 
 #: gnucash/gnome/dialog-payment.c:281
 msgid "You must select a transfer account from the account tree."
@@ -3464,6 +3462,8 @@ msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr ""
+"Nepasirinkti dokumentai, kuriems būtų priskirtas šis mokėjimas. Tai gali "
+"sukurti nepriskirtą mokėjimą."
 
 #: gnucash/gnome/dialog-payment.c:541 gnucash/gnome/dialog-payment.c:1353
 #: gnucash/report/reports/standard/new-aging.scm:177
@@ -3549,6 +3549,8 @@ msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
 msgstr ""
+"Pasirinktas sandoris neturi padalijimo, kurį būtų galima priskirti kaip "
+"mokėjimą"
 
 #: gnucash/gnome/dialog-payment.c:1626
 msgid ""
@@ -3557,16 +3559,18 @@ msgid ""
 "Please select one, the others will be discarded.\n"
 "\n"
 msgstr ""
+"Nors šis sandoris turi kelis padalijimus, kuriuos galima apsvarstyti\n"
+"kaip „mokėjimo padalijimą“, „GnuCash“ žino tik vieną.\n"
+"Pasirinkite vieną, kiti bus atmesti.\n"
+"\n"
 
 #: gnucash/gnome/dialog-payment.c:1630
-#, fuzzy
 msgid "Warning"
-msgstr "Atstatyti įspėjimus"
+msgstr "Įspėjimas"
 
 #: gnucash/gnome/dialog-payment.c:1633
-#, fuzzy
 msgid "Continue"
-msgstr "Tolydus"
+msgstr "Tęsti"
 
 #: gnucash/gnome/dialog-payment.c:1634
 #: gnucash/gnome/gnc-plugin-page-invoice.c:293
@@ -3587,6 +3591,14 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
+"Šis sandoris padalintas į kelias verslo sąskaitas:\n"
+"\n"
+"%s\n"
+"„GnuCash“ gali apdoroti tik sandorius, kurios skelbiamos vienoje sąskaitoje."
+"\n"
+"\n"
+"Ištaisykite tai rankiniu būdu tiesiogiai redaguodami sandorį ir bandykite "
+"dar kartą."
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.cpp:201
@@ -3610,29 +3622,26 @@ msgid "Entries"
 msgstr "Įrašai"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:446
-#, fuzzy
 msgid "Are you sure you want to delete these prices?"
-msgstr "Ar tikrai norite pašalinti %d pasirinktą kainą?"
+msgstr "Ar tikrai norite ištrinti šias kainas?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:572
 #: gnucash/gnome-utils/dialog-transfer.cpp:1797
 #, c-format
 msgid "Price retrieval failed: %s"
-msgstr ""
+msgstr "Kainos nuskaityti nepavyko: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
-#, fuzzy
 msgid "Are you sure you want to replace the existing price?"
-msgstr "Ar tikrai norite pašalinti %d pasirinktą kainą?"
+msgstr "Ar tikrai norite pakeisti esamą kainą?"
 
 #: gnucash/gnome/dialog-price-editor.c:233
-#, fuzzy
 msgid "Replace price?"
-msgstr "Pašalinti kainas?"
+msgstr "Pakeisti kainą?"
 
 #: gnucash/gnome/dialog-price-editor.c:239
 msgid "_Replace"
-msgstr ""
+msgstr "_Pakeisti"
 
 #: gnucash/gnome/dialog-price-editor.c:270
 msgid "You must select a Security."
@@ -3652,9 +3661,9 @@ msgid "Cannot save check format file."
 msgstr "Nepavyko išsaugoti kvito formato failo."
 
 #: gnucash/gnome/dialog-print-check.c:825
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file %s"
-msgstr "Neįmanoma atverti dabartinio žurnalo failo: „%s“"
+msgstr "Neįmanoma atverti rinkmenos: %s"
 
 #: gnucash/gnome/dialog-print-check.c:1513
 msgid "There is a duplicate check format file."
@@ -3698,7 +3707,7 @@ msgstr "naudotojas"
 #: gnucash/gtkbuilder/dialog-print-check.glade:290
 #: gnucash/gtkbuilder/gnc-date-format.glade:30
 msgid "Custom"
-msgstr "Pritaikyti"
+msgstr "Pasirinktas"
 
 #: gnucash/gnome/dialog-print-check.c:2602
 #: gnucash/gtkbuilder/dialog-preferences.glade:3460
@@ -3788,12 +3797,12 @@ msgstr ""
 "norite tai padaryti?"
 
 #: gnucash/gnome/dialog-sx-editor.c:607
-#, fuzzy
 msgid ""
 "Scheduled Transactions with variables or involving more than one commodity "
 "cannot be automatically created."
 msgstr ""
-"Planinės operacijos su kintamaisiais negali būti automatiškai sukurtos."
+"Suplanuotų sandorių su kintamaisiais arba daugiau nei viena preke negalima "
+"sukurti automatiškai."
 
 #: gnucash/gnome/dialog-sx-editor.c:618
 msgid ""
@@ -3825,7 +3834,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-sx-editor.c:754 gnucash/gnome/dialog-sx-editor.c:770
 msgid "Unparsable Formula in Split"
-msgstr ""
+msgstr "Nesuprantama formulė padalijime"
 
 #: gnucash/gnome/dialog-sx-editor.c:767
 #, c-format
@@ -3903,9 +3912,8 @@ msgid "(Need Value)"
 msgstr "(reikalinga reikšmė)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:815
-#, fuzzy
 msgid "Invalid Transactions"
-msgstr "Atšaukti operacijos a_nuliavimą"
+msgstr "Netinkami sandoriai"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:866
 #, c-format
@@ -3967,13 +3975,15 @@ msgstr "Pajamų mokesčių tapatybė"
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
-msgstr ""
+msgstr "_Taikyti"
 
 #: gnucash/gnome/dialog-tax-info.c:1240
 msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
+"ĮSPĖJIMAS: jei nustatysite TXF kategorijas ir vėliau pakeisite „Rūšį“, "
+"turėsite rankiniu būdu iš naujo nustatyti šias kategorijas po vieną"
 
 #: gnucash/gnome/dialog-tax-info.c:1393
 msgid "Form"
@@ -4048,9 +4058,8 @@ msgid "Transfer"
 msgstr "Pervesti"
 
 #: gnucash/gnome/gnc-budget-view.c:513
-#, fuzzy
 msgid "Remaining to Budget"
-msgstr "Atverti egzistuojantį biudžetą"
+msgstr "Liko biudžete"
 
 #: gnucash/gnome/gnc-budget-view.c:1644 gnucash/gnome/window-reconcile.c:1166
 #: gnucash/gnome-utils/gnc-tree-view-account.c:929
@@ -4763,10 +4772,8 @@ msgid "Open a company report window for the owner of this credit note"
 msgstr "Atverti įmonės ataskaitos langą šios sąskaitos faktūros gavėjui"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
-#, fuzzy
-#| msgid "Open imported documents in tabs"
 msgid "Manage Document Link…"
-msgstr "Atverti importuotus dokumentus kortelėse"
+msgstr "Valdyti dokumento ryšius…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:292
 #: gnucash/gnome/gnc-plugin-page-register.c:395
@@ -4787,9 +4794,8 @@ msgid "Unpost"
 msgstr "Išregistruoti"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:301
-#, fuzzy
 msgid "Pay"
-msgstr "Diena"
+msgstr "Mokėti"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:231
 msgid "New Voucher"
@@ -4878,10 +4884,8 @@ msgstr "_Pašalinti operaciją"
 #: gnucash/ui/gnc-plugin-page-register.ui:220
 #: gnucash/ui/gnc-plugin-page-register.ui:405
 #: gnucash/ui/gnc-plugin-page-register.ui:517
-#, fuzzy
-#| msgid "Edit Invoice"
 msgid "Jump to Invoice"
-msgstr "Redaguoti sąskaitą faktūrą"
+msgstr "Eiti į sąskaitą-faktūrą"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:282
 msgid "Cu_t Split"
@@ -4961,9 +4965,8 @@ msgstr "Susieti failą su dabartine operacija"
 #: gnucash/ui/gnc-plugin-page-register.ui:213
 #: gnucash/ui/gnc-plugin-page-register.ui:400
 #: gnucash/ui/gnc-plugin-page-register.ui:512
-#, fuzzy
 msgid "Open the linked document for the current transaction"
-msgstr "Susieti adresą su dabartine operacija"
+msgstr "Atidarykite susietą dabartinio sandorio dokumentą"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:294
 #: gnucash/ui/gnc-plugin-page-register.ui:222
@@ -5002,10 +5005,8 @@ msgid "Split"
 msgstr "Skaidymas"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:400
-#, fuzzy
-#| msgid "_Jump"
 msgid "Jump"
-msgstr "Perš_okti"
+msgstr "Peršokti"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:401
 msgid "Schedule"
@@ -5051,7 +5052,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:1867
 msgid "_Discard Transaction"
-msgstr "_Atmesti operaciją"
+msgstr "_Atmesti sandorį"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:1871
 msgid "_Save Transaction"
@@ -5081,9 +5082,8 @@ msgid "Start Date:"
 msgstr "Pradžios data:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3221
-#, fuzzy
 msgid "Show previous number of days:"
-msgstr "Rodyti akcijų skaičių"
+msgstr "Rodyti ankstesnį dienų skaičių:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3229
 msgid "End Date:"
@@ -5091,9 +5091,8 @@ msgstr "Pabaigos data:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3239
 #: gnucash/report/trep-engine.scm:151
-#, fuzzy
 msgid "Unreconciled"
-msgstr "_Nesuderinta"
+msgstr "Nesuderinta"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3245
 #: gnucash/gnome-search/search-reconciled.c:230
@@ -5109,22 +5108,21 @@ msgstr "Anuliuota"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3257
 msgid "Show:"
-msgstr ""
+msgstr "Rodyti:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3265
 msgid "Hide:"
-msgstr ""
+msgstr "Paslėpti:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3276
-#, fuzzy
 msgid "Filter By:"
-msgstr "Filtruoti pagal..."
+msgstr "Filtruoti pagal:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3338
 #: gnucash/gnome/gnc-plugin-page-register.c:3356
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
-msgstr "Operacijų ataskaita"
+msgstr "Sandorių ataskaita"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3344
 msgid "Portfolio Report"
@@ -5147,7 +5145,7 @@ msgstr "ir antrinės sąskaitos"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3543
 msgid "Print checks from multiple accounts?"
-msgstr "Spausdinti čekius iš kelių sąskaitų?"
+msgstr "Spausdinti kvitus iš kelių sąskaitų?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3545
 msgid ""
@@ -5155,17 +5153,17 @@ msgid ""
 "to print the checks even though they are not all from the same account?"
 msgstr ""
 "Paieškos rezultate yra skaidymų iš daugiau nei vienos sąskaitos. Ar norite "
-"spausdinti čekius nors jie nėra iš tos pačios sąskaitos?"
+"spausdinti kvitus nors jie nėra iš tos pačios sąskaitos?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3555
 msgid "_Print checks"
-msgstr "S_pausdinti čekius"
+msgstr "S_pausdinti kvitus"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3574
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr ""
-"Čekius galite spausdinti tik iš banko sąskaitos registro ar paieškos "
+"Kvitus galite spausdinti tik iš banko sąskaitos registro ar paieškos "
 "rezultatų."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3790
@@ -5184,20 +5182,17 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Atvirkštinis įrašas jau sukurtas šiai operacijai."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3891
-#, fuzzy
 msgid "Jump to the transaction?"
-msgstr "Redaguoti dabartinę operaciją"
+msgstr "Pereiti prie sandorio?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3898
-#, fuzzy
 msgid "Reverse Transaction"
-msgstr "P_ridėti atvirkštinę operaciją"
+msgstr "Atvirkštinis sandoris"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3899
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
-#, fuzzy
 msgid "New Transaction Information"
-msgstr "Operacijos informacija"
+msgstr "Nauja sandorio informacija"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:3989
@@ -5218,11 +5213,11 @@ msgstr "Filtruoti „%s“ pagal…"
 #: gnucash/gnome/gnc-plugin-page-register.c:4613
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
-msgstr ""
+msgstr "%s %s iš %s, patalpinta %s, suma %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4623
 msgid "Several documents are linked with this transaction. Please choose one:"
-msgstr ""
+msgstr "Su šiuo sandoriu yra susieti keli dokumentai. Pasirinkite vieną:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4624
 #: gnucash/gnome-search/dialog-search.c:323
@@ -5231,15 +5226,13 @@ msgid "Select"
 msgstr "Pasirinkti"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4679
-#, fuzzy
-#| msgid "Post Date"
 msgid "Go to Date"
-msgstr "Registravimo data"
+msgstr "Pasirinkti datą"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4981
 #, c-format
 msgid "Checking splits in current register: %u of %u"
-msgstr ""
+msgstr "Dabartinio registro perskyrimų tikrinimas: %u iš %u"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:226
 msgid "Print"
@@ -5255,18 +5248,17 @@ msgstr "Eksportuoti"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:231
 msgid "Save Config"
-msgstr ""
+msgstr "Išsaugoti konfigūraciją"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:234
-#, fuzzy
 msgid "Save Config As…"
-msgstr "Išsaugoti kaip…"
+msgstr "Išsaugoti konfigūraciją kaip…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:235
 msgid "Make Pdf"
-msgstr ""
+msgstr "Sukurti PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:371
 #: gnucash/gnome/gnc-plugin-page-report.cpp:372
@@ -5294,16 +5286,14 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1274
 #: gnucash/ui/gnc-plugin-page-report.ui:74
 #: gnucash/ui/gnc-plugin-page-report.ui:255
-#, fuzzy
 msgid "Save _Report Configuration"
-msgstr "Išsaugoti ataskaitą"
+msgstr "Išsaugoti _ataskaitos konfigūraciją"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1275
 #: gnucash/ui/gnc-plugin-page-report.ui:81
 #: gnucash/ui/gnc-plugin-page-report.ui:270
-#, fuzzy
 msgid "Save Report Configuration As…"
-msgstr "Išsaugoti ataskaitą kaip…"
+msgstr "Išsaugoti ataskaitos konfigūraciją kaip…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1550
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1583
@@ -13735,10 +13725,8 @@ msgstr "ISIN arba kitas kodas"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:138
-#, fuzzy
-#| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "Vardų sritis"
+msgstr "_Vardų sritis"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
@@ -13768,9 +13756,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-customer.glade:757
 #: gnucash/gtkbuilder/dialog-employee.glade:234
 #: gnucash/gtkbuilder/dialog-vendor.glade:252
-#, fuzzy
 msgid "Address"
-msgstr "_Adresas"
+msgstr "Adresas"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:289
 #: gnucash/gtkbuilder/dialog-customer.glade:796
@@ -13851,13 +13838,12 @@ msgid "<b>2. Select Import Type</b>"
 msgstr "<b>2. Pasirinkite importo tipą</b>"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:52
-#, fuzzy
 msgid "Exit the saved report configurations dialog"
-msgstr "Užverti adaptuotų ataskaitų dialogo langą"
+msgstr "Užverti išsaugotų ataskaitų konfigūravimo langą"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:100
 msgid "Currently you have no saved reports."
-msgstr ""
+msgstr "Šiuo metu neturite išsaugotų ataskaitų."
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:112
 msgid ""
@@ -25781,13 +25767,15 @@ msgstr "Pritaikyta eilutė išrašytai/gautai sąskaitai ar sąnaudų kvitui."
 #: gnucash/report/stylesheets/css.scm:118
 #: gnucash/report/stylesheets/css.scm:224
 msgid "CSS"
-msgstr ""
+msgstr "CSS"
 
 #: gnucash/report/reports/standard/invoice.scm:181
 msgid ""
 "CSS code. This field specifies the CSS code for styling the invoice. Please "
 "see the exported report for the CSS class names."
 msgstr ""
+"CSS kodas. Šiame lauke nurodomas sąskaitos-faktūros stiliaus CSS kodas. "
+"Eksportuotoje ataskaitoje rasite CSS klasių pavadinimus."
 
 #: gnucash/report/reports/standard/invoice.scm:186
 #, fuzzy
@@ -31218,6 +31206,8 @@ msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
 msgstr ""
+"Naudojamos sąskaitos-faktūros ataskaitos keitimo trukmė. 0 reikšmė reiškia "
+"išjungtą."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1247
 msgid "Default Customer TaxTable"
@@ -31258,28 +31248,27 @@ msgstr "Partijos nuoroda"
 
 #: libgnucash/engine/policy.c:52
 msgid "First In, First Out"
-msgstr ""
+msgstr "Pirmas įėjęs, pirmas išeina"
 
 #: libgnucash/engine/policy.c:53
 msgid "Use oldest lots first."
-msgstr ""
+msgstr "Pirmiausia naudoti seniausias partijas."
 
 #: libgnucash/engine/policy.c:55
 msgid "Last In, First Out"
-msgstr ""
+msgstr "Paskutinis įėjęs, pirmas išeina"
 
 #: libgnucash/engine/policy.c:56
-#, fuzzy
 msgid "Use newest lots first."
-msgstr "Naudoti datą arčiausiai ataskaitos datos."
+msgstr "Pirmiausia naudoti naujausias partijas."
 
 #: libgnucash/engine/policy.c:59
 msgid "Average cost of open lots."
-msgstr ""
+msgstr "Atvertos partijos vidutinė kaina."
 
 #: libgnucash/engine/policy.c:62
 msgid "Manually select lots."
-msgstr ""
+msgstr "Rankiniu būdu pasirinkti partijas."
 
 #: libgnucash/engine/qofbookslots.h:65
 msgid "Use Trading Accounts"
@@ -31302,14 +31291,12 @@ msgid "Default Budget"
 msgstr "Numatytasis biudžetas"
 
 #: libgnucash/engine/qofbookslots.h:74
-#, fuzzy
-#| msgid "Date of Report"
 msgid "Default Invoice Report"
-msgstr "Ataskaitos data"
+msgstr "Numatytoji sąskaitos-faktūros ataskaita"
 
 #: libgnucash/engine/qofbookslots.h:75
 msgid "Default Invoice Report Timeout"
-msgstr ""
+msgstr "Numatytasis sąskaitos-faktūros ataskaitos keitimo trukmė"
 
 #. Translators: " + " is an separator in a list of string-representations of recurrence frequencies
 #: libgnucash/engine/Recurrence.c:511
@@ -31351,12 +31338,17 @@ msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#Double_posting"
 msgstr ""
+"Ištrinkite šį sandorį. Paaiškinimas nuorodoje https://wiki.gnucash.org/wiki/"
+"Business_Features_Issues#Double_posting"
 
 #: libgnucash/engine/ScrubBusiness.c:565
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
 msgstr ""
+"Ištrinkite šį sandorį. Paaiškinimas nuorodoje https://wiki.gnucash.org/wiki/"
+"Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I."
+"22_from_the_AR.2FAP_account"
 
 #: libgnucash/engine/ScrubBusiness.c:617
 #, c-format
@@ -31457,7 +31449,7 @@ msgstr ""
 #: libgnucash/tax/gnc-locale-tax.c:263
 #, c-format
 msgid "Not tax-related; %s%s: %s (code %s, tax type %s)"
-msgstr "Nesusijusi su mokesčiais; %s%s: %s (kodas „%s“, mokesčio tipas „%s“)"
+msgstr "Nesusijusi su mokesčiais; %s%s: %s (kodas „%s“, mokesčio rūšis „%s“)"
 
 #: libgnucash/tax/gnc-locale-tax.c:310
 #, c-format
