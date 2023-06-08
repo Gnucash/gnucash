@@ -50,9 +50,6 @@ set (gnome_utils_SOURCES
   gnc-amount-edit.c
   gnc-autoclear.c
   gnc-autosave.c
-  gnc-cell-renderer-date.c
-  gnc-cell-renderer-popup.c
-  gnc-cell-renderer-popup-entry.c
   gnc-cell-renderer-text-flag.c
   gnc-cell-renderer-text-view.c
   gnc-cell-view.c
@@ -139,9 +136,6 @@ set (gnome_utils_HEADERS
   gnc-account-sel.h
   gnc-amount-edit.h
   gnc-autoclear.h
-  gnc-cell-renderer-date.h
-  gnc-cell-renderer-popup.h
-  gnc-cell-renderer-popup-entry.h
   gnc-cell-renderer-text-flag.h
   gnc-cell-renderer-text-view.h
   gnc-cell-view.h
