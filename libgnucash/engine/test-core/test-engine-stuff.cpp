@@ -204,12 +204,7 @@ get_random_time (void)
 GncGUID*
 get_random_guid(void)
 {
-    GncGUID *ret;
-
-    ret = g_new(GncGUID, 1);
-    guid_replace(ret);
-
-    return ret;
+    return guid_new();
 }
 
 /* ========================================================== */
