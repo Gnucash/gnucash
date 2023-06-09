@@ -528,9 +528,8 @@ test_gnc_float_txn_get_other_float_split (FlFixture *fixture, gconstpointer pDat
 void gnc_float_txn_to_txn_swap_accounts (const FloatingTxn *ft, Transaction *txn, Account *acct1, Account *acct2, gboolean do_commit)// C: 1  Local: 1:0:0
 */
 static void
-test_gnc_float_txn_to_txn_swap_accounts (FlFixture *fixture, gconstpointer pData)
+impl_test_gnc_float_txn_to_txn_swap_accounts (FlFixture *fixture,  const SwapCommitPrefs *prefs)
 {
-    SwapCommitPrefs *prefs = (SwapCommitPrefs*)pData;
     Transaction *txn = xaccMallocTransaction (fixture->book);
     Account *sw_acct1 = NULL, *sw_acct2 = NULL;
     Account *exp_acct1 = fixture->acc1, *exp_acct2 = fixture->acc2;
@@ -591,11 +590,37 @@ test_gnc_float_txn_to_txn_swap_accounts (FlFixture *fixture, gconstpointer pData
     xaccTransDestroy (txn);
 }
 
+static void
+test_gnc_float_txn_to_txn_swap_accounts_noswap_nocommit (FlFixture *fixture, gconstpointer pData)
+{
+    SwapCommitPrefs prefs = {FALSE, FALSE};
+    impl_test_gnc_float_txn_to_txn_swap_accounts(fixture, &prefs);
+}
+
+static void
+test_gnc_float_txn_to_txn_swap_accounts_noswap_commit (FlFixture *fixture, gconstpointer pData)
+{
+    SwapCommitPrefs prefs = {FALSE, TRUE};
+    impl_test_gnc_float_txn_to_txn_swap_accounts(fixture, &prefs);
+}
+
+static void
+test_gnc_float_txn_to_txn_swap_accounts_swap_commit (FlFixture *fixture, gconstpointer pData)
+{
+    SwapCommitPrefs prefs = {TRUE, TRUE};
+    impl_test_gnc_float_txn_to_txn_swap_accounts(fixture, &prefs);
+}
+
+static void
+test_gnc_float_txn_to_txn_swap_accounts_swap_nocommit (FlFixture *fixture, gconstpointer pData)
+{
+    SwapCommitPrefs prefs = {TRUE, FALSE};
+    impl_test_gnc_float_txn_to_txn_swap_accounts(fixture, &prefs);
+}
 
 void
 test_suite_split_register_copy_ops (void)
 {
-    SwapCommitPrefs prefs;
     GNC_TEST_ADD (suitename, "gnc split to float split", Fixture, NULL, setup, test_gnc_split_to_float_split, teardown);
     GNC_TEST_ADD (suitename, "gnc float split to split", Fixture, NULL, setup, test_gnc_float_split_to_split, teardown);
     GNC_TEST_ADD (suitename, "gnc float txn to float txn", Fixture, NULL, setup, test_gnc_txn_to_float_txn, teardown);
@@ -603,14 +628,9 @@ test_suite_split_register_copy_ops (void)
     GNC_TEST_ADD (suitename, "gnc float txn get float split", FlFixture, NULL, flsetup, test_gnc_float_txn_get_float_split, flteardown);
     GNC_TEST_ADD (suitename, "gnc float txn get other float split", FlFixture, NULL, flsetup, test_gnc_float_txn_get_other_float_split, flteardown);
 
-    prefs.swap_accts = FALSE;
-    prefs.docommit = FALSE;
-    GNC_TEST_ADD (suitename, "gnc float txn to txn noswap nocommit", FlFixture, &prefs, flsetup, test_gnc_float_txn_to_txn_swap_accounts, flteardown);
-    prefs.docommit = TRUE;
-    GNC_TEST_ADD (suitename, "gnc float txn to txn noswap commit", FlFixture, &prefs, flsetup, test_gnc_float_txn_to_txn_swap_accounts, flteardown);
-    prefs.swap_accts = TRUE;
-    GNC_TEST_ADD (suitename, "gnc float txn to txn swap commit", FlFixture, &prefs, flsetup, test_gnc_float_txn_to_txn_swap_accounts, flteardown);
-    prefs.docommit = FALSE;
-    GNC_TEST_ADD (suitename, "gnc float txn to txn swap nocommit", FlFixture, &prefs, flsetup, test_gnc_float_txn_to_txn_swap_accounts, flteardown);
+    GNC_TEST_ADD (suitename, "gnc float txn to txn noswap nocommit", FlFixture, NULL, flsetup, test_gnc_float_txn_to_txn_swap_accounts_noswap_nocommit, flteardown);
+    GNC_TEST_ADD (suitename, "gnc float txn to txn noswap commit", FlFixture, NULL, flsetup, test_gnc_float_txn_to_txn_swap_accounts_noswap_commit, flteardown);
+    GNC_TEST_ADD (suitename, "gnc float txn to txn swap commit", FlFixture, NULL, flsetup, test_gnc_float_txn_to_txn_swap_accounts_swap_commit, flteardown);
+    GNC_TEST_ADD (suitename, "gnc float txn to txn swap nocommit", FlFixture, NULL, flsetup, test_gnc_float_txn_to_txn_swap_accounts_swap_nocommit, flteardown);
 
 }
