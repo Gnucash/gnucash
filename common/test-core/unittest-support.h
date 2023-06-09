@@ -351,8 +351,8 @@ gboolean test_object_checked_destroy (GObject *obj);
  */
 
 #define test_destroy(obj) \
-    g_assert (obj != NULL && G_IS_OBJECT (obj));		\
-    g_assert (test_object_checked_destroy (G_OBJECT (obj)))
+    g_assert_true (obj != NULL && G_IS_OBJECT (obj));		\
+    g_assert_true (test_object_checked_destroy (G_OBJECT (obj)))
 
 /** @} */
 /* For Scheme testing access:

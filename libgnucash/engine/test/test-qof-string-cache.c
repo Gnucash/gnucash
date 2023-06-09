@@ -62,19 +62,19 @@ test_qof_string_cache( void )
 
     strncpy(str, "str1", sizeof(str));
     str1_1 = qof_string_cache_insert(str);      /* Refcount = 1 */
-    g_assert(str1_1 != str);
+    g_assert_true(str1_1 != str);
     str1_2 = qof_string_cache_insert(str);      /* Refcount = 2 */
-    g_assert(str1_1 == str1_2);
+    g_assert_true(str1_1 == str1_2);
     qof_string_cache_remove(str);               /* Refcount = 1 */
     str1_3 = qof_string_cache_insert(str);      /* Refcount = 2 */
-    g_assert(str1_1 == str1_3);
+    g_assert_true(str1_1 == str1_3);
     qof_string_cache_remove(str);               /* Refcount = 1 */
     qof_string_cache_remove(str);               /* Refcount = 0 */
     strncpy(str, "str2", sizeof(str));
     qof_string_cache_insert(str);               /* Refcount = 1 */
     strncpy(str, "str1", sizeof(str));
     str1_4 = qof_string_cache_insert(str);      /* Refcount = 1 */
-    g_assert(str1_1 != str1_4);
+    g_assert_true(str1_1 != str1_4);
 }
 
 void

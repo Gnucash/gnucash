@@ -361,7 +361,7 @@ test_conn_index_functions (QofBackend* qof_be)
     {
         const char* errmsg;
         conn->provider()->drop_index (dbi_be->conn, index);
-        g_assert (DBI_ERROR_NONE == dbi_conn_error (conn->conn(), &errmsg));
+        g_assert_true (DBI_ERROR_NONE == dbi_conn_error (conn->conn(), &errmsg));
     }
 
 }
@@ -388,23 +388,23 @@ test_dbi_store_and_reload (Fixture* fixture, gconstpointer pData)
     auto book2{qof_book_new()};
     auto session_2 = qof_session_new (book2);
     qof_session_begin (session_2, url, SESSION_NEW_OVERWRITE);
-    g_assert (session_2 != NULL);
+    g_assert_true (session_2 != NULL);
     g_assert_cmpint (qof_session_get_error (session_2), == , ERR_BACKEND_NO_ERR);
     qof_session_swap_data (fixture->session, session_2);
     qof_book_mark_session_dirty (qof_session_get_book (session_2));
     qof_session_save (session_2, NULL);
-    g_assert (session_2 != NULL);
+    g_assert_true (session_2 != NULL);
     g_assert_cmpint (qof_session_get_error (session_2), == , ERR_BACKEND_NO_ERR);
 
     // Reload the session data
     auto book3{qof_book_new()};
     auto session_3 = qof_session_new (book3);
-    g_assert (session_3 != NULL);
+    g_assert_true (session_3 != NULL);
     qof_session_begin (session_3, url, SESSION_READ_ONLY);
-    g_assert (session_3 != NULL);
+    g_assert_true (session_3 != NULL);
     g_assert_cmpint (qof_session_get_error (session_3), == , ERR_BACKEND_NO_ERR);
     qof_session_load (session_3, NULL);
-    g_assert (session_3 != NULL);
+    g_assert_true (session_3 != NULL);
     g_assert_cmpint (qof_session_get_error (session_3), == , ERR_BACKEND_NO_ERR);
     // Compare with the original data
     compare_books (qof_session_get_book (session_2),
@@ -447,7 +447,7 @@ test_dbi_safe_save (Fixture* fixture, gconstpointer pData)
         g_warning ("Session Error: %d, %s", qof_session_get_error (session_1),
                    qof_session_get_error_message (session_1));
         g_test_message ("DB Session Creation Failed");
-        g_assert (FALSE);
+        g_assert_true (FALSE);
         goto cleanup;
     }
     qof_session_swap_data (fixture->session, session_1);
@@ -460,7 +460,7 @@ test_dbi_safe_save (Fixture* fixture, gconstpointer pData)
         g_warning ("Session Error: %s",
                    qof_session_get_error_message (session_1));
         g_test_message ("DB Session Safe Save Failed");
-        g_assert (FALSE);
+        g_assert_true (FALSE);
         goto cleanup;
     }
     /* Destroy the session and reload it */
@@ -473,7 +473,7 @@ test_dbi_safe_save (Fixture* fixture, gconstpointer pData)
         g_warning ("Session Error: %d, %s", qof_session_get_error (session_2),
                    qof_session_get_error_message (session_2));
         g_test_message ("DB Session re-creation Failed");
-        g_assert (FALSE);
+        g_assert_true (FALSE);
         goto cleanup;
     }
     qof_session_load (session_2, NULL);
@@ -520,7 +520,7 @@ test_dbi_version_control (Fixture* fixture, gconstpointer pData)
         g_warning ("Session Error: %d, %s", qof_session_get_error (sess),
                    qof_session_get_error_message (sess));
         g_test_message ("DB Session Creation Failed");
-        g_assert (FALSE);
+        g_assert_true (FALSE);
         goto cleanup;
     }
     qof_session_swap_data (fixture->session, sess);

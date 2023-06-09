@@ -219,7 +219,7 @@ do_test_checked_handler (const char *log_domain, GLogLevelFlags log_level,
         gchar *level = test_log_level (log_level);
         g_printf ( "<%s> (%s) %s\n", level, log_domain, msg);
         g_free (level);
-        g_assert (log_level ^ G_LOG_FLAG_FATAL);
+        g_assert_true (log_level ^ G_LOG_FLAG_FATAL);
         return FALSE;
     }
     if (hits)
@@ -242,7 +242,7 @@ test_checked_substring_handler (const char *log_domain, GLogLevelFlags log_level
         gchar *level = test_log_level (log_level);
         g_printf ( "<%s> (%s) %s\n", level, log_domain, msg);
         g_free (level);
-        g_assert (log_level ^ G_LOG_FLAG_FATAL);
+        g_assert_true (log_level ^ G_LOG_FLAG_FATAL);
         return FALSE;
     }
     ++(tdata->hits);
@@ -272,7 +272,7 @@ test_log_handler (const char *log_domain, GLogLevelFlags log_level,
     gchar *level = test_log_level (log_level);
     g_printf ( "<%s> (%s) %s\n", level, log_domain, msg);
     g_free (level);
-    g_assert (log_level ^ G_LOG_FLAG_FATAL);
+    g_assert_true (log_level ^ G_LOG_FLAG_FATAL);
     return FALSE;
 }
 
@@ -330,7 +330,7 @@ mock_signal_handler (QofInstance *entity, QofEventId event_type,
             && signal->event_type == event_type)
     {
         if (signal->event_data)
-            g_assert (signal->event_data == event_data);
+            g_assert_true (signal->event_data == event_data);
         signal->hits += 1;
     }
 }
