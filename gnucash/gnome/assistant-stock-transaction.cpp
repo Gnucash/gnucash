@@ -52,10 +52,37 @@
 
 static QofLogModule log_module = GNC_MOD_ASSISTANT;
 
+/** The Stock Transaction Assistant guides the user through collecting the
+ * information needed to properly account for one of several types of securities
+ * investment transaction, including opening and closing long and short
+ * positions, oridinary and capital gains dividends, returns of capital,
+ * notional dividends, splits, and reverse splits. It tailors the available
+ * transaction types and what information it requests based on the current state
+ * of the account: For example, if the account holds an open short position it
+ * will offer buy to cover short and dividend payments to the owner of the
+ * stock.
+ *
+ * The Assistant is built with the Model-View-Controller pattern where
+ * StockAssistantModel manages the data for the transaction, StockAssistantView
+ * creates the visuals using a GtkAssistant and a class for each page type, and
+ * StockAssistantController handles user input events.
+ *
+ * Depending on type a transaction is composed of some of the following splits:
+ * A stock split representing the amount of units and their value in currency, a
+ * cash split representing the source or disposition of that value, a fees split
+ * representing commissions, fees, and taxes paid on the transaction, a dividend
+ * entry representing currency paid by the issuer to its holders (or in the case
+ * of a short position the currency paid by the short seller to the entity
+ * borrowed from compensating them for the dividend that they would have been
+ * paid had they not lent the shares), and two capital gains split representing
+ * the change in currency value from the opening transaction.
+*/
+
 extern "C"
 {
 // These functions are the GtkAssistant primary button callbacks. They're
-// connected to their signals in assistant-stock-transaction.glade.
+// connected to their signals in assistant-stock-transaction.glade so they
+// mustn't be name-mangled.
 void stock_assistant_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
                                  gpointer user_data);
 void stock_assistant_finish_cb  (GtkAssistant *assistant, gpointer user_data);
@@ -95,8 +122,20 @@ enum split_cols
     SPLIT_COL_UNITS_COLOR,
     NUM_SPLIT_COLS
 };
-
-/** structures *********************************************************/
+/* StockAssistantModel contains a (subclassed) StockTransactionEntry for each split to be created.
+ *
+ * A StockTransactionEntry contains some boolean parameters that are set from a
+ * fieldmask, obtained from the corresponding element in the TxnTypeInfo for the
+ * selected transaction type.
+ *
+ * The available transaction types are populated into
+ * StockAssistantModel::m_txn_types by
+ * StockAssistantModel::maybe_reset_txn_types() based on the state of the
+ * account (long, short, or empty) on the seelected
+ * date. StockAssistantModel::set_txn_type() then sets m_txn_type to the
+ * selected template and calls StockTransactionEntry::set_fieldmask() on each of
+ * its StockTransactionEntry members.
+ */
 
 enum class FieldMask : unsigned
 {
@@ -128,7 +167,9 @@ FieldMask operator ^(FieldMask lhs, FieldMask rhs)
     return static_cast<FieldMask> (static_cast<unsigned>(lhs) ^
                                    static_cast<unsigned>(rhs));
 };
-
+/* The pages displayed by the assistant and which fields are enabled on each
+ * page is controlled by TxnTypeInfos, one for each transaction type.
+ */
 struct TxnTypeInfo
 {
     FieldMask stock_amount;
@@ -387,6 +428,10 @@ then record the reverse split.")
     }
 };
 
+/** Possibly misnamed. Collects the required information to create a single
+ * split in a transaction. This is the base class; there are child classes for
+ * many split types.
+ */
 
 struct StockTransactionEntry
 {
@@ -640,6 +685,7 @@ const char *StockTransactionSplitInfo::s_missing_str = N_("(missing)");
 
 using SplitInfoVec = std::vector<StockTransactionSplitInfo>;
 
+/** Manages the data and actions for the assistant. */
 struct StockAssistantModel
 {
     Account* m_acct;
@@ -1068,6 +1114,8 @@ get_widget (GtkBuilder *builder, const gchar * ID)
     return GTK_WIDGET (obj);
 }
 
+/* Editor widgets used in assistant pages. */
+
 struct GncDateEdit
 {
     GtkWidget *m_edit;
@@ -1233,6 +1281,8 @@ GncAccountSelector::connect (Account **acct)
 {
     g_signal_connect(m_selector, "account_sel_changed", G_CALLBACK (gnc_account_sel_changed_cb), acct);
 }
+
+/* Assistant page classes. */
 
 struct PageTransType {
     // transaction type page
@@ -1667,6 +1717,10 @@ PageCapGain::connect(Account **account, const char **memo, gnc_numeric *value)
     m_value.connect(value);
 }
 
+/* The last page of the assistant shows what the resulting transaction will look
+ * like.
+*/
+/* The GncFinishtreeview lays out the transaction.*/
 struct GncFinishTreeview
 {
     GtkWidget *m_treeview;
@@ -1770,7 +1824,9 @@ PageFinish::prepare (GtkWidget *window, StockAssistantModel *model)
     }
     gtk_label_set_text(GTK_LABEL(m_summary), summary.c_str());
     gtk_assistant_set_page_complete(GTK_ASSISTANT(window), m_page, success);
- }
+}
+
+/* The StockAssistantView contains the pages and manages displaying them one at a time. */
 
 struct StockAssistantView {
     GtkWidget * m_window;
@@ -1817,6 +1873,8 @@ StockAssistantView::~StockAssistantView()
     DEBUG ("StockAssistantView destructor\n");
 };
 
+/* The StockAssistantController manages the event handlers and user input. */
+
 static void connect_signals (gpointer, GtkBuilder*);
 
 struct StockAssistantController
@@ -1838,7 +1896,8 @@ struct StockAssistantController
     ~StockAssistantController (){ DEBUG ("StockAssistantController destructor\n"); };
 };
 
-/******* implementations ***********************************************/
+// These callbacks must be registered with the GtkAssistant so they can't be member functions.
+
 static void
 stock_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
