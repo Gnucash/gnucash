@@ -234,7 +234,7 @@ gnc_account_sel_class_init (GNCAccountSelClass *klass)
         g_signal_new ("account_sel_changed",
                       G_OBJECT_CLASS_TYPE (object_class),
                       G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET (GNCAccountSelClass, account_sel_changed),
+                      0,
                       NULL,
                       NULL,
                       g_cclosure_marshal_VOID__VOID,
