@@ -31,28 +31,17 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_REGISTER            (gnc_plugin_register_get_type ())
-#define GNC_PLUGIN_REGISTER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_REGISTER, GncPluginRegister))
-#define GNC_PLUGIN_REGISTER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN_REGISTER, GncPluginRegisterClass))
-#define GNC_IS_PLUGIN_REGISTER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_PLUGIN_REGISTER))
-#define GNC_IS_PLUGIN_REGISTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_REGISTER))
-#define GNC_PLUGIN_REGISTER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_REGISTER, GncPluginRegisterClass))
+G_DECLARE_FINAL_TYPE (GncPluginRegister, gnc_plugin_register, GNC, PLUGIN_REGISTER, GncPlugin)
 
 #define GNC_PLUGIN_REGISTER_NAME "gnc-plugin-register"
 
 /* typedefs & structures */
-typedef struct
+struct _GncPluginRegister
 {
     GncPlugin gnc_plugin;
-} GncPluginRegister;
-
-typedef struct
-{
-    GncPluginClass gnc_plugin;
-} GncPluginRegisterClass;
+};
 
 /* function prototypes */
-GType      gnc_plugin_register_get_type (void);
-
 GncPlugin *gnc_plugin_register_new      (void);
 
 G_END_DECLS
