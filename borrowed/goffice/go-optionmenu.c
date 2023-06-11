@@ -325,7 +325,7 @@ static void go_option_menu_class_init(GOOptionMenuClass *class)
     GtkWidgetClass *widget_class = (GtkWidgetClass*) class;
 
     signals[CHANGED] = g_signal_new("changed", G_OBJECT_CLASS_TYPE(class),
-            G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET(GOOptionMenuClass, changed),
+            G_SIGNAL_RUN_LAST, 0,
             NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
     gobject_class->set_property = go_option_menu_set_property;
