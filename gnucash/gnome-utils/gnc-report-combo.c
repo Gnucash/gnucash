@@ -126,7 +126,7 @@ gnc_report_combo_class_init (GncReportComboClass *klass)
         g_signal_new ("changed",
                       G_OBJECT_CLASS_TYPE(object_class),
                       G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET(GncReportComboClass, changed),
+                      0,
                       NULL,
                       NULL,
                       g_cclosure_marshal_VOID__VOID,

@@ -25,42 +25,25 @@
 #ifndef GNC_REPORT_COMBO_H
 #define GNC_REPORT_COMBO_H
 
-#define GNC_TYPE_REPORT_COMBO            (gnc_report_combo_get_type())
-#define GNC_REPORT_COMBO(o)              (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_REPORT_COMBO, GncReportCombo))
-#define GNC_REPORT_COMBO_CLASS(k)        (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_REPORT_COMBO, GncReportComboClass))
-#define GNC_IS_REPORT_COMBO(o)           (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_REPORT_COMBO))
-#define GNC_IS_REPORT_COMBO_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), GNC_TYPE_REPORT_COMBO))
-#define GNC_REPORT_COMBO_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_REPORT_COMBO, GncReportComboClass))
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
-typedef struct
+#define GNC_TYPE_REPORT_COMBO            (gnc_report_combo_get_type())
+G_DECLARE_FINAL_TYPE (GncReportCombo, gnc_report_combo, GNC, REPORT_COMBO, GtkBox)
+
+struct _GncReportCombo
 {
     GtkBox box;
 
-} GncReportCombo;
-
-typedef struct
-{
-    GtkBoxClass parent_class;
-    void (*changed) (GncReportCombo *grc);
-
-} GncReportComboClass;
+};
 
 typedef struct
 {
     char *report_guid;
     char *report_name;
 } ReportListEntry;
-
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
-/** Return the GType for the GncReportCombo widget.
- *
- *  @return A GType value.
- */
-GType gnc_report_combo_get_type (void) G_GNUC_CONST;
 
 /** Create a new GncReportCombo widget which can be used to provide
  *  a list of reports and select one.
