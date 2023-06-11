@@ -89,11 +89,6 @@ void stock_assistant_finish_cb  (GtkAssistant *assistant, gpointer user_data);
 void stock_assistant_cancel_cb  (GtkAssistant *gtkassistant, gpointer user_data);
 }
 
-enum class FieldMask : unsigned;
-bool operator &(FieldMask lhs, FieldMask rhs);
-FieldMask operator |(FieldMask lhs, FieldMask rhs);
-FieldMask operator ^(FieldMask lhs, FieldMask rhs);
-
 static const char* GNC_PREFS_GROUP = "dialogs.stock-assistant";
 static const char* ASSISTANT_STOCK_TRANSACTION_CM_CLASS = "assistant-stock-transaction";
 
@@ -151,22 +146,19 @@ enum class FieldMask : unsigned
     CAPGAINS_IN_STOCK    = 1 << 8, // capg only: add a balancing split in stock acct
 };
 
-FieldMask operator |(FieldMask lhs, FieldMask rhs)
+static FieldMask
+operator |(FieldMask lhs, FieldMask rhs)
 {
     return static_cast<FieldMask> (static_cast<unsigned>(lhs) |
                                    static_cast<unsigned>(rhs));
 };
 
-bool operator &(FieldMask lhs, FieldMask rhs)
+static bool
+operator &(FieldMask lhs, FieldMask rhs)
 {
     return (static_cast<unsigned>(lhs) & static_cast<unsigned>(rhs));
 };
 
-FieldMask operator ^(FieldMask lhs, FieldMask rhs)
-{
-    return static_cast<FieldMask> (static_cast<unsigned>(lhs) ^
-                                   static_cast<unsigned>(rhs));
-};
 /* The pages displayed by the assistant and which fields are enabled on each
  * page is controlled by TxnTypeInfos, one for each transaction type.
  */
