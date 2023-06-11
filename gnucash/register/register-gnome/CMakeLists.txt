@@ -2,6 +2,7 @@ include(CheckSymbolExists)
 
 set (register_gnome_SOURCES
   combocell-gnome.c
+  completioncell-gnome.c
   datecell-gnome.c
   formulacell-gnome.c
   gnucash-color.c

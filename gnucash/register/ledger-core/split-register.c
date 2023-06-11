@@ -29,6 +29,7 @@
 #include <glib/gi18n.h>
 
 #include "combocell.h"
+#include "completioncell.h"
 #include "datecell.h"
 #include "dialog-utils.h"
 #include "gnc-component-manager.h"
@@ -2665,10 +2666,10 @@ gnc_split_register_config_cells (SplitRegister* reg)
         ((ComboCell*)
          gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), TRUE);
 
-    /* the description cell */
-    gnc_combo_cell_set_autosize
-        ((ComboCell*)
-         gnc_table_layout_get_cell (reg->table->layout, DESC_CELL), TRUE);
+     /* the description cell */
+    gnc_completion_cell_set_autosize
+        ((CompletionCell*)
+          gnc_table_layout_get_cell (reg->table->layout, DESC_CELL), TRUE);
 
     /* Use GNC_COMMODITY_MAX_FRACTION for prices and "exchange rates"  */
     gnc_price_cell_set_fraction
@@ -2697,10 +2698,10 @@ gnc_split_register_config_cells (SplitRegister* reg)
         ((ComboCell*)
          gnc_table_layout_get_cell (reg->table->layout, ACTN_CELL), FALSE);
 
-    /* The description cell should accept strings not in the list */
-    gnc_combo_cell_set_strict
-        ((ComboCell*)
-         gnc_table_layout_get_cell (reg->table->layout, DESC_CELL), FALSE);
+     /* The description cell should accept strings not in the list */
+    gnc_completion_cell_set_strict
+        ((CompletionCell*)
+          gnc_table_layout_get_cell (reg->table->layout, DESC_CELL), FALSE);
 
     /* number format for share quantities in stock ledgers */
     switch (reg->type)

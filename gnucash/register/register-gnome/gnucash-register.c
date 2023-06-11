@@ -47,6 +47,7 @@
 #include "gnc-state.h"
 
 #include "combocell.h"
+#include "completioncell.h"
 #include "datecell.h"
 #include "formulacell-gnome.h"
 #include "pricecell-gnome.h"
@@ -100,6 +101,7 @@ void
 gnucash_register_add_cell_types (void)
 {
     gnc_register_add_cell_type (COMBO_CELL_TYPE_NAME, gnc_combo_cell_new);
+    gnc_register_add_cell_type (COMPLETION_CELL_TYPE_NAME, gnc_completion_cell_new);
     gnc_register_add_cell_type (DATE_CELL_TYPE_NAME, gnc_date_cell_new);
     gnc_register_add_cell_type (PRICE_CELL_TYPE_NAME,
                                 gnc_price_cell_gnome_new);

@@ -75,9 +75,6 @@ typedef struct _PopBox
 
     GList* ignore_strings;
 
-    GHashTable *item_hash;
-
-    gboolean use_type_ahead_only;
 } PopBox;
 
 
@@ -168,10 +165,6 @@ gnc_combo_cell_init (ComboCell* cell)
     box->complete_char = '\0';
 
     box->ignore_strings = NULL;
-
-    box->item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
-
-    box->use_type_ahead_only = FALSE;
 }
 
 static void
@@ -340,9 +333,6 @@ gnc_combo_cell_destroy (BasicCell* bcell)
             box->qf = NULL;
         }
 
-        if (box->item_hash)
-           g_hash_table_destroy (box->item_hash);
-
         g_list_free_full (box->ignore_strings, g_free);
         box->ignore_strings = NULL;
 
@@ -367,7 +357,7 @@ gnc_combo_cell_set_sort_enabled (ComboCell* cell, gboolean enabled)
         return;
 
     block_list_signals (cell);
-    gnc_item_list_set_sort_enabled (box->item_list, enabled);
+    gnc_item_list_set_sort_column (box->item_list, 0);
     unblock_list_signals (cell);
 }
 
@@ -458,70 +448,6 @@ gnc_combo_cell_add_menu_item (ComboCell* cell, const char* menustr)
 
         gtk_list_store_append (box->tmp_store, &iter);
         gtk_list_store_set (box->tmp_store, &iter, 0, menustr, -1);
-    }
-
-    /* If we're going to be using a pre-fab quickfill,
-     * then don't fill it in here */
-    if (FALSE == box->use_quickfill_cache)
-    {
-        gnc_quickfill_insert (box->qf, menustr, QUICKFILL_ALPHA);
-    }
-}
-
-void
-gnc_combo_cell_add_menu_item_unique (ComboCell* cell, const char* menustr)
-{
-    PopBox* box;
-
-    if (cell == NULL)
-        return;
-    if (menustr == NULL)
-        return;
-
-    box = cell->cell.gui_private;
-
-    if (box->item_list != NULL)
-    {
-        block_list_signals (cell);
-
-        /* check if menustr has already been added. */
-        if (g_hash_table_lookup_extended (box->item_hash, menustr, NULL, NULL))
-            return;
-
-        g_hash_table_insert (box->item_hash, g_strdup (menustr), NULL);
-
-        gchar *menustr_temp = g_strdup (menustr);
-        gnc_utf8_strip_invalid_and_controls (menustr_temp);
-        gnc_item_list_append (box->item_list, menustr_temp);
-        if (cell->cell.value &&
-            (strcmp (menustr_temp, cell->cell.value) == 0))
-            gnc_item_list_select (box->item_list, menustr_temp);
-        g_free (menustr_temp);
-        unblock_list_signals (cell);
-    }
-    else
-    {
-        GtkTreeIter iter;
-
-        // add a blank entry as the first entry in store
-        if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL(cell->shared_store), NULL) == 0)
-        {
-            gtk_list_store_append (cell->shared_store, &iter);
-            gtk_list_store_set (cell->shared_store, &iter, 0, "", -1);
-            g_hash_table_insert (box->item_hash, g_strdup (""), NULL);
-        }
-
-        /* check if menustr has already been added. */
-        if (g_hash_table_lookup_extended (box->item_hash, menustr, NULL, NULL))
-            return;
-
-        g_hash_table_insert (box->item_hash, g_strdup (menustr), NULL);
-
-        gchar *menustr_temp = g_strdup (menustr);
-        gnc_utf8_strip_invalid_and_controls (menustr_temp);
-        gtk_list_store_append (cell->shared_store, &iter);
-        gtk_list_store_set (cell->shared_store, &iter, 0, menustr_temp, -1);
-        g_free (menustr_temp);
     }
 
     /* If we're going to be using a pre-fab quickfill,
@@ -713,8 +639,7 @@ gnc_combo_cell_modify_verify (BasicCell* _cell,
             return;
         }
 
-        if (!box->use_type_ahead_only) // Do we only want to use type-ahead
-            match_str = quickfill_match (box->qf, newval);
+        match_str = quickfill_match (box->qf, newval);
 
         if (match_str != NULL) // Do we have a quickfill match
         {
@@ -935,19 +860,6 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     *end_selection = -1;
 
     return TRUE;
-}
-
-void
-gnc_combo_cell_use_type_ahead_only (ComboCell* cell)
-{
-    PopBox* box;
-
-    if (cell == NULL) return;
-
-    box = cell->cell.gui_private;
-
-    box->use_type_ahead_only = TRUE;
-
 }
 
 static void

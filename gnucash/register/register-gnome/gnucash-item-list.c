@@ -98,22 +98,14 @@ gnc_item_list_append (GncItemList* item_list, const char* string)
 
 
 void
-gnc_item_list_set_sort_enabled (GncItemList* item_list, gboolean enabled)
+gnc_item_list_set_sort_column (GncItemList* item_list, gint column_id)
 {
-    if (enabled)
-    {
-        gtk_tree_sortable_set_sort_column_id
+    g_return_if_fail (IS_GNC_ITEM_LIST (item_list));
+
+    gtk_tree_sortable_set_sort_column_id
         (GTK_TREE_SORTABLE (item_list->list_store),
-         0,
+         column_id,
          GTK_SORT_ASCENDING);
-    }
-    else
-    {
-        gtk_tree_sortable_set_sort_column_id
-        (GTK_TREE_SORTABLE (item_list->list_store),
-         GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID,
-         GTK_SORT_ASCENDING);
-    }
 }
 
 
@@ -203,6 +195,7 @@ gnc_item_list_select (GncItemList* item_list, const char* string)
     g_free (to_find_data);
 }
 
+
 char*
 gnc_item_list_get_selection (GncItemList *item_list)
 {
@@ -275,6 +268,29 @@ gboolean
 gnc_item_list_using_temp (GncItemList *item_list)
 {
     return item_list && item_list->temp_store;
+}
+
+GtkListStore *
+gnc_item_list_disconnect_store (GncItemList *item_list)
+{
+    GtkListStore *store;
+
+    g_return_val_if_fail (item_list != NULL, NULL);
+
+    store = GTK_LIST_STORE(gtk_tree_view_get_model (item_list->tree_view));
+
+    gtk_tree_view_set_model (item_list->tree_view, NULL);
+
+    return store;
+}
+
+void
+gnc_item_list_connect_store (GncItemList *item_list, GtkListStore *list_store)
+{
+    g_return_if_fail (item_list != 0);
+
+    gtk_tree_view_set_model (item_list->tree_view,
+                             GTK_TREE_MODEL (list_store));
 }
 
 static void
@@ -493,9 +509,9 @@ gnc_item_list_new (GtkListStore* list_store)
     g_object_unref (list_store);
 
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW (tree_view), FALSE);
-    gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (
-            tree_view)),
-                                 GTK_SELECTION_BROWSE);
+    gtk_tree_selection_set_mode (
+        gtk_tree_view_get_selection (GTK_TREE_VIEW (tree_view)),
+                                     GTK_SELECTION_BROWSE);
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (list_store),
                                           0, GTK_SORT_ASCENDING);
 
