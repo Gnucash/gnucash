@@ -50,12 +50,6 @@ struct _GncRecurrence
     Recurrence recurrence;
 };
 
-typedef struct
-{
-    GtkBoxClass parent_class;
-    void (*changed) (GncRecurrence *gr);
-} GncRecurrenceClass;
-
 typedef enum
 {
     GNCRECURRENCE_CHANGED,
@@ -353,7 +347,7 @@ gnc_recurrence_class_init( GncRecurrenceClass *klass )
     g_signal_new ("changed",
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_FIRST,
-		  G_STRUCT_OFFSET (GncRecurrenceClass, changed),
+		  0,
 		  NULL,
 		  NULL,
 		  g_cclosure_marshal_VOID__VOID,

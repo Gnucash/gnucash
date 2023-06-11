@@ -33,16 +33,8 @@
 #include "Recurrence.h"
 
 #define GNC_TYPE_RECURRENCE	  (gnc_recurrence_get_type())
-#define GNC_RECURRENCE(obj)	  G_TYPE_CHECK_INSTANCE_CAST  \
-   (obj, GNC_TYPE_RECURRENCE, GncRecurrence)
-#define GNC_RECURRENCE_CLASS(klass) G_TYPE_CHECK_CLASS_CAST \
-   (klass, GNC_TYPE_RECURRENCE, GncRecurrence)
-#define GNC_IS_RECURRENCE(obj)     G_TYPE_CHECK_INSTANCE_TYPE \
-   (obj, GNC_TYPE_RECURRENCE)
+G_DECLARE_FINAL_TYPE (GncRecurrence, gnc_recurrence, GNC, RECURRENCE, GtkBox)
 
-typedef struct _GncRecurrence GncRecurrence;
-
-GType gnc_recurrence_get_type(void);
 GtkWidget * gnc_recurrence_new(void);
 
 void gnc_recurrence_set(GncRecurrence *gr, const Recurrence *r);
