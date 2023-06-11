@@ -1926,39 +1926,48 @@ stock_assistant_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
     case PAGE_STOCK_AMOUNT:
         view->m_stock_amount_page.prepare (model->m_input_new_balance,
                                            model->get_stock_balance_str());
-
-        info->model->m_stock_entry->set_amount(view->m_stock_amount_page.get_stock_amount(), model->m_errors);
+        if (!gnc_numeric_check(view->m_stock_amount_page.get_stock_amount()))
+            info->model->m_stock_entry->set_amount(view->m_stock_amount_page.get_stock_amount(),
+                                                   model->m_errors);
         view->m_stock_amount_page.set_stock_amount(info->model->get_new_amount_str());
         view->m_stock_amount_page.m_amount.set_focus();
         break;
     case PAGE_STOCK_VALUE:
         model->m_stock_entry->m_memo = view->m_stock_value_page.get_memo();
-        model->m_stock_entry->set_value(view->m_stock_value_page.m_value.get(), "stock", model->m_errors);
+        if (!gnc_numeric_check(view->m_stock_value_page.m_value.get()))
+            model->m_stock_entry->set_value(view->m_stock_value_page.m_value.get(),
+                                            "stock", model->m_errors);
         view->m_stock_value_page.set_price(model->calculate_price());
         view->m_stock_value_page.m_value.set_focus();
         break;
     case PAGE_CASH:
         model->m_cash_entry->m_memo = view->m_cash_page.get_memo();
-        model->m_cash_entry->set_value (view->m_cash_page.m_value.get(), "cash", model->m_errors);
+        if (!gnc_numeric_check(view->m_cash_page.m_value.get()))
+            model->m_cash_entry->set_value (view->m_cash_page.m_value.get(),
+                                            "cash", model->m_errors);
         model->m_cash_entry->m_account = view->m_cash_page.m_account.get();
         view->m_cash_page.m_value.set_focus();
         break;
     case PAGE_FEES:
         view->m_fees_page.set_capitalize_fees (info);
         model->m_fees_entry->m_memo = view->m_fees_page.get_memo();
-        model->m_fees_entry->set_value (view->m_fees_page.m_value.get(), "fees", model->m_errors);
+        if (!gnc_numeric_check(view->m_fees_page.m_value.get()))
+            model->m_fees_entry->set_value (view->m_fees_page.m_value.get(), "fees",
+                                            model->m_errors);
         model->m_fees_entry->m_account = view->m_fees_page.m_account.get();
         view->m_fees_page.m_value.set_focus();
         break;
     case PAGE_DIVIDEND:
         model->m_dividend_entry->m_memo = view->m_dividend_page.get_memo();
-        model->m_dividend_entry->set_value (view->m_dividend_page.m_value.get(), "dividend", model->m_errors);
+        if (!gnc_numeric_check(view->m_dividend_page.m_value.get()))
+            model->m_dividend_entry->set_value (view->m_dividend_page.m_value.get(), "dividend", model->m_errors);
         model->m_dividend_entry->m_account = view->m_dividend_page.m_account.get();
         view->m_dividend_page.m_value.set_focus();
         break;
     case PAGE_CAPGAINS:
         model->m_capgains_entry->m_memo = view->m_capgain_page.get_memo();
-        model->m_capgains_entry->set_value(view->m_capgain_page.m_value.get(), "capgains", model->m_errors);
+        if (gnc_numeric_check(view->m_capgain_page.m_value.get()))
+            model->m_capgains_entry->set_value(view->m_capgain_page.m_value.get(), "capgains", model->m_errors);
         model->m_capgains_entry->m_account = view->m_capgain_page.m_account.get();
         view->m_capgain_page.m_value.set_focus();
         break;
