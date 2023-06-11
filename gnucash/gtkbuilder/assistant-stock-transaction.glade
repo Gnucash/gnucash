@@ -9,9 +9,9 @@
     <property name="title" translatable="yes">Stock Transaction Assistant</property>
     <property name="window-position">center</property>
     <property name="default-width">500</property>
-    <signal name="cancel" handler="stock_assistant_cancel" swapped="no"/>
-    <signal name="close" handler="stock_assistant_finish" swapped="no"/>
-    <signal name="prepare" handler="stock_assistant_prepare" swapped="no"/>
+    <signal name="cancel" handler="stock_assistant_cancel_cb" swapped="no"/>
+    <signal name="close" handler="stock_assistant_finish_cb" swapped="no"/>
+    <signal name="prepare" handler="stock_assistant_prepare_cb" swapped="no"/>
     <child>
       <object class="GtkLabel" id="intro_page_label">
         <property name="visible">True</property>

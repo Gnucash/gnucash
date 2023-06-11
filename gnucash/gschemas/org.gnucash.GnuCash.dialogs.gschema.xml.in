@@ -15,6 +15,7 @@
     <child name="open-save" schema="org.gnucash.GnuCash.dialogs.open-save"/>
     <child name="report" schema="org.gnucash.GnuCash.dialogs.report"/>
     <child name="report-saved-configs" schema="org.gnucash.GnuCash.dialogs.report-saved-configs"/>
+    <child name="stock-assistant" schema="org.gnucash.GnuCash.dialogs.stock-assistant"/>
     <child name="lot-viewer" schema="org.gnucash.GnuCash.dialogs.lot-viewer"/>
     <child name="new-user" schema="org.gnucash.GnuCash.dialogs.new-user"/>
     <child name="new-hierarchy" schema="org.gnucash.GnuCash.dialogs.new-hierarchy"/>
@@ -169,6 +170,16 @@
   </schema>
 
   <schema id="org.gnucash.GnuCash.dialogs.report-saved-configs" path="/org/gnucash/GnuCash/dialogs/report-saved-configs/">
+    <key name="last-geometry" type="(iiii)">
+      <default>(-1,-1,-1,-1)</default>
+      <summary>Last window position and size</summary>
+      <description>This setting describes the size and position of the window when it was last closed.
+        The numbers are the X and Y coordinates of the top left corner of the window
+        followed by the width and height of the window.</description>
+    </key>
+  </schema>
+
+  <schema id="org.gnucash.GnuCash.dialogs.stock-assistant" path="/org/gnucash/GnuCash/dialogs/stock-assistant/">
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
