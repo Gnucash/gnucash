@@ -518,7 +518,7 @@ gnc_period_select_class_init (GncPeriodSelectClass *klass)
     signals[CHANGED] = g_signal_new("changed",
                                     G_OBJECT_CLASS_TYPE (klass),
                                     G_SIGNAL_RUN_FIRST,
-                                    G_STRUCT_OFFSET(GncPeriodSelectClass, changed),
+                                    0,
                                     NULL, NULL,
                                     g_cclosure_marshal_VOID__VOID,
                                     G_TYPE_NONE,
