@@ -45,11 +45,8 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_TREE_MODEL_COMMODITY            (gnc_tree_model_commodity_get_type ())
-#define GNC_TREE_MODEL_COMMODITY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_MODEL_COMMODITY, GncTreeModelCommodity))
-#define GNC_TREE_MODEL_COMMODITY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_TREE_MODEL_COMMODITY, GncTreeModelCommodityClass))
-#define GNC_IS_TREE_MODEL_COMMODITY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_MODEL_COMMODITY))
-#define GNC_IS_TREE_MODEL_COMMODITY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_MODEL_COMMODITY))
-#define GNC_TREE_MODEL_COMMODITY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL_COMMODITY, GncTreeModelCommodityClass))
+G_DECLARE_FINAL_TYPE (GncTreeModelCommodity, gnc_tree_model_commodity, GNC, TREE_MODEL_COMMODITY, GncTreeModel)
+
 #define GNC_TREE_MODEL_COMMODITY_NAME            "GncTreeModelCommodity"
 
 
@@ -78,26 +75,12 @@ typedef enum
 /* typedefs & structures */
 
 /** The instance data structure for a commodity tree model. */
-typedef struct
+struct _GncTreeModelCommodity
 {
     GncTreeModel gnc_tree_model;	/**< The parent object data. */
     int stamp;			/**< The state of the model. Any state
 					 *   change increments this number. */
-} GncTreeModelCommodity;
-
-
-/** The class data structure for a commodity tree model. */
-typedef struct
-{
-    GncTreeModelClass gnc_tree_model;/**< The parent object data. */
-} GncTreeModelCommodityClass;
-
-
-/** Get the type of a commodity tree plugin.
- *
- *  @return A GType.
- */
-GType gnc_tree_model_commodity_get_type (void);
+};
 
 
 /** @name Account Tree Model Constructors
