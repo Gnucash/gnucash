@@ -99,7 +99,7 @@ gnc_date_format_class_init (GNCDateFormatClass *klass)
         g_signal_new ("format_changed",
                       G_OBJECT_CLASS_TYPE (gobject_class),
                       G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET (GNCDateFormatClass, format_changed),
+                      0,
                       NULL,
                       NULL,
                       g_cclosure_marshal_VOID__VOID,

@@ -36,24 +36,14 @@ extern "C" {
 #endif
 
 #define GNC_TYPE_DATE_FORMAT          (gnc_date_format_get_type ())
-#define GNC_DATE_FORMAT(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_date_format_get_type(), GNCDateFormat)
-#define GNC_DATE_FORMAT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_date_format_get_type(), GNCDateFormatClass)
-#define GNC_IS_DATE_FORMAT(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_date_format_get_type ())
+G_DECLARE_FINAL_TYPE (GNCDateFormat, gnc_date_format, GNC, DATE_FORMAT, GtkBox)
 
 /**
  **/
-typedef struct
+struct _GNCDateFormat
 {
     GtkBox hbox;
-} GNCDateFormat;
-
-typedef struct
-{
-    GtkBoxClass hbox_class;
-    void (*format_changed) (GNCDateFormat *gdf);
-} GNCDateFormatClass;
-
-GType     gnc_date_format_get_type        (void);
+};
 
 GtkWidget *gnc_date_format_new            (void);
 GtkWidget *gnc_date_format_new_without_label (void);
