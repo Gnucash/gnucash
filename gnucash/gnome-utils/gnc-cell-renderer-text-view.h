@@ -26,15 +26,7 @@
 #include <gtk/gtk.h>
 
 #define GNC_TYPE_CELL_RENDERER_TEXT_VIEW            (gnc_cell_renderer_text_view_get_type ())
-#define GNC_CELL_RENDERER_TEXT_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_CELL_RENDERER_TEXT_VIEW, GncCellRendererTextView))
-#define GNC_CELL_RENDERER_TEXT_VIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_CELL_RENDERER_TEXT_VIEW, GncCellRendererTextViewClass))
-#define GNC_IS_CELL_RENDERER_TEXT_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_CELL_RENDERER_TEXT_VIEW))
-#define GNC_IS_CELL_RENDERER_TEXT_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), GNC_TYPE_CELL_RENDERER_TEXT_VIEW))
-#define GNC_CELL_RENDERER_TEXT_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_CELL_RENDERER_TEXT_VIEW, GncCellRendererTextViewClass))
-
-
-typedef struct _GncCellRendererTextView      GncCellRendererTextView;
-typedef struct _GncCellRendererTextViewClass GncCellRendererTextViewClass;
+G_DECLARE_FINAL_TYPE (GncCellRendererTextView, gnc_cell_renderer_text_view, GNC, CELL_RENDERER_TEXT_VIEW, GtkCellRendererText)
 
 struct _GncCellRendererTextView
 {
@@ -43,13 +35,6 @@ struct _GncCellRendererTextView
     /* The editable entry. */
     GtkWidget *editable;
 };
-
-struct _GncCellRendererTextViewClass
-{
-    GtkCellRendererTextClass parent_class;
-};
-
-GType            gnc_cell_renderer_text_view_get_type (void) G_GNUC_CONST;
 
 GtkCellRenderer *gnc_cell_renderer_text_view_new (void);
 
