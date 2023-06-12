@@ -32,12 +32,7 @@
 G_BEGIN_DECLS
 
 #define GNC_TYPE_DENSE_CAL          (gnc_dense_cal_get_type ())
-#define GNC_DENSE_CAL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, gnc_dense_cal_get_type (), GncDenseCal)
-#define GNC_DENSE_CAL_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, gnc_dense_cal_get_type (), GncDenseCalClass)
-#define GNC_IS_DENSE_CAL(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, gnc_dense_cal_get_type ())
-
-typedef struct _GncDenseCal        GncDenseCal;
-typedef struct _GncDenseCalClass   GncDenseCalClass;
+G_DECLARE_FINAL_TYPE (GncDenseCal, gnc_dense_cal, GNC, DENSE_CAL, GtkBox)
 
 typedef struct _gdc_month_coords
 {
@@ -101,11 +96,6 @@ struct _GncDenseCal
     int disposed; /* private */
 };
 
-struct _GncDenseCalClass
-{
-    GtkBoxClass parent_class;
-};
-
 typedef struct _gdc_mark_data
 {
     gchar *name;
@@ -120,8 +110,6 @@ typedef struct _gdc_mark_data
 GtkWidget*     gnc_dense_cal_new                    (GtkWindow *parent);
 GtkWidget*     gnc_dense_cal_new_with_model         (GtkWindow *parent,
                                                      GncDenseCalModel *model);
-GType          gnc_dense_cal_get_type               (void);
-
 void gnc_dense_cal_set_model(GncDenseCal *cal, GncDenseCalModel *model);
 
 void gnc_dense_cal_set_month(GncDenseCal *dcal, GDateMonth mon);
