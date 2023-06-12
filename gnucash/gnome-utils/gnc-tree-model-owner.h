@@ -43,11 +43,8 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_TREE_MODEL_OWNER            (gnc_tree_model_owner_get_type ())
-#define GNC_TREE_MODEL_OWNER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_MODEL_OWNER, GncTreeModelOwner))
-#define GNC_TREE_MODEL_OWNER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_TREE_MODEL_OWNER, GncTreeModelOwnerClass))
-#define GNC_IS_TREE_MODEL_OWNER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_MODEL_OWNER))
-#define GNC_IS_TREE_MODEL_OWNER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_MODEL_OWNER))
-#define GNC_TREE_MODEL_OWNER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL_OWNER, GncTreeModelOwnerClass))
+G_DECLARE_FINAL_TYPE (GncTreeModelOwner, gnc_tree_model_owner, GNC, TREE_MODEL_OWNER, GncTreeModel)
+
 #define GNC_TREE_MODEL_OWNER_NAME            "GncTreeModelOwner"
 
 
@@ -81,28 +78,12 @@ typedef enum
 /* typedefs & structures */
 
 /** The instance data structure for an owner tree model. */
-typedef struct
+struct _GncTreeModelOwner
 {
     GncTreeModel gnc_tree_model;    /**< The parent object data. */
     int stamp;                      /**< The state of the model. Any state
                                      *   change increments this number. */
-} GncTreeModelOwner;
-
-
-/** The class data structure for an owner tree model. */
-typedef struct
-{
-    GncTreeModelClass gnc_tree_model;/**< The parent object data. */
-} GncTreeModelOwnerClass;
-
-
-
-/** Get the type of an owner tree plugin.
- *
- *  @return A GType.
- */
-GType gnc_tree_model_owner_get_type (void);
-
+};
 
 /** @name Owner Tree Model Constructors
  @{ */
