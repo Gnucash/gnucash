@@ -53,8 +53,6 @@
 #include "gnc-commodity.h"
 #include "qofinstance-p.h"
 #include "gnc-session.h"
-#include "qofquery.h"
-#include "Query.h"
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.scrub"
@@ -91,18 +89,22 @@ gnc_get_ongoing_scrub (void)
 
 /* ================================================================ */
 
+static void add_transactions (const Account *account, GHashTable **ht)
+{
+    for (GList *m = xaccAccountGetSplitList (account); m; m = g_list_next (m))
+        g_hash_table_add (*ht, xaccSplitGetParent (m->data));
+}
+
 static GList*
 get_all_transactions (Account *account, bool descendants)
 {
-    GList *accounts = descendants ? gnc_account_get_descendants (account) : NULL;
-    accounts = g_list_prepend (accounts, account);
-    QofQuery *q = qof_query_create_for (GNC_ID_TRANS);
-    QofBook *book = qof_session_get_book (gnc_get_current_session ());
-    qof_query_set_book (q, book);
-    xaccQueryAddAccountMatch (q, accounts, QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
-    GList *transactions = g_list_copy (qof_query_run (q));
-    qof_query_destroy (q);
-    return transactions;
+    GHashTable *ht = g_hash_table_new (g_direct_hash, g_direct_equal);
+    add_transactions (account, &ht);
+    if (descendants)
+        gnc_account_foreach_descendant (account, (AccountCb)add_transactions, &ht);
+    GList *rv = g_hash_table_get_keys (ht);
+    g_hash_table_destroy (ht);
+    return rv;
 }
 
 /* ================================================================ */
