@@ -49,6 +49,8 @@ static void gnc_plugin_customer_import_cmd_test (GSimpleAction *simple, GVariant
 
 static GActionEntry gnc_plugin_actions [] =
 {
+    // should be "CustomerImportAction", but "customer_importAction"
+    // is already used externally in accelerator maps
     { "customer_importAction", gnc_plugin_customer_import_cmd_test, NULL, NULL, NULL },
 };
 /** The number of actions provided by this plugin. */
@@ -65,16 +67,16 @@ static const gchar *gnc_plugin_load_ui_items [] =
  *                   Object Implementation                  *
  ************************************************************/
 
-G_DEFINE_TYPE(GncPlugincustomer_import, gnc_plugin_customer_import, GNC_TYPE_PLUGIN)
+G_DEFINE_TYPE(GncPluginCustomerImport, gnc_plugin_customer_import, GNC_TYPE_PLUGIN)
 
 GncPlugin *
 gnc_plugin_customer_import_new (void)
 {
-    return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_customer_import, (gchar*) NULL));
+    return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_CUSTOMER_IMPORT, (gchar*) NULL));
 }
 
 static void
-gnc_plugin_customer_import_class_init (GncPlugincustomer_importClass *klass)
+gnc_plugin_customer_import_class_init (GncPluginCustomerImportClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS(klass);
@@ -82,7 +84,7 @@ gnc_plugin_customer_import_class_init (GncPlugincustomer_importClass *klass)
     object_class->finalize = gnc_plugin_customer_import_finalize;
 
     /* plugin info */
-    plugin_class->plugin_name  = GNC_PLUGIN_customer_import_NAME;
+    plugin_class->plugin_name  = GNC_PLUGIN_CUSTOMER_IMPORT_NAME;
 
     /* widget addition/removal */
     plugin_class->actions_name    = PLUGIN_ACTIONS_NAME;
@@ -93,7 +95,7 @@ gnc_plugin_customer_import_class_init (GncPlugincustomer_importClass *klass)
 }
 
 static void
-gnc_plugin_customer_import_init (GncPlugincustomer_import *plugin)
+gnc_plugin_customer_import_init (GncPluginCustomerImport *plugin)
 {
 }
 
