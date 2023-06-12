@@ -51,6 +51,8 @@ static void gnc_plugin_bi_import_cmd_test (GSimpleAction *simple, GVariant *para
 
 static GActionEntry gnc_plugin_actions [] =
 {
+    // should be "BiImportAction", but "bi_importAction" is already
+    // used externally in accelerator maps
     { "bi_importAction", gnc_plugin_bi_import_cmd_test, NULL, NULL, NULL },
 };
 /** The number of actions provided by this plugin. */
@@ -67,7 +69,7 @@ static const gchar *gnc_plugin_load_ui_items [] =
  *                   Object Implementation                  *
  ************************************************************/
 
-G_DEFINE_TYPE(GncPluginbi_import, gnc_plugin_bi_import, GNC_TYPE_PLUGIN)
+G_DEFINE_TYPE(GncPluginBiImport, gnc_plugin_bi_import, GNC_TYPE_PLUGIN)
 
 GncPlugin *
 gnc_plugin_bi_import_new (void)
@@ -76,7 +78,7 @@ gnc_plugin_bi_import_new (void)
 }
 
 static void
-gnc_plugin_bi_import_class_init (GncPluginbi_importClass *klass)
+gnc_plugin_bi_import_class_init (GncPluginBiImportClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS(klass);
@@ -95,7 +97,7 @@ gnc_plugin_bi_import_class_init (GncPluginbi_importClass *klass)
 }
 
 static void
-gnc_plugin_bi_import_init (GncPluginbi_import *plugin)
+gnc_plugin_bi_import_init (GncPluginBiImport *plugin)
 {
 }
 

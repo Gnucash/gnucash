@@ -38,30 +38,17 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_BI_IMPORT            (gnc_plugin_bi_import_get_type())
-#define GNC_PLUGIN_BI_IMPORT(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GNC_TYPE_PLUGIN_BI_IMPORT, GncPluginbi_import))
-#define GNC_PLUGIN_BI_IMPORT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),  GNC_TYPE_PLUGIN_BI_IMPORT, GncPluginbi_importClass))
-#define GNC_IS_PLUGIN_BI_IMPORT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GNC_TYPE_PLUGIN_BI_IMPORT))
-#define GNC_IS_PLUGIN_BI_IMPORT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  GNC_TYPE_PLUGIN_BI_IMPORT))
-#define GNC_PLUGIN_BI_IMPORT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  GNC_TYPE_PLUGIN_BI_IMPORT, GncPluginbi_importClass))
+G_DECLARE_FINAL_TYPE (GncPluginBiImport, gnc_plugin_bi_import, GNC, PLUGIN_BI_IMPORT, GncPlugin)
 
 #define GNC_PLUGIN_BI_IMPORT_NAME "gnc-plugin-bi-import"
 
 /* typedefs & structures */
-typedef struct
+struct _GncPluginBiImport
 {
     GncPlugin gnc_plugin;
-} GncPluginbi_import;
-
-typedef struct
-{
-    GncPluginClass gnc_plugin;
-} GncPluginbi_importClass;
+};
 
 /* function prototypes */
-/**
- * @return The glib runtime type of an bi_import plugin page
- **/
-GType gnc_plugin_bi_import_get_type (void);
 
 /**
  * @return A new GncPluginbi_import object
