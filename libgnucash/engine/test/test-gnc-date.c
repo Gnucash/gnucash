@@ -344,7 +344,7 @@ test_gnc_time (void)
     time64 secs1, secs2;
     secs1 = gnc_time (&secs2);
     g_assert_cmpint (secs1, ==, secs2);
-    g_assert_cmpint (secs1, ==, time(0));
+    g_assert_cmpint (secs1, ==, gnc_time(NULL));
 }
 
 /* gnc_difftime and gnc_tm_free are just too simple to bother testing. */

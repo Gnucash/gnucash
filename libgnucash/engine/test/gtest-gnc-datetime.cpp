@@ -23,6 +23,7 @@
 \********************************************************************/
 
 #include "../gnc-datetime.hpp"
+#include "../gnc-date.h"
 #include <gtest/gtest.h>
 
 /* Backdoor to enable unittests to temporarily override the timezone: */
@@ -253,7 +254,7 @@ TEST(gnc_date_operators, test_move_assignment)
 TEST(gnc_datetime_constructors, test_default_constructor)
 {
     GncDateTime atime;
-    long time_now = time(nullptr);
+    time64 time_now = gnc_time(nullptr);
     EXPECT_EQ(static_cast<time64>(atime), static_cast<time64>(time_now));
 }
 

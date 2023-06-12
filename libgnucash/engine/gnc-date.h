@@ -29,10 +29,7 @@
     Utility functions to handle date and time (adjusting, getting
     the current date, printing the date and time, etc.)
 
-    Overall, this file is quite a mess.  Note, however, that other
-    applications, besides just GnuCash, use this file.  In particular,
-    GnoTime (gttr.sourcefore.net) uses this file, and this file is
-    formally a part of QOF (qof.sourceforge.net).
+    Overall, this file is quite a mess.
 
     An important note about time-keeping:  The general goal of any
     program that works with numeric time values SHOULD BE to always
@@ -80,9 +77,12 @@ extern "C"
 
 
 /**
- * Many systems, including Microsoft Windows and BSD-derived Unixes
- * like Darwin, are retaining the int-32 typedef for time_t. Since
- * this stops working in 2038, we define our own:
+ * Most systems that are currently maintained, including Microsoft Windows,
+ * BSD-derived Unixes and Linux, support 64-bit time_t even on 32-bit
+ * architectures. See https://en.wikipedia.org/wiki/Year_2038_problem
+ *
+ * For practical reasons -- as not all have made the transition to 64-bit --
+ * we define our own 64-bit time type.
  */
 typedef gint64 time64;
 /* A bit of a hack to create a type separate from the alias of int64_t so that
@@ -165,7 +165,7 @@ typedef enum
  * These functions use boost::date_time internally.
  */
 /** \brief fill out a time struct from a 64-bit time value.
- *  \param secs: Seconds since 00:00:01 UTC 01 January 1970 (negative values
+ *  \param secs: Seconds since 00:00:00 UTC 01 January 1970 (negative values
  * are seconds before that moment).
  *  \return A struct tm*, allocated on the heap. Must be freed with gnc_tm_free().
  *  The time is adjusted for the current local time zone.
@@ -173,7 +173,7 @@ typedef enum
 struct tm* gnc_localtime (const time64 *secs);
 
 /** \brief fill out a time struct from a 64-bit time value adjusted for the current time zone.
- *  \param secs: Seconds since 00:00:01 UTC 01 January 1970 (negative values
+ *  \param secs: Seconds since 00:00:00 UTC 01 January 1970 (negative values
  * are seconds before that moment)
  *  \param time: A struct tm* for the function to fill.
  *  The time is adjusted for the current local time zone.
@@ -181,7 +181,7 @@ struct tm* gnc_localtime (const time64 *secs);
 struct tm* gnc_localtime_r (const time64 *secs, struct tm* time);
 
 /** \brief fill out a time struct from a 64-bit time value
- *  \param secs: Seconds since 00:00:01 UTC 01 January 1970 (negative values
+ *  \param secs: Seconds since 00:00:00 UTC 01 January 1970 (negative values
  * are seconds before that moment)
  *  \return A struct tm*, allocated on the heap. Must be freed with gnc_tm_free()
  *  The time is UTC.
@@ -196,7 +196,7 @@ gint gnc_start_of_week (void);
 /** \brief calculate seconds from the epoch given a time struct
  *  \param time: A struct tm* containing the date-time information.
  *  The time is understood to be in the current local time zone.
- *  \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
+ *  \return Seconds since 00:00:00 UTC 01 January 1970 (negative values
  * are seconds before that moment).
  */
 time64 gnc_mktime (struct tm* time);
@@ -204,13 +204,13 @@ time64 gnc_mktime (struct tm* time);
 /** \brief calculate seconds from the epoch given a time struct
  *  \param time: A struct tm* containing the date-time information
  *  The time is understood to be utc.
- *  \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
+ *  \return Seconds since 00:00:00 UTC 01 January 1970 (negative values
  * are seconds before that moment).
  */
 time64 gnc_timegm (struct tm* time);
 
 /** \brief Return a string representation of a date from a 64-bit time value
- *  \param secs: Seconds since 00:00:01 UTC 01 January 1970 (negative values
+ *  \param secs: Seconds since 00:00:00 UTC 01 January 1970 (negative values
  * are seconds before that moment)
  * \return A string, which must be freed with g_free(), representing the date
  * in the following format:
@@ -219,19 +219,19 @@ time64 gnc_timegm (struct tm* time);
  */
 gchar* gnc_ctime (const time64 *secs);
 
-/** \brief get the current local time
+/** \brief get the current time
  *  \param A time64* which, if not NULL, will be filled in with the same
  * value as is returned.
- * \return Seconds since 00:00:01 UTC 01 January 1970 (negative values
+ * \return Seconds since 00:00:00 UTC 01 January 1970 (negative values
  * are seconds before that moment)
  */
 time64 gnc_time (time64 *tbuf);
 
 /** \brief Find the difference in seconds between two time values
  *  \param secs1: The first time value, in Seconds since
- * 00:00:01 UTC 01 January 1970 (negative values are seconds before that moment)
+ * 00:00:00 UTC 01 January 1970 (negative values are seconds before that moment)
  *  \param secs2: The second time value, in Seconds since
- * 00:00:01 UTC 01 January 1970 (negative values are seconds before that moment)
+ * 00:00:00 UTC 01 January 1970 (negative values are seconds before that moment)
  *  \return The difference in seconds between secs1 and secs2. If secs2 is
  * later than secs1 the value will be negative.
  */

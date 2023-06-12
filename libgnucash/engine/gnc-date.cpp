@@ -1329,19 +1329,19 @@ gnc_time64_get_day_end (time64 time_val)
 void
 gnc_tm_get_today_start (struct tm *tm)
 {
-    gnc_tm_get_day_start(tm, time(NULL));
+    gnc_tm_get_day_start(tm, gnc_time(nullptr));
 }
 
 void
 gnc_tm_get_today_neutral (struct tm *tm)
 {
-    gnc_tm_get_day_neutral(tm, time(NULL));
+    gnc_tm_get_day_neutral(tm, gnc_time(nullptr));
 }
 
 void
 gnc_tm_get_today_end (struct tm *tm)
 {
-    gnc_tm_get_day_end(tm, time(NULL));
+    gnc_tm_get_day_end(tm, gnc_time(nullptr));
 }
 
 time64
@@ -1349,7 +1349,7 @@ gnc_time64_get_today_start (void)
 {
     struct tm tm;
 
-    gnc_tm_get_day_start(&tm, time(NULL));
+    gnc_tm_get_day_start(&tm, gnc_time(nullptr));
     return gnc_mktime(&tm);
 }
 
@@ -1358,7 +1358,7 @@ gnc_time64_get_today_end (void)
 {
     struct tm tm;
 
-    gnc_tm_get_day_end(&tm, time(NULL));
+    gnc_tm_get_day_end(&tm, gnc_time(nullptr));
     return gnc_mktime(&tm);
 }
 
