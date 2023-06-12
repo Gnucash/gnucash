@@ -206,7 +206,7 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
         g_signal_new ("page_changed",
                       G_OBJECT_CLASS_TYPE (object_class),
                       G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET (GncEmbeddedWindowClass, page_changed),
+                      0,
                       NULL, NULL,
                       g_cclosure_marshal_VOID__OBJECT,
                       G_TYPE_NONE, 1,
