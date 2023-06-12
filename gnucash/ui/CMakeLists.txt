@@ -1,5 +1,4 @@
 set (ui_SOURCES
-      osx_accel_map
       accelerator-map
       accelerator-map-osx)
 
