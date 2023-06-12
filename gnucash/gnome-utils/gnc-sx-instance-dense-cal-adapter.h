@@ -27,17 +27,9 @@
 #include <glib.h>
 #include "gnc-sx-instance-model.h"
 
-typedef struct _GncSxInstanceDenseCalAdapterClass GncSxInstanceDenseCalAdapterClass;
-typedef struct _GncSxInstanceDenseCalAdapter GncSxInstanceDenseCalAdapter;
-
 #define GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER	          (gnc_sx_instance_dense_cal_adapter_get_type ())
-#define GNC_SX_INSTANCE_DENSE_CAL_ADAPTER(obj)	          (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER, GncSxInstanceDenseCalAdapter))
-#define GNC_SX_INSTANCE_DENSE_CAL_ADAPTER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER, GncSxInstanceDenseCalAdapterClass))
-#define GNC_IS_SX_INSTANCE_DENSE_CAL_ADAPTER(obj)	  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER))
-#define GNC_IS_SX_INSTANCE_DENSE_CAL_ADAPTER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER))
-#define GNC_SX_INSTANCE_DENSE_CAL_ADAPTER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER, GncSxInstanceDenseCalAdapterClass))
+G_DECLARE_FINAL_TYPE (GncSxInstanceDenseCalAdapter, gnc_sx_instance_dense_cal_adapter, GNC, SX_INSTANCE_DENSE_CAL_ADAPTER, GObject)
 
 GncSxInstanceDenseCalAdapter* gnc_sx_instance_dense_cal_adapter_new(GncSxInstanceModel *instances);
-GType gnc_sx_instance_dense_cal_adapter_get_type(void);
 
 #endif // _GNC_SX_INSTANCE_DENSE_CAL_ADAPTER_H
