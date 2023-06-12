@@ -1782,6 +1782,17 @@ gnc_plugin_page_account_tree_cmd_reconcile (GSimpleAction *simple,
     account = gnc_plugin_page_account_tree_get_current_account (page);
     g_return_if_fail (account != NULL);
 
+    /* To prevent mistakes involving saving an edited transaction after
+     * finishing a reconciliation (reverting the reconcile state), we could look
+     * at all open registers and determine if any of them have a transaction
+     * being edited that involves the account to be reconciled.
+     *
+     * However, the reconcile window isn't modal so it's still possible to start
+     * editing a transaction after opening it. Assume the user knows what
+     * they're doing if they start a reconciliation from the account tree and
+     * don't attempt to stop them.
+     */
+
     window = GNC_PLUGIN_PAGE (page)->window;
     recnData = recnWindow (window, account);
     gnc_ui_reconcile_window_raise (recnData);

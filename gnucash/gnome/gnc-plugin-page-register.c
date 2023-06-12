@@ -4327,6 +4327,17 @@ gnc_plugin_page_register_cmd_reconcile (GSimpleAction *simple,
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
+    /* To prevent mistakes involving saving an edited transaction after
+     * finishing a reconciliation (reverting the reconcile state), require
+     * pending activity on the current register to be finished.
+     *
+     * The reconcile window isn't modal so it's still possible to start editing
+     * a transaction after opening it, but at that point the user should know
+     * what they're doing is unsafe.
+     */
+    if (!gnc_plugin_page_register_finish_pending (GNC_PLUGIN_PAGE (page)))
+        return;
+
     account = gnc_plugin_page_register_get_account (page);
 
     window = gnc_window_get_gtk_window (GNC_WINDOW (GNC_PLUGIN_PAGE (
