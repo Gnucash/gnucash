@@ -45,11 +45,8 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_TREE_MODEL_PRICE            (gnc_tree_model_price_get_type ())
-#define GNC_TREE_MODEL_PRICE(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_MODEL_PRICE, GncTreeModelPrice))
-#define GNC_TREE_MODEL_PRICE_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_TREE_MODEL_PRICE, GncTreeModelPriceClass))
-#define GNC_IS_TREE_MODEL_PRICE(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_MODEL_PRICE))
-#define GNC_IS_TREE_MODEL_PRICE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_MODEL_PRICE))
-#define GNC_TREE_MODEL_PRICE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL_PRICE, GncTreeModelPriceClass))
+G_DECLARE_FINAL_TYPE (GncTreeModelPrice, gnc_tree_model_price, GNC, TREE_MODEL_PRICE, GncTreeModel)
+
 #define GNC_TREE_MODEL_PRICE_NAME            "GncTreeModelPrice"
 
 
@@ -72,27 +69,12 @@ typedef enum
 /* typedefs & structures */
 
 /** The instance data structure for a price tree model. */
-typedef struct
+struct _GncTreeModelPrice
 {
     GncTreeModel gnc_tree_model;	/**< The parent object data. */
     int stamp;			/**< The state of the model. Any state
 					 *   change increments this number. */
-} GncTreeModelPrice;
-
-
-/** The class data structure for a price tree model. */
-typedef struct
-{
-    GncTreeModelClass gnc_tree_model;/**< The parent object data. */
-} GncTreeModelPriceClass;
-
-
-/** Get the type of a price tree plugin.
- *
- *  @return A GType.
- */
-GType gnc_tree_model_price_get_type (void);
-
+};
 
 /** @name Account Tree Model Constructors
  @{ */
