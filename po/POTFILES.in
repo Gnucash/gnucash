@@ -416,6 +416,7 @@ gnucash/register/register-core/table-control.c
 gnucash/register/register-core/table-layout.c
 gnucash/register/register-core/table-model.c
 gnucash/register/register-gnome/combocell-gnome.c
+gnucash/register/register-gnome/completioncell-gnome.c
 gnucash/register/register-gnome/datecell-gnome.c
 gnucash/register/register-gnome/formulacell-gnome.c
 gnucash/register/register-gnome/gnucash-color.c
