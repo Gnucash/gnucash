@@ -44,11 +44,8 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_TREE_VIEW_ACCOUNT            (gnc_tree_view_account_get_type ())
-#define GNC_TREE_VIEW_ACCOUNT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_VIEW_ACCOUNT, GncTreeViewAccount))
-#define GNC_TREE_VIEW_ACCOUNT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_TREE_VIEW_ACCOUNT, GncTreeViewAccountClass))
-#define GNC_IS_TREE_VIEW_ACCOUNT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_VIEW_ACCOUNT))
-#define GNC_IS_TREE_VIEW_ACCOUNT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_VIEW_ACCOUNT))
-#define GNC_TREE_VIEW_ACCOUNT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_ACCOUNT, GncTreeViewAccountClass))
+G_DECLARE_FINAL_TYPE (GncTreeViewAccount, gnc_tree_view_account, GNC, TREE_VIEW_ACCOUNT, GncTreeView)
+
 #define GNC_TREE_VIEW_ACCOUNT_NAME            "GncTreeViewAccount"
 
 /* typedefs & structures */
@@ -62,16 +59,11 @@ struct AccountViewInfo_s
 };
 
 
-typedef struct
+struct _GncTreeViewAccount
 {
     GncTreeView   gnc_tree_view;
     int           stamp;
-} GncTreeViewAccount;
-
-typedef struct
-{
-    GncTreeViewClass gnc_tree_view;
-} GncTreeViewAccountClass;
+};
 
 typedef	struct
 {
