@@ -31,28 +31,17 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_LOG_REPLAY            (gnc_plugin_log_replay_get_type ())
-#define GNC_PLUGIN_LOG_REPLAY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_LOG_REPLAY, GncPluginLogreplay))
-#define GNC_PLUGIN_LOG_REPLAY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN_LOG_REPLAY, GncPluginLogreplayClass))
-#define GNC_IS_PLUGIN_LOG_REPLAY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_PLUGIN_LOG_REPLAY))
-#define GNC_IS_PLUGIN_LOG_REPLAY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_LOG_REPLAY))
-#define GNC_PLUGIN_LOG_REPLAY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_LOG_REPLAY, GncPluginLogreplayClass))
+G_DECLARE_FINAL_TYPE (GncPluginLogReplay, gnc_plugin_log_replay, GNC, PLUGIN_LOG_REPLAY, GncPlugin)
 
 #define GNC_PLUGIN_LOG_REPLAY_NAME "gnc-plugin-log-replay"
 
 /* typedefs & structures */
-typedef struct
+struct _GncPluginLogReplay
 {
     GncPlugin gnc_plugin;
-} GncPluginLogreplay;
-
-typedef struct
-{
-    GncPluginClass gnc_plugin;
-} GncPluginLogreplayClass;
+};
 
 /* function prototypes */
-GType      gnc_plugin_log_replay_get_type (void);
-
 GncPlugin *gnc_plugin_log_replay_new      (void);
 
 void       gnc_plugin_log_replay_create_plugin  (void);

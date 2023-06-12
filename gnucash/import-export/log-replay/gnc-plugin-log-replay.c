@@ -54,15 +54,15 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
-typedef struct GncPluginLogreplayPrivate
+typedef struct GncPluginLogReplayPrivate
 {
     gpointer dummy;
-} GncPluginLogreplayPrivate;
+} GncPluginLogReplayPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginLogreplay, gnc_plugin_log_replay, GNC_TYPE_PLUGIN)
+G_DEFINE_TYPE_WITH_PRIVATE(GncPluginLogReplay, gnc_plugin_log_replay, GNC_TYPE_PLUGIN)
 
 #define GNC_PLUGIN_LOG_REPLAY_GET_PRIVATE(o)  \
-   ((GncPluginLogreplayPrivate*)gnc_plugin_log_replay_get_instance_private((GncPluginLogReplay*)o))
+   ((GncPluginLogReplayPrivate*)gnc_plugin_log_replay_get_instance_private((GncPluginLogReplay*)o))
 
 GncPlugin *
 gnc_plugin_log_replay_new (void)
@@ -71,7 +71,7 @@ gnc_plugin_log_replay_new (void)
 }
 
 static void
-gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass)
+gnc_plugin_log_replay_class_init (GncPluginLogReplayClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS (klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS (klass);
@@ -90,7 +90,7 @@ gnc_plugin_log_replay_class_init (GncPluginLogreplayClass *klass)
 }
 
 static void
-gnc_plugin_log_replay_init (GncPluginLogreplay *plugin)
+gnc_plugin_log_replay_init (GncPluginLogReplay *plugin)
 {
 }
 
