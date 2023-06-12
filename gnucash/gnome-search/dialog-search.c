@@ -809,7 +809,7 @@ get_comb_box_widget (GNCSearchWindow *sw, struct _crit_data *data)
 
         gtk_list_store_append(store, &iter);
         gtk_list_store_set(store, &iter,
-                           SEARCH_COL_NAME, _(param->title),
+                           SEARCH_COL_NAME, _(gnc_search_param_get_title (param)),
                            SEARCH_COL_POINTER, param,
                            -1);
 
@@ -875,16 +875,16 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
 
         if (*new_data)
         {
-            if (strcmp (param->title, N_("Action")) == 0)
+            if (strcmp (gnc_search_param_get_title (param), N_("Action")) == 0)
                 gnc_search_param_set_title (param, N_("Number/Action"));
-            if (strcmp (param->title, N_("Number")) == 0)
+            if (strcmp (gnc_search_param_get_title (param), N_("Number")) == 0)
                 gnc_search_param_set_title (param, N_("Transaction Number"));
         }
         else
         {
-            if (strcmp (param->title, N_("Number/Action")) == 0)
+            if (strcmp (gnc_search_param_get_title (param), N_("Number/Action")) == 0)
                 gnc_search_param_set_title (param, N_("Action"));
-            if (strcmp (param->title, N_("Transaction Number")) == 0)
+            if (strcmp (gnc_search_param_get_title (param), N_("Transaction Number")) == 0)
                 gnc_search_param_set_title (param, N_("Number"));
         }
     }

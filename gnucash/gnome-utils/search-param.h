@@ -126,13 +126,17 @@ void gnc_search_param_set_param_path (GNCSearchParamSimple *param,
 GList * gnc_search_param_get_search (GNCSearchParamCompound *param);
 GSList * gnc_search_param_get_param_path (GNCSearchParamSimple *param);
 QofIdTypeConst gnc_search_param_get_param_type (GNCSearchParam *param);
+const char *gnc_search_param_get_title (GNCSearchParam *param);
 void gnc_search_param_set_title (GNCSearchParam *param,
                                  const char *title);
 GNCSearchParamKind gnc_search_param_get_kind (GNCSearchParam *param);
+GtkJustification gnc_search_param_get_justify (GNCSearchParam *param);
 void gnc_search_param_set_justify (GNCSearchParam *param,
                                    GtkJustification justify);
+gboolean gnc_search_param_get_passive (GNCSearchParam *param);
 void gnc_search_param_set_passive (GNCSearchParam *param,
                                    gboolean value);
+gboolean gnc_search_param_get_non_resizeable (GNCSearchParam *param);
 void gnc_search_param_set_non_resizeable (GNCSearchParam *param,
                                           gboolean value);
 gboolean gnc_search_param_type_match (GNCSearchParam *a,

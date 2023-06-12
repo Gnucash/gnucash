@@ -167,16 +167,16 @@ gnc_ui_find_transactions_dialog_create(GtkWindow *parent, GNCLedgerDisplay * ori
 
             if (num_action)
             {
-                if (strcmp (param->title, N_("Action")) == 0)
+                if (strcmp (gnc_search_param_get_title (param), N_("Action")) == 0)
                     gnc_search_param_set_title (param, N_("Number/Action"));
-                if (strcmp (param->title, N_("Number")) == 0)
+                if (strcmp (gnc_search_param_get_title (param), N_("Number")) == 0)
                     gnc_search_param_set_title (param, N_("Transaction Number"));
             }
             else
             {
-                if (strcmp (param->title, N_("Number/Action")) == 0)
+                if (strcmp (gnc_search_param_get_title (param), N_("Number/Action")) == 0)
                     gnc_search_param_set_title (param, N_("Action"));
-                if (strcmp (param->title, N_("Transaction Number")) == 0)
+                if (strcmp (gnc_search_param_get_title (param), N_("Transaction Number")) == 0)
                     gnc_search_param_set_title (param, N_("Number"));
             }
         }
