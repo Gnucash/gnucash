@@ -559,6 +559,20 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
     gtk_list_store_clear (box->tmp_store);
     unblock_list_signals (cell);
 
+    if (strlen (newval) == 0) {
+        /* Deleting everything in the cell shouldn't provide a search result for
+         * "" because that will just be the first MAX_NUM_MATCHES accounts which
+         * isn't very useful.
+         *
+         * Skip the search show the popup again with all accounts. Clear the
+         * temp store or the cell will be pre-filled with the first account.
+         */
+        gnc_item_list_set_temp_store (box->item_list, NULL);
+        gnc_item_edit_show_popup (box->item_edit);
+        box->list_popped = TRUE;
+        goto cleanup;
+    }
+
     while (valid && num_found < MAX_NUM_MATCHES)
     {
         gchar* str_data = NULL;
@@ -585,6 +599,8 @@ gnc_combo_cell_type_ahead_search (const gchar* newval,
         gnc_item_edit_show_popup (box->item_edit);
         box->list_popped = TRUE;
     }
+
+cleanup:
     g_regex_unref (regex);
     return match_str;
 }
@@ -1125,4 +1141,3 @@ gnc_combo_cell_set_autosize (ComboCell* cell, gboolean autosize)
 
     box->autosize = autosize;
 }
-
