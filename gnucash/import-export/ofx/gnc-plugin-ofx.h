@@ -31,28 +31,17 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_OFX            (gnc_plugin_ofx_get_type ())
-#define GNC_PLUGIN_OFX(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_OFX, GncPluginOfx))
-#define GNC_PLUGIN_OFX_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN_OFX, GncPluginOfxClass))
-#define GNC_IS_PLUGIN_OFX(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_PLUGIN_OFX))
-#define GNC_IS_PLUGIN_OFX_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_OFX))
-#define GNC_PLUGIN_OFX_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_OFX, GncPluginOfxClass))
+G_DECLARE_FINAL_TYPE (GncPluginOfx, gnc_plugin_ofx, GNC, PLUGIN_OFX, GncPlugin)
 
 #define GNC_PLUGIN_OFX_NAME "gnc-plugin-ofx"
 
 /* typedefs & structures */
-typedef struct
+struct _GncPluginOfx
 {
     GncPlugin gnc_plugin;
-} GncPluginOfx;
-
-typedef struct
-{
-    GncPluginClass gnc_plugin;
-} GncPluginOfxClass;
+};
 
 /* function prototypes */
-GType      gnc_plugin_ofx_get_type (void);
-
 GncPlugin *gnc_plugin_ofx_new      (void);
 
 void       gnc_plugin_ofx_create_plugin (void);
