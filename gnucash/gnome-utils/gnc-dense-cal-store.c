@@ -54,11 +54,6 @@ struct _GncDenseCalStore
     GDate **cal_marks;
 };
 
-struct _GncDenseCalStoreClass
-{
-    GObjectClass parent_class;
-};
-
 static void gnc_dense_cal_store_iface_init(GncDenseCalModelInterface *iface);
 static void gnc_dense_cal_store_finalize(GObject *obj);
 

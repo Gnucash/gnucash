@@ -32,18 +32,10 @@
 G_BEGIN_DECLS
 
 #define GNC_TYPE_DENSE_CAL_STORE (gnc_dense_cal_store_get_type())
-#define GNC_DENSE_CAL_STORE(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_DENSE_CAL_STORE, GncDenseCalStore))
-#define GNC_DENSE_CAL_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_DENSE_CAL_STORE, GncDenseCalStoreClass))
-#define GNC_IS_DENSE_CAL_STORE(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_DENSE_CAL_STORE))
-#define GNC_IS_DENSE_CAL_STORE_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_DENSE_CAL_STORE))
-#define GNC_DENSE_CAL_STORE_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_DENSE_CAL_STORE, GncDenseCalStore))
+G_DECLARE_FINAL_TYPE (GncDenseCalStore, gnc_dense_cal_store, GNC, DENSE_CAL_STORE, GObject)
 
 typedef enum { NEVER_END, END_ON_DATE, END_AFTER_N_OCCS, BAD_END } gdcs_end_type;
 
-typedef struct _GncDenseCalStore GncDenseCalStore;
-typedef struct _GncDenseCalStoreClass GncDenseCalStoreClass;
-
-GType gnc_dense_cal_store_get_type(void);
 GncDenseCalStore* gnc_dense_cal_store_new(int num_marks);
 void gnc_dense_cal_store_clear(GncDenseCalStore *model);
 void gnc_dense_cal_store_update_name(GncDenseCalStore *model, const gchar* name);
