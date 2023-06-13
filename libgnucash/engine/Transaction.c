@@ -2484,7 +2484,7 @@ xaccTransRetDateDue(const Transaction *trans)
 char
 xaccTransGetTxnType (Transaction *trans)
 {
-    gboolean has_nonAPAR_amount = FALSE;
+    gboolean has_nonAPAR_split = FALSE;
 
     if (!trans) return TXN_TYPE_NONE;
 
@@ -2499,9 +2499,8 @@ xaccTransGetTxnType (Transaction *trans)
         if (!acc)
             continue;
 
-        if (!xaccAccountIsAPARType (xaccAccountGetType (acc)) &&
-            !gnc_numeric_zero_p (xaccSplitGetValue (n->data)))
-            has_nonAPAR_amount = TRUE;
+        if (!xaccAccountIsAPARType (xaccAccountGetType (acc)))
+            has_nonAPAR_split = TRUE;
         else if (trans->txn_type == TXN_TYPE_NONE)
         {
             GNCLot *lot = xaccSplitGetLot (n->data);
@@ -2515,7 +2514,7 @@ xaccTransGetTxnType (Transaction *trans)
         }
     }
 
-    if (!has_nonAPAR_amount && (trans->txn_type == TXN_TYPE_PAYMENT))
+    if (!has_nonAPAR_split && (trans->txn_type == TXN_TYPE_PAYMENT))
         trans->txn_type = TXN_TYPE_LINK;
 
     return trans->txn_type;

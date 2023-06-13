@@ -369,6 +369,12 @@ test_xaccTransGetTxnTypeInvoice (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (TXN_TYPE_INVOICE, ==, xaccTransGetTxnType (fixture->trans));
 
     g_assert_cmpint (TXN_TYPE_PAYMENT, ==, xaccTransGetTxnType (fixture->trans2));
+
+    xaccTransVoid (fixture->trans2, "Cancel payment");
+
+    g_assert_cmpint (TXN_TYPE_PAYMENT, ==, xaccTransGetTxnType (fixture->trans2));
+
+    xaccTransUnvoid (fixture->trans2);
 }
 
 
