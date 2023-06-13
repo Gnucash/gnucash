@@ -56,7 +56,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 /** Declarations *********************************************************/
 static void gnc_tree_view_owner_finalize (GObject *object);
 
-static void gtvo_update_column_names (GncTreeView *view);
+static void gtvo_update_column_names (GncTreeViewOwner *view);
 static void gtvo_currency_changed_cb (void);
 
 static gboolean gnc_tree_view_owner_filter_helper (GtkTreeModel *model,
@@ -74,10 +74,7 @@ struct _GncTreeViewOwner
 {
     GncTreeView gnc_tree_view;
     int stamp;
-};
 
-typedef struct GncTreeViewOwnerPrivate
-{
     OwnerViewInfo ovi;
 
     gnc_tree_view_owner_filter_func filter_fn;
@@ -88,17 +85,14 @@ typedef struct GncTreeViewOwnerPrivate
     GtkTreeViewColumn *id_column;
     GtkTreeViewColumn *balance_report_column;
     GtkTreeViewColumn *notes_column;
-} GncTreeViewOwnerPrivate;
-
-#define GNC_TREE_VIEW_OWNER_GET_PRIVATE(o)  \
-   ((GncTreeViewOwnerPrivate*)gnc_tree_view_owner_get_instance_private((GncTreeViewOwner*)o))
+};
 
 
 /************************************************************/
 /*               g_object required functions                */
 /************************************************************/
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewOwner, gnc_tree_view_owner, GNC_TYPE_TREE_VIEW)
+G_DEFINE_TYPE(GncTreeViewOwner, gnc_tree_view_owner, GNC_TYPE_TREE_VIEW)
 
 static void
 gnc_tree_view_owner_class_init (GncTreeViewOwnerClass *klass)
@@ -129,31 +123,24 @@ gnc_init_owner_view_info(OwnerViewInfo *ovi)
 static void
 gnc_tree_view_owner_init (GncTreeViewOwner *view)
 {
-    GncTreeViewOwnerPrivate *priv;
-
-    priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(view);
-    gnc_init_owner_view_info(&priv->ovi);
+    gnc_init_owner_view_info(&view->ovi);
 }
 
 static void
 gnc_tree_view_owner_finalize (GObject *object)
 {
-    GncTreeViewOwner *owner_view;
-    GncTreeViewOwnerPrivate *priv;
-
     ENTER("view %p", object);
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_TREE_VIEW_OWNER (object));
 
-    owner_view = GNC_TREE_VIEW_OWNER (object);
+    GncTreeViewOwner *view = GNC_TREE_VIEW_OWNER (object);
 
-    priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(owner_view);
-    if (priv->filter_destroy)
+    if (view->filter_destroy)
     {
-        priv->filter_destroy(priv->filter_data);
-        priv->filter_destroy = NULL;
+        view->filter_destroy(view->filter_data);
+        view->filter_destroy = NULL;
     }
-    priv->filter_fn = NULL;
+    view->filter_fn = NULL;
 
     G_OBJECT_CLASS (gnc_tree_view_owner_parent_class)->finalize (object);
     LEAVE(" ");
@@ -331,11 +318,9 @@ sort_by_balance_value (GtkTreeModel *f_model,
 GtkTreeView *
 gnc_tree_view_owner_new (GncOwnerType owner_type)
 {
-    GncTreeView *view;
     GtkTreeModel *model, *f_model, *s_model;
     const gchar *sample_type, *sample_currency;
     const gchar *owner_name = NULL, * owner_id = NULL;
-    GncTreeViewOwnerPrivate *priv;
 
     ENTER(" ");
 
@@ -365,10 +350,8 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
         break;
     }
     /* Create our view */
-    view = g_object_new (GNC_TYPE_TREE_VIEW_OWNER,
-                         "name", "gnc-id-owner-tree", NULL);
-
-    priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(GNC_TREE_VIEW_OWNER (view));
+    GncTreeViewOwner *view = g_object_new (GNC_TYPE_TREE_VIEW_OWNER,
+                                           "name", "gnc-id-owner-tree", NULL);
 
     /* Create/get a pointer to the existing model for this set of books. */
     model = gnc_tree_model_owner_new (owner_type);
@@ -391,90 +374,90 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     sample_type = gncOwnerTypeToQofIdType (GNC_OWNER_CUSTOMER);
     sample_currency = gnc_commodity_get_fullname(gnc_default_currency());
 
-    priv->name_column
-        = gnc_tree_view_add_text_column(view, owner_name, GNC_OWNER_TREE_NAME_COL,
+    view->name_column
+        = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), owner_name, GNC_OWNER_TREE_NAME_COL,
                                         NULL, "GnuCash Inc.",
                                         GNC_TREE_MODEL_OWNER_COL_NAME,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         sort_by_string);
-    gnc_tree_view_add_text_column(view, _("Type"), GNC_OWNER_TREE_TYPE_COL,
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Type"), GNC_OWNER_TREE_TYPE_COL,
                                   NULL, sample_type,
                                   GNC_TREE_MODEL_OWNER_COL_TYPE,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    priv->id_column
-        = gnc_tree_view_add_text_column(view, owner_id, GNC_OWNER_TREE_ID_COL,
+    view->id_column
+        = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), owner_id, GNC_OWNER_TREE_ID_COL,
                                         NULL, "1-123-1234",
                                         GNC_TREE_MODEL_OWNER_COL_ID,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         sort_by_string);
-    gnc_tree_view_add_text_column(view, _("Currency"), GNC_OWNER_TREE_CURRENCY_COL,
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Currency"), GNC_OWNER_TREE_CURRENCY_COL,
                                   NULL, sample_currency,
                                   GNC_TREE_MODEL_OWNER_COL_CURRENCY,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    gnc_tree_view_add_text_column(view, _("Address Name"), GNC_OWNER_TREE_ADDRESS_NAME_COL,
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Address Name"), GNC_OWNER_TREE_ADDRESS_NAME_COL,
                                   NULL, "GnuCash Inc.",
                                   GNC_TREE_MODEL_OWNER_COL_ADDRESS_NAME,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    gnc_tree_view_add_text_column(view, _("Address 1"), GNC_OWNER_TREE_ADDRESS_1_COL,
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Address 1"), GNC_OWNER_TREE_ADDRESS_1_COL,
                                   NULL, "Free Software Foundation",
                                   GNC_TREE_MODEL_OWNER_COL_ADDRESS_1,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    gnc_tree_view_add_text_column(view, _("Address 2"), GNC_OWNER_TREE_ADDRESS_2_COL,
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Address 2"), GNC_OWNER_TREE_ADDRESS_2_COL,
                                   NULL, "51 Franklin Street, Fifth Floor",
                                   GNC_TREE_MODEL_OWNER_COL_ADDRESS_2,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    gnc_tree_view_add_text_column(view, _("Address 3"), GNC_OWNER_TREE_ADDRESS_3_COL,
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Address 3"), GNC_OWNER_TREE_ADDRESS_3_COL,
                                   NULL, "Boston, MA  02110-1301",
                                   GNC_TREE_MODEL_OWNER_COL_ADDRESS_3,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    gnc_tree_view_add_text_column(view, _("Address 4"), GNC_OWNER_TREE_ADDRESS_4_COL,
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Address 4"), GNC_OWNER_TREE_ADDRESS_4_COL,
                                   NULL, "USA",
                                   GNC_TREE_MODEL_OWNER_COL_ADDRESS_4,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    gnc_tree_view_add_text_column(view, _("Phone"), GNC_OWNER_TREE_PHONE_COL,
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Phone"), GNC_OWNER_TREE_PHONE_COL,
                                   NULL, "+1-617-542-5942",
                                   GNC_TREE_MODEL_OWNER_COL_PHONE,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    gnc_tree_view_add_text_column(view, _("Fax"), GNC_OWNER_TREE_FAX_COL,
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Fax"), GNC_OWNER_TREE_FAX_COL,
                                   NULL, "+1-617-542-2652",
                                   GNC_TREE_MODEL_OWNER_COL_FAX,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    gnc_tree_view_add_text_column(view, _("E-mail"), GNC_OWNER_TREE_EMAIL_COL,
+    gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("E-mail"), GNC_OWNER_TREE_EMAIL_COL,
                                   NULL, "gnu@gnu.org",
                                   GNC_TREE_MODEL_OWNER_COL_EMAIL,
                                   GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                   sort_by_string);
-    gnc_tree_view_add_numeric_column(view, _("Balance"), GNC_OWNER_TREE_BALANCE_COL,
+    gnc_tree_view_add_numeric_column(GNC_TREE_VIEW(view), _("Balance"), GNC_OWNER_TREE_BALANCE_COL,
                                      SAMPLE_OWNER_VALUE,
                                      GNC_TREE_MODEL_OWNER_COL_BALANCE,
                                      GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE,
                                      GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                      sort_by_balance_value);
 
-    priv->balance_report_column
-        = gnc_tree_view_add_numeric_column(view, _("Balance"), GNC_OWNER_TREE_BALANCE_REPORT_COL,
+    view->balance_report_column
+        = gnc_tree_view_add_numeric_column(GNC_TREE_VIEW(view), _("Balance"), GNC_OWNER_TREE_BALANCE_REPORT_COL,
                                            SAMPLE_OWNER_VALUE,
                                            GNC_TREE_MODEL_OWNER_COL_BALANCE_REPORT,
                                            GNC_TREE_MODEL_OWNER_COL_COLOR_BALANCE,
                                            GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                            sort_by_balance_value);
 
-    priv->notes_column
-        = gnc_tree_view_add_text_column(view, _("Notes"), GNC_OWNER_TREE_NOTES_COL, NULL,
+    view->notes_column
+        = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Notes"), GNC_OWNER_TREE_NOTES_COL, NULL,
                                         "Sample owner notes.",
                                         GNC_TREE_MODEL_OWNER_COL_NOTES,
                                         GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                         sort_by_string);
-    gnc_tree_view_add_toggle_column (view, _("Active"),
+    gnc_tree_view_add_toggle_column (GNC_TREE_VIEW(view), _("Active"),
                                      C_("Column letter for 'Active'", "A"),
                                      GNC_OWNER_TREE_ACTIVE_COL,
                                      GNC_TREE_MODEL_OWNER_COL_ACTIVE,
@@ -486,7 +469,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
     gtvo_update_column_names(view);
 
     /* By default only the first column is visible. */
-    gnc_tree_view_configure_columns(view);
+    gnc_tree_view_configure_columns(GNC_TREE_VIEW(view));
     gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (f_model),
                                             gnc_tree_view_owner_filter_helper,
                                             view,
@@ -601,7 +584,6 @@ gnc_tree_view_owner_filter_helper (GtkTreeModel *model,
 {
     GncOwner *owner;
     GncTreeViewOwner *view = data;
-    GncTreeViewOwnerPrivate *priv;
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_OWNER (model), FALSE);
     g_return_val_if_fail (iter != NULL, FALSE);
@@ -609,9 +591,8 @@ gnc_tree_view_owner_filter_helper (GtkTreeModel *model,
     owner = gnc_tree_model_owner_get_owner (
                 GNC_TREE_MODEL_OWNER(model), iter);
 
-    priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(view);
-    if (priv->filter_fn)
-        return priv->filter_fn(owner, priv->filter_data);
+    if (view->filter_fn)
+        return view->filter_fn(owner, view->filter_data);
     else return TRUE;
 }
 
@@ -628,21 +609,18 @@ gnc_tree_view_owner_set_filter (GncTreeViewOwner *view,
                                 gpointer data,
                                 GSourceFunc destroy)
 {
-    GncTreeViewOwnerPrivate *priv;
-
     ENTER("view %p, filter func %p, data %p, destroy %p",
           view, func, data, destroy);
 
     g_return_if_fail(GNC_IS_TREE_VIEW_OWNER(view));
 
-    priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(view);
-    if (priv->filter_destroy)
+    if (view->filter_destroy)
     {
-        priv->filter_destroy(priv->filter_data);
+        view->filter_destroy(view->filter_data);
     }
-    priv->filter_destroy = destroy;
-    priv->filter_data = data;
-    priv->filter_fn = func;
+    view->filter_destroy = destroy;
+    view->filter_data = data;
+    view->filter_fn = func;
 
     gnc_tree_view_owner_refilter(view);
     LEAVE(" ");
@@ -854,7 +832,7 @@ gnc_tree_view_owner_set_selected_owner (GncTreeViewOwner *view,
 typedef struct
 {
     GList* return_list;
-    GncTreeViewOwnerPrivate* priv;
+    GncTreeViewOwner* view;
 } GncTreeViewSelectionInfo;
 
 #if 0 /* Not Used */
@@ -883,7 +861,7 @@ get_selected_owners_helper (GtkTreeModel *s_model,
     owner = iter.user_data;
 
     /* Only selected if it passes the filter */
-    if (gtvsi->priv->filter_fn == NULL || gtvsi->priv->filter_fn(owner, gtvsi->priv->filter_data))
+    if (gtvsi->view->filter_fn == NULL || gtvsi->view->filter_fn(owner, gtvsi->view->filter_data))
     {
         gtvsi->return_list = g_list_append(gtvsi->return_list, owner);
     }
@@ -910,19 +888,15 @@ gtvo_update_column_name (GtkTreeViewColumn *column,
 
 
 static void
-gtvo_update_column_names (GncTreeView *view)
+gtvo_update_column_names (GncTreeViewOwner *view)
 {
-    GncTreeViewOwnerPrivate *priv;
-    const gchar *mnemonic;
+    const gchar *mnemonic = gnc_commodity_get_mnemonic(gnc_default_report_currency());
 
-    priv = GNC_TREE_VIEW_OWNER_GET_PRIVATE(view);
-    mnemonic = gnc_commodity_get_mnemonic(gnc_default_report_currency());
-
-    gtvo_update_column_name(priv->balance_report_column,
+    gtvo_update_column_name(view->balance_report_column,
                             /* Translators: %s is a currency mnemonic.*/
                             _("Balance (%s)"), mnemonic);
-    gnc_tree_view_set_show_column_menu(view, FALSE);
-    gnc_tree_view_set_show_column_menu(view, TRUE);
+    gnc_tree_view_set_show_column_menu(GNC_TREE_VIEW(view), FALSE);
+    gnc_tree_view_set_show_column_menu(GNC_TREE_VIEW(view), TRUE);
 }
 
 

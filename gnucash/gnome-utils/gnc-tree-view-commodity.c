@@ -56,20 +56,11 @@ struct _GncTreeViewCommodity
     int stamp;
 };
 
-typedef struct GncTreeViewCommodityPrivate
-{
-    gpointer dummy;
-} GncTreeViewCommodityPrivate;
-
-#define GNC_TREE_VIEW_COMMODITY_GET_PRIVATE(o)  \
-   ((GncTreeViewCommodityPrivate*)gnc_tree_view_commodity_get_instance_private(GncTreeViewCommodity*)o))
-
-
 /************************************************************/
 /*               g_object required functions                */
 /************************************************************/
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewCommodity, gnc_tree_view_commodity, GNC_TYPE_TREE_VIEW)
+G_DEFINE_TYPE(GncTreeViewCommodity, gnc_tree_view_commodity, GNC_TYPE_TREE_VIEW)
 
 static void
 gnc_tree_view_commodity_class_init (GncTreeViewCommodityClass *klass)
