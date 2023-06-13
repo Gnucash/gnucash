@@ -41,7 +41,6 @@
    (obj, GNC_TYPE_RECURRENCE)
 
 typedef struct _GncRecurrence GncRecurrence;
-typedef struct _GncRecurrenceComp GncRecurrenceComp;
 
 GType gnc_recurrence_get_type(void);
 GtkWidget * gnc_recurrence_new(void);
@@ -51,16 +50,5 @@ void gnc_recurrence_set(GncRecurrence *gr, const Recurrence *r);
 /* The returned Recurrence is internally owned and is only valid as
    long as the GncRecurrence is around. */
 const Recurrence * gnc_recurrence_get(GncRecurrence *gr);
-
-/* "composite" recurrences */
-void gnc_recurrence_comp_set_list(GncRecurrenceComp *grc, const GList *r);
-
-/* The GList is newly-allocated, but the Recurrences are internally
-   owned. */
-GList * gnc_recurrence_comp_get_list(GncRecurrenceComp *grc);
-
-/* This works, but is not used.  Kind of experimental... */
-GtkWidget * gnc_recurrence_comp_new(void);
-GType gnc_recurrence_comp_get_type(void);
 
 #endif
