@@ -59,12 +59,6 @@ struct AccountViewInfo_s
 };
 
 
-struct _GncTreeViewAccount
-{
-    GncTreeView   gnc_tree_view;
-    int           stamp;
-};
-
 typedef	struct
 {
     GtkWidget           *dialog;

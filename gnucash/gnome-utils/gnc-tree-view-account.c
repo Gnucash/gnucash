@@ -93,6 +93,12 @@ static gboolean
 gnc_tree_view_tooltip_cb (GtkWidget *widget, gint x, gint y, gboolean keyboard_tip,
                           GtkTooltip *tooltip, gpointer user_data);
 
+struct _GncTreeViewAccount
+{
+    GncTreeView   gnc_tree_view;
+    int           stamp;
+};
+
 typedef struct GncTreeViewAccountPrivate
 {
     AccountViewInfo avi;

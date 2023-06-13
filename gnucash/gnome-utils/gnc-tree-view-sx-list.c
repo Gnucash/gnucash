@@ -50,6 +50,11 @@ static QofLogModule log_module = LOG_MOD;
 static void gnc_tree_view_sx_list_dispose(GObject *object);
 static void gnc_tree_view_sx_list_finalize(GObject *object);
 
+struct _GncTreeViewSxList
+{
+    GncTreeView gnc_tree_view;
+};
+
 typedef struct GncTreeViewSxListPrivate
 {
     GtkTreeModel *tree_model;

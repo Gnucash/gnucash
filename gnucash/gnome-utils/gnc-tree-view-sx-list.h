@@ -40,11 +40,6 @@ G_BEGIN_DECLS
 #define GNC_TYPE_TREE_VIEW_SX_LIST            (gnc_tree_view_sx_list_get_type ())
 G_DECLARE_FINAL_TYPE (GncTreeViewSxList, gnc_tree_view_sx_list, GNC, TREE_VIEW_SX_LIST, GncTreeView)
 
-struct _GncTreeViewSxList
-{
-    GncTreeView gnc_tree_view;
-};
-
 GtkTreeView* gnc_tree_view_sx_list_new(GncSxInstanceModel *sx_instances);
 
 SchedXaction* gnc_tree_view_sx_list_get_sx_from_path(GncTreeViewSxList *view, GtkTreePath *path);

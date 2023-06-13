@@ -46,13 +46,6 @@ G_BEGIN_DECLS
 #define GNC_TYPE_TREE_VIEW_COMMODITY            (gnc_tree_view_commodity_get_type ())
 G_DECLARE_FINAL_TYPE (GncTreeViewCommodity, gnc_tree_view_commodity, GNC, TREE_VIEW_COMMODITY, GncTreeView)
 
-/* typedefs & structures */
-struct _GncTreeViewCommodity
-{
-    GncTreeView gnc_tree_view;
-    int stamp;
-};
-
 /** @name Commodity Tree View Constructors
  @{ */
 

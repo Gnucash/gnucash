@@ -50,6 +50,12 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_view_commodity_finalize (GObject *object);
 static void gnc_tree_view_commodity_destroy (GtkWidget *widget);
 
+struct _GncTreeViewCommodity
+{
+    GncTreeView gnc_tree_view;
+    int stamp;
+};
+
 typedef struct GncTreeViewCommodityPrivate
 {
     gpointer dummy;

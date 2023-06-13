@@ -70,6 +70,12 @@ static void gtvo_setup_column_renderer_edited_cb(GncTreeViewOwner *owner_view,
         GncTreeViewOwnerColumnTextEdited col_edited_cb);
 #endif /* Not Used */
 
+struct _GncTreeViewOwner
+{
+    GncTreeView gnc_tree_view;
+    int stamp;
+};
+
 typedef struct GncTreeViewOwnerPrivate
 {
     OwnerViewInfo ovi;

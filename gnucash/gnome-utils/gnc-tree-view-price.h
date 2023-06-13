@@ -46,13 +46,6 @@ G_BEGIN_DECLS
 #define GNC_TYPE_TREE_VIEW_PRICE            (gnc_tree_view_price_get_type ())
 G_DECLARE_FINAL_TYPE (GncTreeViewPrice, gnc_tree_view_price, GNC, TREE_VIEW_PRICE, GncTreeView)
 
-/* typedefs & structures */
-struct _GncTreeViewPrice
-{
-    GncTreeView gnc_tree_view;
-    int stamp;
-};
-
 /** @name Price Tree View Constructors
  @{ */
 
