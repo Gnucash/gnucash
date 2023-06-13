@@ -381,7 +381,8 @@ gnc_main_window_cmd_file_save (GSimpleAction *simple,
 
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_all_finish_pending ())
+    if (!gnc_main_window_all_finish_pending () ||
+        gnc_file_save_in_progress())
         return;
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
@@ -398,7 +399,8 @@ gnc_main_window_cmd_file_save_as (GSimpleAction *simple,
 
     g_return_if_fail (data != NULL);
 
-    if (!gnc_main_window_all_finish_pending ())
+    if (!gnc_main_window_all_finish_pending () ||
+        gnc_file_save_in_progress())
         return;
 
     gnc_window_set_progressbar_window (GNC_WINDOW(data->window));
