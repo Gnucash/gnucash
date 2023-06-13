@@ -96,16 +96,6 @@ typedef enum
     GNC_TREE_MODEL_ACCOUNT_NUM_COLUMNS
 } GncTreeModelAccountColumn;
 
-/* typedefs & structures */
-
-/** The instance data structure for an account tree model. */
-struct _GncTreeModelAccount
-{
-    GncTreeModel gnc_tree_model;    /**< The parent object data. */
-    int stamp;                      /**< The state of the model. Any state
-                                     *   change increments this number. */
-};
-
 /** Clear the tree model account cached values.
  *
  *  @param model A pointer to the account tree model.

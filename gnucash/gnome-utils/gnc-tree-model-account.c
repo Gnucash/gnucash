@@ -90,6 +90,14 @@ static void gnc_tree_model_account_event_handler (QofInstance *entity,
         GncTreeModelAccount *model,
         GncEventData *ed);
 
+/** The instance data structure for an account tree model. */
+struct _GncTreeModelAccount
+{
+    GncTreeModel gnc_tree_model;    /**< The parent object data. */
+    int stamp;                      /**< The state of the model. Any state
+                                     *   change increments this number. */
+};
+
 /** The instance private data for an account tree model. */
 typedef struct GncTreeModelAccountPrivate
 {

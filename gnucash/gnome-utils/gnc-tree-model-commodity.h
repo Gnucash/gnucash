@@ -72,17 +72,6 @@ typedef enum
     GNC_TREE_MODEL_COMMODITY_NUM_COLUMNS
 } GncTreeModelCommodityColumn;
 
-/* typedefs & structures */
-
-/** The instance data structure for a commodity tree model. */
-struct _GncTreeModelCommodity
-{
-    GncTreeModel gnc_tree_model;	/**< The parent object data. */
-    int stamp;			/**< The state of the model. Any state
-					 *   change increments this number. */
-};
-
-
 /** @name Account Tree Model Constructors
  @{ */
 

@@ -120,6 +120,14 @@ static void gnc_tree_model_price_event_handler (QofInstance *entity,
         gpointer user_data,
         gpointer event_data);
 
+/** The instance data structure for a price tree model. */
+struct _GncTreeModelPrice
+{
+    GncTreeModel gnc_tree_model;    /**< The parent object data. */
+    int stamp;                      /**< The state of the model. Any state
+                                     *   change increments this number. */
+};
+
 /** The instance private data for a price database tree model. */
 typedef struct GncTreeModelPricePrivate
 {

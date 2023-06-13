@@ -54,13 +54,6 @@ typedef enum
     GNC_TREE_MODEL_ACCOUNT_TYPES_NUM_COLUMNS
 } GncTreeModelAccountTypesColumn;
 
-/* typedefs & structures */
-struct _GncTreeModelAccountTypes
-{
-    GObject gobject;
-    int stamp;
-};
-
 /* function prototypes */
 
 /* Choose one of two methods to use the GncTreeModelAccountTypes

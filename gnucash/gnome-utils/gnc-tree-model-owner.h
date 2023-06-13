@@ -75,16 +75,6 @@ typedef enum
     GNC_TREE_MODEL_OWNER_NUM_COLUMNS
 } GncTreeModelOwnerColumn;
 
-/* typedefs & structures */
-
-/** The instance data structure for an owner tree model. */
-struct _GncTreeModelOwner
-{
-    GncTreeModel gnc_tree_model;    /**< The parent object data. */
-    int stamp;                      /**< The state of the model. Any state
-                                     *   change increments this number. */
-};
-
 /** @name Owner Tree Model Constructors
  @{ */
 

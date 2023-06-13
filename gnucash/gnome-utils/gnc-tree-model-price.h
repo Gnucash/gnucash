@@ -66,16 +66,6 @@ typedef enum
     GNC_TREE_MODEL_PRICE_NUM_COLUMNS
 } GncTreeModelPriceColumn;
 
-/* typedefs & structures */
-
-/** The instance data structure for a price tree model. */
-struct _GncTreeModelPrice
-{
-    GncTreeModel gnc_tree_model;	/**< The parent object data. */
-    int stamp;			/**< The state of the model. Any state
-					 *   change increments this number. */
-};
-
 /** @name Account Tree Model Constructors
  @{ */
 

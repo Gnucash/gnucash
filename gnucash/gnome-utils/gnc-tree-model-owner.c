@@ -86,6 +86,14 @@ static void gnc_tree_model_owner_event_handler (QofInstance *entity,
         GncTreeModelOwner *model,
         GncEventData *ed);
 
+/** The instance data structure for an owner tree model. */
+struct _GncTreeModelOwner
+{
+    GncTreeModel gnc_tree_model;    /**< The parent object data. */
+    int stamp;                      /**< The state of the model. Any state
+                                     *   change increments this number. */
+};
+
 /** The instance private data for an owner tree model. */
 typedef struct GncTreeModelOwnerPrivate
 {

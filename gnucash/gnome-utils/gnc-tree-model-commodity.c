@@ -91,6 +91,14 @@ static void gnc_tree_model_commodity_event_handler (QofInstance *entity,
         gpointer user_data,
         gpointer event_data);
 
+/** The instance data structure for a commodity tree model. */
+struct _GncTreeModelCommodity
+{
+    GncTreeModel gnc_tree_model; /**< The parent object data. */
+    int stamp;                   /**< The state of the model. Any state
+                                  *   change increments this number. */
+};
+
 /** The instance private data for a commodity database tree model. */
 typedef struct GncTreeModelCommodityPrivate
 {

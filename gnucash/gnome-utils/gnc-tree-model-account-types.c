@@ -46,6 +46,12 @@ gnc_tree_model_account_types_finalize (GObject * object);
 static void
 gnc_tree_model_account_types_tree_model_init (GtkTreeModelIface * iface);
 
+struct _GncTreeModelAccountTypes
+{
+    GObject gobject;
+    int stamp;
+};
+
 typedef struct GncTreeModelAccountTypesPrivate
 {
     guint32 selected;
