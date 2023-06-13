@@ -494,7 +494,7 @@ test_and_add (PopBox* box, const gchar *text, gint start_pos,
 
         match = g_utf8_substring (text, found_location, found_location + newval_length);
 
-        if (found_location >= 1)
+        if (found_location - start_pos >= 1)
         {
             gunichar prev = g_utf8_get_char (g_utf8_offset_to_pointer (sub_text, found_location - start_pos - 1));
             if (prev && (g_unichar_isspace (prev) || g_unichar_ispunct (prev)))
