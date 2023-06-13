@@ -50,18 +50,11 @@ struct _GncTreeModelAccountTypes
 {
     GObject gobject;
     int stamp;
+
+    guint32 selected;
 };
 
-typedef struct GncTreeModelAccountTypesPrivate
-{
-    guint32 selected;
-} GncTreeModelAccountTypesPrivate;
-
-#define GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(o)  \
-   ((GncTreeModelAccountTypesPrivate*)gnc_tree_model_account_types_get_instance_private((GncTreeModelAccountTypes*)o))
-
 G_DEFINE_TYPE_WITH_CODE(GncTreeModelAccountTypes, gnc_tree_model_account_types, G_TYPE_OBJECT,
-			G_ADD_PRIVATE(GncTreeModelAccountTypes)
 			G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
 					      gnc_tree_model_account_types_tree_model_init))
 
@@ -94,12 +87,8 @@ gnc_tree_model_account_types_finalize (GObject * object)
 GtkTreeModel *
 gnc_tree_model_account_types_new (guint32 selected)
 {
-    GncTreeModelAccountTypes *model;
-    GncTreeModelAccountTypesPrivate *priv;
-
-    model = g_object_new (GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES, NULL);
-    priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
-    priv->selected = selected;
+    GncTreeModelAccountTypes *model = g_object_new (GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES, NULL);
+    model->selected = selected;
 
     return GTK_TREE_MODEL (model);
 }
@@ -413,13 +402,11 @@ gnc_tree_model_account_types_get_value (GtkTreeModel * tree_model,
                                         GValue * value)
 {
     GncTreeModelAccountTypes *model = GNC_TREE_MODEL_ACCOUNT_TYPES(tree_model);
-    GncTreeModelAccountTypesPrivate *priv;
 
     g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT_TYPES (model));
     g_return_if_fail (iter != NULL);
     g_return_if_fail (iter->stamp == model->stamp);
 
-    priv = GNC_TREE_MODEL_ACCOUNT_TYPES_GET_PRIVATE(model);
     switch (column)
     {
     case GNC_TREE_MODEL_ACCOUNT_TYPES_COL_TYPE:
@@ -433,7 +420,7 @@ gnc_tree_model_account_types_get_value (GtkTreeModel * tree_model,
         break;
     case GNC_TREE_MODEL_ACCOUNT_TYPES_COL_SELECTED:
         g_value_init (value, G_TYPE_BOOLEAN);
-        g_value_set_boolean (value, priv->selected &
+        g_value_set_boolean (value, model->selected &
                              (1 << GPOINTER_TO_INT (iter->user_data)));
         break;
     default:

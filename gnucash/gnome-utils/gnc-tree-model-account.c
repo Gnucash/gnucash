@@ -96,11 +96,6 @@ struct _GncTreeModelAccount
     GncTreeModel gnc_tree_model;    /**< The parent object data. */
     int stamp;                      /**< The state of the model. Any state
                                      *   change increments this number. */
-};
-
-/** The instance private data for an account tree model. */
-typedef struct GncTreeModelAccountPrivate
-{
     QofBook *book;
     Account *root;
     gint event_handler_id;
@@ -108,17 +103,12 @@ typedef struct GncTreeModelAccountPrivate
 
     GHashTable *account_values_hash;
 
-} GncTreeModelAccountPrivate;
+};
 
 G_DEFINE_TYPE_WITH_CODE (GncTreeModelAccount,
                          gnc_tree_model_account, GNC_TYPE_TREE_MODEL,
-                         G_ADD_PRIVATE (GncTreeModelAccount)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_TREE_MODEL,
                                                 gnc_tree_model_account_tree_model_init))
-
-#define GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(o)  \
-   ((GncTreeModelAccountPrivate*)gnc_tree_model_account_get_instance_private((GncTreeModelAccount*)o))
-
 
 /************************************************************/
 /*           Account Tree Model - Misc Functions            */
@@ -134,28 +124,25 @@ G_DEFINE_TYPE_WITH_CODE (GncTreeModelAccount,
 static void
 gnc_tree_model_account_update_color (gpointer gsettings, gchar *key, gpointer user_data)
 {
-    GncTreeModelAccountPrivate *priv;
-    GncTreeModelAccount *model;
     gboolean use_red;
 
     g_return_if_fail (GNC_IS_TREE_MODEL_ACCOUNT(user_data));
-    model = user_data;
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
+    GncTreeModelAccount *model = user_data;
 
     // destroy/recreate the cached account value hash to force update
-    g_hash_table_destroy (priv->account_values_hash);
-    priv->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+    g_hash_table_destroy (model->account_values_hash);
+    model->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                        g_free, g_free);
 
     use_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
-    if (priv->negative_color)
-        g_free (priv->negative_color);
+    if (model->negative_color)
+        g_free (model->negative_color);
 
     if (use_red)
-        priv->negative_color = gnc_get_negative_color ();
+        model->negative_color = gnc_get_negative_color ();
     else
-        priv->negative_color = NULL;
+        model->negative_color = NULL;
 }
 
 /************************************************************/
@@ -177,7 +164,6 @@ gnc_tree_model_account_class_init (GncTreeModelAccountClass *klass)
 static void
 gnc_tree_model_account_init (GncTreeModelAccount *model)
 {
-    GncTreeModelAccountPrivate *priv;
     gboolean use_red;
 
     ENTER("model %p", model);
@@ -188,20 +174,19 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
 
     use_red = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-    priv->book = NULL;
-    priv->root = NULL;
+    model->book = NULL;
+    model->root = NULL;
 
-    if (priv->negative_color)
-        g_free (priv->negative_color);
+    if (model->negative_color)
+        g_free (model->negative_color);
 
     if (use_red)
-        priv->negative_color = gnc_get_negative_color ();
+        model->negative_color = gnc_get_negative_color ();
     else
-        priv->negative_color = NULL;
+        model->negative_color = NULL;
 
     // create the account values cache hash
-    priv->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+    model->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                        g_free, g_free);
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
@@ -214,7 +199,6 @@ gnc_tree_model_account_init (GncTreeModelAccount *model)
 static void
 gnc_tree_model_account_finalize (GObject *object)
 {
-    GncTreeModelAccountPrivate *priv;
     GncTreeModelAccount *model;
 
     g_return_if_fail (object != NULL);
@@ -223,9 +207,8 @@ gnc_tree_model_account_finalize (GObject *object)
     ENTER("model %p", object);
 
     model = GNC_TREE_MODEL_ACCOUNT(object);
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
-    priv->book = NULL;
+    model->book = NULL;
 
     G_OBJECT_CLASS(gnc_tree_model_account_parent_class)->finalize (object);
     LEAVE(" ");
@@ -234,7 +217,6 @@ gnc_tree_model_account_finalize (GObject *object)
 static void
 gnc_tree_model_account_dispose (GObject *object)
 {
-    GncTreeModelAccountPrivate *priv;
     GncTreeModelAccount *model;
 
     g_return_if_fail (object != NULL);
@@ -243,19 +225,18 @@ gnc_tree_model_account_dispose (GObject *object)
     ENTER("model %p", object);
 
     model = GNC_TREE_MODEL_ACCOUNT(object);
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
-    if (priv->event_handler_id)
+    if (model->event_handler_id)
     {
-        qof_event_unregister_handler (priv->event_handler_id);
-        priv->event_handler_id = 0;
+        qof_event_unregister_handler (model->event_handler_id);
+        model->event_handler_id = 0;
     }
 
-    if (priv->negative_color)
-        g_free (priv->negative_color);
+    if (model->negative_color)
+        g_free (model->negative_color);
 
     // destroy the cached account values
-    g_hash_table_destroy (priv->account_values_hash);
+    g_hash_table_destroy (model->account_values_hash);
 
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
                                  gnc_tree_model_account_update_color,
@@ -274,7 +255,6 @@ GtkTreeModel *
 gnc_tree_model_account_new (Account *root)
 {
     GncTreeModelAccount *model;
-    GncTreeModelAccountPrivate *priv;
     const GList *item;
 
     ENTER("root %p", root);
@@ -282,8 +262,7 @@ gnc_tree_model_account_new (Account *root)
     for ( ; item; item = g_list_next (item))
     {
         model = (GncTreeModelAccount *)item->data;
-        priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-        if (priv->root == root)
+        if (model->root == root)
         {
             g_object_ref (G_OBJECT(model));
             LEAVE("returning existing model %p", model);
@@ -293,11 +272,10 @@ gnc_tree_model_account_new (Account *root)
 
     model = g_object_new (GNC_TYPE_TREE_MODEL_ACCOUNT, NULL);
 
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-    priv->book = gnc_get_current_book();
-    priv->root = root;
+    model->book = gnc_get_current_book();
+    model->root = root;
 
-    priv->event_handler_id = qof_event_register_handler
+    model->event_handler_id = qof_event_register_handler
                              ((QofEventHandler)gnc_tree_model_account_event_handler, model);
 
     LEAVE("model %p", model);
@@ -437,7 +415,6 @@ gnc_tree_model_account_get_iter (GtkTreeModel *tree_model,
                                  GtkTreeIter *iter,
                                  GtkTreePath *path)
 {
-    GncTreeModelAccountPrivate *priv;
     GncTreeModelAccount *model;
     Account *account, *parent;
     gint i, *indices;
@@ -451,7 +428,6 @@ gnc_tree_model_account_get_iter (GtkTreeModel *tree_model,
     }
 
     model = GNC_TREE_MODEL_ACCOUNT(tree_model);
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
     if (gtk_tree_path_get_depth (path) <= 0)
     {
@@ -467,7 +443,7 @@ gnc_tree_model_account_get_iter (GtkTreeModel *tree_model,
     }
 
     parent = NULL;
-    account = priv->root;
+    account = model->root;
     for (i = 1; i < gtk_tree_path_get_depth (path); i++)
     {
         parent = account;
@@ -494,7 +470,6 @@ gnc_tree_model_account_get_path (GtkTreeModel *tree_model,
                                  GtkTreeIter *iter)
 {
     GncTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT(tree_model);
-    GncTreeModelAccountPrivate *priv;
     Account *account, *parent;
     GtkTreePath *path;
     gint i;
@@ -506,8 +481,7 @@ gnc_tree_model_account_get_path (GtkTreeModel *tree_model,
 
     ENTER("model %p, iter %s", model, iter_to_string (iter));
 
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-    if (priv->root == NULL)
+    if (model->root == NULL)
     {
         LEAVE("failed (1)");
         return NULL;
@@ -547,11 +521,8 @@ gnc_tree_model_account_set_color (GncTreeModelAccount *model,
                                   gboolean negative,
                                   GValue *value)
 {
-    GncTreeModelAccountPrivate *priv;
-
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
     if (negative)
-        g_value_set_static_string (value, priv->negative_color);
+        g_value_set_static_string (value, model->negative_color);
     else
         g_value_set_static_string (value, NULL);
 }
@@ -562,7 +533,6 @@ gnc_tree_model_account_compute_period_balance (GncTreeModelAccount *model,
                                                gboolean recurse,
                                                gboolean *negative)
 {
-    GncTreeModelAccountPrivate *priv;
     GNCPrintAmountInfo print_info;
     time64 t1, t2;
     gnc_numeric b3;
@@ -570,8 +540,7 @@ gnc_tree_model_account_compute_period_balance (GncTreeModelAccount *model,
     if (negative)
         *negative = FALSE;
 
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-    if (acct == priv->root)
+    if (acct == model->root)
         return g_strdup ("");
 
     t1 = gnc_accounting_period_fiscal_start ();
@@ -605,11 +574,9 @@ gnc_tree_model_account_clear_cache (GncTreeModelAccount *model)
 {
     if (model)
     {
-        GncTreeModelAccountPrivate *priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-
         // destroy the cached account values and recreate
-        g_hash_table_destroy (priv->account_values_hash);
-        priv->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
+        g_hash_table_destroy (model->account_values_hash);
+        model->account_values_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                            g_free, g_free);
 
         gtk_tree_model_foreach (GTK_TREE_MODEL(model), row_changed_foreach_func, NULL);
@@ -649,20 +616,19 @@ clear_account_cached_values (GncTreeModelAccount *model, GHashTable *hash, Accou
 static void
 gnc_tree_model_account_clear_cached_values (GncTreeModelAccount *model, Account *account)
 {
-    GncTreeModelAccountPrivate *priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
     Account *parent;
 
     // no hash table or account, return
-    if ((!priv->account_values_hash) || (!account))
+    if ((!model->account_values_hash) || (!account))
         return;
 
-    clear_account_cached_values (model, priv->account_values_hash, account);
+    clear_account_cached_values (model, model->account_values_hash, account);
     parent = gnc_account_get_parent (account);
 
     // clear also all parent accounts, this will update any balances/totals
     while (parent)
     {
-        clear_account_cached_values (model, priv->account_values_hash, parent);
+        clear_account_cached_values (model, model->account_values_hash, parent);
         parent = gnc_account_get_parent (parent);
     }
 }
@@ -671,19 +637,18 @@ static gboolean
 gnc_tree_model_account_get_cached_value (GncTreeModelAccount *model, Account *account,
                                          gint column, gchar **cached_string)
 {
-    GncTreeModelAccountPrivate *priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
     gchar acct_guid_str[GUID_ENCODING_LENGTH + 1];
     gchar *key = NULL;
     gpointer value;
     gboolean found;
 
-    if ((!priv->account_values_hash) || (!account))
+    if ((!model->account_values_hash) || (!account))
         return FALSE;
 
     guid_to_string_buff (xaccAccountGetGUID (account), acct_guid_str);
     key = g_strdup_printf ("%s,%d", acct_guid_str, column);
 
-    found = g_hash_table_lookup_extended (priv->account_values_hash, key,
+    found = g_hash_table_lookup_extended (model->account_values_hash, key,
                                           NULL, &value);
 
      if (found)
@@ -698,9 +663,7 @@ static void
 gnc_tree_model_account_set_cached_value (GncTreeModelAccount *model, Account *account,
                                          gint column, GValue *value)
 {
-    GncTreeModelAccountPrivate *priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-
-    if ((!priv->account_values_hash) || (!account))
+    if ((!model->account_values_hash) || (!account))
         return;
 
     // only interested in string values
@@ -713,7 +676,7 @@ gnc_tree_model_account_set_cached_value (GncTreeModelAccount *model, Account *ac
         guid_to_string_buff (xaccAccountGetGUID (account), acct_guid_str);
         key = g_strdup_printf ("%s,%d", acct_guid_str, column);
 
-        g_hash_table_insert (priv->account_values_hash, key, g_strdup (str));
+        g_hash_table_insert (model->account_values_hash, key, g_strdup (str));
     }
 }
 
@@ -724,7 +687,6 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
                                   GValue *value)
 {
     GncTreeModelAccount *model = GNC_TREE_MODEL_ACCOUNT(tree_model);
-    GncTreeModelAccountPrivate *priv;
     Account *account;
     gboolean negative; /* used to set "deficit style" also known as red numbers */
     gchar *string;
@@ -741,7 +703,6 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
           iter_to_string (iter), column);
 
     account = (Account *) iter->user_data;
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
     // lets see if the value is in the cache
     if (gnc_tree_model_account_get_cached_value (model, account, column, &cached_string))
@@ -756,7 +717,7 @@ gnc_tree_model_account_get_value (GtkTreeModel *tree_model,
     {
     case GNC_TREE_MODEL_ACCOUNT_COL_NAME:
         g_value_init (value, G_TYPE_STRING);
-        if (account == priv->root)
+        if (account == model->root)
             g_value_set_string (value, _("New top level account"));
         else
             g_value_set_string (value, xaccAccountGetName (account));
@@ -1037,7 +998,6 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
                                       GtkTreeIter *iter,
                                       GtkTreeIter *parent_iter)
 {
-    GncTreeModelAccountPrivate *priv;
     GncTreeModelAccount *model;
     Account *account, *parent;
 
@@ -1046,9 +1006,8 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
           tree_model, iter, (parent_iter ? iter_to_string (parent_iter) : "(null)"));
 
     model = GNC_TREE_MODEL_ACCOUNT(tree_model);
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
-    if (priv->root == NULL)
+    if (model->root == NULL)
     {
         iter->stamp = 0;
         LEAVE("failed (no root)");
@@ -1058,7 +1017,7 @@ gnc_tree_model_account_iter_children (GtkTreeModel *tree_model,
     /* Special case when no parent supplied. */
     if (!parent_iter)
     {
-        iter->user_data = priv->root;
+        iter->user_data = model->root;
         iter->user_data2 = NULL;
         iter->user_data3 = GINT_TO_POINTER(0);
         iter->stamp = model->stamp;
@@ -1152,7 +1111,6 @@ gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
                                        int n)
 {
     GncTreeModelAccount *model;
-    GncTreeModelAccountPrivate *priv;
     Account *account, *parent;
 
     if (parent_iter)
@@ -1172,7 +1130,6 @@ gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
     gnc_leave_return_val_if_fail (GNC_IS_TREE_MODEL_ACCOUNT(tree_model), FALSE);
 
     model = GNC_TREE_MODEL_ACCOUNT(tree_model);
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
     /* Special case when no parent supplied. */
     if (!parent_iter)
@@ -1183,7 +1140,7 @@ gnc_tree_model_account_iter_nth_child (GtkTreeModel *tree_model,
             return FALSE;
         }
 
-        iter->user_data = priv->root;
+        iter->user_data = model->root;
         iter->user_data2 = NULL;
         iter->user_data3 = GINT_TO_POINTER(0);
         iter->stamp = model->stamp;
@@ -1302,7 +1259,6 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
                                               Account *account,
                                               GtkTreeIter *iter)
 {
-    GncTreeModelAccountPrivate *priv;
     Account *parent;
     gint i;
 
@@ -1314,8 +1270,7 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
     iter->user_data = account;
     iter->stamp = model->stamp;
 
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
-    if (account == priv->root)
+    if (account == model->root)
     {
         iter->user_data2 = NULL;
         iter->user_data3 = GINT_TO_POINTER(0);
@@ -1323,7 +1278,7 @@ gnc_tree_model_account_get_iter_from_account (GncTreeModelAccount *model,
         return TRUE;
     }
 
-    if (priv->root != gnc_account_get_root (account))
+    if (model->root != gnc_account_get_root (account))
     {
         LEAVE("Root doesn't match");
         return FALSE;
@@ -1448,7 +1403,6 @@ gnc_tree_model_account_event_handler (QofInstance *entity,
                                       GncTreeModelAccount *model,
                                       GncEventData *ed)
 {
-    GncTreeModelAccountPrivate *priv;
     const gchar *parent_name;
     GtkTreePath *path = NULL;
     GtkTreeIter iter;
@@ -1461,16 +1415,15 @@ gnc_tree_model_account_event_handler (QofInstance *entity,
 
     ENTER("entity %p of type %d, model %p, event_data %p",
           entity, event_type, model, ed);
-    priv = GNC_TREE_MODEL_ACCOUNT_GET_PRIVATE(model);
 
     account = GNC_ACCOUNT(entity);
 
-    if (gnc_account_get_book (account) != priv->book)
+    if (gnc_account_get_book (account) != model->book)
     {
         LEAVE("not in this book");
         return;
     }
-    if (gnc_account_get_root (account) != priv->root)
+    if (gnc_account_get_root (account) != model->root)
     {
         LEAVE("not in this model");
         return;
@@ -1505,7 +1458,7 @@ gnc_tree_model_account_event_handler (QofInstance *entity,
     case QOF_EVENT_REMOVE:
         if (!ed) /* Required for a remove. */
             break;
-        parent = ed->node ? GNC_ACCOUNT(ed->node) : priv->root;
+        parent = ed->node ? GNC_ACCOUNT(ed->node) : model->root;
         parent_name = ed->node ? xaccAccountGetName (parent) : "Root";
         DEBUG("remove child %d of account %p (%s)", ed->idx, parent, parent_name);
         path = gnc_tree_model_account_get_path_from_account (model, parent);

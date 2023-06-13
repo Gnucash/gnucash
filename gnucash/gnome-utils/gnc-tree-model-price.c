@@ -126,22 +126,13 @@ struct _GncTreeModelPrice
     GncTreeModel gnc_tree_model;    /**< The parent object data. */
     int stamp;                      /**< The state of the model. Any state
                                      *   change increments this number. */
-};
-
-/** The instance private data for a price database tree model. */
-typedef struct GncTreeModelPricePrivate
-{
     QofBook *book;
     GNCPriceDB *price_db;
     gint event_handler_id;
     GNCPrintAmountInfo print_info;
-} GncTreeModelPricePrivate;
-
-#define GNC_TREE_MODEL_PRICE_GET_PRIVATE(o)  \
-   ((GncTreeModelPricePrivate*)gnc_tree_model_price_get_instance_private((GncTreeModelPrice*)o))
+};
 
 G_DEFINE_TYPE_WITH_CODE(GncTreeModelPrice, gnc_tree_model_price, GNC_TYPE_TREE_MODEL,
-                        G_ADD_PRIVATE(GncTreeModelPrice)
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
                                               gnc_tree_model_price_tree_model_init))
 
@@ -157,22 +148,18 @@ gnc_tree_model_price_class_init (GncTreeModelPriceClass *klass)
 static void
 gnc_tree_model_price_init (GncTreeModelPrice *model)
 {
-    GncTreeModelPricePrivate *priv;
-
     while (model->stamp == 0)
     {
         model->stamp = g_random_int ();
     }
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
-    priv->print_info = gnc_default_price_print_info(NULL);
+    model->print_info = gnc_default_price_print_info(NULL);
 }
 
 static void
 gnc_tree_model_price_finalize (GObject *object)
 {
     GncTreeModelPrice *model;
-    GncTreeModelPricePrivate *priv;
 
     ENTER("model %p", object);
 
@@ -180,10 +167,9 @@ gnc_tree_model_price_finalize (GObject *object)
     g_return_if_fail (GNC_IS_TREE_MODEL_PRICE (object));
 
     model = GNC_TREE_MODEL_PRICE (object);
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
 
-    priv->book = NULL;
-    priv->price_db = NULL;
+    model->book = NULL;
+    model->price_db = NULL;
 
     G_OBJECT_CLASS (gnc_tree_model_price_parent_class)->finalize (object);
     LEAVE(" ");
@@ -193,19 +179,17 @@ static void
 gnc_tree_model_price_dispose (GObject *object)
 {
     GncTreeModelPrice *model;
-    GncTreeModelPricePrivate *priv;
 
     ENTER("model %p", object);
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_TREE_MODEL_PRICE (object));
 
     model = GNC_TREE_MODEL_PRICE (object);
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
 
-    if (priv->event_handler_id)
+    if (model->event_handler_id)
     {
-        qof_event_unregister_handler (priv->event_handler_id);
-        priv->event_handler_id = 0;
+        qof_event_unregister_handler (model->event_handler_id);
+        model->event_handler_id = 0;
     }
 
     G_OBJECT_CLASS (gnc_tree_model_price_parent_class)->dispose (object);
@@ -216,7 +200,6 @@ GtkTreeModel *
 gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db)
 {
     GncTreeModelPrice *model;
-    GncTreeModelPricePrivate *priv;
     const GList *item;
 
     ENTER(" ");
@@ -225,8 +208,7 @@ gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db)
     for ( ; item; item = g_list_next(item))
     {
         model = (GncTreeModelPrice *)item->data;
-        priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
-        if (priv->price_db == price_db)
+        if (model->price_db == price_db)
         {
             g_object_ref(G_OBJECT(model));
             LEAVE("returning existing model %p", model);
@@ -236,11 +218,10 @@ gnc_tree_model_price_new (QofBook *book, GNCPriceDB *price_db)
 
     model = g_object_new (GNC_TYPE_TREE_MODEL_PRICE, NULL);
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
-    priv->book = book;
-    priv->price_db = price_db;
+    model->book = book;
+    model->price_db = price_db;
 
-    priv->event_handler_id =
+    model->event_handler_id =
         qof_event_register_handler (gnc_tree_model_price_event_handler, model);
 
     LEAVE("returning new model %p", model);
@@ -340,7 +321,6 @@ gnc_tree_model_price_get_price (GncTreeModelPrice *model,
 static const gchar *
 iter_to_string (GncTreeModelPrice *model, GtkTreeIter *iter)
 {
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_namespace *name_space;
     gnc_commodity *commodity;
     GNCPrice *price;
@@ -358,7 +338,6 @@ iter_to_string (GncTreeModelPrice *model, GtkTreeIter *iter)
     static char string[ITER_STRING_LEN + 1];
 #endif
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
     if (iter)
     {
         switch (GPOINTER_TO_INT(iter->user_data))
@@ -388,7 +367,7 @@ iter_to_string (GncTreeModelPrice *model, GtkTreeIter *iter)
                      "[stamp:%x data:%d (PRICE), %p (%s:%s), %d]",
                      iter->stamp, GPOINTER_TO_INT(iter->user_data),
                      iter->user_data2, gnc_commodity_get_mnemonic (commodity),
-                     xaccPrintAmount (gnc_price_get_value (price), priv->print_info),
+                     xaccPrintAmount (gnc_price_get_value (price), model->print_info),
                      GPOINTER_TO_INT(iter->user_data3));
             break;
 
@@ -469,7 +448,6 @@ gnc_tree_model_price_get_iter (GtkTreeModel *tree_model,
                                GtkTreePath *path)
 {
     GncTreeModelPrice *model;
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_table *ct;
     gnc_commodity_namespace *name_space;
     gnc_commodity *commodity = NULL;
@@ -497,15 +475,14 @@ gnc_tree_model_price_get_iter (GtkTreeModel *tree_model,
 
     /* Make sure the model has a price db. */
     model = GNC_TREE_MODEL_PRICE (tree_model);
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
-    if (priv->price_db == NULL)
+    if (model->price_db == NULL)
     {
         LEAVE("no price db");
         return FALSE;
     }
 
     /* Verify the first part of the path: the namespace. */
-    ct = qof_book_get_data (priv->book, GNC_COMMODITY_TABLE);
+    ct = qof_book_get_data (model->book, GNC_COMMODITY_TABLE);
     ns_list = gnc_commodity_table_get_namespaces_list(ct);
     i = gtk_tree_path_get_indices (path)[0];
     name_space = g_list_nth_data (ns_list, i);
@@ -549,7 +526,7 @@ gnc_tree_model_price_get_iter (GtkTreeModel *tree_model,
 
     /* Verify the third part of the path: the price. */
     i = gtk_tree_path_get_indices (path)[2];
-    price = gnc_pricedb_nth_price(priv->price_db, commodity, i);
+    price = gnc_pricedb_nth_price(model->price_db, commodity, i);
     /* There's a race condition here that I can't resolve.
      * Comment this check out for now, and we'll handle the
      * resulting problem elsewhere. */
@@ -575,7 +552,6 @@ gnc_tree_model_price_get_path (GtkTreeModel *tree_model,
                                GtkTreeIter *iter)
 {
     GncTreeModelPrice *model = GNC_TREE_MODEL_PRICE (tree_model);
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_table *ct;
     gnc_commodity_namespace *name_space;
     gnc_commodity *commodity;
@@ -589,8 +565,7 @@ gnc_tree_model_price_get_path (GtkTreeModel *tree_model,
     g_return_val_if_fail (iter->stamp == model->stamp, NULL);
 
     /* Make sure this model has a price db. */
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
-    if (priv->price_db == NULL)
+    if (model->price_db == NULL)
     {
         LEAVE("no price db");
         return FALSE;
@@ -607,7 +582,7 @@ gnc_tree_model_price_get_path (GtkTreeModel *tree_model,
     }
 
     /* Get the namespaces list. */
-    ct = qof_book_get_data (priv->book, GNC_COMMODITY_TABLE);
+    ct = qof_book_get_data (model->book, GNC_COMMODITY_TABLE);
     ns_list = gnc_commodity_table_get_namespaces_list(ct);
 
     if (iter->user_data == ITER_IS_COMMODITY)
@@ -641,7 +616,6 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
                                 GValue *value)
 {
     GncTreeModelPrice *model = GNC_TREE_MODEL_PRICE (tree_model);
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_namespace *name_space;
     gnc_commodity *commodity;
     GNCPrice *price;
@@ -750,9 +724,8 @@ gnc_tree_model_price_get_value (GtkTreeModel *tree_model,
         break;
     case GNC_TREE_MODEL_PRICE_COL_VALUE:
         g_value_init (value, G_TYPE_STRING);
-        priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
         g_value_set_string (value, xaccPrintAmount (gnc_price_get_value (price),
-                            priv->print_info));
+                            model->print_info));
         break;
     case GNC_TREE_MODEL_PRICE_COL_VISIBILITY:
         g_value_init (value, G_TYPE_BOOLEAN);
@@ -768,7 +741,6 @@ gnc_tree_model_price_iter_next (GtkTreeModel *tree_model,
                                 GtkTreeIter *iter)
 {
     GncTreeModelPrice *model = GNC_TREE_MODEL_PRICE (tree_model);
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_table *ct;
     gnc_commodity *commodity;
     gnc_commodity_namespace *name_space;
@@ -781,10 +753,9 @@ gnc_tree_model_price_iter_next (GtkTreeModel *tree_model,
     g_return_val_if_fail (iter->user_data != NULL, FALSE);
     g_return_val_if_fail (iter->stamp == model->stamp, FALSE);
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
     if (iter->user_data == ITER_IS_NAMESPACE)
     {
-        ct = qof_book_get_data (priv->book, GNC_COMMODITY_TABLE);
+        ct = qof_book_get_data (model->book, GNC_COMMODITY_TABLE);
         list = gnc_commodity_table_get_namespaces_list(ct);
         n = GPOINTER_TO_INT(iter->user_data3) + 1;
         iter->user_data2 = g_list_nth_data(list, n);
@@ -816,7 +787,7 @@ gnc_tree_model_price_iter_next (GtkTreeModel *tree_model,
     {
         commodity = gnc_price_get_commodity((GNCPrice*)iter->user_data2);
         n = GPOINTER_TO_INT(iter->user_data3) + 1;
-        iter->user_data2 = gnc_pricedb_nth_price(priv->price_db, commodity, n);
+        iter->user_data2 = gnc_pricedb_nth_price(model->price_db, commodity, n);
         if (iter->user_data2 == NULL)
         {
             LEAVE("no next iter");
@@ -839,7 +810,6 @@ gnc_tree_model_price_iter_children (GtkTreeModel *tree_model,
                                     GtkTreeIter *parent)
 {
     GncTreeModelPrice *model;
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_table *ct;
     gnc_commodity_namespace *name_space;
     gnc_commodity *commodity;
@@ -851,10 +821,9 @@ gnc_tree_model_price_iter_children (GtkTreeModel *tree_model,
     ENTER("model %p, iter %p, parent %p (%s)",
           tree_model, iter, parent, iter_to_string(model, parent));
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
     if (parent == NULL)
     {
-        ct = qof_book_get_data (priv->book, GNC_COMMODITY_TABLE);
+        ct = qof_book_get_data (model->book, GNC_COMMODITY_TABLE);
         list = gnc_commodity_table_get_namespaces_list(ct);
         if (list == NULL)
         {
@@ -892,7 +861,7 @@ gnc_tree_model_price_iter_children (GtkTreeModel *tree_model,
     {
         GNCPrice *price;
         commodity = (gnc_commodity *)parent->user_data2;
-        price = gnc_pricedb_nth_price(priv->price_db, commodity, 0);
+        price = gnc_pricedb_nth_price(model->price_db, commodity, 0);
         if (price == NULL)
         {
             LEAVE("no prices");
@@ -915,7 +884,6 @@ gnc_tree_model_price_iter_has_child (GtkTreeModel *tree_model,
                                      GtkTreeIter *iter)
 {
     GncTreeModelPrice *model;
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_namespace *name_space;
     gnc_commodity *commodity;
     gboolean result;
@@ -927,7 +895,6 @@ gnc_tree_model_price_iter_has_child (GtkTreeModel *tree_model,
     g_return_val_if_fail (tree_model != NULL, FALSE);
     g_return_val_if_fail (iter != NULL, FALSE);
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
     if (iter->user_data == ITER_IS_PRICE)
     {
         LEAVE("price has no children");
@@ -945,7 +912,7 @@ gnc_tree_model_price_iter_has_child (GtkTreeModel *tree_model,
     if (iter->user_data == ITER_IS_COMMODITY)
     {
         commodity = (gnc_commodity *)iter->user_data2;
-        result = gnc_pricedb_has_prices(priv->price_db, commodity, NULL);
+        result = gnc_pricedb_has_prices(model->price_db, commodity, NULL);
         LEAVE("%s children", result ? "has" : "no");
         return result;
     }
@@ -959,7 +926,6 @@ gnc_tree_model_price_iter_n_children (GtkTreeModel *tree_model,
                                       GtkTreeIter *iter)
 {
     GncTreeModelPrice *model;
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_table *ct;
     gnc_commodity_namespace *name_space;
     gnc_commodity *commodity;
@@ -972,10 +938,9 @@ gnc_tree_model_price_iter_n_children (GtkTreeModel *tree_model,
     ENTER("model %p, iter %p (%s)", tree_model, iter,
           iter_to_string(model, iter));
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
     if (iter == NULL)
     {
-        ct = qof_book_get_data (priv->book, GNC_COMMODITY_TABLE);
+        ct = qof_book_get_data (model->book, GNC_COMMODITY_TABLE);
         list = gnc_commodity_table_get_namespaces_list(ct);
         LEAVE("ns list length %d", g_list_length(list));
         return g_list_length (list);
@@ -992,7 +957,7 @@ gnc_tree_model_price_iter_n_children (GtkTreeModel *tree_model,
     if (iter->user_data == ITER_IS_COMMODITY)
     {
         commodity = (gnc_commodity *)iter->user_data2;
-        n = gnc_pricedb_num_prices(priv->price_db, commodity);
+        n = gnc_pricedb_num_prices(model->price_db, commodity);
         LEAVE("price list length %d", n);
         return n;
     }
@@ -1008,7 +973,6 @@ gnc_tree_model_price_iter_nth_child (GtkTreeModel *tree_model,
                                      int n)
 {
     GncTreeModelPrice *model;
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_table *ct;
     gnc_commodity_namespace *name_space;
     gnc_commodity *commodity;
@@ -1021,10 +985,9 @@ gnc_tree_model_price_iter_nth_child (GtkTreeModel *tree_model,
     ENTER("model %p, iter %p, parent %p (%s), n %d",
           tree_model, iter, parent, iter_to_string(model, parent), n);
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
     if (parent == NULL)
     {
-        ct = qof_book_get_data (priv->book, GNC_COMMODITY_TABLE);
+        ct = qof_book_get_data (model->book, GNC_COMMODITY_TABLE);
         list = gnc_commodity_table_get_namespaces_list(ct);
 
         iter->stamp      = model->stamp;
@@ -1054,7 +1017,7 @@ gnc_tree_model_price_iter_nth_child (GtkTreeModel *tree_model,
 
         iter->stamp      = model->stamp;
         iter->user_data  = ITER_IS_PRICE;
-        iter->user_data2 = gnc_pricedb_nth_price(priv->price_db, commodity, n);
+        iter->user_data2 = gnc_pricedb_nth_price(model->price_db, commodity, n);
         iter->user_data3 = GINT_TO_POINTER(n);
         LEAVE("price iter %p (%s)", iter, iter_to_string(model, iter));
         return iter->user_data2 != NULL;
@@ -1071,7 +1034,6 @@ gnc_tree_model_price_iter_parent (GtkTreeModel *tree_model,
                                   GtkTreeIter *child)
 {
     GncTreeModelPrice *model;
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_table *ct;
     gnc_commodity * commodity;
     gnc_commodity_namespace *name_space;
@@ -1085,7 +1047,6 @@ gnc_tree_model_price_iter_parent (GtkTreeModel *tree_model,
     ENTER("model %p, iter %p, child %p (%s)",
           tree_model, iter, child, iter_to_string(model, child));
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
     if (child->user_data == ITER_IS_NAMESPACE)
     {
         LEAVE("ns has no parent");
@@ -1094,7 +1055,7 @@ gnc_tree_model_price_iter_parent (GtkTreeModel *tree_model,
 
     if (child->user_data == ITER_IS_COMMODITY)
     {
-        ct = qof_book_get_data (priv->book, GNC_COMMODITY_TABLE);
+        ct = qof_book_get_data (model->book, GNC_COMMODITY_TABLE);
         list = gnc_commodity_table_get_namespaces_list(ct);
         name_space = gnc_commodity_get_namespace_ds((gnc_commodity*)child->user_data2);
 
@@ -1132,7 +1093,6 @@ gnc_tree_model_price_get_iter_from_price (GncTreeModelPrice *model,
         GNCPrice *price,
         GtkTreeIter *iter)
 {
-    GncTreeModelPricePrivate *priv;
     gnc_commodity *commodity;
     GList *list;
     gint n;
@@ -1142,7 +1102,6 @@ gnc_tree_model_price_get_iter_from_price (GncTreeModelPrice *model,
     g_return_val_if_fail ((price != NULL), FALSE);
     g_return_val_if_fail ((iter != NULL), FALSE);
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
     commodity = gnc_price_get_commodity(price);
     if (commodity == NULL)
     {
@@ -1150,7 +1109,7 @@ gnc_tree_model_price_get_iter_from_price (GncTreeModelPrice *model,
         return FALSE;
     }
 
-    list = gnc_pricedb_get_prices(priv->price_db, commodity, NULL);
+    list = gnc_pricedb_get_prices(model->price_db, commodity, NULL);
     if (list == NULL)
     {
         LEAVE("empty list");
@@ -1268,7 +1227,6 @@ gnc_tree_model_price_get_iter_from_namespace (GncTreeModelPrice *model,
         gnc_commodity_namespace *name_space,
         GtkTreeIter *iter)
 {
-    GncTreeModelPricePrivate *priv;
     gnc_commodity_table *ct;
     GList *list;
     gint n;
@@ -1278,8 +1236,7 @@ gnc_tree_model_price_get_iter_from_namespace (GncTreeModelPrice *model,
     g_return_val_if_fail ((name_space != NULL), FALSE);
     g_return_val_if_fail ((iter != NULL), FALSE);
 
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
-    ct = qof_book_get_data (priv->book, GNC_COMMODITY_TABLE);
+    ct = qof_book_get_data (model->book, GNC_COMMODITY_TABLE);
     list = gnc_commodity_table_get_namespaces_list(ct);
     if (list == NULL)
     {
@@ -1541,7 +1498,6 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
                                     gpointer event_data)
 {
     GncTreeModelPrice *model;
-    GncTreeModelPricePrivate *priv;
     GtkTreePath *path;
     GtkTreeIter iter;
     remove_data *data;
@@ -1550,11 +1506,10 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
     ENTER("entity %p, event %d, model %p, event data %p",
           entity, event_type, user_data, event_data);
     model = (GncTreeModelPrice *)user_data;
-    priv = GNC_TREE_MODEL_PRICE_GET_PRIVATE(model);
 
     /* Do deletions if any are pending. */
     if (pending_removals)
-        gnc_tree_model_price_do_deletions (priv->price_db);
+        gnc_tree_model_price_do_deletions (model->price_db);
 
     /* hard failures */
     g_return_if_fail(GNC_IS_TREE_MODEL_PRICE(model));
@@ -1616,7 +1571,7 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
     case QOF_EVENT_ADD:
         /* Tell the filters/views where the new price was added. */
         DEBUG("add %s", name);
-        gnc_pricedb_nth_price_reset_cache (priv->price_db);
+        gnc_pricedb_nth_price_reset_cache (model->price_db);
         gnc_tree_model_price_row_add (model, &iter);
         break;
 
@@ -1635,7 +1590,7 @@ gnc_tree_model_price_event_handler (QofInstance *entity,
         data->path = path;
         pending_removals = g_slist_append (pending_removals, data);
         g_idle_add_full(G_PRIORITY_HIGH_IDLE,
-                        gnc_tree_model_price_do_deletions, priv->price_db, NULL);
+                        gnc_tree_model_price_do_deletions, model->price_db, NULL);
 
         LEAVE(" ");
         return;
