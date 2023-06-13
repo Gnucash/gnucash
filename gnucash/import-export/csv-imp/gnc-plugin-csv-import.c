@@ -63,15 +63,7 @@ struct _GncPluginCsvImport
     GncPlugin gnc_plugin;
 };
 
-typedef struct GncPluginCsvImportPrivate
-{
-    gpointer dummy;
-} GncPluginCsvImportPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginCsvImport, gnc_plugin_csv_import, GNC_TYPE_PLUGIN)
-
-#define GNC_PLUGIN_CSV_IMPORT_GET_PRIVATE(o)  \
-   ((GncPluginCsvImportPrivate*)gnc_plugin_csv_import_get_instance_private((GncPluginCsvImport*)o))
+G_DEFINE_TYPE(GncPluginCsvImport, gnc_plugin_csv_import, GNC_TYPE_PLUGIN)
 
 GncPlugin *
 gnc_plugin_csv_import_new (void)

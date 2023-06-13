@@ -83,14 +83,6 @@ struct _GncPluginBudget
     GncPlugin gnc_plugin;
 };
 
-typedef struct GncPluginBudgetPrivate
-{
-    gpointer dummy;
-} GncPluginBudgetPrivate;
-
-#define GNC_PLUGIN_BUDGET_GET_PRIVATE(o)  \
-   ((GncPluginBudgetPrivate*)gnc_plugin_budget_get_instance_private((GncPluginBudget*)o))
-
 GncPlugin * 
 gnc_plugin_budget_new (void)
 {
@@ -129,7 +121,7 @@ remove_from_window (GncPlugin *plugin, GncMainWindow *window, GQuark type)
     g_signal_handlers_disconnect_by_func (window, G_CALLBACK(page_changed), plugin);
 }
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginBudget, gnc_plugin_budget, GNC_TYPE_PLUGIN)
+G_DEFINE_TYPE(GncPluginBudget, gnc_plugin_budget, GNC_TYPE_PLUGIN)
 
 static void
 gnc_plugin_budget_class_init (GncPluginBudgetClass *klass)

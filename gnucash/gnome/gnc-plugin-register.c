@@ -64,15 +64,7 @@ struct _GncPluginRegister
     GncPlugin gnc_plugin;
 };
 
-typedef struct GncPluginRegisterPrivate
-{
-    gpointer dummy;
-} GncPluginRegisterPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginRegister, gnc_plugin_register, GNC_TYPE_PLUGIN)
-
-#define GNC_PLUGIN_REGISTER_GET_PRIVATE(o)  \
-   ((GncPluginRegisterPrivate*)gnc_plugin_register_get_instance_private((GncPluginRegister*)o))
+G_DEFINE_TYPE(GncPluginRegister, gnc_plugin_register, GNC_TYPE_PLUGIN)
 
 static QofLogModule log_module = GNC_MOD_GUI;
 

@@ -59,15 +59,7 @@ struct _GncPluginLogReplay
     GncPlugin gnc_plugin;
 };
 
-typedef struct GncPluginLogReplayPrivate
-{
-    gpointer dummy;
-} GncPluginLogReplayPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginLogReplay, gnc_plugin_log_replay, GNC_TYPE_PLUGIN)
-
-#define GNC_PLUGIN_LOG_REPLAY_GET_PRIVATE(o)  \
-   ((GncPluginLogReplayPrivate*)gnc_plugin_log_replay_get_instance_private((GncPluginLogReplay*)o))
+G_DEFINE_TYPE(GncPluginLogReplay, gnc_plugin_log_replay, GNC_TYPE_PLUGIN)
 
 GncPlugin *
 gnc_plugin_log_replay_new (void)

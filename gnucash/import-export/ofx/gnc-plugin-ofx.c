@@ -57,15 +57,7 @@ struct _GncPluginOfx
     GncPlugin gnc_plugin;
 };
 
-typedef struct GncPluginOfxPrivate
-{
-    gpointer dummy;
-} GncPluginOfxPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginOfx, gnc_plugin_ofx, GNC_TYPE_PLUGIN)
-
-#define GNC_PLUGIN_OFX_GET_PRIVATE(o)  \
-   ((GncPluginOfxPrivate*)gnc_plugin_ofx_get_instance_private((GncPluginOfx*)o))
+G_DEFINE_TYPE(GncPluginOfx, gnc_plugin_ofx, GNC_TYPE_PLUGIN)
 
 GncPlugin *
 gnc_plugin_ofx_new (void)

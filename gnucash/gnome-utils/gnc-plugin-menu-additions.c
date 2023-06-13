@@ -63,17 +63,9 @@ static QofLogModule log_module = GNC_MOD_GUI;
 struct _GncPluginMenuAdditions
 {
     GncPlugin gnc_plugin;
-};
 
-/** Private data for this plugin.  This data structure is unused. */
-typedef struct GncPluginMenuAdditionsPrivate
-{
     GHashTable *item_hash;
-} GncPluginMenuAdditionsPrivate;
-
-#define GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(o)  \
-   ((GncPluginMenuAdditionsPrivate*)gnc_plugin_menu_additions_get_instance_private((GncPluginMenuAdditions*)o))
-
+};
 
 /** Per-window private data for this plugin.  This plugin is unique in
  *  that it manages its own menu items. */
@@ -101,7 +93,7 @@ static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
  *                  Object Implementation                   *
  ************************************************************/
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginMenuAdditions, gnc_plugin_menu_additions, GNC_TYPE_PLUGIN)
+G_DEFINE_TYPE(GncPluginMenuAdditions, gnc_plugin_menu_additions, GNC_TYPE_PLUGIN)
 
 static void
 gnc_plugin_menu_additions_class_init (GncPluginMenuAdditionsClass *klass)
@@ -132,14 +124,11 @@ gnc_plugin_menu_additions_init (GncPluginMenuAdditions *plugin)
 static void
 gnc_plugin_menu_additions_finalize (GObject *object)
 {
-    GncPluginMenuAdditionsPrivate *priv;
     g_return_if_fail (GNC_IS_PLUGIN_MENU_ADDITIONS(object));
 
     ENTER("plugin %p", object);
 
-    priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(object);
-
-    g_hash_table_destroy (priv->item_hash);
+    g_hash_table_destroy (GNC_PLUGIN_MENU_ADDITIONS(object)->item_hash);
 
     G_OBJECT_CLASS (gnc_plugin_menu_additions_parent_class)->finalize (object);
     LEAVE("");
@@ -185,10 +174,6 @@ gnc_plugin_menu_additions_action_new_cb (GSimpleAction *simple,
                                          GVariant      *parameter,
                                          gpointer       user_data)
 {
-    GncMainWindowActionData *cb_data = user_data;
-    GncPlugin *plugin = cb_data->data;
-    GncPluginMenuAdditionsPrivate *priv;
-
     SCM extension;
     gsize length;
     const gchar *action_name;
@@ -197,13 +182,13 @@ gnc_plugin_menu_additions_action_new_cb (GSimpleAction *simple,
 
     ENTER("");
 
-    priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(plugin);
-
     action_name = g_variant_get_string (parameter, &length);
 
     PINFO("action name is '%s'", action_name);
 
-    extension = g_hash_table_lookup (priv->item_hash, action_name);
+    GncMainWindowActionData *cb_data = user_data;
+    GncPluginMenuAdditions *plugin = GNC_PLUGIN_MENU_ADDITIONS(cb_data->data);
+    extension = g_hash_table_lookup (plugin->item_hash, action_name);
 
     if (extension)
     {
@@ -482,7 +467,6 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
                                          GncMainWindow *window,
                                          GQuark type)
 {
-    GncPluginMenuAdditionsPrivate *priv = GNC_PLUGIN_MENU_ADDITIONS_GET_PRIVATE(plugin);
     GncPluginMenuAdditionsPerWindow per_window;
     static GOnce accel_table_init = G_ONCE_INIT;
     static GHashTable *table;
@@ -492,10 +476,11 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
 
     ENTER(" ");
 
-    if (!priv->item_hash)
-        priv->item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+    GncPluginMenuAdditions *menu_plugin = GNC_PLUGIN_MENU_ADDITIONS (plugin);
+    if (!menu_plugin->item_hash)
+        menu_plugin->item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
-    per_window.item_hash = priv->item_hash;
+    per_window.item_hash = menu_plugin->item_hash;
     per_window.build_menu_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
     per_window.report_menu = g_menu_new ();
 

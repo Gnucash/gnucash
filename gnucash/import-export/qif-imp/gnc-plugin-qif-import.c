@@ -59,15 +59,7 @@ struct _GncPluginQifImport
     GncPlugin gnc_plugin;
 };
 
-typedef struct GncPluginQifImportPrivate
-{
-    gpointer dummy;
-} GncPluginQifImportPrivate;
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginQifImport, gnc_plugin_qif_import, GNC_TYPE_PLUGIN)
-
-#define GNC_PLUGIN_QIF_IMPORT_GET_PRIVATE(o)  \
-   ((GncPluginQifImportPrivate*)gnc_plugin_qif_import_get_instance_private((GncPluginQifImport*)o))
+G_DEFINE_TYPE(GncPluginQifImport, gnc_plugin_qif_import, GNC_TYPE_PLUGIN)
 
 GncPlugin *
 gnc_plugin_qif_import_new (void)
