@@ -35,12 +35,6 @@ G_DECLARE_FINAL_TYPE (GncPluginRegister, gnc_plugin_register, GNC, PLUGIN_REGIST
 
 #define GNC_PLUGIN_REGISTER_NAME "gnc-plugin-register"
 
-/* typedefs & structures */
-struct _GncPluginRegister
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 GncPlugin *gnc_plugin_register_new      (void);
 

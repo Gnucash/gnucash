@@ -35,12 +35,6 @@ G_DECLARE_FINAL_TYPE (GncPluginCsvExport, gnc_plugin_csv_export, GNC, PLUGIN_CSV
 
 #define GNC_PLUGIN_CSV_EXPORT_NAME "gnc-plugin-csv-export"
 
-/* typedefs & structures */
-struct _GncPluginCsvExport
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 GncPlugin *gnc_plugin_csv_export_new      (void);
 

@@ -60,6 +60,11 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 #define PLUGIN_ACTIONS_NAME "gnc-plugin-menu-additions-actions"
 
+struct _GncPluginMenuAdditions
+{
+    GncPlugin gnc_plugin;
+};
+
 /** Private data for this plugin.  This data structure is unused. */
 typedef struct GncPluginMenuAdditionsPrivate
 {

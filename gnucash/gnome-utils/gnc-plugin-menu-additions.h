@@ -48,12 +48,6 @@ G_DECLARE_FINAL_TYPE (GncPluginMenuAdditions, gnc_plugin_menu_additions, GNC, PL
 
 #define GNC_PLUGIN_MENU_ADDITIONS_NAME "gnc-plugin-menu-additions"
 
-/* typedefs & structures */
-struct _GncPluginMenuAdditions
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 
 /** Create a new menu_additions plugin.  This plugin attaches the menu

@@ -174,6 +174,11 @@ static const gchar *gnc_plugin_load_ui_items [] =
  *              Plugin Function Implementation              *
  ************************************************************/
 
+struct _GncPluginBusiness
+{
+    GncPlugin gnc_plugin;
+};
+
 typedef struct GncPluginBusinessPrivate
 {
     GncOwner *last_customer;

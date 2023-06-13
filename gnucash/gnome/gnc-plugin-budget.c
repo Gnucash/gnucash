@@ -78,6 +78,11 @@ static const gchar *plugin_writeable_actions[] =
     NULL
 };
 
+struct _GncPluginBudget
+{
+    GncPlugin gnc_plugin;
+};
+
 typedef struct GncPluginBudgetPrivate
 {
     gpointer dummy;

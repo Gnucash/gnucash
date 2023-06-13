@@ -42,12 +42,6 @@ G_DECLARE_FINAL_TYPE (GncPluginExample, gnc_plugin_example, GNC, PLUGIN_EXAMPLE)
 
 #define GNC_PLUGIN_EXAMPLE_NAME "gnc-plugin-example"
 
-/* typedefs & structures */
-struct _GncPluginExample
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 
 /**

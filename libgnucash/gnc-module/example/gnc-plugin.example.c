@@ -55,6 +55,11 @@ static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
  *                   Object Implementation                  *
  ************************************************************/
 
+struct _GncPluginExample
+{
+    GncPlugin gnc_plugin;
+};
+
 G_DEFINE_TYPE(GncPluginExample, gnc_plugin_example, GNC_TYPE_PLUGIN)
 
 GncPlugin *

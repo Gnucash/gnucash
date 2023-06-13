@@ -52,6 +52,11 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
+struct _GncPluginOfx
+{
+    GncPlugin gnc_plugin;
+};
+
 typedef struct GncPluginOfxPrivate
 {
     gpointer dummy;

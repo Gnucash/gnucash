@@ -45,15 +45,6 @@ G_DECLARE_FINAL_TYPE (GncPluginBasicCommands, gnc_plugin_basic_commands, GNC, PL
 
 #define GNC_PLUGIN_BASIC_COMMANDS_NAME "gnc-plugin-basic-commands"
 
-/* typedefs & structures */
-
-/** The instance data structure for an basic commands menu plugin. */
-struct _GncPluginBasicCommands
-{
-    /** The parent object for this widget */
-    GncPlugin gnc_plugin;
-};
-
 /** Create a new basic commands menu plugin.
  *
  *  @return A pointer to the new object.

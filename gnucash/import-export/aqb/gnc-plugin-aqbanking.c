@@ -139,6 +139,11 @@ static GncMainWindow *gnc_main_window = NULL;
  *                   Object Implementation                  *
  ************************************************************/
 
+struct _GncPluginAqBanking
+{
+    GncPlugin gnc_plugin;
+};
+
 G_DEFINE_TYPE(GncPluginAqBanking, gnc_plugin_aqbanking, GNC_TYPE_PLUGIN)
 
 GncPlugin *

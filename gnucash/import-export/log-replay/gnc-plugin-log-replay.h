@@ -35,12 +35,6 @@ G_DECLARE_FINAL_TYPE (GncPluginLogReplay, gnc_plugin_log_replay, GNC, PLUGIN_LOG
 
 #define GNC_PLUGIN_LOG_REPLAY_NAME "gnc-plugin-log-replay"
 
-/* typedefs & structures */
-struct _GncPluginLogReplay
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 GncPlugin *gnc_plugin_log_replay_new      (void);
 

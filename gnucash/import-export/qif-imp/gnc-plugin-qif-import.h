@@ -36,12 +36,6 @@ G_DECLARE_FINAL_TYPE (GncPluginQifImport, gnc_plugin_qif_import, GNC, PLUGIN_QIF
 
 #define GNC_PLUGIN_QIF_IMPORT_NAME "gnc-plugin-qif-import"
 
-/* typedefs & structures */
-struct _GncPluginQifImport
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 GncPlugin *gnc_plugin_qif_import_new      (void);
 

@@ -59,6 +59,11 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
+struct _GncPluginCsvExport
+{
+    GncPlugin gnc_plugin;
+};
+
 typedef struct GncPluginCsvExportPrivate
 {
     gpointer dummy;

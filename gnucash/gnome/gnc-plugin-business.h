@@ -37,12 +37,6 @@ G_DECLARE_FINAL_TYPE (GncPluginBusiness, gnc_plugin_business, GNC, PLUGIN_BUSINE
 
 #define GNC_PLUGIN_BUSINESS_NAME "gnc-plugin-business"
 
-/* typedefs & structures */
-struct _GncPluginBusiness
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 
 GncPlugin *gnc_plugin_business_new      (void);

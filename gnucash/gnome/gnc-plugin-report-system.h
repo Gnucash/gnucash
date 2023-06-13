@@ -35,12 +35,6 @@ G_DECLARE_FINAL_TYPE (GncPluginReportSystem, gnc_plugin_report_system, GNC, PLUG
 
 #define GNC_PLUGIN_REPORT_SYSTEM_NAME "gnc-plugin-report-system"
 
-/* typedefs & structures */
-struct _GncPluginReportSystem
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 void       gnc_plugin_report_system_new  (void);
 

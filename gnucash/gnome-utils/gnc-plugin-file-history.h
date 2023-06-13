@@ -45,14 +45,6 @@ G_DECLARE_FINAL_TYPE (GncPluginFileHistory, gnc_plugin_file_history, GNC, PLUGIN
 
 #define GNC_PLUGIN_FILE_HISTORY_NAME "gnc-plugin-file-history"
 
-/* typedefs & structures */
-
-/** The instance data structure for a file history plugin. */
-struct _GncPluginFileHistory
-{
-    GncPlugin gnc_plugin;
-};
-
 
 /* function prototypes */
 

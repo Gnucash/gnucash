@@ -42,12 +42,6 @@ G_DECLARE_FINAL_TYPE (GncPluginCustomerImport, gnc_plugin_customer_import, GNC, 
 
 #define GNC_PLUGIN_CUSTOMER_IMPORT_NAME "gnc-plugin-customer-import"
 
-/* typedefs & structures */
-struct _GncPluginCustomerImport
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 
 /**

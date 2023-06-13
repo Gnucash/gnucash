@@ -35,12 +35,6 @@ G_DECLARE_FINAL_TYPE (GncPluginCsvImport, gnc_plugin_csv_import, GNC, PLUGIN_CSV
 
 #define GNC_PLUGIN_CSV_IMPORT_NAME "gnc-plugin-csv-import"
 
-/* typedefs & structures */
-struct _GncPluginCsvImport
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 GncPlugin *gnc_plugin_csv_import_new      (void);
 

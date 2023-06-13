@@ -35,12 +35,6 @@ G_DECLARE_FINAL_TYPE (GncPluginOfx, gnc_plugin_ofx, GNC, PLUGIN_OFX, GncPlugin)
 
 #define GNC_PLUGIN_OFX_NAME "gnc-plugin-ofx"
 
-/* typedefs & structures */
-struct _GncPluginOfx
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 GncPlugin *gnc_plugin_ofx_new      (void);
 

@@ -42,12 +42,6 @@ G_DECLARE_FINAL_TYPE (GncPluginBiImport, gnc_plugin_bi_import, GNC, PLUGIN_BI_IM
 
 #define GNC_PLUGIN_BI_IMPORT_NAME "gnc-plugin-bi-import"
 
-/* typedefs & structures */
-struct _GncPluginBiImport
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 
 /**

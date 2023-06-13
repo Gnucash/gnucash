@@ -45,12 +45,6 @@ G_DECLARE_FINAL_TYPE (GncPluginAqBanking, gnc_plugin_aqbanking, GNC, PLUGIN_AQBA
 
 #define GNC_PLUGIN_AQBANKING_NAME "gnc-plugin-aqbanking"
 
-/* typedefs & structures */
-struct _GncPluginAqBanking
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 
 /**

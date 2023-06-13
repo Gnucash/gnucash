@@ -58,6 +58,11 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
+struct _GncPluginCsvImport
+{
+    GncPlugin gnc_plugin;
+};
+
 typedef struct GncPluginCsvImportPrivate
 {
     gpointer dummy;

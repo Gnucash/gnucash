@@ -65,6 +65,13 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
+/** The instance data structure for an account tree menu plugin. */
+struct _GncPluginAccountTree
+{
+    /** The parent object for this widget */
+    GncPlugin gnc_plugin;
+};
+
 /** The instance private data structure for an account tree plugin. */
 typedef struct GncPluginAccountTreePrivate
 {

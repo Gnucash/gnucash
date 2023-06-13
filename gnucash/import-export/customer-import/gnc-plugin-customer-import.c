@@ -67,6 +67,11 @@ static const gchar *gnc_plugin_load_ui_items [] =
  *                   Object Implementation                  *
  ************************************************************/
 
+struct _GncPluginCustomerImport
+{
+    GncPlugin gnc_plugin;
+};
+
 G_DEFINE_TYPE(GncPluginCustomerImport, gnc_plugin_customer_import, GNC_TYPE_PLUGIN)
 
 GncPlugin *

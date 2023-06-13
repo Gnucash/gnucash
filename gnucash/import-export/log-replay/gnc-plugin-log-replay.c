@@ -54,6 +54,11 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
+struct _GncPluginLogReplay
+{
+    GncPlugin gnc_plugin;
+};
+
 typedef struct GncPluginLogReplayPrivate
 {
     gpointer dummy;

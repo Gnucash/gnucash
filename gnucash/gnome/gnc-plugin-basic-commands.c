@@ -175,6 +175,13 @@ static const gchar *dirty_only_active_actions[] =
     NULL
 };
 
+/** The instance data structure for an basic commands menu plugin. */
+struct _GncPluginBasicCommands
+{
+    /** The parent object for this widget */
+    GncPlugin gnc_plugin;
+};
+
 /** The instance private data structure for an basic commands
  *  plugin. */
 typedef struct GncPluginBasicCommandsPrivate

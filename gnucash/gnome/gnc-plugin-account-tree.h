@@ -46,15 +46,6 @@ G_DECLARE_FINAL_TYPE (GncPluginAccountTree, gnc_plugin_account_tree, GNC, PLUGIN
 
 #define GNC_PLUGIN_ACCOUNT_TREE_NAME "gnc-plugin-account-tree"
 
-/* typedefs & structures */
-
-/** The instance data structure for an account tree menu plugin. */
-struct _GncPluginAccountTree
-{
-    /** The parent object for this widget */
-    GncPlugin gnc_plugin;
-};
-
 /** Create a new account tree menu plugin.
  *
  *  @return A pointer to the new object.

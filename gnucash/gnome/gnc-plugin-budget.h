@@ -39,12 +39,6 @@ G_DECLARE_FINAL_TYPE (GncPluginBudget, gnc_plugin_budget, GNC, PLUGIN_BUDGET, Gn
 
 #define GNC_PLUGIN_BUDGET_NAME "gnc-plugin-budget"
 
-/* typedefs & structures */
-struct _GncPluginBudget
-{
-    GncPlugin gnc_plugin;
-};
-
 /* function prototypes */
 GncPlugin *gnc_plugin_budget_new (void);
 

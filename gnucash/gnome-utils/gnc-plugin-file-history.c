@@ -99,6 +99,12 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
+/** The instance data structure for a file history plugin. */
+struct _GncPluginFileHistory
+{
+    GncPlugin gnc_plugin;
+};
+
 /** The instance private data for a file history plugin.  This data
  *  structure is unused. */
 typedef struct GncPluginFileHistoryPrivate
