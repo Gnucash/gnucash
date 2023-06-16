@@ -6,15 +6,14 @@
 # John Erling Blad <jeblad@gmail.com>, 2018
 # Allan Nordhøy <epost@anotheragency.no>, 2021.
 # Petter Reinholdtsen <pere-weblate@hungry.com>, 2022.
-# Rune Osnes <osnes.rune@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 4.8\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2023-06-06 12:52+0000\n"
-"Last-Translator: Rune Osnes <osnes.rune@gmail.com>\n"
+"PO-Revision-Date: 2022-03-19 08:55+0000\n"
+"Last-Translator: Petter Reinholdtsen <pere-weblate@hungry.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "glossary/nb_NO/>\n"
 "Language: nb\n"
@@ -22,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.12-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -209,8 +208,10 @@ msgid "amount"
 msgstr "beløp"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
+#, fuzzy
+#| msgid "amount"
 msgid "amount due"
-msgstr "skyldig beløp"
+msgstr "beløp"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -290,11 +291,11 @@ msgstr "sjekk"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
-msgstr "sjekk og reparer, til"
+msgstr ""
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
 msgid "close, to"
-msgstr "lukk"
+msgstr ""
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
@@ -342,7 +343,7 @@ msgstr "Tilpasset"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr "hjem"
+msgstr "kontrollpanel"
 
 #. "The backend where the data is stored."
 msgid "database"
@@ -441,12 +442,14 @@ msgid "financial calculator: payments"
 msgstr "finanskalkulator: betalinger"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
+#, fuzzy
+#| msgid "income statement"
 msgid "financial statement"
-msgstr "finansregnskap"
+msgstr "resultatoppstilling"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr "gratis programvare"
+msgstr "fri programvare"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
@@ -489,8 +492,10 @@ msgid "loan"
 msgstr "lån"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
+#, fuzzy
+#| msgid "loan"
 msgid "loan: APR"
-msgstr "lån: årlig prosentsats"
+msgstr "lån"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -529,12 +534,16 @@ msgid "Mortgage"
 msgstr "Panteheftelse"
 
 #. "Adjustable Rate Mortgage"
+#, fuzzy
+#| msgid "Mortgage"
 msgid "mortgage: ARM"
-msgstr "lån: flytende rente"
+msgstr "Panteheftelse"
 
 #. "Fixed Rate Mortgage"
+#, fuzzy
+#| msgid "Mortgage"
 msgid "mortgage: FRM"
-msgstr "lån: fast rente"
+msgstr "Panteheftelse"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -582,7 +591,7 @@ msgstr "ordre"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr "ikke registrert"
+msgstr "foreldreløs"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
@@ -702,11 +711,11 @@ msgstr "laste på nytt, til"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr "rapportskjema: T Kontoskjema"
+msgstr ""
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr "rapportskjema: Vertikalt skjema"
+msgstr ""
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -730,7 +739,7 @@ msgstr "Planlagt Transaksjon"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
-msgstr "fjerne, til"
+msgstr ""
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
@@ -750,7 +759,7 @@ msgstr "kilde"
 
 #. "One of the two or several parts a transaction is divided into"
 msgid "split"
-msgstr "del opp"
+msgstr "splitt"
 
 #. "Alias of 'shares'"
 msgid "stocks"
@@ -782,11 +791,11 @@ msgstr "inntektsskatt"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr "skattetype: salgsskatt"
+msgstr ""
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr "skattetype: MVA"
+msgstr ""
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
