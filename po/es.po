@@ -15,6 +15,7 @@
 # Luis D. Lafaurie <luis.lafaurie@tecnativa.com>, 2022.
 # Guille Lopez <willelopz@gmail.com>, 2022, 2023.
 # gallegonovato <fran-carro@hotmail.es>, 2023.
+# Jaime Marquínez Ferrándiz <jaime.marquinez.ferrandiz@fastmail.net>, 2023.
 #
 #
 # ###############################################################################
@@ -84,8 +85,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-05-06 16:51+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2023-06-16 15:48+0000\n"
+"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
+"ferrandiz@fastmail.net>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -93,7 +95,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
@@ -21381,7 +21383,7 @@ msgstr "Ganancias del capital a corto plazo"
 
 #: gnucash/register/ledger-core/split-register.c:2637
 msgid "Dist"
-msgstr "Dist"
+msgstr "Distribución"
 
 #: gnucash/register/ledger-core/split-register-control.c:59
 msgid "Rebalance Transaction"
