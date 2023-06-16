@@ -7,14 +7,15 @@
 # Nicolae Turcan <nicturcan@gmail.com>, 2008.
 # Daniel Șerbănescu <daniel@serbanescu.dk>, 2020.
 # Dan Purice <dan.purice@outlook.com>, 2021.
+# Andrea Andre <andrea.tsg19@slmail.me>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2021-12-31 14:52+0000\n"
-"Last-Translator: Dan Purice <dan.purice@outlook.com>\n"
+"PO-Revision-Date: 2023-06-11 14:47+0000\n"
+"Last-Translator: Andrea Andre <andrea.tsg19@slmail.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
 "Language: ro\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.10.1\n"
+"X-Generator: Weblate 4.18-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -59,7 +60,7 @@ msgstr "Începutul acestui an"
 #: bindings/guile/date-utilities.scm:720
 #: libgnucash/engine/gnc-option-date.cpp:264
 msgid "First day of the current calendar year."
-msgstr "Prima zi a anului calendaristic curent."
+msgstr "Prima zi a anului calendaristic actual."
 
 #: bindings/guile/date-utilities.scm:724
 #: gnucash/gnome-utils/gnc-period-select.c:91
@@ -70,7 +71,7 @@ msgstr "Sfârșitul acestui an"
 #: bindings/guile/date-utilities.scm:727
 #: libgnucash/engine/gnc-option-date.cpp:272
 msgid "Last day of the current calendar year."
-msgstr "Ultima zi a anului calendaristic curent."
+msgstr "Ultima zi a anului calendaristic actual."
 
 #: bindings/guile/date-utilities.scm:731
 #: gnucash/gnome-utils/gnc-period-select.c:76
@@ -97,24 +98,26 @@ msgstr "Ultima zi a anului calendaristic trecut."
 #: bindings/guile/date-utilities.scm:745
 #: libgnucash/engine/gnc-option-date.cpp:311
 msgid "Start of accounting period"
-msgstr "Începutul perioadei fiscale"
+msgstr "Începutul perioadei contabile"
 
 #: bindings/guile/date-utilities.scm:748
 #: libgnucash/engine/gnc-option-date.cpp:312
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr ""
-"Începutul perioadei contabile, așa cum este setat în preferințele globale."
+"Prima zi a perioadei contabile, așa cum este stabilită în preferințele "
+"globale."
 
 #: bindings/guile/date-utilities.scm:752
 #: libgnucash/engine/gnc-option-date.cpp:319
 msgid "End of accounting period"
-msgstr "Sfârșitul perioadei fiscale"
+msgstr "Sfârșitul perioadei contabile"
 
 #: bindings/guile/date-utilities.scm:755
 #: libgnucash/engine/gnc-option-date.cpp:320
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr ""
-"Începutul perioadei contabile, așa cum este setat în preferințele globale."
+"Ultima zi a perioadei contabile, așa cum este stabilită în preferințele "
+"globale."
 
 #: bindings/guile/date-utilities.scm:759
 #: gnucash/gnome-utils/gnc-period-select.c:71
@@ -125,7 +128,7 @@ msgstr "Începutul acestei luni"
 #: bindings/guile/date-utilities.scm:762
 #: libgnucash/engine/gnc-option-date.cpp:168
 msgid "First day of the current month."
-msgstr "Prima zi a lunii curente."
+msgstr "Prima zi a lunii actuale."
 
 #: bindings/guile/date-utilities.scm:766
 #: gnucash/gnome-utils/gnc-period-select.c:87
@@ -136,7 +139,7 @@ msgstr "Sfârșitul acestei luni"
 #: bindings/guile/date-utilities.scm:769
 #: libgnucash/engine/gnc-option-date.cpp:176
 msgid "Last day of the current month."
-msgstr "Ultima zi a lunii curente."
+msgstr "Ultima zi a lunii actuale."
 
 #: bindings/guile/date-utilities.scm:773
 #: gnucash/gnome-utils/gnc-period-select.c:72
@@ -147,7 +150,7 @@ msgstr "Începutul lunii trecute"
 #: bindings/guile/date-utilities.scm:776
 #: libgnucash/engine/gnc-option-date.cpp:184
 msgid "First day of the previous month."
-msgstr "Prima zi a lunii precedente."
+msgstr "Prima zi a lunii trecute."
 
 #: bindings/guile/date-utilities.scm:780
 #: gnucash/gnome-utils/gnc-period-select.c:88
@@ -158,27 +161,27 @@ msgstr "Sfârșitul lunii trecute"
 #: bindings/guile/date-utilities.scm:783
 #: libgnucash/engine/gnc-option-date.cpp:192
 msgid "Last day of previous month."
-msgstr "Ultima zi a lunii precedente."
+msgstr "Ultima zi a lunii trecute."
 
 #: bindings/guile/date-utilities.scm:787
 #: libgnucash/engine/gnc-option-date.cpp:215
 msgid "Start of current quarter"
-msgstr "Începutul trimestrului curent"
+msgstr "Începutul trimestrului actual"
 
 #: bindings/guile/date-utilities.scm:790
 #: libgnucash/engine/gnc-option-date.cpp:216
 msgid "First day of the current quarterly accounting period."
-msgstr "Prima zi a trimestrului contabil curent."
+msgstr "Prima zi a trimestrului contabil actual."
 
 #: bindings/guile/date-utilities.scm:794
 #: libgnucash/engine/gnc-option-date.cpp:223
 msgid "End of current quarter"
-msgstr "Sfârșitul trimestrului curent"
+msgstr "Sfârșitul trimestrului actual"
 
 #: bindings/guile/date-utilities.scm:797
 #: libgnucash/engine/gnc-option-date.cpp:224
 msgid "Last day of the current quarterly accounting period."
-msgstr "Ultima zi a trimestrului contabil curent."
+msgstr "Ultima zi a trimestrului contabil actual."
 
 #: bindings/guile/date-utilities.scm:801
 #: gnucash/gnome-utils/gnc-period-select.c:74
@@ -213,7 +216,7 @@ msgstr "Azi"
 #: bindings/guile/date-utilities.scm:817
 #: libgnucash/engine/gnc-option-date.cpp:80
 msgid "The current date."
-msgstr "Data curentă."
+msgstr "Data actuală."
 
 #: bindings/guile/options.scm:388 gnucash/gnome/top-level.c:462
 #: libgnucash/engine/gnc-optiondb.cpp:1109 libgnucash/engine/qofbookslots.h:72
@@ -230,35 +233,35 @@ msgstr "Afacere"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/engine/gnc-optiondb.cpp:1209
 msgid "Company Name"
-msgstr "Numele companiei"
+msgstr "Numele firmei"
 
 #: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1212
 msgid "Company Address"
-msgstr "Adresa companiei"
+msgstr "Adresa firmei"
 
 #: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1235
 msgid "Company ID"
-msgstr "ID companie"
+msgstr "ID-ul firmei"
 
 #: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1220
 msgid "Company Phone Number"
-msgstr "Numărul de telefon al companiei"
+msgstr "Numărul de telefon al firmei"
 
 #: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1224
 msgid "Company Fax Number"
-msgstr "Numărul de fax al companiei"
+msgstr "Numărul de fax al firmei"
 
 #: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1232
 msgid "Company Website URL"
-msgstr "Site-ul web al companiei"
+msgstr "Situl web al firmei"
 
 #: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1228
 msgid "Company Email Address"
-msgstr "Email-ul companiei"
+msgstr "E-mailul firmei"
 
 #: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1216
 msgid "Company Contact Person"
-msgstr "Persoană de contact pentru companie"
+msgstr "Persoana de contact a firmei"
 
 #: bindings/guile/options.scm:397
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
@@ -1456,6 +1459,10 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"Firma emite dividende în numerar către deținător.\n"
+"\n"
+"Orice dividend reinvestit trebuie să fie înregistrat ulterior ca o achiziție "
+"obișnuită de acțiuni."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
@@ -1469,6 +1476,7 @@ msgstr "Descreșteri în capital"
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"Firma returnează capitalul, reducând baza de cost fără a afecta # unități."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution
@@ -1481,6 +1489,8 @@ msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Firma emite o distribuție fictivă, care este înregistrată ca venit din "
+"dividende și crește baza de cost fără a afecta # unități."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1500,6 +1510,8 @@ msgid ""
 "divisor, while keeping the total monetary value of the overall investment "
 "constant."
 msgstr ""
+"Firma emite unități suplimentare, reducând astfel prețul acțiunilor cu un "
+"divizor, păstrând constantă valoarea monetară totală a investiției globale."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1520,6 +1532,13 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"Firma răscumpără unități, crescând astfel prețul acțiunilor cu un multiplu, "
+"păstrând constantă valoarea monetară totală a investiției globale.\n"
+"\n"
+"În cazul în care divizarea inversă are ca rezultat o răscumpărare în numerar "
+"pentru unitățile rămase, înregistrează mai întâi vânzarea cu ajutorul "
+"Asistentului pentru tranzacții cu acțiuni, apoi să înregistrezi divizarea "
+"inversă."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
@@ -1554,6 +1573,8 @@ msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
 msgstr ""
+"Firma emite dividende, iar deținătorul acțiunilor pe termen scurt trebuie să "
+"facă o plată compensatorie pentru dividende."
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
@@ -1567,6 +1588,10 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
+"Firma returnează capitalul, iar deținătorul de acțiuni pe termen scurt "
+"trebuie să facă o plată compensatorie pentru capitalul returnat. Acest lucru "
+"reduce baza de cost (mai puțin negativă, spre valoarea 0,00) fără a afecta # "
+"unități."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution when shorting stock
@@ -1581,6 +1606,11 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
+"Firma emite o distribuție fictivă, iar deținătorul de acțiuni pe termen "
+"scurt trebuie să facă o plată compensatorie pentru distribuția fictivă. "
+"Acest lucru este înregistrat ca o pierdere/valoare negativă a venitului din "
+"dividende și mărește baza de cost (mai negativ, îndepărtându-se de valoarea "
+"0,00) fără a afecta # unități."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:370
 msgid ""
@@ -1591,6 +1621,13 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"Firma răscumpără unități, crescând astfel prețul acțiunilor cu un multiplu, "
+"păstrând constantă valoarea monetară totală a investiției globale.\n"
+"\n"
+"În cazul în care divizarea inversă are ca rezultat o răscumpărare în numerar "
+"pentru unitățile rămase, înregistrează mai întâi cumpărarea de acoperire "
+"utilizând Asistentul pentru tranzacții cu acțiuni, apoi să înregistrezi "
+"divizarea inversă."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:537
 #, fuzzy, c-format
@@ -2157,6 +2194,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"Spațiul pentru numele firmei nu poate fi lăsat gol, introdu numele unei "
+"firme sau al unei persoane."
 
 #: gnucash/gnome/dialog-customer.c:322
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -2238,7 +2277,7 @@ msgstr "Contact"
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:124
 #: gnucash/report/reports/standard/new-aging.scm:176
 msgid "Company"
-msgstr "Companie"
+msgstr "Firma"
 
 #: gnucash/gnome/dialog-customer.c:918 gnucash/gnome/dialog-employee.c:706
 #: gnucash/gnome/dialog-job.c:599 gnucash/gnome/dialog-vendor.c:718
@@ -3464,7 +3503,7 @@ msgstr "Trebuie să scrii un nume de cont valid pentru postare."
 
 #: gnucash/gnome/dialog-payment.c:246
 msgid "You must select a company for payment processing."
-msgstr "Trebuie să selectezi o companie pentru procesarea plății."
+msgstr "Trebuie să alegi o firmă pentru procesarea plății."
 
 #: gnucash/gnome/dialog-payment.c:260
 #, fuzzy
@@ -4460,7 +4499,7 @@ msgstr "Introdu o plată pentru proprietarul acestei facturi"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:283
 #: gnucash/ui/gnc-plugin-page-invoice.ui:207
 msgid "_Company Report"
-msgstr "Raport _companie"
+msgstr "_Raportul firmei"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:208
 #, fuzzy
@@ -4847,12 +4886,9 @@ msgid "Enter a payment for the owner of this credit note"
 msgstr "Introdu o plată pentru proprietarul acestei facturi"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:283
-#, fuzzy
-#| msgid "Open a company report window for the owner of this Invoice"
 msgid "Open a company report window for the owner of this credit note"
 msgstr ""
-"Deschide o fereastra cu raportul de companie pentru proprietarul acestei "
-"facturi"
+"Deschide o fereastra cu raportul firmei pentru proprietarul acestei facturi"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
 #, fuzzy
@@ -15326,7 +15362,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-payment.glade:136
 #: gnucash/gtkbuilder/dialog-payment.glade:168
 msgid "The company associated with this payment."
-msgstr "Compania asociată cu această plată."
+msgstr "Firma asociată cu această plată."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:169
 msgid "Partner"
