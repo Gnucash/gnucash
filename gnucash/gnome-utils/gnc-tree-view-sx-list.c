@@ -50,16 +50,15 @@ static QofLogModule log_module = LOG_MOD;
 static void gnc_tree_view_sx_list_dispose(GObject *object);
 static void gnc_tree_view_sx_list_finalize(GObject *object);
 
-typedef struct GncTreeViewSxListPrivate
+struct _GncTreeViewSxList
 {
+    GncTreeView gnc_tree_view;
+
     GtkTreeModel *tree_model;
     gboolean disposed;
-} GncTreeViewSxListPrivate;
+};
 
-#define GNC_TREE_VIEW_SX_LIST_GET_PRIVATE(o)  \
-   ((GncTreeViewSxListPrivate*)gnc_tree_view_sx_list_get_instance_private((GncTreeViewSxList*)o))
-
-G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewSxList, gnc_tree_view_sx_list, GNC_TYPE_TREE_VIEW)
+G_DEFINE_TYPE(GncTreeViewSxList, gnc_tree_view_sx_list, GNC_TYPE_TREE_VIEW)
 
 static void
 gnc_tree_view_sx_list_class_init(GncTreeViewSxListClass *klass)
@@ -83,20 +82,18 @@ static void
 gnc_tree_view_sx_list_dispose(GObject *object)
 {
     GncTreeViewSxList *view;
-    GncTreeViewSxListPrivate *priv;
 
     gnc_leave_return_if_fail (object != NULL);
     gnc_leave_return_if_fail (GNC_IS_TREE_VIEW_SX_LIST (object));
 
     view = GNC_TREE_VIEW_SX_LIST (object);
-    priv = GNC_TREE_VIEW_SX_LIST_GET_PRIVATE(view);
 
-    if (priv->disposed)
+    if (view->disposed)
         return;
-    priv->disposed = TRUE;
+    view->disposed = TRUE;
 
-    g_object_unref(G_OBJECT(priv->tree_model));
-    priv->tree_model = NULL;
+    g_object_unref(G_OBJECT(view->tree_model));
+    view->tree_model = NULL;
 
     G_OBJECT_CLASS (gnc_tree_view_sx_list_parent_class)->dispose (object);
 }
@@ -113,46 +110,40 @@ gnc_tree_view_sx_list_finalize(GObject *object)
 GtkTreeView*
 gnc_tree_view_sx_list_new(GncSxInstanceModel *sx_instances)
 {
-    GncTreeView *view;
-    GtkTreeViewColumn *col;
-    GncTreeViewSxListPrivate *priv;
-
-    view = (GncTreeView*)g_object_new(GNC_TYPE_TREE_VIEW_SX_LIST, NULL);
+    GncTreeViewSxList *view = (GncTreeViewSxList*)g_object_new(GNC_TYPE_TREE_VIEW_SX_LIST, NULL);
     g_object_set(view, "name", "gnc-id-sx-list-tree", NULL);
 
-    priv = GNC_TREE_VIEW_SX_LIST_GET_PRIVATE(view);
+    view->tree_model = GTK_TREE_MODEL(gnc_sx_list_tree_model_adapter_new(sx_instances));
+    gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL(view->tree_model));
 
-    priv->tree_model = GTK_TREE_MODEL(gnc_sx_list_tree_model_adapter_new(sx_instances));
-    gtk_tree_view_set_model (GTK_TREE_VIEW (view), GTK_TREE_MODEL(priv->tree_model));
-
-    col = gnc_tree_view_add_text_column(view, _("Name"), "name", NULL,
+    GtkTreeViewColumn *col = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Name"), "name", NULL,
                                         "Semi-Monthly Paycheck",
                                         SXLTMA_COL_NAME, -1, NULL);
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
-    col = gnc_tree_view_add_toggle_column(view, _("Enabled"),
+    col = gnc_tree_view_add_toggle_column(GNC_TREE_VIEW(view), _("Enabled"),
                                           C_("Single-character short column-title form of 'Enabled'", "E"),
                                           "enabled", SXLTMA_COL_ENABLED,
                                           GNC_TREE_VIEW_COLUMN_VISIBLE_ALWAYS,
                                           NULL, NULL);
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
-    col = gnc_tree_view_add_text_column(view, _("Frequency"), "frequency", NULL,
+    col = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Frequency"), "frequency", NULL,
                                         "Weekly (x3): -------",
                                         SXLTMA_COL_FREQUENCY, -1, NULL);
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
-    col = gnc_tree_view_add_text_column(view, _("Last Occur"), "last-occur", NULL,
+    col = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Last Occur"), "last-occur", NULL,
                                         "2007-01-02",
                                         SXLTMA_COL_LAST_OCCUR, -1, NULL);
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
-    col = gnc_tree_view_add_text_column(view, _("Next Occur"), "next-occur", NULL,
+    col = gnc_tree_view_add_text_column(GNC_TREE_VIEW(view), _("Next Occur"), "next-occur", NULL,
                                         "2007-01-02",
                                         SXLTMA_COL_NEXT_OCCUR, -1, NULL);
     g_object_set_data(G_OBJECT(col), DEFAULT_VISIBLE, GINT_TO_POINTER(1));
 
-    gnc_tree_view_configure_columns(view);
+    gnc_tree_view_configure_columns(GNC_TREE_VIEW(view));
 
     gtk_widget_show(GTK_WIDGET(view));
     return GTK_TREE_VIEW(view);
@@ -162,8 +153,7 @@ SchedXaction*
 gnc_tree_view_sx_list_get_sx_from_path(GncTreeViewSxList *view, GtkTreePath *path)
 {
     GtkTreeIter iter;
-    GncTreeViewSxListPrivate *priv = GNC_TREE_VIEW_SX_LIST_GET_PRIVATE(view);
-    gtk_tree_model_get_iter(GTK_TREE_MODEL(priv->tree_model), &iter, path);
+    gtk_tree_model_get_iter(GTK_TREE_MODEL(view->tree_model), &iter, path);
     return gnc_sx_list_tree_model_adapter_get_sx_instances(
-               GNC_SX_LIST_TREE_MODEL_ADAPTER(priv->tree_model), &iter)->sx;
+               GNC_SX_LIST_TREE_MODEL_ADAPTER(view->tree_model), &iter)->sx;
 }

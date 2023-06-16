@@ -38,23 +38,7 @@
 G_BEGIN_DECLS
 
 #define GNC_TYPE_TREE_VIEW_SX_LIST            (gnc_tree_view_sx_list_get_type ())
-#define GNC_TREE_VIEW_SX_LIST(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_VIEW_SX_LIST, GncTreeViewSxList))
-#define GNC_TREE_VIEW_SX_LIST_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_TREE_VIEW_SX_LIST, GncTreeViewSxListClass))
-#define GNC_IS_TREE_VIEW_SX_LIST(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_VIEW_SX_LIST))
-#define GNC_IS_TREE_VIEW_SX_LIST_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_VIEW_SX_LIST))
-#define GNC_TREE_VIEW_SX_LIST_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_SX_LIST, GncTreeViewSxListClass))
-
-typedef struct
-{
-    GncTreeView gnc_tree_view;
-} GncTreeViewSxList;
-
-typedef struct
-{
-    GncTreeViewClass gnc_tree_view;
-} GncTreeViewSxListClass;
-
-GType gnc_tree_view_sx_list_get_type(void);
+G_DECLARE_FINAL_TYPE (GncTreeViewSxList, gnc_tree_view_sx_list, GNC, TREE_VIEW_SX_LIST, GncTreeView)
 
 GtkTreeView* gnc_tree_view_sx_list_new(GncSxInstanceModel *sx_instances);
 

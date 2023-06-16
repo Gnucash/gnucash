@@ -50,20 +50,18 @@ static QofLogModule log_module = GNC_MOD_GUI;
 static void gnc_tree_view_price_finalize (GObject *object);
 static void gnc_tree_view_price_destroy (GtkWidget *widget);
 
-typedef struct GncTreeViewPricePrivate
+struct _GncTreeViewPrice
 {
-    gpointer dummy;
-} GncTreeViewPricePrivate;
-
-#define GNC_TREE_VIEW_PRICE_GET_PRIVATE(o)  \
-   ((GncTreeViewPricePrivate*)gnc_tree_view_price_get_instance_private((GncTreeViewPrice*)o))
+    GncTreeView gnc_tree_view;
+    int stamp;
+};
 
 
 /************************************************************/
 /*               g_object required functions                */
 /************************************************************/
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncTreeViewPrice, gnc_tree_view_price, GNC_TYPE_TREE_VIEW)
+G_DEFINE_TYPE(GncTreeViewPrice, gnc_tree_view_price, GNC_TYPE_TREE_VIEW)
 
 static void
 gnc_tree_view_price_class_init (GncTreeViewPriceClass *klass)

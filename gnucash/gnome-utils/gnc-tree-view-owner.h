@@ -45,11 +45,8 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_TREE_VIEW_OWNER            (gnc_tree_view_owner_get_type ())
-#define GNC_TREE_VIEW_OWNER(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_VIEW_OWNER, GncTreeViewOwner))
-#define GNC_TREE_VIEW_OWNER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_TREE_VIEW_OWNER, GncTreeViewOwnerClass))
-#define GNC_IS_TREE_VIEW_OWNER(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_VIEW_OWNER))
-#define GNC_IS_TREE_VIEW_OWNER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_VIEW_OWNER))
-#define GNC_TREE_VIEW_OWNER_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_OWNER, GncTreeViewOwnerClass))
+G_DECLARE_FINAL_TYPE (GncTreeViewOwner, gnc_tree_view_owner, GNC, TREE_VIEW_OWNER, GncTreeView)
+
 #define GNC_TREE_VIEW_OWNER_NAME            "GncTreeViewOwner"
 
 /* typedefs & structures */
@@ -61,17 +58,6 @@ struct OwnerViewInfo_s
     gboolean show_inactive;
 };
 
-
-typedef struct
-{
-    GncTreeView gnc_tree_view;
-    int stamp;
-} GncTreeViewOwner;
-
-typedef struct
-{
-    GncTreeViewClass gnc_tree_view;
-} GncTreeViewOwnerClass;
 
 typedef struct
 {
@@ -125,10 +111,6 @@ void gnc_tree_view_owner_restore(GncTreeViewOwner *view,
                                  GKeyFile *key_file,
                                  const gchar *group_name,
                                  GncOwnerType owner_type);
-
-
-/* Get the GType for an GncTreeViewOwner object. */
-GType gnc_tree_view_owner_get_type (void);
 
 
 /** @name Owner Tree View Constructor

@@ -38,28 +38,16 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_TREE_VIEW            (gnc_tree_view_get_type ())
-#define GNC_TREE_VIEW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_VIEW, GncTreeView))
-#define GNC_TREE_VIEW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_TREE_VIEW, GncTreeViewClass))
-#define GNC_IS_TREE_VIEW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_VIEW))
-#define GNC_IS_TREE_VIEW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_VIEW))
-#define GNC_TREE_VIEW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW, GncTreeViewClass))
+G_DECLARE_DERIVABLE_TYPE (GncTreeView, gnc_tree_view, GNC, TREE_VIEW, GtkTreeView)
+
 #define GNC_TREE_VIEW_NAME            "GncTreeView"
 
 
 /* typedefs & structures */
-typedef struct
-{
-    GtkTreeView gtk_tree_view;
-} GncTreeView;
-
-typedef struct
+struct _GncTreeViewClass
 {
     GtkTreeViewClass gtk_tree_view;
-} GncTreeViewClass;
-
-/* Standard g_object type */
-GType gnc_tree_view_get_type (void);
-
+};
 
 /* The columns managed by gnc-tree-view can use the following column
    attributes.  Set them with:

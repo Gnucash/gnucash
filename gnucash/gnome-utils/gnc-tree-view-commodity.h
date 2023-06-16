@@ -44,29 +44,7 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_TREE_VIEW_COMMODITY            (gnc_tree_view_commodity_get_type ())
-#define GNC_TREE_VIEW_COMMODITY(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_VIEW_COMMODITY, GncTreeViewCommodity))
-#define GNC_TREE_VIEW_COMMODITY_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_TREE_VIEW_COMMODITY, GncTreeViewCommodityClass))
-#define GNC_IS_TREE_VIEW_COMMODITY(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_VIEW_COMMODITY))
-#define GNC_IS_TREE_VIEW_COMMODITY_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_VIEW_COMMODITY))
-#define GNC_TREE_VIEW_COMMODITY_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_VIEW_COMMODITY, GncTreeViewCommodityClass))
-
-/* typedefs & structures */
-typedef struct
-{
-    GncTreeView gnc_tree_view;
-    int stamp;
-} GncTreeViewCommodity;
-
-typedef struct
-{
-    GncTreeViewClass gnc_tree_view;
-} GncTreeViewCommodityClass;
-
-
-
-/* Get the GType for an GncTreeViewCommodity object. */
-GType gnc_tree_view_commodity_get_type (void);
-
+G_DECLARE_FINAL_TYPE (GncTreeViewCommodity, gnc_tree_view_commodity, GNC, TREE_VIEW_COMMODITY, GncTreeView)
 
 /** @name Commodity Tree View Constructors
  @{ */
