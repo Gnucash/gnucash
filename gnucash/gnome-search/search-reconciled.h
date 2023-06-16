@@ -26,31 +26,8 @@
 #include "Query.h"		/* for cleared_match_t */
 
 #define GNC_TYPE_SEARCH_RECONCILED	  (gnc_search_reconciled_get_type ())
-#define GNCSEARCH_RECONCILED(obj)	  G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_RECONCILED, GNCSearchReconciled)
-#define GNCSEARCH_RECONCILED_CLASS(klass) G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_RECONCILED, GNCSearchReconciledClass)
-#define IS_GNCSEARCH_RECONCILED(obj)      G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_RECONCILED)
+G_DECLARE_FINAL_TYPE (GNCSearchReconciled, gnc_search_reconciled, GNC, SEARCH_RECONCILED, GNCSearchCoreType)
 
-typedef struct _GNCSearchReconciled	GNCSearchReconciled;
-typedef struct _GNCSearchReconciledClass	GNCSearchReconciledClass;
-
-struct _GNCSearchReconciled
-{
-    GNCSearchCoreType parent;
-
-    QofCharMatch      how;
-    cleared_match_t   value;
-};
-
-struct _GNCSearchReconciledClass
-{
-    GNCSearchCoreTypeClass parent_class;
-
-    /* virtual methods */
-
-    /* signals */
-};
-
-GType		gnc_search_reconciled_get_type	(void);
 GNCSearchReconciled	*gnc_search_reconciled_new	(void);
 
 /* methods */

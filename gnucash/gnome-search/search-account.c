@@ -47,6 +47,13 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_account_finalize	(GObject *obj);
 
+struct _GNCSearchAccount
+{
+    GNCSearchCoreType parent;
+
+    QofGuidMatch        how;
+};
+
 typedef struct _GNCSearchAccountPrivate GNCSearchAccountPrivate;
 
 struct _GNCSearchAccountPrivate
@@ -89,7 +96,7 @@ static void
 gnc_search_account_finalize (GObject *obj)
 {
     GNCSearchAccount *o = (GNCSearchAccount *)obj;
-    g_assert (IS_GNCSEARCH_ACCOUNT (o));
+    g_assert (GNC_IS_SEARCH_ACCOUNT (o));
 
     G_OBJECT_CLASS (gnc_search_account_parent_class)->finalize(obj);
 }
@@ -136,7 +143,7 @@ gncs_validate (GNCSearchCoreType *fe)
     gboolean valid = TRUE;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_ACCOUNT (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_ACCOUNT (fi), FALSE);
 
     priv = _PRIVATE(fi);
 
@@ -265,7 +272,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     char *desc;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_ACCOUNT (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_ACCOUNT (fi), NULL);
 
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
@@ -295,7 +302,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     GList *l = NULL, *node;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_ACCOUNT (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_ACCOUNT (fi), NULL);
 
     priv = _PRIVATE(fi);
     for (node = priv->selected_accounts; node; node = node->next)
@@ -315,7 +322,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     GNCSearchAccountPrivate *se_priv, *fse_priv;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_ACCOUNT (fse), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_ACCOUNT (fse), NULL);
     fse_priv = _PRIVATE(fse);
 
     se = gnc_search_account_new ();
@@ -334,7 +341,7 @@ pass_parent (GNCSearchCoreType *fe, gpointer parent)
     GNCSearchAccountPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_ACCOUNT (fi));
+    g_return_if_fail (GNC_IS_SEARCH_ACCOUNT (fi));
 
     priv = _PRIVATE(fi);
     priv->parent = GTK_WINDOW(parent);

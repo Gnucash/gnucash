@@ -26,30 +26,8 @@
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_BOOLEAN		(gnc_search_boolean_get_type ())
-#define GNCSEARCH_BOOLEAN(obj)		G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_BOOLEAN, GNCSearchBoolean)
-#define GNCSEARCH_BOOLEAN_CLASS(klass)	G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_BOOLEAN, GNCSearchBooleanClass)
-#define IS_GNCSEARCH_BOOLEAN(obj)	G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_BOOLEAN)
+G_DECLARE_FINAL_TYPE (GNCSearchBoolean, gnc_search_boolean, GNC, SEARCH_BOOLEAN, GNCSearchCoreType)
 
-typedef struct _GNCSearchBoolean	GNCSearchBoolean;
-typedef struct _GNCSearchBooleanClass	GNCSearchBooleanClass;
-
-struct _GNCSearchBoolean
-{
-    GNCSearchCoreType parent;
-
-    gboolean		value;
-};
-
-struct _GNCSearchBooleanClass
-{
-    GNCSearchCoreTypeClass parent_class;
-
-    /* virtual methods */
-
-    /* signals */
-};
-
-GType		gnc_search_boolean_get_type	(void);
 GNCSearchBoolean	*gnc_search_boolean_new	(void);
 
 /* methods */

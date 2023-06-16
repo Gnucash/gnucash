@@ -26,31 +26,8 @@
 #include "qof.h"
 
 #define GNC_TYPE_SEARCH_DOUBLE		(gnc_search_double_get_type ())
-#define GNCSEARCH_DOUBLE(obj)		G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_SEARCH_DOUBLE, GNCSearchDouble)
-#define GNCSEARCH_DOUBLE_CLASS(klass)	G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_SEARCH_DOUBLE, GNCSearchDoubleClass)
-#define IS_GNCSEARCH_DOUBLE(obj)	G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_SEARCH_DOUBLE)
+G_DECLARE_FINAL_TYPE (GNCSearchDouble, gnc_search_double, GNC, SEARCH_DOUBLE, GNCSearchCoreType)
 
-typedef struct _GNCSearchDouble	GNCSearchDouble;
-typedef struct _GNCSearchDoubleClass	GNCSearchDoubleClass;
-
-struct _GNCSearchDouble
-{
-    GNCSearchCoreType parent;
-
-    QofQueryCompare	how;
-    double		value;
-};
-
-struct _GNCSearchDoubleClass
-{
-    GNCSearchCoreTypeClass parent_class;
-
-    /* virtual methods */
-
-    /* signals */
-};
-
-GType		gnc_search_double_get_type	(void);
 GNCSearchDouble	*gnc_search_double_new	(void);
 
 /* methods */

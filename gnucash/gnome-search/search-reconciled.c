@@ -45,18 +45,17 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_reconciled_finalize	(GObject *obj);
 
-typedef struct _GNCSearchReconciledPrivate GNCSearchReconciledPrivate;
-
-struct _GNCSearchReconciledPrivate
+struct _GNCSearchReconciled
 {
+    GNCSearchCoreType parent_instance;
+
+    QofCharMatch      how;
+    cleared_match_t   value;
+
     GtkWindow *parent;
-    gpointer dummy;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchReconciled, gnc_search_reconciled, GNC_TYPE_SEARCH_CORE_TYPE)
-
-#define _PRIVATE(o) \
-   ((GNCSearchReconciledPrivate*)gnc_search_reconciled_get_instance_private((GNCSearchReconciled*)o))
+G_DEFINE_TYPE(GNCSearchReconciled, gnc_search_reconciled, GNC_TYPE_SEARCH_CORE_TYPE)
 
 static void
 gnc_search_reconciled_class_init (GNCSearchReconciledClass *klass)
@@ -87,7 +86,7 @@ static void
 gnc_search_reconciled_finalize (GObject *obj)
 {
     GNCSearchReconciled *o = (GNCSearchReconciled *)obj;
-    g_assert (IS_GNCSEARCH_RECONCILED (o));
+    g_assert (GNC_IS_SEARCH_RECONCILED (o));
 
     G_OBJECT_CLASS (gnc_search_reconciled_parent_class)->finalize(obj);
 }
@@ -110,7 +109,7 @@ void
 gnc_search_reconciled_set_value (GNCSearchReconciled *fi, cleared_match_t value)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_RECONCILED (fi));
+    g_return_if_fail (GNC_IS_SEARCH_RECONCILED (fi));
 
     fi->value = value;
 }
@@ -119,7 +118,7 @@ void
 gnc_search_reconciled_set_how (GNCSearchReconciled *fi, QofCharMatch how)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_RECONCILED (fi));
+    g_return_if_fail (GNC_IS_SEARCH_RECONCILED (fi));
     fi->how = how;
 }
 
@@ -127,13 +126,11 @@ static void
 pass_parent (GNCSearchCoreType *fe, gpointer parent)
 {
     GNCSearchReconciled *fi = (GNCSearchReconciled *)fe;
-    GNCSearchReconciledPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_RECONCILED (fi));
+    g_return_if_fail (GNC_IS_SEARCH_RECONCILED (fi));
 
-    priv = _PRIVATE(fi);
-    priv->parent = GTK_WINDOW(parent);
+    fi->parent = GTK_WINDOW(parent);
 }
 
 static gboolean
@@ -143,7 +140,7 @@ gncs_validate (GNCSearchCoreType *fe)
     gboolean valid = TRUE;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_RECONCILED (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_RECONCILED (fi), FALSE);
 
     /* XXX */
 
@@ -203,7 +200,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     GNCSearchReconciled *fi = (GNCSearchReconciled *)fe;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_RECONCILED (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_RECONCILED (fi), NULL);
 
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
@@ -240,7 +237,7 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
     int i;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_RECONCILED (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_RECONCILED (fi), NULL);
 
     /* This code should look a lot like xaccQueryAddClearedMatch() */
 
@@ -267,7 +264,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     GNCSearchReconciled *se, *fse = (GNCSearchReconciled *)fe;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_RECONCILED (fse), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_RECONCILED (fse), NULL);
 
     se = gnc_search_reconciled_new ();
     gnc_search_reconciled_set_value (se, fse->value);

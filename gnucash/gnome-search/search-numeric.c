@@ -47,20 +47,21 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_numeric_finalize	(GObject *obj);
 
-typedef struct _GNCSearchNumericPrivate GNCSearchNumericPrivate;
-
-struct _GNCSearchNumericPrivate
+struct _GNCSearchNumeric
 {
+    GNCSearchCoreType parent_instance;
+
+    QofQueryCompare	how;
+    gnc_numeric		value;
+    QofNumericMatch	option;
+
     gboolean	is_debcred;
     GtkWidget * 	entry;
     GNCAmountEdit *gae;
     GtkWindow *parent;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchNumeric, gnc_search_numeric, GNC_TYPE_SEARCH_CORE_TYPE)
-
-#define _PRIVATE(o) \
-   ((GNCSearchNumericPrivate*)gnc_search_numeric_get_instance_private((GNCSearchNumeric*)o))
+G_DEFINE_TYPE(GNCSearchNumeric, gnc_search_numeric, GNC_TYPE_SEARCH_CORE_TYPE)
 
 static void
 gnc_search_numeric_class_init (GNCSearchNumericClass *klass)
@@ -94,7 +95,7 @@ static void
 gnc_search_numeric_finalize (GObject *obj)
 {
     GNCSearchNumeric *o = (GNCSearchNumeric *)obj;
-    g_assert (IS_GNCSEARCH_NUMERIC (o));
+    g_assert (GNC_IS_SEARCH_NUMERIC (o));
 
     G_OBJECT_CLASS (gnc_search_numeric_parent_class)->finalize(obj);
 }
@@ -124,11 +125,9 @@ GNCSearchNumeric *
 gnc_search_numeric_debcred_new (void)
 {
     GNCSearchNumeric *o;
-    GNCSearchNumericPrivate *priv;
 
     o = g_object_new(GNC_TYPE_SEARCH_NUMERIC, NULL);
-    priv = _PRIVATE(o);
-    priv->is_debcred = TRUE;
+    o->is_debcred = TRUE;
     return o;
 }
 
@@ -136,7 +135,7 @@ void
 gnc_search_numeric_set_value (GNCSearchNumeric *fi, gnc_numeric value)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
 
     fi->value = value;
 }
@@ -145,7 +144,7 @@ void
 gnc_search_numeric_set_how (GNCSearchNumeric *fi, QofQueryCompare how)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
     fi->how = how;
 }
 
@@ -153,7 +152,7 @@ void
 gnc_search_numeric_set_option (GNCSearchNumeric *fi, QofNumericMatch option)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
     fi->option = option;
 }
 
@@ -161,31 +160,26 @@ static void
 pass_parent (GNCSearchCoreType *fe, gpointer parent)
 {
     GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-    GNCSearchNumericPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
 
-    priv = _PRIVATE(fi);
-    priv->parent = GTK_WINDOW(parent);
+    fi->parent = GTK_WINDOW(parent);
 }
 
 static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
     GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-    GNCSearchNumericPrivate *priv;
     gboolean valid = TRUE;
     GError *error = NULL;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_NUMERIC (fi), FALSE);
 
-    priv = _PRIVATE(fi);
-
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(priv->gae), &error))
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(fi->gae), &error))
     {
-        gnc_error_dialog (GTK_WINDOW(priv->parent), "%s", error->message);
+        gnc_error_dialog (GTK_WINDOW(fi->parent), "%s", error->message);
         valid = FALSE;
         g_error_free (error);
     }
@@ -202,29 +196,26 @@ static GtkWidget *
 make_how_menu (GNCSearchCoreType *fe)
 {
     GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-    GNCSearchNumericPrivate *priv;
     GtkComboBox *combo;
 
-    priv = _PRIVATE(fi);
-
     combo = GTK_COMBO_BOX(gnc_combo_box_new_search());
-    gnc_combo_box_search_add(combo, (priv->is_debcred ?
+    gnc_combo_box_search_add(combo, (fi->is_debcred ?
                                      _("less than") : _("is less than")),
                              QOF_COMPARE_LT);
-    gnc_combo_box_search_add(combo, (priv->is_debcred ?
+    gnc_combo_box_search_add(combo, (fi->is_debcred ?
                                      _("less than or equal to") :
                                      _("is less than or equal to")),
                              QOF_COMPARE_LTE);
-    gnc_combo_box_search_add(combo, (priv->is_debcred ?
+    gnc_combo_box_search_add(combo, (fi->is_debcred ?
                                      _("equal to") : _("equals")),
                              QOF_COMPARE_EQUAL);
-    gnc_combo_box_search_add(combo, (priv->is_debcred ?
+    gnc_combo_box_search_add(combo, (fi->is_debcred ?
                                      _("not equal to") : _("does not equal")),
                              QOF_COMPARE_NEQ);
-    gnc_combo_box_search_add(combo, (priv->is_debcred ?
+    gnc_combo_box_search_add(combo, (fi->is_debcred ?
                                      _("greater than") : _("is greater than")),
                              QOF_COMPARE_GT);
-    gnc_combo_box_search_add(combo, (priv->is_debcred ?
+    gnc_combo_box_search_add(combo, (fi->is_debcred ?
                                      _("greater than or equal to") :
                                      _("is greater than or equal to")),
                              QOF_COMPARE_GTE);
@@ -255,28 +246,24 @@ static void
 grab_focus (GNCSearchCoreType *fe)
 {
     GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-    GNCSearchNumericPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
 
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gtk_widget_grab_focus (priv->entry);
+    if (fi->entry)
+        gtk_widget_grab_focus (fi->entry);
 }
 
 static void
 editable_enters (GNCSearchCoreType *fe)
 {
     GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-    GNCSearchNumericPrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_NUMERIC (fi));
+    g_return_if_fail (GNC_IS_SEARCH_NUMERIC (fi));
 
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gtk_entry_set_activates_default(GTK_ENTRY (priv->entry), TRUE);
+    if (fi->entry)
+        gtk_entry_set_activates_default(GTK_ENTRY (fi->entry), TRUE);
 }
 
 static GtkWidget *
@@ -284,17 +271,15 @@ gncs_get_widget (GNCSearchCoreType *fe)
 {
     GtkWidget *entry, *menu, *box;
     GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-    GNCSearchNumericPrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_NUMERIC (fi), NULL);
 
-    priv = _PRIVATE(fi);
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
     /* Build and connect the option menu(s) */
-    if (priv->is_debcred)
+    if (fi->is_debcred)
     {
         menu = make_option_menu (fe);
         gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
@@ -308,8 +293,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (entry), fi->value);
     g_signal_connect (G_OBJECT (entry), "amount_changed", G_CALLBACK (entry_changed), fe);
     gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
-    priv->gae = GNC_AMOUNT_EDIT (entry);
-    priv->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
+    fi->gae = GNC_AMOUNT_EDIT (entry);
+    fi->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
 
     /* And return the box */
     return box;
@@ -318,14 +303,12 @@ gncs_get_widget (GNCSearchCoreType *fe)
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchNumeric *fi = (GNCSearchNumeric *)fe;
-    GNCSearchNumericPrivate *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_NUMERIC (fi), NULL);
 
     /* force the computation of the entry, because we may not get the signal */
-    priv = _PRIVATE(fi);
-    entry_changed (priv->gae, fi);
+    entry_changed (fi->gae, fi);
 
     return qof_query_numeric_predicate (fi->how, fi->option, fi->value);
 }
@@ -333,18 +316,15 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
 {
     GNCSearchNumeric *se, *fse = (GNCSearchNumeric *)fe;
-    GNCSearchNumericPrivate *se_priv, *fse_priv;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_NUMERIC (fse), NULL);
-    fse_priv = _PRIVATE(fse);
+    g_return_val_if_fail (GNC_IS_SEARCH_NUMERIC (fse), NULL);
 
     se = gnc_search_numeric_new ();
     gnc_search_numeric_set_value (se, fse->value);
     gnc_search_numeric_set_how (se, fse->how);
-    se_priv = _PRIVATE(se);
     gnc_search_numeric_set_option (se, fse->option);
-    se_priv->is_debcred = fse_priv->is_debcred;
+    se->is_debcred = fse->is_debcred;
 
     return (GNCSearchCoreType *)se;
 }

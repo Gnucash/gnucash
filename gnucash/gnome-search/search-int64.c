@@ -47,20 +47,19 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_int64_finalize	(GObject *obj);
 
-
-typedef struct _GNCSearchInt64Private GNCSearchInt64Private;
-
-struct _GNCSearchInt64Private
+struct _GNCSearchInt64
 {
+    GNCSearchCoreType parent_instance;
+
+    QofQueryCompare	how;
+    gint64		value;
+
     GtkWidget *entry;
     GNCAmountEdit *gae;
     GtkWindow *parent;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchInt64, gnc_search_int64, GNC_TYPE_SEARCH_CORE_TYPE)
-
-#define _PRIVATE(o) \
-   ((GNCSearchInt64Private*)gnc_search_int64_get_instance_private((GNCSearchInt64*)o))
+G_DEFINE_TYPE(GNCSearchInt64, gnc_search_int64, GNC_TYPE_SEARCH_CORE_TYPE)
 
 static void
 gnc_search_int64_class_init (GNCSearchInt64Class *klass)
@@ -92,7 +91,7 @@ static void
 gnc_search_int64_finalize (GObject *obj)
 {
     GNCSearchInt64 *o = (GNCSearchInt64 *)obj;
-    g_assert (IS_GNCSEARCH_INT64 (o));
+    g_assert (GNC_IS_SEARCH_INT64 (o));
 
     G_OBJECT_CLASS (gnc_search_int64_parent_class)->finalize(obj);
 }
@@ -115,7 +114,7 @@ void
 gnc_search_int64_set_value (GNCSearchInt64 *fi, gint64 value)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_INT64 (fi));
+    g_return_if_fail (GNC_IS_SEARCH_INT64 (fi));
 
     fi->value = value;
 }
@@ -124,7 +123,7 @@ void
 gnc_search_int64_set_how (GNCSearchInt64 *fi, QofQueryCompare how)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_INT64 (fi));
+    g_return_if_fail (GNC_IS_SEARCH_INT64 (fi));
     fi->how = how;
 }
 
@@ -132,31 +131,26 @@ static void
 pass_parent (GNCSearchCoreType *fe, gpointer parent)
 {
     GNCSearchInt64 *fi = (GNCSearchInt64 *)fe;
-    GNCSearchInt64Private *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_INT64 (fi));
+    g_return_if_fail (GNC_IS_SEARCH_INT64 (fi));
 
-    priv = _PRIVATE(fi);
-    priv->parent = GTK_WINDOW(parent);
+    fi->parent = GTK_WINDOW(parent);
 }
 
 static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
     GNCSearchInt64 *fi = (GNCSearchInt64 *)fe;
-    GNCSearchInt64Private *priv;
     gboolean valid = TRUE;
     GError *error = NULL;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_INT64 (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_INT64 (fi), FALSE);
 
-    priv = _PRIVATE(fi);
-
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(priv->gae), &error))
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(fi->gae), &error))
     {
-        gnc_error_dialog (GTK_WINDOW(priv->parent), "%s", error->message);
+        gnc_error_dialog (GTK_WINDOW(fi->parent), "%s", error->message);
         valid = FALSE;
         g_error_free (error);
     }
@@ -195,28 +189,24 @@ static void
 grab_focus (GNCSearchCoreType *fe)
 {
     GNCSearchInt64 *fi = (GNCSearchInt64 *)fe;
-    GNCSearchInt64Private *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_INT64 (fi));
+    g_return_if_fail (GNC_IS_SEARCH_INT64 (fi));
 
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gtk_widget_grab_focus (priv->entry);
+    if (fi->entry)
+        gtk_widget_grab_focus (fi->entry);
 }
 
 static void
 editable_enters (GNCSearchCoreType *fe)
 {
     GNCSearchInt64 *fi = (GNCSearchInt64 *)fe;
-    GNCSearchInt64Private *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_INT64 (fi));
+    g_return_if_fail (GNC_IS_SEARCH_INT64 (fi));
 
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gtk_entry_set_activates_default(GTK_ENTRY (priv->entry), TRUE);
+    if (fi->entry)
+        gtk_entry_set_activates_default(GTK_ENTRY (fi->entry), TRUE);
 }
 
 static GtkWidget *
@@ -224,12 +214,10 @@ gncs_get_widget (GNCSearchCoreType *fe)
 {
     GtkWidget *entry, *menu, *box;
     GNCSearchInt64 *fi = (GNCSearchInt64 *)fe;
-    GNCSearchInt64Private *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_INT64 (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_INT64 (fi), NULL);
 
-    priv = _PRIVATE(fi);
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
@@ -248,8 +236,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
     }
     g_signal_connect (G_OBJECT (entry), "amount_changed", G_CALLBACK (entry_changed), fe);
     gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
-    priv->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
-    priv->gae = GNC_AMOUNT_EDIT (entry);
+    fi->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
+    fi->gae = GNC_AMOUNT_EDIT (entry);
 
     /* And return the box */
     return box;
@@ -258,14 +246,12 @@ gncs_get_widget (GNCSearchCoreType *fe)
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchInt64 *fi = (GNCSearchInt64 *)fe;
-    GNCSearchInt64Private *priv;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_INT64 (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_INT64 (fi), NULL);
 
     /* force the computation of the entry, because we may not get the signal */
-    priv = _PRIVATE(fi);
-    entry_changed (priv->gae, fi);
+    entry_changed (fi->gae, fi);
 
     return qof_query_int64_predicate (fi->how, fi->value);
 }
@@ -275,7 +261,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     GNCSearchInt64 *se, *fse = (GNCSearchInt64 *)fe;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_INT64 (fse), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_INT64 (fse), NULL);
 
     se = gnc_search_int64_new ();
     gnc_search_int64_set_value (se, fse->value);

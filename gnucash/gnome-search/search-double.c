@@ -47,19 +47,19 @@ static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe);
 
 static void gnc_search_double_finalize	(GObject *obj);
 
-typedef struct _GNCSearchDoublePrivate GNCSearchDoublePrivate;
-
-struct _GNCSearchDoublePrivate
+struct _GNCSearchDouble
 {
+    GNCSearchCoreType parent_instance;
+
+    QofQueryCompare     how;
+    double              value;
+
     GtkWidget * entry;
     GNCAmountEdit *gae;
     GtkWindow *parent;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GNCSearchDouble, gnc_search_double, GNC_TYPE_SEARCH_CORE_TYPE)
-
-#define _PRIVATE(o) \
-   ((GNCSearchDoublePrivate*)gnc_search_double_get_instance_private((GNCSearchDouble*)o))
+G_DEFINE_TYPE(GNCSearchDouble, gnc_search_double, GNC_TYPE_SEARCH_CORE_TYPE)
 
 static void
 gnc_search_double_class_init (GNCSearchDoubleClass *klass)
@@ -91,7 +91,7 @@ static void
 gnc_search_double_finalize (GObject *obj)
 {
     GNCSearchDouble *o = (GNCSearchDouble *)obj;
-    g_assert (IS_GNCSEARCH_DOUBLE (o));
+    g_assert (GNC_IS_SEARCH_DOUBLE (o));
 
     G_OBJECT_CLASS (gnc_search_double_parent_class)->finalize(obj);
 }
@@ -114,7 +114,7 @@ void
 gnc_search_double_set_value (GNCSearchDouble *fi, double value)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_DOUBLE (fi));
+    g_return_if_fail (GNC_IS_SEARCH_DOUBLE (fi));
 
     fi->value = value;
 }
@@ -123,7 +123,7 @@ void
 gnc_search_double_set_how (GNCSearchDouble *fi, QofQueryCompare how)
 {
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_DOUBLE (fi));
+    g_return_if_fail (GNC_IS_SEARCH_DOUBLE (fi));
     fi->how = how;
 }
 
@@ -131,31 +131,26 @@ static void
 pass_parent (GNCSearchCoreType *fe, gpointer parent)
 {
     GNCSearchDouble *fi = (GNCSearchDouble *)fe;
-    GNCSearchDoublePrivate *priv;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_DOUBLE (fi));
+    g_return_if_fail (GNC_IS_SEARCH_DOUBLE (fi));
 
-    priv = _PRIVATE(fi);
-    priv->parent = GTK_WINDOW(parent);
+    fi->parent = GTK_WINDOW(parent);
 }
 
 static gboolean
 gncs_validate (GNCSearchCoreType *fe)
 {
     GNCSearchDouble *fi = (GNCSearchDouble *)fe;
-    GNCSearchDoublePrivate *priv;
     gboolean valid = TRUE;
     GError *error = NULL;
 
     g_return_val_if_fail (fi, FALSE);
-    g_return_val_if_fail (IS_GNCSEARCH_DOUBLE (fi), FALSE);
+    g_return_val_if_fail (GNC_IS_SEARCH_DOUBLE (fi), FALSE);
 
-    priv = _PRIVATE(fi);
-
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(priv->gae), &error))
+    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(fi->gae), &error))
     {
-        gnc_error_dialog (GTK_WINDOW(priv->parent), "%s", error->message);
+        gnc_error_dialog (GTK_WINDOW(fi->parent), "%s", error->message);
         valid = FALSE;
         g_error_free (error);
     }
@@ -193,28 +188,24 @@ static void
 grab_focus (GNCSearchCoreType *fe)
 {
     GNCSearchDouble *fi = (GNCSearchDouble *)fe;
-    GNCSearchDoublePrivate *priv ;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_DOUBLE (fi));
+    g_return_if_fail (GNC_IS_SEARCH_DOUBLE (fi));
 
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gtk_widget_grab_focus (priv->entry);
+    if (fi->entry)
+        gtk_widget_grab_focus (fi->entry);
 }
 
 static void
 editable_enters (GNCSearchCoreType *fe)
 {
     GNCSearchDouble *fi = (GNCSearchDouble *)fe;
-    GNCSearchDoublePrivate *priv ;
 
     g_return_if_fail (fi);
-    g_return_if_fail (IS_GNCSEARCH_DOUBLE (fi));
+    g_return_if_fail (GNC_IS_SEARCH_DOUBLE (fi));
 
-    priv = _PRIVATE(fi);
-    if (priv->entry)
-        gtk_entry_set_activates_default(GTK_ENTRY (priv->entry), TRUE);
+    if (fi->entry)
+        gtk_entry_set_activates_default(GTK_ENTRY (fi->entry), TRUE);
 }
 
 static GtkWidget *
@@ -222,12 +213,10 @@ gncs_get_widget (GNCSearchCoreType *fe)
 {
     GtkWidget *entry, *menu, *box;
     GNCSearchDouble *fi = (GNCSearchDouble *)fe;
-    GNCSearchDoublePrivate *priv ;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_DOUBLE (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_DOUBLE (fi), NULL);
 
-    priv = _PRIVATE(fi);
     box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
 
@@ -241,8 +230,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
         gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT (entry), fi->value);
     g_signal_connect (G_OBJECT (entry), "amount_changed", G_CALLBACK (entry_changed), fe);
     gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
-    priv->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
-    priv->gae = GNC_AMOUNT_EDIT (entry);
+    fi->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
+    fi->gae = GNC_AMOUNT_EDIT (entry);
 
     /* And return the box */
     return box;
@@ -251,14 +240,12 @@ gncs_get_widget (GNCSearchCoreType *fe)
 static QofQueryPredData* gncs_get_predicate (GNCSearchCoreType *fe)
 {
     GNCSearchDouble *fi = (GNCSearchDouble *)fe;
-    GNCSearchDoublePrivate *priv ;
 
     g_return_val_if_fail (fi, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_DOUBLE (fi), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_DOUBLE (fi), NULL);
 
     /* force the computation of the entry, because we may not get the signal */
-    priv = _PRIVATE(fi);
-    entry_changed (priv->gae, fi);
+    entry_changed (fi->gae, fi);
 
     return qof_query_double_predicate (fi->how, fi->value);
 }
@@ -268,7 +255,7 @@ static GNCSearchCoreType *gncs_clone(GNCSearchCoreType *fe)
     GNCSearchDouble *se, *fse = (GNCSearchDouble *)fe;
 
     g_return_val_if_fail (fse, NULL);
-    g_return_val_if_fail (IS_GNCSEARCH_DOUBLE (fse), NULL);
+    g_return_val_if_fail (GNC_IS_SEARCH_DOUBLE (fse), NULL);
 
     se = gnc_search_double_new ();
     gnc_search_double_set_value (se, fse->value);
