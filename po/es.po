@@ -9,7 +9,7 @@
 # Jaime Marquínez Ferrándiz <weblate@jregistros.fastmail.net>, 2021, 2022.
 # Guille <willelopz+weblate@gmail.com>, 2021.
 # Adolfo Jayme Barrientos <fitojb@ubuntu.com>, 2021.
-# Francisco Serrador <fserrador@gmail.com>, 2021, 2022.
+# Francisco Serrador <fserrador@gmail.com>, 2021, 2022, 2023.
 # Cow <javier.fserrador@gmail.com>, 2022.
 # Eduardo Malaspina <vaio0@swismail.com>, 2022.
 # Luis D. Lafaurie <luis.lafaurie@tecnativa.com>, 2022.
@@ -85,9 +85,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-06-16 15:48+0000\n"
-"Last-Translator: Jaime Marquínez Ferrándiz <jaime.marquinez."
-"ferrandiz@fastmail.net>\n"
+"PO-Revision-Date: 2023-06-16 17:50+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -1811,7 +1810,7 @@ msgstr "Valor de la acción"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:783
 msgid "Invalid stock new balance."
-msgstr "El nuevo balance de la acción no es válido."
+msgstr "El nuevo balance de la provisión no es válido."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:785
 msgid "New balance must be higher than old balance."
@@ -1888,7 +1887,7 @@ msgstr "Las siguientes advertencias existen:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:960
 msgid "Ne_w Balance"
-msgstr "Nuevo balance"
+msgstr "Nuevo _balance"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:960
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
@@ -3739,7 +3738,7 @@ msgstr "¿Borrar precios?"
 #: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:85
 msgid "Entries"
-msgstr "Asientos"
+msgstr "Asientos(bancarios), Apuntes"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:446
 msgid "Are you sure you want to delete these prices?"
@@ -4886,7 +4885,7 @@ msgstr "Bajar"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:300
 msgid "Unpost"
-msgstr "Descontabilizar"
+msgstr "Des-contabilizar"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:301
 msgid "Pay"
@@ -7080,11 +7079,11 @@ msgstr "No recordarme otra vez esta _sesión."
 
 #: gnucash/gnome-utils/gnc-account-sel.c:525
 msgid "Hide _Placeholder Accounts"
-msgstr "Ocultar Cuentas _Contenedoras"
+msgstr "Ocultar cuentas _contenedoras"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:527
 msgid "Hide _Hidden Accounts"
-msgstr "Ocultar _Cuentas ocultas"
+msgstr "Ocultar _cuentas ocultas"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:722
 msgid "Set the visibility of placeholder and hidden accounts."
@@ -7859,7 +7858,7 @@ msgstr "Contabilidad financiara personal y pequeños negocios."
 #: gnucash/gnome-utils/gnc-main-window.cpp:5266
 msgid "translator-credits"
 msgstr ""
-"Francisco Javier Serrador, 2018 - 2022\n"
+"Francisco Javier Serrador, 2018 - 2023\n"
 "\n"
 "Adolfo Jayme Barrientos, 2021\n"
 "Carlos Manrique Enguita, 2021\n"
@@ -13991,7 +13990,7 @@ msgid ""
 "and LSE."
 msgstr ""
 "Seleccione una categoría para la materia prima o introduzca una nueva. Uno "
-"quizá utilice categorías de inversión como MERCANCÍAS y BONOS o nombres de "
+"quizá utilice categorías de inversión como ACCIONES y BONOS o nombres de "
 "intercambio como NASDAQ y LSE."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:319
@@ -16944,7 +16943,7 @@ msgstr "<b>Transferencia Monetaria</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:520
 msgid "Exchange Rate"
-msgstr "Tipo de cambio"
+msgstr "Tipo de cambio monetario"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:601
 msgid "_Fetch Rate"
@@ -21348,7 +21347,7 @@ msgstr "PdV"
 # ¿Qué representa esto?
 #: gnucash/register/ledger-core/split-register.c:2556
 msgid "AutoDep"
-msgstr "Depósito automático"
+msgstr "Dep. auto."
 
 #: gnucash/register/ledger-core/split-register.c:2557
 msgid "Wire"
@@ -21375,15 +21374,15 @@ msgstr "Sueldo"
 
 #: gnucash/register/ledger-core/split-register.c:2632
 msgid "LTCG"
-msgstr "GCLP"
+msgstr "Ganancias del capital a largo plazo"
 
 #: gnucash/register/ledger-core/split-register.c:2634
 msgid "STCG"
-msgstr "Ganancias del capital a corto plazo"
+msgstr "Ganancias del capital a corto plazo (GCCP)"
 
 #: gnucash/register/ledger-core/split-register.c:2637
 msgid "Dist"
-msgstr "Distribución"
+msgstr "Dist"
 
 #: gnucash/register/ledger-core/split-register-control.c:59
 msgid "Rebalance Transaction"
@@ -29978,8 +29977,9 @@ msgid "_Sort By…"
 msgstr "_Ordenar por…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:184
+#, fuzzy
 msgid "_Void Transaction"
-msgstr "_Cancelar la transacción"
+msgstr "_Cancelar transacción"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
 msgid "Void the current transaction"
