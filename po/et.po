@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-04-15 01:52+0000\n"
+"PO-Revision-Date: 2023-06-08 18:50+0000\n"
 "Last-Translator: Rauno Ots <rots00@gmail.com>\n"
 "Language-Team: Estonian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "et/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -42,6 +42,9 @@ msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
+"Prooviti otsida määratlemata kuupäeva sümbolit „~a”. Selle aruande salvestas "
+"tõenäoliselt GnuCashi hilisem versioon. Vaikeväärtusena kasutatakse tänast "
+"kuupäeva."
 
 #: bindings/guile/date-utilities.scm:717
 #: gnucash/gnome-utils/gnc-period-select.c:75
@@ -180,18 +183,18 @@ msgstr "Eelmise kvartali algus"
 #: bindings/guile/date-utilities.scm:804
 #: libgnucash/engine/gnc-option-date.cpp:232
 msgid "First day of the previous quarterly accounting period."
-msgstr ""
+msgstr "Eelmise kvartali arvestusperioodi esimene päev."
 
 #: bindings/guile/date-utilities.scm:808
 #: gnucash/gnome-utils/gnc-period-select.c:90
 #: libgnucash/engine/gnc-option-date.cpp:239
 msgid "End of previous quarter"
-msgstr ""
+msgstr "Eelmise kvartali lõpp"
 
 #: bindings/guile/date-utilities.scm:811
 #: libgnucash/engine/gnc-option-date.cpp:240
 msgid "Last day of previous quarterly accounting period."
-msgstr ""
+msgstr "Eelmise kvartali arvestusperioodi viimane päev."
 
 #: bindings/guile/date-utilities.scm:815
 #: gnucash/gnome-utils/gnc-cell-renderer-date.c:166
@@ -199,17 +202,17 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-period-select.c:86
 #: libgnucash/engine/gnc-option-date.cpp:79
 msgid "Today"
-msgstr ""
+msgstr "Täna"
 
 #: bindings/guile/date-utilities.scm:817
 #: libgnucash/engine/gnc-option-date.cpp:80
 msgid "The current date."
-msgstr ""
+msgstr "Praegune kuupäev."
 
 #: bindings/guile/options.scm:388 gnucash/gnome/top-level.c:462
 #: libgnucash/engine/gnc-optiondb.cpp:1109 libgnucash/engine/qofbookslots.h:72
 msgid "Business"
-msgstr ""
+msgstr "Äri"
 
 #: bindings/guile/options.scm:389 gnucash/gnome/dialog-customer.c:905
 #: gnucash/gnome/dialog-invoice.c:3571 gnucash/gnome/dialog-invoice.c:3605
@@ -225,37 +228,37 @@ msgstr "Ettevõtte Nimi"
 
 #: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1212
 msgid "Company Address"
-msgstr ""
+msgstr "Ettevõtte aadress"
 
 #: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1235
 msgid "Company ID"
-msgstr ""
+msgstr "Ettevõtte ID"
 
 #: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1220
 msgid "Company Phone Number"
-msgstr ""
+msgstr "Ettevõtte telefoninumber"
 
 #: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1224
 msgid "Company Fax Number"
-msgstr ""
+msgstr "Ettevõtte faksinumber"
 
 #: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1232
 msgid "Company Website URL"
-msgstr ""
+msgstr "Ettevõtte veebilehe URL"
 
 #: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1228
 msgid "Company Email Address"
-msgstr ""
+msgstr "Ettevõtte e-posti aadress"
 
 #: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1216
 msgid "Company Contact Person"
-msgstr ""
+msgstr "Ettevõtte kontaktisik"
 
 #: bindings/guile/options.scm:397
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
 #: libgnucash/engine/gnc-optiondb.cpp:1255
 msgid "Fancy Date Format"
-msgstr ""
+msgstr "Ilustatud kuupäevavorming"
 
 #: bindings/guile/options.scm:398
 msgid "custom"
@@ -271,7 +274,7 @@ msgstr "Käibemaks"
 
 #: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1261
 msgid "Tax Number"
-msgstr ""
+msgstr "Maksumaksja number"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"

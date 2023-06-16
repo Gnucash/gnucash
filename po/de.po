@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-06-01 17:49+0000\n"
+"PO-Revision-Date: 2023-06-07 16:50+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -30569,17 +30569,17 @@ msgstr "Kein Umtauschkurs verfügbar in SX [%s] für %s -> %s, Wert ist Null."
 #: libgnucash/app-utils/gnc-ui-balances.c:369
 #, c-format
 msgid "%s balance is %s, exceeds limit of %s."
-msgstr "Der Saldo von %s beträgt %s und überschreitet den Grenzwert von %s."
+msgstr "Der %s-Saldo von %s liegt über der Obergrenze %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, c-format
 msgid "%s balance is %s, subceeds limit of %s."
-msgstr "Der Saldo von %s beträgt %s und unterschreitet den Grenzwert von %s."
+msgstr "Der %s-Saldo von %s liegt unter der Untergrenze %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
 #, c-format
 msgid "%s balance is %s, and should be zero."
-msgstr "Der Saldo von %s beträgt %s und sollte Null sein."
+msgstr "Der %s-Saldo von %s sollte Null sein."
 
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
