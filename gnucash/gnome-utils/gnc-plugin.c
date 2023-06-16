@@ -47,6 +47,7 @@
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
+static void gnc_plugin_constructed (GObject *object);
 static void gnc_plugin_finalize   (GObject *object);
 
 
@@ -57,8 +58,8 @@ typedef struct GncPluginPrivate
     gpointer dummy;
 } GncPluginPrivate;
 
-GNC_DEFINE_TYPE_WITH_CODE(GncPlugin, gnc_plugin, G_TYPE_OBJECT,
-		        G_ADD_PRIVATE(GncPlugin))
+G_DEFINE_TYPE_WITH_CODE(GncPlugin, gnc_plugin, G_TYPE_OBJECT,
+                        G_ADD_PRIVATE(GncPlugin))
 
 #define GNC_PLUGIN_GET_PRIVATE(o)  \
    ((GncPluginPrivate*)gnc_plugin_get_instance_private((GncPlugin*)o))
@@ -75,6 +76,7 @@ gnc_plugin_class_init (GncPluginClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
+    gobject_class->constructed = gnc_plugin_constructed;
     gobject_class->finalize = gnc_plugin_finalize;
 }
 
@@ -82,18 +84,26 @@ gnc_plugin_class_init (GncPluginClass *klass)
 /** Initialize a new instance of a gnucash menu-only plugin.  This
  *  function adds the object to the tracking system.
  *
- *  @param plugin_page The new object instance created by the object
+ *  @param plugin The new object instance created by the object
  *  system.
- *
- *  @param klass A pointer to the class data structure for this
- *  object. */
+ */
 static void
-gnc_plugin_init (GncPlugin *plugin_page, void *data)
+gnc_plugin_init (GncPlugin *plugin)
 {
-    GncPluginClass *klass = (GncPluginClass*)data;
+}
 
-    gnc_gobject_tracking_remember(G_OBJECT(plugin_page), \
-                                  G_OBJECT_CLASS(klass));
+/** The object has been fully constructed.
+ * This function adds the object to the tracking system.
+ *
+ *  @param obj The new object instance created by the object
+ *  system.
+ */
+static void
+gnc_plugin_constructed (GObject *obj)
+{
+    gnc_gobject_tracking_remember(obj);
+
+    G_OBJECT_CLASS (gnc_plugin_parent_class)->constructed (obj);
 }
 
 

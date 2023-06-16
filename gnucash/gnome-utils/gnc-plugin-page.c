@@ -43,6 +43,7 @@
 /** The debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
+static void gnc_plugin_page_constructed (GObject *object);
 static void gnc_plugin_page_finalize   (GObject *object);
 static void gnc_plugin_page_set_property (GObject      *object,
                                           guint         prop_id,
@@ -106,7 +107,7 @@ typedef struct _GncPluginPagePrivate
 
 } GncPluginPagePrivate;
 
-GNC_DEFINE_TYPE_WITH_CODE(GncPluginPage, gnc_plugin_page, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE(GncPluginPage, gnc_plugin_page, G_TYPE_OBJECT,
                 G_ADD_PRIVATE(GncPluginPage))
 
 #define GNC_PLUGIN_PAGE_GET_PRIVATE(o)  \
@@ -351,6 +352,7 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
 {
     GObjectClass *gobject_class = G_OBJECT_CLASS(klass);
 
+    gobject_class->constructed = gnc_plugin_page_constructed;
     gobject_class->finalize = gnc_plugin_page_finalize;
     gobject_class->set_property = gnc_plugin_page_set_property;
     gobject_class->get_property = gnc_plugin_page_get_property;
@@ -451,21 +453,14 @@ gnc_plugin_page_class_init (GncPluginPageClass *klass)
 
 
 /** Initialize a new instance of a gnucash content plugin.  This
- *  function initializes the object private storage space, and adds
- *  the object to the tracking system.
+ *  function initializes the object private storage space.
  *
  *  @param page The new object instance created by the object system.
- *
- *  @param klass A pointer to the class data structure for this
- *  object. */
+ *  */
 static void
-gnc_plugin_page_init (GncPluginPage *page, void *data)
+gnc_plugin_page_init (GncPluginPage *page)
 {
-    GncPluginPagePrivate *priv;
-
-    GncPluginPageClass *klass = (GncPluginPageClass*)data;
-
-    priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
+    GncPluginPagePrivate *priv = GNC_PLUGIN_PAGE_GET_PRIVATE(page);
     priv->page_name   = NULL;
     priv->page_color  = NULL;
     priv->page_changed_id = 0;
@@ -474,11 +469,21 @@ gnc_plugin_page_init (GncPluginPage *page, void *data)
 
     page->window      = NULL;
     page->summarybar  = NULL;
-
-    gnc_gobject_tracking_remember (G_OBJECT(page),
-                                   G_OBJECT_CLASS(klass));
 }
 
+/** The object has been fully constructed.
+ * This function adds the object to the tracking system.
+ *
+ *  @param obj The new object instance created by the object
+ *  system.
+ */
+ static void
+gnc_plugin_page_constructed (GObject *obj)
+{
+    gnc_gobject_tracking_remember(obj);
+
+    G_OBJECT_CLASS (gnc_plugin_page_parent_class)->constructed (obj);
+}
 
 /** Finalize the gnucash plugin object.  This function is called from
  *  the G_Object level to complete the destruction of the object.  It

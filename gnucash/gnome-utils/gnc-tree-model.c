@@ -36,6 +36,7 @@
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /** Declarations *********************************************************/
+static void gnc_tree_model_constructed (GObject *object);
 static void gnc_tree_model_finalize (GObject *object);
 
 /** The instance private data for a generic tree model. */
@@ -44,7 +45,7 @@ typedef struct GncTreeModelPrivate
     gpointer dummy;
 } GncTreeModelPrivate;
 
-GNC_DEFINE_TYPE_WITH_CODE(GncTreeModel, gnc_tree_model, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE(GncTreeModel, gnc_tree_model, G_TYPE_OBJECT,
 		        G_ADD_PRIVATE(GncTreeModel))
 
 #define GNC_TREE_MODEL_GET_PRIVATE(o)  \
@@ -63,17 +64,29 @@ gnc_tree_model_class_init (GncTreeModelClass *klass)
     o_class = G_OBJECT_CLASS (klass);
 
     /* GObject signals */
+    o_class->constructed = gnc_tree_model_constructed;
     o_class->finalize = gnc_tree_model_finalize;
 }
 
 static void
-gnc_tree_model_init (GncTreeModel *model, void *data)
+gnc_tree_model_init (GncTreeModel *model)
 {
-    GncTreeModelClass *klass = (GncTreeModelClass*)data;
+}
 
-    ENTER("model %p", model);
-    gnc_gobject_tracking_remember(G_OBJECT(model),
-		                  G_OBJECT_CLASS(klass));
+/** The object has been fully constructed.
+ * This function adds the object to the tracking system.
+ *
+ *  @param obj The new object instance created by the object
+ *  system.
+ */
+static void
+gnc_tree_model_constructed (GObject *obj)
+{
+    ENTER("model %p", obj);
+
+    gnc_gobject_tracking_remember(obj);
+
+    G_OBJECT_CLASS (gnc_tree_model_parent_class)->constructed (obj);
 
     LEAVE(" ");
 }

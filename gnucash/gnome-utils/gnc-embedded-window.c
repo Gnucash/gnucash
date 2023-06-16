@@ -55,6 +55,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 
 
 /* Declarations *********************************************************/
+static void gnc_embedded_window_constructed (GObject *object);
 static void gnc_embedded_window_finalize (GObject *object);
 static void gnc_embedded_window_dispose (GObject *object);
 
@@ -98,10 +99,10 @@ typedef struct GncEmbeddedWindowPrivate
     GtkWidget *parent_window;
 } GncEmbeddedWindowPrivate;
 
-GNC_DEFINE_TYPE_WITH_CODE(GncEmbeddedWindow, gnc_embedded_window, GTK_TYPE_BOX,
+G_DEFINE_TYPE_WITH_CODE(GncEmbeddedWindow, gnc_embedded_window, GTK_TYPE_BOX,
                         G_ADD_PRIVATE(GncEmbeddedWindow)
-                        GNC_IMPLEMENT_INTERFACE(GNC_TYPE_WINDOW,
-                                                gnc_window_embedded_window_init))
+                        G_IMPLEMENT_INTERFACE(GNC_TYPE_WINDOW,
+                                              gnc_window_embedded_window_init))
 
 #define GNC_EMBEDDED_WINDOW_GET_PRIVATE(o)  \
    ((GncEmbeddedWindowPrivate*)gnc_embedded_window_get_instance_private((GncEmbeddedWindow*)o))
@@ -187,6 +188,7 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
     ENTER("klass %p", klass);
     object_class = G_OBJECT_CLASS (klass);
 
+    object_class->constructed = gnc_embedded_window_constructed;
     object_class->finalize = gnc_embedded_window_finalize;
     object_class->dispose = gnc_embedded_window_dispose;
 
@@ -215,17 +217,14 @@ gnc_embedded_window_class_init (GncEmbeddedWindowClass *klass)
 
 
 /** Initialize a new instance of a gnucash embedded window.  This
- *  function initializes the object private storage space.  It also
- *  adds the new object to a list (for memory tracking purposes).
+ *  function initializes the object private storage space.
  *
  *  @param view The new object instance created by the object system.
  *
- *  @param klass A pointer to the class data structure for this
- *  object. */
+ *  */
 static void
-gnc_embedded_window_init (GncEmbeddedWindow *window, void *data)
+gnc_embedded_window_init (GncEmbeddedWindow *window)
 {
-    GncEmbeddedWindowClass *klass = (GncEmbeddedWindowClass*)data;
     ENTER("window %p", window);
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(window), GTK_ORIENTATION_VERTICAL);
@@ -235,11 +234,22 @@ gnc_embedded_window_init (GncEmbeddedWindow *window, void *data)
 
     gnc_embedded_window_setup_window (window);
 
-    gnc_gobject_tracking_remember (G_OBJECT(window),
-                                   G_OBJECT_CLASS(klass));
     LEAVE(" ");
 }
 
+/** The object has been fully constructed.
+ * This function adds the object to the tracking system.
+ *
+ *  @param obj The new object instance created by the object
+ *  system.
+ */
+ static void
+gnc_embedded_window_constructed (GObject *obj)
+{
+    gnc_gobject_tracking_remember(obj);
+
+    G_OBJECT_CLASS (gnc_embedded_window_parent_class)->constructed (obj);
+}
 
 /** Finish destruction of an embedded window.
  *

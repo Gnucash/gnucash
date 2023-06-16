@@ -77,6 +77,7 @@ enum
 static QofLogModule log_module = GNC_MOD_GUI;
 
 /**** Declarations ******************************************************/
+static void gnc_tree_view_constructed (GObject *object);
 static void gnc_tree_view_finalize (GObject *object);
 static void gnc_tree_view_destroy (GtkWidget *widget);
 static void gnc_tree_view_set_property (GObject         *object,
@@ -126,7 +127,7 @@ typedef struct GncTreeViewPrivate
     gulong             size_allocate_cb_id;
 } GncTreeViewPrivate;
 
-GNC_DEFINE_TYPE_WITH_CODE(GncTreeView, gnc_tree_view, GTK_TYPE_TREE_VIEW,
+G_DEFINE_TYPE_WITH_CODE(GncTreeView, gnc_tree_view, GTK_TYPE_TREE_VIEW,
                           G_ADD_PRIVATE(GncTreeView))
 
 #define GNC_TREE_VIEW_GET_PRIVATE(o)  \
@@ -177,6 +178,7 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
                                              G_PARAM_READWRITE));
 
     /* GObject signals */
+    gobject_class->constructed = gnc_tree_view_constructed;
     gobject_class->finalize = gnc_tree_view_finalize;
 
     /* GtkWidget signals */
@@ -230,16 +232,11 @@ gnc_tree_view_select_column_icon_cb (GtkWidget *widget, GdkEventButton *event, g
  *  @internal
  */
 static void
-gnc_tree_view_init (GncTreeView *view, void *data)
+gnc_tree_view_init (GncTreeView *view)
 {
     GncTreeViewPrivate *priv;
     GtkTreeViewColumn *column;
     GtkWidget *sep, *icon;
-
-    GncTreeViewClass *klass = (GncTreeViewClass*)data;
-
-    gnc_gobject_tracking_remember (G_OBJECT(view),
-                                   G_OBJECT_CLASS(klass));
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
     priv->column_menu = NULL;
@@ -320,6 +317,20 @@ gnc_tree_view_init (GncTreeView *view, void *data)
         }
     }
     gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
+}
+
+/** The object has been fully constructed.
+ * This function adds the object to the tracking system.
+ *
+ *  @param obj The new object instance created by the object
+ *  system.
+ */
+ static void
+gnc_tree_view_constructed (GObject *obj)
+{
+    gnc_gobject_tracking_remember(obj);
+
+    G_OBJECT_CLASS (gnc_tree_view_parent_class)->constructed (obj);
 }
 
 /** Finalize the GncTreeView object.  This function is called from the

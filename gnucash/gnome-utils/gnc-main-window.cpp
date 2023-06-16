@@ -150,6 +150,7 @@ static guint secs_to_save = 0;
 #define MSG_AUTO_SAVE _("Changes will be saved automatically in %u seconds")
 
 /* Declarations *********************************************************/
+static void gnc_main_window_constructed (GObject *object);
 static void gnc_main_window_finalize (GObject *object);
 static void gnc_main_window_destroy (GtkWidget *widget);
 
@@ -259,7 +260,7 @@ typedef struct GncMainWindowPrivate
 
 } GncMainWindowPrivate;
 
-GNC_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_APPLICATION_WINDOW,
+G_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_APPLICATION_WINDOW,
                         G_ADD_PRIVATE (GncMainWindow)
                         G_IMPLEMENT_INTERFACE (GNC_TYPE_WINDOW,
                                        gnc_window_main_window_init))
@@ -2622,6 +2623,7 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 
     window_type = g_quark_from_static_string ("gnc-main-window");
 
+    object_class->constructed = gnc_main_window_constructed;
     object_class->finalize = gnc_main_window_finalize;
 
     /* GtkWidget signals */
@@ -2704,21 +2706,14 @@ gnc_main_window_class_init (GncMainWindowClass *klass)
 
 
 /** Initialize a new instance of a gnucash main window.  This function
- *  initializes the object private storage space.  It also adds the
- *  new object to a list (for memory tracking purposes).
+ *  initializes the object private storage space.
  *
  *  @param window The new object instance created by the object system.
- *
- *  @param klass A pointer to the class data structure for this
- *  object. */
+ *  */
 static void
-gnc_main_window_init (GncMainWindow *window, void *data)
+gnc_main_window_init (GncMainWindow *window)
 {
-    GncMainWindowPrivate *priv;
-
-    GncMainWindowClass *klass = (GncMainWindowClass*)data;
-
-    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+    GncMainWindowPrivate *priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(window), "gnc-id-main-window");
@@ -2745,10 +2740,21 @@ gnc_main_window_init (GncMainWindow *window, void *data)
                            window);
 
     gnc_main_window_setup_window (window);
-    gnc_gobject_tracking_remember(G_OBJECT(window),
-                          G_OBJECT_CLASS(klass));
 }
 
+/** The object has been fully constructed.
+ * This function adds the object to the tracking system.
+ *
+ *  @param obj The new object instance created by the object
+ *  system.
+ */
+static void
+gnc_main_window_constructed (GObject *obj)
+{
+    gnc_gobject_tracking_remember(obj);
+
+    G_OBJECT_CLASS (gnc_main_window_parent_class)->constructed (obj);
+}
 
 /** Finalize the GncMainWindow object.  This function is called from
  *  the G_Object level to complete the destruction of the object.  It
