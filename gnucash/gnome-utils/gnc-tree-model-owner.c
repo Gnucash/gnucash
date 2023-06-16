@@ -86,25 +86,24 @@ static void gnc_tree_model_owner_event_handler (QofInstance *entity,
         GncTreeModelOwner *model,
         GncEventData *ed);
 
-/** The instance private data for an owner tree model. */
-typedef struct GncTreeModelOwnerPrivate
+/** The instance data structure for an owner tree model. */
+struct _GncTreeModelOwner
 {
+    GncTreeModel gnc_tree_model;    /**< The parent object data. */
+    int stamp;                      /**< The state of the model. Any state
+                                     *   change increments this number. */
+
     QofBook *book;
     GncOwnerType owner_type;
     OwnerList *owner_list;
     gint event_handler_id;
     const gchar *negative_color;
-} GncTreeModelOwnerPrivate;
+};
 
 G_DEFINE_TYPE_WITH_CODE(GncTreeModelOwner, gnc_tree_model_owner,
                         GNC_TYPE_TREE_MODEL,
-                        G_ADD_PRIVATE(GncTreeModelOwner)
                         G_IMPLEMENT_INTERFACE(GTK_TYPE_TREE_MODEL,
                                          gnc_tree_model_owner_tree_model_init))
-
-#define GNC_TREE_MODEL_OWNER_GET_PRIVATE(o)  \
-   ((GncTreeModelOwnerPrivate*)gnc_tree_model_owner_get_instance_private((GncTreeModelOwner*)o))
-
 
 /************************************************************/
 /*           Owner Tree Model - Misc Functions            */
@@ -119,15 +118,13 @@ G_DEFINE_TYPE_WITH_CODE(GncTreeModelOwner, gnc_tree_model_owner,
 static void
 gnc_tree_model_owner_update_color (gpointer gsettings, gchar *key, gpointer user_data)
 {
-    GncTreeModelOwnerPrivate *priv;
     GncTreeModelOwner *model;
     gboolean use_red;
 
     g_return_if_fail(GNC_IS_TREE_MODEL_OWNER(user_data));
     model = user_data;
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
     use_red = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
-    priv->negative_color = use_red ? "red" : NULL;
+    model->negative_color = use_red ? "red" : NULL;
 }
 /************************************************************/
 /*               g_object required functions                */
@@ -148,7 +145,6 @@ gnc_tree_model_owner_class_init (GncTreeModelOwnerClass *klass)
 static void
 gnc_tree_model_owner_init (GncTreeModelOwner *model)
 {
-    GncTreeModelOwnerPrivate *priv;
     gboolean red;
 
     ENTER("model %p", model);
@@ -159,11 +155,10 @@ gnc_tree_model_owner_init (GncTreeModelOwner *model)
 
     red = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED);
 
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
-    priv->book       = NULL;
-    priv->owner_list = NULL;
-    priv->owner_type = GNC_OWNER_NONE;
-    priv->negative_color = red ? "red" : NULL;
+    model->book       = NULL;
+    model->owner_list = NULL;
+    model->owner_type = GNC_OWNER_NONE;
+    model->negative_color = red ? "red" : NULL;
 
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
                           gnc_tree_model_owner_update_color,
@@ -175,7 +170,6 @@ gnc_tree_model_owner_init (GncTreeModelOwner *model)
 static void
 gnc_tree_model_owner_finalize (GObject *object)
 {
-    GncTreeModelOwnerPrivate *priv;
     GncTreeModelOwner *model;
 
     g_return_if_fail (object != NULL);
@@ -184,13 +178,12 @@ gnc_tree_model_owner_finalize (GObject *object)
     ENTER("model %p", object);
 
     model = GNC_TREE_MODEL_OWNER (object);
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
 
-    if (priv->owner_list)
-        g_list_free_full (priv->owner_list, (GDestroyNotify) gncOwnerFree);
+    if (model->owner_list)
+        g_list_free_full (model->owner_list, (GDestroyNotify) gncOwnerFree);
 
-    priv->book       = NULL;
-    priv->owner_list = NULL;
+    model->book       = NULL;
+    model->owner_list = NULL;
 
     G_OBJECT_CLASS(gnc_tree_model_owner_parent_class)->finalize (object);
     LEAVE(" ");
@@ -199,7 +192,6 @@ gnc_tree_model_owner_finalize (GObject *object)
 static void
 gnc_tree_model_owner_dispose (GObject *object)
 {
-    GncTreeModelOwnerPrivate *priv;
     GncTreeModelOwner *model;
 
     g_return_if_fail (object != NULL);
@@ -208,12 +200,11 @@ gnc_tree_model_owner_dispose (GObject *object)
     ENTER("model %p", object);
 
     model = GNC_TREE_MODEL_OWNER (object);
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
 
-    if (priv->event_handler_id)
+    if (model->event_handler_id)
     {
-        qof_event_unregister_handler (priv->event_handler_id);
-        priv->event_handler_id = 0;
+        qof_event_unregister_handler (model->event_handler_id);
+        model->event_handler_id = 0;
     }
 
     gnc_prefs_remove_cb_by_func(GNC_PREFS_GROUP_GENERAL, GNC_PREF_NEGATIVE_IN_RED,
@@ -233,7 +224,6 @@ GtkTreeModel *
 gnc_tree_model_owner_new (GncOwnerType owner_type)
 {
     GncTreeModelOwner *model;
-    GncTreeModelOwnerPrivate *priv;
     const GList *item;
 
     ENTER("owner_type %d", owner_type);
@@ -241,8 +231,7 @@ gnc_tree_model_owner_new (GncOwnerType owner_type)
     for ( ; item; item = g_list_next(item))
     {
         model = (GncTreeModelOwner *)item->data;
-        priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
-        if (priv->owner_type == owner_type)
+        if (model->owner_type == owner_type)
         {
             g_object_ref(G_OBJECT(model));
             LEAVE("returning existing model %p", model);
@@ -253,12 +242,11 @@ gnc_tree_model_owner_new (GncOwnerType owner_type)
     model = g_object_new (GNC_TYPE_TREE_MODEL_OWNER,
                           NULL);
 
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
-    priv->book = gnc_get_current_book();
-    priv->owner_type = owner_type;
-    priv->owner_list = gncBusinessGetOwnerList (priv->book, gncOwnerTypeToQofIdType(owner_type), TRUE);
+    model->book = gnc_get_current_book();
+    model->owner_type = owner_type;
+    model->owner_list = gncBusinessGetOwnerList (model->book, gncOwnerTypeToQofIdType(owner_type), TRUE);
 
-    priv->event_handler_id = qof_event_register_handler
+    model->event_handler_id = qof_event_register_handler
                              ((QofEventHandler)gnc_tree_model_owner_event_handler, model);
 
     LEAVE("model %p", model);
@@ -378,7 +366,6 @@ gnc_tree_model_owner_get_iter (GtkTreeModel *tree_model,
                                GtkTreeIter *iter,
                                GtkTreePath *path)
 {
-    GncTreeModelOwnerPrivate *priv;
     GncTreeModelOwner *model;
     GncOwner *owner;
     gint *indices;
@@ -392,7 +379,6 @@ gnc_tree_model_owner_get_iter (GtkTreeModel *tree_model,
     }
 
     model = GNC_TREE_MODEL_OWNER (tree_model);
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
 
     /* We keep a simple list of owners, not a tree, so only depth 1 is valid */
     if (gtk_tree_path_get_depth (path) != 1)
@@ -403,7 +389,7 @@ gnc_tree_model_owner_get_iter (GtkTreeModel *tree_model,
 
     indices = gtk_tree_path_get_indices (path);
 
-    owner = g_list_nth_data (priv->owner_list, indices[0]);
+    owner = g_list_nth_data (model->owner_list, indices[0]);
     if (owner == NULL)
     {
         iter->stamp = 0;
@@ -425,7 +411,6 @@ gnc_tree_model_owner_get_path (GtkTreeModel *tree_model,
                                GtkTreeIter *iter)
 {
     GncTreeModelOwner *model = GNC_TREE_MODEL_OWNER (tree_model);
-    GncTreeModelOwnerPrivate *priv;
     GncOwner *owner;
     GtkTreePath *path;
     gint i;
@@ -437,8 +422,7 @@ gnc_tree_model_owner_get_path (GtkTreeModel *tree_model,
 
     ENTER("model %p, iter %s", model, iter_to_string(iter));
 
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
-    if (priv->owner_list == NULL)
+    if (model->owner_list == NULL)
     {
         LEAVE("failed (1)");
         return NULL;
@@ -447,7 +431,7 @@ gnc_tree_model_owner_get_path (GtkTreeModel *tree_model,
     owner = (GncOwner *) iter->user_data;
 
     path = gtk_tree_path_new ();
-    i = g_list_index (priv->owner_list, owner);
+    i = g_list_index (model->owner_list, owner);
     if (i == -1)
     {
         gtk_tree_path_free (path);
@@ -469,11 +453,8 @@ gnc_tree_model_owner_set_color(GncTreeModelOwner *model,
                                gboolean negative,
                                GValue *value)
 {
-    GncTreeModelOwnerPrivate *priv;
-
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
     if (negative)
-        g_value_set_static_string (value, priv->negative_color);
+        g_value_set_static_string (value, model->negative_color);
     else
         g_value_set_static_string (value, NULL);
 }
@@ -638,7 +619,6 @@ gnc_tree_model_owner_iter_next (GtkTreeModel *tree_model,
                                 GtkTreeIter *iter)
 {
     GncTreeModelOwner *model = GNC_TREE_MODEL_OWNER (tree_model);
-    GncTreeModelOwnerPrivate *priv;
     GncOwner *owner;
     gint i;
 
@@ -649,11 +629,9 @@ gnc_tree_model_owner_iter_next (GtkTreeModel *tree_model,
 
     ENTER("model %p, iter %s", tree_model, iter_to_string (iter));
 
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
-
     /* Get the *next* sibling owner. */
     i = GPOINTER_TO_INT (iter->user_data2);
-    owner = g_list_nth_data (priv->owner_list, i + 1);
+    owner = g_list_nth_data (model->owner_list, i + 1);
     if (owner == NULL)
     {
         iter->stamp = 0;
@@ -674,7 +652,6 @@ gnc_tree_model_owner_iter_children (GtkTreeModel *tree_model,
                                     GtkTreeIter *iter,
                                     GtkTreeIter *parent_iter)
 {
-    GncTreeModelOwnerPrivate *priv;
     GncTreeModelOwner *model;
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_OWNER (tree_model), FALSE);
@@ -682,14 +659,13 @@ gnc_tree_model_owner_iter_children (GtkTreeModel *tree_model,
           tree_model, iter, (parent_iter ? iter_to_string(parent_iter) : "(null)"));
 
     model = GNC_TREE_MODEL_OWNER (tree_model);
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
 
     /* Owner lists don't have children, so this function call only
      * makes sense if no parent_iter was supplied. In that case,
      * return the first owner in the list */
     if (!parent_iter)
     {
-        iter->user_data = g_list_nth_data (priv->owner_list, 0);
+        iter->user_data = g_list_nth_data (model->owner_list, 0);
         iter->user_data2 = GINT_TO_POINTER (0);
         iter->user_data3 = NULL;
         iter->stamp = model->stamp;
@@ -717,19 +693,17 @@ gnc_tree_model_owner_iter_n_children (GtkTreeModel *tree_model,
                                       GtkTreeIter *iter)
 {
     GncTreeModelOwner *model;
-    GncTreeModelOwnerPrivate *priv;
 
     g_return_val_if_fail (GNC_IS_TREE_MODEL_OWNER (tree_model), -1);
 
     model = GNC_TREE_MODEL_OWNER (tree_model);
-    priv  = GNC_TREE_MODEL_OWNER_GET_PRIVATE (model);
 
     /* Owner lists don't have children, so always return 0, except for
      * the special case this request comes for the special "root" iter
      * (NULL). For that exception we return the size of the owner list.
      */
     if (iter == NULL)
-        return (gint) g_list_length (priv->owner_list);
+        return (gint) g_list_length (model->owner_list);
 
     g_return_val_if_fail (
         GNC_TREE_MODEL_OWNER (tree_model)->stamp == iter->stamp, -1);
@@ -744,7 +718,6 @@ gnc_tree_model_owner_iter_nth_child (GtkTreeModel *tree_model,
                                      int n)
 {
     GncTreeModelOwner *model;
-    GncTreeModelOwnerPrivate *priv;
 
     if (parent_iter)
     {
@@ -763,14 +736,13 @@ gnc_tree_model_owner_iter_nth_child (GtkTreeModel *tree_model,
     gnc_leave_return_val_if_fail (GNC_IS_TREE_MODEL_OWNER (tree_model), FALSE);
 
     model = GNC_TREE_MODEL_OWNER (tree_model);
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
 
     /* Owner lists don't have children, so this function call only
      * makes sense if no parent_iter was supplied. In that case,
      * return the first owner in the list */
     if (!parent_iter)
     {
-        iter->user_data = g_list_nth_data (priv->owner_list, n);
+        iter->user_data = g_list_nth_data (model->owner_list, n);
         iter->user_data2 = GINT_TO_POINTER (n);
         iter->user_data3 = NULL;
         iter->stamp = model->stamp;
@@ -826,7 +798,6 @@ gnc_tree_model_owner_get_iter_from_owner (GncTreeModelOwner *model,
         GncOwner *owner,
         GtkTreeIter *iter)
 {
-    GncTreeModelOwnerPrivate *priv;
     GList *owner_in_list;
 
     ENTER("model %p, owner %p, iter %p", model, owner, iter);
@@ -834,14 +805,12 @@ gnc_tree_model_owner_get_iter_from_owner (GncTreeModelOwner *model,
     gnc_leave_return_val_if_fail ((owner != NULL), FALSE);
     gnc_leave_return_val_if_fail ((iter != NULL), FALSE);
 
-
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
-    owner_in_list = g_list_find_custom (priv->owner_list, (gconstpointer)owner, (GCompareFunc)gncOwnerGCompareFunc);
+    owner_in_list = g_list_find_custom (model->owner_list, (gconstpointer)owner, (GCompareFunc)gncOwnerGCompareFunc);
     if (owner_in_list)
     {
         iter->stamp = model->stamp;
         iter->user_data = owner_in_list->data;
-        iter->user_data2 = GINT_TO_POINTER (g_list_position (priv->owner_list, owner_in_list));
+        iter->user_data2 = GINT_TO_POINTER (g_list_position (model->owner_list, owner_in_list));
         iter->user_data3 = NULL;
         LEAVE("iter %s", iter_to_string (iter));
         return TRUE;
@@ -937,7 +906,6 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
                                     GncTreeModelOwner *model,
                                     GncEventData *ed)
 {
-    GncTreeModelOwnerPrivate *priv;
     GtkTreePath *path = NULL;
     GtkTreeIter iter;
     GncOwner owner;
@@ -949,16 +917,15 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
 
     ENTER("entity %p of type %d, model %p, event_data %p",
           entity, event_type, model, ed);
-    priv = GNC_TREE_MODEL_OWNER_GET_PRIVATE(model);
 
     qofOwnerSetEntity (&owner, entity);
-    if (gncOwnerGetType(&owner) != priv->owner_type)
+    if (gncOwnerGetType(&owner) != model->owner_type)
     {
         LEAVE("model type and owner type differ");
         return;
     }
 
-    if (qof_instance_get_book (entity) != priv->book)
+    if (qof_instance_get_book (entity) != model->book)
     {
         LEAVE("not in this book");
         return;
@@ -971,11 +938,11 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
         /* Tell the filters/views where the new owner was added. */
         DEBUG("add owner %p (%s)", &owner, gncOwnerGetName(&owner));
         /* First update our copy of the owner list. This isn't done automatically */
-        if (priv->owner_list)
-            g_list_free_full (priv->owner_list, (GDestroyNotify) gncOwnerFree);
+        if (model->owner_list)
+            g_list_free_full (model->owner_list, (GDestroyNotify) gncOwnerFree);
 
-        priv->owner_list = gncBusinessGetOwnerList (priv->book,
-                           gncOwnerTypeToQofIdType(priv->owner_type), TRUE);
+        model->owner_list = gncBusinessGetOwnerList (model->book,
+                           gncOwnerTypeToQofIdType(model->owner_type), TRUE);
         increment_stamp(model);
         if (!gnc_tree_model_owner_get_iter_from_owner (model, &owner, &iter))
         {
@@ -995,7 +962,7 @@ gnc_tree_model_owner_event_handler (QofInstance *entity,
         if (!ed) /* Required for a remove. */
             break;
         DEBUG("remove owner %d (%s) from owner_list %p", ed->idx,
-              gncOwnerGetName(&owner), priv->owner_list);
+              gncOwnerGetName(&owner), model->owner_list);
         path = gtk_tree_path_new();
         if (!path)
         {

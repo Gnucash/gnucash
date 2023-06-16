@@ -44,11 +44,7 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES         (gnc_tree_model_account_types_get_type ())
-#define GNC_TREE_MODEL_ACCOUNT_TYPES(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES, GncTreeModelAccountTypes))
-#define GNC_TREE_MODEL_ACCOUNT_TYPES_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES, GncTreeModelAccountTypesClass))
-#define GNC_IS_TREE_MODEL_ACCOUNT_TYPES(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES))
-#define GNC_IS_TREE_MODEL_ACCOUNT_TYPES_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES))
-#define GNC_TREE_MODEL_ACCOUNT_TYPES_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GNC_TYPE_TREE_MODEL_ACCOUNT_TYPES, GncTreeModelAccountTypesClass))
+G_DECLARE_FINAL_TYPE (GncTreeModelAccountTypes, gnc_tree_model_account_types, GNC, TREE_MODEL_ACCOUNT_TYPES, GObject)
 
 typedef enum
 {
@@ -58,20 +54,7 @@ typedef enum
     GNC_TREE_MODEL_ACCOUNT_TYPES_NUM_COLUMNS
 } GncTreeModelAccountTypesColumn;
 
-/* typedefs & structures */
-typedef struct
-{
-    GObject gobject;
-    int stamp;
-} GncTreeModelAccountTypes;
-
-typedef struct
-{
-    GObjectClass gobject;
-} GncTreeModelAccountTypesClass;
-
 /* function prototypes */
-GType gnc_tree_model_account_types_get_type (void);
 
 /* Choose one of two methods to use the GncTreeModelAccountTypes
    objects defined here, depending on how you want to deal with

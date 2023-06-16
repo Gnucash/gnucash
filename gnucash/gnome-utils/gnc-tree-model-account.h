@@ -45,13 +45,8 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_TREE_MODEL_ACCOUNT            (gnc_tree_model_account_get_type ())
-#define GNC_TREE_MODEL_ACCOUNT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_TREE_MODEL_ACCOUNT, GncTreeModelAccount))
-#define GNC_TREE_MODEL_ACCOUNT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_TREE_MODEL_ACCOUNT, GncTreeModelAccountClass))
-#define GNC_IS_TREE_MODEL_ACCOUNT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_TREE_MODEL_ACCOUNT))
-#define GNC_IS_TREE_MODEL_ACCOUNT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_TREE_MODEL_ACCOUNT))
-#define GNC_TREE_MODEL_ACCOUNT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_TREE_MODEL_ACCOUNT, GncTreeModelAccountClass))
+G_DECLARE_FINAL_TYPE (GncTreeModelAccount, gnc_tree_model_account, GNC, TREE_MODEL_ACCOUNT, GncTreeModel)
 #define GNC_TREE_MODEL_ACCOUNT_NAME            "GncTreeModelAccount"
-
 
 typedef enum
 {
@@ -100,31 +95,6 @@ typedef enum
 
     GNC_TREE_MODEL_ACCOUNT_NUM_COLUMNS
 } GncTreeModelAccountColumn;
-
-/* typedefs & structures */
-
-/** The instance data structure for an account tree model. */
-typedef struct
-{
-    GncTreeModel gnc_tree_model;    /**< The parent object data. */
-    int stamp;                      /**< The state of the model. Any state
-                                     *   change increments this number. */
-} GncTreeModelAccount;
-
-
-/** The class data structure for an account tree model. */
-typedef struct
-{
-    GncTreeModelClass gnc_tree_model;/**< The parent object data. */
-} GncTreeModelAccountClass;
-
-
-
-/** Get the type of an account tree plugin.
- *
- *  @return A GType.
- */
-GType gnc_tree_model_account_get_type (void);
 
 /** Clear the tree model account cached values.
  *
