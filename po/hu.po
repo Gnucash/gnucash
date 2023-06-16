@@ -8,14 +8,15 @@
 # Szia Tomi <sziatomi01@gmail.com>, 2022, 2023.
 # mocsa <csaba@feltoltve.hu>, 2022, 2023.
 # ovari <ovari123@zoho.com>, 2022, 2023.
+# Geza Kiss <geza.openstreetmap@reallymymail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-05-28 13:51+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2023-06-09 11:48+0000\n"
+"Last-Translator: Geza Kiss <geza.openstreetmap@reallymymail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -5917,14 +5918,14 @@ msgstr "Elszámolt tranzakciók"
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
-msgstr[0] "A számlakivonat dátuma a mai nap után van %d nappal."
+msgstr[0] "A számlakivonat dátuma %d nappal a mai nap után van."
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:387
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
-msgstr[0] "A számlakivonat megadott dátuma a mai nap után van %d nappal."
+msgstr[0] "A számlakivonat megadott dátuma %d nappal a mai nap után van."
 
 #: gnucash/gnome/window-reconcile.c:392
 msgid ""
