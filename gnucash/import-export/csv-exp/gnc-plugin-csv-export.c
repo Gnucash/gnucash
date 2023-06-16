@@ -59,15 +59,12 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
-typedef struct GncPluginCsvExportPrivate
+struct _GncPluginCsvExport
 {
-    gpointer dummy;
-} GncPluginCsvExportPrivate;
+    GncPlugin gnc_plugin;
+};
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginCsvExport, gnc_plugin_csv_export, GNC_TYPE_PLUGIN)
-
-#define GNC_PLUGIN_CSV_EXPORT_GET_PRIVATE(o)  \
-   ((GncPluginCsvExportPrivate*)gnc_plugin_csv_export_get_instance_private((GncPluginCsvExport*)o))
+G_DEFINE_TYPE(GncPluginCsvExport, gnc_plugin_csv_export, GNC_TYPE_PLUGIN)
 
 GncPlugin *
 gnc_plugin_csv_export_new (void)

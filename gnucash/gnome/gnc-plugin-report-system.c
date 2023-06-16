@@ -61,15 +61,12 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
-typedef struct GncPluginReportSystemPrivate
+struct _GncPluginReportSystem
 {
-    gpointer dummy;
-} GncPluginReportSystemPrivate;
+    GncPlugin gnc_plugin;
+};
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginReportSystem, gnc_plugin_report_system, GNC_TYPE_PLUGIN)
-
-#define GNC_PLUGIN_REPORT_SYSTEM_GET_PRIVATE(o)  \
-   (G_TYPE_INSTANCE_GET_PRIVATE ((o), GNC_TYPE_PLUGIN_REPORT_SYSTEM, GncPluginReportSystemPrivate))
+G_DEFINE_TYPE(GncPluginReportSystem, gnc_plugin_report_system, GNC_TYPE_PLUGIN)
 
 /************************************************************
  *                   Object Implementation                  *

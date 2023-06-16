@@ -99,16 +99,11 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
-/** The instance private data for a file history plugin.  This data
- *  structure is unused. */
-typedef struct GncPluginFileHistoryPrivate
+/** The instance data structure for a file history plugin. */
+struct _GncPluginFileHistory
 {
-    gpointer dummy;
-} GncPluginFileHistoryPrivate;
-
-
-#define GNC_PLUGIN_FILE_HISTORY_GET_PRIVATE(o)  \
-   ((GncPluginFileHistoryPrivate*)gnc_plugin_file_history_get_instance_private((GncPluginFileHistory*)o))
+    GncPlugin gnc_plugin;
+};
 
 /************************************************************
  *                     Other Functions                      *
@@ -546,7 +541,7 @@ gnc_plugin_history_list_changed (gpointer prefs,
  *                  Object Implementation                   *
  ************************************************************/
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginFileHistory, gnc_plugin_file_history, GNC_TYPE_PLUGIN)
+G_DEFINE_TYPE(GncPluginFileHistory, gnc_plugin_file_history, GNC_TYPE_PLUGIN)
 
 /** Initialize the file history plugin class. */
 static void

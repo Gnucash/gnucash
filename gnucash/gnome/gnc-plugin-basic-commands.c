@@ -175,15 +175,12 @@ static const gchar *dirty_only_active_actions[] =
     NULL
 };
 
-/** The instance private data structure for an basic commands
- *  plugin. */
-typedef struct GncPluginBasicCommandsPrivate
+/** The instance data structure for an basic commands menu plugin. */
+struct _GncPluginBasicCommands
 {
-    gpointer dummy;
-} GncPluginBasicCommandsPrivate;
-
-#define GNC_PLUGIN_BASIC_COMMANDS_GET_PRIVATE(o)  \
-   ((GncPluginBasicCommandsPrivate*)gnc_plugin_basic_commands_get_instance_private ((GncPluginBasicCommands*)o))
+    /** The parent object for this widget */
+    GncPlugin gnc_plugin;
+};
 
 /** Create a new basic commands menu plugin. */
 GncPlugin *
@@ -271,7 +268,7 @@ gnc_plugin_basic_commands_main_window_page_changed (GncMainWindow *window,
     }
 }
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginBasicCommands, gnc_plugin_basic_commands, GNC_TYPE_PLUGIN)
+G_DEFINE_TYPE(GncPluginBasicCommands, gnc_plugin_basic_commands, GNC_TYPE_PLUGIN)
 
 /** Initialize the class for a new basic commands plugin.  This will
  *  set up any function pointers that override functions in the parent

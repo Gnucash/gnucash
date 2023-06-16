@@ -55,16 +55,21 @@ static guint gnc_plugin_n_actions = G_N_ELEMENTS(gnc_plugin_actions);
  *                   Object Implementation                  *
  ************************************************************/
 
-G_DEFINE_TYPE(GncPluginexample, gnc_plugin_example, GNC_TYPE_PLUGIN)
+struct _GncPluginExample
+{
+    GncPlugin gnc_plugin;
+};
+
+G_DEFINE_TYPE(GncPluginExample, gnc_plugin_example, GNC_TYPE_PLUGIN)
 
 GncPlugin *
 gnc_plugin_example_new (void)
 {
-    return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_example, (gchar*) NULL));
+    return GNC_PLUGIN (g_object_new (GNC_TYPE_PLUGIN_EXAMPLE, (gchar*) NULL));
 }
 
 static void
-gnc_plugin_example_class_init (GncPluginexampleClass *klass)
+gnc_plugin_example_class_init (GncPluginExampleClass *klass)
 {
     GObjectClass *object_class = G_OBJECT_CLASS(klass);
     GncPluginClass *plugin_class = GNC_PLUGIN_CLASS(klass);
@@ -82,7 +87,7 @@ gnc_plugin_example_class_init (GncPluginexampleClass *klass)
 }
 
 static void
-gnc_plugin_example_init (GncPluginexample *plugin)
+gnc_plugin_example_init (GncPluginExample *plugin)
 {
 }
 

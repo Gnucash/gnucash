@@ -31,28 +31,11 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_CSV_IMPORT            (gnc_plugin_csv_import_get_type ())
-#define GNC_PLUGIN_CSV_IMPORT(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_CSV_IMPORT, GncPluginCsvImport))
-#define GNC_PLUGIN_CSV_IMPORT_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN_CSV_IMPORT, GncPluginCsvImportClass))
-#define GNC_IS_PLUGIN_CSV_IMPORT(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_PLUGIN_CSV_IMPORT))
-#define GNC_IS_PLUGIN_CSV_IMPORT_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_CSV_IMPORT))
-#define GNC_PLUGIN_CSV_IMPORT_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_CSV_IMPORT, GncPluginCsvImportClass))
+G_DECLARE_FINAL_TYPE (GncPluginCsvImport, gnc_plugin_csv_import, GNC, PLUGIN_CSV_IMPORT, GncPlugin)
 
 #define GNC_PLUGIN_CSV_IMPORT_NAME "gnc-plugin-csv-import"
 
-/* typedefs & structures */
-typedef struct
-{
-    GncPlugin gnc_plugin;
-} GncPluginCsvImport;
-
-typedef struct
-{
-    GncPluginClass gnc_plugin;
-} GncPluginCsvImportClass;
-
 /* function prototypes */
-GType      gnc_plugin_csv_import_get_type (void);
-
 GncPlugin *gnc_plugin_csv_import_new      (void);
 
 void       gnc_plugin_csv_import_create_plugin (void);

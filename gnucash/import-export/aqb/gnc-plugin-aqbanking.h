@@ -41,31 +41,11 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_AQBANKING            (gnc_plugin_aqbanking_get_type())
-#define GNC_PLUGIN_AQBANKING(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GNC_TYPE_PLUGIN_AQBANKING, GncPluginAqBanking))
-#define GNC_PLUGIN_AQBANKING_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass), GNC_TYPE_PLUGIN_AQBANKING, GncPluginAqBankingClass))
-#define GNC_IS_PLUGIN_AQBANKING(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GNC_TYPE_PLUGIN_AQBANKING))
-#define GNC_IS_PLUGIN_AQBANKING_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass), GNC_TYPE_PLUGIN_AQBANKING))
-#define GNC_PLUGIN_AQBANKING_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj), GNC_TYPE_PLUGIN_AQBANKING, GncPluginAqBankingClass))
+G_DECLARE_FINAL_TYPE (GncPluginAqBanking, gnc_plugin_aqbanking, GNC, PLUGIN_AQBANKING, GncPlugin)
 
 #define GNC_PLUGIN_AQBANKING_NAME "gnc-plugin-aqbanking"
 
-/* typedefs & structures */
-typedef struct
-{
-    GncPlugin gnc_plugin;
-} GncPluginAqBanking;
-
-typedef struct
-{
-    GncPluginClass gnc_plugin;
-} GncPluginAqBankingClass;
-
 /* function prototypes */
-
-/**
- * @return The glib runtime type of an aqbanking plugin page
- **/
-GType gnc_plugin_aqbanking_get_type(void);
 
 /**
  * @return A new GncPluginAqBanking object

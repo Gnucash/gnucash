@@ -38,28 +38,11 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_example            (gnc_plugin_example_get_type())
-#define GNC_PLUGIN_example(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GNC_TYPE_PLUGIN_example, GncPluginexample))
-#define GNC_PLUGIN_example_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST((klass),  GNC_TYPE_PLUGIN_example, GncPluginexampleClass))
-#define GNC_IS_PLUGIN_example(obj)         (G_TYPE_CHECK_INSTANCE_TYPE((obj), GNC_TYPE_PLUGIN_example))
-#define GNC_IS_PLUGIN_example_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE((klass),  GNC_TYPE_PLUGIN_example))
-#define GNC_PLUGIN_example_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS((obj),  GNC_TYPE_PLUGIN_example, GncPluginexampleClass))
+G_DECLARE_FINAL_TYPE (GncPluginExample, gnc_plugin_example, GNC, PLUGIN_EXAMPLE)
 
-#define GNC_PLUGIN_example_NAME "gnc-plugin-example"
-
-/* typedefs & structures */
-typedef struct {
-    GncPlugin gnc_plugin;
-} GncPluginexample;
-
-typedef struct {
-    GncPluginClass gnc_plugin;
-} GncPluginexampleClass;
+#define GNC_PLUGIN_EXAMPLE_NAME "gnc-plugin-example"
 
 /* function prototypes */
-/**
- * @return The glib runtime type of an example plugin page
- **/
-GType gnc_plugin_example_get_type (void);
 
 /**
  * @return A new GncPluginexample object

@@ -33,27 +33,11 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_PLUGIN_BUSINESS            (gnc_plugin_business_get_type ())
-#define GNC_PLUGIN_BUSINESS(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_PLUGIN_BUSINESS, GncPluginBusiness))
-#define GNC_PLUGIN_BUSINESS_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_PLUGIN_BUSINESS, GncPluginBusinessClass))
-#define GNC_IS_PLUGIN_BUSINESS(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_PLUGIN_BUSINESS))
-#define GNC_IS_PLUGIN_BUSINESS_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_PLUGIN_BUSINESS))
-#define GNC_PLUGIN_BUSINESS_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_PLUGIN_BUSINESS, GncPluginBusinessClass))
+G_DECLARE_FINAL_TYPE (GncPluginBusiness, gnc_plugin_business, GNC, PLUGIN_BUSINESS, GncPlugin)
 
 #define GNC_PLUGIN_BUSINESS_NAME "gnc-plugin-business"
 
-/* typedefs & structures */
-typedef struct
-{
-    GncPlugin gnc_plugin;
-} GncPluginBusiness;
-
-typedef struct
-{
-    GncPluginClass gnc_plugin;
-} GncPluginBusinessClass;
-
 /* function prototypes */
-GType      gnc_plugin_business_get_type (void);
 
 GncPlugin *gnc_plugin_business_new      (void);
 

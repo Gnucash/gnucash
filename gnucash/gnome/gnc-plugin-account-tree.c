@@ -65,16 +65,14 @@ static const gchar *gnc_plugin_load_ui_items [] =
     NULL,
 };
 
-/** The instance private data structure for an account tree plugin. */
-typedef struct GncPluginAccountTreePrivate
+/** The instance data structure for an account tree menu plugin. */
+struct _GncPluginAccountTree
 {
-    gpointer dummy;
-} GncPluginAccountTreePrivate;
+    /** The parent object for this widget */
+    GncPlugin gnc_plugin;
+};
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginAccountTree, gnc_plugin_account_tree, GNC_TYPE_PLUGIN)
-
-#define GNC_PLUGIN_ACCOUNT_TREE_GET_PRIVATE(o)  \
-   ((GncPluginAccountTreePrivate*)gnc_plugin_account_tree_get_instance_private((GncPluginAccountTree*)o))
+G_DEFINE_TYPE(GncPluginAccountTree, gnc_plugin_account_tree, GNC_TYPE_PLUGIN)
 
 /*  Create a new account tree menu plugin. */
 GncPlugin *

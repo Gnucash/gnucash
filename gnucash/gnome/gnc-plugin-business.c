@@ -174,15 +174,14 @@ static const gchar *gnc_plugin_load_ui_items [] =
  *              Plugin Function Implementation              *
  ************************************************************/
 
-typedef struct GncPluginBusinessPrivate
+struct _GncPluginBusiness
 {
+    GncPlugin gnc_plugin;
+
     GncOwner *last_customer;
     GncOwner *last_vendor;
     GncOwner *last_employee;
-} GncPluginBusinessPrivate;
-
-#define GNC_PLUGIN_BUSINESS_GET_PRIVATE(o)  \
-   ((GncPluginBusinessPrivate*)gnc_plugin_business_get_instance_private((GncPluginBusiness*)o))
+};
 
 GncPlugin *
 gnc_plugin_business_new (void)
@@ -200,7 +199,7 @@ gnc_plugin_business_new (void)
     return GNC_PLUGIN (plugin);
 }
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginBusiness, gnc_plugin_business, GNC_TYPE_PLUGIN)
+G_DEFINE_TYPE(GncPluginBusiness, gnc_plugin_business, GNC_TYPE_PLUGIN)
 
 static void
 gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
@@ -227,17 +226,14 @@ gnc_plugin_business_class_init (GncPluginBusinessClass *klass)
 static void
 gnc_plugin_business_init (GncPluginBusiness *plugin)
 {
-    GncPluginBusinessPrivate *priv;
+    plugin->last_customer = gncOwnerNew ();
+    gncOwnerInitCustomer (plugin->last_customer, NULL);
 
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    priv->last_customer = gncOwnerNew ();
-    gncOwnerInitCustomer (priv->last_customer, NULL);
+    plugin->last_vendor = gncOwnerNew ();
+    gncOwnerInitVendor (plugin->last_vendor, NULL);
 
-    priv->last_vendor = gncOwnerNew ();
-    gncOwnerInitVendor (priv->last_vendor, NULL);
-
-    priv->last_employee = gncOwnerNew ();
-    gncOwnerInitEmployee (priv->last_employee, NULL);
+    plugin->last_employee = gncOwnerNew ();
+    gncOwnerInitEmployee (plugin->last_employee, NULL);
 }
 
 static void
@@ -297,15 +293,13 @@ gnc_plugin_business_cmd_customer_find_customer (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
     GncCustomer*customer;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    customer = gncOwnerGetCustomer (priv->last_customer);
+    customer = gncOwnerGetCustomer (plugin->last_customer);
     gnc_customer_search (GTK_WINDOW (mw->window), customer, gnc_get_current_book ());
 }
 
@@ -316,15 +310,13 @@ gnc_plugin_business_cmd_customer_new_invoice (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     last_window = mw->window;
-    gnc_ui_invoice_new (GTK_WINDOW (mw->window), priv->last_customer, gnc_get_current_book ());
+    gnc_ui_invoice_new (GTK_WINDOW (mw->window), plugin->last_customer, gnc_get_current_book ());
 }
 
 static void
@@ -334,15 +326,13 @@ gnc_plugin_business_cmd_customer_find_invoice (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     last_window = mw->window;
-    gnc_invoice_search (GTK_WINDOW (mw->window), NULL, priv->last_customer, gnc_get_current_book ());
+    gnc_invoice_search (GTK_WINDOW (mw->window), NULL, plugin->last_customer, gnc_get_current_book ());
 }
 
 static void
@@ -352,14 +342,12 @@ gnc_plugin_business_cmd_customer_new_job (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    gnc_ui_job_new (GTK_WINDOW (mw->window), priv->last_customer, gnc_get_current_book ());
+    gnc_ui_job_new (GTK_WINDOW (mw->window), plugin->last_customer, gnc_get_current_book ());
 }
 
 static void
@@ -369,14 +357,12 @@ gnc_plugin_business_cmd_customer_find_job (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    gnc_job_search (GTK_WINDOW (mw->window), NULL, priv->last_customer, gnc_get_current_book ());
+    gnc_job_search (GTK_WINDOW (mw->window), NULL, plugin->last_customer, gnc_get_current_book ());
 }
 
 static void
@@ -386,14 +372,12 @@ gnc_plugin_business_cmd_customer_process_payment (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    gnc_ui_payment_new (GTK_WINDOW (mw->window), priv->last_customer, gnc_get_current_book ());
+    gnc_ui_payment_new (GTK_WINDOW (mw->window), plugin->last_customer, gnc_get_current_book ());
 }
 
 static void
@@ -430,15 +414,13 @@ gnc_plugin_business_cmd_vendor_find_vendor (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
     GncVendor *vendor;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    vendor = gncOwnerGetVendor (priv->last_vendor);
+    vendor = gncOwnerGetVendor (plugin->last_vendor);
     gnc_vendor_search (GTK_WINDOW (mw->window), vendor, gnc_get_current_book ());
 }
 
@@ -449,15 +431,13 @@ gnc_plugin_business_cmd_vendor_new_bill (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     last_window = mw->window;
-    gnc_ui_invoice_new (GTK_WINDOW (mw->window), priv->last_vendor, gnc_get_current_book ());
+    gnc_ui_invoice_new (GTK_WINDOW (mw->window), plugin->last_vendor, gnc_get_current_book ());
 }
 
 static void
@@ -467,15 +447,13 @@ gnc_plugin_business_cmd_vendor_find_bill (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     last_window = mw->window;
-    gnc_invoice_search (GTK_WINDOW (mw->window), NULL, priv->last_vendor, gnc_get_current_book ());
+    gnc_invoice_search (GTK_WINDOW (mw->window), NULL, plugin->last_vendor, gnc_get_current_book ());
 }
 
 static void
@@ -485,14 +463,12 @@ gnc_plugin_business_cmd_vendor_new_job (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    gnc_ui_job_new (GTK_WINDOW (mw->window), priv->last_vendor, gnc_get_current_book ());
+    gnc_ui_job_new (GTK_WINDOW (mw->window), plugin->last_vendor, gnc_get_current_book ());
 }
 
 static void
@@ -502,14 +478,12 @@ gnc_plugin_business_cmd_vendor_find_job (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    gnc_job_search (GTK_WINDOW (mw->window), NULL, priv->last_vendor, gnc_get_current_book ());
+    gnc_job_search (GTK_WINDOW (mw->window), NULL, plugin->last_vendor, gnc_get_current_book ());
 }
 
 static void
@@ -519,14 +493,12 @@ gnc_plugin_business_cmd_vendor_process_payment (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    gnc_ui_payment_new (GTK_WINDOW (mw->window), priv->last_vendor, gnc_get_current_book ());
+    gnc_ui_payment_new (GTK_WINDOW (mw->window), plugin->last_vendor, gnc_get_current_book ());
 }
 
 static void
@@ -563,15 +535,13 @@ gnc_plugin_business_cmd_employee_find_employee (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
     GncEmployee *employee;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    employee = gncOwnerGetEmployee (priv->last_employee);
+    employee = gncOwnerGetEmployee (plugin->last_employee);
     gnc_employee_search (GTK_WINDOW (mw->window), employee, gnc_get_current_book ());
 }
 
@@ -582,15 +552,13 @@ gnc_plugin_business_cmd_employee_new_expense_voucher (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     last_window = mw->window;
-    gnc_ui_invoice_new (GTK_WINDOW (mw->window), priv->last_employee, gnc_get_current_book ());
+    gnc_ui_invoice_new (GTK_WINDOW (mw->window), plugin->last_employee, gnc_get_current_book ());
 }
 
 static void
@@ -600,15 +568,13 @@ gnc_plugin_business_cmd_employee_find_expense_voucher (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
     last_window = mw->window;
-    gnc_invoice_search (GTK_WINDOW (mw->window), NULL, priv->last_employee, gnc_get_current_book ());
+    gnc_invoice_search (GTK_WINDOW (mw->window), NULL, plugin->last_employee, gnc_get_current_book ());
 }
 
 static void
@@ -618,14 +584,12 @@ gnc_plugin_business_cmd_employee_process_payment (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin;
-    GncPluginBusinessPrivate *priv;
 
     g_return_if_fail (mw != NULL);
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (mw->data));
 
     plugin = GNC_PLUGIN_BUSINESS (mw->data);
-    priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin);
-    gnc_ui_payment_new (GTK_WINDOW (mw->window), priv->last_employee, gnc_get_current_book ());
+    gnc_ui_payment_new (GTK_WINDOW (mw->window), plugin->last_employee, gnc_get_current_book ());
 }
 
 static void
@@ -720,7 +684,6 @@ gnc_plugin_business_cmd_assign_payment (GSimpleAction *simple,
 {
     GncMainWindowActionData *mw = user_data;
     GncPluginBusiness *plugin_business;
-    GncPluginBusinessPrivate *plugin_business_priv;
     GncPluginPage *plugin_page;
     GNCSplitReg *gsr;
     SplitRegister *reg;
@@ -754,15 +717,14 @@ gnc_plugin_business_cmd_assign_payment (GSimpleAction *simple,
     g_return_if_fail(trans);
 
     plugin_business = GNC_PLUGIN_BUSINESS (mw->data);
-    plugin_business_priv = GNC_PLUGIN_BUSINESS_GET_PRIVATE (plugin_business);
 
     have_owner = gncOwnerGetOwnerFromTxn (trans, &owner);
     if (have_owner)
         owner_p = &owner;
     else if (gnc_ui_payment_is_customer_payment(trans))
-        owner_p = plugin_business_priv->last_customer;
+        owner_p = plugin_business->last_customer;
     else
-        owner_p = plugin_business_priv->last_vendor;
+        owner_p = plugin_business->last_vendor;
 
     gnc_business_assign_payment (GTK_WINDOW (mw->window),
                                  trans, owner_p);
