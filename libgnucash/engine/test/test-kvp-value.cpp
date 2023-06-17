@@ -70,6 +70,7 @@ TEST (KvpValueTest, Copy)
     v2 = std::unique_ptr<KvpValueImpl> {new KvpValueImpl {*v1}};
     EXPECT_EQ (compare (*v1, *v2), 0);
 
+    guid = guid_new ();
     v1 = std::unique_ptr<KvpValueImpl> {new KvpValueImpl {guid}};
     v2 = std::unique_ptr<KvpValueImpl> {new KvpValueImpl {*v1}};
     /*This should delete the guid*/
