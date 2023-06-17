@@ -94,11 +94,12 @@ test_employee (void)
 
         test_bool_fcn (book, "Active", gncEmployeeSetActive, gncEmployeeGetActive);
 
-        do_test (gncEmployeeGetAddr (employee) != NULL, "Addr");
-
         guid_replace (&guid);
         employee = gncEmployeeCreate (book);
         count++;
+
+        do_test (gncEmployeeGetAddr (employee) != NULL, "Addr");
+
         gncEmployeeSetGUID (employee, &guid);
         do_test (guid_equal (&guid, qof_instance_get_guid(QOF_INSTANCE(employee))), "guid compare");
     }
