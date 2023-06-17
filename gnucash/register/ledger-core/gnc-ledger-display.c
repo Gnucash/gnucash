@@ -66,6 +66,8 @@ struct gnc_ledger_display
 
     gboolean loading;
     gboolean use_double_line_default;
+    gboolean visible; /* focus */
+    gboolean needs_refresh;
 
     GNCLedgerDisplayDestroy destroy;
     GNCLedgerDisplayGetParent get_parent;
@@ -617,7 +619,15 @@ refresh_handler (GHashTable* changes, gpointer user_data)
         }
     }
 
-    gnc_ledger_display_refresh (ld);
+    if (ld->visible)
+    {
+        DEBUG ("immediate refresh because ledger is visible");
+        gnc_ledger_display_refresh (ld);
+    }
+    else
+    {
+        ld->needs_refresh = TRUE;
+    }
     LEAVE (" ");
 }
 
@@ -808,6 +818,8 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
     ld->query = NULL;
     ld->ld_type = ld_type;
     ld->loading = FALSE;
+    ld->visible = FALSE;
+    ld->needs_refresh = TRUE;
     ld->destroy = NULL;
     ld->get_parent = NULL;
     ld->user_data = NULL;
@@ -837,10 +849,13 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
 
     gnc_split_register_set_data (ld->reg, ld, gnc_ledger_display_parent);
 
-    /* We don't need to recreate the query, so skip that refresh step by
-     * bypassing gnc_ledger_display_refresh().
+    /* Must call this before gnc_table_realize_gui() gets called or all the
+     * combo boxes will be empty. Use an empty list of splits instad of running
+     * the query when we're not in focus yet.
      */
-    gnc_ledger_display_refresh_internal (ld);
+    ld->loading = TRUE;
+    gnc_split_register_load (ld->reg, NULL, gnc_ledger_display_leader (ld));
+    ld->loading = FALSE;
     return ld;
 }
 
@@ -894,6 +909,7 @@ gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld)
     gnc_split_register_load (ld->reg, splits,
                              gnc_ledger_display_leader (ld));
 
+    ld->needs_refresh = FALSE;
     ld->loading = FALSE;
 }
 
@@ -941,6 +957,20 @@ gnc_ledger_display_refresh (GNCLedgerDisplay* ld)
 
     gnc_ledger_display_refresh_internal (ld);
     LEAVE (" ");
+}
+
+void gnc_ledger_display_set_focus (GNCLedgerDisplay* ld, gboolean focus)
+{
+    if (!ld)
+        return;
+
+    ld->visible = focus;
+
+    if (ld->visible && ld->needs_refresh)
+    {
+        DEBUG ("deferred refresh because ledger is now visible");
+        gnc_ledger_display_refresh (ld);
+    }
 }
 
 void
