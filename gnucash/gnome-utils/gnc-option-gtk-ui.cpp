@@ -1269,19 +1269,21 @@ public:
         GncOptionGtkUIItem{widget, GncOptionUIType::NUMBER_RANGE} {}
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
+        double value;
         if (option.is_alternate())
-            gtk_spin_button_set_value(GTK_SPIN_BUTTON(get_widget()),
-                                      option.get_value<int>());
+            value = static_cast<double>(option.get_value<int>());
         else
-            gtk_spin_button_set_value(GTK_SPIN_BUTTON(get_widget()),
-                                      option.get_value<double>());
+            value = option.get_value<double>();
+
+        gtk_spin_button_set_value(GTK_SPIN_BUTTON(get_widget()), value);
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
+        auto value{gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget()))};
         if (option.is_alternate())
-            option.set_value<int>(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
+            option.set_value<int>(static_cast<int>(value));
         else
-            option.set_value<double>(gtk_spin_button_get_value(GTK_SPIN_BUTTON(get_widget())));
+            option.set_value<double>(value);
     }
 };
 

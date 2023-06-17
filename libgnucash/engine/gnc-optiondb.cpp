@@ -459,9 +459,14 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
                             kvp = kvp_value_from_qof_instance_option(option);
                         else if (type == GncOptionUIType::NUMBER_RANGE)
                         {
-                            auto d_value{option.template get_value<double>()};
-                            auto value{static_cast<int64_t>(d_value)};
-                            kvp = new KvpValue(value);
+                            if (option.is_alternate())
+                            {
+                                kvp = new KvpValue(static_cast<int64_t>(option.template get_value<int>()));
+                            }
+                            else
+                            {
+                                kvp = new KvpValue(option.template get_value<double>());
+                            }
                         }
                         else
                         {
@@ -518,12 +523,12 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
                         /*counters might have been set as doubles
                          * because of
                          * https://bugs.gnucash.org/show_bug.cgi?id=798930. They
-                         * should be int64_t.
+                         * should be int.
                          */
                             constexpr const char *counters{"counters"};
                             auto value{kvp->get<double>()};
                             if (strcmp(static_cast<char*>(list_head.data), counters) == 0)
-                                option.set_value(static_cast<int64_t>(value));
+                                option.set_value(static_cast<int>(value));
                             else
                                 option.set_value(value);
                     };
@@ -873,10 +878,11 @@ gnc_register_invoice_print_report_option(GncOptionDB* db, const char* section,
 void
 gnc_register_counter_option(GncOptionDB* db, const char* section,
                             const char* name, const char* key,
-                            const char* doc_string, double value)
+                            const char* doc_string, int value)
 {
-    GncOption option{GncOptionRangeValue<double>{section, name, key, doc_string,
-                value, 0.0, 999999999.0, 1.0}};
+    GncOption option{GncOptionRangeValue<int>{section, name, key, doc_string,
+                value, 1, 999999999, 1}};
+    option.set_alternate(true);
     db->register_option(section, std::move(option));
 }
 
@@ -1156,7 +1162,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_counter_option(odb, counter_section,
                                 N_("Customer number"), "gncCustomera",
                                 N_("The previous customer number generated. This number will be incremented to generate the next customer number."),
-                                0.0);
+                                0);
     gnc_register_counter_format_option(odb, counter_section,
                                        N_("Customer number format"),
                                        "gncCustomerb",
@@ -1165,7 +1171,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_counter_option(odb, counter_section,
                                 N_("Employee number"), "gncEmployeea",
                                 N_("The previous employee number generated. This number will be incremented to generate the next employee number."),
-                                0.0);
+                                0);
     gnc_register_counter_format_option(odb, counter_section,
                                        N_("Employee number format"),
                                        "gncEmployeeb",
@@ -1174,7 +1180,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_counter_option(odb, counter_section,
                                 N_("Invoice number"), "gncInvoicea",
                                 N_("The previous invoice number generated. This number will be incremented to generate the next invoice number."),
-                                0.0);
+                                0);
     gnc_register_counter_format_option(odb, counter_section,
                                        N_("Invoice number format"),
                                        "gncInvoiceb",
@@ -1183,7 +1189,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_counter_option(odb, counter_section,
                                 N_("Bill number"), "gncBilla",
                                 N_("The previous bill number generated. This number will be incremented to generate the next bill number."),
-                                0.0);
+                                0);
     gnc_register_counter_format_option(odb, counter_section,
                                        N_("Bill number format"), "gncBillb",
                                        N_("The format string to use for generating bill numbers. This is a printf-style format string."),
@@ -1191,7 +1197,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_counter_option(odb, counter_section,
                                 N_("Expense voucher number"), "gncExpVouchera",
                                 N_("The previous expense voucher number generated. This number will be incremented to generate the next voucher number."),
-                                0.0);
+                                0LL);
     gnc_register_counter_format_option(odb, counter_section,
                                        N_("Expense voucher number format"),
                                        "gncExpVoucherb",
@@ -1200,7 +1206,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_counter_option(odb, counter_section,
                                 N_("Job number"), "gncJoba",
                                 N_("The previous job number generated. This number will be incremented to generate the next job number."),
-                                0.0);
+                                0);
     gnc_register_counter_format_option(odb, counter_section,
                                        N_("Job number format"), "gncJobb",
                                        N_("The format string to use for generating job numbers. This is a printf-style format string."),
@@ -1208,7 +1214,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_counter_option(odb, counter_section,
                                 N_("Order number"), "gncOrdera",
                                 N_("The previous order number generated. This number will be incremented to generate the next order number."),
-                                0.0);
+                                0);
     gnc_register_counter_format_option(odb, counter_section,
                                        N_("Order number format"), "gncOrderb",
                                        N_("The format string to use for generating order numbers. This is a printf-style format string."),
@@ -1216,7 +1222,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_counter_option(odb, counter_section,
                                 N_("Vendor number"), "gncVendora",
                                 N_("The previous vendor number generated. This number will be incremented to generate the next vendor number."),
-                                0.0);
+                                0);
     gnc_register_counter_format_option(odb, counter_section,
                                        N_("Vendor number format"), "gncVendorb",
                                        N_("The format string to use for generating vendor numbers. This is a printf-style format string."),

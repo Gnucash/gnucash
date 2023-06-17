@@ -750,7 +750,7 @@ inline void gnc_register_invoice_print_report_option(const GncOptionDBPtr& db,
  */
 void gnc_register_counter_option(GncOptionDB* db, const char* section,
                                  const char* name, const char* key,
-                                 const char* doc_string, double value);
+                                 const char* doc_string, int value);
 
 /**
  * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
