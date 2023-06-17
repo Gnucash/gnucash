@@ -2027,7 +2027,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
         xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
 
         for (node = list; node; node = node->next)
-            g_free (node->data);
+            guid_free (static_cast<GncGUID*>(node->data));
         g_list_free (list);
     }
 
