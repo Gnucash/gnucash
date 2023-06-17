@@ -1550,6 +1550,7 @@ gnc_tree_view_account_get_selected_accounts (GncTreeViewAccount *view)
     g_return_val_if_fail (GNC_IS_TREE_VIEW_ACCOUNT (view), NULL);
 
     info.return_list = NULL;
+    info.view = view;
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(view));
     gtk_tree_selection_selected_foreach(selection, get_selected_accounts_helper, &info);
     info.return_list = g_list_reverse (info.return_list);
