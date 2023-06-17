@@ -392,6 +392,14 @@ option_path(const GncOption& option, GSList* list)
     list->data = (void*)option.get_section().c_str();
 }
 
+/* The usage "option.template get_value<bool>()" looks weird, but it's required
+ * by the C++ standard: "When the name of a member template specialization
+ * appears after . or -> in a postfix-expression, or after nested-name-specifier
+ * in a qualified-id, and the postfix-expression or qualified-id explicitly
+ * depends on a template-parameter (14.6.2), the member template name must be
+ * prefixed by the keyword template. Otherwise the name is assumed to name a
+ * non-template."
+ */
 static inline KvpValue*
 kvp_value_from_bool_option(const GncOption& option)
 {
