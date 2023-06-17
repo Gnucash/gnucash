@@ -85,8 +85,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-06-16 17:50+0000\n"
-"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
+"PO-Revision-Date: 2023-06-17 12:51+0000\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -29977,9 +29977,8 @@ msgid "_Sort By…"
 msgstr "_Ordenar por…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:184
-#, fuzzy
 msgid "_Void Transaction"
-msgstr "_Cancelar transacción"
+msgstr "_Transacción vacía"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
 msgid "Void the current transaction"
