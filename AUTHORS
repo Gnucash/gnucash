@@ -126,6 +126,7 @@ Other Contributors:
 
 Mike Alexander Cap gains, lot and MacOS fixes.
 Andrew Arensburger for FreeBSD &amp; other patches
+Simon Arlott  Previous/next working day SX; performance improvements; misc fixes/preferences
 Matt Armstrong for misc fixes
 Jon Arney  Windows porting patches, misc fixes
 A. Alper Atici Turkish translation
@@ -155,8 +156,10 @@ Graham Chapman  for the xacc-rpts addon package
 George Chen  for MS-Money QIF's &amp; fixes
 Albert Chin-A-Young  configure.in patch
 Kenneth Christiansen  Danish translation
+Richard Cohen  Code cleanup and GLib modernization
 Matthew Condell  FreeBSD patch
 Patrick Condron  for webserver and T1 connection (credits to rackspace.com)
+Vincent Dawans  Report bugfixes and TRep improvements.
 Raphael Dechenaux  register patch
 Ciaran Deignan  for AIX binary version
 Glen Ditchfield  updated documentation
