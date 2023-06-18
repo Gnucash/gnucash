@@ -248,7 +248,7 @@ test_dom_tree_to_guid (void)
                  "dom_tree_to_guid");
 
         xmlFreeNode (test_node);
-        g_free (test_guid1);
+        guid_free (test_guid1);
         guid_free (test_guid2);
     }
 }
