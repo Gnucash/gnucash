@@ -56,6 +56,7 @@
 #include <boost/uuid/uuid_io.hpp>
 #include <sstream>
 #include <string>
+#include <algorithm>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = QOF_MOD_ENGINE;
@@ -120,7 +121,7 @@ guid_copy (const GncGUID *guid)
 {
     if (!guid) return nullptr;
     auto ret = guid_malloc ();
-    memcpy (ret, guid, sizeof (GncGUID));
+    *ret = *guid;
     return ret;
 }
 
@@ -134,7 +135,7 @@ guid_null (void)
 static void
 guid_assign (GncGUID & target, gnc::GUID const & source)
 {
-    memcpy (&target, &source, sizeof (GncGUID));
+    std::copy (source.begin(), source.end(), target.reserved);
 }
 
 /*Takes an allocated guid pointer and constructs it in place*/

@@ -33,7 +33,6 @@
 
 #include <glib.h>
 #include <glib/gi18n.h>
-#include <string.h>		/* for memcpy() */
 #include <qofinstance-p.h>
 
 #include "gncCustomerP.h"
@@ -399,7 +398,7 @@ void gncOwnerCopy (const GncOwner *src, GncOwner *dest)
 {
     if (!src || !dest) return;
     if (src == dest) return;
-    memcpy (dest, src, sizeof (*dest));
+    *dest = *src;
 }
 
 gboolean gncOwnerEqual (const GncOwner *a, const GncOwner *b)
