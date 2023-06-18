@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-05-05 15:02-0700\n"
-"PO-Revision-Date: 2023-06-11 14:47+0000\n"
+"PO-Revision-Date: 2023-06-16 23:51+0000\n"
 "Last-Translator: Andrea Andre <andrea.tsg19@slmail.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -4888,7 +4888,8 @@ msgstr "Introdu o plată pentru proprietarul acestei facturi"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:283
 msgid "Open a company report window for the owner of this credit note"
 msgstr ""
-"Deschide o fereastra cu raportul firmei pentru proprietarul acestei facturi"
+"Deschide o fereastra cu raportul firmei pentru proprietarul acestei note de "
+"credit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:284
 #, fuzzy
@@ -15394,6 +15395,15 @@ msgid ""
 "automatically assign the remaining amount to the first unpaid invoice for "
 "this company."
 msgstr ""
+"Suma care trebuie plătită pentru această factură.\n"
+"\n"
+"Dacă ai ales o factură, GnuCash va propune suma încă datorată pentru "
+"aceasta. Poți modifica această sumă pentru a crea o plată parțială sau o "
+"plată în plus.\n"
+"\n"
+"În cazul unei plăți în plus sau dacă nu a fost aleasă nicio factură, GnuCash "
+"va atribui automat suma rămasă la prima factură neplătită pentru această "
+"firmă."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:469
 #: gnucash/report/reports/standard/new-owner-report.scm:282
@@ -24044,6 +24054,8 @@ msgstr "Omite conturile"
 #: gnucash/report/reports/standard/trial-balance.scm:374
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
 msgstr ""
+"${company-name} ${report-title} Pentru perioada cuprinsă între ${start} și "
+"${end}"
 
 #: gnucash/report/reports/standard/account-summary.scm:381
 msgid "Account title"
@@ -25642,13 +25654,12 @@ msgstr ""
 "Afișează o diagramă circulară cu cheltuieli, pentru un interval de timp dat"
 
 #: gnucash/report/reports/standard/customer-summary.scm:65
-#, fuzzy
 msgid "Show Company Address"
-msgstr "Adresa companiei"
+msgstr "Arată adresa firmei"
 
 #: gnucash/report/reports/standard/customer-summary.scm:66
 msgid "Show your own company's address and the date of printing."
-msgstr ""
+msgstr "Arată adresa propriei firme și data tipăririi."
 
 #: gnucash/report/reports/standard/customer-summary.scm:70
 msgid "Show Lines with All Zeros"
@@ -26742,10 +26753,8 @@ msgid "Client or vendor name, address and ID"
 msgstr ""
 
 #: gnucash/report/reports/standard/invoice.scm:112
-#, fuzzy
-#| msgid "Company Email Address"
 msgid "Company name, address and tax-ID"
-msgstr "Email-ul companiei"
+msgstr "Numele firmei, adresa și codul fiscal"
 
 #: gnucash/report/reports/standard/invoice.scm:113
 msgid "Invoice date, due date, billing ID, terms, job details"
@@ -26901,21 +26910,19 @@ msgstr "Fă toate cecurile De plătit către"
 
 #: gnucash/report/reports/standard/invoice.scm:246
 msgid "Company contact"
-msgstr "Contact companie"
+msgstr "Contactul firmei"
 
 #: gnucash/report/reports/standard/invoice.scm:247
-#, fuzzy
 msgid "Display the Company contact information."
-msgstr "Afișează informațiile de contact ale companiei"
+msgstr "Afișează informațiile de contact ale firmei."
 
 #: gnucash/report/reports/standard/invoice.scm:252
 msgid "Company contact string"
-msgstr "Date de contact pentru companie"
+msgstr "Datele de contact ale firmei"
 
 #: gnucash/report/reports/standard/invoice.scm:253
-#, fuzzy
 msgid "The phrase used to introduce the company contact."
-msgstr "Fraza folosită pentru a introduce datele de contact ale companiei"
+msgstr "Fraza folosită pentru a prezenta persoana de contact a firmei."
 
 #: gnucash/report/reports/standard/invoice.scm:254
 #, fuzzy
@@ -27307,15 +27314,12 @@ msgid "Sort companies by."
 msgstr "Sortează companiile după"
 
 #: gnucash/report/reports/standard/new-aging.scm:92
-#, fuzzy
-#| msgid "Name of the company."
 msgid "Name of the company"
-msgstr "Numele companiei."
+msgstr "Numele firmei"
 
 #: gnucash/report/reports/standard/new-aging.scm:93
-#, fuzzy
 msgid "Total amount owed to/from Company"
-msgstr "Sumă totală datorată de/către Companie"
+msgstr "Sumă totală datorată de/către firmă"
 
 #: gnucash/report/reports/standard/new-aging.scm:94
 msgid "Bracket Total Owed"
@@ -27524,9 +27528,8 @@ msgid "Total Due"
 msgstr "Total datorat"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:862
-#, fuzzy
 msgid "The company for this report."
-msgstr "Compania pentru acest raport"
+msgstr "Firma pentru acest raport."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:875
 #: gnucash/report/reports/standard/new-owner-report.scm:879
@@ -28111,7 +28114,7 @@ msgstr "Numărul facturii"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:79
 msgid "row: Company Name"
-msgstr "rând: Numele companiei"
+msgstr "rând: Numele firmei"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:80
 #, fuzzy
@@ -28206,9 +28209,8 @@ msgid "Display the Invoice Number?"
 msgstr "Se afișează numărul cecului?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:136
-#, fuzzy
 msgid "Display the Company Name?"
-msgstr "Se afișează numele contului?"
+msgstr "Afișezi numele firmei?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:138
 #, fuzzy
@@ -28430,7 +28432,7 @@ msgstr "Ajustează intrările"
 
 #: gnucash/report/reports/standard/trial-balance.scm:370
 msgid "${company-name} ${report-title} ${date}"
-msgstr ""
+msgstr "${company-name} ${report-title} ${date}"
 
 #: gnucash/report/reports/standard/trial-balance.scm:533
 msgid "Adjustments"
@@ -28629,9 +28631,8 @@ msgstr "Pregătit pentru"
 
 #: gnucash/report/stylesheets/footer.scm:57
 #: gnucash/report/stylesheets/head-or-tail.scm:56
-#, fuzzy
 msgid "Name of organization or company prepared for."
-msgstr "Numele organizației sau companiei pregătită"
+msgstr "Numele organizației sau al firmei pentru care a fost pregătit."
 
 #: gnucash/report/stylesheets/footer.scm:62
 #: gnucash/report/stylesheets/head-or-tail.scm:60
@@ -28640,9 +28641,8 @@ msgstr "Afișează informațiile pentru preparator"
 
 #: gnucash/report/stylesheets/footer.scm:63
 #: gnucash/report/stylesheets/head-or-tail.scm:61
-#, fuzzy
 msgid "Name of organization or company."
-msgstr "Numele organizației sau companiei"
+msgstr "Numele organizației sau al firmei."
 
 #: gnucash/report/stylesheets/footer.scm:68
 #: gnucash/report/stylesheets/head-or-tail.scm:85
@@ -28729,7 +28729,7 @@ msgstr "Logo"
 #: gnucash/report/stylesheets/footer.scm:99
 #: gnucash/report/stylesheets/head-or-tail.scm:138
 msgid "Company logo image."
-msgstr "Imaginea logo-ului companiei."
+msgstr "Emblema firmei."
 
 #: gnucash/report/stylesheets/footer.scm:104
 #: gnucash/report/stylesheets/head-or-tail.scm:143
@@ -28892,9 +28892,8 @@ msgid "Show receiver info"
 msgstr "Afișează informațiile pentru preparator"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:66
-#, fuzzy
 msgid "Name of organization or company the report is prepared for."
-msgstr "Numele organizației sau companiei pregătită"
+msgstr "Numele organizației sau al firmei pentru care se întocmește raportul."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:70
 #, fuzzy
@@ -30904,12 +30903,9 @@ msgid "Open the linked document"
 msgstr "Cont nou"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
-#, fuzzy
-#| msgid "Open a company report window for the owner of this Invoice"
 msgid "Open a company report window for the owner of this invoice"
 msgstr ""
-"Deschide o fereastra cu raportul de companie pentru proprietarul acestei "
-"facturi"
+"Deschide o fereastra cu raportul firmei pentru proprietarul acestei facturi"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
 #: gnucash/ui/gnc-plugin-page-invoice.ui:499
@@ -32351,7 +32347,7 @@ msgstr "Adresa site-ului dvs. web."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1236
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
-msgstr "ID-ul pentru compania dvs. (de ex. 'Taxa-ID: 00-000000')"
+msgstr "ID-ul firmei tale (de ex. „Taxa-ID: 00-000000”)."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1244
 msgid ""
