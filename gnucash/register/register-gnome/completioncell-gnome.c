@@ -666,6 +666,10 @@ gnc_completion_cell_modify_verify (BasicCell* bcell,
          box->stop_searching = FALSE;
     }
 
+    // Are were deleting or inserting in the middle.
+    if (change == NULL || *cursor_position < bcell->value_chars)
+        *start_selection = *end_selection = *cursor_position;
+
     populate_list_store (cell, newval);
 
     if (g_strcmp0 (newval, "") == 0)
