@@ -670,7 +670,9 @@ gnc_completion_cell_modify_verify (BasicCell* bcell,
     if (change == NULL || *cursor_position < bcell->value_chars)
         *start_selection = *end_selection = *cursor_position;
 
-    populate_list_store (cell, newval);
+    gchar *start_of_text = g_utf8_substring (newval, 0, *cursor_position);
+    populate_list_store (cell, start_of_text);
+    g_free (start_of_text);
 
     if (g_strcmp0 (newval, "") == 0)
     {
