@@ -565,6 +565,10 @@ select_first_entry_in_list (PopBox* box)
     if (!gtk_tree_model_iter_next (model, &iter))
         return;
 
+    // reset horizontal scrolling
+    gtk_tree_view_column_queue_resize (gtk_tree_view_get_column (
+                                       box->item_list->tree_view, TEXT_COL));
+
     gtk_tree_model_get (model, &iter, TEXT_COL, &string, -1);
 
     gnc_item_list_select (box->item_list, string);
