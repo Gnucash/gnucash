@@ -1502,7 +1502,7 @@ free_random_guids(GList *guids)
     GList *node;
 
     for (node = guids; node; node = node->next)
-        g_free (node->data);
+        guid_free (static_cast<GncGUID*>(node->data));
 
     g_list_free (guids);
 }
@@ -1732,7 +1732,7 @@ get_random_query(void)
                                    guid,
                                    get_random_id_type (),
                                    get_random_queryop ());
-            g_free (guid);
+            guid_free (guid);
             break;
 
         case 8: /* PR_KVP */
