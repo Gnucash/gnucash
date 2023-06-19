@@ -1532,14 +1532,27 @@ gnc_get_export_type_choice (SCM export_types, GtkWindow *parent)
 
     if (!bad)
     {
+        const gchar * html_type = _("HTML");
+        gboolean custom_html_export = FALSE;
+
         choices = g_list_reverse (choices);
 
-        choices = g_list_prepend (choices, g_strdup (_("HTML")));
+        for (node = choices; node; node = node->next)
+            if (g_strcmp0 (static_cast<char*>(node->data), html_type) == 0)
+            {
+                custom_html_export = TRUE;
+                break;
+            }
+
+        if (!custom_html_export)
+            choices = g_list_prepend (choices, g_strdup (html_type));
 
         choice = gnc_choose_radio_option_dialog
             (GTK_WIDGET (parent), _("Choose export format"),
              _("Choose the export format for this report:"),
              nullptr, 0, choices);
+
+        if (custom_html_export && (choice >= 0)) ++choice;
     }
     else
         choice = -1;

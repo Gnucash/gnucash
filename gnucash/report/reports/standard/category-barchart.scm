@@ -607,6 +607,9 @@ Please deselect the accounts with negative balances."))
             (gnc:html-chart-set-format-style!
              chart (if ratio-chart? "percent" "currency"))
 
+            (if (eq? export-type 'html)
+              (gnc:html-chart-set-embed-js?! chart #t))
+
             (gnc:report-percent-done 98)
             (gnc:html-document-add-object! document chart)
 
@@ -682,7 +685,11 @@ Please deselect the accounts with negative balances."))
                                 (list (apply + row))
                                 '())))
                          (map (cut gnc-print-time64 <> iso-date) dates-list)
-                         list-of-rows)))))))))))))
+                         list-of-rows))))))
+             ((eq? export-type 'html)
+              (gnc:html-document-set-export-string
+                 document
+                 (gnc:html-document-render document))))))))))
 
     (unless (gnc:html-document-export-string document)
       (gnc:html-document-set-export-error document (G_ "No exportable data")))
@@ -703,7 +710,7 @@ Please deselect the accounts with negative balances."))
      'menu-name menuname
      'menu-tip menutip
      'options-generator (lambda () (options-generator account-types inc-exp?))
-     'export-types '(("CSV" . csv))
+     'export-types (list (cons (G_ "HTML") 'html) (cons "CSV" 'csv))
      'export-thunk (lambda (report-obj export-type)
                      (category-barchart-renderer
                       report-obj reportname uuid account-types inc-exp? reverse-bal?

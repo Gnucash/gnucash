@@ -65,6 +65,8 @@
 (export gnc:html-chart-set-grid?!)
 (export gnc:html-chart-set-y-axis-label!)
 (export gnc:html-chart-add-data-series!)
+(export gnc:html-chart-embed-js?)
+(export gnc:html-chart-set-embed-js?!)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;
@@ -157,7 +159,8 @@
   (custom-x-axis-ticks? html-chart-custom-x-axis-ticks?
                         html-chart-set-custom-x-axis-ticks?)
   (custom-y-axis-ticks? html-chart-custom-y-axis-ticks?
-                        html-chart-set-custom-y-axis-ticks?))
+                        html-chart-set-custom-y-axis-ticks?)
+  (embed-js? html-chart-embed-js? html-chart-set-embed-js?))
 
 (define gnc:make-html-chart-internal make-html-chart)
 (define gnc:html-chart? html-chart?)
@@ -175,6 +178,8 @@
 (define gnc:html-chart-set-custom-x-axis-ticks?! html-chart-set-custom-x-axis-ticks?)
 (define gnc:html-chart-custom-y-axis-ticks? html-chart-custom-y-axis-ticks?)
 (define gnc:html-chart-set-custom-y-axis-ticks?! html-chart-set-custom-y-axis-ticks?)
+(define gnc:html-chart-embed-js? html-chart-embed-js?)
+(define gnc:html-chart-set-embed-js?! html-chart-set-embed-js?)
 (define gnc:html-chart-get-options-internal html-chart-chart-options)
 (define gnc:html-chart-set-options-internal! html-chart-set-chart-options)
 
@@ -453,8 +458,9 @@ document.getElementById(chartid).onclick = function(evt) {
          ;; Use a unique chart-id for each chart. This prevents charts
          ;; clashing on multi-column reports
          (id (symbol->string (gensym "chart"))))
-
-    (push (gnc:html-js-include "chartjs/Chart.bundle.min.js"))
+    (if (gnc:html-chart-embed-js? chart)
+        (push (gnc:html-js-embed "chartjs/Chart.bundle.min.js"))
+        (push (gnc:html-js-include "chartjs/Chart.bundle.min.js")))
 
     ;; the following hidden h3 is used to query style and copy onto chartjs
     (push "<h3 style='display:none'></h3>")
