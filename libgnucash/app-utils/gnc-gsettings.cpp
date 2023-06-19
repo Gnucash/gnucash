@@ -135,10 +135,11 @@ gnc_gsettings_register_cb (const gchar *schema, const gchar *key,
     {
         gs_obj = gnc_gsettings_get_settings_obj (schema);
         if (G_IS_SETTINGS (gs_obj))
-            g_hash_table_insert (schema_hash, full_name, gs_obj);
+            g_hash_table_insert (schema_hash, g_strdup (full_name), gs_obj);
         else
             PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name);
     }
+    g_free (full_name);
     g_return_val_if_fail (G_IS_SETTINGS (gs_obj), 0);
 
     auto signal = static_cast<char *> (nullptr);
