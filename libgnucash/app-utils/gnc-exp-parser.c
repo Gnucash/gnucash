@@ -280,11 +280,10 @@ update_variables (var_store_ptr vars)
     }
 }
 
-static char* _function_evaluation_error_msg = NULL;
 static void
 _exception_handler(const char *error_message)
 {
-    _function_evaluation_error_msg = (char*)error_message;
+    PERR("function eval error: [%s]\n", error_message);
 }
 
 static
@@ -335,14 +334,9 @@ func_op(const char *fname, int argc, void **argv)
         scmArgs = scm_cons( scmTmp, scmArgs );
     }
 
-    //scmTmp = scm_apply(scmFn, scmArgs , SCM_EOL);
     scmTmp = gfec_apply(scmFn, scmArgs, _exception_handler);
-    if (_function_evaluation_error_msg != NULL)
-    {
-        PERR("function eval error: [%s]\n", _function_evaluation_error_msg);
-        _function_evaluation_error_msg = NULL;
+    if (scmTmp == SCM_UNDEFINED)
         return NULL;
-    }
 
     if (!scm_is_number (scmTmp))
     {

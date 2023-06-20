@@ -74,7 +74,7 @@ GLIST_HELPER_INOUT(PriceList, SWIGTYPE_p_GNCPrice);
 // TODO: free PriceList?
 GLIST_HELPER_INOUT(CommodityList, SWIGTYPE_p_gnc_commodity);
 
-%typemap(newfree) gchar * "g_free($1);"
+%typemap(newfree) char * "g_free($1);"
 
 /* These need to be here so that they are *before* the function
 declarations in the header files, some of which are included by
