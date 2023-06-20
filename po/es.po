@@ -85,8 +85,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
-"PO-Revision-Date: 2023-06-19 22:48+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2023-06-20 19:30+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -877,8 +877,8 @@ msgid ""
 "The full path is displayed in the status bar."
 msgstr ""
 "Si desea conocer cuales directorios donde están almacenados los archivos de "
-"GnuCash recientes, cubra el cursor de uno de los asientos\n"
-"en el menú de historial (Archivo[->Listado más recientes utilizados]).\n"
+"GnuCash recientes, cubra el cursor de uno de los asientos en el menú de "
+"historial (Archivo[-&gt;Listado más recientes utilizados]).\n"
 "La ruta completa es representada dentro de la barra de estado."
 
 #: doc/tip_of_the_day.list.c:24
@@ -1003,7 +1003,7 @@ msgid ""
 msgstr ""
 "¿Quiere ver todas sus transacciones de subcuentas en un solo registro? Desde "
 "las lengüetas de Cuentas dentro de la ventana principal, resalte la cuenta "
-"precedente y seleccione Editar->“Abrir subcuentas” desde el menú."
+"precedente y seleccione Editar-&gt;“Abrir subcuentas” desde el menú."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -1064,8 +1064,8 @@ msgid ""
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
 "Puede empaquetar más de un boletín en una única ventana, suministrando toda "
-"la información financiera que quiera a la vez. Para ello, use el boletín "
-"«Muestra y Adaptación->Boletín Multicolumna Personalizado»."
+"la información financiera que quiera a la vez. Para ello, use el boletín «"
+"Muestra y Adaptación-&gt;Boletín Multicolumna Personalizado»."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -1126,10 +1126,10 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Para buscar a través de todas sus transacciones, inicie una búsqueda (Editar-"
-">Buscar…) desde la página principal de jerarquía de cuentas. Para limitar su "
-"selección de búsqueda a una sola cuenta, inicie la búsqueda desde los "
-"registros de esa cuenta."
+"Para buscar a través de todas sus transacciones, inicie una búsqueda "
+"(Editar-&gt;Buscar…) desde la página principal de jerarquía de cuentas. Para "
+"limitar su selección de búsqueda a una sola cuenta, inicie la búsqueda desde "
+"los registros de esa cuenta."
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -1917,7 +1917,7 @@ msgstr "efectivo"
 #: gnucash/gnome/assistant-stock-transaction.cpp:975
 msgctxt "Stock Assistant: Page name"
 msgid "fees"
-msgstr "Precio"
+msgstr "comisiones"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:979
 msgctxt "Stock Assistant: Page name"
@@ -7130,7 +7130,7 @@ msgstr "Ocultar cuentas _contenedoras"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:521
 msgid "Hide _Hidden Accounts"
-msgstr "Ocultar _cuentas ocultas"
+msgstr "Ocultar _cuentas"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:716
 msgid "Set the visibility of placeholder and hidden accounts."
@@ -7201,11 +7201,11 @@ msgid_plural ""
 msgstr[0] ""
 "Su fichero de datos necesita ser guardado en su disco duro para guardar sus "
 "cambios. GnuCash tiene una característica para guardar el fichero "
-"automáticamente cada %d minuto, tan solo si ha pulsado el botón \"Guardar\" "
+"automáticamente cada %d minuto, tan solo si ha pulsado el botón «Guardar» "
 "cada vez.\n"
 "\n"
 "Puede modificar el intervalo de tiempo o desactivar esta característica en "
-"Editar->Preferencias->General→Intervalo de tiempo de Auto-guardado.\n"
+"Editar → Preferencias → General → Intervalo de tiempo de Auto-guardado.\n"
 "\n"
 "¿Quiere que su fichero deba guardarse automáticamente?"
 msgstr[1] ""
@@ -7215,7 +7215,7 @@ msgstr[1] ""
 "cada vez.\n"
 "\n"
 "Puede modificar el intervalo de tiempo o desactivar esta característica en "
-"Editar -> Preferencias -> General -> Intervalo de tiempo de Autoguardar.\n"
+"Editar → Preferencias → General → Intervalo de tiempo de Autoguardar.\n"
 "\n"
 "¿Quiere que su fichero deba guardarse automáticamente?"
 
@@ -7543,7 +7543,7 @@ msgid ""
 msgstr ""
 "Esta base de datos es de una versión más moderna de GnuCash. Esta versión "
 "puede leerlo, pero no puede guardarlo con seguridad. Será marcada como solo "
-"lectura hasta que pulse “Archivo->Guardar como...”, pero los datos pueden "
+"lectura hasta que pulse “Archivo-&gt;Guardar como...”, pero los datos pueden "
 "perderse al escribir en la versión antigua."
 
 #: gnucash/gnome-utils/gnc-file.c:507
@@ -7721,7 +7721,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-file.c:1742
 #: gnucash/gnome-utils/gnc-main-window.cpp:1194
 msgid "<unknown>"
-msgstr "<desconocido>"
+msgstr ""
 
 #: gnucash/gnome-utils/gnc-general-select.c:183
 msgid "View…"
@@ -7878,7 +7878,7 @@ msgstr "Contabilidad financiara personal y pequeños negocios."
 #: gnucash/gnome-utils/gnc-main-window.cpp:5245
 msgid "translator-credits"
 msgstr ""
-"Francisco Javier Serrador, 2018 - 2023\n"
+"Fco. Javier Serrador, 2018 - 2023\n"
 "\n"
 "Adolfo Jayme Barrientos, 2021\n"
 "Carlos Manrique Enguita, 2021\n"
@@ -7916,7 +7916,7 @@ msgstr "Seleccionar Descendientes"
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1006
 msgid "Select all descendents of selected account."
-msgstr "Seleccionar todas los descendientes de una cuenta seleccionada."
+msgstr "Seleccione todas los descendientes de una cuenta seleccionada."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1012
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1241
@@ -10441,8 +10441,8 @@ msgstr ""
 "Muestra una segunda línea con «Función», «Anotaciones» y «Documentos "
 "Enlazados» por cada transacción dentro de un registro. Esto es el parámetro "
 "predeterminado cuando un registro se abre por primera vez. Los parámetros "
-"pueden ser modificados en cualquier tiempo a través del elemento del menú "
-"«Vista -> Línea doble»."
+"pueden ser modificados en cualquier tiempo a través del elemento del menú «"
+"Vista → Línea doble»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:306
 msgid "Only display leaf account names."
@@ -12670,7 +12670,7 @@ msgstr ""
 "cómo se importan las transacciones de GnuCash. Si vuelve a esta página sin "
 "cancelar e iniciando otra, el diálogo para ajustar las opciones de ejercicio "
 "no serán mostradas por segunda vez cuando avance. Puede accederlo "
-"directamente desde el menú a través de Archivo->Propiedades."
+"directamente desde el menú a través de Archivo → Propiedades."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:969
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2642
@@ -13576,7 +13576,7 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
-"Emplee “Editar->Opciones de Boletín de Imposición” para establecer el "
+"Emplee “Editar-&gt;Opciones de Boletín de Imposición” para establecer el "
 "indicador de imposición relativa y asignar un código de imposición para esta "
 "cuenta."
 
@@ -15518,8 +15518,8 @@ msgstr "Realizar una _configuración de plan contable al crear un fichero nuevo"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1427
 msgid "Present the new account list dialog when you choose File->New File."
 msgstr ""
-"Presentar el diálogo de listado de cuenta nueva cuando seleccione Archivo-"
-">Crear fichero."
+"Presentar el diálogo de listado de cuenta nueva cuando seleccione "
+"Archivo-&gt;Crear fichero."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1458
 msgid "Display \"_tip of the day\" dialog"
@@ -15756,7 +15756,7 @@ msgstr ""
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2296
 msgid "Likely match _day threshold"
-msgstr "Como cotejar _umbral de día"
+msgstr "Como cotejar umbral de _día"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2309
@@ -16519,7 +16519,7 @@ msgstr "<b>_Boletines Seleccionados</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
 msgid "A_dd >>"
-msgstr "_Agregar >>"
+msgstr "_Agregar &gt;&gt;"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
@@ -17639,7 +17639,7 @@ msgstr "Mostrar descripción"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:675
 msgid "Note: Use View->'Filter By…' to control visible accounts."
-msgstr "Nota: utilice Ver->«Filtro por…» para controlar cuentas visibles."
+msgstr "Nota: utilice Ver-&gt;«Filtro por…» para controlar cuentas visibles."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:693
 msgid "Budget List"
@@ -19290,7 +19290,7 @@ msgstr ""
 "- filas descartadas: %i\n"
 "- filas importadas: %i\n"
 "\n"
-"Validación & procesamiento:\n"
+"Validación &amp; procesamiento:\n"
 "- filas corregidas: %u\n"
 "- filas descartadas: %u\n"
 "- recibos creadas: %u\n"
@@ -19367,7 +19367,8 @@ msgstr ""
 "\n"
 "El formato de salida de Precio/Proporción está controlado por la "
 "precedencia\n"
-"«Números, Fecha, Hora» -> «Forzar Precios para desplegar como decimales».\n"
+"«Números, Fecha, Hora» -&gt; «Forzar Precios para desplegar como decimales»."
+"\n"
 "\n"
 "Seleccione los parámetros que requiere para el fichero y después pulse "
 "«Siguiente» para proceder o «Cancelar» para interrumpir la exportación.\n"
@@ -21395,7 +21396,7 @@ msgstr "PdV"
 # ¿Qué representa esto?
 #: gnucash/register/ledger-core/split-register.c:2557
 msgid "AutoDep"
-msgstr "Ingreso automático"
+msgstr "AutoDep"
 
 #: gnucash/register/ledger-core/split-register.c:2558
 msgid "Wire"
@@ -21429,6 +21430,7 @@ msgid "STCG"
 msgstr "Ganancias del capital a corto plazo (GCCP)"
 
 #: gnucash/register/ledger-core/split-register.c:2638
+#, fuzzy
 msgid "Dist"
 msgstr "Dist"
 
@@ -26232,8 +26234,8 @@ msgid ""
 "Display all tax categories separately (one per line) instead of one single "
 "tax line.?"
 msgstr ""
-"Representar todas las categorías imponibles separadamente (una por línea) en "
-"vez de una simple línea impositiva.?"
+"¿Representar todas las categorías imponibles separadamente (una por línea) "
+"en vez de una simple línea impositiva?"
 
 #: gnucash/report/reports/standard/invoice.scm:266
 msgid "References"
@@ -29410,7 +29412,7 @@ msgstr "_Nuevo empleado…"
 
 #: gnucash/ui/gnc-plugin-business.ui:114
 msgid "Open the New Employee dialog"
-msgstr "Abrir el cuadro de diálogo para un Nuevo Empleado"
+msgstr "Abre el diálogo para un Nuevo Empleado"
 
 #: gnucash/ui/gnc-plugin-business.ui:117
 msgid "_Find Employee…"
