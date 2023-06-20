@@ -445,8 +445,8 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
         [book](GncOptionSectionPtr& section)
         {
             section->foreach_option(
-                [book, &section](auto& option) {
-                    if (option.is_changed())
+                [book, &section](GncOption& option) {
+                    if (option.is_dirty())
                     {
                         /* We need the string name out here so that it stays in
                          * scope long enough to pass its c_str to
@@ -482,6 +482,7 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
                             kvp = new KvpValue{g_strdup(str.c_str())};
                         }
                         qof_book_set_option(book, kvp, &list_head);
+                        option.mark_saved();
                     }
                 });
         });

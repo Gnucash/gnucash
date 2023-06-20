@@ -26,6 +26,7 @@
 #include "gnc-option-uitype.hpp"
 #include "gnc-option-ui.hpp"
 #include "gncOwner.h"
+#include "kvp-value.hpp"
 
 static const char* log_module{"gnc.app-utils.gnc-option"};
 
@@ -289,6 +290,22 @@ GncOption::is_internal()
     return std::visit([](auto& option)->bool {
                    return option.is_internal();
                }, *m_option);
+}
+
+void
+GncOption::mark_saved() noexcept
+{
+    std::visit([](auto& option)->void {
+                          option.mark_saved();
+                      }, *m_option);
+}
+
+bool
+GncOption::is_dirty() const noexcept
+{
+    return std::visit([](const auto& option)->bool {
+                          return option.is_dirty();
+                      }, *m_option);
 }
 
 bool

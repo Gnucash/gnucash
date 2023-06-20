@@ -77,6 +77,7 @@ void
 GncOptionGncOwnerValue::set_value(const GncOwner* new_value)
 {
     m_value.reset(make_owner_ptr(new_value));
+    m_dirty = true;
 }
 
 void
@@ -196,6 +197,7 @@ void
 GncOptionQofInstanceValue::set_value(const QofInstance* new_value)
 {
     m_value = make_gnc_item(new_value);
+    m_dirty = true;
 }
 
 void
@@ -308,6 +310,7 @@ GncOptionCommodityValue::set_value(gnc_commodity* value)
         throw std::invalid_argument("Value not a currency when required or not a commodity. Value not set.");
     m_mnemonic = gnc_commodity_get_mnemonic(value);
     m_namespace = gnc_commodity_get_namespace(value);
+    m_dirty = true;
 }
 
 void
@@ -591,6 +594,7 @@ GncOptionDateValue::set_value(uint16_t index) noexcept
     assert(index < m_period_set.size());
     m_date = INT64_MAX;
     m_period = m_period_set[index];
+    m_dirty = true;
 }
 
 uint16_t
@@ -726,6 +730,7 @@ template <typename ValueType> void
 GncOptionValue<ValueType>::set_value(ValueType new_value)
 {
     m_value = new_value;
+    m_dirty = true;
 }
 
 template <typename ValueType> void

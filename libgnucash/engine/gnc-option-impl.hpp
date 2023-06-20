@@ -101,6 +101,8 @@ public:
     void set_value(ValueType new_value);
     void set_default_value(ValueType new_value);
     void reset_default_value();
+    void mark_saved() noexcept { m_dirty = false; }
+    bool is_dirty() const noexcept { return m_dirty; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -111,6 +113,7 @@ private:
     GncOptionUIType m_ui_type;
     ValueType m_value;
     ValueType m_default_value;
+    bool m_dirty{false};
 };
 
 
@@ -144,6 +147,8 @@ public:
     void set_value(const GncOwner* new_value);
     void set_default_value(const GncOwner* new_value);
     void reset_default_value();
+    void mark_saved() noexcept { m_dirty = false; }
+    bool is_dirty() const noexcept { return m_dirty; }
     bool is_changed() const noexcept;
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -154,6 +159,7 @@ private:
     GncOptionUIType m_ui_type;
     GncOwnerPtr m_value;
     GncOwnerPtr m_default_value;
+    bool m_dirty{false};
 };
 
 /** class GncOptionQofinstanceValue
@@ -181,6 +187,8 @@ public:
     void set_value(const QofInstance* new_value);
     void set_default_value(const QofInstance* new_value);
     void reset_default_value();
+    void mark_saved() noexcept { m_dirty = false; }
+    bool is_dirty() const noexcept { return m_dirty; }
     bool is_changed() const noexcept;
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -191,6 +199,7 @@ private:
     GncOptionUIType m_ui_type;
     GncItem m_value;
     GncItem m_default_value;
+    bool m_dirty{false};
 };
 
 /** class GncOptionCommodityValue
@@ -229,6 +238,8 @@ public:
     void set_value(gnc_commodity* value);
     void set_default_value(gnc_commodity* value);
     void reset_default_value();
+    void mark_saved() noexcept { m_dirty = false; }
+    bool is_dirty() const noexcept { return m_dirty; }
     bool is_changed() const noexcept;
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -242,6 +253,7 @@ private:
     std::string m_mnemonic;
     std::string m_default_namespace;
     std::string m_default_mnemonic;
+    bool m_dirty{false};
 };
 
 QofInstance* qof_instance_from_string(const std::string& str,
@@ -408,7 +420,10 @@ public:
     void set_value(ValueType value)
     {
         if (this->validate(value))
+        {
             m_value = value;
+            m_dirty = true;
+        }
         else
             throw std::invalid_argument("Validation failed, value not set.");
     }
@@ -426,6 +441,8 @@ public:
         step = m_step;
     }
     void reset_default_value() { m_value = m_default_value; }
+    void mark_saved() noexcept { m_dirty = false; }
+    bool is_dirty() const noexcept { return m_dirty; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -441,7 +458,8 @@ private:
     ValueType m_min;
     ValueType m_max;
     ValueType m_step;
-    bool m_alternate = false;
+    bool m_alternate{false};
+    bool m_dirty{false};
 };
 
 template<class OptType,
@@ -615,6 +633,7 @@ public:
         {
             m_value.clear();
             m_value.push_back(index);
+            m_dirty = true;
         }
         else
             throw std::invalid_argument("Value not a valid choice.");
@@ -626,6 +645,7 @@ public:
         {
             m_value.clear();
             m_value.push_back(index);
+            m_dirty = true;
         }
         else
             throw std::invalid_argument("Value not a valid choice.");
@@ -689,6 +709,8 @@ public:
         return std::get<1>(m_choices.at(index)).c_str();
     }
     void reset_default_value() { m_value = m_default_value; }
+    void mark_saved() noexcept { m_dirty = false; }
+    bool is_dirty() const noexcept { return m_dirty; }
     bool is_changed() const noexcept { return m_value != m_default_value; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -712,6 +734,7 @@ private:
     GncMultichoiceOptionIndexVec m_value;
     GncMultichoiceOptionIndexVec m_default_value;
     GncMultichoiceOptionChoices m_choices;
+    bool m_dirty{false};
     static const std::string c_empty_string;
     static const std::string c_list_string;
 };
@@ -832,8 +855,11 @@ public:
     bool validate (const GncOptionAccountList& values) const;
     void set_value (GncOptionAccountList values) {
         if (validate(values))
+        {
             //throw!
             m_value = values;
+            m_dirty = true;
+        }
     }
     void set_default_value (GncOptionAccountList values) {
         if (validate(values))
@@ -842,6 +868,8 @@ public:
     }
     GList* account_type_list() const noexcept;
     void reset_default_value() { m_value = m_default_value; }
+    void mark_saved() noexcept { m_dirty = false; }
+    bool is_dirty() const noexcept { return m_dirty; }
     bool is_changed() const noexcept;
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -855,6 +883,7 @@ private:
     GncOptionAccountList m_default_value;
     GncOptionAccountTypeList m_allowed;
     bool m_multiselect;
+    bool m_dirty{false};
 };
 
 template<> inline std::ostream&
@@ -943,6 +972,7 @@ public:
         {
             auto guid{qof_entity_get_guid(value)};
             m_value = *guid;
+            m_dirty = true;
         }
         //else throw
     }
@@ -956,6 +986,8 @@ public:
     }
     GList* account_type_list() const noexcept;
     void reset_default_value() { m_value = m_default_value; }
+    void mark_saved() noexcept { m_dirty = false; }
+    bool is_dirty() const noexcept { return m_dirty; }
     bool is_changed() const noexcept { return !guid_equal(&m_value, &m_default_value); }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
     void make_internal() { m_ui_type = GncOptionUIType::INTERNAL; }
@@ -967,6 +999,7 @@ private:
     GncGUID m_value;
     GncGUID m_default_value;
     GncOptionAccountTypeList m_allowed;
+    bool m_dirty{false};
 };
 
 template<> inline std::ostream&
@@ -1063,6 +1096,7 @@ public:
         {
             m_period = value;
             m_date = INT64_MAX;
+            m_dirty = true;
         }
     }
     void set_value(time64 time) {
@@ -1070,6 +1104,7 @@ public:
         {
             m_period = RelativeDatePeriod::ABSOLUTE;
             m_date = time;
+            m_dirty = true;
         }
     }
     void set_value(uint16_t index) noexcept;
@@ -1104,6 +1139,8 @@ public:
         m_period = m_default_period;
         m_date = m_default_date;
     }
+    void mark_saved() noexcept { m_dirty = false; }
+    bool is_dirty() const noexcept { return m_dirty; }
     bool is_changed() const noexcept { return m_period != m_default_period &&
             m_date != m_default_date; }
     GncOptionUIType get_ui_type() const noexcept { return m_ui_type; }
@@ -1119,6 +1156,7 @@ private:
     RelativeDatePeriod m_period;
     RelativeDatePeriod m_default_period;
     RelativeDatePeriodVec m_period_set;
+    bool m_dirty{false};
 };
 
 template<> inline std::ostream&

@@ -164,6 +164,11 @@ public:
     void set_option_from_ui_item();
     void make_internal();
     bool is_internal();
+/** Mark the option as needing to be saved. */
+    void mark_saved() noexcept;
+/** @returns true if the option has been marked as needing to be saved. */
+    bool is_dirty() const noexcept;
+/** @returns true if the option value differs from its default value. */
     bool is_changed() const noexcept;
 /** @returns false unless m_option contains a GncOptionMultiselectValue or
  * GncOptionAccountListValue for which multiple selections have been enabled.
