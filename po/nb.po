@@ -1454,7 +1454,6 @@ msgstr ""
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:261
 #, fuzzy
-#| msgid "Return of capital"
 msgid "Return of capital (reclassification)"
 msgstr "Kapitalavkastning"
 
@@ -1469,7 +1468,6 @@ msgstr ""
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:272
 #, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (dividend)"
 msgstr "Normalfordeling"
 
@@ -1485,15 +1483,11 @@ msgstr ""
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
 #, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (capital gain)"
 msgstr "Normalfordeling"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
 #, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, which is recorded as dividend "
-#| "income and increases the cost basis without affecting # units."
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
@@ -1603,16 +1597,11 @@ msgstr ""
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:368
 #, fuzzy
-#| msgid "Compensatory return of capital"
 msgid "Compensatory return of capital (reclassification)"
 msgstr "Kompenserende avkastning av kapital"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:369
 #, fuzzy
-#| msgid ""
-#| "Company returns capital, and the short stock holder must make a "
-#| "compensatory payment for the returned capital. This reduces the cost "
-#| "basis (less negative, towards 0.00 value) without affecting # units."
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1630,7 +1619,6 @@ msgstr ""
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:380
 #, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (dividend)"
 msgstr "Kompenserende begrepsfordeling"
 
@@ -1651,18 +1639,11 @@ msgstr ""
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:392
 #, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (capital gain)"
 msgstr "Kompenserende begrepsfordeling"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:393
 #, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, and the short stock holder must "
-#| "make a compensatory payment for the notional distribution. This is "
-#| "recorded as a loss/negative dividend income amount, and increases the "
-#| "cost basis (more negative, away from 0.00 value) without affecting # "
-#| "units."
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1714,7 +1695,6 @@ msgstr "Salærer"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:590
 #, fuzzy
-#| msgid "Amount for %s is missing."
 msgid "Amount for stock value is missing."
 msgstr "Beløp for %s mangler."
 
@@ -1740,7 +1720,6 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:866
 #, fuzzy
-#| msgid "Stock Value"
 msgctxt "Stock Assistant: Page name"
 msgid "stock value"
 msgstr "Aksjeverdi"
@@ -1800,7 +1779,6 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:979
 #, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "dividend"
 msgstr "Utbytte"
@@ -1808,7 +1786,6 @@ msgstr "Utbytte"
 #: gnucash/gnome/assistant-stock-transaction.cpp:987
 #: gnucash/gnome/assistant-stock-transaction.cpp:989
 #, fuzzy
-#| msgid "Capital Gains"
 msgctxt "Stock Assistant: Page name"
 msgid "capital gains"
 msgstr "Kapitalgevinster"
@@ -17381,7 +17358,6 @@ msgstr "_Transaksjonsjournal"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:723
 #, fuzzy
-#| msgid "Delete the current entry"
 msgid "Keep Linked Document Entry"
 msgstr "Slett gjeldende føring"
 
@@ -17933,7 +17909,6 @@ msgstr "Tast inn passord"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:649
 #, fuzzy
-#| msgid "_Width"
 msgid "Bar_width"
 msgstr "_Bredde"
 
@@ -17944,7 +17919,6 @@ msgstr "Innstilling av bredde, tilpasning til størrelsen på TAN-generatoren."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:681
 #, fuzzy
-#| msgid "_Delete"
 msgid "_Delay"
 msgstr "S_lett"
 
@@ -19605,13 +19579,11 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:686
 #, fuzzy
-#| msgid "Error"
 msgid "Parse Error"
 msgstr "Feil"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:702
 #, fuzzy
-#| msgid "Select matching existing transaction"
 msgid "Problem creating preliminary transaction"
 msgstr "Velg overensstemmende eksisterende transaksjon"
 
@@ -19718,7 +19690,6 @@ msgstr "Motkonto"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:77
 #, fuzzy
-#| msgid "Transfer Account"
 msgid "Transfer Amount"
 msgstr "Motkonto"
 
@@ -19960,22 +19931,18 @@ msgstr "Klikk Rediger for å endre"
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1383
 #, fuzzy
-#| msgid "_Select transfer account"
 msgid "_Assign transfer account"
 msgstr "_Velg motkonto"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1393
 #, fuzzy
-#| msgid "Exchange rate"
-#| msgid_plural "Exchange rates"
 msgid "Assign e_xchange rate"
 msgstr "Vekslingskurs"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1401
 #, fuzzy
-#| msgid "Description, Notes, or Memo"
 msgid "_Edit description, notes, or memo"
 msgstr "Beskrivelser, merknader, eller notater"
 
@@ -20211,7 +20178,6 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:906
 #, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
 msgstr "_Beskrivelse"
 
@@ -21625,7 +21591,6 @@ msgstr "Fyll inn kreditformel for reell transaksjon"
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:74
 #, fuzzy
-#| msgid "Loading completed"
 msgid "Don't autocomplete"
 msgstr "Lasting fullført"
 
@@ -21827,7 +21792,6 @@ msgstr "En måned"
 #: gnucash/report/options-utilities.scm:72
 #: gnucash/report/reports/standard/balsheet-pnl.scm:146
 #, fuzzy
-#| msgid "Quarter"
 msgid "Quarter Year"
 msgstr "Kvartal"
 
@@ -21904,13 +21868,11 @@ msgstr "Nyeste"
 
 #: gnucash/report/options-utilities.scm:158
 #, fuzzy
-#| msgid "Width of plot in pixels."
 msgid "Width of plot, 10 - 100 in percent, above in pixels."
 msgstr "Plottets bredde i piksler."
 
 #: gnucash/report/options-utilities.scm:164
 #, fuzzy
-#| msgid "Height of plot in pixels."
 msgid "Height of plot, 10 - 100 in percent, above in pixels."
 msgstr "Plottets høyde i piksler."
 
@@ -21976,8 +21938,6 @@ msgstr "Hvordan saldoer for overordnede kontoer vises."
 
 #: gnucash/report/options-utilities.scm:213
 #, fuzzy
-#| msgid ""
-#| "Show only the balance in the parent account, excluding any subaccounts."
 msgid "Account Balance in the parent account, excluding any subaccounts."
 msgstr ""
 "Vis bare saldoen for den overordnede kontoen, eksluder eventuelle "
@@ -21996,7 +21956,6 @@ msgstr "Kontosaldo"
 
 #: gnucash/report/options-utilities.scm:218
 #, fuzzy
-#| msgid "Calculate"
 msgid "Calculate Subtotal"
 msgstr "Beregn"
 
@@ -22466,7 +22425,6 @@ msgstr "Dette er et tekstalternativ."
 
 #: gnucash/report/reports/example/sample-report.scm:86
 #, fuzzy
-#| msgid "String Option"
 msgid "String Option Default"
 msgstr "Tekstalternativ"
 
@@ -22552,7 +22510,6 @@ msgstr "Testing"
 
 #: gnucash/report/reports/example/sample-report.scm:169
 #, fuzzy
-#| msgid "Report Title"
 msgid "Report Title Default"
 msgstr "Rapporttittel"
 
@@ -22674,7 +22631,6 @@ msgstr "Vis"
 #: gnucash/report/reports/example/sample-report.scm:442
 #: gnucash/report/reports/example/sample-report.scm:453
 #, fuzzy
-#| msgid "Employee Report"
 msgid "Sample Report"
 msgstr "Ansattrapport"
 
@@ -22704,14 +22660,12 @@ msgstr "Bruk fra - til"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:152
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:182
 #, fuzzy
-#| msgid "1st Est Tax Quarter"
 msgid "1st Est Tax Quarter (Jan 1 - Mar 31)"
 msgstr "1. skattekvartal"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:153
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:183
 #, fuzzy
-#| msgid "2nd Est Tax Quarter"
 msgid "2nd Est Tax Quarter (Apr 1 - May 31)"
 msgstr "2. skattekvartal"
 
@@ -22721,14 +22675,12 @@ msgstr "2. skattekvartal"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:154
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:187
 #, fuzzy
-#| msgid "3rd Est Tax Quarter"
 msgid "3rd Est Tax Quarter (Jun 1 - Aug 31)"
 msgstr "3. skattekvartal"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:155
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:188
 #, fuzzy
-#| msgid "4th Est Tax Quarter"
 msgid "4th Est Tax Quarter (Sep 1 - Dec 31)"
 msgstr "4. skattekvartal"
 
@@ -22740,14 +22692,12 @@ msgstr "Forrige år"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:157
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:190
 #, fuzzy
-#| msgid "Last Yr 1st Est Tax Qtr"
 msgid "Last Yr 1st Est Tax Qtr (Jan 1 - Mar 31)"
 msgstr "Fjorårets 1. skattekvartal"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:158
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:191
 #, fuzzy
-#| msgid "Last Yr 2nd Est Tax Qtr"
 msgid "Last Yr 2nd Est Tax Qtr (Apr 1 - May 31)"
 msgstr "Fjorårets 2. skattekvartal"
 
@@ -22757,14 +22707,12 @@ msgstr "Fjorårets 2. skattekvartal"
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:159
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:195
 #, fuzzy
-#| msgid "Last Yr 3rd Est Tax Qtr"
 msgid "Last Yr 3rd Est Tax Qtr (Jun 1 - Aug 31)"
 msgstr "Fjorårets 3. skattekvartal"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:160
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:196
 #, fuzzy
-#| msgid "Last Yr 4th Est Tax Qtr"
 msgid "Last Yr 4th Est Tax Qtr (Sep 1 - Dec 31)"
 msgstr "Fjorårets 4. skattekvartal"
 
@@ -24581,13 +24529,11 @@ msgstr "Vis en kolonne for virkelige verdier."
 
 #: gnucash/report/reports/standard/budget.scm:57
 #, fuzzy
-#| msgid "Actual Transactions"
 msgid "Link to actual transactions"
 msgstr "Faktiske transaksjoner"
 
 #: gnucash/report/reports/standard/budget.scm:58
 #, fuzzy
-#| msgid "Move to the blank transaction at the bottom of the register"
 msgid "Show the actual transactions for the budget period"
 msgstr "Flytt til en blank transaksjon i slutten av registeret"
 
@@ -24965,8 +24911,6 @@ msgstr "Sorteringsrekkefølge"
 
 #: gnucash/report/reports/standard/customer-summary.scm:78
 #, fuzzy
-#| msgid ""
-#| "Choose the ordering of the column sort: Either ascending or descending."
 msgid "Choose the ordering of the column sort."
 msgstr "Velg ordning av kolonnen som sorteres: Enten stigende eller synkende."
 
@@ -25080,13 +25024,11 @@ msgstr "Uttak"
 
 #: gnucash/report/reports/standard/equity-statement.scm:451
 #, fuzzy
-#| msgid "Unrealized Gains"
 msgid "Unrealized Gains for Period"
 msgstr "Urealisert fortjeneste"
 
 #: gnucash/report/reports/standard/equity-statement.scm:452
 #, fuzzy
-#| msgid "Unrealized Losses"
 msgid "Unrealized Losses for Period"
 msgstr "Urealiserte tap"
 
@@ -25481,7 +25423,6 @@ msgstr "Vinning & Tap"
 # This is the opposite of income/inntekt in an income account
 #: gnucash/report/reports/standard/investment-lots.scm:40
 #, fuzzy
-#| msgid "Charge"
 msgid "Chart"
 msgstr "Reduksjon"
 
@@ -25497,7 +25438,6 @@ msgstr "Bekreftelse"
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163
 #, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include accounts with no lots"
 msgstr "Inkluder kontoer uten aksjer"
 
@@ -25517,13 +25457,11 @@ msgstr "Diagram lokasjon"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
 #, fuzzy
-#| msgid "Plot Width"
 msgid "Plot width"
 msgstr "Plotbredde"
 
 #: gnucash/report/reports/standard/investment-lots.scm:54
 #, fuzzy
-#| msgid "Plot Height"
 msgid "Plot height"
 msgstr "Plothøyde"
 
@@ -25573,7 +25511,6 @@ msgstr "Vis s_kjulte kontoer"
 
 #: gnucash/report/reports/standard/investment-lots.scm:73
 #, fuzzy
-#| msgid "Include assets total"
 msgid "Include closed lots"
 msgstr "Ta med totale eiendeler"
 
@@ -25588,31 +25525,26 @@ msgstr "Vis ny bruker-dialogen"
 
 #: gnucash/report/reports/standard/investment-lots.scm:79
 #, fuzzy
-#| msgid "Investments"
 msgid "Investment Lots"
 msgstr "Investeringer"
 
 #: gnucash/report/reports/standard/investment-lots.scm:80
 #, fuzzy
-#| msgid "Start Date"
 msgid "Start date"
 msgstr "Startdato"
 
 #: gnucash/report/reports/standard/investment-lots.scm:81
 #, fuzzy
-#| msgid "End Date"
 msgid "End date"
 msgstr "Sluttdato"
 
 #: gnucash/report/reports/standard/investment-lots.scm:83
 #, fuzzy
-#| msgid "Price Source"
 msgid "Price source"
 msgstr "Priskilde"
 
 #: gnucash/report/reports/standard/investment-lots.scm:87
 #, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include only accounts with warnings"
 msgstr "Inkluder kontoer uten aksjer"
 
@@ -25648,7 +25580,6 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:101
 #, fuzzy
-#| msgid "Report Title"
 msgid "Lot Title"
 msgstr "Rapporttittel"
 
@@ -25658,7 +25589,6 @@ msgstr "GUID"
 
 #: gnucash/report/reports/standard/investment-lots.scm:105
 #, fuzzy
-#| msgid "To Amount"
 msgid "Bought Amount"
 msgstr "Til-beløp"
 
@@ -25668,37 +25598,31 @@ msgstr "Kjøpsverdi (grunnlag)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:107
 #, fuzzy
-#| msgid "Weighted Average"
 msgid "Bought Average Price"
 msgstr "Vektlagt gjennomsnitt"
 
 #: gnucash/report/reports/standard/investment-lots.scm:108
 #, fuzzy
-#| msgid "Stock Split"
 msgid "Sold Splits"
 msgstr "Aksjesplitt"
 
 #: gnucash/report/reports/standard/investment-lots.scm:109
 #, fuzzy
-#| msgid "To Amount"
 msgid "Sold Amount"
 msgstr "Til-beløp"
 
 #: gnucash/report/reports/standard/investment-lots.scm:110
 #, fuzzy
-#| msgid "Basis"
 msgid "Sold Basis"
 msgstr "Grunnlag"
 
 #: gnucash/report/reports/standard/investment-lots.scm:111
 #, fuzzy
-#| msgid "Value"
 msgid "Sold Value"
 msgstr "Verdi"
 
 #: gnucash/report/reports/standard/investment-lots.scm:112
 #, fuzzy
-#| msgid "To Amount"
 msgid "ST Sold Amount"
 msgstr "Til-beløp"
 
@@ -25712,7 +25636,6 @@ msgstr "ST Salgsverdi"
 
 #: gnucash/report/reports/standard/investment-lots.scm:115
 #, fuzzy
-#| msgid "To Amount"
 msgid "LT Sold Amount"
 msgstr "Til-beløp"
 
@@ -25731,49 +25654,41 @@ msgstr "Gjennomsnitt"
 
 #: gnucash/report/reports/standard/investment-lots.scm:119
 #, fuzzy
-#| msgid "Amount"
 msgid "End Amount"
 msgstr "Beløp"
 
 #: gnucash/report/reports/standard/investment-lots.scm:120
 #, fuzzy
-#| msgid "Basis"
 msgid "End Basis"
 msgstr "Grunnlag"
 
 #: gnucash/report/reports/standard/investment-lots.scm:121
 #, fuzzy
-#| msgid "Value"
 msgid "End Value"
 msgstr "Verdi"
 
 #: gnucash/report/reports/standard/investment-lots.scm:123
 #, fuzzy
-#| msgid "Realized Gain"
 msgid "ST Realized Gain"
 msgstr "Realisert fortjeneste"
 
 #: gnucash/report/reports/standard/investment-lots.scm:124
 #, fuzzy
-#| msgid "Realized Gain"
 msgid "LT Realized Gain"
 msgstr "Realisert fortjeneste"
 
 #: gnucash/report/reports/standard/investment-lots.scm:125
 #, fuzzy
-#| msgid "Realized Gain"
 msgid "Realized ROI"
 msgstr "Realisert fortjeneste"
 
 #: gnucash/report/reports/standard/investment-lots.scm:127
 #, fuzzy
-#| msgid "Unrealized Gain"
 msgid "ST Unrealized Gain"
 msgstr "Ikke-realisert fortjeneste"
 
 #: gnucash/report/reports/standard/investment-lots.scm:128
 #, fuzzy
-#| msgid "Unrealized Gain"
 msgid "LT Unrealized Gain"
 msgstr "Ikke-realisert fortjeneste"
 
@@ -25783,7 +25698,6 @@ msgstr "Ikke-realisert avkasting"
 
 #: gnucash/report/reports/standard/investment-lots.scm:131
 #, fuzzy
-#| msgid "Account Notes"
 msgid "Account Lots Total"
 msgstr "Kontonotater"
 
@@ -25821,7 +25735,6 @@ msgstr "Vis kjøpsrelaterte tabellkolonner"
 
 #: gnucash/report/reports/standard/investment-lots.scm:235
 #, fuzzy
-#| msgid "Show _zero total accounts"
 msgid "Show sale-related table columns"
 msgstr "Hvis kontoer med _nullsaldo"
 
@@ -25844,7 +25757,6 @@ msgstr "Grupper gevinster (og salg?) etter langsiktig (LT) og kortsiktig (ST)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:266
 #, fuzzy
-#| msgid "Gains"
 msgid "Gains Only"
 msgstr "Fortjeneste"
 
@@ -25860,7 +25772,6 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:293
 #, fuzzy
-#| msgid "Show long account names"
 msgid "Show long (instead of short) account names"
 msgstr "Vis lange kontonavn"
 
@@ -25942,7 +25853,6 @@ msgstr "  Sluttpris: ~a~a på ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:813
 #, fuzzy
-#| msgid "Not found"
 msgid "No price found"
 msgstr "Ikke funnet"
 
@@ -26019,7 +25929,6 @@ msgstr "~a, ~a til ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1989
 #, fuzzy
-#| msgid "Account Notes"
 msgid "Account Lot Gains"
 msgstr "Kontonotater"
 
@@ -26598,7 +26507,6 @@ msgstr "Innledende dato."
 
 #: gnucash/report/reports/standard/new-aging.scm:145
 #, fuzzy
-#| msgid "Y"
 msgctxt "One-letter indication for 'yes'"
 msgid "Y"
 msgstr "Y"
@@ -26656,13 +26564,11 @@ msgstr "Kilde for adresse."
 
 #: gnucash/report/reports/standard/new-aging.scm:395
 #, fuzzy
-#| msgid "Billing Address"
 msgid "Billing address"
 msgstr "Fakturaadresse"
 
 #: gnucash/report/reports/standard/new-aging.scm:396
 #, fuzzy
-#| msgid "Shipping Address"
 msgid "Shipping address"
 msgstr "Leveringsadresse"
 
@@ -26944,13 +26850,11 @@ msgstr "Dobbeluker"
 
 #: gnucash/report/reports/standard/price-scatter.scm:116
 #, fuzzy
-#| msgid "Quarter"
 msgid "Quarters"
 msgstr "Kvartal"
 
 #: gnucash/report/reports/standard/price-scatter.scm:117
 #, fuzzy
-#| msgid "Half Year"
 msgid "Half Years"
 msgstr "Halvår"
 
@@ -27656,13 +27560,11 @@ msgstr "Posteringsdagbok"
 
 #: gnucash/report/reports/standard/trial-balance.scm:189
 #, fuzzy
-#| msgid "Ignores Adjusting/Closing entries"
 msgid "No adjusting/closing entries"
 msgstr "Overser justerings- og lukkingsoppføringer"
 
 #: gnucash/report/reports/standard/trial-balance.scm:190
 #, fuzzy
-#| msgid "Creates a complete end-of-period work sheet"
 msgid "Full end-of-period work sheet"
 msgstr "Lager et komplett arbeidsark for periodeavslutning"
 
@@ -28249,7 +28151,6 @@ msgstr "Delsum"
 #. To be consistent, also consider how the singular form "Running Total" is translated.
 #: gnucash/report/trep-engine.scm:82
 #, fuzzy
-#| msgid "Running Balance"
 msgid "Running Totals"
 msgstr "Løpende saldo"
 
@@ -28588,7 +28489,6 @@ msgstr "Vis avstemmingsdato?"
 
 #: gnucash/report/trep-engine.scm:913
 #, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
 msgstr "Vis avstemmingsdato?"
 
@@ -28619,13 +28519,11 @@ msgstr "Vis et sammendrag av delsummer."
 
 #: gnucash/report/trep-engine.scm:930
 #, fuzzy
-#| msgid "Display the other account code?"
 msgid "Display the balance of the underlying account on each line?"
 msgstr "Vis motkontokode?"
 
 #: gnucash/report/trep-engine.scm:931
 #, fuzzy
-#| msgid "Display the transaction date?"
 msgid "Display a grand total section at the bottom?"
 msgstr "Vis transaksjonsdato?"
 
@@ -28640,9 +28538,6 @@ msgstr "Vis kontonavn?"
 
 #: gnucash/report/trep-engine.scm:958
 #, fuzzy
-#| msgid ""
-#| "Display the other account name? (if this is a split transaction, this "
-#| "parameter is guessed)."
 msgid ""
 "Display the other account name? If this is a split transaction, this "
 "parameter is guessed."
@@ -28660,7 +28555,6 @@ msgstr "En splitt per linje"
 
 #: gnucash/report/trep-engine.scm:968
 #, fuzzy
-#| msgid "Get Transactions Online"
 msgid "One transaction per line"
 msgstr "Hent transaksjoner online"
 
@@ -28683,19 +28577,16 @@ msgstr ""
 
 #: gnucash/report/trep-engine.scm:1000
 #, fuzzy
-#| msgid "Grand Total Cell Color"
 msgid "Grand Total and Subtotals"
 msgstr "Farge på totalsumcelle"
 
 #: gnucash/report/trep-engine.scm:1001
 #, fuzzy
-#| msgid "Grand Total"
 msgid "Grand Total Only"
 msgstr "Totalsum"
 
 #: gnucash/report/trep-engine.scm:1002
 #, fuzzy
-#| msgid "Subtotal"
 msgid "Subtotals Only"
 msgstr "Delsum"
 
@@ -28713,7 +28604,6 @@ msgstr "Motkonto"
 #. "Secondary Subtotal” and "Running Primary Subtotal"
 #: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:1483
 #, fuzzy
-#| msgid "Secondary Subtotal"
 msgid "Running Secondary Subtotal"
 msgstr "Delsum for sekundærsortering"
 
@@ -28723,7 +28613,6 @@ msgstr "Delsum for sekundærsortering"
 #. “Primary Subtotal”
 #: gnucash/report/trep-engine.scm:1398 gnucash/report/trep-engine.scm:1496
 #, fuzzy
-#| msgid "Primary Subtotal"
 msgid "Running Primary Subtotal"
 msgstr "Delsum for primærsortering"
 
@@ -28741,7 +28630,6 @@ msgstr "Løpende saldo"
 #. "Grand Total”
 #: gnucash/report/trep-engine.scm:1419 gnucash/report/trep-engine.scm:1511
 #, fuzzy
-#| msgid "Grand Total"
 msgid "Running Grand Total"
 msgstr "Totalsum"
 
@@ -28751,7 +28639,6 @@ msgstr "Totalsum"
 #. how the plural form "Running Totals" is translated.
 #: gnucash/report/trep-engine.scm:1424 gnucash/report/trep-engine.scm:1512
 #, fuzzy
-#| msgid "Running Balance"
 msgid "Running Total"
 msgstr "Løpende saldo"
 
@@ -28962,7 +28849,6 @@ msgstr "Avslutt programmet"
 
 #: gnucash/ui/gnc-main-window.ui:143
 #, fuzzy
-#| msgid "Preferences"
 msgid "Pr_eferences"
 msgstr "Brukervalg"
 
@@ -29689,7 +29575,6 @@ msgstr "Rediger valgt konto"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:23
 #, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account"
 msgstr "Slett Konto"
 
@@ -29976,7 +29861,6 @@ msgstr "Rediger valgt konto"
 #: gnucash/ui/gnc-plugin-page-budget.ui:42
 #: gnucash/ui/gnc-plugin-page-budget.ui:287
 #, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report"
 msgstr "Skriv ut aktiv rapport"
 
@@ -30276,7 +30160,6 @@ msgstr "Ugyldig transaksjon"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
 #, fuzzy
-#| msgid "Record the current transaction"
 msgid "Void the current transaction"
 msgstr "Registrer transaksjonen"
 
@@ -30286,7 +30169,6 @@ msgstr "_Av-annuller transaksjon"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
 #, fuzzy
-#| msgid "Record the current transaction"
 msgid "Unvoid the current transaction"
 msgstr "Registrer transaksjonen"
 
@@ -30296,7 +30178,6 @@ msgstr "Legg inn _reverserende transaksjon"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
 #, fuzzy
-#| msgid "Add _Reversing Transaction"
 msgid "Add a reversing transaction"
 msgstr "Legg inn _reverserende transaksjon"
 
@@ -30307,7 +30188,6 @@ msgstr "Legg inn _reverserende transaksjon"
 #: gnucash/ui/gnc-plugin-page-register.ui:644
 #: gnucash/ui/gnc-plugin-page-register.ui:804
 #, fuzzy
-#| msgid "Move to the blank transaction at the bottom of the register"
 msgid "Move to the blank transaction in the register"
 msgstr "Flytt til en blank transaksjon i slutten av registeret"
 
@@ -30315,7 +30195,6 @@ msgstr "Flytt til en blank transaksjon i slutten av registeret"
 #: gnucash/ui/gnc-plugin-page-register.ui:417
 #: gnucash/ui/gnc-plugin-page-register.ui:529
 #, fuzzy
-#| msgid "Post Date"
 msgid "_Go to Date"
 msgstr "Posteringsdato"
 
@@ -30389,13 +30268,11 @@ msgstr "Åpne et registerrapportvindu for denne transaksjonen"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
 #, fuzzy
-#| msgid "_All transactions"
 msgid "All Transactions"
 msgstr "_Alle transaksjoner"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:323
 #, fuzzy
-#| msgid "_This transaction"
 msgid "This transaction"
 msgstr "Denne _transaksjonen"
 
@@ -30730,7 +30607,6 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:392
 #, fuzzy
-#| msgid "There was an error accessing %s."
 msgid "The quote has no error set."
 msgstr "Det oppstod en feil under tilkobling til %s."
 
@@ -30768,7 +30644,6 @@ msgstr "_Ikke-avstemte"
 #. Translators: Means that one of the indicated elements is required
 #: libgnucash/app-utils/gnc-quotes.cpp:806
 #, fuzzy
-#| msgid "End of this year"
 msgctxt "Finance::Quote"
 msgid "one of these"
 msgstr "Slutt på inneværende år"
@@ -30793,7 +30668,6 @@ msgstr "symbol: "
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:819
 #, fuzzy
-#| msgid "Date: "
 msgctxt "Finance::Quote"
 msgid "date: "
 msgstr "Dato: "
@@ -30873,19 +30747,16 @@ msgstr "Ingen valutakurs tilgjengelig i SX [%s] for %s -> %s, verdien er null."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:369
 #, fuzzy, c-format
-#| msgid "%s balance is %s, subceeds limit of %s."
 msgid "%s balance of %s is above the upper limit %s."
 msgstr "%s saldoen er %s, overstiger grensen på %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, fuzzy, c-format
-#| msgid "%s balance is %s, subceeds limit of %s."
 msgid "%s balance of %s is below the lower limit %s."
 msgstr "%s saldoen er %s, overstiger grensen på %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
 #, fuzzy, c-format
-#| msgid "%s balance is %s, and should be zero."
 msgid "%s balance of %s should be zero."
 msgstr "%s saldoen er %s, og skal være null."
 
@@ -31073,7 +30944,6 @@ msgstr "Velg valuta"
 
 #: libgnucash/engine/gnc-commodity.h:111
 #, fuzzy
-#| msgid "Currencies"
 msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "Valuta"
@@ -31629,7 +31499,6 @@ msgstr "_Slett budsjett"
 
 #: libgnucash/engine/qofbookslots.h:74
 #, fuzzy
-#| msgid "Date of Report"
 msgid "Default Invoice Report"
 msgstr "Rapportdato"
 
@@ -31701,13 +31570,11 @@ msgstr "Kontroll av forretningssplitter på konto %s: %u of %u"
 
 #: libgnucash/engine/Scrub.c:148
 #, fuzzy, c-format
-#| msgid "Looking for orphans in account %s: %u of %u"
 msgid "Looking for orphans in transaction: %u of %u"
 msgstr "Ser etter foreldreløse barn på konto %s: %u av %u"
 
 #: libgnucash/engine/Scrub.c:362
 #, fuzzy, c-format
-#| msgid "Looking for imbalances in account %s: %u of %u"
 msgid "Looking for imbalances in transaction date %s: %u of %u"
 msgstr "Ser etter ubalanse i konto %s: %u av %u"
 
