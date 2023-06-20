@@ -547,7 +547,7 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
                             set_double();
                             break;
                         case KvpValue::Type::INT64:
-                            option.set_value(kvp->get<int64_t>());
+                            option.set_value(static_cast<int>(kvp->get<int64_t>()));
                             break;
                         case KvpValue::Type::STRING:
                             fill_option_from_string_kvp(option, kvp);
@@ -889,7 +889,7 @@ gnc_register_counter_option(GncOptionDB* db, const char* section,
                             const char* doc_string, int value)
 {
     GncOption option{GncOptionRangeValue<int>{section, name, key, doc_string,
-                value, 1, 999999999, 1}};
+                value, 0, 999999999, 1}};
     option.set_alternate(true);
     db->register_option(section, std::move(option));
 }
@@ -1205,7 +1205,7 @@ gnc_option_db_book_options(GncOptionDB* odb)
     gnc_register_counter_option(odb, counter_section,
                                 N_("Expense voucher number"), "gncExpVouchera",
                                 N_("The previous expense voucher number generated. This number will be incremented to generate the next voucher number."),
-                                0LL);
+                                0);
     gnc_register_counter_format_option(odb, counter_section,
                                        N_("Expense voucher number format"),
                                        "gncExpVoucherb",
