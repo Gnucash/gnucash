@@ -9,11 +9,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
-"PO-Revision-Date: 2023-05-31 09:52+0000\n"
-"Last-Translator: Newson Parker <2434843612@qq.com>\n"
+"PO-Revision-Date: 2023-06-20 12:51+0000\n"
+"Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1457,16 +1457,11 @@ msgid "Notional distribution (capital gain)"
 msgstr "Notional Distribution"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, which is recorded as dividend "
-#| "income and increases the cost basis without affecting # units."
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
-msgstr ""
-"公司發出 Notional Distribution，將會記錄成股利收入並增加成本基礎，但不會對股"
-"數產生影響。"
+msgstr "公司發出 Notional "
+"Distribution，將會記錄成資本利得並增加成本基礎，但不會對股數產生影響。"
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1738,12 +1733,12 @@ msgstr "將會記錄 %3$s 當天的價格，%1$s = %2$s。"
 #: gnucash/gnome/assistant-stock-transaction.cpp:971
 msgctxt "Stock Assistant: Page name"
 msgid "cash"
-msgstr ""
+msgstr "現金"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:975
 msgctxt "Stock Assistant: Page name"
 msgid "fees"
-msgstr ""
+msgstr "費用"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:979
 #, fuzzy
@@ -1763,7 +1758,7 @@ msgstr "資本利得"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1018
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
-msgstr ""
+msgstr "無法平衡交易，%s 方錯誤：%s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1024
 #, c-format
@@ -29901,10 +29896,9 @@ msgid "Looking for orphans in transaction: %u of %u"
 msgstr "檢查科目 %s 中的無主交易：%u / %u"
 
 #: libgnucash/engine/Scrub.c:362
-#, fuzzy, c-format
-#| msgid "Looking for imbalances in account %s: %u of %u"
+#, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %u"
-msgstr "檢查科目 %s 的失衡：%u / %u"
+msgstr "檢查交易日期 %s 中的失衡：%u / %u"
 
 #: libgnucash/engine/Split.c:1636
 msgctxt ""
