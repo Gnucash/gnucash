@@ -86,7 +86,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
 "PO-Revision-Date: 2023-06-20 19:30+0000\n"
-"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
+"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -3379,7 +3379,7 @@ msgstr "Buscar Cargo"
 
 #: gnucash/gnome/dialog-invoice.c:3754
 msgid "Find Expense Voucher"
-msgstr "Buscar Comprobante de Gasto"
+msgstr "Buscar los recibos de los gastos"
 
 #: gnucash/gnome/dialog-invoice.c:3755
 #: gnucash/gnome-search/dialog-search.c:1089
