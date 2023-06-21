@@ -1497,14 +1497,9 @@ get_random_guids(int max)
 }
 
 static void
-free_random_guids(GList *guids)
+free_guids(GList *guids)
 {
-    GList *node;
-
-    for (node = guids; node; node = node->next)
-        guid_free (static_cast<GncGUID*>(node->data));
-
-    g_list_free (guids);
+    g_list_free_full (guids, (GDestroyNotify)guid_free);
 }
 
 static QofQueryOp
@@ -1671,7 +1666,7 @@ get_random_query(void)
              guids,
              compare_param<QofGuidMatch>(QOF_GUID_MATCH_NONE),
              get_random_queryop ());
-            free_random_guids (guids);
+            free_guids (guids);
             break;
 
         case 2: /*PR_ACTION */
@@ -2026,9 +2021,7 @@ make_trans_query (Transaction *trans, TestQueryTypes query_types)
         }
         xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
 
-        for (node = list; node; node = node->next)
-            guid_free (static_cast<GncGUID*>(node->data));
-        g_list_free (list);
+        free_guids (list);
     }
 
     if (query_types & GUID_QT)
