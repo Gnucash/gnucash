@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
-"PO-Revision-Date: 2023-06-21 03:29+0000\n"
+"PO-Revision-Date: 2023-06-21 06:50+0000\n"
 "Last-Translator: Vincent Dawans <dawansv@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -723,7 +723,7 @@ msgstr "Occidental (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:443
 msgid "Locale: "
-msgstr "Locale : "
+msgstr "Locale&nbsp;: "
 
 #: borrowed/goffice/go-charmap-sel.c:479
 msgid "Conversion Direction"
@@ -19821,6 +19821,9 @@ msgid ""
 "profile list contains specializations and is populated according to which "
 "format you select in this list."
 msgstr ""
+"Cette liste contient les formats de fichiers que AQBanking sait importer. La "
+"liste des profils contient des instructions spéciales et se remplit en "
+"fonction du format que vous sélectionnez dans cette liste."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1733
 msgid "File Format"
@@ -19831,6 +19834,9 @@ msgid ""
 "This lists one or more specialization templates that adjust the import for "
 "different banks' uses of fields in the selected import format."
 msgstr ""
+"Cette liste énumère un ou plusieurs modèles d'instructions spéciales qui "
+"adaptent l'importation des champs du format d'importation sélectionné à "
+"l'utilisation qu'en font les différentes banques."
 
 # messages-i18n.c:318
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
@@ -20325,7 +20331,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AQBanking"
-msgstr ""
+msgstr "Importer avec AQBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
 msgid "Import into GnuCash any file format supported by AQBanking"
@@ -21335,6 +21341,9 @@ msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value."
 msgstr ""
+"Les sélections de compte en cours généreront des transactions multidevises. "
+"Veuillez sélectionner l'une des colonnes suivantes&nbsp;: prix, valeur "
+"(négativé)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:531
 msgid ""
@@ -21342,6 +21351,9 @@ msgid ""
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
 msgstr ""
+"Les sélections de compte en cours généreront des transactions multidevises. "
+"Veuillez sélectionner l'une des colonnes suivantes&nbsp;: prix, valeur "
+"(négativé), montant du transfert (négativé)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
 msgid ""
@@ -21473,7 +21485,7 @@ msgstr "Montant (négativé)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 msgid "Value (Negated)"
-msgstr ""
+msgstr "Valeur (négativé)"
 
 # messages-i18n.c:234
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
@@ -21512,10 +21524,14 @@ msgstr "Cette valeur ne peut être interprétée comme un état rapproché valid
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:245
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"Le champ de date ne peut pas être vide si l'option «&nbsp;Multi-"
+"répartition&nbsp;» n'est pas sélectionnée.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:261
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
+"Le champ de description ne peut pas être vide si l'option «&nbsp;Multi-"
+"répartition&nbsp;» n'est pas sélectionnée.\n"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:311
@@ -21567,12 +21583,17 @@ msgid ""
 "Choice of accounts makes this a multi-currency transaction but price or "
 "(negated) value column is missing or invalid."
 msgstr ""
+"Le choix des comptes fait de cette transaction une opération multidevise "
+"mais la colonne prix ou valeur (négativée) est manquante ou invalide."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:665
 msgid ""
 "Choice of account makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer column is missing or invalid."
 msgstr ""
+"Le choix du compte fait de cette transaction une opération multidevise mais "
+"la colonne prix, valeur (négativée) ou transfert (négativé) est manquante ou "
+"invalide."
 
 # src/gnome/glade-gnc-dialogs.c:1178
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
@@ -21707,7 +21728,7 @@ msgstr ""
 
 #: gnucash/import-export/import-main-matcher.c:973
 msgid "Click Edit to modify"
-msgstr ""
+msgstr "Cliquez sur Edition pour modifier"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #. Translators: Menu entry, no full stop
@@ -22293,7 +22314,7 @@ msgstr "Montant brut de la transaction"
 # messages-i18n.c:204
 #: gnucash/import-export/qif-imp/qif-file.scm:703
 msgid "Share price"
-msgstr "Prix partagé"
+msgstr "cours de l'action"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:704
 msgid "Share quantity"
@@ -22381,7 +22402,7 @@ msgstr "Recherche en cours des transactions en doublon"
 #: gnucash/import-export/qif-imp/qif-parse.scm:174
 #, scheme-format
 msgid "The account type ~s is unknown, using Bank instead."
-msgstr ""
+msgstr "Le type de compte ~s est inconnu, il sera remplacé par Banque."
 
 #. Translators: This is an error message about actions like buy, sell …
 #: gnucash/import-export/qif-imp/qif-parse.scm:238
@@ -22394,6 +22415,8 @@ msgstr "Action \"~a\" inconnue."
 #, scheme-format
 msgid "The unknown reconciliation status '~a' will be replaced by 'uncleared'."
 msgstr ""
+"L'état de rapprochement inconnu \"~a\" sera remplacé par «&nbsp;non "
+"pointé&nbsp;»."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
@@ -24345,7 +24368,7 @@ msgstr "Le titre de ce rapport."
 #: gnucash/report/reports/example/sample-report.scm:119
 #: gnucash/report/reports/example/sample-report.scm:131
 msgid "Tab B"
-msgstr ""
+msgstr "Onglet B"
 
 # po/guile_strings.txt:43
 #: gnucash/report/reports/example/sample-report.scm:61
@@ -24458,7 +24481,7 @@ msgstr "C'est une option de couleur."
 #: gnucash/report/reports/example/sample-report.scm:147
 #: gnucash/report/reports/example/sample-report.scm:158
 msgid "Tab A"
-msgstr ""
+msgstr "Onglet A"
 
 # po/guile_strings.txt:275
 #: gnucash/report/reports/example/sample-report.scm:147
@@ -25364,6 +25387,8 @@ msgstr "Ignorer les comptes"
 #: gnucash/report/reports/standard/trial-balance.scm:374
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
 msgstr ""
+"${report-title} de ${company-name} pour la période allant du ${début} au "
+"${fin}"
 
 # messages-i18n.c:165 po/guile_strings.txt:7
 #: gnucash/report/reports/standard/account-summary.scm:381
@@ -27679,11 +27704,11 @@ msgstr "Afficher les colonnes de plus-values latentes"
 
 #: gnucash/report/reports/standard/investment-lots.scm:67
 msgid "Group gains by age (short term and long term)"
-msgstr ""
+msgstr "Gains de groupe par âge (court terme et long terme)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:68
 msgid "Long term gains age (years)"
-msgstr ""
+msgstr "Age des gains à long terme (années)"
 
 # po/guile_strings.txt:55
 #: gnucash/report/reports/standard/investment-lots.scm:72
@@ -29861,7 +29886,7 @@ msgstr "Ajustement d'inventaire"
 
 #: gnucash/report/reports/standard/trial-balance.scm:370
 msgid "${company-name} ${report-title} ${date}"
-msgstr ""
+msgstr "${report-title} de ${company-name} au ${date}"
 
 # po/guile_strings.txt:228
 #: gnucash/report/reports/standard/trial-balance.scm:533
@@ -32463,7 +32488,7 @@ msgstr "Déplacer l'entrée actuelle vers le bas"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:185
 msgid "Manage link of an external document to this item"
-msgstr ""
+msgstr "Gérer le lien d’un document externe vers cet élément"
 
 # messages-i18n.c:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:191
@@ -33094,11 +33119,11 @@ msgstr "Erreur numérique"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:158
 msgid "Failed to initialize Finance::Quote: "
-msgstr ""
+msgstr "Échec de l'initialisation de Finance::Quote&nbsp;: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:165
 msgid "Finance::Quote check returned error "
-msgstr ""
+msgstr "La vérification de Finance::Quote a renvoyé une erreur "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:173
 msgid "No Finance::Quote Version"
@@ -33106,11 +33131,11 @@ msgstr "Pas de Version de Finance::Quote"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:304
 msgid "GncQuotes::Fetch called with no book."
-msgstr ""
+msgstr "GncQuotes::Fetch appelé sans livre de comptes."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:322
 msgid "GncQuotes::Fetch called with no commodities."
-msgstr ""
+msgstr "GncQuotes::Fetch appelé sans biens ou valeurs boursières."
 
 # messages-i18n.c:124
 #: libgnucash/app-utils/gnc-quotes.cpp:336
@@ -33119,33 +33144,35 @@ msgstr "Il n'y avait pas de biens pour lesquels obtenir des cotations."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:350
 msgid "Finance::Quote retrieval failed with error "
-msgstr ""
+msgstr "L'extraction de cotation de Finance::Quote a échoué avec erreur "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:368
 #: libgnucash/app-utils/gnc-quotes.cpp:842
 msgid "Finance::Quote returned no data and set no error."
-msgstr ""
+msgstr "Finance::Quote n'a renvoyé aucune donnée et n'a défini aucune erreur."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:370
 msgid "Finance::Quote returned an error: "
-msgstr ""
+msgstr "Finance::Quote a renvoyé une erreur&nbsp;: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:374
 msgid "Finance::Quote reported failure set no error."
-msgstr ""
+msgstr "Finance::Quote a signalé un échec sans erreur."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:376
 msgid "Finance::Quote reported failure with error: "
-msgstr ""
+msgstr "Finance::Quote a signalé un échec avec erreur&nbsp;: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:379
 msgid "Finance::Quote returned a quote with no currency."
-msgstr ""
+msgstr "Finance::Quote a renvoyé un cotation sans devise."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:382
 msgid ""
 "Finance::Quote returned a quote with a currency GnuCash doesn't know about."
 msgstr ""
+"Finance::Quote a renvoyé une cotation avec une devise que GnuCash ne connaît "
+"pas."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:385
 msgid "Finance::Quote returned a quote with no price element."
@@ -33167,15 +33194,17 @@ msgstr "La cotation n’a pas d’erreur définie."
 #: libgnucash/app-utils/gnc-quotes.cpp:401
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr ""
+"Les cotations pour les biens suivants étaient indisponibles ou "
+"inutilisables&nbsp;:\n"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:487
 msgid "Currency quotes requires at least two currencies"
-msgstr ""
+msgstr "Les cotations de devises nécessitent au moins deux devises"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:753
 #: libgnucash/app-utils/gnc-quotes.cpp:758
 msgid "Failed to parse result returned by Finance::Quote."
-msgstr ""
+msgstr "Échec de l'analyse du résultat renvoyé par Finance::Quote."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:760
 msgid "Error message:"
@@ -33209,7 +33238,7 @@ msgstr "**manquant**"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:815
 msgid "Finance::Quote fields GnuCash uses:"
-msgstr ""
+msgstr "Champs de Finance::Quote utilisés par GnuCash&nbsp;:"
 
 # messages-i18n.c:334
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
@@ -33243,7 +33272,7 @@ msgstr "dernier : "
 #: libgnucash/app-utils/gnc-quotes.cpp:829
 msgctxt "Finance::Quote"
 msgid "nav: "
-msgstr ""
+msgstr "vna&nbsp;: "
 
 # messages-i18n.c:316
 #. Translators: The quote is neither a last trade nor an NAV.
@@ -33254,22 +33283,29 @@ msgstr "cours : "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:851
 msgid "Finance::Quote reported a failure for symbol "
-msgstr ""
+msgstr "Finance::Quote a signalé un échec pour le symbole "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:854
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr ""
+"Finance::Quote a échoué silencieusement dans la récupération d'une cotation "
+"pour le symbole "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:917
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
+"GnuCash a soumis un json non valide à Finance::Quote. Les détails ont été "
+"enregistrés."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:923
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
 msgstr ""
+"Il manque à Perl les modules suivants. Veuillez consulter https://wiki."
+"gnucash.org/wiki/Online_Quotes#Finance::Quote pour les mesures correctives "
+"détaillées. "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:929
 msgid "Unrecognized Finance::Quote Error: "
@@ -33310,16 +33346,21 @@ msgstr ""
 #, c-format
 msgid "%s balance of %s is above the upper limit %s."
 msgstr ""
+"Le solde du compte «&nbsp;%s&nbsp;» d'une valeur de %s est au dessus de la "
+"limite supérieure de %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, c-format
 msgid "%s balance of %s is below the lower limit %s."
 msgstr ""
+"Le solde du compte «&nbsp;%s&nbsp;» d'une valeur de %s est en dessous de la "
+"limite inférieure de %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
 #, c-format
 msgid "%s balance of %s should be zero."
 msgstr ""
+"Le solde du compte «&nbsp;%s&nbsp;» d'une valeur de %s devrait être zéro."
 
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
@@ -34009,6 +34050,8 @@ msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
 msgstr ""
+"Délai pour modifier le rapport de facture utilisé. Une valeur de 0 signifie "
+"désactivé."
 
 # po/guile_strings.txt:258
 #: libgnucash/engine/gnc-optiondb.cpp:1279
