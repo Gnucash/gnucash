@@ -94,11 +94,12 @@ test_vendor (void)
         //test_bool_fcn (book, "TaxIncluded", gncVendorSetTaxIncluded, gncVendorGetTaxIncluded);
         test_bool_fcn (book, "Active", gncVendorSetActive, gncVendorGetActive);
 
-        do_test (gncVendorGetAddr (vendor) != NULL, "Addr");
-
         guid_replace (&guid);
         vendor = gncVendorCreate (book);
         count++;
+
+        do_test (gncVendorGetAddr (vendor) != NULL, "Addr");
+
         gncVendorSetGUID (vendor, &guid);
         do_test (guid_equal (&guid, qof_instance_get_guid(QOF_INSTANCE(vendor))), "guid compare");
     }

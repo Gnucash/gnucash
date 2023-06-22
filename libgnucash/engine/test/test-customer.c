@@ -87,12 +87,13 @@ test_customer (void)
 
         test_bool_fcn (book, "Active", gncCustomerSetActive, gncCustomerGetActive);
 
-        do_test (gncCustomerGetAddr (customer) != NULL, "Addr");
-        do_test (gncCustomerGetShipAddr (customer) != NULL, "ShipAddr");
-
         guid_replace (&guid);
         customer = gncCustomerCreate (book);
         count++;
+
+        do_test (gncCustomerGetAddr (customer) != NULL, "Addr");
+        do_test (gncCustomerGetShipAddr (customer) != NULL, "ShipAddr");
+
         gncCustomerSetGUID (customer, &guid);
         do_test (guid_equal (&guid, gncCustomerGetGUID (customer)), "guid compare");
     }
