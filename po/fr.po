@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
-"PO-Revision-Date: 2023-06-21 06:50+0000\n"
+"PO-Revision-Date: 2023-06-22 05:47+0000\n"
 "Last-Translator: Vincent Dawans <dawansv@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -2188,8 +2188,8 @@ msgid ""
 "That commodity is currently used by at least one of your accounts. You may "
 "not delete it."
 msgstr ""
-"Ce bien est actuellement utilisé par au moins un de vos comptes. Vous ne "
-"pouvez pas le détruire."
+"Ce produit est actuellement utilisé par au moins un de vos comptes. Vous ne "
+"pouvez pas le supprimer."
 
 # messages-i18n.c:56
 #: gnucash/gnome/dialog-commodities.c:197
@@ -2197,18 +2197,18 @@ msgid ""
 "This commodity has price quotes. Are you sure you want to delete the "
 "selected commodity and its price quotes?"
 msgstr ""
-"Des cotations de cours sont associées à ce bien. Voulez-vous vraiment "
-"effacer ce bien et les cotations associées ?"
+"Des cotations de cours sont associées à ce produit. Voulez-vous vraiment "
+"effacer ce produit et les cotations associées&nbsp;?"
 
 # messages-i18n.c:56
 #: gnucash/gnome/dialog-commodities.c:204
 msgid "Are you sure you want to delete the selected commodity?"
-msgstr "Voulez-vous vraiment supprimer le bien sélectionné ?"
+msgstr "Voulez-vous vraiment supprimer le produit sélectionné&nbsp;?"
 
 # messages-i18n.c:262
 #: gnucash/gnome/dialog-commodities.c:213
 msgid "Delete commodity?"
-msgstr "Supprimer le bien ?"
+msgstr "Supprimer le produit&nbsp;?"
 
 # messages-i18n.c:134
 #: gnucash/gnome/dialog-commodities.c:217 gnucash/gnome/dialog-doclink.c:164
@@ -3629,7 +3629,7 @@ msgstr "Vide"
 #: gnucash/gnome/dialog-lot-viewer.c:829
 msgctxt "Adjective"
 msgid "Open"
-msgstr "Ouvrir"
+msgstr "Ouvert"
 
 # messages-i18n.c:261
 #: gnucash/gnome/dialog-lot-viewer.c:923 gnucash/gnome/dialog-order.c:889
@@ -4137,7 +4137,7 @@ msgid ""
 "cannot be automatically created."
 msgstr ""
 "Il n'est pas possible de créer automatiquement des transaction récurrentes "
-"avec des variables ou de multiples biens."
+"avec des variables ou de multiples produits."
 
 #: gnucash/gnome/dialog-sx-editor.c:618
 msgid ""
@@ -7057,8 +7057,7 @@ msgstr ""
 #: gnucash/gnome-utils/dialog-account.c:1455
 msgid ""
 "An account with opening balance already exists for the desired currency."
-msgstr ""
-"Un compte avec un solde d'ouverture existe déjà pour la devise souhaitée."
+msgstr "Un compte avec un solde initial existe déjà pour la devise souhaitée."
 
 # messages-i18n.c:72
 #: gnucash/gnome-utils/dialog-account.c:1456
@@ -11467,7 +11466,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:34
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:157
 msgid "Delete a commodity with price quotes"
-msgstr "Supprimer un bien avec ses cotations"
+msgstr "Supprimer un produit avec ses cotations"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:35
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:158
@@ -11476,8 +11475,8 @@ msgid ""
 "price quotes attached. Deleting the commodity will delete the quotes as well."
 msgstr ""
 "Cette boîte de dialogue est présentée avant de vous autoriser à supprimer un "
-"bien auquel sont associées des cotations de cours boursiers ou monétaires. "
-"Supprimer ce bien va supprimer les cotations en même temps."
+"produit auquel sont associées des cotations de cours boursiers ou "
+"monétaires. Supprimer ce produit va supprimer les cotations en même temps."
 
 # messages-i18n.c:25
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:39
@@ -12269,16 +12268,16 @@ msgstr ""
 "Un nombre minimal de colonnes doivent être présentes pour que l'importation "
 "réussisse : il s'agit de Date, Montant, Espace de nom d'origine, Symbole "
 "d'origine et Devise de destination. Si toutes les entrées sont pour le même "
-"Bien / Devise, vous pouvez les sélectionner dans l'interface et les colonnes "
-"requises seront alors uniquement Date et Montant.\n"
+"produit ou devise, vous pouvez les sélectionner dans l'interface et les "
+"colonnes requises seront alors uniquement Date et Montant.\n"
 "\n"
 "Plusieurs options existent pour spécifier le délimiteur ainsi qu'une option "
 "de largeur fixe. Avec l'option largeur fixe, double-cliquez sur les lignes "
 "affichées pour définir la largeur de la colonne, puis faites un clic-droit "
 "pour la modifier si nécessaire.\n"
 "\n"
-"Exemples : \"PX1\",\"STLA\",\"16/04/2021\",15.26,\"EUR\" et CURRENCY;"
-"USD;2021-04-16;1.20;EUR\n"
+"Exemples : \"PX1\",\"STLA\",\"16/04/2021\",15.26,\"EUR\" et "
+"CURRENCY;USD;2021-04-16;1.20;EUR\n"
 "\n"
 "Une option permet de définir la ligne de début, la ligne de fin, ainsi que "
 "d'ignorer une ligne sur deux à partir de la ligne de début, si vous avez du "
@@ -12286,18 +12285,18 @@ msgstr ""
 "existants pour les dates données.\n"
 "\n"
 "Finalement, pour des importations répétées, la page de prévisualisation "
-"possède des boutons pour «Charger» et «Enregistrer» les paramètres. Vous "
-"pouvez ajuster et enregistrer vos paramètres pour les réutiliser pour des "
-"importations futures. Après avoir chargés vos paramètres, vous pouvez les "
-"réajuster pour des importations similaires et ensuite les enregistrer sous "
-"un autre nom. Notez que vous ne pouvez pas réenregistrer sur les noms "
-"utilisés par les paramètres définis par défaut.\n"
+"possède des boutons pour «&nbsp;Charger&nbsp;» et «&nbsp;Enregistrer&nbsp;» "
+"les paramètres. Vous pouvez ajuster et enregistrer vos paramètres pour les "
+"réutiliser pour des importations futures. Après avoir chargés vos "
+"paramètres, vous pouvez les réajuster pour des importations similaires et "
+"ensuite les enregistrer sous un autre nom. Notez que vous ne pouvez pas "
+"réenregistrer sur les noms utilisés par les paramètres définis par défaut.\n"
 "\n"
 "Cette opération est irréversible : assurez-vous d'avoir une sauvegarde "
 "fonctionnelle.\n"
 "\n"
-"Cliquez sur «Suivant» pour continuer ou «Annuler» pour interrompre "
-"l'importation."
+"Cliquez sur «&nbsp;Suivant&nbsp;» pour continuer ou «&nbsp;Annuler&nbsp;» "
+"pour interrompre l'importation."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:72
 msgid "Price Import Assistant"
@@ -12482,7 +12481,7 @@ msgstr "<b>Divers</b>"
 # messages-i18n.c:233
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:841
 msgid "<b>Commodity From</b>"
-msgstr "<b>Bien d'origine</b>"
+msgstr "<b>Produit d'origine</b>"
 
 # src/gnome/glade-gnc-dialogs.c:173
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:886
@@ -14370,7 +14369,7 @@ msgstr "Afficher les comptes qui ont un solde nul."
 # messages-i18n.c:262
 #: gnucash/gtkbuilder/dialog-account.glade:1067
 msgid "Use Commodity Value"
-msgstr "Utiliser la valeur du bien"
+msgstr "Utiliser la valeur du produit"
 
 # messages-i18n.c:143
 #: gnucash/gtkbuilder/dialog-account.glade:1121
@@ -14505,7 +14504,7 @@ msgid ""
 "commodity can hold opening balance transactions."
 msgstr ""
 "Ce compte contient les transactions du solde initial. Seul un compte par "
-"bien peut tenir les transactions du solde initial."
+"produit peut tenir les transactions du solde initial."
 
 # messages-i18n.c:211
 #: gnucash/gtkbuilder/dialog-account.glade:1577
@@ -14605,7 +14604,8 @@ msgstr "_Solde"
 # messages-i18n.c:195
 #: gnucash/gtkbuilder/dialog-account.glade:1862
 msgid "_Use equity 'Opening Balances' account"
-msgstr "_Utiliser le compte capitaux propres des 'bilans ouverts'"
+msgstr ""
+"_Utiliser le compte de «&nbsp;soldes initiaux&nbsp;» des capitaux propres"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: gnucash/gtkbuilder/dialog-account.glade:1879
@@ -20951,7 +20951,7 @@ msgstr "Id de la transaction"
 # src/gnome/glade-gnc-dialogs.c:641
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:383
 msgid "Commodity/Currency"
-msgstr "Bien/Devise"
+msgstr "Produit/Devise"
 
 # po/guile_strings.txt:256
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:384
@@ -21250,23 +21250,25 @@ msgid ""
 "Please select a 'From Symbol' column or set a Commodity in the 'Commodity "
 "From' field."
 msgstr ""
-"Veuillez sélectionner une colonne «Symbole d'origine» ou définir un bien "
-"dans le champ «Bien d'origine»."
+"Veuillez sélectionner une colonne «&nbsp;Symbole d'origine&nbsp;» ou définir "
+"un produit dans le champ «&nbsp;Produit d'origine&nbsp;»."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:472
 msgid ""
 "Please select a 'From Namespace' column or set a Commodity in the 'Commodity "
 "From' field."
 msgstr ""
-"Veuillez sélectionner une colonne «Espace de noms d'origine» ou définir un "
-"bien dans le champ «Bien d'origine»."
+"Veuillez sélectionner une colonne «&nbsp;Espace de noms d'origine&nbsp;» ou "
+"définir un produit dans le champ «&nbsp;Produit d'origine&nbsp;»."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:480
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:187
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:209
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:287
 msgid "'Commodity From' can not be the same as 'Currency To'."
-msgstr "«Bien d'origine» ne peut être identique à «Devise de destination»."
+msgstr ""
+"«&nbsp;Produit d'origine&nbsp;» ne peut être identique à «&nbsp;Devise de "
+"destination&nbsp;»."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:500
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:552
@@ -21310,8 +21312,8 @@ msgid ""
 "From specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Aucune colonne «Espace de noms/Symbole d'origine» sélectionnée et aucun "
-"«Bien d'origine» renseigné non plus.\n"
+"Aucune colonne «&nbsp;Espace de noms/Symbole d'origine&nbsp;» sélectionnée "
+"et aucun «&nbsp;Produit d'origine&nbsp;» renseigné non plus.\n"
 "Ceci ne devrait pas se produire. Merci de nous signaler ce problème."
 
 # src/gnome/dialog-qif-import.c:310
@@ -21433,7 +21435,8 @@ msgstr "«Espace de noms d'origine» ne peut pas être vide."
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:222
 msgid "'Currency To' can not be the same as 'Commodity From'."
 msgstr ""
-"La «Devise de destination» ne peut être la même que le «Bien d'origine»."
+"La «&nbsp;Devise de destination&nbsp;» ne peut être la même que le «&nbsp;"
+"Produit d'origine&nbsp;»."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:224
 msgid "Value parsed into an invalid currency for a currency column type."
@@ -21467,7 +21470,7 @@ msgstr "Aucune «Devise de destination»."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:285
 msgid "No 'Commodity from'."
-msgstr "Aucun «Bien d'origine»."
+msgstr "Aucun «&nbsp;Produit d'origine&nbsp;»."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:355
 msgid "Failed to create price from selected columns."
@@ -21476,7 +21479,7 @@ msgstr "Impossible de créer un prix à partir de ces colonnes."
 # messages-i18n.c:346
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:63
 msgid "Transaction Commodity"
-msgstr "Transaction marchande"
+msgstr "Produit de la Transaction"
 
 # src/gnome/glade-gnc-dialogs.c:1332
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
@@ -21697,8 +21700,9 @@ msgid ""
 "Please note that the exchange code of the commodity you select will be "
 "overwritten."
 msgstr ""
-"Sélectionnez un produit correspondant au code d'échange (exchange code). "
-"Notez que le code d'échange du produit que vous choisirez sera écrasé."
+"Veuillez sélectionner un produit correspondant au code boursier suivant. "
+"Veuillez noter que le code boursier du produit que vous sélectionnez sera "
+"écrasé."
 
 #: gnucash/import-export/import-format-dialog.c:78
 msgid "m/d/y"
@@ -24958,7 +24962,7 @@ msgstr "Camembert des dépenses"
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/report/reports/standard/account-piecharts.scm:38
 msgid "Asset Piechart"
-msgstr "Camembert des biens"
+msgstr "Camembert des avoirs"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
@@ -25584,8 +25588,8 @@ msgid ""
 "* this commodity data was built using transaction pricing instead of the "
 "price list."
 msgstr ""
-"* Ces données produit ont été créées en utilisant le cours des transactions "
-"au lieu de la liste des cours."
+"* Ces informations sur le produit ont été créées en utilisant des cours "
+"calculés sur base des transactions au lieu des cours de cotations."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1167
 msgid ""
@@ -25596,7 +25600,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1172
 msgid "** this commodity has no price and a price of 1 has been used."
-msgstr "** ce bien n'a pas de prix alors un prix de 1 a été utilisé."
+msgstr "** ce produit n'a pas de cours alors un cours de 1 a été utilisé."
 
 # messages-i18n.c:249 po/guile_strings.txt:12
 #: gnucash/report/reports/standard/balance-forecast.scm:36
@@ -26792,7 +26796,7 @@ msgstr "Histogramme du flux monétaire"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
 msgid "Include Trading Accounts in report"
-msgstr "Inclure les comptes commerciaux dans le rapport"
+msgstr "Inclure les comptes de change dans le rapport"
 
 # messages-i18n.c:187
 #: gnucash/report/reports/standard/cashflow-barchart.scm:48
@@ -26818,8 +26822,7 @@ msgstr "Afficher le tableau"
 #: gnucash/report/reports/standard/cashflow-barchart.scm:92
 #: gnucash/report/reports/standard/cash-flow.scm:96
 msgid "Include transfers to and from Trading Accounts in the report."
-msgstr ""
-"Inclure les transactions de/vers les comptes commerciaux dans le rapport."
+msgstr "Inclure les transactions de/vers les comptes de change dans le rapport."
 
 # messages-i18n.c:215
 #: gnucash/report/reports/standard/cashflow-barchart.scm:97
@@ -27585,22 +27588,21 @@ msgstr "Taxes sur les achats"
 # messages-i18n.c:72
 #: gnucash/report/reports/standard/income-statement.scm:88
 msgid "Label the trading accounts section"
-msgstr "Étiquette pour la section des comptes de mouvement"
+msgstr "Étiqueter la section des comptes de change"
 
 #: gnucash/report/reports/standard/income-statement.scm:90
 msgid "Whether or not to include a label for the trading accounts section."
-msgstr "Inclure ou non une étiquette pour la section des comptes de mouvement."
+msgstr "Inclure ou non une étiquette pour la section des comptes de change."
 
 #: gnucash/report/reports/standard/income-statement.scm:91
 msgid "Include trading accounts total"
-msgstr "Inclure le total des mouvements des comptes"
+msgstr "Inclure le total des comptes de change"
 
 #: gnucash/report/reports/standard/income-statement.scm:93
 msgid ""
 "Whether or not to include a line indicating total trading accounts balance."
 msgstr ""
-"Afficher ou non une ligne avec le total des mouvements des comptes dans la "
-"balance."
+"Afficher ou non une ligne indiquant le solde total des comptes de change."
 
 # po/guile_strings.txt:212
 #: gnucash/report/reports/standard/income-statement.scm:477
@@ -27973,7 +27975,7 @@ msgstr "Gains et ventes"
 #: gnucash/report/reports/standard/investment-lots.scm:281
 msgid "Commodities held longer than this many years count as long-term (LT)."
 msgstr ""
-"Les biens détenus plus longtemps que ce nombre d’années sont considérés à "
+"Les produits détenus plus longtemps que ce nombre d’années sont considérés à "
 "long terme (LT)."
 
 # po/guile_strings.txt:55
@@ -27984,7 +27986,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:300
 msgid "Show mnemonics with commodity amounts"
-msgstr "Afficher les code mnémotechniques avec les quantités de biens"
+msgstr "Afficher les code mnémotechniques avec les quantités de produits"
 
 #: gnucash/report/reports/standard/investment-lots.scm:307
 msgid "Include closed lots in addition to open lots"
@@ -29073,7 +29075,7 @@ msgstr "Portefeuille d'actions"
 # po/guile_strings.txt:238
 #: gnucash/report/reports/standard/price-scatter.scm:42
 msgid "Price of Commodity"
-msgstr "Valeur du bien/produit"
+msgstr "Valeur du produit"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -29093,7 +29095,7 @@ msgstr "Couleur du marqueur"
 # po/guile_strings.txt:130
 #: gnucash/report/reports/standard/price-scatter.scm:67
 msgid "Calculate the price of this commodity."
-msgstr "Calculer la valeur de ce bien/produit."
+msgstr "Calculer le cours de ce produit."
 
 # po/guile_strings.txt:104
 #: gnucash/report/reports/standard/price-scatter.scm:74
@@ -29142,7 +29144,7 @@ msgid ""
 "doesn't make sense to show prices for identical commodities."
 msgstr ""
 "Le produit sélectionné et la devise du rapport sont identiques. Cela n'a pas "
-"de sens d'afficher le prix de produits identiques."
+"de sens d'afficher les cours de produits identiques."
 
 #: gnucash/report/reports/standard/price-scatter.scm:251
 msgid ""
@@ -29952,7 +29954,7 @@ msgstr "Comptes de capitaux propres"
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:182
 #: gnucash/report/report-utilities.scm:214
 msgid "Trading Accounts"
-msgstr "Comptes de mouvement"
+msgstr "Comptes de change"
 
 # messages-i18n.c:298 po/guile_strings.txt:165
 # src/gnome/glade-gnc-dialogs.c:632
@@ -33135,12 +33137,12 @@ msgstr "GncQuotes::Fetch appelé sans livre de comptes."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:322
 msgid "GncQuotes::Fetch called with no commodities."
-msgstr "GncQuotes::Fetch appelé sans biens ou valeurs boursières."
+msgstr "GncQuotes::Fetch appelé sans produits ou valeurs boursières."
 
 # messages-i18n.c:124
 #: libgnucash/app-utils/gnc-quotes.cpp:336
 msgid "There were no commodities for which to retrieve quotes."
-msgstr "Il n'y avait pas de biens pour lesquels obtenir des cotations."
+msgstr "Il n'y avait pas de produits pour lesquels obtenir des cotations."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:350
 msgid "Finance::Quote retrieval failed with error "
@@ -33194,7 +33196,7 @@ msgstr "La cotation n’a pas d’erreur définie."
 #: libgnucash/app-utils/gnc-quotes.cpp:401
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr ""
-"Les cotations pour les biens suivants étaient indisponibles ou "
+"Les cotations pour les produits suivants étaient indisponibles ou "
 "inutilisables&nbsp;:\n"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:487
@@ -33547,8 +33549,8 @@ msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
 msgstr ""
-"Les gains ou pertes de comptes de mouvements ou de biens qui n'ont pas été "
-"enregistrés ailleurs."
+"Les gains ou pertes réalisés depuis des comptes de change ou de produits "
+"boursiers qui n'ont pas été enregistrés ailleurs."
 
 #: libgnucash/engine/gnc-commodity.h:110
 msgctxt "Commodity Type"
@@ -33801,8 +33803,8 @@ msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
 msgstr ""
-"Veuillez vérifier que vous avez un compte commercial à utiliser pour les "
-"transactions avec plusieurs devises ou produits."
+"Cochez pour que des comptes de change soient utilisés pour les transactions "
+"impliquant plusieurs devises ou produits boursiers."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1165
 msgid "Budget to be used when none has been otherwise specified."
@@ -34119,7 +34121,7 @@ msgstr "Sélectionner manuellement les lots."
 # messages-i18n.c:178
 #: libgnucash/engine/qofbookslots.h:65
 msgid "Use Trading Accounts"
-msgstr "Utiliser des comptes de mouvement"
+msgstr "Utiliser des comptes de change"
 
 #: libgnucash/engine/qofbookslots.h:66
 msgid "Day Threshold for Read-Only Transactions (red line)"
