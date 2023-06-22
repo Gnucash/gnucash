@@ -121,6 +121,9 @@ GNCLedgerDisplay* gnc_ledger_display_find_by_query (Query* q);
 void gnc_ledger_display_refresh (GNCLedgerDisplay* ledger_display);
 void gnc_ledger_display_refresh_by_split_register (SplitRegister* reg);
 
+/** Mark the ledger as being in focus (refresh immediately) or not. */
+void gnc_ledger_display_set_focus (GNCLedgerDisplay* ld, gboolean focus);
+
 /** close the window */
 void gnc_ledger_display_close (GNCLedgerDisplay* ledger_display);
 

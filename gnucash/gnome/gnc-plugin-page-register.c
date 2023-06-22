@@ -1176,6 +1176,8 @@ gnc_plugin_page_register_focus (GncPluginPage* plugin_page,
 
     // set the sheet focus setting
     gnc_split_reg_set_sheet_focus (gsr, priv->page_focus);
+
+    gnc_ledger_display_set_focus (priv->ledger, priv->page_focus);
 }
 
 static GtkWidget*
@@ -1202,8 +1204,6 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         LEAVE ("existing widget %p", priv->widget);
         return priv->widget;
     }
-    // on create, the page will be the current page so set the focus flag
-    priv->page_focus = TRUE;
 
     priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
@@ -1744,7 +1744,6 @@ gnc_plugin_page_register_recreate_page (GtkWidget* window,
 
     /* enable the refresh */
     priv->enable_refresh = TRUE;
-    gnc_ledger_display_refresh (priv->ledger);
     LEAVE (" ");
     return page;
 }

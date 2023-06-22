@@ -66,6 +66,8 @@ struct gnc_ledger_display
 
     gboolean loading;
     gboolean use_double_line_default;
+    gboolean visible; /* focus */
+    gboolean needs_refresh;
 
     GNCLedgerDisplayDestroy destroy;
     GNCLedgerDisplayGetParent get_parent;
@@ -94,8 +96,8 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
                              gboolean is_template,
                              gboolean mismatched_commodities);
 
-static void gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld,
-                                                 GList* splits);
+static void
+gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld);
 
 static void gnc_ledger_display_make_query (GNCLedgerDisplay* ld,
                                            gint limit,
@@ -584,7 +586,6 @@ refresh_handler (GHashTable* changes, gpointer user_data)
     GNCLedgerDisplay* ld = user_data;
     const EventInfo* info;
     gboolean has_leader;
-    GList* splits;
 
     ENTER ("changes=%p, user_data=%p", changes, user_data);
 
@@ -618,35 +619,15 @@ refresh_handler (GHashTable* changes, gpointer user_data)
         }
     }
 
-    /* if subaccount ledger, check to see if still the same number
-     *  of subaccounts, if not recreate the query. */
-    if (ld->ld_type == LD_SUBACCOUNT)
+    if (ld->visible)
     {
-        Account* leader = gnc_ledger_display_leader (ld);
-        GList* accounts = gnc_account_get_descendants (leader);
-
-        if (g_list_length (accounts) != ld->number_of_subaccounts)
-            gnc_ledger_display_make_query (ld,
-                                           gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_MAX_TRANS),
-                                           gnc_get_reg_type (leader, ld->ld_type));
-
-        g_list_free (accounts);
+        DEBUG ("immediate refresh because ledger is visible");
+        gnc_ledger_display_refresh (ld);
     }
-
-    // Exclude any template accounts for search register and gl
-    if (!ld->reg->is_template && (ld->reg->type == SEARCH_LEDGER || ld->ld_type == LD_GL))
-        exclude_template_accounts (ld->query, ld->excluded_template_acc_hash);
-
-    /* Its not clear if we should re-run the query, or if we should
-     * just use qof_query_last_run().  Its possible that the dates
-     * changed, requiring a full new query.  Similar considerations
-     * needed for multi-user mode.
-     */
-    splits = qof_query_run (ld->query);
-
-    gnc_ledger_display_set_watches (ld, splits);
-
-    gnc_ledger_display_refresh_internal (ld, splits);
+    else
+    {
+        ld->needs_refresh = TRUE;
+    }
     LEAVE (" ");
 }
 
@@ -764,7 +745,6 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
     GNCLedgerDisplay* ld;
     gint limit;
     const char* klass;
-    GList* splits;
 
     switch (ld_type)
     {
@@ -838,6 +818,8 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
     ld->query = NULL;
     ld->ld_type = ld_type;
     ld->loading = FALSE;
+    ld->visible = FALSE;
+    ld->needs_refresh = TRUE;
     ld->destroy = NULL;
     ld->get_parent = NULL;
     ld->user_data = NULL;
@@ -867,12 +849,13 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
 
     gnc_split_register_set_data (ld->reg, ld, gnc_ledger_display_parent);
 
-    splits = qof_query_run (ld->query);
-
-    gnc_ledger_display_set_watches (ld, splits);
-
-    gnc_ledger_display_refresh_internal (ld, splits);
-
+    /* Must call this before gnc_table_realize_gui() gets called or all the
+     * combo boxes will be empty. Use an empty list of splits instad of running
+     * the query when we're not in focus yet.
+     */
+    ld->loading = TRUE;
+    gnc_split_register_load (ld->reg, NULL, gnc_ledger_display_leader (ld));
+    ld->loading = FALSE;
     return ld;
 }
 
@@ -902,10 +885,21 @@ gnc_ledger_display_find_by_query (Query* q)
 \********************************************************************/
 
 static void
-gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld, GList* splits)
+gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld)
 {
-    if (!ld || ld->loading)
+    GList* splits;
+
+    if (ld->loading)
         return;
+
+    /* It's not clear if we should re-run the query, or if we should
+     * just use qof_query_last_run().  It's possible that the dates
+     * changed, requiring a full new query.  Similar considerations
+     * needed for multi-user mode.
+     */
+    splits = qof_query_run (ld->query);
+
+    gnc_ledger_display_set_watches (ld, splits);
 
     if (!gnc_split_register_full_refresh_ok (ld->reg))
         return;
@@ -915,6 +909,7 @@ gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld, GList* splits)
     gnc_split_register_load (ld->reg, splits,
                              gnc_ledger_display_leader (ld));
 
+    ld->needs_refresh = FALSE;
     ld->loading = FALSE;
 }
 
@@ -935,12 +930,47 @@ gnc_ledger_display_refresh (GNCLedgerDisplay* ld)
         return;
     }
 
+    /* if subaccount ledger, check to see if still the same number
+     * of subaccounts, if not recreate the query. */
+    if (ld->ld_type == LD_SUBACCOUNT)
+    {
+        Account* leader = gnc_ledger_display_leader (ld);
+        GList* accounts = gnc_account_get_descendants (leader);
+
+        if (g_list_length (accounts) != ld->number_of_subaccounts)
+            gnc_ledger_display_make_query (ld,
+                                        gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_MAX_TRANS),
+                                        gnc_get_reg_type (leader, ld->ld_type));
+
+        g_list_free (accounts);
+    }
+
+    /* In lieu of not "mis-using" some portion of the infrastructure by writing
+     * a bunch of new code, we just filter out the accounts of the template
+     * transactions.  While these are in a separate Account trees just for this
+     * reason, the query engine makes no distinction between Account trees.
+     * See Gnome Bug 86302.
+     *         -- jsled */
     // Exclude any template accounts for search register and gl
     if (!ld->reg->is_template && (ld->reg->type == SEARCH_LEDGER || ld->ld_type == LD_GL))
         exclude_template_accounts (ld->query, ld->excluded_template_acc_hash);
 
-    gnc_ledger_display_refresh_internal (ld, qof_query_run (ld->query));
+    gnc_ledger_display_refresh_internal (ld);
     LEAVE (" ");
+}
+
+void gnc_ledger_display_set_focus (GNCLedgerDisplay* ld, gboolean focus)
+{
+    if (!ld)
+        return;
+
+    ld->visible = focus;
+
+    if (ld->visible && ld->needs_refresh)
+    {
+        DEBUG ("deferred refresh because ledger is now visible");
+        gnc_ledger_display_refresh (ld);
+    }
 }
 
 void
