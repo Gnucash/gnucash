@@ -39,13 +39,26 @@
 #include <boost/property_tree/xml_parser.hpp>
 #include <fstream>
 #include <iostream>
+#include <unordered_map>
 
 namespace bpt = boost::property_tree;
 
 #define GSET_SCHEMA_PREFIX "org.gnucash.GnuCash"
 #define GSET_SCHEMA_OLD_PREFIX "org.gnucash"
 
-static GHashTable *schema_hash = nullptr;
+struct GSettingsDeleter
+{
+    void operator()(GSettings* gsp)
+    {
+        g_object_unref(gsp);
+    }
+};
+
+static GSettingsDeleter g_settings_deleter;
+
+using GSettingsPtr = std::unique_ptr<GSettings, GSettingsDeleter>;
+
+static std::unordered_map<std::string,GSettingsPtr> schema_hash;
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = "gnc.app-utils.gsettings";
@@ -72,11 +85,25 @@ static bool gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key)
     return found;
 }
 
+static std::string
+normalize_schema_name (const gchar *name)
+{
+    if (!name)
+        return GSET_SCHEMA_PREFIX;
+
+    if (g_str_has_prefix (name, GSET_SCHEMA_PREFIX) ||
+       (g_str_has_prefix (name, GSET_SCHEMA_OLD_PREFIX)))
+        return name;
+
+    return std::string{GSET_SCHEMA_PREFIX} + '.' + name;
+}
+
 static GSettings * gnc_gsettings_get_settings_obj (const gchar *schema_str)
 {
     ENTER("");
 
-    auto full_name = gnc_gsettings_normalize_schema_name (schema_str);
+    auto full_name_str = normalize_schema_name (schema_str);
+    auto full_name = full_name_str.c_str();
     auto schema_source {g_settings_schema_source_get_default()};
     auto schema {g_settings_schema_source_lookup(schema_source, full_name, true)};
     auto gset = g_settings_new_full (schema, nullptr, nullptr);
@@ -85,11 +112,31 @@ static GSettings * gnc_gsettings_get_settings_obj (const gchar *schema_str)
     if (!G_IS_SETTINGS(gset))
         PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name);
 
-    g_free(full_name);
-
     LEAVE("");
     g_settings_schema_unref (schema);
     return gset;
+}
+
+static GSettings*
+schema_to_gsettings (const char *schema, bool can_retrieve)
+{
+    auto full_name = normalize_schema_name (schema);
+    auto iter = schema_hash.find (full_name);
+    if (iter != schema_hash.end())
+        return iter->second.get();
+
+    if (!can_retrieve)
+        return nullptr;
+
+    auto gs_obj = gnc_gsettings_get_settings_obj (schema);
+    if (!G_IS_SETTINGS (gs_obj))
+    {
+        PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name.c_str());
+        return nullptr;
+    }
+
+    schema_hash[full_name] = GSettingsPtr (gs_obj, g_settings_deleter);
+    return gs_obj;
 }
 
 /************************************************************/
@@ -101,20 +148,6 @@ gnc_gsettings_get_prefix (void)
 {
     return GSET_SCHEMA_PREFIX;
 }
-
-gchar *
-gnc_gsettings_normalize_schema_name (const gchar *name)
-{
-    if (!name)
-        return g_strdup(GSET_SCHEMA_PREFIX);
-
-    if (g_str_has_prefix (name, GSET_SCHEMA_PREFIX) ||
-       (g_str_has_prefix (name, GSET_SCHEMA_OLD_PREFIX)))
-        return g_strdup(name);
-
-    return g_strjoin(".", GSET_SCHEMA_PREFIX, name, nullptr);
-}
-
 
 /************************************************************/
 /*                   Change notification                    */
@@ -128,20 +161,7 @@ gnc_gsettings_register_cb (const gchar *schema, const gchar *key,
     ENTER("");
     g_return_val_if_fail (func, 0);
 
-    if (!schema_hash)
-        schema_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
-
-    auto full_name = gnc_gsettings_normalize_schema_name (schema);
-    auto gs_obj = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
-    if (!gs_obj)
-    {
-        gs_obj = gnc_gsettings_get_settings_obj (schema);
-        if (G_IS_SETTINGS (gs_obj))
-            g_hash_table_insert (schema_hash, g_strdup (full_name), gs_obj);
-        else
-            PWARN ("Ignoring attempt to access unknown gsettings schema %s", full_name);
-    }
-    g_free (full_name);
+    auto gs_obj = schema_to_gsettings (schema, true);
     g_return_val_if_fail (G_IS_SETTINGS (gs_obj), 0);
 
     auto signal = static_cast<char *> (nullptr);
@@ -186,9 +206,7 @@ gnc_gsettings_remove_cb_by_func (const gchar *schema, const gchar *key,
     ENTER ();
     g_return_if_fail (func);
 
-    auto full_name = gnc_gsettings_normalize_schema_name (schema);
-    auto gs_obj = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
-    g_free (full_name);
+    auto gs_obj = schema_to_gsettings (schema, false);
 
     if (!G_IS_SETTINGS (gs_obj))
     {
@@ -228,9 +246,7 @@ gnc_gsettings_remove_cb_by_id (const gchar *schema, guint handlerid)
 {
     ENTER ();
 
-    auto full_name = gnc_gsettings_normalize_schema_name (schema);
-    auto gs_obj = static_cast<GSettings*> (g_hash_table_lookup (schema_hash, full_name));
-    g_free (full_name);
+    auto gs_obj = schema_to_gsettings (schema, false);
 
     if (!G_IS_SETTINGS (gs_obj))
     {
@@ -297,7 +313,8 @@ gs_obj_unblock_handlers ([[maybe_unused]] gpointer key, gpointer gs_obj,
 void gnc_gsettings_block_all (void)
 {
     ENTER ();
-    g_hash_table_foreach (schema_hash, gs_obj_block_handlers, nullptr);
+    for (const auto& it : schema_hash)
+        gs_obj_block_handlers (nullptr, it.second.get(), nullptr);
     LEAVE();
 }
 
@@ -305,7 +322,8 @@ void gnc_gsettings_block_all (void)
 void gnc_gsettings_unblock_all (void)
 {
     ENTER ();
-    g_hash_table_foreach (schema_hash, gs_obj_unblock_handlers, nullptr);
+    for (const auto& it : schema_hash)
+        gs_obj_unblock_handlers (nullptr, it.second.get(), nullptr);
     LEAVE();
 }
 
