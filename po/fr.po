@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
-"PO-Revision-Date: 2023-06-22 05:47+0000\n"
+"PO-Revision-Date: 2023-06-24 02:40+0000\n"
 "Last-Translator: Vincent Dawans <dawansv@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -305,7 +305,7 @@ msgstr "Contact de la société"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
 #: libgnucash/engine/gnc-optiondb.cpp:1287
 msgid "Fancy Date Format"
-msgstr "Format de date personnalisé"
+msgstr "Format de date amélioré"
 
 #: bindings/guile/options.scm:398
 msgid "custom"
@@ -2789,7 +2789,7 @@ msgstr "Le nombre de paiements ne peut être négatif."
 # messages-i18n.c:140
 #: gnucash/gnome/dialog-find-account.c:378
 msgid "Find Account"
-msgstr "_Chercher le compte"
+msgstr "Chercher le compte"
 
 #: gnucash/gnome/dialog-find-account.c:415
 msgid "Place Holder"
@@ -3491,7 +3491,7 @@ msgstr "Recherche de bon de dépense"
 #: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/report/reports/standard/invoice.scm:733
 msgid "Expense Voucher"
-msgstr "Note de Frais"
+msgstr "Bon de dépense"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -5036,11 +5036,11 @@ msgstr "Créer un nouveau bon comme double de l'actuel"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:242
 msgid "_Post Voucher"
-msgstr "_Bon de commande"
+msgstr "_Enregistrer ce bon"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:242
 msgid "Post this voucher to your Chart of Accounts"
-msgstr "Enregistre cette pièce justificative dans votre plan comptable"
+msgstr "Enregistre ce bon dans votre plan comptable"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -5058,7 +5058,7 @@ msgstr "Nou_veau bon de dépense"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:244
 msgid "Create a new voucher for the same owner as the current one"
-msgstr "Créer un nouveau bon pour le même client que l'actuel"
+msgstr "Créer un nouveau bon pour le même destinataire que l'actuel"
 
 # messages-i18n.c:71
 #: gnucash/gnome/gnc-plugin-page-invoice.c:245
@@ -5410,7 +5410,7 @@ msgstr "Ouvrir un document liée pour la transaction actuelle"
 #: gnucash/ui/gnc-plugin-page-register.ui:407
 #: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr "Accéder à la facture ou à la pièce justificative liée"
+msgstr "Accéder à la facture ou au bon lié"
 
 # messages-i18n.c:80
 #: gnucash/gnome/gnc-plugin-page-register.c:276
@@ -5861,7 +5861,7 @@ msgstr "Facture simplifiée"
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1900
 #: gnucash/report/reports/standard/invoice.scm:869
 msgid "Fancy Invoice"
-msgstr "Facture personnalisée"
+msgstr "Facture améliorée"
 
 # messages-i18n.c:145
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:393
@@ -15511,7 +15511,7 @@ msgstr "Quotidien (365)"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:90
 msgid "Loan Repayment Calculator"
-msgstr "Calculatrice financière"
+msgstr "Calculatrice de remboursement de prêt"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:151
 msgid "_Schedule"
@@ -18303,7 +18303,7 @@ msgstr "UTC - Temps Universel Coordonné"
 # src/gnome/glade-gnc-dialogs.c:1364
 #: gnucash/gtkbuilder/gnc-date-format.glade:33
 msgid "No Fancy Date Format"
-msgstr "Pas de format de date fantaisie"
+msgstr "Pas de format de date amélioré"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:66
 msgid "%Y-%m-%d"
@@ -30365,7 +30365,7 @@ msgstr "Facile"
 
 #: gnucash/report/stylesheets/footer.scm:386
 msgid "Fancy"
-msgstr "Fantaisiste"
+msgstr "Amélioré"
 
 # po/guile_strings.txt:92
 #: gnucash/report/stylesheets/footer.scm:397
@@ -31641,11 +31641,11 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:114
 msgid "_Loan Repayment Calculator"
-msgstr "Calculatrice _financière"
+msgstr "Calculatrice de _remboursement de prêt"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:116
 msgid "Use the loan/mortgage repayment calculator"
-msgstr "Utiliser la calculatrice financière"
+msgstr "Utiliser la calculatrice de remboursement de prêt"
 
 # messages-i18n.c:261
 #: gnucash/ui/gnc-plugin-basic-commands.ui:119
@@ -31716,7 +31716,7 @@ msgstr ""
 # messages-i18n.c:147
 #: gnucash/ui/gnc-plugin-budget.ui:20
 msgid "_Copy Budget"
-msgstr "_Copier le budget"
+msgstr "_Copier un budget"
 
 #: gnucash/ui/gnc-plugin-budget.ui:22
 msgid "Copy an existing Budget"
@@ -31725,7 +31725,7 @@ msgstr "Copier un Budget existant"
 # messages-i18n.c:136
 #: gnucash/ui/gnc-plugin-budget.ui:25
 msgid "_Delete Budget"
-msgstr "_Supprimer ce budget"
+msgstr "_Supprimer un budget"
 
 #: gnucash/ui/gnc-plugin-budget.ui:27
 msgid "Delete an existing Budget"
@@ -32258,7 +32258,7 @@ msgstr "_Vérifier et réparer"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:169
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:281
 msgid "Check & Repair A_ccount"
-msgstr "Vérifier et réparer un _compte"
+msgstr "Vérifier et réparer le _compte"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:171
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:283
@@ -33831,8 +33831,8 @@ msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
 msgstr ""
-"Le format de la chaîne pour générer les numéros de client. C'est un format "
-"d'impression."
+"La chaîne de format à utiliser pour générer les numéros de clients. Il "
+"s'agit d'une chaîne de format de type printf."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1180
 msgid "Employee number"
@@ -33855,8 +33855,8 @@ msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
 msgstr ""
-"Le format de la chaîne pour générer les numéros d'employé(e). C'est un "
-"format d'impression."
+"La chaîne de format à utiliser pour générer les numéros d'employés. Il "
+"s'agit d'une chaîne de format de type printf."
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -33883,14 +33883,14 @@ msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
 msgstr ""
-"Le format de la chaîne pour générer les numéros de facture. C'est un format "
-"d'impression."
+"La chaîne de format à utiliser pour générer les numéros de facture. Il "
+"s'agit d'une chaîne de format de type printf."
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: libgnucash/engine/gnc-optiondb.cpp:1198
 msgid "Bill number"
-msgstr "N° de facturation"
+msgstr "N° de facture fournisseur"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1199
 msgid ""
@@ -33903,43 +33903,43 @@ msgstr ""
 # messages-i18n.c:231
 #: libgnucash/engine/gnc-optiondb.cpp:1202
 msgid "Bill number format"
-msgstr "Format de n° de facturation"
+msgstr "Format de n° de facture fournisseur"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1203
 msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
 msgstr ""
-"Le format de la chaîne pour générer les numéros de facture. C'est un format "
-"d'impression."
+"La chaîne de format à utiliser pour générer les numéros de factures "
+"fournisseur. Il s'agit d'une chaîne de format de type printf."
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: libgnucash/engine/gnc-optiondb.cpp:1206
 msgid "Expense voucher number"
-msgstr "N° de frais réel"
+msgstr "N° de bon de dépense"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1207
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
 msgstr ""
-"Le précédent numéro généré pour le bon. Ce numéro sera incrémenté lors de la "
-"génération du bon suivant."
+"Le précédent numéro généré pour le bon de dépense. Ce numéro sera incrémenté "
+"lors de la génération du bon suivant."
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: libgnucash/engine/gnc-optiondb.cpp:1210
 msgid "Expense voucher number format"
-msgstr "Format de n° de frais réel"
+msgstr "Format de n° de bon de dépense"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1212
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
-"Le texte du format à utiliser pour générer les numéros des bons de commande. "
-"C'est un texte au format de type 'printf'."
+"La chaîne de format à utiliser pour générer les numéros de bons de dépenses. "
+"Il s'agit d'une chaîne de format de type printf."
 
 # po/guile_strings.txt:173
 #: libgnucash/engine/gnc-optiondb.cpp:1215
@@ -33964,33 +33964,33 @@ msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
 msgstr ""
-"Le format de la chaîne pour générer les numéros de prestation. C'est un "
-"format d'impression."
+"La chaîne de format à utiliser pour générer les numéros de prestations. Il "
+"s'agit d'une chaîne de format de type printf."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1223
 msgid "Order number"
-msgstr "N° de saisie"
+msgstr "N° de commande"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1224
 msgid ""
 "The previous order number generated. This number will be incremented to "
 "generate the next order number."
 msgstr ""
-"Précédent numéro de saisie généré. Ce numéro sera augmenté pour obtenir le "
-"prochain numéro de saisie."
+"Précédent numéro de commande généré. Ce numéro sera augmenté pour obtenir le "
+"prochain numéro de commande."
 
 # messages-i18n.c:231
 #: libgnucash/engine/gnc-optiondb.cpp:1227
 msgid "Order number format"
-msgstr "Format de n° de saisie"
+msgstr "Format de n° de commande"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1228
 msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
 msgstr ""
-"Le format de la chaîne pour générer les numéros de saisie. C'est un format "
-"d'impression."
+"La chaîne de format à utiliser pour générer les numéros de commande. Il "
+"s'agit d'une chaîne de format de type printf."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1231
 msgid "Vendor number"
@@ -34013,8 +34013,8 @@ msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
 msgstr ""
-"Le format de la chaîne pour générer les numéros de fournisseur. C'est un "
-"chaîne au format printf."
+"La chaîne de format à utiliser pour générer les numéros de fournisseurs. Il "
+"s'agit d'une chaîne de format de type printf."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1242
 msgid "The name of your business."
@@ -34075,7 +34075,7 @@ msgstr "La table de taxation à appliquer par défaut aux fournisseurs."
 #: libgnucash/engine/gnc-optiondb.cpp:1288
 msgid "The default date format used for fancy printed dates."
 msgstr ""
-"Le format de date à utiliser par défaut pour l’impression personnalisée des "
+"Le format de date à utiliser par défaut pour l’impression améliorée des "
 "dates."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1294
@@ -34148,7 +34148,7 @@ msgstr "Rapport de facture par défaut"
 
 #: libgnucash/engine/qofbookslots.h:75
 msgid "Default Invoice Report Timeout"
-msgstr "Délai dépassé du rapport de la facture par défaut"
+msgstr "Délai du rapport de facture par défaut"
 
 #. Translators: " + " is an separator in a list of string-representations of recurrence frequencies
 #: libgnucash/engine/Recurrence.c:511
