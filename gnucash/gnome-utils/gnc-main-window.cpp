@@ -3189,8 +3189,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 
     if (gnc_main_window_page_exists(page))
     {
-        if (!gnc_main_window_is_restoring_pages (window))
-            gnc_main_window_display_page (page);
+        gnc_main_window_display_page (page);
         return;
     }
 
