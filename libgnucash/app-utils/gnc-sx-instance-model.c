@@ -1898,3 +1898,8 @@ GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_e
                                     result_map, NULL);
     return result_map;
 }
+
+GList *gnc_sx_instance_model_get_sx_instances_list (GncSxInstanceModel *model)
+{
+    return model->sx_instance_list;
+}

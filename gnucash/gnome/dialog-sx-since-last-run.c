@@ -411,7 +411,7 @@ gsslrtma_populate_tree_store (GncSxSlrTreeModelAdapter *model)
     GList *sx_iter;
     int instances_index = -1;
 
-    for (sx_iter = model->instances->sx_instance_list; sx_iter != NULL; sx_iter = sx_iter->next)
+    for (sx_iter = gnc_sx_instance_model_get_sx_instances_list (model->instances); sx_iter != NULL; sx_iter = sx_iter->next)
     {
         GncSxInstances *instances = (GncSxInstances*)sx_iter->data;
         char last_occur_date_buf[MAX_DATE_LENGTH+1];
@@ -549,7 +549,7 @@ _gnc_sx_slr_tree_model_adapter_get_sx_instances (GncSxSlrTreeModelAdapter *model
     index = indices[0];
     gtk_tree_path_free (path);
 
-    return (GncSxInstances*)g_list_nth_data (model->instances->sx_instance_list, index);
+    return (GncSxInstances*)g_list_nth_data (gnc_sx_instance_model_get_sx_instances_list (model->instances), index);
 }
 
 GncSxInstance*
@@ -575,7 +575,7 @@ _gnc_sx_slr_model_get_instance (GncSxSlrTreeModelAdapter *model, GtkTreeIter *it
     instance_index = indices[1];
     gtk_tree_path_free (path);
 
-    instances = (GncSxInstances*)g_list_nth_data (model->instances->sx_instance_list, instances_index);
+    instances = (GncSxInstances*)g_list_nth_data (gnc_sx_instance_model_get_sx_instances_list (model->instances), instances_index);
     if (instance_index < 0 || instance_index >= g_list_length (instances->instance_list))
     {
         return NULL;
@@ -667,7 +667,7 @@ _get_path_for_variable (GncSxSlrTreeModelAdapter *model, GncSxInstance *instance
     int indices[3];
     GtkTreePath *path;
 
-    indices[0] = g_list_index (model->instances->sx_instance_list, instance->parent);
+    indices[0] = g_list_index (gnc_sx_instance_model_get_sx_instances_list (model->instances), instance->parent);
     if (indices[0] == -1)
         return NULL;
     indices[1] = g_list_index (instance->parent->instance_list, instance);
@@ -706,7 +706,7 @@ gsslrtma_removing_cb (GncSxInstanceModel *instances, SchedXaction *to_remove_sx,
     GList *iter;
     int index = 0;
     // get index, create path, remove
-    for (iter = instances->sx_instance_list; iter != NULL; iter = iter->next, index++)
+    for (iter = gnc_sx_instance_model_get_sx_instances_list (instances); iter != NULL; iter = iter->next, index++)
     {
         GncSxInstances *instances = (GncSxInstances*)iter->data;
         if (instances->sx == to_remove_sx)

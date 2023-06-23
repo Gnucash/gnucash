@@ -475,7 +475,7 @@ gsltma_populate_tree_store (GncSxListTreeModelAdapter *model)
     GtkTreeIter iter;
     GList *list;
 
-    for (list = model->instances->sx_instance_list; list != NULL; list = list->next)
+    for (list = gnc_sx_instance_model_get_sx_instances_list (model->instances); list != NULL; list = list->next)
     {
         GncSxInstances *instances = (GncSxInstances*)list->data;
         gchar *frequency_str;
@@ -563,7 +563,7 @@ gsltma_get_sx_instances_from_orig_iter (GncSxListTreeModelAdapter *model, GtkTre
     index = indices[0];
 
     gtk_tree_path_free (path);
-    return (GncSxInstances*)g_list_nth_data (model->instances->sx_instance_list, index);
+    return (GncSxInstances*)g_list_nth_data (gnc_sx_instance_model_get_sx_instances_list (model->instances), index);
 }
 
 GncSxInstances*

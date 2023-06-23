@@ -54,7 +54,6 @@ typedef struct _GncSxInstanceModel
     /* void (*updated)(SchedXaction *sx); // gpointer user_data */
     /* void (*removing)(SchedXaction *sx); // gpointer user_data */
 
-    /* public */
     GDate range_end;
     gboolean include_disabled;
     GList *sx_instance_list; /* <GncSxInstances*> */
@@ -255,6 +254,13 @@ void gnc_sx_all_instantiate_cashflow(GList *all_sxes,
  * would return. The returned value must be free'd with
  * g_hash_table_destroy. */
 GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_end);
+
+/** Returns the list of GncSxInstances in the model
+ * (Each element in the list has type GncSxInstances)
+ *
+ * The returned list is owned by the model
+ */
+GList *gnc_sx_instance_model_get_sx_instances_list (GncSxInstanceModel *model);
 
 G_END_DECLS
 
