@@ -148,6 +148,18 @@ TEST(gncnumeric_constructors, test_string_constructor)
     GncNumeric neg_continental_decimal("-123,456");
     EXPECT_EQ(-123456, neg_continental_decimal.num());
     EXPECT_EQ(1000, neg_continental_decimal.denom());
+    GncNumeric from_scientific("1.234e4");
+    EXPECT_EQ(12340, from_scientific.num());
+    EXPECT_EQ(1, from_scientific.denom());
+    GncNumeric from_no_int_scientific(".234e4");
+    EXPECT_EQ(2340, from_no_int_scientific.num());
+    EXPECT_EQ(1, from_no_int_scientific.denom());
+    GncNumeric from_int_only_scientific("1234e2");
+    EXPECT_EQ(123400, from_int_only_scientific.num());
+    EXPECT_EQ(1, from_int_only_scientific.denom());
+    GncNumeric from_neg_sci("1.234e-2");
+    EXPECT_EQ(1234, from_neg_sci.num());
+    EXPECT_EQ(100000, from_neg_sci.denom());
     ASSERT_NO_THROW(GncNumeric hex_rational("0x1e240/0x1c8"));
     GncNumeric hex_rational("0x1e240/0x1c8");
     EXPECT_EQ(123456, hex_rational.num());

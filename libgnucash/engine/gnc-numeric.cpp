@@ -34,7 +34,9 @@
 #include <boost/locale/encoding_utf.hpp>
 
 #include <config.h>
+#include <stdexcept>
 #include <stdint.h>
+#include "gnc-int128.hpp"
 #include "qof.h"
 
 #include "gnc-numeric.hpp"
@@ -113,14 +115,103 @@ GncNumeric::GncNumeric(double d) : m_num(0), m_den(1)
 }
 
 using boost::regex;
-using boost::smatch;
 using boost::regex_search;
-GncNumeric::GncNumeric(const std::string& str, bool autoround)
+using boost::smatch;
+
+
+static std::pair<int64_t, int64_t>
+reduce_number_pair(std::pair<GncInt128, GncInt128>num_pair,
+                   const std::string& num_str, bool autoround)
 {
+    auto [n, d] = num_pair;
+    if (!autoround && n.isBig()) {
+        std::ostringstream errmsg;
+        errmsg << "Decimal string " << num_str
+               << "can't be represented in a GncNumeric without rounding.";
+        throw std::overflow_error(errmsg.str());
+    }
+    while (n.isBig() && d > 0) {
+        n >>= 1;
+        d >>= 1;
+    }
+    if (n.isBig()) // Shouldn't happen, of course
+    {
+        std::ostringstream errmsg;
+        errmsg << "Decimal string " << num_str
+               << " can't be represented in a GncNumeric, even after reducing "
+            "denom to "
+               << d;
+        throw std::overflow_error(errmsg.str());
+    }
+    return std::make_pair(static_cast<int64_t>(n), static_cast<int64_t>(d));
+}
+
+static std::pair<GncInt128, int64_t>
+numeric_from_decimal_match(const std::string& integer, const std::string& decimal)
+{
+    auto neg = (!integer.empty() && integer[0] == '-');
+    GncInt128 high((neg && integer.length() > 1) || (!neg && !integer.empty())
+                   ? stoll(integer)
+                   : 0);
+    GncInt128 low{ decimal.empty() ? 0 : stoll(decimal)};
+    auto exp10 = decimal.length();
+    int64_t d = powten(exp10);
+    GncInt128 n = high * d + (neg ? -low : low);
+    while (exp10 > max_leg_digits) {
+        /* If the arg to powten is bigger than max_leg_digits
+           it returns 10**max_leg_digits so reduce exp10 by
+           that amount */
+        n = n / powten(exp10 - max_leg_digits);
+        exp10 -= max_leg_digits;
+    }
+    return std::make_pair(n, d);
+}
+
+static std::pair<GncInt128, GncInt128>
+numeric_from_scientific_match(smatch &m)
+{
+    int exp{m[4].matched ? stoi(m[4].str()) : 0};
+    auto neg_exp{exp < 0};
+    exp = neg_exp ? -exp : exp;
+    if (exp >= max_leg_digits)
+    {
+        std::ostringstream errmsg;
+        errmsg << "Exponent " << m[3].str() << " in match " << m[0].str()
+               << " exceeds range that GnuCash can parse.";
+        throw std::overflow_error(errmsg.str());
+    }
+
+    GncInt128 num, denom;
+    auto mult = powten(exp);
+
+    if (m[1].matched)
+    {
+        denom = neg_exp ? mult : 1;
+        num = neg_exp ? stoll(m[1].str()) : mult * stoll(m[1].str());
+    }
+    else
+    {
+        auto [d_num, d_denom] = numeric_from_decimal_match(m[2].str(), m[3].str());
+
+        if (neg_exp || d_denom > mult)
+        {
+            num = d_num;
+            denom = neg_exp ? d_denom * mult : d_denom / mult;
+        }
+        else
+        {
+            num = d_num * mult / d_denom;
+            denom = 1;
+        }
+    }
+    return std::make_pair(num, denom);
+}
+
+GncNumeric::GncNumeric(const std::string &str, bool autoround) {
     static const std::string numer_frag("(-?[0-9]*)");
     static const std::string denom_frag("([0-9]+)");
-    static const std::string hex_frag("(0x[a-f0-9]+)");
-    static const std::string slash( "[ \\t]*/[ \\t]*");
+    static const std::string hex_frag("(0[xX][A-Fa-f0-9]+)");
+    static const std::string slash("[ \\t]*/[ \\t]*");
     /* The llvm standard C++ library refused to recognize the - in the
      * numer_frag pattern with the default ECMAScript syntax so we use the
      * awk syntax.
@@ -132,33 +223,35 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
     static const regex hex_over_num(hex_frag + slash + denom_frag);
     static const regex num_over_hex(numer_frag + slash + hex_frag);
     static const regex decimal(numer_frag + "[.,]" + denom_frag);
-    smatch m;
-/* The order of testing the regexes is from the more restrictve to the less
- * restrictive, as less-restrictive ones will match patterns that would also
- * match the more-restrictive and so invoke the wrong construction.
- */
+    static const regex scientific("(?:(-?[0-9]+[.,]?)|(-?[0-9]*)[.,]([0-9]+))[Ee](-?[0-9]+)");
+    static const regex has_hex_prefix(".*0[xX]$");
+    smatch m, x;
+    /* The order of testing the regexes is from the more restrictve to the less
+     * restrictive, as less-restrictive ones will match  patterns that would also
+     * match the more-restrictive and so invoke the wrong construction.
+     */
     if (str.empty())
-        throw std::invalid_argument("Can't construct a GncNumeric from an empty string.");
+        throw std::invalid_argument(
+            "Can't construct a GncNumeric from an empty string.");
     if (regex_search(str, m, hex_rational))
     {
         GncNumeric n(stoll(m[1].str(), nullptr, 16),
                      stoll(m[2].str(), nullptr, 16));
+
         m_num = n.num();
         m_den = n.denom();
         return;
     }
     if (regex_search(str, m, hex_over_num))
     {
-        GncNumeric n(stoll(m[1].str(), nullptr, 16),
-                     stoll(m[2].str()));
+        GncNumeric n(stoll(m[1].str(), nullptr, 16), stoll(m[2].str()));
         m_num = n.num();
         m_den = n.denom();
         return;
     }
     if (regex_search(str, m, num_over_hex))
     {
-        GncNumeric n(stoll(m[1].str()),
-                     stoll(m[2].str(), nullptr, 16));
+        GncNumeric n(stoll(m[1].str()), stoll(m[2].str(), nullptr, 16));
         m_num = n.num();
         m_den = n.denom();
         return;
@@ -170,51 +263,29 @@ GncNumeric::GncNumeric(const std::string& str, bool autoround)
         m_den = n.denom();
         return;
     }
+    if (regex_search(str, m, scientific) && ! regex_match(m.prefix().str(), x,  has_hex_prefix))
+    {
+        auto [num, denom] =
+            reduce_number_pair(numeric_from_scientific_match(m),
+                                   str, autoround);
+        m_num = num;
+        m_den = denom;
+        return;
+    }
     if (regex_search(str, m, decimal))
     {
-        auto neg = (m[1].length() && m[1].str()[0] == '-');
-        GncInt128 high((neg && m[1].length() > 1) || (!neg && m[1].length()) ?
-                       stoll(m[1].str()) : 0);
-        GncInt128 low(stoll(m[2].str()));
-        auto exp10 = m[2].str().length();
-        int64_t d = powten(exp10);
-        GncInt128 n = high * d + (neg ? -low : low);
-        while (exp10 > max_leg_digits)
-        {
-            /* If the arg to powten is bigger than max_leg_digits
-               it returns 10**max_leg_digits so reduce exp10 by
-               that amount */
-            n = n / powten(exp10 - max_leg_digits);
-            exp10 -= max_leg_digits;
-        }
-        
-        if (!autoround && n.isBig())
-        {
-            std::ostringstream errmsg;
-            errmsg << "Decimal string " << m[1].str() << "." << m[2].str()
-                   << "can't be represented in a GncNumeric without rounding.";
-            throw std::overflow_error(errmsg.str());
-        }
-        while (n.isBig() && d > 0)
-        {
-            n >>= 1;
-            d >>= 1;
-        }
-        if (n.isBig()) //Shouldn't happen, of course
-        {
-            std::ostringstream errmsg;
-            errmsg << "Decimal string " << m[1].str() << "." << m[2].str()
-            << " can't be represented in a GncNumeric, even after reducing denom to " << d;
-            throw std::overflow_error(errmsg.str());
-        }
-        GncNumeric gncn(static_cast<int64_t>(n), d);
-        m_num = gncn.num();
-        m_den = gncn.denom();
+        std::string integer{m[1].matched ? m[1].str() : ""};
+        std::string decimal{m[2].matched ? m[2].str() : ""};
+        auto [num, denom] =
+            reduce_number_pair(numeric_from_decimal_match(integer, decimal),
+                               str, autoround);
+        m_num = num;
+        m_den = denom;
         return;
     }
     if (regex_search(str, m, hex))
     {
-        GncNumeric n(stoll(m[1].str(), nullptr, 16),INT64_C(1));
+        GncNumeric n(stoll(m[1].str(), nullptr, 16), INT64_C(1));
         m_num = n.num();
         m_den = n.denom();
         return;
