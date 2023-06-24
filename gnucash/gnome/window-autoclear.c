@@ -123,7 +123,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
                             AutoClearWindow *data)
 {
     GList *toclear_list = NULL;
-    gnc_numeric toclear_value;
+    gnc_numeric toclear_value = gnc_numeric_error (GNC_ERROR_ARG);
     gchar *errmsg = NULL;
     GError* error = NULL;
 
