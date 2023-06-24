@@ -188,19 +188,7 @@ dom_tree_to_double_kvp_value (xmlNodePtr node)
 static KvpValue*
 dom_tree_to_numeric_kvp_value (xmlNodePtr node)
 {
-    gnc_numeric* danum;
-    KvpValue* ret = NULL;
-
-    danum = dom_tree_to_gnc_numeric (node);
-
-    if (danum)
-    {
-        ret = new KvpValue {*danum};
-    }
-
-    g_free (danum);
-
-    return ret;
+    return new KvpValue {dom_tree_to_gnc_numeric (node)};
 }
 
 static KvpValue*
@@ -514,19 +502,19 @@ dom_tree_to_text (xmlNodePtr tree)
     return result;
 }
 
-gnc_numeric*
+gnc_numeric
 dom_tree_to_gnc_numeric (xmlNodePtr node)
 {
     gchar* content = dom_tree_to_text (node);
     if (!content)
-        return NULL;
+        return gnc_numeric_zero ();
 
-    gnc_numeric *ret = g_new (gnc_numeric, 1);
+    gnc_numeric num;
+    if (!string_to_gnc_numeric (content, &num))
+        num = gnc_numeric_zero ();
 
-    if (!string_to_gnc_numeric (content, ret))
-	*ret = gnc_numeric_zero ();
     g_free (content);
-    return ret;
+    return num;
 }
 
 

@@ -250,11 +250,7 @@ static inline gboolean
 set_numeric (xmlNodePtr node, GncEntry* entry,
              void (*func) (GncEntry* entry, gnc_numeric num))
 {
-    gnc_numeric* num = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (num, FALSE);
-
-    func (entry, *num);
-    g_free (num);
+    func (entry, dom_tree_to_gnc_numeric (node));
     return TRUE;
 }
 

@@ -70,14 +70,12 @@ find_appropriate_node (xmlNodePtr node, Split* spl)
         {
             if (g_strcmp0 ((char*)mark2->name, "split:value") == 0)
             {
-                gnc_numeric* num = dom_tree_to_gnc_numeric (mark2);
+                gnc_numeric num = dom_tree_to_gnc_numeric (mark2);
 
-                if (gnc_numeric_equal (*num, xaccSplitGetValue (spl)))
+                if (gnc_numeric_equal (num, xaccSplitGetValue (spl)))
                 {
                     amount_good = TRUE;
                 }
-
-                g_free (num);
             }
             else if (g_strcmp0 ((char*)mark2->name, "split:account") == 0)
             {
@@ -143,44 +141,40 @@ equals_node_val_vs_split_internal (xmlNodePtr node, Split* spl)
         }
         else if (g_strcmp0 ((char*)mark->name, "split:value") == 0)
         {
-            gnc_numeric* num = dom_tree_to_gnc_numeric (mark);
+            gnc_numeric num = dom_tree_to_gnc_numeric (mark);
             gnc_numeric val = xaccSplitGetValue (spl);
 
-            if (!gnc_numeric_equal (*num, val))
+            if (!gnc_numeric_equal (num, val))
             {
-                g_free (num);
                 return g_strdup_printf ("values differ: %" G_GINT64_FORMAT "/%"
                                         G_GINT64_FORMAT " v %" G_GINT64_FORMAT
                                         "/%" G_GINT64_FORMAT,
-                                        (*num).num, (*num).denom,
+                                        num.num, num.denom,
                                         val.num, val.denom);
             }
-            g_free (num);
         }
         else if (g_strcmp0 ((char*)mark->name, "split:quantity") == 0)
         {
-            gnc_numeric* num = dom_tree_to_gnc_numeric (mark);
+            gnc_numeric num = dom_tree_to_gnc_numeric (mark);
             gnc_numeric val = xaccSplitGetAmount (spl);
 
-            if (!gnc_numeric_equal (*num, val))
+            if (!gnc_numeric_equal (num, val))
             {
                 return g_strdup_printf ("quantities differ under _equal: %"
                                         G_GINT64_FORMAT "/%" G_GINT64_FORMAT
                                         " v %" G_GINT64_FORMAT "/%"
                                         G_GINT64_FORMAT,
-                                        (*num).num, (*num).denom,
+                                        num.num, num.denom,
                                         val.num, val.denom);
             }
-            if (!gnc_numeric_equal (*num, val))
+            if (!gnc_numeric_equal (num, val))
             {
-                g_free (num);
                 return g_strdup_printf ("quantities differ: %" G_GINT64_FORMAT
                                         "/%" G_GINT64_FORMAT " v %"
                                         G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
-                                        (*num).num, (*num).denom,
+                                        num.num, num.denom,
                                         val.num, val.denom);
             }
-            g_free (num);
         }
         else if (g_strcmp0 ((char*)mark->name, "split:account") == 0)
         {

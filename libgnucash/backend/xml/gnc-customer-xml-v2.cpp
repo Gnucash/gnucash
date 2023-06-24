@@ -289,14 +289,8 @@ static gboolean
 customer_discount_handler (xmlNodePtr node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
-    gnc_numeric* val;
 
-    val = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (val, FALSE);
-
-    gncCustomerSetDiscount (pdata->customer, *val);
-    g_free (val);
-
+    gncCustomerSetDiscount (pdata->customer, dom_tree_to_gnc_numeric (node));
     return TRUE;
 }
 
@@ -304,14 +298,8 @@ static gboolean
 customer_credit_handler (xmlNodePtr node, gpointer cust_pdata)
 {
     struct customer_pdata* pdata = static_cast<decltype (pdata)> (cust_pdata);
-    gnc_numeric* val;
 
-    val = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (val, FALSE);
-
-    gncCustomerSetCredit (pdata->customer, *val);
-    g_free (val);
-
+    gncCustomerSetCredit (pdata->customer, dom_tree_to_gnc_numeric (node));
     return TRUE;
 }
 
