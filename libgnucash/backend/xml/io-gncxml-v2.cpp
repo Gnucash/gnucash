@@ -1602,14 +1602,19 @@ gnc_book_write_to_xml_file_v2 (QofBook* book, const char* filename,
         return false;
 
     /* Try to write as much as possible */
-    success = (gnc_book_write_to_xml_filehandle_v2 (book, file));
+    if (!gnc_book_write_to_xml_filehandle_v2 (book, file))
+        success = false;
 
     /* Close the output stream */
-    success = ! (fclose (file));
+    if (fclose (file))
+        success = false;
 
     /* Optionally wait for parallel compression threads */
     if (thread)
-        success =  g_thread_join (thread) != nullptr;
+    {
+        if (g_thread_join (thread) != nullptr)
+            success = false;
+    }
 
     return success;
 }
