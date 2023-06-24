@@ -67,6 +67,7 @@ static bool gnc_gsettings_is_valid_key(GSettings *settings, const gchar *key)
     auto keys = g_settings_schema_list_keys (schema);
     auto found = (keys && g_strv_contains(keys, key));
     g_strfreev (keys);
+    g_settings_schema_unref (schema);
 
     return found;
 }
@@ -87,6 +88,7 @@ static GSettings * gnc_gsettings_get_settings_obj (const gchar *schema_str)
     g_free(full_name);
 
     LEAVE("");
+    g_settings_schema_unref (schema);
     return gset;
 }
 
@@ -472,6 +474,7 @@ gnc_gsettings_reset_schema (const gchar *schema_str)
     }
 
     g_object_unref (gs_obj);
+    g_settings_schema_unref (schema);
     g_strfreev (keys);
 }
 
