@@ -59,7 +59,6 @@ gnc_add_test (test-assistant-stock-transaction
 set_dist_list(test_gnome_DIST
   CMakeLists.txt
   test-invoice-report-builtin-default.cpp
-  test-invoice-buitin-default.cpp
   ${test_gnome_scheme_SOURCES}
   ${test_gnome_SOURCES}
   ${test_assistant-stock-transaction_SOURCES}
