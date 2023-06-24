@@ -329,7 +329,10 @@ void
 GncQuotesImpl::report (const char* source, const StrVec& commodities,
                        bool verbose)
 {
-    bool is_currency{source && strcmp(source, "currency") == 0};
+    if (!source)
+        throw (GncQuoteException(bl::translate("GncQuotes::Report called with no source.")));
+
+    bool is_currency{strcmp(source, "currency") == 0};
     m_failures.clear();
     if (commodities.empty())
     {
