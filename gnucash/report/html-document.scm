@@ -150,11 +150,9 @@
           ((string? e) (cons e accum))
           (else (cons (object->string e) accum)))))
 
-;; first optional argument is "headers?"
 ;; returns the html document as a string, I think.
-(define (gnc:html-document-render doc . rest)
+(define* (gnc:html-document-render doc #:optional (headers? #t))
   (let ((stylesheet (gnc:html-document-style-sheet doc))
-        (headers? (or (null? rest) (car rest)))
         (style-text (gnc:html-document-style-text doc)))
 
     (if stylesheet

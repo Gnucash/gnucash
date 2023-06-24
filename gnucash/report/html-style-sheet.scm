@@ -205,12 +205,11 @@
 ;;  html-style-sheet-render 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define (gnc:html-style-sheet-render sheet doc . rest)
+(define* (gnc:html-style-sheet-render sheet doc #:optional headers?)
   ;; render the document (returns an <html-document>)
   (let ((newdoc ((gnc:html-style-sheet-renderer sheet) 
                  (gnc:html-style-sheet-options sheet)
-                 doc))
-        (headers? (and (pair? rest) (car rest))))
+                 doc)))
 
     ;; Copy values over to stylesheet-produced document.  note that this is a
     ;; bug that should probably better be fixed by having the stylesheets
