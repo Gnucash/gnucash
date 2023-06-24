@@ -3751,7 +3751,6 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     const gchar *menu_qualifier;
 
     GMenuModel *menu_model_part;
-    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
 #ifdef MAC_INTEGRATION
     auto theApp{static_cast<GtkosxApplication *>(g_object_new(GTKOSX_TYPE_APPLICATION, nullptr))};
 #endif
@@ -3792,6 +3791,7 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     gnc_menubar_model_remove_items_with_attrib (priv->menubar_model,
                                                 GNC_MENU_ATTRIBUTE_TEMPORARY);
 
+    GncMenuModelSearch *gsm = g_new0 (GncMenuModelSearch, 1);
     for (gint i = 0; ui_updates[i]; i++)
     {
         gchar *menu_name;
