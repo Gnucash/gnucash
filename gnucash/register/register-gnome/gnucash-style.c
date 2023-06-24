@@ -277,7 +277,7 @@ set_dimensions_pass_two (GnucashSheet *sheet, int default_width)
 
     width = 0;
     num_cols = cursor->num_cols;
-    widths = g_new (int, num_cols);
+    widths = g_new0 (int, num_cols);
 
     /* find header widths */
     for (col = 0; col < num_cols; col++)
