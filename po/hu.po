@@ -12,11 +12,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
-"PO-Revision-Date: 2023-06-09 11:48+0000\n"
-"Last-Translator: Geza Kiss <geza.openstreetmap@reallymymail.com>\n"
+"PO-Revision-Date: 2023-06-24 22:52+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -48,6 +48,9 @@ msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
+"Megpróbált megkeresni egy nem definiált dátumszimbólumot '~a'. Ezt a "
+"jelentést valószínűleg a GnuCash egy későbbi verziója mentette el. "
+"Alapértelmezés szerint ma."
 
 #: bindings/guile/date-utilities.scm:717
 #: gnucash/gnome-utils/gnc-period-select.c:70
@@ -958,14 +961,6 @@ msgstr ""
 "a GnuCash online kézikönyvben található."
 
 #: doc/tip_of_the_day.list.c:44
-#, fuzzy
-#| msgid ""
-#| "Every transaction has a \"Notes\" field where you can put useful "
-#| "information.\n"
-#| "\n"
-#| "To make it visible\n"
-#| "select \"View\" in the menu bar and check \"Double Line\" or\n"
-#| "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -978,7 +973,7 @@ msgstr ""
 "információkat tárolhat.\n"
 "\n"
 "Láthatóvá tételéhez\n"
-"a „Nézet” menüben pipálja be a „Kétsoros” lehetőséget,\n"
+"a „Nézet” menüben jelölje be a „Kétsoros” lehetőséget,\n"
 "vagy a Beállítások:Regiszter alapbeállítások oldalon jelölje be a „Kétsoros "
 "nézet” lehetőséget."
 
@@ -10797,14 +10792,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:10
-#, fuzzy
 msgid "Width of this column"
-msgstr "_Oszlop felosztása"
+msgstr "Az oszlop szélessége"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:11
-#, fuzzy
 msgid "This setting stores the width of the given column in pixels."
-msgstr "E beállítás engedélyezi a dátum oszlopot."
+msgstr "Ez a beállítás az oszlop pixelben megadott szélességét tárolja."
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:17
 msgid ""
@@ -10834,29 +10827,28 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:81
 msgid "Book Closing Dates"
-msgstr "Lezárási dátumok könyvelése"
+msgstr "Főkönyvzárási dátumok"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:196
 #: gnucash/gtkbuilder/dialog-book-close.glade:7
 msgid "Close Book"
-msgstr "Könyv lezárása"
+msgstr "Főönyv zárása"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:210
-#, fuzzy
 msgid "Account Period Finish"
-msgstr "Számlázási időszak"
+msgstr "Számlázási időszak vége"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:237
 msgid "Press 'Close' to Exit."
-msgstr ""
+msgstr "A kilépéshez nyomja meg a „Bezárás” gombot."
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:248
 msgid "Summary Page"
-msgstr ""
+msgstr "Összefoglaló oldal"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:13
 msgid "CSV Import Assistant"
-msgstr "CSV Importáló Segéd"
+msgstr "CSV Importálássegéd"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:30
@@ -10878,21 +10870,21 @@ msgstr ""
 "\n"
 "Ezzel a segéddel számlákat importálhat egy fájlból.\n"
 "\n"
-"A fájl formátumának ugyanolyannak kell lennie, mint amilyet az Exportálás -> "
-"Számlakészlet CSV-fájlba… menüpont készít.\n"
+"A fájl formátumának ugyanolyannak kell lennie, mint amilyet a „Számlakészlet "
+"exportálása CSV-fájlba” exportálási menüpont készít.\n"
 "\n"
 "Amelyik számla még nem létezik, az a teljes számlanév által megadott helyen "
 "és névvel létre fog jönni, feltéve, hogy a hozzá tartozó értékpapír vagy "
-"pénznem is létezik. Amelyik számlák már létezik, annak 4 tulajdonsága "
-"megkapja a fájlban szereplő értékeket: ezek a Számlaszám, a Leírás, a "
-"Megjegyzések és a Szín.\n"
+"pénznem is létezik. Amelyik számla már létezik, annak négy mezője megkapja a "
+"fájlban szereplő értékeket: ezek a Számlaszám, a Leírás, a Megjegyzések és a "
+"Szín.\n"
 "\n"
-"A folytatáshoz kattintson a \"Következő\" gombra, az importálás "
-"megszakításához pedig a \"Mégse\" gombra.\n"
+"A folytatáshoz kattintson a „Következő” gombra, az importálás "
+"megszakításához pedig a „Mégse” gombra.\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:51
 msgid "Import Account Assistant"
-msgstr "Számla Importáló Segéd"
+msgstr "Számlaimportsegéd"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
 msgid "Enter file name and location for the Import…"
@@ -11216,10 +11208,8 @@ msgstr "<b>Beállítások mentése és betöltése</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:225
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:214
-#, fuzzy
-#| msgid "Comma separated"
 msgid "Character-separated"
-msgstr "Vesszővel elválasztott"
+msgstr "Karakterrel elválasztott"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:242
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:231
