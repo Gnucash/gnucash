@@ -1593,7 +1593,7 @@ gnc_split_register_save_to_copy_buffer (SplitRegister *reg,
 
         if (!other_fs)
         {
-            if (g_list_length (ft->m_splits) == 1)
+            if (ft && g_list_length (ft->m_splits) == 1)
             {
                 Split* temp_split;
 
