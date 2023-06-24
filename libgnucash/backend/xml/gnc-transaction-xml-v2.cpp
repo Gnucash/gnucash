@@ -217,14 +217,8 @@ static inline gboolean
 set_spl_gnc_num (xmlNodePtr node, Split* spl,
                  void (*func) (Split* spl, gnc_numeric gn))
 {
-    gnc_numeric* num = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (num, FALSE);
-
-    func (spl, *num);
-
-    g_free (num);
-
-    return FALSE;
+    func (spl, dom_tree_to_gnc_numeric (node));
+    return TRUE;
 }
 
 static gboolean

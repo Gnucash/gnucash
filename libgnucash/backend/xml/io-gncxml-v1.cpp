@@ -2967,10 +2967,7 @@ price_parse_xml_sub_node (GNCPrice* p, xmlNodePtr sub_node, QofBook* book)
     }
     else if (g_strcmp0 ("price:value", (char*)sub_node->name) == 0)
     {
-        gnc_numeric* value = dom_tree_to_gnc_numeric (sub_node);
-        if (!value) return FALSE;
-        gnc_price_set_value (p, *value);
-        g_free (value);
+        gnc_price_set_value (p, dom_tree_to_gnc_numeric (sub_node));
     }
     gnc_price_commit_edit (p);
     return TRUE;

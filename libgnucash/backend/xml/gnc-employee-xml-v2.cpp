@@ -229,13 +229,8 @@ static gboolean
 employee_workday_handler (xmlNodePtr node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
-    gnc_numeric* val;
 
-    val = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (val, FALSE);
-    gncEmployeeSetWorkday (pdata->employee, *val);
-    g_free (val);
-
+    gncEmployeeSetWorkday (pdata->employee, dom_tree_to_gnc_numeric (node));
     return TRUE;
 }
 
@@ -243,13 +238,8 @@ static gboolean
 employee_rate_handler (xmlNodePtr node, gpointer employee_pdata)
 {
     struct employee_pdata* pdata = static_cast<decltype (pdata)> (employee_pdata);
-    gnc_numeric* val;
 
-    val = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (val, FALSE);
-    gncEmployeeSetRate (pdata->employee, *val);
-    g_free (val);
-
+    gncEmployeeSetRate (pdata->employee, dom_tree_to_gnc_numeric (node));
     return TRUE;
 }
 

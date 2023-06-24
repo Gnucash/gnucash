@@ -183,11 +183,8 @@ static gboolean
 ttentry_amount_handler (xmlNodePtr node, gpointer ttentry_pdata)
 {
     struct ttentry_pdata* pdata = static_cast<decltype (pdata)> (ttentry_pdata);
-    gnc_numeric* num = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (num, FALSE);
 
-    gncTaxTableEntrySetAmount (pdata->ttentry, *num);
-    g_free (num);
+    gncTaxTableEntrySetAmount (pdata->ttentry, dom_tree_to_gnc_numeric (node));
     return TRUE;
 }
 

@@ -360,7 +360,7 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
     QIFAccountPickerDialog * wind = user_data;
     GtkTreeModel *model;
     GtkTreeIter iter;
-    gboolean placeholder;
+    gboolean placeholder = TRUE;
 
     if (gtk_tree_selection_get_selected (gtk_tree_view_get_selection
                                         (wind->treeview), &model, &iter))

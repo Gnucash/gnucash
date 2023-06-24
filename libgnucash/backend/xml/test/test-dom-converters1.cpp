@@ -163,7 +163,6 @@ static const char*
 test_gnc_nums_internal (gnc_numeric to_test)
 {
     const char* ret = NULL;
-    gnc_numeric* to_compare = NULL;
     xmlNodePtr to_gen = NULL;
 
     to_gen = gnc_numeric_to_dom_tree ("test-num", &to_test);
@@ -173,24 +172,13 @@ test_gnc_nums_internal (gnc_numeric to_test)
     }
     else
     {
-        to_compare = dom_tree_to_gnc_numeric (to_gen);
-        if (!to_compare)
+        gnc_numeric to_compare = dom_tree_to_gnc_numeric (to_gen);
+        if (!gnc_numeric_equal (to_test, to_compare))
         {
-            ret = "no gnc_numeric parsed";
-        }
-        else
-        {
-            if (!gnc_numeric_equal (to_test, *to_compare))
-            {
-                ret = "numerics compared different";
-            }
+            ret = "numerics compared different";
         }
     }
 
-    if (to_compare)
-    {
-        g_free (to_compare);
-    }
     if (to_gen)
     {
         xmlFreeNode (to_gen);

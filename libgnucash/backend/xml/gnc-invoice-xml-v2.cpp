@@ -382,11 +382,8 @@ static gboolean
 invoice_tochargeamt_handler (xmlNodePtr node, gpointer invoice_pdata)
 {
     struct invoice_pdata* pdata = static_cast<decltype (pdata)> (invoice_pdata);
-    gnc_numeric* num = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (num, FALSE);
 
-    gncInvoiceSetToChargeAmount (pdata->invoice, *num);
-    g_free (num);
+    gncInvoiceSetToChargeAmount (pdata->invoice, dom_tree_to_gnc_numeric (node));
     return TRUE;
 }
 

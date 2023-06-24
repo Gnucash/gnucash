@@ -151,11 +151,7 @@ static gboolean
 set_numeric (xmlNodePtr node, GncBillTerm* term,
              void (*func) (GncBillTerm*, gnc_numeric))
 {
-    gnc_numeric* num = dom_tree_to_gnc_numeric (node);
-    g_return_val_if_fail (num, FALSE);
-
-    func (term, *num);
-    g_free (num);
+    func (term, dom_tree_to_gnc_numeric (node));
     return TRUE;
 }
 
