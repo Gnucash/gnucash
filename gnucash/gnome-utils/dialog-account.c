@@ -2232,7 +2232,7 @@ gnc_account_renumber_update_examples (RenumberDialog *data)
     gtk_label_set_text (GTK_LABEL(data->example1), str);
     g_free (str);
 
-    if (strlen (prefix))
+    if (prefix && *prefix)
         str = g_strdup_printf ("%s-%0*d", prefix, num_digits,
                                interval * data->num_children);
     else
