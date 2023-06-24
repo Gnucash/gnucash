@@ -2587,7 +2587,7 @@ test_xaccAccountType_Compatibility (void)
         else if (type == ACCT_TYPE_TRADING)
             g_assert_cmpint (compat, == , trading_compat);
         for (auto parent = ACCT_TYPE_NONE; parent < ACCT_TYPE_LAST; ++parent)
-            if (1 << parent & compat)
+            if (parent != ACCT_TYPE_NONE && (1 << parent) & compat)
                 g_assert (xaccAccountTypesCompatible (parent, type));
             else
                 g_assert (!xaccAccountTypesCompatible (parent, type));
