@@ -902,6 +902,7 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
     {
         VirtualCellLocation vc_loc;
         vc_loc.virt_row = 0;
+        vc_loc.virt_col = 0;
         gnc_split_register_show_trans (reg, vc_loc);
     }
     else
