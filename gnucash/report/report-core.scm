@@ -172,7 +172,7 @@
   (make-new-record-template version name report-guid parent-type options-generator
                             options-cleanup-cb options-changed-cb
                             renderer in-menu? menu-path menu-name
-                            menu-tip hook export-types export-thunk)
+                            menu-tip hook export-types export-thunk chart?)
   report-template?
   (version report-template-version)
   (report-guid report-template-report-guid report-template-set-report-guid!)
@@ -187,11 +187,12 @@
   (menu-name report-template-menu-name)
   (menu-tip report-template-menu-tip)
   (hook report-template-hook)
+  (chart? report-template-chart?)
   (export-types report-template-export-types)
   (export-thunk report-template-export-thunk))
 
 (define (make-report-template)
-  (make-new-record-template #f #f #f #f #f #f #f #f #t #f #f #f #f #f #f))
+  (make-new-record-template #f #f #f #f #f #f #f #f #t #f #f #f #f #f #f #f))
 (define gnc:report-template-version report-template-version)
 (define gnc:report-template-report-guid report-template-report-guid)
 (define gnc:report-template-set-report-guid! report-template-set-report-guid!)
@@ -742,12 +743,13 @@ not found.")))
         (and template
              (let* ((renderer (gnc:report-template-renderer template))
                     (stylesheet (gnc:report-stylesheet report))
+                    (chart? (report-template-chart? template))
                     (doc (renderer report))
                     (html (cond
                            ((string? doc) doc)
                            (else
                             (gnc:html-document-set-style-sheet! doc stylesheet)
-                            (gnc:html-document-render doc headers?)))))
+                            (gnc:html-document-render doc headers? chart?)))))
                (gnc:report-set-ctext! report html) ;; cache the html
                (gnc:report-set-dirty?! report #f)  ;; mark it clean
                html)))))
