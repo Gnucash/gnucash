@@ -240,6 +240,7 @@ gnc_totd_initialize (void)
             g_free(tip_list[tip]);
             tip_list[tip] = new_str;
         }
+        g_free (contents);
     }
     if (tip_count < 1)
         return FALSE;
