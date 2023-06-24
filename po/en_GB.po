@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
-"PO-Revision-Date: 2023-06-04 15:48+0000\n"
+"PO-Revision-Date: 2023-06-18 23:49+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (United Kingdom) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_GB/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1459,10 +1459,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:261
-#, fuzzy
-#| msgid "Return of capital"
 msgid "Return of capital (reclassification)"
-msgstr "Return of capital"
+msgstr "Return of capital (reclassification)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:262
 msgid ""
@@ -1470,14 +1468,15 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"Company returns capital, reducing the cost basis without affecting # units. "
+"A distribution previously recorded as a dividend is reclassified to return "
+"of capital, often due to end-of-year tax information."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:272
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (dividend)"
-msgstr "Notional distribution"
+msgstr "Notional distribution (dividend)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:273
 msgid ""
@@ -1490,21 +1489,15 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (capital gain)"
-msgstr "Notional distribution"
+msgstr "Notional distribution (capital gain)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, which is recorded as dividend "
-#| "income and increases the cost basis without affecting # units."
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"Company issues a notional distribution, which is recorded as dividend income "
+"Company issues a notional distribution, which is recorded as a capital gain "
 "and increases the cost basis without affecting # units."
 
 #. Translators: this is a stock transaction describing a stock
@@ -1605,17 +1598,10 @@ msgstr ""
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:368
-#, fuzzy
-#| msgid "Compensatory return of capital"
 msgid "Compensatory return of capital (reclassification)"
-msgstr "Compensatory return of capital"
+msgstr "Compensatory return of capital (reclassification)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:369
-#, fuzzy
-#| msgid ""
-#| "Company returns capital, and the short stock holder must make a "
-#| "compensatory payment for the returned capital. This reduces the cost "
-#| "basis (less negative, towards 0.00 value) without affecting # units."
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1625,16 +1611,16 @@ msgid ""
 msgstr ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
-"negative, towards 0.00 value) without affecting # units."
+"negative, towards 0.00 value) without affecting # units. A distribution "
+"previously recorded as a compensatory dividend is reclassified to "
+"compensatory return of capital, often due to end-of-year tax information."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:380
-#, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (dividend)"
-msgstr "Compensatory notional distribution"
+msgstr "Compensatory notional distribution (dividend)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:381
 msgid ""
@@ -1652,19 +1638,10 @@ msgstr ""
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:392
-#, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (capital gain)"
-msgstr "Compensatory notional distribution"
+msgstr "Compensatory notional distribution (capital gain)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:393
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, and the short stock holder must "
-#| "make a compensatory payment for the notional distribution. This is "
-#| "recorded as a loss/negative dividend income amount, and increases the "
-#| "cost basis (more negative, away from 0.00 value) without affecting # "
-#| "units."
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1673,8 +1650,8 @@ msgid ""
 msgstr ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
-"loss/negative dividend income amount, and increases the cost basis (more "
-"negative, away from 0.00 value) without affecting # units."
+"capital loss amount, and increases the cost basis (more negative, away from "
+"0.00 value) without affecting # units."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:415
 msgid ""
@@ -1713,10 +1690,8 @@ msgid "missing"
 msgstr "missing"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:590
-#, fuzzy
-#| msgid "Amount for %s is missing."
 msgid "Amount for stock value is missing."
-msgstr "Amount for %s is missing."
+msgstr "Amount for stock value is missing."
 
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
@@ -1738,11 +1713,9 @@ msgstr ""
 "Please review all transactions to ensure proper recording."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:866
-#, fuzzy
-#| msgid "Stock Value"
 msgctxt "Stock Assistant: Page name"
 msgid "stock value"
-msgstr "Stock Value"
+msgstr "stock value"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:883
 msgid "Invalid stock new balance."
@@ -1790,32 +1763,28 @@ msgstr "A price of 1 %s = %s on %s will be recorded."
 #: gnucash/gnome/assistant-stock-transaction.cpp:971
 msgctxt "Stock Assistant: Page name"
 msgid "cash"
-msgstr ""
+msgstr "cash"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:975
 msgctxt "Stock Assistant: Page name"
 msgid "fees"
-msgstr ""
+msgstr "fees"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:979
-#, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "dividend"
-msgstr "Dividend"
+msgstr "dividend"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:987
 #: gnucash/gnome/assistant-stock-transaction.cpp:989
-#, fuzzy
-#| msgid "Capital Gains"
 msgctxt "Stock Assistant: Page name"
 msgid "capital gains"
-msgstr "Capital Gains"
+msgstr "capital gains"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1018
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
-msgstr ""
+msgstr "Transaction can't balance, %s is error value %s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1024
 #, c-format
@@ -21374,10 +21343,8 @@ msgid "Enter credit formula for real transaction"
 msgstr "Enter credit formula for real transaction"
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:74
-#, fuzzy
-#| msgid "Loading completed"
 msgid "Don't autocomplete"
-msgstr "Loading completed"
+msgstr "Don't autocomplete"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
@@ -24176,16 +24143,12 @@ msgid "Display a column for the actual values."
 msgstr "Display a column for the actual values."
 
 #: gnucash/report/reports/standard/budget.scm:57
-#, fuzzy
-#| msgid "Actual Transactions"
 msgid "Link to actual transactions"
-msgstr "Actual Transactions"
+msgstr "Link to actual transactions"
 
 #: gnucash/report/reports/standard/budget.scm:58
-#, fuzzy
-#| msgid "Move to the blank transaction in the register"
 msgid "Show the actual transactions for the budget period"
-msgstr "Move to the blank transaction in the register"
+msgstr "Show the actual transactions for the budget period"
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Show Difference"
@@ -27568,10 +27531,8 @@ msgstr "Subtotal Table"
 #. "Running Totals" is the plural form as it refers to the running total and running subtotals.
 #. To be consistent, also consider how the singular form "Running Total" is translated.
 #: gnucash/report/trep-engine.scm:82
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Totals"
-msgstr "Running Balance"
+msgstr "Running Totals"
 
 #: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2292
 msgid "Show Account Description"
@@ -27915,10 +27876,8 @@ msgid "Display the balance of the underlying account on each line?"
 msgstr "Display the balance of the underlying account on each line?"
 
 #: gnucash/report/trep-engine.scm:931
-#, fuzzy
-#| msgid "Display the transaction date?"
 msgid "Display a grand total section at the bottom?"
-msgstr "Display the transaction date?"
+msgstr "Display a grand total section at the bottom?"
 
 #: gnucash/report/trep-engine.scm:936
 msgid "Display the trans number?"
@@ -27962,25 +27921,19 @@ msgstr "Reverse amount display for certain account types."
 
 #: gnucash/report/trep-engine.scm:997
 msgid "Display running totals as per report sort order?"
-msgstr ""
+msgstr "Display running totals as per report sort order?"
 
 #: gnucash/report/trep-engine.scm:1000
-#, fuzzy
-#| msgid "Grand Total Cell Color"
 msgid "Grand Total and Subtotals"
-msgstr "Grand Total Cell Colour"
+msgstr "Grand Total and Subtotals"
 
 #: gnucash/report/trep-engine.scm:1001
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Grand Total Only"
-msgstr "Grand Total"
+msgstr "Grand Total Only"
 
 #: gnucash/report/trep-engine.scm:1002
-#, fuzzy
-#| msgid "Subtotal"
 msgid "Subtotals Only"
-msgstr "Subtotal"
+msgstr "Subtotals Only"
 
 #: gnucash/report/trep-engine.scm:1114
 msgid "Num/T-Num"
@@ -27995,49 +27948,39 @@ msgstr "Transfer from/to"
 #. pattern as for these other strings: “Running Totals”,
 #. "Secondary Subtotal” and "Running Primary Subtotal"
 #: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:1483
-#, fuzzy
-#| msgid "Secondary Subtotal"
 msgid "Running Secondary Subtotal"
-msgstr "Secondary Subtotal"
+msgstr "Running Secondary Subtotal"
 
 #. Translators: this is the running total for the primary subtotal.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. “Primary Subtotal”
 #: gnucash/report/trep-engine.scm:1398 gnucash/report/trep-engine.scm:1496
-#, fuzzy
-#| msgid "Primary Subtotal"
 msgid "Running Primary Subtotal"
-msgstr "Primary Subtotal"
+msgstr "Running Primary Subtotal"
 
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
 #: gnucash/report/trep-engine.scm:1402 gnucash/report/trep-engine.scm:1497
-#, fuzzy
-#| msgid "Running Sum"
 msgid "Running Subtotal"
-msgstr "Running Sum"
+msgstr "Running Subtotal"
 
 #. Translators: this is the running total for the grand total.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. "Grand Total”
 #: gnucash/report/trep-engine.scm:1419 gnucash/report/trep-engine.scm:1511
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Running Grand Total"
-msgstr "Grand Total"
+msgstr "Running Grand Total"
 
 #. Translators: "Running Total" is a shorter version of
 #. "Running Grand Total" used when the running grand total is
 #. displayed without subtotals. To be consistent, also consider
 #. how the plural form "Running Totals" is translated.
 #: gnucash/report/trep-engine.scm:1424 gnucash/report/trep-engine.scm:1512
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Total"
-msgstr "Running Balance"
+msgstr "Running Total"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
@@ -30052,22 +29995,19 @@ msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:369
-#, fuzzy, c-format
-#| msgid "%s balance is %s, subceeds limit of %s."
+#, c-format
 msgid "%s balance of %s is above the upper limit %s."
-msgstr "%s balance is %s, below minimum of %s."
+msgstr "%s balance of %s is above the upper limit %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
-#, fuzzy, c-format
-#| msgid "%s balance is %s, subceeds limit of %s."
+#, c-format
 msgid "%s balance of %s is below the lower limit %s."
-msgstr "%s balance is %s, below minimum of %s."
+msgstr "%s balance of %s is below the lower limit %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
-#, fuzzy, c-format
-#| msgid "%s balance is %s, and should be zero."
+#, c-format
 msgid "%s balance of %s should be zero."
-msgstr "%s balance is %s, and should be zero."
+msgstr "%s balance of %s should be zero."
 
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
@@ -30863,16 +30803,14 @@ msgid "Checking business splits in account %s: %u of %u"
 msgstr "Checking business splits in account %s: %u of %u"
 
 #: libgnucash/engine/Scrub.c:148
-#, fuzzy, c-format
-#| msgid "Looking for orphans in account %s: %u of %u"
+#, c-format
 msgid "Looking for orphans in transaction: %u of %u"
-msgstr "Looking for orphans in account %s: %u of %u"
+msgstr "Looking for orphans in transaction: %u of %u"
 
 #: libgnucash/engine/Scrub.c:362
-#, fuzzy, c-format
-#| msgid "Looking for imbalances in account %s: %u of %u"
+#, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %u"
-msgstr "Looking for imbalances in account %s: %u of %u"
+msgstr "Looking for imbalances in transaction date %s: %u of %u"
 
 #: libgnucash/engine/Split.c:1636
 msgctxt ""

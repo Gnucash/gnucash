@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
-"PO-Revision-Date: 2023-05-06 06:50+0000\n"
+"PO-Revision-Date: 2023-06-20 12:51+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/uk/>\n"
@@ -22,9 +22,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : n"
-"%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"Plural-Forms: nplurals=4; plural=n==1 ? 3 : n%10==1 && n%100!=11 ? 0 : "
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.18.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Project-Style: default\n"
 
@@ -1473,10 +1473,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:261
-#, fuzzy
-#| msgid "Return of capital"
 msgid "Return of capital (reclassification)"
-msgstr "Повернення капіталу"
+msgstr "Повернення капіталу (перекласифікація)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:262
 msgid ""
@@ -1484,14 +1482,15 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"Компанія повертає капітал, зменшуючи базову вартість без зміни кількості "
+"одиниць. Розподіл, який раніше було записано, як дивіденди перекласифіковано "
+"як повернення капіталу, часто через річні дані щодо сплати податків."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:272
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (dividend)"
-msgstr "Номінальний розподіл"
+msgstr "Номінальний розподіл (дивіденд)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:273
 msgid ""
@@ -1504,22 +1503,16 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (capital gain)"
-msgstr "Номінальний розподіл"
+msgstr "Номінальний розподіл (збільшення капіталу)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, which is recorded as dividend "
-#| "income and increases the cost basis without affecting # units."
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"Компанія випускає номінальний розподіл, який буде записано як прибуткові "
-"дивіденди, а базову вартість буде збільшено без зміни кількості одиниць."
+"Компанія випускає номінальний розподіл, який буде записано як збільшення "
+"капіталу, а базову вартість буде збільшено без зміни кількості одиниць."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1620,17 +1613,10 @@ msgstr ""
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:368
-#, fuzzy
-#| msgid "Compensatory return of capital"
 msgid "Compensatory return of capital (reclassification)"
-msgstr "Компенсаторне повернення капіталу"
+msgstr "Компенсаторне повернення капіталу (перекласифікація)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:369
-#, fuzzy
-#| msgid ""
-#| "Company returns capital, and the short stock holder must make a "
-#| "compensatory payment for the returned capital. This reduces the cost "
-#| "basis (less negative, towards 0.00 value) without affecting # units."
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1639,17 +1625,17 @@ msgid ""
 "compensatory return of capital, often due to end-of-year tax information."
 msgstr ""
 "Компанія повертає капітал і держатель коротких акцій має здійснити "
-"компенсаційну виплату для поверненого капіталу. Це зменшує базову вартість "
-"(зменшення у напрямку 0.00) без зміни кількості одиниць."
+"компенсаційну виплату для поверненого капіталу. Це зменшує базову вартість ("
+"зменшення у напрямку 0.00) без зміни кількості одиниць. Розподіл, який "
+"раніше було записано як компенсаційний дивіденд, перекласифіковано як "
+"компенсаційне повернення капіталу, часто через річні дані щодо податків."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:380
-#, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (dividend)"
-msgstr "Компенсаторний номінальний розподіл"
+msgstr "Компенсаторний номінальний розподіл (дивіденд)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:381
 msgid ""
@@ -1667,19 +1653,10 @@ msgstr ""
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:392
-#, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (capital gain)"
-msgstr "Компенсаторний номінальний розподіл"
+msgstr "Компенсаторний номінальний розподіл (збільшення капіталу)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:393
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, and the short stock holder must "
-#| "make a compensatory payment for the notional distribution. This is "
-#| "recorded as a loss/negative dividend income amount, and increases the "
-#| "cost basis (more negative, away from 0.00 value) without affecting # "
-#| "units."
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1688,8 +1665,8 @@ msgid ""
 msgstr ""
 "Компанія випускає номінальний розподіл, і держатель коротких акцій має "
 "здійснити компенсаторну виплату для номінального розподілу. Це буде записано "
-"як втрату або від'ємну суму вхідних дивідендів, і збільшити базову вартість "
-"(від'ємніший, від значення 0.00) без впливу на кількість одиниць."
+"як втрату капіталу, і збільшує базову вартість (від'ємніший, від значення 0."
+"00) без впливу на кількість одиниць."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:415
 msgid ""
@@ -1728,10 +1705,8 @@ msgid "missing"
 msgstr "пропущено"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:590
-#, fuzzy
-#| msgid "Amount for %s is missing."
 msgid "Amount for stock value is missing."
-msgstr "Не вистачає суми для %s."
+msgstr "Не вистачає значення вартості акцій для %s."
 
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
@@ -1753,11 +1728,9 @@ msgstr ""
 "перегляньте усі транзакції, щоб переконатися у належному веденні записів."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:866
-#, fuzzy
-#| msgid "Stock Value"
 msgctxt "Stock Assistant: Page name"
 msgid "stock value"
-msgstr "Ціна акції"
+msgstr "ціна акції"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:883
 msgid "Invalid stock new balance."
@@ -1806,32 +1779,28 @@ msgstr "Буде записано ціну 1 %s = %s на %s."
 #: gnucash/gnome/assistant-stock-transaction.cpp:971
 msgctxt "Stock Assistant: Page name"
 msgid "cash"
-msgstr ""
+msgstr "готівка"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:975
 msgctxt "Stock Assistant: Page name"
 msgid "fees"
-msgstr ""
+msgstr "сплати"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:979
-#, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "dividend"
-msgstr "Дивіденд"
+msgstr "дивіденд"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:987
 #: gnucash/gnome/assistant-stock-transaction.cpp:989
-#, fuzzy
-#| msgid "Capital Gains"
 msgctxt "Stock Assistant: Page name"
 msgid "capital gains"
-msgstr "Збільшення капіталу"
+msgstr "збільшення капіталу"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1018
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
-msgstr ""
+msgstr "Балансування операцій неможливе, %s є значенням помилки %s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1024
 #, c-format
@@ -21702,10 +21671,8 @@ msgid "Enter credit formula for real transaction"
 msgstr "Введіть формулу кредиту для реальної транзакції"
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:74
-#, fuzzy
-#| msgid "Loading completed"
 msgid "Don't autocomplete"
-msgstr "Завантаження завершено"
+msgstr "Не завершувати автоматично"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
@@ -24522,16 +24489,12 @@ msgid "Display a column for the actual values."
 msgstr "Показувати стовпчик поточних значень."
 
 #: gnucash/report/reports/standard/budget.scm:57
-#, fuzzy
-#| msgid "Actual Transactions"
 msgid "Link to actual transactions"
-msgstr "Дійсні транзакції"
+msgstr "Посилання на дійсні транзакції"
 
 #: gnucash/report/reports/standard/budget.scm:58
-#, fuzzy
-#| msgid "Move to the blank transaction in the register"
 msgid "Show the actual transactions for the budget period"
-msgstr "Перейти до порожньої транзакції у списку"
+msgstr "Показати дійсні транзакції для бюджетного періоду"
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Show Difference"
@@ -27941,10 +27904,8 @@ msgstr "Таблиця проміжних сум"
 #. "Running Totals" is the plural form as it refers to the running total and running subtotals.
 #. To be consistent, also consider how the singular form "Running Total" is translated.
 #: gnucash/report/trep-engine.scm:82
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Totals"
-msgstr "Поточний баланс"
+msgstr "Поточний суми"
 
 #: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2292
 msgid "Show Account Description"
@@ -28299,10 +28260,8 @@ msgid "Display the balance of the underlying account on each line?"
 msgstr "Показувати баланс базового рахунку у кожному рядку?"
 
 #: gnucash/report/trep-engine.scm:931
-#, fuzzy
-#| msgid "Display the transaction date?"
 msgid "Display a grand total section at the bottom?"
-msgstr "Показувати дату транзакції?"
+msgstr "Показувати розділ загальних сум у нижній частині вікна?"
 
 #: gnucash/report/trep-engine.scm:936
 msgid "Display the trans number?"
@@ -28346,25 +28305,19 @@ msgstr "Обертати знак для деяких типів рахункі�
 
 #: gnucash/report/trep-engine.scm:997
 msgid "Display running totals as per report sort order?"
-msgstr ""
+msgstr "Показати поточні суми як порядок за звітом?"
 
 #: gnucash/report/trep-engine.scm:1000
-#, fuzzy
-#| msgid "Grand Total Cell Color"
 msgid "Grand Total and Subtotals"
-msgstr "Колір комірки головного підсумку"
+msgstr "Загальна сума і проміжні суми"
 
 #: gnucash/report/trep-engine.scm:1001
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Grand Total Only"
-msgstr "Повна сума"
+msgstr "Лише повна сума"
 
 #: gnucash/report/trep-engine.scm:1002
-#, fuzzy
-#| msgid "Subtotal"
 msgid "Subtotals Only"
-msgstr "Проміжний підсумок"
+msgstr "Лише проміжні суми"
 
 #: gnucash/report/trep-engine.scm:1114
 msgid "Num/T-Num"
@@ -28379,49 +28332,39 @@ msgstr "Передача з/на"
 #. pattern as for these other strings: “Running Totals”,
 #. "Secondary Subtotal” and "Running Primary Subtotal"
 #: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:1483
-#, fuzzy
-#| msgid "Secondary Subtotal"
 msgid "Running Secondary Subtotal"
-msgstr "Вторинний проміжний підсумок"
+msgstr "Проміжний вторинний підсумок"
 
 #. Translators: this is the running total for the primary subtotal.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. “Primary Subtotal”
 #: gnucash/report/trep-engine.scm:1398 gnucash/report/trep-engine.scm:1496
-#, fuzzy
-#| msgid "Primary Subtotal"
 msgid "Running Primary Subtotal"
-msgstr "Первинний проміжний підсумок"
+msgstr "Поточний первинний проміжний підсумок"
 
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
 #: gnucash/report/trep-engine.scm:1402 gnucash/report/trep-engine.scm:1497
-#, fuzzy
-#| msgid "Running Sum"
 msgid "Running Subtotal"
-msgstr "Поточна сума"
+msgstr "Поточний проміжний підсумок"
 
 #. Translators: this is the running total for the grand total.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. "Grand Total”
 #: gnucash/report/trep-engine.scm:1419 gnucash/report/trep-engine.scm:1511
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Running Grand Total"
-msgstr "Повна сума"
+msgstr "Поточна повна сума"
 
 #. Translators: "Running Total" is a shorter version of
 #. "Running Grand Total" used when the running grand total is
 #. displayed without subtotals. To be consistent, also consider
 #. how the plural form "Running Totals" is translated.
 #: gnucash/report/trep-engine.scm:1424 gnucash/report/trep-engine.scm:1512
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Total"
-msgstr "Поточний баланс"
+msgstr "Поточний підсумок"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
@@ -30452,22 +30395,19 @@ msgstr ""
 "Немає доступного курсу обміну у SX [%s] для %s → %s, значення є нульовим."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:369
-#, fuzzy, c-format
-#| msgid "%s balance is %s, subceeds limit of %s."
+#, c-format
 msgid "%s balance of %s is above the upper limit %s."
-msgstr "Баланс %s дорівнює %s, нижче обмеження %s."
+msgstr "Баланс %s %s перевищує верхнє обмеження %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
-#, fuzzy, c-format
-#| msgid "%s balance is %s, subceeds limit of %s."
+#, c-format
 msgid "%s balance of %s is below the lower limit %s."
-msgstr "Баланс %s дорівнює %s, нижче обмеження %s."
+msgstr "Баланс %s %s є нижчим за нижнє обмеження %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
-#, fuzzy, c-format
-#| msgid "%s balance is %s, and should be zero."
+#, c-format
 msgid "%s balance of %s should be zero."
-msgstr "Баланс %s дорівнює %s, а має бути нульовим."
+msgstr "Баланс %s дорівнює %s має бути нульовим."
 
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
@@ -31272,16 +31212,14 @@ msgid "Checking business splits in account %s: %u of %u"
 msgstr "Перевіряємо бізнес-дроблення у рахунку %s: %u з %u"
 
 #: libgnucash/engine/Scrub.c:148
-#, fuzzy, c-format
-#| msgid "Looking for orphans in account %s: %u of %u"
+#, c-format
 msgid "Looking for orphans in transaction: %u of %u"
-msgstr "Шукаємо осиротілі записи у рахунку %s: %u з %u"
+msgstr "Шукаємо осиротілі записи у транзакції: %u з %u"
 
 #: libgnucash/engine/Scrub.c:362
-#, fuzzy, c-format
-#| msgid "Looking for imbalances in account %s: %u of %u"
+#, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %u"
-msgstr "Шукаємо дизбаланси на рахунку %s: %u з %u"
+msgstr "Шукаємо дизбаланси на дату транзакції %s: %u з %u"
 
 #: libgnucash/engine/Split.c:1636
 msgctxt ""

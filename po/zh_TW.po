@@ -9,11 +9,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
-"PO-Revision-Date: 2023-05-31 09:52+0000\n"
-"Last-Translator: Newson Parker <2434843612@qq.com>\n"
+"PO-Revision-Date: 2023-06-21 06:50+0000\n"
+"Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1420,25 +1420,22 @@ msgstr "公司退還本金，會在不影響股數的前提下減少成本基礎
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:261
-#, fuzzy
-#| msgid "Return of capital"
 msgid "Return of capital (reclassification)"
-msgstr "資本返還"
+msgstr "資本返還（重新分類）"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:262
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units. "
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
-msgstr ""
+msgstr "公司返還資本，將會在不影響股數的情況下降低成本基礎。之前記為股利的分配被重新"
+"分類為返還資本，這通常是由於年終的稅務資訊所導致。"
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:272
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (dividend)"
-msgstr "Notional Distribution"
+msgstr "Notional Distribution（股利）"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:273
 msgid ""
@@ -1451,22 +1448,15 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (capital gain)"
-msgstr "Notional Distribution"
+msgstr "Notional Distribution（資本利得）"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, which is recorded as dividend "
-#| "income and increases the cost basis without affecting # units."
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
-msgstr ""
-"公司發出 Notional Distribution，將會記錄成股利收入並增加成本基礎，但不會對股"
-"數產生影響。"
+msgstr "公司發出 Notional "
+"Distribution，將會記錄成資本利得並增加成本基礎，但不會對股數產生影響。"
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1559,17 +1549,10 @@ msgstr ""
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:368
-#, fuzzy
-#| msgid "Compensatory return of capital"
 msgid "Compensatory return of capital (reclassification)"
-msgstr "補償資本返還"
+msgstr "補償資本返還（重新分類）"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:369
-#, fuzzy
-#| msgid ""
-#| "Company returns capital, and the short stock holder must make a "
-#| "compensatory payment for the returned capital. This reduces the cost "
-#| "basis (less negative, towards 0.00 value) without affecting # units."
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1577,17 +1560,16 @@ msgid ""
 "previously recorded as a compensatory dividend is reclassified to "
 "compensatory return of capital, often due to end-of-year tax information."
 msgstr ""
-"公司返還本金，持有空頭部位的股東必須為返還的本金支付補償金。 這會降低成本基礎"
-"（較小的負值，接近 0.00 ）而不影響持有股數。"
+"公司返還本金，持有空頭部位的股東必須為返還的本金支付補償金。 "
+"這會降低成本基礎（較小的負值，接近 0.00 ）而不影響持有股數。之前記為股利補償"
+"的分配，被重新分類為補償資本返還，通常是由於年末的稅務資訊所導致。"
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:380
-#, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (dividend)"
-msgstr "補償 Notional Distribution"
+msgstr "補償 Notional Distribution（股利）"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:381
 msgid ""
@@ -1604,19 +1586,10 @@ msgstr ""
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:392
-#, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (capital gain)"
-msgstr "補償 Notional Distribution"
+msgstr "補償 Notional Distribution（資本利得）"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:393
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, and the short stock holder must "
-#| "make a compensatory payment for the notional distribution. This is "
-#| "recorded as a loss/negative dividend income amount, and increases the "
-#| "cost basis (more negative, away from 0.00 value) without affecting # "
-#| "units."
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1624,8 +1597,9 @@ msgid ""
 "0.00 value) without affecting # units."
 msgstr ""
 "公司發行 Notional Distribution，持有空頭部位的股東需針對 Notional "
-"Distribution 進行補償性支付。這會被記錄為資本虧損 / 負值的股利收入，增加成本"
-"基礎（較大的負值，遠離 0.0 ）但不影響持有股數。"
+"Distribution "
+"進行補償性支付。這會被記錄為資本虧損，將會增加成本基礎（較大的負值，遠離 0.0 "
+"）但不影響持有股數。"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:415
 msgid ""
@@ -1662,10 +1636,8 @@ msgid "missing"
 msgstr "不明"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:590
-#, fuzzy
-#| msgid "Amount for %s is missing."
 msgid "Amount for stock value is missing."
-msgstr "%s的金額未填寫。"
+msgstr "股票價值金額未填寫。"
 
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
@@ -1686,8 +1658,6 @@ msgstr ""
 "易，確保記錄的正確性。"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:866
-#, fuzzy
-#| msgid "Stock Value"
 msgctxt "Stock Assistant: Page name"
 msgid "stock value"
 msgstr "股票價值"
@@ -1738,24 +1708,20 @@ msgstr "將會記錄 %3$s 當天的價格，%1$s = %2$s。"
 #: gnucash/gnome/assistant-stock-transaction.cpp:971
 msgctxt "Stock Assistant: Page name"
 msgid "cash"
-msgstr ""
+msgstr "現金"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:975
 msgctxt "Stock Assistant: Page name"
 msgid "fees"
-msgstr ""
+msgstr "費用"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:979
-#, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "dividend"
 msgstr "股利"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:987
 #: gnucash/gnome/assistant-stock-transaction.cpp:989
-#, fuzzy
-#| msgid "Capital Gains"
 msgctxt "Stock Assistant: Page name"
 msgid "capital gains"
 msgstr "資本利得"
@@ -1763,7 +1729,7 @@ msgstr "資本利得"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1018
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
-msgstr ""
+msgstr "無法平衡交易，%s 方錯誤：%s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1024
 #, c-format
@@ -20596,10 +20562,8 @@ msgid "Enter credit formula for real transaction"
 msgstr "輸入實際交易的貸方公式"
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:74
-#, fuzzy
-#| msgid "Loading completed"
 msgid "Don't autocomplete"
-msgstr "載入完成"
+msgstr "停用自動補齊"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
@@ -23347,16 +23311,12 @@ msgid "Display a column for the actual values."
 msgstr "實顯實際發生的金額於一欄。"
 
 #: gnucash/report/reports/standard/budget.scm:57
-#, fuzzy
-#| msgid "Actual Transactions"
 msgid "Link to actual transactions"
-msgstr "實際交易"
+msgstr "連結至實際交易"
 
 #: gnucash/report/reports/standard/budget.scm:58
-#, fuzzy
-#| msgid "Move to the blank transaction in the register"
 msgid "Show the actual transactions for the budget period"
-msgstr "移至此登記簿的空白交易處"
+msgstr "顯示預算期間的實際交易"
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Show Difference"
@@ -26674,10 +26634,8 @@ msgstr "小計表格"
 #. "Running Totals" is the plural form as it refers to the running total and running subtotals.
 #. To be consistent, also consider how the singular form "Running Total" is translated.
 #: gnucash/report/trep-engine.scm:82
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Totals"
-msgstr "逐筆結計餘額"
+msgstr "逐筆結計"
 
 #: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2292
 msgid "Show Account Description"
@@ -27011,10 +26969,8 @@ msgid "Display the balance of the underlying account on each line?"
 msgstr "是否在每一行顯示科目的結餘？"
 
 #: gnucash/report/trep-engine.scm:931
-#, fuzzy
-#| msgid "Display the transaction date?"
 msgid "Display a grand total section at the bottom?"
-msgstr "是否顯示交易日期？"
+msgstr "在底部顯示總計？"
 
 #: gnucash/report/trep-engine.scm:936
 msgid "Display the trans number?"
@@ -27056,25 +27012,19 @@ msgstr "反轉某些科目類型的金額顯示。"
 
 #: gnucash/report/trep-engine.scm:997
 msgid "Display running totals as per report sort order?"
-msgstr ""
+msgstr "是否按照報表的排序順序顯示逐筆結計？"
 
 #: gnucash/report/trep-engine.scm:1000
-#, fuzzy
-#| msgid "Grand Total Cell Color"
 msgid "Grand Total and Subtotals"
-msgstr "「總和」細格顏色"
+msgstr "總計與小計"
 
 #: gnucash/report/trep-engine.scm:1001
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Grand Total Only"
-msgstr "總和"
+msgstr "僅顯示總計"
 
 #: gnucash/report/trep-engine.scm:1002
-#, fuzzy
-#| msgid "Subtotal"
 msgid "Subtotals Only"
-msgstr "小計"
+msgstr "僅顯示小計"
 
 #: gnucash/report/trep-engine.scm:1114
 msgid "Num/T-Num"
@@ -27089,49 +27039,39 @@ msgstr "轉帳 從/到"
 #. pattern as for these other strings: “Running Totals”,
 #. "Secondary Subtotal” and "Running Primary Subtotal"
 #: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:1483
-#, fuzzy
-#| msgid "Secondary Subtotal"
 msgid "Running Secondary Subtotal"
-msgstr "次鍵小計"
+msgstr "逐筆結計次要小計"
 
 #. Translators: this is the running total for the primary subtotal.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. “Primary Subtotal”
 #: gnucash/report/trep-engine.scm:1398 gnucash/report/trep-engine.scm:1496
-#, fuzzy
-#| msgid "Primary Subtotal"
 msgid "Running Primary Subtotal"
-msgstr "主鍵小計"
+msgstr "逐筆結計主要小計"
 
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
 #: gnucash/report/trep-engine.scm:1402 gnucash/report/trep-engine.scm:1497
-#, fuzzy
-#| msgid "Running Sum"
 msgid "Running Subtotal"
-msgstr "當前總數"
+msgstr "逐筆結計小計"
 
 #. Translators: this is the running total for the grand total.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. "Grand Total”
 #: gnucash/report/trep-engine.scm:1419 gnucash/report/trep-engine.scm:1511
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Running Grand Total"
-msgstr "總和"
+msgstr "逐筆結計總計"
 
 #. Translators: "Running Total" is a shorter version of
 #. "Running Grand Total" used when the running grand total is
 #. displayed without subtotals. To be consistent, also consider
 #. how the plural form "Running Totals" is translated.
 #: gnucash/report/trep-engine.scm:1424 gnucash/report/trep-engine.scm:1512
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Total"
-msgstr "逐筆結計餘額"
+msgstr "逐筆結計"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
@@ -29126,20 +29066,17 @@ msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr "排程交易 [%s] 中沒有從 %s 到 %s 的可用匯率，該值將為零。"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:369
-#, fuzzy, c-format
-#| msgid "%s balance is %s, subceeds limit of %s."
+#, c-format
 msgid "%s balance of %s is above the upper limit %s."
-msgstr "%s 的結餘是 %s，低於下限 %s。"
+msgstr "%s 的結餘是 %s，高於上限 %s。"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
-#, fuzzy, c-format
-#| msgid "%s balance is %s, subceeds limit of %s."
+#, c-format
 msgid "%s balance of %s is below the lower limit %s."
 msgstr "%s 的結餘是 %s，低於下限 %s。"
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
-#, fuzzy, c-format
-#| msgid "%s balance is %s, and should be zero."
+#, c-format
 msgid "%s balance of %s should be zero."
 msgstr "%s 的結餘為 %s，但應該是零。"
 
@@ -29895,16 +29832,14 @@ msgid "Checking business splits in account %s: %u of %u"
 msgstr "檢查科目 %s 中的商務分割：%u / %u"
 
 #: libgnucash/engine/Scrub.c:148
-#, fuzzy, c-format
-#| msgid "Looking for orphans in account %s: %u of %u"
+#, c-format
 msgid "Looking for orphans in transaction: %u of %u"
-msgstr "檢查科目 %s 中的無主交易：%u / %u"
+msgstr "檢查無主交易：%u / %u"
 
 #: libgnucash/engine/Scrub.c:362
-#, fuzzy, c-format
-#| msgid "Looking for imbalances in account %s: %u of %u"
+#, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %u"
-msgstr "檢查科目 %s 的失衡：%u / %u"
+msgstr "檢查交易日期 %s 中的失衡：%u / %u"
 
 #: libgnucash/engine/Split.c:1636
 msgctxt ""
