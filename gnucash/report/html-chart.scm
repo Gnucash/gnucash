@@ -456,6 +456,10 @@ document.getElementById(chartid).onclick = function(evt) {
 
     (push (gnc:html-js-include "chartjs/Chart.bundle.min.js"))
 
+    ;; Alternate location for Chart.bundle.min.js in case local file is not available.
+    ;; Make sure to update version number in url when upgrading local Chart.bundle.min.js
+    (push (gnc:html-js-include-alternate "https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.bundle.min.js" "window.Chart"))
+
     ;; the following hidden h3 is used to query style and copy onto chartjs
     (push "<h3 style='display:none'></h3>")
     (push (format #f "<div style='width:~a;height:~a;'>\n"

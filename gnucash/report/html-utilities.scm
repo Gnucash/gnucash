@@ -70,6 +70,7 @@
 (export gnc:html-make-empty-data-warning)
 (export gnc:html-make-options-link)
 (export gnc:html-js-include)
+(export gnc:html-js-include-alternate)
 (export gnc:html-css-include)
 
 ;; returns a list with n #f (empty cell) values
@@ -395,6 +396,12 @@
   (format #f
           "<script language=\"javascript\" type=\"text/javascript\" src=~s></script>\n"
           (make-uri (gnc-resolve-file-path file))))
+
+(define (gnc:html-js-include-alternate url test)
+  (format #f
+          "<script language=\"javascript\" type=\"text/javascript\">~a || \
+document.write('<script language=\"javascript\" type=\"text/javascript\" src=~s><\\/script>');</script>\n"
+          test url))
 
 (define (gnc:html-css-include file)
   (format #f
