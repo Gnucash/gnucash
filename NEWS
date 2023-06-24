@@ -1,25 +1,115 @@
 Version history:
 ------- -------
+5.2  - 25 June 2023
+Between 5.1 and 5.2, the following bugfixes were accomplished:
+
+    Bug 777472 - reconcile does not work if transaction selected
+        Check that there's no outstanding activity in the current register page
+        before starting a reconciliation. It is still possible to start
+        modifying a transaction after the reconciliation window is open but
+        this will stop the most common issue with the process. Starting a
+        reconciliation from the account tree is left unprotected.
+    Bug 798564 - GnuCash is slow when there are a lot of open tabs/registers
+        Lazily load registers as is already done with reports.
+    Bug 798597 - The word "Separators" needs two separate versions
+        Use "Character-separated" when it's a choice between that and fixed
+        field width and "Select Separator Character" when it's a heading.
+    Bug 798695 - Deleting everything from the "Transfer" cell after suggestions
+                 pop-up restricts search to the first 30 accounts
+        Skip the search on an empty value and return all accounts in the combo
+        box as it normally does if the account list is opened without searching
+        for something.
+    Bug 798796 - Account list incomplete in report options
+        Allow stock/fund accounts that are descendants of Bank accounts to be
+        selected for the Advanced Portfolio, Investment Lots and Investment
+        Portfolio reports.
+    Bug 798809 - Multicolumn report error when reopened after saving.
+    Bug 798839 - Edit -> Preferences string not translatable (reopened)
+    Bug 798862 - Merge identical strings (reopened)
+        Ensure similar strings are identical and use double line view instead
+        of double line mode.
+    Bug 798879 - RFE: [Transaction Report] add Running Total option
+    Bug 798885 - Accented character in folder name on Account Export (reopened)
+    Bug 798899 - Gnucash crashes during CSV import when using a template if the
+                 destination account is changed from one used in the template
+    Bug 798901 - Wrong value for very small prices from Finance::Quote.
+    Bug 798916 - Exchange rates fetched from openexchange off by factor of 10
+    Bug 798919 - Inconsistent signs in creating budget
+    Bug 798923 - OFX import is no longer matching security nor asking for
+                 stock account.
+    Bug 798930 - invoices won't sequence to the next number
+    Bug 798948 - XML file corrupted by saving twice in extremely short period
+    Bug 798952 - Unable to set day threshold or counters in properties.
+    Bug 798960 - Transaction completion horizontal scrolling opens without the
+                 new text being visible and remembers previous position/width
+    Bug 798966 - Uninitialised variable used in
+                 dialog-account-picker.c:dialog_response_cb()
+
+The following fixes and improvements were not associated with bug reports:
+
+    The type-ahead selection of transaction descriptions has been substantially
+        overhauled based on extensive user feedback. Matches are now only on
+        the beginning of words and are now sorted by age since last use. This
+        both substantially reduces the number of matches and prioritizes the
+        most recently used as being the most likely candidates for re-use. To
+        help distinguish cases of long descriptions where the match would be
+        outside the popup's viewport the viewport is automatically scrolled
+        horizontally so that the end of the left-most (right-most in rtl
+        languages) matches is centered in the view. Completion can be aborted
+        with the <escape> key or a new Don't autocomplete selection that's the
+        first entry in the popup.
+    Fix lockup on Windows in type-ahead selection of transaction descriptions.
+    More budget-module sign fixes and improvements.
+    Lots of memory-leak fixes, GLib modernization, and code cleanup by
+        Richard Cohen, Simon Arlott, & Chris Lam.
+    Bugfix xaccTransGetTxnType: avoid returning TXN_TYPE_LINK incorrectly:
+        A TXN_TYPE_PAYMENT will have non-APAR splits; a TXN_TYPE_LINK will not
+        have non-APAR splits. This bug manifests as a regular TXN_TYPE_PAYMENT
+        transaction being later voided being incorrectly changed to
+        TXN_TYPE_LINK.
+    Including brokerage fees in Money Out calculation (if not ignoring them)
+        in advanced-portfolio.scm report and updating the "advanced" tests to
+        reflect selling fees being included into the money out value.
+    [stock-txn-asst] Don't use the initial value in amount edit widgets unless
+        they're valid. Otherwise the invalid value will log an error that will
+        prevent later valid input from working.
+    Bugfix: Actions > Online Actions > Show log Window does not open when it
+        is first clicked.
+    cmake: check gdk only when building GUI
+    Get the tooltip working on "Online Banking Setup"
+
+New and Updated Translations: Chinese (Simplified), Chinese (Traditional),
+    Croatian, English (Australia), English (New Zealand),
+    English (United Kingdom), Estonian, French, German, Hungarian, Lithuanian,
+    Marathi, Norwegian Bokmål, Polish, Portuguese, Romanian, Spanish, Swedish,
+    Ukrainian
+
 5.1  - 30 April 2023
 Between 5.0 and 5.1, the following bugfixes were accomplished:
 
     Bug 765920 - Running balance not accurate when sorted different ways
-
-        Renamed option to "Account Balance" to avoid confusion with running total.
-        Added helper function to ensure running balance and balance forward are only shown when transaction are grouped by account and sorted as in register. In that case column heading remains "Running Balance" and balance forward is shown. Otherwwise column heading is renamed "Account Balance" and balance forward is not shown.
+        Renamed option to "Account Balance" to avoid confusion with running
+        total. Added helper function to ensure running balance and balance
+        forward are only shown when transaction are grouped by account and
+        sorted as in register. In that case column heading remains
+        "Running Balance" and balance forward is shown. Otherwise column
+        heading is renamed "Account Balance" and balance forward is not shown.
         Also added missing code for Common Currency conversion.
-
-    Bug 797879 - [Transaction Report] running balance column not consistent with amount column for SAME transaction date
-    Bug 798461 - balance sheet shows positions with zero balances despite report options
+    Bug 797879 - [Transaction Report] running balance column not consistent
+                 with amount column for SAME transaction date
+    Bug 798461 - balance sheet shows positions with zero balances despite
+                 report options
     Bug 798775 - Why is General Journal called "Register" in the tabs?
     Bug 798802 - Online Price quote - Stocks not working GNU 5.0 Windows Bis
     Bug 798802 - Online Price quote - Stocks not working GNU 5.0 Windows
     Bug 798807 - Keyboard shortcuts not working
     Bug 798808 - Saved reports shown on main menu
-    Bug 798810 - Income Statement (multicolumn) - account sorting is 'reversed' each time you restart.
+    Bug 798810 - Income Statement (multicolumn) - account sorting is 'reversed'
+                 each time you restart.
     Bug 798812 - crashes after I open a customer report and select…
     Bug 798813 - Under File->Import, Missing OFX/QFX menu item
-    Bug 798815 - flatpak run --command=gnucash-cli cannot download quotes since 5.0.
+    Bug 798815 - flatpak run --command=gnucash-cli cannot download quotes
+                 since 5.0.
     Bug 798821 - Crash when running report in window
     Bug 798834 - CSS-based Stylesheet Help Button not working
     Bug 798839 - Edit -> Preferences string not translatable
@@ -34,8 +124,10 @@ Between 5.0 and 5.1, the following bugfixes were accomplished:
     Bug 798872 - Reload inoperative for reports
     Bug 798877 - Program crashes upon selection of CSV profile
     Bug 798885 - Accented character in folder name on Account Export
-    Bug 798886 - [Transaction Report] Subtotal upper headings do not follow font style of lower headings
-    Bug 798893 - several menu tip messages in reports are marked translatable but unused.
+    Bug 798886 - [Transaction Report] Subtotal upper headings do not follow
+                 font style of lower headings
+    Bug 798893 - several menu tip messages in reports are marked translatable
+                 but unused.
     Bug 798894 - TOTD with ellipsis broken.
 
 The following fixes and improvements were not associated with bug reports:
