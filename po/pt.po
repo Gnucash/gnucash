@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-06-18 13:11-0700\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2023-06-24 14:16-0700\n"
 "PO-Revision-Date: 2023-06-19 05:34+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
@@ -213,7 +213,7 @@ msgid "The current date."
 msgstr "A data actual."
 
 #: bindings/guile/options.scm:388 gnucash/gnome/top-level.c:462
-#: libgnucash/engine/gnc-optiondb.cpp:1141 libgnucash/engine/qofbookslots.h:72
+#: libgnucash/engine/gnc-optiondb.cpp:1142 libgnucash/engine/qofbookslots.h:72
 msgid "Business"
 msgstr "Empresas"
 
@@ -225,41 +225,41 @@ msgstr "Empresas"
 #: gnucash/gtkbuilder/dialog-customer.glade:146
 #: gnucash/gtkbuilder/dialog-vendor.glade:147
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
-#: libgnucash/engine/gnc-optiondb.cpp:1241
+#: libgnucash/engine/gnc-optiondb.cpp:1242
 msgid "Company Name"
 msgstr "Nome da empresa"
 
-#: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1244
+#: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1245
 msgid "Company Address"
 msgstr "Morada da empresa"
 
-#: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1267
+#: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1268
 msgid "Company ID"
 msgstr "NIF da empresa"
 
-#: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1252
+#: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1253
 msgid "Company Phone Number"
 msgstr "Telefone da empresa"
 
-#: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1256
+#: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1257
 msgid "Company Fax Number"
 msgstr "Fax da empresa"
 
-#: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1264
+#: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1265
 msgid "Company Website URL"
 msgstr "URL da empresa"
 
-#: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1260
+#: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1261
 msgid "Company Email Address"
 msgstr "Correio electrónico da empresa"
 
-#: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1248
+#: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1249
 msgid "Company Contact Person"
 msgstr "Contacto na empresa"
 
 #: bindings/guile/options.scm:397
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
-#: libgnucash/engine/gnc-optiondb.cpp:1287
+#: libgnucash/engine/gnc-optiondb.cpp:1288
 msgid "Fancy Date Format"
 msgstr "Formato elegante da data"
 
@@ -271,11 +271,11 @@ msgstr "personalizada"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
 #: gnucash/report/reports/standard/invoice.scm:497
 #: gnucash/report/reports/standard/new-owner-report.scm:55
-#: libgnucash/engine/gnc-optiondb.cpp:1293
+#: libgnucash/engine/gnc-optiondb.cpp:1294
 msgid "Tax"
 msgstr "Imposto"
 
-#: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1293
+#: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1294
 msgid "Tax Number"
 msgstr "Número fiscal"
 
@@ -1854,7 +1854,7 @@ msgid "Memo"
 msgstr "Nota"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1753
-#: gnucash/gnome/gnc-plugin-page-register.c:3382
+#: gnucash/gnome/gnc-plugin-page-register.c:3381
 #: gnucash/gtkbuilder/dialog-payment.glade:300
 #: gnucash/register/ledger-core/split-register.c:2441
 #: gnucash/report/reports/standard/general-journal.scm:82
@@ -1866,7 +1866,7 @@ msgid "Debit"
 msgstr "Débito"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1760
-#: gnucash/gnome/gnc-plugin-page-register.c:3378
+#: gnucash/gnome/gnc-plugin-page-register.c:3377
 #: gnucash/gtkbuilder/dialog-payment.glade:316
 #: gnucash/register/ledger-core/split-register.c:2464
 #: gnucash/register/ledger-core/split-register.c:2559
@@ -2078,7 +2078,7 @@ msgstr "Eliminar mercadoria?"
 #: gnucash/gnome/gnc-plugin-budget.c:321
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1649
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1061
-#: gnucash/gnome/gnc-plugin-page-register.c:1847
+#: gnucash/gnome/gnc-plugin-page-register.c:1846
 #: gnucash/gnome/gnc-split-reg.c:939 gnucash/gnome/gnc-split-reg.c:977
 #: gnucash/gnome/gnc-split-reg.c:1199 gnucash/gnome/gnc-split-reg.c:1466
 #: gnucash/gnome/gnc-split-reg.c:1506 gnucash/gnome-search/search-account.c:239
@@ -2332,7 +2332,7 @@ msgid "Placeholder account selected. Please try again."
 msgstr "Marcador de posição seleccionado. Tente novamente."
 
 #: gnucash/gnome/dialog-doclink.c:160
-#: gnucash/gnome/gnc-plugin-page-register.c:4610
+#: gnucash/gnome/gnc-plugin-page-register.c:4609
 msgid "Select document"
 msgstr "Seleccionar documento"
 
@@ -2716,8 +2716,8 @@ msgstr "Data de reconciliação"
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.c:2312
-#: gnucash/gnome/gnc-plugin-page-register.c:4002
+#: gnucash/gnome/gnc-plugin-page-register.c:2311
+#: gnucash/gnome/gnc-plugin-page-register.c:4001
 #: gnucash/gnome-search/dialog-search.c:879
 #: gnucash/gnome-search/dialog-search.c:885
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:385
@@ -2728,7 +2728,7 @@ msgstr "Número/Acção"
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.c:2317
+#: gnucash/gnome/gnc-plugin-page-register.c:2316
 #: gnucash/gnome/gnc-split-reg.c:675 gnucash/gnome-search/dialog-search.c:878
 #: gnucash/gnome-search/dialog-search.c:886
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:103
@@ -2745,8 +2745,8 @@ msgstr "Acção"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.c:2311
-#: gnucash/gnome/gnc-plugin-page-register.c:4001
+#: gnucash/gnome/gnc-plugin-page-register.c:2310
+#: gnucash/gnome/gnc-plugin-page-register.c:4000
 #: gnucash/gnome-search/dialog-search.c:881
 #: gnucash/gnome-search/dialog-search.c:887
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:365
@@ -2758,7 +2758,7 @@ msgstr "Número de transacção"
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.c:2316
+#: gnucash/gnome/gnc-plugin-page-register.c:2315
 #: gnucash/gnome/gnc-split-reg.c:663 gnucash/gnome-search/dialog-search.c:880
 #: gnucash/gnome-search/dialog-search.c:888
 #: gnucash/gtkbuilder/dialog-payment.glade:268
@@ -3538,7 +3538,7 @@ msgstr ""
 "uma factura ou um pagamento primeiro?"
 
 #: gnucash/gnome/dialog-payment.c:1574
-#: gnucash/gnome/gnc-plugin-page-register.c:3218
+#: gnucash/gnome/gnc-plugin-page-register.c:3217
 #: gnucash/gnome-search/search-reconciled.c:216
 #: gnucash/gnome-utils/gnc-tree-view-account.c:858
 #: gnucash/report/trep-engine.scm:158
@@ -3546,7 +3546,7 @@ msgid "Cleared"
 msgstr "Confirmada"
 
 #: gnucash/gnome/dialog-payment.c:1576
-#: gnucash/gnome/gnc-plugin-page-register.c:3220
+#: gnucash/gnome/gnc-plugin-page-register.c:3219
 #: gnucash/gnome-search/search-reconciled.c:219
 #: gnucash/gnome-utils/gnc-tree-view-account.c:872
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
@@ -4149,8 +4149,8 @@ msgstr "Eliminar"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:335
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1900
-#: gnucash/gnome/gnc-plugin-page-register.c:1795
-#: gnucash/gnome/gnc-plugin-page-register.c:4944
+#: gnucash/gnome/gnc-plugin-page-register.c:1794
+#: gnucash/gnome/gnc-plugin-page-register.c:4943
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr "\"Verificar e corrigir\" actualmente em curso, deseja abortar?"
 
@@ -4988,20 +4988,20 @@ msgid "Stock Assistant"
 msgstr "Assistente de acções"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:637
-#: gnucash/gnome/gnc-plugin-page-register.c:1902
-#: gnucash/gnome/gnc-plugin-page-register.c:3313
+#: gnucash/gnome/gnc-plugin-page-register.c:1901
+#: gnucash/gnome/gnc-plugin-page-register.c:3312
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "Diário geral"
 
 #. Translators: %s is the name
 #. of the tab page
-#: gnucash/gnome/gnc-plugin-page-register.c:1836
+#: gnucash/gnome/gnc-plugin-page-register.c:1835
 #, c-format
 msgid "Save changes to %s?"
 msgstr "Gravar alterações em %s?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1841
+#: gnucash/gnome/gnc-plugin-page-register.c:1840
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -5010,104 +5010,104 @@ msgstr ""
 "Este diário tem alterações a uma transacção pendentes. Quer gravar as "
 "alterações a esta transacção, descartar a transacção ou cancelar a operação?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1844
+#: gnucash/gnome/gnc-plugin-page-register.c:1843
 msgid "_Discard Transaction"
 msgstr "_Descartar transacção"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1848
+#: gnucash/gnome/gnc-plugin-page-register.c:1847
 msgid "_Save Transaction"
 msgstr "_Gravar transacção"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1881
-#: gnucash/gnome/gnc-plugin-page-register.c:1916
-#: gnucash/gnome/gnc-plugin-page-register.c:1929
-#: gnucash/gnome/gnc-plugin-page-register.c:1986
-#: gnucash/gnome/gnc-plugin-page-register.c:2084
-#: gnucash/gnome/gnc-plugin-page-register.c:2207
+#: gnucash/gnome/gnc-plugin-page-register.c:1880
+#: gnucash/gnome/gnc-plugin-page-register.c:1915
+#: gnucash/gnome/gnc-plugin-page-register.c:1928
+#: gnucash/gnome/gnc-plugin-page-register.c:1985
+#: gnucash/gnome/gnc-plugin-page-register.c:2083
+#: gnucash/gnome/gnc-plugin-page-register.c:2206
 msgid "unknown"
 msgstr "desconhecido"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1904
-#: gnucash/gnome/gnc-plugin-page-register.c:3319
+#: gnucash/gnome/gnc-plugin-page-register.c:1903
+#: gnucash/gnome/gnc-plugin-page-register.c:3318
 msgid "Portfolio"
 msgstr "Portefólio"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1906
-#: gnucash/gnome/gnc-plugin-page-register.c:3325
+#: gnucash/gnome/gnc-plugin-page-register.c:1905
+#: gnucash/gnome/gnc-plugin-page-register.c:3324
 msgid "Search Results"
 msgstr "Resultados da procura"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3191
+#: gnucash/gnome/gnc-plugin-page-register.c:3190
 msgid "Start Date:"
 msgstr "Data inicial:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3198
+#: gnucash/gnome/gnc-plugin-page-register.c:3197
 msgid "Show previous number of days:"
 msgstr "Mostrar número prévio de dias:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3206
+#: gnucash/gnome/gnc-plugin-page-register.c:3205
 msgid "End Date:"
 msgstr "Data final:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3216
+#: gnucash/gnome/gnc-plugin-page-register.c:3215
 #: gnucash/report/trep-engine.scm:157
 msgid "Unreconciled"
 msgstr "Não reconciliada"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3222
+#: gnucash/gnome/gnc-plugin-page-register.c:3221
 #: gnucash/gnome-search/search-reconciled.c:222
 #: gnucash/report/trep-engine.scm:160
 msgid "Frozen"
 msgstr "Congelada"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3224
+#: gnucash/gnome/gnc-plugin-page-register.c:3223
 #: gnucash/gnome-search/search-reconciled.c:225
 #: gnucash/report/trep-engine.scm:161
 msgid "Voided"
 msgstr "Anulada"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3234
+#: gnucash/gnome/gnc-plugin-page-register.c:3233
 msgid "Show:"
 msgstr "Mostrar:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3242
+#: gnucash/gnome/gnc-plugin-page-register.c:3241
 msgid "Hide:"
 msgstr "Ocultar:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3253
+#: gnucash/gnome/gnc-plugin-page-register.c:3252
 msgid "Filter By:"
 msgstr "Filtrar por:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3315
-#: gnucash/gnome/gnc-plugin-page-register.c:3333
+#: gnucash/gnome/gnc-plugin-page-register.c:3314
+#: gnucash/gnome/gnc-plugin-page-register.c:3332
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
 msgstr "Relatório de transacções"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3321
+#: gnucash/gnome/gnc-plugin-page-register.c:3320
 msgid "Portfolio Report"
 msgstr "Relatório de portefólio"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3327
+#: gnucash/gnome/gnc-plugin-page-register.c:3326
 msgid "Search Results Report"
 msgstr "Relatório de resultados da procura"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3331
+#: gnucash/gnome/gnc-plugin-page-register.c:3330
 #: gnucash/gtkbuilder/dialog-preferences.glade:2791
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
 msgstr "Diário"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3349
+#: gnucash/gnome/gnc-plugin-page-register.c:3348
 msgid "and subaccounts"
 msgstr "e subcontas"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3520
+#: gnucash/gnome/gnc-plugin-page-register.c:3519
 msgid "Print checks from multiple accounts?"
 msgstr "Imprimir cheques de múltiplas contas?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3522
+#: gnucash/gnome/gnc-plugin-page-register.c:3521
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5115,55 +5115,55 @@ msgstr ""
 "Este resultado de procura contém parcelas de mais de uma conta. Quer "
 "imprimir os cheques, mesmo que não sejam todos da mesma conta?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3532
+#: gnucash/gnome/gnc-plugin-page-register.c:3531
 msgid "_Print checks"
 msgstr "Im_primir cheques"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3551
+#: gnucash/gnome/gnc-plugin-page-register.c:3550
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr ""
 "Só pode imprimir cheques de um diário de conta bancária ou de resultados de "
 "procura."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3767
+#: gnucash/gnome/gnc-plugin-page-register.c:3766
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
 "Não pode anular uma transacção com parcelas reconciliadas ou confirmadas."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3774
+#: gnucash/gnome/gnc-plugin-page-register.c:3773
 #: gnucash/gnome/gnc-split-reg.c:1124
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr ""
 "Esta transacção está marcada como só de leitura com o comentário: \"%s\""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3867
+#: gnucash/gnome/gnc-plugin-page-register.c:3866
 #: gnucash/gnome/gnc-split-reg.c:1095
 msgid "A reversing entry has already been created for this transaction."
 msgstr "Já foi criada uma entrada reversa para esta transacção."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3868
+#: gnucash/gnome/gnc-plugin-page-register.c:3867
 msgid "Jump to the transaction?"
 msgstr "Saltar para a transacção?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3875
+#: gnucash/gnome/gnc-plugin-page-register.c:3874
 msgid "Reverse Transaction"
 msgstr "Reverter transacção"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3876
+#: gnucash/gnome/gnc-plugin-page-register.c:3875
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
 msgid "New Transaction Information"
 msgstr "Informação da nova transacção"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:3966
+#: gnucash/gnome/gnc-plugin-page-register.c:3965
 #, c-format
 msgid "Sort %s by…"
 msgstr "Ordenar %s por…"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4056
+#: gnucash/gnome/gnc-plugin-page-register.c:4055
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1148
 #, c-format
 msgid "Filter %s by…"
@@ -5172,25 +5172,25 @@ msgstr "Filtrar %s por…"
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4601
+#: gnucash/gnome/gnc-plugin-page-register.c:4600
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr "%s %s de %s, emitida a %s, com o montante de %s"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4611
+#: gnucash/gnome/gnc-plugin-page-register.c:4610
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr "Há vários documentos ligados a esta transacção. Por favor, escolha um:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4612
+#: gnucash/gnome/gnc-plugin-page-register.c:4611
 #: gnucash/gnome-search/dialog-search.c:323
 msgid "Select"
 msgstr "Seleccionar"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4667
+#: gnucash/gnome/gnc-plugin-page-register.c:4666
 msgid "Go to Date"
 msgstr "Ir para data"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4969
+#: gnucash/gnome/gnc-plugin-page-register.c:4968
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr "A verificar parcelas no diário actual: %u de %u"
@@ -7631,12 +7631,12 @@ msgstr "Impossível gravar na base de dados."
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "Impossível gravar na base de dados: livro só de leitura."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4628
+#: gnucash/gnome-utils/gnc-main-window.cpp:4630
 #: gnucash/gtkbuilder/assistant-qif-import.glade:943
 msgid "Book Options"
 msgstr "Opções do livro"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4952
+#: gnucash/gnome-utils/gnc-main-window.cpp:4954
 msgid ""
 "The maximum number of window menu entries reached, no more entries will be "
 "added."
@@ -7644,28 +7644,28 @@ msgstr ""
 "Foi atingido o número máximo de entradas de menu, mais nenhuma será "
 "adicionada."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5190
+#: gnucash/gnome-utils/gnc-main-window.cpp:5192
 #: gnucash/gnucash-core-app.cpp:250
 msgid "(user modifiable)"
 msgstr "(modificável pelo utilizador)"
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.cpp:5215
+#: gnucash/gnome-utils/gnc-main-window.cpp:5217
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr "Copyright © 1997-%s Os colaboradores do GnuCash."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5227
+#: gnucash/gnome-utils/gnc-main-window.cpp:5229
 #: gnucash/gnome-utils/gnc-splash.c:98
 msgid "Version"
 msgstr "Versão"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5228
+#: gnucash/gnome-utils/gnc-main-window.cpp:5230
 #: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:266
 msgid "Build ID"
 msgstr "ID de compilação"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5236
+#: gnucash/gnome-utils/gnc-main-window.cpp:5238
 msgid "Accounting for personal and small business finance."
 msgstr "Contabilidade de finanças pessoais e micro empresas."
 
@@ -7673,11 +7673,11 @@ msgstr "Contabilidade de finanças pessoais e micro empresas."
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.cpp:5245
+#: gnucash/gnome-utils/gnc-main-window.cpp:5247
 msgid "translator-credits"
 msgstr "Pedro Albuquerque <pmra@gmx.com>"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5248
+#: gnucash/gnome-utils/gnc-main-window.cpp:5250
 msgid "Visit the GnuCash website."
 msgstr "Visite a página do GnuCash."
 
@@ -8630,7 +8630,7 @@ msgstr ""
 "barra de ferramentas. Senão ficam ocultos."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:132
-#: libgnucash/engine/gnc-optiondb.cpp:1272
+#: libgnucash/engine/gnc-optiondb.cpp:1273
 msgid "The invoice report to be used for printing."
 msgstr "O relatório de facturação a usar para impressão."
 
@@ -21421,7 +21421,7 @@ msgstr "Insira a fórmula de débito para a transacção real"
 msgid "Enter credit formula for real transaction"
 msgstr "Insira a fórmula de crédito para a transacção real"
 
-#: gnucash/register/register-gnome/completioncell-gnome.c:74
+#: gnucash/register/register-gnome/completioncell-gnome.c:75
 msgid "Don't autocomplete"
 msgstr "Não concluir automaticamente"
 
@@ -29898,39 +29898,39 @@ msgstr "Adiar a reconciliação desta conta"
 msgid "Cancel the reconciliation of this account"
 msgstr "Cancelar a reconciliação desta conta"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:622
+#: libgnucash/app-utils/gnc-exp-parser.c:616
 msgid "Illegal variable in expression."
 msgstr "Variável ilegal na expressão."
 
-#: libgnucash/app-utils/gnc-exp-parser.c:633
+#: libgnucash/app-utils/gnc-exp-parser.c:627
 msgid "Unbalanced parenthesis"
 msgstr "Parênteses desirmanados"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:635
+#: libgnucash/app-utils/gnc-exp-parser.c:629
 msgid "Stack overflow"
 msgstr "Excesso de pilha"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:637
+#: libgnucash/app-utils/gnc-exp-parser.c:631
 msgid "Stack underflow"
 msgstr "Falta de pilha"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:639
+#: libgnucash/app-utils/gnc-exp-parser.c:633
 msgid "Undefined character"
 msgstr "Carácter indefinido"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:641
+#: libgnucash/app-utils/gnc-exp-parser.c:635
 msgid "Not a variable"
 msgstr "Não é uma variável"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:643
+#: libgnucash/app-utils/gnc-exp-parser.c:637
 msgid "Not a defined function"
 msgstr "Função não definida"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:645
+#: libgnucash/app-utils/gnc-exp-parser.c:639
 msgid "Out of memory"
 msgstr "Memória insuficiente"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:647
+#: libgnucash/app-utils/gnc-exp-parser.c:641
 msgid "Numeric error"
 msgstr "Erro numérico"
 
@@ -29954,46 +29954,52 @@ msgstr "GncQuotes::Fetch chamado sem livro."
 msgid "GncQuotes::Fetch called with no commodities."
 msgstr "GncQuotes::Fetch chamado sem mercadorias."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:336
+#: libgnucash/app-utils/gnc-quotes.cpp:333
+#, fuzzy
+#| msgid "GncQuotes::Fetch called with no book."
+msgid "GncQuotes::Report called with no source."
+msgstr "GncQuotes::Fetch chamado sem livro."
+
+#: libgnucash/app-utils/gnc-quotes.cpp:339
 msgid "There were no commodities for which to retrieve quotes."
 msgstr "Não há mercadorias para as quais procurar cotações."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:350
+#: libgnucash/app-utils/gnc-quotes.cpp:353
 msgid "Finance::Quote retrieval failed with error "
 msgstr "Obtenção do Finance::Quote falhou com erro "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:368
-#: libgnucash/app-utils/gnc-quotes.cpp:842
+#: libgnucash/app-utils/gnc-quotes.cpp:371
+#: libgnucash/app-utils/gnc-quotes.cpp:845
 msgid "Finance::Quote returned no data and set no error."
 msgstr "Finance::Quote não devolveu dados nem erros."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:370
+#: libgnucash/app-utils/gnc-quotes.cpp:373
 msgid "Finance::Quote returned an error: "
 msgstr "Finance::Quote devolveu um erro: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:374
+#: libgnucash/app-utils/gnc-quotes.cpp:377
 msgid "Finance::Quote reported failure set no error."
 msgstr "A falha do Finance::Quote não definiu nenhum erro."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:376
+#: libgnucash/app-utils/gnc-quotes.cpp:379
 msgid "Finance::Quote reported failure with error: "
 msgstr "A falha do Finance::Quote devolveu o erro: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:379
+#: libgnucash/app-utils/gnc-quotes.cpp:382
 msgid "Finance::Quote returned a quote with no currency."
 msgstr "Finance::Quote devolveu uma cotação sem moeda.."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:382
+#: libgnucash/app-utils/gnc-quotes.cpp:385
 msgid ""
 "Finance::Quote returned a quote with a currency GnuCash doesn't know about."
 msgstr ""
 "Finance::Quote devolveu uma cotação com uma moeda que o GnuCash desconhece."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:385
+#: libgnucash/app-utils/gnc-quotes.cpp:388
 msgid "Finance::Quote returned a quote with no price element."
 msgstr "O Finance::Quote devolveu uma cotação sem elemento de preço."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:388
+#: libgnucash/app-utils/gnc-quotes.cpp:391
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
@@ -30001,107 +30007,107 @@ msgstr ""
 "O Finance::Quote devolveu uma cotação com um preço que o GnuCash não pôde "
 "converter em número."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:392
+#: libgnucash/app-utils/gnc-quotes.cpp:395
 msgid "The quote has no error set."
 msgstr "A cotação não tem erro definido."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:401
+#: libgnucash/app-utils/gnc-quotes.cpp:404
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr "Cotações das mercadorias seguintes indisponíveis ou inutilizáveis:\n"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:487
+#: libgnucash/app-utils/gnc-quotes.cpp:490
 msgid "Currency quotes requires at least two currencies"
 msgstr "Cotações de moedas requerem pelo menos duas moedas"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:753
-#: libgnucash/app-utils/gnc-quotes.cpp:758
+#: libgnucash/app-utils/gnc-quotes.cpp:756
+#: libgnucash/app-utils/gnc-quotes.cpp:761
 msgid "Failed to parse result returned by Finance::Quote."
 msgstr "Falha ao analisar o resultado devolvido pelo Finance::Quote."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:760
+#: libgnucash/app-utils/gnc-quotes.cpp:763
 msgid "Error message:"
 msgstr "Mensagem de erro:"
 
 #. Translators: Means that the preceding element is required
-#: libgnucash/app-utils/gnc-quotes.cpp:802
+#: libgnucash/app-utils/gnc-quotes.cpp:805
 msgctxt "Finance::Quote"
 msgid "required"
 msgstr "requerido"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
-#: libgnucash/app-utils/gnc-quotes.cpp:804
+#: libgnucash/app-utils/gnc-quotes.cpp:807
 msgctxt "Finance::Quote"
 msgid "recommended"
 msgstr "recomendado"
 
 #. Translators: Means that one of the indicated elements is required
-#: libgnucash/app-utils/gnc-quotes.cpp:806
+#: libgnucash/app-utils/gnc-quotes.cpp:809
 msgctxt "Finance::Quote"
 msgid "one of these"
 msgstr "um destes"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
-#: libgnucash/app-utils/gnc-quotes.cpp:808
+#: libgnucash/app-utils/gnc-quotes.cpp:811
 msgctxt "Finance::Quote"
 msgid "**missing**"
 msgstr "**em falta**"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:815
+#: libgnucash/app-utils/gnc-quotes.cpp:818
 msgid "Finance::Quote fields GnuCash uses:"
 msgstr "Campos do Finance:Quote que o Gnucash usa:"
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
-#: libgnucash/app-utils/gnc-quotes.cpp:817
+#: libgnucash/app-utils/gnc-quotes.cpp:820
 msgctxt "Finance::Quote"
 msgid "symbol: "
 msgstr "símbolo: "
 
 #. Translators: The date of the quote.
-#: libgnucash/app-utils/gnc-quotes.cpp:819
+#: libgnucash/app-utils/gnc-quotes.cpp:822
 msgctxt "Finance::Quote"
 msgid "date: "
 msgstr "Data: "
 
 #. Translators: The quote currency
-#: libgnucash/app-utils/gnc-quotes.cpp:821
+#: libgnucash/app-utils/gnc-quotes.cpp:824
 msgctxt "Finance::Quote"
 msgid "currency: "
 msgstr "moeda: "
 
 #. Translators: The quote is for the most recent trade on the exchange
-#: libgnucash/app-utils/gnc-quotes.cpp:827
+#: libgnucash/app-utils/gnc-quotes.cpp:830
 msgctxt "Finance::Quote"
 msgid "last: "
 msgstr "última: "
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
-#: libgnucash/app-utils/gnc-quotes.cpp:829
+#: libgnucash/app-utils/gnc-quotes.cpp:832
 msgctxt "Finance::Quote"
 msgid "nav: "
 msgstr "vla: "
 
 #. Translators: The quote is neither a last trade nor an NAV.
-#: libgnucash/app-utils/gnc-quotes.cpp:831
+#: libgnucash/app-utils/gnc-quotes.cpp:834
 msgctxt "Finance::Quote"
 msgid "price: "
 msgstr "preço: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:851
+#: libgnucash/app-utils/gnc-quotes.cpp:854
 msgid "Finance::Quote reported a failure for symbol "
 msgstr "Finance::Quote devolveu uma falha do símbolo "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:854
+#: libgnucash/app-utils/gnc-quotes.cpp:857
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr "Finance::Quote falhou ao obter a cotação do símbolo "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:917
+#: libgnucash/app-utils/gnc-quotes.cpp:920
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
 "O GnuCash submeteu json inválido ao Finance::Quote. Os detalhes foram "
 "registados."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:923
+#: libgnucash/app-utils/gnc-quotes.cpp:926
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
@@ -30109,7 +30115,7 @@ msgstr ""
 "Perl tem os seguintes módulos em falta. Por favor, veja https://wiki.gnucash."
 "org/wiki/Online_Quotes#Finance::Quote para acção correctiva detalhada. "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:929
+#: libgnucash/app-utils/gnc-quotes.cpp:932
 msgid "Unrecognized Finance::Quote Error: "
 msgstr "Erro Finance::Quote desconhecido: "
 
@@ -30527,11 +30533,11 @@ msgstr "Final do ano seguinte"
 msgid "Last day of the next calendar year."
 msgstr "Último dia do ano do calendário seguinte."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1142
+#: libgnucash/engine/gnc-optiondb.cpp:1143
 msgid "Counters"
 msgstr "Contadores"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1149
+#: libgnucash/engine/gnc-optiondb.cpp:1150
 msgid ""
 "Choose the number of days after which transactions will be read-only and "
 "cannot be edited anymore. This threshold is marked by a red line in the "
@@ -30542,7 +30548,7 @@ msgstr ""
 "editar. Este limiar é assinalado por uma linha vermelha nas janelas de "
 "diário das contas. Se for zero, todas as transacções são sempre editáveis."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1154
+#: libgnucash/engine/gnc-optiondb.cpp:1155
 msgid ""
 "Check to have split action field used in registers for 'Num' field in place "
 "of transaction number; transaction number shown as 'T-Num' on second line of "
@@ -30555,7 +30561,7 @@ msgstr ""
 "correspondente em funcionalidades de empresas, relatórios e importações/"
 "exportações."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1158
+#: libgnucash/engine/gnc-optiondb.cpp:1159
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
@@ -30563,15 +30569,15 @@ msgstr ""
 "Marque para ter contas de bolsa usadas para transacções envolvendo mais de "
 "uma mercadoria ou moeda."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1165
+#: libgnucash/engine/gnc-optiondb.cpp:1166
 msgid "Budget to be used when none has been otherwise specified."
 msgstr "Orçamento a usar quando nenhum outro foi especificado."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1171
+#: libgnucash/engine/gnc-optiondb.cpp:1172
 msgid "Customer number"
 msgstr "Número de cliente"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1172
+#: libgnucash/engine/gnc-optiondb.cpp:1173
 msgid ""
 "The previous customer number generated. This number will be incremented to "
 "generate the next customer number."
@@ -30579,11 +30585,11 @@ msgstr ""
 "O último número de cliente gerado. Este número será incrementado para gerar "
 "o número de cliente seguinte."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1175
+#: libgnucash/engine/gnc-optiondb.cpp:1176
 msgid "Customer number format"
 msgstr "Formato do nº de cliente"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1177
+#: libgnucash/engine/gnc-optiondb.cpp:1178
 msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
@@ -30591,11 +30597,11 @@ msgstr ""
 "A cadeia de formato a usar para gerar números de cliente. É um formato de "
 "impressão, um modelo."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1180
+#: libgnucash/engine/gnc-optiondb.cpp:1181
 msgid "Employee number"
 msgstr "Número de empregado"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1181
+#: libgnucash/engine/gnc-optiondb.cpp:1182
 msgid ""
 "The previous employee number generated. This number will be incremented to "
 "generate the next employee number."
@@ -30603,11 +30609,11 @@ msgstr ""
 "O último número de empregado gerado. Este número será incrementado para "
 "gerar o número de empregado seguinte."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1184
+#: libgnucash/engine/gnc-optiondb.cpp:1185
 msgid "Employee number format"
 msgstr "Formato do número de empregado"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1186
+#: libgnucash/engine/gnc-optiondb.cpp:1187
 msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
@@ -30615,11 +30621,11 @@ msgstr ""
 "A cadeia de formato a usar para gerar números de empregado. É um formato de "
 "impressão, um modelo."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1189
+#: libgnucash/engine/gnc-optiondb.cpp:1190
 msgid "Invoice number"
 msgstr "Número da factura"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1190
+#: libgnucash/engine/gnc-optiondb.cpp:1191
 msgid ""
 "The previous invoice number generated. This number will be incremented to "
 "generate the next invoice number."
@@ -30627,11 +30633,11 @@ msgstr ""
 "O último número de factura gerado. Este número será incrementado para gerar "
 "o número de factura seguinte."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1193
+#: libgnucash/engine/gnc-optiondb.cpp:1194
 msgid "Invoice number format"
 msgstr "Formato do número de factura"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1195
+#: libgnucash/engine/gnc-optiondb.cpp:1196
 msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
@@ -30639,11 +30645,11 @@ msgstr ""
 "A cadeia de formato a usar para gerar números de factura. É um formato de "
 "impressão, um modelo."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1198
+#: libgnucash/engine/gnc-optiondb.cpp:1199
 msgid "Bill number"
 msgstr "Número de pagamento"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1199
+#: libgnucash/engine/gnc-optiondb.cpp:1200
 msgid ""
 "The previous bill number generated. This number will be incremented to "
 "generate the next bill number."
@@ -30651,11 +30657,11 @@ msgstr ""
 "O último número de pagamento gerado. Este número será incrementado para "
 "gerar o número de pagamento seguinte."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1202
+#: libgnucash/engine/gnc-optiondb.cpp:1203
 msgid "Bill number format"
 msgstr "Formato do número de pagamento"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1203
+#: libgnucash/engine/gnc-optiondb.cpp:1204
 msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
@@ -30663,11 +30669,11 @@ msgstr ""
 "A cadeia de formato a usar para gerar números de pagamento. É um formato de "
 "impressão, um modelo."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1206
+#: libgnucash/engine/gnc-optiondb.cpp:1207
 msgid "Expense voucher number"
 msgstr "Número de vale de despesa"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1207
+#: libgnucash/engine/gnc-optiondb.cpp:1208
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
@@ -30675,11 +30681,11 @@ msgstr ""
 "O último número de vale de despesa gerado. Este número será incrementado "
 "para gerar o número de vale de despesa seguinte."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1210
+#: libgnucash/engine/gnc-optiondb.cpp:1211
 msgid "Expense voucher number format"
 msgstr "Formato do nº de vale de despesa"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1212
+#: libgnucash/engine/gnc-optiondb.cpp:1213
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
@@ -30687,11 +30693,11 @@ msgstr ""
 "A cadeia de formato a usar para gerar números de vales de despesa. É um "
 "formato de impressão, um modelo."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1215
+#: libgnucash/engine/gnc-optiondb.cpp:1216
 msgid "Job number"
 msgstr "Número da tarefa"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1216
+#: libgnucash/engine/gnc-optiondb.cpp:1217
 msgid ""
 "The previous job number generated. This number will be incremented to "
 "generate the next job number."
@@ -30699,11 +30705,11 @@ msgstr ""
 "O último número de tarefa gerado. Este número será incrementado para gerar o "
 "número de tarefa seguinte."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1219
+#: libgnucash/engine/gnc-optiondb.cpp:1220
 msgid "Job number format"
 msgstr "Formato do nº de tarefa"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1220
+#: libgnucash/engine/gnc-optiondb.cpp:1221
 msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
@@ -30711,11 +30717,11 @@ msgstr ""
 "A cadeia de formato a usar para gerar números de tarefas. É um formato de "
 "impressão, um modelo."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1223
+#: libgnucash/engine/gnc-optiondb.cpp:1224
 msgid "Order number"
 msgstr "Número de encomenda"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1224
+#: libgnucash/engine/gnc-optiondb.cpp:1225
 msgid ""
 "The previous order number generated. This number will be incremented to "
 "generate the next order number."
@@ -30723,11 +30729,11 @@ msgstr ""
 "O último número de encomenda gerado. Este número será incrementado para "
 "gerar o número de encomenda seguinte."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1227
+#: libgnucash/engine/gnc-optiondb.cpp:1228
 msgid "Order number format"
 msgstr "Formato do nº de encomenda"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1228
+#: libgnucash/engine/gnc-optiondb.cpp:1229
 msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
@@ -30735,11 +30741,11 @@ msgstr ""
 "A cadeia de formato a usar para gerar números de encomendas. É um formato de "
 "impressão, um modelo."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1231
+#: libgnucash/engine/gnc-optiondb.cpp:1232
 msgid "Vendor number"
 msgstr "Número de fornecedor"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1232
+#: libgnucash/engine/gnc-optiondb.cpp:1233
 msgid ""
 "The previous vendor number generated. This number will be incremented to "
 "generate the next vendor number."
@@ -30747,11 +30753,11 @@ msgstr ""
 "O último número de fornecedor gerado. Este número será incrementado para "
 "gerar o número de fornecedor seguinte."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1235
+#: libgnucash/engine/gnc-optiondb.cpp:1236
 msgid "Vendor number format"
 msgstr "Formato do nº de fornecedor"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1236
+#: libgnucash/engine/gnc-optiondb.cpp:1237
 msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
@@ -30759,36 +30765,36 @@ msgstr ""
 "A cadeia de formato a usar para gerar números de fornecedores. É um formato "
 "de impressão, um modelo."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1242
+#: libgnucash/engine/gnc-optiondb.cpp:1243
 msgid "The name of your business."
 msgstr "O nome da sua empresa."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1245
+#: libgnucash/engine/gnc-optiondb.cpp:1246
 msgid "The address of your business."
 msgstr "A morada da sua empresa."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1249
-#: libgnucash/engine/gnc-optiondb.cpp:1253
+#: libgnucash/engine/gnc-optiondb.cpp:1250
+#: libgnucash/engine/gnc-optiondb.cpp:1254
 msgid "The contact person to print on invoices."
 msgstr "A pessoa de contacto a imprimir em facturas.."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1257
+#: libgnucash/engine/gnc-optiondb.cpp:1258
 msgid "The fax number of your business."
 msgstr "O fax da sua empresa."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1261
+#: libgnucash/engine/gnc-optiondb.cpp:1262
 msgid "The email address of your business."
 msgstr "O endereço electrónico da sua empresa."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1265
+#: libgnucash/engine/gnc-optiondb.cpp:1266
 msgid "The URL address of your website."
 msgstr "O endereço URL da sua página web."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1268
+#: libgnucash/engine/gnc-optiondb.cpp:1269
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
 msgstr "O número de contribuinte da sua empresa (e.g. 000 000 000)."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1276
+#: libgnucash/engine/gnc-optiondb.cpp:1277
 msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
@@ -30796,27 +30802,27 @@ msgstr ""
 "Tempo para alterar o relatório de facturação usado. Zero significa "
 "desactivado."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1279
+#: libgnucash/engine/gnc-optiondb.cpp:1280
 msgid "Default Customer TaxTable"
 msgstr "Tabela de impostos pré-definida para clientes"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1280
+#: libgnucash/engine/gnc-optiondb.cpp:1281
 msgid "The default tax table to apply to customers."
 msgstr "A tabela de impostos pré-definida a aplicar aos clientes."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1283
+#: libgnucash/engine/gnc-optiondb.cpp:1284
 msgid "Default Vendor TaxTable"
 msgstr "Tabela de impostos pré-definida para fornecedores"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1284
+#: libgnucash/engine/gnc-optiondb.cpp:1285
 msgid "The default tax table to apply to vendors."
 msgstr "A tabela de impostos pré-definida a aplicar aos fornecedores."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1288
+#: libgnucash/engine/gnc-optiondb.cpp:1289
 msgid "The default date format used for fancy printed dates."
 msgstr "O formato pré-definido de data para imprimir datas elegantes."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1294
+#: libgnucash/engine/gnc-optiondb.cpp:1295
 msgid "The electronic tax number of your business"
 msgstr "O número fiscal electrónico da sua empresa"
 

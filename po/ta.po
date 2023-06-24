@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-06-18 13:11-0700\n"
+"POT-Creation-Date: 2023-06-24 14:16-0700\n"
 "PO-Revision-Date: 2014-06-02 12:18+0530\n"
 "Last-Translator: Shanmugam R. <shanfaace@yahoo.co.in>\n"
 "Language-Team: NONE\n"
@@ -204,7 +204,7 @@ msgid "The current date."
 msgstr "தற்போதைய தேதி."
 
 #: bindings/guile/options.scm:388 gnucash/gnome/top-level.c:462
-#: libgnucash/engine/gnc-optiondb.cpp:1141 libgnucash/engine/qofbookslots.h:72
+#: libgnucash/engine/gnc-optiondb.cpp:1142 libgnucash/engine/qofbookslots.h:72
 msgid "Business"
 msgstr "தொழில்"
 
@@ -216,41 +216,41 @@ msgstr "தொழில்"
 #: gnucash/gtkbuilder/dialog-customer.glade:146
 #: gnucash/gtkbuilder/dialog-vendor.glade:147
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
-#: libgnucash/engine/gnc-optiondb.cpp:1241
+#: libgnucash/engine/gnc-optiondb.cpp:1242
 msgid "Company Name"
 msgstr "நிறுவனத்தின் பெயர்"
 
-#: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1244
+#: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1245
 msgid "Company Address"
 msgstr "நிறுவன முகவரி"
 
-#: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1267
+#: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1268
 msgid "Company ID"
 msgstr "நிறுவனத்தின் குறியீடு"
 
-#: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1252
+#: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1253
 msgid "Company Phone Number"
 msgstr "நிறுவன தொலைபேசி எண்"
 
-#: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1256
+#: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1257
 msgid "Company Fax Number"
 msgstr "நிறுவன தொலைநகலி எண்"
 
-#: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1264
+#: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1265
 msgid "Company Website URL"
 msgstr "நிறுவன இணையத்தளம் URL"
 
-#: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1260
+#: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1261
 msgid "Company Email Address"
 msgstr "நிறுவனத்தின் மின்னஞ்சல் முகவரி"
 
-#: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1248
+#: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1249
 msgid "Company Contact Person"
 msgstr "நிறுவன தொடர்பு நபர்"
 
 #: bindings/guile/options.scm:397
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
-#: libgnucash/engine/gnc-optiondb.cpp:1287
+#: libgnucash/engine/gnc-optiondb.cpp:1288
 msgid "Fancy Date Format"
 msgstr "பேன்ஸி தேதி வடிவம்"
 
@@ -263,11 +263,11 @@ msgstr "தனிபயன்"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
 #: gnucash/report/reports/standard/invoice.scm:497
 #: gnucash/report/reports/standard/new-owner-report.scm:55
-#: libgnucash/engine/gnc-optiondb.cpp:1293
+#: libgnucash/engine/gnc-optiondb.cpp:1294
 msgid "Tax"
 msgstr "வரி"
 
-#: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1293
+#: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1294
 msgid "Tax Number"
 msgstr "வரி எண்"
 
@@ -1829,7 +1829,7 @@ msgid "Memo"
 msgstr "மெமொ"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1753
-#: gnucash/gnome/gnc-plugin-page-register.c:3382
+#: gnucash/gnome/gnc-plugin-page-register.c:3381
 #: gnucash/gtkbuilder/dialog-payment.glade:300
 #: gnucash/register/ledger-core/split-register.c:2441
 #: gnucash/report/reports/standard/general-journal.scm:82
@@ -1841,7 +1841,7 @@ msgid "Debit"
 msgstr "பற்று"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1760
-#: gnucash/gnome/gnc-plugin-page-register.c:3378
+#: gnucash/gnome/gnc-plugin-page-register.c:3377
 #: gnucash/gtkbuilder/dialog-payment.glade:316
 #: gnucash/register/ledger-core/split-register.c:2464
 #: gnucash/register/ledger-core/split-register.c:2559
@@ -2057,7 +2057,7 @@ msgstr "சரக்கை அழிக்கவா?"
 #: gnucash/gnome/gnc-plugin-budget.c:321
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1649
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1061
-#: gnucash/gnome/gnc-plugin-page-register.c:1847
+#: gnucash/gnome/gnc-plugin-page-register.c:1846
 #: gnucash/gnome/gnc-split-reg.c:939 gnucash/gnome/gnc-split-reg.c:977
 #: gnucash/gnome/gnc-split-reg.c:1199 gnucash/gnome/gnc-split-reg.c:1466
 #: gnucash/gnome/gnc-split-reg.c:1506 gnucash/gnome-search/search-account.c:239
@@ -2308,7 +2308,7 @@ msgid "Placeholder account selected. Please try again."
 msgstr "பிளேஸ்ஹோல்டர் கணக்கு தேர்ந்தெடுக்கப்பட்டது. மீண்டும் முயற்சிக்கவும்."
 
 #: gnucash/gnome/dialog-doclink.c:160
-#: gnucash/gnome/gnc-plugin-page-register.c:4610
+#: gnucash/gnome/gnc-plugin-page-register.c:4609
 #, fuzzy
 #| msgid "Select Account"
 msgid "Select document"
@@ -2710,8 +2710,8 @@ msgstr "ஒப்பிடப்பட்ட நாள்"
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.c:2312
-#: gnucash/gnome/gnc-plugin-page-register.c:4002
+#: gnucash/gnome/gnc-plugin-page-register.c:2311
+#: gnucash/gnome/gnc-plugin-page-register.c:4001
 #: gnucash/gnome-search/dialog-search.c:879
 #: gnucash/gnome-search/dialog-search.c:885
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:385
@@ -2722,7 +2722,7 @@ msgstr "எண்/செயல்"
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.c:2317
+#: gnucash/gnome/gnc-plugin-page-register.c:2316
 #: gnucash/gnome/gnc-split-reg.c:675 gnucash/gnome-search/dialog-search.c:878
 #: gnucash/gnome-search/dialog-search.c:886
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:103
@@ -2739,8 +2739,8 @@ msgstr "செயல்"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.c:2311
-#: gnucash/gnome/gnc-plugin-page-register.c:4001
+#: gnucash/gnome/gnc-plugin-page-register.c:2310
+#: gnucash/gnome/gnc-plugin-page-register.c:4000
 #: gnucash/gnome-search/dialog-search.c:881
 #: gnucash/gnome-search/dialog-search.c:887
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:365
@@ -2752,7 +2752,7 @@ msgstr "பரிமாற்ற எண்"
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.c:2316
+#: gnucash/gnome/gnc-plugin-page-register.c:2315
 #: gnucash/gnome/gnc-split-reg.c:663 gnucash/gnome-search/dialog-search.c:880
 #: gnucash/gnome-search/dialog-search.c:888
 #: gnucash/gtkbuilder/dialog-payment.glade:268
@@ -3538,7 +3538,7 @@ msgstr ""
 "விவரப்பட்டியல் அல்லது பில்லை முதலில் உருவாக்கவா?"
 
 #: gnucash/gnome/dialog-payment.c:1574
-#: gnucash/gnome/gnc-plugin-page-register.c:3218
+#: gnucash/gnome/gnc-plugin-page-register.c:3217
 #: gnucash/gnome-search/search-reconciled.c:216
 #: gnucash/gnome-utils/gnc-tree-view-account.c:858
 #: gnucash/report/trep-engine.scm:158
@@ -3546,7 +3546,7 @@ msgid "Cleared"
 msgstr "தீர்க்கப்பட்டது"
 
 #: gnucash/gnome/dialog-payment.c:1576
-#: gnucash/gnome/gnc-plugin-page-register.c:3220
+#: gnucash/gnome/gnc-plugin-page-register.c:3219
 #: gnucash/gnome-search/search-reconciled.c:219
 #: gnucash/gnome-utils/gnc-tree-view-account.c:872
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
@@ -4142,8 +4142,8 @@ msgstr "அழி"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:335
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1900
-#: gnucash/gnome/gnc-plugin-page-register.c:1795
-#: gnucash/gnome/gnc-plugin-page-register.c:4944
+#: gnucash/gnome/gnc-plugin-page-register.c:1794
+#: gnucash/gnome/gnc-plugin-page-register.c:4943
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
 
@@ -5037,20 +5037,20 @@ msgid "Stock Assistant"
 msgstr "ஸ்டாக் பிரிப்பு உதவியாளர்"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:637
-#: gnucash/gnome/gnc-plugin-page-register.c:1902
-#: gnucash/gnome/gnc-plugin-page-register.c:3313
+#: gnucash/gnome/gnc-plugin-page-register.c:1901
+#: gnucash/gnome/gnc-plugin-page-register.c:3312
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "பொது குறிப்பேடு"
 
 #. Translators: %s is the name
 #. of the tab page
-#: gnucash/gnome/gnc-plugin-page-register.c:1836
+#: gnucash/gnome/gnc-plugin-page-register.c:1835
 #, c-format
 msgid "Save changes to %s?"
 msgstr "%s இல் மாற்றங்களை சேமிக்கவா?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1841
+#: gnucash/gnome/gnc-plugin-page-register.c:1840
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -5060,107 +5060,107 @@ msgstr ""
 "மாற்றங்களை சேமிக்க, பரிமாற்றத்தை தூக்கி எறிய, அல்லது இந்த செயற்பாட்டை ரத்துசெய்ய "
 "விரும்புகிறீர்களா?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1844
+#: gnucash/gnome/gnc-plugin-page-register.c:1843
 msgid "_Discard Transaction"
 msgstr "பரிமாற்றத்தை நீக்கு (_D)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1848
+#: gnucash/gnome/gnc-plugin-page-register.c:1847
 msgid "_Save Transaction"
 msgstr "பரிமாற்றத்தை சேமி (_S)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1881
-#: gnucash/gnome/gnc-plugin-page-register.c:1916
-#: gnucash/gnome/gnc-plugin-page-register.c:1929
-#: gnucash/gnome/gnc-plugin-page-register.c:1986
-#: gnucash/gnome/gnc-plugin-page-register.c:2084
-#: gnucash/gnome/gnc-plugin-page-register.c:2207
+#: gnucash/gnome/gnc-plugin-page-register.c:1880
+#: gnucash/gnome/gnc-plugin-page-register.c:1915
+#: gnucash/gnome/gnc-plugin-page-register.c:1928
+#: gnucash/gnome/gnc-plugin-page-register.c:1985
+#: gnucash/gnome/gnc-plugin-page-register.c:2083
+#: gnucash/gnome/gnc-plugin-page-register.c:2206
 msgid "unknown"
 msgstr "தெரியாத "
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1904
-#: gnucash/gnome/gnc-plugin-page-register.c:3319
+#: gnucash/gnome/gnc-plugin-page-register.c:1903
+#: gnucash/gnome/gnc-plugin-page-register.c:3318
 msgid "Portfolio"
 msgstr "போர்ட்ஃபோலியோ"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1906
-#: gnucash/gnome/gnc-plugin-page-register.c:3325
+#: gnucash/gnome/gnc-plugin-page-register.c:1905
+#: gnucash/gnome/gnc-plugin-page-register.c:3324
 msgid "Search Results"
 msgstr "முடிவுகளைத் தேடு"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3191
+#: gnucash/gnome/gnc-plugin-page-register.c:3190
 msgid "Start Date:"
 msgstr "துவக்க தேதி:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3198
+#: gnucash/gnome/gnc-plugin-page-register.c:3197
 #, fuzzy
 msgid "Show previous number of days:"
 msgstr "பங்குகளின் எண்ணிக்கையைக் காட்டு"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3206
+#: gnucash/gnome/gnc-plugin-page-register.c:3205
 msgid "End Date:"
 msgstr "முடியும் தேதி:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3216
+#: gnucash/gnome/gnc-plugin-page-register.c:3215
 #: gnucash/report/trep-engine.scm:157
 #, fuzzy
 msgid "Unreconciled"
 msgstr "ஒப்பிடப்படாதது (_U)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3222
+#: gnucash/gnome/gnc-plugin-page-register.c:3221
 #: gnucash/gnome-search/search-reconciled.c:222
 #: gnucash/report/trep-engine.scm:160
 msgid "Frozen"
 msgstr "உறைதல்"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3224
+#: gnucash/gnome/gnc-plugin-page-register.c:3223
 #: gnucash/gnome-search/search-reconciled.c:225
 #: gnucash/report/trep-engine.scm:161
 msgid "Voided"
 msgstr "காலியாக்கப்பட்டது"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3234
+#: gnucash/gnome/gnc-plugin-page-register.c:3233
 msgid "Show:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3242
+#: gnucash/gnome/gnc-plugin-page-register.c:3241
 msgid "Hide:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3253
+#: gnucash/gnome/gnc-plugin-page-register.c:3252
 #, fuzzy
 msgid "Filter By:"
 msgstr "இதன்படி வடிகட்டு..."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3315
-#: gnucash/gnome/gnc-plugin-page-register.c:3333
+#: gnucash/gnome/gnc-plugin-page-register.c:3314
+#: gnucash/gnome/gnc-plugin-page-register.c:3332
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
 msgstr "பரிமாற்ற அறிக்கை"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3321
+#: gnucash/gnome/gnc-plugin-page-register.c:3320
 msgid "Portfolio Report"
 msgstr "போர்ட்ஃபோலியோ அறிக்கை"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3327
+#: gnucash/gnome/gnc-plugin-page-register.c:3326
 msgid "Search Results Report"
 msgstr "முடிவுகளின் அறிக்கையைத் தேடு"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3331
+#: gnucash/gnome/gnc-plugin-page-register.c:3330
 #: gnucash/gtkbuilder/dialog-preferences.glade:2791
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
 msgstr "பதிவேடு"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3349
+#: gnucash/gnome/gnc-plugin-page-register.c:3348
 msgid "and subaccounts"
 msgstr "மற்றும் துணைக்கணக்குகள்"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3520
+#: gnucash/gnome/gnc-plugin-page-register.c:3519
 msgid "Print checks from multiple accounts?"
 msgstr "பல கணக்குகளிலிருந்து அச்சினை சரிபார்க்கவா?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3522
+#: gnucash/gnome/gnc-plugin-page-register.c:3521
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5168,55 +5168,55 @@ msgstr ""
 "ஒரு கணக்கிற்கு மேற்பட்ட பிரிப்புகள் இந்த தேடல் முடிவினை கொண்டுள்ளன. அதே கணக்கிலிருந்து "
 "அவை இல்லையெனிலும் அவற்றை நீங்கள் சரிபார்த்து அச்சிட விரும்புகிறீர்களா?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3532
+#: gnucash/gnome/gnc-plugin-page-register.c:3531
 msgid "_Print checks"
 msgstr "அச்சினை சரிபார்க்கிறது (_P)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3551
+#: gnucash/gnome/gnc-plugin-page-register.c:3550
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr "நீங்கள் ஒரு வங்கி பதிவு அல்லது தேடல் முடிவுகளிலிருந்து சரிபார்த்தல்களை அச்சிடலாம்."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3767
+#: gnucash/gnome/gnc-plugin-page-register.c:3766
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
 "ஒப்பிடப்பட்ட அல்லது தீர்க்கப்பட்ட பிரிவுடன் ஒரு பரிமாற்றத்தை உங்களால் காலியாக்க முடியாது."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3774
+#: gnucash/gnome/gnc-plugin-page-register.c:3773
 #: gnucash/gnome/gnc-split-reg.c:1124
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "இந்த பரிமாற்றமானது கருத்துடன் வாசிக்க-மட்டும் என குறிப்பிடப்பட்டது: '%s'"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3867
+#: gnucash/gnome/gnc-plugin-page-register.c:3866
 #: gnucash/gnome/gnc-split-reg.c:1095
 msgid "A reversing entry has already been created for this transaction."
 msgstr "இந்த பரிமாற்றத்திற்காக ஏற்கனவே ஒரு தலைகீழான உள்ளீடு உருவாக்கப்பட்டது."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3868
+#: gnucash/gnome/gnc-plugin-page-register.c:3867
 #, fuzzy
 msgid "Jump to the transaction?"
 msgstr "நடப்பு பரிமாற்றத்தை திருத்தவும்"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3875
+#: gnucash/gnome/gnc-plugin-page-register.c:3874
 #, fuzzy
 msgid "Reverse Transaction"
 msgstr "தலைகீழ் பரிமாற்றத்தை சேர் (_R)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3876
+#: gnucash/gnome/gnc-plugin-page-register.c:3875
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
 #, fuzzy
 msgid "New Transaction Information"
 msgstr "பரிமாற்றத் தகவல்"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:3966
+#: gnucash/gnome/gnc-plugin-page-register.c:3965
 #, c-format
 msgid "Sort %s by…"
 msgstr "இதன்படி %s ஐ வரிசைபடுத்து…"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4056
+#: gnucash/gnome/gnc-plugin-page-register.c:4055
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1148
 #, c-format
 msgid "Filter %s by…"
@@ -5225,27 +5225,27 @@ msgstr "%s ஐ இதன்படி வடிகட்டு…"
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4601
+#: gnucash/gnome/gnc-plugin-page-register.c:4600
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4611
+#: gnucash/gnome/gnc-plugin-page-register.c:4610
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4612
+#: gnucash/gnome/gnc-plugin-page-register.c:4611
 #: gnucash/gnome-search/dialog-search.c:323
 msgid "Select"
 msgstr "தேர்ந்தெடு"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4667
+#: gnucash/gnome/gnc-plugin-page-register.c:4666
 #, fuzzy
 #| msgid "Post Date"
 msgid "Go to Date"
 msgstr "வெளியீடு தேதி"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4969
+#: gnucash/gnome/gnc-plugin-page-register.c:4968
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr ""
@@ -7698,12 +7698,12 @@ msgid "Unable to save to database: Book is marked read-only."
 msgstr ""
 "தரவுத்தளத்தை சேமிக்க முடியவில்லை: வாசிப்பதற்கு மட்டுமென புத்தகம் குறிப்பிட்டுள்ளது."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4628
+#: gnucash/gnome-utils/gnc-main-window.cpp:4630
 #: gnucash/gtkbuilder/assistant-qif-import.glade:943
 msgid "Book Options"
 msgstr "புத்தக விருப்பங்கள் "
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4952
+#: gnucash/gnome-utils/gnc-main-window.cpp:4954
 #, fuzzy
 #| msgid "The minimum number of invoice entries to display."
 msgid ""
@@ -7711,28 +7711,28 @@ msgid ""
 "added."
 msgstr "காட்டுவதற்கான விவரப்பட்டியலின் குறைந்தபட்ச உள்ளீடுகளின் எண்ணிகை."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5190
+#: gnucash/gnome-utils/gnc-main-window.cpp:5192
 #: gnucash/gnucash-core-app.cpp:250
 msgid "(user modifiable)"
 msgstr ""
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.cpp:5215
+#: gnucash/gnome-utils/gnc-main-window.cpp:5217
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5227
+#: gnucash/gnome-utils/gnc-main-window.cpp:5229
 #: gnucash/gnome-utils/gnc-splash.c:98
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5228
+#: gnucash/gnome-utils/gnc-main-window.cpp:5230
 #: gnucash/gnome-utils/gnc-splash.c:99 gnucash/gnucash-core-app.cpp:266
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5236
+#: gnucash/gnome-utils/gnc-main-window.cpp:5238
 #, fuzzy
 msgid "Accounting for personal and small business finance."
 msgstr "- GnuCash தனிப்பட்ட மற்றும் சிறிய வணிக நிதி மேலாண்மை"
@@ -7741,11 +7741,11 @@ msgstr "- GnuCash தனிப்பட்ட மற்றும் சிறி
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.cpp:5245
+#: gnucash/gnome-utils/gnc-main-window.cpp:5247
 msgid "translator-credits"
 msgstr "Shanmugam R., C-DAC, GIST, Pune, India, 2014"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5248
+#: gnucash/gnome-utils/gnc-main-window.cpp:5250
 msgid "Visit the GnuCash website."
 msgstr ""
 
@@ -8702,7 +8702,7 @@ msgstr ""
 "காட்டுகிறது. இல்லையெனில் அவை காட்டப்படாது."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:132
-#: libgnucash/engine/gnc-optiondb.cpp:1272
+#: libgnucash/engine/gnc-optiondb.cpp:1273
 msgid "The invoice report to be used for printing."
 msgstr "அச்சிட பயன்படுத்த வேண்டிய விலைப்பட்டியல் அறிக்கையின் பெயர்."
 
@@ -21643,7 +21643,7 @@ msgstr "சரியான பரிமாற்றத்திற்கான �
 msgid "Enter credit formula for real transaction"
 msgstr "சரியான பரிமாற்றத்திற்கான வரவு"
 
-#: gnucash/register/register-gnome/completioncell-gnome.c:74
+#: gnucash/register/register-gnome/completioncell-gnome.c:75
 #, fuzzy
 #| msgid "Loading completed"
 msgid "Don't autocomplete"
@@ -30613,39 +30613,39 @@ msgstr "இந்த கணக்கின் சரிக்கட்டுத�
 msgid "Cancel the reconciliation of this account"
 msgstr "இந்த கணக்கின் சரிக்கட்டுதலை ரத்து செய்யவும்"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:622
+#: libgnucash/app-utils/gnc-exp-parser.c:616
 msgid "Illegal variable in expression."
 msgstr "கோவையில் செல்லுபடியாகாத மாறி."
 
-#: libgnucash/app-utils/gnc-exp-parser.c:633
+#: libgnucash/app-utils/gnc-exp-parser.c:627
 msgid "Unbalanced parenthesis"
 msgstr "சமமில்லாத அடைப்புக்குறி"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:635
+#: libgnucash/app-utils/gnc-exp-parser.c:629
 msgid "Stack overflow"
 msgstr "ஸ்டாக் மிகையளவு"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:637
+#: libgnucash/app-utils/gnc-exp-parser.c:631
 msgid "Stack underflow"
 msgstr "ஸ்டேக் குறையளவு"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:639
+#: libgnucash/app-utils/gnc-exp-parser.c:633
 msgid "Undefined character"
 msgstr "வரையறுக்கப்படாத எழுத்து"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:641
+#: libgnucash/app-utils/gnc-exp-parser.c:635
 msgid "Not a variable"
 msgstr "ஒரு மாறி இல்லை"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:643
+#: libgnucash/app-utils/gnc-exp-parser.c:637
 msgid "Not a defined function"
 msgstr "ஒரு வரையறுக்கப்பட்ட செயல்பாடு இல்லை"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:645
+#: libgnucash/app-utils/gnc-exp-parser.c:639
 msgid "Out of memory"
 msgstr "நினைவகம் நிரம்பியது"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:647
+#: libgnucash/app-utils/gnc-exp-parser.c:641
 msgid "Numeric error"
 msgstr "எண் பிழை"
 
@@ -30669,77 +30669,81 @@ msgstr ""
 msgid "GncQuotes::Fetch called with no commodities."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:336
+#: libgnucash/app-utils/gnc-quotes.cpp:333
+msgid "GncQuotes::Report called with no source."
+msgstr ""
+
+#: libgnucash/app-utils/gnc-quotes.cpp:339
 #, fuzzy
 #| msgid "There are no options for this report."
 msgid "There were no commodities for which to retrieve quotes."
 msgstr "இந்த அறிக்கைக்கை விருப்பங்கள் எதுவும் இல்லை."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:350
+#: libgnucash/app-utils/gnc-quotes.cpp:353
 msgid "Finance::Quote retrieval failed with error "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:368
-#: libgnucash/app-utils/gnc-quotes.cpp:842
+#: libgnucash/app-utils/gnc-quotes.cpp:371
+#: libgnucash/app-utils/gnc-quotes.cpp:845
 msgid "Finance::Quote returned no data and set no error."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:370
+#: libgnucash/app-utils/gnc-quotes.cpp:373
 msgid "Finance::Quote returned an error: "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:374
+#: libgnucash/app-utils/gnc-quotes.cpp:377
 msgid "Finance::Quote reported failure set no error."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:376
+#: libgnucash/app-utils/gnc-quotes.cpp:379
 msgid "Finance::Quote reported failure with error: "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:379
+#: libgnucash/app-utils/gnc-quotes.cpp:382
 msgid "Finance::Quote returned a quote with no currency."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:382
+#: libgnucash/app-utils/gnc-quotes.cpp:385
 msgid ""
 "Finance::Quote returned a quote with a currency GnuCash doesn't know about."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:385
+#: libgnucash/app-utils/gnc-quotes.cpp:388
 msgid "Finance::Quote returned a quote with no price element."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:388
+#: libgnucash/app-utils/gnc-quotes.cpp:391
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:392
+#: libgnucash/app-utils/gnc-quotes.cpp:395
 #, fuzzy
 #| msgid "There was an error accessing %s."
 msgid "The quote has no error set."
 msgstr "%s ஐ அணுகுதலில் ஒரு பிழை."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:401
+#: libgnucash/app-utils/gnc-quotes.cpp:404
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:487
+#: libgnucash/app-utils/gnc-quotes.cpp:490
 msgid "Currency quotes requires at least two currencies"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:753
-#: libgnucash/app-utils/gnc-quotes.cpp:758
+#: libgnucash/app-utils/gnc-quotes.cpp:756
+#: libgnucash/app-utils/gnc-quotes.cpp:761
 msgid "Failed to parse result returned by Finance::Quote."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:760
+#: libgnucash/app-utils/gnc-quotes.cpp:763
 msgid "Error message:"
 msgstr ""
 
 #. Translators: Means that the preceding element is required
-#: libgnucash/app-utils/gnc-quotes.cpp:802
+#: libgnucash/app-utils/gnc-quotes.cpp:805
 #, fuzzy
 #| msgid "Date required."
 msgctxt "Finance::Quote"
@@ -30747,14 +30751,14 @@ msgid "required"
 msgstr "தேதி தேவைப்படுகிறது."
 
 #. Translators: Means that the quote will work best if the preceding element is provided
-#: libgnucash/app-utils/gnc-quotes.cpp:804
+#: libgnucash/app-utils/gnc-quotes.cpp:807
 #, fuzzy
 msgctxt "Finance::Quote"
 msgid "recommended"
 msgstr "ஒப்பிடப்படாதது (_U)"
 
 #. Translators: Means that one of the indicated elements is required
-#: libgnucash/app-utils/gnc-quotes.cpp:806
+#: libgnucash/app-utils/gnc-quotes.cpp:809
 #, fuzzy
 #| msgid "End of this year"
 msgctxt "Finance::Quote"
@@ -30762,18 +30766,18 @@ msgid "one of these"
 msgstr "இந்த ஆண்டின் முடிவு"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
-#: libgnucash/app-utils/gnc-quotes.cpp:808
+#: libgnucash/app-utils/gnc-quotes.cpp:811
 #, fuzzy
 msgctxt "Finance::Quote"
 msgid "**missing**"
 msgstr "தரகு"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:815
+#: libgnucash/app-utils/gnc-quotes.cpp:818
 msgid "Finance::Quote fields GnuCash uses:"
 msgstr ""
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
-#: libgnucash/app-utils/gnc-quotes.cpp:817
+#: libgnucash/app-utils/gnc-quotes.cpp:820
 #, fuzzy
 #| msgid "Symbol"
 msgctxt "Finance::Quote"
@@ -30781,7 +30785,7 @@ msgid "symbol: "
 msgstr "குறியீடு"
 
 #. Translators: The date of the quote.
-#: libgnucash/app-utils/gnc-quotes.cpp:819
+#: libgnucash/app-utils/gnc-quotes.cpp:822
 #, fuzzy
 #| msgid "Date: "
 msgctxt "Finance::Quote"
@@ -30789,7 +30793,7 @@ msgid "date: "
 msgstr "நாள்: "
 
 #. Translators: The quote currency
-#: libgnucash/app-utils/gnc-quotes.cpp:821
+#: libgnucash/app-utils/gnc-quotes.cpp:824
 #, fuzzy
 #| msgid "Currency"
 msgctxt "Finance::Quote"
@@ -30797,7 +30801,7 @@ msgid "currency: "
 msgstr "நாணயம்"
 
 #. Translators: The quote is for the most recent trade on the exchange
-#: libgnucash/app-utils/gnc-quotes.cpp:827
+#: libgnucash/app-utils/gnc-quotes.cpp:830
 #, fuzzy
 #| msgid "last %s"
 msgctxt "Finance::Quote"
@@ -30805,39 +30809,39 @@ msgid "last: "
 msgstr "கடைசி %s"
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
-#: libgnucash/app-utils/gnc-quotes.cpp:829
+#: libgnucash/app-utils/gnc-quotes.cpp:832
 msgctxt "Finance::Quote"
 msgid "nav: "
 msgstr ""
 
 #. Translators: The quote is neither a last trade nor an NAV.
-#: libgnucash/app-utils/gnc-quotes.cpp:831
+#: libgnucash/app-utils/gnc-quotes.cpp:834
 #, fuzzy
 #| msgid "Price"
 msgctxt "Finance::Quote"
 msgid "price: "
 msgstr "விலை"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:851
+#: libgnucash/app-utils/gnc-quotes.cpp:854
 msgid "Finance::Quote reported a failure for symbol "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:854
+#: libgnucash/app-utils/gnc-quotes.cpp:857
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:917
+#: libgnucash/app-utils/gnc-quotes.cpp:920
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:923
+#: libgnucash/app-utils/gnc-quotes.cpp:926
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:929
+#: libgnucash/app-utils/gnc-quotes.cpp:932
 #, fuzzy
 #| msgid "Unrecognized or inconsistent format."
 msgid "Unrecognized Finance::Quote Error: "
@@ -31265,11 +31269,11 @@ msgstr "வருடத்தின் முடிவில்"
 msgid "Last day of the next calendar year."
 msgstr "அடுத்த நாள்காட்டி வருடத்தின் கடைசி நாள்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1142
+#: libgnucash/engine/gnc-optiondb.cpp:1143
 msgid "Counters"
 msgstr "கவுண்டர்கள்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1149
+#: libgnucash/engine/gnc-optiondb.cpp:1150
 msgid ""
 "Choose the number of days after which transactions will be read-only and "
 "cannot be edited anymore. This threshold is marked by a red line in the "
@@ -31281,7 +31285,7 @@ msgstr ""
 "கோடு மூலம் குறிப்பிடப்படுகிறது. பூஜ்யம் என்றால், அனைத்து பரிமாற்றங்களையும் திருத்த "
 "முடியும் மற்றும் எதுவுமே படிக்க-மட்டுமே என்றில்லை."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1154
+#: libgnucash/engine/gnc-optiondb.cpp:1155
 msgid ""
 "Check to have split action field used in registers for 'Num' field in place "
 "of transaction number; transaction number shown as 'T-Num' on second line of "
@@ -31293,7 +31297,7 @@ msgstr ""
 "இது வணிக அம்சங்கள், அறிக்கையிடல் மற்றும்  இறக்குமதிகள்/ஏற்றுமதிகளில் தொடர்பான விளைவை "
 "ஏற்படுத்தும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1158
+#: libgnucash/engine/gnc-optiondb.cpp:1159
 msgid ""
 "Check to have trading accounts used for transactions involving more than one "
 "currency or commodity."
@@ -31301,15 +31305,15 @@ msgstr ""
 "ஒன்றுக்கு மேற்பட்ட நாணயம் அல்லது சரக்குகளில் பரிமாற்றங்களில் பயன்படுத்தப்படும் வர்த்தக "
 "கணக்குகளை பெற சரிபார்க்கவும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1165
+#: libgnucash/engine/gnc-optiondb.cpp:1166
 msgid "Budget to be used when none has been otherwise specified."
 msgstr "ஒன்றும் குறிப்பிடப்படாத போது எனில் பட்ஜெட் பயன்படுத்தப்படும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1171
+#: libgnucash/engine/gnc-optiondb.cpp:1172
 msgid "Customer number"
 msgstr "வாடிக்கையாளர் எண்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1172
+#: libgnucash/engine/gnc-optiondb.cpp:1173
 msgid ""
 "The previous customer number generated. This number will be incremented to "
 "generate the next customer number."
@@ -31317,11 +31321,11 @@ msgstr ""
 "முந்தைய வாடிக்கையாளர் எண் உருவாக்கப்பட்டது. இந்த எண்ணானது அடுத்த வாடிக்கையாளர் எண்ணை "
 "உருவாக்க அதிகரிக்கும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1175
+#: libgnucash/engine/gnc-optiondb.cpp:1176
 msgid "Customer number format"
 msgstr "வாடிக்கையாளர் எண் வடிவம்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1177
+#: libgnucash/engine/gnc-optiondb.cpp:1178
 msgid ""
 "The format string to use for generating customer numbers. This is a printf-"
 "style format string."
@@ -31329,11 +31333,11 @@ msgstr ""
 "இந்த சர வடிவம் வாடிக்கையாளர் எண்களை உருவாக்குவதற்காக பயன்படுத்தப்படுகிறது. இது ஒரு "
 "printf-பாணி வடிவ சரமாகும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1180
+#: libgnucash/engine/gnc-optiondb.cpp:1181
 msgid "Employee number"
 msgstr "ஊழியர் எண்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1181
+#: libgnucash/engine/gnc-optiondb.cpp:1182
 msgid ""
 "The previous employee number generated. This number will be incremented to "
 "generate the next employee number."
@@ -31341,11 +31345,11 @@ msgstr ""
 "முந்தைய ஊழியர் எண் உருவாக்கப்பட்டது. இந்த எண்ணானது அடுத்த ஊழியர் எண்ணை உருவாக்க "
 "அதிகரிக்கும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1184
+#: libgnucash/engine/gnc-optiondb.cpp:1185
 msgid "Employee number format"
 msgstr "ஊழியர் எண் வடிவம் "
 
-#: libgnucash/engine/gnc-optiondb.cpp:1186
+#: libgnucash/engine/gnc-optiondb.cpp:1187
 msgid ""
 "The format string to use for generating employee numbers. This is a printf-"
 "style format string."
@@ -31353,11 +31357,11 @@ msgstr ""
 "இந்த சர வடிவம் ஊழியரின் எண்களை உருவாக்குவதற்காக பயன்படுத்தப்படுகிறது. இது ஒரு printf-"
 "பாணி வடிவ சரமாகும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1189
+#: libgnucash/engine/gnc-optiondb.cpp:1190
 msgid "Invoice number"
 msgstr "விவரப்பட்டியல் எண்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1190
+#: libgnucash/engine/gnc-optiondb.cpp:1191
 msgid ""
 "The previous invoice number generated. This number will be incremented to "
 "generate the next invoice number."
@@ -31365,11 +31369,11 @@ msgstr ""
 "முந்தைய விவரப்பட்டியல் எண் உருவாக்கப்பட்டது. இந்த எண்ணானது அடுத்த விவரப்பட்டியல் எண்ணை "
 "உருவாக்க அதிகரிக்கும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1193
+#: libgnucash/engine/gnc-optiondb.cpp:1194
 msgid "Invoice number format"
 msgstr "விவரப்பட்டியல் எண் வடிவம்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1195
+#: libgnucash/engine/gnc-optiondb.cpp:1196
 msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
@@ -31377,22 +31381,22 @@ msgstr ""
 "இந்த சர வடிவம் விவரக்குறிப்பு எண்களை உருவாக்குவதற்காக பயன்படுத்தப்படுகிறது. இது ஒரு "
 "printf-பாணி வடிவ சரமாகும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1198
+#: libgnucash/engine/gnc-optiondb.cpp:1199
 msgid "Bill number"
 msgstr "பில் எண்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1199
+#: libgnucash/engine/gnc-optiondb.cpp:1200
 msgid ""
 "The previous bill number generated. This number will be incremented to "
 "generate the next bill number."
 msgstr ""
 "முந்தைய பில் எண் உருவாக்கப்பட்டது. இந்த எண்ணானது அடுத்த பில் எண்ணை உருவாக்க அதிகரிக்கும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1202
+#: libgnucash/engine/gnc-optiondb.cpp:1203
 msgid "Bill number format"
 msgstr "பில் எண் வடிவம்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1203
+#: libgnucash/engine/gnc-optiondb.cpp:1204
 msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
@@ -31400,11 +31404,11 @@ msgstr ""
 "இந்த சர வடிவம் பில் எண்களை உருவாக்குவதற்காக பயன்படுத்தப்படுகிறது. இது ஒரு printf-பாணி "
 "வடிவ சரமாகும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1206
+#: libgnucash/engine/gnc-optiondb.cpp:1207
 msgid "Expense voucher number"
 msgstr "செலவு வவூச்சர் எண் "
 
-#: libgnucash/engine/gnc-optiondb.cpp:1207
+#: libgnucash/engine/gnc-optiondb.cpp:1208
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
@@ -31412,11 +31416,11 @@ msgstr ""
 "முந்தைய செலவு வவுச்சர் எண் உருவாக்கப்பட்டது. இந்த எண்ணானது அடுத்த வவுச்சர் எண்ணை உருவாக்க "
 "அதிகரிக்கும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1210
+#: libgnucash/engine/gnc-optiondb.cpp:1211
 msgid "Expense voucher number format"
 msgstr "செலவு வவூச்சர் எண் வடிவம்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1212
+#: libgnucash/engine/gnc-optiondb.cpp:1213
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
@@ -31424,22 +31428,22 @@ msgstr ""
 "இந்த சர வடிவம் செலவு வவுச்சர் எண்களை உருவாக்குவதற்காக பயன்படுத்தப்படுகிறது. இது ஒரு "
 "printf-பாணி வடிவ சரமாகும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1215
+#: libgnucash/engine/gnc-optiondb.cpp:1216
 msgid "Job number"
 msgstr "பணி எண்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1216
+#: libgnucash/engine/gnc-optiondb.cpp:1217
 msgid ""
 "The previous job number generated. This number will be incremented to "
 "generate the next job number."
 msgstr ""
 "முந்தைய பணி எண் உருவாக்கப்பட்டது. இந்த எண்ணானது அடுத்த பணி எண்ணை உருவாக்க அதிகரிக்கும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1219
+#: libgnucash/engine/gnc-optiondb.cpp:1220
 msgid "Job number format"
 msgstr "பணி எண் வடிவம்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1220
+#: libgnucash/engine/gnc-optiondb.cpp:1221
 msgid ""
 "The format string to use for generating job numbers. This is a printf-style "
 "format string."
@@ -31447,22 +31451,22 @@ msgstr ""
 "இந்த சர வடிவம் பணி எண்களை உருவாக்குவதற்காக பயன்படுத்தப்படுகிறது. இது ஒரு printf-பாணி "
 "வடிவ சரமாகும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1223
+#: libgnucash/engine/gnc-optiondb.cpp:1224
 msgid "Order number"
 msgstr "வரிசை எண்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1224
+#: libgnucash/engine/gnc-optiondb.cpp:1225
 msgid ""
 "The previous order number generated. This number will be incremented to "
 "generate the next order number."
 msgstr ""
 "முந்தைய ஆர்டர் எண் உருவாக்கப்பட்டது. இந்த எண்ணானது அடுத்த ஆர்டர் எண்ணை உருவாக்க அதிகரிக்கும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1227
+#: libgnucash/engine/gnc-optiondb.cpp:1228
 msgid "Order number format"
 msgstr "வரிசை எண் வடிவம்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1228
+#: libgnucash/engine/gnc-optiondb.cpp:1229
 msgid ""
 "The format string to use for generating order numbers. This is a printf-"
 "style format string."
@@ -31470,11 +31474,11 @@ msgstr ""
 "இந்த சர வடிவம் ஆர்டர் எண்களை உருவாக்குவதற்காக பயன்படுத்தப்படுகிறது. இது ஒரு printf-"
 "பாணி வடிவ சரமாகும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1231
+#: libgnucash/engine/gnc-optiondb.cpp:1232
 msgid "Vendor number"
 msgstr "விற்பனையாளர் எண்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1232
+#: libgnucash/engine/gnc-optiondb.cpp:1233
 msgid ""
 "The previous vendor number generated. This number will be incremented to "
 "generate the next vendor number."
@@ -31482,11 +31486,11 @@ msgstr ""
 "முந்தைய விற்பனையாளர் எண் உருவாக்கப்பட்டது. இந்த எண்ணானது அடுத்த விற்பனையாளர் எண்ணை "
 "உருவாக்க அதிகரிக்கும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1235
+#: libgnucash/engine/gnc-optiondb.cpp:1236
 msgid "Vendor number format"
 msgstr "விற்பனையாளர் எண் வடிவம்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1236
+#: libgnucash/engine/gnc-optiondb.cpp:1237
 msgid ""
 "The format string to use for generating vendor numbers. This is a printf-"
 "style format string."
@@ -31494,62 +31498,62 @@ msgstr ""
 "இந்த சர வடிவம் விற்பனையாளர் எண்களை உருவாக்குவதற்காக பயன்படுத்தப்படுகிறது. இது ஒரு "
 "printf-பாணி வடிவ சரமாகும்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1242
+#: libgnucash/engine/gnc-optiondb.cpp:1243
 msgid "The name of your business."
 msgstr "உங்கள் தொழிலின் பெயர்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1245
+#: libgnucash/engine/gnc-optiondb.cpp:1246
 msgid "The address of your business."
 msgstr "உங்கள் தொழிலின் முகவரி."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1249
-#: libgnucash/engine/gnc-optiondb.cpp:1253
+#: libgnucash/engine/gnc-optiondb.cpp:1250
+#: libgnucash/engine/gnc-optiondb.cpp:1254
 msgid "The contact person to print on invoices."
 msgstr "விவரப்பட்டியல்களில் அச்சிட வேண்டிய தொடர்பு கொள்ளும் நபர் ."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1257
+#: libgnucash/engine/gnc-optiondb.cpp:1258
 msgid "The fax number of your business."
 msgstr "உங்கள் தொழிலின் தொலைநகலி எண்."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1261
+#: libgnucash/engine/gnc-optiondb.cpp:1262
 msgid "The email address of your business."
 msgstr "உங்கள் தொழிலின் மின்னஞ்சல் முகவரி."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1265
+#: libgnucash/engine/gnc-optiondb.cpp:1266
 msgid "The URL address of your website."
 msgstr "உங்கள் இணையத்தளத்தின் URL முகவரி."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1268
+#: libgnucash/engine/gnc-optiondb.cpp:1269
 msgid "The ID for your company (eg 'Tax-ID: 00-000000)."
 msgstr "உங்கள் நிறுவனத்திற்கான ஐடி (எகா 'Tax-ID: 00-000000)."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1276
+#: libgnucash/engine/gnc-optiondb.cpp:1277
 msgid ""
 "Length of time to change the used invoice report. A value of 0 means "
 "disabled."
 msgstr ""
 
-#: libgnucash/engine/gnc-optiondb.cpp:1279
+#: libgnucash/engine/gnc-optiondb.cpp:1280
 msgid "Default Customer TaxTable"
 msgstr "முன்னிருப்பு வாடிக்கையாளர் வரிஅட்டவணை"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1280
+#: libgnucash/engine/gnc-optiondb.cpp:1281
 msgid "The default tax table to apply to customers."
 msgstr "வாடிக்கையாளர்களுக்கு செயல்படுத்துவதற்கான முன்னிருப்பு வரி அட்டவணை."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1283
+#: libgnucash/engine/gnc-optiondb.cpp:1284
 msgid "Default Vendor TaxTable"
 msgstr "முன்னிருப்பு விற்பனையாளர் வரிஅட்டவணை"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1284
+#: libgnucash/engine/gnc-optiondb.cpp:1285
 msgid "The default tax table to apply to vendors."
 msgstr "விற்பனையாளர்களுக்கு செயல்படுத்துவதற்கான முன்னிருப்பு வரி அட்டவணை."
 
-#: libgnucash/engine/gnc-optiondb.cpp:1288
+#: libgnucash/engine/gnc-optiondb.cpp:1289
 msgid "The default date format used for fancy printed dates."
 msgstr "பேன்ஸி அச்சிடப்பட்ட நாட்களுக்காக பயன்படுத்தப்படும் முன்னிருப்பு தேதி வடிவம்"
 
-#: libgnucash/engine/gnc-optiondb.cpp:1294
+#: libgnucash/engine/gnc-optiondb.cpp:1295
 msgid "The electronic tax number of your business"
 msgstr "உங்கள் தொழிலின் எலக்ட்ரானிக் வரி எண்"
 
