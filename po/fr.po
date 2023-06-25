@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-18 13:11-0700\n"
-"PO-Revision-Date: 2023-06-24 02:40+0000\n"
+"PO-Revision-Date: 2023-06-25 03:39+0000\n"
 "Last-Translator: Vincent Dawans <dawansv@gmail.com>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -73,7 +73,7 @@ msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
-"Aucune valeur possible pour le symbole de date '~a'. Ce rapport à "
+"Aucune valeur possible pour le symbole de date « ~a ». Ce rapport à "
 "certainement du être enregistré avec une ancienne version de GnuCash. La "
 "date d'aujourd'hui sera donc utilisée."
 
@@ -723,7 +723,7 @@ msgstr "Occidental (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:443
 msgid "Locale: "
-msgstr "Locale&nbsp;: "
+msgstr "Locale : "
 
 #: borrowed/goffice/go-charmap-sel.c:479
 msgid "Conversion Direction"
@@ -1740,10 +1740,9 @@ msgid ""
 msgstr ""
 "La société émet une distribution notionnelle, et le détenteur d’actions à "
 "découvert doit effectuer un paiement compensatoire pour la distribution "
-"notionnelle. Ceci est enregistré comme un montant de perte&nbsp;/&nbsp;"
-"revenu de dividende négatif, et augmente la valeur de base (c-à-d une valeur "
-"plus négative, plus loin de la valeur de 0,00) sans affecter le nombre de "
-"titres."
+"notionnelle. Ceci est enregistré comme un montant de perte / revenu de "
+"dividende négatif, et augmente la valeur de base (c-à-d une valeur plus "
+"négative, plus loin de la valeur de 0,00) sans affecter le nombre de titres."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
@@ -2198,17 +2197,17 @@ msgid ""
 "selected commodity and its price quotes?"
 msgstr ""
 "Des cotations de cours sont associées à ce produit. Voulez-vous vraiment "
-"effacer ce produit et les cotations associées&nbsp;?"
+"effacer ce produit et les cotations associées ?"
 
 # messages-i18n.c:56
 #: gnucash/gnome/dialog-commodities.c:204
 msgid "Are you sure you want to delete the selected commodity?"
-msgstr "Voulez-vous vraiment supprimer le produit sélectionné&nbsp;?"
+msgstr "Voulez-vous vraiment supprimer le produit sélectionné ?"
 
 # messages-i18n.c:262
 #: gnucash/gnome/dialog-commodities.c:213
 msgid "Delete commodity?"
-msgstr "Supprimer le produit&nbsp;?"
+msgstr "Supprimer le produit ?"
 
 # messages-i18n.c:134
 #: gnucash/gnome/dialog-commodities.c:217 gnucash/gnome/dialog-doclink.c:164
@@ -2573,7 +2572,7 @@ msgstr "Modifier l'URL"
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
 msgid "Enter an URL like \"%s\""
-msgstr "Entrez une URL comme «&nbsp;%s&nbsp;»"
+msgstr "Entrez une URL comme « %s »"
 
 #: gnucash/gnome/dialog-doclink.c:264
 msgid "Existing Document Link is"
@@ -3900,7 +3899,7 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
-"Cette transaction comporte des répartitions dans plusieurs comptes&nbsp;:\n"
+"Cette transaction comporte des répartitions dans plusieurs comptes :\n"
 "\n"
 "%s\n"
 "GnuCash ne peut traiter que des transactions comptabilisées sur un seul "
@@ -5754,7 +5753,7 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"Ajoute la configuration du rapport actuel dans le menu « Rapports -> "
+"Ajoute la configuration du rapport actuel dans le menu « Rapports -> "
 "Rapports préconfigurés ». Le rapport sera enregistré dans le fichier %s."
 
 # messages-i18n.c:324 po/guile_strings.txt:181
@@ -8600,7 +8599,7 @@ msgstr "'%s' est manquant"
 #: gnucash/gnome-utils/gnc-report-combo.c:316
 #, c-format
 msgid "Report with GUID '%s' is missing"
-msgstr "Le rapport avec le GUID «&nbsp;%s&nbsp;» est manquant"
+msgstr "Le rapport avec le GUID « %s » est manquant"
 
 #: gnucash/gnome-utils/gnc-splash.c:113
 msgid "Loading…"
@@ -9057,7 +9056,7 @@ msgid ""
 "for when using the get command"
 msgstr ""
 "L'expression régulière indiquant les espaces de noms des cotations à "
-"récupérer lors de l'utilisation de la commande «get»"
+"récupérer lors de l'utilisation de la commande « get »"
 
 #: gnucash/gnucash-cli.cpp:105
 msgid ""
@@ -9141,7 +9140,7 @@ msgstr "Finance::Quote sources :\n"
 
 #: gnucash/gnucash-commands.cpp:365 gnucash/gnucash-commands.cpp:389
 msgid "Price retrieval failed: "
-msgstr "Echec de la récupération de cotation&nbsp;: "
+msgstr "Echec de la récupération de cotation : "
 
 #: gnucash/gnucash-core-app.cpp:79
 msgid "This is a development version. It may or may not work."
@@ -12285,18 +12284,18 @@ msgstr ""
 "existants pour les dates données.\n"
 "\n"
 "Finalement, pour des importations répétées, la page de prévisualisation "
-"possède des boutons pour «&nbsp;Charger&nbsp;» et «&nbsp;Enregistrer&nbsp;» "
-"les paramètres. Vous pouvez ajuster et enregistrer vos paramètres pour les "
-"réutiliser pour des importations futures. Après avoir chargés vos "
-"paramètres, vous pouvez les réajuster pour des importations similaires et "
-"ensuite les enregistrer sous un autre nom. Notez que vous ne pouvez pas "
-"réenregistrer sur les noms utilisés par les paramètres définis par défaut.\n"
+"possède des boutons pour « Charger » et « Enregistrer » les paramètres. Vous "
+"pouvez ajuster et enregistrer vos paramètres pour les réutiliser pour des "
+"importations futures. Après avoir chargés vos paramètres, vous pouvez les "
+"réajuster pour des importations similaires et ensuite les enregistrer sous "
+"un autre nom. Notez que vous ne pouvez pas réenregistrer sur les noms "
+"utilisés par les paramètres définis par défaut.\n"
 "\n"
 "Cette opération est irréversible : assurez-vous d'avoir une sauvegarde "
 "fonctionnelle.\n"
 "\n"
-"Cliquez sur «&nbsp;Suivant&nbsp;» pour continuer ou «&nbsp;Annuler&nbsp;» "
-"pour interrompre l'importation."
+"Cliquez sur « Suivant » pour continuer ou « Annuler » pour interrompre "
+"l'importation."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:72
 msgid "Price Import Assistant"
@@ -13082,7 +13081,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:470
 msgid "… utilize an escrow account for payments?"
-msgstr "... utiliser un compte séquestre pour les paiements&nbsp;?"
+msgstr "... utiliser un compte séquestre pour les paiements ?"
 
 # messages-i18n.c:190
 #: gnucash/gtkbuilder/assistant-loan.glade:495
@@ -13950,7 +13949,7 @@ msgstr "Frais de courtages"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:641
 msgid "Capitalize brokerage fees into stock account?"
-msgstr "Capitaliser les frais de courtage dans le compte d'actions&nbsp;?"
+msgstr "Capitaliser les frais de courtage dans le compte d'actions ?"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:682
 msgid "In this page, input any dividend income received in this transaction."
@@ -14489,9 +14488,9 @@ msgstr ""
 "Ce compte (et tous les sous-comptes) sera caché dans l'arborescence des "
 "comptes et n'apparaîtra pas dans la liste popup des comptes dans le "
 "registre. Pour réinitialiser cette option, vous devez d'abord ouvrir la "
-"boîte de dialogue «&nbsp;Filtrer par...…» pour l'arborescence des comptes et "
-"cocher l'option «&nbsp;Afficher les comptes cachés&nbsp;». Cela vous "
-"permettra de sélectionner le compte et de rouvrir cette boîte de dialogue."
+"boîte de dialogue « Filtrer par... » pour l'arborescence des comptes et "
+"cocher l'option « Afficher les comptes cachés ». Cela vous permettra de "
+"sélectionner le compte et de rouvrir cette boîte de dialogue."
 
 # messages-i18n.c:195
 #: gnucash/gtkbuilder/dialog-account.glade:1562
@@ -14539,7 +14538,7 @@ msgstr ""
 "Si une valeur est présente, une indication s'affichera dans la vue du plan "
 "comptable lorsque le solde du jour est supérieur à cette valeur.\n"
 "\n"
-"Par exemple&nbsp;:\n"
+"Par exemple :\n"
 "Un solde de -90 aujourd'hui affichera une icône si la limite est fixée à -"
 "100\n"
 "Un solde de 100 aujourd'hui affichera une icône si la limite est fixée à 90."
@@ -14561,7 +14560,7 @@ msgstr ""
 "Si une valeur est présente, une indication s'affichera dans la vue du plan "
 "comptable lorsque le solde du jour est inférieur à cette valeur.\n"
 "\n"
-"Par exemple&nbsp;:\n"
+"Par exemple :\n"
 "Un solde de -100 aujourd'hui affichera une icône si la limite est fixée à -"
 "90\n"
 "Un solde de 90 aujourd'hui affichera une icône si la limite est fixée à 100."
@@ -14604,8 +14603,7 @@ msgstr "_Solde"
 # messages-i18n.c:195
 #: gnucash/gtkbuilder/dialog-account.glade:1862
 msgid "_Use equity 'Opening Balances' account"
-msgstr ""
-"_Utiliser le compte de «&nbsp;soldes initiaux&nbsp;» des capitaux propres"
+msgstr "_Utiliser le compte de « soldes initiaux » des capitaux propres"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: gnucash/gtkbuilder/dialog-account.glade:1879
@@ -15252,9 +15250,9 @@ msgstr ""
 "Les rapports préconfigurés sont créés en\n"
 "1. ouvrant un rapport dans le menu Rapports, \n"
 "2. modifiant les options du rapport à votre goût\n"
-"3. choisissant «&nbsp;Enregistrer le rapport préconfiguré [sous...]&nbsp;» "
-"dans le menu Rapports\n"
-" ou en appuyant sur le bouton \"Enregistrer la configuration [sous...]\" de "
+"3. choisissant « Enregistrer le rapport préconfiguré [sous...] » dans le "
+"menu Rapports\n"
+" ou en appuyant sur le bouton « Enregistrer la configuration [sous...] » de "
 "la barre d'outils."
 
 # po/guile_strings.txt:46
@@ -15309,7 +15307,7 @@ msgstr "(aucun)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:409
 msgid "Enter an URL like \"https://www.gnucash.org\""
-msgstr "Entrer une URL telle que «&nbsp;https://www.gnucash.org&nbsp;»"
+msgstr "Entrer une URL telle que « https://www.gnucash.org »"
 
 # messages-i18n.c:82
 #: gnucash/gtkbuilder/dialog-doclink.glade:454
@@ -21138,7 +21136,7 @@ msgid ""
 "- %s\n"
 "- %s"
 msgstr ""
-"Les prix ont été importés à partir du fichier « %s »\n"
+"Les prix ont été importés à partir du fichier « %s »\n"
 "\n"
 "Résumé de l'importation :\n"
 "- %s\n"
@@ -21242,24 +21240,24 @@ msgid ""
 "Please select a 'Currency to' column or set a Currency in the 'Currency To' "
 "field."
 msgstr ""
-"Veuillez sélectionner une colonne «Devise de destination» ou définir une "
-"devise dans le champ «Devise de destination»."
+"Veuillez sélectionner une colonne « Devise de destination » ou définir une "
+"devise dans le champ « Devise de destination »."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:464
 msgid ""
 "Please select a 'From Symbol' column or set a Commodity in the 'Commodity "
 "From' field."
 msgstr ""
-"Veuillez sélectionner une colonne «&nbsp;Symbole d'origine&nbsp;» ou définir "
-"un produit dans le champ «&nbsp;Produit d'origine&nbsp;»."
+"Veuillez sélectionner une colonne « Symbole d'origine » ou définir un "
+"produit dans le champ « Produit d'origine »."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:472
 msgid ""
 "Please select a 'From Namespace' column or set a Commodity in the 'Commodity "
 "From' field."
 msgstr ""
-"Veuillez sélectionner une colonne «&nbsp;Espace de noms d'origine&nbsp;» ou "
-"définir un produit dans le champ «&nbsp;Produit d'origine&nbsp;»."
+"Veuillez sélectionner une colonne « Espace de noms d'origine » ou définir un "
+"produit dans le champ « Produit d'origine »."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:480
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:187
@@ -21267,8 +21265,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:287
 msgid "'Commodity From' can not be the same as 'Currency To'."
 msgstr ""
-"«&nbsp;Produit d'origine&nbsp;» ne peut être identique à «&nbsp;Devise de "
-"destination&nbsp;»."
+"« Produit d'origine » ne peut être identique à « Devise de destination »."
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:500
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:552
@@ -21302,7 +21299,7 @@ msgid ""
 "No 'Currency to' column selected and no selected Currency specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Aucune colonne «Devise de destination» sélectionnée et aucune devise "
+"Aucune colonne « Devise de destination » sélectionnée et aucune devise "
 "renseignée non plus.\n"
 "Ceci ne devrait pas se produire. Merci de nous signalez ce problème."
 
@@ -21312,8 +21309,8 @@ msgid ""
 "From specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
-"Aucune colonne «&nbsp;Espace de noms/Symbole d'origine&nbsp;» sélectionnée "
-"et aucun «&nbsp;Produit d'origine&nbsp;» renseigné non plus.\n"
+"Aucune colonne « Espace de noms/Symbole d'origine » sélectionnée et aucun « "
+"Produit d'origine » renseigné non plus.\n"
 "Ceci ne devrait pas se produire. Merci de nous signaler ce problème."
 
 # src/gnome/dialog-qif-import.c:310
@@ -21344,8 +21341,7 @@ msgid ""
 "Please select one of the following columns: price, (negated) value."
 msgstr ""
 "Les sélections de compte en cours généreront des transactions multidevises. "
-"Veuillez sélectionner l'une des colonnes suivantes&nbsp;: prix, valeur "
-"(négativé)."
+"Veuillez sélectionner l'une des colonnes suivantes : prix, valeur (négativé)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:531
 msgid ""
@@ -21354,8 +21350,8 @@ msgid ""
 "(negated) transfer amount."
 msgstr ""
 "Les sélections de compte en cours généreront des transactions multidevises. "
-"Veuillez sélectionner l'une des colonnes suivantes&nbsp;: prix, valeur "
-"(négativé), montant du transfert (négativé)."
+"Veuillez sélectionner l'une des colonnes suivantes : prix, valeur (négativé)"
+", montant du transfert (négativé)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
 msgid ""
@@ -21426,17 +21422,17 @@ msgstr "La valeur de la colonne ne peut être vide."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:177
 msgid "'From Symbol' can not be empty."
-msgstr "«Symbole d'origine» ne peut pas être vide."
+msgstr "« Symbole d'origine » ne peut pas être vide."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:197
 msgid "'From Namespace' can not be empty."
-msgstr "«Espace de noms d'origine» ne peut pas être vide."
+msgstr "« Espace de noms d'origine » ne peut pas être vide."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:222
 msgid "'Currency To' can not be the same as 'Commodity From'."
 msgstr ""
-"La «&nbsp;Devise de destination&nbsp;» ne peut être la même que le «&nbsp;"
-"Produit d'origine&nbsp;»."
+"La « Devise de destination » ne peut être la même que le « Produit d'origine "
+"»."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:224
 msgid "Value parsed into an invalid currency for a currency column type."
@@ -21466,11 +21462,11 @@ msgstr "Pas de colonne de montant."
 # src/gnome/glade-gnc-dialogs.c:641
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:283
 msgid "No 'Currency to'."
-msgstr "Aucune «Devise de destination»."
+msgstr "Aucune « Devise de destination »."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:285
 msgid "No 'Commodity from'."
-msgstr "Aucun «&nbsp;Produit d'origine&nbsp;»."
+msgstr "Aucun « Produit d'origine »."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:355
 msgid "Failed to create price from selected columns."
@@ -21527,14 +21523,14 @@ msgstr "Cette valeur ne peut être interprétée comme un état rapproché valid
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:245
 msgid "Date field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
-"Le champ de date ne peut pas être vide si l'option «&nbsp;Multi-"
-"répartition&nbsp;» n'est pas sélectionnée.\n"
+"Le champ de date ne peut pas être vide si l'option « Multi-répartition » "
+"n'est pas sélectionnée.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:261
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
-"Le champ de description ne peut pas être vide si l'option «&nbsp;Multi-"
-"répartition&nbsp;» n'est pas sélectionnée.\n"
+"Le champ de description ne peut pas être vide si l'option « Multi-"
+"répartition » n'est pas sélectionnée.\n"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:311
@@ -21805,8 +21801,8 @@ msgstr "Nouveau, virer %s vers (auto) \"%s\""
 #, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr ""
-"Nouveau, NON BALANCÉ (besoin d'un prix pour transférer %s vers le compte "
-"%s)&nbsp;!"
+"Nouveau, NON BALANCÉ (besoin d'un prix pour transférer %s vers le compte %s) "
+"!"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.c:2044
@@ -22419,8 +22415,7 @@ msgstr "Action \"~a\" inconnue."
 #, scheme-format
 msgid "The unknown reconciliation status '~a' will be replaced by 'uncleared'."
 msgstr ""
-"L'état de rapprochement inconnu \"~a\" sera remplacé par «&nbsp;non "
-"pointé&nbsp;»."
+"L'état de rapprochement inconnu « ~a » sera remplacé par « non pointé »."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:213
 msgid "QIF import: Name conflict with another account."
@@ -28110,8 +28105,8 @@ msgstr ""
 msgid ""
 "Warning: ~a split(s) are not assigned to a lot. Do lots need to be scrubbed?"
 msgstr ""
-"Attention&nbsp;: ~a répartition(s) n'est(ne sont) pas assignée(s) à un lot. "
-"Les lots doivent-ils être épurés&nbsp;?"
+"Attention : ~a répartition(s) n'est(ne sont) pas assignée(s) à un lot. Les "
+"lots doivent-ils être épurés ?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1408
 #, scheme-format
@@ -28119,8 +28114,8 @@ msgid ""
 "Warning: The following ~a split(s) are not assigned to a lot. Do lots need "
 "to be scrubbed?"
 msgstr ""
-"Attention&nbsp;: Le(s) répartition(s) suivante(s) ~a n'est (ne sont) pas "
-"attribué(s) à un lot. Les lots doivent-ils être nettoyés ?"
+"Attention : Le(s) répartition(s) suivante(s) ~a n'est (ne sont) pas "
+"attribué(s) à un lot. Les lots doivent-ils être nettoyés ?"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
 #: gnucash/report/reports/standard/investment-lots.scm:1425
@@ -30846,7 +30841,7 @@ msgstr ""
 
 #: gnucash/report/trep-engine.scm:808
 msgid "Subtotal according to the primary key?"
-msgstr "Sous-total selon la clef primaire&nbsp;?"
+msgstr "Sous-total selon la clef primaire ?"
 
 #: gnucash/report/trep-engine.scm:815 gnucash/report/trep-engine.scm:849
 msgid "Do a date subtotal."
@@ -30864,7 +30859,7 @@ msgstr "Trier par ce second critère."
 
 #: gnucash/report/trep-engine.scm:842
 msgid "Subtotal according to the secondary key?"
-msgstr "Sous-total selon la clef secondaire&nbsp;?"
+msgstr "Sous-total selon la clef secondaire ?"
 
 # po/guile_strings.txt:287
 #: gnucash/report/trep-engine.scm:858
@@ -30874,32 +30869,32 @@ msgstr "L'ordre du tri secondaire."
 # po/guile_strings.txt:219
 #: gnucash/report/trep-engine.scm:912
 msgid "Display the reconciled date?"
-msgstr "Afficher la date de rapprochement&nbsp;?"
+msgstr "Afficher la date de rapprochement ?"
 
 # po/guile_strings.txt:219
 #: gnucash/report/trep-engine.scm:913
 msgid "Display the entered date?"
-msgstr "Afficher la date d'imputation&nbsp;?"
+msgstr "Afficher la date d'imputation ?"
 
 # po/guile_strings.txt:219
 #: gnucash/report/trep-engine.scm:918
 msgid "Display the notes if the memo is unavailable?"
-msgstr "Afficher les notes si le mémo n'est pas disponible&nbsp;?"
+msgstr "Afficher les notes si le mémo n'est pas disponible ?"
 
 # messages-i18n.c:96
 #: gnucash/report/trep-engine.scm:920 gnucash/report/trep-engine.scm:923
 msgid "Display the full account name?"
-msgstr "Afficher le nom complet du compte&nbsp;?"
+msgstr "Afficher le nom complet du compte ?"
 
 # messages-i18n.c:96
 #: gnucash/report/trep-engine.scm:921
 msgid "Display the account code?"
-msgstr "Afficher le code du compte&nbsp;?"
+msgstr "Afficher le code du compte ?"
 
 # messages-i18n.c:96
 #: gnucash/report/trep-engine.scm:924
 msgid "Display the other account code?"
-msgstr "Afficher le code de l'autre compte&nbsp;?"
+msgstr "Afficher le code de l'autre compte ?"
 
 # po/guile_strings.txt:219
 #: gnucash/report/trep-engine.scm:926
@@ -30914,30 +30909,30 @@ msgstr "Afficher le tableau de résume des sous-totaux."
 # messages-i18n.c:96
 #: gnucash/report/trep-engine.scm:930
 msgid "Display the balance of the underlying account on each line?"
-msgstr "Afficher le solde du compte sous-jacent sur chaque ligne&nbsp;?"
+msgstr "Afficher le solde du compte sous-jacent sur chaque ligne ?"
 
 # po/guile_strings.txt:219
 #: gnucash/report/trep-engine.scm:931
 msgid "Display a grand total section at the bottom?"
-msgstr "Afficher une section de total général en bas de page&nbsp;?"
+msgstr "Afficher une section de total général en bas de page ?"
 
 # po/guile_strings.txt:219
 #: gnucash/report/trep-engine.scm:936
 msgid "Display the trans number?"
-msgstr "Afficher le numéro de la transaction&nbsp;?"
+msgstr "Afficher le numéro de la transaction ?"
 
 # messages-i18n.c:96
 #: gnucash/report/trep-engine.scm:950
 msgid "Display the account name?"
-msgstr "Afficher le nom du compte&nbsp;?"
+msgstr "Afficher le nom du compte ?"
 
 #: gnucash/report/trep-engine.scm:958
 msgid ""
 "Display the other account name? If this is a split transaction, this "
 "parameter is guessed."
 msgstr ""
-"Afficher le nom de l'autre compte&nbsp;? Si c'est une transaction répartie, "
-"ce paramètre est deviné."
+"Afficher le nom de l'autre compte ? Si c'est une transaction répartie, ce "
+"paramètre est deviné."
 
 # messages-i18n.c:95
 #: gnucash/report/trep-engine.scm:965
@@ -32900,7 +32895,7 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu"
 msgstr ""
-"Ajoute la configuration du rapport actuel dans le menu « Rapports -> "
+"Ajoute la configuration du rapport actuel dans le menu « Rapports -> "
 "Rapports préconfigurés »"
 
 # messages-i18n.c:248
@@ -33121,7 +33116,7 @@ msgstr "Erreur numérique"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:158
 msgid "Failed to initialize Finance::Quote: "
-msgstr "Échec de l'initialisation de Finance::Quote&nbsp;: "
+msgstr "Échec de l'initialisation de Finance::Quote : "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:165
 msgid "Finance::Quote check returned error "
@@ -33155,7 +33150,7 @@ msgstr "Finance::Quote n'a renvoyé aucune donnée et n'a défini aucune erreur.
 
 #: libgnucash/app-utils/gnc-quotes.cpp:370
 msgid "Finance::Quote returned an error: "
-msgstr "Finance::Quote a renvoyé une erreur&nbsp;: "
+msgstr "Finance::Quote a renvoyé une erreur : "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:374
 msgid "Finance::Quote reported failure set no error."
@@ -33163,7 +33158,7 @@ msgstr "Finance::Quote a signalé un échec sans erreur."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:376
 msgid "Finance::Quote reported failure with error: "
-msgstr "Finance::Quote a signalé un échec avec erreur&nbsp;: "
+msgstr "Finance::Quote a signalé un échec avec erreur : "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:379
 msgid "Finance::Quote returned a quote with no currency."
@@ -33197,7 +33192,7 @@ msgstr "La cotation n’a pas d’erreur définie."
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr ""
 "Les cotations pour les produits suivants étaient indisponibles ou "
-"inutilisables&nbsp;:\n"
+"inutilisables :\n"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:487
 msgid "Currency quotes requires at least two currencies"
@@ -33210,7 +33205,7 @@ msgstr "Échec de l'analyse du résultat renvoyé par Finance::Quote."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:760
 msgid "Error message:"
-msgstr "Message d'erreur&nbsp;:"
+msgstr "Message d'erreur :"
 
 # messages-i18n.c:135
 #. Translators: Means that the preceding element is required
@@ -33240,7 +33235,7 @@ msgstr "**manquant**"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:815
 msgid "Finance::Quote fields GnuCash uses:"
-msgstr "Champs de Finance::Quote utilisés par GnuCash&nbsp;:"
+msgstr "Champs de Finance::Quote utilisés par GnuCash :"
 
 # messages-i18n.c:334
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
@@ -33254,7 +33249,7 @@ msgstr "symbole : "
 #: libgnucash/app-utils/gnc-quotes.cpp:819
 msgctxt "Finance::Quote"
 msgid "date: "
-msgstr "date&nbsp;: "
+msgstr "date : "
 
 # messages-i18n.c:266 po/guile_strings.txt:112
 # src/gnome/glade-gnc-dialogs.c:641
@@ -33274,7 +33269,7 @@ msgstr "dernier : "
 #: libgnucash/app-utils/gnc-quotes.cpp:829
 msgctxt "Finance::Quote"
 msgid "nav: "
-msgstr "vna&nbsp;: "
+msgstr "vna : "
 
 # messages-i18n.c:316
 #. Translators: The quote is neither a last trade nor an NAV.
@@ -33311,7 +33306,7 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:929
 msgid "Unrecognized Finance::Quote Error: "
-msgstr "Erreur de Finance::Quote non reconnue&nbsp;: "
+msgstr "Erreur de Finance::Quote non reconnue : "
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".
@@ -33348,21 +33343,20 @@ msgstr ""
 #, c-format
 msgid "%s balance of %s is above the upper limit %s."
 msgstr ""
-"Le solde du compte «&nbsp;%s&nbsp;» d'une valeur de %s est au dessus de la "
-"limite supérieure de %s."
+"Le solde du compte %s d'une valeur de %s est au dessus de la limite "
+"supérieure de %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, c-format
 msgid "%s balance of %s is below the lower limit %s."
 msgstr ""
-"Le solde du compte «&nbsp;%s&nbsp;» d'une valeur de %s est en dessous de la "
-"limite inférieure de %s."
+"Le solde du compte %s d'une valeur de %s est en dessous de la limite "
+"inférieure de %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
 #, c-format
 msgid "%s balance of %s should be zero."
-msgstr ""
-"Le solde du compte «&nbsp;%s&nbsp;» d'une valeur de %s devrait être zéro."
+msgstr "Le solde du compte %s d'une valeur de %s devrait être zéro."
 
 #: libgnucash/app-utils/gnc-ui-util.c:481
 msgctxt "Reconciled flag 'not cleared'"
@@ -34216,14 +34210,12 @@ msgstr ""
 #: libgnucash/engine/Scrub.c:148
 #, c-format
 msgid "Looking for orphans in transaction: %u of %u"
-msgstr "Recherche d'éléments orphelins dans la transaction&nbsp;: %u sur %u"
+msgstr "Recherche d'éléments orphelins dans la transaction : %u sur %u"
 
 #: libgnucash/engine/Scrub.c:362
 #, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %u"
-msgstr ""
-"Recherche des irrégularités dans la date de transaction %s&nbsp;:&nbsp;%u "
-"sur %u"
+msgstr "Recherche des irrégularités dans la date de transaction %s : %u sur %u"
 
 # messages-i18n.c:336
 #: libgnucash/engine/Split.c:1636
