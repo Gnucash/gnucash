@@ -48,7 +48,8 @@ splash_destroy_cb (GtkWidget *object, gpointer user_data)
 static gboolean
 button_press_cb(GtkWidget *widget, GdkEventButton *event, gpointer unused)
 {
-    gnc_destroy_splash_screen();
+    if (splash)
+        gtk_window_iconify (GTK_WINDOW (splash));
     return TRUE;
 }
 
