@@ -523,6 +523,9 @@ gnc_plugin_page_finalize (GObject *object)
         priv->books = NULL;
     }
 
+    if (priv->builder)
+        g_object_unref (priv->builder);
+
     page->window = NULL; // Don't need to free it.
 
     gnc_gobject_tracking_forget (object);
