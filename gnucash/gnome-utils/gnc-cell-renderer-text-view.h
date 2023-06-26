@@ -28,14 +28,6 @@
 #define GNC_TYPE_CELL_RENDERER_TEXT_VIEW            (gnc_cell_renderer_text_view_get_type ())
 G_DECLARE_FINAL_TYPE (GncCellRendererTextView, gnc_cell_renderer_text_view, GNC, CELL_RENDERER_TEXT_VIEW, GtkCellRendererText)
 
-struct _GncCellRendererTextView
-{
-    GtkCellRendererText  parent;
-
-    /* The editable entry. */
-    GtkWidget *editable;
-};
-
 GtkCellRenderer *gnc_cell_renderer_text_view_new (void);
 
 

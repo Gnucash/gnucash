@@ -48,13 +48,6 @@ G_DECLARE_FINAL_TYPE (GncEmbeddedWindow, gnc_embedded_window, GNC, EMBEDDED_WIND
 
 /* typedefs & structures */
 
-/** The instance data structure for an embedded window object. */
-struct _GncEmbeddedWindow
-{
-    /** The parent object for an embedded window. */
-    GtkBox vbox;
-};
-
 /* function prototypes */
 
 /** Create a new gnc embedded window plugin.

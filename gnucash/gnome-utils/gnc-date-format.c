@@ -55,6 +55,13 @@ enum
 
 typedef struct _GNCDateFormatPrivate GNCDateFormatPrivate;
 
+/**
+ **/
+struct _GNCDateFormat
+{
+    GtkBox hbox;
+};
+
 struct _GNCDateFormatPrivate
 {
     GtkWidget*	format_combobox;

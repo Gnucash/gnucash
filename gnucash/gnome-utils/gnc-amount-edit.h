@@ -39,31 +39,6 @@ extern "C" {
 #define GNC_TYPE_AMOUNT_EDIT          (gnc_amount_edit_get_type ())
 G_DECLARE_FINAL_TYPE (GNCAmountEdit, gnc_amount_edit, GNC, AMOUNT_EDIT, GtkBox)
 
-struct _GNCAmountEdit
-{
-    GtkBox    box;
-    GtkEntry *entry;
-    GtkWidget *image;
- 
-    gboolean disposed;
-
-    gboolean need_to_parse;
-
-    GNCPrintAmountInfo print_info;
-
-    gboolean block_changed;
-
-    gnc_numeric amount;
-
-    int fraction;
-
-    gboolean evaluate_on_enter;
-    gboolean validate_on_change;
-
-    gboolean show_warning_symbol;
-
-};
-
 /**
  * gnc_amount_edit_new:
  *

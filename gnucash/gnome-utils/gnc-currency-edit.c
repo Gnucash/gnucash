@@ -71,6 +71,11 @@ static void gnc_currency_edit_mnemonic_changed (GObject    *gobject,
 static void gnc_currency_edit_active_changed (GtkComboBox *gobject,
         gpointer     user_data);
 
+struct _GNCCurrencyEdit
+{
+    GtkComboBox combobox;
+};
+
 /** The instance private data for a content plugin. */
 typedef struct _GNCCurrencyEditPrivate
 {

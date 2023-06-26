@@ -65,6 +65,21 @@ enum
     LAST_PROP
 };
 
+typedef struct _GtkCellRendererTextPrivate
+{
+    gint size;
+    GdkRGBA color;
+    GdkRGBA color_selected;
+    gboolean flagged;
+} GncCellRendererTextFlagPrivate;
+
+struct _GncCellRendererTextFlag
+{
+  GtkCellRendererText parent;
+
+  GncCellRendererTextFlagPrivate *priv;
+};
+
 G_DEFINE_TYPE_WITH_PRIVATE(GncCellRendererTextFlag,
                            gnc_cell_renderer_text_flag,
                            GTK_TYPE_CELL_RENDERER_TEXT)

@@ -36,6 +36,12 @@ static void gnc_plugin_manager_dispose (GObject *object);
 static void gnc_plugin_manager_finalize (GObject *object);
 static void gnc_plugin_manager_shutdown (gpointer dummy, gpointer dummy2);
 
+/* typedefs & structures */
+struct _GncPluginManager
+{
+    GObject gobject;
+};
+
 typedef struct GncPluginManagerPrivate
 {
     GList *plugins;

@@ -95,6 +95,12 @@ const gchar *end_strings[GNC_ACCOUNTING_PERIOD_LAST] =
 /** Private Data Structure ***********************************************/
 
 typedef struct _GncPeriodSelectPrivate GncPeriodSelectPrivate;
+
+struct _GncPeriodSelect
+{
+    GtkBox hbox;
+};
+
 struct _GncPeriodSelectPrivate
 {
     GtkWidget *selector;

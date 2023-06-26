@@ -63,6 +63,13 @@ static void gnc_window_embedded_window_init (GncWindowInterface *iface);
 
 static void gnc_embedded_window_setup_window (GncEmbeddedWindow *window);
 
+/** The instance data structure for an embedded window object. */
+struct _GncEmbeddedWindow
+{
+    /** The parent object for an embedded window. */
+    GtkBox vbox;
+};
+
 /** The instance private data for an embedded window object. */
 typedef struct GncEmbeddedWindowPrivate
 {

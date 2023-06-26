@@ -46,6 +46,11 @@ enum
     RC_MISSING
 };
 
+struct _GncReportCombo
+{
+    GtkBox box;
+};
+
 /** The instance private data for a content plugin. */
 typedef struct _GncReportComboPrivate
 {

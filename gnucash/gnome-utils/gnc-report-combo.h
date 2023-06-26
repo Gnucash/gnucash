@@ -33,12 +33,6 @@ extern "C"
 #define GNC_TYPE_REPORT_COMBO            (gnc_report_combo_get_type())
 G_DECLARE_FINAL_TYPE (GncReportCombo, gnc_report_combo, GNC, REPORT_COMBO, GtkBox)
 
-struct _GncReportCombo
-{
-    GtkBox box;
-
-};
-
 typedef struct
 {
     char *report_guid;

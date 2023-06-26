@@ -32,22 +32,6 @@
 #define GNC_TYPE_CELL_RENDERER_TEXT_FLAG		(gnc_cell_renderer_text_flag_get_type ())
 G_DECLARE_FINAL_TYPE (GncCellRendererTextFlag, gnc_cell_renderer_text_flag, GNC, CELL_RENDERER_TEXT_FLAG, GtkCellRendererText)
 
-typedef struct _GtkCellRendererTextPrivate
-{
-    guint size;
-    GdkRGBA color;
-    GdkRGBA color_selected;
-    gboolean flagged;
-} GncCellRendererTextFlagPrivate;
-
-struct _GncCellRendererTextFlag
-{
-  GtkCellRendererText parent;
-
-  /*< private >*/
-  GncCellRendererTextFlagPrivate *priv;
-};
-
 GtkCellRenderer *gnc_cell_renderer_text_flag_new(void);
 
 #endif /* __GNC_CELL_RENDERER_TEXT_FLAG_H__ */

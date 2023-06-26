@@ -61,12 +61,6 @@ G_BEGIN_DECLS
 #define GNC_TYPE_PLUGIN_MANAGER            (gnc_plugin_manager_get_type ())
 G_DECLARE_FINAL_TYPE (GncPluginManager, gnc_plugin_manager, GNC, PLUGIN_MANAGER, GObject)
 
-/* typedefs & structures */
-struct _GncPluginManager
-{
-    GObject gobject;
-};
-
 /** @} */
 
 

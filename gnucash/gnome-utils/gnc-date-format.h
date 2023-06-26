@@ -38,13 +38,6 @@ extern "C" {
 #define GNC_TYPE_DATE_FORMAT          (gnc_date_format_get_type ())
 G_DECLARE_FINAL_TYPE (GNCDateFormat, gnc_date_format, GNC, DATE_FORMAT, GtkBox)
 
-/**
- **/
-struct _GNCDateFormat
-{
-    GtkBox hbox;
-};
-
 GtkWidget *gnc_date_format_new            (void);
 GtkWidget *gnc_date_format_new_without_label (void);
 GtkWidget *gnc_date_format_new_with_label (const char *label);

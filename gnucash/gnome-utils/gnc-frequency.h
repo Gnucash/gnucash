@@ -37,29 +37,6 @@ extern "C" {
 G_DECLARE_FINAL_TYPE (GncFrequency, gnc_frequency, GNC, FREQUENCY, GtkBox)
 
 /**
- * A GncFrequency is a VBox containing a scrollable GtkNotebook [and other
- * widgets] which allows the user to specify the frequency [of a scheduled
- * transaction or budgeting category, for instance], manipulating a FreqSpec
- * object in the process.
- **/
-typedef struct _GncFrequency
-{
-    GtkBox	     widget;
-    GtkBox          *vb;
-    GtkNotebook     *nb;
-    GtkComboBox     *freqComboBox;
-    GNCDateEdit     *startDate;
-    GtkBuilder      *builder;
-} GncFrequency;
-
-struct pageDataTuple
-{
-    int idx;
-    UIFreqType uiFTVal;
-    char *name;
-};
-
-/**
  * Either or both param may be NULL for reasonable defaults.
  **/
 GtkWidget* gnc_frequency_new(GList *recurrences, const GDate *start_date);

@@ -67,11 +67,6 @@ extern "C" {
 #define GNC_TYPE_CURRENCY_EDIT	    (gnc_currency_edit_get_type())
 G_DECLARE_FINAL_TYPE (GNCCurrencyEdit, gnc_currency_edit, GNC, CURRENCY_EDIT, GtkComboBox)
 
-struct _GNCCurrencyEdit
-{
-    GtkComboBox combobox;
-};
-
 /** Create a new GNCCurrencyEdit widget which can be used to provide
  *  an easy way to enter ISO currency codes.
  *

@@ -39,12 +39,6 @@ G_BEGIN_DECLS
 #define GNC_TYPE_PERIOD_SELECT      (gnc_period_select_get_type())
 G_DECLARE_FINAL_TYPE (GncPeriodSelect, gnc_period_select, GNC, PERIOD_SELECT, GtkBox)
 
-/* typedefs & structures */
-struct _GncPeriodSelect
-{
-    GtkBox hbox;
-};
-
 /** @name GncPeriodSelect Widget Implementation
  @{ */
 

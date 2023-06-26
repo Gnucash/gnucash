@@ -94,6 +94,29 @@ static const char *CHECKBOX_NAMES[] =
 
 /** Implementations ********************/
 
+/**
+ * A GncFrequency is a VBox containing a scrollable GtkNotebook [and other
+ * widgets] which allows the user to specify the frequency [of a scheduled
+ * transaction or budgeting category, for instance], manipulating a FreqSpec
+ * object in the process.
+ **/
+typedef struct _GncFrequency
+{
+    GtkBox	     widget;
+    GtkBox          *vb;
+    GtkNotebook     *nb;
+    GtkComboBox     *freqComboBox;
+    GNCDateEdit     *startDate;
+    GtkBuilder      *builder;
+} GncFrequency;
+
+struct pageDataTuple
+{
+    int idx;
+    UIFreqType uiFTVal;
+    char *name;
+};
+
 G_DEFINE_TYPE (GncFrequency, gnc_frequency, GTK_TYPE_BOX)
 
 static void
