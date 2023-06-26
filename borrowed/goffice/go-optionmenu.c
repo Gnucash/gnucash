@@ -50,6 +50,15 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+struct _GOOptionMenu
+{
+    GtkButton button;
+
+    GtkMenuShell *menu;
+    GtkMenuItem *selected;
+    GtkLabel *button_label;
+};
+
 G_DEFINE_TYPE (GOOptionMenu, go_option_menu, GTK_TYPE_BUTTON)
 
 GtkWidget*
