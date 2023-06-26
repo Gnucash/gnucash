@@ -1,5 +1,22 @@
 Version history:
 ------- -------
+5.3  - 26 June 2023
+
+The following bugs have been fixed:
+    Bug 798967 - Cannot Save to Any Path After Upgrading to 5.2 Fix
+		 inverted if statement condition for save success flag
+
+Other repairs or enhancements not marked as bugs:
+
+      Some memory cleanup by Chris Lam.
+
+      Missing from the 5.2 release notes is that Chris streamlined the
+      transaction scrubbing so that each transaction gets scrubbed
+      only once. This improves--in some cases substantially--the time
+      to load and to run Check and Repair.
+
+New and Updated Translations: Hungarian, Dutch, Portuguese, French, Italian
+
 5.2  - 25 June 2023
 Between 5.1 and 5.2, the following bugfixes were accomplished:
 
