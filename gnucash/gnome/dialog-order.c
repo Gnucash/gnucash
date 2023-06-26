@@ -154,6 +154,7 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
 
     gncOrderCommitEdit (order);
     gnc_resume_gui_refresh ();
+    g_free (text);
 }
 
 static gboolean

@@ -66,7 +66,7 @@ gcrtv_editing_done (GtkCellEditable         *editable,
                     GncCellRendererTextView *cell_tv)
 {
     gchar       *path;
-    const gchar *new_text;
+    gchar       *new_text;
 
     if (GNC_CELL_VIEW(editable)->focus_out_id > 0)
     {
@@ -96,6 +96,8 @@ gcrtv_editing_done (GtkCellEditable         *editable,
     gtk_cell_editable_remove_widget (GTK_CELL_EDITABLE(editable));
 
     g_signal_emit_by_name (cell_tv, "edited", path, new_text);
+
+    g_free (new_text);
 }
 
 static gboolean

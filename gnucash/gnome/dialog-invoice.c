@@ -441,6 +441,7 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
 
     gncInvoiceCommitEdit (invoice);
     gnc_resume_gui_refresh ();
+    g_free (text);
 }
 
 static gboolean
@@ -1522,6 +1523,7 @@ gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
     gtk_text_buffer_get_bounds (text_buffer, &start, &end);
     text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
     gncInvoiceSetNotes (invoice, text);
+    g_free (text);
     return FALSE;
 }
 

@@ -258,6 +258,7 @@ static void gnc_ui_to_customer (CustomerWindow *cw, GncCustomer *cust)
 
     gncCustomerCommitEdit (cust);
     gnc_resume_gui_refresh ();
+    g_free (text);
 }
 
 static gboolean check_edit_amount (GtkWidget *amount,

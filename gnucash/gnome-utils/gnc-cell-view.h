@@ -60,6 +60,6 @@ GtkWidget   *gnc_cell_view_new (void);
 
 void         gnc_cell_view_set_text (GncCellView *cv, const gchar *text);
 
-const gchar *gnc_cell_view_get_text (GncCellView *cv);
+gchar       *gnc_cell_view_get_text (GncCellView *cv);
 
 #endif /* __GNC_CELL_VIEW_H__ */

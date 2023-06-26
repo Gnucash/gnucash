@@ -521,10 +521,11 @@ gnc_ui_to_account (AccountWindow *aw)
 
     gtk_text_buffer_get_start_iter (aw->notes_text_buffer, &start);
     gtk_text_buffer_get_end_iter (aw->notes_text_buffer, &end);
-    string = gtk_text_buffer_get_text (aw->notes_text_buffer, &start, &end, FALSE);
+    char *new_string = gtk_text_buffer_get_text (aw->notes_text_buffer, &start, &end, FALSE);
     old_string = xaccAccountGetNotes (account);
-    if (null_strcmp (string, old_string) != 0)
-        xaccAccountSetNotes (account, string);
+    if (g_strcmp0 (new_string, old_string))
+        xaccAccountSetNotes (account, new_string);
+    g_free (new_string);
 
     flag = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(aw->opening_balance_button));
     if (xaccAccountGetIsOpeningBalance (account) != flag)

@@ -178,6 +178,7 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
 
     gncVendorCommitEdit (vendor);
     gnc_resume_gui_refresh ();
+    g_free (text);
 }
 
 static gboolean check_entry_nonempty (GtkWidget *entry,

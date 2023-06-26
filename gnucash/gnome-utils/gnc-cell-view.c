@@ -260,7 +260,7 @@ gnc_cell_view_set_text (GncCellView *cv, const gchar *text)
                               -1);
 }
 
-const gchar *
+gchar *
 gnc_cell_view_get_text (GncCellView *cv)
 {
     GtkTextIter siter, eiter;
