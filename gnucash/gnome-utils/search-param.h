@@ -45,27 +45,11 @@ struct _GNCSearchParamSimple
 };
 
 #define GNC_TYPE_SEARCH_PARAM_COMPOUND (gnc_search_param_compound_get_type ())
-#define GNC_SEARCH_PARAM_COMPOUND(o) \
-    (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_PARAM_COMPOUND, GNCSearchParamCompound))
-#define GNCSEARCH_PARAM_COMPOUND_CLASS(k) \
-    (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_PARAM_COMPOUND, GNCSearchParamCompoundClass)
-#define GNC_IS_SEARCH_PARAM_COMPOUND(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM_COMPOUND))
-
-typedef struct _GNCSearchParamCompound      GNCSearchParamCompound;
-typedef struct _GNCSearchParamCompoundClass GNCSearchParamCompoundClass;
+G_DECLARE_FINAL_TYPE (GNCSearchParamCompound, gnc_search_param_compound, GNC, SEARCH_PARAM_COMPOUND, GNCSearchParam)
 
 struct _GNCSearchParamCompound
 {
     GNCSearchParam  search_param;
-};
-
-struct _GNCSearchParamCompoundClass
-{
-    GNCSearchParamClass search_param_class;
-
-    /* virtual methods */
-
-    /* signals */
 };
 
 typedef enum
@@ -74,9 +58,6 @@ typedef enum
     SEARCH_PARAM_ANY = 1,
     SEARCH_PARAM_ALL = 2
 } GNCSearchParamKind;
-
-/* These are internal functions */
-GType gnc_search_param_compound_get_type (void);
 
 /* Create a new search param */
 GNCSearchParamSimple * gnc_search_param_simple_new (void);
