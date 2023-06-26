@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-06-26 12:37+0000\n"
+"PO-Revision-Date: 2023-06-26 16:00+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
@@ -18138,8 +18138,6 @@ msgid "_Start AqBanking Setup"
 msgstr "AqBanking configuratie-assistent _starten"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:186
-#, fuzzy
-#| msgid "Initial Online Banking Setup"
 msgid "Start Online Banking Setup"
 msgstr "Online bankieren de eerste keer configureren"
 
@@ -18436,10 +18434,8 @@ msgid "_Templates"
 msgstr "S_jablonen"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1661
-#, fuzzy
-#| msgid "Select File for Import"
 msgid "Select File Import Format and Template"
-msgstr "Een te importeren bestand selecteren"
+msgstr "Selecteer Bestandsimportformaat en sjabloon"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1730
 msgid ""
@@ -31692,14 +31688,12 @@ msgid "Default Budget"
 msgstr "Standaardbudget"
 
 #: libgnucash/engine/qofbookslots.h:74
-#, fuzzy
-#| msgid "Date of Report"
 msgid "Default Invoice Report"
-msgstr "Rapportdatum"
+msgstr "Standaard factuurrapport"
 
 #: libgnucash/engine/qofbookslots.h:75
 msgid "Default Invoice Report Timeout"
-msgstr ""
+msgstr "Standaard factuurrapport time-out"
 
 #. Translators: " + " is an separator in a list of string-representations of recurrence frequencies
 #: libgnucash/engine/Recurrence.c:511
@@ -31764,16 +31758,14 @@ msgid "Checking business splits in account %s: %u of %u"
 msgstr "Controleren van boekregels op rekening %s: %u van %u"
 
 #: libgnucash/engine/Scrub.c:148
-#, fuzzy, c-format
-#| msgid "Looking for orphans in account %s: %u of %u"
+#, c-format
 msgid "Looking for orphans in transaction: %u of %u"
-msgstr "Zoeken naar verweesde posten op rekening %s: %u van %u"
+msgstr "Zoeken naar verweesde posten in boeking %s: %u van %u"
 
 #: libgnucash/engine/Scrub.c:362
-#, fuzzy, c-format
-#| msgid "Looking for imbalances in account %s: %u of %u"
+#, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %u"
-msgstr "Zoeken naar posten niet in balans op rekening %s: %u van %u"
+msgstr "Zoeken naar posten niet in balans op boekingsdatum %s: %u van %u"
 
 #: libgnucash/engine/Split.c:1636
 msgctxt ""
