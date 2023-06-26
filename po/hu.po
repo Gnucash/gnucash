@@ -12,11 +12,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-06-24 22:52+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-06-26 16:00+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -19235,7 +19235,7 @@ msgstr "Válasszon ki egy leírás oszlopot."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:507
 msgid "Please select a (negated) amount column."
-msgstr "Kérjük, válasszon egy (negált) összeg oszlopot."
+msgstr "Kérjük, válasszon egy (negált) mennyiség oszlopot."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
 msgid ""

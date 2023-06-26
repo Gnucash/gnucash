@@ -16,6 +16,7 @@
 # Guille Lopez <willelopz@gmail.com>, 2022, 2023.
 # gallegonovato <fran-carro@hotmail.es>, 2023.
 # Jaime Marquínez Ferrándiz <jaime.marquinez.ferrandiz@fastmail.net>, 2023.
+# Francisco <fhiegom@outlook.es>, 2023.
 #
 #
 # ###############################################################################
@@ -82,11 +83,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-06-21 21:51+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2023-06-26 16:00+0000\n"
+"Last-Translator: Francisco <fhiegom@outlook.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -97,8 +98,8 @@ msgstr ""
 "X-Generator: Weblate 4.18.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -30486,10 +30487,8 @@ msgid "GncQuotes::Fetch called with no commodities."
 msgstr "GncQuotes::Fetch fue llamado sin productos."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:333
-#, fuzzy
-#| msgid "GncQuotes::Fetch called with no book."
 msgid "GncQuotes::Report called with no source."
-msgstr "GncQuotes::Fetch fue llamado sin libro."
+msgstr "GncQuotes:: Informe fue llamado sin libro."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:339
 msgid "There were no commodities for which to retrieve quotes."
