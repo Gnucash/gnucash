@@ -459,6 +459,7 @@ gnc_history_update_action (GncMainWindow *window,
         g_free (full_action_name);
         g_free (label_name);
         g_free (tooltip);
+        g_object_unref (item);
     }
     g_free (gsm);
     g_free (action_name);

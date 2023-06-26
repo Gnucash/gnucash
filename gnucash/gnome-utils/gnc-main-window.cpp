@@ -1820,6 +1820,7 @@ gnc_main_window_update_one_menu_action (GncMainWindow *window,
     if (pos < g_menu_model_get_n_items (gsm->model))
         g_menu_remove (G_MENU(gsm->model), pos);
     g_menu_insert_item (G_MENU(gsm->model), pos, item);
+    g_object_unref (item);
 
     g_free (gsm);
     LEAVE(" ");

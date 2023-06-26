@@ -481,7 +481,7 @@ gnc_plugin_menu_additions_add_to_window (GncPlugin *plugin,
         menu_plugin->item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 
     per_window.item_hash = menu_plugin->item_hash;
-    per_window.build_menu_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+    per_window.build_menu_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_object_unref);
     per_window.report_menu = g_menu_new ();
 
     menu_list = g_slist_sort (gnc_extensions_get_menu_list(),

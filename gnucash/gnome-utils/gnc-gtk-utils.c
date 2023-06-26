@@ -907,6 +907,7 @@ gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
 
             g_menu_remove (G_MENU(gsm->model), gsm->index);
             g_menu_insert_item (G_MENU(gsm->model), gsm->index, item);
+            g_object_unref (item);
             found = TRUE;
         }
         if (old_target)
