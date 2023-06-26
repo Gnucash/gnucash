@@ -1612,7 +1612,7 @@ gnc_book_write_to_xml_file_v2 (QofBook* book, const char* filename,
     /* Optionally wait for parallel compression threads */
     if (thread)
     {
-        if (g_thread_join (thread) != nullptr)
+        if (g_thread_join (thread) == nullptr)
             success = false;
     }
 
