@@ -52,19 +52,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-01-09 07:51+0000\n"
+"PO-Revision-Date: 2023-06-26 07:47+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
-"Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/program-"
-"beta/it/>\n"
+"Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"it/>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.1-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1433,26 +1433,22 @@ msgstr "Nessun conto delle azioni ha un saldo!"
 #. Translators: this is a stock transaction describing an
 #. Initial stock long purchase
 #: gnucash/gnome/assistant-stock-transaction.cpp:190
-#, fuzzy
-#| msgid "Open"
 msgid "Open buy"
-msgstr "Aperto"
+msgstr "Acquisto"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:191
 msgid "Initial stock long purchase."
-msgstr ""
+msgstr "Acquisto iniziale long di azioni."
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:201
-#, fuzzy
-#| msgid "Open _Folder"
 msgid "Open short"
-msgstr "Apri _cartella"
+msgstr "Vendita short"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:202
 msgid "Initial stock short sale."
-msgstr ""
+msgstr "Vendita short iniziale di azioni."
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
@@ -1472,7 +1468,7 @@ msgstr "Compra"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:217
 msgid "Buying stock long."
-msgstr ""
+msgstr "Acquisto azioni posizione long."
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
@@ -1493,6 +1489,8 @@ msgstr "Vendi"
 #: gnucash/gnome/assistant-stock-transaction.cpp:228
 msgid "Selling stock long, and record capital gain/loss."
 msgstr ""
+"Vendita di azioni in posizione long e registrazione di un profitto/perdita "
+"in conto capitale."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1510,27 +1508,29 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"La società ha distribuito dei dividendi in denaro agli azionisti.\n"
+"\n"
+"Ogni dividendo che viene reinvestito deve quindi essere registrato come un "
+"normale acquisto di azioni."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:250
-#, fuzzy
-#| msgid "Decrease in capital"
 msgid "Return of capital"
-msgstr "Diminuzione del capitale"
+msgstr "Rimborso di capitale"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:251
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"La società restituisce capitale, riducendo il costo di carico senza influire "
+"sulle # unità."
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:261
-#, fuzzy
-#| msgid "Decrease in capital"
 msgid "Return of capital (reclassification)"
-msgstr "Diminuzione del capitale"
+msgstr "Rimborso di capitale (riclassificazione)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:262
 msgid ""
@@ -1538,32 +1538,40 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"La società restituisce capitale, riducendo il costo di carico senza influire "
+"sulle # unità. Una distribuzione precedentemente registrata come un "
+"dividendo viene riclassificata in rimborso di capitale, spesso a causa di "
+"informazioni fiscali ricevute a fine anno."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:272
-#, fuzzy
-#| msgid "No description provided."
 msgid "Notional distribution (dividend)"
-msgstr "Nessuna descrizione fornita."
+msgstr "Distribuzione di nozionale (dividendo)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:273
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"La società ha effettuato una distribuzione di nozionale che viene registrata "
+"come un'entrata per un dividendo e aumenta il costo delle azioni senza "
+"interessare le # unità."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
 msgid "Notional distribution (capital gain)"
-msgstr ""
+msgstr "Distribuzione di nozionale (capital gain)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"La società ha effettuato una distribuzione di nozionale che viene registrata "
+"come un capital gain e aumenta il costo delle azioni senza interessare le # "
+"unità."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1625,6 +1633,8 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:335
 msgid "Buy back stock to cover short position, and record capital gain/loss."
 msgstr ""
+"Riacquisto di azioni per coprire una posizione short, e rilevazione di un "
+"utile/perdita in conto capitale."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
@@ -1687,7 +1697,7 @@ msgstr ""
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:392
 msgid "Compensatory notional distribution (capital gain)"
-msgstr ""
+msgstr "Distribuzione nozionale compensativa (capital gain)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:393
 msgid ""
@@ -13242,10 +13252,8 @@ msgstr "Fine frazionamento azionario"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:9
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:27
-#, fuzzy
-#| msgid "Transaction Import Assistant"
 msgid "Stock Transaction Assistant"
-msgstr "Assistente importazione transazioni"
+msgstr "Assistente per le transazioni in azioni"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:22
 msgid ""
@@ -13253,6 +13261,10 @@ msgid ""
 "type (purchase, sale, dividend, distribution, return of capital, stock "
 "split) will determine the transaction splits involved in the transaction."
 msgstr ""
+"Questo assistente ti aiuterà a registrare una transazione azionaria. Il tipo "
+"di transazione (acquisto, vendita, dividendo, distribuzione, restituzione "
+"del capitale, frazionamento azionario) determinerà le suddivisioni della "
+"scrittura implicate dalla transazione."
 
 # Tooltip
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
