@@ -39,18 +39,8 @@ struct _GNCSearchParamClass
 #define GNC_TYPE_SEARCH_PARAM_SIMPLE (gnc_search_param_simple_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchParamSimple, gnc_search_param_simple, GNC, SEARCH_PARAM_SIMPLE, GNCSearchParam)
 
-struct _GNCSearchParamSimple
-{
-    GNCSearchParam  search_param;
-};
-
 #define GNC_TYPE_SEARCH_PARAM_COMPOUND (gnc_search_param_compound_get_type ())
 G_DECLARE_FINAL_TYPE (GNCSearchParamCompound, gnc_search_param_compound, GNC, SEARCH_PARAM_COMPOUND, GNCSearchParam)
-
-struct _GNCSearchParamCompound
-{
-    GNCSearchParam  search_param;
-};
 
 typedef enum
 {

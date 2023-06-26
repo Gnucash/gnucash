@@ -56,6 +56,11 @@ struct _GNCSearchParamPrivate
 
 typedef struct _GNCSearchParamSimplePrivate GNCSearchParamSimplePrivate;
 
+struct _GNCSearchParamSimple
+{
+    GNCSearchParam  search_param;
+};
+
 struct _GNCSearchParamSimplePrivate
 {
     GSList *        converters;
@@ -69,6 +74,11 @@ struct _GNCSearchParamSimplePrivate
    ((GNCSearchParamSimplePrivate*)gnc_search_param_simple_get_instance_private ((GNCSearchParamSimple*)o))
 
 typedef struct _GNCSearchParamCompoundPrivate GNCSearchParamCompoundPrivate;
+
+struct _GNCSearchParamCompound
+{
+    GNCSearchParam  search_param;
+};
 
 struct _GNCSearchParamCompoundPrivate
 {
