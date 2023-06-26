@@ -6,10 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-06-19 05:34+0000\n"
+"PO-Revision-Date: 2023-06-26 04:05+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -14720,8 +14720,8 @@ msgid ""
 "will be displayed again next time you start GnuCash. If you press the <i>No</"
 "i> button, it will not be displayed again."
 msgstr ""
-"Se clicar em <b>Sim</b>, o diálogo <i>Boas vindas ao GnuCash</i> será "
-"mostrado novamente no próximo arranque do GnuCash. Se clicar em <b>Não</b>, "
+"Se clicar em <i>Sim</i>, o diálogo <i>Boas vindas ao GnuCash</i> será "
+"mostrado novamente no próximo arranque do GnuCash. Se clicar em <i>Não</i>, "
 "não será mostrado novamente."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:210
@@ -29955,10 +29955,8 @@ msgid "GncQuotes::Fetch called with no commodities."
 msgstr "GncQuotes::Fetch chamado sem mercadorias."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:333
-#, fuzzy
-#| msgid "GncQuotes::Fetch called with no book."
 msgid "GncQuotes::Report called with no source."
-msgstr "GncQuotes::Fetch chamado sem livro."
+msgstr "GncQuotes::Report chamado sem fonte."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:339
 msgid "There were no commodities for which to retrieve quotes."
