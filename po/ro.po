@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-06-16 23:51+0000\n"
+"PO-Revision-Date: 2023-06-26 16:00+0000\n"
 "Last-Translator: Andrea Andre <andrea.tsg19@slmail.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
@@ -42,7 +42,7 @@ msgstr ""
 #: gnucash/report/reports/standard/price-scatter.scm:186
 #, scheme-format
 msgid "~a to ~a"
-msgstr ""
+msgstr "~a la ~a"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -692,9 +692,8 @@ msgid "Western (Windows-1252)"
 msgstr "Occidentală (Windows-1252)"
 
 #: borrowed/goffice/go-charmap-sel.c:443
-#, fuzzy
 msgid "Locale: "
-msgstr "Lo_cal:"
+msgstr "Local: "
 
 #: borrowed/goffice/go-charmap-sel.c:479
 #, fuzzy
@@ -1548,10 +1547,8 @@ msgstr ""
 #. reverse split when shorting stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:304
 #: gnucash/gnome/assistant-stock-transaction.cpp:414
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Reverse split"
-msgstr "_Revizuiește tranzacțiile create"
+msgstr "Divizare inversă"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:305
 msgid ""
@@ -1843,10 +1840,8 @@ msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1425
-#, fuzzy
-#| msgid "Get _Balance"
 msgid "Ne_w Balance"
-msgstr "Obține _balanța"
+msgstr "S_old nou"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1425
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
@@ -1857,17 +1852,13 @@ msgid "_Shares"
 msgstr "_Acțiuni"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1428
-#, fuzzy
-#| msgid "_Rotation"
 msgid "Ratio"
-msgstr "_Rotație"
+msgstr "Proporție"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1428
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
-#, fuzzy
-#| msgid "Get _Balance"
 msgid "Next Balance"
-msgstr "Obține _balanța"
+msgstr "Următorul sold"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1431
 #, fuzzy
@@ -2470,7 +2461,7 @@ msgstr "Selectează cont"
 #: gnucash/import-export/aqb/dialog-ab.glade:906
 #: gnucash/import-export/aqb/dialog-ab.glade:1690
 msgid "_OK"
-msgstr ""
+msgstr "_OK"
 
 #: gnucash/gnome/dialog-doclink.c:241
 msgid "Amend the URL"
@@ -2525,9 +2516,8 @@ msgid "Manage Document Link"
 msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:763
-#, fuzzy
 msgid "Transaction can not be modified."
-msgstr "_Jurnalul tranzacțiilor"
+msgstr "Tranzacția nu poate fi modificată."
 
 #: gnucash/gnome/dialog-doclink.c:824 libgnucash/engine/gncOwner.c:214
 msgid "Undefined"
@@ -2704,9 +2694,8 @@ msgstr "Global"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:979
 #: gnucash/gtkbuilder/dialog-account.glade:323
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:63
-#, fuzzy
 msgid "Hidden"
-msgstr "Asc_uns"
+msgstr "Ascuns"
 
 #: gnucash/gnome/dialog-find-account.c:437
 #, fuzzy
@@ -2719,18 +2708,15 @@ msgid "Balance Zero"
 msgstr "Balanță (Perioadă)"
 
 #: gnucash/gnome/dialog-find-account.c:459
-#, fuzzy
-#| msgid "Ta_x related"
 msgid "Tax related"
-msgstr "Ta_xă înrudită"
+msgstr "Aspecte fiscale"
 
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
 #: gnucash/gnome/dialog-find-account.c:491
-#, fuzzy, c-format
-#| msgid "Accounts in '%s'"
+#, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "Conturi în '%s'"
+msgstr "Su_b-conturi ale „%s”"
 
 #: gnucash/gnome/dialog-find-transactions.c:105
 msgid "All Accounts"
@@ -3427,9 +3413,8 @@ msgstr "Doar active?"
 #: gnucash/gnome/dialog-job.c:566 gnucash/gnome/dialog-job.c:579
 #: gnucash/gtkbuilder/dialog-job.glade:206
 #: gnucash/register/ledger-core/split-register-model.c:374
-#, fuzzy
 msgid "Rate"
-msgstr "Taxe în_rudite"
+msgstr "Tarif"
 
 #: gnucash/gnome/dialog-job.c:568 gnucash/gnome-utils/gnc-tree-view-owner.c:341
 #: gnucash/gtkbuilder/dialog-job.glade:103
@@ -3741,7 +3726,7 @@ msgstr "Prețuri înregistrate"
 
 #: gnucash/gnome/dialog-price-editor.c:239
 msgid "_Replace"
-msgstr ""
+msgstr "În_locuiește"
 
 #: gnucash/gnome/dialog-price-editor.c:270
 msgid "You must select a Security."
@@ -3928,9 +3913,8 @@ msgid "Split with memo %s has an invalid account."
 msgstr ""
 
 #: gnucash/gnome/dialog-sx-editor.c:739
-#, fuzzy
 msgid "Invalid Account in Split"
-msgstr "Include totalul _mare"
+msgstr "Cont greșit în divizare"
 
 #: gnucash/gnome/dialog-sx-editor.c:751
 #, c-format
@@ -4021,9 +4005,8 @@ msgid "(Need Value)"
 msgstr "(Are nevoie de o valoare)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:773
-#, fuzzy
 msgid "Invalid Transactions"
-msgstr "Tranzacție _nevidă"
+msgstr "Tranzacții nevalabile"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:824
 #, fuzzy, c-format
@@ -4087,7 +4070,7 @@ msgstr "Declarație de venituri"
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
-msgstr ""
+msgstr "_Aplică"
 
 #: gnucash/gnome/dialog-tax-info.c:1240
 msgid ""
@@ -4304,10 +4287,8 @@ msgstr ""
 "Ești pe cale să suprascrii o tranzacție existentă. Sigur vrei să faci asta?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1300
-#, fuzzy
-#| msgid "_Select transfer account"
 msgid "_Pick another account"
-msgstr "_Selectează contul de transfer"
+msgstr "_Alege alt cont"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1301
 msgid "_Do it anyway"
