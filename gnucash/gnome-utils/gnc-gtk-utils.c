@@ -863,6 +863,7 @@ gnc_menubar_model_update_item (GMenuModel *menu_model, const gchar *action_name,
 
             g_variant_unref (value);
         }
+        g_object_unref (iter);
 
         if (!label && !gsm->search_action_label)
         {
