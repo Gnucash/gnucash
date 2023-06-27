@@ -133,6 +133,8 @@ void failure_args(
 #define do_test( result, title ) do_test_call( result, title, __FILE__, __LINE__ )
 #define success( title ) success_call( title, __FILE__, __LINE__ );
 #define failure( title ) failure_call( title, __FILE__, __LINE__ );
+#define failuref( title, format, ... ) failure_args( title, __FILE__, __LINE__, format, ## __VA_ARGS__ );
+
 
 /** This one doesn't work because macros can't take a variable number of arguments.
  * well, apparently gcc can, but it's non-standard.
