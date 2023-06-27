@@ -935,6 +935,9 @@ StockAssistantModel::generate_list_of_splits() {
     if (!m_txn_types || !m_txn_type)
         return { false, "Error: txn_type not initialized", {} };
 
+    m_warnings.clear();
+    m_errors.clear();
+    m_infos.clear();
     m_list_of_splits.clear();
 
     gnc_numeric debit = gnc_numeric_zero ();
