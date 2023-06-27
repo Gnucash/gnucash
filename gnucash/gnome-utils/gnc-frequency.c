@@ -110,13 +110,6 @@ typedef struct _GncFrequency
     GtkBuilder      *builder;
 } GncFrequency;
 
-struct pageDataTuple
-{
-    int idx;
-    UIFreqType uiFTVal;
-    char *name;
-};
-
 G_DEFINE_TYPE (GncFrequency, gnc_frequency, GTK_TYPE_BOX)
 
 static void
