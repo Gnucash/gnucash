@@ -40,18 +40,12 @@ static void gnc_plugin_manager_shutdown (gpointer dummy, gpointer dummy2);
 struct _GncPluginManager
 {
     GObject gobject;
-};
 
-typedef struct GncPluginManagerPrivate
-{
     GList *plugins;
     GHashTable *plugins_table;
 }  GncPluginManagerPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncPluginManager, gnc_plugin_manager, G_TYPE_OBJECT)
-
-#define GNC_PLUGIN_MANAGER_GET_PRIVATE(o)  \
-   ((GncPluginManagerPrivate*)gnc_plugin_manager_get_instance_private((GncPluginManager*)o))
+G_DEFINE_TYPE(GncPluginManager, gnc_plugin_manager, G_TYPE_OBJECT)
 
 enum
 {
@@ -81,21 +75,19 @@ void
 gnc_plugin_manager_add_plugin (GncPluginManager *manager,
                                GncPlugin *plugin)
 {
-    GncPluginManagerPrivate *priv;
     gint index;
 
     ENTER (" ");
     g_return_if_fail (GNC_IS_PLUGIN_MANAGER (manager));
     g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
-    priv = GNC_PLUGIN_MANAGER_GET_PRIVATE(manager);
-    index = g_list_index (priv->plugins, plugin);
+    index = g_list_index (manager->plugins, plugin);
 
     if (index >= 0)
         return;
 
-    priv->plugins = g_list_append (priv->plugins, plugin);
-    g_hash_table_insert (priv->plugins_table,
+    manager->plugins = g_list_append (manager->plugins, plugin);
+    g_hash_table_insert (manager->plugins_table,
                          g_strdup( GNC_PLUGIN_GET_CLASS(plugin)->plugin_name ),
                          plugin);
 
@@ -107,21 +99,19 @@ void
 gnc_plugin_manager_remove_plugin (GncPluginManager *manager,
                                   GncPlugin *plugin)
 {
-    GncPluginManagerPrivate *priv;
     gint index;
 
     ENTER (" ");
     g_return_if_fail (GNC_IS_PLUGIN_MANAGER (manager));
     g_return_if_fail (GNC_IS_PLUGIN (plugin));
 
-    priv = GNC_PLUGIN_MANAGER_GET_PRIVATE(manager);
-    index = g_list_index (priv->plugins, plugin);
+    index = g_list_index (manager->plugins, plugin);
 
     if (index < 0)
         return;
 
-    priv->plugins = g_list_remove (priv->plugins, plugin);
-    g_hash_table_remove (priv->plugins_table,
+    manager->plugins = g_list_remove (manager->plugins, plugin);
+    g_hash_table_remove (manager->plugins_table,
                          GNC_PLUGIN_GET_CLASS(plugin)->plugin_name);
 
     g_signal_emit (G_OBJECT (manager), signals[PLUGIN_REMOVED], 0, plugin);
@@ -134,25 +124,19 @@ gnc_plugin_manager_remove_plugin (GncPluginManager *manager,
 GList *
 gnc_plugin_manager_get_plugins (GncPluginManager *manager)
 {
-    GncPluginManagerPrivate *priv;
-
     g_return_val_if_fail (GNC_IS_PLUGIN_MANAGER (manager), NULL);
 
-    priv = GNC_PLUGIN_MANAGER_GET_PRIVATE(manager);
-    return g_list_copy (priv->plugins);
+    return g_list_copy (manager->plugins);
 }
 
 GncPlugin *
 gnc_plugin_manager_get_plugin (GncPluginManager *manager,
                                const gchar *name)
 {
-    GncPluginManagerPrivate *priv;
-
     g_return_val_if_fail (GNC_IS_PLUGIN_MANAGER (manager), NULL);
     g_return_val_if_fail (name != NULL, NULL);
 
-    priv = GNC_PLUGIN_MANAGER_GET_PRIVATE(manager);
-    return GNC_PLUGIN (g_hash_table_lookup (priv->plugins_table, name));
+    return GNC_PLUGIN (g_hash_table_lookup (manager->plugins_table, name));
 }
 
 static void
@@ -186,29 +170,24 @@ gnc_plugin_manager_class_init (GncPluginManagerClass *klass)
 static void
 gnc_plugin_manager_init (GncPluginManager *manager)
 {
-    GncPluginManagerPrivate *priv;
-
-    priv = GNC_PLUGIN_MANAGER_GET_PRIVATE(manager);
-    priv->plugins_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+    manager->plugins_table = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
 }
 
 static void
 gnc_plugin_manager_dispose (GObject *object)
 {
     GncPluginManager *manager = GNC_PLUGIN_MANAGER (object);
-    GncPluginManagerPrivate *priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_MANAGER (manager));
 
-    priv = GNC_PLUGIN_MANAGER_GET_PRIVATE(manager);
-    if (priv->plugins_table)
+    if (manager->plugins_table)
     {
-        g_hash_table_destroy (priv->plugins_table);
-        priv->plugins_table = NULL;
+        g_hash_table_destroy (manager->plugins_table);
+        manager->plugins_table = NULL;
 
-        g_list_foreach (priv->plugins, (GFunc)g_object_unref, NULL);
-        g_list_free (priv->plugins);
-        priv->plugins = NULL;
+        g_list_foreach (manager->plugins, (GFunc)g_object_unref, NULL);
+        g_list_free (manager->plugins);
+        manager->plugins = NULL;
     }
 
     G_OBJECT_CLASS (gnc_plugin_manager_parent_class)->dispose (object);

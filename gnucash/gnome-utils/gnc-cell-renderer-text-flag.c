@@ -65,37 +65,26 @@ enum
     LAST_PROP
 };
 
-typedef struct _GtkCellRendererTextPrivate
+struct _GncCellRendererTextFlag
 {
+    GtkCellRendererText parent;
+
     gint size;
     GdkRGBA color;
     GdkRGBA color_selected;
     gboolean flagged;
-} GncCellRendererTextFlagPrivate;
-
-struct _GncCellRendererTextFlag
-{
-  GtkCellRendererText parent;
-
-  GncCellRendererTextFlagPrivate *priv;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE(GncCellRendererTextFlag,
-                           gnc_cell_renderer_text_flag,
-                           GTK_TYPE_CELL_RENDERER_TEXT)
+G_DEFINE_TYPE(GncCellRendererTextFlag,
+              gnc_cell_renderer_text_flag,
+              GTK_TYPE_CELL_RENDERER_TEXT)
 
 static void
 gnc_cell_renderer_text_flag_init(GncCellRendererTextFlag *celltext)
 {
-    GncCellRendererTextFlagPrivate *priv;
-
-    celltext->priv =
-        gnc_cell_renderer_text_flag_get_instance_private(celltext);
-    priv = celltext->priv;
-
-    priv->size = 8;
-    gdk_rgba_parse(&priv->color, "red");
-    priv->flagged = FALSE;
+    celltext->size = 8;
+    gdk_rgba_parse(&celltext->color, "red");
+    celltext->flagged = FALSE;
 }
 
 static void
@@ -150,24 +139,23 @@ gnc_cell_renderer_text_flag_get_property(GObject *object, guint param_id,
                                          GValue *value, GParamSpec *pspec)
 {
     GncCellRendererTextFlag *celltext    = GNC_CELL_RENDERER_TEXT_FLAG(object);
-    GncCellRendererTextFlagPrivate *priv = celltext->priv;
 
     switch (param_id)
     {
     case PROP_FLAGGED:
-        g_value_set_boolean(value, priv->flagged);
+        g_value_set_boolean(value, celltext->flagged);
         break;
 
     case PROP_FLAG_SIZE:
-        g_value_set_int(value, priv->size);
+        g_value_set_int(value, celltext->size);
         break;
 
     case PROP_FLAG_COLOR_RGBA:
-      g_value_set_boxed (value, &priv->color);
+      g_value_set_boxed (value, &celltext->color);
       break;
 
     case PROP_FLAG_COLOR_RGBA_SELECTED:
-      g_value_set_boxed (value, &priv->color_selected);
+      g_value_set_boxed (value, &celltext->color_selected);
       break;
 
     default:
@@ -182,7 +170,6 @@ gnc_cell_renderer_text_flag_set_property(GObject *object, guint param_id,
                                          GParamSpec *pspec)
 {
     GncCellRendererTextFlag *celltext    = GNC_CELL_RENDERER_TEXT_FLAG(object);
-    GncCellRendererTextFlagPrivate *priv = celltext->priv;
     switch (param_id)
     {
     case PROP_FLAG_COLOR:
@@ -195,9 +182,9 @@ gnc_cell_renderer_text_flag_set_property(GObject *object, guint param_id,
         else if (gdk_rgba_parse(&rgba, g_value_get_string(value))) 
         {
             if (param_id == PROP_FLAG_COLOR_SELECTED)
-                priv->color = rgba;
+                celltext->color = rgba;
             else
-                priv->color_selected = rgba;
+                celltext->color_selected = rgba;
         }
         else
             g_warning("Don't know color '%s'", g_value_get_string(value));
@@ -209,8 +196,8 @@ gnc_cell_renderer_text_flag_set_property(GObject *object, guint param_id,
         GdkRGBA *rgba;
 
         rgba = g_value_get_boxed(value);
-        if (rgba) 
-            priv->color = *rgba;
+        if (rgba)
+            celltext->color = *rgba;
     }
     break;
 
@@ -219,17 +206,17 @@ gnc_cell_renderer_text_flag_set_property(GObject *object, guint param_id,
         GdkRGBA *rgba;
 
         rgba = g_value_get_boxed(value);
-        if (rgba) 
-            priv->color_selected = *rgba;
+        if (rgba)
+            celltext->color_selected = *rgba;
     }
     break;
 
     case PROP_FLAGGED:
-        priv->flagged = g_value_get_boolean(value);
+        celltext->flagged = g_value_get_boolean(value);
         break;
 
     case PROP_FLAG_SIZE:
-        priv->size = g_value_get_int(value);
+        celltext->size = g_value_get_int(value);
         break;
 
     default:
@@ -262,16 +249,15 @@ gnc_cell_renderer_text_flag_render(GtkCellRenderer *cell, cairo_t *cr,
 
 {
     GncCellRendererTextFlag *celltext    = GNC_CELL_RENDERER_TEXT_FLAG(cell);
-    GncCellRendererTextFlagPrivate *priv = celltext->priv;
 
     // call the parent renderer to do the standard drawing
     GTK_CELL_RENDERER_CLASS(gnc_cell_renderer_text_flag_parent_class)
         ->render(cell, cr, widget, background_area, cell_area, flags);
 
     // add the flag (triangle in the top right corner)
-    if (priv->flagged) 
+    if (celltext->flagged)
     {
-        guint size = MIN(MIN(background_area->height, priv->size),
+        guint size = MIN(MIN(background_area->height, celltext->size),
                          background_area->width);
         double x   = background_area->x + background_area->width - size;
         double y   = background_area->y;
@@ -281,8 +267,8 @@ gnc_cell_renderer_text_flag_render(GtkCellRenderer *cell, cairo_t *cr,
         cairo_rel_line_to(cr, 0, size);
         cairo_close_path(cr);
         gdk_cairo_set_source_rgba(cr, (flags & GTK_CELL_RENDERER_SELECTED)
-                                          ? &priv->color_selected
-                                          : &priv->color);
+                                          ? &celltext->color_selected
+                                          : &celltext->color);
         cairo_fill(cr);
     }
 }
