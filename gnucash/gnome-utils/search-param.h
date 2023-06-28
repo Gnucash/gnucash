@@ -25,22 +25,7 @@
 
 
 #define GNC_TYPE_SEARCH_PARAM    (gnc_search_param_get_type ())
-#define GNC_SEARCH_PARAM(o)      (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_PARAM, GNCSearchParam))
-#define GNCSEARCH_PARAM_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_PARAM, GNCSearchParamClass)
-#define GNC_IS_SEARCH_PARAM(o)   (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM))
-
-typedef struct _GNCSearchParam  GNCSearchParam;
-typedef struct _GNCSearchParamClass GNCSearchParamClass;
-
-struct _GNCSearchParam
-{
-    GObject gobject;
-
-    const char *        title;
-    GtkJustification    justify;
-    gboolean            passive;
-    gboolean            non_resizeable;
-};
+G_DECLARE_DERIVABLE_TYPE (GNCSearchParam, gnc_search_param, GNC, SEARCH_PARAM, GObject)
 
 struct _GNCSearchParamClass
 {
@@ -107,7 +92,6 @@ typedef enum
 } GNCSearchParamKind;
 
 /* These are internal functions */
-GType gnc_search_param_get_type (void);
 GType gnc_search_param_simple_get_type (void);
 GType gnc_search_param_compound_get_type (void);
 

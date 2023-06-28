@@ -43,6 +43,11 @@ typedef struct _GNCSearchParamPrivate GNCSearchParamPrivate;
 
 struct _GNCSearchParamPrivate
 {
+    const char *        title;
+    GtkJustification    justify;
+    gboolean            passive;
+    gboolean            non_resizeable;
+
     QofIdTypeConst  type;
 };
 
@@ -339,7 +344,8 @@ gnc_search_param_get_title (GNCSearchParam *param)
 {
     g_return_val_if_fail (GNC_IS_SEARCH_PARAM(param), NULL);
 
-    return param->title;
+    GNCSearchParamPrivate *priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+    return priv->title;
 }
 
 void
@@ -347,7 +353,8 @@ gnc_search_param_set_title (GNCSearchParam *param, const char *title)
 {
     g_return_if_fail (GNC_IS_SEARCH_PARAM(param));
 
-    param->title = title;
+    GNCSearchParamPrivate *priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+    priv->title = title;
 }
 
 GtkJustification
@@ -355,7 +362,8 @@ gnc_search_param_get_justify (GNCSearchParam *param)
 {
     g_return_val_if_fail (GNC_IS_SEARCH_PARAM(param), GTK_JUSTIFY_LEFT);
 
-    return param->justify;
+    GNCSearchParamPrivate *priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+    return priv->justify;
 }
 
 void
@@ -363,7 +371,8 @@ gnc_search_param_set_justify (GNCSearchParam *param, GtkJustification justify)
 {
     g_return_if_fail (GNC_IS_SEARCH_PARAM(param));
 
-    param->justify = justify;
+    GNCSearchParamPrivate *priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+    priv->justify = justify;
 }
 
 gboolean
@@ -371,7 +380,8 @@ gnc_search_param_get_passive (GNCSearchParam *param)
 {
     g_return_val_if_fail (GNC_IS_SEARCH_PARAM(param), FALSE);
 
-    return param->passive;
+    GNCSearchParamPrivate *priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+    return priv->passive;
 }
 
 void
@@ -379,7 +389,8 @@ gnc_search_param_set_passive (GNCSearchParam *param, gboolean value)
 {
     g_assert (GNC_IS_SEARCH_PARAM(param));
 
-    param->passive = value;
+    GNCSearchParamPrivate *priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+    priv->passive = value;
 }
 
 gboolean
@@ -387,7 +398,8 @@ gnc_search_param_get_non_resizeable (GNCSearchParam *param)
 {
     g_return_val_if_fail (GNC_IS_SEARCH_PARAM(param), FALSE);
 
-    return param->non_resizeable;
+    GNCSearchParamPrivate *priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+    return priv->non_resizeable;
 }
 
 void
@@ -395,7 +407,8 @@ gnc_search_param_set_non_resizeable (GNCSearchParam *param, gboolean value)
 {
     g_assert (GNC_IS_SEARCH_PARAM(param));
 
-    param->non_resizeable = value;
+    GNCSearchParamPrivate *priv = GNC_SEARCH_PARAM_GET_PRIVATE(param);
+    priv->non_resizeable = value;
 }
 
 gboolean
