@@ -37,24 +37,6 @@ G_BEGIN_DECLS
 #define GNC_TYPE_SX_INSTANCE_MODEL	      (gnc_sx_instance_model_get_type ())
 G_DECLARE_FINAL_TYPE (GncSxInstanceModel, gnc_sx_instance_model, GNC, SX_INSTANCE_MODEL, GObject)
 
-typedef struct _GncSxInstanceModel
-{
-    GObject parent;
-    gboolean disposed;
-
-    /* private */
-    gint qof_event_handler_id;
-
-    /* signals */
-    /* void (*added)(SchedXaction *sx); // gpointer user_data */
-    /* void (*updated)(SchedXaction *sx); // gpointer user_data */
-    /* void (*removing)(SchedXaction *sx); // gpointer user_data */
-
-    GDate range_end;
-    gboolean include_disabled;
-    GList *sx_instance_list; /* <GncSxInstances*> */
-} GncSxInstanceModel;
-
 typedef struct _GncSxInstances
 {
     SchedXaction *sx;

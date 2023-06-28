@@ -72,6 +72,18 @@ typedef struct _SxTxnCreationData
     GList **creation_errors;
 } SxTxnCreationData;
 
+struct _GncSxInstanceModel
+{
+    GObject parent;
+    gboolean disposed;
+
+    gint qof_event_handler_id;
+
+    GDate range_end;
+    gboolean include_disabled;
+    GList *sx_instance_list; /* <GncSxInstances*> */
+};
+
 static GncSxInstanceModel* gnc_sx_instance_model_new(void);
 
 static GncSxInstance* gnc_sx_instance_new(GncSxInstances *parent, GncSxInstanceState state, GDate *date, void *temporal_state, gint sequence_num);
