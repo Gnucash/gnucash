@@ -491,4 +491,7 @@
  'report-guid "d5adcc61c62e4b8684dd8907448d7900"
  'menu-path (list gnc:menuname-example)
  'options-generator options-generator
+ 'chart? (lambda (report_obj)
+          (let* ((options (gnc:report-options report_obj)))
+            (gnc-optiondb-lookup-value options gnc:pagename-display "Show plot")))
  'renderer renderer)

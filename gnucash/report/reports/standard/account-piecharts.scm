@@ -588,6 +588,7 @@ balance at a given time"))
     'options-generator (lambda () (options-generator acct-types
                                                      income-expense?
                                                      depth-based?))
+    'chart? #t
     'renderer (lambda (report-obj)
                 (piechart-renderer report-obj name uuid
                                    acct-types income-expense? depth-based?
