@@ -152,13 +152,13 @@
           (else (cons (object->string e) accum)))))
 
 ;; returns the html document as a string, I think.
-(define* (gnc:html-document-render doc #:optional (headers? #t) chart?)
+(define* (gnc:html-document-render doc #:optional (headers? #t) chart? export?)
   (let ((stylesheet (gnc:html-document-style-sheet doc))
         (style-text (gnc:html-document-style-text doc)))
 
     (if stylesheet
         ;; if there's a style sheet, let it do the rendering
-        (gnc:html-style-sheet-render stylesheet doc headers? chart?)
+        (gnc:html-style-sheet-render stylesheet doc headers? chart? export?)
 
         ;; otherwise, do the trivial render.
         (let* ((retval '())
@@ -186,8 +186,10 @@
                 (push (list "</style>" style-text "<style type=\"text/css\">\n")))
             (if (not (string-null? title))
                 (push (list "</title>" title "<title>\n")))
-            (when chart?
-              (push (gnc:html-js-include "chartjs/Chart.bundle.min.js")))
+            (if chart?
+              (if export?
+                (push (gnc:html-js-embed "chartjs/Chart.bundle.min.js"))
+                (push (gnc:html-js-include "chartjs/Chart.bundle.min.js"))))
             (push "</head>")
 
             ;; this lovely little number just makes sure that <body>

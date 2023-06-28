@@ -205,7 +205,7 @@
 ;;  html-style-sheet-render 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(define* (gnc:html-style-sheet-render sheet doc #:optional headers?)
+(define* (gnc:html-style-sheet-render sheet doc #:optional headers? chart? export?)
   ;; render the document (returns an <html-document>)
   (let ((newdoc ((gnc:html-style-sheet-renderer sheet) 
                  (gnc:html-style-sheet-options sheet)
@@ -238,7 +238,7 @@
     ;; render the ssdocument (using the trivial stylesheet).  since
     ;; the objects from 'doc' are now in newdoc, this renders the whole
     ;; package.
-    (gnc:html-document-render newdoc headers?)))
+    (gnc:html-document-render newdoc headers? chart? export?)))
 
 (define (gnc:get-html-style-sheets)
   (sort (map cdr (hash-map->list cons *gnc:_style-sheets_*))

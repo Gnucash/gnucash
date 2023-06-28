@@ -35,6 +35,7 @@
 (use-modules (gnucash report html-text))
 (use-modules (gnucash report html-table))
 (use-modules (ice-9 match))
+(use-modules (ice-9 textual-ports))
 (use-modules (web uri))
 
 (export gnc:html-make-empty-cell)
@@ -70,6 +71,7 @@
 (export gnc:html-make-empty-data-warning)
 (export gnc:html-make-options-link)
 (export gnc:html-js-include)
+(export gnc:html-js-embed)
 (export gnc:html-css-include)
 
 ;; returns a list with n #f (empty cell) values
@@ -395,6 +397,14 @@
   (format #f
           "<script language=\"javascript\" type=\"text/javascript\" src=~s></script>\n"
           (make-uri (gnc-resolve-file-path file))))
+
+(define (gnc:html-js-embed file)
+  (let* ((js-port (open-input-file (gnc-resolve-file-path file)))
+         (js-embed (get-string-all js-port)))
+    (close-port js-port)
+    (format #f
+            "<script language=\"javascript\" type=\"text/javascript\">~a</script>\n"
+            js-embed)))
 
 (define (gnc:html-css-include file)
   (format #f
