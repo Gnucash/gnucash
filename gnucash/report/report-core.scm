@@ -74,6 +74,7 @@
 (export gnc:report-dirty?)
 (export gnc:report-editor-widget)
 (export gnc:report-embedded-list)
+(export gnc:report-chart?)
 (export gnc:report-export-thunk)
 (export gnc:report-export-types)
 (export gnc:report-id)
@@ -94,6 +95,7 @@
 (export gnc:report-set-stylesheet!)
 (export gnc:report-set-type!)
 (export gnc:report-stylesheet)
+(export gnc:report-template-chart?)
 (export gnc:report-template-export-thunk)
 (export gnc:report-template-export-types)
 (export gnc:report-template-has-unique-name?)
@@ -209,6 +211,7 @@
 (define gnc:report-template-menu-name report-template-menu-name)
 (define gnc:report-template-menu-tip report-template-menu-tip)
 (define gnc:report-template-hook report-template-hook)
+(define gnc:report-template-chart? report-template-chart?)
 (define gnc:report-template-export-types report-template-export-types)
 (define gnc:report-template-export-thunk report-template-export-thunk)
 
@@ -418,6 +421,17 @@ not found.")))
                             (gnc:report-type report))))
     (and template
          (gnc:report-template-export-thunk template))))
+
+;; A convenience wrapper to either get the report-template's chart flag from
+;; an instantiated report or if the template chart flag is a procedure,
+;; run it against the report.
+(define (gnc:report-chart? report)
+  (let* ((template (hash-ref *gnc:_report-templates_*
+                            (gnc:report-type report)))
+         (chart? (gnc:report-template-chart? template)))
+    (if (and chart? (procedure? chart?))
+        (chart? report)
+        chart?)))
 
 (define (gnc:report-menu-name report)
   (let ((template (hash-ref *gnc:_report-templates_*
@@ -733,32 +747,36 @@ not found.")))
 ;; gets the stylesheet from the report;
 ;; renders the html doc and caches the resulting string;
 ;; returns the html string.
+;; if export flag is #t, call gnc:html-document-render with export flag
+;; and disable caching.
 ;; Now accepts either an html-doc or finished HTML from the renderer -
 ;; the former requires further processing, the latter is just returned.
-(define (gnc:report-render-html report headers?)
-  (if (and (not (gnc:report-dirty? report))
+(define* (gnc:report-render-html report #:optional (headers? #t) (export? #f))
+  (if (and (not export?)
+           (not (gnc:report-dirty? report))
            (gnc:report-ctext report))
       (gnc:report-ctext report)
       (let ((template (hash-ref *gnc:_report-templates_* (gnc:report-type report))))
         (and template
              (let* ((renderer (gnc:report-template-renderer template))
                     (stylesheet (gnc:report-stylesheet report))
-                    (chart? (report-template-chart? template))
+                    (chart? (gnc:report-chart? report))
                     (doc (renderer report))
                     (html (cond
                            ((string? doc) doc)
                            (else
                             (gnc:html-document-set-style-sheet! doc stylesheet)
-                            (gnc:html-document-render doc headers? chart?)))))
-               (gnc:report-set-ctext! report html) ;; cache the html
-               (gnc:report-set-dirty?! report #f)  ;; mark it clean
+                            (gnc:html-document-render doc headers? chart? export?)))))
+               (when (not export?)
+                 (gnc:report-set-ctext! report html) ;; cache the html
+                 (gnc:report-set-dirty?! report #f))  ;; mark it clean
                html)))))
 
 ;; render report. will return a 2-element list: either (list html #f)
 ;; where html is the report html string, or (list #f captured-error)
 ;; where captured-error is the error string.
 (define (gnc:render-report report)
-  (define (get-report) (gnc:report-render-html report #t))
+  (define (get-report) (gnc:report-render-html report #t #f))
   (gnc:apply-with-error-handling get-report '()))
 
 ;; "thunk" should take the report-type and the report template record

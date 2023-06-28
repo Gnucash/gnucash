@@ -1724,7 +1724,6 @@ gnc_plugin_page_report_export_cb (GSimpleAction *simple,
     char * filepath;
     SCM export_types;
     SCM export_thunk;
-    gboolean result;
     SCM choice;
     GtkWindow *parent = GTK_WINDOW (gnc_plugin_page_get_window
                                     (GNC_PLUGIN_PAGE (report)));
@@ -1788,17 +1787,37 @@ gnc_plugin_page_report_export_cb (GSimpleAction *simple,
                                      "document object with export-string or "
                                      "export-error."));
         }
-        result = TRUE;
     }
     else
-        result = gnc_html_export_to_file (priv->html, filepath);
-
-    if (!result)
     {
-        const char *fmt = _("Could not open the file %s. "
-                            "The error is: %s");
-        gnc_error_dialog (parent, fmt, filepath ? filepath : "(null)",
-                          strerror (errno) ? strerror (errno) : "" );
+        SCM chart_report = scm_call_1 (scm_c_eval_string ("gnc:report-chart?"),
+                                       priv->cur_report);
+        SCM html_export = (scm_is_true (chart_report)) ? SCM_BOOL_T : SCM_BOOL_F;
+        SCM report_render_html = scm_c_eval_string ("gnc:report-render-html");
+        SCM apply_with_error_handling = scm_c_eval_string ("gnc:apply-with-error-handling");
+        SCM arg_list = scm_list_3 (priv->cur_report, SCM_BOOL_T, html_export);
+        SCM rendered = scm_call_2 (apply_with_error_handling, report_render_html, arg_list);
+        SCM document = SCM_CAR(rendered);
+        SCM err = SCM_CDR (rendered);
+
+        if (scm_is_false (document))
+        {
+            gchar *str = scm_to_utf8_string (err);
+            gnc_error_dialog (parent, "%s %s", _("Error rendering HTML:"), str);
+            g_free (str);
+        }
+        else
+        {
+            GError *err = nullptr;
+            gchar *exported = scm_to_utf8_string (document);
+            if (!g_file_set_contents (filepath, exported, -1, &err))
+                gnc_error_dialog (parent, "%s %s",
+                                  _("Error during export:"),
+                                  err->message);
+            g_free (exported);
+            if (err)
+                g_error_free (err);
+        }
     }
 
     g_free(filepath);
