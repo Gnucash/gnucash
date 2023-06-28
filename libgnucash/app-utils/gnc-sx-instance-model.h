@@ -35,11 +35,7 @@
 G_BEGIN_DECLS
 
 #define GNC_TYPE_SX_INSTANCE_MODEL	      (gnc_sx_instance_model_get_type ())
-#define GNC_SX_INSTANCE_MODEL(obj)	      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_SX_INSTANCE_MODEL, GncSxInstanceModel))
-#define GNC_SX_INSTANCE_MODEL_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_SX_INSTANCE_MODEL, GncSxInstanceModelClass))
-#define GNC_IS_SX_INSTANCE_MODEL(obj)	      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_SX_INSTANCE_MODEL))
-#define GNC_IS_SX_INSTANCE_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_SX_INSTANCE_MODEL))
-#define GNC_SX_INSTANCE_MODEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_SX_INSTANCE_MODEL, GncSxInstanceModelClass))
+G_DECLARE_FINAL_TYPE (GncSxInstanceModel, gnc_sx_instance_model, GNC, SX_INSTANCE_MODEL, GObject)
 
 typedef struct _GncSxInstanceModel
 {
@@ -58,15 +54,6 @@ typedef struct _GncSxInstanceModel
     gboolean include_disabled;
     GList *sx_instance_list; /* <GncSxInstances*> */
 } GncSxInstanceModel;
-
-typedef struct _GncSxInstanceModelClass
-{
-    GObjectClass parent;
-
-    guint removing_signal_id;
-    guint updated_signal_id;
-    guint added_signal_id;
-} GncSxInstanceModelClass;
 
 typedef struct _GncSxInstances
 {
@@ -112,8 +99,6 @@ typedef struct _GncSxVariableNeeded
     GncSxInstance *instance;
     GncSxVariable *variable;
 } GncSxVariableNeeded;
-
-GType gnc_sx_instance_model_get_type(void);
 
 /** Shorthand for get_instances(now, FALSE); */
 GncSxInstanceModel* gnc_sx_get_current_instances(void);

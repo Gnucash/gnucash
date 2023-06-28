@@ -90,6 +90,14 @@ typedef struct
     gnc_numeric amount;
 } ScrubItem;
 
+enum
+{
+    REMOVING, UPDATED, ADDED,
+    LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 static void
 scrub_sx_split_numeric (Split* split, gboolean is_credit, GList **changes)
 {
@@ -670,7 +678,7 @@ gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass)
     object_class->dispose = gnc_sx_instance_model_dispose;
     object_class->finalize = gnc_sx_instance_model_finalize;
 
-    klass->removing_signal_id =
+    signals[REMOVING] =
         g_signal_new("removing",
                      GNC_TYPE_SX_INSTANCE_MODEL,
                      G_SIGNAL_RUN_FIRST,
@@ -682,7 +690,7 @@ gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass)
                      1,
                      G_TYPE_POINTER);
 
-    klass->updated_signal_id =
+    signals[UPDATED] =
         g_signal_new("updated",
                      GNC_TYPE_SX_INSTANCE_MODEL,
                      G_SIGNAL_RUN_FIRST,
@@ -694,7 +702,7 @@ gnc_sx_instance_model_class_init (GncSxInstanceModelClass *klass)
                      1,
                      G_TYPE_POINTER);
 
-    klass->added_signal_id =
+    signals[ADDED] =
         g_signal_new("added",
                      GNC_TYPE_SX_INSTANCE_MODEL,
                      G_SIGNAL_RUN_FIRST,
