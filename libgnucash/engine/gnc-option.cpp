@@ -28,7 +28,7 @@
 #include "gncOwner.h"
 #include "kvp-value.hpp"
 
-static const char* log_module{"gnc.app-utils.gnc-option"};
+static const char* log_module{"gnc.engine.gnc-option"};
 
 #include "qoflog.h"
 
