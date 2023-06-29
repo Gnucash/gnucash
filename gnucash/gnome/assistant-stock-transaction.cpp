@@ -470,6 +470,9 @@ StockTransactionEntry::set_fieldmask(FieldMask mask)
 void
 StockTransactionEntry::set_value(gnc_numeric amount, const char* page, StringVec& errors)
 {
+    PWARN ("checking value %s page %s",
+           gnc_num_dbg_to_string (amount),
+           page);
 
     auto add_error = [&errors](const char* format_str, const char* arg)
     {
@@ -733,7 +736,7 @@ struct StockAssistantModel
     std::string get_new_amount_str ();
     std::tuple<bool, gnc_numeric, const char*> calculate_price ();
     std::tuple<bool, std::string, SplitInfoVec> generate_list_of_splits ();
-    std::tuple<bool, Transaction*> create_transaction ();
+    bool create_transaction ();
 
 private:
     std::optional<time64>     m_txn_types_date;
@@ -1041,7 +1044,7 @@ StockAssistantModel::generate_list_of_splits() {
     return { m_ready_to_create, summary_message(), m_list_of_splits };
 }
 
-std::tuple<bool, Transaction*>
+bool
 StockAssistantModel::create_transaction ()
 {
     if (!m_ready_to_create)
@@ -2017,9 +2020,11 @@ stock_assistant_finish_cb (GtkAssistant *assistant, gpointer user_data)
     g_return_if_fail (info->model->m_txn_type);
 
     gnc_suspend_gui_refresh ();
+    auto success = info->model->create_transaction();
     gnc_resume_gui_refresh ();
 
-    gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
+    if (success)
+        gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
 }
 
 
