@@ -470,7 +470,7 @@ StockTransactionEntry::set_fieldmask(FieldMask mask)
 void
 StockTransactionEntry::set_value(gnc_numeric amount, const char* page, StringVec& errors)
 {
-    PWARN ("checking value %s page %s",
+    DEBUG ("checking value %s page %s",
            gnc_num_dbg_to_string (amount),
            page);
 
