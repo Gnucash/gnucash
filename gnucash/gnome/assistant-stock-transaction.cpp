@@ -1050,7 +1050,7 @@ StockAssistantModel::create_transaction ()
     if (!m_ready_to_create)
     {
         PERR ("errors exist. cannot create transaction.");
-        return { false, nullptr };
+        return false;
     }
     auto book = qof_instance_get_book (m_acct);
     auto trans = xaccMallocTransaction (book);
@@ -1065,7 +1065,7 @@ StockAssistantModel::create_transaction ()
     xaccTransCommitEdit (trans);
     std::for_each (accounts.begin(), accounts.end(), xaccAccountCommitEdit);
     m_ready_to_create = false;
-    return { true, trans };
+    return true;
 }
 
 void
