@@ -252,7 +252,9 @@ public:
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GTK_TEXT_VIEW(get_widget())};
-        option.set_value(std::string{xxxgtk_textview_get_text(widget)});
+        auto str{xxxgtk_textview_get_text(widget)};
+        option.set_value(std::string{str});
+        g_free (str);
     }
 };
 
