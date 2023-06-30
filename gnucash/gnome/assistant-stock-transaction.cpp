@@ -736,7 +736,7 @@ struct StockAssistantModel
     std::string get_new_amount_str ();
     std::tuple<bool, gnc_numeric, const char*> calculate_price ();
     std::tuple<bool, std::string, SplitInfoVec> generate_list_of_splits ();
-    bool create_transaction ();
+    std::tuple<bool, Transaction*> create_transaction ();
 
 private:
     std::optional<time64>     m_txn_types_date;
@@ -1044,13 +1044,13 @@ StockAssistantModel::generate_list_of_splits() {
     return { m_ready_to_create, summary_message(), m_list_of_splits };
 }
 
-bool
+std::tuple<bool, Transaction*>
 StockAssistantModel::create_transaction ()
 {
     if (!m_ready_to_create)
     {
         PERR ("errors exist. cannot create transaction.");
-        return false;
+        return {false, nullptr};
     }
     auto book = qof_instance_get_book (m_acct);
     auto trans = xaccMallocTransaction (book);
@@ -1065,7 +1065,7 @@ StockAssistantModel::create_transaction ()
     xaccTransCommitEdit (trans);
     std::for_each (accounts.begin(), accounts.end(), xaccAccountCommitEdit);
     m_ready_to_create = false;
-    return true;
+    return {true, trans};
 }
 
 void
@@ -2020,11 +2020,10 @@ stock_assistant_finish_cb (GtkAssistant *assistant, gpointer user_data)
     g_return_if_fail (info->model->m_txn_type);
 
     gnc_suspend_gui_refresh ();
-    auto success = info->model->create_transaction();
+    [[maybe_unused]] auto [success, trans] = info->model->create_transaction();
     gnc_resume_gui_refresh ();
 
-    if (success)
-        gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
+    gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
 }
 
 
