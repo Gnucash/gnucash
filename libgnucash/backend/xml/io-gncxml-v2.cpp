@@ -872,11 +872,11 @@ static gboolean
 write_counts (FILE* out, ...)
 {
     va_list ap;
-    char* type;
+    const char* type;
     gboolean success = TRUE;
 
     va_start (ap, out);
-    type = g_strdup (va_arg (ap, char*));
+    type = va_arg (ap, char*);
 
     while (success && type)
     {
@@ -885,6 +885,7 @@ write_counts (FILE* out, ...)
         if (amount != 0)
         {
 #if GNUCASH_REALLY_BUILD_AN_XML_TREE_ON_OUTPUT
+            char *type_dup = g_strdup (type);
             char* val;
             xmlNodePtr node;
 
@@ -896,10 +897,10 @@ write_counts (FILE* out, ...)
              * This is invalid xml because the namespace isn't
              * declared in the tag itself. This should be changed to
              * 'type' at some point. */
-            xmlSetProp (node, BAD_CAST "cd:type", checked_char_cast (type));
+            xmlSetProp (node, BAD_CAST "cd:type", checked_char_cast (type_dup));
             xmlNodeAddContent (node, checked_char_cast (val));
             g_free (val);
-            g_free (type);
+            g_free (type_dup);
 
             xmlElemDump (out, NULL, node);
             xmlFreeNode (node);
