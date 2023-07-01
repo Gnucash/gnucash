@@ -75,6 +75,7 @@
 #include "gnc-icons.h"
 #include "print-session.h"
 
+#include <unordered_map>
 #include <memory>
 #include <gnc-report.h>
 
