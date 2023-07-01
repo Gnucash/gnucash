@@ -85,10 +85,9 @@ with qof_log_set_level().*/
 static QofLogModule log_module = GNC_MOD_GUI;
 
 // A static GHashTable to record the usage count for each printer
-// output name. FIXME: Currently this isn't cleaned up at program
-// shutdown because there isn't a place to easily insert a finalize()
-// function for this. Oh well.
-static GHashTable *static_report_printnames = nullptr;
+// output name.
+
+static std::unordered_map<std::string,unsigned> static_report_printnames;
 
 // Property-id values.
 enum
@@ -366,11 +365,6 @@ gnc_plugin_page_report_class_init (GncPluginPageReportClass *klass)
                                              _("The numeric ID of the report."),
                                                        -1, G_MAXINT, -1,
                                                        paramspec));
-
-    // Also initialize the report name usage count table
-    if (!static_report_printnames)
-        static_report_printnames = g_hash_table_new_full(g_str_hash,
-                                   g_str_equal, g_free, nullptr);
 }
 
 static void
@@ -1947,32 +1941,16 @@ static gchar *report_create_jobname(GncPluginPageReportPrivate *priv)
     {
         /* And one final checking issue: We want to avoid allocating
          * the same name twice for a saved PDF.  Hence, we keep a
-         * GHashTable with the usage count of existing output
-         * names. (Because I'm lazy, I just use a static GHashTable
-         * for this.) */
-        gpointer value;
-        gboolean already_found;
-        g_assert(static_report_printnames);
+         * unordered_map with the usage count of existing output
+         * names. */
 
-        // Lookup the existing usage count
-        value = g_hash_table_lookup(static_report_printnames, job_name);
-        already_found = (value != nullptr);
-        if (!value)
-        {
-            value = GINT_TO_POINTER(0);
-        }
+        auto& value = static_report_printnames[job_name];
+        value++;
 
-        // Increment the stored usage count
-        value = GINT_TO_POINTER(1 + GPOINTER_TO_INT(value));
-        // and store it again
-        g_hash_table_insert(static_report_printnames, g_strdup(job_name), value);
-
-        // If the previous usage count was more than 0, append the current
-        // count (which is now 2 or higher) to the resulting name
-        if (already_found)
+        if (value > 1)
         {
             // The name was already in use, so modify the name again
-            gchar *tmp = g_strdup_printf("%s_%d", job_name, (int) GPOINTER_TO_INT(value));
+            gchar *tmp = g_strdup_printf("%s_%d", job_name, value);
             g_free(job_name);
             job_name = tmp;
         }
