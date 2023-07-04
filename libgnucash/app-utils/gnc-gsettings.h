@@ -56,24 +56,6 @@
 extern "C" {
 #endif
 
-/** Convert a partial schema name into a complete gsettings schema name.
- *
- *  This function takes a partial gsettings schema name and converts
- *  it into a fully qualified gsettings schema name.  It does this
- *  by prepending the standard prefix for all gnucash schemas.
- *  If the schema is already fully qualified (i.e. begins with the
- *  default schema prefix, this routine will not change it.
- *
- *  @param name A partial schema name.  The default prefix is
- *  prepended to this name to produce a fully qualified schema
- *  name.
- *
- *  @return This function returns a string pointer to the fully
- *  qualified schema name.  It is the caller's responsibility to
- *  free this string.
- */
-gchar *gnc_gsettings_normalize_schema_name (const gchar *name);
-
 /** Get the default gsettings schema prefix.
  *  If none was set explicitly, this defaults to
  *  "org.gnucash.GnuCash"
