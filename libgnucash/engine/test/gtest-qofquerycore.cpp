@@ -102,6 +102,7 @@ TEST_F(QofQueryCoreTest, construct_predicate_guid)
     EXPECT_TRUE (guid_equal (guid, (const GncGUID*)pdata->guids->data));
     EXPECT_EQ (NULL,               pdata->guids->next);
     qof_query_core_predicate_free ((QofQueryPredData*) pdata);
+    g_list_free_full (guidlist, (GDestroyNotify)guid_free);
 }
 
 TEST_F(QofQueryCoreTest, construct_predicate_int32)
