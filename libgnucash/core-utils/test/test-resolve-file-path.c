@@ -65,7 +65,7 @@ main(int argc, char **argv)
          * used to pass invalid home directories manually. The
          * test error messages should then show the system's temporary
          * directory to be used instead */
-        home_dir = argv[1];
+        home_dir = g_strdup (argv[1]);
     else
         /* Set up a fake home directory to play with */
         home_dir = g_dir_make_tmp("gnucashXXXXXX", NULL);
@@ -105,6 +105,7 @@ main(int argc, char **argv)
         g_free(daout);
     }
 
+    g_free (home_dir);
     print_test_results();
     return get_rv();
 }
