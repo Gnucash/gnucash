@@ -19,7 +19,8 @@
 \********************************************************************/
 #include <config.h>
 #include <stdlib.h>
-#include <string.h>
+
+#include <string>
 
 #include "test-engine-stuff.h"
 #include "io-gncxml-v2.h"
@@ -38,11 +39,9 @@ main (int argc, char** argv)
         directory = "test-files/xml2";
     }
 
-    auto size{strlen (directory) + 1 + strlen (FILENAME) + 1};
-    char* filename = static_cast<decltype (filename)> (malloc (size));
-    snprintf (filename, size, "%s/%s", directory, FILENAME);
-    do_test (gnc_is_xml_data_file_v2 (filename, NULL), "gnc_is_xml_data_file_v2");
+    auto filename = std::string{directory} + '/' + FILENAME;
+    do_test (gnc_is_xml_data_file_v2 (filename.c_str(), NULL), "gnc_is_xml_data_file_v2");
 
     print_test_results ();
-    exit (get_rv ());
+    return get_rv ();
 }
