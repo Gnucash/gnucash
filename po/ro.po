@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-06-26 16:00+0000\n"
+"PO-Revision-Date: 2023-07-03 16:51+0000\n"
 "Last-Translator: Andrea Andre <andrea.tsg19@slmail.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -1958,7 +1958,7 @@ msgstr "Editează"
 #: gnucash/report/reports/standard/invoice.scm:731
 #: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1098
 msgid "Bill"
-msgstr "Factură"
+msgstr "Bon fiscal"
 
 #: gnucash/gnome/business-gnome-utils.c:354 gnucash/gnome/dialog-doclink.c:817
 #: gnucash/gnome/dialog-invoice.c:2807 gnucash/gnome/dialog-invoice.c:3033
@@ -2037,7 +2037,7 @@ msgstr "Zilele de reduceri nu pot fi mai multe decât numărul zilelor scadente.
 
 #: gnucash/gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
-msgstr "Trebuie sa dai un nume pentru acest termen de plată."
+msgstr "Trebuie introdus numele termenului de plată."
 
 #: gnucash/gnome/dialog-billterms.c:331
 #, c-format
@@ -2045,8 +2045,8 @@ msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Trebuie sa dai un nume unic pentru acest termen de plată. Alegerea ta \"%s\" "
-"este deja folosită."
+"Trebuie dat un nume unic acestui termen de plată. Alegerea ta „%s” este deja "
+"folosită."
 
 #: gnucash/gnome/dialog-billterms.c:531
 #: gnucash/gtkbuilder/dialog-billterms.glade:183
@@ -2307,7 +2307,7 @@ msgstr "Contactul pentru livrare"
 
 #: gnucash/gnome/dialog-customer.c:887 gnucash/gnome/dialog-vendor.c:689
 msgid "Billing Contact"
-msgstr "Contactul pentru facturare"
+msgstr "Contact de facturare"
 
 #: gnucash/gnome/dialog-customer.c:889
 msgid "Customer ID"
@@ -2939,7 +2939,7 @@ msgstr "HBCI online"
 #. invoiced.
 #: gnucash/gnome/dialog-invoice.c:467 gnucash/gnome/dialog-order.c:179
 msgid "You need to supply Billing Information."
-msgstr "Trebuie să furnizezi informațiile de facturare."
+msgstr "Trebuie furnizate informațiile de facturare."
 
 #: gnucash/gnome/dialog-invoice.c:723
 msgid "Are you sure you want to delete the selected entry?"
@@ -2992,17 +2992,13 @@ msgid "Do you really want to post the invoice?"
 msgstr "Chiar vrei să postezi factura?"
 
 #: gnucash/gnome/dialog-invoice.c:1167
-#, fuzzy
-#| msgid ""
-#| "One or more of the entries are for accounts different from the invoice/"
-#| "bill currency. You will be asked a conversion rate for each."
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked to enter a conversion rate for each."
 msgstr ""
-"Una sau mai multe din liniile introduse sunt pentru conturi în altă monedă "
-"decât cea a facturii. Vi se va cere câte o rată de schimb pentru fiecare din "
-"linii."
+"Una sau mai multe dintre intrări sunt pentru conturi diferite de moneda "
+"facturii/bonului fiscal. Ți se va cere să introduci un curs de schimb pentru "
+"fiecare dintre ele."
 
 #: gnucash/gnome/dialog-invoice.c:1300
 msgid "The post action was canceled because not all exchange rates were given."
@@ -3078,19 +3074,16 @@ msgstr "Vizualizează factură"
 #: gnucash/gnome/dialog-invoice.c:2335
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:225
 #: gnucash/gnome-search/dialog-search.c:1079
-#, fuzzy
 msgid "New Bill"
-msgstr "Factură nouă"
+msgstr "Bon fiscal nou"
 
 #: gnucash/gnome/dialog-invoice.c:2341
-#, fuzzy
 msgid "Edit Bill"
-msgstr "Editează factură"
+msgstr "Modifică bonul fiscal"
 
 #: gnucash/gnome/dialog-invoice.c:2345
-#, fuzzy
 msgid "View Bill"
-msgstr "Vizualizează factură"
+msgstr "Arată bonul fiscal"
 
 #: gnucash/gnome/dialog-invoice.c:2354
 #: gnucash/gnome-search/dialog-search.c:1091
@@ -3111,15 +3104,13 @@ msgid "Open Linked Document:"
 msgstr "Cont nou"
 
 #: gnucash/gnome/dialog-invoice.c:2800 gnucash/gnome/dialog-invoice.c:3025
-#, fuzzy
 msgid "Bill Information"
-msgstr "Informații despre facturare"
+msgstr "Informații despre bonul fiscal"
 
 #: gnucash/gnome/dialog-invoice.c:2802 gnucash/gnome/dialog-invoice.c:3028
 #: gnucash/gnome/dialog-invoice.c:3609
-#, fuzzy
 msgid "Bill ID"
-msgstr "ID factură"
+msgstr "ID-ul bonului fiscal"
 
 #: gnucash/gnome/dialog-invoice.c:2806 gnucash/gnome/dialog-invoice.c:3032
 msgid "Voucher Information"
@@ -3169,9 +3160,8 @@ msgid "Printable Report"
 msgstr "Raport tipăribil"
 
 #: gnucash/gnome/dialog-invoice.c:3522 gnucash/gnome/dialog-invoice.c:3788
-#, fuzzy
 msgid "View/Edit Bill"
-msgstr "Vizualizează/Editează factură"
+msgstr "Arată/Modifică Bonul fiscal"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
@@ -3195,9 +3185,8 @@ msgstr "Notele facturii"
 #: gnucash/gtkbuilder/dialog-invoice.glade:1064
 #: gnucash/gtkbuilder/dialog-job.glade:219
 #: gnucash/report/reports/standard/invoice.scm:274
-#, fuzzy
 msgid "Billing ID"
-msgstr "ID facturare"
+msgstr "ID-ul facturării"
 
 #: gnucash/gnome/dialog-invoice.c:3556 gnucash/gnome/dialog-invoice.c:3590
 #: gnucash/gnome/dialog-invoice.c:3624
@@ -3227,11 +3216,11 @@ msgstr "ID factură"
 
 #: gnucash/gnome/dialog-invoice.c:3581
 msgid "Bill Owner"
-msgstr "Proprietarul facturii"
+msgstr "Emitentul bonului fiscal"
 
 #: gnucash/gnome/dialog-invoice.c:3584
 msgid "Bill Notes"
-msgstr "Notele facturii"
+msgstr "Însemnări privind bonul fiscal"
 
 #: gnucash/gnome/dialog-invoice.c:3615
 msgid "Voucher Owner"
@@ -3301,7 +3290,7 @@ msgstr "Nr"
 
 #: gnucash/gnome/dialog-invoice.c:3747
 msgid "Find Bill"
-msgstr "Găsește factură"
+msgstr "Caută bonul fiscal"
 
 #: gnucash/gnome/dialog-invoice.c:3754
 msgid "Find Expense Voucher"
@@ -3355,7 +3344,7 @@ msgstr[2] "Următoarele %d de facturi sunt scadente:"
 
 #: gnucash/gnome/dialog-invoice.c:3899
 msgid "Due Bills Reminder"
-msgstr "Notificator pentru facturile scadente"
+msgstr ""
 
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
@@ -4432,10 +4421,8 @@ msgstr "Trebuie să selectezi un item din listă"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:189
 #: gnucash/ui/gnc-plugin-page-invoice.ui:287
-#, fuzzy
-#| msgid "Print Invoice"
 msgid "_Print Invoice"
-msgstr "Tipărește factura"
+msgstr "_Tipărește factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:189
 #: gnucash/ui/gnc-plugin-page-invoice.ui:289
@@ -4445,7 +4432,7 @@ msgstr "Crează o factură tipăribilă"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:367
 msgid "_Edit Invoice"
-msgstr "_Editează factura"
+msgstr "_Modifică factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:18
@@ -4467,7 +4454,7 @@ msgstr "Crează o factură nouă ca duplicat al facturii curente"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:522
 msgid "_Post Invoice"
-msgstr "_Postează factura"
+msgstr "_Emite factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:30
@@ -4479,7 +4466,7 @@ msgstr "Postează această factură în planul tău de conturi"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:537
 msgid "_Unpost Invoice"
-msgstr "_Depostează factura"
+msgstr "_Anulează factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:36
@@ -4555,10 +4542,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:205
 #: gnucash/ui/gnc-plugin-page-register.ui:393
 #: gnucash/ui/gnc-plugin-page-register.ui:505
-#, fuzzy
-#| msgid "Documents"
 msgid "_Manage Document Link…"
-msgstr "Documente"
+msgstr ""
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4571,9 +4556,8 @@ msgstr "Documente"
 #: gnucash/ui/gnc-plugin-page-register.ui:211
 #: gnucash/ui/gnc-plugin-page-register.ui:398
 #: gnucash/ui/gnc-plugin-page-register.ui:510
-#, fuzzy
 msgid "_Open Linked Document"
-msgstr "Cont nou"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:199
 #: gnucash/gnome/gnc-plugin-page-invoice.c:224
@@ -4606,9 +4590,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:214
-#, fuzzy
 msgid "_Print Bill"
-msgstr "Tipărește"
+msgstr "_Tipărește bonul fiscal"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:214
 #, fuzzy
@@ -4617,9 +4600,8 @@ msgid "Make a printable bill"
 msgstr "Crează o factură tipăribilă"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:215
-#, fuzzy
 msgid "_Edit Bill"
-msgstr "Editează factură"
+msgstr "_Modifică factura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:215
 #, fuzzy
@@ -4662,9 +4644,8 @@ msgid "Unpost this bill and make it editable"
 msgstr "Depostează factura și fă-o modificabilă"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:219
-#, fuzzy
 msgid "New _Bill"
-msgstr "Factură nouă"
+msgstr "_Bon fiscal nou"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:219
 #, fuzzy
@@ -4716,10 +4697,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:239
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Voucher"
-msgstr "Tipărește cecuri"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:239
 #, fuzzy
@@ -4832,10 +4811,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:264
-#, fuzzy
-#| msgid "Edit Credit Note"
 msgid "_Print Credit Note"
-msgstr "Editează nota de credit"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:264
 #, fuzzy
@@ -5329,7 +5306,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3531
 msgid "_Print checks"
-msgstr "Tipărește cecuri"
+msgstr "_Tipărește cecuri"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3550
 msgid ""
@@ -16683,9 +16660,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-invoice.ui:6
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:6
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:6
-#, fuzzy
 msgid "_Print"
-msgstr "Tipărește"
+msgstr "_Tipărește"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:384
 #, fuzzy
@@ -21801,9 +21777,8 @@ msgstr "Vorbitor"
 #: gnucash/report/reports/standard/receipt.scm:203
 #: gnucash/report/reports/support/receipt.eguile.scm:277
 #: gnucash/report/reports/support/receipt.eguile.scm:284
-#, fuzzy
 msgid "Receipt"
-msgstr "Primește"
+msgstr "Chitanță"
 
 #: gnucash/register/ledger-core/split-register.c:2550
 #: gnucash/register/ledger-core/split-register.c:2564
@@ -27999,7 +27974,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/receipt.scm:204
 msgid "Display a customer invoice as receipt, cash voucher"
-msgstr ""
+msgstr "Afișarea unei facturi de client ca chitanță, bon de numerar"
 
 #: gnucash/report/reports/standard/reconcile-report.scm:62
 msgid ""
@@ -30404,9 +30379,8 @@ msgstr "Deschide dialogul Găsește furnizor"
 #: gnucash/ui/gnc-plugin-business.ui:73
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:193
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:512
-#, fuzzy
 msgid "New _Bill…"
-msgstr "Factură nouă"
+msgstr "_Bon fiscal nou…"
 
 #: gnucash/ui/gnc-plugin-business.ui:75
 #, fuzzy
@@ -31157,10 +31131,8 @@ msgid "Create a new voucher"
 msgstr "Creează un voucher nou"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Checks…"
-msgstr "Tipărește cecuri"
+msgstr "_Tipărește cecuri…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:444
@@ -31372,7 +31344,7 @@ msgstr "Deschide un registru raport pentru tranzacția selectată"
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
 msgid "_Print Report…"
-msgstr "Im_primă raport…"
+msgstr "_Tipărește raportul…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:9
 #: gnucash/ui/gnc-plugin-page-report.ui:302
