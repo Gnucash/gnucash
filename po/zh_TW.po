@@ -9,10 +9,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-06-21 06:50+0000\n"
+"PO-Revision-Date: 2023-06-27 07:52+0000\n"
 "Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hant/>\n"
@@ -20564,7 +20564,7 @@ msgstr "輸入實際交易的貸方公式"
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:75
 msgid "Don't autocomplete"
-msgstr "停用自動補齊"
+msgstr "不要自動補齊"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
@@ -28890,10 +28890,8 @@ msgid "GncQuotes::Fetch called with no commodities."
 msgstr "忽叫 GncQuotes::Fetch 時未代入商品。"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:333
-#, fuzzy
-#| msgid "GncQuotes::Fetch called with no book."
 msgid "GncQuotes::Report called with no source."
-msgstr "呼叫 GncQuotes::Fetch 時未代入帳本。"
+msgstr "呼叫 GncQuotes::Report 時未代入來源。"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:339
 msgid "There were no commodities for which to retrieve quotes."
