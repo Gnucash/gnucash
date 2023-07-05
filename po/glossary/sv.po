@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2023-03-25 08:40+0000\n"
+"PO-Revision-Date: 2023-06-27 04:52+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "sv/>\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
@@ -50,80 +50,80 @@ msgstr "kontonamn"
 
 #. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
 msgid "account type: Active"
-msgstr "kontotyp: Aktivt"
+msgstr "Aktivt"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr "kontotyp: Tillgång"
+msgstr "Tillgång"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
 msgid "account type: Assets & Liabilities"
-msgstr "kontotyp: Tillgångar & Skulder"
+msgstr "Tillgångar & Skulder"
 
 # src/prefs.c:210
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "kontotyp: check"
+msgstr "check"
 
 #. "-"
 msgid "account type: currency"
-msgstr "kontotyp: valuta"
+msgstr "valuta"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr "kontotyp: Eget kapital"
+msgstr "Eget kapital"
 
 #. "-"
 msgid "account type: Expense"
-msgstr "kontotyp: Utgift"
+msgstr "Utgift"
 
 #. "-"
 msgid "account type: Income"
-msgstr "kontotyp: Inkomst"
+msgstr "Inkomst"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr "kontotyp: Skuld"
+msgstr "Skuld"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "kontotyp: penningmarknad"
+msgstr "penningmarknad"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr "kontotyp: investeringsfond"
+msgstr "Investeringsfond"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr "kontotyp: Passivt"
+msgstr "Passivt"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr "kontotyp: Förtjänst & Förlust"
+msgstr "Vinst & Förlust"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "kontotyp: spar"
+msgstr "spar"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "kontotyp: aktie"
+msgstr "Aktie"
 
 #. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
-msgstr "kontotyp: handel"
+msgstr "handel"
 
 #. "-"
 msgid "account: parent account"
-msgstr "konto: överliggande konto"
+msgstr "överliggande konto"
 
 #. "-"
 msgid "account: subaccount"
-msgstr "konto: underkonto"
+msgstr "underkonto"
 
 #. "-"
 msgid "account: top level account"
-msgstr "konto: huvudkonto"
+msgstr "huvudkonto"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
@@ -131,75 +131,75 @@ msgstr "Händelse (register)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "händelse: bankomat"
+msgstr "Bankomat"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr "händelse: stående överföring"
+msgstr "stående överföring"
 
 #. "-"
 msgid "action: buy"
-msgstr "händelse: köp"
+msgstr "köp"
 
 #. "-"
 msgid "action: deposit"
-msgstr "händelse: insättning"
+msgstr "insättning"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr "händelse: autogiro"
+msgstr "direktbetalning"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr "händelse: dist"
+msgstr "dist"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr "händelse: utdelning"
+msgstr "utdelning"
 
 #. "-"
 msgid "action: fee"
-msgstr "händelse: avgift"
+msgstr "avgift"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr "händelse: ränta"
+msgstr "ränta"
 
 #. "-"
 msgid "action: loan"
-msgstr "händelse: lån"
+msgstr "lån"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr "händelse: betalning"
+msgstr "betalning"
 
 #. "Point of sale"
 msgid "action: POS"
-msgstr "händelse: POS"
+msgstr "POS"
 
 #. "-"
 msgid "action: rebate"
-msgstr "händelse: återbäring"
+msgstr "återbäring"
 
 #. "-"
 msgid "action: sell"
-msgstr "händelse: försäljning"
+msgstr "försäljning"
 
 #. "-"
 msgid "action: Teller"
-msgstr "händelse: Kassa"
+msgstr "Kassa"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
-msgstr "händelse: överföring"
+msgstr "överföring"
 
 #. "-"
 msgid "action: wire"
-msgstr "händelse: överför elektroniskt"
+msgstr "elektronisk överföring"
 
 #. "-"
 msgid "action: withdraw"
-msgstr "händelse: uttag"
+msgstr "uttag"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
@@ -219,7 +219,7 @@ msgstr "medelvärde"
 
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr "saldo (substantiv)"
+msgstr "saldo"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
 msgid "balance b/f"
@@ -267,11 +267,11 @@ msgstr "Budget"
 
 #. "-"
 msgid "business (adjective)"
-msgstr "affärs- (adjektiv)"
+msgstr "affärs-"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
-msgstr "företag (substantiv)"
+msgstr "företag"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
@@ -307,11 +307,11 @@ msgstr "produktlista"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr "produktalternativ: fraktion"
+msgstr "fraktion"
 
 #. "e.g. USD, DEM"
 msgid "commodity option: Symbol"
-msgstr "produktalterativ: Symbol"
+msgstr "Symbol"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 msgid "compound interests"
@@ -319,7 +319,7 @@ msgstr "ränta på ränta"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr "Kredit (kolumn i register)"
+msgstr "Kredit"
 
 #. "-"
 msgid "Credit Card"
@@ -363,15 +363,15 @@ msgstr "datumintervall"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr "Debet (kolumn i register)"
+msgstr "Debet"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
-msgstr "standardvärde"
+msgstr "förval"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr "insättning (i avstämningsdialogen)"
+msgstr "insättning"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
@@ -379,7 +379,7 @@ msgstr "avskrivning"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr "Beskrivning (kolumn i register)"
+msgstr "Beskrivning"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 msgid "discount"
@@ -415,7 +415,7 @@ msgstr "förteckning över eget kapital"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr "depositionskonto"
+msgstr "deposition"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
@@ -435,11 +435,11 @@ msgstr "filtyp"
 
 #. "-"
 msgid "financial calculator: interest rate"
-msgstr "finansiell miniräknare: räntesats"
+msgstr "räntesats"
 
 #. "see: payment"
 msgid "financial calculator: payments"
-msgstr "finansiell miniräknare: betalningar"
+msgstr "betalningar"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
 msgid "financial statement"
@@ -493,7 +493,7 @@ msgstr "lån"
 # src/languages.h:184
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
 msgid "loan: APR"
-msgstr "lån: effektiv ränta"
+msgstr "effektiv ränta"
 
 #. "The money lost in business activity"
 msgid "loss"
@@ -533,11 +533,11 @@ msgstr "Inteckning"
 
 #. "Adjustable Rate Mortgage"
 msgid "mortgage: ARM"
-msgstr "inteckning: rörlig ränta"
+msgstr "rörlig ränta"
 
 #. "Fixed Rate Mortgage"
 msgid "mortgage: FRM"
-msgstr "inteckning: fast ränta"
+msgstr "fast ränta"
 
 #. "e.g. USD, DEM, see Currency."
 msgid "national currency"
@@ -561,11 +561,11 @@ msgstr "nettoförmögenhet"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
-msgstr "anteckningar (register)"
+msgstr "anteckningar"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr "Nr (kolumn i register)"
+msgstr "Nr"
 
 #. "to make accessible"
 msgid "open, to"
@@ -590,7 +590,7 @@ msgstr "föräldralös"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr "ägare (räkning, faktura eller traktamente)"
+msgstr "ägare"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -634,19 +634,19 @@ msgstr "amortering"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
-msgstr "pris (i en delning)"
+msgstr "pris"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr "pristyp: säljkurs"
+msgstr "säljkurs"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr "pristyp: köpkurs"
+msgstr "köpkurs"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
-msgstr "pris: kurser"
+msgstr "kurser"
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
@@ -662,7 +662,7 @@ msgstr "snabbifyllning"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
-msgstr "ombalansera, att (en transaktion)"
+msgstr "ombalansera, att"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
@@ -678,39 +678,39 @@ msgstr "register"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "registerpost: delad transaktion"
+msgstr "delad transaktion"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr "registerpost: aktie-split"
+msgstr "aktie-split"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr "register: autodelningsliggare"
+msgstr "autodelningsliggare"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr "register: grundläggande liggare"
+msgstr "grundläggande liggare"
 
 #. "another form of register"
 msgid "register: general ledger"
-msgstr "register: allmän liggare"
+msgstr "allmän liggare"
 
 #. "another form of register"
 msgid "register: transaction journal"
-msgstr "register: transaktionsjournal"
+msgstr "transaktionsjournal"
 
 #. "reload the current document"
 msgid "reload, to"
-msgstr "läs om, att"
+msgstr "läsa om, att"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr "rapportform: T-kontoform"
+msgstr "T-kontoformat"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr "rapportform: Vertikalt format"
+msgstr "Vertikalt format"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -718,7 +718,7 @@ msgstr "Balanserade vinstmedel"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
-msgstr "återbetalning (Åtgärd i registret)"
+msgstr "återbetala, att"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
@@ -726,7 +726,7 @@ msgstr "försäljning"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
-msgstr "spara, att (till en fil)"
+msgstr "spara, att"
 
 # src/prefs.c:239
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
@@ -743,7 +743,7 @@ msgstr "värdepapper"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr "Aktiebalans (register)"
+msgstr "Aktiesaldo"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
@@ -783,19 +783,19 @@ msgstr "skatteinformation"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
-msgstr "skattetyp: inkomstskatt"
+msgstr "inkomstskatt"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr "skattetyp: försäljningsskatt"
+msgstr "försäljningsskatt"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr "skattetyp: moms"
+msgstr "moms"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr "skattetyp: mervärdesskatt"
+msgstr "mervärdesskatt"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
@@ -820,23 +820,23 @@ msgstr "transaktion"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr "transaktionstillstånd: clearad"
+msgstr "clearad"
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr "transaktionstillstånd: frusen"
+msgstr "frusen"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr "transaktionstillstånd: avstämd"
+msgstr "avstämd"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr "transaktionstillstånd: annulerad"
+msgstr "annullerad"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
-msgstr "överföring (substantiv)"
+msgstr "överföring"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
@@ -844,11 +844,11 @@ msgstr "överföringskonto"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr "överföra, att (registerverktygsrad)"
+msgstr "överföra, att"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr "råbalans (rapport)"
+msgstr "råbalans"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
@@ -864,7 +864,7 @@ msgstr "URL"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr "värde (i en delning)"
+msgstr "värde"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
@@ -876,7 +876,7 @@ msgstr "traktamente"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr "uttag (i avstämningsdialogen)"
+msgstr "uttag"
 
 msgid "stock"
 msgstr "aktie"

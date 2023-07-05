@@ -14,10 +14,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-06-20 06:49+0000\n"
+"PO-Revision-Date: 2023-06-27 02:47+0000\n"
 "Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
@@ -29925,10 +29925,8 @@ msgid "GncQuotes::Fetch called with no commodities."
 msgstr "GncQuotes::Fetch anropades utan produkter."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:333
-#, fuzzy
-#| msgid "GncQuotes::Fetch called with no book."
 msgid "GncQuotes::Report called with no source."
-msgstr "GncQuote::Fetch anropades utan bok."
+msgstr "GncQuotes::Report anropades utan källa."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:339
 msgid "There were no commodities for which to retrieve quotes."
