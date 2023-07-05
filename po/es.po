@@ -86,8 +86,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-06-26 16:00+0000\n"
-"Last-Translator: Francisco <fhiegom@outlook.es>\n"
+"PO-Revision-Date: 2023-07-02 11:48+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -95,7 +95,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
@@ -370,27 +370,27 @@ msgstr "Dirección de Sociedad"
 
 #: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1268
 msgid "Company ID"
-msgstr "ID de sociedad"
+msgstr "ID societario"
 
 #: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1253
 msgid "Company Phone Number"
-msgstr "Teléfono de Sociedad"
+msgstr "Número Telefónico Societario"
 
 #: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1257
 msgid "Company Fax Number"
-msgstr "Número de fax de Sociedad"
+msgstr "Número de Fax Societario"
 
 #: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1265
 msgid "Company Website URL"
-msgstr "URL del Web de Sociedad"
+msgstr "URL del Web Societaria"
 
 #: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1261
 msgid "Company Email Address"
-msgstr "Correo-e de Sociedad"
+msgstr "Correo-e Societario"
 
 #: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1249
 msgid "Company Contact Person"
-msgstr "Persona de Contacto de Sociedad"
+msgstr "Persona de Contacto Societario"
 
 #: bindings/guile/options.scm:397
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
@@ -879,7 +879,8 @@ msgid ""
 msgstr ""
 "Si desea conocer cuales directorios donde están almacenados los archivos de "
 "GnuCash recientes, cubra el cursor de uno de los asientos en el menú de "
-"historial (Archivo[-&gt;Listado más recientes utilizados]).\n"
+"historial\n"
+"(Archivo[->Listado más recientes utilizados]).\n"
 "La ruta completa es representada dentro de la barra de estado."
 
 #: doc/tip_of_the_day.list.c:24
@@ -938,12 +939,11 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line View\" in Preferences:Register Defaults."
 msgstr ""
-"Cada transacción tiene un campo \"Notas\" donde puede poner información "
-"útil.\n"
+"Cada transacción tiene un campo «Notas» donde puede poner información útil.\n"
 "\n"
 "Para hacerlo visible\n"
-"seleccione \"Ver\" en la barra de menús y marque \"Doble línea\" o\n"
-"marque \"Vista de doble línea\" en Preferencias:Registrar valores "
+"seleccione «Ver» en la barra de menús y marque «Doble línea» o\n"
+"marque «Vista de doble línea» en Preferencias:Registrar valores "
 "predeterminados."
 
 #: doc/tip_of_the_day.list.c:50
@@ -1346,7 +1346,7 @@ msgstr "Remuneraciones Varias"
 #: gnucash/gnome/assistant-loan.cpp:766
 #, c-format
 msgid "… pay \"%s\"?"
-msgstr "…remunerar «%s»?"
+msgstr "…abonar «%s»?"
 
 #: gnucash/gnome/assistant-loan.cpp:778
 msgid "via Escrow account?"
@@ -1518,7 +1518,7 @@ msgstr "Compra inicial de acciones a largo."
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:201
 msgid "Open short"
-msgstr "Abrir corto"
+msgstr "Abrir en corto"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:202
 msgid "Initial stock short sale."
@@ -1580,10 +1580,10 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
-"Empresa emite dividendo en efectivo al titular.\n"
+"Empresa emite dividendos en efectivo al titular.\n"
 "\n"
 "Cualquier dividendo que sea reinvertido deberá ser introducido después como "
-"una compra de acciones normal."
+"una compra de acciones usual."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
@@ -1595,7 +1595,7 @@ msgstr "Retorno de capital"
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
-"Empresa devuelve capital, reduciendo la base de coste sin afectar al # de "
+"Empresa devuelve capital, reduciendo la base de coste sin afectar al nº de "
 "unidades."
 
 #. Translators: this is a stock transaction describing return
@@ -1610,8 +1610,8 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
-"La empresa devuelve capital, reduciendo la base de los costes sin afectar a "
-"# unidades. Una distribución previamente registrada como dividendo se "
+"La compañía devuelve capital, reduciendo la base de los costes sin afectar a "
+"nº de unidades. Una distribución previamente registrada como dividendo se "
 "reclasifica como devolución de capital, a menudo debido a la información "
 "fiscal de fin de año."
 
@@ -1619,29 +1619,31 @@ msgstr ""
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:272
 msgid "Notional distribution (dividend)"
-msgstr "Distribución nocional (dividendo)"
+msgstr "Distribución especulativa (dividendo)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:273
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"Empresa emite una distribución nocional, que se registra como ingreso por "
-"dividendo e incrementa la base de costo sin afectar # unidades."
+"Compañía emite una distribución especulativa, que se registra como ingreso "
+"por dividendo e incrementa la base de costo sin afectar el número de "
+"unidades."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
 msgid "Notional distribution (capital gain)"
-msgstr "Distribución nocional (plusvalía)"
+msgstr "Distribución especulativa (plusvalía)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"La empresa emite una distribución teórica, que se contabiliza como plusvalía "
-"y aumenta la base de coste sin afectar a las # participaciones ."
+"La sociedad emite una distribución especulativa, que se contabiliza como "
+"plusvalía y aumenta la base de coste sin afectar al número de "
+"participaciones."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1659,8 +1661,9 @@ msgid ""
 "divisor, while keeping the total monetary value of the overall investment "
 "constant."
 msgstr ""
-"Empresa emite unidades adicionales, reduciendo así el precio del valor con "
-"un factor, manteniendo constante el valor monetario de la inversión total."
+"Sociedad emite unidades adicionales, por tanto reduciendo el precio del "
+"valor con un factor, manteniendo constante el valor monetario de la "
+"inversión total."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1679,13 +1682,13 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
-"Empresa redime o rescata unidades, incrementado de esta forma el precio de "
-"la acción por un múltiplo, manteniendo constante el valor monetario de la "
-"inversión total.\n"
+"Compañía redime unidades, incrementado de esta forma el precio de la acción "
+"por un múltiplo, manteniendo constante el valor monetario de la inversión "
+"total.\n"
 "\n"
 "Si la anotación inversa resulta en un efectivo por las unidades restantes, "
-"registre primero esta venta usando el Asistente de Transacciones de Valores, "
-"y registre después la anotación inversa."
+"registre primero esta venta usando el Asistente de Transacciones de "
+"Acciones, y registre después la anotación inversa."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
@@ -1706,7 +1709,7 @@ msgstr "Comprar para cubrir corto"
 #: gnucash/gnome/assistant-stock-transaction.cpp:335
 msgid "Buy back stock to cover short position, and record capital gain/loss."
 msgstr ""
-"Comprar de nuevo valor para cubrir posición en corto y registrar ganancias/"
+"Comprar de nuevo acción para cubrir posición en corto y registrar ganancias/"
 "pérdidas de capital."
 
 #. Translators: this is a stock transaction describing
@@ -1720,8 +1723,8 @@ msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
 msgstr ""
-"Empresa emite dividendos, y el titular de la acción a corto tiene que hacer "
-"un pago compensatorio por el dividendo."
+"Compañía emite dividendos, y el titular de la acción a corto debe hacer una "
+"abonación compensatoria por el dividendo."
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
@@ -1736,8 +1739,8 @@ msgid ""
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
 "Empresa devuelve capital y el titular de la acción a corto debe hacer un "
-"pago compensatorio por el capital devuelto. Esto reduce la base de coste "
-"(menos negativa, hacia el valor 0.00) sin afectar # unidades."
+"pago compensatorio por el capital devuelto. Esto reduce la base de coste ("
+"menos negativa, hacia el valor 0'00) sin afectar al nº unidades."
 
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
@@ -1754,19 +1757,19 @@ msgid ""
 "previously recorded as a compensatory dividend is reclassified to "
 "compensatory return of capital, often due to end-of-year tax information."
 msgstr ""
-"La empresa devuelve capital, y el titular de las acciones cortas debe "
+"La sociedad devuelve capital, y el titular de las acciones cortas debe "
 "realizar un pago compensatorio por el capital devuelto. Esto reduce la base "
-"de coste (menos negativa, hacia el valor 0,00) sin afectar a # las "
-"unidades . Una distribución previamente registrada como dividendo "
-"compensatorio se reclasifica a devolución compensatoria de capital, a menudo "
-"debido a la información fiscal de final de año."
+"de coste (menos negativa, hacia el valor 0'00) sin afectar a nº de las "
+"unidades. Una distribución previamente registrada como dividendo "
+"compensatorio está reclasificado para devolución compensatoria de capital, a "
+"menudo debido a la información fiscal del final de año."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:380
 msgid "Compensatory notional distribution (dividend)"
-msgstr "Distribución nocional compensatoria (dividendo)"
+msgstr "Distribución especulativa compensatoria (dividendo)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:381
 msgid ""
@@ -1775,18 +1778,18 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
-"Empresa emite una distribución nocional y el titular de la acción a corto "
-"debe de hacer un pago compensatorio por la distribución nocional. Esto se "
-"registra como una pérdida o ingreso negativo por dividendo, e incrementa la "
-"base de coste (más negativa, alejándose del valor 0.00) sin afectar las # "
-"unidades."
+"La sociedad emite una distribución hipotética y el titular de la acción a "
+"corto debe de hacer un pago compensatorio por la distribución hipotética. "
+"Esto se registra como una pérdida o ingreso negativo por dividendo, e "
+"incrementa la base de coste (más negativa, alejándose del valor 0'00) sin "
+"afectar al número de unidades."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:392
 msgid "Compensatory notional distribution (capital gain)"
-msgstr "Distribución nocional compensatoria (ganancia de capital)"
+msgstr "Distribución especulativa compensatoria (ganancia de capital)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:393
 msgid ""
@@ -1795,10 +1798,11 @@ msgid ""
 "capital loss amount, and increases the cost basis (more negative, away from "
 "0.00 value) without affecting # units."
 msgstr ""
-"La empresa emite una distribución teórica, y el tenedor de acciones cortas "
-"debe realizar un pago compensatorio por la distribución teórica. Esto se "
-"registra como un importe de pérdida de capital, y aumenta la base de coste "
-"(más negativo, lejos del valor 0,00) sin afectar a # unidades."
+"La empresa emite una distribución especulativa, y el tenedor de acciones "
+"cortas debe realizar una abonación compensatoria por la distribución "
+"especulativa. Esto se registra como un importe de pérdida de capital, y "
+"aumenta la base de coste (más negativo, lejos del valor 0,00) sin afectar a "
+"número de unidades."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:415
 msgid ""
@@ -1809,12 +1813,12 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
-"Empresa redime o rescata unidades, incrementado de esta forma el precio de "
+"Sociedad redime o rescata unidades, incrementado de esta forma el precio de "
 "la acción por un múltiplo, manteniendo constante el valor monetario de la "
 "inversión total.\n"
 "\n"
 "Si la anotación inversa resulta en un efectivo por las unidades restantes, "
-"registre primero esta compra de cobertura usando el Asistente de "
+"registre primero esta compra de cobertura usando antes el Asistente de "
 "Transacciones de Valores, y registre después la anotación inversa."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:485
@@ -1839,7 +1843,7 @@ msgstr "ausente"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:590
 msgid "Amount for stock value is missing."
-msgstr "Falta el importe del valor de las acciones."
+msgstr "Falta la cantidad del valor de acciones."
 
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
@@ -1855,16 +1859,16 @@ msgid ""
 "and therefore capital gains, of transactions dated after the new entry. "
 "Please review all transactions to ensure proper recording."
 msgstr ""
-"Introducirá una transacción con fecha %s, que es anterior a la última "
+"Introducirá una transacción con fecha %s, la cual es anterior a la última "
 "transacción de esta cuenta, con fecha %s. Hacer esto puede afectar a la base "
-"de coste y por consiguiente a las ganancias de capital con fecha posterior a "
-"la nueva entrada. Por favor, revise todas las transacciones para asegurar un "
-"registro apropiado."
+"de coste y por consiguiente a las ganancias de capital, con fecha de "
+"transacciones posterior al asiento nuevo. Por favor, revise todas las "
+"transacciones para asegurar un registro apropiado."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:866
 msgctxt "Stock Assistant: Page name"
 msgid "stock value"
-msgstr "valor de las acciones"
+msgstr "valor de acción"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:883
 msgid "Invalid stock new balance."
@@ -1876,7 +1880,7 @@ msgstr "El balance nuevo debe ser mayor que el antiguo."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:887
 msgid "New balance must be lower than old balance."
-msgstr "El nuevo balance debe ser inferior al balance anterior."
+msgstr "El balance nuevo debe ser inferior al balance anterior."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:893
 msgid "Stock amount must be positive."
@@ -1892,12 +1896,11 @@ msgstr "No se pueden comprar para cobertura más unidades de las adeudadas."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:916
 msgid "No errors found. Click Apply to create transaction."
-msgstr ""
-"No se encontraron errores. Haga clic en Aplicar para crear transacción."
+msgstr "No se encontraron errores. Pulse en Aplicar para crear transacción."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:921
 msgid "The following errors must be fixed:"
-msgstr "Los siguientes errores tienen que corregirse:"
+msgstr "Los siguientes errores deben ser corregidos:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:926
 msgid "The following warnings exist:"
@@ -1908,7 +1911,7 @@ msgstr "Las siguientes advertencias existen:"
 #: gnucash/gnome/assistant-stock-transaction.cpp:959
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
-msgstr "Un precio de 1 %s = %s el %s será registrado."
+msgstr "Un precio de 1 %s = %s en %s será registrado."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:971
 msgctxt "Stock Assistant: Page name"
@@ -14554,7 +14557,7 @@ msgstr "Discreto"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:582
 msgid "Continuous"
-msgstr "Contínuo"
+msgstr "Continuo"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:598
 msgid "Beginning"
@@ -14571,7 +14574,7 @@ msgstr "Liquidado el"
 #: gnucash/gtkbuilder/dialog-find-account.glade:25
 #: gnucash/gtkbuilder/dialog-find-account.glade:96
 msgid "Search the Account List"
-msgstr "Buscar lista de cuentas"
+msgstr "Busca el listado de cuentas"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
 msgid "Close _on Jump"
@@ -15105,7 +15108,7 @@ msgstr "Referencias a objetos"
 
 #: gnucash/gtkbuilder/dialog-object-references.glade:52
 msgid "Explanation"
-msgstr "Descripción"
+msgstr "Explicación"
 
 #: gnucash/gtkbuilder/dialog-options.glade:44
 msgid "Close dialog and make no changes."
@@ -15363,7 +15366,7 @@ msgstr "_Ninguna"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:669
 msgid "C_redit accounts"
-msgstr "Cuentas de c_rédito"
+msgstr "Cuentas c_rediticias"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:688
 msgid "_Income & expense"
@@ -15439,7 +15442,7 @@ msgstr "_Emplear 24 horas"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1087
 msgid "Use a 24 hour (instead of a 12 hour) time format."
-msgstr "Emplee el formato temporal de 24 horas (en vez del de 12 horas)."
+msgstr "Emplee el formato de hora de 24 (en vez del de 12 horas)."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1102
 msgid "<b>Date Completion</b>"
@@ -15454,7 +15457,7 @@ msgid ""
 "Dates will be completed so that they are within the current calendar year."
 msgstr ""
 "Las fechas serán completadas para que estén dentro del calendario de año "
-"efectiva."
+"efectivo."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1144
 msgid ""
@@ -15553,7 +15556,7 @@ msgstr "Com_primir ficheros"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1541
 msgid "Compress the data file with gzip when saving it to disk."
-msgstr "Comprimir el fichero de datos con gzip al guardarlo en disco."
+msgstr "Comprimir el fichero de datos con gzip al guardarlo al disco."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1556
 msgid "<b>Files</b>"
@@ -15591,7 +15594,7 @@ msgstr "minutos"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1709
 msgid "Show auto-save confirmation _question"
-msgstr "Mostrar la _pregunta de confirmación de autoguardado"
+msgstr "Mostrar la _pregunta de confirmación de auto-guardado"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1715
 msgid ""
@@ -15874,7 +15877,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2627
 msgid "Always reconcile to t_oday"
-msgstr "Siempre conciliar al día de h_oy"
+msgstr "Siempre conciliar a h_oy"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2633
 msgid ""
@@ -16015,7 +16018,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2973
 msgid "_Only display leaf account names"
-msgstr "_Sólo representar los nombres de ramas de cuenta"
+msgstr "Sól_o representar los nombres de ramas de cuenta"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2979
 msgid ""
@@ -16119,14 +16122,14 @@ msgstr "<b>Lengüetas</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3521
 msgid "Show close button on _notebook tabs"
-msgstr "Mostrar botón cerrar en _pestañas"
+msgstr "Mostrar botón cerrar en pestañas de a_notaciones"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3527
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr ""
-"Mostrar un botón de cierre en cada lengüeta del cuaderno. Estas funcionan "
+"Muestra un botón de cierre en cada lengüeta del cuaderno. Estas funcionan "
 "idénticamente al elemento del menú «Cerrar»."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3548
@@ -16135,8 +16138,8 @@ msgid ""
 "then the tab label will have the middle cut and replaced with an ellipsis."
 msgstr ""
 "Si el texto en la lengüeta es más larga que este valor (el resto es "
-"aproximado) entonces la etiqueta tendrá un corte en la mitad y remplazada "
-"con una elipsis."
+"aproximado) entonces la etiqueta de la lengüeta tendrá un corte en la mitad "
+"y remplazada con una elipse."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3568
 msgid "characters"
@@ -16211,7 +16214,7 @@ msgstr "Quita todos los precios anteriores a la fecha."
 
 #: gnucash/gtkbuilder/dialog-price.glade:471
 msgid "Last of _Week"
-msgstr "Última de _Semana"
+msgstr "Última de _semana"
 
 #: gnucash/gtkbuilder/dialog-price.glade:475
 msgid "Keep the last price of each week if present before date."
@@ -16220,7 +16223,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:488
 msgid "Last of _Month"
-msgstr "Último del _Mes"
+msgstr "Último del _mes"
 
 #: gnucash/gtkbuilder/dialog-price.glade:492
 msgid "Keep the last price of each month if present before date."
@@ -16228,7 +16231,7 @@ msgstr "Conserva el precio último para cada mes si presenta antes de la fecha."
 
 #: gnucash/gtkbuilder/dialog-price.glade:505
 msgid "Last of _Quarter"
-msgstr "Último del _Trimestre"
+msgstr "Último del _trimestre"
 
 #: gnucash/gtkbuilder/dialog-price.glade:509
 msgid ""
@@ -16241,7 +16244,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:522
 msgid "Last of _Period"
-msgstr "Último del _Periodo"
+msgstr "Último del _periodo"
 
 #: gnucash/gtkbuilder/dialog-price.glade:526
 msgid ""
@@ -16249,8 +16252,8 @@ msgid ""
 "period is derived from the accounting period end date."
 msgstr ""
 "Conservar el último precio de cada periodo fiscal si se presenta antes de la "
-"fecha. El trimestre fiscal está derivado desde la fecha final del periodo de "
-"contabilización."
+"fecha. El trimestre fiscal está derivado desde la fecha final del periodo "
+"contable."
 
 #: gnucash/gtkbuilder/dialog-price.glade:539
 msgid "_Scaled"
@@ -16262,18 +16265,18 @@ msgid ""
 "'One a month' is used for dates older than a year and 'One a week' is used "
 "for dates older than six months to a year."
 msgstr ""
-"Con la opción de escala, precios son quitados relativos para la fecha "
-"seleccionada. 'Una vez al mes' se emplea para datos más antiguos que un año "
-"y 'Una vez por semana' está empleado para dostos más antigis que seis meses "
-"a un año."
+"Con la opción de escala, los precios son quitados relativos para la fecha "
+"seleccionada. 'Una vez al mes' se emplea para fechas más antiguas que un año "
+"y 'Una vez por semana' está empleado para fechas más anteriores desde seis "
+"meses a un año."
 
 #: gnucash/gtkbuilder/dialog-price.glade:591
 msgid "First Date"
-msgstr "Fecha Primera"
+msgstr "Primera fecha"
 
 #: gnucash/gtkbuilder/dialog-price.glade:622
 msgid "From these Commodities"
-msgstr "Desde estas Accións"
+msgstr "Desde estas Materias Primas"
 
 #: gnucash/gtkbuilder/dialog-price.glade:636
 msgid "Keeping the last available price for option"
@@ -16516,11 +16519,11 @@ msgstr "<b>Boletines _disponibles</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:71
 msgid "<b>_Selected Reports</b>"
-msgstr "<b>_Boletines Seleccionados</b>"
+msgstr "<b>Boletines _Seleccionados</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
 msgid "A_dd >>"
-msgstr "_Agregar &gt;&gt;"
+msgstr "A_gregar >>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:117
 msgid "<< _Remove"
