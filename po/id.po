@@ -8,14 +8,15 @@
 # Syahmin Sukhairi <syahmin@gmail.com>, 2021.
 # Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
 # Sarekashi <sarekashi@tuta.io>, 2022.
+# Sucipto <sucipto@pm.me>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2022-09-27 06:20+0000\n"
-"Last-Translator: Sarekashi <sarekashi@tuta.io>\n"
+"PO-Revision-Date: 2023-06-27 14:52+0000\n"
+"Last-Translator: Sucipto <sucipto@pm.me>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.18.1\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -25741,7 +25742,7 @@ msgstr "Pernyataan Pendapatan"
 
 #: gnucash/report/reports/standard/income-statement.scm:553
 msgid "Profit & Loss"
-msgstr "Laba & Rugi"
+msgstr "Untung & Rugi"
 
 #: gnucash/report/reports/standard/investment-lots.scm:40
 #, fuzzy
