@@ -58,6 +58,7 @@
 #include <qofinstance-p.h>
 #include "gncInvoice.h"
 #include "gncOwner.h"
+#include "gnc-uri-utils.h"
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
  *  xaccTransRollback():
