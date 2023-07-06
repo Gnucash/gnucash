@@ -83,6 +83,8 @@ main(G_GNUC_UNUSED int argc, G_GNUC_UNUSED char **argv)
      * The code should fall back to using the temporary
      * directory in that case. */
     g_setenv("HOME", homedir, TRUE);
+    g_free (homedir);
+
     for (i = 0; strs2[i].funcname != NULL; i++)
     {
         char *daout;
