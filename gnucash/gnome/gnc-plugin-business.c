@@ -241,6 +241,11 @@ gnc_plugin_business_finalize (GObject *object)
 {
     g_return_if_fail (GNC_IS_PLUGIN_BUSINESS (object));
 
+    GncPluginBusiness *plugin = (GncPluginBusiness*) object;
+    gncOwnerFree (plugin->last_customer);
+    gncOwnerFree (plugin->last_vendor);
+    gncOwnerFree (plugin->last_employee);
+
     G_OBJECT_CLASS (gnc_plugin_business_parent_class)->finalize (object);
 }
 
