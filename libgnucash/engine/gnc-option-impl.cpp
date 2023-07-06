@@ -46,6 +46,8 @@ ui_type_to_owner_type(GncOptionUIType ui_type)
         return GNC_OWNER_VENDOR;
     if (ui_type == GncOptionUIType::EMPLOYEE)
         return GNC_OWNER_EMPLOYEE;
+    if (ui_type == GncOptionUIType::JOB)
+        return GNC_OWNER_JOB;
     return GNC_OWNER_NONE;
 }
 
