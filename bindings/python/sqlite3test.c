@@ -36,6 +36,7 @@ int main()
     qof_session_load(s, NULL);
     qof_session_save(s, NULL);
     qof_session_end(s);
+    qof_session_destroy(s);
     unlink(TESTFILE);
     return 0;
 }
