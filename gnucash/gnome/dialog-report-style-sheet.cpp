@@ -87,9 +87,8 @@ static void
 dirty_same_stylesheet (gpointer key, gpointer val, gpointer data)
 {
     auto dirty_ss{static_cast<SCM>(data)};
-    SCM rep_ss = NULL;
     auto report{static_cast<SCM>(val)};
-    SCM func = NULL;
+    SCM func, rep_ss;
 
     func = scm_c_eval_string ("gnc:report-stylesheet");
     if (scm_is_procedure (func))
@@ -378,7 +377,7 @@ gnc_style_sheet_select_dialog_edit_cb (GtkWidget *widget, gpointer user_data)
         ss_info             * ssinfo;
         gchar               * name;
 
-        SCM                 sheet_info = NULL;
+        SCM                 sheet_info;
 
         gtk_tree_model_get (model, &iter,
                             COLUMN_NAME, &name,
@@ -408,7 +407,7 @@ gnc_style_sheet_select_dialog_delete_cb (GtkWidget *widget, gpointer user_data)
     {
         ss_info           * ssinfo;
 
-        SCM                 sheet_info = NULL;
+        SCM                 sheet_info;
         SCM                 remover;
 
         gtk_tree_model_get (model, &iter,
