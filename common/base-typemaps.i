@@ -71,7 +71,6 @@ typedef char gchar;
 
 %typemap(in) struct tm * (struct tm t) {
     SCM tm = $input;
-    SCM zone;
     t.tm_sec = scm_to_int(SCM_SIMPLE_VECTOR_REF(tm, 0));
     t.tm_min = scm_to_int(SCM_SIMPLE_VECTOR_REF(tm, 1));
     t.tm_hour = scm_to_int(SCM_SIMPLE_VECTOR_REF(tm, 2));
@@ -83,7 +82,7 @@ typedef char gchar;
     t.tm_isdst = scm_to_int(SCM_SIMPLE_VECTOR_REF(tm, 8));
 %#ifdef HAVE_STRUCT_TM_GMTOFF
     t.tm_gmtoff = scm_to_int(SCM_SIMPLE_VECTOR_REF(tm, 9));
-    zone = SCM_SIMPLE_VECTOR_REF(tm, 10);
+    SCM zone = SCM_SIMPLE_VECTOR_REF(tm, 10);
     t.tm_zone = SCM_UNBNDP(zone) ? NULL : scm_to_locale_string(zone);
 %#endif
     $1 = &t;
