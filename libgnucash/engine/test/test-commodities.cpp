@@ -72,6 +72,7 @@ test_commodity(void)
         do_test(
             g_strcmp0(fullname, gnc_commodity_get_fullname(com)) == 0,
             "fullnames equal test");
+        g_free (fullname);
 
         do_test(
             g_strcmp0(name_space, gnc_commodity_get_namespace(com)) == 0,
@@ -80,10 +81,12 @@ test_commodity(void)
         do_test(
             g_strcmp0(mnemonic, gnc_commodity_get_mnemonic(com)) == 0,
             "mnemonic equal test");
+        g_free (mnemonic);
 
         do_test(
             g_strcmp0(cusip, gnc_commodity_get_cusip(com)) == 0,
             "cusip equal test");
+        g_free (cusip);
 
         do_test(
             gnc_commodity_get_fraction(com) == fraction,
@@ -126,6 +129,10 @@ test_commodity(void)
 
         com2 = gnc_commodity_new(book, fullname, name_space, mnemonic,
                                  cusip, fraction);
+        g_free (fullname);
+        g_free (mnemonic);
+        g_free (cusip);
+
         do_test(
             gnc_commodity_equiv(com, com2), "commodity equiv");
 
