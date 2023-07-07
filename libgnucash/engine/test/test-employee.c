@@ -117,15 +117,14 @@ test_employee (void)
         g_list_free (list);
     }
     {
-        const char *str = get_random_string();
-        const char *res;
-        GncAddress *addr;
+        char *str = get_random_string();
 
-        addr = gncEmployeeGetAddr (employee);
+        GncAddress *addr = gncEmployeeGetAddr (employee);
         gncAddressSetName (addr, str);
-        res = qof_object_printable (GNC_ID_EMPLOYEE, employee);
+        const char *res = qof_object_printable (GNC_ID_EMPLOYEE, employee);
         do_test (res != NULL, "Printable NULL?");
         do_test (g_strcmp0 (str, res) == 0, "Printable equals");
+        g_free (str);
     }
 
     qof_book_destroy (book);
@@ -137,7 +136,7 @@ test_string_fcn (QofBook *book, const char *message,
                  const char * (*get)(const GncEmployee *))
 {
     GncEmployee *employee = gncEmployeeCreate (book);
-    char const *str = get_random_string ();
+    char *str = get_random_string ();
 
     do_test (!gncEmployeeIsDirty (employee), "test if start dirty");
     gncEmployeeBeginEdit (employee);
@@ -152,6 +151,7 @@ test_string_fcn (QofBook *book, const char *message,
      */
     // do_test (!gncEmployeeIsDirty (employee), "test dirty after commit");
     do_test (g_strcmp0 (get (employee), str) == 0, message);
+    g_free (str);
     gncEmployeeSetActive (employee, FALSE);
     count++;
 }
