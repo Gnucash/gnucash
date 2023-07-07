@@ -76,12 +76,13 @@ test_string_fcn (GncAddress *address, const char *message,
                  void (*set) (GncAddress *, const char *str),
                  const char * (*get)(const GncAddress *))
 {
-    char const *str = get_random_string ();
+    char *str = get_random_string ();
 
     do_test (!gncAddressIsDirty (address), "test if start dirty");
     set (address, str);
     do_test (gncAddressIsDirty (address), "test dirty later");
     do_test (g_strcmp0 (get (address), str) == 0, message);
+    g_free (str);
     gncAddressClearDirty (address);
 }
 
