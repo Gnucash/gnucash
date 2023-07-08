@@ -590,21 +590,21 @@ calc_price_time(const PriceParams& p)
         {
             auto quote_time{GncDateTime(GncDate(*p.date, "m-d-y"))};
             PINFO("Quote date included, using %s for %s:%s",
-                  quote_time.format("%Y-%m-%d %H:%M:%S").c_str(), p.ns, p.mnemonic);
+                  quote_time.format("%Y-%m-%d %H:%M:%S %z").c_str(), p.ns, p.mnemonic);
             return static_cast<time64>(quote_time);
           }
         catch (const std::exception &err)
         {
             auto now{GncDateTime()};
             PWARN("Warning: failed to parse quote date '%s' for %s:%s because %s - will use %s",
-                  p.date->c_str(),  p.ns, p.mnemonic, err.what(), now.format("%Y-%m-%d %H:%M%S").c_str());
+                  p.date->c_str(),  p.ns, p.mnemonic, err.what(), now.format("%Y-%m-%d %H:%M:%S %z").c_str());
             return static_cast<time64>(now);
         }
     }
 
     auto now{GncDateTime()};
     PINFO("No date  was returned for %s:%s - will use %s",
-          p.ns, p.mnemonic, now.format("%Y-%m-%d %H:%M%S").c_str());
+          p.ns, p.mnemonic, now.format("%Y-%m-%d %H:%M:%S %z").c_str());
     return static_cast<time64>(now);
 }
 
