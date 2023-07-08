@@ -584,7 +584,7 @@ calc_price_time(const PriceParams& p)
      * as gnucash insists on having a valid format". It's also wrong,
      * as it lacks seconds. Best ignored.
      */
-    if (p.date)
+    if (p.date && !p.date->empty())
     {
         try
         {
