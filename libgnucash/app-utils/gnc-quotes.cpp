@@ -586,25 +586,18 @@ calc_price_time(const PriceParams& p)
      */
     if (p.date)
     {
-        /* Returned date is always in MM/DD/YYYY format according to
-         * F::Q man page, transform it to simplify conversion to
-         * GncDateTime.
-         */
-        auto date_tmp = *p.date;
-        auto iso_date_str = date_tmp.substr (6, 4) + "-" + date_tmp.substr (0, 2) +
-            "-" + date_tmp.substr (3, 2);
         try
         {
-            auto close_time{GncDateTime(iso_date_str + " 16:00:00")};
+            auto quote_time{GncDateTime(GncDate(*p.date, "m-d-y"))};
             PINFO("Quote date included, using %s for %s:%s",
-                  close_time.format("%Y-%m-%d %H:%M:%S").c_str(), p.ns, p.mnemonic);
-            return static_cast<time64>(close_time);
-        }
-        catch (...)
+                  quote_time.format("%Y-%m-%d %H:%M:%S").c_str(), p.ns, p.mnemonic);
+            return static_cast<time64>(quote_time);
+          }
+        catch (const std::exception &err)
         {
             auto now{GncDateTime()};
-            PWARN("Warning: failed to parse quote date '%s' for %s:%s - will use %s",
-                  iso_date_str.c_str(),  p.ns, p.mnemonic, now.format("%Y-%m-%d %H:%M%S").c_str());
+            PWARN("Warning: failed to parse quote date '%s' for %s:%s because %s - will use %s",
+                  p.date->c_str(),  p.ns, p.mnemonic, err.what(), now.format("%Y-%m-%d %H:%M%S").c_str());
             return static_cast<time64>(now);
         }
     }
