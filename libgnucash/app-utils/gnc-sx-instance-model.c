@@ -1141,7 +1141,7 @@ split_apply_exchange_rate (Split *split, GHashTable *bindings,
     if (exchange_rate_var != NULL)
     {
         exchange_rate = exchange_rate_var->value;
-        DEBUG("exchange_rate is %s", gnc_numeric_to_string (exchange_rate));
+        DEBUG("exchange_rate is %s", gnc_num_dbg_to_string (exchange_rate));
     }
     g_free (exchange_rate_var_name);
 
@@ -1154,7 +1154,7 @@ split_apply_exchange_rate (Split *split, GHashTable *bindings,
                               GNC_HOW_RND_ROUND_HALF_UP);
 
 
-    DEBUG("amount is %s for memo split '%s'", gnc_numeric_to_string (amt),
+    DEBUG("amount is %s for memo split '%s'", gnc_num_dbg_to_string (amt),
             xaccSplitGetMemo (split));
     xaccSplitSetAmount(split, amt); /* marks split dirty */
 
@@ -1318,7 +1318,7 @@ create_each_transaction_helper(Transaction *template_txn, void *user_data)
                                                      creation_data);
             xaccSplitSetValue(copying_split, final);
             DEBUG("value is %s for memo split '%s'",
-                    gnc_numeric_to_string (final),
+                    gnc_num_dbg_to_string (final),
                     xaccSplitGetMemo (copying_split));
             if (! gnc_commodity_equal(split_cmdty, txn_cmdty))
             {

@@ -1290,12 +1290,13 @@ gnc_num_dbg_to_string(gnc_numeric n)
 {
     static char buff[1000];
     static char *p = buff;
-    static const uint64_t size = 50;
+    static const size_t size = 50;
     int64_t tmpnum = n.num;
     int64_t tmpdenom = n.denom;
 
     p += size;
-    if (p - buff >= 1000) p = buff;
+    if ((size_t)(p - buff) > (sizeof(buff) - size))
+        p = buff;
 
     snprintf(p, size, "%" PRId64 "/%" PRId64, tmpnum, tmpdenom);
 

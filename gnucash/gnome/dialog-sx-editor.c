@@ -474,9 +474,9 @@ check_credit_debit_balance (gpointer key, gpointer val, gpointer ud)
     *unbalanced |= !(gnc_numeric_zero_p (diff));
 
     DEBUG ("%p | %s [%s - %s = %s]", key, result,
-           gnc_numeric_to_string (tcds->debitSum),
-           gnc_numeric_to_string (tcds->creditSum),
-           gnc_numeric_to_string (diff));
+           gnc_num_dbg_to_string (tcds->debitSum),
+           gnc_num_dbg_to_string (tcds->creditSum),
+           gnc_num_dbg_to_string (diff));
 }
 
 static gboolean
