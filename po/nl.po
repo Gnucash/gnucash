@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-07-05 08:50+0000\n"
+"PO-Revision-Date: 2023-07-08 13:48+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
@@ -815,7 +815,7 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line View\" in Preferences:Register Defaults."
 msgstr ""
-"Elke transactie heeft een veld \"Notities\" waarin nuttige informatie kan "
+"Elke transactie heeft een veld \"Toelichting\" waarin nuttige informatie kan "
 "worden bewaard.\n"
 "\n"
 "Om dit veld zichtbaar te maken,\n"
@@ -1881,7 +1881,7 @@ msgstr "n.v.t."
 #: gnucash/report/trep-engine.scm:1142 gnucash/report/trep-engine.scm:1143
 #: gnucash/report/trep-engine.scm:2257
 msgid "Memo"
-msgstr "Memo"
+msgstr "Notitie"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1753
 #: gnucash/gnome/gnc-plugin-page-register.c:3381
@@ -10128,8 +10128,8 @@ msgstr ""
 "Door activering van deze optie zal GnuCash een specifiek kleurschema (groen/"
 "geel) gebruiken voor dagboekweergave. Anders wordt het standaard systeem "
 "kleurschema gebruikt. Gevorderde gebruikers kunnen het ingestelde "
-"kleurschema te allen tijde overschrijven via een gnucash-specifiek css "
-"bestand te bewaren in the gebruikers configuratie map. Meer informatie "
+"kleurschema te allen tijde overschrijven door een gnucash-specifiek css-"
+"bestand op te slaan in de gebruikers-configuratiemap. Meer informatie "
 "hierover vindt u in de gnucash FAQ."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:246
@@ -10281,8 +10281,8 @@ msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
 msgstr ""
-"Voor elke boeking een tweede regel weergeven met \"Actie\", \"Notities\" en "
-"\"Bestandskoppelingen\"."
+"Voor elke boeking een tweede regel weergeven met \"Actie\", \"Toelichting\" "
+"en \"Bestandskoppelingen\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
 msgid ""
@@ -10292,7 +10292,7 @@ msgid ""
 "\"View->Double Line\" menu item."
 msgstr ""
 "Per boeking twee regels weergeven op het dagboek. De tweede regel bevat "
-"“Actie”, “Notities” en “Gekoppelde documenten”. Dit is de standaard "
+"“Actie”, “Toelichting” en “Gekoppelde documenten”. Dit is de standaard "
 "instelling wanneer een dagboek voor het eerst wordt geopend. Deze instelling "
 "kan worden aangepast via menukeuze “Beeld‣Tweeregelig”."
 
@@ -11634,9 +11634,9 @@ msgstr ""
 "\n"
 "Voor een succesvolle import moet de import data minstens drie kolommen "
 "bevatten:\n"
-"• een datum kolom\n"
-"• een beschrijving kolom\n"
-"• een storting of afname kolom\n"
+"• datum\n"
+"• omschrijving\n"
+"• storting of opname\n"
 "\n"
 "Indien er geen rekeninggegevens beschikbaar zijn, kan een basis rekening "
 "ingesteld worden waarnaar alle gegevens geïmporteerd zullen worden.\n"
@@ -11648,7 +11648,7 @@ msgstr ""
 "worden.\n"
 "\n"
 "Boekingen kunnen een of meerdere regels beslaan. In geval van meerdere "
-"regels is komt elke regel overeen met een enkel boekregel.\n"
+"regels is komt elke regel overeen met een enkele boekregel.\n"
 "\n"
 "Tenslotte kan voor herhaaldelijk importeren een bepaalde set aangepaste "
 "instellingen opgeslagen worden voor toekomstig gebruik. Na het herladen van "
@@ -11717,15 +11717,15 @@ msgstr "<b>Rekening</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:942
 msgid "Select a row to change the mappings"
-msgstr "Kies een regel om associaties te wijzigen"
+msgstr "Kies een regel om de associaties te wijzigen"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:960
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button…"
 msgstr ""
-"Om een associatie te wijzigen, op een regel dubbelklikken of een rij "
-"selecteren en de knop drukken…"
+"Om een associatie te wijzigen, dubbelklik op een regel of selecteer een rij "
+"en druk de knop…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:971
 #: gnucash/import-export/import-account-matcher.c:166
@@ -11855,7 +11855,7 @@ msgstr "Selectie _opheffen"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:310
 msgid "<b>Category Description</b>"
-msgstr "<b>Beschrijving van deze categorie</b>"
+msgstr "<b>Omschrijving van deze categorie</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
@@ -12829,7 +12829,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
 msgid "Select the date and description for your records."
-msgstr "Selecteer de datum en beschrijving voor uw registraties."
+msgstr "Selecteer de datum en omschrijving voor uw registraties."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:109
 #: gnucash/gtkbuilder/dialog-payment.glade:662
@@ -14206,12 +14206,12 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"Op een waarde in de Beschrijvingskolom dubbelklikken om naar de transactie "
-"te springen.\n"
-"Op een waarde in de Koppelingskolom dubbelklikken om het gekoppelde bestand "
-"te openen.\n"
-"Op een waarde in de Beschikbaar kolom dubbelklikken om een bestandskoppeling "
-"te wijzigen."
+"Dubbelklik een waarde in de kolom Omschrijving om naar de transactie te "
+"springen.\n"
+"Dubbelklik een waarde in de kolom Koppeling om het gekoppelde bestand te "
+"openen.\n"
+"Dubbelklik een waarde in de kolom Beschikbaar om de bestandskoppeling te "
+"wijzigen."
 
 #: gnucash/gtkbuilder/dialog-employee.glade:168
 msgid ""
@@ -14473,7 +14473,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:35
 msgid "Import Map Editor"
-msgstr "Bewerker voor import correlaties"
+msgstr "Import-associaties bewerken"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:52
 msgid "_Remove Invalid Mappings"
@@ -14507,7 +14507,7 @@ msgstr "Gecorreleerde tekst"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:233
 msgid "Mapped to Account Name"
-msgstr "Gecorreleerd naar rekening naam"
+msgstr "Geassocieerd met rekeningnaam"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:247
 msgid "Count of Match String Usage"
@@ -14518,8 +14518,8 @@ msgid ""
 "Filter will be applied to 'Match String' and 'Mapped to Account Name' "
 "fields, case sensitive."
 msgstr ""
-"Filter zal hoofdlettergevoelig toegepast worden op velden \"Overeen te "
-"stemmen tekenreeks\" en \"Toegewezen rekeningnaam\"."
+"Filter wordt hoofdlettergevoelig toegepast op velden \"Overeenkomstige "
+"tekenreeks\" en \"Geassocieerd met rekeningnaam\"."
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:335
 msgid "_Filter"
@@ -14728,7 +14728,7 @@ msgstr "_Rekeningkolom weergeven"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1116
 msgid "Show _Memo column"
-msgstr "_Memokolom weergeven"
+msgstr "_Notitiekolom weergeven"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1132
 msgid "Show matched _information"
@@ -14745,8 +14745,8 @@ msgid ""
 "replacing them."
 msgstr ""
 "Wanneer u een overeenkomende transactie bijwerkt en vereffent, voegt u de "
-"geïmporteerde beschrijving en opmerkingen toe aan de overeenkomende "
-"beschrijving en notities in plaats van deze te vervangen."
+"geïmporteerde omschrijving en toelichting toe aan de overeenkomende "
+"omschrijving en toelichting in plaats van deze te vervangen."
 
 #: gnucash/gtkbuilder/dialog-import.glade:1163
 msgid "_Reconcile after match"
@@ -14881,7 +14881,7 @@ msgstr "U moet aan deze partij een naam toekennen."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:174
 msgid "Enter any notes you want to make about this lot."
-msgstr "Een toelichting op deze partij invoeren."
+msgstr "Een toelichting op deze post invoeren."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:193
 msgid "<b>_Title</b>"
@@ -15850,7 +15850,7 @@ msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
 msgstr ""
-"Voor elke boeking een tweede regel weergeven met Actie, Notities en "
+"Voor elke boeking een tweede regel weergeven met Actie, Toelichting en "
 "Bestandskoppelingen."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
@@ -15936,7 +15936,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3361
 msgid "<b>Tab Position</b>"
-msgstr "<b>Positie tabs</b>"
+msgstr "<b>Positie tabbladen</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3371
 #: gnucash/ui/gnc-main-window.ui:195
@@ -18153,7 +18153,7 @@ msgstr "Wachtwoord _bevestigen"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:836
 msgid "_Remember the PIN in memory"
-msgstr "Het PIN in het geheugen _onthouden"
+msgstr "De PIN in het geheugen _onthouden"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:842
 msgid ""
@@ -18161,9 +18161,9 @@ msgid ""
 "during a session. Otherwise it will have to be entered again each time "
 "during a session when it is needed."
 msgstr ""
-"Door activering van deze optie zal het PIN voor Online bankieren-acties "
+"Door activering van deze optie zal de PIN voor Online bankieren-acties "
 "tijdens de sessie in het geheugen blijven opgeslagen. Zonder deze optie zal "
-"het PIN tijdens de sessie telkens wanneer het nodig is opnieuw moeten worden "
+"de PIN tijdens de sessie telkens wanneer het nodig is opnieuw moeten worden "
 "ingevoerd."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:877
@@ -18334,7 +18334,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:52
 msgid "Remember the _PIN in memory"
-msgstr "Het _PIN in het geheugen onthouden"
+msgstr "De _PIN in het geheugen onthouden"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:58
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:21
@@ -18343,9 +18343,9 @@ msgid ""
 "during a session. Otherwise it will have to be entered again each time "
 "during a session when it is needed."
 msgstr ""
-"Door activering van deze optie zal het PIN voor Online bankieren-acties "
+"Door activering van deze optie zal de PIN voor Online bankieren-acties "
 "tijdens de sessie in het geheugen blijven opgeslagen. Zonder deze optie zal "
-"het PIN tijdens de sessie telkens wanneer het nodig is opnieuw moeten worden "
+"de PIN tijdens de sessie telkens wanneer het nodig is opnieuw moeten worden "
 "ingevoerd."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:70
@@ -18871,7 +18871,7 @@ msgstr "Dit venster na afloop sluiten"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:20
 msgid "Remember the PIN in memory"
-msgstr "Het PIN in het geheugen onthouden"
+msgstr "De PIN in het geheugen onthouden"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:25
 msgid "Put the transaction text in front of the purpose of a transaction."
@@ -19702,7 +19702,7 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:501
 msgid "Please select a description column."
-msgstr "Een kolom met beschrijvingen selecteren."
+msgstr "Selecteer een kolom met omschrijvingen."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:507
 msgid "Please select a (negated) amount column."
@@ -19882,7 +19882,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:261
 msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
-"Het beschrijvingsveld kan niet leeg zijn als de optie 'Meerregelig' is "
+"Het veld Omschrijving mag niet leeg zijn als de optie 'Meerregelig' is "
 "uitgeschakeld.\n"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:311
@@ -19891,7 +19891,7 @@ msgstr "Ongeldige datum."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:314
 msgid "No valid description."
-msgstr "Geen geldige beschrijving."
+msgstr "Geen geldige omschrijving."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:447
 msgid "Account value can't be empty."
@@ -19899,7 +19899,7 @@ msgstr "Waarde voor rekening kan niet leeg zijn."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:452
 msgid "Account value can't be mapped back to an account."
-msgstr "Waarde voor rekening kan niet terug gelinkt worden naar een rekening."
+msgstr "Waarde voor rekening kan niet met een rekening worden geassocieerd."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:458
 msgid "Transfer account value can't be empty."
@@ -19908,8 +19908,7 @@ msgstr "Waarde voor tegenrekening mag niet leeg zijn."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:464
 msgid "Transfer account value can't be mapped back to an account."
 msgstr ""
-"Waarde voor tegenrekening kan niet geassocieerd worden met een GnuCash-"
-"rekening."
+"Waarde voor tegenrekening kan niet met een rekening worden geassocieerd."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:641
 msgid "No amount or negated amount column."
@@ -20086,7 +20085,7 @@ msgstr "Wisselkoers toekennen"
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1401
 msgid "_Edit description, notes, or memo"
-msgstr "Omschrijving, notitie of memo _bewerken"
+msgstr "Omschrijving, toelichting of notitie _bewerken"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1410
@@ -20293,7 +20292,7 @@ msgstr "GnuCash-rekeningnaam"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:861
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
-msgstr "Voer een naam of korte beschrijving in, zoals ‘Aandelen KPN’."
+msgstr "Voer een naam of korte omschrijving in, zoals ‘Aandelen KPN’."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:863
 msgid ""
@@ -25202,10 +25201,10 @@ msgid ""
 "in the VAT account description. EU Goods sales and purchase accounts may be "
 "tagged with *EUGOODS* in the account description."
 msgstr ""
-"Merk op dat de UK variant EU BTW rekeningen kan hanteren. Hiervoor kunnen "
-"rekeningen gelabeld worden door *EUVAT* in te geven in de beschrijving van "
-"de BTW rekening. Verkoop en aankoop van EU goederen kunnen gelabeld worden "
-"met *EUGOODS* in de rekeningbeschrijving."
+"Merk op dat de UK variant EU BTW-rekeningen kan hanteren. Hiervoor kunnen "
+"rekeningen gelabeld worden door *EUVAT* in te geven in de omschrijving van "
+"de BTW-rekening. Verkoop en aankoop van EU-goederen kunnen gelabeld worden "
+"met *EUGOODS* in de omschrijving van de rekening."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:75
 msgid "This message will be removed when tax accounts are specified."
@@ -25310,10 +25309,10 @@ msgid ""
 "used. Denote EU VAT accounts *EUVAT* in account description, and denote EU "
 "goods sales and purchases accounts with *EUGOODS* in the account description."
 msgstr ""
-"VK btw aangifte. Gelieve verkoop-, aankoop- en btw-rekeningen te selecteren. "
-"EU regels kunnen gebruikt worden. Markeer EU btw rekeningen met *EUVAT* in "
-"de rekeningbeschrijving en EU goederen verkoop- en aankooprekeningen met "
-"*EUGOODS* in de rekeningbeschrijving."
+"VK btw-aangifte. Selecteer verkoop-, aankoop- en btw-rekeningen. EU-regels "
+"zijn mogelijk van toepassing. Markeer EU btw-rekeningen met *EUVAT* in de "
+"omschrijving van de rekening en EU goederenverkoop- en aankooprekeningen met "
+"*EUGOODS* in de omschrijving van de rekening."
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:166
 msgid "Australia BAS"
@@ -28198,10 +28197,11 @@ msgid ""
 "e.g. '#gift' will find all transactions with #gift in description, notes or "
 "memo. It can be left blank, which will disable the filter."
 msgstr ""
-"Enkel boekingen weergeven waarvan de beschrijving, notities of memo "
-"overeenstemmen met deze filter.\n"
+"Toon alleen boekingen waarvan de omschrijving, toelichting of notities "
+"overeenstemmen met dit filter.\n"
 "Bijvoorbeeld '#geschenk' zal alle boekingen selecteren met '#geschenk' in "
-"beschrijving, notities of memo. Een blanco waarde deactiveert de filter."
+"omschrijving, toelichting of notitie. Een blanco waarde deactiveert het "
+"filter."
 
 #: gnucash/report/trep-engine.scm:613
 msgid ""
@@ -28209,10 +28209,10 @@ msgid ""
 "true to enable full POSIX regular expressions capabilities. '#work|#family' "
 "will match both tags within description, notes or memo."
 msgstr ""
-"Standaard zal de transactie filter enkel de opgegeven tekst zoeken. Door dit "
-"aan te vinken wordt volledige POSIX reguliere expressie ondersteuning "
-"geactiveerd. '#Werk|#Familie' zal zoeken naar zowel '#Werk' als '#Familie' "
-"in beschrijving, notities and memo."
+"Standaard zal de transactie filter alleen de opgegeven tekst zoeken. Door "
+"dit aan te vinken wordt ondersteuning voor volledige POSIX reguliere "
+"expressie geactiveerd. '#Werk|#Familie' zal zoeken naar zowel '#Werk' als '#"
+"Familie' in omschrijving, toelichting en notities."
 
 #: gnucash/report/trep-engine.scm:621
 msgid "If this option is selected, transactions matching filter are excluded."
@@ -28270,7 +28270,7 @@ msgstr "Het rekeningnummer bij subtotalen en subtitels weergeven?"
 
 #: gnucash/report/trep-engine.scm:784
 msgid "Show the account description for subheadings?"
-msgstr "De rekeningbeschrijving bij subtitels weergeven?"
+msgstr "De omschrijving van de rekening als subtitels weergeven?"
 
 #: gnucash/report/trep-engine.scm:790
 msgid "Show the informal headers for debit/credit accounts?"
@@ -29010,7 +29010,7 @@ msgstr "De boekhouding aan het einde van de periode afsluiten"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:124
 msgid "_Import Map Editor"
-msgstr "_Import correlaties bewerken"
+msgstr "_Import-associaties bewerken"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:126
 msgid "View and Delete Bayesian and non-Bayesian information"
@@ -29340,7 +29340,7 @@ msgstr "Klanten of leveranciers uit een CSV-bestand importeren"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
 msgid "_Replay GnuCash .log file…"
-msgstr "GnuCash logbestand _opnieuw uitvoeren…"
+msgstr "GnuCash-logbestand _opnieuw uitvoeren…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
 msgid "Replay a GnuCash log file after a crash. This cannot be undone"
@@ -30577,7 +30577,7 @@ msgid ""
 "safely remove the old directory."
 msgstr ""
 "Als u niet langer van plan bent om {1} 2.6.x of ouder op dit systeem te "
-"draaien, dan kan je zonder problemen de oude map verwijderen."
+"draaien, dan kunt u de oude map zonder problemen verwijderen."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:691
 msgid "In addition:"
