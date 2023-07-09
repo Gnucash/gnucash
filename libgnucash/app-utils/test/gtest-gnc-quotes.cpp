@@ -266,7 +266,7 @@ TEST_F(GncQuotesTest, fetch_one_commodity)
     EXPECT_TRUE(failures.empty());
     auto pricedb{gnc_pricedb_get_db(m_book)};
     auto price{gnc_pricedb_lookup_latest(pricedb, hpe, usd)};
-    auto datetime{static_cast<time64>(GncDateTime("20220901160000"))};
+    auto datetime{static_cast<time64>(GncDateTime("20220901105900"))};
 
     EXPECT_EQ(usd, gnc_price_get_currency(price));
     EXPECT_EQ(datetime, gnc_price_get_time64(price));
