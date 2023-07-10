@@ -104,6 +104,8 @@ const char * gnc_locale_default_iso_currency_code (void);
 %newobject gnc_locale_name;
 gchar *gnc_locale_name (void);
 
+int g_utf8_collate (const char *a, const char *b);
+
 #if defined(SWIGGUILE)
 %init {
     {

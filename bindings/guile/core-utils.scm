@@ -75,8 +75,8 @@
      (issue-deprecation-warning "Using _ to call gettext is disallowed in guile-3 and will be removed in the future. Use G_ instead.")
      (gnc:gettext x))))
 
-(define gnc:string-locale<? string-locale<?)
-(define gnc:string-locale>? string-locale>?)
+(define (gnc:string-locale<? a b) (< (g-utf8-collate a b) 0))
+(define (gnc:string-locale>? a b) (> (g-utf8-collate a b) 0))
 
 ;; Custom unbound-variable exception printer: instead of generic "In
 ;; procedure module-lookup: Unbound variable: varname", it will first
