@@ -495,7 +495,7 @@ error_handler<DbType::DBI_MYSQL> (dbi_conn conn, void* user_data)
     if (!dbi_be->connected())
     {
         PINFO ("DBI error: %s\n", msg);
-        PINFO ("Note: GbcDbiSqlConnection not yet initialized. Skipping further error processing.");
+        PINFO ("Note: GncDbiSqlConnection not yet initialized. Skipping further error processing.");
         return;
     }
 
@@ -1205,6 +1205,21 @@ gnc_module_finalize_backend_dbi (void)
 
 /* --------------------------------------------------------- */
 
+static void
+log_failed_field(dbi_result result, const char* fieldname)
+{
+    auto idx = dbi_result_get_field_idx(result, fieldname);
+    if (dbi_result_field_is_null_idx(result, idx))
+        PERR("Result field %s is NULL", fieldname);
+    else
+    {
+        auto type = dbi_result_get_field_type_idx(result, idx);
+        auto attribs = dbi_result_get_field_attribs_idx(result, idx);
+        PERR("Result field %s has type %d and attribs %d",
+             fieldname, type, attribs);
+    }
+}
+
 /** Users discovered a bug in some distributions of libdbi, where if
  * it is compiled on certain versions of gcc with the -ffast-math
  * compiler option it fails to correctly handle saving of 64-bit
@@ -1246,7 +1261,7 @@ dbi_library_test (dbi_conn conn)
     dbi_result_free (result);
     auto locale = gnc_push_locale (LC_NUMERIC, "C");
     result = dbi_conn_query (conn, "SELECT * FROM numtest");
-    if (result == nullptr)
+    if (result == nullptr || !dbi_result_get_numrows(result))
     {
         const char* errmsg;
         dbi_conn_error (conn, &errmsg);
@@ -1259,8 +1274,14 @@ dbi_library_test (dbi_conn conn)
     while (dbi_result_next_row (result))
     {
         resultlonglong = dbi_result_get_longlong (result, "test_int");
+        if (!resultlonglong)
+            log_failed_field(result, "test_int");
         resultulonglong = dbi_result_get_ulonglong (result, "test_unsigned");
+        if (!resultulonglong)
+            log_failed_field(result, "test_unsigned");
         resultdouble = dbi_result_get_double (result, "test_double");
+        if (!resultdouble)
+            log_failed_field(result, "test_double");
     }
     dbi_conn_query (conn, "DROP TABLE numtest");
     gnc_pop_locale (LC_NUMERIC, locale);
