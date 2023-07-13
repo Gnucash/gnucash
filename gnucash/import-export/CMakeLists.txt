@@ -15,7 +15,7 @@ add_subdirectory(qif-imp)
 
 set (generic_import_SOURCES
   import-account-matcher.c
-  import-commodity-matcher.c
+  import-commodity-matcher.cpp
   import-backend.cpp
   import-format-dialog.c
   import-match-picker.cpp
