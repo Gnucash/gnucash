@@ -25,6 +25,10 @@
 #ifndef OFX_IMPORT_H
 #define OFX_IMPORT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <gtk/gtk.h>
 
 /** The gnc_file_ofx_import() routine will pop up a standard file
@@ -33,4 +37,9 @@
  *     are merged into the existing session (if any). The current
  *     session continues to remain open for editing. */
 void              gnc_file_ofx_import (GtkWindow *parent);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif
