@@ -21,7 +21,7 @@ set (generic_import_SOURCES
   import-match-picker.cpp
   import-parse.c
   import-utilities.c
-  import-settings.c
+  import-settings.cpp
   import-main-matcher.cpp
   import-pending-matches.cpp
 )
