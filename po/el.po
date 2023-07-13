@@ -35,14 +35,15 @@
 # Katerina <katerina.gakou@hotmail.com>, 2021.
 # Eugenia Russell <eugenia.russell2019@gmail.com>, 2021.
 # Gregory-K <lifeturn@gmail.com>, 2022.
+# ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΤΥΛΙΣΟΥ <astilisos209@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash ${VERSION}-pot${POTVERSION}\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2022-02-13 17:55+0000\n"
-"Last-Translator: Gregory-K <lifeturn@gmail.com>\n"
+"PO-Revision-Date: 2023-07-12 10:30+0000\n"
+"Last-Translator: ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΤΥΛΙΣΟΥ <astilisos209@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
 "Language: el\n"
@@ -50,7 +51,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.11-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -66,7 +67,7 @@ msgstr ""
 #: gnucash/report/reports/standard/price-scatter.scm:186
 #, scheme-format
 msgid "~a to ~a"
-msgstr ""
+msgstr "~a έως ~a"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -74,6 +75,9 @@ msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
+"Προσπάθησε να αναζητήσει ένα απροσδιόριστο σύμβολο ημερομηνίας '~a'. Αυτή η "
+"αναφορά πιθανότατα αποθηκεύτηκε από μια μεταγενέστερη έκδοση του GnuCash. "
+"Προεπιλογή μέχρι σήμερα."
 
 #: bindings/guile/date-utilities.scm:717
 #: gnucash/gnome-utils/gnc-period-select.c:70
@@ -83,7 +87,6 @@ msgstr "Αρχή αυτού του έτους"
 
 #: bindings/guile/date-utilities.scm:720
 #: libgnucash/engine/gnc-option-date.cpp:264
-#, fuzzy
 msgid "First day of the current calendar year."
 msgstr "Πρώτη ημέρα του τρέχοντος ημερολογιακού έτους"
 
@@ -95,7 +98,6 @@ msgstr "Τέλος αυτού του έτους"
 
 #: bindings/guile/date-utilities.scm:727
 #: libgnucash/engine/gnc-option-date.cpp:272
-#, fuzzy
 msgid "Last day of the current calendar year."
 msgstr "Τελευταία ημέρα του τρέχοντος ημερολογιακού έτους"
 
@@ -107,7 +109,6 @@ msgstr "Αρχή του προηγούμενου έτους"
 
 #: bindings/guile/date-utilities.scm:734
 #: libgnucash/engine/gnc-option-date.cpp:280
-#, fuzzy
 msgid "First day of the previous calendar year."
 msgstr "Πρώτη ημέρα του προηγούμενου ημερολογιακού έτους"
 
@@ -119,7 +120,6 @@ msgstr "Τέλος προηγούμενου έτους"
 
 #: bindings/guile/date-utilities.scm:741
 #: libgnucash/engine/gnc-option-date.cpp:288
-#, fuzzy
 msgid "Last day of the previous calendar year."
 msgstr "Τελευταία μέρα του προηγούμενου ημερολογιακού έτους"
 
@@ -130,10 +130,9 @@ msgstr "Αρχή της λογιστικής περιόδου"
 
 #: bindings/guile/date-utilities.scm:748
 #: libgnucash/engine/gnc-option-date.cpp:312
-#, fuzzy
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr ""
-"Πρώτη ημέρα λογιστικής περιόδου όπως ορίστηκε στις κεντρικές προτιμήσεις"
+"Πρώτη ημέρα της λογιστικής περιόδου, όπως ορίζεται στις γενικές προτιμήσεις."
 
 #: bindings/guile/date-utilities.scm:752
 #: libgnucash/engine/gnc-option-date.cpp:319
@@ -142,10 +141,10 @@ msgstr "Τέλος της λογιστικής περιόδου"
 
 #: bindings/guile/date-utilities.scm:755
 #: libgnucash/engine/gnc-option-date.cpp:320
-#, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr ""
-"Τελευταία ημέρα λογιστικής περιόδου όπως ορίστηκε στις κεντρικές προτιμήσεις"
+"Τελευταία ημέρα της λογιστικής περιόδου, όπως ορίζεται στις συνολικές "
+"προτιμήσεις."
 
 #: bindings/guile/date-utilities.scm:759
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -155,9 +154,8 @@ msgstr "Αρχή αυτού του μήνα"
 
 #: bindings/guile/date-utilities.scm:762
 #: libgnucash/engine/gnc-option-date.cpp:168
-#, fuzzy
 msgid "First day of the current month."
-msgstr "Πρώτη ημέρα τρέχοντος μήνα"
+msgstr "Πρώτη ημέρα του τρέχοντος μήνα."
 
 #: bindings/guile/date-utilities.scm:766
 #: gnucash/gnome-utils/gnc-period-select.c:82
@@ -167,9 +165,8 @@ msgstr "Τέλος του τρέχοντος μήνα"
 
 #: bindings/guile/date-utilities.scm:769
 #: libgnucash/engine/gnc-option-date.cpp:176
-#, fuzzy
 msgid "Last day of the current month."
-msgstr "Τελευταία ημέρα τρέχοντος μήνα"
+msgstr "Τελευταία ημέρα του τρέχοντος μήνα."
 
 #: bindings/guile/date-utilities.scm:773
 #: gnucash/gnome-utils/gnc-period-select.c:67
@@ -179,9 +176,8 @@ msgstr "Αρχή του προηγούμενου μήνα"
 
 #: bindings/guile/date-utilities.scm:776
 #: libgnucash/engine/gnc-option-date.cpp:184
-#, fuzzy
 msgid "First day of the previous month."
-msgstr "Πρώτη μέρα του προηγούμενου μήνα"
+msgstr "Πρώτη μέρα του προηγούμενου μήνα."
 
 #: bindings/guile/date-utilities.scm:780
 #: gnucash/gnome-utils/gnc-period-select.c:83
@@ -191,7 +187,6 @@ msgstr "Τέλος του προηγούμενου μήνα"
 
 #: bindings/guile/date-utilities.scm:783
 #: libgnucash/engine/gnc-option-date.cpp:192
-#, fuzzy
 msgid "Last day of previous month."
 msgstr "Τελευταία μέρα του προηγούμενου μήνα"
 
@@ -202,7 +197,6 @@ msgstr "Αρχή του τρέχοντος τριμήνου"
 
 #: bindings/guile/date-utilities.scm:790
 #: libgnucash/engine/gnc-option-date.cpp:216
-#, fuzzy
 msgid "First day of the current quarterly accounting period."
 msgstr "Πρώτη ημέρα του τρέχοντος λογιστικού τριμήνου"
 
@@ -213,7 +207,6 @@ msgstr "Τέλος του τρέχοντος τριμήνου"
 
 #: bindings/guile/date-utilities.scm:797
 #: libgnucash/engine/gnc-option-date.cpp:224
-#, fuzzy
 msgid "Last day of the current quarterly accounting period."
 msgstr "Τελευταία ημέρα του τρέχοντος λογιστικού τριμήνου"
 
@@ -266,7 +259,7 @@ msgstr "Επιχείρηση"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/engine/gnc-optiondb.cpp:1242
 msgid "Company Name"
-msgstr "Όνομα εταιρίας"
+msgstr "Όνομα εταιρείας"
 
 #: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1245
 msgid "Company Address"
@@ -780,6 +773,11 @@ msgid ""
 "(File[->Most Recently Used-List]).\n"
 "The full path is displayed in the status bar."
 msgstr ""
+"Εάν θέλετε να μάθετε σε ποιους καταλόγους είναι αποθηκευμένα τα πρόσφατα "
+"αρχεία σας GnuCash, τοποθετήστε το δείκτη του ποντικιού πάνω από μία από τις "
+"καταχωρήσεις στο μενού ιστορικού\n"
+"(Αρχείο[->Πιο πρόσφατα χρησιμοποιημένα-Λίστα]).\n"
+"Η πλήρης διαδρομή εμφανίζεται στη γραμμή κατάστασης."
 
 #: doc/tip_of_the_day.list.c:24
 msgid ""
@@ -838,6 +836,12 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line View\" in Preferences:Register Defaults."
 msgstr ""
+"Κάθε συναλλαγή έχει ένα πεδίο \"Σημειώσεις\" όπου μπορείτε να βάλετε "
+"χρήσιμες πληροφορίες.\n"
+"\n"
+"Για να το κάνει ορατό\n"
+"επιλέξτε \"Προβολή\" στη γραμμή μενού και επιλέξτε \"Διπλή γραμμή\" ή\n"
+"επιλέξτε \"Διπλή προβολή γραμμής\" στο Preferences:Register Defaults."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -846,9 +850,12 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
+"Για να εισαγάγετε συναλλαγές με πολλαπλούς διαχωρισμούς, όπως επιταγή "
+"πληρωμής με πολλαπλές παρακρατήσεις, κάντε κλικ στο κουμπί Διαχωρισμός στη "
+"γραμμή εργαλείων. Εναλλακτικά, στο μενού Προβολή, μπορείτε να επιλέξετε το "
+"στυλ εγγραφής Auto-Split Ledger ή Transaction Journal."
 
 #: doc/tip_of_the_day.list.c:55
-#, fuzzy
 msgid ""
 "As you enter amounts in the register, you can use the GnuCash calculator to "
 "add, subtract, multiply and divide. Simply type the first value, then select "
@@ -882,6 +889,11 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
+"Πληκτρολογήστε τα πρώτα γράμματα ενός υπάρχοντος ονόματος λογαριασμού στη "
+"στήλη Transfer Register και το GnuCash θα συμπληρώσει το όνομα από τη λίστα "
+"των λογαριασμών σας. Για υπολογαριασμούς, πληκτρολογήστε τα πρώτα γράμματα "
+"του γονικού λογαριασμού, ακολουθούμενα από «:» και τα πρώτα γράμματα του "
+"δευτερεύοντος λογαριασμού (π.χ. A:C για Στοιχεία: Μετρητά)."
 
 #: doc/tip_of_the_day.list.c:71
 msgid ""
@@ -889,6 +901,10 @@ msgid ""
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
 msgstr ""
+"Θέλετε να δείτε όλες τις συναλλαγές του δευτερεύοντος λογαριασμού σας σε ένα "
+"μητρώο; Από την καρτέλα Λογαριασμοί στο κύριο παράθυρο, επισημάνετε τον "
+"γονικό λογαριασμό και επιλέξτε Επεξεργασία->Άνοιγμα δευτερευόντων "
+"λογαριασμών από το μενού."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -896,12 +912,18 @@ msgid ""
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
 msgstr ""
+"Όταν εισάγετε ημερομηνίες, μπορείτε να πληκτρολογήσετε '+' ή '-' για να "
+"αυξήσετε ή να μειώσετε την επιλεγμένη ημερομηνία. Μπορείτε να "
+"χρησιμοποιήσετε τα '+' και '-' για να αυξήσετε και να μειώσετε τους αριθμούς "
+"ελέγχου επίσης."
 
 #: doc/tip_of_the_day.list.c:79
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
 msgstr ""
+"Για εναλλαγή μεταξύ πολλών καρτελών στο κύριο παράθυρο, πατήστε Control+Page "
+"Up/Down."
 
 #: doc/tip_of_the_day.list.c:82
 msgid ""
@@ -909,6 +931,9 @@ msgid ""
 "reconciled. You can also press Tab and Shift-Tab to move between deposits "
 "and withdrawals."
 msgstr ""
+"Στο παράθυρο εναρμόνισης, μπορείτε να πατήσετε το πλήκτρο διαστήματος για να "
+"επισημάνετε τις συναλλαγές ως εναρμονισμένες. Μπορείτε επίσης να πατήσετε "
+"Tab και Shift-Tab για να μετακινηθείτε μεταξύ καταθέσεων και αναλήψεων."
 
 #: doc/tip_of_the_day.list.c:86
 msgid ""
@@ -929,9 +954,13 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
+"Μπορείτε να ρυθμίσετε την οθόνη του Επεξεργαστή Ασφαλείας να εμφανίζει την "
+"Πηγή Προσφοράς ενός τίτλου, γεγονός που καθιστά εύκολο να δείτε ποιες "
+"ηλεκτρονικές πηγές χρησιμοποιούν οι κινητές αξίες σας. Κάντε κλικ στο "
+"τρίγωνο στη δεξιά πλευρά των επικεφαλίδων στηλών για να αλλάξετε την "
+"εμφάνιση."
 
 #: doc/tip_of_the_day.list.c:96
-#, fuzzy
 msgid ""
 "You can pack multiple reports into a single window, providing all the "
 "financial information you want at a glance. To do so, use the Sample & "
@@ -947,12 +976,17 @@ msgid ""
 "report as a report option, and use the Edit->Style Sheets menu to customize "
 "style sheets."
 msgstr ""
+"Τα φύλλα στυλ επηρεάζουν τον τρόπο εμφάνισης των αναφορών. Επιλέξτε ένα "
+"φύλλο στυλ για την αναφορά σας ως επιλογή αναφοράς και χρησιμοποιήστε το "
+"μενού Επεξεργασία-> Φύλλα στυλ για να προσαρμόσετε τα φύλλα στυλ."
 
 #: doc/tip_of_the_day.list.c:105
 msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
+"Για να αυξήσετε το μενού λογαριασμών στο πεδίο μεταφοράς μιας σελίδας "
+"εγγραφής, πατήστε το πλήκτρο Μενού ή το συνδυασμό πλήκτρων Ctrl-Down."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
@@ -967,6 +1001,18 @@ msgid ""
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
 msgstr ""
+"Το πρόγραμμα επεξεργασίας προγραμματισμένων συναλλαγών συνοδεύεται από έναν "
+"πολύ ευέλικτο διαμορφωτή συχνότητας. Οι βασικές συχνότητες για τον "
+"προγραμματισμό μιας συναλλαγής περιλαμβάνουν ημερήσια, εβδομαδιαία και "
+"μηνιαία. Αλλά μπορούν να δημιουργηθούν και πιο προηγμένα σχήματα. Μερικά "
+"παραδείγματα:\n"
+"\n"
+"Για να προγραμματίσετε μια συναλλαγή κάθε τρεις εβδομάδες, μπορείτε να "
+"επιλέξετε την εβδομαδιαία βασική συχνότητα και στη συνέχεια να ορίσετε \"Κάθε"
+" 3 εβδομάδες\".\n"
+"\n"
+"Για να προγραμματίσετε μια συναλλαγή κάθε χρόνο, μπορείτε να επιλέξετε τη "
+"μηνιαία βασική συχνότητα και στη συνέχεια να ορίσετε «Κάθε 12 μήνες»."
 
 #: doc/tip_of_the_day.list.c:117
 msgid ""
@@ -985,6 +1031,10 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
+"Για να πραγματοποιήσετε αναζήτηση σε όλες τις συναλλαγές σας, ξεκινήστε μια "
+"αναζήτηση (Επεξεργασία->Εύρεση…) από την κύρια σελίδα ιεραρχίας λογαριασμών. "
+"Για να περιορίσετε την αναζήτησή σας σε έναν μόνο λογαριασμό, ξεκινήστε την "
+"αναζήτηση από το μητρώο αυτού του λογαριασμού."
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -992,6 +1042,9 @@ msgid ""
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
+"Για να συγκρίνετε οπτικά στην οθόνη τα περιεχόμενα 2 καρτελών, σε μία από "
+"τις καρτέλες, επιλέξτε Παράθυρο->Νέο παράθυρο με σελίδα από το μενού για να "
+"αντιγράψετε αυτήν την καρτέλα σε νέο παράθυρο."
 
 #: doc/tip_of_the_day.list.c:129
 msgid ""
@@ -1025,7 +1078,13 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
+"Η παλαιότερη ημερομηνία συναλλαγής που βρέθηκε σε αυτό το βιβλίο είναι %s. "
+"Με βάση την επιλογή που έγινε παραπάνω, αυτό το βιβλίο θα χωριστεί σε %d "
+"βιβλίο."
 msgstr[1] ""
+"Η παλαιότερη ημερομηνία συναλλαγής που βρέθηκε σε αυτό το βιβλίο είναι %s. "
+"Με βάση την επιλογή που έγινε παραπάνω, αυτό το βιβλίο θα χωριστεί σε %d "
+"βιβλία."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
@@ -1056,6 +1115,9 @@ msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
+"Το βιβλίο θα δημιουργηθεί με τον τίτλο %s όταν κάνετε κλικ στο \"Εφαρμογή\". "
+"Κάντε κλικ στο \"Πίσω\" για προσαρμογή ή στο \"Ακύρωση\" για να μην "
+"δημιουργήσετε κανένα βιβλίο."
 
 #: gnucash/gnome/assistant-acct-period.c:525
 #, c-format
@@ -1143,7 +1205,6 @@ msgstr "Χρήση υπάρχουσας"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1487
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:44
-#, fuzzy
 msgid "Please choose the currency to use for new accounts."
 msgstr ""
 "Παρακαλώ επιλέξτε το νόμισμα που θα χρησιμοποιηθεί στους νέους λογαριασμούς."
@@ -1151,9 +1212,8 @@ msgstr ""
 #: gnucash/gnome/assistant-hierarchy.cpp:1531
 #: gnucash/gnome/assistant-hierarchy.cpp:1550
 #: gnucash/gnome-utils/dialog-utils.c:810
-#, fuzzy
 msgid "New Book Options"
-msgstr "Επιλογές βιβλίου"
+msgstr "Νέες επιλογές βιβλίου"
 
 #: gnucash/gnome/assistant-loan.cpp:125
 msgid "Taxes"
@@ -1191,8 +1251,7 @@ msgstr "Άλλη πληρωμή"
 #. Translators: %s is "Taxes",
 #. "Insurance", or similar.
 #: gnucash/gnome/assistant-loan.cpp:766
-#, fuzzy, c-format
-#| msgid "... pay \"%s\"?"
+#, c-format
 msgid "… pay \"%s\"?"
 msgstr "... πληρωμή \"%s\";"
 
@@ -1289,7 +1348,6 @@ msgid "Interest"
 msgstr "Τόκοι"
 
 #: gnucash/gnome/assistant-loan.cpp:2863
-#, fuzzy
 msgid "Escrow Payment"
 msgstr "Πρόσθετες πληρωμές"
 
@@ -1364,7 +1422,7 @@ msgstr "Άνοιγμα"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:191
 msgid "Initial stock long purchase."
-msgstr ""
+msgstr "Αρχική μακροχρόνια αγορά αποθέματος."
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
@@ -1376,7 +1434,7 @@ msgstr "συγκεντρωτικός"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:202
 msgid "Initial stock short sale."
-msgstr ""
+msgstr "Αρχική ανοικτή πώληση μετοχών."
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
@@ -1396,7 +1454,7 @@ msgstr "Αγορά"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:217
 msgid "Buying stock long."
-msgstr ""
+msgstr "Αγορά μετοχών για μεγάλο χρονικό διάστημα."
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
@@ -1416,7 +1474,7 @@ msgstr "Πώληση"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:228
 msgid "Selling stock long, and record capital gain/loss."
-msgstr ""
+msgstr "Πώληση μετοχών μεγάλης διάρκειας και ρεκόρ κεφαλαιακών κερδών/ζημιών."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1434,12 +1492,14 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"Η Εταιρεία εκδίδει μερίσματα σε μετρητά στον κάτοχό της.\n"
+"\n"
+"Κάθε μέρισμα που επανεπενδύεται πρέπει στη συνέχεια να καταγράφεται ως "
+"κανονική αγορά μετοχών."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:250
-#, fuzzy
-#| msgid "Decrease in capital"
 msgid "Return of capital"
 msgstr "Μείωση στο κεφάλαιο"
 
@@ -1447,6 +1507,8 @@ msgstr "Μείωση στο κεφάλαιο"
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"Η εταιρεία επιστρέφει κεφάλαιο, μειώνοντας τη βάση κόστους χωρίς να "
+"επηρεάζονται # μονάδες."
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
@@ -1462,12 +1524,14 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"Η εταιρεία επιστρέφει κεφάλαιο, μειώνοντας τη βάση κόστους χωρίς να "
+"επηρεάζονται # μονάδες. Μια διανομή που είχε καταγραφεί προηγουμένως ως "
+"μέρισμα αναταξινομείται σε απόδοση κεφαλαίου, συχνά λόγω φορολογικών "
+"πληροφοριών στο τέλος του έτους."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:272
-#, fuzzy
-#| msgid "No description provided."
 msgid "Notional distribution (dividend)"
 msgstr "Δεν παρέχεται περιγραφή."
 
@@ -1476,18 +1540,23 @@ msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Η εταιρεία εκδίδει μια πλασματική διανομή, η οποία καταγράφεται ως έσοδα από "
+"μερίσματα και αυξάνει τη βάση κόστους χωρίς να επηρεάζονται # μονάδες."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
 msgid "Notional distribution (capital gain)"
-msgstr ""
+msgstr "Τυπική διανομή (κεφαλαιακό κέρδος)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Η εταιρεία εκδίδει μια πλασματική διανομή, η οποία καταγράφεται ως "
+"κεφαλαιουχικό κέρδος και αυξάνει τη βάση κόστους χωρίς να επηρεάζει # "
+"μονάδες."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1495,10 +1564,8 @@ msgstr ""
 #. split when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:294
 #: gnucash/gnome/assistant-stock-transaction.cpp:403
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock split"
-msgstr "Σπλιτ Μετοχής"
+msgstr "διαίρεση Μετοχής"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:295
 #: gnucash/gnome/assistant-stock-transaction.cpp:404
@@ -1507,16 +1574,17 @@ msgid ""
 "divisor, while keeping the total monetary value of the overall investment "
 "constant."
 msgstr ""
+"Η Εταιρεία εκδίδει πρόσθετα μερίδια, μειώνοντας έτσι την τιμή της μετοχής με "
+"διαιρέτη, διατηρώντας παράλληλα σταθερή τη συνολική νομισματική αξία της "
+"συνολικής επένδυσης."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
 #. reverse split when shorting stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:304
 #: gnucash/gnome/assistant-stock-transaction.cpp:414
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Reverse split"
-msgstr "Έ_λεγχος συναλλαγών που δημιουργήθηκαν"
+msgstr "Αντίστροφη διαίρεση"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:305
 msgid ""
@@ -1527,46 +1595,55 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"Η Εταιρεία εξαγοράζει μερίδια, αυξάνοντας έτσι την τιμή της μετοχής κατά "
+"πολλαπλάσιο, διατηρώντας παράλληλα σταθερή τη συνολική νομισματική αξία της "
+"συνολικής επένδυσης.\n"
+"\n"
+"Εάν ο αντίστροφος διαχωρισμός έχει ως αποτέλεσμα την αντιστροφή μετρητών για "
+"τις υπόλοιπες μονάδες, καταγράψτε την πώληση χρησιμοποιώντας πρώτα το Stock "
+"Transaction Assistant και, στη συνέχεια, καταγράψτε το reverse split."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:323
-#, fuzzy
-#| msgid "Sort Order"
 msgid "Short sell"
-msgstr "Σειρά ταξινόμησης"
+msgstr "Μικρή πώληση"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:324
 msgid "Selling stock short."
-msgstr ""
+msgstr "Πώληση μετοχών short."
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
 #: gnucash/gnome/assistant-stock-transaction.cpp:334
 msgid "Buy to cover short"
-msgstr ""
+msgstr "Αγοράστε για να καλύψετε σύντομα"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:335
 msgid "Buy back stock to cover short position, and record capital gain/loss."
 msgstr ""
+"Αγοράστε πίσω μετοχές για να καλύψετε θέση πώλησης και καταγράψτε κέρδος/"
+"ζημία κεφαλαίου."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:345
 msgid "Compensatory dividend"
-msgstr ""
+msgstr "Εξισωτικό μέρισμα"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:346
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
 msgstr ""
+"Η Εταιρεία εκδίδει μερίσματα και ο κάτοχος ανοικτών μετοχών πρέπει να "
+"καταβάλει αντισταθμιστική πληρωμή για το μέρισμα."
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:356
 msgid "Compensatory return of capital"
-msgstr ""
+msgstr "Αντισταθμιστική επιστροφή κεφαλαίου"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:357
 msgid ""
@@ -1574,13 +1651,17 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
+"Η εταιρεία επιστρέφει κεφάλαιο και ο κάτοχος ανοικτών μετοχών πρέπει να "
+"καταβάλει αντισταθμιστική πληρωμή για το επιστρεφόμενο κεφάλαιο. Αυτό "
+"μειώνει τη βάση κόστους (λιγότερο αρνητικό, προς 0,00 τιμή) χωρίς να "
+"επηρεάζει # μονάδες."
 
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:368
 msgid "Compensatory return of capital (reclassification)"
-msgstr ""
+msgstr "Αντισταθμιστική επιστροφή κεφαλαίου (αναταξινόμηση)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:369
 msgid ""
@@ -1590,13 +1671,19 @@ msgid ""
 "previously recorded as a compensatory dividend is reclassified to "
 "compensatory return of capital, often due to end-of-year tax information."
 msgstr ""
+"Η εταιρεία επιστρέφει κεφάλαιο και ο κάτοχος ανοικτών μετοχών πρέπει να "
+"καταβάλει αντισταθμιστική πληρωμή για το επιστρεφόμενο κεφάλαιο. Αυτό "
+"μειώνει τη βάση κόστους (λιγότερο αρνητικό, προς 0,00 τιμή) χωρίς να "
+"επηρεάζει # μονάδες. Μια διανομή που είχε καταγραφεί προηγουμένως ως "
+"αντισταθμιστικό μέρισμα επαναταξινομείται σε αντισταθμιστική απόδοση "
+"κεφαλαίου, συχνά λόγω φορολογικών πληροφοριών στο τέλος του έτους."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:380
 msgid "Compensatory notional distribution (dividend)"
-msgstr ""
+msgstr "Αντισταθμιστική τεκμαρτή διανομή (μέρισμα)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:381
 msgid ""
@@ -1605,13 +1692,18 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
+"Η Εταιρεία εκδίδει μια πλασματική διανομή και ο κάτοχος ανοικτών μετοχών "
+"πρέπει να καταβάλει μια αντισταθμιστική πληρωμή για την πλασματική διανομή. "
+"Αυτό καταγράφεται ως ποσό ζημιών/αρνητικού εισοδήματος από μερίσματα και "
+"αυξάνει τη βάση κόστους (πιο αρνητική, μακριά από την τιμή 0,00) χωρίς να "
+"επηρεάζει # μονάδες."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:392
 msgid "Compensatory notional distribution (capital gain)"
-msgstr ""
+msgstr "Αντισταθμιστική πλασματική διανομή (κεφαλαιουχικό κέρδος)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:393
 msgid ""
@@ -1620,6 +1712,10 @@ msgid ""
 "capital loss amount, and increases the cost basis (more negative, away from "
 "0.00 value) without affecting # units."
 msgstr ""
+"Η Εταιρεία εκδίδει μια πλασματική διανομή και ο κάτοχος ανοικτών μετοχών "
+"πρέπει να καταβάλει μια αντισταθμιστική πληρωμή για την πλασματική διανομή. "
+"Αυτό καταγράφεται ως ποσό απώλειας κεφαλαίου και αυξάνει τη βάση κόστους ("
+"πιο αρνητική, μακριά από την τιμή 0,00) χωρίς να επηρεάζει # μονάδες."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:415
 msgid ""
@@ -1630,40 +1726,43 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"Η Εταιρεία εξαγοράζει μερίδια, αυξάνοντας έτσι την τιμή της μετοχής κατά "
+"πολλαπλάσιο, διατηρώντας παράλληλα σταθερή τη συνολική νομισματική αξία της "
+"συνολικής επένδυσης.\n"
+"\n"
+"Εάν ο αντίστροφος διαχωρισμός έχει ως αποτέλεσμα την αντιστροφή μετρητών για "
+"τις υπόλοιπες μονάδες, καταγράψτε την εξαγορά με χρήση του Βοηθού Συναλλαγών "
+"Χρηματιστηρίου πρώτα και, στη συνέχεια, καταγράψτε την αντίστροφη διαίρεση."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:485
 #, c-format
 msgid "Amount for %s is missing."
-msgstr ""
+msgstr "Λείπει το ποσό για %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:499
 #, c-format
 msgid "Amount for %s must not be negative."
-msgstr ""
+msgstr "Το ποσό για %s δεν πρέπει να είναι αρνητικό."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:505
 #, c-format
 msgid "Amount for %s must be positive."
-msgstr ""
+msgstr "Το ποσό για το %s πρέπει να είναι θετικό."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:517
 #: gnucash/report/reports/standard/balsheet-pnl.scm:812
-#, fuzzy
 msgid "missing"
-msgstr "Προμήθεια"
+msgstr "λείπει"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:590
-#, fuzzy
-#| msgid "Accounts in '%s'"
 msgid "Amount for stock value is missing."
-msgstr "Λογαριασμοί στο '%s'"
+msgstr "Λείπει το ποσό για την αξία του αποθέματος."
 
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
 #: gnucash/gnome/assistant-stock-transaction.cpp:676
-#, fuzzy
 msgid "(missing)"
-msgstr "Προμήθεια"
+msgstr "(λείπει)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:846
 #, c-format
@@ -1673,43 +1772,46 @@ msgid ""
 "and therefore capital gains, of transactions dated after the new entry. "
 "Please review all transactions to ensure proper recording."
 msgstr ""
+"Θα εισαγάγετε μια συναλλαγή με ημερομηνία %s, η οποία είναι προγενέστερη από "
+"την τελευταία συναλλαγή σε αυτόν τον λογαριασμό, με ημερομηνία %s. Κάτι "
+"τέτοιο μπορεί να επηρεάσει τη βάση του κόστους, και συνεπώς τα κέρδη "
+"κεφαλαίου, των συναλλαγών που χρονολογούνται μετά τη νέα εγγραφή. Ελέγξτε "
+"όλες τις συναλλαγές για να διασφαλίσετε τη σωστή καταγραφή."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:866
-#, fuzzy
-#| msgid "Stock Split"
 msgctxt "Stock Assistant: Page name"
 msgid "stock value"
-msgstr "Σπλιτ Μετοχής"
+msgstr "αξία μετοχής"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:883
-#, fuzzy
 msgid "Invalid stock new balance."
 msgstr "Επιλέξατε μη έγκυρη κωδικοποίηση"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:885
 msgid "New balance must be higher than old balance."
-msgstr ""
+msgstr "Το νέο υπόλοιπο πρέπει να είναι υψηλότερο από το παλιό."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:887
 msgid "New balance must be lower than old balance."
-msgstr ""
+msgstr "Το νέο υπόλοιπο πρέπει να είναι χαμηλότερο από το παλιό."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:893
-#, fuzzy
 msgid "Stock amount must be positive."
 msgstr "Λογαριασμοί Μετοχών για αναφορά"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:901
 msgid "Cannot sell more units than owned."
-msgstr ""
+msgstr "Δεν είναι δυνατή η πώληση περισσότερων μονάδων από αυτές που ανήκουν."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:904
 msgid "Cannot cover buy more units than owed."
 msgstr ""
+"Δεν μπορεί να καλύψει την αγορά περισσότερων μονάδων από τις οφειλόμενες."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:916
 msgid "No errors found. Click Apply to create transaction."
 msgstr ""
+"Δεν βρέθηκαν σφάλματα. Κάντε κλικ στο Apply για να δημιουργήσετε συναλλαγή."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:921
 #, fuzzy
@@ -1717,7 +1819,6 @@ msgid "The following errors must be fixed:"
 msgstr "Το ακόλουθο τιμολόγιο αγορών %d λήγει:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:926
-#, fuzzy
 msgid "The following warnings exist:"
 msgstr "Το ακόλουθο τιμολόγιο αγορών %d λήγει:"
 
@@ -1726,17 +1827,17 @@ msgstr "Το ακόλουθο τιμολόγιο αγορών %d λήγει:"
 #: gnucash/gnome/assistant-stock-transaction.cpp:959
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
-msgstr ""
+msgstr "Θα καταγραφεί μια τιμή 1 %s = %s στο %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:971
 msgctxt "Stock Assistant: Page name"
 msgid "cash"
-msgstr ""
+msgstr "μετρητά"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:975
 msgctxt "Stock Assistant: Page name"
 msgid "fees"
-msgstr ""
+msgstr "αμοιβές"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:979
 #, fuzzy
@@ -1757,11 +1858,14 @@ msgstr "Κεφάλαιο"
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
 msgstr ""
+"Δεν είναι δυνατή η ισορροπία της συναλλαγής, το %s είναι η τιμή σφάλματος %s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1024
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
+"Οι συνολικές χρεώσεις του %s δεν ισορροπούν με τις συνολικές πιστώσεις του "
+"%s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1425
 #, fuzzy
@@ -1777,16 +1881,13 @@ msgid "_Shares"
 msgstr "_Μετοχές"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1428
-#, fuzzy
-#| msgid "_Rotation"
 msgid "Ratio"
-msgstr "_Περιστροφή"
+msgstr "Αναλογία"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1428
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
-#, fuzzy
 msgid "Next Balance"
-msgstr "Λήψη _υπόλοιπου"
+msgstr "Επόμενο Υπόλοιπο"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1431
 #, fuzzy
@@ -1866,8 +1967,6 @@ msgstr "Μονάδες"
 #: gnucash/gnome/business-gnome-utils.c:392 gnucash/gnome/dialog-invoice.c:1674
 #: gnucash/gnome/dialog-invoice.c:1752
 #: gnucash/gnome-utils/gnc-general-select.c:179
-#, fuzzy
-#| msgid "Select"
 msgid "Select…"
 msgstr "Επιλογή"
 
@@ -1892,7 +1991,7 @@ msgstr "Τιμολόγιο αγορών"
 #: gnucash/gnome/dialog-invoice.c:2807 gnucash/gnome/dialog-invoice.c:3033
 #: gnucash/gnome/dialog-invoice.c:3034
 msgid "Voucher"
-msgstr "Παραστατικό εξόδου"
+msgstr "Κουπόνι"
 
 #: gnucash/gnome/business-gnome-utils.c:357 gnucash/gnome/dialog-doclink.c:821
 #: gnucash/gnome/dialog-invoice.c:3762
@@ -2175,6 +2274,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"Το πεδίο Επωνυμία Εταιρείας δεν μπορεί να μείνει κενό. Εισαγάγετε το όνομα "
+"της εταιρείας ή το όνομα ενός ατόμου."
 
 #: gnucash/gnome/dialog-customer.c:322
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -2402,7 +2503,7 @@ msgstr "Εισαγωγή URL:"
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
 msgid "Enter an URL like \"%s\""
-msgstr ""
+msgstr "Εισαγάγετε μια διεύθυνση URL όπως \"%s\""
 
 #: gnucash/gnome/dialog-doclink.c:264
 #, fuzzy
@@ -2509,6 +2610,12 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
+"Κάντε διπλό κλικ στην καταχώριση στη στήλη Αναγνωριστικό για να μεταβείτε "
+"στο επιχειρηματικό στοιχείο.\n"
+"Κάντε διπλό κλικ στην καταχώρηση στη στήλη Σύνδεσμος για να ανοίξετε το "
+"Συνδεδεμένο έγγραφο.\n"
+"Κάντε διπλό κλικ στην καταχώρηση στη στήλη Διαθέσιμο για να τροποποιήσετε τη "
+"σύνδεση του εγγράφου."
 
 #: gnucash/gnome/dialog-doclink.c:1106
 #, fuzzy
@@ -2587,6 +2694,8 @@ msgid ""
 "This program can only calculate one value at a time. You must enter values "
 "for all but one quantity."
 msgstr ""
+"Αυτό το πρόγραμμα μπορεί να υπολογίσει μόνο μία τιμή κάθε φορά. Πρέπει να "
+"εισαγάγετε τιμές για όλες τις ποσότητες εκτός από μία."
 
 #: gnucash/gnome/dialog-fincalc.c:340
 msgid ""
@@ -2878,10 +2987,14 @@ msgstr "Είστε σίγουρος ότι θέλετε να διαγράψετ�
 msgid ""
 "This entry is attached to an order and will be deleted from that as well!"
 msgstr ""
+"Αυτή η καταχώρηση επισυνάπτεται σε μια παραγγελία και θα διαγραφεί και από "
+"αυτήν!"
 
 #: gnucash/gnome/dialog-invoice.c:920
 msgid "Choose a different report template or Printable Invoice will be used"
 msgstr ""
+"Επιλέξτε διαφορετικό πρότυπο αναφοράς ή θα χρησιμοποιηθεί εκτυπώσιμο "
+"τιμολόγιο"
 
 #: gnucash/gnome/dialog-invoice.c:1034 gnucash/gnome/dialog-invoice.c:3568
 #: gnucash/gnome/dialog-invoice.c:3602 gnucash/gnome/dialog-invoice.c:3636
@@ -3076,7 +3189,7 @@ msgstr "Αντίγραφο"
 #: gnucash/gnome/dialog-invoice.c:3536
 #: gnucash/gnome/gnc-plugin-page-invoice.c:288
 msgid "Post"
-msgstr "Εγγραφή"
+msgstr "Post"
 
 #: gnucash/gnome/dialog-invoice.c:3517 gnucash/gnome/dialog-invoice.c:3526
 #: gnucash/gnome/dialog-invoice.c:3537
@@ -3481,7 +3594,7 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:305
 #: gnucash/report/reports/standard/new-owner-report.scm:703
 msgid "Pre-Payment"
-msgstr "Προπληρωμή"
+msgstr "προκαταβολή"
 
 #: gnucash/gnome/dialog-payment.c:1002
 msgid ""
@@ -3544,7 +3657,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-account.c:858
 #: gnucash/report/trep-engine.scm:158
 msgid "Cleared"
-msgstr "Έχει εκκαθαριστεί"
+msgstr "Καθαρίστηκε"
 
 #: gnucash/gnome/dialog-payment.c:1576
 #: gnucash/gnome/gnc-plugin-page-register.c:3219
@@ -3615,7 +3728,7 @@ msgstr "Διαγραφή τιμών;"
 #: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:85
 msgid "Entries"
-msgstr "Καταχωρήσεις"
+msgstr "καταχωρήσεις"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:446
 #, fuzzy
@@ -4802,9 +4915,8 @@ msgid "Unpost"
 msgstr "Αναίρεση καταχώρησης"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:290
-#, fuzzy
 msgid "Pay"
-msgstr "Ημέρα"
+msgstr "Πληρωμή"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:227
 #, fuzzy
@@ -5831,7 +5943,7 @@ msgstr "Δεν έχετε επιλέξει ένα κάτοχο"
 #: gnucash/report/reports/standard/new-owner-report.scm:99
 #: libgnucash/engine/gncOwner.c:218
 msgid "Job"
-msgstr "Εργασία"
+msgstr "εργασία"
 
 #: gnucash/gnome/search-owner.c:216
 #: gnucash/gnome-search/search-reconciled.c:175
@@ -6001,7 +6113,6 @@ msgid "_Remove"
 msgstr "_Αφαίρεση"
 
 #: gnucash/gnome-search/dialog-search.c:1101
-#, fuzzy
 msgid "Order"
 msgstr "Παραγγελία"
 
@@ -6660,9 +6771,8 @@ msgid "Path head not set, using '%s' for relative paths"
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:425
-#, fuzzy
 msgid "Existing"
-msgstr "Χρήση υπάρχουσας"
+msgstr "Υπάρχον"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:149
 msgid "You can type '+' or '-' to increment or decrement the number."
@@ -13433,7 +13543,7 @@ msgstr "Διάλογος επιλογής κατόχου"
 #: gnucash/gtkbuilder/dialog-commodities.glade:27
 #: gnucash/report/reports/standard/account-piecharts.scm:62
 msgid "Securities"
-msgstr "Χρεόγραφα"
+msgstr "αξιόγραφα"
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:77
 msgid "Show National Currencies"
@@ -16407,7 +16517,7 @@ msgstr "<b>Μεταφορά συναλλάγματος</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:520
 msgid "Exchange Rate"
-msgstr "Ισοτιμία"
+msgstr "συναλλαγματική ισοτιμία"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:601
 msgid "_Fetch Rate"
@@ -20725,11 +20835,11 @@ msgstr "Επιταγή"
 
 #: gnucash/register/ledger-core/split-register.c:2633
 msgid "LTCG"
-msgstr ""
+msgstr "Μακροπρόθεσμα κέρδη"
 
 #: gnucash/register/ledger-core/split-register.c:2635
 msgid "STCG"
-msgstr ""
+msgstr "Βραχυπρόθεσμα κεφαλαιακά κέρδη"
 
 #: gnucash/register/ledger-core/split-register.c:2638
 msgid "Dist"
@@ -22852,7 +22962,7 @@ msgstr "Εμφάνιση σημειώσεων λογαριασμού"
 #: gnucash/report/reports/standard/income-statement.scm:101
 #: gnucash/report/reports/standard/trial-balance.scm:122
 msgid "Commodities"
-msgstr "Αξίες"
+msgstr "Εμπορεύματα"
 
 #: gnucash/report/reports/standard/account-summary.scm:126
 #: gnucash/report/reports/standard/balance-sheet.scm:132
@@ -25492,10 +25602,8 @@ msgid "No price found"
 msgstr "Δε βρέθηκε"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1230
-#, fuzzy
-#| msgid "(split)"
 msgid "split"
-msgstr "(σπλιτ)"
+msgstr "Σπάσιμο"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1351
 #, scheme-format
@@ -29901,7 +30009,7 @@ msgstr "Ταξινόμηση κατά"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
-msgstr "_Ακύρωση συναλλαγής"
+msgstr "_Άκυρη συναλλαγή"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
 #, fuzzy
