@@ -33,14 +33,15 @@
 #ifndef GNC_IMPORT_MAIN_MATCHER_H
 #define GNC_IMPORT_MAIN_MATCHER_H
 
-#include "Transaction.h"
-#include "import-backend.h"
-
-#include <stdbool.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "Transaction.h"
+#include "import-backend.h"
+#include "import-match-picker.h"
+
+#include <stdbool.h>
 
 typedef struct _main_matcher_info GNCImportMainMatcher;
 
