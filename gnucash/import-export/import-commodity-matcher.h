@@ -25,6 +25,10 @@
 #ifndef IMPORT_COMMODITY_MATCHER_H
 #define IMPORT_COMMODITY_MATCHER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "gnc-commodity.h"
 
 /**
@@ -62,6 +66,11 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
         gboolean ask_on_unknown,
         const char * default_fullname,
         const char * default_mnemonic);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
 /**@}*/
