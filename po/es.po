@@ -86,8 +86,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-07-02 11:48+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2023-07-13 19:52+0000\n"
+"Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -1652,7 +1652,7 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:294
 #: gnucash/gnome/assistant-stock-transaction.cpp:403
 msgid "Stock split"
-msgstr "División de acciones"
+msgstr "Desglosar acciones"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:295
 #: gnucash/gnome/assistant-stock-transaction.cpp:404
@@ -1937,13 +1937,13 @@ msgstr "plusvalías"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1018
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
-msgstr "La transacción no se puede cuadrar, %s el valor de los errores %s"
+msgstr "La transacción no puede cuadrar, %s el valor de los errores %s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1024
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
-"Los débitos totales de %s no están balanceados con los créditos totales de "
+"Los débitos totales de %s no están equilibrados con los créditos totales de "
 "%s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1425
@@ -1969,8 +1969,7 @@ msgstr "Siguiente balance"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1431
 msgid "Enter the new balance of shares after the stock split."
-msgstr ""
-"Introduzca el nuevo balance de acciones después de la división de acciones."
+msgstr "Introduzca el balance nuevo de acciones tras la división de acciones."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1432
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
@@ -1980,7 +1979,7 @@ msgstr "Introduzca el número de acciones ganadas o perdidas en la transacción.
 #. Translators: StockAssistant: N/A denotes stock price is not computable
 #: gnucash/gnome/assistant-stock-transaction.cpp:1514
 msgid "N/A"
-msgstr "N/A"
+msgstr "N/D"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1745
 #: gnucash/gnome/dialog-find-transactions.c:153
@@ -3511,7 +3510,7 @@ msgstr "Vacío"
 #: gnucash/gnome/dialog-lot-viewer.c:829
 msgctxt "Adjective"
 msgid "Open"
-msgstr "Abierto"
+msgstr "Abrir"
 
 #: gnucash/gnome/dialog-lot-viewer.c:923 gnucash/gnome/dialog-order.c:889
 #: gnucash/report/reports/standard/investment-lots.scm:103
