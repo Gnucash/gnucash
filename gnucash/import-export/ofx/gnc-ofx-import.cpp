@@ -1058,32 +1058,32 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
         {
             switch (data.account_type)
             {
-            case OFX_CHECKING :
+            case OfxAccountData::OFX_CHECKING:
                 default_type = ACCT_TYPE_BANK;
                 account_type_name = _("Unknown OFX checking account");
                 break;
-            case OFX_SAVINGS :
+            case OfxAccountData::OFX_SAVINGS:
                 default_type = ACCT_TYPE_BANK;
                 account_type_name = _("Unknown OFX savings account");
                 break;
-            case OFX_MONEYMRKT :
+            case OfxAccountData::OFX_MONEYMRKT:
                 default_type = ACCT_TYPE_MONEYMRKT;
                 account_type_name = _("Unknown OFX money market account");
                 break;
-            case OFX_CREDITLINE :
+            case OfxAccountData::OFX_CREDITLINE:
                 default_type = ACCT_TYPE_CREDITLINE;
                 account_type_name = _("Unknown OFX credit line account");
                 break;
-            case OFX_CMA :
+            case OfxAccountData::OFX_CMA:
                 default_type = ACCT_TYPE_NONE;
                 /* Cash Management Account */
                 account_type_name = _("Unknown OFX CMA account");
                 break;
-            case OFX_CREDITCARD :
+            case OfxAccountData::OFX_CREDITCARD:
                 default_type = ACCT_TYPE_CREDIT;
                 account_type_name = _("Unknown OFX credit card account");
                 break;
-            case OFX_INVESTMENT :
+            case OfxAccountData::OFX_INVESTMENT:
                 default_type = ACCT_TYPE_BANK;
                 account_type_name = _("Unknown OFX investment account");
                 break;
@@ -1226,7 +1226,7 @@ gnc_ofx_match_done (GtkDialog *dialog, gpointer user_data)
 
     if (info->run_reconcile && info->statement && info->statement->data)
     {
-        struct OfxStatementData* statement = info->statement->data;
+        auto statement = static_cast<struct OfxStatementData*>(info->statement->data);
         // Open a reconcile window.
         Account* account = gnc_import_select_account (gnc_gen_trans_list_widget(info->gnc_ofx_importer_gui),
                                                       statement->account_id,
@@ -1305,13 +1305,13 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
     // a hash of amount and date, and whose value is the account in which they appear.
     for(GList* node = info->trans_list; node; node=node->next)
     {
-        Transaction* trans = node->data;
+        auto trans = static_cast<Transaction*>(node->data);
         Split* split = xaccTransGetSplit (trans, 0);
         Account* account = xaccSplitGetAccount (split);
         gchar *date_amount_key = make_date_amount_key (xaccTransGetDate (trans),
                                                       gnc_numeric_abs (xaccSplitGetAmount (split)));
         // Test if date_amount_key is already in trans_hash.
-        Account* _account = g_hash_table_lookup (trans_hash, date_amount_key);
+        auto _account = static_cast<Account*>(g_hash_table_lookup (trans_hash, date_amount_key));
         if (_account && _account != account)
         {
             if (qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG))
@@ -1393,7 +1393,7 @@ gnc_file_ofx_import_process_file (ofx_info* info)
     if (info->file_list == NULL)
         return;
 
-    filename = info->file_list->data;
+    filename = static_cast<char*>(info->file_list->data);
     libofx_context = libofx_get_new_context();
 
 #ifdef G_OS_WIN32
@@ -1465,7 +1465,7 @@ void gnc_file_ofx_import (GtkWindow *parent)
     if (selected_filenames)
     {
         /* Remember the directory as the default. */
-        default_dir = g_path_get_dirname(selected_filenames->data);
+        default_dir = g_path_get_dirname(static_cast<char*>(selected_filenames->data));
         gnc_set_default_directory(GNC_PREFS_GROUP, default_dir);
         g_free(default_dir);
 

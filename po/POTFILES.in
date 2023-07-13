@@ -359,7 +359,7 @@ gnucash/import-export/import-utilities.cpp
 gnucash/import-export/log-replay/gnc-log-replay.c
 gnucash/import-export/log-replay/gnc-plugin-log-replay.c
 gnucash/import-export/ofx/gncmod-ofx-import.c
-gnucash/import-export/ofx/gnc-ofx-import.c
+gnucash/import-export/ofx/gnc-ofx-import.cpp
 gnucash/import-export/ofx/gnc-plugin-ofx.c
 gnucash/import-export/ofx/gnc-plugin-ofx.ui
 gnucash/import-export/ofx/gschemas/org.gnucash.GnuCash.dialogs.import.ofx.gschema.xml.in

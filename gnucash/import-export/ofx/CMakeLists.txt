@@ -2,7 +2,7 @@ add_subdirectory(gschemas)
 add_subdirectory(test)
 
 set(ofx_SOURCES
-  gnc-ofx-import.c
+  gnc-ofx-import.cpp
   gncmod-ofx-import.c
   gnc-plugin-ofx.c
 )
