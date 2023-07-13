@@ -31,10 +31,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
-#include "import-backend.h"
 #include "import-match-picker.h"
-#include "import-pending-matches.h"
-
 #include "qof.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
@@ -196,7 +193,7 @@ match_update_match_model (GNCImportMatchPicker *matcher)
                                  (matcher->selected_trans_info));
     while (list_element != NULL)
     {
-        match_info = list_element->data;
+        match_info = static_cast<GNCImportMatchInfo*>(list_element->data);
 
         /* Skip this match if reconciled and we're not showing those */
         reconciled = xaccSplitGetReconcile
