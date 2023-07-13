@@ -38,7 +38,7 @@
 static void
 option_changed_cb (GtkWidget *widget, gpointer index_p)
 {
-    gint *my_index = index_p;
+    auto my_index = static_cast<gint*>(index_p);
     *my_index = gtk_combo_box_get_active(GTK_COMBO_BOX(widget));
 }
 
@@ -139,7 +139,7 @@ gnc_import_choose_fmt(const char* msg, GncImportFormat fmts, gpointer data)
     GtkWidget *dialog;
     GtkWidget *widget;
 
-    g_return_val_if_fail(fmts, FALSE);
+    g_return_val_if_fail (fmts, GNCIF_NONE);
 
     /* if there is only one format available, just return it */
     if (!(fmts & (fmts - 1)))
