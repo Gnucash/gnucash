@@ -26,6 +26,10 @@
 #ifndef GNC_GEN_MATCH_PICKER_H
 #define GNC_GEN_MATCH_PICKER_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "import-backend.h"
 #include "import-pending-matches.h"
 
@@ -59,5 +63,8 @@ gnc_import_match_picker_run_and_close (GtkWidget *parent,
 /**@}*/
 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif
