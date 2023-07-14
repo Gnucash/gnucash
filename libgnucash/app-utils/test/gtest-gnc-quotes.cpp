@@ -45,7 +45,7 @@ gnc_default_currency(void)
 class GncMockQuoteSource final : public GncQuoteSource
 {
     const std::string m_version{"9.99"};
-    const StrVec m_sources{"currency", "yahoo_json"};
+    const StrVec m_sources{"currency", "alphavantage"};
     const StrVec m_quotes;
     const StrVec m_errors;
 public:
@@ -108,7 +108,7 @@ protected:
         gnc_commodity_table_insert(comm_table, eur);
         auto usd = gnc_commodity_new(m_book, "United States Dollar", "CURRENCY", "USD", NULL, 100);
         gnc_commodity_table_insert(comm_table, usd);
-        source = gnc_quote_source_lookup_by_internal("yahoo_json");
+        source = gnc_quote_source_lookup_by_internal("alphavantage");
         auto aapl = gnc_commodity_new(m_book, "Apple", "NASDAQ", "AAPL", NULL, 1);
         gnc_commodity_begin_edit(aapl);
         gnc_commodity_set_quote_flag(aapl, TRUE);
@@ -127,7 +127,7 @@ protected:
         gnc_commodity_set_quote_source(fkcm, source);
         gnc_commodity_commit_edit(fkcm);
         gnc_commodity_table_insert(comm_table, fkcm);
-        GList *sources = g_list_prepend(nullptr, (void*)"yahoo_json");
+        GList *sources = g_list_prepend(nullptr, (void*)"alphavantage");
         gnc_quote_source_set_fq_installed("TestSuite", sources);
         g_list_free(sources);
     }
@@ -149,8 +149,8 @@ TEST_F(GncQuotesTest, quote_sources)
     EXPECT_TRUE(qs_yahoo != nullptr);
     EXPECT_TRUE(qs_alpha != nullptr);
     EXPECT_TRUE(gnc_quote_source_get_supported(qs_cur));
-    EXPECT_TRUE(gnc_quote_source_get_supported(qs_yahoo));
-    EXPECT_FALSE(gnc_quote_source_get_supported(qs_alpha));
+    EXPECT_FALSE(gnc_quote_source_get_supported(qs_yahoo));
+    EXPECT_TRUE(gnc_quote_source_get_supported(qs_alpha));
 }
 
 TEST_F(GncQuotesTest, quotable_commodities)
@@ -183,8 +183,8 @@ TEST_F(GncQuotesTest, offline_wiggle)
     StrVec quote_vec{
         "{"
         "\"EUR\":{\"symbol\":\"EUR\",\"currency\":\"USD\",\"success\":\"1\",\"inverted\":0,\"last\":1.0004},"
-        "\"AAPL\":{\"eps\":6.05,\"success\":1,\"year_range\":\"      129.04 - 182.94\",\"currency\":\"USD\",\"exchange\":\"Sourced from Yahoo Finance (as JSON)\",\"volume\":73539475,\"close\":157.22,\"high\":158.39,\"open\":156.64,\"div_yield\":0.5660857,\"last\":157.96,\"isodate\":\"2022-09-01\",\"method\":\"yahoo_json\",\"name\":\"AAPL (Apple Inc.)\",\"pe\":26.10909,\"low\":154.67,\"type\":\"EQUITY\",\"symbol\":\"AAPL\",\"date\":\"09/01/2022\"},"
-        "\"HPE\":{\"symbol\":\"HPE\",\"date\":\"09/01/2022\",\"low\":13.13,\"type\":\"EQUITY\",\"method\":\"yahoo_json\",\"name\":\"HPE (Hewlett Packard Enterprise Comp)\",\"isodate\":\"2022-09-01\",\"pe\":4.7921147,\"last\":13.37,\"high\":13.535,\"close\":13.6,\"open\":13.5,\"div_yield\":3.5294116,\"volume\":16370483,\"exchange\":\"Sourced from Yahoo Finance (as JSON)\",\"currency\":\"USD\",\"year_range\":\"        12.4 - 17.76\",\"eps\":2.79,\"success\":1},"
+        "\"AAPL\":{\"eps\":6.05,\"success\":1,\"year_range\":\"      129.04 - 182.94\",\"currency\":\"USD\",\"exchange\":\"Sourced from Alphavantage\",\"volume\":73539475,\"close\":157.22,\"high\":158.39,\"open\":156.64,\"div_yield\":0.5660857,\"last\":157.96,\"isodate\":\"2022-09-01\",\"method\":\"alphavantage\",\"name\":\"AAPL (Apple Inc.)\",\"pe\":26.10909,\"low\":154.67,\"type\":\"EQUITY\",\"symbol\":\"AAPL\",\"date\":\"09/01/2022\"},"
+        "\"HPE\":{\"symbol\":\"HPE\",\"date\":\"09/01/2022\",\"low\":13.13,\"type\":\"EQUITY\",\"method\":\"alphavantage\",\"name\":\"HPE (Hewlett Packard Enterprise Comp)\",\"isodate\":\"2022-09-01\",\"pe\":4.7921147,\"last\":13.37,\"high\":13.535,\"close\":13.6,\"open\":13.5,\"div_yield\":3.5294116,\"volume\":16370483,\"exchange\":\"Sourced from Alphavantage\",\"currency\":\"USD\",\"year_range\":\"        12.4 - 17.76\",\"eps\":2.79,\"success\":1},"
         "\"FKCM\":{\"success\":0,\"symbol\":\"FKCM\",\"errormsg\":\"Error retrieving quote for FKCM - no listing for this name found. Please check symbol and the two letter extension (if any)\"}"
         "}"
     };
@@ -202,16 +202,16 @@ TEST_F(GncQuotesTest, offline_report)
 {
     StrVec quote_vec{
         "{"
-        "\"AAPL\":{\"eps\":6.05,\"success\":1,\"year_range\":\"      129.04 - 182.94\",\"currency\":\"USD\",\"exchange\":\"Sourced from Yahoo Finance (as JSON)\",\"volume\":73539475,\"close\":157.22,\"high\":158.39,\"open\":156.64,\"div_yield\":0.5660857,\"last\":157.96,\"isodate\":\"2022-09-01\",\"method\":\"yahoo_json\",\"name\":\"AAPL (Apple Inc.)\",\"pe\":26.10909,\"low\":154.67,\"type\":\"EQUITY\",\"symbol\":\"AAPL\",\"date\":\"09/01/2022\"},"
-        "\"HPE\":{\"symbol\":\"HPE\",\"date\":\"09/01/2022\",\"low\":13.13,\"type\":\"EQUITY\",\"method\":\"yahoo_json\",\"name\":\"HPE (Hewlett Packard Enterprise Comp)\",\"isodate\":\"2022-09-01\",\"pe\":4.7921147,\"last\":13.37,\"high\":13.535,\"close\":13.6,\"open\":13.5,\"div_yield\":3.5294116,\"volume\":16370483,\"exchange\":\"Sourced from Yahoo Finance (as JSON)\",\"currency\":\"USD\",\"year_range\":\"        12.4 - 17.76\",\"eps\":2.79,\"success\":1},"
+        "\"AAPL\":{\"eps\":6.05,\"success\":1,\"year_range\":\"      129.04 - 182.94\",\"currency\":\"USD\",\"exchange\":\"Sourced from Alphavantage\",\"volume\":73539475,\"close\":157.22,\"high\":158.39,\"open\":156.64,\"div_yield\":0.5660857,\"last\":157.96,\"isodate\":\"2022-09-01\",\"method\":\"alphavantage\",\"name\":\"AAPL (Apple Inc.)\",\"pe\":26.10909,\"low\":154.67,\"type\":\"EQUITY\",\"symbol\":\"AAPL\",\"date\":\"09/01/2022\"},"
+        "\"HPE\":{\"symbol\":\"HPE\",\"date\":\"09/01/2022\",\"low\":13.13,\"type\":\"EQUITY\",\"method\":\"alphavantage\",\"name\":\"HPE (Hewlett Packard Enterprise Comp)\",\"isodate\":\"2022-09-01\",\"pe\":4.7921147,\"last\":13.37,\"high\":13.535,\"close\":13.6,\"open\":13.5,\"div_yield\":3.5294116,\"volume\":16370483,\"exchange\":\"Sourced from Alphavantage\",\"currency\":\"USD\",\"year_range\":\"        12.4 - 17.76\",\"eps\":2.79,\"success\":1},"
         "\"FKCM\":{\"success\":0,\"symbol\":\"FKCM\",\"errormsg\":\"Error retrieving quote for FKCM - no listing for this name found. Please check symbol and the two letter extension (if any)\"}"
         "}"
     };
     StrVec commodities{"AAPL", "HPE", "FKCM"};
     StrVec err_vec;
     GncQuotesImpl quotes(m_book, std::make_unique<GncMockQuoteSource>(std::move(quote_vec), std::move(err_vec)));
-    quotes.report("yahoo_json", commodities, false);
-    quotes.report("yahoo_json", commodities, true);
+    quotes.report("alphavantage", commodities, false);
+    quotes.report("alphavantage", commodities, true);
 }
 
 TEST_F(GncQuotesTest, offline_currency_report)
@@ -232,8 +232,8 @@ TEST_F(GncQuotesTest, comvec_fetch)
 {
      StrVec quote_vec{
         "{"
-        "\"AAPL\":{\"eps\":6.05,\"success\":1,\"year_range\":\"      129.04 - 182.94\",\"currency\":\"USD\",\"exchange\":\"Sourced from Yahoo Finance (as JSON)\",\"volume\":73539475,\"close\":157.22,\"high\":158.39,\"open\":156.64,\"div_yield\":0.5660857,\"last\":157.96,\"isodate\":\"2022-09-01\",\"method\":\"yahoo_json\",\"name\":\"AAPL (Apple Inc.)\",\"pe\":26.10909,\"low\":154.67,\"type\":\"EQUITY\",\"symbol\":\"AAPL\",\"date\":\"09/01/2022\"},"
-        "\"HPE\":{\"symbol\":\"HPE\",\"date\":\"09/01/2022\",\"low\":13.13,\"type\":\"EQUITY\",\"method\":\"yahoo_json\",\"name\":\"HPE (Hewlett Packard Enterprise Comp)\",\"isodate\":\"2022-09-01\",\"pe\":4.7921147,\"last\":13.37,\"high\":13.535,\"close\":13.6,\"open\":13.5,\"div_yield\":3.5294116,\"volume\":16370483,\"exchange\":\"Sourced from Yahoo Finance (as JSON)\",\"currency\":\"USD\",\"year_range\":\"        12.4 - 17.76\",\"eps\":2.79,\"success\":1}"
+        "\"AAPL\":{\"eps\":6.05,\"success\":1,\"year_range\":\"      129.04 - 182.94\",\"currency\":\"USD\",\"exchange\":\"Sourced from Alphavantage\",\"volume\":73539475,\"close\":157.22,\"high\":158.39,\"open\":156.64,\"div_yield\":0.5660857,\"last\":157.96,\"isodate\":\"2022-09-01\",\"method\":\"alphavantage\",\"name\":\"AAPL (Apple Inc.)\",\"pe\":26.10909,\"low\":154.67,\"type\":\"EQUITY\",\"symbol\":\"AAPL\",\"date\":\"09/01/2022\"},"
+        "\"HPE\":{\"symbol\":\"HPE\",\"date\":\"09/01/2022\",\"low\":13.13,\"type\":\"EQUITY\",\"method\":\"alphavantage\",\"name\":\"HPE (Hewlett Packard Enterprise Comp)\",\"isodate\":\"2022-09-01\",\"pe\":4.7921147,\"last\":13.37,\"high\":13.535,\"close\":13.6,\"open\":13.5,\"div_yield\":3.5294116,\"volume\":16370483,\"exchange\":\"Sourced from Alphavantage\",\"currency\":\"USD\",\"year_range\":\"        12.4 - 17.76\",\"eps\":2.79,\"success\":1}"
         "}"
     };
     StrVec err_vec;
