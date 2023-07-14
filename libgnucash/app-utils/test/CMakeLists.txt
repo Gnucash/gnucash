@@ -48,7 +48,8 @@ set(test_gnc_quotes_LIBS
         ${Boost_PROPERTY_TREE_LIBRARY}
         ${Boost_SYSTEM_LIBRARY}
         )
-gnc_add_test(test-gnc-quotes "${test_gnc_quotes_SOURCES}" test_gnc_quotes_INCLUDES test_gnc_quotes_LIBS)
+gnc_add_test(test-gnc-quotes "${test_gnc_quotes_SOURCES}" test_gnc_quotes_INCLUDES test_gnc_quotes_LIBS
+        "GTEST_FILTER=-GncQuotesTest.online_wiggle")
 
 set(GUILE_DEPENDS
   scm-test-engine
