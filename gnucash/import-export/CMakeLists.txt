@@ -19,7 +19,7 @@ set (generic_import_SOURCES
   import-backend.cpp
   import-format-dialog.cpp
   import-match-picker.cpp
-  import-parse.c
+  import-parse.cpp
   import-utilities.cpp
   import-settings.cpp
   import-main-matcher.cpp
