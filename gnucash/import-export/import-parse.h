@@ -27,6 +27,10 @@
 #ifndef IMPORT_PARSE_H
 #define IMPORT_PARSE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "qof.h"
 
 typedef enum
@@ -57,9 +61,9 @@ gboolean gnc_import_parse_numeric(const char* str, GncImportFormat fmt,
 gboolean gnc_import_parse_date(const char *date, GncImportFormat fmt,
                                time64 *val);
 
-/* Set and clear flags in bit-flags */
-#define import_set_flag(i,f) (i |= f)
-#define import_clear_flag(i,f) (i &= ~f)
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* IMPORT_PARSE_H */
