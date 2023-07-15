@@ -14,16 +14,16 @@ add_subdirectory(qif-imp)
 
 
 set (generic_import_SOURCES
-  import-account-matcher.c
-  import-commodity-matcher.c
+  import-account-matcher.cpp
+  import-commodity-matcher.cpp
   import-backend.cpp
-  import-format-dialog.c
-  import-match-picker.c
-  import-parse.c
-  import-utilities.c
-  import-settings.c
-  import-main-matcher.c
-  import-pending-matches.c
+  import-format-dialog.cpp
+  import-match-picker.cpp
+  import-parse.cpp
+  import-utilities.cpp
+  import-settings.cpp
+  import-main-matcher.cpp
+  import-pending-matches.cpp
 )
 
 # Add dependency on config.h
