@@ -357,17 +357,19 @@ get_trans_info (GtkTreeModel* model, GtkTreeIter* iter)
     return transaction_info;
 }
 
+using TransImportVec = std::vector<GNCImportTransInfo*>;
+
 /* This function finds the top matching register transaction for the imported transaction pointed to by iter
  * It then goes through the list of all other imported transactions and creates a list of the ones that
  * have the same register transaction as their top match (i.e., are in conflict). It finds the best of them
  * (match-score-wise) and returns the rest as a list. The imported transactions in that list will get their
  * top match modified. */
-static GList*
+static TransImportVec
 get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gint best_match)
 {
     GtkTreeIter iter = import_iter;
     GNCImportTransInfo* best_import = get_trans_info (model, &import_iter);
-    GList* conflicts = g_list_prepend (NULL, best_import);
+    TransImportVec conflicts = {best_import};
 
     while (gtk_tree_model_iter_next (model, &iter))
     {
@@ -386,7 +388,7 @@ get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gi
         // Conflict. Get the match score, add this transaction to our list.
         match_score = get_top_trans_match_score (register_iter);
         trans_info = get_trans_info (model, &iter);
-        conflicts = g_list_prepend (conflicts, trans_info);
+        conflicts.push_back (trans_info);
 
         if (match_score > best_match)
         {
@@ -397,15 +399,8 @@ get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gi
     }
 
     // Remove the best match from the list of conflicts, as it will keep its match
-    conflicts = g_list_remove (conflicts, best_import);
+    conflicts.erase (std::find (conflicts.begin(), conflicts.end(), best_import));
     return conflicts;
-}
-
-static void
-remove_top_matches (GList* conflicts)
-{
-    for (GList* iter = conflicts; iter && iter->data; iter=iter->next)
-        gnc_import_TransInfo_remove_top_match (static_cast<GNCImportTransInfo*>(iter->data));
 }
 
 static void
@@ -413,7 +408,6 @@ resolve_conflicts (GNCImportMainMatcher *info)
 {
     GtkTreeModel* model = gtk_tree_view_get_model (info->view);
     GtkTreeIter import_iter;
-    gint best_match = 0;
 
     /* A greedy conflict resolution. Find all imported trans that vie for the same
      * register trans. Assign the reg trans to the imported trans with the best match.
@@ -430,14 +424,16 @@ resolve_conflicts (GNCImportMainMatcher *info)
 
         // The ID of the best current match for this imported trans
         GncGUID id = *get_top_trans_match_id (match_list);
-        best_match = get_top_trans_match_score (match_list);
+        auto best_match = get_top_trans_match_score (match_list);
+
         /* Get a list of all imported transactions that have a conflict with this one.
          * The returned list excludes the best transaction. */
-        GList *conflicts = get_conflict_list (model, import_iter, &id, best_match);
+        auto conflicts = get_conflict_list (model, import_iter, &id, best_match);
 
-        if (conflicts)
+        if (conflicts.size())
         {
-            remove_top_matches (conflicts);
+            std::for_each (conflicts.begin(), conflicts.end(), gnc_import_TransInfo_remove_top_match);
+
             /* Go back to the beginning here, because a nth choice
              * could now conflict with a previously assigned first choice. */
             valid = gtk_tree_model_get_iter_first (model, &import_iter);
@@ -446,8 +442,6 @@ resolve_conflicts (GNCImportMainMatcher *info)
             valid = gtk_tree_model_iter_next (model, &import_iter);
         /* NOTE: The loop is guaranteed to terminate because whenever we go back to the top
          * we remove at least 1 match, and there's a finite number of them. */
-
-        g_list_free (conflicts);
     }
 
     // Refresh all
