@@ -38,6 +38,8 @@
 #include <glib/gi18n.h>
 #include <stdbool.h>
 
+#include <vector>
+
 #include "import-main-matcher.h"
 
 #include "dialog-transfer.h"
@@ -1018,21 +1020,21 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo& rowinfo,
     auto trans = gnc_import_TransInfo_get_trans (rowinfo.get_trans_info ());
     auto split = gnc_import_TransInfo_get_fsplit (rowinfo.get_trans_info ());
 
-    EntryInfo entries[] = {
+    std::vector<EntryInfo> entries = {
         { desc_entry, gtk_builder_get_object (builder, "desc_override"), &info->can_edit_desc, info->desc_hash, xaccTransGetDescription (trans) },
         { notes_entry, gtk_builder_get_object (builder, "notes_override"), &info->can_edit_notes, info->notes_hash, xaccTransGetNotes (trans) },
         { memo_entry, gtk_builder_get_object (builder, "memo_override"), &info->can_edit_memo, info->memo_hash, xaccSplitGetMemo (split) },
-        { NULL } };
+    };
 
-    for (guint i = 0; entries[i].entry; i++)
-        setup_entry (&entries[i]);
+    for (auto& entryinfo : entries)
+        setup_entry (&entryinfo);
 
     /* ensure that an override button doesn't have focus. find the
        first available entry and give it focus. */
-    for (guint i = 0; entries[i].entry; i++)
-        if (*entries[i].can_edit)
+    for (const auto& entryinfo : entries)
+        if (entryinfo.can_edit)
         {
-            gtk_widget_grab_focus (entries[i].entry);
+            gtk_widget_grab_focus (entryinfo.entry);
             break;
         }
 
