@@ -39,6 +39,12 @@
 #include <stdbool.h>
 
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
+#include <string>
+#include <algorithm>
+#include <numeric>
+#include <optional>
 
 #include "import-main-matcher.h"
 
@@ -129,6 +135,9 @@ enum downloaded_cols
 #define G_MOD_IMPORT_MATCHER "gnc.import.main-matcher"
 /*static QofLogModule log_module = GNC_MOD_IMPORT;*/
 static QofLogModule log_module = G_MOD_IMPORT_MATCHER;
+
+using SplitVec = std::vector<Split*>;
+using AcctMap = std::unordered_map<Account*,SplitVec>;
 
 static const gpointer one = GINT_TO_POINTER (1);
 
@@ -454,20 +463,19 @@ load_hash_tables (GNCImportMainMatcher *info)
 {
     GtkTreeModel *model = gtk_tree_view_get_model (info->view);
     GtkTreeIter import_iter;
-    GList *accounts_list = NULL;
+    std::unordered_set<Account*> accounts_list;
     bool valid = gtk_tree_model_get_iter_first (model, &import_iter);
     while (valid)
     {
         GNCImportTransInfo *trans_info = get_trans_info (model, &import_iter);
         Split *s = gnc_import_TransInfo_get_fsplit (trans_info);
         Account *acc = xaccSplitGetAccount (s);
-        if (!g_list_find (accounts_list, acc))
-            accounts_list = g_list_prepend (accounts_list, acc);
+        accounts_list.insert (acc);
         valid = gtk_tree_model_iter_next (model, &import_iter);
     }
-    for (GList *m = accounts_list; m; m = m->next)
+    for (const auto& acc : accounts_list)
     {
-        for (GList *n = xaccAccountGetSplitList (static_cast<Account*>(m->data)); n; n = n->next)
+        for (GList *n = xaccAccountGetSplitList (acc); n; n = n->next)
         {
             auto s = static_cast<const Split*>(n->data);
             const Transaction *t = xaccSplitGetParent (s);
@@ -485,7 +493,6 @@ load_hash_tables (GNCImportMainMatcher *info)
                 g_hash_table_insert (info->memo_hash, (gpointer)key, one);
         }
     }
-    g_list_free (accounts_list);
 }
 
 void
@@ -821,7 +828,7 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     DEBUG("Rows in selection = %i",
           gtk_tree_selection_count_selected_rows (selection));
 
-    GList *refs = NULL;
+    std::vector<GtkTreeRowReference*> refs;
     for (GList *l = selected_rows; l; l = l->next)
     {
         auto path = static_cast<GtkTreePath*>(l->data);
@@ -831,7 +838,7 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
         DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
         DEBUG("passing path = %s", path_str);
         g_free (path_str);
-        refs = g_list_prepend (refs, ref);
+        refs.push_back (ref);
         gnc_gen_trans_assign_transfer_account (treeview,
                                                 &first, is_selection, path,
                                                 &assigned_account, info);
@@ -845,15 +852,13 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
 
     // now reselect the transaction rows. This is very slow if there are lots of transactions.
-    for (GList *l = refs; l; l = l->next)
+    for (const auto& ref : refs)
     {
-        auto ref = static_cast<GtkTreeRowReference*>(l->data);
         GtkTreePath *path = gtk_tree_row_reference_get_path (ref);
         gtk_tree_selection_select_path (selection, path);
         gtk_tree_path_free (path);
         gtk_tree_row_reference_free (ref);
     }
-    g_list_free (refs);
 
     LEAVE("");
 }
@@ -1859,27 +1864,25 @@ update_child_row (GNCImportMatchInfo *sel_match, GtkTreeModel *model, GtkTreeIte
     g_free (date);
 }
 
-static gchar *
+static std::string
 get_peer_acct_names (Split *split)
 {
-    GList *names = NULL, *accounts_seen = NULL;
+    std::unordered_set<Account*> accounts_seen;
+    std::vector<std::string> names;
     for (GList *n = xaccTransGetSplitList (xaccSplitGetParent (split)); n; n = n->next)
     {
         Account *account = xaccSplitGetAccount (static_cast<Split*>(n->data));
         if ((n->data == split) ||
             (xaccAccountGetType (account) == ACCT_TYPE_TRADING) ||
-            (g_list_find (accounts_seen, account)))
+            (!accounts_seen.insert (account).second))
             continue;
         gchar *name = gnc_account_get_full_name (account);
-        names = g_list_prepend (names, g_strdup_printf ("\"%s\"", name));
-        accounts_seen = g_list_prepend (accounts_seen, account);
+        names.push_back (std::string{'"'} + name + '"');
         g_free (name);
     }
-    names = g_list_sort (names, (GCompareFunc)g_utf8_collate);
-    gchar *retval = gnc_g_list_stringjoin (names, ", ");
-    g_list_free_full (names, g_free);
-    g_list_free (accounts_seen);
-    return retval;
+    std::sort (names.begin(), names.end());
+    return std::accumulate (names.begin(), names.end(), std::string(""),
+                            [](const auto& a, const auto& b){ return a + ", " + b; });
 }
 
 static void
@@ -2027,19 +2030,18 @@ refresh_model_row (GNCImportMainMatcher *gui,
 
             if (sel_match)
             {
-                gchar *full_names = get_peer_acct_names (sel_match->split);
+                auto full_names = get_peer_acct_names (sel_match->split);
                 color = get_required_color (int_not_required_class);
                 if (gnc_import_TransInfo_get_match_selected_manually (info))
                 {
                     text = g_strdup_printf (_("Reconcile (manual) match to %s"),
-                                            full_names);
+                                            full_names.c_str());
                 }
                 else
                 {
                     text = g_strdup_printf (_("Reconcile (auto) match to %s"),
-                                            full_names);
+                                            full_names.c_str());
                 }
-                g_free (full_names);
                 update_child_row (sel_match, model, iter);
             }
             else
@@ -2056,19 +2058,18 @@ refresh_model_row (GNCImportMainMatcher *gui,
             GNCImportMatchInfo *sel_match = gnc_import_TransInfo_get_selected_match (info);
             if (sel_match)
             {
-                gchar *full_names = get_peer_acct_names (sel_match->split);
+                auto full_names = get_peer_acct_names (sel_match->split);
                 color = get_required_color (int_not_required_class);
                 if (gnc_import_TransInfo_get_match_selected_manually (info))
                 {
                     text = g_strdup_printf (_("Update and reconcile (manual) match to %s"),
-                                            full_names);
+                                            full_names.c_str());
                 }
                 else
                 {
                     text = g_strdup_printf (_("Update and reconcile (auto) match to %s"),
-                                            full_names);
+                                            full_names.c_str());
                 }
-                g_free (full_names);
                 update_child_row (sel_match, model, iter);
             }
             else
@@ -2240,15 +2241,16 @@ void gnc_gen_trans_list_add_trans_with_split_data (GNCImportMainMatcher *gui,
  * import. The matching range is also date-limited (configurable
  * via preferences) to not go too far in the past or future.
  */
-static GList*
+static SplitVec
 filter_existing_splits_on_account_and_date (GNCImportMainMatcher *gui)
 {
     static const int secs_per_day = 86400;
     gint match_date_limit =
         gnc_import_Settings_get_match_date_hardlimit (gui->user_settings);
-    time64 min_time=G_MAXINT64, max_time=0;
+    std::optional<time64> min_time, max_time;
     time64 match_timelimit = match_date_limit * secs_per_day;
     GList *all_accounts = NULL;
+    SplitVec retval;
 
     /* Go through all imported transactions, gather the list of accounts, and
      * min/max date range.
@@ -2261,9 +2263,10 @@ filter_existing_splits_on_account_and_date (GNCImportMainMatcher *gui)
             xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
         time64 txn_time =
             xaccTransGetDate (gnc_import_TransInfo_get_trans (txn_info));
-        all_accounts = g_list_prepend (all_accounts, txn_account);
-        min_time = MIN(min_time, txn_time);
-        max_time = MAX(max_time, txn_time);
+        if (!g_list_find (all_accounts, txn_account))
+            all_accounts = g_list_prepend (all_accounts, txn_account);
+        min_time = min_time.has_value() ? MIN(min_time.value(), txn_time) : txn_time;
+        max_time = max_time.has_value() ? MAX(max_time.value(), txn_time) : txn_time;
     }
 
     // Make a query to find splits with the right accounts and dates.
@@ -2272,12 +2275,13 @@ filter_existing_splits_on_account_and_date (GNCImportMainMatcher *gui)
     xaccQueryAddAccountMatch (query, all_accounts,
                               QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
     xaccQueryAddDateMatchTT (query,
-                             true, min_time - match_timelimit,
-                             true, max_time + match_timelimit,
+                             true, min_time.value() - match_timelimit,
+                             true, max_time.value() + match_timelimit,
                              QOF_QUERY_AND);
-    GList *query_results = qof_query_run (query);
     g_list_free (all_accounts);
-    GList *retval = g_list_copy (query_results);
+
+    for (auto n = qof_query_run (query); n; n = g_list_next (n))
+        retval.push_back (static_cast<Split*>(n->data));
     qof_query_destroy (query);
 
     return retval;
@@ -2286,14 +2290,12 @@ filter_existing_splits_on_account_and_date (GNCImportMainMatcher *gui)
 /* Create a hash by account of all splits that could match one of the imported
  * transactions based on their account and date and organized per account.
  */
-static GHashTable*
-create_hash_of_potential_matches (GList *candidate_splits,
-                                  GHashTable *account_hash)
+static AcctMap
+create_map_of_potential_matches (SplitVec& candidate_splits)
 {
-    for (GList* candidate = candidate_splits; candidate != NULL;
-         candidate = g_list_next (candidate))
+    auto map = AcctMap{};
+    for (const auto& split : candidate_splits)
     {
-        auto split = static_cast<Split*>(candidate->data);
         if (gnc_import_split_has_online_id (split))
             continue;
         /* In this context an open transaction represents a freshly
@@ -2301,34 +2303,9 @@ create_hash_of_potential_matches (GList *candidate_splits,
         if (xaccTransIsOpen(xaccSplitGetParent(split)))
             continue;
         Account *split_account = xaccSplitGetAccount (split);
-        /* g_hash_table_steal_extended would do the two calls in one shot but is
-         * not available until GLib 2.58.
-         */
-        auto split_list = static_cast<GSList*>(g_hash_table_lookup (account_hash, split_account));
-        g_hash_table_steal (account_hash, split_account);
-        split_list = g_slist_prepend (split_list, split);
-        g_hash_table_insert (account_hash, split_account, split_list);
+        map[split_account].push_back (split);
     }
-    return account_hash;
-}
-
-typedef struct _match_struct
-{
-    GNCImportTransInfo* transaction_info;
-    gint display_threshold;
-    gint date_threshold;
-    gint date_not_threshold;
-    double fuzzy_amount;
-} match_struct;
-
-static void
-match_helper (Split* data, match_struct* s)
-{
-    split_find_match (s->transaction_info, data,
-                      s->display_threshold,
-                      s->date_threshold,
-                      s->date_not_threshold,
-                      s->fuzzy_amount);
+    return map;
 }
 
 /* Iterate through the imported transactions selecting matches from the
@@ -2337,7 +2314,7 @@ match_helper (Split* data, match_struct* s)
  */
 
 static void
-perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
+perform_matching (GNCImportMainMatcher *gui, AcctMap& map)
 {
     GtkTreeModel* model = gtk_tree_view_get_model (gui->view);
     gint display_threshold =
@@ -2354,10 +2331,10 @@ perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
     {
         auto txn_info = static_cast<GNCImportTransInfo*>(imported_txn->data);
         Account *importaccount = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
-        match_struct s = {txn_info, display_threshold, date_threshold, date_not_threshold, fuzzy_amount};
 
-        g_slist_foreach (static_cast<GSList*>(g_hash_table_lookup (account_hash, importaccount)),
-                         (GFunc) match_helper, &s);
+        for (const auto& it : map[importaccount])
+            split_find_match (txn_info, it, display_threshold, date_threshold,
+                              date_not_threshold, fuzzy_amount);
 
         // Sort the matches, select the best match, and set the action.
         gnc_import_TransInfo_init_matches (txn_info, gui->user_settings);
@@ -2380,17 +2357,13 @@ perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
 void
 gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
 {
-    GHashTable* account_hash =
-        g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
-                              (GDestroyNotify)g_slist_free);
     g_assert (gui);
-    GList *candidate_splits = filter_existing_splits_on_account_and_date (gui);
 
-    create_hash_of_potential_matches (candidate_splits, account_hash);
-    perform_matching (gui, account_hash);
+    auto candidate_splits = filter_existing_splits_on_account_and_date (gui);
+    auto map = create_map_of_potential_matches (candidate_splits);
 
-    g_list_free (candidate_splits);
-    g_hash_table_destroy (account_hash);
+    perform_matching (gui, map);
+
     return;
 }
 
