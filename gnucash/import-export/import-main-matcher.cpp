@@ -138,6 +138,7 @@ static QofLogModule log_module = G_MOD_IMPORT_MATCHER;
 
 using SplitVec = std::vector<Split*>;
 using AcctMap = std::unordered_map<Account*,SplitVec>;
+using AccountSet = std::unordered_set<Account*>;
 
 static const gpointer one = GINT_TO_POINTER (1);
 
@@ -355,6 +356,7 @@ get_trans_info (GtkTreeModel* model, GtkTreeIter* iter)
                         -1);
     return transaction_info;
 }
+
 /* This function finds the top matching register transaction for the imported transaction pointed to by iter
  * It then goes through the list of all other imported transactions and creates a list of the ones that
  * have the same register transaction as their top match (i.e., are in conflict). It finds the best of them
@@ -463,7 +465,7 @@ load_hash_tables (GNCImportMainMatcher *info)
 {
     GtkTreeModel *model = gtk_tree_view_get_model (info->view);
     GtkTreeIter import_iter;
-    std::unordered_set<Account*> accounts_list;
+    AccountSet accounts_list;
     bool valid = gtk_tree_model_get_iter_first (model, &import_iter);
     while (valid)
     {
@@ -521,15 +523,6 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
     gnc_gen_trans_list_show_accounts_column (info);
 }
 
-static void acc_begin_edit (GList **accounts_modified, Account *acc)
-{
-    if (!acc || !accounts_modified || g_list_find (*accounts_modified, acc))
-        return;
-
-    DEBUG ("xaccAccountBeginEdit for acc %s", xaccAccountGetName (acc));
-    xaccAccountBeginEdit (acc);
-    *accounts_modified = g_list_prepend (*accounts_modified, acc);
-}
 void
 on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 {
@@ -551,7 +544,7 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     gnc_suspend_gui_refresh ();
     bool first_tran = true;
     bool append_text = gtk_toggle_button_get_active ((GtkToggleButton*) info->append_text);
-    GList *accounts_modified = NULL;
+    AccountSet accounts_modified;
     do
     {
         GNCImportTransInfo *trans_info;
@@ -563,7 +556,11 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
         Transaction *trans = xaccSplitGetParent (first_split);
 
         for (GList *n = xaccTransGetSplitList (trans); n; n = g_list_next (n))
-            acc_begin_edit (&accounts_modified, xaccSplitGetAccount (static_cast<Split*>(n->data)));
+        {
+            auto acct = xaccSplitGetAccount (static_cast<Split*>(n->data));
+            if (accounts_modified.insert (acct).second)
+                xaccAccountBeginEdit (acct);
+        }
 
         // Allow the backend to know if the Append checkbox is ticked or unticked
         // by propagating info->append_text to every trans_info->append_text
@@ -578,9 +575,6 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
             xaccAccountSetAppendText (xaccSplitGetAccount(first_split), append_text);
             first_tran = false;
         }
-
-        Account *dest_acc = gnc_import_TransInfo_get_destacc (trans_info);
-        acc_begin_edit (&accounts_modified, dest_acc);
 
         if (gnc_import_process_trans_item (NULL, trans_info))
         {
@@ -599,7 +593,7 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     gnc_resume_gui_refresh ();
 
     /* DEBUG ("End") */
-    g_list_free_full (accounts_modified, (GDestroyNotify)xaccAccountCommitEdit);
+    std::for_each (accounts_modified.begin(), accounts_modified.end(), xaccAccountCommitEdit);
 }
 
 void
@@ -1867,7 +1861,7 @@ update_child_row (GNCImportMatchInfo *sel_match, GtkTreeModel *model, GtkTreeIte
 static std::string
 get_peer_acct_names (Split *split)
 {
-    std::unordered_set<Account*> accounts_seen;
+    AccountSet accounts_seen;
     std::vector<std::string> names;
     for (GList *n = xaccTransGetSplitList (xaccSplitGetParent (split)); n; n = n->next)
     {
