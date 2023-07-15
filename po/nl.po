@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-07-10 05:50+0000\n"
+"PO-Revision-Date: 2023-07-14 23:52+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
@@ -20080,7 +20080,7 @@ msgstr "Tegenrekening _toekennen"
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1393
 msgid "Assign e_xchange rate"
-msgstr "Wisselkoers toekennen"
+msgstr "_Wisselkoers toekennen"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.c:1401
