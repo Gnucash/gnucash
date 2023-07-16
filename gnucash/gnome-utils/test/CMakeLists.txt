@@ -9,11 +9,7 @@ set(GNOME_UTILS_GUI_TEST_LIBS
   test-core
   gnc-gnome-utils
 )
-#This is a GUI test
-#gnc_add_test(test-gnc-recurrence test-gnc-recurrence.c
-#  GNOME_UTILS_GUI_TEST_INCLUDE_DIRS
-#  GNOME_UTILS_GUI_TEST_LIBS
-#
+
 set(GUILE_DEPENDS
   scm-gnome-utils
   test-core

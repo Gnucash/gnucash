@@ -63,6 +63,31 @@ static gint gnc_amount_edit_key_press (GtkWidget   *widget,
 
 #define GNC_AMOUNT_EDIT_PATH "gnc-amount-edit-path"
 
+struct _GNCAmountEdit
+{
+    GtkBox    box;
+    GtkEntry *entry;
+    GtkWidget *image;
+
+    gboolean disposed;
+
+    gboolean need_to_parse;
+
+    GNCPrintAmountInfo print_info;
+
+    gboolean block_changed;
+
+    gnc_numeric amount;
+
+    int fraction;
+
+    gboolean evaluate_on_enter;
+    gboolean validate_on_change;
+
+    gboolean show_warning_symbol;
+
+};
+
 G_DEFINE_TYPE (GNCAmountEdit, gnc_amount_edit, GTK_TYPE_BOX)
 
 static void
@@ -110,7 +135,7 @@ gnc_amount_edit_class_init (GNCAmountEditClass *klass)
         g_signal_new ("activate",
                       G_OBJECT_CLASS_TYPE(object_class),
                       G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET(GNCAmountEditClass, activate),
+                      0,
                       NULL,
                       NULL,
                       g_cclosure_marshal_VOID__VOID,
@@ -121,7 +146,7 @@ gnc_amount_edit_class_init (GNCAmountEditClass *klass)
         g_signal_new ("changed",
                       G_OBJECT_CLASS_TYPE(object_class),
                       G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET(GNCAmountEditClass, changed),
+                      0,
                       NULL,
                       NULL,
                       g_cclosure_marshal_VOID__VOID,
@@ -132,7 +157,7 @@ gnc_amount_edit_class_init (GNCAmountEditClass *klass)
         g_signal_new ("amount_changed",
                       G_OBJECT_CLASS_TYPE(object_class),
                       G_SIGNAL_RUN_FIRST,
-                      G_STRUCT_OFFSET(GNCAmountEditClass, amount_changed),
+                      0,
                       NULL,
                       NULL,
                       g_cclosure_marshal_VOID__VOID,

@@ -50,11 +50,6 @@ static gchar* gsidca_get_info(GncDenseCalModel *model, guint tag);
 static gint gsidca_get_instance_count(GncDenseCalModel *model, guint tag);
 static void gsidca_get_instance(GncDenseCalModel *model, guint tag, gint instance_index, GDate *date);
 
-struct _GncSxInstanceDenseCalAdapterClass
-{
-    GObjectClass parent;
-};
-
 struct _GncSxInstanceDenseCalAdapter
 {
     GObject parent;

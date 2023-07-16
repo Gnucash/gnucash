@@ -37,6 +37,14 @@ static GtkCellEditable *gcrtv_start_editing (GtkCellRenderer          *cell,
 
 #define GNC_CELL_RENDERER_TEXT_VIEW_PATH "gnc-cell-renderer-text-view-path"
 
+struct _GncCellRendererTextView
+{
+    GtkCellRendererText  parent;
+
+    /* The editable entry. */
+    GtkWidget *editable;
+};
+
 G_DEFINE_TYPE (GncCellRendererTextView, gnc_cell_renderer_text_view, GTK_TYPE_CELL_RENDERER_TEXT)
 
 static void

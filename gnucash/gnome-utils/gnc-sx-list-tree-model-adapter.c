@@ -51,14 +51,6 @@ struct _GncSxListTreeModelAdapter
     GtkTreeModelSort *real;
 };
 
-struct _GncSxListTreeModelAdapterClass
-{
-    GObjectClass parent;
-
-    /* This signal is emitted when the model is populated */
-    void (*model_populated) (GncSxListTreeModelAdapter *model, gpointer user_data);
-};
-
 /* Signal codes */
 enum
 {
@@ -92,12 +84,10 @@ gnc_sx_list_tree_model_adapter_class_init (GncSxListTreeModelAdapterClass *klass
         g_signal_new("model_populated",
                      G_TYPE_FROM_CLASS(obj_class),
                      G_SIGNAL_RUN_LAST,
-                     G_STRUCT_OFFSET (GncSxListTreeModelAdapterClass, model_populated),
+                     0,
                      NULL, NULL,
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
-
-    klass->model_populated = NULL;
 }
 
 static GtkTreeModelFlags

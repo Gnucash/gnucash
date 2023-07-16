@@ -37,51 +37,7 @@ extern "C" {
 #endif
 
 #define GNC_TYPE_AMOUNT_EDIT          (gnc_amount_edit_get_type ())
-#define GNC_AMOUNT_EDIT(obj)          G_TYPE_CHECK_INSTANCE_CAST(obj, GNC_TYPE_AMOUNT_EDIT, GNCAmountEdit)
-#define GNC_AMOUNT_EDIT_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST(klass, GNC_TYPE_AMOUNT_EDIT, GNCAmountEditClass)
-#define GNC_IS_AMOUNT_EDIT(obj)       G_TYPE_CHECK_INSTANCE_TYPE(obj, GNC_TYPE_AMOUNT_EDIT)
-
-typedef struct
-{
-    GtkBox    box;
-    GtkEntry *entry;
-    GtkWidget *image;
- 
-    gboolean disposed;
-
-    gboolean need_to_parse;
-
-    GNCPrintAmountInfo print_info;
-
-    gboolean block_changed;
-
-    gnc_numeric amount;
-
-    int fraction;
-
-    gboolean evaluate_on_enter;
-    gboolean validate_on_change;
-
-    gboolean show_warning_symbol;
-
-} GNCAmountEdit;
-
-typedef struct
-{
-    GtkBoxClass parent_class;
-
-    /* Signals for notification/filtering of changes */
-    void (*activate) (GNCAmountEdit *gae);
-    void (*changed) (GNCAmountEdit *gae);
-    void (*amount_changed) (GNCAmountEdit *gae);
-} GNCAmountEditClass;
-
-/**
- * gnc_amount_edit_get_type:
- *
- * Returns the GType for the GNCAmountEdit widget
- */
-GType gnc_amount_edit_get_type (void) G_GNUC_CONST;
+G_DECLARE_FINAL_TYPE (GNCAmountEdit, gnc_amount_edit, GNC, AMOUNT_EDIT, GtkBox)
 
 /**
  * gnc_amount_edit_new:

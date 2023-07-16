@@ -38,21 +38,8 @@ extern "C" {
 #endif
 
 #define GNC_TYPE_ACCOUNT_SEL          (gnc_account_sel_get_type())
-#define GNC_ACCOUNT_SEL(obj)          G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_ACCOUNT_SEL, GNCAccountSel)
-#define GNC_ACCOUNT_SEL_CLASS(klass)  G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_ACCOUNT_SEL, GNCAccountSelClass)
-#define GNC_IS_ACCOUNT_SEL(obj)       G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_ACCOUNT_SEL)
+G_DECLARE_FINAL_TYPE (GNCAccountSel, gnc_account_sel, GNC, ACCOUNT_SEL, GtkBox)
 
-typedef struct _GNCAccountSel GNCAccountSel;
-
-typedef struct
-{
-    GtkBoxClass parent_class;
-
-    /* Signals for notification/filtering of changes */
-    void (*account_sel_changed) (GNCAccountSel *gas);
-} GNCAccountSelClass;
-
-GType      gnc_account_sel_get_type (void) G_GNUC_CONST;
 GtkWidget* gnc_account_sel_new (void);
 
 /**

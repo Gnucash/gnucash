@@ -34,41 +34,7 @@ extern "C" {
 #endif
 
 #define GNC_TYPE_FREQUENCY	  (gnc_frequency_get_type())
-#define GNC_FREQUENCY(obj)	  G_TYPE_CHECK_INSTANCE_CAST (obj, GNC_TYPE_FREQUENCY, GncFrequency)
-#define GNC_FREQENCY_CLASS(klass) G_TYPE_CHECK_CLASS_CAST (klass, GNC_TYPE_FREQUENCY, GncFrequency)
-#define GNC_IS_FREQUENCY(obj)     G_TYPE_CHECK_INSTANCE_TYPE (obj, GNC_TYPE_FREQUENCY)
-
-/**
- * A GncFrequency is a VBox containing a scrollable GtkNotebook [and other
- * widgets] which allows the user to specify the frequency [of a scheduled
- * transaction or budgeting category, for instance], manipulating a FreqSpec
- * object in the process.
- **/
-typedef struct _GncFrequency
-{
-    GtkBox	     widget;
-    GtkBox          *vb;
-    GtkNotebook     *nb;
-    GtkComboBox     *freqComboBox;
-    GNCDateEdit     *startDate;
-    GtkBuilder      *builder;
-} GncFrequency;
-
-typedef struct _GncFrequencyClass
-{
-    GtkBoxClass parent_class;
-
-    void (*changed) (GncFrequency *gf);
-} GncFrequencyClass;
-
-struct pageDataTuple
-{
-    int idx;
-    UIFreqType uiFTVal;
-    char *name;
-};
-
-GType gnc_frequency_get_type(void);
+G_DECLARE_FINAL_TYPE (GncFrequency, gnc_frequency, GNC, FREQUENCY, GtkBox)
 
 /**
  * Either or both param may be NULL for reasonable defaults.

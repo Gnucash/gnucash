@@ -71,16 +71,14 @@ static void gnc_currency_edit_mnemonic_changed (GObject    *gobject,
 static void gnc_currency_edit_active_changed (GtkComboBox *gobject,
         gpointer     user_data);
 
-/** The instance private data for a content plugin. */
-typedef struct _GNCCurrencyEditPrivate
+struct _GNCCurrencyEdit
 {
+    GtkComboBox combobox;
+
     gchar *mnemonic;
-} GNCCurrencyEditPrivate;
+};
 
-G_DEFINE_TYPE_WITH_PRIVATE(GNCCurrencyEdit, gnc_currency_edit, GTK_TYPE_COMBO_BOX)
-
-#define GET_PRIVATE(o)  \
-   ((GNCCurrencyEditPrivate*)gnc_currency_edit_get_instance_private((GNCCurrencyEdit*)o))
+G_DEFINE_TYPE(GNCCurrencyEdit, gnc_currency_edit, GTK_TYPE_COMBO_BOX)
 
 /** @name Basic Object Implementation */
 /** @{ */
@@ -103,14 +101,13 @@ gnc_currency_edit_set_property (GObject      *object,
                                 GParamSpec   *pspec)
 {
     GNCCurrencyEdit *self = GNC_CURRENCY_EDIT (object);
-    GNCCurrencyEditPrivate *priv = GET_PRIVATE (self);
 
     switch (property_id)
     {
     case PROP_GCE_MNEMONIC:
-        g_free (priv->mnemonic);
-        priv->mnemonic = g_value_dup_string (value);
-        DEBUG ("mnemonic: %s\n", priv->mnemonic);
+        g_free (self->mnemonic);
+        self->mnemonic = g_value_dup_string (value);
+        DEBUG ("mnemonic: %s\n", self->mnemonic);
         break;
 
     default:
@@ -127,12 +124,11 @@ gnc_currency_edit_get_property (GObject    *object,
                                 GParamSpec *pspec)
 {
     GNCCurrencyEdit *self = GNC_CURRENCY_EDIT (object);
-    GNCCurrencyEditPrivate *priv = GET_PRIVATE (self);
 
     switch (property_id)
     {
     case PROP_GCE_MNEMONIC:
-        g_value_set_string (value, priv->mnemonic);
+        g_value_set_string (value, self->mnemonic);
         break;
 
     default:
@@ -202,19 +198,12 @@ gnc_currency_edit_init (GNCCurrencyEdit *gce)
 static void
 gnc_currency_edit_finalize (GObject *object)
 {
-    GNCCurrencyEditPrivate *priv;
-    GNCCurrencyEdit *period;
-
     g_return_if_fail (object != NULL);
     g_return_if_fail (GNC_IS_CURRENCY_EDIT (object));
 
-    period = GNC_CURRENCY_EDIT(object);
-    priv = GET_PRIVATE(period);
+    GNCCurrencyEdit *self = GNC_CURRENCY_EDIT(object);
 
-    g_free (priv->mnemonic);
-
-    /* Do not free the private data structure itself. It is part of
-     * a larger memory block allocated by the type system. */
+    g_free (self->mnemonic);
 
     G_OBJECT_CLASS(gnc_currency_edit_parent_class)->finalize (object);
 }
@@ -227,11 +216,10 @@ gnc_currency_edit_mnemonic_changed (GObject    *gobject,
 {
 
     GNCCurrencyEdit *self = GNC_CURRENCY_EDIT (gobject);
-    GNCCurrencyEditPrivate *priv = GET_PRIVATE (self);
 
     gnc_commodity *currency = gnc_commodity_table_lookup (gnc_get_current_commodities (),
                               GNC_COMMODITY_NS_CURRENCY,
-                              priv->mnemonic);
+                              self->mnemonic);
 
     /* If there isn't any such commodity, get the default */
     if (!currency)

@@ -37,33 +37,10 @@
 G_BEGIN_DECLS
 
 #define GNC_TYPE_PERIOD_SELECT      (gnc_period_select_get_type())
-#define GNC_PERIOD_SELECT(o)        (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_PERIOD_SELECT, GncPeriodSelect))
-#define GNC_PERIOD_SELECT_CLASS(k)  (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_PERIOD_SELECT, GncPeriodSelectClass))
-#define GNC_IS_PERIOD_SELECT(o)     (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_PERIOD_SELECT))
-
-/* typedefs & structures */
-typedef struct
-{
-    GtkBox hbox;
-} GncPeriodSelect;
-
-typedef struct
-{
-    GtkBoxClass hbox;
-
-    /* Signals */
-    void (*changed) (GncPeriodSelect *period);
-
-} GncPeriodSelectClass;
-
+G_DECLARE_FINAL_TYPE (GncPeriodSelect, gnc_period_select, GNC, PERIOD_SELECT, GtkBox)
 
 /** @name GncPeriodSelect Widget Implementation
  @{ */
-
-/** Returns the GType of a GncPeriodSelect widget.
- */
-GType gnc_period_select_get_type (void);
-
 
 /** Create a new GncPeriodSelect widget which is used to select a
  *  accounting period like "previous month" or "this year".

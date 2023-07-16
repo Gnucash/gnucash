@@ -44,41 +44,11 @@ G_BEGIN_DECLS
 
 /* type macros */
 #define GNC_TYPE_EMBEDDED_WINDOW            (gnc_embedded_window_get_type ())
-#define GNC_EMBEDDED_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindow))
-#define GNC_EMBEDDED_WINDOW_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowClass))
-#define GNC_IS_EMBEDDED_WINDOW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_EMBEDDED_WINDOW))
-#define GNC_IS_EMBEDDED_WINDOW_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_EMBEDDED_WINDOW))
-#define GNC_EMBEDDED_WINDOW_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_EMBEDDED_WINDOW, GncEmbeddedWindowClass))
+G_DECLARE_FINAL_TYPE (GncEmbeddedWindow, gnc_embedded_window, GNC, EMBEDDED_WINDOW, GtkBox)
 
 /* typedefs & structures */
 
-/** The instance data structure for an embedded window object. */
-typedef struct
-{
-    /** The parent object for an embedded window. */
-    GtkBox vbox;
-} GncEmbeddedWindow;
-
-
-/** The class data structure for an embedded window object. */
-typedef struct
-{
-    /** The parent class for an embedded window. */
-    GtkBoxClass vbox;
-
-    /* callbacks */
-    void (*page_changed) (GncEmbeddedWindow *window,
-                          GncPluginPage *page);
-} GncEmbeddedWindowClass;
-
-
 /* function prototypes */
-
-/** Get the type of a gnc embedded window.
- *
- *  @return A GType. */
-GType gnc_embedded_window_get_type (void);
-
 
 /** Create a new gnc embedded window plugin.
  *
