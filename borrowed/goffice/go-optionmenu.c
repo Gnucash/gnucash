@@ -50,6 +50,15 @@ enum
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
+struct _GOOptionMenu
+{
+    GtkButton button;
+
+    GtkMenuShell *menu;
+    GtkMenuItem *selected;
+    GtkLabel *button_label;
+};
+
 G_DEFINE_TYPE (GOOptionMenu, go_option_menu, GTK_TYPE_BUTTON)
 
 GtkWidget*
@@ -325,7 +334,7 @@ static void go_option_menu_class_init(GOOptionMenuClass *class)
     GtkWidgetClass *widget_class = (GtkWidgetClass*) class;
 
     signals[CHANGED] = g_signal_new("changed", G_OBJECT_CLASS_TYPE(class),
-            G_SIGNAL_RUN_LAST, G_STRUCT_OFFSET(GOOptionMenuClass, changed),
+            G_SIGNAL_RUN_LAST, 0,
             NULL, NULL, g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
     gobject_class->set_property = go_option_menu_set_property;

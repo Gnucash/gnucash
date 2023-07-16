@@ -38,41 +38,8 @@
 G_BEGIN_DECLS
 
 #define GO_TYPE_OPTION_MENU              (go_option_menu_get_type ())
-#define GO_OPTION_MENU(obj)              (G_TYPE_CHECK_INSTANCE_CAST ((obj), GO_TYPE_OPTION_MENU, GOOptionMenu))
-#define GO_OPTION_MENU_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GO_TYPE_OPTION_MENU, GOOptionMenuClass))
-#define GO_IS_OPTION_MENU(obj)           (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GO_TYPE_OPTION_MENU))
-#define GO_IS_OPTION_MENU_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GO_TYPE_OPTION_MENU))
-#define GO_OPTION_MENU_GET_CLASS(obj)    (G_TYPE_INSTANCE_GET_CLASS ((obj), GO_TYPE_OPTION_MENU, GOOptionMenuClass))
+G_DECLARE_FINAL_TYPE (GOOptionMenu, go_option_menu, GO, OPTION_MENU, GtkButton)
 
-typedef struct _GOOptionMenu GOOptionMenu;
-typedef struct _GOOptionMenuClass GOOptionMenuClass;
-
-struct _GOOptionMenu
-{
-    GtkButton button;
-
-    /*< private >*/
-
-    GtkMenuShell *menu;
-    GtkMenuItem *selected;
-    GtkLabel *button_label;
-};
-
-struct _GOOptionMenuClass
-{
-    GtkButtonClass parent_class;
-
-    void (*changed)(GOOptionMenu *option_menu);
-
-    /* Padding for future expansion */
-    void (*_gtk_reserved1)(void);
-    void (*_gtk_reserved2)(void);
-    void (*_gtk_reserved3)(void);
-    void (*_gtk_reserved4)(void);
-};
-
-GType go_option_menu_get_type(void)
-G_GNUC_CONST;
 GtkWidget* go_option_menu_new(void);
 void go_option_menu_set_menu(GOOptionMenu *option_menu, GtkWidget *menu);
 void go_option_menu_set_history(GOOptionMenu *option_menu, GSList *selection);
