@@ -46,21 +46,21 @@ static const gchar * suitename {"/qof/gnc-guid"};
 /*Create a GUID and free it.*/
 static void test_create_gnc_guid (void){
     GncGUID * guid {guid_malloc ()};
-    g_assert (guid != nullptr);
+    g_assert_true (guid != nullptr);
     guid_replace (guid);
     /*We apparently don't need to free guid_null (based on its being const)*/
     const GncGUID * guidnull {guid_null ()};
-    g_assert (!guid_equal (guid, guidnull));
+    g_assert_true (!guid_equal (guid, guidnull));
     guid_free (guid);
 }
 
 /*We create a GUID, create a copy, and compare them to ensure they're not different.*/
 static void test_gnc_guid_copy (void) {
     GncGUID * guid {guid_malloc ()};
-    g_assert (guid != nullptr);
+    g_assert_true (guid != nullptr);
     guid_replace (guid);
     GncGUID * cp {guid_copy (guid)};
-    g_assert (guid_equal (guid, cp));
+    g_assert_true (guid_equal (guid, cp));
     guid_free (cp);
     guid_free (guid);
 }
@@ -71,23 +71,23 @@ static void test_gnc_guid_to_string (void) {
     GncGUID * guid {guid_malloc()};
     gchar guidstrp [GUID_ENCODING_LENGTH+1];
     gchar guidstrp2[GUID_ENCODING_LENGTH+1];
-    g_assert (guid != nullptr);
+    g_assert_true (guid != nullptr);
     guid_replace (guid);
     string message {" using guid_to_string (deprecated): "};
     guid_to_string_buff (guid,guidstrp);
     string guidstr {guidstrp};
-    g_assert (guidstr.size () == GUID_ENCODING_LENGTH);
+    g_assert_true (guidstr.size () == GUID_ENCODING_LENGTH);
     message += guidstr;
     g_test_message ("%s", message.c_str ());
     message = " using guid_to_string_buff: ";
     gchar * ret {guid_to_string_buff (guid, guidstrp2)};
-    g_assert (ret == guidstrp2 + GUID_ENCODING_LENGTH);
+    g_assert_true (ret == guidstrp2 + GUID_ENCODING_LENGTH);
     string guidstr2 {guidstrp2};
-    g_assert (guidstr2.size () == GUID_ENCODING_LENGTH);
+    g_assert_true (guidstr2.size () == GUID_ENCODING_LENGTH);
     message += guidstr2;
     g_test_message ("%s", message.c_str ());
 
-    g_assert (guidstr2 == guidstr);
+    g_assert_true (guidstr2 == guidstr);
     guid_free (guid);
 }
 
@@ -95,11 +95,11 @@ static void test_gnc_guid_to_string (void) {
 two GUIDs, then ensure that they are equal*/
 static void test_gnc_guid_equals (void) {
     GncGUID * guid1 {guid_malloc ()};
-    g_assert (guid1 != nullptr);
+    g_assert_true (guid1 != nullptr);
     GncGUID * guid2 {guid_malloc ()};
-    g_assert (guid2 != nullptr);
+    g_assert_true (guid2 != nullptr);
     GncGUID * guidold {guid_malloc ()};
-    g_assert (guidold != nullptr);
+    g_assert_true (guidold != nullptr);
 
     mt19937 m;
     uniform_int_distribution<unsigned> dist;
@@ -115,14 +115,14 @@ static void test_gnc_guid_equals (void) {
         for (unsigned spot {0}; spot < 4; ++spot)
             o << setw (8) << dist (m);
         string guids {o.str ()};
-        g_assert (guids.size() == GUID_ENCODING_LENGTH);
-        g_assert (string_to_guid (guids.c_str (), guid1));
-        g_assert (string_to_guid (guids.c_str (), guid2));
-        g_assert (guid_equal (guid1, guid2));
+        g_assert_true (guids.size() == GUID_ENCODING_LENGTH);
+        g_assert_true (string_to_guid (guids.c_str (), guid1));
+        g_assert_true (string_to_guid (guids.c_str (), guid2));
+        g_assert_true (guid_equal (guid1, guid2));
         /*Assuming that our distribution won't give the same
         GUID twice in a row.*/
-        g_assert (!guid_equal (guid1, guidold));
-        g_assert (string_to_guid (guids.c_str (), guidold));
+        g_assert_true (!guid_equal (guid1, guidold));
+        g_assert_true (string_to_guid (guids.c_str (), guidold));
     }
     guid_free (guidold);
     guid_free (guid2);
@@ -133,17 +133,17 @@ static void test_gnc_guid_equals (void) {
 a guid, ensuring that we end up with an equivalent structure*/
 static void test_gnc_guid_roundtrip (void) {
     GncGUID * guid1 {guid_malloc ()};
-    g_assert (guid1 != nullptr);
+    g_assert_true (guid1 != nullptr);
     GncGUID * guid2 {guid_malloc ()};
-    g_assert (guid2 != nullptr);
+    g_assert_true (guid2 != nullptr);
     guid_replace (guid1);
 
     gchar guidstrp [GUID_ENCODING_LENGTH+1];
     gchar * temp {guid_to_string_buff (guid1, guidstrp)};
-    g_assert (temp == guidstrp + GUID_ENCODING_LENGTH);
+    g_assert_true (temp == guidstrp + GUID_ENCODING_LENGTH);
 
-    g_assert (string_to_guid (guidstrp, guid2));
-    g_assert (guid_equal (guid1, guid2));
+    g_assert_true (string_to_guid (guidstrp, guid2));
+    g_assert_true (guid_equal (guid1, guid2));
     guid_free (guid2);
     guid_free (guid1);
 }
@@ -160,7 +160,7 @@ static void test_gnc_guid_replace (void)
     guid_replace (guid1);
     GncGUID * guid2 {guid_copy (guid1)};
     guid_replace (guid1);
-    g_assert (! guid_equal (guid1, guid2));
+    g_assert_true (! guid_equal (guid1, guid2));
 
     guid_free (guid2);
     guid_free (guid1);
@@ -175,13 +175,13 @@ static void test_gnc_guid_from_string (void) {
     const char * bogus {"01-23-45-6789a.cDeF0123z56789abcdef"};
 
     /* string_to_guid should return false if either parameter is null*/
-    g_assert (!string_to_guid (nullptr, guid));
-    g_assert (!string_to_guid (bogus, nullptr));
+    g_assert_true (!string_to_guid (nullptr, guid));
+    g_assert_true (!string_to_guid (bogus, nullptr));
 
-    g_assert (!string_to_guid (bogus, guid));
+    g_assert_true (!string_to_guid (bogus, guid));
 
     const char * good {"0123456789abcdef1234567890abcdef"};
-    g_assert (string_to_guid (good, guid));
+    g_assert_true (string_to_guid (good, guid));
 
     guid_free (guid);
 }

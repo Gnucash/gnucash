@@ -691,23 +691,23 @@ test_gnc_price_list_equal (PriceDBFixture *fixture, gconstpointer pData)
     gnc_commodity *aud = c->aud;
 
     /* p1 and p2 are both NULL */
-    g_assert (gnc_price_list_equal (p1, p2));
+    g_assert_true (gnc_price_list_equal (p1, p2));
 
     p1 = gnc_pricedb_lookup_latest_any_currency(fixture->pricedb, aud);
 
     /* p1 is PriceList, p2 is NULL */
-    g_assert (!gnc_price_list_equal (p1, p2));
+    g_assert_true (!gnc_price_list_equal (p1, p2));
 
     p2 = p1;
 
     /* p1 and p2 both point to the same PriceList */
-    g_assert (gnc_price_list_equal (p1, p2));
+    g_assert_true (gnc_price_list_equal (p1, p2));
 
     p2 = gnc_pricedb_lookup_latest_any_currency(fixture->pricedb, aud);
 
     /* p1 and p2 are different PriceLists, but are identical in contents */
-    g_assert (p1 != p2);
-    g_assert (gnc_price_list_equal (p1, p2));
+    g_assert_true (p1 != p2);
+    g_assert_true (gnc_price_list_equal (p1, p2));
 
     gnc_price_list_destroy (p1);
     gnc_price_list_destroy (p2);
@@ -831,7 +831,7 @@ static void test_gnc_pricedb_remove_old_prices (PriceDBFixture *fixture, gconstp
 
     g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 42);
 
-    g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
+    g_assert_true (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
                                            fiscal_end_date, t_cut1,
                                            PRICE_REMOVE_SOURCE_USER, // source is USER
                                            PRICE_REMOVE_KEEP_NONE)); // keep none
@@ -839,35 +839,35 @@ static void test_gnc_pricedb_remove_old_prices (PriceDBFixture *fixture, gconstp
     g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 39);
 
     // there should be no prices before cutoff, returns false
-    g_assert (!gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
+    g_assert_true (!gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
                                            NULL, t_cut,
                                            PRICE_REMOVE_SOURCE_FQ,   // source is FQ
                                            PRICE_REMOVE_KEEP_NONE)); // keep none
 
     g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 39);
 
-    g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
+    g_assert_true (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
                                            fiscal_end_date, t_cut1,
                                            source_all,                      // source is ALL
                                            PRICE_REMOVE_KEEP_LAST_WEEKLY)); // keep last of week
 
     g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 38);
 
-    g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
+    g_assert_true (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
                                            fiscal_end_date, t_cut2,
                                            PRICE_REMOVE_SOURCE_FQ,           // source is FQ
                                            PRICE_REMOVE_KEEP_LAST_MONTHLY)); // keep last of month
 
     g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 37);
 
-    g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
+    g_assert_true (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
                                            fiscal_end_date, t_cut2,
                                            source_all,                         // source is all
                                            PRICE_REMOVE_KEEP_LAST_QUARTERLY)); // keep last of quarter
 
     g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 35);
 
-    g_assert (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
+    g_assert_true (gnc_pricedb_remove_old_prices(fixture->pricedb, comm_list,
                                            fiscal_end_date, t_cut2,
                                            source_all,                      // source is all
                                            PRICE_REMOVE_KEEP_LAST_PERIOD)); // keep last of period
@@ -905,12 +905,12 @@ test_gnc_pricedb_lookup_latest (PriceDBFixture *fixture, gconstpointer pData)
                                                          fixture->com->eur);
     time64 t = gnc_dmy2time64(12, 11, 2014);
     time64 price_time = gnc_price_get_time64(price);
-    g_assert(gnc_price_get_commodity(price) == fixture->com->gbp);
-    g_assert(gnc_price_get_currency(price) == fixture->com->eur);
+    g_assert_true(gnc_price_get_commodity(price) == fixture->com->gbp);
+    g_assert_true(gnc_price_get_currency(price) == fixture->com->eur);
     g_assert_cmpint(price_time, ==, t);
     price2 = gnc_pricedb_lookup_latest(fixture->pricedb, fixture->com->eur,
                                       fixture->com->gbp);
-    g_assert(price2 == price);
+    g_assert_true(price2 == price);
     gnc_price_unref(price);
     gnc_price_unref(price2);
 }
@@ -1073,9 +1073,9 @@ gnc_pricedb_has_prices(GNCPriceDB *db,// C: 4 in 3 SCM: 1  Local: 0:0:0
 static void
 test_gnc_pricedb_has_prices (PriceDBFixture *fixture, gconstpointer pData)
 {
-    g_assert(gnc_pricedb_has_prices(fixture->pricedb, fixture->com->usd,
+    g_assert_true(gnc_pricedb_has_prices(fixture->pricedb, fixture->com->usd,
                                     fixture->com->dkk));
-    g_assert(!gnc_pricedb_has_prices(fixture->pricedb, fixture->com->usd,
+    g_assert_true(!gnc_pricedb_has_prices(fixture->pricedb, fixture->com->usd,
                                      fixture->com->gbp));
 }
 /* gnc_pricedb_get_prices
@@ -1118,7 +1118,7 @@ test_gnc_pricedb_lookup_day_t64 (PriceDBFixture *fixture, gconstpointer pData)
     price = gnc_pricedb_lookup_day_t64(fixture->pricedb,
                                    fixture->com->usd,
                                    fixture->com->gbp, t);
-    g_assert(price == NULL);
+    g_assert_true(price == NULL);
     g_log_set_default_handler (hdlr, 0);
 }
 

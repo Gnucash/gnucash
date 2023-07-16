@@ -61,7 +61,7 @@ compare_account_trees (QofBook* book_1, QofBook* book_2)
     Account* root_2 = gnc_book_get_root_account (book_2);
 
     xaccAccountSetHidden (root_2, xaccAccountGetHidden (root_1));
-    g_assert (xaccAccountEqual (root_1, root_2, FALSE));
+    g_assert_true (xaccAccountEqual (root_1, root_2, FALSE));
 }
 
 static void
@@ -72,7 +72,7 @@ compare_single_tx (QofInstance* inst, gpointer user_data)
     Transaction* tx_2 = xaccTransLookup (qof_instance_get_guid (inst),
                                          info->book_2);
 
-    g_assert (xaccTransEqual (tx_1, tx_2, TRUE, TRUE, TRUE, FALSE));
+    g_assert_true (xaccTransEqual (tx_1, tx_2, TRUE, TRUE, TRUE, FALSE));
 }
 
 static void
@@ -104,8 +104,8 @@ get_sx_by_guid (QofBook* book, const GncGUID* guid)
 #define TEST_GDATES_EQUAL(gd1, gd2) \
     if (g_date_valid (gd1))           \
     {                         \
-        g_assert (g_date_valid (gd2));        \
-        g_assert (g_date_compare (gd1, gd2) == 0);\
+        g_assert_true (g_date_valid (gd2));        \
+        g_assert_true (g_date_compare (gd1, gd2) == 0);\
     }
 
 static void
@@ -116,7 +116,7 @@ compare_recurrences (GList* rl_1, GList* rl_2)
     if (rl_1 == NULL)
         return;
 
-    g_assert (rl_2 != NULL);
+    g_assert_true (rl_2 != NULL);
     g_assert_cmpint (g_list_length (rl_1), == , g_list_length (rl_2));
     for (ritem1 = rl_1, ritem2 = rl_2; ritem1 != NULL && ritem2 != NULL;
          ritem1 = g_list_next (ritem1), ritem2 = g_list_next (ritem2))
@@ -139,7 +139,7 @@ compare_single_sx (QofInstance* inst, gpointer user_data)
     SchedXaction* sx_2 = get_sx_by_guid (info->book_2,
                                          qof_instance_get_guid (inst));
 
-    g_assert (sx_2 != NULL);
+    g_assert_true (sx_2 != NULL);
     g_assert_cmpstr (sx_1->name, == , sx_2->name);
     compare_recurrences (sx_2->schedule, sx_1->schedule);
     TEST_GDATES_EQUAL (&sx_2->last_date, &sx_1->last_date);
@@ -176,11 +176,11 @@ compare_single_lot (QofInstance* inst, gpointer user_data)
                                     info->book_2);
     GList* split1, *splits1, *splits2;
 
-    g_assert (xaccAccountEqual (gnc_lot_get_account (lot_1),
+    g_assert_true (xaccAccountEqual (gnc_lot_get_account (lot_1),
                                 gnc_lot_get_account (lot_2), FALSE));
     g_assert_cmpint (gnc_lot_is_closed (lot_1), == , gnc_lot_is_closed (lot_2));
 
-    g_assert (compare (qof_instance_get_slots (QOF_INSTANCE (lot_1)),
+    g_assert_true (compare (qof_instance_get_slots (QOF_INSTANCE (lot_1)),
                        qof_instance_get_slots (QOF_INSTANCE (lot_2))) == 0);
     splits1 = gnc_lot_get_split_list (lot_1);
     splits2 = gnc_lot_get_split_list (lot_2);
@@ -188,11 +188,11 @@ compare_single_lot (QofInstance* inst, gpointer user_data)
     for (split1 = splits1; split1 != NULL; split1 = g_list_next (split1))
     {
         Split* split2;
-        g_assert (GNC_IS_SPLIT (split1->data));
+        g_assert_true (GNC_IS_SPLIT (split1->data));
         split2 = xaccSplitLookup (qof_instance_get_guid (split1->data),
                                   info->book_2);
-        g_assert (GNC_IS_SPLIT (split2));
-        g_assert (xaccSplitEqual (static_cast<Split*> (split1->data),
+        g_assert_true (GNC_IS_SPLIT (split2));
+        g_assert_true (xaccSplitEqual (static_cast<Split*> (split1->data),
                                   split2, TRUE, TRUE, TRUE));
     }
 }
@@ -215,7 +215,7 @@ test_conn_index_functions (QofBackend* qof_be)
     {
         const char* errmsg;
         conn->provider()->drop_index (dbi_be->conn, index);
-        g_assert (DBI_ERROR_NONE == dbi_conn_error (conn->conn(), &errmsg));
+        g_assert_true (DBI_ERROR_NONE == dbi_conn_error (conn->conn(), &errmsg));
     }
 }
 #endif

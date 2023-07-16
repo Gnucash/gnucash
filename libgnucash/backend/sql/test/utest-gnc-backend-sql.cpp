@@ -258,7 +258,7 @@ gnc_sql_commit_edit (GncSqlBackend *sql_be, QofInstance *inst)// C: 1 */
 static void
 test_dirty_cb (QofBook* book, gboolean dirty, gpointer data)
 {
-    g_assert (data != NULL);
+    g_assert_true (data != NULL);
     if (dirty)
         ++* (guint*)data;
     else if (* (guint*)data)
@@ -296,34 +296,34 @@ test_gnc_sql_commit_edit (void)
     gnc_account_create_root (book);
     qof_book_mark_session_dirty (book);
 
-    g_assert (qof_instance_get_dirty_flag (inst));
-    g_assert (qof_book_session_not_saved (book));
+    g_assert_true (qof_instance_get_dirty_flag (inst));
+    g_assert_true (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
     sql_be->commit(inst);
-    g_assert (!qof_instance_get_dirty_flag (inst));
-    g_assert (!qof_book_session_not_saved (book));
+    g_assert_true (!qof_instance_get_dirty_flag (inst));
+    g_assert_true (!qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 0);
     g_assert_cmpint (check1.hits, == , 2);
 
     qof_book_mark_session_dirty (book);
 
-    g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
-    g_assert (qof_book_session_not_saved (book));
+    g_assert_true (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
+    g_assert_true (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
     sql_be->commit(QOF_INSTANCE (book));
-    g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
-    g_assert (qof_book_session_not_saved (book));
+    g_assert_true (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
+    g_assert_true (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
     g_assert_cmpint (check1.hits, == , 2);
 
     qof_instance_set_dirty_flag (QOF_INSTANCE (book), TRUE);
 
-    g_assert (qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
-    g_assert (qof_book_session_not_saved (book));
+    g_assert_true (qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
+    g_assert_true (qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 1);
     sql_be->commit(QOF_INSTANCE (book));
-    g_assert (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
-    g_assert (!qof_book_session_not_saved (book));
+    g_assert_true (!qof_instance_get_dirty_flag (QOF_INSTANCE (book)));
+    g_assert_true (!qof_book_session_not_saved (book));
     g_assert_cmpint (dirty_called, == , 0);
     g_assert_cmpint (check1.hits, == , 2);
 

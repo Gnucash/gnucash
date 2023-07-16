@@ -288,22 +288,22 @@ test_invoice_post ( Fixture *fixture, gconstpointer pData )
 {
     time64 ts1 = gnc_time(NULL);
     time64 ts2 = ts1;
-    g_assert(fixture->invoice);
-    g_assert(!gncInvoiceGetIsCreditNote(fixture->invoice));
-    g_assert(gncInvoiceGetActive(fixture->invoice));
-    g_assert(gncInvoiceGetPostedAcc(fixture->invoice) == NULL);
+    g_assert_true(fixture->invoice);
+    g_assert_true(!gncInvoiceGetIsCreditNote(fixture->invoice));
+    g_assert_true(gncInvoiceGetActive(fixture->invoice));
+    g_assert_true(gncInvoiceGetPostedAcc(fixture->invoice) == NULL);
 
     gncInvoiceSetCurrency(fixture->invoice, fixture->commodity);
 
     gncInvoiceSetOwner(fixture->invoice, &fixture->owner);
 
     g_test_message( "Will now post the invoice" );
-    g_assert(!gncInvoiceIsPosted(fixture->invoice));
+    g_assert_true(!gncInvoiceIsPosted(fixture->invoice));
     gncInvoicePostToAccount(fixture->invoice, fixture->account, ts1, ts2, "memo", TRUE, FALSE);
-    g_assert(gncInvoiceIsPosted(fixture->invoice));
+    g_assert_true(gncInvoiceIsPosted(fixture->invoice));
 
     gncInvoiceUnpost(fixture->invoice, TRUE);
-    g_assert(!gncInvoiceIsPosted(fixture->invoice));
+    g_assert_true(!gncInvoiceIsPosted(fixture->invoice));
 }
 
 
@@ -341,8 +341,8 @@ test_invoice_posted_trans ( Fixture *fixture, gconstpointer pData )
     gnc_numeric total = gncInvoiceGetTotal(fixture->invoice);
     gnc_numeric acct_balance, acct2_balance;
 
-    g_assert (account_has_one_split (fixture->account));
-    g_assert (account_has_one_split (fixture->account2));
+    g_assert_true (account_has_one_split (fixture->account));
+    g_assert_true (account_has_one_split (fixture->account2));
 
     acct_balance = xaccAccountGetBalance(fixture->account);
     acct2_balance = xaccAccountGetBalance(fixture->account2);
@@ -350,13 +350,13 @@ test_invoice_posted_trans ( Fixture *fixture, gconstpointer pData )
     // Handle sign reversals (document values vs balance values)
     if (data->is_cn != !data->is_cust_doc)
     {
-        g_assert (gnc_numeric_equal (gnc_numeric_neg(acct_balance), total));
-        g_assert (gnc_numeric_equal (acct2_balance, total));
+        g_assert_true (gnc_numeric_equal (gnc_numeric_neg(acct_balance), total));
+        g_assert_true (gnc_numeric_equal (acct2_balance, total));
     }
     else
     {
-        g_assert (gnc_numeric_equal (acct_balance, total));
-        g_assert (gnc_numeric_equal (gnc_numeric_neg(acct2_balance), total));
+        g_assert_true (gnc_numeric_equal (acct_balance, total));
+        g_assert_true (gnc_numeric_equal (gnc_numeric_neg(acct2_balance), total));
     }
 }
 

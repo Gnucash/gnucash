@@ -81,11 +81,11 @@ mock_dirty_cb (QofBook *book, gboolean dirty, gpointer user_data)
 {
     test_struct.called = TRUE;
     g_test_message( "Checking if book is valid" );
-    g_assert( book );
-    g_assert( QOF_IS_BOOK( book ) );
+    g_assert_true( book );
+    g_assert_true( QOF_IS_BOOK( book ) );
     g_test_message( "Checking parameters" );
-    g_assert( dirty );
-    g_assert( user_data == test_struct.data );
+    g_assert_true( dirty );
+    g_assert_true( user_data == test_struct.data );
 }
 
 /* mock callback for qof_book_foreach_collection testing */
@@ -93,8 +93,8 @@ static void
 mock_foreach_collection (QofCollection *col, gpointer user_data)
 {
     g_test_message( "Checking if collection and data passed correctly" );
-    g_assert( col );
-    g_assert( user_data == col_struct.data );
+    g_assert_true( col );
+    g_assert_true( user_data == col_struct.data );
     if ( g_strcmp0( qof_collection_get_type(col), "my_type" ) == 0 )
         col_struct.col1_called = TRUE;
     else if ( g_strcmp0( qof_collection_get_type(col), "my_type2" ) == 0 )
@@ -106,8 +106,8 @@ static void
 mock_final_cb (QofBook *book, gpointer key, gpointer user_data)
 {
     test_struct.called = TRUE;
-    g_assert( book );
-    g_assert( QOF_IS_BOOK( book ) );
+    g_assert_true( book );
+    g_assert_true( QOF_IS_BOOK( book ) );
     g_test_message( "Checking parameters" );
     g_assert_cmpstr( (gchar*)key, == , "key" );
     g_assert_cmpstr( (gchar*)user_data, == , "data" );
@@ -116,10 +116,10 @@ mock_final_cb (QofBook *book, gpointer key, gpointer user_data)
 static void
 test_book_readonly( Fixture *fixture, gconstpointer pData )
 {
-    g_assert( fixture->book != NULL );
-    g_assert( !qof_book_is_readonly( fixture->book ) );
+    g_assert_true( fixture->book != NULL );
+    g_assert_true( !qof_book_is_readonly( fixture->book ) );
     qof_book_mark_readonly( fixture->book );
-    g_assert( qof_book_is_readonly( fixture->book ) );
+    g_assert_true( qof_book_is_readonly( fixture->book ) );
 }
 static void
 test_book_normalize_counter( void )
@@ -130,8 +130,8 @@ test_book_normalize_counter( void )
 
     /* Test for detection of missing format conversion */
     r = qof_book_normalize_counter_format("This string is missing the conversion specifier", &err_msg);
-    g_assert(!r);
-    g_assert(err_msg);
+    g_assert_true(!r);
+    g_assert_true(err_msg);
     if (!r && g_test_verbose())
     {
         g_test_message("Counter format normalization correctly failed: %s", err_msg);
@@ -146,7 +146,7 @@ test_book_normalize_counter( void )
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
     g_assert_cmpstr( r, == , "Test - %" PRIi64);
-    g_assert(err_msg == NULL);
+    g_assert_true(err_msg == NULL);
     g_free(r);
 
     /* Test the Windows G_GINT64_FORMAT */
@@ -156,7 +156,7 @@ test_book_normalize_counter( void )
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
     g_assert_cmpstr( r, == , "Test - %" PRIi64);
-    g_assert(err_msg == NULL);
+    g_assert_true(err_msg == NULL);
     g_free(r);
 
     /* Test the system's G_INT64_FORMAT */
@@ -166,7 +166,7 @@ test_book_normalize_counter( void )
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
     g_assert_cmpstr( r, == , "Test - %" PRIi64);
-    g_assert(err_msg == NULL);
+    g_assert_true(err_msg == NULL);
     g_free(r);
 
     /* Test the posix' PRIi64 */
@@ -176,7 +176,7 @@ test_book_normalize_counter( void )
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
     g_assert_cmpstr( r, == , "Test - %" PRIi64);
-    g_assert(err_msg == NULL);
+    g_assert_true(err_msg == NULL);
     g_free(r);
 
     /* Test the posix' PRIi64 with precision field */
@@ -186,7 +186,7 @@ test_book_normalize_counter( void )
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
     g_assert_cmpstr( r, == , "Test - %.3" PRIi64);
-    g_assert(err_msg == NULL);
+    g_assert_true(err_msg == NULL);
     g_free(r);
 
     /* Test the posix' PRIi64 with width field */
@@ -196,7 +196,7 @@ test_book_normalize_counter( void )
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
     g_assert_cmpstr( r, == , "Test - %5" PRIi64);
-    g_assert(err_msg == NULL);
+    g_assert_true(err_msg == NULL);
     g_free(r);
 
     /* Test the posix' PRIi64 with width and precision field */
@@ -206,7 +206,7 @@ test_book_normalize_counter( void )
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
     g_assert_cmpstr( r, == , "Test - %5.4" PRIi64);
-    g_assert(err_msg == NULL);
+    g_assert_true(err_msg == NULL);
     g_free(r);
 
     /* Test the usual Linux/Unix G_GINT64_FORMAT */
@@ -216,7 +216,7 @@ test_book_normalize_counter( void )
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
     g_assert_cmpstr( r, == , "Test - %" PRIi64);
-    g_assert(err_msg == NULL);
+    g_assert_true(err_msg == NULL);
     g_free(r);
 
     /* Test the Windows G_GINT64_FORMAT */
@@ -226,13 +226,13 @@ test_book_normalize_counter( void )
         g_test_message("Counter format normalization erroneously failed: %s", err_msg);
     }
     g_assert_cmpstr( r, == , "Test - %" PRIi64);
-    g_assert(err_msg == NULL);
+    g_assert_true(err_msg == NULL);
     g_free(r);
 
     /* Test an erroneous Windows G_GINT64_FORMAT */
     r = qof_book_normalize_counter_format_internal("Test - %li", "I64i", &err_msg);
-    g_assert(!r);
-    g_assert(err_msg);
+    g_assert_true(!r);
+    g_assert_true(err_msg);
     if (!r && g_test_verbose())
     {
         g_test_message("Counter format normalization correctly failed: %s", err_msg);
@@ -242,8 +242,8 @@ test_book_normalize_counter( void )
 
     /* Test an erroneous Linux G_GINT64_FORMAT */
     r = qof_book_normalize_counter_format_internal("Test - %I64i", "li", &err_msg);
-    g_assert(!r);
-    g_assert(err_msg);
+    g_assert_true(!r);
+    g_assert_true(err_msg);
     if (!r && g_test_verbose())
     {
         g_test_message("Counter format normalization correctly failed: %s", err_msg);
@@ -257,7 +257,7 @@ test_book_get_string_option( Fixture *fixture, gconstpointer pData )
     const char *opt_name = "Option Name";
     const char *opt_value = "Option Value";
     const char *opt_name_notset = "Not Set";
-    g_assert( fixture->book != NULL );
+    g_assert_true( fixture->book != NULL );
     qof_book_set_string_option( fixture->book, opt_name, opt_value);
     g_assert_cmpstr( qof_book_get_string_option( fixture->book, opt_name ), == , opt_value);
     g_assert_cmpstr( qof_book_get_string_option( fixture->book, opt_name_notset ), == , NULL );
@@ -268,21 +268,21 @@ test_book_set_string_option( Fixture *fixture, gconstpointer pData )
 {
     const char *opt_name = "Option Name";
     const char *opt_value = "Option Value";
-    g_assert( fixture->book != NULL );
+    g_assert_true( fixture->book != NULL );
     qof_book_set_string_option( fixture->book, opt_name, opt_value);
-    g_assert( qof_instance_is_dirty (QOF_INSTANCE (fixture->book)) );
+    g_assert_true( qof_instance_is_dirty (QOF_INSTANCE (fixture->book)) );
 }
 
 static void
 test_book_session_not_saved( Fixture *fixture, gconstpointer pData )
 {
-    g_assert( fixture->book != NULL );
-    g_assert( !qof_book_session_not_saved( fixture->book ) );
+    g_assert_true( fixture->book != NULL );
+    g_assert_true( !qof_book_session_not_saved( fixture->book ) );
     qof_book_mark_session_saved( fixture->book );
-    g_assert( !qof_book_session_not_saved( fixture->book ) );
+    g_assert_true( !qof_book_session_not_saved( fixture->book ) );
     gnc_account_create_root (fixture->book);
     qof_book_mark_session_dirty( fixture-> book );
-    g_assert( qof_book_session_not_saved( fixture->book ) );
+    g_assert_true( qof_book_session_not_saved( fixture->book ) );
 }
 
 static void
@@ -292,13 +292,13 @@ test_book_mark_session_saved( Fixture *fixture, gconstpointer pData )
 
     gnc_account_create_root (fixture->book);
     qof_book_mark_session_dirty( fixture-> book );
-    g_assert( qof_book_session_not_saved( fixture->book ) );
+    g_assert_true( qof_book_session_not_saved( fixture->book ) );
     dirty_time = qof_book_get_session_dirty_time( fixture->book );
     qof_book_mark_session_saved( fixture->book );
     clean_time = qof_book_get_session_dirty_time( fixture->book );
-    g_assert( !qof_book_session_not_saved( fixture->book ) );
-    g_assert( dirty_time != clean_time );
-    g_assert( clean_time == 0);
+    g_assert_true( !qof_book_session_not_saved( fixture->book ) );
+    g_assert_true( dirty_time != clean_time );
+    g_assert_true( clean_time == 0);
 }
 
 static void
@@ -314,17 +314,17 @@ test_book_get_counter( Fixture *fixture, gconstpointer pData )
 
     counter = qof_book_get_counter( NULL, counter_name );
     g_assert_cmpint( counter, == , -1 );
-    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_no_book ) != NULL );
     g_free( test_struct.msg );
 
     counter = qof_book_get_counter( fixture->book, NULL );
     g_assert_cmpint( counter, == , -1 );
-    g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
     g_free( test_struct.msg );
 
     counter = qof_book_get_counter( fixture->book, NULL );
     g_assert_cmpint( counter, == , -1 );
-    g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
     g_free( test_struct.msg );
 
     counter = qof_book_get_counter( fixture->book, counter_name );
@@ -349,19 +349,19 @@ test_book_get_counter_format ( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing counter format when book is null" );
     r = qof_book_get_counter_format( NULL, counter_name );
     g_assert_cmpstr( r, == , NULL );
-    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_no_book ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing counter format when counter name is null" );
     r = qof_book_get_counter_format( fixture->book, NULL );
     g_assert_cmpstr( r, == , NULL );
-    g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing counter format when counter name is empty string" );
     r = qof_book_get_counter_format( fixture->book, "" );
     g_assert_cmpstr( r, == , NULL );
-    g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing counter format with existing counter" );
@@ -390,21 +390,21 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
     r = qof_book_increment_and_format_counter( NULL, counter_name );
     g_assert_cmpstr( r, == , NULL );
     g_free( r );
-    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_no_book ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing increment and format when counter name is null" );
     r = qof_book_increment_and_format_counter( fixture->book, NULL );
     g_assert_cmpstr( r, == , NULL );
     g_free( r );
-    g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing increment and format when counter name is empty string" );
     r = qof_book_increment_and_format_counter( fixture->book, "" );
     g_assert_cmpstr( r, == , NULL );
     g_free( r );
-    g_assert( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_invalid_cnt ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing increment and format with new counter" );
@@ -412,7 +412,7 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
     counter = qof_book_get_counter( fixture->book, counter_name );
     format = qof_book_get_counter_format( fixture->book, counter_name );
     g_assert_cmpint( counter, == , 1 );
-    g_assert( qof_instance_is_dirty (QOF_INSTANCE (fixture->book)) );
+    g_assert_true( qof_instance_is_dirty (QOF_INSTANCE (fixture->book)) );
     g_assert_cmpstr( r, == , g_strdup_printf( format, counter ));
     g_free( r );
 
@@ -437,7 +437,7 @@ test_book_get_default_report_guid ( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing default report guid when book is null" );
     r = qof_book_get_default_invoice_report_guid ( NULL );
     g_assert_cmpstr( r, == , NULL );
-    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_no_book ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing default report guid for default value" );
@@ -457,7 +457,7 @@ test_book_get_default_report_name ( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing default report name when book is null" );
     r = qof_book_get_default_invoice_report_name ( NULL );
     g_assert_cmpstr( r, == , NULL );
-    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_no_book ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing default report name for default value" );
@@ -477,7 +477,7 @@ test_book_get_default_report_timeout ( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing default report timeout when book is null" );
     r = qof_book_get_default_invoice_report_timeout ( NULL );
     g_assert_cmpint( r, == , 0 );
-    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_no_book ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing default report timeout for default value" );
@@ -503,21 +503,21 @@ test_book_set_default_report ( Fixture *fixture, gconstpointer pData )
     qof_book_set_default_invoice_report ( NULL, test_guid1, test_name );
     r = qof_book_get_default_invoice_report_guid ( fixture->book );
     g_assert_cmpstr( r, == , NULL );
-    g_assert( g_strrstr( test_struct.msg, err_no_book ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_no_book ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing setting default report when guid is null" );
     qof_book_set_default_invoice_report ( fixture->book, NULL, test_name );
     r = qof_book_get_default_invoice_report_guid ( fixture->book );
     g_assert_cmpstr( r, == , NULL );
-    g_assert( g_strrstr( test_struct.msg, err_no_guid ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_no_guid ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing setting default report when name is null" );
     qof_book_set_default_invoice_report ( fixture->book, test_guid1, NULL );
     r = qof_book_get_default_invoice_report_guid ( fixture->book );
     g_assert_cmpstr( r, == , NULL );
-    g_assert( g_strrstr( test_struct.msg, err_no_name ) != NULL );
+    g_assert_true( g_strrstr( test_struct.msg, err_no_name ) != NULL );
     g_free( test_struct.msg );
 
     g_test_message( "Testing setting default report when name is empty string" );
@@ -538,20 +538,20 @@ test_book_set_default_report ( Fixture *fixture, gconstpointer pData )
 static void
 test_book_use_trading_accounts( Fixture *fixture, gconstpointer pData )
 {
-    g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
+    g_assert_true( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
 
     g_test_message( "Testing with existing trading accounts set to true - t" );
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "trading-accts", "t",
 		      NULL);
-    g_assert( qof_book_use_trading_accounts( fixture-> book ) == TRUE );
+    g_assert_true( qof_book_use_trading_accounts( fixture-> book ) == TRUE );
 
     g_test_message( "Testing with existing trading accounts and incorrect value - tt" );
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "trading-accts", "tt",
 		      NULL);
-    g_assert( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
+    g_assert_true( qof_book_use_trading_accounts( fixture-> book ) == FALSE );
     qof_book_commit_edit (fixture->book);
 
 }
@@ -560,32 +560,32 @@ static void
 test_book_get_num_days_autofreeze( Fixture *fixture, gconstpointer pData )
 {
     g_test_message( "Testing default: No auto-freeze days are set" );
-    g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
-    g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
+    g_assert_true( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
+    g_assert_true( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
-    g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
-    g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
+    g_assert_true( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
+    g_assert_true( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
     qof_book_begin_edit (fixture->book);
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "autoreadonly-days", (gdouble)17,
 		      NULL);
-    g_assert( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
-    g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 17 );
+    g_assert_true( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
+    g_assert_true( qof_book_get_num_days_autoreadonly( fixture-> book ) == 17 );
 
     g_test_message( "Testing when setting this correctly to zero again" );
 
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "autoreadonly-days", (gdouble)0,
 		      NULL);
-    g_assert( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
-    g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
+    g_assert_true( qof_book_uses_autoreadonly( fixture-> book ) == FALSE );
+    g_assert_true( qof_book_get_num_days_autoreadonly( fixture-> book ) == 0 );
 
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "autoreadonly-days", (gdouble)32,
 		      NULL);
-    g_assert( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
-    g_assert( qof_book_get_num_days_autoreadonly( fixture-> book ) == 32 );
+    g_assert_true( qof_book_uses_autoreadonly( fixture-> book ) == TRUE );
+    g_assert_true( qof_book_get_num_days_autoreadonly( fixture-> book ) == 32 );
 
     qof_book_commit_edit (fixture->book);
 }
@@ -594,7 +594,7 @@ static void
 test_book_use_split_action_for_num_field( Fixture *fixture, gconstpointer pData )
 {
     g_test_message( "Testing default: No selection has been specified" );
-    g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
+    g_assert_true( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
 
     g_test_message( "Testing with existing use split action for num set to true - t" );
 
@@ -602,13 +602,13 @@ test_book_use_split_action_for_num_field( Fixture *fixture, gconstpointer pData 
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "split-action-num-field", "t",
 		      NULL);
-    g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == TRUE );
+    g_assert_true( qof_book_use_split_action_for_num_field( fixture-> book ) == TRUE );
 
     g_test_message( "Testing with existing use split action for num and incorrect value - tt" );
     qof_instance_set (QOF_INSTANCE (fixture->book),
 		      "split-action-num-field", "tt",
 		      NULL);
-    g_assert( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
+    g_assert_true( qof_book_use_split_action_for_num_field( fixture-> book ) == FALSE );
     qof_book_commit_edit (fixture->book);
 }
 
@@ -621,19 +621,19 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
 
     g_test_message( "Testing when book is NULL" );
     qof_book_mark_session_dirty( _empty );
-    g_assert( _empty == NULL );
+    g_assert_true( _empty == NULL );
 
     g_test_message( "Testing when book is not dirty and dirty_cb is null" );
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), == , 0);
-    g_assert( fixture->book->dirty_cb == NULL );
-    g_assert( qof_book_session_not_saved( fixture->book ) == FALSE );
+    g_assert_true( fixture->book->dirty_cb == NULL );
+    g_assert_true( qof_book_session_not_saved( fixture->book ) == FALSE );
     before = gnc_time (NULL);
     gnc_account_create_root (fixture->book);
     qof_book_mark_session_dirty( fixture->book );
     after = gnc_time (NULL);
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), >= , before);
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), <= , after);
-    g_assert( qof_book_session_not_saved( fixture->book ) == TRUE );
+    g_assert_true( qof_book_session_not_saved( fixture->book ) == TRUE );
 
     g_test_message( "Testing when book is not dirty and dirty_cb is not null" );
     /* prepare conditions */
@@ -641,9 +641,9 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
     qof_book_set_dirty_cb( fixture->book, mock_dirty_cb, (gpointer) (&param) );
     test_struct.data = (gpointer) (&param);
     test_struct.called = FALSE;
-    g_assert( fixture->book->dirty_cb != NULL );
+    g_assert_true( fixture->book->dirty_cb != NULL );
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), == , 0);
-    g_assert( qof_book_session_not_saved( fixture->book ) == FALSE );
+    g_assert_true( qof_book_session_not_saved( fixture->book ) == FALSE );
     /* run FUT */
     before = gnc_time (NULL);
     qof_book_mark_session_dirty( fixture->book );
@@ -651,14 +651,14 @@ test_book_mark_session_dirty( Fixture *fixture, gconstpointer pData )
     /* test output */
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), >= , before);
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), <= , after);
-    g_assert( qof_book_session_not_saved( fixture->book ) == TRUE );
-    g_assert( test_struct.called );
+    g_assert_true( qof_book_session_not_saved( fixture->book ) == TRUE );
+    g_assert_true( test_struct.called );
 
     g_test_message( "Testing when book is dirty" );
-    g_assert( qof_book_session_not_saved( fixture->book ) == TRUE );
+    g_assert_true( qof_book_session_not_saved( fixture->book ) == TRUE );
     before = qof_book_get_session_dirty_time( fixture->book );
     qof_book_mark_session_dirty( fixture->book );
-    g_assert( qof_book_session_not_saved( fixture->book ) == TRUE );
+    g_assert_true( qof_book_session_not_saved( fixture->book ) == TRUE );
     after = qof_book_get_session_dirty_time( fixture->book );
     g_assert_cmpint( before, == , after );
 }
@@ -669,7 +669,7 @@ test_book_get_session_dirty_time( Fixture *fixture, gconstpointer pData )
     time64 before, after;
 
     g_test_message( "Testing time on saved book = 0" );
-    g_assert( qof_book_session_not_saved( fixture->book ) == FALSE );
+    g_assert_true( qof_book_session_not_saved( fixture->book ) == FALSE );
     g_assert_cmpint( qof_book_get_session_dirty_time( fixture->book ), == , 0);
 
     g_test_message( "Testing time on dirty book is correct" );
@@ -687,20 +687,20 @@ test_book_set_dirty_cb( Fixture *fixture, gconstpointer pData )
     const char * error_msg = "Already existing callback";
 
     g_test_message( "Testing when callback is previously not set" );
-    g_assert( fixture->book->dirty_cb == NULL );
+    g_assert_true( fixture->book->dirty_cb == NULL );
     qof_book_set_dirty_cb( fixture->book, mock_dirty_cb, (gpointer) (&test_struct) );
-    g_assert( fixture->book->dirty_cb == mock_dirty_cb );
-    g_assert( fixture->book->dirty_data == &test_struct );
+    g_assert_true( fixture->book->dirty_cb == mock_dirty_cb );
+    g_assert_true( fixture->book->dirty_data == &test_struct );
 
     /* need this as long as we have fatal warnings enabled */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
 
     g_test_message( "Testing when callback was previously set" );
-    g_assert( fixture->book->dirty_cb != NULL );
+    g_assert_true( fixture->book->dirty_cb != NULL );
     qof_book_set_dirty_cb( fixture->book, NULL, NULL );
-    g_assert( g_strrstr( test_struct.msg, error_msg ) != NULL );
-    g_assert( fixture->book->dirty_cb == NULL );
-    g_assert( fixture->book->dirty_data == NULL );
+    g_assert_true( g_strrstr( test_struct.msg, error_msg ) != NULL );
+    g_assert_true( fixture->book->dirty_cb == NULL );
+    g_assert_true( fixture->book->dirty_data == NULL );
     g_free( test_struct.msg );
 }
 
@@ -708,13 +708,13 @@ static void
 test_book_shutting_down( Fixture *fixture, gconstpointer pData )
 {
     g_test_message( "Testing when book is null" );
-    g_assert( qof_book_shutting_down( NULL ) == FALSE );
+    g_assert_true( qof_book_shutting_down( NULL ) == FALSE );
     g_test_message( "Testing when shutting down is true" );
     fixture->book->shutting_down = TRUE;
-    g_assert( qof_book_shutting_down( fixture->book ) == TRUE );
+    g_assert_true( qof_book_shutting_down( fixture->book ) == TRUE );
     g_test_message( "Testing when shutting down is false" );
     fixture->book->shutting_down = FALSE;
-    g_assert( qof_book_shutting_down( fixture->book ) == FALSE );
+    g_assert_true( qof_book_shutting_down( fixture->book ) == FALSE );
 }
 
 static void
@@ -723,18 +723,18 @@ test_book_set_get_data( Fixture *fixture, gconstpointer pData )
     const char *key = "key";
     const char *data = "data";
 
-    g_assert( fixture->book->data_tables != NULL );
+    g_assert_true( fixture->book->data_tables != NULL );
     g_test_message( "Testing when book is null" );
     qof_book_set_data( NULL, key, (gpointer) data );
-    g_assert( qof_book_get_data( NULL, key ) == NULL );
+    g_assert_true( qof_book_get_data( NULL, key ) == NULL );
 
     g_test_message( "Testing when key is null" );
     qof_book_set_data( fixture->book, NULL, (gpointer) data );
-    g_assert( qof_book_get_data( fixture->book, NULL) == NULL );
+    g_assert_true( qof_book_get_data( fixture->book, NULL) == NULL );
 
     g_test_message( "Testing with book key not null, data null" );
     qof_book_set_data( fixture->book, key, NULL );
-    g_assert( qof_book_get_data( fixture->book, key ) == NULL );
+    g_assert_true( qof_book_get_data( fixture->book, key ) == NULL );
 
     g_test_message( "Testing with book key data not null" );
     qof_book_set_data( fixture->book, key, (gpointer) data );
@@ -748,22 +748,22 @@ test_book_get_collection( Fixture *fixture, gconstpointer pData )
     QofCollection *m_col, *m_col2;
 
     g_test_message( "Testing when book is null" );
-    g_assert( qof_book_get_collection( NULL, my_type ) == NULL );
+    g_assert_true( qof_book_get_collection( NULL, my_type ) == NULL );
 
     g_test_message( "Testing when entity type is null" );
-    g_assert( qof_book_get_collection( fixture->book, NULL ) == NULL );
+    g_assert_true( qof_book_get_collection( fixture->book, NULL ) == NULL );
 
     g_test_message( "Testing when collection does not exist" );
-    g_assert( fixture->book->hash_of_collections != NULL );
-    g_assert( g_hash_table_lookup ( fixture->book->hash_of_collections, my_type ) == NULL );
+    g_assert_true( fixture->book->hash_of_collections != NULL );
+    g_assert_true( g_hash_table_lookup ( fixture->book->hash_of_collections, my_type ) == NULL );
     m_col = qof_book_get_collection( fixture->book, my_type );
-    g_assert( m_col != NULL );
+    g_assert_true( m_col != NULL );
 
     g_test_message( "Testing with existing collection" );
-    g_assert( g_hash_table_lookup ( fixture->book->hash_of_collections, my_type ) != NULL );
+    g_assert_true( g_hash_table_lookup ( fixture->book->hash_of_collections, my_type ) != NULL );
     m_col2 = qof_book_get_collection( fixture->book, my_type );
-    g_assert( m_col2 != NULL );
-    g_assert( m_col == m_col2 );
+    g_assert_true( m_col2 != NULL );
+    g_assert_true( m_col == m_col2 );
 }
 
 
@@ -839,16 +839,16 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     col_struct.data = (gpointer) (&param);
     /* launch foreach make sure callback was not called and check warning msg */
     qof_book_foreach_collection( NULL, mock_foreach_collection, (gpointer)(&param) );
-    g_assert( !col_struct.col1_called );
-    g_assert( !col_struct.col2_called );
+    g_assert_true( !col_struct.col1_called );
+    g_assert_true( !col_struct.col2_called );
     g_assert_cmpstr( test_struct.msg, == , msg1);
     g_free( test_struct.msg );
 
     g_test_message( "Testing when cb is null" );
     /* launching with empty cb should still fail and produce warning */
     qof_book_foreach_collection( fixture->book, NULL, (gpointer)(&param) );
-    g_assert( !col_struct.col1_called );
-    g_assert( !col_struct.col2_called );
+    g_assert_true( !col_struct.col1_called );
+    g_assert_true( !col_struct.col2_called );
     g_assert_cmpstr( test_struct.msg, == , msg2);
     g_free( test_struct.msg );
     g_log_remove_handler (log_domain, hdlr);
@@ -857,8 +857,8 @@ test_book_foreach_collection( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing when book and cb not null, user_data provided" );
     /* both cols have to be called */
     qof_book_foreach_collection( fixture->book, mock_foreach_collection, (gpointer)(&param) );
-    g_assert( col_struct.col1_called );
-    g_assert( col_struct.col2_called );
+    g_assert_true( col_struct.col1_called );
+    g_assert_true( col_struct.col2_called );
 }
 
 static void
@@ -898,12 +898,12 @@ test_book_set_data_fin( void )
     g_assert_cmpint( g_hash_table_size( book->data_tables ), == , 1 );
     g_assert_cmpint( g_hash_table_size( book->data_table_finalizers ), == , 1 );
     g_assert_cmpstr( (const char *)qof_book_get_data( book, key ), == , data );
-    g_assert( g_hash_table_lookup ( book->data_table_finalizers, (gpointer)key ) == mock_final_cb );
+    g_assert_true( g_hash_table_lookup ( book->data_table_finalizers, (gpointer)key ) == mock_final_cb );
 
     /* get rid of book make sure final cb is called */
     test_struct.called = FALSE;
     qof_book_destroy( book );
-    g_assert( test_struct.called );
+    g_assert_true( test_struct.called );
 }
 
 static void
@@ -928,19 +928,19 @@ test_book_new_destroy( void )
 
     g_test_message( "Testing book creation and initial setup" );
     book = qof_book_new();
-    g_assert( book );
-    g_assert( QOF_IS_BOOK( book ) );
+    g_assert_true( book );
+    g_assert_true( QOF_IS_BOOK( book ) );
 
     g_test_message( "Testing book initial setup" );
-    g_assert( book->hash_of_collections );
-    g_assert( book->data_tables );
-    g_assert( book->data_table_finalizers );
+    g_assert_true( book->hash_of_collections );
+    g_assert_true( book->data_tables );
+    g_assert_true( book->data_table_finalizers );
     g_assert_cmpint( g_hash_table_size( book->hash_of_collections ), == , 1 );
-    g_assert( g_hash_table_lookup ( book->hash_of_collections, QOF_ID_BOOK ) != NULL );
+    g_assert_true( g_hash_table_lookup ( book->hash_of_collections, QOF_ID_BOOK ) != NULL );
     g_assert_cmpint( g_hash_table_size( book->data_tables ), == , 0 );
     g_assert_cmpint( g_hash_table_size( book->data_table_finalizers ), == , 0 );
     g_assert_cmpstr( &book->book_open, == , "y");
-    g_assert( !book->read_only );
+    g_assert_true( !book->read_only );
     g_assert_cmpint( book->version, == , 0 );
 
     /* set finalizer */
@@ -949,8 +949,8 @@ test_book_new_destroy( void )
 
     g_test_message( "Testing book destroy" );
     qof_book_destroy( book );
-    g_assert( qof_book_shutting_down( book ) );
-    g_assert( test_struct.called );
+    g_assert_true( qof_book_shutting_down( book ) );
+    g_assert_true( test_struct.called );
 }
 
 void

@@ -154,7 +154,7 @@ test_gnc_localtime (void)
         struct tm* ans;
         if (secs[ind] > max_secs)
         {
-            g_assert (time == NULL);
+            g_assert_true (time == NULL);
             continue;
         }
         tsecs = (time_t)(secs[ind]);
@@ -205,7 +205,7 @@ test_gnc_gmtime (void)
         struct tm* time = gnc_gmtime (&secs[ind]);
         if ((secs[ind] > max_secs))
         {
-            g_assert (time == NULL);
+            g_assert_true (time == NULL);
             continue;
         }
 
@@ -376,28 +376,28 @@ static void
 test_gnc_date_string_to_dateformat (void)
 {
     QofDateFormat fmt = 123;
-    g_assert (gnc_date_string_to_dateformat (NULL, &fmt));
+    g_assert_true (gnc_date_string_to_dateformat (NULL, &fmt));
     g_assert_cmpint (fmt, ==, 123);
-    g_assert (!gnc_date_string_to_dateformat ("us", &fmt));
+    g_assert_true (!gnc_date_string_to_dateformat ("us", &fmt));
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_US);
-    g_assert (!gnc_date_string_to_dateformat ("uk", &fmt));
+    g_assert_true (!gnc_date_string_to_dateformat ("uk", &fmt));
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_UK);
-    g_assert (!gnc_date_string_to_dateformat ("ce", &fmt));
+    g_assert_true (!gnc_date_string_to_dateformat ("ce", &fmt));
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_CE);
-    g_assert (!gnc_date_string_to_dateformat ("iso", &fmt));
+    g_assert_true (!gnc_date_string_to_dateformat ("iso", &fmt));
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_ISO);
-    g_assert (!gnc_date_string_to_dateformat ("utc", &fmt));
+    g_assert_true (!gnc_date_string_to_dateformat ("utc", &fmt));
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_UTC);
-    g_assert (!gnc_date_string_to_dateformat ("locale", &fmt));
+    g_assert_true (!gnc_date_string_to_dateformat ("locale", &fmt));
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_LOCALE);
-    g_assert (!gnc_date_string_to_dateformat ("custom", &fmt));
+    g_assert_true (!gnc_date_string_to_dateformat ("custom", &fmt));
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_CUSTOM);
-    g_assert (!gnc_date_string_to_dateformat ("unset", &fmt));
+    g_assert_true (!gnc_date_string_to_dateformat ("unset", &fmt));
     g_assert_cmpint (fmt, ==, QOF_DATE_FORMAT_UNSET);
     fmt = 123;
-    g_assert (gnc_date_string_to_dateformat ("", &fmt));
+    g_assert_true (gnc_date_string_to_dateformat ("", &fmt));
     g_assert_cmpint (fmt, ==, 123);
-    g_assert (gnc_date_string_to_dateformat ("foo", &fmt));
+    g_assert_true (gnc_date_string_to_dateformat ("foo", &fmt));
     g_assert_cmpint (fmt, ==, 123);
 
 }
@@ -411,7 +411,7 @@ test_gnc_date_monthformat_to_string (void)
     g_assert_cmpstr (gnc_date_monthformat_to_string (GNCDATE_MONTH_NUMBER), ==, "number");
     g_assert_cmpstr (gnc_date_monthformat_to_string (GNCDATE_MONTH_ABBREV), ==, "abbrev");
     g_assert_cmpstr (gnc_date_monthformat_to_string (GNCDATE_MONTH_NAME), ==, "name");
-    g_assert (gnc_date_monthformat_to_string (93) == NULL);
+    g_assert_true (gnc_date_monthformat_to_string (93) == NULL);
 }
 /* gnc_date_string_to_monthformat
 gboolean
@@ -421,18 +421,18 @@ static void
 test_gnc_date_string_to_monthformat (void)
 {
     GNCDateMonthFormat fmt = 123;
-    g_assert (gnc_date_string_to_monthformat (NULL, &fmt));
+    g_assert_true (gnc_date_string_to_monthformat (NULL, &fmt));
     g_assert_cmpint (fmt, ==, 123);
-    g_assert (!gnc_date_string_to_monthformat ("number", &fmt));
+    g_assert_true (!gnc_date_string_to_monthformat ("number", &fmt));
     g_assert_cmpint (fmt, ==, GNCDATE_MONTH_NUMBER);
-    g_assert (!gnc_date_string_to_monthformat ("abbrev", &fmt));
+    g_assert_true (!gnc_date_string_to_monthformat ("abbrev", &fmt));
     g_assert_cmpint (fmt, ==, GNCDATE_MONTH_ABBREV);
-    g_assert (!gnc_date_string_to_monthformat ("name", &fmt));
+    g_assert_true (!gnc_date_string_to_monthformat ("name", &fmt));
     g_assert_cmpint (fmt, ==, GNCDATE_MONTH_NAME);
     fmt = 123;
-    g_assert (gnc_date_string_to_monthformat ("", &fmt));
+    g_assert_true (gnc_date_string_to_monthformat ("", &fmt));
     g_assert_cmpint (fmt, ==, 123);
-    g_assert (gnc_date_string_to_monthformat ("foo", &fmt));
+    g_assert_true (gnc_date_string_to_monthformat ("foo", &fmt));
     g_assert_cmpint (fmt, ==, 123);
 }
 
@@ -1158,61 +1158,61 @@ test_qof_scan_date (void)
     year = tm.tm_year + 1900;
     month = tm.tm_mon + 1;
 
-    g_assert (!qof_scan_date (NULL, &day, &mo, &yr));
+    g_assert_true (!qof_scan_date (NULL, &day, &mo, &yr));
     g_assert_cmpint (day, ==, 0);
     g_assert_cmpint (mo, ==, 0);
     g_assert_cmpint (yr, ==, 0);
 
     qof_date_format_set (QOF_DATE_FORMAT_UTC);
-    g_assert (qof_scan_date ("1974-11-23", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("1974-11-23", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 23);
     g_assert_cmpint (mo, ==, 11);
     g_assert_cmpint (yr, ==, 1974);
 
-    g_assert (qof_scan_date ("1961-2-2", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("1961-2-2", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 2);
     g_assert_cmpint (mo, ==, 2);
     g_assert_cmpint (yr, ==, 1961);
 
-    g_assert (qof_scan_date ("2045-6-16", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("2045-6-16", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 16);
     g_assert_cmpint (mo, ==, 6);
     g_assert_cmpint (yr, ==, 2045);
 
     qof_date_format_set (QOF_DATE_FORMAT_US);
-    g_assert (qof_scan_date ("11/23/1974", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("11/23/1974", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 23);
     g_assert_cmpint (mo, ==, 11);
     g_assert_cmpint (yr, ==, 1974);
 
-    g_assert (qof_scan_date ("2/2/1961", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("2/2/1961", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 2);
     g_assert_cmpint (mo, ==, 2);
     g_assert_cmpint (yr, ==, 1961);
 
-    g_assert (qof_scan_date ("6/16/2045", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("6/16/2045", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 16);
     g_assert_cmpint (mo, ==, 6);
     g_assert_cmpint (yr, ==, 2045);
 
-    g_assert (qof_scan_date ("11월23년1974", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("11월23년1974", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 23);
     g_assert_cmpint (mo, ==, 11);
     g_assert_cmpint (yr, ==, 1974);
 
-    g_assert (qof_scan_date ("11月23年1974", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("11月23年1974", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 23);
     g_assert_cmpint (mo, ==, 11);
     g_assert_cmpint (yr, ==, 1974);
 
     qof_date_completion_set (QOF_DATE_COMPLETION_THISYEAR, 0);
 
-    g_assert (qof_scan_date ("11-23", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("11-23", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 23);
     g_assert_cmpint (mo, ==, 11);
     g_assert_cmpint (yr, ==, year);
 
-    g_assert (qof_scan_date ("23-11", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("23-11", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 23);
     g_assert_cmpint (mo, ==, 11);
     g_assert_cmpint (yr, ==, year);
@@ -1221,7 +1221,7 @@ test_qof_scan_date (void)
     {
         qof_date_completion_set (QOF_DATE_COMPLETION_SLIDING, month + 1);
 
-        g_assert (qof_scan_date ("12-23", &day, &mo, &yr));
+        g_assert_true (qof_scan_date ("12-23", &day, &mo, &yr));
         g_assert_cmpint (day, ==, 23);
         g_assert_cmpint (mo, ==, 12);
         g_assert_cmpint (yr, ==, year - 1);
@@ -1230,17 +1230,17 @@ test_qof_scan_date (void)
     }
 
     qof_date_format_set (QOF_DATE_FORMAT_UK);
-    g_assert (qof_scan_date ("23/11/1974", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("23/11/1974", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 23);
     g_assert_cmpint (mo, ==, 11);
     g_assert_cmpint (yr, ==, 1974);
 
-    g_assert (qof_scan_date ("2/2/1961", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("2/2/1961", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 2);
     g_assert_cmpint (mo, ==, 2);
     g_assert_cmpint (yr, ==, 1961);
 
-    g_assert (qof_scan_date ("16/6/2045", &day, &mo, &yr));
+    g_assert_true (qof_scan_date ("16/6/2045", &day, &mo, &yr));
     g_assert_cmpint (day, ==, 16);
     g_assert_cmpint (mo, ==, 6);
     g_assert_cmpint (yr, ==, 2045);
@@ -1249,14 +1249,14 @@ test_qof_scan_date (void)
     test_gnc_setlocale (LC_TIME, "en_GB");
     tm_set_dmy (&tm, 1974, 11, 23);
     strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
-    g_assert (qof_scan_date (buff, &day, &mo, &yr));
+    g_assert_true (qof_scan_date (buff, &day, &mo, &yr));
     g_assert_cmpint (day, ==, tm.tm_mday);
     g_assert_cmpint (mo, ==, tm.tm_mon + 1);
     g_assert_cmpint (yr, ==, tm.tm_year + 1900);
 
     tm_set_dmy (&tm, 1961,2, 2);
     strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
-    g_assert (qof_scan_date (buff, &day, &mo, &yr));
+    g_assert_true (qof_scan_date (buff, &day, &mo, &yr));
     g_assert_cmpint (day, ==, tm.tm_mday);
     g_assert_cmpint (mo, ==, tm.tm_mon + 1);
     /* Some locale date formats result in a 2-digit year, which strptime
@@ -1266,7 +1266,7 @@ test_qof_scan_date (void)
 
     tm_set_dmy (&tm, 2045, 6, 16);
     strftime (buff, MAX_DATE_LENGTH, GNC_D_FMT, &tm);
-    g_assert (qof_scan_date (buff, &day, &mo, &yr));
+    g_assert_true (qof_scan_date (buff, &day, &mo, &yr));
     g_assert_cmpint (day, ==, tm.tm_mday);
     g_assert_cmpint (mo, ==, tm.tm_mon + 1);
     g_assert_cmpint (yr, ==, tm.tm_year + 1900);
@@ -1326,7 +1326,7 @@ test_gnc_date_timestamp (void)
     gchar *timestr = gnc_date_timestamp ();
     struct tm tm0, tm1;
     gnc_localtime_r(&now, &tm0);
-    g_assert (strptime (timestr, "%Y%m%d%H%M%S", &tm1));
+    g_assert_true (strptime (timestr, "%Y%m%d%H%M%S", &tm1));
     g_assert_cmpint (tm0.tm_year, ==, tm1.tm_year);
     g_assert_cmpint (tm0.tm_mon, ==, tm1.tm_mon);
     g_assert_cmpint (tm0.tm_mday, ==, tm1.tm_mday);
@@ -1390,7 +1390,7 @@ test_gnc_time64_to_iso8601_buff (FixtureA *f, gconstpointer pData)
     memset (buff, 0, sizeof buff);
 
     end = gnc_time64_to_iso8601_buff (t, NULL);
-    g_assert (end == NULL);
+    g_assert_true (end == NULL);
 
     end = gnc_time64_to_iso8601_buff (f->t0, buff);
     g_assert_cmpint (end - buff, ==, strlen (buff));
@@ -1625,7 +1625,7 @@ test_gdate_to_time64 (FixtureB *f, gconstpointer pData)
               if (f->test[i].secs < INT64_MAX)
               {
                    gd2 = time64_to_gdate(r_t);
-                   g_assert (g_date_compare (&gd2, &gd) == 0);
+                   g_assert_true (g_date_compare (&gd2, &gd) == 0);
               }
          }
     }

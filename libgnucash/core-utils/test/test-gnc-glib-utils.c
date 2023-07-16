@@ -45,9 +45,9 @@ test_gnc_utf8_strip_invalid_and_controls (gconstpointer data)
                                  &check);
 
     gnc_utf8_strip_invalid_and_controls (str);
-    g_assert (g_utf8_validate(str, -1, NULL) == TRUE);
-    g_assert (strpbrk(str, controls) == NULL);
-    g_assert (g_utf8_strlen(str, -1) > 0);
+    g_assert_true (g_utf8_validate(str, -1, NULL) == TRUE);
+    g_assert_true (strpbrk(str, controls) == NULL);
+    g_assert_true (g_utf8_strlen(str, -1) > 0);
     g_log_remove_handler (NULL, handler);
     g_free (str);
     g_free (msg1);
@@ -60,10 +60,10 @@ test_g_list_stringjoin (gconstpointer data)
     gchar *ret;
 
     ret = gnc_g_list_stringjoin (NULL, NULL);
-    g_assert (ret == NULL);
+    g_assert_true (ret == NULL);
 
     ret = gnc_g_list_stringjoin (NULL, ":");
-    g_assert (ret == NULL);
+    g_assert_true (ret == NULL);
 
     test = g_list_prepend (test, "one");
 
@@ -120,18 +120,18 @@ test_gnc_list_length (gconstpointer data)
 {
     GList *lst = NULL;
 
-    g_assert (gnc_list_length_cmp (lst, 0) == 0);
-    g_assert (gnc_list_length_cmp (lst, 1) == -1);
+    g_assert_true (gnc_list_length_cmp (lst, 0) == 0);
+    g_assert_true (gnc_list_length_cmp (lst, 1) == -1);
 
     lst = g_list_prepend (lst, (gpointer)1);
-    g_assert (gnc_list_length_cmp (lst, 0) == 1);
-    g_assert (gnc_list_length_cmp (lst, 1) == 0);
-    g_assert (gnc_list_length_cmp (lst, 2) == -1);
+    g_assert_true (gnc_list_length_cmp (lst, 0) == 1);
+    g_assert_true (gnc_list_length_cmp (lst, 1) == 0);
+    g_assert_true (gnc_list_length_cmp (lst, 2) == -1);
 
     lst = g_list_prepend (lst, (gpointer)2);
-    g_assert (gnc_list_length_cmp (lst, 1) == 1);
-    g_assert (gnc_list_length_cmp (lst, 2) == 0);
-    g_assert (gnc_list_length_cmp (lst, 3) == -1);
+    g_assert_true (gnc_list_length_cmp (lst, 1) == 1);
+    g_assert_true (gnc_list_length_cmp (lst, 2) == 0);
+    g_assert_true (gnc_list_length_cmp (lst, 3) == -1);
 
     g_list_free (lst);
 }

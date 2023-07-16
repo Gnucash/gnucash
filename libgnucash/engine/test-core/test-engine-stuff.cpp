@@ -1294,11 +1294,11 @@ get_random_split(QofBook *book, Account *acct, Transaction *trn)
        also allowed to be zero, because that is caused by a small
        rate. */
     if (gnc_numeric_positive_p(val))
-        g_assert(!gnc_numeric_negative_p(amt)); /* non-negative amt */
+        g_assert_true(!gnc_numeric_negative_p(amt)); /* non-negative amt */
     else
-        g_assert(!gnc_numeric_positive_p(amt)); /* non-positive amt */
+        g_assert_true(!gnc_numeric_positive_p(amt)); /* non-positive amt */
 
-//    g_assert(amt.num < (2LL << 56));
+//    g_assert_true(amt.num < (2LL << 56));
     qof_instance_set_slots(QOF_INSTANCE (ret), get_random_kvp_frame());
     xaccTransCommitEdit(trn);
 

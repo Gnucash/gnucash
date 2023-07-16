@@ -36,9 +36,9 @@ test_gnc_set_budget_name()
     QofBook *book = qof_book_new();
     GncBudget* budget = gnc_budget_new(book);
 
-    g_assert(strcmp(gnc_budget_get_name(budget), "Unnamed Budget") == 0);
+    g_assert_true(strcmp(gnc_budget_get_name(budget), "Unnamed Budget") == 0);
     gnc_budget_set_name(budget, "New Budget");
-    g_assert(strcmp(gnc_budget_get_name(budget), "New Budget") == 0);
+    g_assert_true(strcmp(gnc_budget_get_name(budget), "New Budget") == 0);
 
     gnc_budget_destroy(budget);
 }
@@ -49,9 +49,9 @@ test_gnc_set_budget_description()
     QofBook *book = qof_book_new();
     GncBudget* budget = gnc_budget_new(book);
 
-    g_assert(strcmp(gnc_budget_get_description(budget), "") == 0);
+    g_assert_true(strcmp(gnc_budget_get_description(budget), "") == 0);
     gnc_budget_set_description(budget, "New Budget");
-    g_assert(strcmp(gnc_budget_get_description(budget), "New Budget") == 0);
+    g_assert_true(strcmp(gnc_budget_get_description(budget), "New Budget") == 0);
 
     gnc_budget_destroy(budget);
 }
@@ -85,7 +85,7 @@ test_gnc_set_budget_num_periods_data_retention ()
 
     /* create value at period 16 */
     gnc_budget_set_account_period_value(budget, acc, 15, gnc_numeric_create(100,1));
-    g_assert (gnc_budget_is_account_period_value_set(budget, acc, 15));
+    g_assert_true (gnc_budget_is_account_period_value_set(budget, acc, 15));
 
     /* create note at period 12 */
     gnc_budget_set_account_period_note(budget, acc, 11, "undefined");
@@ -97,7 +97,7 @@ test_gnc_set_budget_num_periods_data_retention ()
     gnc_budget_set_num_periods(budget, 20);
 
     /* value and note are lost */
-    g_assert (!gnc_budget_is_account_period_value_set(budget, acc, 15));
+    g_assert_true (!gnc_budget_is_account_period_value_set(budget, acc, 15));
     note = gnc_budget_get_account_period_note (budget, acc, 11);
     g_assert_cmpstr (note, ==, NULL);
 
@@ -172,11 +172,11 @@ test_gnc_set_budget_account_period_value()
 
     acc = gnc_account_create_root(book);
 
-    g_assert(!gnc_budget_is_account_period_value_set(budget, acc, 0));
+    g_assert_true(!gnc_budget_is_account_period_value_set(budget, acc, 0));
     gnc_budget_set_account_period_value(budget, acc, 0, gnc_numeric_create(100,1));
-    g_assert(gnc_budget_is_account_period_value_set(budget, acc, 0));
+    g_assert_true(gnc_budget_is_account_period_value_set(budget, acc, 0));
     val = gnc_budget_get_account_period_value(budget, acc, 0);
-    g_assert (gnc_numeric_equal (val, gnc_numeric_create (100, 1)));
+    g_assert_true (gnc_numeric_equal (val, gnc_numeric_create (100, 1)));
 
     /* Budget has 12 periods by default, numbered from 0 to 11. Setting
      * period 12 should throw an error. */

@@ -10,7 +10,7 @@ mock_g_object_new (GType object_type, const gchar *first_property_name, size_t s
     GTypeQuery query;
 
     g_type_query(object_type, &query);
-    g_assert(size == query.instance_size);
+    g_assert_true (size == query.instance_size);
     return g_object_new (object_type, first_property_name);
 }
 
@@ -21,7 +21,7 @@ mock_g_object_unref (gpointer object, size_t size)
     GTypeQuery query;
 
     g_type_query(object_type, &query);
-    g_assert(size == query.instance_size);
+    g_assert_true (size == query.instance_size);
     g_object_unref(object);
 }
 

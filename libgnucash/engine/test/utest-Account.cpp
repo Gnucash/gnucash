@@ -284,7 +284,7 @@ insert_split (Account *parent, Transaction *txn, SplitParms *p)
     auto acct = gnc_account_lookup_by_name (parent, p->account);
     auto lotlist = xaccAccountGetLotList (acct);
     GNCLot* lot = NULL;
-    g_assert (acct != NULL);
+    g_assert_true (acct != NULL);
     xaccSplitSetParent (split, txn);
     xaccSplitSetMemo (split, p->memo);
     xaccSplitSetReconcile (split, (p->reconciled ? p->reconciled : NREC));
@@ -337,7 +337,7 @@ setup (Fixture *fixture, gconstpointer pData)
         if (p.parent && strlen (p.parent) > 0)
         {
             auto parent = static_cast<Account*>(g_hash_table_lookup (accts, p.parent));
-            g_assert (parent != NULL);
+            g_assert_true (parent != NULL);
             gnc_account_append_child (parent, child);
         }
         else
@@ -422,18 +422,18 @@ test_gnc_set_account_separator ()
     const gunichar default_sep = ':';
     gunichar sep = gnc_get_account_separator ();
 
-    g_assert (sep == default_sep);
+    g_assert_true (sep == default_sep);
     memset (sep_str, 0, sizeof (sep_str));
     g_unichar_to_utf8 (fail_sep, sep_str);
     gnc_set_account_separator (sep_str);
     sep = gnc_get_account_separator ();
-    g_assert (sep != fail_sep);
-    g_assert (sep == default_sep);
+    g_assert_true (sep != fail_sep);
+    g_assert_true (sep == default_sep);
     memset (sep_str, 0, sizeof (sep_str));
     g_unichar_to_utf8 (pass_sep, sep_str);
     gnc_set_account_separator (sep_str);
     sep = gnc_get_account_separator ();
-    g_assert (sep == pass_sep);
+    g_assert_true (sep == pass_sep);
 }
 /* Note: gnc_account_name_violations and gnc_account_list_name_violations should work with unicode. Change the functions and the tests accordingly. */
 /* gnc_account_name_violations_errmsg
@@ -450,7 +450,7 @@ test_gnc_account_name_violations_errmsg ()
     auto message = gnc_account_name_violations_errmsg (separator, nonames);
     auto account_list = gnc_g_list_stringjoin (badnames, "\n");
     message = gnc_account_name_violations_errmsg (separator, nonames);
-    g_assert (message == NULL);
+    g_assert_true (message == NULL);
     auto validation_message = g_strdup_printf (
         "The separator character \"%s\" is used in one or more account "
         "names.\n\nThis will result in unexpected behaviour. "
@@ -481,11 +481,11 @@ test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
      */
     GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_substring_handler, check);
-    g_assert (gnc_account_list_name_violations (NULL, NULL) == NULL);
+    g_assert_true (gnc_account_list_name_violations (NULL, NULL) == NULL);
     g_assert_cmpint (check->hits, ==, 1);
-    g_assert (gnc_account_list_name_violations (book, NULL) == NULL);
+    g_assert_true (gnc_account_list_name_violations (book, NULL) == NULL);
     g_assert_cmpint (check->hits, ==, 2);
-    g_assert (gnc_account_list_name_violations (NULL, sep) == NULL);
+    g_assert_true (gnc_account_list_name_violations (NULL, sep) == NULL);
     g_log_set_default_handler (oldlogger, NULL);
     results = gnc_account_list_name_violations (book, sep);
     g_assert_cmpuint (g_list_length (results), == , 2);
@@ -590,33 +590,33 @@ test_gnc_account_create_and_destroy (void)
     g_assert_cmpstr (fname, == , "");
     g_assert_cmpstr (code, == , "");
     g_assert_cmpstr (desc, == , "");
-    g_assert (!color);
-    g_assert (!notes);
-    g_assert (type == ACCT_TYPE_NONE);
-    g_assert (!commo);
-    g_assert (!commo_scu);
-    g_assert (!non_std_scu);
-    g_assert (!sort_dirty);
-    g_assert (!bal_dirty);
-    g_assert (gnc_numeric_zero_p (*end_bal));
-    g_assert (gnc_numeric_zero_p (*end_clr_bal));
-    g_assert (gnc_numeric_zero_p (*end_rec_bal));
-    g_assert (gnc_numeric_zero_p (*start_bal));
-    g_assert (gnc_numeric_zero_p (*start_clr_bal));
-    g_assert (gnc_numeric_zero_p (*start_rec_bal));
-    g_assert (!opening_balance);
-    g_assert (pol == xaccGetFIFOPolicy ());
-    g_assert (!mark);
-    g_assert (!tax_rel);
-    g_assert (!tax_code);
-    g_assert (!tax_src);
-    g_assert (copy_num == 1);
-    g_assert (!hide);
-    g_assert (!hold);
-    g_assert (gnc_account_get_parent (acc) == NULL);
-    g_assert (gnc_account_get_children (acc) == NULL);
-    g_assert (xaccAccountGetLotList (acc) == NULL);
-    g_assert (xaccAccountGetSplitList (acc) == NULL);
+    g_assert_true (!color);
+    g_assert_true (!notes);
+    g_assert_true (type == ACCT_TYPE_NONE);
+    g_assert_true (!commo);
+    g_assert_true (!commo_scu);
+    g_assert_true (!non_std_scu);
+    g_assert_true (!sort_dirty);
+    g_assert_true (!bal_dirty);
+    g_assert_true (gnc_numeric_zero_p (*end_bal));
+    g_assert_true (gnc_numeric_zero_p (*end_clr_bal));
+    g_assert_true (gnc_numeric_zero_p (*end_rec_bal));
+    g_assert_true (gnc_numeric_zero_p (*start_bal));
+    g_assert_true (gnc_numeric_zero_p (*start_clr_bal));
+    g_assert_true (gnc_numeric_zero_p (*start_rec_bal));
+    g_assert_true (!opening_balance);
+    g_assert_true (pol == xaccGetFIFOPolicy ());
+    g_assert_true (!mark);
+    g_assert_true (!tax_rel);
+    g_assert_true (!tax_code);
+    g_assert_true (!tax_src);
+    g_assert_true (copy_num == 1);
+    g_assert_true (!hide);
+    g_assert_true (!hold);
+    g_assert_true (gnc_account_get_parent (acc) == NULL);
+    g_assert_true (gnc_account_get_children (acc) == NULL);
+    g_assert_true (xaccAccountGetLotList (acc) == NULL);
+    g_assert_true (xaccAccountGetSplitList (acc) == NULL);
     g_free (name);
     g_free (fname);
     g_free (code);
@@ -676,13 +676,13 @@ test_gnc_book_set_get_root_account (Fixture *fixture, gconstpointer pData)
     GLogFunc oldlogger;
     QofBook *book2 = gnc_account_get_book (fixture->acct);
     acc1 = gnc_book_get_root_account (NULL);
-    g_assert (!acc1);
+    g_assert_true (!acc1);
     /* Check that an account is created, and that it isn't the same as the
      * one in fixture.
      */
     acc1 = gnc_book_get_root_account (book1);
-    g_assert (acc1);
-    g_assert (acc1 != fixture->acct);
+    g_assert_true (acc1);
+    g_assert_true (acc1 != fixture->acct);
     /* Now try to set the book's root account to the fixture
      * account. Should throw an error.
      */
@@ -690,17 +690,17 @@ test_gnc_book_set_get_root_account (Fixture *fixture, gconstpointer pData)
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler,
                                   check);
     gnc_book_set_root_account (book1, fixture->acct);
-    g_assert (gnc_book_get_root_account (book1) == acc1);
+    g_assert_true (gnc_book_get_root_account (book1) == acc1);
     g_assert_cmpint (check->hits, ==, 1);
     g_log_set_default_handler (oldlogger, NULL);
     /* Check that if we set the same root, it stays set */
     gnc_book_set_root_account (book2, fixture->acct);
-    g_assert (gnc_book_get_root_account (book2) == fixture->acct);
+    g_assert_true (gnc_book_get_root_account (book2) == fixture->acct);
     /* Create a new account in book1 and check that we can set it to root */
     acc2 = xaccMallocAccount (book1);
     gnc_book_set_root_account (book1, acc2);
-    g_assert (gnc_book_get_root_account (book1) != acc1);
-    g_assert (gnc_book_get_root_account (book1) == acc2);
+    g_assert_true (gnc_book_get_root_account (book1) != acc1);
+    g_assert_true (gnc_book_get_root_account (book1) == acc2);
     /* Clean up */
     /* acc1 gets freed by setting the root account to acc2
         g_object_unref (acc1);
@@ -718,7 +718,7 @@ test_xaccMallocAccount (void)
     Account *acc;
     TestSignal signal = test_signal_new (NULL, QOF_EVENT_CREATE, NULL);
     acc = xaccMallocAccount (book);
-    g_assert (acc != NULL);
+    g_assert_true (acc != NULL);
     test_signal_assert_hits (signal, 1);
     test_signal_free (signal);
     g_object_unref (acc);
@@ -738,12 +738,12 @@ test_gnc_account_create_root (void)
     AccountTestFunctions *func = _utest_account_fill_functions ();
     /* Can't use gnc_book_get_root_account, it creates one if it doesn't
      * yet exist */
-    g_assert (func->coll_get_root_account (coll) == NULL);
+    g_assert_true (func->coll_get_root_account (coll) == NULL);
     acc = gnc_account_create_root (book);
-    g_assert (acc);
+    g_assert_true (acc);
     g_object_get (acc, "name", &name, NULL);
     g_assert_cmpstr (name, == , "Root Account");
-    g_assert (gnc_book_get_root_account (book) == acc);
+    g_assert_true (gnc_book_get_root_account (book) == acc);
     g_object_unref (acc);
     qof_book_destroy (book);
     g_free (func);
@@ -767,28 +767,28 @@ test_xaccCloneAccount (Fixture *fixture, gconstpointer pData)
                                                 check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_substring_handler, check);
     clone = xaccCloneAccount (NULL, book);
-    g_assert (clone == NULL);
+    g_assert_true (clone == NULL);
     g_assert_cmpint (check->hits, ==, 1);
     g_free(check->msg);
     check->msg = g_strdup(msg2);
     clone = xaccCloneAccount (fixture->acct, NULL);
-    g_assert (clone == NULL);
+    g_assert_true (clone == NULL);
     g_assert_cmpint (check->hits, ==, 2);
     g_log_set_default_handler (oldlogger, NULL);
     /* Now test the real clone */
     clone = xaccCloneAccount (fixture->acct, book);
-    g_assert (clone);
+    g_assert_true (clone);
     acct_p = fixture->func->get_private (fixture->acct);
     clone_p = fixture->func->get_private (clone);
-    g_assert (clone_p->type == acct_p->type);
-    g_assert (clone_p->accountName == acct_p->accountName);
-    g_assert (clone_p->accountCode == acct_p->accountCode);
-    g_assert (clone_p->description == acct_p->description);
-    g_assert (compare (clone->inst.kvp_data,
+    g_assert_true (clone_p->type == acct_p->type);
+    g_assert_true (clone_p->accountName == acct_p->accountName);
+    g_assert_true (clone_p->accountCode == acct_p->accountCode);
+    g_assert_true (clone_p->description == acct_p->description);
+    g_assert_true (compare (clone->inst.kvp_data,
                        fixture->acct->inst.kvp_data) == 0);
-    g_assert (gnc_commodity_equal (clone_p->commodity, acct_p->commodity));
-    g_assert (clone_p->commodity_scu == acct_p->commodity_scu);
-    g_assert (clone_p->non_standard_scu == acct_p->non_standard_scu);
+    g_assert_true (gnc_commodity_equal (clone_p->commodity, acct_p->commodity));
+    g_assert_true (clone_p->commodity_scu == acct_p->commodity_scu);
+    g_assert_true (clone_p->non_standard_scu == acct_p->non_standard_scu);
     /* Clean Up */
     test_error_struct_free(check);
     g_object_unref (clone);
@@ -891,11 +891,11 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
     }
     xaccAccountSetCommodity (parent, commodity);
     /* Check that we've got children, lots, and splits to remove */
-    g_assert (p_priv->children != NULL);
-    g_assert (p_priv->lots != NULL);
-    g_assert (p_priv->splits != NULL);
-    g_assert (p_priv->parent != NULL);
-    g_assert (p_priv->commodity != NULL);
+    g_assert_true (p_priv->children != NULL);
+    g_assert_true (p_priv->lots != NULL);
+    g_assert_true (p_priv->splits != NULL);
+    g_assert_true (p_priv->parent != NULL);
+    g_assert_true (p_priv->commodity != NULL);
     g_assert_cmpint (check1->hits, ==, 0);
     g_assert_cmpint (check2->hits, ==, 0);
     /* Now set the other private parts to something so that they can be set back */
@@ -1006,11 +1006,11 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     }
     xaccAccountSetCommodity (parent, commodity);
     /* Check that we've got children, lots, and splits to remove */
-    g_assert (p_priv->children != NULL);
-    g_assert (p_priv->lots != NULL);
-    g_assert (p_priv->splits != NULL);
-    g_assert (p_priv->parent != NULL);
-    g_assert (p_priv->commodity != NULL);
+    g_assert_true (p_priv->children != NULL);
+    g_assert_true (p_priv->lots != NULL);
+    g_assert_true (p_priv->splits != NULL);
+    g_assert_true (p_priv->parent != NULL);
+    g_assert_true (p_priv->commodity != NULL);
     g_assert_cmpint (check1->hits, ==, 0);
     g_assert_cmpint (check2->hits, ==, 0);
 
@@ -1022,11 +1022,11 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     /* Make sure that the account didn't get destroyed */
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 0);
-    g_assert (p_priv->children != NULL);
-    g_assert (p_priv->lots != NULL);
-    g_assert (p_priv->splits != NULL);
-    g_assert (p_priv->parent != NULL);
-    g_assert (p_priv->commodity != NULL);
+    g_assert_true (p_priv->children != NULL);
+    g_assert_true (p_priv->lots != NULL);
+    g_assert_true (p_priv->splits != NULL);
+    g_assert_true (p_priv->parent != NULL);
+    g_assert_true (p_priv->commodity != NULL);
     g_assert_cmpint (check1->hits, ==, 0);
     g_assert_cmpint (check2->hits, ==, 0);
     /* xaccAccountDestroy destroys the account by calling
@@ -1097,22 +1097,22 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     int prev_months, prev_days;
 
     // equity_type getter/setter
-    g_assert (xaccAccountGetIsOpeningBalance (account) == FALSE);
+    g_assert_true (xaccAccountGetIsOpeningBalance (account) == FALSE);
 
     xaccAccountSetIsOpeningBalance (account, TRUE);
-    g_assert (xaccAccountGetIsOpeningBalance (account) == TRUE);
+    g_assert_true (xaccAccountGetIsOpeningBalance (account) == TRUE);
 
     xaccAccountSetIsOpeningBalance (account, FALSE);
-    g_assert (xaccAccountGetIsOpeningBalance (account) == FALSE);
+    g_assert_true (xaccAccountGetIsOpeningBalance (account) == FALSE);
 
     // sortreversed getter/setter
-    g_assert (xaccAccountGetSortReversed (account) == FALSE);
+    g_assert_true (xaccAccountGetSortReversed (account) == FALSE);
 
     xaccAccountSetSortReversed (account, TRUE);
-    g_assert (xaccAccountGetSortReversed (account) == TRUE);
+    g_assert_true (xaccAccountGetSortReversed (account) == TRUE);
 
     xaccAccountSetSortReversed (account, FALSE);
-    g_assert (xaccAccountGetSortReversed (account) == FALSE);
+    g_assert_true (xaccAccountGetSortReversed (account) == FALSE);
 
     // color getter/setter
     g_assert_cmpstr (xaccAccountGetColor (account), ==, nullptr);
@@ -1238,59 +1238,59 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert_cmpstr (xaccAccountGetNotes (account), ==, nullptr);
 
     // Balance Limits getter/setter
-    g_assert (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == false);
-    g_assert (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == false);
-    g_assert (xaccAccountGetIncludeSubAccountBalances (account) == false);
+    g_assert_true (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == false);
+    g_assert_true (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == false);
+    g_assert_true (xaccAccountGetIncludeSubAccountBalances (account) == false);
 
     xaccAccountSetHigherBalanceLimit (account, h_balance);
     xaccAccountSetLowerBalanceLimit (account, l_balance);
     xaccAccountSetIncludeSubAccountBalances (account, true);
 
-    g_assert (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == true);
+    g_assert_true (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == true);
     g_assert_cmpint (gnc_numeric_compare (h_balance, balance_limit), ==, 0);
 
-    g_assert (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == true);
+    g_assert_true (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == true);
     g_assert_cmpint (gnc_numeric_compare (l_balance, balance_limit), ==, 0);
 
-    g_assert (xaccAccountGetIncludeSubAccountBalances (account) == true);
+    g_assert_true (xaccAccountGetIncludeSubAccountBalances (account) == true);
 
     xaccAccountSetIncludeSubAccountBalances (account, false);
 
     xaccAccountClearHigherBalanceLimit (account);
     xaccAccountClearLowerBalanceLimit (account);
 
-    g_assert (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == false);
-    g_assert (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == false);
-    g_assert (xaccAccountGetIncludeSubAccountBalances (account) == false);
+    g_assert_true (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == false);
+    g_assert_true (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == false);
+    g_assert_true (xaccAccountGetIncludeSubAccountBalances (account) == false);
 
     // Reconcile getter/setter
     date = date - (60*60*24*7); // -7 days
     xaccAccountSetReconcileLastDate (account, date);
     xaccAccountGetReconcileLastDate (account, &returned_date);
-    g_assert (date == returned_date);
+    g_assert_true (date == returned_date);
 
     date = date + (60*60*24*2); // +2 days
     xaccAccountSetReconcilePostponeDate (account, date);
     xaccAccountGetReconcilePostponeDate (account, &returned_date);
-    g_assert (date == returned_date);
+    g_assert_true (date == returned_date);
 
-    g_assert (xaccAccountGetReconcilePostponeBalance (account, &returned_post_balance) == false);
+    g_assert_true (xaccAccountGetReconcilePostponeBalance (account, &returned_post_balance) == false);
     xaccAccountSetReconcilePostponeBalance (account, post_balance);
-    g_assert (xaccAccountGetReconcilePostponeBalance (account, &returned_post_balance) == true);
+    g_assert_true (xaccAccountGetReconcilePostponeBalance (account, &returned_post_balance) == true);
     g_assert_cmpint (gnc_numeric_compare (post_balance, returned_post_balance), ==, 0);
 
     xaccAccountClearReconcilePostpone (account);
-    g_assert (xaccAccountGetReconcilePostponeBalance (account, &returned_post_balance) == false);
+    g_assert_true (xaccAccountGetReconcilePostponeBalance (account, &returned_post_balance) == false);
 
-    g_assert (xaccAccountGetReconcileLastInterval (account, &prev_months, &prev_days) == false);
+    g_assert_true (xaccAccountGetReconcileLastInterval (account, &prev_months, &prev_days) == false);
     xaccAccountSetReconcileLastInterval (account, 2, 6);
-    g_assert (xaccAccountGetReconcileLastInterval (account, &prev_months, &prev_days) == true);
-    g_assert (prev_months == 2);
-    g_assert (prev_days == 6);
+    g_assert_true (xaccAccountGetReconcileLastInterval (account, &prev_months, &prev_days) == true);
+    g_assert_true (prev_months == 2);
+    g_assert_true (prev_days == 6);
 
-    g_assert (xaccAccountGetReconcileChildrenStatus (account) == false); //default
+    g_assert_true (xaccAccountGetReconcileChildrenStatus (account) == false); //default
     xaccAccountSetReconcileChildrenStatus (account, true);
-    g_assert (xaccAccountGetReconcileChildrenStatus (account) == true);
+    g_assert_true (xaccAccountGetReconcileChildrenStatus (account) == true);
 
     // STOCK_ACCOUNT tests from now on
     xaccAccountSetType (account, ACCT_TYPE_STOCK);
@@ -1396,22 +1396,22 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_substring_handler, NULL);
 
     /* Check that the call fails with invalid account and split (throws) */
-    g_assert (!gnc_account_insert_split (NULL, split1));
+    g_assert_true (!gnc_account_insert_split (NULL, split1));
     g_assert_cmpuint (g_list_length (priv->splits), == , 0);
-    g_assert (!priv->sort_dirty);
-    g_assert (!priv->balance_dirty);
+    g_assert_true (!priv->sort_dirty);
+    g_assert_true (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 0);
     test_signal_assert_hits (sig2, 0);
-    g_assert (!gnc_account_insert_split (fixture->acct, NULL));
+    g_assert_true (!gnc_account_insert_split (fixture->acct, NULL));
     g_assert_cmpuint (g_list_length (priv->splits), == , 0);
-    g_assert (!priv->sort_dirty);
-    g_assert (!priv->balance_dirty);
+    g_assert_true (!priv->sort_dirty);
+    g_assert_true (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 0);
     test_signal_assert_hits (sig2, 0);
-    /* g_assert (!gnc_account_insert_split (fixture->acct, (Split*)priv)); */
+    /* g_assert_true (!gnc_account_insert_split (fixture->acct, (Split*)priv)); */
     /* g_assert_cmpuint (g_list_length (priv->splits), == , 0); */
-    /* g_assert (!priv->sort_dirty); */
-    /* g_assert (!priv->balance_dirty); */
+    /* g_assert_true (!priv->sort_dirty); */
+    /* g_assert_true (!priv->balance_dirty); */
     /* test_signal_assert_hits (sig1, 0); */
     /* test_signal_assert_hits (sig2, 0); */
     g_assert_cmpint (check1->hits, ==, 1);
@@ -1421,33 +1421,33 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     test_clear_error_list ();
 
     /* Check that it works the first time */
-    g_assert (gnc_account_insert_split (fixture->acct, split1));
+    g_assert_true (gnc_account_insert_split (fixture->acct, split1));
     g_assert_cmpuint (g_list_length (priv->splits), == , 1);
-    g_assert (!priv->sort_dirty);
-    g_assert (priv->balance_dirty);
+    g_assert_true (!priv->sort_dirty);
+    g_assert_true (priv->balance_dirty);
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 1);
     /* Check that it fails if the split has already been added once */
-    g_assert (!gnc_account_insert_split (fixture->acct, split1));
+    g_assert_true (!gnc_account_insert_split (fixture->acct, split1));
     /* Free up hdlr2 and set up hdlr2 */
     test_signal_free (sig2);
     sig3 = test_signal_new (&fixture->acct->inst, GNC_EVENT_ITEM_ADDED, split2);
     /* Now add a second split to the account and check that sort_dirty isn't set. We have to bump the editlevel to force this. */
-    g_assert (gnc_account_insert_split (fixture->acct, split2));
+    g_assert_true (gnc_account_insert_split (fixture->acct, split2));
     g_assert_cmpuint (g_list_length (priv->splits), == , 2);
-    g_assert (!priv->sort_dirty);
-    g_assert (priv->balance_dirty);
+    g_assert_true (!priv->sort_dirty);
+    g_assert_true (priv->balance_dirty);
     test_signal_assert_hits (sig1, 2);
     test_signal_assert_hits (sig3, 1);
     /* One more add, incrementing the editlevel to get sort_dirty set. */
     test_signal_free (sig3);
     sig3 = test_signal_new (&fixture->acct->inst, GNC_EVENT_ITEM_ADDED, split3);
     qof_instance_increase_editlevel (fixture->acct);
-    g_assert (gnc_account_insert_split (fixture->acct, split3));
+    g_assert_true (gnc_account_insert_split (fixture->acct, split3));
     qof_instance_decrease_editlevel (fixture->acct);
     g_assert_cmpuint (g_list_length (priv->splits), == , 3);
-    g_assert (priv->sort_dirty);
-    g_assert (priv->balance_dirty);
+    g_assert_true (priv->sort_dirty);
+    g_assert_true (priv->balance_dirty);
     test_signal_assert_hits (sig1, 3);
     test_signal_assert_hits (sig3, 1);
     /* Finally delete a split. It's going to recompute the balance, so
@@ -1455,18 +1455,18 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     test_signal_free (sig3);
     sig3 = test_signal_new (&fixture->acct->inst, GNC_EVENT_ITEM_REMOVED,
                             split3);
-    g_assert (gnc_account_remove_split (fixture->acct, split3));
+    g_assert_true (gnc_account_remove_split (fixture->acct, split3));
     g_assert_cmpuint (g_list_length (priv->splits), == , 2);
-    g_assert (priv->sort_dirty);
-    g_assert (!priv->balance_dirty);
+    g_assert_true (priv->sort_dirty);
+    g_assert_true (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 4);
     test_signal_assert_hits (sig3, 1);
     /* And do it again to make sure that it fails when the split has
      * already been removed */
-    g_assert (!gnc_account_remove_split (fixture->acct, split3));
+    g_assert_true (!gnc_account_remove_split (fixture->acct, split3));
     g_assert_cmpuint (g_list_length (priv->splits), == , 2);
-    g_assert (priv->sort_dirty);
-    g_assert (!priv->balance_dirty);
+    g_assert_true (priv->sort_dirty);
+    g_assert_true (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 4);
     test_signal_assert_hits (sig3, 1);
 
@@ -1527,19 +1527,19 @@ test_xaccAccountInsertRemoveLot (Fixture *fixture, gconstpointer pData)
     g_assert_cmpuint (g_list_length (a_priv->lots), == , 0);
     g_assert_cmpuint (g_list_length (p_priv->lots), == , 0);
     xaccAccountInsertLot (fixture->acct, lot);
-    g_assert (gnc_lot_get_account (lot) == fixture->acct);
+    g_assert_true (gnc_lot_get_account (lot) == fixture->acct);
     g_assert_cmpuint (g_list_length (a_priv->lots), == , 1);
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 1);
     /* Make sure that inserting again doesn't do anything */
     xaccAccountInsertLot (fixture->acct, lot);
-    g_assert (gnc_lot_get_account (lot) == fixture->acct);
+    g_assert_true (gnc_lot_get_account (lot) == fixture->acct);
     g_assert_cmpuint (g_list_length (a_priv->lots), == , 1);
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 1);
     /* Check that inserting the lot into a different account changes the lot */
     xaccAccountInsertLot (parent, lot);
-    g_assert (gnc_lot_get_account (lot) == parent);
+    g_assert_true (gnc_lot_get_account (lot) == parent);
     g_assert_cmpuint (g_list_length (a_priv->lots), == , 0);
     g_assert_cmpuint (g_list_length (p_priv->lots), == , 1);
     test_signal_assert_hits (sig1, 2);
@@ -1550,7 +1550,7 @@ test_xaccAccountInsertRemoveLot (Fixture *fixture, gconstpointer pData)
     /* The following test should fail, but it doesn't because of an
      * error in the routine: When removing a lot from an account, the
      * account reference in the lot object should be NULLed. */
-    g_assert (gnc_lot_get_account (lot) != NULL);
+    g_assert_true (gnc_lot_get_account (lot) != NULL);
     g_assert_cmpuint (g_list_length (a_priv->lots), == , 0);
     g_assert_cmpuint (g_list_length (p_priv->lots), == , 0);
     test_signal_assert_hits (sig3, 1);
@@ -1562,7 +1562,7 @@ test_xaccAccountInsertRemoveLot (Fixture *fixture, gconstpointer pData)
     gnc_lot_set_account (lot, NULL);
     xaccAccountInsertLot (parent, lot);
     g_assert_cmpuint (g_list_length (p_priv->lots), == , 1);
-    g_assert (gnc_lot_get_account (lot) == parent);
+    g_assert_true (gnc_lot_get_account (lot) == parent);
     gnc_lot_destroy (lot);
     /* Destroying the lot should remove it from the account. */
     g_assert_cmpuint (g_list_length (p_priv->lots), == , 0);
@@ -1602,7 +1602,7 @@ test_xaccAccountRecomputeBalance (Fixture *fixture, gconstpointer pData)
                 clr_bal = gnc_numeric_zero ();
     SetupData *sdata = (SetupData*)pData;
     TxnParms* t_arr;
-    g_assert (sdata != NULL);
+    g_assert_true (sdata != NULL);
     t_arr = (TxnParms*)sdata->txns;
     for (unsigned int ind = 0; ind < sdata->num_txns; ind++)
     {
@@ -1613,15 +1613,15 @@ test_xaccAccountRecomputeBalance (Fixture *fixture, gconstpointer pData)
         if (p.reconciled == YREC || p.reconciled == FREC)
             rec_bal = gnc_numeric_add_fixed (rec_bal, p.amount);
     }
-    g_assert (gnc_numeric_zero_p (priv->starting_balance));
-    g_assert (gnc_numeric_zero_p (priv->balance));
+    g_assert_true (gnc_numeric_zero_p (priv->starting_balance));
+    g_assert_true (gnc_numeric_zero_p (priv->balance));
     priv->balance_dirty = TRUE;
     xaccAccountRecomputeBalance (fixture->acct);
-    g_assert (gnc_numeric_zero_p (priv->starting_balance));
-    g_assert (gnc_numeric_eq (priv->balance, bal));
-    g_assert (gnc_numeric_eq (priv->cleared_balance, clr_bal));
-    g_assert (gnc_numeric_eq (priv->reconciled_balance, rec_bal));
-    g_assert (!priv->balance_dirty);
+    g_assert_true (gnc_numeric_zero_p (priv->starting_balance));
+    g_assert_true (gnc_numeric_eq (priv->balance, bal));
+    g_assert_true (gnc_numeric_eq (priv->cleared_balance, clr_bal));
+    g_assert_true (gnc_numeric_eq (priv->reconciled_balance, rec_bal));
+    g_assert_true (!priv->balance_dirty);
 }
 
 /* xaccAccountOrder
@@ -1634,10 +1634,10 @@ test_xaccAccountOrder ( )
     QofBook *book = qof_book_new ();
 
 
-    g_assert (xaccAccountOrder (aa, ab) == 0);
+    g_assert_true (xaccAccountOrder (aa, ab) == 0);
     aa = xaccMallocAccount (book);
-    g_assert (xaccAccountOrder (aa, ab) == -1);
-    g_assert (xaccAccountOrder (ab, aa) == 1);
+    g_assert_true (xaccAccountOrder (aa, ab) == -1);
+    g_assert_true (xaccAccountOrder (ab, aa) == 1);
 
     ab = xaccMallocAccount (book);
     qof_instance_increase_editlevel (aa);
@@ -1730,16 +1730,16 @@ test_qofAccountSetParent (Fixture *fixture, gconstpointer pData)
     Account *root = gnc_account_get_root (fixture->acct);
     Account *old_parent = gnc_account_get_parent (fixture->acct);
     AccountTestFunctions *func = _utest_account_fill_functions ();
-    g_assert (root != old_parent);
+    g_assert_true (root != old_parent);
     /* qofAccountSetParent doesn't check to see if the parent is already
      * set, nor does gnc_account_append_child, which is the passed-through
      * function.
      */
     func->qofAccountSetParent (fixture->acct, QOF_INSTANCE (root));
-    g_assert (root == gnc_account_get_parent (fixture->acct));
-    g_assert (qof_instance_get_dirty (QOF_INSTANCE (fixture->acct)));
-    g_assert (qof_instance_get_dirty (QOF_INSTANCE (root)));
-    g_assert (qof_instance_get_dirty (QOF_INSTANCE (old_parent)));
+    g_assert_true (root == gnc_account_get_parent (fixture->acct));
+    g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (fixture->acct)));
+    g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (root)));
+    g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (old_parent)));
 }
 /* gnc_account_append_child
 void
@@ -1772,16 +1772,16 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
     sig3 = test_signal_new (QOF_INSTANCE (account), QOF_EVENT_CREATE, NULL);
 
     gnc_account_append_child (froot, account);
-    g_assert (gnc_account_get_parent (account) == froot);
+    g_assert_true (gnc_account_get_parent (account) == froot);
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 0);
     test_signal_assert_hits (sig3, 0);
     g_assert_cmpint (check_warn->hits, ==, 0);
     g_assert_cmpint (check_err->hits, ==, 0);
-    g_assert (qof_instance_get_dirty (QOF_INSTANCE (froot)));
-    g_assert (qof_instance_get_dirty (QOF_INSTANCE (account)));
-    g_assert (g_list_find (frpriv->children, account));
-    g_assert (qof_collection_lookup_entity (
+    g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (froot)));
+    g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (account)));
+    g_assert_true (g_list_find (frpriv->children, account));
+    g_assert_true (qof_collection_lookup_entity (
                   qof_book_get_collection (fbook, GNC_ID_ACCOUNT),
                   acct_guid));
     auto loglevelr = static_cast<GLogLevelFlags>(G_LOG_LEVEL_WARNING |
@@ -1793,21 +1793,21 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
     gnc_account_append_child (fixture->acct, account);
     g_log_remove_handler (logdomain, log_handler);
     g_assert_cmpstr (msg1, == , check_warn->msg);
-    g_assert (gnc_account_get_parent (account) == fixture->acct);
+    g_assert_true (gnc_account_get_parent (account) == fixture->acct);
     test_signal_assert_hits (sig1, 2);
     test_signal_assert_hits (sig2, 1);
     test_signal_assert_hits (sig3, 1);
     g_assert_cmpint (check_warn->hits, ==, 1);
     g_assert_cmpint (check_err->hits, ==, 0);
-    g_assert (!qof_collection_lookup_entity (
+    g_assert_true (!qof_collection_lookup_entity (
                   qof_book_get_collection (fbook, GNC_ID_ACCOUNT),
                   acct_guid));
-    g_assert (qof_collection_lookup_entity (
+    g_assert_true (qof_collection_lookup_entity (
                   qof_book_get_collection (book, GNC_ID_ACCOUNT),
                   acct_guid));
-    g_assert (qof_instance_get_dirty (QOF_INSTANCE (fixture->acct)));
-    g_assert (g_list_find (frpriv->children, account) == NULL);
-    g_assert (g_list_find (apriv->children, account));
+    g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (fixture->acct)));
+    g_assert_true (g_list_find (frpriv->children, account) == NULL);
+    g_assert_true (g_list_find (apriv->children, account));
 
     test_signal_free (sig1);
     test_signal_free (sig2);
@@ -1826,8 +1826,8 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (check_warn->hits, ==, 1);
 
     gnc_account_remove_child (fixture->acct, account);
-    g_assert (gnc_account_get_parent (account) == NULL);
-    g_assert (g_list_find (apriv->children, account) == NULL);
+    g_assert_true (gnc_account_get_parent (account) == NULL);
+    g_assert_true (g_list_find (apriv->children, account) == NULL);
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 1);
     g_assert_cmpint (check_warn->hits, ==, 1);
@@ -1912,12 +1912,12 @@ test_gnc_account_get_descendants (Fixture *fixture, gconstpointer pData)
 
     GList *list = gnc_account_get_descendants (
                       gnc_account_get_root (fixture->acct));
-    g_assert (list != NULL);
+    g_assert_true (list != NULL);
     g_assert_cmpuint (g_list_length (list), == , 34);
     g_assert_cmpint (g_list_index (list, fixture->acct), == , 33);
     g_list_free (list);
     list = gnc_account_get_descendants (fixture->acct);
-    g_assert (list == NULL);
+    g_assert_true (list == NULL);
 }
 /* gnc_account_get_descendants_sorted
 GList *
@@ -1927,7 +1927,7 @@ test_gnc_account_get_descendants_sorted (Fixture *fixture, gconstpointer pData)
 {
     GList *list = gnc_account_get_descendants_sorted (
                       gnc_account_get_root (fixture->acct));
-    g_assert (list != NULL);
+    g_assert_true (list != NULL);
     g_list_foreach (list, print_account, NULL);
     g_assert_cmpuint (g_list_length (list), == , 34);
     g_assert_cmpint (g_list_index (list, fixture->acct), == , 10);
@@ -1943,21 +1943,21 @@ test_gnc_account_lookup_by_name (Fixture *fixture, gconstpointer pData)
     gchar *code;
     root = gnc_account_get_root (fixture->acct);
     target = gnc_account_lookup_by_name (root, "income");
-    g_assert (target != NULL);
+    g_assert_true (target != NULL);
     g_object_get (target, "code", &code, NULL);
     g_assert_cmpstr (code, == , "4000");
     target = gnc_account_lookup_by_name (target, "int");
-    g_assert (target != NULL);
+    g_assert_true (target != NULL);
     g_free (code);
     g_object_get (target, "code", &code, NULL);
     g_assert_cmpstr (code, == , "4160");
     target = gnc_account_lookup_by_name (root, "bank");
-    g_assert (target != NULL);
+    g_assert_true (target != NULL);
     g_free (code);
     g_object_get (target, "code", &code, NULL);
     g_assert_cmpstr (code, == , "2300");
     target = gnc_account_lookup_by_name (target, "int");
-    g_assert (target == NULL);
+    g_assert_true (target == NULL);
     g_free (code);
 
 }
@@ -1973,7 +1973,7 @@ test_gnc_account_lookup_by_name_duplicated (Fixture *fixture, gconstpointer pDat
     gchar *code;
     root = gnc_account_get_root (fixture->acct);
     target = gnc_account_lookup_by_name (root, "B");
-    g_assert (target != NULL);
+    g_assert_true (target != NULL);
     g_object_get (target, "code", &code, NULL);
     g_assert_cmpstr (code, == , "1B");
     g_free (code);
@@ -1989,16 +1989,16 @@ test_gnc_account_lookup_by_code (Fixture *fixture, gconstpointer pData)
     gchar *name;
     root = gnc_account_get_root (fixture->acct);
     target = gnc_account_lookup_by_code (root, "3100");
-    g_assert (target != NULL);
+    g_assert_true (target != NULL);
     g_object_get (target, "name", &name, NULL);
     g_assert_cmpstr (name, == , "ordinary");
     g_free (name);
     target = gnc_account_lookup_by_code (target, "3150");
-    g_assert (target != NULL);
+    g_assert_true (target != NULL);
     g_object_get (target, "name", &name, NULL);
     g_assert_cmpstr (name, == , "utilities");
     target = gnc_account_lookup_by_code (target, "2100");
-    g_assert (target == NULL);
+    g_assert_true (target == NULL);
     g_free (name);
 }
 /* gnc_account_lookup_by_full_name_helper
@@ -2018,16 +2018,16 @@ test_gnc_account_lookup_by_full_name_helper ( Fixture *fixture,
 
     root = gnc_account_get_root (fixture->acct);
     target = func->gnc_account_lookup_by_full_name_helper (root, const_cast<char**>(names1));
-    g_assert (target != NULL);
+    g_assert_true (target != NULL);
     g_object_get (target, "code", &code, NULL);
     g_assert_cmpstr (code, == , "4160");
     g_free (code);
     target = func->gnc_account_lookup_by_full_name_helper (root, const_cast<char**>(names2));
-    g_assert (target != NULL);
+    g_assert_true (target != NULL);
     g_object_get (target, "code", &code, NULL);
     g_assert_cmpstr (code, == , "4210");
     target = func->gnc_account_lookup_by_full_name_helper (root, const_cast<char**>(names3));
-    g_assert (target == NULL);
+    g_assert_true (target == NULL);
     g_free (code);
 }
 /* gnc_account_lookup_by_full_name
@@ -2044,16 +2044,16 @@ test_gnc_account_lookup_by_full_name (Fixture *fixture, gconstpointer pData)
 
     root = gnc_account_get_root (fixture->acct);
     target = gnc_account_lookup_by_full_name (root, names1);
-    g_assert (target != NULL);
+    g_assert_true (target != NULL);
     g_object_get (target, "code", &code, NULL);
     g_assert_cmpstr (code, == , "4160");
     g_free (code);
     target = gnc_account_lookup_by_full_name (root, names2);
-    g_assert (target != NULL);
+    g_assert_true (target != NULL);
     g_object_get (target, "code", &code, NULL);
     g_assert_cmpstr (code, == , "4210");
     target = gnc_account_lookup_by_full_name (root, names3);
-    g_assert (target == NULL);
+    g_assert_true (target == NULL);
     g_free (code);
 }
 
@@ -2061,7 +2061,7 @@ static void
 thunk (Account *s, gpointer data)
 {
     guint *counter = (guint*)data;
-    g_assert (GNC_IS_ACCOUNT (s));
+    g_assert_true (GNC_IS_ACCOUNT (s));
     ++(*counter);
 }
 
@@ -2070,7 +2070,7 @@ thunk2 (Account *s, gpointer data)
 {
     guint *counter = (guint*)data;
     gchar *name;
-    g_assert (GNC_IS_ACCOUNT (s));
+    g_assert_true (GNC_IS_ACCOUNT (s));
     g_object_get (G_OBJECT (s), "name", &name, NULL);
     if (!g_strcmp0 (name, "int"))
     {
@@ -2107,10 +2107,10 @@ test_gnc_account_foreach_child_until (Fixture *fixture, gconstpointer pData)
     guint counter = 0;
     result = gnc_account_foreach_child_until (first, thunk2, &counter);
     g_assert_cmpint (counter, ==, 2);
-    g_assert (result == NULL);
+    g_assert_true (result == NULL);
     counter = 0;
     result = gnc_account_foreach_child_until (second, thunk2, &counter);
-    g_assert (result == expected);
+    g_assert_true (result == expected);
     g_assert_cmpint (counter, ==, 3);
     }*/
 /* gnc_account_foreach_descendant
@@ -2138,10 +2138,10 @@ test_gnc_account_foreach_descendant_until (Fixture *fixture, gconstpointer pData
     unsigned int counter = 0;
     auto result = static_cast<Account*>(gnc_account_foreach_descendant_until (first, thunk2, &counter));
     g_assert_cmpint (counter, == , 11);
-    g_assert (result == NULL);
+    g_assert_true (result == NULL);
     counter = 0;
     result = static_cast<Account*>(gnc_account_foreach_descendant_until (second, thunk2, &counter));
-    g_assert (result == expected);
+    g_assert_true (result == expected);
     g_assert_cmpint (counter, == , 6);
 }
 /* More getter/setters:
@@ -2169,15 +2169,15 @@ test_gnc_account_get_full_name (Fixture *fixture, gconstpointer pData)
 {
     gchar *result;
     result = gnc_account_get_full_name (NULL);
-    g_assert (result != NULL);
+    g_assert_true (result != NULL);
     g_assert_cmpstr (result, == , "");
     g_free (result);
     result = gnc_account_get_full_name (gnc_account_get_root (fixture->acct));
-    g_assert (result != NULL);
+    g_assert_true (result != NULL);
     g_assert_cmpstr (result, == , "");
     g_free (result);
     result = gnc_account_get_full_name (fixture->acct);
-    g_assert (result != NULL);
+    g_assert_true (result != NULL);
     g_assert_cmpstr (result, == , "foo:baz:waldo");
     g_free (result);
 
@@ -2201,7 +2201,7 @@ test_xaccAccountGetProjectedMinimumBalance (Fixture *fixture, gconstpointer pDat
     TxnParms* t_arr;
     int ind;
     gint min_ind = 4;
-    g_assert (sdata != NULL);
+    g_assert_true (sdata != NULL);
     t_arr = (TxnParms*)sdata->txns;
     for (ind = 0; ind < min_ind; ind++)
     {
@@ -2231,7 +2231,7 @@ test_xaccAccountGetBalanceAsOfDate (Fixture *fixture, gconstpointer pData)
     int ind;
     gint min_ind = 2;
     gint offset = 24 * 3600 * 3; /* 3 days in seconds */
-    g_assert (sdata != NULL);
+    g_assert_true (sdata != NULL);
     t_arr = (TxnParms*)sdata->txns;
     for (ind = 0; ind < min_ind; ind++)
     {
@@ -2258,7 +2258,7 @@ test_xaccAccountGetPresentBalance (Fixture *fixture, gconstpointer pData)
     TxnParms* t_arr;
     int ind;
     gint min_ind = 3;
-    g_assert (sdata != NULL);
+    g_assert_true (sdata != NULL);
     t_arr = (TxnParms*)sdata->txns;
     for (ind = 0; ind < min_ind; ind++)
     {
@@ -2332,21 +2332,21 @@ test_xaccAccountFindOpenLots (Fixture *fixture, gconstpointer pData)
     Account *acct = gnc_account_lookup_by_name (root, "baz");
     LotList* lots;
 
-    g_assert (acct);
+    g_assert_true (acct);
     lots = xaccAccountFindOpenLots (acct, NULL, NULL, NULL);
-    g_assert (g_list_length (lots) == 2);
+    g_assert_true (g_list_length (lots) == 2);
     if (lots) g_list_free (lots);
     lots = xaccAccountFindOpenLots (acct, bogus_lot_match_func_true,
                                     NULL, NULL);
-    g_assert (g_list_length (lots) == 2);
+    g_assert_true (g_list_length (lots) == 2);
     if (lots) g_list_free (lots);
     lots = xaccAccountFindOpenLots (acct, bogus_lot_match_func_false,
                                     NULL, NULL);
-    g_assert (g_list_length (lots) == 0);
+    g_assert_true (g_list_length (lots) == 0);
     if (lots) g_list_free (lots);
     lots = xaccAccountFindOpenLots (acct, NULL, NULL, bogus_lot_sort_func);
     g_assert_cmpint (count_sorts, == , 1);
-    g_assert (g_list_length (lots) == 2);
+    g_assert_true (g_list_length (lots) == 2);
     if (lots) g_list_free (lots);
     count_sorts = 0;
 }
@@ -2369,7 +2369,7 @@ test_xaccAccountForEachLot (Fixture *fixture, gconstpointer pData)
     Account *acct = gnc_account_lookup_by_name (root, "baz");
     guint count_calls = 0;
 
-    g_assert (acct);
+    g_assert_true (acct);
     xaccAccountForEachLot (acct, bogus_for_each_lot_func, &count_calls);
     g_assert_cmpint (count_calls, == , 3);
     xaccAccountForEachLot (acct, bogus_for_each_lot_func, &count_calls);
@@ -2402,13 +2402,13 @@ test_xaccAccountHasAncestor (Fixture *fixture, gconstpointer pData)
     Account *income = gnc_account_lookup_by_name (root, "income");
     Account *expense = gnc_account_lookup_by_name (root, "expense");
 
-    g_assert (root);
-    g_assert (ltcg);
-    g_assert (income);
-    g_assert (expense);
-    g_assert (xaccAccountHasAncestor (fixture->acct, root));
-    g_assert (xaccAccountHasAncestor (ltcg, income));
-    g_assert (!xaccAccountHasAncestor (ltcg, expense));
+    g_assert_true (root);
+    g_assert_true (ltcg);
+    g_assert_true (income);
+    g_assert_true (expense);
+    g_assert_true (xaccAccountHasAncestor (fixture->acct, root));
+    g_assert_true (xaccAccountHasAncestor (ltcg, income));
+    g_assert_true (!xaccAccountHasAncestor (ltcg, expense));
 
 }
 inline GNCAccountType& operator++(GNCAccountType& x)
@@ -2446,7 +2446,7 @@ test_xaccAccountType_Stuff (void)
         const gchar *typestr;
         gchar *typestr_uc;
 
-        g_assert (type_name);
+        g_assert_true (type_name);
         g_assert_cmpint (xaccAccountStringToEnum (type_name), == , type);
         if (type < 0 || type >= NUM_ACCOUNT_TYPES)
             continue;
@@ -2480,9 +2480,9 @@ test_xaccAccountType_Stuff (void)
 	qof_instance_decrease_editlevel (acc);
         if (type == ACCT_TYPE_STOCK || type == ACCT_TYPE_MUTUAL ||
                 type == ACCT_TYPE_CURRENCY)
-            g_assert (xaccAccountIsPriced (acc));
+            g_assert_true (xaccAccountIsPriced (acc));
         else
-            g_assert (!xaccAccountIsPriced (acc));
+            g_assert_true (!xaccAccountIsPriced (acc));
 
     }
     g_object_unref (acc);
@@ -2490,7 +2490,7 @@ test_xaccAccountType_Stuff (void)
     loghandler = g_log_set_handler (logdomain, loglevel,
                                     (GLogFunc)test_null_handler, check1);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check1);
-    g_assert (!xaccAccountTypeEnumAsString (ACCT_TYPE_LAST));
+    g_assert_true (!xaccAccountTypeEnumAsString (ACCT_TYPE_LAST));
     g_assert_cmpint (check1->hits, ==, 1);
 
     g_log_remove_handler (logdomain, loghandler);
@@ -2498,14 +2498,14 @@ test_xaccAccountType_Stuff (void)
     loghandler = g_log_set_handler (logdomain, loglevel,
                                     (GLogFunc)test_null_handler, check2);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check2);
-    g_assert (!xaccAccountStringToType (NULL, &type));
+    g_assert_true (!xaccAccountStringToType (NULL, &type));
     g_assert_cmpint (check2->hits, ==, 1);
 
     g_log_remove_handler (logdomain, loghandler);
     loghandler = g_log_set_handler (logdomain, loglevel,
                                     (GLogFunc)test_null_handler, check3);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_handler, check3);
-    g_assert (!xaccAccountStringToType ("LAST", &type));
+    g_assert_true (!xaccAccountStringToType ("LAST", &type));
     g_assert_cmpint (check3->hits, ==, 1);
 
     g_log_remove_handler (logdomain, loghandler);
@@ -2588,9 +2588,9 @@ test_xaccAccountType_Compatibility (void)
             g_assert_cmpint (compat, == , trading_compat);
         for (auto parent = ACCT_TYPE_NONE; parent < ACCT_TYPE_LAST; ++parent)
             if (parent != ACCT_TYPE_NONE && (1 << parent) & compat)
-                g_assert (xaccAccountTypesCompatible (parent, type));
+                g_assert_true (xaccAccountTypesCompatible (parent, type));
             else
-                g_assert (!xaccAccountTypesCompatible (parent, type));
+                g_assert_true (!xaccAccountTypesCompatible (parent, type));
 
         compat = xaccAccountTypesCompatibleWith (type);
         if (type <= ACCT_TYPE_LIABILITY ||
@@ -2632,7 +2632,7 @@ test_xaccAccountFindSplitByDesc (Fixture *fixture, gconstpointer pData)
     Account *baz = gnc_account_lookup_by_name (root, "baz");
     gchar *memo;
     Split *split = xaccAccountFindSplitByDesc (baz, "pepper");
-    g_assert (split);
+    g_assert_true (split);
     g_object_get (split, "memo", &memo, NULL);
     g_assert_cmpstr (memo, == , "pepper_baz");
     g_free (memo);
@@ -2647,7 +2647,7 @@ test_xaccAccountFindTransByDesc (Fixture *fixture, gconstpointer pData)
     Account *baz = gnc_account_lookup_by_name (root, "baz");
     gchar *desc;
     Transaction *txn = xaccAccountFindTransByDesc (baz, "pepper");
-    g_assert (txn);
+    g_assert_true (txn);
     g_object_get (txn, "description", &desc, NULL);
     g_assert_cmpstr (desc, == , "pepper");
     g_free (desc);
@@ -2816,7 +2816,7 @@ test_xaccAccountForEachTransaction (Fixture *fixture, gconstpointer pData )
     gint result;
     result = xaccAccountForEachTransaction (root, thunk3, &td);
     g_assert_cmpint (td.count, == , 0);
-    g_assert (money);
+    g_assert_true (money);
     result = xaccAccountForEachTransaction (money, thunk3, &td);
     g_assert_cmpint (td.count, == , 9);
     g_assert_cmpint (result, == , 0);

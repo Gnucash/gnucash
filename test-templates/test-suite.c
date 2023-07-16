@@ -87,7 +87,7 @@ test_performance_function( void )
 /* Assert macros that you can use in your test functions. "cmp" is a
  * comparison operator, one of ==, !=, <, >, <=, >=.
  *
- *  g_assert( boolean_expression )
+ *  g_assert_true( boolean_expression )
  *  g_assert_not_reached()
  *  g_assert_cmpstr( gchar *s1, cmp, gchar *s2 )
  *  g_assert_cmpint( int s1, cmp, int s2 )

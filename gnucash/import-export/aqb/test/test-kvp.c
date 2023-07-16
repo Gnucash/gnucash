@@ -47,7 +47,7 @@ static char* get_filepath(const char* filename)
     g_test_message("Using file path %s\n", result);
 
     // Test whether the file really exists
-    g_assert(g_file_test(result, G_FILE_TEST_EXISTS));
+    g_assert_true(g_file_test(result, G_FILE_TEST_EXISTS));
 
     return result;
 }
@@ -71,16 +71,16 @@ test_qofsession_aqb_kvp( void )
         qof_session_begin (new_session, newfile, SESSION_READ_ONLY);
         io_err = qof_session_get_error (new_session);
         //printf("io_err1 = %d\n", io_err);
-        g_assert(io_err != ERR_BACKEND_NO_HANDLER); // Do not have no handler
+        g_assert_true(io_err != ERR_BACKEND_NO_HANDLER); // Do not have no handler
 
-        g_assert(io_err != ERR_BACKEND_NO_SUCH_DB); // DB must exist
-        g_assert(io_err != ERR_BACKEND_LOCKED);
-        g_assert(io_err == 0);
+        g_assert_true(io_err != ERR_BACKEND_NO_SUCH_DB); // DB must exist
+        g_assert_true(io_err != ERR_BACKEND_LOCKED);
+        g_assert_true(io_err == 0);
 
         qof_session_load (new_session, NULL);
         io_err = qof_session_get_error (new_session);
         //printf("io_err2 = %d\n", io_err);
-        g_assert(io_err == 0);
+        g_assert_true(io_err == 0);
 
         g_free(newfile);
         g_free(file1);
@@ -100,16 +100,16 @@ test_qofsession_aqb_kvp( void )
         qof_session_begin (new_session, newfile, SESSION_READ_ONLY);
         io_err = qof_session_get_error (new_session);
         //printf("io_err1 = %d\n", io_err);
-        g_assert(io_err != ERR_BACKEND_NO_HANDLER); // Do not have no handler
+        g_assert_true(io_err != ERR_BACKEND_NO_HANDLER); // Do not have no handler
 
-        g_assert(io_err != ERR_BACKEND_NO_SUCH_DB); // DB must exist
-        g_assert(io_err != ERR_BACKEND_LOCKED);
-        g_assert(io_err == 0);
+        g_assert_true(io_err != ERR_BACKEND_NO_SUCH_DB); // DB must exist
+        g_assert_true(io_err != ERR_BACKEND_LOCKED);
+        g_assert_true(io_err == 0);
 
         qof_session_load (new_session, NULL);
         io_err = qof_session_get_error (new_session);
         //printf("io_err2 = %d\n", io_err);
-        g_assert(io_err == 0);
+        g_assert_true(io_err == 0);
 
         {
             GList *templ_list;
@@ -129,11 +129,11 @@ test_qofsession_aqb_kvp( void )
             // Now we change the name into something else and verify it can be saved
             gnc_ab_trans_templ_set_name(templ, CHANGED_NAME);
             {
-                g_assert(!qof_instance_get_dirty(QOF_INSTANCE(book))); // not yet dirty
+                g_assert_true(!qof_instance_get_dirty(QOF_INSTANCE(book))); // not yet dirty
 
                 // Here we save the changed kvp
                 gnc_ab_set_book_template_list(book, templ_list);
-                g_assert(qof_instance_get_dirty(QOF_INSTANCE(book))); // yup, now dirty
+                g_assert_true(qof_instance_get_dirty(QOF_INSTANCE(book))); // yup, now dirty
                 gnc_ab_trans_templ_list_free(templ_list);
             }
 
@@ -153,7 +153,7 @@ test_qofsession_aqb_kvp( void )
             Account* account = gnc_book_get_root_account(book);
             struct tm *retrieved_date, *original_date;
 
-            g_assert(account);
+            g_assert_true(account);
 
             // The interesting test case here: Can we read the correct date
             // from the xml file?

@@ -84,41 +84,41 @@ test_entry_basics ( Fixture *fixture, gconstpointer pData )
     gboolean is_cn = FALSE;
 
     GncEntry *entry = gncEntryCreate(fixture->book);
-    g_assert(entry);
+    g_assert_true(entry);
 
     g_test_message( "Test basic setters/getters" );
     g_test_message( "  Date" );
     gncEntrySetDate (entry, ts1);
     ts2 = gncEntryGetDate (entry);
-    g_assert(ts2 == ts1);
+    g_assert_true(ts2 == ts1);
     g_test_message( "  DateEntered" );
     gncEntrySetDateEntered (entry, ts1);
     ts2 = gncEntryGetDateEntered (entry);
-    g_assert(ts2 == ts1);
+    g_assert_true(ts2 == ts1);
     g_test_message( "  Description" );
     gncEntrySetDescription (entry, desc);
-    g_assert(g_strcmp0 (gncEntryGetDescription (entry), desc) == 0);
+    g_assert_true(g_strcmp0 (gncEntryGetDescription (entry), desc) == 0);
     g_test_message( "  Action" );
     gncEntrySetAction (entry, action);
-    g_assert(g_strcmp0 (gncEntryGetAction (entry), action) == 0);
+    g_assert_true(g_strcmp0 (gncEntryGetAction (entry), action) == 0);
     g_test_message( "  Notes" );
     gncEntrySetNotes (entry, note);
-    g_assert(g_strcmp0 (gncEntryGetNotes (entry), note) == 0);
+    g_assert_true(g_strcmp0 (gncEntryGetNotes (entry), note) == 0);
     g_test_message( "  Quantity" );
     gncEntrySetQuantity (entry, quantity);
-    g_assert(gnc_numeric_eq (gncEntryGetQuantity (entry), quantity));
+    g_assert_true(gnc_numeric_eq (gncEntryGetQuantity (entry), quantity));
     g_test_message( "  DocQuantity (with is_cn = FALSE)" );
     gncEntrySetDocQuantity (entry, quantity, is_cn);
-    g_assert(gnc_numeric_eq (gncEntryGetDocQuantity (entry, is_cn), quantity));
-    g_assert(gnc_numeric_eq (gncEntryGetQuantity (entry), quantity));
+    g_assert_true(gnc_numeric_eq (gncEntryGetDocQuantity (entry, is_cn), quantity));
+    g_assert_true(gnc_numeric_eq (gncEntryGetQuantity (entry), quantity));
     g_test_message( "  DocQuantity (with is_cn = TRUE)");
     is_cn = TRUE;
     gncEntrySetDocQuantity (entry, quantity, is_cn);
-    g_assert(gnc_numeric_eq (gncEntryGetDocQuantity (entry, is_cn), quantity));
-    g_assert(gnc_numeric_eq (gncEntryGetQuantity (entry), gnc_numeric_neg (quantity)));
+    g_assert_true(gnc_numeric_eq (gncEntryGetDocQuantity (entry, is_cn), quantity));
+    g_assert_true(gnc_numeric_eq (gncEntryGetQuantity (entry), gnc_numeric_neg (quantity)));
     g_test_message( "  InvAccount" );
     gncEntrySetInvAccount (entry, fixture->account);
-    g_assert(gncEntryGetInvAccount (entry) == fixture->account);
+    g_assert_true(gncEntryGetInvAccount (entry) == fixture->account);
 
 }
 
@@ -148,21 +148,21 @@ test_entry_rounding ( Fixture *fixture, gconstpointer pData )
     gncEntrySetQuantity(entry, gnc_numeric_create (2, 1));
     gncEntrySetInvPrice(entry, gnc_numeric_create (3, 1));
     /* Check unrounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (6, 1)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (6, 10)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (6, 1)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (6, 10)));
     /* Check rounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (6, 1)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (6, 10)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (6, 1)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (6, 10)));
 
     // Test with numbers that do require rounding
     /* Tax 10% (high precision GncNumeric), tax included */
     gncEntrySetInvTaxIncluded(entry, TRUE);
     /* Check unrounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 11)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 110)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 11)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 110)));
     /* Check rounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (545455, 100000)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (54545, 100000)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (545455, 100000)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (54545, 100000)));
 
     // Use different taxtable percentage precision
     /* Tax 10% (low precision GncNumeric), tax included */
@@ -170,11 +170,11 @@ test_entry_rounding ( Fixture *fixture, gconstpointer pData )
     gncEntrySetInvTaxTable(entry, NULL);
     gncEntrySetInvTaxTable(entry, taxtable);
     /* Check unrounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 11)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 110)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 11)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 110)));
     /* Check rounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (545455, 100000)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (54545, 100000)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (545455, 100000)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (54545, 100000)));
 
     // Test with odd tax percentage (Taken from a mailing list example)
     /* Tax 13% (high precision GncNumeric), tax not included */
@@ -185,11 +185,11 @@ test_entry_rounding ( Fixture *fixture, gconstpointer pData )
     gncEntrySetQuantity(entry, gnc_numeric_create (1, 1));
     gncEntrySetInvPrice(entry, gnc_numeric_create (27750, 100));
     /* Check unrounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
     /* Check rounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
     /* Note on the above expected result: the standard gncEntry denom is 100000 if the entry has no invoice or
      * bill set. So with the example above no rounding is required yet */
 
@@ -200,11 +200,11 @@ test_entry_rounding ( Fixture *fixture, gconstpointer pData )
     gncEntrySetInvTaxTable(entry, NULL);
     gncEntrySetInvTaxTable(entry, taxtable);
     /* Check unrounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
     /* Check rounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
     /* Note on the above expected result: the standard gncEntry denom is 100000 if the entry has no invoice or
      * bill set. So with the example above no rounding is required yet */
 
@@ -218,21 +218,21 @@ test_entry_rounding ( Fixture *fixture, gconstpointer pData )
     gncEntrySetQuantity(entry, gnc_numeric_create (2, 1));
     gncEntrySetInvPrice(entry, gnc_numeric_create (3, 1));
     /* Check unrounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (6, 1)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (6, 10)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (6, 1)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (6, 10)));
     /* Check rounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (6, 1)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (6, 10)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (6, 1)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (6, 10)));
 
     // Test with numbers that do require rounding
     /* Tax 10% (high precision GncNumeric), tax included */
     gncEntrySetInvTaxIncluded(entry, TRUE);
     /* Check unrounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 11)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 110)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 11)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 110)));
     /* Check rounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (545, 100)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (55, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (545, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (55, 100)));
 
     // Use different taxtable percentage precision
     /* Tax 10% (low precision GncNumeric), tax included */
@@ -240,11 +240,11 @@ test_entry_rounding ( Fixture *fixture, gconstpointer pData )
     gncEntrySetInvTaxTable(entry, NULL);
     gncEntrySetInvTaxTable(entry, taxtable);
     /* Check unrounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 11)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 110)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 11)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (60, 110)));
     /* Check rounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (545, 100)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (55, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (545, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (55, 100)));
 
     // Test with odd tax percentage (Taken from a mailing list example)
     /* Tax 13% (high precision GncNumeric), tax not included */
@@ -255,11 +255,11 @@ test_entry_rounding ( Fixture *fixture, gconstpointer pData )
     gncEntrySetQuantity(entry, gnc_numeric_create (1, 1));
     gncEntrySetInvPrice(entry, gnc_numeric_create (27750, 100));
     /* Check unrounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
     /* Check rounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (3608, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (3608, 100)));
     /* Note on the above expected result: the standard gncEntry denom is 100000 if the entry has no invoice or
      * bill set. So with the example above no rounding is required yet */
 
@@ -270,11 +270,11 @@ test_entry_rounding ( Fixture *fixture, gconstpointer pData )
     gncEntrySetInvTaxTable(entry, NULL);
     gncEntrySetInvTaxTable(entry, taxtable);
     /* Check unrounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, FALSE, TRUE, FALSE), gnc_numeric_create (36075, 1000)));
     /* Check rounded result */
-    g_assert(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
-    g_assert(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (3608, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (27750, 100)));
+    g_assert_true(gnc_numeric_equal (gncEntryGetDocTaxValue(entry, TRUE, TRUE, FALSE), gnc_numeric_create (3608, 100)));
     /* Note on the above expected result: the standard gncEntry denom is 100000 if the entry has no invoice or
      * bill set. So with the example above no rounding is required yet */
 
