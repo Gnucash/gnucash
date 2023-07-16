@@ -25,22 +25,7 @@
 
 
 #define GNC_TYPE_SEARCH_PARAM    (gnc_search_param_get_type ())
-#define GNC_SEARCH_PARAM(o)      (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_PARAM, GNCSearchParam))
-#define GNCSEARCH_PARAM_CLASS(k) (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_PARAM, GNCSearchParamClass)
-#define GNC_IS_SEARCH_PARAM(o)   (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM))
-
-typedef struct _GNCSearchParam  GNCSearchParam;
-typedef struct _GNCSearchParamClass GNCSearchParamClass;
-
-struct _GNCSearchParam
-{
-    GObject gobject;
-
-    const char *        title;
-    GtkJustification    justify;
-    gboolean            passive;
-    gboolean            non_resizeable;
-};
+G_DECLARE_DERIVABLE_TYPE (GNCSearchParam, gnc_search_param, GNC, SEARCH_PARAM, GObject)
 
 struct _GNCSearchParamClass
 {
@@ -52,52 +37,10 @@ struct _GNCSearchParamClass
 };
 
 #define GNC_TYPE_SEARCH_PARAM_SIMPLE (gnc_search_param_simple_get_type ())
-#define GNC_SEARCH_PARAM_SIMPLE(o) \
-    (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_PARAM_SIMPLE, GNCSearchParamSimple))
-#define GNCSEARCH_PARAM_SIMPLE_CLASS(k) \
-    (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_PARAM_SIMPLE, GNCSearchParamSimpleClass)
-#define GNC_IS_SEARCH_PARAM_SIMPLE(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM_SIMPLE))
-
-typedef struct _GNCSearchParamSimple      GNCSearchParamSimple;
-typedef struct _GNCSearchParamSimpleClass GNCSearchParamSimpleClass;
-
-struct _GNCSearchParamSimple
-{
-    GNCSearchParam  search_param;
-};
-
-struct _GNCSearchParamSimpleClass
-{
-    GNCSearchParamClass search_param_class;
-
-    /* virtual methods */
-
-    /* signals */
-};
+G_DECLARE_FINAL_TYPE (GNCSearchParamSimple, gnc_search_param_simple, GNC, SEARCH_PARAM_SIMPLE, GNCSearchParam)
 
 #define GNC_TYPE_SEARCH_PARAM_COMPOUND (gnc_search_param_compound_get_type ())
-#define GNC_SEARCH_PARAM_COMPOUND(o) \
-    (G_TYPE_CHECK_INSTANCE_CAST ((o), GNC_TYPE_SEARCH_PARAM_COMPOUND, GNCSearchParamCompound))
-#define GNCSEARCH_PARAM_COMPOUND_CLASS(k) \
-    (G_TYPE_CHECK_CLASS_CAST ((k), GNC_TYPE_SEARCH_PARAM_COMPOUND, GNCSearchParamCompoundClass)
-#define GNC_IS_SEARCH_PARAM_COMPOUND(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), GNC_TYPE_SEARCH_PARAM_COMPOUND))
-
-typedef struct _GNCSearchParamCompound      GNCSearchParamCompound;
-typedef struct _GNCSearchParamCompoundClass GNCSearchParamCompoundClass;
-
-struct _GNCSearchParamCompound
-{
-    GNCSearchParam  search_param;
-};
-
-struct _GNCSearchParamCompoundClass
-{
-    GNCSearchParamClass search_param_class;
-
-    /* virtual methods */
-
-    /* signals */
-};
+G_DECLARE_FINAL_TYPE (GNCSearchParamCompound, gnc_search_param_compound, GNC, SEARCH_PARAM_COMPOUND, GNCSearchParam)
 
 typedef enum
 {
@@ -105,11 +48,6 @@ typedef enum
     SEARCH_PARAM_ANY = 1,
     SEARCH_PARAM_ALL = 2
 } GNCSearchParamKind;
-
-/* These are internal functions */
-GType gnc_search_param_get_type (void);
-GType gnc_search_param_simple_get_type (void);
-GType gnc_search_param_compound_get_type (void);
 
 /* Create a new search param */
 GNCSearchParamSimple * gnc_search_param_simple_new (void);
@@ -126,13 +64,17 @@ void gnc_search_param_set_param_path (GNCSearchParamSimple *param,
 GList * gnc_search_param_get_search (GNCSearchParamCompound *param);
 GSList * gnc_search_param_get_param_path (GNCSearchParamSimple *param);
 QofIdTypeConst gnc_search_param_get_param_type (GNCSearchParam *param);
+const char *gnc_search_param_get_title (GNCSearchParam *param);
 void gnc_search_param_set_title (GNCSearchParam *param,
                                  const char *title);
 GNCSearchParamKind gnc_search_param_get_kind (GNCSearchParam *param);
+GtkJustification gnc_search_param_get_justify (GNCSearchParam *param);
 void gnc_search_param_set_justify (GNCSearchParam *param,
                                    GtkJustification justify);
+gboolean gnc_search_param_get_passive (GNCSearchParam *param);
 void gnc_search_param_set_passive (GNCSearchParam *param,
                                    gboolean value);
+gboolean gnc_search_param_get_non_resizeable (GNCSearchParam *param);
 void gnc_search_param_set_non_resizeable (GNCSearchParam *param,
                                           gboolean value);
 gboolean gnc_search_param_type_match (GNCSearchParam *a,

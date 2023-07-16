@@ -310,15 +310,15 @@ gnc_query_view_init_view (GNCQueryView *qview)
         col = gtk_tree_view_column_new ();
 
         /* Set the column title */
-        gtk_tree_view_column_set_title (col, (gchar *) ((GNCSearchParam *) param)->title);
+        gtk_tree_view_column_set_title (col, gnc_search_param_get_title (GNC_SEARCH_PARAM (param)));
 
         /* pack tree view column into tree view */
         gtk_tree_view_append_column (view, col);
 
         /* Get justification */
-        if (((GNCSearchParam *) param)->justify == GTK_JUSTIFY_CENTER)
+        if (gnc_search_param_get_justify (GNC_SEARCH_PARAM (param)) == GTK_JUSTIFY_CENTER)
             algn = 0.5;
-        else if (((GNCSearchParam *) param)->justify == GTK_JUSTIFY_RIGHT)
+        else if (gnc_search_param_get_justify (GNC_SEARCH_PARAM (param)) == GTK_JUSTIFY_RIGHT)
         {
             /* GTK_JUSTIFY_RIGHT is only used for monetary values so right align
              * the column title and data for both ltr and rtl */
@@ -330,7 +330,7 @@ gnc_query_view_init_view (GNCQueryView *qview)
         gtk_tree_view_column_set_alignment (col, algn);
 
         /* Set column resizable */
-        if (((GNCSearchParam *) param)->non_resizeable)
+        if (gnc_search_param_get_non_resizeable (GNC_SEARCH_PARAM (param)))
         {
             gtk_tree_view_column_set_resizable (col, FALSE);
             gtk_tree_view_column_set_expand (col, FALSE);
@@ -339,7 +339,7 @@ gnc_query_view_init_view (GNCQueryView *qview)
             gtk_tree_view_column_set_resizable (col, TRUE);
 
         /* Set column clickable */
-        if (((GNCSearchParam *) param)->passive)
+        if (gnc_search_param_get_passive (GNC_SEARCH_PARAM (param)))
             gtk_tree_view_column_set_clickable (col, FALSE);
         else
         {
