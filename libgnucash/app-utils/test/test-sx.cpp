@@ -60,8 +60,8 @@ test_basic()
         GncSxInstances *insts;
         GList *iter;
 
-        do_test(g_list_length(model->sx_instance_list) == 1, "1 GncSxInstances");
-        insts = (GncSxInstances*)model->sx_instance_list->data;
+        do_test(g_list_length(gnc_sx_instance_model_get_sx_instances_list(model)) == 1, "1 GncSxInstances");
+        insts = (GncSxInstances*)gnc_sx_instance_model_get_sx_instances_list(model)->data;
         do_test(g_list_length(insts->instance_list) == 3, "yesterday, today and tomorrow");
         for (iter = insts->instance_list; iter != NULL; iter = iter->next)
         {
@@ -93,7 +93,7 @@ test_empty()
 
     end = g_date_new_dmy(31, (GDateMonth)12, way_in_the_future_year);
     model = gnc_sx_get_instances(end, TRUE);
-    do_test(g_list_length(model->sx_instance_list) == 0, "no instances");
+    do_test(g_list_length(gnc_sx_instance_model_get_sx_instances_list(model)) == 0, "no instances");
     g_object_unref(G_OBJECT(model));
     g_date_free(end);
     success("empty");
@@ -128,8 +128,8 @@ test_once()
 
     model = gnc_sx_get_instances(end, TRUE);
 
-    do_test(g_list_length(model->sx_instance_list) == 1, "1 instances");
-    instances = (GncSxInstances*)model->sx_instance_list->data;
+    do_test(g_list_length(gnc_sx_instance_model_get_sx_instances_list(model)) == 1, "1 instances");
+    instances = (GncSxInstances*)gnc_sx_instance_model_get_sx_instances_list(model)->data;
     do_test(g_list_length(instances->instance_list) == 1, "1 instance");
     instance = (GncSxInstance*)instances->instance_list->data;
     do_test(g_date_compare(when, &instances->next_instance_date) == 0, "next instance is expected");
@@ -165,8 +165,8 @@ test_state_changes()
     foo = add_daily_sx("foo", start, NULL, NULL);
     model = gnc_sx_get_instances(end, TRUE);
 
-    do_test(g_list_length(model->sx_instance_list) == 1, "one sx");
-    insts = (GncSxInstances*)g_list_nth_data(model->sx_instance_list, 0);
+    do_test(g_list_length(gnc_sx_instance_model_get_sx_instances_list(model)) == 1, "one sx");
+    insts = (GncSxInstances*)g_list_nth_data(gnc_sx_instance_model_get_sx_instances_list(model), 0);
     do_test(g_list_length(insts->instance_list) == 4, "4 instances");
 
     inst = _nth_instance(insts, 2);

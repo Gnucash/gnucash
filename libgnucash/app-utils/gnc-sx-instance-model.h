@@ -35,39 +35,7 @@
 G_BEGIN_DECLS
 
 #define GNC_TYPE_SX_INSTANCE_MODEL	      (gnc_sx_instance_model_get_type ())
-#define GNC_SX_INSTANCE_MODEL(obj)	      (G_TYPE_CHECK_INSTANCE_CAST ((obj), GNC_TYPE_SX_INSTANCE_MODEL, GncSxInstanceModel))
-#define GNC_SX_INSTANCE_MODEL_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), GNC_TYPE_SX_INSTANCE_MODEL, GncSxInstanceModelClass))
-#define GNC_IS_SX_INSTANCE_MODEL(obj)	      (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GNC_TYPE_SX_INSTANCE_MODEL))
-#define GNC_IS_SX_INSTANCE_MODEL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), GNC_TYPE_SX_INSTANCE_MODEL))
-#define GNC_SX_INSTANCE_MODEL_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GNC_TYPE_SX_INSTANCE_MODEL, GncSxInstanceModelClass))
-
-typedef struct _GncSxInstanceModel
-{
-    GObject parent;
-    gboolean disposed;
-
-    /* private */
-    gint qof_event_handler_id;
-
-    /* signals */
-    /* void (*added)(SchedXaction *sx); // gpointer user_data */
-    /* void (*updated)(SchedXaction *sx); // gpointer user_data */
-    /* void (*removing)(SchedXaction *sx); // gpointer user_data */
-
-    /* public */
-    GDate range_end;
-    gboolean include_disabled;
-    GList *sx_instance_list; /* <GncSxInstances*> */
-} GncSxInstanceModel;
-
-typedef struct _GncSxInstanceModelClass
-{
-    GObjectClass parent;
-
-    guint removing_signal_id;
-    guint updated_signal_id;
-    guint added_signal_id;
-} GncSxInstanceModelClass;
+G_DECLARE_FINAL_TYPE (GncSxInstanceModel, gnc_sx_instance_model, GNC, SX_INSTANCE_MODEL, GObject)
 
 typedef struct _GncSxInstances
 {
@@ -113,8 +81,6 @@ typedef struct _GncSxVariableNeeded
     GncSxInstance *instance;
     GncSxVariable *variable;
 } GncSxVariableNeeded;
-
-GType gnc_sx_instance_model_get_type(void);
 
 /** Shorthand for get_instances(now, FALSE); */
 GncSxInstanceModel* gnc_sx_get_current_instances(void);
@@ -255,6 +221,13 @@ void gnc_sx_all_instantiate_cashflow(GList *all_sxes,
  * would return. The returned value must be free'd with
  * g_hash_table_destroy. */
 GHashTable* gnc_sx_all_instantiate_cashflow_all(GDate range_start, GDate range_end);
+
+/** Returns the list of GncSxInstances in the model
+ * (Each element in the list has type GncSxInstances)
+ *
+ * The returned list is owned by the model
+ */
+GList *gnc_sx_instance_model_get_sx_instances_list (GncSxInstanceModel *model);
 
 G_END_DECLS
 
