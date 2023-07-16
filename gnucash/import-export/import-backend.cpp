@@ -128,26 +128,18 @@ gnc_import_TransInfo_get_match_list (const GNCImportTransInfo *info)
     return info->match_list;
 }
 
-static void
-gnc_import_TransInfo_set_match_list (GNCImportTransInfo *info, GList* match_list)
+void
+gnc_import_TransInfo_remove_top_match (GNCImportTransInfo *info)
 {
-    g_assert (info);
-    info->match_list = match_list;
-    if (match_list)
-        info->selected_match_info.selected_match = static_cast<GNCImportMatchInfo*>(match_list->data);
+    g_return_if_fail (info);
+    info->match_list = g_list_remove (info->match_list, static_cast<gpointer>(info->match_list->data));
+    if (info->match_list)
+        info->selected_match_info.selected_match = static_cast<GNCImportMatchInfo*>(info->match_list->data);
     else
     {
         info->selected_match_info.selected_match = nullptr;
         gnc_import_TransInfo_set_action (info, GNCImport_ADD);
-    }
-}
-
-void
-gnc_import_TransInfo_remove_top_match (GNCImportTransInfo *info)
-{
-    GList* match_trans = gnc_import_TransInfo_get_match_list (info);
-    match_trans = g_list_remove (match_trans, static_cast<gpointer>(match_trans->data));
-    gnc_import_TransInfo_set_match_list (info, match_trans);
+    };
 }
 
 Transaction *
