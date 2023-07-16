@@ -549,6 +549,8 @@ gnc_import_match_picker_run_and_close (GtkWidget *parent, GNCImportTransInfo *tr
                                              matcher->selected_match_info,
                                              TRUE);
     }
+    gnc_import_Settings_delete (matcher->user_settings);
+    g_free (matcher);
 }
 
 /** @} */
