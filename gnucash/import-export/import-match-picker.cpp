@@ -95,27 +95,21 @@ static void
 downloaded_transaction_append(GNCImportMatchPicker * matcher,
                               GNCImportTransInfo * transaction_info)
 {
-    GtkListStore *store;
-    GtkTreeIter iter;
-    GtkTreeSelection *selection;
-    Transaction *trans;
-    Split *split;
-    gchar *text;
-    const gchar *ro_text;
-    gboolean found = FALSE;
-    GNCImportTransInfo *local_info;
+    g_return_if_fail (matcher);
+    g_return_if_fail (transaction_info);
 
-    g_assert(matcher);
-    g_assert(transaction_info);
-
-    /*DEBUG("Begin");*/
+    auto found = false;
+    auto store = GTK_LIST_STORE(gtk_tree_view_get_model(matcher->downloaded_view));
+    auto split = gnc_import_TransInfo_get_fsplit(transaction_info);
+    auto trans = gnc_import_TransInfo_get_trans(transaction_info);
 
     /* Has the transaction already been added? */
-    store = GTK_LIST_STORE(gtk_tree_view_get_model(matcher->downloaded_view));
+    GtkTreeIter iter;
     if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))
     {
         do
         {
+            GNCImportTransInfo *local_info;
             gtk_tree_model_get(GTK_TREE_MODEL(store), &iter,
                                DOWNLOADED_COL_INFO_PTR, &local_info,
                                -1);
@@ -130,44 +124,34 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
     if (!found)
         gtk_list_store_append(store, &iter);
 
-    split = gnc_import_TransInfo_get_fsplit(transaction_info);
-    trans = gnc_import_TransInfo_get_trans(transaction_info);
-
-    /*Account*/
-    ro_text = xaccAccountGetName(xaccSplitGetAccount(split));
-    gtk_list_store_set(store, &iter, DOWNLOADED_COL_ACCOUNT, ro_text, -1);
-
-    /*Date*/
-    text = qof_print_date(xaccTransGetDate(trans));
-    gtk_list_store_set(store, &iter, DOWNLOADED_COL_DATE, text, -1);
-    g_free(text);
-
-    /*Amount*/
-    ro_text = xaccPrintAmount(xaccSplitGetAmount(split),
-                              gnc_split_amount_print_info(split, TRUE));
-    gtk_list_store_set(store, &iter, DOWNLOADED_COL_AMOUNT, ro_text, -1);
-
-    /*Description*/
-    ro_text = xaccTransGetDescription(trans);
-    gtk_list_store_set(store, &iter, DOWNLOADED_COL_DESCRIPTION, ro_text, -1);
-
-    /*Memo*/
-    ro_text = xaccSplitGetMemo(split);
-    gtk_list_store_set(store, &iter, DOWNLOADED_COL_MEMO, ro_text, -1);
+    auto account = xaccAccountGetName(xaccSplitGetAccount(split));
+    auto date = qof_print_date(xaccTransGetDate(trans));
+    auto amount = g_strdup (xaccPrintAmount(xaccSplitGetAmount(split), gnc_split_amount_print_info(split, TRUE)));
+    auto desc = xaccTransGetDescription(trans);
+    auto memo = xaccSplitGetMemo(split);
 
     /*Imbalance*/
     /* Assume that the importer won't create a transaction that involves two or more
        currencies and no non-currency commodity.  In that case can use the simpler
        value imbalance check. */
-    ro_text = xaccPrintAmount(xaccTransGetImbalanceValue(trans),
-                              gnc_commodity_print_info (xaccTransGetCurrency (trans), TRUE));
-    gtk_list_store_set(store, &iter, DOWNLOADED_COL_BALANCED, ro_text, -1);
+    auto imbalance = g_strdup (xaccPrintAmount (xaccTransGetImbalanceValue(trans),
+                                                gnc_commodity_print_info (xaccTransGetCurrency (trans), TRUE)));
 
-    gtk_list_store_set(store, &iter, DOWNLOADED_COL_INFO_PTR,
-                       transaction_info, -1);
+    gtk_list_store_set (store, &iter,
+                        DOWNLOADED_COL_ACCOUNT, account,
+                        DOWNLOADED_COL_DATE, date,
+                        DOWNLOADED_COL_AMOUNT, amount,
+                        DOWNLOADED_COL_DESCRIPTION, desc,
+                        DOWNLOADED_COL_MEMO, memo,
+                        DOWNLOADED_COL_BALANCED, imbalance,
+                        DOWNLOADED_COL_INFO_PTR, transaction_info,
+                        -1);
 
-    selection = gtk_tree_view_get_selection(matcher->downloaded_view);
-    gtk_tree_selection_select_iter(selection, &iter);
+    gtk_tree_selection_select_iter (gtk_tree_view_get_selection(matcher->downloaded_view), &iter);
+
+    g_free (date);
+    g_free (amount);
+    g_free (imbalance);
 }
 
 static void
