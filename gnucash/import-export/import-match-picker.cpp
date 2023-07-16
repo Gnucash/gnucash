@@ -157,115 +157,60 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
 static void
 match_update_match_model (GNCImportMatchPicker *matcher)
 {
-    GNCImportMatchInfo * match_info;
-    GtkTreeIter iter;
-    gboolean show_reconciled;
-    gchar reconciled;
-    GtkListStore *match_store;
-    GList * list_element;
-    gchar *text;
-    const gchar *ro_text;
-    GNCImportPendingMatchType pending_match_type;
+    g_return_if_fail (matcher);
 
-    show_reconciled = gtk_toggle_button_get_active
-                        (GTK_TOGGLE_BUTTON(matcher->reconciled_chk));
+    auto show_reconciled = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(matcher->reconciled_chk));
 
     /* Now rewrite the "match" model based on that trans. */
-    match_store = GTK_LIST_STORE(gtk_tree_view_get_model(matcher->match_view));
+    auto match_store = GTK_LIST_STORE(gtk_tree_view_get_model(matcher->match_view));
     gtk_list_store_clear(match_store);
-    list_element = g_list_first (gnc_import_TransInfo_get_match_list
-                                 (matcher->selected_trans_info));
-    while (list_element != NULL)
+
+    for (auto n = gnc_import_TransInfo_get_match_list (matcher->selected_trans_info); n; n = g_list_next (n))
     {
-        match_info = static_cast<GNCImportMatchInfo*>(list_element->data);
+        auto match_info = static_cast<GNCImportMatchInfo*>(n->data);
+        auto split = gnc_import_MatchInfo_get_split (match_info);
+        auto reconciled = xaccSplitGetReconcile (split);
 
         /* Skip this match if reconciled and we're not showing those */
-        reconciled = xaccSplitGetReconcile
-                        (gnc_import_MatchInfo_get_split(match_info));
         if (show_reconciled == FALSE && reconciled != NREC)
-        {
-            list_element = g_list_next (list_element);
             continue;
-        }
 
-        gtk_list_store_append(match_store, &iter);
+        auto probability = gnc_import_MatchInfo_get_probability (match_info);
+        auto trans = xaccSplitGetParent (split);
+        auto match_type = gnc_import_PendingMatches_get_match_type (matcher->pending_matches, match_info);
 
         /* Print fields. */
+        auto confidence = g_strdup_printf ("%d", probability);
+        auto date = qof_print_date (xaccTransGetDate (trans));
+        auto amount = xaccPrintAmount (xaccSplitGetAmount (split), gnc_split_amount_print_info (split, true));
+        auto description = xaccTransGetDescription (trans);
+        auto memo = xaccSplitGetMemo (split);
+        auto pixbuf = probability ? gen_probability_pixbuf (probability, matcher->user_settings,
+                                                            GTK_WIDGET(matcher->match_view)) : nullptr;
+        auto pending_str = (match_type == GNCImportPending_MANUAL || match_type == GNCImportPending_AUTO)
+            ? g_strdup_printf ("%s (%s)", gnc_get_reconcile_str (CREC), gnc_import_PendingMatches_get_type_str (match_type))
+            : nullptr;
 
-        /* Probability */
-        text = g_strdup_printf("%d", gnc_import_MatchInfo_get_probability (match_info));
-        gtk_list_store_set(match_store, &iter, MATCHER_COL_CONFIDENCE, text, -1);
-        g_free(text);
-
-        /* Date */
-        text =
-            qof_print_date
-            ( xaccTransGetDate
-              ( xaccSplitGetParent
-                ( gnc_import_MatchInfo_get_split(match_info) ) ));
-        gtk_list_store_set(match_store, &iter, MATCHER_COL_DATE, text, -1);
-        g_free(text);
-
-        /* Amount */
-        ro_text =
-            xaccPrintAmount( xaccSplitGetAmount ( gnc_import_MatchInfo_get_split(match_info)  ),
-                             gnc_split_amount_print_info(gnc_import_MatchInfo_get_split(match_info), TRUE)
-                           );
-        gtk_list_store_set(match_store, &iter, MATCHER_COL_AMOUNT, ro_text, -1);
-
-        /*Description*/
-        ro_text = xaccTransGetDescription
-                  ( xaccSplitGetParent( gnc_import_MatchInfo_get_split(match_info)) );
-        gtk_list_store_set(match_store, &iter, MATCHER_COL_DESCRIPTION, ro_text, -1);
-
-        /*Split memo*/
-        ro_text = xaccSplitGetMemo(gnc_import_MatchInfo_get_split(match_info) );
-        gtk_list_store_set(match_store, &iter, MATCHER_COL_MEMO, ro_text, -1);
-
-        /*Reconciled*/
-        ro_text = gnc_get_reconcile_str (reconciled);
-        gtk_list_store_set (match_store, &iter, MATCHER_COL_RECONCILED, ro_text,
+        GtkTreeIter iter;
+        gtk_list_store_append (match_store, &iter);
+        gtk_list_store_set (match_store, &iter,
+                            MATCHER_COL_DATE, date,
+                            MATCHER_COL_CONFIDENCE, confidence,
+                            MATCHER_COL_CONFIDENCE_PIXBUF, pixbuf,
+                            MATCHER_COL_AMOUNT, amount,
+                            MATCHER_COL_DESCRIPTION, description,
+                            MATCHER_COL_MEMO, memo,
+                            MATCHER_COL_RECONCILED, gnc_get_reconcile_str (reconciled),
+                            MATCHER_COL_INFO_PTR, match_info,
+                            MATCHER_COL_PENDING, pending_str,
                             -1);
-        
-        /*Pending Action*/
-        pending_match_type = gnc_import_PendingMatches_get_match_type
-                                 (matcher->pending_matches, match_info);
-        
-        /* If it has a pending match mark it cleared, otherwise leave alone */
-        if (pending_match_type == GNCImportPending_MANUAL ||
-            pending_match_type == GNCImportPending_AUTO)
-        {
-            ro_text = gnc_get_reconcile_str (CREC);
-            text = g_strdup_printf("%s (%s)",
-                                   ro_text,
-                                   gnc_import_PendingMatches_get_type_str
-                                       (pending_match_type));
-            
-            gtk_list_store_set (match_store, &iter, MATCHER_COL_PENDING, text, -1);
-            g_free (text);
-        }
 
-        gtk_list_store_set(match_store, &iter, MATCHER_COL_INFO_PTR, match_info, -1);
-        if (gnc_import_MatchInfo_get_probability(match_info) != 0)
-        {
-                gtk_list_store_set(match_store, &iter,
-                                   MATCHER_COL_CONFIDENCE_PIXBUF,
-                                   gen_probability_pixbuf(gnc_import_MatchInfo_get_probability(match_info),
-                                           matcher->user_settings,
-                                           GTK_WIDGET(matcher->match_view)),
-                                   -1);
-        }
+        if (match_info == gnc_import_TransInfo_get_selected_match (matcher->selected_trans_info))
+            gtk_tree_selection_select_iter (gtk_tree_view_get_selection (matcher->match_view), &iter);
 
-        if (match_info ==
-                gnc_import_TransInfo_get_selected_match (matcher->selected_trans_info))
-        {
-            GtkTreeSelection *selection;
-
-            selection = gtk_tree_view_get_selection(matcher->match_view);
-            gtk_tree_selection_select_iter(selection, &iter);
-        }
-
-        list_element = g_list_next(list_element);
+        g_free (confidence);
+        g_free (date);
+        g_free (pending_str);
     }
 }
 
