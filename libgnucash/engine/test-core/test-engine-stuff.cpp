@@ -52,6 +52,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+
+#include <string>
+
 #include <qof.h>
 
 #include "Account.h"
@@ -1376,8 +1379,6 @@ get_random_transaction_with_currency(QofBook *book,
 {
     Transaction* trans;
     KvpFrame *f;
-    gint num;
-    gchar *numstr;
 
     if (!account_list)
     {
@@ -1392,8 +1393,6 @@ get_random_transaction_with_currency(QofBook *book,
         return NULL;
     }
 
-    numstr = g_new0(gchar, 10);
-
     trans = xaccMallocTransaction(book);
 
     xaccTransBeginEdit(trans);
@@ -1402,9 +1401,10 @@ get_random_transaction_with_currency(QofBook *book,
                           currency ? currency :
                           get_random_commodity (book));
 
-    num = get_random_int_in_range (1, max_trans_num);
-    g_snprintf(numstr, 10, "%d", num);
-    xaccTransSetNum(trans, numstr);
+    gint num = get_random_int_in_range (1, max_trans_num);
+    auto numstr = std::to_string(num);
+    xaccTransSetNum(trans, numstr.c_str());
+
     set_tran_random_string_from_array(trans, xaccTransSetDescription,
                                       sane_descriptions);
     trn_add_ran_time(trans, xaccTransSetDatePostedSecs);
