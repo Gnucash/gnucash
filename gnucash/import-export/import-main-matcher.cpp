@@ -947,15 +947,15 @@ match_func (GtkEntryCompletion *completion, const char *entry_str,
 typedef struct
 {
     GtkWidget *entry;
-    GObject *override;
+    GObject *override_widget;
     bool *can_edit;
     GHashTable *hash;
     const char *initial;
 } EntryInfo;
 
-static void override_clicked (GtkWidget *widget, EntryInfo *entryinfo)
+static void override_widget_clicked (GtkWidget *widget, EntryInfo *entryinfo)
 {
-    gtk_widget_set_visible (GTK_WIDGET (entryinfo->override), false);
+    gtk_widget_set_visible (GTK_WIDGET (entryinfo->override_widget), false);
     gtk_widget_set_sensitive (entryinfo->entry, true);
     gtk_entry_set_text (GTK_ENTRY (entryinfo->entry), "");
     gtk_widget_grab_focus (entryinfo->entry);
@@ -967,19 +967,19 @@ setup_entry (EntryInfo *entryinfo)
 {
     bool sensitive = *entryinfo->can_edit;
     GtkWidget *entry = entryinfo->entry;
-    GtkWidget *override = GTK_WIDGET (entryinfo->override);
+    GtkWidget *override_widget = GTK_WIDGET (entryinfo->override_widget);
     GHashTable *hash = entryinfo->hash;
     const char *initial = entryinfo->initial;
 
     gtk_widget_set_sensitive (entry, sensitive);
-    gtk_widget_set_visible (override, !sensitive);
+    gtk_widget_set_visible (override_widget, !sensitive);
 
     if (sensitive && initial && *initial)
         gtk_entry_set_text (GTK_ENTRY (entry), initial);
     else if (!sensitive)
     {
         gtk_entry_set_text (GTK_ENTRY (entry), _("Click Edit to modify"));
-        g_signal_connect (override, "clicked", G_CALLBACK (override_clicked),
+        g_signal_connect (override_widget, "clicked", G_CALLBACK (override_widget_clicked),
                           entryinfo);
     }
 
