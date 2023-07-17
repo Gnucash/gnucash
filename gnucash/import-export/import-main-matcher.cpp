@@ -1857,36 +1857,23 @@ update_child_row (GNCImportMatchInfo *sel_match, GtkTreeModel *model, GtkTreeIte
     else
         gtk_tree_model_iter_nth_child (model, &child, iter, 0);
 
-    gchar *text = qof_print_date (xaccTransGetDate (sel_match->trans));
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_DATE_TXT, text, -1);
-    g_free (text);
-
-    if (xaccTransCountSplits (sel_match->trans) == 2)
-        gtk_tree_store_set (store, &child, DOWNLOADED_COL_ACCOUNT, xaccAccountGetName (
-                            xaccSplitGetAccount (xaccSplitGetOtherSplit (sel_match->split))), -1);
-    else
-        gtk_tree_store_set (store, &child, DOWNLOADED_COL_ACCOUNT, _("-- Split Transaction --"), -1);
-
-    const gchar *ro_text = xaccPrintAmount (xaccSplitGetAmount (sel_match->split),
-                               gnc_split_amount_print_info (sel_match->split, true));
+    auto account_str = (xaccTransCountSplits (sel_match->trans) == 2)
+        ? xaccAccountGetName (xaccSplitGetAccount (xaccSplitGetOtherSplit (sel_match->split)))
+        : _("-- Split Transaction --");
+    auto amount_str = xaccPrintAmount (xaccSplitGetAmount (sel_match->split), gnc_split_amount_print_info (sel_match->split, true));
+    auto date = qof_print_date (xaccTransGetDate (sel_match->trans));
 
     gtk_tree_store_set (store, &child,
-                        DOWNLOADED_COL_AMOUNT, ro_text,
-                        -1);
-
-    const gchar *memo = xaccSplitGetMemo (sel_match->split);
-    gtk_tree_store_set (store, &child,
-                        DOWNLOADED_COL_MEMO, memo,
+                        DOWNLOADED_COL_ACCOUNT, account_str,
+                        DOWNLOADED_COL_DATE_TXT, date,
+                        DOWNLOADED_COL_AMOUNT, amount_str,
+                        DOWNLOADED_COL_MEMO, xaccSplitGetMemo (sel_match->split),
                         DOWNLOADED_COL_MEMO_STYLE, PANGO_STYLE_NORMAL,
-                        -1);
-
-    const gchar *desc = xaccTransGetDescription (sel_match->trans);
-    gtk_tree_store_set (store, &child,
-                        DOWNLOADED_COL_DESCRIPTION, desc,
+                        DOWNLOADED_COL_DESCRIPTION, xaccTransGetDescription (sel_match->trans),
                         DOWNLOADED_COL_DESCRIPTION_STYLE, PANGO_STYLE_NORMAL,
+                        DOWNLOADED_COL_ENABLE, false,
                         -1);
-
-    gtk_tree_store_set (store, &child, DOWNLOADED_COL_ENABLE, false, -1);
+    g_free (date);
 }
 
 static gchar *
