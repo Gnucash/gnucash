@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-06-26 16:00+0000\n"
+"PO-Revision-Date: 2023-07-17 22:03+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -5278,7 +5278,7 @@ msgstr "Keresési jelentés"
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
-msgstr "Folyószámla-könyv"
+msgstr "Regiszter"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3348
 msgid "and subaccounts"
@@ -5731,10 +5731,10 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and delete the split from that register."
 msgstr ""
-"Ezen felosztás horgonyozza le a tranzakciót a regiszterben. Nem törölhető "
-"ebből az ablakból. Az egész tranzakció törölhető az ablakból, vagy "
-"navigáljon a tranzakció másik oldalát mutató regiszterbe, és törölje a "
-"felosztást abból a regiszterből."
+"Ez a felosztás köti a tranzakciót ehhez a regiszterhez, ezért ebben a "
+"regiszterben nem törölheti ebből az ablakból. Helyette törölheti az egész "
+"tranzakciót, vagy átugorhat a tranzakció másik lábát mutató regiszterbe, és "
+"ott már törölheti ezt a felosztást."
 
 #: gnucash/gnome/gnc-split-reg.c:1483
 msgid "Delete the current transaction?"
@@ -6499,7 +6499,7 @@ msgstr "Nem lehetett nyitóegyenleget létrehozni."
 
 #: gnucash/gnome-utils/dialog-account.c:836
 msgid "Give the children the same type?"
-msgstr "A leszármazott megegyező típusú legyen?"
+msgstr "Az alszámlák típusát is megváltoztassuk?"
 
 #: gnucash/gnome-utils/dialog-account.c:847
 #, c-format
@@ -6507,10 +6507,12 @@ msgid ""
 "The children of the edited account have to be changed to type \"%s\" to make "
 "them compatible."
 msgstr ""
+"A szerkesztett számla alszámláit is \"%s\" típusúra kell módosítani, hogy "
+"kompatibilisek maradjanak."
 
 #: gnucash/gnome-utils/dialog-account.c:858
 msgid "_Show children accounts"
-msgstr "_Alárendelt számlák megjelenítése"
+msgstr "_Az érintett alszámlák megjelenítése"
 
 #: gnucash/gnome-utils/dialog-account.c:930
 msgid "The account must be given a name."
@@ -6880,13 +6882,12 @@ msgstr "Bevétel%sFizetés%sAdóköteles"
 
 #: gnucash/gnome-utils/dialog-preferences.c:904
 msgid "Path does not exist, "
-msgstr "Út nem létezik, "
+msgstr "Az útvonal nem létezik, "
 
 #: gnucash/gnome-utils/dialog-preferences.c:960
 #: gnucash/gnome-utils/dialog-preferences.c:1455
-#, fuzzy
 msgid "Select a folder"
-msgstr "Költségvetés kiválasztása"
+msgstr "Válasszon egy könyvtárat"
 
 #: gnucash/gnome-utils/dialog-preferences.c:1458
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1524
@@ -9132,8 +9133,8 @@ msgid ""
 msgstr ""
 "Tranzakció kihagyásának engedélyezése a tranzakció-egyeztetőben. Ha "
 "engedélyezve van, akkor alapértelmezésként ki lesz hagyva az a tranzakció, "
-"amelynek a legjobb egyezés-pontszáma a sárga sávba esik (az auto-felvétel "
-"küszöb felett, de az auto-igazolás küszöb alatt)."
+"amelynek a legjobb egyezés-pontszáma a sárga sávba esik (az automatikus "
+"hozzáadás határa felett, de az automatikus elszámolás határa alatt van)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:10
 msgid "Enable UPDATE match action"
@@ -10871,7 +10872,7 @@ msgstr ""
 "Ezzel a segéddel számlákat importálhat egy fájlból.\n"
 "\n"
 "A fájl formátumának ugyanolyannak kell lennie, mint amilyet a „Számlakészlet "
-"exportálása CSV-fájlba” exportálási menüpont készít.\n"
+"exportálása CSV-fájlba” menüpont készít.\n"
 "\n"
 "Amelyik számla még nem létezik, az a teljes számlanév által megadott helyen "
 "és névvel létre fog jönni, feltéve, hogy a hozzá tartozó értékpapír vagy "
@@ -18738,7 +18739,7 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
-"Ezzel a segéddel a tranzakciókat exportálhat fájlba, az alább kiválasztott "
+"Ezzel a segéddel tranzakciókat exportálhat fájlba, az alább kiválasztott "
 "elválasztójel használatával.\n"
 "\n"
 "%s\n"
@@ -20599,6 +20600,8 @@ msgid ""
 "This transaction is already being edited in another register. Please finish "
 "editing it there first."
 msgstr ""
+"Ez a tranzakció már szerkesztés alatt áll egy másik regiszterben. Kérjük, "
+"előbb fejezze be a szerkesztést ott."
 
 #: gnucash/register/ledger-core/split-register.c:462
 msgid "Save transaction before duplicating?"
