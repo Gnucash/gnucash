@@ -98,7 +98,7 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         N_("d-m-y"),
         "(?:"                                   // either d-m-y
         "(?<DAY>[0-9]+)[-/.' ]+"
-        "(?<MONTH>[0-9]+)[-/.' ]+"
+        "(?<MONTH>[0-9]+|[A-Za-z]+)[-/.' ]+"
         "(?<YEAR>[0-9]+)"
         "|"                                     // or DDMMCCYY
         "(?<DAY>[0-9]{2})"
@@ -591,7 +591,7 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
         year = m_greg.year(); // Can use m_greg here as it was already initialized in the initializer list earlier
 
     m_greg = Date(year,
-                  static_cast<Month>(std::stoi (what.str("MONTH"))),
+                  boost::date_time::month_str_to_ushort<Month> (what.str("MONTH")),
                   std::stoi (what.str("DAY")));
 }
 
