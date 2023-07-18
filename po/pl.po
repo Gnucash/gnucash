@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-07-14 23:52+0000\n"
+"PO-Revision-Date: 2023-07-18 22:07+0000\n"
 "Last-Translator: vim <dev.getport@slmail.me>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -49,8 +49,8 @@ msgid ""
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
 "Próbowano wyszukać niezdefiniowany symbol daty '~a'. Ten raport został "
-"prawdopodobnie zapisany przez późniejszą wersję GnuCash. Domyślnie jest to "
-"dzień dzisiejszy."
+"prawdopodobnie zapisany przez nowszą wersję GnuCash. Domyślnie jest to dzień "
+"dzisiejszy."
 
 #: bindings/guile/date-utilities.scm:717
 #: gnucash/gnome-utils/gnc-period-select.c:70
@@ -4081,7 +4081,7 @@ msgstr "Wydatki"
 #: gnucash/register/ledger-core/split-register-model.c:353
 #: gnucash/report/reports/standard/register.scm:143
 msgid "Transfer"
-msgstr "Transfer"
+msgstr "Przelew"
 
 #: gnucash/gnome/gnc-budget-view.c:509
 #, fuzzy
@@ -4819,9 +4819,8 @@ msgid "Pay"
 msgstr "Zapłać"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:227
-#, fuzzy
 msgid "New Voucher"
-msgstr "Kwit"
+msgstr "Nowy Voucher"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:228
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:860
@@ -4875,7 +4874,7 @@ msgstr "_Wytnij transakcję"
 #: gnucash/gnome/gnc-plugin-page-register.c:248
 #: gnucash/ui/gnc-plugin-page-register.ui:136
 msgid "_Copy Transaction"
-msgstr "S_kopiuj transakcję"
+msgstr "_Kopiuj transakcję"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:249
 #: gnucash/ui/gnc-plugin-page-register.ui:142
@@ -5042,7 +5041,7 @@ msgstr "Skocz"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:382
 msgid "Schedule"
-msgstr "Terminarz"
+msgstr "Harmonogram"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:385
 #: gnucash/gnome/window-autoclear.c:88
@@ -5233,7 +5232,7 @@ msgstr "<b>Informacje o nowej transakcji</b>"
 #: gnucash/gnome/gnc-plugin-page-register.c:3965
 #, c-format
 msgid "Sort %s by…"
-msgstr "Sortuj %s według…"
+msgstr "Sortuj %s wedł_ug…"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.c:4055
@@ -7173,7 +7172,7 @@ msgstr "(bez nazwy)"
 
 #: gnucash/gnome-utils/gnc-file.c:96 gnucash/ui/gnc-main-window.ui:17
 msgid "_Import"
-msgstr "_Importuj"
+msgstr "_Import"
 
 #: gnucash/gnome-utils/gnc-file.c:98 gnucash/gnome-utils/gnc-file.c:337
 #: gnucash/gtkbuilder/dialog-preferences.glade:2371
@@ -7890,7 +7889,7 @@ msgstr "Brakuje '%s'"
 #: gnucash/gnome-utils/gnc-report-combo.c:316
 #, c-format
 msgid "Report with GUID '%s' is missing"
-msgstr "Brakuje raportu z GUID"
+msgstr "Brak raportu z GUID '%s'"
 
 #: gnucash/gnome-utils/gnc-splash.c:113
 msgid "Loading…"
@@ -13296,7 +13295,7 @@ msgstr "Użyj wartości dla Typu środków"
 #: gnucash/ui/gnc-main-window.ui:492 gnucash/ui/gnc-reconcile-window.ui:85
 #: gnucash/ui/gnc-reconcile-window.ui:88
 msgid "_Help"
-msgstr "Pomo_c"
+msgstr "Po_moc"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1194
 #: gnucash/gtkbuilder/dialog-customer.glade:206
@@ -14502,10 +14501,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:266
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:412
-#, fuzzy
-#| msgid "New Account"
 msgid "New _Account…"
-msgstr "Nowe konto"
+msgstr "Nowe _konto"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -14705,9 +14702,8 @@ msgstr ""
 "opis i notatki do opisu i notatki pasującej transakcji zamiast zastępować je."
 
 #: gnucash/gtkbuilder/dialog-import.glade:1163
-#, fuzzy
 msgid "_Reconcile after match"
-msgstr "Uzgodnij (automatycznie) dopasowane"
+msgstr "_Uzgodnij (automatycznie) dopasowane"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1186
 msgid "Generic import transaction matcher"
@@ -14911,7 +14907,7 @@ msgstr "Utwórz _nowy plan kont"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:261
 msgid "_Import my QIF files"
-msgstr "Importuj pliki _QIF"
+msgstr "Importuj moje pliki _QIF"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:278
 msgid "_Open the new user tutorial"
@@ -17552,7 +17548,7 @@ msgstr "Zam_rożone"
 #. Filter By Dialog, below tabs
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:533
 msgid "Sa_ve Filter"
-msgstr "Zapisz filtr"
+msgstr "Zapi_sz filtr"
 
 #. Duplicate Transaction Dialog
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:566
@@ -17653,7 +17649,7 @@ msgstr "Sortuj według pola notatek."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1049
 msgid "Sa_ve Sort Order"
-msgstr "Zapisz kolejność sortowania"
+msgstr "Zapi_sz kolejność sortowania"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1053
 msgid "Save the sort order for this register."
@@ -18734,7 +18730,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AQBanking"
-msgstr ""
+msgstr "Importuj używając AqBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
 #, fuzzy
@@ -18745,7 +18741,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
-msgstr "_Działania online"
+msgstr "_Czynności online"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:18
 msgid "Get _Balance"
@@ -18766,31 +18762,27 @@ msgstr "Pobierz transakcje, korzystając z bankowości elektronicznej"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
-#, fuzzy
 msgid "Issue _SEPA Transaction…"
-msgstr "W_yślij transakcję…"
+msgstr "W_yślij transakcję SEPA…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:33
-#, fuzzy
 msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
 msgstr ""
-"Wyślij nową transakcję wewnątrz-bankową, korzystając z bankowości "
-"elektronicznej"
+"Wyślij nową transakcję międzynarodową (SEPA) online za pośrednictwem "
+"bankowości elektronicznej"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
-#, fuzzy
 msgid "Issue SEPA I_nternal Transaction…"
-msgstr "W_yślij transakcję…"
+msgstr "W_yślij transakcję międzynarodową SEPA…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:38
-#, fuzzy
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
 msgstr ""
-"Wyślij nową transakcję wewnątrz-bankową, korzystając z bankowości "
+"Wyślij nową transakcję (SEPA) online za pośrednictwem bankowości "
 "elektronicznej"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
@@ -18805,21 +18797,20 @@ msgstr ""
 "elektronicznej"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
-#, fuzzy
 msgid "Issue SEPA Direct _Debit…"
-msgstr "_Polecenie zapłaty"
+msgstr "Wyślij _polecenie zapłaty SEPA…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:48
-#, fuzzy
 msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
-msgstr "Wyślij nowe polecenie zapłaty, korzystając z bankowości elektronicznej"
+msgstr ""
+"Wyślij nowe międzynarodowe (SEPA) polecenie zapłaty online za pośrednictwem "
+"bankowości elektronicznej"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:53
-#, fuzzy
 msgid "Show _log window"
-msgstr "Pokaż okno nowego użytkownika"
+msgstr "Pokaż okno _dziennika"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:55
 #, fuzzy
@@ -28610,7 +28601,7 @@ msgstr "Wytnij bieżące zaznaczenie i skopiuj do schowka"
 #: gnucash/ui/gnc-embedded-register-window.ui:15
 #: gnucash/ui/gnc-main-window.ui:108
 msgid "_Copy"
-msgstr "S_kopiuj"
+msgstr "_Kopiuj"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:18
 #: gnucash/ui/gnc-main-window.ui:111
@@ -28715,10 +28706,8 @@ msgstr "_Podwójny wiersz"
 #: gnucash/ui/gnc-plugin-page-register.ui:229
 #: gnucash/ui/gnc-plugin-page-register.ui:872
 #: gnucash/ui/gnc-reconcile-window.ui:43
-#, fuzzy
-#| msgid "Transfer"
 msgid "_Transfer…"
-msgstr "Transfer"
+msgstr "_Przelew…"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:95
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:128
@@ -28783,10 +28772,8 @@ msgid "Quit this application"
 msgstr "Wyjdź z aplikacji"
 
 #: gnucash/ui/gnc-main-window.ui:143
-#, fuzzy
-#| msgid "Preferences"
 msgid "Pr_eferences"
-msgstr "Opcje"
+msgstr "_Ustawienia"
 
 #: gnucash/ui/gnc-main-window.ui:145
 msgid "Edit the global preferences of GnuCash"
@@ -28794,7 +28781,7 @@ msgstr "Edytuj globalne preferencje GnuCash"
 
 #: gnucash/ui/gnc-main-window.ui:178
 msgid "_Toolbar"
-msgstr "_Pasek narzędziowy"
+msgstr "_Pasek narzędzi"
 
 #: gnucash/ui/gnc-main-window.ui:180
 msgid "Show/hide the toolbar on this window"
@@ -28818,7 +28805,7 @@ msgstr "Pokaż/ukryj pasek stanu na tym oknie"
 
 #: gnucash/ui/gnc-main-window.ui:193
 msgid "Tab P_osition"
-msgstr "P_ozycja zakładek"
+msgstr "P_ozycja kart"
 
 #: gnucash/ui/gnc-main-window.ui:198
 #, fuzzy
@@ -28853,10 +28840,8 @@ msgid "_Actions"
 msgstr "_Czynności"
 
 #: gnucash/ui/gnc-main-window.ui:344
-#, fuzzy
-#| msgid "Reset Warnings"
 msgid "Reset _Warnings…"
-msgstr "Wyzeruj ostrzeżenia"
+msgstr "Resetuj _ostrzeżenia…"
 
 #: gnucash/ui/gnc-main-window.ui:346
 #, fuzzy
@@ -28873,7 +28858,7 @@ msgstr "Wyzeruj stan wszystkich ostrzeżeń, aby ukazywały się ponownie."
 #: gnucash/ui/gnc-plugin-page-register.ui:357
 #: gnucash/ui/gnc-plugin-page-register.ui:469
 msgid "Re_name Page"
-msgstr "Zmień _nazwę strony"
+msgstr "Zmi_eń nazwę karty"
 
 #: gnucash/ui/gnc-main-window.ui:351
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:202
@@ -29031,7 +29016,7 @@ msgstr "Zapisz ten plik pod inną nazwą"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:33
 msgid "Re_vert"
-msgstr "Odw_róć"
+msgstr "Co_fnij"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:35
 msgid "Reload the current database, reverting all unsaved changes"
@@ -29188,19 +29173,16 @@ msgid "View the Tips of the Day"
 msgstr "Wyświetla Porady dnia"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:6
-#, fuzzy
-#| msgid "Import Bills or Invoices from csv"
 msgid "Import Bills & _Invoices…"
-msgstr "Importuj rachunki lub faktury z CSV"
+msgstr "Importuj _rachunki i faktury…"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:8
 msgid "Import bills and invoices from a CSV text file"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-budget.ui:10
-#, fuzzy
 msgid "_New Budget"
-msgstr "Nowy budżet"
+msgstr "_Nowy budżet"
 
 #: gnucash/ui/gnc-plugin-budget.ui:12
 #, fuzzy
@@ -29209,9 +29191,8 @@ msgid "Create a new Budget"
 msgstr "Utwórz nowy budżet."
 
 #: gnucash/ui/gnc-plugin-budget.ui:15
-#, fuzzy
 msgid "_Open Budget"
-msgstr "Otwórz budżet"
+msgstr "_Otwórz budżet"
 
 #: gnucash/ui/gnc-plugin-budget.ui:17
 msgid ""
@@ -29220,9 +29201,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-budget.ui:20
-#, fuzzy
 msgid "_Copy Budget"
-msgstr "Kopiuj budżet"
+msgstr "_Kopiuj budżet"
 
 #: gnucash/ui/gnc-plugin-budget.ui:22
 #, fuzzy
@@ -29493,9 +29473,8 @@ msgid "Export the Transactions to a CSV file"
 msgstr "Eksportuj transakcje do pliku CSV"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
-#, fuzzy
 msgid "Export A_ctive Register to CSV…"
-msgstr "_Plan kont…"
+msgstr "Eksportuj aktywny _rejestr do CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:18
 #, fuzzy
@@ -29519,19 +29498,16 @@ msgid "Import Transactions from a CSV file"
 msgstr "Importuj transakcje z pliku CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
-#, fuzzy
-#| msgid "Import Prices from a CSV file"
 msgid "Import _Prices from a CSV file…"
-msgstr "Importuj ceny z pliku CSV"
+msgstr "Importuj _ceny z pliku CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
 msgstr "Importuj ceny z pliku CSV"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
-#, fuzzy
 msgid "Import _Customers & Vendors…"
-msgstr "Import CSV and s_end…"
+msgstr "Importuj klientów i _dostawców…"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:8
 #, fuzzy
@@ -29663,7 +29639,7 @@ msgstr "Utwórz nowe konto"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
 msgid "New Account _Hierarchy…"
-msgstr "Nowy _plan kont…"
+msgstr "Nowa _hierarchia kont…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:118
 msgid "Extend the current book by merging with new account type categories"
@@ -29674,10 +29650,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:234
 #: gnucash/ui/gnc-plugin-page-register.ui:236
 #: gnucash/ui/gnc-plugin-page-register.ui:887
-#, fuzzy
-#| msgid "_Reconcile"
 msgid "_Reconcile…"
-msgstr "Uz_godnij"
+msgstr "Uz_godnij…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
@@ -29689,10 +29663,8 @@ msgstr "Uzgodnij wybrane konto"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:138
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:239
 #: gnucash/ui/gnc-plugin-page-register.ui:242
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "_Auto-clear…"
-msgstr "Automatyczne przejrzenie"
+msgstr "Automatyczne _rozliczenie…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
 #: gnucash/ui/gnc-plugin-page-register.ui:244
@@ -29707,17 +29679,14 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:249
 #: gnucash/ui/gnc-plugin-page-register.ui:248
 #: gnucash/ui/gnc-plugin-page-register.ui:902
-#, fuzzy
 msgid "Stock Ass_istant…"
-msgstr "Szczegóły splitu giełdowego"
+msgstr "Asystent _transakcji giełdowych…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:150
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
 #: gnucash/ui/gnc-plugin-page-register.ui:254
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stoc_k Split…"
-msgstr "Split giełdowy"
+msgstr "Asystent splitu_ akcji…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
@@ -29743,7 +29712,7 @@ msgstr "Przywróć edytor/przeglądarkę partii"
 #: gnucash/ui/gnc-plugin-page-register.ui:314
 #: gnucash/ui/gnc-reconcile-window.ui:49
 msgid "_Check & Repair"
-msgstr "Spraw_dź i napraw"
+msgstr "Sprawdź i _napraw"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:169
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:281
@@ -30251,10 +30220,8 @@ msgstr "Edytuj kurs wymiany dla bieżącej transakcji"
 #: gnucash/ui/gnc-plugin-page-register.ui:432
 #: gnucash/ui/gnc-plugin-page-register.ui:544
 #: gnucash/ui/gnc-plugin-page-register.ui:847
-#, fuzzy
-#| msgid "Schedule"
 msgid "Sche_dule…"
-msgstr "Terminarz"
+msgstr "Har_monogram…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
@@ -30427,7 +30394,7 @@ msgstr "Usuwa zaznaczoną zaplanowaną transakcję"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
 msgid "Import _QIF…"
-msgstr "Zaimportuj plik _QIF…"
+msgstr "Importuj plik _QIF…"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:8
 msgid "Import a Quicken QIF file"
