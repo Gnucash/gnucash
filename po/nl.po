@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-07-14 23:52+0000\n"
+"PO-Revision-Date: 2023-07-19 06:06+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
@@ -18293,7 +18293,7 @@ msgid ""
 "profile list contains specializations and is populated according to which "
 "format you select in this list."
 msgstr ""
-"Deze lijst bevat de bestandsindelingen die AQBanking kan importeren. De "
+"Deze lijst bevat de bestandsindelingen die AqBanking kan importeren. De "
 "profiellijst bevat specialisaties en wordt ingevuld volgens het formaat dat "
 "u in deze lijst selecteert."
 
@@ -18777,12 +18777,12 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AQBanking"
-msgstr "Importeren met AQBanking"
+msgstr "Importeren met AqBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
 msgid "Import into GnuCash any file format supported by AQBanking"
 msgstr ""
-"Importeer in GnuCash elk bestandsformaat dat wordt ondersteund door AQBanking"
+"Importeer in GnuCash elk bestandsformaat dat wordt ondersteund door AqBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
