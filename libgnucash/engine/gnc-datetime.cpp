@@ -44,6 +44,9 @@
 #include "gnc-timezone.hpp"
 #include "gnc-datetime.hpp"
 
+#include "unicode/smpdtfmt.h"
+#include <unicode/gregocal.h>
+
 #define N_(string) string //So that xgettext will find it
 
 using PTZ = boost::local_time::posix_time_zone;
@@ -555,6 +558,25 @@ GncDateTimeImpl::timestamp()
     return str.substr(0, 8) + str.substr(9, 15);
 }
 
+static void
+interpret_date (const std::string day_in, const std::string month_in, const std::string year_in,
+                int& day_out, int& month_out, int& year_out)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    static icu::SimpleDateFormat df("dd/MMM/yyyy", icu::Locale(), status);
+    static icu::GregorianCalendar calendar = icu::GregorianCalendar (status);
+
+    auto myDate = df.parse(icu::UnicodeString::fromUTF8(day_in + '/' + month_in + '/' + year_in), status);
+
+    // Convert UDate to components
+    calendar.setTime(myDate, status);
+
+    year_out = calendar.get(UCAL_YEAR, status);
+    month_out = calendar.get(UCAL_MONTH, status);
+    day_out = calendar.get(UCAL_DATE, status);
+}
+
+
 /* Member function definitions for GncDateImpl.
  */
 GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
@@ -590,9 +612,11 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
     else /* The input dates have no year, so use current year */
         year = m_greg.year(); // Can use m_greg here as it was already initialized in the initializer list earlier
 
-    m_greg = Date(year,
-                  boost::date_time::month_str_to_ushort<Month> (what.str("MONTH")),
-                  std::stoi (what.str("DAY")));
+    int cday, cmonth, cyear;
+
+    interpret_date (what.str("DAY"), what.str("MONTH"), std::to_string (year), cday, cmonth, cyear);
+
+    m_greg = Date(cyear, cmonth+1, cday);
 }
 
 gnc_ymd
