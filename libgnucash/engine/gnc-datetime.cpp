@@ -102,7 +102,7 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         N_("y-b-d"),
         "(?:"                                   // either y-b-d
         "(?<YEAR>[0-9]+)[-/.' ]+"
-        "(?<MONTH>[A-Za-z]+)[-/.' ]+"
+        "(?<MONTH>[[:alpha:]]+)[-/.' ]+"
         "(?<DAY>[0-9]+)"
         ")"
     },
@@ -123,7 +123,7 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         N_("d-b-y"),
         "(?:"                                   // either d-b-y
         "(?<DAY>[0-9]+)[-/.' ]"
-        "(?<MONTH>[A-Za-z]+)[-/.' ]+"
+        "(?<MONTH>[[:alpha:]]+)[-/.' ]+"
         "(?<YEAR>[0-9]+)+"
         ")"
     },
@@ -143,7 +143,7 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         // Translators: b is for the month name
         N_("b-d-y"),
         "(?:"                                   // either b-d-y
-        "(?<MONTH>[A-Za-z]+)[-/.' ]+"
+        "(?<MONTH>[[:alpha:]]+)[-/.' ]+"
         "(?<DAY>[0-9]+)[-/.' ]"
         "(?<YEAR>[0-9]+)+"
         ")"
@@ -166,7 +166,7 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         (N_("d-b")),
         "(?:"                                   // either d-b(-y)
         "(?<DAY>[0-9]+)[-/.' ]+"
-        "(?<MONTH>[A-Za-z]+)(?:[-/.' ]+"
+        "(?<MONTH>[[:alpha:]]+)(?:[-/.' ]+"
         "(?<YEAR>[0-9]+))?"
         ")"
     },
@@ -185,7 +185,7 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
     GncDateFormat {
         (N_("b-d")),
         "(?:"                                   // either b-d(-y)
-        "(?<MONTH>[A-Za-z]+)[-/.' ]+"
+        "(?<MONTH>[[:alpha:]]+)[-/.' ]+"
         "(?<DAY>[0-9]+)(?:[-/.' ]+"
         "(?<YEAR>[0-9]+))?"
         ")"
