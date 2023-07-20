@@ -69,7 +69,7 @@ typedef char gchar;
 %typemap(in) time64 * (time64 t) "t = scm_to_int64($input); $1 = &t;"
 %typemap(out) time64 * " $result = ($1) ? scm_from_int64(*($1)) : SCM_BOOL_F; "
 
-%typemap(in) struct tm * (struct tm t) {
+%typemap(in) struct tm * (struct tm t, char *tzone) {
     SCM tm = $input;
     t.tm_sec = scm_to_int(SCM_SIMPLE_VECTOR_REF(tm, 0));
     t.tm_min = scm_to_int(SCM_SIMPLE_VECTOR_REF(tm, 1));
@@ -83,10 +83,16 @@ typedef char gchar;
 %#ifdef HAVE_STRUCT_TM_GMTOFF
     t.tm_gmtoff = scm_to_int(SCM_SIMPLE_VECTOR_REF(tm, 9));
     SCM zone = SCM_SIMPLE_VECTOR_REF(tm, 10);
-    t.tm_zone = SCM_UNBNDP(zone) ? NULL : scm_to_locale_string(zone);
+    tzone = SCM_UNBNDP(zone) ? NULL : scm_to_locale_string(zone);
+    t.tm_zone = tzone;
 %#endif
     $1 = &t;
  }
+%typemap(freearg) struct tm * {
+%#ifdef HAVE_STRUCT_TM_GMTOFF
+    free(tzone$argnum);
+%#endif
+}
 
 %typemap(out) struct tm * {
     SCM tm = scm_c_make_vector(11, SCM_UNDEFINED);
