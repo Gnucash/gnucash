@@ -1152,10 +1152,12 @@ class GncGtkListUIItem : public GncOptionGtkUIItem
 public:
     GncGtkListUIItem(GtkWidget* widget) :
         GncOptionGtkUIItem{widget, GncOptionUIType::LIST} {}
+
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GTK_TREE_VIEW(get_widget())};
         auto selection{gtk_tree_view_get_selection(widget)};
+        gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
         g_signal_handlers_block_by_func(selection, (gpointer)list_changed_cb, &option);
         gtk_tree_selection_unselect_all(selection);
         for (auto index : option.get_value<GncMultichoiceOptionIndexVec>())
