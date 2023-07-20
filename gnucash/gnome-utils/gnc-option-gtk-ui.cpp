@@ -1168,20 +1168,20 @@ public:
         }
         g_signal_handlers_unblock_by_func(selection, (gpointer)list_changed_cb, &option);
     }
+
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GTK_TREE_VIEW(get_widget())};
         auto selection{gtk_tree_view_get_selection(widget)};
-        auto rows{option.num_permissible_values()};
+        auto selected_rows{gtk_tree_selection_get_selected_rows(selection, nullptr)};
         GncMultichoiceOptionIndexVec vec;
-        for (size_t row = 0; row < rows; ++row)
+        for (auto row = selected_rows; row; row = g_list_next(row))
         {
-            auto path{gtk_tree_path_new_from_indices(row, -1)};
-            auto selected{gtk_tree_selection_path_is_selected(selection, path)};
-            gtk_tree_path_free(path);
-            if (selected)
-                vec.push_back(row);
+            auto path{static_cast<GtkTreePath*>(row->data)};
+            auto indices{gtk_tree_path_get_indices(path)};
+            vec.push_back(*indices);
         }
+        g_list_free_full(selected_rows, (GDestroyNotify)gtk_tree_path_free);
         option.set_value(vec);
     }
 };
