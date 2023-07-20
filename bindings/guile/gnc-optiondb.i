@@ -1287,29 +1287,9 @@ inline SCM return_scm_value(ValueType value)
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionMultichoiceValue>)
                 {
-                    auto serial{option.serialize()};
-                    if (serial.empty())
-                    {
-                        return scm_simple_format(SCM_BOOL_F, list_format_str,
-                                                 scm_list_1(no_value));
-                    }
-                    else
-                    {
-                        auto keytype{option.get_keytype(option.get_index())};
-                        auto scm_str{scm_from_utf8_string(serial.c_str())};
-                        switch (keytype)
-                        {
-                        case GncOptionMultichoiceKeyType::SYMBOL:
-                            return scm_simple_format(SCM_BOOL_F, list_format_str,
-                                                     scm_list_1(scm_string_to_symbol(scm_str)));
-                        case GncOptionMultichoiceKeyType::STRING:
-                            return scm_simple_format(SCM_BOOL_F, list_format_str,
-                                                     scm_list_1((scm_str)));
-                        case GncOptionMultichoiceKeyType::NUMBER:
-                            return scm_simple_format(SCM_BOOL_F, ticked_format_str,
-                                                     scm_list_1(scm_str));
-                        }
-                    }
+                  auto scm_val{get_scm_value(option)};
+                  return scm_simple_format(SCM_BOOL_F, list_format_str,
+                                       scm_list_1(scm_val));
                 }
                 if constexpr (is_same_decayed_v<decltype(option),
                               GncOptionRangeValue<int>>  ||
