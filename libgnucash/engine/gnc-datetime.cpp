@@ -98,15 +98,33 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         ")"
     },
     GncDateFormat {
+        // Translators: b is for the month name
+        N_("y-b-d"),
+        "(?:"                                   // either y-b-d
+        "(?<YEAR>[0-9]+)[-/.' ]+"
+        "(?<MONTH>[A-Za-z]+)[-/.' ]+"
+        "(?<DAY>[0-9]+)"
+        ")"
+    },
+    GncDateFormat {
         N_("d-m-y"),
         "(?:"                                   // either d-m-y
         "(?<DAY>[0-9]+)[-/.' ]+"
-        "(?<MONTH>[0-9]+|[A-Za-z]+)[-/.' ]+"
+        "(?<MONTH>[0-9]+)[-/.' ]+"
         "(?<YEAR>[0-9]+)"
         "|"                                     // or DDMMCCYY
         "(?<DAY>[0-9]{2})"
         "(?<MONTH>[0-9]{2})"
         "(?<YEAR>[0-9]{4})"
+        ")"
+    },
+    GncDateFormat {
+        // Translators: b is for the month name
+        N_("d-b-y"),
+        "(?:"                                   // either d-b-y
+        "(?<DAY>[0-9]+)[-/.' ]"
+        "(?<MONTH>[A-Za-z]+)[-/.' ]+"
+        "(?<YEAR>[0-9]+)+"
         ")"
     },
     GncDateFormat {
@@ -119,6 +137,15 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         "(?<MONTH>[0-9]{2})"
         "(?<DAY>[0-9]{2})"
         "(?<YEAR>[0-9]{4})"
+        ")"
+    },
+    GncDateFormat {
+        // Translators: b is for the month name
+        N_("b-d-y"),
+        "(?:"                                   // either b-d-y
+        "(?<MONTH>[A-Za-z]+)[-/.' ]+"
+        "(?<DAY>[0-9]+)[-/.' ]"
+        "(?<YEAR>[0-9]+)+"
         ")"
     },
     // Note year is still checked for in the regexes below
@@ -136,6 +163,14 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         ")"
     },
     GncDateFormat {
+        (N_("d-b")),
+        "(?:"                                   // either d-b(-y)
+        "(?<DAY>[0-9]+)[-/.' ]+"
+        "(?<MONTH>[A-Za-z]+)(?:[-/.' ]+"
+        "(?<YEAR>[0-9]+))?"
+        ")"
+    },
+    GncDateFormat {
         (N_("m-d")),
         "(?:"                                   // either m-d(-y)
         "(?<MONTH>[0-9]+)[-/.' ]+"
@@ -145,6 +180,14 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         "(?<MONTH>[0-9]{2})"
         "(?<DAY>[0-9]{2})"
         "(?<YEAR>[0-9]+)?"
+        ")"
+    },
+    GncDateFormat {
+        (N_("b-d")),
+        "(?:"                                   // either b-d(-y)
+        "(?<MONTH>[A-Za-z]+)[-/.' ]+"
+        "(?<DAY>[0-9]+)(?:[-/.' ]+"
+        "(?<YEAR>[0-9]+))?"
         ")"
     }
 });
@@ -558,12 +601,11 @@ GncDateTimeImpl::timestamp()
     return str.substr(0, 8) + str.substr(9, 15);
 }
 
-static void
-interpret_date (const std::string day_in, const std::string month_in, const std::string year_in,
-                int& day_out, int& month_out, int& year_out)
+static Date
+interpret_date (const std::string day_in, const std::string month_in, const std::string year_in)
 {
     UErrorCode status = U_ZERO_ERROR;
-    static icu::SimpleDateFormat df("dd/MMM/yyyy", icu::Locale(), status);
+    static const icu::SimpleDateFormat df("dd/MMM/yyyy", icu::Locale(), status);
     static icu::GregorianCalendar calendar = icu::GregorianCalendar (status);
 
     auto myDate = df.parse(icu::UnicodeString::fromUTF8(day_in + '/' + month_in + '/' + year_in), status);
@@ -571,9 +613,21 @@ interpret_date (const std::string day_in, const std::string month_in, const std:
     // Convert UDate to components
     calendar.setTime(myDate, status);
 
-    year_out = calendar.get(UCAL_YEAR, status);
-    month_out = calendar.get(UCAL_MONTH, status);
-    day_out = calendar.get(UCAL_DATE, status);
+    /*
+    icu::UnicodeString str;
+    std::string converted;
+    df.format (myDate, str);
+    str.toUTF8String(converted);
+    std::cout << day_in << '/' << month_in << '/' << year_in << ' ' << converted
+              << " = "
+              << calendar.get(UCAL_DATE, status) << '/'
+              << calendar.get(UCAL_MONTH, status) + 1 << '/'
+              << calendar.get(UCAL_YEAR, status) << std::endl;
+    */
+
+    return Date (calendar.get(UCAL_YEAR, status),
+                 calendar.get(UCAL_MONTH, status) + 1,
+                 calendar.get(UCAL_DATE, status));
 }
 
 
@@ -612,11 +666,12 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
     else /* The input dates have no year, so use current year */
         year = m_greg.year(); // Can use m_greg here as it was already initialized in the initializer list earlier
 
-    int cday, cmonth, cyear;
-
-    interpret_date (what.str("DAY"), what.str("MONTH"), std::to_string (year), cday, cmonth, cyear);
-
-    m_greg = Date(cyear, cmonth+1, cday);
+    if (fmt.find('b') != std::string::npos)
+        m_greg = interpret_date (what.str("DAY"), what.str("MONTH"), std::to_string (year));
+    else
+        m_greg = Date(year,
+                      Month(std::stoi (what.str("MONTH"))),
+                      std::stoi (what.str("DAY")));
 }
 
 gnc_ymd
