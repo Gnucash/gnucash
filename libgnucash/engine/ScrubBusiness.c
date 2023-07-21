@@ -214,13 +214,21 @@ scrub_start:
         if (xaccTransGetTxnType (ll_txn) == TXN_TYPE_INVOICE)
             continue; // next scrub lot split
 
-        // Empty splits can be removed immediately
-        if (gnc_numeric_zero_p (xaccSplitGetValue (sl_split)) ||
-                gnc_numeric_zero_p(xaccSplitGetValue (sl_split)))
+        // Empty splits can be immediately removed from the list.
+        if (gnc_numeric_zero_p (xaccSplitGetValue (sl_split)))
         {
-            xaccSplitDestroy (sl_split);
-            modified = TRUE;
-            goto scrub_start;
+            GList *tmp_iter = sls_iter->prev;
+            PINFO("Removing 0-value split from the lot.");
+
+            if (xaccTransGetReadOnly(xaccSplitGetParent(sl_split)))
+                gnc_lot_remove_split (scrub_lot, sl_split);
+            else
+                xaccSplitDestroy (sl_split);
+
+            sls_iter = tmp_iter;
+            if (!sls_iter)
+                goto scrub_start; // Otherwise sls_iter->next will crash
+            continue;
         }
 
         // Iterate over all splits in the lot link transaction
