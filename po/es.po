@@ -86,7 +86,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-07-13 19:52+0000\n"
+"PO-Revision-Date: 2023-07-21 11:02+0000\n"
 "Last-Translator: Francisco Serrador <fserrador@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -1937,7 +1937,7 @@ msgstr "plusvalías"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1018
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
-msgstr "La transacción no puede cuadrar, %s el valor de los errores %s"
+msgstr "La transacción no puede cuadrar, %s es erróneo con valor %s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1024
 #, c-format
@@ -1969,7 +1969,7 @@ msgstr "Siguiente balance"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1431
 msgid "Enter the new balance of shares after the stock split."
-msgstr "Introduzca el balance nuevo de acciones tras la división de acciones."
+msgstr "Introduzca el balance nuevo de acciones tras el desglose mercantil."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1432
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
@@ -2562,7 +2562,7 @@ msgstr "_Aceptar"
 
 #: gnucash/gnome/dialog-doclink.c:241
 msgid "Amend the URL"
-msgstr "Enmendar la URL"
+msgstr "Solucionar la URL"
 
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
@@ -3382,7 +3382,7 @@ msgstr "Buscar Cargo"
 
 #: gnucash/gnome/dialog-invoice.c:3754
 msgid "Find Expense Voucher"
-msgstr "Buscar los recibos de los gastos"
+msgstr "Buscar los comprobantes de gastos"
 
 #: gnucash/gnome/dialog-invoice.c:3755
 #: gnucash/gnome-search/dialog-search.c:1089
@@ -3726,8 +3726,8 @@ msgid ""
 "\n"
 msgstr ""
 "Aunque esta transacción tiene múltiples desgloses que puedan ser\n"
-"considerado como 'el desglose de remuneración', GnuCash solo sabe\n"
-"como manipular una. Seleccione uno, los otros serán descartados.\n"
+"considerado como «el desglose de remuneración», GnuCash solo sabe\n"
+"como manipular uno. Seleccione uno, los otros serán descartados.\n"
 "\n"
 
 #: gnucash/gnome/dialog-payment.c:1630
@@ -3756,11 +3756,11 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
-"Esta transacción tiene anotaciones en varias cuentas de negocio:\n"
+"Esta transacción tiene anotaciones en múltiples cuentas de negocio:\n"
 "\n"
 "%s\n"
-"GnuCash solo puede manejar transacciones que contabilicen a una única "
-"cuenta.\n"
+"GnuCash solo puede manejar transacciones que contabilicen a una única cuenta."
+"\n"
 "\n"
 "Por favor, corrija esto manualmente editando directamente la transacción e "
 "inténtelo de nuevo."
@@ -3793,7 +3793,7 @@ msgstr "¿Confirma que quiere borrar estos precios?"
 #: gnucash/gnome-utils/dialog-transfer.cpp:1797
 #, c-format
 msgid "Price retrieval failed: %s"
-msgstr "Fallo en la recuperación de precios: %s"
+msgstr "Fallo al recuperar el precio: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
@@ -3905,7 +3905,7 @@ msgstr "Filas"
 
 #: gnucash/gnome/dialog-report-column-view.cpp:396
 msgid "Cols"
-msgstr "Columnas"
+msgstr "Cols"
 
 #: gnucash/gnome/dialog-report-style-sheet.cpp:175
 #, c-format
@@ -4009,7 +4009,7 @@ msgstr "Fórmula No Interpretada del Desglose"
 #, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr ""
-"Desglose con memorándum %s tiene una Fórmula de Débito que no se puede "
+"Desglose con memorándum %s tiene una Fórmula Debiticia que no se puede "
 "interpretar."
 
 #: gnucash/gnome/dialog-sx-editor.c:875
@@ -4912,7 +4912,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:273
 msgid "Manage Document Link…"
-msgstr "Gestionar el enlace al documento…"
+msgstr "Gestionar enlace documental…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:281
 #: gnucash/gnome/gnc-plugin-page-register.c:376
@@ -5161,7 +5161,7 @@ msgstr "Auto-puntear"
 #: gnucash/ui/gnc-plugin-page-register.ui:250
 #: gnucash/ui/gnc-plugin-page-register.ui:904
 msgid "Stock Assistant"
-msgstr "Asistente de acciones"
+msgstr "Asistente de Acciones"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:637
 #: gnucash/gnome/gnc-plugin-page-register.c:1901
@@ -6146,7 +6146,7 @@ msgstr "_Quita"
 
 #: gnucash/gnome-search/dialog-search.c:1101
 msgid "Order"
-msgstr "Orden"
+msgstr "Operación"
 
 #: gnucash/gnome-search/dialog-search.c:1103
 #: gnucash/gtkbuilder/dialog-order.glade:421
