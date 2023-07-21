@@ -377,7 +377,9 @@ static GncToolBarShortNames toolbar_labels[] =
     { "CancelTransactionAction",            N_ ("Cancel") },
     { "DeleteTransactionAction",            N_ ("Delete") },
     { "DuplicateTransactionAction",         N_ ("Duplicate") },
-    { "SplitTransactionAction",             N_ ("Split") },
+    { "SplitTransactionAction",
+      /* Translators: This is the label of a toolbar button. So keep it short. */
+      N_ ("Split View") },
     { "JumpTransactionAction",              N_ ("Jump") },
     { "ScheduleTransactionAction",          N_ ("Schedule") },
     { "BlankTransactionAction",             N_ ("Blank") },
