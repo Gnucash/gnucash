@@ -846,12 +846,11 @@ TEST_F(GncListOption, test_set_value)
 TEST_F(GncListOption, test_list_out)
 {
     auto vec{m_option.get_value<GncMultichoiceOptionIndexVec>()};
-    std::string value{m_option.permissible_value(vec[0])};
-    value += " ";
-    value += m_option.permissible_value(vec[1]);
-    std::ostringstream oss;
+    std::ostringstream vss, oss;
+    vss << '(' << m_option.permissible_value(vec[0]) << " "
+        << m_option.permissible_value(vec[1]) << ')';
     oss << m_option;
-    EXPECT_EQ(oss.str(), value);
+    EXPECT_EQ(oss.str(), vss.str());
 }
 
 TEST_F(GncListOption, test_list_in)

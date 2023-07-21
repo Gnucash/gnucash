@@ -23,6 +23,7 @@
 
 #include "gnc-option-impl.hpp"
 #include "gnc-datetime.hpp"
+#include "gnc-option-uitype.hpp"
 #include "guid.hpp"
 #include <cassert>
 #include <sstream>
@@ -887,11 +888,15 @@ GncOptionAccountSelValue::deserialize(const std::string& str) noexcept
 std::string
 GncOptionMultichoiceValue::serialize() const noexcept
 {
-    static const std::string no_value{"No Value"};
+    static const std::string no_value{""};
     std::string retval;
     bool first = true;
+    bool list_context = m_ui_type == GncOptionUIType::LIST;
     if (m_value.empty())
         return no_value;
+
+    if (list_context)
+        retval += '(';
     for (auto index : m_value)
     {
         if (!first)
@@ -899,6 +904,8 @@ GncOptionMultichoiceValue::serialize() const noexcept
         first = false;
         retval += std::get<0>(m_choices[index]);
     }
+    if (list_context)
+        retval += ')';
     return retval;
 }
 
