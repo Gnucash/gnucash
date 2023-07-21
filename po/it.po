@@ -8,6 +8,7 @@
 # Lorenzo Cappelletti <L.Cappelletti@mail.com>, 2002 2003;
 # Alessandro Seveso <aleseveso@tiscalinet.it>, 2000;
 # J. Lavoie <j.lavoie@net-c.ca>, 2020
+# Marco <marcxosm@gmail.com>, 2023.
 #
 # Common translations other than those of the glossary:
 #
@@ -56,7 +57,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
 "PO-Revision-Date: 2023-07-21 11:38+0000\n"
-"Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
+"Last-Translator: Marco <marcxosm@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
 "Language: it\n"
@@ -28679,7 +28680,7 @@ msgstr "Il filtro delle transazioni esclude le stringhe corrispondenti"
 
 #: gnucash/report/trep-engine.scm:129
 msgid "Transaction Filter is case insensitive"
-msgstr "Il filtro delle transazioni tiene conto di maiuscole e minuscole"
+msgstr "Il filtro delle transazioni non distingue tra maiuscole e minuscole"
 
 #: gnucash/report/trep-engine.scm:130 gnucash/report/trep-engine.scm:205
 msgid "Reconciled Status"
