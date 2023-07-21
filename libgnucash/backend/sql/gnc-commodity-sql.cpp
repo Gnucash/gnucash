@@ -98,7 +98,7 @@ get_quote_source_name (gpointer pObject)
     g_return_val_if_fail (GNC_IS_COMMODITY (pObject), NULL);
 
     pCommodity = GNC_COMMODITY (pObject);
-    return (gpointer)gnc_quote_source_get_internal_name (
+    return (gpointer)gnc_quote_source_get_name (
                gnc_commodity_get_quote_source (pCommodity));
 }
 
@@ -115,7 +115,7 @@ set_quote_source_name (gpointer pObject, gpointer pValue)
     if (pValue == NULL) return;
 
     pCommodity = GNC_COMMODITY (pObject);
-    quote_source = gnc_quote_source_lookup_by_internal (quote_source_name);
+    quote_source = gnc_quote_source_lookup_by_name (quote_source_name);
     gnc_commodity_set_quote_source (pCommodity, quote_source);
 }
 

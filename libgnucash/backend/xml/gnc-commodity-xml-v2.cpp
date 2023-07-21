@@ -101,7 +101,7 @@ gnc_commodity_dom_tree_create (const gnc_commodity* com)
         source = gnc_commodity_get_quote_source (com);
         if (source)
             xmlAddChild (ret, text_to_dom_tree (cmdty_quote_source,
-                                                gnc_quote_source_get_internal_name (source)));
+                                                gnc_quote_source_get_name (source)));
         string = gnc_commodity_get_quote_tz (com);
         if (string)
             xmlAddChild (ret, text_to_dom_tree (cmdty_quote_tz, string));
@@ -156,9 +156,9 @@ set_commodity_value (xmlNodePtr node, gnc_commodity* com)
         char* string;
 
         string = (char*) xmlNodeGetContent (node->xmlChildrenNode);
-        source = gnc_quote_source_lookup_by_internal (string);
+        source = gnc_quote_source_lookup_by_name (string);
         if (!source)
-            source = gnc_quote_source_add_new (string, FALSE);
+            source = gnc_quote_source_add_new (string, SOURCE_UNKNOWN);
         gnc_commodity_set_quote_source (com, source);
         xmlFree (string);
     }

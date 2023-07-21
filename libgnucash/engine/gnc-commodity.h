@@ -158,17 +158,19 @@ gboolean gnc_quote_source_fq_installed (void);
  */
 const char* gnc_quote_source_fq_version (void);
 
-/** Update gnucash internal tables based on what Finance::Quote
- *  sources are installed.  Sources that have been explicitly coded
- *  into gnucash are marked sensitive/insensitive based upon whether
- *  they are present. New sources that gnucash doesn't know about are
- *  added to its internal tables.
+/** Register the available currency, single, and multiple sources
+ * that Finance::Quote reports are available.  The "unkown" source
+ * type is used for quote sources that are in the user's data but
+ * are not available in the current version of Finance::Quote.
  *
- *  @param sources_list A list of strings containing the source names
- *  as they are known to F::Q.
+ *  @param currency_sources_list A list of strings for currency sources
+ *  @param single_sources_list A list of strings for F::Q modules (single sources)
+ *  @param multiple_sources_list A list of strings for F::Q methods (multiple sources)
  */
 void gnc_quote_source_set_fq_installed (const char* version_string,
-                                        const GList *sources_list);
+                                        const GList *currency_sources_list,
+                                        const GList *single_sources_list,
+                                        const GList *multiple_sources_list);
 
 /** Return the number of entries for a given type of quote source.
  *
@@ -178,29 +180,28 @@ void gnc_quote_source_set_fq_installed (const char* version_string,
  */
 gint gnc_quote_source_num_entries(QuoteSourceType type);
 
-/** Create a new quote source. This is called by the F::Q startup code
- *  or the XML parsing code to add new entries to the list of
- *  available quote sources.
+/** Create a new quote source.  This is called from gnc_quote_source_set_fq_installed()
+ *  and from the book parsing code when an unknown source is found.
  *
  *  @param name The internal name for this new quote source.
  *
- *  @param supported TRUE if this quote source is supported by F::Q.
- *  Should only be set by the F::Q startup routine.
+ *  @param type indicates the source type
  *
  *  @return A pointer to the newly created quote source.
  */
-gnc_quote_source *gnc_quote_source_add_new(const char * name, gboolean supported);
+gnc_quote_source *gnc_quote_source_add_new(const char * name, QuoteSourceType type);
 
-/** Given the internal (gnucash or F::Q) name of a quote source, find
+/** Given the F::Q name of a quote source, find
  *  the data structure identified by this name.
  *
- *  @param internal_name The name of this quote source.
+ *  @param name The name of this quote source
+ *  @param type The type of the quote source
  *
  *  @return A pointer to the price quote source that has the specified
  *  internal name.
  */
 /*@ dependent @*/
-gnc_quote_source *gnc_quote_source_lookup_by_internal(const char * internal_name);
+gnc_quote_source *gnc_quote_source_lookup_by_name(const char * name, QuoteSourceType type);
 
 /** Given the type/index of a quote source, find the data structure
  *  identified by this pair.
@@ -227,7 +228,7 @@ gboolean gnc_quote_source_get_supported (const gnc_quote_source *source);
 /** Given a gnc_quote_source data structure, return the type of this
  *  particular quote source. (SINGLE, MULTI, UNKNOWN)
  *
- *  @param source The quote source in question.
+ *  @param source The quote source in question.y
  *
  *  @return The type of this quote source.
  */
@@ -242,27 +243,15 @@ QuoteSourceType gnc_quote_source_get_type (const gnc_quote_source *source);
  */
 gint gnc_quote_source_get_index (const gnc_quote_source *source);
 
-/** Given a gnc_quote_source data structure, return the user friendly
- *  name of this quote source.  E.G. "Yahoo Australia" or "Australia
- *  (Yahoo, ASX, ...)"
+/** Given a gnc_quote_source data structure, return the F::Q name for 
+ *  the source.
  *
  *  @param source The quote source in question.
  *
- *  @return The user friendly name.
+ *  @return The quote source name
  */
 /*@ dependent @*/
-const char *gnc_quote_source_get_user_name (const gnc_quote_source *source);
-
-/** Given a gnc_quote_source data structure, return the internal name
- *  of this quote source.  This is the name used by both gnucash and
- *  by Finance::Quote.  E.G. "yahoo_australia" or "australia"
- *
- *  @param source The quote source in question.
- *
- *  @return The internal name.
- */
-/*@ dependent @*/
-const char *gnc_quote_source_get_internal_name (const gnc_quote_source *source);
+const char *gnc_quote_source_get_name (const gnc_quote_source *source);
 
 /** @} */
 
