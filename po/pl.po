@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-06-24 14:16-0700\n"
-"PO-Revision-Date: 2023-07-19 20:02+0000\n"
+"PO-Revision-Date: 2023-07-20 21:25+0000\n"
 "Last-Translator: vim <dev.getport@slmail.me>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -5153,7 +5153,7 @@ msgstr "Filtruj wg:"
 #: gnucash/gnome/gnc-plugin-page-register.c:3332
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
-msgstr "Raport z transakcji"
+msgstr "Raport tra_nsakcji"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3320
 msgid "Portfolio Report"
@@ -5824,9 +5824,8 @@ msgstr "Wyświetl raport ~a"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
-#, fuzzy
 msgid "Saved Report Configurations"
-msgstr "Ustaw ścieżkę konfiguracji"
+msgstr "Zapisane kon_figuracje raportów"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
@@ -11109,9 +11108,8 @@ msgstr "Importuj konta teraz"
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:333
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:1057
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1139
-#, fuzzy
 msgid "Import Summary"
-msgstr "Podsumowanie z konta"
+msgstr "Podsumowanie importu"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:8
 msgid "CSV Export Assistant"
@@ -12185,9 +12183,8 @@ msgid "Schedule added successfully."
 msgstr "Księga została poprawnie zamknięta."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1258
-#, fuzzy
 msgid "Loan Summary"
-msgstr "Podsumowanie z konta"
+msgstr "Podsumowanie pożyczki"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:14
 #, fuzzy
@@ -12624,9 +12621,8 @@ msgid "Summary Text"
 msgstr "Pasek _podsumowania"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1357
-#, fuzzy
 msgid "Qif Import Summary"
-msgstr "Podsumowanie z konta"
+msgstr "Podsumowanie importu QIF"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:9
 #: gnucash/gtkbuilder/assistant-stock-split.glade:28
@@ -21967,7 +21963,7 @@ msgstr "Pokaż sumy częściowe"
 
 #: gnucash/report/report-core.scm:154
 msgid "_Assets & Liabilities"
-msgstr "Akty_wa i pasywa"
+msgstr "_Aktywa i pasywa"
 
 #: gnucash/report/report-core.scm:155
 msgid "_Income & Expense"
@@ -21983,16 +21979,15 @@ msgstr "_Podatki"
 
 #: gnucash/report/report-core.scm:158
 msgid "E_xamples"
-msgstr "Przykłady (_x)"
+msgstr "Przy_kłady"
 
 #: gnucash/report/report-core.scm:159
 msgid "_Experimental"
-msgstr "_Eksprymentalny"
+msgstr "_Eksprymentalne"
 
 #: gnucash/report/report-core.scm:160
-#, fuzzy
 msgid "_Multicolumn"
-msgstr "Widok wielokolumnowy"
+msgstr "_Wielokolumnowe"
 
 #: gnucash/report/report-core.scm:164
 #: gnucash/report/reports/standard/invoice.scm:226
@@ -22779,7 +22774,7 @@ msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:119
 msgid "Tax Schedule Report/TXF Export"
-msgstr "Raport - tabela podatkowa / Eksport TXF"
+msgstr "Raport harmonogramu podatkowego/Eksport TXF"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:204
 msgid "$0.00 valued Tax codes won't be printed."
@@ -22870,7 +22865,7 @@ msgstr "Najbliższa do daty raportu"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3310
 msgid "Tax Schedule Report & TXF Export"
-msgstr "Raport - tabela podatkowa & Eksport TXF"
+msgstr "Raport harmonogramu podatkowego i eksport _TXF"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3312
 msgid ""
@@ -22918,7 +22913,7 @@ msgstr "Wykres kołowy aktywów"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
-msgstr "Wykres kołowy obciążeń"
+msgstr "Wykres kołowy zobowiązań"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
@@ -23062,12 +23057,11 @@ msgstr "Bilans na ~a"
 
 #: gnucash/report/reports/standard/account-summary.scm:66
 msgid "Account Summary"
-msgstr "Podsumowanie z konta"
+msgstr "Pod_sumowanie konta"
 
 #: gnucash/report/reports/standard/account-summary.scm:67
-#, fuzzy
 msgid "Future Scheduled Transactions Summary"
-msgstr "Transakcje zaplanowane"
+msgstr "Podsumowanie prz_yszłych zaplanowanych _transakcji"
 
 #: gnucash/report/reports/standard/account-summary.scm:85
 msgid "Depth limit behavior"
@@ -23504,9 +23498,8 @@ msgid "** this commodity has no price and a price of 1 has been used."
 msgstr ""
 
 #: gnucash/report/reports/standard/balance-forecast.scm:36
-#, fuzzy
 msgid "Balance Forecast"
-msgstr "Bilans na %s"
+msgstr "Prognoza salda"
 
 #: gnucash/report/reports/standard/balance-forecast.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:116
@@ -23749,7 +23742,7 @@ msgstr "Kapitał własny i pasywa razem"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:136
 msgid "Balance Sheet (eguile)"
-msgstr "Arkusz bilansowy (eguile)"
+msgstr "Bilans (eguile)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:144
 #, fuzzy
@@ -23892,7 +23885,7 @@ msgstr "Osierocone"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:554
 msgid "Balance Sheet using eguile-gnc"
-msgstr "Arkusz bilansowy używa eguile-gnc"
+msgstr "Bilans (eguile-gnc)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:555
 msgid "Display a balance sheet (using eguile template)"
@@ -24086,9 +24079,8 @@ msgid "Net Income"
 msgstr "Przychód netto"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1265
-#, fuzzy
 msgid "Balance Sheet (Multicolumn)"
-msgstr "Arkusz bilansowy (eguile)"
+msgstr "Bilans (wielokolumnowy)"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1266
 msgid "Income Statement (Multicolumn)"
@@ -24096,7 +24088,7 @@ msgstr "Wyciąg z przychodów (kolumnowy)"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
-msgstr "Budżet: arkusz bilansowy"
+msgstr "Bilans budżetu"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:94
 msgid "Include new/existing totals"
@@ -24704,7 +24696,7 @@ msgstr "Wykres aktywów"
 #: gnucash/report/reports/standard/category-barchart.scm:48
 #: gnucash/report/reports/standard/net-charts.scm:370
 msgid "Liability Chart"
-msgstr "Wykres wierzytelności"
+msgstr "Wykres zobowiązań"
 
 #: gnucash/report/reports/standard/category-barchart.scm:53
 #, fuzzy
@@ -25025,7 +25017,7 @@ msgstr "Ogółem"
 
 #: gnucash/report/reports/standard/general-ledger.scm:39
 msgid "General Ledger"
-msgstr "Księga główna"
+msgstr "Główna księga rachunkowa"
 
 #: gnucash/report/reports/standard/general-ledger.scm:50
 #: gnucash/report/reports/standard/income-gst-statement.scm:44
@@ -25472,10 +25464,8 @@ msgid "Show lot split rows"
 msgstr "Pokaż okno nowego użytkownika"
 
 #: gnucash/report/reports/standard/investment-lots.scm:79
-#, fuzzy
-#| msgid "Investments"
 msgid "Investment Lots"
-msgstr "Inwestycje"
+msgstr "Udziały inwestycyjne"
 
 #: gnucash/report/reports/standard/investment-lots.scm:80
 msgid "Start date"
@@ -26306,7 +26296,7 @@ msgstr "Wartość netto"
 
 #: gnucash/report/reports/standard/net-charts.scm:471
 msgid "Net Worth Barchart"
-msgstr "Diagram słupkowy wartości netto"
+msgstr "Wykres słupkowy wartości netto"
 
 #: gnucash/report/reports/standard/net-charts.scm:482
 msgid "Income/Expense Chart"
@@ -26317,9 +26307,8 @@ msgid "Income & Expense Barchart"
 msgstr "Wykres słupkowy przychodów/wydatków"
 
 #: gnucash/report/reports/standard/net-charts.scm:494
-#, fuzzy
 msgid "Net Worth Linechart"
-msgstr "Diagram słupkowy wartości netto"
+msgstr "Wykres liniowy wartości netto"
 
 #: gnucash/report/reports/standard/net-charts.scm:507
 #: gnucash/report/reports/standard/net-charts.scm:509
@@ -26733,7 +26722,7 @@ msgstr "Raport zadania"
 
 #: gnucash/report/reports/standard/portfolio.scm:33
 msgid "Investment Portfolio"
-msgstr "Portfel inwestycji"
+msgstr "Portfel inwestycyjny"
 
 #: gnucash/report/reports/standard/price-scatter.scm:42
 msgid "Price of Commodity"
@@ -27048,9 +27037,8 @@ msgid "Funds Out"
 msgstr "Wydatki"
 
 #: gnucash/report/reports/standard/reconcile-report.scm:108
-#, fuzzy
 msgid "Reconciliation Report"
-msgstr "Status uzgadniania"
+msgstr "Raport u_zgodnień"
 
 #: gnucash/report/reports/standard/register.scm:147
 #: gnucash/report/reports/standard/register.scm:374
