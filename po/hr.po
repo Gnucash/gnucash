@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-07-22 00:48+0200\n"
-"PO-Revision-Date: 2023-07-20 19:07+0000\n"
+"PO-Revision-Date: 2023-07-22 16:05+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -1454,14 +1454,14 @@ msgstr "Povrat na kapital"
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"Poduzeće vraća kapital, smanjujući osnovicu troškova bez utjecaja na broj "
+"jedinica."
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:261
-#, fuzzy
-#| msgid "Return of capital"
 msgid "Return of capital (reclassification)"
-msgstr "Povrat na kapital"
+msgstr "Povrat na kapital (reklasifikacija)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:262
 msgid ""
@@ -1469,6 +1469,9 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"Poduzeće vraća kapital, smanjujući osnovicu troškova bez utjecaja na broj "
+"jedinica. Raspodjela prethodno evidentirana kao dividenda reklasificira se u "
+"povrat kapitala, često zbog poreznih podataka na kraju godine."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
@@ -1512,6 +1515,8 @@ msgid ""
 "divisor, while keeping the total monetary value of the overall investment "
 "constant."
 msgstr ""
+"Poduzeće izdaje dodatne jedinice, smanjujući cijenu dionice divizorom, dok "
+"istovremeno održava ukupnu novčanu vrijednost ukupne investicije konstantnom."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
