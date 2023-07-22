@@ -134,12 +134,11 @@ typedef enum
     SOURCE_MULTI,		/**< This quote source may pull from multiple
 			 *   web sites.  For example, the australia
 			 *   source may pull from ASX, yahoo, etc. */
-    SOURCE_UNKNOWN,	/**< This is a locally installed quote source
-			 *   that gnucash knows nothing about. May
-			 *   pull from single or multiple
-			 *   locations. */
+    SOURCE_UNKNOWN,	/**< This is a quote source observed in user's data
+             *   file but not known to F::Q. */
+    SOURCE_FQ_CURRENCY, /**< An F::Q currency source. */
     SOURCE_MAX,
-    SOURCE_CURRENCY = SOURCE_MAX, /**< The special currency quote source. */
+    SOURCE_CURRENCY = SOURCE_MAX, /**< The special currency quote source called "currency". */
 } QuoteSourceType;
 
 /** This function indicates whether or not the Finance::Quote module
@@ -191,8 +190,8 @@ gint gnc_quote_source_num_entries(QuoteSourceType type);
  */
 gnc_quote_source *gnc_quote_source_add_new(const char * name, QuoteSourceType type);
 
-/** Given the F::Q name of a quote source, find
- *  the data structure identified by this name.
+/** Given the F::Q name of a quote source and the type, find
+ *  the corresponding data structure.
  *
  *  @param name The name of this quote source
  *  @param type The type of the quote source
@@ -201,7 +200,21 @@ gnc_quote_source *gnc_quote_source_add_new(const char * name, QuoteSourceType ty
  *  internal name.
  */
 /*@ dependent @*/
-gnc_quote_source *gnc_quote_source_lookup_by_name(const char * name, QuoteSourceType type);
+
+gnc_quote_source *gnc_quote_source_lookup_by_name_and_type(const char * name, QuoteSourceType type);
+
+/** Given the F::Q name of a quote source, find
+ *  the data structure identified by this name. The name "currency"
+ *  is a special case, referring to the internal name for calling
+ *  F::Q currency conversion.
+ *
+ *  @param name The name of this quote source
+ *
+ *  @return A pointer to the price quote source that has the specified
+ *  internal name.
+ */
+/*@ dependent @*/
+gnc_quote_source *gnc_quote_source_lookup_by_name(const char * name);
 
 /** Given the type/index of a quote source, find the data structure
  *  identified by this pair.

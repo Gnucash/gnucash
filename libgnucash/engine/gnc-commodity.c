@@ -155,7 +155,21 @@ struct gnc_quote_source_s
     char *name;
 };
 
+/**
+ * Finanace::Quote supports multiple sources for currency information, but they are 
+ * not exposed as separate methods. The F::Q object must be constructed with currency 
+ * sources listed in order of preference (or through an envionment variable).  currently,
+ * GNC uses "currency" as the source internally and the F::Q wrapper uses that source
+ * name as the indicator to call the F::Q->currency function.
+ *
+ * Here, currency_quote_sources is a 1-long list for the "currency" source.
+ * fq_currency_quote_sources stores the list of available currency sources assigned
+ * as reported by F::Q and can be used in the future to enable more user control of the 
+ * currency source.
+ **/
+
 static GList *currency_quote_sources = NULL;
+static GList *fq_currency_quote_sources = NULL;
 static GList *single_quote_sources = NULL;
 static GList *multiple_quote_sources = NULL;
 static GList *unknown_quote_sources = NULL;
@@ -171,7 +185,6 @@ gnc_quote_source_fq_installed (void)
 {
     return (fq_version != NULL);
 }
-
 
 /********************************************************************
  * gnc_quote_source_fq_version
@@ -194,6 +207,7 @@ gint gnc_quote_source_num_entries(QuoteSourceType type)
 {
     switch (type) {
         case SOURCE_CURRENCY: return g_list_length(currency_quote_sources); break;
+        case SOURCE_FQ_CURRENCY: return g_list_length(fq_currency_quote_sources); break;
         case SOURCE_SINGLE: return g_list_length(single_quote_sources); break;
         case SOURCE_MULTI: return g_list_length(multiple_quote_sources); break;
         case SOURCE_UNKNOWN: return g_list_length(unknown_quote_sources); break;
@@ -222,6 +236,10 @@ gnc_quote_source_add_new (const char *source_name, QuoteSourceType type)
         case SOURCE_CURRENCY:
             new_source->index = g_list_length(currency_quote_sources);
             currency_quote_sources = g_list_append(currency_quote_sources, new_source);
+            break;
+        case SOURCE_FQ_CURRENCY:
+            new_source->index = g_list_length(fq_currency_quote_sources);
+            fq_currency_quote_sources = g_list_append(fq_currency_quote_sources, new_source);
             break;
         case SOURCE_SINGLE:
             new_source->index = g_list_length(single_quote_sources);
@@ -256,6 +274,7 @@ gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
     switch (type)
     {
         case SOURCE_CURRENCY: source_list = currency_quote_sources; break;
+        case SOURCE_FQ_CURRENCY: source_list = fq_currency_quote_sources; break;
         case SOURCE_SINGLE: source_list = single_quote_sources; break;
         case SOURCE_MULTI: source_list = multiple_quote_sources; break;
         case SOURCE_UNKNOWN: source_list = unknown_quote_sources; break;
@@ -275,7 +294,7 @@ gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
 }
 
 gnc_quote_source *
-gnc_quote_source_lookup_by_name(const char * name, QuoteSourceType type)
+gnc_quote_source_lookup_by_name_and_type(const char * name, QuoteSourceType type)
 {
     if ((name == NULL) || (g_strcmp0(name, "") == 0))
     {
@@ -285,12 +304,13 @@ gnc_quote_source_lookup_by_name(const char * name, QuoteSourceType type)
     GList *source_list = NULL;
     switch (type) {
         case SOURCE_CURRENCY: source_list = currency_quote_sources; break;
+        case SOURCE_FQ_CURRENCY: source_list = fq_currency_quote_sources; break;
         case SOURCE_SINGLE: source_list = single_quote_sources; break;
         case SOURCE_MULTI: source_list = multiple_quote_sources; break;
         case SOURCE_UNKNOWN: source_list = unknown_quote_sources; break;
     }
 
-    for (GList* node = sources_list; node; node = node->next) {
+    for (GList* node = source_list; node; node = node->next) {
         gnc_quote_source *source = node->data;
 
         if (g_strcmp0(name, source->name) == 0)
@@ -298,6 +318,25 @@ gnc_quote_source_lookup_by_name(const char * name, QuoteSourceType type)
     }
 
     DEBUG("gnc_quote_source_lookup_by_internal: Unknown source %s", name);
+    return NULL;
+}
+
+gnc_quote_source *
+gnc_quote_source_lookup_by_name(const char * name)
+{
+    // "currency" is the internal GNC name that causes the F::Q wrapper to call the currency conversion routine
+    if (g_strcmp0(name, "currency") == 0)
+        return gnc_quote_source_lookup_by_name_and_type(name, SOURCE_CURRENCY);
+
+    // Otherwise, the source must be in one of the following since SOURCE_FQ_CURRENCY is not currently in use
+    gnc_quote_source *source = NULL;
+    if (NULL != (source = gnc_quote_source_lookup_by_name_and_type(name, SOURCE_SINGLE)))
+        return source;
+    if (NULL != (source = gnc_quote_source_lookup_by_name_and_type(name, SOURCE_MULTI)))
+        return source;
+    if (NULL != (source = gnc_quote_source_lookup_by_name_and_type(name, SOURCE_UNKNOWN)))
+        return source;
+
     return NULL;
 }
 
@@ -382,11 +421,15 @@ void gnc_quote_source_set_fq_installed (const char* version_string,
     if (version_string)
         fq_version = g_strdup (version_string);
 
-    for (node = currency_quote_sources; node; node = node->next)
-        gnc_quote_source_add_new(node->data, SOURCE_CURRENCY);
-    for (node = single_quote_sources; node; node = node->next)
+    // Register GNC "currency" first
+    gnc_quote_source_add_new("currency", SOURCE_CURRENCY);
+
+    // Now register all the info reported by F::Q
+    for (node = currency_sources_list; node; node = node->next)
+        gnc_quote_source_add_new(node->data, SOURCE_FQ_CURRENCY);
+    for (node = single_sources_list; node; node = node->next)
         gnc_quote_source_add_new(node->data, SOURCE_SINGLE);
-    for (node = multiple_quote_sources; node; node = node->next)
+    for (node = multiple_sources_list; node; node = node->next)
         gnc_quote_source_add_new(node->data, SOURCE_MULTI);
 }
 
@@ -702,7 +745,7 @@ gnc_commodity_new(QofBook *book, const char * fullname,
         if (gnc_commodity_namespace_is_iso(name_space))
         {
             gnc_commodity_set_quote_source(retval,
-                                           gnc_quote_source_lookup_by_name("alphavantage", SOURCE_CURRENCY) );
+                                           gnc_quote_source_lookup_by_name_and_type("currency", SOURCE_CURRENCY) );
         }
     }
     gnc_commodity_set_fullname(retval, fullname);
@@ -956,7 +999,7 @@ gnc_commodity_get_quote_source(const gnc_commodity *cm)
     if (!cm) return NULL;
     priv = GET_PRIVATE(cm);
     if (!priv->quote_source && gnc_commodity_is_iso(cm))
-        return &currency_quote_source;
+        return gnc_quote_source_lookup_by_name_and_type("currency", SOURCE_CURRENCY);
     return priv->quote_source;
 }
 
@@ -964,9 +1007,9 @@ gnc_quote_source*
 gnc_commodity_get_default_quote_source(const gnc_commodity *cm)
 {
     if (cm && gnc_commodity_is_iso(cm))
-        return &currency_quote_source;
+        return gnc_quote_source_lookup_by_name_and_type("currency", SOURCE_CURRENCY);
     /* Should make this a user option at some point. */
-    return gnc_quote_source_lookup_by_name("alphavantage", SOURCE_SINGLE);
+    return gnc_quote_source_lookup_by_name_and_type("alphavantage", SOURCE_SINGLE);
 }
 
 /********************************************************************
@@ -1077,7 +1120,7 @@ gnc_commodity_set_namespace(gnc_commodity * cm, const char * name_space)
     gnc_commodity_begin_edit(cm);
     priv->name_space = nsp;
     if (nsp->iso4217)
-        priv->quote_source = gnc_quote_source_lookup_by_internal("currency");
+        priv->quote_source = gnc_quote_source_lookup_by_name_and_type("currency", SOURCE_CURRENCY);
     mark_commodity_dirty(cm);
     reset_printname(priv);
     reset_unique_name(priv);
@@ -1233,7 +1276,7 @@ gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag)
 void
 gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src)
 {
-    ENTER ("(cm=%p, src=%p(%s))", cm, src, src ? src->internal_name : "unknown");
+    ENTER ("(cm=%p, src=%p(%s))", cm, src, src ? src->name : "unknown");
 
     if (!cm) return;
     gnc_commodity_begin_edit(cm);
@@ -1962,7 +2005,7 @@ get_quotables_helper1(gpointer key, gpointer value, gpointer data)
     GList ** l = data;
 
     if (!priv->quote_flag ||
-            !priv->quote_source || !priv->quote_source->supported)
+            !priv->quote_source || priv->quote_source->type != SOURCE_UNKNOWN)
         return;
     *l = g_list_prepend(*l, value);
 }
@@ -1974,7 +2017,7 @@ get_quotables_helper2 (gnc_commodity *comm, gpointer data)
     gnc_commodityPrivate* priv = GET_PRIVATE(comm);
 
     if (!priv->quote_flag ||
-            !priv->quote_source || !priv->quote_source->supported)
+            !priv->quote_source || priv->quote_source->type != SOURCE_UNKNOWN)
         return TRUE;
     *l = g_list_prepend(*l, comm);
     return TRUE;
@@ -2343,8 +2386,6 @@ static QofObject commodity_table_object_def =
 gboolean
 gnc_commodity_table_register (void)
 {
-    gnc_quote_source_init_tables();
-
     if (!qof_object_register (&commodity_object_def))
         return FALSE;
     if (!qof_object_register (&namespace_object_def))

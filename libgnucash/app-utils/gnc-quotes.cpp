@@ -232,11 +232,10 @@ m_version{}, m_currency_sources{}, m_single_sources{}, m_multiple_sources{}, m_a
             // info["quote_methods"]    = { "name" : ["module_name", ...] }
             // info["quote_modules"]    = { "name" : ["feature_name", ...] }
             //
-            // A quote_method is the name for one more quote sources, such as NYSE
-            // A quote_module is a single source with option "features"
+            // A quote_method is the name for one or more quote sources, such as nasdaq (multiple) or alphavantage (single)
+            // A quote_module is backs one or more methods and may have required features.
             // A "feature_name" is something like "API_KEY", a need value for the source
 
-            PWARN("TAG: %s", info["currency_modules"]["AlphaVantage"][0].c_str());
             m_version = std::move(version);
 
             for (auto& it : info["currency_modules"]) {
@@ -244,14 +243,14 @@ m_version{}, m_currency_sources{}, m_single_sources{}, m_multiple_sources{}, m_a
             }
             std::sort (m_currency_sources.begin(), m_currency_sources.end());
             
-            for (auto& it : info["quote_modules"]) {
-                m_single_sources.push_back(it.first);
+            for (auto& it : info["quote_methods"]) {
+                // Sort methods into single vs multiple sources
+                if (info["quote_methods"][it.first].size() == 1)
+                    m_single_sources.push_back(it.first);
+                else
+                    m_multiple_sources.push_back(it.first);
             }
             std::sort (m_single_sources.begin(), m_single_sources.end());
-
-            for (auto& it : info["quote_methods"]) {
-                m_multiple_sources.push_back(it.first);
-            }
             std::sort (m_multiple_sources.begin(), m_multiple_sources.end());
         }
         catch (std::exception &e)
@@ -555,7 +554,7 @@ GncQuotesImpl::comm_vec_to_json_string(const CommVec &comm_vec) const
                                return;
                        }
                        else
-                           comm_ns = gnc_quote_source_get_internal_name(gnc_commodity_get_quote_source(comm));
+                           comm_ns = gnc_quote_source_get_name(gnc_commodity_get_quote_source(comm));
 
                        pt.put (make_quote_path(comm_ns, comm_mnemonic), "");
                    }

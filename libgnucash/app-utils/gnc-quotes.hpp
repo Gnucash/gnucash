@@ -117,10 +117,14 @@ public:
      */
     GList* currency_sources_as_glist ();
 
-    /** Get quote sources that use a single upstream source as a std::vector. Finance::Quote
-     * has "modules" (which gather quotes from a single upstream source) and "methods" (which
-     * use a combination of modules to retrieve quotes, trying one and then
-     * falling back to other modules if the first fails.
+    /** Get quote sources that use a single upstream source as a std::vector.
+     * Finance::Quote has "modules" that gather quotes from a single upstream
+     * source and "methods" that use one or more modules to retrieve quotes
+     * (trying one and then falling back to other modules if the first fails).
+     * 
+     * A module typically provides a method with the same name (eg the AlphaVantage
+     * module provides the alphavantage method as well as being one of the sources
+     * for the nasdaq method).
      *
      * @return The single sources configured in Finance::Quote
      */

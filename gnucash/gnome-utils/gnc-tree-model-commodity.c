@@ -602,7 +602,7 @@ gnc_tree_model_commodity_get_value (GtkTreeModel *tree_model,
         if (gnc_commodity_get_quote_flag (commodity))
         {
             source = gnc_commodity_get_quote_source (commodity);
-            g_value_set_string (value, gnc_quote_source_get_internal_name(source));
+            g_value_set_string (value, gnc_quote_source_get_name(source));
         }
         else
         {

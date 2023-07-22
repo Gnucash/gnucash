@@ -318,16 +318,20 @@ Gnucash::check_finance_quote (void)
         std::cout << bl::translate ("Finance::Quote sources:\n");
         int count{0};
         const auto width{12};
-        for (auto source : quotes.sources())
+        const QuoteSources source_type[] = {quotes.single_sources(), quotes.multiple_sources()};
+        for (auto source_list : source_type) 
         {
-            auto mul{source.length() / width + 1};
-            count += mul;
-            if (count > 6)
+            for (auto source : source_list)
             {
-                count = mul;
-                std::cout << "\n";
+                auto mul{source.length() / width + 1};
+                count += mul;
+                if (count > 6)
+                {
+                    count = mul;
+                    std::cout << "\n";
+                }
+                std::cout << std::setw(mul * (width + 1)) << std::left << source;
             }
-            std::cout << std::setw(mul * (width + 1)) << std::left << source;
         }
         std::cout << std::endl;
         return 0;
@@ -361,9 +365,15 @@ Gnucash::add_quotes (const bo_str& uri)
     {
         GncQuotes quotes;
         std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << std::endl;
-        auto quote_sources = quotes.sources_as_glist();
-        gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
-        g_list_free_full (quote_sources, g_free);
+
+        auto currency_quote_sources = quotes.currency_sources_as_glist();
+        auto single_quote_sources = quotes.single_sources_as_glist();
+        auto multiple_quote_sources = quotes.multiple_sources_as_glist();
+        gnc_quote_source_set_fq_installed (quotes.version().c_str(), currency_quote_sources, single_quote_sources, multiple_quote_sources);
+        g_list_free_full (currency_quote_sources, g_free);
+        g_list_free_full (single_quote_sources, g_free);
+        g_list_free_full (multiple_quote_sources, g_free);
+        
         quotes.fetch(qof_session_get_book(session));
         if (quotes.had_failures())
             std::cerr << quotes.report_failures() << std::endl;
