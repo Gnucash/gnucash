@@ -16,10 +16,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-07-22 00:48+0200\n"
-"PO-Revision-Date: 2023-07-19 06:06+0000\n"
+"PO-Revision-Date: 2023-07-22 07:02+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
@@ -29,8 +29,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 5.0-dev\n"
-"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -5013,8 +5013,6 @@ msgstr "De huidige regel verwijderen"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
-#, fuzzy
-#| msgid "Split"
 msgid "Split View"
 msgstr "Boekregels"
 
