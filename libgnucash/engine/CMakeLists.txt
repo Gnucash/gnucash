@@ -170,7 +170,7 @@ set (engine_SOURCES
   gnc-option.cpp
   gnc-option-impl.cpp
   gnc-optiondb.cpp
-  gnc-pricedb.c
+  gnc-pricedb.cpp
   gnc-rational.cpp
   gnc-session.c
   gnc-timezone.cpp

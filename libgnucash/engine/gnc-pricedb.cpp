@@ -204,17 +204,17 @@ gnc_price_set_property(GObject* object, guint prop_id, const GValue* value, GPar
         gnc_price_set_typestr(price, g_value_get_string(value));
         break;
     case PROP_VALUE:
-        number = g_value_get_boxed(value);
+        number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
         gnc_price_set_value(price, *number);
         break;
     case PROP_COMMODITY:
-        gnc_price_set_commodity(price, g_value_get_object(value));
+        gnc_price_set_commodity(price, static_cast<gnc_commodity*>(g_value_get_object(value)));
         break;
     case PROP_CURRENCY:
-        gnc_price_set_currency(price, g_value_get_object(value));
+        gnc_price_set_currency(price, static_cast<gnc_commodity*>(g_value_get_object(value)));
         break;
     case PROP_DATE:
-        time = g_value_get_boxed(value);
+        time = static_cast<Time64*>(g_value_get_boxed(value));
         gnc_price_set_time64(price, time->t);
         break;
     default:
@@ -311,7 +311,7 @@ gnc_price_create (QofBook *book)
     g_return_val_if_fail (book, NULL);
 
     ENTER(" ");
-    p = g_object_new(GNC_TYPE_PRICE, NULL);
+    p = static_cast<GNCPrice*>(g_object_new(GNC_TYPE_PRICE, NULL));
 
     qof_instance_init_data (&p->inst, GNC_ID_PRICE, book);
     qof_event_gen (&p->inst, QOF_EVENT_CREATE, NULL);
@@ -543,7 +543,7 @@ gnc_price_set_source_string(GNCPrice *p, const char* str)
 {
     if (!p) return;
     for (PriceSource s = PRICE_SOURCE_EDIT_DLG;
-         s < PRICE_SOURCE_INVALID; ++s)
+         s < PRICE_SOURCE_INVALID; s = PriceSource(s + 1))
         if (strcmp(source_names[s], str) == 0)
         {
             gnc_price_set_source(p, s);
@@ -813,7 +813,7 @@ gnc_price_list_equal(PriceList *prices1, PriceList *prices2)
             PINFO ("prices1 has extra prices");
             return FALSE;
         }
-        if (!gnc_price_equal (n1->data, n2->data))
+        if (!gnc_price_equal (static_cast<GNCPrice*>(n1->data), static_cast<GNCPrice*>(n2->data)))
             return FALSE;
 
         n1 = n1->next;
@@ -865,14 +865,14 @@ gnc_pricedb_create(QofBook * book)
      * then use that.  Warn user, they shouldn't be creating two ...
      */
     col = qof_book_get_collection (book, GNC_ID_PRICEDB);
-    result = qof_collection_get_data (col);
+    result = static_cast<GNCPriceDB*>(qof_collection_get_data (col));
     if (result)
     {
         PWARN ("A price database already exists for this book!");
         return result;
     }
 
-    result = g_object_new(GNC_TYPE_PRICEDB, NULL);
+    result = static_cast<GNCPriceDB*>(g_object_new(GNC_TYPE_PRICEDB, NULL));
     qof_instance_init_data (&result->inst, GNC_ID_PRICEDB, book);
     qof_collection_mark_clean(col);
 
@@ -897,7 +897,7 @@ destroy_pricedb_currency_hash_data(gpointer key,
 
     for (node = price_list; node; node = node->next)
     {
-        p = node->data;
+        p = static_cast<GNCPrice*>(node->data);
 
         p->db = NULL;
     }
@@ -959,7 +959,7 @@ GNCPriceDB *
 gnc_collection_get_pricedb(QofCollection *col)
 {
     if (!col) return NULL;
-    return qof_collection_get_data (col);
+    return static_cast<GNCPriceDB*>(qof_collection_get_data (col));
 }
 
 GNCPriceDB *
@@ -977,7 +977,7 @@ gnc_pricedb_get_db(QofBook *book)
 static gboolean
 num_prices_helper (GNCPrice *p, gpointer user_data)
 {
-    guint *count = user_data;
+    auto count = static_cast<guint*>(user_data);
 
     *count += 1;
 
@@ -1010,14 +1010,12 @@ typedef struct
 static void
 pricedb_equal_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
 {
-    GNCPriceDBEqualData *equal_data = user_data;
-    gnc_commodity *currency = key;
-    GList *price_list1 = val;
-    GList *price_list2;
-
-    price_list2 = gnc_pricedb_get_prices (equal_data->db2,
-                                          equal_data->commodity,
-                                          currency);
+    auto equal_data = static_cast<GNCPriceDBEqualData*>(user_data);
+    auto currency = static_cast<gnc_commodity*>(key);
+    auto price_list1 = static_cast<GList*>(val);
+    auto price_list2 = gnc_pricedb_get_prices (equal_data->db2,
+                                               equal_data->commodity,
+                                               currency);
 
     if (!gnc_price_list_equal (price_list1, price_list2))
         equal_data->equal = FALSE;
@@ -1029,10 +1027,10 @@ static void
 pricedb_equal_foreach_currencies_hash (gpointer key, gpointer val,
                                        gpointer user_data)
 {
-    GHashTable *currencies_hash = val;
-    GNCPriceDBEqualData *equal_data = user_data;
+    auto currencies_hash = static_cast<GHashTable*>(val);
+    auto equal_data = static_cast<GNCPriceDBEqualData *>(user_data);
 
-    equal_data->commodity = key;
+    equal_data->commodity = static_cast<gnc_commodity*>(key);
 
     g_hash_table_foreach (currencies_hash,
                           pricedb_equal_foreach_pricelist,
@@ -1127,14 +1125,14 @@ add_price(GNCPriceDB *db, GNCPrice *p)
         }
     }
 
-    currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
+    currency_hash = static_cast<GHashTable*>(g_hash_table_lookup(db->commodity_hash, commodity));
     if (!currency_hash)
     {
         currency_hash = g_hash_table_new(NULL, NULL);
         g_hash_table_insert(db->commodity_hash, commodity, currency_hash);
     }
 
-    price_list = g_hash_table_lookup(currency_hash, currency);
+    price_list = static_cast<GList*>(g_hash_table_lookup(currency_hash, currency));
     if (!gnc_price_list_insert(&price_list, p, !db->bulk_update))
     {
         LEAVE ("gnc_price_list_insert failed");
@@ -1226,7 +1224,7 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
         return FALSE;
     }
 
-    currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
+    currency_hash = static_cast<GHashTable*>(g_hash_table_lookup(db->commodity_hash, commodity));
     if (!currency_hash)
     {
         LEAVE (" no currency hash");
@@ -1234,7 +1232,7 @@ remove_price(GNCPriceDB *db, GNCPrice *p, gboolean cleanup)
     }
 
     qof_event_gen (&p->inst, QOF_EVENT_REMOVE, NULL);
-    price_list = g_hash_table_lookup(currency_hash, currency);
+    price_list = static_cast<GList*>(g_hash_table_lookup(currency_hash, currency));
     gnc_price_ref(p);
     if (!gnc_price_list_remove(&price_list, p))
     {
@@ -1317,7 +1315,7 @@ typedef struct
 static gboolean
 check_one_price_date (GNCPrice *price, gpointer user_data)
 {
-    remove_info *data = user_data;
+    auto data = static_cast<remove_info*>(user_data);
     PriceSource source;
     time64 time;
 
@@ -1507,7 +1505,7 @@ gnc_pricedb_process_removal_list (GNCPriceDB *db, GDate *fiscal_end_date,
 
     // get the fiscal start month
     g_date_subtract_months (tmp_date, 12);
-    fiscal_month_start = g_date_get_month (tmp_date) + 1;
+    fiscal_month_start = static_cast<GDateMonth>(g_date_get_month (tmp_date) + 1);
     g_date_free (tmp_date);
 
     // sort the list by commodity / currency / date
@@ -1518,25 +1516,26 @@ gnc_pricedb_process_removal_list (GNCPriceDB *db, GDate *fiscal_end_date,
     {
         GDate saved_price_date;
         GDate next_price_date;
+        auto price = static_cast<GNCPrice*>(item->data);
 
         // Keep None
         if (keep == PRICE_REMOVE_KEEP_NONE)
         {
-            gnc_pricedb_remove_old_prices_pinfo (item->data, FALSE);
-            gnc_pricedb_remove_price (db, item->data);
+            gnc_pricedb_remove_old_prices_pinfo (price, FALSE);
+            gnc_pricedb_remove_price (db, price);
             continue;
         }
 
-        save_first_price = !price_commodity_and_currency_equal (item->data, cloned_price); // Not Equal
+        save_first_price = !price_commodity_and_currency_equal (price, cloned_price); // Not Equal
         if (save_first_price == TRUE)
         {
-            clone_price (&cloned_price, item->data);
+            clone_price (&cloned_price, price);
             continue;
         }
 
         // get the price dates
         saved_price_date = time64_to_gdate (gnc_price_get_time64 (cloned_price));
-        next_price_date = time64_to_gdate (gnc_price_get_time64 (item->data));
+        next_price_date = time64_to_gdate (gnc_price_get_time64 (price));
 
         // Keep last price in fiscal year
         if (keep == PRICE_REMOVE_KEEP_LAST_PERIOD && save_first_price == FALSE)
@@ -1591,11 +1590,11 @@ gnc_pricedb_process_removal_list (GNCPriceDB *db, GDate *fiscal_end_date,
         // Now compare the values
         if (saved_test_value == next_test_value)
         {
-            gnc_pricedb_remove_old_prices_pinfo (item->data, FALSE);
-            gnc_pricedb_remove_price (db, item->data);
+            gnc_pricedb_remove_old_prices_pinfo (price, FALSE);
+            gnc_pricedb_remove_price (db, price);
         }
         else
-            clone_price (&cloned_price, item->data);
+            clone_price (&cloned_price, price);
     }
     if (cloned_price)
         gnc_price_unref (cloned_price);
@@ -1634,7 +1633,7 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
     // Walk the list of commodities
     for (node = g_list_first (comm_list); node; node = g_list_next (node))
     {
-        GHashTable *currencies_hash = g_hash_table_lookup (db->commodity_hash, node->data);
+        auto currencies_hash = static_cast<GHashTable*>(g_hash_table_lookup (db->commodity_hash, node->data));
         g_hash_table_foreach (currencies_hash, pricedb_remove_foreach_pricelist, &data);
     }
 
@@ -1652,13 +1651,13 @@ gnc_pricedb_remove_old_prices (GNCPriceDB *db, GList *comm_list,
     {
         GDateYear year_now = g_date_get_year (gnc_g_date_new_today ());
         fiscal_end_date = g_date_new ();
-        g_date_set_dmy (fiscal_end_date, 31, 12, year_now);
+        g_date_set_dmy (fiscal_end_date, 31, GDateMonth(12), year_now);
     }
     else if (g_date_valid (fiscal_end_date) == FALSE)
     {
         GDateYear year_now = g_date_get_year (gnc_g_date_new_today ());
         g_date_clear (fiscal_end_date, 1);
-        g_date_set_dmy (fiscal_end_date, 31, 12, year_now);
+        g_date_set_dmy (fiscal_end_date, 31, GDateMonth(12), year_now);
     }
     gnc_pricedb_process_removal_list (db, fiscal_end_date, data, keep);
 
@@ -1675,16 +1674,16 @@ static PriceList *pricedb_price_list_merge (PriceList *a, PriceList *b);
 static void
 hash_values_helper(gpointer key, gpointer value, gpointer data)
 {
-    GList ** l = data;
+    auto l = static_cast<GList**>(data);
     if (*l)
     {
         GList *new_l;
-        new_l = pricedb_price_list_merge(*l, value);
+        new_l = pricedb_price_list_merge(*l, static_cast<PriceList*>(value));
         g_list_free (*l);
         *l = new_l;
     }
     else
-        *l = g_list_copy (value);
+        *l = g_list_copy (static_cast<GList*>(value));
 }
 
 static PriceList *
@@ -1693,7 +1692,7 @@ price_list_from_hashtable (GHashTable *hash, const gnc_commodity *currency)
     GList *price_list = NULL, *result = NULL ;
     if (currency)
     {
-        price_list = g_hash_table_lookup(hash, currency);
+        price_list = static_cast<GList*>(g_hash_table_lookup(hash, currency));
         if (!price_list)
         {
             LEAVE (" no price list");
@@ -1750,9 +1749,9 @@ pricedb_get_prices_internal(GNCPriceDB *db, const gnc_commodity *commodity,
     PriceList *forward_list = NULL, *reverse_list = NULL;
     g_return_val_if_fail (db != NULL, NULL);
     g_return_val_if_fail (commodity != NULL, NULL);
-    forward_hash = g_hash_table_lookup(db->commodity_hash, commodity);
+    forward_hash = static_cast<GHashTable*>(g_hash_table_lookup(db->commodity_hash, commodity));
     if (currency && bidi)
-        reverse_hash = g_hash_table_lookup(db->commodity_hash, currency);
+        reverse_hash = static_cast<GHashTable*>(g_hash_table_lookup(db->commodity_hash, currency));
     if (!forward_hash && !reverse_hash)
     {
         LEAVE (" no currency hash");
@@ -1803,7 +1802,7 @@ GNCPrice *gnc_pricedb_lookup_latest(GNCPriceDB *db,
     /* This works magically because prices are inserted in date-sorted
      * order, and the latest date always comes first. So return the
      * first in the list.  */
-    result = price_list->data;
+    result = static_cast<GNCPrice*>(price_list->data);
     gnc_price_ref(result);
     g_list_free (price_list);
     LEAVE("price is %p", result);
@@ -1838,8 +1837,9 @@ price_list_scan_any_currency(GList *price_list, gpointer data)
     if (!price_list)
         return TRUE;
 
-    com = gnc_price_get_commodity(node->data);
-    cur = gnc_price_get_currency(node->data);
+    auto price = static_cast<GNCPrice*>(node->data);
+    com = gnc_price_get_commodity(price);
+    cur = gnc_price_get_currency(price);
 
     /* if this price list isn't for the commodity we are interested in,
        ignore it. */
@@ -1851,14 +1851,14 @@ price_list_scan_any_currency(GList *price_list, gpointer data)
        previous price to the result list. */
     while (node != NULL)
     {
-        GNCPrice *price = node->data;
+        price = static_cast<GNCPrice*>(node->data);
         time64 price_t = gnc_price_get_time64(price);
         if (price_t < helper->t)
         {
             /* If there is a previous price add it to the results. */
             if (node->prev)
             {
-                GNCPrice *prev_price = node->prev->data;
+                auto prev_price = static_cast<GNCPrice*>(node->prev->data);
                 gnc_price_ref(prev_price);
                 *helper->list = g_list_prepend(*helper->list, prev_price);
             }
@@ -1914,7 +1914,7 @@ find_comtime(GPtrArray* array, gnc_commodity *com)
     GNCPrice** retval = NULL;
     for (index = 0; index < array->len; ++index)
     {
-        GNCPrice **price_p = g_ptr_array_index(array, index);
+        auto price_p = static_cast<GNCPrice**>(g_ptr_array_index(array, index));
         if (gnc_price_get_commodity(*price_p) == com ||
             gnc_price_get_currency(*price_p) == com)
             retval = price_p;
@@ -1998,7 +1998,7 @@ nearest_to (PriceList *prices, const gnc_commodity* target, time64 t)
      */
     for (index = 0; index < price_array->len; ++index)
     {
-        GNCPrice **com_price = g_ptr_array_index(price_array, index);
+        auto com_price = static_cast<GNCPrice**>(g_ptr_array_index(price_array, index));
         time64 price_t = gnc_price_get_time64(*com_price);
         if (price_t >= t)
         {
@@ -2076,7 +2076,7 @@ gnc_pricedb_has_prices(GNCPriceDB *db,
 
     if (!db || !commodity) return FALSE;
     ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
-    currency_hash = g_hash_table_lookup(db->commodity_hash, commodity);
+    currency_hash = static_cast<GHashTable*>(g_hash_table_lookup(db->commodity_hash, commodity));
     if (!currency_hash)
     {
         LEAVE("no, no currency_hash table");
@@ -2085,7 +2085,7 @@ gnc_pricedb_has_prices(GNCPriceDB *db,
 
     if (currency)
     {
-        price_list = g_hash_table_lookup(currency_hash, currency);
+        price_list = static_cast<GList*>(g_hash_table_lookup(currency_hash, currency));
         if (price_list)
         {
             LEAVE("yes");
@@ -2118,7 +2118,7 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
     result = pricedb_get_prices_internal (db, commodity, currency, FALSE);
     if (!result) return NULL;
     for (node = result; node; node = node->next)
-        gnc_price_ref (node->data);
+        gnc_price_ref (static_cast<GNCPrice*>(node->data));
 
     LEAVE (" ");
     return result;
@@ -2129,8 +2129,8 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
 static void
 price_count_helper(gpointer key, gpointer value, gpointer data)
 {
-    int *result = data;
-    GList *price_list = value;
+    auto result = static_cast<int*>(data);
+    auto price_list = static_cast<GList*>(value);
 
     *result += g_list_length(price_list);
 }
@@ -2145,7 +2145,7 @@ gnc_pricedb_num_prices(GNCPriceDB *db,
     if (!db || !c) return 0;
     ENTER ("db=%p commodity=%p", db, c);
 
-    currency_hash = g_hash_table_lookup(db->commodity_hash, c);
+    currency_hash = static_cast<GHashTable*>(g_hash_table_lookup(db->commodity_hash, c));
     if (currency_hash)
     {
         g_hash_table_foreach(currency_hash, price_count_helper,  (gpointer)&result);
@@ -2160,11 +2160,12 @@ static void
 list_combine (gpointer element, gpointer data)
 {
     GList *list = *(GList**)data;
+    auto lst = static_cast<GList*>(element);
     if (list == NULL)
-        *(GList**)data = g_list_copy (element);
+        *(GList**)data = g_list_copy (lst);
     else
     {
-        GList *new_list = g_list_concat ((GList *)list, g_list_copy (element));
+        GList *new_list = g_list_concat (list, g_list_copy (lst));
         *(GList**)data = new_list;
     }
 }
@@ -2198,7 +2199,7 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
 
     if (last_c && prices && last_c == c && db->reset_nth_price_cache == FALSE)
     {
-        result = g_list_nth_data (prices, n);
+        result = static_cast<GNCPrice*>(g_list_nth_data (prices, n));
         LEAVE ("price=%p", result);
         return result;
     }
@@ -2213,12 +2214,12 @@ gnc_pricedb_nth_price (GNCPriceDB *db,
 
     db->reset_nth_price_cache = FALSE;
 
-    currency_hash = g_hash_table_lookup (db->commodity_hash, c);
+    currency_hash = static_cast<GHashTable*>(g_hash_table_lookup (db->commodity_hash, c));
     if (currency_hash)
     {
         GList *currencies = g_hash_table_get_values (currency_hash);
         g_list_foreach (currencies, list_combine, &prices);
-        result = g_list_nth_data (prices, n);
+        result = static_cast<GNCPrice*>(g_list_nth_data (prices, n));
         g_list_free (currencies);
     }
 
@@ -2257,7 +2258,7 @@ gnc_pricedb_lookup_at_time64(GNCPriceDB *db,
     item = price_list;
     while (item)
     {
-        GNCPrice *p = item->data;
+        auto p = static_cast<GNCPrice*>(item->data);
         time64 price_time = gnc_price_get_time64(p);
         if (price_time == t)
         {
@@ -2294,20 +2295,20 @@ lookup_nearest_in_time(GNCPriceDB *db,
     item = price_list;
 
     /* default answer */
-    current_price = item->data;
+    current_price = static_cast<GNCPrice*>(item->data);
 
     /* find the first candidate past the one we want.  Remember that
        prices are in most-recent-first order. */
     while (!next_price && item)
     {
-        GNCPrice *p = item->data;
+        auto p = static_cast<GNCPrice*>(item->data);
         time64 price_time = gnc_price_get_time64(p);
         if (price_time <= t)
         {
-            next_price = item->data;
+            next_price = static_cast<GNCPrice*>(item->data);
             break;
         }
-        current_price = item->data;
+        current_price = static_cast<GNCPrice*>(item->data);
         item = item->next;
     }
 
@@ -2416,9 +2417,9 @@ gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,
     item = price_list;
     do
     {
-        price_time = gnc_price_get_time64 (item->data);
+        price_time = gnc_price_get_time64 (static_cast<GNCPrice*>(item->data));
         if (price_time <= t)
-            current_price = item->data;
+            current_price = static_cast<GNCPrice*>(item->data);
         item = item->next;
     }
     while (price_time > t && item);
@@ -2901,7 +2902,7 @@ typedef struct
 static gboolean
 add_price_to_list (GNCPrice *p, gpointer data)
 {
-    GList **list = data;
+    auto list = static_cast<GList**>(data);
 
     *list = g_list_prepend (*list, p);
 
@@ -2911,8 +2912,8 @@ add_price_to_list (GNCPrice *p, gpointer data)
 static void
 gnc_price_fixup_legacy_commods(gpointer data, gpointer user_data)
 {
-    GNCPrice *p = data;
-    GNCPriceFixupData *fixup_data = user_data;
+    auto p = static_cast<GNCPrice*>(data);
+    auto fixup_data = static_cast<GNCPriceFixupData*>(user_data);
     gnc_commodity *price_c;
 
     if (!p) return;
@@ -3040,13 +3041,12 @@ pricedb_book_begin (QofBook *book)
 static void
 pricedb_book_end (QofBook *book)
 {
-    GNCPriceDB *db;
     QofCollection *col;
 
     if (!book)
         return;
     col = qof_book_get_collection(book, GNC_ID_PRICEDB);
-    db = qof_collection_get_data(col);
+    auto db = static_cast<GNCPriceDB*>(qof_collection_get_data(col));
     qof_collection_set_data(col, NULL);
     gnc_pricedb_destroy(db);
 }
@@ -3110,7 +3110,7 @@ price_foreach(const QofCollection *col, QofInstanceForeachCB cb, gpointer data)
 {
     GNCPriceDB *db;
 
-    db = qof_collection_get_data(col);
+    db = static_cast<GNCPriceDB*>(qof_collection_get_data(col));
     void_unstable_price_traversal(db,
                                   (void (*)(GNCPrice *, gpointer)) cb,
                                   data);
@@ -3126,7 +3126,7 @@ static void price_list_dump(GList *price_list, const char *tag);
 static const char *
 price_printable(gpointer obj)
 {
-    GNCPrice *pr = obj;
+    auto pr = static_cast<GNCPrice*>(obj);
     gnc_commodity *commodity;
     gnc_commodity *currency;
     static char buff[2048];  /* nasty static OK for printing */
