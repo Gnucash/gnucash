@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-07-22 00:48+0200\n"
-"PO-Revision-Date: 2023-07-22 07:02+0000\n"
+"PO-Revision-Date: 2023-07-23 06:02+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
@@ -4897,7 +4897,7 @@ msgstr "Boeking _verwijderen"
 #: gnucash/ui/gnc-plugin-page-register.ui:405
 #: gnucash/ui/gnc-plugin-page-register.ui:517
 msgid "Jump to Invoice"
-msgstr "Naar verkoopfactuur springen"
+msgstr "Naar verkoopfactuur gaan"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:263
 msgid "Cu_t Split"
@@ -4985,7 +4985,7 @@ msgstr "Het gekoppelde bestand voor de huidige boeking openen"
 #: gnucash/ui/gnc-plugin-page-register.ui:407
 #: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr "Naar betreffende aankoopfactuur, verkoopfactuur of declaratie springen"
+msgstr "Naar betreffende aankoopfactuur, verkoopfactuur of declaratie gaan"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:276
 msgid "Cut the selected split into clipboard"
@@ -5018,7 +5018,7 @@ msgstr "Boekregels"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 msgid "Jump"
-msgstr "Springen"
+msgstr "Gaan"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:384
 msgid "Schedule"
@@ -5196,7 +5196,7 @@ msgstr "Deze boeking is al tegengeboekt."
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3869
 msgid "Jump to the transaction?"
-msgstr "Naar de transactie springen?"
+msgstr "Naar de transactie gaan?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3876
 msgid "Reverse Transaction"
@@ -14207,8 +14207,8 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"Dubbelklik een waarde in de kolom Omschrijving om naar de transactie te "
-"springen.\n"
+"Dubbelklik een waarde in de kolom Omschrijving om naar de transactie te gaan."
+"\n"
 "Dubbelklik een waarde in de kolom Koppeling om het gekoppelde bestand te "
 "openen.\n"
 "Dubbelklik een waarde in de kolom Beschikbaar om de bestandskoppeling te "
@@ -14434,11 +14434,11 @@ msgstr "Rekeninglijst doorzoeken"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:38
 msgid "Close _on Jump"
-msgstr "Sluiten _bij springen"
+msgstr "Sluiten _bij gaan"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:55
 msgid "_Jump To"
-msgstr "_Springen naar"
+msgstr "_Gaan naar"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
 msgid "All _accounts"
@@ -14467,8 +14467,8 @@ msgid ""
 "Tree,\n"
 "if account should not be shown, this will be temporarily overridden."
 msgstr ""
-"Kies een regel en klik dan op \"Springen naar\" om naar de betreffende "
-"rekening in de rekeninglijst te springen,\n"
+"Kies een regel en klik dan op \"Gaan naar\" om naar de betreffende rekening "
+"in de rekeninglijst te gaan,\n"
 "als de rekening normaal gesproken niet zichtbaar is, dan wordt ze tijdelijk "
 "toch zichtbaar gemaakt."
 
@@ -30014,7 +30014,7 @@ msgstr "Een vaste journaalpost aanmaken met de huidige boeking als sjabloon"
 #: gnucash/ui/gnc-plugin-page-register.ui:549
 #: gnucash/ui/gnc-plugin-page-register.ui:832
 msgid "_Jump to the other account"
-msgstr "Naar andere rekening _springen"
+msgstr "Naar andere rekening _gaan"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:439
