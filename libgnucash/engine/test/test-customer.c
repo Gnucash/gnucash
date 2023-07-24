@@ -111,16 +111,16 @@ test_customer (void)
         g_list_free (list);
     }
     {
-        const char *str = get_random_string();
-        const char *res;
+        char *str = get_random_string();
 
-        res = NULL;
         gncCustomerBeginEdit(customer);
         gncCustomerSetName (customer, str);
         gncCustomerCommitEdit(customer);
-        res = qof_object_printable (GNC_ID_CUSTOMER, customer);
+
+        const char *res = qof_object_printable (GNC_ID_CUSTOMER, customer);
         do_test (res != NULL, "Printable NULL?");
         do_test (g_strcmp0 (str, res) == 0, "Printable equals");
+        g_free (str);
     }
 
     do_test (gncCustomerGetJoblist (customer, TRUE) == NULL, "joblist empty");
@@ -143,7 +143,7 @@ test_string_fcn (QofBook *book, const char *message,
                  const char * (*get)(const GncCustomer *))
 {
     GncCustomer *customer = gncCustomerCreate (book);
-    char const *str = get_random_string ();
+    char *str = get_random_string ();
 
     do_test (!gncCustomerIsDirty (customer), "test if start dirty");
     gncCustomerBeginEdit (customer);
@@ -158,6 +158,7 @@ test_string_fcn (QofBook *book, const char *message,
      */
     // do_test (!gncCustomerIsDirty (customer), "test dirty after commit");
     do_test (g_strcmp0 (get (customer), str) == 0, message);
+    g_free (str);
     gncCustomerSetActive (customer, FALSE);
     count++;
 }

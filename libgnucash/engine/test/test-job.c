@@ -113,13 +113,13 @@ test_job (void)
     }
 #endif
     {
-        const char *str = get_random_string();
-        const char *res;
+        char *str = get_random_string();
 
         gncJobSetName (job, str);
-        res = qof_object_printable (GNC_ID_JOB, job);
+        const char *res = qof_object_printable (GNC_ID_JOB, job);
         do_test (res != NULL, "Printable NULL?");
         do_test (g_strcmp0 (str, res) == 0, "Printable equals");
+        g_free (str);
     }
     {
         GList *list;
@@ -154,7 +154,7 @@ test_string_fcn (QofBook *book, const char *message,
                  const char * (*get)(const GncJob *))
 {
     GncJob *job = gncJobCreate (book);
-    char const *str = get_random_string ();
+    char *str = get_random_string ();
 
     do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test if start dirty");
     gncJobBeginEdit (job);
@@ -169,6 +169,7 @@ test_string_fcn (QofBook *book, const char *message,
      */
     // do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
     do_test (g_strcmp0 (get (job), str) == 0, message);
+    g_free (str);
     gncJobSetActive (job, FALSE);
     count++;
 }

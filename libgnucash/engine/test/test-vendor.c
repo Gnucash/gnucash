@@ -117,13 +117,13 @@ test_vendor (void)
         g_list_free (list);
     }
     {
-        const char *str = get_random_string();
-        const char *res;
+        char *str = get_random_string();
 
         gncVendorSetName (vendor, str);
-        res = qof_object_printable (GNC_ID_VENDOR, vendor);
+        const char *res = qof_object_printable (GNC_ID_VENDOR, vendor);
         do_test (res != NULL, "Printable NULL?");
         do_test (g_strcmp0 (str, res) == 0, "Printable equals");
+        g_free (str);
     }
 
     qof_book_destroy (book);
@@ -135,7 +135,7 @@ test_string_fcn (QofBook *book, const char *message,
                  const char * (*get)(const GncVendor *))
 {
     GncVendor *vendor = gncVendorCreate (book);
-    char const *str = get_random_string ();
+    char *str = get_random_string ();
 
     do_test (!gncVendorIsDirty (vendor), "test if start dirty");
     gncVendorBeginEdit (vendor);
@@ -150,6 +150,7 @@ test_string_fcn (QofBook *book, const char *message,
      */
     // do_test (!gncVendorIsDirty (vendor), "test dirty after commit");
     do_test (g_strcmp0 (get (vendor), str) == 0, message);
+    g_free (str);
     gncVendorSetActive (vendor, FALSE);
     count++;
 }
