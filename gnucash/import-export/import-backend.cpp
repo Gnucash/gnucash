@@ -1033,15 +1033,6 @@ gboolean gnc_import_exists_online_id (Transaction *trans, GHashTable* acct_id_ha
     }
 
     auto online_id_exists = g_hash_table_contains (online_id_hash, source_online_id);
-    
-    /* If it does, abort the process for this transaction, since it is
-       already in the system. */
-    if (online_id_exists)
-    {
-        DEBUG("%s", "Transaction with same online ID exists, destroying current transaction");
-        xaccTransDestroy(trans);
-        xaccTransCommitEdit(trans);
-    }
     g_free (source_online_id);
     return online_id_exists;
 }

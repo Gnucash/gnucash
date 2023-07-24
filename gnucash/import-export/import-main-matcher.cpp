@@ -2225,7 +2225,14 @@ gnc_gen_trans_list_add_trans_internal (GNCImportMainMatcher *gui, Transaction *t
     g_assert (trans);
 
     if (gnc_import_exists_online_id (trans, gui->acct_id_hash))
+    {
+        /* If it does, abort the process for this transaction, since
+           it is already in the system. */
+        DEBUG("%s", "Transaction with same online ID exists, destroying current transaction");
+        xaccTransDestroy(trans);
+        xaccTransCommitEdit(trans);
         return;
+    }
 
     Split *split = xaccTransGetSplit (trans, 0);
     Account *acc = xaccSplitGetAccount (split);
