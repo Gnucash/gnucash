@@ -1080,6 +1080,10 @@
             (map gnc:strify (coll 'format gnc:make-gnc-monetary #f))))
   (define (value-collector->str coll)
     (format #f "coll<~a>" (coll 'total #f)))
+  (define (option-get-description option)
+    (format #f "Option<~a/~a>"
+            (GncOption-get-section option)
+            (GncOption-get-name option)))
   (define (procedure->str proc)
     (format #f "Proc<~a>"
             (or (procedure-name proc) "unk")))
@@ -1141,6 +1145,7 @@
                              (if (eq? (car d) 'absolute)
                                  (qof-print-date (cdr d))
                                  (gnc:strify (cdr d)))))
+      (try option-get-description)
       (try monetary-collector->str)
       (try value-collector->str)
       (try procedure->str)
