@@ -49,7 +49,11 @@ GncTokenizer::load_file(const std::string& path)
     GError *error = nullptr;
 
     if (!g_file_get_contents(path.c_str(), &raw_contents, &raw_length, &error))
-      throw std::ifstream::failure(error->message);
+    {
+        std::string msg {error->message};
+        g_error_free (error);
+        throw std::ifstream::failure {msg};
+    }
 
     m_raw_contents = raw_contents;
     g_free(raw_contents);

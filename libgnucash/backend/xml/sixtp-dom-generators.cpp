@@ -46,14 +46,16 @@ boolean_to_dom_tree (const char* tag, gboolean val)
 xmlNodePtr
 text_to_dom_tree (const char* tag, const char* str)
 {
-    xmlNodePtr result;
-    gchar* newstr = g_strdup (str);
     g_return_val_if_fail (tag, NULL);
     g_return_val_if_fail (str, NULL);
-    result = xmlNewNode (NULL, BAD_CAST tag);
+
+    xmlNodePtr result = xmlNewNode (NULL, BAD_CAST tag);
     g_return_val_if_fail (result, NULL);
+
+    gchar* newstr = g_strdup (str);
     xmlNodeAddContent (result, checked_char_cast (newstr));
     g_free (newstr);
+
     return result;
 }
 
