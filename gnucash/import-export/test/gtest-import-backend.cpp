@@ -156,6 +156,7 @@ protected:
         m_import_acc->free();
         m_dest_acc->free();
         m_trans->free();
+        g_list_free (m_splitList);
         m_split->free();
     }
 

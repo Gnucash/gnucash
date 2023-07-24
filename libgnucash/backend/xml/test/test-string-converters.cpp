@@ -57,6 +57,9 @@ test_string_converters (void)
         do_test_args (
             g_strcmp0 (backout, mark) == 0,
             "string converting", __FILE__, __LINE__, "with string %s", mark);
+
+        g_free (backout);
+        xmlFreeNode (test_node);
     }
 }
 
@@ -71,6 +74,9 @@ test_bad_string (void)
     do_test_args (g_strcmp0 (backout, sanitized) == 0,
                   "string sanitizing", __FILE__, __LINE__,
                   "with string %s", badstr);
+
+    g_free (backout);
+    xmlFreeNode (test_node);
 }
 
 int
