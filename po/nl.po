@@ -20,8 +20,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-07-22 00:48+0200\n"
-"PO-Revision-Date: 2023-07-25 03:06+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"PO-Revision-Date: 2023-07-25 09:05+0000\n"
+"Last-Translator: Rene Lambers <jbh.lambers@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
 "Language: nl\n"
@@ -1829,7 +1829,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1431
 msgid "Ne_w Balance"
-msgstr "Nieu_we balans"
+msgstr "Nieu_w saldo"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1431
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
@@ -6990,7 +6990,7 @@ msgstr "_Aggregatierekeningen verbergen"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:521
 msgid "Hide _Hidden Accounts"
-msgstr "_Verborgen rekeningen weergeven"
+msgstr "_Verborgen rekeningen verbergen"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:716
 msgid "Set the visibility of placeholder and hidden accounts."
