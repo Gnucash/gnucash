@@ -13,14 +13,15 @@
 # Geert Janssens <info@kobaltwit.be>, 2021.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2022.
 # Stephan Paternotte <stephan@paternottes.net>, 2023.
+# Rene Lambers <jbh.lambers@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-07-22 00:48+0200\n"
-"PO-Revision-Date: 2023-07-24 08:06+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"PO-Revision-Date: 2023-07-24 22:45+0000\n"
+"Last-Translator: Rene Lambers <jbh.lambers@gmail.com>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
 "Language: nl\n"
@@ -94,8 +95,9 @@ msgstr "Eerste dag van het vorige kalenderjaar."
 #: bindings/guile/date-utilities.scm:738
 #: gnucash/gnome-utils/gnc-period-select.c:87
 #: libgnucash/engine/gnc-option-date.cpp:287
+#, fuzzy
 msgid "End of previous year"
-msgstr "Einde van vorige jaar"
+msgstr "Einde van vorig jaar"
 
 #: bindings/guile/date-utilities.scm:741
 #: libgnucash/engine/gnc-option-date.cpp:288
@@ -224,7 +226,7 @@ msgstr "De huidige datum."
 #: bindings/guile/options.scm:388 gnucash/gnome/top-level.c:462
 #: libgnucash/engine/gnc-optiondb.cpp:1142 libgnucash/engine/qofbookslots.h:72
 msgid "Business"
-msgstr "MKB"
+msgstr "Bedrijf"
 
 #: bindings/guile/options.scm:389 gnucash/gnome/dialog-customer.c:892
 #: gnucash/gnome/dialog-invoice.c:3573 gnucash/gnome/dialog-invoice.c:3607
@@ -256,7 +258,7 @@ msgstr "Zakelijk faxnummer"
 
 #: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1265
 msgid "Company Website URL"
-msgstr "URL voor website bedrijf"
+msgstr "URL voor de website van het bedrijf"
 
 #: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1261
 msgid "Company Email Address"
@@ -282,7 +284,7 @@ msgstr "aangepast"
 #: gnucash/report/reports/standard/new-owner-report.scm:55
 #: libgnucash/engine/gnc-optiondb.cpp:1294
 msgid "Tax"
-msgstr "BTW"
+msgstr "Belasting"
 
 #: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1294
 msgid "Tax Number"
@@ -384,7 +386,7 @@ msgstr "Arabisch (Windows-1256)"
 
 #: borrowed/goffice/go-charmap-sel.c:123
 msgid "Armenian (ARMSCII-8)"
-msgstr "Armeens(ARMSCII-8)"
+msgstr "Armeens (ARMSCII-8)"
 
 #: borrowed/goffice/go-charmap-sel.c:124
 msgid "Baltic (ISO-8859-13)"
@@ -640,7 +642,7 @@ msgstr "Unicode (UTF-32LE)"
 
 #: borrowed/goffice/go-charmap-sel.c:214
 msgid "User Defined"
-msgstr "Gedefinieer door de gebruiker"
+msgstr "Gedefinieerd door de gebruiker"
 
 #: borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
@@ -692,7 +694,7 @@ msgstr "Conversierichting"
 
 #: borrowed/goffice/go-charmap-sel.c:471
 msgid "This value determines which iconv test to perform."
-msgstr "Deze waarde bepaalt welke iconv test zal uitgevoerd worden."
+msgstr "Deze waarde bepaalt welke iconv test uitgevoerd zal worden."
 
 #: borrowed/goffice/go-optionmenu.c:347
 msgid "Menu"
@@ -717,9 +719,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
-"Email lijsten zijn het geprefereerde communicatiekanaal in de GnuCash "
+"Email lijsten zijn het voorkeurscommunicatiekanaal in de GnuCash "
 "gemeenschap. Voor aankondigingen van nieuwe uitgaven, gebruikersgroepen enz. "
-"refereer aan de tabel op https://wiki.gnucash.org/wiki/Mailing_Lists"
+"zie de tabel op https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:11
 msgid ""
@@ -727,10 +729,9 @@ msgid ""
 "lists, you can chat to them live on IRC! Join them on #gnucash at irc.gnome."
 "org"
 msgstr ""
-"U kunt eenvoudig contact opnemen met de ontwikkelaars van GnuCash via de "
-"mailinglijst. Ook chatten (via IRC) behoort tot de mogelijkheden; de "
-"ontwikkelaars zijn regelmatig op kanaal #gnucash van server irc.gnome.org te "
-"vinden"
+"U kunt eenvoudig contact opnemen met de ontwikkelaars van GnuCash. Naast "
+"mailing lists kunt u live chatten (via IRC). Vind ze op kanaal #gnucash van "
+"server irc.gnome.org"
 
 #: doc/tip_of_the_day.list.c:15
 msgid ""
@@ -1841,7 +1842,7 @@ msgstr "_Aandelen"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1434
 msgid "Ratio"
-msgstr "Ratio"
+msgstr "Verhouding"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1434
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
@@ -27178,15 +27179,15 @@ msgstr "Factuurnummer naast titel"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:89
 msgid "table-border-collapse"
-msgstr "table-border-collapse"
+msgstr "tabel-rand-inklappen"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:90
 msgid "table-header-border-color"
-msgstr "table-header-border-color"
+msgstr "tabel-kop-rand-kleur"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:91
 msgid "table-cell-border-color"
-msgstr "table-cell-border-color"
+msgstr "tabel-cel-rand-kleur"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:92
 msgid "Embedded CSS"
@@ -27310,7 +27311,7 @@ msgstr "Referentie: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:322
 msgid "Engagement: "
-msgstr "Engagement: "
+msgstr "Opdracht: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:328
 #: gnucash/report/reports/standard/taxinvoice.scm:330
