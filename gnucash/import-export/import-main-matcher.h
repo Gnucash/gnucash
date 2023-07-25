@@ -206,9 +206,6 @@ void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui,
  * actually efficiently destroy the transactions already imported.
  *
  * @param gui The Transaction Importer to use.
- *
- *
- * @param ref_id Reference id which links an external object to the transaction.
  */
 
 void gnc_gen_trans_list_purge_existing (GNCImportMainMatcher *gui);

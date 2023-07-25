@@ -2266,8 +2266,8 @@ gnc_gen_trans_list_purge_existing (GNCImportMainMatcher *gui)
     std::for_each (gui->transactions_to_delete.begin(), gui->transactions_to_delete.end(),
                    [](Transaction* txn)
                    {
-                       xaccTransBeginEdit (txn);
                        xaccTransDestroy (txn);
+                       xaccTransCommitEdit (txn);
                    });
     std::for_each (accset.begin(), accset.end(), xaccAccountCommitEdit);
     gui->transactions_to_delete.clear();
