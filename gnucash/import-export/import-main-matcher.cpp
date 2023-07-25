@@ -39,6 +39,8 @@
 #include <stdbool.h>
 
 #include <vector>
+#include <unordered_set>
+#include <algorithm>
 
 #include "import-main-matcher.h"
 
@@ -78,6 +80,7 @@ struct _main_matcher_info
     GtkWidget               *show_matched_info;
     GtkWidget               *append_text; // Update+Clear: Append import Desc/Notes to matched Desc/Notes
     GtkWidget               *reconcile_after_close;
+    std::vector<Transaction*> transactions_to_delete; // transactions to delete immediately instead of importing
     bool add_toggled;     // flag to indicate that add has been toggled to stop selection
     gint id;
     GSList* temp_trans_list;  // Temporary list of imported transactions
@@ -2229,8 +2232,7 @@ gnc_gen_trans_list_add_trans_internal (GNCImportMainMatcher *gui, Transaction *t
         /* If it does, abort the process for this transaction, since
            it is already in the system. */
         DEBUG("%s", "Transaction with same online ID exists, destroying current transaction");
-        xaccTransDestroy(trans);
-        xaccTransCommitEdit(trans);
+        gui->transactions_to_delete.push_back (trans);
         return;
     }
 
@@ -2244,6 +2246,31 @@ gnc_gen_trans_list_add_trans_internal (GNCImportMainMatcher *gui, Transaction *t
     // It's much faster to gather the imported transactions into a GSList than
     // directly into the treeview.
     gui->temp_trans_list = g_slist_prepend (gui->temp_trans_list, transaction_info);
+}
+
+void
+gnc_gen_trans_list_purge_existing (GNCImportMainMatcher *gui)
+{
+    g_return_if_fail (gui);
+    std::unordered_set<Account*> accset;
+    std::for_each (gui->transactions_to_delete.begin(), gui->transactions_to_delete.end(),
+                   [&accset](const Transaction* txn)
+                   {
+                       for (auto n = xaccTransGetSplitList (txn); n; n = n->next)
+                       {
+                           auto acc{xaccSplitGetAccount (static_cast<const Split*>(n->data))};
+                           if (accset.insert(acc).second)
+                               xaccAccountBeginEdit (acc);
+                       }
+                   });
+    std::for_each (gui->transactions_to_delete.begin(), gui->transactions_to_delete.end(),
+                   [](Transaction* txn)
+                   {
+                       xaccTransBeginEdit (txn);
+                       xaccTransDestroy (txn);
+                   });
+    std::for_each (accset.begin(), accset.end(), xaccAccountCommitEdit);
+    gui->transactions_to_delete.clear();
 }
 
 void

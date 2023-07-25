@@ -2183,6 +2183,8 @@ CsvImpTransAssist::assist_match_page_prepare ()
             draft_trans->trans = nullptr;
         }
     }
+
+    gnc_gen_trans_list_purge_existing(gnc_csv_importer_gui);
     /* Show the matcher dialog */
     gnc_gen_trans_list_show_all (gnc_csv_importer_gui);
 }

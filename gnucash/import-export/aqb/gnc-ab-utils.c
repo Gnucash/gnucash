@@ -872,6 +872,7 @@ txn_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
                                                txn_transaction_cb, data,
                                                AB_Transaction_TypeStatement, 0);
     }
+    gnc_gen_trans_list_purge_existing (data->generic_importer);
     return NULL;
 }
 
