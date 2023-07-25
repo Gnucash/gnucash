@@ -19,7 +19,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-07-22 00:48+0200\n"
-"PO-Revision-Date: 2023-07-23 06:02+0000\n"
+"PO-Revision-Date: 2023-07-24 08:06+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
@@ -753,9 +753,9 @@ msgid ""
 "The full path is displayed in the status bar."
 msgstr ""
 "Als u wilt weten in welke mappen uw recente GnuCash-bestanden zijn "
-"opgeslagen, beweeg de aanwijzer dan over een van de vermeldingen in het "
-"geschiedenismenu\n"
-"(Bestand [-> Meest recent gebruikte lijst]).\n"
+"opgeslagen, beweeg de aanwijzer dan over een van de vermeldingen in de "
+"bestandsgeschiedenis\n"
+"(Bestand [-> Lijst recente bestanden]).\n"
 "Het volledige pad wordt weergegeven in de statusbalk."
 
 #: doc/tip_of_the_day.list.c:24
@@ -7338,7 +7338,8 @@ msgid ""
 msgstr ""
 "Het bestand/URI %s werd niet gevonden.\n"
 "\n"
-"Het bestand staat op de historiek, wil je het hiervan verwijderen ?"
+"Het bestand staat in de bestandsgeschiedenis, wilt u het hieruit verwijderen "
+"?"
 
 #: gnucash/gnome-utils/gnc-file.c:442
 #, c-format
@@ -10095,8 +10096,8 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
-"Instellen dat bij nieuwe bestanden in grootboekkaarten en rapporten "
-"standaard de “actie” wordt gebruikt in plaats van “Nr”"
+"Bij nieuwe bestanden in grootboekkaarten en rapporten standaard de “actie” "
+"gebruiken in plaats van “Nr”"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1445
@@ -10503,7 +10504,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:5
 msgid "Number of files in history"
-msgstr "Aantal bestanden in historie"
+msgstr "Aantal bestanden in de geschiedenislijst"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:6
 msgid ""
@@ -10513,7 +10514,7 @@ msgid ""
 msgstr ""
 "Deze instelling betreft het aantal bestanden dat in menu ‘Bestand’ als "
 "laatst geopend bestand bewaard blijft. Een waarde van 0 betekent dat er géén "
-"bestandshistorie wordt bijgehouden. De maximale waarde is 10."
+"bestandsgeschiedenis wordt bijgehouden. De maximale waarde is 10."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:10
 msgid "Most recently opened file"
@@ -26549,7 +26550,7 @@ msgstr "Partij-koppeling"
 #: gnucash/report/reports/standard/new-owner-report.scm:333
 #, scheme-format
 msgid "~a History"
-msgstr "~a Historiek"
+msgstr "~a Geschiedenis"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:335
 msgid "Linked Details"
