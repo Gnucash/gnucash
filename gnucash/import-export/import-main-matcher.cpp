@@ -2224,6 +2224,10 @@ gnc_gen_trans_list_add_trans_internal (GNCImportMainMatcher *gui, Transaction *t
     g_assert (gui);
     g_assert (trans);
 
+    Split *split = xaccTransGetSplit (trans, 0);
+    Account *acc = xaccSplitGetAccount (split);
+    defer_bal_computation (gui, acc);
+
     if (gnc_import_exists_online_id (trans, gui->acct_id_hash))
     {
         /* If it does, abort the process for this transaction, since
@@ -2233,10 +2237,6 @@ gnc_gen_trans_list_add_trans_internal (GNCImportMainMatcher *gui, Transaction *t
         xaccTransCommitEdit(trans);
         return;
     }
-
-    Split *split = xaccTransGetSplit (trans, 0);
-    Account *acc = xaccSplitGetAccount (split);
-    defer_bal_computation (gui, acc);
 
     GNCImportTransInfo *transaction_info = gnc_import_TransInfo_new (trans, NULL);
     gnc_import_TransInfo_set_ref_id (transaction_info, ref_id);
