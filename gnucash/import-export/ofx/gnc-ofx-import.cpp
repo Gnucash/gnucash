@@ -1339,7 +1339,6 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
             info->num_trans_processed ++;
         }
     }
-    gnc_gen_trans_list_purge_existing (info->gnc_ofx_importer_gui);
     g_list_free (info->trans_list);
     g_hash_table_destroy (trans_hash);
     info->trans_list = g_list_reverse (trans_list_remain);

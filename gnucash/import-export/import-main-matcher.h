@@ -200,16 +200,6 @@ void gnc_gen_trans_list_add_trans_with_ref_id (GNCImportMainMatcher *gui,
                                                guint32 ref_id);
 
 
-/** Performs housekeeping for the previous related functions
- * gnc_gen_trans_list_add_trans etc -- these functions will add (or
- * mark for destroy) transactions for import. This function will
- * actually efficiently destroy the transactions already imported.
- *
- * @param gui The Transaction Importer to use.
- */
-
-void gnc_gen_trans_list_purge_existing (GNCImportMainMatcher *gui);
-
 /** Run this dialog and return only after the user pressed Ok, Cancel,
   or closed the window. This means that all actual importing will
   have been finished upon returning.
