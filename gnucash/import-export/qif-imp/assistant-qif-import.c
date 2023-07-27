@@ -1147,10 +1147,14 @@ refresh_old_transactions (QIFImportWindow * wind, int selection)
     GtkTreeView *view;
     GtkListStore *store;
     GtkTreeIter iter;
+    static GMutex mutex;
+    if (!g_mutex_trylock(&mutex))
+      return;
 
     view = GTK_TREE_VIEW(wind->old_transaction_view);
     store = GTK_LIST_STORE(gtk_tree_view_get_model (view));
     gtk_list_store_clear (store);
+    g_mutex_unlock (&mutex);
 
     if (wind->match_transactions != SCM_BOOL_F)
     {
