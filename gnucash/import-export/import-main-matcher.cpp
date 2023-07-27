@@ -674,6 +674,15 @@ run_match_dialog (GNCImportMainMatcher *info,
 }
 
 static void
+set_treeview_selection_from_path (GtkTreeView* view, const char* path)
+{
+    auto selection = gtk_tree_view_get_selection (view);
+    auto tree_path = gtk_tree_path_new_from_string (path);
+    gtk_tree_selection_select_path (selection, tree_path);
+    gtk_tree_path_free (tree_path);
+}
+
+static void
 gen_trans_common_toggled_cb (GtkCellRendererToggle *cell_renderer, gchar *path,
                              GNCImportMainMatcher *gui, GNCImportAction action)
 {
@@ -689,6 +698,8 @@ gen_trans_common_toggled_cb (GtkCellRendererToggle *cell_renderer, gchar *path,
     else
         gnc_import_TransInfo_set_action (transaction_info, action);
     refresh_model_row (gui, model, &tree_iter, transaction_info);
+
+    set_treeview_selection_from_path (GTK_TREE_VIEW(gui->view), path);
 }
 
 static void
