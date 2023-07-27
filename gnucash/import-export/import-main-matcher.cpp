@@ -674,27 +674,29 @@ run_match_dialog (GNCImportMainMatcher *info,
 }
 
 static void
+gen_trans_common_toggled_cb (GtkCellRendererToggle *cell_renderer, gchar *path,
+                             GNCImportMainMatcher *gui, GNCImportAction action)
+{
+    auto model = gtk_tree_view_get_model (gui->view);
+    GtkTreeIter tree_iter;
+    g_return_if_fail (gtk_tree_model_get_iter_from_string (model, &tree_iter, path));
+
+    GNCImportTransInfo *transaction_info;
+    gtk_tree_model_get (model, &tree_iter, DOWNLOADED_COL_DATA, &transaction_info, -1);
+    if (gnc_import_TransInfo_get_action (transaction_info) == action &&
+        gnc_import_Settings_get_action_skip_enabled (gui->user_settings))
+        gnc_import_TransInfo_set_action (transaction_info, GNCImport_SKIP);
+    else
+        gnc_import_TransInfo_set_action (transaction_info, action);
+    refresh_model_row (gui, model, &tree_iter, transaction_info);
+}
+
+static void
 gnc_gen_trans_add_toggled_cb (GtkCellRendererToggle *cell_renderer,
                               gchar                 *path,
                               GNCImportMainMatcher  *gui)
 {
-    ENTER("");
-
-    GtkTreeModel *model = gtk_tree_view_get_model (gui->view);
-    GtkTreeIter iter;
-    if (!gtk_tree_model_get_iter_from_string (model, &iter, path))
-        return;
-
-    GNCImportTransInfo *trans_info;
-    gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
-
-    if (gnc_import_TransInfo_get_action (trans_info) == GNCImport_ADD &&
-            gnc_import_Settings_get_action_skip_enabled (gui->user_settings))
-        gnc_import_TransInfo_set_action (trans_info, GNCImport_SKIP);
-    else
-        gnc_import_TransInfo_set_action (trans_info, GNCImport_ADD);
-    refresh_model_row (gui, model, &iter, trans_info);
-    LEAVE("");
+    gen_trans_common_toggled_cb (cell_renderer, path, gui, GNCImport_ADD);
 }
 
 static void
@@ -702,23 +704,7 @@ gnc_gen_trans_clear_toggled_cb (GtkCellRendererToggle *cell_renderer,
                                 gchar                 *path,
                                 GNCImportMainMatcher  *gui)
 {
-    ENTER("");
-
-    GtkTreeModel *model = gtk_tree_view_get_model (gui->view);
-    GtkTreeIter iter;
-    if (!gtk_tree_model_get_iter_from_string (model, &iter, path))
-        return;
-
-    GNCImportTransInfo *trans_info;
-    gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
-
-    if (gnc_import_TransInfo_get_action (trans_info) == GNCImport_CLEAR &&
-            gnc_import_Settings_get_action_skip_enabled (gui->user_settings))
-        gnc_import_TransInfo_set_action (trans_info, GNCImport_SKIP);
-    else
-        gnc_import_TransInfo_set_action (trans_info, GNCImport_CLEAR);
-    refresh_model_row (gui, model, &iter, trans_info);
-    LEAVE("");
+    gen_trans_common_toggled_cb (cell_renderer, path, gui, GNCImport_CLEAR);
 }
 
 static void
@@ -726,23 +712,7 @@ gnc_gen_trans_update_toggled_cb (GtkCellRendererToggle *cell_renderer,
                                  gchar                 *path,
                                  GNCImportMainMatcher  *gui)
 {
-    ENTER("");
-
-    GtkTreeModel *model = gtk_tree_view_get_model (gui->view);
-    GtkTreeIter iter;
-    if (!gtk_tree_model_get_iter_from_string (model, &iter, path))
-        return;
-
-    GNCImportTransInfo *trans_info;
-    gtk_tree_model_get (model, &iter, DOWNLOADED_COL_DATA, &trans_info, -1);
-
-    if (gnc_import_TransInfo_get_action (trans_info) == GNCImport_UPDATE &&
-            gnc_import_Settings_get_action_skip_enabled (gui->user_settings))
-        gnc_import_TransInfo_set_action (trans_info, GNCImport_SKIP);
-    else
-        gnc_import_TransInfo_set_action (trans_info, GNCImport_UPDATE);
-    refresh_model_row (gui, model, &iter, trans_info);
-    LEAVE("");
+    gen_trans_common_toggled_cb (cell_renderer, path, gui, GNCImport_UPDATE);
 }
 
 static void
