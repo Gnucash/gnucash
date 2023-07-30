@@ -10,7 +10,7 @@
 # Marco Zietzling <marco.zietzling@gmail.com>, 2021.
 # Moritz Höppner <moritz.hoeppner@resourcify.de>, 2021.
 # Tobias Mohr <tobias_mohr_1991@gmx.de>, 2021.
-# Christian Wehling <christian.wehling@web.de>, 2022.
+# Christian Wehling <christian.wehling@web.de>, 2022, 2023.
 # Joachim Wetzig <jo.wetzig@web.de>, 2023.
 msgid ""
 msgstr ""
@@ -18,8 +18,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2021-12-05 20:11+0100\n"
-"PO-Revision-Date: 2023-03-05 22:39+0000\n"
-"Last-Translator: Joachim Wetzig <jo.wetzig@web.de>\n"
+"PO-Revision-Date: 2023-07-29 15:08+0000\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
 msgid "Term (Dear translator: This file will never be visible to the user!)"
