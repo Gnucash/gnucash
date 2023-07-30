@@ -10,10 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-07-22 00:48+0200\n"
-"PO-Revision-Date: 2023-07-20 21:25+0000\n"
+"PO-Revision-Date: 2023-07-27 22:08+0000\n"
 "Last-Translator: vim <dev.getport@slmail.me>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -5361,7 +5361,7 @@ msgstr "Opcje GnuCash"
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1892
 #: gnucash/report/reports/standard/invoice.scm:849
 msgid "Printable Invoice"
-msgstr "Drukowalna faktura"
+msgstr "Faktura (do druku)"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1893
 #: gnucash/report/reports/standard/taxinvoice.scm:301
@@ -5374,12 +5374,12 @@ msgstr "Faktura VAT"
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1894
 #: gnucash/report/reports/standard/invoice.scm:859
 msgid "Easy Invoice"
-msgstr "Prosta faktura"
+msgstr "Faktura (prosta)"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1895
 #: gnucash/report/reports/standard/invoice.scm:869
 msgid "Fancy Invoice"
-msgstr "Faktura ozdobna"
+msgstr "Faktura (ozdobna)"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:393
 #: gnucash/gtkbuilder/dialog-billterms.glade:494
@@ -5802,7 +5802,7 @@ msgstr "Zarządzanie raportami własnymi i ich uruchamianie"
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:51
 msgid "Dashboard"
-msgstr "Pulpit nawigacyjny"
+msgstr "Raport zbiorczy (Dashboard)"
 
 #: gnucash/gnome/report-menus.scm:118
 msgid "A basic dashboard for your accounting data"
@@ -24763,7 +24763,7 @@ msgstr "Nowy klient"
 
 #: gnucash/report/reports/standard/customer-summary.scm:476
 msgid "Customer Summary"
-msgstr "Podsumowanie klienta"
+msgstr "Klient (podsumowanie)"
 
 #. Translators: This statement is about a range of time
 #: gnucash/report/reports/standard/equity-statement.scm:56
@@ -26525,23 +26525,23 @@ msgstr "Nie odnaleziono pasujących transakcji"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:104
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:164
 msgid "Customer Report"
-msgstr "Raport klientów"
+msgstr "Klient (raport)"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1174
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:119
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:198
 msgid "Vendor Report"
-msgstr "Raport dostawców"
+msgstr "Dostawca (raport)"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1183
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:232
 msgid "Employee Report"
-msgstr "Raport pracownika"
+msgstr "Pracownik (raport)"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1192
 msgid "Job Report"
-msgstr "Raport zadania"
+msgstr "Zadanie (raport)"
 
 #: gnucash/report/reports/standard/portfolio.scm:33
 msgid "Investment Portfolio"
@@ -27201,9 +27201,8 @@ msgstr "Inwestycje: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:328
 #: gnucash/report/reports/standard/taxinvoice.scm:330
-#, fuzzy
 msgid "Australian Tax Invoice"
-msgstr "Faktura VAT"
+msgstr "Australijska faktura VAT"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:331
 #, fuzzy
@@ -27352,7 +27351,7 @@ msgstr "Widok wielokolumnowy"
 
 #: gnucash/report/reports/standard/view-column.scm:184
 msgid "Custom Multicolumn Report"
-msgstr "Własny format wielokolumnowy"
+msgstr "Niestandardowy raport wielokolumnowy"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:167
 msgid "Assets Accounts"
