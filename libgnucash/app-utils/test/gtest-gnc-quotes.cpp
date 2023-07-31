@@ -45,7 +45,9 @@ gnc_default_currency(void)
 class GncMockQuoteSource final : public GncQuoteSource
 {
     const std::string m_version{"9.99"};
-    const StrVec m_sources{"currency", "alphavantage"};
+    const StrVec m_currency_sources{"currency"};
+    const StrVec m_single_sources{"alphavantage"};
+    const StrVec m_multiple_sources{"nyse"};
     const StrVec m_quotes;
     const StrVec m_errors;
 public:
@@ -53,7 +55,9 @@ public:
         m_quotes{std::move(quotes)}, m_errors{std::move(errors)}{}
     ~GncMockQuoteSource() override = default;
     const std::string& get_version() const noexcept override { return m_version; }
-    const StrVec& get_sources() const noexcept override { return m_sources; }
+    const StrVec& get_currency_sources() const noexcept override { return m_currency_sources; }
+    const StrVec& get_single_sources() const noexcept override { return m_single_sources; }
+    const StrVec& get_multiple_sources() const noexcept override { return m_multiple_sources; }
     QuoteResult get_quotes(const std::string&) const override;
 };
 
@@ -61,7 +65,9 @@ class GncFailedQuoteSource final : public GncQuoteSource
 {
 
     const std::string m_version{"0"};
-    const StrVec m_sources;
+    const StrVec m_currency_sources;
+    const StrVec m_single_sources;
+    const StrVec m_multiple_sources;
 public:
     GncFailedQuoteSource()
         {
@@ -71,7 +77,9 @@ public:
         }
     ~GncFailedQuoteSource() override = default;
     const std::string& get_version() const noexcept override { return m_version; }
-    const StrVec& get_sources() const noexcept override { return m_sources; }
+    const StrVec& get_currency_sources() const noexcept override { return m_currency_sources; }
+    const StrVec& get_single_sources() const noexcept override { return m_single_sources; }
+    const StrVec& get_multiple_sources() const noexcept override { return m_multiple_sources; }
     QuoteResult get_quotes(const std::string&) const override {return {0, {}, {}}; }
 };
 
@@ -100,7 +108,7 @@ protected:
         gnc_pricedb_register();
 
         auto eur = gnc_commodity_new(m_book, "Euro", "ISO4217", "EUR", NULL, 100);
-        auto source{gnc_quote_source_lookup_by_internal("currency")};
+        auto source{gnc_quote_source_lookup_by_name("currency")};
         gnc_commodity_begin_edit(eur);
         gnc_commodity_set_quote_flag(eur, TRUE);
         gnc_commodity_set_quote_source(eur, source);
@@ -108,7 +116,7 @@ protected:
         gnc_commodity_table_insert(comm_table, eur);
         auto usd = gnc_commodity_new(m_book, "United States Dollar", "CURRENCY", "USD", NULL, 100);
         gnc_commodity_table_insert(comm_table, usd);
-        source = gnc_quote_source_lookup_by_internal("alphavantage");
+        source = gnc_quote_source_lookup_by_name("alphavantage");
         auto aapl = gnc_commodity_new(m_book, "Apple", "NASDAQ", "AAPL", NULL, 1);
         gnc_commodity_begin_edit(aapl);
         gnc_commodity_set_quote_flag(aapl, TRUE);
@@ -127,9 +135,13 @@ protected:
         gnc_commodity_set_quote_source(fkcm, source);
         gnc_commodity_commit_edit(fkcm);
         gnc_commodity_table_insert(comm_table, fkcm);
-        GList *sources = g_list_prepend(nullptr, (void*)"alphavantage");
-        gnc_quote_source_set_fq_installed("TestSuite", sources);
-        g_list_free(sources);
+        GList *currency_sources = g_list_prepend(nullptr, (void*)"alphavantage");
+        GList *single_sources = g_list_prepend(nullptr, (void*)"alphavantage");
+        GList *multiple_sources = g_list_prepend(nullptr, (void*)"nyse");
+        gnc_quote_source_set_fq_installed("TestSuite", currency_sources, single_sources, multiple_sources);
+        g_list_free(multiple_sources);
+        g_list_free(single_sources);
+        g_list_free(currency_sources);
     }
     ~GncQuotesTest() {
         gnc_clear_current_session();
@@ -142,15 +154,17 @@ protected:
 
 TEST_F(GncQuotesTest, quote_sources)
 {
-    auto qs_cur{gnc_quote_source_lookup_by_internal("currency")};
-    auto qs_yahoo{gnc_quote_source_lookup_by_internal("yahoo_json")};
-    auto qs_alpha{gnc_quote_source_lookup_by_internal("alphavantage")};
+    auto qs_cur{gnc_quote_source_lookup_by_name("currency")};
+    auto qs_alpha{gnc_quote_source_lookup_by_name("alphavantage")};
+    auto qs_yahoo{gnc_quote_source_lookup_by_name("yahoo_json")};
     EXPECT_TRUE(qs_cur != nullptr);
-    EXPECT_TRUE(qs_yahoo != nullptr);
     EXPECT_TRUE(qs_alpha != nullptr);
+    EXPECT_TRUE(qs_yahoo == nullptr);
+    qs_yahoo = gnc_quote_source_add_new("yahoo_json", SOURCE_UNKNOWN);
+    EXPECT_TRUE(qs_yahoo != nullptr);
     EXPECT_TRUE(gnc_quote_source_get_supported(qs_cur));
-    EXPECT_FALSE(gnc_quote_source_get_supported(qs_yahoo));
     EXPECT_TRUE(gnc_quote_source_get_supported(qs_alpha));
+    EXPECT_FALSE(gnc_quote_source_get_supported(qs_yahoo));
 }
 
 TEST_F(GncQuotesTest, quotable_commodities)
