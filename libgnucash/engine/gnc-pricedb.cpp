@@ -56,12 +56,6 @@ enum
     PROP_VALUE,		/* Table, 2 fields (numeric) */
 };
 
-typedef struct
-{
-     gpointer key;
-     gpointer value;
-} HashEntry;
-
 /* Like strcmp, returns -1 if a < b, +1 if a > b, and 0 if they're equal. */
 static inline int
 time64_cmp (time64 a, time64 b)
@@ -69,30 +63,22 @@ time64_cmp (time64 a, time64 b)
     return a < b ? -1 : a > b ? 1 : 0;
 }
 
-static void
-hash_entry_insert(gpointer key, gpointer val, gpointer user_data)
-{
-    GSList **result = (GSList **) user_data;
-    HashEntry *entry = g_new(HashEntry, 1);
-
-    entry->key = key;
-    entry->value = val;
-    *result = g_slist_prepend(*result, entry);
-}
-
-static GSList *
-hash_table_to_list(GHashTable *table)
-{
-    GSList *result_list = NULL;
-    g_hash_table_foreach(table, hash_entry_insert, &result_list);
-    return result_list;
-}
+using CommodityPtrPair = std::pair<const gnc_commodity*, gpointer>;
+using CommodityPtrPairVec = std::vector<CommodityPtrPair>;
 
 static void
-hash_entry_free_gfunc(gpointer data, G_GNUC_UNUSED gpointer user_data)
+hash_entry_insert(const gnc_commodity* key, const gpointer val, CommodityPtrPairVec *result)
 {
-    HashEntry *entry = (HashEntry *) data;
-    g_free(entry);
+    result->emplace_back (key, val);
+}
+
+static CommodityPtrPairVec
+hash_table_to_vector (GHashTable *table)
+{
+    CommodityPtrPairVec result_vec;
+    result_vec.reserve (g_hash_table_size (table));
+    g_hash_table_foreach(table, (GHFunc)hash_entry_insert, &result_vec);
+    return result_vec;
 }
 
 /* GObject Initialization */
@@ -2766,84 +2752,53 @@ pricedb_pricelist_traversal(GNCPriceDB *db,
     return foreach_data.ok;
 }
 
-static gint
-compare_hash_entries_by_commodity_key(gconstpointer a, gconstpointer b)
+static bool
+compare_hash_entries_by_commodity_key (const CommodityPtrPair& he_a, const CommodityPtrPair& he_b)
 {
-    HashEntry *he_a = (HashEntry *) a;
-    HashEntry *he_b = (HashEntry *) b;
-    gnc_commodity *ca;
-    gnc_commodity *cb;
-    int cmp_result;
+    auto ca = he_a.first;
+    auto cb = he_b.first;
 
-    if (a == b) return 0;
-    if (!a && !b) return 0;
-    if (!a) return -1;
-    if (!b) return 1;
+    if (ca == cb || !cb)
+        return false;
 
-    ca = (gnc_commodity *) he_a->key;
-    cb = (gnc_commodity *) he_b->key;
+    if (!ca)
+        return true;
 
-    cmp_result = g_strcmp0(gnc_commodity_get_namespace(ca),
-                           gnc_commodity_get_namespace(cb));
+    auto cmp_result = g_strcmp0 (gnc_commodity_get_namespace (ca), gnc_commodity_get_namespace (cb));
 
-    if (cmp_result != 0) return cmp_result;
+    if (cmp_result)
+        return (cmp_result < 0);
 
-    return g_strcmp0(gnc_commodity_get_mnemonic(ca),
-                     gnc_commodity_get_mnemonic(cb));
+    return g_strcmp0(gnc_commodity_get_mnemonic (ca), gnc_commodity_get_mnemonic (cb)) < 0;
 }
 
-static gboolean
+static bool
 stable_price_traversal(GNCPriceDB *db,
                        gboolean (*f)(GNCPrice *p, gpointer user_data),
                        gpointer user_data)
 {
-    GSList *currency_hashes = NULL;
-    gboolean ok = TRUE;
-    GSList *i = NULL;
+    g_return_val_if_fail (db && f, false);
 
-    if (!db || !f) return FALSE;
+    auto currency_hashes = hash_table_to_vector (db->commodity_hash);
+    std::sort (currency_hashes.begin(), currency_hashes.end(), compare_hash_entries_by_commodity_key);
 
-    currency_hashes = hash_table_to_list(db->commodity_hash);
-    currency_hashes = g_slist_sort(currency_hashes,
-                                   compare_hash_entries_by_commodity_key);
-
-    for (i = currency_hashes; i; i = i->next)
+    for (const auto& entry : currency_hashes)
     {
-        HashEntry *entry = (HashEntry *) i->data;
-        GHashTable *currency_hash = (GHashTable *) entry->value;
-        GSList *price_lists = hash_table_to_list(currency_hash);
-        GSList *j;
+        auto price_lists = hash_table_to_vector (static_cast<GHashTable*>(entry.second));
+        std::sort (price_lists.begin(), price_lists.end(), compare_hash_entries_by_commodity_key);
 
-        price_lists = g_slist_sort(price_lists, compare_hash_entries_by_commodity_key);
-        for (j = price_lists; j; j = j->next)
+        for (const auto& pricelist_entry : price_lists)
         {
-            HashEntry *pricelist_entry = (HashEntry *) j->data;
-            GList *price_list = (GList *) pricelist_entry->value;
-            GList *node;
-
-            for (node = (GList *) price_list; node; node = node->next)
+            for (auto node = static_cast<GList*>(pricelist_entry.second); node; node = node->next)
             {
-                GNCPrice *price = (GNCPrice *) node->data;
-
                 /* stop traversal when f returns FALSE */
-                if (FALSE == ok) break;
-                if (!f(price, user_data)) ok = FALSE;
+                if (!f(static_cast<GNCPrice *>(node->data), user_data))
+                    return false;
             }
         }
-        if (price_lists)
-        {
-            g_slist_foreach(price_lists, hash_entry_free_gfunc, NULL);
-            g_slist_free(price_lists);
-            price_lists = NULL;
-        }
     }
 
-    if (currency_hashes)
-    {
-        g_slist_foreach(currency_hashes, hash_entry_free_gfunc, NULL);
-        g_slist_free(currency_hashes);
-    }
-    return ok;
+    return true;
 }
 
 gboolean
