@@ -206,12 +206,24 @@ gnc_quote_source_fq_version (void)
 gint gnc_quote_source_num_entries(QuoteSourceType type)
 {
     switch (type) {
-        case SOURCE_CURRENCY: return g_list_length(currency_quote_sources); break;
-        case SOURCE_FQ_CURRENCY: return g_list_length(fq_currency_quote_sources); break;
-        case SOURCE_SINGLE: return g_list_length(single_quote_sources); break;
-        case SOURCE_MULTI: return g_list_length(multiple_quote_sources); break;
-        case SOURCE_UNKNOWN: return g_list_length(unknown_quote_sources); break;
-        default: return 0; break;
+        case SOURCE_CURRENCY:
+            return g_list_length(currency_quote_sources);
+            break;
+        case SOURCE_FQ_CURRENCY:
+            return g_list_length(fq_currency_quote_sources);
+            break;
+        case SOURCE_SINGLE:
+            return g_list_length(single_quote_sources);
+            break;
+        case SOURCE_MULTI:
+            return g_list_length(multiple_quote_sources);
+            break;
+        case SOURCE_UNKNOWN:
+            return g_list_length(unknown_quote_sources);
+            break;
+        default:
+            return 0;
+            break;
     }
 }
 
@@ -273,11 +285,21 @@ gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
 
     switch (type)
     {
-        case SOURCE_CURRENCY: source_list = currency_quote_sources; break;
-        case SOURCE_FQ_CURRENCY: source_list = fq_currency_quote_sources; break;
-        case SOURCE_SINGLE: source_list = single_quote_sources; break;
-        case SOURCE_MULTI: source_list = multiple_quote_sources; break;
-        case SOURCE_UNKNOWN: source_list = unknown_quote_sources; break;
+        case SOURCE_CURRENCY:
+            source_list = currency_quote_sources;
+            break;
+        case SOURCE_FQ_CURRENCY:
+            source_list = fq_currency_quote_sources;
+            break;
+        case SOURCE_SINGLE:
+            source_list = single_quote_sources;
+            break;
+        case SOURCE_MULTI:
+            source_list = multiple_quote_sources;
+            break;
+        case SOURCE_UNKNOWN:
+            source_list = unknown_quote_sources;
+            break;
     }
 
     if (NULL != source_list)
@@ -303,11 +325,21 @@ gnc_quote_source_lookup_by_name_and_type(const char * name, QuoteSourceType type
 
     GList *source_list = NULL;
     switch (type) {
-        case SOURCE_CURRENCY: source_list = currency_quote_sources; break;
-        case SOURCE_FQ_CURRENCY: source_list = fq_currency_quote_sources; break;
-        case SOURCE_SINGLE: source_list = single_quote_sources; break;
-        case SOURCE_MULTI: source_list = multiple_quote_sources; break;
-        case SOURCE_UNKNOWN: source_list = unknown_quote_sources; break;
+        case SOURCE_CURRENCY:
+            source_list = currency_quote_sources;
+            break;
+        case SOURCE_FQ_CURRENCY:
+            source_list = fq_currency_quote_sources;
+            break;
+        case SOURCE_SINGLE:
+            source_list = single_quote_sources;
+            break;
+        case SOURCE_MULTI:
+            source_list = multiple_quote_sources;
+            break;
+        case SOURCE_UNKNOWN:
+            source_list = unknown_quote_sources;
+            break;
     }
 
     for (GList* node = source_list; node; node = node->next) {
