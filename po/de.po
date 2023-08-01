@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-07-22 00:48+0200\n"
-"PO-Revision-Date: 2023-07-29 15:08+0000\n"
+"PO-Revision-Date: 2023-08-01 21:07+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -1782,10 +1782,8 @@ msgid "missing"
 msgstr "fehlt"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:593
-#, fuzzy
-#| msgid "Amount for %s is missing."
 msgid "Amount for stock value is missing."
-msgstr "Betrag für %s fehlt."
+msgstr "Der Betrag für den Aktienwert fehlt."
 
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
@@ -1807,8 +1805,6 @@ msgstr ""
 "alle Transktionen, um eine korrekte Erfassung sicherzustellen."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:869
-#, fuzzy
-#| msgid "Stock Value"
 msgctxt "Stock Assistant: Page name"
 msgid "stock value"
 msgstr "Aktienwert"
@@ -1861,27 +1857,23 @@ msgstr "Ein Preis von 1 %s = %s auf %s wird erfasst."
 #: gnucash/gnome/assistant-stock-transaction.cpp:977
 msgctxt "Stock Assistant: Page name"
 msgid "cash"
-msgstr ""
+msgstr "Bargeld"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:981
 msgctxt "Stock Assistant: Page name"
 msgid "fees"
-msgstr ""
+msgstr "Gebühren"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:985
-#, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "dividend"
 msgstr "Dividende"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:993
 #: gnucash/gnome/assistant-stock-transaction.cpp:995
-#, fuzzy
-#| msgid "Capital Gains"
 msgctxt "Stock Assistant: Page name"
 msgid "capital gains"
-msgstr "Kapitalertäge"
+msgstr "Kapitalerträge"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1024
 #, c-format
@@ -21878,10 +21870,8 @@ msgid "Enter credit formula for real transaction"
 msgstr "Geben Sie die Formel zur Soll-Berechnung der tatsächlichen Buchung ein"
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:75
-#, fuzzy
-#| msgid "Loading completed"
 msgid "Don't autocomplete"
-msgstr "Vollständig geladen"
+msgstr "Nicht automatisch vervollständigen"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
@@ -24735,10 +24725,8 @@ msgid "Link to actual transactions"
 msgstr "Tatsächliche Buchungen"
 
 #: gnucash/report/reports/standard/budget.scm:58
-#, fuzzy
-#| msgid "Move to the blank transaction in the register"
 msgid "Show the actual transactions for the budget period"
-msgstr "Zur freien Buchungszeile des Kontobuchs gehen"
+msgstr "Anzeige der tatsächlichen Buchungen für den Budgetzeitraum"
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Show Difference"
@@ -28554,10 +28542,8 @@ msgid "Display the balance of the underlying account on each line?"
 msgstr "Den Saldo des zugrunde liegenden Kontos in jeder Zeile anzeigen?"
 
 #: gnucash/report/trep-engine.scm:931
-#, fuzzy
-#| msgid "Display the transaction date?"
 msgid "Display a grand total section at the bottom?"
-msgstr "Anzeigen des Buchungsdatums?"
+msgstr "Eine Gesamtsumme am Ende anzeigen?"
 
 #: gnucash/report/trep-engine.scm:936
 msgid "Display the trans number?"
@@ -28604,22 +28590,16 @@ msgid "Display running totals as per report sort order?"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:1000
-#, fuzzy
-#| msgid "Grand Total Cell Color"
 msgid "Grand Total and Subtotals"
-msgstr "Zellfarbe für Gesamtsumme"
+msgstr "Gesamtbetrag und Zwischensummen"
 
 #: gnucash/report/trep-engine.scm:1001
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Grand Total Only"
-msgstr "Gesamtbetrag"
+msgstr "Nur Gesamtbetrag"
 
 #: gnucash/report/trep-engine.scm:1002
-#, fuzzy
-#| msgid "Subtotal"
 msgid "Subtotals Only"
-msgstr "Zwischensumme"
+msgstr "Nur Zwischensummen"
 
 #: gnucash/report/trep-engine.scm:1114
 msgid "Num/T-Num"
@@ -28634,49 +28614,39 @@ msgstr "Umbuchen von/nach"
 #. pattern as for these other strings: “Running Totals”,
 #. "Secondary Subtotal” and "Running Primary Subtotal"
 #: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:1483
-#, fuzzy
-#| msgid "Secondary Subtotal"
 msgid "Running Secondary Subtotal"
-msgstr "Sekundärschlüssel mit Zwischensumme"
+msgstr "Laufender Sekundärschlüssel mit Zwischensumme"
 
 #. Translators: this is the running total for the primary subtotal.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. “Primary Subtotal”
 #: gnucash/report/trep-engine.scm:1398 gnucash/report/trep-engine.scm:1496
-#, fuzzy
-#| msgid "Primary Subtotal"
 msgid "Running Primary Subtotal"
-msgstr "Primärschlüssel mit Zwischensumme"
+msgstr "Laufender Primärschlüssel mit Zwischensumme"
 
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
 #: gnucash/report/trep-engine.scm:1402 gnucash/report/trep-engine.scm:1497
-#, fuzzy
-#| msgid "Running Sum"
 msgid "Running Subtotal"
-msgstr "Laufender Saldo"
+msgstr "Laufende Zwischensumme"
 
 #. Translators: this is the running total for the grand total.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. "Grand Total”
 #: gnucash/report/trep-engine.scm:1419 gnucash/report/trep-engine.scm:1511
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Running Grand Total"
-msgstr "Gesamtbetrag"
+msgstr "Laufender Gesamtbetrag"
 
 #. Translators: "Running Total" is a shorter version of
 #. "Running Grand Total" used when the running grand total is
 #. displayed without subtotals. To be consistent, also consider
 #. how the plural form "Running Totals" is translated.
 #: gnucash/report/trep-engine.scm:1424 gnucash/report/trep-engine.scm:1512
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Total"
-msgstr "Laufender Saldo"
+msgstr "Laufende Summe"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
@@ -30534,10 +30504,8 @@ msgid "GncQuotes::Fetch called with no commodities."
 msgstr "Aufruf von GncQuotes::Fetch ohne Wertpapier."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:333
-#, fuzzy
-#| msgid "GncQuotes::Fetch called with no book."
 msgid "GncQuotes::Report called with no source."
-msgstr "Aufruf von GncQuotes::Fetch ohne Buch."
+msgstr "GncQuotes::Report ohne Kursquelle aufgerufen."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:339
 msgid "There were no commodities for which to retrieve quotes."
@@ -31560,16 +31528,14 @@ msgid "Checking business splits in account %s: %u of %u"
 msgstr "Überprüfe geschäftliche Buchungsteile im Konto %s: %u von %u"
 
 #: libgnucash/engine/Scrub.c:148
-#, fuzzy, c-format
-#| msgid "Looking for orphans in account %s: %u of %u"
+#, c-format
 msgid "Looking for orphans in transaction: %u of %u"
-msgstr "Suche nach verwaisten Buchungen im Konto %s: %u von %u"
+msgstr "Suche nach verwaisten Buchungen: %u von %u"
 
 #: libgnucash/engine/Scrub.c:362
-#, fuzzy, c-format
-#| msgid "Looking for imbalances in account %s: %u of %u"
+#, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %u"
-msgstr "Suche nach unausgeglichenen Buchungen im Konto %s: %u von %u"
+msgstr "Suche nach unausgeglichenen Buchungen zum Datum %s: %u von %u"
 
 #: libgnucash/engine/Split.c:1643
 msgctxt ""
