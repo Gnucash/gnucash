@@ -13,8 +13,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-07-22 00:48+0200\n"
-"PO-Revision-Date: 2023-07-27 22:08+0000\n"
-"Last-Translator: vim <dev.getport@slmail.me>\n"
+"PO-Revision-Date: 2023-08-01 13:03+0000\n"
+"Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -19152,7 +19152,6 @@ msgstr "Użyj pełnej nazwy konta"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:394
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
-#, fuzzy
 msgid "Reconcile Date"
 msgstr "Data uzgodnienia"
 
