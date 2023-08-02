@@ -362,10 +362,6 @@ test_price_list_is_duplicate (Fixture *fixture, gconstpointer pData)
 gboolean
 gnc_price_list_insert(PriceList **prices, GNCPrice *p, gboolean check_dupl)// Local: 3:0:0
 */
-/* static void
-test_gnc_price_list_insert (Fixture *fixture, gconstpointer pData)
-{
-}*/
 /* gnc_price_list_remove
 gboolean
 gnc_price_list_remove(PriceList **prices, GNCPrice *p)// Local: 1:0:0
@@ -681,6 +677,37 @@ test_num_prices_helper (Fixture *fixture, gconstpointer pData)
 guint
 gnc_pricedb_get_num_prices(GNCPriceDB *db)// C: 2 in 1  Local: 0:0:0
 */
+
+static void
+test_gnc_price_list_insert (PriceDBFixture *fixture, gconstpointer pData)
+{
+    GNCPriceDB *db = fixture->pricedb;
+    Commodities *c = fixture->com;
+    QofBook *book = qof_instance_get_book(QOF_INSTANCE(db));
+
+    g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 42);
+
+    // nop because 12/4/09 already exists
+    gnc_pricedb_add_price (db, construct_price(book, c->usd, c->aud,
+                                               gnc_dmy2time64(12, 4, 2009),
+                                               PRICE_SOURCE_USER_PRICE,
+                                               gnc_numeric_create(131190, 10000)));
+    g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 42);
+
+    // num_prices increases because because 14/4/09 doesn't exist yet
+    gnc_pricedb_add_price (db, construct_price(book, c->usd, c->aud,
+                                               gnc_dmy2time64(14, 4, 2009),
+                                               PRICE_SOURCE_USER_PRICE,
+                                               gnc_numeric_create(131190, 10000)));
+    g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 43);
+
+    // nop because because 14/4/09 already exists
+    gnc_pricedb_add_price (db, construct_price(book, c->usd, c->aud,
+                                               gnc_dmy2time64(14, 4, 2009),
+                                               PRICE_SOURCE_USER_PRICE,
+                                               gnc_numeric_create(131190, 10000)));
+    g_assert_cmpint (gnc_pricedb_get_num_prices(fixture->pricedb), ==, 43);
+}
 
 static void
 test_gnc_price_list_equal (PriceDBFixture *fixture, gconstpointer pData)
@@ -1672,7 +1699,7 @@ test_suite_gnc_pricedb (void)
 // GNC_TEST_ADD (suitename, "gnc price equal", Fixture, NULL, setup, test_gnc_price_equal, teardown);
 // GNC_TEST_ADD (suitename, "compare prices by date", Fixture, NULL, setup, test_compare_prices_by_date, teardown);
 // GNC_TEST_ADD (suitename, "price list is duplicate", Fixture, NULL, setup, test_price_list_is_duplicate, teardown);
-// GNC_TEST_ADD (suitename, "gnc price list insert", Fixture, NULL, setup, test_gnc_price_list_insert, teardown);
+GNC_TEST_ADD (suitename, "gnc price list insert", PriceDBFixture, NULL, setup, test_gnc_price_list_insert, teardown);
 // GNC_TEST_ADD (suitename, "gnc price list remove", Fixture, NULL, setup, test_gnc_price_list_remove, teardown);
 // GNC_TEST_ADD (suitename, "price list destroy helper", Fixture, NULL, setup, test_price_list_destroy_helper, teardown);
 // GNC_TEST_ADD (suitename, "gnc price list destroy", Fixture, NULL, setup, test_gnc_price_list_destroy, teardown);
