@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-07-22 00:48+0200\n"
-"PO-Revision-Date: 2023-07-03 16:51+0000\n"
+"PO-Revision-Date: 2023-08-02 15:23+0000\n"
 "Last-Translator: Andrea Andre <andrea.tsg19@slmail.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
@@ -1049,7 +1049,7 @@ msgstr[2] ""
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have asked for a book to be created. This book will contain all "
 "transactions up to midnight %s (for a total of %d transactions spread over "
@@ -1060,8 +1060,10 @@ msgid ""
 msgstr ""
 "Ai cerut crearea unei cărți. Această carte va conține toate tranzacțiile "
 "până la miezul nopții %s (pentru un total de %d tranzacții răspândite în %d "
-"conturi). Clic pe 'Înainte' pentru a crea această carte. Clic pe 'Înapoi' "
-"pentru a corecta datele."
+"conturi).\n"
+"\n"
+"Modifică titlul și observațiile sau fă clic pe „Înainte” pentru a continua.\n"
+"Clic pe „Înapoi” pentru a corecta datele sau „Renunță”."
 
 #: gnucash/gnome/assistant-acct-period.c:388
 #, c-format
@@ -2836,7 +2838,7 @@ msgstr "Număr"
 
 #: gnucash/gnome/dialog-find-transactions.c:149
 msgid "Description, Notes, or Memo"
-msgstr "Descriere, note sau memo"
+msgstr "Descriere, observații sau reamintire"
 
 #: gnucash/gnome/dialog-find-transactions.c:155
 #: gnucash/gnome/gnc-split-reg.c:678
@@ -2866,7 +2868,7 @@ msgstr "Descriere, note sau memo"
 #: gnucash/report/trep-engine.scm:918 gnucash/report/trep-engine.scm:1142
 #: gnucash/report/trep-engine.scm:2258
 msgid "Notes"
-msgstr "Note"
+msgstr "Observații"
 
 #: gnucash/gnome/dialog-find-transactions.c:201
 #: gnucash/gnome-search/dialog-search.c:1486
@@ -3176,7 +3178,7 @@ msgstr "Proprietarul facturii"
 #: gnucash/gnome/dialog-invoice.c:3552
 #: gnucash/report/reports/standard/invoice.scm:282
 msgid "Invoice Notes"
-msgstr "Notele facturii"
+msgstr "Observații în factură"
 
 #: gnucash/gnome/dialog-invoice.c:3555 gnucash/gnome/dialog-invoice.c:3589
 #: gnucash/gnome/dialog-invoice.c:3623 gnucash/gnome/dialog-invoice.c:3652
@@ -3220,7 +3222,7 @@ msgstr "Emitentul bonului fiscal"
 
 #: gnucash/gnome/dialog-invoice.c:3586
 msgid "Bill Notes"
-msgstr "Însemnări privind bonul fiscal"
+msgstr "Observații pe bonul fiscal"
 
 #: gnucash/gnome/dialog-invoice.c:3617
 msgid "Voucher Owner"
@@ -3228,7 +3230,7 @@ msgstr "Voucher de proprietar"
 
 #: gnucash/gnome/dialog-invoice.c:3620
 msgid "Voucher Notes"
-msgstr "Note voucher"
+msgstr "Observații în cupoane"
 
 #: gnucash/gnome/dialog-invoice.c:3654 gnucash/gnome/dialog-invoice.c:3813
 #: gnucash/gnome/dialog-lot-viewer.c:907 gnucash/gnome/dialog-tax-info.c:1235
@@ -3503,7 +3505,7 @@ msgstr "Vizualizează/Editează comanda"
 
 #: gnucash/gnome/dialog-order.c:868
 msgid "Order Notes"
-msgstr "Notele comenzii"
+msgstr "Observații comandă"
 
 #: gnucash/gnome/dialog-order.c:870 gnucash/gtkbuilder/dialog-order.glade:149
 msgid "Date Closed"
@@ -9023,11 +9025,6 @@ msgid ""
 "opposite sign. For example for a bill, vendor credit notes and negative "
 "bills are considered counter documents."
 msgstr ""
-"În momentul postării încearcă să plătești documentele furnizorului automat "
-"cu pre-plățile anterioare în așteptare și contra-documente. Pre-plățile și "
-"documentele trebuie să fie către același furnizor. Contra-documentele sunt "
-"documente cu semn opus. De exemplu, pentru o factură, notele de credit "
-"client și facturile negative sunt considerate contra-documente."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:159
 msgid "Show bills due reminder at startup"
@@ -9199,9 +9196,8 @@ msgstr ""
 "specificate din cec."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:60
-#, fuzzy
 msgid "Position of notes line"
-msgstr "Poziția liniei pentru dată"
+msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:61
 #, fuzzy
@@ -9823,7 +9819,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
-msgstr ""
+msgstr "Versiunea acestor reglări"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:11
 msgid ""
@@ -10529,25 +10525,18 @@ msgid "All transactions are expanded to show all splits."
 msgstr "Toate tranzacțiile sunt expandate să afișeze toate părțile."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:301
-#, fuzzy
-#| msgid "Show two lines of information for each transaction"
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction."
-msgstr "Afișează două linii de informații pentru fiecare tranzacție"
+msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:302
-#, fuzzy
 msgid ""
 "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" for "
 "each transaction in a register. This is the default setting for when a "
 "register is first opened. The setting can be changed at any time via the "
 "\"View->Double Line\" menu item."
 msgstr ""
-"Afișează informațiile pe două linii pentru fiecare tranzacție în registru. "
-"Aceasta este setarea implicită când un registru este deschis pentru prima "
-"dată. Această setare poate fi schimbată în orice moment via meniul "
-"\"Vizualizare->Pe două linii\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:306
 #, fuzzy
@@ -11488,9 +11477,8 @@ msgid "Simple Layout"
 msgstr "Exemplu de date:"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:230
-#, fuzzy
 msgid "Choose Export Settings"
-msgstr "Alege formatul pentru export"
+msgstr "Alege reglările pentru exportare"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:245
 msgid "Select the accounts to be exported and date range if required."
@@ -11649,6 +11637,41 @@ msgid ""
 "\n"
 "Click on \"Next\" to proceed or \"Cancel\" to Abort Import."
 msgstr ""
+"Acest asistent te va ajuta la importarea prețurilor dintr-un fișier CSV.\n"
+"\n"
+"Există un număr minim de coloane care trebuie să fie prezente pentru ca "
+"importarea să aibă succes, acestea fiind Data, Suma, Spațiul numelor de "
+"proveniență, Simbolul de proveniență și Valuta de destinație. Dacă toate "
+"intrările sunt pentru aceeași Marfă / Valută, atunci le poți alege și "
+"coloanele vor fi Data și Suma.\n"
+"\n"
+"Există diverse opțiuni pentru specificarea delimitatorului, precum și o "
+"opțiune de lățime fixă. Cu opțiunea de lățime fixă, se face dublu clic pe "
+"tabelul de rânduri afișat pentru a stabili o lățime a coloanei, apoi se face "
+"clic cu butonul din dreapta al șoricelului pentru a o modifica, dacă este "
+"necesar.\n"
+"\n"
+"Exemplele sunt „FTSE”, „RR.L”, „21/11/2016”,5.345, „GBP” și "
+"VALUTA;USD;2016-11-21;1.56;GBP\n"
+"\n"
+"Există o opțiune pentru specificarea rândului de început, a rândului de "
+"sfârșit și o opțiune pentru a sări peste rândurile alternative începând de "
+"la rândul de început, care poate fi utilizată în cazul în care există un "
+"text de antet. De asemenea, există o opțiune pentru a înlocui prețurile "
+"existente pentru ziua respectivă, dacă este necesar.\n"
+"\n"
+"În cele din urmă, pentru importuri repetate, pagina de previzualizare are "
+"butoane pentru a încărca și a salva reglările. Poți salva reglările ajustate "
+"pentru a le reutiliza la importuri ulterioare. De asemenea, după ce ai "
+"încărcat reglările, le poți ajusta din nou pentru importuri similare și le "
+"poți salva sub un alt nume. Reține că nu poți salva în reglările "
+"prestabilite integrate.\n"
+"\n"
+"Această operațiune este ireversibilă, așa că asigură-te că ai o copie de "
+"rezervă funcțională.\n"
+"\n"
+"Fă clic pe „Înainte” pentru a continua sau pe „Renunță” pentru a întrerupe "
+"importarea."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:72
 msgid "Price Import Assistant"
@@ -11677,6 +11700,11 @@ msgid ""
 "- No settings\n"
 "- Gnucash default export format"
 msgstr ""
+"Șterge reglările\n"
+"Șterge reglările salvate sub numele introdus în spațiul alăturat de text.\n"
+"Există două nume rezervate care nu pot fi șterse niciodată:\n"
+"- Nu există reglări\n"
+"- Format prestabilit de exportare Gnucash"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:165
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:156
@@ -11688,12 +11716,17 @@ msgid ""
 "- No settings\n"
 "- Gnucash default export format"
 msgstr ""
+"Salvează reglările\n"
+"Salvează reglările actuale sub numele introdus în spațiul alăturat de text.\n"
+"Există două nume rezervate care nu pot fi utilizate pentru a salva reglările "
+"personalizate:\n"
+"- Fără reglări\n"
+"- Format prestabilit de exportare Gnucash"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:193
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:183
-#, fuzzy
 msgid "<b>Load and Save Settings</b>"
-msgstr "Economii"
+msgstr "<b>Încarcă și salvează reglările</b>"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:225
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:214
@@ -11876,6 +11909,34 @@ msgid ""
 "imports. After loading your settings you can also tweak them again for "
 "similar imports and save them under another name."
 msgstr ""
+"Acest asistent te va ajuta la importarea unui fișier delimitat care conține "
+"o listă de tranzacții. Acesta acceptă atât fișiere separate prin semne (cum "
+"ar fi cele separate prin virgulă sau punct și virgulă), cât și date cu "
+"lățime fixă.\n"
+"\n"
+"Pentru o importare reușită, trei coloane trebuie să fie disponibile în "
+"datele de import:\n"
+"- o coloană Data\n"
+"- o coloană Descriere\n"
+"- o coloană Depunere sau Retragere\n"
+"\n"
+"Dacă nu există date de cont disponibile, se poate alege un cont de bază în "
+"care vor fi importate toate datele.\n"
+"\n"
+"În afară de alegerea delimitatorului, există mai multe opțiuni pentru a "
+"ajusta importatorul. De exemplu, se poate sări peste un număr de linii la "
+"începutul sau la sfârșitul datelor, precum și peste rândurile impare. Sunt "
+"acceptate mai multe formate de date și numere. Se poate defini codificarea "
+"fișierului.\n"
+"\n"
+"Importatorul poate gestiona fișiere în care tranzacțiile sunt împărțite pe "
+"mai multe linii, fiecare linie reprezentând o divizare.\n"
+"\n"
+"În cele din urmă, pentru importări repetate, pagina de previzualizare are "
+"butoane pentru a încărca și salva reglările. Poți salva reglările ajustate "
+"pentru a le reutiliza la importări ulterioare. De asemenea, după ce ai "
+"încărcat reglările, le poți ajusta din nou pentru importări similare și le "
+"poți salva sub un alt nume."
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:62
 #, fuzzy
@@ -12836,7 +12897,6 @@ msgid "Select possible duplicates"
 msgstr "Selectează posibilele duplicate"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1335
-#, fuzzy
 msgid ""
 "Click \"Apply\" to import data from the staging area and update your GnuCash "
 "accounts. The account and category matching information you have entered "
@@ -12849,16 +12909,16 @@ msgid ""
 "\n"
 "Click \"Cancel\" to abort the QIF import process."
 msgstr ""
-"Fă clic pe \"Aplică\" pentru a importa datele din zona de scenă și a "
-"actualiza conturile tale GnuCash. Contul și categoria de informații "
-"potrivite pe care le-ai introdus vor fi salvate și folosite implicit "
-"următoarea dată când vei folosi facilitatea de import QIF.\n"
+"Fă clic pe „Aplică” pentru a importa datele din zona de pregătire și pentru "
+"a actualiza conturile GnuCash. Informațiile de potrivire a conturilor și a "
+"categoriilor care au fost introduse vor fi salvate și utilizate ca valori "
+"prestabilite data viitoare când vei utiliza facilitatea de importare QIF.\n"
 "\n"
-"Fă clic pe \"Înapoi\" pentru a revedea contul și potrivirile categoriilor, "
-"pentru a schimba moneda și setările de securitate pentru noile conturi sau "
-"pentru a adăuga mai multe fișiere în zona de scenă.\n"
+"Fă clic pe „Înapoi” pentru a revedea potrivirea conturilor și categoriilor, "
+"pentru a modifica moneda și reglările de securitate pentru noile conturi sau "
+"pentru a adăuga mai multe fișiere în zona de pregătire.\n"
 "\n"
-"Fă clic pe \"Renunță\" pentru a renunța la procesul de import QIF."
+"Fă clic pe „Renunță” pentru a întrerupe procesul de importare QIF."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1344
 msgid "Update your GnuCash accounts"
@@ -15063,7 +15123,7 @@ msgstr "Nu importă (nicio acțiune selectată)"
 #: gnucash/gtkbuilder/dialog-print-check.glade:745
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1014
 msgid "_Notes"
-msgstr "_Note"
+msgstr "_Observații"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1058
 #, fuzzy
@@ -15244,7 +15304,7 @@ msgstr "Introdu un nume pentru lotul evidențiat."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:174
 msgid "Enter any notes you want to make about this lot."
-msgstr "Introdu orice note vrei despre acest lot."
+msgstr "Introdu ce observații vrei despre acest lot."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:193
 msgid "<b>_Title</b>"
@@ -16248,12 +16308,10 @@ msgstr "Mod pe _două linii"
 #: gnucash/gtkbuilder/dialog-preferences.glade:2943
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid "Show two lines of information for each transaction"
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
-msgstr "Afișează două linii de informații pentru fiecare tranzacție"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
@@ -17268,7 +17326,7 @@ msgstr "_Precedentul"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:41
 msgid "_Next"
-msgstr "_Următorul"
+msgstr "Î_nainte"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:95
 msgid "<b>Tip of the Day</b>"
@@ -17991,10 +18049,8 @@ msgid "Delete the Selected Budget"
 msgstr "Șterge bugetul selectat"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:837
-#, fuzzy
-#| msgid "Budget Name:"
 msgid "Budget Notes"
-msgstr "Nume buget:"
+msgstr "Observații buget"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:892
 #, fuzzy
@@ -18158,9 +18214,8 @@ msgid "Sort by action field."
 msgstr "Sortează după câmpul de acțiune"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1018
-#, fuzzy
 msgid "Sort by notes field."
-msgstr "Sortează după câmpul notelor"
+msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1049
 #, fuzzy
@@ -19050,18 +19105,14 @@ msgstr ""
 "Vrei să introduci serviciul din nou?"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:628
-#, fuzzy
 msgid ""
 "The amount is zero or the amount field could not be interpreted correctly. "
 "You might have mixed up decimal point and comma, compared to your locale "
 "settings. This does not result in a valid online transfer job."
 msgstr ""
-"Suma este zero sau câmpul sumei nu poate fi interpretat corect. Poți avea "
-"amestecate puncte zecimale și virgule zecimale, legate de setările tale "
-"locale. Aceasta nu poate avea ca rezultat un serviciu de transfer online "
-"valid.\n"
-"\n"
-"Vrei să introduci din nou serviciul?"
+"Suma este zero sau spațiul sumei nu a putut fi interpretat corect. Este "
+"posibil să fi încurcat punctul zecimal și virgula, în comparație cu "
+"reglările locale. Acest lucru nu are ca rezultat un transfer online valabil."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:645
 #, fuzzy
@@ -19739,6 +19790,11 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
+"Acest asistent te ajută la exportarea structurii de conturi într-un fișier "
+"cu separatorul specificat mai jos.\n"
+"\n"
+"Alege reglările de care ai nevoie pentru fișier și apoi fă clic pe „Înainte” "
+"pentru a continua sau pe „Renunță” pentru a întrerupe exportarea.\n"
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
@@ -19759,6 +19815,20 @@ msgid ""
 "Select the settings you require for the file and then click \"Next\" to "
 "proceed or \"Cancel\" to abort the export.\n"
 msgstr ""
+"Acest asistent te va ajuta la exportarea tranzacțiilor într-un fișier cu "
+"separatorul specificat mai jos.\n"
+"\n"
+"%s\n"
+"\n"
+"Deși o tranzacție poate avea subdiviziuni în mai multe dintre conturile "
+"alese, aceasta va fi exportată doar o singură dată. Ea va apărea sub primul "
+"cont procesat dintre acelea în care este divizată tranzacția.\n"
+"\n"
+"Formatul de ieșire Prețul/Taxa este controlat de preferința\n"
+"„Numere, dată, oră”->„Forțează vizualizarea prețurilor cu zecimale”.\n"
+"\n"
+"Alege reglările de care ai nevoie pentru fișier și apoi fă clic pe „Înainte” "
+"pentru a continua sau pe „Renunță” pentru a anula exportul.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:99
 msgid ""
@@ -19933,12 +20003,14 @@ msgid ""
 "There were problems reading some saved settings, continuing to load.\n"
 "Please review and save again."
 msgstr ""
+"Au existat probleme la citirea unor reglări salvate, continuând să se "
+"încarce.\n"
+"Verifică și salvează din nou."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:908
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:880
-#, fuzzy
 msgid "Delete the Import Settings."
-msgstr "Alege formatul pentru export"
+msgstr "Șterge reglările de importare."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:942
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:914
@@ -19947,17 +20019,13 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:956
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:928
-#, fuzzy
 msgid "The settings have been saved."
-msgstr "Unele tranzacții ar putea fi șterse."
+msgstr "Reglările au fost salvate."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:981
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:953
-#, fuzzy
 msgid "There was a problem saving the settings, please try again."
-msgstr ""
-"Există o problemă cu opțiunea %s:%s.\n"
-"%s"
+msgstr "A apărut o problemă la salvarea reglărilor, încearcă din nou."
 
 #: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1152
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:1127
@@ -20427,9 +20495,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
-#, fuzzy
 msgid "No Settings"
-msgstr "Alege formatul pentru export"
+msgstr "Fără reglări"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:47
 #, fuzzy
@@ -20585,10 +20652,8 @@ msgstr "Rată de schimb"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.cpp:1404
-#, fuzzy
-#| msgid "Description, Notes, or Memo"
 msgid "_Edit description, notes, or memo"
-msgstr "Descriere, note sau memo"
+msgstr "_Modifică descrierea, observațiile sau reamintirile"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.cpp:1413
@@ -22010,11 +22075,9 @@ msgid "T"
 msgstr "T"
 
 #: gnucash/register/ledger-core/split-register-layout.c:827
-#, fuzzy
-#| msgid "sample:Notes field sample text string"
 msgctxt "sample"
 msgid "Notes field sample text string"
-msgstr "exemplu: Notează câmpul pentru exemplul șirului de text"
+msgstr "Text pentru spațiul observațiilor"
 
 #: gnucash/register/ledger-core/split-register-layout.c:835
 #, fuzzy
@@ -22151,7 +22214,7 @@ msgstr "Introduceți o descriere a tranzacției"
 
 #: gnucash/register/ledger-core/split-register-model.c:1169
 msgid "Enter notes for the transaction"
-msgstr "Introdu note pentru tranzacție"
+msgstr "Introdu observații pentru tranzacție"
 
 #: gnucash/register/ledger-core/split-register-model.c:1202
 msgid "Reason the transaction was voided"
@@ -22163,12 +22226,10 @@ msgid "Enter an action type, or choose one from the list"
 msgstr "Introdu tipul tranzacției sau alege unul din listă"
 
 #: gnucash/register/ledger-core/split-register-model.c:1302
-#, fuzzy
 msgid ""
 "Enter a reference number, such as the next check number, or choose an action "
 "type from the list"
 msgstr ""
-"Introdu contul de venituri/cheltuieli pentru intrare sau alege unul din listă"
 
 #: gnucash/register/ledger-core/split-register-model.c:1330
 msgid "Enter a description of the split"
@@ -23995,12 +24056,11 @@ msgstr "Afișează descrierea contului"
 
 #: gnucash/report/reports/standard/account-summary.scm:120
 msgid "Account Notes"
-msgstr "Note de cont"
+msgstr "Observații cont"
 
 #: gnucash/report/reports/standard/account-summary.scm:121
-#, fuzzy
 msgid "Show an account's notes."
-msgstr "Afișează notele de cont"
+msgstr "Arată observațiile contului."
 
 #: gnucash/report/reports/standard/account-summary.scm:123
 #: gnucash/report/reports/standard/balance-sheet.scm:129
@@ -24628,7 +24688,7 @@ msgstr ""
 #: gnucash/report/reports/standard/receipt.scm:64
 #: gnucash/report/reports/standard/taxinvoice.scm:112
 msgid "Extra Notes"
-msgstr "Note"
+msgstr "Observații suplimentare"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:176
 #: gnucash/report/reports/standard/taxinvoice.scm:221
@@ -25073,9 +25133,8 @@ msgstr "Perioadă buget:"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:68
 #: gnucash/report/reports/standard/budget.scm:114
-#, fuzzy
 msgid "Next budget period"
-msgstr "Perioadă buget:"
+msgstr "Următoarea perioadă de buget"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:69
 #: gnucash/report/reports/standard/budget.scm:115
@@ -25322,14 +25381,12 @@ msgid "Display a column for the budget values."
 msgstr "Afișează valoarea intrării"
 
 #: gnucash/report/reports/standard/budget.scm:53
-#, fuzzy
 msgid "Show Budget Notes"
-msgstr "Buget nou"
+msgstr "Arată observații buget"
 
 #: gnucash/report/reports/standard/budget.scm:54
-#, fuzzy
 msgid "Display a column for the budget notes."
-msgstr "Afișează valoarea intrării"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:55
 #, fuzzy
@@ -27015,7 +27072,7 @@ msgstr "Afișează acțiunea?"
 
 #: gnucash/report/reports/standard/invoice.scm:283
 msgid "Display the invoice notes?"
-msgstr "Afișează notele facturii?"
+msgstr "Afișezi observațiile facturii?"
 
 #: gnucash/report/reports/standard/invoice.scm:286
 msgid "Payments"
@@ -27036,9 +27093,8 @@ msgid "Display the job name for this invoice?"
 msgstr "Afișează plățile aplicate acestei facturi?"
 
 #: gnucash/report/reports/standard/invoice.scm:295
-#, fuzzy
 msgid "Extra notes to put on the invoice."
-msgstr "Note externe de pus pe factură"
+msgstr "Observații suplimentare de introdus în factură."
 
 #: gnucash/report/reports/standard/invoice.scm:296
 #: gnucash/report/reports/standard/taxinvoice.scm:222
@@ -29404,9 +29460,8 @@ msgid "Display the entered date?"
 msgstr "Se afișează data de reconciliere?"
 
 #: gnucash/report/trep-engine.scm:918
-#, fuzzy
 msgid "Display the notes if the memo is unavailable?"
-msgstr "Afișează plățile aplicate acestei facturi?"
+msgstr "Afișezi observațiile dacă reamintirea nu este disponibilă?"
 
 #: gnucash/report/trep-engine.scm:920 gnucash/report/trep-engine.scm:923
 #, fuzzy
@@ -32175,7 +32230,7 @@ msgstr "Peste un an."
 
 #: libgnucash/engine/gnc-option-date.cpp:199
 msgid "Start of next month"
-msgstr "Începutul lunii viitoare"
+msgstr "Începutul lunii următoare"
 
 #: libgnucash/engine/gnc-option-date.cpp:200
 msgid "First day of the next month."
@@ -32183,7 +32238,7 @@ msgstr "Prima zi a lunii următoare."
 
 #: libgnucash/engine/gnc-option-date.cpp:207
 msgid "End of next month"
-msgstr "Sfârșitul lunii viitoare"
+msgstr "Sfârșitul lunii următoare"
 
 #: libgnucash/engine/gnc-option-date.cpp:208
 msgid "Last day of next month."
@@ -32191,7 +32246,7 @@ msgstr "Ultima zi a lunii următoare."
 
 #: libgnucash/engine/gnc-option-date.cpp:247
 msgid "Start of next quarter"
-msgstr "Începutul trimestrului viitor"
+msgstr "Începutul trimestrului următor"
 
 #: libgnucash/engine/gnc-option-date.cpp:248
 msgid "First day of the next quarterly accounting period."
@@ -32199,15 +32254,15 @@ msgstr "Prima zi a trimestrului contabil următor."
 
 #: libgnucash/engine/gnc-option-date.cpp:255
 msgid "End of next quarter"
-msgstr "Sfârşitul trimestrului viitor"
+msgstr "Sfârşitul trimestrului următor"
 
 #: libgnucash/engine/gnc-option-date.cpp:256
 msgid "Last day of next quarterly accounting period."
-msgstr "Ultima zi a trimestrului contabil viitor."
+msgstr "Ultima zi a trimestrului contabil următor."
 
 #: libgnucash/engine/gnc-option-date.cpp:295
 msgid "Start of next year"
-msgstr "Începutul anului viitor"
+msgstr "Începutul anului următor"
 
 #: libgnucash/engine/gnc-option-date.cpp:296
 msgid "First day of the next calendar year."
@@ -32215,7 +32270,7 @@ msgstr "Prima zi a anului calendaristic următor."
 
 #: libgnucash/engine/gnc-option-date.cpp:303
 msgid "End of next year"
-msgstr "Sfârșitul anului viitor"
+msgstr "Sfârșitul anului următor"
 
 #: libgnucash/engine/gnc-option-date.cpp:304
 msgid "Last day of the next calendar year."
