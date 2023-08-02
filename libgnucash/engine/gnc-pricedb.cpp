@@ -754,12 +754,9 @@ gnc_price_list_destroy(PriceList *prices)
 gboolean
 gnc_price_list_equal(PriceList *prices1, PriceList *prices2)
 {
-    GList *n1 = prices1;
-    GList *n2 = prices2;
-
     if (prices1 == prices2) return TRUE;
 
-    while (n1 || n2)
+    for (auto n1 = prices1, n2 = prices2; n1 || n2; n1 = g_list_next (n1), n2 = g_list_next (n2))
     {
         if (!n1)
         {
@@ -773,9 +770,6 @@ gnc_price_list_equal(PriceList *prices1, PriceList *prices2)
         }
         if (!gnc_price_equal (static_cast<GNCPrice*>(n1->data), static_cast<GNCPrice*>(n2->data)))
             return FALSE;
-
-        n1 = n1->next;
-        n2 = n2->next;
     };
 
     return TRUE;
@@ -1788,14 +1782,13 @@ static gboolean
 price_list_scan_any_currency(GList *price_list, gpointer data)
 {
     UsesCommodity *helper = (UsesCommodity*)data;
-    GList *node = price_list;
     gnc_commodity *com;
     gnc_commodity *cur;
 
     if (!price_list)
         return TRUE;
 
-    auto price = static_cast<GNCPrice*>(node->data);
+    auto price = static_cast<GNCPrice*>(price_list->data);
     com = gnc_price_get_commodity(price);
     cur = gnc_price_get_currency(price);
 
@@ -1807,7 +1800,7 @@ price_list_scan_any_currency(GList *price_list, gpointer data)
     /* The price list is sorted in decreasing order of time.  Find the first
        price on it that is older than the requested time and add it and the
        previous price to the result list. */
-    while (node != NULL)
+    for (auto node = price_list; node; node = g_list_next (node))
     {
         price = static_cast<GNCPrice*>(node->data);
         time64 price_t = gnc_price_get_time64(price);
@@ -1832,7 +1825,6 @@ price_list_scan_any_currency(GList *price_list, gpointer data)
             gnc_price_ref(price);
             *helper->list = g_list_prepend(*helper->list, price);
         }
-        node = node->next;
     }
 
     return TRUE;
@@ -2207,14 +2199,10 @@ gnc_pricedb_lookup_at_time64(GNCPriceDB *db,
                              const gnc_commodity *currency,
                              time64 t)
 {
-    GList *price_list;
-    GList *item = NULL;
-
     if (!db || !c || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
-    price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
-    item = price_list;
-    while (item)
+    auto price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
+    for (auto item = price_list; item; item = item->next)
     {
         auto p = static_cast<GNCPrice*>(item->data);
         time64 price_time = gnc_price_get_time64(p);
@@ -2225,7 +2213,6 @@ gnc_pricedb_lookup_at_time64(GNCPriceDB *db,
             LEAVE("price is %p", p);
             return p;
         }
-        item = item->next;
     }
     g_list_free (price_list);
     LEAVE (" ");
@@ -2243,21 +2230,19 @@ lookup_nearest_in_time(GNCPriceDB *db,
     GNCPrice *current_price = NULL;
     GNCPrice *next_price = NULL;
     GNCPrice *result = NULL;
-    GList *item = NULL;
 
     if (!db || !c || !currency) return NULL;
     if (t == INT64_MAX) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
     price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
     if (!price_list) return NULL;
-    item = price_list;
 
     /* default answer */
-    current_price = static_cast<GNCPrice*>(item->data);
+    current_price = static_cast<GNCPrice*>(price_list->data);
 
     /* find the first candidate past the one we want.  Remember that
        prices are in most-recent-first order. */
-    while (!next_price && item)
+    for (auto item = price_list; item; item = g_list_next (item))
     {
         auto p = static_cast<GNCPrice*>(item->data);
         time64 price_time = gnc_price_get_time64(p);
@@ -2267,7 +2252,6 @@ lookup_nearest_in_time(GNCPriceDB *db,
             break;
         }
         current_price = static_cast<GNCPrice*>(item->data);
-        item = item->next;
     }
 
     if (current_price)      /* How can this be null??? */
@@ -2361,28 +2345,27 @@ gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,
                                        const gnc_commodity *currency,
                                        time64 t)
 {
-    GList *price_list;
     GNCPrice *current_price = NULL;
-    /*  GNCPrice *next_price = NULL;
-        GNCPrice *result = NULL;*/
-    GList *item = NULL;
-    time64 price_time;
 
     if (!db || !c || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
-    price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
+
+    auto price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
     if (!price_list) return NULL;
-    item = price_list;
-    do
+
+    for (auto item = price_list; item; item = item->next)
     {
-        price_time = gnc_price_get_time64 (static_cast<GNCPrice*>(item->data));
-        if (price_time <= t)
-            current_price = static_cast<GNCPrice*>(item->data);
-        item = item->next;
+        auto p = static_cast<GNCPrice*>(item->data);
+        if (gnc_price_get_time64 (p) <= t)
+        {
+            current_price = p;
+            break;
+        }
     }
-    while (price_time > t && item);
+
     gnc_price_ref(current_price);
     g_list_free (price_list);
+
     LEAVE (" ");
     return current_price;
 }
@@ -2663,15 +2646,13 @@ static void
 pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
 {
     GList *price_list = (GList *) val;
-    GList *node = price_list;
     GNCPriceDBForeachData *foreach_data = (GNCPriceDBForeachData *) user_data;
 
     /* stop traversal when func returns FALSE */
-    while (foreach_data->ok && node)
+    for (auto node = price_list; foreach_data->ok && node; node = node->next)
     {
         GNCPrice *p = (GNCPrice *) node->data;
         foreach_data->ok = foreach_data->func(p, foreach_data->user_data);
-        node = node->next;
     }
 }
 
@@ -2998,14 +2979,12 @@ static void
 void_pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
 {
     GList *price_list = (GList *) val;
-    GList *node = price_list;
     VoidGNCPriceDBForeachData *foreach_data = (VoidGNCPriceDBForeachData *) user_data;
 
-    while (node)
+    for (auto node = price_list; node; node = node->next)
     {
         GNCPrice *p = (GNCPrice *) node->data;
         foreach_data->func(p, foreach_data->user_data);
-        node = node->next;
     }
 }
 
