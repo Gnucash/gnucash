@@ -1493,6 +1493,45 @@ test_gnc_pricedb_get_nearest_before_price (PriceDBFixture *fixture, gconstpointe
     g_assert_cmpint(result.num, ==, 278150);
     g_assert_cmpint(result.denom, ==, 1331);
 }
+
+/* gnc_pricedb_foreach_price
+gboolean
+gnc_pricedb_foreach_price(GNCPriceDB *db,// C: 2 in 2  Local: 6:0:0
+*/
+
+static void prepend_price_time64 (GNCPrice *p, GList **lst)
+{
+    *lst = g_list_prepend (*lst, GUINT_TO_POINTER(gnc_price_get_time64 (p)));
+}
+
+static void inc_counter (GNCPrice *p, guint *count)
+{
+    (*count)++;
+}
+
+static void
+test_gnc_pricedb_foreach_price (PriceDBFixture *fixture, gconstpointer pData)
+{
+    /* unstable -- cannot guarantee order. count number prices. */
+    guint count = 0;
+    gnc_pricedb_foreach_price (fixture->pricedb, (GncPriceForeachFunc)inc_counter, &count, FALSE);
+    g_assert_cmpint (count, ==, 42);
+
+    /* stable -- can guarantee order. check price dates. */
+    GList *lst = NULL;
+    gnc_pricedb_foreach_price (fixture->pricedb, (GncPriceForeachFunc)prepend_price_time64, &lst, TRUE);
+
+    gchar *date = qof_print_date((time64)g_list_first (lst)->data);
+    g_assert_cmpstr (date, ==, "04/11/09");
+    g_free (date);
+
+    date = qof_print_date((time64)g_list_last (lst)->data);
+    g_assert_cmpstr (date, ==, "11/12/14");
+    g_free (date);
+
+    g_list_free (lst);
+}
+
 /* pricedb_foreach_pricelist
 static void
 pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)// Local: 0:1:0
@@ -1531,14 +1570,6 @@ stable_price_traversal(GNCPriceDB *db,// Local: 1:0:0
 */
 /* static void
 test_stable_price_traversal (Fixture *fixture, gconstpointer pData)
-{
-}*/
-/* gnc_pricedb_foreach_price
-gboolean
-gnc_pricedb_foreach_price(GNCPriceDB *db,// C: 2 in 2  Local: 6:0:0
-*/
-/* static void
-test_gnc_pricedb_foreach_price (Fixture *fixture, gconstpointer pData)
 {
 }*/
 /* add_price_to_list
@@ -1759,7 +1790,7 @@ GNC_TEST_ADD (suitename, "gnc price list equal", PriceDBFixture, NULL, setup, te
 // GNC_TEST_ADD (suitename, "unstable price traversal", Fixture, NULL, setup, test_unstable_price_traversal, teardown);
 // GNC_TEST_ADD (suitename, "compare kvpairs by commodity key", Fixture, NULL, setup, test_compare_kvpairs_by_commodity_key, teardown);
 // GNC_TEST_ADD (suitename, "stable price traversal", Fixture, NULL, setup, test_stable_price_traversal, teardown);
-// GNC_TEST_ADD (suitename, "gnc pricedb foreach price", Fixture, NULL, setup, test_gnc_pricedb_foreach_price, teardown);
+GNC_TEST_ADD (suitename, "gnc pricedb foreach price", PriceDBFixture, NULL, setup, test_gnc_pricedb_foreach_price, teardown);
 // GNC_TEST_ADD (suitename, "add price to list", Fixture, NULL, setup, test_add_price_to_list, teardown);
 // GNC_TEST_ADD (suitename, "gnc price fixup legacy commods", Fixture, NULL, setup, test_gnc_price_fixup_legacy_commods, teardown);
 // GNC_TEST_ADD (suitename, "gnc price print", Fixture, NULL, setup, test_gnc_price_print, teardown);
