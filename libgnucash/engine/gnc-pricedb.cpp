@@ -690,14 +690,14 @@ compare_prices_by_date(gconstpointer a, gconstpointer b)
                          gnc_price_get_guid((GNCPrice *) b));
 }
 
-static bool
-price_is_duplicate (const GNCPrice *pPrice, const GNCPrice *cPrice)
+static int
+price_is_duplicate (const GNCPrice *p_price, const GNCPrice *c_price)
 {
     /* If the date, currency, commodity and price match, it's a duplicate */
-    return (gnc_numeric_equal (gnc_price_get_value (pPrice), gnc_price_get_value (cPrice)) &&
-            gnc_price_get_commodity (pPrice) == gnc_price_get_commodity (cPrice) &&
-            gnc_price_get_currency (pPrice) == gnc_price_get_currency (cPrice) &&
-            time64CanonicalDayTime (gnc_price_get_time64 (pPrice)) == time64CanonicalDayTime (gnc_price_get_time64 (cPrice)));
+    return time64CanonicalDayTime (gnc_price_get_time64 (p_price)) != time64CanonicalDayTime (gnc_price_get_time64 (c_price)) ||
+        gnc_numeric_compare (gnc_price_get_value (p_price), gnc_price_get_value (c_price)) ||
+        gnc_commodity_compare (gnc_price_get_commodity (p_price), gnc_price_get_commodity (c_price)) ||
+        gnc_commodity_compare (gnc_price_get_currency (p_price), gnc_price_get_currency (c_price));
 }
 
 gboolean
@@ -706,10 +706,8 @@ gnc_price_list_insert(PriceList **prices, GNCPrice *p, gboolean check_dupl)
     if (!prices || !p) return FALSE;
     gnc_price_ref(p);
 
-    if (check_dupl)
-        for (auto n = *prices; n; n = g_list_next (n))
-            if (price_is_duplicate (static_cast<GNCPrice*>(n->data), p))
-                return true;
+    if (check_dupl && g_list_find_custom (*prices, p, (GCompareFunc)price_is_duplicate))
+        return true;
 
     auto result_list = g_list_insert_sorted(*prices, p, compare_prices_by_date);
     if (!result_list)
@@ -738,17 +736,10 @@ gnc_price_list_remove(PriceList **prices, GNCPrice *p)
     return TRUE;
 }
 
-static void
-price_list_destroy_helper(gpointer data, gpointer user_data)
-{
-    gnc_price_unref((GNCPrice *) data);
-}
-
 void
 gnc_price_list_destroy(PriceList *prices)
 {
-    g_list_foreach(prices, price_list_destroy_helper, NULL);
-    g_list_free(prices);
+    g_list_free_full (prices, (GDestroyNotify)gnc_price_unref);
 }
 
 gboolean
@@ -2059,17 +2050,11 @@ gnc_pricedb_get_prices(GNCPriceDB *db,
                        const gnc_commodity *commodity,
                        const gnc_commodity *currency)
 {
-    GList *result;
-    GList *node;
-
-
     if (!db || !commodity) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, commodity, currency);
-    result = pricedb_get_prices_internal (db, commodity, currency, FALSE);
+    auto result = pricedb_get_prices_internal (db, commodity, currency, FALSE);
     if (!result) return NULL;
-    for (node = result; node; node = node->next)
-        gnc_price_ref (static_cast<GNCPrice*>(node->data));
-
+    g_list_foreach (result, (GFunc)gnc_price_ref, nullptr);
     LEAVE (" ");
     return result;
 }
@@ -2193,30 +2178,31 @@ gnc_pricedb_lookup_day_t64(GNCPriceDB *db,
     return lookup_nearest_in_time(db, c, currency, t, TRUE);
 }
 
+// return 0 if price's time matches exactly
+static int price_same_time (GNCPrice *p, time64 time)
+{
+    return !(gnc_price_get_time64 (p) == time);
+}
+
 GNCPrice *
 gnc_pricedb_lookup_at_time64(GNCPriceDB *db,
                              const gnc_commodity *c,
                              const gnc_commodity *currency,
                              time64 t)
 {
+    GNCPrice *rv = nullptr;
     if (!db || !c || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
     auto price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
-    for (auto item = price_list; item; item = item->next)
+    auto p = g_list_find_custom (price_list, GUINT_TO_POINTER(t), (GCompareFunc) price_same_time);
+    if (p)
     {
-        auto p = static_cast<GNCPrice*>(item->data);
-        time64 price_time = gnc_price_get_time64(p);
-        if (price_time == t)
-        {
-            gnc_price_ref(p);
-            g_list_free (price_list);
-            LEAVE("price is %p", p);
-            return p;
-        }
+        rv = GNC_PRICE (p->data);
+        gnc_price_ref (rv);
     }
     g_list_free (price_list);
     LEAVE (" ");
-    return NULL;
+    return rv;
 }
 
 static GNCPrice *
@@ -2338,6 +2324,11 @@ gnc_pricedb_lookup_nearest_in_time64(GNCPriceDB *db,
     return lookup_nearest_in_time(db, c, currency, t, FALSE);
 }
 
+// return 0 if price's time is less or equal to time
+static int price_time64_less_or_equal (GNCPrice *p, time64 time)
+{
+    return !(gnc_price_get_time64 (p) <= time);
+}
 
 GNCPrice *
 gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,
@@ -2346,26 +2337,17 @@ gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,
                                        time64 t)
 {
     GNCPrice *current_price = NULL;
-
     if (!db || !c || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
-
     auto price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
     if (!price_list) return NULL;
-
-    for (auto item = price_list; item; item = item->next)
+    auto p = g_list_find_custom (price_list, GUINT_TO_POINTER(t), (GCompareFunc)price_time64_less_or_equal);
+    if (p)
     {
-        auto p = static_cast<GNCPrice*>(item->data);
-        if (gnc_price_get_time64 (p) <= t)
-        {
-            current_price = p;
-            break;
-        }
+        current_price = GNC_PRICE (p->data);
+        gnc_price_ref (current_price);
     }
-
-    gnc_price_ref(current_price);
     g_list_free (price_list);
-
     LEAVE (" ");
     return current_price;
 }
@@ -2649,11 +2631,8 @@ pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
     GNCPriceDBForeachData *foreach_data = (GNCPriceDBForeachData *) user_data;
 
     /* stop traversal when func returns FALSE */
-    for (auto node = price_list; foreach_data->ok && node; node = node->next)
-    {
-        GNCPrice *p = (GNCPrice *) node->data;
-        foreach_data->ok = foreach_data->func(p, foreach_data->user_data);
-    }
+    foreach_data->ok = g_list_find_custom (price_list, foreach_data->user_data, (GCompareFunc)foreach_data->func)
+        != nullptr;
 }
 
 static void
@@ -2769,14 +2748,8 @@ stable_price_traversal(GNCPriceDB *db,
         std::sort (price_lists.begin(), price_lists.end(), compare_hash_entries_by_commodity_key);
 
         for (const auto& pricelist_entry : price_lists)
-        {
-            for (auto node = static_cast<GList*>(pricelist_entry.second); node; node = node->next)
-            {
-                /* stop traversal when f returns FALSE */
-                if (!f(static_cast<GNCPrice *>(node->data), user_data))
-                    return false;
-            }
-        }
+            if (g_list_find_custom (static_cast<GList*>(pricelist_entry.second), user_data, (GCompareFunc)f))
+                return false;
     }
 
     return true;
@@ -2981,11 +2954,7 @@ void_pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
     GList *price_list = (GList *) val;
     VoidGNCPriceDBForeachData *foreach_data = (VoidGNCPriceDBForeachData *) user_data;
 
-    for (auto node = price_list; node; node = node->next)
-    {
-        GNCPrice *p = (GNCPrice *) node->data;
-        foreach_data->func(p, foreach_data->user_data);
-    }
+    g_list_foreach (price_list, (GFunc)foreach_data->func, foreach_data->user_data);
 }
 
 static void
