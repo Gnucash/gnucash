@@ -1,0 +1,6 @@
+These files are used for testing loading and saving
+
+If the "load-save-files" test fails because the written XML file is now
+different, zcat *.gnucash-compressed~ to *.gnucash, check that the changes
+are appropriate, expected and have the right backward/forward compatibility
+then commit the new versions of the files.
