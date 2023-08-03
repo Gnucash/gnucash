@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-07-22 00:48+0200\n"
+"POT-Creation-Date: 2023-08-03 06:21+0200\n"
 "PO-Revision-Date: 2021-03-05 11:50+0000\n"
 "Last-Translator: bruh <quangtrung02hn16@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/gnucash/"
@@ -1206,11 +1206,11 @@ msgstr "Bàn tính tài chính"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:378
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.cpp:1560
-#: gnucash/import-export/import-match-picker.cpp:384
-#: gnucash/import-export/import-match-picker.cpp:424
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3699
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3750
+#: gnucash/import-export/import-main-matcher.cpp:1541
+#: gnucash/import-export/import-match-picker.cpp:313
+#: gnucash/import-export/import-match-picker.cpp:353
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3703
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3754
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:233
 #: gnucash/report/reports/standard/account-summary.scm:77
@@ -1291,8 +1291,8 @@ msgstr "Gặp lỗi khi thêm giá."
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.cpp:1561
-#: gnucash/import-export/import-match-picker.cpp:383
+#: gnucash/import-export/import-main-matcher.cpp:1542
+#: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1026
@@ -1791,9 +1791,9 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:386
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.cpp:1565
-#: gnucash/import-export/import-match-picker.cpp:387
-#: gnucash/import-export/import-match-picker.cpp:427
+#: gnucash/import-export/import-main-matcher.cpp:1546
+#: gnucash/import-export/import-match-picker.cpp:316
+#: gnucash/import-export/import-match-picker.cpp:356
 #: gnucash/register/ledger-core/split-register-model.c:360
 #: gnucash/report/reports/standard/general-ledger.scm:71
 #: gnucash/report/reports/standard/general-ledger.scm:91
@@ -2456,11 +2456,11 @@ msgstr "Báo cáo giao dịch"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.cpp:1564
-#: gnucash/import-export/import-match-picker.cpp:386
-#: gnucash/import-export/import-match-picker.cpp:426
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3709
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3760
+#: gnucash/import-export/import-main-matcher.cpp:1545
+#: gnucash/import-export/import-match-picker.cpp:315
+#: gnucash/import-export/import-match-picker.cpp:355
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3713
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3764
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
 #: gnucash/register/ledger-core/split-register-model.c:300
 #: gnucash/report/reports/standard/account-summary.scm:380
@@ -2633,7 +2633,7 @@ msgid "All Accounts"
 msgstr "Mọi tài khoản"
 
 #: gnucash/gnome/dialog-find-transactions.c:112
-#: gnucash/import-export/import-match-picker.cpp:388
+#: gnucash/import-export/import-match-picker.cpp:317
 msgid "Balanced"
 msgstr "Cân bằng"
 
@@ -3227,11 +3227,11 @@ msgstr "Tìm đơn hàng gửi"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.cpp:1563
-#: gnucash/import-export/import-match-picker.cpp:385
-#: gnucash/import-export/import-match-picker.cpp:425
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3720
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3771
+#: gnucash/import-export/import-main-matcher.cpp:1544
+#: gnucash/import-export/import-match-picker.cpp:314
+#: gnucash/import-export/import-match-picker.cpp:354
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3724
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3775
 #: gnucash/report/reports/standard/general-journal.scm:101
 #: gnucash/report/reports/standard/general-ledger.scm:81
 #: gnucash/report/reports/standard/general-ledger.scm:101
@@ -3532,7 +3532,7 @@ msgstr "Đã chuyển"
 #: gnucash/gnome-search/search-reconciled.c:219
 #: gnucash/gnome-utils/gnc-tree-view-account.c:872
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
-#: gnucash/import-export/import-match-picker.cpp:428
+#: gnucash/import-export/import-match-picker.cpp:357
 #: gnucash/report/trep-engine.scm:159
 msgid "Reconciled"
 msgstr "Đã chỉnh hợp"
@@ -5003,9 +5003,9 @@ msgstr "Xoá mục nhập hiện tại"
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
 #, fuzzy
-#| msgid "Split"
-msgid "Split View"
-msgstr "Phân tách"
+#| msgid "Stock Split"
+msgid "Show Splits"
+msgstr "Chia nhỏ chứng khoán"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 #, fuzzy
@@ -12366,7 +12366,7 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:969
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2642
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2646
 msgid "Choose the QIF file currency and select Book Options"
 msgstr ""
 
@@ -12407,8 +12407,8 @@ msgid "_Start Import"
 msgstr "Nhập _QSF"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1142
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1733
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2985
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1737
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2989
 msgid "P_ause"
 msgstr ""
 
@@ -19170,7 +19170,7 @@ msgid "File exported successfully!\n"
 msgstr ""
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
-#: gnucash/import-export/import-main-matcher.cpp:1868
+#: gnucash/import-export/import-main-matcher.cpp:1843
 #: gnucash/report/reports/standard/register.scm:217
 #: libgnucash/engine/Split.c:1610 libgnucash/engine/Split.c:1627
 msgid "-- Split Transaction --"
@@ -19895,134 +19895,134 @@ msgstr "y/d/m"
 msgid "No new transactions were found in this import."
 msgstr "Giao dịch hiện thời chưa được cân bằng."
 
-#: gnucash/import-export/import-main-matcher.cpp:790
+#: gnucash/import-export/import-main-matcher.cpp:771
 msgid "Destination account for the auto-balance split."
 msgstr "Tài khoản đích cho sự phân tách tự động cân bằng."
 
-#: gnucash/import-export/import-main-matcher.cpp:981
+#: gnucash/import-export/import-main-matcher.cpp:962
 msgid "Click Edit to modify"
 msgstr ""
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1386
+#: gnucash/import-export/import-main-matcher.cpp:1367
 #, fuzzy
 #| msgid "_Select transfer account"
 msgid "_Assign transfer account"
 msgstr "Chọn tài khoản chu_yển"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1396
+#: gnucash/import-export/import-main-matcher.cpp:1377
 #, fuzzy
 #| msgid "Exchange rate"
 msgid "Assign e_xchange rate"
 msgstr "Tỷ lệ hội suất"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1404
+#: gnucash/import-export/import-main-matcher.cpp:1385
 #, fuzzy
 msgid "_Edit description, notes, or memo"
 msgstr "Mô tả"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1413
+#: gnucash/import-export/import-main-matcher.cpp:1394
 #, fuzzy
 msgid "_Reset all edits"
 msgstr "Mặc định sổ cái"
 
-#: gnucash/import-export/import-main-matcher.cpp:1566
+#: gnucash/import-export/import-main-matcher.cpp:1547
 #, fuzzy
 #| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.cpp:1570
+#: gnucash/import-export/import-main-matcher.cpp:1551
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.cpp:1574
+#: gnucash/import-export/import-main-matcher.cpp:1555
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.cpp:1581
+#: gnucash/import-export/import-main-matcher.cpp:1562
 msgid "Info"
 msgstr "Thông tin"
 
-#: gnucash/import-export/import-main-matcher.cpp:1588
+#: gnucash/import-export/import-main-matcher.cpp:1569
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 #, fuzzy
 msgid "Additional Comments"
 msgstr "Phụ vào Thẻ:"
 
-#: gnucash/import-export/import-main-matcher.cpp:1987
+#: gnucash/import-export/import-main-matcher.cpp:1955
 msgid "New, already balanced"
 msgstr "Mới, đã cân bằng"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2009
+#: gnucash/import-export/import-main-matcher.cpp:1977
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Mới, chuyển %s cho « %s » (bằng tay)"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2017
+#: gnucash/import-export/import-main-matcher.cpp:1985
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Mới, chuyển %s cho « %s » (tự động)"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2030
+#: gnucash/import-export/import-main-matcher.cpp:1998
 #, fuzzy, c-format
 #| msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr "Mới, CHƯA CÂN BẰNG (cần tài khoản chuyển %s)"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2046
+#: gnucash/import-export/import-main-matcher.cpp:2014
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Mới, CHƯA CÂN BẰNG (cần tài khoản chuyển %s)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2064
+#: gnucash/import-export/import-main-matcher.cpp:2032
 #, fuzzy, c-format
 #| msgid "Reconcile (manual) match"
 msgid "Reconcile (manual) match to %s"
 msgstr "Chỉnh hợp sự khớp (bằng tay)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2069
+#: gnucash/import-export/import-main-matcher.cpp:2037
 #, fuzzy, c-format
 #| msgid "Reconcile (auto) match"
 msgid "Reconcile (auto) match to %s"
 msgstr "Chỉnh hợp sự khớp (tự động)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2078
-#: gnucash/import-export/import-main-matcher.cpp:2107
+#: gnucash/import-export/import-main-matcher.cpp:2046
+#: gnucash/import-export/import-main-matcher.cpp:2075
 msgid "Match missing!"
 msgstr "Thiếu sự khớp !"
 
-#: gnucash/import-export/import-main-matcher.cpp:2093
+#: gnucash/import-export/import-main-matcher.cpp:2061
 #, fuzzy, c-format
 msgid "Update and reconcile (manual) match to %s"
 msgstr "Chỉnh hợp sự khớp (bằng tay)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2098
+#: gnucash/import-export/import-main-matcher.cpp:2066
 #, fuzzy, c-format
 msgid "Update and reconcile (auto) match to %s"
 msgstr "Chỉnh hợp sự khớp (tự động)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2115
+#: gnucash/import-export/import-main-matcher.cpp:2083
 msgid "Do not import (no action selected)"
 msgstr "Đừng nhập khẩu (chưa chọn hành động)"
 
-#: gnucash/import-export/import-match-picker.cpp:414
+#: gnucash/import-export/import-match-picker.cpp:343
 msgid "Confidence"
 msgstr "Tin cậy"
 
-#: gnucash/import-export/import-match-picker.cpp:429
+#: gnucash/import-export/import-match-picker.cpp:358
 #, fuzzy
 msgid "Pending Action"
 msgstr "_Hành động trực tuyến"
@@ -20167,160 +20167,160 @@ msgstr "_Ký hiệu/viết tắt"
 msgid "_Exchange or abbreviation type"
 msgstr "Tỷ lệ hội _suất"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3314
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1180
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3318
 msgid "(split)"
 msgstr "(phân tách)"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1369
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1373
 #, fuzzy
 msgid "Are you sure you want to cancel?"
 msgstr "Bạn có chắc muốn xoá « %s » không?"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1580
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1584
 msgid "Please select a file to load."
 msgstr "Hãy chọn tập tin cần nạp."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1583
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1587
 msgid "File not found or read permission denied. Please select another file."
 msgstr ""
 "Không tìm thấy tập tin, hoặc không có quyền đọc. Hãy chọn tập tin khác."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1594
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1598
 msgid "That QIF file is already loaded. Please select another file."
 msgstr "Tập tin QIF đó đã được nạp. Hãy chọn tập tin khác."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1662
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1666
 msgid "Select QIF File"
 msgstr "Chọn tập tin QIF"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1725
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1728
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2977
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2980
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1729
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1732
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2981
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2984
 #, fuzzy
 msgid "_Resume"
 msgstr "Đánh số _lại"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1813
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1888
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3064
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1817
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1892
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3068
 #, fuzzy
 msgid "Canceled"
 msgstr "Thôi"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1827
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1831
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1835
 #, fuzzy
 msgid "An error occurred while loading the QIF file."
 msgstr "Gặp lỗi khi chạy báo cáo."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1828
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1846
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1907
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1964
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3084
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3105
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3153
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1832
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1850
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1911
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1968
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3088
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3109
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3157
 #, fuzzy
 msgid "Failed"
 msgstr "_Tập tin"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1884
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1901
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3060
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3078
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3101
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3147
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1888
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1905
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3064
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3082
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3105
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3151
 #, fuzzy
 msgid "Cleaning up"
 msgstr "còn lại"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1906
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1910
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1914
 #, fuzzy
 msgid "A bug was detected while parsing the QIF file."
 msgstr "Gặp lỗi khi phân tích tập tin QIF."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1981
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1985
 msgid "Loading completed"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2018
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2022
 msgid ""
 "When you press the Start Button, GnuCash will load your QIF file. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
 "Otherwise, the details will be shown below for your review."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2649
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2653
 #, fuzzy
 msgid "Choose the QIF file currency"
 msgstr "Gõ phần trăm bớt giá"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2865
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2869
 msgid "You must enter an existing national currency or enter a different type."
 msgstr "Bạn phải gõ một tiền tệ quốc gia đã tồn tại, hoặc gõ kiểu khác."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3083
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3087
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3091
 msgid "A bug was detected while converting the QIF data."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3138
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3142
 #, fuzzy
 msgid "Canceling"
 msgstr "Thôi"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3152
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3156
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3160
 msgid "A bug was detected while detecting duplicates."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3175
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3179
 msgid "Conversion completed"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3207
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3211
 msgid ""
 "When you press the Start Button, GnuCash will import your QIF data. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
 "Otherwise, the details will be shown below for your review."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3413
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3417
 msgid "GnuCash was unable to save your mapping preferences."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3446
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3450
 #, fuzzy, c-format
 msgid "There was a problem with the import."
 msgstr ""
 "Gặp lỗi với tùy chọn %s:%s.\n"
 "%s"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3448
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3452
 #, fuzzy, c-format
 msgid "QIF Import Completed."
 msgstr "Nhập QIF"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3666
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3670
 msgid "QIF account name"
 msgstr "Tên tài khoản QIF"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3672
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3676
 msgid "QIF category name"
 msgstr "Tên phân loại QIF"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3678
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3682
 msgid "QIF payee/memo"
 msgstr "Người được trả tiền/ghi nhớ QIF"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3781
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3785
 msgid "Match?"
 msgstr ""
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3884
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3888
 msgid "QIF import requires guile with regex support."
 msgstr ""
 
@@ -31842,24 +31842,24 @@ msgstr "%s: %s"
 msgid "Unknown, %d-size list."
 msgstr "Không rõ, danh sách kích cỡ %d"
 
-#: libgnucash/engine/ScrubBusiness.c:549
+#: libgnucash/engine/ScrubBusiness.c:557
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#Double_posting"
 msgstr ""
 
-#: libgnucash/engine/ScrubBusiness.c:565
+#: libgnucash/engine/ScrubBusiness.c:573
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
 msgstr ""
 
-#: libgnucash/engine/ScrubBusiness.c:617
+#: libgnucash/engine/ScrubBusiness.c:625
 #, c-format
 msgid "Checking business lots in account %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/ScrubBusiness.c:671
+#: libgnucash/engine/ScrubBusiness.c:679
 #, c-format
 msgid "Checking business splits in account %s: %u of %u"
 msgstr ""
@@ -31960,3 +31960,8 @@ msgstr "%s và các tài khoản con đã chọn"
 #, fuzzy
 msgid "No help available."
 msgstr "Không phải biến"
+
+#, fuzzy
+#~| msgid "Split"
+#~ msgid "Split View"
+#~ msgstr "Phân tách"

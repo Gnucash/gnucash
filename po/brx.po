@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-07-22 00:48+0200\n"
+"POT-Creation-Date: 2023-08-03 06:21+0200\n"
 "PO-Revision-Date: 2021-02-20 14:50+0000\n"
 "Last-Translator: Adithya K <adithyak04@gmail.com>\n"
 "Language-Team: Bodo <https://hosted.weblate.org/projects/gnucash/gnucash/brx/"
@@ -1224,11 +1224,11 @@ msgstr "लन रांहोफिननाय उफ्रा¥: \"%s\""
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:378
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.cpp:1560
-#: gnucash/import-export/import-match-picker.cpp:384
-#: gnucash/import-export/import-match-picker.cpp:424
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3699
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3750
+#: gnucash/import-export/import-main-matcher.cpp:1541
+#: gnucash/import-export/import-match-picker.cpp:313
+#: gnucash/import-export/import-match-picker.cpp:353
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3703
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3754
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:233
 #: gnucash/report/reports/standard/account-summary.scm:77
@@ -1308,8 +1308,8 @@ msgstr "बेसेन दाजाबदेरनाय समाव जान
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.cpp:1561
-#: gnucash/import-export/import-match-picker.cpp:383
+#: gnucash/import-export/import-main-matcher.cpp:1542
+#: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1026
@@ -1812,9 +1812,9 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:386
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.cpp:1565
-#: gnucash/import-export/import-match-picker.cpp:387
-#: gnucash/import-export/import-match-picker.cpp:427
+#: gnucash/import-export/import-main-matcher.cpp:1546
+#: gnucash/import-export/import-match-picker.cpp:316
+#: gnucash/import-export/import-match-picker.cpp:356
 #: gnucash/register/ledger-core/split-register-model.c:360
 #: gnucash/report/reports/standard/general-ledger.scm:71
 #: gnucash/report/reports/standard/general-ledger.scm:91
@@ -2469,11 +2469,11 @@ msgstr "लेनदेननि गुवारै"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.cpp:1564
-#: gnucash/import-export/import-match-picker.cpp:386
-#: gnucash/import-export/import-match-picker.cpp:426
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3709
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3760
+#: gnucash/import-export/import-main-matcher.cpp:1545
+#: gnucash/import-export/import-match-picker.cpp:315
+#: gnucash/import-export/import-match-picker.cpp:355
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3713
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3764
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
 #: gnucash/register/ledger-core/split-register-model.c:300
 #: gnucash/report/reports/standard/account-summary.scm:380
@@ -2646,7 +2646,7 @@ msgid "All Accounts"
 msgstr "गासै एकाउन्ट"
 
 #: gnucash/gnome/dialog-find-transactions.c:112
-#: gnucash/import-export/import-match-picker.cpp:388
+#: gnucash/import-export/import-match-picker.cpp:317
 msgid "Balanced"
 msgstr "बेलेन्स खालामबाय"
 
@@ -3238,11 +3238,11 @@ msgstr "सालान नागिरना दिहुन"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.cpp:1563
-#: gnucash/import-export/import-match-picker.cpp:385
-#: gnucash/import-export/import-match-picker.cpp:425
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3720
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3771
+#: gnucash/import-export/import-main-matcher.cpp:1544
+#: gnucash/import-export/import-match-picker.cpp:314
+#: gnucash/import-export/import-match-picker.cpp:354
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3724
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3775
 #: gnucash/report/reports/standard/general-journal.scm:101
 #: gnucash/report/reports/standard/general-ledger.scm:81
 #: gnucash/report/reports/standard/general-ledger.scm:101
@@ -3544,7 +3544,7 @@ msgstr "साफा खालामबाय"
 #: gnucash/gnome-search/search-reconciled.c:219
 #: gnucash/gnome-utils/gnc-tree-view-account.c:872
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
-#: gnucash/import-export/import-match-picker.cpp:428
+#: gnucash/import-export/import-match-picker.cpp:357
 #: gnucash/report/trep-engine.scm:159
 msgid "Reconciled"
 msgstr "रां सुखबाय"
@@ -4997,9 +4997,9 @@ msgstr "दानि बोखावनायखौ खोमोर"
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
 #, fuzzy
-#| msgid "Split"
-msgid "Split View"
-msgstr "बोखावनाय"
+#| msgid "Stock Split"
+msgid "Show Splits"
+msgstr "स्टक स्प्लिट"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 #, fuzzy
@@ -12392,7 +12392,7 @@ msgstr ""
 "फाइल->आखुथायनि गेजेरजों मेनु निफ्राय थोंजोङै हाबहोनो हायो।"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:969
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2642
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2646
 msgid "Choose the QIF file currency and select Book Options"
 msgstr "QIF फाइल सोलिनाय रांखौ बासिख आरो बुक(बिजाब) उफ्राखौ सायख"
 
@@ -12450,8 +12450,8 @@ msgid "_Start Import"
 msgstr "लाबोनायखौ जागाय"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1142
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1733
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2985
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1737
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2989
 msgid "P_ause"
 msgstr ""
 
@@ -19173,7 +19173,7 @@ msgid "File exported successfully!\n"
 msgstr "फाइल दैथायनाया जाफुंसारबाय!\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
-#: gnucash/import-export/import-main-matcher.cpp:1868
+#: gnucash/import-export/import-main-matcher.cpp:1843
 #: gnucash/report/reports/standard/register.scm:217
 #: libgnucash/engine/Split.c:1610 libgnucash/engine/Split.c:1627
 msgid "-- Split Transaction --"
@@ -19924,140 +19924,140 @@ msgstr "y/d/m"
 msgid "No new transactions were found in this import."
 msgstr "बे लेनदेनआ URI जों थाफाया।"
 
-#: gnucash/import-export/import-main-matcher.cpp:790
+#: gnucash/import-export/import-main-matcher.cpp:771
 msgid "Destination account for the auto-balance split."
 msgstr "अट'-बेलेन्स बोखावनायनि थाखाय थांखि एकाउन्ट।"
 
-#: gnucash/import-export/import-main-matcher.cpp:981
+#: gnucash/import-export/import-main-matcher.cpp:962
 msgid "Click Edit to modify"
 msgstr ""
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1386
+#: gnucash/import-export/import-main-matcher.cpp:1367
 #, fuzzy
 #| msgid "_Select transfer account"
 msgid "_Assign transfer account"
 msgstr "ट्रेन्सफार एकाउन्ट सायख"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1396
+#: gnucash/import-export/import-main-matcher.cpp:1377
 #, fuzzy
 #| msgid "Exchange rate"
 msgid "Assign e_xchange rate"
 msgstr "सोलाय सोल' हार"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1404
+#: gnucash/import-export/import-main-matcher.cpp:1385
 #, fuzzy
 msgid "_Edit description, notes, or memo"
 msgstr "बेखेवथि / लिरसुंथाइ / मेम'"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1413
+#: gnucash/import-export/import-main-matcher.cpp:1394
 #, fuzzy
 #| msgid "Reset defaults"
 msgid "_Reset all edits"
 msgstr "डिफल्टफोरखौ फिन फज"
 
-#: gnucash/import-export/import-main-matcher.cpp:1566
+#: gnucash/import-export/import-main-matcher.cpp:1547
 #, fuzzy
 #| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.cpp:1570
+#: gnucash/import-export/import-main-matcher.cpp:1551
 #, fuzzy
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "U+R"
 
-#: gnucash/import-export/import-main-matcher.cpp:1574
+#: gnucash/import-export/import-main-matcher.cpp:1555
 #, fuzzy
 #| msgid "C"
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "C"
 
-#: gnucash/import-export/import-main-matcher.cpp:1581
+#: gnucash/import-export/import-main-matcher.cpp:1562
 msgid "Info"
 msgstr "फोरमायथिहोग्रा"
 
-#: gnucash/import-export/import-main-matcher.cpp:1588
+#: gnucash/import-export/import-main-matcher.cpp:1569
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 #, fuzzy
 msgid "Additional Comments"
 msgstr "कार्डाव बांद्राय:"
 
-#: gnucash/import-export/import-main-matcher.cpp:1987
+#: gnucash/import-export/import-main-matcher.cpp:1955
 msgid "New, already balanced"
 msgstr "गोदान, सिगाङावनो समायथाय खालामबाय"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2009
+#: gnucash/import-export/import-main-matcher.cpp:1977
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "गोदान, %s खौ (मेनुयेल) \"%s\"आव जायगा सोलायहो"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2017
+#: gnucash/import-export/import-main-matcher.cpp:1985
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "गोदान, %s खौ (अट') \"%s\" आव जायगा सोलायहो"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2030
+#: gnucash/import-export/import-main-matcher.cpp:1998
 #, fuzzy, c-format
 #| msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr "गोदान, UNBALANCED (एकाउन्टखौ %s आव जायगा सोलायहोनांगौ)!"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2046
+#: gnucash/import-export/import-main-matcher.cpp:2014
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "गोदान, UNBALANCED (एकाउन्टखौ %s आव जायगा सोलायहोनांगौ)!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2064
+#: gnucash/import-export/import-main-matcher.cpp:2032
 #, fuzzy, c-format
 #| msgid "Reconcile (manual) match"
 msgid "Reconcile (manual) match to %s"
 msgstr "(मेनुयेल) गोरोबनायखौ गोरोबहोफिन"
 
-#: gnucash/import-export/import-main-matcher.cpp:2069
+#: gnucash/import-export/import-main-matcher.cpp:2037
 #, fuzzy, c-format
 #| msgid "Reconcile (auto) match"
 msgid "Reconcile (auto) match to %s"
 msgstr "(अट') गोरोबनायखौ गोरोबहोफिन"
 
-#: gnucash/import-export/import-main-matcher.cpp:2078
-#: gnucash/import-export/import-main-matcher.cpp:2107
+#: gnucash/import-export/import-main-matcher.cpp:2046
+#: gnucash/import-export/import-main-matcher.cpp:2075
 msgid "Match missing!"
 msgstr "गोरोबनाय गैया!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2093
+#: gnucash/import-export/import-main-matcher.cpp:2061
 #, fuzzy, c-format
 #| msgid "Update and reconcile (manual) match"
 msgid "Update and reconcile (manual) match to %s"
 msgstr "(मेनुयेल) गोरोबनायखौ आपडेट खालाम आरो गोरोबहोफिन"
 
-#: gnucash/import-export/import-main-matcher.cpp:2098
+#: gnucash/import-export/import-main-matcher.cpp:2066
 #, fuzzy, c-format
 #| msgid "Update and reconcile (auto) match"
 msgid "Update and reconcile (auto) match to %s"
 msgstr "(अट') गोरोबनायखौ आपडेट खालाम आरो गोरोबहोफिन"
 
-#: gnucash/import-export/import-main-matcher.cpp:2115
+#: gnucash/import-export/import-main-matcher.cpp:2083
 msgid "Do not import (no action selected)"
 msgstr "लाबोनो नाङा (जेबो हाबा सायख'वाखै)"
 
-#: gnucash/import-export/import-match-picker.cpp:414
+#: gnucash/import-export/import-match-picker.cpp:343
 msgid "Confidence"
 msgstr "गुमुर बाथ्रा"
 
-#: gnucash/import-export/import-match-picker.cpp:429
+#: gnucash/import-export/import-match-picker.cpp:358
 #, fuzzy
 msgid "Pending Action"
 msgstr "अनलाइन हाबाफोर"
@@ -20203,79 +20203,79 @@ msgstr "टिकार दिन्थिसिन एबा गुबुन �
 msgid "_Exchange or abbreviation type"
 msgstr "सोलाय सोल' एबा सुंद' रोखोम"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3314
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1180
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3318
 msgid "(split)"
 msgstr "(स्प्टि)"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1369
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1373
 #, fuzzy
 msgid "Are you sure you want to cancel?"
 msgstr "नोंथाङा थारैनो \"%s\" खौ खोमोरनो लुबैयो नामा?"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1580
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1584
 msgid "Please select a file to load."
 msgstr "ल'ड खालामनो मोनसे फाइल सायख।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1583
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1587
 msgid "File not found or read permission denied. Please select another file."
 msgstr "फाइल मोनाखै एबा फरायनायनि गनायथि होआखै। अननानै गुबुन मोनसे फाइल सायख।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1594
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1598
 msgid "That QIF file is already loaded. Please select another file."
 msgstr "बै QIF फाइलखौ सिगाङावनो ल'ड खालामबाय। अननानै गुबुन मोनसे फाइल सायख।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1662
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1666
 msgid "Select QIF File"
 msgstr "QIF फाइल सायख"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1725
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1728
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2977
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2980
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1729
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1732
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2981
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2984
 msgid "_Resume"
 msgstr "फिन जागाय"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1813
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1888
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3064
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1817
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1892
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3068
 msgid "Canceled"
 msgstr "बातिल खालामबाय"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1827
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1831
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1835
 msgid "An error occurred while loading the QIF file."
 msgstr "QIF फाइल ल'ड खालामनाय समाव मोनसे गोरोन्थि जाबाय।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1828
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1846
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1907
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1964
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3084
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3105
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3153
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1832
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1850
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1911
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1968
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3088
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3109
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3157
 msgid "Failed"
 msgstr "फेलें जाबाय"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1884
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1901
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3060
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3078
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3101
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3147
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1888
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1905
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3064
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3082
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3105
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3151
 msgid "Cleaning up"
 msgstr "हुगार गासिनो दं"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1906
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1910
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1914
 msgid "A bug was detected while parsing the QIF file."
 msgstr "QIF फाइल पार्स खालामनाय समाव मोनसे बागखौ संना दिहुनबाय।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1981
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1985
 msgid "Loading completed"
 msgstr "ल'ड खालामनाया जोबबाय"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2018
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2022
 msgid ""
 "When you press the Start Button, GnuCash will load your QIF file. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
@@ -20285,33 +20285,33 @@ msgstr ""
 "खालामगोन। जेबो गोरोन्थि एबा सांग्रांथि गैयाब्ला, नोंथाङा उननि स्टेपआव गावनो गाव महरै "
 "दावगालांगोन। नङाब्ला, गुवारैखौ नोंथांनि नायफिननायनि थाखाय गाहायाव दिन्थिगोन।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2649
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2653
 msgid "Choose the QIF file currency"
 msgstr "QIF फाइल सोलिनाय रांखौ बासिख"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2865
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2869
 msgid "You must enter an existing national currency or enter a different type."
 msgstr "नोंथाङा मोनसे थाखानाय माहारिआरि रां एबा मोनसे गुबुन रोखोम हाबहो थारनांगोन।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3083
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3087
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3091
 msgid "A bug was detected while converting the QIF data."
 msgstr "QIF डाटा सोलायहोनाय समाव मोनसे बागखौ संना दिहुनबाय।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3138
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3142
 msgid "Canceling"
 msgstr "बातिल खालाम गासिनो दं"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3152
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3156
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3160
 msgid "A bug was detected while detecting duplicates."
 msgstr "डुप्लिकेटफोरखौ संना दिहुननाय समाव मोनसे बागखौ संना दिहुनबाय।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3175
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3179
 msgid "Conversion completed"
 msgstr "सोलायहोनायआ जोबबाय"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3207
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3211
 msgid ""
 "When you press the Start Button, GnuCash will import your QIF data. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
@@ -20321,37 +20321,37 @@ msgstr ""
 "जेबो गोरोन्थि एबा सांग्रांथि गैयाब्ला, नोंथाङा उननि स्टेपआव गावनो गाव महरै दावगालांगोन। "
 "नङाब्ला, गुवारैखौ नोंथांनि नायफिननायनि थाखाय गाहायाव दिन्थिगोन।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3413
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3417
 msgid "GnuCash was unable to save your mapping preferences."
 msgstr "GnuCash आ नोंथांनि मेपिं पसन्दखौ थिना दोननो हायाखैमोन।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3446
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3450
 #, c-format
 msgid "There was a problem with the import."
 msgstr "लाबोनायजों मोनसे जेंना दंमोन।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3448
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3452
 #, c-format
 msgid "QIF Import Completed."
 msgstr "QIF लाबोनायखौ फोजोबबाय।"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3666
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3670
 msgid "QIF account name"
 msgstr "QIF एकाउन्टनि मुं"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3672
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3676
 msgid "QIF category name"
 msgstr "QIF थाखोनि मुं"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3678
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3682
 msgid "QIF payee/memo"
 msgstr "QIF रां मोनग्रा/मेम'"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3781
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3785
 msgid "Match?"
 msgstr "गोरोबहो?"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3884
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3888
 msgid "QIF import requires guile with regex support."
 msgstr ""
 
@@ -31556,24 +31556,24 @@ msgstr "%s %s"
 msgid "Unknown, %d-size list."
 msgstr "मोनथिमोनै, %d-महर लिस्ट।"
 
-#: libgnucash/engine/ScrubBusiness.c:549
+#: libgnucash/engine/ScrubBusiness.c:557
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#Double_posting"
 msgstr ""
 
-#: libgnucash/engine/ScrubBusiness.c:565
+#: libgnucash/engine/ScrubBusiness.c:573
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
 msgstr ""
 
-#: libgnucash/engine/ScrubBusiness.c:617
+#: libgnucash/engine/ScrubBusiness.c:625
 #, c-format
 msgid "Checking business lots in account %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/ScrubBusiness.c:671
+#: libgnucash/engine/ScrubBusiness.c:679
 #, c-format
 msgid "Checking business splits in account %s: %u of %u"
 msgstr ""
@@ -31674,3 +31674,8 @@ msgstr "(खाजोना-सोमोन्दोगोनां लेङा
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "जेबो मदद गैया।"
+
+#, fuzzy
+#~| msgid "Split"
+#~ msgid "Split View"
+#~ msgstr "बोखावनाय"

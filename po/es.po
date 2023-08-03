@@ -83,9 +83,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-07-22 00:48+0200\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2023-08-03 06:21+0200\n"
 "PO-Revision-Date: 2023-07-24 13:07+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -98,8 +98,8 @@ msgstr ""
 "X-Generator: Weblate 5.0-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
-">;</span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
+"span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1377,11 +1377,11 @@ msgstr "Opción de Amortización Prestamentaria: «%s»"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:378
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.cpp:1560
-#: gnucash/import-export/import-match-picker.cpp:384
-#: gnucash/import-export/import-match-picker.cpp:424
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3699
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3750
+#: gnucash/import-export/import-main-matcher.cpp:1541
+#: gnucash/import-export/import-match-picker.cpp:313
+#: gnucash/import-export/import-match-picker.cpp:353
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3703
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3754
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:233
 #: gnucash/report/reports/standard/account-summary.scm:77
@@ -1460,8 +1460,8 @@ msgstr "Error al añadir precio."
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.cpp:1561
-#: gnucash/import-export/import-match-picker.cpp:383
+#: gnucash/import-export/import-main-matcher.cpp:1542
+#: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1026
@@ -1988,9 +1988,9 @@ msgstr "N/D"
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:386
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.cpp:1565
-#: gnucash/import-export/import-match-picker.cpp:387
-#: gnucash/import-export/import-match-picker.cpp:427
+#: gnucash/import-export/import-main-matcher.cpp:1546
+#: gnucash/import-export/import-match-picker.cpp:316
+#: gnucash/import-export/import-match-picker.cpp:356
 #: gnucash/register/ledger-core/split-register-model.c:360
 #: gnucash/report/reports/standard/general-ledger.scm:71
 #: gnucash/report/reports/standard/general-ledger.scm:91
@@ -2638,11 +2638,11 @@ msgstr "Enlaces de Transacción Documental"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.cpp:1564
-#: gnucash/import-export/import-match-picker.cpp:386
-#: gnucash/import-export/import-match-picker.cpp:426
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3709
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3760
+#: gnucash/import-export/import-main-matcher.cpp:1545
+#: gnucash/import-export/import-match-picker.cpp:315
+#: gnucash/import-export/import-match-picker.cpp:355
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3713
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3764
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
 #: gnucash/register/ledger-core/split-register-model.c:300
 #: gnucash/report/reports/standard/account-summary.scm:380
@@ -2810,7 +2810,7 @@ msgid "All Accounts"
 msgstr "Todas las cuentas"
 
 #: gnucash/gnome/dialog-find-transactions.c:112
-#: gnucash/import-export/import-match-picker.cpp:388
+#: gnucash/import-export/import-match-picker.cpp:317
 msgid "Balanced"
 msgstr "Cuadrado"
 
@@ -3403,11 +3403,11 @@ msgstr "Buscar Factura"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.cpp:1563
-#: gnucash/import-export/import-match-picker.cpp:385
-#: gnucash/import-export/import-match-picker.cpp:425
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3720
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3771
+#: gnucash/import-export/import-main-matcher.cpp:1544
+#: gnucash/import-export/import-match-picker.cpp:314
+#: gnucash/import-export/import-match-picker.cpp:354
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3724
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3775
 #: gnucash/report/reports/standard/general-journal.scm:101
 #: gnucash/report/reports/standard/general-ledger.scm:81
 #: gnucash/report/reports/standard/general-ledger.scm:101
@@ -3705,7 +3705,7 @@ msgstr "Punteado"
 #: gnucash/gnome-search/search-reconciled.c:219
 #: gnucash/gnome-utils/gnc-tree-view-account.c:872
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
-#: gnucash/import-export/import-match-picker.cpp:428
+#: gnucash/import-export/import-match-picker.cpp:357
 #: gnucash/report/trep-engine.scm:159
 msgid "Reconciled"
 msgstr "Conciliado"
@@ -5139,8 +5139,10 @@ msgstr "Borra el desglose efectivo"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
-msgid "Split View"
-msgstr "Dividir la vista"
+#, fuzzy
+#| msgid "Sold Splits"
+msgid "Show Splits"
+msgstr "Anotaciones vendidas"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 msgid "Jump"
@@ -12676,7 +12678,7 @@ msgstr ""
 "directamente desde el menú a través de Archivo → Propiedades."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:969
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2642
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2646
 msgid "Choose the QIF file currency and select Book Options"
 msgstr "Escoja la moneda del fichero QIF y seleccione las Opciones del Libro"
 
@@ -12729,8 +12731,8 @@ msgid "_Start Import"
 msgstr "_Iniciar importación"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1142
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1733
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2985
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1737
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2989
 msgid "P_ause"
 msgstr "_Pausar"
 
@@ -19456,7 +19458,7 @@ msgid "File exported successfully!\n"
 msgstr "¡Fichero exportado correctamente!\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
-#: gnucash/import-export/import-main-matcher.cpp:1868
+#: gnucash/import-export/import-main-matcher.cpp:1843
 #: gnucash/report/reports/standard/register.scm:217
 #: libgnucash/engine/Split.c:1610 libgnucash/engine/Split.c:1627
 msgid "-- Split Transaction --"
@@ -20222,124 +20224,124 @@ msgstr ""
 "No fue encontrada ninguna de las transacciones nuevas dentro de esta "
 "importación."
 
-#: gnucash/import-export/import-main-matcher.cpp:790
+#: gnucash/import-export/import-main-matcher.cpp:771
 msgid "Destination account for the auto-balance split."
 msgstr "Cuenta de destino para el desglose de cuadrado automático."
 
-#: gnucash/import-export/import-main-matcher.cpp:981
+#: gnucash/import-export/import-main-matcher.cpp:962
 msgid "Click Edit to modify"
 msgstr "Pulsa Editar para modificar"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1386
+#: gnucash/import-export/import-main-matcher.cpp:1367
 msgid "_Assign transfer account"
 msgstr "_Asignar cuenta de transferencia"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1396
+#: gnucash/import-export/import-main-matcher.cpp:1377
 msgid "Assign e_xchange rate"
 msgstr "Establecer el _tipo de cambio"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1404
+#: gnucash/import-export/import-main-matcher.cpp:1385
 msgid "_Edit description, notes, or memo"
 msgstr "_Editar descripción, anotaciones o memorándum"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1413
+#: gnucash/import-export/import-main-matcher.cpp:1394
 msgid "_Reset all edits"
 msgstr "_Restablecer predeterminados"
 
-#: gnucash/import-export/import-main-matcher.cpp:1566
+#: gnucash/import-export/import-main-matcher.cpp:1547
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
 # Update And Reconcile
-#: gnucash/import-export/import-main-matcher.cpp:1570
+#: gnucash/import-export/import-main-matcher.cpp:1551
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "A+V"
 
-#: gnucash/import-export/import-main-matcher.cpp:1574
+#: gnucash/import-export/import-main-matcher.cpp:1555
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "P"
 
-#: gnucash/import-export/import-main-matcher.cpp:1581
+#: gnucash/import-export/import-main-matcher.cpp:1562
 msgid "Info"
 msgstr "Info"
 
-#: gnucash/import-export/import-main-matcher.cpp:1588
+#: gnucash/import-export/import-main-matcher.cpp:1569
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 msgid "Additional Comments"
 msgstr "Comentarios Adicionales"
 
-#: gnucash/import-export/import-main-matcher.cpp:1987
+#: gnucash/import-export/import-main-matcher.cpp:1955
 msgid "New, already balanced"
 msgstr "Nuevo, ya cuadrado"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2009
+#: gnucash/import-export/import-main-matcher.cpp:1977
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Nuevo, transferir %s a «%s» (manual)"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2017
+#: gnucash/import-export/import-main-matcher.cpp:1985
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Nuevo, transferir %s a «%s» (automático)"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2030
+#: gnucash/import-export/import-main-matcher.cpp:1998
 #, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr ""
 "¡Nuevo, DESCUADRADO (se necesita precio para transferir %s a la cuenta %s)!"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2046
+#: gnucash/import-export/import-main-matcher.cpp:2014
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "¡Nuevo, DESCUADRADO (se necesita cuenta para transferir %s)!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2064
+#: gnucash/import-export/import-main-matcher.cpp:2032
 #, c-format
 msgid "Reconcile (manual) match to %s"
 msgstr "Conciliar cotejo (manual) a %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2069
+#: gnucash/import-export/import-main-matcher.cpp:2037
 #, c-format
 msgid "Reconcile (auto) match to %s"
 msgstr "Conciliar cotejo (automático) a %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2078
-#: gnucash/import-export/import-main-matcher.cpp:2107
+#: gnucash/import-export/import-main-matcher.cpp:2046
+#: gnucash/import-export/import-main-matcher.cpp:2075
 msgid "Match missing!"
 msgstr "¡No hay cotejo!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2093
+#: gnucash/import-export/import-main-matcher.cpp:2061
 #, c-format
 msgid "Update and reconcile (manual) match to %s"
 msgstr "Actualizar y conciliar cotejo (manual) a %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2098
+#: gnucash/import-export/import-main-matcher.cpp:2066
 #, c-format
 msgid "Update and reconcile (auto) match to %s"
 msgstr "Actualizar y conciliar cotejo (automático) a %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2115
+#: gnucash/import-export/import-main-matcher.cpp:2083
 msgid "Do not import (no action selected)"
 msgstr "No importar (ninguna operación seleccionada)"
 
-#: gnucash/import-export/import-match-picker.cpp:414
+#: gnucash/import-export/import-match-picker.cpp:343
 msgid "Confidence"
 msgstr "Confianza"
 
-#: gnucash/import-export/import-match-picker.cpp:429
+#: gnucash/import-export/import-match-picker.cpp:358
 msgid "Pending Action"
 msgstr "Operación Pendiente"
 
@@ -20484,79 +20486,79 @@ msgstr "_Símbolo/Abreviatura"
 msgid "_Exchange or abbreviation type"
 msgstr "Tipo de cambio o abr_eviación"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1176
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3314
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1180
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3318
 msgid "(split)"
 msgstr "(desglose)"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1369
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1373
 msgid "Are you sure you want to cancel?"
 msgstr "¿Confirma que desea cancelar?"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1580
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1584
 msgid "Please select a file to load."
 msgstr "Seleccione un fichero para cargar."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1583
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1587
 msgid "File not found or read permission denied. Please select another file."
 msgstr ""
 "Archivo no encontrado o permiso de lectura denegado. Elija otro fichero."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1594
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1598
 msgid "That QIF file is already loaded. Please select another file."
 msgstr "Ese fichero QIF ya está cargado. Seleccione otro fichero."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1662
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1666
 msgid "Select QIF File"
 msgstr "Seleccione Fichero QIF"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1725
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1728
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2977
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2980
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1729
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1732
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2981
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2984
 msgid "_Resume"
 msgstr "_Resumè"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1813
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1888
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3064
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1817
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1892
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3068
 msgid "Canceled"
 msgstr "Cancelado"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1827
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1831
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1835
 msgid "An error occurred while loading the QIF file."
 msgstr "Ocurrió un error mientras se carga el fichero QIF."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1828
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1846
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1907
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1964
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3084
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3105
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3153
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1832
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1850
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1911
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1968
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3088
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3109
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3157
 msgid "Failed"
 msgstr "Fallado"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1884
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1901
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3060
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3078
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3101
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3147
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1888
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1905
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3064
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3082
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3105
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3151
 msgid "Cleaning up"
 msgstr "Vaciando"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1906
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1910
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1914
 msgid "A bug was detected while parsing the QIF file."
 msgstr "Se ha encontrado un defecto mientras se analizaba el fichero QIF."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1981
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1985
 msgid "Loading completed"
 msgstr "Carga completa"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2018
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2022
 msgid ""
 "When you press the Start Button, GnuCash will load your QIF file. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
@@ -20566,33 +20568,33 @@ msgstr ""
 "ningún error o aviso, automáticamente pasará el paso siguiente. En otro "
 "caso, los detalles se mostrarán debajo para su revisión."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2649
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2653
 msgid "Choose the QIF file currency"
 msgstr "Escoja la moneda del fichero QIF"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2865
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2869
 msgid "You must enter an existing national currency or enter a different type."
 msgstr "Debe introducir una moneda nacional o introducir un tipo diferente."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3083
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3087
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3091
 msgid "A bug was detected while converting the QIF data."
 msgstr "Se ha encontrado un defecto mientras se convertía el dato QIF."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3138
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3142
 msgid "Canceling"
 msgstr "Cancelando"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3152
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3156
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3160
 msgid "A bug was detected while detecting duplicates."
 msgstr "Se ha encontrado un defecto mientras se detectaban duplicados."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3175
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3179
 msgid "Conversion completed"
 msgstr "Conversión terminada"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3207
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3211
 msgid ""
 "When you press the Start Button, GnuCash will import your QIF data. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
@@ -20602,37 +20604,37 @@ msgstr ""
 "ningún error o aviso, automáticamente continuará con el paso siguiente. En "
 "otro caso, a continuación se muestran los detalles para su revisión."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3413
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3417
 msgid "GnuCash was unable to save your mapping preferences."
 msgstr "GnuCash fue incapaz de guardar sus preferencias de asignación."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3446
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3450
 #, c-format
 msgid "There was a problem with the import."
 msgstr "Hubo un problema con la importación."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3448
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3452
 #, c-format
 msgid "QIF Import Completed."
 msgstr "Importación QIF Terminada."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3666
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3670
 msgid "QIF account name"
 msgstr "Nombre de la cuenta QIF"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3672
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3676
 msgid "QIF category name"
 msgstr "Nombre de la categoría QIF"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3678
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3682
 msgid "QIF payee/memo"
 msgstr "Portador/Memorandum QIF"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3781
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3785
 msgid "Match?"
 msgstr "¿Coteja?"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3884
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3888
 msgid "QIF import requires guile with regex support."
 msgstr "Importación QIF requiere guile con mantenidos para regex."
 
@@ -31476,7 +31478,7 @@ msgstr "%s - %s"
 msgid "Unknown, %d-size list."
 msgstr "Desconocido, tamaño del índice %d."
 
-#: libgnucash/engine/ScrubBusiness.c:549
+#: libgnucash/engine/ScrubBusiness.c:557
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#Double_posting"
@@ -31484,7 +31486,7 @@ msgstr ""
 "Por favor, borre esta transacción. La explicación en https://wiki.gnucash."
 "org/wiki/Business_Features_Issues#Double_posting"
 
-#: libgnucash/engine/ScrubBusiness.c:565
+#: libgnucash/engine/ScrubBusiness.c:573
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
@@ -31493,12 +31495,12 @@ msgstr ""
 "org/wiki/"
 "Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
 
-#: libgnucash/engine/ScrubBusiness.c:617
+#: libgnucash/engine/ScrubBusiness.c:625
 #, c-format
 msgid "Checking business lots in account %s: %u of %u"
 msgstr "Comprobando negociaciones de hipotecas en cuanta %s: %u de %u"
 
-#: libgnucash/engine/ScrubBusiness.c:671
+#: libgnucash/engine/ScrubBusiness.c:679
 #, c-format
 msgid "Checking business splits in account %s: %u of %u"
 msgstr "Comprobando negocios de desgloses en cuenta %s: %u de %u"
@@ -31602,3 +31604,6 @@ msgstr "(Subcuenta de Relación Impositiva: %d)"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "No hay ayuda disponible."
+
+#~ msgid "Split View"
+#~ msgstr "Dividir la vista"
