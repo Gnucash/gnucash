@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-08-03 06:58+0000\n"
+"PO-Revision-Date: 2023-08-03 22:45+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/uk/>\n"
@@ -28948,7 +28948,7 @@ msgstr "Переглянути поради дня"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:6
 msgid "Import Bills & _Invoices…"
-msgstr "Імпортувати рахунки і рахунки-фактури…"
+msgstr "Імпортувати рахунки і ра_хунки-фактури…"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:8
 msgid "Import bills and invoices from a CSV text file"
