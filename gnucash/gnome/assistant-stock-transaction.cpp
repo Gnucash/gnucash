@@ -1871,21 +1871,132 @@ StockAssistantView::~StockAssistantView()
 
 /* The StockAssistantController manages the event handlers and user input. */
 
-static void connect_signals (gpointer, GtkBuilder*);
-
 struct StockAssistantController
 {
-    std::unique_ptr<StockAssistantModel> model;
-    StockAssistantView view;
+    std::unique_ptr<StockAssistantModel> m_model;
+    StockAssistantView m_view;
     StockAssistantController (GtkWidget *parent, GtkBuilder* builder, Account* acct)
-        : model{std::make_unique<StockAssistantModel>(acct)},
-          view{builder, acct, parent}
+        : m_model{std::make_unique<StockAssistantModel>(acct)},
+          m_view{builder, acct, parent}
     {
-        connect_signals (this, builder);
+        connect_signals (builder);
         DEBUG ("StockAssistantController constructor\n");
     };
     ~StockAssistantController (){ DEBUG ("StockAssistantController destructor\n"); };
+    void connect_signals(GtkBuilder *builder);
+    void prepare(GtkAssistant* assistant, GtkWidget *page);
 };
+
+static gint forward_page_func(int32_t, StockAssistantController*);
+static void stock_assistant_window_destroy_cb(GtkWidget *object, gpointer user_data);
+static void refresh_handler (GHashTable *changes, gpointer user_data);
+static void close_handler (gpointer user_data);
+
+void
+StockAssistantController::connect_signals (GtkBuilder *builder)
+{
+    m_view.m_type_page.connect(m_model.get());
+    m_view.m_deets_page.connect(&m_model->m_transaction_date, &m_model->m_transaction_description);
+    m_view.m_stock_amount_page.connect(m_model.get());
+    m_view.m_stock_value_page.connect(m_model.get());
+    m_view.m_cash_page.connect(&m_model->m_cash_entry->m_account,  &m_model->m_cash_entry->m_memo,
+                               &m_model->m_cash_entry->m_value);
+    m_view.m_fees_page.connect(m_model.get());
+    m_view.m_dividend_page.connect(&m_model->m_dividend_entry->m_account, &m_model->m_dividend_entry->m_memo,
+                                   &m_model->m_dividend_entry->m_value);
+    m_view.m_capgain_page.connect(&m_model->m_capgains_entry->m_account, &m_model->m_capgains_entry->m_memo,
+                                  &m_model->m_capgains_entry->m_value);
+
+    g_signal_connect (m_view.m_window, "destroy", G_CALLBACK (stock_assistant_window_destroy_cb), this);
+
+    gtk_assistant_set_forward_page_func (GTK_ASSISTANT(m_view.m_window),
+                                         (GtkAssistantPageFunc)forward_page_func,
+                                         this, nullptr);
+    gtk_builder_connect_signals (builder, this); //Stock Assistant View: cancel, close, prepare
+
+    auto component_id = gnc_register_gui_component
+        (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, refresh_handler, close_handler, this);
+    gnc_gui_component_watch_entity_type (component_id, GNC_ID_ACCOUNT,
+                                         QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+}
+
+void
+StockAssistantController::prepare(GtkAssistant* assistant, GtkWidget* page)
+{
+    auto currentpage = gtk_assistant_get_current_page(assistant);
+
+    switch (currentpage)
+    {
+    case PAGE_TRANSACTION_TYPE:
+        if (!m_model->maybe_reset_txn_types())
+            break;
+        m_view.m_type_page.prepare(m_model.get());
+        m_view.m_type_page.set_focus();
+        m_view.m_fees_page.set_capitalize_fees(m_model.get());
+        break;
+    case PAGE_TRANSACTION_DETAILS:
+        m_model->m_transaction_date = m_view.m_deets_page.get_date_time();
+        m_model->m_transaction_description = m_view.m_deets_page.get_description();
+        m_view.m_deets_page.set_focus ();
+        break;
+    case PAGE_STOCK_AMOUNT:
+        m_view.m_stock_amount_page.prepare (m_model->m_input_new_balance,
+                                           m_model->get_stock_balance_str());
+        if (!gnc_numeric_check(m_view.m_stock_amount_page.get_stock_amount()))
+            m_model->m_stock_entry->set_amount(m_view.m_stock_amount_page.get_stock_amount(),
+                                               m_model->m_errors);
+        m_view.m_stock_amount_page.set_stock_amount(m_model->get_new_amount_str());
+        m_view.m_stock_amount_page.m_amount.set_focus();
+        break;
+    case PAGE_STOCK_VALUE:
+        m_model->m_stock_entry->m_memo = m_view.m_stock_value_page.get_memo();
+        if (!gnc_numeric_check(m_view.m_stock_value_page.m_value.get()))
+            m_model->m_stock_entry->set_value(m_view.m_stock_value_page.m_value.get(),
+                                            "stock", m_model->m_errors);
+        m_view.m_stock_value_page.set_price(m_model->calculate_price());
+        m_view.m_stock_value_page.m_value.set_focus();
+        break;
+    case PAGE_CASH:
+        m_model->m_cash_entry->m_memo = m_view.m_cash_page.get_memo();
+        if (!gnc_numeric_check(m_view.m_cash_page.m_value.get()))
+            m_model->m_cash_entry->set_value (m_view.m_cash_page.m_value.get(),
+                                            "cash", m_model->m_errors);
+        m_model->m_cash_entry->m_account = m_view.m_cash_page.m_account.get();
+        m_view.m_cash_page.m_value.set_focus();
+        break;
+    case PAGE_FEES:
+        m_view.m_fees_page.set_capitalize_fees (m_model.get());
+        m_model->m_fees_entry->m_memo = m_view.m_fees_page.get_memo();
+        if (!gnc_numeric_check(m_view.m_fees_page.m_value.get()))
+            m_model->m_fees_entry->set_value (m_view.m_fees_page.m_value.get(), "fees",
+                                            m_model->m_errors);
+        m_model->m_fees_entry->m_account = m_view.m_fees_page.m_account.get();
+        m_view.m_fees_page.m_value.set_focus();
+        break;
+    case PAGE_DIVIDEND:
+        m_model->m_dividend_entry->m_memo = m_view.m_dividend_page.get_memo();
+        if (!gnc_numeric_check(m_view.m_dividend_page.m_value.get()))
+            m_model->m_dividend_entry->set_value (m_view.m_dividend_page.m_value.get(), "dividend", m_model->m_errors);
+        m_model->m_dividend_entry->m_account = m_view.m_dividend_page.m_account.get();
+        m_view.m_dividend_page.m_value.set_focus();
+        break;
+    case PAGE_CAPGAINS:
+        m_model->m_capgains_entry->m_memo = m_view.m_capgain_page.get_memo();
+        if (gnc_numeric_check(m_view.m_capgain_page.m_value.get()))
+            m_model->m_capgains_entry->set_value(m_view.m_capgain_page.m_value.get(), "capgains", m_model->m_errors);
+        m_model->m_capgains_entry->m_account = m_view.m_capgain_page.m_account.get();
+        m_view.m_capgain_page.m_value.set_focus();
+        break;
+    case PAGE_FINISH:
+    {
+        m_view.m_finish_page.prepare (m_view.m_window, m_model.get());
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 
 // These callbacks must be registered with the GtkAssistant so they can't be member functions.
 
@@ -1902,88 +2013,13 @@ stock_assistant_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
                          gpointer user_data)
 {
     auto info = static_cast<StockAssistantController*>(user_data);
-    g_return_if_fail (info && info->model);
-    auto model = info->model.get();
-    auto& view = info->view;
-
-    auto currentpage = gtk_assistant_get_current_page(assistant);
-
-    switch (currentpage)
-    {
-    case PAGE_TRANSACTION_TYPE:
-        if (!model->maybe_reset_txn_types())
-            break;
-        view.m_type_page.prepare(model);
-        view.m_type_page.set_focus();
-        view.m_fees_page.set_capitalize_fees(model);
-        break;
-    case PAGE_TRANSACTION_DETAILS:
-        model->m_transaction_date = view.m_deets_page.get_date_time();
-        model->m_transaction_description = view.m_deets_page.get_description();
-        view.m_deets_page.set_focus ();
-        break;
-    case PAGE_STOCK_AMOUNT:
-        view.m_stock_amount_page.prepare (model->m_input_new_balance,
-                                           model->get_stock_balance_str());
-        if (!gnc_numeric_check(view.m_stock_amount_page.get_stock_amount()))
-            info->model->m_stock_entry->set_amount(view.m_stock_amount_page.get_stock_amount(),
-                                                   model->m_errors);
-        view.m_stock_amount_page.set_stock_amount(info->model->get_new_amount_str());
-        view.m_stock_amount_page.m_amount.set_focus();
-        break;
-    case PAGE_STOCK_VALUE:
-        model->m_stock_entry->m_memo = view.m_stock_value_page.get_memo();
-        if (!gnc_numeric_check(view.m_stock_value_page.m_value.get()))
-            model->m_stock_entry->set_value(view.m_stock_value_page.m_value.get(),
-                                            "stock", model->m_errors);
-        view.m_stock_value_page.set_price(model->calculate_price());
-        view.m_stock_value_page.m_value.set_focus();
-        break;
-    case PAGE_CASH:
-        model->m_cash_entry->m_memo = view.m_cash_page.get_memo();
-        if (!gnc_numeric_check(view.m_cash_page.m_value.get()))
-            model->m_cash_entry->set_value (view.m_cash_page.m_value.get(),
-                                            "cash", model->m_errors);
-        model->m_cash_entry->m_account = view.m_cash_page.m_account.get();
-        view.m_cash_page.m_value.set_focus();
-        break;
-    case PAGE_FEES:
-        view.m_fees_page.set_capitalize_fees (info);
-        model->m_fees_entry->m_memo = view.m_fees_page.get_memo();
-        if (!gnc_numeric_check(view.m_fees_page.m_value.get()))
-            model->m_fees_entry->set_value (view.m_fees_page.m_value.get(), "fees",
-                                            model->m_errors);
-        model->m_fees_entry->m_account = view.m_fees_page.m_account.get();
-        view.m_fees_page.m_value.set_focus();
-        break;
-    case PAGE_DIVIDEND:
-        model->m_dividend_entry->m_memo = view.m_dividend_page.get_memo();
-        if (!gnc_numeric_check(view.m_dividend_page.m_value.get()))
-            model->m_dividend_entry->set_value (view.m_dividend_page.m_value.get(), "dividend", model->m_errors);
-        model->m_dividend_entry->m_account = view.m_dividend_page.m_account.get();
-        view.m_dividend_page.m_value.set_focus();
-        break;
-    case PAGE_CAPGAINS:
-        model->m_capgains_entry->m_memo = view.m_capgain_page.get_memo();
-        if (gnc_numeric_check(view.m_capgain_page.m_value.get()))
-            model->m_capgains_entry->set_value(view.m_capgain_page.m_value.get(), "capgains", model->m_errors);
-        model->m_capgains_entry->m_account = view.m_capgain_page.m_account.get();
-        view.m_capgain_page.m_value.set_focus();
-        break;
-    case PAGE_FINISH:
-    {
-        view.m_finish_page.prepare (view.m_window, model);
-        break;
-    }
-    default:
-        break;
-    }
+    info->prepare(assistant, page);
 }
 
 static gint
 forward_page_func (gint current_page, StockAssistantController* info)
 {
-    auto model = info->model.get();
+    auto model = info->m_model.get();
 
     current_page++;
     if (!model->m_txn_type)
@@ -2010,10 +2046,10 @@ void
 stock_assistant_finish_cb (GtkAssistant *assistant, gpointer user_data)
 {
     auto info = static_cast<StockAssistantController*>(user_data);
-    g_return_if_fail (info->model->m_txn_type);
+    g_return_if_fail (info->m_model->m_txn_type);
 
     gnc_suspend_gui_refresh ();
-    [[maybe_unused]] auto [success, trans] = info->model->create_transaction();
+    [[maybe_unused]] auto [success, trans] = info->m_model->create_transaction();
     gnc_resume_gui_refresh ();
 
     gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
@@ -2033,9 +2069,9 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 {
     auto info = static_cast<StockAssistantController*>(user_data);
 
-    if (!GNC_IS_ACCOUNT (info->model->m_acct))
+    if (!GNC_IS_ACCOUNT (info->m_model->m_acct))
     {
-        PWARN ("account %p does not exist anymore. abort", info->model->m_acct);
+        PWARN ("account %p does not exist anymore. abort", info->m_model->m_acct);
         gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
     }
 }
@@ -2044,35 +2080,7 @@ static void
 close_handler (gpointer user_data)
 {
     auto info = static_cast<StockAssistantController*>(user_data);
-    gtk_widget_destroy (info->view.m_window);
-}
-
-static void connect_signals (gpointer data, GtkBuilder *builder)
-{
-    auto info = static_cast<StockAssistantController*>(data);
-    auto model = info->model.get();
-    auto& view = info->view;
-
-    view.m_type_page.connect(model);
-    view.m_deets_page.connect(&model->m_transaction_date, &model->m_transaction_description);
-    view.m_stock_amount_page.connect(model);
-    view.m_stock_value_page.connect(model);
-    view.m_cash_page.connect(&model->m_cash_entry->m_account,  &model->m_cash_entry->m_memo, &model->m_cash_entry->m_value);
-    view.m_fees_page.connect(model);
-    view.m_dividend_page.connect(&model->m_dividend_entry->m_account, &model->m_dividend_entry->m_memo, &model->m_dividend_entry->m_value);
-    view.m_capgain_page.connect(&model->m_capgains_entry->m_account, &model->m_capgains_entry->m_memo,  &model->m_capgains_entry->m_value);
-
-    g_signal_connect (view.m_window, "destroy", G_CALLBACK (stock_assistant_window_destroy_cb), info);
-
-    gtk_assistant_set_forward_page_func (GTK_ASSISTANT(view.m_window),
-                                         (GtkAssistantPageFunc)forward_page_func,
-                                         info, nullptr);
-    gtk_builder_connect_signals (builder, info); //Stock Assistant View: cancel, close, prepare
-
-    auto component_id = gnc_register_gui_component
-        (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, refresh_handler, close_handler, info);
-    gnc_gui_component_watch_entity_type (component_id, GNC_ID_ACCOUNT,
-                                         QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
+    gtk_widget_destroy (info->m_view.m_window);
 }
 
 /********************************************************************\
