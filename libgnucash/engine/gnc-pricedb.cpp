@@ -2371,12 +2371,17 @@ gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,
 }
 
 
-using PriceTuple = std::pair<GNCPrice*, GNCPrice*>;
+typedef struct
+{
+    GNCPrice *from;
+    GNCPrice *to;
+} PriceTuple;
 
 static PriceTuple
 extract_common_prices (PriceList *from_prices, PriceList *to_prices,
                        const gnc_commodity *from, const gnc_commodity *to)
 {
+    PriceTuple retval = {NULL, NULL};
     GList *from_node = NULL, *to_node = NULL;
     GNCPrice *from_price = NULL, *to_price = NULL;
 
@@ -2406,27 +2411,31 @@ extract_common_prices (PriceList *from_prices, PriceList *to_prices,
             break;
     }
     if (from_price == NULL || to_price == NULL)
-        return {nullptr, nullptr};
+        return retval;
     gnc_price_ref(from_price);
     gnc_price_ref(to_price);
-    return {from_price, to_price};
+    retval.from = from_price;
+    retval.to = to_price;
+    return retval;
 }
 
 
 static gnc_numeric
 convert_price (const gnc_commodity *from, const gnc_commodity *to, PriceTuple tuple)
 {
-    gnc_commodity *from_com = gnc_price_get_commodity (tuple.first);
-    gnc_commodity *from_cur = gnc_price_get_currency (tuple.first);
-    gnc_commodity *to_com = gnc_price_get_commodity (tuple.second);
-    gnc_commodity *to_cur = gnc_price_get_currency (tuple.second);
-    gnc_numeric from_val = gnc_price_get_value (tuple.first);
-    gnc_numeric to_val = gnc_price_get_value (tuple.second);
+    gnc_commodity *from_com = gnc_price_get_commodity (tuple.from);
+    gnc_commodity *from_cur = gnc_price_get_currency (tuple.from);
+    gnc_commodity *to_com = gnc_price_get_commodity (tuple.to);
+    gnc_commodity *to_cur = gnc_price_get_currency (tuple.to);
+    gnc_numeric from_val = gnc_price_get_value (tuple.from);
+    gnc_numeric to_val = gnc_price_get_value (tuple.to);
+    gnc_numeric price;
     int no_round = GNC_HOW_DENOM_EXACT | GNC_HOW_RND_NEVER;
-    gnc_numeric price = gnc_numeric_div (to_val, from_val, GNC_DENOM_AUTO, no_round);
 
-    gnc_price_unref (tuple.first);
-    gnc_price_unref (tuple.second);
+    price = gnc_numeric_div (to_val, from_val, GNC_DENOM_AUTO, no_round);
+
+    gnc_price_unref (tuple.from);
+    gnc_price_unref (tuple.to);
 
     if (from_cur == from && to_cur == to)
         return price;
@@ -2480,7 +2489,7 @@ indirect_price_conversion (GNCPriceDB *db, const gnc_commodity *from,
     tuple = extract_common_prices (from_prices, to_prices, from, to);
     gnc_price_list_destroy (from_prices);
     gnc_price_list_destroy (to_prices);
-    if (tuple.first)
+    if (tuple.from)
         return convert_price (from, to, tuple);
     return zero;
 }
