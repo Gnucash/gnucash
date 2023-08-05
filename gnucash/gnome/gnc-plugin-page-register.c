@@ -5287,7 +5287,6 @@ gnc_plugin_page_register_event_handler (QofInstance* entity,
     QofBook* book;
     GncPluginPage* visible_page;
     GtkWidget* window;
-    gchar* label, *color;
 
     g_return_if_fail (page); /* Required */
     if (!GNC_IS_TRANS (entity) && !GNC_IS_ACCOUNT (entity))
@@ -5302,15 +5301,20 @@ gnc_plugin_page_register_event_handler (QofInstance* entity,
     {
         if (GNC_IS_MAIN_WINDOW (window))
         {
-            label = gnc_plugin_page_register_get_tab_name (GNC_PLUGIN_PAGE (page));
-            main_window_update_page_name (GNC_PLUGIN_PAGE (page), label);
-            color = gnc_plugin_page_register_get_tab_color (GNC_PLUGIN_PAGE (page));
+            gchar *name = gnc_plugin_page_register_get_tab_name (GNC_PLUGIN_PAGE (page));
+            main_window_update_page_name (GNC_PLUGIN_PAGE (page), name);
+
+            gchar *long_name = gnc_plugin_page_register_get_long_name (GNC_PLUGIN_PAGE (page));
+            main_window_update_page_long_name (GNC_PLUGIN_PAGE (page), long_name);
+
+            gchar *color = gnc_plugin_page_register_get_tab_color (GNC_PLUGIN_PAGE (page));
             main_window_update_page_color (GNC_PLUGIN_PAGE (page), color);
             // update page icon if read only registers
             gnc_plugin_page_register_update_page_icon (GNC_PLUGIN_PAGE (page));
 
             g_free (color);
-            g_free (label);
+            g_free (name);
+            g_free (long_name);
         }
         LEAVE ("tab name updated");
         return;

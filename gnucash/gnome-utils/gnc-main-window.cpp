@@ -2293,6 +2293,48 @@ main_window_find_tab_widget (GncMainWindow *window,
 }
 
 void
+main_window_update_page_long_name (GncPluginPage *page,
+                                   const gchar *long_name_in)
+{
+    GtkWidget *tab_widget;
+
+    ENTER(" ");
+
+    if ((long_name_in == nullptr) || (*long_name_in == '\0'))
+    {
+        LEAVE("no string");
+        return;
+    }
+    gchar *long_name = g_strstrip (g_strdup (long_name_in));
+    const gchar *old_long_name = gnc_plugin_page_get_page_long_name (page);
+
+    /* Optimization, if the long_name hasn't changed, don't update X. */
+    if (*long_name == '\0' || strcmp (long_name, old_long_name) == 0)
+    {
+        g_free (long_name);
+        LEAVE("empty string or name unchanged");
+        return;
+    }
+
+    gnc_plugin_page_set_page_long_name (page, long_name);
+
+    GncMainWindow *window = GNC_MAIN_WINDOW(page->window);
+    if (!window)
+    {
+        g_free (long_name);
+        LEAVE("no window widget available");
+        return;
+    }
+
+    /* Update the notebook tab tooltip */
+    if (main_window_find_tab_widget (window, page, &tab_widget))
+        gtk_widget_set_tooltip_text (tab_widget, long_name);
+
+    g_free (long_name);
+    LEAVE("");
+}
+
+void
 main_window_update_page_name (GncPluginPage *page,
                               const gchar *name_in)
 {
@@ -2343,25 +2385,6 @@ main_window_update_page_name (GncPluginPage *page,
     tw = populate_tab_width_struct ();
     gnc_main_window_update_tab_width_one_page (page, tw);
     g_free (tw);
-
-    /* Update Tooltip on notebook Tab */
-    if (old_page_long_name && old_page_name
-            && g_strrstr(old_page_long_name, old_page_name) != nullptr)
-    {
-        gchar *new_page_long_name;
-        gint string_position;
-        GtkWidget *tab_widget;
-
-        string_position = strlen(old_page_long_name) - strlen(old_page_name);
-        new_page_long_name = g_strconcat(g_strndup(old_page_long_name, string_position), name, nullptr);
-
-        gnc_plugin_page_set_page_long_name(page, new_page_long_name);
-
-        if (main_window_find_tab_widget(window, page, &tab_widget))
-            gtk_widget_set_tooltip_text(tab_widget, new_page_long_name);
-
-        g_free(new_page_long_name);
-    }
 
     /* Update the notebook menu */
     if (page->notebook_page)

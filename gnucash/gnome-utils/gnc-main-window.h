@@ -179,6 +179,15 @@ void
 main_window_update_page_name (GncPluginPage *page,
                               const gchar *name_in);
 
+/** Update the long name of the page in the main window.
+ *
+ *  @param page The page to be updated.
+ *  @param long_name_in The new long name for the page.
+*/
+void
+main_window_update_page_long_name (GncPluginPage *page,
+                                   const gchar *long_name_in);
+
 /** Update the color on the page tabs in the main window.
  *
  *  @param page The page to be updated.
