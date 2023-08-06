@@ -1321,6 +1321,7 @@ PageTransType::prepare(StockAssistantModel *model)
 
     set_transaction_types(model->m_txn_types.value());
     change_txn_type (model);
+    set_focus();
 }
 
 int
@@ -1377,6 +1378,7 @@ struct PageTransDeets
     const char* get_description () { return gtk_entry_get_text (GTK_ENTRY (m_description)); }
     void set_focus () { gtk_widget_grab_focus (m_description); }
     void connect (time64 *date, const char **description);
+    void prepare(time64 *date, const char** description);
 };
 
 PageTransDeets::PageTransDeets (GtkBuilder *builder) :
@@ -1394,6 +1396,14 @@ PageTransDeets::connect(time64 *date, const char **description)
     g_signal_connect(m_description, "changed", G_CALLBACK (text_entry_changed_cb), description);
 }
 
+void
+PageTransDeets::prepare(time64 *date, const char** description)
+{
+    *date = get_date_time();
+    *description = get_description();
+    set_focus ();
+}
+
 struct PageStockAmount
 {
     // stock amount page
@@ -1405,7 +1415,7 @@ struct PageStockAmount
     GncAmountEdit m_amount;
     GtkWidget * m_amount_label;
     PageStockAmount (GtkBuilder *builder, Account* account);
-    void prepare (bool input_new_balance, const std::string prev_balance);
+    void prepare (StockTransactionStockEntry*, StockAssistantModel*, StringVec&);
     gnc_numeric get_stock_amount () { return m_amount.get(); }
     void set_stock_amount (std::string new_amount_str);
     void connect(StockAssistantModel *model);
@@ -1424,19 +1434,25 @@ PageStockAmount::PageStockAmount (GtkBuilder *builder, Account* account) :
 }
 
 void
-PageStockAmount::prepare (bool input_new_balance, const std::string prev_balance)
+PageStockAmount::prepare (StockTransactionStockEntry* entry, StockAssistantModel* model,
+                          StringVec& errors)
 {
     gtk_label_set_text_with_mnemonic
         (GTK_LABEL (m_amount_label),
-         input_new_balance ? _("Ne_w Balance") : _("_Shares"));
+         model->m_input_new_balance ? _("Ne_w Balance") : _("_Shares"));
     gtk_label_set_text
         (GTK_LABEL (m_next_amount_label),
-         input_new_balance ? _("Ratio") : _("Next Balance"));
+         model->m_input_new_balance ? _("Ratio") : _("Next Balance"));
     gtk_label_set_text (GTK_LABEL (m_title),
-         input_new_balance ?
+         model->m_input_new_balance ?
          _("Enter the new balance of shares after the stock split.") :
          _("Enter the number of shares you gained or lost in the transaction."));
-    gtk_label_set_text (GTK_LABEL (m_prev_amount), prev_balance.c_str());
+    gtk_label_set_text (GTK_LABEL (m_prev_amount), model->get_stock_balance_str().c_str());
+    if (!gnc_numeric_check(get_stock_amount()))
+        entry->set_amount(get_stock_amount(), errors);
+    set_stock_amount(model->get_new_amount_str());
+    m_amount.set_focus();
+
 }
 
 static void
@@ -1469,7 +1485,8 @@ struct PageStockValue
     GtkWidget * m_memo;
     PageStockValue (GtkBuilder *builder, Account* account);
     const char* get_memo ();
-    void connect (StockAssistantModel *model);
+    void connect(StockAssistantModel *model);
+    void prepare(StockTransactionEntry*, StockAssistantModel*, StringVec&);
     void set_price(const gchar *val);
     void set_price (std::tuple<bool, gnc_numeric, const char*> price_tuple);
 };
@@ -1500,6 +1517,16 @@ PageStockValue::connect(StockAssistantModel *model)
     g_signal_connect (m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &model->m_stock_entry->m_memo);
 }
 
+void
+PageStockValue::prepare(StockTransactionEntry* entry, StockAssistantModel* model, StringVec& errors)
+{
+    entry->m_memo = get_memo();
+    if (!gnc_numeric_check(m_value.get()))
+        entry->set_value(m_value.get(), "stock", errors);
+    set_price(model->calculate_price());
+    m_value.set_focus();
+}
+
 const char *
 PageStockValue::get_memo()
 {
@@ -1528,7 +1555,8 @@ struct PageCash
     GtkWidget * m_memo;
     GncAmountEdit m_value;
     PageCash (GtkBuilder *builder, Account* account);
-    void connect(Account **account, const char **memo, gnc_numeric *value);
+    void connect(StockTransactionEntry* entry);
+    void prepare(StockTransactionEntry* entry, StringVec& errors);
     const char* get_memo();
 };
 
@@ -1544,11 +1572,21 @@ PageCash::PageCash(GtkBuilder *builder, Account* account)
 }
 
 void
-PageCash::connect(Account **account, const char **memo, gnc_numeric *value)
+PageCash::connect(StockTransactionEntry* entry)
 {
-    m_account.connect(account);
-    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), memo);
-    m_value.connect(value);
+    m_account.connect(&entry->m_account);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &entry->m_memo);
+    m_value.connect(&entry->m_value);
+}
+
+void
+PageCash::prepare(StockTransactionEntry* entry, StringVec& errors)
+{
+    entry->m_memo = get_memo();
+    if (!gnc_numeric_check(m_value.get()))
+        entry->set_value (m_value.get(), "cash", errors);
+    entry->m_account = m_account.get();
+    m_value.set_focus();
 }
 
 const char *
@@ -1566,13 +1604,14 @@ struct PageFees
     GtkWidget * m_memo;
     GncAmountEdit m_value;
     PageFees (GtkBuilder *builder, Account* account);
-    void connect(StockAssistantModel *model);
+    void connect(StockTransactionFeesEntry*);
     bool get_capitalize_fees ();
     const char* get_memo();
     void set_capitalize_fees (bool state);
-    void set_capitalize_fees (StockAssistantModel *model);
+    void set_capitalize_fees (StockTransactionFeesEntry*);
     void set_account (Account *acct) { m_account.set(acct); }
     void update_fees_acct_sensitive (bool sensitive);
+    void prepare(StockTransactionFeesEntry*, StringVec&);
 };
 
 PageFees::PageFees(GtkBuilder *builder, Account* account)
@@ -1608,10 +1647,9 @@ PageFees::set_capitalize_fees(bool state)
 }
 
 void
-PageFees::set_capitalize_fees(StockAssistantModel *model)
+PageFees::set_capitalize_fees(StockTransactionFeesEntry* entry)
 {
-    auto fees_entry = dynamic_cast<StockTransactionFeesEntry*>(model->m_fees_entry.get());
-    set_capitalize_fees (fees_entry->m_capitalize);
+    set_capitalize_fees (entry->m_capitalize);
 }
 
 void
@@ -1621,24 +1659,35 @@ PageFees::update_fees_acct_sensitive(bool sensitive)
 }
 
 static void
-capitalize_fees_toggled_cb (GtkWidget *widget, StockAssistantModel *model)
+capitalize_fees_toggled_cb (GtkWidget *widget, StockTransactionFeesEntry *entry)
 {
-    g_return_if_fail (model && model->m_txn_type);
+    g_return_if_fail (entry);
     auto me = static_cast<PageFees *>(g_object_get_data (G_OBJECT (widget), "owner"));
     g_return_if_fail (me);
     bool cap =  me->get_capitalize_fees();
-    model->m_fees_entry->set_capitalize(cap);
+    entry->set_capitalize(cap);
     me->update_fees_acct_sensitive (!cap);
 }
 
 void
-PageFees::connect(StockAssistantModel *model)
+PageFees::connect(StockTransactionFeesEntry* entry)
 {
-    m_account.connect(&model->m_fees_entry->m_account);
-    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb),  &model->m_fees_entry->m_memo);
-    m_value.connect(&model->m_fees_entry->m_value);
+    m_account.connect(&entry->m_account);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb),  &entry->m_memo);
+    m_value.connect(&entry->m_value);
     g_object_set_data(G_OBJECT (m_capitalize), "owner", this);
-    g_signal_connect (m_capitalize, "toggled", G_CALLBACK (capitalize_fees_toggled_cb), model);
+    g_signal_connect (m_capitalize, "toggled", G_CALLBACK (capitalize_fees_toggled_cb), entry);
+}
+
+void
+PageFees::prepare(StockTransactionFeesEntry* entry, StringVec& errors)
+{
+        set_capitalize_fees (entry);
+        entry->m_memo = get_memo();
+        if (!gnc_numeric_check(m_value.get()))
+            entry->set_value (m_value.get(), "fees", errors);
+        entry->m_account = m_account.get();
+        m_value.set_focus();
 }
 
 struct PageDividend
@@ -1649,7 +1698,8 @@ struct PageDividend
     GtkWidget *m_memo;
     GncAmountEdit m_value;
     PageDividend (GtkBuilder *builder, Account* account);
-    void connect(Account **account, const char **memo, gnc_numeric *value);
+    void connect(StockTransactionEntry*);
+    void prepare(StockTransactionEntry*, StringVec&);
     const char* get_memo();
 };
 
@@ -1665,11 +1715,21 @@ PageDividend::PageDividend(GtkBuilder *builder, Account* account)
 
 
 void
-PageDividend::connect(Account **account, const char **memo, gnc_numeric *value)
+PageDividend::connect(StockTransactionEntry* entry)
 {
-    m_account.connect(account);
-    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), memo);
-    m_value.connect(value);
+    m_account.connect(&entry->m_account);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &entry->m_memo);
+    m_value.connect(&entry->m_value);
+}
+
+void
+PageDividend::prepare(StockTransactionEntry* entry, StringVec& errors)
+{
+    entry->m_memo = get_memo();
+    if (!gnc_numeric_check(m_value.get()))
+        entry->set_value(m_value.get(), "dividend", errors);
+    entry->m_account = m_account.get();
+    m_value.set_focus();
 }
 
 const char *
@@ -1686,7 +1746,8 @@ struct PageCapGain
     GtkWidget * m_memo;
     GncAmountEdit m_value;
     PageCapGain (GtkBuilder *builder, Account* account);
-    void connect(Account **account, const char **memo, gnc_numeric *value);
+    void connect(StockTransactionsStockCapGainsEntry* entry);
+    void prepare(StockTransactionsStockCapGainsEntry* entry, StringVec& errors);
     const char* get_memo();
 };
 
@@ -1708,11 +1769,21 @@ PageCapGain::get_memo()
 
 
 void
-PageCapGain::connect(Account **account, const char **memo, gnc_numeric *value)
+PageCapGain::connect(StockTransactionsStockCapGainsEntry*entry)
 {
-    m_account.connect(account);
-    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), memo);
-    m_value.connect(value);
+    m_account.connect(&entry->m_account);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &entry->m_memo);
+    m_value.connect(&entry->m_value);
+}
+
+void
+PageCapGain::prepare(StockTransactionsStockCapGainsEntry* entry, StringVec& errors)
+{
+    entry->m_memo = get_memo();
+    if (gnc_numeric_check(m_value.get()))
+        entry->set_value(m_value.get(), "capgains", errors);
+        entry->m_account = m_account.get();
+        m_value.set_focus();
 }
 
 /* The last page of the assistant shows what the resulting transaction will look
@@ -1899,13 +1970,14 @@ StockAssistantController::connect_signals (GtkBuilder *builder)
     m_view.m_deets_page.connect(&m_model->m_transaction_date, &m_model->m_transaction_description);
     m_view.m_stock_amount_page.connect(m_model.get());
     m_view.m_stock_value_page.connect(m_model.get());
-    m_view.m_cash_page.connect(&m_model->m_cash_entry->m_account,  &m_model->m_cash_entry->m_memo,
-                               &m_model->m_cash_entry->m_value);
-    m_view.m_fees_page.connect(m_model.get());
-    m_view.m_dividend_page.connect(&m_model->m_dividend_entry->m_account, &m_model->m_dividend_entry->m_memo,
-                                   &m_model->m_dividend_entry->m_value);
-    m_view.m_capgain_page.connect(&m_model->m_capgains_entry->m_account, &m_model->m_capgains_entry->m_memo,
-                                  &m_model->m_capgains_entry->m_value);
+    m_view.m_cash_page.connect(m_model->m_cash_entry.get());
+    auto fees_entry = dynamic_cast<StockTransactionFeesEntry *>(m_model->m_fees_entry.get());
+    if (fees_entry)
+      m_view.m_fees_page.connect(fees_entry);
+    m_view.m_dividend_page.connect(m_model->m_dividend_entry.get());
+    auto capgains_entry = dynamic_cast<StockTransactionsStockCapGainsEntry *>(m_model->m_capgains_entry.get());
+    if (capgains_entry)
+        m_view.m_capgain_page.connect(capgains_entry);
 
     g_signal_connect (m_view.m_window, "destroy", G_CALLBACK (stock_assistant_window_destroy_cb), this);
 
@@ -1931,62 +2003,40 @@ StockAssistantController::prepare(GtkAssistant* assistant, GtkWidget* page)
         if (!m_model->maybe_reset_txn_types())
             break;
         m_view.m_type_page.prepare(m_model.get());
-        m_view.m_type_page.set_focus();
-        m_view.m_fees_page.set_capitalize_fees(m_model.get());
         break;
     case PAGE_TRANSACTION_DETAILS:
-        m_model->m_transaction_date = m_view.m_deets_page.get_date_time();
-        m_model->m_transaction_description = m_view.m_deets_page.get_description();
-        m_view.m_deets_page.set_focus ();
+        m_view.m_deets_page.prepare(&m_model->m_transaction_date, &m_model->m_transaction_description);
         break;
     case PAGE_STOCK_AMOUNT:
-        m_view.m_stock_amount_page.prepare (m_model->m_input_new_balance,
-                                           m_model->get_stock_balance_str());
-        if (!gnc_numeric_check(m_view.m_stock_amount_page.get_stock_amount()))
-            m_model->m_stock_entry->set_amount(m_view.m_stock_amount_page.get_stock_amount(),
-                                               m_model->m_errors);
-        m_view.m_stock_amount_page.set_stock_amount(m_model->get_new_amount_str());
-        m_view.m_stock_amount_page.m_amount.set_focus();
+    {
+        auto stock_entry = dynamic_cast<StockTransactionStockEntry*>(m_model->m_stock_entry.get());
+        if (stock_entry)
+            m_view.m_stock_amount_page.prepare(stock_entry, m_model.get(), m_model->m_errors);
         break;
+    }
     case PAGE_STOCK_VALUE:
-        m_model->m_stock_entry->m_memo = m_view.m_stock_value_page.get_memo();
-        if (!gnc_numeric_check(m_view.m_stock_value_page.m_value.get()))
-            m_model->m_stock_entry->set_value(m_view.m_stock_value_page.m_value.get(),
-                                            "stock", m_model->m_errors);
-        m_view.m_stock_value_page.set_price(m_model->calculate_price());
-        m_view.m_stock_value_page.m_value.set_focus();
+        m_view.m_stock_value_page.prepare(m_model->m_stock_entry.get(), m_model.get(), m_model->m_errors);
         break;
     case PAGE_CASH:
-        m_model->m_cash_entry->m_memo = m_view.m_cash_page.get_memo();
-        if (!gnc_numeric_check(m_view.m_cash_page.m_value.get()))
-            m_model->m_cash_entry->set_value (m_view.m_cash_page.m_value.get(),
-                                            "cash", m_model->m_errors);
-        m_model->m_cash_entry->m_account = m_view.m_cash_page.m_account.get();
-        m_view.m_cash_page.m_value.set_focus();
+        m_view.m_cash_page.prepare(m_model->m_cash_entry.get(), m_model->m_errors);
         break;
     case PAGE_FEES:
-        m_view.m_fees_page.set_capitalize_fees (m_model.get());
-        m_model->m_fees_entry->m_memo = m_view.m_fees_page.get_memo();
-        if (!gnc_numeric_check(m_view.m_fees_page.m_value.get()))
-            m_model->m_fees_entry->set_value (m_view.m_fees_page.m_value.get(), "fees",
-                                            m_model->m_errors);
-        m_model->m_fees_entry->m_account = m_view.m_fees_page.m_account.get();
-        m_view.m_fees_page.m_value.set_focus();
+    {
+        auto fees_entry = dynamic_cast<StockTransactionFeesEntry*>(m_model->m_fees_entry.get());
+        if (fees_entry)
+            m_view.m_fees_page.prepare(fees_entry, m_model->m_errors);
         break;
+    }
     case PAGE_DIVIDEND:
-        m_model->m_dividend_entry->m_memo = m_view.m_dividend_page.get_memo();
-        if (!gnc_numeric_check(m_view.m_dividend_page.m_value.get()))
-            m_model->m_dividend_entry->set_value (m_view.m_dividend_page.m_value.get(), "dividend", m_model->m_errors);
-        m_model->m_dividend_entry->m_account = m_view.m_dividend_page.m_account.get();
-        m_view.m_dividend_page.m_value.set_focus();
+        m_view.m_dividend_page.prepare(m_model->m_dividend_entry.get(), m_model->m_errors);
         break;
     case PAGE_CAPGAINS:
-        m_model->m_capgains_entry->m_memo = m_view.m_capgain_page.get_memo();
-        if (gnc_numeric_check(m_view.m_capgain_page.m_value.get()))
-            m_model->m_capgains_entry->set_value(m_view.m_capgain_page.m_value.get(), "capgains", m_model->m_errors);
-        m_model->m_capgains_entry->m_account = m_view.m_capgain_page.m_account.get();
-        m_view.m_capgain_page.m_value.set_focus();
+    {
+        auto capgain_entry = dynamic_cast<StockTransactionsStockCapGainsEntry*>(m_model->m_capgains_entry.get());
+        if (capgain_entry)
+            m_view.m_capgain_page.prepare(capgain_entry, m_model->m_errors);
         break;
+    }
     case PAGE_FINISH:
     {
         m_view.m_finish_page.prepare (m_view.m_window, m_model.get());
