@@ -420,6 +420,96 @@ then record the reverse split.")
     }
 };
 
+enum class LogMsgType
+{
+    info,
+    warning,
+    error
+};
+
+class LogMessage
+{
+    LogMsgType m_type;
+    const std::string m_message;
+public:
+    LogMessage(LogMsgType type, std::string&& message) :
+        m_type{type}, m_message(std::move(message)) {}
+    LogMessage(LogMsgType type, const char* message) :
+        m_type{type}, m_message(message) {}
+    LogMessage(const LogMessage&) = default;
+    LogMessage(LogMessage&&) = default;
+    ~LogMessage() = default;
+    LogMsgType type() { return m_type; }
+    const std::string& message() { return m_message; }
+};
+
+using Log = std::vector<LogMessage>;
+
+class Logger
+{
+    Log m_log;
+public: // compiler generated ctors & dtor are fine
+    void info(const char* message) { m_log.emplace_back(LogMsgType::info, message); }
+    void warn(const char* message) { m_log.emplace_back(LogMsgType::warning, message); }
+    void error(const char* message) { m_log.emplace_back(LogMsgType::error, message); }
+    void clear() { m_log.clear(); }
+    bool has_errors();
+    bool has_warnings();
+    void write_log(std::stringstream& stream, LogMsgType type);
+    void infos(std::stringstream& stream) { return write_log(stream, LogMsgType::info); }
+    void warnings(std::stringstream& stream) { return write_log(stream, LogMsgType::warning); }
+    void errors(std::stringstream& stream) { return write_log(stream, LogMsgType::error); }
+    std::string report();
+};
+
+void
+Logger::write_log(std::stringstream& stream, LogMsgType type)
+{
+    std::for_each(m_log.begin(), m_log.end(),
+                  [&](auto& msg){
+                      if (msg.type() == type)
+                          stream << "\n * " << msg.message();
+                  });
+}
+
+bool
+Logger::has_warnings()
+{
+    return std::any_of(m_log.begin(), m_log.end(),
+                       [](auto& msg){ return msg.type() == LogMsgType::warning;
+                       });
+}
+
+bool
+Logger::has_errors()
+{
+    return std::any_of(m_log.begin(), m_log.end(),
+                       [](auto& msg){ return msg.type() == LogMsgType::error;
+                       });
+}
+
+std::string
+Logger::report()
+{
+    std::stringstream summary;
+    if (!has_errors())
+    {
+        summary << _("No errors found. Click Apply to create transaction.");
+        infos(summary);
+    }
+    else
+    {
+        summary << _("The following errors must be fixed:");
+        errors(summary);
+    }
+    if (has_warnings())
+    {
+        summary << "\n\n" << _("The following warnings exist:");
+        warnings(summary);
+    }
+    return summary.str();
+}
+
 /** Possibly misnamed. Collects the required information to create a single
  * split in a transaction. This is the base class; there are child classes for
  * many split types.
@@ -445,9 +535,9 @@ struct StockTransactionEntry
 
     virtual void set_fieldmask(FieldMask mask);
     virtual void set_capitalize(bool capitalize) {}
-    virtual void set_value(gnc_numeric amount, const char* page, StringVec& errors);
+    virtual void set_value(gnc_numeric amount, const char* page, Logger& logger);
     virtual gnc_numeric amount() { return m_value; }
-    virtual void set_amount(gnc_numeric, StringVec&) {}
+    virtual void set_amount(gnc_numeric, Logger&) {}
     virtual void create_split(Transaction* trans, const char* action,
                               AccountVec& commits);
     virtual const char* print_value(GNCPrintAmountInfo info);
@@ -468,17 +558,17 @@ StockTransactionEntry::set_fieldmask(FieldMask mask)
 
 
 void
-StockTransactionEntry::set_value(gnc_numeric amount, const char* page, StringVec& errors)
+StockTransactionEntry::set_value(gnc_numeric amount, const char* page, Logger& logger)
 {
     DEBUG ("checking value %s page %s",
            gnc_num_dbg_to_string (amount),
            page);
 
-    auto add_error = [&errors](const char* format_str, const char* arg)
+    auto add_error = [&logger](const char* format_str, const char* arg)
     {
         char *buf = g_strdup_printf (_(format_str),
                                       g_dpgettext2 (nullptr, "Stock Assistant: Page name", arg));
-        errors.emplace_back (buf);
+        logger.error(buf);
         g_free (buf);
     };
 
@@ -568,7 +658,7 @@ struct StockTransactionStockEntry : public StockTransactionEntry
     }
     void set_fieldmask(FieldMask mask) override;
     gnc_numeric amount() override { return m_amount; }
-    void set_amount(gnc_numeric amount, StringVec& errors) override;
+    void set_amount(gnc_numeric amount, Logger& logger) override;
     gnc_numeric calculate_price(bool new_balance) override;
 };
 
@@ -583,7 +673,7 @@ StockTransactionStockEntry::set_fieldmask(FieldMask mask)
 }
 
 void
-StockTransactionStockEntry::set_amount(gnc_numeric amount, StringVec& errors)
+StockTransactionStockEntry::set_amount(gnc_numeric amount, Logger& logger)
 {
      if (!m_amount_enabled)
         return;
@@ -592,7 +682,7 @@ StockTransactionStockEntry::set_amount(gnc_numeric amount, StringVec& errors)
     {
         const char* err{_("Amount for stock value is missing.")};
 
-        errors.emplace_back(err);
+        logger.error(err);
         return;
     }
 
@@ -703,7 +793,7 @@ struct StockAssistantModel
     StockTransactionEntryPtr m_dividend_entry;
     StockTransactionEntryPtr m_capgains_entry;
     StockTransactionEntryPtr m_stock_cg_entry; // Required at this level for lifetime management
-    StringVec m_errors, m_warnings, m_infos;
+    Logger m_logger;
 
     StockAssistantModel (Account *account) :
         m_acct{account},
@@ -746,7 +836,6 @@ private:
 
     void add_price (QofBook *book);
     StockTransactionSplitInfo make_stock_split_info();
-    std::string summary_message();
 };
 
 bool
@@ -835,7 +924,7 @@ StockAssistantModel::calculate_price ()
 }
 
 static void
-check_txn_date(GList* last_split_node, time64 txn_date, StringVec& warnings)
+check_txn_date(GList* last_split_node, time64 txn_date, Logger& logger)
 {
     auto last_split = static_cast<const Split *>(last_split_node->data);
     auto last_split_date = xaccTransGetDate(xaccSplitGetParent(last_split));
@@ -852,7 +941,7 @@ check_txn_date(GList* last_split_node, time64 txn_date, StringVec& warnings)
               "of transactions dated after the new entry. Please review all transactions "
               "to ensure proper recording."),
             new_date_str, last_split_date_str);
-        warnings.push_back(warn_txt);
+        logger.warn(warn_txt);
         g_free(warn_txt);
         g_free(new_date_str);
         g_free(last_split_date_str);
@@ -863,7 +952,7 @@ StockTransactionSplitInfo
 StockAssistantModel::make_stock_split_info()
 {
     auto add_error_str = [this]
-        (const char* str) { m_errors.emplace_back (_(str)); };
+        (const char* str) { m_logger.error (_(str)); };
 
     StockTransactionSplitInfo line{m_stock_entry.get(),
         NC_ ("Stock Assistant: Page name", "stock value")};
@@ -879,7 +968,7 @@ StockAssistantModel::make_stock_split_info()
         auto ratio = gnc_numeric_div(stock_amount, m_balance_at_date,
                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
         stock_amount = gnc_numeric_sub_fixed(stock_amount, m_balance_at_date);
-        line.m_entry->set_amount(stock_amount, m_errors);
+        line.m_entry->set_amount(stock_amount, m_logger);
         line.m_units_in_red =
             negative_in_red && gnc_numeric_negative_p(stock_amount);
         if (gnc_numeric_check(ratio) || !gnc_numeric_positive_p(ratio))
@@ -909,38 +998,12 @@ StockAssistantModel::make_stock_split_info()
     return line;
 }
 
-std::string
-StockAssistantModel::summary_message()
-{
-    std::ostringstream summary;
-    auto summary_add = [&summary](auto a) { summary << "\n• " << a; };
-    if (m_errors.empty())
-    {
-        summary << _("No errors found. Click Apply to create transaction.");
-        std::for_each (m_infos.begin(), m_infos.end(), summary_add);
-    }
-    else
-    {
-        summary << _("The following errors must be fixed:");
-        std::for_each (m_errors.begin(), m_errors.end(), summary_add);
-    }
-    if (!m_warnings.empty())
-    {
-        summary << "\n\n" << _("The following warnings exist:");
-        std::for_each (m_warnings.begin(), m_warnings.end(), summary_add);
-    }
-
-    return summary.str();
-}
-
 std::tuple<bool, std::string, SplitInfoVec>
 StockAssistantModel::generate_list_of_splits() {
     if (!m_txn_types || !m_txn_type)
         return { false, "Error: txn_type not initialized", {} };
 
-    m_warnings.clear();
-    m_errors.clear();
-    m_infos.clear();
+    m_logger.clear();
     m_list_of_splits.clear();
 
     gnc_numeric debit = gnc_numeric_zero ();
@@ -952,7 +1015,7 @@ StockAssistantModel::generate_list_of_splits() {
     // to review them.
     auto last_split_node = g_list_last (xaccAccountGetSplitList (m_acct));
     if (last_split_node)
-        check_txn_date(last_split_node, m_transaction_date, m_warnings);
+        check_txn_date(last_split_node, m_transaction_date, m_logger);
 
 
     m_list_of_splits.push_back (make_stock_split_info());
@@ -968,7 +1031,7 @@ StockAssistantModel::generate_list_of_splits() {
             (_(tmpl),
              gnc_commodity_get_mnemonic (xaccAccountGetCommodity (m_acct)),
              price_str, date_str);
-        m_infos.emplace_back (price_msg);
+        m_logger.info(price_msg);
         g_free (date_str);
     }
 
@@ -1022,7 +1085,7 @@ StockAssistantModel::generate_list_of_splits() {
         if (err_act)
         {
             auto err_str = g_strdup_printf (N_("Transaction can't balance, %s is error value %s"), err_act, err_reason);
-            m_errors.emplace_back(err_str);
+            m_logger.error(err_str);
             g_free (err_str);
         }
         else
@@ -1031,7 +1094,7 @@ StockAssistantModel::generate_list_of_splits() {
             auto debit_str = g_strdup (xaccPrintAmount (debit, m_curr_pinfo));
             auto credit_str = g_strdup (xaccPrintAmount (credit, m_curr_pinfo));
             auto error_str = g_strdup_printf (_(imbalance_str), debit_str, credit_str);
-            m_errors.emplace_back (error_str);
+            m_logger.error (error_str);
             g_free (error_str);
             g_free (credit_str);
             g_free (debit_str);
@@ -1040,8 +1103,8 @@ StockAssistantModel::generate_list_of_splits() {
 
     // generate final summary message. Collates a header, the errors
     // and warnings. Then allow completion if errors is empty.
-    m_ready_to_create = m_errors.empty();
-    return { m_ready_to_create, summary_message(), m_list_of_splits };
+    m_ready_to_create = !m_logger.has_errors();
+    return { m_ready_to_create, m_logger.report(), m_list_of_splits };
 }
 
 std::tuple<bool, Transaction*>
@@ -1415,7 +1478,7 @@ struct PageStockAmount
     GncAmountEdit m_amount;
     GtkWidget * m_amount_label;
     PageStockAmount (GtkBuilder *builder, Account* account);
-    void prepare (StockTransactionStockEntry*, StockAssistantModel*, StringVec&);
+    void prepare (StockTransactionStockEntry*, StockAssistantModel*, Logger&);
     gnc_numeric get_stock_amount () { return m_amount.get(); }
     void set_stock_amount (std::string new_amount_str);
     void connect(StockAssistantModel *model);
@@ -1435,7 +1498,7 @@ PageStockAmount::PageStockAmount (GtkBuilder *builder, Account* account) :
 
 void
 PageStockAmount::prepare (StockTransactionStockEntry* entry, StockAssistantModel* model,
-                          StringVec& errors)
+                          Logger& logger)
 {
     gtk_label_set_text_with_mnemonic
         (GTK_LABEL (m_amount_label),
@@ -1449,7 +1512,7 @@ PageStockAmount::prepare (StockTransactionStockEntry* entry, StockAssistantModel
          _("Enter the number of shares you gained or lost in the transaction."));
     gtk_label_set_text (GTK_LABEL (m_prev_amount), model->get_stock_balance_str().c_str());
     if (!gnc_numeric_check(get_stock_amount()))
-        entry->set_amount(get_stock_amount(), errors);
+        entry->set_amount(get_stock_amount(), logger);
     set_stock_amount(model->get_new_amount_str());
     m_amount.set_focus();
 
@@ -1459,7 +1522,7 @@ static void
 page_stock_amount_changed_cb(GtkWidget *widget, StockAssistantModel *model)
 {
     auto me = static_cast<PageStockAmount*>(g_object_get_data (G_OBJECT (widget), "owner"));
-    model->m_stock_entry->set_amount(me->m_amount.get(), model->m_errors);
+    model->m_stock_entry->set_amount(me->m_amount.get(), model->m_logger);
     me->set_stock_amount (model->get_new_amount_str());
 }
 
@@ -1486,7 +1549,7 @@ struct PageStockValue
     PageStockValue (GtkBuilder *builder, Account* account);
     const char* get_memo ();
     void connect(StockAssistantModel *model);
-    void prepare(StockTransactionEntry*, StockAssistantModel*, StringVec&);
+    void prepare(StockTransactionEntry*, StockAssistantModel*, Logger&);
     void set_price(const gchar *val);
     void set_price (std::tuple<bool, gnc_numeric, const char*> price_tuple);
 };
@@ -1496,7 +1559,7 @@ page_stock_value_changed_cb(GtkWidget *widget, StockAssistantModel *model)
 {
     auto me = static_cast<PageStockValue*>(g_object_get_data (G_OBJECT (widget), "owner"));
     auto value = me->m_value.get ();
-    model->m_stock_entry->set_value (value, "stocks", model->m_errors);
+    model->m_stock_entry->set_value (value, "stocks", model->m_logger);
     me->set_price (model->calculate_price());
 }
 
@@ -1518,11 +1581,11 @@ PageStockValue::connect(StockAssistantModel *model)
 }
 
 void
-PageStockValue::prepare(StockTransactionEntry* entry, StockAssistantModel* model, StringVec& errors)
+PageStockValue::prepare(StockTransactionEntry* entry, StockAssistantModel* model, Logger& logger)
 {
     entry->m_memo = get_memo();
     if (!gnc_numeric_check(m_value.get()))
-        entry->set_value(m_value.get(), "stock", errors);
+        entry->set_value(m_value.get(), "stock", logger);
     set_price(model->calculate_price());
     m_value.set_focus();
 }
@@ -1556,7 +1619,7 @@ struct PageCash
     GncAmountEdit m_value;
     PageCash (GtkBuilder *builder, Account* account);
     void connect(StockTransactionEntry* entry);
-    void prepare(StockTransactionEntry* entry, StringVec& errors);
+    void prepare(StockTransactionEntry* entry, Logger& logger);
     const char* get_memo();
 };
 
@@ -1580,11 +1643,11 @@ PageCash::connect(StockTransactionEntry* entry)
 }
 
 void
-PageCash::prepare(StockTransactionEntry* entry, StringVec& errors)
+PageCash::prepare(StockTransactionEntry* entry, Logger& logger)
 {
     entry->m_memo = get_memo();
     if (!gnc_numeric_check(m_value.get()))
-        entry->set_value (m_value.get(), "cash", errors);
+        entry->set_value (m_value.get(), "cash", logger);
     entry->m_account = m_account.get();
     m_value.set_focus();
 }
@@ -1611,7 +1674,7 @@ struct PageFees
     void set_capitalize_fees (StockTransactionFeesEntry*);
     void set_account (Account *acct) { m_account.set(acct); }
     void update_fees_acct_sensitive (bool sensitive);
-    void prepare(StockTransactionFeesEntry*, StringVec&);
+    void prepare(StockTransactionFeesEntry*, Logger&);
 };
 
 PageFees::PageFees(GtkBuilder *builder, Account* account)
@@ -1680,12 +1743,12 @@ PageFees::connect(StockTransactionFeesEntry* entry)
 }
 
 void
-PageFees::prepare(StockTransactionFeesEntry* entry, StringVec& errors)
+PageFees::prepare(StockTransactionFeesEntry* entry, Logger& logger)
 {
         set_capitalize_fees (entry);
         entry->m_memo = get_memo();
         if (!gnc_numeric_check(m_value.get()))
-            entry->set_value (m_value.get(), "fees", errors);
+            entry->set_value (m_value.get(), "fees", logger);
         entry->m_account = m_account.get();
         m_value.set_focus();
 }
@@ -1699,7 +1762,7 @@ struct PageDividend
     GncAmountEdit m_value;
     PageDividend (GtkBuilder *builder, Account* account);
     void connect(StockTransactionEntry*);
-    void prepare(StockTransactionEntry*, StringVec&);
+    void prepare(StockTransactionEntry*, Logger&);
     const char* get_memo();
 };
 
@@ -1723,11 +1786,11 @@ PageDividend::connect(StockTransactionEntry* entry)
 }
 
 void
-PageDividend::prepare(StockTransactionEntry* entry, StringVec& errors)
+PageDividend::prepare(StockTransactionEntry* entry, Logger& logger)
 {
     entry->m_memo = get_memo();
     if (!gnc_numeric_check(m_value.get()))
-        entry->set_value(m_value.get(), "dividend", errors);
+        entry->set_value(m_value.get(), "dividend", logger);
     entry->m_account = m_account.get();
     m_value.set_focus();
 }
@@ -1747,7 +1810,7 @@ struct PageCapGain
     GncAmountEdit m_value;
     PageCapGain (GtkBuilder *builder, Account* account);
     void connect(StockTransactionsStockCapGainsEntry* entry);
-    void prepare(StockTransactionsStockCapGainsEntry* entry, StringVec& errors);
+    void prepare(StockTransactionsStockCapGainsEntry* entry, Logger& logger);
     const char* get_memo();
 };
 
@@ -1777,11 +1840,11 @@ PageCapGain::connect(StockTransactionsStockCapGainsEntry*entry)
 }
 
 void
-PageCapGain::prepare(StockTransactionsStockCapGainsEntry* entry, StringVec& errors)
+PageCapGain::prepare(StockTransactionsStockCapGainsEntry* entry, Logger& logger)
 {
     entry->m_memo = get_memo();
     if (gnc_numeric_check(m_value.get()))
-        entry->set_value(m_value.get(), "capgains", errors);
+        entry->set_value(m_value.get(), "capgains", logger);
         entry->m_account = m_account.get();
         m_value.set_focus();
 }
@@ -2011,30 +2074,30 @@ StockAssistantController::prepare(GtkAssistant* assistant, GtkWidget* page)
     {
         auto stock_entry = dynamic_cast<StockTransactionStockEntry*>(m_model->m_stock_entry.get());
         if (stock_entry)
-            m_view.m_stock_amount_page.prepare(stock_entry, m_model.get(), m_model->m_errors);
+            m_view.m_stock_amount_page.prepare(stock_entry, m_model.get(), m_model->m_logger);
         break;
     }
     case PAGE_STOCK_VALUE:
-        m_view.m_stock_value_page.prepare(m_model->m_stock_entry.get(), m_model.get(), m_model->m_errors);
+        m_view.m_stock_value_page.prepare(m_model->m_stock_entry.get(), m_model.get(), m_model->m_logger);
         break;
     case PAGE_CASH:
-        m_view.m_cash_page.prepare(m_model->m_cash_entry.get(), m_model->m_errors);
+        m_view.m_cash_page.prepare(m_model->m_cash_entry.get(), m_model->m_logger);
         break;
     case PAGE_FEES:
     {
         auto fees_entry = dynamic_cast<StockTransactionFeesEntry*>(m_model->m_fees_entry.get());
         if (fees_entry)
-            m_view.m_fees_page.prepare(fees_entry, m_model->m_errors);
+            m_view.m_fees_page.prepare(fees_entry, m_model->m_logger);
         break;
     }
     case PAGE_DIVIDEND:
-        m_view.m_dividend_page.prepare(m_model->m_dividend_entry.get(), m_model->m_errors);
+        m_view.m_dividend_page.prepare(m_model->m_dividend_entry.get(), m_model->m_logger);
         break;
     case PAGE_CAPGAINS:
     {
         auto capgain_entry = dynamic_cast<StockTransactionsStockCapGainsEntry*>(m_model->m_capgains_entry.get());
         if (capgain_entry)
-            m_view.m_capgain_page.prepare(capgain_entry, m_model->m_errors);
+            m_view.m_capgain_page.prepare(capgain_entry, m_model->m_logger);
         break;
     }
     case PAGE_FINISH:
