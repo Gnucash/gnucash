@@ -354,6 +354,10 @@ update_info (SRInfo* info, SplitRegister* reg)
         gnc_split_register_get_current_trans_split (reg, NULL);
     info->cursor_hint_cursor_class =
         gnc_split_register_get_current_cursor_class (reg);
+
+    if (!info->first_pass && !info->quickfill_setup)
+        info->quickfill_setup = TRUE;
+
     info->hint_set_by_traverse = FALSE;
     info->traverse_to_new = FALSE;
     info->exact_traversal = FALSE;
@@ -746,15 +750,14 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
             }
         }
 
-        /* If this is the first load of the register,
-         * fill up the quickfill cells. */
-        if (info->first_pass)
+        /* On first load the split list is empty so fill up the quickfill cells
+         * only on the next load. */
+        if (!info->first_pass && !info->quickfill_setup)
             add_quickfill_completions (reg->table->layout, trans, split, has_last_num);
 
         gnc_completion_cell_add_menu_item (
             (CompletionCell*) gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
              xaccTransGetDescription (trans));
-
 
         if (trans == find_trans)
             new_trans_row = vcell_loc.virt_row;
