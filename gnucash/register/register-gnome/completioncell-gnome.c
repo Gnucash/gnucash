@@ -170,6 +170,9 @@ text_width (PangoLayout *layout)
 static void
 horizontal_scroll_to_found_text (PopBox* box, char* item_string, gint found_location)
 {
+    if (!gtk_widget_get_realized (GTK_WIDGET(box->item_list->tree_view)))
+        return;
+
     GtkAllocation alloc;
     gtk_widget_get_allocation (GTK_WIDGET(box->item_list->tree_view), &alloc);
     gint scroll_point = 0;
