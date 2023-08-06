@@ -2341,7 +2341,7 @@ main_window_update_page_name (GncPluginPage *page,
     GncMainWindow *window;
     GncMainWindowPrivate *priv;
     GtkWidget *label, *entry;
-    gchar *name, *old_page_name, *old_page_long_name;
+    gchar *name;
     TabWidth *tw;
 
     ENTER(" ");
@@ -2361,9 +2361,6 @@ main_window_update_page_name (GncPluginPage *page,
         return;
     }
 
-    old_page_name = g_strdup( gnc_plugin_page_get_page_name(page));
-    old_page_long_name = g_strdup( gnc_plugin_page_get_page_long_name(page));
-
     /* Update the plugin */
     gnc_plugin_page_set_page_name(page, name);
 
@@ -2371,8 +2368,6 @@ main_window_update_page_name (GncPluginPage *page,
     window = GNC_MAIN_WINDOW(page->window);
     if (!window)
     {
-        g_free(old_page_name);
-        g_free(old_page_long_name);
         g_free(name);
         LEAVE("no window widget available");
         return;
@@ -2397,8 +2392,6 @@ main_window_update_page_name (GncPluginPage *page,
 
     /* Force an update of the window title */
     gnc_main_window_update_title(window);
-    g_free(old_page_long_name);
-    g_free(old_page_name);
     g_free(name);
     LEAVE("done");
 }
