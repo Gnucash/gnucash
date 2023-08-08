@@ -728,7 +728,7 @@ GncQuotesImpl::parse_quotes (const std::string& quote_str)
 {
     bpt::ptree pt;
     std::istringstream ss {quote_str};
-    const char* what = nullptr;
+    std::string what;
 
     try
     {
@@ -747,15 +747,26 @@ GncQuotesImpl::parse_quotes (const std::string& quote_str)
     }
     catch (...) {
         std::string error_msg{_("Failed to parse result returned by Finance::Quote.")};
+        error_msg += "\n";
+        //Translators: This labels the return value of a query to Finance::Quote written in an error.
+        error_msg += _("Result:");
+        error_msg += "\n";
+        error_msg += quote_str;
         throw(GncQuoteException(error_msg));
     }
-    if (what)
+    if (!what.empty())
     {
         std::string error_msg{_("Failed to parse result returned by Finance::Quote.")};
         error_msg += "\n";
+        //Translators: This is the error message reported by the Online Quotes processing code.
         error_msg += _("Error message:");
         error_msg += "\n";
         error_msg += what;
+        error_msg += "\n";
+        //Translators: This labels the return value of a query to Finance::Quote written in an error.
+        error_msg += _("Result:");
+        error_msg += "\n";
+        error_msg += quote_str;
         throw(GncQuoteException(error_msg));
     }
     return pt;

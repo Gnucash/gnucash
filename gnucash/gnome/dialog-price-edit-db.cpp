@@ -569,7 +569,7 @@ gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data)
     {
         gnc_unset_busy_cursor(nullptr);
         PERR("Price retrieval failed: %s", err.what());
-        gnc_error_dialog(GTK_WINDOW(pdb_dialog), _("Price retrieval failed: %s"), err.what());
+        gnc_error_dialog(GTK_WINDOW(pdb_dialog->window), _("Price retrieval failed: %s"), err.what());
     }
 
     /* Without this, the summary bar on the accounts tab
