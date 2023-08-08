@@ -224,12 +224,8 @@ gnc_get_current_book (void)
 gboolean
 gnc_is_new_book (void)
 {
-    return ((!gnc_current_session_exist() ||
-                            (gnc_current_session_exist() &&
-                                !gnc_account_get_children(
-                                    gnc_book_get_root_account(
-                                        gnc_get_current_book()))))
-                            ? TRUE : FALSE);
+    return (!gnc_current_session_exist() ||
+            gnc_account_n_children (gnc_book_get_root_account (gnc_get_current_book ())) == 0);
 }
 
 #define OPTION_TAXUS_NAME "tax_US/name"
