@@ -72,10 +72,8 @@ static QofLogModule log_module = GNC_MOD_IMPORT;
 static gboolean auto_create_commodity = FALSE;
 static Account *ofx_parent_account = NULL;
 
-typedef struct OfxTransactionData OfxTransactionData;
-
 // Structure we use to gather information about statement balance/account etc.
-typedef struct _ofx_info
+struct OfxInfo
 {
     GtkWindow* parent;
     GNCImportMainMatcher *gnc_ofx_importer_gui;
@@ -88,9 +86,14 @@ typedef struct _ofx_info
     GSList* file_list;                      // List of OFX files to import
     std::vector<Transaction*> trans_list;                      // We store the processed ofx transactions here
     gint response;                          // Response sent by the match gui
-} ofx_info ;
+    OfxInfo (GtkWindow* p, GSList *filenames) :
+        parent{p}, gnc_ofx_importer_gui {nullptr}, last_import_account{nullptr}, last_investment_account{nullptr},
+        last_income_account{nullptr}, num_trans_processed{0}, statement{nullptr}, run_reconcile{false},
+        file_list{filenames}, response{0}
+    {};
+};
 
-static void runMatcher(ofx_info* info, char * selected_filename, gboolean go_to_next_file);
+static void runMatcher(OfxInfo* info, char * selected_filename, gboolean go_to_next_file);
 
 /*
 int ofx_proc_status_cb(struct OfxStatusData data)
@@ -548,7 +551,7 @@ fill_transaction_notes(Transaction *transaction, OfxTransactionData *data)
 
 static void
 process_bank_transaction(Transaction *transaction, Account *import_account,
-                         OfxTransactionData *data, ofx_info *info)
+                         OfxTransactionData *data, OfxInfo *info)
 {
     Split *split;
     gnc_numeric gnc_amount;
@@ -650,7 +653,7 @@ continue_account_selection(GtkWidget* parent, Account* account,
 }
 
 static Account*
-choose_investment_account_helper(OfxTransactionData *data, ofx_info *info,
+choose_investment_account_helper(OfxTransactionData *data, OfxInfo *info,
                                  InvestmentAcctData *inv_data)
 {
     Account *investment_account, *parent_account;
@@ -703,7 +706,7 @@ choose_investment_account_helper(OfxTransactionData *data, ofx_info *info,
 }
 
 static Account*
-choose_investment_account(OfxTransactionData *data, ofx_info *info,
+choose_investment_account(OfxTransactionData *data, OfxInfo *info,
                           gnc_commodity *commodity)
 {
     Account* investment_account = NULL;
@@ -737,7 +740,7 @@ choose_investment_account(OfxTransactionData *data, ofx_info *info,
 
 static Account*
 choose_income_account(Account* investment_account, Transaction *transaction,
-                      OfxTransactionData *data, ofx_info *info)
+                      OfxTransactionData *data, OfxInfo *info)
 {
     Account *income_account = NULL;
     DEBUG("Now let's find an account for the destination split");
@@ -848,7 +851,7 @@ add_currency_split(Transaction *transaction, Account* account,
 
 static void
 process_investment_transaction(Transaction *transaction, Account *import_account,
-                               OfxTransactionData *data, ofx_info *info)
+                               OfxTransactionData *data, OfxInfo *info)
 {
     Account *investment_account = NULL;
     Account *income_account = NULL;
@@ -918,7 +921,7 @@ int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
     gnc_commodity *currency = NULL;
     QofBook *book;
     Transaction *transaction;
-    ofx_info* info = (ofx_info*) user_data;
+    OfxInfo* info = (OfxInfo*) user_data;
 
     g_assert(info->parent);
 
@@ -1021,7 +1024,7 @@ int ofx_proc_transaction_cb(OfxTransactionData data, void *user_data)
 
 int ofx_proc_statement_cb (struct OfxStatementData data, void * statement_user_data)
 {
-    ofx_info* info = (ofx_info*) statement_user_data;
+    OfxInfo* info = (OfxInfo*) statement_user_data;
     struct OfxStatementData *statement = g_new (struct OfxStatementData, 1);
     *statement = data;
     info->statement = g_list_prepend (info->statement, statement);
@@ -1040,7 +1043,7 @@ int ofx_proc_account_cb(struct OfxAccountData data, void * account_user_data)
     /* In order to trigger a book options display on the creation of a new book,
      * we need to detect when we are dealing with a new book. */
     gboolean new_book = gnc_is_new_book();
-    ofx_info* info = (ofx_info*) account_user_data;
+    OfxInfo* info = (OfxInfo*) account_user_data;
     Account* account = NULL;
 
     const gchar * account_type_name = _("Unknown OFX account");
@@ -1178,13 +1181,13 @@ double ofx_get_investment_amount(const OfxTransactionData* data)
 
 // Forward declaration, required because several static functions depend on one-another.
 static void
-gnc_file_ofx_import_process_file (ofx_info* info);
+gnc_file_ofx_import_process_file (OfxInfo* info);
 
 // gnc_ofx_process_next_file processes the next file in the info->file_list.
 static void
 gnc_ofx_process_next_file (GtkDialog *dialog, gpointer user_data)
 {
-    ofx_info* info = (ofx_info*) user_data;
+    OfxInfo* info = (OfxInfo*) user_data;
     // Free the statement (if it was allocated)
     g_list_free_full (info->statement, g_free);
     info->statement = NULL;
@@ -1204,14 +1207,14 @@ static void
 gnc_ofx_on_match_click (GtkDialog *dialog, gint response_id, gpointer user_data)
 {
     // Record the response of the user. If cancel we won't go to the next file, etc.
-    ofx_info* info = (ofx_info*)user_data;
+    OfxInfo* info = (OfxInfo*)user_data;
     info->response = response_id;
 }
 
 static void
 gnc_ofx_match_done (GtkDialog *dialog, gpointer user_data)
 {
-    ofx_info* info = (ofx_info*) user_data;
+    OfxInfo* info = (OfxInfo*) user_data;
 
     /* The the user did not click OK, don't process the rest of the
      * transaction, don't go to the next of xfile.
@@ -1279,7 +1282,7 @@ gnc_ofx_match_done (GtkDialog *dialog, gpointer user_data)
 // This callback is triggered when the user checks or unchecks the reconcile after match
 // check box in the matching dialog.
 static void
-reconcile_when_close_toggled_cb (GtkToggleButton *togglebutton, ofx_info* info)
+reconcile_when_close_toggled_cb (GtkToggleButton *togglebutton, OfxInfo* info)
 {
     info->run_reconcile = gtk_toggle_button_get_active (togglebutton);
 }
@@ -1295,7 +1298,7 @@ make_date_amount_key (time64 date, gnc_numeric amount)
 }
 
 static void
-runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
+runMatcher (OfxInfo* info, char * selected_filename, gboolean go_to_next_file)
 {
     GtkWindow *parent = info->parent;
     std::vector<Transaction*> trans_list_remain;
@@ -1385,7 +1388,7 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
 
 // Aux function to process the OFX file in info->file_list
 static void
-gnc_file_ofx_import_process_file (ofx_info* info)
+gnc_file_ofx_import_process_file (OfxInfo* info)
 {
     LibofxContextPtr libofx_context;
     char* filename = NULL;
@@ -1439,7 +1442,6 @@ void gnc_file_ofx_import (GtkWindow *parent)
     GSList* selected_filenames = NULL;
     char *default_dir;
     GList *filters = NULL;
-    ofx_info* info = NULL;
     GtkFileFilter* filter = gtk_file_filter_new ();
 
 
@@ -1476,17 +1478,10 @@ void gnc_file_ofx_import (GtkWindow *parent)
             gnc_prefs_get_bool (GNC_PREFS_GROUP_IMPORT, GNC_PREF_AUTO_COMMODITY);
 
         DEBUG("Opening selected file(s)");
+
         // Create the structure that holds the list of files to process and the statement info.
-        info = new ofx_info;
-        info->num_trans_processed = 0;
-        info->statement = NULL;
-        info->last_investment_account = NULL;
-        info->last_import_account = NULL;
-        info->last_income_account = NULL;
-        info->parent = parent;
-        info->run_reconcile = FALSE;
-        info->file_list = selected_filenames;
-        info->response = 0;
+        auto info = new OfxInfo (parent, selected_filenames);
+
         // Call the aux import function.
         gnc_file_ofx_import_process_file (info);
     }
