@@ -340,7 +340,7 @@ void gnc_import_TransInfo_delete (GNCImportTransInfo *info)
 {
     if (info)
     {
-        g_list_free (info->match_list);
+        g_list_free_full (info->match_list, g_free);
         /*If the transaction exists and is still open, it must be destroyed*/
         if (xaccTransIsOpen(info->trans))
         {
