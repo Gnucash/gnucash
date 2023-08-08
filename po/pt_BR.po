@@ -15,10 +15,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-07-15 10:52+0000\n"
+"PO-Revision-Date: 2023-08-08 15:48+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -802,14 +802,6 @@ msgstr ""
 "GnuCash."
 
 #: doc/tip_of_the_day.list.c:44
-#, fuzzy
-#| msgid ""
-#| "Every transaction has a \"Notes\" field where you can put useful "
-#| "information.\n"
-#| "\n"
-#| "To make it visible\n"
-#| "select \"View\" in the menu bar and check \"Double Line\" or\n"
-#| "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -823,7 +815,7 @@ msgstr ""
 "\n"
 "Para torná-lo visível\n"
 "escolha \"Exibir\" na barra do menu e marque \"Linha dupla\" ou\n"
-"marque \"Modo de linha dupla\" nas Preferências:Padrões do Cadastro."
+"marque \"Visualização de linha dupla\" nas Preferências:Padrões do cadastro."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -1004,20 +996,15 @@ msgstr ""
 "as novas transações. Não é preciso reiniciar o GnuCash."
 
 #: doc/tip_of_the_day.list.c:121
-#, fuzzy
-#| msgid ""
-#| "To search through all your transactions, start a search (Edit->Find...) "
-#| "from the main accounts hierarchy page. To limit your search to a single "
-#| "account, start the search from that account's register."
 msgid ""
 "To search through all your transactions, start a search (Edit->Find…) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Para pesquisar ao longo de todas as transações, inicie uma pesquisa (Editar-"
-">Pesquisar...) a partir da conta principal na página de contas. Para limitar "
-"a sua pesquisa numa única conta, inicie a sua pesquisa a partir do cadastro "
-"daquela conta."
+"Para pesquisar ao longo de todas as transações, inicie uma pesquisa "
+"(Editar->Pesquisar...) a partir da conta principal na página de contas. Para "
+"limitar a sua pesquisa numa única conta, inicie a sua pesquisa a partir do "
+"cadastro da conta."
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -1396,14 +1383,12 @@ msgstr "Você não possui nenhuma conta de ações com saldo!"
 #. Translators: this is a stock transaction describing an
 #. Initial stock long purchase
 #: gnucash/gnome/assistant-stock-transaction.cpp:190
-#, fuzzy
-#| msgid "Open"
 msgid "Open buy"
-msgstr "Abrir"
+msgstr "Compra aberta"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:191
 msgid "Initial stock long purchase."
-msgstr ""
+msgstr "Compra inicial de ações a longo prazo."
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
