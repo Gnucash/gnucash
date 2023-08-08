@@ -39,6 +39,7 @@ Type of account identifiers
 !Type:Cat        Category list
 !Type:Class      Class list
 !Type:Memorized  Memorized transaction list
+!Type:Prices     Security prices
 
 Note that !Account is used both to be a header for account information,
 and to be a header for a list of transactions.
@@ -234,6 +235,22 @@ C      Code
 R      Rate
 L      Link
 W      Private
+
+
+Security Prices
+---------------
+The records in a list of security prices do not use any letter
+identifiers, and take the following form:
+"<symbol>",<price>,"<date>"
+where <symbol> is the security's ticker symbol, <price> is the security
+price, and <date> is the date the security had that price.
+The price can be either a decimal number of a whole number followed by
+a practional price.  For example, for shares of Intuit updated 6/30/98,
+with a price of $50.50 per share, the price record would be:
+"INTU",50 1/2,"6/30/98"
+or
+"INTU",50.50,"6/30/98"
+Each price is followed by a ^ (end of entry indicator).
 
 
 =====================================================================

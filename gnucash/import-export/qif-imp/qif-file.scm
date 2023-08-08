@@ -49,6 +49,7 @@
 (export qif-file:parse-fields-results)
 (export qif-file:read-file)
 (export qif-file:reparse-dates)
+(export qif-file:parse-price-line)
 
 (define qif-bad-numeric-rexp
   (make-regexp "^\\.\\.\\."))
@@ -229,8 +230,7 @@
 
                           ;; Security price list
                           ((type:prices)
-                           ;; Not supported. We really should warn the user.
-                           #f)
+                           (set! current-xtn (make-qif-price)))
 
                           ((option:autoswitch)
                            (set! ignore-accounts #t))
@@ -516,6 +516,20 @@
                            (else
                             (mywarn (G_ "Ignoring security line") ": " line))))
 
+                        ;;;;;;;;;;;;;;;;
+                        ;; Price list ;;
+                        ;;;;;;;;;;;;;;;;
+                        ((type:prices)
+                         (case tag
+                           ((#\^)
+                             ;; end-of-record
+                             (set! current-xtn (make-qif-price)))
+                           (else
+                             ;; Parse the price which is a mini csv of 3 entries
+                             (set! current-xtn (qif-file:parse-price-line line))
+                             (if (equal? current-xtn #f)
+                                 (mywarn (G_ "Could not parse price line") ": " line)
+                                 (qif-file:add-price! self current-xtn)))))
 
                         ;; trying to sneak one by, eh?
                         (else
@@ -724,6 +738,9 @@
       ;;
       (set-sub (G_ "Parsing categories"))
       ;; The category tasks will be 5% of the overall parsing effort.
+      ;;   Note, the presumption is that reading the file is 70% of the
+      ;;   overall effort, so this function only has ~30% to dole out,
+      ;;   hence 5% at a time here
       (start-sub 0.05)
 
       ;; Tax classes; assume this is 50% of the category parsing effort.
@@ -786,6 +803,39 @@
        qif-acct:type qif-acct:set-type!
        qif-parse:parse-acct-type (qif-file:accounts self)
        add-error 'acct-type
+       update-progress)
+      (finish-sub)
+
+      (finish-sub)
+
+
+      ;;
+      ;; Prices
+      ;;
+      (set-sub (G_ "Parsing prices"))
+      ;; We process the list of prices
+      (start-sub 0.05)
+
+      ;; Dates
+      (start-sub 0.5)
+      (check-and-parse-field
+       qif-price:date qif-price:set-date! equal?
+       qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m)
+       qif-parse:parse-date/format
+       (qif-file:prices self)
+       qif-parse:print-date
+       'error-on-ambiguity add-error 'date
+       update-progress)
+      (finish-sub)
+
+      ;; Amounts
+      (start-sub 1)
+      (check-and-parse-field
+       qif-price:share-price qif-price:set-share-price! gnc-numeric-equal
+       qif-parse:check-number-format '(decimal comma)
+       qif-parse:parse-number/format (qif-file:prices self)
+       qif-parse:print-number
+       'guess-on-ambiguity add-error 'share-price
        update-progress)
       (finish-sub)
 
@@ -1083,3 +1133,36 @@
               (test-results (cdr results))))))
 
   (if results (test-results results) #f))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-file:parse-price-line
+;;
+;;  Takes an expected price line and returns a qif-price object
+;;
+;;  We are parsing "SYMBOL",value,"DATE"
+;;    where symbol is the alpha name of the security symbol,
+;;    value can be a float like 42.50 or a fractional expression like 42 1/2
+;;    and date can be the typical Quicken date formats
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-file:parse-price-line line)
+  (let ((current-xtn (make-qif-price)))
+    (if (not (false-if-exception
+        (let* ((symbol (string-trim-both (string-trim-both (car (string-split line #\,)) char-set:punctuation)))
+               (price (cadr (string-split line #\,)))
+               (fracprice (string-split price #\space))
+               (date (string-trim-both (string-trim-both (caddr (string-split line #\,)) char-set:punctuation))))
+
+          (qif-price:set-symbol! current-xtn symbol)
+          (qif-price:set-date! current-xtn date)
+
+          ;; If we have a fractional portion, convert it to float
+          (if (> (length fracprice) 1)
+              (let ((total (+ (string->number (car fracprice))
+                 (string->number (cadr fracprice)))))
+              (set! price (format #f "~f" total))))
+
+          (qif-price:set-share-price! current-xtn price))))
+       (set! current-xtn #f))
+    current-xtn))
