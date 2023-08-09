@@ -7,14 +7,15 @@
 # Dullus <dullus@gmail.com>, 2022.
 # Zdenko Podobný <zdenop@gmail.com>, 2022.
 # ZdPo Ster <zdposter@gmail.com>, 2023.
+# Milan Šalka <salka.milan@googlemail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-03-28 19:40+0000\n"
-"Last-Translator: ZdPo Ster <zdposter@gmail.com>\n"
+"PO-Revision-Date: 2023-08-09 20:50+0000\n"
+"Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
 "Language: sk\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 5.0-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-Language: Slovak\n"
 "X-Poedit-Country: SLOVAKIA\n"
@@ -59,9 +60,8 @@ msgstr "Začiatku toto roku"
 
 #: bindings/guile/date-utilities.scm:720
 #: libgnucash/engine/gnc-option-date.cpp:264
-#, fuzzy
 msgid "First day of the current calendar year."
-msgstr "Začiatku aktuálneho kalendárneho roku"
+msgstr "Začiatku aktuálneho kalendárneho roku."
 
 #: bindings/guile/date-utilities.scm:724
 #: gnucash/gnome-utils/gnc-period-select.c:86
@@ -71,9 +71,8 @@ msgstr "Konca tohto roku"
 
 #: bindings/guile/date-utilities.scm:727
 #: libgnucash/engine/gnc-option-date.cpp:272
-#, fuzzy
 msgid "Last day of the current calendar year."
-msgstr "Začiatku aktuálneho kalendárneho roku"
+msgstr "Začiatku aktuálneho kalendárneho roku."
 
 #: bindings/guile/date-utilities.scm:731
 #: gnucash/gnome-utils/gnc-period-select.c:71
