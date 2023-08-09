@@ -244,6 +244,8 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     g_list_free_full (info->new_strings, (GDestroyNotify)g_free);
 
     g_free (info);
+
+    gnc_gui_refresh_all ();
 }
 
 bool
