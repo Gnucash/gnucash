@@ -1970,6 +1970,7 @@ CsvImpPriceAssist::assist_finish ()
     try
     {
         price_imp->create_prices ();
+        gnc_gui_refresh_all ();
     }
     catch (const std::invalid_argument& err)
     {
