@@ -186,7 +186,7 @@ guid_to_string_buff (const GncGUID * guid, gchar *str)
 gboolean
 string_to_guid (const char * str, GncGUID * guid)
 {
-    if (!guid || !str) return false;
+    if (!guid || !str || !*str) return false;
 
     try
     {
@@ -194,6 +194,7 @@ string_to_guid (const char * str, GncGUID * guid)
     }
     catch (...)
     {
+        PINFO("Failed to construct a GUID from %s", str);
         return false;
     }
     return true;
