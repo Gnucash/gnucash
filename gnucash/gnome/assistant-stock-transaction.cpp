@@ -686,12 +686,7 @@ StockTransactionStockEntry::set_amount(gnc_numeric amount, Logger& logger)
         return;
     }
 
-    bool neg{gnc_numeric_negative_p(amount) == TRUE};
-
-    if ((m_debit_side && !neg) || (!m_debit_side && neg))
-        m_amount = amount;
-    else
-        m_amount = gnc_numeric_neg(amount);
+    m_amount = amount;
     PINFO("%s set amount %s", m_memo, print_amount(amount));
 }
 
@@ -704,7 +699,7 @@ StockTransactionStockEntry::calculate_price(bool new_balance)
         gnc_numeric_zero_p(m_amount) || gnc_numeric_zero_p(m_value))
         return gnc_numeric_error(GNC_ERROR_ARG);
 
-    return gnc_numeric_div(m_value, m_amount,
+    return gnc_numeric_div(m_debit_side ? m_value : gnc_numeric_neg(m_value), m_amount,
                            GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
 }
 
