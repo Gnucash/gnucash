@@ -130,7 +130,7 @@ scm_run_report (void *data,
     scm_c_use_module ("gnucash reports");
 
     gnc_report_init ();
-    Gnucash::gnc_load_scm_config();
+    Gnucash::gnc_load_scm_config ([](const gchar *msg){ PINFO ("%s", msg); });
     gnc_prefs_init ();
     qof_event_suspend ();
 
@@ -259,7 +259,7 @@ scm_report_show (void *data,
     scm_c_use_module ("gnucash app-utils");
     scm_c_use_module ("gnucash reports");
     gnc_report_init ();
-    Gnucash::gnc_load_scm_config();
+    Gnucash::gnc_load_scm_config ([](const gchar *msg){ PINFO ("%s", msg); });
 
     if (!args->file_to_load.empty())
     {
@@ -291,7 +291,7 @@ scm_report_list ([[maybe_unused]] void *data,
     scm_c_use_module ("gnucash app-utils");
     scm_c_use_module ("gnucash reports");
     gnc_report_init ();
-    Gnucash::gnc_load_scm_config();
+    Gnucash::gnc_load_scm_config ([](const gchar *msg){ PINFO ("%s", msg); });
 
     scm_call_1 (scm_c_eval_string ("gnc:cmdline-report-list"),
                 scm_current_output_port ());

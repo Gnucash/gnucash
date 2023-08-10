@@ -155,7 +155,11 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
     /* Load the scm config files before starting up the gui. This ensures that
      * custom reports have been read into memory before the Reports
      * menu is created. */
-    Gnucash::gnc_load_scm_config();
+    Gnucash::gnc_load_scm_config ([](const gchar *msg)
+    {
+        gnc_update_splash_screen (msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
+        PINFO ("%s", msg);
+    });
 
     /* Setting-up the report menu must come after the module
      loading but before the gui initialization. */

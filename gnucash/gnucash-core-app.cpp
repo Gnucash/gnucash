@@ -41,7 +41,6 @@
 #include <gnc-path.h>
 #include <gnc-prefs.h>
 #include <gnc-gsettings.h>
-#include <gnc-splash.h>
 #include <gnc-version.h>
 #include "gnucash-locale-platform.h"
 
@@ -84,22 +83,15 @@ gnc_print_unstable_message(void)
               << bl::format (std::string{_("To find the last stable version, please refer to {1}")}) % PACKAGE_URL << "\n";
 }
 
-static void
-update_message(const gchar *msg)
-{
-    gnc_update_splash_screen(msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
-    PINFO("%s", msg);
-}
-
 void
-Gnucash::gnc_load_scm_config (void)
+Gnucash::gnc_load_scm_config (MessageCb update_message_cb)
 {
     static auto is_system_config_loaded = false;
     if (!is_system_config_loaded)
     {
         /* Translators: Guile is the programming language of the reports */
         auto msg = _("Loading system wide Guile extensions…");
-        update_message (msg);
+        update_message_cb (msg);
         auto system_config_dir = gnc_path_get_pkgsysconfdir ();
         auto system_config = g_build_filename (system_config_dir, "config", nullptr);
         is_system_config_loaded = gfec_try_load (system_config);
@@ -111,7 +103,7 @@ Gnucash::gnc_load_scm_config (void)
     if (!is_user_config_loaded)
     {
         auto msg = _("Loading user specific Guile extensions…");
-        update_message (msg);
+        update_message_cb (msg);
         auto config_filename = g_build_filename (gnc_userconfig_dir (), "config-user.scm", nullptr);
         is_user_config_loaded = gfec_try_load (config_filename);
         g_free (config_filename);

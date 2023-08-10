@@ -70,6 +70,8 @@ private:
     char *sys_locale = nullptr;
 };
 
-void gnc_load_scm_config(void);
+using MessageCb = std::function<void(const char*)>;
+
+void gnc_load_scm_config (MessageCb update_message);
 }
 #endif
