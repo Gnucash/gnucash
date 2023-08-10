@@ -36,7 +36,6 @@
 #include <gnc-engine-guile.h>
 #include <gnc-prefs.h>
 #include <gnc-prefs-utils.h>
-#include <gnc-gnome-utils.h>
 #include <gnc-session.h>
 #include <qoflog.h>
 
@@ -74,12 +73,19 @@ cleanup_and_exit_with_failure (QofSession *session)
     return 1;
 }
 
+static void gnc_shutdown_cli (int exit_status)
+{
+    gnc_hook_run (HOOK_SHUTDOWN, NULL);
+    gnc_engine_shutdown ();
+    exit (exit_status);
+}
+
 /* scm_boot_guile doesn't expect to return, so call shutdown ourselves here */
 static void
 scm_cleanup_and_exit_with_failure (QofSession *session)
 {
     cleanup_and_exit_with_failure (session);
-    gnc_shutdown (1);
+    gnc_shutdown_cli (1);
 }
 
 static void
@@ -238,7 +244,7 @@ return a document object with export-string or export-error.") << std::endl;
     qof_session_destroy (session);
 
     qof_event_resume ();
-    gnc_shutdown (0);
+    gnc_shutdown_cli (0);
     return;
 }
 
@@ -278,7 +284,7 @@ scm_report_show (void *data,
     scm_call_2 (scm_c_eval_string ("gnc:cmdline-report-show"),
                 scm_from_locale_string (args->show_report.c_str ()),
                 scm_current_output_port ());
-    gnc_shutdown (0);
+    gnc_shutdown_cli (0);
     return;
 }
 
@@ -295,7 +301,7 @@ scm_report_list ([[maybe_unused]] void *data,
 
     scm_call_1 (scm_c_eval_string ("gnc:cmdline-report-list"),
                 scm_current_output_port ());
-    gnc_shutdown (0);
+    gnc_shutdown_cli (0);
     return;
 }
 
