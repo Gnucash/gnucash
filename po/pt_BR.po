@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-08-08 15:48+0000\n"
+"PO-Revision-Date: 2023-08-10 12:48+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -1388,7 +1388,7 @@ msgstr "Compra aberta"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:191
 msgid "Initial stock long purchase."
-msgstr "Compra inicial de ações a longo prazo."
+msgstr "Compra inicial a longo prazo."
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
