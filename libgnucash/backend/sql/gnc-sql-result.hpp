@@ -27,6 +27,7 @@
 #include <qof.h>
 
 #include <cstdint>
+#include <optional>
 #include <string>
 #include <vector>
 
@@ -49,11 +50,11 @@ protected:
         virtual ~IteratorImpl() = default;
         virtual GncSqlRow& operator++() = 0;
         virtual GncSqlResult* operator*() = 0;
-        virtual int64_t get_int_at_col (const char* col) const = 0;
-        virtual double get_float_at_col (const char* col) const = 0;
-        virtual double get_double_at_col (const char* col) const = 0;
-        virtual std::string get_string_at_col (const char* col) const = 0;
-        virtual time64 get_time64_at_col (const char* col) const = 0;
+        virtual std::optional<int64_t> get_int_at_col (const char* col) const = 0;
+        virtual std::optional<double> get_float_at_col (const char* col) const = 0;
+        virtual std::optional<double> get_double_at_col (const char* col) const = 0;
+        virtual std::optional<std::string> get_string_at_col (const char* col) const = 0;
+        virtual std::optional<time64> get_time64_at_col (const char* col) const = 0;
         virtual bool is_col_null (const char* col) const noexcept = 0;
     };
 };
@@ -84,15 +85,15 @@ public:
     GncSqlRow& operator++();
     GncSqlRow& operator*() { return *this; }
     friend bool operator!=(const GncSqlRow&, const GncSqlRow&);
-    int64_t get_int_at_col (const char* col) const {
+    std::optional<int64_t> get_int_at_col (const char* col) const {
         return m_iter->get_int_at_col (col); }
-    double get_float_at_col (const char* col) const {
+    std::optional<double> get_float_at_col (const char* col) const {
         return m_iter->get_float_at_col (col); }
-    double get_double_at_col (const char* col) const {
+    std::optional<double> get_double_at_col (const char* col) const {
         return m_iter->get_double_at_col (col); }
-    std::string get_string_at_col (const char* col) const {
+    std::optional<std::string> get_string_at_col (const char* col) const {
         return m_iter->get_string_at_col (col); }
-    time64 get_time64_at_col (const char* col) const {
+    std::optional<time64> get_time64_at_col (const char* col) const {
         return m_iter->get_time64_at_col (col); }
     bool is_col_null (const char* col) const noexcept {
         return m_iter->is_col_null (col); }

@@ -183,34 +183,36 @@ public:
                                                  QofIdTypeConst obj_name,
                                                  void* pObject, T get_ref)
         const noexcept
-        {
-            static QofLogModule log_module = G_LOG_DOMAIN;
-            g_return_if_fail (pObject != NULL);
+    {
+        static QofLogModule log_module = G_LOG_DOMAIN;
+        g_return_if_fail (pObject != NULL);
 
-            try
-            {
-                GncGUID guid;
-                auto val = row.get_string_at_col (m_col_name);
-                if (string_to_guid (val.c_str(), &guid))
-                {
-                    auto target = get_ref(&guid);
-                    if (target != nullptr)
-                        set_parameter (pObject, target, get_setter(obj_name),
-                                       m_gobj_param_name);
-                    else
-                        DEBUG("GUID %s returned null %s reference.",
-                             val.c_str(), m_gobj_param_name);
-                }
-                else
-                {
-                    if (val.empty()) DEBUG("Can't load empty guid string for column %s", m_col_name);
-                    else DEBUG("Invalid GUID %s for column %s", val.c_str(), m_col_name);
-                }
-            }
-            catch (std::invalid_argument& err) {
-                DEBUG("set_parameter threw %s for column %s", err.what(), m_col_name);
-            }
+        GncGUID guid;
+        auto val = row.get_string_at_col (m_col_name);
+        if (!val)
+        {
+            DEBUG("set parameter: No string in column %s.", m_col_name);
+            return;
         }
+
+        if (string_to_guid (val->c_str(), &guid))
+        {
+            auto target = get_ref(&guid);
+            if (target != nullptr)
+                set_parameter (pObject, target, get_setter(obj_name),
+                               m_gobj_param_name);
+            else
+                DEBUG("GUID %s returned null %s reference.",
+                      val->c_str(), m_gobj_param_name);
+        }
+        else
+        {
+            if (val->empty())
+                DEBUG("Can't load empty guid string for column %s", m_col_name);
+            else
+                DEBUG("Invalid GUID %s for column %s", val->c_str(), m_col_name);
+        }
+    }
 
 
 protected:

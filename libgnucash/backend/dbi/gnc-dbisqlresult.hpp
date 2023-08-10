@@ -25,6 +25,8 @@
 #ifndef __GNC_DBISQLBACKEND_HPP__
 #define __GNC_DBISQLBACKEND_HPP__
 
+#include <optional>
+
 #include "gnc-backend-dbi.h"
 #include <gnc-sql-result.hpp>
 
@@ -53,11 +55,11 @@ protected:
         virtual GncSqlRow& operator++();
         virtual GncSqlRow& operator++(int) { return ++(*this); };
         virtual GncSqlResult* operator*() { return m_inst; }
-        virtual int64_t get_int_at_col (const char* col) const;
-        virtual double get_float_at_col (const char* col) const;
-        virtual double get_double_at_col (const char* col) const;
-        virtual std::string get_string_at_col (const char* col)const;
-        virtual time64 get_time64_at_col (const char* col) const;
+        virtual std::optional<int64_t> get_int_at_col (const char* col) const;
+        virtual std::optional<double> get_float_at_col (const char* col) const;
+        virtual std::optional<double> get_double_at_col (const char* col) const;
+        virtual std::optional<std::string> get_string_at_col (const char* col)const;
+        virtual std::optional<time64> get_time64_at_col (const char* col) const;
         virtual bool is_col_null(const char* col) const noexcept
         {
             return dbi_result_field_is_null(m_inst->m_dbi_result, col);

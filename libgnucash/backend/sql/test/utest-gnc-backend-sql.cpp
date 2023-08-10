@@ -62,15 +62,15 @@ protected:
             virtual GncSqlRow& operator++() { return m_inst->m_row; }
             virtual GncSqlRow& operator++(int) { return ++(*this); };
             virtual GncSqlResult* operator*() { return m_inst; }
-            virtual int64_t get_int_at_col (const char* col) const
+            virtual std::optional<int64_t> get_int_at_col (const char* col) const
             { return 1LL; }
-            virtual double get_float_at_col (const char* col) const
+            virtual std::optional<double> get_float_at_col (const char* col) const
             { return 1.0; }
-            virtual double get_double_at_col (const char* col) const
+            virtual std::optional<double> get_double_at_col (const char* col) const
             { return 1.0; }
-            virtual std::string get_string_at_col (const char* col)const
+            virtual std::optional<std::string> get_string_at_col (const char* col)const
             { return std::string{"foo"}; }
-            virtual time64 get_time64_at_col (const char* col) const
+            virtual std::optional<time64> get_time64_at_col (const char* col) const
             { return 1466270857LL; }
             virtual bool is_col_null(const char* col) const noexcept
             { return false; }

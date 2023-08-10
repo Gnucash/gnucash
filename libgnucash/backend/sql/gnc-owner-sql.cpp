@@ -64,10 +64,10 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* sql_be,
     auto buf = std::string{m_col_name} + "_type";
     try
     {
-        type = static_cast<decltype(type)>(row.get_int_at_col (buf.c_str()));
+        type = static_cast<decltype(type)>(row.get_int_at_col(buf.c_str()).value_or(0));
         buf = std::string{m_col_name} + "_guid";
         auto val = row.get_string_at_col (buf.c_str());
-        if (string_to_guid (val.c_str(), &guid))
+        if (val && string_to_guid (val->c_str(), &guid))
             pGuid = &guid;
     }
     catch (std::invalid_argument&)
@@ -76,7 +76,7 @@ GncSqlColumnTableEntryImpl<CT_OWNERREF>::load (const GncSqlBackend* sql_be,
     }
     if (type == GNC_OWNER_NONE || pGuid == nullptr)
         return;
-    
+
     switch (type)
     {
     case GNC_OWNER_CUSTOMER:

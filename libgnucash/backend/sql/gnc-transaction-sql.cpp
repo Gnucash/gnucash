@@ -792,27 +792,27 @@ GncSqlColumnTableEntryImpl<CT_TXREF>::load (const GncSqlBackend* sql_be,
     g_return_if_fail (sql_be != NULL);
     g_return_if_fail (pObject != NULL);
 
-    try
+    auto val = row.get_string_at_col (m_col_name);
+    if (!val)
+        return;
+
+    GncGUID guid;
+    Transaction *tx = nullptr;
+    if (string_to_guid (val->c_str(), &guid))
+        tx = xaccTransLookup (&guid, sql_be->book());
+
+    // If the transaction is not found, try loading it
+    std::string tpkey(tx_col_table[0]->name());
+    if (tx == nullptr)
     {
-        auto val = row.get_string_at_col (m_col_name);
-        GncGUID guid;
-        Transaction *tx = nullptr;
-        if (string_to_guid (val.c_str(), &guid))
-            tx = xaccTransLookup (&guid, sql_be->book());
-
-        // If the transaction is not found, try loading it
-	std::string tpkey(tx_col_table[0]->name());
-        if (tx == nullptr)
-        {
-	    std::string sql = tpkey + " = '" + val + "'";
-            query_transactions ((GncSqlBackend*)sql_be, sql);
-            tx = xaccTransLookup (&guid, sql_be->book());
-        }
-
-        if (tx != nullptr)
-            set_parameter (pObject, tx, get_setter(obj_name), m_gobj_param_name);
+        std::string sql = tpkey + " = '" + *val + "'";
+        query_transactions ((GncSqlBackend*)sql_be, sql);
+        tx = xaccTransLookup (&guid, sql_be->book());
     }
-    catch (std::invalid_argument&) {}
+
+    if (tx != nullptr)
+        set_parameter (pObject, tx, get_setter(obj_name), m_gobj_param_name);
+
 }
 
 template<> void

@@ -669,8 +669,9 @@ GncSqlBackend::init_version_info() noexcept
         for (const auto& row : *result)
         {
             auto name = row.get_string_at_col (TABLE_COL_NAME);
-            unsigned int version = row.get_int_at_col (VERSION_COL_NAME);
-            m_versions.push_back(std::make_pair(name, version));
+            auto version = row.get_int_at_col (VERSION_COL_NAME);
+            if (name && version)
+                m_versions.push_back(std::make_pair(*name, static_cast<unsigned int>(*version)));
         }
     }
     else

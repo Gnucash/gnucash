@@ -29,6 +29,7 @@
 #include <dbi/dbi-dev.h>
 #include <cmath>
 #include <gnc-datetime.hpp>
+#include <sys/_types/_timeval.h>
 #include "gnc-dbisqlresult.hpp"
 #include "gnc-dbisqlconnection.hpp"
 
@@ -98,16 +99,16 @@ GncDbiSqlResult::IteratorImpl::operator++()
     return m_inst->m_sentinel;
 }
 
-int64_t
+std::optional<int64_t>
 GncDbiSqlResult::IteratorImpl::get_int_at_col(const char* col) const
 {
     auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_INTEGER)
-        throw (std::invalid_argument{"Requested integer from non-integer column."});
-    return dbi_result_get_longlong (m_inst->m_dbi_result, col);
+        return std::nullopt;
+    return std::optional<int64_t>{dbi_result_get_longlong (m_inst->m_dbi_result, col)};
 }
 
-double
+std::optional<double>
 GncDbiSqlResult::IteratorImpl::get_float_at_col(const char* col) const
 {
     constexpr double float_precision = 1000000.0;
@@ -115,56 +116,52 @@ GncDbiSqlResult::IteratorImpl::get_float_at_col(const char* col) const
     auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_DECIMAL ||
        (attrs & DBI_DECIMAL_SIZEMASK) != DBI_DECIMAL_SIZE4)
-        throw (std::invalid_argument{"Requested float from non-float column."});
+        return std::nullopt;
     auto locale = gnc_push_locale (LC_NUMERIC, "C");
     auto interim =  dbi_result_get_float(m_inst->m_dbi_result, col);
     gnc_pop_locale (LC_NUMERIC, locale);
     double retval = static_cast<double>(round(interim * float_precision)) / float_precision;
-    return retval;
+    return std::optional<double>{retval};
 }
 
-double
+std::optional<double>
 GncDbiSqlResult::IteratorImpl::get_double_at_col(const char* col) const
 {
     auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
     auto attrs = dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_DECIMAL ||
        (attrs & DBI_DECIMAL_SIZEMASK) != DBI_DECIMAL_SIZE8)
-        throw (std::invalid_argument{"Requested double from non-double column."});
+        return std::nullopt;
     auto locale = gnc_push_locale (LC_NUMERIC, "C");
     auto retval =  dbi_result_get_double(m_inst->m_dbi_result, col);
     gnc_pop_locale (LC_NUMERIC, locale);
-    return retval;
+    return std::optional<double>{retval};
 }
 
-std::string
+std::optional<std::string>
 GncDbiSqlResult::IteratorImpl::get_string_at_col(const char* col) const
 {
     auto type = dbi_result_get_field_type (m_inst->m_dbi_result, col);
     dbi_result_get_field_attribs (m_inst->m_dbi_result, col);
     if(type != DBI_TYPE_STRING)
-        throw (std::invalid_argument{"Requested string from non-string column."});
+        return std::nullopt;
     auto strval = dbi_result_get_string(m_inst->m_dbi_result, col);
-    if (strval == nullptr)
-    {
-        throw (std::invalid_argument{"Column empty."});
-    }
-    auto retval =  std::string{strval};
-    return retval;
+    return std::optional<std::string>{strval ? strval : ""};
 }
-time64
+
+std::optional<time64>
 GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
 {
     auto result = (dbi_result_t*) (m_inst->m_dbi_result);
     auto type = dbi_result_get_field_type (result, col);
     dbi_result_get_field_attribs (result, col);
     if (type != DBI_TYPE_DATETIME)
-        throw (std::invalid_argument{"Requested time64 from non-time64 column."});
+        return std::nullopt;
 #if HAVE_LIBDBI_TO_LONGLONG
     /* A less evil hack than the one required by libdbi-0.8, but
      * still necessary to work around the same bug.
      */
-    auto retval = dbi_result_get_as_longlong(result, col);
+    auto timeval = dbi_result_get_as_longlong(result, col);
 #else
     /* A seriously evil hack to work around libdbi bug #15
      * https://sourceforge.net/p/libdbi/bugs/15/. When libdbi
@@ -174,11 +171,11 @@ GncDbiSqlResult::IteratorImpl::get_time64_at_col (const char* col) const
      */
     auto row = dbi_result_get_currow (result);
     auto idx = dbi_result_get_field_idx (result, col) - 1;
-    time64 retval = result->rows[row]->field_values[idx].d_datetime;
+    time64 timeval = result->rows[row]->field_values[idx].d_datetime;
 #endif //HAVE_LIBDBI_TO_LONGLONG
-    if (retval < MINTIME || retval > MAXTIME)
-        retval = 0;
-    return retval;
+    if (timeval < MINTIME || timeval > MAXTIME)
+        timeval = 0;
+    return std::optional<time64>(timeval);
 }
 
 

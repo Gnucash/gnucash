@@ -85,18 +85,13 @@ GncSqlColumnTableEntryImpl<CT_ADDRESS>::load (const GncSqlBackend* sql_be,
     for (auto const& subtable_row : col_table)
     {
         auto buf = std::string{m_col_name} + "_" + subtable_row->m_col_name;
-        try
-        {
-            auto val = row.get_string_at_col (buf.c_str());
-            auto sub_setter = subtable_row->get_setter(GNC_ID_ADDRESS);
-            set_parameter (addr, val.c_str(), sub_setter,
+        auto val = row.get_string_at_col (buf.c_str());
+        auto sub_setter = subtable_row->get_setter(GNC_ID_ADDRESS);
+        if (val)
+            set_parameter (addr, val->c_str(), sub_setter,
                            subtable_row->m_gobj_param_name);
-        }
-        catch (std::invalid_argument&)
-        {
-            return;
-        }
     }
+
     set_parameter (pObject, addr,
                    reinterpret_cast<AddressSetterFunc>(get_setter(obj_name)),
                    m_gobj_param_name);

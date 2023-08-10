@@ -124,12 +124,9 @@ GncSqlColumnTableEntryImpl<CT_STRING>::load (const GncSqlBackend* sql_be,
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (m_gobj_param_name != NULL || get_setter(obj_name) != NULL);
 
-    try
-    {
-        auto s = row.get_string_at_col (m_col_name);
-        set_parameter(pObject, s.c_str(), get_setter(obj_name), m_gobj_param_name);
-    }
-    catch (std::invalid_argument&) {}
+    auto s = row.get_string_at_col (m_col_name);
+    if (s)
+        set_parameter(pObject, s->c_str(), get_setter(obj_name), m_gobj_param_name);
 }
 
 template<> void
@@ -174,8 +171,10 @@ GncSqlColumnTableEntryImpl<CT_INT>::load (const GncSqlBackend* sql_be,
     g_return_if_fail (m_gobj_param_name != NULL || get_setter(obj_name) != NULL);
 
     auto val = row.get_int_at_col(m_col_name);
-    set_parameter(pObject, val,
-                  reinterpret_cast<IntSetterFunc>(get_setter(obj_name)), m_gobj_param_name);
+    if (val)
+        set_parameter(pObject, *val,
+                      reinterpret_cast<IntSetterFunc>(get_setter(obj_name)),
+                      m_gobj_param_name);
 }
 
 template<> void
@@ -208,9 +207,10 @@ GncSqlColumnTableEntryImpl<CT_BOOLEAN>::load (const GncSqlBackend* sql_be,
     g_return_if_fail (m_gobj_param_name != NULL || get_setter(obj_name) != NULL);
 
     auto val = row.get_int_at_col (m_col_name);
-    set_parameter(pObject, static_cast<int>(val),
-                  reinterpret_cast<BooleanSetterFunc>(get_setter(obj_name)),
-                  m_gobj_param_name);
+    if (val)
+        set_parameter(pObject, static_cast<int>(*val),
+                      reinterpret_cast<BooleanSetterFunc>(get_setter(obj_name)),
+                      m_gobj_param_name);
 }
 
 template<> void
@@ -242,9 +242,10 @@ GncSqlColumnTableEntryImpl<CT_INT64>::load (const GncSqlBackend* sql_be,
     g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
 
     auto val = row.get_int_at_col (m_col_name);
-    set_parameter(pObject, val,
-                  reinterpret_cast<Int64SetterFunc>(get_setter(obj_name)),
-                  m_gobj_param_name);
+    if (val)
+        set_parameter(pObject, *val,
+                      reinterpret_cast<Int64SetterFunc>(get_setter(obj_name)),
+                      m_gobj_param_name);
 }
 
 template<> void
@@ -273,29 +274,15 @@ GncSqlColumnTableEntryImpl<CT_DOUBLE>::load (const GncSqlBackend* sql_be,
 {
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
-    double val;
-    try
-    {
-        val = static_cast<double>(row.get_int_at_col(m_col_name));
-    }
-    catch (std::invalid_argument&)
-    {
-        try
-        {
-            val = row.get_float_at_col(m_col_name);
-        }
-        catch (std::invalid_argument&)
-        {
-            try
-            {
-                val = row.get_double_at_col(m_col_name);
-            }
-            catch (std::invalid_argument&)
-            {
-                val = 0.0;
-            }
-        }
-    }
+    double val{0.0};
+
+    if (auto int_val{row.get_int_at_col(m_col_name)})
+        val = static_cast<decltype(val)>(*int_val);
+    else if (auto float_val{row.get_float_at_col(m_col_name)})
+        val = static_cast<decltype(val)>(*float_val);
+    else if (auto double_val{row.get_double_at_col(m_col_name)})
+        val = *double_val;
+
     set_parameter(pObject, val, get_setter(obj_name), m_gobj_param_name);
 }
 
@@ -329,16 +316,8 @@ GncSqlColumnTableEntryImpl<CT_GUID>::load (const GncSqlBackend* sql_be,
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
 
-    std::string str;
-    try
-    {
-        str = row.get_string_at_col(m_col_name);
-    }
-    catch (std::invalid_argument&)
-    {
-        return;
-    }
-    if (string_to_guid (str.c_str(), &guid))
+    auto strval{row.get_string_at_col(m_col_name)};
+    if (strval && string_to_guid (strval->c_str(), &guid))
         set_parameter(pObject, &guid, get_setter(obj_name), m_gobj_param_name);
 }
 
@@ -378,28 +357,28 @@ GncSqlColumnTableEntryImpl<CT_TIME>::load (const GncSqlBackend* sql_be,
 {
     time64 t{0};
     g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
-    try
+    auto strval = row.get_string_at_col(m_col_name);
+    if (strval)
     {
-        t = row.get_time64_at_col (m_col_name);
-    }
-    catch (std::invalid_argument&)
-    {
-        try
-        {
-            auto val = row.get_string_at_col(m_col_name);
-            GncDateTime time(val);
-            t = static_cast<time64>(time);
-        }
-        catch (const std::invalid_argument& err)
-        {
-            if (strcmp(err.what(), "Column empty.") != 0)
+        if (!strval->empty())
+            try
             {
-                auto val = row.get_string_at_col (m_col_name);
-                PWARN("An invalid date %s was found in your database."
-                      "It has been set to 1 January 1970.", val.c_str());
+                GncDateTime time(*strval);
+                t = static_cast<time64>(time);
             }
-        }
+            catch (const std::invalid_argument& err)
+            {
+                PWARN("An invalid date %s was found in your database."
+                      "It has been set to 1 January 1970.",
+                      strval->c_str());
+            }
     }
+    else
+    {
+        if (auto time64val = row.get_time64_at_col (m_col_name))
+            t = *time64val;
+    }
+
     if (m_gobj_param_name != nullptr)
     {
         Time64 t64{t};
@@ -472,37 +451,35 @@ GncSqlColumnTableEntryImpl<CT_GDATE>::load (const GncSqlBackend* sql_be,
         return;
     GDate date;
     g_date_clear (&date, 1);
-    try
+
+    auto strval{row.get_string_at_col(m_col_name)};
+    if (strval)
     {
+        if (strval->empty())
+            return;
+        auto year = static_cast<GDateYear>(stoi (strval->substr (0,4)));
+        auto month = static_cast<GDateMonth>(stoi (strval->substr (4,2)));
+        auto day = static_cast<GDateDay>(stoi (strval->substr (6,2)));
+
+        if (year != 0 || month != 0 || day != (GDateDay)0)
+            g_date_set_dmy(&date, day, month, year);
+    }
+    else
+    {
+        auto timeval = row.get_time64_at_col(m_col_name);
+        if (!timeval)
+            return;
         /* time64_to_gdate applies the tz, and gdates are saved
          * as ymd, so we don't want that.
          */
-        auto time = row.get_time64_at_col(m_col_name);
+        auto time = *timeval;
         auto tm = gnc_gmtime(&time);
         g_date_set_dmy(&date, tm->tm_mday,
                        static_cast<GDateMonth>(tm->tm_mon + 1),
                        tm->tm_year + 1900);
         free(tm);
     }
-    catch (std::invalid_argument&)
-    {
-        try
-        {
-            std::string str = row.get_string_at_col(m_col_name);
-            if (str.empty()) return;
-            auto year = static_cast<GDateYear>(stoi (str.substr (0,4)));
-            auto month = static_cast<GDateMonth>(stoi (str.substr (4,2)));
-            auto day = static_cast<GDateDay>(stoi (str.substr (6,2)));
 
-            if (year != 0 || month != 0 || day != (GDateDay)0)
-                g_date_set_dmy(&date, day, month, year);
-
-        }
-        catch (std::invalid_argument&)
-        {
-            return;
-        }
-    }
     set_parameter(pObject, &date, get_setter(obj_name), m_gobj_param_name);
 }
 
@@ -562,24 +539,21 @@ GncSqlColumnTableEntryImpl<CT_NUMERIC>::load (const GncSqlBackend* sql_be,
 
     g_return_if_fail (pObject != NULL);
     g_return_if_fail (m_gobj_param_name != nullptr || get_setter(obj_name) != nullptr);
-    gnc_numeric n;
-    try
+
+    auto buf = g_strdup_printf ("%s_num", m_col_name);
+    auto num = row.get_int_at_col (buf);
+    g_free (buf);
+    buf = g_strdup_printf ("%s_denom", m_col_name);
+    auto denom = row.get_int_at_col (buf);
+    g_free (buf);
+
+    if (num && denom)
     {
-        auto buf = g_strdup_printf ("%s_num", m_col_name);
-        auto num = row.get_int_at_col (buf);
-        g_free (buf);
-        buf = g_strdup_printf ("%s_denom", m_col_name);
-        auto denom = row.get_int_at_col (buf);
-        n = gnc_numeric_create (num, denom);
-        g_free (buf);
+        auto n = gnc_numeric_create (*num, *denom);
+        set_parameter(pObject, n,
+                      reinterpret_cast<NumericSetterFunc>(get_setter(obj_name)),
+                      m_gobj_param_name);
     }
-    catch (std::invalid_argument&)
-    {
-        return;
-    }
-    set_parameter(pObject, n,
-                  reinterpret_cast<NumericSetterFunc>(get_setter(obj_name)),
-                  m_gobj_param_name);
 }
 
 template<> void
