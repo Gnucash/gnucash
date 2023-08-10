@@ -140,7 +140,7 @@ add_dependencies (gnucash-cli gnucash)
 target_compile_definitions(gnucash-cli PRIVATE -DG_LOG_DOMAIN=\"gnc.bin\")
 
 target_link_libraries (gnucash-cli
-   gnc-gnome-utils gnc-app-utils
+   gnc-app-utils
    gnc-engine gnc-core-utils gnucash-guile gnc-report
    ${GUILE_LDFLAGS} PkgConfig::GLIB2
    ${Boost_LIBRARIES}
