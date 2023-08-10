@@ -31,6 +31,7 @@
 # Dyf_Tfh <n.zhao@hotmail.fr>, 2023.
 # Gaël CATLLA <gcatlla@free.fr>, 2023.
 # Vincent Dawans <dawansv@gmail.com>, 2023.
+# Xavier Gandillot (aka xavier268), 2023.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -25392,8 +25393,8 @@ msgstr "Ignorer les comptes"
 #: gnucash/report/reports/standard/trial-balance.scm:374
 msgid "${company-name} ${report-title} For Period Covering ${start} to ${end}"
 msgstr ""
-"${report-title} de ${company-name} pour la période allant du ${début} au "
-"${fin}"
+"${report-title} de ${company-name} pour la période allant du ${start} au "
+"${end}"
 
 # messages-i18n.c:165 po/guile_strings.txt:7
 #: gnucash/report/reports/standard/account-summary.scm:381
