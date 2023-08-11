@@ -3826,9 +3826,9 @@ msgstr "Employé"
 #: gnucash/gnome/dialog-payment.c:1449
 #, c-format
 msgid ""
-"You have no valid \"Post To\" accounts. Please create an account of type \"%s"
-"\" before you continue to process this payment. Perhaps you want to create "
-"an Invoice or Bill first?"
+"You have no valid \"Post To\" accounts. Please create an account of type "
+"\"%s\" before you continue to process this payment. Perhaps you want to "
+"create an Invoice or Bill first?"
 msgstr ""
 "Vous n'avez pas de compte valide pour la publication. Créez un compte de "
 "type \"%s\" avant de continuer à traiter ce paiement. Peut-être voulez-vous "
@@ -5448,6 +5448,7 @@ msgstr "Supprime la répartition courante"
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
 #, fuzzy
+#| msgid "Sold Splits"
 msgid "Show Splits"
 msgstr "Répartitions vendues"
 
@@ -7268,8 +7269,8 @@ msgstr "Ce produit existe déjà."
 
 #: gnucash/gnome-utils/dialog-commodity.c:1347
 msgid ""
-"You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and \"Type"
-"\" for the commodity."
+"You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and "
+"\"Type\" for the commodity."
 msgstr ""
 "Vous devez saisir un \"Nom complet\" non vide, un \"Code/abréviation\", et "
 "un \"Type\" pour le produit."
@@ -9922,8 +9923,8 @@ msgstr "Assistant de création de hiérarchie pour \"Nouveau fichier\""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:231
 msgid ""
-"If active, the \"New Hierarchy\" window will be shown whenever the \"New File"
-"\" menu item is chosen. Otherwise it will not be shown."
+"If active, the \"New Hierarchy\" window will be shown whenever the \"New "
+"File\" menu item is chosen. Otherwise it will not be shown."
 msgstr ""
 "Si cette option est cochée, la fenêtre \"Nouvelle hiérarchie\" s'affichera "
 "lorsque l'élément de menu \"Nouveau fichier\" sera choisi. Dans le cas "
@@ -10239,15 +10240,15 @@ msgid ""
 msgstr ""
 "Si actif, le dialogue \"Depuis la dernière exécution\" n'affichant que les "
 "notifications pour les transactions programmées est lancé automatiquement à "
-"chaque ouverture de fichier (si le processus \"Depuis la dernière exécution"
-"\" est aussi actif), y compris au lancement de GnuCash lors de l'ouverture "
-"du fichier initial. Si inactif, le dialogue ne sera pas affiché "
+"chaque ouverture de fichier (si le processus \"Depuis la dernière "
+"exécution\" est aussi actif), y compris au lancement de GnuCash lors de "
+"l'ouverture du fichier initial. Si inactif, le dialogue ne sera pas affiché "
 "automatiquement."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:27
 msgid ""
-"Set \"Review Created Transactions\" as the default for the \"since last run"
-"\" dialog."
+"Set \"Review Created Transactions\" as the default for the \"since last "
+"run\" dialog."
 msgstr ""
 "Utiliser \"Étudier les transactions créées\" par défaut pour le dialogue "
 "\"depuis la dernière exécution\"."
@@ -10373,8 +10374,8 @@ msgstr "Le caractère utilisé pour séparer les noms détaillés des comptes"
 msgid ""
 "This setting determines the character that will be used between components "
 "of an account name. Possible values are any single non-alphanumeric unicode "
-"character, or any of the following strings: \"colon\", \"slash\", \"backslash"
-"\", \"dash\" and \"period\"."
+"character, or any of the following strings: \"colon\", \"slash\", "
+"\"backslash\", \"dash\" and \"period\"."
 msgstr ""
 "Ce paramètre définie le caractère qui sera utilisé entre les composants d'un "
 "nom de compte. Les valeurs possibles sont n'importe quel caractère hors "
@@ -10710,8 +10711,8 @@ msgstr ""
 "Cette préférence définie la source des nouvelles devises pour les nouveaux "
 "comptes. Si vous choisissez \"locale\", GnuCash chargera les devises par "
 "défaut pour celles des actuels paramètres régionaux. Si vous choisissez "
-"\"other\", GnuCash utilisera le réglage indiqué par la clé \"currency_other"
-"\"."
+"\"other\", GnuCash utilisera le réglage indiqué par la clé "
+"\"currency_other\"."
 
 # po/guile_strings.txt:200
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:145
@@ -10854,8 +10855,8 @@ msgid ""
 "\"right\". It defaults to \"top\"."
 msgstr ""
 "Ce paramètre détermine l'extrémité à laquelle sont positionnés les onglets "
-"de changement de page. Les options possibles sont \"top\", \"left\", \"bottom"
-"\" and \"right\". Par défaut, \"top\" est utilisé."
+"de changement de page. Les options possibles sont \"top\", \"left\", "
+"\"bottom\" and \"right\". Par défaut, \"top\" est utilisé."
 
 # messages-i18n.c:71
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
@@ -10882,8 +10883,8 @@ msgstr "Afficher une barre de résumé au début de la page."
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:221
 msgid ""
 "This setting determines the edge at which the summary bar for various pages "
-"is drawn. Possible values are \"top\" and \"bottom\". It defaults to \"bottom"
-"\"."
+"is drawn. Possible values are \"top\" and \"bottom\". It defaults to "
+"\"bottom\"."
 msgstr ""
 "Ce paramètre détermine l'extrémité à laquelle est positionnée la barre de "
 "résumé des pages. Les options possibles sont \"top\" et \"bottom\". Par "
@@ -11259,8 +11260,8 @@ msgid ""
 msgstr ""
 "Ce paramètre défini la devise par défaut pour les rapports. Si vous "
 "définissez sa valeur à \"locale\", GnuCash chargera les devises par défaut "
-"depuis les paramètres régionaux de l'utilisateur. Si vous choisissez \"other"
-"\", GnuCash utilisera le réglage indiqué par la clé 'currency_other'."
+"depuis les paramètres régionaux de l'utilisateur. Si vous choisissez "
+"\"other\", GnuCash utilisera le réglage indiqué par la clé 'currency_other'."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:354
 #: gnucash/gtkbuilder/dialog-preferences.glade:3183
@@ -11295,18 +11296,18 @@ msgstr "Format du nom du fichier PDF exporté"
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
-"string with three arguments: \"%1$s\" is the report name such as \"Invoice"
-"\". \"%2$s\" is the number of the report, which for an invoice report is the "
-"invoice number. \"%3$s\" is the date of the report, formatted according to "
-"the filename-date-format setting. Note: Any characters that are not allowed "
-"in filenames, such as '/', will be replaced with underscores '_' in the "
-"resulting file name."
+"string with three arguments: \"%1$s\" is the report name such as "
+"\"Invoice\". \"%2$s\" is the number of the report, which for an invoice "
+"report is the invoice number. \"%3$s\" is the date of the report, formatted "
+"according to the filename-date-format setting. Note: Any characters that are "
+"not allowed in filenames, such as '/', will be replaced with underscores '_' "
+"in the resulting file name."
 msgstr ""
 "Ce réglage permet de choisir le nom du fichier à utiliser pour les exports "
 "au format PDF. C'est une chaîne de caractères compatible sprintf(3) avec "
-"trois arguments : \"%1$s\" est le nom du rapport, comme \"Facture\". \"%2$s"
-"\" est le numéro du rapport, pour lequel le rapport est le numéro de la "
-"facture. \"%3$s\" est la date du rapport, au format défini par le réglage "
+"trois arguments : \"%1$s\" est le nom du rapport, comme \"Facture\". "
+"\"%2$s\" est le numéro du rapport, pour lequel le rapport est le numéro de "
+"la facture. \"%3$s\" est la date du rapport, au format défini par le réglage "
 "\"filename-date-format\". Note : les caractères non autorisés, comme '/', "
 "seront remplacés par des tirets '_' dans le nom final du fichier."
 
@@ -13311,8 +13312,8 @@ msgstr ""
 "\n"
 "Sélectionnez un format de date pour le fichier. Les fichiers QIF créés par "
 "les logiciels européens utilisent habituellement \"j-m-a\" ou format jour-"
-"mois-année, et les fichiers QIF américains utilisent habituellement \"m-j-a"
-"\" ou mois-jour-année.\n"
+"mois-année, et les fichiers QIF américains utilisent habituellement \"m-j-"
+"a\" ou mois-jour-année.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:304
 #: gnucash/gtkbuilder/assistant-qif-import.glade:389
@@ -15081,8 +15082,8 @@ msgid ""
 "retrieve the information from another site."
 msgstr ""
 "Ce sont des sources de cours \"F::Q\" qui chargent des informations depuis "
-"de nombreux sites sur Internet. Si un de ces sites est inaccessible, \"F::Q"
-"\" essaiera de charger les informations depuis un autre site."
+"de nombreux sites sur Internet. Si un de ces sites est inaccessible, \"F::"
+"Q\" essaiera de charger les informations depuis un autre site."
 
 # messages-i18n.c:169 po/guile_strings.txt:62
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
@@ -20844,8 +20845,8 @@ msgstr ""
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:109
 #, c-format
 msgid ""
-"The account tree will be exported to the file '%s' when you click \"Apply"
-"\".\n"
+"The account tree will be exported to the file '%s' when you click "
+"\"Apply\".\n"
 "\n"
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
@@ -23525,9 +23526,9 @@ msgstr "Ne pas compléter automatiquement"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
-"The entered date of the transaction is older than the \"Read-Only Threshold"
-"\" set for this book. This setting can be changed in File->Properties-"
-">Accounts, resetting to the threshold."
+"The entered date of the transaction is older than the \"Read-Only "
+"Threshold\" set for this book. This setting can be changed in File-"
+">Properties->Accounts, resetting to the threshold."
 msgstr ""
 "La date de cette transaction est antérieure au \"seuil de protection en "
 "écriture seule\" configuré pour ce livre. Cette préférence peut être changée "
@@ -33143,6 +33144,7 @@ msgstr "GncQuotes::Fetch appelé sans produits ou valeurs boursières."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:333
 #, fuzzy
+#| msgid "GncQuotes::Fetch called with no book."
 msgid "GncQuotes::Report called with no source."
 msgstr "GncQuotes::Fetch appelé sans livre de comptes."
 
@@ -34323,5 +34325,6 @@ msgstr "Aide non disponible."
 
 # messages-i18n.c:336
 #, fuzzy
+#~| msgid "Split"
 #~ msgid "Split View"
 #~ msgstr "Répartition"
