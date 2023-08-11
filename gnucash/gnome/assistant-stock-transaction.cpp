@@ -703,15 +703,15 @@ StockTransactionStockEntry::calculate_price(bool new_balance)
                            GNC_DENOM_AUTO, GNC_HOW_DENOM_EXACT);
 }
 
-struct StockTransactionsStockCapGainsEntry : public StockTransactionEntry
+struct StockTransactionStockCapGainsEntry : public StockTransactionEntry
 {
-    StockTransactionsStockCapGainsEntry(const StockTransactionEntry* cg_entry,
+    StockTransactionStockCapGainsEntry(const StockTransactionEntry* cg_entry,
                                         const StockTransactionEntry* stk_entry);
     gnc_numeric amount() { return gnc_numeric_zero(); }
 };
 
-StockTransactionsStockCapGainsEntry::StockTransactionsStockCapGainsEntry(const StockTransactionEntry* cg_entry,
-                                                                         const StockTransactionEntry* stk_entry) :
+StockTransactionStockCapGainsEntry::StockTransactionStockCapGainsEntry(const StockTransactionEntry *cg_entry,
+                                                                       const StockTransactionEntry *stk_entry) :
     StockTransactionEntry(!cg_entry->m_debit_side, cg_entry->m_allow_zero, cg_entry->m_allow_negative,
                           stk_entry->m_account, cg_entry->m_value) {}
 
@@ -1045,7 +1045,7 @@ StockAssistantModel::generate_list_of_splits() {
     if (m_capgains_entry->m_enabled)
     {
         m_stock_cg_entry =
-            std::make_unique<StockTransactionsStockCapGainsEntry>(m_capgains_entry.get(),
+            std::make_unique<StockTransactionStockCapGainsEntry>(m_capgains_entry.get(),
                                                                   m_stock_entry.get());
         m_list_of_splits.push_back(StockTransactionSplitInfo{m_stock_cg_entry.get(),
              NC_ ("Stock Assistant: Page name", "capital gains")});
@@ -1804,8 +1804,8 @@ struct PageCapGain
     GtkWidget * m_memo;
     GncAmountEdit m_value;
     PageCapGain (GtkBuilder *builder, Account* account);
-    void connect(StockTransactionsStockCapGainsEntry* entry);
-    void prepare(StockTransactionsStockCapGainsEntry* entry, Logger& logger);
+    void connect(StockTransactionStockCapGainsEntry* entry);
+    void prepare(StockTransactionStockCapGainsEntry* entry, Logger& logger);
     const char* get_memo();
 };
 
@@ -1827,7 +1827,7 @@ PageCapGain::get_memo()
 
 
 void
-PageCapGain::connect(StockTransactionsStockCapGainsEntry*entry)
+PageCapGain::connect(StockTransactionStockCapGainsEntry*entry)
 {
     m_account.connect(&entry->m_account);
     g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &entry->m_memo);
@@ -1835,7 +1835,7 @@ PageCapGain::connect(StockTransactionsStockCapGainsEntry*entry)
 }
 
 void
-PageCapGain::prepare(StockTransactionsStockCapGainsEntry* entry, Logger& logger)
+PageCapGain::prepare(StockTransactionStockCapGainsEntry* entry, Logger& logger)
 {
     entry->m_memo = get_memo();
     if (gnc_numeric_check(m_value.get()))
@@ -2033,7 +2033,7 @@ StockAssistantController::connect_signals (GtkBuilder *builder)
     if (fees_entry)
       m_view.m_fees_page.connect(fees_entry);
     m_view.m_dividend_page.connect(m_model->m_dividend_entry.get());
-    auto capgains_entry = dynamic_cast<StockTransactionsStockCapGainsEntry *>(m_model->m_capgains_entry.get());
+    auto capgains_entry = dynamic_cast<StockTransactionStockCapGainsEntry *>(m_model->m_capgains_entry.get());
     if (capgains_entry)
         m_view.m_capgain_page.connect(capgains_entry);
 
@@ -2090,7 +2090,7 @@ StockAssistantController::prepare(GtkAssistant* assistant, GtkWidget* page)
         break;
     case PAGE_CAPGAINS:
     {
-        auto capgain_entry = dynamic_cast<StockTransactionsStockCapGainsEntry*>(m_model->m_capgains_entry.get());
+        auto capgain_entry = dynamic_cast<StockTransactionStockCapGainsEntry*>(m_model->m_capgains_entry.get());
         if (capgain_entry)
             m_view.m_capgain_page.prepare(capgain_entry, m_model->m_logger);
         break;
