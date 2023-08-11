@@ -29,7 +29,6 @@
 #include <dbi/dbi-dev.h>
 #include <cmath>
 #include <gnc-datetime.hpp>
-#include <sys/_types/_timeval.h>
 #include "gnc-dbisqlresult.hpp"
 #include "gnc-dbisqlconnection.hpp"
 
