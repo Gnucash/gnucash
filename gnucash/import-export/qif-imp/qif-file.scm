@@ -1163,6 +1163,10 @@
                  (string->number (cadr fracprice)))))
               (set! price (format #f "~f" total))))
 
-          (qif-price:set-share-price! current-xtn price))))
+          (qif-price:set-share-price! current-xtn price)
+
+          ;; A blank entry will not necessarily throw an exception, but is invalid
+          (if (or (string-null? symbol) (or (string-null? price) (string-null? date)))
+            (set! current-xtn #f)))))
        (set! current-xtn #f))
     current-xtn))

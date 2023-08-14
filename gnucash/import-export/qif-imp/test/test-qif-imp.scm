@@ -77,5 +77,8 @@
     (qif-price:set-date! model "1/1' 4")
     (test-equal parsed model))
 
+  (let ((parsed (qif-file:parse-price-line "\"ABC\",,\"1/1' 4\"")))
+    (test-equal parsed #f))
+
   (let ((parsed (qif-file:parse-price-line "\"ABC\",\"1/1' 4\"")))
     (test-equal parsed #f)))
