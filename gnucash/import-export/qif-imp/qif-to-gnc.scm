@@ -499,10 +499,11 @@
                           (G_ (format #f "Warning: cannot find commodity for symbol ~a." current-symbol))))))
             (if (not (equal? commodity #f))
                 (if (not (duplicate-price? pricedb commodity default-currency price))
-                    (set! pruned-prices (append pruned-prices (list price)))
+                    (set! pruned-prices (cons price pruned-prices))
                     (set! pruned-price-count (+ 1 pruned-price-count))))
             (update-progress))
          sorted-prices)
+        (set! pruned-prices (reverse pruned-prices))
 
         (if progress-dialog
             (begin
