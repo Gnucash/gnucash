@@ -40,8 +40,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-08-14 16:53+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2023-08-14 18:48+0000\n"
+"Last-Translator: Carsten Hütter <Carsten.Huetter@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -1511,7 +1511,7 @@ msgstr ""
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:261
 msgid "Return of capital (reclassification)"
-msgstr "Kapitalrückgabe (Reklassifizierung)"
+msgstr "Kapitalrückzahlung (Reklassifizierung)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:262
 msgid ""
@@ -1522,8 +1522,8 @@ msgstr ""
 "Eine Gesellschaft zahlt investiertes Kapital an Aktionäre bzw. "
 "Anteilsinhaber zurück, ohne dass sich die Anzahl der Anteile ändert. Eine "
 "Auszahlung, die zuvor als Dividende erfolgte, wird reklassifiziert als "
-"Kapitalrückgabe - dies kann bei einer Steuererklärung zum Jahreabschluss "
-"erfolgen."
+"Kapitalrückzahlung, dies erfolgt häufig aufgrund von Steuerer Informationen "
+"zum Jahreabschluss."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
