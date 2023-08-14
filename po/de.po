@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-08-12 10:46+0000\n"
+"PO-Revision-Date: 2023-08-14 01:52+0000\n"
 "Last-Translator: Carsten Hütter <Carsten.Huetter@gmx.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -1497,7 +1497,7 @@ msgstr ""
 #. of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:250
 msgid "Return of capital"
-msgstr "Kapitalrückgabe"
+msgstr "Kapitalrückzahlung"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:251
 msgid ""
@@ -1510,10 +1510,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:261
-#, fuzzy
-#| msgid "Return of capital"
 msgid "Return of capital (reclassification)"
-msgstr "Kapitalrückgabe"
+msgstr "Kapitalrückgabe (Reklassifizierung)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:262
 msgid ""
@@ -1521,46 +1519,41 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"Eine Gesellschaft zahlt investiertes Kapital an Aktionäre bzw. "
+"Anteilsinhaber zurück, ohne dass sich die Anzahl der Anteile ändert. Eine "
+"Auszahlung, die zuvor als Dividende erfolgte, wird reklassifiziert als "
+"Kapitalrückgabe - dies kann bei einer Steuererklärung zum Jahreabschluss "
+"erfolgen."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:272
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (dividend)"
-msgstr "Thesaurierung"
+msgstr "Thesaurierung (Dividende)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:273
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"Es erfolgt eine Thesaurierung des Kapitalertrags, wodurch sich ein "
-"Wertzuwachs der Anteile ergibt, der als Ertrag einer Dividende erfasst wird. "
-"Es enteht ein Zuwachs der Kostenbasis, die Anzahl der Anteile bleibt dabei "
-"unverändert."
+"Es erfolgt eine Thesaurierung des Kapitalertrags, der als Dividende verbucht "
+"wird. Dadurch ergibt sich ein Wertzuwachs der Anteile mit einem Zuwachs der "
+"Kostenbasis, die Anzahl der Anteile bleibt dabei unverändert."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (capital gain)"
-msgstr "Thesaurierung"
+msgstr "Thesaurierung (Wertzuwachs)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, which is recorded as dividend "
-#| "income and increases the cost basis without affecting # units."
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"Es erfolgt eine Thesaurierung des Kapitalertrags, wodurch sich ein "
-"Wertzuwachs der Anteile ergibt, der als Ertrag einer Dividende erfasst wird. "
-"Es enteht ein Zuwachs der Kostenbasis, die Anzahl der Anteile bleibt dabei "
-"unverändert."
+"Es erfolgt eine Thesaurierung des Kapitalertrags, der als Wertzuwachs der "
+"Anteile verbucht wird. Es enteht ein Zuwachs der Kostenbasis, die Anzahl der "
+"Anteile bleibt dabei unverändert."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1671,17 +1664,10 @@ msgstr ""
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:368
-#, fuzzy
-#| msgid "Compensatory return of capital"
 msgid "Compensatory return of capital (reclassification)"
-msgstr "Kompensatorische Kapitalrückzahlung"
+msgstr "Kompensatorische Kapitalrückzahlung (Reklassifizierung)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:369
-#, fuzzy
-#| msgid ""
-#| "Company returns capital, and the short stock holder must make a "
-#| "compensatory payment for the returned capital. This reduces the cost "
-#| "basis (less negative, towards 0.00 value) without affecting # units."
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1690,18 +1676,19 @@ msgid ""
 "compensatory return of capital, often due to end-of-year tax information."
 msgstr ""
 "Bei einer Kapitalrückzahlung während eines offenen Leerverkaufs muss der "
-"Verleiher eine Kompensationszahlung für die Rückzahlung leisten. Dies "
-"vermindert den Absolutbetrag der Kostenbasis (diese wird weniger negativ, "
-"nähert sich dem Nullwert), ohne dass sich die Anzahl der Anteile ändert."
+"Verleiher eine Kompensationszahlung (Ausgleichszahlung) für die Rückzahlung "
+"leisten. Dies vermindert den Absolutbetrag der Kostenbasis (diese wird "
+"weniger negativ, nähert sich dem Nullwert), ohne dass sich die Anzahl der "
+"Anteile ändert. Eine zuvor als Ausgleichsdividende verbuchte Ausschüttung "
+"wird oft aufgrund von Steuerinformationen zum Jahresende in die "
+"Ausgleichskapitalrückzahlung umgegliedert."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:380
-#, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (dividend)"
-msgstr "Kompensatorische Thesaurierung"
+msgstr "Kompensatorische Thesaurierung (Dividende)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:381
 msgid ""
@@ -1713,37 +1700,28 @@ msgstr ""
 "Bei Thesaurierung einer Dividende während eines offenen Leerverkaufs muss "
 "der Leerverkäufer eine Kompensation für die Dividende zahlen. Diese wird als "
 "negativer Dividendenertrag aufgezeichnet und erhöht den Absolutbetrag der "
-"Kostenbasis (wird damit negativer). Die Anzahl der Anteile bleibt "
-"unverändert."
+"Kostenbasis (wird damit negativer, entfernt sich mehr vom Nullwert). Die "
+"Anzahl der Anteile bleibt unverändert."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:392
-#, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (capital gain)"
-msgstr "Kompensatorische Thesaurierung"
+msgstr "Kompensatorische Thesaurierung (Kapitalrückzahlung)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:393
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, and the short stock holder must "
-#| "make a compensatory payment for the notional distribution. This is "
-#| "recorded as a loss/negative dividend income amount, and increases the "
-#| "cost basis (more negative, away from 0.00 value) without affecting # "
-#| "units."
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
 "capital loss amount, and increases the cost basis (more negative, away from "
 "0.00 value) without affecting # units."
 msgstr ""
-"Bei Thesaurierung einer Dividende während eines offenen Leerverkaufs muss "
-"der Leerverkäufer eine Kompensation für die Dividende zahlen. Diese wird als "
-"negativer Dividendenertrag aufgezeichnet und erhöht den Absolutbetrag der "
-"Kostenbasis (wird damit negativer). Die Anzahl der Anteile bleibt "
-"unverändert."
+"Bei Thesaurierung einer Kapitalrückzahlung während eines offenen "
+"Leerverkaufs muss der Leerverkäufer eine Kompensation für die "
+"Kapitalrückzahlung zahlen. Diese wird als Kapitalverlust aufgezeichnet und "
+"erhöht den Absolutbetrag der Kostenbasis (wird damit negativer, entfernt "
+"sich mehr vom Nullwert). Die Anzahl der Anteile bleibt unverändert."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:415
 msgid ""
@@ -1880,6 +1858,7 @@ msgstr "Kapitalerträge"
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
 msgstr ""
+"Die Transaktion kann nicht ausgeglichen werden, %s ist ein Fehlerwert %s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1030
 #, c-format
@@ -3806,7 +3785,7 @@ msgstr ""
 #. * gnucash application.
 #: gnucash/gnome/dialog-print-check.c:1564
 msgid "application"
-msgstr "application"
+msgstr "Applikation"
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by a
@@ -5099,10 +5078,8 @@ msgstr "Aktuellen Buchungsteil _löschen"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
-#, fuzzy
-#| msgid "Sold Splits"
 msgid "Show Splits"
-msgstr "Verkaufsbuchungen"
+msgstr "Vollständig"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 msgid "Jump"
@@ -7899,6 +7876,7 @@ msgstr ""
 "Joachim Wetzig, 2019-2022\n"
 "Christian Wehling, 2020-2022\n"
 "Jan Schneider, 2022\n"
+"Carsten Hütter, 2022-2023\n"
 "Christian Stimming, 2001-2021\n"
 "Marco Zietzling, 2020-2021\n"
 "Alois Spitzbart, 2020-2021\n"
@@ -13113,7 +13091,7 @@ msgstr "Fertig"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:16
 msgid "Introduction placeholder"
-msgstr "Introduction placeholder"
+msgstr "Platzhalter für die Einführung"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:21
 msgid "Title placeholder"
@@ -14552,7 +14530,7 @@ msgstr "Berechnen"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:385
 msgid "Recalculate the (single) blank entry in the above fields."
-msgstr "Den einen leeren Eintrag in den Feldern ausrechnen."
+msgstr "Den einen leeren Eintrag in den obigen Feldern ausrechnen."
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:514
 msgid "<b>Payment Options</b>"
@@ -24741,10 +24719,8 @@ msgid "Display a column for the actual values."
 msgstr "Eine Spalte mit den Ist-Werten anzeigen."
 
 #: gnucash/report/reports/standard/budget.scm:57
-#, fuzzy
-#| msgid "Actual Transactions"
 msgid "Link to actual transactions"
-msgstr "Tatsächliche Buchungen"
+msgstr "Verknüpfung zu tatsächlichen Buchungen"
 
 #: gnucash/report/reports/standard/budget.scm:58
 msgid "Show the actual transactions for the budget period"
@@ -28208,10 +28184,8 @@ msgstr "Zwischensumme Tabelle"
 #. "Running Totals" is the plural form as it refers to the running total and running subtotals.
 #. To be consistent, also consider how the singular form "Running Total" is translated.
 #: gnucash/report/trep-engine.scm:82
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Totals"
-msgstr "Laufender Saldo"
+msgstr "Laufende Gesamtsalden"
 
 #: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2292
 msgid "Show Account Description"
@@ -28613,7 +28587,7 @@ msgstr "Vorzeichen für bestimmte Kontenarten umkehren."
 
 #: gnucash/report/trep-engine.scm:997
 msgid "Display running totals as per report sort order?"
-msgstr ""
+msgstr "Anzeige der laufenden Salden mit der Sortierung des Reports?"
 
 #: gnucash/report/trep-engine.scm:1000
 msgid "Grand Total and Subtotals"
@@ -29188,7 +29162,7 @@ msgstr "Seit _letztem Aufruf…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:91
 msgid "Create Scheduled Transactions since the last time run"
-msgstr "Alle geplanten Buchungen seit dem letzten Aufruf erstellen."
+msgstr "Alle geplanten Buchungen seit dem letzten Aufruf erstellen"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
 msgid "_Mortgage & Loan Repayment…"
@@ -30728,7 +30702,7 @@ msgstr "Kein Umtauschkurs verfügbar in SX [%s] für %s -> %s, Wert ist Null."
 #: libgnucash/app-utils/gnc-ui-balances.c:369
 #, c-format
 msgid "%s balance of %s is above the upper limit %s."
-msgstr "Der %s-Saldo von %s liegt oberhalb der Untergrenze %s."
+msgstr "Der %s-Saldo von %s liegt über der Obergrenze %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, c-format
