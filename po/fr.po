@@ -27,7 +27,7 @@
 # ButterflyOfFire <ButterflyOfFire@protonmail.com>, 2022.
 # Laurent Bigonville <bigon@bigon.be>, 2022.
 # Simon Arlott <weblate.simon@arlott.org>, 2022.
-# Philippe Lamare <ph.lamare@free.fr>, 2022.
+# Philippe Lamare <ph.lamare@free.fr>, 2022, 2023.
 # Dyf_Tfh <n.zhao@hotmail.fr>, 2023.
 # Gaël CATLLA <gcatlla@free.fr>, 2023.
 # Vincent Dawans <dawansv@gmail.com>, 2023.
@@ -38,20 +38,19 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-06-25 03:39+0000\n"
-"Last-Translator: Vincent Dawans <dawansv@gmail.com>\n"
+"PO-Revision-Date: 2023-08-15 17:51+0000\n"
+"Last-Translator: Philippe Lamare <ph.lamare@free.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"product=GnuCash&component=Translations\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.0-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1462,7 +1461,7 @@ msgstr "Vous n'avez aucun compte-titres avec solde !"
 #. Initial stock long purchase
 #: gnucash/gnome/assistant-stock-transaction.cpp:190
 msgid "Open buy"
-msgstr "Ouverture avec achat d'actions"
+msgstr "Offre à prix ouvert"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:191
 msgid "Initial stock long purchase."
@@ -1837,7 +1836,7 @@ msgstr "valeur des actions"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:886
 msgid "Invalid stock new balance."
-msgstr "Valeur invalide du nouveau solde d'actions."
+msgstr "Nouveau solde d'actions invalide."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:888
 msgid "New balance must be higher than old balance."
@@ -5447,10 +5446,8 @@ msgstr "Supprime la répartition courante"
 # src/gnome/glade-gnc-dialogs.c:635
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
-#, fuzzy
-#| msgid "Sold Splits"
 msgid "Show Splits"
-msgstr "Répartitions vendues"
+msgstr "Voir les fractionnements"
 
 # messages-i18n.c:144
 #: gnucash/gnome/gnc-plugin-page-register.c:383
@@ -26773,7 +26770,7 @@ msgstr "Budget"
 #. Translators: Abbreviation for "Actual" amount
 #: gnucash/report/reports/standard/budget.scm:497
 msgid "Act"
-msgstr "Action"
+msgstr "Cour"
 
 #. Translators: Abbreviation for "Difference" amount
 #: gnucash/report/reports/standard/budget.scm:502
@@ -28129,7 +28126,7 @@ msgstr ""
 #: gnucash/report/reports/standard/investment-lots.scm:1425
 #, scheme-format
 msgid ": amount ~a, value ~a"
-msgstr ": quantité ~a, valeur ~a"
+msgstr ": montant ~a, valeur ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1445
 #, scheme-format
@@ -33146,7 +33143,7 @@ msgstr "GncQuotes::Fetch appelé sans produits ou valeurs boursières."
 #, fuzzy
 #| msgid "GncQuotes::Fetch called with no book."
 msgid "GncQuotes::Report called with no source."
-msgstr "GncQuotes::Fetch appelé sans livre de comptes."
+msgstr "GncQuotes::Report appelé sans source."
 
 # messages-i18n.c:124
 #: libgnucash/app-utils/gnc-quotes.cpp:339
