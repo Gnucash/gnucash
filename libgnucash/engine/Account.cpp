@@ -231,54 +231,6 @@ gnc_set_account_separator (const gchar *separator)
     account_separator[count] = '\0';
 }
 
-gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invalid_account_names)
-{
-    gchar *message = NULL;
-
-    if ( !invalid_account_names )
-        return NULL;
-
-    auto account_list {gnc_g_list_stringjoin (invalid_account_names, "\n")};
-
-    /* Translators: The first %s will be the account separator character,
-       the second %s is a list of account names.
-       The resulting string will be displayed to the user if there are
-       account names containing the separator character. */
-    message = g_strdup_printf(
-                  _("The separator character \"%s\" is used in one or more account names.\n\n"
-                    "This will result in unexpected behaviour. "
-                    "Either change the account names or choose another separator character.\n\n"
-                    "Below you will find the list of invalid account names:\n"
-                    "%s"), separator, account_list );
-    g_free ( account_list );
-    return message;
-}
-
-struct ViolationData
-{
-    GList *list;
-    const gchar *separator;
-};
-
-static void
-check_acct_name (Account *acct, gpointer user_data)
-{
-    auto cb {static_cast<ViolationData*>(user_data)};
-    auto name {xaccAccountGetName (acct)};
-    if (g_strstr_len (name, -1, cb->separator))
-        cb->list = g_list_prepend (cb->list, g_strdup (name));
-}
-
-GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)
-{
-    g_return_val_if_fail (separator != NULL, nullptr);
-    if (!book) return nullptr;
-    ViolationData cb = { nullptr, separator };
-    gnc_account_foreach_descendant (gnc_book_get_root_account (book),
-                                    (AccountCb)check_acct_name, &cb);
-    return cb.list;
-}
-
 struct AcctNameViolation
 {
     std::vector<std::string> list;

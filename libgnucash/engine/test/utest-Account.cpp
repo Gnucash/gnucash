@@ -435,34 +435,7 @@ test_gnc_set_account_separator ()
     sep = gnc_get_account_separator ();
     g_assert_true (sep == pass_sep);
 }
-/* Note: gnc_account_name_violations and gnc_account_list_name_violations should work with unicode. Change the functions and the tests accordingly. */
-/* gnc_account_name_violations_errmsg
-gchar *gnc_account_name_violations_errmsg (const gchar *separator, GList* invalid_account_names)// C: 6 in 4 */
-static void
-test_gnc_account_name_violations_errmsg ()
-{
-    GList *badnames = NULL, *nonames = NULL;
-    auto separator = ":";
-    /* FUT wants to free the strings, so we alloc them */
-    badnames = g_list_prepend (badnames, g_strdup ("Foo:bar"));
-    badnames = g_list_prepend (badnames, g_strdup ("baz"));
-    badnames = g_list_prepend (badnames, g_strdup ("waldo:pepper"));
-    auto message = gnc_account_name_violations_errmsg (separator, nonames);
-    auto account_list = gnc_g_list_stringjoin (badnames, "\n");
-    message = gnc_account_name_violations_errmsg (separator, nonames);
-    g_assert_true (message == NULL);
-    auto validation_message = g_strdup_printf (
-        "The separator character \"%s\" is used in one or more account "
-        "names.\n\nThis will result in unexpected behaviour. "
-        "Either change the account names or choose another separator "
-        "character.\n\nBelow you will find the list of invalid account names:\n"
-        "%s", separator, account_list);
-    g_free (account_list);
-    message = gnc_account_name_violations_errmsg (separator, badnames);
-    g_assert_cmpstr ( message, == , validation_message);
-    g_free (validation_message);
-    g_free (message);
-}
+
 /* This should be qof_BOOK_list_name_violations */
 /* gnc_account_list_name_violations
 GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)// C: 6 in 4 */
@@ -471,9 +444,8 @@ test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
 {
     auto log_level = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto log_domain = "gnc.engine";
-    auto msg = ": assertion 'separator != NULL' failed";
+    auto msg = ": assertion 'book && sep' failed";
     auto check = test_error_struct_new(log_domain, log_level, msg);
-    GList *results, *res_iter;
     auto sep = ":";
     QofBook *book = gnc_account_get_book (fixture->acct);
     /* Because of GLib bug 653052, we have to set the logging user_data to
@@ -481,19 +453,23 @@ test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
      */
     GLogFunc oldlogger = g_log_set_default_handler ((GLogFunc)test_null_handler, check);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_checked_substring_handler, check);
-    g_assert_true (gnc_account_list_name_violations (NULL, NULL) == NULL);
+    g_assert_true (gnc_account_violations_message (NULL, NULL) == NULL);
     g_assert_cmpint (check->hits, ==, 1);
-    g_assert_true (gnc_account_list_name_violations (book, NULL) == NULL);
+    g_assert_true (gnc_account_violations_message (book, NULL) == NULL);
     g_assert_cmpint (check->hits, ==, 2);
-    g_assert_true (gnc_account_list_name_violations (NULL, sep) == NULL);
+    g_assert_true (gnc_account_violations_message (NULL, sep) == NULL);
     g_log_set_default_handler (oldlogger, NULL);
-    results = gnc_account_list_name_violations (book, sep);
-    g_assert_cmpuint (g_list_length (results), == , 2);
-    g_assert_cmpint (check->hits, ==, 2);
-    for (res_iter = results; res_iter; res_iter = g_list_next (res_iter))
-        test_free (res_iter->data);
-    g_list_free (results);
+    auto result = gnc_account_violations_message (book, sep);
+    auto validation_message = "The separator character \":\" is used in one or more account "
+        "names.\n\nThis will result in unexpected behaviour. "
+        "Either change the account names or choose another separator "
+        "character.\n\nBelow you will find the list of invalid account names:\n"
+        ":foo:bar:waldo:pepper";
+    g_assert_cmpstr (result, == , validation_message);
+    g_assert_cmpint (check->hits, ==, 3);
+    g_free (result);
 }
+
 /* mark_account
 void
 mark_account (Account *acc)// C: 2 in 1 */
@@ -2834,7 +2810,6 @@ test_suite_account (void)
 {
 
     GNC_TEST_ADD_FUNC (suitename, "gnc set account separator", test_gnc_set_account_separator);
-    GNC_TEST_ADD_FUNC (suitename, "gnc account name violations errmsg", test_gnc_account_name_violations_errmsg);
     GNC_TEST_ADD (suitename, "gnc account list name violations", Fixture, &bad_data, setup, test_gnc_account_list_name_violations,  teardown);
     GNC_TEST_ADD_FUNC (suitename, "account create and destroy", test_gnc_account_create_and_destroy);
     GNC_TEST_ADD (suitename, "book set/get root account", Fixture, NULL, setup, test_gnc_book_set_get_root_account, teardown);
