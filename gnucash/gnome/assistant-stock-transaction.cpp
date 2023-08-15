@@ -670,8 +670,7 @@ void
 StockTransactionStockEntry::set_fieldmask(FieldMask mask)
 {
     StockTransactionEntry::set_fieldmask(mask);
-    m_enabled = mask & (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT |
-                        FieldMask::AMOUNT_CREDIT | FieldMask::AMOUNT_DEBIT);
+    m_enabled = mask & (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT);
     m_amount_enabled = mask & (FieldMask::AMOUNT_CREDIT | FieldMask::AMOUNT_DEBIT);
     m_debit_side = mask & (FieldMask::ENABLED_DEBIT | FieldMask::AMOUNT_DEBIT);
 }
@@ -1064,22 +1063,25 @@ StockAssistantModel::generate_list_of_splits() {
     if (last_split_node)
         check_txn_date(last_split_node, m_transaction_date, m_logger);
 
-
-    m_list_of_splits.push_back (make_stock_split_info());
-
-    auto [has_price, price, price_str] = calculate_price ();
-    if (has_price)
+    auto stock_entry{dynamic_cast<StockTransactionStockEntry*>(m_stock_entry.get())};
+    if (stock_entry && (stock_entry->m_enabled  || stock_entry->m_amount_enabled))
     {
-        // Translators: %s refer to: stock mnemonic, broker currency,
-        // date of transaction.
-        auto tmpl = N_("A price of 1 %s = %s on %s will be recorded.");
-        auto date_str = qof_print_date (m_transaction_date);
-        auto price_msg = g_strdup_printf
-            (_(tmpl),
-             gnc_commodity_get_mnemonic (xaccAccountGetCommodity (m_acct)),
-             price_str, date_str);
-        m_logger.info(price_msg);
-        g_free (date_str);
+        m_list_of_splits.push_back (make_stock_split_info());
+
+        auto [has_price, price, price_str] = calculate_price ();
+        if (has_price)
+        {
+            // Translators: %s refer to: stock mnemonic, broker currency,
+            // date of transaction.
+            auto tmpl = N_("A price of 1 %s = %s on %s will be recorded.");
+            auto date_str = qof_print_date (m_transaction_date);
+            auto price_msg = g_strdup_printf
+                (_(tmpl),
+                 gnc_commodity_get_mnemonic (xaccAccountGetCommodity (m_acct)),
+                 price_str, date_str);
+            m_logger.info(price_msg);
+            g_free (date_str);
+        }
     }
 
     if (m_cash_entry->m_enabled)
