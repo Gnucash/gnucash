@@ -56,7 +56,7 @@
 #include "gnc-csv-gnumeric-popup.h"
 #include "go-charmap-sel.h"
 
-#include "gnc-tree-model-container.hpp"
+#include "gnc-tree-container.hpp"
 #include "gnc-imp-settings-csv-tx.hpp"
 #include "gnc-import-tx.hpp"
 #include "gnc-tokenizer-fw.hpp"

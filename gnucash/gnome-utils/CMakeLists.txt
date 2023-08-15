@@ -113,7 +113,7 @@ set(gnome_utils_noinst_HEADERS
   gnc-autosave.h
   gnc-gobject-utils.h
   gnc-gtk-utils.h
-  gnc-tree-model-container.hpp
+  gnc-tree-container.hpp
   gnc-option-gtk-ui.hpp
   search-param.h
 )

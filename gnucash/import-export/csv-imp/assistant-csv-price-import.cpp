@@ -35,7 +35,7 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
-#include "gnc-tree-model-container.hpp"
+#include "gnc-tree-container.hpp"
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
 #include "gnc-ui-util.h"

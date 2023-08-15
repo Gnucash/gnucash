@@ -1,5 +1,5 @@
 /********************************************************************\
- * gnc-tree-model-container.hpp
+ * gnc-tree-container.hpp
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -19,8 +19,8 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#ifndef GNC_TREE_MODEL_CONTAINER_HPP
-#define GNC_TREE_MODEL_CONTAINER_HPP
+#ifndef GNC_TREE_CONTAINER_HPP
+#define GNC_TREE_CONTAINER_HPP
 
 #include <string>
 #include <optional>
