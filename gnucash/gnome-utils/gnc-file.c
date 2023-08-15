@@ -700,13 +700,7 @@ static char*
 get_account_sep_warning (QofBook *book)
 {
     const char *sep = gnc_get_account_separator_string ();
-    GList *violation_accts = gnc_account_list_name_violations (book, sep);
-    if (!violation_accts)
-        return NULL;
-
-    gchar *rv = gnc_account_name_violations_errmsg (sep, violation_accts);
-    g_list_free_full (violation_accts, g_free);
-    return rv;
+    return gnc_account_violations_message (book, sep);
 }
 
 /* private utilities for file open; done in two stages */

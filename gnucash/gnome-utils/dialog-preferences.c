@@ -123,22 +123,13 @@ GSList *add_ins = NULL;
 static gchar *gnc_account_separator_is_valid (const gchar *separator,
                                               gchar **normalized_separator)
 {
-    QofBook *book;
-    GList *conflict_accts = NULL;
-    gchar *message = NULL;
-
     if (!gnc_current_session_exist())
         return NULL;
 
-    book = gnc_get_current_book ();
+    QofBook *book = gnc_get_current_book ();
     *normalized_separator = gnc_normalize_account_separator (separator);
-    conflict_accts = gnc_account_list_name_violations (book, *normalized_separator);
-    if (conflict_accts)
-        message = gnc_account_name_violations_errmsg (*normalized_separator,
-                                                      conflict_accts);
 
-    g_list_free_full (conflict_accts, g_free);
-    return message;
+    return gnc_account_violations_message (book, *normalized_separator);
 }
 
 /** This function is called whenever the account separator is changed
