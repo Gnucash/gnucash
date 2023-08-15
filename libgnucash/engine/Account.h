@@ -288,6 +288,18 @@ typedef enum
      */
     GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator);
 
+    /** Runs through all the accounts and returns a translatable error
+     *  message showing which account names clash with the current
+     *  account separator.
+     *
+     *  @param book Pointer to the book with accounts to verify
+     *  @param separator The separator character to verify against
+     *
+     *  @return An error message that can be displayed to the user or logged.
+     *          This message string should be freed with g_free when no longer
+     *          needed. Returns nullptr if there are no invalid account names.
+     */
+    gchar *gnc_account_violations_message (QofBook *book, const char *sep);
     /* ------------------ */
 
     /** @name Account general setters/getters

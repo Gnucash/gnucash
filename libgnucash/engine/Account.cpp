@@ -279,6 +279,42 @@ GList *gnc_account_list_name_violations (QofBook *book, const gchar *separator)
     return cb.list;
 }
 
+struct AcctNameViolation
+{
+    std::vector<std::string> list;
+    const gchar *separator;
+    AcctNameViolation (const char *sep) : separator(sep) {};
+};
+
+static void
+check_account_name (Account *acct, AcctNameViolation* cb)
+{
+    auto name = xaccAccountGetName (acct);
+    if (g_strstr_len (name, -1, cb->separator))
+        cb->list.push_back (name);
+}
+
+gchar *gnc_account_violations_message (QofBook *book, const char *sep)
+{
+    g_return_val_if_fail (book && sep, nullptr);
+
+    AcctNameViolation cb{sep};
+
+    gnc_account_foreach_descendant (gnc_book_get_root_account (book), reinterpret_cast<AccountCb>(check_account_name), &cb);
+
+    if (!cb.list.size())
+        return nullptr;
+
+    auto str = std::accumulate (cb.list.begin(), cb.list.end(), std::string(),
+                                [&sep](const auto& a, const auto& b){ return a + sep + b; });
+
+    return g_strdup_printf (_("The separator character \"%s\" is used in one or more account names.\n\n"
+                              "This will result in unexpected behaviour. "
+                              "Either change the account names or choose another separator character.\n\n"
+                              "Below you will find the list of invalid account names:\n"
+                              "%s"), sep, str.c_str());
+}
+
 /********************************************************************\
 \********************************************************************/
 
