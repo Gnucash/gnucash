@@ -156,6 +156,7 @@ set (gnome_utils_HEADERS
   gnc-gui-query.h
   gnc-icons.h
   gnc-keyring.h
+  gnc-list-model-container.hpp
   gnc-main-window.h
   gnc-menu-extensions.h
   gnc-plugin-file-history.h
