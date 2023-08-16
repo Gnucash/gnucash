@@ -74,6 +74,12 @@ template <typename ModelType>
 class GncTreeIter
 {
 public:
+    using iterator_category = std::forward_iterator_tag;
+    using value_type = ModelType;
+    using difference_type = ModelType;
+    using pointer = ModelType*;
+    using reference = ModelType&;
+
     GncTreeIter(GtkTreeModel* model, std::optional<GtkTreeIter> iter) : m_model(model), m_iter(iter) {}
 
     GncTreeIter(GtkTreeModel* model) : m_model (model)
@@ -98,6 +104,13 @@ public:
             throw "no value, cannot dereference";
         return ModelType (m_model, *m_iter);
     }
+
+    GtkTreeIter& get_gtk_tree_iter ()
+    {
+        if (!m_iter.has_value())
+            throw "no value, cannot dereference";
+        return *m_iter;
+    };
 
     bool has_value() { return m_iter.has_value(); };
 
@@ -135,6 +148,13 @@ public:
     TreeModelIterator begin() { return TreeModelIterator(m_model); };
 
     TreeModelIterator end() { return TreeModelIterator(m_model, std::nullopt); };
+
+    TreeModelIterator append()
+    {
+        GtkTreeIter iter;
+        gtk_list_store_append (GTK_LIST_STORE(m_model), &iter);
+        return TreeModelIterator(m_model, iter);
+    };
 
     bool empty() { return begin() == end(); };
 
