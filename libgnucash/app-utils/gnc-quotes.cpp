@@ -567,7 +567,7 @@ parse_quote_json(PriceParams& p, const bpt::ptree& comm_pt)
 
 
     PINFO("Commodity: %s", p.mnemonic);
-    PINFO("  Success: %s", (inverted ? "yes" : "no"));
+    PINFO("  Success: %s", (p.success ? "yes" : "no"));
     PINFO("     Date: %s", (p.date ? p.date->c_str() : "missing"));
     PINFO("     Time: %s", (p.time ? p.time->c_str() : "missing"));
     PINFO(" Currency: %s", (p.currency ? p.currency->c_str() : "missing"));
