@@ -1,0 +1,84 @@
+!Account
+NAssets:Investments:Mutual Funds:Account ABC
+TMutual
+DDeferred Compensation
+^
+NAssets:Investments:Mutual Funds:Account GHI
+TPort
+^
+!Account
+NAssets:Investments:Mutual Funds:Account ABC
+DDeferred Compensation
+TInvst
+^
+!Type:Security
+NSecurity ABC
+SABC
+TMutual Fund
+^
+!Type:Security
+NDEF Fund
+SDEF
+TMutual Fund
+^
+!Type:Security
+NSecurity GHI
+SGHI
+TMutual Fund
+^
+!Type:Invst
+D12/31/00
+NShrsIn
+YSecurity ABC
+I30.34
+Q1,343.648538
+U40,766.30
+T40,766.30
+^
+D2/02/04
+NSellX
+YSecurity ABC
+I30.34
+Q1,343.648538
+U40,766.30
+T40,766.30
+L[Assets:Investments:Mutual Funds:Account GHI]
+$40,766.30
+^
+D2/02/04
+NBuyX
+YSecurity GHI
+I18.60999
+Q2,190.56
+U40,766.30
+T40,766.30
+MEst. price as of 2/2/04
+L[Assets:Investments:Mutual Funds:Account ABC]
+$40,766.30
+!Type:Prices
+"DEF",1.05,"01/06/18"
+^
+!Type:Prices
+"ABC",1,"01/01/18"
+^
+!Type:Prices
+"ABC",1.02,"01/03/18"
+^
+!Type:Prices
+"ABC",1 15/16,"01/03/19"
+^
+!Type:Prices
+"DEF",1.03,"01/04/18"
+^
+!Type:Prices
+"ABC",1.01,"01/20/00"
+^
+!Type:Prices
+"DEF",1 3/4,"01/05/18"
+^
+!Type:Prices
+"GHI",1 1/2,"01/05/21"
+^
+!Type:Prices
+"ABC",," 1/18'38"
+^
