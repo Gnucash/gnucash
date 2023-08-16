@@ -31,11 +31,14 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include "gnc-list-model-container.hpp"
 #include "import-match-picker.h"
 #include "qof.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
 #include "gnc-prefs.h"
+
+#include <algorithm>
 
 /********************************************************************\
  *   Constants   *
@@ -98,32 +101,22 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
     g_return_if_fail (matcher);
     g_return_if_fail (transaction_info);
 
-    auto found = false;
     auto store = GTK_LIST_STORE(gtk_tree_view_get_model(matcher->downloaded_view));
     auto split = gnc_import_TransInfo_get_fsplit(transaction_info);
     auto trans = gnc_import_TransInfo_get_trans(transaction_info);
+    GncListModelContainer container{GTK_TREE_MODEL(store)};
 
-    /* Has the transaction already been added? */
-    GtkTreeIter iter;
-    if (gtk_tree_model_get_iter_first(GTK_TREE_MODEL(store), &iter))
-    {
-        do
-        {
-            GNCImportTransInfo *local_info;
-            gtk_tree_model_get(GTK_TREE_MODEL(store), &iter,
-                               DOWNLOADED_COL_INFO_PTR, &local_info,
-                               -1);
-            if (local_info == transaction_info)
-            {
-                found = TRUE;
-                break;
-            }
-        }
-        while (gtk_tree_model_iter_next(GTK_TREE_MODEL(store), &iter));
-    }
-    if (!found)
-        gtk_list_store_append(store, &iter);
+    auto it_matches = [&transaction_info](auto it)
+    { return it.template get_column<GNCImportTransInfo*>(DOWNLOADED_COL_INFO_PTR) == transaction_info; };
 
+    // find the GncTreeIter whose DOWNLOADED_COL_INFO_PTR matches transaction_info
+    auto iter = std::find_if (container.begin(), container.end(), it_matches);
+
+    // not found. append a new GtkTreeIter in container.
+    if (iter == container.end())
+        iter = container.append();
+
+    // now iter is a GncTreeIter; iter->get_iter() is the GtkTreeIter
     auto account = xaccAccountGetName(xaccSplitGetAccount(split));
     auto date = qof_print_date(xaccTransGetDate(trans));
     auto amount = g_strdup (xaccPrintAmount(xaccSplitGetAmount(split), gnc_split_amount_print_info(split, TRUE)));
@@ -137,17 +130,15 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
     auto imbalance = g_strdup (xaccPrintAmount (xaccTransGetImbalanceValue(trans),
                                                 gnc_commodity_print_info (xaccTransGetCurrency (trans), TRUE)));
 
-    gtk_list_store_set (store, &iter,
-                        DOWNLOADED_COL_ACCOUNT, account,
-                        DOWNLOADED_COL_DATE, date,
-                        DOWNLOADED_COL_AMOUNT, amount,
-                        DOWNLOADED_COL_DESCRIPTION, desc,
-                        DOWNLOADED_COL_MEMO, memo,
-                        DOWNLOADED_COL_BALANCED, imbalance,
-                        DOWNLOADED_COL_INFO_PTR, transaction_info,
-                        -1);
+    iter->set_column (DOWNLOADED_COL_ACCOUNT, account);
+    iter->set_column (DOWNLOADED_COL_DATE, date);
+    iter->set_column (DOWNLOADED_COL_AMOUNT, amount);
+    iter->set_column (DOWNLOADED_COL_DESCRIPTION, desc);
+    iter->set_column (DOWNLOADED_COL_MEMO, memo);
+    iter->set_column (DOWNLOADED_COL_BALANCED, imbalance);
+    iter->set_column (DOWNLOADED_COL_INFO_PTR, transaction_info);
 
-    gtk_tree_selection_select_iter (gtk_tree_view_get_selection(matcher->downloaded_view), &iter);
+    gtk_tree_selection_select_iter (gtk_tree_view_get_selection(matcher->downloaded_view), &iter->get_iter());
 
     g_free (date);
     g_free (amount);
