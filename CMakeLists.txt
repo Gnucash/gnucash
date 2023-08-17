@@ -497,19 +497,29 @@ endif()
 
 if (WITH_PYTHON)
   set (PYTHON_MIN_VERSION 3.6.0)
-  find_package(PythonInterp ${PYTHON_MIN_VERSION})
-  if (NOT PYTHONINTERP_FOUND)
-    message(SEND_ERROR "Python support enabled, but Python interpreter not found.")
-  endif()
+  if (CMAKE_VERSION GREATER_EQUAL 3.12.0)
+    find_package (Python3 ${PYTHON_MIN_VERSION} COMPONENTS Interpreter Development)
+    if (NOT Python3_FOUND)
+      message(SEND_ERROR "Python support enabled, but Python3 interpreter and/or libaries not found.")
+    endif()
+  else()
+    find_package(PythonInterp ${PYTHON_MIN_VERSION})
+    if (NOT PYTHONINTERP_FOUND)
+      message(SEND_ERROR "Python support enabled, but Python interpreter not found.")
+    endif()
 
-  find_package(PythonLibs ${PYTHON_MIN_VERSION})
-  if (NOT PYTHONLIBS_FOUND)
-    message(SEND_ERROR "Python support enabled, but Python libraries not found.")
+    find_package(PythonLibs ${PYTHON_MIN_VERSION})
+    if (NOT PYTHONLIBS_FOUND)
+      message(SEND_ERROR "Python support enabled, but Python libraries not found.")
+    endif()
+    set(Python3_EXECUTABLE ${PYTHON_EXECUTABLE})
+    set(Python3_LIBRARIES ${PYTHON_LIBRARIES})
+    set(Python3_INCLUDE_DIRS ${PYTHON_INCLUDE_DIRS})
   endif()
 
   # Determine where to install the python libraries.
   execute_process(
-    COMMAND ${PYTHON_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}', plat_specific=True))"
+    COMMAND ${Python3_EXECUTABLE} -c "from distutils import sysconfig; print(sysconfig.get_python_lib(prefix='${CMAKE_INSTALL_PREFIX}', plat_specific=True))"
     RESULT_VARIABLE PYTHON_SYSCONFIG_RESULT
     OUTPUT_VARIABLE PYTHON_SYSCONFIG_OUTPUT
     ERROR_VARIABLE PYTHON_SYSCONFIG_ERROR

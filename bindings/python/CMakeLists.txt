@@ -73,13 +73,13 @@ if(WITH_PYTHON)
     ${CMAKE_SOURCE_DIR}/libgnucash/app-utils
     ${CMAKE_SOURCE_DIR}/gnucash/gnome
     ${CMAKE_SOURCE_DIR}/libgnucash/core-utils
-    ${PYTHON_INCLUDE_DIRS}
+    ${Python3_INCLUDE_DIRS}
   )
 
   add_library(gnucash_core_c MODULE ${SWIG_GNUCASH_CORE_C})
   target_include_directories(gnucash_core_c PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
 
-  target_link_libraries(gnucash_core_c gnc-app-utils gnc-engine ${PYTHON_LIBRARIES})
+  target_link_libraries(gnucash_core_c gnc-app-utils gnc-engine ${Python3_LIBRARIES})
   set_target_properties(gnucash_core_c PROPERTIES PREFIX "_")
   target_compile_options(gnucash_core_c PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
   if (HAVE_STRINGOP_TRUNCATION)
@@ -87,7 +87,7 @@ if(WITH_PYTHON)
   endif()
 
   add_executable(sqlite3test EXCLUDE_FROM_ALL sqlite3test.c ${SWIG_GNUCASH_CORE_C})
-  target_link_libraries(sqlite3test gnc-app-utils gnc-engine ${PYTHON_LIBRARIES})
+  target_link_libraries(sqlite3test gnc-app-utils gnc-engine ${Python3_LIBRARIES})
   target_include_directories(sqlite3test PRIVATE ${gnucash_core_c_INCLUDE_DIRS})
   target_compile_options(sqlite3test PRIVATE -Wno-implicit -Wno-missing-prototypes -Wno-declaration-after-statement -Wno-missing-declarations)
   if (HAVE_STRINGOP_TRUNCATION)
@@ -122,7 +122,7 @@ if(WITH_PYTHON)
 
   add_library (sw_core_utils MODULE ${SWIG_CORE_UTILS_PYTHON_C})
 
-  target_link_libraries(sw_core_utils gnc-core-utils ${PYTHON_LIBRARIES})
+  target_link_libraries(sw_core_utils gnc-core-utils ${Python3_LIBRARIES})
   set_target_properties(sw_core_utils PROPERTIES PREFIX "_")
 
   if (HAVE_STRINGOP_TRUNCATION)
@@ -131,7 +131,7 @@ if(WITH_PYTHON)
 
   target_include_directories (sw_core_utils
     PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-    PRIVATE ${PYTHON_INCLUDE_DIRS}
+    PRIVATE ${Python3_INCLUDE_DIRS}
   )
   target_compile_definitions (sw_core_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.core-utils\")
 
@@ -156,7 +156,7 @@ if(WITH_PYTHON)
   set(PYEXEC_FILES sw_app_utils.py)
   add_library (sw_app_utils MODULE ${SWIG_APP_UTILS_PYTHON_C})
 
-  target_link_libraries(sw_app_utils gnc-app-utils ${app_utils_ALL_LIBRARIES} ${PYTHON_LIBRARIES})
+  target_link_libraries(sw_app_utils gnc-app-utils ${app_utils_ALL_LIBRARIES} ${Python3_LIBRARIES})
   set_target_properties(sw_app_utils PROPERTIES PREFIX "_")
   if (HAVE_STRINGOP_TRUNCATION)
     target_compile_options(sw_app_utils PRIVATE -Wno-error=stringop-truncation)
@@ -168,7 +168,7 @@ if(WITH_PYTHON)
 
   target_include_directories (sw_app_utils
           PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
-          PRIVATE ${app_utils_ALL_INCLUDES} ${PYTHON_INCLUDE_DIRS}
+          PRIVATE ${app_utils_ALL_INCLUDES} ${Python3_INCLUDE_DIRS}
           )
   target_compile_definitions (sw_app_utils PRIVATE -DG_LOG_DOMAIN=\"gnc.app-utils\")
 
