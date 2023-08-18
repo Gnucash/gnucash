@@ -17,7 +17,7 @@ if (WITH_PYTHON)
   target_link_libraries(gncmod-python gnc-module gnc-core-utils
    ${Python3_LIBRARIES})   # ${PYTHON_EXTRA_LIBS}
   target_include_directories(gncmod-python
-    PRIVATE ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/libgnucash/core-utils ${CMAKE_SOURCE_DIR}/gnc-module ${PYTHON_INCLUDE_DIR})
+    PRIVATE ${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/libgnucash/core-utils ${CMAKE_SOURCE_DIR}/gnc-module ${Python3_INCLUDE_DIRS})
   target_compile_options(gncmod-python PRIVATE -DG_LOG_DOMAIN=\"gnc.python\")
 if (APPLE)
   set_target_properties (gncmod-python PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
