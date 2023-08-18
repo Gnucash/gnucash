@@ -2869,7 +2869,11 @@ gnc_main_window_destroy (GtkWidget *widget)
     g_return_if_fail (GNC_IS_MAIN_WINDOW (widget));
 
     window = GNC_MAIN_WINDOW (widget);
-
+#ifdef MAC_INTEGRATION
+    auto entry = g_list_find (active_windows, window);
+    if (entry && (entry->next || entry->prev))
+        gnc_quartz_set_menu (GNC_MAIN_WINDOW (entry->next ? entry->next->data : entry->prev->data));
+#endif
     active_windows = g_list_remove (active_windows, window);
 
     /* Do these things once */
