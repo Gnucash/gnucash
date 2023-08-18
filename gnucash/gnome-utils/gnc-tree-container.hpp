@@ -79,7 +79,7 @@ public:
     GncTreeIter(GtkTreeModel* model) : m_model (model)
     {
         GtkTreeIter iter;
-        m_iter = gtk_tree_model_get_iter_first(m_model, &iter) ? iter : std::nullopt;
+        m_iter = gtk_tree_model_get_iter_first(m_model, &iter) ? std::make_optional(iter) : std::nullopt;
     }
 
     GncTreeIter& operator++()
