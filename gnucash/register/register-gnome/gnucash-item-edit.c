@@ -319,6 +319,7 @@ gnc_item_edit_init (GncItemEdit *item_edit)
     item_edit->popup_user_data = NULL;
     item_edit->popup_returned_height = 0;
     item_edit->popup_height_signal_id = 0;
+    item_edit->popup_allocation_height = -1;
 
     item_edit->style = NULL;
     item_edit->button_width = MIN_BUTT_WIDTH;
@@ -944,15 +945,15 @@ gnc_item_edit_destroying (GtkWidget *item_edit, gpointer data)
 static void
 check_popup_height_is_true (GtkWidget    *widget,
                             GdkRectangle *allocation,
-                            gpointer user_data)
+                            gpointer      user_data)
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT(user_data);
 
-    // if a larger font is specified in css for the sheet, the popup returned height value
-    // on first pop does not reflect the true height but the minimum height so just to be
-    // sure check this value against the allocated one.
+    // the popup returned height value on first pop sometimes does not reflect the true height
+    // but the minimum height so just to be sure check this value against the allocated one.
     if (allocation->height != item_edit->popup_returned_height)
     {
+        item_edit->popup_allocation_height = allocation->height;
         gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
 
         g_idle_add_full (G_PRIORITY_HIGH_IDLE,
@@ -1104,6 +1105,8 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
 
     gtk_toggle_button_set_active
         (GTK_TOGGLE_BUTTON(item_edit->popup_toggle.tbutton), FALSE);
+
+    item_edit->popup_allocation_height = -1;
 
     gtk_widget_grab_focus (GTK_WIDGET(item_edit->sheet));
 }

@@ -644,6 +644,7 @@ populate_list_store (CompletionCell* cell, const gchar* str)
     PopBox* box = cell->cell.gui_private;
 
     box->in_list_select = FALSE;
+    box->item_edit->popup_allocation_height = -1;
 
     if (box->stop_searching)
         return;
@@ -904,27 +905,20 @@ gnc_completion_cell_gui_move (BasicCell* bcell)
 }
 
 static int
-popup_get_height (G_GNUC_UNUSED GtkWidget* widget,
+popup_get_height (GtkWidget* widget,
                   int space_available,
-                  int row_height,
+                  G_GNUC_UNUSED int row_height,
                   gpointer user_data)
 {
     PopBox* box = user_data;
     GtkScrolledWindow* scrollwin = GNC_ITEM_LIST(widget)->scrollwin;
-    GtkWidget *hsbar = gtk_scrolled_window_get_hscrollbar (scrollwin);
-    GtkStyleContext *context = gtk_widget_get_style_context (hsbar);
-    /* Note: gtk_scrolled_window_get_overlay_scrolling (scrollwin) always returns
-       TRUE so look for style class "overlay-indicator" on the scrollbar. */
-    gboolean overlay = gtk_style_context_has_class (context, "overlay-indicator");
-    int count = gnc_item_list_num_entries (box->item_list);
-    int height = count * (gnc_item_list_get_cell_height (box->item_list) + 2);
+    int height;
 
-    if (!overlay)
-    {
-        gint minh, nath;
-        gtk_widget_get_preferred_height (hsbar, &minh, &nath);
-        height = height + minh;
-    }
+    // if popup_allocation_height set use that
+    if (box->item_edit->popup_allocation_height != -1)
+        height = box->item_edit->popup_allocation_height;
+    else
+        height = gnc_item_list_get_popup_height (GNC_ITEM_LIST(widget));
 
     if (height < space_available)
     {

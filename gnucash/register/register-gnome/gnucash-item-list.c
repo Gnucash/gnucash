@@ -468,7 +468,7 @@ tree_view_selection_changed (GtkTreeSelection* selection,
 }
 
 
-gint
+static gint
 gnc_item_list_get_cell_height (GncItemList *item_list)
 {
 
@@ -479,6 +479,26 @@ gnc_item_list_get_cell_height (GncItemList *item_list)
                                            &nat_height);
 
     return min_height;
+}
+
+gint
+gnc_item_list_get_popup_height (GncItemList *item_list)
+{
+    GtkWidget *hsbar = gtk_scrolled_window_get_hscrollbar (GTK_SCROLLED_WINDOW(item_list->scrollwin));
+    GtkStyleContext *context = gtk_widget_get_style_context (hsbar);
+    /* Note: gtk_scrolled_window_get_overlay_scrolling (scrollwin) always returns
+       TRUE so look for style class "overlay-indicator" on the scrollbar. */
+    gboolean overlay = gtk_style_context_has_class (context, "overlay-indicator");
+    int count = gnc_item_list_num_entries (item_list);
+    int height = count * (gnc_item_list_get_cell_height (item_list) + 2);
+
+    if (!overlay)
+    {
+        gint minh, nath;
+        gtk_widget_get_preferred_height (hsbar, &minh, &nath);
+        height = height + minh;
+    }
+    return height;
 }
 
 
