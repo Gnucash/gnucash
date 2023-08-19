@@ -102,6 +102,8 @@ public:
 
     bool operator==(const GncTreeIter& other) const
     {
+        if (m_model != other.m_model)
+            return false;
         if (!m_iter.has_value() && !other.m_iter.has_value())
             return true;
         if (!m_iter.has_value() || !other.m_iter.has_value())
