@@ -1459,7 +1459,7 @@ PageTransType::change_txn_type (StockAssistantModel *model)
     if (!model->set_txn_type (type_idx))
         return;
 
-    set_txn_type_explanation (model->m_txn_type->explanation);
+    set_txn_type_explanation (_(model->m_txn_type->explanation));
 }
 
 void
