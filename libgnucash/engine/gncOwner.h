@@ -279,26 +279,26 @@ gncOwnerApplyPaymentSecs (const GncOwner *owner, Transaction **preset_txn,
                           gnc_numeric amount, gnc_numeric exch, time64 date,
                           const char *memo, const char *num, gboolean auto_pay);
 
-/** Helper function to find a split in lot that best offsets target_value
+/** Helper function to find a split in lot that best offsets target_amount
  *  Obviously it should be of opposite sign.
  * If there are more splits of opposite sign the following
  * criteria are used in order of preference:
- * 1. exact match in abs value is preferred over larger abs value
- * 2. larger abs value is preferred over smaller abs value
- * 3. if previous and new candidate are in the same value category,
+ * 1. exact match in abs amount is preferred over larger abs amount
+ * 2. larger abs amount is preferred over smaller abs amount
+ * 3. if previous and new candidate are in the same amount category,
  *    prefer real payment splits over lot link splits
  * 4. if previous and new candidate are of same split type
- *    prefer biggest abs value.
+ *    prefer biggest abs amount.
  */
-Split *gncOwnerFindOffsettingSplit (GNCLot *pay_lot, gnc_numeric target_value);
+Split* gncOwnerFindOffsettingSplit(GNCLot* lot, gnc_numeric target_amount);
 
-/** Helper function to reduce the value of a split to target_value. To make
+/** Helper function to reduce the amount of a split to target_amount. To make
  *  sure the split's parent transaction remains balanced a second split
  *  will be created with the remainder. Similarly if the split was part of a
  *  (business) lot, the remainder split will be added to the same lot to
  *  keep the lot's balance unchanged.
  */
-gboolean gncOwnerReduceSplitTo (Split *split, gnc_numeric target_value);
+gboolean gncOwnerReduceSplitTo(Split* split, gnc_numeric target_amount);
 
 /** To help a user understand what a lot link transaction does,
  *  we set the memo to name all documents involved in the link.

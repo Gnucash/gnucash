@@ -893,11 +893,11 @@ typedef enum
     is_pay_split = 1
 } split_flags;
 
-Split *gncOwnerFindOffsettingSplit (GNCLot *lot, gnc_numeric target_value)
+Split *gncOwnerFindOffsettingSplit (GNCLot *lot, gnc_numeric target_amount)
 {
     SplitList *ls_iter = NULL;
     Split *best_split = NULL;
-    gnc_numeric best_val = { 0, 1};
+    gnc_numeric best_amt = { 0, 1};
     gint best_flags = 0;
 
     if (!lot)
@@ -906,16 +906,12 @@ Split *gncOwnerFindOffsettingSplit (GNCLot *lot, gnc_numeric target_value)
     for (ls_iter = gnc_lot_get_split_list (lot); ls_iter; ls_iter = ls_iter->next)
     {
         Split *split = ls_iter->data;
-        Transaction *txn;
-        gnc_numeric split_value;
-        gint new_flags = 0;
-        gint val_cmp = 0;
 
         if (!split)
             continue;
 
 
-        txn = xaccSplitGetParent (split);
+        Transaction *txn = xaccSplitGetParent (split);
         if (!txn)
         {
             // Ooops - the split doesn't belong to any transaction !
@@ -925,18 +921,19 @@ Split *gncOwnerFindOffsettingSplit (GNCLot *lot, gnc_numeric target_value)
             continue;
         }
 
-        // Check if this split has the opposite sign of the target value we want to offset
-        split_value = xaccSplitGetValue (split);
-        if (gnc_numeric_positive_p (target_value) == gnc_numeric_positive_p (split_value))
+        // Check if this split has the opposite sign of the target amount we want to offset
+        gnc_numeric split_amount = xaccSplitGetAmount (split);
+        if (gnc_numeric_positive_p (target_amount) == gnc_numeric_positive_p (split_amount))
             continue;
 
         // Ok we have found a split that potentially can offset the target value
         // Let's see if it's better than what we have found already.
-        val_cmp = gnc_numeric_compare (gnc_numeric_abs (split_value),
-                                       gnc_numeric_abs (target_value));
-        if (val_cmp == 0)
+        gint amt_cmp = gnc_numeric_compare (gnc_numeric_abs (split_amount),
+                                            gnc_numeric_abs (target_amount));
+        gint new_flags = 0;
+        if (amt_cmp == 0)
             new_flags += is_equal;
-        else if (val_cmp > 0)
+        else if (amt_cmp > 0)
             new_flags += is_more;
         else
             new_flags += is_less;
@@ -945,13 +942,13 @@ Split *gncOwnerFindOffsettingSplit (GNCLot *lot, gnc_numeric target_value)
             new_flags += is_pay_split;
 
         if ((new_flags >= best_flags) &&
-            (gnc_numeric_compare (gnc_numeric_abs (split_value),
-                                  gnc_numeric_abs (best_val)) > 0))
+            (gnc_numeric_compare (gnc_numeric_abs (split_amount),
+                                  gnc_numeric_abs (best_amt)) > 0))
         {
             // The new split is a better match than what we found so far
             best_split = split;
             best_flags = new_flags;
-            best_val   = split_value;
+            best_amt   = split_amount;
         }
     }
 
@@ -959,34 +956,51 @@ Split *gncOwnerFindOffsettingSplit (GNCLot *lot, gnc_numeric target_value)
 }
 
 gboolean
-gncOwnerReduceSplitTo (Split *split, gnc_numeric target_value)
+gncOwnerReduceSplitTo (Split *split, gnc_numeric target_amount)
 {
-    gnc_numeric split_val = xaccSplitGetValue (split);
-    gnc_numeric rem_val;
-    Split *rem_split;
-    Transaction *txn;
-    GNCLot *lot;
+    gnc_numeric split_amt = xaccSplitGetAmount (split);
+    if (gnc_numeric_positive_p (split_amt) != gnc_numeric_positive_p (target_amount))
+        return FALSE; // Split and target amount have to be of the same sign
 
-    if (gnc_numeric_positive_p (split_val) != gnc_numeric_positive_p (target_value))
-        return FALSE; // Split and target value have to be of the same sign
+    if (gnc_numeric_equal (split_amt, target_amount))
+        return FALSE; // Split already has the target amount
 
-    if (gnc_numeric_equal (split_val, target_value))
-        return FALSE; // Split already has the target value
+    if (gnc_numeric_zero_p (split_amt))
+        return FALSE; // We can't reduce a split that already has zero amount
 
-    rem_val = gnc_numeric_sub (split_val, target_value, GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD); // note: values are of opposite sign
-    rem_split = xaccMallocSplit (xaccSplitGetBook (split));
-    xaccSplitCopyOnto (split, rem_split);
-    xaccSplitSetAmount (rem_split, rem_val);
-    xaccSplitSetValue (rem_split, rem_val);
-
-    txn = xaccSplitGetParent (split);
+    Transaction *txn = xaccSplitGetParent (split);
     xaccTransBeginEdit (txn);
-    xaccSplitSetAmount (split, target_value);
-    xaccSplitSetValue (split, target_value);
+
+    /* Calculate new value for reduced split. This can be different from
+     * the reduced split's new amount (when account and transaction
+     * commodity differ) */
+    gnc_numeric split_val = xaccSplitGetValue (split);
+    gnc_numeric exch = gnc_numeric_div (split_val, split_amt,
+                                        GNC_DENOM_AUTO, GNC_HOW_DENOM_LCD);
+
+    gint64 txn_comm_fraction = gnc_commodity_get_fraction (xaccTransGetCurrency (txn));
+    gnc_numeric target_val = gnc_numeric_mul (target_amount, exch,
+                                              txn_comm_fraction,
+                                              GNC_HOW_RND_ROUND_HALF_UP);
+    xaccSplitSetAmount (split, target_amount);
+    xaccSplitSetValue (split, target_val);
+
+    /* Calculate amount and value for remainder split.
+     * Note we calculate the remaining value by subtracting the new target value
+     * from the original split's value rather than multiplying the remaining
+     * amount with the exchange rate to avoid imbalances due to rounding errors. */
+    gnc_numeric rem_amt = gnc_numeric_sub (split_amt, target_amount, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+    gnc_numeric rem_val = gnc_numeric_sub (split_val, target_val, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
+
+    Split *rem_split = xaccMallocSplit (xaccSplitGetBook (split));
+    xaccSplitCopyOnto (split, rem_split);
+    xaccSplitSetAmount (rem_split, rem_amt);
+    xaccSplitSetValue (rem_split, rem_val);
     xaccSplitSetParent (rem_split, txn);
+
     xaccTransCommitEdit (txn);
 
-    lot = xaccSplitGetLot (split);
+    GNCLot *lot = xaccSplitGetLot (split);
     gnc_lot_add_split (lot, rem_split);
 
     return TRUE;
@@ -1226,11 +1240,11 @@ static void gncOwnerOffsetLots (GNCLot *from_lot, GNCLot *to_lot, const GncOwner
         return; // No suitable offsetting split found, nothing more to do
 
     /* If the offsetting split is bigger than the amount needed to balance
-     * to_lot, reduce the split so its reduced value closes to_lot exactly.
+     * to_lot, reduce the split so its reduced amount closes to_lot exactly.
      * Note the negation in the reduction function. The split must be of
      * opposite sign of to_lot's balance in order to be able to close it.
      */
-    if (gnc_numeric_compare (gnc_numeric_abs (xaccSplitGetValue (split)),
+    if (gnc_numeric_compare (gnc_numeric_abs (xaccSplitGetAmount (split)),
                              gnc_numeric_abs (target_offset)) > 0)
         gncOwnerReduceSplitTo (split, gnc_numeric_neg (target_offset));
 
