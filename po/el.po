@@ -36,14 +36,15 @@
 # Eugenia Russell <eugenia.russell2019@gmail.com>, 2021.
 # Gregory-K <lifeturn@gmail.com>, 2022.
 # ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΤΥΛΙΣΟΥ <astilisos209@gmail.com>, 2023.
+# Dimitris Mandalidis <dimitris.mandalidis@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-07-12 10:30+0000\n"
-"Last-Translator: ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΤΥΛΙΣΟΥ <astilisos209@gmail.com>\n"
+"PO-Revision-Date: 2023-08-23 16:54+0000\n"
+"Last-Translator: Dimitris Mandalidis <dimitris.mandalidis@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/gnucash/el/"
 ">\n"
 "Language: el\n"
@@ -3070,7 +3071,7 @@ msgstr "Πιστωτικό σημείωμα"
 
 #: gnucash/gnome/dialog-invoice.c:2267
 msgid "PAID"
-msgstr ""
+msgstr "ΠΛΗΡΩΜΕΝΟ"
 
 #: gnucash/gnome/dialog-invoice.c:2269
 #: gnucash/report/reports/standard/new-owner-report.scm:574
@@ -3739,7 +3740,7 @@ msgstr "Είστε σίγουρος ότι θέλετε τη διαγραφή τ
 #: gnucash/gnome-utils/dialog-transfer.cpp:1797
 #, c-format
 msgid "Price retrieval failed: %s"
-msgstr ""
+msgstr "Η ανάκτηση της τιμής απέτυχε: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 #, fuzzy
@@ -4294,6 +4295,9 @@ msgid ""
 "transactions from.\n"
 "Are you sure you want to do this?"
 msgstr ""
+"Ο λογαριασμός %s δεν είναι στο ίδιο νόμισμα με αυτόν από τον οποίο "
+"μεταφέρετε τις συναλλαγές.\n"
+"Είστε σίγουρος;"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1300
 #, fuzzy
@@ -4904,11 +4908,11 @@ msgstr "Εισαγωγή"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:285
 msgid "Up"
-msgstr ""
+msgstr "Πάνω"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:286
 msgid "Down"
-msgstr ""
+msgstr "Κάτω"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:289
 msgid "Unpost"
@@ -5250,11 +5254,11 @@ msgstr "Ακυρωμένο"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3235
 msgid "Show:"
-msgstr ""
+msgstr "Εμφάνιση:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3243
 msgid "Hide:"
-msgstr ""
+msgstr "Απόκρυψη:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3254
 #, fuzzy
@@ -5405,7 +5409,7 @@ msgstr "Αποθήκευση ως…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:231
 msgid "Make Pdf"
-msgstr ""
+msgstr "Δημιουργία PDF"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:365
 #: gnucash/gnome/gnc-plugin-page-report.cpp:366
@@ -5861,7 +5865,7 @@ msgstr ""
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:17
 msgid "Keep track of your day to day personal income and expenses"
-msgstr ""
+msgstr "Διατηρείστε τον έλεγχο των καθημερινών σας εσόδων και εξόδων"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:18
 msgid "Manage your stock, bond and mutual fund accounts with ease"
@@ -5875,6 +5879,7 @@ msgstr "Διατήρηση κανονικής ταξινόμησης λογαρ�
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
 msgid "Create accurate reports and graphs from your financial data"
 msgstr ""
+"Δημιουργήστε ακριβείς αναφορές και γραφήματα από τα οικονομικά σας δεδομένα"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
 #, fuzzy
@@ -5889,7 +5894,7 @@ msgstr ""
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Perform financial calculations, such as a loan repayment"
-msgstr ""
+msgstr "Εκτελέστε οικονομικούς υπολογισμούς, όπως μια αποπληρωμή δανείου"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:33
 #, fuzzy
@@ -6563,6 +6568,7 @@ msgstr ""
 msgid ""
 "An account with opening balance already exists for the desired currency."
 msgstr ""
+"Ένας λογαριασμός με ισολογισμό έναρξης υπάρχει ήδη για την επιθυμητό νόμισμα."
 
 #: gnucash/gnome-utils/dialog-account.c:1457
 #, fuzzy
@@ -6876,7 +6882,7 @@ msgstr "Επαναφορά τιμών στις προεπιλεγμένες."
 
 #: gnucash/gnome-utils/dialog-options.cpp:560
 msgid "Page"
-msgstr ""
+msgstr "Σελίδα"
 
 #. Translators: Both %s will be the account separator character; the
 #. resulting string is a demonstration how the account separator
