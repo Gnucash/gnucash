@@ -56,7 +56,6 @@
 #include "gnc-csv-gnumeric-popup.h"
 #include "go-charmap-sel.h"
 
-#include "gnc-tree-container.hpp"
 #include "gnc-imp-settings-csv-tx.hpp"
 #include "gnc-import-tx.hpp"
 #include "gnc-tokenizer-fw.hpp"
@@ -894,25 +893,31 @@ void
 CsvImpTransAssist::preview_settings_save ()
 {
     auto new_name = tx_imp->settings_name();
-    GncTreeContainer<> tree_model_container{gtk_combo_box_get_model (settings_combo)};
 
     /* Check if the entry text matches an already existing preset */
     GtkTreeIter iter;
     if (!gtk_combo_box_get_active_iter (settings_combo, &iter))
     {
-        for (auto iter : tree_model_container)
+
+        auto model = gtk_combo_box_get_model (settings_combo);
+        bool valid = gtk_tree_model_get_iter_first (model, &iter);
+        while (valid)
         {
             // Walk through the list, reading each row
-            auto preset = iter.get<CsvTransImpSettings*>(SET_GROUP);
-            if (preset && preset->m_name == new_name)
+            CsvTransImpSettings *preset;
+            gtk_tree_model_get (model, &iter, SET_GROUP, &preset, -1);
+
+            if (preset && (preset->m_name == std::string(new_name)))
             {
-                auto response = gnc_ok_cancel_dialog (GTK_WINDOW (csv_imp_asst), GTK_RESPONSE_OK,
-                                                      "%s", _("Setting name already exists, overwrite?"));
+                auto response = gnc_ok_cancel_dialog (GTK_WINDOW (csv_imp_asst),
+                        GTK_RESPONSE_OK,
+                        "%s", _("Setting name already exists, overwrite?"));
                 if (response != GTK_RESPONSE_OK)
                     return;
 
                 break;
             }
+            valid = gtk_tree_model_iter_next (model, &iter);
         }
     }
 
@@ -924,14 +929,23 @@ CsvImpTransAssist::preview_settings_save ()
 
         // Update the settings store
         preview_populate_settings_combo();
+        auto model = gtk_combo_box_get_model (settings_combo);
 
-        for (auto iter : tree_model_container)
+        // Get the first entry in model
+        GtkTreeIter   iter;
+        bool valid = gtk_tree_model_get_iter_first (model, &iter);
+        while (valid)
         {
-            if (iter.get_string (SET_NAME) == new_name) // Set Active, the one Saved.
-            {
-                gtk_combo_box_set_active_iter (settings_combo, &iter.get_iter());
-                break;
-            }
+            // Walk through the list, reading each row
+            gchar *name = nullptr;
+            gtk_tree_model_get (model, &iter, SET_NAME, &name, -1);
+
+            if (g_strcmp0 (name, new_name.c_str()) == 0) // Set Active, the one Saved.
+                gtk_combo_box_set_active_iter (settings_combo, &iter);
+
+            g_free (name);
+
+            valid = gtk_tree_model_iter_next (model, &iter);
         }
     }
     else
@@ -1442,6 +1456,7 @@ CsvImpTransAssist::preview_row_fill_state_cells (GtkListStore *store, GtkTreeIte
 GtkWidget*
 CsvImpTransAssist::preview_cbox_factory (GtkTreeModel* model, uint32_t colnum)
 {
+    GtkTreeIter iter;
     auto cbox = gtk_combo_box_new_with_model(model);
 
     /* Set up a renderer for this combobox. */
@@ -1451,14 +1466,18 @@ CsvImpTransAssist::preview_cbox_factory (GtkTreeModel* model, uint32_t colnum)
     gtk_cell_layout_add_attribute (GTK_CELL_LAYOUT(cbox),
             renderer, "text", COL_TYPE_NAME);
 
-    for (auto iter : GncTreeContainer (model))
+    auto valid = gtk_tree_model_get_iter_first (model, &iter);
+    while (valid)
     {
-        if (iter.get_int(COL_TYPE_ID) == static_cast<int>( tx_imp->column_types()[colnum]))
-        {
-            gtk_combo_box_set_active_iter (GTK_COMBO_BOX(cbox), &iter.get_iter());
+        gint stored_col_type;
+        gtk_tree_model_get (model, &iter,
+                COL_TYPE_ID, &stored_col_type, -1);
+        if (stored_col_type == static_cast<int>( tx_imp->column_types()[colnum]))
             break;
-        }
+        valid = gtk_tree_model_iter_next(model, &iter);
     }
+    if (valid)
+        gtk_combo_box_set_active_iter (GTK_COMBO_BOX(cbox), &iter);
 
     g_object_set_data (G_OBJECT(cbox), "col-num", GUINT_TO_POINTER(colnum));
     g_signal_connect (G_OBJECT(cbox), "changed",
@@ -1760,34 +1779,54 @@ void CsvImpTransAssist::acct_match_set_accounts ()
 static void
 csv_tximp_acct_match_load_mappings (GtkTreeModel *mappings_store)
 {
-    for (auto iter : GncTreeContainer<>(mappings_store))
+    // Set iter to first entry of store
+    GtkTreeIter iter;
+    auto valid = gtk_tree_model_get_iter_first (mappings_store, &iter);
+
+    // Walk through the store trying to match to a map
+    while (valid)
     {
         // Walk through the list, reading each row
-        auto account = iter.get<Account*>(MAPPING_ACCOUNT);
-        auto map_string = iter.get_string(MAPPING_STRING);
+        Account *account = nullptr;
+        gchar   *map_string;
+        gtk_tree_model_get (GTK_TREE_MODEL(mappings_store), &iter, MAPPING_STRING, &map_string, MAPPING_ACCOUNT, &account, -1);
 
         // Look for an account matching the map_string
         // It may already be set in the tree model. If not we try to match the map_string with
         // - an entry in our saved account maps
         // - a full name of any of our existing accounts
         if (account ||
-            (account = gnc_account_imap_find_any (gnc_get_current_book(), IMAP_CAT_CSV, map_string.c_str())) ||
-            (account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), map_string.c_str())))
+            (account = gnc_account_imap_find_any (gnc_get_current_book(), IMAP_CAT_CSV, map_string)) ||
+            (account = gnc_account_lookup_by_full_name (gnc_get_current_root_account(), map_string)))
         {
             auto fullpath = gnc_account_get_full_name (account);
-            gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter.get_iter(), MAPPING_FULLPATH, fullpath, -1);
-            gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter.get_iter(), MAPPING_ACCOUNT, account, -1);
+            gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_FULLPATH, fullpath, -1);
+            gtk_list_store_set (GTK_LIST_STORE(mappings_store), &iter, MAPPING_ACCOUNT, account, -1);
             g_free (fullpath);
         }
+
+        g_free (map_string);
+        valid = gtk_tree_model_iter_next (mappings_store, &iter);
     }
 }
 
 static bool
 csv_tximp_acct_match_check_all (GtkTreeModel *model)
 {
-    for (auto iter : GncTreeContainer<>(model))
-        if (!iter.get<Account*>(MAPPING_ACCOUNT))
+    // Set iter to first entry of store
+    GtkTreeIter iter;
+    auto valid = gtk_tree_model_get_iter_first (model, &iter);
+
+    // Walk through the store looking for nullptr accounts
+    while (valid)
+    {
+        Account *account;
+        gtk_tree_model_get (model, &iter, MAPPING_ACCOUNT, &account, -1);
+        if (!account)
             return false;
+
+        valid = gtk_tree_model_iter_next (model, &iter);
+    }
     return true;
 }
 
