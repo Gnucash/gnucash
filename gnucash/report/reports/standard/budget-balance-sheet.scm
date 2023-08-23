@@ -224,8 +224,7 @@
       (gnc:report-options report-obj) pagename optname))
 
   (define (get-budget-account-budget-balance budget account)
-    (let ((bal (gnc:budget-account-get-net budget account #f #f)))
-      (if (gnc-reverse-balance account) (gnc:collector- bal) bal)))
+    (gnc:budget-account-get-net budget account #f #f))
 
   (define (get-budget-account-initial-balance budget account)
     (gnc:budget-account-get-initial-balance budget account))
@@ -247,6 +246,20 @@
     (let ((initial (gnc:select-assoc-account-balance initial-balances account))
           (budget (gnc:select-assoc-account-balance budget-balances account)))
       (and initial budget (gnc:collector+ initial budget))))
+
+  (define (make-sign-handler accounts)
+    (if (null? accounts)
+      identity
+      (lambda (bal)
+        (if (gnc-reverse-balance (car accounts)) (gnc:collector- bal) bal))))
+
+
+  (define (make-get-balance-fn initial-balances budget-balances)
+    (lambda (account start-date end-date)
+      (sum-prefetched-account-balances-for-account
+        initial-balances
+        budget-balances
+        account)))
 
   (gnc:report-starting reportname)
 
@@ -309,7 +322,7 @@
          (income-accounts (assoc-ref split-up-accounts ACCT-TYPE-INCOME))
          (expense-accounts (assoc-ref split-up-accounts ACCT-TYPE-EXPENSE))
          (equity-accounts (assoc-ref split-up-accounts ACCT-TYPE-EQUITY))
-
+         (liability-sign-handler (make-sign-handler liability-accounts))
          (doc (gnc:make-html-document))
          ;; this can occasionally put extra (blank) columns in our
          ;; table (when there is one account at the maximum depth and
@@ -371,19 +384,16 @@
                (existing-assets #f)
                (allocated-assets #f)
                (unallocated-assets #f)
-               (asset-get-balance-fn #f)
 
                (existing-liabilities #f)
                (new-liabilities #f)
                (liability-repayments #f)
                (liability-balance #f)
-               (liability-get-balance-fn #f)
 
                (unrealized-gain #f)
                (existing-equity #f)
                (new-equity #f)
                (equity-balance #f)
-               (equity-get-balance-fn #f)
 
                (new-retained-earnings #f)
                (existing-retained-earnings #f)
@@ -424,13 +434,6 @@
               asset-accounts
               get-budget-account-budget-balance))
 
-          (set! asset-get-balance-fn
-            (lambda (account start-date end-date)
-              (sum-prefetched-account-balances-for-account
-                asset-account-initial-balances
-                asset-account-budget-balances
-                account)))
-
 
           (gnc:report-percent-done 6)
 
@@ -449,12 +452,6 @@
               liability-accounts
               get-budget-account-budget-balance))
 
-          (set! liability-get-balance-fn
-            (lambda (account start-date end-date)
-              (sum-prefetched-account-balances-for-account
-                liability-account-initial-balances
-                liability-account-budget-balances
-                account)))
 
 
           (gnc:report-percent-done 8)
@@ -474,28 +471,17 @@
               equity-accounts
               get-budget-account-budget-balance))
 
-          (set! equity-get-balance-fn
-            (lambda (account start-date end-date)
-              (sum-prefetched-account-balances-for-account
-                equity-account-initial-balances
-                equity-account-budget-balances
-                account)))
-
 
           (gnc:report-percent-done 10)
 
 
-          ;; Existing liabilities must be negated.
+          ;; Existing liabilities prior to the first budget period
           (set! existing-liabilities
-            (get-assoc-account-balances-total-negated liability-account-initial-balances))
+            (gnc:get-assoc-account-balances-total liability-account-initial-balances))
 
-          ;; Budgeted liabilities are liability repayments (negative liabilities).
-          (set! liability-repayments
-            (gnc:get-assoc-account-balances-total liability-account-budget-balances))
-
-          ;; New liabilities are then negated liability repayments.
+          ;; New liabilities are the sum of the liabilities changes projected in the budget itself
           (set! new-liabilities
-            (gnc:commodity-collector-get-negated liability-repayments))
+            (gnc:get-assoc-account-balances-total liability-account-budget-balances))
 
           ;; Total liabilities.
           (set! liability-balance
@@ -516,8 +502,9 @@
           ;; Total new retained earnings.
           (set! new-retained-earnings
             (gnc:collector-
-             (get-budget-accountlist-budget-balance budget income-accounts)
-             (get-budget-accountlist-budget-balance budget expense-accounts)))
+              (gnc:collector+
+               (get-budget-accountlist-budget-balance budget income-accounts)
+               (get-budget-accountlist-budget-balance budget expense-accounts))))
 
           ;; Total retained earnings.
           (set! retained-earnings
@@ -537,11 +524,11 @@
 
           ;; Total unallocated assets.
           ;; unallocated-assets =
-          ;;  new-retained-earnings - allocated-assets - liability-repayments
+          ;;  new-retained-earnings - (allocated-assets + new-liabilities)
           (set! unallocated-assets
-            (gnc:collector- new-retained-earnings
-                            allocated-assets
-                            liability-repayments))
+            (gnc:collector-
+              new-retained-earnings
+              (gnc:collector+ allocated-assets new-liabilities)))
 
           ;; Total assets.
           (set! asset-balance
@@ -557,9 +544,8 @@
                   (gnc:accounts-get-comm-total-assets
                    asset-accounts get-total-value-fn))
                  (liability-basis
-                  (gnc:collector-
                    (gnc:accounts-get-comm-total-assets
-                    liability-accounts get-total-value-fn))))
+                    liability-accounts get-total-value-fn)))
 
             (set! unrealized-gain
               (gnc:collector-
@@ -587,7 +573,7 @@
 
           ;; Total liability + equity.
           (set! liability-plus-equity
-            (gnc:collector+ liability-balance equity-balance))
+            (gnc:collector+ (gnc:collector- liability-balance) equity-balance))
 
           (gnc:report-percent-done 30)
 
@@ -633,7 +619,12 @@
           (if label-assets? (add-subtotal-line left-table (G_ "Assets") #f #f))
           (set! asset-table
             (gnc:make-html-acct-table/env/accts
-            (append table-env (list (list 'get-balance-fn asset-get-balance-fn)))
+            (append table-env
+              (list
+                (list 'get-balance-fn
+                      (make-get-balance-fn
+                        asset-account-initial-balances
+                        asset-account-budget-balances))))
             asset-accounts))
 
           (gnc:html-table-add-account-balances left-table asset-table params)
@@ -664,8 +655,13 @@
           (set! liability-table
             (gnc:make-html-acct-table/env/accts
               (append table-env
-                (list (list 'get-balance-fn liability-get-balance-fn)))
+                (list
+                  (list 'get-balance-fn
+                        (make-get-balance-fn
+                          liability-account-initial-balances
+                          liability-account-budget-balances))))
               liability-accounts))
+
           (gnc:html-table-add-account-balances
            right-table liability-table params)
           (if total-liabilities?
@@ -673,16 +669,13 @@
               (if new-existing?
                 (begin
                   (add-subtotal-line
-                    right-table
-                    (G_ "Existing Liabilities")
-                    #f
-                    existing-liabilities)
+                    right-table (G_ "Existing Liabilities") #f (liability-sign-handler existing-liabilities))
 
                   (add-subtotal-line
-                    right-table (G_ "New Liabilities") #f new-liabilities)))
+                    right-table (G_ "New Liabilities") #f (liability-sign-handler new-liabilities))))
 
               (add-subtotal-line
-                right-table (G_ "Total Liabilities") #f liability-balance)))
+                right-table (G_ "Total Liabilities") #f (liability-sign-handler liability-balance))))
 
           (add-rule right-table)
 
@@ -693,8 +686,13 @@
           (set! equity-table
                 (gnc:make-html-acct-table/env/accts
                   (append table-env
-                    (list (list 'get-balance-fn equity-get-balance-fn)))
+                    (list
+                      (list 'get-balance-fn
+                             (make-get-balance-fn
+                                equity-account-initial-balances
+                                equity-account-budget-balances))))
                  equity-accounts))
+
           (gnc:html-table-add-account-balances
            right-table equity-table params)
 

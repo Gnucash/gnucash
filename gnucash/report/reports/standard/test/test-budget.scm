@@ -43,15 +43,15 @@
 (define (run-test)
   (test-runner-factory gnc:test-runner)
   (test-begin "budget")
-  (test-group-with-cleanup "budget.scm"
-    (test-budget)
-    (teardown))
+   (test-group-with-cleanup "budget.scm"
+     (test-budget)
+     (teardown))
   (test-group-with-cleanup "budget-income-statement.scm"
     (test-budget-income-statement)
     (teardown))
   (test-group-with-cleanup "budget-balance-sheet.scm"
-    (test-budget-balance-sheet)
-    (teardown))
+   (test-budget-balance-sheet)
+   (teardown))
   (test-end "budget"))
 
 (define (set-option options page tag value)
@@ -205,15 +205,15 @@
         (sxml->table-row-col sxml 1 9 #f))
 
       (test-equal "unallocated assets"
-        '("Unallocated Assets" "-$405.00")
+        '("Unallocated Assets" "-$15.00")
         (sxml->table-row-col sxml 1 10 #f))
 
       (test-equal "total assets"
-        '("Total Assets" "$2,833.00")
+        '("Total Assets" "$3,223.00")
         (sxml->table-row-col sxml 1 11 #f))
 
       (test-equal "existing liab"
-        '("Existing Liabilities" "$3.00")
+        '("Existing Liabilities" "-$3.00")
         (sxml->table-row-col sxml 1 16 #f))
 
       (test-equal "new liab"
@@ -221,15 +221,15 @@
         (sxml->table-row-col sxml 1 17 #f))
 
       (test-equal "total liab"
-        '("Total Liabilities" "$3.00")
+        '("Total Liabilities" "-$3.00")
         (sxml->table-row-col sxml 1 18 #f))
 
       (test-equal "retained earnings"
         '("Existing Retained Earnings" "$3,227.00")
         (sxml->table-row-col sxml 1 22 #f))
 
-      (test-equal "retained losses"
-        '("New Retained Losses" "$285.00")
+      (test-equal "retained earnings"
+        '("New Retained Earnings" "$105.00")
         (sxml->table-row-col sxml 1 23 #f))
 
       (test-equal "unrealized losses"
@@ -241,14 +241,14 @@
         (sxml->table-row-col sxml 1 25 #f))
 
       (test-equal "new equity"
-        '("New Equity" "-$285.00")
+        '("New Equity" "$105.00")
         (sxml->table-row-col sxml 1 26 #f))
 
       (test-equal "total equity"
-        '("Total Equity" "$2,830.00")
+        '("Total Equity" "$3,220.00")
         (sxml->table-row-col sxml 1 27 #f))
 
       (test-equal "total liab and equity"
-        '("Total Liabilities & Equity" "$2,833.00")
+        '("Total Liabilities & Equity" "$3,223.00")
         (sxml->table-row-col sxml 1 29 #f)))))
 
