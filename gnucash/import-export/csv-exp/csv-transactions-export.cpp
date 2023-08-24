@@ -401,15 +401,21 @@ void csv_transactions_export (CsvExportInfo *info)
 
     /* Go through list of accounts */
     TransSet trans_set;
-    for (auto ptr = info->csva.account_list; !info->failed && ptr;
-         ptr = g_list_next(ptr))
+
+    switch (info->export_type)
     {
-        auto acc{static_cast<Account*>(ptr->data)};
-        DEBUG("Account being processed is : %s", xaccAccountGetName (acc));
-        account_splits (info, acc, ss, trans_set);
-        info->failed = ss.fail();
+    case XML_EXPORT_TRANS:
+        for (auto ptr = info->csva.account_list; !ss.fail() && ptr; ptr = g_list_next(ptr))
+            account_splits (info, GNC_ACCOUNT(ptr->data), ss, trans_set);
+        break;
+    case XML_EXPORT_REGISTER:
+        account_splits (info, nullptr, ss, trans_set);
+        break;
+    default:
+        PERR ("unknown export_type %d", info->export_type);
     }
 
+    info->failed = ss.fail();
     LEAVE("");
 }
 
