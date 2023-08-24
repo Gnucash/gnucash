@@ -225,7 +225,7 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing new
         // sale of stock, and recording capital gain/loss
         N_("Sell"),
-        N_("Selling stock long, and record capital gain/loss.")
+        N_("Selling stock long, and record capital gain/loss.\n\nIf you are unable to calculate capital gains you can enter a placeholder amount and correct it in the transaction later.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -292,7 +292,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         // Translators: this is a stock transaction describing a stock
         // split
         N_("Stock split"),
-        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant.")
+        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant..\n\nIf the reverse split results in a cash in lieu for remainder units, please record the sale using the Stock Transaction Assistant first, then record the split.")
     },
     {
         FieldMask::DISABLED | FieldMask::AMOUNT_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
@@ -302,11 +302,7 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a reverse split
         N_("Reverse split"),
-        N_("Company redeems units, thereby increasing the stock price by a \
-multiple, while keeping the total monetary value of the overall investment \
-constant.\n\nIf the reverse split results in a cash in lieu for remainder \
-units, please record the sale using the Stock Transaction Assistant first, then \
-record the reverse split.")
+        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the total monetary value of the overall investment constant.\n\nIf the reverse split results in a cash in lieu for remainder units, please record the sale using the Stock Transaction Assistant first, then record the reverse split.")
     }
 };
 
@@ -332,7 +328,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing cover
         // buying stock, and recording capital gain/loss
         N_("Buy to cover short"),
-        N_("Buy back stock to cover short position, and record capital gain/loss.")
+        N_("Buy back stock to cover short position, and record capital gain/loss.\n\nIf you are unable to calculate capital gains you can enter a placeholder amount and correct it in the transaction later.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -401,7 +397,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a stock
         // split when shorting stock
         N_("Stock split"),
-        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant.")
+        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant.\n\nIf the reverse split results in a cash in lieu for remainder units, please record the cover buy using the Stock Transaction Assistant first, then record the split.")
     },
     {
         FieldMask::DISABLED | FieldMask::AMOUNT_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
@@ -412,11 +408,7 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a
         // reverse split when shorting stock.
         N_("Reverse split"),
-        N_("Company redeems units, thereby increasing the stock price by \
-a multiple, while keeping the total monetary value of the overall investment \
-constant.\n\nIf the reverse split results in a cash in lieu for remainder \
-units, please record the cover buy using the Stock Transaction Assistant first, \
-then record the reverse split.")
+        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the total monetary value of the overall investment constant.\n\nIf the reverse split results in a cash in lieu for remainder units, please record the cover buy using the Stock Transaction Assistant first, then record the reverse split.")
     }
 };
 
