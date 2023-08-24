@@ -225,7 +225,9 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing new
         // sale of stock, and recording capital gain/loss
         N_("Sell"),
-        N_("Selling stock long, and record capital gain/loss.\n\nIf you are unable to calculate capital gains you can enter a placeholder amount and correct it in the transaction later.")
+        N_("Selling stock long, and record capital gain/loss."
+           "\n\nIf you are unable to calculate capital gains you can enter a"
+           "placeholder amount and correct it in the transaction later.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -236,8 +238,8 @@ static const TxnTypeVec long_types
         // Translators: this is a stock transaction describing
         // dividends issued to holder
         N_("Dividend"),
-        N_("Company issues cash dividends to holder.\n\nAny dividend being \
-reinvested must be subsequently recorded as a regular stock purchase.")
+        N_("Company issues cash dividends to holder.\n\nAny dividend being "
+           "reinvested must be subsequently recorded as a regular stock purchase.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
@@ -259,7 +261,9 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         // Translators: this is a stock transaction describing return
         // of capital, reclassifying a dividend into return of capital
         N_("Return of capital (reclassification)"),
-        N_("Company returns capital, reducing the cost basis without affecting # units. A distribution previously recorded as a dividend is reclassified to return of capital, often due to end-of-year tax information.")
+        N_("Company returns capital, reducing the cost basis without affecting # units. "
+           "A distribution previously recorded as a dividend is reclassified to return "
+           "of capital, often due to end-of-year tax information.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
@@ -270,7 +274,8 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         // Translators: this is a stock transaction describing a
         // notional distribution recorded as dividend
         N_("Notional distribution (dividend)"),
-        N_("Company issues a notional distribution, which is recorded as dividend income and increases the cost basis without affecting # units.")
+        N_("Company issues a notional distribution, which is recorded as dividend "
+           "income and increases the cost basis without affecting # units.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
@@ -281,7 +286,8 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         // Translators: this is a stock transaction describing a
         // notional distribution recorded as capital gain
         N_("Notional distribution (capital gain)"),
-        N_("Company issues a notional distribution, which is recorded as capital gain and increases the cost basis without affecting # units.")
+        N_("Company issues a notional distribution, which is recorded as capital gain "
+           "and increases the cost basis without affecting # units.")
     },
     {
         FieldMask::DISABLED | FieldMask::AMOUNT_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
@@ -292,7 +298,10 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         // Translators: this is a stock transaction describing a stock
         // split
         N_("Stock split"),
-        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant..\n\nIf the reverse split results in a cash in lieu for remainder units, please record the sale using the Stock Transaction Assistant first, then record the split.")
+        N_("Company issues additional units, thereby reducing the stock price by a divisor "
+           ", while keeping the total monetary value of the overall investment constant. "
+           "\n\nIf the split results in a cash in lieu for remainder units, please "
+           "record the sale using the Stock Transaction Assistant first, then record the split.")
     },
     {
         FieldMask::DISABLED | FieldMask::AMOUNT_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
@@ -302,7 +311,10 @@ reinvested must be subsequently recorded as a regular stock purchase.")
         FieldMask::DISABLED,               // capg_amt
         // Translators: this is a stock transaction describing a reverse split
         N_("Reverse split"),
-        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the total monetary value of the overall investment constant.\n\nIf the reverse split results in a cash in lieu for remainder units, please record the sale using the Stock Transaction Assistant first, then record the reverse split.")
+        N_("Company redeems units, thereby increasing the stock price by a multiple, while "
+           "keeping the total monetary value of the overall investment constant.\n\nIf the "
+           "reverse split results in a cash in lieu for remainder units, please record the "
+           "sale using the Stock Transaction Assistant first, then record the reverse split.")
     }
 };
 
@@ -328,7 +340,9 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing cover
         // buying stock, and recording capital gain/loss
         N_("Buy to cover short"),
-        N_("Buy back stock to cover short position, and record capital gain/loss.\n\nIf you are unable to calculate capital gains you can enter a placeholder amount and correct it in the transaction later.")
+        N_("Buy back stock to cover short position, and record capital gain/loss. "
+           "\n\nIf you are unable to calculate capital gains you can enter a placeholder "
+           "amount and correct it in the transaction later.")
     },
     {
         FieldMask::DISABLED,               // stock_amt
@@ -339,7 +353,8 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing
         // dividends retrieved from holder when shorting stock
         N_("Compensatory dividend"),
-        N_("Company issues dividends, and the short stock holder must make a compensatory payment for the dividend.")
+        N_("Company issues dividends, and the short stock holder must make a compensatory "
+           "payment for the dividend.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
@@ -350,7 +365,9 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing return
         // of capital retrieved from holder when shorting stock
         N_("Compensatory return of capital"),
-        N_("Company returns capital, and the short stock holder must make a compensatory payment for the returned capital. This reduces the cost basis (less negative, towards 0.00 value) without affecting # units.")
+        N_("Company returns capital, and the short stock holder must make a compensatory "
+           "payment for the returned capital. This reduces the cost basis (less negative, "
+           "towards 0.00 value) without affecting # units.")
     },
     {
         FieldMask::ENABLED_DEBIT,          // stock_amt
@@ -362,7 +379,11 @@ static const TxnTypeVec short_types
         // reclassifying a compensatory dividend into compensatory
         // return of capital when shorting stock
         N_("Compensatory return of capital (reclassification)"),
-        N_("Company returns capital, and the short stock holder must make a compensatory payment for the returned capital. This reduces the cost basis (less negative, towards 0.00 value) without affecting # units. A distribution previously recorded as a compensatory dividend is reclassified to compensatory return of capital, often due to end-of-year tax information.")
+        N_("Company returns capital, and the short stock holder must make a compensatory "
+           "payment for the returned capital. This reduces the cost basis (less negative, "
+           "towards 0.00 value) without affecting # units. A distribution previously recorded "
+           "as a compensatory dividend is reclassified to compensatory return of capital,"
+           "often due to end-of-year tax information.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
@@ -374,7 +395,10 @@ static const TxnTypeVec short_types
         // notional distribution recorded as dividend when shorting
         // stock
         N_("Compensatory notional distribution (dividend)"),
-        N_("Company issues a notional distribution, and the short stock holder must make a compensatory payment for the notional distribution. This is recorded as a loss/negative dividend income amount, and increases the cost basis (more negative, away from 0.00 value) without affecting # units.")
+        N_("Company issues a notional distribution, and the short stock holder must make a "
+           "compensatory payment for the notional distribution. This is recorded as a "
+           "loss/negative dividend income amount, and increases the cost basis (more "
+           "negative, away from 0.00 value) without affecting # units.")
     },
     {
         FieldMask::ENABLED_CREDIT,         // stock_amt
@@ -386,7 +410,10 @@ static const TxnTypeVec short_types
         // notional distribution recorded as capital gain when
         // shorting stock
         N_("Compensatory notional distribution (capital gain)"),
-        N_("Company issues a notional distribution, and the short stock holder must make a compensatory payment for the notional distribution. This is recorded as a capital loss amount, and increases the cost basis (more negative, away from 0.00 value) without affecting # units.")
+        N_("Company issues a notional distribution, and the short stock holder must make "
+           "a compensatory payment for the notional distribution. This is recorded as a "
+           "capital loss amount, and increases the cost basis (more negative, away from "
+           "0.00 value) without affecting # units.")
     },
     {
         FieldMask::DISABLED | FieldMask::AMOUNT_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
@@ -397,7 +424,10 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a stock
         // split when shorting stock
         N_("Stock split"),
-        N_("Company issues additional units, thereby reducing the stock price by a divisor, while keeping the total monetary value of the overall investment constant.\n\nIf the reverse split results in a cash in lieu for remainder units, please record the cover buy using the Stock Transaction Assistant first, then record the split.")
+        N_("Company issues additional units, thereby reducing the stock price by a divisor, "
+           "while keeping the total monetary value of the overall investment constant. "
+           "\n\nIf the split results in a cash in lieu for remainder units, please "
+           "record the cover buy using the Stock Transaction Assistant first, then record the split.")
     },
     {
         FieldMask::DISABLED | FieldMask::AMOUNT_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
@@ -408,7 +438,10 @@ static const TxnTypeVec short_types
         // Translators: this is a stock transaction describing a
         // reverse split when shorting stock.
         N_("Reverse split"),
-        N_("Company redeems units, thereby increasing the stock price by a multiple, while keeping the total monetary value of the overall investment constant.\n\nIf the reverse split results in a cash in lieu for remainder units, please record the cover buy using the Stock Transaction Assistant first, then record the reverse split.")
+        N_("Company redeems units, thereby increasing the stock price by a multiple, while "
+           "keeping the total monetary value of the overall investment constant.\n\nIf the "
+           "reverse split results in a cash in lieu for remainder units, please record the "
+           "cover buy using the Stock Transaction Assistant first, then record the reverse split.")
     }
 };
 
