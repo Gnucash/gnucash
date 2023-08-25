@@ -829,26 +829,7 @@ StockTransactionFeesEntry::create_split(Transaction* trans,  AccountVec& commits
                                   m_action));
 }
 
-struct StockTransactionSplitInfo
-{
-    StockTransactionEntry* m_entry;
-    bool m_units_in_red = false;
-    static const char* s_missing_str;
-
-    StockTransactionSplitInfo(StockTransactionEntry* entry) :
-        m_entry{entry}
-    {
-        DEBUG ("StockTransactionSplitInfo constructor\n");
-    }
-
-    ~StockTransactionSplitInfo () { DEBUG ("StockTransactionSplitInfo destructor\n"); }
-};
-
-// Translators: (missing) denotes that the amount or account is
-// not provided, or incorrect, in the Stock Transaction Assistant.
-const char *StockTransactionSplitInfo::s_missing_str = N_("(missing)");
-
-using SplitInfoVec = std::vector<StockTransactionSplitInfo>;
+using EntryVec = std::vector<StockTransactionEntry*>;
 
 /** Manages the data and actions for the assistant. */
 struct StockAssistantModel
@@ -905,17 +886,17 @@ struct StockAssistantModel
 
     std::string get_new_amount_str ();
     std::tuple<bool, gnc_numeric, const char*> calculate_price ();
-    std::tuple<bool, std::string, SplitInfoVec> generate_list_of_splits ();
+    std::tuple<bool, std::string, EntryVec> generate_list_of_splits ();
     std::tuple<bool, Transaction*> create_transaction ();
 
 private:
     std::optional<time64>     m_txn_types_date;
     bool m_ready_to_create = false;
 
-    SplitInfoVec m_list_of_splits;
+    EntryVec m_list_of_splits;
 
     void add_price (QofBook *book);
-    StockTransactionSplitInfo make_stock_split_info();
+    StockTransactionEntry* make_stock_split_info();
 };
 
 bool
@@ -1029,23 +1010,22 @@ check_txn_date(GList* last_split_node, time64 txn_date, Logger& logger)
     }
 }
 
-StockTransactionSplitInfo
+StockTransactionEntry*
 StockAssistantModel::make_stock_split_info()
 {
     auto add_error_str = [this]
         (const char* str) { m_logger.error (_(str)); };
 
-    StockTransactionSplitInfo line{m_stock_entry.get()};
 
     if (m_input_new_balance)
     {
-        auto stock_amount = line.m_entry->amount();
+        auto stock_amount = m_stock_entry->amount();
         auto credit_side = (m_txn_type->stock_amount & FieldMask::AMOUNT_CREDIT);
         auto delta = gnc_numeric_sub_fixed(stock_amount, m_balance_at_date);
         auto ratio = gnc_numeric_div(stock_amount, m_balance_at_date,
                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
         stock_amount = gnc_numeric_sub_fixed(stock_amount, m_balance_at_date);
-        line.m_entry->set_amount(stock_amount, m_logger);
+        m_stock_entry->set_amount(stock_amount, m_logger);
         if (gnc_numeric_check(ratio) || !gnc_numeric_positive_p(ratio))
             add_error_str(N_("Invalid stock new balance."));
         else if (gnc_numeric_negative_p(delta) && !credit_side)
@@ -1053,9 +1033,9 @@ StockAssistantModel::make_stock_split_info()
         else if (gnc_numeric_positive_p(delta) && credit_side)
             add_error_str(N_("New balance must be lower than old balance."));
     }
-    else if (line.m_entry->has_amount())
+    else if (m_stock_entry->has_amount())
     {
-        auto stock_amount = line.m_entry->amount();
+        auto stock_amount = m_stock_entry->amount();
         if (!gnc_numeric_positive_p(stock_amount))
             add_error_str(N_("Stock amount must be positive."));
         auto new_bal = gnc_numeric_add_fixed(m_balance_at_date, stock_amount);
@@ -1066,10 +1046,10 @@ StockAssistantModel::make_stock_split_info()
                  gnc_numeric_positive_p(new_bal))
             add_error_str(N_("Cannot cover buy more units than owed."));
     }
-    return line;
+    return m_stock_entry.get();
 }
 
-std::tuple<bool, std::string, SplitInfoVec>
+std::tuple<bool, std::string, EntryVec>
 StockAssistantModel::generate_list_of_splits() {
     if (!m_txn_types || !m_txn_type)
         return { false, "Error: txn_type not initialized", {} };
@@ -1110,22 +1090,22 @@ StockAssistantModel::generate_list_of_splits() {
     }
 
     if (m_cash_entry->m_enabled)
-        m_list_of_splits.push_back (StockTransactionSplitInfo{m_cash_entry.get()});
+        m_list_of_splits.push_back (m_cash_entry.get());
 
     if (m_fees_entry->m_enabled)
-        m_list_of_splits.push_back (StockTransactionSplitInfo{m_fees_entry.get()});
+        m_list_of_splits.push_back (m_fees_entry.get());
 
     if (m_dividend_entry->m_enabled)
-        m_list_of_splits.push_back (StockTransactionSplitInfo{m_dividend_entry.get()});
+        m_list_of_splits.push_back (m_dividend_entry.get());
 
     if (m_capgains_entry->m_enabled)
     {
         m_stock_cg_entry =
             std::make_unique<StockTransactionStockCapGainsEntry>(m_capgains_entry.get(),
                                                                   m_stock_entry.get());
-        m_list_of_splits.push_back(StockTransactionSplitInfo{m_stock_cg_entry.get()});
+        m_list_of_splits.push_back(m_stock_cg_entry.get());
 
-        m_list_of_splits.push_back (StockTransactionSplitInfo{m_capgains_entry.get()});
+        m_list_of_splits.push_back (m_capgains_entry.get());
     }
 
     if (gnc_numeric_check(debit) || gnc_numeric_check(credit) ||!gnc_numeric_equal (debit, credit))
@@ -1183,7 +1163,7 @@ StockAssistantModel::create_transaction ()
     xaccTransSetDatePostedSecsNormalized (trans, m_transaction_date);
     AccountVec accounts;
     std::for_each (m_list_of_splits.begin(), m_list_of_splits.end(),
-                   [&](auto& line){ line.m_entry->create_split (trans, accounts); });
+                   [&](auto& entry){ entry->create_split (trans, accounts); });
     add_price (book);
     xaccTransCommitEdit (trans);
     std::for_each (accounts.begin(), accounts.end(), xaccAccountCommitEdit);
@@ -2005,10 +1985,10 @@ PageFinish::prepare (GtkWidget *window, StockAssistantModel *model)
                                                GNC_PREF_NEGATIVE_IN_RED);
     auto list = GTK_LIST_STORE(gtk_tree_view_get_model(gtv));
     gtk_list_store_clear(list);
-    for (const auto &line : list_of_splits) {
+    for (const auto &entry : list_of_splits) {
         GtkTreeIter iter;
-        auto tooltip = (line.m_entry->m_memo && *line.m_entry->m_memo ?
-                        g_markup_escape_text(line.m_entry->m_memo, -1) : strdup(""));
+        auto tooltip = (entry->m_memo && *entry->m_memo ?
+                        g_markup_escape_text(entry->m_memo, -1) : strdup(""));
         /* print_value and print_amount rely on xaccPrintAmount that
          * uses static memory so the result needs to be copied
          * immediately or the second call overwrites the results of
@@ -2016,20 +1996,20 @@ PageFinish::prepare (GtkWidget *window, StockAssistantModel *model)
          */
         auto char2str{[](const char* str) -> std::string {
             return std::string{ str ? str : "" }; }};
-        auto amount{char2str(line.m_entry->print_value(model->m_curr_pinfo))};
-        auto units{char2str(line.m_entry->has_amount() ?
-                            line.m_entry->print_amount(line.m_entry->m_debit_side ? line.m_entry->amount() :
-                                                       gnc_numeric_neg(line.m_entry->amount())) : "")};
-        auto units_in_red{negative_in_red && !line.m_entry->m_debit_side};
+        auto amount{char2str(entry->print_value(model->m_curr_pinfo))};
+        auto units{char2str(entry->has_amount() ?
+                            entry->print_amount(entry->m_debit_side ? entry->amount() :
+                                                       gnc_numeric_neg(entry->amount())) : "")};
+        auto units_in_red{negative_in_red && !entry->m_debit_side};
         gtk_list_store_append(list, &iter);
         gtk_list_store_set(
             list, &iter,
             SPLIT_COL_ACCOUNT,
-            line.m_entry->m_account ? xaccAccountGetName(line.m_entry->m_account) : "", SPLIT_COL_MEMO,
-            line.m_entry->m_memo, SPLIT_COL_TOOLTIP, tooltip, SPLIT_COL_DEBIT,
-            line.m_entry->m_debit_side ? amount.c_str() : nullptr,
+            entry->m_account ? xaccAccountGetName(entry->m_account) : "", SPLIT_COL_MEMO,
+            entry->m_memo, SPLIT_COL_TOOLTIP, tooltip, SPLIT_COL_DEBIT,
+            entry->m_debit_side ? amount.c_str() : nullptr,
             SPLIT_COL_CREDIT,
-            line.m_entry->m_debit_side ? nullptr : amount.c_str(),
+            entry->m_debit_side ? nullptr : amount.c_str(),
             SPLIT_COL_UNITS, units.c_str(),
             SPLIT_COL_UNITS_COLOR, units_in_red ? "red" : nullptr, -1);
         g_free(tooltip);
