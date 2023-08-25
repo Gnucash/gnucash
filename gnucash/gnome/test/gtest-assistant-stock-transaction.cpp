@@ -173,7 +173,7 @@ StockAssistantTest::instantiate_model(StockAssistantModel &model, const ASTTestC
 
     model.set_txn_type (t.type_idx);
     model.m_transaction_description = t.desc;
-    stock_entry->m_amount = gnc_numeric_create (t.stock_amt * 100, 100);
+    stock_entry->set_amount(gnc_numeric_create (t.stock_amt, 1), model.m_logger);
     model.m_stock_entry->m_value = gnc_numeric_create (t.stock_val, 100);
     model.m_cash_entry->m_value = gnc_numeric_create (t.cash_val, 100);
     model.m_cash_entry->m_account = cash_account;

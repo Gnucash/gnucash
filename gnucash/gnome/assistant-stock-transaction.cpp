@@ -24,6 +24,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <cinttypes>
 #include <memory>
 #include <vector>
 #include <string>
@@ -546,10 +547,12 @@ struct StockTransactionEntry
     bool m_debit_side;
     bool m_allow_zero;
     bool m_allow_negative;
+    bool m_input_new_balance = false;
     Account *m_account;
     gnc_numeric m_value;
     const char* m_memo;
     const char* m_action;
+    gnc_numeric m_balance = gnc_numeric_zero();
 
     StockTransactionEntry() :
         m_enabled{false}, m_debit_side{false}, m_allow_zero{false},  m_account{nullptr},
@@ -566,11 +569,14 @@ struct StockTransactionEntry
     virtual void set_capitalize(bool capitalize) {}
     virtual void set_value(gnc_numeric amount, Logger& logger);
     virtual gnc_numeric amount() { return m_value; }
+    virtual void set_balance(gnc_numeric balance) { m_balance = balance; }
+    virtual gnc_numeric get_balance() { return m_balance; }
     virtual void set_amount(gnc_numeric, Logger&) {}
     virtual void create_split(Transaction* trans,  AccountVec& commits);
     virtual const char* print_value(GNCPrintAmountInfo info);
     virtual const char* print_amount(gnc_numeric amt);
-    virtual gnc_numeric calculate_price(bool) { return gnc_numeric_error(GNC_ERROR_ARG); }
+    virtual std::string amount_str_for_display() { return ""; }
+    virtual gnc_numeric calculate_price() { return gnc_numeric_error(GNC_ERROR_ARG); }
     virtual bool has_amount() { return false; }
 };
 
@@ -634,6 +640,8 @@ StockTransactionEntry::set_value(gnc_numeric amount, Logger& logger)
 const char *
 StockTransactionEntry::print_value(GNCPrintAmountInfo pinfo)
 {
+    if (!m_enabled || (gnc_numeric_check(m_value) && m_allow_zero))
+        return nullptr;
     if ((gnc_numeric_check(m_value) || gnc_numeric_zero_p(m_value))
         && !m_allow_zero)
         return _("missing");
@@ -661,7 +669,8 @@ StockTransactionEntry::create_split(Transaction *trans,  AccountVec &account_com
   account_commits.push_back(m_account);
   xaccSplitSetAccount(split, m_account);
   xaccSplitSetMemo(split, m_memo);
-  xaccSplitSetValue(split, m_debit_side ? m_value : gnc_numeric_neg(m_value));
+  if (m_enabled)
+      xaccSplitSetValue(split, m_debit_side ? m_value : gnc_numeric_neg(m_value));
   xaccSplitSetAmount(split, amount());
   PINFO("creating %s split in Acct(%s): Val(%s), Amt(%s) => Val(%s), Amt(%s)",
         m_action, m_account ? xaccAccountGetName (m_account) : "Empty!",
@@ -693,7 +702,8 @@ struct StockTransactionStockEntry : public StockTransactionEntry
     gnc_numeric amount() override { return m_amount; }
     void set_amount(gnc_numeric amount, Logger& logger) override;
     void create_split(Transaction *trans, AccountVec &account_commits) override;
-    gnc_numeric calculate_price(bool new_balance) override;
+    std::string amount_str_for_display() override;
+    gnc_numeric calculate_price() override;
     bool has_amount() override { return m_amount_enabled; }
 };
 
@@ -704,6 +714,7 @@ StockTransactionStockEntry::set_fieldmask(FieldMask mask)
     m_enabled = mask & (FieldMask::ENABLED_CREDIT | FieldMask::ENABLED_DEBIT);
     m_amount_enabled = mask & (FieldMask::AMOUNT_CREDIT | FieldMask::AMOUNT_DEBIT);
     m_debit_side = mask & (FieldMask::ENABLED_DEBIT | FieldMask::AMOUNT_DEBIT);
+    m_input_new_balance = mask & FieldMask::INPUT_NEW_BALANCE;
 }
 
 
@@ -713,32 +724,99 @@ StockTransactionStockEntry::set_amount(gnc_numeric amount, Logger& logger)
      if (!m_amount_enabled)
         return;
 
+    auto add_error_str = [&logger]
+        (const char* str) { logger.error (_(str)); };
+
     if (gnc_numeric_check(amount) || gnc_numeric_zero_p(amount))
     {
-        const char* err{_("Amount for stock value is missing.")};
-
-        logger.error(err);
+        add_error_str(_("Amount for stock value is missing."));
         return;
     }
 
-    m_amount = m_debit_side ? amount : gnc_numeric_neg(amount);
-    PINFO("%s set amount %s", m_memo, print_amount(amount));
+    if (m_input_new_balance)
+    {
+        auto delta = gnc_numeric_sub_fixed(amount, m_balance);
+        auto ratio = gnc_numeric_div(amount, m_balance,
+                                     GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        if (m_debit_side)
+            m_amount = gnc_numeric_sub_fixed(amount, m_balance);
+        else
+            m_amount = gnc_numeric_sub_fixed(m_balance, amount);
+        if (gnc_numeric_check(ratio) || !gnc_numeric_positive_p(ratio))
+            add_error_str(N_("Invalid stock new balance."));
+        else if (gnc_numeric_negative_p(delta) && m_debit_side)
+            add_error_str(N_("New balance must be higher than old balance."));
+        else if (gnc_numeric_positive_p(delta) && !m_debit_side)
+            add_error_str(N_("New balance must be lower than old balance."));
+        PINFO("%s set amount for new balance %s", m_memo, print_amount(m_amount));
+        return;
+    }
+
+    if (!gnc_numeric_positive_p(amount))
+        add_error_str(N_("Stock amount must be positive."));
+    auto new_bal = gnc_numeric_add_fixed(m_balance, amount);
+    if (gnc_numeric_positive_p(m_balance) && gnc_numeric_negative_p(new_bal))
+        add_error_str(N_("Cannot sell more units than owned."));
+    else if (gnc_numeric_negative_p(m_balance) && gnc_numeric_positive_p(new_bal))
+        add_error_str(N_("Cannot cover buy more units than owed."));
+
+    m_amount = amount;
+    PINFO("%s set amount %s", m_memo, print_amount(m_amount));
 }
+
+std::string
+StockTransactionStockEntry::amount_str_for_display()
+{
+    std::string rv{""};
+
+    if (gnc_numeric_check (m_amount))
+        return rv;
+
+    if (m_input_new_balance)
+    {
+        auto amount = gnc_numeric_add(m_debit_side ? m_amount : gnc_numeric_neg(m_amount), m_balance,
+                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        auto ratio = gnc_numeric_div (amount, m_balance,
+                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
+        PINFO("Computed ratio %" PRId64 "/%" PRId64 "; amount %" PRId64
+              "/%" PRId64 " and balance %" PRId64 "/%" PRId64,
+              ratio.num, ratio.denom, amount.num, amount.denom, m_balance.num, m_balance.denom);
+        if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
+            return rv;
+
+        std::ostringstream ret;
+        ret << ratio.num << ':' << ratio.denom;
+        rv = ret.str();
+    }
+    else
+    {
+        auto amount = m_debit_side ? m_amount : gnc_numeric_neg (m_amount);
+        amount = gnc_numeric_add_fixed (amount, m_balance);
+        rv = print_amount(amount);
+    }
+
+    return rv;
+};
+
 
 void
 StockTransactionStockEntry::create_split(Transaction *trans, AccountVec &account_commits)
 {
   g_return_if_fail(trans);
-  if (!m_account || gnc_numeric_check(m_value))
-    return;
+  if (!m_account)
+      return;
   auto split = xaccMallocSplit(qof_instance_get_book(trans));
   xaccSplitSetParent(split, trans);
   xaccAccountBeginEdit(m_account);
   account_commits.push_back(m_account);
   xaccSplitSetAccount(split, m_account);
   xaccSplitSetMemo(split, m_memo);
-  xaccSplitSetValue(split, m_debit_side ? m_value : gnc_numeric_neg(m_value));
-  xaccSplitSetAmount(split, m_debit_side ? amount() : gnc_numeric_neg(amount()));
+  if (m_enabled)
+      xaccSplitSetValue(split, m_debit_side ? m_value : gnc_numeric_neg(m_value));
+  if (m_amount_enabled)
+      xaccSplitSetAmount(split, m_debit_side ? m_amount : gnc_numeric_neg(m_amount));
+  if (m_amount_enabled && !m_enabled) // It's a stock split
+      xaccSplitMakeStockSplit(split);
   PINFO("creating %s split in Acct(%s): Val(%s), Amt(%s) => Val(%s), Amt(%s)",
         m_action, m_account ? xaccAccountGetName (m_account) : "Empty!",
         gnc_num_dbg_to_string(m_value),
@@ -751,9 +829,9 @@ StockTransactionStockEntry::create_split(Transaction *trans, AccountVec &account
 }
 
 gnc_numeric
-StockTransactionStockEntry::calculate_price(bool new_balance)
+StockTransactionStockEntry::calculate_price()
 {
-    if (new_balance ||
+    if (m_input_new_balance ||
         !m_amount_enabled || gnc_numeric_check(m_amount) ||
         !m_enabled || gnc_numeric_check(m_value) ||
         gnc_numeric_zero_p(m_amount) || gnc_numeric_zero_p(m_value))
@@ -845,9 +923,6 @@ struct StockAssistantModel
 
     std::optional<TxnTypeInfo> m_txn_type;
 
-    gnc_numeric m_balance_at_date = gnc_numeric_create (1, 0);
-
-    bool m_input_new_balance;
     StockTransactionEntryPtr m_stock_entry;
     StockTransactionEntryPtr m_cash_entry;
     StockTransactionEntryPtr m_fees_entry;
@@ -879,11 +954,6 @@ struct StockAssistantModel
     // current (i.e. transaction_date hasn't changed).
     bool maybe_reset_txn_types ();
     bool set_txn_type (guint type_idx);
-    std::string get_stock_balance_str ()
-    {
-        return m_stock_entry->print_amount(m_balance_at_date);
-    };
-
     std::string get_new_amount_str ();
     std::tuple<bool, gnc_numeric, const char*> calculate_price ();
     std::tuple<bool, std::string, EntryVec> generate_list_of_splits ();
@@ -902,15 +972,16 @@ private:
 bool
 StockAssistantModel::maybe_reset_txn_types ()
 {
+    auto old_bal = m_stock_entry->get_balance();
     auto new_bal = xaccAccountGetBalanceAsOfDate
         (m_acct, gnc_time64_get_day_end (m_transaction_date));
     if (m_txn_types_date && m_txn_types_date == m_transaction_date &&
-        gnc_numeric_equal (m_balance_at_date, new_bal))
+        gnc_numeric_equal (old_bal, new_bal))
         return false;
-    m_balance_at_date = new_bal;
+    m_stock_entry->set_balance(new_bal);
     m_txn_types_date = m_transaction_date;
-    m_txn_types = gnc_numeric_zero_p (m_balance_at_date) ? starting_types
-        : gnc_numeric_positive_p (m_balance_at_date) ? long_types
+    m_txn_types = gnc_numeric_zero_p (new_bal) ? starting_types
+        : gnc_numeric_positive_p (new_bal) ? long_types
         : short_types;
     return true;
 };
@@ -933,7 +1004,6 @@ StockAssistantModel::set_txn_type (guint type_idx)
         return false;
     }
 
-    m_input_new_balance = m_txn_type->stock_amount & FieldMask::INPUT_NEW_BALANCE;
     m_stock_entry->set_fieldmask(m_txn_type->stock_amount);
     m_fees_entry->set_fieldmask(m_txn_type->fees_value);
     m_capgains_entry->set_fieldmask(m_txn_type->capgains_value);
@@ -942,42 +1012,10 @@ StockAssistantModel::set_txn_type (guint type_idx)
     return true;
 };
 
-std::string
-StockAssistantModel::get_new_amount_str ()
-{
-    std::string rv{""};
-    auto stock_entry = dynamic_cast<StockTransactionStockEntry*>(m_stock_entry.get());
-
-    if (gnc_numeric_check (stock_entry->m_amount))
-        return rv;
-
-    if (m_input_new_balance)
-    {
-        auto ratio = gnc_numeric_div (stock_entry->m_amount, m_balance_at_date,
-                                      GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-        if (gnc_numeric_check (ratio) || !gnc_numeric_positive_p (ratio))
-            return rv;
-
-        std::ostringstream ret;
-        ret << ratio.num << ':' << ratio.denom;
-        rv = ret.str();
-    }
-    else
-    {
-        auto stock_entry = dynamic_cast<StockTransactionStockEntry*>(m_stock_entry.get());
-        auto amount = (m_txn_type->stock_amount & FieldMask::ENABLED_CREDIT) ?
-            gnc_numeric_neg (stock_entry->m_amount) : stock_entry->m_amount;
-        amount = gnc_numeric_add_fixed (amount, m_balance_at_date);
-        rv = m_stock_entry->print_amount(amount);
-    }
-
-    return rv;
-};
-
 std::tuple<bool, gnc_numeric, const char*>
 StockAssistantModel::calculate_price ()
 {
-    auto price{m_stock_entry->calculate_price(m_input_new_balance)};
+    auto price{m_stock_entry->calculate_price()};
     if (gnc_numeric_check(price))
         return {false, price, nullptr};
     auto pinfo{gnc_price_print_info (m_currency, true)};
@@ -1010,45 +1048,6 @@ check_txn_date(GList* last_split_node, time64 txn_date, Logger& logger)
     }
 }
 
-StockTransactionEntry*
-StockAssistantModel::make_stock_split_info()
-{
-    auto add_error_str = [this]
-        (const char* str) { m_logger.error (_(str)); };
-
-
-    if (m_input_new_balance)
-    {
-        auto stock_amount = m_stock_entry->amount();
-        auto credit_side = (m_txn_type->stock_amount & FieldMask::AMOUNT_CREDIT);
-        auto delta = gnc_numeric_sub_fixed(stock_amount, m_balance_at_date);
-        auto ratio = gnc_numeric_div(stock_amount, m_balance_at_date,
-                                     GNC_DENOM_AUTO, GNC_HOW_DENOM_REDUCE);
-        stock_amount = gnc_numeric_sub_fixed(stock_amount, m_balance_at_date);
-        m_stock_entry->set_amount(stock_amount, m_logger);
-        if (gnc_numeric_check(ratio) || !gnc_numeric_positive_p(ratio))
-            add_error_str(N_("Invalid stock new balance."));
-        else if (gnc_numeric_negative_p(delta) && !credit_side)
-            add_error_str(N_("New balance must be higher than old balance."));
-        else if (gnc_numeric_positive_p(delta) && credit_side)
-            add_error_str(N_("New balance must be lower than old balance."));
-    }
-    else if (m_stock_entry->has_amount())
-    {
-        auto stock_amount = m_stock_entry->amount();
-        if (!gnc_numeric_positive_p(stock_amount))
-            add_error_str(N_("Stock amount must be positive."));
-        auto new_bal = gnc_numeric_add_fixed(m_balance_at_date, stock_amount);
-        if (gnc_numeric_positive_p(m_balance_at_date) &&
-            gnc_numeric_negative_p(new_bal))
-            add_error_str(N_("Cannot sell more units than owned."));
-        else if (gnc_numeric_negative_p(m_balance_at_date) &&
-                 gnc_numeric_positive_p(new_bal))
-            add_error_str(N_("Cannot cover buy more units than owed."));
-    }
-    return m_stock_entry.get();
-}
-
 std::tuple<bool, std::string, EntryVec>
 StockAssistantModel::generate_list_of_splits() {
     if (!m_txn_types || !m_txn_type)
@@ -1068,10 +1067,9 @@ StockAssistantModel::generate_list_of_splits() {
     if (last_split_node)
         check_txn_date(last_split_node, m_transaction_date, m_logger);
 
-    auto stock_entry{dynamic_cast<StockTransactionStockEntry*>(m_stock_entry.get())};
-    if (stock_entry && (stock_entry->m_enabled  || stock_entry->m_amount_enabled))
+    if (m_stock_entry->m_enabled  || m_stock_entry->has_amount())
     {
-        m_list_of_splits.push_back (make_stock_split_info());
+        m_list_of_splits.push_back(m_stock_entry.get());
 
         auto [has_price, price, price_str] = calculate_price ();
         if (has_price)
@@ -1518,7 +1516,7 @@ struct PageStockAmount
     GncAmountEdit m_amount;
     GtkWidget * m_amount_label;
     PageStockAmount (GtkBuilder *builder, Account* account);
-    void prepare (StockTransactionStockEntry*, StockAssistantModel*, Logger&);
+    void prepare (StockTransactionStockEntry*, Logger&);
     gnc_numeric get_stock_amount () { return m_amount.get(); }
     void set_stock_amount (std::string new_amount_str);
     void connect(StockAssistantModel *model);
@@ -1537,23 +1535,22 @@ PageStockAmount::PageStockAmount (GtkBuilder *builder, Account* account) :
 }
 
 void
-PageStockAmount::prepare (StockTransactionStockEntry* entry, StockAssistantModel* model,
-                          Logger& logger)
+PageStockAmount::prepare (StockTransactionStockEntry* entry, Logger& logger)
 {
     gtk_label_set_text_with_mnemonic
         (GTK_LABEL (m_amount_label),
-         model->m_input_new_balance ? _("Ne_w Balance") : _("_Shares"));
+         entry->m_input_new_balance ? _("Ne_w Balance") : _("_Shares"));
     gtk_label_set_text
         (GTK_LABEL (m_next_amount_label),
-         model->m_input_new_balance ? _("Ratio") : _("Next Balance"));
+         entry->m_input_new_balance ? _("Ratio") : _("Next Balance"));
     gtk_label_set_text (GTK_LABEL (m_title),
-         model->m_input_new_balance ?
+         entry->m_input_new_balance ?
          _("Enter the new balance of shares after the stock split.") :
          _("Enter the number of shares you gained or lost in the transaction."));
-    gtk_label_set_text (GTK_LABEL (m_prev_amount), model->get_stock_balance_str().c_str());
+    gtk_label_set_text (GTK_LABEL (m_prev_amount), entry->print_amount(entry->get_balance()));
     if (!gnc_numeric_check(get_stock_amount()))
         entry->set_amount(get_stock_amount(), logger);
-    set_stock_amount(model->get_new_amount_str());
+    set_stock_amount(entry->amount_str_for_display());
     m_amount.set_focus();
 
 }
@@ -1563,7 +1560,7 @@ page_stock_amount_changed_cb(GtkWidget *widget, StockAssistantModel *model)
 {
     auto me = static_cast<PageStockAmount*>(g_object_get_data (G_OBJECT (widget), "owner"));
     model->m_stock_entry->set_amount(me->m_amount.get(), model->m_logger);
-    me->set_stock_amount (model->get_new_amount_str());
+    me->set_stock_amount (model->m_stock_entry->amount_str_for_display());
 }
 
 void
@@ -2132,7 +2129,7 @@ StockAssistantController::prepare(GtkAssistant* assistant, GtkWidget* page)
     {
         auto stock_entry = dynamic_cast<StockTransactionStockEntry*>(m_model->m_stock_entry.get());
         if (stock_entry)
-            m_view.m_stock_amount_page.prepare(stock_entry, m_model.get(), m_model->m_logger);
+            m_view.m_stock_amount_page.prepare(stock_entry, m_model->m_logger);
         break;
     }
     case PAGE_STOCK_VALUE:
@@ -2193,9 +2190,8 @@ forward_page_func (gint current_page, StockAssistantController* info)
     current_page++;
     if (!model->m_txn_type)
         return current_page;
-    auto stock_entry = dynamic_cast<StockTransactionStockEntry*>(model->m_stock_entry.get());
 
-    if (!stock_entry->m_amount_enabled && current_page == PAGE_STOCK_AMOUNT)
+    if (!model->m_stock_entry->has_amount() && current_page == PAGE_STOCK_AMOUNT)
         current_page++;
     if (!model->m_stock_entry->m_enabled && current_page == PAGE_STOCK_VALUE)
         current_page++;
