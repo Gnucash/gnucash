@@ -549,22 +549,25 @@ struct StockTransactionEntry
     Account *m_account;
     gnc_numeric m_value;
     const char* m_memo;
+    const char* m_action;
 
     StockTransactionEntry() :
         m_enabled{false}, m_debit_side{false}, m_allow_zero{false},  m_account{nullptr},
-        m_value{gnc_numeric_error(GNC_ERROR_ARG)}, m_memo{nullptr} {}
-    StockTransactionEntry(bool debit_side, bool allow_zero, bool allow_negative, Account* account, gnc_numeric value) :
+        m_value{gnc_numeric_error(GNC_ERROR_ARG)}, m_memo{nullptr}, m_action{nullptr} {}
+    StockTransactionEntry(const char* action) :
+        m_enabled{false}, m_debit_side{false}, m_allow_zero{false},  m_account{nullptr},
+        m_value{gnc_numeric_error(GNC_ERROR_ARG)}, m_memo{nullptr}, m_action{action} {}
+    StockTransactionEntry(bool debit_side, bool allow_zero, bool allow_negative, Account* account, gnc_numeric value, const char* action) :
         m_enabled{false}, m_debit_side{debit_side}, m_allow_zero{allow_zero}, m_allow_negative{allow_negative},
-        m_account{account}, m_value{value}, m_memo{nullptr} {}
+        m_account{account}, m_value{value}, m_memo{nullptr}, m_action{action} {}
     virtual ~StockTransactionEntry() = default;
 
     virtual void set_fieldmask(FieldMask mask);
     virtual void set_capitalize(bool capitalize) {}
-    virtual void set_value(gnc_numeric amount, const char* page, Logger& logger);
+    virtual void set_value(gnc_numeric amount, Logger& logger);
     virtual gnc_numeric amount() { return m_value; }
     virtual void set_amount(gnc_numeric, Logger&) {}
-    virtual void create_split(Transaction* trans, const char* action,
-                              AccountVec& commits);
+    virtual void create_split(Transaction* trans,  AccountVec& commits);
     virtual const char* print_value(GNCPrintAmountInfo info);
     virtual const char* print_amount(gnc_numeric amt);
     virtual gnc_numeric calculate_price(bool) { return gnc_numeric_error(GNC_ERROR_ARG); }
@@ -584,11 +587,11 @@ StockTransactionEntry::set_fieldmask(FieldMask mask)
 
 
 void
-StockTransactionEntry::set_value(gnc_numeric amount, const char* page, Logger& logger)
+StockTransactionEntry::set_value(gnc_numeric amount, Logger& logger)
 {
     DEBUG ("checking value %s page %s",
            gnc_num_dbg_to_string (amount),
-           page);
+           m_action);
 
     auto add_error = [&logger](const char* format_str, const char* arg)
     {
@@ -601,7 +604,7 @@ StockTransactionEntry::set_value(gnc_numeric amount, const char* page, Logger& l
 
     if (gnc_numeric_check (amount))
     {
-        add_error (N_("Amount for %s is missing."), page);
+        add_error (N_("Amount for %s is missing."), m_action);
         return;
     }
 
@@ -615,13 +618,13 @@ StockTransactionEntry::set_value(gnc_numeric amount, const char* page, Logger& l
         else
         {
             if (m_allow_zero)
-                add_error (N_("Amount for %s must not be negative."), page);
+                add_error (N_("Amount for %s must not be negative."), m_action);
         }
     }
 
     if (!m_allow_zero && !gnc_numeric_positive_p (amount))
     {
-        add_error (N_("Amount for %s must be positive."), page);
+        add_error (N_("Amount for %s must be positive."), m_action);
         return;
     }
 
@@ -648,8 +651,7 @@ StockTransactionEntry::print_amount(gnc_numeric amt)
 }
 
 void
-StockTransactionEntry::create_split(Transaction *trans, const char* action,
-                                    AccountVec &account_commits) {
+StockTransactionEntry::create_split(Transaction *trans,  AccountVec &account_commits) {
   g_return_if_fail(trans);
   if (!m_account || gnc_numeric_check(m_value))
     return;
@@ -662,14 +664,14 @@ StockTransactionEntry::create_split(Transaction *trans, const char* action,
   xaccSplitSetValue(split, m_debit_side ? m_value : gnc_numeric_neg(m_value));
   xaccSplitSetAmount(split, amount());
   PINFO("creating %s split in Acct(%s): Val(%s), Amt(%s) => Val(%s), Amt(%s)",
-        action, m_account ? xaccAccountGetName (m_account) : "Empty!",
+        m_action, m_account ? xaccAccountGetName (m_account) : "Empty!",
         gnc_num_dbg_to_string(m_value),
         gnc_num_dbg_to_string(amount()),
         gnc_num_dbg_to_string(xaccSplitGetValue(split)),
         gnc_num_dbg_to_string(xaccSplitGetAmount(split)));
   gnc_set_num_action(nullptr, split, nullptr,
                      g_dpgettext2(nullptr, "Stock Assistant: Action field",
-                                  action));
+                                  m_action));
 }
 
 struct StockTransactionStockEntry : public StockTransactionEntry
@@ -678,15 +680,19 @@ struct StockTransactionStockEntry : public StockTransactionEntry
     gnc_numeric m_amount;
 
     StockTransactionStockEntry() :
-        StockTransactionEntry{},
-        m_amount{gnc_numeric_error(GNC_ERROR_ARG)} {
+        StockTransactionEntry{}, m_amount{gnc_numeric_error(GNC_ERROR_ARG)}
+    {
+        PINFO("Stock Entry");
+    }
+    StockTransactionStockEntry(const char* action) :
+        StockTransactionEntry{action}, m_amount{gnc_numeric_error(GNC_ERROR_ARG)}
+    {
         PINFO("Stock Entry");
     }
     void set_fieldmask(FieldMask mask) override;
     gnc_numeric amount() override { return m_amount; }
     void set_amount(gnc_numeric amount, Logger& logger) override;
-    void create_split(Transaction *trans, const char* action,
-                      AccountVec &account_commits) override;
+    void create_split(Transaction *trans, AccountVec &account_commits) override;
     gnc_numeric calculate_price(bool new_balance) override;
     bool has_amount() override { return m_amount_enabled; }
 };
@@ -720,8 +726,7 @@ StockTransactionStockEntry::set_amount(gnc_numeric amount, Logger& logger)
 }
 
 void
-StockTransactionStockEntry::create_split(Transaction *trans, const char* action,
-                                    AccountVec &account_commits)
+StockTransactionStockEntry::create_split(Transaction *trans, AccountVec &account_commits)
 {
   g_return_if_fail(trans);
   if (!m_account || gnc_numeric_check(m_value))
@@ -735,14 +740,14 @@ StockTransactionStockEntry::create_split(Transaction *trans, const char* action,
   xaccSplitSetValue(split, m_debit_side ? m_value : gnc_numeric_neg(m_value));
   xaccSplitSetAmount(split, m_debit_side ? amount() : gnc_numeric_neg(amount()));
   PINFO("creating %s split in Acct(%s): Val(%s), Amt(%s) => Val(%s), Amt(%s)",
-        action, m_account ? xaccAccountGetName (m_account) : "Empty!",
+        m_action, m_account ? xaccAccountGetName (m_account) : "Empty!",
         gnc_num_dbg_to_string(m_value),
         gnc_num_dbg_to_string(amount()),
         gnc_num_dbg_to_string(xaccSplitGetValue(split)),
         gnc_num_dbg_to_string(xaccSplitGetAmount(split)));
   gnc_set_num_action(nullptr, split, nullptr,
                      g_dpgettext2(nullptr, "Stock Assistant: Action field",
-                                  action));
+                                  m_action));
 }
 
 gnc_numeric
@@ -779,19 +784,17 @@ struct StockTransactionStockCapGainsEntry : public StockTransactionEntry
 StockTransactionStockCapGainsEntry::StockTransactionStockCapGainsEntry(const StockTransactionEntry *cg_entry,
                                                                        const StockTransactionEntry *stk_entry) :
     StockTransactionEntry(!cg_entry->m_debit_side, cg_entry->m_allow_zero, cg_entry->m_allow_negative,
-                          stk_entry->m_account, cg_entry->m_value) {}
+                          stk_entry->m_account, cg_entry->m_value, cg_entry->m_action) {}
 
 struct StockTransactionFeesEntry : public StockTransactionEntry
 {
     bool m_capitalize;
 
-    StockTransactionFeesEntry() :
-        StockTransactionEntry{},
-        m_capitalize{false} {}
+    StockTransactionFeesEntry() : StockTransactionEntry{}, m_capitalize{false} {}
+    StockTransactionFeesEntry(const char* action) : StockTransactionEntry{action}, m_capitalize{false} {}
     void set_fieldmask(FieldMask mask) override;
     void set_capitalize(bool capitalize) override { m_capitalize = capitalize; }
-    void create_split(Transaction *trans, const char *action,
-                      AccountVec &commits) override;
+    void create_split(Transaction *trans,  AccountVec &commits) override;
 };
 
 void
@@ -802,8 +805,7 @@ StockTransactionFeesEntry::set_fieldmask(FieldMask mask)
 }
 
 void
-StockTransactionFeesEntry::create_split(Transaction* trans, const char* action,
-                              AccountVec& commits)
+StockTransactionFeesEntry::create_split(Transaction* trans,  AccountVec& commits)
 {
   g_return_if_fail(trans);
   if (!m_account || !m_capitalize || gnc_numeric_check(m_value))
@@ -817,25 +819,24 @@ StockTransactionFeesEntry::create_split(Transaction* trans, const char* action,
   xaccSplitSetValue(split, m_debit_side ? m_value : gnc_numeric_neg(m_value));
   xaccSplitSetAmount(split, amount());
   PINFO("creating %s split in Acct(%s): Val(%s), Amt(%s) => Val(%s), Amt(%s)",
-        action, m_account ? xaccAccountGetName (m_account) : "Empty!",
+        m_action, m_account ? xaccAccountGetName (m_account) : "Empty!",
         gnc_num_dbg_to_string(m_value),
         gnc_num_dbg_to_string(amount()),
         gnc_num_dbg_to_string(xaccSplitGetValue(split)),
         gnc_num_dbg_to_string(xaccSplitGetAmount(split)));
   gnc_set_num_action(nullptr, split, nullptr,
                      g_dpgettext2(nullptr, "Stock Assistant: Action field",
-                                  action));
+                                  m_action));
 }
 
 struct StockTransactionSplitInfo
 {
     StockTransactionEntry* m_entry;
     bool m_units_in_red = false;
-    const char* m_action;
     static const char* s_missing_str;
 
-    StockTransactionSplitInfo(StockTransactionEntry* entry, const char* page) :
-        m_entry{entry}, m_action{page}
+    StockTransactionSplitInfo(StockTransactionEntry* entry) :
+        m_entry{entry}
     {
         DEBUG ("StockTransactionSplitInfo constructor\n");
     }
@@ -878,11 +879,11 @@ struct StockAssistantModel
         m_acct{account},
         m_currency{gnc_account_get_currency_or_parent(account)},
         m_curr_pinfo (gnc_commodity_print_info (m_currency, true)),
-        m_stock_entry{std::make_unique<StockTransactionStockEntry>()},
-        m_cash_entry{std::make_unique<StockTransactionEntry>()},
-        m_fees_entry{std::make_unique<StockTransactionFeesEntry>()},
-        m_dividend_entry{std::make_unique<StockTransactionEntry>()},
-        m_capgains_entry{std::make_unique<StockTransactionEntry>()}
+        m_stock_entry{std::make_unique<StockTransactionStockEntry>(NC_ ("Stock Assistant: Page name","Stock"))},
+        m_cash_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Cash"))},
+        m_fees_entry{std::make_unique<StockTransactionFeesEntry>(NC_ ("Stock Assistant: Page name","Fees"))},
+        m_dividend_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Dividend"))},
+        m_capgains_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Capital Gains"))}
     {
         DEBUG ("StockAssistantModel constructor\n");
         m_stock_entry->m_account = m_acct;
@@ -1034,8 +1035,7 @@ StockAssistantModel::make_stock_split_info()
     auto add_error_str = [this]
         (const char* str) { m_logger.error (_(str)); };
 
-    StockTransactionSplitInfo line{m_stock_entry.get(),
-        NC_ ("Stock Assistant: Page name", "stock value")};
+    StockTransactionSplitInfo line{m_stock_entry.get()};
 
     if (m_input_new_balance)
     {
@@ -1110,26 +1110,22 @@ StockAssistantModel::generate_list_of_splits() {
     }
 
     if (m_cash_entry->m_enabled)
-        m_list_of_splits.push_back (StockTransactionSplitInfo{m_cash_entry.get(),
-             NC_ ("Stock Assistant: Page name", "cash")});
+        m_list_of_splits.push_back (StockTransactionSplitInfo{m_cash_entry.get()});
 
     if (m_fees_entry->m_enabled)
-        m_list_of_splits.push_back (StockTransactionSplitInfo{m_fees_entry.get(),
-             NC_ ("Stock Assistant: Page name", "fees")});
+        m_list_of_splits.push_back (StockTransactionSplitInfo{m_fees_entry.get()});
 
     if (m_dividend_entry->m_enabled)
-        m_list_of_splits.push_back (StockTransactionSplitInfo{m_dividend_entry.get(),
-             NC_ ("Stock Assistant: Page name", "dividend")});
+        m_list_of_splits.push_back (StockTransactionSplitInfo{m_dividend_entry.get()});
 
     if (m_capgains_entry->m_enabled)
     {
         m_stock_cg_entry =
             std::make_unique<StockTransactionStockCapGainsEntry>(m_capgains_entry.get(),
                                                                   m_stock_entry.get());
-        m_list_of_splits.push_back(StockTransactionSplitInfo{m_stock_cg_entry.get(),
-             NC_ ("Stock Assistant: Page name", "capital gains")});
-        m_list_of_splits.push_back (StockTransactionSplitInfo{m_capgains_entry.get(),
-             NC_ ("Stock Assistant: Page name", "capital gains")});
+        m_list_of_splits.push_back(StockTransactionSplitInfo{m_stock_cg_entry.get()});
+
+        m_list_of_splits.push_back (StockTransactionSplitInfo{m_capgains_entry.get()});
     }
 
     if (gnc_numeric_check(debit) || gnc_numeric_check(credit) ||!gnc_numeric_equal (debit, credit))
@@ -1187,7 +1183,7 @@ StockAssistantModel::create_transaction ()
     xaccTransSetDatePostedSecsNormalized (trans, m_transaction_date);
     AccountVec accounts;
     std::for_each (m_list_of_splits.begin(), m_list_of_splits.end(),
-                   [&](auto& line){ line.m_entry->create_split (trans, line.m_action, accounts); });
+                   [&](auto& line){ line.m_entry->create_split (trans, accounts); });
     add_price (book);
     xaccTransCommitEdit (trans);
     std::for_each (accounts.begin(), accounts.end(), xaccAccountCommitEdit);
@@ -1623,7 +1619,7 @@ page_stock_value_changed_cb(GtkWidget *widget, StockAssistantModel *model)
 {
     auto me = static_cast<PageStockValue*>(g_object_get_data (G_OBJECT (widget), "owner"));
     auto value = me->m_value.get ();
-    model->m_stock_entry->set_value (value, "stocks", model->m_logger);
+    model->m_stock_entry->set_value (value, model->m_logger);
     me->set_price (model->calculate_price());
 }
 
@@ -1649,7 +1645,7 @@ PageStockValue::prepare(StockTransactionEntry* entry, StockAssistantModel* model
 {
     entry->m_memo = get_memo();
     if (!gnc_numeric_check(m_value.get()))
-        entry->set_value(m_value.get(), "stock", logger);
+        entry->set_value(m_value.get(), logger);
     set_price(model->calculate_price());
     m_value.set_focus();
 }
@@ -1711,7 +1707,7 @@ PageCash::prepare(StockTransactionEntry* entry, Logger& logger)
 {
     entry->m_memo = get_memo();
     if (!gnc_numeric_check(m_value.get()))
-        entry->set_value (m_value.get(), "cash", logger);
+        entry->set_value (m_value.get(), logger);
     entry->m_account = m_account.get();
     m_value.set_focus();
 }
@@ -1816,7 +1812,7 @@ PageFees::prepare(StockTransactionFeesEntry* entry, Logger& logger)
         set_capitalize_fees (entry);
         entry->m_memo = get_memo();
         if (!gnc_numeric_check(m_value.get()))
-            entry->set_value (m_value.get(), "fees", logger);
+            entry->set_value (m_value.get(), logger);
         entry->m_account = m_account.get();
         m_value.set_focus();
 }
@@ -1858,7 +1854,7 @@ PageDividend::prepare(StockTransactionEntry* entry, Logger& logger)
 {
     entry->m_memo = get_memo();
     if (!gnc_numeric_check(m_value.get()))
-        entry->set_value(m_value.get(), "dividend", logger);
+        entry->set_value(m_value.get(), logger);
     entry->m_account = m_account.get();
     m_value.set_focus();
 }
@@ -1912,7 +1908,7 @@ PageCapGain::prepare(StockTransactionEntry* entry, Logger& logger)
 {
     entry->m_memo = get_memo();
     if (gnc_numeric_check(m_value.get()))
-        entry->set_value(m_value.get(), "capgains", logger);
+        entry->set_value(m_value.get(), logger);
         entry->m_account = m_account.get();
         m_value.set_focus();
 }
