@@ -255,28 +255,11 @@ using TransSet = std::unordered_set<Transaction*>;
  * gather the splits / transactions for an account and
  * send them to a file
  *******************************************************/
-static
-void account_splits (CsvExportInfo *info, Account *acc, std::ofstream& ss,
-                     TransSet& trans_set)
+static void
+export_query_splits (CsvExportInfo *info, bool is_trading_acct,
+                     std::ofstream& ss, TransSet& trans_set)
 {
-    bool is_trading_acct = acc && (xaccAccountGetType (acc) == ACCT_TYPE_TRADING);
-
-    // Setup the query for normal transaction export
-    if (info->export_type == XML_EXPORT_TRANS)
-    {
-        info->query = qof_query_create_for (GNC_ID_SPLIT);
-        QofBook *book = gnc_get_current_book();
-        qof_query_set_book (info->query, book);
-
-        /* Sort by transaction date */
-        GSList *p1 = g_slist_prepend (NULL, (gpointer)TRANS_DATE_POSTED);
-        p1 = g_slist_prepend (p1, (gpointer)SPLIT_TRANS);
-        GSList *p2 = g_slist_prepend (NULL, (gpointer)QUERY_DEFAULT_SORT);
-        qof_query_set_sort_order (info->query, p1, p2, NULL);
-
-        xaccQueryAddSingleAccountMatch (info->query, acc, QOF_QUERY_AND);
-        xaccQueryAddDateMatchTT (info->query, true, info->csvd.start_time, true, info->csvd.end_time, QOF_QUERY_AND);
-    }
+    g_return_if_fail (info);
 
     /* Run the query */
     for (GList *splits = qof_query_run (info->query); !info->failed && splits;
@@ -335,11 +318,24 @@ void account_splits (CsvExportInfo *info, Account *acc, std::ofstream& ss,
                                               info->separator_str);
         }
     }
-
-    if (info->export_type == XML_EXPORT_TRANS)
-        qof_query_destroy (info->query);
 }
 
+static void
+account_splits (CsvExportInfo *info, Account *acc,
+                std::ofstream& ss, TransSet& trans_set)
+{
+    g_return_if_fail (info && GNC_IS_ACCOUNT (acc));
+    // Setup the query for normal transaction export
+    auto p1 = g_slist_prepend (g_slist_prepend (nullptr, (gpointer)TRANS_DATE_POSTED), (gpointer)SPLIT_TRANS);
+    auto p2 = g_slist_prepend (nullptr, (gpointer)QUERY_DEFAULT_SORT);
+    info->query = qof_query_create_for (GNC_ID_SPLIT);
+    qof_query_set_book (info->query, gnc_get_current_book());
+    qof_query_set_sort_order (info->query, p1, p2, nullptr);
+    xaccQueryAddSingleAccountMatch (info->query, acc, QOF_QUERY_AND);
+    xaccQueryAddDateMatchTT (info->query, true, info->csvd.start_time, true, info->csvd.end_time, QOF_QUERY_AND);
+    export_query_splits (info, xaccAccountGetType (acc) == ACCT_TYPE_TRADING, ss, trans_set);
+    qof_query_destroy (info->query);
+}
 
 /*******************************************************
  * csv_transactions_export
@@ -409,7 +405,7 @@ void csv_transactions_export (CsvExportInfo *info)
             account_splits (info, GNC_ACCOUNT(ptr->data), ss, trans_set);
         break;
     case XML_EXPORT_REGISTER:
-        account_splits (info, nullptr, ss, trans_set);
+        export_query_splits (info, false, ss, trans_set);
         break;
     default:
         PERR ("unknown export_type %d", info->export_type);
