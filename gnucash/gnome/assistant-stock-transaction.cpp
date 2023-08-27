@@ -1265,10 +1265,12 @@ struct GncAmountEdit
     GncAmountEdit (GtkBuilder *builder, gnc_commodity *commodity);
     void attach (GtkBuilder *builder, const char *table_id,
                  const char *label_ID, int row);
+    GtkWidget* widget() {
+        return gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(m_edit));
+    }
     gnc_numeric get ();
     void connect (gnc_numeric *value);
     void connect (GCallback cb, gpointer data);
-    void set_focus();
     void set_owner (gpointer obj);
 };
 
@@ -1322,12 +1324,6 @@ void
 GncAmountEdit::connect (GCallback cb, gpointer data)
 {
     g_signal_connect(m_edit, "changed", cb, data);
-}
-
-void
-GncAmountEdit::set_focus()
-{
-    gtk_widget_grab_focus (GTK_WIDGET (gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (m_edit))));
 }
 
 void
@@ -1389,7 +1385,24 @@ GncAccountSelector::connect (Account **acct)
     g_signal_connect(m_selector, "account_sel_changed", G_CALLBACK (gnc_account_sel_changed_cb), acct);
 }
 
-/* Assistant page classes. */
+/* Assistant page classes, one per page.  */
+
+/* When an assistant page (a GtkContainer) is displayed it emits a
+ * focus signal. This handler grabs the passed-in widget so that it
+ * will have the initial focus instead of the first item on the
+ * page. The focus signal is also used by GtkContainer to handle tab
+ * and arrow keys, so we immediately disconnect it to allow them to
+ * function. It's connected in the page's prepare function instead of
+ * the connect one so that it can set the initial focus every time the
+ * user visits the page.
+ */
+static void
+assistant_page_set_focus(GtkWidget* page, [[maybe_unused]]GtkDirectionType type,  GtkWidget* entry)
+{
+    gtk_widget_grab_focus(entry);
+    g_signal_handlers_disconnect_by_data(page, entry);
+}
+
 
 struct PageTransType {
     // transaction type page
@@ -1401,7 +1414,6 @@ struct PageTransType {
     int get_transaction_type_index ();
     void set_transaction_types (const TxnTypeVec& txn_types);
     void set_txn_type_explanation (const gchar *txt);
-    void set_focus() { gtk_widget_grab_focus (m_type); }
     void connect (StockAssistantModel *model);
     void change_txn_type (StockAssistantModel *model);
 };
@@ -1430,7 +1442,7 @@ PageTransType::prepare(StockAssistantModel *model)
 
     set_transaction_types(model->m_txn_types.value());
     change_txn_type (model);
-    set_focus();
+    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_type);
 }
 
 int
@@ -1485,7 +1497,6 @@ struct PageTransDeets
     PageTransDeets (GtkBuilder *builder);
     time64 get_date_time () { return m_date.get_date_time(); }
     const char* get_description () { return gtk_entry_get_text (GTK_ENTRY (m_description)); }
-    void set_focus () { gtk_widget_grab_focus (m_description); }
     void connect (time64 *date, const char **description);
     void prepare(time64 *date, const char** description);
 };
@@ -1510,7 +1521,7 @@ PageTransDeets::prepare(time64 *date, const char** description)
 {
     *date = get_date_time();
     *description = get_description();
-    set_focus ();
+    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_description);
 }
 
 struct PageStockAmount
@@ -1559,8 +1570,7 @@ PageStockAmount::prepare (StockTransactionStockEntry* entry, Logger& logger)
     if (!gnc_numeric_check(get_stock_amount()))
         entry->set_amount(get_stock_amount(), logger);
     set_stock_amount(entry->amount_str_for_display());
-    m_amount.set_focus();
-
+    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_amount.widget());
 }
 
 static void
@@ -1632,7 +1642,7 @@ PageStockValue::prepare(StockTransactionEntry* entry, StockAssistantModel* model
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get(), logger);
     set_price(model->calculate_price());
-    m_value.set_focus();
+    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
 }
 
 const char *
@@ -1694,7 +1704,7 @@ PageCash::prepare(StockTransactionEntry* entry, Logger& logger)
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value (m_value.get(), logger);
     entry->m_account = m_account.get();
-    m_value.set_focus();
+    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
 }
 
 const char *
@@ -1794,12 +1804,12 @@ PageFees::connect(StockTransactionFeesEntry* entry)
 void
 PageFees::prepare(StockTransactionFeesEntry* entry, Logger& logger)
 {
-        set_capitalize_fees (entry);
-        entry->m_memo = get_memo();
-        if (!gnc_numeric_check(m_value.get()))
-            entry->set_value (m_value.get(), logger);
-        entry->m_account = m_account.get();
-        m_value.set_focus();
+    set_capitalize_fees (entry);
+    entry->m_memo = get_memo();
+    if (!gnc_numeric_check(m_value.get()))
+        entry->set_value (m_value.get(), logger);
+    entry->m_account = m_account.get();
+    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
 }
 
 struct PageDividend
@@ -1841,7 +1851,7 @@ PageDividend::prepare(StockTransactionEntry* entry, Logger& logger)
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get(), logger);
     entry->m_account = m_account.get();
-    m_value.set_focus();
+    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
 }
 
 const char *
@@ -1895,7 +1905,7 @@ PageCapGain::prepare(StockTransactionEntry* entry, Logger& logger)
     if (gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get(), logger);
         entry->m_account = m_account.get();
-        m_value.set_focus();
+    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
 }
 
 /* The last page of the assistant shows what the resulting transaction will look
@@ -2040,9 +2050,6 @@ struct StockAssistantView {
 
     StockAssistantView(GtkBuilder *builder, Account* account, GtkWidget *parent);
     ~StockAssistantView();
-    void set_focus (GtkWidget *widget) { gtk_widget_grab_focus (widget); }
-    void set_focus_gae (GtkWidget *gae) { set_focus (GTK_WIDGET (gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (gae)))); }
-
 };
 
 StockAssistantView::StockAssistantView (GtkBuilder *builder, Account* account, GtkWidget *parent) :
