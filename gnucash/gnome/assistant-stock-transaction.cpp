@@ -560,9 +560,10 @@ struct StockTransactionEntry
     StockTransactionEntry(const char* action) :
         m_enabled{false}, m_debit_side{false}, m_allow_zero{false},  m_account{nullptr},
         m_value{gnc_numeric_error(GNC_ERROR_ARG)}, m_memo{nullptr}, m_action{action} {}
-    StockTransactionEntry(bool debit_side, bool allow_zero, bool allow_negative, Account* account, gnc_numeric value, const char* action) :
-        m_enabled{false}, m_debit_side{debit_side}, m_allow_zero{allow_zero}, m_allow_negative{allow_negative},
-        m_account{account}, m_value{value}, m_memo{nullptr}, m_action{action} {}
+    StockTransactionEntry(bool debit_side, bool allow_zero, bool allow_negative, Account* account,
+                          gnc_numeric value, const char* memo, const char* action) :
+        m_enabled{true}, m_debit_side{debit_side}, m_allow_zero{allow_zero}, m_allow_negative{allow_negative},
+        m_account{account}, m_value{value}, m_memo{memo}, m_action{action} {}
     virtual ~StockTransactionEntry() = default;
 
     virtual void set_fieldmask(FieldMask mask);
@@ -862,7 +863,7 @@ struct StockTransactionStockCapGainsEntry : public StockTransactionEntry
 StockTransactionStockCapGainsEntry::StockTransactionStockCapGainsEntry(const StockTransactionEntry *cg_entry,
                                                                        const StockTransactionEntry *stk_entry) :
     StockTransactionEntry(!cg_entry->m_debit_side, cg_entry->m_allow_zero, cg_entry->m_allow_negative,
-                          stk_entry->m_account, cg_entry->m_value, cg_entry->m_action) {}
+                          stk_entry->m_account, cg_entry->m_value, cg_entry->m_memo, cg_entry->m_action) {}
 
 struct StockTransactionFeesEntry : public StockTransactionEntry
 {
