@@ -887,16 +887,23 @@ void
 StockTransactionFeesEntry::create_split(Transaction* trans,  AccountVec& commits)
 {
   g_return_if_fail(trans);
-  if (!m_account || !m_capitalize || gnc_numeric_check(m_value))
-    return;
+  if ((!m_account && !m_capitalize) || gnc_numeric_check(m_value))
+      return;
   auto split = xaccMallocSplit(qof_instance_get_book(trans));
   xaccSplitSetParent(split, trans);
-  xaccAccountBeginEdit(m_account);
-  commits.push_back(m_account);
-  xaccSplitSetAccount(split, m_account);
+  if (m_capitalize)
+  {
+      xaccSplitSetAccount(split, commits[0]); // Should be the stock account
+  }
+  else
+  {
+      xaccAccountBeginEdit(m_account);
+      commits.push_back(m_account);
+      xaccSplitSetAccount(split, m_account);
+      xaccSplitSetAmount(split, amount());
+  }
   xaccSplitSetMemo(split, m_memo);
   xaccSplitSetValue(split, m_debit_side ? m_value : gnc_numeric_neg(m_value));
-  xaccSplitSetAmount(split, amount());
   PINFO("creating %s split in Acct(%s): Val(%s), Amt(%s) => Val(%s), Amt(%s)",
         m_action, m_account ? xaccAccountGetName (m_account) : "Empty!",
         gnc_num_dbg_to_string(m_value),

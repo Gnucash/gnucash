@@ -270,6 +270,6 @@ TEST_F(StockAssistantTest, testAggregateResults)
     dump_acct (cash_account);
     EXPECT_EQ (xaccAccountGetBalance (dividend_account).num, 42000);
     EXPECT_EQ (xaccAccountGetBalance (capgains_account).num, -995981);
-    EXPECT_EQ (xaccAccountGetBalance (fees_account).num, 5473);
+    EXPECT_EQ (xaccAccountGetBalance (fees_account).num, 4478);
     EXPECT_EQ (xaccAccountGetBalance (cash_account).num, 1663049);
 }
