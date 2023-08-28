@@ -357,14 +357,13 @@ for styling the invoice. Please see the exported report for the CSS class names.
                     monetary)
                 monetary))))
 
-    (define (add-payment-row table used-columns split total-collector reverse-payments?)
+    (define (add-payment-row table used-columns currency split total-collector reverse-payments?)
       (let* ((t (xaccSplitGetParent split))
-             (currency (xaccTransGetCurrency t))
              ;; Depending on the document type, the payments may need to be sign-reversed
              (amt (gnc:make-gnc-monetary currency
                                          (if reverse-payments?
-                                             (- (xaccSplitGetValue split))
-                                             (xaccSplitGetValue split)))))
+                                             (- (xaccSplitGetAmount split))
+                                             (xaccSplitGetAmount split)))))
 
         (total-collector 'add
                          (gnc:gnc-monetary-commodity amt)
@@ -511,7 +510,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                     (for-each
                      (lambda (split)
                        (if (not (equal? (xaccSplitGetParent split) txn))
-                           (add-payment-row table used-columns
+                           (add-payment-row table used-columns currency
                                             split total-collector
                                             reverse-payments?)))
                      splits)))

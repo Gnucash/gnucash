@@ -383,18 +383,17 @@
          (lambda (split)
            (let ((t (xaccSplitGetParent split)))
              (unless (equal? t txn) ; don't process the entry itself as a split ;'
-               (let ((c (xaccTransGetCurrency t))
-                     (a (if reverse-payments?
-                            (- (xaccSplitGetValue split))
-                            (xaccSplitGetValue split))))
-                 (total-col 'add c a)
+               (let ((a (if reverse-payments?
+                            (- (xaccSplitGetAmount split))
+                            (xaccSplitGetAmount split))))
+                 (total-col 'add currency a)
     ?>
     <tr valign="top">
       <?scm (when opt-col-date ?>
       <td align="center"><?scm:d (qof-print-date (xaccTransGetDate t)) ?></td>
       <?scm ) ?>
       <td align="left" colspan="<?scm:d (+ tbl_cols (if opt-col-date 0 1)) ?>"><?scm:d opt-payment-recd-heading ?></td>
-      <td align="right"><?scm:d (fmtmoney c a) ?></td>
+      <td align="right"><?scm:d (fmtmoney currency a) ?></td>
     </tr>
     <?scm ))))
          splits)) ?>

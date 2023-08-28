@@ -228,14 +228,13 @@
              (lambda (split)
                 (let ((t (xaccSplitGetParent split)))
                   (unless (equal? t txn) ; don't process the entry itself as a split
-                    (let ((c (xaccTransGetCurrency t))
-                          (a (xaccSplitGetValue    split)))
-                      (total-col 'add c a)
+                    (let ((a (xaccSplitGetAmount    split)))
+                      (total-col 'add currency a)
         ?>
         <tr valign="top">
           <td align="center"><?scm:d (qof-print-date (xaccTransGetDate t)) ?></td>
           <td align="left" colspan="<?scm:d (- maxcols 3) ?>"><?scm:d opt-payment-recd-heading ?></td>
-          <td align="right" colspan="2"><?scm:d (fmtmoney c a) ?></td>
+          <td align="right" colspan="2"><?scm:d (fmtmoney currency a) ?></td>
         </tr>
         <?scm ))))
              splits)) ?>
