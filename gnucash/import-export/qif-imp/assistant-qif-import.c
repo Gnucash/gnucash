@@ -109,7 +109,6 @@ enum qif_trans_cols
 struct _qifimportwindow
 {
     GtkWidget * window;
-    GtkWidget * assistant;
 
     /* Widgets on the file selection page. */
     GtkWidget * filename_entry;
@@ -2924,7 +2923,7 @@ do_page_check (gpointer user_data)
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     gtk_assistant_set_page_complete (assistant, page,
-                                     gnc_ui_qif_import_comm_valid (GTK_ASSISTANT(wind->assistant), wind));
+                                     gnc_ui_qif_import_comm_valid (assistant, wind));
 
     wind->timeout_id = 0;
     return FALSE;
