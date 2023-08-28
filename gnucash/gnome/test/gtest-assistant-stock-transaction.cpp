@@ -173,17 +173,17 @@ StockAssistantTest::instantiate_model(StockAssistantModel &model, const ASTTestC
 
     model.set_txn_type (t.type_idx);
     model.m_transaction_description = t.desc;
-    stock_entry->set_amount(gnc_numeric_create (t.stock_amt, 1), model.m_logger);
-    model.m_stock_entry->m_value = gnc_numeric_create (t.stock_val, 100);
-    model.m_cash_entry->m_value = gnc_numeric_create (t.cash_val, 100);
+    stock_entry->set_amount(gnc_numeric_create (t.stock_amt, 1));
+    model.m_stock_entry->set_value(gnc_numeric_create (t.stock_val, 100));
+    model.m_cash_entry->set_value(gnc_numeric_create (t.cash_val, 100));
     model.m_cash_entry->m_account = cash_account;
     model.m_fees_entry->m_account = fees_account;
     fees_entry->m_capitalize = t.capitalize;
-    model.m_fees_entry->m_value = gnc_numeric_create (t.fees_val, 100);
+    model.m_fees_entry->set_value(gnc_numeric_create (t.fees_val, 100));
     model.m_capgains_entry->m_account = capgains_account;
-    model.m_capgains_entry->m_value = gnc_numeric_create (t.capg_val, 100);
+    model.m_capgains_entry->set_value(gnc_numeric_create (t.capg_val, 100));
     model.m_dividend_entry->m_account = dividend_account;
-    model.m_dividend_entry->m_value = gnc_numeric_create (t.divi_val, 100);
+    model.m_dividend_entry->set_value(gnc_numeric_create (t.divi_val, 100));
 }
 
 class StockAssistantTestParameterized :
