@@ -130,13 +130,15 @@ downloaded_transaction_append(GNCImportMatchPicker * matcher,
     auto imbalance = g_strdup (xaccPrintAmount (xaccTransGetImbalanceValue(trans),
                                                 gnc_commodity_print_info (xaccTransGetCurrency (trans), TRUE)));
 
-    iter->set_column (DOWNLOADED_COL_ACCOUNT, account);
-    iter->set_column (DOWNLOADED_COL_DATE, date);
-    iter->set_column (DOWNLOADED_COL_AMOUNT, amount);
-    iter->set_column (DOWNLOADED_COL_DESCRIPTION, desc);
-    iter->set_column (DOWNLOADED_COL_MEMO, memo);
-    iter->set_column (DOWNLOADED_COL_BALANCED, imbalance);
-    iter->set_column (DOWNLOADED_COL_INFO_PTR, transaction_info);
+    iter->set_columns (0,
+                       DOWNLOADED_COL_ACCOUNT, account,
+                       DOWNLOADED_COL_DATE, date,
+                       DOWNLOADED_COL_AMOUNT, amount,
+                       DOWNLOADED_COL_DESCRIPTION, desc,
+                       DOWNLOADED_COL_MEMO, memo,
+                       DOWNLOADED_COL_BALANCED, imbalance,
+                       DOWNLOADED_COL_INFO_PTR, transaction_info,
+                       -1);
 
     gtk_tree_selection_select_iter (gtk_tree_view_get_selection(matcher->downloaded_view), &iter->get_iter());
 
