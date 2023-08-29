@@ -296,10 +296,9 @@ gnc_numeric double_to_gnc_numeric(double n, gint64 denom,
                                   gint how);
 
 /** Read a gnc_numeric from str, skipping any leading whitespace.
- *  Return TRUE on success and store the resulting value in "n".
- *  Return NULL on error. */
-gboolean string_to_gnc_numeric(const gchar* str, gnc_numeric *n);
-
+ *  Returns the resulting gnc_numeric.
+ *  Return GNC_ERROR_ARG on error. */
+gnc_numeric gnc_numeric_from_string (const gchar* str);
 /** Create a gnc_numeric object that signals the error condition
  *  noted by error_code, rather than a number.
  */

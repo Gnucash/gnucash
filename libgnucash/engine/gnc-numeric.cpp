@@ -208,21 +208,24 @@ numeric_from_scientific_match(smatch &m)
 }
 
 GncNumeric::GncNumeric(const std::string &str, bool autoround) {
-    static const std::string numer_frag("(-?[0-9]*)");
-    static const std::string denom_frag("([0-9]+)");
+    static const std::string maybe_sign ("(-?)");
+    static const std::string opt_signed_int("(-?[0-9]*)");
+    static const std::string unsigned_int("([0-9]+)");
     static const std::string hex_frag("(0[xX][A-Fa-f0-9]+)");
     static const std::string slash("[ \\t]*/[ \\t]*");
+    static const std::string whitespace("[ \\t]+");
     /* The llvm standard C++ library refused to recognize the - in the
-     * numer_frag pattern with the default ECMAScript syntax so we use the
+     * opt_signed_int pattern with the default ECMAScript syntax so we use the
      * awk syntax.
      */
-    static const regex numeral(numer_frag);
+    static const regex numeral(opt_signed_int);
     static const regex hex(hex_frag);
-    static const regex numeral_rational(numer_frag + slash + denom_frag);
+    static const regex numeral_rational(opt_signed_int + slash + unsigned_int);
+    static const regex integer_and_fraction(maybe_sign + unsigned_int + whitespace + unsigned_int + slash + unsigned_int);
     static const regex hex_rational(hex_frag + slash + hex_frag);
-    static const regex hex_over_num(hex_frag + slash + denom_frag);
-    static const regex num_over_hex(numer_frag + slash + hex_frag);
-    static const regex decimal(numer_frag + "[.,]" + denom_frag);
+    static const regex hex_over_num(hex_frag + slash + unsigned_int);
+    static const regex num_over_hex(opt_signed_int + slash + hex_frag);
+    static const regex decimal(opt_signed_int + "[.,]" + unsigned_int);
     static const regex scientific("(?:(-?[0-9]+[.,]?)|(-?[0-9]*)[.,]([0-9]+))[Ee](-?[0-9]+)");
     static const regex has_hex_prefix(".*0[xX]$");
     smatch m, x;
@@ -253,6 +256,14 @@ GncNumeric::GncNumeric(const std::string &str, bool autoround) {
     {
         GncNumeric n(stoll(m[1].str()), stoll(m[2].str(), nullptr, 16));
         m_num = n.num();
+        m_den = n.denom();
+        return;
+    }
+    if (regex_search(str, m, integer_and_fraction))
+    {
+        GncNumeric n(stoll(m[3].str()), stoll(m[4].str()));
+        n += stoll(m[2].str());
+        m_num = m[1].str().empty() ? n.num() : -n.num();
         m_den = n.denom();
         return;
     }
@@ -1303,19 +1314,19 @@ gnc_num_dbg_to_string(gnc_numeric n)
     return p;
 }
 
-gboolean
-string_to_gnc_numeric(const gchar* str, gnc_numeric *n)
+gnc_numeric
+gnc_numeric_from_string (const gchar* str)
 {
+    if (!str)
+        return gnc_numeric_error (GNC_ERROR_ARG);
     try
     {
-        GncNumeric an(str);
-        *n = static_cast<gnc_numeric>(an);
-        return TRUE;
+        return GncNumeric (str);
     }
     catch (const std::exception& err)
     {
         PWARN("%s", err.what());
-        return FALSE;
+        return gnc_numeric_error (GNC_ERROR_ARG);
     }
 }
 

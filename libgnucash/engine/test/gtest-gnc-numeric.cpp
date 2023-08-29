@@ -180,6 +180,28 @@ TEST(gncnumeric_constructors, test_string_constructor)
     GncNumeric neg_embedded("The number is -123456/456");
     EXPECT_EQ(-123456, neg_embedded.num());
     EXPECT_EQ(456, neg_embedded.denom());
+    ASSERT_NO_THROW(GncNumeric integer_fraction("The number is 1234 567/890"));
+    GncNumeric integer_fraction("The number is 1234 567/890");
+    EXPECT_EQ(1098827, integer_fraction.num());
+    EXPECT_EQ(890, integer_fraction.denom());
+    ASSERT_NO_THROW(GncNumeric neg_integer_fraction("The number is -1234 567/890"));
+    GncNumeric neg_integer_fraction("The number is -1234 567/890");
+    EXPECT_EQ(-1098827, neg_integer_fraction.num());
+    EXPECT_EQ(890, neg_integer_fraction.denom());
+    GncNumeric integer_large_fraction("The number is 1234 4567/890");
+    EXPECT_EQ(1102827, integer_large_fraction.num());
+    EXPECT_EQ(890, integer_large_fraction.denom());
+    GncNumeric neg_integer_large_fraction("The number is -1234 4567/890");
+    EXPECT_EQ(-1102827, neg_integer_large_fraction.num());
+    EXPECT_EQ(890, neg_integer_large_fraction.denom());
+    ASSERT_NO_THROW(GncNumeric zero_integer_fraction("The number is 0 567/890"));
+    GncNumeric zero_integer_fraction("The number is 0 567/890");
+    EXPECT_EQ(567, zero_integer_fraction.num());
+    EXPECT_EQ(890, zero_integer_fraction.denom());
+    ASSERT_NO_THROW(GncNumeric neg_zero_integer_fraction("The number is -0 567/890"));
+    GncNumeric neg_zero_integer_fraction("The number is -0 567/890");
+    EXPECT_EQ(-567, neg_zero_integer_fraction.num());
+    EXPECT_EQ(890, neg_zero_integer_fraction.denom());
     EXPECT_THROW(GncNumeric throw_zero_denom("123/0"), std::invalid_argument);
     EXPECT_THROW(GncNumeric overflow("12345678987654321.123456"),
                  std::overflow_error);
