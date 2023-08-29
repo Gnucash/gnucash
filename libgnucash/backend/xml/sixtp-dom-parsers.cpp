@@ -509,8 +509,8 @@ dom_tree_to_gnc_numeric (xmlNodePtr node)
     if (!content)
         return gnc_numeric_zero ();
 
-    gnc_numeric num;
-    if (!string_to_gnc_numeric (content, &num))
+    gnc_numeric num = gnc_numeric_from_string (content);
+    if (gnc_numeric_check (num))
         num = gnc_numeric_zero ();
 
     g_free (content);

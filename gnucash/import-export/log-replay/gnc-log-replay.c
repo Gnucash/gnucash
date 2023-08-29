@@ -233,12 +233,12 @@ static split_record interpret_split_record( char *record_line)
     }
     if (strlen(tok_ptr = my_strtok(NULL, "\t")) != 0)
     {
-        string_to_gnc_numeric(tok_ptr, &(record.amount));
+        record.amount = gnc_numeric_from_string (tok_ptr);
         record.amount_present = TRUE;
     }
     if (strlen(tok_ptr = my_strtok(NULL, "\t")) != 0)
     {
-        string_to_gnc_numeric(tok_ptr, &(record.value));
+        record.value = gnc_numeric_from_string (tok_ptr);
         record.value_present = TRUE;
     }
     if (strlen(tok_ptr = my_strtok(NULL, "\t")) != 0)

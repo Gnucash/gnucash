@@ -49,8 +49,8 @@ from gnucash.gnucash_core_c import gncInvoiceLookup, gncInvoiceGetInvoiceFromTxn
     gnc_search_customer_on_id, gnc_search_bill_on_id , \
     gnc_search_vendor_on_id, gncInvoiceNextID, gncCustomerNextID, \
     gncVendorNextID, gncTaxTableGetTables, gnc_numeric_zero, \
-    gnc_numeric_create, double_to_gnc_numeric, string_to_gnc_numeric, \
-    gnc_numeric_to_string
+    gnc_numeric_create, double_to_gnc_numeric, gnc_numeric_from_string, \
+    gnc_numeric_to_string, gnc_numeric_check
 
 from gnucash.deprecation import (
     deprecated_args_session,
@@ -432,8 +432,8 @@ class GncNumeric(GnuCashCoreClass):
             elif isinstance(arg, float):
                 return double_to_gnc_numeric(arg, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED | GNC_HOW_RND_NEVER)
             elif isinstance(arg, str):
-                instance = gnc_numeric_zero()
-                if not string_to_gnc_numeric(arg, instance):
+                instance = gnc_numeric_from_string(arg)
+                if gnc_numeric_check(instance):
                     raise TypeError('Failed to convert to GncNumeric: ' + str(args))
                 return instance
             elif isinstance(arg, GncNumeric):

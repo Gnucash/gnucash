@@ -98,10 +98,9 @@ gnc_exp_parser_real_init ( gboolean addPredefined )
             for (key = keys; key && *key; key++)
             {
                 str_value = g_key_file_get_string(key_file, GEP_GROUP_NAME, *key, NULL);
-                if (str_value && string_to_gnc_numeric(str_value, &value))
-                {
+                value = gnc_numeric_from_string (str_value);
+                if (!gnc_numeric_check (value))
                     gnc_exp_parser_set_value (*key, gnc_numeric_reduce (value));
-                }
             }
             g_strfreev(keys);
             g_key_file_free(key_file);

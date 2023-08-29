@@ -194,9 +194,8 @@ gui_to_fi (FinCalcDialog *fcd)
     text = gtk_entry_get_text (GTK_ENTRY(entry));
     if (text && *text)
     {
-        gnc_numeric out;
-        gboolean result = string_to_gnc_numeric (text, &out);
-        if (result)
+        gnc_numeric out = gnc_numeric_from_string (text);
+        if (!gnc_numeric_check (out))
             npp = gnc_numeric_convert (out, 1, GNC_HOW_RND_TRUNC);
         else
             npp = gnc_numeric_zero ();

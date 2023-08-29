@@ -611,7 +611,8 @@ generic_gnc_numeric_end_handler (gpointer data_for_children,
         num = g_new (gnc_numeric, 1);
         if (num)
         {
-            if (string_to_gnc_numeric (txt, num))
+            *num = gnc_numeric_from_string (txt);
+            if (!gnc_numeric_check (*num))
             {
                 ok = TRUE;
                 *result = num;

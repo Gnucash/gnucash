@@ -472,6 +472,13 @@ simple_kvp_value_parser_new (sixtp_end_handler end_handler)
 
  */
 
+static gboolean
+string_to_gnc_numeric(const gchar* str, gnc_numeric *n)
+{
+    *n = gnc_numeric_from_string (str);
+    return (!gnc_numeric_check (*n));
+}
+
 /* ------------------------------------------------------------ */
 /* generic type copnversion for kvp types */
 #define KVP_CVT_VALUE(TYPE)                 \
