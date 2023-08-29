@@ -22,6 +22,7 @@
 
 #include <config.h>
 
+#include <exception>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <cinttypes>
@@ -577,7 +578,8 @@ struct StockTransactionEntry
     virtual const char* print_value(GNCPrintAmountInfo info);
     virtual const char* print_amount(gnc_numeric amt);
     virtual std::string amount_str_for_display() { return ""; }
-    virtual gnc_numeric calculate_price() { return gnc_numeric_error(GNC_ERROR_ARG); }
+    virtual gnc_numeric calculate_price() const { return gnc_numeric_error(GNC_ERROR_ARG); }
+    virtual  const char* print_price() const;
     virtual bool has_amount() { return false; }
     virtual void validate_amount(Logger&) const;
 };
@@ -687,6 +689,18 @@ StockTransactionEntry::create_split(Transaction *trans,  AccountVec &account_com
                                   m_action));
 }
 
+const char *
+StockTransactionEntry::print_price() const
+{
+    auto price{calculate_price()};
+    if (gnc_numeric_check(price))
+//Translators: "N/A" here means that a commodity doesn't have a valid price.
+        return _("N/A");
+    auto currency{gnc_account_get_currency_or_parent(m_account)};
+    auto pinfo{gnc_price_print_info(currency, TRUE)};
+    return xaccPrintAmount(price, pinfo);
+}
+
 struct StockTransactionStockEntry : public StockTransactionEntry
 {
     bool m_amount_enabled;
@@ -707,7 +721,7 @@ struct StockTransactionStockEntry : public StockTransactionEntry
     void set_amount(gnc_numeric amount) override;
     void create_split(Transaction *trans, AccountVec &account_commits) override;
     std::string amount_str_for_display() override;
-    gnc_numeric calculate_price() override;
+    gnc_numeric calculate_price() const override;
     bool has_amount() override { return m_amount_enabled; }
     void validate_amount(Logger& logger) const override;
 };
@@ -856,7 +870,7 @@ StockTransactionStockEntry::create_split(Transaction *trans, AccountVec &account
 }
 
 gnc_numeric
-StockTransactionStockEntry::calculate_price()
+StockTransactionStockEntry::calculate_price() const
 {
     if (m_input_new_balance ||
         !m_amount_enabled || gnc_numeric_check(m_amount) ||
@@ -989,7 +1003,6 @@ struct StockAssistantModel
     bool maybe_reset_txn_types ();
     bool set_txn_type (guint type_idx);
     std::string get_new_amount_str ();
-    std::tuple<bool, gnc_numeric, const char*> calculate_price ();
     std::tuple<bool, std::string, EntryVec> generate_list_of_splits ();
     std::tuple<bool, Transaction*> create_transaction ();
 
@@ -1046,17 +1059,6 @@ StockAssistantModel::set_txn_type (guint type_idx)
     return true;
 };
 
-std::tuple<bool, gnc_numeric, const char*>
-StockAssistantModel::calculate_price ()
-{
-    auto price{m_stock_entry->calculate_price()};
-    if (gnc_numeric_check(price))
-        return {false, price, nullptr};
-    auto pinfo{gnc_price_print_info (m_currency, true)};
-    PINFO("Model Price %s", xaccPrintAmount(price, pinfo));
-    return {true, price, xaccPrintAmount (price, pinfo)};
-}
-
 static void
 check_txn_date(GList* last_split_node, time64 txn_date, Logger& logger)
 {
@@ -1106,8 +1108,8 @@ StockAssistantModel::generate_list_of_splits() {
         m_stock_entry->validate_amount(m_logger);
         m_list_of_splits.push_back(m_stock_entry.get());
 
-        auto [has_price, price, price_str] = calculate_price ();
-        if (has_price)
+        auto price{m_stock_entry->calculate_price()};
+        if (!gnc_numeric_check(price))
         {
             // Translators: %s refer to: stock mnemonic, broker currency,
             // date of transaction.
@@ -1116,7 +1118,7 @@ StockAssistantModel::generate_list_of_splits() {
             auto price_msg = g_strdup_printf
                 (_(tmpl),
                  gnc_commodity_get_mnemonic (xaccAccountGetCommodity (m_acct)),
-                 price_str, date_str);
+                 m_stock_entry->print_price(), date_str);
             m_logger.info(price_msg);
             g_free (date_str);
         }
@@ -1217,8 +1219,8 @@ StockAssistantModel::create_transaction ()
 void
 StockAssistantModel::add_price (QofBook *book)
 {
-    auto [has_price, p, price_str] = calculate_price ();
-    if (!has_price)
+    auto stock_price{m_stock_entry->calculate_price()};
+    if (gnc_numeric_check(stock_price))
         return;
 
     auto price = gnc_price_create (book);
@@ -1228,7 +1230,7 @@ StockAssistantModel::add_price (QofBook *book)
     gnc_price_set_time64 (price, m_transaction_date);
     gnc_price_set_source (price, PRICE_SOURCE_STOCK_TRANSACTION);
     gnc_price_set_typestr (price, PRICE_TYPE_UNK);
-    gnc_price_set_value (price, p);
+    gnc_price_set_value (price, stock_price);
     gnc_price_commit_edit (price);
 
     auto pdb = gnc_pricedb_get_db (book);
@@ -1640,19 +1642,18 @@ struct PageStockValue
     GtkWidget * m_memo;
     PageStockValue (GtkBuilder *builder, Account* account);
     const char* get_memo ();
-    void connect(StockAssistantModel *model);
-    void prepare(StockTransactionEntry*, StockAssistantModel*);
+    void connect(StockTransactionEntry* entry);
+    void prepare(StockTransactionEntry* entry);
     void set_price(const gchar *val);
-    void set_price (std::tuple<bool, gnc_numeric, const char*> price_tuple);
 };
 
 static void
-page_stock_value_changed_cb(GtkWidget *widget, StockAssistantModel *model)
+page_stock_value_changed_cb(GtkWidget *widget, StockTransactionEntry* entry)
 {
     auto me = static_cast<PageStockValue*>(g_object_get_data (G_OBJECT (widget), "owner"));
     auto value = me->m_value.get ();
-    model->m_stock_entry->set_value (value);
-    me->set_price (model->calculate_price());
+    entry->set_value (value);
+    me->set_price (entry->print_price());
 }
 
 PageStockValue::PageStockValue(GtkBuilder *builder, Account* account)
@@ -1665,20 +1666,20 @@ PageStockValue::PageStockValue(GtkBuilder *builder, Account* account)
 }
 
 void
-PageStockValue::connect(StockAssistantModel *model)
+PageStockValue::connect(StockTransactionEntry* entry)
 {
-    m_value.connect(G_CALLBACK (page_stock_value_changed_cb), model);
+    m_value.connect(G_CALLBACK (page_stock_value_changed_cb), entry);
     m_value.set_owner (static_cast<gpointer>(this));
-    g_signal_connect (m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &model->m_stock_entry->m_memo);
+    g_signal_connect (m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &entry->m_memo);
 }
 
 void
-PageStockValue::prepare(StockTransactionEntry* entry, StockAssistantModel* model)
+PageStockValue::prepare(StockTransactionEntry* entry)
 {
     entry->m_memo = get_memo();
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get());
-    set_price(model->calculate_price());
+    set_price(entry->print_price());
     g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
 }
 
@@ -1693,14 +1694,6 @@ PageStockValue::set_price (const gchar *val)
 {
     gtk_label_set_text(GTK_LABEL(this->m_price), val);
 };
-
-void
-PageStockValue::set_price (std::tuple<bool, gnc_numeric, const char*> price_tuple)
-{
-    auto [has_price, price, price_str] = price_tuple;
-    // Translators: StockAssistant: N/A denotes stock price is not computable
-    set_price(has_price ? price_str : _("N/A"));
-}
 
 struct PageCash
 {
@@ -2141,7 +2134,7 @@ StockAssistantController::connect_signals (GtkBuilder *builder)
     m_view.m_type_page.connect(m_model.get());
     m_view.m_deets_page.connect(&m_model->m_transaction_date, &m_model->m_transaction_description);
     m_view.m_stock_amount_page.connect(m_model.get());
-    m_view.m_stock_value_page.connect(m_model.get());
+    m_view.m_stock_value_page.connect(m_model->m_stock_entry.get());
     m_view.m_cash_page.connect(m_model->m_cash_entry.get());
     auto fees_entry = dynamic_cast<StockTransactionFeesEntry *>(m_model->m_fees_entry.get());
     if (fees_entry)
@@ -2185,7 +2178,7 @@ StockAssistantController::prepare(GtkAssistant* assistant, GtkWidget* page)
         break;
     }
     case PAGE_STOCK_VALUE:
-        m_view.m_stock_value_page.prepare(m_model->m_stock_entry.get(), m_model.get());
+        m_view.m_stock_value_page.prepare(m_model->m_stock_entry.get());
         break;
     case PAGE_CASH:
         m_view.m_cash_page.prepare(m_model->m_cash_entry.get());
