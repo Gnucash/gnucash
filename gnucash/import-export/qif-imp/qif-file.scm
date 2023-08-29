@@ -39,6 +39,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 rdelim))
+(use-modules (ice-9 match))
 (use-modules (gnucash qif-import qif-objects))
 (use-modules (gnucash qif-import qif-utils))
 (use-modules (gnucash qif-import qif-parse))
@@ -832,7 +833,7 @@
       (start-sub 1)
       (check-and-parse-field
        qif-price:share-price qif-price:set-share-price! gnc-numeric-equal
-       qif-parse:check-number-format '(decimal comma)
+       qif-parse:check-number-format '(decimal comma rational)
        qif-parse:parse-number/format (qif-file:prices self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'share-price
@@ -883,7 +884,7 @@
       (start-sub 0.1)
       (check-and-parse-field
        qif-xtn:share-price qif-xtn:set-share-price! gnc-numeric-equal
-       qif-parse:check-number-format '(decimal comma)
+       qif-parse:check-number-format '(decimal comma rational)
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'share-price
@@ -1147,26 +1148,18 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define (qif-file:parse-price-line line)
-  (let ((current-xtn (make-qif-price)))
-    (if (not (false-if-exception
-        (let* ((symbol (string-trim-both (string-trim-both (car (string-split line #\,)) char-set:punctuation)))
-               (price (cadr (string-split line #\,)))
-               (fracprice (string-split price #\space))
-               (date (string-trim-both (string-trim-both (caddr (string-split line #\,)) char-set:punctuation))))
-
-          (qif-price:set-symbol! current-xtn symbol)
-          (qif-price:set-date! current-xtn date)
-
-          ;; If we have a fractional portion, convert it to float
-          (if (> (length fracprice) 1)
-              (let ((total (+ (string->number (car fracprice))
-                 (string->number (cadr fracprice)))))
-              (set! price (format #f "~f" total))))
-
-          (qif-price:set-share-price! current-xtn price)
-
-          ;; A blank entry will not necessarily throw an exception, but is invalid
-          (if (or (string-null? symbol) (or (string-null? price) (string-null? date)))
-            (set! current-xtn #f)))))
-       (set! current-xtn #f))
-    current-xtn))
+  (define (remove-punctuation s) (string-trim-both s char-set:punctuation))
+  (and (string? line)
+       (match (string-split line #\,)
+         (((= remove-punctuation symbol) (= gnc-numeric-from-string value) (= remove-punctuation date))
+          (cond
+           ((string-null? symbol) #f)
+           ((not value) #f)
+           ((string-null? date) #f)
+           (else
+            (let ((xtn (make-qif-price)))
+              (qif-price:set-symbol! xtn symbol)
+              (qif-price:set-date! xtn date)
+              (qif-price:set-share-price! xtn (number->string value))
+              xtn))))
+         (_ #f))))
