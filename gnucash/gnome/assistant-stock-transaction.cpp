@@ -569,6 +569,9 @@ struct StockTransactionEntry
 
     virtual void set_fieldmask(FieldMask mask);
     virtual void set_capitalize(bool capitalize) {}
+    virtual bool do_capitalize() const { return false; }
+    virtual void set_account(Account* account) { m_account = account; }
+    virtual void set_memo(const char* memo) { m_memo = memo; }
     virtual void set_value(gnc_numeric amount);
     virtual gnc_numeric amount() { return m_value; }
     virtual void set_balance(gnc_numeric balance) { m_balance = balance; }
@@ -599,10 +602,6 @@ StockTransactionEntry::set_fieldmask(FieldMask mask)
 void
 StockTransactionEntry::set_value(gnc_numeric amount)
 {
-    DEBUG ("checking value %s page %s",
-           gnc_num_dbg_to_string (amount),
-           m_action);
-
     if (gnc_numeric_check (amount))
         return;
 
@@ -615,6 +614,7 @@ StockTransactionEntry::set_value(gnc_numeric amount)
     {
         m_value = amount;
     }
+    PINFO("Set %s value to %" PRId64 "/%" PRId64, m_action, m_value.num, m_value.denom);
 }
 
 void
@@ -913,6 +913,7 @@ struct StockTransactionFeesEntry : public StockTransactionEntry
     StockTransactionFeesEntry(const char* action) : StockTransactionEntry{action}, m_capitalize{false} {}
     void set_fieldmask(FieldMask mask) override;
     void set_capitalize(bool capitalize) override { m_capitalize = capitalize; }
+    bool do_capitalize() const override { return m_capitalize; }
     void create_split(Transaction *trans,  AccountVec &commits) override;
 };
 
@@ -956,6 +957,9 @@ StockTransactionFeesEntry::create_split(Transaction* trans,  AccountVec& commits
 }
 
 using EntryVec = std::vector<StockTransactionEntry*>;
+
+static void stock_assistant_model_date_changed_cb(GtkWidget*, void*);
+static void stock_assistant_model_description_changed_cb(GtkWidget*, void*);
 
 /** Manages the data and actions for the assistant. */
 struct StockAssistantModel
@@ -1002,6 +1006,11 @@ struct StockAssistantModel
     // current (i.e. transaction_date hasn't changed).
     bool maybe_reset_txn_types ();
     bool set_txn_type (guint type_idx);
+    void set_transaction_date(time64 date) {
+        m_transaction_date = date;
+        PWARN("Setting tranacaction date to %s", qof_print_date(m_transaction_date));
+    }
+    void set_transaction_desc(const char* desc) { m_transaction_description = desc; }
     std::string get_new_amount_str ();
     std::tuple<bool, std::string, EntryVec> generate_list_of_splits ();
     std::tuple<bool, Transaction*> create_transaction ();
@@ -1240,13 +1249,27 @@ StockAssistantModel::add_price (QofBook *book)
     gnc_price_unref (price);
 }
 
+static void
+stock_assistant_model_date_changed_cb(GtkWidget* widget, void* data)
+{
+    auto model{static_cast<StockAssistantModel*>(data)};
+    model->set_transaction_date(gnc_date_edit_get_date_end(GNC_DATE_EDIT(widget)));
+}
+
+static void
+stock_assistant_model_description_changed_cb(GtkWidget* widget, void* data)
+{
+    auto model{static_cast<StockAssistantModel*>(data)};
+    model->set_transaction_desc(gtk_entry_get_text(GTK_ENTRY(widget)));
+}
+
 /* ********************* View Classes ************************/
 
 /* ***************** Generic Event Callbacks ****************/
 static void
-text_entry_changed_cb (GtkWidget *widget, const gchar **model_text)
+text_entry_changed_cb (GtkWidget *widget, StockTransactionEntry* entry)
 {
-    *model_text = gtk_entry_get_text (GTK_ENTRY (widget));
+    entry->set_memo(gtk_entry_get_text (GTK_ENTRY (widget)));
 }
 
 
@@ -1270,15 +1293,8 @@ struct GncDateEdit
     void attach(GtkBuilder *builder, const char *table_ID, const char *label_ID,
                 int row);
     time64 get_date_time() { return gnc_date_edit_get_date_end(GNC_DATE_EDIT(m_edit)); }
-    void connect(time64 *target);
+    void connect(GCallback, gpointer);
 };
-
-static void
-gnc_date_edit_changed_cb (GtkWidget* widget, time64 *target)
-{
-    g_return_if_fail(GNC_IS_DATE_EDIT(widget));
-    *target = gnc_date_edit_get_date_end(GNC_DATE_EDIT(widget));
-}
 
 void
 GncDateEdit::attach(GtkBuilder *builder, const char *table_ID,
@@ -1292,9 +1308,9 @@ GncDateEdit::attach(GtkBuilder *builder, const char *table_ID,
 }
 
 void
-GncDateEdit::connect(time64 *time)
+GncDateEdit::connect(GCallback cb, gpointer data)
 {
-    g_signal_connect(m_edit, "date_changed", G_CALLBACK (gnc_date_edit_changed_cb), time);
+    g_signal_connect(m_edit, "date_changed", cb, data);
 }
 
 struct GncAmountEdit
@@ -1308,20 +1324,18 @@ struct GncAmountEdit
         return gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(m_edit));
     }
     gnc_numeric get ();
-    void connect (gnc_numeric *value);
     void connect (GCallback cb, gpointer data);
     void set_owner (gpointer obj);
 };
 
 static void
-gnc_amount_edit_changed_cb (GtkWidget* widget, gnc_numeric *value)
+value_changed_cb (GtkWidget* widget, StockTransactionEntry* entry)
 {
     g_return_if_fail(GNC_IS_AMOUNT_EDIT(widget));
-    gnc_numeric amt;
-    if (!gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(widget), &amt, true, nullptr))
-        *value =  amt;
-    else
-        *value = gnc_numeric_error(GNC_ERROR_ARG);
+    gnc_numeric value;
+    auto invalid{gnc_amount_edit_expr_is_valid(GNC_AMOUNT_EDIT(widget),
+                                             &value, true, nullptr)};
+    entry->set_value(invalid ? gnc_numeric_error(GNC_ERROR_ARG) : value);
 }
 
 GncAmountEdit::GncAmountEdit (GtkBuilder *builder, gnc_commodity *commodity) :
@@ -1354,12 +1368,6 @@ GncAmountEdit::get ()
 }
 
 void
-GncAmountEdit::connect (gnc_numeric *value)
-{
-    g_signal_connect(m_edit, "changed", G_CALLBACK (gnc_amount_edit_changed_cb), value);
-}
-
-void
 GncAmountEdit::connect (GCallback cb, gpointer data)
 {
     g_signal_connect(m_edit, "changed", cb, data);
@@ -1381,16 +1389,16 @@ struct GncAccountSelector
                         gnc_commodity *currency);
     void attach (GtkBuilder *builder, const char *table_id,
                  const char *label_ID, int row);
-    void connect (Account **acct);
+    void connect (StockTransactionEntry*);
     void set (Account *acct) { gnc_account_sel_set_account (GNC_ACCOUNT_SEL (m_selector), acct, TRUE); }
     Account *get () { return gnc_account_sel_get_account (GNC_ACCOUNT_SEL (m_selector)); }
 };
 
 static void
-gnc_account_sel_changed_cb (GtkWidget* widget, Account **acct)
+gnc_account_sel_changed_cb (GtkWidget* widget, StockTransactionEntry* entry)
 {
     g_return_if_fail (GNC_IS_ACCOUNT_SEL (widget));
-    *acct = gnc_account_sel_get_account (GNC_ACCOUNT_SEL (widget));
+    entry->set_account(gnc_account_sel_get_account (GNC_ACCOUNT_SEL (widget)));
 }
 
 GncAccountSelector::GncAccountSelector (GtkBuilder *builder, AccountTypeList types,
@@ -1419,9 +1427,9 @@ GncAccountSelector::attach (GtkBuilder *builder, const char *table_ID,
 }
 
 void
-GncAccountSelector::connect (Account **acct)
+GncAccountSelector::connect (StockTransactionEntry* entry)
 {
-    g_signal_connect(m_selector, "account_sel_changed", G_CALLBACK (gnc_account_sel_changed_cb), acct);
+    g_signal_connect(m_selector, "account_sel_changed", G_CALLBACK (gnc_account_sel_changed_cb), entry);
 }
 
 /* Assistant page classes, one per page.  */
@@ -1481,7 +1489,7 @@ PageTransType::prepare(StockAssistantModel *model)
 
     set_transaction_types(model->m_txn_types.value());
     change_txn_type (model);
-    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_type);
+    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_type);
 }
 
 int
@@ -1536,8 +1544,8 @@ struct PageTransDeets
     PageTransDeets (GtkBuilder *builder);
     time64 get_date_time () { return m_date.get_date_time(); }
     const char* get_description () { return gtk_entry_get_text (GTK_ENTRY (m_description)); }
-    void connect (time64 *date, const char **description);
-    void prepare(time64 *date, const char** description);
+    void connect (StockAssistantModel*);
+    void prepare(StockAssistantModel*);
 };
 
 PageTransDeets::PageTransDeets (GtkBuilder *builder) :
@@ -1549,18 +1557,21 @@ PageTransDeets::PageTransDeets (GtkBuilder *builder) :
 }
 
 void
-PageTransDeets::connect(time64 *date, const char **description)
+PageTransDeets::connect(StockAssistantModel* model)
 {
-    m_date.connect(date);
-    g_signal_connect(m_description, "changed", G_CALLBACK (text_entry_changed_cb), description);
+    m_date.connect(G_CALLBACK (stock_assistant_model_date_changed_cb),
+                   static_cast<void*>(model));
+    g_signal_connect(m_description, "changed",
+                     G_CALLBACK (stock_assistant_model_description_changed_cb),
+                     static_cast<void*>(model));
 }
 
 void
-PageTransDeets::prepare(time64 *date, const char** description)
+PageTransDeets::prepare(StockAssistantModel* model)
 {
-    *date = get_date_time();
-    *description = get_description();
-    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_description);
+    model->set_transaction_date(get_date_time());
+    model->set_transaction_desc(get_description());
+    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_description);
 }
 
 struct PageStockAmount
@@ -1577,7 +1588,7 @@ struct PageStockAmount
     void prepare (StockTransactionStockEntry*);
     gnc_numeric get_stock_amount () { return m_amount.get(); }
     void set_stock_amount (std::string new_amount_str);
-    void connect(StockAssistantModel *model);
+    void connect(StockTransactionEntry* entry);
 };
 
 PageStockAmount::PageStockAmount (GtkBuilder *builder, Account* account) :
@@ -1609,21 +1620,21 @@ PageStockAmount::prepare (StockTransactionStockEntry* entry)
     if (!gnc_numeric_check(get_stock_amount()))
         entry->set_amount(get_stock_amount());
     set_stock_amount(entry->amount_str_for_display());
-    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_amount.widget());
+    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_amount.widget());
 }
 
 static void
-page_stock_amount_changed_cb(GtkWidget *widget, StockAssistantModel *model)
+page_stock_amount_changed_cb(GtkWidget *widget, StockTransactionEntry* entry)
 {
     auto me = static_cast<PageStockAmount*>(g_object_get_data (G_OBJECT (widget), "owner"));
-    model->m_stock_entry->set_amount(me->m_amount.get());
-    me->set_stock_amount (model->m_stock_entry->amount_str_for_display());
+    entry->set_amount(me->m_amount.get());
+    me->set_stock_amount (entry->amount_str_for_display());
 }
 
 void
-PageStockAmount::connect(StockAssistantModel *model)
+PageStockAmount::connect(StockTransactionEntry* entry)
 {
-    m_amount.connect(G_CALLBACK (page_stock_amount_changed_cb), model);
+    m_amount.connect(G_CALLBACK (page_stock_amount_changed_cb), entry);
     m_amount.set_owner(static_cast<gpointer>(this));
 }
 
@@ -1670,7 +1681,7 @@ PageStockValue::connect(StockTransactionEntry* entry)
 {
     m_value.connect(G_CALLBACK (page_stock_value_changed_cb), entry);
     m_value.set_owner (static_cast<gpointer>(this));
-    g_signal_connect (m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &entry->m_memo);
+    g_signal_connect (m_memo, "changed", G_CALLBACK(text_entry_changed_cb), entry);
 }
 
 void
@@ -1680,7 +1691,7 @@ PageStockValue::prepare(StockTransactionEntry* entry)
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get());
     set_price(entry->print_price());
-    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
+    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
 }
 
 const char *
@@ -1722,9 +1733,9 @@ PageCash::PageCash(GtkBuilder *builder, Account* account)
 void
 PageCash::connect(StockTransactionEntry* entry)
 {
-    m_account.connect(&entry->m_account);
-    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &entry->m_memo);
-    m_value.connect(&entry->m_value);
+    m_account.connect(entry);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), entry);
+    m_value.connect(G_CALLBACK(value_changed_cb), entry);
 }
 
 void
@@ -1734,7 +1745,7 @@ PageCash::prepare(StockTransactionEntry* entry)
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value (m_value.get());
     entry->m_account = m_account.get();
-    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
+    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
 }
 
 const char *
@@ -1753,14 +1764,13 @@ struct PageFees
     GncAmountEdit m_value;
     Account* m_stock_account;
     PageFees (GtkBuilder *builder, Account* account);
-    void connect(StockTransactionFeesEntry*);
+    void connect(StockTransactionEntry*);
     bool get_capitalize_fees ();
     const char* get_memo();
     void set_capitalize_fees (bool state);
-    void set_capitalize_fees (StockTransactionFeesEntry*);
     void set_account (Account *acct) { m_account.set(acct); }
     void update_fees_acct_sensitive (bool sensitive);
-    void prepare(StockTransactionFeesEntry*);
+    void prepare(StockTransactionEntry*);
 };
 
 PageFees::PageFees(GtkBuilder *builder, Account* account)
@@ -1797,19 +1807,13 @@ PageFees::set_capitalize_fees(bool state)
 }
 
 void
-PageFees::set_capitalize_fees(StockTransactionFeesEntry* entry)
-{
-    set_capitalize_fees (entry->m_capitalize);
-}
-
-void
 PageFees::update_fees_acct_sensitive(bool sensitive)
 {
     gtk_widget_set_sensitive(m_account.m_selector, sensitive);
 }
 
 static void
-capitalize_fees_toggled_cb (GtkWidget *widget, StockTransactionFeesEntry *entry)
+capitalize_fees_toggled_cb (GtkWidget *widget, StockTransactionEntry *entry)
 {
     g_return_if_fail (entry);
     auto me = static_cast<PageFees *>(g_object_get_data (G_OBJECT (widget), "owner"));
@@ -1822,24 +1826,24 @@ capitalize_fees_toggled_cb (GtkWidget *widget, StockTransactionFeesEntry *entry)
 }
 
 void
-PageFees::connect(StockTransactionFeesEntry* entry)
+PageFees::connect(StockTransactionEntry* entry)
 {
-    m_account.connect(&entry->m_account);
-    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb),  &entry->m_memo);
-    m_value.connect(&entry->m_value);
+    m_account.connect(entry);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb),  entry);
+    m_value.connect(G_CALLBACK(value_changed_cb), entry);
     g_object_set_data(G_OBJECT (m_capitalize), "owner", this);
     g_signal_connect (m_capitalize, "toggled", G_CALLBACK (capitalize_fees_toggled_cb), entry);
 }
 
 void
-PageFees::prepare(StockTransactionFeesEntry* entry)
+PageFees::prepare(StockTransactionEntry* entry)
 {
-    set_capitalize_fees (entry);
+    set_capitalize_fees (entry->do_capitalize());
     entry->m_memo = get_memo();
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value (m_value.get());
     entry->m_account = m_account.get();
-    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
+    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
 }
 
 struct PageDividend
@@ -1869,9 +1873,9 @@ PageDividend::PageDividend(GtkBuilder *builder, Account* account)
 void
 PageDividend::connect(StockTransactionEntry* entry)
 {
-    m_account.connect(&entry->m_account);
-    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &entry->m_memo);
-    m_value.connect(&entry->m_value);
+    m_account.connect(entry);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), entry);
+    m_value.connect(G_CALLBACK(value_changed_cb), entry);
 }
 
 void
@@ -1881,7 +1885,7 @@ PageDividend::prepare(StockTransactionEntry* entry)
     if (!gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get());
     entry->m_account = m_account.get();
-    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
+    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
 }
 
 const char *
@@ -1923,9 +1927,9 @@ PageCapGain::get_memo()
 void
 PageCapGain::connect(StockTransactionEntry*entry)
 {
-    m_account.connect(&entry->m_account);
-    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), &entry->m_memo);
-    m_value.connect(&entry->m_value);
+    m_account.connect(entry);
+    g_signal_connect(m_memo, "changed", G_CALLBACK(text_entry_changed_cb), entry);
+    m_value.connect(G_CALLBACK(value_changed_cb), entry);
 }
 
 void
@@ -1935,7 +1939,7 @@ PageCapGain::prepare(StockTransactionEntry* entry)
     if (gnc_numeric_check(m_value.get()))
         entry->set_value(m_value.get());
         entry->m_account = m_account.get();
-    g_signal_connect(m_page, "focus", (GCallback)assistant_page_set_focus, m_value.widget());
+    g_signal_connect(m_page, "focus", G_CALLBACK(assistant_page_set_focus), m_value.widget());
 }
 
 /* The last page of the assistant shows what the resulting transaction will look
@@ -2132,13 +2136,11 @@ void
 StockAssistantController::connect_signals (GtkBuilder *builder)
 {
     m_view.m_type_page.connect(m_model.get());
-    m_view.m_deets_page.connect(&m_model->m_transaction_date, &m_model->m_transaction_description);
-    m_view.m_stock_amount_page.connect(m_model.get());
+    m_view.m_deets_page.connect(m_model.get());
+    m_view.m_stock_amount_page.connect(m_model->m_stock_entry.get());
     m_view.m_stock_value_page.connect(m_model->m_stock_entry.get());
     m_view.m_cash_page.connect(m_model->m_cash_entry.get());
-    auto fees_entry = dynamic_cast<StockTransactionFeesEntry *>(m_model->m_fees_entry.get());
-    if (fees_entry)
-      m_view.m_fees_page.connect(fees_entry);
+    m_view.m_fees_page.connect(m_model->m_fees_entry.get());
     m_view.m_dividend_page.connect(m_model->m_dividend_entry.get());
     m_view.m_capgain_page.connect(m_model->m_capgains_entry.get());
 
@@ -2168,7 +2170,7 @@ StockAssistantController::prepare(GtkAssistant* assistant, GtkWidget* page)
         m_view.m_type_page.prepare(m_model.get());
         break;
     case PAGE_TRANSACTION_DETAILS:
-        m_view.m_deets_page.prepare(&m_model->m_transaction_date, &m_model->m_transaction_description);
+        m_view.m_deets_page.prepare(m_model.get());
         break;
     case PAGE_STOCK_AMOUNT:
     {
