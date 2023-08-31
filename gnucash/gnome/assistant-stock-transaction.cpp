@@ -1272,6 +1272,7 @@ StockAssistantModel::create_transaction ()
     if (!m_ready_to_create)
     {
         PERR ("errors exist. cannot create transaction.");
+        m_list_of_splits.clear();
         return {false, nullptr};
     }
     auto book = qof_instance_get_book (m_acct);
@@ -1286,6 +1287,7 @@ StockAssistantModel::create_transaction ()
     add_price (book);
     xaccTransCommitEdit (trans);
     std::for_each (accounts.begin(), accounts.end(), xaccAccountCommitEdit);
+    m_list_of_splits.clear();
     m_ready_to_create = false;
     return {true, trans};
 }
@@ -2300,6 +2302,7 @@ class StockAssistantController
 {
     std::unique_ptr<StockAssistantModel> m_model;
     StockAssistantView m_view;
+    bool m_destroying = false;
 public:
     StockAssistantController (GtkWidget *parent, GtkBuilder* builder, Account* acct)
         : m_model{std::make_unique<StockAssistantModel>(acct)},
@@ -2312,6 +2315,7 @@ public:
     void connect_signals(GtkBuilder *builder);
     void prepare(GtkAssistant* assistant, GtkWidget *page);
     void finish();
+    bool destroying() { return m_destroying; }
 };
 
 static void stock_assistant_window_destroy_cb(GtkWidget *object, gpointer user_data);
@@ -2320,6 +2324,7 @@ static void close_handler (gpointer user_data);
 
 StockAssistantController::~StockAssistantController()
 {
+    m_destroying = true;
     gnc_unregister_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, this);
 }
 
@@ -2367,49 +2372,66 @@ stock_assistant_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
     info->prepare(assistant, page);
 }
 
-void
-stock_assistant_window_destroy_cb(GtkWidget *object, gpointer user_data)
+
+static void
+stock_assistant_window_destroy_cb (GtkWidget *object, gpointer user_data) //crashes before this gets called.
 {
-    auto info = static_cast<StockAssistantController*>(user_data);
-    gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
+    auto controller = static_cast<StockAssistantController*>(user_data);
+    if (controller->destroying())
+        return;
+
+    gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, controller);
 }
+
 
 void
 stock_assistant_finish_cb (GtkAssistant *assistant, gpointer user_data)
 {
-    auto info = static_cast<StockAssistantController*>(user_data);
-    info->finish();
+    auto controller = static_cast<StockAssistantController*>(user_data);
+    controller->finish();
 }
 
 
 void
 stock_assistant_cancel_cb (GtkAssistant *assistant, gpointer user_data)
 {
-    auto info = static_cast<StockAssistantController*>(user_data);
-    gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
+    auto controller = static_cast<StockAssistantController*>(user_data);
+    if (controller->destroying())
+        return;
+    gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, controller);
 }
 
 
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
-/* FIXME: This isn't right, we need to examine the changes hash
-   table. If the account is destroyed trying to query it will crash.
-     auto info = static_cast<StockAssistantController*>(user_data);
+    if (!changes) // None of our watches fired, we don't need to do anything.
+        return;
 
-    if (!GNC_IS_ACCOUNT (info->m_model->m_acct))
+/* We have only one watch so we don't need to check GUIDs. There
+ * should be only one entry, so just get the value and see if it
+ * matches QOF_EVENT_DESTROY.
+ */
+    auto list = g_hash_table_get_values(changes);
+    for (auto node = list; node; node = g_list_next(node))
     {
-        PWARN ("account %p does not exist anymore. abort", info->m_model->m_acct);
-        gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, info);
+        auto change{static_cast<EventInfo*>(node->data)};
+        if (change->event_mask & QOF_EVENT_DESTROY)
+        {
+            PWARN ("Stock account destroyed, cancelling assistant.");
+            auto controller = static_cast<StockAssistantController*>(user_data);
+            gnc_close_gui_component_by_data(ASSISTANT_STOCK_TRANSACTION_CM_CLASS, controller);
+        }
     }
-*/
 }
 
 static void
 close_handler (gpointer user_data)
 {
-    auto info = static_cast<StockAssistantController*>(user_data);
-    delete info;
+    auto controller = static_cast<StockAssistantController*>(user_data);
+    if (controller->destroying())
+        return;
+    delete controller;
 }
 
 /********************************************************************\
