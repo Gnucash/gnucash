@@ -5,7 +5,7 @@
 # Juraj Korec <euro777@gmail.com>, 2008.
 # Zdenko Podobny <zdenop@gmail.com>, 2009, 2010, 2011, 2018
 # Dullus <dullus@gmail.com>, 2022.
-# Zdenko Podobný <zdenop@gmail.com>, 2022.
+# Zdenko Podobný <zdenop@gmail.com>, 2022, 2023.
 # ZdPo Ster <zdposter@gmail.com>, 2023.
 # Milan Šalka <salka.milan@googlemail.com>, 2023.
 msgid ""
@@ -14,8 +14,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-08-09 20:50+0000\n"
-"Last-Translator: Milan Šalka <salka.milan@googlemail.com>\n"
+"PO-Revision-Date: 2023-09-04 18:52+0000\n"
+"Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
 "Language: sk\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-Language: Slovak\n"
 "X-Poedit-Country: SLOVAKIA\n"
@@ -10899,9 +10899,8 @@ msgid "Import Prices Now"
 msgstr "Importovať QIF súborov"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:28
-#, fuzzy
 msgid "CSV Transaction Import"
-msgstr "Výkaz transakcií"
+msgstr "CSV import transakcií"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:44
 msgid ""
@@ -10933,9 +10932,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:62
-#, fuzzy
 msgid "Transaction Import Assistant"
-msgstr "Výkaz transakcií"
+msgstr "Asistent importu transakcií"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:520
 #, fuzzy
