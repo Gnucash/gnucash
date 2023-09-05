@@ -33,26 +33,26 @@
 
 (define (reconcile-report-options-generator)
   (let ((options (gnc:trep-options-generator)))
-    (GncOption-set-value
+    (GncOption-set-default-value
      (gnc-lookup-option options "Sorting" "Primary Key") 'reconciled-status)
-    (GncOption-set-value
+    (GncOption-set-default-value
      (gnc-lookup-option options "Sorting" "Secondary Key")   'date)
-    (GncOption-set-value
+    (GncOption-set-default-value
      (gnc-lookup-option options "Sorting" "Secondary Subtotal for Date Key") 'none)
-    (GncOption-set-value
+    (GncOption-set-default-value
      (gnc-lookup-option options gnc:pagename-general "Start Date")
      (cons 'relative 'start-prev-quarter))
-    (GncOption-set-value
+    (GncOption-set-default-value
      (gnc-lookup-option options gnc:pagename-general "End Date")
      (cons 'relative 'today))
-    (GncOption-set-value
+    (GncOption-set-default-value
      (gnc-lookup-option options gnc:pagename-general "Date Filter")
      'reconciled)
-    (GncOption-set-value
+    (GncOption-set-default-value
      (gnc-lookup-option options gnc:pagename-display "Reconciled Date") #t)
-    (GncOption-set-value
+    (GncOption-set-default-value
      (gnc-lookup-option options gnc:pagename-display "Running Balance") #f)
-    (GncOption-set-value
+    (GncOption-set-default-value
      (gnc-lookup-option options gnc:pagename-display "Memo") #f)
     (GncOptionDBPtr-make-internal options gnc:pagename-display "Running Balance")
     options))
