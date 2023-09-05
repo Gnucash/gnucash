@@ -2225,7 +2225,6 @@ class GncFinishTreeview
     GtkWidget *m_treeview;
 public:
     GncFinishTreeview(GtkBuilder *builder);
-    void set_tooltip_column(int);
     /** Extract the information from the StockTransactionEntries in
      * the vector created by the model's `make_list_of_splits`
      * function and write it into the list view.
@@ -2284,13 +2283,6 @@ GncFinishTreeview::GncFinishTreeview (GtkBuilder *builder) :
     gtk_tree_view_append_column(view, column);
     gtk_tree_view_set_tooltip_column(GTK_TREE_VIEW(m_treeview),
                                      SPLIT_COL_TOOLTIP);}
-
-void
-GncFinishTreeview::set_tooltip_column(int column)
-{
-    gtk_tree_view_set_tooltip_column (GTK_TREE_VIEW (m_treeview),
-                                      column);
-}
 
 void
 GncFinishTreeview::load(const EntryVec& list_of_splits)
