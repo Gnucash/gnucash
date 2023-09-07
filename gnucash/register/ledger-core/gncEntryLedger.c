@@ -113,7 +113,8 @@ gnc_entry_ledger_get_account_by_name (GncEntryLedger *ledger, BasicCell * bcell,
         else
             account_types = g_list_prepend (account_types, (gpointer)ACCT_TYPE_EXPENSE);
 
-        account = gnc_ui_new_accounts_from_name_window_with_types (GTK_WINDOW (ledger->parent), name, account_types);
+        account = gnc_ui_new_accounts_from_name_with_defaults (GTK_WINDOW (ledger->parent), name, account_types,
+                                                               NULL, NULL);
         g_list_free ( account_types );
         if (!account)
             return NULL;
