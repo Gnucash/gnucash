@@ -143,26 +143,6 @@ void gnc_ui_new_account_with_types (GtkWindow *parent, QofBook *book,
 Account * gnc_ui_new_accounts_from_name_window (GtkWindow *parent,
                                                 const char *name);
 
-/** Display a modal window for creating a new account.  This function
- *  will restrict the available account type values to the list
- *  specified by the caller.
- *
- *  @param parent The widget on which to parent the dialog.
- *
- *  @param name The account name/path to be created.  This parameter
- *  is not used for determining the initially selected parent account.
- *
- *  @param valid_types A GList of GNCAccountType gints [as pointers]
- *  which are allowed to be created.  The calling function is
- *  responsible for freeing this list.
- *
- *  @return A pointer to the newly created account.
- */
-/* Note that the caller owns the valid_types list */
-Account * gnc_ui_new_accounts_from_name_window_with_types (GtkWindow *parent,
-                                                           const char *name,
-                                                           GList *valid_types);
-
 
 /** Display a modal window for creating a new account.  This function
  *  will restrict the available account type values to the list

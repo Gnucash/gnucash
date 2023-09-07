@@ -1986,15 +1986,6 @@ gnc_ui_new_accounts_from_name_window (GtkWindow *parent, const char *name)
 }
 
 Account *
-gnc_ui_new_accounts_from_name_window_with_types (GtkWindow *parent,
-                                                 const char *name,
-                                                 GList *valid_types)
-{
-    return gnc_ui_new_accounts_from_name_with_defaults (parent, name,
-                                                        valid_types, NULL, NULL);
-}
-
-Account *
 gnc_ui_new_accounts_from_name_with_defaults (GtkWindow *parent,
                                              const char *name,
                                              GList *valid_types,
@@ -2167,14 +2158,6 @@ gnc_ui_new_account_window (GtkWindow *parent, QofBook *book,
 
     gnc_ui_new_account_window_internal (parent, book, parent_acct, NULL, NULL,
                                         NULL, FALSE);
-}
-
-void
-gnc_ui_new_account_with_types (GtkWindow *parent, QofBook *book,
-                               GList *valid_types)
-{
-    gnc_ui_new_account_window_internal (parent, book, NULL, NULL,
-                                        valid_types, NULL, FALSE);
 }
 
 /************************************************************
