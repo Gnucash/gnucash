@@ -65,6 +65,7 @@ struct _GNCAccountSel
     GList *acctTypeFilters;
     GList *acctCommodityFilters;
     GList *acctExcludeList;
+    gnc_commodity *default_new_commodity;
 
     /* The state of this pointer also serves as a flag about what state
      * the widget is in WRT the new-account-button ability. */
@@ -671,6 +672,7 @@ gnc_account_sel_init (GNCAccountSel *gas)
 
     gtk_orientable_set_orientation (GTK_ORIENTABLE(gas), GTK_ORIENTATION_HORIZONTAL);
 
+    gas->default_new_commodity = NULL;
     gas->acctTypeFilters = NULL;
     gas->acctCommodityFilters = NULL;
     gas->acctExcludeList = NULL;
@@ -913,6 +915,14 @@ gnc_account_sel_set_acct_exclude_filter (GNCAccountSel *gas,
     update_entry_and_refilter (gas);
 }
 
+void
+gnc_account_sel_set_default_new_commodity (GNCAccountSel *gas, gnc_commodity *new_commodity)
+{
+    g_return_if_fail (gas);
+    g_return_if_fail (GNC_IS_COMMODITY (new_commodity));
+    gas->default_new_commodity = new_commodity;
+}
+
 static void
 gnc_account_sel_finalize (GObject *object)
 {
@@ -1015,14 +1025,14 @@ gas_new_account_click (GtkButton *b, gpointer user_data)
 
     if (gas->isModal)
     {
-        Account *account = gnc_ui_new_accounts_from_name_window_with_types (parent, NULL,
-                                                                            gas->acctTypeFilters);
+        Account *account = gnc_ui_new_accounts_from_name_with_defaults (parent, NULL, gas->acctTypeFilters,
+                                                                        gas->default_new_commodity, NULL);
         if (account)
             gnc_account_sel_set_account (gas, account, FALSE);
     }
     else
-        gnc_ui_new_account_with_types (parent, gnc_get_current_book(),
-                                       gas->acctTypeFilters);
+        gnc_ui_new_account_with_types_and_commodity (parent, gnc_get_current_book(),
+                                                     gas->acctTypeFilters, gas->default_new_commodity);
 }
 
 gint
