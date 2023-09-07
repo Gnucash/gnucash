@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-09-03 22:45+0000\n"
+"PO-Revision-Date: 2023-09-07 19:55+0000\n"
 "Last-Translator: Andrea Andre <andrea.tsg19@slmail.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
@@ -4110,10 +4110,8 @@ msgid "Transfer"
 msgstr "Transferă"
 
 #: gnucash/gnome/gnc-budget-view.c:509
-#, fuzzy
-#| msgid "Open an existing Budget"
 msgid "Remaining to Budget"
-msgstr "Deschide un buget existent"
+msgstr ""
 
 #: gnucash/gnome/gnc-budget-view.c:1604 gnucash/gnome/window-reconcile.c:1166
 #: gnucash/gnome-utils/gnc-tree-view-account.c:906
@@ -4163,7 +4161,7 @@ msgstr[2] ""
 
 #: gnucash/gnome/gnc-plugin-budget.c:320
 msgid "Select a Budget"
-msgstr "Selectează un buget"
+msgstr "Alege un buget"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:287
 #: gnucash/gnome/gnc-plugin-page-budget.c:177 gnucash/gnome-utils/gnc-file.c:92
@@ -17686,9 +17684,8 @@ msgid "On the"
 msgstr "Pe"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:15
-#, fuzzy
 msgid "Edit budget for all periods"
-msgstr "Perioadă buget:"
+msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:117
 msgid "Replace"
@@ -17754,8 +17751,8 @@ msgid ""
 "GnuCash will estimate budget values for the selected accounts from past "
 "transactions."
 msgstr ""
-"GnuCash va estima valorile bugetului pentru conturile selectate de la "
-"tranzacțiile trecute."
+"GnuCash va estima valorile bugetului pentru conturile alese pe baza "
+"tranzacțiilor anterioare."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:410
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:658
@@ -17763,10 +17760,8 @@ msgid "Budget Options"
 msgstr "Opțiuni buget"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:477
-#, fuzzy
-#| msgid "Budget Name:"
 msgid "Budget Name"
-msgstr "Nume buget:"
+msgstr "Numele bugetului"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:541
 #, fuzzy
@@ -17775,10 +17770,8 @@ msgid "Number of Periods"
 msgstr "Numărul de perioade:"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:571
-#, fuzzy
-#| msgid "Budget Period:"
 msgid "Budget Period"
-msgstr "Perioadă buget:"
+msgstr "Perioada bugetului"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:620
 #: gnucash/report/reports/standard/general-ledger.scm:126
@@ -17799,11 +17792,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:693
 msgid "Budget List"
-msgstr "Listă buget"
+msgstr "Lista bugetului"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:713
 msgid "Close the Budget List"
-msgstr "Închide lista de buget"
+msgstr "Închide lista bugetului"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:773
 msgid "Create a New Budget"
@@ -17811,11 +17804,11 @@ msgstr "Creează un buget nou"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:789
 msgid "Open the Selected Budget"
-msgstr "Deschide bugetul selectat"
+msgstr "Deschide bugetul ales"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:805
 msgid "Delete the Selected Budget"
-msgstr "Șterge bugetul selectat"
+msgstr "Șterge bugetul ales"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:837
 msgid "Budget Notes"
@@ -20994,14 +20987,12 @@ msgid "Tax class"
 msgstr "Tabelele de taxe"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:710
-#, fuzzy
 msgid "Category budget amount"
-msgstr "Sortează după sumă"
+msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:711
-#, fuzzy
 msgid "Account budget amount"
-msgstr "Ștergere cont"
+msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:712
 #, fuzzy
@@ -24705,9 +24696,8 @@ msgid "Income Statement (Multicolumn)"
 msgstr "Declarație de venituri"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:38
-#, fuzzy
 msgid "Budget Balance Sheet"
-msgstr "Bilanț"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:94
 #, fuzzy
@@ -24715,21 +24705,18 @@ msgid "Include new/existing totals"
 msgstr "Include capitalul total"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:96
-#, fuzzy
 msgid ""
 "Whether or not to include lines indicating change in totals introduced by "
 "budget."
 msgstr ""
-"Când se include și când nu se include o linie care indică venitul total"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:108
 #: gnucash/report/reports/standard/budget-barchart.scm:84
 #: gnucash/report/reports/standard/budget-flow.scm:54
 #: gnucash/report/reports/standard/budget-income-statement.scm:53
 #: gnucash/report/reports/standard/budget.scm:123
-#, fuzzy
 msgid "Budget to use."
-msgstr "Opțiuni buget"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:645
 msgid "Existing Assets"
@@ -24796,9 +24783,8 @@ msgid "New Equity"
 msgstr "Capital propriu"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:36
-#, fuzzy
 msgid "Budget Chart"
-msgstr "Diagramă cu bare pentru active"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:41
 #, fuzzy
@@ -24820,9 +24806,8 @@ msgstr "Interval: "
 
 #: gnucash/report/reports/standard/budget-barchart.scm:52
 #: gnucash/report/reports/standard/budget.scm:76
-#, fuzzy
 msgid "Select a budget period type that starts the reporting range."
-msgstr "Selectează data pentru raport"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:53
 #: gnucash/report/reports/standard/budget.scm:77
@@ -24844,9 +24829,8 @@ msgstr "Interval: "
 
 #: gnucash/report/reports/standard/budget-barchart.scm:59
 #: gnucash/report/reports/standard/budget.scm:83
-#, fuzzy
 msgid "Select a budget period type that ends the reporting range."
-msgstr "Selectează data pentru raport"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:60
 #: gnucash/report/reports/standard/budget.scm:84
@@ -24862,21 +24846,18 @@ msgstr "Selectează data pentru raport"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:65
 #: gnucash/report/reports/standard/budget.scm:111
-#, fuzzy
 msgid "First budget period"
-msgstr "Perioadă buget:"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:66
 #: gnucash/report/reports/standard/budget.scm:112
-#, fuzzy
 msgid "Previous budget period"
-msgstr "Perioadă buget:"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:67
 #: gnucash/report/reports/standard/budget.scm:113
-#, fuzzy
 msgid "Current budget period"
-msgstr "Perioadă buget:"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:68
 #: gnucash/report/reports/standard/budget.scm:114
@@ -24885,9 +24866,8 @@ msgstr "Următoarea perioadă de buget"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:69
 #: gnucash/report/reports/standard/budget.scm:115
-#, fuzzy
 msgid "Last budget period"
-msgstr "Perioadă buget:"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:70
 #: gnucash/report/reports/standard/budget.scm:116
@@ -24928,9 +24908,8 @@ msgid "Actual"
 msgstr "Anual"
 
 #: gnucash/report/reports/standard/budget-flow.scm:36
-#, fuzzy
 msgid "Budget Flow"
-msgstr "Buget"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-flow.scm:67
 #, fuzzy
@@ -24957,9 +24936,8 @@ msgid "Select a budget period that begins the reporting range."
 msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:66
-#, fuzzy
 msgid "Select a budget period that ends the reporting range."
-msgstr "Selectează data pentru raport"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:95
 #: gnucash/report/reports/standard/income-statement.scm:82
@@ -25061,19 +25039,19 @@ msgid "Total Expenses"
 msgstr "Cheltuieli totale"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:503
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a"
-msgstr "Buget"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:505
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Period ~d"
-msgstr "Perioadă buget:"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:508
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "for Budget ~a Periods ~d - ~d"
-msgstr "Perioadă buget:"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:536
 #: gnucash/report/reports/standard/equity-statement.scm:434
@@ -25092,14 +25070,12 @@ msgid "Net loss"
 msgstr "Pierdere netă"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:577
-#, fuzzy
 msgid "Budget Income Statement"
-msgstr "Declarație de venituri"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:578
-#, fuzzy
 msgid "Budget Profit & Loss"
-msgstr "Perioadă buget:"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:41
 #: gnucash/ui/gnc-plugin-page-budget.ui:40
@@ -25118,14 +25094,12 @@ msgid "Always show sub-accounts"
 msgstr "Arată întotdeauna subconturile"
 
 #: gnucash/report/reports/standard/budget.scm:51
-#, fuzzy
 msgid "Show Budget"
-msgstr "Buget nou"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:52
-#, fuzzy
 msgid "Display a column for the budget values."
-msgstr "Afișează valoarea intrării"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:53
 msgid "Show Budget Notes"
@@ -30637,16 +30611,13 @@ msgstr "Șterge contul selectat"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
-#, fuzzy
-#| msgid "Estimate Budget"
 msgid "Esti_mate Budget…"
-msgstr "Estimează buget"
+msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
-#, fuzzy
 msgid "_All Periods…"
-msgstr "Perioada:"
+msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:24
 #: gnucash/ui/gnc-plugin-page-budget.ui:227
@@ -31202,7 +31173,7 @@ msgstr "Renunță la cererile HTML restante"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:285
 msgid "Export _Report"
-msgstr "Exportă _raport"
+msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:149
