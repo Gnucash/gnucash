@@ -2143,6 +2143,14 @@ gnc_ui_edit_account_window (GtkWindow *parent, Account *account)
     gtk_window_present (GTK_WINDOW(aw->dialog));
 }
 
+void
+gnc_ui_new_account_with_types_and_commodity (GtkWindow *parent, QofBook *book, GList *valid_types,
+                                             gnc_commodity *default_commodity)
+{
+    gnc_ui_new_account_window_internal (parent, book, NULL, NULL,
+                                        valid_types, default_commodity, FALSE);
+}
+
 /*
  * opens up a window to create a new account
  *
