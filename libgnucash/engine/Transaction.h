@@ -359,6 +359,17 @@ void          xaccTransSetIsClosingTxn (Transaction *trans, gboolean is_closing)
 /** Returns whether this transaction is a "closing transaction" */
 gboolean      xaccTransGetIsClosingTxn (const Transaction *trans);
 
+/** Remove all splits from the transaction
+ *
+ * Clears the split list of the transaction. All splits that the
+ * transaction still owns will be destroyed, and others will be
+ * unlinked.
+ *
+ * Opens and commits an edit on the transaction, so this will destroy
+ * the transaction if it isn't already open, as will committing the
+ * outer edits if new splits are not added before hand.
+ */
+void xaccTransClearSplits(Transaction* trans);
 
 /** Add a split to the transaction
  *

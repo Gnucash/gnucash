@@ -2232,6 +2232,15 @@ xaccTransSetIsClosingTxn (Transaction *trans, gboolean is_closing)
 
 /********************************************************************\
 \********************************************************************/
+void
+xaccTransClearSplits(Transaction* trans)
+{
+    xaccTransBeginEdit(trans);
+    FOR_EACH_SPLIT(trans, xaccSplitDestroy(s));
+    g_list_free (trans->splits);
+    trans->splits = NULL;
+    xaccTransCommitEdit(trans);
+}
 
 Split *
 xaccTransGetSplit (const Transaction *trans, int i)

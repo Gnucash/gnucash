@@ -400,9 +400,8 @@ void gnc_float_txn_to_txn_swap_accounts (const FloatingTxn *ft, Transaction *txn
         xaccTransSetDatePostedSecs (txn, ft->m_date_posted);
 
     /* strip off the old splits */
-    while (xaccTransCountSplits (txn))
-        xaccSplitDestroy (xaccTransGetSplit (txn, 0));
-
+    xaccTransClearSplits(txn);
+    
     /* and put on the new ones! Please note they go in the *same*
        order as in the original transaction. This is important. */
     for (iter = ft->m_splits; iter; iter = iter->next)
