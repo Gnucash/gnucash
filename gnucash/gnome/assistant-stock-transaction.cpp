@@ -1593,6 +1593,8 @@ GncAccountSelector::GncAccountSelector (GtkBuilder *builder, AccountTypeList typ
     auto curr_list = accum(null_glist, currency);
     gnc_account_sel_set_new_account_ability(GNC_ACCOUNT_SEL(m_selector), true);
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(m_selector), acct_list, curr_list);
+    gnc_account_sel_set_default_new_commodity(GNC_ACCOUNT_SEL(m_selector), currency);
+    gnc_account_sel_set_new_account_modal (GNC_ACCOUNT_SEL(m_selector), true);
     g_list_free(acct_list);
     g_list_free(curr_list);
 }
