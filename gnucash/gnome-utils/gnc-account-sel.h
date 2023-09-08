@@ -75,6 +75,14 @@ void gnc_account_sel_set_acct_filters (GNCAccountSel *gas,
 void gnc_account_sel_set_acct_exclude_filter (GNCAccountSel *gas,
                                               GList *excludeFilter);
 
+
+/**
+ * The GNCAccountSel can be setup to provide a New account facility whose commodity
+ * is defaulted to this commodity.
+ * @param gas The GNCAccountSel widget.
+ * @param gnc_commodity* A gnc_commodity*
+ **/
+void gnc_account_sel_set_default_new_commodity (GNCAccountSel*, gnc_commodity*);
 /**
  * Conditional inclusion of a new-account button to the right of the
  * combobox.
