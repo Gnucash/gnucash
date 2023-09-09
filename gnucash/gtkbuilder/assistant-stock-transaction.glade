@@ -19,7 +19,7 @@
         <property name="valign">start</property>
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
-        <property name="label" translatable="yes">This assistant will help you record a stock transaction. The transaction type (purchase, sale, dividend, distribution, return of capital, stock split) will determine the transaction splits involved in the transaction.</property>
+        <property name="label" translatable="yes">This assistant will help you record a stock transaction. The transaction type (purchase, sale, dividend, distribution, return of capital, stock split) will determine the transaction splits involved in the transaction. Note that the transaction currency will be that of the stock account and that multi-currency transactions are not supported: Only accounts in the transaction currency will be offered for cash, capital gains, dividends, and fees.</property>
         <property name="wrap">True</property>
       </object>
       <packing>
