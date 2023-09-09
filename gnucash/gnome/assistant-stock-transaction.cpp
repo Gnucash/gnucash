@@ -618,8 +618,11 @@ StockTransactionEntry::set_fieldmask(FieldMask mask)
 const char *
 StockTransactionEntry::print_account() const
 {
+    auto acct_required = m_enabled &&
+        !(m_allow_zero && (gnc_numeric_zero_p(m_value) ||
+                           gnc_numeric_check(m_value)));
     return m_account ? xaccAccountGetName(m_account) :
-        m_enabled && !gnc_numeric_zero_p(m_value) ? _("missing") : "";
+        acct_required ? _("missing") : "";
 }
 
 void
