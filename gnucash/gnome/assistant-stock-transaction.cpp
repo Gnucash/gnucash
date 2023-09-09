@@ -101,6 +101,8 @@ enum class FieldMask : unsigned
     ALLOW_NEGATIVE       = 1 << 6,
     CAPITALIZE_DEFAULT   = 1 << 7, // fees only: capitalize by default into stock acct
     CAPGAINS_IN_STOCK    = 1 << 8, // capg only: add a balancing split in stock acct
+    MARKER_SPLIT         = 1 << 9, // stock only, place a no-amount, no-value split in the
+                                   // stock account to associate the income.
 };
 
 static FieldMask
@@ -191,7 +193,7 @@ static const TxnTypeVec long_types
            "placeholder amount and correct it in the transaction later.")
     },
     {
-        FieldMask::DISABLED,               // stock_amt
+        FieldMask::MARKER_SPLIT,               // stock_amt
         FieldMask::ENABLED_DEBIT,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         FieldMask::ENABLED_CREDIT,         // dividend_amt
@@ -306,7 +308,7 @@ static const TxnTypeVec short_types
            "amount and correct it in the transaction later.")
     },
     {
-        FieldMask::DISABLED,               // stock_amt
+        FieldMask::MARKER_SPLIT,               // stock_amt
         FieldMask::ENABLED_CREDIT,         // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO,          // fees_amt
         FieldMask::ENABLED_DEBIT,          // dividend_amt
@@ -556,6 +558,7 @@ public:
     virtual void set_amount(gnc_numeric) {}
     virtual gnc_numeric amount() const { return m_value; }
     virtual bool has_amount() const { return false; }
+    virtual bool marker_split() const { return false; }
     /* Validates that the value and for stock entry the amount meet
      * the criteria set for the entry by the field mask.
      *
@@ -747,6 +750,7 @@ class StockTransactionStockEntry : public StockTransactionEntry
 {
     bool m_amount_enabled;
     gnc_numeric m_amount;
+    bool m_marker = false;
 public:
     StockTransactionStockEntry() :
         StockTransactionEntry{}, m_amount{gnc_numeric_error(GNC_ERROR_ARG)}
@@ -766,6 +770,7 @@ public:
     void create_split(Transaction *trans, AccountVec &account_commits) const override;
     std::string amount_str_for_display() const override;
     gnc_numeric calculate_price() const override;
+    bool marker_split() const override { return m_marker; }
 };
 
 void
@@ -776,6 +781,7 @@ StockTransactionStockEntry::set_fieldmask(FieldMask mask)
     m_amount_enabled = mask & (FieldMask::AMOUNT_CREDIT | FieldMask::AMOUNT_DEBIT);
     m_debit_side = mask & (FieldMask::ENABLED_DEBIT | FieldMask::AMOUNT_DEBIT);
     m_input_new_balance = mask & FieldMask::INPUT_NEW_BALANCE;
+    m_marker = mask & FieldMask::MARKER_SPLIT;
 }
 
 
@@ -1299,6 +1305,9 @@ StockAssistantModel::generate_list_of_splits() {
             g_free (date_str);
         }
     }
+
+    if (m_stock_entry->marker_split())
+        m_list_of_splits.push_back(m_stock_entry.get());
 
     if (m_cash_entry->enabled())
     {
