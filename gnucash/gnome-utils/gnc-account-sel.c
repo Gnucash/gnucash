@@ -25,6 +25,7 @@
 
 #include <config.h>
 
+#include <stdbool.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
@@ -543,37 +544,17 @@ icon_release_cb (GtkEntry *entry, GtkEntryIconPosition icon_pos,
 static gboolean
 account_is_included (GNCAccountSel *gas, Account *acc)
 {
-    gboolean included = TRUE;
-
-    if (gas->acctExcludeList)
-    {
-        if (g_list_find (gas->acctExcludeList, acc) != NULL)
-            included = FALSE;
-    }
+    if (gas->acctExcludeList && g_list_find (gas->acctExcludeList, acc))
+        return false;
 
     /* Filter as we've been configured to do. */
-    if (gas->acctTypeFilters)
-    {
-        /* g_list_find is the poor-mans '(member ...)', especially
-         * easy when the data pointers in the list are just casted
-         * account type identifiers. */
-        if (g_list_find (gas->acctTypeFilters,
-                         GINT_TO_POINTER(xaccAccountGetType (acc))) == NULL)
-        {
-            included = FALSE;
-        }
-    }
+    if (gas->acctTypeFilters && !g_list_find (gas->acctTypeFilters, GINT_TO_POINTER (xaccAccountGetType (acc))))
+        return false;
 
-    if (gas->acctCommodityFilters)
-    {
-        if (g_list_find_custom (gas->acctCommodityFilters,
-                                GINT_TO_POINTER(xaccAccountGetCommodity (acc)),
-                                gnc_commodity_compare_void) == NULL)
-        {
-            included = FALSE;
-        }
-    }
-    return included;
+    if (gas->acctCommodityFilters && !g_list_find (gas->acctCommodityFilters, xaccAccountGetCommodity (acc)))
+        return false;
+
+    return true;
 }
 
 static gboolean
@@ -581,21 +562,22 @@ account_is_visible_func (GtkTreeModel *model, GtkTreeIter *iter, gpointer user_d
 {
     GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
     Account *acc;
-    gboolean visible = TRUE;
 
     gtk_tree_model_get (GTK_TREE_MODEL(gas->store), iter, ACCT_COL_PTR, &acc, -1);
 
-    if (acc)
-    {
-        visible = account_is_included (gas, acc);
+    if (!acc)
+        return true;
 
-        if (gas->hide_placeholder && xaccAccountGetPlaceholder (acc))
-            visible = FALSE;
+    if (!account_is_included (gas, acc))
+        return false;
 
-        if (gas->hide_placeholder && xaccAccountIsHidden (acc))
-            visible = FALSE;
-    }
-    return visible;
+    if (gas->hide_placeholder && xaccAccountGetPlaceholder (acc))
+        return false;
+
+    if (gas->hide_placeholder && xaccAccountIsHidden (acc))
+        return false;
+
+    return true;
 }
 
 static void
