@@ -15,13 +15,13 @@ jobs:
         echo "PREFIX=$HOME/gnucash/inst" >> $GITHUB_ENV
         echo "SRCROOT=$HOME/gnucash/source" >> $GITHUB_ENV
     - name: download dependency tarball
-      uses: carlosperate/download-file-action@v1.0.3
+      uses: carlosperate/download-file-action@v2
       id: dependencies
       with:
         file-url: 'https://downloads.sourceforge.net/gnucash/Dependencies/gnucash-4.900-mac-dependencies.tar.xz'
         file-name: gnucash-dependencies.tar.xz
     - name: download googletest
-      uses: carlosperate/download-file-action@v1.0.3
+      uses: carlosperate/download-file-action@v2
 
       id: googletest
       with:
@@ -50,7 +50,7 @@ jobs:
         ninja check
       env:
         CTEST_OUTPUT_ON_FAILURE: On
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: failure()
       with:
         name: TestLog

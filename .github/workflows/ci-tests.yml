@@ -33,7 +33,7 @@ jobs:
         ninja check
       env:
         CTEST_OUTPUT_ON_FAILURE: On
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       if: failure()
       with:
         name: TestLog
