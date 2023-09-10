@@ -253,7 +253,7 @@ static const TxnTypeVec long_types
            "and increases the cost basis without affecting # units.")
     },
     {
-        FieldMask::DISABLED | FieldMask::AMOUNT_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
+        FieldMask::AMOUNT_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
@@ -267,7 +267,7 @@ static const TxnTypeVec long_types
            "record the sale using the Stock Transaction Assistant first, then record the split.")
     },
     {
-        FieldMask::DISABLED | FieldMask::AMOUNT_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
+        FieldMask::AMOUNT_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
@@ -379,7 +379,7 @@ static const TxnTypeVec short_types
            "0.00 value) without affecting # units.")
     },
     {
-        FieldMask::DISABLED | FieldMask::AMOUNT_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
+        FieldMask::AMOUNT_CREDIT | FieldMask::INPUT_NEW_BALANCE,         // stock_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
@@ -393,7 +393,7 @@ static const TxnTypeVec short_types
            "record the cover buy using the Stock Transaction Assistant first, then record the split.")
     },
     {
-        FieldMask::DISABLED | FieldMask::AMOUNT_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
+        FieldMask::AMOUNT_DEBIT | FieldMask::INPUT_NEW_BALANCE,          // stock_amt
         FieldMask::ENABLED_CREDIT | FieldMask::ALLOW_ZERO,          // cash_amt
         FieldMask::ENABLED_DEBIT | FieldMask::ALLOW_ZERO | FieldMask::CAPITALIZE_DEFAULT,          // fees_amt
         FieldMask::DISABLED,               // dividend_amt
