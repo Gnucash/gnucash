@@ -166,24 +166,22 @@ StockAssistantTest::StockAssistantTest() :
 void
 StockAssistantTest::instantiate_model(StockAssistantModel &model, const ASTTestCase &t)
 {
-    model.m_transaction_date = gnc_dmy2time64 (t.dd, t.mm, t.yy);
+    model.set_transaction_date(gnc_dmy2time64 (t.dd, t.mm, t.yy));
     model.maybe_reset_txn_types ();
-    auto fees_entry = dynamic_cast<StockTransactionFeesEntry*>(model.m_fees_entry.get());
-    auto stock_entry = dynamic_cast<StockTransactionStockEntry*>(model.m_stock_entry.get());
 
     model.set_txn_type (t.type_idx);
-    model.m_transaction_description = t.desc;
-    stock_entry->m_amount = gnc_numeric_create (t.stock_amt * 100, 100);
-    model.m_stock_entry->m_value = gnc_numeric_create (t.stock_val, 100);
-    model.m_cash_entry->m_value = gnc_numeric_create (t.cash_val, 100);
-    model.m_cash_entry->m_account = cash_account;
-    model.m_fees_entry->m_account = fees_account;
-    fees_entry->m_capitalize = t.capitalize;
-    model.m_fees_entry->m_value = gnc_numeric_create (t.fees_val, 100);
-    model.m_capgains_entry->m_account = capgains_account;
-    model.m_capgains_entry->m_value = gnc_numeric_create (t.capg_val, 100);
-    model.m_dividend_entry->m_account = dividend_account;
-    model.m_dividend_entry->m_value = gnc_numeric_create (t.divi_val, 100);
+    model.set_transaction_desc(t.desc);
+    model.stock_entry()->set_amount(gnc_numeric_create (t.stock_amt, 1));
+    model.stock_entry()->set_value(gnc_numeric_create (t.stock_val, 100));
+    model.cash_entry()->set_value(gnc_numeric_create (t.cash_val, 100));
+    model.cash_entry()->set_account(cash_account);
+    model.fees_entry()->set_account(fees_account);
+    model.fees_entry()->set_capitalize(t.capitalize);
+    model.fees_entry()->set_value(gnc_numeric_create (t.fees_val, 100));
+    model.capgains_entry()->set_account(capgains_account);
+    model.capgains_entry()->set_value(gnc_numeric_create (t.capg_val, 100));
+    model.dividend_entry()->set_account(dividend_account);
+    model.dividend_entry()->set_value(gnc_numeric_create (t.divi_val, 100));
 }
 
 class StockAssistantTestParameterized :
@@ -204,7 +202,7 @@ protected:
 TEST_F(StockAssistantTest, testFailureModes)
 {
     StockAssistantModel model (stock_account);
-    model.m_transaction_date = gnc_dmy2time64 (1, 1, 2022);
+    model.set_transaction_date(gnc_dmy2time64 (1, 1, 2022));
 
     // resetting txn_types will work the first time
     EXPECT_TRUE (model.maybe_reset_txn_types ());
@@ -213,7 +211,7 @@ TEST_F(StockAssistantTest, testFailureModes)
     EXPECT_FALSE (model.maybe_reset_txn_types ());
 
     // set transaction-date to a different date.
-    model.m_transaction_date = gnc_dmy2time64 (1, 2, 2022);
+    model.set_transaction_date(gnc_dmy2time64 (1, 2, 2022));
 
     // resetting txn_types will now work.
     EXPECT_TRUE (model.maybe_reset_txn_types ());
@@ -259,7 +257,8 @@ TEST_F(StockAssistantTest, testAggregateResults)
         auto [success_txn, txn] = model.create_transaction ();
         EXPECT_TRUE (success_txn);
 
-        EXPECT_EQ (xaccAccountGetBalance (stock_account).num, t.new_bal * 100);
+        EXPECT_EQ (xaccAccountGetBalance (stock_account).num, t.new_bal * 100) <<
+            t.dd << '/' << t.mm << '/' << t.yy << ": " << t.desc;
     }
 
     dump_acct (stock_account);
