@@ -121,30 +121,6 @@ typedef char gchar;
  
 %typemap(newfree) struct tm * "gnc_tm_free($1);"
 
-%typemap(argout) struct tm * {
-    struct tm* t = $1;
-    SCM tm = $input;
-    if (t == NULL)
-    {
-        SCM_SIMPLE_VECTOR_SET(tm, 0, scm_from_int(t->tm_sec));
-        SCM_SIMPLE_VECTOR_SET(tm, 1, scm_from_int(t->tm_min));
-        SCM_SIMPLE_VECTOR_SET(tm, 2, scm_from_int(t->tm_hour));
-        SCM_SIMPLE_VECTOR_SET(tm, 3, scm_from_int(t->tm_mday));
-        SCM_SIMPLE_VECTOR_SET(tm, 4, scm_from_int(t->tm_mon));
-        SCM_SIMPLE_VECTOR_SET(tm, 5, scm_from_int(t->tm_year));
-        SCM_SIMPLE_VECTOR_SET(tm, 6, scm_from_int(t->tm_wday));
-        SCM_SIMPLE_VECTOR_SET(tm, 7, scm_from_int(t->tm_yday));
-        SCM_SIMPLE_VECTOR_SET(tm, 8, scm_from_int(t->tm_isdst));
-%#ifdef HAVE_STRUCT_TM_GMTOFF
-        SCM_SIMPLE_VECTOR_SET(tm, 9, scm_from_long(t->tm_gmtoff));
-        SCM_SIMPLE_VECTOR_SET(tm, 10, scm_from_locale_string(t->tm_zone?t->tm_zone:"Unset"));
-%#else
-        SCM_SIMPLE_VECTOR_SET(tm, 9, scm_from_long(0));
-        SCM_SIMPLE_VECTOR_SET(tm, 10, scm_from_locale_string("GMT"));
-%#endif
-     }
- }
-
 %define GLIST_HELPER_INOUT(ListType, ElemSwigType)
 %typemap(in) ListType * {
   SCM list = $input;
