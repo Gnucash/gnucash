@@ -100,6 +100,9 @@ struct sr_info
     /** true if we are loading the register for the first time */
     gboolean first_pass;
 
+    /** true if we have setup the quickfills */
+    gboolean quickfill_setup;
+
     /** true if the user has already confirmed changes of a reconciled
      * split */
     gboolean change_confirmed;

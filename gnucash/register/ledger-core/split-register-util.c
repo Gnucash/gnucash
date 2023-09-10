@@ -55,6 +55,7 @@ gnc_split_register_init_info (SplitRegister *reg)
     info->last_date_entered = gnc_time64_get_today_start ();
 
     info->first_pass = TRUE;
+    info->quickfill_setup = FALSE;
     info->full_refresh = TRUE;
     info->separator_changed = TRUE;
 
