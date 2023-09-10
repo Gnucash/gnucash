@@ -347,6 +347,12 @@
        qif-files-list)
 
 
+      ;; Add any prices to the list of work to do
+      (for-each
+        (lambda (qif-file)
+          (set! work-to-do (+ (length (qif-file:prices qif-file)) work-to-do)))
+       qif-files-list)
+
       ;; Build a local account tree to hold converted transactions.
       (if progress-dialog
           (gnc-progress-dialog-set-sub progress-dialog
@@ -448,6 +454,88 @@
                   (xaccTransRecordPrice gnc-xtn PRICE-SOURCE-SPLIT-IMPORT))))
           (qif-file:xtns qif-file)))
        sorted-qif-files-list)
+
+      ;; Add prices
+      (let ((pricedb (gnc-pricedb-get-db (gnc-get-current-book)))
+            (symbol-hash (make-symbol-hash stock-map))
+            (sorted-prices '())
+            (pruned-prices '())
+            (pruned-price-count 0)
+            (commodity #f)
+            (current-symbol " invalid symbol "))
+
+        ;; Let's combine all the prices and sort them; it
+        ;;  is slightly more efficient to do them by symbol and
+        ;;  tidies up error reporting on missing symbols
+        (for-each
+          (lambda (qif-file)
+            (set! sorted-prices (append sorted-prices (qif-file:prices qif-file))))
+         qif-files-list)
+
+        (set! sorted-prices (sort sorted-prices
+          (lambda (a b)
+            (string-ci<? (qif-price:symbol a) (qif-price:symbol b)))))
+
+        (gnc-pricedb-begin-edit pricedb)
+        ;; Turning off bulk update avoids an n^2 performance
+        ;;  cost, but also turns off duplicate checking
+        (gnc-pricedb-set-bulk-update pricedb #t)
+
+        (if progress-dialog
+            (gnc-progress-dialog-set-sub progress-dialog
+                (string-append (G_ "Discarding duplicate prices"))))
+
+        ;; Prune duplicate records before inserting
+        (for-each
+          (lambda (price)
+            (if (not (string-ci=? current-symbol (qif-price:symbol price)))
+                (begin
+                  (set! current-symbol (qif-price:symbol price))
+                  (set! commodity (hash-ref symbol-hash current-symbol))
+
+                  (if (equal? commodity #f)
+                      (qif-import:log progress-dialog
+                          "qif-import:qif-to-gnc"
+                          (G_ (format #f "Warning: cannot find commodity for symbol ~a." current-symbol))))))
+            (if (not (equal? commodity #f))
+                (if (not (duplicate-price? pricedb commodity default-currency price))
+                    (set! pruned-prices (cons price pruned-prices))
+                    (set! pruned-price-count (+ 1 pruned-price-count))))
+            (update-progress))
+         sorted-prices)
+        (set! pruned-prices (reverse pruned-prices))
+
+        (if progress-dialog
+            (begin
+                (if (> pruned-price-count 0)
+                    (qif-import:log progress-dialog
+                        "qif-import:qif-to-gnc"
+                        (G_ (format #f "Warning: skipped ~a prices on days that already had prices." pruned-price-count))))
+
+                (gnc-progress-dialog-set-sub progress-dialog
+                    (string-append (G_ "Adding prices")))))
+
+        ;; Reset and run again, this time to actually add prices
+        (set! current-symbol " -- unknown --")
+        (for-each
+          (lambda (price)
+            (if (not (string-ci=? current-symbol (qif-price:symbol price)))
+                (begin
+                  (set! current-symbol (qif-price:symbol price))
+                  (set! commodity (hash-ref symbol-hash current-symbol))))
+
+            (if (not (equal? commodity #f))
+                (let* ((gnc-price (gnc-price-create (gnc-get-current-book)))
+                       ;; We skip any bad price results, instead of crashing the whole process
+                       (okay (false-if-exception
+                           (qif-price-to-gnc-price price gnc-price
+                               default-currency commodity progress-dialog))))
+                  (if okay (gnc-pricedb-add-price pricedb gnc-price))
+                  (gnc-price-unref gnc-price)))
+            (update-progress))
+         pruned-prices)
+
+        (gnc-pricedb-commit-edit pricedb))
 
       ;; Finished.
       (if progress-dialog
@@ -1259,3 +1347,98 @@
       (xaccAccountBeginEdit root)
       (xaccAccountDestroy root))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Utility procedures for handling prices
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; make-symbol-hash
+;;
+;; Quicken provides historical price data using the stock symbol.
+;; We generate a map of symbol to commodity in order to update prices.
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (make-symbol-hash stock-map)
+  (let ((table (make-hash-table 20)))
+    (hash-for-each
+      (lambda (stock commodity)
+        (let ((symbol (gnc-commodity-get-mnemonic commodity)))
+          (hash-set! table symbol commodity)))
+     stock-map)
+   table))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; duplicate-price?
+;;
+;; Is there already a price for this commodity?
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (duplicate-price? pricedb commodity currency qif-price)
+  (let* ((qif-date (qif-price:date qif-price))
+         (time64 (qif-date-to-time64 qif-date))
+         (tm (gnc-localtime time64))
+         (near-price (gnc-pricedb-lookup-nearest-before-t64 pricedb commodity currency time64))
+         (near-tm (gnc-localtime (gnc-price-get-time64 near-price)))
+         (dupe #f))
+    (if (and (equal? (tm:year tm) (tm:year near-tm))
+             (equal? (tm:mon tm) (tm:mon near-tm))
+             (equal? (tm:mday tm) (tm:mday near-tm)))
+        (set! dupe #t))
+  dupe))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; qif-date-to-time64
+;;
+;; Convert our internal qif-date format into a time64
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (qif-date-to-time64  qif-date)
+  (let ((tm (gnc-localtime (current-time))))
+    ;; Choose a 'neutral' time of day, instead of time of import
+    (set-tm:hour tm 10)
+    (set-tm:min tm 59)
+    (set-tm:sec tm 0)
+    (set-tm:mday tm (car qif-date))
+    (set-tm:mon tm (- (cadr qif-date) 1))
+    (set-tm:year tm (- (caddr qif-date) 1900))
+    (gnc-mktime tm)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; qif-price-to-gnc-price
+;; translate a single price to a GNCPrice structure
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-price-to-gnc-price qif-price gnc-price
+                                       default-currency commodity progress-dialog)
+  (let* ((qif-symbol (qif-price:symbol qif-price))
+         (qif-share-price (qif-price:share-price qif-price))
+         (qif-date (qif-price:date qif-price))
+         (gnc-value (gnc-numeric-zero)))
+
+    ;; Check the transaction date.
+    (if (not qif-date)
+        ((qif-import:log progress-dialog
+                        "qif-price-to-gnc-price"
+                        (G_ "Invalid transaction date."))
+        (throw 'bad-date
+               "qif-price-to-gnc-price"
+               "Missing transaction date."
+               #f
+               #f)))
+
+    ;; Set properties of the whole transaction.
+    (gnc-price-begin-edit gnc-price)
+    (gnc-price-set-commodity gnc-price commodity)
+    (gnc-price-set-currency gnc-price default-currency)
+    (gnc-price-set-source-string gnc-price "user:price")
+
+    ;; other options for type are "last" or "nav" which are
+    ;;  the last known price for a stock or the net asset value
+    ;;  for a mutual fund.  We don't really know, so we'll
+    ;;  go with unknown
+    (gnc-price-set-typestr gnc-price "unknown")
+
+    (gnc-price-set-value gnc-price (gnc-numeric-create
+            (numerator qif-share-price) (denominator qif-share-price)))
+    (gnc-price-set-time64 gnc-price (qif-date-to-time64 qif-date))
+    (gnc-price-commit-edit gnc-price)
+
+    ;; return the transaction
+    gnc-price))

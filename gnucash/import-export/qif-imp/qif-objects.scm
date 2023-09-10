@@ -44,6 +44,7 @@
 (export make-qif-map-entry)
 (export make-qif-split)
 (export make-qif-stock-symbol)
+(export make-qif-price)
 (export make-qif-xtn)
 (export make-ticker-map)
 (export qif-acct:budget)
@@ -75,6 +76,8 @@
 (export qif-file:add-cat!)
 (export qif-file:add-class!)
 (export qif-file:add-xtn!)
+(export qif-file:add-price!)
+(export qif-file:prices)
 (export qif-file:cats)
 (export qif-file:path)
 (export qif-file:path-to-accountname)
@@ -112,6 +115,12 @@
 (export qif-stock-symbol:set-name!)
 (export qif-stock-symbol:set-symbol!)
 (export qif-stock-symbol:set-type!)
+(export qif-price:symbol)
+(export qif-price:set-symbol!)
+(export qif-price:date)
+(export qif-price:set-date!)
+(export qif-price:share-price)
+(export qif-price:set-share-price!)
 (export qif-ticker-map:add-ticker!)
 (export qif-ticker-map:lookup-symbol)
 (export qif-ticker-map:lookup-type)
@@ -156,6 +165,7 @@
 ;;  accounts     : list of <qif-acct>  
 ;;  cats         : list of <qif-cat>  
 ;;  classes      : list of <qif-class>  
+;;  prices       : list of <qif-price>
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define <qif-file>
@@ -166,7 +176,8 @@
      xtns                
      accounts 
      cats
-     classes)))
+     classes
+     prices)))
 
 (define qif-file?
   (record-predicate <qif-file>))
@@ -207,6 +218,12 @@
 (define qif-file:set-accounts!
   (record-modifier <qif-file> 'accounts))
 
+(define qif-file:prices
+  (record-accessor <qif-file> 'prices))
+
+(define qif-file:set-prices!
+  (record-modifier <qif-file> 'prices))
+
 (define (make-qif-file) 
   (let ((self (construct <qif-file>)))
     (qif-file:set-y2k-threshold! self 50)
@@ -214,6 +231,7 @@
     (qif-file:set-accounts! self '())
     (qif-file:set-cats! self '())
     (qif-file:set-classes! self '())
+    (qif-file:set-prices! self '())
     self))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -627,6 +645,10 @@
   (qif-file:set-accounts! self 
                           (cons account (qif-file:accounts self))))
 
+(define (qif-file:add-price! self price)
+  (qif-file:set-prices! self
+                         (cons price (qif-file:prices self))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;  munge the QIF filename to create a simple default account name 
@@ -785,6 +807,44 @@
     (qif-stock-symbol:set-name! retval "")
     (qif-stock-symbol:set-symbol! retval "")
     (qif-stock-symbol:set-type! retval "")
+    retval))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  <qif-price>
+;;  Symbol,shares,date
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define <qif-price>
+  (make-record-type
+   'qif-price
+   '(symbol share-price date)))
+
+(define qif-price:symbol
+  (record-accessor <qif-price> 'symbol))
+
+(define qif-price:set-symbol!
+  (record-modifier <qif-price> 'symbol))
+
+(define qif-price:share-price
+  (record-accessor <qif-price> 'share-price))
+
+(define qif-price:set-share-price!
+  (record-modifier <qif-price> 'share-price))
+
+(define qif-price:date
+  (record-accessor <qif-price> 'date))
+
+(define qif-price:set-date!
+  (record-modifier <qif-price> 'date))
+
+(define (qif-price:print self)
+  (write self))
+
+(define (make-qif-price)
+  (let ((retval (construct <qif-price>)))
+    (qif-price:set-symbol! retval "")
+    (qif-price:set-share-price! retval "")
+    (qif-price:set-date! retval "")
     retval))
 
 (define <qif-ticker-map>

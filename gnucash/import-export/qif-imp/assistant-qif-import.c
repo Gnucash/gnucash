@@ -171,6 +171,7 @@ struct _qifimportwindow
     gboolean  show_doc_pages;
     gboolean  ask_date_format;
     gboolean  busy;
+    gboolean  read_file_warnings;
     gboolean  load_stop;
     gboolean  acct_tree_found;
     gboolean  new_book;
@@ -1546,6 +1547,7 @@ gnc_ui_qif_import_intro_prepare (GtkAssistant  *assistant, gpointer user_data)
 
     /* Set load stop to FALSE */
     wind->load_stop = FALSE;
+    wind->read_file_warnings = FALSE;
 
     files_list = scm_call_2 (unload, wind->selected_file, wind->imported_files);
 
@@ -1853,6 +1855,8 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
             wind->busy = FALSE;
             wind->load_stop = TRUE;
         }
+        else
+            wind->read_file_warnings = TRUE;
     }
 
     /*
@@ -1991,7 +1995,8 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
     gtk_widget_set_sensitive (wind->load_pause, FALSE);
     wind->busy = FALSE;
 
-    if (wind->load_stop == FALSE)
+
+    if (wind->load_stop == FALSE && wind->read_file_warnings == FALSE)
     {
         /* Auto step to next page */
         gtk_assistant_set_current_page (assistant, num + 1);

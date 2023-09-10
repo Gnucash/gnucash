@@ -404,6 +404,11 @@
   (and regexp-enabled?
        (make-regexp "^ *[$]?[+-]?[$]?[0-9]+[+-]?$|^ *[$]?[+-]?[$]?[0-9]?[0-9]?[0-9]?([\\.'][0-9][0-9][0-9])*(,[0-9]*)?[+-]? *$|^ *[$]?[+-]?[$]?[0-9]+,[0-9]*[+-]? *$")))
 
+;; eg 1/2 or 32/15 or 4
+(define rational-regexp
+  (and regexp-enabled?
+       (make-regexp "^-?[0-9]+(/[0-9]+|)$")))
+
 ;; eg 456 or 123
 (define integer-regexp
   (and regexp-enabled?
@@ -419,6 +424,7 @@
   (define numtypes-alist
     (list (cons 'decimal decimal-radix-regexp)
           (cons 'comma comma-radix-regexp)
+          (cons 'rational rational-regexp)
           (cons 'integer integer-regexp)))
   (filter (lambda (fmt) (regexp-exec (assq-ref numtypes-alist fmt) value-string))
           possible-formats))
@@ -439,7 +445,7 @@
                         ((comma) (gnc:string-replace-char
                                   (gnc:string-delete-chars filtered-string ".")
                                   #\, #\.))
-                        ((integer) filtered-string)))
+                        ((integer rational) filtered-string)))
          (num (or (string->number (string-append "#e" read-string)) 0)))
     (if has-minus? (- num) num)))
 

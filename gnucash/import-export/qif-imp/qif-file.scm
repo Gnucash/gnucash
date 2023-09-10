@@ -39,6 +39,7 @@
 (use-modules (srfi srfi-1))
 (use-modules (srfi srfi-13))
 (use-modules (ice-9 rdelim))
+(use-modules (ice-9 match))
 (use-modules (gnucash qif-import qif-objects))
 (use-modules (gnucash qif-import qif-utils))
 (use-modules (gnucash qif-import qif-parse))
@@ -49,6 +50,7 @@
 (export qif-file:parse-fields-results)
 (export qif-file:read-file)
 (export qif-file:reparse-dates)
+(export qif-file:parse-price-line)
 
 (define qif-bad-numeric-rexp
   (make-regexp "^\\.\\.\\."))
@@ -229,8 +231,7 @@
 
                           ;; Security price list
                           ((type:prices)
-                           ;; Not supported. We really should warn the user.
-                           #f)
+                           (set! current-xtn (make-qif-price)))
 
                           ((option:autoswitch)
                            (set! ignore-accounts #t))
@@ -516,6 +517,20 @@
                            (else
                             (mywarn (G_ "Ignoring security line") ": " line))))
 
+                        ;;;;;;;;;;;;;;;;
+                        ;; Price list ;;
+                        ;;;;;;;;;;;;;;;;
+                        ((type:prices)
+                         (case tag
+                           ((#\^)
+                             ;; end-of-record
+                             (set! current-xtn (make-qif-price)))
+                           (else
+                             ;; Parse the price which is a mini csv of 3 entries
+                             (set! current-xtn (qif-file:parse-price-line line))
+                             (if (equal? current-xtn #f)
+                                 (mywarn (G_ "Could not parse price line") ": " line)
+                                 (qif-file:add-price! self current-xtn)))))
 
                         ;; trying to sneak one by, eh?
                         (else
@@ -724,6 +739,9 @@
       ;;
       (set-sub (G_ "Parsing categories"))
       ;; The category tasks will be 5% of the overall parsing effort.
+      ;;   Note, the presumption is that reading the file is 70% of the
+      ;;   overall effort, so this function only has ~30% to dole out,
+      ;;   hence 5% at a time here
       (start-sub 0.05)
 
       ;; Tax classes; assume this is 50% of the category parsing effort.
@@ -793,6 +811,39 @@
 
 
       ;;
+      ;; Prices
+      ;;
+      (set-sub (G_ "Parsing prices"))
+      ;; We process the list of prices
+      (start-sub 0.05)
+
+      ;; Dates
+      (start-sub 0.5)
+      (check-and-parse-field
+       qif-price:date qif-price:set-date! equal?
+       qif-parse:check-date-format '(m-d-y d-m-y y-m-d y-d-m)
+       qif-parse:parse-date/format
+       (qif-file:prices self)
+       qif-parse:print-date
+       'error-on-ambiguity add-error 'date
+       update-progress)
+      (finish-sub)
+
+      ;; Amounts
+      (start-sub 1)
+      (check-and-parse-field
+       qif-price:share-price qif-price:set-share-price! gnc-numeric-equal
+       qif-parse:check-number-format '(decimal comma rational)
+       qif-parse:parse-number/format (qif-file:prices self)
+       qif-parse:print-number
+       'guess-on-ambiguity add-error 'share-price
+       update-progress)
+      (finish-sub)
+
+      (finish-sub)
+
+
+      ;;
       ;; fields of transactions
       ;;
       (set-sub (G_ "Parsing transactions"))
@@ -833,7 +884,7 @@
       (start-sub 0.1)
       (check-and-parse-field
        qif-xtn:share-price qif-xtn:set-share-price! gnc-numeric-equal
-       qif-parse:check-number-format '(decimal comma)
+       qif-parse:check-number-format '(decimal comma rational)
        qif-parse:parse-number/format (qif-file:xtns self)
        qif-parse:print-number
        'guess-on-ambiguity add-error 'share-price
@@ -1083,3 +1134,32 @@
               (test-results (cdr results))))))
 
   (if results (test-results results) #f))
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;  qif-file:parse-price-line
+;;
+;;  Takes an expected price line and returns a qif-price object
+;;
+;;  We are parsing "SYMBOL",value,"DATE"
+;;    where symbol is the alpha name of the security symbol,
+;;    value can be a float like 42.50 or a fractional expression like 42 1/2
+;;    and date can be the typical Quicken date formats
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(define (qif-file:parse-price-line line)
+  (define (remove-punctuation s) (string-trim-both s char-set:punctuation))
+  (and (string? line)
+       (match (string-split line #\,)
+         (((= remove-punctuation symbol) (= gnc-numeric-from-string value) (= remove-punctuation date))
+          (cond
+           ((string-null? symbol) #f)
+           ((not value) #f)
+           ((string-null? date) #f)
+           (else
+            (let ((xtn (make-qif-price)))
+              (qif-price:set-symbol! xtn symbol)
+              (qif-price:set-date! xtn date)
+              (qif-price:set-share-price! xtn (number->string value))
+              xtn))))
+         (_ #f))))
