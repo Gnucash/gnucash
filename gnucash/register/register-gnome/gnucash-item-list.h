@@ -71,7 +71,7 @@ GtkWidget *gnc_item_list_new (GtkListStore *shared_store);
 
 gint gnc_item_list_num_entries (GncItemList *item_list);
 
-gint gnc_item_list_get_cell_height (GncItemList *item_list);
+gint gnc_item_list_get_popup_height (GncItemList *item_list);
 
 void gnc_item_list_clear (GncItemList *item_list);
 

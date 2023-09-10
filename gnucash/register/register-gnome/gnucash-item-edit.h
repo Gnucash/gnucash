@@ -91,6 +91,7 @@ typedef struct
     PopupGetWidth    popup_get_width;
     gpointer         popup_user_data;
     gint             popup_returned_height;
+    gint             popup_allocation_height;
     gulong           popup_height_signal_id;
 
     GtkBorder        padding;
