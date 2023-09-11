@@ -53,10 +53,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.3-pot1\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-07-21 13:04+0000\n"
+"PO-Revision-Date: 2023-09-11 15:53+0000\n"
 "Last-Translator: Giuseppe Foti <foti.giuseppe@gmail.com>\n"
 "Language-Team: Italian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "it/>\n"
@@ -65,7 +65,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.0.1-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -5063,10 +5063,8 @@ msgstr "Elimina la suddivisione corrente"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
-#, fuzzy
-#| msgid "Sold Splits"
 msgid "Show Splits"
-msgstr "Frazionamenti venduti"
+msgstr "Mostra frazionamenti"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 msgid "Jump"
