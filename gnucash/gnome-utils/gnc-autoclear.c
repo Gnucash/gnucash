@@ -2,6 +2,7 @@
  * gnc-autoclear.c -- Knapsack algorithm functions                  *
  *                                                                  *
  * Copyright 2020 Cristian Klein <cristian@kleinlabs.eu>            *
+ * Modified  2021 Christopher Lam to clear same-amount splits       *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -27,6 +28,7 @@
 
 #include "Account.h"
 #include "Split.h"
+#include "Transaction.h"
 #include "gncOwner.h"
 #include "qof.h"
 #include "gnc-autoclear.h"
@@ -50,35 +52,95 @@ autoclear_quark (void)
 }
 
 static gboolean
-ght_gnc_numeric_equal(gconstpointer v1, gconstpointer v2)
+numeric_equal (gnc_numeric *n1, gnc_numeric *n2)
 {
-    gnc_numeric n1 = *(gnc_numeric *)v1, n2 = *(gnc_numeric *)v2;
-    return gnc_numeric_equal(n1, n2);
+    return gnc_numeric_equal (*n1, *n2);
 }
 
 static guint
-ght_gnc_numeric_hash(gconstpointer v1)
+numeric_hash (gnc_numeric *n1)
 {
-    gnc_numeric n1 = *(gnc_numeric *)v1;
-    gdouble d1 = gnc_numeric_to_double(n1);
+    gdouble d1 = gnc_numeric_to_double (*n1);
     return g_double_hash (&d1);
 }
 
-typedef struct _sack_foreach_data_t
+typedef struct
 {
-    gnc_numeric split_value;
-    GList *reachable_list;
-} *sack_foreach_data_t;
+    GList *worklist;
+    GHashTable *sack;
+    Split *split;
+} sack_data;
 
-static void sack_foreach_func(gpointer key, gpointer value, gpointer user_data)
+typedef struct
 {
-    sack_foreach_data_t data = (sack_foreach_data_t) user_data;
-    gnc_numeric thisvalue = *(gnc_numeric *) key;
-    gnc_numeric reachable_value = gnc_numeric_add_fixed (thisvalue, data->split_value);
-    gpointer new_value = g_malloc(sizeof(gnc_numeric));
+    gnc_numeric reachable_amount;
+    GList *list_of_splits;
+} WorkItem;
 
-    memcpy(new_value, &reachable_value, sizeof(gnc_numeric));
-    data->reachable_list = g_list_prepend(data->reachable_list, new_value);
+static GList *DUP_LIST;
+
+static WorkItem *
+make_workitem (GHashTable *hash, gnc_numeric amount,
+               Split *split, GList *splits)
+{
+    WorkItem *item = g_new0 (WorkItem, 1);
+    item->reachable_amount = amount;
+    if (g_hash_table_lookup (hash, &amount) || splits == DUP_LIST)
+        item->list_of_splits = DUP_LIST;
+    else
+        item->list_of_splits = g_list_prepend (g_list_copy (splits), split);
+    return item;
+}
+
+static void
+sack_foreach_func (gnc_numeric *thisvalue, GList *splits, sack_data *data)
+{
+    gnc_numeric itemval = xaccSplitGetAmount (data->split);
+    gnc_numeric new_value = gnc_numeric_add_fixed (*thisvalue, itemval);
+    WorkItem *item = make_workitem (data->sack, new_value, data->split, splits);
+
+    data->worklist = g_list_prepend (data->worklist, item);
+}
+
+static void dump_sack (gnc_numeric *thisvalue, GList *splits, sack_data *data)
+{
+    DEBUG ("%6.2f:", gnc_numeric_to_double (*thisvalue));
+    if (splits == DUP_LIST)
+        DEBUG (" DUPE");
+    else
+        for (GList *n = splits; n; n = n->next)
+            DEBUG (" [%5.2f]", gnc_numeric_to_double (xaccSplitGetAmount (n->data)));
+    DEBUG ("\n");
+}
+
+static void
+sack_free (gnc_numeric *thisvalue, GList *splits, sack_data *data)
+{
+    dump_sack (thisvalue, splits, data);
+    g_free (thisvalue);
+    if (splits != DUP_LIST)
+        g_list_free (splits);
+}
+
+static void
+process_work (WorkItem *item, GHashTable *sack)
+{
+    GList *existing = g_hash_table_lookup (sack, &item->reachable_amount);
+    if (existing && existing != DUP_LIST)
+    {
+        DEBUG ("removing existing for %6.2f\n",
+               gnc_numeric_to_double (item->reachable_amount));
+        g_list_free (existing);
+    }
+    g_hash_table_insert (sack, &item->reachable_amount, item->list_of_splits);
+}
+
+static void status_update (GtkLabel *label, gchar *status)
+{
+    if (!label) return;
+    gtk_label_set_text (label, status);
+    while (gtk_events_pending ())
+        g_main_context_iteration (NULL,FALSE);
 }
 
 gboolean
@@ -88,24 +150,32 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
 {
     GList *nc_list = NULL, *toclear_list = NULL;
     GHashTable *sack;
-    gboolean success = FALSE;
-    guint sack_size = 0;
+    guint nc_progress = 0, nc_list_length = 0;
 
     g_return_val_if_fail (GNC_IS_ACCOUNT (account), FALSE);
+    g_return_val_if_fail (splits != NULL, FALSE);
 
-    sack = g_hash_table_new_full (ght_gnc_numeric_hash, ght_gnc_numeric_equal,
-                                  g_free, NULL);
+    sack = g_hash_table_new ((GHashFunc) numeric_hash, (GEqualFunc) numeric_equal);
+    DUP_LIST = g_list_prepend (NULL, NULL);
 
     /* Extract which splits are not cleared and compute the amount we have to clear */
     for (GList *node = xaccAccountGetSplitList (account); node; node = node->next)
     {
         Split *split = (Split *)node->data;
 
-        if (xaccSplitGetReconcile (split) == NREC)
-            nc_list = g_list_prepend (nc_list, split);
-        else
+        if (xaccSplitGetReconcile (split) != NREC)
             toclear_value = gnc_numeric_sub_fixed
                 (toclear_value, xaccSplitGetAmount (split));
+        else if (gnc_numeric_zero_p (xaccSplitGetAmount (split)))
+            DEBUG ("skipping zero-amount split %p", split);
+        else if (end_date != INT64_MAX &&
+                 xaccTransGetDate (xaccSplitGetParent (split)) > end_date)
+            DEBUG ("skipping split after statement_date %p", split);
+        else
+        {
+            nc_list = g_list_prepend (nc_list, split);
+            nc_list_length++;
+        }
     }
 
     if (gnc_numeric_zero_p (toclear_value))
@@ -114,95 +184,68 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
                      _("Account is already at Auto-Clear Balance."));
         goto skip_knapsack;
     }
+    else if (!nc_list)
+    {
+        g_set_error (error, autoclear_quark (), AUTOCLEAR_NOP,
+                     _("No uncleared splits found."));
+        goto skip_knapsack;
+    }
 
-    /* Run knapsack */
-    /* Entries in the hash table are:
-     *  - key   = amount to which we know how to clear (freed by GHashTable)
-     *  - value = last split we used to clear this amount (not managed by GHashTable)
-     */
     for (GList *node = nc_list; node; node = node->next)
     {
         Split *split = (Split *)node->data;
-        gnc_numeric split_value = xaccSplitGetAmount (split);
-        gpointer new_value = g_malloc(sizeof(gnc_numeric));
+        WorkItem *item = make_workitem (sack, xaccSplitGetAmount (split), split, NULL);
+        sack_data s_data = { g_list_prepend (NULL, item), sack, split };
 
-        struct _sack_foreach_data_t s_data[1];
-        s_data->split_value = split_value;
-        s_data->reachable_list = NULL;
-
-        /* For each value in the sack, compute a new reachable value */
-        g_hash_table_foreach (sack, sack_foreach_func, s_data);
-
-        /* Add the value of the split itself to the reachable_list */
-        memcpy(new_value, &split_value, sizeof(gnc_numeric));
-        s_data->reachable_list = g_list_prepend
-            (s_data->reachable_list, new_value);
-
-        /* Add everything to the sack, looking out for duplicates */
-        for (GList *s_node = s_data->reachable_list; s_node; s_node = s_node->next)
+        g_hash_table_foreach (sack, (GHFunc) sack_foreach_func, &s_data);
+        g_list_foreach (s_data.worklist, (GFunc) process_work, sack);
+        g_list_free (s_data.worklist);
+        nc_progress++;
+        if (label)
         {
-            gnc_numeric *reachable_value = s_node->data;
-
-            /* Check if it already exists */
-            if (g_hash_table_lookup_extended (sack, reachable_value, NULL, NULL))
-            {
-                /* If yes, we are in trouble, we reached an amount
-                   using two solutions */
-                g_hash_table_insert (sack, reachable_value, NULL);
-            }
-            else
-            {
-                g_hash_table_insert (sack, reachable_value, split);
-                sack_size++;
-
-                if (sack_size > MAXIMUM_SACK_SIZE)
-                {
-                    g_set_error (error, autoclear_quark (), AUTOCLEAR_OVERLOAD,
-                                 _("Too many uncleared splits"));
-                    goto skip_knapsack;
-                }
-            }
+            gchar *text = g_strdup_printf ("%u/%u splits processed, %u combos",
+                                           nc_progress, nc_list_length,
+                                           g_hash_table_size (sack));
+            status_update (label, text);
+            g_free (text);
         }
-        g_list_free (s_data->reachable_list);
-    }
-
-    /* Check solution */
-    while (!gnc_numeric_zero_p (toclear_value))
-    {
-        Split *split = NULL;
-
-        if (!g_hash_table_lookup_extended (sack, &toclear_value,
-                                           NULL, (gpointer) &split))
+        if (g_hash_table_size (sack) > MAXIMUM_SACK_SIZE)
         {
-            g_set_error (error, autoclear_quark (), AUTOCLEAR_UNABLE,
-                         _("The selected amount cannot be cleared."));
+            g_set_error (error, autoclear_quark (), AUTOCLEAR_OVERLOAD,
+                         _("Too many uncleared splits"));
             goto skip_knapsack;
         }
-
-        if (!split)
+        else if (g_hash_table_lookup (sack, &toclear_value) == DUP_LIST)
         {
             g_set_error (error, autoclear_quark (), AUTOCLEAR_MULTIPLE,
                          _("Cannot uniquely clear splits. Found multiple possibilities."));
             goto skip_knapsack;
         }
-
-        toclear_list = g_list_prepend (toclear_list, split);
-        toclear_value = gnc_numeric_sub_fixed (toclear_value,
-                                               xaccSplitGetAmount (split));
     }
-    success = TRUE;
+
+    status_update (label, "Cleaning up...");
+
+    toclear_list = g_hash_table_lookup (sack, &toclear_value);
+
+    /* Check solution */
+    if (!toclear_list)
+    {
+        g_set_error (error, autoclear_quark (), AUTOCLEAR_UNABLE,
+                     _("The selected amount cannot be cleared."));
+        goto skip_knapsack;
+    }
+    else
+        /* copy GList because GHashTable value will be freed */
+        *splits = g_list_copy (toclear_list);
 
  skip_knapsack:
+    g_hash_table_foreach (sack, (GHFunc) sack_free, NULL);
     g_hash_table_destroy (sack);
     g_list_free (nc_list);
+    g_list_free (DUP_LIST);
 
-    if (!success)
-    {
-        g_list_free (toclear_list);
-        toclear_list = NULL;
-    }
+    status_update (label, NULL);
 
-    *splits = toclear_list;
     return (toclear_list != NULL);
 }
 
@@ -214,8 +257,8 @@ gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
     GError *error = NULL;
     GList *splits = NULL;
 
-    gnc_autoclear_get_splits (account, toclear_value,
-                              &splits, &error);
+    gnc_autoclear_get_splits (account, toclear_value, INT64_MAX,
+                              &splits, &error, NULL);
 
     if (error)
     {
