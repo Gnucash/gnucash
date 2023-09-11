@@ -17,8 +17,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-09-09 04:14+0000\n"
-"Last-Translator: Luna Jernberg <droidbittin@gmail.com>\n"
+"PO-Revision-Date: 2023-09-11 17:54+0000\n"
+"Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
 "Language: sv\n"
@@ -1356,7 +1356,7 @@ msgstr "Symbol"
 #: gnucash/report/trep-engine.scm:925 gnucash/report/trep-engine.scm:1177
 #: gnucash/report/trep-engine.scm:2249
 msgid "Shares"
-msgstr "Aktier"
+msgstr "Andelar"
 
 #: gnucash/gnome/assistant-stock-split.c:787
 msgid "You don't have any stock accounts with balances!"
@@ -3451,7 +3451,7 @@ msgstr "Sök order"
 
 #: gnucash/gnome/dialog-payment.c:237
 msgid "You must enter a valid account name for posting."
-msgstr "Du måste ange ett giltigt kontonamn för flytt."
+msgstr "Du måste ange ett giltigt kontonamn för registrering."
 
 #: gnucash/gnome/dialog-payment.c:246
 msgid "You must select a company for payment processing."
@@ -8672,7 +8672,7 @@ msgid ""
 msgstr ""
 "Om fältet är aktivt kommer flera poster i en faktura med överföringar till "
 "samma konto att ackumuleras till en enda delning. Fältet kan åsidosättas per "
-"faktura i flyttdialogen."
+"faktura i registreringsdialogen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:155
 #: gnucash/gtkbuilder/business-prefs.glade:244
@@ -12962,7 +12962,7 @@ msgstr ""
 #. See the tooltip "At post time…" for details.
 #: gnucash/gtkbuilder/business-prefs.glade:161
 msgid "_Process payments on posting"
-msgstr "_Behandla betalningar vid flytt"
+msgstr "_Behandla betalningar vid registrering"
 
 #: gnucash/gtkbuilder/business-prefs.glade:192
 msgid "<b>Bills</b>"
@@ -12987,7 +12987,7 @@ msgstr ""
 #. See the tooltip "At post time…" for details.
 #: gnucash/gtkbuilder/business-prefs.glade:238
 msgid "Pro_cess payments on posting"
-msgstr "Behandla be_talningar vid flytt"
+msgstr "Behandla be_talningar vid registrering"
 
 #: gnucash/gtkbuilder/business-prefs.glade:258
 msgid "Days in ad_vance"
@@ -14632,7 +14632,7 @@ msgid ""
 "Unposting this Invoice will delete the posted transaction.\n"
 "Are you sure you want to unpost it?"
 msgstr ""
-"Att avflytta fakturan kommer att radera den registrerade transaktionen.\n"
+"Att avregistrera fakturan kommer att radera den registrerade transaktionen.\n"
 "Är du säker på att du vill avregistrera den?"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1410
@@ -18742,7 +18742,7 @@ msgstr "Rad %d, faktura %s/%u: kund %s finns inte.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:372
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid posting date.\n"
-msgstr "Rad %d, faktura %s/%u: %s är inte ett giltigt flyttdatum.\n"
+msgstr "Rad %d, faktura %s/%u: %s är inte ett giltigt registreringsdatum.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:380
 #, c-format
@@ -23009,7 +23009,7 @@ msgstr "Visa ett kontos anteckningar."
 #: gnucash/report/reports/standard/income-statement.scm:101
 #: gnucash/report/reports/standard/trial-balance.scm:122
 msgid "Commodities"
-msgstr "Handelsvaror"
+msgstr "Produkter"
 
 #: gnucash/report/reports/standard/account-summary.scm:126
 #: gnucash/report/reports/standard/balance-sheet.scm:132
@@ -30367,7 +30367,7 @@ msgstr "Extra till betalkort"
 
 #: libgnucash/engine/gncInvoice.c:1768
 msgid "Generated from an invoice. Try unposting the invoice."
-msgstr "Genererat från en faktura. Försök att avflytta fakturan."
+msgstr "Genererat från en faktura. Försök att avregistrera fakturan."
 
 #: libgnucash/engine/gncInvoice.c:2198
 msgid " (posted)"
