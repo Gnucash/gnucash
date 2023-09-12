@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-09-11 20:02+0000\n"
+"PO-Revision-Date: 2023-09-12 18:49+0000\n"
 "Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
@@ -84,9 +84,8 @@ msgstr "Začiatku predchádzajúceho roku"
 
 #: bindings/guile/date-utilities.scm:734
 #: libgnucash/engine/gnc-option-date.cpp:280
-#, fuzzy
 msgid "First day of the previous calendar year."
-msgstr "Začiatok predchádzajúceho kalendárneho roka"
+msgstr "Prvý deň predchádzajúceho kalendárneho roka."
 
 #: bindings/guile/date-utilities.scm:738
 #: gnucash/gnome-utils/gnc-period-select.c:87
@@ -96,9 +95,8 @@ msgstr "Konca predchádzajúceho roku"
 
 #: bindings/guile/date-utilities.scm:741
 #: libgnucash/engine/gnc-option-date.cpp:288
-#, fuzzy
 msgid "Last day of the previous calendar year."
-msgstr "Začiatok predchádzajúceho kalendárneho roka"
+msgstr "Posledný deň predchádzajúceho kalendárneho roka."
 
 #: bindings/guile/date-utilities.scm:745
 #: libgnucash/engine/gnc-option-date.cpp:311
@@ -107,10 +105,8 @@ msgstr "Začiatok účtovného obdobia"
 
 #: bindings/guile/date-utilities.scm:748
 #: libgnucash/engine/gnc-option-date.cpp:312
-#, fuzzy
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr ""
-"Začiatok účtovného obdobia, ako je nastavené vo všeobecných nastaveniach"
+msgstr "Prvý deň účtovného obdobia, ako je nastavené v globálnych nastaveniach."
 
 #: bindings/guile/date-utilities.scm:752
 #: libgnucash/engine/gnc-option-date.cpp:319
@@ -119,10 +115,9 @@ msgstr "Konca účtovného obdobia"
 
 #: bindings/guile/date-utilities.scm:755
 #: libgnucash/engine/gnc-option-date.cpp:320
-#, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr ""
-"Začiatok účtovného obdobia, ako je nastavené vo všeobecných nastaveniach"
+"Posledný deň účtovného obdobia, ako je nastavené v globálnych nastaveniach."
 
 #: bindings/guile/date-utilities.scm:759
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -132,9 +127,8 @@ msgstr "Začiatku tohoto mesiaca"
 
 #: bindings/guile/date-utilities.scm:762
 #: libgnucash/engine/gnc-option-date.cpp:168
-#, fuzzy
 msgid "First day of the current month."
-msgstr "Prvý deň aktuálneho mesiaca"
+msgstr "Prvý deň aktuálneho mesiaca."
 
 #: bindings/guile/date-utilities.scm:766
 #: gnucash/gnome-utils/gnc-period-select.c:82
@@ -144,9 +138,8 @@ msgstr "Konca tohoto mesiaca"
 
 #: bindings/guile/date-utilities.scm:769
 #: libgnucash/engine/gnc-option-date.cpp:176
-#, fuzzy
 msgid "Last day of the current month."
-msgstr "Posledný deň aktuálneho mesiaca"
+msgstr "Posledný deň aktuálneho mesiaca."
 
 #: bindings/guile/date-utilities.scm:773
 #: gnucash/gnome-utils/gnc-period-select.c:67
@@ -156,9 +149,8 @@ msgstr "Začiatku predchádzajúceho mesiaca"
 
 #: bindings/guile/date-utilities.scm:776
 #: libgnucash/engine/gnc-option-date.cpp:184
-#, fuzzy
 msgid "First day of the previous month."
-msgstr "Prvý deň predchádzajúceho mesiaca"
+msgstr "Prvý deň predchádzajúceho mesiaca."
 
 #: bindings/guile/date-utilities.scm:780
 #: gnucash/gnome-utils/gnc-period-select.c:83
@@ -168,9 +160,8 @@ msgstr "Konca predchádzajúceho mesiaca"
 
 #: bindings/guile/date-utilities.scm:783
 #: libgnucash/engine/gnc-option-date.cpp:192
-#, fuzzy
 msgid "Last day of previous month."
-msgstr "Posledný deň predchádzajúceho mesiaca"
+msgstr "Posledný deň predchádzajúceho mesiaca."
 
 #: bindings/guile/date-utilities.scm:787
 #: libgnucash/engine/gnc-option-date.cpp:215
@@ -179,9 +170,8 @@ msgstr "Začiatku aktuálneho kvartálu"
 
 #: bindings/guile/date-utilities.scm:790
 #: libgnucash/engine/gnc-option-date.cpp:216
-#, fuzzy
 msgid "First day of the current quarterly accounting period."
-msgstr "Začiatku posledného kvartálneho účtovného obdobia"
+msgstr "Prvý deň aktuálneho štvrťročného účtovného obdobia."
 
 #: bindings/guile/date-utilities.scm:794
 #: libgnucash/engine/gnc-option-date.cpp:223
@@ -190,9 +180,8 @@ msgstr "Koniec aktuálneho kvartálu"
 
 #: bindings/guile/date-utilities.scm:797
 #: libgnucash/engine/gnc-option-date.cpp:224
-#, fuzzy
 msgid "Last day of the current quarterly accounting period."
-msgstr "Začiatku posledného kvartálneho účtovného obdobia"
+msgstr "Posledný deň aktuálneho štvrťročného účtovného obdobia."
 
 #: bindings/guile/date-utilities.scm:801
 #: gnucash/gnome-utils/gnc-period-select.c:69
@@ -202,9 +191,8 @@ msgstr "Začiatku predchádzajúceho kvartálu"
 
 #: bindings/guile/date-utilities.scm:804
 #: libgnucash/engine/gnc-option-date.cpp:232
-#, fuzzy
 msgid "First day of the previous quarterly accounting period."
-msgstr "Začiatku predchádzajúceho kvartálneho účtovného obdobia"
+msgstr "Prvý deň predchádzajúceho kvartálneho účtovného obdobia."
 
 #: bindings/guile/date-utilities.scm:808
 #: gnucash/gnome-utils/gnc-period-select.c:85
@@ -214,9 +202,8 @@ msgstr "Konca predchádzajúceho kvartálu"
 
 #: bindings/guile/date-utilities.scm:811
 #: libgnucash/engine/gnc-option-date.cpp:240
-#, fuzzy
 msgid "Last day of previous quarterly accounting period."
-msgstr "konca predchádzajúceho kvartálneho účtovného obdobia"
+msgstr "Posledný deň predchádzajúceho kvartálneho účtovného obdobia."
 
 #: bindings/guile/date-utilities.scm:815
 #: gnucash/gnome-utils/gnc-period-select.c:65
@@ -464,9 +451,8 @@ msgid "Croatian (MacCroatian)"
 msgstr "Chorvátčina (MacCroatian)"
 
 #: borrowed/goffice/go-charmap-sel.c:149
-#, fuzzy
 msgid "Cyrillic (IBM-855)"
-msgstr "Cyrilika"
+msgstr "Cyrilika (IBM-855)"
 
 #: borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
@@ -846,15 +832,14 @@ msgstr ""
 "Na prepínanie medzi kartami hlavného okna použite Control+Page Up/Down."
 
 #: doc/tip_of_the_day.list.c:82
-#, fuzzy
 msgid ""
 "In the reconcile window, you can press the spacebar to mark transactions as "
 "reconciled. You can also press Tab and Shift-Tab to move between deposits "
 "and withdrawals."
 msgstr ""
 "V okne Vysporiadanie po stlačení medzerníka označíte transakciu ako "
-"vysporiadanú. Po stlačení Tab alebo Shift-Tab sa budete pohybovať medzi "
-"vkladmi a výbermi."
+"vysporiadanú. Pomocou Tab alebo Shift-Tab sa môžete presúvať medzi vkladmi a "
+"výbermi."
 
 #: doc/tip_of_the_day.list.c:86
 msgid ""
@@ -880,14 +865,13 @@ msgid ""
 msgstr ""
 
 #: doc/tip_of_the_day.list.c:101
-#, fuzzy
 msgid ""
 "Style Sheets affect how reports are displayed. Choose a style sheet for your "
 "report as a report option, and use the Edit->Style Sheets menu to customize "
 "style sheets."
 msgstr ""
-"Štýl ovplyvňuje zobrazenie výkazu. Vyberte si štýl svojho výkazu v "
-"nastaveniach výkazu prípadne použite ponuku Upraviť->Štýly na prispôsobenie "
+"Štýl ovplyvňuje zobrazenie reportu. Vyberte si štýl svojho reportu v "
+"nastaveniach reportu prípadne použite ponuku Upraviť->Štýly na prispôsobenie "
 "štýlu."
 
 #: doc/tip_of_the_day.list.c:105
@@ -963,8 +947,14 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
+"Najskorší dátum transakcie nájdený v tejto knihe je %s. Na základe vyššie "
+"uvedeného výberu bude táto kniha rozdelená na %d knihu."
 msgstr[1] ""
+"Najskorší dátum transakcie nájdený v tejto knihe je %s. Na základe vyššie "
+"uvedeného výberu bude táto kniha rozdelená na %d knihy."
 msgstr[2] ""
+"Najskorší dátum transakcie nájdený v tejto knihe je %s. Na základe vyššie "
+"uvedeného výberu bude táto kniha rozdelená na %d kníh."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
@@ -977,6 +967,12 @@ msgid ""
 "Amend the Title and Notes or Click on \"Next\" to proceed.\n"
 "Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
+"Požiadali ste o vytvorenie knihy. Táto kniha bude obsahovať všetky "
+"transakcie až do polnoci %s (celkom %d transakcií rozložených na %d účtoch)."
+"\n"
+"\n"
+"Upravte Titulok a Poznámky alebo pokračujte kliknutím na „Ďalej“.\n"
+"Kliknite na \"Späť\" pre úpravu dátumov alebo \"Zrušiť\"."
 
 #: gnucash/gnome/assistant-acct-period.c:388
 #, c-format
@@ -989,6 +985,8 @@ msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
+"Po kliknutí na „Použiť“ sa vytvorí kniha s názvom %s. Kliknutím na „Späť“ "
+"upravíte alebo kliknutím na „Zrušiť“ nevytvoríte žiadnu knihu."
 
 #: gnucash/gnome/assistant-acct-period.c:525
 #, c-format
@@ -1284,25 +1282,22 @@ msgstr "Nemáte žiadny účet s akciami so zostatkom!"
 #. Translators: this is a stock transaction describing an
 #. Initial stock long purchase
 #: gnucash/gnome/assistant-stock-transaction.cpp:190
-#, fuzzy
-#| msgid "Open"
 msgid "Open buy"
-msgstr "Otvoriť"
+msgstr "Otvoriť nákup"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:191
 msgid "Initial stock long purchase."
-msgstr ""
+msgstr "Počiatočný dlhodobý nákup akcie."
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:201
-#, fuzzy
 msgid "Open short"
-msgstr "Drží miesto (syntetický účet)"
+msgstr "Otvorené krátku pozíciu"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:202
 msgid "Initial stock short sale."
-msgstr ""
+msgstr "Počiatočný predaj akcie „na krátko“"
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
@@ -1364,10 +1359,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing return
 #. of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:250
-#, fuzzy
-#| msgid "Decrease in capital"
 msgid "Return of capital"
-msgstr "Pokles kapitálu"
+msgstr "Návratnosť kapitálu"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:251
 msgid ""
@@ -1377,10 +1370,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:261
-#, fuzzy
-#| msgid "Decrease in capital"
 msgid "Return of capital (reclassification)"
-msgstr "Pokles kapitálu"
+msgstr "Návratnosť kapitálu (reklasifikácia)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:262
 msgid ""
@@ -1392,10 +1383,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:272
-#, fuzzy
-#| msgid "No description provided."
 msgid "Notional distribution (dividend)"
-msgstr "Popis nebol poskytnutý."
+msgstr "Predpokladané rozdelenie (dividenda)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:273
 msgid ""
@@ -1421,8 +1410,6 @@ msgstr ""
 #. split when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:294
 #: gnucash/gnome/assistant-stock-transaction.cpp:403
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock split"
 msgstr "Rozdelenie akcií"
 
@@ -1439,10 +1426,8 @@ msgstr ""
 #. reverse split when shorting stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:304
 #: gnucash/gnome/assistant-stock-transaction.cpp:414
-#, fuzzy
-#| msgid "_Review created transactions"
 msgid "Reverse split"
-msgstr "Prekontrolovať vytvorené transakcie"
+msgstr "Reverzné rozdelenie"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:305
 msgid ""
@@ -1453,14 +1438,18 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"Spoločnosť odkupuje podielové listy, čím zvyšuje cenu akcií o násobok, "
+"pričom udržuje celkovú peňažnú hodnotu celkovej investície konštantnú.\n"
+"\n"
+"Ak výsledkom reverzného rozdelenia je hotovosť namiesto zvyšných jednotiek, "
+"zaznamenajte predaj najprv pomocou Asistenta akciovej transakcie a potom "
+"zaznamenajte spätné rozdelenie."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:323
-#, fuzzy
-#| msgid "Sort Order"
 msgid "Short sell"
-msgstr "Poradie radenia"
+msgstr "Predaj „na krátko“"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:324
 msgid "Selling stock short."
@@ -1574,22 +1563,18 @@ msgstr "Suma pre %s musí byť kladná."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:520
 #: gnucash/report/reports/standard/balsheet-pnl.scm:812
-#, fuzzy
 msgid "missing"
-msgstr "Provízie"
+msgstr "chýba"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:593
-#, fuzzy
-#| msgid "Accounts in %s"
 msgid "Amount for stock value is missing."
-msgstr "Účty v %s"
+msgstr "Chýba suma pre hodnotu akcia"
 
 #. Translators: (missing) denotes that the amount or account is
 #. not provided, or incorrect, in the Stock Transaction Assistant.
 #: gnucash/gnome/assistant-stock-transaction.cpp:679
-#, fuzzy
 msgid "(missing)"
-msgstr "Provízie"
+msgstr "(chýba)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:849
 #, c-format
@@ -7781,7 +7766,7 @@ msgstr "Filtrovať %s podľa..."
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:346
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
 msgid "Namespace"
-msgstr "Označenie"
+msgstr "Menný priestor"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:363
 msgid "Print Name"
@@ -10607,9 +10592,8 @@ msgid "Enter file name and location for the Export…"
 msgstr "Zadajte názov súboru a umiestnenie pre export…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:698
-#, fuzzy
 msgid "Choose File Name for Export"
-msgstr "Zvoliť súbor pre import"
+msgstr "Zvoliť súbor pre export"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:712
 msgid "Export Now…"
@@ -11854,6 +11838,8 @@ msgid ""
 "If you want to record a stock price for the split, enter it below. You may "
 "safely leave it blank."
 msgstr ""
+"Ak chcete zaznamenať cenu akcií za rozdelenie, zadajte ju nižšie. Pokojne ho "
+"môžete nechať prázdne."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:197
 msgid "New _Price"
@@ -11872,6 +11858,8 @@ msgid ""
 "If you received a cash disbursement as a result of the stock split, enter "
 "the details of that payment here. Otherwise, just click \"Next\"."
 msgstr ""
+"Ak ste dostali hotovostnú výplatu v dôsledku rozdelenia akcie, zadajte sem "
+"podrobnosti o tejto platbe. V opačnom prípade stačí kliknúť na „Ďalej“."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:279
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:463
@@ -11918,17 +11906,18 @@ msgid ""
 "may also press \"Back\" to review your choices, or \"Cancel\" to quit "
 "without making any changes."
 msgstr ""
+"Ak ste dokončili vytváranie rozdelenia alebo zlúčenia akcií, stlačte „Použiť“"
+". Môžete tiež stlačiť tlačidlo „Späť“ a skontrolovať svoje voľby alebo "
+"tlačidlo „Zrušiť“ ukončiť bez vykonania akýchkoľvek zmien."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:418
-#, fuzzy
 msgid "Stock Split Finish"
-msgstr "Rozdelenie akcií"
+msgstr "Ukončiť rozdelenie akcie"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:9
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:27
-#, fuzzy
 msgid "Stock Transaction Assistant"
-msgstr "Výkaz transakcií"
+msgstr "Asistent akciovej transakcie"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:22
 msgid ""
@@ -11936,11 +11925,13 @@ msgid ""
 "type (purchase, sale, dividend, distribution, return of capital, stock "
 "split) will determine the transaction splits involved in the transaction."
 msgstr ""
+"Tento Asistent vám pomôže zaznamenať akciovú transakciu. Typ transakcie ("
+"nákup, predaj, dividenda, distribúcia, návratnosť kapitálu, rozdelenie akcií)"
+" bude určovať rozdelenie transakcie zahrnuté v transakcii."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
-#, fuzzy
 msgid "Select the date and description for your records."
-msgstr "Zobraziť popis účtu"
+msgstr "Vyberte dátum a popis pre svoje záznamy."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:109
 #: gnucash/gtkbuilder/dialog-payment.glade:662
@@ -11954,6 +11945,9 @@ msgid ""
 "negative (i.e. when shorting stock). The type will determine the component "
 "splits."
 msgstr ""
+"Vyberte typ aktivity pre akciu, ktorú chcete zaznamenať. Dostupné typy "
+"závisia od toho, či je aktuálne saldo akcii kladné, nulový alebo záporné (t. "
+"j. pri obchodovaní na krátko). Typ určí rozdelenie komponentov."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:195
 msgid "Transaction Type"
@@ -11968,10 +11962,8 @@ msgid "Stock Amount"
 msgstr "Suma akcie"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:329
-#, fuzzy
-#| msgid "Enter the name of the Customer"
 msgid "Enter the value of the shares."
-msgstr "Vložte meno odberateľa"
+msgstr "Zadajte hodnotu akcií."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:404
 msgid "_Stock Value"
@@ -11987,6 +11979,9 @@ msgid ""
 "spent. It may differ from the stock value from the last page, if there are "
 "brokerage fees associated with this transaction."
 msgstr ""
+"Na tejto stránke zadajte účet aktív a prijatú/minutú peňažnú čiastku. Môže "
+"sa líšiť od hodnoty akcií na poslednej strane, ak sú s touto transakciou "
+"spojené sprostredkovateľské poplatky."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:493
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:538
@@ -11998,10 +11993,8 @@ msgid "Cash"
 msgstr "Hotovosť"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:516
-#, fuzzy
-#| msgid "Raise Accounts"
 msgid "Cash Account"
-msgstr "Zvýšiť účty"
+msgstr "Hotovostný účet"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:555
 msgid ""
@@ -12011,11 +12004,17 @@ msgid ""
 "expensed. If there are no fees involved in this transaction, it can be left "
 "blank."
 msgstr ""
+"Na tejto stránke zadajte akékoľvek sprostredkovateľské poplatky vzniknuté "
+"pri tejto transakcii. Poplatok môže byť kapitalizovaný na majetkový účet "
+"alebo zaúčtovaný do nákladov na účet sprostredkovateľských poplatkov. "
+"Poplatky za nákup sa zvyčajne kapitalizujú a poplatky za predaj sa účtujú do "
+"nákladov. Ak s touto transakciou nie sú spojené žiadne poplatky, môže byť "
+"ponechaná prázdna."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:606
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:665
 msgid "Fees"
-msgstr ""
+msgstr "Poplatky"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:629
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1065
@@ -12024,22 +12023,25 @@ msgstr "Sprostredkovateľský poplatok"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:641
 msgid "Capitalize brokerage fees into stock account?"
-msgstr ""
+msgstr "Kapitalizovať poplatky za sprostredkovanie na akciový účet?"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:682
 msgid "In this page, input any dividend income received in this transaction."
 msgstr ""
+"Na tejto stránke zadajte akýkoľvek príjem z dividend prijatý v tejto "
+"transakcii."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:756
-#, fuzzy
 msgid "Dividend Account"
-msgstr "Účet"
+msgstr "Dividendový účet"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:795
 msgid ""
 "In this page, input any capital gains or losses incurred, and the associated "
 "income account. Capital gains are positive, and capital losses are negative."
 msgstr ""
+"Na tejto stránke zadajte akékoľvek kapitálové zisky alebo straty a súvisiaci "
+"príjmový účet. Kapitálové zisky sú kladné a kapitálové straty záporné."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:846
 msgid "Capital Gain"
@@ -12154,16 +12156,14 @@ msgid "General"
 msgstr "Všeobecné"
 
 #: gnucash/gtkbuilder/business-prefs.glade:48
-#, fuzzy
 msgid "Enable extra _buttons"
-msgstr "Typ skosenia okolo tlačidiel panelu"
+msgstr "Povoliť _extra tlačidlá"
 
 #: gnucash/gtkbuilder/business-prefs.glade:66
 msgid "_Open in new window"
 msgstr "_Otvoriť v novom okne"
 
 #: gnucash/gtkbuilder/business-prefs.glade:72
-#, fuzzy
 msgid ""
 "If checked, each invoice will be opened in its own top level window. If "
 "clear, the invoice will be opened in the current window."
@@ -12212,9 +12212,8 @@ msgstr ""
 
 #. See the tooltip "At post time…" for details.
 #: gnucash/gtkbuilder/business-prefs.glade:161
-#, fuzzy
 msgid "_Process payments on posting"
-msgstr "Spracovanie platby"
+msgstr "_Spracovanie platby pri vystavení"
 
 #: gnucash/gtkbuilder/business-prefs.glade:192
 msgid "<b>Bills</b>"
@@ -12238,12 +12237,10 @@ msgstr ""
 
 #. See the tooltip "At post time…" for details.
 #: gnucash/gtkbuilder/business-prefs.glade:238
-#, fuzzy
 msgid "Pro_cess payments on posting"
-msgstr "Spracovanie platby"
+msgstr "Spra_covať platby pri vystavení"
 
 #: gnucash/gtkbuilder/business-prefs.glade:258
-#, fuzzy
 msgid "Days in ad_vance"
 msgstr "Vopre_d o (dní)"
 
@@ -12252,12 +12249,10 @@ msgid "How many days in the future to warn about Bills coming due."
 msgstr "O koľko dní skôr varovať o účtoch, ktoré je potrebné zaplatiť."
 
 #: gnucash/gtkbuilder/business-prefs.glade:288
-#, fuzzy
 msgid "How many days in the future to warn about Invoices coming due."
-msgstr "O koľko dní skôr varovať o účtoch, ktoré je potrebné zaplatiť."
+msgstr "O koľko dní skôr varovať o faktúrach, ktoré je potrebné zaplatiť."
 
 #: gnucash/gtkbuilder/business-prefs.glade:300
-#, fuzzy
 msgid "_Days in advance"
 msgstr "Vopre_d o (dní)"
 
@@ -12298,11 +12293,12 @@ msgid ""
 "If any account has an existing color it will not be replaced unless the "
 "following is ticked."
 msgstr ""
+"Ak má niektorý účet existujúcu farbu, nebude nahradená, pokiaľ nie je "
+"zaškrtnuté nasledovné."
 
 #: gnucash/gtkbuilder/dialog-account.glade:233
-#, fuzzy
 msgid "Replace any existing account colors"
-msgstr "Odstraňovanie účtu %s"
+msgstr "Nahradiť akúkoľvek farbu účtu"
 
 #: gnucash/gtkbuilder/dialog-account.glade:362
 msgid "Delete Account"
@@ -12313,18 +12309,16 @@ msgid "<b>Sub-accounts</b>"
 msgstr "<b>Pod-účty</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:469
-#, fuzzy
 msgid "This account has a sub-account. What would you like to do with it?"
-msgstr "Aktuálna transakcia bola zmenená. Prajete si ju uložiť?"
+msgstr "Tento účet má podúčet. Čo by ste s tým chceli robiť?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:480
 msgid "_Move to"
 msgstr "_Posunúť"
 
 #: gnucash/gtkbuilder/dialog-account.glade:498
-#, fuzzy
 msgid "Delete the _subaccount"
-msgstr "Odstrániť všetky _podúčty"
+msgstr "Odstrániť po_dúčet"
 
 #: gnucash/gtkbuilder/dialog-account.glade:574
 #: gnucash/gtkbuilder/dialog-account.glade:693
@@ -12483,19 +12477,16 @@ msgid "Placeholde_r"
 msgstr "S_yntetický účet"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1518
-#, fuzzy
 msgid ""
 "This account is present solely as a placeholder in the hierarchy. "
 "Transactions may not be posted to this account, only to sub-accounts of this "
 "account."
 msgstr ""
 "Tento účet reprezentuje účet držiaci miesto (syntetický účet) v hierarchií "
-"účtov. Transakcie nie je možné vkladať na takýto účet, iba na jeho podúčty "
-"(analytické účty)."
+"účtov. Transakcie nie je možné vkladať na takýto účet, iba na jeho podúčty ("
+"analytické účty)."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1530
-#, fuzzy
-#| msgid "Automatic _interest transfer"
 msgid "Auto _interest transfer"
 msgstr "Automatický transfer ú_roku"
 
@@ -12536,10 +12527,8 @@ msgstr ""
 "priradenie daňového kódu k účtu."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1636
-#, fuzzy
-#| msgid "_Ending Balance"
 msgid "_Higher Balance Limit"
-msgstr "_Konečný stav"
+msgstr "_Horný limit zostatku"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1649
 msgid ""
@@ -12552,6 +12541,14 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Ak je prítomná hodnota, v účtovej osnove sa môže zobraziť údaj, keď je "
+"dnešný zostatok vyšší ako táto hodnota.\n"
+"\n"
+"Napríklad:\n"
+"Ak je limit nastavený na -100, na dnešný zostatok je -90 – zobrazí sa ikona\n"
+"Ak dnešný zostatok bude 100, ikona sa zobrazí ak limit bude na 90\n"
+"\n"
+"Vymažte záznam, ak nechcete žiadne upozornenie."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1670
 msgid ""
@@ -12564,15 +12561,20 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"Ak je prítomná hodnota, v účtovej osnove sa môže zobraziť údaj, keď je "
+"dnešný zostatok nižší ako táto hodnota.\n"
+"\n"
+"Napríklad:\n"
+"Ak je limit nastavený na -90, na dnešný zostatok je -100 – zobrazí sa ikona\n"
+"Ak dnešný zostatok bude 90, ikona sa zobrazí ak limit bude na 100\n"
+"\n"
+"Vymažte záznam, ak nechcete žiadne upozornenie."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1692
-#, fuzzy
 msgid "_Lower Balance Limit"
-msgstr "Vynechať nulové sumy"
+msgstr "_Dolný limit zostatku"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1718
-#, fuzzy
-#| msgid "Include _subaccounts"
 msgid "_Include sub accounts"
 msgstr "Vrátane po_dúčtov"
 
@@ -12624,16 +12626,16 @@ msgid "Interval"
 msgstr "Interval"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2190
-#, fuzzy
-#| msgid "Number of Periods"
 msgid "Number of Digits"
-msgstr "Počet periód"
+msgstr "Počet číslic"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2204
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
 msgstr ""
+"Tým sa pole kódu účtu každého podriadeného účtu nahradí novo vygenerovaným "
+"kódom"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -12645,31 +12647,33 @@ msgid "_Reconciled"
 msgstr "_Vysporiadané"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:72
-#, fuzzy
 msgid "_Cleared"
-msgstr "o"
+msgstr "_Prečistené"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:78
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as cleared."
 msgstr ""
+"Ak nie je stav špecifikovaný v súbore QIF, transakcie sú označené ako "
+"prečistené."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:91
-#, fuzzy
 msgid "_Not cleared"
-msgstr "n"
+msgstr "_Neprečistené"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:97
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as not cleared."
 msgstr ""
+"Ak v súbore QIF nie je špecifikovaný stav, transakcie sú označené ako "
+"neprečistené."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:113
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
-msgstr ""
+msgstr "Predvolený stav transakcie (prepísaný stavom daným súborom QIF)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:159
 #: gnucash/gtkbuilder/dialog-import.glade:12
@@ -12677,9 +12681,8 @@ msgid "Select Account"
 msgstr "Zvoliť účet"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:237
-#, fuzzy
 msgid "_Select or add a GnuCash account:"
-msgstr "Zvoľte alebo pridajte GnuCash účet"
+msgstr "_Zvoľte alebo pridajte GnuCash účet:"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:7
 msgid "Import transactions from text file"
@@ -12687,9 +12690,8 @@ msgstr "Importovať transakcie z textového súboru"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:123
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
-#, fuzzy
 msgid "1. Choose the file to import"
-msgstr "Zvoliť súbor pre import"
+msgstr "1. Vyberte súbor pre import"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:153
 msgid "Import bill CSV data"
@@ -12700,9 +12702,8 @@ msgid "Import invoice CSV data"
 msgstr "Importovať CSV dáta faktúr"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:191
-#, fuzzy
 msgid "2. Select import type"
-msgstr "Zvolte typ zľavy"
+msgstr "2. Vyberte typ importu"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
@@ -12716,15 +12717,13 @@ msgstr "Oddelené čiarkou"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:252
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:252
-#, fuzzy
 msgid "Semicolon separated with quotes"
-msgstr "Pokračovať s použitím dobrých cien."
+msgstr "Oddelené bodkočiarkou s úvodzovkami"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:270
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:270
-#, fuzzy
 msgid "Comma separated with quotes"
-msgstr "Pokračovať s použitím dobrých cien."
+msgstr "Oddelené čiarkou s úvodzovkami"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:310
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:310
@@ -12733,32 +12732,29 @@ msgstr "3. Vyberte možnosti importu"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:349
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:353
-#, fuzzy
 msgid "4. Preview"
-msgstr "Náhľad"
+msgstr "4. Náhľad"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:374
 msgid "Open imported documents in tabs"
-msgstr ""
+msgstr "Otvoriť importované dokumenty v kartách"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
 msgid "Open not yet posted documents in tabs"
-msgstr "Nový účet"
+msgstr "Otvoriť ešte nevystavené dokumenty v kartách"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
-msgstr ""
+msgstr "Neotvárať importované dokumenty v kartách"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:432
 msgid "5. Afterwards"
-msgstr ""
+msgstr "5. Následne"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:48
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:8
-#, fuzzy
 msgid "window1"
-msgstr "Okno _1"
+msgstr "okno1"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:73
 msgid "Due Days"
@@ -12935,9 +12931,8 @@ msgid "Remove the current commodity."
 msgstr "Odobrať aktuálnu komoditu."
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:162
-#, fuzzy
 msgid "Edit the current commodity."
-msgstr "Odobrať aktuálnu komoditu."
+msgstr "Upraviť aktuálnu komoditu."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:120
 msgid ""
@@ -13046,10 +13041,8 @@ msgstr "ISIN, CUSI_P alebo iný kód"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:138
-#, fuzzy
-#| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "Označenie"
+msgstr "M_enný priestor"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
@@ -13218,10 +13211,8 @@ msgid "(none)"
 msgstr "(nič)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:409
-#, fuzzy
-#| msgid "Enter URL like http://www.gnucash.org"
 msgid "Enter an URL like \"https://www.gnucash.org\""
-msgstr "Vložte URL ako napr. http://www.gnucash.org"
+msgstr "Vložte URL ako napr. „http://www.gnucash.org“"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:454
 msgid "Location does not start with a valid scheme"
@@ -13842,10 +13833,8 @@ msgid "Use template report"
 msgstr "Výkaz zamestnancov"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:715
-#, fuzzy
-#| msgid "Choose the export format for this report:"
 msgid "Choose a different report template before timeout"
-msgstr "Zvoľte formát, do ktorého bude výkaz exportovaný:"
+msgstr "Pred vypršaním časového limitu vyberte inú šablónu reportu"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:907
 #, fuzzy
@@ -14813,10 +14802,8 @@ msgid "Layout"
 msgstr "Rozloženie"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2765
-#, fuzzy
-#| msgid "Number of _transactions"
 msgid "_Placement of future transactions"
-msgstr "Počet _transakcií"
+msgstr "_Umiestnenie budúcich transakcií"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2771
 msgid ""
@@ -14826,6 +14813,11 @@ msgid ""
 "clear, the blank transaction will be at the bottom of the register after all "
 "transactions unless in reverse sort order when it will be at the top."
 msgstr ""
+"Ak je začiarknuté, transakcie s dátumom v budúcnosti sa zobrazia v spodnej "
+"časti registra po prázdnej transakcii, pokiaľ nie sú v obrátenom poradí, keď "
+"sú zobrazené v hornej časti pred prázdnou transakciou. Ak je prečistená, "
+"prázdna transakcia bude po všetkých transakciách v spodnej časti registra, "
+"pokiaľ nebude v opačnom poradí, kedy bude navrchu."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2811
 msgid "<b>Default Style</b>"
@@ -14854,37 +14846,34 @@ msgid "Number of _transactions"
 msgstr "Počet _transakcií"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2937
-#, fuzzy
-#| msgid "_Double line mode"
 msgid "_Double line view"
-msgstr "_Dvojriadkový režim"
+msgstr "_Dvojriadkové zobrazenie"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2943
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
-msgstr "Zobraziť dva riadky informácií pre každú transakciu"
+msgstr ""
+"Zobraziť druhý riadok s poľami Akcia, Poznámky a Prepojený dokument pre "
+"každú transakciu."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
 msgstr "Register otvára nové _okno"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2961
-#, fuzzy
 msgid ""
 "If checked, each register will be opened in its own top level window. If "
 "clear, the register will be opened in the current window."
 msgstr ""
-"Ak je zaškrtnuté, každá faktúra sa otvorí vo svojom okne najvyššej úrovne. "
-"Ak nie je zaškrtnuté, faktúra bude otvorená v aktuálnom okne."
+"Ak je zaškrtnuté, každý register sa otvorí vo svojom okne najvyššej úrovne. "
+"Ak nie je zaškrtnuté, register bude otvorený v aktuálnom okne."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2973
-#, fuzzy
 msgid "_Only display leaf account names"
-msgstr "Zobrazovať názov účtu"
+msgstr "_Zobraziť iba konce názvov účtov"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2979
 msgid ""
@@ -14893,6 +14882,10 @@ msgid ""
 "display the full name, including the path in the account tree. Checking this "
 "option implies that you use unique leaf names."
 msgstr ""
+"Ak je zaškrtnuté, v registri a vo vyskakovacom okne výberu účtu sa zobrazia "
+"iba konce názvov účtov. Predvolené správanie je zobraziť celé meno vrátane "
+"cesty v strome účtu. Zaškrtnutie tejto možnosti znamená, že používate "
+"jedinečné názvy listov."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3056
 msgid "Register Defaults"
@@ -14911,13 +14904,12 @@ msgid "Report opens in a new _window"
 msgstr "_Výkaz sa otvorí v novom okne"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3127
-#, fuzzy
 msgid ""
 "If checked, each report will be opened in its own top level window. If "
 "clear, the report will be opened in the current window."
 msgstr ""
-"Ak je zaškrtnuté, každá faktúra sa otvorí vo svojom okne najvyššej úrovne. "
-"Ak nie je zaškrtnuté, faktúra bude otvorená v aktuálnom okne."
+"Ak je zaškrtnuté, každý report sa otvorí vo svojom okne najvyššej úrovne. Ak "
+"nie je zaškrtnuté, report sa otvorí v aktuálnom okne."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3155
 #: gnucash/gtkbuilder/dialog-preferences.glade:3235
@@ -14937,9 +14929,8 @@ msgid "_Save window size and position"
 msgstr "Uložiť veľko_sť a polohu okna"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3316
-#, fuzzy
 msgid "Save window size and location when it is closed."
-msgstr "Uložiť veľko_sť a polohu okna"
+msgstr "Uložiť veľkosť a polohu okna pri zatvorení."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3329
 msgid "Bring the most _recent tab to the front"
@@ -14992,12 +14983,16 @@ msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr ""
+"Zobraziť tlačidlo zatvorenia na každej karte poznámkového bloku. Tieto "
+"fungujú rovnako ako položka ponuky „Zatvoriť“."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3548
 msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
 msgstr ""
+"Ak je text na karte dlhší ako táto hodnota (test je približný), štítok karty "
+"bude mať stredný výrez a nahradí ho trojbodka."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3568
 msgid "characters"
@@ -15009,11 +15004,11 @@ msgstr "_Šírka"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3598
 msgid "Open new tabs _adjacent to current tab"
-msgstr ""
+msgstr "Otvoriť nové k_arty vedľa aktuálnej karty"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3604
 msgid "Opens new tab adjacent to current tab instead of at the end."
-msgstr ""
+msgstr "Otvorí novú kartu vedľa aktuálnej karty namiesto na konci."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3643
 msgid "Windows"
@@ -15033,14 +15028,12 @@ msgid "Ask"
 msgstr "Dopyt"
 
 #: gnucash/gtkbuilder/dialog-price.glade:18
-#, fuzzy
 msgid "Last"
-msgstr "Posledné č."
+msgstr "Posledné"
 
 #: gnucash/gtkbuilder/dialog-price.glade:21
-#, fuzzy
 msgid "Net Asset Value"
-msgstr "Čisté aktíva:"
+msgstr "Čistá hodnota aktív"
 
 #: gnucash/gtkbuilder/dialog-price.glade:43
 msgid "Price Editor"
@@ -15058,9 +15051,8 @@ msgid "_Price"
 msgstr "_Cena"
 
 #: gnucash/gtkbuilder/dialog-price.glade:374
-#, fuzzy
 msgid "Remove Old Prices"
-msgstr "_Odstrániť staré"
+msgstr "Odstrániť staré ceny"
 
 #: gnucash/gtkbuilder/dialog-price.glade:437
 msgid "Delete prices that meet the following criteria:"
@@ -17256,9 +17248,8 @@ msgid "_Templates"
 msgstr "Ša_blóny"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1661
-#, fuzzy
 msgid "Select File Import Format and Template"
-msgstr "Zvoliť súbor pre import"
+msgstr "Zvoliť súbor importný formát súboru a šablónu"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1730
 msgid ""
@@ -19048,9 +19039,8 @@ msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr ""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1459
-#, fuzzy
 msgid "Select one or multiple OFX/QFX file(s) to process"
-msgstr "Zvoľte súbor OFX/QFX na spracovanie"
+msgstr "Zvoľte jeden alebo viacero súborov OFX/QFX na spracovanie"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
 msgid "Import _OFX/QFX…"
@@ -20594,9 +20584,8 @@ msgstr ""
 "obdobie"
 
 #: gnucash/report/options-utilities.scm:51
-#, fuzzy
 msgid "Select a date to report on."
-msgstr "Zvoľte dátum pre výkaz"
+msgstr "Zvoľte dátum reportu"
 
 #: gnucash/report/options-utilities.scm:57
 #, fuzzy
@@ -21715,9 +21704,8 @@ msgid "Currency conversion date"
 msgstr "Zadajte dátum publikovania."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:236
-#, fuzzy
 msgid "Select date to use for PriceDB lookups."
-msgstr "Zvoľte dátum pre výkaz"
+msgstr "Vyberte dátum, ktorý chcete použiť na vyhľadávanie PriceDB."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:239
 #, fuzzy
@@ -22370,9 +22358,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balance-forecast.scm:51
 #: gnucash/report/reports/standard/net-charts.scm:146
-#, fuzzy
 msgid "Display a mark for each data point."
-msgstr "Zvoľte zvýrazňovač pre každý údajový bod."
+msgstr "Zvoľte značku pre každý dátový bod."
 
 #: gnucash/report/reports/standard/balance-forecast.scm:53
 #: gnucash/report/reports/standard/balance-forecast.scm:54
@@ -28269,7 +28256,7 @@ msgstr "Otvoriť dialóg Nová výdavková poukážka"
 
 #: gnucash/ui/gnc-plugin-business.ui:127
 msgid "Find Expense _Voucher…"
-msgstr "Hľadať výdavkovú poukážku…"
+msgstr "Hľadať _výdavkovú poukážku…"
 
 #: gnucash/ui/gnc-plugin-business.ui:129
 msgid "Open the Find Expense Voucher dialog"
@@ -28350,7 +28337,7 @@ msgstr "Importovať transakcie z CSV súboru"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
 msgid "Import _Prices from a CSV file…"
-msgstr "Importovať ceny z CSV súboru…"
+msgstr "I_mportovať ceny z CSV súboru…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
@@ -28882,14 +28869,13 @@ msgstr "Vytvorí novú faktúru"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:195
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:514
-#, fuzzy
 msgid "Create a new bill"
-msgstr "Vytvorí nový súbor"
+msgstr "Vytvorí novú účtenku"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:227
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:667
 msgid "New _Voucher…"
-msgstr "Nová poukážka…"
+msgstr "N_ová poukážka…"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:229
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:669
