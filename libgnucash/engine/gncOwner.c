@@ -1415,6 +1415,12 @@ gncOwnerApplyPaymentSecs (const GncOwner *owner, Transaction **preset_txn,
                || (!xfer_acc && !gnc_numeric_zero_p (amount)) ) return;
     g_return_if_fail (owner->owner.undefined);
 
+    if (lots)
+        selected_lots = lots;
+    else if (auto_pay)
+        selected_lots = xaccAccountFindOpenLots (posted_acc, gncOwnerLotMatchOwnerFunc,
+                        (gpointer)owner, NULL);
+
     /* If there's a real amount to transfer create a lot for this payment */
     if (!gnc_numeric_zero_p (amount))
         payment_lot = gncOwnerCreatePaymentLotSecs (owner, preset_txn,
@@ -1422,18 +1428,14 @@ gncOwnerApplyPaymentSecs (const GncOwner *owner, Transaction **preset_txn,
                                                     amount, exch, date, memo,
                                                     num);
 
-    if (lots)
-        selected_lots = lots;
-    else if (auto_pay)
-        selected_lots = xaccAccountFindOpenLots (posted_acc, gncOwnerLotMatchOwnerFunc,
-                        (gpointer)owner, NULL);
-
-    /* And link the selected lots and the payment lot together as well as possible.
-     * If the payment was bigger than the selected documents/overpayments, only
-     * part of the payment will be used. Similarly if more documents were selected
-     * than the payment value set, not all documents will be marked as paid. */
+    /* And link the selected lots and the payment lot together as well
+     * as possible.  If the payment was bigger than the selected
+     * documents/overpayments, only part of the payment will be
+     * used. Similarly if more documents were selected than the
+     * payment value set, not all documents will be marked as paid. */
     if (payment_lot)
         selected_lots = g_list_prepend (selected_lots, payment_lot);
+
     gncOwnerAutoApplyPaymentsWithLots (owner, selected_lots);
     g_list_free (selected_lots);
 }
