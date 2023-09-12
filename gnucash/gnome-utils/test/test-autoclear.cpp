@@ -100,9 +100,8 @@ TestCase ambiguousTestCase = {
         { -10, "Cannot uniquely clear splits. Found multiple possibilities." },
         { -20, "Cannot uniquely clear splits. Found multiple possibilities." },
 
-        // Forbid auto-clear to be too smart. We expect the user to manually deal
-        // with such situations.
-        { -30, "Cannot uniquely clear splits. Found multiple possibilities." },
+        // -30 can be cleared by returning all three -10 splits
+        { -30, nullptr },
     },
 };
 
