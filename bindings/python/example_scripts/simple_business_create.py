@@ -70,7 +70,7 @@ if len(argv) < 2:
     
 
 try:
-    s = Session(argv[1], SessionOpenMode.SESSION_NEW_STORE)
+    s = Session(argv[1], SessionOpenMode.SESSION_NEW_OVERWRITE)
 
     book = s.book
     root = book.get_root_account()
