@@ -145,12 +145,15 @@ TEST_P(AutoClearTest, DoesAutoClear) {
             xaccSplitSetReconcile(split, CREC);
         }
 
+        g_list_free (splits_to_clear);
+
         ASSERT_STREQ(err, t.expectedErr);
         if (t.expectedErr == NULL) {
             gnc_numeric c = xaccAccountGetClearedBalance(m_account);
             ASSERT_EQ(c.num, t.amount);
             ASSERT_EQ(c.denom, DENOM);
         }
+        g_free (err);
     }
 }
 
