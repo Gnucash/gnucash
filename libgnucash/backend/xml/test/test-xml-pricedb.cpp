@@ -114,6 +114,7 @@ test_db (GNCPriceDB* db)
             failure_args ("gnc_xml_parse_file returned FALSE",
                           __FILE__, __LINE__, "%d", iter);
         }
+        sixtp_destroy (parser);
     }
 
     g_unlink (filename1);

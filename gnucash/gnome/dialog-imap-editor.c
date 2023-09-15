@@ -647,17 +647,10 @@ get_imap_info (ImapDialog *imap_dialog, Account *acc, const gchar *category, con
             // First add a child entry and pass iter to add_to_store
             gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), &child, &toplevel);
             add_to_store (imap_dialog, &child, text, imapInfo);
-
-            // Free the members and structure
-            g_free (imapInfo->head);
-            g_free (imapInfo->category);
-            g_free (imapInfo->match_string);
-            g_free (imapInfo->count);
-            g_free (imapInfo);
         }
     }
     g_free (acc_name);
-    g_list_free (imap_list); // Free the List
+    g_list_free_full (imap_list, (GDestroyNotify)gnc_account_imap_info_destroy); // Free the List
 }
 
 static void

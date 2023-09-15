@@ -330,9 +330,10 @@ test_book_get_counter( Fixture *fixture, gconstpointer pData )
     counter = qof_book_get_counter( fixture->book, counter_name );
     g_assert_cmpint( counter, == , 0 );
 
-    qof_book_increment_and_format_counter( fixture->book, counter_name );
+    char *r = qof_book_increment_and_format_counter( fixture->book, counter_name );
     counter = qof_book_get_counter( fixture->book, counter_name );
     g_assert_cmpint( counter, == , 1 );
+    g_free (r);
 }
 
 static void
@@ -341,7 +342,7 @@ test_book_get_counter_format ( Fixture *fixture, gconstpointer pData )
     const char *counter_name = "Counter name";
     const char *err_no_book = "No book";
     const char *err_invalid_cnt = "Invalid counter name";
-    const char *r;
+    char *r;
 
     /* need this as long as we have fatal warnings enabled */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
@@ -367,10 +368,12 @@ test_book_get_counter_format ( Fixture *fixture, gconstpointer pData )
     g_test_message( "Testing counter format with existing counter" );
     r = qof_book_get_counter_format( fixture->book, counter_name );
     g_assert_cmpstr( r, == , "%.6" PRIi64);
+    g_free (r);
 
     g_test_message( "Testing counter format for default value" );
     r = qof_book_get_counter_format( fixture->book, counter_name );
     g_assert_cmpstr( r, == , "%.6" PRIi64);
+    g_free (r);
 }
 
 static void
@@ -379,8 +382,7 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
     const char *counter_name = "Counter name";
     const char *err_no_book = "No book";
     const char *err_invalid_cnt = "Invalid counter name";
-    const char *format;
-    char *r;
+    char *r, *format, *format_str;
     gint64 counter;
 
     /* need this as long as we have fatal warnings enabled */
@@ -411,18 +413,24 @@ test_book_increment_and_format_counter ( Fixture *fixture, gconstpointer pData )
     r = qof_book_increment_and_format_counter( fixture->book, counter_name );
     counter = qof_book_get_counter( fixture->book, counter_name );
     format = qof_book_get_counter_format( fixture->book, counter_name );
+    format_str = g_strdup_printf (format, counter);
     g_assert_cmpint( counter, == , 1 );
     g_assert_true( qof_instance_is_dirty (QOF_INSTANCE (fixture->book)) );
-    g_assert_cmpstr( r, == , g_strdup_printf( format, counter ));
+    g_assert_cmpstr( r, == , format_str);
     g_free( r );
+    g_free (format);
+    g_free (format_str);
 
     g_test_message( "Testing increment and format with existing counter" );
     r = qof_book_increment_and_format_counter( fixture->book, counter_name );
     counter = qof_book_get_counter( fixture->book, counter_name );
     format = qof_book_get_counter_format( fixture->book, counter_name );
+    format_str = g_strdup_printf (format, counter);
     g_assert_cmpint( counter, == , 2 );
-    g_assert_cmpstr( r, == , g_strdup_printf( format, counter ));
+    g_assert_cmpstr( r, == , format_str);
     g_free( r );
+    g_free (format);
+    g_free (format_str);
 }
 
 static void
@@ -494,7 +502,7 @@ test_book_set_default_report ( Fixture *fixture, gconstpointer pData )
     const char *test_guid1 = "5123a759ceb9483abf2182d01c140eff";
     const char *test_guid2 = "5123a759ceb9483abf2182d01c140eee";
     const char *test_name = "My Invoice Report";
-    const char *r;
+    char *r;
 
     /* need this as long as we have fatal warnings enabled */
     g_test_log_set_fatal_handler ( ( GTestLogFatalFunc )handle_faults, NULL );
@@ -524,15 +532,19 @@ test_book_set_default_report ( Fixture *fixture, gconstpointer pData )
     qof_book_set_default_invoice_report ( fixture->book, test_guid1, "" );
     r = qof_book_get_default_invoice_report_guid ( fixture->book );
     g_assert_cmpstr( r, == , test_guid1 );
+    g_free (r);
     r = qof_book_get_default_invoice_report_name ( fixture->book );
     g_assert_cmpstr( r, == , "" );
+    g_free (r);
 
     g_test_message( "Testing setting default report with guid and name" );
     qof_book_set_default_invoice_report ( fixture->book, test_guid2, test_name );
     r = qof_book_get_default_invoice_report_guid ( fixture->book );
     g_assert_cmpstr( r, == , test_guid2 );
+    g_free (r);
     r = qof_book_get_default_invoice_report_name ( fixture->book );
     g_assert_cmpstr( r, == , test_name );
+    g_free (r);
 }
 
 static void

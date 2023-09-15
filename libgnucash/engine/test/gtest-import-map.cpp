@@ -266,6 +266,8 @@ TEST_F(ImapBayesTest, FindAccountBayes)
     root->set_path({std::string{IMAP_FRAME_BAYES} + "/" + pepper + "/" + waldo + "/" + acct2_guid}, new KvpValue{*value});
     account = gnc_account_imap_find_account_bayes(t_acc, t_list3);
     EXPECT_EQ(t_expense_account1, account);
+    g_free (acct1_guid);
+    g_free (acct2_guid);
 }
 
 TEST_F(ImapBayesTest, AddAccountBayes)
@@ -309,6 +311,8 @@ TEST_F(ImapBayesTest, AddAccountBayes)
     qof_instance_reset_editlevel(QOF_INSTANCE(t_bank_account));
     value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + baz + "/" + acct2_guid});
     EXPECT_EQ(2, value->get<int64_t>());
+    g_free (acct1_guid);
+    g_free (acct2_guid);
 }
 
 TEST_F(ImapBayesTest, ConvertBayesData)
@@ -353,6 +357,10 @@ TEST_F(ImapBayesTest, ConvertBayesData)
     value = root->get_slot({std::string{IMAP_FRAME_BAYES} + "/" + salt + "/" + acct1_guid});
     EXPECT_EQ(10, value->get<int64_t>());
     EXPECT_TRUE(qof_instance_get_dirty_flag(QOF_INSTANCE(t_bank_account)));
+    g_free (acct1_guid);
+    g_free (acct2_guid);
+    g_free (acct3_guid);
+    g_free (acct4_guid);
 }
 
 /* Tests the import map's handling of KVP delimiters */
@@ -365,6 +373,7 @@ TEST_F (ImapBayesTest, import_map_with_delimiters)
     gnc_account_imap_add_account_bayes (t_acc, tokens, t_expense_account1);
     auto account = gnc_account_imap_find_account_bayes (t_acc, tokens);
     EXPECT_EQ (account, t_expense_account1);
+    g_list_free (tokens);
 }
 
 TEST_F (ImapBayesTest, get_bayes_info)
@@ -383,5 +392,8 @@ TEST_F (ImapBayesTest, get_bayes_info)
     EXPECT_STREQ (info->head, (std::string {IMAP_FRAME_BAYES} + "/one/two/three/" + acct1_guid).c_str ());
     EXPECT_STREQ (info->match_string, "one/two/three");
     EXPECT_STREQ (info->count, "1");
+    g_list_free_full (infos, (GDestroyNotify)gnc_account_imap_info_destroy);
+    g_list_free (tokens);
+    g_free (acct1_guid);
 }
 

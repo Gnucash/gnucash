@@ -6232,6 +6232,15 @@ build_bayes (const char *suffix, KvpValue * value, GncImapInfo & imapInfo)
     imapInfo.list = g_list_prepend (imapInfo.list, imap_node);
 }
 
+void gnc_account_imap_info_destroy (GncImapInfo* imapInfo)
+{
+    g_free (imapInfo->head);
+    g_free (imapInfo->category);
+    g_free (imapInfo->match_string);
+    g_free (imapInfo->count);
+    g_free (imapInfo);
+}
+
 GList *
 gnc_account_imap_get_info_bayes (Account *acc)
 {
