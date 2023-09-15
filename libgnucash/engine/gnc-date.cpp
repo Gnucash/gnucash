@@ -187,8 +187,8 @@ gnc_gmtime (const time64 *secs)
 {
     try
     {
-        auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
         GncDateTime gncdt(*secs);
+        auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
         *time = gncdt.utc_tm();
         return time;
     }
