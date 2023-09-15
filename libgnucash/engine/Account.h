@@ -1611,6 +1611,11 @@ typedef enum
         char           *count;
     }GncImapInfo;
 
+    /** Clean destructor for the imap_info structure of Bayesian
+     *  mappings
+     */
+    void gnc_account_imap_info_destroy (GncImapInfo*);
+
     /** Returns a GList of structure imap_info of all Bayesian mappings for
      *  required Account
      */
