@@ -138,6 +138,8 @@ test_once()
     g_object_unref(model);
     success("model unref");
     remove_sx(lonely);
+    g_date_free (when);
+    g_date_free (end);
 }
 
 static GncSxInstance*
@@ -215,6 +217,8 @@ test_state_changes()
 
     g_object_unref(model);
     remove_sx(foo);
+    g_date_free (start);
+    g_date_free (end);
 }
 
 static void
