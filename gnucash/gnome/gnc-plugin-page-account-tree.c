@@ -141,6 +141,7 @@ static void gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
 
 static void gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
                                                                GncPluginPageAccountTree *page);
+static void accounting_period_changed_cb(gpointer prefs, gchar *pref, gpointer user_data);
 void gppat_populate_trans_mas_list(GtkToggleButton *sa_mrb, GtkWidget *dialog);
 void gppat_set_insensitive_iff_rb_active(GtkWidget *widget, GtkToggleButton *b);
 
@@ -566,19 +567,9 @@ gnc_plugin_page_account_tree_focus_widget (GncPluginPage *account_plugin_page)
 static void
 gnc_plugin_page_account_refresh_cb (GHashTable *changes, gpointer user_data)
 {
-    GncPluginPageAccountTree *page = user_data;
-    GncPluginPageAccountTreePrivate *priv;
-
-    g_return_if_fail(GNC_IS_PLUGIN_PAGE_ACCOUNT_TREE(page));
-
     /* We're only looking for forced updates here. */
-    if (changes)
-        return;
-
-    priv = GNC_PLUGIN_PAGE_ACCOUNT_TREE_GET_PRIVATE(page);
-
-    gnc_tree_view_account_clear_model_cache (GNC_TREE_VIEW_ACCOUNT(priv->tree_view));
-    gtk_widget_queue_draw(priv->widget);
+      if (!changes)
+      gnc_plugin_page_account_tree_cmd_refresh(NULL, NULL, user_data);
 }
 
 static void
@@ -711,6 +702,19 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
                            GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
                            gnc_plugin_page_account_tree_summarybar_position_changed,
                            page);
+
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_CHOICE_ABS,
+                          accounting_period_changed_cb, page);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_DATE,
+                          accounting_period_changed_cb, page);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_START_PERIOD,
+                          accounting_period_changed_cb, page);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_CHOICE_ABS,
+                          accounting_period_changed_cb, page);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_DATE,
+                          accounting_period_changed_cb, page);
+    gnc_prefs_register_cb(GNC_PREFS_GROUP_ACCT_SUMMARY, GNC_PREF_END_PERIOD,
+                          accounting_period_changed_cb, page);
 
     g_signal_connect (G_OBJECT(plugin_page), "inserted",
                       G_CALLBACK(gnc_plugin_page_inserted_cb),
@@ -1010,6 +1014,11 @@ gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
     update_inactive_actions (plugin_page);
 }
 
+static void
+accounting_period_changed_cb (gpointer prefs, gchar *pref, gpointer user_data)
+{
+    gnc_plugin_page_account_tree_cmd_refresh (NULL, NULL, user_data);
+}
 
 /* Command callbacks */
 static void
