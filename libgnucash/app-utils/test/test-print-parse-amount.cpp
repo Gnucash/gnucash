@@ -44,14 +44,19 @@ test_num_print_info (gnc_numeric n, GNCPrintAmountInfo print_info, int line)
 
     ok = xaccParseAmount (s, print_info.monetary, &n_parsed, NULL);
 
+    gchar *n_str = gnc_numeric_to_string (n);
+    gchar *n_parsed_str = gnc_numeric_to_string (n_parsed);
+
     do_test_args (ok, "parsing failure", __FILE__, __LINE__,
-                  "num: %s, string %s (line %d)", gnc_numeric_to_string (n), s, line);
+                  "num: %s, string %s (line %d)", n_str, s, line);
 
     ok = gnc_numeric_equal (n, n_parsed);
     do_test_args (ok, "not equal", __FILE__, __LINE__,
                   "start: %s, string %s, finish: %s (line %d)",
-                  gnc_numeric_to_string (n), s,
-                  gnc_numeric_to_string (n_parsed), line);
+                  n_str, s, n_parsed_str, line);
+
+    g_free (n_parsed_str);
+    g_free (n_str);
 }
 
 static void
@@ -80,9 +85,11 @@ test_num (gnc_numeric n)
                                   GNC_HOW_RND_ROUND_HALF_UP);
         if (gnc_numeric_check(n1))
         {
+            gchar *n_str = gnc_numeric_to_string(n);
             do_test_args((gnc_numeric_check(n1) == GNC_ERROR_OVERFLOW),
                          "BAD NUMERIC CONVERSION", __FILE__, __LINE__,
-                         "num: %s, fraction: %d", gnc_numeric_to_string(n), fraction);
+                         "num: %s, fraction: %d", n_str, fraction);
+            g_free (n_str);
             continue;
         }
 
@@ -108,11 +115,14 @@ test_num (gnc_numeric n)
 
 #define IS_VALID_NUM(n,m)                                               \
     if (gnc_numeric_check(n)) {                                         \
+        n_str = gnc_numeric_to_string(n);                               \
+        m_str = gnc_numeric_to_string(m);                               \
         do_test_args(gnc_numeric_check(n) == GNC_ERROR_OVERFLOW,        \
                      "BAD NUMERIC", __FILE__, __LINE__,                 \
                      "num: %s (from %s)",                               \
-                     gnc_numeric_to_string(n),                          \
-                     gnc_numeric_to_string(m));                         \
+                     n_str, m_str);                                     \
+        g_free (m_str);                                                 \
+        g_free (n_str);                                                 \
         continue;                                                       \
     } else { m = n; }
 
@@ -139,6 +149,7 @@ run_tests (void)
     {
         gnc_numeric n;
         gnc_numeric n1;
+        gchar *m_str, *n_str;
 
         n = get_random_gnc_numeric (GNC_DENOM_AUTO);
         IS_VALID_NUM(n, n);
@@ -155,6 +166,9 @@ run_tests (void)
     }
     g_log_remove_handler (log_domain, hdlr);
     test_clear_error_list();
+    test_error_struct_free (check3);
+    test_error_struct_free (check2);
+    test_error_struct_free (check1);
 }
 
 int
