@@ -241,6 +241,7 @@ make_one_transaction_end(TTInfo **tti, SchedXaction *sx)
     xaccSchedXactionSetTemplateTrans(sx, txns, book);
     gnc_ttinfo_free(*tti);
     *tti = NULL;
+    g_list_free (txns);
 }
 
 static void
