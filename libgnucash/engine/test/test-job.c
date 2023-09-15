@@ -135,12 +135,14 @@ test_job (void)
         do_test (g_list_length (list) == 1, "correct joblist length");
         do_test (list->data == job, "verify job in list");
         gncJobSetActive (job, FALSE);
+        g_list_free (list);
         list = gncCustomerGetJoblist (cust, FALSE);
         do_test (list == NULL, "no active jobs");
         list = gncCustomerGetJoblist (cust, TRUE);
         do_test (list != NULL, "all jobs");
         gncJobBeginEdit (job);
         gncJobDestroy (job);
+        g_list_free (list);
         list = gncCustomerGetJoblist (cust, TRUE);
         do_test (list == NULL, "no more jobs");
     }
@@ -171,6 +173,8 @@ test_string_fcn (QofBook *book, const char *message,
     do_test (g_strcmp0 (get (job), str) == 0, message);
     g_free (str);
     gncJobSetActive (job, FALSE);
+    gncJobBeginEdit (job);
+    gncJobDestroy (job);
     count++;
 }
 
@@ -196,6 +200,8 @@ test_numeric_fcn (QofBook *book, const char *message,
     // do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
     do_test (gnc_numeric_equal (get (job), num), message);
     gncJobSetActive (job, FALSE);
+    gncJobBeginEdit (job);
+    gncJobDestroy (job);
     count++;
 }
 
@@ -223,6 +229,8 @@ test_bool_fcn (QofBook *book, const char *message,
     // do_test (!qof_instance_is_dirty (QOF_INSTANCE(job)), "test dirty after commit");
     do_test (get (job) == num, message);
     gncJobSetActive (job, FALSE);
+    gncJobBeginEdit (job);
+    gncJobDestroy (job);
     count++;
 }
 
