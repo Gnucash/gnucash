@@ -368,6 +368,7 @@ _get_vars_helper(Transaction *txn, void *var_hash_data)
             var_name = var_name_from_commodities(split_cmdty, txn_cmdty);
             var = gnc_sx_variable_new(var_name);
             g_hash_table_insert(var_hash, g_strdup(var->name), var);
+            g_free (var_name);
         }
     }
 
