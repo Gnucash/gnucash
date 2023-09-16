@@ -102,7 +102,7 @@ typedef struct GncPluginPageReportPrivate
     /// The report-id
     int reportId;
     gint component_manager_id;
-
+    GSimpleActionGroup* action_group;
     /// The report which this Page is satisfying
     SCM cur_report;
     /// The Option DB for this report.
@@ -201,6 +201,17 @@ static GActionEntry report_actions[] =
     { "ReportStopAction", gnc_plugin_page_report_stop_cb, nullptr, nullptr, nullptr },
 };
 static guint num_report_actions = G_N_ELEMENTS(report_actions);
+static const gchar *initially_insensitive_actions[] =
+{
+    nullptr
+};
+
+static const gchar *disable_during_load_actions[] =
+{
+    "FilePrintAction",
+    "FilePrintPDFAction",
+    "ReportOptionsAction"
+};
 
 /** The default menu items that need to be add to the menu */
 static const gchar *gnc_plugin_load_ui_items [] =
@@ -443,6 +454,8 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
         g_object_remove_weak_pointer(G_OBJECT(page), (gpointer*)(&weak_page));
     }
 
+    gnc_plugin_set_actions_enabled(G_ACTION_MAP(priv->action_group),
+                                   disable_during_load_actions, TRUE);
     // this resets the window for the progressbar to nullptr
     gnc_window_set_progressbar_window( nullptr );
 }
@@ -794,6 +807,8 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     /* it's probably already dirty, but make sure */
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
+    gnc_plugin_set_actions_enabled(G_ACTION_MAP(priv->action_group),
+                                   disable_during_load_actions, FALSE);
     // prevent closing this page while loading...
     priv->reloading = TRUE;
 
@@ -811,6 +826,8 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     // this resets the window for the progressbar to nullptr
     gnc_window_set_progressbar_window( nullptr );
 
+    gnc_plugin_set_actions_enabled(G_ACTION_MAP(priv->action_group),
+                                   disable_during_load_actions, FALSE);
     priv->reloading = FALSE;
 }
 
@@ -1175,14 +1192,11 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
         scm_gc_unprotect_object(priv->edited_reports);
 }
 
-static const gchar *initially_insensitive_actions[] =
-{
-    nullptr
-};
-
 static void
 gnc_plugin_page_report_init ( GncPluginPageReport *plugin_page )
 {
+    GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(plugin_page);
+    priv->action_group = NULL;
 }
 
 static GObject*
@@ -1277,7 +1291,6 @@ static void
 gnc_plugin_page_report_constr_init (GncPluginPageReport *plugin_page, gint reportId)
 {
     GncPluginPageReportPrivate *priv;
-    GSimpleActionGroup *simple_action_group;
     GncPluginPage *parent;
     gboolean use_new;
     gchar *name;
@@ -1304,14 +1317,16 @@ gnc_plugin_page_report_constr_init (GncPluginPageReport *plugin_page, gint repor
     gnc_plugin_page_add_book (parent, gnc_get_current_book());
 
     /* Create menu and toolbar information */
-    simple_action_group = gnc_plugin_page_create_action_group (parent, "GncPluginPageReportActions");
-    g_action_map_add_action_entries (G_ACTION_MAP(simple_action_group),
+    priv->action_group = gnc_plugin_page_create_action_group (parent, "GncPluginPageReportActions");
+    g_action_map_add_action_entries (G_ACTION_MAP(priv->action_group),
                                      report_actions,
                                      num_report_actions,
                                      plugin_page);
 
-    gnc_plugin_set_actions_enabled (G_ACTION_MAP(simple_action_group), initially_insensitive_actions,
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(priv->action_group), initially_insensitive_actions,
                                     FALSE);
+    gnc_plugin_set_actions_enabled(G_ACTION_MAP(priv->action_group),
+                                   disable_during_load_actions, FALSE);
 }
 
 GncPluginPage*
@@ -1456,7 +1471,9 @@ gnc_plugin_page_report_reload_cb (GSimpleAction *simple,
     scm_call_2(dirty_report, priv->cur_report, SCM_BOOL_T);
 
     /* now queue the fact that we need to reload this report */
-
+    // Disable some actions reported to crash while loading
+    gnc_plugin_set_actions_enabled(G_ACTION_MAP(priv->action_group),
+                                   disable_during_load_actions, FALSE);
     // prevent closing this page while loading...
     priv->reloading = TRUE;
     // this sets the window for the progressbar
@@ -1471,6 +1488,8 @@ gnc_plugin_page_report_reload_cb (GSimpleAction *simple,
 
     // this resets the window for the progressbar to nullptr
     gnc_window_set_progressbar_window( nullptr );
+    gnc_plugin_set_actions_enabled(G_ACTION_MAP(priv->action_group),
+                                   disable_during_load_actions, FALSE);
     priv->reloading = FALSE;
 }
 
