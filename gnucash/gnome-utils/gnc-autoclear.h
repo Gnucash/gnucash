@@ -25,6 +25,8 @@
 #define GNC_AUTOCLEAR_H
 
 #include <glib.h>
+#include <stdint.h>
+#include <gtk/gtk.h>
 #include <Account.h>
 
 #ifdef __cplusplus
@@ -39,6 +41,12 @@ extern "C" {
  */
 GList * gnc_account_get_autoclear_splits (Account *account, gnc_numeric toclear_value,
                                           gchar **errmsg);
+
+/* same as above, but returns TRUE if successful, and FALSE if
+   unsuccessful and sets GError appropriately */
+gboolean gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
+                                   time64 end_date,
+                                   GList **splits, GError **error, GtkLabel *label);
 
 #ifdef __cplusplus
 }

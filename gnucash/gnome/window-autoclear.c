@@ -124,18 +124,12 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
 {
     GList *toclear_list = NULL;
     gnc_numeric toclear_value = gnc_numeric_error (GNC_ERROR_ARG);
-    gchar *errmsg = NULL;
     GError* error = NULL;
 
     g_return_if_fail (widget && data);
 
     /* test for valid value */
-    if (!gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(data->end_value), &error))
-    {
-        errmsg = g_strdup (error->message);
-        g_error_free (error);
-    }
-    else
+    if (gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(data->end_value), &error))
     {
         toclear_value = gnc_amount_edit_get_amount(data->end_value);
 
@@ -145,19 +139,19 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         toclear_value = gnc_numeric_convert
             (toclear_value, xaccAccountGetCommoditySCU(data->account), GNC_HOW_RND_ROUND);
 
-        toclear_list = gnc_account_get_autoclear_splits
-            (data->account, toclear_value, &errmsg);
+        gnc_autoclear_get_splits (data->account, toclear_value, INT64_MAX,
+                                  &toclear_list, &error, data->status_label);
     }
 
-    if (errmsg)
+    if (error && error->message)
     {
         GtkWidget *entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(data->end_value));
-        gtk_label_set_text (data->status_label, errmsg);
+        gtk_label_set_text (data->status_label, error->message);
         if (gnc_numeric_check (toclear_value) == 0)
             gnc_amount_edit_set_amount (data->end_value, toclear_value);
         gtk_widget_grab_focus (GTK_WIDGET(entry));
         gnc_amount_edit_select_region (GNC_AMOUNT_EDIT(data->end_value), 0, -1);
-        g_free (errmsg);
+        g_error_free (error);
     }
     else
     {
