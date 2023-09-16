@@ -1306,6 +1306,7 @@ StockAssistantModel::generate_list_of_splits() {
                  m_stock_entry->print_price(), date_str);
             m_logger.info(price_msg);
             g_free (date_str);
+            g_free (price_msg);
         }
     }
 
