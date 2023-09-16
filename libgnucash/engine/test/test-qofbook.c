@@ -64,6 +64,9 @@ setup( Fixture *fixture, gconstpointer pData )
 static void
 teardown( Fixture *fixture, gconstpointer pData )
 {
+    Account *root = gnc_book_get_root_account (fixture->book);
+    xaccAccountBeginEdit (root);
+    xaccAccountDestroy (root);
     qof_book_destroy( fixture->book );
 }
 
