@@ -4,10 +4,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.3-pot1\n"
+"Project-Id-Version: GnuCash 5.4
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-08-03 06:21+0200\n"
+"POT-Creation-Date: 2023-09-17 14:31-0700\n"
 "PO-Revision-Date: 2014-09-25 20:34-0500\n"
 "Last-Translator: Ravi Kumar Ragam <ragamrravi@gmail.com>\n"
 "Language-Team: NONE\n"
@@ -262,7 +262,7 @@ msgstr "అనుకూలీకరించు"
 
 #: bindings/guile/options.scm:399
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
-#: gnucash/report/reports/standard/invoice.scm:497
+#: gnucash/report/reports/standard/invoice.scm:496
 #: gnucash/report/reports/standard/new-owner-report.scm:55
 #: libgnucash/engine/gnc-optiondb.cpp:1294
 msgid "Tax"
@@ -1116,7 +1116,7 @@ msgstr "స్ధలదారు"
 #: gnucash/gnome-utils/dialog-account.c:402
 #: gnucash/gnome-utils/gnc-tree-view-account.c:995
 #: gnucash/gtkbuilder/dialog-account.glade:1945
-#: libgnucash/app-utils/gnc-ui-util.c:715
+#: libgnucash/app-utils/gnc-ui-util.c:711
 msgid "Opening Balance"
 msgstr "ప్రారంభ నిల్వ"
 
@@ -1204,15 +1204,15 @@ msgstr "రుణం తిరిగి చెల్లింపు ఐచ్చ
 #: gnucash/gtkbuilder/dialog-transfer.glade:128
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:368
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:144
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:363
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:378
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:359
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:374
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.cpp:1541
+#: gnucash/import-export/import-main-matcher.cpp:1543
 #: gnucash/import-export/import-match-picker.cpp:313
 #: gnucash/import-export/import-match-picker.cpp:353
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3703
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3754
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3892
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3943
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:62
 #: gnucash/register/ledger-core/split-register-model.c:233
 #: gnucash/report/reports/standard/account-summary.scm:77
@@ -1227,7 +1227,7 @@ msgstr "రుణం తిరిగి చెల్లింపు ఐచ్చ
 #: gnucash/report/reports/standard/general-ledger.scm:87
 #: gnucash/report/reports/standard/invoice.scm:87
 #: gnucash/report/reports/standard/invoice.scm:190
-#: gnucash/report/reports/standard/invoice.scm:548
+#: gnucash/report/reports/standard/invoice.scm:547
 #: gnucash/report/reports/standard/net-charts.scm:398
 #: gnucash/report/reports/standard/new-owner-report.scm:49
 #: gnucash/report/reports/standard/new-owner-report.scm:225
@@ -1287,12 +1287,12 @@ msgid "Error adding price."
 msgstr "ధర చేర్చుతున్న దోషం"
 
 #: gnucash/gnome/assistant-stock-split.c:582
-#: gnucash/gnome/assistant-stock-transaction.cpp:1745
+#: gnucash/gnome/assistant-stock-transaction.cpp:2276
 #: gnucash/gnome/dialog-find-transactions.c:109
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.cpp:1542
+#: gnucash/import-export/import-main-matcher.cpp:1544
 #: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
@@ -1338,31 +1338,31 @@ msgstr "నిల్వలు కలిగిన ఎలాంటి స్టా
 
 #. Translators: this is a stock transaction describing an
 #. Initial stock long purchase
-#: gnucash/gnome/assistant-stock-transaction.cpp:190
+#: gnucash/gnome/assistant-stock-transaction.cpp:154
 #, fuzzy
 #| msgid "Open"
 msgid "Open buy"
 msgstr "తెరువు"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:191
+#: gnucash/gnome/assistant-stock-transaction.cpp:155
 msgid "Initial stock long purchase."
 msgstr ""
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
-#: gnucash/gnome/assistant-stock-transaction.cpp:201
+#: gnucash/gnome/assistant-stock-transaction.cpp:165
 #, fuzzy
 #| msgid "placeholder"
 msgid "Open short"
 msgstr "ప్లేస్హోల్డర్"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:202
+#: gnucash/gnome/assistant-stock-transaction.cpp:166
 msgid "Initial stock short sale."
 msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:216
+#: gnucash/gnome/assistant-stock-transaction.cpp:180
 #: gnucash/register/ledger-core/split-register.c:2566
 #: gnucash/register/ledger-core/split-register.c:2570
 #: gnucash/register/ledger-core/split-register.c:2577
@@ -1376,13 +1376,13 @@ msgstr ""
 msgid "Buy"
 msgstr "కొను"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:217
+#: gnucash/gnome/assistant-stock-transaction.cpp:181
 msgid "Buying stock long."
 msgstr ""
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
-#: gnucash/gnome/assistant-stock-transaction.cpp:227
+#: gnucash/gnome/assistant-stock-transaction.cpp:191
 #: gnucash/register/ledger-core/split-register.c:2567
 #: gnucash/register/ledger-core/split-register.c:2571
 #: gnucash/register/ledger-core/split-register.c:2582
@@ -1396,20 +1396,24 @@ msgstr ""
 msgid "Sell"
 msgstr "విక్రయించు"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:228
-msgid "Selling stock long, and record capital gain/loss."
+#: gnucash/gnome/assistant-stock-transaction.cpp:192
+msgid ""
+"Selling stock long, and record capital gain/loss.\n"
+"\n"
+"If you are unable to calculate capital gains you can enter aplaceholder "
+"amount and correct it in the transaction later."
 msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
-#: gnucash/gnome/assistant-stock-transaction.cpp:238
+#: gnucash/gnome/assistant-stock-transaction.cpp:204
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:733
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:778
 #: gnucash/register/ledger-core/split-register.c:2630
 msgid "Dividend"
 msgstr "డివిడెండ్"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:239
+#: gnucash/gnome/assistant-stock-transaction.cpp:205
 msgid ""
 "Company issues cash dividends to holder.\n"
 "\n"
@@ -1419,26 +1423,26 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital
-#: gnucash/gnome/assistant-stock-transaction.cpp:250
+#: gnucash/gnome/assistant-stock-transaction.cpp:216
 #, fuzzy
 #| msgid "Decrease in capital"
 msgid "Return of capital"
 msgstr "మూలధనంలో తగ్గుదల"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:251
+#: gnucash/gnome/assistant-stock-transaction.cpp:217
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
-#: gnucash/gnome/assistant-stock-transaction.cpp:261
+#: gnucash/gnome/assistant-stock-transaction.cpp:227
 #, fuzzy
 #| msgid "Decrease in capital"
 msgid "Return of capital (reclassification)"
 msgstr "మూలధనంలో తగ్గుదల"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:262
+#: gnucash/gnome/assistant-stock-transaction.cpp:228
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units. "
 "A distribution previously recorded as a dividend is reclassified to return "
@@ -1447,13 +1451,13 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
-#: gnucash/gnome/assistant-stock-transaction.cpp:272
+#: gnucash/gnome/assistant-stock-transaction.cpp:240
 #, fuzzy
 #| msgid "No description provided."
 msgid "Notional distribution (dividend)"
 msgstr "వివరణ అందించబడేదు."
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:273
+#: gnucash/gnome/assistant-stock-transaction.cpp:241
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
@@ -1461,11 +1465,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
-#: gnucash/gnome/assistant-stock-transaction.cpp:283
+#: gnucash/gnome/assistant-stock-transaction.cpp:252
 msgid "Notional distribution (capital gain)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:284
+#: gnucash/gnome/assistant-stock-transaction.cpp:253
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
@@ -1475,32 +1479,34 @@ msgstr ""
 #. split
 #. Translators: this is a stock transaction describing a stock
 #. split when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:294
-#: gnucash/gnome/assistant-stock-transaction.cpp:403
+#: gnucash/gnome/assistant-stock-transaction.cpp:264
+#: gnucash/gnome/assistant-stock-transaction.cpp:390
 #, fuzzy
 #| msgid "Stock Split"
 msgid "Stock split"
 msgstr "స్టాక్ చీలిక"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:295
-#: gnucash/gnome/assistant-stock-transaction.cpp:404
+#: gnucash/gnome/assistant-stock-transaction.cpp:265
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
-"divisor, while keeping the total monetary value of the overall investment "
-"constant."
+"divisor , while keeping the total monetary value of the overall investment "
+"constant. \n"
+"\n"
+"If the split results in a cash in lieu for remainder units, please record "
+"the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
 #. reverse split when shorting stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:304
-#: gnucash/gnome/assistant-stock-transaction.cpp:414
+#: gnucash/gnome/assistant-stock-transaction.cpp:277
+#: gnucash/gnome/assistant-stock-transaction.cpp:404
 #, fuzzy
 #| msgid "_Review created transactions"
 msgid "Reverse split"
 msgstr "_సృష్టించిన లావాదేవీలను సమీక్షించు"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:305
+#: gnucash/gnome/assistant-stock-transaction.cpp:278
 msgid ""
 "Company redeems units, thereby increasing the stock price by a multiple, "
 "while keeping the total monetary value of the overall investment constant.\n"
@@ -1512,33 +1518,37 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:323
+#: gnucash/gnome/assistant-stock-transaction.cpp:295
 #, fuzzy
 #| msgid "Sort Order"
 msgid "Short sell"
 msgstr "వరుస క్రమబద్ధీకరించు "
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:324
+#: gnucash/gnome/assistant-stock-transaction.cpp:296
 msgid "Selling stock short."
 msgstr ""
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
-#: gnucash/gnome/assistant-stock-transaction.cpp:334
+#: gnucash/gnome/assistant-stock-transaction.cpp:306
 msgid "Buy to cover short"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:335
-msgid "Buy back stock to cover short position, and record capital gain/loss."
+#: gnucash/gnome/assistant-stock-transaction.cpp:307
+msgid ""
+"Buy back stock to cover short position, and record capital gain/loss. \n"
+"\n"
+"If you are unable to calculate capital gains you can enter a placeholder "
+"amount and correct it in the transaction later."
 msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:345
+#: gnucash/gnome/assistant-stock-transaction.cpp:319
 msgid "Compensatory dividend"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:346
+#: gnucash/gnome/assistant-stock-transaction.cpp:320
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
@@ -1546,11 +1556,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:356
+#: gnucash/gnome/assistant-stock-transaction.cpp:331
 msgid "Compensatory return of capital"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:357
+#: gnucash/gnome/assistant-stock-transaction.cpp:332
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1560,27 +1570,27 @@ msgstr ""
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:368
+#: gnucash/gnome/assistant-stock-transaction.cpp:345
 msgid "Compensatory return of capital (reclassification)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:369
+#: gnucash/gnome/assistant-stock-transaction.cpp:346
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units. A distribution "
 "previously recorded as a compensatory dividend is reclassified to "
-"compensatory return of capital, often due to end-of-year tax information."
+"compensatory return of capital,often due to end-of-year tax information."
 msgstr ""
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:380
+#: gnucash/gnome/assistant-stock-transaction.cpp:361
 msgid "Compensatory notional distribution (dividend)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:381
+#: gnucash/gnome/assistant-stock-transaction.cpp:362
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1591,11 +1601,11 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:392
+#: gnucash/gnome/assistant-stock-transaction.cpp:376
 msgid "Compensatory notional distribution (capital gain)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:393
+#: gnucash/gnome/assistant-stock-transaction.cpp:377
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1603,7 +1613,18 @@ msgid ""
 "0.00 value) without affecting # units."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:415
+#: gnucash/gnome/assistant-stock-transaction.cpp:391
+msgid ""
+"Company issues additional units, thereby reducing the stock price by a "
+"divisor, while keeping the total monetary value of the overall investment "
+"constant. \n"
+"\n"
+"If the split results in a cash in lieu for remainder units, please record "
+"the cover buy using the Stock Transaction Assistant first, then record the "
+"split."
+msgstr ""
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:405
 msgid ""
 "Company redeems units, thereby increasing the stock price by a multiple, "
 "while keeping the total monetary value of the overall investment constant.\n"
@@ -1613,41 +1634,124 @@ msgid ""
 "record the reverse split."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:488
-#, c-format
-msgid "Amount for %s is missing."
+#: gnucash/gnome/assistant-stock-transaction.cpp:497
+msgid "No errors found. Click Apply to create transaction."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:502
-#, c-format
-msgid "Amount for %s must not be negative."
-msgstr ""
+#, fuzzy
+msgid "The following errors must be fixed:"
+msgstr "కింది బిల్లు చెల్లించాల్సి ఉంది: "
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:508
-#, c-format
-msgid "Amount for %s must be positive."
-msgstr ""
+#: gnucash/gnome/assistant-stock-transaction.cpp:507
+#, fuzzy
+msgid "The following warnings exist:"
+msgstr "కింది బిల్లు చెల్లించాల్సి ఉంది: "
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:520
+#: gnucash/gnome/assistant-stock-transaction.cpp:627
+#: gnucash/gnome/assistant-stock-transaction.cpp:685
 #: gnucash/report/reports/standard/balsheet-pnl.scm:812
 #, fuzzy
 msgid "missing"
 msgstr "కమిషన్"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:593
+#: gnucash/gnome/assistant-stock-transaction.cpp:663
+#: gnucash/gnome/assistant-stock-transaction.cpp:1010
+#, c-format
+msgid "Amount for %s is missing."
+msgstr ""
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:668
+#: gnucash/gnome/assistant-stock-transaction.cpp:1015
+#, c-format
+msgid "Amount for %s must not be negative."
+msgstr ""
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:671
+#: gnucash/gnome/assistant-stock-transaction.cpp:1018
+#, c-format
+msgid "Amount for %s must be positive."
+msgstr ""
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:674
+#: gnucash/gnome/assistant-stock-transaction.cpp:1021
+#, fuzzy, c-format
+#| msgid "Include sub-accounts of all selected accounts."
+msgid "The %s amount has no associated account."
+msgstr "అన్ని ఎంపిక చేసిన ఖాతాల ఉపఖాతాలను చేర్చుకో."
+
+#. Translators: "N/A" here means that a commodity doesn't have a valid price.
+#: gnucash/gnome/assistant-stock-transaction.cpp:740
+msgid "N/A"
+msgstr ""
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:829
 #, fuzzy
 #| msgid "Accounts in '%s'"
 msgid "Amount for stock value is missing."
 msgstr "%s'లో ఖాతాలు"
 
-#. Translators: (missing) denotes that the amount or account is
-#. not provided, or incorrect, in the Stock Transaction Assistant.
-#: gnucash/gnome/assistant-stock-transaction.cpp:679
+#: gnucash/gnome/assistant-stock-transaction.cpp:841
 #, fuzzy
-msgid "(missing)"
-msgstr "కమిషన్"
+msgid "Invalid stock new balance."
+msgstr "చెల్లని ఎన్‌కోడింగ్ ఎంచుకోబడింది"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:849
+#: gnucash/gnome/assistant-stock-transaction.cpp:843
+msgid "New balance must be higher than old balance."
+msgstr ""
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:845
+msgid "New balance must be lower than old balance."
+msgstr ""
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:852
+#, fuzzy
+#| msgid "Stock Accounts to report on."
+msgid "Stock amount must be positive."
+msgstr "నివేదించడానికి స్టాక్ ఖాతాలు."
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:856
+msgid "Cannot sell more units than owned."
+msgstr ""
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:858
+msgid "Cannot cover buy more units than owed."
+msgstr ""
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:1094
+#, fuzzy
+#| msgid "Stock"
+msgctxt "Stock Assistant: Page name"
+msgid "Stock"
+msgstr "స్టాక్"
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:1095
+#, fuzzy
+#| msgid "Cash"
+msgctxt "Stock Assistant: Page name"
+msgid "Cash"
+msgstr "నగదు"
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:1096
+msgctxt "Stock Assistant: Page name"
+msgid "Fees"
+msgstr ""
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:1097
+#, fuzzy
+#| msgid "Dividend"
+msgctxt "Stock Assistant: Page name"
+msgid "Dividend"
+msgstr "డివిడెండ్"
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:1098
+#, fuzzy
+#| msgid "Capital"
+msgctxt "Stock Assistant: Page name"
+msgid "Capital Gains"
+msgstr "మూలధనం"
+
+#: gnucash/gnome/assistant-stock-transaction.cpp:1261
 #, c-format
 msgid ""
 "You will enter a transaction with date %s which is earlier than the latest "
@@ -1656,102 +1760,29 @@ msgid ""
 "Please review all transactions to ensure proper recording."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:869
-#, fuzzy
-#| msgid "Stock Split"
-msgctxt "Stock Assistant: Page name"
-msgid "stock value"
-msgstr "స్టాక్ చీలిక"
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:886
-#, fuzzy
-msgid "Invalid stock new balance."
-msgstr "చెల్లని ఎన్‌కోడింగ్ ఎంచుకోబడింది"
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:888
-msgid "New balance must be higher than old balance."
-msgstr ""
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:890
-msgid "New balance must be lower than old balance."
-msgstr ""
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:896
-#, fuzzy
-#| msgid "Stock Accounts to report on."
-msgid "Stock amount must be positive."
-msgstr "నివేదించడానికి స్టాక్ ఖాతాలు."
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:904
-msgid "Cannot sell more units than owned."
-msgstr ""
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:907
-msgid "Cannot cover buy more units than owed."
-msgstr ""
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:919
-msgid "No errors found. Click Apply to create transaction."
-msgstr ""
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:924
-#, fuzzy
-msgid "The following errors must be fixed:"
-msgstr "కింది బిల్లు చెల్లించాల్సి ఉంది: "
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:929
-#, fuzzy
-msgid "The following warnings exist:"
-msgstr "కింది బిల్లు చెల్లించాల్సి ఉంది: "
-
 #. Translators: %s refer to: stock mnemonic, broker currency,
 #. date of transaction.
-#: gnucash/gnome/assistant-stock-transaction.cpp:965
+#: gnucash/gnome/assistant-stock-transaction.cpp:1303
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:977
-msgctxt "Stock Assistant: Page name"
-msgid "cash"
-msgstr ""
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:981
-msgctxt "Stock Assistant: Page name"
-msgid "fees"
-msgstr ""
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:985
-#, fuzzy
-#| msgid "Dividend"
-msgctxt "Stock Assistant: Page name"
-msgid "dividend"
-msgstr "డివిడెండ్"
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:993
-#: gnucash/gnome/assistant-stock-transaction.cpp:995
-#, fuzzy
-#| msgid "Capital"
-msgctxt "Stock Assistant: Page name"
-msgid "capital gains"
-msgstr "మూలధనం"
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:1024
+#: gnucash/gnome/assistant-stock-transaction.cpp:1373
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1030
+#: gnucash/gnome/assistant-stock-transaction.cpp:1379
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1431
+#: gnucash/gnome/assistant-stock-transaction.cpp:1877
 #, fuzzy
 msgid "Ne_w Balance"
 msgstr "నిల్వ_ పొందు"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1431
+#: gnucash/gnome/assistant-stock-transaction.cpp:1877
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:234
 #: gnucash/register/ledger-core/split-register.c:2091
@@ -1759,44 +1790,39 @@ msgstr "నిల్వ_ పొందు"
 msgid "_Shares"
 msgstr "_వాటాలు"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1434
+#: gnucash/gnome/assistant-stock-transaction.cpp:1880
 #, fuzzy
 #| msgid "_Rotation"
 msgid "Ratio"
 msgstr "_భ్రమణం"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1434
+#: gnucash/gnome/assistant-stock-transaction.cpp:1880
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
 #, fuzzy
 msgid "Next Balance"
 msgstr "నిల్వ_ పొందు"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1437
+#: gnucash/gnome/assistant-stock-transaction.cpp:1884
 #, fuzzy
 #| msgid "Enter the value of shares bought or sold"
 msgid "Enter the new balance of shares after the stock split."
 msgstr "కొనుగోలు చేసిన లేదా అమ్మిన వాటాల విలువను ప్రవేశపెట్టు"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1438
+#: gnucash/gnome/assistant-stock-transaction.cpp:1885
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
 #, fuzzy
 #| msgid "Enter the number of shares bought or sold"
 msgid "Enter the number of shares you gained or lost in the transaction."
 msgstr "కొన్న లేదా అమ్మిన వాటాల సంఖ్యను ప్రవేశపెట్టు"
 
-#. Translators: StockAssistant: N/A denotes stock price is not computable
-#: gnucash/gnome/assistant-stock-transaction.cpp:1520
-msgid "N/A"
-msgstr ""
-
-#: gnucash/gnome/assistant-stock-transaction.cpp:1751
+#: gnucash/gnome/assistant-stock-transaction.cpp:2282
 #: gnucash/gnome/dialog-find-transactions.c:153
 #: gnucash/gnome/gnc-split-reg.c:669
 #: gnucash/gtkbuilder/dialog-payment.glade:495
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:386
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.cpp:1546
+#: gnucash/import-export/import-main-matcher.cpp:1548
 #: gnucash/import-export/import-match-picker.cpp:316
 #: gnucash/import-export/import-match-picker.cpp:356
 #: gnucash/register/ledger-core/split-register-model.c:360
@@ -1810,7 +1836,7 @@ msgstr ""
 msgid "Memo"
 msgstr "మెమో"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1759
+#: gnucash/gnome/assistant-stock-transaction.cpp:2290
 #: gnucash/gnome/gnc-plugin-page-register.c:3383
 #: gnucash/gtkbuilder/dialog-payment.glade:300
 #: gnucash/register/ledger-core/split-register.c:2441
@@ -1822,7 +1848,7 @@ msgstr "మెమో"
 msgid "Debit"
 msgstr "ఖర్చుపద్దు"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1766
+#: gnucash/gnome/assistant-stock-transaction.cpp:2297
 #: gnucash/gnome/gnc-plugin-page-register.c:3379
 #: gnucash/gtkbuilder/dialog-payment.glade:316
 #: gnucash/register/ledger-core/split-register.c:2464
@@ -1837,7 +1863,7 @@ msgstr "ఖర్చుపద్దు"
 msgid "Credit"
 msgstr "జమ పద్దు"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1773
+#: gnucash/gnome/assistant-stock-transaction.cpp:2304
 #: gnucash/report/reports/standard/portfolio.scm:247
 #: gnucash/report/reports/standard/receipt.scm:52
 #: gnucash/report/reports/standard/receipt.scm:114
@@ -1867,7 +1893,7 @@ msgstr "సవరించు"
 #: gnucash/gnome/dialog-invoice.c:3029 gnucash/gnome/dialog-invoice.c:3750
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
-#: gnucash/report/reports/standard/invoice.scm:731
+#: gnucash/report/reports/standard/invoice.scm:730
 #: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1098
 msgid "Bill"
 msgstr "బిల్లు"
@@ -1890,8 +1916,8 @@ msgstr "ఓచర్‌"
 #: gnucash/gtkbuilder/dialog-invoice.glade:935
 #: gnucash/gtkbuilder/dialog-invoice.glade:959
 #: gnucash/register/ledger-core/split-register.c:2593
-#: gnucash/report/reports/standard/invoice.scm:720
-#: gnucash/report/reports/standard/invoice.scm:739
+#: gnucash/report/reports/standard/invoice.scm:719
+#: gnucash/report/reports/standard/invoice.scm:738
 #: gnucash/report/reports/standard/receipt.scm:112
 #: gnucash/report/reports/standard/taxinvoice.scm:177
 #: gnucash/report/reports/support/receipt.eguile.scm:91
@@ -2031,7 +2057,7 @@ msgstr "సరుకును తొలగించాలా?"
 #: gnucash/gnome/dialog-price-edit-db.cpp:214
 #: gnucash/gnome/dialog-price-editor.c:238 gnucash/gnome/dialog-tax-info.c:1189
 #: gnucash/gnome/gnc-plugin-budget.c:321
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1649
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1658
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1061
 #: gnucash/gnome/gnc-plugin-page-register.c:1848
 #: gnucash/gnome/gnc-split-reg.c:939 gnucash/gnome/gnc-split-reg.c:977
@@ -2114,7 +2140,7 @@ msgstr "సరుకును తొలగించాలా?"
 #: gnucash/import-export/aqb/dialog-ab.glade:1012
 #: gnucash/import-export/aqb/dialog-ab.glade:1675
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2093
-#: gnucash/register/ledger-core/gncEntryLedger.c:920
+#: gnucash/register/ledger-core/gncEntryLedger.c:921
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
 #: gnucash/register/ledger-core/split-register-control.c:1537
 #: gnucash/ui/gnc-plugin-page-invoice.ui:141
@@ -2126,7 +2152,7 @@ msgstr "_రద్దుచేయి"
 
 #: gnucash/gnome/dialog-commodities.c:218
 #: gnucash/gnome/dialog-price-edit-db.cpp:215
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1650
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1659
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1062
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:405
 #: gnucash/gtkbuilder/dialog-account.glade:396
@@ -2395,7 +2421,7 @@ msgstr "చిరునామా 1"
 msgid "Address Not Found"
 msgstr "చిరునామా పేరు"
 
-#: gnucash/gnome/dialog-doclink.c:602 gnucash/gnome/dialog-imap-editor.c:867
+#: gnucash/gnome/dialog-doclink.c:602 gnucash/gnome/dialog-imap-editor.c:860
 #, fuzzy
 msgid "Total Entries"
 msgstr "మొత్తం ధర"
@@ -2446,15 +2472,15 @@ msgstr "లావాదేవీ వివరాలు"
 #: gnucash/import-export/aqb/dialog-ab.glade:1744
 #: gnucash/import-export/aqb/dialog-ab.glade:1798
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:145
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:366
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:362
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:377
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.cpp:1545
+#: gnucash/import-export/import-main-matcher.cpp:1547
 #: gnucash/import-export/import-match-picker.cpp:315
 #: gnucash/import-export/import-match-picker.cpp:355
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3713
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3764
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3902
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3953
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:67
 #: gnucash/register/ledger-core/split-register-model.c:300
 #: gnucash/report/reports/standard/account-summary.scm:380
@@ -2553,28 +2579,28 @@ msgstr "పేరు"
 msgid "Find Employee"
 msgstr "ఉద్యోగిని వెతుకు"
 
-#: gnucash/gnome/dialog-fincalc.c:338
+#: gnucash/gnome/dialog-fincalc.c:337
 msgid ""
 "This program can only calculate one value at a time. You must enter values "
 "for all but one quantity."
 msgstr ""
 "ఈ ప్రోగ్రాం ఒకసారికి విలువను మాత్రమే లెక్కించగలదు. ఒకటి తప్ప అన్నిటికోసం మీరు విలువలను ప్రవేశపెట్టాలి."
 
-#: gnucash/gnome/dialog-fincalc.c:340
+#: gnucash/gnome/dialog-fincalc.c:339
 msgid ""
 "GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
 msgstr "GnuCash ఒకానొక క్షేత్రంలోని విలువను నిర్ధారించలేదు. మీరు చెల్లే భావప్రకటనను ప్రవేశపెట్టాలి."
 
-#: gnucash/gnome/dialog-fincalc.c:384
+#: gnucash/gnome/dialog-fincalc.c:383
 msgid "The interest rate cannot be zero."
 msgstr "వడ్డీ రేటు శూన్యంగా ఉండరాదు"
 
-#: gnucash/gnome/dialog-fincalc.c:411
+#: gnucash/gnome/dialog-fincalc.c:410
 msgid "The number of payments cannot be zero."
 msgstr "చెల్లింపుల సంఖ్య శూన్యంగా ఉండరాదు"
 
-#: gnucash/gnome/dialog-fincalc.c:416
+#: gnucash/gnome/dialog-fincalc.c:415
 msgid "The number of payments cannot be negative."
 msgstr "చెల్లింపుల సంఖ్య తక్కువగా ఉండరాదు."
 
@@ -2639,8 +2665,8 @@ msgstr "మూసే నమోదులు"
 #: gnucash/gnome/dialog-find-transactions.c:118
 #: gnucash/gnome/gnc-plugin-page-register.c:386
 #: gnucash/gnome/window-reconcile.c:1444
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:368
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:393
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:364
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:389
 msgid "Reconcile"
 msgstr "సమన్వయం"
 
@@ -2685,7 +2711,7 @@ msgstr "సమన్వయ తేదీ"
 #: gnucash/gnome/gnc-plugin-page-register.c:4003
 #: gnucash/gnome-search/dialog-search.c:879
 #: gnucash/gnome-search/dialog-search.c:885
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:385
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
 #: gnucash/report/trep-engine.scm:245
 msgid "Number/Action"
 msgstr "సంఖ్య/చర్య"
@@ -2698,7 +2724,7 @@ msgstr "సంఖ్య/చర్య"
 #: gnucash/gnome-search/dialog-search.c:886
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:103
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:146
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:385
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:65
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
 #: gnucash/register/ledger-core/split-register-model.c:332
@@ -2714,8 +2740,8 @@ msgstr "చర్య"
 #: gnucash/gnome/gnc-plugin-page-register.c:4002
 #: gnucash/gnome-search/dialog-search.c:881
 #: gnucash/gnome-search/dialog-search.c:887
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:365
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:380
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:361
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:376
 #: gnucash/report/trep-engine.scm:257
 msgid "Transaction Number"
 msgstr "లావాదేవీ సంఖ్య"
@@ -2728,8 +2754,8 @@ msgstr "లావాదేవీ సంఖ్య"
 #: gnucash/gnome-search/dialog-search.c:888
 #: gnucash/gtkbuilder/dialog-payment.glade:268
 #: gnucash/gtkbuilder/gnc-date-format.glade:99
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:365
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:380
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:361
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:376
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:60
 #: gnucash/report/trep-engine.scm:251
 msgid "Number"
@@ -2755,7 +2781,7 @@ msgstr "వివరణ/గమనికలు/మెమో"
 #: gnucash/gtkbuilder/dialog-vendor.glade:453
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:503
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:142
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:378
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:62
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:62
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:133
@@ -2804,31 +2830,31 @@ msgstr "ఖాతా సంకేతం"
 msgid "(Note, if there is a large number, it may take a while)"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:688
+#: gnucash/gnome/dialog-imap-editor.c:681
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
 msgid "Bayesian"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:703
+#: gnucash/gnome/dialog-imap-editor.c:696
 #, fuzzy
 msgid "Description Field"
 msgstr "వివరణ"
 
-#: gnucash/gnome/dialog-imap-editor.c:706
+#: gnucash/gnome/dialog-imap-editor.c:699
 msgid "Memo Field"
 msgstr ""
 
-#: gnucash/gnome/dialog-imap-editor.c:709
+#: gnucash/gnome/dialog-imap-editor.c:702
 #, fuzzy
 msgid "CSV Account Map"
 msgstr "ఖాతా పేరు"
 
-#: gnucash/gnome/dialog-imap-editor.c:749
+#: gnucash/gnome/dialog-imap-editor.c:742
 #, fuzzy
 msgid "Online Id"
 msgstr "ఆన్‌‌లైన్"
 
-#: gnucash/gnome/dialog-imap-editor.c:775
+#: gnucash/gnome/dialog-imap-editor.c:768
 #, fuzzy
 msgid "Online HBCI"
 msgstr "ఆన్‌‌లైన్"
@@ -2860,7 +2886,7 @@ msgstr ""
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:158
 #: gnucash/register/ledger-core/split-register-model.c:240
 #: gnucash/report/reports/standard/invoice.scm:226
-#: gnucash/report/reports/standard/invoice.scm:553
+#: gnucash/report/reports/standard/invoice.scm:552
 #: gnucash/report/reports/standard/new-aging.scm:112
 #: gnucash/report/reports/standard/new-owner-report.scm:50
 #: gnucash/report/reports/standard/new-owner-report.scm:936
@@ -2928,7 +2954,7 @@ msgstr "మొత్తం ఛార్జీ:"
 
 #: gnucash/gnome/dialog-invoice.c:2071 gnucash/gnome/dialog-payment.c:1358
 #: gnucash/gtkbuilder/dialog-invoice.glade:976
-#: gnucash/report/reports/standard/invoice.scm:737
+#: gnucash/report/reports/standard/invoice.scm:736
 #: libgnucash/engine/gncInvoice.c:1104
 msgid "Credit Note"
 msgstr "క్రెడిట్ నోట్"
@@ -3198,7 +3224,7 @@ msgstr "వ్యయ ఓచర్‌ను వెతుకు"
 
 #: gnucash/gnome/dialog-invoice.c:3757
 #: gnucash/gnome-search/dialog-search.c:1089
-#: gnucash/report/reports/standard/invoice.scm:733
+#: gnucash/report/reports/standard/invoice.scm:732
 msgid "Expense Voucher"
 msgstr "వ్యయ ఓచర్‌ "
 
@@ -3215,11 +3241,11 @@ msgstr "ఇన్వాయిస్‌ను వెతుకు"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.cpp:1544
+#: gnucash/import-export/import-main-matcher.cpp:1546
 #: gnucash/import-export/import-match-picker.cpp:314
 #: gnucash/import-export/import-match-picker.cpp:354
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3724
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3775
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3913
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3964
 #: gnucash/report/reports/standard/general-journal.scm:101
 #: gnucash/report/reports/standard/general-ledger.scm:81
 #: gnucash/report/reports/standard/general-ledger.scm:101
@@ -4066,20 +4092,20 @@ msgstr[1] ""
 msgid "Select a Budget"
 msgstr "బడ్జెట్‌ను ఎంచుకో"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:287
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:288
 #: gnucash/gnome/gnc-plugin-page-budget.c:177 gnucash/gnome-utils/gnc-file.c:92
 #: gnucash/gnome-utils/gnc-file.c:329 gnucash/gnome-utils/gnc-file.c:1182
 msgid "Open"
 msgstr "తెరువు"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:288
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:289
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:219
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:220
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
 msgid "Edit"
 msgstr "సవరించు"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:289
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:290
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:222
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:223
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:224
@@ -4087,7 +4113,7 @@ msgstr "సవరించు"
 msgid "New"
 msgstr "కొత్త"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:290
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:291
 #: gnucash/gnome/gnc-plugin-page-budget.c:178
 #: gnucash/gnome/gnc-plugin-page-invoice.c:283
 #: gnucash/gnome/gnc-plugin-page-register.c:378
@@ -4095,14 +4121,14 @@ msgstr "కొత్త"
 msgid "Delete"
 msgstr "తొలగించు"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:335
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1900
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:336
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1909
 #: gnucash/gnome/gnc-plugin-page-register.c:1796
 #: gnucash/gnome/gnc-plugin-page-register.c:4945
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:398
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:399
 #: gnucash/gtkbuilder/assistant-csv-export.glade:270
 #: gnucash/gtkbuilder/dialog-preferences.glade:1002
 #: gnucash/report/report-core.scm:163
@@ -4132,7 +4158,7 @@ msgstr ""
 msgid "Accounts"
 msgstr "ఖాతాలు"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1292
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1301
 #, fuzzy, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
@@ -4140,27 +4166,27 @@ msgid ""
 "Are you sure you want to do this?"
 msgstr "ప్రస్తుత లావాదేవీ మీద శుభ్రపరిచి రాయాలనుకుంటున్నారు. మీరు దానిని తప్పక చేయాలనుకుంటున్నారా?"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1300
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1309
 #, fuzzy
 msgid "_Pick another account"
 msgstr "_బదిలీ ఖాతాను ఎంచుకో"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1301
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1310
 msgid "_Do it anyway"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1384
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1523
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1393
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1532
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:1044
 msgid "(no name)"
 msgstr "(పేరు లేదు)"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1396
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1405
 #, c-format
 msgid "Deleting account %s"
 msgstr "%s ఖాతాను తొలగిస్తోంది"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1513
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1522
 msgid ""
 "The list below shows objects which make use of the account which you want to "
 "delete.\n"
@@ -4169,7 +4195,7 @@ msgid ""
 "of another account"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1526
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1535
 #, c-format
 msgid ""
 "The account \"%s\" has more than one subaccount.\n"
@@ -4177,42 +4203,42 @@ msgid ""
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1588
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1597
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "%s ఖాతా తొలగించబడింది"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1597
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1606
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "ఈ ఖాతాలోని లావాదేవీలన్నీ %sఖాతాలోకి తరలించబడతాయి."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1604
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1613
 #, c-format
 msgid "All transactions in this account will be deleted."
 msgstr "ఈ ఖాతాలోని లావాదేవీలన్నీ తొలగించబడతాయి."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1613
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1622
 #, fuzzy, c-format
 msgid "Its sub-account will be moved to the account %s."
 msgstr "దీని ఉపఖాతాలన్నీ %sఖాతాలోకి తరలించబడతాయి."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1619
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1628
 #, fuzzy, c-format
 msgid "Its subaccount will be deleted."
 msgstr "దీని ఉపఖాతాలన్నీ తొలగించబడతాయి."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1623
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1632
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "ఉప-ఖాతా లావాదేవీలన్నీ %sఖాతాలోకి తరలించబడతాయి."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1630
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1639
 #, c-format
 msgid "All sub-account transactions will be deleted."
 msgstr "ఉపఖాతా లావాదేవీలన్నీ తొలగించబడతాయి."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1636
+#: gnucash/gnome/gnc-plugin-page-account-tree.c:1645
 msgid "Are you sure you want to do this?"
 msgstr "మీరు ఖచ్చితంగా ఇది చేయాలనుకుంటున్నారా?"
 
@@ -5305,7 +5331,7 @@ msgstr "%s ఫైల్ ఇప్పటికే ఉంది. మీరు ఖ�
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1761
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1787
-#: gnucash/gnucash-commands.cpp:180 gnucash/gnucash-commands.cpp:208
+#: gnucash/gnucash-commands.cpp:186 gnucash/gnucash-commands.cpp:214
 msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
@@ -5321,7 +5347,7 @@ msgid "GnuCash-Report"
 msgstr "GnuCash-నివేదిక"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1892
-#: gnucash/report/reports/standard/invoice.scm:849
+#: gnucash/report/reports/standard/invoice.scm:848
 msgid "Printable Invoice"
 msgstr "ముద్రించగల ఇన్‌వాయిస్"
 
@@ -5329,17 +5355,17 @@ msgstr "ముద్రించగల ఇన్‌వాయిస్"
 #: gnucash/report/reports/standard/taxinvoice.scm:301
 #: gnucash/report/reports/standard/taxinvoice.scm:303
 #: gnucash/report/reports/standard/taxinvoice.scm:315
-#: gnucash/report/reports/support/taxinvoice.eguile.scm:424
+#: gnucash/report/reports/support/taxinvoice.eguile.scm:423
 msgid "Tax Invoice"
 msgstr "పన్ను ఇన్వాయిస్‌"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1894
-#: gnucash/report/reports/standard/invoice.scm:859
+#: gnucash/report/reports/standard/invoice.scm:858
 msgid "Easy Invoice"
 msgstr "తేలికైన ఇన్వాయిస్‌"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1895
-#: gnucash/report/reports/standard/invoice.scm:869
+#: gnucash/report/reports/standard/invoice.scm:868
 msgid "Fancy Invoice"
 msgstr "ఇష్టానుసార ఇన్వాయిస్‌"
 
@@ -6445,26 +6471,26 @@ msgstr "(%d) కొత్త ఖాతాలు"
 msgid "New Account"
 msgstr "కొత్త ఖాతా"
 
-#: gnucash/gnome-utils/dialog-account.c:2342
+#: gnucash/gnome-utils/dialog-account.c:2333
 #, fuzzy, c-format
 #| msgid "Renumber sub-accounts"
 msgid "Renumber the immediate sub-accounts of '%s'?"
 msgstr "ఉప-ఖాతాలను తిరిగి సంఖ్యపరచు"
 
-#: gnucash/gnome-utils/dialog-account.c:2448
+#: gnucash/gnome-utils/dialog-account.c:2439
 #, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
 "selected color"
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-account.c:2475
+#: gnucash/gnome-utils/dialog-account.c:2466
 #, fuzzy, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
 msgstr "ఏదేని ఉపఖాతాలను మినహాయించి, మాతృక ఖాతాలో బ్యాలెన్స్‌ను మాత్రమే చూపించు."
 
-#: gnucash/gnome-utils/dialog-account.c:2489
+#: gnucash/gnome-utils/dialog-account.c:2480
 #, fuzzy, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
@@ -6921,19 +6947,19 @@ msgstr "గుర్తుంచుకుని, ఈ_సెషన్‌లో �
 msgid "Don't tell me again this _session."
 msgstr "ఈ_ సెషన్‌ గురించి మళ్ళీ నాకు చెప్పకు"
 
-#: gnucash/gnome-utils/gnc-account-sel.c:519
+#: gnucash/gnome-utils/gnc-account-sel.c:521
 #, fuzzy
 #| msgid "Selected Accounts"
 msgid "Hide _Placeholder Accounts"
 msgstr "ఎంచుకున్న ఖాతాలు"
 
-#: gnucash/gnome-utils/gnc-account-sel.c:521
+#: gnucash/gnome-utils/gnc-account-sel.c:523
 #, fuzzy
 #| msgid "Show Hidden Accounts"
 msgid "Hide _Hidden Accounts"
 msgstr "భద్రపరచిన ఖాతాలను చూపించు"
 
-#: gnucash/gnome-utils/gnc-account-sel.c:716
+#: gnucash/gnome-utils/gnc-account-sel.c:700
 msgid "Set the visibility of placeholder and hidden accounts."
 msgstr ""
 
@@ -6941,7 +6967,7 @@ msgstr ""
 #. * control used in several dialogs. When pressed it opens the New Account
 #. * dialog.
 #.
-#: gnucash/gnome-utils/gnc-account-sel.c:990
+#: gnucash/gnome-utils/gnc-account-sel.c:982
 msgid "New…"
 msgstr ""
 
@@ -6959,21 +6985,31 @@ msgstr "%s ను ప్రోసెసింగ్ చేసేటప్పు�
 msgid "An error occurred while processing '%s'"
 msgstr "%s ను ప్రోసెసింగ్ చేసేటప్పుడు సంభవించిన దోషం"
 
-#: gnucash/gnome-utils/gnc-autoclear.c:98
+#: gnucash/gnome-utils/gnc-autoclear.c:149
+#, c-format
 msgid "Account is already at Auto-Clear Balance."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-autoclear.c:144
+#: gnucash/gnome-utils/gnc-autoclear.c:155
+#, fuzzy, c-format
+#| msgid "_Review created transactions"
+msgid "No uncleared splits found."
+msgstr "_సృష్టించిన లావాదేవీలను సమీక్షించు"
+
+#: gnucash/gnome-utils/gnc-autoclear.c:171
+#, c-format
 msgid "Too many uncleared splits"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-autoclear.c:160
-msgid "The selected amount cannot be cleared."
-msgstr "ఎంపిక చేసిన మొత్తాన్ని చెరిపి వేయరాదు."
-
-#: gnucash/gnome-utils/gnc-autoclear.c:166
+#: gnucash/gnome-utils/gnc-autoclear.c:177
+#, c-format
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr "విభజనలను విశిష్ఠంగా చెరిపివేయలేరు. అనేక అవకాశాలు కనుగొనబడ్డాయి."
+
+#: gnucash/gnome-utils/gnc-autoclear.c:188
+#, c-format
+msgid "The selected amount cannot be cleared."
+msgstr "ఎంపిక చేసిన మొత్తాన్ని చెరిపి వేయరాదు."
 
 #: gnucash/gnome-utils/gnc-autosave.c:101
 msgid "Save file automatically?"
@@ -7605,25 +7641,25 @@ msgstr "చివరగా %I:%M%P వద్ద %a, %b %e, %Yన సవరిం
 msgid "File %s opened. %s"
 msgstr "ఫైల్ %s తెరవబడింది. %s"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:2907
+#: gnucash/gnome-utils/gnc-main-window.cpp:2927
 msgctxt "lower case key for short cut to 'Accounts'"
 msgid "a"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:2994
+#: gnucash/gnome-utils/gnc-main-window.cpp:3014
 msgid "Unable to save to database."
 msgstr "డేటాబేస్ భద్రపరచడానికి సాధ్యం కాలేకపోయింది."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:2996
+#: gnucash/gnome-utils/gnc-main-window.cpp:3016
 msgid "Unable to save to database: Book is marked read-only."
 msgstr "డేటాబేస్ భద్రపరచడానికి సాధ్యం కాలేదు: పఠిత అని పుస్తకం అని గుర్తు వేయబడింది."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4631
+#: gnucash/gnome-utils/gnc-main-window.cpp:4651
 #: gnucash/gtkbuilder/assistant-qif-import.glade:943
 msgid "Book Options"
 msgstr "పుస్తక ఐచ్ఛికాలు"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:4955
+#: gnucash/gnome-utils/gnc-main-window.cpp:4975
 #, fuzzy
 #| msgid "The minimum number of invoice entries to display."
 msgid ""
@@ -7631,28 +7667,28 @@ msgid ""
 "added."
 msgstr "ప్రదర్శించడానికి ఇన్‌వాయిస్ ఎంట్రీల కనిష్ఠ నెంబర్."
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5193
-#: gnucash/gnucash-core-app.cpp:250
+#: gnucash/gnome-utils/gnc-main-window.cpp:5213
+#: gnucash/gnucash-core-app.cpp:242
 msgid "(user modifiable)"
 msgstr ""
 
 #. Translators: %s will be replaced with the current year
-#: gnucash/gnome-utils/gnc-main-window.cpp:5218
+#: gnucash/gnome-utils/gnc-main-window.cpp:5238
 #, c-format
 msgid "Copyright © 1997-%s The GnuCash contributors."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5230
+#: gnucash/gnome-utils/gnc-main-window.cpp:5250
 #: gnucash/gnome-utils/gnc-splash.c:99
 msgid "Version"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5231
-#: gnucash/gnome-utils/gnc-splash.c:100 gnucash/gnucash-core-app.cpp:266
+#: gnucash/gnome-utils/gnc-main-window.cpp:5251
+#: gnucash/gnome-utils/gnc-splash.c:100 gnucash/gnucash-core-app.cpp:258
 msgid "Build ID"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5239
+#: gnucash/gnome-utils/gnc-main-window.cpp:5259
 #, fuzzy
 msgid "Accounting for personal and small business finance."
 msgstr "-gnuక్యాష్ వ్యక్తిగత మరియు చిన్న వ్యాపార ఆర్థిక నిర్వహణ"
@@ -7661,11 +7697,11 @@ msgstr "-gnuక్యాష్ వ్యక్తిగత మరియు చ�
 #. Enter your name or that of your team and an email contact for feedback.
 #. The string can have multiple rows, so you can also add a list of
 #. contributors.
-#: gnucash/gnome-utils/gnc-main-window.cpp:5248
+#: gnucash/gnome-utils/gnc-main-window.cpp:5268
 msgid "translator-credits"
 msgstr "Ravi Kumar Ragam, C-DAC, GIST, Pune, India, 2014"
 
-#: gnucash/gnome-utils/gnc-main-window.cpp:5251
+#: gnucash/gnome-utils/gnc-main-window.cpp:5271
 msgid "Visit the GnuCash website."
 msgstr ""
 
@@ -7807,8 +7843,8 @@ msgstr "కొత్త ఉన్నత స్థాయి ఖాతా"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:788
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:983
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:364
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:388
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:360
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:384
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:60
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:276
 #: gnucash/report/reports/standard/general-ledger.scm:72
@@ -8254,6 +8290,7 @@ msgid "Not enough information for quotes dump"
 msgstr "ఖాళీ లావాదేవీ కోసం తగినంత సమాచారం లేదా? "
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8262,6 +8299,7 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8270,96 +8308,98 @@ msgstr ""
 msgid "Missing command or option"
 msgstr "ఇది ఒక రంగు ఐచ్చికం."
 
-#: gnucash/gnucash-commands.cpp:309 gnucash/gnucash-commands.cpp:355
-#: gnucash/gnucash.cpp:177
+#: gnucash/gnucash-commands.cpp:315 gnucash/gnucash-commands.cpp:361
+#: gnucash/gnucash.cpp:181
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
-#: gnucash/gnucash-commands.cpp:310
+#: gnucash/gnucash-commands.cpp:316
 msgid "Finance::Quote sources:\n"
 msgstr ""
 
-#: gnucash/gnucash-commands.cpp:365 gnucash/gnucash-commands.cpp:389
+#: gnucash/gnucash-commands.cpp:371 gnucash/gnucash-commands.cpp:395
 msgid "Price retrieval failed: "
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:79
+#: gnucash/gnucash-core-app.cpp:78
 msgid "This is a development version. It may or may not work."
 msgstr "ఇది ఒక అభివృద్ధి వెర్షన్. ఇది పని చేయవచ్చు లేదా పని చేయకపోవచ్చు."
 
-#: gnucash/gnucash-core-app.cpp:80
+#: gnucash/gnucash-core-app.cpp:79
 msgid "Report bugs and other problems to gnucash-devel@gnucash.org"
 msgstr "gnuక్యాష్-డెవ్‌లప్@gnuక్యాష్.ఆర్గ్‌కు దోషాలను మరియు ఇతర సమస్యలను నివేదించు"
 
 #. Translators: {1} will be replaced with an URL
-#: gnucash/gnucash-core-app.cpp:82
-#, fuzzy
+#: gnucash/gnucash-core-app.cpp:81
+#, fuzzy, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "https://bugs.gnucash.org కూడా మీరు దోష నివేదికలను చూడవచ్చు మరియు ఫైల్ చేయవచ్చు."
 
 #. Translators: {1} will be replaced with an URL
-#: gnucash/gnucash-core-app.cpp:84
-#, fuzzy
+#: gnucash/gnucash-core-app.cpp:83
+#, fuzzy, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "చివరి స్టేబుల్ వెర్షన్‌ను కనుగొనడానికి, దయచేసి http://www.gnucash.org ‌కు వెళ్లండి."
 
 #. Translators: Guile is the programming language of the reports
-#: gnucash/gnucash-core-app.cpp:101
+#: gnucash/gnucash-core-app.cpp:93
 msgid "Loading system wide Guile extensions…"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:113
+#: gnucash/gnucash-core-app.cpp:105
 msgid "Loading user specific Guile extensions…"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:215
+#: gnucash/gnucash-core-app.cpp:207
 #, fuzzy
 msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "-gnuక్యాష్ వ్యక్తిగత మరియు చిన్న వ్యాపార ఆర్థిక నిర్వహణ"
 
-#: gnucash/gnucash-core-app.cpp:217
+#: gnucash/gnucash-core-app.cpp:209
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:245
+#: gnucash/gnucash-core-app.cpp:237
 #, fuzzy
 msgid "GnuCash Paths"
 msgstr "Gnuక్యాష్"
 
-#: gnucash/gnucash-core-app.cpp:258
-#, fuzzy
+#: gnucash/gnucash-core-app.cpp:250
+#, fuzzy, c++-format
 msgid "GnuCash {1}"
 msgstr "Gnuక్యాష్"
 
-#: gnucash/gnucash-core-app.cpp:259
-#, fuzzy
+#: gnucash/gnucash-core-app.cpp:251
+#, fuzzy, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s అభివృద్ధి వెర్షన్‌"
 
-#: gnucash/gnucash-core-app.cpp:284
+#: gnucash/gnucash-core-app.cpp:276
 #, fuzzy
 msgid "Common Options"
 msgstr "పుస్తక ఐచ్ఛికాలు"
 
-#: gnucash/gnucash-core-app.cpp:287
+#: gnucash/gnucash-core-app.cpp:279
 msgid "Show this help message"
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:289
+#: gnucash/gnucash-core-app.cpp:281
 msgid "Show GnuCash version"
 msgstr "GnuCash వెర్షన్‌ని చూపించు"
 
-#: gnucash/gnucash-core-app.cpp:291
+#: gnucash/gnucash-core-app.cpp:283
 msgid ""
 "Enable debugging mode: provide deep detail in the logs.\n"
 "This is equivalent to: --log \"=info\" --log \"qof=info\" --log \"gnc=info\""
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:293
+#: gnucash/gnucash-core-app.cpp:285
 msgid "Enable extra/development/debugging features."
 msgstr "అదనం/అభివృద్ధి/డీబగ్ చేసే విశేషాంశాలను చేతనపరచు"
 
-#: gnucash/gnucash-core-app.cpp:295
+#: gnucash/gnucash-core-app.cpp:287
 msgid ""
 "Log level overrides, of the form \"modulename={debug,info,warn,crit,"
 "error}\"\n"
@@ -8367,13 +8407,13 @@ msgid ""
 "This can be invoked multiple times."
 msgstr ""
 
-#: gnucash/gnucash-core-app.cpp:297
+#: gnucash/gnucash-core-app.cpp:289
 #, fuzzy
 #| msgid "Show plot"
 msgid "Show paths"
 msgstr "ప్లాట్‌ను చూపించు"
 
-#: gnucash/gnucash-core-app.cpp:299
+#: gnucash/gnucash-core-app.cpp:291
 msgid ""
 "File to log into; defaults to \"/tmp/gnucash.trace\"; can be \"stderr\" or "
 "\"stdout\"."
@@ -8381,38 +8421,38 @@ msgstr ""
 "\"/tmp/gnucash.trace\"; can be \"stderr\" or \"stdout\"కు అప్రమేయాలు; లోనికి "
 "ప్రవేశించడానికి ఫైల్ చేయి"
 
-#: gnucash/gnucash-core-app.cpp:301
+#: gnucash/gnucash-core-app.cpp:293
 #, fuzzy
 msgid "Hidden Options"
 msgstr "బడ్జెట్ ఐచ్ఛికాలు"
 
-#: gnucash/gnucash-core-app.cpp:304
+#: gnucash/gnucash-core-app.cpp:296
 msgid "[datafile]"
 msgstr "[డేటాఫైల్]"
 
-#: gnucash/gnucash.cpp:174
+#: gnucash/gnucash.cpp:178
 msgid "Checking Finance::Quote…"
 msgstr "ఫైనాన్స్:: ధర అంచనా పరిశీలిస్తోంది…"
 
-#: gnucash/gnucash.cpp:185
+#: gnucash/gnucash.cpp:189
 msgid "Unable to load Finance::Quote."
 msgstr "ఫైనాన్స్:: ధర అంచనా పరిశీలిస్తోంది..."
 
-#: gnucash/gnucash.cpp:196
+#: gnucash/gnucash.cpp:200
 msgid "Loading data…"
 msgstr "డేటా లోడవుతోంది…"
 
-#: gnucash/gnucash.cpp:268
+#: gnucash/gnucash.cpp:272
 #, fuzzy
 msgid "Application Options"
 msgstr "అనువర్తనం"
 
-#: gnucash/gnucash.cpp:271
+#: gnucash/gnucash.cpp:275
 msgid "Do not load the last file opened"
 msgstr "చివరిగా తెరచిన ఫైల్‌ను లోడ్‌ చేయవద్దు"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:309
+#: gnucash/gnucash.cpp:313
 #, fuzzy
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
@@ -12225,7 +12265,7 @@ msgstr ""
 "ప్రాప్తించుకోగలరు."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:969
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2646
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2815
 msgid "Choose the QIF file currency and select Book Options"
 msgstr "QIF ఫైల్ కరెన్సీని ఎంచుకుని, పుస్తక ఐచ్చికాలను ఎంపిక చేసుకో"
 
@@ -12280,8 +12320,8 @@ msgid "_Start Import"
 msgstr "_దిగుమతిని ప్రారంభించు"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1142
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1737
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2989
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1854
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3162
 msgid "P_ause"
 msgstr ""
 
@@ -12510,7 +12550,11 @@ msgstr "లావాదేవీ దిగుమతి అసిస్టెం�
 msgid ""
 "This assistant will help you record a stock transaction. The transaction "
 "type (purchase, sale, dividend, distribution, return of capital, stock "
-"split) will determine the transaction splits involved in the transaction."
+"split) will determine the transaction splits involved in the transaction. "
+"Note that the transaction currency will be that of the stock account and "
+"that multi-currency transactions are not supported: Only accounts in the "
+"transaction currency will be offered for cash, capital gains, dividends, and "
+"fees."
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
@@ -17546,7 +17590,7 @@ msgid "GnuCash Account Name"
 msgstr "GnuCash ఖాతా పేరు"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.c:783
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:572
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:584
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:452
 msgid "New?"
 msgstr "కొత్తా?"
@@ -18926,71 +18970,71 @@ msgid "File exported successfully!\n"
 msgstr "ఫైల్ విజయవంతంగా ఎగుమతి చేయబడింది!\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
-#: gnucash/import-export/import-main-matcher.cpp:1843
+#: gnucash/import-export/import-main-matcher.cpp:1845
 #: gnucash/report/reports/standard/register.scm:217
 #: libgnucash/engine/Split.c:1610 libgnucash/engine/Split.c:1627
 msgid "-- Split Transaction --"
 msgstr "-- చీలిక లావాదేవీ -- "
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:367
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:363
 #, fuzzy
 msgid "Full Category Path"
 msgstr "QIF వర్గం పేరు"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:369
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:389
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:365
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:385
 #, fuzzy
 msgid "Amount With Sym"
 msgstr "సిమ్‌తో వరకు"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:370
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:390
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:366
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:386
 #, fuzzy
 msgid "Amount Num."
 msgstr "బాకీ మొత్తం"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:371
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:391
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:367
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:387
 #, fuzzy
 msgid "Value With Sym"
 msgstr "సిమ్‌తో వరకు"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:372
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:392
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:368
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:388
 #, fuzzy
 #| msgid "Value $"
 msgid "Value Num."
 msgstr "విలువ $"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:373
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:395
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:369
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:391
 #, fuzzy
 msgid "Rate/Price"
 msgstr "రేట్/ధర వరకు"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:379
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:375
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:58
 #, fuzzy
 msgid "Transaction ID"
 msgstr "లావాదేవీ"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:383
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:379
 #, fuzzy
 msgid "Commodity/Currency"
 msgstr "సాధారణ కరెన్సీ"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:384
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:380
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:64
 msgid "Void Reason"
 msgstr "చెల్లని కారణం"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:387
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:383
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:60
 #, fuzzy
 msgid "Full Account Name"
 msgstr "పూర్తి ఖాతా పేరును ఉపయోగించు"
 
-#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:394
+#: gnucash/import-export/csv-exp/csv-transactions-export.cpp:390
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:74
 #, fuzzy
 msgid "Reconcile Date"
@@ -19152,7 +19196,7 @@ msgid ""
 "- %s"
 msgstr "లావాదేవీలు ఫైల్ '%s' నుంచి దిగుమతి చేయబడ్డాయి."
 
-#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1980
+#: gnucash/import-export/csv-imp/assistant-csv-price-import.cpp:1981
 #, c-format
 msgid ""
 "An unexpected error has occurred while creating prices. Please report this "
@@ -19187,7 +19231,7 @@ msgstr "మార్చడానికి వరుసల్లో డబుల�
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2202
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "లావాదేవీలు ఫైల్ '%s' నుంచి దిగుమతి చేయబడ్డాయి."
 
@@ -19405,6 +19449,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -19668,137 +19713,137 @@ msgstr "సంవత్సరం/నెల/తేదీ "
 msgid "y/d/m"
 msgstr "సంవత్సరం/తేదీ/నెల "
 
-#: gnucash/import-export/import-main-matcher.cpp:499
+#: gnucash/import-export/import-main-matcher.cpp:501
 #, fuzzy
 msgid "No new transactions were found in this import."
 msgstr "ఈ లావాదేవీ URIతో ముడిపడలేదు."
 
-#: gnucash/import-export/import-main-matcher.cpp:771
+#: gnucash/import-export/import-main-matcher.cpp:773
 msgid "Destination account for the auto-balance split."
 msgstr "స్వయం-నిల్వ చీలికకోసం గమ్య ఖాతా"
 
-#: gnucash/import-export/import-main-matcher.cpp:962
+#: gnucash/import-export/import-main-matcher.cpp:964
 msgid "Click Edit to modify"
 msgstr ""
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1367
+#: gnucash/import-export/import-main-matcher.cpp:1369
 #, fuzzy
 #| msgid "_Select transfer account"
 msgid "_Assign transfer account"
 msgstr "_బదిలీ ఖాతాను ఎంచుకో"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1377
+#: gnucash/import-export/import-main-matcher.cpp:1379
 #, fuzzy
 #| msgid "Exchange rate"
 msgid "Assign e_xchange rate"
 msgstr "ఎక్స్‌చేంజ్ రేటు"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1385
+#: gnucash/import-export/import-main-matcher.cpp:1387
 #, fuzzy
 msgid "_Edit description, notes, or memo"
 msgstr "వివరణ/గమనికలు/మెమో"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1394
+#: gnucash/import-export/import-main-matcher.cpp:1396
 #, fuzzy
 #| msgid "Reset defaults"
 msgid "_Reset all edits"
 msgstr "అప్రమేయాలను యథాస్థితికి చేర్చు"
 
-#: gnucash/import-export/import-main-matcher.cpp:1547
+#: gnucash/import-export/import-main-matcher.cpp:1549
 #, fuzzy
 #| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.cpp:1551
+#: gnucash/import-export/import-main-matcher.cpp:1553
 #, fuzzy
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "U+R"
 
-#: gnucash/import-export/import-main-matcher.cpp:1555
+#: gnucash/import-export/import-main-matcher.cpp:1557
 #, fuzzy
 #| msgid "C"
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "C"
 
-#: gnucash/import-export/import-main-matcher.cpp:1562
+#: gnucash/import-export/import-main-matcher.cpp:1564
 msgid "Info"
 msgstr "సమాచారం"
 
-#: gnucash/import-export/import-main-matcher.cpp:1569
+#: gnucash/import-export/import-main-matcher.cpp:1571
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 #, fuzzy
 msgid "Additional Comments"
 msgstr "కార్డుకు అదనం:"
 
-#: gnucash/import-export/import-main-matcher.cpp:1955
+#: gnucash/import-export/import-main-matcher.cpp:1957
 msgid "New, already balanced"
 msgstr "కొత్తది, ఇప్పటికే సమతుల్యం చేసినది"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:1977
+#: gnucash/import-export/import-main-matcher.cpp:1979
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "కొత్తది, \"%s\" (మానవీయ)కు %s బదిలీ"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:1985
+#: gnucash/import-export/import-main-matcher.cpp:1987
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "కొత్తది, \"%s\" (స్వయం)కు %s బదిలీ"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:1998
+#: gnucash/import-export/import-main-matcher.cpp:2000
 #, fuzzy, c-format
 #| msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr "కొత్త, అసమతుల్యం (%s బదిలీకి ఖాతా కావాలి)!"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2014
+#: gnucash/import-export/import-main-matcher.cpp:2016
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "కొత్త, అసమతుల్యం (%s బదిలీకి ఖాతా కావాలి)!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2032
+#: gnucash/import-export/import-main-matcher.cpp:2034
 #, fuzzy, c-format
 #| msgid "Reconcile (manual) match"
 msgid "Reconcile (manual) match to %s"
 msgstr "సమన్వయ (మానవీయ) సరిపోలిక"
 
-#: gnucash/import-export/import-main-matcher.cpp:2037
+#: gnucash/import-export/import-main-matcher.cpp:2039
 #, fuzzy, c-format
 #| msgid "Reconcile (auto) match"
 msgid "Reconcile (auto) match to %s"
 msgstr "సమన్వయ (స్వయం) సరిపోలిక"
 
-#: gnucash/import-export/import-main-matcher.cpp:2046
-#: gnucash/import-export/import-main-matcher.cpp:2075
+#: gnucash/import-export/import-main-matcher.cpp:2048
+#: gnucash/import-export/import-main-matcher.cpp:2077
 msgid "Match missing!"
 msgstr "సరిపోలిక అదృశ్యమైంది!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2061
+#: gnucash/import-export/import-main-matcher.cpp:2063
 #, fuzzy, c-format
 #| msgid "Update and reconcile (manual) match"
 msgid "Update and reconcile (manual) match to %s"
 msgstr "నవీకరించి, (మానవీయ) సరిపోలిక సమన్వితం చేయి"
 
-#: gnucash/import-export/import-main-matcher.cpp:2066
+#: gnucash/import-export/import-main-matcher.cpp:2068
 #, fuzzy, c-format
 #| msgid "Update and reconcile (auto) match"
 msgid "Update and reconcile (auto) match to %s"
 msgstr "నవీకరించి, (స్వయం) సరిపోలిక సమన్వితం చేయి"
 
-#: gnucash/import-export/import-main-matcher.cpp:2083
+#: gnucash/import-export/import-main-matcher.cpp:2085
 msgid "Do not import (no action selected)"
 msgstr "దిగుమతి చేయకు (చర్య ఎంచుకోబడలేదు)"
 
@@ -19911,15 +19956,15 @@ msgstr "_OFX/QFXను దిగుమతి చేసుకో…"
 msgid "Process an OFX/QFX response file"
 msgstr "OFX/QFX స్పందన ఫైల్‌ను ప్రోసెస్ చేయి"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:556
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:568
 msgid "GnuCash account name"
 msgstr "GnuCash ఖాతా పేరు"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:861
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:873
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
 msgstr "పేరు లేక \"Red Hat Stock\" లాంటి క్లుప్త వివరణను ప్రవేశపెట్టు"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:863
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:875
 msgid ""
 "Enter the ticker symbol or other well known abbreviation, such as \"RHT\". "
 "If there isn't one, or you don't know it, create your own."
@@ -19927,7 +19972,7 @@ msgstr ""
 "టిక్కర్ చిహ్నం లేక \"RHT\" లాంటి ఇతర బాగా పరిచయమైన సంక్షేపంను ప్రవేశపెట్టు. అలాంటిది లేకుంటే లేదా అది "
 "మీకు తెలియకుంటే, సొంతంగా సృష్టించుకో"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:866
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:878
 msgid ""
 "Select the exchange on which the symbol is traded, or select the type of "
 "investment (such as FUND for mutual funds.) If you don't see your exchange "
@@ -19937,93 +19982,93 @@ msgstr ""
 "లాంటిది). మీ ఎక్స్‌చేంజిని మీరు చూడలేకున్నా లేకుంటే తగిన పెట్టుబడి రకం కాకున్నా, మీరు కొత్త దానిని "
 "ప్రవేశపెట్టగలరు."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:906
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:918
 #, fuzzy
 #| msgid "_Name or description"
 msgid "Name or _description"
 msgstr "_పేరు లేదా వివరణ"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:930
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:942
 msgid "_Ticker symbol or other abbreviation"
 msgstr "_టిక్కర్ చిహ్నం లేక ఇతర సంక్షేపం"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:964
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:976
 msgid "_Exchange or abbreviation type"
 msgstr "_ఎక్స్‌చేంజ్ లేక సంక్షేపం రకం"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1180
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3318
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1192
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3497
 msgid "(split)"
 msgstr "(చీలిక)"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1373
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1385
 #, fuzzy
 msgid "Are you sure you want to cancel?"
 msgstr "మీరు ఖచ్చితంగా \"%s\"ను తొలగించాలనుకుంటున్నారా?"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1584
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1701
 msgid "Please select a file to load."
 msgstr "దయచేసి లోడ్‌చేయడానికి ఫైల్‌ను ఎంచుకో"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1587
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1704
 msgid "File not found or read permission denied. Please select another file."
 msgstr "ఫైల్ కనిపించడం లేదు లేకుంటే చదివే అనుమతి తిరస్కరించబడింది. దయచేసి మరో ఫైల్‌ను ఎంచుకో"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1598
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1715
 msgid "That QIF file is already loaded. Please select another file."
 msgstr "ఆ QIF ఫైల్ ఇంతకుముందే లోడ్‌చేయబడింది. దయచేసి మరో ఫైల్‌ను ఎంచుకోండి"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1666
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1783
 msgid "Select QIF File"
 msgstr "QIF ఫైల్‌ను ఎంచుకో"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1729
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1732
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2981
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2984
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1846
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1849
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3154
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3157
 msgid "_Resume"
 msgstr "_పునరుద్ధరించు"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1817
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1892
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3068
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1934
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2011
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3241
 msgid "Canceled"
 msgstr "రద్దు చేసిన "
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1831
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1835
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1948
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1952
 msgid "An error occurred while loading the QIF file."
 msgstr "QIF ఫైల్‌‌ను ఎక్కించేటప్పుడు దోషం సంభవించింది."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1832
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1850
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1911
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1968
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3088
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3109
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3157
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1949
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:1967
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2030
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2087
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3261
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3282
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3330
 msgid "Failed"
 msgstr "విఫలమైంది"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1888
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1905
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3064
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3082
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3105
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3151
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2007
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2024
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3237
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3255
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3278
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3324
 msgid "Cleaning up"
 msgstr "శుభ్రపరచడం"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1910
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1914
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2029
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2033
 msgid "A bug was detected while parsing the QIF file."
 msgstr "QIF ఫైల్‌ను విడగొట్టేటప్పుడు దోషం గుర్తించబడింది."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:1985
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2104
 msgid "Loading completed"
 msgstr "లోడ్‌చేయడం పూర్తయ్యింది"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2022
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2139
 msgid ""
 "When you press the Start Button, GnuCash will load your QIF file. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
@@ -20033,33 +20078,33 @@ msgstr ""
 "హెచ్చరికలు కానీ లేకుంటే, మీరు స్వయంచాలకంగా తదుపరి దశకు వెళుతారు. లేని పక్షంలో, మీ సమీక్ష కోసం "
 "వివరాలు కింద చూపించబడుతాయి."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2653
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:2822
 msgid "Choose the QIF file currency"
 msgstr "QIF ఫైల్ కరెన్సీని ఎంచుకో"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:2869
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3042
 msgid "You must enter an existing national currency or enter a different type."
 msgstr "ప్రస్తుత జాతీయ కరెన్సీ లేక భిన్నమైన రకాన్ని ప్రవేశపెట్టాలి."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3087
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3091
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3260
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3264
 msgid "A bug was detected while converting the QIF data."
 msgstr "QIF డేటాను పరివర్తిస్తుండగా, దోషం గుర్తించబడింది."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3142
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3315
 msgid "Canceling"
 msgstr "రద్దుచేస్తోంది"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3156
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3160
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3329
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3333
 msgid "A bug was detected while detecting duplicates."
 msgstr "నకీలీలను గుర్తిస్తుండగా, దోషం గుర్తించబడింది."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3179
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3352
 msgid "Conversion completed"
 msgstr "మార్పు పూర్తయింది."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3211
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3385
 msgid ""
 "When you press the Start Button, GnuCash will import your QIF data. If there "
 "are no errors or warnings, you will automatically proceed to the next step. "
@@ -20069,37 +20114,37 @@ msgstr ""
 "హెచ్చరికలు కానీ లేకుంటే, మీరు స్వయంచాలకంగా తదుపరి దశకు వెళుతారు. లేని పక్షంలో, మీ సమీక్ష కోసం "
 "వివరాలు కింద చూపించబడుతాయి."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3417
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3606
 msgid "GnuCash was unable to save your mapping preferences."
 msgstr "మీ మ్యాపింగ్ అభీష్టాలను GnuCash భద్రపరచలేకపోతోంది."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3450
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3639
 #, c-format
 msgid "There was a problem with the import."
 msgstr "దిగుమతితో సమస్య ఏర్పడింది."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3452
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3641
 #, c-format
 msgid "QIF Import Completed."
 msgstr "QIF దిగుమతి పూర్తయింది."
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3670
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3859
 msgid "QIF account name"
 msgstr "QIF ఖాతా పేరు"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3676
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3865
 msgid "QIF category name"
 msgstr "QIF వర్గం పేరు"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3682
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3871
 msgid "QIF payee/memo"
 msgstr "QIF స్వీకర్త/మెమో"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3785
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:3974
 msgid "Match?"
 msgstr "సరిపోలిందా?"
 
-#: gnucash/import-export/qif-imp/assistant-qif-import.c:3888
+#: gnucash/import-export/qif-imp/assistant-qif-import.c:4081
 msgid "QIF import requires guile with regex support."
 msgstr ""
 
@@ -20144,8 +20189,8 @@ msgstr "క్యాపిటల్. లాభం (స్వల్ప) "
 #: gnucash/register/ledger-core/split-register.c:2620
 #: gnucash/report/reports/standard/balance-sheet.scm:468
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1064
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:692
-#: libgnucash/app-utils/gnc-ui-util.c:654 libgnucash/engine/Account.cpp:4459
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:685
+#: libgnucash/app-utils/gnc-ui-util.c:650 libgnucash/engine/Account.cpp:4459
 msgid "Equity"
 msgstr "ఈక్విటీ"
 
@@ -20155,7 +20200,7 @@ msgstr "ఈక్విటీ"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1073
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1088
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
-#: libgnucash/app-utils/gnc-ui-util.c:563
+#: libgnucash/app-utils/gnc-ui-util.c:559
 msgid "Retained Earnings"
 msgstr "నిలుపుకున్న రాబడులు"
 
@@ -20167,133 +20212,145 @@ msgstr "కమిషన్లు"
 msgid "Margin Interest"
 msgstr "ఉపాంత వడ్డీ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:103
-#: gnucash/import-export/qif-imp/qif-file.scm:111
+#: gnucash/import-export/qif-imp/qif-file.scm:105
+#: gnucash/import-export/qif-imp/qif-file.scm:113
 msgid "Line"
 msgstr "లైన్"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:114
+#: gnucash/import-export/qif-imp/qif-file.scm:116
 msgid "Read aborted."
 msgstr "చదవాల్సింది కాదు "
 
-#: gnucash/import-export/qif-imp/qif-file.scm:154
+#: gnucash/import-export/qif-imp/qif-file.scm:156
 msgid "Reading"
 msgstr "చదువుతోంది"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:184
+#: gnucash/import-export/qif-imp/qif-file.scm:186
 msgid "Some characters have been discarded."
 msgstr "కొన్ని అక్షరాలు విసర్జించబడ్డాయి."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:185
-#: gnucash/import-export/qif-imp/qif-file.scm:189
+#: gnucash/import-export/qif-imp/qif-file.scm:187
+#: gnucash/import-export/qif-imp/qif-file.scm:191
 msgid "Converted to: "
 msgstr "కి మార్పిడి:"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:188
+#: gnucash/import-export/qif-imp/qif-file.scm:190
 msgid "Some characters have been converted according to your locale."
 msgstr "మీ స్థానికాన్ని అనుసరించి కొన్ని అక్షరాలు మార్పిడి చేయబడ్డాయి."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:247
+#: gnucash/import-export/qif-imp/qif-file.scm:248
 msgid "Ignoring unknown option"
 msgstr "తెలియని ఐచ్ఛికాన్ని విస్మరిస్తోంది."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:385
+#: gnucash/import-export/qif-imp/qif-file.scm:386
 msgid "Date required."
 msgstr "కావలసిన తేదీ."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:386
+#: gnucash/import-export/qif-imp/qif-file.scm:387
 msgid "Discarding this transaction."
 msgstr "ఈ లావాదేవీని విసర్జిస్తోంది"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:418
+#: gnucash/import-export/qif-imp/qif-file.scm:419
 msgid "Ignoring class line"
 msgstr "తరగతి వరుసను విస్మరిస్తోంది."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:486
+#: gnucash/import-export/qif-imp/qif-file.scm:487
 msgid "Ignoring category line"
 msgstr "వర్గం లైన్‌ను విస్మరిస్తోంది"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:517
+#: gnucash/import-export/qif-imp/qif-file.scm:518
 msgid "Ignoring security line"
 msgstr "భద్రత లైన్‌ను విస్మరిస్తోంది"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:525
+#: gnucash/import-export/qif-imp/qif-file.scm:532
+#, fuzzy
+#| msgid "Could not create opening balance."
+msgid "Could not parse price line"
+msgstr "ప్రారంభ నిల్వను సృష్టించడం సాధ్యం కాలేదు."
+
+#: gnucash/import-export/qif-imp/qif-file.scm:540
 msgid "File does not appear to be in QIF format"
 msgstr "QIF ఆకృతిలో ఫైల్ కనిపించడం లేదు"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:701
+#: gnucash/import-export/qif-imp/qif-file.scm:716
 msgid "Transaction date"
 msgstr "లావాదేవీ తేదీ"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:702
+#: gnucash/import-export/qif-imp/qif-file.scm:717
 msgid "Transaction amount"
 msgstr "లావాదేవీ మొత్తం"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:703
+#: gnucash/import-export/qif-imp/qif-file.scm:718
 msgid "Share price"
 msgstr "వాటా ధర "
 
-#: gnucash/import-export/qif-imp/qif-file.scm:704
+#: gnucash/import-export/qif-imp/qif-file.scm:719
 msgid "Share quantity"
 msgstr "వాటా పరిమాణం"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:705
+#: gnucash/import-export/qif-imp/qif-file.scm:720
 msgid "Investment action"
 msgstr "పెట్టుబడి పని"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:706
+#: gnucash/import-export/qif-imp/qif-file.scm:721
 msgid "Reconciliation status"
 msgstr "సమన్వయ స్థితి"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:707
+#: gnucash/import-export/qif-imp/qif-file.scm:722
 msgid "Commission"
 msgstr "కమిషన్"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:708
+#: gnucash/import-export/qif-imp/qif-file.scm:723
 msgid "Account type"
 msgstr "ఖాతా రకం"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:709
+#: gnucash/import-export/qif-imp/qif-file.scm:724
 msgid "Tax class"
 msgstr "పన్ను తరగతి"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:710
+#: gnucash/import-export/qif-imp/qif-file.scm:725
 msgid "Category budget amount"
 msgstr "వర్గం బడ్జెట్ మొత్తం"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:711
+#: gnucash/import-export/qif-imp/qif-file.scm:726
 msgid "Account budget amount"
 msgstr "ఖాతా బడ్జెట్ మొత్తం"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:712
+#: gnucash/import-export/qif-imp/qif-file.scm:727
 msgid "Credit limit"
 msgstr "జమాపద్దు పరిమితి"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:725
+#: gnucash/import-export/qif-imp/qif-file.scm:740
 msgid "Parsing categories"
 msgstr "వర్గాలను విభజిస్తోంది."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:757
+#: gnucash/import-export/qif-imp/qif-file.scm:775
 msgid "Parsing accounts"
 msgstr "ఖాతాలను విభజిస్తోంది."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:798
+#: gnucash/import-export/qif-imp/qif-file.scm:816
+#, fuzzy
+#| msgid "Parsing categories"
+msgid "Parsing prices"
+msgstr "వర్గాలను విభజిస్తోంది."
+
+#: gnucash/import-export/qif-imp/qif-file.scm:849
 msgid "Parsing transactions"
 msgstr "లావాదేవీలను విభజిస్తోంది."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:974
+#: gnucash/import-export/qif-imp/qif-file.scm:1025
 msgid "Unrecognized or inconsistent format."
 msgstr "గుర్తించని లేదా అసంగతమైన ఆకృతి"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1016
+#: gnucash/import-export/qif-imp/qif-file.scm:1067
 msgid "Parsing failed."
 msgstr "విభజించడంలో విఫలమైంది."
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1057
+#: gnucash/import-export/qif-imp/qif-file.scm:1108
 msgid "Parse ambiguity between formats"
 msgstr "ఆకృతుల మధ్య సందిగ్ధతను విభజించు"
 
-#: gnucash/import-export/qif-imp/qif-file.scm:1059
+#: gnucash/import-export/qif-imp/qif-file.scm:1110
 #, fuzzy, scheme-format
 msgid "Value '~a' could be ~a or ~a."
 msgstr "విలువ '%s' %s లేదా %s కాదు."
@@ -20329,21 +20386,37 @@ msgstr "QIF దిగుమతి: మరొక ఖాతాతో సంఘర�
 msgid "Preparing to convert your QIF data"
 msgstr "మీ QIF డేటాను పరివర్తించడానికి సిద్ధమవుతోంది."
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:353
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:359
 msgid "Creating accounts"
 msgstr "ఖాతాలను సృష్టిస్తోంది."
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:402
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:408
 msgid "Matching transfers between accounts"
 msgstr "ఖాతాల మధ్య బదిలీలను సరిపోలేలా చేయడం"
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:420
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:426
 msgid "Converting"
 msgstr "మార్పిడిచేయడం"
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:501
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:486
+#, fuzzy
+msgid "Discarding duplicate prices"
+msgstr "_ఇన్వాయిస్‌‌ను నకిలీ చేయి"
+
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:516
+#, fuzzy
+#| msgid "Add a new price."
+msgid "Adding prices"
+msgstr "కొత్త ధరను చేర్చు"
+
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:589
 msgid "Missing transaction date."
 msgstr "అదృశ్య లావాదేవీ తేదీ "
+
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:1419
+#, fuzzy
+msgid "Invalid transaction date."
+msgstr "_ రద్దుకాని లావాదేవీ"
 
 #: gnucash/python/init.py:18
 msgid "Welcome to GnuCash"
@@ -20365,24 +20438,24 @@ msgstr "Gnuక్యాష్‌‍ ~aకు సుస్వాగతం!"
 msgid "The account %s does not exist. Would you like to create it?"
 msgstr "%s ఖాతా ఉనికిలో లేదు. మీరు దీనిని సృష్టించాలని కోరుకుంటున్నారా?"
 
-#: gnucash/register/ledger-core/gncEntryLedger.c:250
+#: gnucash/register/ledger-core/gncEntryLedger.c:251
 msgid "Hours"
 msgstr "గంటలు"
 
-#: gnucash/register/ledger-core/gncEntryLedger.c:251
+#: gnucash/register/ledger-core/gncEntryLedger.c:252
 msgid "Project"
 msgstr "ప్రాజెక్ట్"
 
-#: gnucash/register/ledger-core/gncEntryLedger.c:252
+#: gnucash/register/ledger-core/gncEntryLedger.c:253
 msgid "Material"
 msgstr "మెటీరియల్"
 
-#: gnucash/register/ledger-core/gncEntryLedger.c:904
+#: gnucash/register/ledger-core/gncEntryLedger.c:905
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:875
 msgid "Save the current entry?"
 msgstr "ప్రస్తుత నమోదును భద్రపరుచు చేయాలా?"
 
-#: gnucash/register/ledger-core/gncEntryLedger.c:906
+#: gnucash/register/ledger-core/gncEntryLedger.c:907
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating this entry, or cancel the duplication?"
@@ -20390,7 +20463,7 @@ msgstr ""
 "ప్రస్తుత లావాదేవీ మార్చబడింది. ఈ నమోదును నకిలీ చేసేముందు మార్పులను రికార్డ్ చేయాలనుకుంటున్నారా లేదా నకీలీని "
 "రద్దు చేయలనుకుంటున్నారా?"
 
-#: gnucash/register/ledger-core/gncEntryLedger.c:921
+#: gnucash/register/ledger-core/gncEntryLedger.c:922
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:897
 #: gnucash/register/ledger-core/split-register.c:477
 msgid "_Record"
@@ -20828,8 +20901,8 @@ msgstr "టెల్లర్"
 #: gnucash/register/ledger-core/split-register.c:2549
 #: gnucash/report/reports/standard/receipt.scm:201
 #: gnucash/report/reports/standard/receipt.scm:203
-#: gnucash/report/reports/support/receipt.eguile.scm:277
-#: gnucash/report/reports/support/receipt.eguile.scm:284
+#: gnucash/report/reports/support/receipt.eguile.scm:276
+#: gnucash/report/reports/support/receipt.eguile.scm:283
 msgid "Receipt"
 msgstr "వోచర్"
 
@@ -21307,7 +21380,7 @@ msgstr ""
 "కొత్త లావాదేవీని ప్రవేశపెట్టిన తేదీ ఈ పుస్తకానికి అమర్చిన \"చదవడానికి-మాత్రమే ప్రారంభం\" కన్నా పాతది. ఈ "
 "సెటింగ్‌ను ఫైల్->లక్షణాలు->ఖాతాలులో మార్చవచ్చు."
 
-#: gnucash/register/register-gnome/gnucash-item-list.c:519
+#: gnucash/register/register-gnome/gnucash-item-list.c:539
 #: gnucash/report/reports/standard/investment-lots.scm:384
 msgid "List"
 msgstr "జాబితా"
@@ -22666,7 +22739,7 @@ msgstr "వ్యయం ఖాతాలు"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:61
 #: gnucash/report/reports/standard/balance-sheet.scm:451
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:633
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:619
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:402
 #: gnucash/report/report-utilities.scm:200
@@ -22675,7 +22748,7 @@ msgstr "ఆస్తులు"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:63
 #: gnucash/report/reports/standard/balance-sheet.scm:352
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:663
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:654
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:402
 #: gnucash/report/report-utilities.scm:201
@@ -23378,12 +23451,12 @@ msgid "Whether or not to include a line indicating total equity."
 msgstr "మొత్తం ఈక్విటీని సూచించే వరుసను చేర్చాలా వద్దా."
 
 #: gnucash/report/reports/standard/balance-sheet.scm:356
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:685
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:678
 msgid "Total Liabilities"
 msgstr "మొత్తం అప్పులు"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:454
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:654
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:645
 msgid "Total Assets"
 msgstr "మొత్తం ఆస్తులు"
 
@@ -23403,24 +23476,24 @@ msgstr "వర్తక నష్టాలు"
 #: gnucash/report/reports/standard/balance-sheet.scm:485
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1068
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1083
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:727
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:725
 #: gnucash/report/reports/standard/trial-balance.scm:697
 msgid "Unrealized Gains"
 msgstr "గ్రహించని లాభాలు"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:486
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:728
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:726
 #: gnucash/report/reports/standard/trial-balance.scm:698
 msgid "Unrealized Losses"
 msgstr "గ్రహించని నష్టాలు"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:490
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:743
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:741
 msgid "Total Equity"
 msgstr "మొత్తం ఈక్వీటి"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:500
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:749
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:747
 msgid "Total Liabilities & Equity"
 msgstr "మొత్తం అప్పులు & ఈక్వీటి"
 
@@ -23803,55 +23876,55 @@ msgstr "బడ్జెట్ దా్వరా ప్రవేశపెట్�
 msgid "Budget to use."
 msgstr "ఉపయోగించడానికి బడ్జెట్"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:645
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:636
 msgid "Existing Assets"
 msgstr "ప్రస్తుత ఆస్తులు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:647
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:638
 msgid "Allocated Assets"
 msgstr "ప్రత్యేకించిన ఆస్తులు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:651
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:642
 msgid "Unallocated Assets"
 msgstr "ప్రత్యేకించని ఆస్తులు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:677
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:672
 msgid "Existing Liabilities"
 msgstr "ప్రస్తుత అప్పులు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:682
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:675
 msgid "New Liabilities"
 msgstr "కొత్త అప్పులు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:708
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:706
 msgid "Existing Retained Earnings"
 msgstr "ప్రస్తుతం నిలుపుకున్న సంపాదనలు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:709
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:707
 msgid "Existing Retained Losses"
 msgstr "ప్రస్తుతం నిలుపుకున్న నష్టాలు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:714
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:712
 msgid "New Retained Earnings"
 msgstr "కొత్తగా నిలుపుకున్న లాభాలు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:715
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:713
 msgid "New Retained Losses"
 msgstr "కొత్తగా నిలుపుకున్న నష్టాలు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:720
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:718
 msgid "Total Retained Earnings"
 msgstr "మొత్తం నిలుపుకున్న లాభాలు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:721
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:719
 msgid "Total Retained Losses"
 msgstr "మొత్తం నిలుపుకున్న నష్టాలు"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:737
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:735
 msgid "Existing Equity"
 msgstr "ప్రస్తుత ఈక్వీటి"
 
-#: gnucash/report/reports/standard/budget-balance-sheet.scm:740
+#: gnucash/report/reports/standard/budget-balance-sheet.scm:738
 msgid "New Equity"
 msgstr "కొత్త ఈక్వీటి"
 
@@ -25854,17 +25927,17 @@ msgstr ""
 msgid "Row 3 Right"
 msgstr "కుడి"
 
-#: gnucash/report/reports/standard/invoice.scm:380
+#: gnucash/report/reports/standard/invoice.scm:379
 #, fuzzy
 msgid "Payment, thank you!"
 msgstr "చెల్లింపు, ధన్యవాదాలు"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
-#: gnucash/report/reports/standard/invoice.scm:437
+#: gnucash/report/reports/standard/invoice.scm:436
 msgid "T"
 msgstr "T"
 
-#: gnucash/report/reports/standard/invoice.scm:484
+#: gnucash/report/reports/standard/invoice.scm:483
 #: gnucash/report/reports/standard/receipt.scm:57
 #: gnucash/report/reports/standard/receipt.scm:124
 #: gnucash/report/reports/standard/taxinvoice.scm:105
@@ -25872,7 +25945,7 @@ msgstr "T"
 msgid "Net Price"
 msgstr "నికర ధర"
 
-#: gnucash/report/reports/standard/invoice.scm:500
+#: gnucash/report/reports/standard/invoice.scm:499
 #: gnucash/report/reports/standard/receipt.scm:60
 #: gnucash/report/reports/standard/receipt.scm:130
 #: gnucash/report/reports/standard/taxinvoice.scm:108
@@ -25880,7 +25953,7 @@ msgstr "నికర ధర"
 msgid "Total Price"
 msgstr "మొత్తం ధర"
 
-#: gnucash/report/reports/standard/invoice.scm:520
+#: gnucash/report/reports/standard/invoice.scm:519
 #: gnucash/report/reports/standard/receipt.scm:62
 #: gnucash/report/reports/standard/receipt.scm:134
 #: gnucash/report/reports/standard/taxinvoice.scm:110
@@ -25888,38 +25961,38 @@ msgstr "మొత్తం ధర"
 msgid "Amount Due"
 msgstr "బాకీ మొత్తం"
 
-#: gnucash/report/reports/standard/invoice.scm:560
+#: gnucash/report/reports/standard/invoice.scm:559
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
 msgid "Invoice in progress…"
 msgstr "ఇన్వాయిస్‌ పురోగమనంలో…"
 
-#: gnucash/report/reports/standard/invoice.scm:568
+#: gnucash/report/reports/standard/invoice.scm:567
 #, fuzzy
 msgid "Reference:"
 msgstr "ప్రస్తావన"
 
-#: gnucash/report/reports/standard/invoice.scm:580
+#: gnucash/report/reports/standard/invoice.scm:579
 #, fuzzy
 msgid "Terms:"
 msgstr "నియమాలు:"
 
-#: gnucash/report/reports/standard/invoice.scm:590
+#: gnucash/report/reports/standard/invoice.scm:589
 #: gnucash/report/reports/standard/taxinvoice.scm:214
 #, fuzzy
 msgid "Job number:"
 msgstr "పని నెంబర్:"
 
-#: gnucash/report/reports/standard/invoice.scm:595
+#: gnucash/report/reports/standard/invoice.scm:594
 #: gnucash/report/reports/standard/taxinvoice.scm:217
 #, fuzzy
 msgid "Job name:"
 msgstr "పని పేరు:"
 
-#: gnucash/report/reports/standard/invoice.scm:640
+#: gnucash/report/reports/standard/invoice.scm:639
 msgid "REF"
 msgstr "REF"
 
-#: gnucash/report/reports/standard/invoice.scm:721
+#: gnucash/report/reports/standard/invoice.scm:720
 msgid ""
 "No valid invoice selected. Click on the Options button and select the "
 "invoice to use."
@@ -25931,7 +26004,7 @@ msgstr ""
 #. Note", and so on and the second the number.  Replace
 #. " #" by whatever is common as number abbreviation,
 #. i.e. "~a Nr. ~a"
-#: gnucash/report/reports/standard/invoice.scm:746
+#: gnucash/report/reports/standard/invoice.scm:745
 #, scheme-format
 msgid "~a #~a"
 msgstr ""
@@ -27267,13 +27340,13 @@ msgstr "ఇన్వాయిస్‌ గమనికలు"
 msgid "Descr."
 msgstr ""
 
-#: gnucash/report/reports/support/receipt.eguile.scm:278
-#: gnucash/report/reports/support/taxinvoice.eguile.scm:425
+#: gnucash/report/reports/support/receipt.eguile.scm:277
+#: gnucash/report/reports/support/taxinvoice.eguile.scm:424
 msgid ""
 "No invoice has been selected -- please use the Options menu to select one."
 msgstr "ఇన్వాయిస్‌ ఎంచుకోబడలేదు --దయచేసి దానిని ఎంచుకోవడానికి ఐచ్ఛికాల మెనూని ఎంచుకో"
 
-#: gnucash/report/reports/support/receipt.eguile.scm:285
+#: gnucash/report/reports/support/receipt.eguile.scm:284
 msgid ""
 "This report is designed for customer (sales) invoices only. Please use the "
 "Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
@@ -30181,39 +30254,39 @@ msgstr "ఈ ఖాతా సమన్వయాన్ని వాయిదా �
 msgid "Cancel the reconciliation of this account"
 msgstr "ఈ ఖాతా సమన్వయాన్ని రద్దుచేయి."
 
-#: libgnucash/app-utils/gnc-exp-parser.c:616
+#: libgnucash/app-utils/gnc-exp-parser.c:615
 msgid "Illegal variable in expression."
 msgstr "భావప్రకటనలో చెల్లని వేరియబుల్"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:627
+#: libgnucash/app-utils/gnc-exp-parser.c:626
 msgid "Unbalanced parenthesis"
 msgstr "అసమతుల్య వర్గీకరణ"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:629
+#: libgnucash/app-utils/gnc-exp-parser.c:628
 msgid "Stack overflow"
 msgstr "స్టాక్ అతిప్రవాహం "
 
-#: libgnucash/app-utils/gnc-exp-parser.c:631
+#: libgnucash/app-utils/gnc-exp-parser.c:630
 msgid "Stack underflow"
 msgstr "స్టాక్ మితప్రవాహం"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:633
+#: libgnucash/app-utils/gnc-exp-parser.c:632
 msgid "Undefined character"
 msgstr "అనిర్వచిత అక్షరం"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:635
+#: libgnucash/app-utils/gnc-exp-parser.c:634
 msgid "Not a variable"
 msgstr "వేరియబుల్ కాదు"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:637
+#: libgnucash/app-utils/gnc-exp-parser.c:636
 msgid "Not a defined function"
 msgstr "నిర్వచిత ఫంక్షన్ కాదు"
 
-#: libgnucash/app-utils/gnc-exp-parser.c:639
+#: libgnucash/app-utils/gnc-exp-parser.c:638
 msgid "Out of memory"
 msgstr "మెమరీలో లేదు "
 
-#: libgnucash/app-utils/gnc-exp-parser.c:641
+#: libgnucash/app-utils/gnc-exp-parser.c:640
 msgid "Numeric error"
 msgstr "సంఖ్యా దోషం"
 
@@ -30252,7 +30325,7 @@ msgid "Finance::Quote retrieval failed with error "
 msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:371
-#: libgnucash/app-utils/gnc-quotes.cpp:838
+#: libgnucash/app-utils/gnc-quotes.cpp:849
 msgid "Finance::Quote returned no data and set no error."
 msgstr ""
 
@@ -30302,16 +30375,23 @@ msgid "Currency quotes requires at least two currencies"
 msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:749
-#: libgnucash/app-utils/gnc-quotes.cpp:754
+#: libgnucash/app-utils/gnc-quotes.cpp:759
 msgid "Failed to parse result returned by Finance::Quote."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:756
+#. Translators: This labels the return value of a query to Finance::Quote written in an error.
+#: libgnucash/app-utils/gnc-quotes.cpp:752
+#: libgnucash/app-utils/gnc-quotes.cpp:767
+msgid "Result:"
+msgstr ""
+
+#. Translators: This is the error message reported by the Online Quotes processing code.
+#: libgnucash/app-utils/gnc-quotes.cpp:762
 msgid "Error message:"
 msgstr ""
 
 #. Translators: Means that the preceding element is required
-#: libgnucash/app-utils/gnc-quotes.cpp:798
+#: libgnucash/app-utils/gnc-quotes.cpp:809
 #, fuzzy
 #| msgid "Date required."
 msgctxt "Finance::Quote"
@@ -30319,14 +30399,14 @@ msgid "required"
 msgstr "కావలసిన తేదీ."
 
 #. Translators: Means that the quote will work best if the preceding element is provided
-#: libgnucash/app-utils/gnc-quotes.cpp:800
+#: libgnucash/app-utils/gnc-quotes.cpp:811
 #, fuzzy
 msgctxt "Finance::Quote"
 msgid "recommended"
 msgstr "_అసమన్వయం"
 
 #. Translators: Means that one of the indicated elements is required
-#: libgnucash/app-utils/gnc-quotes.cpp:802
+#: libgnucash/app-utils/gnc-quotes.cpp:813
 #, fuzzy
 #| msgid "End of this year"
 msgctxt "Finance::Quote"
@@ -30334,18 +30414,18 @@ msgid "one of these"
 msgstr "ఈ సంవత్సరం ముగింపు"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
-#: libgnucash/app-utils/gnc-quotes.cpp:804
+#: libgnucash/app-utils/gnc-quotes.cpp:815
 #, fuzzy
 msgctxt "Finance::Quote"
 msgid "**missing**"
 msgstr "కమిషన్"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:811
+#: libgnucash/app-utils/gnc-quotes.cpp:822
 msgid "Finance::Quote fields GnuCash uses:"
 msgstr ""
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
-#: libgnucash/app-utils/gnc-quotes.cpp:813
+#: libgnucash/app-utils/gnc-quotes.cpp:824
 #, fuzzy
 #| msgid "Symbol"
 msgctxt "Finance::Quote"
@@ -30353,7 +30433,7 @@ msgid "symbol: "
 msgstr "చిహ్నం"
 
 #. Translators: The date of the quote.
-#: libgnucash/app-utils/gnc-quotes.cpp:815
+#: libgnucash/app-utils/gnc-quotes.cpp:826
 #, fuzzy
 #| msgid "Date: "
 msgctxt "Finance::Quote"
@@ -30361,7 +30441,7 @@ msgid "date: "
 msgstr "తేదీ:"
 
 #. Translators: The quote currency
-#: libgnucash/app-utils/gnc-quotes.cpp:817
+#: libgnucash/app-utils/gnc-quotes.cpp:828
 #, fuzzy
 #| msgid "Currency"
 msgctxt "Finance::Quote"
@@ -30369,7 +30449,7 @@ msgid "currency: "
 msgstr "కరెన్సీ"
 
 #. Translators: The quote is for the most recent trade on the exchange
-#: libgnucash/app-utils/gnc-quotes.cpp:823
+#: libgnucash/app-utils/gnc-quotes.cpp:834
 #, fuzzy
 #| msgid "last %s"
 msgctxt "Finance::Quote"
@@ -30377,39 +30457,39 @@ msgid "last: "
 msgstr "చివర%s"
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
-#: libgnucash/app-utils/gnc-quotes.cpp:825
+#: libgnucash/app-utils/gnc-quotes.cpp:836
 msgctxt "Finance::Quote"
 msgid "nav: "
 msgstr ""
 
 #. Translators: The quote is neither a last trade nor an NAV.
-#: libgnucash/app-utils/gnc-quotes.cpp:827
+#: libgnucash/app-utils/gnc-quotes.cpp:838
 #, fuzzy
 #| msgid "Price"
 msgctxt "Finance::Quote"
 msgid "price: "
 msgstr "ధర"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:847
+#: libgnucash/app-utils/gnc-quotes.cpp:858
 msgid "Finance::Quote reported a failure for symbol "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:850
+#: libgnucash/app-utils/gnc-quotes.cpp:861
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:913
+#: libgnucash/app-utils/gnc-quotes.cpp:924
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:919
+#: libgnucash/app-utils/gnc-quotes.cpp:930
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:925
+#: libgnucash/app-utils/gnc-quotes.cpp:936
 #, fuzzy
 #| msgid "Unrecognized or inconsistent format."
 msgid "Unrecognized Finance::Quote Error: "
@@ -30417,23 +30497,23 @@ msgstr "గుర్తించని లేదా అసంగతమైన ఆ
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1027
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1028
 #, c-format
 msgid "Unknown account for guid [%s], cancelling SX [%s] creation."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1082
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1083
 #, c-format
 msgid "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1138
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1807
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1139
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1808
 #, c-format
 msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-sx-instance-model.c:1816
+#: libgnucash/app-utils/gnc-sx-instance-model.c:1817
 #, c-format
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr ""
@@ -30453,43 +30533,43 @@ msgstr ""
 msgid "%s balance of %s should be zero."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:481
+#: libgnucash/app-utils/gnc-ui-util.c:477
 msgctxt "Reconciled flag 'not cleared'"
 msgid "n"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:483
+#: libgnucash/app-utils/gnc-ui-util.c:479
 msgctxt "Reconciled flag 'cleared'"
 msgid "c"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:485
+#: libgnucash/app-utils/gnc-ui-util.c:481
 #, fuzzy
 msgctxt "Reconciled flag 'reconciled'"
 msgid "y"
 msgstr "y"
 
-#: libgnucash/app-utils/gnc-ui-util.c:487
+#: libgnucash/app-utils/gnc-ui-util.c:483
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:489
+#: libgnucash/app-utils/gnc-ui-util.c:485
 msgctxt "Reconciled flag 'void'"
 msgid "v"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:529
+#: libgnucash/app-utils/gnc-ui-util.c:525
 msgctxt "Document Link flag for 'web'"
 msgid "w"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:531
+#: libgnucash/app-utils/gnc-ui-util.c:527
 msgctxt "Document Link flag for 'file'"
 msgid "f"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:560
+#: libgnucash/app-utils/gnc-ui-util.c:556
 msgid "Opening Balances"
 msgstr "ప్రారంభ నిల్వలు"
 
@@ -30521,6 +30601,7 @@ msgstr "కొత్త విభజన సమాచారం"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -30531,13 +30612,14 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "అప్పటికే జాబితాకు ఈ ఎన్‌కోడింగ్ చేర్చబడింది"
 msgstr[1] "అప్పటికే జాబితాకు ఈ ఎన్‌కోడింగ్ చేర్చబడింది"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -30548,7 +30630,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "ఈ ఫైల్‌ మళ్ళీ తెరచుకోలేదు. "
@@ -31105,11 +31187,11 @@ msgstr "మీ వ్యాపారం ఎలక్ట్రానిక్ ప
 msgid " (closed)"
 msgstr "(మూసిన)"
 
-#: libgnucash/engine/gncOwner.c:998
+#: libgnucash/engine/gncOwner.c:1012
 msgid "Offset between documents: "
 msgstr ""
 
-#: libgnucash/engine/gncOwner.c:1110
+#: libgnucash/engine/gncOwner.c:1124
 msgid "Lot Link"
 msgstr "బహుళ లంకె"
 
@@ -31243,11 +31325,11 @@ msgctxt ""
 msgid "Split"
 msgstr "చీలిక"
 
-#: libgnucash/engine/Transaction.c:2732
+#: libgnucash/engine/Transaction.c:2741
 msgid "Voided transaction"
 msgstr "వ్యర్ధమైన లావాదేవీ"
 
-#: libgnucash/engine/Transaction.c:2745
+#: libgnucash/engine/Transaction.c:2754
 msgid "Transaction Voided"
 msgstr "లావాదేవీ వ్యర్ధమైంది"
 
@@ -31321,8 +31403,3 @@ msgstr "(పన్ను సంబంధిత ఉపఖాతాలు: %d)"
 #: libgnucash/tax/us/txf.scm:122
 msgid "No help available."
 msgstr "సహాయం అందుబాటులో లేదు"
-
-#, fuzzy
-#~| msgid "Split"
-#~ msgid "Split View"
-#~ msgstr "చీలిక"
