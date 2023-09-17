@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-08-03 06:21+0200\n"
-"PO-Revision-Date: 2023-09-07 19:55+0000\n"
+"PO-Revision-Date: 2023-09-15 18:49+0000\n"
 "Last-Translator: Andrea Andre <andrea.tsg19@slmail.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
@@ -1847,10 +1847,8 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1438
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
-#, fuzzy
-#| msgid "Enter the number of shares bought or sold"
 msgid "Enter the number of shares you gained or lost in the transaction."
-msgstr "Introdu numărul de acțiuni cumpărate sau vândute"
+msgstr ""
 
 #. Translators: StockAssistant: N/A denotes stock price is not computable
 #: gnucash/gnome/assistant-stock-transaction.cpp:1520
@@ -2740,7 +2738,7 @@ msgstr "Valoare"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:157
 #: gnucash/report/trep-engine.scm:539
 msgid "Date Posted"
-msgstr "Data postării"
+msgstr "Data de emitere"
 
 #: gnucash/gnome/dialog-find-transactions.c:129
 #: gnucash/report/reports/standard/general-ledger.scm:67
@@ -2945,11 +2943,11 @@ msgstr "Scadența"
 #: gnucash/report/reports/standard/new-aging.scm:113
 #: gnucash/report/reports/standard/new-owner-report.scm:937
 msgid "Post Date"
-msgstr "Data postării"
+msgstr "Data emiterii"
 
 #: gnucash/gnome/dialog-invoice.c:1037
 msgid "Post to Account"
-msgstr "Postează în contul"
+msgstr "Emite în cont"
 
 #: gnucash/gnome/dialog-invoice.c:1038
 #, fuzzy
@@ -2962,7 +2960,7 @@ msgstr "Factura trebuie să aibă cel puțin o intrare."
 
 #: gnucash/gnome/dialog-invoice.c:1150
 msgid "Do you really want to post the invoice?"
-msgstr "Chiar vrei să postezi factura?"
+msgstr "Chiar vrei să emiți factura?"
 
 #: gnucash/gnome/dialog-invoice.c:1168
 msgid ""
@@ -2976,7 +2974,8 @@ msgstr ""
 #: gnucash/gnome/dialog-invoice.c:1301
 msgid "The post action was canceled because not all exchange rates were given."
 msgstr ""
-"Postarea a fost anulată deoarece nu au fost oferite toate ratele de schimb."
+"Emiterea a fost anulată deoarece nu au fost introduse toate cursurile de "
+"schimb."
 
 #: gnucash/gnome/dialog-invoice.c:1586
 msgid "Total:"
@@ -3103,11 +3102,12 @@ msgid ""
 "One or more selected invoices have already been posted.\n"
 "Re-check your selection."
 msgstr ""
+"Una sau mai multe facturi alese au fost deja emise.\n"
+"Verifică din nou alegerea."
 
 #: gnucash/gnome/dialog-invoice.c:3427
-#, fuzzy
 msgid "Do you really want to post these invoices?"
-msgstr "Chiar vrei să postezi factura?"
+msgstr "Chiar vrei să emiți această factură?"
 
 #: gnucash/gnome/dialog-invoice.c:3515 gnucash/gnome/dialog-invoice.c:3796
 msgid "View/Edit Invoice"
@@ -3125,7 +3125,7 @@ msgstr "Fă un duplicat"
 #: gnucash/gnome/dialog-invoice.c:3538
 #: gnucash/gnome/gnc-plugin-page-invoice.c:288
 msgid "Post"
-msgstr "Postează"
+msgstr "Emite"
 
 #: gnucash/gnome/dialog-invoice.c:3519 gnucash/gnome/dialog-invoice.c:3528
 #: gnucash/gnome/dialog-invoice.c:3539
@@ -3169,7 +3169,7 @@ msgstr "Este plătită?"
 #: gnucash/gnome/dialog-invoice.c:3564 gnucash/gnome/dialog-invoice.c:3598
 #: gnucash/gnome/dialog-invoice.c:3632
 msgid "Is Posted?"
-msgstr "Este postată?"
+msgstr "A fost emisă?"
 
 #: gnucash/gnome/dialog-invoice.c:3567 gnucash/gnome/dialog-invoice.c:3601
 #: gnucash/gnome/dialog-invoice.c:3635 gnucash/gnome/dialog-order.c:874
@@ -3233,7 +3233,7 @@ msgstr "Plătit"
 
 #: gnucash/gnome/dialog-invoice.c:3659
 msgid "Posted"
-msgstr "Postat"
+msgstr "Emisă"
 
 #: gnucash/gnome/dialog-invoice.c:3664 gnucash/gnome/dialog-invoice.c:3817
 msgid "Due"
@@ -3499,7 +3499,7 @@ msgstr "Găsește comandă"
 
 #: gnucash/gnome/dialog-payment.c:237
 msgid "You must enter a valid account name for posting."
-msgstr "Trebuie să scrii un nume de cont valid pentru postare."
+msgstr "Trebuie să scrii un nume de cont valabil pentru emitere."
 
 #: gnucash/gnome/dialog-payment.c:246
 msgid "You must select a company for payment processing."
@@ -3534,6 +3534,8 @@ msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
 msgstr ""
+"Conturile de transfer și de emitere au asociate valute diferite. Specifică "
+"cursul de schimb."
 
 #: gnucash/gnome/dialog-payment.c:1288 gnucash/gnome/search-owner.c:196
 #: gnucash/gnome-search/dialog-search.c:1081
@@ -4421,9 +4423,8 @@ msgstr "_Emite factura"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:30
 #: gnucash/ui/gnc-plugin-page-invoice.ui:524
-#, fuzzy
 msgid "Post this invoice to your Chart of Accounts"
-msgstr "Postează această factură în planul tău de conturi"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:537
@@ -4759,9 +4760,8 @@ msgid "_Post Credit Note"
 msgstr "Editează nota de credit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:267
-#, fuzzy
 msgid "Post this credit note to your Chart of Accounts"
-msgstr "Postează această factură în planul tău de conturi"
+msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:268
 #, fuzzy
@@ -24585,15 +24585,12 @@ msgstr ""
 "Când se include și când nu se include o linie indicând totalul activelor"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:106
-#, fuzzy
 msgid "Enable chart"
-msgstr "Diagramă cu bare pentru valoarea netă"
+msgstr "Activează graficul"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:107
-#, fuzzy
-#| msgid "Enable Links"
 msgid "Enable link to chart"
-msgstr "Activează legăturile"
+msgstr "Activează legătura la grafic"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:109
 #: gnucash/report/trep-engine.scm:112
@@ -24661,9 +24658,8 @@ msgid "Exchange Rates"
 msgstr "Rata de schimb:"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
-#, fuzzy
 msgid "Barchart"
-msgstr "Diagramă cu bare pentru active"
+msgstr "Grafic cu bare"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1169
 msgid " to "
@@ -24784,7 +24780,7 @@ msgstr "Capital propriu"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:36
 msgid "Budget Chart"
-msgstr ""
+msgstr "Graficul bugetului"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:41
 #, fuzzy
@@ -24793,9 +24789,8 @@ msgstr "Balanță"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:84
-#, fuzzy
 msgid "Chart Type"
-msgstr "Tipul plății"
+msgstr "Tip de grafic"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
 #: gnucash/report/reports/standard/budget-income-statement.scm:60
@@ -24880,20 +24875,18 @@ msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:132
 msgid "Select which chart type to use."
-msgstr ""
+msgstr "Alege tipul de grafic de utilizat."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:134
 #: gnucash/report/reports/standard/category-barchart.scm:149
 #: gnucash/report/reports/standard/investment-lots.scm:188
-#, fuzzy
 msgid "Bar Chart"
-msgstr "Diagramă cu bare pentru active"
+msgstr "Grafic cu bare"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:135
 #: gnucash/report/reports/standard/category-barchart.scm:150
-#, fuzzy
 msgid "Line Chart"
-msgstr "Diagramă de venituri"
+msgstr "Grafic cu linii"
 
 #. Translators: Bgt and Act refer to budgeted and
 #. actual total amounts.
@@ -25216,9 +25209,8 @@ msgid "using accumulated amounts"
 msgstr "cont existent"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:40
-#, fuzzy
 msgid "Cash Flow Barchart"
-msgstr "Flux de numerar"
+msgstr ""
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
@@ -25278,9 +25270,8 @@ msgid "Overview:"
 msgstr "Prezentare generală:"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:351
-#, fuzzy
 msgid "Shows a barchart with cash flow over time"
-msgstr "Afișează o diagramă cu bare pentru activele suplimentare"
+msgstr ""
 
 #: gnucash/report/reports/standard/cash-flow.scm:38
 msgid "Cash Flow"
@@ -25319,44 +25310,38 @@ msgstr "Banii din conturile selectate merg în"
 #: gnucash/report/reports/standard/category-barchart.scm:45
 #: gnucash/report/reports/standard/net-charts.scm:348
 msgid "Income Chart"
-msgstr "Diagramă de venituri"
+msgstr "Graficul veniturilor"
 
 #: gnucash/report/reports/standard/category-barchart.scm:46
 #: gnucash/report/reports/standard/net-charts.scm:369
 msgid "Expense Chart"
-msgstr "Diagramă de cheltuieli"
+msgstr "Graficul cheltuielilor"
 
 #: gnucash/report/reports/standard/category-barchart.scm:47
 #: gnucash/report/reports/standard/net-charts.scm:349
 msgid "Asset Chart"
-msgstr "Diagramă pentru active"
+msgstr "Graficul activelor"
 
 #: gnucash/report/reports/standard/category-barchart.scm:48
 #: gnucash/report/reports/standard/net-charts.scm:370
 msgid "Liability Chart"
-msgstr "Diagramă pentru pasive"
+msgstr "Graficul pasivelor"
 
 #: gnucash/report/reports/standard/category-barchart.scm:53
-#, fuzzy
 msgid "Shows a chart with the Income per interval developing over time"
 msgstr ""
-"Afișează o diagramă cu bare pentru veniturile per interval suplimentare"
 
 #: gnucash/report/reports/standard/category-barchart.scm:56
-#, fuzzy
 msgid "Shows a chart with the Expenses per interval developing over time"
 msgstr ""
-"Afișează o diagramă cu bare pentru cheltuielile per interval suplimentare"
 
 #: gnucash/report/reports/standard/category-barchart.scm:59
-#, fuzzy
 msgid "Shows a chart with the Assets developing over time"
-msgstr "Afișează o diagramă cu bare pentru activele suplimentare"
+msgstr ""
 
 #: gnucash/report/reports/standard/category-barchart.scm:61
-#, fuzzy
 msgid "Shows a chart with the Liabilities developing over time"
-msgstr "Afișează o diagramă cu bare pentru datoriile suplimentare"
+msgstr ""
 
 #: gnucash/report/reports/standard/category-barchart.scm:67
 msgid "Income Over Time"
@@ -25380,29 +25365,25 @@ msgid "Show long account names"
 msgstr "Afișează numele lungi de cont"
 
 #: gnucash/report/reports/standard/category-barchart.scm:86
-#, fuzzy
 msgid "Use Stacked Charts"
-msgstr "Folosește barele stivuite"
+msgstr ""
 
 #: gnucash/report/reports/standard/category-barchart.scm:87
 msgid "Maximum Bars"
 msgstr "Numărul maxim de bare"
 
 #: gnucash/report/reports/standard/category-barchart.scm:155
-#, fuzzy
 msgid "Show charts as stacked charts?"
-msgstr "Afișează diagrama ca diagramă stivuită? (Guppi>=0.35.4 e cerută)"
+msgstr ""
 
 #: gnucash/report/reports/standard/category-barchart.scm:160
-#, fuzzy
 msgid "Maximum number of stacks in the chart."
-msgstr "Numărul maxim de bare al diagramei"
+msgstr ""
 
 #: gnucash/report/reports/standard/category-barchart.scm:173
 #: gnucash/report/reports/standard/category-barchart.scm:245
-#, fuzzy
 msgid "Percentage chart"
-msgstr "Diagramă cu bare pentru valoarea netă"
+msgstr "Grafic cu procente"
 
 #: gnucash/report/reports/standard/category-barchart.scm:174
 msgid ""
@@ -26015,10 +25996,8 @@ msgid "Profit & Loss"
 msgstr "Profituri:"
 
 #: gnucash/report/reports/standard/investment-lots.scm:40
-#, fuzzy
-#| msgid "Charge"
 msgid "Chart"
-msgstr "Plată"
+msgstr "Grafic"
 
 #: gnucash/report/reports/standard/investment-lots.scm:41
 #, fuzzy
@@ -26039,20 +26018,16 @@ msgid "Include accounts with no lots"
 msgstr "Include conturile fără acțiuni"
 
 #: gnucash/report/reports/standard/investment-lots.scm:50
-#, fuzzy
 msgid "Show Chart"
-msgstr "Arată tabelul"
+msgstr "Arată graficul"
 
 #: gnucash/report/reports/standard/investment-lots.scm:51
-#, fuzzy
 msgid "Chart type"
-msgstr "Tipul plății"
+msgstr "Tip de grafic"
 
 #: gnucash/report/reports/standard/investment-lots.scm:52
-#, fuzzy
-#| msgid "Open File/Location"
 msgid "Chart location"
-msgstr "Deschide fișier/locație"
+msgstr "Poziția graficului"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
 #, fuzzy
@@ -26342,14 +26317,12 @@ msgid "What kind of chart to include"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:189
-#, fuzzy
 msgid "Stacked Bar Chart"
-msgstr "Folosește barele stivuite"
+msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:195
-#, fuzzy
 msgid "Where to place the chart"
-msgstr "Diagramă cu bare pentru valoarea netă"
+msgstr "Unde trebuie așezat graficul"
 
 #: gnucash/report/reports/standard/investment-lots.scm:214
 msgid "Show the lot GUID table column"
@@ -27002,27 +26975,24 @@ msgstr "Profit net"
 
 #: gnucash/report/reports/standard/net-charts.scm:471
 msgid "Net Worth Barchart"
-msgstr "Diagramă cu bare pentru valoarea netă"
+msgstr "Grafic cu bare al valorii nete"
 
 #: gnucash/report/reports/standard/net-charts.scm:482
 msgid "Income/Expense Chart"
-msgstr "Diagramă venituri/cheltuieli"
+msgstr "Grafic venituri/cheltuieli"
 
 #: gnucash/report/reports/standard/net-charts.scm:484
-#, fuzzy
 msgid "Income & Expense Barchart"
-msgstr "Diagramă de venituri & cheltuieli"
+msgstr ""
 
 #: gnucash/report/reports/standard/net-charts.scm:494
-#, fuzzy
 msgid "Net Worth Linechart"
-msgstr "Diagramă cu bare pentru valoarea netă"
+msgstr ""
 
 #: gnucash/report/reports/standard/net-charts.scm:507
 #: gnucash/report/reports/standard/net-charts.scm:509
-#, fuzzy
 msgid "Income & Expense Linechart"
-msgstr "Diagramă de venituri & cheltuieli"
+msgstr ""
 
 #: gnucash/report/reports/standard/new-aging.scm:40
 msgid "Sort By"
