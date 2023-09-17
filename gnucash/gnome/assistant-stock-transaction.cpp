@@ -47,6 +47,7 @@
 #include <gnc-date-edit.h>
 #include "gnc-engine.h"
 #include "gnc-numeric.h"
+#include "gnc-numeric.hpp"
 #include "gnc-prefs.h"
 #include "gnc-component-manager.h"
 #include "gnc-date-edit.h"
@@ -555,6 +556,7 @@ public:
     virtual void set_memo(const char* memo) { m_memo = memo; }
     virtual const char* memo() const { return m_memo; }
     virtual void set_value(gnc_numeric amount);
+    virtual GncNumeric value() { return GncNumeric(m_value); }
     virtual void set_amount(gnc_numeric) {}
     virtual gnc_numeric amount() const { return m_value; }
     virtual bool has_amount() const { return false; }
@@ -1277,8 +1279,8 @@ StockAssistantModel::generate_list_of_splits() {
     m_logger.clear();
     m_list_of_splits.clear();
 
-    gnc_numeric debit = gnc_numeric_zero ();
-    gnc_numeric credit = gnc_numeric_zero ();
+    GncNumeric debit{};
+    GncNumeric credit{};
 
     // check the stock transaction date. If there are existing stock
     // transactions dated after the date specified, it is very likely
@@ -1343,6 +1345,14 @@ StockAssistantModel::generate_list_of_splits() {
         m_list_of_splits.push_back(m_stock_cg_entry.get());
         m_list_of_splits.push_back (m_capgains_entry.get());
     }
+
+    std::for_each(m_list_of_splits.begin(), m_list_of_splits.end(),
+                    [&debit, &credit](auto& entry) {
+                        if (entry->debit_side())
+                            debit += entry->value();
+                        else
+                            credit += entry->value();
+                    });
 
     if (gnc_numeric_check(debit) || gnc_numeric_check(credit) ||!gnc_numeric_equal (debit, credit))
     {
