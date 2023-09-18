@@ -839,12 +839,14 @@ GncOptionAccountListValue::serialize() const noexcept
     bool first = true;
     if (m_value.empty())
         return no_value;
+    gchar guidstr[GUID_ENCODING_LENGTH + 1];
     for (auto val : m_value)
     {
         if (!first)
             retval += " ";
         first = false;
-        retval += guid_to_string(&val);
+        guid_to_string_buff (&val, guidstr);
+        retval += guidstr;
     }
     return retval;
 }
