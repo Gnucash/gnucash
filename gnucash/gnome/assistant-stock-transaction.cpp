@@ -2655,12 +2655,6 @@ stock_assistant_cancel_cb (GtkAssistant *assistant, gpointer user_data)
 }
 
 
-static bool
-is_destroying (gpointer key, EventInfo* change, gpointer user_data)
-{
-    return (change->event_mask & QOF_EVENT_DESTROY);
-};
-
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
@@ -2671,12 +2665,18 @@ refresh_handler (GHashTable *changes, gpointer user_data)
  * should be only one entry, so just get the value and see if it
  * matches QOF_EVENT_DESTROY.
  */
-    if (g_hash_table_find (changes, (GHRFunc)is_destroying, nullptr))
+    auto list = g_hash_table_get_values(changes);
+    for (auto node = list; node; node = g_list_next(node))
     {
-        PWARN ("Stock account destroyed, cancelling assistant.");
-        auto controller = static_cast<StockAssistantController*>(user_data);
-        gnc_close_gui_component_by_data(ASSISTANT_STOCK_TRANSACTION_CM_CLASS, controller);
+        auto change{static_cast<EventInfo*>(node->data)};
+        if (change->event_mask & QOF_EVENT_DESTROY)
+        {
+            PWARN ("Stock account destroyed, cancelling assistant.");
+            auto controller = static_cast<StockAssistantController*>(user_data);
+            gnc_close_gui_component_by_data(ASSISTANT_STOCK_TRANSACTION_CM_CLASS, controller);
+        }
     }
+    g_list_free (list);
 }
 
 static void
