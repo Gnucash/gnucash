@@ -631,7 +631,10 @@ void
 StockTransactionEntry::set_value(gnc_numeric amount)
 {
     if (gnc_numeric_check (amount))
+    {
+        m_value = gnc_numeric_error(GNC_ERROR_ARG);
         return;
+    }
 
     if (gnc_numeric_negative_p (amount))
     {
@@ -794,7 +797,10 @@ void
 StockTransactionStockEntry::set_amount(gnc_numeric amount)
 {
      if (!m_amount_enabled || gnc_numeric_check(amount))
-        return;
+     {
+         m_amount = gnc_numeric_error(GNC_ERROR_ARG);
+         return;
+     }
 
     if (m_input_new_balance)
     {
