@@ -36,8 +36,20 @@ static bool sync_called {false};
 static bool load_error {true};
 static bool data_loaded {false};
 
+struct DestroyAccount
+{
+    void operator()(Account *acct)
+    {
+        xaccAccountBeginEdit (acct);
+        xaccAccountDestroy (acct);
+    }
+};
+
+using AccountPtr = std::unique_ptr<Account, DestroyAccount>;
+
 class QofSessionMockBackend : public QofBackend
 {
+    AccountPtr m_root;
 public:
     QofSessionMockBackend() = default;
     QofSessionMockBackend(const QofSessionMockBackend&) = delete;
@@ -56,7 +68,7 @@ void QofSessionMockBackend::load (QofBook *book, QofBackendLoadType)
     if (load_error)
         set_error(ERR_BACKEND_NO_BACKEND);
     else
-        gnc_account_create_root (book);
+        m_root = AccountPtr{gnc_account_create_root (book)};
     data_loaded = true;
 }
 
