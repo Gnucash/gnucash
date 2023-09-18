@@ -1348,8 +1348,6 @@ StockAssistantModel::generate_list_of_splits() {
 
     std::for_each(m_list_of_splits.begin(), m_list_of_splits.end(),
                     [&debit, &credit](auto& entry) {
-                        if (gnc_numeric_check (entry->amount()))
-                            return;
                         if (entry->debit_side())
                             debit += entry->value();
                         else
