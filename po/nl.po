@@ -17,10 +17,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-08-13 05:50+0000\n"
+"PO-Revision-Date: 2023-09-18 05:22+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
@@ -29,9 +29,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
-"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"X-Generator: Weblate 5.0.2\n"
+"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1449,6 +1449,10 @@ msgid ""
 "If you are unable to calculate capital gains you can enter aplaceholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Beleggingen verkopen op lange termijn en winst/verlies registreren.\n"
+"\n"
+"Als u geen vermogenswinsten kunt berekenen, kunt u een tijdelijk bedrag "
+"invoeren en dit later in de transactie corrigeren."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1540,15 +1544,6 @@ msgid "Stock split"
 msgstr "Beleggingsdeling"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:265
-#, fuzzy
-#| msgid ""
-#| "Company redeems units, thereby increasing the stock price by a multiple, "
-#| "while keeping the total monetary value of the overall investment "
-#| "constant.\n"
-#| "\n"
-#| "If the reverse split results in a cash in lieu for remainder units, "
-#| "please record the sale using the Stock Transaction Assistant first, then "
-#| "record the reverse split."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor , while keeping the total monetary value of the overall investment "
@@ -1557,13 +1552,13 @@ msgid ""
 "If the split results in a cash in lieu for remainder units, please record "
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
-"Bedrijf verkrijgt eenheden, waardoor de beleggingskoers met een veelvoud "
-"wordt verhoogd, terwijl de totale geldwaarde van de totale investering "
-"constant blijft.\n"
+"Bedrijf geeft aanvullende eenheden uit, waardoor de beleggingskoers door een "
+"deelfactor wordt verlaagd, terwijl de totale geldwaarde van de totale "
+"investering constant blijft.\n"
 "\n"
-"Als deze omgekeerde deling resulteert in een cash in plaats van "
-"resteenheden, registreer dan eerst de verkoop met behulp van de "
-"Beleggingsassistent en noteer vervolgens de omgekeerde deling."
+"Als deze deling resulteert in een cash in plaats van resteenheden, "
+"registreer dan eerst de verkoop met behulp van de Beleggingsassistent en "
+"noteer vervolgens de deling."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1613,6 +1608,11 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Aandelen terugkopen om de korte termijnpositie te dekken en winst/verlies "
+"registreren.\n"
+" \n"
+"Als u geen vermogenswinsten kunt berekenen, kunt u een tijdelijk bedrag "
+"invoeren en dit later in de transactie corrigeren."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
@@ -1653,14 +1653,6 @@ msgid "Compensatory return of capital (reclassification)"
 msgstr "Compenserend kapitaalrendement (herclassificatie)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:346
-#, fuzzy
-#| msgid ""
-#| "Company returns capital, and the short stock holder must make a "
-#| "compensatory payment for the returned capital. This reduces the cost "
-#| "basis (less negative, towards 0.00 value) without affecting # units. A "
-#| "distribution previously recorded as a compensatory dividend is "
-#| "reclassified to compensatory return of capital, often due to end-of-year "
-#| "tax information."
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1716,15 +1708,6 @@ msgstr ""
 "heeft voor # eenheden."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:391
-#, fuzzy
-#| msgid ""
-#| "Company redeems units, thereby increasing the stock price by a multiple, "
-#| "while keeping the total monetary value of the overall investment "
-#| "constant.\n"
-#| "\n"
-#| "If the reverse split results in a cash in lieu for remainder units, "
-#| "please record the cover buy using the Stock Transaction Assistant first, "
-#| "then record the reverse split."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor, while keeping the total monetary value of the overall investment "
@@ -1734,13 +1717,13 @@ msgid ""
 "the cover buy using the Stock Transaction Assistant first, then record the "
 "split."
 msgstr ""
-"Bedrijf verwerft eenheden, waardoor de beleggingskoers met een veelvoud "
-"wordt verhoogd, terwijl de totale geldwaarde van de totale investering "
-"constant blijft.\n"
+"Bedrijf geeft aanvullende eenheden uit, waardoor de beleggingskoers met een "
+"deelfactor wordt verlaagd, terwijl de totale geldwaarde van de totale "
+"investering constant blijft.\n"
 "\n"
-"Als deze omgekeerde deling resulteert in een cash in plaats van voor de rest "
-"van de eenheden, registreer dan eerst de cover buy met behulp van de Stock "
-"Transaction Assistant en noteer vervolgens de omgekeerde deling."
+"Als deze deling resulteert in een cash in plaats van voor de resterende "
+"eenheden, registreer dan eerst de cover buy met behulp van de Stock "
+"Transaction Assistant en noteer vervolgens de deling."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:405
 msgid ""
@@ -1797,10 +1780,9 @@ msgstr "Bedrag voor %s moet positief zijn."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:674
 #: gnucash/gnome/assistant-stock-transaction.cpp:1021
-#, fuzzy, c-format
-#| msgid "Include sub-accounts of all selected accounts."
+#, c-format
 msgid "The %s amount has no associated account."
-msgstr "Subrekeningen van alle geselecteerde rekeningen weergeven."
+msgstr "Het %s bedrag is niet gekoppeld aan een rekening."
 
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
 #: gnucash/gnome/assistant-stock-transaction.cpp:740
@@ -1836,36 +1818,26 @@ msgid "Cannot cover buy more units than owed."
 msgstr "Kan niet meer eenheden kopen dan verschuldigd."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1094
-#, fuzzy
-#| msgid "Stock"
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
 msgstr "Belegging"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1095
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "Contant"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1096
-#, fuzzy
-#| msgid "Fees"
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
 msgstr "Vergoedingen"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1097
-#, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "Dividend"
 msgstr "Dividend"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1098
-#, fuzzy
-#| msgid "Capital Gains"
 msgctxt "Stock Assistant: Page name"
 msgid "Capital Gains"
 msgstr "Kapitaalwinsten"
@@ -7092,10 +7064,9 @@ msgid "Account is already at Auto-Clear Balance."
 msgstr "Rekening is al op automatisch-bevestigen balans."
 
 #: gnucash/gnome-utils/gnc-autoclear.c:155
-#, fuzzy, c-format
-#| msgid "Too many uncleared splits"
+#, c-format
 msgid "No uncleared splits found."
-msgstr "Te veel boekregels om te verwerken"
+msgstr "Geen boekregels gevonden."
 
 #: gnucash/gnome-utils/gnc-autoclear.c:171
 #, c-format
@@ -12908,11 +12879,6 @@ msgid "Stock Transaction Assistant"
 msgstr "Beleggingsassistent"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:22
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you record a stock transaction. The transaction "
-#| "type (purchase, sale, dividend, distribution, return of capital, stock "
-#| "split) will determine the transaction splits involved in the transaction."
 msgid ""
 "This assistant will help you record a stock transaction. The transaction "
 "type (purchase, sale, dividend, distribution, return of capital, stock "
@@ -12924,7 +12890,11 @@ msgid ""
 msgstr ""
 "Deze assistent helpt u bij het registreren van een beurstransactie. Het "
 "transactietype (aankoop, verkoop, dividend, uitkering, kapitaalrendement, "
-"beleggingsdeling) bepaalt de onderdelen die bij de transactie betrokken zijn."
+"beleggingsdeling) bepaalt de onderdelen die bij de transactie betrokken "
+"zijn. Merk op dat de transactievaluta die van de aandelenrekening zal zijn "
+"en dat transacties met meerdere valuta's niet worden ondersteund: alleen "
+"rekeningen in de transactievaluta worden aangeboden voor contant geld, "
+"meerwaarden, dividenden en vergoedingen."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
 msgid "Select the date and description for your records."
@@ -20702,10 +20672,8 @@ msgid "Ignoring security line"
 msgstr "Fonds-regel wordt genegeerd"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:532
-#, fuzzy
-#| msgid "Could not create opening balance."
 msgid "Could not parse price line"
-msgstr "Aanmaken van beginsaldo mislukt."
+msgstr "Kon prijsregel niet verwerken."
 
 #: gnucash/import-export/qif-imp/qif-file.scm:540
 msgid "File does not appear to be in QIF format"
@@ -20768,10 +20736,8 @@ msgid "Parsing accounts"
 msgstr "Rekeningen aan het verwerken"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:816
-#, fuzzy
-#| msgid "Parsing categories"
 msgid "Parsing prices"
-msgstr "Categorieën aan het verwerken"
+msgstr "Prijzen verwerken"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:849
 msgid "Parsing transactions"
@@ -20840,27 +20806,20 @@ msgid "Converting"
 msgstr "Aan het omzetten"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:486
-#, fuzzy
-#| msgid "%d duplicate price"
-#| msgid_plural "%d duplicate prices"
 msgid "Discarding duplicate prices"
-msgstr "%d dubbele koers"
+msgstr "Dubbele prijzen negeren"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:516
-#, fuzzy
-#| msgid "Add a new price."
 msgid "Adding prices"
-msgstr "Een nieuwe koers toevoegen."
+msgstr "Prijzen toevoegen"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:589
 msgid "Missing transaction date."
 msgstr "Onbrekende boekdatum."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1419
-#, fuzzy
-#| msgid "Invalid Transactions"
 msgid "Invalid transaction date."
-msgstr "Ongeldige boekingen"
+msgstr "Ongeldige boekingsdatum"
 
 #: gnucash/python/init.py:18
 msgid "Welcome to GnuCash"
@@ -30505,7 +30464,7 @@ msgstr "Het resultaat van Finance::Quote kon niet worden verwerkt."
 #: libgnucash/app-utils/gnc-quotes.cpp:752
 #: libgnucash/app-utils/gnc-quotes.cpp:767
 msgid "Result:"
-msgstr ""
+msgstr "Resultaat:"
 
 #. Translators: This is the error message reported by the Online Quotes processing code.
 #: libgnucash/app-utils/gnc-quotes.cpp:762
