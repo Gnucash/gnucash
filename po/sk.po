@@ -11,10 +11,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-09-17 20:28+0000\n"
+"PO-Revision-Date: 2023-09-18 18:07+0000\n"
 "Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
@@ -799,7 +799,6 @@ msgstr ""
 "online príručke GnuCash."
 
 #: doc/tip_of_the_day.list.c:44
-#, fuzzy
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -812,10 +811,10 @@ msgstr ""
 "informácie.\n"
 "\n"
 "Aby to bolo viditeľné\n"
-"vyberte v ponukovej lište \"Zobraziť\" a zaškrtnite \"Dvojitý riadok\" "
-"resp.\n"
-"začiarknite políčko „Zobrazenie dvoch riadkov“ v časti Predvoľby: Predvolené "
-"nastavenia registra."
+"vyberte v ponukovej lište \"Zobraziť\" a zaškrtnite \"Dvojitý riadok\" resp."
+"\n"
+"začiarknite políčko „Zobrazenie dvoch riadkov“ v časti Upraviť: Nastavenia: "
+"Štandardy registra."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -824,6 +823,10 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
+"Ak chcete zadať viacnásobne rozdelené transakcie, ako je napríklad výplata s "
+"viacerými zrážkami, kliknite na tlačidlo Rozdelenia na paneli nástrojov. "
+"Prípadne si v ponuke Zobraziť môžete vybrať štýl registra Automaticky delená "
+"účtovná kniha alebo Denník transakcií."
 
 #: doc/tip_of_the_day.list.c:55
 msgid ""
@@ -832,6 +835,10 @@ msgid ""
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
+"Keď zadávate sumy do registra, môžete použiť kalkulačku GnuCash na sčítanie, "
+"odčítanie, násobenie a delenie. Jednoducho zadajte prvú hodnotu a potom "
+"vyberte '+', '-', '*' alebo '/'. Napíšte druhú hodnotu a stlačením klávesu "
+"Enter zaznamenajte vypočítanú sumu."
 
 #: doc/tip_of_the_day.list.c:60
 msgid ""
@@ -840,6 +847,9 @@ msgid ""
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
 msgstr ""
+"Rýchle vyplnenie uľahčuje zadávanie bežných transakcií. Keď napíšete prvé "
+"písmeno(á) bežného popisu transakcie a potom stlačíte kláves Tab, GnuCash "
+"automaticky dokončí zvyšok transakcie tak, ako bola naposledy zadaná."
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -849,6 +859,10 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
+"Zadajte prvé písmeno(á) názvu existujúceho účtu do stĺpca Transfer register "
+"a GnuCash doplní názov z vášho zoznamu účtov. Pre podúčty zadajte prvé "
+"písmeno (písmená) nadradeného účtu, po ktorom nasleduje „:“ a prvé písmeno "
+"(písmená) podúčtu (napr. A:H pre aktíva:hotovosť)."
 
 #: doc/tip_of_the_day.list.c:71
 msgid ""
@@ -856,6 +870,9 @@ msgid ""
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
 msgstr ""
+"Chcete vidieť všetky transakcie na podúčte v jednom registri? Na karte Účty "
+"v hlavnom okne zvýraznite nadradený účet a z ponuky vyberte položku Upraviť-"
+">Otvoriť podúčty."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -863,6 +880,9 @@ msgid ""
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
 msgstr ""
+"Pri zadávaní dátumov môžete zadať '+' alebo '-' na zvýšenie alebo zníženie "
+"zvoleného dátumu. Na zvýšenie a zníženie kontrolných čísel môžete použiť aj "
+"'+' a '-'."
 
 #: doc/tip_of_the_day.list.c:79
 msgid ""
@@ -888,6 +908,9 @@ msgid ""
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
+"Pre prevod prostriedkov medzi účtami s rôznymi menami kliknite na tlačidlo "
+"Prevod v lište nástrojov registrácie, vyberte účty a sprístupnia sa možnosti "
+"Prevod meny pre zadanie výmenného kurzu alebo sumy v inej mene."
 
 #: doc/tip_of_the_day.list.c:91
 msgid ""
@@ -1676,9 +1699,9 @@ msgstr "Suma pre %s musí byť kladná."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:674
 #: gnucash/gnome/assistant-stock-transaction.cpp:1021
-#, fuzzy, c-format
+#, c-format
 msgid "The %s amount has no associated account."
-msgstr "Vrátane podúčtov všetkých zvolených účtov"
+msgstr "K sume %s nie je priradený žiadny účet."
 
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
 #: gnucash/gnome/assistant-stock-transaction.cpp:740
@@ -25685,41 +25708,37 @@ msgstr "Prepojené transakcie sú skryté."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:920
 msgid "Invoices show if paid, payments show invoice numbers."
-msgstr ""
+msgstr "Faktúry ukazujú či sú zaplatené, platby ukazujú čísla faktúr."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:921
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
-msgstr ""
+msgstr "Faktúry zobrazujú zoznam platieb, platby zobrazujú zoznam faktúr a súm."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:925
 msgid "Simple"
 msgstr "Jednoduché"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:926
-#, fuzzy
 msgid "Detailed"
-msgstr "Neuspel prevod %s"
+msgstr "Detailné"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:930
-#, fuzzy
 msgid "Display document link?"
-msgstr "Zobraziť účty ako hyperodkazy"
+msgstr "Zobraziť odkaz na dokument?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1045
-#, fuzzy
 msgid "No valid account found"
-msgstr "Nenašla sa zodpovedajúca transakcia"
+msgstr "Nenašiel sa žiadny platný účet"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1046
-#, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
-msgstr "Tento report vyžaduje, aby boli zvolené účty."
+msgstr ""
+"Tento prehľad vyžaduje, aby bol k dispozícii platný účet Pohľadávok/Záväzkov."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1069
-#, fuzzy
 msgid "No transactions found."
-msgstr "Nenašla sa zodpovedajúca transakcia"
+msgstr "Nenašla sa žiadna transakcia."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1070
 #: gnucash/report/trep-engine.scm:141
@@ -25745,9 +25764,8 @@ msgid "Employee Report"
 msgstr "Report zamestnancov"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1192
-#, fuzzy
 msgid "Job Report"
-msgstr "Ohlásiť chybu"
+msgstr "Report o práci"
 
 #: gnucash/report/reports/standard/portfolio.scm:33
 msgid "Investment Portfolio"
@@ -25783,12 +25801,11 @@ msgstr "Aktuálna transakcia"
 
 #: gnucash/report/reports/standard/price-scatter.scm:81
 msgid "Plot commodity per currency rather than currency per commodity."
-msgstr ""
+msgstr "Komoditu vykresľujte podľa meny, nie podľa meny na komoditu."
 
 #: gnucash/report/reports/standard/price-scatter.scm:96
-#, fuzzy
 msgid "Color of the marker."
-msgstr "Farba zvýrazňovača"
+msgstr "Farba zvýrazňovača."
 
 #: gnucash/report/reports/standard/price-scatter.scm:113
 msgid "Weeks"
@@ -25799,10 +25816,8 @@ msgid "Double-Weeks"
 msgstr "Dvojtýždenne"
 
 #: gnucash/report/reports/standard/price-scatter.scm:116
-#, fuzzy
-#| msgid "Quarter"
 msgid "Quarters"
-msgstr "Štvrťrok"
+msgstr "Štvrťroky"
 
 #: gnucash/report/reports/standard/price-scatter.scm:117
 msgid "Half Years"
@@ -25891,24 +25906,20 @@ msgid "Text font"
 msgstr "Písmo pre text"
 
 #: gnucash/report/reports/standard/receipt.scm:48
-#, fuzzy
 msgid "Header logo filename"
-msgstr "Názov súboru s logom"
+msgstr "Názov súboru loga hlavičky"
 
 #: gnucash/report/reports/standard/receipt.scm:49
-#, fuzzy
 msgid "Header logo width"
-msgstr "Šírka loga"
+msgstr "Šírka hlavičky loga"
 
 #: gnucash/report/reports/standard/receipt.scm:50
-#, fuzzy
 msgid "Footer logo filename"
-msgstr "Názov súboru s logom"
+msgstr "Názov súboru loga päty"
 
 #: gnucash/report/reports/standard/receipt.scm:51
-#, fuzzy
 msgid "Footer logo width"
-msgstr "Šírka loga"
+msgstr "Šírka loga päty"
 
 #: gnucash/report/reports/standard/receipt.scm:53
 #: gnucash/report/reports/standard/receipt.scm:116
@@ -25961,6 +25972,9 @@ msgid ""
 "either be in your .gnucash directory, or else in its proper place within the "
 "GnuCash installation directories."
 msgstr ""
+"Názov súboru časti eguile šablóny tohto reportu. Tento súbor by mal byť buď "
+"vo vašom adresári .gnucash, alebo na správnom mieste v inštalačných "
+"adresároch GnuCash."
 
 #: gnucash/report/reports/standard/receipt.scm:81
 #: gnucash/report/reports/standard/taxinvoice.scm:153
@@ -25969,22 +25983,23 @@ msgid ""
 "should either be in your .gnucash directory, or else in its proper place "
 "within the GnuCash installation directories."
 msgstr ""
+"Názov súboru šablóny so štýlmi CSS, ktorá sa má použiť s týmto reportom. "
+"Tento súbor by mal byť buď vo vašom adresári .gnucash, alebo na správnom "
+"mieste v inštalačných adresároch GnuCash."
 
 #: gnucash/report/reports/standard/receipt.scm:85
 #: gnucash/report/reports/standard/taxinvoice.scm:157
-#, fuzzy
 msgid "Font to use for the main heading."
-msgstr "Názov súboru s písmom, ktoré chcete použiť."
+msgstr "Písmo, ktoré sa má použiť pre hlavný nadpis."
 
 #: gnucash/report/reports/standard/receipt.scm:88
 #: gnucash/report/reports/standard/taxinvoice.scm:160
-#, fuzzy
 msgid "Font to use for everything else."
-msgstr "Názov súboru s písmom, ktoré chcete použiť."
+msgstr "Písmo na použitie na všetko ostatné."
 
 #: gnucash/report/reports/standard/receipt.scm:91
 msgid "Name of a file containing a logo to be used on the header of the report"
-msgstr ""
+msgstr "Názov súboru obsahujúceho logo, ktoré sa má použiť v hlavičke reportu"
 
 #: gnucash/report/reports/standard/receipt.scm:94
 msgid ""
@@ -25992,10 +26007,13 @@ msgid ""
 "display the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
+"Šírka loga hlavičky vo formáte CSS, napr. 10 % alebo 32 pixelov. Ak chcete "
+"logo zobraziť v jeho prirodzenej šírke, nechajte pole prázdne. Výška loga sa "
+"zodpovedajúcim spôsobom upraví."
 
 #: gnucash/report/reports/standard/receipt.scm:97
 msgid "Name of a file containing a logo to be used on the footer of the report"
-msgstr ""
+msgstr "Názov súboru obsahujúceho logo, ktoré sa má použiť v päte správy"
 
 #: gnucash/report/reports/standard/receipt.scm:100
 msgid ""
@@ -26003,6 +26021,9 @@ msgid ""
 "display the logo at its natural width. The height of the logo will be scaled "
 "accordingly."
 msgstr ""
+"Šírka loga päty vo formáte CSS, napr. 10 % alebo 32 pixelov. Ak chcete logo "
+"zobraziť v jeho prirodzenej šírke, nechajte pole prázdne. Výška loga sa "
+"zodpovedajúcim spôsobom upraví."
 
 #: gnucash/report/reports/standard/receipt.scm:104
 msgid "The format for the date->string conversion for today's date."
@@ -26021,11 +26042,11 @@ msgstr "Platba prijatá,ďakujeme!"
 
 #: gnucash/report/reports/standard/receipt.scm:141
 msgid "Notes added at end of invoice -- may contain HTML markup"
-msgstr ""
+msgstr "Poznámky pridané na konci faktúry -- môžu obsahovať HTML značky"
 
 #: gnucash/report/reports/standard/receipt.scm:204
 msgid "Display a customer invoice as receipt, cash voucher"
-msgstr ""
+msgstr "Zobrazte zákaznícku faktúru ako potvrdenie, pokladničný doklad"
 
 #: gnucash/report/reports/standard/reconcile-report.scm:62
 msgid ""
@@ -26033,6 +26054,9 @@ msgid ""
 "tool. Please select the account from Report Options. Please note the dates "
 "specified in the options will apply to the Reconciliation Date."
 msgstr ""
+"Report o vysporiadaní je navrhnutý tak, aby bola podobná nástroju formálneho "
+"odsúhlasenia. Vyberte účet z možností reportu. Upozorňujeme, že dátumy "
+"uvedené v nastaveniach sa budú vzťahovať na dátum vyrovnania."
 
 #: gnucash/report/reports/standard/reconcile-report.scm:85
 #: libgnucash/engine/Account.cpp:148
@@ -26063,18 +26087,16 @@ msgid "Credit Value"
 msgstr "Kreditná hodnota"
 
 #: gnucash/report/reports/standard/register.scm:342
-#, fuzzy
 msgid "The title of the report."
-msgstr "Titul reportu"
+msgstr "Titulok reportu."
 
 #: gnucash/report/reports/standard/register.scm:343
 msgid "Register Report"
 msgstr "Report registra"
 
 #: gnucash/report/reports/standard/register.scm:352
-#, fuzzy
 msgid "Display the check number/action?"
-msgstr "Zobraziť číslo šeku?"
+msgstr "Zobraziť číslo šeku/akciu?"
 
 #: gnucash/report/reports/standard/register.scm:355
 #: gnucash/report/trep-engine.scm:915 gnucash/report/trep-engine.scm:916
@@ -26121,9 +26143,8 @@ msgid "Two Columns"
 msgstr "Dvojstĺpcové"
 
 #: gnucash/report/reports/standard/register.scm:391
-#, fuzzy
 msgid "Display the value in transaction currency?"
-msgstr "Zobraziť odkaz transakcie?"
+msgstr "Zobraziť hodnotu v mene transakcie?"
 
 #: gnucash/report/reports/standard/register.scm:399
 msgid "Display the totals?"
@@ -26138,14 +26159,12 @@ msgid "Total Credits"
 msgstr "Celkový kredit"
 
 #: gnucash/report/reports/standard/register.scm:542
-#, fuzzy
 msgid "Total Value Debits"
-msgstr "2. Dolaďte zvolenú hodnotu:"
+msgstr "Celková hodnota debetov"
 
 #: gnucash/report/reports/standard/register.scm:544
-#, fuzzy
 msgid "Total Value Credits"
-msgstr "2. Dolaďte zvolenú hodnotu:"
+msgstr "Celková hodnota kreditov"
 
 #: gnucash/report/reports/standard/register.scm:547
 msgid "Net Change"
@@ -26168,37 +26187,32 @@ msgid "column: Date"
 msgstr "stĺpec: dátum"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:74
-#, fuzzy
 msgid "column: Tax Rate"
-msgstr "Daňová sadzba"
+msgstr "stĺpec: Daňová sadzba"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:75
 msgid "column: Units"
 msgstr "stĺpec: Jednotky"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:76
-#, fuzzy
 msgid "row: Address"
-msgstr "_Adresa"
+msgstr "riadok: Adresa"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:77
 msgid "row: Contact"
 msgstr "riadok: Kontakt"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:78
-#, fuzzy
 msgid "row: Invoice Number"
-msgstr "Číslo faktúry"
+msgstr "riadok: Číslo faktúry"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:79
-#, fuzzy
 msgid "row: Company Name"
-msgstr "Názov spoločnosti"
+msgstr "riadok: Názov spoločnosti"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:80
-#, fuzzy
 msgid "Invoice number text"
-msgstr "Číslo faktúry"
+msgstr "Text čísla faktúry"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:81
 msgid "To text"
@@ -26229,14 +26243,12 @@ msgid "Show Job number"
 msgstr "Číslo úlohy"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:87
-#, fuzzy
 msgid "Show net price"
-msgstr "Zobraziť ceny"
+msgstr "Zobraziť čistú cenu"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:88
-#, fuzzy
 msgid "Invoice number next to title"
-msgstr "Formát čísla faktúry"
+msgstr "Čísla faktúry vedľa titulku"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:89
 msgid "table-border-collapse"
@@ -26435,6 +26447,8 @@ msgid ""
 "Do not net, but show gross debit/credit adjustments to these accounts. "
 "Merchandising businesses will normally select their inventory accounts here."
 msgstr ""
+"Nnetovať, ale zobraziť hrubé debetné/kreditné úpravy týchto účtov. Obchodné "
+"spoločnosti si tu zvyčajne vyberú svoje účty zásob."
 
 #: gnucash/report/reports/standard/trial-balance.scm:81
 #, fuzzy
@@ -26447,6 +26461,9 @@ msgid ""
 "Adjustments, Adjusted Trial Balance, and Income Statement columns. Mostly "
 "useful for merchandising businesses."
 msgstr ""
+"Úpravy vykonané na týchto účtoch sú upravené v hrubom (pozri vyššie) v "
+"stĺpcoch Úpravy, Upravený Hrubý zostatok a Výkaz ziskov a strát. Väčšinou "
+"užitočné pre merchandisingové podniky."
 
 #: gnucash/report/reports/standard/trial-balance.scm:86
 msgid "Adjusting Entries pattern"
@@ -26564,7 +26581,7 @@ msgstr "Suma nerovnováhy"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:267
 msgid "<strong>Exchange Rates</strong> used for this report"
-msgstr ""
+msgstr "<strong>Výmenné kurzy</strong> použité pre tento prehľad"
 
 #: gnucash/report/reports/support/receipt.eguile.scm:124
 msgid "Invoice No."
@@ -26587,6 +26604,8 @@ msgid ""
 "This report is designed for customer (sales) invoices only. Please use the "
 "Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
 msgstr ""
+"Tento report je určený len pre zákaznícke (predajné) faktúry. Pomocou ponuky "
+"Možnosti vyberte <em>Faktúru</em>, nie účtenku alebo poukaz na výdavky."
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
@@ -26652,11 +26671,11 @@ msgstr "Bez titulku"
 
 #: gnucash/report/stylesheets/css.scm:119
 msgid "CSS code. This field specifies the CSS code for styling reports."
-msgstr ""
+msgstr "CSS kód. Toto pole určuje kód CSS pre zostavy so štýlom."
 
 #: gnucash/report/stylesheets/css.scm:209
 msgid "&lt;/style is disallowed in CSS. Using default CSS."
-msgstr ""
+msgstr "&lt;/štýl je v CSS zakázaný. Použije sa predvolený CSS."
 
 #: gnucash/report/stylesheets/css.scm:228
 msgid "CSS-based stylesheet (experimental)"
@@ -26679,9 +26698,8 @@ msgstr "Zastavené pre"
 
 #: gnucash/report/stylesheets/footer.scm:57
 #: gnucash/report/stylesheets/head-or-tail.scm:56
-#, fuzzy
 msgid "Name of organization or company prepared for."
-msgstr "Názov organizácie alebo spoločnosti, pre ktorú sa zhotovuje"
+msgstr "Názov organizácie alebo spoločnosti, pre ktorú sa pripravuje."
 
 #: gnucash/report/stylesheets/footer.scm:62
 #: gnucash/report/stylesheets/head-or-tail.scm:60
@@ -26843,9 +26861,8 @@ msgstr "Farba buniek pod-podzáhlavia/súčtov"
 
 #: gnucash/report/stylesheets/footer.scm:137
 #: gnucash/report/stylesheets/head-or-tail.scm:176
-#, fuzzy
 msgid "Color for subsubtotals."
-msgstr "Farba medzimedzisúčtov"
+msgstr "Farba medzimedzisúčtov."
 
 #: gnucash/report/stylesheets/footer.scm:142
 #: gnucash/report/stylesheets/head-or-tail.scm:181
@@ -26854,9 +26871,8 @@ msgstr "Farba bunky celkového súčtu"
 
 #: gnucash/report/stylesheets/footer.scm:143
 #: gnucash/report/stylesheets/head-or-tail.scm:182
-#, fuzzy
 msgid "Color for grand totals."
-msgstr "Farba pre celkové súčty"
+msgstr "Farba pre celkové súčty."
 
 #: gnucash/report/stylesheets/footer.scm:147
 #: gnucash/report/stylesheets/footer.scm:152
@@ -26879,9 +26895,8 @@ msgstr "Vzdialenosť buniek"
 #: gnucash/report/stylesheets/footer.scm:148
 #: gnucash/report/stylesheets/head-or-tail.scm:187
 #: gnucash/report/stylesheets/plain.scm:58
-#, fuzzy
 msgid "Space between table cells."
-msgstr "Medzera medzi bunkami tabuľky"
+msgstr "Medzera medzi bunkami tabuľky."
 
 #: gnucash/report/stylesheets/footer.scm:153
 #: gnucash/report/stylesheets/head-or-tail.scm:192
@@ -26892,9 +26907,8 @@ msgstr "Výplň buniek"
 #: gnucash/report/stylesheets/footer.scm:153
 #: gnucash/report/stylesheets/head-or-tail.scm:192
 #: gnucash/report/stylesheets/plain.scm:62
-#, fuzzy
 msgid "Space between table cell edge and content."
-msgstr "Medzera medzi bunkami obsahom bunky a jej okrajom"
+msgstr "Medzera medzi bunkami obsahom bunky a jej okrajom."
 
 #: gnucash/report/stylesheets/footer.scm:158
 #: gnucash/report/stylesheets/head-or-tail.scm:197
@@ -26905,9 +26919,8 @@ msgstr "Hrúbka ohraničenia tabuľky"
 #: gnucash/report/stylesheets/footer.scm:158
 #: gnucash/report/stylesheets/head-or-tail.scm:197
 #: gnucash/report/stylesheets/plain.scm:66
-#, fuzzy
 msgid "Bevel depth on tables."
-msgstr "Hĺbka sklonu tabuliek"
+msgstr "Hĺbka sklonu tabuliek."
 
 #: gnucash/report/stylesheets/footer.scm:338
 #: gnucash/report/stylesheets/head-or-tail.scm:385
@@ -26952,52 +26965,56 @@ msgstr "Dátum vytvorenia reportu."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:75
 msgid "Show time in addition to date"
-msgstr ""
+msgstr "Zobrazte okrem dátumu aj čas"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:76
 msgid ""
 "The creation time for this report can only be shown if the date is shown."
 msgstr ""
+"Čas vytvorenia tohto reportu je možné zobraziť iba vtedy, ak je zobrazený "
+"dátum."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:80
-#, fuzzy
 msgid "Show GnuCash Version"
 msgstr "Zobraziť verziu GnuCash"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:81
-#, fuzzy
 msgid "Show the currently used GnuCash version."
-msgstr "Zobraziť verziu GnuCash"
+msgstr "Zobraziť aktuálne používanú verziu GnuCash"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:92
 msgid "String for additional report information."
-msgstr ""
+msgstr "Reťazec pre ďalšie informácie o reporte."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:96
-#, fuzzy
 msgid "Show preparer info at bottom"
-msgstr "Zobrazí informácie o zhotoviteľovi"
+msgstr "V dolnej časti zobraziť informácie o zhotoviteľovi"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:97
 msgid "Per default the preparer info will be shown before the report data."
 msgstr ""
+"V predvolenom nastavení sa pred údajmi reportu zobrazia informácie o "
+"zhotoviteľovi."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:101
-#, fuzzy
 msgid "Show receiver info at bottom"
-msgstr "Zobrazí informácie o zhotoviteľovi"
+msgstr "Zobraziť informácie o príjemcovi dole"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:102
 msgid "Per default the receiver info will be shown before the report data."
 msgstr ""
+"V predvolenom nastavení sa informácie o príjemcovi zobrazia pred údajmi "
+"reportu."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:106
 msgid "Show date/time at bottom"
-msgstr ""
+msgstr "Zobraziť dátum/čas v spodnej časti"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:107
 msgid "Per default the date/time info will be shown before the report data."
 msgstr ""
+"V predvolenom nastavení sa pred údajmi reportu zobrazia informácie o dátume "
+"a čase."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:111
 msgid "Show comments at bottom"
@@ -27008,14 +27025,16 @@ msgid ""
 "Per default the additional comments text will be shown before the report "
 "data."
 msgstr ""
+"V predvolenom nastavení sa text dodatočných komentárov zobrazí pred údajmi "
+"reportu."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:116
 msgid "Show GnuCash version at bottom"
-msgstr "Zobraziť dole verziu GnuCash"
+msgstr "Zobraziť verziu GnuCash dole"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:117
 msgid "Per default the GnuCash version will be shown before the report data."
-msgstr ""
+msgstr "V predvolenom nastavení sa verzia GnuCash zobrazí pred údajmi reportu."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:402
 #: gnucash/report/stylesheets/head-or-tail.scm:409
@@ -27062,10 +27081,8 @@ msgstr "Tabuľka medzisúčtov"
 #. "Running Totals" is the plural form as it refers to the running total and running subtotals.
 #. To be consistent, also consider how the singular form "Running Total" is translated.
 #: gnucash/report/trep-engine.scm:82
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Totals"
-msgstr "Obrat"
+msgstr "Priebežné súčty"
 
 #: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2292
 msgid "Show Account Description"
@@ -27073,53 +27090,47 @@ msgstr "Zobraziť popis účtu"
 
 #: gnucash/report/trep-engine.scm:93
 msgid "Show Informal Debit/Credit Headers"
-msgstr ""
+msgstr "Zobraziť neformálne debetné/kreditné hlavičky"
 
 #: gnucash/report/trep-engine.scm:95
-#, fuzzy
 msgid "Show subtotals only (hide transactional data)"
-msgstr "Zobrazovať len neplatné transakcie"
+msgstr "Zobraziť iba medzisúčty (skryť transakčné údaje)"
 
 #: gnucash/report/trep-engine.scm:96
-#, fuzzy
 msgid "Add indenting columns"
-msgstr "_Rozšíriť tento stĺpec"
+msgstr "Pridajte stĺpce na odsadenie"
 
 #: gnucash/report/trep-engine.scm:105
-#, fuzzy
 msgid "Date Filter"
-msgstr "Uložiť %s do súboru"
+msgstr "Dátumový filter"
 
 #: gnucash/report/trep-engine.scm:106
 msgid "Table for Exporting"
 msgstr "Tabuľka pre export"
 
 #: gnucash/report/trep-engine.scm:118
-#, fuzzy
 msgid "Account Name Filter"
-msgstr "Názov účtu"
+msgstr "Filter názvu účtuNázov účtu"
 
 #: gnucash/report/trep-engine.scm:120
 msgid "Use regular expressions for account name filter"
-msgstr ""
+msgstr "Na filter názvu účtu použite regulárne výrazy"
 
 #: gnucash/report/trep-engine.scm:122
-#, fuzzy
 msgid "Account Name Filter excludes matched strings"
-msgstr "Názov účtu"
+msgstr "Filter názvu účtu vylučuje zhodné reťazce"
 
 #: gnucash/report/trep-engine.scm:123
 msgid "Transaction Filter"
 msgstr "Filter transakcií"
 
 #: gnucash/report/trep-engine.scm:125
-#, fuzzy
 msgid "Use regular expressions for transaction filter"
-msgstr "Zobraziť dátum transakcie?"
+msgstr "Na filtrovanie transakcií použite regulárne výrazy"
 
 #: gnucash/report/trep-engine.scm:127
 msgid "Transaction Filter excludes matched strings"
-msgstr ""
+msgstr "Filter transakcií vylučuje zhodné reťazce"
 
 #: gnucash/report/trep-engine.scm:129
 msgid "Transaction Filter is case insensitive"
@@ -27130,29 +27141,28 @@ msgid "Reconciled Status"
 msgstr "Stav vysporiadania"
 
 #: gnucash/report/trep-engine.scm:131
-#, fuzzy
 msgid "Void Transactions"
-msgstr "Plánovaná transakcia"
+msgstr "Neplatné transakcie"
 
 #: gnucash/report/trep-engine.scm:132
-#, fuzzy
 msgid "Closing transactions"
-msgstr "Spracovávanie transakcií"
+msgstr "Uzávierkové transakcie"
 
 #: gnucash/report/trep-engine.scm:142
 msgid ""
 "No transactions were found that match the time interval and account "
 "selection specified in the Options panel."
 msgstr ""
+"Nenašli sa žiadne transakcie, ktoré by sa zhodovali s časovým intervalom a "
+"výberom účtu zadaným na paneli Možnosti."
 
 #: gnucash/report/trep-engine.scm:213
 msgid "Register Order"
-msgstr "Triedenie registra"
+msgstr "Zoraďovanie registra"
 
 #: gnucash/report/trep-engine.scm:350
-#, fuzzy
 msgid "Do not do any filtering"
-msgstr "Nepoužívať filter"
+msgstr "Nefiltrovať"
 
 #: gnucash/report/trep-engine.scm:353
 msgid "Include Transactions to/from Filter Accounts"
@@ -27171,53 +27181,44 @@ msgid "Void only"
 msgstr "Len neplatné"
 
 #: gnucash/report/trep-engine.scm:370
-#, fuzzy
 msgid "Both (and include void transactions in totals)"
-msgstr "Zobrazovať oboje (a zahrnúť neplatné transakcie v súčtoch)"
+msgstr "Oboje (a zahrnúť neplatné transakcie v súčtoch)"
 
 #: gnucash/report/trep-engine.scm:375
-#, fuzzy
 msgid "Exclude closing transactions"
-msgstr "Spracovávanie transakcií"
+msgstr "Vylúčiť uzávierkové transakcie"
 
 #: gnucash/report/trep-engine.scm:379
-#, fuzzy
 msgid "Show both closing and regular transactions"
-msgstr "Zobrazovať len neplatné transakcie"
+msgstr "Zobrazte uzávierkové aj bežné transakcie"
 
 #: gnucash/report/trep-engine.scm:383
-#, fuzzy
 msgid "Show closing transactions only"
-msgstr "Nenašla sa zodpovedajúca transakcia"
+msgstr "Zobraziť iba uzávierkové transakcie"
 
 #: gnucash/report/trep-engine.scm:393
-#, fuzzy
 msgid "Show All Transactions"
-msgstr "_Všetky transakcie"
+msgstr "Zobraziť všetky transakcie"
 
 #: gnucash/report/trep-engine.scm:397
-#, fuzzy
 msgid "Unreconciled only"
-msgstr "_Nevysporiadané"
+msgstr "Iba nevysporiadané"
 
 #: gnucash/report/trep-engine.scm:401
-#, fuzzy
 msgid "Cleared only"
-msgstr "Potvrdené"
+msgstr "Iba spracované"
 
 #: gnucash/report/trep-engine.scm:405
-#, fuzzy
 msgid "Reconciled only"
-msgstr "Vysporiadané"
+msgstr "Iba vysporiadané"
 
 #: gnucash/report/trep-engine.scm:419
 msgid "Use Global Preference"
 msgstr "Použiť globálne nastavenia"
 
 #: gnucash/report/trep-engine.scm:422
-#, fuzzy
 msgid "Don't change any displayed amounts"
-msgstr "Nemeniť zobrazené sumy"
+msgstr "Nemeňte žiadne zobrazené sumy"
 
 #: gnucash/report/trep-engine.scm:425
 msgid "Income and Expense"
@@ -27229,7 +27230,7 @@ msgstr "Kreditné účty"
 
 #: gnucash/report/trep-engine.scm:537
 msgid "Specify date to filter by…"
-msgstr ""
+msgstr "Zadajte dátum na filtrovanie podľa…"
 
 #: gnucash/report/trep-engine.scm:541 gnucash/report/trep-engine.scm:913
 #: gnucash/report/trep-engine.scm:1092 gnucash/report/trep-engine.scm:2240
@@ -27237,21 +27238,18 @@ msgid "Date Entered"
 msgstr "Dátum zadaný"
 
 #: gnucash/report/trep-engine.scm:545
-#, fuzzy
 msgid "Convert all transactions into a common currency."
-msgstr "Konvertovať všetky transakcie na obvyklú menu"
+msgstr "Konvertovať všetky transakcie na spoločnú menu."
 
 #: gnucash/report/trep-engine.scm:566
-#, fuzzy
 msgid "Formats the table suitable for cut & paste exporting with extra cells."
 msgstr ""
 "Formátuje tabuľku vhodnú pre export pomocou kopírovania a vloženia (cut & "
-"paste) s extra bunkami"
+"paste) s extra bunkami."
 
 #: gnucash/report/trep-engine.scm:576
-#, fuzzy
 msgid "If no transactions matched"
-msgstr "Všeobecný priradzovač importovaných transakcií"
+msgstr "Ak sa nezhodujú žiadne transakcie"
 
 #: gnucash/report/trep-engine.scm:584
 msgid ""
@@ -27314,6 +27312,10 @@ msgid ""
 "expense accounts to equity, and must usually be excluded from periodic "
 "reporting."
 msgstr ""
+"Väčšina používateľov by štandardne nemala do reportu transakcií zahrnúť "
+"uzávierkové transakcie. Uzávierkové transakcie sú prevody z účtov výnosov a "
+"nákladov do vlastného imania a musia byť zvyčajne vylúčené z pravidelného "
+"vykazovania."
 
 #: gnucash/report/trep-engine.scm:666
 #, fuzzy
@@ -27364,14 +27366,12 @@ msgid "Subtotal according to the primary key?"
 msgstr "Medzisúčty podľa primárneho kľúča?"
 
 #: gnucash/report/trep-engine.scm:815 gnucash/report/trep-engine.scm:849
-#, fuzzy
 msgid "Do a date subtotal."
-msgstr "Urobiť dátumové medzisúčty"
+msgstr "Urobiť dátumové medzisúčty."
 
 #: gnucash/report/trep-engine.scm:824
-#, fuzzy
 msgid "Order of primary sorting."
-msgstr "Určenie primárneho triedenia"
+msgstr "Určenie primárneho zoraďovania."
 
 #: gnucash/report/trep-engine.scm:832
 #, fuzzy
