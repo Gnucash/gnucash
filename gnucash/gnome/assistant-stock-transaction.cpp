@@ -656,6 +656,8 @@ StockTransactionEntry::validate_amount(Logger& logger) const
         g_free (buf);
     };
 
+    if (!gnc_numeric_zero_p(m_value) && !m_account)
+        add_error(N_("The %s amount has no associated account."), m_action);
 
     if (gnc_numeric_check (m_value))
     {
@@ -669,9 +671,6 @@ StockTransactionEntry::validate_amount(Logger& logger) const
 
     if (!m_allow_zero && !gnc_numeric_positive_p (m_value))
         add_error (N_("Amount for %s must be positive."), m_action);
-
-    if (!gnc_numeric_zero_p(m_value) && !m_account)
-        add_error(N_("The %s amount has no associated account."), m_action);
 }
 
 const char *
@@ -1004,6 +1003,9 @@ StockTransactionFeesEntry::validate_amount(Logger& logger) const
     };
 
 
+    if (!gnc_numeric_zero_p(m_value) && !m_account && !m_capitalize)
+        add_error(N_("The %s amount has no associated account."), m_action);
+
     if (gnc_numeric_check (m_value))
     {
         if (!m_allow_zero)
@@ -1016,9 +1018,6 @@ StockTransactionFeesEntry::validate_amount(Logger& logger) const
 
     if (!m_allow_zero && !gnc_numeric_positive_p (m_value))
         add_error (N_("Amount for %s must be positive."), m_action);
-
-    if (!gnc_numeric_zero_p(m_value) && !m_account && !m_capitalize)
-        add_error(N_("The %s amount has no associated account."), m_action);
 }
 
 void
