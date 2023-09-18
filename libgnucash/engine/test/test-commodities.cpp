@@ -136,6 +136,8 @@ test_commodity(void)
         do_test(
             gnc_commodity_equiv(com, com2), "commodity equiv");
 
+        gnc_commodity_destroy (com2);
+        gnc_commodity_destroy (com);
         qof_book_destroy (book);
     }
 
@@ -188,6 +190,8 @@ test_commodity(void)
                     tbl, gnc_commodity_get_namespace(coms[i])),
                 "test have namespace");
         }
+        gnc_commodity_table_destroy (tbl);
+        qof_book_destroy (book);
     }
 
 }
