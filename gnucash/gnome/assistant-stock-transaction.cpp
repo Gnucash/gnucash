@@ -556,7 +556,7 @@ public:
     virtual void set_memo(const char* memo) { m_memo = memo; }
     virtual const char* memo() const { return m_memo; }
     virtual void set_value(gnc_numeric amount);
-    virtual GncNumeric value() { return GncNumeric(m_value); }
+    virtual GncNumeric value() { return (gnc_numeric_check(m_value) ? GncNumeric{} : GncNumeric(m_value)); }
     virtual void set_amount(gnc_numeric) {}
     virtual gnc_numeric amount() const { return m_value; }
     virtual bool has_amount() const { return false; }
