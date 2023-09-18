@@ -329,7 +329,7 @@ test_gnc_sql_commit_edit (void)
 
     g_log_remove_handler (logdomain, hdlr1);
     g_object_unref (inst);
-    g_object_unref (book);
+    qof_book_destroy (book);
     delete sql_be;
 }
 /* handle_and_term
