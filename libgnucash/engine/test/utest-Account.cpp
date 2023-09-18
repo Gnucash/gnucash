@@ -1346,24 +1346,30 @@ static void
 test_gnc_account_get_map_entry (Fixture *fixture, gconstpointer pData)
 {
     Account *account = xaccMallocAccount (gnc_account_get_book (fixture->acct));
-
+    char *entry;
     g_assert_cmpstr (gnc_account_get_map_entry (account, "one", NULL), ==, nullptr);
     g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "two"), ==, nullptr);
 
     set_kvp_string_path (account, {"one"}, "uno");
-    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", NULL), ==, "uno");
+    entry = gnc_account_get_map_entry (account, "one", NULL);
+    g_assert_cmpstr (entry, ==, "uno");
     g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "two"), ==, nullptr);
+    g_free (entry);
 
     set_kvp_string_path (account, {"one", "two"}, "dos");
     g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "tw0"), ==, nullptr);
-    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "two"), ==, "dos");
+    entry = gnc_account_get_map_entry (account, "one", "two");
+    g_assert_cmpstr (entry, ==, "dos");
+    g_free (entry);
 
     set_kvp_string_path (account, {"one"}, nullptr);
     g_assert_cmpstr (gnc_account_get_map_entry (account, "one", NULL), ==, nullptr);
     g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "two"), ==, nullptr);
 
     set_kvp_string_path (account, {"one", "two"}, "dos");
-    g_assert_cmpstr (gnc_account_get_map_entry (account, "one", "two"), ==, "dos");
+    entry = gnc_account_get_map_entry (account, "one", "two");
+    g_assert_cmpstr (entry, ==, "dos");
+    g_free (entry);
 
     xaccAccountBeginEdit (account);
     xaccAccountDestroy (account);
