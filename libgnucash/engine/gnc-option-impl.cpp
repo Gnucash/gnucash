@@ -877,7 +877,12 @@ std::string
 GncOptionAccountSelValue::serialize() const noexcept
 {
     static const std::string no_value{"No Value"};
-    return guid_equal(guid_null(), &m_value) ? no_value : guid_to_string(&m_value);
+    if (guid_equal(guid_null(), &m_value))
+        return no_value;
+
+    gchar strbuff[GUID_ENCODING_LENGTH + 1];
+    guid_to_string_buff (&m_value, strbuff);
+    return strbuff;
 }
 
 bool
