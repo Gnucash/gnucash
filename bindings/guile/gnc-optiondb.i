@@ -1226,9 +1226,10 @@ inline SCM return_scm_value(ValueType value)
                     if (guid_list.empty())
                         return scm_simple_format(SCM_BOOL_F, list_format_str, scm_list_1(no_value));
                     SCM string_list{SCM_EOL};
+                    char guid_str[GUID_ENCODING_LENGTH+1];
                     for(auto guid : guid_list)
                     {
-                        auto guid_str{guid_to_string(&guid)};
+                        guid_to_string_buff (&guid, guid_str);
                         auto guid_scm{scm_from_utf8_string(guid_str)};
                         string_list = scm_cons(guid_scm, string_list);
                     }
