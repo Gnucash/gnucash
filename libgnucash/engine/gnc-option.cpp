@@ -115,6 +115,7 @@ GncOption::set_value(ValueType value)
         [value](auto& option) {
             if constexpr
                 (is_same_decayed_v<decltype(option.get_value()), ValueType> ||
+                 is_same_decayed_v<decltype(option), GncOptionDateFormat> ||
                  (is_same_decayed_v<decltype(option),
                   GncOptionDateValue> &&
                   (is_same_decayed_v<ValueType, RelativeDatePeriod> ||
@@ -146,6 +147,7 @@ GncOption::set_default_value(ValueType value)
         [value](auto& option) {
             if constexpr
                 (is_same_decayed_v<decltype(option.get_value()), ValueType>||
+                 is_same_decayed_v<decltype(option), GncOptionDateFormat> ||
                  (is_same_decayed_v<decltype(option), GncOptionDateValue> &&
                   (is_same_decayed_v<ValueType, RelativeDatePeriod> ||
                    std::is_same_v<ValueType, time64> ||
@@ -486,6 +488,10 @@ template GncOption::GncOption(const char*, const char*, const char*,
 template GncOption::GncOption(const char*, const char*, const char*,
                               const char*, const QofQuery*, GncOptionUIType);
 
+template GncOption::GncOption(const char *, const char*, const char*,
+                              const char *, GncOptionDateFormat,
+                              GncOptionUIType);
+
 template bool GncOption::get_value<bool>() const;
 template int GncOption::get_value<int>() const;
 template int64_t GncOption::get_value<int64_t>() const;
@@ -501,6 +507,7 @@ template RelativeDatePeriod GncOption::get_value<RelativeDatePeriod>() const;
 template GncOptionAccountList GncOption::get_value<GncOptionAccountList>() const;
 template GncMultichoiceOptionIndexVec GncOption::get_value<GncMultichoiceOptionIndexVec>() const;
 template GncOptionReportPlacementVec GncOption::get_value<GncOptionReportPlacementVec>() const;
+template GncOptionDateFormat GncOption::get_value<GncOptionDateFormat>() const;
 
 template bool GncOption::get_default_value<bool>() const;
 template int GncOption::get_default_value<int>() const;
@@ -515,6 +522,7 @@ template RelativeDatePeriod GncOption::get_default_value<RelativeDatePeriod>() c
 template GncOptionAccountList GncOption::get_default_value<GncOptionAccountList>() const;
 template GncMultichoiceOptionIndexVec GncOption::get_default_value<GncMultichoiceOptionIndexVec>() const;
 template GncOptionReportPlacementVec GncOption::get_default_value<GncOptionReportPlacementVec>() const;
+template GncOptionDateFormat GncOption::get_default_value<GncOptionDateFormat>() const;
 
 template void GncOption::set_value(bool);
 template void GncOption::set_value(int);
@@ -532,6 +540,7 @@ template void GncOption::set_value(uint16_t);
 template void GncOption::set_value(GncOptionAccountList);
 template void GncOption::set_value(GncMultichoiceOptionIndexVec);
 template void GncOption::set_value(GncOptionReportPlacementVec);
+template void GncOption::set_value(GncOptionDateFormat);
 
 template void GncOption::set_default_value(bool);
 template void GncOption::set_default_value(int);
@@ -547,6 +556,7 @@ template void GncOption::set_default_value(uint16_t);
 template void GncOption::set_default_value(GncOptionAccountList);
 template void GncOption::set_default_value(GncMultichoiceOptionIndexVec);
 template void GncOption::set_default_value(GncOptionReportPlacementVec);
+template void GncOption::set_default_value(GncOptionDateFormat);
 
 template void GncOption::get_limits(double&, double&, double&) const noexcept;
 template void GncOption::get_limits(int&, int&, int&) const noexcept;
@@ -563,6 +573,7 @@ template bool GncOption::validate(const QofQuery*) const;
 template bool GncOption::validate(RelativeDatePeriod) const;
 template bool GncOption::validate(GncMultichoiceOptionIndexVec) const;
 template bool GncOption::validate(GncOptionReportPlacementVec) const;
+template bool GncOption::validate(GncOptionDateFormat) const;
 
 template GncOption* gnc_make_option<const std::string&>(const char*,
                                                         const char*,

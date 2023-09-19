@@ -1682,13 +1682,21 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GNC_DATE_FORMAT(get_widget())};
-        gnc_date_format_set_custom(widget,
-                                   option.get_value<std::string>().c_str());
+        auto [format, months, years, custom] = option.get_value<GncOptionDateFormat>();
+        gnc_date_format_set_format(widget, format);
+        gnc_date_format_set_months(widget, months);
+        gnc_date_format_set_years(widget, years);
+        gnc_date_format_set_custom(widget, custom.c_str());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GNC_DATE_FORMAT(get_widget())};
-        option.set_value(std::string{gnc_date_format_get_custom(widget)});
+        GncOptionDateFormat format{
+            gnc_date_format_get_format(widget),
+            gnc_date_format_get_months(widget),
+            gnc_date_format_get_years(widget),
+            gnc_date_format_get_custom(widget)};
+        option.set_value(format);
     }
 };
 

@@ -28,6 +28,7 @@
 #include <sstream>
 #include "gnc-option-uitype.hpp"
 #include "kvp-value.hpp"
+#include "kvp-frame.hpp"
 #include "qofbookslots.h"
 #include "guid.hpp"
 #include "gnc-optiondb.h"
@@ -436,6 +437,30 @@ kvp_value_from_qof_instance_option(const GncOption& option)
     return new KvpValue(guid);
 }
 
+/* GncOptionDateFormat Constants and support functions. These are frozen for backwards compatibility. */
+
+static const char* date_format_frame_key = "Fancy Date Format";
+static const char* date_format_custom_key ="custom";
+static const char* date_format_months_key = "month";
+static const char* date_format_years_key = "years";
+static const char *date_format_format_key = "fmt";
+
+static inline KvpValue *
+kvp_frame_from_date_format_option(const GncOption& option)
+{
+    auto [format, months, years, custom] = option.get_value<GncOptionDateFormat>();
+
+    if (format == QOF_DATE_FORMAT_UNSET)
+        return nullptr;
+
+    auto frame{new KvpFrame};
+    frame->set({date_format_format_key}, new KvpValue(g_strdup(gnc_date_dateformat_to_string(format))));
+    frame->set({date_format_months_key}, new KvpValue(g_strdup(gnc_date_monthformat_to_string(months))));
+    frame->set({date_format_years_key}, new KvpValue(static_cast<int64_t>(years)));
+    frame->set({date_format_custom_key}, new KvpValue(g_strdup(custom.c_str())));
+    return new KvpValue(frame);
+};
+
 void
 GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
 {
@@ -476,6 +501,8 @@ GncOptionDB::save_to_kvp(QofBook* book, bool clear_options) const noexcept
                                 kvp = new KvpValue(option.template get_value<double>());
                             }
                         }
+                        else if (type == GncOptionUIType::DATE_FORMAT)
+                            kvp = kvp_frame_from_date_format_option(option);
                         else
                         {
                             auto str{option.template get_value<std::string>()};
@@ -504,6 +531,33 @@ fill_option_from_guid_kvp(GncOption& option, KvpValue* kvp)
     auto guid{kvp->get<GncGUID*>()};
     option.set_value(
         (const QofInstance*)qof_instance_from_guid(guid, option.get_ui_type()));
+}
+
+static inline void
+fill_option_from_date_format_kvp(GncOption& option, KvpValue* kvp)
+{
+    GncOptionDateFormat default_fmt{QOF_DATE_FORMAT_UNSET, GNCDATE_MONTH_NUMBER, true, ""};
+    auto frame{kvp->get<KvpFrame*>()};
+    if (!frame)
+    {
+        option.set_value(default_fmt);
+        return;
+    }
+    auto format_str{frame->get_slot({date_format_format_key})->get<const char*>()};
+    QofDateFormat format;
+    if (!format_str || gnc_date_string_to_dateformat(format_str, &format))
+    {
+        option.set_value(default_fmt);
+        return;
+    }
+    GNCDateMonthFormat months = GNCDATE_MONTH_NUMBER;
+    auto months_str{frame->get_slot({date_format_months_key})->get<const char*>()};
+    if (months_str)
+        gnc_date_string_to_monthformat(months_str, &months);
+    auto years_num{frame->get_slot({date_format_years_key})->get<int64_t>()};
+    bool years = static_cast<bool>(years_num);
+    auto custom_str{frame->get_slot({date_format_custom_key})->get<const char*>()};
+    option.set_value<GncOptionDateFormat>({format, months, years, custom_str ? custom_str : ""});
 }
 
 void
@@ -556,6 +610,10 @@ GncOptionDB::load_from_kvp(QofBook* book) noexcept
                         case KvpValue::Type::GUID:
                             fill_option_from_guid_kvp(option, kvp);
                           break;
+                        case KvpValue::Type::FRAME:
+                            if (g_strcmp0(option.get_name().c_str(), date_format_frame_key) == 0)
+                                fill_option_from_date_format_kvp(option, kvp);
+                            break;
                         default:
                             return;
                             break;
@@ -909,9 +967,9 @@ gnc_register_counter_format_option(GncOptionDB* db,
 void
 gnc_register_dateformat_option(GncOptionDB* db, const char* section,
                                const char* name, const char* key,
-                               const char* doc_string, std::string value)
+                               const char* doc_string, GncOptionDateFormat&& value)
 {
-    GncOption option{section, name, key, doc_string, value,
+    GncOption option{section, name, key, doc_string, std::move(value),
             GncOptionUIType::DATE_FORMAT};
     db->register_option(section, std::move(option));
 }
@@ -1284,10 +1342,11 @@ gnc_option_db_book_options(GncOptionDB* odb)
                                  N_("Default Vendor TaxTable"), "f2",
                                  N_("The default tax table to apply to vendors."),
                                  nullptr);
+
     gnc_register_dateformat_option(odb, business_section,
                                    N_("Fancy Date Format"), "g",
                                    N_("The default date format used for fancy printed dates."),
-                                   empty_string);
+                                   {QOF_DATE_FORMAT_UNSET, GNCDATE_MONTH_NUMBER, true, ""});
 
 //Tax Tab
 

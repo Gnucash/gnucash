@@ -806,7 +806,7 @@ inline void gnc_register_counter_format_option(GncOptionDBPtr& db,
 void gnc_register_dateformat_option(GncOptionDB* db,
                                     const char* section, const char* name,
                                     const char* key, const char* doc_string,
-                                    std::string value);
+                                    GncOptionDateFormat&& value);
 
 /**
  * As above but takes a const GncOptionDBPtr& (const std::unique_ptr<GncOptionDB>&) for calling from C++.
@@ -815,10 +815,10 @@ inline void gnc_register_dateformat_option(GncOptionDBPtr& db,
                                            const char* section,
                                            const char* name, const char* key,
                                            const char* doc_string,
-                                           std::string value)
+                                           GncOptionDateFormat&& value)
 {
     gnc_register_dateformat_option(db.get(), section, name, key,
-                                   doc_string, value);
+                                   doc_string, std::move(value));
 }
 
 enum RelativeDateUI : uint8_t

@@ -341,7 +341,8 @@ template<class OptType,
 std::istream& operator>>(std::istream& iss, OptType& opt)
 {
     if constexpr (std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _gncOwner*> ||
-                  std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _QofQuery*>)
+                  std::is_same_v<std::decay_t<decltype(opt.get_value())>, const _QofQuery*> ||
+                  std::is_same_v<std::decay_t<decltype(opt.get_value())>, GncOptionDateFormat>)
         return iss;
     else
     {
