@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-09-19 21:00+0000\n"
+"PO-Revision-Date: 2023-09-20 20:02+0000\n"
 "Last-Translator: Andrea Andre <andrea.tsg19@slmail.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
@@ -15494,7 +15494,7 @@ msgstr "Afișează sumele negative cu roșu"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1261
 msgid "_Automatic decimal point"
-msgstr "Virgula zecimală automată"
+msgstr "Virgulă zecimală _automată"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1267
 msgid ""
@@ -16040,7 +16040,7 @@ msgstr "<b>Locație</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3121
 msgid "Report opens in a new _window"
-msgstr "Raportul se deschide într-o fereastră nouă"
+msgstr "Raportul se deschide într-o _fereastră nouă"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3127
 msgid ""
@@ -16075,7 +16075,7 @@ msgstr "Salvează poziția și locațiile ferestrei"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3329
 msgid "Bring the most _recent tab to the front"
-msgstr "Adu cea mai recentă filă în față"
+msgstr "Adu în față cea mai _recentă filă"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3361
 msgid "<b>Tab Position</b>"
@@ -21610,7 +21610,7 @@ msgstr "Tranzacția curentă nu e echilibrată."
 
 #: gnucash/register/ledger-core/split-register-control.c:138
 msgid "Balance it _manually"
-msgstr "Echilibrează manual"
+msgstr "Echilibrează _manual"
 
 #: gnucash/register/ledger-core/split-register-control.c:140
 msgid "Let GnuCash _add an adjusting split"
@@ -30288,7 +30288,7 @@ msgstr "Deschide contul selectat și toate subconturile sale"
 #: gnucash/ui/gnc-plugin-page-register.ui:353
 #: gnucash/ui/gnc-plugin-page-register.ui:465
 msgid "_Filter By…"
-msgstr "Filtrează după…"
+msgstr "_Filtrează după…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:98
 #: gnucash/ui/gnc-plugin-page-budget.ui:87
@@ -30413,7 +30413,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:175
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:286
 msgid "Check & Repair Su_baccounts"
-msgstr "_Verifică & repară su_bconturi"
+msgstr "Verifică & repară su_bconturi"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:177
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:288
