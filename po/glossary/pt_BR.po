@@ -11,10 +11,10 @@
 # Wellington Terumi Uemura <wellingtonuemura@gmail.com>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-12-05 20:11+0100\n"
+"Project-Id-Version: GnuCash 5.4\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2023-09-21 00:29+0200\n"
 "PO-Revision-Date: 2023-07-28 04:06+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -26,8 +26,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.0-dev\n"
 
-#. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
-msgid "Term (Dear translator: This file will never be visible to the user!)"
+#. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
+#, fuzzy
+#| msgid "Term (Dear translator: This file will never be visible to the user!)"
+msgid ""
+"Term (Dear translators: This file will never be visible to normal users!)"
 msgstr "Termo (Só para completar a estatística)"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
@@ -38,7 +41,7 @@ msgstr "\"\""
 msgid "account"
 msgstr "conta"
 
-#. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
+#. "An alphanumerical code applied to accounts for sorting. Some jurisdictions mandate codes and some GnuCash book templates include codes as part of the tree structure. Account codes can be set and changed in the Edit Account dialog."
 msgid "account code"
 msgstr "código da conta"
 
@@ -50,7 +53,7 @@ msgstr "hierarquia das contas"
 msgid "account name"
 msgstr "nome da conta"
 
-#. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
+#. "The grouping of accounts whose balance increases with a debit (left side of the balance sheet in T account form). Complement: Passive. See also: Report Form"
 msgid "account type: Active"
 msgstr "Ativa"
 
@@ -110,7 +113,7 @@ msgstr "Poupança"
 msgid "account type: Stock"
 msgstr "Ações"
 
-#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+#. "This account type is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
 msgstr "Negociação"
 
@@ -514,7 +517,7 @@ msgstr "unifique"
 msgid "marker"
 msgstr "marcador"
 
-#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+#. "1. Some text annotation, but this meaning is rarely used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 msgid "markup"
 msgstr "Marcação"
 
@@ -538,7 +541,7 @@ msgstr "Taxa variável"
 msgid "mortgage: FRM"
 msgstr "Taxa fixa"
 
-#. "e.g. USD, DEM, see Currency."
+#. "e.g. USD, EUR, see Currency."
 msgid "national currency"
 msgstr "moeda nacional"
 
@@ -874,14 +877,14 @@ msgstr "comprovante"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "saque"
 
-msgid "stock"
-msgstr "estoque"
+#~ msgid "stock"
+#~ msgstr "estoque"
 
-msgid "due"
-msgstr "devido"
+#~ msgid "due"
+#~ msgstr "devido"
 
-msgid "Online"
-msgstr "Online"
+#~ msgid "Online"
+#~ msgstr "Online"
 
-msgid "Direct Debit"
-msgstr "Débito direto"
+#~ msgid "Direct Debit"
+#~ msgstr "Débito direto"

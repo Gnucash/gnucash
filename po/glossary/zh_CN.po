@@ -13,10 +13,10 @@
 # Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.8\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-12-05 20:11+0100\n"
+"Project-Id-Version: GnuCash 5.4\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2023-09-21 00:29+0200\n"
 "PO-Revision-Date: 2023-03-16 17:41+0000\n"
 "Last-Translator: Zhaoquan Huang <zhaoquan2008@hotmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -30,8 +30,11 @@ msgstr ""
 
 # 翻译人员好，这个是不会被最终用户所见的。这是为了您，也就是翻译人员所提供的一个工具。GnuCash 是一个个人或小型企业理财的软件，是一个会计专业性比较强的软件，其中包含了很多的术语。而这里就是针对很多术语的解释。
 # 请大家务必在翻译前先浏览此文件，否则很容易出现翻译不一致的地方。如果有必须修正的术语错误，也请先修改这个文件，然后再修改软件的 po，这样后来的翻译人员就不会犯同样的出错了。请大家在翻译术语的时候，尽量参考国内会计行业术语，以方便专业人士使用。谢谢！
-#. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
-msgid "Term (Dear translator: This file will never be visible to the user!)"
+#. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
+#, fuzzy
+#| msgid "Term (Dear translator: This file will never be visible to the user!)"
+msgid ""
+"Term (Dear translators: This file will never be visible to normal users!)"
 msgstr "术语 (翻译人员好，这个文件将不会被最终用户所看到)"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
@@ -43,7 +46,7 @@ msgstr "“”"
 msgid "account"
 msgstr "科目"
 
-#. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
+#. "An alphanumerical code applied to accounts for sorting. Some jurisdictions mandate codes and some GnuCash book templates include codes as part of the tree structure. Account codes can be set and changed in the Edit Account dialog."
 msgid "account code"
 msgstr "科目编号"
 
@@ -56,7 +59,7 @@ msgid "account name"
 msgstr "科目名"
 
 # 某人或某公司持有的某个事物，其有价值并且可以被使用或销售以支付债务
-#. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
+#. "The grouping of accounts whose balance increases with a debit (left side of the balance sheet in T account form). Complement: Passive. See also: Report Form"
 msgid "account type: Active"
 msgstr "科目类型：流动"
 
@@ -127,7 +130,7 @@ msgstr "科目类型：股票"
 
 # 1. (美国) 任何赚取利息的账户类型
 # 2. (英国) 任何比现金流账户或存款账户利息更高的银行账户
-#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+#. "This account type is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
 msgstr "科目类型：交易"
 
@@ -614,7 +617,7 @@ msgid "marker"
 msgstr "标记"
 
 # 散点图用于标记每一个数据点的东西
-#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+#. "1. Some text annotation, but this meaning is rarely used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 msgid "markup"
 msgstr "标记"
 
@@ -647,7 +650,7 @@ msgid "mortgage: FRM"
 msgstr "固定利率抵押贷款"
 
 # 如 USD, DEM, CNY, 见货币
-#. "e.g. USD, DEM, see Currency."
+#. "e.g. USD, EUR, see Currency."
 msgid "national currency"
 msgstr "本位币"
 
@@ -1051,14 +1054,14 @@ msgstr "凭证"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "撤回（在对账对话框）"
 
-msgid "stock"
-msgstr "股票"
+#~ msgid "stock"
+#~ msgstr "股票"
 
-msgid "due"
-msgstr "到期"
+#~ msgid "due"
+#~ msgstr "到期"
 
-msgid "Online"
-msgstr "在线"
+#~ msgid "Online"
+#~ msgstr "在线"
 
-msgid "Direct Debit"
-msgstr "直接借记"
+#~ msgid "Direct Debit"
+#~ msgstr "直接借记"

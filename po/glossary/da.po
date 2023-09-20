@@ -6,10 +6,10 @@
 # Aputsiak Niels Janussen <aj@isit.gl>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 4.8\n"
+"Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2021-12-05 20:11+0100\n"
+"POT-Creation-Date: 2023-09-21 00:29+0200\n"
 "PO-Revision-Date: 2022-01-02 22:54+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -21,8 +21,9 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 4.10.1\n"
 
-#. "English Definition (Dear translator: This file will never be visible to the user! It should only serve as a tool for you, the translator. Nothing more.)"
-msgid "Term (Dear translator: This file will never be visible to the user!)"
+#. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
+msgid ""
+"Term (Dear translators: This file will never be visible to normal users!)"
 msgstr ""
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
@@ -33,7 +34,7 @@ msgstr ""
 msgid "account"
 msgstr "konto"
 
-#. "An alphanumerical key of an account in GnuCash, not at the bank, can be used to sort. Some templates provide them or the user can enter them."
+#. "An alphanumerical code applied to accounts for sorting. Some jurisdictions mandate codes and some GnuCash book templates include codes as part of the tree structure. Account codes can be set and changed in the Edit Account dialog."
 msgid "account code"
 msgstr "kontonummer"
 
@@ -45,7 +46,7 @@ msgstr "kontoplan"
 msgid "account name"
 msgstr "kontonavn"
 
-#. "The left side of the balance sheet in T account form shows the application of funds in form of assets. Because it contains only assets use assets directly. Complement: Passive. See also: Report Form"
+#. "The grouping of accounts whose balance increases with a debit (left side of the balance sheet in T account form). Complement: Passive. See also: Report Form"
 #, fuzzy
 msgid "account type: Active"
 msgstr "kontotype: Aktiv"
@@ -110,7 +111,7 @@ msgstr "kontotype: opsparing"
 msgid "account type: Stock"
 msgstr "kontotype: aktie"
 
-#. "This account type (new in gnucash-2.4.0) is used when exchanging or trading amounts from one currency into another"
+#. "This account type is used when exchanging or trading amounts from one currency into another"
 #, fuzzy
 msgid "account type: trading"
 msgstr "kontotype: opsparing"
@@ -526,7 +527,7 @@ msgstr "slå sammen, til"
 msgid "marker"
 msgstr "markering"
 
-#. "1. Some text annotation, but this meaning isn't used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
+#. "1. Some text annotation, but this meaning is rarely used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 #, fuzzy
 msgid "markup"
 msgstr "markering"
@@ -555,7 +556,7 @@ msgstr "Huslån"
 msgid "mortgage: FRM"
 msgstr "Huslån"
 
-#. "e.g. USD, DEM, see Currency."
+#. "e.g. USD, EUR, see Currency."
 msgid "national currency"
 msgstr "national valuta"
 
@@ -903,15 +904,3 @@ msgstr "kilde"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "hævning (i afstemningsdialogen)"
-
-msgid "stock"
-msgstr ""
-
-msgid "due"
-msgstr ""
-
-msgid "Online"
-msgstr ""
-
-msgid "Direct Debit"
-msgstr ""
