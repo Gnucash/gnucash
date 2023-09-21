@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-09-19 06:59+0000\n"
+"PO-Revision-Date: 2023-09-21 09:02+0000\n"
 "Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-Language: Slovak\n"
 "X-Poedit-Country: SLOVAKIA\n"
@@ -919,6 +919,10 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
+"Obrazovku Editor cenných papierov môžete nastaviť tak, aby zobrazovala zdroj "
+"kotácie cenného papiera, čo uľahčuje zistenie, ktoré online zdroje vaše "
+"cenné papiere používajú. Kliknutím na trojuholník úplne vpravo od nadpisov "
+"stĺpcov zmeníte zobrazenie."
 
 #: doc/tip_of_the_day.list.c:96
 msgid ""
@@ -926,6 +930,9 @@ msgid ""
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
+"Môžete zaradiť viacero reportov do jedného okna a poskytnúť všetky "
+"požadované finančné informácie naraz. Ak to chcete urobiť, použite prehľad "
+"Ukážka & Vlastný -> \"Vlastný viacstĺpcový report\"."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -942,6 +949,8 @@ msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
+"Ak chcete vyvolať ponuku účtov v poli presun na stránke registra, stlačte "
+"kláves Ponuka alebo kombináciu klávesov Ctrl-Dole."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
@@ -956,6 +965,16 @@ msgid ""
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
 msgstr ""
+"Editor naplánovaných transakcií prichádza s veľmi flexibilným konfigurátorom "
+"frekvencie. Základné frekvencie na plánovanie transakcie zahŕňajú denné, "
+"týždenné a mesačné. Ale dajú sa nastaviť aj pokročilejšie schémy. Niektoré "
+"príklady:\n"
+"\n"
+"Ak chcete naplánovať transakciu každé tri týždne, môžete si vybrať týždennú "
+"základnú frekvenciu a potom nastaviť „Každé 3 týždne“.\n"
+"\n"
+"Ak chcete naplánovať transakciu každý rok, môžete si vybrať základnú mesačnú "
+"frekvenciu a potom nastaviť „Každých 12 mesiacov“."
 
 #: doc/tip_of_the_day.list.c:117
 msgid ""
@@ -963,6 +982,9 @@ msgid ""
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
+"Ak pracujete cez noc, mali by ste svoje pracovné registre zatvoriť a znova "
+"otvoriť po polnoci, aby ste získali nový dátum ako predvolený pre nové "
+"transakcie. Nie je potrebné reštartovať GnuCash."
 
 #: doc/tip_of_the_day.list.c:121
 msgid ""
@@ -970,6 +992,9 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
+"Ak chcete prehľadať všetky svoje transakcie, spustite vyhľadávanie "
+"(Upraviť->Nájsť…) na hlavnej stránke hierarchie účtov. Ak chcete obmedziť "
+"vyhľadávanie na jeden účet, spustite vyhľadávanie z registra daného účtu."
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -977,6 +1002,9 @@ msgid ""
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
+"Ak chcete na obrazovke vizuálne porovnať obsah 2 kariet, na jednej z kariet "
+"vyberte v ponuke položku Okno->Nové okno so stránkou, čím túto kartu "
+"zduplikujete v novom okne."
 
 #: doc/tip_of_the_day.list.c:129
 msgid ""
@@ -1121,7 +1149,7 @@ msgstr "Nie"
 #: gnucash/gtkbuilder/dialog-account.glade:273
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:63
 msgid "Placeholder"
-msgstr "Drží miesto (syntetický účet)"
+msgstr "Zástupca (syntetický účet)"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1356
 #: gnucash/gnome-utils/dialog-account.c:402
@@ -1380,7 +1408,7 @@ msgstr "Nákup"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:181
 msgid "Buying stock long."
-msgstr ""
+msgstr "Nákup akcií „na dlho“."
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
@@ -1405,6 +1433,10 @@ msgid ""
 "If you are unable to calculate capital gains you can enter aplaceholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Predať „dlhé“ akcie a zaznamenať kapitálový zisk/stratu.\n"
+"\n"
+"Ak nemôžete vypočítať kapitálové zisky, môžete zadať zástupnú čiastku a "
+"opraviť ju v transakcii neskôr."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1422,6 +1454,10 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"Spoločnosť dáva peňažné dividendy majiteľovi.\n"
+"\n"
+"Každá reinvestovaná dividenda sa musí následne zaznamenať ako bežný nákup "
+"akcií."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
@@ -1433,6 +1469,8 @@ msgstr "Návratnosť kapitálu"
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"Spoločnosť vracia kapitál, čím znižuje základ nákladov bez ovplyvnenia # "
+"jednotiek."
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
@@ -1446,6 +1484,9 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"Spoločnosť vracia kapitál, čím znižuje základ nákladov bez ovplyvnenia # "
+"jednotiek. Distribúcia predtým zaznamenaná ako dividenda sa preklasifikuje "
+"na návratnosť kapitálu, často v dôsledku daňových informácií na konci roka."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
@@ -1458,18 +1499,22 @@ msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Spoločnosť vydáva predpokladanú distribúciu, ktorá sa zaznamenáva ako príjem "
+"z dividend a zvyšuje základ nákladov bez ovplyvnenia # jednotiek."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:252
 msgid "Notional distribution (capital gain)"
-msgstr ""
+msgstr "Predpokladaná distribúcia (kapitálový výnos)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:253
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Spoločnosť vydáva predpokladanú distribúciu, ktorá sa zaznamenáva ako "
+"kapitálový výnos a zvyšuje nákladovú základňu bez ovplyvnenia # jednotiek."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1528,13 +1573,13 @@ msgstr "Predaj „na krátko“"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:296
 msgid "Selling stock short."
-msgstr ""
+msgstr "Predaj akcií „na krátko“."
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
 #: gnucash/gnome/assistant-stock-transaction.cpp:306
 msgid "Buy to cover short"
-msgstr ""
+msgstr "Nákup na pokrytie „krátkych“ pozícií"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:307
 msgid ""
@@ -1553,19 +1598,21 @@ msgstr ""
 #. dividends retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:319
 msgid "Compensatory dividend"
-msgstr ""
+msgstr "Kompenzačná dividenda"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:320
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
 msgstr ""
+"Spoločnosť vydáva dividendy a držiteľ akcií nakrátko musí za dividendu "
+"zaplatiť kompenzačnú platbu."
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:331
 msgid "Compensatory return of capital"
-msgstr ""
+msgstr "Kompenzačná návratnosť kapitálu"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:332
 msgid ""
@@ -1573,13 +1620,16 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
+"Spoločnosť vracia kapitál a držiteľ akcií nakrátko musí za vrátený kapitál "
+"zaplatiť kompenzačnú platbu. Tým sa zníži základná cena (menej záporná, "
+"smerom k hodnote 0,00) bez ovplyvnenia # jednotiek."
 
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:345
 msgid "Compensatory return of capital (reclassification)"
-msgstr ""
+msgstr "Kompenzačná návratnosť kapitálu (reklasifikácia)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:346
 msgid ""
@@ -1590,7 +1640,7 @@ msgid ""
 "compensatory return of capital,often due to end-of-year tax information."
 msgstr ""
 "Spoločnosť vracia kapitál a držiteľ akcií nakrátko musí za vrátený kapitál "
-"zaplatiť kompenzačnú platbu. Tým sa zníži základná cena (menej záporná, "
+"zaplatiť kompenzačnú platbu. Tým sa zníži základná cena (menej negatívna, "
 "smerom k hodnote 0,00) bez ovplyvnenia # jednotiek. Distribúcia predtým "
 "zaznamenaná ako kompenzačná dividenda sa preklasifikuje na kompenzačnú "
 "návratnosť kapitálu, často v dôsledku daňových informácií na konci roka."
@@ -1600,7 +1650,7 @@ msgstr ""
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:361
 msgid "Compensatory notional distribution (dividend)"
-msgstr ""
+msgstr "Kompenzačné predpokladané rozdelenie (dividenda)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:362
 msgid ""
@@ -1609,13 +1659,17 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
+"Spoločnosť vydáva predpokladanú distribúciu a držiteľ akcií nakrátko musí "
+"zaplatiť kompenzačnú platbu za predpokladanú distribúciu. Zaznamenáva sa to "
+"ako strata/záporná suma dividendového príjmu a zvyšuje nákladovú základňu ("
+"negatívnejšia, od hodnoty 0,00) bez ovplyvnenia # jednotiek."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:376
 msgid "Compensatory notional distribution (capital gain)"
-msgstr ""
+msgstr "Kompenzačné predpokladané rozdelenie (kapitálový výnos)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:377
 msgid ""
@@ -1624,6 +1678,10 @@ msgid ""
 "capital loss amount, and increases the cost basis (more negative, away from "
 "0.00 value) without affecting # units."
 msgstr ""
+"Spoločnosť vydáva predpokladanú distribúciu a držiteľ akcií nakrátko musí "
+"zaplatiť kompenzačnú platbu za fiktívnu distribúciu. Zaznamená sa to ako "
+"suma kapitálovej straty a zvýši základ nákladov (negatívnejšie, od hodnoty "
+"0,00) bez ovplyvnenia # jednotiek."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:391
 msgid ""
@@ -1651,6 +1709,12 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"Spoločnosť odkupuje podielové listy, čím zvyšuje cenu akcií o násobok, "
+"pričom udržuje celkovú peňažnú hodnotu celkovej investície konštantnú.\n"
+"\n"
+"Ak výsledkom spätného rozdelenia je hotovosť namiesto zvyšných jednotiek, "
+"najskôr zaznamenajte nákup krytu pomocou Asistenta pre transakcie akcií a "
+"potom zaznamenajte spätné rozdelenie."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:497
 msgid "No errors found. Click Apply to create transaction."
@@ -1729,36 +1793,26 @@ msgid "Cannot cover buy more units than owed."
 msgstr "Nie je možné pokryť nákup viac jednotiek než dĺžite."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1094
-#, fuzzy
-#| msgid "Stock"
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
-msgstr "Akcie"
+msgstr "Akcia"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1095
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "Hotovosť"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1096
-#, fuzzy
-#| msgid "Fees"
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
 msgstr "Poplatky"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1097
-#, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "Dividend"
 msgstr "Dividenda"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1098
-#, fuzzy
-#| msgid "Capital Gains"
 msgctxt "Stock Assistant: Page name"
 msgid "Capital Gains"
 msgstr "Kapitálové výnosy"
@@ -2319,7 +2373,7 @@ msgstr "Nie je zvolený žiaden účet. Skúste, prosím, znova."
 
 #: gnucash/gnome/dialog-date-close.c:82
 msgid "Placeholder account selected. Please try again."
-msgstr "Bol zvolený účet držiaci miesto. Prosím skúste znova."
+msgstr "Bol zvolený zástupný účet. Prosím skúste znova."
 
 #: gnucash/gnome/dialog-doclink.c:160
 #: gnucash/gnome/gnc-plugin-page-register.c:4611
@@ -2879,7 +2933,7 @@ msgstr "Táto položka je pripojená k objednávke a bude odstránená aj z nej!
 
 #: gnucash/gnome/dialog-invoice.c:921
 msgid "Choose a different report template or Printable Invoice will be used"
-msgstr ""
+msgstr "Vyberte inú šablónu správy alebo sa použije faktúra určená na tlač"
 
 #: gnucash/gnome/dialog-invoice.c:1035 gnucash/gnome/dialog-invoice.c:3570
 #: gnucash/gnome/dialog-invoice.c:3604 gnucash/gnome/dialog-invoice.c:3638
@@ -2921,10 +2975,13 @@ msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked to enter a conversion rate for each."
 msgstr ""
+"Jeden alebo viac záznamov je pre účty odlišné od meny faktúry/účtenky. "
+"Budete požiadaní o zadanie konverzného kurzu pre každý z nich."
 
 #: gnucash/gnome/dialog-invoice.c:1301
 msgid "The post action was canceled because not all exchange rates were given."
 msgstr ""
+"Úkon zaúčtovania bol zrušený, pretože neboli uvedené všetky výmenné kurzy."
 
 #: gnucash/gnome/dialog-invoice.c:1586
 msgid "Total:"
@@ -3461,6 +3518,8 @@ msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr ""
+"Neboli vybraté žiadne dokumenty na priradenie tejto platby. Môže to spôsobiť "
+"nepripojenie platbu."
 
 #: gnucash/gnome/dialog-payment.c:541 gnucash/gnome/dialog-payment.c:1353
 #: gnucash/report/reports/standard/new-aging.scm:177
@@ -3473,7 +3532,7 @@ msgstr "Platba vopred"
 msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
-msgstr ""
+msgstr "Jednotlivé účty sú spojené s rôznymi menami. Uveďte výmenný kurz."
 
 #: gnucash/gnome/dialog-payment.c:1288 gnucash/gnome/search-owner.c:196
 #: gnucash/gnome-search/dialog-search.c:1081
@@ -3511,13 +3570,13 @@ msgid "Employee"
 msgstr "Zamestnanec"
 
 #: gnucash/gnome/dialog-payment.c:1449
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have no valid \"Post To\" accounts. Please create an account of type "
 "\"%s\" before you continue to process this payment. Perhaps you want to "
 "create an Invoice or Bill first?"
 msgstr ""
-"Nemáte platné účty \"Vystaviť na\". Pred pokračovaním v spracovávaní tejto "
+"Nemáte platné účty „Vystaviť na“. Pred pokračovaním v spracovávaní tejto "
 "platby vytvorte prosím účet typu \"%s\". Alebo chcete najskôr vystaviť "
 "faktúru alebo účet?"
 
@@ -3543,7 +3602,7 @@ msgstr "Vysporiadané"
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
-msgstr ""
+msgstr "Vybratá transakcia nemá rozdelenia, ktoré je možné priradiť ako platbu"
 
 #: gnucash/gnome/dialog-payment.c:1626
 msgid ""
@@ -3552,6 +3611,10 @@ msgid ""
 "Please select one, the others will be discarded.\n"
 "\n"
 msgstr ""
+"Aj keď táto transakcia má viacero rozdelení, ktoré možno zvážiť\n"
+"ako „rozdelenie platieb“ GnuCash vie, ako zaobchádzať s jedným.\n"
+"Vyberte jednu, ostatné sa zahodia.\n"
+"\n"
 
 #: gnucash/gnome/dialog-payment.c:1630
 msgid "Warning"
@@ -3579,13 +3642,19 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
+"Táto transakcia je rozdelená na viacero podnikateľských účtov:\n"
+"\n"
+"%s\n"
+"GnuCash dokáže spracovať iba transakcie, ktoré sa účtujú na jeden účet.\n"
+"\n"
+"Prosím, opravte to ručne priamou úpravou transakcie a skúste to znova."
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.cpp:201
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Ste si istý, že chcete odstrániť %d označenú cenu?"
+msgstr[0] "Ste si istý, že chcete odstrániť označenú cenu?"
 msgstr[1] "Ste si istý, že chcete odstrániť %d označené ceny?"
 msgstr[2] "Ste si istý, že chcete odstrániť %d označených cien?"
 
@@ -3602,20 +3671,18 @@ msgid "Entries"
 msgstr "Položky"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:446
-#, fuzzy
 msgid "Are you sure you want to delete these prices?"
-msgstr "Ste si istý, že chcete odstrániť %d označenú cenu?"
+msgstr "Ste si istý, že chcete odstrániť označené cenu?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:572
 #: gnucash/gnome-utils/dialog-transfer.cpp:1797
 #, c-format
 msgid "Price retrieval failed: %s"
-msgstr ""
+msgstr "Načítanie ceny zlyhalo: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
-#, fuzzy
 msgid "Are you sure you want to replace the existing price?"
-msgstr "Ste si istý, že chcete odstrániť %d označenú cenu?"
+msgstr "Naozaj chcete nahradiť existujúcu cenu?"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "Replace price?"
@@ -3623,15 +3690,13 @@ msgstr "Nahradiť cenu?"
 
 #: gnucash/gnome/dialog-price-editor.c:239
 msgid "_Replace"
-msgstr ""
+msgstr "Nah_radiť"
 
 #: gnucash/gnome/dialog-price-editor.c:270
-#, fuzzy
 msgid "You must select a Security."
-msgstr "Musíte si vybrať menu."
+msgstr "Musíte si vybrať cenný papier."
 
 #: gnucash/gnome/dialog-price-editor.c:275
-#, fuzzy
 msgid "You must select a Currency."
 msgstr "Musíte si vybrať menu."
 
@@ -3651,7 +3716,7 @@ msgstr "Nie je možné otvoriť %s"
 
 #: gnucash/gnome/dialog-print-check.c:1513
 msgid "There is a duplicate check format file."
-msgstr ""
+msgstr "Existuje duplicitný súbor formátu kontroly."
 
 #. Translators:
 #. %1$s is the type of the first check format
@@ -3665,6 +3730,8 @@ msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
+"Identifikátory GUID v súbore kontrolného formátu %s '%s' a súbore "
+"kontrolného formátu %s '%s' sa zhodujú."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -3731,19 +3798,17 @@ msgid "HTML Style Sheet Properties: %s"
 msgstr "Vlastnosti HTML štýlu: %s"
 
 #: gnucash/gnome/dialog-report-style-sheet.cpp:263
-#, fuzzy
 msgid "You must provide a name for the new style sheet."
-msgstr "Musíte zadať názov tejto daňovej tabuľky."
+msgstr "Musíte zadať názov pre novú šablónu štýlov."
 
 #: gnucash/gnome/dialog-report-style-sheet.cpp:513
 msgid "Style Sheet Name"
 msgstr "Názov štýlu"
 
 #: gnucash/gnome/dialog-sx-editor.c:203
-#, fuzzy
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
-msgstr "Toto plánovanie bolo zmenené; ste si istý, že chcete skončiť?"
+msgstr "Táto plánovaná transakcia sa zmenila; Ste si istý, že to chcete zrušiť?"
 
 #: gnucash/gnome/dialog-sx-editor.c:489
 msgid "Please name the Scheduled Transaction."
@@ -3755,6 +3820,8 @@ msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
 msgstr ""
+"Naplánovaná transakcia s názvom \"%s\" už existuje. Ste si istý, že ju "
+"chcete pomenovať rovnako?"
 
 #: gnucash/gnome/dialog-sx-editor.c:533
 msgid "Please provide a valid end selection."
@@ -3777,18 +3844,24 @@ msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
 msgstr ""
+"Pokúsili ste sa vytvoriť plánovanú transakciu, ktorá sa nikdy nespustí. "
+"Naozaj to chcete urobiť?"
 
 #: gnucash/gnome/dialog-sx-editor.c:607
 msgid ""
 "Scheduled Transactions with variables or involving more than one commodity "
 "cannot be automatically created."
 msgstr ""
+"Plánované transakcie s premennými alebo zahŕňajúce viac ako jednu komoditu "
+"nemožno automaticky vytvoriť."
 
 #: gnucash/gnome/dialog-sx-editor.c:618
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
 msgstr ""
+"Naplánované transakcie bez šablóny transakcie nie je možné vytvoriť "
+"automaticky."
 
 #: gnucash/gnome/dialog-sx-editor.c:670
 #, c-format
@@ -3798,26 +3871,25 @@ msgstr "Nie je možné analyzovať %s pre rozdelenie \"%s\"."
 #: gnucash/gnome/dialog-sx-editor.c:736
 #, c-format
 msgid "Split with memo %s has an invalid account."
-msgstr ""
+msgstr "Rozdelenie s memom %s má neplatný účet."
 
 #: gnucash/gnome/dialog-sx-editor.c:739
-#, fuzzy
 msgid "Invalid Account in Split"
-msgstr "Toto je neplatné kódovanie."
+msgstr "Neplatný účet v rozdelení"
 
 #: gnucash/gnome/dialog-sx-editor.c:751
 #, c-format
 msgid "Split with memo %s has an unparsable Credit Formula."
-msgstr ""
+msgstr "Rozdelenie s memom %s má nespracovateľný kreditný vzorec."
 
 #: gnucash/gnome/dialog-sx-editor.c:754 gnucash/gnome/dialog-sx-editor.c:770
 msgid "Unparsable Formula in Split"
-msgstr ""
+msgstr "Nespracovateľný vzorec v rozdelení"
 
 #: gnucash/gnome/dialog-sx-editor.c:767
 #, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
-msgstr ""
+msgstr "Rozdelenie s memom %s má nespracovateľný debetný vzorec."
 
 #: gnucash/gnome/dialog-sx-editor.c:875
 #: gnucash/gnome/dialog-sx-from-trans.c:260
@@ -3825,6 +3897,8 @@ msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
 msgstr ""
+"Editor naplánovaných transakcií nemôže automaticky vyrovnať túto transakciu. "
+"Treba to ešte zadať?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1409
 msgid "(never)"
@@ -3846,6 +3920,8 @@ msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
 msgstr ""
+"Plánovaná transakcia je nevyvážená. Dôrazne sa vám odporúča napraviť túto "
+"situáciu."
 
 #: gnucash/gnome/dialog-sx-from-trans.c:777
 msgid ""
@@ -3888,9 +3964,8 @@ msgid "(Need Value)"
 msgstr "(Potrebná je hodnota)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:773
-#, fuzzy
 msgid "Invalid Transactions"
-msgstr "_Obnova platnosti transakcie"
+msgstr "Neplatné transakcie"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:824
 #, c-format
@@ -3930,7 +4005,7 @@ msgstr "Posledný platný rok: "
 
 #: gnucash/gnome/dialog-tax-info.c:288
 msgid "Form Line Data: "
-msgstr ""
+msgstr "Údaje riadku formulára: "
 
 #. Translators: Tax Code
 #: gnucash/gnome/dialog-tax-info.c:290
@@ -3952,7 +4027,7 @@ msgstr "Identita pre daň z príjmu"
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
-msgstr ""
+msgstr "P_oužiť"
 
 #: gnucash/gnome/dialog-tax-info.c:1240
 msgid ""
@@ -4035,9 +4110,8 @@ msgid "Transfer"
 msgstr "Prevod"
 
 #: gnucash/gnome/gnc-budget-view.c:509
-#, fuzzy
 msgid "Remaining to Budget"
-msgstr "Otvoriť existujúci rozpočet"
+msgstr "Zostáva do rozpočtu"
 
 #: gnucash/gnome/gnc-budget-view.c:1604 gnucash/gnome/window-reconcile.c:1166
 #: gnucash/gnome-utils/gnc-tree-view-account.c:906
@@ -4076,8 +4150,14 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
+"V súčasnosti nie sú k dispozícii žiadne plánované transakcie. (%d transakcia "
+"bola vytvorená automaticky)"
 msgstr[1] ""
+"V súčasnosti nie sú k dispozícii žiadne plánované transakcie. (automaticky "
+"vytvorených transakcií: %d)"
 msgstr[2] ""
+"V súčasnosti nie sú k dispozícii žiadne plánované transakcie. (automaticky "
+"vytvorených transakcií: %d)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:320
 msgid "Select a Budget"
@@ -4156,6 +4236,8 @@ msgid ""
 "transactions from.\n"
 "Are you sure you want to do this?"
 msgstr ""
+"Účet %s nemá rovnakú menu ako ten, z ktorého presúvate transakcie.\n"
+"Naozaj to chcete urobiť?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1309
 msgid "_Pick another account"
@@ -4184,6 +4266,11 @@ msgid ""
 "modify them so they make use\n"
 "of another account"
 msgstr ""
+"Nižšie uvedený zoznam zobrazuje objekty, ktoré využívajú účet, ktorý chcete "
+"odstrániť.\n"
+"Pred odstránením musíte tieto objekty buď odstrániť, alebo ich upraviť tak, "
+"aby sa dali použiť\n"
+"iného účtu"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1535
 #, c-format
@@ -4192,6 +4279,9 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"Účet \"%s\" má viac ako jeden podúčet.\n"
+"\n"
+"Pred pokusom o odstránenie tohto účtu presuňte podúčty alebo ich odstráňte."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1597
 #, c-format
@@ -4214,19 +4304,19 @@ msgid "Its sub-account will be moved to the account %s."
 msgstr "Jeho podúčty budú presunuté do účtu %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1628
-#, fuzzy, c-format
+#, c-format
 msgid "Its subaccount will be deleted."
-msgstr "Všetky jeho podúčty budú odstránené."
+msgstr "Jeho podúčty budú odstránené."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1632
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
-msgstr ""
+msgstr "Všetky transakcie podúčtu budú presunuté na účet %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1639
 #, c-format
 msgid "All sub-account transactions will be deleted."
-msgstr ""
+msgstr "Všetky transakcie na podúčte budú vymazané."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.c:1645
 msgid "Are you sure you want to do this?"
@@ -4253,10 +4343,8 @@ msgid "Note"
 msgstr "Poznámka"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
-msgstr "Report účtov"
+msgstr "Spustiť report"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:264
 #: gnucash/gnome/gnc-plugin-page-budget.c:303
@@ -4322,7 +4410,7 @@ msgstr "_Duplikovať faktúru"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:24
 #: gnucash/ui/gnc-plugin-page-invoice.ui:384
 msgid "Create a new invoice as a duplicate of the current one"
-msgstr ""
+msgstr "Vytvorte novú faktúru ako duplikát aktuálnej faktúry"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:522
@@ -4332,7 +4420,6 @@ msgstr "_Vystaviť faktúru"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:30
 #: gnucash/ui/gnc-plugin-page-invoice.ui:524
-#, fuzzy
 msgid "Post this invoice to your Chart of Accounts"
 msgstr "Vystaviť túto faktúru do vášho účtovníctva"
 
@@ -4344,9 +4431,8 @@ msgstr "_Zrušiť vystavenie faktúry"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:36
 #: gnucash/ui/gnc-plugin-page-invoice.ui:539
-#, fuzzy
 msgid "Unpost this invoice and make it editable"
-msgstr "Zrušiť vystavenie tejto faktúry a umožniť jej úpravy"
+msgstr "Odúčtovať túto faktúru a umožniť jej úpravy"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:352
@@ -4356,7 +4442,7 @@ msgstr "Nová _faktúra"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:354
 msgid "Create a new invoice for the same owner as the current one"
-msgstr ""
+msgstr "Vytvorte novú faktúru pre rovnakého vlastníka ako je aktuálna"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:195
 #: gnucash/gnome/gnc-plugin-page-invoice.c:220
@@ -4369,9 +4455,8 @@ msgid "Blank"
 msgstr "Prázdna"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:195
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the invoice"
-msgstr "Presunie na prázdnu transakciu na konci faktúry"
+msgstr "Presunie na prázdnu položku na konci faktúry"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:196
 #: gnucash/ui/gnc-plugin-page-invoice.ui:552
@@ -4381,7 +4466,6 @@ msgstr "_Zaplatiť faktúru"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:196
 #: gnucash/ui/gnc-plugin-page-invoice.ui:200
 #: gnucash/ui/gnc-plugin-page-invoice.ui:554
-#, fuzzy
 msgid "Enter a payment for the owner of this invoice"
 msgstr "Vložiť platbu pre majiteľa tejto faktúry"
 
@@ -4394,7 +4478,6 @@ msgid "_Company Report"
 msgstr "Report _spoločnosti"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:197
-#, fuzzy
 msgid "Open a customer report window for the owner of this invoice"
 msgstr "Otvoriť okno reportu o spoločnosti pre vlastníka tejto faktúry"
 
@@ -4431,23 +4514,24 @@ msgstr "_Otvoriť pripojený dokument"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:249
 #: gnucash/gnome/gnc-plugin-page-invoice.c:274
 #: gnucash/gnome/gnc-plugin-page-register.c:389
-#, fuzzy
 msgid "Open Linked Document"
-msgstr "Nový účet"
+msgstr "Otvoriť prepojený dokument"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:205
 msgid "_Use as Default Layout for Customer Documents"
-msgstr ""
+msgstr "Po_užiť ako predvolené rozloženie pre dokumenty zákazníka"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:206
 #: gnucash/ui/gnc-plugin-page-invoice.ui:66
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
 msgstr ""
+"Použite aktuálne rozloženie ako predvolené pre všetky zákaznícke faktúry a "
+"dobropisy"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:207
 msgid "_Reset Default Layout for Customer Documents"
-msgstr ""
+msgstr "_Resetovať predvolené rozloženie pre dokumenty zákazníka"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:208
 #: gnucash/ui/gnc-plugin-page-invoice.ui:72
@@ -4455,15 +4539,16 @@ msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
+"Obnoviť predvolené rozloženie pre všetky zákaznícke faktúry a dobropisy späť "
+"na vstavané predvolené hodnoty a podľa toho aktualizujte aktuálnu stránku"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:214
 msgid "_Print Bill"
 msgstr "Tlačiť _potvrdenie"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:214
-#, fuzzy
 msgid "Make a printable bill"
-msgstr "Vytvoriť tlačiteľnú faktúru"
+msgstr "Vytvoriť tlačiteľnú účtenku"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:215
 msgid "_Edit Bill"
@@ -5630,7 +5715,7 @@ msgid ""
 msgstr ""
 "Transakcie tohto účtu nie je možné upravovať.\n"
 "Ak chcete upraviť transakcie v tomto registri, otvorte možnosti účtu a "
-"vypnite zaškrtávacie pole Syntetický účet."
+"vypnite zaškrtávacie pole zástupný účet."
 
 #: gnucash/gnome/gnc-split-reg.c:2478
 msgid ""
@@ -5641,7 +5726,7 @@ msgid ""
 msgstr ""
 "Transakcie na jednom z vybratých podúčtov nie je možné upravovať.\n"
 "Ak chcete upraviť transakcie v tomto registri, otvorte možnosti podúčtu a "
-"vypnite zaškrtávacie pole Syntetický účet.\n"
+"vypnite zaškrtávacie pole zástupný účet.\n"
 "Môžete si tiež otvoriť individuálny účet namiesto súboru účtov."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
@@ -7758,7 +7843,7 @@ msgstr "Kód účtu"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:817
 msgid "Last Num"
-msgstr "Posledné č."
+msgstr "Posledné č"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:823
 msgid "Present"
@@ -12239,7 +12324,7 @@ msgstr "Dokončiť"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:16
 msgid "Introduction placeholder"
-msgstr ""
+msgstr "Zástupný symbol úvodu"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:21
 msgid "Title placeholder"
@@ -12258,9 +12343,8 @@ msgid "Convert the file"
 msgstr "Konvertovať súbor"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
-#, fuzzy
 msgid "finish placeholder"
-msgstr "Drží miesto (syntetický účet)"
+msgstr "dokončiť zástupný symbol"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:150
 msgid "Finish GnuCash Datafile Import"
@@ -12653,9 +12737,9 @@ msgid ""
 "Transactions may not be posted to this account, only to sub-accounts of this "
 "account."
 msgstr ""
-"Tento účet reprezentuje účet držiaci miesto (syntetický účet) v hierarchií "
-"účtov. Transakcie nie je možné vkladať na takýto účet, iba na jeho podúčty "
-"(analytické účty)."
+"Tento účet reprezentuje účet zástupcu (syntetický účet) v hierarchií účtov. "
+"Transakcie nie je možné vkladať na takýto účet, iba na jeho podúčty ("
+"analytické účty)."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1530
 msgid "Auto _interest transfer"
@@ -18934,7 +19018,7 @@ msgid ""
 "The account '%s' is a placeholder account and does not allow transactions. "
 "Please choose a different account."
 msgstr ""
-"Účet %s je syntetický účet, ktorý nepovoľuje účtovné položky. Zvoľte prosím "
+"Účet %s je zástupný účet, ktorý nepovoľuje účtovné položky. Zvoľte prosím "
 "iný účet."
 
 #: gnucash/import-export/import-account-matcher.cpp:419
@@ -19390,7 +19474,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:443
 msgid "Placeholder?"
-msgstr "Zástupca (syntetický účet)?"
+msgstr "Zástupca?"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:71
 msgid "Dividends"
@@ -22609,7 +22693,7 @@ msgid ""
 "Report section order is assets/liabilities/equity (rather than assets/equity/"
 "liabilities)."
 msgstr ""
-"Poradie sekcie výkazu je aktíva/pasíva/vlastné imanie (a nie aktíva/vlastné "
+"Poradie sekcie reportu je aktíva/pasíva/vlastné imanie (a nie aktíva/vlastné "
 "imanie/pasíva)."
 
 #: gnucash/report/reports/standard/balance-sheet.scm:116
@@ -28036,7 +28120,7 @@ msgstr "_Nastavenie Daňového reportu"
 #: gnucash/ui/gnc-plugin-page-report.ui:39
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:30
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
-msgstr "Nastavte relevantné účty pre daňové výkazy, napr. daň z príjmu v USA"
+msgstr "Nastavte relevantné účty pre daňové reporty, napr. daň z príjmu v USA"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:80
 msgid "_Scheduled Transactions"
