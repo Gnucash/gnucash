@@ -31,6 +31,16 @@ extern void test_suite_gnc_backend_dbi ();
 #define GNC_LIB_NAME_2 "gncmod-backend-xml"
 #define GNC_LIB_REL_PATH_2 "xml"
 
+/* Test the DBI backends. Always tests SQLite3, MySql/MariaDB and
+ * Postgres require setting environment variables to inform them of
+ * available databases of the respective types:
+ *
+ * TEST_MYSQL_URL="mysql://user:password@host/database-name/"
+ * TEST_PGSQL_URL="postgres://user:password@host/database-name/"
+ *
+ * host must be resolvable by the system's network.
+ */
+
 int
 main (int   argc,
       char* argv[])

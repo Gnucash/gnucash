@@ -95,8 +95,6 @@ if (NOT DEFINED GNC_DBD_DIR)
   set(GNC_DBD_DIR $ENV{GNC_DBD_DIR} CACHE PATH "Hint for location of libdbi-drivers.")
 endif()
 set(PKGLIBDIR ${CMAKE_INSTALL_LIBDIR}/gnucash)
-set(TEST_MYSQL_URL "" CACHE STRING "MySQL database URL for testing")
-set(TEST_PGSQL_URL "" CACHE STRING "PgSQL database URL for testing")
 
 set(DATADIR_BUILD    ${CMAKE_BINARY_DIR}/${DATADIRNAME})
 string(REPLACE ${CMAKE_INSTALL_PREFIX} "" LIBDIR_BUILD ${LIBDIR})

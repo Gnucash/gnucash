@@ -71,6 +71,9 @@ static dbi_inst dbi_instance = NULL;
 static const gchar* suitename = "/backend/dbi";
 void test_suite_gnc_backend_dbi (void);
 
+static std::string mysql_url{};
+static std::string pgsql_url{};
+
 using StrVec = std::vector<std::string>;
 
 typedef struct
@@ -663,19 +666,22 @@ test_suite_gnc_backend_dbi (void)
     {
         drivers.push_back(dbi_driver_get_name (driver));
     }
+    mysql_url.append(getenv("TEST_MYSQL_URL") ? getenv("TEST_MYSQL_URL") : "");
+    pgsql_url.append(getenv("TEST_PGSQL_URL") ? getenv("TEST_PGSQL_URL") : "");
+
     for (auto name : drivers)
     {
         if (name == "sqlite3")
             create_dbi_test_suite ("sqlite3", "sqlite3");
-        if (strlen (TEST_MYSQL_URL) > 0 && name == "mysql")
-            create_dbi_test_suite ("mysql", TEST_MYSQL_URL);
-        if (strlen (TEST_PGSQL_URL) > 0 && name == "pgsql")
+        if (!mysql_url.empty() && name == "mysql")
+            create_dbi_test_suite ("mysql", mysql_url.c_str());
+        if (!pgsql_url.empty() && name == "pgsql")
         {
             g_setenv ("PGOPTIONS", "-c client_min_messages=WARNING", FALSE);
-            create_dbi_test_suite ("postgres", TEST_PGSQL_URL);
+            create_dbi_test_suite ("postgres", pgsql_url.c_str());
         }
     }
 
-    GNC_TEST_ADD_FUNC( suitename, "adjust sql options string localtime", 
+    GNC_TEST_ADD_FUNC( suitename, "adjust sql options string localtime",
         test_adjust_sql_options_string );
 }
