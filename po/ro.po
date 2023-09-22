@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-09-20 20:02+0000\n"
+"PO-Revision-Date: 2023-09-22 21:59+0000\n"
 "Last-Translator: Andrea Andre <andrea.tsg19@slmail.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
@@ -2670,8 +2670,8 @@ msgid ""
 "GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
 msgstr ""
-"GnuCasn nu poate determina valoarea unui câmp. Trebuie să introduci o "
-"expresie validă."
+"GnuCash nu poate recunoaște conținutul uneia dintre rubrici. Trebuie "
+"introdusă o formulare valabilă."
 
 #: gnucash/gnome/dialog-fincalc.c:383
 msgid "The interest rate cannot be zero."
@@ -2913,13 +2913,12 @@ msgid "Bayesian"
 msgstr ""
 
 #: gnucash/gnome/dialog-imap-editor.c:696
-#, fuzzy
 msgid "Description Field"
-msgstr "Descriere"
+msgstr "Rubrica Descriere"
 
 #: gnucash/gnome/dialog-imap-editor.c:699
 msgid "Memo Field"
-msgstr ""
+msgstr "Rubrica Reamintire"
 
 #: gnucash/gnome/dialog-imap-editor.c:702
 #, fuzzy
@@ -3232,7 +3231,7 @@ msgstr "Voucher de proprietar"
 
 #: gnucash/gnome/dialog-invoice.c:3620
 msgid "Voucher Notes"
-msgstr "Observații în cupoane"
+msgstr "Observații în cupon"
 
 #: gnucash/gnome/dialog-invoice.c:3654 gnucash/gnome/dialog-invoice.c:3813
 #: gnucash/gnome/dialog-lot-viewer.c:907 gnucash/gnome/dialog-tax-info.c:1235
@@ -3505,7 +3504,7 @@ msgstr "Arată/Modifică comanda"
 
 #: gnucash/gnome/dialog-order.c:868
 msgid "Order Notes"
-msgstr "Observații comandă"
+msgstr "Observații în comandă"
 
 #: gnucash/gnome/dialog-order.c:870 gnucash/gtkbuilder/dialog-order.glade:149
 msgid "Date Closed"
@@ -8725,11 +8724,6 @@ msgid ""
 "are documents with opposite sign. For example for an invoice, customer "
 "credit notes and negative invoices are considered counter documents."
 msgstr ""
-"În momentul postării încearcă să plătești documentele clientului automat cu "
-"pre-plățile anterioare în așteptare și contra-documente. Pre-plățile și "
-"documentele trebuie să fie către același client. Contra-documentele sunt "
-"documente cu semn opus. De exemplu, pentru o factură, notele de credit "
-"client și facturile negative sunt considerate contra-documente."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:117
 #, fuzzy
@@ -8755,15 +8749,11 @@ msgid "Show invoices due within this many days"
 msgstr "Arată facturile scadente în atâtea zile"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:123
-#, fuzzy
 msgid ""
 "This field defines the number of days in advance that GnuCash will check for "
 "due invoices. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
-"Acest câmp definește numărul de zile în avans în care GnuCash va verifica "
-"după facturi scadente. Valoarea lui este folosită dacă setarea \"Notifică "
-"cand e scadent\" este activă."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:127
 #, fuzzy
@@ -8808,9 +8798,6 @@ msgid ""
 "the same account will be accumulated into a single split. This field can be "
 "overridden per invoice in the Posting dialog."
 msgstr ""
-"Dacă acest câmp este activ, atunci mai multe intrări într-un venit cu "
-"transfer în același cont vor fi acumulate într-o singură împărțire. Acest "
-"câmp nu poate fi suprascris pe venituri în dialogul de postare."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:155
 #: gnucash/gtkbuilder/business-prefs.glade:244
@@ -8848,9 +8835,6 @@ msgid ""
 "due bills. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
-"Acest câmp definește numărul de zile în avans în care GnuCash va verifica "
-"după facturi scadente. Valoarea lui este folosită dacă setarea \"Notifică "
-"cand e scadent\" este activă."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 msgid "GUID of predefined check format to use"
@@ -8995,15 +8979,11 @@ msgid "Position of notes line"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:61
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the notes line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
 msgstr ""
-"Această valoare conține coordonatele X, Y pentru startul liniei datei pe "
-"cec. Coordonatele sunt calculate din colțul stânga-jos al poziției "
-"specificate din cec."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:65
 msgid "Position of memo line"
@@ -9137,13 +9117,13 @@ msgstr "Ultima cale folosită"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:28
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:56
 #: gnucash/import-export/ofx/gschemas/org.gnucash.GnuCash.dialogs.import.ofx.gschema.xml.in:6
-#, fuzzy
 msgid ""
 "This field contains the last pathname used by this window. It will be used "
 "as the initial filename/pathname the next time this window is opened."
 msgstr ""
-"Acest câmp conține ultima cale folosită de acest dialog. Va fi folosit ca "
-"fișier/cale inițial(ă) următoarea dată când acest dialog va fi deschis."
+"Acest loc conține ultimul nume al căii utilizate de această fereastră. "
+"Acesta va fi utilizat ca nume inițial al fișierului/căii la următoarea "
+"deschidere a acestei ferestre."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:17
 msgid "Window geometry"
@@ -9268,8 +9248,9 @@ msgid ""
 "This field specifies the minimum matching score a potential matching "
 "transaction must have to be displayed in the match list."
 msgstr ""
-"Acest câmp specifică faptul că scorul minim de potrivire pentru o tranzacție "
-"potențială de potrivire trebuie să fie afișată în lista de potrivire."
+"Acest loc indică punctajul minim de potrivire pe care trebuie să îl aibă o "
+"tranzacție potențial corespunzătoare pentru a fi afișată în lista de "
+"potrivire."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:25
 #, fuzzy
@@ -9278,16 +9259,12 @@ msgid "Likely matching transaction within these days"
 msgstr "Adaugă tranzacții echilibrate sub acest scor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:26
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
 msgstr ""
-"Acest câmp specifică faptul că scorul minim de potrivire pentru o tranzacție "
-"potențială de potrivire trebuie să fie afișată în lista de potrivire."
+"Acest loc specifică numărul maxim de zile în care este posibil ca o "
+"tranzacție să fie o potrivire în listă."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:30
 #, fuzzy
@@ -9296,16 +9273,12 @@ msgid "UnLikely matching a transaction outside of these days"
 msgstr "Golește tranzacțiile echilibrate sub acest scor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:31
-#, fuzzy
-#| msgid ""
-#| "This field specifies the minimum matching score a potential matching "
-#| "transaction must have to be displayed in the match list."
 msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
 msgstr ""
-"Acest câmp specifică faptul că scorul minim de potrivire pentru o tranzacție "
-"potențială de potrivire trebuie să fie afișată în lista de potrivire."
+"Acest loc specifică numărul minim de zile în care nu este posibil ca o "
+"tranzacție să fie o potrivire în listă."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
@@ -9318,10 +9291,11 @@ msgid ""
 "zone (above the display minimum score but below or equal to the Add match "
 "score) will be added to the GnuCash file by default."
 msgstr ""
-"Acest câmp specifică pragul sub care o tranzacție echlibrată va fi adăugată "
-"automat. O tranzacție al cărei cel mai bun scor de echilibrare se situează "
-"în zona roșie (deasupra scorului minim afișat, dar sub sau egală cu scorul "
-"de echilibrare de adăugare) va fi adăugată de GnuCash în mod implicit."
+"Acest loc specifică limita sub care se va adăuga automat o tranzacție care "
+"se potrivește. O tranzacție al cărei punctaj al celei mai bune potriviri se "
+"află în zona roșie (peste punctajul minim afișat, dar sub sau egal cu "
+"punctajul de adăugare a potrivirii) va fi adăugată automat în fișierul "
+"GnuCash."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:40
 msgid "Clear matching transactions above this score"
@@ -9334,10 +9308,10 @@ msgid ""
 "green zone (above or equal to this Clear threshold) will be cleared by "
 "default."
 msgstr ""
-"Acest câmp specifică un prag deasupra căruia echilibrarea tranzacțiilor va "
-"fi ștearsă în mod implicit. O tranzacție al cărei cel mai bun scor de "
-"echilibrare se situează în zona verde (deasupra sau egală cu acest prag de "
-"golire) va fi golită în mod implicit."
+"Acest loc specifică limita peste care o tranzacție care se potrivește va fi "
+"ștearsă automat. O tranzacție al cărei cel mai bun punctaj de potrivire se "
+"află în zona verde (peste sau egal cu această limită de ștergere) va fi "
+"ștearsă automat."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:45
 msgid "Maximum ATM fee amount in your area"
@@ -9355,16 +9329,16 @@ msgid ""
 "whatever is the maximum such fee in your area (in units of your local "
 "currency), so the transaction will be recognised as a match."
 msgstr ""
-"Acest câmp specifică taxele în plus care sunt luate în cont când potrivește "
-"tranzacțiile importate. În anumite locuri, ATM-urile comerciale (care nu "
-"aparțin unei instituții financiare) sunt instalate în locuri precum magazine "
-"potrivite. Aceste ATM-uri adaugă taxele lor direct în sumă, în loc să le "
-"afișeze ca pe o tranzacție separată sau în banca ta lunară de taxe. De "
-"exemplu, tu retragi $100 și încarci $101,50 plus taxe Interac. Dacă "
-"introduci manual acești $100, sumele nu se vor potrivi. Trebuie să setezi "
-"această aceasta oriunde se află un maxim al unor asemenea taxe în câmpul tău "
-"(în unitățile monedei tale locale), astfel încât tranzacția va fi "
-"recunoscută ca o potrivire."
+"Acest loc specifică comisionul suplimentar care este luat în considerare la "
+"compararea tranzacțiilor importate. În unele locuri, bancomatele comerciale ("
+"care nu aparțin unei instituții financiare) sunt instalate în locuri precum "
+"magazinele de cartier. Aceste bancomate își adaugă comisionul direct la "
+"sumă, în loc să apară ca o tranzacție separată sau în comisioanele bancare "
+"lunare. De exemplu, dacă scoți 100€, ți se percepe suma de 101,50€ plus "
+"comisionul de retragere. Dacă ai introdus manual cei 100€, sumele nu se vor "
+"potrivi. Ar trebui specificată valoarea maximă a acestor comisioane (în "
+"unități de valută locală), astfel încât tranzacția să fie recunoscută ca "
+"potrivire."
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:50
@@ -9740,7 +9714,7 @@ msgstr "Numărul de zecimale plasate automat"
 msgid ""
 "This field specifies the number of automatic decimal places that will be "
 "filled in."
-msgstr "Acest câmp specifică numărul automat de zecimale care vor fi adăugate."
+msgstr "Acest loc specifică numărul de zecimale care vor fi adăugate automat."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
@@ -9869,10 +9843,10 @@ msgid ""
 "when designating fields on screen. Otherwise, informal labels such as "
 "Increase/Decrease, \"Funds In\"/\"Funds Out\", etc. will be used."
 msgstr ""
-"Dacă e activă, etichetele formale contabile \"Credit\" și \"Debit\" vor fi "
-"folosite când vor fi câmpuri desemnate pe ecran. Atlfel, etichetele "
-"informale precum Creștere/Descreștere, \"Fonduri intrate\"/\"Fonduri "
-"ieșite\" etc. vor fi folosite."
+"Dacă este activă, etichetele contabile formale „Credit” și „Debit” vor fi "
+"utilizate pentru rubricile de pe ecran. În caz contrar, se vor folosi "
+"etichete informale, cum ar fi Creștere/Descreștere, „Fonduri intrate”/„"
+"Fonduri ieșite”, etc."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:125
 msgid "Show close buttons on notebook tabs"
@@ -9944,16 +9918,11 @@ msgid "Default currency for new accounts"
 msgstr "Moneda curentă pentru conturile noi"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:151
-#, fuzzy
 msgid ""
 "This setting specifies the default currency used for new accounts if the "
 "currency-choice setting is set to \"other\". This field must contain the "
 "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr ""
-"Această setare specifică moneda curente folosită pentru conturile noi, dacă "
-"setarea alegerea_monedei este \"alta\". Acest câmp trebuie să conțină codul "
-"de monedă format din trei litere, în conformitate cu ISO 4217 (d.e. USD, "
-"GBP, RUB)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:155
 msgid "Use 24 hour time format"
@@ -10500,7 +10469,7 @@ msgstr "Fișierul deschis cel mai recent"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:11
 msgid "This field contains the full path of the most recently opened file."
-msgstr "Acest câmp conține calea completă a fișierului deschis cel mai recent."
+msgstr "Acest loc conține calea completă a celui mai recent fișier deschis."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:15
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:20
@@ -10525,7 +10494,8 @@ msgstr "Următorul fișier deschis recent"
 #: gnucash/gschemas/org.gnucash.GnuCash.history.gschema.xml.in:56
 msgid ""
 "This field contains the full path of the next most recently opened file."
-msgstr "Acest câmp conține calea următorului fișier deschis recent."
+msgstr ""
+"Acest loc conține calea completă a următorului fișier deschis cel mai recent."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:9
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:132
@@ -10954,30 +10924,22 @@ msgid "Starting date (in seconds from Jan 1, 1970)"
 msgstr "Dată de start (în secunde, din 1 ian. 1970)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:26
-#, fuzzy
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
-"Această setare controlează data de sfârșit prezentă în calularea profitului/"
-"pierderii, dacă setarea alege_sfârșit este \"absolut\". Acest câmp trebuie "
-"să conțină o dată reprezentată în secunde de la 1 ianuarie 1970."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:30
 msgid "Starting time period identifier"
 msgstr "Pornește identificatorul perioadei de timp"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:31
-#, fuzzy
 msgid ""
 "This setting controls the starting date set in profit/loss calculations if "
 "the start-choice setting is set to anything other than \"absolute\". This "
 "field should contain a value between 0 and 8."
 msgstr ""
-"Această setare controlează data de sfârșit prezentă în calularea profitului/"
-"pierderii, dacă setarea alege_sfârșit este alta decât \"absolut\". Acest "
-"câmp trebuie să conțină o valoare între 0 și 8."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:35
 #, fuzzy
@@ -11008,30 +10970,22 @@ msgid "Ending date (in seconds from Jan 1, 1970)"
 msgstr "Dată de sfârșit (în secunde, din 1 ian. 1970)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:46
-#, fuzzy
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to \"absolute\". This field should contain a date "
 "as represented in seconds from January 1st, 1970."
 msgstr ""
-"Această setare controlează data de sfârșit prezentă în calularea profitului/"
-"pierderii, dacă setarea alege_sfârșit este \"absolut\". Acest câmp trebuie "
-"să conțină o dată reprezentată în secunde de la 1 ianuarie 1970."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:50
 msgid "Ending time period identifier"
 msgstr "Identificatorul sfârșitului perioadei de timp"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:51
-#, fuzzy
 msgid ""
 "This setting controls the ending date set in profit/loss calculations if the "
 "end-choice setting is set to anything other than \"absolute\". This field "
 "should contain a value between 0 and 8."
 msgstr ""
-"Această setare controlează data de sfârșit prezentă în calularea profitului/"
-"pierderii, dacă setarea alege_sfârșit este alta decât \"absolut\". Acest "
-"câmp trebuie să conțină o valoare între 0 și 8."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:5
 msgid "Display this column"
@@ -12475,17 +12429,6 @@ msgid "Match QIF categories with GnuCash accounts"
 msgstr "Potrivește categoriile QIF cu conturile GnuCash"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:771
-#, fuzzy
-#| msgid ""
-#| "QIF files downloaded from banks and other financial institutions may not "
-#| "have information about Accounts and Categories which would allow them to "
-#| "be correctly assigned to GnuCash accounts.\n"
-#| "\n"
-#| "In the following page, you will see the text that appears in the Payee "
-#| "and Memo fields of transactions with no QIF Account or Category. By "
-#| "default these transactions are assigned to the 'Unspecified' account in "
-#| "GnuCash. If you select a different account, it will be remembered for "
-#| "future QIF files. "
 msgid ""
 "QIF files downloaded from banks and other financial institutions may not "
 "have information about Accounts and Categories which would allow them to be "
@@ -12496,14 +12439,6 @@ msgid ""
 "these transactions are assigned to the 'Unspecified' account in GnuCash. If "
 "you select a different account, it will be remembered for future QIF files."
 msgstr ""
-"Fișierele QIF descărcate din bănci și alte instituții financiare pot să nu "
-"conțină informații despre Conturi și Categorii, ceea ce le-ar permite să fie "
-"corect înțelese de conturile GnuCash.\n"
-"\n"
-"În următoarea pagină, veți observa textul ce apare în câmpurile Terț și Memo "
-"ale tranzacțiilor fără cont sau categorii QIF. În mod implicit, aceste "
-"tranzacții sunt alocate contului „Nespecificate” în GnuCash. Dacă selectați "
-"un cont diferit, acesta va fi reamintit pentru fișierele viitoare QIF. "
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:784
 msgid "Payees and memos"
@@ -12570,7 +12505,7 @@ msgstr "Introdu informații despre \"%s\""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1034
 msgid "All fields must be complete to continue…"
-msgstr ""
+msgstr "Toate rubricile trebuie să fie complete pentru a continua…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1051
 msgid "Tradable commodities"
@@ -13588,16 +13523,10 @@ msgid "Number of Digits"
 msgstr "Numărul de perioade:"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2204
-#, fuzzy
-#| msgid ""
-#| "Renumber the immediate sub-accounts of %s? This will replace the account "
-#| "code field of each child account with a newly generated code."
 msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
-msgstr ""
-"Renumerotez subconturile imediate din %s? Aceasta va înlocui câmpul de cod "
-"al fiecărui cont copil cu un cod nou generat."
+msgstr "Aceasta va înlocui codul fiecărui cont copil cu un cod nou"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
 msgid "_Show documentation"
@@ -13930,8 +13859,8 @@ msgid ""
 "Enter a unique code used to identify the commodity. Or, you may safely leave "
 "this field blank."
 msgstr ""
-"Introdu un cod unic folosit pentru a identifica o marfă. Sau poți lăsa în "
-"siguranță acest câmp alb."
+"Introdu un cod unic pentru a identifica o marfă, sau poți lăsa gol acest "
+"spațiu."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:191
 msgid ""
@@ -14483,7 +14412,7 @@ msgstr "Calculează"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:385
 msgid "Recalculate the (single) blank entry in the above fields."
-msgstr "Recalculează (singura) intrare goală în câmpurile de deasupra."
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:514
 msgid "<b>Payment Options</b>"
@@ -15812,7 +15741,7 @@ msgstr "Tipărește caracterele _blocate"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2440
 msgid "Print '***' before and after each text field on the check."
-msgstr "Tipărește „***” înainte și după fiecare câmp de pe CEC."
+msgstr "Tipărește „***” înainte și după fiecare spațiu pentru text de pe CEC."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2455
 #, fuzzy
@@ -17882,13 +17811,12 @@ msgid "_Action"
 msgstr "_Acțiune"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:999
-#, fuzzy
 msgid "Sort by action field."
-msgstr "Sortează după câmpul de acțiune"
+msgstr ""
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1018
 msgid "Sort by notes field."
-msgstr ""
+msgstr "Aranjare după observații."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1049
 #, fuzzy
@@ -21747,11 +21675,9 @@ msgid "999,999.000"
 msgstr "999 999,000"
 
 #: gnucash/register/ledger-core/split-register-layout.c:745
-#, fuzzy
-#| msgid "sample:Memo field sample text string"
 msgctxt "sample"
 msgid "Memo field sample text string"
-msgstr "model:șir de caractere model pentru câmpul memo"
+msgstr ""
 
 #: gnucash/register/ledger-core/split-register-layout.c:819
 #, fuzzy
@@ -21763,7 +21689,7 @@ msgstr "T"
 #: gnucash/register/ledger-core/split-register-layout.c:827
 msgctxt "sample"
 msgid "Notes field sample text string"
-msgstr "Text pentru spațiul observațiilor"
+msgstr "Text pentru rubrica observațiilor"
 
 #: gnucash/register/ledger-core/split-register-layout.c:835
 #, fuzzy
@@ -21981,14 +21907,11 @@ msgid "Change reconciled split?"
 msgstr "Modifică partea reconciliată?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2217
-#, fuzzy
 msgid ""
 "You are about to change a protected field of a reconciled split. If you "
 "continue editing this split it will be unreconciled. This might make future "
 "reconciliation difficult! Continue with this change?"
 msgstr ""
-"Ești pe cale să schimbi o parte reconciliată. Făcând astfel poți face "
-"viitoarea reconciliere dificilă! Continui cu această schimbare?"
 
 #: gnucash/register/ledger-core/split-register-model.c:2239
 msgid "Chan_ge Split"
