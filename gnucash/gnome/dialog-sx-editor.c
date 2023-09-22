@@ -826,9 +826,7 @@ gnc_sxed_check_consistent (GncSxEditorDialog *sxed)
      *   . false: indicate to user, allow decision.
      */
 
-    /* FIXME: This is probably superfluous. */
-    gnc_split_register_save (
-        gnc_ledger_display_get_split_register (sxed->ledger), FALSE);
+    gnc_sxed_reg_check_close (sxed);
     /* numeric-formulas-get-balanced determination */
     gnc_sx_get_variables (sxed->sx, vars);
 
