@@ -35,6 +35,9 @@
 #endif
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
+#ifdef BOOST_WINDOWS_API
+#include <boost/process/windows.hpp>
+#endif
 #include <boost/process.hpp>
 #include <boost/regex.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -219,12 +222,18 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
 				bp::std_out > out_buf,
 				bp::std_err > err_buf,
 				bp::std_in < input_buf,
+#ifdef BOOST_WINDOWS_API
+                                bp::windows::create_no_window,
+#endif
 				svc);
 	else
 	    process = bp::child(c_cmd, args,
 				bp::std_out > out_buf,
 				bp::std_err > err_buf,
 				bp::std_in < input_buf,
+#ifdef BOOST_WINDOWS_API
+                                bp::windows::create_no_window,
+#endif
 				bp::env["ALPHAVANTAGE_API_KEY"] = m_api_key,
 				svc);
 
