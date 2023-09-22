@@ -6,6 +6,7 @@
 # with slight GnuCash modifications by Christian Stimming <stimming@tuhh.de> 
 # 19 Aug 2001
 # and 04 Sep 2020 by Frank H. Ellenberger <frank.h.ellenberger@gmail.com>
+# 2022-01-04 fell: add msgctxt
 #check args
 if [ $# -eq 0 ]
 then
@@ -49,5 +50,5 @@ msgstr ""
 !
 
 #Yes this is the most simple awk script you've ever seen :)
-awk -F'\t' '{if ($2 != "") print "#. "$2; print "msgid "$1; print "msgstr \"\"\n"}' \
+awk -F'\t' '{if ($3 != "") print "#. "$3; if ($1 != "") print "msgctxt "$1; print "msgid "$2; print "msgstr \"\"\n"}' \
 $GLOSSARY_CSV
