@@ -47,5 +47,5 @@ gnc_add_test(test-autoclear "${test_autoclear_SOURCES}"
 gnc_add_scheme_tests(test-load-gnome-utils-module.scm)
 
 
-set_dist_list(test_gnome_utils_DIST CMakeLists.txt test-gnc-recurrence.c test-load-gnome-utils-module.scm
+set_dist_list(test_gnome_utils_DIST CMakeLists.txt test-load-gnome-utils-module.scm
   ${test_autoclear_SOURCES})
