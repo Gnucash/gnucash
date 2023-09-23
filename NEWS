@@ -1,5 +1,97 @@
 Version history:
 ------- -------
+5.4  - 24 September 2023
+The following bugs have been fixed:
+
+
+    Bug 728875 - Back button does not work in QIF import assistant
+    Bug 797507 - GnuCash Splash screen may disappear before the main window
+                 appears
+    Bug 798709 - Total(Period) column does not refresh period's value after
+                 update of the period in settings.a>
+    Bug 798904 - GnuCash on Windows opens a CMD window at startup.
+    Bug 798925 - Python bindings: "invalid unclassed pointer in cast to
+                 'QofInstance'".
+    Bug 798944 - Program crashes when matching transactions
+    Bug 798950 - Bug Report: Incorrect Currency Conversion and Provider
+                 Invoice Payment Recording
+                 * When balancing lots use the split amount, not the value
+                 * Recalculate the values using deduced exchange rates after
+                   adjusting split amounts.
+                 * Be conservative when recalculating values after breaking
+                   up a split to avoid imbalances caused by rounding.
+    Bug 798958 - gncScrubLotLinks will infinite loop in some conditions
+    Bug 798982 - GetQuotes crashes if Finance::Quote returns an empty date.
+    Bug 798983 - Empty Orphan account appears after entering transactions in 5.3
+    Bug 798990 - Notes No Longer Autofills
+    Bug 798991 - Incorrect Account Name Order in Transaction Report
+    Bug 798995 - Keystrokes ignored during ledger entry
+    Bug 798998 - Job Report Not Working
+    Bug 799004 - Update of Prices attaches incorrect Date
+    Bug 799010 - gnc-register-account-sel-limited-option errors doesn't work
+    Bug 799020 - widget of gnc-register-list-option disregards user's clicks
+    Bug 799021 - Saved report renders default of gnc-register-list-option
+    Bug 799036 - Import prices from a CSV date problem
+    Bug 799039 - gnc:strify produces unusual results or crashes GnuCash when
+                 fed an option from gnc-lookup-option
+    Bug 799048 - Hover on tab not correct
+    Bug 799051 - Shortcut Ctrl + Tab not working in 5.3
+    Bug 799054 - Stock Assist not functioning
+    Bug 799060 - Consistent Crash in Invoices
+    Bug 799068 - csv export active register not working
+    Bug 799069 - Multicurrency Invoice Payment
+    Bug 799075 - Saving display tab changes in Report Options does not work.
+    Bug 799084 - Unable to create new scheduled transaction
+
+Other repairs or enhancements not marked as bugs:
+
+    [import-main-matcher.cpp] After clicking/toggling A/U+C/C checkbox,
+        reselect the row because it'll be much faster to use keyboard
+        navigation -- use up/down/left/right to target desired checkbox,
+        hit <down> <space> repeatedly to repeat the same action over several
+        consecutive rows.
+    Implement support for !Type:Prices records in the QIF importer.
+    Modernize construction of GObjects using G_DECLARE_DERIVABLE, G_DECLARE_FINAL, etc.
+    Fix yet more leaks.
+    [DBI backend] Change DBI test URLs to environment variables from cmake
+        configuration definitions.
+    Restore the Stock Transaction Assistant to full operation.
+    Fix the Fancy Date file property so that it saves.
+    Fix formatting error in po files project-id line.
+    [simple-business-create.py] Overwrite an existing file instead of crashing.
+    Update github action package versions.
+    Add parsing mixed number and fraction (e.g. 10 1/2) to the gnc_numeric
+        string constructor.
+    Bump minimum cmake version to 3.14 and drop some conditionals for older
+        versions
+    Major speedup in the SQLBackend by replacing C++ exceptions with
+        std::optional for null values.
+    Refresh the GUI on completion of the import matcher so that the imports
+        are immediately reflected in the register.
+    Improve online quote retrieval error reporting.
+    Test loading and saving XML files with and without compression
+    [import-main-matcher] always defer_bal_computation during import to speed
+        up both importing new transactions, and destroying existing ones.
+    GncGtkListUIItem::set_option_from_ui_item: Iterate over selected items
+        Instead of all possible items.
+    Convert gnc-ofx-import.c, import-parse.c, import-utilities.c,
+        import-format-dialog.c, import-account-matcher.c,
+        import-commodity-matcher.c, import-settings.c,
+        import-pending-matches.c, import-match-picker.c, import-main-matcher.c,
+        and gnc-pricedb.c to .cpp
+    By default, filter out online_wiggle in test-gnc-quotes.
+        Running ./bin/test-gnc-quotes from the command line will still include
+        online_wiggle
+    Replace yahoo_json with alphavantage in test-gnc-quotes. yahoo_json is too
+        unstable.
+    Include timezone in price-quote date diagnostic messages.
+
+New and Updated Translations: Arabic, Chinese (Traditional), Croatian, Dutch,
+    English (Australia), English (New Zealand), English (United Kingdom),
+    French, German, Greek, Hebrew, Hungarian, Indonesian, Italian, Polish,
+    Portuguese, Portuguese (Brazil), Romanian, Slovak, Spanish, Swedish,
+    Ukrainian
+
 5.3  - 26 June 2023
 
 The following bugs have been fixed:

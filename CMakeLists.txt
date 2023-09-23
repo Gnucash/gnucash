@@ -3,7 +3,7 @@
 cmake_minimum_required (VERSION 3.14.5)
 
 project (gnucash
-    VERSION 5.3
+    VERSION 5.4
 )
 
 enable_testing()
