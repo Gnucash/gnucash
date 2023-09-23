@@ -71,7 +71,7 @@ set_local_dist(test_backend_xml_DIST_local
   test-kvp-frames.cpp
   test-load-backend.cpp
   test-load-example-account.cpp
-  test-load-save-files.cpp
+  gtest-load-save-files.cpp
   test-load-xml2.cpp
   test-real-data.sh
   test-save-in-lang.cpp
