@@ -2,16 +2,16 @@
 # Copyright (C) 2008 Free Software Foundation, Inc.
 # Ori Hoch <ori@uumpa.com>, 2008
 # http://www.uumpa.com/gnucash-he/
-# Yaron Shahrabani <sh.yaron@gmail.com>, 2020, 2021.
+# Yaron Shahrabani <sh.yaron@gmail.com>, 2020, 2021, 2023.
 # Avi Markovitz <avi.markovitz@gmail.com>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-21 00:29+0200\n"
-"PO-Revision-Date: 2022-07-15 11:18+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2023-09-24 10:59+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/glossary/"
 "he/>\n"
 "Language: he\n"
@@ -20,11 +20,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Weblate 4.14-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-#, fuzzy
-#| msgid "Term (Dear translator: This file will never be visible to the user!)"
 msgid ""
 "Term (Dear translators: This file will never be visible to normal users!)"
 msgstr "מונח"
