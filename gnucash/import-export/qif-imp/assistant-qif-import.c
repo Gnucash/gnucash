@@ -1784,11 +1784,11 @@ gnc_ui_qif_import_select_file_cb (GtkButton * button,
                                      g_list_prepend (NULL, filter),
                                      default_dir,
                                      GNC_FILE_DIALOG_IMPORT);
-
-    /* Insure valid data, and something that can be freed. */
+    /* If NULL then the user cancelled the file dialog. */
     if (new_file_name == NULL)
     {
-        file_name = g_strdup (default_dir);
+        g_free (default_dir);
+        return;
     }
     else if (!g_path_is_absolute (new_file_name))
     {
