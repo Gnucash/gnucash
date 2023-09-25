@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-21 00:29+0200\n"
+"POT-Creation-Date: 2023-09-25 08:00+0200\n"
 "PO-Revision-Date: 2023-06-27 14:52+0000\n"
 "Last-Translator: Sucipto <sucipto@pm.me>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
@@ -26,10 +26,7 @@ msgstr ""
 "X-Generator: Weblate 4.18.1\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-#, fuzzy
-#| msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgid ""
-"Term (Dear translators: This file will never be visible to normal users!)"
+msgid "Term"
 msgstr "Pernyataan"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
@@ -312,7 +309,7 @@ msgstr "bursa komoditas"
 msgid "commodity option: fraction"
 msgstr "opsi komoditas: fraksi"
 
-#. "e.g. USD, DEM"
+#. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
 msgstr "opsi komoditas: Simbol"
 
@@ -875,15 +872,3 @@ msgstr "kupon"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "penarikan( dalam rekonsiliasi dialog)"
-
-#~ msgid "stock"
-#~ msgstr "saham"
-
-#~ msgid "due"
-#~ msgstr "Jatuh Tempo"
-
-#~ msgid "Online"
-#~ msgstr "Daring"
-
-#~ msgid "Direct Debit"
-#~ msgstr "Debit Langsung"

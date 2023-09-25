@@ -1,4 +1,4 @@
-# Assamese translations for GnuCash package. (Glossary)
+# Serbian translations for GnuCash package. (Glossary)
 # This file is distributed under the same license as the GnuCash package.
 # Copyright (C) 2023 by the GnuCash developers and the translators:
 # Automatically generated, 2023.
@@ -12,11 +12,12 @@ msgstr ""
 "PO-Revision-Date: 2023-09-21 00:29+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
-"Language: as\n"
+"Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -256,7 +257,7 @@ msgstr ""
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
-msgstr "বাজেট"
+msgstr "Буџет"
 
 #. "-"
 msgid "business (adjective)"
@@ -316,7 +317,7 @@ msgstr ""
 
 #. "-"
 msgid "Credit Card"
-msgstr "পাবলগীয়াৰ পত্ৰ"
+msgstr "Кредитна картица"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
@@ -332,7 +333,7 @@ msgstr ""
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
-msgstr "কাষ্টম"
+msgstr "Произвољно"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
@@ -344,7 +345,7 @@ msgstr ""
 
 #. "A specific numbered day of the month"
 msgid "Date"
-msgstr "তাৰিখ"
+msgstr "Датум"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
 msgid "date format"
@@ -496,7 +497,7 @@ msgstr ""
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr "বহুত"
+msgstr "Артикал"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
@@ -516,7 +517,7 @@ msgstr ""
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
-msgstr "মেমো"
+msgstr "Белешка"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
@@ -644,7 +645,7 @@ msgstr ""
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "লাভ & লোচকান"
+msgstr "Зарада и губитак"
 
 #. "-"
 msgid "quick-fill"
@@ -704,7 +705,7 @@ msgstr ""
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
-msgstr "পুনৰাই হোৱা উপাৰ্জনবোৰ"
+msgstr "Задржане зараде"
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
@@ -746,7 +747,7 @@ msgstr ""
 #, fuzzy
 #| msgid "(split)"
 msgid "split"
-msgstr "(স্প্লিট)"
+msgstr "(подели)"
 
 #. "Alias of 'shares'"
 msgid "stocks"

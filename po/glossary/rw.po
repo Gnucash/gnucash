@@ -16,7 +16,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-21 00:29+0200\n"
+"POT-Creation-Date: 2023-09-25 08:00+0200\n"
 "PO-Revision-Date: 2022-01-02 22:54+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Kinyarwanda <https://hosted.weblate.org/projects/gnucash/"
@@ -29,8 +29,7 @@ msgstr ""
 "X-Generator: Weblate 4.10.1\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-msgid ""
-"Term (Dear translators: This file will never be visible to normal users!)"
+msgid "Term"
 msgstr ""
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
@@ -375,7 +374,7 @@ msgstr ""
 msgid "commodity option: fraction"
 msgstr "Ihitamo Imigabane"
 
-#. "e.g. USD, DEM"
+#. "e.g. USD, EUR"
 #, fuzzy
 msgid "commodity option: Symbol"
 msgstr "Ihitamo"
@@ -776,8 +775,9 @@ msgid "profit"
 msgstr ""
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
+#, fuzzy
 msgid "Profit & Loss"
-msgstr ""
+msgstr "Igiteranyo"
 
 #. "-"
 #, fuzzy

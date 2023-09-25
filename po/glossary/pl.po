@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-21 00:29+0200\n"
+"POT-Creation-Date: 2023-09-25 08:00+0200\n"
 "PO-Revision-Date: 2023-07-21 22:02+0000\n"
 "Last-Translator: vim <dev.getport@slmail.me>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -25,12 +25,8 @@ msgstr ""
 "X-Generator: Weblate 5.0-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-#, fuzzy
-#| msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgid ""
-"Term (Dear translators: This file will never be visible to normal users!)"
-msgstr ""
-"Termin (Drogi tłumaczu: Ten plik nigdy nie będzie widoczny dla użytkownika!)"
+msgid "Term"
+msgstr "Termin"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
@@ -312,7 +308,7 @@ msgstr "kursy środków"
 msgid "commodity option: fraction"
 msgstr "opcja środków: ułamek"
 
-#. "e.g. USD, DEM"
+#. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
 msgstr "opcja środków: Symbol"
 
@@ -875,15 +871,3 @@ msgstr "kwit"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "obciążenie"
-
-#~ msgid "stock"
-#~ msgstr "akcja"
-
-#~ msgid "due"
-#~ msgstr "należne"
-
-#~ msgid "Online"
-#~ msgstr "Online"
-
-#~ msgid "Direct Debit"
-#~ msgstr "Polecenie zapłaty"

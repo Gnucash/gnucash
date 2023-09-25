@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-21 00:29+0200\n"
+"POT-Creation-Date: 2023-09-25 08:00+0200\n"
 "PO-Revision-Date: 2023-07-12 09:48+0000\n"
 "Last-Translator: ΑΓΡΟΤΙΚΟΣ ΣΥΝΕΤΑΙΡΙΣΜΟΣ ΤΥΛΙΣΟΥ <astilisos209@gmail.com>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -25,12 +25,8 @@ msgstr ""
 "X-Generator: Weblate 5.0-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-#, fuzzy
-#| msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgid ""
-"Term (Dear translators: This file will never be visible to normal users!)"
-msgstr ""
-"Όρος (Αγαπητέ μεταφραστή: Αυτό το αρχείο δεν θα είναι ποτέ ορατό στο χρήστη!)"
+msgid "Term"
+msgstr "Όρος"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
@@ -317,7 +313,7 @@ msgstr "λίστα εμπορευμάτων"
 msgid "commodity option: fraction"
 msgstr "επιλογή εμπορευμάτων: κλάσμα"
 
-#. "e.g. USD, DEM"
+#. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
 msgstr "επιλογή εμπορευμάτων: Σύμβολο"
 
@@ -902,15 +898,3 @@ msgstr "κουπόνι"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "απόσυρση (στο παράθυρο διαλόγου συμφωνίας)"
-
-#~ msgid "stock"
-#~ msgstr "στοκ"
-
-#~ msgid "due"
-#~ msgstr "λήξη"
-
-#~ msgid "Online"
-#~ msgstr "Σε σύνδεση"
-
-#~ msgid "Direct Debit"
-#~ msgstr "Άμεση Ανάληψη"

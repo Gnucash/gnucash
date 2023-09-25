@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-21 00:29+0200\n"
+"POT-Creation-Date: 2023-09-25 08:00+0200\n"
 "PO-Revision-Date: 2023-05-15 09:50+0000\n"
 "Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
@@ -22,11 +22,8 @@ msgstr ""
 "X-Generator: Weblate 4.18-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-#, fuzzy
-#| msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgid ""
-"Term (Dear translators: This file will never be visible to normal users!)"
-msgstr "術語（親愛的翻譯者：這個檔案不會被使用者看到！）"
+msgid "Term"
+msgstr "術語"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
@@ -308,7 +305,7 @@ msgstr "商品掛牌"
 msgid "commodity option: fraction"
 msgstr "最小單位"
 
-#. "e.g. USD, DEM"
+#. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
 msgstr "代碼"
 
@@ -871,15 +868,3 @@ msgstr "憑證"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "提出"
-
-#~ msgid "stock"
-#~ msgstr "股票"
-
-#~ msgid "due"
-#~ msgstr "到期"
-
-#~ msgid "Online"
-#~ msgstr "線上"
-
-#~ msgid "Direct Debit"
-#~ msgstr "自動扣款"

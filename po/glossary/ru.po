@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-21 00:29+0200\n"
+"POT-Creation-Date: 2023-09-25 08:00+0200\n"
 "PO-Revision-Date: 2023-04-23 21:48+0000\n"
 "Last-Translator: Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail."
 "com>\n"
@@ -28,10 +28,7 @@ msgstr ""
 "X-Generator: Weblate 4.18-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-#, fuzzy
-#| msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgid ""
-"Term (Dear translators: This file will never be visible to normal users!)"
+msgid "Term"
 msgstr "Термин"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
@@ -320,7 +317,7 @@ msgstr "товарная номенклатура"
 msgid "commodity option: fraction"
 msgstr "commodity option: составляющая"
 
-#. "e.g. USD, DEM"
+#. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
 msgstr "commodity option: Обозначение"
 
@@ -896,13 +893,3 @@ msgstr "товарный чек"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "снятие"
-
-#, fuzzy
-#~ msgid "stock"
-#~ msgstr "ценные бумаги"
-
-#~ msgid "Online"
-#~ msgstr "Онлайн"
-
-#~ msgid "Direct Debit"
-#~ msgstr "Прямое дебетование"

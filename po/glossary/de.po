@@ -17,7 +17,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-21 00:29+0200\n"
+"POT-Creation-Date: 2023-09-25 08:00+0200\n"
 "PO-Revision-Date: 2023-08-14 16:53+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -30,10 +30,7 @@ msgstr ""
 "X-Generator: Weblate 5.0-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-#, fuzzy
-#| msgid "Term (Dear translator: This file will never be visible to the user!)"
-msgid ""
-"Term (Dear translators: This file will never be visible to normal users!)"
+msgid "Term"
 msgstr "Begriff"
 
 # Tastenkürzel: [altgr]+[Y]/[X]
@@ -329,7 +326,7 @@ msgstr "Handelsplatz"
 msgid "commodity option: fraction"
 msgstr "Stückelung"
 
-#. "e.g. USD, DEM"
+#. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
 msgstr "Symbol"
 
@@ -918,15 +915,3 @@ msgstr "Auslagenerstattung"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "Belastung"
-
-#~ msgid "stock"
-#~ msgstr "Aktie"
-
-#~ msgid "due"
-#~ msgstr "fällig"
-
-#~ msgid "Online"
-#~ msgstr "Online"
-
-#~ msgid "Direct Debit"
-#~ msgstr "Lastschrift"

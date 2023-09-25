@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-21 00:29+0200\n"
+"POT-Creation-Date: 2023-09-25 08:00+0200\n"
 "PO-Revision-Date: 2023-09-16 15:59+0000\n"
 "Last-Translator: BL <ghostzeko@gmail.com>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -23,8 +23,7 @@ msgstr ""
 "X-Generator: Weblate 5.0.2\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-msgid ""
-"Term (Dear translators: This file will never be visible to normal users!)"
+msgid "Term"
 msgstr ""
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
@@ -308,7 +307,7 @@ msgstr "اسواق السلع"
 msgid "commodity option: fraction"
 msgstr "وحدة"
 
-#. "e.g. USD, DEM"
+#. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
 msgstr "رمز"
 
@@ -872,16 +871,3 @@ msgstr "سند"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr ""
-
-#, fuzzy
-#~ msgid "stock"
-#~ msgstr "مخزون"
-
-#~ msgid "due"
-#~ msgstr "مستحق"
-
-#~ msgid "Online"
-#~ msgstr "عبر الإنترنت"
-
-#~ msgid "Direct Debit"
-#~ msgstr "خصم من الحساب مباشرة"

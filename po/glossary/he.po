@@ -7,9 +7,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-21 00:29+0200\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2023-09-25 08:00+0200\n"
 "PO-Revision-Date: 2023-09-24 10:59+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/glossary/"
@@ -23,8 +23,7 @@ msgstr ""
 "X-Generator: Weblate 5.1-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
-msgid ""
-"Term (Dear translators: This file will never be visible to normal users!)"
+msgid "Term"
 msgstr "מונח"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
@@ -307,7 +306,7 @@ msgstr "בורסה"
 msgid "commodity option: fraction"
 msgstr "אפשרות סחורה: שבר"
 
-#. "e.g. USD, DEM"
+#. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
 msgstr "אפשרות סחורה: סמל"
 
@@ -870,15 +869,3 @@ msgstr "שובר"
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
 msgstr "משיכה (בתיבת דו שיח התאמות)"
-
-#~ msgid "stock"
-#~ msgstr "מניות"
-
-#~ msgid "due"
-#~ msgstr "חל"
-
-#~ msgid "Online"
-#~ msgstr "מקוון"
-
-#~ msgid "Direct Debit"
-#~ msgstr "דירקט דביט"
