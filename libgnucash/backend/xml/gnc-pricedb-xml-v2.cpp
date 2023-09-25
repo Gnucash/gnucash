@@ -486,7 +486,7 @@ gnc_pricedb_to_dom_tree (const xmlChar* tag, GNCPriceDB* db)
 
     xmlSetProp (db_xml, BAD_CAST "version", BAD_CAST "1");
 
-    if (!gnc_pricedb_foreach_price (db, xml_add_gnc_price_adapter, db_xml, TRUE))
+    if (!gnc_pricedb_foreach_price_while (db, xml_add_gnc_price_adapter, db_xml, TRUE))
     {
         xmlFreeNode (db_xml);
         return NULL;

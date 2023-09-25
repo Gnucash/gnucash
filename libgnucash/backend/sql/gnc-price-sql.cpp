@@ -222,7 +222,7 @@ GncSqlPriceBackend::write (GncSqlBackend* sql_be)
     write_objects_t data{sql_be, true, this};
 
     auto priceDB = gnc_pricedb_get_db (sql_be->book());
-    return gnc_pricedb_foreach_price (priceDB, write_price, &data, TRUE);
+    return gnc_pricedb_foreach_price_while (priceDB, write_price, &data, TRUE);
 }
 
 /* ========================== END OF FILE ===================== */

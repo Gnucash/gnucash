@@ -917,14 +917,12 @@ gnc_pricedb_get_db(QofBook *book)
 
 /* ==================================================================== */
 
-static gboolean
+static void
 num_prices_helper (GNCPrice *p, gpointer user_data)
 {
     auto count = static_cast<guint*>(user_data);
 
     *count += 1;
-
-    return TRUE;
 }
 
 guint
@@ -2622,6 +2620,7 @@ typedef struct
     gboolean ok;
     gboolean (*func)(GNCPrice *p, gpointer user_data);
     gpointer user_data;
+    gboolean stop_if_false;
 } GNCPriceDBForeachData;
 
 static void
@@ -2630,9 +2629,10 @@ pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)
     GList *price_list = (GList *) val;
     GNCPriceDBForeachData *foreach_data = (GNCPriceDBForeachData *) user_data;
 
-    /* stop traversal when func returns FALSE */
-    foreach_data->ok = g_list_find_custom (price_list, foreach_data->user_data, (GCompareFunc)foreach_data->func)
-        != nullptr;
+    if (!foreach_data->stop_if_false)
+        g_list_foreach (price_list, (GFunc)foreach_data->func, foreach_data->user_data);
+    else if (!g_list_find_custom (price_list, foreach_data->user_data, (GCompareFunc)foreach_data->func))
+        foreach_data->ok = false;
 }
 
 static void
@@ -2645,7 +2645,7 @@ pricedb_foreach_currencies_hash(gpointer key, gpointer val, gpointer user_data)
 static gboolean
 unstable_price_traversal(GNCPriceDB *db,
                          gboolean (*f)(GNCPrice *p, gpointer user_data),
-                         gpointer user_data)
+                         gpointer user_data, gboolean stop_if_false)
 {
     GNCPriceDBForeachData foreach_data;
 
@@ -2653,6 +2653,7 @@ unstable_price_traversal(GNCPriceDB *db,
     foreach_data.ok = TRUE;
     foreach_data.func = f;
     foreach_data.user_data = user_data;
+    foreach_data.stop_if_false = stop_if_false;
     if (db->commodity_hash == NULL)
     {
         return FALSE;
@@ -2735,7 +2736,7 @@ compare_hash_entries_by_commodity_key (const CommodityPtrPair& he_a, const Commo
 static bool
 stable_price_traversal(GNCPriceDB *db,
                        gboolean (*f)(GNCPrice *p, gpointer user_data),
-                       gpointer user_data)
+                       gpointer user_data, gboolean stop_if_false)
 {
     g_return_val_if_fail (db && f, false);
 
@@ -2748,27 +2749,44 @@ stable_price_traversal(GNCPriceDB *db,
         std::sort (price_lists.begin(), price_lists.end(), compare_hash_entries_by_commodity_key);
 
         for (const auto& pricelist_entry : price_lists)
-            if (g_list_find_custom (static_cast<GList*>(pricelist_entry.second), user_data, (GCompareFunc)f))
+            if (!stop_if_false)
+                g_list_foreach (static_cast<GList*>(pricelist_entry.second), (GFunc)f, user_data);
+            else if (g_list_find_custom (static_cast<GList*>(pricelist_entry.second), user_data, (GCompareFunc)f))
                 return false;
     }
 
     return true;
 }
 
-gboolean
-gnc_pricedb_foreach_price(GNCPriceDB *db,
-                          GncPriceForeachFunc f,
-                          gpointer user_data,
-                          gboolean stable_order)
+static gboolean
+pricedb_foreach_price_while (GNCPriceDB *db,
+                             GncPriceForeachUntilFunc f,
+                             gpointer user_data,
+                             gboolean stable_order,
+                             gboolean stop_if_false)
 {
     ENTER ("db=%p f=%p", db, f);
     if (stable_order)
     {
         LEAVE (" stable order found");
-        return stable_price_traversal(db, f, user_data);
+        return stable_price_traversal(db, f, user_data, stop_if_false);
     }
     LEAVE (" use unstable order");
-    return unstable_price_traversal(db, f, user_data);
+    return unstable_price_traversal(db, f, user_data, stop_if_false);
+}
+
+gboolean
+gnc_pricedb_foreach_price_while (GNCPriceDB *db, GncPriceForeachUntilFunc f,
+                                 gpointer user_data, gboolean stable_order)
+{
+    return pricedb_foreach_price_while (db, f, user_data, stable_order, true);
+}
+
+void
+gnc_pricedb_foreach_price (GNCPriceDB *db, GncPriceForeachFunc f,
+                           gpointer user_data, gboolean stable_order)
+{
+    pricedb_foreach_price_while (db, (GncPriceForeachUntilFunc)f, user_data, stable_order, false);
 }
 
 /* ==================================================================== */
@@ -2780,14 +2798,12 @@ typedef struct
     gnc_commodity *new_c;
 } GNCPriceFixupData;
 
-static gboolean
+static void
 add_price_to_list (GNCPrice *p, gpointer data)
 {
     auto list = static_cast<GList**>(data);
 
     *list = g_list_prepend (*list, p);
-
-    return TRUE;
 }
 
 static void
@@ -2883,12 +2899,11 @@ gnc_price_print(GNCPrice *p, FILE *f, int indent)
     g_free(istr);
 }
 
-static gboolean
+static void
 print_pricedb_adapter(GNCPrice *p, gpointer user_data)
 {
     FILE *f = (FILE *) user_data;
     gnc_price_print(p, f, 1);
-    return TRUE;
 }
 
 void

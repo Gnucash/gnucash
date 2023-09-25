@@ -705,14 +705,12 @@ get_random_pricedb(QofBook *book)
     return db;
 }
 
-static gboolean
+static void
 price_accumulator (GNCPrice *p, gpointer data)
 {
     auto list = static_cast<GList**>(data);
 
     *list = g_list_prepend (*list, p);
-
-    return TRUE;
 }
 
 void

@@ -30,6 +30,7 @@ typedef struct _GncPriceDBClass GNCPriceDBClass;
 #include "qof.h"
 #include "gnc-commodity.h"
 #include "gnc-engine.h"
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -647,9 +648,10 @@ gnc_pricedb_convert_balance_nearest_before_price_t64 (GNCPriceDB *pdb,
                                                      const gnc_commodity *new_currency,
                                                      time64 t);
 
-typedef gboolean (*GncPriceForeachFunc)(GNCPrice *p, gpointer user_data);
+typedef gboolean (*GncPriceForeachUntilFunc)(GNCPrice *p, gpointer user_data);
+typedef void (*GncPriceForeachFunc)(GNCPrice *p, gpointer user_data);
 
-/** @brief Call a GncPriceForeachFunction once for each price in db, until the
+/** @brief Call a GncPriceForeachUntilFunction once for each price in db, until the
  * function returns FALSE.
  *
  * If stable_order is not FALSE, make sure the ordering of the traversal is
@@ -663,10 +665,27 @@ typedef gboolean (*GncPriceForeachFunc)(GNCPrice *p, gpointer user_data);
  * @return TRUE if all calls to f succeeded (unstable) or if the order of
  * processing was the same as the previous invocation (stable), FALSE otherwise.
  */
-gboolean     gnc_pricedb_foreach_price(GNCPriceDB *db,
-                                       GncPriceForeachFunc f,
-                                       gpointer user_data,
-                                       gboolean stable_order);
+gboolean     gnc_pricedb_foreach_price_while (GNCPriceDB *db,
+                                              GncPriceForeachUntilFunc f,
+                                              gpointer user_data,
+                                              gboolean stable_order);
+
+
+/** @brief Call a GncPriceForeachFunction once for each price in db.
+ *
+ * If stable_order is not FALSE, make sure the ordering of the traversal is
+ * stable (i.e. the same order every time given the same db contents -- stable
+ * traversals may be less efficient).
+ * @param db The pricedb
+ * @param f The function to call
+ * @param user_data A data to pass to each invocation of f
+ * @param stable_order Ensure that the traversal is performed in the same order
+ * each time.
+ */
+void     gnc_pricedb_foreach_price (GNCPriceDB *db,
+                                    GncPriceForeachFunc f,
+                                    gpointer user_data,
+                                    gboolean stable_order);
 
 /** @brief Get the number of prices, in any currency, for a given commodity.
  * @param db The pricedb
