@@ -464,13 +464,13 @@ xml_add_gnc_price_adapter (GNCPrice* p, gpointer data)
     if (p)
     {
         xmlNodePtr price_xml = gnc_price_to_dom_tree (BAD_CAST "price", p);
-        if (!price_xml) return FALSE;
+        if (!price_xml) return true;
         xmlAddChild (xml_node, price_xml);
-        return TRUE;
+        return false;
     }
     else
     {
-        return TRUE;
+        return false;
     }
 }
 
@@ -486,7 +486,8 @@ gnc_pricedb_to_dom_tree (const xmlChar* tag, GNCPriceDB* db)
 
     xmlSetProp (db_xml, BAD_CAST "version", BAD_CAST "1");
 
-    if (!gnc_pricedb_foreach_price_while (db, xml_add_gnc_price_adapter, db_xml, TRUE))
+    if (gnc_pricedb_foreach_price_until (db, (GncPriceForeachUntilFunc)xml_add_gnc_price_adapter,
+                                         db_xml, true))
     {
         xmlFreeNode (db_xml);
         return NULL;

@@ -1532,6 +1532,47 @@ test_gnc_pricedb_foreach_price (PriceDBFixture *fixture, gconstpointer pData)
     g_list_free (lst);
 }
 
+/* when these functions return true, cease traversal */
+static bool prepend_price_time64_until_10 (GNCPrice *p, GList **lst)
+{
+    time64 time = gnc_price_get_time64 (p);
+    *lst = g_list_prepend (*lst, GUINT_TO_POINTER(time));
+    return (g_list_length (*lst) >= 10);
+}
+
+static bool inc_counter_until_10 (GNCPrice *p, guint *count)
+{
+    (*count)++;
+    return ((*count) >= 10);
+}
+
+static void
+test_gnc_pricedb_foreach_price_until (PriceDBFixture *fixture, gconstpointer pData)
+{
+    /* unstable -- cannot guarantee order. count number prices. */
+    guint count = 0;
+    gnc_pricedb_foreach_price_until (fixture->pricedb, (GncPriceForeachUntilFunc)inc_counter_until_10,
+                                     &count, FALSE);
+    g_assert_cmpint (count, ==, 10);
+
+    /* stable -- can guarantee order. check price dates. */
+    GList *lst = NULL;
+    gnc_pricedb_foreach_price_until (fixture->pricedb, (GncPriceForeachUntilFunc)prepend_price_time64_until_10,
+                                     &lst, TRUE);
+
+    g_assert_cmpint (g_list_length (lst), ==, 10);
+
+    gchar *date = qof_print_date((time64)g_list_first (lst)->data);
+    g_assert_cmpstr (date, ==, "08/01/13");
+    g_free (date);
+
+    date = qof_print_date((time64)g_list_last (lst)->data);
+    g_assert_cmpstr (date, ==, "11/12/14");
+    g_free (date);
+
+    g_list_free (lst);
+}
+
 /* pricedb_foreach_pricelist
 static void
 pricedb_foreach_pricelist(gpointer key, gpointer val, gpointer user_data)// Local: 0:1:0
@@ -1791,6 +1832,7 @@ GNC_TEST_ADD (suitename, "gnc price list equal", PriceDBFixture, NULL, setup, te
 // GNC_TEST_ADD (suitename, "compare kvpairs by commodity key", Fixture, NULL, setup, test_compare_kvpairs_by_commodity_key, teardown);
 // GNC_TEST_ADD (suitename, "stable price traversal", Fixture, NULL, setup, test_stable_price_traversal, teardown);
 GNC_TEST_ADD (suitename, "gnc pricedb foreach price", PriceDBFixture, NULL, setup, test_gnc_pricedb_foreach_price, teardown);
+GNC_TEST_ADD (suitename, "gnc pricedb foreach price while", PriceDBFixture, NULL, setup, test_gnc_pricedb_foreach_price_until, teardown);
 // GNC_TEST_ADD (suitename, "add price to list", Fixture, NULL, setup, test_add_price_to_list, teardown);
 // GNC_TEST_ADD (suitename, "gnc price fixup legacy commods", Fixture, NULL, setup, test_gnc_price_fixup_legacy_commods, teardown);
 // GNC_TEST_ADD (suitename, "gnc price print", Fixture, NULL, setup, test_gnc_price_print, teardown);

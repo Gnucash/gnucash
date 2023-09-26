@@ -204,15 +204,15 @@ write_price (GNCPrice* p, gpointer data)
 {
     auto s = reinterpret_cast<write_objects_t*>(data);
 
-    g_return_val_if_fail (p != NULL, FALSE);
-    g_return_val_if_fail (data != NULL, FALSE);
+    g_return_val_if_fail (p != NULL, true);
+    g_return_val_if_fail (data != NULL, true);
 
     if (s->is_ok && gnc_price_get_source (p) != PRICE_SOURCE_TEMP)
     {
         s->commit (QOF_INSTANCE(p));
     }
 
-    return s->is_ok;
+    return !s->is_ok;
 }
 
 bool
@@ -222,7 +222,7 @@ GncSqlPriceBackend::write (GncSqlBackend* sql_be)
     write_objects_t data{sql_be, true, this};
 
     auto priceDB = gnc_pricedb_get_db (sql_be->book());
-    return gnc_pricedb_foreach_price_while (priceDB, write_price, &data, TRUE);
+    return !gnc_pricedb_foreach_price_until (priceDB, (GncPriceForeachUntilFunc)write_price, &data, TRUE);
 }
 
 /* ========================== END OF FILE ===================== */

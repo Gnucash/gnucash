@@ -648,11 +648,11 @@ gnc_pricedb_convert_balance_nearest_before_price_t64 (GNCPriceDB *pdb,
                                                      const gnc_commodity *new_currency,
                                                      time64 t);
 
-typedef gboolean (*GncPriceForeachUntilFunc)(GNCPrice *p, gpointer user_data);
+typedef gpointer (*GncPriceForeachUntilFunc)(GNCPrice *p, gpointer user_data);
 typedef void (*GncPriceForeachFunc)(GNCPrice *p, gpointer user_data);
 
 /** @brief Call a GncPriceForeachUntilFunction once for each price in db, until the
- * function returns FALSE.
+ * function returns non-null.
  *
  * If stable_order is not FALSE, make sure the ordering of the traversal is
  * stable (i.e. the same order every time given the same db contents -- stable
@@ -662,10 +662,9 @@ typedef void (*GncPriceForeachFunc)(GNCPrice *p, gpointer user_data);
  * @param user_data A data to pass to each invocation of f
  * @param stable_order Ensure that the traversal is performed in the same order
  * each time.
- * @return TRUE if all calls to f succeeded (unstable) or if the order of
- * processing was the same as the previous invocation (stable), FALSE otherwise.
+ * @return nullptr if all calls to f returned nullptr; or returns the return value of f.
  */
-gboolean     gnc_pricedb_foreach_price_while (GNCPriceDB *db,
+gboolean     gnc_pricedb_foreach_price_until (GNCPriceDB *db,
                                               GncPriceForeachUntilFunc f,
                                               gpointer user_data,
                                               gboolean stable_order);
