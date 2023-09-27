@@ -2010,7 +2010,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
                     xaccTransGetCurrency (gnc_import_TransInfo_get_trans (info)), true);
                 gnc_numeric bal_val = gnc_import_TransInfo_get_dest_value (info);
                 imbalance = g_strdup (xaccPrintAmount (bal_val, pinfo));
-                color = get_required_color (int_required_class);
+                color = get_required_color (int_prob_required_class);
                 text =
                     /* Translators: %s is the amount to be transferred. */
                     g_strdup_printf (_("New, UNBALANCED (need acct to transfer %s)!"),
