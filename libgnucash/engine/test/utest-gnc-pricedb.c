@@ -1499,14 +1499,16 @@ gboolean
 gnc_pricedb_foreach_price(GNCPriceDB *db,// C: 2 in 2  Local: 6:0:0
 */
 
-static void prepend_price_time64 (GNCPrice *p, GList **lst)
+static gboolean prepend_price_time64 (GNCPrice *p, GList **lst)
 {
     *lst = g_list_prepend (*lst, GUINT_TO_POINTER(gnc_price_get_time64 (p)));
+    return TRUE;
 }
 
-static void inc_counter (GNCPrice *p, guint *count)
+static gboolean inc_counter (GNCPrice *p, guint *count)
 {
     (*count)++;
+    return TRUE;
 }
 
 static void
