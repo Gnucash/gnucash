@@ -10,10 +10,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-08-01 13:03+0000\n"
+"PO-Revision-Date: 2023-09-29 00:03+0000\n"
 "Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 "X-Poedit-Bookmarks: 2255,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -82,9 +82,8 @@ msgstr "Początek poprzedniego roku"
 
 #: bindings/guile/date-utilities.scm:734
 #: libgnucash/engine/gnc-option-date.cpp:280
-#, fuzzy
 msgid "First day of the previous calendar year."
-msgstr "Pierwszy dzień poprzedniego roku kalendarzowego"
+msgstr "Pierwszy dzień poprzedniego roku kalendarzowego."
 
 #: bindings/guile/date-utilities.scm:738
 #: gnucash/gnome-utils/gnc-period-select.c:87
@@ -104,9 +103,8 @@ msgstr "Początek okresu obrachunkowego"
 
 #: bindings/guile/date-utilities.scm:748
 #: libgnucash/engine/gnc-option-date.cpp:312
-#, fuzzy
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr "Pierwszy dzień okresu obrachunkowego zgodnie z ustawieniami globalnymi"
+msgstr "Pierwszy dzień okresu obrachunkowego zgodnie z ustawieniami globalnymi."
 
 #: bindings/guile/date-utilities.scm:752
 #: libgnucash/engine/gnc-option-date.cpp:319
@@ -115,9 +113,8 @@ msgstr "Koniec okresu obrachunkowego"
 
 #: bindings/guile/date-utilities.scm:755
 #: libgnucash/engine/gnc-option-date.cpp:320
-#, fuzzy
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr "Ostatni dzień okresu obrachunkowego zgodnie z ustawieniami globalnymi"
+msgstr "Ostatni dzień okresu obrachunkowego zgodnie z ustawieniami globalnymi."
 
 #: bindings/guile/date-utilities.scm:759
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -127,9 +124,8 @@ msgstr "Początek tego miesiąca"
 
 #: bindings/guile/date-utilities.scm:762
 #: libgnucash/engine/gnc-option-date.cpp:168
-#, fuzzy
 msgid "First day of the current month."
-msgstr "Pierwszy dzień bieżącego miesiąca"
+msgstr "Pierwszy dzień bieżącego miesiąca."
 
 #: bindings/guile/date-utilities.scm:766
 #: gnucash/gnome-utils/gnc-period-select.c:82
@@ -139,9 +135,8 @@ msgstr "Koniec tego miesiąca"
 
 #: bindings/guile/date-utilities.scm:769
 #: libgnucash/engine/gnc-option-date.cpp:176
-#, fuzzy
 msgid "Last day of the current month."
-msgstr "Ostatni dzień bieżącego miesiąca"
+msgstr "Ostatni dzień bieżącego miesiąca."
 
 #: bindings/guile/date-utilities.scm:773
 #: gnucash/gnome-utils/gnc-period-select.c:67
@@ -151,9 +146,8 @@ msgstr "Początek poprzedniego miesiąca"
 
 #: bindings/guile/date-utilities.scm:776
 #: libgnucash/engine/gnc-option-date.cpp:184
-#, fuzzy
 msgid "First day of the previous month."
-msgstr "Pierwszy dzień poprzedniego miesiąca"
+msgstr "Pierwszy dzień poprzedniego miesiąca."
 
 #: bindings/guile/date-utilities.scm:780
 #: gnucash/gnome-utils/gnc-period-select.c:83
@@ -163,9 +157,8 @@ msgstr "Koniec poprzedniego miesiąca"
 
 #: bindings/guile/date-utilities.scm:783
 #: libgnucash/engine/gnc-option-date.cpp:192
-#, fuzzy
 msgid "Last day of previous month."
-msgstr "Ostatni dzień poprzedniego miesiąca"
+msgstr "Ostatni dzień poprzedniego miesiąca."
 
 #: bindings/guile/date-utilities.scm:787
 #: libgnucash/engine/gnc-option-date.cpp:215
@@ -174,9 +167,8 @@ msgstr "Początek bieżącego kwartału"
 
 #: bindings/guile/date-utilities.scm:790
 #: libgnucash/engine/gnc-option-date.cpp:216
-#, fuzzy
 msgid "First day of the current quarterly accounting period."
-msgstr "Pierwszy dzień bieżącego kwartalnego okresu rozliczeniowego"
+msgstr "Pierwszy dzień bieżącego kwartalnego okresu rozliczeniowego."
 
 #: bindings/guile/date-utilities.scm:794
 #: libgnucash/engine/gnc-option-date.cpp:223
@@ -185,9 +177,8 @@ msgstr "Koniec bieżącego kwartału"
 
 #: bindings/guile/date-utilities.scm:797
 #: libgnucash/engine/gnc-option-date.cpp:224
-#, fuzzy
 msgid "Last day of the current quarterly accounting period."
-msgstr "Ostatni dzień bieżącego kwartalnego okresu rozliczeniowego"
+msgstr "Ostatni dzień bieżącego kwartalnego okresu rozliczeniowego."
 
 #: bindings/guile/date-utilities.scm:801
 #: gnucash/gnome-utils/gnc-period-select.c:69
@@ -197,9 +188,8 @@ msgstr "Początek poprzedniego kwartału"
 
 #: bindings/guile/date-utilities.scm:804
 #: libgnucash/engine/gnc-option-date.cpp:232
-#, fuzzy
 msgid "First day of the previous quarterly accounting period."
-msgstr "Pierwszy dzień poprzedniego kwartalnego okresu rozliczeniowego"
+msgstr "Pierwszy dzień poprzedniego kwartalnego okresu rozliczeniowego."
 
 #: bindings/guile/date-utilities.scm:808
 #: gnucash/gnome-utils/gnc-period-select.c:85
@@ -209,9 +199,8 @@ msgstr "Koniec poprzedniego kwartału"
 
 #: bindings/guile/date-utilities.scm:811
 #: libgnucash/engine/gnc-option-date.cpp:240
-#, fuzzy
 msgid "Last day of previous quarterly accounting period."
-msgstr "Ostatni dzień poprzedniego kwartalnego okresu obrachunkowego"
+msgstr "Ostatni dzień poprzedniego kwartalnego okresu obrachunkowego."
 
 #: bindings/guile/date-utilities.scm:815
 #: gnucash/gnome-utils/gnc-period-select.c:65
@@ -222,9 +211,8 @@ msgstr "Dzisiaj"
 
 #: bindings/guile/date-utilities.scm:817
 #: libgnucash/engine/gnc-option-date.cpp:80
-#, fuzzy
 msgid "The current date."
-msgstr "Bieżąca data"
+msgstr "Bieżąca data."
 
 #: bindings/guile/options.scm:388 gnucash/gnome/top-level.c:462
 #: libgnucash/engine/gnc-optiondb.cpp:1142 libgnucash/engine/qofbookslots.h:72
@@ -1496,9 +1484,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:240
-#, fuzzy
 msgid "Notional distribution (dividend)"
-msgstr "Nie podano opisu."
+msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:241
 msgid ""
@@ -1698,7 +1685,7 @@ msgstr "brakujące"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1010
 #, c-format
 msgid "Amount for %s is missing."
-msgstr "Brakuje ilości %s"
+msgstr "Brakuje ilości %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:668
 #: gnucash/gnome/assistant-stock-transaction.cpp:1015
@@ -13573,9 +13560,8 @@ msgid "Open imported documents in tabs"
 msgstr "Otwórz zaimportowane dokumenty na kartach"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
 msgid "Open not yet posted documents in tabs"
-msgstr "Otwórz jeszcze niepublikowane dokumenty w zakładkach "
+msgstr "Otwórz jeszcze niepublikowane dokumenty w zakładkach"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -14450,7 +14436,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:266
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:412
 msgid "New _Account…"
-msgstr "Nowe _konto"
+msgstr "Nowe _konto…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -16253,7 +16239,7 @@ msgstr "Własny format"
 
 #: gnucash/gtkbuilder/dialog-progress.glade:12
 msgid "Working…"
-msgstr "Przetwarzanie…"
+msgstr "Pracuję…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:55
 msgid "<b>A_vailable reports</b>"
@@ -17593,7 +17579,7 @@ msgstr "Porządek rejestru"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1073
 msgid "Sort in descending order."
-msgstr "Sortuj malejąco"
+msgstr "Sortuj malejąco."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1109
 msgid "Void Transaction"
@@ -24418,7 +24404,7 @@ msgstr "Pokaż budżet"
 
 #: gnucash/report/reports/standard/budget.scm:52
 msgid "Display a column for the budget values."
-msgstr "Wyświetl kolumnę dla wartości budżetu"
+msgstr "Wyświetl kolumnę dla wartości budżetu."
 
 #: gnucash/report/reports/standard/budget.scm:53
 #, fuzzy
@@ -24436,7 +24422,7 @@ msgstr "Pokaż obecne"
 
 #: gnucash/report/reports/standard/budget.scm:56
 msgid "Display a column for the actual values."
-msgstr "Wyświetl kolumnę dla wartości bieżących"
+msgstr "Wyświetl kolumnę dla wartości bieżących."
 
 #: gnucash/report/reports/standard/budget.scm:57
 #, fuzzy
@@ -26187,7 +26173,7 @@ msgstr "Pokazywać paski wartości netto?"
 
 #: gnucash/report/reports/standard/net-charts.scm:136
 msgid "Add grid lines."
-msgstr "Dodaj linie na siatce"
+msgstr "Dodaj linie na siatce."
 
 #: gnucash/report/reports/standard/net-charts.scm:375
 #: gnucash/report/reports/standard/net-charts.scm:406
@@ -28617,7 +28603,7 @@ msgstr "_Plik"
 
 #: gnucash/ui/gnc-main-window.ui:40
 msgid "Pa_ge Setup"
-msgstr "Ustawienia _strony..."
+msgstr "Ustawienia _strony"
 
 #: gnucash/ui/gnc-main-window.ui:43
 msgid "Specify the page size and orientation for printing"
