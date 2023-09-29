@@ -24,6 +24,7 @@
 #include "config.h"
 #include <glib.h>
 #include "../assistant-stock-transaction.cpp"
+#include <iomanip>
 #include <memory>
 #include <Account.h>
 #include <Split.h>
