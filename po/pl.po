@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-09-29 00:03+0000\n"
+"PO-Revision-Date: 2023-09-30 16:59+0000\n"
 "Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -5138,7 +5138,7 @@ msgstr "Filtruj wg:"
 #: gnucash/gnome/gnc-plugin-page-register.c:3334
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
-msgstr "Raport tra_nsakcji"
+msgstr "Raport transakcji"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3322
 msgid "Portfolio Report"
