@@ -52,7 +52,7 @@
         <property name="margin-end">12</property>
         <property name="label" translatable="yes" comments="You should localize the (british) examples to your region.">This assistant will help you import Prices from a CSV file.
 
-There is a minimum number of columns that have to be present for a successful import, these are Date, Amount, From Namespace, From Symbol and Currency To. If all entries are for the same Commodity / Currency then you can select them and then the columns will be Date and Amount.
+The minimum required columns for a successful import are: Date, Amount, From Namespace, From Symbol and Currency To. If all entries are for the same Commodity / Currency then you can select them and then the columns will be Date and Amount.
 
 Various options exist for specifying the delimiter as well as a fixed width option. With the fixed width option, double click on the table of rows displayed to set a column width, then right mouse to change if required.
 
