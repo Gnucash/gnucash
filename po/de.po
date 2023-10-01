@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-09-20 20:02+0000\n"
+"PO-Revision-Date: 2023-10-01 14:02+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -5960,7 +5960,7 @@ msgstr "Sie haben keinen Mandanten ausgewählt"
 #: gnucash/report/reports/standard/new-owner-report.scm:99
 #: libgnucash/engine/gncOwner.c:218
 msgid "Job"
-msgstr "Aufgabe"
+msgstr "Auftrag"
 
 #: gnucash/gnome/search-owner.c:216
 #: gnucash/gnome-search/search-reconciled.c:175
