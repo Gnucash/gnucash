@@ -12,11 +12,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-09-03 20:59+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-10-01 14:02+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.0.1-dev\n"
+"X-Generator: Weblate 5.1-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -5203,10 +5203,8 @@ msgstr ""
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
-#, fuzzy
-#| msgid "Show plot"
 msgid "Show Splits"
-msgstr "Ábra megjelenítése"
+msgstr "Felosztás"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 msgid "Jump"
