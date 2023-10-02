@@ -40,7 +40,6 @@
 #include <gnc-locale-utils.h>
 #include <gnc-path.h>
 #include <gnc-prefs.h>
-#include <gnc-gsettings.h>
 #include <gnc-version.h>
 #include "gnucash-locale-platform.h"
 

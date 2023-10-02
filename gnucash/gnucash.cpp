@@ -39,7 +39,6 @@
 #include <gnc-file.h>
 #include <gnc-filepath-utils.h>
 #include <gnc-gnome-utils.h>
-#include <gnc-gsettings.h>
 #include <gnc-hooks.h>
 #include <gnc-module.h>
 #include <gnc-path.h>
