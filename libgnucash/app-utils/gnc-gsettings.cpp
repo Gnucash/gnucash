@@ -522,9 +522,7 @@ void gnc_gsettings_load_backend (void)
     if (g_strcmp0 (g_getenv ("GNC_UNINSTALLED"), "1") == 0)
         return;
 
-    if (prefsbackend)
-        g_free (prefsbackend);
-
+    g_free (prefsbackend);
     prefsbackend = g_new0 (PrefsBackend, 1);
 
     prefsbackend->register_cb = gnc_gsettings_register_cb;
@@ -560,6 +558,12 @@ void gnc_gsettings_load_backend (void)
     LEAVE("Prefsbackend bind = %p", prefsbackend->bind);
 }
 
+void
+gnc_gsettings_shutdown (void)
+{
+    schema_hash.clear();
+    g_free (prefsbackend);
+}
 
 
 static GVariant *

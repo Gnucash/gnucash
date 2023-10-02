@@ -57,6 +57,7 @@ PyObject* SWIG_init (void);
 %import "base-typemaps.i"
 
 void gnc_prefs_init();
+void gnc_prefs_remove_registered();
 
 QofBook * gnc_get_current_book (void);
 QofSession * gnc_get_current_session (void);

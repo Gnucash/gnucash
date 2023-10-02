@@ -570,6 +570,10 @@ void gnc_gsettings_reset_schema (const gchar *schema);
  */
 void gnc_gsettings_load_backend (void);
 
+/** Free the GSettings resources.
+ */
+void gnc_gsettings_shutdown (void);
+
 /** Check whether we need to adjust the user settings
  * to a newer version.
  *
