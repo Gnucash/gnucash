@@ -30,7 +30,7 @@ jobs:
       run: |
         cd build
         ninja
-        ninja check
+        ninja distcheck
       env:
         CTEST_OUTPUT_ON_FAILURE: On
     - uses: actions/upload-artifact@v3
