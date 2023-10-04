@@ -2,6 +2,11 @@
 
 cmake_minimum_required (VERSION 3.14.5)
 
+# CMake 3.15+ Python3_FIND_STRATEGY=LOCATION
+if (POLICY CMP0094)
+  cmake_policy(SET CMP0094 NEW)
+endif()
+
 project (gnucash
     VERSION 5.4
 )
@@ -492,6 +497,9 @@ endif()
 
 if (WITH_PYTHON)
   set (PYTHON_MIN_VERSION 3.6.0)
+  if (NOT DEFINED Python3_FIND_UNVERSIONED_NAMES)
+    set (Python3_FIND_UNVERSIONED_NAMES FIRST)
+  endif()
   find_package (Python3 ${PYTHON_MIN_VERSION} COMPONENTS Interpreter Development)
   if (NOT Python3_FOUND)
     message(SEND_ERROR "Python support enabled, but Python3 interpreter and/or libaries not found.")
