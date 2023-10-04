@@ -52,7 +52,7 @@
         <property name="margin-end">12</property>
         <property name="label" translatable="yes" comments="You should localize the (british) examples to your region.">This assistant will help you import Prices from a CSV file.
 
-The importer needs at least: Date, Amount, From Namespace, From Symbol, and Currency To. If all entries are for the same Commodity and Currency then the drop-down settings can be used to set Commodity From instead of From Namespace and From symbol columns, and Currency To.
+The importer needs at least: Date, Amount, From Namespace, From Symbol, and Currency To. If all entries are for the same Commodity and Currency then the Commodity From setting can be used instead of From Namespace and From symbol columns, with the Currency To setting instead of a Currency To column.
 
 For example: 21/11/2016,5.345,FTSE,RR.L,GBP
 
