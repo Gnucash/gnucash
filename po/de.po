@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-01 14:02+0000\n"
+"PO-Revision-Date: 2023-10-05 15:10+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -21227,7 +21227,7 @@ msgstr "Stückpreis"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:102
 msgid "Taxable?"
-msgstr "Steuerbar?"
+msgstr "Besteuerbar?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:107
 msgid "Tax Included?"
