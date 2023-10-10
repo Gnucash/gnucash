@@ -1208,6 +1208,15 @@
           (maybe-str 'Action (xaccSplitGetAction s))
           (maybe-str 'Memo (xaccSplitGetMemo s))))
 
+(define-public (gnc:dump-transaction trans)
+  (format #t "  Transaction:~a Date:~a Currency:~a ~a ~a\n"
+          (string-take (gncTransGetGUID trans) 8)
+          (qof-print-date (xaccTransGetDate trans))
+          (gnc-commodity-get-mnemonic (xaccTransGetCurrency trans))
+          (maybe-str 'Desc (xaccTransGetDescription trans))
+          (maybe-str 'Notes (xaccTransGetNotes trans)))
+  (for-each (cut gnc:dump-split <> #t) (xaccTransGetSplitList trans)))
+
 (define-public (gnc:dump-all-transactions)
   (define query (qof-query-create-for-splits))
   (define (split-has-no-account? split) (null? (xaccSplitGetAccount split)))
@@ -1222,13 +1231,7 @@
       (((? split-has-no-account?) . rest) (lp rest))
       ((split . rest)
        (let ((trans (xaccSplitGetParent split)))
-         (format #t "  Trans ~a: ~a Curr ~a ~a~a\n"
-                 (string-take (gncTransGetGUID trans) 8)
-                 (qof-print-date (xaccTransGetDate trans))
-                 (gnc-commodity-get-mnemonic (xaccTransGetCurrency trans))
-                 (maybe-str 'Desc (xaccTransGetDescription trans))
-                 (maybe-str 'Notes (xaccTransGetNotes trans)))
-         (for-each (cut gnc:dump-split <> #t) (xaccTransGetSplitList trans))
+         (gnc:dump-transaction trans)
          (lp rest))))))
 
 ;; utility function for testing. dumps the whole book contents to
