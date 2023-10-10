@@ -18,3 +18,4 @@ gnucash/gschemas/org.gnucash.GnuCash.deprecated.gschema.xml.in
 
 # These files are example scripts for gnucash-cli
 doc/examples/book-to-hledger.scm
+doc/examples/simple-book-add-txn.scm
