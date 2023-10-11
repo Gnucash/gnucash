@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-01 14:02+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2023-10-09 16:00+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -4502,7 +4502,7 @@ msgstr "Biztosan ezt akarja tenni?"
 #: gnucash/gtkbuilder/dialog-print-check.glade:641
 #: gnucash/gtkbuilder/dialog-sx.glade:932
 msgid "Options"
-msgstr "Lehetőségek"
+msgstr "Opciók"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:180
 msgid "Estimate"
@@ -25749,7 +25749,7 @@ msgid ""
 "No valid invoice selected. Click on the Options button and select the "
 "invoice to use."
 msgstr ""
-"Nincs érvényesen kiválasztott számla. Kattintson a Lehetőségek gombra és "
+"Nincs érvényesen kiválasztott számla. Kattintson az Opciók gombra és "
 "válassza ki a használandó számlát."
 
 #. Translators: This is the format of the invoice
