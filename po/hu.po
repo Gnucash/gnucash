@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-09 16:00+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-10-10 21:01+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -4502,7 +4502,7 @@ msgstr "Biztosan ezt akarja tenni?"
 #: gnucash/gtkbuilder/dialog-print-check.glade:641
 #: gnucash/gtkbuilder/dialog-sx.glade:932
 msgid "Options"
-msgstr "Opciók"
+msgstr "Beállítások"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:180
 msgid "Estimate"
@@ -9707,9 +9707,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:75
 #: gnucash/gtkbuilder/dialog-preferences.glade:1743
-#, fuzzy
 msgid "Do not create log/backup files."
-msgstr "Nem lehetett nyitóegyenleget létrehozni."
+msgstr "Nem jönnek létre naplók és biztonsági mentések."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:76
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:81
@@ -9725,12 +9724,12 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1761
 msgid "Delete old log/backup files after this many days (0 = never)."
-msgstr "Régi napló/mentés fájlok törlése ennyi nap után (0 = soha)."
+msgstr "Régi naplók és biztonsági mentések törlése ennyi nap után (0 = soha)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1779
 msgid "Do not delete log/backup files."
-msgstr ""
+msgstr "A naplók és biztonsági mentések soha nem törlődnek."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:90
 msgid "Delete old log/backup files after this many days (0 = never)"
@@ -10030,7 +10029,8 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
-"Új fájloknál legyen bekapcsolva a Felosztás Művelet mezője Számként használva"
+"Új fájloknál legyen bekapcsolva a \"Felosztás Művelet mezője Számként "
+"használva\" beállítás"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1445
@@ -15114,7 +15114,7 @@ msgstr "A GnuCash használatára vonatkozó tanácsok megjelenítése indításk
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1485
 msgid "How many days to keep old log/backup files."
-msgstr ""
+msgstr "Ennyi napig tárolódnak a naplók és biztonsági mentések."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1504
 #: gnucash/gtkbuilder/dialog-sx.glade:615
@@ -15134,7 +15134,7 @@ msgstr "Fájlok _tömörítése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1541
 msgid "Compress the data file with gzip when saving it to disk."
-msgstr "Adatfájlok tömörítése gzippel lemezre mentéskor."
+msgstr "Mentéskor az adatfájlok tömörítése gzippel."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1556
 msgid "<b>Files</b>"
@@ -15181,10 +15181,9 @@ msgstr ""
 "kérni. Ha nincs bejelölve, akkor nem fog rákérdezni."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
-#, fuzzy
 msgctxt "keep"
 msgid "For"
-msgstr "Űrlap"
+msgstr "Ennyi ideig"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1773
 #: gnucash/gtkbuilder/dialog-sx.glade:1227
@@ -15689,6 +15688,8 @@ msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
 msgstr ""
+"Ha a fül neve a megadott számnál hosszabb (a szám hozzávetőleges), akkor a "
+"név közepét három ponttal helyettesítjük."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3568
 msgid "characters"
