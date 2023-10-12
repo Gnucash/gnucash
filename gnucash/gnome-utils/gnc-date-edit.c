@@ -800,9 +800,6 @@ date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
     tm = gnc_date_edit_get_date_internal (gde);
     gnc_date_edit_set_time (gde, gnc_mktime (&tm));
 
-    /* Get the date again in case it was invalid the first time. */
-    tm = gnc_date_edit_get_date_internal (gde);
-
     g_signal_emit (gde, date_edit_signals [DATE_CHANGED], 0);
     g_signal_emit (gde, date_edit_signals [TIME_CHANGED], 0);
 
@@ -1020,10 +1017,11 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
         function will have to check this. Alas, I'm too lazy to do this here. */
         gnc_tm_get_today_neutral(&tm);
     }
-
-    tm.tm_mon--;
-
-    tm.tm_year -= 1900;
+    else
+    {
+        tm.tm_mon--;
+        tm.tm_year -= 1900;
+    }
 
     if (gde->flags & GNC_DATE_EDIT_SHOW_TIME)
     {
