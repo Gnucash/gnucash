@@ -294,7 +294,7 @@ Gnucash::CoreApp::add_common_program_options (void)
         ("input-file", bpo::value (&m_file_to_load),
          _("[datafile]"));
 
-        m_pos_opt_desc.add("input-file", -1);
+        m_pos_opt_desc.add("input-file", 1);
 
         m_opt_desc_all.add (common_options);
         m_opt_desc_all.add (hidden_options);

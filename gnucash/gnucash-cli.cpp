@@ -62,6 +62,12 @@ namespace Gnucash {
         boost::optional <std::string> m_namespace;
         bool m_verbose = false;
 
+        boost::optional <std::string> m_script;
+        std::vector<std::string> m_script_args;
+        std::string m_language;
+        bool m_interactive;
+        bool m_open_readwrite;
+
         boost::optional <std::string> m_report_cmd;
         boost::optional <std::string> m_report_name;
         boost::optional <std::string> m_export_type;
@@ -107,6 +113,17 @@ Gnucash::GnucashCli::configure_program_options (void)
     m_opt_desc_display->add (quotes_options);
     m_opt_desc_all.add (quotes_options);
 
+    bpo::options_description cli_options(_("Scripting and/or Interactive Session Options"));
+    cli_options.add_options()
+        ("script,S", bpo::value (&m_script), _("Script to run"))
+        ("script-args", bpo::value (&m_script_args), _("Script arguments"))
+        ("interactive,I", bpo::bool_switch (&m_interactive), _("Interactive session"))
+        ("language,L", bpo::value (&m_language)->default_value("guile"), _("Specify language for script or interactive session; guile (default) or python"))
+        ("readwrite,W", bpo::bool_switch (&m_open_readwrite), _("Open datafile read-write for script and/or interactive session"));
+    m_pos_opt_desc.add("script-args", -1);
+    m_opt_desc_display->add (cli_options);
+    m_opt_desc_all.add (cli_options);
+
     bpo::options_description report_options(_("Report Generation Options"));
     report_options.add_options()
     ("report,R", bpo::value (&m_report_cmd),
@@ -127,9 +144,31 @@ may be specified to describe some saved options.\n"
 }
 
 int
-Gnucash::GnucashCli::start ([[maybe_unused]] int argc, [[maybe_unused]] char **argv)
+Gnucash::GnucashCli::start (int argc, char **argv)
 {
     Gnucash::CoreApp::start();
+
+    if (m_interactive || m_script)
+    {
+        std::vector<const char*> newArgv =
+            { argc ? argv[0] : "", m_file_to_load ? m_file_to_load->c_str() : ""};
+        std::transform (m_script_args.begin(), m_script_args.end(), std::back_inserter(newArgv),
+                        [](const std::string& s) { return s.c_str(); });
+        // note the vector<const char*> is valid as long as script_args's strings are not damaged!
+
+        std::cout << "\n\nScript args:";
+        for (const auto& arg : newArgv)
+            std::cout << ' ' << arg;
+        std::cout << '\n';
+        std::cout << "File to load: " << (m_file_to_load ? *m_file_to_load : "(null)") << std::endl;
+        std::cout << "Language: " << m_language << std::endl;
+        std::cout << "Script: " << (m_script ? *m_script : "(null)") << std::endl;
+        std::cout << "Readwrite: " << (m_open_readwrite ? 'Y' : 'N') << std::endl;
+        std::cout << "Interactive: " << (m_interactive ? 'Y' : 'N') << "\n\n" << std::endl;
+
+        return Gnucash::run_scripting (newArgv, m_file_to_load, m_language, m_script,
+                                       m_open_readwrite, m_interactive);
+    }
 
     if (!m_quotes_cmd.empty())
     {
