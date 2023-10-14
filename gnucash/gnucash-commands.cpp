@@ -99,6 +99,27 @@ report_session_percentage (const char *message, double percent)
     return;
 }
 
+static std::string
+get_line (const char* prompt)
+{
+    std::string rv;
+    std::cout << prompt;
+    if (!std::getline (std::cin, rv))
+        gnc_shutdown_cli (1);
+    return rv;
+}
+
+static std::string
+get_choice (const char* prompt, const std::vector<std::string> choices)
+{
+    while (true)
+    {
+        auto response = get_line (prompt);
+        if (std::find (choices.begin(), choices.end(), response) != choices.end())
+            return response;
+    }
+}
+
 /* Don't try to use std::string& for the members of the following struct, it
  * results in the values getting corrupted as it passes through initializing
  * Scheme when compiled with Clang.
@@ -122,6 +143,48 @@ write_report_file (const char *html, const char* file)
     }
     ofs << html << std::endl;
     // ofs destructor will close the file
+}
+
+static QofSession*
+load_file (const std::string& file_to_load, bool open_readwrite)
+{
+    PINFO ("Loading %s %s", file_to_load.c_str(), open_readwrite ? "(r/w)" : "(readonly)");
+    auto session = gnc_get_current_session();
+    if (!session)
+        gnc_shutdown_cli (1);
+
+    auto mode = open_readwrite ? SESSION_NORMAL_OPEN : SESSION_READ_ONLY;
+    while (true)
+    {
+        qof_session_begin (session, file_to_load.c_str(), mode);
+        auto io_err = qof_session_get_error (session);
+        switch (io_err)
+        {
+        case ERR_BACKEND_NO_ERR:
+            qof_session_load (session, report_session_percentage);
+            return session;
+        case ERR_BACKEND_LOCKED:
+        {
+            // Translators: [R] [U] and [A] are responses and must not be translated.
+            auto response = get_choice (_("File Locked. Open [R]eadonly, [U]nlock or [A]bort?"),
+                                        {"R","r","U","u","A","a"});
+            if (response == "R" || response == "r")
+                mode = SESSION_READ_ONLY;
+            else if (response == "U" || response == "u")
+                mode = SESSION_BREAK_LOCK;
+            else if (response == "A" || response == "a")
+                gnc_shutdown_cli (1);
+            break;
+        }
+        case ERR_BACKEND_READONLY:
+            std::cerr << _("File is readonly. Cannot open read-write") << std::endl;
+            mode = SESSION_READ_ONLY;
+            break;
+        default:
+            std::cerr << _("Unknown error. Abort.") << std::endl;
+            scm_cleanup_and_exit_with_failure (session);
+        }
+    }
 }
 
 static void
@@ -160,17 +223,7 @@ scm_run_report (void *data,
 
     PINFO ("Loading datafile %s...\n", datafile);
 
-    auto session = gnc_get_current_session ();
-    if (!session)
-        scm_cleanup_and_exit_with_failure (session);
-
-    qof_session_begin (session, datafile, SESSION_READ_ONLY);
-    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
-        scm_cleanup_and_exit_with_failure (session);
-
-    qof_session_load (session, report_session_percentage);
-    if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
-        scm_cleanup_and_exit_with_failure (session);
+    auto session = load_file (args->file_to_load, false);
 
     if (!args->export_type.empty())
     {
@@ -273,14 +326,7 @@ scm_report_show (void *data,
     {
         auto datafile = args->file_to_load.c_str();
         PINFO ("Loading datafile %s...\n", datafile);
-
-        auto session = gnc_get_current_session ();
-        if (session)
-        {
-            qof_session_begin (session, datafile, SESSION_READ_ONLY);
-            if (qof_session_get_error (session) == ERR_BACKEND_NO_ERR)
-                qof_session_load (session, report_session_percentage);
-        }
+        [[maybe_unused]] auto session = load_file (args->file_to_load, false);
     }
 
     scm_call_2 (scm_c_eval_string ("gnc:cmdline-report-show"),
@@ -345,17 +391,7 @@ Gnucash::add_quotes (const bo_str& uri)
     gnc_prefs_init ();
     qof_event_suspend();
 
-    auto session = gnc_get_current_session();
-    if (!session)
-        return 1;
-
-    qof_session_begin(session, uri->c_str(), SESSION_NORMAL_OPEN);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        return cleanup_and_exit_with_failure (session);
-
-    qof_session_load(session, NULL);
-    if (qof_session_get_error(session) != ERR_BACKEND_NO_ERR)
-        return cleanup_and_exit_with_failure (session);
+    auto session = load_file (*uri, true);
 
     try
     {
