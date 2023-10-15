@@ -2179,9 +2179,9 @@ gnc_pricedb_lookup_day_t64(GNCPriceDB *db,
 }
 
 // return 0 if price's time matches exactly
-static int price_same_time (GNCPrice *p, time64 time)
+static int price_same_time (GNCPrice *p, time64 *time)
 {
-    return !(gnc_price_get_time64 (p) == time);
+    return !(gnc_price_get_time64 (p) == *time);
 }
 
 GNCPrice *
@@ -2194,7 +2194,7 @@ gnc_pricedb_lookup_at_time64(GNCPriceDB *db,
     if (!db || !c || !currency) return NULL;
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
     auto price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
-    auto p = g_list_find_custom (price_list, GUINT_TO_POINTER(t), (GCompareFunc) price_same_time);
+    auto p = g_list_find_custom (price_list, &t, (GCompareFunc) price_same_time);
     if (p)
     {
         rv = GNC_PRICE (p->data);
@@ -2325,9 +2325,9 @@ gnc_pricedb_lookup_nearest_in_time64(GNCPriceDB *db,
 }
 
 // return 0 if price's time is less or equal to time
-static int price_time64_less_or_equal (GNCPrice *p, time64 time)
+static int price_time64_less_or_equal (GNCPrice *p, time64 *time)
 {
-    return !(gnc_price_get_time64 (p) <= time);
+    return !(gnc_price_get_time64 (p) <= *time);
 }
 
 GNCPrice *
@@ -2341,7 +2341,7 @@ gnc_pricedb_lookup_nearest_before_t64 (GNCPriceDB *db,
     ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
     auto price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
     if (!price_list) return NULL;
-    auto p = g_list_find_custom (price_list, GUINT_TO_POINTER(t), (GCompareFunc)price_time64_less_or_equal);
+    auto p = g_list_find_custom (price_list, &t, (GCompareFunc)price_time64_less_or_equal);
     if (p)
     {
         current_price = GNC_PRICE (p->data);
