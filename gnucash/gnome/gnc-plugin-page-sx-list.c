@@ -425,6 +425,20 @@ treeview_button_press (GtkTreeView *treeview, GdkEvent *event,
         GdkEventButton *event_button = (GdkEventButton*)event;
         if (event_button->button == GDK_BUTTON_SECONDARY)
         {
+            GtkTreePath *path = NULL;
+            if (gtk_tree_view_get_path_at_pos (priv->tree_view, event_button->x, event_button->y,
+                                               &path, NULL, NULL, NULL))
+            {
+                GtkTreeSelection *selection = gtk_tree_view_get_selection (priv->tree_view);
+
+                if (!gtk_tree_selection_path_is_selected (selection, path))
+                {
+                    gtk_tree_selection_unselect_all (selection);
+                    gtk_tree_selection_select_path (selection, path);
+                }
+            }
+            gtk_tree_path_free (path);
+
             treeview_popup (tree_view, event, page);
             return TRUE;
         }
