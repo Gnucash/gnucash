@@ -849,20 +849,29 @@ _destroy_sx(gpointer data, gpointer user_data)
 
 
 static void
+_destroy_sx_names (gpointer data, gpointer user_data)
+{
+    SchedXaction *sx = (SchedXaction*)data;
+    GList **to_delete_names = (GList**)user_data;
+    *to_delete_names = g_list_append (*to_delete_names, xaccSchedXactionGetName (sx));
+}
+
+
+static void
 gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
                                     GVariant      *parameter,
                                     gpointer       user_data)
 {
     GncPluginPageSxList *plugin_page = user_data;
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
-    GtkTreeSelection *selection;
-    GList *selected_paths, *to_delete = NULL;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (priv->tree_view);
+    GList *selected_paths, *to_delete = NULL, *to_delete_names = NULL;
     GtkTreeModel *model;
     GtkWindow *window;
     gchar *message = NULL;
     gint length;
+    gchar *text_list_of_scheduled_transaction_names = NULL;
 
-    selection = gtk_tree_view_get_selection (priv->tree_view);
     selected_paths = gtk_tree_selection_get_selected_rows (selection, &model);
     if (!gnc_list_length_cmp (selected_paths, 0))
     {
@@ -874,14 +883,23 @@ gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
                                 (GncGMapFunc)_argument_reorder_fn,
                                  priv->tree_view);
 
+    g_list_foreach (to_delete, (GFunc)_destroy_sx_names, &to_delete_names);
+
     window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
 
     length = g_list_length (to_delete);
 
-    /* Translators: This is a ngettext(3) message, %d is the number of scheduled transactions deleted */
-    message = g_strdup_printf (ngettext ("Do you really want to delete this scheduled transaction?",
-                                         "Do you really want to delete %d scheduled transactions?",
-                                          length), length);
+    text_list_of_scheduled_transaction_names = gnc_g_list_stringjoin (to_delete_names, "\n");
+
+    /* Translators: This is a ngettext(3) message, question followed by list of scheduled transactions to be deleted */
+    message = g_strdup_printf ("%s\n\n%s",
+                               ngettext ("Do you really want to delete this scheduled transaction?",
+                                         "Do you really want to delete these scheduled transactions?",
+                                          length),
+                               text_list_of_scheduled_transaction_names);
+
+    g_free (text_list_of_scheduled_transaction_names);
+    g_list_free (to_delete_names);
 
     if (gnc_verify_dialog (window, FALSE, "%s", message))
     {
