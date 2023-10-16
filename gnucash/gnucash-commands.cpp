@@ -172,8 +172,6 @@ scm_run_report (void *data,
     if (qof_session_get_error (session) != ERR_BACKEND_NO_ERR)
         scm_cleanup_and_exit_with_failure (session);
 
-    char *output;
-
     if (!args->export_type.empty())
     {
         SCM retval = scm_call_2 (run_export_cmd, report, type);
@@ -193,7 +191,7 @@ return a document object with export-string or export-error.") << std::endl;
 
         if (scm_is_string (export_string))
         {
-            output = scm_to_utf8_string (export_string);
+            auto output = scm_to_utf8_string (export_string);
             if (!args->output_file.empty())
             {
                 write_report_file(output, args->output_file.c_str());
@@ -202,11 +200,13 @@ return a document object with export-string or export-error.") << std::endl;
             {
                 std::cout << output << std::endl;
             }
+            g_free (output);
         }
         else if (scm_is_string (export_error))
         {
             auto err = scm_to_utf8_string (export_error);
             std::cerr << err << std::endl;
+            g_free (err);
             scm_cleanup_and_exit_with_failure (nullptr);
         }
         else
@@ -234,10 +234,12 @@ return a document object with export-string or export-error.") << std::endl;
             {
                 std::cout << html << std::endl;
             }
+            g_free (html);
         }
         else
         {
             std::cerr << errmsg << std::endl;
+            g_free (errmsg);
         }
     }
 
