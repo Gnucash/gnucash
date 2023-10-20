@@ -790,10 +790,8 @@ GncQuotesImpl::create_quotes (const bpt::ptree& pt, const CommVec& comm_vec)
         auto price{parse_one_quote(pt, comm)};
         if (!price)
             continue;
-        gnc_price_begin_edit (price);
+// See the comment at gnc_pricedb_add_price
         gnc_pricedb_add_price(pricedb, price);
-        gnc_price_commit_edit(price);
-        gnc_price_unref (price);
     }
 }
 
