@@ -610,6 +610,23 @@ if (MINGW)
   set( CMAKE_CXX_FLAGS "-DWINVER=0x0500 -D_EMULATE_GLIBC=0 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 endif()
 
+if (APPLE)
+  execute_process(COMMAND clang --print-file-name=libclang_rt.asan_osx_dynamic.dylib
+    OUTPUT_VARIABLE ASAN_DYNAMIC_LIB
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(ASAN_DYNAMIC_LIB_ENV "DYLD_INSERT_LIBRARIES=${ASAN_DYNAMIC_LIB}")
+elseif(UNIX)
+  execute_process(COMMAND gcc -print-file-name=libasan.so OUTPUT_VARIABLE LIBASAN_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND gcc -print-file-name=libstdc++.so OUTPUT_VARIABLE LIBSTDCXX_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(PRELOADS "${LIBASAN_PATH} ${LIBSTDCXX_PATH}")
+  set(ASAN_OPTIONS "detect_leaks=0:fast_unwind_on_malloc=0")
+  set(ASAN_DYNAMIC_LIB_ENV "LD_PRELOAD=${PRELOADS};ASAN_OPTIONS=${ASAN_OPTIONS}")
+endif ()
+set(ASAN_BUILD_OPTIONS -fsanitize=address -fsanitize=undefined)
+set(ASAN_COMPILE_OPTIONS -g ${ASAN_BUILD_OPTIONS})
+add_compile_options("$<$<CONFIG:Asan>:${ASAN_COMPILE_OPTIONS}>")
+add_link_options("$<$<CONFIG:Asan>:${ASAN_BUILD_OPTIONS}>")
+
 if (APPLE AND WITH_GNUCASH)
   set(CMAKE_MACOSX_RPATH ON)
   set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")

@@ -77,36 +77,35 @@ function(gnc_add_test _TARGET _SOURCE_FILES TEST_INCLUDE_VAR_NAME TEST_LIBS_VAR_
     # Extra arguments are treated as environment variables
     set(HAVE_ENV_VARS TRUE)
   endif()
+  set(ENVVARS "GNC_UNINSTALLED=YES;GNC_BUILDDIR=${CMAKE_BINARY_DIR}")
+  if (HAVE_ENV_VARS)
+    list(APPEND ENVVARS ${ARGN})
+  endif()
   set(TEST_INCLUDE_DIRS ${${TEST_INCLUDE_VAR_NAME}})
   set(TEST_LIBS ${${TEST_LIBS_VAR_NAME}})
   set_source_files_properties (${_SOURCE_FILES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
-  add_executable(${_TARGET} EXCLUDE_FROM_ALL ${_SOURCE_FILES})
-  target_link_libraries(${_TARGET} ${TEST_LIBS})
-  target_include_directories(${_TARGET} PRIVATE ${TEST_INCLUDE_DIRS})
-  if (${HAVE_ENV_VARS})
-    add_test(${_TARGET} ${CMAKE_BINARY_DIR}/bin/${_TARGET})
-    set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "GNC_UNINSTALLED=YES;GNC_BUILDDIR=${CMAKE_BINARY_DIR};${ARGN}")
+  if (CMAKE_GENERATOR STREQUAL Xcode)
+    add_test(NAME ${_TARGET} COMMAND ${_TARGET} CONFIGURATIONS Debug;Release)
   else()
-    if (CMAKE_GENERATOR STREQUAL Xcode)
-      add_test(NAME ${_TARGET} COMMAND ${_TARGET} CONFIGURATIONS Debug;Release)
-    else()
-      add_test(NAME ${_TARGET} COMMAND ${_TARGET})
-    endif()
-    set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "GNC_UNINSTALLED=YES;GNC_BUILDDIR=${CMAKE_BINARY_DIR}")
+    add_test(NAME ${_TARGET} COMMAND ${_TARGET})
   endif()
+  add_executable(${_TARGET} EXCLUDE_FROM_ALL ${_SOURCE_FILES})
+  target_link_libraries(${_TARGET} PRIVATE ${TEST_LIBS})
+  target_include_directories(${_TARGET} PRIVATE ${TEST_INCLUDE_DIRS})
+  set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "$<IF:$<CONFIG:Asan>,${ENVVARS};ASAN_OPTIONS=fast_unwind_on_malloc=0,${ENVVARS}>")
   add_dependencies(check ${_TARGET})
 endfunction()
 
 function(gnc_add_test_with_guile _TARGET _SOURCE_FILES TEST_INCLUDE_VAR_NAME TEST_LIBS_VAR_NAME)
   get_guile_env()
   gnc_add_test(${_TARGET} "${_SOURCE_FILES}" "${TEST_INCLUDE_VAR_NAME}" "${TEST_LIBS_VAR_NAME}"
-    "${GUILE_ENV};${ARGN}"
+    "${GUILE_ENV}$<$<CONFIG:Asan>:;${ASAN_DYNAMIC_LIB_ENV}>;${ARGN}"
   )
 endfunction()
 
 
 function(gnc_add_scheme_test _TARGET _SOURCE_FILE)
-  add_test(${_TARGET} ${GUILE_EXECUTABLE} --debug -c "
+  add_test(NAME ${_TARGET} COMMAND ${GUILE_EXECUTABLE} --debug -c "
     (set! %load-hook
           (lambda (filename)
             (when (and filename
@@ -119,7 +118,7 @@ function(gnc_add_scheme_test _TARGET _SOURCE_FILE)
     (exit (run-test))"
   )
   get_guile_env()
-  set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "${GUILE_ENV};${ARGN}")
+  set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "$<IF:$<CONFIG:Asan>,${GUILE_ENV};${ASAN_DYNAMIC_LIB_ENV};ASAN_OPTIONS=fast_unwind_on_malloc=0;${ARGN},${GUILE_ENV};${ARGN}>")
 endfunction()
 
 function(gnc_add_scheme_tests _SOURCE_FILES)
