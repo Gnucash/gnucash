@@ -13,7 +13,7 @@ set(XML_TEST_INCLUDE_DIRS
 )
 
 
-set(XML_TEST_LIBS gnc-engine gnc-test-engine test-core ${LIBXML2_LDFLAGS} -lz)
+set(XML_TEST_LIBS gnc-backend-xml-utils gnc-engine gnc-test-engine test-core ${LIBXML2_LDFLAGS} -lz)
 set(XML_GTEST_LIBS ${XML_TEST_LIBS} gtest)
 
 function(add_xml_test _TARGET _SOURCE_FILES)
