@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-19 04:10+0000\n"
+"PO-Revision-Date: 2023-10-22 13:01+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -1513,11 +1513,6 @@ msgid "Stock split"
 msgstr "Podjela dionice"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:265
-#, fuzzy
-#| msgid ""
-#| "Company issues additional units, thereby reducing the stock price by a "
-#| "divisor, while keeping the total monetary value of the overall investment "
-#| "constant."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor , while keeping the total monetary value of the overall investment "
@@ -1527,7 +1522,12 @@ msgid ""
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
 "Poduzeće izdaje dodatne jedinice, smanjujući cijenu dionice divizorom, dok "
-"istovremeno održava ukupnu novčanu vrijednost ukupne investicije konstantnom."
+"istovremeno održava ukupnu novčanu vrijednost sveukupne investicije "
+"konstantnom.\n"
+"\n"
+"Ako podjela rezultira gotovinom za preostale jedinice, najprije zabilježi "
+"prodaju koristeći asistenta za transakcije dionicama, a zatim zabilježi "
+"podjelu."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1655,11 +1655,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:391
-#, fuzzy
-#| msgid ""
-#| "Company issues additional units, thereby reducing the stock price by a "
-#| "divisor, while keeping the total monetary value of the overall investment "
-#| "constant."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor, while keeping the total monetary value of the overall investment "
@@ -1670,7 +1665,12 @@ msgid ""
 "split."
 msgstr ""
 "Poduzeće izdaje dodatne jedinice, smanjujući cijenu dionice divizorom, dok "
-"istovremeno održava ukupnu novčanu vrijednost ukupne investicije konstantnom."
+"istovremeno održava ukupnu novčanu vrijednost sveukupne investicije "
+"konstantnom.\n"
+"\n"
+"Ako podjela rezultira gotovinom za preostale jedinice, najprije zabilježi "
+"prodaju koristeći asistenta za transakcije dionicama, a zatim zabilježi "
+"podjelu."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:405
 msgid ""
@@ -1730,14 +1730,12 @@ msgid "N/A"
 msgstr "--"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:829
-#, fuzzy
-#| msgid "Amount for %s is missing."
 msgid "Amount for stock value is missing."
-msgstr "Iznos za %s nedostaje."
+msgstr "Iznos za vrijednost dionice nedostaje."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:841
 msgid "Invalid stock new balance."
-msgstr "Novi saldo neispravna dionice."
+msgstr "Neispravni novi saldo dionica."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:843
 msgid "New balance must be higher than old balance."
@@ -1760,36 +1758,26 @@ msgid "Cannot cover buy more units than owed."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1094
-#, fuzzy
-#| msgid "Stock"
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
 msgstr "Dionica"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1095
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "Gotovina"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1096
-#, fuzzy
-#| msgid "Fees"
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
 msgstr "Naknade"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1097
-#, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "Dividend"
 msgstr "Dividenda"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1098
-#, fuzzy
-#| msgid "Capital Gains"
 msgctxt "Stock Assistant: Page name"
 msgid "Capital Gains"
 msgstr "Kapitalna dobit"
@@ -3563,7 +3551,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-account.c:858
 #: gnucash/report/trep-engine.scm:158
 msgid "Cleared"
-msgstr "Potvrđeno"
+msgstr "potvrđeno"
 
 #: gnucash/gnome/dialog-payment.c:1576
 #: gnucash/gnome/gnc-plugin-page-register.c:3221
@@ -6536,7 +6524,7 @@ msgid ""
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 "\n"
-"Šifra tečaja (ISIN, CUSIP ili sl.): "
+"Identifikacijski broj vrijednosnih papira (ISIN, SKDD ili sl.): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:176
 msgid ""
@@ -8037,7 +8025,7 @@ msgstr "Jedinstveno ime"
 #. National Securities Identifying Number.
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:382
 msgid "ISIN/CUSIP"
-msgstr "ISIN/CUSIP"
+msgstr "ISIN/SKDD"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:388
 msgid "Fraction"
@@ -12432,7 +12420,7 @@ msgstr ""
 "Svaka dionica, investicijski fond ili drugo ulaganje mora imati ime i "
 "kraticu, kao što je burzovna oznaka. Budući da neke nepovezane investicije "
 "imaju isti kraticu, također moraš ukazati na vrstu upisane kratice. Na "
-"primjer, možeš odabrati burzu koja je dodijeliia oznaku (NASDAQ, NYSE, itd.) "
+"primjer, možeš odabrati burzu koja je dodijelila oznaku (NASDAQ, NYSE, itd.) "
 "ili odaberi vrstu ulaganja.\n"
 "\n"
 "Ako na spisku ne vidiš svoju burzu ili ako nijedna od dostupnih nije "
@@ -23046,7 +23034,7 @@ msgstr "Prikaži napomene konta."
 #: gnucash/report/reports/standard/income-statement.scm:101
 #: gnucash/report/reports/standard/trial-balance.scm:122
 msgid "Commodities"
-msgstr "Roba"
+msgstr "roba/dionica/valuta"
 
 #: gnucash/report/reports/standard/account-summary.scm:126
 #: gnucash/report/reports/standard/balance-sheet.scm:132
@@ -23205,7 +23193,7 @@ msgstr "Prikaži burzovne oznake."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:106
 msgid "Display exchange listings."
-msgstr "Prikaži burzovni popis."
+msgstr "Prikaži popis burzi."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:111
 msgid "Display numbers of shares in accounts."
@@ -30210,17 +30198,17 @@ msgstr ""
 #: libgnucash/app-utils/gnc-ui-balances.c:369
 #, c-format
 msgid "%s balance of %s is above the upper limit %s."
-msgstr ""
+msgstr "%s saldo od %s je iznad gornje granice %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:370
 #, c-format
 msgid "%s balance of %s is below the lower limit %s."
-msgstr ""
+msgstr "%s saldo od %s je ispod donje granice %s."
 
 #: libgnucash/app-utils/gnc-ui-balances.c:371
 #, c-format
 msgid "%s balance of %s should be zero."
-msgstr ""
+msgstr "%s saldo od %s bi trebao biti nula."
 
 #: libgnucash/app-utils/gnc-ui-util.c:477
 msgctxt "Reconciled flag 'not cleared'"
