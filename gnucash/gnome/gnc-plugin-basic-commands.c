@@ -475,6 +475,7 @@ gnc_main_window_cmd_actions_since_last_run (GSimpleAction *simple,
     GncSxInstanceModel *sx_instances;
     GncSxSummary summary;
     GList *auto_created_txns = NULL;
+    GList *creation_errors = NULL;
     const char *nothing_to_do_msg =
         _( "There are no Scheduled Transactions to be entered at this time." );
 
@@ -490,7 +491,8 @@ gnc_main_window_cmd_actions_since_last_run (GSimpleAction *simple,
 
     sx_instances = gnc_sx_get_current_instances();
     gnc_sx_instance_model_summarize(sx_instances, &summary);
-    gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns, NULL);
+    gnc_sx_instance_model_effect_change(sx_instances, TRUE, &auto_created_txns,
+                                        &creation_errors);
 
     if (auto_created_txns)
         gnc_gui_refresh_all();
@@ -521,6 +523,9 @@ gnc_main_window_cmd_actions_since_last_run (GSimpleAction *simple,
     }
     g_list_free (auto_created_txns);
     g_object_unref (G_OBJECT(sx_instances));
+
+    if (creation_errors)
+        gnc_ui_sx_creation_error_dialog (&creation_errors);
 }
 
 static void

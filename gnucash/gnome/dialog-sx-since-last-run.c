@@ -759,8 +759,8 @@ gnc_sx_slr_tree_model_adapter_new (GncSxInstanceModel *instances)
     return rtn;
 }
 
-static void
-creation_error_dialog (GList **creation_errors)
+void
+gnc_ui_sx_creation_error_dialog (GList **creation_errors)
 {
     GtkWidget *dialog = NULL;
     gchar *message = NULL;
@@ -833,7 +833,7 @@ gnc_sx_sxsincelast_book_opened (void)
     g_object_unref (G_OBJECT(inst_model));
 
     if (creation_errors)
-        creation_error_dialog (&creation_errors);
+        gnc_ui_sx_creation_error_dialog (&creation_errors);
 }
 
 static void
@@ -1128,7 +1128,7 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog
         gnc_resume_gui_refresh ();
         gnc_gui_refresh_all (); // force a refresh of all registers
         if (creation_errors)
-            creation_error_dialog (&creation_errors);
+            gnc_ui_sx_creation_error_dialog (&creation_errors);
 
         if (gtk_toggle_button_get_active (app_dialog->review_created_txns_toggle)
                 && g_list_length (app_dialog->created_txns) > 0)

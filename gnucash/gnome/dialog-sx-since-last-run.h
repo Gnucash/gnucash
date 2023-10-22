@@ -52,4 +52,6 @@ GncSxSinceLastRunDialog*  gnc_ui_sx_since_last_run_dialog (GtkWindow *parent,
                                                            GncSxInstanceModel *sx_instances,
                                                            GList *auto_created_txn_guids);
 
+void gnc_ui_sx_creation_error_dialog (GList **creation_errors);
+
 #endif
