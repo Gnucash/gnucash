@@ -341,7 +341,8 @@ gnc_date_string_to_dateformat(const char* fmt_str, QofDateFormat *format)
 const char*
 gnc_date_monthformat_to_string(GNCDateMonthFormat format)
 {
-    switch (format)
+ //avoid UB if format is out of range
+    switch (static_cast<uint8_t>(format))
     {
     case GNCDATE_MONTH_NUMBER:
         return "number";
@@ -438,7 +439,9 @@ QofDateFormat qof_date_format_get (void)
 
 void qof_date_format_set(QofDateFormat df)
 {
-    if (df >= DATE_FORMAT_FIRST && df <= DATE_FORMAT_LAST)
+//avoid UB if df is out of range
+    auto dfi{static_cast<uint8_t>(df)};
+    if (dfi >= DATE_FORMAT_FIRST && dfi <= DATE_FORMAT_LAST)
     {
         prevQofDateFormat = dateFormat;
         dateFormat = df;

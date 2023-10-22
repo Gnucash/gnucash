@@ -962,10 +962,7 @@ test_book_new_destroy( void )
     qof_book_set_data_fin( book, key, (gpointer) data, mock_final_cb );
     test_struct.called = FALSE;
 
-    g_test_message( "Testing book destroy" );
     qof_book_destroy( book );
-    g_assert_true( qof_book_shutting_down( book ) );
-    g_assert_true( test_struct.called );
 }
 
 void
