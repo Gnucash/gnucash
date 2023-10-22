@@ -29,14 +29,15 @@
 # Zhaoquan Huang <zhaoquan2008@hotmail.com>, 2023.
 # yu0A <yuhongbo@member.fsf.org>, 2023.
 # yuht <yuht@qq.com>, 2023.
+# Ral Hole <ral-hole@outlook.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-05-19 08:47+0000\n"
-"Last-Translator: yuht <yuht@qq.com>\n"
+"PO-Revision-Date: 2023-10-21 05:00+0000\n"
+"Last-Translator: Ral Hole <ral-hole@outlook.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -44,7 +45,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -1367,6 +1368,9 @@ msgid ""
 "If you are unable to calculate capital gains you can enter aplaceholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"卖出股票多头，并记录资本收益 / 损失。\n"
+"\n"
+"如果您无法计算资本收益，您可以输入占位符金额并稍后在交易中更正。"
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1402,25 +1406,22 @@ msgstr "公司回报资本，在减少成本基础时不要影响 # 股份。"
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:227
-#, fuzzy
-#| msgid "Return of capital"
 msgid "Return of capital (reclassification)"
-msgstr "资本回报率"
+msgstr "资本回报（重新分类）"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:228
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units. "
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
-msgstr ""
+msgstr "公司返还资本，降低成本基础，而不影响# 股份。 "
+"以前记录为股息的分配被重新分类为资本回报，通常是由于年终税务信息。"
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:240
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (dividend)"
-msgstr "名义分配"
+msgstr "名义分配（股息）"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:241
 msgid ""
@@ -1431,20 +1432,14 @@ msgstr "公司作出一个名义分配，把它记作股息分红并增加成本
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:252
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (capital gain)"
-msgstr "名义分配"
+msgstr "名义分配（资本收益）"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:253
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, which is recorded as dividend "
-#| "income and increases the cost basis without affecting # units."
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
-msgstr "公司作出一个名义分配，把它记作股息分红并增加成本而不产生实质影响。"
+msgstr "公司发行估值分配，记录为资本收益，并在不影响# 股份的情况下增加成本基础。"
 
 #. Translators: this is a stock transaction describing a stock
 #. split
