@@ -477,8 +477,8 @@ namespace IANAParser
 	    endian_swap(&info.gmtoff);
 	    tzinfo.push_back(
 		{info, &fileblock[abbrev + info.abbrind],
-			fileblock[std_dist + index] != '\0',
-			fileblock[gmt_dist + index] != '\0'});
+         (index < isstd_count ? fileblock[std_dist + index] != '\0' : true),
+         (index < isgmt_count ? fileblock[gmt_dist + index] != '\0' : false)});
 	}
 
     }

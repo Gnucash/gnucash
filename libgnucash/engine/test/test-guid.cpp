@@ -82,7 +82,7 @@ run_test (void)
         auto ent = QOF_INSTANCE(g_object_new(QOF_TYPE_INSTANCE, "guid", &guid, NULL));
         do_test ((NULL == qof_collection_lookup_entity (col, &guid)),
                  "duplicate guid");
-        ent->e_type = type;
+        ent->e_type = CACHE_INSERT(type);
         qof_collection_insert_entity (col, ent);
         do_test ((NULL != qof_collection_lookup_entity (col, &guid)),
                  "guid not found");

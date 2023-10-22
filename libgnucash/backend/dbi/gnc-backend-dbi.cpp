@@ -1030,7 +1030,7 @@ template<> bool
 QofDbiBackendProvider<DbType::DBI_SQLITE>::type_check(const char *uri)
 {
     FILE* f;
-    gchar buf[50];
+    gchar buf[51]{};
     G_GNUC_UNUSED size_t chars_read;
     gint status;
     gchar* filename;
@@ -1050,7 +1050,7 @@ QofDbiBackendProvider<DbType::DBI_SQLITE>::type_check(const char *uri)
     }
 
     // OK if file has the correct header
-    chars_read = fread (buf, sizeof (buf), 1, f);
+    chars_read = fread (buf, sizeof (buf) - 1, 1, f);
     status = fclose (f);
     if (status < 0)
     {

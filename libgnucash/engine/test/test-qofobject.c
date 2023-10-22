@@ -303,8 +303,8 @@ test_qof_object_book_begin( Fixture *fixture, gconstpointer pData )
     g_assert_cmpint( g_list_index( get_book_list(), (gconstpointer) book2 ), != , -1 );
     g_assert_cmpint( object_book_begin_struct.call_count, == , list_length );
 
-    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
     qof_book_destroy( book2 );
+    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
 }
 
 static void
@@ -389,8 +389,8 @@ test_qof_object_is_dirty( Fixture *fixture, gconstpointer pData )
     g_assert_true( qof_object_is_dirty( book ) == TRUE );
     g_assert_cmpint( object_dirty_struct.call_count, == , 1 ); /* should break on first */
 
-    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
     qof_book_destroy( book );
+    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
 }
 
 static struct
@@ -433,8 +433,8 @@ test_qof_object_mark_clean( Fixture *fixture, gconstpointer pData )
     qof_object_mark_clean( book );
     g_assert_cmpint( object_mark_clean_struct.call_count, == , list_length );
 
-    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
     qof_book_destroy( book );
+    qof_object_foreach_type ((QofForeachTypeCB)g_free, NULL);
 }
 
 static struct

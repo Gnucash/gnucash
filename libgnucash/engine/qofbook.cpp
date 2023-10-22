@@ -32,6 +32,7 @@
  * Copyright (c) 2000 Dave Peticolas
  * Copyright (c) 2007 David Hampton <hampton@employees.org>
  */
+#include "qof-string-cache.h"
 #include <glib.h>
 
 #include <config.h>
@@ -53,6 +54,7 @@
 #include "qofobject-p.h"
 #include "qofbookslots.h"
 #include "kvp-frame.hpp"
+#include "gnc-lot.h"
 // For GNC_ID_ROOT_ACCOUNT:
 #include "AccountP.h"
 
@@ -111,7 +113,8 @@ qof_book_init (QofBook *book)
 
     qof_instance_init_data (&book->inst, QOF_ID_BOOK, book);
 
-    book->data_tables = g_hash_table_new (g_str_hash, g_str_equal);
+    book->data_tables = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                               (GDestroyNotify)qof_string_cache_remove, NULL);
     book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
 
     book->book_open = 'y';
@@ -317,6 +320,13 @@ qof_book_finalize_real (G_GNUC_UNUSED GObject *bookp)
 {
 }
 
+static void
+destroy_lot(QofInstance *inst, [[maybe_unused]]void* data)
+{
+    auto lot{GNC_LOT(inst)};
+    gnc_lot_destroy(lot);
+}
+
 void
 qof_book_destroy (QofBook *book)
 {
@@ -333,6 +343,11 @@ qof_book_destroy (QofBook *book)
      */
     g_hash_table_foreach (book->data_table_finalizers, book_final, book);
 
+    /* Lots hold a variety of pointers that need to still exist while
+     * cleaning them up so run its book_end before the rest.
+     */
+    auto lots{qof_book_get_collection(book, GNC_ID_LOT)};
+    qof_collection_foreach(lots, destroy_lot, nullptr);
     qof_object_book_end (book);
 
     g_hash_table_destroy (book->data_table_finalizers);
@@ -350,7 +365,6 @@ qof_book_destroy (QofBook *book)
     cols = book->hash_of_collections;
     g_object_unref (book);
     g_hash_table_destroy (cols);
-    /*book->hash_of_collections = NULL;*/
 
     LEAVE ("book=%p", book);
 }
@@ -450,13 +464,14 @@ qof_book_set_backend (QofBook *book, QofBackend *be)
 
 /* ====================================================================== */
 /* Store arbitrary pointers in the QofBook for data storage extensibility */
-/* XXX if data is NULL, we should remove the key from the hash table!
- */
 void
 qof_book_set_data (QofBook *book, const char *key, gpointer data)
 {
     if (!book || !key) return;
-    g_hash_table_insert (book->data_tables, (gpointer)key, data);
+    if (data)
+        g_hash_table_insert (book->data_tables, (gpointer)CACHE_INSERT(key), data);
+    else
+        g_hash_table_remove(book->data_tables, key);
 }
 
 void
