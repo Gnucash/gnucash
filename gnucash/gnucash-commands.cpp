@@ -60,6 +60,38 @@ static std::string empty_string{};
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
+#ifdef _WIN32
+struct ConsoleStruct
+{
+public:
+    bool has_ansi () { return m_has_ansi; };
+private:
+    HANDLE m_stdoutHandle = INVALID_HANDLE_VALUE;
+    DWORD m_outModeInit = 0;
+    bool m_has_ansi = false;
+    ConsoleStruct () : m_stdoutHandle {GetStdHandle(STD_OUTPUT_HANDLE)}
+    {
+        if (m_stdoutHandle != INVALID_HANDLE_VALUE && GetConsoleMode(m_stdoutHandle, &m_outModeInit))
+        {
+            SetConsoleMode (m_stdoutHandle, m_outModeInit | ENABLE_VIRTUAL_TERMINAL_PROCESSING);
+            m_has_ansi = true;
+        }
+    }
+    ~ConsoleStruct ()
+    {
+        if (m_stdoutHandle == INVALID_HANDLE_VALUE)
+            return;
+        printf ("\x1b[0m");
+        SetConsoleMode (m_stdoutHandle, m_outModeInit);
+    }
+} console_ansi;
+#else
+struct ConsoleStruct
+{
+    bool has_ansi () { return true; };
+} console_ansi;
+#endif
+
 static int
 cleanup_and_exit_with_failure (QofSession *session)
 {
@@ -110,7 +142,8 @@ static std::string
 get_line (const char* prompt)
 {
     std::string rv;
-    std::cout << prompt;
+    std::cout << (console_ansi.has_ansi() ? "\x1b[1;33m" : "") << prompt
+              << (console_ansi.has_ansi() ? "\x1b[m" : "");
     if (!std::getline (std::cin, rv))
         gnc_shutdown_cli (1);
     return rv;
