@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-14 21:38+0000\n"
+"PO-Revision-Date: 2023-10-23 16:02+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.1.1-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1707,6 +1707,13 @@ msgid ""
 "the cover buy using the Stock Transaction Assistant first, then record the "
 "split."
 msgstr ""
+"A empresa emite unidades adicionais, reduzindo assim o preço das ações por "
+"um divisor, enquanto mantém constante o valor monetário total do "
+"investimento geral. \n"
+"\n"
+"Se o desdobramento resultar em uma substituição de dinheiro por unidades "
+"restantes, registre primeiro a compra de cobertura usando o Stock "
+"Transaction Assistant e, em seguida, registre o desdobramento."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:405
 msgid ""
@@ -12952,10 +12959,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
-#, fuzzy
-#| msgid "Show the account description for subheadings?"
 msgid "Select the date and description for your records."
-msgstr "Mostre a descrição da conta para os subtítulos?"
+msgstr "Selecione a data e a descrição para seus registros."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:109
 #: gnucash/gtkbuilder/dialog-payment.glade:662
@@ -13086,19 +13091,15 @@ msgid "Capital Gains"
 msgstr "Capital"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:908
-#, fuzzy
-#| msgid ""
-#| "If you are finished creating the stock split or merger, press \"Apply\". "
-#| "You may also press \"Back\" to review your choices, or \"Cancel\" to quit "
-#| "without making any changes."
 msgid ""
 "A summary of splits is shown as follows. If the summary is correct, and "
 "there are no errors, please press \"Apply\". You may also press \"Back\" to "
 "review your choices, or \"Cancel\" to quit without making any changes. "
 msgstr ""
-"Caso tenha concluído a criação do desdobramento ou da fusão das ações, "
-"clique em \"Aplicar\". Você também pode clicar em \"Voltar\" para revisar as "
-"suas escolhas ou em \"Cancelar\" para concluir sem fazer nenhuma alteração."
+"Um resumo das divisões é mostrado a seguir. Se o resumo estiver correto e "
+"não houver erros, clique em \"Aplicar\". Você também pode clicar em \"Voltar"
+"\" para revisar as suas escolhas ou em \"Cancelar\" para concluir sem fazer "
+"nenhuma alteração. "
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:956
 #, fuzzy
@@ -13398,10 +13399,8 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-account.glade:801
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
 #: gnucash/report/trep-engine.scm:71
-#, fuzzy
-#| msgid "Filter By:"
 msgid "Filter By…"
-msgstr "Filtre por:"
+msgstr "Filtre por…"
 
 #: gnucash/gtkbuilder/dialog-account.glade:922
 msgid "_Default"
@@ -13787,10 +13786,8 @@ msgid "Open imported documents in tabs"
 msgstr "Abra os documentos importados nas abas"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
-#| msgid "Open not yet posted documents in tabs "
 msgid "Open not yet posted documents in tabs"
-msgstr "Abra os documentos ainda não postados nas abas "
+msgstr "Abra os documentos ainda não postados nas abas"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -14944,10 +14941,8 @@ msgid "Use template report"
 msgstr "Mostre o relatório do funcionário"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:715
-#, fuzzy
-#| msgid "Choose the export format for this report:"
 msgid "Choose a different report template before timeout"
-msgstr "Escolha o formato de exportação para este relatório:"
+msgstr "Escolha um modelo de relatório diferente antes do tempo limite"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:907
 msgid ""
@@ -18468,10 +18463,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
-#, fuzzy
-#| msgid "Profits:"
 msgid "Profiles"
-msgstr "Lucros:"
+msgstr "Perfis"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:22
 #: gnucash/import-export/aqb/gncmod-aqbanking.c:70
@@ -25686,10 +25679,8 @@ msgid "Chart type"
 msgstr "Tipo do gráfico"
 
 #: gnucash/report/reports/standard/investment-lots.scm:52
-#, fuzzy
-#| msgid "Old location:"
 msgid "Chart location"
-msgstr "Antiga localização:"
+msgstr "Local do gráfico"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
 #, fuzzy
@@ -29872,10 +29863,8 @@ msgstr "Abra a conta selecionada e todas as suas sub-contas"
 #: gnucash/ui/gnc-plugin-page-register.ui:112
 #: gnucash/ui/gnc-plugin-page-register.ui:353
 #: gnucash/ui/gnc-plugin-page-register.ui:465
-#, fuzzy
-#| msgid "Filter By:"
 msgid "_Filter By…"
-msgstr "Filtre por:"
+msgstr "_Filtre por…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:98
 #: gnucash/ui/gnc-plugin-page-budget.ui:87
@@ -30932,11 +30921,9 @@ msgstr ""
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
 #: libgnucash/app-utils/gnc-quotes.cpp:824
-#, fuzzy
-#| msgid "Symbol"
 msgctxt "Finance::Quote"
 msgid "symbol: "
-msgstr "Símbolo"
+msgstr "Símbolo: "
 
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:826
@@ -30948,19 +30935,15 @@ msgstr "Data: "
 
 #. Translators: The quote currency
 #: libgnucash/app-utils/gnc-quotes.cpp:828
-#, fuzzy
-#| msgid "Currency"
 msgctxt "Finance::Quote"
 msgid "currency: "
-msgstr "Moeda"
+msgstr "moeda: "
 
 #. Translators: The quote is for the most recent trade on the exchange
 #: libgnucash/app-utils/gnc-quotes.cpp:834
-#, fuzzy
-#| msgid "last %s"
 msgctxt "Finance::Quote"
 msgid "last: "
-msgstr "último(a) %s"
+msgstr "último(a): "
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
 #: libgnucash/app-utils/gnc-quotes.cpp:836
@@ -30970,11 +30953,9 @@ msgstr ""
 
 #. Translators: The quote is neither a last trade nor an NAV.
 #: libgnucash/app-utils/gnc-quotes.cpp:838
-#, fuzzy
-#| msgid "Price"
 msgctxt "Finance::Quote"
 msgid "price: "
-msgstr "Preço"
+msgstr "preço: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:858
 msgid "Finance::Quote reported a failure for symbol "
@@ -30996,10 +30977,8 @@ msgid ""
 msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:936
-#, fuzzy
-#| msgid "Found Finance::Quote version ~A."
 msgid "Unrecognized Finance::Quote Error: "
-msgstr "Encontrado Finance::Quote versão ~A."
+msgstr "Unrecognized Finance::Quote Error: "
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".
