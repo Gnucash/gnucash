@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-24 15:04+0000\n"
+"PO-Revision-Date: 2023-10-26 13:01+0000\n"
 "Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1.1-dev\n"
+"X-Generator: Weblate 5.1.1\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-Language: Slovak\n"
 "X-Poedit-Country: SLOVAKIA\n"
@@ -1535,7 +1535,7 @@ msgid ""
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
 "Spoločnosť vydáva ďalšie podiely, čím znižuje cenu akcií deliteľom, pričom "
-"udržuje celkovú peňažnú hodnotu celkovej investície konštantnú.\n"
+"udržuje celkovú peňažnú hodnotu celkovej investície konštantnú. \n"
 "\n"
 "Ak výsledkom rozdelenia je hotovosť namiesto zvyšných jednotiek, najskôr "
 "zaznamenajte predaj pomocou Asistenta pre transakcie akcií a potom "
@@ -1589,7 +1589,7 @@ msgid ""
 "amount and correct it in the transaction later."
 msgstr ""
 "Nakúpiť späť akcie na pokrytie krátkej pozície a zaznamenať kapitálový zisk/"
-"stratu.\n"
+"stratu. \n"
 "\n"
 "Ak nemôžete vypočítať kapitálové zisky, môžete zadať zástupnú sumu a neskôr "
 "ju v transakcii opraviť."
@@ -1849,7 +1849,7 @@ msgstr "Celkové debety %s nie sú v rovnováhe s celkovými kreditmi %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1877
 msgid "Ne_w Balance"
-msgstr "No_vé saldo"
+msgstr "_Nové saldo"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1877
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
@@ -9143,7 +9143,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:15
 msgid "Use bayesian matching"
-msgstr "Použiť bayesianske porovnávanie"
+msgstr "Použiť bayesianske párovanie"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:16
 msgid ""
@@ -9151,29 +9151,33 @@ msgid ""
 "existing transactions. Otherwise a less sophisticated rule-based matching "
 "mechanism will be used."
 msgstr ""
+"Umožňuje bayesovské párovanie pri porovnávaní importovanej transakcie s "
+"existujúcimi transakciami. V opačnom prípade sa použije menej sofistikovaný "
+"mechanizmus zhody založený na pravidlách."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:20
-#, fuzzy
 msgid "Minimum score to be displayed"
-msgstr "Maximálny počet zobrazovaných položiek"
+msgstr "Minimálne skóre na zobrazenie"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:21
 msgid ""
 "This field specifies the minimum matching score a potential matching "
 "transaction must have to be displayed in the match list."
 msgstr ""
+"Toto pole určuje minimálne skóre zhody, ktoré musí mať potenciálna zhoda "
+"transakcií, aby bola zobrazená v zozname zhôd."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:25
-#, fuzzy
-#| msgid "No matching transactions found"
 msgid "Likely matching transaction within these days"
-msgstr "Nenašla sa zodpovedajúca transakcia"
+msgstr "Pravdepodobne zodpovedajúca transakcia v týchto dňoch"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:26
 msgid ""
 "This field specifies the maximum number of days a transaction is likely to "
 "be a match in the list."
 msgstr ""
+"Toto pole určuje maximálny počet dní, počas ktorých sa transakcia "
+"pravdepodobne zhoduje so zoznamom."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:30
 msgid "UnLikely matching a transaction outside of these days"
@@ -9184,10 +9188,12 @@ msgid ""
 "This field specifies the minimum number of days a transaction is unlikely to "
 "be a match in the list."
 msgstr ""
+"Toto pole určuje minimálny počet dní, počas ktorých je nepravdepodobné, že "
+"by sa transakcia zhodovala so zoznamom."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:35
 msgid "Add matching transactions below this score"
-msgstr ""
+msgstr "Pridať zodpovedajúce transakcie pod týmto skóre"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:36
 msgid ""
@@ -9196,10 +9202,14 @@ msgid ""
 "zone (above the display minimum score but below or equal to the Add match "
 "score) will be added to the GnuCash file by default."
 msgstr ""
+"Toto pole určuje prah, pod ktorým sa automaticky pridá zodpovedajúca "
+"transakcia. Transakcia, ktorej najlepšie skóre zhody je v červenej zóne (nad "
+"zobrazovaným minimálnym skóre, ale pod alebo rovné hodnote Pridať skóre "
+"zhody), bude štandardne pridaná do súboru GnuCash."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:40
 msgid "Clear matching transactions above this score"
-msgstr ""
+msgstr "Vymaž zodpovedajúce transakcie nad týmto skóre"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:41
 msgid ""
@@ -9208,10 +9218,14 @@ msgid ""
 "green zone (above or equal to this Clear threshold) will be cleared by "
 "default."
 msgstr ""
+"Toto pole určuje prahovú hodnotu, pri prekročení ktorej sa zodpovedajúca "
+"transakcia štandardne vymaže. Transakcia, ktorej najlepšie skóre zhody je v "
+"zelenej zóne (nad alebo rovná tejto prahovej hodnote), bude štandardne "
+"vymazaná."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:45
 msgid "Maximum ATM fee amount in your area"
-msgstr ""
+msgstr "Maximálny poplatok za bankomat vo vašej oblasti"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:46
 msgid ""
@@ -9238,9 +9252,8 @@ msgstr ""
 #. Preferences->Online Banking:Generic
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:50
 #: gnucash/gtkbuilder/dialog-preferences.glade:2275
-#, fuzzy
 msgid "Automatically create new commodities"
-msgstr "Automaticky vkladať desatinnú čiarku"
+msgstr "Automaticky vytvárať nové komodity"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:2281
@@ -9249,6 +9262,9 @@ msgid ""
 "is encountered during import. Otherwise the user will be asked what to do "
 "with each unknown commodity."
 msgstr ""
+"Umožňuje automatické vytváranie nových komodít, ak sa počas importu stretne "
+"s neznámou komoditou. V opačnom prípade bude používateľ požiadaný, čo má "
+"robiť s každou neznámou komoditou."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:68
 msgid "Display or hide reconciled matches"
@@ -9259,6 +9275,8 @@ msgid ""
 "Shows or hides transactions from the match picker which are already of some "
 "reconciled state."
 msgstr ""
+"Zobrazí alebo skryje transakcie z nástroja na výber zhody, ktoré už sú vo "
+"vysporiadanom stave."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:10
@@ -9270,6 +9288,7 @@ msgstr "Štandardný status QIF transakcie"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:16
 msgid "Default status for QIF transaction when not specified in QIF file."
 msgstr ""
+"Predvolený stav pre transakciu QIF, ak nie je špecifikovaný v súbore QIF."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:15
 #: gnucash/gtkbuilder/dialog-account-picker.glade:59
@@ -9277,6 +9296,8 @@ msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
 msgstr ""
+"Ak nie je stav špecifikovaný v súbore QIF, transakcie sú označené ako "
+"vysporiadané."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:32
 msgid "Show documentation"
@@ -9285,7 +9306,7 @@ msgstr "Zobraziť dokumentáciu"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:33
 #: gnucash/gtkbuilder/dialog-account-picker.glade:40
 msgid "Show some documentation-only pages in QIF Import assistant."
-msgstr ""
+msgstr "Zobraziť niektoré stránky s dokumentáciou v pomocníkovi importu QIF."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:5
 msgid "Pre-select cleared transactions"
@@ -9297,10 +9318,13 @@ msgid ""
 "already selected in the reconcile dialog. Otherwise no transactions will be "
 "initially selected."
 msgstr ""
+"Ak je aktívne, všetky transakcie označené v registri ako zúčtované sa v "
+"dialógovom okne odsúhlasenia zobrazia ako vybraté. V opačnom prípade sa na "
+"začiatku nevyberú žiadne transakcie."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:10
 msgid "Prompt for interest charges"
-msgstr ""
+msgstr "Výzva na zaplatenie úrokov"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:11
 #: gnucash/gtkbuilder/dialog-account.glade:1534
@@ -9317,13 +9341,16 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:15
 msgid "Prompt for credit card payment"
-msgstr ""
+msgstr "Výzva na platbu kreditnou kartou"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:16
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
 msgstr ""
+"Ak je aktívne, po vysporiadaní účtu kreditnej karty vyzve používateľa, aby "
+"zadal platbu kreditnou kartou. V opačnom prípade na to používateľa "
+"nevyzývajte."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:20
 msgid "Always reconcile to today"
@@ -9334,10 +9361,12 @@ msgid ""
 "If active, always open the reconcile dialog using today's date for the "
 "statement date, regardless of previous reconciliations."
 msgstr ""
+"Ak je aktívne, vždy otvorte dialógové okno vysporiadania s použitím dnešného "
+"dátumu pre dátum výpisu, bez ohľadu na predchádzajúce vyrovnania."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:17
 msgid "Run \"since last run\" dialog when a file is opened."
-msgstr ""
+msgstr "Pri otvorení súboru spustite dialógové okno „od posledného spustenia“."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:18
 msgid ""
@@ -9346,10 +9375,17 @@ msgid ""
 "the initial opening of the data file when GnuCash starts. If this setting is "
 "active, run the \"since last run\" process, otherwise it is not run."
 msgstr ""
+"Toto nastavenie riadi, či sa spracovanie naplánovaných transakcií „od "
+"posledného spustenia“ spustí automaticky pri otvorení dátového súboru. To "
+"zahŕňa počiatočné otvorenie dátového súboru pri spustení GnuCash. Ak je toto "
+"nastavenie aktívne, spustite proces „od posledného spustenia“, inak sa "
+"nespustí."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:22
 msgid "Show \"since last run\" notification dialog when a file is opened."
 msgstr ""
+"Zobraziť dialógové okno s upozornením „od posledného spustenia“ pri otvorení "
+"súboru."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:23
 msgid ""
@@ -9359,22 +9395,32 @@ msgid ""
 "opening of the data file when GnuCash starts. If this setting is active, "
 "show the dialog, otherwise it is not shown."
 msgstr ""
+"Toto nastavenie riadi, či sa pri otvorení súboru s údajmi zobrazí iba "
+"dialógové okno s upozornením na plánované transakcie „od posledného "
+"spustenia“ (ak je pri otvorení súboru povolené spracovanie „od posledného "
+"spustenia“). To zahŕňa počiatočné otvorenie dátového súboru pri spustení "
+"GnuCash. Ak je toto nastavenie aktívne, zobrazte dialógové okno, inak sa "
+"nezobrazí."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:27
 msgid ""
 "Set \"Review Created Transactions\" as the default for the \"since last "
 "run\" dialog."
 msgstr ""
+"Nastaviť „Skontrolovať vytvorené transakcie“ ako predvolené pre dialógové "
+"okno „od posledného spustenia“."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:28
 msgid ""
 "This setting controls whether as default the \"review created transactions\" "
 "is set for the \"since last run\" dialog."
 msgstr ""
+"Toto nastavenie riadi, či je predvolene nastavené „kontrola vytvorených "
+"transakcií“ pre dialógové okno „od posledného spustenia“."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:35
 msgid "Set the \"auto create\" flag by default"
-msgstr "Štandardne nastaviť príznak \"automaticky vytvoriť\""
+msgstr "Štandardne nastaviť príznak „automatické vytvorenie“"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:36
 msgid ""
@@ -9383,6 +9429,10 @@ msgid ""
 "transaction creation, or at any later time by editing the scheduled "
 "transaction."
 msgstr ""
+"Ak je aktívne, každá novovytvorená plánovaná transakcia bude mať štandardne "
+"aktívny príznak „automatické vytvorenie“. Používateľ môže tento príznak "
+"zmeniť počas vytvárania transakcie alebo kedykoľvek neskôr úpravou "
+"naplánovanej transakcie."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:40
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:41
@@ -9391,7 +9441,7 @@ msgstr "O koľko dní skôr upozorniť používateľa."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:52
 msgid "Set the \"notify\" flag by default"
-msgstr "Štandardne nastaviť príznak \"upozorniť\""
+msgstr "Štandardne nastaviť príznak „upozorniť“"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:53
 msgid ""
@@ -9400,12 +9450,16 @@ msgid ""
 "creation, or at any later time by editing the scheduled transaction. This "
 "setting only has meaning if the create-auto setting is active."
 msgstr ""
+"Ak je aktívne, každá novovytvorená naplánovaná transakcia bude mať "
+"štandardne nastavený príznak „upozorniť“. Používateľ môže tento príznak "
+"zmeniť počas vytvárania transakcie alebo kedykoľvek neskôr úpravou "
+"naplánovanej transakcie. Toto nastavenie má význam iba vtedy, ak je aktívne "
+"nastavenie „automatické vytvorenie“."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:57
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:58
-#, fuzzy
 msgid "How many days in advance to remind the user."
-msgstr "O koľko dní skôr upozorniť používateľa."
+msgstr "Koľko dní vopred upozorniť používateľa."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:6
@@ -9414,13 +9468,15 @@ msgstr "Zobradiť nasledujúci tip."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:17
 msgid "Show \"Tip Of The Day\" at GnuCash start"
-msgstr ""
+msgstr "Ukážte „Tip dňa“ pri spustení GnuCash"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:18
 msgid ""
 "Enables the \"Tip Of The Day\" when GnuCash starts up. If active, the dialog "
 "will be shown. Otherwise it will not be shown."
 msgstr ""
+"Povolenie pre „Tip dňa“ pri spustení GnuCash. Ak je aktívne, zobrazí sa "
+"dialógové okno. V opačnom prípade sa nezobrazí."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:5
 #: gnucash/gtkbuilder/dialog-preferences.glade:3663
@@ -9434,16 +9490,20 @@ msgid ""
 "To retrieve online quotes from Alphavantage, this key needs to be set. A key "
 "can be retrieved from the Alpha Vantage website."
 msgstr ""
+"Ak chcete získať online cien z Alphavantage, je potrebná zadať tento kľúč. "
+"Kľúč je možné získať z webovej stránky Alpha Vantage."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
 msgid "The version of these settings"
-msgstr ""
+msgstr "Verzia týchto nastavení"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:11
 msgid ""
 "This is used internally to determine whether some preferences may need "
 "conversion when switching to a newer version of GnuCash."
 msgstr ""
+"Používa sa interne na určenie, či niektoré preferencie môžu vyžadovať "
+"konverziu pri prechode na novšiu verziu GnuCash."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:15
 msgid "Save window sizes and locations"
@@ -9455,10 +9515,13 @@ msgid ""
 "is closed. The sizes and locations of content windows will be remembered "
 "when you quit GnuCash. Otherwise the sizes will not be saved."
 msgstr ""
+"Ak je aktívne, veľkosť a umiestnenie každého dialógového okna sa po jeho "
+"zatvorení uloží. Veľkosti a umiestnenia okien s obsahom sa zapamätajú, keď "
+"ukončíte GnuCash. V opačnom prípade sa veľkosti neuložia."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:20
 msgid "Character to use as separator between account names"
-msgstr ""
+msgstr "Znak, ktorý sa má použiť ako oddeľovač medzi názvami účtov"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:21
 msgid ""
@@ -9467,6 +9530,10 @@ msgid ""
 "character, or any of the following strings: \"colon\", \"slash\", "
 "\"backslash\", \"dash\" and \"period\"."
 msgstr ""
+"Toto nastavenie určuje znak, ktorý sa použije medzi komponentmi názvu účtu. "
+"Možné hodnoty sú akýkoľvek jeden nealfanumerický znak Unicode alebo "
+"ktorýkoľvek z nasledujúcich reťazcov: \"dvojbodka\", \"lomka\", \"spätná "
+"lomka\", \"pomlčka\" a \"bodka\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 msgid "Transaction Linked Files head path"
@@ -9476,6 +9543,8 @@ msgstr "Hlavička cesty k súborom prepojeným s transakciou"
 msgid ""
 "This is the path head for the Transaction Linked Files with relative paths"
 msgstr ""
+"Toto je hlavička cesty pre súbory prepojené s transakciou s relatívnymi "
+"cestami"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:30
 msgid "Compress the data file"
@@ -9483,7 +9552,7 @@ msgstr "Komprimovať dátový súbor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:31
 msgid "Enables file compression when writing the data file."
-msgstr ""
+msgstr "Umožňuje kompresiu súboru pri zápise dátového súboru."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:35
 msgid "Show auto-save explanation"
@@ -9494,6 +9563,9 @@ msgid ""
 "If active, GnuCash shows an explanation of the auto-save feature the first "
 "time that feature is started. Otherwise no extra explanation is shown."
 msgstr ""
+"Ak je aktívne, GnuCash zobrazí vysvetlenie funkcie automatického ukladania "
+"pri prvom spustení tejto funkcie. V opačnom prípade sa nezobrazí extra "
+"vysvetlenie."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:40
 msgid "Auto-save time interval"
@@ -9505,6 +9577,8 @@ msgid ""
 "The number of minutes until saving of the data file to harddisk will be "
 "started automatically. If zero, no saving will be started automatically."
 msgstr ""
+"Automaticky sa spustí počet minút do uloženia dátového súboru na pevný disk. "
+"Ak je nula, automaticky ukladanie sa nebude spúšťať."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:45
 #: gnucash/gtkbuilder/dialog-preferences.glade:1791
@@ -9519,10 +9593,13 @@ msgid ""
 "that time, the changes will be saved automatically and the question window "
 "closed."
 msgstr ""
+"Ak je táto možnosť povolená, otázka „Uložiť zmeny pri zatvorení“ počká na "
+"odpoveď iba obmedzený počet sekúnd. Ak používateľ do tohto času neodpovie, "
+"zmeny sa automaticky uložia a okno s otázkou sa zatvorí."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:50
 msgid "Time to wait for answer"
-msgstr "Čakať na odpoveď"
+msgstr "Dĺžka čakania na odpoveď"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:51
 #: gnucash/gtkbuilder/dialog-preferences.glade:1830
@@ -9530,6 +9607,8 @@ msgid ""
 "The number of seconds to wait before the question window will be closed and "
 "the changes saved automatically."
 msgstr ""
+"Počet sekúnd na čakanie, kým sa okno s otázkami zatvorí a zmeny sa "
+"automaticky uložia."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:55
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:56
@@ -9546,6 +9625,9 @@ msgid ""
 "that are entered without one. Otherwise GnuCash will not modify entered "
 "numbers."
 msgstr ""
+"Ak je aktívne, GnuCash automaticky vloží desatinnú čiarku do hodnôt, ktoré "
+"sú zadané bez desatinnej čiarky. V opačnom prípade GnuCash neupraví zadané "
+"čísla."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:65
 msgid "Number of automatic decimal places"
@@ -9556,6 +9638,7 @@ msgid ""
 "This field specifies the number of automatic decimal places that will be "
 "filled in."
 msgstr ""
+"Toto pole určuje počet automatických desatinných miest, ktoré budú vyplnené."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
@@ -9570,12 +9653,14 @@ msgid ""
 "decimals instead of displaying the exact fraction if the fractional part "
 "cannot be exactly represented as a decimal."
 msgstr ""
+"Ak je aktívne, GnuCash zaokrúhli ceny podľa potreby, aby ich zobrazil ako "
+"desatinné miesta namiesto zobrazenia presného zlomku, ak zlomkovú časť "
+"nemožno presne vyjadriť ako desatinné číslo."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:75
 #: gnucash/gtkbuilder/dialog-preferences.glade:1743
-#, fuzzy
 msgid "Do not create log/backup files."
-msgstr "Nie je možné vytvoriť začiatočný stav."
+msgstr "Nevytvárať protokolové/záložné súbory."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:76
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:81
@@ -9587,8 +9672,8 @@ msgid ""
 "keep old files for a number of days. How many days is defined in key 'retain-"
 "days'"
 msgstr ""
-"Toto nastavenie určuje, čo robiť so starými súbormi denníkov/záloh. \"navždy"
-"\" znamená ponechať si všetky staré súbory. \"nikdy\" znamená, že sa "
+"Toto nastavenie určuje, čo robiť so starými súbormi protokolov/záloh. "
+"\"navždy\" znamená ponechať si všetky staré súbory. \"nikdy\" znamená, že sa "
 "neuchovávajú žiadne staré protokolové/záložné súbory. Pri každom uložení sa "
 "staršie verzie súboru odstránia. „dni“ znamená uchovávanie starých súborov "
 "niekoľko dní. Koľko dní je definovaných v kľúči 'retain-days'"
@@ -9596,12 +9681,12 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1761
 msgid "Delete old log/backup files after this many days (0 = never)."
-msgstr "Zmazať staré súbory log/záloh po týchto dňoch (0 = nikdy)."
+msgstr "Zmazať staré súbory protokolov/záloh po týchto dňoch (0 = nikdy)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:85
 #: gnucash/gtkbuilder/dialog-preferences.glade:1779
 msgid "Do not delete log/backup files."
-msgstr ""
+msgstr "Nemazať protokolové/záložné súbory."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:90
 msgid "Delete old log/backup files after this many days (0 = never)"
@@ -9612,6 +9697,8 @@ msgid ""
 "This setting specifies the number of days after which old log/backup files "
 "will be deleted (0 = never)."
 msgstr ""
+"Toto nastavenie určuje počet dní, po ktorých budú staré protokolové/záložné "
+"súbory vymazané (0 = nikdy)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:95
 #: gnucash/gtkbuilder/dialog-preferences.glade:656
@@ -9629,6 +9716,12 @@ msgid ""
 "status of the account. The setting \"none\" doesn't reverse the sign on any "
 "balances."
 msgstr ""
+"Toto nastavenie umožňuje určitým účtom, aby sa ich zostatky obrátili v "
+"znamienku z kladného na záporné alebo naopak. Nastavenie „príjem-výdavok“ je "
+"pre používateľov, ktorí radi vidia negatívne výdavky a kladné príjmy. "
+"Nastavenie „kreditu“ je pre používateľov, ktorí chcú vidieť zostatky "
+"odzrkadľujúce stav debetu/kreditu účtu. Nastavenie \"žiadny\" nezvráti "
+"znamienko na žiadnych zostatkoch."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:100
 #: gnucash/gtkbuilder/dialog-preferences.glade:675
@@ -9646,7 +9739,7 @@ msgstr "Zmeniť znamienka zostatkov pre účty príjmov a výdavkov."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:110
 msgid "Use account colors in the account hierarchy"
-msgstr ""
+msgstr "Použite farby účtu v hierarchii účtu"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:111
 msgid ""
@@ -27203,14 +27296,12 @@ msgid "Sort by this criterion first."
 msgstr "Zoraďovať najprv podľa tohto kritéria."
 
 #: gnucash/report/trep-engine.scm:772
-#, fuzzy
 msgid "Show the full account name for subtotals and subheadings?"
-msgstr "Zobrazovať v legende úplný názov účtu?"
+msgstr "Zobraziť celý názov účtu pre medzisúčty a podnadpisy?"
 
 #: gnucash/report/trep-engine.scm:778
-#, fuzzy
 msgid "Show the account code for subtotals and subheadings?"
-msgstr "Zobraziť kód účtu pre medzisúčty?"
+msgstr "Zobraziť kód účtu pre medzisúčty a podnadpisy?"
 
 #: gnucash/report/trep-engine.scm:784
 msgid "Show the account description for subheadings?"
@@ -27222,7 +27313,7 @@ msgstr "Zobraziť neformálne hlavičky pre debetné/kreditné účty?"
 
 #: gnucash/report/trep-engine.scm:796
 msgid "Add indenting columns with grouping and subtotals?"
-msgstr ""
+msgstr "Chcete pridať odsadenie stĺpcov so zoskupením a medzisúčtami?"
 
 #: gnucash/report/trep-engine.scm:802
 msgid "Show subtotals only, hiding transactional detail?"
@@ -27257,84 +27348,67 @@ msgid "Display the reconciled date?"
 msgstr "Zobrazovať dátum vysporiadania?"
 
 #: gnucash/report/trep-engine.scm:913
-#, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
-msgstr "Zobrazovať dátum vysporiadania?"
+msgstr "Zobraziť zadaný dátum?"
 
 #: gnucash/report/trep-engine.scm:918
 msgid "Display the notes if the memo is unavailable?"
-msgstr ""
+msgstr "Zobraziť poznámky, ak memo nie je k dispozícii?"
 
 #: gnucash/report/trep-engine.scm:920 gnucash/report/trep-engine.scm:923
 msgid "Display the full account name?"
 msgstr "Zobraziť celý názov účtu?"
 
 #: gnucash/report/trep-engine.scm:921
-#, fuzzy
 msgid "Display the account code?"
-msgstr "Zobrazovať kód účtu?"
+msgstr "Zobraziť kód účtu?"
 
 #: gnucash/report/trep-engine.scm:924
-#, fuzzy
 msgid "Display the other account code?"
-msgstr "Zobrazovať iný kód účtu?"
+msgstr "Zobraziť iný kód účtu?"
 
 #: gnucash/report/trep-engine.scm:926
-#, fuzzy
 msgid "Display the transaction linked document"
-msgstr "Nezobraziť žiadnu sumu"
+msgstr "Zobraziť dokument prepojený s transakciou"
 
 #: gnucash/report/trep-engine.scm:929
 msgid "Display a subtotal summary table."
 msgstr "Zobraziť medzisúčty súhrnnej tabuľky."
 
 #: gnucash/report/trep-engine.scm:930
-#, fuzzy
 msgid "Display the balance of the underlying account on each line?"
-msgstr "Zobrazovať iný kód účtu?"
+msgstr "Zobraziť zostatok podkladového účtu na každom riadku?"
 
 #: gnucash/report/trep-engine.scm:931
-#, fuzzy
-#| msgid "Display the transaction date?"
 msgid "Display a grand total section at the bottom?"
-msgstr "Zobraziť dátum transakcie?"
+msgstr "Zobraziť sekciu celkového súčtu v dolnej časti?"
 
 #: gnucash/report/trep-engine.scm:936
-#, fuzzy
 msgid "Display the trans number?"
-msgstr "Zobraziť číslo šeku?"
+msgstr "Zobraziť číslo trans?"
 
 #: gnucash/report/trep-engine.scm:950
 msgid "Display the account name?"
-msgstr "Zobrazovať názov účtu?"
+msgstr "Zobraziť názov účtu?"
 
 #: gnucash/report/trep-engine.scm:958
-#, fuzzy
-#| msgid ""
-#| "Display the other account name? (if this is a split transaction, this "
-#| "parameter is guessed)."
 msgid ""
 "Display the other account name? If this is a split transaction, this "
 "parameter is guessed."
 msgstr ""
-"Zobrazovať druhý účet? (ak je to rozdelená transakcia, je tento parameter "
-"odhadovaný)."
+"Zobraziť druhý účet? Ak ide o delenú transakciu, tento parameter je uhádnutý."
 
 #: gnucash/report/trep-engine.scm:965
-#, fuzzy
 msgid "Amount of detail to display per transaction."
-msgstr "Nie je možné modifikovať alebo odstrániť túto transakciu."
+msgstr "Množstvo podrobností, ktoré sa majú zobraziť na transakciu."
 
 #: gnucash/report/trep-engine.scm:967
 msgid "One split per line"
-msgstr ""
+msgstr "Jedno rozdelenie na riadok"
 
 #: gnucash/report/trep-engine.scm:968
-#, fuzzy
-#| msgid "Get Transactions Online"
 msgid "One transaction per line"
-msgstr "Získať transakcie online"
+msgstr "Jedna transakcia na riadok"
 
 #: gnucash/report/trep-engine.scm:978
 msgid "Hide"
@@ -27350,27 +27424,23 @@ msgstr "Reverzné zobrazenie sumy pre určité typy účtov."
 
 #: gnucash/report/trep-engine.scm:997
 msgid "Display running totals as per report sort order?"
-msgstr ""
+msgstr "Zobraziť priebežné súčty podľa poradia zoradenia prehľadov?"
 
 #: gnucash/report/trep-engine.scm:1000
-#, fuzzy
-#| msgid "Grand Total Cell Color"
 msgid "Grand Total and Subtotals"
-msgstr "Farba bunky celkového súčtu"
+msgstr "Celkový súčet a medzisúčty"
 
 #: gnucash/report/trep-engine.scm:1001
 msgid "Grand Total Only"
 msgstr "Iba celkové súčty"
 
 #: gnucash/report/trep-engine.scm:1002
-#, fuzzy
-#| msgid "Subtotal"
 msgid "Subtotals Only"
-msgstr "Medzisúčet"
+msgstr "Iba medzisúčty"
 
 #: gnucash/report/trep-engine.scm:1114
 msgid "Num/T-Num"
-msgstr ""
+msgstr "Čís/T-Čís"
 
 #: gnucash/report/trep-engine.scm:1164
 msgid "Transfer from/to"
@@ -27412,10 +27482,8 @@ msgstr "Priebežné celkové súčty"
 #. displayed without subtotals. To be consistent, also consider
 #. how the plural form "Running Totals" is translated.
 #: gnucash/report/trep-engine.scm:1424 gnucash/report/trep-engine.scm:1512
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Total"
-msgstr "Obrat"
+msgstr "Priebežný súčet"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
@@ -27429,7 +27497,7 @@ msgstr "Rozdeliť transakciu"
 
 #: gnucash/report/trep-engine.scm:2008
 msgid "CSV disabled for double column amounts"
-msgstr ""
+msgstr "CSV je zakázaný pre sumy v dvoch stĺpcoch"
 
 #. Translators: Both ~a's are dates
 #: gnucash/report/trep-engine.scm:2554
@@ -27592,7 +27660,7 @@ msgstr "_Nastavenie strany"
 
 #: gnucash/ui/gnc-main-window.ui:43
 msgid "Specify the page size and orientation for printing"
-msgstr ""
+msgstr "Zadajte veľkosť a orientáciu strany pre tlač"
 
 #: gnucash/ui/gnc-main-window.ui:62
 msgid "Proper_ties"
@@ -27685,7 +27753,7 @@ msgstr "Resetovať n_astavenia…"
 
 #: gnucash/ui/gnc-main-window.ui:346
 msgid "Reset the state of all warning messages so they will be shown again"
-msgstr ""
+msgstr "Obnovte stav všetkých varovných správ, aby sa znova zobrazili"
 
 #: gnucash/ui/gnc-main-window.ui:349
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:200
@@ -27840,11 +27908,11 @@ msgstr "Uložiť _ako…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:30
 msgid "Save this file with a different name"
-msgstr ""
+msgstr "Uložiť tento súbor pod iným názvom"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:33
 msgid "Re_vert"
-msgstr ""
+msgstr "_Vrátiť späť"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:35
 msgid "Reload the current database, reverting all unsaved changes"
@@ -28018,6 +28086,8 @@ msgid ""
 "Open an existing Budget in a new tab. If none exists a new budget will be "
 "created"
 msgstr ""
+"Otvorte existujúci rozpočet na novej karte. Ak žiadny neexistuje, vytvorí sa "
+"nový rozpočet"
 
 #: gnucash/ui/gnc-plugin-budget.ui:20
 msgid "_Copy Budget"
@@ -28032,23 +28102,20 @@ msgid "_Delete Budget"
 msgstr "O_dstrániť rozpočet"
 
 #: gnucash/ui/gnc-plugin-budget.ui:27
-#, fuzzy
 msgid "Delete an existing Budget"
-msgstr "Otvoriť existujúci rozpočet"
+msgstr "Zmazať existujúci rozpočet"
 
 #: gnucash/ui/gnc-plugin-business.ui:6
 msgid "_Customer"
 msgstr "Od_berateľ"
 
 #: gnucash/ui/gnc-plugin-business.ui:9
-#, fuzzy
 msgid "Customers Overview"
-msgstr "Odberateľské faktúry"
+msgstr "Prehľad zákazníkov"
 
 #: gnucash/ui/gnc-plugin-business.ui:11
-#, fuzzy
 msgid "Open a Customer overview page"
-msgstr "Otvoriť nový dialóg odberateľa"
+msgstr "Otvoriť stránku Prehľad zákazníkov"
 
 #: gnucash/ui/gnc-plugin-business.ui:14
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:23
@@ -28119,9 +28186,8 @@ msgid "Vendors Overview"
 msgstr "Prehľad dodávateľov"
 
 #: gnucash/ui/gnc-plugin-business.ui:60
-#, fuzzy
 msgid "Open a Vendor overview page"
-msgstr "Otvorí novú stránku so stromom účtov"
+msgstr "Otvorte stránku Prehľad dodávateľov"
 
 #: gnucash/ui/gnc-plugin-business.ui:63
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:39
@@ -28176,9 +28242,8 @@ msgid "Employees Overview"
 msgstr "Prehľad zamestnancov"
 
 #: gnucash/ui/gnc-plugin-business.ui:109
-#, fuzzy
 msgid "Open a Employee overview page"
-msgstr "Otvoriť dialóg nového zamestnanca"
+msgstr "Otvorte stránku Prehľad zamestnancov"
 
 #: gnucash/ui/gnc-plugin-business.ui:112
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:55
@@ -28203,10 +28268,8 @@ msgid "New _Expense Voucher…"
 msgstr "Nová _výdavková poukážka…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
-#, fuzzy
-#| msgid "Open the New Expense Voucher dialog"
 msgid "Open the New Voucher dialog"
-msgstr "Otvoriť dialóg Nová výdavková poukážka"
+msgstr "Otvoriť dialóg Nová poukážka"
 
 #: gnucash/ui/gnc-plugin-business.ui:127
 msgid "Find Expense _Voucher…"
@@ -28218,7 +28281,7 @@ msgstr "Otvoriť dialóg Hľadať výdavkovú poukážku"
 
 #: gnucash/ui/gnc-plugin-business.ui:138
 msgid "Business Linked Documents"
-msgstr ""
+msgstr "Obchodné prepojené dokumenty"
 
 #: gnucash/ui/gnc-plugin-business.ui:140
 msgid "View all Linked Business Documents"
@@ -28229,9 +28292,8 @@ msgid "Sales _Tax Table"
 msgstr "_Daňová tabuľká predaja"
 
 #: gnucash/ui/gnc-plugin-business.ui:148
-#, fuzzy
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "Zobraziť a upraviť zoznam daňových tabuliek"
+msgstr "Zobrazenie a úprava zoznamu tabuliek dane z predaja (GST/DPH)"
 
 #: gnucash/ui/gnc-plugin-business.ui:151
 msgid "_Billing Terms Editor"
@@ -28457,6 +28519,8 @@ msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
 msgstr ""
+"Automaticky zúčtovať jednotlivé transakcie tak, aby sa dosiahla určitá "
+"zúčtovaná suma"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:144
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:249
@@ -28540,7 +28604,6 @@ msgstr ""
 "všetkých účtoch"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
-#, fuzzy
 msgid "Filter accounts"
 msgstr "Filtrovať účty"
 
@@ -28551,7 +28614,7 @@ msgstr "Upr_aviť účet"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:241
 msgid "Automatically clear individual transactions, given a cleared amount"
-msgstr ""
+msgstr "Automaticky zúčtovať jednotlivé transakcie pri danej zúčtovanej sume"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:271
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:427
@@ -28575,11 +28638,9 @@ msgstr "Všetky obdobi_a…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:24
 #: gnucash/ui/gnc-plugin-page-budget.ui:227
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
-msgstr ""
-"Odhadnúť hodnoty rozpočtu pre zvolené účty podľa historických transakcií"
+msgstr "Odhadnúť hodnoty rozpočtu pre zvolené účty podľa minulých transakcií"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
@@ -28589,7 +28650,7 @@ msgstr "O_dstrániť rozpočet…"
 #: gnucash/ui/gnc-plugin-page-budget.ui:30
 #: gnucash/ui/gnc-plugin-page-budget.ui:257
 msgid "Select this or another budget and delete it"
-msgstr ""
+msgstr "Vyberte tento alebo iný rozpočet a odstráňte ho"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:34
 #: gnucash/ui/gnc-plugin-page-budget.ui:270
@@ -28704,7 +28765,7 @@ msgstr "Posunúť aktuálnu položku o riadok nadol"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:185
 msgid "Manage link of an external document to this item"
-msgstr ""
+msgstr "Spravovať prepojenie externého dokumentu na túto položku"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:191
 msgid "Open the linked document"
@@ -28778,7 +28839,7 @@ msgstr "Zobraziť report zákazníkov"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:112
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:374
 msgid "Show customer aging overview for all customers"
-msgstr ""
+msgstr "Zobraziť vekovú štruktúru pohľadávok všetkých zákazníkov"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:121
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:200
@@ -28788,7 +28849,7 @@ msgstr "Zobraziť report dodávateľov"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:127
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:529
 msgid "Show vendor aging overview for all vendors"
-msgstr ""
+msgstr "Zobraziť vekovú štruktúru záväzkov všetkých dodávateľov"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:136
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:234
@@ -28876,23 +28937,19 @@ msgstr "_Zoradiť podľa…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
-msgstr "_Zrušenie platnosti transakcie"
+msgstr "_Anulovať transakciu"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Void the current transaction"
-msgstr "Zaznamená aktuálnu transakciu"
+msgstr "Anulovať aktuálnu transakciu"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
 msgid "_Unvoid Transaction"
-msgstr "_Obnova platnosti transakcie"
+msgstr "_Zrušiť anulovanie transakcie"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Unvoid the current transaction"
-msgstr "Zaznamená aktuálnu transakciu"
+msgstr "Zrušiť anulovanie aktuálnej transakcie"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
@@ -28920,9 +28977,8 @@ msgstr "_Prejsť na deň"
 #: gnucash/ui/gnc-plugin-page-register.ui:279
 #: gnucash/ui/gnc-plugin-page-register.ui:419
 #: gnucash/ui/gnc-plugin-page-register.ui:531
-#, fuzzy
 msgid "Move to the split at the specified date"
-msgstr "Zobrazovať oboje (a zahrnúť neplatné transakcie v súčtoch)"
+msgstr "Presuňte sa na rozdelenie v určený dátum"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:283
 #: gnucash/ui/gnc-plugin-page-register.ui:422
@@ -29058,6 +29114,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu"
 msgstr ""
+"Pridajte konfiguráciu aktuálneho reportu do ponuky „Prehľady->Uložené "
+"konfigurácie reportov“"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:170
 msgid "Back"
