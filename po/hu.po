@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-11 21:00+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2023-10-25 22:04+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -6820,11 +6820,11 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
 msgid "Path head for files is,"
-msgstr ""
+msgstr "útvonal előtag:"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:239
 msgid "Path head does not exist,"
-msgstr "Útfej nem létezik,"
+msgstr "útvonal előtag nem létezik,"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:242
 #, c-format
@@ -6832,9 +6832,8 @@ msgid "Path head not set, using '%s' for relative paths"
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:425
-#, fuzzy
 msgid "Existing"
-msgstr "Meglévő használat"
+msgstr "Jelenlegi"
 
 #: gnucash/gnome-utils/dialog-dup-trans.c:149
 msgid "You can type '+' or '-' to increment or decrement the number."
@@ -13885,25 +13884,28 @@ msgid "Question"
 msgstr "Kérdés"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:49
-#, fuzzy
 msgid "Change Linked Document path head"
-msgstr "<b>Új tranzakció-információ</b>"
+msgstr "Csatolt dokumentumok útvonal előtagjának megváltoztatása"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:85
 msgid ""
 "Existing relative file path links will be converted to absolute ones by "
 "combining them with the existing path head unless box unticked."
 msgstr ""
+"A meglévő relatív útvonalú csatolásokat abszolút útvonallá alakítjuk át a "
+"jelenlegi előtag beégetésével, ha ez a pipa be van jelölve."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:140
 msgid ""
 "Existing absolute file path links will be converted to relative ones by "
 "comparing them to the new path head unless box unticked."
 msgstr ""
+"A meglévő abszolút útvonalú csatolásokat relatív útvonallá alakítjuk át az "
+"új előtaggal összehasonlítva, ha ez a pipa be van jelölve."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:178
 msgid "Note: Only Document Links that are not read-only will be changed."
-msgstr ""
+msgstr "Megjegyzés: Az írásvédett dokumentum csatolások nem módosulnak."
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:276
 #, fuzzy
@@ -15122,7 +15124,7 @@ msgstr "Ennyi napig tárolódnak a naplók és biztonsági mentések."
 #: gnucash/gtkbuilder/dialog-sx.glade:1011
 #: gnucash/gtkbuilder/dialog-sx.glade:1071
 msgid "days"
-msgstr "nap"
+msgstr "napig"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1523
 msgid "<b>_Retain log/backup files</b>"
@@ -15151,6 +15153,7 @@ msgstr "Új keresés kor_lát"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1617
 msgid "Default to 'new search' if fewer than this number of items is returned."
 msgstr ""
+"\"Új keresés\" használata, ha a találatok száma ennél a számnál kevesebb."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1633
 msgid "Show splash scree_n"
@@ -15183,12 +15186,12 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
 msgctxt "keep"
 msgid "For"
-msgstr "Ennyi ideig"
+msgstr "Korlátozottan"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1773
 #: gnucash/gtkbuilder/dialog-sx.glade:1227
 msgid "Forever"
-msgstr "Mindig"
+msgstr "Korlátlan ideig"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1812
 msgid "Time to _wait for answer"
@@ -15201,7 +15204,7 @@ msgstr "másodpercig"
 #: gnucash/gtkbuilder/dialog-preferences.glade:1877
 #: gnucash/gtkbuilder/dialog-preferences.glade:1895
 msgid "Path head for Linked Files Relative Paths"
-msgstr ""
+msgstr "Csatolt fájlok relatív útvonalának előtagja"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1924
 msgid "Enable horizontal grid lines on table displays"
@@ -15228,10 +15231,8 @@ msgstr ""
 "nézetekben, mint amilyen a Számlák fül."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1961
-#, fuzzy
-#| msgid "<b>Files</b>"
 msgid "<b>Linked Files</b>"
-msgstr "<b>Fájlok</b>"
+msgstr "<b>Csatolt fájlok</b>"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2057
@@ -15241,7 +15242,7 @@ msgstr "Tranzakció kihagyásának engedélyezése"
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2076
 msgid "Enable update match action"
-msgstr "Frissítési egyezési művelet engedélyezése"
+msgstr "Egyezés frissítésének engedélyezése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2082
 msgid ""
