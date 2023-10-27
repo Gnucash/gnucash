@@ -725,7 +725,8 @@ xaccFreeSplit (Split *split)
     {
         Split *other = xaccSplitGetOtherSplit(split->gains_split);
         split->gains_split->gains_split = NULL;
-        other->gains_split = NULL;
+        if (other)
+          other->gains_split = NULL;
     }
 
     g_object_unref(split);
