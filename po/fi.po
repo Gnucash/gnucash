@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-26 22:41+0000\n"
+"PO-Revision-Date: 2023-10-28 16:03+0000\n"
 "Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
@@ -2415,10 +2415,8 @@ msgid "Business Document Links"
 msgstr "Yrityksen asiakirjalinkit"
 
 #: gnucash/gnome/dialog-employee.c:203
-#, fuzzy
-#| msgid "You must enter a payment address."
 msgid "You must enter a Payment-Address Name."
-msgstr "Syötä laskutusosoite."
+msgstr "Sinun on annettava nimi maksuosoitteelle."
 
 #: gnucash/gnome/dialog-employee.c:288
 msgid "Edit Employee"
@@ -2805,16 +2803,12 @@ msgid "Do you really want to post the invoice?"
 msgstr "Haluatko varmasti viedä tämän myyntilaskun tilikirjaan?"
 
 #: gnucash/gnome/dialog-invoice.c:1168
-#, fuzzy
-#| msgid ""
-#| "One or more of the entries are for accounts different from the invoice/"
-#| "bill currency. You will be asked a conversion rate for each."
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked to enter a conversion rate for each."
 msgstr ""
-"Yksi tai useampi merkintä on tilille, jotka käyttävät eri valuuttaa kuin "
-"lasku. Sinulta kysytään jokaisen vaihtokurssi."
+"Yksi tai useampi kirjaus on tilille, jotka käyttävät eri valuuttaa kuin "
+"lasku. Sinua pyydetään syöttämään jokaisen vaihtokurssi."
 
 #: gnucash/gnome/dialog-invoice.c:1301
 msgid "The post action was canceled because not all exchange rates were given."
@@ -3182,10 +3176,8 @@ msgid "You must choose an owner for this job."
 msgstr "Hankkeelle täytyy antaa omistaja."
 
 #: gnucash/gnome/dialog-job.c:154
-#, fuzzy
-#| msgid "Credit must be a positive amount or you must leave it blank."
 msgid "The rate amount must be valid or you must leave it blank."
-msgstr "Luoton tulee olla positiivinen arvo tai tyhjä."
+msgstr "Taksan tulee olla kelvollinen tai se on jätettävä tyhjäksi."
 
 #: gnucash/gnome/dialog-job.c:245
 msgid "Edit Job"
@@ -3215,7 +3207,7 @@ msgstr "Vain aktiiviset?"
 #: gnucash/gtkbuilder/dialog-job.glade:206
 #: gnucash/register/ledger-core/split-register-model.c:374
 msgid "Rate"
-msgstr "Hinta"
+msgstr "Taksa"
 
 #: gnucash/gnome/dialog-job.c:568 gnucash/gnome-utils/gnc-tree-view-owner.c:341
 #: gnucash/gtkbuilder/dialog-job.glade:103
@@ -3491,7 +3483,7 @@ msgstr "Poista hinnat?"
 #: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:85
 msgid "Entries"
-msgstr ""
+msgstr "Kirjaus"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:446
 msgid "Are you sure you want to delete these prices?"
@@ -10554,10 +10546,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:225
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:214
-#, fuzzy
-#| msgid "Comma separated"
 msgid "Character-separated"
-msgstr "Pilkulla erotettu"
+msgstr "Merkillä erotettu"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:242
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:231
@@ -11011,7 +11001,7 @@ msgstr "Todellinen vuosikorko (kerrytetään vuosittain)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:72
 msgid "Fixed Rate"
-msgstr "Kiinteä"
+msgstr "Kiinteäkorkoinen"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:75
 msgid "3/1 Year ARM"
@@ -11105,8 +11095,8 @@ msgid ""
 "Enter the annual interest rate in percent. Accepts values from 0.001 - 100. "
 "The Mortgage Assistant does not support zero-interest loans."
 msgstr ""
-"Vuosittainen korkoprosentti, hyväksyttävät arvot ovat välillä 0,001-100. "
-"Nolla-prosenttinen korko ei ole tuettu."
+"Kirjoita vuotuinen korko prosentteina. Hyväksytään arvot 0,001-100. Laina-"
+"apuri ei tue nollakorkoisia lainoja."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:359
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -12488,12 +12478,12 @@ msgstr "Pilkulla erotettu"
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:252
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:252
 msgid "Semicolon separated with quotes"
-msgstr ""
+msgstr "Lainatut tekstit puolipisteellä erotettuna"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:270
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:270
 msgid "Comma separated with quotes"
-msgstr ""
+msgstr "Lainatut tekstit pilkulla erotettuna"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:310
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:310
@@ -15559,7 +15549,7 @@ msgstr "<b>Valuutan siirto</b>"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:520
 msgid "Exchange Rate"
-msgstr "Näytä valuuttakurssi"
+msgstr "Valuuttakurssi"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:601
 msgid "_Fetch Rate"
@@ -22425,7 +22415,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1096
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1239
 msgid "Exchange Rates"
-msgstr "Näytä valuuttakurssit"
+msgstr "Valuuttakurssit"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1106
 msgid "Barchart"
