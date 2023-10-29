@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-28 16:03+0000\n"
+"PO-Revision-Date: 2023-10-29 20:44+0000\n"
 "Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
@@ -1428,8 +1428,6 @@ msgstr ""
 #. split when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:264
 #: gnucash/gnome/assistant-stock-transaction.cpp:390
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock split"
 msgstr "Osakkeen jako"
 
@@ -1653,15 +1651,11 @@ msgid "Cannot cover buy more units than owed."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1094
-#, fuzzy
-#| msgid "Stock"
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
 msgstr "Osake"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1095
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "Käteinen"
@@ -3225,10 +3219,8 @@ msgid "Find Job"
 msgstr "Etsi hanke"
 
 #: gnucash/gnome/dialog-lot-viewer.c:817
-#, fuzzy
-#| msgid "Empty space"
 msgid "Empty"
-msgstr "Tyhjä tila"
+msgstr "Tyhjä"
 
 #: gnucash/gnome/dialog-lot-viewer.c:829
 msgctxt "Adjective"
@@ -4115,10 +4107,8 @@ msgid "Note"
 msgstr "Huomautus"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
-#, fuzzy
-#| msgid "Account Report"
 msgid "Run Report"
-msgstr "Tiliraportti"
+msgstr "Tee raportti"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:264
 #: gnucash/gnome/gnc-plugin-page-budget.c:303
@@ -4252,10 +4242,8 @@ msgid "_Company Report"
 msgstr "_Yritysraportti"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:197
-#, fuzzy
-#| msgid "Open a company report window for the owner of this invoice"
 msgid "Open a customer report window for the owner of this invoice"
-msgstr "Avaa myyntilaskun omistajan yritysraportti-ikkuna"
+msgstr "Avaa myyntilaskun omistajan asiakasraportti-ikkuna"
 
 #. Translators: This is a menu item that opens a dialog for linking an
 #. external file or URL with the bill, invoice, transaction, or voucher or
@@ -4375,10 +4363,8 @@ msgid "Enter a payment for the owner of this bill"
 msgstr "Syötä maksu ostolaskuun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:222
-#, fuzzy
-#| msgid "Open a company report window for the owner of this bill"
 msgid "Open a vendor report window for the owner of this bill"
-msgstr "Avaa tämän ostolaskun omistajan yritysraportti-ikkuna"
+msgstr "Avaa tämän ostolaskun omistajan toimittajaraportti-ikkuna"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:230
 msgid "_Use as Default Layout for Vendor Documents"
@@ -4459,10 +4445,8 @@ msgid "Enter a payment for the owner of this voucher"
 msgstr "Syötä maksu matkalaskuun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:247
-#, fuzzy
-#| msgid "Open a company report window for the owner of this voucher"
 msgid "Open a employee report window for the owner of this voucher"
-msgstr "Avaa matkalaskun omistajan yritysraportti-ikkuna"
+msgstr "Avaa matkalaskun omistajan työntekijäraportti-ikkuna"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:255
 msgid "_Use as Default Layout for Employee Documents"
@@ -4775,10 +4759,8 @@ msgstr "Poista tämä tositerivi"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Show Splits"
-msgstr "Osakkeen jako"
+msgstr "Näytä rivit"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 msgid "Jump"
@@ -4798,10 +4780,8 @@ msgstr "Automaattinen tyhjennys"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:251
 #: gnucash/ui/gnc-plugin-page-register.ui:250
 #: gnucash/ui/gnc-plugin-page-register.ui:904
-#, fuzzy
-#| msgid "Stock Split Assistant"
 msgid "Stock Assistant"
-msgstr "Osakejakoavustin"
+msgstr "Osakeavustin"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:639
 #: gnucash/gnome/gnc-plugin-page-register.c:1903
@@ -4959,7 +4939,7 @@ msgstr "Siirry suoraan tositteelle?"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3876
 msgid "Reverse Transaction"
-msgstr "Lisää käänteinen tosite"
+msgstr "Käänteinen tosite"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3877
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
@@ -5755,16 +5735,11 @@ msgid "New Split"
 msgstr "Uusi rivi"
 
 #: gnucash/gnome-search/dialog-search.c:1120
-#, fuzzy
-#| msgctxt ""
-#| "Item represents an unknown object type (in the sense of bill, customer, "
-#| "invoice, transaction, split,...)!"
-#| msgid "New item"
 msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,…)!"
 msgid "New item"
-msgstr "Uusi merkintä"
+msgstr "Uusi kohde"
 
 #: gnucash/gnome-search/dialog-search.c:1163
 #: gnucash/gtkbuilder/dialog-commodities.glade:121
@@ -6666,16 +6641,12 @@ msgid "Don't tell me again this _session."
 msgstr "Älä _kerro uudelleen tämän istunnon aikana."
 
 #: gnucash/gnome-utils/gnc-account-sel.c:521
-#, fuzzy
-#| msgid "Selected Accounts"
 msgid "Hide _Placeholder Accounts"
-msgstr "Valitut tilit"
+msgstr "Piilota koontitilit"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:523
-#, fuzzy
-#| msgid "Show Hidden Accounts"
 msgid "Hide _Hidden Accounts"
-msgstr "Näytä piilotetut tilit"
+msgstr "Piilota _piilotetut tilit"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:700
 msgid "Set the visibility of placeholder and hidden accounts."
@@ -6707,10 +6678,9 @@ msgid "Account is already at Auto-Clear Balance."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-autoclear.c:155
-#, fuzzy, c-format
-#| msgid "No valid customer found."
+#, c-format
 msgid "No uncleared splits found."
-msgstr "Sopivaa asiakasta ei löydy."
+msgstr "Hyväksymättömiä rivejä ei löytynyt."
 
 #: gnucash/gnome-utils/gnc-autoclear.c:171
 #, c-format
@@ -7132,11 +7102,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:754
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following are noted in this file:"
-msgstr "Seuraava osto-/hyvityslasku on erääntymässä:"
+msgstr "Huomiot tästä tiedostosta:"
 
 #: gnucash/gnome-utils/gnc-file.c:880
 #, c-format
@@ -7336,12 +7303,11 @@ msgid "Book Options"
 msgstr "Kirjanpidon asetukset"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:4975
-#, fuzzy
-#| msgid "The minimum number of invoice entries to display."
 msgid ""
 "The maximum number of window menu entries reached, no more entries will be "
 "added."
-msgstr "Vähimmäismäärä näytettäviä myyntilaskurivejä."
+msgstr ""
+"Valintojen enimmäismäärä valikossa on saavutettu, lisää merkintöjä ei lisätä."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5213
 #: gnucash/gnucash-core-app.cpp:242
@@ -7616,10 +7582,8 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-account.c:953
 #: gnucash/gnome-utils/gnc-tree-view-account.c:956
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
-#| msgid "Balance"
 msgid "Balance Limit"
-msgstr "Saldo"
+msgstr "Saldoraja"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:966
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:63
@@ -8070,10 +8034,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:289
-#, fuzzy
-#| msgid "Show plot"
 msgid "Show paths"
-msgstr "Näytä kuvaaja"
+msgstr "Näytä polut"
 
 #: gnucash/gnucash-core-app.cpp:291
 msgid ""
@@ -8701,10 +8663,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:25
-#, fuzzy
-#| msgid "No matching transactions found"
 msgid "Likely matching transaction within these days"
-msgstr "Osuvia tositteita ei löytynyt"
+msgstr "Todennäköisesti vastaava tosite näiden päivien sisällä"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:26
 msgid ""
@@ -8713,10 +8673,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:30
-#, fuzzy
-#| msgid "No matching transactions found"
 msgid "UnLikely matching a transaction outside of these days"
-msgstr "Osuvia tositteita ei löytynyt"
+msgstr "Todennäköisesti ei ole vastaava tosite näiden päivien ulkopuolella"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:31
 msgid ""
@@ -9432,14 +9390,6 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
 #: gnucash/gtkbuilder/dialog-preferences.glade:1445
-#, fuzzy
-#| msgid ""
-#| "If selected, the default book option for new files is set so that the "
-#| "'Num' cell on registers shows/updates the split 'action' field and the "
-#| "transaction 'num' field is shown on the second line in double line mode "
-#| "(and is not visible in single line mode). Otherwise, the default book "
-#| "option for new files is set so that the 'Num' cell on registers shows/"
-#| "updates the transaction 'num' field."
 msgid ""
 "If selected, the default book option for new files is set so that the 'Num' "
 "cell on registers shows/updates the split 'action' field and the transaction "
@@ -9448,11 +9398,11 @@ msgid ""
 "is set so that the 'Num' cell on registers shows/updates the transaction "
 "'num' field."
 msgstr ""
-"Jos valittu, oletuksena uusissa tiedostoissa tilien ja raporttien \"Nro\"-"
-"solu näyttää/päivittää rivin \"toiminto\"-kentän ja tositteen numerokenttä "
-"näytetään toisella rivillä kahden rivin näkymässä (eikä sitä näytetä "
-"lainkaan yhden rivin näkymässä). Muussa tapauksessa oletuksena uusissa "
-"tiedostoissa tilikirjoissa \"Nro\"-kenttä näyttää tositteen numeron."
+"Jos valittu, oletuksena uusissa tilikirjatiedostoissa tilien ja raporttien "
+"'Nro'-solu näyttää/päivittää rivin 'toiminto'-kentän ja tositteen "
+"numerokenttä näytetään toisella rivillä kahden rivin näkymässä (eikä sitä "
+"näytetä lainkaan yhden rivin näkymässä). Muussa tapauksessa oletuksena "
+"uusissa tilikirjatiedostoissa 'Nro'-kenttä näyttää tositteen numeron."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
 msgid "Color the register using a gnucash specific color theme"
@@ -9938,10 +9888,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:69
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:192
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a split from a transaction"
-msgstr "Poista jako tositteesta"
+msgstr "Leikkaa rivi tositteelta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:70
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:193
@@ -9952,10 +9900,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:74
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:197
-#, fuzzy
-#| msgid "Remove a split from a transaction"
 msgid "Cut a reconciled split from a transaction"
-msgstr "Poista jako tositteesta"
+msgstr "Leikkaa täsmätty rivi tositteelta"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:75
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:198
@@ -10015,10 +9961,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:222
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Cut a transaction"
-msgstr "_Leikkaa tosite"
+msgstr "Leikkaa tosite"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:100
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:223
@@ -10027,10 +9971,8 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:227
-#, fuzzy
-#| msgid "Delete a transaction with reconciled splits"
 msgid "Cut a transaction with reconciled splits"
-msgstr "Poistaa tositteen täsmäytettyine vienteineen"
+msgstr "Leikkaa tosite, jossa täsmäytetyt rivit"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:105
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:228
@@ -10308,10 +10250,8 @@ msgstr "Kaksoispiste (:)"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:217
 #: gnucash/gtkbuilder/assistant-csv-export.glade:214
-#, fuzzy
-#| msgid "Select Separator Type"
 msgid "Select Separator Character"
-msgstr "Valitse erotin"
+msgstr "Valitse erotinmerkki"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:255
 msgid "Preview"
@@ -10867,10 +10807,8 @@ msgstr "<b>Kategorian kuvaus</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, fuzzy
-#| msgid "Accounts in '%s'"
 msgid "Accounts in %s"
-msgstr "Tilit kategoriassa '%s'"
+msgstr "Tilit mallissa '%s'"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:470
 msgid ""
@@ -11675,10 +11613,8 @@ msgstr "Osakejaon päättäminen"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:9
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:27
-#, fuzzy
-#| msgid "Transaction Import Assistant"
 msgid "Stock Transaction Assistant"
-msgstr "Tositteiden tuonnin avustaja"
+msgstr "Osaketapahtumien avustaja"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:22
 msgid ""
@@ -11709,38 +11645,28 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:195
-#, fuzzy
-#| msgid "Transaction"
 msgid "Transaction Type"
-msgstr "Tosite"
+msgstr "Tositetyyppi"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:248
-#, fuzzy
-#| msgid "Trial Balance"
 msgid "Previous Balance"
-msgstr "Koetase"
+msgstr "Edellinen saldo"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:312
-#, fuzzy
-#| msgid "To Amount"
 msgid "Stock Amount"
-msgstr "Summaan"
+msgstr "Osakemäärä"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:329
 msgid "Enter the value of the shares."
 msgstr "Syötä osakkeiden arvo."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:404
-#, fuzzy
-#| msgid "_Value"
 msgid "_Stock Value"
-msgstr "_Arvo"
+msgstr "_Osakearvo"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:425
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock Value"
-msgstr "Osakkeen jako"
+msgstr "Osakearvo"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:442
 msgid ""
@@ -11759,10 +11685,8 @@ msgid "Cash"
 msgstr "Käteinen"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:516
-#, fuzzy
-#| msgid "Raise Accounts"
 msgid "Cash Account"
-msgstr "Korota tilit"
+msgstr "Käteistili"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:555
 msgid ""
@@ -11792,10 +11716,8 @@ msgid "In this page, input any dividend income received in this transaction."
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:756
-#, fuzzy
-#| msgid "Find Account"
 msgid "Dividend Account"
-msgstr "Etsi tili"
+msgstr "Osinkotili"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:795
 msgid ""
@@ -11804,22 +11726,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:846
-#, fuzzy
-#| msgid "Capital"
 msgid "Capital Gain"
-msgstr "Pääoma"
+msgstr "Pääomatulo"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:869
-#, fuzzy
-#| msgid "Splits Account"
 msgid "Capital Gains Account"
-msgstr "Rivin tili"
+msgstr "Pääomatulotili"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:891
-#, fuzzy
-#| msgid "Capital"
 msgid "Capital Gains"
-msgstr "Pääoma"
+msgstr "Pääomatulot"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:908
 msgid ""
@@ -11829,10 +11745,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:956
-#, fuzzy
-#| msgid "_Finish"
 msgid "Finish"
-msgstr "_Valmis"
+msgstr "Vahvista"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:16
 msgid "Introduction placeholder"
@@ -12230,10 +12144,8 @@ msgid "_Parent Account"
 msgstr "_Ylätili"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1464
-#, fuzzy
-#| msgid "Account Type"
 msgid "Acco_unt Type"
-msgstr "Tilin tyyppi"
+msgstr "Tilin _tyyppi"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1514
 msgid "Placeholde_r"
@@ -12257,13 +12169,6 @@ msgid "H_idden"
 msgstr "P_iilotettu"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1550
-#, fuzzy
-#| msgid ""
-#| "This account (and any sub-accounts) will be hidden in the account tree "
-#| "and will not appear in the popup account list in the register. To reset "
-#| "this option, you will first need to open the \"Filter By...\" dialog for "
-#| "the account tree and check the \"show hidden accounts\" option. Doing so "
-#| "will allow you to select the account and reopen this dialog."
 msgid ""
 "This account (and any sub-accounts) will be hidden in the account tree and "
 "will not appear in the popup account list in the register. To reset this "
@@ -12273,7 +12178,7 @@ msgid ""
 msgstr ""
 "Tämä tili ja sen alatilit piilotetaan tililistasta, eikä se esiinny tilien "
 "valinnan pudotusvalikoissa. Aiemmin piilotettujen tilien kohdalla pääset "
-"tähän valintaan käsiksi \"Suodata\"-toiminnon kautta valitsemalla\"näytä "
+"tähän valintaan käsiksi \"Suodata…\"-toiminnon kautta valitsemalla\"näytä "
 "piilotetut tilit\" valinnan."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1562
@@ -12298,10 +12203,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1636
-#, fuzzy
-#| msgid "_Ending Balance"
 msgid "_Higher Balance Limit"
-msgstr "_Loppusaldo"
+msgstr "_Korkeampi saldoraja"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1649
 msgid ""
@@ -12328,22 +12231,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1692
-#, fuzzy
-#| msgid "Show zero balance items"
 msgid "_Lower Balance Limit"
-msgstr "Näytä nollasaldolliset"
+msgstr "_Alempi saldoraja"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1718
-#, fuzzy
-#| msgid "Include _subaccounts"
 msgid "_Include sub accounts"
 msgstr "_Sisällytä alatilit"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1755
-#, fuzzy
-#| msgid "Proper_ties"
 msgid "More Properties"
-msgstr "_Ominaisuudet"
+msgstr "Lisää ominaisuuksia"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1781
 msgid "<b>Balance Information</b>"
@@ -12389,10 +12286,8 @@ msgid "Interval"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:2190
-#, fuzzy
-#| msgid "Number of Periods"
 msgid "Number of Digits"
-msgstr "Jaksojen määrä"
+msgstr "Numeroiden määrä"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2204
 msgid ""
@@ -12500,10 +12395,8 @@ msgid "Open imported documents in tabs"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
-#| msgid "Open Linked Document"
 msgid "Open not yet posted documents in tabs"
-msgstr "Avaa yhdistetty asiakirja"
+msgstr "Avaa viemättä olevat asiakirjat tabeille"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -12811,10 +12704,8 @@ msgstr "ISIN, CUSI_P tai muu koodi"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:138
-#, fuzzy
-#| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "Nimiavaruus"
+msgstr "Nimi_avaruus"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
@@ -12979,10 +12870,8 @@ msgid "(none)"
 msgstr "(ei mikään)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:409
-#, fuzzy
-#| msgid "Enter URL like http://www.gnucash.org"
 msgid "Enter an URL like \"https://www.gnucash.org\""
-msgstr "Syötä URL-osoite, esimerkiksi http://www.gnucash.org"
+msgstr "Syötä URL-osoite, esimerkiksi \"https://www.gnucash.org\""
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:454
 msgid "Location does not start with a valid scheme"
@@ -13490,10 +13379,8 @@ msgid "Green"
 msgstr "Vihreä"
 
 #: gnucash/gtkbuilder/dialog-import.glade:871
-#, fuzzy
-#| msgid "Do not print transaction detail"
 msgid "Edit imported transaction details"
-msgstr "Älä näytä tositteen yksityiskohtia"
+msgstr "Muokkaa tuodun tositteen yksityiskohtia"
 
 #: gnucash/gtkbuilder/dialog-import.glade:944
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:151
@@ -13516,16 +13403,12 @@ msgid "Show _Memo column"
 msgstr "Näytä _muistiinpanosarake"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1132
-#, fuzzy
-#| msgid "Show _matched information"
 msgid "Show matched _information"
 msgstr "Näytä _sopivat tiedot"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1147
-#, fuzzy
-#| msgid "Spend"
 msgid "A_ppend"
-msgstr "Kulutus"
+msgstr "_Liitä vanhoihin"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1151
 msgid ""
@@ -13535,10 +13418,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:1163
-#, fuzzy
-#| msgid "Reconcile after match"
 msgid "_Reconcile after match"
-msgstr "Täsmäytä sopivan löytymisen jälkeen"
+msgstr "_Täsmäytä sopivan löytymisen jälkeen"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1186
 msgid "Generic import transaction matcher"
@@ -13575,16 +13456,12 @@ msgid "Extra Payments"
 msgstr "Ylimääräiset maksut"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:625
-#, fuzzy
-#| msgid "Report Title"
 msgid "Report template"
-msgstr "Raportin otsikko"
+msgstr "Raportin malli"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:687
-#, fuzzy
-#| msgid "Show employee report"
 msgid "Use template report"
-msgstr "Näytä työntekijäraportti"
+msgstr "Käytä malliraporttia"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:715
 msgid "Choose a different report template before timeout"
@@ -14230,11 +14107,9 @@ msgstr ""
 "vahvistuksen käyttäjältä. Muussa tapauksess erillistä vahvistusta ei pyydetä."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
-#, fuzzy
-#| msgid "For"
 msgctxt "keep"
 msgid "For"
-msgstr "Tietyn ajan"
+msgstr "Kunnes"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1773
 #: gnucash/gtkbuilder/dialog-sx.glade:1227
@@ -14359,17 +14234,13 @@ msgstr ""
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2296
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "Likely match _day threshold"
-msgstr "Näytä"
+msgstr "Todennäköisesti täsmäävän _päiväyksen raja"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2309
-#, fuzzy
-#| msgid "Match _display threshold"
 msgid "_Unlikely match day threshold"
-msgstr "Näytä"
+msgstr "Todennäköisesti _ei täsmäävän päiväyksen raja"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2323
 msgid ""
@@ -14539,10 +14410,8 @@ msgid "Layout"
 msgstr "Asettelu"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2765
-#, fuzzy
-#| msgid "Number of _transactions"
 msgid "_Placement of future transactions"
-msgstr "_Tositteiden lukumäärä"
+msgstr "_Tulevien tositteiden sijainti"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2771
 msgid ""
@@ -14580,24 +14449,18 @@ msgid "Number of _transactions"
 msgstr "_Tositteiden lukumäärä"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2937
-#, fuzzy
-#| msgid "_Double line mode"
 msgid "_Double line view"
 msgstr "_Kahden rivin näkymä"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2943
 #: gnucash/ui/gnc-embedded-register-window.ui:83
 #: gnucash/ui/gnc-plugin-page-register.ui:99
-#, fuzzy
-#| msgid ""
-#| "Show a second line with \"Action\", \"Notes\", and \"Linked Documents\" "
-#| "for each transaction."
 msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
 msgstr ""
 "Näytä toinen rivi, jossa näytetään toimenpide, muistiinpano ja yhdistetty "
-"asiakirja, joka tositteelle."
+"asiakirja joka tositteelle."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
@@ -14773,7 +14636,7 @@ msgstr "Viimeisin"
 
 #: gnucash/gtkbuilder/dialog-price.glade:21
 msgid "Net Asset Value"
-msgstr "Nettoarvo"
+msgstr "Omaisuuserän nettoarvo"
 
 #: gnucash/gtkbuilder/dialog-price.glade:43
 msgid "Price Editor"
@@ -15387,11 +15250,9 @@ msgid "Until"
 msgstr "Asti"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
-#, fuzzy
-#| msgid "For"
 msgctxt "repeat"
 msgid "For"
-msgstr "Tietyn ajan"
+msgstr "Toistuu"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1278
 msgid "occurrences"
@@ -16636,10 +16497,8 @@ msgid "_Start AqBanking Setup"
 msgstr "_Aloita AqBanking määritys"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:186
-#, fuzzy
-#| msgid "Initial Online Banking Setup"
 msgid "Start Online Banking Setup"
-msgstr "Verkkopankin määrityksen aloitus"
+msgstr "Aloita verkkopankin määritys"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:204
 msgid ""
@@ -16913,10 +16772,8 @@ msgid "_Templates"
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1661
-#, fuzzy
-#| msgid "Select File for Import"
 msgid "Select File Import Format and Template"
-msgstr "Valitse tuotava tiedosto"
+msgstr "Valitse tuotavan tiedoston muoto ja malli"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1730
 msgid ""
@@ -16926,10 +16783,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1733
-#, fuzzy
-#| msgid "<b>File Format</b>"
 msgid "File Format"
-msgstr "<b>Tiedostomuoto</b>"
+msgstr "Tiedostomuoto"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1779
 msgid ""
@@ -17034,10 +16889,8 @@ msgid "Enter a SEPA Internal Transfer"
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:398
-#, fuzzy
-#| msgid "Tax Accounts"
 msgid "Target Accounts"
-msgstr "Verotilit"
+msgstr "Kohdetilit"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
 msgid "Enter a SEPA Online Direct Debit Note"
@@ -17392,10 +17245,8 @@ msgid "Show _log window"
 msgstr "Näytä _loki-ikkuna"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:55
-#, fuzzy
-#| msgid "Show the new user window"
 msgid "Show the online banking log window"
-msgstr "Näytä uusi käyttäjäikkuna"
+msgstr "Näytä verkkopankin loki-ikkuna"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
 msgid "_Online Banking Setup…"
@@ -17679,13 +17530,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:80
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you export the Account Tree to a file\n"
-#| "with the separator specified below.\n"
-#| "\n"
-#| "Select the settings you require for the file and then click \"Next\" to "
-#| "proceed or \"Cancel\" to abort the export.\n"
 msgid ""
 "This assistant will help you export the Account Tree to a file with the "
 "separator specified below.\n"
@@ -17812,10 +17656,8 @@ msgstr "Määrä numerona"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:367
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:387
-#, fuzzy
-#| msgid "Amount With Sym"
 msgid "Value With Sym"
-msgstr "Määrä symbolilla"
+msgstr "Arvo symbolilla"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:368
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:388
@@ -18142,10 +17984,8 @@ msgid "Please select a description column."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:507
-#, fuzzy
-#| msgid "Please select a file to load."
 msgid "Please select a (negated) amount column."
-msgstr "Valitse ladattava tiedosto."
+msgstr "Valitse (kumottu) summasarake."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
 msgid ""
@@ -18173,16 +18013,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:686
-#, fuzzy
-#| msgid "Error"
 msgid "Parse Error"
-msgstr "Virhe"
+msgstr "Tulkintavirhe"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:702
-#, fuzzy
-#| msgid "Show both closing and regular transactions"
 msgid "Problem creating preliminary transaction"
-msgstr "Näytä sekä päättävät että tavalliset tositteet"
+msgstr "Ongelma alustavan tapahtuman luomisessa"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:54
 msgid "From Symbol"
@@ -18269,10 +18105,8 @@ msgid "Transaction Commodity"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
-#, fuzzy
-#| msgid "Amount (_words)"
 msgid "Amount (Negated)"
-msgstr "Määrä (_sanoja)"
+msgstr "Määrä (kumottu)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 msgid "Value (Negated)"
@@ -18288,7 +18122,7 @@ msgstr "Siirron määrä"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
 msgid "Transfer Amount (Negated)"
-msgstr "Siirron määrä (käänteisenä)"
+msgstr "Siirron määrä (kumottu)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
 msgid "Transfer Memo"
@@ -18319,10 +18153,8 @@ msgid "No valid date."
 msgstr "Virheellinen päiväys."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:314
-#, fuzzy
-#| msgid "Sort by description."
 msgid "No valid description."
-msgstr "Järjestä selitteen mukaan."
+msgstr "Ei kelvollista kuvausta."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:447
 msgid "Account value can't be empty."
@@ -18375,10 +18207,8 @@ msgid "GnuCash Export Format"
 msgstr "GnuCashin vientimuoto"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:48
-#, fuzzy
-#| msgid "GnuCash Export Format"
 msgid "GnuCash Export Format (4.x and older)"
-msgstr "GnuCashin vientimuoto"
+msgstr "GnuCashin vientimuoto (4.x tai vanhempi)"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:134
 msgid "Shipping Name"
@@ -18472,10 +18302,8 @@ msgid "y/d/m"
 msgstr "y/d/m"
 
 #: gnucash/import-export/import-main-matcher.cpp:501
-#, fuzzy
-#| msgid "No transactions were found associated with the ~a."
 msgid "No new transactions were found in this import."
-msgstr "Tositteita ei löydy liittyen ~a."
+msgstr "Tässä tuonnissa ei löytynyt uusia tositteita."
 
 #: gnucash/import-export/import-main-matcher.cpp:773
 msgid "Destination account for the auto-balance split."
@@ -18487,32 +18315,23 @@ msgstr ""
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.cpp:1369
-#, fuzzy
-#| msgid "_Select transfer account"
 msgid "_Assign transfer account"
-msgstr "_Valitse tositteen tili"
+msgstr "Määritä tositteen _tili"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.cpp:1379
-#, fuzzy
-#| msgid "Exchange rate"
-#| msgid_plural "Exchange rates"
 msgid "Assign e_xchange rate"
-msgstr "Muuntokurssi"
+msgstr "Määritä _muuntokurssi"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.cpp:1387
-#, fuzzy
-#| msgid "Description, Notes, or Memo"
 msgid "_Edit description, notes, or memo"
-msgstr "Selite, huomautus tai erittely"
+msgstr "_Muokkaa kuvausta, huomautuksia tai erittelyä"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.cpp:1396
-#, fuzzy
-#| msgid "Reset defaults"
 msgid "_Reset all edits"
-msgstr "Palauta oletukset"
+msgstr "_Poista kaikki muokkaukset"
 
 #: gnucash/import-export/import-main-matcher.cpp:1549
 msgctxt "Column header for 'Adding transaction'"
@@ -18725,8 +18544,6 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:918
-#, fuzzy
-#| msgid "_Name or description"
 msgid "Name or _description"
 msgstr "_Nimi tai kuvaus"
 
@@ -19129,11 +18946,8 @@ msgid "Converting"
 msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:486
-#, fuzzy
-#| msgid "%d duplicate price"
-#| msgid_plural "%d duplicate prices"
 msgid "Discarding duplicate prices"
-msgstr "%d hinta moneen kertaan"
+msgstr "Hylkää toistuvat hinnat"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:516
 msgid "Adding prices"
@@ -19419,10 +19233,8 @@ msgid "Enter the Discount Percent"
 msgstr "Syötä alennusprosentti"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:609
-#, fuzzy
-#| msgid "Enter the Discount Amount"
 msgid "Enter the Discount … unknown type"
-msgstr "Syötä alennusmäärä"
+msgstr "Syötä alennusmäärä … tuntematon tyyppi"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:627
 msgid "Discount Type: Monetary Value"
@@ -20068,10 +19880,8 @@ msgid "Enter credit formula for real transaction"
 msgstr ""
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:75
-#, fuzzy
-#| msgid "Loading completed"
 msgid "Don't autocomplete"
-msgstr "Lataaminen valmis"
+msgstr "Älä täydennä automaattisesti"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
@@ -20320,10 +20130,8 @@ msgstr ""
 
 #: gnucash/report/options-utilities.scm:143
 #: gnucash/report/reports/standard/investment-lots.scm:339
-#, fuzzy
-#| msgid "Choose export format"
 msgid "Closest to report date"
-msgstr "Valitse vientimuoto"
+msgstr "Lähinnä raportin päiväystä"
 
 #: gnucash/report/options-utilities.scm:144
 #: gnucash/report/reports/standard/advanced-portfolio.scm:76
@@ -20415,10 +20223,8 @@ msgid "Account Balance"
 msgstr "Tilin saldo"
 
 #: gnucash/report/options-utilities.scm:218
-#, fuzzy
-#| msgid "Calculate"
 msgid "Calculate Subtotal"
-msgstr "Laske"
+msgstr "Laske välisummat"
 
 #: gnucash/report/options-utilities.scm:219
 #: gnucash/report/options-utilities.scm:234
@@ -20962,10 +20768,8 @@ msgid "Testing"
 msgstr ""
 
 #: gnucash/report/reports/example/sample-report.scm:169
-#, fuzzy
-#| msgid "Report Title"
 msgid "Report Title Default"
-msgstr "Raportin otsikko"
+msgstr "Raportin oletusotsikko"
 
 #: gnucash/report/reports/example/sample-report.scm:285
 #, scheme-format
@@ -21074,10 +20878,8 @@ msgstr "Näytä ohje"
 
 #: gnucash/report/reports/example/sample-report.scm:442
 #: gnucash/report/reports/example/sample-report.scm:453
-#, fuzzy
-#| msgid "Employee Report"
 msgid "Sample Report"
-msgstr "Työntekijäraportti"
+msgstr "Malliraportti"
 
 #: gnucash/report/reports/example/sample-report.scm:457
 msgid "An options example report."
@@ -21289,17 +21091,13 @@ msgid "Select date to use for PriceDB lookups."
 msgstr ""
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:239
-#, fuzzy
-#| msgid "Nearest transaction date"
 msgid "Nearest to transaction date"
-msgstr "Lähin tositteen päiväys"
+msgstr "Lähimpänä tositteen päiväystä"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:241
 #: gnucash/report/reports/standard/advanced-portfolio.scm:77
-#, fuzzy
-#| msgid "Nearest transaction date"
 msgid "Nearest to report date"
-msgstr "Lähin tositteen päiväys"
+msgstr "Lähimpänä raportin päiväystä"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3310
 msgid "Tax Schedule Report & TXF Export"
@@ -21506,16 +21304,12 @@ msgstr ""
 "syvyysrajalla."
 
 #: gnucash/report/reports/standard/account-summary.scm:91
-#, fuzzy
-#| msgid "Shows accounts deeper than the depth limit at the depth limit."
 msgid "Raise accounts deeper than the depth limit to the depth limit."
-msgstr "Näytä syvyysrajan ylittävät tilit syvyysrajalla."
+msgstr "Nosta syvyysrajaa syvemmät tilit syvyysrajaan."
 
 #: gnucash/report/reports/standard/account-summary.scm:92
-#, fuzzy
-#| msgid "Disregard completely any accounts deeper than the depth limit."
 msgid "Omit any accounts deeper than the depth limit."
-msgstr "Ohita syvyysrajan ylittävät tilit kokonaan."
+msgstr "Syvyysrajaa syvemmät tilit jätetään pois."
 
 #: gnucash/report/reports/standard/account-summary.scm:94
 #: gnucash/report/reports/standard/balance-sheet.scm:90
@@ -21772,16 +21566,12 @@ msgid "Average cost of all shares"
 msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:83
-#, fuzzy
-#| msgid "First In, First Out"
 msgid "First-in first-out"
-msgstr "FIFO (ensin sisään, ensin ulos)"
+msgstr "Ensimmäiset ensin ulos"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:84
-#, fuzzy
-#| msgid "Last In, First Out"
 msgid "Last-in first-out"
-msgstr "LIFO (viimeksi sisään, ensin ulos)"
+msgstr "Viimeiset ensin ulos"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:88
 msgid "Prefer use of price editor pricing over transactions, where applicable."
@@ -21796,10 +21586,8 @@ msgid "Include in basis"
 msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:96
-#, fuzzy
-#| msgid "Include in gain"
 msgid "Include in gain/loss"
-msgstr "Sisällytä voittoon"
+msgstr "Sisällytä voitto/tappioon"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:97
 msgid "Omit from report"
@@ -22233,10 +22021,8 @@ msgid "Sign: -$10.00"
 msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:226
-#, fuzzy
-#| msgid "Brackets"
 msgid "Brackets: ($10.00)"
-msgstr "Sulut"
+msgstr "Suluissa: (10,00 €)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:251
 msgid ""
@@ -22833,16 +22619,12 @@ msgid "Display a column for the actual values."
 msgstr "Näytä sarake toteutuneille arvoille."
 
 #: gnucash/report/reports/standard/budget.scm:57
-#, fuzzy
-#| msgid "_Cut Transaction"
 msgid "Link to actual transactions"
-msgstr "_Leikkaa tosite"
+msgstr "Linkki todellisiin tositteisiin"
 
 #: gnucash/report/reports/standard/budget.scm:58
-#, fuzzy
-#| msgid "Move to the blank transaction at the bottom of the register"
 msgid "Show the actual transactions for the budget period"
-msgstr "Siirry tilikirjan lopussa olevaan tyhjään tositteeseen"
+msgstr "Näytä budjettikauden todelliset tapahtumat"
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Show Difference"
@@ -23083,10 +22865,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/category-barchart.scm:173
 #: gnucash/report/reports/standard/category-barchart.scm:245
-#, fuzzy
-#| msgid "Enable chart"
 msgid "Percentage chart"
-msgstr "Käytä kaaviota"
+msgstr "Prosenttikaavio"
 
 #: gnucash/report/reports/standard/category-barchart.scm:174
 msgid ""
@@ -23095,10 +22875,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/category-barchart.scm:275
-#, fuzzy
-#| msgid "Invalid Transactions"
 msgid "Invalid dates"
-msgstr "Virheelliset tositteet"
+msgstr "Virheelliset päiväykset"
 
 #: gnucash/report/reports/standard/category-barchart.scm:276
 msgid "Start date must be earlier than End date"
@@ -23184,10 +22962,8 @@ msgid "Sort Order"
 msgstr "Järjestyssuunta"
 
 #: gnucash/report/reports/standard/customer-summary.scm:78
-#, fuzzy
-#| msgid "Select the type of each column to import."
 msgid "Choose the ordering of the column sort."
-msgstr "Valitse tuotavien sarakkeiden tyypit."
+msgstr "Valitse sarakelajittelun järjestys."
 
 #: gnucash/report/reports/standard/customer-summary.scm:106
 msgid "Customer Name"
@@ -23290,16 +23066,12 @@ msgid "Withdrawals"
 msgstr "Nostot"
 
 #: gnucash/report/reports/standard/equity-statement.scm:451
-#, fuzzy
-#| msgid "Unrealized Gains"
 msgid "Unrealized Gains for Period"
-msgstr "Toteutumattomat tulot"
+msgstr "Realisoitumattomat voitot kaudelta"
 
 #: gnucash/report/reports/standard/equity-statement.scm:452
-#, fuzzy
-#| msgid "Unrealized Losses"
 msgid "Unrealized Losses for Period"
-msgstr "Toteutumattomat tappiot"
+msgstr "Realisoitumattomat tappiot kaudella"
 
 #: gnucash/report/reports/standard/equity-statement.scm:458
 msgid "Increase in capital"
@@ -23640,37 +23412,27 @@ msgid "Profit & Loss"
 msgstr "Tuloslaskelma"
 
 #: gnucash/report/reports/standard/investment-lots.scm:40
-#, fuzzy
-#| msgid "Charge"
 msgid "Chart"
-msgstr "Veloitus"
+msgstr "Kaavio"
 
 #: gnucash/report/reports/standard/investment-lots.scm:41
 msgid "Columns"
 msgstr "Sarakkeet"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
-#, fuzzy
-#| msgid "application"
 msgid "Validation"
-msgstr "sovellus"
+msgstr "Tarkistus"
 
 #: gnucash/report/reports/standard/investment-lots.scm:47
 #: gnucash/report/reports/standard/investment-lots.scm:163
-#, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include accounts with no lots"
-msgstr "Sisällytä tilit joissa ei ole osakkeita"
+msgstr "Sisällytä tilit ilman eriä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:50
-#, fuzzy
-#| msgid "Show date"
 msgid "Show Chart"
-msgstr "Näytä päiväys"
+msgstr "Näytä kaavio"
 
 #: gnucash/report/reports/standard/investment-lots.scm:51
-#, fuzzy
-#| msgid "Chart Type"
 msgid "Chart type"
 msgstr "Kaavion tyyppi"
 
@@ -23679,56 +23441,40 @@ msgid "Chart location"
 msgstr "Kaavion sijainti"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
-#, fuzzy
-#| msgid "Logo width"
 msgid "Plot width"
-msgstr "Logon leveys"
+msgstr "Kuvaajan leveys"
 
 #: gnucash/report/reports/standard/investment-lots.scm:54
-#, fuzzy
-#| msgid "Plot Type"
 msgid "Plot height"
-msgstr "Kuvaajatyyppi"
+msgstr "Kuvaajan korkeus"
 
 #: gnucash/report/reports/standard/investment-lots.scm:57
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show lot GUID column"
-msgstr "Näytä _muistiinpanosarake"
+msgstr "Näytä erän GUID -sarake"
 
 #: gnucash/report/reports/standard/investment-lots.scm:58
 msgid "Show date columns"
 msgstr "Näytä päiväyssarakkeet"
 
 #: gnucash/report/reports/standard/investment-lots.scm:59
-#, fuzzy
-#| msgid "Show _Account column"
 msgid "Show bought columns"
-msgstr "Näytä _tilisarake"
+msgstr "Näytä ostosarakkeet"
 
 #: gnucash/report/reports/standard/investment-lots.scm:60
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show sold columns"
-msgstr "Näytä _muistiinpanosarake"
+msgstr "Näytä myyntisarakkeet"
 
 #: gnucash/report/reports/standard/investment-lots.scm:61
-#, fuzzy
-#| msgid "Show _Memo column"
 msgid "Show end columns"
-msgstr "Näytä _muistiinpanosarake"
+msgstr "Näytä loppusarakkeet"
 
 #: gnucash/report/reports/standard/investment-lots.scm:63
-#, fuzzy
-#| msgid "Show linked transactions"
 msgid "Show realized gain column(s)"
-msgstr "Näytä liitetyt tositteet"
+msgstr "Näytä realisoituneen voiton sarakkeet"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
-#, fuzzy
-#| msgid "Show _unused accounts"
 msgid "Show unrealized gain column(s)"
-msgstr "Näytä _käyttämättömät tilit"
+msgstr "Näytä realisoitumattoman voiton sarakkeet"
 
 #: gnucash/report/reports/standard/investment-lots.scm:67
 msgid "Group gains by age (short term and long term)"
@@ -23739,56 +23485,40 @@ msgid "Long term gains age (years)"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:72
-#, fuzzy
-#| msgid "_Show children accounts"
 msgid "Show mnemonic in amounts"
-msgstr "Näytä _alatilit"
+msgstr "Näytä osakekoodi määrissä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:73
-#, fuzzy
-#| msgid "Include assets total"
 msgid "Include closed lots"
-msgstr "Sisällytä vastaavien summa"
+msgstr "Sisällytä suljetut erät"
 
 #: gnucash/report/reports/standard/investment-lots.scm:75
 msgid "Show blanks instead of zeros in table cells"
 msgstr "Näytä tyhjää nollien paikalla taulukon soluissa"
 
 #: gnucash/report/reports/standard/investment-lots.scm:76
-#, fuzzy
-#| msgid "Show _log window"
 msgid "Show lot split rows"
-msgstr "Näytä _loki-ikkuna"
+msgstr "Näytä erän jaetut rivit"
 
 #: gnucash/report/reports/standard/investment-lots.scm:79
-#, fuzzy
-#| msgid "Investments"
 msgid "Investment Lots"
-msgstr "Investoinnit"
+msgstr "Investointierät"
 
 #: gnucash/report/reports/standard/investment-lots.scm:80
-#, fuzzy
-#| msgid "Start Date"
 msgid "Start date"
 msgstr "Alkupäivämäärä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:81
-#, fuzzy
-#| msgid "End Date"
 msgid "End date"
 msgstr "Loppupäivämäärä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:83
-#, fuzzy
-#| msgid "Price Source"
 msgid "Price source"
 msgstr "Hintalähde"
 
 #: gnucash/report/reports/standard/investment-lots.scm:87
-#, fuzzy
-#| msgid "Include accounts with no shares"
 msgid "Include only accounts with warnings"
-msgstr "Sisällytä tilit joissa ei ole osakkeita"
+msgstr "Sisällytä vain tilit, joilla on varoituksia"
 
 #: gnucash/report/reports/standard/investment-lots.scm:89
 msgid "Warn if a lot has more than one bought split"
@@ -23818,20 +23548,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:101
-#, fuzzy
-#| msgid "Report Title"
 msgid "Lot Title"
-msgstr "Raportin otsikko"
+msgstr "Erän otsikko"
 
 #: gnucash/report/reports/standard/investment-lots.scm:104
 msgid "GUID"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:105
-#, fuzzy
-#| msgid "To Amount"
 msgid "Bought Amount"
-msgstr "Summaan"
+msgstr "Ostettu määrä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:106
 msgid "Bought Value (Basis)"
@@ -23842,32 +23568,24 @@ msgid "Bought Average Price"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:108
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Sold Splits"
-msgstr "Osakkeen jako"
+msgstr "Myydyt erät"
 
 #: gnucash/report/reports/standard/investment-lots.scm:109
-#, fuzzy
-#| msgid "To Amount"
 msgid "Sold Amount"
-msgstr "Summaan"
+msgstr "Myyty määrä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:110
 msgid "Sold Basis"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:111
-#, fuzzy
-#| msgid "Value"
 msgid "Sold Value"
-msgstr "Arvo"
+msgstr "Myyty arvo"
 
 #: gnucash/report/reports/standard/investment-lots.scm:112
-#, fuzzy
-#| msgid "To Amount"
 msgid "ST Sold Amount"
-msgstr "Summaan"
+msgstr "LA myyty määrä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:113
 msgid "ST Sold Basis"
@@ -23878,10 +23596,8 @@ msgid "ST Sold Value"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:115
-#, fuzzy
-#| msgid "To Amount"
 msgid "LT Sold Amount"
-msgstr "Summaan"
+msgstr "PA myyty määrä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:116
 msgid "LT Sold Basis"
@@ -23892,68 +23608,48 @@ msgid "LT Sold Value"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:118
-#, fuzzy
-#| msgid "Show Average"
 msgid "Sold Average Price"
-msgstr "Näytä keskiarvo"
+msgstr "Myyty keskihinta"
 
 #: gnucash/report/reports/standard/investment-lots.scm:119
-#, fuzzy
-#| msgid "Amount"
 msgid "End Amount"
-msgstr "Määrä"
+msgstr "Loppumäärä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:120
 msgid "End Basis"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:121
-#, fuzzy
-#| msgid "Value"
 msgid "End Value"
-msgstr "Arvo"
+msgstr "Loppuarvo"
 
 #: gnucash/report/reports/standard/investment-lots.scm:123
-#, fuzzy
-#| msgid "Realized Gain/Loss"
 msgid "ST Realized Gain"
-msgstr "Toteutuneet tulot/menot"
+msgstr "LA toteutuneet voitot"
 
 #: gnucash/report/reports/standard/investment-lots.scm:124
-#, fuzzy
-#| msgid "Realized Gain/Loss"
 msgid "LT Realized Gain"
-msgstr "Toteutuneet tulot/menot"
+msgstr "PA toteutuneet voitot"
 
 #: gnucash/report/reports/standard/investment-lots.scm:125
-#, fuzzy
-#| msgid "Realized Gain/Loss"
 msgid "Realized ROI"
-msgstr "Toteutuneet tulot/menot"
+msgstr "Sijoitetun pääoman tuotto (ROI)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:127
-#, fuzzy
-#| msgid "Unrealized Gains"
 msgid "ST Unrealized Gain"
-msgstr "Toteutumattomat tulot"
+msgstr "LA toteutumattomat voitot"
 
 #: gnucash/report/reports/standard/investment-lots.scm:128
-#, fuzzy
-#| msgid "Unrealized Gains"
 msgid "LT Unrealized Gain"
-msgstr "Toteutumattomat tulot"
+msgstr "PA toteutumattomat voitot"
 
 #: gnucash/report/reports/standard/investment-lots.scm:129
-#, fuzzy
-#| msgid "Unrealized Gains"
 msgid "Unrealized ROI"
-msgstr "Toteutumattomat tulot"
+msgstr "Toteutumattomat pääomatulot (ROI)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:131
-#, fuzzy
-#| msgid "Account Notes"
 msgid "Account Lots Total"
-msgstr "Tilin huomautukset"
+msgstr "Tilin erät yhteensä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:171
 msgid "Include a chart that shows lot gains, grouped by account and gain type"
@@ -23968,30 +23664,24 @@ msgid "Stacked Bar Chart"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:195
-#, fuzzy
-#| msgid "Enable chart"
 msgid "Where to place the chart"
-msgstr "Käytä kaaviota"
+msgstr "Mihin kaavio sijoitetaan"
 
 #: gnucash/report/reports/standard/investment-lots.scm:214
 msgid "Show the lot GUID table column"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:221
-#, fuzzy
-#| msgid "Show the income and expense accounts"
 msgid "Show the lot open and close table columns"
-msgstr "Näytä tulo- ja menotilit"
+msgstr "Näytä erän avaus ja sulku -taulukkosarakkeet"
 
 #: gnucash/report/reports/standard/investment-lots.scm:228
 msgid "Show purchase-related table columns"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:235
-#, fuzzy
-#| msgid "Show _zero total accounts"
 msgid "Show sale-related table columns"
-msgstr "Näytä _nollasaldotilit"
+msgstr "Näytä myyntiin liittyvät taulukon sarakkeet"
 
 #: gnucash/report/reports/standard/investment-lots.scm:242
 msgid "Show end date amount and value table columns"
@@ -24010,26 +23700,20 @@ msgid "Group gains (and sales?) by long-term (LT) and short-term (ST)"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:266
-#, fuzzy
-#| msgid "Gains"
 msgid "Gains Only"
-msgstr "Tulot"
+msgstr "Vain voitot"
 
 #: gnucash/report/reports/standard/investment-lots.scm:267
-#, fuzzy
-#| msgid "Tax on Sales"
 msgid "Gains and Sales"
-msgstr "Myynnin vero"
+msgstr "Voitot ja myynti"
 
 #: gnucash/report/reports/standard/investment-lots.scm:281
 msgid "Commodities held longer than this many years count as long-term (LT)."
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:293
-#, fuzzy
-#| msgid "Show long account names"
 msgid "Show long (instead of short) account names"
-msgstr "Näytä pitkät tilinimet"
+msgstr "Näytä pitkät (eikä lyhyet) tilinimet"
 
 #: gnucash/report/reports/standard/investment-lots.scm:300
 msgid "Show mnemonics with commodity amounts"
@@ -24082,10 +23766,8 @@ msgid "Detect splits that have not been assigned to a lot."
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:383
-#, fuzzy
-#| msgid "Counters"
 msgid "Count"
-msgstr "Laskurit"
+msgstr "Lukumäärä"
 
 #: gnucash/report/reports/standard/investment-lots.scm:390
 msgid ""
@@ -24098,16 +23780,12 @@ msgid "  End price: ~a~a on ~a"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:813
-#, fuzzy
-#| msgid "Not found"
 msgid "No price found"
-msgstr "Ei löytynyt"
+msgstr "Ei löytynyt hintaa"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1230
-#, fuzzy
-#| msgid "(split)"
 msgid "split"
-msgstr "(rivi)"
+msgstr "rivi"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1351
 #, scheme-format
@@ -24165,10 +23843,8 @@ msgid "~a, ~a to ~a"
 msgstr "~a, ~a → ~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1989
-#, fuzzy
-#| msgid "Account Notes"
 msgid "Account Lot Gains"
-msgstr "Tilin huomautukset"
+msgstr "Tilin erien voitot"
 
 #: gnucash/report/reports/standard/invoice.scm:101
 #: gnucash/report/reports/standard/invoice.scm:218
@@ -25641,10 +25317,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/trial-balance.scm:188
-#, fuzzy
-#| msgid "General Journal Report"
 msgid "General journal exact balances"
-msgstr "Päiväkirjaraportti"
+msgstr "Päiväkirjan tarkat saldot"
 
 #: gnucash/report/reports/standard/trial-balance.scm:189
 msgid "No adjusting/closing entries"
@@ -26212,10 +25886,8 @@ msgstr "Välisummataulu"
 #. "Running Totals" is the plural form as it refers to the running total and running subtotals.
 #. To be consistent, also consider how the singular form "Running Total" is translated.
 #: gnucash/report/trep-engine.scm:82
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Totals"
-msgstr "Juokseva saldo"
+msgstr "Juoksevat saldot"
 
 #: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2292
 msgid "Show Account Description"
@@ -26234,10 +25906,8 @@ msgid "Add indenting columns"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:105
-#, fuzzy
-#| msgid "Filter"
 msgid "Date Filter"
-msgstr "Suodatin"
+msgstr "Päiväyssuodin"
 
 #: gnucash/report/trep-engine.scm:106
 msgid "Table for Exporting"
@@ -26252,10 +25922,8 @@ msgid "Use regular expressions for account name filter"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:122
-#, fuzzy
-#| msgid "Account Name Filter"
 msgid "Account Name Filter excludes matched strings"
-msgstr "Tilin nimisuodin"
+msgstr "Tilin nimi -suodatin sulkee pois sopivat merkkijonot"
 
 #: gnucash/report/trep-engine.scm:123
 msgid "Transaction Filter"
@@ -26509,10 +26177,8 @@ msgid "Display the reconciled date?"
 msgstr "Näytä täsmäytyspäivä?"
 
 #: gnucash/report/trep-engine.scm:913
-#, fuzzy
-#| msgid "Display the reconciled date?"
 msgid "Display the entered date?"
-msgstr "Näytä täsmäytyspäivä?"
+msgstr "Näytä kirjauspäivä?"
 
 #: gnucash/report/trep-engine.scm:918
 msgid "Display the notes if the memo is unavailable?"
@@ -26539,16 +26205,12 @@ msgid "Display a subtotal summary table."
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:930
-#, fuzzy
-#| msgid "Display the other account code?"
 msgid "Display the balance of the underlying account on each line?"
-msgstr "Näytä toinen tilinumero?"
+msgstr "Näytetäänkö perustana olevan tilin saldo kullakin rivillä?"
 
 #: gnucash/report/trep-engine.scm:931
-#, fuzzy
-#| msgid "Display the transaction date?"
 msgid "Display a grand total section at the bottom?"
-msgstr "Näytä tositteen päiväys?"
+msgstr "Näytä loppusumma-osio alareunassa?"
 
 #: gnucash/report/trep-engine.scm:936
 msgid "Display the trans number?"
@@ -26593,22 +26255,16 @@ msgid "Display running totals as per report sort order?"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:1000
-#, fuzzy
-#| msgid "Grand Total Cell Color"
 msgid "Grand Total and Subtotals"
-msgstr "Loppusumman solun väri"
+msgstr "Loppusumma ja välisummat"
 
 #: gnucash/report/trep-engine.scm:1001
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Grand Total Only"
-msgstr "Loppusumma"
+msgstr "Vain loppusumma"
 
 #: gnucash/report/trep-engine.scm:1002
-#, fuzzy
-#| msgid "Subtotal"
 msgid "Subtotals Only"
-msgstr "Välisumma"
+msgstr "Vain välisummat"
 
 #: gnucash/report/trep-engine.scm:1114
 msgid "Num/T-Num"
@@ -26623,47 +26279,37 @@ msgstr "Siirrä tililtä/tilille"
 #. pattern as for these other strings: “Running Totals”,
 #. "Secondary Subtotal” and "Running Primary Subtotal"
 #: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:1483
-#, fuzzy
-#| msgid "Secondary Subtotal"
 msgid "Running Secondary Subtotal"
-msgstr "Välisummat toissijaiselle perusteelle"
+msgstr "Juokseva toissijainen välisumma"
 
 #. Translators: this is the running total for the primary subtotal.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. “Primary Subtotal”
 #: gnucash/report/trep-engine.scm:1398 gnucash/report/trep-engine.scm:1496
-#, fuzzy
-#| msgid "Primary Subtotal"
 msgid "Running Primary Subtotal"
-msgstr "Välisummat ensisijaiselle perusteelle"
+msgstr "Juokseva ensisijainen välisumma"
 
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
 #: gnucash/report/trep-engine.scm:1402 gnucash/report/trep-engine.scm:1497
-#, fuzzy
-#| msgid "Running Sum"
 msgid "Running Subtotal"
-msgstr "Juokseva summa"
+msgstr "Juokseva välisumma"
 
 #. Translators: this is the running total for the grand total.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. "Grand Total”
 #: gnucash/report/trep-engine.scm:1419 gnucash/report/trep-engine.scm:1511
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Running Grand Total"
-msgstr "Loppusumma"
+msgstr "Juokseva loppusumma"
 
 #. Translators: "Running Total" is a shorter version of
 #. "Running Grand Total" used when the running grand total is
 #. displayed without subtotals. To be consistent, also consider
 #. how the plural form "Running Totals" is translated.
 #: gnucash/report/trep-engine.scm:1424 gnucash/report/trep-engine.scm:1512
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Total"
 msgstr "Juokseva saldo"
 
@@ -26902,10 +26548,8 @@ msgid "Show/hide the status bar on this window"
 msgstr "Näytä/piilota ikkunan tilapalkki"
 
 #: gnucash/ui/gnc-main-window.ui:193
-#, fuzzy
-#| msgid "<b>Tab Position</b>"
 msgid "Tab P_osition"
-msgstr "<b>Välilehtien kielekkeiden sijainti</b>"
+msgstr "Välilehden kielekkeen _sijainti"
 
 #: gnucash/ui/gnc-main-window.ui:198
 msgid "Display the notebook tabs at the top of the window"
@@ -27014,10 +26658,8 @@ msgid "Open the GnuCash Help"
 msgstr "Avaa GnuCashin ohjeet"
 
 #: gnucash/ui/gnc-main-window.ui:518
-#, fuzzy
-#| msgid "_Abort"
 msgid "_About"
-msgstr "_Keskeytä"
+msgstr "_Tietoja"
 
 #: gnucash/ui/gnc-main-window.ui:520
 msgid "About GnuCash"
@@ -27452,8 +27094,6 @@ msgid "New _Expense Voucher…"
 msgstr "Uusi _matkalasku…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
-#, fuzzy
-#| msgid "Open the New Expense Voucher dialog"
 msgid "Open the New Voucher dialog"
 msgstr "Avaa uuden matkalaskun luonti-ikkuna"
 
@@ -27579,10 +27219,8 @@ msgid "Edit the selected account"
 msgstr "Muokkaa valittua tiliä"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:23
-#, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account"
-msgstr "Poista tili"
+msgstr "_Poista tili"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:30
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:227
@@ -27845,17 +27483,13 @@ msgstr "Muokkaa huomautusta"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:36
 #: gnucash/ui/gnc-plugin-page-budget.ui:272
-#, fuzzy
-#| msgid "Edit note for the selected account and period"
 msgid "Edit note for the selected account and period"
 msgstr "Muokkaa muistiinpanoa valitulta tililtä ja aikaväliltä"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:42
 #: gnucash/ui/gnc-plugin-page-budget.ui:287
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report"
-msgstr "Tulosta tämä raportti"
+msgstr "Aja budjettiraportti"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:70
 #: gnucash/ui/gnc-plugin-page-budget.ui:200
@@ -27914,10 +27548,8 @@ msgid "_Blank"
 msgstr "_Tyhjä"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:155
-#, fuzzy
-#| msgid "Move to the blank entry at the bottom of the bill"
 msgid "Move to the blank entry at the bottom"
-msgstr "Siirry tyhjälle riville ostolaskun lopussa"
+msgstr "Siirry tyhjälle riville lopussa"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:162
 #: gnucash/ui/gnc-plugin-page-invoice.ui:242
@@ -27960,21 +27592,15 @@ msgid "Manage link of an external document to this item"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:191
-#, fuzzy
-#| msgid "Open Linked Document"
 msgid "Open the linked document"
 msgstr "Avaa yhdistetty asiakirja"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
-#, fuzzy
-#| msgid "Open a company report window for the owner of this invoice"
 msgid "Open a company report window for the owner of this invoice"
 msgstr "Avaa myyntilaskun omistajan yritysraportti-ikkuna"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
 #: gnucash/ui/gnc-plugin-page-invoice.ui:499
-#, fuzzy
-#| msgid "Move to the blank entry at the bottom of the invoice"
 msgid "Move to the blank entry at the bottom of the Invoice"
 msgstr "Siirry pohjalla olevalle tyhjälle laskuriville"
 
@@ -28138,30 +27764,24 @@ msgid "_Void Transaction"
 msgstr "_Mitätöi tosite"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Void the current transaction"
-msgstr "Tallenna tämä tosite"
+msgstr "Mitätöi tämä tosite"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
 msgid "_Unvoid Transaction"
 msgstr "P_alauta tosite"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Unvoid the current transaction"
-msgstr "Tallenna tämä tosite"
+msgstr "Kumoa tämän tositteen mitätöinti"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
 msgstr "Lisää k_äänteinen tosite"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
-#, fuzzy
-#| msgid "Add _Reversing Transaction"
 msgid "Add a reversing transaction"
-msgstr "Lisää k_äänteinen tosite"
+msgstr "Lisää käänteinen tosite"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:272
 #: gnucash/ui/gnc-plugin-page-register.ui:414
@@ -28169,10 +27789,8 @@ msgstr "Lisää k_äänteinen tosite"
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
 #: gnucash/ui/gnc-plugin-page-register.ui:804
-#, fuzzy
-#| msgid "Move to the blank transaction at the bottom of the register"
 msgid "Move to the blank transaction in the register"
-msgstr "Siirry tilikirjan lopussa olevaan tyhjään tositteeseen"
+msgstr "Siirry tilikirjan tyhjään tositteeseen"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:417
@@ -28246,16 +27864,12 @@ msgid ""
 msgstr "Avaa valittu tosite toisella tilillä uudessa tilikirjavälilehdessä"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
-#, fuzzy
-#| msgid "_All transactions"
 msgid "All Transactions"
-msgstr "_Kaikki tositteet"
+msgstr "Kaikki tositteet"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:323
-#, fuzzy
-#| msgid "_This transaction"
 msgid "This transaction"
-msgstr "_Valittu tosite"
+msgstr "Valittu tosite"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:332
 msgid "Account Report"
@@ -28314,10 +27928,8 @@ msgstr "Vie HTML-muotoiltu raportti tiedostoon"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:77
 #: gnucash/ui/gnc-plugin-page-report.ui:257
-#, fuzzy
-#| msgid "Delete report configuration"
 msgid "Update the current report's saved configuration"
-msgstr "Poista raportin asetuksia"
+msgstr "Päivitä nykyisen raportin tallennetut asetukset"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:84
 #: gnucash/ui/gnc-plugin-page-report.ui:272
@@ -28439,20 +28051,16 @@ msgid "Reconcile the selected transactions"
 msgstr "Täsmäytä valitut tositteet"
 
 #: gnucash/ui/gnc-reconcile-window.ui:161
-#, fuzzy
-#| msgid "_Reconcile Selection"
 msgid "Reconcile Selection"
-msgstr "_Täsmäytä valinta"
+msgstr "Täsmäytä valinta"
 
 #: gnucash/ui/gnc-reconcile-window.ui:175
 msgid "Unreconcile the selected transactions"
 msgstr "Peruuta valittujen tositteiden täsmäytys"
 
 #: gnucash/ui/gnc-reconcile-window.ui:177
-#, fuzzy
-#| msgid "_Unreconcile Selection"
 msgid "Unreconcile Selection"
-msgstr "_Peruuta valitun täsmäytys"
+msgstr "Peruuta valinan täsmäytys"
 
 #: gnucash/ui/gnc-reconcile-window.ui:191
 msgid "Delete the selected transaction"
@@ -28535,10 +28143,8 @@ msgid "GncQuotes::Report called with no source."
 msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:339
-#, fuzzy
-#| msgid "There are no options for this report."
 msgid "There were no commodities for which to retrieve quotes."
-msgstr "Tälle raportille ei ole asetuksia."
+msgstr "Ei ollut hyödykkeitä, joille hakea tarjouksia."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:353
 msgid "Finance::Quote retrieval failed with error "
@@ -28581,10 +28187,8 @@ msgid ""
 msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:395
-#, fuzzy
-#| msgid "There was an error parsing the file."
 msgid "The quote has no error set."
-msgstr "Tiedoston tulkinnassa tapahtui virhe."
+msgstr "Tarjouksessa ei ole virhettä."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:404
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
@@ -28618,19 +28222,15 @@ msgstr "vaadittu"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
 #: libgnucash/app-utils/gnc-quotes.cpp:811
-#, fuzzy
-#| msgid "Unreconciled"
 msgctxt "Finance::Quote"
 msgid "recommended"
-msgstr "Täsmäyttämättä"
+msgstr "suositeltu"
 
 #. Translators: Means that one of the indicated elements is required
 #: libgnucash/app-utils/gnc-quotes.cpp:813
-#, fuzzy
-#| msgid "End of this year"
 msgctxt "Finance::Quote"
 msgid "one of these"
-msgstr "Tämän vuoden loppu"
+msgstr "jokin näistä"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
 #: libgnucash/app-utils/gnc-quotes.cpp:815
@@ -28650,11 +28250,9 @@ msgstr "symboli: "
 
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:826
-#, fuzzy
-#| msgid "Date: "
 msgctxt "Finance::Quote"
 msgid "date: "
-msgstr "Päiväys: "
+msgstr "päiväys: "
 
 #. Translators: The quote currency
 #: libgnucash/app-utils/gnc-quotes.cpp:828
@@ -28908,15 +28506,11 @@ msgid ""
 msgstr ""
 
 #: libgnucash/engine/gnc-commodity.h:110
-#, fuzzy
-#| msgid "All non-currency"
 msgctxt "Commodity Type"
 msgid "All non-currency"
 msgstr "Kaikki ei-valuutta"
 
 #: libgnucash/engine/gnc-commodity.h:111
-#, fuzzy
-#| msgid "Currencies"
 msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "Valuutat"
@@ -29446,10 +29040,8 @@ msgid "Default Budget"
 msgstr "Oletusbudjetti"
 
 #: libgnucash/engine/qofbookslots.h:74
-#, fuzzy
-#| msgid "Date of Report"
 msgid "Default Invoice Report"
-msgstr "Raportin päivämäärä"
+msgstr "Oletus myyntilaskuraportti"
 
 #: libgnucash/engine/qofbookslots.h:75
 msgid "Default Invoice Report Timeout"
