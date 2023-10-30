@@ -13,7 +13,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-29 20:44+0000\n"
+"PO-Revision-Date: 2023-10-30 13:04+0000\n"
 "Last-Translator: Marko Kohtala <marko.kohtala@gmail.com>\n"
 "Language-Team: Finnish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fi/>\n"
@@ -2546,7 +2546,7 @@ msgstr ""
 #: gnucash/report/reports/standard/income-statement.scm:234
 #: gnucash/report/reports/standard/trial-balance.scm:256
 msgid "Closing Entries"
-msgstr ""
+msgstr "Tilinpäätöstositteet"
 
 #: gnucash/gnome/dialog-find-transactions.c:118
 #: gnucash/gnome/gnc-plugin-page-register.c:386
@@ -4911,7 +4911,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3533
 msgid "_Print checks"
-msgstr "_Tulosta šekkejä"
+msgstr "Tulosta š_ekkejä"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3552
 msgid ""
@@ -6642,7 +6642,7 @@ msgstr "Älä _kerro uudelleen tämän istunnon aikana."
 
 #: gnucash/gnome-utils/gnc-account-sel.c:521
 msgid "Hide _Placeholder Accounts"
-msgstr "Piilota koontitilit"
+msgstr "Piilota _koontitilit"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:523
 msgid "Hide _Hidden Accounts"
@@ -12100,7 +12100,7 @@ msgstr "Käytä hyödykkeen arvoa"
 #: gnucash/ui/gnc-main-window.ui:492 gnucash/ui/gnc-reconcile-window.ui:85
 #: gnucash/ui/gnc-reconcile-window.ui:88
 msgid "_Help"
-msgstr "_Ohje"
+msgstr "O_hje"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1194
 #: gnucash/gtkbuilder/dialog-customer.glade:206
@@ -21372,7 +21372,7 @@ msgstr ""
 #: gnucash/report/reports/standard/equity-statement.scm:70
 #: gnucash/report/reports/standard/income-statement.scm:75
 msgid "Show accounting-style rules"
-msgstr ""
+msgstr "Näytä kirjanpitotyyliset viivat"
 
 #: gnucash/report/reports/standard/account-summary.scm:106
 #: gnucash/report/reports/standard/balance-sheet.scm:102
@@ -22497,7 +22497,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:118
 #: gnucash/report/reports/standard/income-statement.scm:123
 msgid "Display as a two column report"
-msgstr ""
+msgstr "Näytä kaksisarakkeisena raporttina"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/income-statement.scm:125
@@ -22507,7 +22507,7 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:122
 #: gnucash/report/reports/standard/income-statement.scm:127
 msgid "Display in standard, income first, order"
-msgstr ""
+msgstr "Näytä standardissa tulot-ensin -järjestyksessä"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:124
 #: gnucash/report/reports/standard/income-statement.scm:129
@@ -23013,38 +23013,40 @@ msgstr ""
 #: gnucash/report/reports/standard/income-statement.scm:111
 #: gnucash/report/reports/standard/trial-balance.scm:98
 msgid "Closing Entries pattern"
-msgstr ""
+msgstr "Tilinpäätöstositteen malli"
 
 #: gnucash/report/reports/standard/equity-statement.scm:86
 #: gnucash/report/reports/standard/income-statement.scm:113
 #: gnucash/report/reports/standard/trial-balance.scm:100
 msgid "Any text in the Description column which identifies closing entries."
 msgstr ""
+"Mikä vain teksti kuvaussarakkeessa, josta tilinpäätöstosite tunnistetaan."
 
 #: gnucash/report/reports/standard/equity-statement.scm:88
 #: gnucash/report/reports/standard/income-statement.scm:115
 #: gnucash/report/reports/standard/trial-balance.scm:102
 msgid "Closing Entries pattern is case-sensitive"
-msgstr ""
+msgstr "Tilinpäätöstositteen malli ottaa huomioon isot ja pienet kirjaimet"
 
 #: gnucash/report/reports/standard/equity-statement.scm:90
 #: gnucash/report/reports/standard/income-statement.scm:117
 #: gnucash/report/reports/standard/trial-balance.scm:104
 msgid "Causes the Closing Entries Pattern match to be case-sensitive."
 msgstr ""
+"Saa tilinpäätöstositteen mallin ottamaan huomioon isot ja pienet kirjaimet."
 
 #: gnucash/report/reports/standard/equity-statement.scm:92
 #: gnucash/report/reports/standard/income-statement.scm:119
 #: gnucash/report/reports/standard/trial-balance.scm:106
 msgid "Closing Entries Pattern is regular expression"
-msgstr ""
+msgstr "Tilinpäätöstositteen malli on säännöllinen lauseke"
 
 #: gnucash/report/reports/standard/equity-statement.scm:94
 #: gnucash/report/reports/standard/income-statement.scm:121
 #: gnucash/report/reports/standard/trial-balance.scm:108
 msgid ""
 "Causes the Closing Entries Pattern to be treated as a regular expression."
-msgstr ""
+msgstr "Saa tilinpäätösmallin toimimaan säännöllisenä lausekkeena."
 
 #: gnucash/report/reports/standard/equity-statement.scm:402
 #: gnucash/report/reports/standard/income-statement.scm:442
@@ -25322,7 +25324,7 @@ msgstr "Päiväkirjan tarkat saldot"
 
 #: gnucash/report/reports/standard/trial-balance.scm:189
 msgid "No adjusting/closing entries"
-msgstr ""
+msgstr "Ei oikaisu- tai tilinpäätöskirjauksia"
 
 #: gnucash/report/reports/standard/trial-balance.scm:190
 msgid "Full end-of-period work sheet"
