@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-23 16:02+0000\n"
+"PO-Revision-Date: 2023-10-30 09:00+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -27,7 +27,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.1.1-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -12713,20 +12713,6 @@ msgstr "Importe o QIF"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1211
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "If you are importing a QIF file from a bank or other financial "
-#| "institution, some of the transactions may already exist in your GnuCash "
-#| "accounts. To avoid duplication, GnuCash has tried to identify matches and "
-#| "needs your help to review them.\n"
-#| "\n"
-#| "On the next page you will be shown a list of imported transactions. As "
-#| "you select each one, a list of possible matches will be shown below it. "
-#| "If you find a correct match, click on it. Your selection will be "
-#| "confirmed by a check mark in the \"Match?\" column.\n"
-#| "\n"
-#| "Click \"Next\" to review the possible matches."
 msgid ""
 "If you are importing a QIF file from a bank or other financial institution, "
 "some of the transactions may already exist in your GnuCash accounts. To "
@@ -12740,7 +12726,6 @@ msgid ""
 "\n"
 "Click \"Next\" to review the possible matches."
 msgstr ""
-"\n"
 "Caso esteja importando um arquivo QIF a partir de um banco ou de uma outra "
 "instituição financeira, algumas das transações podem já existir nas suas "
 "contas do GnuCash. Para evitar a duplicação, o GnuCash tentou identificar "
@@ -12749,8 +12734,8 @@ msgstr ""
 "Na próxima página, você verá uma lista das transações que foram importadas. "
 "Conforme você seleciona cada um, uma lista de possíveis combinações será "
 "mostrada abaixo. Caso encontre uma combinação correta, clique nela. A sua "
-"seleção será confirmada através de uma marca de seleção na coluna "
-"\"Coincidir?\".\n"
+"seleção será confirmada através de uma marca de seleção na coluna \"Coincidir"
+"?\".\n"
 "\n"
 "Clique em \"Avançar\" para revisar todas as combinações possíveis."
 
@@ -12994,10 +12979,8 @@ msgid "Stock Amount"
 msgstr "Quantia de destino"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:329
-#, fuzzy
-#| msgid "Enter the name of the Customer"
 msgid "Enter the value of the shares."
-msgstr "Insira o nome do cliente"
+msgstr "Insira o valor das ações."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:404
 #, fuzzy
@@ -13749,7 +13732,7 @@ msgstr "Importe as faturas a partir de dados em CSV"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:191
 msgid "2. Select import type"
-msgstr "2. 2. Selecione o tipo de importação"
+msgstr "2. Selecione o tipo de importação"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
@@ -13774,7 +13757,7 @@ msgstr "Separado com vírgulas, com texto entre aspas"
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:310
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:310
 msgid "3. Select import options"
-msgstr "3. 3. Escolha as opções de importação"
+msgstr "3. Escolha as opções de importação"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:349
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:353
@@ -14223,23 +14206,10 @@ msgid "Exit the saved report configurations dialog"
 msgstr "Encerre a caixa de diálogo das configurações do relatório salvo"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:100
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Currently you have no saved reports.\n"
 msgid "Currently you have no saved reports."
-msgstr ""
-"\n"
-"Atualmente você não possui relatórios salvos.\n"
+msgstr "Atualmente você não possui relatórios salvos."
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:112
-#, fuzzy
-#| msgid ""
-#| "Saved report configurations are created by first opening a report from "
-#| "the Reports menu,\n"
-#| "altering the report's options to your taste and then choosing \"Save "
-#| "Report Configuration\" from\n"
-#| "the Reports menu or tool bar."
 msgid ""
 "Saved report configurations are created by\n"
 "1. opening a report from the Reports menu,\n"
@@ -14247,11 +14217,13 @@ msgid ""
 "3. selecting \"Save Report Configuration [As…]\" from the Reports menu\n"
 " or pressing a \"Save Config [As…]\" button on the tool bar."
 msgstr ""
-"As configurações salvas do relatório são criadas abrindo primeiro um "
-"relatório no menu Relatórios,\n"
-"alterando as opções a seu gosto e em seguida, escolhendo \"Salve a "
-"configuração do relatório\" a partir\n"
-"do menu relatórios ou na barra de ferramentas."
+"As configurações salvas do relatório são criadas ao\n"
+"1. abrindo um relatório no menu Relatórios,\n"
+"2. alterando as opções a seu gosto\n"
+"3. e em seguida, escolhendo \"Salve a configuração do relatório\" a partir\n"
+"do menu relatórios\n"
+" ou pressionando o botão \"Salvar a configuração [Como...]na barra de "
+"ferramentas."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:261
@@ -14687,10 +14659,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:266
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:412
-#, fuzzy
-#| msgid "New Account"
 msgid "New _Account…"
-msgstr "Nova conta"
+msgstr "Nova cont_a…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -16610,13 +16580,8 @@ msgid "Temporary Warnings"
 msgstr "Avisos temporários"
 
 #: gnucash/gtkbuilder/dialog-search.glade:37
-#, fuzzy
-#| msgctxt ""
-#| "Item represents an unknown object type (in the sense of bill, customer, "
-#| "invoice, transaction, split,...)!"
-#| msgid "New item"
 msgid "_New item…"
-msgstr "Novo item"
+msgstr "_Novo item…"
 
 #: gnucash/gtkbuilder/dialog-search.glade:82
 msgid "_Find"
@@ -18925,14 +18890,9 @@ msgid "Import using AQBanking"
 msgstr ""
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
-#, fuzzy
-#| msgid ""
-#| "Import a DTAUS file into GnuCash and transmit its orders by Online "
-#| "Banking."
 msgid "Import into GnuCash any file format supported by AQBanking"
 msgstr ""
-"Importe um arquivo DTAUS para o GnuCash e envie os seus pedidos pelo banco "
-"on-line."
+"Importar para o GnuCash qualquer formato de arquivo suportado pelo AQBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
@@ -19005,10 +18965,8 @@ msgid "Show _log window"
 msgstr "Abra a janela do _log"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:55
-#, fuzzy
-#| msgid "Show the online banking log window."
 msgid "Show the online banking log window"
-msgstr "Mostre a janela do log do banco on-line."
+msgstr "Mostrar a janela de registro do banco on-line"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
 msgid "_Online Banking Setup…"
@@ -19163,14 +19121,8 @@ msgstr ""
 "Há erros na fatura sem ID, todas as linhas desta fatura foram ignoradas.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:645
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Processing...\n"
 msgid "Processing…"
-msgstr ""
-"\n"
-"Processando...\n"
+msgstr "Processando…"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:714
 #, c-format
@@ -19486,10 +19438,8 @@ msgstr "Quantidade com Sym"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:368
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:388
-#, fuzzy
-#| msgid "Value $"
 msgid "Value Num."
-msgstr "Valor $"
+msgstr "Valor Num."
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:369
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:391
