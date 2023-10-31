@@ -636,6 +636,29 @@ run_python_cli (int argc, char **argv, scripting_args* args)
 }
 #endif
 
+static const std::vector<const char*> valid_schemes = { "file", "mysql", "postgres" };
+
+static bool
+is_valid_uri (const bo_str& uri)
+{
+    if (!uri)
+        return false;
+
+    if (boost::filesystem::is_regular_file (*uri))
+        return true;
+
+    auto scheme = g_uri_parse_scheme (uri->c_str());
+
+    if (!scheme)
+        return false;
+
+    auto rv = std::any_of (valid_schemes.begin(), valid_schemes.end(),
+                           [&scheme](const char* str) { return !g_strcmp0(str, scheme); });
+
+    g_free (scheme);
+    return rv;
+}
+
 int
 Gnucash::run_scripting (std::vector<const char*> newArgv,
                         const bo_str& file_to_load,
@@ -671,7 +694,7 @@ Gnucash::run_scripting (std::vector<const char*> newArgv,
 
     gnc_prefs_init ();
     gnc_ui_util_init();
-    if (file_to_load && boost::filesystem::is_regular_file (*file_to_load))
+    if (is_valid_uri (file_to_load))
         [[maybe_unused]] auto session = load_file (*file_to_load, open_readwrite);
 
     scripting_args args { script, interactive };
