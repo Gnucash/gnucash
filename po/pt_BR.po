@@ -18,7 +18,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-30 09:00+0000\n"
+"PO-Revision-Date: 2023-10-31 08:00+0000\n"
 "Last-Translator: Wellington Terumi Uemura <wellingtonuemura@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/pt_BR/>\n"
@@ -1724,24 +1724,26 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"A empresa resgata unidades, aumentando assim o preço das ações em um "
+"múltiplo, enquanto mantém constante o valor monetário total do investimento "
+"geral.\n"
+"\n"
+"Se o desdobramento reverso resultar em uma substituição de dinheiro por "
+"unidades restantes, registre primeiro a compra de cobertura usando o "
+"assistente de transação de ações e, em seguida, registre o desdobramento "
+"reverso."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:497
 msgid "No errors found. Click Apply to create transaction."
-msgstr ""
+msgstr "Nenhum erro foi encontrado. Clique em aplicar para criar a transação."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:502
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following errors must be fixed:"
-msgstr "A conta do fornecedor está vencida:"
+msgstr "Os seguintes erros devem ser corrigidos:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:507
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following warnings exist:"
-msgstr "A conta do fornecedor está vencida:"
+msgstr "Existem os seguintes avisos:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:627
 #: gnucash/gnome/assistant-stock-transaction.cpp:685
@@ -1753,19 +1755,19 @@ msgstr "Faltando"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1010
 #, c-format
 msgid "Amount for %s is missing."
-msgstr ""
+msgstr "Está faltando a quantidade para %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:668
 #: gnucash/gnome/assistant-stock-transaction.cpp:1015
 #, c-format
 msgid "Amount for %s must not be negative."
-msgstr ""
+msgstr "A quantidade para %s não deve ser negativa."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:671
 #: gnucash/gnome/assistant-stock-transaction.cpp:1018
 #, c-format
 msgid "Amount for %s must be positive."
-msgstr ""
+msgstr "A quantidade para %s deve ser positiva."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:674
 #: gnucash/gnome/assistant-stock-transaction.cpp:1021
@@ -1776,7 +1778,7 @@ msgstr "O valor %s não tem conta associada."
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
 #: gnucash/gnome/assistant-stock-transaction.cpp:740
 msgid "N/A"
-msgstr ""
+msgstr "N/D"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:829
 msgid "Amount for stock value is missing."
@@ -1788,25 +1790,23 @@ msgstr "O novo saldo das ações é inválido."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:843
 msgid "New balance must be higher than old balance."
-msgstr ""
+msgstr "O novo saldo deve ser maior do que o saldo antigo."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:845
 msgid "New balance must be lower than old balance."
 msgstr "O novo saldo deve ser inferior ao saldo antigo."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:852
-#, fuzzy
-#| msgid "Stock Accounts to report on."
 msgid "Stock amount must be positive."
-msgstr "Contas do estoque para relatar."
+msgstr "A quantidade de ações deve ser positiva."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:856
 msgid "Cannot sell more units than owned."
-msgstr ""
+msgstr "Não é possível vender mais unidades do que as possuídas."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:858
 msgid "Cannot cover buy more units than owed."
-msgstr ""
+msgstr "Não é possível cobrir a compra de mais unidades do que o devido."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1094
 #, fuzzy
@@ -1816,8 +1816,6 @@ msgid "Stock"
 msgstr "Ação"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1095
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "Dinheiro"
@@ -1825,21 +1823,17 @@ msgstr "Dinheiro"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1096
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
-msgstr ""
+msgstr "Taxas"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1097
-#, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "Dividend"
 msgstr "Dividendo"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1098
-#, fuzzy
-#| msgid "Capital"
 msgctxt "Stock Assistant: Page name"
 msgid "Capital Gains"
-msgstr "Capital"
+msgstr "Ganhos de capital"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1261
 #, c-format
@@ -1849,29 +1843,32 @@ msgid ""
 "and therefore capital gains, of transactions dated after the new entry. "
 "Please review all transactions to ensure proper recording."
 msgstr ""
+"Você entrará numa transação no dia %s que é anterior à última transação "
+"nesta conta, no dia %s. Isso pode afetar a base de custo e, portanto, os "
+"ganhos de capital, de transações com data posterior à nova entrada. Revise "
+"todas as transações para garantir o registro adequado."
 
 #. Translators: %s refer to: stock mnemonic, broker currency,
 #. date of transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:1303
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
-msgstr ""
+msgstr "Será registrado um preço de 1 %s = %s em %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1373
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
-msgstr ""
+msgstr "A transação não pode ser compensada, %s é o valor de erro %s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1379
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
+"O total de débitos de %s não está balanceado com o total de créditos de %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1877
-#, fuzzy
-#| msgid "Net Balance"
 msgid "Ne_w Balance"
-msgstr "Saldo líquido"
+msgstr "No_vo balanço"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1877
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
@@ -1889,10 +1886,8 @@ msgstr "_Rotação"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1880
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
-#, fuzzy
-#| msgid "Net Balance"
 msgid "Next Balance"
-msgstr "Saldo líquido"
+msgstr "Próximo balanço"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1884
 msgid "Enter the new balance of shares after the stock split."
@@ -2484,7 +2479,7 @@ msgstr "Alterar a URL"
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
 msgid "Enter an URL like \"%s\""
-msgstr ""
+msgstr "Insira uma URL como \"%s\""
 
 #: gnucash/gnome/dialog-doclink.c:264
 msgid "Existing Document Link is"
@@ -2959,6 +2954,7 @@ msgstr "Esse cadastro está anexado a um pedido e que também será excluído!"
 #: gnucash/gnome/dialog-invoice.c:921
 msgid "Choose a different report template or Printable Invoice will be used"
 msgstr ""
+"Escolha um modelo de relatório diferente ou será usada a fatura imprimível"
 
 #: gnucash/gnome/dialog-invoice.c:1035 gnucash/gnome/dialog-invoice.c:3570
 #: gnucash/gnome/dialog-invoice.c:3604 gnucash/gnome/dialog-invoice.c:3638
@@ -2996,16 +2992,12 @@ msgid "Do you really want to post the invoice?"
 msgstr "Tem certeza de que deseja enviar a fatura?"
 
 #: gnucash/gnome/dialog-invoice.c:1168
-#, fuzzy
-#| msgid ""
-#| "One or more of the entries are for accounts different from the invoice/"
-#| "bill currency. You will be asked a conversion rate for each."
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked to enter a conversion rate for each."
 msgstr ""
-"Um ou mais cadastros são para as contas com uma moeda diferente da fatura/"
-"conta. Você será pedindo por uma taxa de cambio para cada uma delas."
+"Uma ou mais entradas são para contas diferentes da moeda da fatura/boleto. "
+"Você será solicitado a inserir uma taxa de conversão para cada uma delas."
 
 #: gnucash/gnome/dialog-invoice.c:1301
 msgid "The post action was canceled because not all exchange rates were given."
@@ -3638,12 +3630,6 @@ msgstr ""
 "pagamento"
 
 #: gnucash/gnome/dialog-payment.c:1626
-#, fuzzy
-#| msgid ""
-#| "While this transaction has multiple splits that can be considered\n"
-#| "as 'the payment split', gnucash only knows how to handle one.\n"
-#| "Please select one, the others will be ignored.\n"
-#| "\n"
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', GnuCash only knows how to handle one.\n"
@@ -3651,7 +3637,7 @@ msgid ""
 "\n"
 msgstr ""
 "Embora esta transação tenha várias divisões que podem ser consideradas\n"
-"como 'a divisão do pagamento', o gnucash só sabe como lidar com uma.\n"
+"como 'a divisão do pagamento', o GnuCash só sabe como lidar com uma.\n"
 "Escolha um, os outros serão ignorados.\n"
 "\n"
 
@@ -3681,6 +3667,12 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
+"Essa transação tem divisões em várias contas comerciais:\n"
+"\n"
+"%s\n"
+"O GnuCash só pode lidar com transações que são lançadas em uma única conta.\n"
+"\n"
+"Corrija isso manualmente editando a transação diretamente e tente novamente."
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.cpp:201
@@ -5046,10 +5038,8 @@ msgstr "Exclua o desdobramento atual"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Show Splits"
-msgstr "Desdobramento das ações"
+msgstr "Mostrar desdobramento"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 msgid "Jump"
@@ -6064,11 +6054,6 @@ msgid "New Split"
 msgstr "Novo desdobramento"
 
 #: gnucash/gnome-search/dialog-search.c:1120
-#, fuzzy
-#| msgctxt ""
-#| "Item represents an unknown object type (in the sense of bill, customer, "
-#| "invoice, transaction, split,...)!"
-#| msgid "New item"
 msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,…)!"
