@@ -436,14 +436,14 @@ gnc_price_to_dom_tree (const xmlChar* tag, GNCPrice* price)
     if (!add_child_or_kill_parent (price_xml, tmpnode)) return NULL;
 
     sourcestr = gnc_price_get_source_string (price);
-    if (sourcestr && (strlen (sourcestr) != 0))
+    if (sourcestr && *sourcestr)
     {
         tmpnode = text_to_dom_tree ("price:source", sourcestr);
         if (!add_child_or_kill_parent (price_xml, tmpnode)) return NULL;
     }
 
     typestr = gnc_price_get_typestr (price);
-    if (typestr && (strlen (typestr) != 0))
+    if (typestr && *typestr)
     {
         tmpnode = text_to_dom_tree ("price:type", typestr);
         if (!add_child_or_kill_parent (price_xml, tmpnode)) return NULL;

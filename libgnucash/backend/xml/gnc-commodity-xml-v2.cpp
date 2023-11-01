@@ -85,12 +85,10 @@ gnc_commodity_dom_tree_create (const gnc_commodity* com)
                                                 gnc_commodity_get_fullname (com)));
         }
 
-        if (gnc_commodity_get_cusip (com) &&
-            strlen (gnc_commodity_get_cusip (com)) > 0)
+        const char* cusip = gnc_commodity_get_cusip (com);
+        if (cusip && *cusip)
         {
-            xmlAddChild (ret, text_to_dom_tree (
-                             cmdty_xcode,
-                             gnc_commodity_get_cusip (com)));
+            xmlAddChild (ret, text_to_dom_tree (cmdty_xcode, cusip));
         }
 
         xmlAddChild (ret, int_to_dom_tree (cmdty_fraction,

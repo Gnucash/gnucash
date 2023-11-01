@@ -775,7 +775,7 @@ GncXmlBackend::remove_old_files ()
              * juggling, but considering the above tests, this should always
              * be safe */
             regex_t pattern;
-            gchar* stamp_start = name + strlen (m_fullpath.c_str());
+            gchar* stamp_start = name + m_fullpath.size();
             gchar* expression = g_strdup_printf ("^\\.[[:digit:]]{14}(\\%s|\\%s|\\.xac)$",
                                                  GNC_DATAFILE_EXT, GNC_LOGFILE_EXT);
             gboolean got_date_stamp = FALSE;

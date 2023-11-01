@@ -121,13 +121,13 @@ gnc_account_dom_tree_create (Account* act,
     }
 
     str = xaccAccountGetCode (act);
-    if (str && strlen (str) > 0)
+    if (str && *str)
     {
         xmlAddChild (ret, text_to_dom_tree (act_code_string, str));
     }
 
     str = xaccAccountGetDescription (act);
-    if (str && strlen (str) > 0)
+    if (str && *str)
     {
         xmlAddChild (ret, text_to_dom_tree (act_description_string, str));
     }

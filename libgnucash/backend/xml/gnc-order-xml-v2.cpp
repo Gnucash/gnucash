@@ -64,7 +64,7 @@ const gchar* order_version_string = "2.0.0";
 static void
 maybe_add_string (xmlNodePtr ptr, const char* tag, const char* str)
 {
-    if (str && strlen (str) > 0)
+    if (str && *str)
         xmlAddChild (ptr, text_to_dom_tree (tag, str));
 }
 
