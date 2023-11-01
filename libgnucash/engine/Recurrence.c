@@ -518,10 +518,10 @@ recurrenceListToString(const GList *r)
     return g_string_free(str, FALSE);
 }
 
-gchar *
+const gchar *
 recurrencePeriodTypeToString(PeriodType pt)
 {
-    return VALID_PERIOD_TYPE(pt) ? g_strdup(period_type_strings[pt]) : NULL;
+    return VALID_PERIOD_TYPE(pt) ? period_type_strings[pt] : NULL;
 }
 
 PeriodType
@@ -535,10 +535,10 @@ recurrencePeriodTypeFromString(const gchar *str)
     return -1;
 }
 
-gchar *
+const gchar *
 recurrenceWeekendAdjustToString(WeekendAdjust wadj)
 {
-    return VALID_WEEKEND_ADJ(wadj) ? g_strdup(weekend_adj_strings[wadj]) : NULL;
+    return VALID_WEEKEND_ADJ(wadj) ? weekend_adj_strings[wadj] : NULL;
 }
 
 WeekendAdjust
