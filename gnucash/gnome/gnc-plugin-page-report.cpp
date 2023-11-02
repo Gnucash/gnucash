@@ -334,7 +334,7 @@ gnc_plugin_page_report_focus_widget (GncPluginPage *report_plugin_page)
             if (!priv->loaded) // so we only do the load once
                 gnc_plugin_page_report_load_uri (report_plugin_page);
 
-            if (GTK_IS_WIDGET(widget))
+            if (widget && GTK_IS_WIDGET(widget))
             {
                 if (!gtk_widget_is_focus (GTK_WIDGET(widget)))
                     gtk_widget_grab_focus (GTK_WIDGET(widget));
