@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-25 22:04+0000\n"
+"PO-Revision-Date: 2023-11-04 19:34+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Weblate 5.2-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1596,10 +1596,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:227
-#, fuzzy
-#| msgid "Return of capital"
 msgid "Return of capital (reclassification)"
-msgstr "Tőkekifizetés"
+msgstr "Tőkekifizetés (átminősítés)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:228
 msgid ""
@@ -1611,10 +1609,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:240
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (dividend)"
-msgstr "Nem pénzbeli kifizetés"
+msgstr "Nem pénzbeli kifizetés (osztalék)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:241
 msgid ""
@@ -1628,23 +1624,16 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:252
-#, fuzzy
-#| msgid "Notional distribution"
 msgid "Notional distribution (capital gain)"
-msgstr "Nem pénzbeli kifizetés"
+msgstr "Nem pénzbeli kifizetés (tőkenyereség)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:253
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, which is recorded as dividend "
-#| "income and increases the cost basis without affecting # units."
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"A társaság nem pénzbeli kifizetést nyújt, amit osztalékjövedelemként "
-"könyvelünk el. Ez növeli a bekerülési értéket, miközben a részvények száma "
-"nem változik."
+"A társaság nem pénzbeli kifizetést nyújt, amit tőkenyereségként könyvelünk "
+"el. Ez növeli a bekerülési értéket, miközben a részvények száma nem változik."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1656,15 +1645,6 @@ msgid "Stock split"
 msgstr "Részvényfelaprózás"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:265
-#, fuzzy
-#| msgid ""
-#| "Company redeems units, thereby increasing the stock price by a multiple, "
-#| "while keeping the total monetary value of the overall investment "
-#| "constant.\n"
-#| "\n"
-#| "If the reverse split results in a cash in lieu for remainder units, "
-#| "please record the sale using the Stock Transaction Assistant first, then "
-#| "record the reverse split."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor , while keeping the total monetary value of the overall investment "
@@ -1673,13 +1653,13 @@ msgid ""
 "If the split results in a cash in lieu for remainder units, please record "
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
-"A vállalat visszavonja részvényeinek egy részét, ezáltal egy szorzóval "
-"növeli a részvényárfolyamot, miközben a teljes befektetés pénzbeli értéke "
-"nem változik.\n"
+"A vállalat további részvényeket bocsát ki, ezáltal egy osztóval csökkenti a "
+"részvényárfolyamot, miközben a teljes befektetés pénzbeli értéke nem "
+"változik. \n"
 "\n"
-"Ha az összevonás során törtrészvények keletkeznek, akkor először könyvelje "
-"le ezek eladását a Részvénytranzakció-segéddel és utána könyvelje a "
-"részvényösszevonást."
+"Ha a felaprózás során törtrészvények keletkeznek, akkor először könyvelje le "
+"ezek eladását a Részvénytranzakció-segéddel és utána könyvelje a "
+"részvényfelaprózást."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1765,17 +1745,10 @@ msgstr ""
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:345
-#, fuzzy
-#| msgid "Compensatory return of capital"
 msgid "Compensatory return of capital (reclassification)"
-msgstr "Kompenzációs tőkekifizetés"
+msgstr "Kompenzációs tőkekifizetés (átminősítés)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:346
-#, fuzzy
-#| msgid ""
-#| "Company returns capital, and the short stock holder must make a "
-#| "compensatory payment for the returned capital. This reduces the cost "
-#| "basis (less negative, towards 0.00 value) without affecting # units."
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1784,18 +1757,17 @@ msgid ""
 "compensatory return of capital,often due to end-of-year tax information."
 msgstr ""
 "A társaság tőkét fizet vissza és a shortolt részvény tulajdonosának "
-"kompenzációt kell fizetnie a tőkéért. Ez csökkenti a bekerülési értéket "
-"(kevésbé negatívvá teszi, közelíti a nullához), miközben a részvények száma "
-"nem változik."
+"kompenzációt kell fizetnie a tőkéért. Ez csökkenti a bekerülési értéket ("
+"kevésbé negatívvá teszi, közelíti a nullához), miközben a részvények száma "
+"nem változik. A korábban rögzített kompenzációs osztalékot kompenzációs "
+"tőkevisszafizetéssé minősítik át, rendszerint az év végi adózás miatt."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:361
-#, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (dividend)"
-msgstr "Kompenzációs nem pénzbeli kifizetés"
+msgstr "Kompenzációs nem pénzbeli kifizetés (osztalék)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:362
 msgid ""
@@ -1814,19 +1786,10 @@ msgstr ""
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:376
-#, fuzzy
-#| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (capital gain)"
-msgstr "Kompenzációs nem pénzbeli kifizetés"
+msgstr "Kompenzációs nem pénzbeli kifizetés (tőkenyereség)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:377
-#, fuzzy
-#| msgid ""
-#| "Company issues a notional distribution, and the short stock holder must "
-#| "make a compensatory payment for the notional distribution. This is "
-#| "recorded as a loss/negative dividend income amount, and increases the "
-#| "cost basis (more negative, away from 0.00 value) without affecting # "
-#| "units."
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1834,21 +1797,11 @@ msgid ""
 "0.00 value) without affecting # units."
 msgstr ""
 "A társaság nem pénzbeli kifizetést nyújt és a shortolt részvény "
-"tulajdonosának kompenzációt kell fizetnie érte. Ezt veszteségként, azaz "
-"negatív osztalékjövedelemként könyveljük, ami növeli a bekerülési értéket "
-"(még negatívabbá teszi, távolítja a nullától), miközben a részvények száma "
-"nem változik."
+"tulajdonosának kompenzációt kell fizetnie érte. Ezt tőkeveszteségként "
+"könyveljük, ami növeli a bekerülési értéket (még negatívabbá teszi, "
+"távolítja a nullától), miközben a részvények száma nem változik."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:391
-#, fuzzy
-#| msgid ""
-#| "Company redeems units, thereby increasing the stock price by a multiple, "
-#| "while keeping the total monetary value of the overall investment "
-#| "constant.\n"
-#| "\n"
-#| "If the reverse split results in a cash in lieu for remainder units, "
-#| "please record the cover buy using the Stock Transaction Assistant first, "
-#| "then record the reverse split."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor, while keeping the total monetary value of the overall investment "
@@ -1858,13 +1811,13 @@ msgid ""
 "the cover buy using the Stock Transaction Assistant first, then record the "
 "split."
 msgstr ""
-"A vállalat visszavonja részvényeinek egy részét, ezáltal egy szorzóval "
-"növeli a részvényárfolyamot, miközben a teljes befektetés pénzbeli értéke "
-"nem változik.\n"
+"A vállalat további részvényeket bocsát ki, ezáltal egy osztóval csökkenti a "
+"részvényárfolyamot, miközben a teljes befektetés pénzbeli értéke nem "
+"változik. \n"
 "\n"
-"Ha az összevonás során törtrészvények keletkeznek, akkor először vételként "
+"Ha a felaprózás során törtrészvények keletkeznek, akkor először vételként "
 "könyvelje le az értük kapott összeget a Részvénytranzakció-segéddel és utána "
-"könyvelje a részvényösszevonást."
+"könyvelje a részvényfelaprózást."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:405
 msgid ""
@@ -1924,10 +1877,9 @@ msgstr "%s pozitívnak kell lennie."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:674
 #: gnucash/gnome/assistant-stock-transaction.cpp:1021
-#, fuzzy, c-format
-#| msgid "Include sub-accounts of all selected accounts."
+#, c-format
 msgid "The %s amount has no associated account."
-msgstr "Tartalmazza a kiválasztott számlák alszámláit."
+msgstr "%s összeghez nem tartozik számla."
 
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
 #: gnucash/gnome/assistant-stock-transaction.cpp:740
@@ -1935,10 +1887,8 @@ msgid "N/A"
 msgstr "nincs ár"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:829
-#, fuzzy
-#| msgid "Amount for %s is missing."
 msgid "Amount for stock value is missing."
-msgstr "%s összege hiányzik."
+msgstr "Részvény értéke hiányzik."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:841
 msgid "Invalid stock new balance."
@@ -1965,36 +1915,26 @@ msgid "Cannot cover buy more units than owed."
 msgstr "Nem vásárolhat vissza több részvényt, mint amennyivel tartozik."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1094
-#, fuzzy
-#| msgid "Stock"
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
 msgstr "Részvény"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1095
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "Készpénz"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1096
-#, fuzzy
-#| msgid "Fees"
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
 msgstr "Díj"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1097
-#, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "Dividend"
 msgstr "Osztalékfizetés"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1098
-#, fuzzy
-#| msgid "Capital Gains"
 msgctxt "Stock Assistant: Page name"
 msgid "Capital Gains"
 msgstr "Tőkenyereség"
@@ -7171,10 +7111,9 @@ msgid "Account is already at Auto-Clear Balance."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-autoclear.c:155
-#, fuzzy, c-format
-#| msgid "Too many uncleared splits"
+#, c-format
 msgid "No uncleared splits found."
-msgstr "Túl sok a nem elszámolt felosztás"
+msgstr ""
 
 #: gnucash/gnome-utils/gnc-autoclear.c:171
 #, c-format
@@ -7605,10 +7544,8 @@ msgstr ""
 
 # msgid_plural "The following %d bills are due:"
 #: gnucash/gnome-utils/gnc-file.c:754
-#, fuzzy
-#| msgid "The following warnings exist:"
 msgid "The following are noted in this file:"
-msgstr "Figyelem:"
+msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:880
 #, c-format
@@ -10176,17 +10113,14 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
-#, fuzzy
-#| msgid ""
-#| "Automatically expand the current transaction to show all splits. All "
-#| "other transactions are shown on one line or in double line view on two."
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one or two lines depending on whether Double line "
 "view is set."
 msgstr ""
 "Automatikusan kinyitja az aktuális tranzakció felosztását. A többi "
-"tranzakció egy sorban jelenik meg, kétsoros nézet esetén kettőben."
+"tranzakció egy vagy két sorban jelenik meg a Kétsoros nézet beállítástól "
+"függően."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:296
 #: gnucash/gtkbuilder/dialog-preferences.glade:2888
@@ -12594,11 +12528,6 @@ msgid "Stock Transaction Assistant"
 msgstr "Részvénytranzakció-segéd"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:22
-#, fuzzy
-#| msgid ""
-#| "This assistant will help you record a stock transaction. The transaction "
-#| "type (purchase, sale, dividend, distribution, return of capital, stock "
-#| "split) will determine the transaction splits involved in the transaction."
 msgid ""
 "This assistant will help you record a stock transaction. The transaction "
 "type (purchase, sale, dividend, distribution, return of capital, stock "
@@ -12610,7 +12539,10 @@ msgid ""
 msgstr ""
 "Ez a segéd végigvezeti egy részvénytranzakció könyvelésén. A tranzakció "
 "típusa (vétel, eladás, osztalékfizetés, tőkekifizetés, felaprózás) fogja "
-"meghatározni a tranzakció felosztását."
+"meghatározni a tranzakció felosztását. A részvénytranzakció a részvényszámla "
+"pénznemét fogja használni, ezért készpénz, tőkenyereség, osztalék és díjak "
+"bevitelekor a segéd csak az ilyen pénznemű számlákat fogja felajánlani. "
+"Többféle pénznemben történt tranzakciót a segéd nem kezel."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
 msgid "Select the date and description for your records."
@@ -15508,10 +15440,8 @@ msgid "Layout"
 msgstr "<b>_Számlák</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2765
-#, fuzzy
-#| msgid "Number of _transactions"
 msgid "_Placement of future transactions"
-msgstr "_Tranzakciók száma"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2771
 msgid ""
@@ -20182,10 +20112,8 @@ msgid "Ignoring security line"
 msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:532
-#, fuzzy
-#| msgid "Could not create opening balance."
 msgid "Could not parse price line"
-msgstr "Nem lehetett nyitóegyenleget létrehozni."
+msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:540
 msgid "File does not appear to be in QIF format"
@@ -20248,10 +20176,8 @@ msgid "Parsing accounts"
 msgstr "Számlák elemzése"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:816
-#, fuzzy
-#| msgid "Parsing categories"
 msgid "Parsing prices"
-msgstr "Kategóriák elemzése"
+msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:849
 msgid "Parsing transactions"
@@ -20318,17 +20244,12 @@ msgid "Converting"
 msgstr "Konvertálás"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:486
-#, fuzzy
-#| msgid "%d duplicate price"
-#| msgid_plural "%d duplicate prices"
 msgid "Discarding duplicate prices"
-msgstr "%d ár duplikált volt"
+msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:516
-#, fuzzy
-#| msgid "Add a new price."
 msgid "Adding prices"
-msgstr "Új ár hozzáadása."
+msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:589
 msgid "Missing transaction date."
@@ -21301,10 +21222,8 @@ msgid "Enter credit formula for real transaction"
 msgstr "Követelés-képlet megadása valós tranzakcióhoz"
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:75
-#, fuzzy
-#| msgid "Loading completed"
 msgid "Don't autocomplete"
-msgstr "Betöltés kész"
+msgstr ""
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
@@ -22205,9 +22124,9 @@ msgid ""
 "the scm/report directory for details on writing your own reports, or "
 "extending existing reports."
 msgstr ""
-"Ez egy ~a GnuCash-jelentés mintája. A saját jelentések írásának vagy a "
-"meglévő jelentések bővítésének részleteit lásd az scm/report mappában lévő "
-"guile (scheme) forráskódban."
+"Ez egy ~a GnuCash kimutatás mintája. A saját kimutatás írásának vagy a "
+"meglévők bővítésének részleteit lásd az scm/report mappában lévő guile "
+"(scheme) forráskódban."
 
 #: gnucash/report/reports/example/sample-report.scm:292
 #, scheme-format
@@ -24117,16 +24036,12 @@ msgid "Display a column for the actual values."
 msgstr "A jelenlegi értékek oszlopának megjelenítése."
 
 #: gnucash/report/reports/standard/budget.scm:57
-#, fuzzy
-#| msgid "Actual Transactions"
 msgid "Link to actual transactions"
-msgstr "Aktuális tranzakciók"
+msgstr ""
 
 #: gnucash/report/reports/standard/budget.scm:58
-#, fuzzy
-#| msgid "Move to the blank transaction at the bottom of the register"
 msgid "Show the actual transactions for the budget period"
-msgstr "Ugrás a regiszter alján lévő üres tranzakcióra"
+msgstr "A költségvetési időszak aktuális tranzakcióinak megjelenítése"
 
 #: gnucash/report/reports/standard/budget.scm:59
 msgid "Show Difference"
@@ -27556,10 +27471,8 @@ msgstr "Részösszeg"
 #. "Running Totals" is the plural form as it refers to the running total and running subtotals.
 #. To be consistent, also consider how the singular form "Running Total" is translated.
 #: gnucash/report/trep-engine.scm:82
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Totals"
-msgstr "Futó egyenleg"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2292
 msgid "Show Account Description"
@@ -27908,16 +27821,12 @@ msgid "Display a subtotal summary table."
 msgstr "Részösszegek összefoglaló táblázatának megjelenítése."
 
 #: gnucash/report/trep-engine.scm:930
-#, fuzzy
-#| msgid "Display the other account code?"
 msgid "Display the balance of the underlying account on each line?"
-msgstr "A másik számla kódjának megjelenítése?"
+msgstr "A kapcsolódó számla egyenlegének megjelenítése minden sorban?"
 
 #: gnucash/report/trep-engine.scm:931
-#, fuzzy
-#| msgid "Display the transaction date?"
 msgid "Display a grand total section at the bottom?"
-msgstr "Tranzakciódátum megjelenítése?"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:936
 #, fuzzy
@@ -27968,22 +27877,16 @@ msgid "Display running totals as per report sort order?"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:1000
-#, fuzzy
-#| msgid "Grand Total Cell Color"
 msgid "Grand Total and Subtotals"
-msgstr "A főösszeg cella színe"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:1001
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Grand Total Only"
-msgstr "Főösszeg"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:1002
-#, fuzzy
-#| msgid "Subtotal"
 msgid "Subtotals Only"
-msgstr "Részösszeg"
+msgstr ""
 
 #: gnucash/report/trep-engine.scm:1114
 msgid "Num/T-Num"
@@ -27998,49 +27901,39 @@ msgstr "Átvitel innen/ide"
 #. pattern as for these other strings: “Running Totals”,
 #. "Secondary Subtotal” and "Running Primary Subtotal"
 #: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:1483
-#, fuzzy
-#| msgid "Secondary Subtotal"
 msgid "Running Secondary Subtotal"
-msgstr "Másodlagos alösszeg"
+msgstr ""
 
 #. Translators: this is the running total for the primary subtotal.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. “Primary Subtotal”
 #: gnucash/report/trep-engine.scm:1398 gnucash/report/trep-engine.scm:1496
-#, fuzzy
-#| msgid "Primary Subtotal"
 msgid "Running Primary Subtotal"
-msgstr "Elsődleges alösszeg"
+msgstr ""
 
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
 #: gnucash/report/trep-engine.scm:1402 gnucash/report/trep-engine.scm:1497
-#, fuzzy
-#| msgid "Running Sum"
 msgid "Running Subtotal"
-msgstr "Futó egyenleg"
+msgstr ""
 
 #. Translators: this is the running total for the grand total.
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. "Grand Total”
 #: gnucash/report/trep-engine.scm:1419 gnucash/report/trep-engine.scm:1511
-#, fuzzy
-#| msgid "Grand Total"
 msgid "Running Grand Total"
-msgstr "Főösszeg"
+msgstr ""
 
 #. Translators: "Running Total" is a shorter version of
 #. "Running Grand Total" used when the running grand total is
 #. displayed without subtotals. To be consistent, also consider
 #. how the plural form "Running Totals" is translated.
 #: gnucash/report/trep-engine.scm:1424 gnucash/report/trep-engine.scm:1512
-#, fuzzy
-#| msgid "Running Balance"
 msgid "Running Total"
-msgstr "Futó egyenleg"
+msgstr ""
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
@@ -28946,8 +28839,7 @@ msgstr "GnuCash .log naplófájl _visszajátszása…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
 msgid "Replay a GnuCash log file after a crash. This cannot be undone"
-msgstr ""
-"Egy GnuCash naplófájl visszajátszása összeomlás után. Vissza nem vonható"
+msgstr "GnuCash naplófájl visszajátszása összeomlás után. Vissza nem vonható"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:16
 #: gnucash/ui/gnc-plugin-page-register.ui:32
@@ -29542,7 +29434,7 @@ msgstr "Fo_rdított tranzakció felvétele(Storno)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
 msgid "Add a reversing transaction"
-msgstr "Fordított tranzakció felvétele(Storno)"
+msgstr "Fordított tranzakció felvétele (Storno)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:272
 #: gnucash/ui/gnc-plugin-page-register.ui:414
@@ -29550,10 +29442,8 @@ msgstr "Fordított tranzakció felvétele(Storno)"
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
 #: gnucash/ui/gnc-plugin-page-register.ui:804
-#, fuzzy
-#| msgid "Move to the blank transaction at the bottom of the register"
 msgid "Move to the blank transaction in the register"
-msgstr "Ugrás a regiszter alján lévő üres tranzakcióra"
+msgstr "Ugrás a regiszterben lévő üres tranzakcióra"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:417
