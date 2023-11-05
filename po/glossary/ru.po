@@ -8,15 +8,15 @@
 # Nikita Samoilov <n.p.samoilov@gmail.com>, 2022.
 # Vik <k3kelm4vw@mozmail.com>, 2022.
 # Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail.com>, 2023.
+# hades <dev@hades.name>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-25 08:00+0200\n"
-"PO-Revision-Date: 2023-04-23 21:48+0000\n"
-"Last-Translator: Muhammadyusuf Kurbonov <muhammadyusuf.kurbonov2002@gmail."
-"com>\n"
+"PO-Revision-Date: 2023-11-05 14:32+0000\n"
+"Last-Translator: hades <dev@hades.name>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ru/>\n"
 "Language: ru\n"
@@ -25,7 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -205,17 +205,15 @@ msgstr "action: отзыв"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "устаревание"
 
 #. "A sum of money"
 msgid "amount"
 msgstr "сумма"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
-#, fuzzy
-#| msgid "amount"
 msgid "amount due"
-msgstr "сумма"
+msgstr "сумма к оплате"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
@@ -226,14 +224,12 @@ msgid "balance (noun)"
 msgstr "остаток"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
-#, fuzzy
 msgid "balance b/f"
-msgstr "свести баланс"
+msgstr "вступительный баланс"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
-#, fuzzy
 msgid "balance c/f"
-msgstr "свести баланс"
+msgstr "перенесённый остаток"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
@@ -252,9 +248,8 @@ msgid "bill"
 msgstr "счет на оплату"
 
 #. "see invoice owner"
-#, fuzzy
 msgid "bill owner"
-msgstr "условия платежа"
+msgstr "получатель счёта"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
@@ -313,9 +308,8 @@ msgid "commodity listing"
 msgstr "товарная номенклатура"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
-#, fuzzy
 msgid "commodity option: fraction"
-msgstr "commodity option: составляющая"
+msgstr "commodity option: доля"
 
 #. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
