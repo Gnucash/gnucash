@@ -16,23 +16,24 @@
 # Nikita Samoilov <n.p.samoilov@gmail.com>, 2022.
 # Vik <xasertop@gmail.com>, 2022.
 # Vin <k3kelm4vw@mozmail.com>, 2023.
+# hades <dev@hades.name>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-03-06 11:40+0000\n"
-"Last-Translator: Vin <k3kelm4vw@mozmail.com>\n"
-"Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/program-"
-"beta/ru/>\n"
+"PO-Revision-Date: 2023-11-06 10:34+0000\n"
+"Last-Translator: hades <dev@hades.name>\n"
+"Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
+"ru/>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 5.2-dev\n"
 "X-Source-Language: C\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -2230,7 +2231,7 @@ msgstr "_Отменить"
 #: gnucash/ui/gnc-reconcile-window.ui:78 gnucash/ui/gnc-reconcile-window.ui:114
 #: gnucash/ui/gnc-reconcile-window.ui:193
 msgid "_Delete"
-msgstr "_Удалить"
+msgstr "У_далить"
 
 #: gnucash/gnome/dialog-customer.c:314 gnucash/gnome/dialog-vendor.c:205
 msgid ""
@@ -2446,7 +2447,7 @@ msgstr "Выбрать документ"
 #: gnucash/import-export/aqb/dialog-ab.glade:906
 #: gnucash/import-export/aqb/dialog-ab.glade:1690
 msgid "_OK"
-msgstr "ОК"
+msgstr "_ОК"
 
 #: gnucash/gnome/dialog-doclink.c:241
 #, fuzzy
@@ -2692,7 +2693,7 @@ msgstr "Относящиеся к налогам"
 #: gnucash/gnome/dialog-find-account.c:491
 #, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr "Субсчета в '%s'"
+msgstr "_Субсчета в '%s'"
 
 #: gnucash/gnome/dialog-find-transactions.c:105
 msgid "All Accounts"
@@ -4431,7 +4432,7 @@ msgstr "Отменить ввод этого счёта-фактуры и сде
 #: gnucash/gnome/gnc-plugin-page-invoice.c:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:352
 msgid "New _Invoice"
-msgstr "Новый счёт-фактура"
+msgstr "_Новый счёт-фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:354
@@ -4456,7 +4457,7 @@ msgstr "Переместиться на чистую запись снизу с�
 #: gnucash/gnome/gnc-plugin-page-invoice.c:196
 #: gnucash/ui/gnc-plugin-page-invoice.ui:552
 msgid "_Pay Invoice"
-msgstr "Оплатить счёт-фактуру"
+msgstr "_Оплатить счёт-фактуру"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:196
 #: gnucash/ui/gnc-plugin-page-invoice.ui:200
@@ -4956,7 +4957,7 @@ msgstr "Ду_блировать часть"
 #: gnucash/ui/gnc-plugin-page-register.ui:481
 #: gnucash/ui/gnc-plugin-page-register.ui:618
 msgid "_Delete Split"
-msgstr "Удалить часть"
+msgstr "У_далить часть"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:268
 #: gnucash/ui/gnc-embedded-register-window.ui:35
@@ -5623,7 +5624,7 @@ msgstr ""
 #. Translators: This is the confirmation button in a warning dialog
 #: gnucash/gnome/gnc-split-reg.c:1202
 msgid "_Remove Splits"
-msgstr "Удалить части"
+msgstr "_Удалить части"
 
 #: gnucash/gnome/gnc-split-reg.c:1263
 #, fuzzy
@@ -5972,7 +5973,7 @@ msgstr "Платёж в"
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
 msgid "Enter _Interest Payment…"
-msgstr "Ввод платежа по процентам…"
+msgstr "Ввод платежа по про_центам…"
 
 #: gnucash/gnome/window-reconcile.c:787
 msgid "Enter _Interest Charge…"
@@ -6762,9 +6763,8 @@ msgstr "Открыть"
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:106
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:784
 #: gnucash/ui/gnc-reconcile-window.ui:220
-#, fuzzy
 msgid "_Open"
-msgstr "Открыть"
+msgstr "_Открыть"
 
 #: gnucash/gnome-utils/dialog-file-access.c:330
 #, fuzzy
@@ -6774,9 +6774,8 @@ msgstr "Сохранить как…"
 #: gnucash/gnome-utils/dialog-file-access.c:331
 #: gnucash/gnome-utils/dialog-file-access.c:340
 #: gnucash/gtkbuilder/dialog-file-access.glade:40
-#, fuzzy
 msgid "_Save As"
-msgstr "Сохранить как..."
+msgstr "Сохранить _как..."
 
 #: gnucash/gnome-utils/dialog-file-access.c:359
 #: gnucash/gnome-utils/gnc-file.c:149
@@ -7041,7 +7040,7 @@ msgstr "Больше не _повторять."
 
 #: gnucash/gnome-utils/dialog-utils.c:770
 msgid "Remember and don't ask me again this _session."
-msgstr "Запомнить и больше не спрашивать в течение этой сессии."
+msgstr "Запомнить и больше не спрашивать в течение этой _сессии."
 
 #: gnucash/gnome-utils/dialog-utils.c:771
 msgid "Don't tell me again this _session."
@@ -7054,10 +7053,8 @@ msgid "Hide _Placeholder Accounts"
 msgstr "Выбранные счета"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:523
-#, fuzzy
-#| msgid "Show Hidden Accounts"
 msgid "Hide _Hidden Accounts"
-msgstr "Показывать скрытые счета"
+msgstr "Не показывать _скрытые счета"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:700
 msgid "Set the visibility of placeholder and hidden accounts."
@@ -7260,12 +7257,12 @@ msgstr "Импорт"
 #: gnucash/ui/gnc-plugin-page-report.ui:105
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:82
 msgid "_Save"
-msgstr "Сохранить"
+msgstr "_Сохранить"
 
 #: gnucash/gnome-utils/gnc-file.c:104 gnucash/gnome-utils/gnc-file.c:345
 #: gnucash/gnome-utils/gnc-file.c:1236 gnucash/gnome-utils/gnc-file.c:1508
 msgid "Save"
-msgstr "_Сохранить"
+msgstr "Сохранить"
 
 #: gnucash/gnome-utils/gnc-file.c:108 gnucash/ui/gnc-main-window.ui:51
 msgid "_Export"
@@ -11346,7 +11343,7 @@ msgstr "В_ыбрать все"
 #: gnucash/gtkbuilder/assistant-csv-export.glade:456
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:141
 msgid "Select _Range"
-msgstr "Выбрать диапазон"
+msgstr "Выбрать _диапазон"
 
 #. Filter By Dialog, Date Tab, Start section
 #: gnucash/gtkbuilder/assistant-csv-export.glade:484
@@ -11857,7 +11854,7 @@ msgstr "<b>Категории</b>"
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:272
 #: gnucash/gtkbuilder/dialog-account.glade:906
 msgid "C_lear All"
-msgstr "Очистить все"
+msgstr "О_чистить все"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:310
 msgid "<b>Category Description</b>"
@@ -12422,11 +12419,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:458
 msgid "_Unload selected file"
-msgstr "Выгрузить выбранный файл"
+msgstr "_Выгрузить выбранный файл"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:473
 msgid "_Load another file"
-msgstr "Загрузить другой файл"
+msgstr "_Загрузить другой файл"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:495
 msgid "QIF files you have loaded"
@@ -12774,7 +12771,7 @@ msgstr "_Дата"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:143
 msgid "Desc_ription"
-msgstr "Описание"
+msgstr "_Описание"
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:158
 msgid "Stock Split"
@@ -13120,11 +13117,11 @@ msgstr "Основные"
 
 #: gnucash/gtkbuilder/business-prefs.glade:48
 msgid "Enable extra _buttons"
-msgstr "Включить дополнительные кнопки"
+msgstr "Включить дополнительные _кнопки"
 
 #: gnucash/gtkbuilder/business-prefs.glade:66
 msgid "_Open in new window"
-msgstr "Открыть в новом окне"
+msgstr "_Открыть в новом окне"
 
 #: gnucash/gtkbuilder/business-prefs.glade:72
 msgid ""
@@ -13136,7 +13133,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/business-prefs.glade:84
 msgid "_Accumulate splits on post"
-msgstr "Собирать части при вводе"
+msgstr "_Собирать части при вводе"
 
 #: gnucash/gtkbuilder/business-prefs.glade:90
 msgid ""
@@ -13154,7 +13151,7 @@ msgstr "<b>Счета-фактуры</b>"
 
 #: gnucash/gtkbuilder/business-prefs.glade:125
 msgid "Not_ify when due"
-msgstr "Извещать о счетах-фактурах к оплате"
+msgstr "_Извещать о счетах-фактурах к оплате"
 
 #: gnucash/gtkbuilder/business-prefs.glade:131
 #: gnucash/gtkbuilder/business-prefs.glade:208
@@ -13163,7 +13160,7 @@ msgstr "Показывать список счетов-платежей к оп�
 
 #: gnucash/gtkbuilder/business-prefs.glade:143
 msgid "_Tax included"
-msgstr "Налоги включены"
+msgstr "Налоги _включены"
 
 #: gnucash/gtkbuilder/business-prefs.glade:149
 msgid ""
@@ -13184,7 +13181,7 @@ msgstr "<b>Счета-Платежи</b>"
 
 #: gnucash/gtkbuilder/business-prefs.glade:202
 msgid "_Notify when due"
-msgstr "Извещать о счетах-платежах к оплате"
+msgstr "Извещать о счетах-_платежах к оплате"
 
 #: gnucash/gtkbuilder/business-prefs.glade:220
 msgid "Ta_x included"
@@ -13205,7 +13202,7 @@ msgstr "Автоматически _оплачивать при вводе"
 
 #: gnucash/gtkbuilder/business-prefs.glade:258
 msgid "Days in ad_vance"
-msgstr "Заранее, дней"
+msgstr "_Заранее, дней"
 
 #: gnucash/gtkbuilder/business-prefs.glade:273
 msgid "How many days in the future to warn about Bills coming due."
@@ -13218,7 +13215,7 @@ msgstr "За сколько дней предупреждать о необхо�
 
 #: gnucash/gtkbuilder/business-prefs.glade:300
 msgid "_Days in advance"
-msgstr "Заранее, дней"
+msgstr "За_ранее, дней"
 
 #: gnucash/gtkbuilder/dialog-account.glade:7
 #, fuzzy
@@ -13345,12 +13342,11 @@ msgstr "Тип счета"
 
 #: gnucash/gtkbuilder/dialog-account.glade:968
 msgid "Show _hidden accounts"
-msgstr "Показывать скрытые счета"
+msgstr "Показывать _скрытые счета"
 
 #: gnucash/gtkbuilder/dialog-account.glade:986
-#, fuzzy
 msgid "Show _unused accounts"
-msgstr "Показывать скрытые счета"
+msgstr "Показывать _неиспользуемые счета"
 
 #: gnucash/gtkbuilder/dialog-account.glade:990
 #, fuzzy
@@ -13359,7 +13355,7 @@ msgstr "Счет %s не поддерживает проводки."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1004
 msgid "Show _zero total accounts"
-msgstr "Показывать счета с нулевым балансом"
+msgstr "Показывать счета с _нулевым балансом"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1008
 msgid "Show accounts which have a zero total value."
@@ -14036,7 +14032,7 @@ msgstr "Получить онла_йн котировки"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:456
 msgid "F_raction traded"
-msgstr "Часть для продажи"
+msgstr "_Часть для продажи"
 
 #. Again replace CUSIP by your National Securities Identifying Number.
 #: gnucash/gtkbuilder/dialog-commodity.glade:470
@@ -14053,7 +14049,7 @@ msgstr "Вид"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
-msgstr "Символ/аббревиатура"
+msgstr "_Символ/аббревиатура"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:515
 msgid "_Full name"
@@ -14532,10 +14528,8 @@ msgid "_Jump To"
 msgstr "П_ерейти"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:127
-#, fuzzy
-#| msgid "All accounts"
 msgid "All _accounts"
-msgstr "Все счета"
+msgstr "Все _счета"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:165
 msgid "Search scope"
@@ -14621,7 +14615,7 @@ msgstr "_Файл"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:349
 msgid "_Expand All"
-msgstr "Развернуть всё"
+msgstr "_Развернуть всё"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:363
 #, fuzzy
@@ -14637,10 +14631,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:266
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:412
-#, fuzzy
-#| msgid "New Account"
 msgid "New _Account…"
-msgstr "Новый счёт"
+msgstr "Новый _счёт"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -14985,7 +14977,7 @@ msgstr "Введите примечание к этому набору."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:193
 msgid "<b>_Title</b>"
-msgstr "<b>Заголовок</b>"
+msgstr "<b>_Заголовок</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:223
 msgid "<b>_Lots in This Account</b>"
@@ -14997,11 +14989,11 @@ msgstr "Показать только открытые лоты"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:304
 msgid "<b>Splits _free</b>"
-msgstr "<b>Доступные части</b>"
+msgstr "<b>_Доступные части</b>"
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:359
 msgid "<b>Splits _in lot</b>"
-msgstr "<b>Части в составе лота</b>"
+msgstr "<b>Части в _составе лота</b>"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:25
 #, fuzzy
@@ -15305,7 +15297,7 @@ msgstr "Расчётный период"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:609
 msgid "Use _formal accounting labels"
-msgstr "Использовать формальные обозначения счетов"
+msgstr "Использовать _формальные обозначения счетов"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:615
 msgid "Use only 'debit' and 'credit' instead of informal synonyms."
@@ -15395,7 +15387,7 @@ msgstr "<b>Формат времени</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1081
 msgid "U_se 24-hour clock"
-msgstr "Использовать 24-х часовой формат времени"
+msgstr "Использовать 24-_х часовой формат времени"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1087
 msgid "Use a 24 hour (instead of a 12 hour) time format."
@@ -15443,7 +15435,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1243
 msgid "Display ne_gative amounts in red"
-msgstr "Показывать отрицательные суммы красным"
+msgstr "Показывать отрицательные суммы _красным"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1249
 msgid "Display negative amounts in red."
@@ -15487,7 +15479,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1458
 msgid "Display \"_tip of the day\" dialog"
-msgstr "Показывать советы дня"
+msgstr "Показывать _советы дня"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1464
 msgid "Display hints for using GnuCash at startup."
@@ -15546,7 +15538,7 @@ msgstr "Показывать заставку при запуске."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1654
 msgid "Auto-save time _interval"
-msgstr "Период между автосохранениями"
+msgstr "_Период между автосохранениями"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1693
 msgid "minutes"
@@ -15577,7 +15569,7 @@ msgstr "Навсегда"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1812
 msgid "Time to _wait for answer"
-msgstr "Время для ожидания ответа"
+msgstr "Время для _ожидания ответа"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1849
 msgid "seconds"
@@ -15693,7 +15685,7 @@ msgstr ""
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2203
 msgid "Commercial ATM _fees threshold"
-msgstr "Максимальный сбор торгового автомата"
+msgstr "Максимальная _комиссия банкомата"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2217
@@ -15708,7 +15700,7 @@ msgstr "Порог авто_добавления"
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2245
 msgid "Match _display threshold"
-msgstr "Не выводить более"
+msgstr "Не выводить _более"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2256
@@ -15773,7 +15765,7 @@ msgstr "Печатать '***' до и после каждого текстов�
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2455
 msgid "Default _font"
-msgstr "Шрифт по умолчанию"
+msgstr "_Шрифт по умолчанию"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2484
 msgid "Printing"
@@ -16036,7 +16028,7 @@ msgstr "Запоминать размеры и положения окна пр�
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3329
 msgid "Bring the most _recent tab to the front"
-msgstr "Перенести наиболее часто используемую закладку вперед"
+msgstr "Перенести наиболее _часто используемую закладку вперед"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3361
 msgid "<b>Tab Position</b>"
@@ -16367,7 +16359,7 @@ msgstr "Печать"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:384
 msgid "Check _format"
-msgstr "Формат чека"
+msgstr "_Формат чека"
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:399
 msgid "Check po_sition"
@@ -16553,7 +16545,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:120
 msgid "_Unselect All"
-msgstr "Снять все выделение"
+msgstr "_Снять все выделение"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:146
 msgid "No warnings to reset."
@@ -16688,7 +16680,7 @@ msgstr "Показывать диалог \"с прошлого запуска\"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:558
 msgid "_Show notification window"
-msgstr "Показывать окно уведомления"
+msgstr "_Показывать окно уведомления"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:562
 msgid ""
@@ -18908,7 +18900,7 @@ msgstr "Список плановых проводок"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
 msgid "Get _Transactions…"
-msgstr "Получить проводки…"
+msgstr "_Получить проводки…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:25
 msgid "Get the transactions online through Online Banking"
@@ -20918,7 +20910,7 @@ msgstr ""
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:897
 #: gnucash/register/ledger-core/split-register.c:477
 msgid "_Record"
-msgstr "Записать"
+msgstr "_Записать"
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:157
 msgid ""
@@ -20952,7 +20944,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:895
 msgid "_Don't Record"
-msgstr "Не записывать"
+msgstr "_Не записывать"
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:982
 msgid "The current entry has been changed. Would you like to save it?"
@@ -29289,7 +29281,7 @@ msgstr "Новый счёт-фактура"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:6
 msgid "New Accounts _Page"
-msgstr "Новая страница счетов"
+msgstr "Новая страни_ца счетов"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:8
 msgid "Open a new Account Tree page"
@@ -29304,9 +29296,8 @@ msgid "Create a new file"
 msgstr "Создать новый документ"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:12
-#, fuzzy
 msgid "_Open…"
-msgstr "Открыть"
+msgstr "_Открыть…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:15
 msgid "Open an existing GnuCash file"
@@ -29401,11 +29392,11 @@ msgstr "_Плановые проводки"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:84
 msgid "_Scheduled Transaction Editor"
-msgstr "Редактор плановых проводок"
+msgstr "Редактор _плановых проводок"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:89
 msgid "Since _Last Run…"
-msgstr "С момента последнего запуска…"
+msgstr "С момента последнего _запуска…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:91
 msgid "Create Scheduled Transactions since the last time run"
@@ -29413,7 +29404,7 @@ msgstr "Создать плановые проводки с момента по�
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
 msgid "_Mortgage & Loan Repayment…"
-msgstr "Выплаты по залогам и займам…"
+msgstr "Выплаты по _ипотеке и кредитам…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:96
 msgid "Setup scheduled transactions for repayment of a loan"
@@ -29429,7 +29420,7 @@ msgstr "Просмотреть и изменить цены ценных бум�
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:109
 msgid "_Security Editor"
-msgstr "Редактор ценных бумаг"
+msgstr "Редактор _ценных бумаг"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:111
 msgid "View and edit the commodities for stocks and mutual funds"
@@ -29623,7 +29614,7 @@ msgstr "Открыть диалог напоминаний о платежах"
 
 #: gnucash/ui/gnc-plugin-business.ui:55
 msgid "_Vendor"
-msgstr "Поставщик"
+msgstr "_Поставщик"
 
 #: gnucash/ui/gnc-plugin-business.ui:58
 msgid "Vendors Overview"
@@ -29790,18 +29781,16 @@ msgid "Export the Transactions to a CSV file"
 msgstr "Экспортировать проводки в CSV файл"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:16
-#, fuzzy
 msgid "Export A_ctive Register to CSV…"
-msgstr "Экспорт текущего журнала в CSV…"
+msgstr "Экспорт текущего _журнала в CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:18
-#, fuzzy
 msgid "Export the Active Register to a CSV file"
-msgstr "Экспортировать иерархию счетов в CSV файл"
+msgstr "Экспортировать текущий журнал в CSV файл"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
 msgid "Import _Accounts from CSV…"
-msgstr "Импортировать счета из CSV…"
+msgstr "И_мпортировать счета из CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:8
 msgid "Import Accounts from a CSV file"
@@ -29809,17 +29798,15 @@ msgstr "Импортировать счета из CSV файла"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
 msgid "Import _Transactions from CSV…"
-msgstr "Импортировать проводки из CSV…"
+msgstr "Импортировать п_роводки из CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:13
 msgid "Import Transactions from a CSV file"
 msgstr "Импортировать проводки из CSV файла"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
-#, fuzzy
-#| msgid "Import Prices from a CSV file"
 msgid "Import _Prices from a CSV file…"
-msgstr "Импортировать цены из CSV файла"
+msgstr "Импортировать _цены из CSV файла…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
@@ -29827,12 +29814,11 @@ msgstr "Импортировать цены из CSV файла"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
 msgid "Import _Customers & Vendors…"
-msgstr "Импорт клиентов и поставщиков…"
+msgstr "Импорт _клиентов и поставщиков…"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:8
-#, fuzzy
 msgid "Import Customers and Vendors from a CSV text file"
-msgstr "Импортировать клиентов или поставщиков из текстового файла"
+msgstr "Импортировать клиентов и поставщиков из CSV файла"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
 msgid "_Replay GnuCash .log file…"
@@ -29960,7 +29946,7 @@ msgstr "Создать новый счет"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:116
 msgid "New Account _Hierarchy…"
-msgstr "Новая иерархия счетов…"
+msgstr "Новая _иерархия счетов…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:118
 msgid "Extend the current book by merging with new account type categories"
@@ -30114,7 +30100,7 @@ msgstr "Удалить выбранный счёт"
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
 msgid "Esti_mate Budget…"
-msgstr "Оценка бюджета…"
+msgstr "О_ценка бюджета…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
@@ -30199,7 +30185,7 @@ msgstr "_Количество"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:225
 #: gnucash/ui/gnc-plugin-page-invoice.ui:407
 msgid "_Enter"
-msgstr "Ввести"
+msgstr "_Ввести"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:137
 #: gnucash/ui/gnc-plugin-page-invoice.ui:227
@@ -30719,7 +30705,7 @@ msgstr "Импортировать файл Quicken QIF"
 
 #: gnucash/ui/gnc-plugin-register.ui:6
 msgid "_General Journal"
-msgstr "Основной журнал"
+msgstr "_Основной журнал"
 
 #: gnucash/ui/gnc-plugin-register.ui:8
 #, fuzzy
