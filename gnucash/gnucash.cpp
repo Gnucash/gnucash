@@ -58,7 +58,9 @@
 #include <search-core-type.h>
 #include <top-level.h>
 
+#include <boost/filesystem.hpp>
 #include <boost/locale.hpp>
+#include <boost/none.hpp>
 #include <boost/optional.hpp>
 #ifdef __MINGW32__
 #include <boost/nowide/args.hpp>
@@ -114,14 +116,14 @@ load_gnucash_modules()
     }
 }
 
-static char *
-get_file_to_load (const char* file_to_load)
+static boost::optional<boost::filesystem::path>
+get_file_to_load (boost::filesystem::path file_to_load)
 {
-    if (file_to_load && *file_to_load != '\0')
-        return g_strdup(file_to_load);
-    else
-        /* Note history will always return a valid (possibly empty) string */
-        return gnc_history_get_last();
+    if (!file_to_load.empty())
+        return file_to_load;
+    if (auto last = gnc_history_get_last())
+        return boost::filesystem::path(last);
+    return boost::none;
 }
 
 extern SCM scm_init_sw_gnome_module(void);
@@ -193,17 +195,17 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
 
     gnc_hook_run(HOOK_STARTUP, NULL);
 
-    char* fn = nullptr;
-    if (!user_file_spec->nofile && (fn = get_file_to_load (user_file_spec->file_to_load)) && *fn )
+    if (!user_file_spec->nofile)
     {
-        auto msg = _("Loading data…");
-        gnc_update_splash_screen (msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
-        gnc_file_open_file(gnc_get_splash_screen(), fn, /*open_readonly*/ FALSE);
-        g_free(fn);
+        if (auto fn = get_file_to_load (user_file_spec->file_to_load))
+        {
+            auto msg = _("Loading data…");
+            gnc_update_splash_screen (msg, GNC_SPLASH_PERCENTAGE_UNKNOWN);
+            gnc_file_open_file(gnc_get_splash_screen(), fn->c_str(), /*open_readonly*/ FALSE);
+        }
     }
     else if (gnc_prefs_get_bool(GNC_PREFS_GROUP_NEW_USER, GNC_PREF_FIRST_STARTUP))
     {
-        g_free(fn); /* fn could be an empty string ("") */
         gnc_destroy_splash_screen();
         gnc_ui_new_user_dialog();
     }
