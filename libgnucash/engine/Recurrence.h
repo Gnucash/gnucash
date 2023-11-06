@@ -155,9 +155,9 @@ void recurrenceListNextInstance(const GList *r, const GDate *refDate,
                                 GDate *nextDate);
 
 /* These four functions are only for xml storage, not user presentation. */
-gchar *recurrencePeriodTypeToString(PeriodType pt);
+const gchar *recurrencePeriodTypeToString(PeriodType pt);
 PeriodType recurrencePeriodTypeFromString(const gchar *str);
-gchar *recurrenceWeekendAdjustToString(WeekendAdjust wadj);
+const gchar *recurrenceWeekendAdjustToString(WeekendAdjust wadj);
 WeekendAdjust recurrenceWeekendAdjustFromString(const gchar *str);
 
 /* For debugging.  Caller owns the returned string.  Not intl. */
