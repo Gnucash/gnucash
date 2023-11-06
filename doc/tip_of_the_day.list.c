@@ -126,6 +126,9 @@ to a single account, start the search from that account's register.")
 in one of the tabs, select Window->New Window with Page \
 from the menu to duplicate that tab in a new window.")
 
+ N_( "You can assign or modify keyboard shortcuts for many GnuCash \
+actions. See https://wiki.gnucash.org/wiki/Keyboard_Shortcuts.")
+
  N_( "There is a theory that if ever anyone discovers what \
 the Universe is for and why it is here, it will instantly \
 disappear and be replaced with something even more bizarre and \
