@@ -145,7 +145,7 @@ gchar *gnc_path_get_localedir()
     {
         g_free (prefix);
         g_free (locale_subdir);
-        return LOCALEDIR;
+        return g_strdup (LOCALEDIR);
     }
     else
     {
