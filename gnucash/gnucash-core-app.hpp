@@ -27,7 +27,7 @@
 #ifdef __MINGW32__
 #undef _GLIBCXX_USE_C99_MATH_TR1 // Avoid cmath missing function decl.
 #endif
-#include <boost/optional.hpp>
+#include <optional>
 #include <boost/program_options.hpp>
 #include <string>
 #include <vector>
@@ -47,8 +47,8 @@ public:
 protected:
     std::string m_app_name;
     std::string m_tagline;
-    boost::optional <std::string> m_log_to_filename;
-    boost::optional <std::string> m_file_to_load;
+    std::optional <std::string> m_log_to_filename;
+    std::optional <std::string> m_file_to_load;
 
     bpo::options_description m_opt_desc_all;
     std::unique_ptr<bpo::options_description> m_opt_desc_display;
@@ -64,7 +64,7 @@ private:
     bool m_show_paths = false;
     bool m_debug = false;
     bool m_extra = false;
-    boost::optional <std::string> m_gsettings_prefix;
+    std::optional <std::string> m_gsettings_prefix;
     std::vector <std::string> m_log_flags;
 
     char *sys_locale = nullptr;

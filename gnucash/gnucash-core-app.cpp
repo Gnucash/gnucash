@@ -111,7 +111,7 @@ Gnucash::gnc_load_scm_config (MessageCb update_message_cb)
 
 static void
 gnc_log_init (const std::vector <std::string> log_flags,
-              const boost::optional <std::string> &log_to_filename)
+              const std::optional <std::string> &log_to_filename)
 {
     if (log_to_filename && !log_to_filename->empty())
     {

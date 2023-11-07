@@ -27,9 +27,9 @@
 
 #include <string>
 #include <vector>
-#include <boost/optional.hpp>
+#include <optional>
 
-using bo_str = boost::optional <std::string>;
+using bo_str = std::optional <std::string>;
 using StrVec = std::vector<std::string>;
 
 namespace Gnucash {

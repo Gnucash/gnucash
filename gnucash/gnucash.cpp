@@ -59,7 +59,7 @@
 #include <top-level.h>
 
 #include <boost/locale.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 #ifdef __MINGW32__
 #include <boost/nowide/args.hpp>
 #endif

@@ -35,7 +35,7 @@
 #include <gnc-prefs.h>
 
 #include <boost/locale.hpp>
-#include <boost/optional.hpp>
+#include <optional>
 #ifdef __MINGW32__
 #include <boost/nowide/args.hpp>
 #endif
@@ -59,13 +59,13 @@ namespace Gnucash {
         void configure_program_options (void);
 
         std::vector<std::string> m_quotes_cmd;
-        boost::optional <std::string> m_namespace;
+        std::optional <std::string> m_namespace;
         bool m_verbose = false;
 
-        boost::optional <std::string> m_report_cmd;
-        boost::optional <std::string> m_report_name;
-        boost::optional <std::string> m_export_type;
-        boost::optional <std::string> m_output_file;
+        std::optional <std::string> m_report_cmd;
+        std::optional <std::string> m_report_name;
+        std::optional <std::string> m_export_type;
+        std::optional <std::string> m_output_file;
     };
 
 }
