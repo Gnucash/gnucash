@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-11-06 10:34+0000\n"
+"PO-Revision-Date: 2023-11-07 12:34+0000\n"
 "Last-Translator: hades <dev@hades.name>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
@@ -29412,7 +29412,7 @@ msgstr "Настроить плановые проводки для выплат
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:104
 msgid "_Price Database"
-msgstr "База данных цен"
+msgstr "_База данных цен"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:106
 msgid "View and edit the prices for stocks and mutual funds"
@@ -29888,7 +29888,7 @@ msgstr "Перенумеровать субсчета выбранного сч�
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:372
 #: gnucash/ui/gnc-plugin-page-budget.ui:175
 msgid "Open _Account"
-msgstr "Открыть счет"
+msgstr "_Открыть счет"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:54
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:209
