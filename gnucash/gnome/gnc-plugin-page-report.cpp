@@ -210,7 +210,8 @@ static const gchar *disable_during_load_actions[] =
 {
     "FilePrintAction",
     "FilePrintPDFAction",
-    "ReportOptionsAction"
+    "ReportOptionsAction",
+    nullptr
 };
 
 /** The default menu items that need to be add to the menu */
@@ -827,7 +828,7 @@ gnc_plugin_page_report_option_change_cb(gpointer data)
     gnc_window_set_progressbar_window( nullptr );
 
     gnc_plugin_set_actions_enabled(G_ACTION_MAP(priv->action_group),
-                                   disable_during_load_actions, FALSE);
+                                   disable_during_load_actions, TRUE);
     priv->reloading = FALSE;
 }
 
@@ -1489,7 +1490,7 @@ gnc_plugin_page_report_reload_cb (GSimpleAction *simple,
     // this resets the window for the progressbar to nullptr
     gnc_window_set_progressbar_window( nullptr );
     gnc_plugin_set_actions_enabled(G_ACTION_MAP(priv->action_group),
-                                   disable_during_load_actions, FALSE);
+                                   disable_during_load_actions, TRUE);
     priv->reloading = FALSE;
 }
 
