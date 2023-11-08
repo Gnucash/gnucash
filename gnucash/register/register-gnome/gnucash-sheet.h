@@ -57,7 +57,7 @@ typedef struct
 
 
 GType      gnucash_sheet_get_type (void);
-GtkWidget *gnucash_sheet_new (Table *table);
+GtkWidget *gnucash_sheet_new (Table *table, GtkAdjustment *hadj, GtkAdjustment *vadj);
 
 void gnucash_sheet_table_load (GnucashSheet *sheet, gboolean do_scroll);
 

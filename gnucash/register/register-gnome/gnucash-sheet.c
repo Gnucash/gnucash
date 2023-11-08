@@ -516,7 +516,6 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
 {
     VirtualCellLocation vcell_loc;
     GtkAllocation alloc;
-    GtkAdjustment *adj;
     gint height;
     gint cy;
     gint top_block;
@@ -527,8 +526,7 @@ gnucash_sheet_compute_visible_range (GnucashSheet *sheet)
     gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
     height = alloc.height;
 
-    adj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(sheet));
-    cy = gtk_adjustment_get_value (adj);
+    cy = gtk_adjustment_get_value (sheet->vadj);
 
     top_block = gnucash_sheet_y_pixel_to_block (sheet, cy);
 
@@ -561,7 +559,6 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
     VirtualCellLocation vcell_loc = { virt_row, 0 };
     SheetBlock *block;
     GtkAllocation alloc;
-    GtkAdjustment *adj;
     gint block_height;
     gint height;
     gint cx, cy;
@@ -575,10 +572,8 @@ gnucash_sheet_show_row (GnucashSheet *sheet, gint virt_row)
     vcell_loc.virt_row = MIN (vcell_loc.virt_row,
                               sheet->num_virt_rows - 1);
 
-    adj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE(sheet));
-    cx = gtk_adjustment_get_value (adj);
-    adj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(sheet));
-    cy = gtk_adjustment_get_value (adj);
+    cx = gtk_adjustment_get_value (sheet->hadj);
+    cy = gtk_adjustment_get_value (sheet->vadj);
     x = cx;
 
     gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
@@ -638,7 +633,6 @@ gnucash_sheet_show_range (GnucashSheet *sheet,
     SheetBlock *start_block;
     SheetBlock *end_block;
     GtkAllocation alloc;
-    GtkAdjustment *adj;
     gint block_height;
     gint height;
     gint cx, cy;
@@ -655,10 +649,8 @@ gnucash_sheet_show_range (GnucashSheet *sheet,
     end_loc.virt_row = MIN(end_loc.virt_row,
                            sheet->num_virt_rows - 1);
 
-    adj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE(sheet));
-    cx = gtk_adjustment_get_value (adj);
-    adj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(sheet));
-    cy = gtk_adjustment_get_value (adj);
+    cx = gtk_adjustment_get_value (sheet->hadj);
+    cy = gtk_adjustment_get_value (sheet->vadj);
     x = cx;
 
     gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
@@ -806,7 +798,7 @@ gnucash_sheet_finalize (GObject *object)
 
 
 static GnucashSheet *
-gnucash_sheet_create (Table *table)
+gnucash_sheet_create (Table *table, GtkAdjustment *hadj, GtkAdjustment *vadj)
 {
     GnucashSheet *sheet;
 
@@ -815,8 +807,8 @@ gnucash_sheet_create (Table *table)
     sheet = g_object_new (GNUCASH_TYPE_SHEET, NULL);
     sheet->table = table;
     sheet->entry = NULL;
-    sheet->vadj = gtk_scrollable_get_vadjustment (GTK_SCROLLABLE(sheet));
-    sheet->hadj = gtk_scrollable_get_hadjustment (GTK_SCROLLABLE(sheet));
+    sheet->hadj = hadj;
+    sheet->vadj = vadj;
 
     g_signal_connect (G_OBJECT(sheet->vadj), "value_changed",
                       G_CALLBACK(gnucash_sheet_vadjustment_value_changed), sheet);
@@ -1342,72 +1334,6 @@ gnucash_sheet_button_release_event (GtkWidget *widget, GdkEventButton *event)
     gtk_grab_remove (widget);
     sheet->grabbed = FALSE;
 
-    return TRUE;
-}
-
-static float
-clamp_scrollable_value (float value, GtkAdjustment* adj)
-{
-    float lower = gtk_adjustment_get_lower (adj);
-    float upper = gtk_adjustment_get_upper (adj);
-    float size = gtk_adjustment_get_page_size (adj);
-    return CLAMP(value, lower, upper - size);
-
-}
-static gboolean
-gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
-{
-    GnucashSheet *sheet;
-    GtkAdjustment *vadj;
-    gfloat h_value, v_value;
-
-    g_return_val_if_fail (widget != NULL, TRUE);
-    g_return_val_if_fail (GNUCASH_IS_SHEET(widget), TRUE);
-    g_return_val_if_fail (event != NULL, TRUE);
-
-    sheet = GNUCASH_SHEET(widget);
-    vadj = sheet->vadj;
-    v_value = gtk_adjustment_get_value (vadj);
-
-    switch (event->direction)
-    {
-    case GDK_SCROLL_UP:
-        v_value -= gtk_adjustment_get_step_increment (vadj);
-        break;
-    case GDK_SCROLL_DOWN:
-        v_value += gtk_adjustment_get_step_increment (vadj);
-        break;
-/* GdkQuartz reserves GDK_SCROLL_SMOOTH for high-resolution touchpad
- * scrolling events, and in that case scrolling by line is much too
- * fast. Gdk/Wayland and Gdk/Win32 pass GDK_SCROLL_SMOOTH for all
- * scroll-wheel events and expect coarse resolution.
- */
-    case GDK_SCROLL_SMOOTH:
-        h_value = gtk_adjustment_get_value (sheet->hadj);
-        h_value += event->delta_x;
-        h_value = clamp_scrollable_value (h_value, sheet->hadj);
-        gtk_adjustment_set_value (sheet->hadj, h_value);
-#if defined MAC_INTEGRATION
-        v_value += event->delta_y;
-#else
-        int direction = event->delta_y > 0 ? 1 : event->delta_y < 0 ? -1 : 0;
-        v_value += gtk_adjustment_get_step_increment (vadj) * direction;
-#endif
-        break;
-    default:
-        return FALSE;
-    }
-    v_value = clamp_scrollable_value (v_value, vadj);
-    gtk_adjustment_set_value (vadj, v_value);
-
-    if (event->delta_y == 0)
-    {
-        /* There are problems with the slider not tracking the value so
-           when delta_y is 0 hide and showing the scrollbar seems to fix it
-           observed when using mouse wheel on sheet after a page-up or down */
-        gtk_widget_hide (GTK_WIDGET(sheet->vscrollbar));
-        gtk_widget_show (GTK_WIDGET(sheet->vscrollbar));
-    }
     return TRUE;
 }
 
@@ -2341,7 +2267,6 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
     widget_class->key_release_event = gnucash_sheet_key_release_event;
     widget_class->button_press_event = gnucash_sheet_button_press_event;
     widget_class->button_release_event = gnucash_sheet_button_release_event;
-    widget_class->scroll_event = gnucash_scroll_event;
 }
 
 
@@ -2452,13 +2377,13 @@ gnucash_sheet_tooltip (GtkWidget  *widget, gint x, gint y,
 
 
 GtkWidget *
-gnucash_sheet_new (Table *table)
+gnucash_sheet_new (Table *table, GtkAdjustment *hadj, GtkAdjustment *vadj)
 {
     GnucashSheet *sheet;
 
     g_return_val_if_fail (table != NULL, NULL);
 
-    sheet = gnucash_sheet_create (table);
+    sheet = gnucash_sheet_create (table, hadj, vadj);
 
     /* on create, the sheet can grab the focus */
     sheet->sheet_has_focus = TRUE;
