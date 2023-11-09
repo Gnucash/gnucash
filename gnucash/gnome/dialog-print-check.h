@@ -29,6 +29,7 @@
 typedef struct _print_check_dialog PrintCheckDialog;
 
 void gnc_ui_print_check_dialog_create(GtkWidget *parent,
-                                      GList *splits);
+                                      GList *splits,
+                                      Account* account);
 
 #endif

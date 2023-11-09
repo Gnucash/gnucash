@@ -278,6 +278,7 @@ struct _print_check_dialog
 
     Split *split;
     GList *splits;
+    Account* account;
 
     GtkWidget *format_combobox;
     gint format_max;
@@ -369,6 +370,44 @@ get_check_address( PrintCheckDialog *pcd)
     return address;
 }
 
+struct _trans_amount
+{
+    const Transaction* trans;
+    gnc_numeric amount;
+};
+
+static void
+subtotal_subaccount(const Account *account, struct _trans_amount* trans_amount)
+{
+    /* Get the amount of this account in the transaction.*/
+    gnc_numeric amount = xaccTransGetAccountAmount(trans_amount->trans, account);
+    /* Accumulate. */
+    trans_amount->amount = gnc_numeric_add_fixed(trans_amount->amount, amount);
+}
+
+/* This function returns the amount of the check.
+ */
+static gnc_numeric
+get_check_amount(PrintCheckDialog *pcd)
+{
+    gnc_numeric amount;
+    if (pcd->account)
+    {
+        /* A parent account, e.g. from a subaccount register plugin page.
+         * Subtotal the amount of all splits from descendant accounts. */
+        struct _trans_amount trans_amount;
+        trans_amount.trans = xaccSplitGetParent(pcd->split);
+        trans_amount.amount = gnc_numeric_zero();
+        gnc_account_foreach_descendant(pcd->account, (AccountCb)subtotal_subaccount, &trans_amount);
+        amount = trans_amount.amount;
+    }
+    else
+    {
+        /* Print just the amount of the split. */
+        amount = xaccSplitGetAmount(pcd->split);
+    }
+    return gnc_numeric_abs(amount);
+}
 
 //@{
 /** @name Split printing functions */
@@ -1606,10 +1645,13 @@ initialize_format_combobox (PrintCheckDialog *pcd)
 /*****************************************************
  * gnc_ui_print_check_dialog_create                  *
  * make a new print check dialog and wait for it.    *
+ * If account is given, this is a parent account to  *
+ * subtotal the amount of all splits under it.       *
  *****************************************************/
 void
 gnc_ui_print_check_dialog_create(GtkWidget *parent,
-                                 GList *splits)
+                                 GList *splits,
+                                 Account* account)
 {
     PrintCheckDialog *pcd;
     GtkBuilder *builder;
@@ -1620,6 +1662,7 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     pcd = g_new0(PrintCheckDialog, 1);
     pcd->caller_window = GTK_WINDOW(parent);
     pcd->splits = g_list_copy(splits);
+    pcd->account = account;
 
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment1");
@@ -2112,7 +2155,7 @@ draw_page_items(GtkPrintContext *context,
     trans = xaccSplitGetParent(pcd->split);
     /* This was valid when the check printing dialog was instantiated. */
     g_return_if_fail(trans);
-    amount = gnc_numeric_abs(xaccSplitGetAmount(pcd->split));
+    amount = get_check_amount(pcd);
 
     if (format->font)
         default_desc = pango_font_description_from_string(format->font);

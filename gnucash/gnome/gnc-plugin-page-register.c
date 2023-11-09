@@ -3458,7 +3458,7 @@ gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple,
     Transaction*    trans;
     GList*          splits = NULL, *item;
     GNCLedgerDisplayType ledger_type;
-    Account*        account;
+    Account*        account, *subaccount = NULL;
     GtkWidget*      window;
 
     ENTER ("(action %p, page %p)", simple, page);
@@ -3474,13 +3474,19 @@ gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple,
         account  = gnc_plugin_page_register_get_account (page);
         split    = gnc_split_register_get_current_split (reg);
         trans    = xaccSplitGetParent (split);
+        if (ledger_type == LD_SUBACCOUNT)
+        {
+            /* Set up subaccount printing, where the check amount matches the
+             * value displayed in the register. */
+            subaccount = account;
+        }
 
         if (split && trans)
         {
             if (xaccSplitGetAccount (split) == account)
             {
                 splits = g_list_prepend (splits, split);
-                gnc_ui_print_check_dialog_create (window, splits);
+                gnc_ui_print_check_dialog_create (window, splits, subaccount);
                 g_list_free (splits);
             }
             else
@@ -3491,7 +3497,7 @@ gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple,
                 if (split)
                 {
                     splits = g_list_prepend (splits, split);
-                    gnc_ui_print_check_dialog_create (window, splits);
+                    gnc_ui_print_check_dialog_create (window, splits, subaccount);
                     g_list_free (splits);
                 }
             }
@@ -3544,7 +3550,7 @@ gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple,
                 }
             }
         }
-        gnc_ui_print_check_dialog_create (window, splits);
+        gnc_ui_print_check_dialog_create (window, splits, NULL);
     }
     else
     {

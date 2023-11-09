@@ -1041,7 +1041,7 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
         Split *split = xaccTransFindSplitByAccount (pw->tx_info->txn, pw->xfer_acct);
         GList *splits = NULL;
         splits = g_list_append(splits, split);
-        gnc_ui_print_check_dialog_create(NULL, splits);
+        gnc_ui_print_check_dialog_create(NULL, splits, NULL);
         g_list_free (splits);
     }
 
