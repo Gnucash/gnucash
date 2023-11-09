@@ -54,6 +54,7 @@ option (WITH_OFX "compile with ofx support (needs LibOFX)" ON)
 option (WITH_PYTHON "enable python plugin and bindings" OFF)
 option (ENABLE_BINRELOC "compile with binary relocation support" ON)
 option (DISABLE_NLS "do not use Native Language Support" OFF)
+option (COVERAGE "Instrument an Asan build for coverage reporting" OFF)
 # ############################################################
 
 # These are also settable from the command line in a similar way.
@@ -623,6 +624,9 @@ elseif(UNIX)
   set(ASAN_DYNAMIC_LIB_ENV "LD_PRELOAD=${PRELOADS};ASAN_OPTIONS=${ASAN_OPTIONS}")
 endif ()
 set(ASAN_BUILD_OPTIONS -fsanitize=address -fsanitize=undefined)
+if (COVERAGE)
+  list(APPEND ASAN_BUILD_OPTIONS --coverage)
+endif()
 set(ASAN_COMPILE_OPTIONS -g ${ASAN_BUILD_OPTIONS})
 add_compile_options("$<$<CONFIG:Asan>:${ASAN_COMPILE_OPTIONS}>")
 add_link_options("$<$<CONFIG:Asan>:${ASAN_BUILD_OPTIONS}>")
