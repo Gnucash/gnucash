@@ -46,6 +46,7 @@
 
 #include <cinttypes>
 #include <unicode/calendar.h>
+#include <unicode/listformatter.h>
 
 #include "gnc-date.h"
 #include "gnc-date-p.h"
@@ -1655,4 +1656,30 @@ gnc_date_load_funcs (void)
 {
     Testfuncs *tf = g_slice_new (Testfuncs);
     return tf;
+}
+
+
+gchar*
+gnc_list_formatter (GList *strings)
+{
+    g_return_val_if_fail (strings, nullptr);
+
+    UErrorCode status = U_ZERO_ERROR;
+    auto formatter = icu::ListFormatter::createInstance(status);
+    std::vector<icu::UnicodeString> strvec;
+    icu::UnicodeString result;
+    std::string retval;
+
+    for (auto n = strings; n; n = g_list_next (n))
+        strvec.push_back (static_cast<char*>(n->data));
+
+    formatter->format (strvec.data(), strvec.size(), result, status);
+
+    if (U_FAILURE(status))
+        PERR ("Unicode error");
+    else
+        result.toUTF8String(retval);
+
+    delete formatter;
+    return g_strdup (retval.c_str());
 }

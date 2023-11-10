@@ -813,6 +813,17 @@ void gnc_gdate_set_prev_fiscal_year_start (GDate *date, const GDate *year_end);
  *  fiscal year.  The year field of this argument is ignored. */
 void gnc_gdate_set_prev_fiscal_year_end (GDate *date, const GDate *year_end);
 
+
+
+/** This function takes a GList of char*, and uses locale-sensitive
+ *  list formatter.
+ *
+ *  @param strings The GList* of char*.
+ *
+ * @returns a newly allocated char*
+ */
+gchar* gnc_list_formatter (GList* strings);
+
 //@}
 
 //@}

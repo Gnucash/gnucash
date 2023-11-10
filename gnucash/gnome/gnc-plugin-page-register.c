@@ -3230,7 +3230,7 @@ gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page)
 
         if (show)
         {
-            char *str = gnc_g_list_stringjoin (show, ", ");
+            char *str = gnc_list_formatter (show);
             t_list = g_list_prepend
                 (t_list, g_strdup_printf ("%s %s", _("Show:"), str));
             g_free (str);
@@ -3238,7 +3238,7 @@ gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page)
 
         if (hide)
         {
-            char *str = gnc_g_list_stringjoin (hide, ", ");
+            char *str = gnc_list_formatter (hide);
             t_list = g_list_prepend
                 (t_list, g_strdup_printf ("%s %s", _("Hide:"), str));
             g_free (str);
