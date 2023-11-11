@@ -27,8 +27,6 @@
 #include "swig-runtime.h"
 #include <libguile.h>
 #include <cstring>
-#include <string>
-#include <unordered_set>
 
 #include "Account.h"
 #include "engine-helpers.h"
@@ -384,7 +382,6 @@ GSList *
 gnc_query_scm2path (SCM path_scm)
 {
     GSList *path = nullptr;
-    static std::unordered_set<std::string> param_cache;
 
     if (!scm_is_list (path_scm))
         return nullptr;
@@ -397,8 +394,7 @@ gnc_query_scm2path (SCM path_scm)
             break;
 
         auto key = gnc_scm_to_utf8_string(key_scm);
-        auto key_cache = param_cache.insert (key).first;
-        path = g_slist_prepend (path, (gpointer)key_cache->c_str());
+        path = g_slist_prepend (path, (gpointer)qof_string_cache_insert (key));
         g_free (key);
     }
 
@@ -408,7 +404,7 @@ gnc_query_scm2path (SCM path_scm)
 void
 gnc_query_path_free (GSList *path)
 {
-    g_slist_free (path);
+    g_slist_free_full (path, (GDestroyNotify)qof_string_cache_remove);
 }
 
 
