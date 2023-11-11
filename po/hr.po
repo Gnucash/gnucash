@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-29 05:18+0000\n"
+"PO-Revision-Date: 2023-11-11 17:33+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -30131,7 +30131,7 @@ msgstr "zadnja: "
 #: libgnucash/app-utils/gnc-quotes.cpp:836
 msgctxt "Finance::Quote"
 msgid "nav: "
-msgstr ""
+msgstr "neto vrijednost: "
 
 #. Translators: The quote is neither a last trade nor an NAV.
 #: libgnucash/app-utils/gnc-quotes.cpp:838
@@ -30141,7 +30141,7 @@ msgstr "cijena: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:858
 msgid "Finance::Quote reported a failure for symbol "
-msgstr ""
+msgstr "Finance::Quote je prijavio neuspjeh za oznaku "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:861
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
