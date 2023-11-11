@@ -49,8 +49,6 @@ int gnc_guid_p(SCM guid_scm);
 /* for a list of strings */
 GSList* gnc_query_scm2path(SCM path_scm);
 
-void gnc_query_path_free (GSList *path);
-
 /* These two functions convert a query object into a scheme
  * representation of the query and vice-versa. They do not
  * simply convert a query pointer to a guile query pointer! */

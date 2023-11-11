@@ -401,7 +401,7 @@ gnc_query_scm2path (SCM path_scm)
     return g_slist_reverse (path);
 }
 
-void
+static void
 gnc_query_path_free (GSList *path)
 {
     g_slist_free_full (path, (GDestroyNotify)qof_string_cache_remove);
