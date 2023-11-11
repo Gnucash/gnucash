@@ -246,18 +246,26 @@ add_kvp_value_node (xmlNodePtr node, const gchar* tag, KvpValue* val)
     switch (val->get_type ())
     {
     case KvpValue::Type::INT64:
-        add_text_to_node (val_node, "integer",
-                          g_strdup_printf ("%" G_GINT64_FORMAT,
-                                           val->get<int64_t> ()));
+    {
+        char *int_str = g_strdup_printf ("%" G_GINT64_FORMAT, val->get<int64_t> ());
+        add_text_to_node (val_node, "integer", int_str);
+        g_free (int_str);
         break;
+    }
     case KvpValue::Type::DOUBLE:
-        add_text_to_node (val_node, "double",
-                          double_to_string (val->get<double> ()));
+    {
+        char *dbl_str = double_to_string (val->get<double> ());
+        add_text_to_node (val_node, "double", dbl_str);
+        g_free (dbl_str);
         break;
+    }
     case KvpValue::Type::NUMERIC:
-        add_text_to_node (val_node, "numeric",
-                          gnc_numeric_to_string (val->get<gnc_numeric> ()));
+    {
+        char *num_str = gnc_numeric_to_string (val->get<gnc_numeric> ());
+        add_text_to_node (val_node, "numeric", num_str);
+        g_free (num_str);
         break;
+    }
     case KvpValue::Type::STRING:
         xmlSetProp (val_node, BAD_CAST "type", BAD_CAST "string");
         break;

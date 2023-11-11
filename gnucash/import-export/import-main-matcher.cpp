@@ -39,6 +39,12 @@
 #include <stdbool.h>
 
 #include <vector>
+#include <unordered_set>
+#include <unordered_map>
+#include <string>
+#include <algorithm>
+#include <numeric>
+#include <optional>
 
 #include "import-main-matcher.h"
 
@@ -49,6 +55,7 @@
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
 #include "gnc-gtk-utils.h"
+#include "gnc-tree-container.hpp"
 #include "import-settings.h"
 #include "import-backend.h"
 #include "import-account-matcher.h"
@@ -130,6 +137,10 @@ enum downloaded_cols
 /*static QofLogModule log_module = GNC_MOD_IMPORT;*/
 static QofLogModule log_module = G_MOD_IMPORT_MATCHER;
 
+using SplitVec = std::vector<Split*>;
+using AcctMap = std::unordered_map<Account*,SplitVec>;
+using AccountSet = std::unordered_set<Account*>;
+
 static const gpointer one = GINT_TO_POINTER (1);
 
 extern "C" {
@@ -192,6 +203,16 @@ defer_bal_computation (GNCImportMainMatcher *info, Account* acc)
     }
 }
 
+class ImportMatcherType : public GncTreeData
+{
+public:
+    ImportMatcherType (GtkTreeModel* model, GtkTreeIter iter) : GncTreeData (model, iter) {};
+
+    GNCImportTransInfo* get_trans_info () {return get<GNCImportTransInfo*>(DOWNLOADED_COL_DATA); };
+
+    std::string get_account_name () { return get_string (DOWNLOADED_COL_ACCOUNT); };
+};
+
 void
 gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
 {
@@ -199,25 +220,9 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
     if (info == NULL)
         return;
 
-    GtkTreeModel *model = gtk_tree_view_get_model (info->view);
-    GtkTreeIter iter;
-    if (gtk_tree_model_get_iter_first (model, &iter))
-    {
-        do
-        {
-            GNCImportTransInfo *trans_info;
-            gtk_tree_model_get (model, &iter,
-                                DOWNLOADED_COL_DATA, &trans_info,
-                                -1);
-
-            if (info->transaction_processed_cb)
-            {
-                info->transaction_processed_cb (trans_info, false,
-                                                info->user_data);
-            }
-        }
-        while (gtk_tree_model_iter_next (model, &iter));
-    }
+    if (info->transaction_processed_cb)
+        for (auto iter : GncTreeContainer<ImportMatcherType>{gtk_tree_view_get_model (info->view)})
+            info->transaction_processed_cb (iter.get_trans_info(), false, info->user_data);
 
     if (GTK_IS_DIALOG(info->main_widget))
     {
@@ -264,48 +269,29 @@ gnc_gen_trans_list_show_accounts_column (GNCImportMainMatcher *info)
 {
     g_assert (info);
 
-    GtkTreeModel *model = gtk_tree_view_get_model (info->view);
-    if (gtk_tree_model_iter_n_children (model, NULL) > 1)
+    std::string first_acct_name;
+    bool multiple_accounts = false;
+
+    for (auto iter : GncTreeContainer<ImportMatcherType>(gtk_tree_view_get_model (info->view)))
     {
-        bool multiple_accounts = false;
-        GtkTreeIter iter;
-
-        /* Get first row in list store */
-        bool valid = gtk_tree_model_get_iter_first (model, &iter);
-        if (valid)
+        auto acct_name = iter.get_account_name ();
+        if (acct_name.empty())
+            continue;
+        else if (first_acct_name.empty())
         {
-            gchar *account_name;
-            gtk_tree_model_get (model, &iter, DOWNLOADED_COL_ACCOUNT, &account_name, -1);
-
-            valid = gtk_tree_model_iter_next (model, &iter);
-
-            while (valid)
-            {
-                gchar *test_account_name;
-                gtk_tree_model_get (model, &iter, DOWNLOADED_COL_ACCOUNT, &test_account_name, -1);
-                if (g_strcmp0 (account_name, test_account_name) != 0)
-                {
-                     multiple_accounts = true;
-                     g_free (test_account_name);
-                     break;
-                }
-                valid = gtk_tree_model_iter_next (model, &iter);
-                g_free (test_account_name);
-            }
-            g_free (account_name);
+            first_acct_name.swap(acct_name);
+            continue;
         }
-        // now toggle the column
-        if (multiple_accounts)
-        {
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->show_account_column), true);
-            gtk_tree_view_expand_all (info->view);
-        }
-        else
-        {
-            gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->show_account_column), false);
-            gtk_tree_view_collapse_all (info->view);
-        }
+        else if (acct_name == first_acct_name)
+            continue;
+        multiple_accounts = true;
+        break;
     }
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(info->show_account_column), multiple_accounts);
+    if (multiple_accounts)
+        gtk_tree_view_expand_all (info->view);
+    else
+        gtk_tree_view_collapse_all (info->view);
 }
 
 // This returns the transaction ID of the first match candidate in match_list
@@ -346,17 +332,20 @@ get_trans_info (GtkTreeModel* model, GtkTreeIter* iter)
                         -1);
     return transaction_info;
 }
+
+using TransImportVec = std::vector<GNCImportTransInfo*>;
+
 /* This function finds the top matching register transaction for the imported transaction pointed to by iter
  * It then goes through the list of all other imported transactions and creates a list of the ones that
  * have the same register transaction as their top match (i.e., are in conflict). It finds the best of them
  * (match-score-wise) and returns the rest as a list. The imported transactions in that list will get their
  * top match modified. */
-static GList*
+static TransImportVec
 get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gint best_match)
 {
     GtkTreeIter iter = import_iter;
     GNCImportTransInfo* best_import = get_trans_info (model, &import_iter);
-    GList* conflicts = g_list_prepend (NULL, best_import);
+    TransImportVec conflicts = {best_import};
 
     while (gtk_tree_model_iter_next (model, &iter))
     {
@@ -375,7 +364,7 @@ get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gi
         // Conflict. Get the match score, add this transaction to our list.
         match_score = get_top_trans_match_score (register_iter);
         trans_info = get_trans_info (model, &iter);
-        conflicts = g_list_prepend (conflicts, trans_info);
+        conflicts.push_back (trans_info);
 
         if (match_score > best_match)
         {
@@ -386,88 +375,66 @@ get_conflict_list (GtkTreeModel* model, GtkTreeIter import_iter, GncGUID* id, gi
     }
 
     // Remove the best match from the list of conflicts, as it will keep its match
-    conflicts = g_list_remove (conflicts, best_import);
+    conflicts.erase (std::find (conflicts.begin(), conflicts.end(), best_import));
     return conflicts;
-}
-
-static void
-remove_top_matches (GList* conflicts)
-{
-    for (GList* iter = conflicts; iter && iter->data; iter=iter->next)
-        gnc_import_TransInfo_remove_top_match (static_cast<GNCImportTransInfo*>(iter->data));
 }
 
 static void
 resolve_conflicts (GNCImportMainMatcher *info)
 {
-    GtkTreeModel* model = gtk_tree_view_get_model (info->view);
-    GtkTreeIter import_iter;
-    gint best_match = 0;
+    GtkTreeModel *model = gtk_tree_view_get_model (info->view);
 
     /* A greedy conflict resolution. Find all imported trans that vie for the same
      * register trans. Assign the reg trans to the imported trans with the best match.
      * Loop over the imported transactions */
-    bool valid = gtk_tree_model_get_iter_first (model, &import_iter);
-    while (valid)
+
+ restart:
+    for (auto iter : GncTreeContainer<ImportMatcherType>(model))
     {
-        GList *match_list = get_trans_match_list (model, &import_iter);
+        GList *match_list = gnc_import_TransInfo_get_match_list (iter.get_trans_info());
         if (!match_list || !match_list->data)
-        {
-            valid = gtk_tree_model_iter_next (model, &import_iter);
             continue;
-        }
 
         // The ID of the best current match for this imported trans
         GncGUID id = *get_top_trans_match_id (match_list);
-        best_match = get_top_trans_match_score (match_list);
+        auto best_match = get_top_trans_match_score (match_list);
+
         /* Get a list of all imported transactions that have a conflict with this one.
          * The returned list excludes the best transaction. */
-        GList *conflicts = get_conflict_list (model, import_iter, &id, best_match);
+        auto conflicts = get_conflict_list (model, iter.get_iter(), &id, best_match);
 
-        if (conflicts)
+        if (conflicts.size())
         {
-            remove_top_matches (conflicts);
+            std::for_each (conflicts.begin(), conflicts.end(), gnc_import_TransInfo_remove_top_match);
+
             /* Go back to the beginning here, because a nth choice
              * could now conflict with a previously assigned first choice. */
-            valid = gtk_tree_model_get_iter_first (model, &import_iter);
+            goto restart;
         }
-        else
-            valid = gtk_tree_model_iter_next (model, &import_iter);
         /* NOTE: The loop is guaranteed to terminate because whenever we go back to the top
          * we remove at least 1 match, and there's a finite number of them. */
-
-        g_list_free (conflicts);
     }
 
     // Refresh all
-    valid = gtk_tree_model_get_iter_first (model, &import_iter);
-    while (valid)
-    {
-        refresh_model_row (info, model, &import_iter, get_trans_info (model, &import_iter));
-        valid = gtk_tree_model_iter_next (model, &import_iter);
-    }
+    for (auto iter : GncTreeContainer (model))
+        refresh_model_row (info, model, &iter.get_iter(), get_trans_info (model, &iter.get_iter()));
 }
 
 
 static void
 load_hash_tables (GNCImportMainMatcher *info)
 {
-    GtkTreeModel *model = gtk_tree_view_get_model (info->view);
-    GtkTreeIter import_iter;
-    GList *accounts_list = NULL;
-    bool valid = gtk_tree_model_get_iter_first (model, &import_iter);
-    while (valid)
+    AccountSet accounts_list;
+    for (auto iter : GncTreeContainer<ImportMatcherType>(gtk_tree_view_get_model (info->view)))
     {
-        GNCImportTransInfo *trans_info = get_trans_info (model, &import_iter);
+        auto trans_info = iter.get_trans_info ();
         Split *s = gnc_import_TransInfo_get_fsplit (trans_info);
         Account *acc = xaccSplitGetAccount (s);
-        if (!g_list_find (accounts_list, acc))
-            accounts_list = g_list_prepend (accounts_list, acc);
-        valid = gtk_tree_model_iter_next (model, &import_iter);
+        accounts_list.insert (acc);
     }
-    for (GList *m = accounts_list; m; m = m->next)
+    for (const auto& acc : accounts_list)
     {
-        for (GList *n = xaccAccountGetSplitList (static_cast<Account*>(m->data)); n; n = n->next)
+        for (GList *n = xaccAccountGetSplitList (acc); n; n = n->next)
         {
             auto s = static_cast<const Split*>(n->data);
             const Transaction *t = xaccSplitGetParent (s);
@@ -485,7 +452,6 @@ load_hash_tables (GNCImportMainMatcher *info)
                 g_hash_table_insert (info->memo_hash, (gpointer)key, one);
         }
     }
-    g_list_free (accounts_list);
 }
 
 void
@@ -514,15 +480,6 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
     gnc_gen_trans_list_show_accounts_column (info);
 }
 
-static void acc_begin_edit (GList **accounts_modified, Account *acc)
-{
-    if (!acc || !accounts_modified || g_list_find (*accounts_modified, acc))
-        return;
-
-    DEBUG ("xaccAccountBeginEdit for acc %s", xaccAccountGetName (acc));
-    xaccAccountBeginEdit (acc);
-    *accounts_modified = g_list_prepend (*accounts_modified, acc);
-}
 void
 on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 {
@@ -530,9 +487,8 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
 
     /*   DEBUG ("Begin") */
 
-    GtkTreeModel *model = gtk_tree_view_get_model (info->view);
-    GtkTreeIter iter;
-    if (!gtk_tree_model_get_iter_first (model, &iter))
+    GncTreeContainer<ImportMatcherType> container(gtk_tree_view_get_model (info->view));
+    if (container.empty())
     {
         // No transaction, we can just close the dialog.
         gnc_gen_trans_list_delete (info);
@@ -544,19 +500,19 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     gnc_suspend_gui_refresh ();
     bool first_tran = true;
     bool append_text = gtk_toggle_button_get_active ((GtkToggleButton*) info->append_text);
-    GList *accounts_modified = NULL;
-    do
+    AccountSet accounts_modified;
+    for (auto iter : container)
     {
-        GNCImportTransInfo *trans_info;
-        gtk_tree_model_get (model, &iter,
-                            DOWNLOADED_COL_DATA, &trans_info,
-                            -1);
-
+        auto trans_info{iter.get_trans_info()};
         Split* first_split = gnc_import_TransInfo_get_fsplit (trans_info);
         Transaction *trans = xaccSplitGetParent (first_split);
 
         for (GList *n = xaccTransGetSplitList (trans); n; n = g_list_next (n))
-            acc_begin_edit (&accounts_modified, xaccSplitGetAccount (static_cast<Split*>(n->data)));
+        {
+            auto acct = xaccSplitGetAccount (static_cast<Split*>(n->data));
+            if (accounts_modified.insert (acct).second)
+                xaccAccountBeginEdit (acct);
+        }
 
         // Allow the backend to know if the Append checkbox is ticked or unticked
         // by propagating info->append_text to every trans_info->append_text
@@ -572,9 +528,6 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
             first_tran = false;
         }
 
-        Account *dest_acc = gnc_import_TransInfo_get_destacc (trans_info);
-        acc_begin_edit (&accounts_modified, dest_acc);
-
         if (gnc_import_process_trans_item (NULL, trans_info))
         {
             if (info->transaction_processed_cb)
@@ -583,8 +536,7 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
                                                info->user_data);
             }
         }
-    }
-    while (gtk_tree_model_iter_next (model, &iter));
+    };
 
     gnc_gen_trans_list_delete (info);
 
@@ -592,7 +544,7 @@ on_matcher_ok_clicked (GtkButton *button, GNCImportMainMatcher *info)
     gnc_resume_gui_refresh ();
 
     /* DEBUG ("End") */
-    g_list_free_full (accounts_modified, (GDestroyNotify)xaccAccountCommitEdit);
+    std::for_each (accounts_modified.begin(), accounts_modified.end(), xaccAccountCommitEdit);
 }
 
 void
@@ -821,7 +773,7 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     DEBUG("Rows in selection = %i",
           gtk_tree_selection_count_selected_rows (selection));
 
-    GList *refs = NULL;
+    std::vector<GtkTreeRowReference*> refs;
     for (GList *l = selected_rows; l; l = l->next)
     {
         auto path = static_cast<GtkTreePath*>(l->data);
@@ -831,7 +783,7 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
         DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
         DEBUG("passing path = %s", path_str);
         g_free (path_str);
-        refs = g_list_prepend (refs, ref);
+        refs.push_back (ref);
         gnc_gen_trans_assign_transfer_account (treeview,
                                                 &first, is_selection, path,
                                                 &assigned_account, info);
@@ -845,15 +797,13 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
 
     // now reselect the transaction rows. This is very slow if there are lots of transactions.
-    for (GList *l = refs; l; l = l->next)
+    for (const auto& ref : refs)
     {
-        auto ref = static_cast<GtkTreeRowReference*>(l->data);
         GtkTreePath *path = gtk_tree_row_reference_get_path (ref);
         gtk_tree_selection_select_path (selection, path);
         gtk_tree_path_free (path);
         gtk_tree_row_reference_free (ref);
     }
-    g_list_free (refs);
 
     LEAVE("");
 }
@@ -1859,26 +1809,25 @@ update_child_row (GNCImportMatchInfo *sel_match, GtkTreeModel *model, GtkTreeIte
     g_free (date);
 }
 
-static gchar *
+static std::string
 get_peer_acct_names (Split *split)
 {
-    GList *names = NULL, *accounts_seen = NULL;
+    AccountSet accounts_seen;
+    std::vector<std::string> names;
     for (GList *n = xaccTransGetSplitList (xaccSplitGetParent (split)); n; n = n->next)
     {
         Account *account = xaccSplitGetAccount (static_cast<Split*>(n->data));
         if ((n->data == split) ||
             (xaccAccountGetType (account) == ACCT_TYPE_TRADING) ||
-            (g_list_find (accounts_seen, account)))
+            (!accounts_seen.insert (account).second))
             continue;
         gchar *name = gnc_account_get_full_name (account);
-        names = g_list_prepend (names, name);
-        accounts_seen = g_list_prepend (accounts_seen, account);
+        names.push_back (name);
+        g_free (name);
     }
-    names = g_list_sort (names, (GCompareFunc)g_utf8_collate);
-    auto retval = gnc_list_formatter (names);
-    g_list_free_full (names, g_free);
-    g_list_free (accounts_seen);
-    return retval;
+    std::sort (names.begin(), names.end());
+    return std::accumulate (names.begin(), names.end(), std::string(""),
+                            [](const auto& a, const auto& b){ return a + ", " + b; });
 }
 
 static void
@@ -2026,19 +1975,18 @@ refresh_model_row (GNCImportMainMatcher *gui,
 
             if (sel_match)
             {
-                gchar *full_names = get_peer_acct_names (sel_match->split);
+                auto full_names = get_peer_acct_names (sel_match->split);
                 color = get_required_color (int_not_required_class);
                 if (gnc_import_TransInfo_get_match_selected_manually (info))
                 {
                     text = g_strdup_printf (_("Reconcile (manual) match to %s"),
-                                            full_names);
+                                            full_names.c_str());
                 }
                 else
                 {
                     text = g_strdup_printf (_("Reconcile (auto) match to %s"),
-                                            full_names);
+                                            full_names.c_str());
                 }
-                g_free (full_names);
                 update_child_row (sel_match, model, iter);
             }
             else
@@ -2055,19 +2003,18 @@ refresh_model_row (GNCImportMainMatcher *gui,
             GNCImportMatchInfo *sel_match = gnc_import_TransInfo_get_selected_match (info);
             if (sel_match)
             {
-                gchar *full_names = get_peer_acct_names (sel_match->split);
+                auto full_names = get_peer_acct_names (sel_match->split);
                 color = get_required_color (int_not_required_class);
                 if (gnc_import_TransInfo_get_match_selected_manually (info))
                 {
                     text = g_strdup_printf (_("Update and reconcile (manual) match to %s"),
-                                            full_names);
+                                            full_names.c_str());
                 }
                 else
                 {
                     text = g_strdup_printf (_("Update and reconcile (auto) match to %s"),
-                                            full_names);
+                                            full_names.c_str());
                 }
-                g_free (full_names);
                 update_child_row (sel_match, model, iter);
             }
             else
@@ -2239,15 +2186,16 @@ void gnc_gen_trans_list_add_trans_with_split_data (GNCImportMainMatcher *gui,
  * import. The matching range is also date-limited (configurable
  * via preferences) to not go too far in the past or future.
  */
-static GList*
+static SplitVec
 filter_existing_splits_on_account_and_date (GNCImportMainMatcher *gui)
 {
     static const int secs_per_day = 86400;
     gint match_date_limit =
         gnc_import_Settings_get_match_date_hardlimit (gui->user_settings);
-    time64 min_time=G_MAXINT64, max_time=0;
+    std::optional<time64> min_time, max_time;
     time64 match_timelimit = match_date_limit * secs_per_day;
     GList *all_accounts = NULL;
+    SplitVec retval;
 
     /* Go through all imported transactions, gather the list of accounts, and
      * min/max date range.
@@ -2260,9 +2208,10 @@ filter_existing_splits_on_account_and_date (GNCImportMainMatcher *gui)
             xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
         time64 txn_time =
             xaccTransGetDate (gnc_import_TransInfo_get_trans (txn_info));
-        all_accounts = g_list_prepend (all_accounts, txn_account);
-        min_time = MIN(min_time, txn_time);
-        max_time = MAX(max_time, txn_time);
+        if (!g_list_find (all_accounts, txn_account))
+            all_accounts = g_list_prepend (all_accounts, txn_account);
+        min_time = min_time.has_value() ? MIN(min_time.value(), txn_time) : txn_time;
+        max_time = max_time.has_value() ? MAX(max_time.value(), txn_time) : txn_time;
     }
 
     // Make a query to find splits with the right accounts and dates.
@@ -2271,12 +2220,13 @@ filter_existing_splits_on_account_and_date (GNCImportMainMatcher *gui)
     xaccQueryAddAccountMatch (query, all_accounts,
                               QOF_GUID_MATCH_ANY, QOF_QUERY_AND);
     xaccQueryAddDateMatchTT (query,
-                             true, min_time - match_timelimit,
-                             true, max_time + match_timelimit,
+                             true, min_time.value() - match_timelimit,
+                             true, max_time.value() + match_timelimit,
                              QOF_QUERY_AND);
-    GList *query_results = qof_query_run (query);
     g_list_free (all_accounts);
-    GList *retval = g_list_copy (query_results);
+
+    for (auto n = qof_query_run (query); n; n = g_list_next (n))
+        retval.push_back (static_cast<Split*>(n->data));
     qof_query_destroy (query);
 
     return retval;
@@ -2285,14 +2235,12 @@ filter_existing_splits_on_account_and_date (GNCImportMainMatcher *gui)
 /* Create a hash by account of all splits that could match one of the imported
  * transactions based on their account and date and organized per account.
  */
-static GHashTable*
-create_hash_of_potential_matches (GList *candidate_splits,
-                                  GHashTable *account_hash)
+static AcctMap
+create_map_of_potential_matches (SplitVec& candidate_splits)
 {
-    for (GList* candidate = candidate_splits; candidate != NULL;
-         candidate = g_list_next (candidate))
+    auto map = AcctMap{};
+    for (const auto& split : candidate_splits)
     {
-        auto split = static_cast<Split*>(candidate->data);
         if (gnc_import_split_has_online_id (split))
             continue;
         /* In this context an open transaction represents a freshly
@@ -2300,34 +2248,9 @@ create_hash_of_potential_matches (GList *candidate_splits,
         if (xaccTransIsOpen(xaccSplitGetParent(split)))
             continue;
         Account *split_account = xaccSplitGetAccount (split);
-        /* g_hash_table_steal_extended would do the two calls in one shot but is
-         * not available until GLib 2.58.
-         */
-        auto split_list = static_cast<GSList*>(g_hash_table_lookup (account_hash, split_account));
-        g_hash_table_steal (account_hash, split_account);
-        split_list = g_slist_prepend (split_list, split);
-        g_hash_table_insert (account_hash, split_account, split_list);
+        map[split_account].push_back (split);
     }
-    return account_hash;
-}
-
-typedef struct _match_struct
-{
-    GNCImportTransInfo* transaction_info;
-    gint display_threshold;
-    gint date_threshold;
-    gint date_not_threshold;
-    double fuzzy_amount;
-} match_struct;
-
-static void
-match_helper (Split* data, match_struct* s)
-{
-    split_find_match (s->transaction_info, data,
-                      s->display_threshold,
-                      s->date_threshold,
-                      s->date_not_threshold,
-                      s->fuzzy_amount);
+    return map;
 }
 
 /* Iterate through the imported transactions selecting matches from the
@@ -2336,7 +2259,7 @@ match_helper (Split* data, match_struct* s)
  */
 
 static void
-perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
+perform_matching (GNCImportMainMatcher *gui, AcctMap& map)
 {
     GtkTreeModel* model = gtk_tree_view_get_model (gui->view);
     gint display_threshold =
@@ -2353,10 +2276,10 @@ perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
     {
         auto txn_info = static_cast<GNCImportTransInfo*>(imported_txn->data);
         Account *importaccount = xaccSplitGetAccount (gnc_import_TransInfo_get_fsplit (txn_info));
-        match_struct s = {txn_info, display_threshold, date_threshold, date_not_threshold, fuzzy_amount};
 
-        g_slist_foreach (static_cast<GSList*>(g_hash_table_lookup (account_hash, importaccount)),
-                         (GFunc) match_helper, &s);
+        for (const auto& it : map[importaccount])
+            split_find_match (txn_info, it, display_threshold, date_threshold,
+                              date_not_threshold, fuzzy_amount);
 
         // Sort the matches, select the best match, and set the action.
         gnc_import_TransInfo_init_matches (txn_info, gui->user_settings);
@@ -2379,17 +2302,13 @@ perform_matching (GNCImportMainMatcher *gui, GHashTable *account_hash)
 void
 gnc_gen_trans_list_create_matches (GNCImportMainMatcher *gui)
 {
-    GHashTable* account_hash =
-        g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
-                              (GDestroyNotify)g_slist_free);
     g_assert (gui);
-    GList *candidate_splits = filter_existing_splits_on_account_and_date (gui);
 
-    create_hash_of_potential_matches (candidate_splits, account_hash);
-    perform_matching (gui, account_hash);
+    auto candidate_splits = filter_existing_splits_on_account_and_date (gui);
+    auto map = create_map_of_potential_matches (candidate_splits);
 
-    g_list_free (candidate_splits);
-    g_hash_table_destroy (account_hash);
+    perform_matching (gui, map);
+
     return;
 }
 
