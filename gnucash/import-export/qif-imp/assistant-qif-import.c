@@ -1488,62 +1488,64 @@ static gboolean
 gnc_ui_qif_import_assistant_skip_page (GtkAssistant *assistant, GtkWidget *page, QIFImportWindow *wind)
 {
     const char *pagename = gtk_buildable_get_name (GTK_BUILDABLE(page));
+    gboolean rv = FALSE;
 
-    PINFO ("Visibility page name is %s", gtk_buildable_get_name (GTK_BUILDABLE(page)));
+    ENTER("Page %s", pagename);
 
     if (!g_strcmp0 (pagename, "date_format_page"))
     {
         /* Current page is date page */
-        return gnc_ui_qif_import_skip_date_format (assistant, wind);
+        rv = gnc_ui_qif_import_skip_date_format (assistant, wind);
     }
     else if (!g_strcmp0 (pagename, "account_name_page"))
     {
         /* Current page is account page */
-        return gnc_ui_qif_import_skip_account (assistant, wind);
+        rv = gnc_ui_qif_import_skip_account (assistant, wind);
     }
     else if (!g_strcmp0 (pagename, "account_doc_page"))
     {
         /* Current page is  Account Doc. page */
-        return gnc_ui_qif_import_skip_account_doc (wind);
+        rv = gnc_ui_qif_import_skip_account_doc (wind);
     }
     else if (!g_strcmp0 (pagename, "category_doc_page"))
     {
         /* Current page is Category Doc. page */
-        return gnc_ui_qif_import_skip_category_doc (wind);
+        rv = gnc_ui_qif_import_skip_category_doc (wind);
     }
     else if (!g_strcmp0 (pagename, "category_match_page"))
     {
         /* Current page is Category Match page */
-        return gnc_ui_qif_import_skip_category_match (wind);
+        rv = gnc_ui_qif_import_skip_category_match (wind);
     }
     else if (!g_strcmp0 (pagename, "memo_doc_page"))
     {
         /* Current page is Memo Doc. page */
-        return gnc_ui_qif_import_skip_memo_doc (wind);
+        rv = gnc_ui_qif_import_skip_memo_doc (wind);
     }
     else if (!g_strcmp0 (pagename, "memo_match_page"))
     {
         /* Current page is Memo Match page */
-        return gnc_ui_qif_import_skip_memo_match (wind);
+        rv = gnc_ui_qif_import_skip_memo_match (wind);
     }
     else if (!g_strcmp0 (pagename, "commodity_page"))
     {
         /* Current page is Commodity page */
-        return gnc_ui_qif_import_skip_commodity (wind);
+        rv = gnc_ui_qif_import_skip_commodity (wind);
     }
     else if (!g_strcmp0 (pagename, "duplicates_doc_page"))
     {
         /* Current page is Duplicates Doc page */
-        return gnc_ui_qif_import_skip_duplicates_doc (wind);
+        rv = gnc_ui_qif_import_skip_duplicates_doc (wind);
     }
     else if (!g_strcmp0 (pagename, "duplicates_match_page"))
     {
         /* Current page is Duplicates Match page */
-        return gnc_ui_qif_import_skip_duplicates_match (wind);
+        rv = gnc_ui_qif_import_skip_duplicates_match (wind);
     }
 
     /* By default, we do not skip */
-    return FALSE;
+    LEAVE("%s", rv ? "Skipped" : "Not Skipped");
+    return rv;
 }
 
 
@@ -2520,7 +2522,6 @@ gnc_ui_qif_import_account_doc_prepare (GtkAssistant *assistant,
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gtk_assistant_update_buttons_state (assistant);
 
-    PINFO ("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
 
     /* Enable the Assistant "Next" Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
@@ -2602,8 +2603,6 @@ gnc_ui_qif_import_category_doc_prepare (GtkAssistant *assistant,
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gtk_assistant_update_buttons_state (assistant);
-
-    PINFO ("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
 
     /* Enable the Assistant "Next" Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
@@ -2701,8 +2700,6 @@ gnc_ui_qif_import_memo_doc_prepare (GtkAssistant *assistant, gpointer user_data)
     gint num = gtk_assistant_get_current_page (assistant);
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gtk_assistant_update_buttons_state (assistant);
-
-    PINFO ("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
 
     /* Enable the Assistant "Next" Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
@@ -2952,8 +2949,6 @@ gnc_ui_qif_import_commodity_prepare (GtkAssistant *assistant, gpointer user_data
     GtkWidget       *page = gtk_assistant_get_nth_page (assistant, num);
 
     gtk_assistant_update_buttons_state (assistant);
-
-    PINFO ("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
 
     /* Enable the Assistant "Next" Button */
     gtk_assistant_set_page_complete (assistant, page,
@@ -3417,8 +3412,6 @@ gnc_ui_qif_import_duplicates_doc_prepare (GtkAssistant *assistant,
     GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gtk_assistant_update_buttons_state (assistant);
 
-    PINFO ("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
-
     /* Enable the Assistant "Next" Button */
     gtk_assistant_set_page_complete (assistant, page, TRUE);
 
@@ -3658,7 +3651,7 @@ void gnc_ui_qif_import_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
     GtkWidget *mypage = gtk_assistant_get_nth_page (assistant, currentpage);
     const char *pagename = gtk_buildable_get_name (GTK_BUILDABLE(mypage));
 
-    PINFO ("Builder Page Name is %s", gtk_buildable_get_name (GTK_BUILDABLE(mypage)));
+    ENTER("Page %s", pagename);
 
     if (!g_strcmp0 (pagename, "start_page"))
     {
@@ -3755,6 +3748,7 @@ void gnc_ui_qif_import_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
         /* Current page is the summary page */
         gnc_ui_qif_import_summary_page_prepare (assistant, user_data);
     }
+    LEAVE("");
 }
 
 
@@ -4016,15 +4010,17 @@ gnc_ui_qif_import_assistant_make (QIFImportWindow *qif_win)
 
     /* Get all interesting builder-defined widgets. */
     get_assistant_widgets (qif_win, builder);
+    GtkAssistant *assistant = GTK_ASSISTANT(qif_win->window);
 
     /* Make this window stay on top */
     gtk_window_set_transient_for (GTK_WINDOW(qif_win->window), gnc_ui_get_main_window (NULL));
 
     /* Build the details of all GtkTreeView widgets. */
     build_views (qif_win);
+    PINFO ("Total Number of Assistant Pages is %d", gtk_assistant_get_n_pages (assistant));
 
     /* Establish a custom next page function. */
-    gtk_assistant_set_forward_page_func(GTK_ASSISTANT(qif_win->window),
+    gtk_assistant_set_forward_page_func(assistant,
                                         gnc_ui_qif_import_assistant_page_forward, qif_win, NULL);
 
     /* Currency Page */
