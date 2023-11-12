@@ -286,6 +286,13 @@ void gnc_ui_qif_import_end_page_prepare (GtkAssistant *assistant, gpointer user_
 
 void gnc_ui_qif_import_summary_page_prepare (GtkAssistant *assistant, gpointer user_data);
 
+static inline void
+mark_page_complete (GtkAssistant *assistant, gboolean page_status)
+{
+    gint num = gtk_assistant_get_current_page (assistant);
+    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
+    gtk_assistant_set_page_complete (assistant, page, page_status);
+}
 
 /****************************************************************
  * update_account_picker_page
@@ -1739,8 +1746,6 @@ gnc_ui_qif_import_load_file_prepare (GtkAssistant *assistant, gpointer user_data
     const gchar * path_to_load;
     gboolean page_status = FALSE;
 
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Get the file name. */
     path_to_load = gtk_entry_get_text (GTK_ENTRY(wind->filename_entry));
@@ -1750,7 +1755,7 @@ gnc_ui_qif_import_load_file_prepare (GtkAssistant *assistant, gpointer user_data
     {
        page_status = gnc_ui_qif_import_load_file_complete (assistant, user_data);
     }
-    gtk_assistant_set_page_complete (assistant, page, page_status);
+    mark_page_complete(assistant, page_status);
 }
 
 
@@ -1768,8 +1773,6 @@ gnc_ui_qif_import_select_file_cb (GtkButton * button,
     QIFImportWindow * wind = user_data;
 
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     GtkFileFilter *filter;
     char * new_file_name;
@@ -1811,8 +1814,8 @@ gnc_ui_qif_import_select_file_cb (GtkButton * button,
     gtk_entry_set_text (GTK_ENTRY(wind->filename_entry), file_name);
     g_free (file_name);
 
-    gtk_assistant_set_page_complete (assistant, page,
-                                     gnc_ui_qif_import_load_file_complete (assistant, user_data));
+    mark_page_complete (assistant,
+                        gnc_ui_qif_import_load_file_complete (assistant, user_data));
 }
 
 
@@ -1869,8 +1872,6 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
 {
     QIFImportWindow   *wind = user_data;
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     const gchar * path_to_load;
 
@@ -2096,7 +2097,7 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
     }
 
     /* Enable the assistant "Next" button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 
     /* Set Pause and Start buttons */
     gtk_widget_set_sensitive (wind->load_pause, FALSE);
@@ -2132,8 +2133,6 @@ void
 gnc_ui_qif_import_load_progress_prepare (GtkAssistant  *assistant, gpointer user_data)
 {
     QIFImportWindow   *wind = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Reset the progress display. */
     gnc_progress_dialog_set_primary (wind->load_progress, "");
@@ -2148,7 +2147,7 @@ gnc_ui_qif_import_load_progress_prepare (GtkAssistant  *assistant, gpointer user
     gtk_widget_set_sensitive (wind->load_start, TRUE);
 
     /* Disable the assistant "Next" button */
-    gtk_assistant_set_page_complete (assistant, page, FALSE);
+    mark_page_complete (assistant, FALSE);
 }
 
 
@@ -2194,8 +2193,6 @@ gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data)
     GtkTreeIter iter;
 
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Get the selected date format. */
     model = gtk_combo_box_get_model (GTK_COMBO_BOX(wind->date_format_combo));
@@ -2209,7 +2206,7 @@ gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data)
 
     qif_import_reparse_dates (wind);
 
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 }
 
 /******************************************
@@ -2278,20 +2275,18 @@ gnc_ui_qif_import_acct_enter_cb (GtkWidget * widget,
     QIFImportWindow * wind = user_data;
 
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     const gchar * acct_name = gtk_entry_get_text (GTK_ENTRY(wind->acct_entry));
 
     if (!acct_name || acct_name[0] == 0)
     {
         /* Disable the assistant "Next" Button */
-        gtk_assistant_set_page_complete (assistant, page, FALSE);
+        mark_page_complete (assistant, FALSE);
     }
     else
     {
         /* Enable the assistant "Next" Button and proceed */
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        mark_page_complete (assistant, TRUE);
 
         /* Move on to the next page automatically */
         gtk_assistant_next_page (assistant);
@@ -2311,20 +2306,18 @@ gnc_ui_qif_import_acct_valid_cb (GtkWidget * widget,
     QIFImportWindow * wind = user_data;
 
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     const gchar * acct_name = gtk_entry_get_text (GTK_ENTRY(wind->acct_entry));
 
     if (!acct_name || acct_name[0] == 0)
     {
         /* Disable the assistant "Next" Button */
-        gtk_assistant_set_page_complete (assistant, page, FALSE);
+        mark_page_complete (assistant, FALSE);
     }
     else
     {
         /* Enable the assistant "Next" Button */
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        mark_page_complete (assistant, TRUE);
     }
 }
 
@@ -2344,9 +2337,6 @@ gnc_ui_qif_import_loaded_files_prepare (GtkAssistant *assistant,
 {
     QIFImportWindow * wind = user_data;
 
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
     const gchar * acct_name = gtk_entry_get_text (GTK_ENTRY(wind->acct_entry));
     SCM    fix_default = scm_c_eval_string ("qif-import:fix-from-acct");
     SCM    scm_name;
@@ -2357,7 +2347,7 @@ gnc_ui_qif_import_loaded_files_prepare (GtkAssistant *assistant,
         scm_call_2 (fix_default, wind->selected_file, scm_name);
 
         /* Enable the assistant "Next" Button */
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        mark_page_complete (assistant, TRUE);
     }
 
     update_file_page (wind);
@@ -2432,8 +2422,6 @@ update_file_page (QIFImportWindow * wind)
     GtkTreeRowReference *reference = NULL;
 
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
     gint num_of_files = 0;
 
     /* clear the list */
@@ -2442,7 +2430,7 @@ update_file_page (QIFImportWindow * wind)
     gtk_list_store_clear (store);
     qif_file_path = scm_c_eval_string ("qif-file:path");
 
-    gtk_assistant_set_page_complete (assistant, page, FALSE);
+    mark_page_complete (assistant, FALSE);
 
     while (!scm_is_null (loaded_file_list))
     {
@@ -2484,7 +2472,7 @@ update_file_page (QIFImportWindow * wind)
     num_of_files = gtk_tree_model_iter_n_children (GTK_TREE_MODEL(store), NULL);
 
     if (num_of_files > 0)
-        gtk_assistant_set_page_complete (assistant, page, TRUE);
+        mark_page_complete (assistant, TRUE);
     else
     {
         /*  TODO: It would be ideal to disable the back button at this point
@@ -2518,13 +2506,8 @@ void
 gnc_ui_qif_import_account_doc_prepare (GtkAssistant *assistant,
                                        gpointer user_data)
 {
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-    gtk_assistant_update_buttons_state (assistant);
-
-
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 }
 
 /********************************************************************
@@ -2552,8 +2535,6 @@ gnc_ui_qif_import_account_match_prepare (GtkAssistant *assistant,
                                          gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     /* Prepare the matching pages. */
     gnc_set_busy_cursor (NULL, TRUE);
@@ -2563,7 +2544,7 @@ gnc_ui_qif_import_account_match_prepare (GtkAssistant *assistant,
     gnc_unset_busy_cursor (NULL);
 
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 }
 
 
@@ -2600,12 +2581,8 @@ void
 gnc_ui_qif_import_category_doc_prepare (GtkAssistant *assistant,
                                         gpointer user_data)
 {
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-    gtk_assistant_update_buttons_state (assistant);
-
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 }
 
 /********************************************************************
@@ -2642,11 +2619,8 @@ void
 gnc_ui_qif_import_category_match_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 }
 
 /********************************************************************
@@ -2697,13 +2671,8 @@ gnc_ui_qif_import_category_rematch_cb (GtkButton *button, gpointer user_data)
 void
 gnc_ui_qif_import_memo_doc_prepare (GtkAssistant *assistant, gpointer user_data)
 {
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-    gtk_assistant_update_buttons_state (assistant);
-
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
-
+    mark_page_complete (assistant, TRUE);
 }
 
 /********************************************************************
@@ -2739,12 +2708,8 @@ gnc_ui_qif_import_skip_memo_doc (QIFImportWindow *wind)
 void
 gnc_ui_qif_import_memo_match_prepare (GtkAssistant *assistant, gpointer user_data)
 {
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
-
+    mark_page_complete (assistant, TRUE);
 }
 
 /********************************************************************
@@ -2821,7 +2786,7 @@ gnc_ui_qif_import_currency_prepare (GtkAssistant *assistant, gpointer user_data)
     }
 
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 }
 
 
@@ -2945,14 +2910,10 @@ void
 gnc_ui_qif_import_commodity_prepare (GtkAssistant *assistant, gpointer user_data)
 {
     QIFImportWindow *wind = user_data;
-    gint              num = gtk_assistant_get_current_page (assistant);
-    GtkWidget       *page = gtk_assistant_get_nth_page (assistant, num);
-
-    gtk_assistant_update_buttons_state (assistant);
 
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page,
-                                     gnc_ui_qif_import_commodity_all_notebook_pages_complete (wind));
+    mark_page_complete (assistant,
+                        gnc_ui_qif_import_commodity_all_notebook_pages_complete (wind));
 
     /* If there are new securities, prepare the security pages. */
     if (wind->new_securities != SCM_BOOL_F)
@@ -3074,11 +3035,9 @@ gnc_ui_qif_import_comm_changed_cb (GtkWidget *widget, gpointer user_data)
 {
     QIFImportWindow *wind = user_data;
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    gtk_assistant_set_page_complete (assistant, page,
-                                     gnc_ui_qif_import_comm_valid (assistant, user_data));
+    mark_page_complete (assistant,
+                        gnc_ui_qif_import_comm_valid (assistant, user_data));
 }
 
 
@@ -3087,11 +3046,9 @@ do_page_check (gpointer user_data)
 {
     QIFImportWindow *wind = user_data;
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
-    gtk_assistant_set_page_complete (assistant, page,
-                                     gnc_ui_qif_import_comm_valid (assistant, wind));
+    mark_page_complete (assistant,
+                        gnc_ui_qif_import_comm_valid (assistant, wind));
 
     wind->timeout_id = 0;
     return FALSE;
@@ -3169,8 +3126,6 @@ gnc_ui_qif_import_convert_progress_start_cb (GtkButton * button,
 {
     QIFImportWindow   *wind = user_data;
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     SCM qif_to_gnc      = scm_c_eval_string ("qif-import:qif-to-gnc");
     SCM find_duplicates = scm_c_eval_string ("gnc:account-tree-find-duplicates");
@@ -3333,7 +3288,7 @@ gnc_ui_qif_import_convert_progress_start_cb (GtkButton * button,
         }
     }
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 
     /* Set Pause and Start buttons */
     gtk_widget_set_sensitive (wind->convert_pause, FALSE);
@@ -3367,11 +3322,6 @@ gnc_ui_qif_import_convert_progress_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     QIFImportWindow   *wind = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
-    /* Recompute assistant Buttons */
-    gtk_assistant_update_buttons_state (assistant);
 
     /* Reset the progress display. */
     gnc_progress_dialog_set_primary (wind->convert_progress, "");
@@ -3388,7 +3338,7 @@ gnc_ui_qif_import_convert_progress_prepare (GtkAssistant *assistant,
     gtk_widget_set_sensitive (wind->convert_start, TRUE);
 
     /* Disable the assistant "Next" button */
-    gtk_assistant_set_page_complete (assistant, page, FALSE);
+    mark_page_complete (assistant, FALSE);
 
     /* Before creating transactions, if this is a new book, let user specify
      * book options, since they affect how transactions are created */
@@ -3408,12 +3358,8 @@ void
 gnc_ui_qif_import_duplicates_doc_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-    gtk_assistant_update_buttons_state (assistant);
-
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 
 }
 
@@ -3448,8 +3394,6 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
         gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
 
     GtkTreeView      *view;
     GtkListStore     *store;
@@ -3518,7 +3462,7 @@ gnc_ui_qif_import_duplicates_match_prepare (GtkAssistant *assistant,
     }
 
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 }
 
 /********************************************************************
@@ -3545,11 +3489,8 @@ void
 gnc_ui_qif_import_end_page_prepare (GtkAssistant *assistant,
                                     gpointer user_data)
 {
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 }
 
 
@@ -3622,9 +3563,6 @@ gnc_ui_qif_import_summary_page_prepare (GtkAssistant *assistant,
                                         gpointer user_data)
 {
     QIFImportWindow * wind = user_data;
-    gint num = gtk_assistant_get_current_page (assistant);
-    GtkWidget *page = gtk_assistant_get_nth_page (assistant, num);
-
     gchar *text;
 
     if (wind->load_stop)
@@ -3637,7 +3575,7 @@ gnc_ui_qif_import_summary_page_prepare (GtkAssistant *assistant,
     g_free (text);
 
     /* Enable the Assistant "Next" Button */
-    gtk_assistant_set_page_complete (assistant, page, TRUE);
+    mark_page_complete (assistant, TRUE);
 }
 
 
