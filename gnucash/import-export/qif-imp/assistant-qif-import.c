@@ -2171,6 +2171,19 @@ gnc_ui_qif_import_skip_date_format (GtkAssistant *assistant, QIFImportWindow *wi
  *
  * Reparse file with new date format.
  ********************************************************************/
+static void
+qif_import_reparse_dates (QIFImportWindow* wind)
+{
+    SCM  reparse_dates   = scm_c_eval_string ("qif-file:reparse-dates");
+    SCM format_sym = scm_from_locale_symbol (wind->date_format);
+
+    /* Reparse the dates using the selected format. */
+    scm_call_2 (reparse_dates, wind->selected_file, format_sym);
+    g_free (wind->date_format);
+    wind->date_format = NULL;
+    wind->ask_date_format = FALSE;
+}
+
 void
 gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data)
 {
@@ -2192,20 +2205,9 @@ gnc_ui_qif_import_date_valid_cb (GtkWidget *widget, gpointer user_data)
         g_critical ("QIF import: BUG DETECTED in gnc_ui_qif_import_date_valid_cb. Format is NULL.");
     }
 
+    qif_import_reparse_dates (wind);
+
     gtk_assistant_set_page_complete (assistant, page, TRUE);
-}
-
-static void
-qif_import_reparse_dates (QIFImportWindow* wind)
-{
-    SCM  reparse_dates   = scm_c_eval_string ("qif-file:reparse-dates");
-    SCM format_sym = scm_from_locale_symbol (wind->date_format);
-
-    /* Reparse the dates using the selected format. */
-    scm_call_2 (reparse_dates, wind->selected_file, format_sym);
-    g_free (wind->date_format);
-    wind->date_format = NULL;
-    wind->ask_date_format = FALSE;
 }
 
 /******************************************
@@ -2223,9 +2225,6 @@ gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
     QIFImportWindow * wind = user_data;
 
     SCM  check_from_acct = scm_c_eval_string ("qif-file:check-from-acct");
-
-    if (wind->ask_date_format && wind->date_format)
-        qif_import_reparse_dates (wind);
 
     /* make sure there is a file selected, may have come back */
     if (wind->selected_file == SCM_BOOL_F)
