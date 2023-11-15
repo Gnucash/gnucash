@@ -333,16 +333,17 @@ enum
     SLR_MODEL_COL_INSTANCE_VISIBILITY,
     SLR_MODEL_COL_VARIABLE_VISIBILITY,
     SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
+    SLR_MODEL_COL_INSTANCE_DATE,
 };
 
 static void
 gnc_sx_slr_tree_model_adapter_init (GncSxSlrTreeModelAdapter *adapter)
 {
-    // columns:    thing-name, instance-state, variable-value, instance-visible, variable-visible, instance_state_sensitivity
-    // at depth=0: <sx>,       N/A,            N/A,            N/A               N/A,              N/A
-    // at depth=1: <instance>, <state>,        N/A,            <valid>,          N/A,              <valid>
-    // at depth=2: <variable>, N/A,            <value>,        N/A,              <valid>,          N/A
-    adapter->real = gtk_tree_store_new (6, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN);
+    // columns:    thing-name, instance-state, variable-value, instance-visible, variable-visible, instance_state_sensitivity, date
+    // at depth=0: <sx>,       N/A,            N/A,            N/A               N/A,              N/A                         N/A
+    // at depth=1: <instance>, <state>,        N/A,            <valid>,          N/A,              <valid>                     <date>
+    // at depth=2: <variable>, N/A,            <value>,        N/A,              <valid>,          N/A                         N/A
+    adapter->real = gtk_tree_store_new (7, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_INT64);
 
     g_signal_connect (adapter->real, "row-changed", G_CALLBACK(gsslrtma_proxy_row_changed), adapter);
     g_signal_connect (adapter->real, "row-deleted", G_CALLBACK(gsslrtma_proxy_row_deleted), adapter);
@@ -442,6 +443,7 @@ gsslrtma_populate_tree_store (GncSxSlrTreeModelAdapter *model)
                             SLR_MODEL_COL_INSTANCE_VISIBILITY, FALSE,
                             SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
                             SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, FALSE,
+                            SLR_MODEL_COL_INSTANCE_DATE, INT64_MAX,
                             -1);
 
         // Insert instance information
@@ -455,6 +457,7 @@ gsslrtma_populate_tree_store (GncSxSlrTreeModelAdapter *model)
             {
                 GncSxInstance *inst = (GncSxInstance*)inst_iter->data;
                 qof_print_gdate (instance_date_buf, MAX_DATE_LENGTH, &inst->date);
+                time64 t = gdate_to_time64 (inst->date);
 
                 if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(model->real), &inst_tree_iter, &sx_tree_iter, ++instance_index))
                 {
@@ -467,6 +470,7 @@ gsslrtma_populate_tree_store (GncSxSlrTreeModelAdapter *model)
                                     SLR_MODEL_COL_INSTANCE_VISIBILITY, TRUE,
                                     SLR_MODEL_COL_VARIABLE_VISIBILITY, FALSE,
                                     SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, inst->state != SX_INSTANCE_STATE_CREATED,
+                                    SLR_MODEL_COL_INSTANCE_DATE, t,
                                     -1);
 
                 // Insert variable information
@@ -506,6 +510,7 @@ gsslrtma_populate_tree_store (GncSxSlrTreeModelAdapter *model)
                                             SLR_MODEL_COL_INSTANCE_VISIBILITY, FALSE,
                                             SLR_MODEL_COL_VARIABLE_VISIBILITY, TRUE,
                                             SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY, FALSE,
+                                            SLR_MODEL_COL_INSTANCE_DATE, INT64_MAX,
                                             -1);
                         g_string_free (tmp_str, TRUE);
                     }
@@ -661,11 +666,13 @@ _variable_list_index (GList *variables, GncSxVariable *variable)
 }
 
 static GtkTreePath*
-_get_path_for_variable (GncSxSlrTreeModelAdapter *model, GncSxInstance *instance, GncSxVariable *variable)
+_get_path_for_variable (GncSxSinceLastRunDialog *app_dialog, GncSxInstance *instance, GncSxVariable *variable)
 {
     GList *variables;
     int indices[3];
-    GtkTreePath *path;
+    GtkTreePath *path, *child_path;
+    GncSxSlrTreeModelAdapter *model = app_dialog->editing_model;
+    GtkTreeModel *sort_model = gtk_tree_view_get_model (app_dialog->instance_view);
 
     indices[0] = g_list_index (gnc_sx_instance_model_get_sx_instances_list (model->instances), instance->parent);
     if (indices[0] == -1)
@@ -678,7 +685,9 @@ _get_path_for_variable (GncSxSlrTreeModelAdapter *model, GncSxInstance *instance
     g_list_free (variables);
     if (indices[2] == -1)
         return NULL;
-    path = gtk_tree_path_new_from_indices (indices[0], indices[1], indices[2], -1);
+    child_path = gtk_tree_path_new_from_indices (indices[0], indices[1], indices[2], -1);
+    path = gtk_tree_model_sort_convert_child_path_to_path (GTK_TREE_MODEL_SORT(sort_model), child_path);
+    gtk_tree_path_free (child_path);
     return path;
 }
 
@@ -836,6 +845,18 @@ gnc_sx_sxsincelast_book_opened (void)
         gnc_ui_sx_creation_error_dialog (&creation_errors);
 }
 
+static GtkTreePath *
+instance_get_model_path (GtkTreeView *view, const gchar *path)
+{
+    GtkTreePath *sort_path = gtk_tree_path_new_from_string (path);
+    GtkTreeModelSort *sort_model = GTK_TREE_MODEL_SORT(gtk_tree_view_get_model (view));
+    GtkTreePath *model_path = gtk_tree_model_sort_convert_path_to_child_path (sort_model, sort_path);
+
+    gtk_tree_path_free (sort_path);
+
+    return model_path;
+}
+
 static void
 instance_state_changed_cb (GtkCellRendererText *cell,
                            const gchar *path,
@@ -846,6 +867,7 @@ instance_state_changed_cb (GtkCellRendererText *cell,
     GncSxInstance *inst;
     int i;
     GncSxInstanceState new_state;
+    GtkTreePath *model_path = instance_get_model_path (dialog->instance_view, path);
 
     for (i = 0; i < SX_INSTANCE_STATE_CREATED; i++)
     {
@@ -859,11 +881,13 @@ instance_state_changed_cb (GtkCellRendererText *cell,
     }
     new_state = i;
 
-    if (!gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL(dialog->editing_model), &tree_iter, path))
+    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(dialog->editing_model), &tree_iter, model_path))
     {
+        gtk_tree_path_free (model_path);
         g_warning ("unknown path [%s]", path);
         return;
     }
+    gtk_tree_path_free (model_path);
 
     inst = gnc_sx_slr_model_get_instance (dialog->editing_model, &tree_iter);
     if (inst == NULL)
@@ -886,13 +910,17 @@ variable_value_changed_cb (GtkCellRendererText *cell,
     GtkTreeIter tree_iter;
     gnc_numeric parsed_num;
     char *endStr = NULL;
+    GtkTreePath *model_path = instance_get_model_path (dialog->instance_view, path);
 
     DEBUG ("variable to [%s] at path [%s]", value, path);
-    if (!gtk_tree_model_get_iter_from_string (GTK_TREE_MODEL(dialog->editing_model), &tree_iter, path))
+
+    if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(dialog->editing_model), &tree_iter, model_path))
     {
+        gtk_tree_path_free (model_path);
         g_warning ("invalid path [%s]", path);
         return;
     }
+    gtk_tree_path_free (model_path);
 
     if (!gnc_sx_slr_model_get_instance_and_variable (dialog->editing_model, &tree_iter, &inst, &var))
     {
@@ -918,6 +946,114 @@ variable_value_changed_cb (GtkCellRendererText *cell,
         return;
     }
     gnc_sx_instance_model_set_variable (dialog->editing_model->instances, inst, var, &parsed_num);
+}
+
+static gint
+_transaction_sort_func (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b, gpointer user_data)
+{
+    gint rtn = 0;
+    GtkTreePath *path_a = gtk_tree_model_get_path (model, iter_a);
+
+    if (gtk_tree_path_get_depth (path_a) != 1)
+    {
+        gtk_tree_path_free (path_a);
+        return rtn;
+    }
+
+    gint child_num_a = gtk_tree_model_iter_has_child (model, iter_a) ? 1 : 0;
+    gint child_num_b = gtk_tree_model_iter_has_child (model, iter_b) ? 1 : 0;
+
+    gtk_tree_path_free (path_a);
+
+    if (child_num_a > child_num_b)
+        rtn = -1;
+    if (child_num_b > child_num_a)
+        rtn = 1;
+
+    if ((child_num_a == 1) && (child_num_b == 1))
+    {
+        GtkTreeIter child_iter_a, child_iter_b;
+        gint64 date_a = 0, date_b = 0;
+
+        if (gtk_tree_model_iter_nth_child (model, &child_iter_a, iter_a, 0))
+            gtk_tree_model_get (model, &child_iter_a, SLR_MODEL_COL_INSTANCE_DATE, &date_a, -1);
+
+        if (gtk_tree_model_iter_nth_child (model, &child_iter_b, iter_b, 0))
+            gtk_tree_model_get (model, &child_iter_b, SLR_MODEL_COL_INSTANCE_DATE, &date_b, -1);
+
+        if (date_a > date_b)
+            rtn = 1;
+        if (date_b > date_a)
+            rtn = -1;
+    }
+
+    if (((child_num_a == 0) && (child_num_b == 0)) || rtn == 0)
+    {
+        gchar *name_text_a, *name_text_b;
+
+        gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_NAME, &name_text_a, -1);
+        gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_NAME, &name_text_b, -1);
+
+        rtn = safe_utf8_collate (name_text_a, name_text_b);
+
+        g_free (name_text_a);
+        g_free (name_text_b);
+    }
+    return rtn;
+}
+
+static gint
+_status_sort_func (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b, gpointer user_data)
+{
+    gint rtn = 0;
+    GtkTreePath *path_a = gtk_tree_model_get_path (model, iter_a);
+
+    if (gtk_tree_path_get_depth (path_a) != 1)
+    {
+        gtk_tree_path_free (path_a);
+        return rtn;
+    }
+
+    gint child_num_a = gtk_tree_model_iter_has_child (model, iter_a) ? 1 : 0;
+    gint child_num_b = gtk_tree_model_iter_has_child (model, iter_b) ? 1 : 0;
+
+    gtk_tree_path_free (path_a);
+
+    if (child_num_a > child_num_b)
+        rtn = -1;
+    if (child_num_b > child_num_a)
+        rtn = 1;
+
+    if ((child_num_a == 1) && (child_num_b == 1))
+    {
+        GtkTreeIter child_iter_a, child_iter_b;
+        gchar *state_text_a = NULL, *state_text_b = NULL;
+
+        if (gtk_tree_model_iter_nth_child (model, &child_iter_a, iter_a, 0))
+            gtk_tree_model_get (model, &child_iter_a, SLR_MODEL_COL_INSTANCE_STATE, &state_text_a, -1);
+
+        if (gtk_tree_model_iter_nth_child (model, &child_iter_b, iter_b, 0))
+            gtk_tree_model_get (model, &child_iter_b, SLR_MODEL_COL_INSTANCE_STATE, &state_text_b, -1);
+
+        rtn = safe_utf8_collate (state_text_a, state_text_b);
+
+        g_free (state_text_a);
+        g_free (state_text_b);
+    }
+
+    if (((child_num_a == 0) && (child_num_b == 0)) || rtn == 0)
+    {
+        gchar *name_text_a, *name_text_b;
+
+        gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_NAME, &name_text_a, -1);
+        gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_NAME, &name_text_b, -1);
+
+        rtn = safe_utf8_collate (name_text_a, name_text_b);
+
+        g_free (name_text_a);
+        g_free (name_text_b);
+    }
+    return rtn;
 }
 
 GncSxSinceLastRunDialog*
@@ -949,15 +1085,26 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
     {
         GtkCellRenderer *renderer;
         GtkTreeViewColumn *col;
+        GtkTreeModel *sort_model = gtk_tree_model_sort_new_with_model (GTK_TREE_MODEL(dialog->editing_model));
 
         dialog->instance_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "instance_view"));
-        gtk_tree_view_set_model (dialog->instance_view, GTK_TREE_MODEL(dialog->editing_model));
+        gtk_tree_view_set_model (dialog->instance_view, GTK_TREE_MODEL(sort_model));
+        g_object_unref (sort_model);
+
+        /* default sort order */
+        gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(sort_model),
+                                              SLR_MODEL_COL_NAME, GTK_SORT_ASCENDING);
 
         renderer = gtk_cell_renderer_text_new ();
         col = gtk_tree_view_column_new_with_attributes (_("Transaction"), renderer,
                 "text", SLR_MODEL_COL_NAME,
                 NULL);
         gtk_tree_view_append_column (dialog->instance_view, col);
+
+        gtk_tree_view_column_set_sort_column_id (col, SLR_MODEL_COL_NAME);
+
+        gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(sort_model), SLR_MODEL_COL_NAME,
+                                         _transaction_sort_func, dialog, NULL);
 
         renderer = gtk_cell_renderer_combo_new ();
         g_object_set (G_OBJECT(renderer),
@@ -979,6 +1126,11 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
                 "editable", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
                 "sensitive", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
                 NULL);
+
+        gtk_tree_view_column_set_sort_column_id (col, SLR_MODEL_COL_INSTANCE_STATE);
+
+        gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(sort_model), SLR_MODEL_COL_INSTANCE_STATE,
+                                         _status_sort_func, dialog, NULL);
 
         renderer = gtk_cell_renderer_pixbuf_new ();
         g_object_set (G_OBJECT(renderer),
@@ -1109,7 +1261,8 @@ dialog_response_cb (GtkDialog *dialog, gint response_id, GncSxSinceLastRunDialog
                 gboolean start_editing = TRUE;
 
                 first_unbound = (GncSxVariableNeeded*)unbound_variables->data;
-                variable_path = _get_path_for_variable (app_dialog->editing_model, first_unbound->instance, first_unbound->variable);
+
+                variable_path = _get_path_for_variable (app_dialog, first_unbound->instance, first_unbound->variable);
                 variable_col = gtk_tree_view_get_column (app_dialog->instance_view, variable_view_column);
 
                 gtk_tree_view_set_cursor (app_dialog->instance_view, variable_path, variable_col, start_editing);
