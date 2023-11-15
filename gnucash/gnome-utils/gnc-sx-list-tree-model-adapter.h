@@ -43,8 +43,9 @@
 
 G_BEGIN_DECLS
 
-#define GNC_TYPE_SX_LIST_TREE_MODEL_ADAPTER            (gnc_sx_list_tree_model_adapter_get_type ())
-G_DECLARE_FINAL_TYPE (GncSxListTreeModelAdapter, gnc_sx_list_tree_model_adapter, GNC, SX_LIST_TREE_MODEL_ADAPTER, GObject)
+#define GNC_TYPE_SX_LIST_TREE_MODEL_ADAPTER (gnc_sx_list_tree_model_adapter_get_type ())
+G_DECLARE_FINAL_TYPE (GncSxListTreeModelAdapter, gnc_sx_list_tree_model_adapter,
+                      GNC, SX_LIST_TREE_MODEL_ADAPTER, GObject)
 
 // model columns
 enum
@@ -58,7 +59,8 @@ enum
 
 GncSxListTreeModelAdapter* gnc_sx_list_tree_model_adapter_new (GncSxInstanceModel *instances);
 
-GncSxInstances* gnc_sx_list_tree_model_adapter_get_sx_instances (GncSxListTreeModelAdapter *model, GtkTreeIter *iter);
+GncSxInstances* gnc_sx_list_tree_model_adapter_get_sx_instances (GncSxListTreeModelAdapter *model,
+                                                                 GtkTreeIter *iter);
 
 G_END_DECLS
 
