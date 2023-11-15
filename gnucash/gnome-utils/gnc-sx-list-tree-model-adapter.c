@@ -459,7 +459,7 @@ gnc_sx_list_tree_model_adapter_init (GncSxListTreeModelAdapter *adapter)
                                      _next_occur_comparator, adapter, NULL);
 
     gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(adapter->real),
-                                          SXLTMA_COL_NEXT_OCCUR, GTK_SORT_ASCENDING);
+                                          SXLTMA_COL_NAME, GTK_SORT_ASCENDING);
 
     g_signal_connect (adapter->real, "row-changed",
                       G_CALLBACK(gsltma_proxy_row_changed), adapter);
