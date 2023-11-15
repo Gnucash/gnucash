@@ -435,6 +435,10 @@ gsslrtma_populate_tree_store (GncSxSlrTreeModelAdapter *model)
             }
         }
 
+        // if there are no instances for the instance skip adding
+        if (g_list_length (instances->instance_list) == 0)
+            continue;
+
         if (!gtk_tree_model_iter_nth_child (GTK_TREE_MODEL(model->real), &sx_tree_iter, NULL, ++instances_index))
         {
             gtk_tree_store_append (model->real, &sx_tree_iter, NULL);
