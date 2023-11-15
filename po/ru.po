@@ -23,7 +23,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-11-07 12:34+0000\n"
+"PO-Revision-Date: 2023-11-15 12:03+0000\n"
 "Last-Translator: hades <dev@hades.name>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
@@ -273,9 +273,8 @@ msgid "Fancy Date Format"
 msgstr "Расширенный формат даты"
 
 #: bindings/guile/options.scm:398
-#, fuzzy
 msgid "custom"
-msgstr "Настроенный"
+msgstr "произвольный"
 
 #: bindings/guile/options.scm:399
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
@@ -806,14 +805,6 @@ msgstr ""
 "GnuCash."
 
 #: doc/tip_of_the_day.list.c:44
-#, fuzzy
-#| msgid ""
-#| "Every transaction has a \"Notes\" field where you can put useful "
-#| "information.\n"
-#| "\n"
-#| "To make it visible\n"
-#| "select \"View\" in the menu bar and check \"Double Line\" or\n"
-#| "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -822,11 +813,11 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line View\" in Preferences:Register Defaults."
 msgstr ""
-"У каждой проводки есть поле \"Примечания\", куда вы можете поместить "
-"полезную информацию. \n"
+"У каждой проводки есть поле \"Примечания\", куда можно записать полезную "
+"информацию.\n"
 "\n"
-"Чтобы сделать его видимым\n"
-"выберите \"Вид\" в строке меню и установите флажок \"Две строки\" или\n"
+"Чтобы оно появилось\n"
+"выберите \"Вид\" в меню и установите флажок \"Две строки\" или\n"
 "флажок \"Двустрочный режим\" в Настройки: Настройки журнала."
 
 #: doc/tip_of_the_day.list.c:50
@@ -923,9 +914,9 @@ msgid ""
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
-"Чтобы передать фонды между счетами с различными валютами, нажмите на кнопку "
-"\"Передать\" в панели инструментов журнала, выберите счета и укажите "
-"параметры передачи валюты - курс обмена или сумму в другой валюте."
+"Чтобы перевести средства между счетами с различными валютами, нажмите на "
+"кнопку \"Перевести\" на панели инструментов журнала, выберите счета и "
+"укажите параметры перевода валют: курс обмена или сумму в другой валюте."
 
 #: doc/tip_of_the_day.list.c:91
 msgid ""
@@ -998,19 +989,14 @@ msgstr ""
 "нет необходимости перезапускать GnuCash."
 
 #: doc/tip_of_the_day.list.c:121
-#, fuzzy
-#| msgid ""
-#| "To search through all your transactions, start a search (Edit->Find...) "
-#| "from the main accounts hierarchy page. To limit your search to a single "
-#| "account, start the search from that account's register."
 msgid ""
 "To search through all your transactions, start a search (Edit->Find…) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Для поиска по всем транзакциям, откройте диалог поиска (\"Правка\"-"
-">\"Найти...\") со страницы иерархии счетов. Чтобы искать в пределах одного "
-"счета, откройте диалог поиска со страницы журнала этого счета."
+"Для поиска по всем проводкам, откройте диалог поиска (\"Правка\"->\"Найти..."
+"\") со страницы иерархии счетов. Чтобы искать в пределах одного счета, "
+"откройте диалог поиска со страницы журнала этого счета."
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -4986,7 +4972,7 @@ msgstr "Вставить проводку из буфера обмена"
 #: gnucash/ui/gnc-plugin-page-register.ui:576
 #: gnucash/ui/gnc-plugin-page-register.ui:724
 msgid "Make a copy of the current transaction"
-msgstr "Сделать копию текущей проводки"
+msgstr "Создать копию текущей проводки"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:272
 #: gnucash/ui/gnc-embedded-register-window.ui:55
@@ -5039,7 +5025,7 @@ msgstr "Вставить часть из буфера обмена"
 #: gnucash/ui/gnc-plugin-page-register.ui:478
 #: gnucash/ui/gnc-plugin-page-register.ui:615
 msgid "Make a copy of the current split"
-msgstr "Сделать копию текущей части"
+msgstr "Создать копию текущей части"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:280
 #: gnucash/ui/gnc-plugin-page-register.ui:483
@@ -29007,7 +28993,7 @@ msgstr "Перевести"
 #: gnucash/ui/gnc-plugin-page-register.ui:232
 #: gnucash/ui/gnc-plugin-page-register.ui:874
 msgid "Transfer funds from one account to another"
-msgstr "Перевести фонды с одного счёта на другой"
+msgstr "Перевести средства с одного счёта на другой"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:98
 #: gnucash/ui/gnc-embedded-register-window.ui:140
@@ -30548,11 +30534,9 @@ msgstr "Показывать код другого счёта?"
 #: gnucash/ui/gnc-plugin-page-register.ui:439
 #: gnucash/ui/gnc-plugin-page-register.ui:551
 #: gnucash/ui/gnc-plugin-page-register.ui:834
-#, fuzzy
-#| msgid "Open a register report for the selected Transaction"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
-msgstr "Открыть отчёт по журналу для выбранной проводки"
+msgstr "Открыть противоположный счёт и перейти к текущей проводке"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
 #, fuzzy

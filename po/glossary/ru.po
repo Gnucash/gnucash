@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-25 08:00+0200\n"
-"PO-Revision-Date: 2023-11-05 14:32+0000\n"
+"PO-Revision-Date: 2023-11-15 12:03+0000\n"
 "Last-Translator: hades <dev@hades.name>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/glossary/"
 "ru/>\n"
@@ -41,7 +41,7 @@ msgstr "счёт"
 
 #. "An alphanumerical code applied to accounts for sorting. Some jurisdictions mandate codes and some GnuCash book templates include codes as part of the tree structure. Account codes can be set and changed in the Edit Account dialog."
 msgid "account code"
-msgstr "код счета"
+msgstr "код счёта"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
@@ -49,7 +49,7 @@ msgstr "иерархия счетов"
 
 #. "-"
 msgid "account name"
-msgstr "название счета"
+msgstr "название счёта"
 
 #. "The grouping of accounts whose balance increases with a debit (left side of the balance sheet in T account form). Complement: Passive. See also: Report Form"
 msgid "account type: Active"
@@ -57,7 +57,7 @@ msgstr "account type: Актив"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr "account type: Активы"
+msgstr "account type: Актив"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
 msgid "account type: Assets & Liabilities"
@@ -65,7 +65,7 @@ msgstr "account type: Активы и обязательства"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr "account type: чеки"
+msgstr "account type: текущий"
 
 #. "-"
 msgid "account type: currency"
@@ -89,7 +89,7 @@ msgstr "account type: Обязательства"
 
 #. "-"
 msgid "account type: money-market"
-msgstr "account type: валютный рынок"
+msgstr "account type: вклад до востребования"
 
 #. "-"
 msgid "account type: Mutual fund"
@@ -97,43 +97,43 @@ msgstr "account type: Взаимный фонд"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr "account type: Пассивный"
+msgstr "account type: Пассив"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr "account type: Прибыль и потери"
+msgstr "account type: Прибыль и убытки"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr "account type: депозит"
+msgstr "account type: сберегательный"
 
 #. "-"
 msgid "account type: Stock"
-msgstr "account type: Пакет акций"
+msgstr "account type: Акции"
 
 #. "This account type is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
-msgstr "account type: обмен валют"
+msgstr "account type: торговый"
 
 #. "-"
 msgid "account: parent account"
-msgstr "account: родительский счет"
+msgstr "account: подчинён счёту"
 
 #. "-"
 msgid "account: subaccount"
-msgstr "account: субсчет"
+msgstr "account: субсчёт"
 
 #. "-"
 msgid "account: top level account"
-msgstr "account: счет верхнего уровня"
+msgstr "account: счет первого уровня"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
-msgstr "Действие (журнал)"
+msgstr "Действие"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr "action: платежный терминал"
+msgstr "action: банкомат"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
@@ -161,7 +161,7 @@ msgstr "action: дивиденд"
 
 #. "-"
 msgid "action: fee"
-msgstr "action: гонорар"
+msgstr "action: сбор"
 
 #. "transaction comes from interest"
 msgid "action: int"
@@ -173,11 +173,11 @@ msgstr "action: займ"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr "action: платеж"
+msgstr "action: платёж"
 
 #. "Point of sale"
 msgid "action: POS"
-msgstr "action: Пункт продажи"
+msgstr "action: POS"
 
 #. "-"
 msgid "action: rebate"
@@ -201,7 +201,7 @@ msgstr "action: электронный"
 
 #. "-"
 msgid "action: withdraw"
-msgstr "action: отзыв"
+msgstr "action: снятие"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
@@ -245,7 +245,7 @@ msgstr "банк"
 
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr "счет на оплату"
+msgstr "счёт на оплату"
 
 #. "see invoice owner"
 msgid "bill owner"
@@ -261,7 +261,7 @@ msgstr "Книга"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr "закрытие книги"
+msgstr "закрытие книг"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -273,7 +273,7 @@ msgstr "деловой"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
-msgstr "деятельность"
+msgstr "предприятие"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
@@ -341,7 +341,7 @@ msgstr "валюта"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
-msgstr "Настраиваемый"
+msgstr "Произвольный"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
@@ -372,7 +372,6 @@ msgid "default"
 msgstr "по умолчанию"
 
 #. "see credit"
-#, fuzzy
 msgid "deposit (in the reconcile dialog)"
 msgstr "депозит"
 
@@ -390,7 +389,7 @@ msgstr "скидка"
 
 #. "Important Buzzword :)"
 msgid "double entry"
-msgstr "двойная бухгалтерия"
+msgstr "двойная запись"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
@@ -457,13 +456,12 @@ msgid "gain"
 msgstr "прибыль"
 
 #. "Name of an automatically created account to get imbalanced transactions back in balance"
-#, fuzzy
 msgid "imbalance"
 msgstr "несоответствие"
 
 #. "Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
 msgid "import"
-msgstr "импорт"
+msgstr "импортирование"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
@@ -479,20 +477,19 @@ msgstr "счёт-фактура"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
-msgstr "операция"
+msgstr "заказ"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
 msgstr "бухгалтерская книга"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
-#, fuzzy
 msgid "liabilities/equity"
 msgstr "обязательства/собственные средства"
 
 #. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
-msgstr "ссуда"
+msgstr "сумма займа"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
 msgid "loan: APR"
@@ -508,16 +505,15 @@ msgstr "Потерянные счета"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
-msgstr "Набор"
+msgstr "Партия"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
 msgstr "объединить"
 
 #. "The thing that the scatter plot uses to mark each data point"
-#, fuzzy
 msgid "marker"
-msgstr "маркер"
+msgstr "точка"
 
 #. "1. Some text annotation, but this meaning is rarely used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 msgid "markup"
@@ -525,7 +521,7 @@ msgstr "наценка"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
-msgstr ""
+msgstr "многодокументный интерфейс"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
@@ -593,7 +589,7 @@ msgstr "упущенный"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "получатель"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
@@ -613,20 +609,19 @@ msgstr "плательщик"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
-msgstr "платеж"
+msgstr "платёж"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr "виртуальный"
+msgstr "промежуточный"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
 msgstr "портфель"
 
 #. "Register invoice, voucher in account register"
-#, fuzzy
 msgid "post, to"
-msgstr "закрыть"
+msgstr "заносить"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
@@ -634,7 +629,7 @@ msgstr "настройки"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
 msgid "principal payment"
-msgstr "основной платеж"
+msgstr "погашение долга"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
@@ -679,11 +674,11 @@ msgstr "ведение учета"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr "реестр"
+msgstr "регистр"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr "register entry: разделенная проводка"
+msgstr "register entry: сложная проводка"
 
 #. "-"
 #, fuzzy
