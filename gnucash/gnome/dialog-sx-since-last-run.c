@@ -72,6 +72,8 @@ struct _GncSxSinceLastRunDialog
     GtkTreeView *instance_view;
     GtkToggleButton *review_created_txns_toggle;
     GList *created_txns;
+
+    GtkCellEditable *temp_ce; // used when editing values
 };
 
 /* ------------------------------------------------------------ */
@@ -922,6 +924,8 @@ variable_value_changed_cb (GtkCellRendererText *cell,
 
     DEBUG ("variable to [%s] at path [%s]", value, path);
 
+    dialog->temp_ce = NULL;
+
     if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(dialog->editing_model), &tree_iter, model_path))
     {
         gtk_tree_path_free (model_path);
@@ -954,6 +958,21 @@ variable_value_changed_cb (GtkCellRendererText *cell,
         return;
     }
     gnc_sx_instance_model_set_variable (dialog->editing_model->instances, inst, var, &parsed_num);
+}
+
+static void
+variable_value_start_changed_cb (GtkCellRenderer *renderer, GtkCellEditable *editable,
+                                 gchar *path, gpointer user_data)
+{
+    GncSxSinceLastRunDialog *dialog = user_data;
+    dialog->temp_ce = editable;
+}
+
+static void
+variable_value_cancel_changed_cb (GtkCellRenderer *renderer, gpointer user_data)
+{
+    GncSxSinceLastRunDialog *dialog = user_data;
+    dialog->temp_ce = NULL;
 }
 
 static gint
@@ -1064,11 +1083,25 @@ _status_sort_func (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b
     return rtn;
 }
 
+static gboolean
+finish_editing_before_ok_cb (GtkWidget *button, GdkEvent *event,
+                             GncSxSinceLastRunDialog *dialog)
+{
+    // finish editing
+    if (dialog->temp_ce)
+        gtk_cell_editable_editing_done (dialog->temp_ce);
+
+    dialog->temp_ce = NULL;
+
+    return FALSE;
+} 
+
 GncSxSinceLastRunDialog*
 gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_instances, GList *auto_created_txn_guids)
 {
     GncSxSinceLastRunDialog *dialog;
     GtkBuilder *builder;
+    GtkWidget *ok_button;
 
     dialog = g_new0 (GncSxSinceLastRunDialog, 1);
 
@@ -1089,6 +1122,11 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
                                   gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SET_REVIEW));
 
     dialog->created_txns = auto_created_txn_guids;
+
+    ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "okbutton2"));
+
+    g_signal_connect (G_OBJECT(ok_button), "button-press-event",
+                      G_CALLBACK(finish_editing_before_ok_cb), dialog);
 
     {
         GtkCellRenderer *renderer;
@@ -1163,6 +1201,17 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
                           "edited",
                           G_CALLBACK(variable_value_changed_cb),
                           dialog);
+
+        g_signal_connect (G_OBJECT(renderer),
+                          "editing-started",
+                          G_CALLBACK(variable_value_start_changed_cb),
+                          dialog);
+
+        g_signal_connect (G_OBJECT(renderer),
+                          "editing-canceled",
+                          (GCallback)variable_value_cancel_changed_cb,
+                          dialog);
+
         col = gtk_tree_view_column_new_with_attributes (_("Value"), renderer,
                 "text", SLR_MODEL_COL_VARAIBLE_VALUE,
                 "visible", SLR_MODEL_COL_VARIABLE_VISIBILITY,
