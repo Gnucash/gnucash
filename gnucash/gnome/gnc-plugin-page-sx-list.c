@@ -390,19 +390,19 @@ treeview_popup (GtkTreeView *treeview, GdkEvent *event, GncPluginPageSxList *pag
 
     menu = gtk_menu_new();
 
-    menuitem = gtk_menu_item_new_with_mnemonic (_("_New"));
+    menuitem = gtk_menu_item_new_with_mnemonic (_("_New Schedule"));
     full_action_name = g_strconcat (group_name, ".SxListNewAction", NULL);
     gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
     g_free (full_action_name);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-    menuitem = gtk_menu_item_new_with_mnemonic (_("_Edit"));
+    menuitem = gtk_menu_item_new_with_mnemonic (_("_Edit Schedule"));
     full_action_name = g_strconcat (group_name, ".SxListEditAction", NULL);
     gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
     g_free (full_action_name);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
-    menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete"));
+    menuitem = gtk_menu_item_new_with_mnemonic (_("_Delete Schedule"));
     full_action_name = g_strconcat (group_name, ".SxListDeleteAction", NULL);
     gtk_actionable_set_action_name (GTK_ACTIONABLE(menuitem), full_action_name);
     g_free (full_action_name);

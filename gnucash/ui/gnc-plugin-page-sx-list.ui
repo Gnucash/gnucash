@@ -44,19 +44,19 @@
 
   <menu id="SchedulePlaceholder0">
     <item>
-      <attribute name="label" translatable="yes">_New</attribute>
+      <attribute name="label" translatable="yes">_New Schedule</attribute>
       <attribute name="action">GncPluginPageSxListActions.SxListNewAction</attribute>
       <attribute name="tooltip" translatable="yes">Create a new scheduled transaction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_Edit</attribute>
+      <attribute name="label" translatable="yes">_Edit Schedule</attribute>
       <attribute name="action">GncPluginPageSxListActions.SxListEditAction</attribute>
       <attribute name="tooltip" translatable="yes">Edit the selected scheduled transaction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
-      <attribute name="label" translatable="yes">_Delete</attribute>
+      <attribute name="label" translatable="yes">_Delete Schedule</attribute>
       <attribute name="action">GncPluginPageSxListActions.SxListDeleteAction</attribute>
       <attribute name="tooltip" translatable="yes">Delete the selected scheduled transaction</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
