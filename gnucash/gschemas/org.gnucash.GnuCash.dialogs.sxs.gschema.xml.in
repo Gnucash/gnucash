@@ -27,8 +27,17 @@
       <summary>Set "Review Created Transactions" as the default for the "since last run" dialog.</summary>
       <description>This setting controls whether as default the "review created transactions" is set for the "since last run" dialog.</description>
     </key>
+    <key name="sort-column" type="i">
+      <default>0</default>
+      <summary>Set the sort column in the "since last run" dialog.</summary>
+      <description>This settings sets the sort column in the "since last run" dialog.</description>
+    </key>
+    <key name="sort-ascending" type="b">
+      <default>true</default>
+      <summary>Set the sort direction in the "since last run" dialog.</summary>
+      <description>This settings sets the sort direction in the "since last run" dialog.</description>
+    </key>
   </schema>
-
   <schema id="org.gnucash.GnuCash.dialogs.sxs.transaction-editor" path="/org/gnucash/GnuCash/dialogs/scheduled-trans/transaction-editor/">
     <key name="create-auto" type="b">
       <default>false</default>

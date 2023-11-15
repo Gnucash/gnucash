@@ -60,6 +60,10 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define DIALOG_SX_SINCE_LAST_RUN_CM_CLASS "dialog-sx-since-last-run"
 
+#define GNC_PREF_SET_REVIEW     "review-transactions"
+#define GNC_PREF_SLR_SORT_COL   "sort-column"
+#define GNC_PREF_SLR_SORT_ASC   "sort-ascending"
+
 struct _GncSxSinceLastRunDialog
 {
     GtkWidget *dialog;
@@ -1092,8 +1096,11 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
         g_object_unref (sort_model);
 
         /* default sort order */
+        gboolean sort_ascending = gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_ASC);
+        gint sort_column = gnc_prefs_get_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_COL);
+        GtkSortType sort_type = sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
         gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(sort_model),
-                                              SLR_MODEL_COL_NAME, GTK_SORT_ASCENDING);
+                                              sort_column, sort_type);
 
         renderer = gtk_cell_renderer_text_new ();
         col = gtk_tree_view_column_new_with_attributes (_("Transaction"), renderer,
@@ -1215,6 +1222,20 @@ static void
 close_handler (gpointer user_data)
 {
     GncSxSinceLastRunDialog *app_dialog = user_data;
+    GtkSortType order;
+    gint column;
+
+    if (gtk_tree_sortable_get_sort_column_id (GTK_TREE_SORTABLE(
+                                              gtk_tree_view_get_model (app_dialog->instance_view)),
+                                              &column, &order))
+    {
+        gboolean sort_ascending = TRUE;
+        if (order == GTK_SORT_DESCENDING)
+            sort_ascending = FALSE;
+
+        gnc_prefs_set_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_ASC, sort_ascending);
+        gnc_prefs_set_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_COL, column);
+    }
 
     gnc_save_window_size (GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(app_dialog->dialog));
     gtk_widget_destroy (app_dialog->dialog);
