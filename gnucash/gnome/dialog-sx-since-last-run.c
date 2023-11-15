@@ -957,6 +957,12 @@ variable_value_changed_cb (GtkCellRendererText *cell,
         g_free (value_copy);
         return;
     }
+
+    if (inst->state == SX_INSTANCE_STATE_REMINDER)
+    {
+        gnc_sx_instance_model_change_instance_state (dialog->editing_model->instances, inst,
+                                                     SX_INSTANCE_STATE_TO_CREATE);
+    }
     gnc_sx_instance_model_set_variable (dialog->editing_model->instances, inst, var, &parsed_num);
 }
 
