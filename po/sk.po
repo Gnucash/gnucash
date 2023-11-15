@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-11-04 08:34+0000\n"
+"PO-Revision-Date: 2023-11-15 21:03+0000\n"
 "Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
@@ -9747,10 +9747,13 @@ msgid ""
 "account's custom color if set. This can serve as a visual aid to quickly "
 "identify accounts."
 msgstr ""
+"Ak je aktívnr, hierarchia účtu zafarbí účet pomocou vlastnej farby účtu, ak "
+"je nastavená. To môže slúžiť ako vizuálna pomôcka na rýchlu identifikáciu "
+"účtov."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:115
 msgid "Use account colors in the tabs of open account registers"
-msgstr ""
+msgstr "Použiť farby účtov v záložkách registrov otvorených účtov"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:116
 msgid ""
@@ -9758,6 +9761,9 @@ msgid ""
 "custom color if set. This can serve as a visual aid to quickly identify "
 "accounts."
 msgstr ""
+"Ak je aktívne, karty registra účtu budú zafarbené pomocou vlastnej farby "
+"účtu, ak je nastavená. To môže slúžiť ako vizuálna pomôcka na rýchlu "
+"identifikáciu účtov."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:120
 msgid "Use formal account labels"
@@ -9785,6 +9791,11 @@ msgid ""
 "this setting, pages can always be closed via the \"close\" menu item or the "
 "\"close\" button on toolbar."
 msgstr ""
+"Ak je aktívne, na každej karte poznámkového bloku, ktorá môže byť zatvorená, "
+"sa zobrazí tlačidlo „zatvoriť“. V opačnom prípade sa žiadne takéto tlačidlo "
+"na karte nezobrazí. Bez ohľadu na toto nastavenie je možné stránky vždy "
+"zatvoriť cez položku ponuky „zatvoriť“ alebo tlačidlo „zatvoriť“ na paneli "
+"nástrojov."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:130
 msgid "Width of notebook tabs"
@@ -9796,6 +9807,9 @@ msgid ""
 "tab is longer than this value (the test is approximate) then the tab label "
 "will have the middle cut and replaced with an ellipsis."
 msgstr ""
+"Tento kľúč určuje maximálnu šírku kariet poznámkového bloku. Ak je text na "
+"tabulátore dlhší ako táto hodnota (test je približný), štítok tabulátora "
+"bude v strede vystrihnutý a nahradí ho trojbodka."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
@@ -9806,6 +9820,8 @@ msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
 msgstr ""
+"Ak je aktívne, otvoria sa nové karty vedľa aktuálnej karty. Ak nie je "
+"aktívne, nové karty sa otvoria na konci."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:942
@@ -9821,6 +9837,10 @@ msgid ""
 "the user's locale setting. If set to \"other\", GnuCash will use the setting "
 "specified by the currency-other key."
 msgstr ""
+"Toto nastavenie riadi zdroj predvolenej meny pre nové účty. Ak je nastavené "
+"na „miestne“, potom GnuCash získa predvolenú menu z nastavenia miestneho "
+"nastavenia používateľa. Ak je nastavený na „iné“, GnuCash použije nastavenie "
+"mena-iný kľúč."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:145
 #: gnucash/gtkbuilder/dialog-preferences.glade:922
@@ -9902,9 +9922,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:185
-#, fuzzy
 msgid "Show Vertical Grid Lines"
-msgstr "Zobraziť vertikálne okraje v registri"
+msgstr "Zobraziť zvislé čiary mriežky"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:186
 msgid ""
@@ -10711,7 +10730,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:45
 msgid "Ending date (in seconds from Jan 1, 1970)"
-msgstr ""
+msgstr "Dátum ukončenia (v sekundách od 1. januára 1970)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:46
 msgid ""
@@ -10722,7 +10741,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:50
 msgid "Ending time period identifier"
-msgstr ""
+msgstr "Identifikátor koncového časového obdobia"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:51
 msgid ""
@@ -11702,6 +11721,7 @@ msgstr "Nastavenie splácania úveru / hypotéky"
 msgid ""
 "Enter the Loan Details, as a minimum enter a valid Loan Account and Amount.\n"
 msgstr ""
+"Zadajte Údaje o pôžičke, minimálne zadajte platný Úverový účet a Sumu.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:165
 #: gnucash/gtkbuilder/assistant-loan.glade:1173
@@ -11753,6 +11773,8 @@ msgid ""
 "Enter the annual interest rate in percent. Accepts values from 0.001 - 100. "
 "The Mortgage Assistant does not support zero-interest loans."
 msgstr ""
+"Zadajte ročnú úrokovú sadzbu v percentách. Akceptuje hodnoty od 0,001 - 100. "
+"Hypotekárny asistent nepodporuje úvery s nulovým úrokom."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:359
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -12276,6 +12298,10 @@ msgid ""
 "for the share distribution. You can also enter a description of the "
 "transaction, or accept the default one."
 msgstr ""
+"Zadajte dátum a počet akcií, ktoré ste získali alebo stratili rozdelením "
+"alebo zlúčením akcií. Pre fúzie akcií (záporné rozdelenie) použite zápornú "
+"hodnotu pre rozdelenie akcií. Môžete tiež zadať popis transakcie alebo "
+"akceptovať predvolený."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:115
 #: gnucash/gtkbuilder/dialog-account.glade:1851
@@ -13400,6 +13426,8 @@ msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr ""
+"Zadajte celý názov komodity. Príklad: Cisco Systems Inc. alebo Apple "
+"Computer, Inc."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:138
 msgid ""
@@ -13407,6 +13435,9 @@ msgid ""
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case)."
 msgstr ""
+"Zadajte symbol pre komoditu (napr. CSCO alebo AAPL). Ak získavate cenové "
+"ponuky online, toto pole sa musí presne zhodovať so symbolom, ktorý používa "
+"zdroj cenovej ponuky (vrátane veľkých a malých písmen)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:156
 msgid ""
@@ -13442,6 +13473,8 @@ msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
 msgstr ""
+"Zadajte symbol zobrazenia. Toto môžete pokojne nechať prázdne, v takom "
+"prípade sa použije symbol meny alebo kód ISO meny."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:335
 msgid "Type of quote source"
@@ -14381,7 +14414,7 @@ msgstr "Zadajte názov pre zvýraznenú položku."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:174
 msgid "Enter any notes you want to make about this lot."
-msgstr ""
+msgstr "Zadajte akékoľvek poznámky, ktoré si chcete o tejto šarži urobiť."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:193
 msgid "<b>_Title</b>"
@@ -14805,7 +14838,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1168
 msgid "Enter number of months."
-msgstr ""
+msgstr "Vložiť počet mesiacov."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1189
 msgid "Use the date format specified by the system locale."
@@ -14991,9 +15024,8 @@ msgstr "Povoliť akciu preskočenia transakcie"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2076
-#, fuzzy
 msgid "Enable update match action"
-msgstr "Označenie časti aktív"
+msgstr "Povoliť akciu aktualizácie zhody"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2082
 msgid ""
@@ -15653,6 +15685,9 @@ msgid ""
 "format\" selector of the Print Check dialog. Using the title of an existing "
 "custom format will cause that format to be overwritten."
 msgstr ""
+"Zadajte názov pre tento vlastný formát. Tento názov sa zobrazí v selektore „"
+"Formát kontroly“ v dialógovom okne Kontrola tlače. Použitie názvu "
+"existujúceho vlastného formátu spôsobí prepísanie tohto formátu."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:241
 msgid "Inches"
@@ -17394,6 +17429,10 @@ msgid ""
 "match it to a GnuCash account or select incorrect matches and click \"Delete "
 "selected matches\". Click \"Next\" when all desired accounts are matching."
 msgstr ""
+"Dvakrát kliknite na riadok názvu účtu Online Banking, ak ho chcete priradiť "
+"k účtu GnuCash, alebo vyberte nesprávne zhody a kliknite na „Odstrániť "
+"vybrané zhody“. Keď sa všetky požadované účty zhodujú, kliknite na tlačidlo "
+"„Ďalej“."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:242
 msgid "_Delete selected matches"
@@ -17633,7 +17672,7 @@ msgstr "Presuňte vybratú šablónu transakcie o jeden riadok nahor"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1519
 msgid "_Down"
-msgstr ""
+msgstr "_Dole"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1525
 msgid "Move the selected transaction template one row down"
@@ -17721,7 +17760,7 @@ msgstr "Podrobné ladiace sprá_vy"
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:76
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
-msgstr ""
+msgstr "Umožňuje podrobné ladiace správy pre HBCI/AqBanking Online Banking."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:88
 msgid "Use Non-SWIFT _transaction text"
@@ -17783,9 +17822,8 @@ msgid "Target Accounts"
 msgstr "Cieľový účet"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
-#, fuzzy
 msgid "Enter a SEPA Online Direct Debit Note"
-msgstr "Zadajte online inkaso"
+msgstr "Vložiť online SEPA inkaso"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:412
 msgid "Debited Account Owner"
@@ -17888,6 +17926,9 @@ msgid ""
 "\n"
 "Status: %s"
 msgstr ""
+"Chyba pri vykonávaní úlohy.\n"
+"\n"
+"Stav: %s"
 
 #: gnucash/import-export/aqb/gnc-ab-gettrans.c:142
 msgid "Online action \"Get Transactions\" not available for this account."
@@ -17900,6 +17941,9 @@ msgid ""
 "\n"
 "Status: %s (%d)"
 msgstr ""
+"Chyba pri vykonávaní úlohy.\n"
+"\n"
+"Stav: %s (%d)"
 
 #: gnucash/import-export/aqb/gnc-ab-gettrans.c:212
 msgid ""
@@ -18286,7 +18330,7 @@ msgstr "Riadok %d, faktúra %s/%u: nie je zadaná cena.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:533
 #, c-format
 msgid "Error(s) in invoice %s, all rows of this invoice ignored.\n"
-msgstr ""
+msgstr "Chyby vo faktúre %s, všetky riadky tejto faktúry sú ignorované.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:539
 #, c-format
@@ -20736,7 +20780,7 @@ msgstr "Vložte popis transakcie"
 
 #: gnucash/register/ledger-core/split-register-model.c:1169
 msgid "Enter notes for the transaction"
-msgstr "Vložte poznámky pre rozdelenie"
+msgstr "Vložiť poznámky pre rozdelenie"
 
 #: gnucash/register/ledger-core/split-register-model.c:1202
 msgid "Reason the transaction was voided"
@@ -20850,7 +20894,7 @@ msgstr "Zadajte kreditný vzorec pre skutočnú transakciu"
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:75
 msgid "Don't autocomplete"
-msgstr "Nevykonávať automatické dopĺňanie"
+msgstr "Nedoplniť automaticky"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
@@ -23084,9 +23128,8 @@ msgid "Period order is most recent first"
 msgstr "Poradie obdobia je najnovšie ako prvé"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:61
-#, fuzzy
 msgid "Enable dual columns"
-msgstr "Individuálne dane"
+msgstr "Povoliť dvojité stĺpce"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:62
 msgid "Selecting this option will enable double-column reporting."
@@ -24717,16 +24760,12 @@ msgid "End Amount"
 msgstr "Konečná suma"
 
 #: gnucash/report/reports/standard/investment-lots.scm:120
-#, fuzzy
-#| msgid "Basis"
 msgid "End Basis"
-msgstr "Základ"
+msgstr "Základ do"
 
 #: gnucash/report/reports/standard/investment-lots.scm:121
-#, fuzzy
-#| msgid "Value"
 msgid "End Value"
-msgstr "Hodnota"
+msgstr "Koncová hodnota"
 
 #: gnucash/report/reports/standard/investment-lots.scm:123
 msgid "ST Realized Gain"
@@ -24999,9 +25038,8 @@ msgstr "Obrázok"
 
 #. Translators: "Empty space" refers to invoice header section being left blank
 #: gnucash/report/reports/standard/invoice.scm:118
-#, fuzzy
 msgid "Empty space"
-msgstr "Označenie"
+msgstr "Empty space"
 
 #: gnucash/report/reports/standard/invoice.scm:176
 msgid "Custom Title"
@@ -29435,7 +29473,7 @@ msgstr "Výsledok:"
 #. Translators: This is the error message reported by the Online Quotes processing code.
 #: libgnucash/app-utils/gnc-quotes.cpp:762
 msgid "Error message:"
-msgstr ""
+msgstr "Chybová správa:"
 
 #. Translators: Means that the preceding element is required
 #: libgnucash/app-utils/gnc-quotes.cpp:809
@@ -29536,13 +29574,14 @@ msgstr ""
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1083
 #, c-format
 msgid "Error parsing SX [%s] key [%s]=formula [%s] at [%s]: %s."
-msgstr ""
+msgstr "Chyba pri analýze kľúča SX [%s] [%s]=vzorec [%s] na [%s]: %s."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1139
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1808
 #, c-format
 msgid "Error %d in SX [%s] final gnc_numeric value, using 0 instead."
 msgstr ""
+"Chyba %d v konečnej hodnote gnc_numeric SX [%s], namiesto toho sa použite 0."
 
 #: libgnucash/app-utils/gnc-sx-instance-model.c:1817
 #, c-format
