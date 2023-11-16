@@ -910,6 +910,20 @@ instance_state_changed_cb (GtkCellRendererText *cell,
 }
 
 static void
+control_scroll_bars (GncSxSinceLastRunDialog *dialog)
+{
+    GtkWidget *sw = gtk_widget_get_parent (GTK_WIDGET(dialog->instance_view));
+    GtkWidget *vsbar = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW(sw));
+    gboolean enable = TRUE;
+
+    if (dialog->temp_ce)
+        enable = FALSE;
+
+    gtk_widget_set_sensitive (vsbar, enable);
+    gtk_widget_set_visible (vsbar, enable);
+}
+
+static void
 variable_value_changed_cb (GtkCellRendererText *cell,
                            const gchar *path,
                            const gchar *value,
@@ -925,6 +939,7 @@ variable_value_changed_cb (GtkCellRendererText *cell,
     DEBUG ("variable to [%s] at path [%s]", value, path);
 
     dialog->temp_ce = NULL;
+    control_scroll_bars (dialog);
 
     if (!gtk_tree_model_get_iter (GTK_TREE_MODEL(dialog->editing_model), &tree_iter, model_path))
     {
@@ -972,6 +987,7 @@ variable_value_start_changed_cb (GtkCellRenderer *renderer, GtkCellEditable *edi
 {
     GncSxSinceLastRunDialog *dialog = user_data;
     dialog->temp_ce = editable;
+    control_scroll_bars (dialog);
 }
 
 static void
@@ -979,6 +995,7 @@ variable_value_cancel_changed_cb (GtkCellRenderer *renderer, gpointer user_data)
 {
     GncSxSinceLastRunDialog *dialog = user_data;
     dialog->temp_ce = NULL;
+    control_scroll_bars (dialog);
 }
 
 static gint
@@ -1100,7 +1117,18 @@ finish_editing_before_ok_cb (GtkWidget *button, GdkEvent *event,
     dialog->temp_ce = NULL;
 
     return FALSE;
-} 
+}
+
+static gboolean
+scroll_event (GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
+{
+    GncSxSinceLastRunDialog *dialog = user_data;
+
+    if (dialog->temp_ce)
+        return TRUE;
+    else
+        return FALSE;
+}
 
 GncSxSinceLastRunDialog*
 gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_instances, GList *auto_created_txn_guids)
@@ -1150,6 +1178,9 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
         gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(sort_model),
                                               sort_column, sort_type);
 
+        g_signal_connect (G_OBJECT(dialog->instance_view), "scroll-event",
+                          G_CALLBACK(scroll_event), dialog);
+
         renderer = gtk_cell_renderer_text_new ();
         col = gtk_tree_view_column_new_with_attributes (_("Transaction"), renderer,
                 "text", SLR_MODEL_COL_NAME,
@@ -1197,7 +1228,7 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
                 "sensitive", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
                 NULL);
         gtk_tree_view_append_column (dialog->instance_view, col);
-        gtk_tree_view_column_set_resizable (col, TRUE);
+        gtk_tree_view_column_set_resizable (col, FALSE);
 
         renderer = gtk_cell_renderer_text_new ();
         g_object_set (G_OBJECT(renderer),
