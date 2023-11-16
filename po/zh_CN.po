@@ -30,14 +30,15 @@
 # yu0A <yuhongbo@member.fsf.org>, 2023.
 # yuht <yuht@qq.com>, 2023.
 # Ral Hole <ral-hole@outlook.com>, 2023.
+# derxi <happycxin@163.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-10-21 05:00+0000\n"
-"Last-Translator: Ral Hole <ral-hole@outlook.com>\n"
+"PO-Revision-Date: 2023-11-16 08:03+0000\n"
+"Last-Translator: derxi <happycxin@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -45,7 +46,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.1\n"
+"X-Generator: Weblate 5.2\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -18634,22 +18635,20 @@ msgstr "请选择一个描述栏。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:507
 msgid "Please select a (negated) amount column."
-msgstr "请选择一个（要取消的）科目列。"
+msgstr "请选择一个（负的）科目列。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:524
 msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value."
-msgstr "当前选择的科目将生成多币交易。请选择一列：价格、（要无效的）值。"
+msgstr "当前选择的科目将生成多币交易。请选择一列：价格、（负的）值。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:531
 msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
-msgstr ""
-"当前的科目将生成多币交易。请选择一列：价格、（要无效的）值、（要无效的）转账"
-"金额。"
+msgstr "当前的科目将生成多币交易。请选择一列：价格、（负的）值、（负的）转账金额。"
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
 msgid ""
@@ -18761,11 +18760,11 @@ msgstr "交易商品"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
 msgid "Amount (Negated)"
-msgstr "（要无效的）金额"
+msgstr "（负的）金额"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 msgid "Value (Negated)"
-msgstr "（要无效的）值"
+msgstr "（负的）值"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
 msgid "Transfer Action"
@@ -18777,7 +18776,7 @@ msgstr "转账金额"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
 msgid "Transfer Amount (Negated)"
-msgstr "（要无效的）转账金额"
+msgstr "（负的）转账金额"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
 msgid "Transfer Memo"
@@ -18829,7 +18828,7 @@ msgstr "收款帐户的值无法映射回一个帐户。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:641
 msgid "No amount or negated amount column."
-msgstr "无金额或要无效的金额列。"
+msgstr "无金额或负的金额列。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:644
 msgid "Split is reconciled but reconcile date column is missing or invalid."
@@ -18845,17 +18844,13 @@ msgstr "资金目的地拆分已经匹配，但这不是资金目的地融合日
 msgid ""
 "Choice of accounts makes this a multi-currency transaction but price or "
 "(negated) value column is missing or invalid."
-msgstr ""
-"账户的选择令其成为一个多货币的交易，但价格或（要无效的）价格的值的列丢失或无"
-"效。"
+msgstr "账户的选择令其成为一个多货币的交易，但价格或（负的）价格的值的列丢失或无效。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:665
 msgid ""
 "Choice of account makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer column is missing or invalid."
-msgstr ""
-"账户的选择令其成为一个多货币的交易，但价格或（要无效的）价格的值的列丢失或无"
-"效。"
+msgstr "账户的选择令其成为一个多货币的交易，但价格或（负的）价格的值的列丢失或无效。"
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
 msgid "No Settings"
