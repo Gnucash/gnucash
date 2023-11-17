@@ -26,6 +26,7 @@
 #include <qof.h>
 #include <qofbookslots.h>
 #include <qofinstance-p.h>
+#include <optional>
 #include <unordered_map>
 #include <vector>
 #include <memory>
@@ -61,13 +62,11 @@ typedef struct
 struct PeriodData
 {
     std::string note;
-    bool value_is_set;
-    gnc_numeric value;
+    std::optional<gnc_numeric> opt_value;
     PeriodData () = default;
-    PeriodData (const char* note, bool value_is_set, gnc_numeric value)
+    PeriodData (const char* note, std::optional<gnc_numeric> opt_value)
         : note (note)
-        , value_is_set (value_is_set)
-        , value (value) {};
+        , opt_value (opt_value) {};
 };
 
 using PeriodDataVec = std::vector<PeriodData>;
@@ -528,7 +527,7 @@ gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
     g_return_if_fail (period_num < GET_PRIVATE(budget)->num_periods);
 
     auto& data = get_perioddata (budget, account, period_num);
-    data.value_is_set = false;
+    data.opt_value.reset();
 
     gnc_budget_begin_edit(budget);
     auto path = make_period_data_path (account, period_num);
@@ -566,14 +565,13 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
     if (gnc_numeric_check(val))
     {
         delete budget_kvp->set_path (path, nullptr);
-        perioddata.value_is_set = false;
+        perioddata.opt_value.reset();
     }
     else
     {
         KvpValue* v = new KvpValue (val);
         delete budget_kvp->set_path (path, v);
-        perioddata.value_is_set = true;
-        perioddata.value = val;
+        perioddata.opt_value = val;
     }
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
@@ -588,7 +586,7 @@ gnc_budget_is_account_period_value_set (const GncBudget *budget,
                                         guint period_num)
 {
     g_return_val_if_fail (period_num < GET_PRIVATE(budget)->num_periods, false);
-    return get_perioddata (budget, account, period_num).value_is_set;
+    return get_perioddata (budget, account, period_num).opt_value.has_value();
 }
 
 gnc_numeric
@@ -599,10 +597,8 @@ gnc_budget_get_account_period_value (const GncBudget *budget,
     g_return_val_if_fail (period_num < GET_PRIVATE(budget)->num_periods,
                           gnc_numeric_zero());
     auto& data = get_perioddata (budget, account, period_num);
-    if (!data.value_is_set)
-        return gnc_numeric_zero();
 
-    return data.value;
+    return data.opt_value.has_value() ? data.opt_value.value() : gnc_numeric_zero();
 }
 
 void
@@ -698,11 +694,11 @@ get_perioddata (const GncBudget *budget, const Account *account, guint period_nu
             auto kval2 { budget_kvp->get_slot (make_period_note_path (account, i)) };
 
             auto is_set = kval1 && kval1->get_type() == KvpValue::Type::NUMERIC;
-            auto num = is_set ? kval1->get<gnc_numeric>() : gnc_numeric_zero ();
+            auto num = is_set ? std::make_optional (kval1->get<gnc_numeric>()) : std::nullopt;
             auto note = (kval2 && kval2->get_type() == KvpValue::Type::STRING) ?
                 kval2->get<const char*>() : "";
 
-            vec.emplace_back (note, is_set, num);
+            vec.emplace_back (note, num);
         }
     }
 
