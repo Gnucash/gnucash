@@ -38,30 +38,37 @@ protected:
 
         t_asset_account1 = xaccMallocAccount(book);
         xaccAccountSetName(t_asset_account1, "Asset");
+        xaccAccountSetType(t_asset_account1, ACCT_TYPE_ASSET);
         gnc_account_append_child(root, t_asset_account1);
 
         t_bank_account = xaccMallocAccount(book);
         xaccAccountSetName(t_bank_account, "Bank");
+        xaccAccountSetType(t_bank_account, ACCT_TYPE_BANK);
         gnc_account_append_child(t_asset_account1, t_bank_account);
 
         t_asset_account2 = xaccMallocAccount(book);
         xaccAccountSetName(t_asset_account2, "Asset-Bank");
+        xaccAccountSetType(t_asset_account2, ACCT_TYPE_ASSET);
         gnc_account_append_child(root, t_asset_account2);
 
         t_sav_account = xaccMallocAccount(book);
         xaccAccountSetName(t_sav_account, "Bank");
+        xaccAccountSetType(t_sav_account,ACCT_TYPE_BANK);
         gnc_account_append_child(t_asset_account2, t_sav_account);
 
         t_expense_account = xaccMallocAccount(book);
         xaccAccountSetName(t_expense_account, "Expense");
+        xaccAccountSetType(t_expense_account, ACCT_TYPE_EXPENSE);
         gnc_account_append_child(root, t_expense_account);
 
         t_expense_account1 = xaccMallocAccount(book);
         xaccAccountSetName(t_expense_account1, "Food");
+        xaccAccountSetType(t_expense_account1, ACCT_TYPE_EXPENSE);
         gnc_account_append_child(t_expense_account, t_expense_account1);
 
         t_expense_account2 = xaccMallocAccount(book);
         xaccAccountSetName(t_expense_account2, "Drink");
+        xaccAccountSetType(t_expense_account2, ACCT_TYPE_EXPENSE);
         gnc_account_append_child(t_expense_account, t_expense_account2);
     }
     void TearDown() {
