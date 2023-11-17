@@ -34,6 +34,7 @@
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
+#include <stdexcept>
 #include <stdlib.h>
 
 #include "gnc-path.h"
@@ -1726,7 +1727,14 @@ CsvImpTransAssist::preview_refresh ()
         gtk_entry_set_text (GTK_ENTRY(custom_entry), separators.c_str());
         g_signal_handlers_unblock_by_func (custom_cbutton, (gpointer) csv_tximp_preview_sep_button_cb, this);
         g_signal_handlers_unblock_by_func (custom_entry, (gpointer) csv_tximp_preview_sep_button_cb, this);
-        csv_tximp_preview_sep_button_cb (GTK_WIDGET (custom_cbutton), this);
+        try
+        {
+            tx_imp->tokenize (false);
+        }
+        catch(std::range_error& err)
+        {
+            PERR("CSV Tokenization Failed: %s", err.what());
+        }
     }
 
     // Repopulate the parsed data table
