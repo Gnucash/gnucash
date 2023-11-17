@@ -1811,7 +1811,14 @@ CsvImpPriceAssist::preview_refresh ()
 
         g_signal_handlers_unblock_by_func (custom_cbutton, (gpointer) csv_price_imp_preview_sep_button_cb, this);
         g_signal_handlers_unblock_by_func (custom_entry, (gpointer) csv_price_imp_preview_sep_button_cb, this);
-        csv_price_imp_preview_sep_button_cb (GTK_WIDGET(custom_cbutton), this);
+        try
+        {
+            price_imp->tokenize (false);
+        }
+        catch (std::range_error& err)
+        {
+            PERR ("CSV Tokenization Failed: %s", err.what ());
+        }
     }
     // Repopulate the parsed data table
     g_idle_add ((GSourceFunc)csv_imp_preview_queue_rebuild_table, this);
