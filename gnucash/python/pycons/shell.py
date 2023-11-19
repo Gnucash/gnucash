@@ -47,7 +47,7 @@ class Shell:
         self.command = ''
         self.globals = ns_globals
         self.locals = ns_locals
-        self.complete_sep = re.compile('[\s\{\}\[\]\(\)]')
+        self.complete_sep = re.compile(r'[\s\{\}\[\]\(\)]')
         self.prompt = sys.ps1
 
 
