@@ -65,15 +65,29 @@ libgncmod_python_gnc_module_description(void)
 int
 libgncmod_python_gnc_module_init(int refcount)
 {
-    Py_Initialize();
-
+#ifdef __WIN32
     wchar_t* argv = NULL;
-    PySys_SetArgv(0, &argv);
-
+#else
+    char* argv = NULL;
+#endif
+    PyStatus status;
+    PyConfig config;
+    PyConfig_InitPythonConfig(&config);
+    status = PyConfig_SetBytesArgv(&config, 0, &argv);
+    if (PyStatus_Exception(status))
+    {
+        PyConfig_Clear(&config);
+        return FALSE;
+    }
+    Py_Initialize();
     gchar *pkgdatadir = gnc_path_get_pkgdatadir();
     gchar *init_filename = g_build_filename(pkgdatadir, "python/init.py", (char*)NULL);
     g_debug("Looking for python init script at %s", init_filename);
+#ifdef __WIN32
+    FILE *fp = fopen(init_filename, "rb");
+#else
     FILE *fp = fopen(init_filename, "r");
+#endif
     if (fp)
     {
         PyRun_SimpleFile(fp, init_filename);
@@ -87,6 +101,7 @@ libgncmod_python_gnc_module_init(int refcount)
     }
     g_free(init_filename);
     g_free(pkgdatadir);
+    PyConfig_Clear(&config);
 
     return TRUE;
 }
