@@ -278,7 +278,7 @@ function(gnc_add_scheme_targets _TARGET)
       add_custom_command(
         OUTPUT ${output_file}
         COMMAND ${CMAKE_COMMAND} -E env
-            "${GUILE_ENV}$<$<CONFIG:Asan>:;${ASAN_DYNAMIC_LIB_ENV}>"
+            "${GUILE_ENV}$<$<CONFIG:Asan>:;${ASAN_DYNAMIC_LIB_ENV};ASAN_OPTIONS=${ASAN_BUILD_OPTIONS}>"
             ${GUILE_EXECUTABLE} -e "\(@@ \(guild\) main\)" -s ${GUILD_EXECUTABLE} compile -o ${output_file} ${source_file_abs_path}
         DEPENDS ${guile_depends}
         MAIN_DEPENDENCY ${source_file_abs_path}

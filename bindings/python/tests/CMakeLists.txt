@@ -9,7 +9,7 @@ if (WITH_PYTHON)
   add_dependencies(check test-python-bindings)
   add_test(NAME python-bindings COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/runTests.py.in)
   set(PYTHON_ENV "GNC_UNINSTALLED=1;GNC_BUILDDIR=${CMAKE_BINARY_DIR};PYTHONPATH=${PYTHON_SYSCONFIG_BUILD}:${LIBDIR_BUILD}/gnucash:${test_core_dir}")
-  set(ASAN_ENV "${ASAN_DYNAMIC_LIB_ENV};ASAN_OPTIONS=fast_unwind_on_malloc=0")
+  set(ASAN_ENV "${ASAN_DYNAMIC_LIB_ENV};ASAN_OPTIONS=${ASAN_TEST_OPTIONS}")
   set_tests_properties(python-bindings PROPERTIES ENVIRONMENT "$<IF:$<CONFIG:Asan>,${PYTHON_ENV};${ASAN_ENV},${PYTHON_ENV}>")
 
 endif()

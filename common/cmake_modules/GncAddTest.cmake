@@ -92,7 +92,7 @@ function(gnc_add_test _TARGET _SOURCE_FILES TEST_INCLUDE_VAR_NAME TEST_LIBS_VAR_
   add_executable(${_TARGET} EXCLUDE_FROM_ALL ${_SOURCE_FILES})
   target_link_libraries(${_TARGET} PRIVATE ${TEST_LIBS})
   target_include_directories(${_TARGET} PRIVATE ${TEST_INCLUDE_DIRS})
-  set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "$<IF:$<CONFIG:Asan>,${ENVVARS};ASAN_OPTIONS=fast_unwind_on_malloc=0,${ENVVARS}>")
+  set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "${ENVVARS}$<$<CONFIG:Asan>:;ASAN_OPTIONS=${ASAN_TEST_OPTIONS}>")
   add_dependencies(check ${_TARGET})
 endfunction()
 
@@ -118,7 +118,7 @@ function(gnc_add_scheme_test _TARGET _SOURCE_FILE)
     (exit (run-test))"
   )
   get_guile_env()
-  set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "$<IF:$<CONFIG:Asan>,${GUILE_ENV};${ASAN_DYNAMIC_LIB_ENV};ASAN_OPTIONS=fast_unwind_on_malloc=0;${ARGN},${GUILE_ENV};${ARGN}>")
+  set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "${GUILE_ENV}$<$<CONFIG:Asan>:;${ASAN_DYNAMIC_LIB_ENV};ASAN_OPTIONS=${ASAN_TEST_OPTIONS}>;${ARGN}>")
 endfunction()
 
 function(gnc_add_scheme_tests _SOURCE_FILES)

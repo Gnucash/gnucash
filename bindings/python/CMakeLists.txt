@@ -96,6 +96,7 @@ if(WITH_PYTHON)
 
   add_test(NAME sqlite3test COMMAND sqlite3test)
   add_dependencies(check sqlite3test)
+  set_tests_properties(sqlite3test PROPERTIES ENVIRONMENT "$<$<CONFIG:Asan>:;ASAN_OPTIONS=${ASAN_TEST_OPTIONS}>")
 
   install(TARGETS gnucash_core_c
     LIBRARY DESTINATION ${PYTHON_SYSCONFIG_OUTPUT}/gnucash
