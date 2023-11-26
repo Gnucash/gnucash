@@ -164,7 +164,7 @@ class Console (Gtk.ScrolledWindow):
                                 weight=Pango.Weight.BOLD,
                                 font='Mono 10')
         self.buffer.create_tag('0')
-        self.color_pat = re.compile('\x01?\x1b\[(.*?)m\x02?')
+        self.color_pat = re.compile(r'\x01?\x1b\[(.*?)m\x02?')
         for code in ansi_colors:
             self.buffer.create_tag(code,
                                    foreground=ansi_colors[code],
