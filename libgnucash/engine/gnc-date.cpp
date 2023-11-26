@@ -756,11 +756,11 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
             char *strv = strptime (buff, normalize_format(GNC_D_FMT).c_str(),
                                    &thetime);
 
-            if (!strv) // Parse failed, continuing gives the wrong result.
-                return FALSE;
-
             if (third_field)
             {
+                if (!strv) // Parse failed, continuing gives the wrong result.
+                    return FALSE;
+
                 /* Easy.  All three values were parsed. */
                 iyear = thetime.tm_year + 1900;
                 iday = thetime.tm_mday;
