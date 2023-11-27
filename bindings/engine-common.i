@@ -34,6 +34,8 @@ static const GncGUID * gncAccountGetGUID(Account *x)
 %typemap(newfree) LotList * "g_list_free($1);"
 %typemap(newfree) CommodityList * "g_list_free($1);"
 
+%typemap(freearg) AccountList * "g_list_free($1);"
+
 %include <Split.h>
 
 %newobject gnc_account_get_children;
