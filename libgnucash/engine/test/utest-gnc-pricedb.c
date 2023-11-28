@@ -1501,7 +1501,9 @@ gnc_pricedb_foreach_price(GNCPriceDB *db,// C: 2 in 2  Local: 6:0:0
 
 static gboolean prepend_price_time64 (GNCPrice *p, GList **lst)
 {
-    *lst = g_list_prepend (*lst, GUINT_TO_POINTER(gnc_price_get_time64 (p)));
+    time64* time = g_new0(time64, 1);
+    *time = gnc_price_get_time64 (p);
+    *lst = g_list_prepend (*lst, time);
     return TRUE;
 }
 
@@ -1523,15 +1525,15 @@ test_gnc_pricedb_foreach_price (PriceDBFixture *fixture, gconstpointer pData)
     GList *lst = NULL;
     gnc_pricedb_foreach_price (fixture->pricedb, (GncPriceForeachFunc)prepend_price_time64, &lst, TRUE);
 
-    gchar *date = qof_print_date((time64)g_list_first (lst)->data);
+    gchar *date = qof_print_date(*(time64*)g_list_first (lst)->data);
     g_assert_cmpstr (date, ==, "04/11/09");
     g_free (date);
 
-    date = qof_print_date((time64)g_list_last (lst)->data);
+    date = qof_print_date(*(time64*)g_list_last (lst)->data);
     g_assert_cmpstr (date, ==, "11/12/14");
     g_free (date);
 
-    g_list_free (lst);
+    g_list_free_full (lst, g_free);
 }
 
 /* pricedb_foreach_pricelist
