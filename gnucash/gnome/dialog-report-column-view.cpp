@@ -61,7 +61,7 @@ using StrVec = std::vector<std::string>;
 
 struct gncp_column_view_edit
 {
-    GncOptionsDialog * optwin;
+    std::unique_ptr<GncOptionsDialog> optwin;
     GtkTreeView  * available;
     GtkTreeView  * contents;
 
@@ -103,10 +103,9 @@ gnc_column_view_set_option(GncOptionDB* odb, const char* section,
 static void
 gnc_column_view_edit_destroy(gnc_column_view_edit * view)
 {
-    delete view->optwin;
     scm_gc_unprotect_object(view->view);
     gnc_option_db_destroy(view->odb);
-    g_free(view);
+    delete view;
 }
 
 static StrVec
@@ -322,10 +321,10 @@ gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
     }
     else
     {
-        gnc_column_view_edit * r = g_new0(gnc_column_view_edit, 1);
+        auto r = new gnc_column_view_edit;
         GtkBuilder *builder;
 
-        r->optwin = new GncOptionsDialog(nullptr, GTK_WINDOW(gnc_ui_get_main_window (nullptr)));
+        r->optwin = std::make_unique<GncOptionsDialog>(nullptr, GTK_WINDOW(gnc_ui_get_main_window (nullptr)));
 
         /* Hide the generic dialog page list. */
         gtk_widget_hide(r->optwin->get_page_list());

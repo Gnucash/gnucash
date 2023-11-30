@@ -386,17 +386,16 @@ gnc_query_scm2path (SCM path_scm)
     if (!scm_is_list (path_scm))
         return nullptr;
 
-    while (!scm_is_null (path_scm))
+    for (; !scm_is_null (path_scm); path_scm = scm_cdr (path_scm))
     {
         SCM key_scm = SCM_CAR (path_scm);
-        char *key;
 
         if (!scm_is_string (key_scm))
             break;
 
-        key = gnc_scm_to_utf8_string(key_scm);
-        path = g_slist_prepend (path, key);
-        path_scm = SCM_CDR (path_scm);
+        auto key = gnc_scm_to_utf8_string(key_scm);
+        path = g_slist_prepend (path, (gpointer)qof_string_cache_insert(key));
+        g_free (key);
     }
 
     return g_slist_reverse (path);
@@ -405,12 +404,7 @@ gnc_query_scm2path (SCM path_scm)
 static void
 gnc_query_path_free (GSList *path)
 {
-    GSList *node;
-
-    for (node = path; node; node = node->next)
-        g_free (node->data);
-
-    g_slist_free (path);
+    g_slist_free_full (path, (GDestroyNotify)qof_string_cache_remove);
 }
 
 
