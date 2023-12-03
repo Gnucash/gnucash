@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-11-04 19:34+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2023-11-29 22:45+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -859,7 +859,7 @@ msgstr "Menü"
 
 #: borrowed/goffice/go-optionmenu.c:347
 msgid "The menu of options"
-msgstr "A szám-opció %s"
+msgstr "A beállítások menüje"
 
 #: doc/tip_of_the_day.list.c:3
 msgid ""
@@ -897,8 +897,8 @@ msgid ""
 "on the sub-menu Import and click on QIF or OFX file, respectively. Then, "
 "follow the instructions provided."
 msgstr ""
-"Meglévő pénzügyi adatait könnyedén importálhatja a Quicken-ből, MS Money-ból "
-"vagy más programból, ami QIF vagy OFX-fájlt exportál. A fájl menüben "
+"Meglévő pénzügyi adatait könnyedén importálhatja a Quicken-ből, az MS Money-"
+"ból vagy más programból, ami QIF vagy OFX-fájlt exportál. A fájl menüben "
 "kattintson az Importálás almenüre és kattintson a QIF vagy OFX-fájl "
 "menüpontra! Ezután kövesse az utasításokat."
 
@@ -932,8 +932,8 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
-"Megváltoztathatja a számlatükörben, hogy melyik oszlopok jelenjenek meg. "
-"Csak keresse meg a háromszöget az oszlop tetejének jobb oldalán és "
+"Megváltoztathatja, hogy a számlatükörben, melyik oszlopok jelenjenek meg. "
+"Csak keresse meg a háromszöget az oszlop tetejének jobb oldalán, és "
 "rákattintva láthatja az elérhető különböző oszlopokat."
 
 #: doc/tip_of_the_day.list.c:33
@@ -1068,9 +1068,9 @@ msgid ""
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
-"Ha különböző pénznemben tartott számlák között kíván átutalást eszközölni, "
-"akkor kattintson az Átutalás-gombra a regiszter eszköztárában, válassza ki a "
-"számlákat, és a Pénznem lehetőséget az árfolyam vagy az átváltott összeg "
+"A különböző pénznemben tartott számlák közötti átutaláshoz kattintson az "
+"átutalásgombra a regiszter eszköztárában, válassza ki a számlákat és a "
+"pénznemátviteli lehetőséget, az árfolyam vagy az átváltott összeg "
 "beviteléhez."
 
 #: doc/tip_of_the_day.list.c:91
@@ -4528,7 +4528,7 @@ msgstr "Számla meg_kettőzése"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:24
 #: gnucash/ui/gnc-plugin-page-invoice.ui:384
 msgid "Create a new invoice as a duplicate of the current one"
-msgstr "Új számla készítése a jelenlegi mintájára"
+msgstr "Új kimenőszámla létrehozása a jelenlegi mintájára"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:522
@@ -4562,7 +4562,8 @@ msgstr "Új _számla"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:354
 msgid "Create a new invoice for the same owner as the current one"
-msgstr "Új kimenő számla készítése a jelenlegi címzettnek"
+msgstr ""
+"Egy új kimenőszámla létrehozása ugyanannak a tulajdonosnak, mint a jelenlegi"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:195
 #: gnucash/gnome/gnc-plugin-page-invoice.c:220
@@ -4688,7 +4689,7 @@ msgstr "Számla meg_kettőzése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:216
 msgid "Create a new bill as a duplicate of the current one"
-msgstr "Új számla generálása a jelenlegl mintájára"
+msgstr "Új bejövőszámla létrehozása a jelenlegi mintájára"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:217
 #, fuzzy
@@ -4711,24 +4712,21 @@ msgid "Unpost this bill and make it editable"
 msgstr "Számla könyvelésének törlése és szerkeszthetővé tétele"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:219
-#, fuzzy
 msgid "New _Bill"
-msgstr "Új számla"
+msgstr "Új _bejövőszámla"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:219
-#, fuzzy
 msgid "Create a new bill for the same owner as the current one"
-msgstr "Új kimenő számla készítése a jelenlegi címzettnek"
+msgstr ""
+"Egy új bejövőszámla létrehozása ugyanannak a tulajdonosnak, mint a jelenlegi"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:220
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the bill"
-msgstr "Ugrás a számla alján lévő üres bejegyzésre"
+msgstr "Mozgassa az üres bejegyzésre a bejövőszámla alján"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:221
-#, fuzzy
 msgid "_Pay Bill"
-msgstr "Számla kifizetése"
+msgstr "Bejövőszámla ki_fizetése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:221
 #, fuzzy
@@ -11985,9 +11983,8 @@ msgid "End Date"
 msgstr "Kimutatás vége"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1244
-#, fuzzy
 msgid "Loan Review"
-msgstr "Áttekintés"
+msgstr "Hitel-felülvizsgálat"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1252
 #, fuzzy
@@ -20256,9 +20253,8 @@ msgid "Missing transaction date."
 msgstr "Tranzakciódátum hiányzik."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1419
-#, fuzzy
 msgid "Invalid transaction date."
-msgstr "Tranzakció érvényesítése"
+msgstr "Érvénytelen tranzakciódátum."
 
 #: gnucash/python/init.py:18
 msgid "Welcome to GnuCash"
@@ -28646,9 +28642,8 @@ msgid "_Vendor"
 msgstr "_Beszállító"
 
 #: gnucash/ui/gnc-plugin-business.ui:58
-#, fuzzy
 msgid "Vendors Overview"
-msgstr "Áttekintés"
+msgstr "Beszállítók áttekintése"
 
 #: gnucash/ui/gnc-plugin-business.ui:60
 #, fuzzy
@@ -28663,7 +28658,7 @@ msgstr "Új b_eszállító…"
 
 #: gnucash/ui/gnc-plugin-business.ui:65
 msgid "Open the New Vendor dialog"
-msgstr "Nyissa meg az új eladó párbeszédablakot"
+msgstr "Új beszállítói párbeszédablak megnyitása"
 
 #: gnucash/ui/gnc-plugin-business.ui:68
 msgid "_Find Vendor…"
@@ -29333,12 +29328,12 @@ msgstr "Alkalmazott-jelentés megjelenítése"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:161
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:359
 msgid "Create a new invoice"
-msgstr "Új számla létrehozása"
+msgstr "Új kimenőszámla létrehozása"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:195
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:514
 msgid "Create a new bill"
-msgstr ""
+msgstr "Új bejövőszámla létrehozása"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:227
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:667
