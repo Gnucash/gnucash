@@ -4794,11 +4794,11 @@ gnc_main_window_cmd_edit_paste (GSimpleAction *simple,
     }
     else if (GTK_IS_TEXT_VIEW(widget))
     {
-        auto text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
-        auto clipboard = gtk_widget_get_clipboard (GTK_WIDGET(text_buffer),
-                                                   GDK_SELECTION_CLIPBOARD);
+        auto clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_CLIPBOARD);
+
         if (clipboard)
         {
+            auto text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
             auto editable = gtk_text_view_get_editable (GTK_TEXT_VIEW(widget));
             gtk_text_buffer_paste_clipboard (text_buffer, clipboard, nullptr,
                                              editable);
