@@ -14,7 +14,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-09-22 21:59+0000\n"
+"PO-Revision-Date: 2023-11-22 11:04+0000\n"
 "Last-Translator: Andrea Andre <andrea.tsg19@slmail.me>\n"
 "Language-Team: Romanian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ro/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.2\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
@@ -8276,7 +8276,7 @@ msgstr "Activat"
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:125
 msgctxt "Single-character short column-title form of 'Enabled'"
 msgid "E"
-msgstr ""
+msgstr "A"
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:136
 msgid "Last Occur"
@@ -12911,9 +12911,8 @@ msgid "Introduction placeholder"
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:21
-#, fuzzy
 msgid "Title placeholder"
-msgstr "Global"
+msgstr ""
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:46
 msgid "_Edit list of encodings"
@@ -21965,9 +21964,8 @@ msgid "Fonts"
 msgstr "Luni"
 
 #: gnucash/report/html-fonts.scm:106
-#, fuzzy
 msgid "Font info for the report title."
-msgstr "Exportă raportul formatat HTML în fișier"
+msgstr ""
 
 #: gnucash/report/html-fonts.scm:110
 #, fuzzy
@@ -22738,9 +22736,8 @@ msgstr "Titlu raport"
 #: gnucash/report/reports/standard/equity-statement.scm:61
 #: gnucash/report/reports/standard/income-statement.scm:50
 #: gnucash/report/reports/standard/trial-balance.scm:63
-#, fuzzy
 msgid "Title for this report."
-msgstr "Titlul acestui raport"
+msgstr "Titlul acestui raport."
 
 #: gnucash/report/reports/example/sample-report.scm:61
 #: gnucash/report/reports/example/sample-report.scm:72
@@ -26023,10 +26020,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:101
-#, fuzzy
-#| msgid "Report Title"
 msgid "Lot Title"
-msgstr "Titlu raport"
+msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:104
 msgid "GUID"
@@ -26416,9 +26411,8 @@ msgid "Empty space"
 msgstr "Spațiu de nume"
 
 #: gnucash/report/reports/standard/invoice.scm:176
-#, fuzzy
 msgid "Custom Title"
-msgstr "Client"
+msgstr ""
 
 #: gnucash/report/reports/standard/invoice.scm:177
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
@@ -27849,9 +27843,8 @@ msgid "Display the Company Name?"
 msgstr "Afișezi numele firmei?"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:138
-#, fuzzy
 msgid "Invoice Number next to title?"
-msgstr "Numărul facturii"
+msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:140
 #, fuzzy
@@ -28230,10 +28223,8 @@ msgid "Rendering '~a' report …"
 msgstr "Construiește raportul '%s'…"
 
 #: gnucash/report/report-utilities.scm:650
-#, fuzzy
-#| msgid "Until:"
 msgid "Untitled"
-msgstr "Până la:"
+msgstr "Fără titlu"
 
 #: gnucash/report/stylesheets/css.scm:119
 msgid "CSS code. This field specifies the CSS code for styling reports."
