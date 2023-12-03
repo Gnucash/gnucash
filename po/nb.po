@@ -5,16 +5,16 @@
 # Sigve Indregard <sigve.indregard@gmail.com>, 2006.
 # John Erling Blad <jeblad@gmail.com>, 2018, 2020
 # Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022.
-# Petter Reinholdtsen <pere-weblate@hungry.com>, 2022.
+# Petter Reinholdtsen <pere-weblate@hungry.com>, 2022, 2023.
 # Rune Osnes <osnes.rune@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-06-16 11:48+0000\n"
-"Last-Translator: Rune Osnes <osnes.rune@gmail.com>\n"
+"PO-Revision-Date: 2023-11-20 05:11+0000\n"
+"Last-Translator: Petter Reinholdtsen <pere-weblate@hungry.com>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
 "Language: nb\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.1-dev\n"
+"X-Generator: Weblate 5.2\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1875,7 +1875,7 @@ msgstr "Hent _saldo"
 #: gnucash/register/ledger-core/split-register.c:2091
 #: gnucash/register/ledger-core/split-register.c:2094
 msgid "_Shares"
-msgstr "Ak_sjer"
+msgstr "_Andeler"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1880
 msgid "Ratio"
