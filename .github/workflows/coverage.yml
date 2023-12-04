@@ -1,0 +1,66 @@
+name: coverage
+on: push
+permissions: {}
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    name: C++ Code coverage analysis
+    continue-on-error: true
+    env:
+      TZ: America/Los_Angeles
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - run: sudo apt-get update
+      - name: Install additional dependencies
+        run: sudo apt-get install -y gettext cmake libxslt-dev xsltproc ninja-build libboost-all-dev libgtk-3-dev guile-2.2-dev libgwengui-gtk3-dev libaqbanking-dev libofx-dev libdbi-dev libdbd-sqlite3 libwebkit2gtk-4.0-dev  googletest lcov
+      - name: Install language packs.
+        run: sudo apt-get --reinstall install -y language-pack-en language-pack-fr
+      - run: |
+          echo "ROOT_DIR=$GITHUB_WORKSPACE/.." >> $GITHUB_ENV
+      - name: Create Directories
+        run: |
+          pwd
+          mkdir $ROOT_DIR/inst
+          mkdir build
+      - name: Configure GnuCash
+        run: |
+          cd build
+          cmake -G Ninja -DWITH_PYTHON=ON -DCMAKE_INSTALL_PREFIX=$ROOT_DIR/inst $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=Debug -DCOVERAGE=ON
+      - name: Build and test GnuCash with coverage analysis
+        run: |
+          cd build
+          ninja
+          ninja lcov-initialize
+          ninja check
+          ninja -k 0 lcov-collect
+          ninja lcov-generate-html
+        env:
+          CTEST_OUTPUT_ON_FAILURE: Off
+      - name: prepare_upload
+        if: success()
+        run: |
+          mkdir build/github-pages
+          mv build/Coverage-HTML build/github-pages/
+          chmod -v -R +rX "build/github-pages" | while read line; do
+            echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
+      - name: Upload pages
+        uses: actions/upload-pages-artifact@v2
+        if: success()
+        with:
+          path: ${{ github.workspace }}/build/github-pages
+
+  deploy-coverage:
+    needs: coverage
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish
+        id: deployment
+        uses: actions/deploy-pages@v2
