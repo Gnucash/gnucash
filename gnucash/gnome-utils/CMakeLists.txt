@@ -224,6 +224,10 @@ if (MAC_INTEGRATION)
   target_link_libraries(gnc-gnome-utils ${OSX_EXTRA_LIBRARIES})
 endif()
 
+if (COVERAGE)
+  add_coverage_target(gnc-gnome-utils)
+endif()
+
 target_include_directories(gnc-gnome-utils
     PUBLIC
       ${CMAKE_CURRENT_SOURCE_DIR}

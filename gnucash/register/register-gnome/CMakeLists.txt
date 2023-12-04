@@ -55,6 +55,10 @@ if (APPLE)
   set_target_properties (gnc-register-gnome PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
+if (COVERAGE)
+  add_coverage_target(gnc-register-gnome)
+endif()
+
 install(TARGETS gnc-register-gnome
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash

@@ -48,6 +48,10 @@ if (WITH_OFX)
     set_target_properties (gncmod-ofx PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
   endif()
 
+  if (COVERAGE AND LCOV_VERSION VERSION_GREATER_EQUAL "2.0")
+    add_coverage_target(gncmod-ofx)
+  endif()
+
   install(TARGETS gncmod-ofx
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash

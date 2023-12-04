@@ -35,6 +35,10 @@ if (APPLE)
   set_target_properties (gnc-customer-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
+if (0 AND COVERAGE) # Generates no coverage data
+  add_coverage_target(gnc-customer-import)
+endif()
+
 install(TARGETS gnc-customer-import
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash

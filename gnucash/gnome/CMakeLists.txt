@@ -163,6 +163,9 @@ if (MAC_INTEGRATION)
   target_link_libraries(gnc-gnome ${OSX_EXTRA_LIBRARIES})
 endif()
 
+if (COVERAGE)
+  add_coverage_target(gnc-gnome)
+endif()
 
 install(TARGETS gnc-gnome
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}

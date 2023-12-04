@@ -54,7 +54,7 @@ option (WITH_OFX "compile with ofx support (needs LibOFX)" ON)
 option (WITH_PYTHON "enable python plugin and bindings" OFF)
 option (ENABLE_BINRELOC "compile with binary relocation support" ON)
 option (DISABLE_NLS "do not use Native Language Support" OFF)
-option (COVERAGE "Instrument an Asan build for coverage reporting" OFF)
+option (COVERAGE "Instrument a Debug or Asan build for coverage reporting" OFF)
 option (LEAKS "Report leaks for tests in a non-Apple Asan build." OFF)
 option (ODR "Report One Definition Rule violations in tests in a non-Apple Asan build." OFF)
 # ############################################################
@@ -628,7 +628,13 @@ elseif(UNIX)
 endif ()
 set(ASAN_LINK_OPTIONS -fsanitize=address -fsanitize=undefined)
 if (COVERAGE)
-  list(APPEND ASAN_LINK_OPTIONS --coverage)
+  include(GncCoverage)
+endif()
+if (COVERAGE)
+  set(COVERAGE_COMPILE_OPTION --coverage)
+  add_compile_options("$<$<CONFIG:Debug>:${COVERAGE_COMPILE_OPTION}>")
+  add_link_options("$<$<CONFIG:Debug>:${COVERAGE_COMPILE_OPTION}>")
+  list(APPEND ASAN_LINK_OPTIONS ${COVERAGE_COMPILE_OPTION})
 endif()
 set(ASAN_COMPILE_OPTIONS -g ${ASAN_LINK_OPTIONS})
 add_compile_options("$<$<CONFIG:Asan>:${ASAN_COMPILE_OPTIONS}>")
@@ -688,6 +694,10 @@ gnc_gtest_configure()
 add_custom_target(check
   COMMAND ${CMAKE_CTEST_COMMAND}
 )
+
+if (COVERAGE)
+  add_dependencies(check lcov-initialize)
+endif()
 
 set(gnucash_DOCS
     AUTHORS

@@ -60,6 +60,10 @@ install(TARGETS gnc-register-core
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
+if (COVERAGE)
+  add_coverage_target(gnc-register-core)
+endif()
+
 install(FILES ${register_core_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
 set_local_dist(register_core_DIST_local CMakeLists.txt README ${register_core_SOURCES} ${register_core_HEADERS})

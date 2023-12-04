@@ -23,6 +23,10 @@ if (APPLE)
   set_target_properties (gnc-locale-tax PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
 endif()
 
+if (COVERAGE)
+  add_coverage_target(gnc-locale-tax)
+endif()
+
 install(TARGETS gnc-locale-tax
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

@@ -43,6 +43,10 @@ if (APPLE)
   set_target_properties (gnc-report PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
+if (COVERAGE)
+  add_coverage_target(gnc-report)
+endif()
+
 install(TARGETS gnc-report
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash

@@ -73,6 +73,11 @@ if (APPLE)
 endif()
 
 add_dependencies(gnc-html swig-gnc-html-c)
+
+if (COVERAGE)
+  add_coverage_target(gnc-html)
+endif()
+
 install(TARGETS gnc-html
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash

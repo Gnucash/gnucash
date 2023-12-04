@@ -160,6 +160,11 @@ if (MAC_INTEGRATION)
   target_link_options(gnucash-cli PRIVATE -Wl,-sectcreate,__TEXT,__info_plist,${CMAKE_SOURCE_DIR}/Info.plist)
 endif()
 
+if (COVERAGE AND LCOV_VERSION VERSION_GREATER_EQUAL "2.0")
+  add_coverage_target(gnucash)
+  add_coverage_target(gnucash-cli)
+endif()
+
 install(TARGETS gnucash gnucash-cli DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install.
 
