@@ -420,7 +420,11 @@ reldate_offset(RelativeDatePeriod per)
     return checked_reldate(per).m_offset;
 }
 
-static constexpr int days_in_month[12]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+static int
+days_in_month(int month, int year)
+{
+    return gnc_date_get_last_mday(month, year + 1900);
+}
 
 /* Normalize the modified struct tm computed in gnc_relative_date_to_time64
  * before setting the time and perhaps beginning/end of the month. Using the
@@ -429,43 +433,33 @@ static constexpr int days_in_month[12]{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 3
 static void
 normalize_reldate_tm(struct tm& now)
 {
-    auto factor{abs(now.tm_mon) / 12};
-    now.tm_mon /= factor > 0 ? factor : 1;
-    now.tm_year += now.tm_mon < 0 ? -factor: factor;
-
-    auto days = [](auto month, int year)
+    auto delta = (now.tm_mon / 12) + (now.tm_mon < 0 ? -1 : 0);
+    now.tm_mon -= 12 * delta;
+    now.tm_year += delta;
+  
+    if (now.tm_mday < 1)
     {
-        auto mon{month % 12 + (month < 0 ? 12 : 0)};
-        auto num_days{days_in_month[mon]};
-        //Leap year check.
-        if (mon == 1 && year % 4 == 0 && !(year % 100 == 0 && (year + 1900) % 400 != 0))
-            ++num_days;
-        return num_days;
-    };
-
-    while (now.tm_mday < 1)
-        now.tm_mday += days(--now.tm_mon, now.tm_year);
-
-    while (now.tm_mday > days(now.tm_mon, now.tm_year))
-        now.tm_mday -= days(now.tm_mon++, now.tm_year);
-
-    while (now.tm_mon < 0)
-    {
-        now.tm_mon += 12;
-        --now.tm_year;
-    }
-    while (now.tm_mon > 11)
-    {
-        now.tm_mon -= 12;
-        ++now.tm_year;
+        do
+        {
+            if (now.tm_mon-- == 0)
+            {
+                now.tm_mon = 11;
+                now.tm_year--;
+            }
+            now.tm_mday += days_in_month(now.tm_mon, now.tm_year);
+        } while (now.tm_mday < 1) ;
+        return;
     }
 
-    /* This would happen only if we moved from Feb 29 in a leap year while
-     * adjusting the months so we don't need to worry about adjusting the year
-     * again.
-     */
-    if (now.tm_mday > days_in_month[now.tm_mon])
-        now.tm_mday -= days_in_month[now.tm_mon++];
+    while (now.tm_mday > (delta = days_in_month(now.tm_mon, now.tm_year)))
+    {
+        if (now.tm_mon++ == 11)
+        {
+            now.tm_mon = 0;
+            now.tm_year++;
+        }
+        now.tm_mday -= delta;
+    }
 }
 
 static void
@@ -478,11 +472,11 @@ reldate_set_day_and_time(struct tm& now, RelativeDateType type)
     }
     else if (type == RelativeDateType::END)
     {
-        /* Ensure that the month is between 0 and 12*/
-        auto year_delta = now.tm_mon / 12 + now.tm_mon < 0 ? -1 : 0;
-        auto month = now.tm_mon - 12 * year_delta;
-        auto year = now.tm_year + year_delta + 1900;
-        now.tm_mday = gnc_date_get_last_mday(month, year);
+        /* Ensure that the month is between 0 and 11*/
+        auto year_delta = (now.tm_mon / 12) + (now.tm_mon < 0 ? -1 : 0);
+        auto month = now.tm_mon - (12 * year_delta);
+        auto year = now.tm_year + year_delta;
+        now.tm_mday = days_in_month(month, year);
         gnc_tm_set_day_end(&now);
     }
     // Do nothing for LAST and NEXT.
