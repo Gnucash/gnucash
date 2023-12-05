@@ -419,17 +419,17 @@ time64CanonicalDayTime (time64 t)
 /* NB: month is 1-12, year is 0001 - 9999. */
 int gnc_date_get_last_mday (int month, int year)
 {
-    static int last_day_of_month[2][12] =
-    {
-        /* non leap */ {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31},
-        /*   leap   */ {31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}
-    };
+    static int last_day_of_month[12] =
+        {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+  
+    g_assert(month >= 0 && month < 12);
 
-    /* Is this a leap year? */
-    if (year % 2000 == 0) return last_day_of_month[1][month];
-    if (year % 400 == 0 ) return last_day_of_month[0][month];
-    if (year % 4   == 0 ) return last_day_of_month[1][month];
-    return last_day_of_month[0][month];
+    // To be a leap year, the year number must be divisible by four,
+    // except for end-of-century years, which must be divisible by 400.
+
+    return last_day_of_month[month] +
+        (month == 1 && year % 4 == 0 && !(year % 100 == 0 && year % 400 != 0) ?
+        1 : 0);
 }
 
 QofDateFormat qof_date_format_get (void)
