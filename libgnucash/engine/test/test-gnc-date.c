@@ -544,7 +544,8 @@ test_gnc_date_get_last_mday (void)
     g_assert_cmpint (gnc_date_get_last_mday (11, 1975), ==, 31);
     g_assert_cmpint (gnc_date_get_last_mday (11, 1980), ==, 31);
     g_assert_cmpint (gnc_date_get_last_mday (1, 2000), ==, 29);
-    g_assert_cmpint (gnc_date_get_last_mday (1, 2400), ==, 28);
+    g_assert_cmpint (gnc_date_get_last_mday (1, 2100), ==, 28);
+    g_assert_cmpint (gnc_date_get_last_mday (1, 2400), ==, 29);
 }
 /* Getter, no testing needed.
 QofDateFormat qof_date_format_get (void)// C: 5 in 3  Local: 0:0:0
