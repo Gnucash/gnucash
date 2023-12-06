@@ -17,14 +17,15 @@
 # Vik <xasertop@gmail.com>, 2022.
 # Vin <k3kelm4vw@mozmail.com>, 2023.
 # hades <dev@hades.name>, 2023.
+# Xangel2Net <xangel1@mail.ru>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-17 14:31-0700\n"
-"PO-Revision-Date: 2023-11-15 12:03+0000\n"
-"Last-Translator: hades <dev@hades.name>\n"
+"PO-Revision-Date: 2023-12-06 20:05+0000\n"
+"Last-Translator: Xangel2Net <xangel1@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ru/>\n"
 "Language: ru\n"
@@ -33,7 +34,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.3-dev\n"
 "X-Source-Language: C\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -50,7 +51,7 @@ msgstr ""
 #: gnucash/report/reports/standard/price-scatter.scm:186
 #, scheme-format
 msgid "~a to ~a"
-msgstr ""
+msgstr "от ~a по ~a"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -1672,7 +1673,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:497
 msgid "No errors found. Click Apply to create transaction."
-msgstr ""
+msgstr "Ошибок не обнаружено. Нажмите на Применить для создания транзакции."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:502
 #, fuzzy
@@ -1699,19 +1700,19 @@ msgstr "Комиссия"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1010
 #, c-format
 msgid "Amount for %s is missing."
-msgstr ""
+msgstr "Отсутствует сумма для %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:668
 #: gnucash/gnome/assistant-stock-transaction.cpp:1015
 #, c-format
 msgid "Amount for %s must not be negative."
-msgstr ""
+msgstr "Сумма для %s не должна быть отрицательной."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:671
 #: gnucash/gnome/assistant-stock-transaction.cpp:1018
 #, c-format
 msgid "Amount for %s must be positive."
-msgstr ""
+msgstr "Сумма для %s должна быть положительной."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:674
 #: gnucash/gnome/assistant-stock-transaction.cpp:1021
@@ -1723,7 +1724,7 @@ msgstr "Включить субсчета всех выбранных счето
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
 #: gnucash/gnome/assistant-stock-transaction.cpp:740
 msgid "N/A"
-msgstr ""
+msgstr "н/д"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:829
 #, fuzzy
@@ -1738,11 +1739,11 @@ msgstr "Некорректный счёт в разделении"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:843
 msgid "New balance must be higher than old balance."
-msgstr ""
+msgstr "Новый баланс должен быть выше старого баланса."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:845
 msgid "New balance must be lower than old balance."
-msgstr ""
+msgstr "Новый баланс должен быть ниже старого баланса."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:852
 #, fuzzy
@@ -1752,7 +1753,7 @@ msgstr "Выводить отчёт по этому счету ценных бу
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:856
 msgid "Cannot sell more units than owned."
-msgstr ""
+msgstr "Не можем продать больше, чем владеем."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:858
 msgid "Cannot cover buy more units than owed."
