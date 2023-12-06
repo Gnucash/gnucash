@@ -14,7 +14,7 @@
 # --branch-coverage; to ensure branch info is saved
 # --demangle-cpp; requires c++filt
 
-if (COVERAGE)
+if (COVERAGE OR GUILE_COVERAGE)
   find_program(LCOV lcov)
   find_program(GENINFO geninfo)
   find_program(GENHTML genhtml)

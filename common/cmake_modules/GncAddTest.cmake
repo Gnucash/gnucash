@@ -34,6 +34,15 @@ function(get_guile_env)
   set(guile_load_paths "")
   list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}")
   list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/deprecated") # Path to gnucash' deprecated modules
+  if (GUILE_COVERAGE)
+    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash")
+    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/report")
+    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/reports")
+    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/engine")
+    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/app-utils")
+    list(APPEND guile_load_paths "${CMAKE_BINARY_DIR}/${GUILE_REL_SITEDIR}/gnucash/qif-import")
+
+  endif()
   set(guile_load_path "${guile_load_paths}")
 
   set(guile_load_compiled_paths "")
@@ -103,20 +112,46 @@ function(gnc_add_test_with_guile _TARGET _SOURCE_FILES TEST_INCLUDE_VAR_NAME TES
   )
 endfunction()
 
-
 function(gnc_add_scheme_test _TARGET _SOURCE_FILE)
-  add_test(NAME ${_TARGET} COMMAND ${GUILE_EXECUTABLE} --debug -c "
-    (set! %load-hook
+  if (GUILE_COVERAGE)
+    add_test(NAME ${_TARGET} COMMAND ${GUILE_EXECUTABLE} --debug -c "
+      (set! %load-hook
           (lambda (filename)
-            (when (and filename
-                       (string-contains filename \"${GUILE_REL_SITEDIR}\")
-                       (not (string-prefix? \"${CMAKE_BINARY_DIR}\" filename)))
+              (when (and filename
+                         (string-contains filename \"${GUILE_REL_SITEDIR}\")
+                         (not (string-prefix? \"${CMAKE_BINARY_DIR}\" filename)))
                   (format #t \"%load-path = ~s~%\" %load-path)
                   (format #t \"%load-compiled-path = ~s~%\" %load-compiled-path)
                   (error \"Loading guile/site file from outside build tree!\" filename))))
-    (load-from-path \"${_TARGET}\")
-    (exit (run-test))"
-  )
+      (load-from-path \"${_TARGET}\")
+      (use-modules (system vm coverage)
+                   (system vm vm))
+      (call-with-values (lambda ()
+          (with-code-coverage
+              (lambda ()
+                  (run-test))))
+
+          (lambda (data result)
+              (let ((port (open-output-file \"${coverage_dir}/${_TARGET}_results.info\")))
+                  (coverage-data->lcov data port)
+                  (close port))
+              (exit result)))
+"
+    )
+  else()
+    add_test(NAME ${_TARGET} COMMAND ${GUILE_EXECUTABLE} --debug -c "
+      (set! %load-hook
+          (lambda (filename)
+              (when (and filename
+                         (string-contains filename \"${GUILE_REL_SITEDIR}\")
+                         (not (string-prefix? \"${CMAKE_BINARY_DIR}\" filename)))
+                  (format #t \"%load-path = ~s~%\" %load-path)
+                  (format #t \"%load-compiled-path = ~s~%\" %load-compiled-path)
+                  (error \"Loading guile/site file from outside build tree!\" filename))))
+      (load-from-path \"${_TARGET}\")
+      (exit (run-test))"
+    )
+  endif()
   get_guile_env()
   set_tests_properties(${_TARGET} PROPERTIES ENVIRONMENT "${GUILE_ENV}$<$<CONFIG:Asan>:;${ASAN_DYNAMIC_LIB_ENV};ASAN_OPTIONS=${ASAN_TEST_OPTIONS}>;${ARGN}>")
 endfunction()
