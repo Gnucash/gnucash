@@ -126,54 +126,73 @@ gnc_localtime_r (const time64 *secs, struct tm* time)
 }
 
 static void
-normalize_time_component (int *inner, int *outer, int divisor, int base)
+normalize_time_component (int *inner, int *outer, int divisor)
 {
-    if (*inner < base)
+    if (*inner < 0)
     {
         do
         {
             --(*outer);
             *inner += divisor;
-        } while (*inner < base) ;
-        return;
+        } while (*inner < 0) ;
     }
-    while (*inner >= divisor + base)
+    else while (*inner >= divisor)
     {
         ++(*outer);
         *inner -= divisor;
     }
 }
-  
+
 static int
 days_in_month (struct tm* time)
 {
-    normalize_time_component (&(time->tm_mon), &(time->tm_year), 12, 0);
+    normalize_time_component (&(time->tm_mon), &(time->tm_year), 12);
     return gnc_date_get_last_mday (time->tm_mon, time->tm_year + 1900);
 }
-  
+
 static void
 normalize_struct_tm (struct tm* time)
 {
     int days;
     
-    normalize_time_component (&(time->tm_sec), &(time->tm_min), 60, 0);
-    normalize_time_component (&(time->tm_min), &(time->tm_hour), 60, 0);
-    normalize_time_component (&(time->tm_hour), &(time->tm_mday), 24, 0);
-  
-    if (time->tm_mday < 1)     
+    normalize_time_component (&(time->tm_sec), &(time->tm_min), 60);
+    normalize_time_component (&(time->tm_min), &(time->tm_hour), 60);
+    normalize_time_component (&(time->tm_hour), &(time->tm_mday), 24);
+
+    if (time->tm_mday < 1)
     {
         do
         {
             time->tm_mon--;
             time->tm_mday += days_in_month (time);
         } while (time->tm_mday < 1) ;
-        return;
     }
-
-    while (time->tm_mday > (days = days_in_month (time)))
+    else while (time->tm_mday > (days = days_in_month (time)))
     {
         time->tm_mon++;
         time->tm_mday -= days;
+    }
+     
+    /* Gregorian_date throws if it gets an out-of-range year
+     * so bring the time into gregorian_date's range.
+     */
+    if (time->tm_year + 1900 < 1400)
+    {
+        time->tm_sec = 0;
+        time->tm_min = 0;
+        time->tm_hour = 0;
+        time->tm_mday = 1;
+        time->tm_mon = 0;
+        time->tm_year = 1400 - 1900;
+    }
+    else if (time->tm_year + 1900 > 9999)
+    {
+        time->tm_sec = 59;
+        time->tm_min = 59;
+        time->tm_hour = 23;
+        time->tm_mday = 31;
+        time->tm_mon = 11;
+        time->tm_year = 9999 - 1900;
     }
 }
 
