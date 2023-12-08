@@ -126,61 +126,55 @@ gnc_localtime_r (const time64 *secs, struct tm* time)
 }
 
 static void
-normalize_time_component (int *inner, int *outer, unsigned int divisor,
-                          int base)
+normalize_time_component (int *inner, int *outer, int divisor, int base)
 {
-     while (*inner < base)
-     {
-          --(*outer);
-          *inner += divisor;
-     }
-     while (*inner > static_cast<gint>(divisor))
-     {
-          ++(*outer);
-          *inner -= divisor;
-     }
+    if (*inner < base)
+    {
+        do
+        {
+            --(*outer);
+            *inner += divisor;
+        } while (*inner < base) ;
+        return;
+    }
+    while (*inner >= divisor + base)
+    {
+        ++(*outer);
+        *inner -= divisor;
+    }
 }
-
-static void
-normalize_month(int *month, int *year)
+  
+static int
+days_in_month (struct tm* time)
 {
-    ++(*month);
-    normalize_time_component(month, year, 12, 1);
-    --(*month);
+    normalize_time_component (&(time->tm_mon), &(time->tm_year), 12, 0);
+    return gnc_date_get_last_mday (time->tm_mon, time->tm_year + 1900);
 }
-
+  
 static void
 normalize_struct_tm (struct tm* time)
 {
-     gint year = time->tm_year + 1900;
-     gint last_day;
+    int days;
+    
+    normalize_time_component (&(time->tm_sec), &(time->tm_min), 60, 0);
+    normalize_time_component (&(time->tm_min), &(time->tm_hour), 60, 0);
+    normalize_time_component (&(time->tm_hour), &(time->tm_mday), 24, 0);
+  
+    if (time->tm_mday < 1)     
+    {
+        do
+        {
+            time->tm_mon--;
+            time->tm_mday += days_in_month (time);
+        } while (time->tm_mday < 1) ;
+        return;
+    }
 
-     /* Gregorian_date throws if it gets an out-of-range year
-      * so clamp year into gregorian_date's range.
-      */
-     if (year < 1400) year += 1400;
-     if (year > 9999) year %= 10000;
-
-     normalize_time_component (&(time->tm_sec), &(time->tm_min), 60, 0);
-     normalize_time_component (&(time->tm_min), &(time->tm_hour), 60, 0);
-     normalize_time_component (&(time->tm_hour), &(time->tm_mday), 24, 0);
-     normalize_month (&(time->tm_mon), &year);
-
-     // auto month_in_range = []int (int m){ return (m + 12) % 12; }
-     while (time->tm_mday < 1)
-     {
-         normalize_month (&(--time->tm_mon), &year);
-         last_day = gnc_date_get_last_mday (time->tm_mon, year);
-         time->tm_mday += last_day;
-     }
-     last_day = gnc_date_get_last_mday (time->tm_mon, year);
-     while (time->tm_mday > last_day)
-     {
-          time->tm_mday -= last_day;
-          normalize_month(&(++time->tm_mon), &year);
-          last_day = gnc_date_get_last_mday (time->tm_mon, year);
-     }
-     time->tm_year = year - 1900;
+    while (time->tm_mday > (days = days_in_month (time)))
+    {
+        time->tm_mon++;
+        time->tm_mday -= days;
+    }
 }
 
 struct tm*
