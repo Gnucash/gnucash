@@ -27,6 +27,10 @@ target_include_directories (gnc-module
             ${CMAKE_BINARY_DIR}/common # for config.h
 )
 
+if (COVERAGE)
+  add_coverage_target(gnc-module)
+endif()
+
 install(TARGETS gnc-module
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

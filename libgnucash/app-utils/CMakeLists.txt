@@ -84,7 +84,11 @@ if (APPLE)
   set_target_properties (gnc-app-utils PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
 endif()
 
-install(TARGETS gnc-app-utils
+if (COVERAGE)
+  add_coverage_target(gnc-app-utils)
+endif()
+
+install (TARGETS gnc-app-utils
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}

@@ -37,6 +37,10 @@ if (APPLE)
   set_target_properties (gnc-bi-import PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
+if (COVERAGE AND LCOV_VERSION VERSION_GREATER_EQUAL "2.0")
+  add_coverage_target(gnc-bi-import)
+endif()
+
 install(TARGETS gnc-bi-import
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash

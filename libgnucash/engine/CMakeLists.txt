@@ -263,6 +263,10 @@ if (APPLE)
   set_target_properties (gnc-engine PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
 endif()
 
+if (COVERAGE)
+  add_coverage_target(gnc-engine)
+endif()
+
 install(TARGETS gnc-engine
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}

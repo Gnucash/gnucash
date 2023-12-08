@@ -266,18 +266,23 @@ function(gnc_add_scheme_targets _TARGET)
         message("   GNC_MODULE_PATH: ${_GNC_MODULE_PATH}")
       endif()
       #We quote the arguments to stop CMake stripping the path separators.
+      set (GUILE_ENV
+        "${LIBRARY_PATH}"
+        "GNC_UNINSTALLED=YES"
+        "GNC_BUILDDIR=${CMAKE_BINARY_DIR}"
+        "GUILE_LOAD_PATH=${_GUILE_LOAD_PATH}"
+        "GUILE_LOAD_COMPILED_PATH=${_GUILE_LOAD_COMPILED_PATH}"
+        "GNC_MODULE_PATH=${_GNC_MODULE_PATH}"
+      )
+
       add_custom_command(
         OUTPUT ${output_file}
         COMMAND ${CMAKE_COMMAND} -E env
-            "${LIBRARY_PATH}"
-            "GNC_UNINSTALLED=YES"
-            "GNC_BUILDDIR=${CMAKE_BINARY_DIR}"
-            "GUILE_LOAD_PATH=${_GUILE_LOAD_PATH}"
-            "GUILE_LOAD_COMPILED_PATH=${_GUILE_LOAD_COMPILED_PATH}"
-            "GNC_MODULE_PATH=${_GNC_MODULE_PATH}"
+            "${GUILE_ENV}$<$<CONFIG:Asan>:;${ASAN_DYNAMIC_LIB_ENV};ASAN_OPTIONS=${ASAN_BUILD_OPTIONS}>"
             ${GUILE_EXECUTABLE} -e "\(@@ \(guild\) main\)" -s ${GUILD_EXECUTABLE} compile -o ${output_file} ${source_file_abs_path}
         DEPENDS ${guile_depends}
         MAIN_DEPENDENCY ${source_file_abs_path}
+        COMMAND_EXPAND_LISTS
         VERBATIM
         )
   endforeach(source_file)

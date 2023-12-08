@@ -96,6 +96,10 @@ install(TARGETS gnc-backend-xml-utils
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 # No headers to install
+if (COVERAGE)
+  add_coverage_target(gnc-backend-xml-utils)
+endif()
+
 
 # ----
 
@@ -117,6 +121,10 @@ endif()
 
 if (APPLE)
   set_target_properties (gncmod-backend-xml PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
+endif()
+
+if (COVERAGE)
+  add_coverage_target(gncmod-backend-xml)
 endif()
 
 install(TARGETS gncmod-backend-xml

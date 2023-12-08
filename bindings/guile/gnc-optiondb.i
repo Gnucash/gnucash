@@ -1725,13 +1725,13 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
     static void
     test_book_set_data(QofBook* book, const char* key, void* data)
     {
-        qof_book_set_data(book, key, data);
+      qof_book_set_data(book, key, data);
     }
 
     static void
     test_book_clear_data(QofBook* book, const char* key)
     {
-        qof_book_set_data(book, key, nullptr);
+      qof_book_set_data(book, key, nullptr);
     }
 
     static void

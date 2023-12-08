@@ -56,6 +56,10 @@ if (APPLE)
   set_target_properties (gnc-ledger-core PROPERTIES INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/gnucash")
 endif()
 
+if (COVERAGE)
+  add_coverage_target(gnc-ledger-core)
+endif()
+
 install(TARGETS gnc-ledger-core
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}/gnucash

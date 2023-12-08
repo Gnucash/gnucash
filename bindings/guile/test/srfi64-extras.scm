@@ -45,5 +45,5 @@
       (lambda (runner)
         (format #t "Source:~a\npass = ~a, fail = ~a\n"
                 (test-result-ref runner 'source-file) num-passed num-failed)
-        (exit (zero? num-failed))))
+        (zero? num-failed)))
     runner))

@@ -7,11 +7,11 @@ if (WITH_PYTHON)
   endif()
   add_custom_target(test-python-bindings ALL DEPENDS unittest_support gnucash-core-c-build gnucash-core-c-py sw-core-utils-build sw-core-utils-py sw-app-utils-build sw-app-utils-py)
   add_dependencies(check test-python-bindings)
-  add_test(python-bindings ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/runTests.py.in)
-  set_property(TEST python-bindings PROPERTY ENVIRONMENT
-    GNC_BUILDDIR=${CMAKE_BINARY_DIR}
-    PYTHONPATH=${PYTHON_SYSCONFIG_BUILD}:${LIBDIR_BUILD}/gnucash:${test_core_dir}
-  )
+  add_test(NAME python-bindings COMMAND ${Python3_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/runTests.py.in)
+  set(PYTHON_ENV "GNC_UNINSTALLED=1;GNC_BUILDDIR=${CMAKE_BINARY_DIR};PYTHONPATH=${PYTHON_SYSCONFIG_BUILD}:${LIBDIR_BUILD}/gnucash:${test_core_dir}")
+  set(ASAN_ENV "${ASAN_DYNAMIC_LIB_ENV};ASAN_OPTIONS=${ASAN_TEST_OPTIONS}")
+  set_tests_properties(python-bindings PROPERTIES ENVIRONMENT "$<IF:$<CONFIG:Asan>,${PYTHON_ENV};${ASAN_ENV},${PYTHON_ENV}>")
+
 endif()
 
 set(test_python_bindings_DATA

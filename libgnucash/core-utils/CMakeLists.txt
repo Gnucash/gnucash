@@ -72,6 +72,10 @@ install(TARGETS gnc-core-utils
   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
+if (COVERAGE)
+  add_coverage_target(gnc-core-utils)
+endif()
+
 
 ### gncla-dir.h
 set(prefix ${CMAKE_INSTALL_PREFIX})

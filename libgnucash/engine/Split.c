@@ -720,9 +720,15 @@ xaccFreeSplit (Split *split)
 
     split->date_reconciled = 0;
     G_OBJECT_CLASS (QOF_INSTANCE_GET_CLASS (&split->inst))->dispose(G_OBJECT (split));
-    // Is this right?
-    if (split->gains_split) split->gains_split->gains_split = NULL;
-    /* qof_instance_release(&split->inst); */
+
+    if (split->gains_split)
+    {
+        Split *other = xaccSplitGetOtherSplit(split->gains_split);
+        split->gains_split->gains_split = NULL;
+        if (other)
+          other->gains_split = NULL;
+    }
+
     g_object_unref(split);
 }
 

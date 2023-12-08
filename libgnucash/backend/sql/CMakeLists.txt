@@ -80,5 +80,9 @@ if(WITH_SQL)
     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
+  if (COVERAGE)
+    add_coverage_target(gnc-backend-sql)
+  endif()
+
   # No headers to install
 endif()

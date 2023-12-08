@@ -54,6 +54,10 @@ option (WITH_OFX "compile with ofx support (needs LibOFX)" ON)
 option (WITH_PYTHON "enable python plugin and bindings" OFF)
 option (ENABLE_BINRELOC "compile with binary relocation support" ON)
 option (DISABLE_NLS "do not use Native Language Support" OFF)
+option (COVERAGE "Instrument a Debug or Asan build for coverage reporting" OFF)
+option (GUILE_COVERAGE "Compute testing coverage of Scheme code. WARNING: 15X slowdown!" OFF)
+option (LEAKS "Report leaks for tests in a non-Apple Asan build." OFF)
+option (ODR "Report One Definition Rule violations in tests in a non-Apple Asan build." OFF)
 # ############################################################
 
 # These are also settable from the command line in a similar way.
@@ -610,6 +614,48 @@ if (MINGW)
   set( CMAKE_CXX_FLAGS "-DWINVER=0x0500 -D_EMULATE_GLIBC=0 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 endif()
 
+if (APPLE)
+  execute_process(COMMAND clang --print-file-name=libclang_rt.asan_osx_dynamic.dylib
+    OUTPUT_VARIABLE ASAN_DYNAMIC_LIB
+    OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(ASAN_DYNAMIC_LIB_ENV "DYLD_INSERT_LIBRARIES=${ASAN_DYNAMIC_LIB}")
+  set(ASAN_BUILD_OPTIONS fast_unwind_on_malloc=0)
+elseif(UNIX)
+  execute_process(COMMAND gcc -print-file-name=libasan.so OUTPUT_VARIABLE LIBASAN_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  execute_process(COMMAND gcc -print-file-name=libstdc++.so OUTPUT_VARIABLE LIBSTDCXX_PATH OUTPUT_STRIP_TRAILING_WHITESPACE)
+  set(PRELOADS "${LIBASAN_PATH}:${LIBSTDCXX_PATH}")
+  set(ASAN_BUILD_OPTIONS "detect_leaks=0:fast_unwind_on_malloc=0")
+  set(ASAN_DYNAMIC_LIB_ENV LD_PRELOAD=${PRELOADS})
+endif ()
+set(ASAN_LINK_OPTIONS -fsanitize=address -fsanitize=undefined)
+if (COVERAGE OR GUILE_COVERAGE)
+  include(GncCoverage)
+endif()
+if (COVERAGE)
+  set(COVERAGE_COMPILE_OPTION --coverage)
+  add_compile_options("$<$<CONFIG:Debug>:${COVERAGE_COMPILE_OPTION}>")
+  add_link_options("$<$<CONFIG:Debug>:${COVERAGE_COMPILE_OPTION}>")
+  list(APPEND ASAN_LINK_OPTIONS ${COVERAGE_COMPILE_OPTION})
+endif()
+set(ASAN_COMPILE_OPTIONS -g ${ASAN_LINK_OPTIONS})
+add_compile_options("$<$<CONFIG:Asan>:${ASAN_COMPILE_OPTIONS}>")
+add_link_options("$<$<CONFIG:Asan>:${ASAN_LINK_OPTIONS}>")
+# See https://github.com/google/sanitizers/wiki/AddressSanitizerFlags#run-time-flags
+set(ASAN_TEST_OPTIONS fast_unwind_on_malloc=0)
+if (UNIX AND NOT APPLE)
+  if (LEAKS)
+    list(APPEND ASAN_TEST_OPTIONS detect_leaks=1)
+  else()
+    list(APPEND ASAN_TEST_OPTIONS detect_leaks=0)
+  endif()
+  if (ODR)
+    list(APPEND ASAN_TEST_OPTIONS detect_odr_violation=2)
+  else()
+    list(APPEND ASAN_TEST_OPTIONS detect_odr_violation=0)
+  endif()
+  string(REPLACE ";" ":" ASAN_TEST_OPTIONS "${ASAN_TEST_OPTIONS}")
+endif()
+
 if (APPLE AND WITH_GNUCASH)
   set(CMAKE_MACOSX_RPATH ON)
   set(CMAKE_INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
@@ -649,6 +695,10 @@ gnc_gtest_configure()
 add_custom_target(check
   COMMAND ${CMAKE_CTEST_COMMAND}
 )
+
+if (COVERAGE)
+  add_dependencies(check lcov-initialize)
+endif()
 
 set(gnucash_DOCS
     AUTHORS
