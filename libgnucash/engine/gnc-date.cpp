@@ -126,7 +126,7 @@ gnc_localtime_r (const time64 *secs, struct tm* time)
 }
 
 static void
-normalize_time_component (int *inner, int *outer, unsigned int divisor,
+normalize_time_component (int *inner, int *outer, int divisor,
                           int base)
 {
      while (*inner < base)
@@ -134,7 +134,7 @@ normalize_time_component (int *inner, int *outer, unsigned int divisor,
           --(*outer);
           *inner += divisor;
      }
-     while (*inner > static_cast<gint>(divisor))
+     while (*inner >= divisor + base)
      {
           ++(*outer);
           *inner -= divisor;
