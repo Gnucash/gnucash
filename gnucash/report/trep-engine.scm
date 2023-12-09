@@ -2015,12 +2015,19 @@ be excluded from periodic reporting.")
                       calculated-cells total-collectors)))))
       (values table grid csvlist))))
 
+(define-record-type :subtotal-table-cell
+  (make-subtotal-table-cell row col data)
+  subtotal-table-cell?
+  (row get-subtotal-table-cell-row)
+  (col get-subtotal-table-cell-col)
+  (data get-subtotal-table-cell-data))
+
 ;; grid data structure
 (define (make-grid)
   '())
 (define (cell-match? cell row col)
-  (and (or (not row) (equal? row (vector-ref cell 0)))
-       (or (not col) (equal? col (vector-ref cell 1)))))
+  (and (or (not row) (equal? row (get-subtotal-table-cell-row cell)))
+       (or (not col) (equal? col (get-subtotal-table-cell-col cell)))))
 (define (grid-get grid row col)
   ;; grid filter - get all row/col - if #f then retrieve whole row/col
   (filter
@@ -2028,13 +2035,13 @@ be excluded from periodic reporting.")
      (cell-match? cell row col))
    grid))
 (define (grid-rows grid)
-  (delete-duplicates (map (lambda (cell) (vector-ref cell 0)) grid)))
+  (delete-duplicates (map get-subtotal-table-cell-row grid)))
 (define (grid-cols grid)
-  (delete-duplicates (map (lambda (cell) (vector-ref cell 1)) grid)))
+  (delete-duplicates (map get-subtotal-table-cell-col grid)))
 (define (grid-add grid row col data)
   ;; we don't need to check for duplicate cells in a row/col because
   ;; in the trep it should never happen.
-  (cons (vector row col data) grid))
+  (cons (make-subtotal-table-cell row col data) grid))
 (define (grid->html-table grid)
   (define (<? a b)
     (cond ((string? (car a)) (gnc:string-locale<? (car a) (car b)))
@@ -2057,7 +2064,7 @@ be excluded from periodic reporting.")
            (map (lambda (col)
                   (let ((cell (grid-get grid row col)))
                     (if (null? cell) 0
-                        (length (vector-ref (car cell) 2)))))
+                        (length (get-subtotal-table-cell-data (car cell))))))
                 (cons 'col-total list-of-cols))))
   (define (make-table-cell row col commodity-idx divisor)
     (let ((cell (grid-get grid row col)))
@@ -2065,7 +2072,7 @@ be excluded from periodic reporting.")
           (gnc:make-html-table-cell/markup
            "number-cell"
            (monetary-div
-            (list-ref-safe (vector-ref (car cell) 2) commodity-idx)
+            (list-ref-safe (get-subtotal-table-cell-data (car cell)) commodity-idx)
             divisor)))))
   (define (make-row row commodity-idx)
     (append
