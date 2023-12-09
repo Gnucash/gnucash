@@ -2071,18 +2071,20 @@ be excluded from periodic reporting.")
       (if (null? cell) ""
           (gnc:make-html-table-cell/markup
            "number-cell"
-           (monetary-div
-            (list-ref-safe (get-subtotal-table-cell-data (car cell)) commodity-idx)
-            divisor)))))
+           (gnc:make-html-text
+            (let ((subtotal (list-ref-safe (get-subtotal-table-cell-data (car cell)) commodity-idx)))
+              (if divisor
+                  (monetary-div subtotal divisor)
+                  subtotal)))))))
   (define (make-row row commodity-idx)
     (append
      (list (cond
             ((positive? commodity-idx) "")
             ((eq? row 'row-total) (G_ "Grand Total"))
             (else (cdr row))))
-     (map (lambda (col) (make-table-cell row col commodity-idx 1))
+     (map (lambda (col) (make-table-cell row col commodity-idx #f))
           list-of-cols)
-     (list (make-table-cell row 'col-total commodity-idx 1))
+     (list (make-table-cell row 'col-total commodity-idx #f))
      (if row-average-enabled?
          (list (make-table-cell
                 row 'col-total commodity-idx (length list-of-cols)))
