@@ -10,8 +10,6 @@
 (use-modules (tests srfi64-extras))
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
-(use-modules (system vm coverage))
-(use-modules (system vm vm))
 
 ;; This is implementation testing for both the Portfolio and the
 ;; Advanced Portfolio Report.
@@ -23,21 +21,6 @@
 (setlocale LC_ALL "C")
 
 (define (run-test)
-  (if #f
-      (coverage-test)
-      (run-test-proper)))
-
-(define (coverage-test)
-  (let ((currfile (dirname (current-filename))))
-    (add-to-load-path (string-take currfile (string-rindex currfile #\/))))
-  (call-with-values
-      (lambda () (with-code-coverage run-test-proper))
-    (lambda (data result)
-      (let ((port (open-output-file "/tmp/lcov.info")))
-        (coverage-data->lcov data port)
-        (close port)))))
-
-(define (run-test-proper)
   (test-runner-factory gnc:test-runner)
   (test-begin "test-portfolios.scm")
   (null-test "portfolio" portfolio-uuid)

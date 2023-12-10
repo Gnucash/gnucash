@@ -10,8 +10,6 @@
 (use-modules (tests srfi64-extras))
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
-(use-modules (system vm coverage))
-(use-modules (system vm vm))
 
 ;; Guide to the test-transaction.scm
 
@@ -28,16 +26,6 @@
 ;; (options->sxml) which in turn generates the transaction report, and
 ;; dumps the output at /tmp/test-trep-*.html for review.
 
-;; For coverage analysis, please amend (run-test) (if #f ...) to (if
-;; #t ...)  and this will run (coverage-test) instead, which will
-;; generate the coverage report in /tmp/lcov.info -- the latter can be
-;; converted to an html report using genhtml from
-;; http://ltp.sourceforge.net/coverage/lcov.php
-
-;; Please note the with-code-coverage has changed guile-2.0 to 2.2
-;; which does not require specifying the VM; I have no experience
-;; running in guile 2.2 and cannot confirm syntax.
-
 ;; copied from transaction.scm
 (define trep-uuid "2fe3b9833af044abb929a88d5a59620f")
 (define reconcile-uuid "e45218c6d76f11e7b5ef0800277ef320")
@@ -46,23 +34,6 @@
 (setlocale LC_ALL "C")
 
 (define (run-test)
-  (if #f
-      (coverage-test)
-      (run-test-proper)))
-
-(define (coverage-test)
-  (let* ((currfile (dirname (current-filename)))
-         (path (string-take currfile (string-rindex currfile #\/))))
-    (add-to-load-path path))
-  (call-with-values
-      (lambda()
-        (with-code-coverage run-test-proper))
-    (lambda (data result)
-      (let ((port (open-output-file "/tmp/lcov.info")))
-        (coverage-data->lcov data port)
-        (close port)))))
-
-(define (run-test-proper)
   (test-runner-factory gnc:test-runner)
   (test-begin "transaction.scm")
   (null-test)

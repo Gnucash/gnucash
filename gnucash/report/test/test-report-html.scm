@@ -13,26 +13,8 @@
 (use-modules (tests test-engine-extras))
 (use-modules (tests test-report-extras))
 (use-modules (tests srfi64-extras))
-(use-modules (system vm coverage))
-
-(define (coverage-test)
-  (let* ((currfile (dirname (current-filename)))
-         (path (string-take currfile (string-rindex currfile #\/))))
-    (add-to-load-path path))
-  (call-with-values
-      (lambda()
-        (with-code-coverage run-test-proper))
-    (lambda (data result)
-      (let ((port (open-output-file "/tmp/lcov.info")))
-        (coverage-data->lcov data port)
-        (close port)))))
 
 (define (run-test)
-  (if #f
-      (coverage-test)
-      (run-test-proper)))
-
-(define (run-test-proper)
     (test-runner-factory gnc:test-runner)
     (test-begin "Testing/Temporary/test-report-html")
       ;; if (test-runner-factory gnc:test-runner) is commented out, this

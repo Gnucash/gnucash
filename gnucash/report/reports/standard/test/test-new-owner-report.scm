@@ -12,31 +12,12 @@
 (use-modules (tests srfi64-extras))
 (use-modules (sxml simple))
 (use-modules (sxml xpath))
-(use-modules (system vm coverage))
-(use-modules (system vm vm))
 
 (define uuid "c146317be32e4948a561ec7fc89d15c1")
 
 (setlocale LC_ALL "C")
 
 (define (run-test)
-  (if #f
-      (coverage-test run-test-proper)
-      (run-test-proper)))
-
-(define (coverage-test tester)
-  (let* ((currfile (dirname (current-filename)))
-         (path (string-take currfile (string-rindex currfile #\/))))
-    (add-to-load-path path))
-  (call-with-values
-      (lambda()
-        (with-code-coverage tester))
-    (lambda (data result)
-      (let ((port (open-output-file "/tmp/lcov.info")))
-        (coverage-data->lcov data port)
-        (close port)))))
-
-(define (run-test-proper)
   (let ((saved-format (qof-date-format-get)))
     (qof-date-format-set QOF-DATE-FORMAT-ISO)
     (test-runner-factory gnc:test-runner)

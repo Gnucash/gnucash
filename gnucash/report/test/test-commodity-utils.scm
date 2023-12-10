@@ -30,11 +30,10 @@
 (use-modules (sw_engine))
 (use-modules (sw_app_utils))
 (use-modules (gnucash report))
-(use-modules (system vm coverage))
 
 (setlocale LC_ALL "C")
 
-(define (run-test-proper)
+(define (run-test)
   (test-runner-factory gnc:test-runner)
   (test-begin "commodity-utils")
   ;; Tests go here
@@ -49,23 +48,6 @@
   (test-get-commodity-inst-prices)
   (test-weighted-average)
   (test-end "commodity-utils"))
-
-(define (coverage-test)
-  (let* ((currfile (dirname (current-filename)))
-         (path (string-take currfile (string-rindex currfile #\/))))
-    (add-to-load-path path))
-  (call-with-values
-      (lambda()
-        (with-code-coverage run-test-proper))
-    (lambda (data result)
-      (let ((port (open-output-file "/tmp/lcov.info")))
-        (coverage-data->lcov data port)
-        (close port)))))
-
-(define (run-test)
-  (if #f                                ;switch to #t to run coverage
-      (coverage-test)
-      (run-test-proper)))
 
 (define test-accounts
   (list "Root" (list (cons 'type ACCT-TYPE-ROOT))
