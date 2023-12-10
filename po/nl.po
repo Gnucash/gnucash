@@ -17,10 +17,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-09-26 22:18+0000\n"
+"PO-Revision-Date: 2023-12-10 11:05+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
@@ -29,9 +29,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
-"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"X-Generator: Weblate 5.3-dev\n"
+"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1029,6 +1029,8 @@ msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 msgstr ""
+"U kunt sneltoetsen toewijzen of wijzigen voor veel GnuCash-acties. Zie "
+"https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 
 #: doc/tip_of_the_day.list.c:132
 msgid ""
@@ -5439,24 +5441,18 @@ msgstr "Elegante factuur"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:393
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:47
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_New Schedule"
-msgstr "_Plannen"
+msgstr "_Nieuwe planning"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:399
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Edit Schedule"
-msgstr "_Plannen"
+msgstr "Planning b_ewerken"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:405
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Delete Schedule"
-msgstr "_Plannen"
+msgstr "Planning verwij_deren"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:487
 #: gnucash/gtkbuilder/dialog-account.glade:553
@@ -5468,13 +5464,10 @@ msgid "Upcoming Transactions"
 msgstr "Toekomstige boekingen"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:896
-#, fuzzy
-#| msgid "Do you really want to delete this scheduled transaction?"
-#| msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
 msgstr[0] "Weet u zeker dat u deze vaste journaalpost wilt verwijderen?"
-msgstr[1] "Weet u zeker dat u %d vaste journaalposten wilt verwijderen?"
+msgstr[1] "Weet u zeker dat u deze vaste journaalposten wilt verwijderen?"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:163
 #: gnucash/report/reports/standard/view-column.scm:95
@@ -9520,44 +9513,27 @@ msgstr ""
 "ingesteld voor het \"Vaste journaalposten uitvoeren…\" venster."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:32
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "Set the sort column in the \"since last run\" dialog."
 msgstr ""
-"\"Aangemaakte boekingen bekijken\" als standaard instellen voor het venster "
-"\"Vaste Journaalposten uitvoeren\"."
+"De sorteerkolom in het dialoogvenster \"sinds laatste uitvoering\" instellen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:33
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "This settings sets the sort column in the \"since last run\" dialog."
 msgstr ""
-"\"Aangemaakte boekingen bekijken\" als standaard instellen voor het venster "
-"\"Vaste Journaalposten uitvoeren\"."
+"Deze instellingen stellen de sorteerkolom in het dialoogvenster \"sinds "
+"laatste uitvoering\" in."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:37
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "Set the sort direction in the \"since last run\" dialog."
 msgstr ""
-"\"Aangemaakte boekingen bekijken\" als standaard instellen voor het venster "
-"\"Vaste Journaalposten uitvoeren\"."
+"De sorteerrichting in het dialoogvenster \"sinds laatste uitvoering\" "
+"instellen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:38
-#, fuzzy
-#| msgid ""
-#| "This setting controls whether as default the \"review created "
-#| "transactions\" is set for the \"since last run\" dialog."
 msgid "This settings sets the sort direction in the \"since last run\" dialog."
 msgstr ""
-"Deze instelling bepaalt of \"Aangemaakte boekingen weergeven\" standaard is "
-"ingesteld voor het \"Vaste journaalposten uitvoeren…\" venster."
+"Deze instellingen stellen de sorteerrichting in het dialoogvenster \"sinds "
+"laatste uitvoering\" in."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:44
 msgid "Set the \"auto create\" flag by default"
