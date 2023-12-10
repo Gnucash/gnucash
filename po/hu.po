@@ -12,10 +12,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-11-29 22:45+0000\n"
+"PO-Revision-Date: 2023-12-10 04:06+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -4649,17 +4649,19 @@ msgstr "Új folyószámla"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:205
 msgid "_Use as Default Layout for Customer Documents"
-msgstr ""
+msgstr "_Használja alapértelmezett elrendezésként az ügyféldokumentumokhoz"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:206
 #: gnucash/ui/gnc-plugin-page-invoice.ui:66
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
 msgstr ""
+"Alapértelmezett elrendezésként használja az összes ügyféldokumentumhoz és "
+"jóváíráshoz"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:207
 msgid "_Reset Default Layout for Customer Documents"
-msgstr ""
+msgstr "Az ügyféldokumentumok alapértelmezett elrendezésének _visszaállítása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:208
 #: gnucash/ui/gnc-plugin-page-invoice.ui:72
@@ -4667,6 +4669,9 @@ msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
+"Visszaállítja az összes ügyfélszámla és jóváírás alapértelmezett "
+"elrendezését a beépített alapértelmezettre, és ennek megfelelően frissíti a "
+"jelenlegi oldalt"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:214
 #, fuzzy
@@ -4738,27 +4743,31 @@ msgid "Enter a payment for the owner of this bill"
 msgstr "Adjon meg egy fizetési módot a számla tulajdonosának"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:222
-#, fuzzy
 msgid "Open a vendor report window for the owner of this bill"
-msgstr "Cégjelentés megnyitása a számla tulajdonosához"
+msgstr "Beszállítójelentés megnyitása a számla tulajdonosa számára"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:230
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr ""
+msgstr "_Használja alapértelmezett elrendezésként a beszállítódokumentumokhoz"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:231
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
+"Alapértelmezett elrendezésként használja az összes beszállítódokumentumhoz "
+"és jóváíráshoz"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:232
 msgid "_Reset Default Layout for Vendor Documents"
-msgstr ""
+msgstr "A beszállítódokumentumok alapértelmezett elrendezésének _visszaállítása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:233
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
+"Visszaállítja az összes bejövőszámla és beszállítói jóváírás alapértelmezett "
+"elrendezését a beépített alapértelmezettre, és ennek megfelelően frissíti a "
+"jelenlegi oldalt"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:239
 msgid "_Print Voucher"
@@ -4824,26 +4833,33 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.c:247
 msgid "Open a employee report window for the owner of this voucher"
 msgstr ""
-"Alkalmazott jelentés megnyitása ennek a bizonlyatnak a tulajdonosa számára"
+"Alkalmazottjelentés megnyitása ennek a bizonlyatnak a tulajdonosa számára"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:255
 msgid "_Use as Default Layout for Employee Documents"
 msgstr ""
+"_Használja alapértelmezett elrendezésként az alkalmazotti dokumentumokhoz"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:256
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
+"Alapértelmezett elrendezésként használja az alkalmazotti dokumentumokhoz és "
+"jóváírásokhoz"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:257
 msgid "_Reset Default Layout for Employee Documents"
 msgstr ""
+"Az alkalmazotti dokumentumok alapértelmezett elrendezésének _visszaállítása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:258
 msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
+"Visszaállítja az összes alkalmazotti utalvány és jóváírás alapértelmezett "
+"elrendezését a beépített alapértelmezettre, és ennek megfelelően frissíti a "
+"jelenlegi oldalt"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:264
 msgid "_Print Credit Note"
@@ -4970,9 +4986,8 @@ msgid "Jobs"
 msgstr "Állások"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:566
-#, fuzzy
 msgid "Vendors"
-msgstr "Beszállító"
+msgstr "Beszállítók"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:571
 msgid "Employees"
