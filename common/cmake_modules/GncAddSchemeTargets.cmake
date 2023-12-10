@@ -20,10 +20,19 @@ function(make_unix_path PATH)
     set(${PATH} ${newpath} PARENT_SCOPE)
 endfunction()
 
-#PATH variables in the environment are separated by colons, but CMake lists are separated by semicolons. This function transforms the separators.
+# PATH variables in the environment are separated by colons, but CMake
+# lists are separated by semicolons. This function transforms the
+# separators.
 function(make_unix_path_list PATH)
     string(REPLACE ";" ":" newpath "${${PATH}}")
     set(${PATH} ${newpath} PARENT_SCOPE)
+endfunction()
+# Meanwhile cmake treats the semicolons in Win32 path lists as its own
+# list separators converting them into spaces on the command
+# line. Escape them to prevent that.
+function(make_win32_path_list PATH)
+    string(REPLACE ";" "\\\;" newpath "${${PATH}}")
+    set(${PATH} "${newpath}" PARENT_SCOPE)
 endfunction()
 
 # This function will set two or four environment variables to a directory in the parent PARENT_SCOPE
@@ -241,6 +250,7 @@ function(gnc_add_scheme_targets _TARGET)
         set(fpath "")
         file(TO_CMAKE_PATH "$ENV{PATH}" fpath)
         set(LIBRARY_PATH "PATH=${BINDIR_BUILD};${fpath}")
+        make_win32_path_list(LIBRARY_PATH)
       else()
         set (LIBRARY_PATH "LD_LIBRARY_PATH=${LIBDIR_BUILD}:${LIBDIR_BUILD}/gnucash:$ENV{LD_LIBRARY_PATH}")
       endif()
@@ -256,6 +266,9 @@ function(gnc_add_scheme_targets _TARGET)
       if(NOT MINGW64 OR ${GUILE_EFFECTIVE_VERSION} VERSION_LESS 2.2)
         make_unix_path_list(_GUILE_LOAD_PATH)
         make_unix_path_list(_GUILE_LOAD_COMPILED_PATH)
+      elseif(MINGW64)
+        make_win32_path_list(_GUILE_LOAD_PATH)
+        make_win32_path_list(_GUILE_LOAD_COMPILED_PATH)
       endif()
       make_unix_path_list(_GNC_MODULE_PATH)
       if (__DEBUG)
