@@ -39,6 +39,7 @@
 #include "split-register-control.h"
 #include "split-register-model-save.h"
 #include "split-register-p.h"
+#include "split-register.h"
 #include "table-allgui.h"
 #include "engine-helpers.h"
 
@@ -448,6 +449,10 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     saved = gnc_split_register_save (reg, old_trans != new_trans);
     pending_trans = xaccTransLookup (&info->pending_trans_guid,
                                      gnc_get_current_book ());
+    Split* blank_split = xaccSplitLookup (&info->blank_split_guid,
+                                          gnc_get_current_book ());
+    Transaction* blank_trans = xaccSplitGetParent (blank_split);
+
     if ((old_class == CURSOR_CLASS_SPLIT) &&
             old_split &&
             (old_split != new_split) &&
@@ -471,6 +476,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
     }
     else if ((pending_trans != NULL)      &&
              (pending_trans == old_trans) &&
+             (pending_trans != blank_trans) &&
              (old_trans != new_trans))
     {
         if (gnc_split_register_balance_trans (reg, pending_trans))
