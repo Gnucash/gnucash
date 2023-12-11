@@ -69,6 +69,16 @@ typedef char gchar;
 %typemap(in) time64 * (time64 t) "t = scm_to_int64($input); $1 = &t;"
 %typemap(out) time64 * " $result = ($1) ? scm_from_int64(*($1)) : SCM_BOOL_F; "
 
+%typemap(in) QofIdType " $1 = scm_to_utf8_string ($input); "
+%typemap(out) QofIdType " $result = $1 ? scm_from_utf8_string ($1) : SCM_BOOL_F; "
+%typemap(freearg) QofIdType " g_free ((gpointer)$1); "
+%typemap(newfree) QofIdType " g_free ((gpointer)$1); "
+
+%typemap(in) QofIdTypeConst " $1 = scm_to_utf8_string ($input); "
+%typemap(out) QofIdTypeConst " $result = $1 ? scm_from_utf8_string ($1) : SCM_BOOL_F; "
+%typemap(freearg) QofIdTypeConst " g_free ((gpointer)$1); "
+%typemap(newfree) QofIdTypeConst " g_free ((gpointer)$1); "
+
 %typemap(in) struct tm * (struct tm t, char *tzone) {
     SCM tm = $input;
     t.tm_sec = scm_to_int(SCM_SIMPLE_VECTOR_REF(tm, 0));
