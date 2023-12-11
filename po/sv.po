@@ -18,8 +18,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-12-10 09:05+0000\n"
-"Last-Translator: bittin1ddc447d824349b2 <bittin@reimu.nl>\n"
+"PO-Revision-Date: 2023-12-11 04:07+0000\n"
+"Last-Translator: Arve Eriksson <031299870@telia.com>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sv/>\n"
 "Language: sv\n"
@@ -9426,23 +9426,23 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:32
 msgid "Set the sort column in the \"since last run\" dialog."
-msgstr "Ställ in sorteringskolumnen i dialogrutan \"sedan senaste körning\"."
+msgstr "Ställ in sorteringskolumnen i dialogrutan ”sedan senaste körning”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:33
 msgid "This settings sets the sort column in the \"since last run\" dialog."
 msgstr ""
-"Dessa inställningar ställer in sorteringskolumnen i dialogrutan \"sedan "
-"senaste körning\"."
+"Dessa inställningar ställer in sorteringskolumnen i dialogrutan ”sedan "
+"senaste körning”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:37
 msgid "Set the sort direction in the \"since last run\" dialog."
-msgstr "Ställ in sorteringsriktningen i dialogrutan \"sedan senaste körning\"."
+msgstr "Ställ in sorteringsriktningen i dialogrutan ”sedan senaste körning”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:38
 msgid "This settings sets the sort direction in the \"since last run\" dialog."
 msgstr ""
-"De här inställningarna ställer in sorteringsriktningen i dialogrutan \"sedan "
-"senaste körning\"."
+"De här inställningarna ställer in sorteringsriktningen i dialogrutan ”sedan "
+"senaste körning”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:44
 msgid "Set the \"auto create\" flag by default"
