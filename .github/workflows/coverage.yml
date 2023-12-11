@@ -53,6 +53,7 @@ jobs:
 
   deploy-coverage:
     needs: coverage
+    if: github.repository == 'gnucash/gnucash'
     permissions:
       pages: write
       id-token: write
