@@ -645,11 +645,14 @@ not found.")))
 (define (gnc:report-template-serialize report-template)
   (let* ((name (gnc:report-template-name report-template))
          (type (gnc:report-template-parent-type report-template))
-         (templ-name (gnc:report-template-name
-                      (hash-ref *gnc:_report-templates_* type)))
-         (options (gnc:report-template-new-options report-template))
-         (guid (gnc:report-template-report-guid report-template)))
-    (gnc:report-template-serialize-internal name type templ-name options guid)))
+         (tmpl (hash-ref *gnc:_report-templates_* type)))
+    (cond
+     ((not tmpl) (gnc:warn "gnc:report-template-serialize: cannot find template for " type) #f)
+     (else
+      (let ((templ-name (gnc:report-template-name tmpl))
+            (options (gnc:report-template-new-options report-template))
+            (guid (gnc:report-template-report-guid report-template)))
+        (gnc:report-template-serialize-internal name type templ-name options guid))))))
 
 ;; Convert a report into a report template and save this template in the savefile
 ;; Under specific conditions the we will attempt to replace the current report's
@@ -712,7 +715,7 @@ not found.")))
 
 (define (gnc:report-template-save-to-savefile report-template)
   (let ((saved-form (gnc:report-template-serialize report-template)))
-    (gnc-saved-reports-write-to-file saved-form #f)))
+    (and saved-form (gnc-saved-reports-write-to-file saved-form #f))))
 
 ;; save all custom reports, moving the old version of the
 ;; saved-reports file aside as a backup
