@@ -1,5 +1,102 @@
 Version history:
 ------- -------
+5.5  - 17 December 2023
+The following bugs have been fixed:
+
+
+    Bug 607000 - SLR visible transactions
+                 Change the Since Last Run dialog to show only transactions
+                 with a non-empty Status.
+    Bug 792241 - Allow sorting scheduled transactions
+    Bug 798025 - SLR Value entry not tied to location
+                 Disable scrolling and the horizontal scroll bar while an entry
+                 has focus.
+    Bug 798760 - SLR OK button to complete value entry
+                 With this change the Since Last Run dialog's OK button will
+                 commit an in-progress edit and advance to the next edit
+                 requiring input. It will close the dialog only if there are
+                 no more edits.
+    Bug 798760 - SLR change reminder with value entry
+                 Change transaction state from Reminder to ToCreate when the
+                 user has provided the needed value and clicked OK.
+    Bug 798890 - Printing Problem
+    Bug 799087 - Import - Unbalanced (need acct) transactions now show in red
+                 (previously orange).
+    Bug 799090 - Right Clicking scheduled transaction
+                 Ensure that the selection highlight changes to the item under
+                 the pointer when right-clicking in the SX Editor.
+    Bug 799092 - GnuCash 5.4 leaves background process running on exit
+                 Clear the schema_hash at app shutdown via
+                 gnc_prefs_remove_registered and make that function available
+                 to the Python bindings so that python programs can do so too.
+    Bug 799099 - Crash when trying to get quotes
+    Bug 799104 - "Asset Chart" broken
+    Bug 799108 - "Since Last Run" crashes if there are any errors creating a
+                 scheduled transaction: Capture errors and display them in a
+                 dialog box instead.
+    Bug 799113 - "Start Import" button reports "Failed"
+    Bug 799121 - Parse error on CSV import on MacOS
+    Bug 799130 - split-register.c:1847:gnc_split_register_save: assertion
+                 failed: (xaccTransIsOpen (blank_trans))
+    Bug 799134 - Fails to build with GCC 14 (‘find_if’ is not a member of ‘std’;
+                 did you mean ‘find’)
+    Bug 799138 - Port to new Python C config API
+    Bug 799143 - FTBFS on 32bit architectures
+    Bug 799144 - Date Completion is broken after 5.4 upgrade
+    Bug 799148 - Reliable crash when saving a modified saved report
+                 configuration
+    Bug 799150 - Can't paste text (with Ctrl+V) in Notes field in Account Tree
+                 View
+    Bug 799151 - gnc_date_get_last_mday () does not account for leap years
+                 correctly.
+    Bug 799152 - normalize_reldate_tm() does not handle dates with months
+                 greater than 11 or less than -11 correctly.
+    Bug 799156 - normalize_struct_tm() does not normalize seconds,minutes, and
+                 hours correctly.
+Other repairs or enhancements not marked as bugs:
+
+    Cancel the QIF import instead of inserting the default directory if the
+        user cancels the file-selection dialog.
+    Memory leak fixes
+    Rename the scheduled transaction edit/new/delete menus to resolve a
+        shortcut conflict.
+    Allow saving the sort column in the Since Last Run dialog
+    Ensure that Print Checks obtains for the check amount the sum of all splits
+        in the current register account and subaccounts.
+    Ensure that report page actions are re-enabled after editing options. Some
+        actions (Print, PDFExport, and Report Options) had been left disabled.
+    Ensure GncDateEntry always reverts to today if the user enters an invalid
+        date string.
+    Direct cmake to find the base installed Python3 instead of the latest
+        version installed. Reference Cmake Issue 24126, Cmake Issue 24878, and
+        CMake merge request 8287. Note that this requires CMake 3.20 or later;
+        users of older versions will still get the newest installed Python
+        version.
+    CI: Run distcheck on one workflow to catch quickly instances where someone
+        adds a file but forgets to update the distribution.
+    Primarily of interest to developers: We've added a new CMAKE_BUILD_TYPE,
+        Asan, with two options -DLEAKS and -DODR, both of which default to OFF.
+        This creates a non-optimized, with-symbols build with the Address
+        Sanitizer hooks compiled in. While the primary motivation is a CI run
+        to ensure that there aren't any memory allocation errors revealed in
+        the test suite, this is also a useful build to use when debugging a
+        segfault crash, many of which are caused by use-after-free errors. When
+        building on non-Apple platforms -DLEAKS=ON will add leak detection,
+        dumping a stack trace for the allocation of any leaked heap or
+        free-store allocations. Similarly and on non-Apple platforms only
+        -DODR=ON will log violations of the C++ one definition rule.
+    Also of interest to developers: A new cmake option -DCOVERAGE. When on and
+        in a non-optimized build this will instrument the program and libraries
+        to count usage for every source line. The option also adds three
+        targets, lcov-initialize, lcov-collect, and lcov-generate-html. The
+        primary motivation is to assess the completeness of tests in CI, see
+        https://gnucash.github.io/Coverage-HTML for the latest results.
+
+New and Updated Translations: Chinese (Simplified), Croatian, Dutch, English
+    (Australia), English (New Zealand), English (United Kingdom), Finnish,
+    German, Gujarati, Hungarian, Italian, Norwegian Bokmål, Polish, Portuguese,
+    Portuguese (Brazil), Romanian, Russian, Slovak, Spanish, Swedish
+
 5.4  - 24 September 2023
 The following bugs have been fixed:
 
