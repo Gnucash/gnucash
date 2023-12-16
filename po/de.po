@@ -37,10 +37,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-10-05 15:10+0000\n"
+"PO-Revision-Date: 2023-12-15 18:07+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -49,7 +49,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1-dev\n"
+"X-Generator: Weblate 5.3\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1050,6 +1050,8 @@ msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 msgstr ""
+"Sie können für viele GnuCash-Aktionen Tastaturkürzel zuweisen oder ändern. "
+"Siehe https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 
 #: doc/tip_of_the_day.list.c:132
 msgid ""
@@ -1480,6 +1482,12 @@ msgid ""
 "If you are unable to calculate capital gains you can enter aplaceholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Verkaufen Sie Long-Position Aktien, und erfassen Sie den Kapitalgewinn/"
+"-verlust.\n"
+"\n"
+"Wenn Sie nicht wissen, wie Kapitalgewinne berechnet werden, können Sie einen "
+"beliebigen Betrag als Platzhalter eingeben und ihn später in der Buchung "
+"korrigieren."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1574,15 +1582,6 @@ msgid "Stock split"
 msgstr "Aktienteilung"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:265
-#, fuzzy
-#| msgid ""
-#| "Company redeems units, thereby increasing the stock price by a multiple, "
-#| "while keeping the total monetary value of the overall investment "
-#| "constant.\n"
-#| "\n"
-#| "If the reverse split results in a cash in lieu for remainder units, "
-#| "please record the sale using the Stock Transaction Assistant first, then "
-#| "record the reverse split."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor , while keeping the total monetary value of the overall investment "
@@ -1591,16 +1590,13 @@ msgid ""
 "If the split results in a cash in lieu for remainder units, please record "
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
-"Dies ist die Umkehrung einer Aktienteilung (reverse split). Die Anzahl der "
-"Aktien wird reduziert, ohne dass sich das Grundkapital der "
-"Aktiengesellschaft bzw. der Gesamtwert der Aktien ändert. Somit erhöht sich "
-"der Wert jeder einzelnen Aktie um einen bestimmten Faktor. Wenn sich z. B. "
-"die Anzahl der Aktien durch die Zusammenlegung halbiert, erhöht sich dadurch "
-"der Preis auf das Doppelte.\n"
+"Das Unternehmen gibt zusätzliche Anteile aus, wodurch sich der Aktienkurs um "
+"einen Divisor verringert, während der Gesamtwert der Anlage konstant bleibt."
 "\n"
-"Wenn die Aktienzusammenlegung zu einem Bargeldersatz bei den verbliebenen "
-"Papiere führt, erfassen Sie bitte zuerst den Verkauf mit dem "
-"Aktienassistenten und geben dann die Aktienzusammenlegung ein."
+"\n"
+"Wenn die Aktienteilung zu einem Barausgleich für die restlichen Anteile "
+"führt, erfassen Sie bitte zuerst den Verkauf mit dem Aktienassistenten und "
+"dann die Teilung."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1655,6 +1651,12 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Kaufen Sie Aktien zurück, um die Short-Position zu decken, und verbuchen Sie "
+"den Kapitalgewinn/-verlust.\n"
+"\n"
+"Wenn Sie nicht in der Lage sind, Kapitalgewinne zu berechnen, können Sie "
+"einen Betrag als Platzhalter eingeben und ihn später in der Buchung "
+"korrigieren."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
@@ -1751,15 +1753,6 @@ msgstr ""
 "sich mehr vom Nullwert). Die Anzahl der Anteile bleibt unverändert."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:391
-#, fuzzy
-#| msgid ""
-#| "Company redeems units, thereby increasing the stock price by a multiple, "
-#| "while keeping the total monetary value of the overall investment "
-#| "constant.\n"
-#| "\n"
-#| "If the reverse split results in a cash in lieu for remainder units, "
-#| "please record the cover buy using the Stock Transaction Assistant first, "
-#| "then record the reverse split."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor, while keeping the total monetary value of the overall investment "
@@ -1769,13 +1762,12 @@ msgid ""
 "the cover buy using the Stock Transaction Assistant first, then record the "
 "split."
 msgstr ""
-"Das Unternehmen legt Aktien zusammen, wodurch sich der Wert einer Aktie um "
-"ein Vielfaches erhöht, dabei aber der Gesamtwert des investierten Kapitals "
-"konstant bleibt.\n"
+"Das Unternehmen gibt zusätzliche Anteile aus, wodurch sich der Aktienkurs um "
+"einen Divisor verringert, während der Geldwert der Gesamtanlage konstant "
+"bleibt.\n"
 "\n"
-"Wenn die Aktienzusammenlegung zu einem Bargeldersatz bei den verbliebenen "
-"Papiere führt, erfassen Sie bitte zuerst den Deckungskauf mit dem "
-"Aktienassistenten und geben dann die Aktienzusammenlegung ein."
+"Führt die Aktienteilung zu einer Barabgeltung der Restanteile, erfassen Sie "
+"bitte zuerst den Deckungskauf mit dem Aktienassistenten und dann die Teilung."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:405
 msgid ""
@@ -5516,24 +5508,18 @@ msgstr "Elegante Rechnung"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:393
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:47
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_New Schedule"
-msgstr "_Terminiert"
+msgstr "_Neue Planung"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:399
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Edit Schedule"
-msgstr "_Terminiert"
+msgstr "Planung _Bearbeiten"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:405
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Delete Schedule"
-msgstr "_Terminiert"
+msgstr "Planung _Löschen"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:487
 #: gnucash/gtkbuilder/dialog-account.glade:553
@@ -5545,14 +5531,11 @@ msgid "Upcoming Transactions"
 msgstr "Bevorstehende Buchungen"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:896
-#, fuzzy
-#| msgid "Do you really want to delete this scheduled transaction?"
-#| msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
 msgstr[0] ""
 "Sind Sie sicher, dass Sie die ausgewählte geplante Buchung löschen wollen?"
-msgstr[1] "Sind Sie sicher, dass Sie %d geplanten Buchungen löschen wollen?"
+msgstr[1] "Sind Sie sicher, dass Sie diese geplanten Buchungen löschen wollen?"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:163
 #: gnucash/report/reports/standard/view-column.scm:95
@@ -9659,44 +9642,24 @@ msgstr ""
 "standardmäßig die »Überprüfung erzeugter Buchungen« eingestellt ist."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:32
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "Set the sort column in the \"since last run\" dialog."
-msgstr ""
-"Legen Sie »Erzeugte Buchungen durchsehen« als Standard für den Dialog »seit "
-"letzten Aufruf« fest."
+msgstr "Legen Sie die Sortierspalte im Dialog \"seit letzten Aufruf\" fest."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:33
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "This settings sets the sort column in the \"since last run\" dialog."
 msgstr ""
-"Legen Sie »Erzeugte Buchungen durchsehen« als Standard für den Dialog »seit "
-"letzten Aufruf« fest."
+"Diese Einstellung legt die Sortierspalte im \"seit letzten Aufruf\"-Dialog "
+"fest."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:37
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "Set the sort direction in the \"since last run\" dialog."
-msgstr ""
-"Legen Sie »Erzeugte Buchungen durchsehen« als Standard für den Dialog »seit "
-"letzten Aufruf« fest."
+msgstr "Legen Sie die Sortierreihenfolge im Dialog »seit letzten Aufruf« fest."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:38
-#, fuzzy
-#| msgid ""
-#| "This setting controls whether as default the \"review created "
-#| "transactions\" is set for the \"since last run\" dialog."
 msgid "This settings sets the sort direction in the \"since last run\" dialog."
 msgstr ""
-"Diese Einstellung steuert, ob für den Dialog »seit letzten Aufruf« "
-"standardmäßig die »Überprüfung erzeugter Buchungen« eingestellt ist."
+"Mit dieser Einstellung wird die Sortierreihenfolge im Dialog »seit letzten "
+"Aufruf« festgelegt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:44
 msgid "Set the \"auto create\" flag by default"
