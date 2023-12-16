@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-12-10 04:06+0000\n"
+"PO-Revision-Date: 2023-12-16 01:07+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.3\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -2025,7 +2025,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:1142 gnucash/report/trep-engine.scm:1143
 #: gnucash/report/trep-engine.scm:2257
 msgid "Memo"
-msgstr "Felosztás jegyzete"
+msgstr "Feljegyzés"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2296
 #: gnucash/gnome/gnc-plugin-page-register.c:3383
