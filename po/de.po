@@ -29,6 +29,7 @@
 # Jan Schneider <grimpeur78@gmail.com>, 2022.
 # Steffen Möller <steffen_moeller@gmx.de>, 2022.
 # Carsten Hütter <Carsten.Huetter@gmx.de>, 2023.
+# "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2023.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -40,8 +41,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-12-15 18:07+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2023-12-16 05:06+0000\n"
+"Last-Translator: \"Frank H. Ellenberger\" <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -30705,7 +30706,7 @@ msgstr ""
 #: libgnucash/app-utils/gnc-quotes.cpp:761
 #: libgnucash/app-utils/gnc-quotes.cpp:776
 msgid "Result:"
-msgstr ""
+msgstr "Ergebnis:"
 
 #. Translators: This is the error message reported by the Online Quotes processing code.
 #: libgnucash/app-utils/gnc-quotes.cpp:771
