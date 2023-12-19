@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-12-16 01:07+0000\n"
+"PO-Revision-Date: 2023-12-18 02:07+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -969,7 +969,7 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line View\" in Preferences:Register Defaults."
 msgstr ""
-"Minden tranzakcióhoz tartozik egy „Megjegyzések” mező ahol hasznos "
+"Minden tranzakcióhoz tartozik egy „Jegyzetek” mező ahol hasznos "
 "információkat tárolhat.\n"
 "\n"
 "Láthatóvá tételéhez\n"
@@ -2950,7 +2950,7 @@ msgstr "Szám"
 
 #: gnucash/gnome/dialog-find-transactions.c:149
 msgid "Description, Notes, or Memo"
-msgstr "Leírás, Megjegyzések vagy Felosztás jegyzete"
+msgstr "Leírás, Jegyzetek vagy Feljegyzés"
 
 #: gnucash/gnome/dialog-find-transactions.c:155
 #: gnucash/gnome/gnc-split-reg.c:678
@@ -2980,7 +2980,7 @@ msgstr "Leírás, Megjegyzések vagy Felosztás jegyzete"
 #: gnucash/report/trep-engine.scm:918 gnucash/report/trep-engine.scm:1142
 #: gnucash/report/trep-engine.scm:2258
 msgid "Notes"
-msgstr "Megjegyzések"
+msgstr "Jegyzetek"
 
 #: gnucash/gnome/dialog-find-transactions.c:201
 #: gnucash/gnome-search/dialog-search.c:1486
@@ -3020,7 +3020,7 @@ msgstr "(Figyelem! Ha sok ilyen van, eltarthat egy ideig)"
 #: gnucash/gnome/dialog-imap-editor.c:681
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:123
 msgid "Bayesian"
-msgstr "bayesi"
+msgstr "Bayes-féle"
 
 #: gnucash/gnome/dialog-imap-editor.c:696
 msgid "Description Field"
@@ -4459,7 +4459,7 @@ msgstr "Időszak"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:182
 msgid "Note"
-msgstr "Megjegyzések"
+msgstr "Jegyzet"
 
 #: gnucash/gnome/gnc-plugin-page-budget.c:183
 msgid "Run Report"
@@ -5658,7 +5658,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:912 gnucash/gnome/gnc-split-reg.c:1439
 msgid "(no memo)"
-msgstr "(nincs jegyzet a felosztáshoz)"
+msgstr "(nincs feljegyzés)"
 
 #: gnucash/gnome/gnc-split-reg.c:915 gnucash/gnome/gnc-split-reg.c:1442
 msgid "(no description)"
@@ -5918,7 +5918,7 @@ msgstr "Pénzügyi Igazgatás"
 #: gnucash/register/ledger-core/split-register-model.c:317
 msgctxt "Column header for 'Reconciled'"
 msgid "R"
-msgstr "E"
+msgstr "Ö"
 
 #: gnucash/gnome/report-menus.scm:57
 #, scheme-format
@@ -5927,9 +5927,8 @@ msgstr "~a kimutatás megjelenítése"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
-#, fuzzy
 msgid "Saved Report Configurations"
-msgstr "Adja meg a beállítás elérési útját"
+msgstr "Mentett jelentéskonfigurációk"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
@@ -5938,11 +5937,11 @@ msgstr "Mentett jelentéskonfigurációk kezelése és futtatása"
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:51
 msgid "Dashboard"
-msgstr ""
+msgstr "Üzletmenet"
 
 #: gnucash/gnome/report-menus.scm:118
 msgid "A basic dashboard for your accounting data"
-msgstr ""
+msgstr "Egy alapvető üzletmenet-jelentés a számviteli adatai áttekintéséhez"
 
 #: gnucash/gnome/search-owner.c:130
 msgid "You have not selected an owner"
@@ -8887,7 +8886,7 @@ msgid ""
 "the check."
 msgstr ""
 "Ez az érték tartalmazza a kedvezményezett sorának kezdetének X,Y "
-"koordinátáit a csekken. A koordinátákat a csekk bal felső sarkától számítják."
+"koordinátáit a csekken."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:40
 msgid "Position of date line"
@@ -8900,7 +8899,7 @@ msgid ""
 "position."
 msgstr ""
 "Ez az érték tartalmazza a dátumsor kezdetének X,Y koordinátáit a csekken. A "
-"koordinátákat a csekk bal felső sarkától számítják."
+"koordinátákat a csekk bal alsó sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:45
 msgid "Position of check amount in words"
@@ -8926,7 +8925,7 @@ msgid ""
 "specified check position."
 msgstr ""
 "Ez az érték tartalmazza az összeg számmal sorának kezdetének X,Y "
-"koordinátáit a csekken. A koordinátákat a csekk bal felső sarkától számítják."
+"koordinátáit a csekken. A koordinátákat a csekk bal alsó sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:55
 #, fuzzy
@@ -8934,32 +8933,30 @@ msgid "Position of payee address"
 msgstr "A kedvezményezett pozíciója"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:56
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the payee address "
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
 "Ez az érték tartalmazza a dátumsor kezdetének X,Y koordinátáit a csekken. A "
-"koordinátákat a csekk bal felső sarkától számítják."
+"koordinátákat a csekk bal alsó sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:60
 msgid "Position of notes line"
-msgstr ""
+msgstr "A jegyzetsor pozíciója"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:61
-#, fuzzy
 msgid ""
 "This value contains the X,Y coordinates for the start of the notes line on "
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
 msgstr ""
-"Ez az érték tartalmazza a megjegyzések sora kezdetének X,Y koordinátáit a "
-"csekken. A koordinátákat a csekk bal alsó sarkától számítják."
+"Ez az érték tartalmazza a jegyzetsor kezdetének X,Y koordinátáit a csekken. "
+"A koordinátákat a csekk bal alsó sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:65
 msgid "Position of memo line"
-msgstr "A felosztás jegyzete sor pozíciója"
+msgstr "A feljegyzés sor pozíciója"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:66
 msgid ""
@@ -8967,35 +8964,32 @@ msgid ""
 "the check. Coordinates are from the lower left corner of the specified check "
 "position."
 msgstr ""
-"Ez az érték tartalmazza a megjegyzéssor kezdetének X,Y koordinátáit a "
-"csekken. A koordinátákat a csekk bal felső sarkától számítják."
+"Ez az érték tartalmazza a feljegyzéssor kezdetének X,Y koordinátáit a "
+"csekken. A koordinátákat a csekk bal alsó sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:70
 msgid "Offset for complete check"
-msgstr ""
+msgstr "A teljes csekk eltolása"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:71
-#, fuzzy
 msgid ""
 "This value contains the X,Y offset for the complete check. Coordinates are "
 "from the lower left corner of the specified check position."
 msgstr ""
-"Ez az érték tartalmazza a megjegyzéssor kezdetének X,Y koordinátáit a "
-"csekken. A koordinátákat a csekk bal felső sarkától számítják."
+"Ez az érték tartalmazza a teljes csekk X,Y eltolását. A koordinátákat a "
+"megadott csekk bal alsó sarkának pozíciójától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:75
-#, fuzzy
 msgid "Rotation angle"
-msgstr "Fo_rgás"
+msgstr "Forgatás szöge"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:76
-#, fuzzy
 msgid "Number of degrees to rotate the check."
-msgstr "A csekk forgatásához szükséges fokok száma."
+msgstr "A csekk elforgatásának fokban megadott mértéke."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:80
 msgid "Position of split's amount in numbers"
-msgstr ""
+msgstr "A részösszeg pozíciója számokban"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:81
 msgid ""
@@ -10189,10 +10183,10 @@ msgid ""
 "register is first opened. The setting can be changed at any time via the "
 "\"View->Double Line\" menu item."
 msgstr ""
-"Minden tranzakcióhoz megjelenik egy második sor a \"Művelet\", "
-"\"Megjegyzések\" és \"Kapcsolódó dokumentumok\" mezőkkel. Ez az "
-"alapértelmezett beállítás a regiszter első megnyitásakor, de bármikor "
-"megváltoztatható a \"Nézet->Kétsoros\" menüponttal."
+"Minden tranzakcióhoz megjelenik egy második sor a „Művelet”, „Jegyzetek” és „"
+"Kapcsolódó dokumentumok” mezőkkel. Ez az alapértelmezett beállítás a "
+"regiszter első megnyitásakor, de bármikor megváltoztatható a \"Nézet->"
+"Kétsoros\" menüponttal."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:306
 msgid "Only display leaf account names."
@@ -10222,10 +10216,10 @@ msgid "Show entered and reconciled dates on selection"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:317
-#, fuzzy
 msgid "Show the entered date and reconciled date on transaction selection."
 msgstr ""
-"Válaszd az \"U+R\" illeszkedő tranzakció frissítéséhez és egyeztetéséhez."
+"Megjeleníti a beviteli dátumot és az egyeztetési dátumot a tranzakció "
+"kiválasztásánál."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:321
 #, fuzzy
@@ -10936,7 +10930,7 @@ msgstr ""
 "Amelyik számla még nem létezik, az a teljes számlanév által megadott helyen "
 "és névvel létre fog jönni, feltéve, hogy a hozzá tartozó értékpapír vagy "
 "pénznem is létezik. Amelyik számla már létezik, annak négy mezője megkapja a "
-"fájlban szereplő értékeket: ezek a Számlaszám, a Leírás, a Megjegyzések és a "
+"fájlban szereplő értékeket: ezek a Számlaszám, a Leírás, a Jegyzetek és a "
 "Szín.\n"
 "\n"
 "A folytatáshoz kattintson a „Következő” gombra, az importálás "
@@ -14467,7 +14461,7 @@ msgstr "Importált tranzakció adatainak szerkesztése"
 #: gnucash/gtkbuilder/dialog-print-check.glade:745
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1014
 msgid "_Notes"
-msgstr "_Megjegyzések"
+msgstr "_Jegyzetek"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1058
 msgid ""
@@ -21030,7 +21024,7 @@ msgstr "példa:999.999,000"
 #: gnucash/register/ledger-core/split-register-layout.c:745
 msgctxt "sample"
 msgid "Memo field sample text string"
-msgstr "Felosztás jegyzete mező mintaszövege"
+msgstr "Feljegyzés mező mintaszövege"
 
 #: gnucash/register/ledger-core/split-register-layout.c:819
 #, fuzzy
@@ -21041,7 +21035,7 @@ msgstr "A"
 #: gnucash/register/ledger-core/split-register-layout.c:827
 msgctxt "sample"
 msgid "Notes field sample text string"
-msgstr "Megjegyzések mező mintaszövege"
+msgstr "Jegyzetek mező mintaszövege"
 
 #: gnucash/register/ledger-core/split-register-layout.c:835
 #, fuzzy
@@ -26568,7 +26562,7 @@ msgstr "Csekkszám megjelenítése?"
 #: gnucash/report/reports/standard/register.scm:363
 #: gnucash/report/trep-engine.scm:942
 msgid "Display the memo?"
-msgstr "Felosztások jegyzeteinek megjelenítése?"
+msgstr "Feljegyzések megjelenítése?"
 
 #: gnucash/report/reports/standard/register.scm:367
 msgid "Display the account?"
