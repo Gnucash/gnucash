@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-12-11 07:12+0000\n"
+"PO-Revision-Date: 2023-12-19 08:07+0000\n"
 "Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/pt/>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.3\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -7723,7 +7723,7 @@ msgstr "Contabilidade de finanças pessoais e micro empresas."
 #. contributors.
 #: gnucash/gnome-utils/gnc-main-window.cpp:5268
 msgid "translator-credits"
-msgstr "Pedro Albuquerque <pmra@gmx.com>"
+msgstr "Pedro Albuquerque <pmra@gmx.com>, 2024"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5271
 msgid "Visit the GnuCash website."
