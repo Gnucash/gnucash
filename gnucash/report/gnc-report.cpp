@@ -227,18 +227,12 @@ gnc_run_report_with_error_handling (gint report_id, gchar ** data, gchar **errms
         *errmsg = NULL;
         return TRUE;
     }
-    else if (scm_is_string (captured_error))
-    {
-        *errmsg = gnc_scm_to_utf8_string (captured_error);
-        *data = NULL;
-        PWARN ("Error in report: %s", *errmsg);
-        return FALSE;
-    }
     else
     {
+        *errmsg = scm_is_string (captured_error) ? gnc_scm_to_utf8_string (captured_error) :
+            g_strdup ("");
         *data = nullptr;
-        PWARN("Report %s Failed to generate html but didn't raise a Scheme exception.",
-              gnc_report_name (report));
+        PWARN ("Error in report: %s", *errmsg);
         return FALSE;
     }
 }
