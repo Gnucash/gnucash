@@ -564,7 +564,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
               (begin
                 (gnc:html-table-append-row! invoice-details-table
                                             (list
-                                             (G_ "Reference:")
+                                             (G_ "Reference:&nbsp;")
                                              (gnc:make-html-div/markup
                                               "div-align-right"
                                               (multiline-to-html-text billing-id))))
