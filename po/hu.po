@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-12-18 02:07+0000\n"
+"PO-Revision-Date: 2023-12-23 17:07+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -2821,9 +2821,8 @@ msgid "Balance Zero"
 msgstr "Egyenleg (időszak)"
 
 #: gnucash/gnome/dialog-find-account.c:459
-#, fuzzy
 msgid "Tax related"
-msgstr "A_dóvonatkozású"
+msgstr "Adóvonatkozású"
 
 #. Translators: %s is a full account name.
 #. This is a label in Search Account from context menu.
@@ -3024,11 +3023,11 @@ msgstr "Bayes-féle"
 
 #: gnucash/gnome/dialog-imap-editor.c:696
 msgid "Description Field"
-msgstr "Leírás mező"
+msgstr "Leírásmező"
 
 #: gnucash/gnome/dialog-imap-editor.c:699
 msgid "Memo Field"
-msgstr "Felosztás jegyzete mező"
+msgstr "Feljegyzésmező"
 
 #: gnucash/gnome/dialog-imap-editor.c:702
 #, fuzzy
@@ -3036,14 +3035,12 @@ msgid "CSV Account Map"
 msgstr "Folyószámla Neve"
 
 #: gnucash/gnome/dialog-imap-editor.c:742
-#, fuzzy
 msgid "Online Id"
-msgstr "Online"
+msgstr "Online azonosító"
 
 #: gnucash/gnome/dialog-imap-editor.c:768
-#, fuzzy
 msgid "Online HBCI"
-msgstr "Online"
+msgstr "Online HBCI"
 
 #. Translators: In this context,
 #. 'Billing information' maps to the
@@ -3136,9 +3133,8 @@ msgstr "Összes Költség:"
 #: gnucash/gtkbuilder/dialog-invoice.glade:976
 #: gnucash/report/reports/standard/invoice.scm:736
 #: libgnucash/engine/gncInvoice.c:1104
-#, fuzzy
 msgid "Credit Note"
-msgstr "Kedvezményezett folyószámla"
+msgstr "Jóváírás"
 
 #: gnucash/gnome/dialog-invoice.c:2267
 msgid "PAID"
@@ -3151,50 +3147,48 @@ msgstr "Kifizetetlen"
 
 #: gnucash/gnome/dialog-invoice.c:2317 gnucash/gnome/dialog-invoice.c:2336
 #: gnucash/gnome/dialog-invoice.c:2355
-#, fuzzy
 msgid "New Credit Note"
-msgstr "Kedvezményezett folyószámla"
+msgstr "Új jóváírás"
 
 #: gnucash/gnome/dialog-invoice.c:2318
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
 #: gnucash/gnome-search/dialog-search.c:1095
 #: gnucash/gtkbuilder/dialog-invoice.glade:760
 msgid "New Invoice"
-msgstr "Új kimenő számla"
+msgstr "Új kimenőszámla"
 
 #: gnucash/gnome/dialog-invoice.c:2323 gnucash/gnome/dialog-invoice.c:2342
 #: gnucash/gnome/dialog-invoice.c:2361
 #, fuzzy
 msgid "Edit Credit Note"
-msgstr "Jelentés opciók szerkesztése"
+msgstr "Jóváírás szerkesztése"
 
 #: gnucash/gnome/dialog-invoice.c:2324
 msgid "Edit Invoice"
-msgstr "Számla szerkesztése"
+msgstr "Kimenőszámla szerkesztése"
 
 #: gnucash/gnome/dialog-invoice.c:2327 gnucash/gnome/dialog-invoice.c:2346
 #: gnucash/gnome/dialog-invoice.c:2365
-#, fuzzy
 msgid "View Credit Note"
-msgstr "Megbízás szerkesztése/megtekintése"
+msgstr "Jóváírás megtekintése"
 
 #: gnucash/gnome/dialog-invoice.c:2328
 msgid "View Invoice"
-msgstr "Számla megtekintése"
+msgstr "Kimenőszámla megtekintése"
 
 #: gnucash/gnome/dialog-invoice.c:2337
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:225
 #: gnucash/gnome-search/dialog-search.c:1079
 msgid "New Bill"
-msgstr "Új bejövő számla"
+msgstr "Új bejövőszámla"
 
 #: gnucash/gnome/dialog-invoice.c:2343
 msgid "Edit Bill"
-msgstr "Számla szerkesztése"
+msgstr "Bejövőszámla szerkesztése"
 
 #: gnucash/gnome/dialog-invoice.c:2347
 msgid "View Bill"
-msgstr "Számla megtekintése"
+msgstr "Bejövőszámla megtekintése"
 
 #: gnucash/gnome/dialog-invoice.c:2356
 #: gnucash/gnome-search/dialog-search.c:1091
@@ -3252,7 +3246,7 @@ msgstr "Biztosan, rögzíteni kívánja a számlát?"
 
 #: gnucash/gnome/dialog-invoice.c:3515 gnucash/gnome/dialog-invoice.c:3796
 msgid "View/Edit Invoice"
-msgstr "Számla szerkesztése/megtekintése"
+msgstr "Kimenőszámla megtekintése/szerkesztése"
 
 #: gnucash/gnome/dialog-invoice.c:3517 gnucash/gnome/dialog-invoice.c:3526
 #: gnucash/gnome/dialog-invoice.c:3537
@@ -3276,13 +3270,13 @@ msgstr "Egyetlen report"
 
 #: gnucash/gnome/dialog-invoice.c:3524 gnucash/gnome/dialog-invoice.c:3790
 msgid "View/Edit Bill"
-msgstr "Számla szerkesztése/megtekintése"
+msgstr "Bejövőszámla megtekintése/szerkesztése"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
 #: gnucash/gnome/dialog-invoice.c:3535
 msgid "View/Edit Voucher"
-msgstr "Költségbizonylat szerkesztése/megtekintése"
+msgstr "Utalvány megtekintése/szerkesztése"
 
 #: gnucash/gnome/dialog-invoice.c:3549
 msgid "Invoice Owner"
@@ -3492,15 +3486,15 @@ msgstr "Megbízás szerkesztése"
 
 #: gnucash/gnome/dialog-job.c:245 gnucash/gnome-search/dialog-search.c:1099
 msgid "New Job"
-msgstr "Új Megbízás"
+msgstr "Új megbízás"
 
 #: gnucash/gnome/dialog-job.c:549
 msgid "View/Edit Job"
-msgstr "Megbízás szerkesztése/megtekintése"
+msgstr "Megbízás megtekintése/szerkesztése"
 
 #: gnucash/gnome/dialog-job.c:550
 msgid "View Invoices"
-msgstr "Számlák megtekintése"
+msgstr "Kimenőszámlák megtekintése"
 
 #: gnucash/gnome/dialog-job.c:560
 msgid "Owner's Name"
@@ -3538,7 +3532,7 @@ msgstr "Üres"
 #: gnucash/gnome/dialog-lot-viewer.c:829
 msgctxt "Adjective"
 msgid "Open"
-msgstr "Megnyitás"
+msgstr "Megnyitott"
 
 #: gnucash/gnome/dialog-lot-viewer.c:923 gnucash/gnome/dialog-order.c:890
 #: gnucash/report/reports/standard/investment-lots.scm:103
@@ -3645,11 +3639,11 @@ msgstr "Ki kell választani egy céget a kifizetés lebonyolításához."
 
 #: gnucash/gnome/dialog-payment.c:260
 msgid "There is a problem with the Payment or Refund amount."
-msgstr "Hiba van a fizetés vagy a jóváírás összeével."
+msgstr "Hibás a kifizetés vagy a visszatérítés összege."
 
 #: gnucash/gnome/dialog-payment.c:281
 msgid "You must select a transfer account from the account tree."
-msgstr "Ki kell választani a kifizető folyószámlát a számlafából."
+msgstr "Ki kell választania egy célszámlát a számlafából."
 
 #: gnucash/gnome/dialog-payment.c:292
 msgid ""
@@ -5566,12 +5560,9 @@ msgid "Upcoming Transactions"
 msgstr "Érvénytelen tranzakciók"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:896
-#, fuzzy
-#| msgid "Do you really want to delete this scheduled transaction?"
-#| msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
-msgstr[0] "Biztosan törölni kívánja %d az ütemezett tranzakciót?"
+msgstr[0] "Biztosan törölni kívánja ezeket az ütemezett tranzakciókat?"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:163
 #: gnucash/report/reports/standard/view-column.scm:95
@@ -7797,6 +7788,7 @@ msgstr "Pénzügyi-számviteli program magánszemélyeknek és kisvállalkozáso
 #: gnucash/gnome-utils/gnc-main-window.cpp:5268
 msgid "translator-credits"
 msgstr ""
+"SziaTomi (2022 ->)\n"
 "Molnár, Csaba (2022-2023)\n"
 "Kárász, Attila (2022)\n"
 "Tako, Kornel (2007)\n"
@@ -21308,7 +21300,7 @@ msgstr "A \"~a\" sablonfájl nem olvasható"
 
 #: gnucash/report/html-chart.scm:473
 msgid "Load"
-msgstr ""
+msgstr "Betölt"
 
 #: gnucash/report/html-fonts.scm:105 gnucash/report/html-fonts.scm:109
 #: gnucash/report/html-fonts.scm:113 gnucash/report/html-fonts.scm:117
@@ -21316,27 +21308,27 @@ msgstr ""
 #: gnucash/report/html-fonts.scm:129 gnucash/report/html-fonts.scm:134
 #: gnucash/report/html-fonts.scm:139
 msgid "Fonts"
-msgstr "Betűk"
+msgstr "Betűtípusok"
 
 #: gnucash/report/html-fonts.scm:106
 msgid "Font info for the report title."
-msgstr ""
+msgstr "A jelentés címének betűtípus-információja."
 
 #: gnucash/report/html-fonts.scm:110
 msgid "Account link"
-msgstr "Account link"
+msgstr "Számlahivatkozás"
 
 #: gnucash/report/html-fonts.scm:110
 msgid "Font info for account name."
-msgstr ""
+msgstr "A számlanév betűtípus-információja."
 
 #: gnucash/report/html-fonts.scm:114
 msgid "Number cell"
-msgstr ""
+msgstr "Számcella"
 
 #: gnucash/report/html-fonts.scm:114
 msgid "Font info for regular number cells."
-msgstr ""
+msgstr "A normál számcellák betűtípus-információja."
 
 #: gnucash/report/html-fonts.scm:118
 msgid "Negative Values in Red"
@@ -21348,51 +21340,49 @@ msgstr "Negatív mennyiségek megjelenítése pirossal."
 
 #: gnucash/report/html-fonts.scm:122
 msgid "Number header"
-msgstr "Szám fejléc"
+msgstr "Számfejléc"
 
 #: gnucash/report/html-fonts.scm:122
 msgid "Font info for number headers."
-msgstr ""
+msgstr "A számfejlécek betűtípus-információja."
 
 #: gnucash/report/html-fonts.scm:126
 msgid "Text cell"
-msgstr "Szöveg fejléc"
+msgstr "Szövegcella"
 
 #: gnucash/report/html-fonts.scm:126
 msgid "Font info for regular text cells."
-msgstr ""
+msgstr "A normál szövegcellák betűtípus-információja."
 
 #: gnucash/report/html-fonts.scm:130
 msgid "Total number cell"
-msgstr ""
+msgstr "Teljesösszeg-cella"
 
 #: gnucash/report/html-fonts.scm:131
 msgid "Font info for number cells containing a total."
-msgstr ""
+msgstr "A teljesösszeg-cellák betűtípus-információja."
 
 #: gnucash/report/html-fonts.scm:135
 msgid "Total label cell"
-msgstr ""
+msgstr "Összescímke-cella"
 
 #: gnucash/report/html-fonts.scm:136
 msgid "Font info for cells containing total labels."
-msgstr ""
+msgstr "Az összescímke-cellák betűtípus-információja."
 
 #: gnucash/report/html-fonts.scm:140
 msgid "Centered label cell"
-msgstr ""
+msgstr "Középre igazított címkecella"
 
 #: gnucash/report/html-fonts.scm:140
 msgid "Font info for centered label cells."
-msgstr ""
+msgstr "A középre igazított címkecellák betűtípus-információja."
 
 #: gnucash/report/html-style-sheet.scm:150
 msgid "Can't save style sheet"
-msgstr "uA stíluslapot nem lehet elmenteni"
+msgstr "A stíluslapot nem lehet elmenteni"
 
 #: gnucash/report/html-utilities.scm:263
-#, fuzzy
-#| msgid "Exchange rate"
 msgid "Exchange rate"
 msgid_plural "Exchange rates"
 msgstr[0] "Árfolyam"
@@ -21404,27 +21394,25 @@ msgstr ""
 #: gnucash/report/html-utilities.scm:293
 #: gnucash/ui/gnc-plugin-page-report.ui:242
 msgid "Edit report options"
-msgstr "Jelentés opciók szerkesztése"
+msgstr "Jelentésbeállítások szerkesztése"
 
 #: gnucash/report/html-utilities.scm:309
 #: gnucash/report/reports/standard/balsheet-pnl.scm:143
 #: gnucash/report/reports/standard/new-owner-report.scm:924
-#, fuzzy
 msgid "Disabled"
-msgstr "Engedélyezve"
+msgstr "Letiltva"
 
 #: gnucash/report/html-utilities.scm:361
 msgid "This report requires you to specify certain report options."
-msgstr "E jelentés néhány opció kiválasztását igényli."
+msgstr "Ez a jelentés megköveteli egyes jelentésbeállítások megadását."
 
 #: gnucash/report/html-utilities.scm:368
 msgid "No accounts selected"
 msgstr "Nincs kiválasztott számla"
 
 #: gnucash/report/html-utilities.scm:369
-#, fuzzy
 msgid "This report requires accounts to be selected in the report options."
-msgstr "E jelentéshez ki kell választani számlákat."
+msgstr "Ez a jelentés a jelentésbeállításokban kiválasztandó számlákat igényel."
 
 #: gnucash/report/html-utilities.scm:376
 #: gnucash/report/reports/standard/price-scatter.scm:250
@@ -29525,7 +29513,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:534
 #: gnucash/ui/gnc-plugin-page-register.ui:817
 msgid "S_plit Transaction"
-msgstr "T_ranzakció osztása"
+msgstr "T_ranzakció felosztása"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:285
 #: gnucash/ui/gnc-plugin-page-register.ui:424
@@ -29589,20 +29577,19 @@ msgstr "Ezen tranzakció"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:332
 msgid "Account Report"
-msgstr "Folyószámlajelentés"
+msgstr "Számlajelentés"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:334
 msgid "Open a register report for this Account"
-msgstr "Jelentésoldal megnyitása e tranzakcióhoz"
+msgstr "Egy nyilvántartásjelentés megnyitása ehez a számlához"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:338
-#, fuzzy
 msgid "Account Report - Single Transaction"
-msgstr "Online tranzakció bevitele"
+msgstr "Számlajelentés - Egyetlen tranzakció"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:340
 msgid "Open a register report for the selected Transaction"
-msgstr "Jelentésoldal megnyitása e tranzakcióhoz"
+msgstr "Egy nyilvántartásjelentés megnyitása a kiválasztott számlához"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
@@ -29612,12 +29599,12 @@ msgstr "_Jelentés nyomtatása…"
 #: gnucash/ui/gnc-plugin-page-report.ui:9
 #: gnucash/ui/gnc-plugin-page-report.ui:302
 msgid "Print the current report"
-msgstr "A jelen jelentés nyomtatása"
+msgstr "A jelenlegi jelentés nyomtatása"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:26
 #: gnucash/ui/gnc-plugin-page-report.ui:240
 msgid "_Report Options"
-msgstr "Jelentés _opciók"
+msgstr "Jelentés_opciók"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:28
 #: gnucash/ui/gnc-plugin-report-system.ui:8
@@ -29631,24 +29618,22 @@ msgstr "Exportálás _PDF-fájlként…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:58
 #: gnucash/ui/gnc-plugin-page-report.ui:317
-#, fuzzy
 msgid "Export the current report as a PDF document"
-msgstr "A jelen jelentés nyomtatása"
+msgstr "A jelenlegi jelentés exportálása PDF dokumentumként"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:65
 msgid "Export _Report…"
-msgstr "_Kimutatás exportálása…"
+msgstr "_Jelentés exportálása…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:67
 #: gnucash/ui/gnc-plugin-page-report.ui:287
 msgid "Export HTML-formatted report to file"
-msgstr "HTML-formátumú kimutatás fájlba exportálása"
+msgstr "HTML-formátumú jelentés exportálása fájlba"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:77
 #: gnucash/ui/gnc-plugin-page-report.ui:257
-#, fuzzy
 msgid "Update the current report's saved configuration"
-msgstr "Adja meg a beállítás elérési útját"
+msgstr "Frissítse a jelenlegi jelentés mentett konfigurációját"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:84
 #: gnucash/ui/gnc-plugin-page-report.ui:272
@@ -29656,6 +29641,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu"
 msgstr ""
+"Adja hozzá a jelenlegi jelentés konfigurációját a mentett "
+"jelentéskonfigurációkhoz"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:170
 msgid "Back"
@@ -29691,7 +29678,7 @@ msgstr "A nem teljesült HTML-kérések megszakítása"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:285
 msgid "Export _Report"
-msgstr "_Kimutatás exportálása"
+msgstr "_Jelentés exportálása"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:149
