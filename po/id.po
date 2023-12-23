@@ -9,14 +9,15 @@
 # Azhar Pusparadhian <pazhar@rocketmail.com>, 2022.
 # Sarekashi <sarekashi@tuta.io>, 2022.
 # Sucipto <sucipto@pm.me>, 2023.
+# Andika Triwidada <andika@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-06-27 14:52+0000\n"
-"Last-Translator: Sucipto <sucipto@pm.me>\n"
+"PO-Revision-Date: 2023-12-22 06:11+0000\n"
+"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/id/>\n"
 "Language: id\n"
@@ -24,7 +25,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.1\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -795,14 +796,6 @@ msgstr ""
 "penyiapan bagan akun, silakan lihat manual daring GnuCash."
 
 #: doc/tip_of_the_day.list.c:44
-#, fuzzy
-#| msgid ""
-#| "Every transaction has a \"Notes\" field where you can put useful "
-#| "information.\n"
-#| "\n"
-#| "To make it visible\n"
-#| "select \"View\" in the menu bar and check \"Double Line\" or\n"
-#| "check \"Double Line Mode\" in Preferences:Register Defaults."
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -816,7 +809,7 @@ msgstr ""
 "\n"
 "Untuk menampilkannya\n"
 "pilih \"Lihat\" pada bilah menu dan centang \"Baris Ganda\" atau\n"
-"centang \"Mode Baris Ganda\" di Preferensi:Register Baku."
+"centang \"Tampilan Baris Ganda\" di Preferensi:Register Baku."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -993,11 +986,6 @@ msgstr ""
 "memulai ulang GnuCash."
 
 #: doc/tip_of_the_day.list.c:121
-#, fuzzy
-#| msgid ""
-#| "To search through all your transactions, start a search (Edit->Find...) "
-#| "from the main accounts hierarchy page. To limit your search to a single "
-#| "account, start the search from that account's register."
 msgid ""
 "To search through all your transactions, start a search (Edit->Find…) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
