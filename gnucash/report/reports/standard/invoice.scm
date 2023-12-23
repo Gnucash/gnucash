@@ -40,7 +40,7 @@
 .entries-table > table { width: 100% }
 .company-table > table * { padding: 0px; }
 .client-table > table * { padding: 0px; }
-.invoice-details-table > table * { padding: 0px; }
+.invoice-details-table > table * { padding: 0px; text-indent: 0.2em; }
 @media print { .main-table > table { width: 100%; }}
 ")
 
@@ -564,7 +564,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
               (begin
                 (gnc:html-table-append-row! invoice-details-table
                                             (list
-                                             (G_ "Reference:&nbsp;")
+                                             (G_ "Reference:")
                                              (gnc:make-html-div/markup
                                               "div-align-right"
                                               (multiline-to-html-text billing-id))))
