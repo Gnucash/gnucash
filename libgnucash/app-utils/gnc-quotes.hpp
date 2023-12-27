@@ -139,8 +139,7 @@ public:
 
     /** Get list of quotes souces that use multiple upstream sources.  See single_sources() for more details.
      *
-     * @return A double-linked list containing the names of the available Fiannce::Quote methods.
-     * @note the list and its contents are owned by the caller and should be freed with `g_list_free_full(list, g_free)`.
+     * @return The sources in Finance::Quote that use multiple sources
      */
     const QuoteSources& multiple_sources() noexcept;
     
