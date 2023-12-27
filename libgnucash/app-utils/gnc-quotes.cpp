@@ -80,9 +80,6 @@ struct GncQuoteSourceError : public std::runtime_error
 CommVec
 gnc_quotes_get_quotable_commodities(const gnc_commodity_table * table);
 
-/**
- * GncQuotesSource provides an API for quote retrieval used by GncQuotesImpl.
- **/
 class GncQuoteSource
 {
 public:
@@ -94,11 +91,6 @@ public:
     virtual QuoteResult get_quotes(const std::string& json_str) const = 0;
 };
 
-/**
- * GncQuotesImpl defines the Quote API used by the core of GnuCash.  A quote source
- * such as Finance::Quote implements the GncQuotesSource API and this class translates
- * between that API and the public API this class defines for the rest of GnuCash.
- **/
 class GncQuotesImpl
 {
 public:
@@ -144,9 +136,6 @@ private:
     gnc_commodity *m_dflt_curr;
 };
 
-/**
- * GncFQQuotesSource implements the GncQuotesSources API for Finance::Quote. 
- **/
 class GncFQQuoteSource final : public GncQuoteSource
 {
     const bfs::path c_cmd;
