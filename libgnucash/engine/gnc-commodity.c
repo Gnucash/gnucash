@@ -230,7 +230,7 @@ gint gnc_quote_source_num_entries(QuoteSourceType type)
 /********************************************************************
  * gnc_quote_source_add_new
  *
- * Add a new price source. Called from withing this source file to 
+ * Add a new price source. Called from within this source file to 
  * register F::Q sources as well as when an unknown source is found 
  * in the user's data.
  ********************************************************************/
