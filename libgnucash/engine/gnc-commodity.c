@@ -356,18 +356,9 @@ gnc_quote_source_lookup_by_name_and_type(const char * name, QuoteSourceType type
 gnc_quote_source *
 gnc_quote_source_lookup_by_name(const char * name)
 {
-    // "currency" is the internal GNC name that causes the F::Q wrapper to call the currency conversion routine
-    if (g_strcmp0(name, "currency") == 0)
-        return gnc_quote_source_lookup_by_name_and_type(name, SOURCE_CURRENCY);
-
-    // Otherwise, the source must be in one of the following since SOURCE_FQ_CURRENCY is not currently in use
-    gnc_quote_source *source = NULL;
-    if (NULL != (source = gnc_quote_source_lookup_by_name_and_type(name, SOURCE_SINGLE)))
-        return source;
-    if (NULL != (source = gnc_quote_source_lookup_by_name_and_type(name, SOURCE_MULTI)))
-        return source;
-    if (NULL != (source = gnc_quote_source_lookup_by_name_and_type(name, SOURCE_UNKNOWN)))
-        return source;
+    for (QuoteSourceType type = SOURCE_SINGLE; type <= SOURCE_CURRENCY; type++)
+      if (source = gnc_quote_source_lookup_by_name_and_type (name, type))
+          return source;    
 
     return NULL;
 }
