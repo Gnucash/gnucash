@@ -356,8 +356,9 @@ gnc_quote_source_lookup_by_name_and_type(const char * name, QuoteSourceType type
 gnc_quote_source *
 gnc_quote_source_lookup_by_name(const char * name)
 {
+    gnc_quote_source *source;
     for (QuoteSourceType type = SOURCE_SINGLE; type <= SOURCE_CURRENCY; type++)
-      if (source = gnc_quote_source_lookup_by_name_and_type (name, type))
+      if ((source = gnc_quote_source_lookup_by_name_and_type (name, type)))
           return source;    
 
     return NULL;

@@ -656,7 +656,6 @@ libgnucash/engine/gnc-option-impl.cpp
 libgnucash/engine/gncOrder.c
 libgnucash/engine/gncOwner.c
 libgnucash/engine/gnc-pricedb.cpp
-libgnucash/engine/gnc-quote-source.cpp
 libgnucash/engine/gnc-rational.cpp
 libgnucash/engine/gnc-session.c
 libgnucash/engine/gncTaxTable.c
