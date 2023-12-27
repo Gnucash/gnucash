@@ -85,6 +85,23 @@
               </packing>
             </child>
             <child>
+              <object class="GtkButton" id="regview_button">
+                <property name="label" translatable="yes">_Register View</property>
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can-focus">True</property>
+                <property name="can-default">True</property>
+                <property name="receives-default">False</property>
+                <property name="tooltip-text" translatable="yes">View in the register</property>
+                <property name="use-underline">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
               <object class="GtkButton" id="button5">
                 <property name="label" translatable="yes">_Close</property>
                 <property name="visible">True</property>
@@ -96,7 +113,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">4</property>
+                <property name="position">5</property>
               </packing>
             </child>
           </object>
@@ -453,6 +470,7 @@
       <action-widget response="4">scrub_account_button</action-widget>
       <action-widget response="3">scrub_lot_button</action-widget>
       <action-widget response="2">delete_button</action-widget>
+      <action-widget response="1">regview_button</action-widget>
       <action-widget response="-7">button5</action-widget>
     </action-widgets>
   </object>

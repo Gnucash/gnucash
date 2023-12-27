@@ -22,11 +22,6 @@
  *                                                                  *
 \********************************************************************/
 
-/* XXX todo: The button "view lot in register" is not implemented.
- *   it needs to open register window showing only the splits in the
- *     given lot ...
- */
-
 #include <config.h>
 
 #include <gtk/gtk.h>
@@ -51,6 +46,10 @@
 #include "gnc-window.h"
 #include "misc-gnome-utils.h"
 #include "tree-view-utils.h"
+
+#include "gnc-ledger-display.h"
+#include "gnc-plugin-page-register.h"
+#include "gnc-main-window.h"
 
 #define LOT_VIEWER_CM_CLASS "dialog-lot-viewer"
 
@@ -98,9 +97,7 @@ enum split_cols
 struct _GNCLotViewer
 {
     GtkWidget     * window;
-#ifdef LOTS_READY_FOR_SHOWTIME
     GtkButton     * regview_button;
-#endif
     GtkButton     * delete_button;
     GtkButton     * scrub_lot_button;
     GtkButton     * new_lot_button;
@@ -285,9 +282,7 @@ lv_unset_lot (GNCLotViewer *lv)
     /* Erase the mini-view area */
     lv_clear_splits_in_lot (lv);
 
-#ifdef LOTS_READY_FOR_SHOWTIME
     gtk_widget_set_sensitive(GTK_WIDGET(lv->regview_button), FALSE);
-#endif
     gtk_widget_set_sensitive(GTK_WIDGET(lv->delete_button), FALSE);
     gtk_widget_set_sensitive(GTK_WIDGET(lv->scrub_lot_button), FALSE);
 }
@@ -318,9 +313,7 @@ lv_select_row (GNCLotViewer *lv,
     lv->selected_lot = lot;
     lv_show_splits_in_lot (lv);
 
-#ifdef LOTS_READY_FOR_SHOWTIME
     gtk_widget_set_sensitive(GTK_WIDGET(lv->regview_button), TRUE);
-#endif
     gtk_widget_set_sensitive(GTK_WIDGET(lv->delete_button), TRUE);
     gtk_widget_set_sensitive(GTK_WIDGET(lv->scrub_lot_button), TRUE);
 }
@@ -743,6 +736,33 @@ lv_only_show_open_lots_changed_cb (GtkWidget *widget, GNCLotViewer * lv)
     lv_refresh(lv);
 }
 
+static void
+open_register_for_lot (GNCLot *lot)
+{
+    GNCLedgerDisplay *ledger;
+    GncPluginPage *page;
+    Query *book_query, *guid_query;
+    GList *splits = gnc_lot_get_split_list (lot);
+
+    book_query = qof_query_create_for (GNC_ID_SPLIT);
+    guid_query = qof_query_create_for (GNC_ID_SPLIT);
+    qof_query_set_book (book_query, gnc_get_current_book ());
+
+    for (GList *iter = splits; iter; iter = iter->next)
+    {
+        GncGUID guid = xaccSplitReturnGUID (iter->data);
+        xaccQueryAddGUIDMatch (guid_query, &guid, GNC_ID_SPLIT, QOF_QUERY_OR);
+    }
+    book_query = qof_query_merge (book_query, guid_query, QOF_QUERY_AND);
+    ledger = gnc_ledger_display_query (book_query, SEARCH_LEDGER, REG_STYLE_JOURNAL);
+    gnc_ledger_display_refresh (ledger);
+    page = gnc_plugin_page_register_new_ledger (ledger);
+    main_window_update_page_name (page, _("Lot Splits"));
+    gnc_main_window_open_page (NULL, page);
+    qof_query_destroy (book_query);
+    qof_query_destroy (guid_query);
+}
+
 /* ======================================================================== */
 /* Any button was pressed */
 
@@ -761,7 +781,7 @@ lv_response_cb (GtkDialog *dialog, gint response, gpointer data)
     case RESPONSE_VIEW:
         if (NULL == lot)
             return;
-        printf ("UNIMPLEMENTED: need to display register showing only this one lot.\n");
+        open_register_for_lot (lot);
         break;
 
     case RESPONSE_DELETE:
@@ -1092,9 +1112,7 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
     gtk_window_set_title (GTK_WINDOW (lv->window), win_title);
     g_free (win_title);
 
-#ifdef LOTS_READY_FOR_SHOWTIME
-    lv->regview_button = GTK_BUTTON(glade_xml_get_widget (builder, "regview_button"));
-#endif
+    lv->regview_button = GTK_BUTTON(gtk_builder_get_object(builder, "regview_button"));
     lv->delete_button = GTK_BUTTON(gtk_builder_get_object (builder, "delete_button"));
     lv->scrub_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "scrub_lot_button"));
     lv->new_lot_button = GTK_BUTTON(gtk_builder_get_object (builder, "new_lot_button"));
