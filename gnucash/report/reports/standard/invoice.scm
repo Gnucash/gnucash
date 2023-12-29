@@ -40,7 +40,7 @@
 .entries-table > table { width: 100% }
 .company-table > table * { padding: 0px; }
 .client-table > table * { padding: 0px; }
-.invoice-details-table > table * { padding: 0px; }
+.invoice-details-table > table * { padding: 0px; text-indent: 0.2em; }
 @media print { .main-table > table { width: 100%; }}
 ")
 
