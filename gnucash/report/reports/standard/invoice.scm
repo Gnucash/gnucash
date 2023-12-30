@@ -529,11 +529,12 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
       table)))
 
-(define (make-invoice-details-table invoice options)
+(define (make-invoice-details-table options)
   ;; dual-column. invoice date/due, billingID, terms, job name/number
   (define (opt-val section name)
     (gnc-optiondb-lookup-value options section name))
   (let* ((invoice-details-table (gnc:make-html-table))
+         (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
          (book (gncInvoiceGetBook invoice))
          (date-format (gnc:options-fancy-date book))
          (jobnumber (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner invoice))))
@@ -595,19 +596,37 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                             (gnc:make-html-div/markup
                                              "div-align-right"
                                              jobname)))))
-    invoice-details-table))
 
-(define (make-img img-url)
-  ;; just an image
-  (gnc:make-html-text
-   (gnc:html-markup-img
-    (make-file-url img-url))))
+    (gnc:make-html-div/markup "invoice-details-table" invoice-details-table)))
 
-(define (make-client-table owner orders options)
+(define (make-picture options)
   (define (opt-val section name)
     (gnc-optiondb-lookup-value options section name))
+  (let ((img-url (opt-val "Layout" "Picture Location")))
+    (gnc:make-html-div/markup
+     "picture"
+     (gnc:make-html-text
+      (gnc:html-markup-img
+       (make-file-url img-url))))))
+
+(define (make-client-table options)
+
+  (define (get-orders invoice)
+    (fold
+     (lambda (a b)
+       (let ((order (gncEntryGetOrder a)))
+         (if (member order b) b (cons order b))))
+     '() (gncInvoiceGetEntries invoice)))
+
+  (define (opt-val section name)
+    (gnc-optiondb-lookup-value options section name))
+
   ;; this is a single-column table.
-  (let ((table (gnc:make-html-table)))
+  (let* ((invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
+         (owner (gncInvoiceGetOwner invoice))
+         (references? (opt-val "Display" "References"))
+         (orders (if references? (get-orders invoice) '()))
+         (table (gnc:make-html-table)))
 
     (gnc:html-table-append-row! table
                                 (list
@@ -640,7 +659,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
                                                 reference))))))
      orders)
 
-    table))
+    (gnc:make-html-div/markup "client-table" table)))
 
 (define (make-date-row label date date-format)
   (list
@@ -649,9 +668,14 @@ for styling the invoice. Please see the exported report for the CSS class names.
     "div-align-right"
     (gnc-print-time64 date date-format))))
 
-(define (make-company-table book)
+(define (make-company-table options)
+
+  (define (opt-val section name)
+    (gnc-optiondb-lookup-value options section name))
+
   ;; single-column table. my name, address, and printdate
   (let* ((table (gnc:make-html-table))
+         (book (gncInvoiceGetBook (opt-val gnc:pagename-general gnc:optname-invoice-number)))
          (name (gnc:company-info book gnc:*company-name*))
          (addy (gnc:company-info book gnc:*company-addy*))
          (phone (gnc:company-info book gnc:*company-phone*))
@@ -701,14 +725,17 @@ for styling the invoice. Please see the exported report for the CSS class names.
          table (list (gnc:make-html-div/markup
                       "maybe-align-right company-tax-nr" taxnr))))
 
-    table))
+    (gnc:make-html-div/markup "company-table" table)))
+
+(define (make-today options)
+  (gnc:make-html-div/markup
+   "invoice-print-date" (qof-print-date (current-time))))
 
 (define (reg-renderer report-obj)
   (let* ((document (gnc:make-html-document))
          (options (gnc:report-options report-obj))
          (opt-val (lambda (section name) (gnc-optiondb-lookup-value options section name)))
          (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
-         (references? (opt-val "Display" "References"))
          (custom-title (opt-val gnc:pagename-general "Custom Title")))
 
     (if (null? invoice)
@@ -720,9 +747,7 @@ for styling the invoice. Please see the exported report for the CSS class names.
           (G_ "No valid invoice selected. Click on the Options button and select the invoice to use.")))
 
         (let* ((book (gncInvoiceGetBook invoice))
-               (owner (gncInvoiceGetOwner invoice))
                (type (gncInvoiceGetType invoice))
-               (orders (if references? (delete-duplicates (map gncEntryGetOrder (gncInvoiceGetEntries invoice))) '()))
                (cust-doc? (memv type (list GNC-INVOICE-CUST-INVOICE GNC-INVOICE-CUST-CREDIT-NOTE)))
                (credit-note? (memv type (list GNC-INVOICE-CUST-CREDIT-NOTE GNC-INVOICE-VEND-CREDIT-NOTE GNC-INVOICE-EMPL-CREDIT-NOTE)))
                (default-title (cond
@@ -744,23 +769,11 @@ for styling the invoice. Please see the exported report for the CSS class names.
                ;; i.e. "~a Nr. ~a"
                (invoice-title (format #f (G_"~a #~a") title (gncInvoiceGetID invoice)))
                (layout-lookup-table (list (cons 'none #f)
-                                          (cons 'picture (gnc:make-html-div/markup
-                                                          "picture"
-                                                          (make-img (opt-val "Layout" "Picture Location"))))
-                                          (cons 'invoice (gnc:make-html-div/markup
-                                                          "invoice-details-table"
-                                                          (make-invoice-details-table
-                                                           invoice options)))
-                                          (cons 'client (gnc:make-html-div/markup
-                                                         "client-table"
-                                                         (make-client-table
-                                                          owner orders options)))
-                                          (cons 'company (gnc:make-html-div/markup
-                                                          "company-table"
-                                                          (make-company-table book)))
-                                          (cons 'today (gnc:make-html-div/markup
-                                                        "invoice-print-date"
-                                                        (qof-print-date (current-time))))))
+                                          (cons 'picture (make-picture options))
+                                          (cons 'invoice (make-invoice-details-table options))
+                                          (cons 'client (make-client-table options))
+                                          (cons 'company (make-company-table options))
+                                          (cons 'today (make-today options))))
                (layout-lookup (lambda (loc) (cdr (assq (opt-val "Layout" loc) layout-lookup-table)))))
 
           (gnc:html-document-set-style-text! document (opt-val "Layout" "CSS"))
