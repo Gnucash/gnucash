@@ -108,14 +108,30 @@
       (gnc:make-gnc-monetary currency numeric)))
 
 (define layout-key-list
-  (list (cons 'client (list (cons 'text (G_ "Client or vendor name, address and ID"))))
-        (cons 'company (list (cons 'text (G_ "Company name, address and tax-ID"))))
-        (cons 'invoice (list (cons 'text (G_ "Invoice date, due date, billing ID, terms, job details"))))
-        (cons 'today (list (cons 'text (G_ "Today's date"))))
-        (cons 'picture (list (cons 'text (G_ "Picture"))))
+  (list (list 'client
+              (cons 'renderer make-client-table)
+              (cons 'text (G_ "Client or vendor name, address and ID")))
+
+        (list 'company
+              (cons 'renderer make-company-table)
+              (cons 'text (G_ "Company name, address and tax-ID")))
+
+        (list 'invoice
+              (cons 'renderer make-invoice-details-table)
+              (cons 'text (G_ "Invoice date, due date, billing ID, terms, job details")))
+
+        (list 'today
+              (cons 'renderer make-today)
+              (cons 'text (G_ "Today's date")))
+
+        (list 'picture
+              (cons 'renderer make-picture)
+              (cons 'text (G_ "Picture")))
 
         ;; Translators: "Empty space" refers to invoice header section being left blank
-        (cons 'none (list (cons 'text (G_ "Empty space"))))))
+        (list 'none
+              (cons 'renderer (const #f))
+              (cons 'text (G_ "Empty space")))))
 
 (define variant-list
   (list
@@ -768,13 +784,10 @@ for styling the invoice. Please see the exported report for the CSS class names.
                ;; " #" by whatever is common as number abbreviation,
                ;; i.e. "~a Nr. ~a"
                (invoice-title (format #f (G_"~a #~a") title (gncInvoiceGetID invoice)))
-               (layout-lookup-table (list (cons 'none #f)
-                                          (cons 'picture (make-picture options))
-                                          (cons 'invoice (make-invoice-details-table options))
-                                          (cons 'client (make-client-table options))
-                                          (cons 'company (make-company-table options))
-                                          (cons 'today (make-today options))))
-               (layout-lookup (lambda (loc) (cdr (assq (opt-val "Layout" loc) layout-lookup-table)))))
+               (layout-lookup (lambda (loc)
+                                (let* ((key (opt-val "Layout" loc))
+                                       (renderer (keylist-get-info layout-key-list key 'renderer)))
+                                  (renderer options)))))
 
           (gnc:html-document-set-style-text! document (opt-val "Layout" "CSS"))
 
