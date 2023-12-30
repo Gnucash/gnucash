@@ -1802,6 +1802,15 @@ be excluded from periodic reporting.")
     (define (render-grand-total)
       (G_ "Grand Total"))
 
+    (define primary-subtotal-collectors
+      (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))
+
+    (define secondary-subtotal-collectors
+      (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))
+
+    (define total-collectors
+      (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))
+
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; add-split-row
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1841,25 +1850,27 @@ be excluded from periodic reporting.")
                                cell-content)))))
                  cell-calculators))))
 
-        (map (lambda (cell)
-               (and (assq-ref cell 'subtotal?)
-                    ((assq-ref cell 'calc-fn) split transaction-row?)))
-             cell-calculators)))
+        (when transaction-row?
+          (for-each
+           (lambda (prime-collector sec-collector tot-collector cell)
+             (when (assq-ref cell 'subtotal?)
+               (let ((value ((assq-ref cell 'calc-fn) split transaction-row?)))
+                 (when value
+                   (let ((comm (gnc:gnc-monetary-commodity value))
+                         (amt (gnc:gnc-monetary-amount value)))
+                     (prime-collector 'add comm amt)
+                     (sec-collector 'add comm amt)
+                     (tot-collector 'add comm amt))))))
+           primary-subtotal-collectors
+           secondary-subtotal-collectors
+           total-collectors
+           cell-calculators))))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     ;; do-rows-with-subtotals
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-    (define primary-subtotal-collectors
-      (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))
-
-    (define secondary-subtotal-collectors
-      (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))
-
-    (define total-collectors
-      (map (lambda (x) (gnc:make-commodity-collector)) calculated-cells))
 
     (define grid (make-grid))
     (define primary-subtotal-comparator (report-uses? 'primary-key/split-sortvalue))
@@ -1901,14 +1912,13 @@ be excluded from periodic reporting.")
 
           (let* ((current (car splits))
                  (rest (cdr splits))
-                 (next (and (pair? rest) (car rest)))
-                 (split-values (add-split-row
-                                current
-                                calculated-cells
-                                (if (or odd-row? (report-uses? 'multiline))
-                                    def:normal-row-style
-                                    def:alternate-row-style)
-                                #t)))
+                 (next (and (pair? rest) (car rest))))
+
+            (add-split-row current calculated-cells
+                           (if (or odd-row? (report-uses? 'multiline))
+                               def:normal-row-style
+                               def:alternate-row-style)
+                           #t)
 
             (when (report-uses? 'multiline)
               (for-each
@@ -1917,19 +1927,6 @@ be excluded from periodic reporting.")
                                 def:alternate-row-style #f))
                (delete current (xaccTransGetSplitList
                                 (xaccSplitGetParent current)))))
-
-            (for-each
-             (lambda (prime-collector sec-collector tot-collector value)
-               (when (gnc:gnc-monetary? value)
-                 (let ((comm (gnc:gnc-monetary-commodity value))
-                       (val (gnc:gnc-monetary-amount value)))
-                 (prime-collector 'add comm val)
-                 (sec-collector 'add comm val)
-                 (tot-collector 'add comm val))))
-             primary-subtotal-collectors
-             secondary-subtotal-collectors
-             total-collectors
-             split-values)
 
             (cond
              ((and primary-subtotal-comparator
