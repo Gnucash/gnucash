@@ -107,6 +107,210 @@
       (string-append (gnc:default-html-gnc-numeric-renderer numeric #f) " " (G_ "%"))
       (gnc:make-gnc-monetary currency numeric)))
 
+
+(define (make-client-table options)
+
+  (define (get-orders invoice)
+    (fold
+     (lambda (a b)
+       (let ((order (gncEntryGetOrder a)))
+         (if (member order b) b (cons order b))))
+     '() (gncInvoiceGetEntries invoice)))
+
+  (define (opt-val section name)
+    (gnc-optiondb-lookup-value options section name))
+
+  ;; this is a single-column table.
+  (let* ((invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
+         (owner (gncInvoiceGetOwner invoice))
+         (references? (opt-val "Display" "References"))
+         (orders (if references? (get-orders invoice) '()))
+         (table (gnc:make-html-table)))
+
+    (gnc:html-table-append-row! table
+                                (list
+                                 (gnc:make-html-div/markup
+                                  "maybe-align-right client-name"
+                                  (gnc:owner-get-name-dep owner))))
+
+    (gnc:html-table-append-row! table
+                                (list
+                                 (gnc:make-html-div/markup
+                                  "maybe-align-right client-address"
+                                  (multiline-to-html-text
+                                   (gnc:owner-get-address-dep owner)))))
+
+    (if (opt-val "Display" "Invoice owner ID")
+        (gnc:html-table-append-row! table
+                                    (list
+                                     (gnc:make-html-div/markup
+                                      "maybe-align-right client-id"
+                                      (multiline-to-html-text
+                                       (gnc:owner-get-owner-id owner))))))
+
+    (for-each
+     (lambda (order)
+       (let ((reference (gncOrderGetReference order)))
+         (if (and reference (not (string-null? reference)))
+             (gnc:html-table-append-row! table
+                                         (list (string-append
+                                                (G_ "REF") " "
+                                                reference))))))
+     orders)
+
+    (gnc:make-html-div/markup "client-table" table)))
+
+(define (make-company-table options)
+
+  (define (opt-val section name)
+    (gnc-optiondb-lookup-value options section name))
+
+  ;; single-column table. my name, address, and printdate
+  (let* ((table (gnc:make-html-table))
+         (book (gncInvoiceGetBook (opt-val gnc:pagename-general gnc:optname-invoice-number)))
+         (name (gnc:company-info book gnc:*company-name*))
+         (addy (gnc:company-info book gnc:*company-addy*))
+         (phone (gnc:company-info book gnc:*company-phone*))
+         (fax (gnc:company-info book gnc:*company-fax*))
+         (email (gnc:company-info book gnc:*company-email*))
+         (url (gnc:company-info book gnc:*company-url*))
+         (taxnr (gnc:book-get-option-value book gnc:*tax-label* gnc:*tax-nr-label*))
+         (taxid (gnc:company-info book gnc:*company-id*)))
+
+    (if (and name (not (string-null? name)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-name" name))))
+
+    (if (and addy (not (string-null? addy)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-address" (multiline-to-html-text addy)))))
+
+    (if (and phone (not (string-null? phone)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                           "maybe-align-right company-phone" phone))))
+
+    (if (and fax (not (string-null? fax)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-fax" fax))))
+
+    (if (and email (not (string-null? email)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-email" email))))
+
+    (if (and url (not (string-null? url)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-url" url))))
+
+    (if (and taxid (not (string-null? taxid)))
+        (gnc:html-table-append-row! table (list
+                                           (gnc:make-html-div/markup
+                                            "maybe-align-right company-tax-id" taxid))))
+
+    (if (and taxnr (not (string-null? taxnr)))
+        (gnc:html-table-append-row!
+         table (list (gnc:make-html-div/markup
+                      "maybe-align-right company-tax-nr" taxnr))))
+
+    (gnc:make-html-div/markup "company-table" table)))
+
+
+(define (make-date-row label date date-format)
+  (list
+   (string-append label ":")
+   (gnc:make-html-div/markup
+    "div-align-right"
+    (gnc-print-time64 date date-format))))
+
+(define (make-invoice-details-table options)
+  ;; dual-column. invoice date/due, billingID, terms, job name/number
+  (define (opt-val section name)
+    (gnc-optiondb-lookup-value options section name))
+  (let* ((invoice-details-table (gnc:make-html-table))
+         (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
+         (book (gncInvoiceGetBook invoice))
+         (date-format (gnc:options-fancy-date book))
+         (jobnumber (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner invoice))))
+         (jobname (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner invoice)))))
+
+    (if (gncInvoiceIsPosted invoice)
+
+        (begin
+          (gnc:html-table-append-row!
+           invoice-details-table
+           (make-date-row (G_ "Date") (gncInvoiceGetDatePosted invoice) date-format))
+
+          (if (opt-val "Display" "Due Date")
+              (gnc:html-table-append-row!
+               invoice-details-table
+               (make-date-row (G_ "Due Date") (gncInvoiceGetDateDue invoice) date-format))))
+
+        (gnc:html-table-append-row! invoice-details-table
+                                    (gnc:make-html-table-cell/size
+                                     1 2 (gnc:make-html-span/markup
+                                          "invoice-in-progress"
+                                          (gnc:make-html-text
+                                           (G_ "Invoice in progress…"))))))
+
+    (if (opt-val "Display" "Billing ID")
+        (let ((billing-id (gncInvoiceGetBillingID invoice)))
+          (if (and billing-id (not (string-null? billing-id)))
+              (begin
+                (gnc:html-table-append-row! invoice-details-table
+                                            (list
+                                             (G_ "Reference:")
+                                             (gnc:make-html-div/markup
+                                              "div-align-right"
+                                              (multiline-to-html-text billing-id))))
+                (gnc:html-table-append-row! invoice-details-table '())))))
+
+    (if (opt-val "Display" "Billing Terms")
+        (let* ((term (gncInvoiceGetTerms invoice))
+               (terms (gncBillTermGetDescription term)))
+          (if (and terms (not (string-null? terms)))
+              (gnc:html-table-append-row! invoice-details-table
+                                          (list
+                                           (G_ "Terms:")
+                                           (gnc:make-html-div/markup
+                                            "div-align-right"
+                                            (multiline-to-html-text terms)))))))
+
+    ;; Add job number and name to invoice if requested and if it exists
+    (if (and (opt-val "Display" "Job Details")
+             (not (string-null? jobnumber)))
+        (begin
+          (gnc:html-table-append-row! invoice-details-table
+                                      (list (G_ "Job number:")
+                                            (gnc:make-html-div/markup
+                                             "div-align-right"
+                                             jobnumber)))
+          (gnc:html-table-append-row! invoice-details-table
+                                      (list (G_ "Job name:")
+                                            (gnc:make-html-div/markup
+                                             "div-align-right"
+                                             jobname)))))
+
+    (gnc:make-html-div/markup "invoice-details-table" invoice-details-table)))
+
+(define (make-picture options)
+  (define (opt-val section name)
+    (gnc-optiondb-lookup-value options section name))
+  (let ((img-url (opt-val "Layout" "Picture Location")))
+    (gnc:make-html-div/markup
+     "picture"
+     (gnc:make-html-text
+      (gnc:html-markup-img
+       (make-file-url img-url))))))
+
+(define (make-today options)
+  (gnc:make-html-div/markup
+   "invoice-print-date" (qof-print-date (current-time))))
+
 (define layout-key-list
   (list (list 'client
               (cons 'renderer make-client-table)
@@ -545,207 +749,6 @@ for styling the invoice. Please see the exported report for the CSS class names.
 
       table)))
 
-(define (make-invoice-details-table options)
-  ;; dual-column. invoice date/due, billingID, terms, job name/number
-  (define (opt-val section name)
-    (gnc-optiondb-lookup-value options section name))
-  (let* ((invoice-details-table (gnc:make-html-table))
-         (invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
-         (book (gncInvoiceGetBook invoice))
-         (date-format (gnc:options-fancy-date book))
-         (jobnumber (gncJobGetID (gncOwnerGetJob (gncInvoiceGetOwner invoice))))
-         (jobname (gncJobGetName (gncOwnerGetJob (gncInvoiceGetOwner invoice)))))
-
-    (if (gncInvoiceIsPosted invoice)
-
-        (begin
-          (gnc:html-table-append-row!
-           invoice-details-table
-           (make-date-row (G_ "Date") (gncInvoiceGetDatePosted invoice) date-format))
-
-          (if (opt-val "Display" "Due Date")
-              (gnc:html-table-append-row!
-               invoice-details-table
-               (make-date-row (G_ "Due Date") (gncInvoiceGetDateDue invoice) date-format))))
-
-        (gnc:html-table-append-row! invoice-details-table
-                                    (gnc:make-html-table-cell/size
-                                     1 2 (gnc:make-html-span/markup
-                                          "invoice-in-progress"
-                                          (gnc:make-html-text
-                                           (G_ "Invoice in progress…"))))))
-
-    (if (opt-val "Display" "Billing ID")
-        (let ((billing-id (gncInvoiceGetBillingID invoice)))
-          (if (and billing-id (not (string-null? billing-id)))
-              (begin
-                (gnc:html-table-append-row! invoice-details-table
-                                            (list
-                                             (G_ "Reference:")
-                                             (gnc:make-html-div/markup
-                                              "div-align-right"
-                                              (multiline-to-html-text billing-id))))
-                (gnc:html-table-append-row! invoice-details-table '())))))
-
-    (if (opt-val "Display" "Billing Terms")
-        (let* ((term (gncInvoiceGetTerms invoice))
-               (terms (gncBillTermGetDescription term)))
-          (if (and terms (not (string-null? terms)))
-              (gnc:html-table-append-row! invoice-details-table
-                                          (list
-                                           (G_ "Terms:")
-                                           (gnc:make-html-div/markup
-                                            "div-align-right"
-                                            (multiline-to-html-text terms)))))))
-
-    ;; Add job number and name to invoice if requested and if it exists
-    (if (and (opt-val "Display" "Job Details")
-             (not (string-null? jobnumber)))
-        (begin
-          (gnc:html-table-append-row! invoice-details-table
-                                      (list (G_ "Job number:")
-                                            (gnc:make-html-div/markup
-                                             "div-align-right"
-                                             jobnumber)))
-          (gnc:html-table-append-row! invoice-details-table
-                                      (list (G_ "Job name:")
-                                            (gnc:make-html-div/markup
-                                             "div-align-right"
-                                             jobname)))))
-
-    (gnc:make-html-div/markup "invoice-details-table" invoice-details-table)))
-
-(define (make-picture options)
-  (define (opt-val section name)
-    (gnc-optiondb-lookup-value options section name))
-  (let ((img-url (opt-val "Layout" "Picture Location")))
-    (gnc:make-html-div/markup
-     "picture"
-     (gnc:make-html-text
-      (gnc:html-markup-img
-       (make-file-url img-url))))))
-
-(define (make-client-table options)
-
-  (define (get-orders invoice)
-    (fold
-     (lambda (a b)
-       (let ((order (gncEntryGetOrder a)))
-         (if (member order b) b (cons order b))))
-     '() (gncInvoiceGetEntries invoice)))
-
-  (define (opt-val section name)
-    (gnc-optiondb-lookup-value options section name))
-
-  ;; this is a single-column table.
-  (let* ((invoice (opt-val gnc:pagename-general gnc:optname-invoice-number))
-         (owner (gncInvoiceGetOwner invoice))
-         (references? (opt-val "Display" "References"))
-         (orders (if references? (get-orders invoice) '()))
-         (table (gnc:make-html-table)))
-
-    (gnc:html-table-append-row! table
-                                (list
-                                 (gnc:make-html-div/markup
-                                  "maybe-align-right client-name"
-                                  (gnc:owner-get-name-dep owner))))
-
-    (gnc:html-table-append-row! table
-                                (list
-                                 (gnc:make-html-div/markup
-                                  "maybe-align-right client-address"
-                                  (multiline-to-html-text
-                                   (gnc:owner-get-address-dep owner)))))
-
-    (if (opt-val "Display" "Invoice owner ID")
-        (gnc:html-table-append-row! table
-                                    (list
-                                     (gnc:make-html-div/markup
-                                      "maybe-align-right client-id"
-                                      (multiline-to-html-text
-                                       (gnc:owner-get-owner-id owner))))))
-
-    (for-each
-     (lambda (order)
-       (let ((reference (gncOrderGetReference order)))
-         (if (and reference (not (string-null? reference)))
-             (gnc:html-table-append-row! table
-                                         (list (string-append
-                                                (G_ "REF") " "
-                                                reference))))))
-     orders)
-
-    (gnc:make-html-div/markup "client-table" table)))
-
-(define (make-date-row label date date-format)
-  (list
-   (string-append label ":")
-   (gnc:make-html-div/markup
-    "div-align-right"
-    (gnc-print-time64 date date-format))))
-
-(define (make-company-table options)
-
-  (define (opt-val section name)
-    (gnc-optiondb-lookup-value options section name))
-
-  ;; single-column table. my name, address, and printdate
-  (let* ((table (gnc:make-html-table))
-         (book (gncInvoiceGetBook (opt-val gnc:pagename-general gnc:optname-invoice-number)))
-         (name (gnc:company-info book gnc:*company-name*))
-         (addy (gnc:company-info book gnc:*company-addy*))
-         (phone (gnc:company-info book gnc:*company-phone*))
-         (fax (gnc:company-info book gnc:*company-fax*))
-         (email (gnc:company-info book gnc:*company-email*))
-         (url (gnc:company-info book gnc:*company-url*))
-         (taxnr (gnc:book-get-option-value book gnc:*tax-label* gnc:*tax-nr-label*))
-         (taxid (gnc:company-info book gnc:*company-id*)))
-
-    (if (and name (not (string-null? name)))
-        (gnc:html-table-append-row! table (list
-                                           (gnc:make-html-div/markup
-                                            "maybe-align-right company-name" name))))
-
-    (if (and addy (not (string-null? addy)))
-        (gnc:html-table-append-row! table (list
-                                           (gnc:make-html-div/markup
-                                            "maybe-align-right company-address" (multiline-to-html-text addy)))))
-
-    (if (and phone (not (string-null? phone)))
-        (gnc:html-table-append-row! table (list
-                                           (gnc:make-html-div/markup
-                                           "maybe-align-right company-phone" phone))))
-
-    (if (and fax (not (string-null? fax)))
-        (gnc:html-table-append-row! table (list
-                                           (gnc:make-html-div/markup
-                                            "maybe-align-right company-fax" fax))))
-
-    (if (and email (not (string-null? email)))
-        (gnc:html-table-append-row! table (list
-                                           (gnc:make-html-div/markup
-                                            "maybe-align-right company-email" email))))
-
-    (if (and url (not (string-null? url)))
-        (gnc:html-table-append-row! table (list
-                                           (gnc:make-html-div/markup
-                                            "maybe-align-right company-url" url))))
-
-    (if (and taxid (not (string-null? taxid)))
-        (gnc:html-table-append-row! table (list
-                                           (gnc:make-html-div/markup
-                                            "maybe-align-right company-tax-id" taxid))))
-
-    (if (and taxnr (not (string-null? taxnr)))
-        (gnc:html-table-append-row!
-         table (list (gnc:make-html-div/markup
-                      "maybe-align-right company-tax-nr" taxnr))))
-
-    (gnc:make-html-div/markup "company-table" table)))
-
-(define (make-today options)
-  (gnc:make-html-div/markup
-   "invoice-print-date" (qof-print-date (current-time))))
 
 (define (reg-renderer report-obj)
   (let* ((document (gnc:make-html-document))
