@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-12-29 08:07+0000\n"
+"PO-Revision-Date: 2023-12-31 22:45+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -921,10 +921,10 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"Ha ismer más pénzügyi programokat mint a Quicken, figyelje meg, hogy GnuCash "
-"a bevételek és költségek nyomonkövetésére számlákat használ kategóriák "
-"helyett. A bevételi és költségszámlákról további tájékoztatás a GnuCash "
-"online kézikönyvben található."
+"Ha ismer más pénzügyi programokat, mint a Quicken, figyelje meg, hogy "
+"GnuCash a bevételek és költségek nyomonkövetésére számlákat használ "
+"kategóriák helyett. A bevételi és költségszámlákról további tájékoztatás a "
+"GnuCash online kézikönyvben található."
 
 #: doc/tip_of_the_day.list.c:29
 msgid ""
@@ -1098,9 +1098,9 @@ msgid ""
 "report as a report option, and use the Edit->Style Sheets menu to customize "
 "style sheets."
 msgstr ""
-"A stíluslapok határozzák meg a kimutatások megjelenését. A Beállításokban "
-"válasszon a kimutatás számára egy stíluslapot, és a testreszabáshoz "
-"használja a Szerkesztés->Stíluslapok menüt."
+"A stíluslapok határozzák meg a jelentések megjelenését. A beállításokban "
+"válasszon a jelentés számára egy stíluslapot, és a testreszabáshoz használja "
+"a Szerkesztés->Stíluslapok menüt."
 
 #: doc/tip_of_the_day.list.c:105
 msgid ""
@@ -2463,22 +2463,22 @@ msgstr "Biztosan törölni kívánja ezt: \"%s\"?"
 
 #: gnucash/gnome/dialog-custom-report.c:435
 msgid "You must select a report configuration to load."
-msgstr "Ki kell választania egy betöltendő kimutatáskonfigurációt."
+msgstr "Ki kell választania egy betöltendő jelentéskonfigurációt."
 
 #: gnucash/gnome/dialog-custom-report.c:450
 msgid "You must select a report configuration to delete."
-msgstr "Ki kell választania a törlendő kimutatáskonfigurációt."
+msgstr "Ki kell választania a törlendő jelentéskonfigurációt."
 
 #: gnucash/gnome/dialog-custom-report.c:464
 msgid "Unable to change report configuration name."
-msgstr "A kimutatás konfigurációs neve nem módosítható."
+msgstr "A jelentéskonfiguráció neve nem módosítható."
 
 #: gnucash/gnome/dialog-custom-report.c:494
 msgid ""
 "A saved report configuration with this name already exists, please choose "
 "another name."
 msgstr ""
-"Már létezik egy mentett kimutatáskonfiguráció ezzel a névvel. Kérjük, "
+"Már létezik egy mentett jelentéskonfiguráció ezzel a névvel. Kérjük, "
 "válasszon másik nevet."
 
 #: gnucash/gnome/dialog-custom-report.c:520
@@ -3781,7 +3781,7 @@ msgstr ""
 #, c-format
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] "Biztosan törölni kívánja a %d db kiválasztott árat?"
+msgstr[0] "Biztosan törölni kívánja a kiválasztott %d árat?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:209
 msgid "Delete prices?"
@@ -3796,37 +3796,32 @@ msgid "Entries"
 msgstr "Tételek"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:446
-#, fuzzy
 msgid "Are you sure you want to delete these prices?"
-msgstr "Biztosan törölni kívánja a %d kiválasztott árat?"
+msgstr "Biztosan törölni kívánja ezeket az árakat?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:572
 #: gnucash/gnome-utils/dialog-transfer.cpp:1797
 #, c-format
 msgid "Price retrieval failed: %s"
-msgstr ""
+msgstr "Az ár lekérése nem sikerült: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
-#, fuzzy
 msgid "Are you sure you want to replace the existing price?"
-msgstr "Biztosan törölni kívánja a %d kiválasztott árat?"
+msgstr "Biztosan cserélni kívánja a meglévő árat?"
 
 #: gnucash/gnome/dialog-price-editor.c:233
-#, fuzzy
 msgid "Replace price?"
-msgstr "Árak törlése?"
+msgstr "Ár cseréje?"
 
 #: gnucash/gnome/dialog-price-editor.c:239
 msgid "_Replace"
-msgstr "_Cserélje ki"
+msgstr "_Cserél"
 
 #: gnucash/gnome/dialog-price-editor.c:270
-#, fuzzy
 msgid "You must select a Security."
-msgstr "Ki kell választani egy pénznemet."
+msgstr "Ki kell választani egy értékpapirt."
 
 #: gnucash/gnome/dialog-price-editor.c:275
-#, fuzzy
 msgid "You must select a Currency."
 msgstr "Ki kell választani egy pénznemet."
 
@@ -3837,16 +3832,16 @@ msgstr "Érvényes árat kell megadni."
 
 #: gnucash/gnome/dialog-print-check.c:862
 msgid "Cannot save check format file."
-msgstr "Csekk űrlap fájlt nem lehet menteni."
+msgstr "Nem lehet menteni a csekkűrlap fájlt."
 
 #: gnucash/gnome/dialog-print-check.c:864
-#, fuzzy, c-format
+#, c-format
 msgid "Cannot open file %s"
-msgstr "A jelenlegi, %s, naplófájlt nem lehet megnyitni"
+msgstr "%s fájlt nem lehet megnyitni"
 
 #: gnucash/gnome/dialog-print-check.c:1552
 msgid "There is a duplicate check format file."
-msgstr "Csekk-űrlap fájl másolata létezik."
+msgstr "Van egy duplikált csekkűrlap fájl."
 
 #. Translators:
 #. %1$s is the type of the first check format
@@ -3860,8 +3855,7 @@ msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
-"A GUID-k, a %s csekk fromátum fájlban '%s' és a %s csekk formátum fájl '%s' "
-"egyeznek."
+"A %s csekkűrlap fájl '%s' GUID és a %s csekkűrlap fájl '%s' GUID egyezik."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -5420,14 +5414,16 @@ msgstr "PDF készítése"
 #: gnucash/gnome/gnc-plugin-page-report.cpp:377
 #: gnucash/gnome/gnc-plugin-page-report.cpp:378
 msgid "The numeric ID of the report."
-msgstr "A kimutatás azonosítószáma."
+msgstr "A jelentés azonosítószáma."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1260
 #, c-format
 msgid ""
 "Update the current report's saved configuration. The report configuration "
 "will be saved in the file %s."
-msgstr "A jelenlegi kimutatás beállításainak felülírása a %s fájlban."
+msgstr ""
+"A jelenlegi jelentés metett beállításainak frissítése. A jelentés "
+"beállításai a következő fájlba lesznek elmentve: %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1263
 #, c-format
@@ -5915,7 +5911,7 @@ msgstr "Ö"
 #: gnucash/gnome/report-menus.scm:57
 #, scheme-format
 msgid "Display the ~a report"
-msgstr "~a kimutatás megjelenítése"
+msgstr "~a jelentés megjelenítése"
 
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
@@ -7862,11 +7858,11 @@ msgstr "A kiválasztott képfájlok törlése."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1531
 msgid "Select image"
-msgstr "Válaszd ki a képet"
+msgstr "Kép kiválasztása"
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1533
 msgid "Select an image file."
-msgstr "Képfájl kiválasztása."
+msgstr "Válasszon egy képfájlt."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1746
 msgid "Pixels"
@@ -7907,19 +7903,19 @@ msgstr "_Egyéni"
 
 #: gnucash/gnome-utils/gnc-report-combo.c:247
 msgid "Selected Report is Missing"
-msgstr "A választott kimutatás nem található"
+msgstr "A kiválasztott jelentés nem található"
 
 #. Translators: %s is the report name.
 #: gnucash/gnome-utils/gnc-report-combo.c:300
 #, c-format
 msgid "'%s' is missing"
-msgstr "\"%s\" hiányzik"
+msgstr "'%s' nem található"
 
 #. Translators: %s is the internal report guid.
 #: gnucash/gnome-utils/gnc-report-combo.c:304
 #, c-format
 msgid "Report with GUID '%s' is missing"
-msgstr ""
+msgstr "GUID '%s' azonosítóval nem taláható jelentés"
 
 #: gnucash/gnome-utils/gnc-splash.c:114
 msgid "Loading…"
@@ -7985,11 +7981,11 @@ msgstr "Egyenleg (időszak)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:865
 msgid "Cleared (Report)"
-msgstr "Egyeztetett (kimutatás)"
+msgstr "Elszámolt (Jelentés)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:879
 msgid "Reconciled (Report)"
-msgstr "Egyeztetett (jelentés)"
+msgstr "Egyeztetett (Jelentés)"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:886
 msgid "Last Reconcile Date"
@@ -8026,7 +8022,7 @@ msgstr "Számlaszín"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:944
 msgctxt "Column header for 'Balance Limit'"
 msgid "L"
-msgstr ""
+msgstr "K"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:953
 #: gnucash/gnome-utils/gnc-tree-view-account.c:956
@@ -13195,7 +13191,7 @@ msgid ""
 "code to this account."
 msgstr ""
 "Az adórelevancia bekapcsolása és az adónem számlához rendelése a Szerkesztés-"
-">Adókimutatás beállítások menüpontban végezhető el."
+">Adójelentés beállítások menüpontban végezhető el."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1636
 msgid "_Higher Balance Limit"
@@ -14536,7 +14532,7 @@ msgstr "Jelentéssablon használata"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:715
 msgid "Choose a different report template before timeout"
-msgstr "Válasszon másik kimutatássablont az időkorlát lejárta előtt"
+msgstr "Válasszon másik jelentéssablont az időkorlát lejárta előtt"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:907
 msgid ""
@@ -21505,7 +21501,7 @@ msgstr "Jelentés ezen számlákról, ha a kijelzési mélység ezt megengedi."
 
 #: gnucash/report/options-utilities.scm:129
 msgid "Select the currency to display the values of this report in."
-msgstr "Válassza ki, milyen pénznemben jelenjenek meg a kimutatás értékei."
+msgstr "Válassza ki, milyen pénznemben jelenjenek meg a jelentés értékei."
 
 #: gnucash/report/options-utilities.scm:138
 #: gnucash/report/reports/standard/advanced-portfolio.scm:75
@@ -21745,7 +21741,7 @@ msgstr ""
 
 #: gnucash/report/report-core.scm:309
 msgid "Enter a descriptive name for this report."
-msgstr "Adjon egy találó címet a kimutatásnak."
+msgstr "Adjon egy találó címet a jelentésnek."
 
 #: gnucash/report/report-core.scm:316
 msgid "Select a stylesheet for the report."
@@ -22177,7 +22173,7 @@ msgid ""
 "the scm/report directory for details on writing your own reports, or "
 "extending existing reports."
 msgstr ""
-"Ez egy ~a GnuCash kimutatás mintája. A saját kimutatás írásának vagy a "
+"Ez egy ~a GnuCash jelentés mintája. A saját jelentés írásának vagy a "
 "meglévők bővítésének részleteit lásd az scm/report mappában lévő guile "
 "(scheme) forráskódban."
 
@@ -22284,7 +22280,7 @@ msgstr "Megjelenítés"
 #: gnucash/report/reports/example/sample-report.scm:442
 #: gnucash/report/reports/example/sample-report.scm:453
 msgid "Sample Report"
-msgstr "Minta kimutatás"
+msgstr "Minta jelentés"
 
 #: gnucash/report/reports/example/sample-report.scm:457
 msgid "An options example report."
@@ -22632,7 +22628,7 @@ msgstr "Hosszú számlanevek megjelenítése"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:75
 msgid "Show Percents"
-msgstr ""
+msgstr "Százalék megjelenítése"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:76
 msgid "Maximum Slices"
@@ -22776,7 +22772,7 @@ msgstr "Nulla egyenlegű számlák feltüntetése"
 #: gnucash/report/reports/standard/income-statement.scm:70
 #: gnucash/report/reports/standard/trial-balance.scm:117
 msgid "Include accounts with zero total (recursive) balances in this report."
-msgstr "Nulla (rekurzív) egyenlegű számlák feltüntetése ebben a kimutatásban."
+msgstr "Nulla (rekurzív) egyenlegű számlák feltüntetése ebben a jelentésben."
 
 #: gnucash/report/reports/standard/account-summary.scm:100
 #: gnucash/report/reports/standard/balance-sheet.scm:96
@@ -22888,7 +22884,7 @@ msgstr "Áruk"
 #: gnucash/report/reports/standard/income-statement.scm:104
 #: gnucash/report/reports/standard/trial-balance.scm:125
 msgid "Show Foreign Currencies"
-msgstr "Valuták megjelenítése"
+msgstr "Külföldi pénznemek megjelenítése"
 
 #: gnucash/report/reports/standard/account-summary.scm:128
 #: gnucash/report/reports/standard/balance-sheet.scm:134
@@ -22961,7 +22957,7 @@ msgstr "Darabszám tizedesjegyeinek száma"
 #: gnucash/report/reports/standard/investment-lots.scm:46
 #: gnucash/report/reports/standard/portfolio.scm:37
 msgid "Include accounts with no shares"
-msgstr "Nulla egyenlegű számlák feltüntetése a kimutatásban"
+msgstr "Nulla egyenlegű számlák feltüntetése a jelentésben"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:43
 msgid "Show ticker symbols"
@@ -22989,7 +22985,7 @@ msgstr "Árfolyam-adatbázis árainak előnyben részesítése"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:49
 msgid "How to report brokerage fees"
-msgstr "Közvetítői díjak kimutatásának módja"
+msgstr "Közvetítői díjak jelentésének módja"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:81
 msgid "Basis calculation method."
@@ -23015,7 +23011,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:93
 msgid "How to report commissions and other brokerage fees."
-msgstr "Jutalékok és egyéb közvetítői díjak kimutatásának módja."
+msgstr "Jutalékok és egyéb közvetítői díjak jelentésének módja."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:95
 msgid "Include in basis"
@@ -23054,13 +23050,13 @@ msgstr "Eszközök aktuális árfolyamának megjelenítése."
 #: gnucash/report/reports/standard/investment-lots.scm:145
 #: gnucash/report/reports/standard/portfolio.scm:64
 msgid "Stock Accounts to report on."
-msgstr "A kimutatás az itt kiválasztott számlákról készül."
+msgstr "A jelentés az itt kiválasztott számlákról készül."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:136
 #: gnucash/report/reports/standard/investment-lots.scm:156
 #: gnucash/report/reports/standard/portfolio.scm:72
 msgid "Include accounts that have a zero share balances."
-msgstr "Nulla egyenlegű számlák is jelenjenek meg a kimutatásban."
+msgstr "Nulla egyenlegű számlák is jelenjenek meg a jelentésben."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1042
 #: gnucash/report/reports/standard/portfolio.scm:246
@@ -23143,7 +23139,7 @@ msgstr "Egyenlegelőrejelzés"
 #: gnucash/report/reports/standard/trial-balance.scm:72
 #: gnucash/report/trep-engine.scm:656
 msgid "Report on these accounts."
-msgstr "A kimutatás az itt kiválasztott számlákról készül."
+msgstr "A jelentés az itt kiválasztott számlákról készül."
 
 #: gnucash/report/reports/standard/balance-forecast.scm:50
 #: gnucash/report/reports/standard/net-charts.scm:59
@@ -23693,7 +23689,7 @@ msgstr "Balance Sheet (eguile)"
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1266
 #, fuzzy
 msgid "Income Statement (Multicolumn)"
-msgstr "Bevételi kimutatás"
+msgstr "Bevételi jelentés"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
@@ -24052,7 +24048,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-budget.ui:40
 #: gnucash/ui/gnc-plugin-page-budget.ui:285
 msgid "Budget Report"
-msgstr "Költségvetési kimutatás"
+msgstr "Költségvetési jelentés"
 
 #: gnucash/report/reports/standard/budget.scm:47
 #: gnucash/report/reports/standard/cash-flow.scm:45
@@ -24491,11 +24487,11 @@ msgstr "Ügyfél eredmény"
 #. Translators: This statement is about a range of time
 #: gnucash/report/reports/standard/equity-statement.scm:56
 msgid "Equity Statement"
-msgstr "Saját tőke kimutatás"
+msgstr "Saját tőke jelentés"
 
 #: gnucash/report/reports/standard/equity-statement.scm:68
 msgid "Report only on these accounts."
-msgstr "Csak ezekről a számlákról készítsen kimutatást."
+msgstr "Csak ezekről a számlákról készítsen jelentést."
 
 #: gnucash/report/reports/standard/equity-statement.scm:84
 #: gnucash/report/reports/standard/income-statement.scm:111
@@ -24700,15 +24696,13 @@ msgid "Secondary Sort Order"
 msgstr "Másodlagos sorrend"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:43
-#, fuzzy
 msgid "Income and GST Statement"
-msgstr "Bevételi kimutatás"
+msgstr "Bevétel- és GST-jelentés"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:45
 #: gnucash/report/trep-engine.scm:117
-#, fuzzy
 msgid "Filter"
-msgstr "Szűrőtípus"
+msgstr "Szűrő"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:52
 msgid ""
@@ -24823,15 +24817,13 @@ msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:151
 #: gnucash/report/reports/standard/income-gst-statement.scm:155
-#, fuzzy
 msgid "Report Format"
-msgstr "Jelentés hiba"
+msgstr "Jelentésformátum"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:156
 #: gnucash/report/reports/standard/income-gst-statement.scm:165
-#, fuzzy
 msgid "Default Format"
-msgstr "Alapértelmezett betűtípus"
+msgstr "Alapértelmezett formátum"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:157
 msgid ""
@@ -24915,7 +24907,7 @@ msgstr "Összes kereskedés"
 #: gnucash/report/reports/standard/income-statement.scm:552
 #: gnucash/report/reports/standard/trial-balance.scm:535
 msgid "Income Statement"
-msgstr "Bevételi kimutatás"
+msgstr "Bevételjelentés"
 
 #: gnucash/report/reports/standard/income-statement.scm:553
 msgid "Profit & Loss"
@@ -26532,7 +26524,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/register.scm:342
 msgid "The title of the report."
-msgstr "A kimutatás címe."
+msgstr "A jelentés címe."
 
 #: gnucash/report/reports/standard/register.scm:343
 msgid "Register Report"
@@ -26908,7 +26900,7 @@ msgid ""
 "useful for merchandising businesses."
 msgstr ""
 "A korrekciók ezen számlákon bruttók (lásd fent) a Korrekciók, Korrigált "
-"próbaegyenleg és a Bevételi kimutatás oszlopokban. Leginkább kereskedelmi "
+"próbaegyenleg és a Bevételjelentés oszlopokban. Leginkább kereskedelmi "
 "vállalatoknak hasznos."
 
 #: gnucash/report/reports/standard/trial-balance.scm:86
@@ -27134,7 +27126,7 @@ msgstr "Készítő"
 #: gnucash/report/stylesheets/footer.scm:51
 #: gnucash/report/stylesheets/head-or-tail.scm:51
 msgid "Name of person preparing the report."
-msgstr "A kimutatás készítőjének neve."
+msgstr "A jelentés készítőjének neve."
 
 #: gnucash/report/stylesheets/footer.scm:56
 #: gnucash/report/stylesheets/head-or-tail.scm:55
@@ -27399,7 +27391,7 @@ msgstr "uLássuk a készítői információt"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:66
 msgid "Name of organization or company the report is prepared for."
-msgstr "A szervezet vagy cég neve, amely számára a kimutatás készült."
+msgstr "A szervezet vagy cég neve, amely számára a jelentés készült."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:70
 #, fuzzy
@@ -27408,7 +27400,7 @@ msgstr "Táblázat megjelenítése"
 
 #: gnucash/report/stylesheets/head-or-tail.scm:71
 msgid "The creation date for this report."
-msgstr "A kimutatás készítésének napja."
+msgstr "A jelentés készítésének napja."
 
 #: gnucash/report/stylesheets/head-or-tail.scm:75
 msgid "Show time in addition to date"
@@ -28474,7 +28466,7 @@ msgstr "Tranzakció keresése"
 #: gnucash/ui/gnc-plugin-page-report.ui:36
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:27
 msgid "Ta_x Report Options"
-msgstr "_Adókimutatás beállítások"
+msgstr "_Adójelentés beállítások"
 
 #. Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string
 #: gnucash/ui/gnc-plugin-basic-commands.ui:73
@@ -29184,7 +29176,7 @@ msgstr "A kiválasztott folyószámla és időszak megjegyzésének szerkesztés
 #: gnucash/ui/gnc-plugin-page-budget.ui:42
 #: gnucash/ui/gnc-plugin-page-budget.ui:287
 msgid "Run the budget report"
-msgstr "Költségvetési kimutatás futtatása"
+msgstr "Költségvetésjelentés futtatása"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:70
 #: gnucash/ui/gnc-plugin-page-budget.ui:200
@@ -30186,11 +30178,11 @@ msgstr "Befektetési alap"
 
 #: libgnucash/engine/Account.cpp:4460
 msgid "A/Receivable"
-msgstr "Követelés"
+msgstr "S/Követelés"
 
 #: libgnucash/engine/Account.cpp:4461
 msgid "A/Payable"
-msgstr "Kötelezettség"
+msgstr "S/Kifizetendő"
 
 #: libgnucash/engine/Account.cpp:4462
 msgid "Root"
@@ -30439,10 +30431,10 @@ msgid ""
 "register. Has corresponding effect on business features, reporting and "
 "imports/exports."
 msgstr ""
-"Bekapcsolásakor a regiszter Szám mezőjében a felosztás Művelet értékét lehet "
-"kezelni, a tranzakció Száma pedig \"Tr. Szám\" néven a regiszter második "
-"sorában jelenik meg. A beállítás hatással van a vállalkozási funkciókra, a "
-"kimutatásokra és az importálásra/exportálásra."
+"Bekapcsolásakor a regiszter „Szám” mezőjében a felosztásművelet értékét "
+"lehet kezelni, a tranzakció száma pedig „Tr. Szám” néven a regiszter második "
+"sorában jelenik meg. A beállítás hatással van a üzleti funkciókra, a "
+"jelentésekre és az importálásra, exportálásra."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1217
 msgid ""
