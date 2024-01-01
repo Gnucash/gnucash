@@ -5,7 +5,7 @@
 # SULYOK Péter <peti@sulyok.hu>, 2003-2006.
 # Kornel Tako <takokornel@gmail.com>, 2007.
 # Kárász Attila <cult.edie@gmail.com>, 2022, 2023.
-# Szia Tomi <sziatomi01@gmail.com>, 2022, 2023.
+# Szia Tomi <sziatomi01@gmail.com>, 2022, 2023, 2024.
 # mocsa <csaba@feltoltve.hu>, 2022, 2023.
 # ovari <ovari123@zoho.com>, 2022, 2023.
 # Geza Kiss <geza.openstreetmap@reallymymail.com>, 2023.
@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-12-31 22:45+0000\n"
+"PO-Revision-Date: 2024-01-01 02:08+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1043,7 +1043,7 @@ msgid ""
 msgstr ""
 "A dátumok megadásakor a kiválasztott dátum növeléséhez vagy csökkentéséhez "
 "nyomja meg a „+” vagy a „-” billentyűket. Használhatja a „+” és a „-” "
-"billentyűket a csekk számok növelésére és csökkentésére is."
+"billentyűket a csekkszámok növelésére és csökkentésére is."
 
 #: doc/tip_of_the_day.list.c:79
 msgid ""
@@ -8810,13 +8810,12 @@ msgid "GUID of predefined check format to use"
 msgstr "Az előre meghatározott használandó csekkformátum"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:6
-#, fuzzy
 msgid ""
 "This value specifies the predefined check format to use. The number is the "
 "guid of a known check format."
 msgstr ""
-"Ez az érték határozza meg a használandó előre definiált csekkformátumot. A "
-"szám az ismert csekkformátumok listájának 0-alapú indexe."
+"Ez az érték határozza meg a használandó előre definiált csekkűrlapot. A szám "
+"az ismert csekkűrlapok listájának 0-alapú indexe."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:10
 msgid "Which check position to print"
@@ -9162,7 +9161,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:15
 msgid "Use bayesian matching"
-msgstr "Bayes-i egyeztetés használata"
+msgstr "Bayes-féle egyezés használata"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:16
 msgid ""
@@ -9170,9 +9169,9 @@ msgid ""
 "existing transactions. Otherwise a less sophisticated rule-based matching "
 "mechanism will be used."
 msgstr ""
-"Bayes-i egyeztetés engedélyezése importált tranzakciók meglévőkkel történő "
-"összevetésekor. Különben kevésbé kifinomult szabályalapú egyeztetést lesz "
-"használva."
+"Enfedélyezi a Bayes-féle egyezés használatát az importált tranzakciók "
+"meglévőkkel történő összevetésekor. Különben kevésbé kifinomult szabályalapú "
+"egyezést lesz használva."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:20
 msgid "Minimum score to be displayed"
@@ -14198,9 +14197,8 @@ msgid "Search scope"
 msgstr "Keresés hatóköre"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:191
-#, fuzzy
 msgid "Account Full Name"
-msgstr "Folyószámla Neve"
+msgstr "Számla teljes neve"
 
 #: gnucash/gtkbuilder/dialog-find-account.glade:215
 msgid "Case insensitive searching is available on 'Account Full Name'."
@@ -14240,9 +14238,8 @@ msgid "Online"
 msgstr "Online"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:193
-#, fuzzy
 msgid "Source Account Name"
-msgstr "Teljes számlanevek megjelenítése"
+msgstr "Forrásszámla neve"
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:205
 #, fuzzy
@@ -15314,7 +15311,8 @@ msgstr "Ba_yes-i illesztés"
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
 msgstr ""
-"Bayes-i illesztés használata új tranzakciók meglévő számlákra illesztéséhez."
+"Bayes-féle algoritmusokat használ az új tranzakciók meglévő számlákra "
+"illesztéséhez."
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2296
@@ -24171,9 +24169,8 @@ msgid "using accumulated amounts"
 msgstr "Számlák elemzése"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:40
-#, fuzzy
 msgid "Cash Flow Barchart"
-msgstr "Készpénz"
+msgstr "Pénzforgalomi oszlopdiagram"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
@@ -24233,7 +24230,7 @@ msgstr "Oszlopdiagram megjelenítése az eszközök időbeli alakulásával"
 
 #: gnucash/report/reports/standard/cash-flow.scm:38
 msgid "Cash Flow"
-msgstr "Készpénz"
+msgstr "Pénzforgalom"
 
 #: gnucash/report/reports/standard/cash-flow.scm:52
 msgid "Show Full Account Names"
@@ -24264,44 +24261,38 @@ msgstr "A kiválasztott számlára terhelt pénz célja"
 #: gnucash/report/reports/standard/category-barchart.scm:45
 #: gnucash/report/reports/standard/net-charts.scm:348
 msgid "Income Chart"
-msgstr "Bevétel-ábra"
+msgstr "Bevételdiagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:46
 #: gnucash/report/reports/standard/net-charts.scm:369
 msgid "Expense Chart"
-msgstr "Költség-ábra"
+msgstr "Költségdiagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:47
 #: gnucash/report/reports/standard/net-charts.scm:349
 msgid "Asset Chart"
-msgstr "Eszköz-ábra"
+msgstr "Eszközdiagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:48
 #: gnucash/report/reports/standard/net-charts.scm:370
 msgid "Liability Chart"
-msgstr "Kötelezettség-ábra"
+msgstr "Kötelezettségdiagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:53
-#, fuzzy
 msgid "Shows a chart with the Income per interval developing over time"
-msgstr ""
-"Oszlopdiagram megjelenítése az időszakonkénti bevétel időbeli alakulásával"
+msgstr "Diagram megjelenítése a bevétel időszakonkénti időbeli alakulásával"
 
 #: gnucash/report/reports/standard/category-barchart.scm:56
-#, fuzzy
 msgid "Shows a chart with the Expenses per interval developing over time"
-msgstr ""
-"Oszlopdiagram megjelenítése az időszakonkénti költségek időbeli alakulásával"
+msgstr "Diagram megjelenítése a költségek időszakonkénti időbeli alakulásával"
 
 #: gnucash/report/reports/standard/category-barchart.scm:59
-#, fuzzy
 msgid "Shows a chart with the Assets developing over time"
-msgstr "Oszlopdiagram megjelenítése az eszközök időbeli alakulásával"
+msgstr "Diagram megjelenítése az eszközök időbeli alakulásával"
 
 #: gnucash/report/reports/standard/category-barchart.scm:61
-#, fuzzy
 msgid "Shows a chart with the Liabilities developing over time"
-msgstr "Oszlopdiagram megjelenítése az eszközök időbeli alakulásával"
+msgstr "Diagram megjelenítése az eszközök időbeli alakulásával"
 
 #: gnucash/report/reports/standard/category-barchart.scm:67
 msgid "Income Over Time"
@@ -24331,7 +24322,7 @@ msgstr "Halmozott oszlopok használata"
 
 #: gnucash/report/reports/standard/category-barchart.scm:87
 msgid "Maximum Bars"
-msgstr "Oszlopok maximuma"
+msgstr "Oszlopok maximális száma"
 
 #: gnucash/report/reports/standard/category-barchart.scm:155
 #, fuzzy
@@ -24344,9 +24335,8 @@ msgstr "A diagramon szereplő halmok maximális száma."
 
 #: gnucash/report/reports/standard/category-barchart.scm:173
 #: gnucash/report/reports/standard/category-barchart.scm:245
-#, fuzzy
 msgid "Percentage chart"
-msgstr "Nettó érték oszlopdiagramja"
+msgstr "Százalékos diagram"
 
 #: gnucash/report/reports/standard/category-barchart.scm:174
 msgid ""
@@ -28498,11 +28488,11 @@ msgstr "Ütemezett tranzakciók létrehozása az utolsó futás óta"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
 msgid "_Mortgage & Loan Repayment…"
-msgstr "_Jelzálog/kölcsön törlesztés…"
+msgstr "_Jelzálogkölcsön/Kölcsön visszafizetés…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:96
 msgid "Setup scheduled transactions for repayment of a loan"
-msgstr "Ütemezett tranzakciók beállítása kölcsön törlesztésére"
+msgstr "Ütemezett tranzakciók beállítása a kölcsön visszafizetésére"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:104
 msgid "_Price Database"
@@ -28541,7 +28531,7 @@ msgstr "Könyv lezárása az időszak végén"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:124
 msgid "_Import Map Editor"
-msgstr "_Importálási megfeleltetések szerkesztése"
+msgstr "_Importálásimegfeleltetés-szerkesztő"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:126
 msgid "View and Delete Bayesian and non-Bayesian information"
