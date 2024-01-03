@@ -1241,6 +1241,33 @@ scroll_event (GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
         return FALSE;
 }
 
+static gboolean
+follow_select_tree_path (GtkTreeView *view)
+{
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (view);
+    GtkTreeModel *sort_model;
+    GtkTreeIter iter;
+
+    if (gtk_tree_selection_get_selected (selection, &sort_model, &iter))
+    {
+        GtkTreePath *view_path = gtk_tree_model_get_path (sort_model, &iter);
+
+        gtk_tree_view_scroll_to_cell (view, view_path, NULL, TRUE, 0.5, 0.0);
+
+        gtk_tree_path_free (view_path);
+    }
+    return FALSE;
+}
+
+static void
+sort_column_changed (GtkTreeSortable* self, gpointer user_data)
+{
+    // this is triggered before a sort change
+    GncSxSinceLastRunDialog *dialog = user_data;
+
+    g_idle_add ((GSourceFunc)follow_select_tree_path, dialog->instance_view);
+}
+
 GncSxSinceLastRunDialog*
 gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_instances, GList *auto_created_txn_guids)
 {
@@ -1328,6 +1355,9 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
 
         gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(sort_model), SLR_MODEL_COL_INSTANCE_STATE,
                                          _status_sort_func, dialog, NULL);
+
+        g_signal_connect (G_OBJECT(sort_model), "sort-column-changed",
+                          G_CALLBACK(sort_column_changed), dialog);
 
         renderer = gtk_cell_renderer_pixbuf_new ();
         g_object_set (G_OBJECT(renderer),
