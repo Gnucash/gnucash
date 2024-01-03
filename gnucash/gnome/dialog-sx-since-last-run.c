@@ -63,6 +63,7 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 #define GNC_PREF_SET_REVIEW     "review-transactions"
 #define GNC_PREF_SLR_SORT_COL   "sort-column"
 #define GNC_PREF_SLR_SORT_ASC   "sort-ascending"
+#define GNC_PREF_SLR_SORT_DEPTH "sort-depth"
 
 struct _GncSxSinceLastRunDialog
 {
@@ -74,6 +75,7 @@ struct _GncSxSinceLastRunDialog
     GList *created_txns;
 
     GtkCellEditable *temp_ce; // used when editing values
+    gint sort_selection_depth; // used when sorting transaction column
 };
 
 /* ------------------------------------------------------------ */
@@ -1110,31 +1112,41 @@ variable_value_cancel_changed_cb (GtkCellRenderer *renderer, gpointer user_data)
 }
 
 static gint
-_transaction_sort_func (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b, gpointer user_data)
+_sort_text (const gchar *text_a, const gchar *text_b)
 {
+    gchar *a_caseless, *b_caseless;
     gint rtn = 0;
+
+    if (text_a == NULL && text_b == NULL) return 0;
+    if (text_a == NULL) return 1;
+    if (text_b == NULL) return -1;
+
+    a_caseless = g_utf8_casefold (text_a, -1);
+    b_caseless = g_utf8_casefold (text_b, -1);
+    rtn = g_strcmp0 (a_caseless, b_caseless);
+    g_free (a_caseless);
+    g_free (b_caseless);
+
+    return rtn;
+}
+
+static gint
+_transaction_sort_func_date (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b)
+{
     GtkTreePath *path_a = gtk_tree_model_get_path (model, iter_a);
-
-    if (gtk_tree_path_get_depth (path_a) != 1)
-    {
-        gtk_tree_path_free (path_a);
-        return rtn;
-    }
-
-    gint child_num_a = gtk_tree_model_iter_has_child (model, iter_a) ? 1 : 0;
-    gint child_num_b = gtk_tree_model_iter_has_child (model, iter_b) ? 1 : 0;
+    gint depth = gtk_tree_path_get_depth (path_a);
+    gint64 date_a = 0, date_b = 0;
+    gint rtn = 0;
 
     gtk_tree_path_free (path_a);
 
-    if (child_num_a > child_num_b)
-        rtn = -1;
-    if (child_num_b > child_num_a)
-        rtn = 1;
+    if (depth == 3)
+        return rtn;
 
-    if ((child_num_a == 1) && (child_num_b == 1))
+    // if top level, look at the first date for order
+    if (depth == 1)
     {
         GtkTreeIter child_iter_a, child_iter_b;
-        gint64 date_a = 0, date_b = 0;
 
         if (gtk_tree_model_iter_nth_child (model, &child_iter_a, iter_a, 0))
             gtk_tree_model_get (model, &child_iter_a, SLR_MODEL_COL_INSTANCE_DATE, &date_a, -1);
@@ -1146,21 +1158,81 @@ _transaction_sort_func (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *i
             rtn = 1;
         if (date_b > date_a)
             rtn = -1;
+
+        if (rtn == 0) // if dates are equal, look at name
+        {
+            gchar *name_text_a, *name_text_b;
+
+            gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_NAME, &name_text_a, -1);
+            gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_NAME, &name_text_b, -1);
+
+            rtn = _sort_text (name_text_a, name_text_b);
+
+            g_free (name_text_a);
+            g_free (name_text_b);
+        }
+        return rtn;
     }
 
-    if (((child_num_a == 0) && (child_num_b == 0)) || rtn == 0)
-    {
-        gchar *name_text_a, *name_text_b;
+    gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_INSTANCE_DATE, &date_a, -1);
+    gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_INSTANCE_DATE, &date_b, -1);
 
+    if (date_a > date_b)
+        rtn = 1;
+    if (date_b > date_a)
+        rtn = -1;
+
+    return rtn;
+}
+
+static gint
+_transaction_sort_func_desc (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b)
+{
+    GtkTreePath *path_a = gtk_tree_model_get_path (model, iter_a);
+    gint depth = gtk_tree_path_get_depth (path_a);
+    gchar *name_text_a, *name_text_b;
+    gint rtn = 0;
+
+    gtk_tree_path_free (path_a);
+
+    if (depth == 3)
+        return rtn;
+
+    if (depth == 1)
+    {
         gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_NAME, &name_text_a, -1);
         gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_NAME, &name_text_b, -1);
 
-        rtn = safe_utf8_collate (name_text_a, name_text_b);
+        rtn = _sort_text (name_text_a, name_text_b);
 
         g_free (name_text_a);
         g_free (name_text_b);
     }
+
+    if (depth == 2)
+    {
+        gint64 date_a = 0, date_b = 0;
+
+        gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_INSTANCE_DATE, &date_a, -1);
+        gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_INSTANCE_DATE, &date_b, -1);
+
+        if (date_a > date_b)
+            rtn = 1;
+        if (date_b > date_a)
+            rtn = -1;
+    }
     return rtn;
+}
+
+static gint
+_transaction_sort_func (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b, gpointer user_data)
+{
+    GncSxSinceLastRunDialog *dialog = user_data;
+
+    if (dialog->sort_selection_depth == 1)
+        return _transaction_sort_func_desc (model, iter_a, iter_b);
+    else
+        return _transaction_sort_func_date (model, iter_a, iter_b);
 }
 
 static gint
@@ -1241,6 +1313,23 @@ scroll_event (GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
         return FALSE;
 }
 
+static void
+set_transaction_sort_column_tooltip (GncSxSinceLastRunDialog *dialog)
+{
+    GtkTreeViewColumn *col = gtk_tree_view_get_column (GTK_TREE_VIEW(dialog->instance_view), 0);
+    const gchar *date_text = _("Highlight a date first to sort by occurrence date.");
+    const gchar *sched_text = _("Highlight a schedule first to sort by schedule name.");
+    gchar *tooltip;
+
+    if (dialog->sort_selection_depth == 1)
+        tooltip = g_strconcat (sched_text, " *\n", date_text, NULL);
+    else
+        tooltip = g_strconcat (sched_text, "\n", date_text, " *", NULL);
+
+    gtk_widget_set_tooltip_text (gtk_tree_view_column_get_button (col), tooltip);
+    g_free (tooltip);
+}
+
 static gboolean
 follow_select_tree_path (GtkTreeView *view)
 {
@@ -1264,6 +1353,22 @@ sort_column_changed (GtkTreeSortable* self, gpointer user_data)
 {
     // this is triggered before a sort change
     GncSxSinceLastRunDialog *dialog = user_data;
+    GtkTreeIter iter;
+    GtkTreeSelection *selection = gtk_tree_view_get_selection (dialog->instance_view);
+    GtkTreeModel *sort_model;
+
+    if (gtk_tree_selection_get_selected (selection, &sort_model, &iter))
+    {
+        GtkTreePath *view_path = gtk_tree_model_get_path (sort_model, &iter);
+
+        dialog->sort_selection_depth = gtk_tree_path_get_depth (view_path);
+
+        gtk_tree_path_free (view_path);
+    }
+    else
+        dialog->sort_selection_depth = 1;
+
+    set_transaction_sort_column_tooltip (dialog);
 
     g_idle_add ((GSourceFunc)follow_select_tree_path, dialog->instance_view);
 }
@@ -1310,6 +1415,7 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
         g_object_unref (sort_model);
 
         /* default sort order */
+        dialog->sort_selection_depth = gnc_prefs_get_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_DEPTH);
         gboolean sort_ascending = gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_ASC);
         gint sort_column = gnc_prefs_get_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_COL);
         GtkSortType sort_type = sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
@@ -1329,6 +1435,8 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
 
         gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(sort_model), SLR_MODEL_COL_NAME,
                                          _transaction_sort_func, dialog, NULL);
+
+        set_transaction_sort_column_tooltip (dialog);
 
         renderer = gtk_cell_renderer_combo_new ();
         g_object_set (G_OBJECT(renderer),
@@ -1466,6 +1574,8 @@ close_handler (gpointer user_data)
 
         gnc_prefs_set_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_ASC, sort_ascending);
         gnc_prefs_set_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_COL, column);
+        gnc_prefs_set_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_DEPTH,
+                           app_dialog->sort_selection_depth);
     }
 
     gnc_save_window_size (GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(app_dialog->dialog));

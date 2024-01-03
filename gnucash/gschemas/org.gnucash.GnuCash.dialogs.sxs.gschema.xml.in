@@ -37,6 +37,11 @@
       <summary>Set the sort direction in the "since last run" dialog.</summary>
       <description>This settings sets the sort direction in the "since last run" dialog.</description>
     </key>
+    <key name="sort-depth" type="i">
+      <default>1</default>
+      <summary>The depth used in the tree to sort in the "since last run" dialog.</summary>
+      <description>The depth used in the tree to sort in the "since last run" dialog.</description>
+    </key>
   </schema>
   <schema id="org.gnucash.GnuCash.dialogs.sxs.transaction-editor" path="/org/gnucash/GnuCash/dialogs/scheduled-trans/transaction-editor/">
     <key name="create-auto" type="b">
