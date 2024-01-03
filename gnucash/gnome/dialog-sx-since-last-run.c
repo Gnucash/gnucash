@@ -1235,60 +1235,6 @@ _transaction_sort_func (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *i
         return _transaction_sort_func_date (model, iter_a, iter_b);
 }
 
-static gint
-_status_sort_func (GtkTreeModel *model, GtkTreeIter *iter_a, GtkTreeIter *iter_b, gpointer user_data)
-{
-    gint rtn = 0;
-    GtkTreePath *path_a = gtk_tree_model_get_path (model, iter_a);
-
-    if (gtk_tree_path_get_depth (path_a) != 1)
-    {
-        gtk_tree_path_free (path_a);
-        return rtn;
-    }
-
-    gint child_num_a = gtk_tree_model_iter_has_child (model, iter_a) ? 1 : 0;
-    gint child_num_b = gtk_tree_model_iter_has_child (model, iter_b) ? 1 : 0;
-
-    gtk_tree_path_free (path_a);
-
-    if (child_num_a > child_num_b)
-        rtn = -1;
-    if (child_num_b > child_num_a)
-        rtn = 1;
-
-    if ((child_num_a == 1) && (child_num_b == 1))
-    {
-        GtkTreeIter child_iter_a, child_iter_b;
-        gchar *state_text_a = NULL, *state_text_b = NULL;
-
-        if (gtk_tree_model_iter_nth_child (model, &child_iter_a, iter_a, 0))
-            gtk_tree_model_get (model, &child_iter_a, SLR_MODEL_COL_INSTANCE_STATE, &state_text_a, -1);
-
-        if (gtk_tree_model_iter_nth_child (model, &child_iter_b, iter_b, 0))
-            gtk_tree_model_get (model, &child_iter_b, SLR_MODEL_COL_INSTANCE_STATE, &state_text_b, -1);
-
-        rtn = safe_utf8_collate (state_text_a, state_text_b);
-
-        g_free (state_text_a);
-        g_free (state_text_b);
-    }
-
-    if (((child_num_a == 0) && (child_num_b == 0)) || rtn == 0)
-    {
-        gchar *name_text_a, *name_text_b;
-
-        gtk_tree_model_get (model, iter_a, SLR_MODEL_COL_NAME, &name_text_a, -1);
-        gtk_tree_model_get (model, iter_b, SLR_MODEL_COL_NAME, &name_text_b, -1);
-
-        rtn = safe_utf8_collate (name_text_a, name_text_b);
-
-        g_free (name_text_a);
-        g_free (name_text_b);
-    }
-    return rtn;
-}
-
 static gboolean
 finish_editing_before_ok_cb (GtkWidget *button, GdkEvent *event,
                              GncSxSinceLastRunDialog *dialog)
@@ -1419,6 +1365,10 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
         gboolean sort_ascending = gnc_prefs_get_bool (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_ASC);
         gint sort_column = gnc_prefs_get_int (GNC_PREFS_GROUP_STARTUP, GNC_PREF_SLR_SORT_COL);
         GtkSortType sort_type = sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
+
+        if (sort_column != 0)
+            sort_column = 0;
+
         gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(sort_model),
                                               sort_column, sort_type);
 
@@ -1458,11 +1408,6 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
                 "editable", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
                 "sensitive", SLR_MODEL_COL_INSTANCE_STATE_SENSITIVITY,
                 NULL);
-
-        gtk_tree_view_column_set_sort_column_id (col, SLR_MODEL_COL_INSTANCE_STATE);
-
-        gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE(sort_model), SLR_MODEL_COL_INSTANCE_STATE,
-                                         _status_sort_func, dialog, NULL);
 
         g_signal_connect (G_OBJECT(sort_model), "sort-column-changed",
                           G_CALLBACK(sort_column_changed), dialog);
