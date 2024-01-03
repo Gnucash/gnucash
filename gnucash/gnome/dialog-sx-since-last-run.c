@@ -103,10 +103,7 @@ static void gnc_sx_slr_tree_model_adapter_dispose (GObject *obj);
 static void gnc_sx_slr_tree_model_adapter_finalize (GObject *obj);
 
 GncSxInstanceModel* gnc_sx_slr_tree_model_adapter_get_instance_model (GncSxSlrTreeModelAdapter *slr_model);
-GncSxInstances* gnc_sx_slr_tree_model_adapter_get_sx_instances (GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter);
-static GncSxInstances* _gnc_sx_slr_tree_model_adapter_get_sx_instances (GncSxSlrTreeModelAdapter *model,
-                                                                        GtkTreeIter *iter,
-                                                                        gboolean check_depth);
+
 /** @return null if the iter is not actually an GncSxInstance. **/
 GncSxInstance* gnc_sx_slr_model_get_instance (GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter);
 static GncSxInstance* _gnc_sx_slr_model_get_instance (GncSxSlrTreeModelAdapter *model,
@@ -558,48 +555,6 @@ GncSxInstanceModel*
 gnc_sx_slr_tree_model_adapter_get_instance_model (GncSxSlrTreeModelAdapter *slr_model)
 {
     return slr_model->instances;
-}
-
-GncSxInstances*
-gnc_sx_slr_tree_model_adapter_get_sx_instances (GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter)
-{
-    return _gnc_sx_slr_tree_model_adapter_get_sx_instances (model, iter, TRUE);
-}
-
-static GncSxInstances*
-_gnc_sx_slr_tree_model_adapter_get_sx_instances (GncSxSlrTreeModelAdapter *model, GtkTreeIter *iter, gboolean check_depth)
-{
-    GtkTreePath *model_path = gtk_tree_model_get_path (GTK_TREE_MODEL(model), iter);
-    gint *indices, instances_index;
-    GncSxInstances *instances = NULL;
-    GtkTreeIter new_iter;
-
-    debug_path (DEBUG, "model path is:", model_path);
-
-    if (check_depth && gtk_tree_path_get_depth (model_path) != 1)
-    {
-        DEBUG("path depth not equal to 1");
-        gtk_tree_path_free (model_path);
-        return NULL;
-    }
-
-    indices = gtk_tree_path_get_indices (model_path);
-    instances_index = indices[0];
-
-    gtk_tree_path_free (model_path);
-
-    model_path = gtk_tree_path_new_from_indices (instances_index, -1);
-
-    debug_path (DEBUG, "new model path is:", model_path);
-
-    if (gtk_tree_model_get_iter (GTK_TREE_MODEL(model), &new_iter, model_path))
-        gtk_tree_model_get (GTK_TREE_MODEL(model), &new_iter, SLR_MODEL_COL_INSTANCE_PTR, &instances, -1);
-
-    gtk_tree_path_free (model_path);
-
-    DEBUG("instances is %p", instances);
-
-    return instances;
 }
 
 GncSxInstance*
