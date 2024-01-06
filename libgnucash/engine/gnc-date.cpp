@@ -1665,7 +1665,10 @@ gnc_list_formatter (GList *strings)
     std::string retval;
 
     for (auto n = strings; n; n = g_list_next (n))
-        strvec.push_back (static_cast<char*>(n->data));
+    {
+        auto utf8_str{static_cast<const char*>(n->data)};
+        strvec.push_back (icu::UnicodeString::fromUTF8(utf8_str));
+    }
 
     formatter->format (strvec.data(), strvec.size(), result, status);
 
