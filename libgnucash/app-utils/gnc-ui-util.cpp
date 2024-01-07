@@ -42,6 +42,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <cinttypes>
+#include <unicode/listformatter.h>
 
 #include "qof.h"
 #include "gnc-prefs.h"
@@ -61,6 +62,8 @@
 #define GNC_PREF_REVERSED_ACCTS_CREDIT  "reversed-accounts-credit"
 #define GNC_PREF_REVERSED_ACCTS_INC_EXP "reversed-accounts-incomeexpense"
 #define GNC_PREF_PRICES_FORCE_DECIMAL   "force-price-decimal"
+
+using UniStr = icu::UnicodeString;
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
@@ -2280,4 +2283,32 @@ gnc_filter_text_for_currency_commodity (const gnc_commodity *comm,
         *symbol = gnc_commodity_get_nice_symbol (gnc_default_currency ());
 
     return gnc_filter_text_for_currency_symbol (incoming_text, *symbol);
+}
+
+gchar*
+gnc_list_formatter (GList *strings)
+{
+    g_return_val_if_fail (strings, nullptr);
+
+    UErrorCode status = U_ZERO_ERROR;
+    auto formatter = icu::ListFormatter::createInstance(status);
+    std::vector<UniStr> strvec;
+    UniStr result;
+    std::string retval;
+
+    for (auto n = strings; n; n = g_list_next (n))
+    {
+        auto utf8_str{static_cast<const char*>(n->data)};
+        strvec.push_back (UniStr::fromUTF8(utf8_str));
+    }
+
+    formatter->format (strvec.data(), strvec.size(), result, status);
+
+    if (U_FAILURE(status))
+        PERR ("Unicode error");
+    else
+        result.toUTF8String(retval);
+
+    delete formatter;
+    return g_strdup (retval.c_str());
 }

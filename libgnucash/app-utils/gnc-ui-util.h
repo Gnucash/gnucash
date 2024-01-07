@@ -458,6 +458,15 @@ char* gnc_filter_text_for_currency_commodity (const gnc_commodity *comm,
                                               const char* incoming_text,
                                               const char** symbol);
 
+/** This function takes a GList of char*, and uses locale-sensitive
+ *  list formatter.
+ *
+ *  @param strings The GList* of char*.
+ *
+ * @returns a newly allocated char*
+ */
+gchar* gnc_list_formatter (GList* strings);
+
 #ifdef __cplusplus
 }
 #endif
