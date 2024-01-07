@@ -31,7 +31,7 @@ set (app_utils_SOURCES
   gnc-prefs-utils.c
   gnc-quotes.cpp
   gnc-state.c
-  gnc-ui-util.c
+  gnc-ui-util.cpp
   gnc-ui-balances.c
   )
 

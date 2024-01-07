@@ -544,7 +544,7 @@ libgnucash/app-utils/gnc-quotes.cpp
 libgnucash/app-utils/gnc-state.c
 libgnucash/app-utils/gnc-sx-instance-model.c
 libgnucash/app-utils/gnc-ui-balances.c
-libgnucash/app-utils/gnc-ui-util.c
+libgnucash/app-utils/gnc-ui-util.cpp
 libgnucash/app-utils/QuickFill.c
 libgnucash/backend/dbi/gnc-backend-dbi.cpp
 libgnucash/backend/dbi/gnc-dbisqlconnection.cpp
@@ -656,7 +656,6 @@ libgnucash/engine/gnc-option-impl.cpp
 libgnucash/engine/gncOrder.c
 libgnucash/engine/gncOwner.c
 libgnucash/engine/gnc-pricedb.cpp
-libgnucash/engine/gnc-quote-source.cpp
 libgnucash/engine/gnc-rational.cpp
 libgnucash/engine/gnc-session.c
 libgnucash/engine/gncTaxTable.c

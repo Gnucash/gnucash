@@ -44,11 +44,11 @@ extern "C" {
 #endif
 
 
-typedef QofSession * (*QofSessionCB) (void);
+typedef QofSession* (*QofSessionCB) (void);
 
 
-gchar *gnc_normalize_account_separator (const gchar* separator);
-gboolean gnc_reverse_balance(const Account *account);
+char* gnc_normalize_account_separator (const char* separator);
+gboolean gnc_reverse_balance(const Account* account);
 
 /* Backward compatibility *******************************************
  * Return that book's support opening balance accounts by equity type slot */
@@ -64,12 +64,12 @@ gboolean gnc_using_equity_type_opening_balance_account (QofBook* book);
 
 /* Default directories **********************************************/
 
-gchar *gnc_get_default_directory (const gchar *section);
-void gnc_set_default_directory (const gchar *section,
-                                const gchar *directory);
+char* gnc_get_default_directory (const char* section);
+void gnc_set_default_directory (const char* section,
+                                const char* directory);
 
 /* Engine enhancements & i18n ***************************************/
-QofBook * gnc_get_current_book (void);
+QofBook* gnc_get_current_book (void);
 
 /* If there is no current session, there is no book and we must be dealing
  * with a new book. When gnucash is started with --nofile, there is
@@ -82,17 +82,17 @@ QofBook * gnc_get_current_book (void);
 gboolean gnc_is_new_book (void);
 
 void gnc_set_current_book_tax_name_type (gboolean name_changed,
-                                            const gchar *tax_name,
+                                            const char* tax_name,
                                             gboolean type_changed,
-                                            const gchar *tax_type);
-const gchar * gnc_get_current_book_tax_name (void);
-const gchar * gnc_get_current_book_tax_type (void);
+                                            const char* tax_type);
+const char*  gnc_get_current_book_tax_name (void);
+const char*  gnc_get_current_book_tax_type (void);
 /** Calls gnc_book_option_num_field_source_change to initiate registered
   * callbacks when num_field_source book option changes so that
   * registers/reports can update themselves; sets feature flag */
 void gnc_book_option_num_field_source_change_cb (gboolean num_action);
-Account * gnc_get_current_root_account (void);
-gnc_commodity_table * gnc_get_current_commodities (void);
+Account* gnc_get_current_root_account (void);
+gnc_commodity_table* gnc_get_current_commodities (void);
 
 /**
  * Get either the full name of the account or the simple name, depending on the
@@ -101,7 +101,7 @@ gnc_commodity_table * gnc_get_current_commodities (void);
  * @param account The account to retrieve the name for.
  * @return A newly allocated string.
 */
-gchar *gnc_get_account_name_for_register(const Account *account);
+char* gnc_get_account_name_for_register(const Account* account);
 
 /**
  * Retrieve the account matching the given name starting from the descendants of
@@ -114,8 +114,8 @@ gchar *gnc_get_account_name_for_register(const Account *account);
  * @param name The name to search for.
  * @return A pointer to the account, or NULL if the account was not found.
 */
-Account *gnc_account_lookup_for_register(const Account *base_account, const
-        gchar *name);
+Account* gnc_account_lookup_for_register(const Account* base_account, const
+        char* name);
 
 /**
  * Get either the full name of the account or the simple name, depending on the
@@ -125,7 +125,7 @@ Account *gnc_account_lookup_for_register(const Account *base_account, const
  * @param show_leaf_accounts Whether the full name will be returned.
  * @return A newly allocated string.
 */
-gchar *gnc_get_account_name_for_split_register(const Account *account,
+char* gnc_get_account_name_for_split_register(const Account* account,
         gboolean show_leaf_accounts);
 
 /*
@@ -147,9 +147,9 @@ gchar *gnc_get_account_name_for_split_register(const Account *account,
  *                  values to an amount the requested currency.
  */
 
-const char * gnc_get_reconcile_str (char reconciled_flag);
-const char * gnc_get_reconcile_valid_flags (void);
-const char * gnc_get_reconcile_flag_order (void);
+const char*  gnc_get_reconcile_str (char reconciled_flag);
+const char*  gnc_get_reconcile_valid_flags (void);
+const char*  gnc_get_reconcile_flag_order (void);
 
 #define WLINK 'w'
 #define FLINK 'f'
@@ -158,13 +158,13 @@ const char * gnc_get_reconcile_flag_order (void);
  *
  *  @return a string containing the list of valid link_flags
  */
-const char *gnc_get_doclink_valid_flags (void);
+const char* gnc_get_doclink_valid_flags (void);
 
 /** Get a string containing document link flag order
  *
  * @return a string containing the document link flag change order
  */
-const char *gnc_get_doclink_flag_order (void);
+const char* gnc_get_doclink_flag_order (void);
 
 /** Get a string representing the document link type
  *
@@ -172,7 +172,7 @@ const char *gnc_get_doclink_flag_order (void);
  *
  * @return the i18n'd doclink string
  */
-const char *gnc_get_doclink_str (char link_flag);
+const char* gnc_get_doclink_str (char link_flag);
 
 typedef enum
 {
@@ -181,13 +181,13 @@ typedef enum
     NUM_EQUITY_TYPES
 } GNCEquityType;
 
-Account * gnc_find_or_create_equity_account (Account *root,
+Account * gnc_find_or_create_equity_account (Account* root,
         GNCEquityType equity_type,
-        gnc_commodity *currency);
-gboolean gnc_account_create_opening_balance (Account *account,
+        gnc_commodity* currency);
+gboolean gnc_account_create_opening_balance (Account* account,
         gnc_numeric balance,
         time64 date,
-        QofBook *book);
+        QofBook* book);
 
 /* Locale functions *************************************************/
 
@@ -195,13 +195,13 @@ gboolean gnc_account_create_opening_balance (Account *account,
 /**
  * Returns the default currency of the current locale, or NULL if no
  * sensible currency could be identified from the locale. */
-gnc_commodity * gnc_locale_default_currency_nodefault (void);
+gnc_commodity* gnc_locale_default_currency_nodefault (void);
 
 /**
  * Returns the default currency of the current locale. WATCH OUT: If
  * no currency could be identified from the locale, this one returns
  * "USD", but this will have nothing to do with the actual locale. */
-gnc_commodity * gnc_locale_default_currency (void);
+gnc_commodity* gnc_locale_default_currency (void);
 
 
 /** Return the default currency set by the user.  If the user's
@@ -210,7 +210,7 @@ gnc_commodity * gnc_locale_default_currency (void);
  *
  *  @return A pointer to a currency.
  */
-gnc_commodity * gnc_default_currency (void);
+gnc_commodity* gnc_default_currency (void);
 
 /** Returns a gnc_commodity that is a currency, suitable for being a
 Transaction's currency. The gnc_commodity is taken either from the current
@@ -235,7 +235,8 @@ NULL.
 
 @return A currency pointer (and never NULL).
 */
-gnc_commodity * gnc_account_or_default_currency(const Account* account, gboolean * currency_from_account_found);
+gnc_commodity* gnc_account_or_default_currency(const Account* account,
+                                               gboolean* currency_from_account_found);
 
 /** Return the default currency for use in reports, as set by the
  *  user.  If the user's preference is invalid, then this routine will
@@ -243,7 +244,7 @@ gnc_commodity * gnc_account_or_default_currency(const Account* account, gboolean
  *
  *  @return A pointer to a currency.
  */
-gnc_commodity * gnc_default_report_currency (void);
+gnc_commodity* gnc_default_report_currency (void);
 
 /* Amount printing and parsing **************************************/
 
@@ -304,18 +305,18 @@ GNCPrintAmountInfo gnc_integral_print_info (void);
  * gnc_numeric is not checked for validity and the returned char* may
  * point to random garbage.
  */
-const char * xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
+const char*  xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 /**
  * Make a string representation of a gnc_numeric.  Warning, the
  * gnc_numeric is not checked for validity and the contents of the
  * buffer will be unchanged. It is up to the calling function to
  * ensure that buf is large enough for the results.
  */
-int xaccSPrintAmount (char *buf, gnc_numeric val, GNCPrintAmountInfo info);
+int xaccSPrintAmount (char* buf, gnc_numeric val, GNCPrintAmountInfo info);
 
-const gchar *printable_value(gdouble val, gint denom);
-gchar *number_to_words(gdouble val, gint64 denom);
-gchar *numeric_to_words(gnc_numeric val);
+const char* printable_value(gdouble val, gint denom);
+char* number_to_words(gdouble val, gint64 denom);
+char* numeric_to_words(gnc_numeric val);
 
 /**  Parses in_str to obtain a numeric result. The
  *   routine will parse as much of in_str as it can to obtain a single
@@ -328,8 +329,8 @@ gchar *numeric_to_words(gnc_numeric val);
  *   location of the first character in in_str not used by the parser
  *   will be returned in *endstr. If FALSE is returned and endstr is
  *   non-NULL, *endstr will point to in_str. */
-gboolean xaccParseAmount (const char * in_str, gboolean monetary,
-                          gnc_numeric *result, char **endstr);
+gboolean xaccParseAmount (const char*  in_str, gboolean monetary,
+                          gnc_numeric* result, char** endstr);
 
 /**
  * Converts a string to a gnc_numeric. The caller must provide all the
@@ -340,10 +341,10 @@ gboolean xaccParseAmount (const char * in_str, gboolean monetary,
  * is ignored.
  */
 gboolean
-xaccParseAmountExtended (const char * in_str, gboolean monetary,
+xaccParseAmountExtended (const char*  in_str, gboolean monetary,
                          gunichar negative_sign, gunichar decimal_point,
-                         gunichar group_separator, const char *ignore_list,
-                         gnc_numeric *result, char **endstr);
+                         gunichar group_separator, const char* ignore_list,
+                         gnc_numeric* result, char** endstr);
 
 /**
  * Similar to xaccParseAmount, but with two differences
@@ -360,9 +361,9 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
  * as set by the user.
  */
 gboolean
-xaccParseAmountImport (const char * in_str, gboolean monetary,
-                       gnc_numeric *result,
-                       char **endstr, gboolean skip);
+xaccParseAmountImport (const char*  in_str, gboolean monetary,
+                       gnc_numeric* result,
+                       char** endstr, gboolean skip);
 
 /**
  * Similar to xaccParseAmountExtended, but will not automatically
@@ -371,10 +372,10 @@ xaccParseAmountImport (const char * in_str, gboolean monetary,
  * gnucash that are not typed in by the user (like via csv import).
  */
 gboolean
-xaccParseAmountExtImport (const char * in_str, gboolean monetary,
+xaccParseAmountExtImport (const char*  in_str, gboolean monetary,
                              gunichar negative_sign, gunichar decimal_point,
-                             gunichar group_separator, const char *ignore_list,
-                             gnc_numeric *result, char **endstr);
+                             gunichar group_separator, const char* ignore_list,
+                             gnc_numeric* result, char** endstr);
 
 /**
  * Make a string representation of a gnc_numeric.  Warning, the
@@ -384,8 +385,9 @@ xaccParseAmountExtImport (const char * in_str, gboolean monetary,
  * This is the same as xaccPrintAmount but wraps the output with BiDi
  * left to right isolate if a symbol is displayed.
  */
-const char *
-gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info);
+const char*
+gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val,
+                                        GNCPrintAmountInfo info);
 
 /**
  * This function helps with GTK's use of 'Unicode Bidirectional
@@ -395,8 +397,8 @@ gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info
  * This helps with monetary values in RTL languages that display the
  * currency symbol.
  */
-gchar *
-gnc_wrap_text_with_bidi_ltr_isolate (const char *text);
+char*
+gnc_wrap_text_with_bidi_ltr_isolate (const char* text);
 
 /* Initialization ***************************************************/
 
@@ -412,8 +414,8 @@ void gnc_ui_util_remove_registered_prefs (void);
  *
  * @return The incoming text filtered of control characters to be
  *         freed by the caller.
-*/
-gchar * gnc_filter_text_for_control_chars (const gchar *incoming_text);
+ */
+char*  gnc_filter_text_for_control_chars (const char* incoming_text);
 
 /** Updates cursor_position after removal of currency symbols
  *
@@ -424,10 +426,10 @@ gchar * gnc_filter_text_for_control_chars (const gchar *incoming_text);
  * @param cursor_position the position of cursor in the incoming text
  *
  * @return nothing
-*/
-void gnc_filter_text_set_cursor_position (const gchar *incoming_text,
-                                          const gchar *symbol,
-                                          gint *cursor_position);
+ */
+void gnc_filter_text_set_cursor_position (const char* incoming_text,
+                                          const char* symbol,
+                                          int* zcursor_position);
 
 /** Returns the incoming text removed of a currency symbol
  *
@@ -438,9 +440,9 @@ void gnc_filter_text_set_cursor_position (const gchar *incoming_text,
  * @param cursor_position the position of cursor in the incoming text
  *
  * @return The incoming text with symbol removed to be freed by the caller
-*/
-gchar * gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
-                                             const gchar *symbol);
+ */
+char* gnc_filter_text_for_currency_symbol (const char* incoming_text,
+                                           const char* symbol);
 
 /** Returns the incoming text removed of currency symbol
  *
@@ -451,10 +453,10 @@ gchar * gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
  * @param symbol return the symbol used
  *
  * @return The incoming text with symbol removed to be freed by the caller
-*/
-gchar * gnc_filter_text_for_currency_commodity (const gnc_commodity *comm,
-                                                const gchar *incoming_text,
-                                                const gchar **symbol);
+ */
+char* gnc_filter_text_for_currency_commodity (const gnc_commodity *comm,
+                                              const char* incoming_text,
+                                              const char** symbol);
 
 #ifdef __cplusplus
 }

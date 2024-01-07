@@ -41,7 +41,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
+#include <cinttypes>
 
 #include "qof.h"
 #include "gnc-prefs.h"
@@ -64,26 +64,27 @@
 
 static QofLogModule log_module = GNC_MOD_GUI;
 
-static gboolean auto_decimal_enabled = FALSE;
+static bool auto_decimal_enabled = false;
 static int auto_decimal_places = 2;    /* default, can be changed */
 
-static gboolean reverse_balance_inited = FALSE;
-static gboolean reverse_type[NUM_ACCOUNT_TYPES];
+static bool reverse_balance_inited = false;
+static bool reverse_type[NUM_ACCOUNT_TYPES];
 
 /* Cache currency ISO codes and only look them up in the settings when
  * absolutely necessary. Can't cache a pointer to the data structure
  * as that will change any time the book changes. */
-static gchar *user_default_currency = NULL;
-static gchar *user_report_currency = NULL;
-const static int maximum_decimals = 15;
-static const gint64 pow_10[] = {1, 10, 100, 1000, 10000, 100000, 1000000,
+static char* user_default_currency = nullptr;
+static char* user_report_currency = nullptr;
+constexpr int maximum_decimals = 15;
+constexpr int64_t pow_10[] = {1, 10, 100, 1000, 10000, 100000, 1000000,
                                10000000, 100000000, 1000000000, 10000000000,
                                100000000000, 1000000000000, 10000000000000,
                                100000000000000, 1000000000000000};
 
-gchar *gnc_normalize_account_separator (const gchar* separator)
+char*
+gnc_normalize_account_separator (const gchar* separator)
 {
-    gchar *new_sep=NULL;
+    char* new_sep=nullptr;
 
     if (!separator || !*separator || g_strcmp0(separator, "colon") == 0)
             new_sep = g_strdup (":");
@@ -109,11 +110,8 @@ gchar *gnc_normalize_account_separator (const gchar* separator)
 static void
 gnc_configure_account_separator (void)
 {
-    gchar *separator;
-    char *string;
-
-    string = gnc_prefs_get_string(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNT_SEPARATOR);
-    separator = gnc_normalize_account_separator (string);
+    auto string = gnc_prefs_get_string(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNT_SEPARATOR);
+    auto separator = gnc_normalize_account_separator (string);
 
     gnc_set_account_separator(separator);
 
@@ -125,23 +123,21 @@ gnc_configure_account_separator (void)
 static void
 gnc_configure_reverse_balance (void)
 {
-    gint i;
-
-    for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
-        reverse_type[i] = FALSE;
+    for (auto i = 0; i < NUM_ACCOUNT_TYPES; i++)
+        reverse_type[i] = false;
 
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_INC_EXP))
     {
-        reverse_type[ACCT_TYPE_INCOME]  = TRUE;
-        reverse_type[ACCT_TYPE_EXPENSE] = TRUE;
+        reverse_type[ACCT_TYPE_INCOME]  = true;
+        reverse_type[ACCT_TYPE_EXPENSE] = true;
     }
     else if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_CREDIT))
     {
-        reverse_type[ACCT_TYPE_LIABILITY] = TRUE;
-        reverse_type[ACCT_TYPE_PAYABLE]   = TRUE;
-        reverse_type[ACCT_TYPE_EQUITY]    = TRUE;
-        reverse_type[ACCT_TYPE_INCOME]    = TRUE;
-        reverse_type[ACCT_TYPE_CREDIT]    = TRUE;
+        reverse_type[ACCT_TYPE_LIABILITY] = true;
+        reverse_type[ACCT_TYPE_PAYABLE]   = true;
+        reverse_type[ACCT_TYPE_EQUITY]    = true;
+        reverse_type[ACCT_TYPE_INCOME]    = true;
+        reverse_type[ACCT_TYPE_CREDIT]    = true;
     }
     else if (!gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_NONE))
         PWARN("no reversed account preference set, using none");
@@ -158,12 +154,10 @@ gnc_reverse_balance_init (void)
 gboolean
 gnc_reverse_balance (const Account *account)
 {
-    int type;
-
-    if (account == NULL)
+    if (account == nullptr)
         return FALSE;
 
-    type = xaccAccountGetType (account);
+    auto type = xaccAccountGetType (account);
     if ((type < 0) || (type >= NUM_ACCOUNT_TYPES))
         return FALSE;
 
@@ -183,12 +177,10 @@ void gnc_set_use_equity_type_opening_balance_account (QofBook* book)
     gnc_features_set_used (book, GNC_FEATURE_EQUITY_TYPE_OPENING_BALANCE);
 }
 
-gchar *
-gnc_get_default_directory (const gchar *section)
+char*
+gnc_get_default_directory (const char* section)
 {
-    gchar *dir;
-
-    dir = gnc_prefs_get_string (section, GNC_PREF_LAST_PATH);
+    auto dir = gnc_prefs_get_string (section, GNC_PREF_LAST_PATH);
     if (!(dir && *dir))
     {
         g_free (dir); // if it's ""
@@ -202,7 +194,7 @@ gnc_get_default_directory (const gchar *section)
 }
 
 void
-gnc_set_default_directory (const gchar *section, const gchar *directory)
+gnc_set_default_directory (const char* section, const char* directory)
 {
     gnc_prefs_set_string(section, GNC_PREF_LAST_PATH, directory);
 }
@@ -234,28 +226,28 @@ gnc_is_new_book (void)
 #define OLD_OPTION_TAXUS_TYPE "book/tax_US/type"
 
 void
-gnc_set_current_book_tax_name_type (gboolean name_changed, const gchar *tax_name,
-                                    gboolean type_changed, const gchar *tax_type)
+gnc_set_current_book_tax_name_type (gboolean name_changed, const char* tax_name,
+                                    gboolean type_changed, const char* tax_type)
 {
     if (name_changed)
     {
         if (type_changed)
         {
-            QofBook* book = gnc_get_current_book();
+            auto book = gnc_get_current_book();
             if ((g_strcmp0 (tax_name, "") == 0) ||
-                (tax_name == NULL))
+                (tax_name == nullptr))
             { /* change to no name */
                 if ((g_strcmp0 (tax_type, "Other") == 0) ||
                     (g_strcmp0 (tax_type, "") == 0) ||
-                    (tax_type == NULL))
+                    (tax_type == nullptr))
                 { /* need to delete both name and type and the "tax_US" frame */
-                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, NULL);
-                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, NULL);
+                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, nullptr);
+                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, nullptr);
                     qof_book_option_frame_delete(book, "tax_US");
                 }
                 else
                 { /* delete the name & change the type; keep the "tax_US" frame */
-                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, NULL);
+                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, nullptr);
                     qof_book_set_string_option(book, OPTION_TAXUS_TYPE, tax_type);
                 }
             }
@@ -263,9 +255,9 @@ gnc_set_current_book_tax_name_type (gboolean name_changed, const gchar *tax_name
             {
                 if ((g_strcmp0 (tax_type, "Other") == 0) ||
                     (g_strcmp0 (tax_type, "") == 0) ||
-                    (tax_type == NULL))
+                    (tax_type == nullptr))
                 { /* delete the type & change the name; keep the "tax_US" frame */
-                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, NULL);
+                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, nullptr);
                     qof_book_set_string_option(book, OPTION_TAXUS_NAME, tax_name);
                 }
                 else /* and new type */
@@ -277,20 +269,20 @@ gnc_set_current_book_tax_name_type (gboolean name_changed, const gchar *tax_name
         }
         else /* no type change but name changed */
         {
-            QofBook* book = gnc_get_current_book();
+            auto book = gnc_get_current_book();
             if ((g_strcmp0 (tax_name, "") == 0) ||
-                (tax_name == NULL))
+                (tax_name == nullptr))
             { /* change to no name */
                 if ((g_strcmp0 (tax_type, "Other") == 0) ||
                     (g_strcmp0 (tax_type, "") == 0) ||
-                    (tax_type == NULL))
+                    (tax_type == nullptr))
                 { /* delete the name; there is no type; deleted the "tax_US" frame */
-                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, NULL);
+                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, nullptr);
                     qof_book_option_frame_delete(book, "tax_US");
                 }
                 else
                 { /* need to delete the name and keep "tax_US" frame */
-                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, NULL);
+                    qof_book_set_string_option(book, OPTION_TAXUS_NAME, nullptr);
                 }
             }
             else
@@ -303,20 +295,20 @@ gnc_set_current_book_tax_name_type (gboolean name_changed, const gchar *tax_name
    {
         if (type_changed)
         {
-            QofBook* book = gnc_get_current_book();
+            auto book = gnc_get_current_book();
             if ((g_strcmp0 (tax_type, "Other") == 0) ||
                 (g_strcmp0 (tax_type, "") == 0) ||
-                (tax_type == NULL))
+                (tax_type == nullptr))
             {
                 if ((g_strcmp0 (tax_name, "") == 0) ||
-                    (tax_name == NULL))
+                    (tax_name == nullptr))
                 {/* delete the type; there is no name; delete the "tax_US" frame */
-                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, NULL);
+                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, nullptr);
                     qof_book_option_frame_delete(book, "tax_US");
                 }
                 else
                 { /* need to delete the type and keep "tax_US" frame */
-                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, NULL);
+                    qof_book_set_string_option(book, OPTION_TAXUS_TYPE, nullptr);
                 }
             }
             else
@@ -327,12 +319,11 @@ gnc_set_current_book_tax_name_type (gboolean name_changed, const gchar *tax_name
    }
 }
 
-const gchar *
+const char*
 gnc_get_current_book_tax_name (void)
 {
-    QofBook* book = gnc_get_current_book();
-    const char* tax_name =
-        qof_book_get_string_option(book, OPTION_TAXUS_NAME);
+    auto book = gnc_get_current_book();
+    auto tax_name = qof_book_get_string_option(book, OPTION_TAXUS_NAME);
     if (tax_name)
     {
         return tax_name;
@@ -350,9 +341,9 @@ gnc_get_current_book_tax_name (void)
             { /* switch both name and type and remove unused frames */
                 char* taxus_type = g_strdup(old_option_taxus_type);
                 qof_book_set_string_option(book, OPTION_TAXUS_NAME, taxus_name);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, NULL);
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, nullptr);
                 qof_book_set_string_option(book, OPTION_TAXUS_TYPE, taxus_type);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, NULL);
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, nullptr);
                 qof_book_option_frame_delete(book, "book/tax_US");
                 qof_book_option_frame_delete(book, "book");
                 g_free (taxus_type);
@@ -360,22 +351,22 @@ gnc_get_current_book_tax_name (void)
             else
             { /* switch just name and remove unused frames */
                 qof_book_set_string_option(book, OPTION_TAXUS_NAME, taxus_name);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, NULL);
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, nullptr);
                 qof_book_option_frame_delete(book, "book/tax_US");
                 qof_book_option_frame_delete(book, "book");
             }
             g_free (taxus_name);
             return qof_book_get_string_option(book, OPTION_TAXUS_NAME);
         }
-        return NULL;
+        return nullptr;
     }
 }
 
-const gchar *
+const char*
 gnc_get_current_book_tax_type (void)
 {
-    QofBook* book = gnc_get_current_book();
-    const char* tax_type =
+    auto book = gnc_get_current_book();
+    auto tax_type =
         qof_book_get_string_option(book, OPTION_TAXUS_TYPE);
     if (tax_type)
     {
@@ -383,20 +374,20 @@ gnc_get_current_book_tax_type (void)
     }
     else
     {
-        const char* old_option_taxus_type =
+        auto old_option_taxus_type =
             qof_book_get_string_option(book, OLD_OPTION_TAXUS_TYPE);
         if (old_option_taxus_type)
         {
-            char* taxus_type = g_strdup(old_option_taxus_type);
-            const char* old_option_taxus_name =
+            auto taxus_type = g_strdup(old_option_taxus_type);
+            auto old_option_taxus_name =
                 qof_book_get_string_option(book, OLD_OPTION_TAXUS_NAME);
             if (old_option_taxus_name)
             { /* switch both name and type and remove unused frames */
-                char* taxus_name = g_strdup(old_option_taxus_name);
+                auto taxus_name = g_strdup(old_option_taxus_name);
                 qof_book_set_string_option(book, OPTION_TAXUS_NAME, taxus_name);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, NULL);
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_NAME, nullptr);
                 qof_book_set_string_option(book, OPTION_TAXUS_TYPE, taxus_type);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, NULL);
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, nullptr);
                 qof_book_option_frame_delete(book, "book/tax_US");
                 qof_book_option_frame_delete(book, "book");
                 g_free (taxus_name);
@@ -404,14 +395,14 @@ gnc_get_current_book_tax_type (void)
             else
             { /* switch just type and remove unused frames */
                 qof_book_set_string_option(book, OPTION_TAXUS_TYPE, taxus_type);
-                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, NULL);
+                qof_book_set_string_option(book, OLD_OPTION_TAXUS_TYPE, nullptr);
                 qof_book_option_frame_delete(book, "book/tax_US");
                 qof_book_option_frame_delete(book, "book");
             }
             g_free (taxus_type);
             return qof_book_get_string_option(book, OPTION_TAXUS_TYPE);
         }
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -426,11 +417,12 @@ gnc_get_current_commodities (void)
 {
      if (gnc_current_session_exist())
           return gnc_commodity_table_get_table (gnc_get_current_book ());
-     return NULL;
+     return nullptr;
 }
 
-gchar *
-gnc_get_account_name_for_split_register(const Account *account, gboolean show_leaf_accounts)
+char*
+gnc_get_account_name_for_split_register(const Account *account,
+                                        gboolean show_leaf_accounts)
 {
     if (show_leaf_accounts)
         return g_strdup (xaccAccountGetName (account));
@@ -438,22 +430,22 @@ gnc_get_account_name_for_split_register(const Account *account, gboolean show_le
         return gnc_account_get_full_name (account);
 }
 
-gchar *
+char*
 gnc_get_account_name_for_register(const Account *account)
 {
-    gboolean show_leaf_accounts;
-    show_leaf_accounts = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
-                                            GNC_PREF_SHOW_LEAF_ACCT_NAMES);
+    auto show_leaf_accounts =
+        gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                           GNC_PREF_SHOW_LEAF_ACCT_NAMES);
 
     return gnc_get_account_name_for_split_register(account, show_leaf_accounts);
 }
 
 Account *
-gnc_account_lookup_for_register(const Account *base_account, const char *name)
+gnc_account_lookup_for_register(const Account *base_account, const char* name)
 {
-    gboolean show_leaf_accounts;
-    show_leaf_accounts = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
-                                            GNC_PREF_SHOW_LEAF_ACCT_NAMES);
+    auto show_leaf_accounts =
+        gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL_REGISTER,
+                           GNC_PREF_SHOW_LEAF_ACCT_NAMES);
 
     if (show_leaf_accounts)
         return gnc_account_lookup_by_name (base_account, name);
@@ -468,7 +460,7 @@ gnc_account_lookup_for_register(const Account *base_account, const char *name)
  * Args: reconciled_flag - the flag to convert into a string        *
  * Returns: the i18n'd reconciled string                            *
 \********************************************************************/
-const char *
+const char*
 gnc_get_reconcile_str (char reconciled_flag)
 {
     switch (reconciled_flag)
@@ -485,7 +477,7 @@ gnc_get_reconcile_str (char reconciled_flag)
         return C_("Reconciled flag 'void'", "v");
     default:
         PERR("Bad reconciled flag\n");
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -495,7 +487,7 @@ gnc_get_reconcile_str (char reconciled_flag)
  *                                                                  *
  * Returns: the i18n'd reconciled flags string                      *
 \********************************************************************/
-const char *
+const char*
 gnc_get_reconcile_valid_flags (void)
 {
     static const char flags[] = { NREC, CREC, YREC, FREC, VREC, 0 };
@@ -509,14 +501,14 @@ gnc_get_reconcile_valid_flags (void)
  * Args: reconciled_flag - the flag to convert into a string        *
  * Returns: the i18n'd reconciled string                            *
 \********************************************************************/
-const char *
+const char*
 gnc_get_reconcile_flag_order (void)
 {
     static const char flags[] = { NREC, CREC, 0 };
     return flags;
 }
 
-const char *
+const char*
 gnc_get_doclink_str (char link_flag)
 {
     switch (link_flag)
@@ -529,25 +521,25 @@ gnc_get_doclink_str (char link_flag)
         return " ";
     default:
         PERR("Bad link flag");
-        return NULL;
+        return nullptr;
     }
 }
 
-const char *
+const char*
 gnc_get_doclink_valid_flags (void)
 {
     static const char flags[] = { FLINK, WLINK, ' ', 0 };
     return flags;
 }
 
-const char *
+const char*
 gnc_get_doclink_flag_order (void)
 {
     static const char flags[] = { FLINK, WLINK, ' ', 0 };
     return flags;
 }
 
-static const char *
+static const char*
 equity_base_name (GNCEquityType equity_type)
 {
     switch (equity_type)
@@ -559,7 +551,7 @@ equity_base_name (GNCEquityType equity_type)
         return N_("Retained Earnings");
 
     default:
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -568,34 +560,26 @@ gnc_find_or_create_equity_account (Account *root,
                                    GNCEquityType equity_type,
                                    gnc_commodity *currency)
 {
-    Account *parent;
-    Account *account = NULL;
-    gboolean name_exists;
-    gboolean base_name_exists;
-    const char *base_name;
-    char *name;
-    gboolean use_eq_op_feature;
+    g_return_val_if_fail (equity_type >= 0, nullptr);
+    g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, nullptr);
+    g_return_val_if_fail (currency != nullptr, nullptr);
+    g_return_val_if_fail (root != nullptr, nullptr);
+    g_return_val_if_fail (gnc_commodity_is_currency(currency), nullptr);
 
-    g_return_val_if_fail (equity_type >= 0, NULL);
-    g_return_val_if_fail (equity_type < NUM_EQUITY_TYPES, NULL);
-    g_return_val_if_fail (currency != NULL, NULL);
-    g_return_val_if_fail (root != NULL, NULL);
-    g_return_val_if_fail (gnc_commodity_is_currency(currency), NULL);
-
-    use_eq_op_feature = equity_type == EQUITY_OPENING_BALANCE && gnc_using_equity_type_opening_balance_account (gnc_get_current_book ());
+    auto use_eq_op_feature = equity_type == EQUITY_OPENING_BALANCE && gnc_using_equity_type_opening_balance_account (gnc_get_current_book ());
 
     if (use_eq_op_feature)
     {
-        account = gnc_account_lookup_by_opening_balance (root, currency);
+        auto account = gnc_account_lookup_by_opening_balance (root, currency);
         if (account)
             return account;
     }
 
-    base_name = equity_base_name (equity_type);
+    auto base_name = equity_base_name (equity_type);
 
-    account = gnc_account_lookup_by_name(root, base_name);
+    auto account = gnc_account_lookup_by_name(root, base_name);
     if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
-        account = NULL;
+        account = nullptr;
 
     if (!account)
     {
@@ -603,10 +587,10 @@ gnc_find_or_create_equity_account (Account *root,
 
         account = gnc_account_lookup_by_name(root, base_name);
         if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
-            account = NULL;
+            account = nullptr;
     }
 
-    base_name_exists = (account != NULL);
+    auto base_name_exists = (account != nullptr);
 
     if (account &&
             gnc_commodity_equiv (currency, xaccAccountGetCommodity (account)))
@@ -616,13 +600,13 @@ gnc_find_or_create_equity_account (Account *root,
         return account;
     }
 
-    name = g_strconcat (base_name, " - ",
-                        gnc_commodity_get_mnemonic (currency), NULL);
+    auto name = g_strconcat (base_name, " - ",
+                        gnc_commodity_get_mnemonic (currency), nullptr);
     account = gnc_account_lookup_by_name(root, name);
     if (account && xaccAccountGetType (account) != ACCT_TYPE_EQUITY)
-        account = NULL;
+        account = nullptr;
 
-    name_exists = (account != NULL);
+    auto name_exists = (account != nullptr);
 
     if (account &&
             gnc_commodity_equiv (currency, xaccAccountGetCommodity (account)))
@@ -637,7 +621,7 @@ gnc_find_or_create_equity_account (Account *root,
     {
         PWARN ("equity account with unexpected currency");
         g_free (name);
-        return NULL;
+        return nullptr;
     }
 
     if (!base_name_exists &&
@@ -647,7 +631,7 @@ gnc_find_or_create_equity_account (Account *root,
         name = g_strdup (base_name);
     }
 
-    parent = gnc_account_lookup_by_name(root, _("Equity"));
+    auto parent = gnc_account_lookup_by_name(root, _("Equity"));
     if (!parent || xaccAccountGetType (parent) != ACCT_TYPE_EQUITY)
         parent = root;
     g_assert(parent);
@@ -680,19 +664,14 @@ gnc_account_create_opening_balance (Account *account,
                                     time64 date,
                                     QofBook *book)
 {
-    Account *equity_account;
-    Transaction *trans;
-    Split *split;
-    gnc_commodity *commodity;
-
     if (gnc_numeric_zero_p (balance))
         return TRUE;
 
-    g_return_val_if_fail (account != NULL, FALSE);
-    commodity = xaccAccountGetCommodity (account);
+    g_return_val_if_fail (account != nullptr, FALSE);
+    auto commodity = xaccAccountGetCommodity (account);
     g_return_val_if_fail (gnc_commodity_is_currency (commodity), FALSE);
 
-    equity_account =
+    auto equity_account =
         gnc_find_or_create_equity_account (gnc_account_get_root(account),
                                            EQUITY_OPENING_BALANCE,
                                            commodity);
@@ -702,15 +681,15 @@ gnc_account_create_opening_balance (Account *account,
     xaccAccountBeginEdit (account);
     xaccAccountBeginEdit (equity_account);
 
-    trans = xaccMallocTransaction (book);
+    auto trans = xaccMallocTransaction (book);
 
     xaccTransBeginEdit (trans);
 
-    xaccTransSetCurrency (trans, gnc_account_or_default_currency (account, NULL));
+    xaccTransSetCurrency (trans, gnc_account_or_default_currency (account, nullptr));
     xaccTransSetDatePostedSecsNormalized (trans, date);
     xaccTransSetDescription (trans, _("Opening Balance"));
 
-    split = xaccMallocSplit (book);
+    auto split = xaccMallocSplit (book);
 
     xaccTransAppendSplit (trans, split);
     xaccAccountInsertSplit (account, split);
@@ -739,22 +718,20 @@ gnc_account_create_opening_balance (Account *account,
 gnc_commodity *
 gnc_locale_default_currency_nodefault (void)
 {
-    gnc_commodity * currency;
-    gnc_commodity_table *table;
-    const char *code;
+    auto table = gnc_get_current_commodities ();
+    auto code = gnc_locale_default_iso_currency_code ();
 
-    table = gnc_get_current_commodities ();
-    code = gnc_locale_default_iso_currency_code ();
+    auto currency = gnc_commodity_table_lookup (table,
+                                                GNC_COMMODITY_NS_CURRENCY,
+                                                code);
 
-    currency = gnc_commodity_table_lookup (table, GNC_COMMODITY_NS_CURRENCY, code);
-
-    return (currency ? currency : NULL);
+    return (currency ? currency : nullptr);
 }
 
-gnc_commodity *
+gnc_commodity*
 gnc_locale_default_currency (void)
 {
-    gnc_commodity * currency = gnc_locale_default_currency_nodefault ();
+    auto currency = gnc_locale_default_currency_nodefault ();
 
     return (currency ? currency :
             gnc_commodity_table_lookup (gnc_get_current_commodities (),
@@ -762,12 +739,11 @@ gnc_locale_default_currency (void)
 }
 
 
-static gnc_commodity *
-gnc_default_currency_common (gchar *requested_currency,
-                             const gchar *section)
+static gnc_commodity*
+gnc_default_currency_common (char* requested_currency,
+                             const char* section)
 {
-    gnc_commodity *currency = NULL;
-    gchar  *mnemonic;
+    gnc_commodity *currency = nullptr;
 
     if (requested_currency)
         return gnc_commodity_table_lookup(gnc_get_current_commodities(),
@@ -777,9 +753,10 @@ gnc_default_currency_common (gchar *requested_currency,
     if (gnc_current_session_exist() &&
         gnc_prefs_get_bool (section, GNC_PREF_CURRENCY_CHOICE_OTHER))
     {
-        mnemonic = gnc_prefs_get_string(section, GNC_PREF_CURRENCY_OTHER);
+        auto mnemonic = gnc_prefs_get_string(section, GNC_PREF_CURRENCY_OTHER);
         currency = gnc_commodity_table_lookup(gnc_get_current_commodities(),
-                                              GNC_COMMODITY_NS_CURRENCY, mnemonic);
+                                              GNC_COMMODITY_NS_CURRENCY,
+                                              mnemonic);
         DEBUG("mnemonic %s, result %p",
               mnemonic && *mnemonic ? mnemonic : "(null)", currency);
         g_free(mnemonic);
@@ -790,20 +767,22 @@ gnc_default_currency_common (gchar *requested_currency,
 
     if (currency)
     {
-        mnemonic = requested_currency;
-        g_free(mnemonic);
+        g_free (requested_currency);
     }
 
     return currency;
 }
 
-gnc_commodity *
+gnc_commodity*
 gnc_default_currency (void)
 {
-    return gnc_default_currency_common (user_default_currency, GNC_PREFS_GROUP_GENERAL);
+    return gnc_default_currency_common (user_default_currency,
+                                        GNC_PREFS_GROUP_GENERAL);
 }
 
-gnc_commodity * gnc_account_or_default_currency(const Account* account, gboolean * currency_from_account_found)
+gnc_commodity*
+gnc_account_or_default_currency(const Account* account,
+                                gboolean * currency_from_account_found)
 {
     gnc_commodity *currency;
     if (!account)
@@ -830,18 +809,19 @@ gnc_commodity * gnc_account_or_default_currency(const Account* account, gboolean
 
 
 
-gnc_commodity *
+gnc_commodity*
 gnc_default_report_currency (void)
 {
-    return gnc_default_currency_common (user_report_currency, GNC_PREFS_GROUP_GENERAL_REPORT);
+    return gnc_default_currency_common (user_report_currency,
+                                        GNC_PREFS_GROUP_GENERAL_REPORT);
 }
 
 static void
-gnc_currency_changed_cb (GSettings *settings, gchar *key, gpointer user_data)
+gnc_currency_changed_cb (GSettings *settings, char* key, gpointer user_data)
 {
-    user_default_currency = NULL;
-    user_report_currency = NULL;
-    gnc_hook_run(HOOK_CURRENCY_CHANGED, NULL);
+    user_default_currency = nullptr;
+    user_report_currency = nullptr;
+    gnc_hook_run(HOOK_CURRENCY_CHANGED, nullptr);
 }
 
 
@@ -849,8 +829,7 @@ GNCPrintAmountInfo
 gnc_default_print_info (gboolean use_symbol)
 {
     static GNCPrintAmountInfo info;
-    static gboolean got_it = FALSE;
-    struct lconv *lc;
+    static bool got_it = false;
 
     /* These must be updated each time. */
     info.use_symbol = use_symbol ? 1 : 0;
@@ -859,7 +838,7 @@ gnc_default_print_info (gboolean use_symbol)
     if (got_it)
         return info;
 
-    lc = gnc_localeconv ();
+    auto lc = gnc_localeconv ();
 
     info.max_decimal_places = lc->frac_digits;
     info.min_decimal_places = lc->frac_digits;
@@ -875,18 +854,18 @@ gnc_default_print_info (gboolean use_symbol)
     return info;
 }
 
-static gboolean
-is_decimal_fraction (int fraction, guint8 *max_decimal_places_p)
+static bool
+is_decimal_fraction (int fraction, uint8_t *max_decimal_places_p)
 {
-    guint8 max_decimal_places = 0;
+    uint8_t max_decimal_places = 0;
 
     if (fraction <= 0)
-        return FALSE;
+        return false;
 
     while (fraction != 1)
     {
         if (fraction % 10 != 0)
-            return FALSE;
+            return false;
 
         fraction = fraction / 10;
         max_decimal_places += 1;
@@ -895,7 +874,7 @@ is_decimal_fraction (int fraction, guint8 *max_decimal_places_p)
     if (max_decimal_places_p)
         *max_decimal_places_p = max_decimal_places;
 
-    return TRUE;
+    return true;
 }
 
 GNCPrintAmountInfo
@@ -903,14 +882,13 @@ gnc_commodity_print_info (const gnc_commodity *commodity,
                           gboolean use_symbol)
 {
     GNCPrintAmountInfo info;
-    gboolean is_iso;
 
-    if (commodity == NULL)
+    if (commodity == nullptr)
         return gnc_default_print_info (use_symbol);
 
     info.commodity = commodity;
 
-    is_iso = gnc_commodity_is_iso (commodity);
+    auto is_iso = gnc_commodity_is_iso (commodity);
 
     if (is_decimal_fraction (gnc_commodity_get_fraction (commodity),
                              &info.max_decimal_places))
@@ -939,17 +917,15 @@ gnc_account_print_info_helper(const Account *account, gboolean use_symbol,
                               int (*scufunc)(const Account*))
 {
     GNCPrintAmountInfo info;
-    gboolean is_iso;
-    int scu;
 
-    if (account == NULL)
+    if (account == nullptr)
         return gnc_default_print_info (use_symbol);
 
     info.commodity = efffunc (account);
 
-    is_iso = gnc_commodity_is_iso (info.commodity);
+    auto is_iso = gnc_commodity_is_iso (info.commodity);
 
-    scu = scufunc (account);
+    auto scu = scufunc (account);
 
     if (is_decimal_fraction (scu, &info.max_decimal_places))
     {
@@ -997,7 +973,7 @@ gnc_default_print_info_helper (int decplaces)
 {
     GNCPrintAmountInfo info;
 
-    info.commodity = NULL;
+    info.commodity = nullptr;
 
     info.max_decimal_places = decplaces;
     info.min_decimal_places = 0;
@@ -1016,7 +992,7 @@ GNCPrintAmountInfo
 gnc_default_share_print_info (void)
 {
     static GNCPrintAmountInfo info;
-    static gboolean got_it = FALSE;
+    static bool got_it = false;
 
     if (!got_it)
     {
@@ -1045,8 +1021,8 @@ GNCPrintAmountInfo
 gnc_price_print_info (const gnc_commodity *curr, gboolean use_symbol)
 {
     GNCPrintAmountInfo info;
-    gboolean force = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
-                                         GNC_PREF_PRICES_FORCE_DECIMAL);
+    auto force = gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL,
+                                     GNC_PREF_PRICES_FORCE_DECIMAL);
     info.commodity = curr;
 
     if (info.commodity)
@@ -1084,7 +1060,7 @@ GNCPrintAmountInfo
 gnc_integral_print_info (void)
 {
     static GNCPrintAmountInfo info;
-    static gboolean got_it = FALSE;
+    static bool got_it = false;
 
     if (!got_it)
     {
@@ -1097,17 +1073,13 @@ gnc_integral_print_info (void)
 
 /* Utility function for printing non-negative amounts */
 static int
-PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
+PrintAmountInternal(char* buf, gnc_numeric val, const GNCPrintAmountInfo *info)
 {
-    struct lconv *lc = gnc_localeconv();
-    int num_whole_digits;
-    static const size_t buf_size = 128;
+    auto *lc = gnc_localeconv();
+    constexpr size_t buf_size = 128;
     char temp_buf[buf_size];
-    gnc_numeric whole, rounding;
-    int min_dp, max_dp;
-    gboolean value_is_negative, value_is_decimal;
 
-    g_return_val_if_fail (info != NULL, 0);
+    g_return_val_if_fail (info != nullptr, 0);
 
     if (gnc_numeric_check (val))
     {
@@ -1118,11 +1090,11 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     }
 
     /* Print the absolute value, but remember sign */
-    value_is_negative = gnc_numeric_negative_p (val);
+    auto value_is_negative = gnc_numeric_negative_p (val);
     val = gnc_numeric_abs (val);
 
     /* Try to print as decimal. */
-    value_is_decimal = gnc_numeric_to_decimal(&val, NULL);
+    auto value_is_decimal = gnc_numeric_to_decimal(&val, nullptr);
     if (!value_is_decimal && info->force_fit && info->round)
     {
         /* if there's a commodity use 100x the commodity's fraction. N.B. This
@@ -1130,16 +1102,16 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
          * assumption in 2018. Otherwise, if there's a reasonable
          * max_decimal_places, use that.
          */
-        const gint64 denom = info->commodity ?
+        const int64_t denom = info->commodity ?
              gnc_commodity_get_fraction(info->commodity) * 100 :
              (info->max_decimal_places &&
                info->max_decimal_places <= maximum_decimals) ?
              pow_10[info->max_decimal_places] : pow_10[maximum_decimals];
         val = gnc_numeric_convert(val, denom, GNC_HOW_RND_ROUND_HALF_UP);
-        value_is_decimal = gnc_numeric_to_decimal(&val, NULL);
+        value_is_decimal = gnc_numeric_to_decimal(&val, nullptr);
     }
-    min_dp = info->min_decimal_places;
-    max_dp = info->max_decimal_places;
+    auto min_dp = info->min_decimal_places;
+    auto max_dp = info->max_decimal_places;
 
     /* Don to limit the number of decimal places _UNLESS_ force_fit is
      * true. */
@@ -1149,8 +1121,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     /* rounding? -- can only ROUND if force_fit is also true */
     if (value_is_decimal && info->round && info->force_fit)
     {
-        rounding.num = 5; /* Limit the denom to 10^13 ~= 2^44, leaving max at ~524288 */
-        rounding.denom = pow(10, max_dp + 1);
+        /* Limit the denom to 10^13 ~= 2^44, leaving max at ~524288 */
+        gnc_numeric rounding{5, pow_10[max_dp + 1]};
+
         val = gnc_numeric_add(val, rounding, val.denom,
                               GNC_HOW_DENOM_EXACT | GNC_HOW_RND_TRUNC);
 
@@ -1164,7 +1137,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     }
 
     /* calculate the integer part and the remainder */
-    whole = gnc_numeric_convert(val, 1, GNC_HOW_RND_TRUNC);
+    auto whole = gnc_numeric_convert(val, 1, GNC_HOW_RND_TRUNC);
     val = gnc_numeric_sub (val, whole, GNC_DENOM_AUTO, GNC_HOW_RND_NEVER);
     if (gnc_numeric_check (val))
     {
@@ -1175,21 +1148,17 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     }
 
     // Value may now be decimal, for example if the factional part is zero
-    value_is_decimal = gnc_numeric_to_decimal(&val, NULL);
+    value_is_decimal = gnc_numeric_to_decimal(&val, nullptr);
     /* print the integer part without separators */
     snprintf(temp_buf, buf_size, "%" G_GINT64_FORMAT, whole.num);
-    num_whole_digits = strlen (temp_buf);
+    auto num_whole_digits = strlen (temp_buf);
 
     if (!info->use_separators)
         strcpy (buf, temp_buf);
     else
     {
-        int group_count;
-        char *separator;
-        char *temp_ptr;
-        char *buf_ptr;
-        char *group;
-        gchar *rev_buf;
+        char* separator;
+        char* group;
 
         if (info->monetary)
         {
@@ -1202,9 +1171,9 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
             group = lc->grouping;
         }
 
-        buf_ptr = buf;
-        temp_ptr = &temp_buf[num_whole_digits - 1];
-        group_count = 0;
+        auto buf_ptr = buf;
+        auto temp_ptr = &temp_buf[num_whole_digits - 1];
+        auto group_count = 0;
 
         while (temp_ptr != temp_buf)
         {
@@ -1217,7 +1186,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
                 if (group_count == *group)
                 {
                     g_utf8_strncpy(buf_ptr, separator, 1);
-                    buf_ptr = g_utf8_find_next_char(buf_ptr, NULL);
+                    buf_ptr = g_utf8_find_next_char(buf_ptr, nullptr);
                     group_count = 0;
 
                     /* Peek ahead at the next group code */
@@ -1241,7 +1210,7 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
         /* We built the string backwards, now reverse */
         *buf_ptr++ = *temp_ptr;
         *buf_ptr = '\0';
-        rev_buf = g_utf8_strreverse(buf, -1);
+        auto rev_buf = g_utf8_strreverse(buf, -1);
         strcpy (buf, rev_buf);
         g_free(rev_buf);
     } /* endif */
@@ -1271,15 +1240,14 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
     }
     else
     {
-        char *decimal_point;
         guint8 num_decimal_places = 0;
-        char *temp_ptr = temp_buf;
+        char* temp_ptr = temp_buf;
 
-        decimal_point = info->monetary
-                        ? lc->mon_decimal_point
-                        : lc->decimal_point;
+        auto decimal_point = info->monetary
+                             ? lc->mon_decimal_point
+                             : lc->decimal_point;
         g_utf8_strncpy(temp_ptr, decimal_point, 1);
-        temp_ptr = g_utf8_find_next_char(temp_ptr, NULL);
+        temp_ptr = g_utf8_find_next_char(temp_ptr, nullptr);
 
         while (!gnc_numeric_zero_p (val)
                 && (val.denom != 1)
@@ -1330,25 +1298,23 @@ PrintAmountInternal(char *buf, gnc_numeric val, const GNCPrintAmountInfo *info)
  * @param bufp Should be at least 64 chars.
  **/
 int
-xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
+xaccSPrintAmount (char*  bufp, gnc_numeric val, GNCPrintAmountInfo info)
 {
-    struct lconv *lc;
-
-    char *orig_bufp = bufp;
-    const char *currency_symbol;
-    const char *sign;
+    auto orig_bufp = bufp;
+    auto currency_symbol = "";
+    const char* sign;
 
     char cs_precedes;
     char sep_by_space;
     char sign_posn;
 
-    gboolean print_sign = TRUE;
-    gboolean print_absolute = FALSE;
+    bool print_sign = true;
+    bool print_absolute = false;
 
     if (!bufp)
         return 0;
 
-    lc = gnc_localeconv();
+    auto lc = gnc_localeconv();
     if (info.use_locale)
         if (gnc_numeric_negative_p (val))
         {
@@ -1375,8 +1341,6 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
             sep_by_space = TRUE;
         }
     }
-    else /* !info.use_symbol || !info.commodity */
-        currency_symbol = "";
 
     if (gnc_numeric_negative_p (val))
     {
@@ -1389,7 +1353,7 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
         sign_posn = lc->p_sign_posn;
     }
 
-    if (gnc_numeric_zero_p (val) || (sign == NULL) || (sign[0] == 0))
+    if (gnc_numeric_zero_p (val) || (sign == nullptr) || (sign[0] == 0))
         print_sign = FALSE;
 
     /* See if we print sign now */
@@ -1460,7 +1424,7 @@ xaccSPrintAmount (char * bufp, gnc_numeric val, GNCPrintAmountInfo info)
 
 #define BUFLEN 1024
 
-const char *
+const char*
 xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
 {
     /* hack alert -- this is not thread safe ... */
@@ -1473,14 +1437,14 @@ xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info)
     return buf;
 }
 
-const char *
+const char*
 gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info)
 {
     /* hack alert -- this is not thread safe ... */
     static char buf[BUFLEN];
-    static const char ltr_isolate[] = { 0xe2, 0x81, 0xa6 };
-    static const char ltr_pop_isolate[] = { 0xe2, 0x81, 0xa9 };
-    size_t offset = info.use_symbol ? 3 : 0;
+    static const char ltr_isolate[] = { '\xe2', '\x81', '\xa6' };
+    static const char ltr_pop_isolate[] = { '\xe2', '\x81', '\xa9' };
+    auto offset = info.use_symbol ? 3 : 0;
 
     if (!gnc_commodity_is_currency (info.commodity))
         offset = 0;
@@ -1499,7 +1463,7 @@ gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info
 
     if (buf[BUFLEN - 4] == '\0')
     {
-        size_t length = strlen (buf);
+        auto length = strlen (buf);
         memcpy (buf + length, ltr_pop_isolate, 3);
     }
     else
@@ -1514,16 +1478,16 @@ gnc_print_amount_with_bidi_ltr_isolate (gnc_numeric val, GNCPrintAmountInfo info
     return buf;
 }
 
-gchar *
-gnc_wrap_text_with_bidi_ltr_isolate (const gchar *text)
+char*
+gnc_wrap_text_with_bidi_ltr_isolate (const char* text)
 {
-    static const char *ltr = "\u2066"; // ltr isolate
-    static const char *pop = "\u2069"; // pop directional formatting
+    static const char* ltr = "\u2066"; // ltr isolate
+    static const char* pop = "\u2069"; // pop directional formatting
 
     if (!text)
-        return NULL;
+        return nullptr;
 
-    return g_strconcat (ltr, text, pop, NULL);
+    return g_strconcat (ltr, text, pop, nullptr);
 }
 
 /********************************************************************\
@@ -1539,7 +1503,7 @@ gnc_wrap_text_with_bidi_ltr_isolate (const gchar *text)
    wrong. For this reason, we don't even start to pretend a
    word-by-word translation would be of any use, so we don't mark any
    of these strings for translation. cstim, 2007-04-15. */
-static gchar *small_numbers[] =
+static const char* small_numbers[] =
 {
     /* Translators: This section is for generating the "amount, in
        words" field when printing a check. This function gets the
@@ -1553,12 +1517,12 @@ static gchar *small_numbers[] =
     "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen",
     "Twenty"
 };
-static gchar *medium_numbers[] =
+static const char* medium_numbers[] =
 {
     "Zero", "Ten", "Twenty", "Thirty", "Forty",
     "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
 };
-static gchar *big_numbers[] =
+static const char* big_numbers[] =
 {
     /* Translators: This is the word for the number 10^2 */
     "Hundred",
@@ -1582,35 +1546,31 @@ static gchar *big_numbers[] =
     "Quintillion"
 };
 
-static gchar *
+static char*
 integer_to_words(gint64 val)
 {
-    gint64 log_val, pow_val, this_part;
-    GString *result;
-    gchar *tmp;
-
     if (val == 0)
         return g_strdup("zero");
     if (val < 0)
         val = -val;
 
-    result = g_string_sized_new(100);
+    auto result = g_string_sized_new(100);
 
     while (val >= 1000)
     {
-        log_val = log10(val) / 3 + FUDGE;
-        pow_val = exp(log_val * 3 * G_LN10) + FUDGE;
-        this_part = val / pow_val;
+        auto log_val = log10(val) / 3 + FUDGE;
+        auto pow_val = exp(log_val * 3 * G_LN10) + FUDGE;
+        auto this_part = val / pow_val;
         val -= this_part * pow_val;
-        tmp = integer_to_words(this_part);
+        auto tmp = integer_to_words(this_part);
         g_string_append_printf(result, "%s %s ", tmp,
-                               gettext(big_numbers[log_val]));
+                               gettext(big_numbers[static_cast<int>(log_val)]));
         g_free(tmp);
     }
 
     if (val >= 100)
     {
-        this_part = val / 100;
+        auto this_part = val / 100;
         val -= this_part * 100;
         g_string_append_printf(result, "%s %s ",
                                gettext(small_numbers[this_part]),
@@ -1619,7 +1579,7 @@ integer_to_words(gint64 val)
 
     if (val > 20)
     {
-        this_part = val / 10;
+        auto this_part = val / 10;
         val -= this_part * 10;
         g_string_append(result, gettext(medium_numbers[this_part]));
         g_string_append_c(result, ' ');
@@ -1627,7 +1587,7 @@ integer_to_words(gint64 val)
 
     if (val > 0)
     {
-        this_part = val;
+        auto this_part = val;
         g_string_append(result, gettext(small_numbers[this_part]));
         g_string_append_c(result, ' ');
     }
@@ -1644,25 +1604,22 @@ static double round(double x)
 }
 #endif
 
-gchar *
-number_to_words(gdouble val, gint64 denom)
+char*
+number_to_words(double val, int64_t denom)
 {
-    gint64 int_part, frac_part;
-    gchar *int_string, *nomin_string, *denom_string, *full_string;
-
     if (val < 0) val = -val;
     if (denom < 0) denom = -denom;
 
-    int_part = floor(val);
-    frac_part = round((val - int_part) * denom);
+    auto int_part = floor(val);
+    auto frac_part = static_cast<int64_t>(round((val - int_part) * denom));
 
-    int_string = integer_to_words(int_part);
+    auto int_string = integer_to_words(int_part);
     /* Inside of the gettext macro _(...) we must not use any macros but
        only plain string literals. For this reason, convert the strings
        separately. */
-    nomin_string = g_strdup_printf("%02" G_GINT64_FORMAT, frac_part);
-    denom_string = g_strdup_printf("%" G_GINT64_FORMAT, denom);
-    full_string =
+    auto nomin_string = g_strdup_printf("%02" PRId64, frac_part);
+    auto denom_string = g_strdup_printf("%" PRId64, denom);
+    auto full_string =
         /* Translators: This is for the "amount, in words" field in check
            printing. The first %s is the integer amount of dollars (or
            whatever currency), the second and third %s the cent amount as
@@ -1675,21 +1632,18 @@ number_to_words(gdouble val, gint64 denom)
     return full_string;
 }
 
-gchar *
+char*
 numeric_to_words(gnc_numeric val)
 {
     return number_to_words(gnc_numeric_to_double(val),
                            gnc_numeric_denom(val));
 }
 
-const gchar *
-printable_value (gdouble val, gint denom)
+const char*
+printable_value (double val, int denom)
 {
-    GNCPrintAmountInfo info;
-    gnc_numeric num;
-
-    num = gnc_numeric_create(round(val * denom), denom);
-    info = gnc_share_print_info_places(log10(denom));
+    auto num = gnc_numeric_create(round(val * denom), denom);
+    auto info = gnc_share_print_info_places(log10(denom));
     return xaccPrintAmount (num, info);
 }
 
@@ -1699,14 +1653,14 @@ printable_value (gdouble val, gint denom)
  *                                                                  *
  * Args: in_str   -- pointer to string rep of num                   *
  *       monetary -- boolean indicating whether value is monetary   *
- *       result   -- pointer to result location, may be NULL        *
+ *       result   -- pointer to result location, may be nullptr        *
  *       endstr   -- used to store first digit not used in parsing  *
  * Return: gboolean -- TRUE if a number found and parsed            *
  *                     If FALSE, result is not changed              *
 \********************************************************************/
 
 /* Parsing state machine states */
-typedef enum
+enum ParseState
 {
     START_ST,       /* Parsing initial whitespace */
     NEG_ST,         /* Parsed a negative sign or a left paren */
@@ -1714,11 +1668,11 @@ typedef enum
     FRAC_ST,        /* Parsing the fractional portion of a number */
     DONE_ST,        /* Finished, number is correct module grouping constraints */
     NO_NUM_ST       /* Finished, number was malformed */
-} ParseState;
+};
 
 #define done_state(state) (((state) == DONE_ST) || ((state) == NO_NUM_ST))
 
-static inline long long int
+static inline int64_t
 multiplier (int num_decimals)
 {
     switch (num_decimals)
@@ -1759,20 +1713,20 @@ multiplier (int num_decimals)
 }
 
 static gboolean
-xaccParseAmountInternal (const char * in_str, gboolean monetary,
+xaccParseAmountInternal (const char*  in_str, gboolean monetary,
                          gunichar negative_sign, gunichar decimal_point,
-                         gunichar group_separator, const char *ignore_list,
+                         gunichar group_separator, const char* ignore_list,
                          gboolean use_auto_decimal,
-                         gnc_numeric *result, char **endstr)
+                         gnc_numeric *result, char** endstr)
 {
     /* Initialize *endstr to in_str */
     if (endstr)
-        *endstr = (char *) in_str;
+        *endstr = (char* ) in_str;
 
     if (!in_str)
         return FALSE;
 
-    const gchar *in;
+    const char* in;
     if (!g_utf8_validate(in_str, -1, &in))
     {
         printf("Invalid utf8 string '%s'. Bad character at position %ld.\n",
@@ -1782,26 +1736,26 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
 
     /* 'out_str' will be used to store digits for numeric conversion.
      * 'out' will be used to traverse out_str. */
-    gchar *out_str = g_new(gchar, strlen(in_str) + 128);
-    gchar *out = out_str;
+    auto out_str = g_new(gchar, strlen(in_str) + 128);
+    auto out = out_str;
 
     /* 'in' is used to traverse 'in_str'. */
     in = in_str;
 
-    gboolean is_negative = FALSE;
-    gboolean got_decimal = FALSE;
-    gboolean need_paren = FALSE;
-    long long int numer = 0;
-    long long int denom = 1;
+    auto is_negative = false;
+    auto got_decimal = false;
+    auto need_paren = false;
+    int64_t numer = 0;
+    int64_t denom = 1;
 
     /* Initialize the state machine */
-    ParseState state = START_ST;
+    auto state = START_ST;
 
     /* This while loop implements a state machine for parsing numbers. */
     while (TRUE)
     {
-        ParseState next_state = state;
-        gunichar uc = g_utf8_get_char(in);
+        auto next_state = state;
+        auto uc = g_utf8_get_char(in);
 
         /* Ignore anything in the 'ignore list' */
         if (ignore_list && uc && g_utf8_strchr(ignore_list, -1, uc))
@@ -1931,7 +1885,7 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
         {
             *out = '\0';
 
-            if (*out_str && sscanf(out_str, "%lld", &numer) < 1)
+            if (*out_str && sscanf(out_str, "%" SCNd64, &numer) < 1)
                 next_state = NO_NUM_ST;
             else if (next_state == FRAC_ST)
             {
@@ -1964,7 +1918,7 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
     if (got_decimal && *out_str)
     {
 
-        size_t len = strlen(out_str);
+        auto len = strlen(out_str);
 
         if (len > 12)
         {
@@ -1972,8 +1926,8 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
             len = 12;
         }
 
-        long long int fraction;
-        if (sscanf (out_str, "%lld", &fraction) < 1)
+        int64_t fraction;
+        if (sscanf (out_str, "%" SCNd64 , &fraction) < 1)
         {
             g_free(out_str);
             return FALSE;
@@ -2005,7 +1959,7 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
     }
 
     if (endstr)
-        *endstr = (char *) in;
+        *endstr = (char* ) in;
 
     g_free (out_str);
 
@@ -2014,9 +1968,9 @@ xaccParseAmountInternal (const char * in_str, gboolean monetary,
 
 
 static gboolean
-xaccParseAmountBasicInternal (const char * in_str, gboolean monetary,
+xaccParseAmountBasicInternal (const char*  in_str, gboolean monetary,
                               gboolean use_auto_decimal, gnc_numeric *result,
-                              char **endstr, gboolean skip)
+                              char** endstr, gboolean skip)
 {
     struct lconv *lc = gnc_localeconv();
     gunichar negative_sign = g_utf8_get_char(lc->negative_sign);
@@ -2034,7 +1988,7 @@ xaccParseAmountBasicInternal (const char * in_str, gboolean monetary,
         decimal_point = g_utf8_get_char(lc->decimal_point);
     }
 
-    gchar *ignore = NULL;
+    const char* ignore = nullptr;
     if (skip)
     {
         /* We want the locale's positive sign to be ignored.
@@ -2053,17 +2007,17 @@ xaccParseAmountBasicInternal (const char * in_str, gboolean monetary,
 
 
 gboolean
-xaccParseAmount (const char * in_str, gboolean monetary, gnc_numeric *result,
-                 char **endstr)
+xaccParseAmount (const char*  in_str, gboolean monetary, gnc_numeric *result,
+                 char** endstr)
 {
     return xaccParseAmountBasicInternal (in_str, monetary, auto_decimal_enabled,
                                          result, endstr, FALSE);
 }
 
 gboolean
-xaccParseAmountImport (const char * in_str, gboolean monetary,
+xaccParseAmountImport (const char*  in_str, gboolean monetary,
                         gnc_numeric *result,
-                        char **endstr, gboolean skip)
+                        char** endstr, gboolean skip)
 {
     return xaccParseAmountBasicInternal (in_str, monetary, FALSE,
                                          result, endstr, skip);
@@ -2071,10 +2025,10 @@ xaccParseAmountImport (const char * in_str, gboolean monetary,
 
 
 gboolean
-xaccParseAmountExtended (const char * in_str, gboolean monetary,
+xaccParseAmountExtended (const char*  in_str, gboolean monetary,
                          gunichar negative_sign, gunichar decimal_point,
-                         gunichar group_separator, const char *ignore_list,
-                         gnc_numeric *result, char **endstr)
+                         gunichar group_separator, const char* ignore_list,
+                         gnc_numeric *result, char** endstr)
 {
     return xaccParseAmountInternal (in_str, monetary, negative_sign,
                                     decimal_point, group_separator,
@@ -2083,10 +2037,10 @@ xaccParseAmountExtended (const char * in_str, gboolean monetary,
 }
 
 gboolean
-xaccParseAmountExtImport (const char * in_str, gboolean monetary,
+xaccParseAmountExtImport (const char*  in_str, gboolean monetary,
                              gunichar negative_sign, gunichar decimal_point,
-                             gunichar group_separator, const char *ignore_list,
-                             gnc_numeric *result, char **endstr)
+                             gunichar group_separator, const char* ignore_list,
+                             gnc_numeric *result, char** endstr)
 {
     return xaccParseAmountInternal (in_str, monetary, negative_sign,
                                     decimal_point, group_separator,
@@ -2097,7 +2051,7 @@ xaccParseAmountExtImport (const char * in_str, gboolean monetary,
 
 /* enable/disable the auto_decimal_enabled option */
 static void
-gnc_set_auto_decimal_enabled (gpointer settings, gchar *key, gpointer user_data)
+gnc_set_auto_decimal_enabled (gpointer settings, char* key, gpointer user_data)
 {
     auto_decimal_enabled =
             gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_POINT);
@@ -2105,7 +2059,7 @@ gnc_set_auto_decimal_enabled (gpointer settings, gchar *key, gpointer user_data)
 
 /* set the number of auto decimal places to use */
 static void
-gnc_set_auto_decimal_places (gpointer settings, gchar *key, gpointer user_data)
+gnc_set_auto_decimal_places (gpointer settings, char* key, gpointer user_data)
 {
     auto_decimal_places =
             gnc_prefs_get_int (GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_PLACES);
@@ -2127,29 +2081,29 @@ gnc_ui_util_init (void)
     gnc_auto_decimal_init();
 
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNT_SEPARATOR,
-                          gnc_configure_account_separator, NULL);
+                          (void*)gnc_configure_account_separator, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_NONE,
-                          gnc_configure_reverse_balance, NULL);
+                          (void*)gnc_configure_reverse_balance, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_CREDIT,
-                          gnc_configure_reverse_balance, NULL);
+                          (void*)gnc_configure_reverse_balance, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_REVERSED_ACCTS_INC_EXP,
-                          gnc_configure_reverse_balance, NULL);
+                          (void*)gnc_configure_reverse_balance, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_CURRENCY_CHOICE_LOCALE,
-                          gnc_currency_changed_cb, NULL);
+                          (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_CURRENCY_CHOICE_OTHER,
-                          gnc_currency_changed_cb, NULL);
+                          (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_CURRENCY_OTHER,
-                          gnc_currency_changed_cb, NULL);
+                          (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_CURRENCY_CHOICE_LOCALE,
-                          gnc_currency_changed_cb, NULL);
+                          (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_CURRENCY_CHOICE_OTHER,
-                          gnc_currency_changed_cb, NULL);
+                          (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_CURRENCY_OTHER,
-                          gnc_currency_changed_cb, NULL);
+                          (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_POINT,
-                          gnc_set_auto_decimal_enabled, NULL);
+                          (void*)gnc_set_auto_decimal_enabled, nullptr);
     gnc_prefs_register_cb(GNC_PREFS_GROUP_GENERAL, GNC_PREF_AUTO_DECIMAL_PLACES,
-                          gnc_set_auto_decimal_places, NULL);
+                          (void*)gnc_set_auto_decimal_places, nullptr);
 
 }
 
@@ -2159,72 +2113,67 @@ gnc_ui_util_remove_registered_prefs (void)
     // remove the registered pref call backs above
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_ACCOUNT_SEPARATOR,
-                                 gnc_configure_account_separator, NULL);
+                                 (void*)gnc_configure_account_separator, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_REVERSED_ACCTS_NONE,
-                                 gnc_configure_reverse_balance, NULL);
+                                 (void*)gnc_configure_reverse_balance, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_REVERSED_ACCTS_CREDIT,
-                                 gnc_configure_reverse_balance, NULL);
+                                 (void*)gnc_configure_reverse_balance, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_REVERSED_ACCTS_INC_EXP,
-                                 gnc_configure_reverse_balance, NULL);
+                                 (void*)gnc_configure_reverse_balance, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_CURRENCY_CHOICE_LOCALE,
-                                 gnc_currency_changed_cb, NULL);
+                                 (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_CURRENCY_CHOICE_OTHER,
-                                 gnc_currency_changed_cb, NULL);
+                                 (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_CURRENCY_OTHER,
-                                 gnc_currency_changed_cb, NULL);
+                                 (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REPORT,
                                  GNC_PREF_CURRENCY_CHOICE_LOCALE,
-                                 gnc_currency_changed_cb, NULL);
+                                 (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REPORT,
                                  GNC_PREF_CURRENCY_CHOICE_OTHER,
-                                 gnc_currency_changed_cb, NULL);
+                                 (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL_REPORT,
                                  GNC_PREF_CURRENCY_OTHER,
-                                 gnc_currency_changed_cb, NULL);
+                                 (void*)gnc_currency_changed_cb, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_AUTO_DECIMAL_POINT,
-                                 gnc_set_auto_decimal_enabled, NULL);
+                                 (void*)gnc_set_auto_decimal_enabled, nullptr);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_AUTO_DECIMAL_PLACES,
-                                 gnc_set_auto_decimal_places, NULL);
+                                 (void*)gnc_set_auto_decimal_places, nullptr);
 }
 
-static gboolean
+static inline bool
 unichar_is_cntrl (gunichar uc)
 {
-    if (uc < 0x20 || (uc > 0x7e && uc < 0xa0))
-        return TRUE;
-    else
-        return FALSE;
+    return (uc < 0x20 || (uc > 0x7e && uc < 0xa0));
 }
 
-gchar *
-gnc_filter_text_for_control_chars (const gchar *text)
+char*
+gnc_filter_text_for_control_chars (const char* text)
 {
-    const char *ch;
-    GString *filtered;
-    gboolean cntrl = FALSE;
-    gboolean text_found = FALSE;
+    bool cntrl = false;
+    bool text_found = false;
 
     if (!text)
-        return NULL;
+        return nullptr;
 
-    if (!g_utf8_validate (text, -1, NULL))
-        return NULL;
+    if (!g_utf8_validate (text, -1, nullptr))
+        return nullptr;
 
-    filtered = g_string_sized_new (strlen (text) + 1);
+    auto filtered = g_string_sized_new (strlen (text) + 1);
 
-    ch = text;
+    auto ch = text;
 
     while (*ch)
     {
-        gunichar uc = g_utf8_get_char (ch);
+        auto uc = g_utf8_get_char (ch);
 
         // check for starting with control characters
         if (unichar_is_cntrl (uc) && !text_found)
@@ -2236,33 +2185,32 @@ gnc_filter_text_for_control_chars (const gchar *text)
         if (!unichar_is_cntrl (uc))
         {
             filtered = g_string_append_unichar (filtered, uc);
-            text_found = TRUE;
+            text_found = true;
         }
         // check for control characters after text
         if (unichar_is_cntrl (uc))
-            cntrl = TRUE;
+            cntrl = true;
 
         ch = g_utf8_next_char (ch);
 
         if (cntrl) // if control characters in text replace with space
         {
-            gunichar uc2 = g_utf8_get_char (ch);
+            auto uc2 = g_utf8_get_char (ch);
 
             if (!unichar_is_cntrl (uc2))
                 filtered = g_string_append_unichar (filtered, ' ');
         }
-        cntrl = FALSE;
+        cntrl = false;
     }
     return g_string_free (filtered, FALSE);
 }
 
 void
-gnc_filter_text_set_cursor_position (const gchar *incoming_text,
-                                     const gchar *symbol,
+gnc_filter_text_set_cursor_position (const char* incoming_text,
+                                     const char* symbol,
                                      gint *cursor_position)
 {
-    gint text_len;
-    gint num = 0;
+    int num = 0;
 
     if (*cursor_position == 0)
         return;
@@ -2270,62 +2218,59 @@ gnc_filter_text_set_cursor_position (const gchar *incoming_text,
     if (!incoming_text || !symbol)
         return;
 
-    if (g_strrstr (incoming_text, symbol) == NULL)
+    if (g_strrstr (incoming_text, symbol) == nullptr)
         return;
 
-    text_len = g_utf8_strlen (incoming_text, -1);
+    auto text_len = g_utf8_strlen (incoming_text, -1);
 
-    for (gint x = 0; x < text_len; x++)
+    for (int x = 0; x < text_len; x++)
     {
-        gchar *temp = g_utf8_offset_to_pointer (incoming_text, x);
+        auto temp = g_utf8_offset_to_pointer (incoming_text, x);
 
         if (g_str_has_prefix (temp, symbol))
             num++;
 
-        if (g_strrstr (temp, symbol) == NULL)
+        if (g_strrstr (temp, symbol) == nullptr)
             break;
     }
     *cursor_position = *cursor_position - (num * g_utf8_strlen (symbol, -1));
 }
 
-gchar *
-gnc_filter_text_for_currency_symbol (const gchar *incoming_text,
-                                     const gchar *symbol)
+char*
+gnc_filter_text_for_currency_symbol (const char* incoming_text,
+                                     const char* symbol)
 {
-    gchar *ret_text = NULL;
-    gchar **split;
-
     if (!incoming_text)
-        return NULL;
+        return nullptr;
 
     if (!symbol)
        return g_strdup (incoming_text);
 
-    if (g_strrstr (incoming_text, symbol) == NULL)
+    if (g_strrstr (incoming_text, symbol) == nullptr)
         return g_strdup (incoming_text);
 
-    split = g_strsplit (incoming_text, symbol, -1);
+    auto split = g_strsplit (incoming_text, symbol, -1);
 
-    ret_text = g_strjoinv (NULL, split);
+    auto ret_text = g_strjoinv (nullptr, split);
 
     g_strfreev (split);
     return ret_text;
 }
 
-gchar *
+char*
 gnc_filter_text_for_currency_commodity (const gnc_commodity *comm,
-                                        const gchar *incoming_text,
-                                        const gchar **symbol)
+                                        const char* incoming_text,
+                                        const char** symbol)
 {
     if (!incoming_text)
     {
-        *symbol = NULL;
-        return NULL;
+        *symbol = nullptr;
+        return nullptr;
     }
 
     if (!gnc_commodity_is_currency (comm))
     {
-        *symbol = NULL;
+        *symbol = nullptr;
         return g_strdup (incoming_text);
     }
 
