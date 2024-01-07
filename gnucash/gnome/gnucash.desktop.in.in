@@ -15,5 +15,5 @@ X-GNOME-Bugzilla-Bugzilla=gnucash.org
 X-GNOME-Bugzilla-Product=GnuCash
 X-GNOME-Bugzilla-Component=General
 X-GNOME-Bugzilla-Version=@PROJECT_VERSION@
-X-GNOME-DocPath=gnucash-help/gnucash-help.xml
+X-GNOME-DocPath=gnucash-manual/index.docbook
 X-GNOME-FullName=GnuCash Finance Management
