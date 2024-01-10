@@ -739,12 +739,7 @@ also show overall period profit & loss."))
          ;; generate an exchange-fn for date, and cache its result.
          (get-date-exchange-fn
           (let ((h (make-hash-table))
-                (commodities (sort-and-delete-duplicates
-                              (map xaccAccountGetCommodity accounts)
-                              (lambda (a b)
-                                (gnc:string-locale<? (gnc-commodity-get-unique-name a)
-                                                     (gnc-commodity-get-unique-name b)))
-                              gnc-commodity-equal)))
+                (commodities (gnc:accounts-get-commodities accounts #f)))
             (lambda (date)
               (or (hashv-ref h date)
                   (let ((exchangefn (gnc:case-exchange-time-fn

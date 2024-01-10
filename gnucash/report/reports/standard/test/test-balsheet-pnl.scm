@@ -331,7 +331,7 @@
         '("#200.00" "$340.00" "30 FUNDS" "$14,424.52" "$106,709.00" "$106,709.00")
         (sxml->table-row-col sxml 1 3 6))
       (test-equal "show-rates enabled"
-        '("#1.00" "$1.7000" "1 FUNDS" "$480 + 85/104")
+        '("1 FUNDS" "$480 + 85/104" "#1.00" "$1.7000")
         (sxml->table-row-col sxml 2 #f #f)))
 
     ;;make-multilevel

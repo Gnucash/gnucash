@@ -217,14 +217,11 @@
 ;; Get the list of all different commodities that are used within the
 ;; 'accounts', excluding the 'exclude-commodity'.
 (define (gnc:accounts-get-commodities accounts exclude-commodity)
-  (delete exclude-commodity
-          (sort-and-delete-duplicates
-           (map xaccAccountGetCommodity accounts)
-           (lambda (a b)
-             (gnc:string-locale<? (gnc-commodity-get-unique-name a)
-                                  (gnc-commodity-get-unique-name b)))
-           gnc-commodity-equiv)))
-
+  (if (null? accounts)
+      '()
+      (let ((comm (xaccAccountGetCommodity (car accounts)))
+            (accum (gnc:accounts-get-commodities (cdr accounts) exclude-commodity)))
+        (if (or (equal? exclude-commodity comm) (member comm accum)) accum (cons comm accum)))))
 
 ;; Returns the depth of the current account hierarchy, that is, the
 ;; maximum level of subaccounts in the tree
