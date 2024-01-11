@@ -5,6 +5,10 @@ set (html_HEADERS
   gnc-html-p.h
   gnc-html-factory.h
   gnc-html-extras.h
+  gnc-html-browser-p.h
+  gnc-html-browser.h
+  gnc-ws-server.h
+  gnc-ws-protocol.h
 )
 
 # Command to generate the swig-gnc-html.c wrapper file
@@ -17,6 +21,9 @@ set (html_SOURCES
   gnc-html.c
   gnc-html-history.c
   gnc-html-factory.c
+  gnc-html-browser.c
+  gnc-ws-server.c
+  gnc-ws-protocol.c
 )
 
 set (gnc_html_SCHEME html.scm)
