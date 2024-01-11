@@ -26,7 +26,6 @@
 #include <gtk/gtk.h>
 
 #include "gnc-html.h"
-#include "gnc-html-webkit.h"
 #include "qoflog.h"
 #include "gnc-engine.h"
 

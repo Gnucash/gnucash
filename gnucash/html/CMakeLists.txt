@@ -5,8 +5,6 @@ set (html_HEADERS
   gnc-html-p.h
   gnc-html-factory.h
   gnc-html-extras.h
-  gnc-html-webkit-p.h
-  gnc-html-webkit.h
 )
 
 # Command to generate the swig-gnc-html.c wrapper file
@@ -20,18 +18,6 @@ set (html_SOURCES
   gnc-html-history.c
   gnc-html-factory.c
 )
-
-if (WEBKIT1)
-  list(APPEND html_HEADERS gnc-html-webkit1.h)
-  list(APPEND html_SOURCES gnc-html-webkit1.c)
-  set(html_EXTRA_DIST gnc-html-webkit2.h gnc-html-webkit2.c)
-else ()
-  list(APPEND html_HEADERS gnc-html-webkit2.h)
-  list(APPEND html_SOURCES gnc-html-webkit2.c)
-  set(html_EXTRA_DIST gnc-html-webkit1.h gnc-html-webkit1.c)
-endif()
-
-
 
 set (gnc_html_SCHEME html.scm)
 
@@ -57,7 +43,6 @@ target_link_libraries(gnc-html
         gnc-engine
         gnc-gnome-utils
         PkgConfig::GTK3
-        PkgConfig::WEBKIT
         ${GUILE_LDFLAGS})
 
 target_compile_definitions(gnc-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")
