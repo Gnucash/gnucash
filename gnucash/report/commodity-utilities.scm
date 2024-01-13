@@ -218,17 +218,9 @@
 (define (gnc:get-commoditylist-totalavg-prices
          commodity-list report-currency end-date
          start-percent delta-percent)
-  (define (interesting-split? s)
-    (not (gnc-commodity-equiv
-          (xaccTransGetCurrency (xaccSplitGetParent s))
-          (xaccAccountGetCommodity (xaccSplitGetAccount s)))))
-  (define (date<? a b)
-    (< (xaccTransGetDate (xaccSplitGetParent a))
-       (xaccTransGetDate (xaccSplitGetParent b))))
   (let* ((currency-accounts
           (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
-         (all-splits (get-all-splits currency-accounts end-date))
-         (interesting-splits (sort (filter interesting-split? all-splits) date<?))
+         (interesting-splits (gnc:get-match-commodity-splits-sorted currency-accounts end-date #f))
          (commodity-list (delete-duplicates commodity-list))
          (work-to-do (length commodity-list)))
     (map
