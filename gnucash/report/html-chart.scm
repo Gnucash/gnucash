@@ -64,6 +64,7 @@
 (export gnc:html-chart-set-stacking?!)
 (export gnc:html-chart-set-grid?!)
 (export gnc:html-chart-set-y-axis-label!)
+(export gnc:html-chart-set-y-axis-begin-at-zero!)
 (export gnc:html-chart-add-data-series!)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -331,6 +332,9 @@
 
 (define (gnc:html-chart-set-y-axis-label! chart label)
   (gnc:html-chart-set! chart '(options scales yAxes (0) scaleLabel labelString) label))
+
+(define (gnc:html-chart-set-y-axis-begin-at-zero! chart yzero?)
+  (gnc:html-chart-set! chart '(options scales yAxes (0) ticks beginAtZero) yzero?))
 
 (define (gnc:html-chart-get chart path)
   (let ((options (gnc:html-chart-get-options-internal chart)))
