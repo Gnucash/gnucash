@@ -80,6 +80,7 @@
 ;; "Running Totals" is the plural form as it refers to the running total and running subtotals.
 ;; To be consistent, also consider how the singular form "Running Total" is translated.
 (define optname-running-totals (N_ "Running Totals"))
+(define optname-doclink (N_ "Linked Document"))
 
 ;;Sorting
 (define pagename-sorting (N_ "Sorting"))
@@ -923,7 +924,6 @@ be excluded from periodic reporting.")
       (list (N_ "Use Full Other Account Name")  "i"  (G_ "Display the full account name?") #f)
       (list (N_ "Other Account Code")           "j"  (G_ "Display the other account code?") #f)
       (list (N_ "Shares")                       "k"  (G_ "Display the number of shares?") #f)
-      (list (N_ "Link")                         "l5" (G_ "Display the transaction linked document") #f)
       (list (N_ "Price")                        "l"  (G_ "Display the shares price?") #f)
       ;; note the "Amount" multichoice option in between here
       (list optname-grid                        "m5" (G_ "Display a subtotal summary table.") #f)
@@ -969,6 +969,15 @@ be excluded from periodic reporting.")
       (lambda (x)
         (set! disp-detail-level? x)
         (apply-selectable-by-name-display-options)))
+
+     (gnc-register-multichoice-option options
+      gnc:pagename-display optname-doclink
+      "l5" (G_ "Display the transaction linked document?")
+      "none"
+      (list
+       (vector 'none   (G_ "Hide"))
+       (vector 'anchor (G_ "Short link anchor"))
+       (vector 'url    (G_ "Full document path"))))
 
     (gnc-register-multichoice-callback-option options
       gnc:pagename-display (N_ "Amount")
@@ -1182,20 +1191,23 @@ be excluded from periodic reporting.")
                                       (xaccSplitGetAmount split))))))
 
                (add-if (report-uses? 'doclink)
-                       (list (cons 'heading "")
+                       (list (cons 'heading
+                                   (if (eq? (report-uses? 'doclink) 'url)
+                                       (G_"Linked Document") ""))
                              (cons 'renderer-fn
                                    (lambda (split transaction-row?)
-                                     (let ((url (xaccTransGetDocLink
-                                                 (xaccSplitGetParent split))))
+                                     (let* ((url (xaccTransGetDocLinkFullPath
+                                                 (xaccSplitGetParent split)))
+                                            (label (if (eq? (report-uses? 'doclink) 'url) url
+                                                       ;; Translators: 'L' is short for Linked Document
+                                                       (C_ "Column header for 'Document Link'" "L"))))
                                        (and (not (string-null? url))
                                             (gnc:make-html-table-cell/markup
                                              "text-cell"
                                              (if (report-uses? 'links)
                                                  (gnc:html-transaction-doclink-anchor
-                                                  (xaccSplitGetParent split)
-                                                  ;; Translators: 'L' is short for Linked Document
-                                                  (C_ "Column header for 'Document Link'" "L"))
-                                                 (C_ "Column header for 'Document Link'" "L")))))))))
+                                                  (xaccSplitGetParent split) label)
+                                                 label))))))))
 
                (add-if (report-uses? 'price)
                        (list (cons 'heading (G_ "Price"))
@@ -2245,7 +2257,8 @@ be excluded from periodic reporting.")
                             (opt-val gnc:pagename-display (N_ "Other Account Name"))))
                 (cons 'shares (opt-val gnc:pagename-display (N_ "Shares")))
                 (cons 'price (opt-val gnc:pagename-display (N_ "Price")))
-                (cons 'doclink (opt-val gnc:pagename-display (N_ "Link")))
+                (cons 'doclink (and (not (eq? (opt-val gnc:pagename-display optname-doclink) 'none))
+                                    (opt-val gnc:pagename-display optname-doclink)))
                 (cons 'amount-single (eq? amount-setting 'single))
                 (cons 'amount-double (eq? amount-setting 'double))
                 (cons 'running-balance (opt-val gnc:pagename-display "Account Balance"))

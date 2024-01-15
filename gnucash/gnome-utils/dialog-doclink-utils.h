@@ -27,24 +27,6 @@
 extern "C" {
 #endif
 
-#define GNC_DOC_LINK_PATH_HEAD "assoc-head"
-/* Note, assoc-head is the old name for the document link head which has been
-   kept for compatibility */
-
-
-/** Return the current documentation-link file path head uri.
- *
- *  This function will get the current documentation-link path head from prefs.
- *  If it is not set then a default path head is set based on either
- *  the home directory or the user data directory.
- *
- *  The calling function should free the returned value with g_free when
- *  the it is no longer needed.
- *
- *  @return The current documentation-link file path head.
- */
-gchar * gnc_doclink_get_path_head (void);
-
 /** Sets the label text for displaying the path head in a dialog.
  *
  *  @param path_head_label The GtkLabel Widget
@@ -54,63 +36,6 @@ gchar * gnc_doclink_get_path_head (void);
 void gnc_doclink_set_path_head_label (GtkWidget *path_head_label,
                                       const gchar *incoming_path_head,
                                       const gchar *prefix);
-
-/** Return a uri that can be used for opening it.
- *
- *  The function allocates memory for the uri. The calling function should
- *  free this memory with g_free when uri is no longer needed.
- *
- *  If the uri scheme is 'file' or NULL, an absolute path is created and returned
- *  otherwise the uri is returned.
- *
- *  @param path_head The starting common path head
- *  @param uri The document link URI
- *  @param uri_scheme http:, https:, or file:
- *
- *  @return The uri used for opening the link.
- */
-gchar * gnc_doclink_get_use_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme);
-
-/** Corrects an earlier relative file documentation link uri forrmat.
- *
- *  Prior to version 3.5, relative paths were stored starting as 'file:'
- *  or 'file:/' depending on OS. This function changes them so that
- *  relative paths are stored without a leading "/" and in native form.
- *
- *  @param trans The Transaction holding the document link
- *  @param book_ro TRUE if the book is read only
- */
-gchar * gnc_doclink_convert_trans_link_uri (gpointer trans, gboolean book_ro);
-
-/** Return an unescaped uri for display use.
- *
- *  The function allocates memory for the uri. The calling function should
- *  free this memory with g_free when the unescaped uri is no longer needed.
-
- *  Return an unescaped uri for displaying and if OS is windows change the
- *  '/' to '\' to look like a traditional windows path
- *
- *  @param path_head The starting common path head
- *  @param uri The document link
- *  @param uri_scheme
- *
- *  @return The unescaped uri used for display purposes.
- */
-gchar * gnc_doclink_get_unescape_uri (const gchar *path_head, const gchar *uri, gchar *uri_scheme);
-
-/** Return an unescaped uri for display use just based on the uri.
- *
- *  The function allocates memory for the uri. The calling function should
- *  free this memory with g_free when the unescaped uri is no longer needed.
-
- *  Return an unescaped uri for displaying and if OS is windows change the
- *  '/' to '\' to look like a traditional windows path
- *
- *  @param uri The document link
- *
- *  @return The unescaped uri used for display purposes.
- */
-gchar * gnc_doclink_get_unescaped_just_uri (const gchar *uri);
 
 /** Presents a dialog when the path head is changed.
  *

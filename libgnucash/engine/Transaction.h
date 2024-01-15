@@ -347,6 +347,8 @@ const char *  xaccTransGetNum (const Transaction *trans);
 const char *  xaccTransGetDescription (const Transaction *trans);
 /** Gets the transaction Document Link */
 const char *  xaccTransGetDocLink(const Transaction *trans);
+/** Gets the transaction Document Link with full path*/
+const char *  xaccTransGetDocLinkFullPath(const Transaction *trans);
 /** Gets the transaction Notes
  *
  The Notes field is only visible in the register in double-line mode */

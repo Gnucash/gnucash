@@ -58,6 +58,7 @@
 #include <qofinstance-p.h>
 #include "gncInvoice.h"
 #include "gncOwner.h"
+#include "gnc-uri-utils.h"
 
 /* Notes about xaccTransBeginEdit(), xaccTransCommitEdit(), and
  *  xaccTransRollback():
@@ -2377,6 +2378,17 @@ xaccTransGetDocLink (const Transaction *trans)
     g_value_unset (&v);
 
     return doclink;
+}
+
+const char *
+xaccTransGetDocLinkFullPath (const Transaction *trans)
+{
+    g_return_val_if_fail (trans, NULL);
+
+    const char* doclink = xaccTransGetDocLink (trans);
+    const char* doclinkfp = gnc_doclink_get_unescaped_just_uri (doclink);
+
+    return doclinkfp;
 }
 
 const char *
