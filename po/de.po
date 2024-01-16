@@ -18,7 +18,7 @@
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020, 2021.
-# Christian Wehling <christian.wehling@web.de>, 2020-2023.
+# Christian Wehling <christian.wehling@web.de>, 2020-2023, 2024.
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021.
 # Christian Stimming <christian@cstimming.de>, 2021, 2023.
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
@@ -40,8 +40,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-12-16 05:06+0000\n"
-"Last-Translator: \"Frank H. Ellenberger\" <frank.h.ellenberger@gmail.com>\n"
+"PO-Revision-Date: 2024-01-16 19:56+0000\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -49,7 +49,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1062,11 +1062,11 @@ msgid ""
 "\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
-"GnuCash unterstützt auch Online-Banking mit dem deutschen Standard FinTS, "
-"vormals HBCI. Im Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des "
-"Online-Banking-Zugangs. Nachdem ein Online-Banking-Zugang eingerichtet "
-"wurde, können die Menüpunkte im Kontofenster unter 'Aktionen->Online "
-"Aktionen' verwendet werden."
+"GnuCash unterstützt auch Online-Banking mit dem deutschen Standard FinTS. Im "
+"Menü Werkzeuge finden Sie den Menüpunkt zur Einrichtung des Online-Banking- "
+"Zugangs. Nachdem ein Online-Banking- Zugang eingerichtet wurde, können die "
+"Menüpunkte im Kontofenster unter 'Aktionen->Online Aktionen' verwendet "
+"werden."
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
@@ -2990,7 +2990,7 @@ msgstr "Online Id"
 
 #: gnucash/gnome/dialog-imap-editor.c:768
 msgid "Online HBCI"
-msgstr "Online HBCI/FinTS"
+msgstr "Online FinTS"
 
 #. Translators: In this context,
 #. 'Billing information' maps to the
@@ -5885,8 +5885,8 @@ msgid ""
 "Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data "
 "including Transaction Matching"
 msgstr ""
-"Datenaustausch mittels CSV/FinTS(former HBCI) oder importiere SWIFT-MT9xx/"
-"QIF/OFX Daten, einschließlich Buchungsabgleich"
+"Datenaustausch mittels CSV/FinTS oder importiere SWIFT-MT9xx/QIF/OFX Daten, "
+"einschließlich Buchungsabgleich"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Perform financial calculations, such as a loan repayment"
@@ -18109,7 +18109,7 @@ msgstr "Bankleitzahl %s (%s), Kontonummer %s (%s)"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.c:772
 msgid "Online Banking Account Name"
-msgstr "Online-Banking Kontoname"
+msgstr "Online-Banking- Kontoname"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.c:777
 msgid "GnuCash Account Name"
@@ -18130,7 +18130,7 @@ msgid ""
 "This assistant helps you setting up your Online Banking connection with your "
 "bank."
 msgstr ""
-"Dieser Assistent führt Sie durch die Einrichtung der Online-Banking-"
+"Dieser Assistent führt Sie durch die Einrichtung der Online-Banking- "
 "Verbindung mit Ihrer Bank."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:39
@@ -18188,21 +18188,21 @@ msgid ""
 "feedback when a transfer is rejected."
 msgstr ""
 "Hinweis: KEINE GARANTIE FÜR IRGENDWAS. Einige Banken betreiben einen "
-"schlecht implementierten Online Banking Server. Sie sollten sich nicht auf "
-"zeitkritische Überweisungen über Online Banking verlassen, da die Bank Ihnen "
+"schlecht implementierten Online-Banking- Server. Sie sollten sich nicht auf "
+"zeitkritische Überweisungen über Online-Banking verlassen, da die Bank Ihnen "
 "manchmal keine korrekte Rückmeldung gibt, wenn eine Überweisung abgelehnt "
 "wird."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:89
 msgid "Initial Online Banking Setup"
-msgstr "Grundlegende Online-Banking Einrichtung"
+msgstr "Grundlegende Online-Banking- Einrichtung"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:111
 msgid ""
 "The Setup of your Online Banking connection is handled by the external "
 "program \"AqBanking Setup\"."
 msgstr ""
-"Die Einrichtung Ihrer Onlinebanking-Verbindung wird von dem externen "
+"Die Einrichtung Ihrer Online-Banking- Verbindung wird von dem externen "
 "Programm »AqBanking Setup« durchgeführt."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:125
@@ -18241,7 +18241,7 @@ msgstr "AqBanking Setup _starten"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:186
 msgid "Start Online Banking Setup"
-msgstr "Onlinebanking-Einrichtung starten"
+msgstr "Online-Banking- Einrichtung starten"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:204
 msgid ""
@@ -18249,7 +18249,7 @@ msgid ""
 "match it to a GnuCash account or select incorrect matches and click \"Delete "
 "selected matches\". Click \"Next\" when all desired accounts are matching."
 msgstr ""
-"Doppelklicken Sie auf die Zeile eines Online-Banking-Kontos, um diesem ein "
+"Doppelklicken Sie auf die Zeile eines Online-Banking- Kontos, um diesem ein "
 "GnuCash-Konto zuzuordnen oder selektieren Sie fehlerhafte Zuordnungen und "
 "klicken »Ausgewählte Zuordnungen löschen«. Klicken Sie »Weiter«, wenn alle "
 "gewünschten Konten zugeordnet sind."
@@ -18260,7 +18260,7 @@ msgstr "Ausgewählte Zuordnungen _löschen"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:265
 msgid "Match Online accounts with GnuCash accounts"
-msgstr "Online-Banking-Konten mit GnuCash-Konten zuordnen"
+msgstr "Online-Banking- Konten mit GnuCash-Konten zuordnen"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:280
 msgid ""
@@ -18272,23 +18272,23 @@ msgid ""
 "\n"
 "Press \"Apply\" now."
 msgstr ""
-"Die Einrichtung des Onlinebanking-Zugangs und die Zuordnung zu den passenden "
-"GnuCash-Konten ist fertig gestellt. Sie können nun Onlinebanking-Aktionen in "
-"diesen Konten aufrufen (Menü Aktionen: Online Aktionen).\n"
+"Die Einrichtung des Online-Banking- Zugangs und die Zuordnung zu den "
+"passenden GnuCash-Konten ist fertig gestellt. Sie können nun Online-Banking- "
+"Aktionen in diesen Konten aufrufen (Menü Aktionen: Online Aktionen).\n"
 "\n"
 "Wenn Sie eine neue Bank, einen neuen Benutzer oder ein neues Konto "
-"hinzufügen möchten, können Sie diesen Assistenten jederzeit wieder "
-"aufrufen.\n"
+"hinzufügen möchten, können Sie diesen Assistenten jederzeit wieder aufrufen."
+"\n"
 "\n"
 "Klicken Sie jetzt »Anwenden«."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:296
 msgid "Online Banking Setup Finished"
-msgstr "Online-Banking Einrichtung beendet"
+msgstr "Online-Banking- Einrichtung beendet"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:8
 msgid "Online Banking Connection Window"
-msgstr "Onlinebanking Verbindungsfenster"
+msgstr "Online-Banking- Verbindungsfenster"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:26
 msgid "_Abort"
@@ -18408,7 +18408,7 @@ msgstr "Passwort _wiederholen"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:836
 msgid "_Remember the PIN in memory"
-msgstr "HBCI PIN im Speicher _merken"
+msgstr "PIN im Speicher _merken"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:842
 msgid ""
@@ -18416,10 +18416,10 @@ msgid ""
 "during a session. Otherwise it will have to be entered again each time "
 "during a session when it is needed."
 msgstr ""
-"Wenn aktiviert, wird die PIN (Persönliche Identifikationsnummer) für HBCI/"
-"AqBanking während einer Programmbenutzung im Speicher zwischengespeichert. "
-"Wenn nicht aktiviert, muss die PIN bei jeder einzelnen Aktion von HBCI/"
-"AqBanking eingegeben werden und wird nicht im Speicher gehalten."
+"Wenn aktiviert, wird die PIN für FinTS/AqBanking während einer "
+"Programmbenutzung im Speicher zwischengespeichert. Ansonsten wird die PIN "
+"nicht im Speicher gehalten und muss bei jeder einzelnen Aktion eingegeben "
+"werden."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:877
 msgid "Name for new template"
@@ -18572,7 +18572,7 @@ msgstr "Profile"
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:22
 #: gnucash/import-export/aqb/gncmod-aqbanking.c:70
 msgid "Online Banking"
-msgstr "Onlinebanking"
+msgstr "Online-Banking"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:34
 msgid "_Close log window when finished"
@@ -18584,12 +18584,12 @@ msgid ""
 "If active, the window will be closed automatically when you finish the HBCI/"
 "AqBanking import process. Otherwise it will stay open."
 msgstr ""
-"Wenn aktiviert, wird das Fenster automatisch geschlossen, wenn der HBCI/"
+"Wenn aktiviert, wird das Fenster automatisch geschlossen, sobald der "
 "AqBanking-Import beendet ist. Andernfalls bleibt das Fenster geöffnet."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:52
 msgid "Remember the _PIN in memory"
-msgstr "HBCI _PIN im Speicher merken"
+msgstr "_PIN im Speicher merken"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:58
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:21
@@ -18598,10 +18598,10 @@ msgid ""
 "during a session. Otherwise it will have to be entered again each time "
 "during a session when it is needed."
 msgstr ""
-"Wenn aktiviert, wird die PIN (Persönliche Identifikationsnummer) für HBCI/"
-"AqBanking während einer Programmbenutzung im Speicher zwischengespeichert. "
-"Wenn nicht aktiviert, muss die PIN bei jeder einzelnen Aktion von HBCI/"
-"AqBanking eingegeben werden und wird nicht im Speicher gehalten."
+"Wenn aktiviert, wird die PIN für FinTS/AqBanking während einer "
+"Programmbenutzung im Speicher zwischengespeichert. Wenn nicht, wird die PIN "
+"nicht im Speicher gehalten und muss bei jeder einzelnen Aktion eingegeben "
+"werden."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:70
 msgid "_Verbose debug messages"
@@ -18610,7 +18610,7 @@ msgstr "Ausführliche _Fehlermeldungen"
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:76
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
-msgstr "Ausführliche Fehlermeldungen für HBCI Online Banking aktivieren."
+msgstr "Ausführliche Fehlermeldungen für AqBanking aktivieren."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:88
 msgid "Use Non-SWIFT _transaction text"
@@ -18645,7 +18645,7 @@ msgstr "(unbekannt)"
 #. subdirectory.
 #: gnucash/import-export/aqb/dialog-ab-trans.c:362
 msgid "Enter a SEPA Online Transfer"
-msgstr "SEPA Online-Überweisung eingeben"
+msgstr "Eine SEPA Online-Überweisung eingeben"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:364
 #: gnucash/import-export/aqb/dialog-ab-trans.c:379
@@ -18669,7 +18669,7 @@ msgstr "BIC des Auftraggebers"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:377
 msgid "Enter a SEPA Internal Transfer"
-msgstr "SEPA Online-Übertrag eingeben"
+msgstr "Eine bankinterne SEPA-Umbuchung eingeben"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:398
 msgid "Target Accounts"
@@ -18677,7 +18677,7 @@ msgstr "Zielkonten"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
 msgid "Enter a SEPA Online Direct Debit Note"
-msgstr "SEPA Online-Lastschrift eingeben"
+msgstr "Eine SEPA Online-Lastschrift eingeben"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:412
 msgid "Debited Account Owner"
@@ -18722,10 +18722,10 @@ msgid ""
 "follows: aqhbci-tool4 getaccsepa -b %s -a %s"
 msgstr ""
 "Ihr lokales Bankkonto hat keine SEPA Konteninformationen gespeichert. Es tut "
-"uns leid. aber in dieser Entwicklerversion ist ein weiterer Schritt "
-"notwendig, welcher noch nicht direkt in GnuCash implementiert ist - Bitte "
-"führen Sie das Kommandozeilenprogramm »aqhbci-tool« für Ihr Konto wie folgt "
-"aus: aqhbci-tool4 getaccsepa -b %s -a %s"
+"uns leid. aber in dieser Version ist ein weiterer Schritt notwendig, welcher "
+"noch nicht direkt in GnuCash implementiert ist - Bitte führen Sie das "
+"Kommandozeilenprogramm »aqhbci-tool« für Ihr Konto wie folgt aus: aqhbci-"
+"tool4 getaccsepa -b %s -a %s"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:574
 msgid ""
@@ -18790,7 +18790,7 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-ab-gettrans.c:124
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:104
 msgid "No valid online banking account assigned."
-msgstr "Kein gültiges Online-Banking-Konto zugewiesen."
+msgstr "Kein gültiges Online-Banking- Konto zugewiesen."
 
 #: gnucash/import-export/aqb/gnc-ab-getbalance.c:82
 msgid "Online action \"Get Balance\" not available for this account."
@@ -18856,7 +18856,7 @@ msgstr ""
 "gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
 "\n"
 "Wahrscheinlich wird dieser Geschäftsvorfall von Ihrer Bank leider nicht "
-"unterstützt oder ist für Ihren HBCI-Zugang nicht freigeschaltet. Weitere "
+"unterstützt oder ist für Ihren Online-Zugang nicht freigeschaltet. Weitere "
 "Fehlermeldungen könnten auf dem Console-Log sichtbar sein.\n"
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
@@ -18875,11 +18875,11 @@ msgstr "Online-Auftrag SEPA-Überweisung"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:218
 msgid "Online Banking European (SEPA) Internal Transfer"
-msgstr "Online-Auftrag SEPA-Übertrag"
+msgstr "Online-Auftrag bankinterne SEPA-Umbuchung"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:224
 msgid "Online Banking European (SEPA) Debit Note"
-msgstr "Online-Auftrag SEPA-Einzellastschrift"
+msgstr "Online-Auftrag SEPA-Lastschrift"
 
 #: gnucash/import-export/aqb/gnc-ab-transfer.c:230
 msgid "Online Banking Transaction"
@@ -18922,8 +18922,8 @@ msgstr ""
 "gefunden. Es ist nicht möglich, den Auftrag auszuführen.\n"
 "\n"
 "Wahrscheinlich wird dieser Geschäftsvorfall von Ihrer Bank leider nicht "
-"unterstützt oder ist für Ihren FinTS/HBCI-Zugang nicht freigeschaltet. "
-"Weitere Fehlermeldungen könnten im Log-Fenster sichtbar sein.\n"
+"unterstützt oder ist für Ihren Online-Zugang nicht freigeschaltet. Weitere "
+"Fehlermeldungen könnten im Log-Fenster sichtbar sein.\n"
 "\n"
 "Wollen Sie den Auftrag erneut eingeben?"
 
@@ -18940,8 +18940,8 @@ msgid ""
 "No Online Banking account found for this gnucash account. These transactions "
 "will not be executed by Online Banking."
 msgstr ""
-"Kein Online-Banking Konto gefunden, welches zu diesem GnuCash-Konto "
-"zugeordnet ist. Die Buchungen werden nicht als Online-Banking Aufträge "
+"Kein Online-Banking- Konto gefunden, welches zu diesem GnuCash-Konto "
+"zugeordnet ist. Die Buchungen werden nicht als Online-Banking- Aufträge "
 "abgeschickt."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:913
@@ -18973,8 +18973,8 @@ msgstr ""
 "\n"
 "Entweder war dies der korrekte Saldo, oder Ihre Bank bietet anscheinend "
 "keine Saldenabfrage in der gewählten HBCI-Version an. Im letzteren Fall "
-"können Sie im Onlinebanking-Einrichtungs-Assistent eine höhere HBCI-Version "
-"auswählen. Versuchen Sie anschließend erneut, den Saldo abzufragen."
+"können Sie im Online-Banking- Einrichtungs-Assistent eine höhere HBCI-"
+"Version auswählen. Versuchen Sie anschließend erneut, den Saldo abzufragen."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1023
 #, c-format
@@ -19029,7 +19029,7 @@ msgstr ""
 msgid ""
 "The Online Banking job is still running; are you sure you want to cancel?"
 msgstr ""
-"Der Online-Banking-Auftrag wird noch bearbeitet. Sind Sie sicher, dass Sie "
+"Der Online-Banking- Auftrag wird noch bearbeitet. Sind Sie sicher, dass Sie "
 "abbrechen wollen?"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
@@ -19061,28 +19061,28 @@ msgstr "Abfrage Konto_umsätze…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:25
 msgid "Get the transactions online through Online Banking"
-msgstr "Kontoumsätze online abfragen via HBCI/Onlinebanking"
+msgstr "Kontoumsätze per Online-Banking abfragen"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
 msgid "Issue _SEPA Transaction…"
-msgstr "SEPA _Einzelüberweisung…"
+msgstr "SEPA _Überweisung…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:33
 msgid ""
 "Issue a new international European (SEPA) transaction online through Online "
 "Banking"
-msgstr "Neue SEPA-Überweisung mit HBCI/Onlinebanking online absenden"
+msgstr "Eine neue SEPA-Überweisung per Online-Banking durchführen"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:36
 msgid "Issue SEPA I_nternal Transaction…"
-msgstr "SEPA Interne Um_buchung…"
+msgstr "SEPA Um_buchung…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:38
 msgid ""
 "Issue a new internal European (SEPA) transaction online through Online "
 "Banking"
-msgstr "Neuen SEPA-Übertrag mit HBCI/Onlinebanking online absenden"
+msgstr "Eine neue bankinterne SEPA-Umbuchung per Online-Banking durchführen"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:41
 msgid "_Internal Transaction…"
@@ -19090,18 +19090,17 @@ msgstr "_Interne Umbuchung…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:43
 msgid "Issue a new bank-internal transaction online through Online Banking"
-msgstr ""
-"Neue bankinterne Einzelumbuchung mit HBCI/Onlinebanking online absenden"
+msgstr "Eine neue bankinterne Umbuchung per Online-Banking durchführen"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
 msgid "Issue SEPA Direct _Debit…"
-msgstr "SEPA Einzel_lastschrift…"
+msgstr "SEPA _Lastschrift…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:48
 msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
-msgstr "Neue SEPA-Einzellastschrift online mit HBCI/Onlinebanking absenden"
+msgstr "Eine neue SEPA-Lastschrift per Online-Banking durchführen"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:53
 msgid "Show _log window"
@@ -19113,13 +19112,15 @@ msgstr "Zeigt das Protokollfenster vom Online-Banking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
 msgid "_Online Banking Setup…"
-msgstr "_Onlinebanking Einrichtung…"
+msgstr "_Online-Banking Einrichtung…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:65
 msgid ""
 "Initial setup of Online Banking access (HBCI, or OFX DirectConnect, using "
 "AqBanking)"
-msgstr "Einrichtung des Online Banking Zugangs: HBCI oder OFX DirectConnect"
+msgstr ""
+"Einrichtung des Online-Banking- Zugangs (FinTS oder OFX DirectConnect) "
+"mittels AqBanking"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:15
 msgid "Close window when finished"
@@ -19127,7 +19128,7 @@ msgstr "Fenster nach Verbindungsende schließen"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:20
 msgid "Remember the PIN in memory"
-msgstr "HBCI PIN im Speicher merken"
+msgstr "PIN im Speicher merken"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:25
 msgid "Put the transaction text in front of the purpose of a transaction."
@@ -19135,7 +19136,7 @@ msgstr "Den »transaction text« vor dem Verwendungszweck einfügen."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:30
 msgid "Verbose HBCI debug messages"
-msgstr "Ausführliche HBCI-Fehlermeldungen"
+msgstr "Ausführliche FinTS Fehlermeldungen"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:35
 msgid "DTAUS import data format"
