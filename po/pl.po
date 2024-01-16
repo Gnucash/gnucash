@@ -7,14 +7,15 @@
 # gnu-ewm <gnu.ewm@protonmail.com>, 2022, 2023.
 # Kaligula <kaligula.dev@gmail.com>, 2022, 2023.
 # vim <dev.getport@slmail.me>, 2023.
+# Rcvrvugyvgvb <xzdfrlhz@duck.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-11-01 04:33+0000\n"
-"Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
+"PO-Revision-Date: 2024-01-14 18:06+0000\n"
+"Last-Translator: Rcvrvugyvgvb <xzdfrlhz@duck.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 "X-Poedit-Bookmarks: 2255,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -795,7 +796,6 @@ msgstr ""
 "ustawień wykresów kont, zajrzyj do podręcznika internetowego GnuCash."
 
 #: doc/tip_of_the_day.list.c:44
-#, fuzzy
 msgid ""
 "Every transaction has a \"Notes\" field where you can put useful "
 "information.\n"
@@ -987,14 +987,13 @@ msgstr ""
 "transakcji. Nie jest konieczne ponowne uruchomienie programu GnuCash."
 
 #: doc/tip_of_the_day.list.c:121
-#, fuzzy
 msgid ""
 "To search through all your transactions, start a search (Edit->Find…) from "
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
-"Aby przeszukać wszystkie transakcje, rozpocznij wyszukiwanie (Edycja-"
-">Znajdź...) na stronie głównej hierarchii rachunków. Aby ograniczyć "
+"Aby przeszukać wszystkie transakcje, rozpocznij wyszukiwanie "
+"(Edycja->Znajdź...) na stronie głównej hierarchii rachunków. Aby ograniczyć "
 "wyszukiwanie do jednego konta, rozpocznij wyszukiwanie z rejestru konta."
 
 #: doc/tip_of_the_day.list.c:125
@@ -1012,6 +1011,8 @@ msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 msgstr ""
+"Do wielu działań GnuCash można przypisać lub zmodyfikować skróty "
+"klawiaturowe. Zobacz https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 
 #: doc/tip_of_the_day.list.c:132
 msgid ""
@@ -1389,9 +1390,8 @@ msgstr "Pierwszy zakup długiej pozycji."
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:165
-#, fuzzy
 msgid "Open short"
-msgstr "Wypełniacz"
+msgstr "Otwórz krótką pozycję"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:166
 msgid "Initial stock short sale."
@@ -1440,6 +1440,10 @@ msgid ""
 "If you are unable to calculate capital gains you can enter aplaceholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Długa sprzedaż akcji i rekordowy zysk/strata kapitałowa.\n"
+"\n"
+"Jeśli nie jesteś w stanie obliczyć zysków kapitałowych, możesz wprowadzić "
+"kwotę zastępczą i skorygować ją później w transakcji."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1465,21 +1469,21 @@ msgstr ""
 #. Translators: this is a stock transaction describing return
 #. of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:216
-#, fuzzy
 msgid "Return of capital"
-msgstr "Zmniejszenie kapitału"
+msgstr "Zwrot kapitału"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:217
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"Firma zwraca kapitał, zmniejszając podstawę kosztową bez wpływu na # "
+"jednostki."
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:227
-#, fuzzy
 msgid "Return of capital (reclassification)"
-msgstr "Zmniejszenie kapitału"
+msgstr "Zwrot kapitału (reklasyfikacja)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:228
 msgid ""
@@ -1487,30 +1491,38 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"Firma zwraca kapitał, zmniejszając podstawę kosztową bez wpływu na # "
+"jednostki. Wypłata wcześniej zarejestrowana jako dywidenda jest "
+"przeklasyfikowana na zwrot kapitału, często ze względu na informacje "
+"podatkowe na koniec roku."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:240
 msgid "Notional distribution (dividend)"
-msgstr ""
+msgstr "Fikcyjna dystrybucja (dywidenda)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:241
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Spółka dokonuje fikcyjnej wypłaty, która jest rejestrowana jako dochód z "
+"dywidendy i zwiększa podstawę kosztową bez wpływu na # jednostek."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:252
 msgid "Notional distribution (capital gain)"
-msgstr ""
+msgstr "Fikcyjny podział (zysk kapitałowy)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:253
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Spółka emituje hipotetyczną dystrybucję, która jest rejestrowana jako zysk "
+"kapitałowy i zwiększa podstawę kosztową bez wpływu na # jednostki."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1518,9 +1530,8 @@ msgstr ""
 #. split when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:264
 #: gnucash/gnome/assistant-stock-transaction.cpp:390
-#, fuzzy
 msgid "Stock split"
-msgstr "Split giełdowy"
+msgstr "Podział akcji"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:265
 msgid ""
@@ -1531,15 +1542,20 @@ msgid ""
 "If the split results in a cash in lieu for remainder units, please record "
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
+"Spółka emituje dodatkowe jednostki, zmniejszając w ten sposób cenę akcji o "
+"dzielnik, zachowując jednocześnie stałą wartość pieniężną całej inwestycji.\n"
+"\n"
+"Jeżeli podział skutkuje otrzymaniem środków pieniężnych w zamian za "
+"pozostałe jednostki, należy najpierw zarejestrować sprzedaż za pomocą "
+"Asystenta transakcji giełdowych, a następnie zarejestrować podział."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
 #. reverse split when shorting stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:277
 #: gnucash/gnome/assistant-stock-transaction.cpp:404
-#, fuzzy
 msgid "Reverse split"
-msgstr "_Zobacz przejrzane podziały"
+msgstr "Podział odwrócony"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:278
 msgid ""
@@ -1550,23 +1566,29 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"Spółka umarza jednostki, zwiększając w ten sposób cenę akcji o "
+"wielokrotność, przy jednoczesnym utrzymaniu całkowitej wartości pieniężnej "
+"całej inwestycji na stałym poziomie.\n"
+"\n"
+"Jeśli odwrotny podział skutkuje wypłatą gotówki w zamian za pozostałe "
+"jednostki, należy najpierw zarejestrować sprzedaż za pomocą Asystenta "
+"transakcji na akcjach, a następnie zarejestrować odwrotny podział."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:295
-#, fuzzy
 msgid "Short sell"
-msgstr "Porządek sortowania"
+msgstr "Krótka sprzedaż"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:296
 msgid "Selling stock short."
-msgstr ""
+msgstr "Krótka sprzedaż akcji."
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
 #: gnucash/gnome/assistant-stock-transaction.cpp:306
 msgid "Buy to cover short"
-msgstr ""
+msgstr "Kupno w celu pokrycia krótkiej pozycji"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:307
 msgid ""
@@ -1575,24 +1597,31 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Odkup akcji w celu pokrycia krótkiej pozycji i zarejestruj zysk/stratę "
+"kapitałową. \n"
+"\n"
+"Jeśli nie jesteś w stanie obliczyć zysków kapitałowych, możesz wprowadzić "
+"kwotę zastępczą i skorygować ją później w transakcji."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:319
 msgid "Compensatory dividend"
-msgstr ""
+msgstr "Dywidenda wyrównawcza"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:320
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
 msgstr ""
+"Spółka wypłaca dywidendę, a posiadacz akcji krótkich musi dokonać płatności "
+"wyrównawczej z tytułu dywidendy."
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:331
 msgid "Compensatory return of capital"
-msgstr ""
+msgstr "Kompensacyjny zwrot kapitału"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:332
 msgid ""
@@ -1600,13 +1629,16 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
+"Spółka zwraca kapitał, a posiadacz akcji krótkich musi dokonać płatności "
+"wyrównawczej za zwrócony kapitał. Zmniejsza to podstawę kosztową (mniej "
+"ujemną, w kierunku wartości 0,00) bez wpływu na # jednostek."
 
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:345
 msgid "Compensatory return of capital (reclassification)"
-msgstr ""
+msgstr "Kompensacyjny zwrot kapitału (reklasyfikacja)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:346
 msgid ""
@@ -1616,13 +1648,19 @@ msgid ""
 "previously recorded as a compensatory dividend is reclassified to "
 "compensatory return of capital,often due to end-of-year tax information."
 msgstr ""
+"Spółka zwraca kapitał, a posiadacz akcji krótkich musi dokonać płatności "
+"wyrównawczej za zwrócony kapitał. Zmniejsza to podstawę kosztową (mniej "
+"ujemną, w kierunku wartości 0,00) bez wpływu na jednostki #. Dystrybucja "
+"wcześniej zarejestrowana jako dywidenda kompensacyjna jest przeklasyfikowana "
+"na kompensacyjny zwrot kapitału, często ze względu na informacje podatkowe "
+"na koniec roku."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:361
 msgid "Compensatory notional distribution (dividend)"
-msgstr ""
+msgstr "Fikcyjny podział kompensacyjny (dywidenda)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:362
 msgid ""
@@ -1631,13 +1669,18 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
+"Spółka emituje hipotetyczną dystrybucję, a posiadacz krótkich akcji musi "
+"dokonać płatności wyrównawczej za hipotetyczną dystrybucję. Jest to "
+"rejestrowane jako strata / ujemna kwota dochodu z dywidendy i zwiększa "
+"podstawę kosztową (bardziej ujemną, z dala od wartości 0,00) bez wpływu na "
+"liczbę jednostek."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:376
 msgid "Compensatory notional distribution (capital gain)"
-msgstr ""
+msgstr "Fikcyjny podział kompensacyjny (zysk kapitałowy)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:377
 msgid ""
@@ -1646,6 +1689,10 @@ msgid ""
 "capital loss amount, and increases the cost basis (more negative, away from "
 "0.00 value) without affecting # units."
 msgstr ""
+"Spółka emituje hipotetyczną dystrybucję, a posiadacz krótkich akcji musi "
+"dokonać płatności wyrównawczej za hipotetyczną dystrybucję. Jest to "
+"rejestrowane jako kwota straty kapitałowej i zwiększa podstawę kosztową ("
+"bardziej ujemną, z dala od wartości 0,00) bez wpływu na jednostki #."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:391
 msgid ""
@@ -1657,6 +1704,13 @@ msgid ""
 "the cover buy using the Stock Transaction Assistant first, then record the "
 "split."
 msgstr ""
+"Spółka emituje dodatkowe jednostki, obniżając w ten sposób cenę akcji o "
+"dzielnik, przy jednoczesnym utrzymaniu całkowitej wartości pieniężnej całej "
+"inwestycji na stałym poziomie. \n"
+"\n"
+"Jeśli podział skutkuje wypłatą gotówki w zamian za pozostałe jednostki, "
+"należy najpierw zarejestrować zakup pokrycia za pomocą Asystenta transakcji "
+"na akcjach, a następnie zarejestrować podział."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:405
 msgid ""
@@ -1667,20 +1721,26 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"Spółka umarza jednostki, zwiększając w ten sposób cenę akcji o "
+"wielokrotność, przy jednoczesnym utrzymaniu całkowitej wartości pieniężnej "
+"całej inwestycji na stałym poziomie.\n"
+"\n"
+"Jeśli odwrotny podział skutkuje wypłatą gotówki w zamian za pozostałe "
+"jednostki, należy najpierw zarejestrować zakup pokrycia za pomocą Asystenta "
+"transakcji akcjami, a następnie zarejestrować odwrotny podział."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:497
 msgid "No errors found. Click Apply to create transaction."
 msgstr ""
+"Nie znaleziono błędów. Kliknij przycisk Zastosuj, aby utworzyć transakcję."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:502
-#, fuzzy
 msgid "The following errors must be fixed:"
-msgstr "Wymagany jest następujący dokument dostawcy:"
+msgstr "Następujące błędy muszą zostać naprawione:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:507
-#, fuzzy
 msgid "The following warnings exist:"
-msgstr "Wymagany jest następujący dokument dostawcy:"
+msgstr "Istnieją następujące ostrzeżenia:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:627
 #: gnucash/gnome/assistant-stock-transaction.cpp:688
@@ -1698,19 +1758,19 @@ msgstr "Brakuje ilości %s."
 #: gnucash/gnome/assistant-stock-transaction.cpp:1021
 #, c-format
 msgid "Amount for %s must not be negative."
-msgstr ""
+msgstr "Kwota %s nie może być ujemna."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:674
 #: gnucash/gnome/assistant-stock-transaction.cpp:1024
 #, c-format
 msgid "Amount for %s must be positive."
-msgstr ""
+msgstr "Kwota %s musi być dodatnia."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:677
 #: gnucash/gnome/assistant-stock-transaction.cpp:1027
-#, fuzzy, c-format
+#, c-format
 msgid "The %s amount has no associated account."
-msgstr "Uwzględniaj konta podrzędne wszystkich wybranych kont"
+msgstr "Kwota %s nie ma powiązanego konta."
 
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
 #: gnucash/gnome/assistant-stock-transaction.cpp:743
@@ -1718,46 +1778,39 @@ msgid "N/A"
 msgstr "nd."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:835
-#, fuzzy
 msgid "Amount for stock value is missing."
-msgstr "Brakuje ilości %s"
+msgstr "Brakuje kwoty odpowiadającej wartości zapasów."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:847
-#, fuzzy
 msgid "Invalid stock new balance."
-msgstr "Wybrano niepoprawne kodowanie"
+msgstr "Nieprawidłowe nowe saldo zapasów."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:849
 msgid "New balance must be higher than old balance."
-msgstr ""
+msgstr "Nowe saldo musi być wyższe niż stare saldo."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:851
 msgid "New balance must be lower than old balance."
-msgstr ""
+msgstr "Nowe saldo musi być niższe niż stare saldo."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:858
-#, fuzzy
 msgid "Stock amount must be positive."
-msgstr "Rachunki walorów do raportu"
+msgstr "Kwota zapasów musi być dodatnia."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:862
 msgid "Cannot sell more units than owned."
-msgstr ""
+msgstr "Nie można sprzedać więcej jednostek niż się posiada."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:864
 msgid "Cannot cover buy more units than owed."
-msgstr ""
+msgstr "Nie można pokryć zakupu większej liczby jednostek niż należne."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1100
-#, fuzzy
-#| msgid "Stock"
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
-msgstr "Giełda"
+msgstr "Akcje"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1101
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "Gotówka"
