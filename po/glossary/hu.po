@@ -4,7 +4,7 @@
 # Kornel Tako <takokornel@gmail.com>, 2007.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2020.
 # Kárász Attila <cult.edie@gmail.com>, 2022.
-# Szia Tomi <sziatomi01@gmail.com>, 2022, 2023.
+# Szia Tomi <sziatomi01@gmail.com>, 2022, 2023, 2024.
 # mocsa <csaba@feltoltve.hu>, 2023.
 msgid ""
 msgstr ""
@@ -12,7 +12,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-25 08:00+0200\n"
-"PO-Revision-Date: 2023-12-30 05:08+0000\n"
+"PO-Revision-Date: 2024-01-14 12:30+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hu/>\n"
@@ -461,7 +461,7 @@ msgstr "importálás"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
-msgstr "jövedelemkimutatás"
+msgstr "bevételkimutatás"
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"

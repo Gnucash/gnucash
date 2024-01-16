@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-01 02:08+0000\n"
+"PO-Revision-Date: 2024-01-14 12:30+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -921,10 +921,10 @@ msgid ""
 "For more information on income and expense accounts, please see the GnuCash "
 "online manual."
 msgstr ""
-"Ha ismer más pénzügyi programokat, mint a Quicken, figyelje meg, hogy "
-"GnuCash a bevételek és költségek nyomonkövetésére számlákat használ "
-"kategóriák helyett. A bevételi és költségszámlákról további tájékoztatás a "
-"GnuCash online kézikönyvben található."
+"Ha ismer más pénzügyi programokat, mint például a Quicken, figyelje meg, "
+"hogy GnuCash a bevételek és a költségek nyomonkövetésére számlákat használ "
+"kategóriák helyett. A bevétel- és költségszámlákról bővebb információt a "
+"GnuCash online kézikönyvében talál."
 
 #: doc/tip_of_the_day.list.c:29
 msgid ""
@@ -12048,13 +12048,13 @@ msgid ""
 msgstr ""
 "GnuCash képes pénzügyi adatokat importálni QIF (Quicken Interchange Format) "
 "típusú fájlokból, Quicken/QuickBooks, MS Money, Moneydance és sok más "
-"program által írtakból.\n"
+"program által létrehozottakból.\n"
 "\n"
-"Az importálási folyamatnak több lépése van.A GnuCash számlái nem változnak "
-"mialatt ön az 'Alkalmazás'-ra kattint a folyamat végén.\n"
+"Az importálási folyamatnak számos lépése van. Az Ön GnuCash számlái nem "
+"változnak, míg az „Alkalmazás”-ra nem kattint a folyamat végén.\n"
 "\n"
-"Kattintson az \"Következő\" -re a QIF fájl betöltéséhez,vagy a "
-"\"Megszakítás\" -ra a kilépéshez."
+"Kattintson az „Következő”-re a QIF fájl betöltéséhez, vagy a „Megszakítás”-"
+"ra a kilépéshez."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:35
 msgid "Import QIF files"
@@ -23685,9 +23685,8 @@ msgid "Balance Sheet (Multicolumn)"
 msgstr "Balance Sheet (eguile)"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1266
-#, fuzzy
 msgid "Income Statement (Multicolumn)"
-msgstr "Bevételi jelentés"
+msgstr "Bevételkimutatás (Többoszlopos)"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
@@ -24046,12 +24045,12 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-budget.ui:40
 #: gnucash/ui/gnc-plugin-page-budget.ui:285
 msgid "Budget Report"
-msgstr "Költségvetési jelentés"
+msgstr "Költségvetés-jelentés"
 
 #: gnucash/report/reports/standard/budget.scm:47
 #: gnucash/report/reports/standard/cash-flow.scm:45
 msgid "Account Display Depth"
-msgstr "Számla-megjelenítés mélysége"
+msgstr "Számlamegjelenítés mélysége"
 
 #: gnucash/report/reports/standard/budget.scm:48
 #: gnucash/report/reports/standard/cash-flow.scm:46
@@ -24477,7 +24476,7 @@ msgstr "Ügyfél eredmény"
 #. Translators: This statement is about a range of time
 #: gnucash/report/reports/standard/equity-statement.scm:56
 msgid "Equity Statement"
-msgstr "Saját tőke jelentés"
+msgstr "Tőkekimutatás"
 
 #: gnucash/report/reports/standard/equity-statement.scm:68
 msgid "Report only on these accounts."
