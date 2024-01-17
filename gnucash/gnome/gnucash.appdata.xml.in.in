@@ -14,13 +14,16 @@
     </p>
     <p>With GnuCash you can (but are not limited to):</p>
     <ul>
-      <li>Keep track of your day to day personal income and expenses</li>
-      <li>Manage your stock, bond and mutual fund accounts with ease</li>
-      <li>Keep your small business' accounting up to date</li>
-      <li>Create accurate reports and graphs from your financial data</li>
-      <li>Set up scheduled transactions to avoid repeated data entry</li>
-      <li>Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data including Transaction Matching</li>
-      <li>Perform financial calculations, such as a loan repayment</li>
+      <li>Keep track of your day to day personal income and expenses.</li>
+      <li>Manage your stock, bond and mutual fund accounts with ease.</li>
+      <li>Keep your small business' accounting up to date.</li>
+      <li>Create accurate reports and graphs from your financial data.</li>
+      <li>Set up scheduled transactions to avoid repeated data entry.</li>
+      <li>Process your bank data via online banking using OFX DirectConnect or FinTS.</li>
+      <li>Download Transactions and Balances and initiate various SEPA Actions using AqBanking.</li>
+      <li>Import accounts, business data, prices, and transactions from CSV and transactions and balances from many formats including CAMT, SWIFT-MT9xx, and OFX.</li>
+      <li>Export the account tree or transactions as CSV.</li>
+      <li>Perform financial calculations, such as a loan repayment.</li>
     </ul>
   </description>
 

@@ -999,16 +999,17 @@ bal_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
                      /* Translators: Strings from this file are needed only in
                         countries that have one of aqbanking's Online Banking
                         techniques available. This is 'OFX DirectConnect'
-                        (U.S. and others), 'HBCI' (in Germany), or 'YellowNet'
+                        (U.S. and others), 'FinTS' (in Germany), or 'YellowNet'
                         (Switzerland). If none of these techniques are available
                         in your country, you may safely ignore strings from the
                         import-export/hbci subdirectory. */
                      _("The downloaded Online Banking Balance was zero.\n\n"
                        "Either this is the correct balance, or your bank does not "
-                       "support Balance download in this Online Banking version. "
-                       "In the latter case you should choose a different "
-                       "Online Banking version number in the Online Banking "
-                       "(AqBanking or HBCI) Setup. After that, try again to "
+                       "support Balance download with the parameters you have "
+                       "selected. "
+                       "In the latter case you should check the details of "
+                       "your connection like Server URL in the Online Banking "
+                       "(AqBanking) Setup. After that, try again to "
                        "download the Online Banking Balance."));
         gtk_dialog_run (GTK_DIALOG(dialog));
         gtk_widget_destroy (dialog);
