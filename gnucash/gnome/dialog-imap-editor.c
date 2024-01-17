@@ -765,7 +765,7 @@ get_account_info_online (ImapDialog *imap_dialog, GList *accts)
 
             // Add top level entry and pass iter to add_to_store
             gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), &toplevel, NULL);
-            add_to_store (imap_dialog, &toplevel, _("Online HBCI"), &imapInfo);
+            add_to_store (imap_dialog, &toplevel, _("Online FinTS"), &imapInfo);
         }
         g_free (hbci_account_id);
         g_free (hbci_bank_code);
