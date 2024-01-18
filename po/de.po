@@ -40,7 +40,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-16 19:56+0000\n"
+"PO-Revision-Date: 2024-01-18 06:35+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -18610,7 +18610,7 @@ msgstr "Ausführliche _Fehlermeldungen"
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:76
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:31
 msgid "Enables verbose debug messages for HBCI/AqBanking Online Banking."
-msgstr "Ausführliche Fehlermeldungen für AqBanking aktivieren."
+msgstr "Ausführliche Fehlermeldungen für FinTS/AqBanking aktivieren."
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:88
 msgid "Use Non-SWIFT _transaction text"
@@ -18972,9 +18972,10 @@ msgstr ""
 "Der abgefragte Saldo war Null.\n"
 "\n"
 "Entweder war dies der korrekte Saldo, oder Ihre Bank bietet anscheinend "
-"keine Saldenabfrage in der gewählten HBCI-Version an. Im letzteren Fall "
-"können Sie im Online-Banking- Einrichtungs-Assistent eine höhere HBCI-"
-"Version auswählen. Versuchen Sie anschließend erneut, den Saldo abzufragen."
+"keine Saldenabfrage in der gewählten Online-Banking- Version an. Im "
+"letzteren Fall können Sie im Online-Banking- Einrichtungs-Assistent eine "
+"höhere FinTS-Version auswählen. Versuchen Sie anschließend erneut, den Saldo "
+"abzufragen."
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1023
 #, c-format
