@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-14 12:30+0000\n"
+"PO-Revision-Date: 2024-01-21 20:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1057,7 +1057,7 @@ msgid ""
 "reconciled. You can also press Tab and Shift-Tab to move between deposits "
 "and withdrawals."
 msgstr ""
-"A bankszámla-egyeztetés ablakában a szóköz-billentyű megnyomásával a "
+"A bankszámla-egyeztetés ablakában a szóközbillentyű megnyomásával a "
 "tranzakciók egyeztetettnek jelölhetők. Tab ill. Shift-tab megnyomásával a "
 "jóváírások és a terhelések között mozoghat."
 
@@ -1358,7 +1358,7 @@ msgstr "Kölcsön"
 #: gnucash/gnome/assistant-loan.cpp:1475
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
-msgstr "Kölcsön visszafizetési kalkulátor:\"%s\""
+msgstr "Kölcsön-visszafizetési opció:„%s”"
 
 #: gnucash/gnome/assistant-loan.cpp:1877 gnucash/gnome/dialog-lot-viewer.c:984
 #: gnucash/gnome/gnc-split-reg.c:654 gnucash/gnome/reconcile-view.c:453
@@ -11830,13 +11830,13 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:111
 msgid "Loan / Mortgage Repayment Setup"
-msgstr "Hitel / jelzálog kölcsön törlesztésének beállítása"
+msgstr "Kölcsön / Jelzálogkölcsön visszafizetésének beállítása"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:127
 msgid ""
 "Enter the Loan Details, as a minimum enter a valid Loan Account and Amount.\n"
 msgstr ""
-"Adja meg a hitel részleteit, minimum egy érvényes hitelszámlát és az "
+"Adja meg a kölcsön részleteit, legalább egy érvényes kölcsönszámlát és az "
 "összeget.\n"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:165
@@ -11870,13 +11870,15 @@ msgstr "Hossz"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:204
 msgid "Loan Account"
-msgstr "Hitelszámla"
+msgstr "Kölcsönszámla"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:219
 msgid ""
 "Enter the number of months still to be paid off. This determines both the "
 "remaining principle and the duration of the scheduled transaction."
 msgstr ""
+"Adja meg a törlesztési hónapok számát. Ez meghatározza a hátralévő "
+"tőketartozás összegét és az ütemezett tranzakciók időtartamát."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:288
 msgid "Months Remaining"
@@ -11900,7 +11902,7 @@ msgstr "Kamatlábváltozás gyakorisága"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:436
 msgid "Loan Details"
-msgstr ""
+msgstr "Kölcsön részletei"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:451
 msgid "Do you utilize an escrow account, if so an account must be specified…"
@@ -11915,9 +11917,8 @@ msgid "Escrow Account"
 msgstr "Letéti számla"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:531
-#, fuzzy
 msgid "Loan Repayment Options"
-msgstr "Kölcsön visszafizetési kalkulátor"
+msgstr "Kölcsön-visszafizetési opciók"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:544
 msgid "All accounts must have valid entries to continue."
@@ -11925,24 +11926,25 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:584
 msgid "Principal To"
-msgstr "Kölcsön ide"
+msgstr "Tőketartozás"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:623
 msgid "Interest To"
-msgstr "Kamat ide"
+msgstr "Fizetendő kamat"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:679
 msgid "Repayment Frequency"
 msgstr "Törlesztés gyakorisága"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:714
-#, fuzzy
 msgid "Loan Repayment"
-msgstr "Törlesztés"
+msgstr "Kölcsön-visszafizetés"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:727
 msgid "All enabled option pages must contain valid entries to continue."
 msgstr ""
+"Az összes engedélyezett opciós oldalnak érvényes bejegyzéseket kell "
+"tartalmaznia a folytatáshoz."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:798
 msgid "Payment To (Escrow)"
@@ -11969,19 +11971,16 @@ msgid "Payment Frequency"
 msgstr "Törlesztés gyakorisága"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1032
-#, fuzzy
 msgid "Previous Option"
-msgstr "Első opció"
+msgstr "Előző opció"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1046
-#, fuzzy
 msgid "Next Option"
-msgstr "Szám beállítások"
+msgstr "Következő opció"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1068
-#, fuzzy
 msgid "Loan Payment"
-msgstr "Adófizetés"
+msgstr "Hiteltörlesztés"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1081
 msgid ""
@@ -14057,7 +14056,7 @@ msgstr "Kéthavi"
 #: gnucash/report/trep-engine.scm:326 libgnucash/engine/Recurrence.c:761
 #: libgnucash/engine/Recurrence.c:775
 msgid "Monthly"
-msgstr "Havonta"
+msgstr "Havi"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:30
 #: gnucash/gtkbuilder/dialog-fincalc.glade:71
@@ -14079,7 +14078,7 @@ msgstr "Kétheti"
 #: gnucash/report/reports/standard/category-barchart.scm:121
 #: gnucash/report/trep-engine.scm:318 libgnucash/engine/Recurrence.c:622
 msgid "Weekly"
-msgstr "Hetente"
+msgstr "Heti"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:39
 #: gnucash/gtkbuilder/dialog-fincalc.glade:80
@@ -14093,10 +14092,9 @@ msgstr "Napi (365)"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:90
 msgid "Loan Repayment Calculator"
-msgstr "Kölcsön visszafizetési kalkulátor"
+msgstr "Kölcsön-visszafizetési kalkulátor"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:151
-#, fuzzy
 msgid "_Schedule"
 msgstr "_Ütemezett"
 
@@ -15079,7 +15077,7 @@ msgstr "Az automatikusan kitöltött tizedes helyek száma."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1389
 msgid "Numbers, Date, Time"
-msgstr ""
+msgstr "Számok, Dátum, Idő"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1421
 msgid "Perform account list _setup on new file"
@@ -15311,8 +15309,8 @@ msgstr "Ba_yes-i illesztés"
 msgid ""
 "Use bayesian algorithms to match new transactions with existing accounts."
 msgstr ""
-"Bayes-féle algoritmusokat használ az új tranzakciók meglévő számlákra "
-"illesztéséhez."
+"Bayes-féle algoritmusokat használ az új tranzakciók meglévő számlákhoz "
+"illesztésére."
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2296
@@ -28186,7 +28184,7 @@ msgstr "Eszköz_tár"
 
 #: gnucash/ui/gnc-main-window.ui:180
 msgid "Show/hide the toolbar on this window"
-msgstr "Eszköztár megjelenítése/elrejtése ebben az ablakban"
+msgstr "Eszköztár megjelenítése/elrejtése ezen az ablakon"
 
 #: gnucash/ui/gnc-main-window.ui:183
 msgid "Su_mmary Bar"
@@ -28194,7 +28192,7 @@ msgstr "Összegzőso_r"
 
 #: gnucash/ui/gnc-main-window.ui:185
 msgid "Show/hide the summary bar on this window"
-msgstr "Összegzősor megjelenítése/elrejtése ebben az ablakban"
+msgstr "Összegzősor megjelenítése/elrejtése ezen az ablakon"
 
 #: gnucash/ui/gnc-main-window.ui:188
 msgid "Stat_us Bar"
@@ -28202,7 +28200,7 @@ msgstr "Á_llapotsor"
 
 #: gnucash/ui/gnc-main-window.ui:190
 msgid "Show/hide the status bar on this window"
-msgstr "Állapotsor megjelenítése/elrejtése ez ablakban"
+msgstr "Állapotsor megjelenítése/elrejtése ezen az ablakon"
 
 #: gnucash/ui/gnc-main-window.ui:193
 msgid "Tab P_osition"
@@ -28269,7 +28267,7 @@ msgstr "_Ütemezett"
 
 #: gnucash/ui/gnc-main-window.ui:403
 msgid "_Reports"
-msgstr "_Kimutatások"
+msgstr "_Jelentések"
 
 #: gnucash/ui/gnc-main-window.ui:422
 msgid "_Tools"
@@ -28301,11 +28299,11 @@ msgstr "A jelenlegi lap megnyitása egy új GnuCash ablakban"
 
 #: gnucash/ui/gnc-main-window.ui:501
 msgid "Tutorial and Concepts _Guide"
-msgstr "Oktató és fo_galomtár"
+msgstr "Oktatóanyag és fo_galmi útmutató"
 
 #: gnucash/ui/gnc-main-window.ui:504
 msgid "Open the GnuCash Tutorial"
-msgstr "A GnuCash-oktató megnyitása"
+msgstr "A GnuCash oktatóanyagának megnyitása"
 
 #: gnucash/ui/gnc-main-window.ui:512
 msgid "_Contents"
@@ -28313,7 +28311,7 @@ msgstr "_Tartalom"
 
 #: gnucash/ui/gnc-main-window.ui:515
 msgid "Open the GnuCash Help"
-msgstr "A GnuCash-súgó megnyitása"
+msgstr "A GnuCash súgójának megnyitása"
 
 #: gnucash/ui/gnc-main-window.ui:518
 msgid "_About"
@@ -28321,7 +28319,7 @@ msgstr "_Névjegy"
 
 #: gnucash/ui/gnc-main-window.ui:520
 msgid "About GnuCash"
-msgstr "GnuCash névjegye"
+msgstr "A GnuCash névjegye"
 
 #: gnucash/ui/gnc-main-window.ui:545 gnucash/ui/gnc-plugin-basic-commands.ui:24
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:309
@@ -28417,7 +28415,7 @@ msgstr "A jelenleg aktív lap nyomtatása"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:51
 msgid "Export _Accounts"
-msgstr "Számla_hierarchia GnuCash fájlba"
+msgstr "Számla_hierarchia exportálása"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:53
 msgid "Export the account hierarchy to a new GnuCash datafile"
@@ -28487,11 +28485,11 @@ msgstr "Ütemezett tranzakciók létrehozása az utolsó futás óta"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
 msgid "_Mortgage & Loan Repayment…"
-msgstr "_Jelzálogkölcsön/Kölcsön visszafizetés…"
+msgstr "_Jelzálogkölcsön és Kölcsön visszafizetése…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:96
 msgid "Setup scheduled transactions for repayment of a loan"
-msgstr "Ütemezett tranzakciók beállítása a kölcsön visszafizetésére"
+msgstr "Ütemezett tranzakciók beállítása a kölcsön visszafizetéséhez"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:104
 msgid "_Price Database"
@@ -28514,11 +28512,11 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:114
 msgid "_Loan Repayment Calculator"
-msgstr "Kölcsön _visszafizetési kalkulátor"
+msgstr "_Kölcsön-visszafizetési kalkulátor"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:116
 msgid "Use the loan/mortgage repayment calculator"
-msgstr "Használja a kölcsön visszafizetési számológépet"
+msgstr "Kölcsön-visszafizetési kalkulátor használata"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:119
 msgid "_Close Book…"
