@@ -85,10 +85,14 @@
                 (dates (map (compose xaccTransGetDate xaccSplitGetParent) new-splits)))
             (qof-query-set-book q (gnc-account-get-book old-root))
             (xaccQueryAddAccountMatch q old-accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-            (xaccQueryAddDateMatchTT q
-                                     #t (decdate (apply min dates) WeekDelta)
-                                     #t (incdate (apply max dates) WeekDelta)
-                                     QOF-QUERY-AND)
+            (cond
+             ((null? dates)
+              (gnc:warn "Probable error: the new account tree has no transactions."))
+             (else
+              (xaccQueryAddDateMatchTT q
+                                       #t (decdate (apply min dates) WeekDelta)
+                                       #t (incdate (apply max dates) WeekDelta)
+                                       QOF-QUERY-AND)))
             (let ((splits (qof-query-run q)))
               (qof-query-destroy q)
               splits)))
