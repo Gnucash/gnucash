@@ -596,6 +596,13 @@
       (else
         (apply xaccTransSetDate gnc-xtn (qif-xtn:date qif-xtn))))
 
+    (unless qif-action
+      (qif-import:log progress-dialog "qif-import:qif-xtn-to-gnc-xtn"
+                      (format #f (G_ "Missing QIF investment action for transaction dated ~a.")
+                              (qof-print-date (qif-date-to-time64 qif-date))))
+      (throw 'missing-action "qif-import:qif-xtn-to-gnc-xtn" "Missing investment action."
+             #f #f))
+
     ;; fixme: bug #105
     (if qif-payee
         (xaccTransSetDescription gnc-xtn qif-payee))
