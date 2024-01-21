@@ -1,14 +1,14 @@
 # Croatian translations for GnuCash.
 # Copyright (C) 2019 Free Software Foundation, Inc.
 # This file is distributed under the same license as the GnuCash package.
-# Milo Ivir <mail@milotype.de>, 2019., 2020, 2021, 2022, 2023.
+# Milo Ivir <mail@milotype.de>, 2019., 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-12-24 16:42+0000\n"
+"PO-Revision-Date: 2024-01-20 15:01+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -1451,10 +1451,10 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
-"Poduzeće izdaje dividende u gotovini dioničaru.\n"
+"Poduzeće dioničaru izdaje dividende u gotovini.\n"
 "\n"
-"Sve reinvestirane dividende moraju se naknadno evidentirati kao kupnje "
-"dionica."
+"Sve reinvestirane dividende moraju se naknadno evidentirati kao normalne "
+"kupnje dionica."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
@@ -4974,10 +4974,8 @@ msgstr "Izbriši trenutačnu stavku"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
-#, fuzzy
-#| msgid "Sold Splits"
 msgid "Show Splits"
-msgstr "Podjele prodaje"
+msgstr "Prikaži podjele"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 msgid "Jump"
@@ -5352,24 +5350,18 @@ msgstr "Izlazni račun (složeni)"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:393
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:47
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_New Schedule"
-msgstr "_Terminiranje"
+msgstr "_Novo terminiranje"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:399
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Edit Schedule"
-msgstr "_Terminiranje"
+msgstr "_Uredi terminiranje"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:405
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Delete Schedule"
-msgstr "_Terminiranje"
+msgstr "_Izbriši terminiranje"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:487
 #: gnucash/gtkbuilder/dialog-account.glade:553
@@ -5381,14 +5373,11 @@ msgid "Upcoming Transactions"
 msgstr "Nadolazeće transakcije"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:896
-#, fuzzy
-#| msgid "Do you really want to delete this scheduled transaction?"
-#| msgid_plural "Do you really want to delete %d scheduled transactions?"
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
-msgstr[0] "Stvarno želiš izbrisati %d terminiranu transakciju?"
-msgstr[1] "Stvarno želiš izbrisati %d terminirane transakcije?"
-msgstr[2] "Stvarno želiš izbrisati %d terminiranih transakcija?"
+msgstr[0] "Stvarno želiš izbrisati ovu terminiranu transakciju?"
+msgstr[1] "Stvarno želiš izbrisati ove terminirane transakcije?"
+msgstr[2] "Stvarno želiš izbrisati ove terminirane transakcije?"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:163
 #: gnucash/report/reports/standard/view-column.scm:95
@@ -6677,13 +6666,13 @@ msgstr "Sve datoteke"
 #. be translated
 #: gnucash/gnome-utils/dialog-file-access.c:366
 msgid "Datafiles only (*.gnucash, *.xac)"
-msgstr ""
+msgstr "Samo datoteke (*.gnucash, *.xac)"
 
 #. Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
 #. patterns and must not be translated
 #: gnucash/gnome-utils/dialog-file-access.c:376
 msgid "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
-msgstr ""
+msgstr "Samo sigurnosne kopije (*.gnucash.*.gnucash, *.xac.*.xac)"
 
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
@@ -7455,10 +7444,8 @@ msgstr ""
 "znakove."
 
 #: gnucash/gnome-utils/gnc-file.c:754
-#, fuzzy
-#| msgid "The following warnings exist:"
 msgid "The following are noted in this file:"
-msgstr "Postoje sljedeća upozoreja:"
+msgstr "Sljedeće je zabilježeno u ovoj datoteci:"
 
 #: gnucash/gnome-utils/gnc-file.c:880
 #, c-format
@@ -9377,24 +9364,13 @@ msgstr ""
 "postavljena kao standardna za dijalog „Od zadnjeg pokretanja”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:32
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "Set the sort column in the \"since last run\" dialog."
-msgstr ""
-"Postavi „Pregledaj stvorene transakcije” kao standardno u dijalogu „Od "
-"zadnjeg pokretanja”."
+msgstr "Postavi stupac redoslijeda u dijalogu „Od zadnjeg pokretanja”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:33
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "This settings sets the sort column in the \"since last run\" dialog."
 msgstr ""
-"Postavi „Pregledaj stvorene transakcije” kao standardno u dijalogu „Od "
-"zadnjeg pokretanja”."
+"Ova postavka postavlja stupac redoslijeda u dijalogu „Od zadnjeg pokretanja”."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:37
 #, fuzzy
@@ -10840,7 +10816,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:15
 msgid "Use relative profit/loss starting date"
-msgstr "Koristi relativan početni datum za dobit/gubitak"
+msgstr "Koristi relativni početni datum dobiti/gubitka"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:16
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:21
@@ -10858,7 +10834,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:20
 msgid "Use absolute profit/loss starting date"
-msgstr "Koristi početni datum apsolutne dobiti/gubitka"
+msgstr "Koristi apsolutni početni datum dobiti/gubitka"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:25
 msgid "Starting date (in seconds from Jan 1, 1970)"
@@ -10871,7 +10847,7 @@ msgid ""
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
 "Ova postavka upravlja početnim datumom u kalkulacijama dobiti/gubitka, ako "
-"je podešavanje izbora početka postavljeno na „apsolutno“. Ovo polje mora "
+"je postavka za izbor početka postavljena na „apsolutno“. Ovo polje mora "
 "sadržati datum, prikazan u sekundama od 1. siječnja 1970. godine."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:30
@@ -10890,7 +10866,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:35
 msgid "Use relative profit/loss ending date"
-msgstr "Koristi relativan završni datum za dobit/gubitak"
+msgstr "Koristi relativni završni datum dobiti/gubitka"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:36
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:41
@@ -10908,7 +10884,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:40
 msgid "Use absolute profit/loss ending date"
-msgstr "Koristi završni datum apsolutne dobiti/gubitka"
+msgstr "Koristi apsolutni završni datum dobiti/gubitka"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:45
 msgid "Ending date (in seconds from Jan 1, 1970)"
@@ -12796,7 +12772,7 @@ msgstr "Naknade"
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:629
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1065
 msgid "Brokerage Fees"
-msgstr "Brokerske provizije"
+msgstr "Brokerske naknade"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:641
 msgid "Capitalize brokerage fees into stock account?"
@@ -12808,25 +12784,27 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:756
 msgid "Dividend Account"
-msgstr "Konto dividende"
+msgstr "Konto dividendi"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:795
 msgid ""
 "In this page, input any capital gains or losses incurred, and the associated "
 "income account. Capital gains are positive, and capital losses are negative."
 msgstr ""
+"Na ovoj stranici unesi sve nastale kapitalne dobitke ili gubitke i povezani "
+"račun prihoda. Kapitalni dobici su pozitivni, a kapitalni gubici negativni."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:846
 msgid "Capital Gain"
-msgstr "Dobit"
+msgstr "Kapitalna dobit"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:869
 msgid "Capital Gains Account"
-msgstr "Konto kapitalne dobiti"
+msgstr "Konto kapitalnih dobiti"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:891
 msgid "Capital Gains"
-msgstr "Kapitalna dobit"
+msgstr "Kapitalne dobiti"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:908
 msgid ""
@@ -15452,7 +15430,7 @@ msgstr ""
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2203
 msgid "Commercial ATM _fees threshold"
-msgstr "Prag na_knade za korištenje bankomata"
+msgstr "Prag za na_knade bankomata"
 
 #. Preferences->Online Banking:Generic
 #: gnucash/gtkbuilder/dialog-preferences.glade:2217
@@ -20859,7 +20837,7 @@ msgstr "Popust se računa na već oporeženu (bruto) vrijednost"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:659
 msgid "Select how to compute the Discount and Taxes"
-msgstr "Odaberi način obračunavanja popusta i poreza"
+msgstr "Odaberi način izračunavanja popusta i poreza"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:672
 msgid "Enter the unit-Price for this Entry"
@@ -20998,7 +20976,7 @@ msgstr "Promijenjeno"
 
 #: gnucash/register/ledger-core/split-register.c:2117
 msgid "_Recalculate"
-msgstr "_Ponovo izračunaj"
+msgstr "_Izračunaj ponovo"
 
 #: gnucash/register/ledger-core/split-register.c:2540
 msgctxt "Action Column"
@@ -23210,7 +23188,7 @@ msgstr "Odredi postavke za podatke popisa cijena"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:49
 msgid "How to report brokerage fees"
-msgstr "Način izvještavanja o brokerskim nadoknadama"
+msgstr "Način izvještavanja o brokerskim naknadama"
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:81
 msgid "Basis calculation method."
@@ -23236,8 +23214,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:93
 msgid "How to report commissions and other brokerage fees."
-msgstr ""
-"Odaberi način izvještavanja o provizijama i drugim brokerskim nadoknadama."
+msgstr "Način izvještavanja o provizijama i drugim brokerskim naknadama."
 
 #: gnucash/report/reports/standard/advanced-portfolio.scm:95
 msgid "Include in basis"
@@ -24824,7 +24801,7 @@ msgstr "Ukupno"
 
 #: gnucash/report/reports/standard/general-ledger.scm:39
 msgid "General Ledger"
-msgstr "Opća glavna knjiga"
+msgstr "Glavna knjiga"
 
 #: gnucash/report/reports/standard/general-ledger.scm:50
 #: gnucash/report/reports/standard/income-gst-statement.scm:44
@@ -25142,11 +25119,11 @@ msgstr "Da li uključiti redak, koji pokazuje ukupni saldo konta trgovanja."
 #: gnucash/report/reports/standard/income-statement.scm:477
 #: libgnucash/engine/Account.cpp:4463 libgnucash/engine/Scrub.c:538
 msgid "Trading"
-msgstr "Burzovno trgovanje"
+msgstr "Trgovanje"
 
 #: gnucash/report/reports/standard/income-statement.scm:480
 msgid "Total Trading"
-msgstr "Ukupno burzovno trgovanje"
+msgstr "Ukupno trgovanje"
 
 #: gnucash/report/reports/standard/income-statement.scm:552
 #: gnucash/report/reports/standard/trial-balance.scm:535
@@ -25216,11 +25193,11 @@ msgstr "Prikaži stupce kraja"
 
 #: gnucash/report/reports/standard/investment-lots.scm:63
 msgid "Show realized gain column(s)"
-msgstr "Prikaži stupce dobitka"
+msgstr "Prikaži stupce dobitaka"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
 msgid "Show unrealized gain column(s)"
-msgstr "Prikaži stupce neostvrenog dobitka"
+msgstr "Prikaži stupce neostvarenog dobitka"
 
 #: gnucash/report/reports/standard/investment-lots.scm:67
 msgid "Group gains by age (short term and long term)"
@@ -25266,7 +25243,7 @@ msgstr "Izvor cijena"
 
 #: gnucash/report/reports/standard/investment-lots.scm:87
 msgid "Include only accounts with warnings"
-msgstr "Uključi samo konta bez upozorenja"
+msgstr "Uključi samo konta s upozorenjima"
 
 #: gnucash/report/reports/standard/investment-lots.scm:89
 msgid "Warn if a lot has more than one bought split"
