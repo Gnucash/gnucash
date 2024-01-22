@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-20 15:01+0000\n"
+"PO-Revision-Date: 2024-01-22 16:01+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -6833,8 +6833,8 @@ msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
 msgstr ""
-"Za ovu transakciju moraš navesti konto, iz kojeg ćeš prenijeti ili u koji "
-"ćeš prenijeti ili oboje. U protivnom se transakcija neće zabilježiti."
+"Za ovu transakciju moraš odrediti konto iz kojeg ćeš prenijeti ili u koji "
+"ćeš prenijeti, ili oboje. U protivnom se transakcija neće zabilježiti."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1408
 msgid "You can't transfer from and to the same account!"
@@ -6852,7 +6852,7 @@ msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
 msgstr ""
-"Ne možeš prenijeti s bezvalutnog konta. Pokušaj obrnuti konta „iz“ i „u“ i "
+"Ne možeš prenijeti iz bezvalutnog konta. Pokušaj obrnuti konta „iz“ i „u“ i "
 "učini „iznos“ negativnim."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1453
@@ -9950,7 +9950,7 @@ msgid ""
 "notebooks are drawn. Possible values are \"top\", \"left\", \"bottom\" and "
 "\"right\". It defaults to \"top\"."
 msgstr ""
-"Ova postavka određuje rub, na kojem se iscrtavaju kartice za prebacivanje "
+"Ova postavka određuje rub pri kojem se iscrtavaju kartice za prebacivanje "
 "stranica. Moguće vrijednosti su „gore“, „lijevo“, „dolje“ i „desno“. "
 "Standardna vrijednost je „gore“."
 
@@ -9981,7 +9981,7 @@ msgid ""
 "is drawn. Possible values are \"top\" and \"bottom\". It defaults to "
 "\"bottom\"."
 msgstr ""
-"Ova postavka određuje rub, na kojem se iscrtava traka sažetka za razne "
+"Ova postavka određuje rub pri kojem se iscrtava traka sažetka za razne "
 "stranice. Moguće vrijednosti su „gore“ i „dolje“. Standardna vrijednost je "
 "„dolje“."
 
@@ -12195,7 +12195,7 @@ msgid ""
 "software are likely to be in \"d-m-y\" or day-month-year format, where US "
 "QIF files are likely to be \"m-d-y\" or month-day-year.\n"
 msgstr ""
-"Format QIF datoteke ne precizira kojim se redoslijedom ispisuju komponente "
+"QIF format datoteka ne određuje kojim se redoslijedom ispisuju komponente "
 "datuma, kao što su: dan, mjesec i godina. U većini slučajeva, moguće je "
 "automatski odrediti koji format je u upotrebi u određenoj datoteci. Međutim, "
 "u upravo uvezenoj datoteci postoji više od jednog mogućeg formata, koji "
@@ -15396,9 +15396,9 @@ msgstr ""
 "dodaju svoju naknadu direktno na iznos, umjesto da je prikažu kao zasebnu "
 "transakciju ili u tvojim mjesečnim bankovnim naknadama. Na primjer, podigneš "
 "100 €, a naplaćeno ti je 101,50 € kao naknada za interakciju (u Kanadi). Ako "
-"tih 100 € upišeš ručno, iznosi se neće poklopiti. Postavi ovo na najveću "
-"takvu naknadu u tvom području (u jedinicama tvoje lokalne valute), kako bi "
-"se transakcija prepoznala kao poklapajuća."
+"tih 100 € upišeš ručno iznosi se neće poklopiti. Postavi ovo na najveću "
+"takvu naknadu u tvom području (u jedinicama tvoje lokalne valute) kako bi se "
+"transakcija prepoznala kao poklapajuća."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2138
 msgid ""
@@ -18649,14 +18649,15 @@ msgstr "Izdaj novu bankovno-internu transakciju, putem internet bankarstva"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:46
 msgid "Issue SEPA Direct _Debit…"
-msgstr "Izdaj izravno SEPA _terećenje …"
+msgstr "Izdaj SEPA izravno _terećenje …"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:48
 msgid ""
 "Issue a new international European (SEPA) direct debit note online through "
 "Online Banking"
 msgstr ""
-"Izdaj novo međunarodno SEPA izravno terećenje, putem internet bankarstva"
+"Izdaj novo međunarodno europsko izravno terećenje (SEPA) putem internet "
+"bankarstva"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:53
 msgid "Show _log window"
@@ -27724,7 +27725,7 @@ msgstr "Prikaži neformalna zaglavlja za Duguje/Potražuje"
 
 #: gnucash/report/trep-engine.scm:95
 msgid "Show subtotals only (hide transactional data)"
-msgstr "Prikaži samo podzbrojeve (sakrij podatke o transakciji)"
+msgstr "Prikaži samo podzbrojeve (sakrij transakcijske podatke)"
 
 #: gnucash/report/trep-engine.scm:96
 msgid "Add indenting columns"
@@ -27860,7 +27861,7 @@ msgstr "Konta potraživanja"
 
 #: gnucash/report/trep-engine.scm:537
 msgid "Specify date to filter by…"
-msgstr "Navedi datum za filtriranje …"
+msgstr "Odredi datum za filtriranje …"
 
 #: gnucash/report/trep-engine.scm:541 gnucash/report/trep-engine.scm:913
 #: gnucash/report/trep-engine.scm:1092 gnucash/report/trep-engine.scm:2240
