@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-22 01:01+0000\n"
+"PO-Revision-Date: 2024-01-22 16:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -20575,9 +20575,8 @@ msgstr "Adja meg a tétel típusát"
 #. https://www.gnu.org/software/libc/manual/html_node/Formatting-Calendar-Time.html
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:577
 #: gnucash/register/ledger-core/split-register-model.c:1002
-#, fuzzy
 msgid "%A %d %B %Y"
-msgstr "%B %#d, %Y"
+msgstr "%Y %B %d %A"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:587
 msgid "Enter the Entry Description"
@@ -26454,7 +26453,7 @@ msgstr "A dátum->szöveg átalakítás alakja a mai dátumra."
 #: gnucash/report/reports/standard/receipt.scm:107
 #, fuzzy
 msgid "%l:%M %P, %e %B %Y"
-msgstr "%B %#d, %Y"
+msgstr "%Y %B %e %H:%M"
 
 #: gnucash/report/reports/standard/receipt.scm:137
 #: gnucash/report/reports/standard/taxinvoice.scm:202
@@ -26972,7 +26971,7 @@ msgstr "Többoszlopos nézet"
 
 #: gnucash/report/reports/standard/view-column.scm:184
 msgid "Custom Multicolumn Report"
-msgstr "Egyedi többoszlopos jelentés"
+msgstr "Egyeditöbboszlopos-jelentés"
 
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:167
 msgid "Assets Accounts"
@@ -30202,12 +30201,12 @@ msgstr "Pénznemek"
 
 #: libgnucash/engine/gnc-date.cpp:77
 msgid "%B %#d, %Y"
-msgstr "%B %#d, %Y"
+msgstr "%Y %B %#d"
 
 #. Translators: call "man strftime" for possible values.
 #: libgnucash/engine/gnc-date.cpp:81
 msgid "%B %e, %Y"
-msgstr "%B %e, %Y"
+msgstr "%Y %B %e"
 
 #: libgnucash/engine/gnc-datetime.cpp:86
 msgid "y-m-d"
