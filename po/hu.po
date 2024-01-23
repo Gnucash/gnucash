@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-22 16:01+0000\n"
+"PO-Revision-Date: 2024-01-23 06:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -16565,7 +16565,7 @@ msgstr "Nincs bővített dátumformátum"
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:66
 msgid "%Y-%m-%d"
-msgstr "%Y-%m-%d"
+msgstr "%Y. %m. %d."
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:78
 msgid "Include Century"
@@ -20576,7 +20576,7 @@ msgstr "Adja meg a tétel típusát"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:577
 #: gnucash/register/ledger-core/split-register-model.c:1002
 msgid "%A %d %B %Y"
-msgstr "%Y %B %d %A"
+msgstr "%Y. %B %d. %A"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:587
 msgid "Enter the Entry Description"
@@ -26451,9 +26451,8 @@ msgstr "A dátum->szöveg átalakítás alakja a mai dátumra."
 #. Translators: Boost::date_time format string
 #. "%l:%M %P, %e %B %Y" means " 9:56 pm, 19 June 2019"
 #: gnucash/report/reports/standard/receipt.scm:107
-#, fuzzy
 msgid "%l:%M %P, %e %B %Y"
-msgstr "%Y %B %e %H:%M"
+msgstr "%Y. %B %d. %H:%M"
 
 #: gnucash/report/reports/standard/receipt.scm:137
 #: gnucash/report/reports/standard/taxinvoice.scm:202
@@ -30050,12 +30049,12 @@ msgstr "s"
 #: libgnucash/app-utils/gnc-ui-util.c:525
 msgctxt "Document Link flag for 'web'"
 msgid "w"
-msgstr ""
+msgstr "w"
 
 #: libgnucash/app-utils/gnc-ui-util.c:527
 msgctxt "Document Link flag for 'file'"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: libgnucash/app-utils/gnc-ui-util.c:556
 msgid "Opening Balances"
@@ -30201,12 +30200,12 @@ msgstr "Pénznemek"
 
 #: libgnucash/engine/gnc-date.cpp:77
 msgid "%B %#d, %Y"
-msgstr "%Y %B %#d"
+msgstr "%Y. %B %#d."
 
 #. Translators: call "man strftime" for possible values.
 #: libgnucash/engine/gnc-date.cpp:81
 msgid "%B %e, %Y"
-msgstr "%Y %B %e"
+msgstr "%Y. %B %e."
 
 #: libgnucash/engine/gnc-datetime.cpp:86
 msgid "y-m-d"
