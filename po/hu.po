@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-23 06:01+0000\n"
+"PO-Revision-Date: 2024-01-25 04:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1859,9 +1859,8 @@ msgstr "Figyelem:"
 #: gnucash/gnome/assistant-stock-transaction.cpp:627
 #: gnucash/gnome/assistant-stock-transaction.cpp:688
 #: gnucash/report/reports/standard/balsheet-pnl.scm:812
-#, fuzzy
 msgid "missing"
-msgstr "Jutalék"
+msgstr "hiányzik"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:666
 #: gnucash/gnome/assistant-stock-transaction.cpp:1016
@@ -1879,7 +1878,7 @@ msgstr "%s nem lehet negatív."
 #: gnucash/gnome/assistant-stock-transaction.cpp:1024
 #, c-format
 msgid "Amount for %s must be positive."
-msgstr "%s pozitívnak kell lennie."
+msgstr "%s pozitív kell legyen."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:677
 #: gnucash/gnome/assistant-stock-transaction.cpp:1027
@@ -17198,7 +17197,7 @@ msgstr "A kiválasztott költségvetés törlése"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:837
 msgid "Budget Notes"
-msgstr "Költségvetés megjegyzések"
+msgstr "Költségvetés-megjegyzések"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:892
 msgid "Enter Note"
