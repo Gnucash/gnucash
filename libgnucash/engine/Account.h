@@ -312,6 +312,11 @@ typedef enum
     void xaccAccountSetSortReversed (Account *account, gboolean sortreversed);
     /** Set the account's notes */
     void xaccAccountSetNotes (Account *account, const char *notes);
+
+    /** Set the account's associated account e.g. stock account -> dividend account */
+    void xaccAccountSetAssociatedAccount (Account *acc, const char *tag,
+                                          const Account *assoc_acct);
+
     /** Set the last num field of an Account */
     void xaccAccountSetLastNum (Account *account, const char *num);
     /** Set the account's lot order policy */
@@ -416,6 +421,9 @@ typedef enum
     gboolean xaccAccountGetSortReversed (const Account *account);
     /** Get the account's notes */
     const char * xaccAccountGetNotes (const Account *account);
+
+    /** Get the account's associated account e.g. stock account -> dividend account */
+    Account* xaccAccountGetAssociatedAccount (const Account *acc, const char *tag);
     /** Get the last num field of an Account */
     const char * xaccAccountGetLastNum (const Account *account);
     /** Get the account's lot order policy */

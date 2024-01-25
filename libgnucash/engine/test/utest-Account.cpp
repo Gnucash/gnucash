@@ -1237,6 +1237,25 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     xaccAccountSetNotes (account, nullptr);
     g_assert_cmpstr (xaccAccountGetNotes (account), ==, nullptr);
 
+    // Associated Account getter/setter
+    g_assert_null (xaccAccountGetAssociatedAccount (account, "test"));
+
+    g_test_expect_message ("gnc.engine", G_LOG_LEVEL_CRITICAL,
+                           "*xaccAccountSetAssociatedAccount*assertion*tag && *tag*");
+    xaccAccountSetAssociatedAccount (account, nullptr, account);
+    g_test_assert_expected_messages();
+
+    g_test_expect_message ("gnc.engine", G_LOG_LEVEL_CRITICAL,
+                           "*xaccAccountSetAssociatedAccount*assertion*GNC_IS_ACCOUNT(acc)*");
+    xaccAccountSetAssociatedAccount (nullptr, "test", account);
+    g_test_assert_expected_messages();
+
+    xaccAccountSetAssociatedAccount (account, "test", account);
+    g_assert_true (xaccAccountGetAssociatedAccount (account, "test") == account);
+
+    xaccAccountSetAssociatedAccount (account, "test", nullptr);
+    g_assert_null (xaccAccountGetAssociatedAccount (account, "test"));
+
     // Balance Limits getter/setter
     g_assert_true (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == false);
     g_assert_true (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == false);
