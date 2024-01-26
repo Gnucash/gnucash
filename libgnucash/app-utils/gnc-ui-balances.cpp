@@ -212,7 +212,7 @@ account_get_balance_as_of_date (Account *account,
             gnc_commodity *child_currency;
             gnc_numeric child_balance;
 
-            child = node->data;
+            child = static_cast<Account*>(node->data);
             child_currency = xaccAccountGetCommodity (child);
             child_balance = fn (child, date);
             child_balance =

@@ -34,6 +34,10 @@
 #include "gncOwner.h"
 #include "qof.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /********************************************************************
  * Balance calculations related to accounts
  ********************************************************************/
@@ -196,5 +200,9 @@ gchar * gnc_ui_account_get_balance_limit_icon_name (const Account *account);
  *  are no limits, or balance is within limits.
  */
 gchar * gnc_ui_account_get_balance_limit_explanation (const Account *account);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_UI_BALANCES_H_ */

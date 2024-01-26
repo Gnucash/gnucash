@@ -32,7 +32,7 @@ set (app_utils_SOURCES
   gnc-quotes.cpp
   gnc-state.c
   gnc-ui-util.cpp
-  gnc-ui-balances.c
+  gnc-ui-balances.cpp
   )
 
 set_source_files_properties (${app_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
