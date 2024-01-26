@@ -408,13 +408,13 @@ also show overall period profit & loss."))
            (lp rest
                (let ((converted (and show-orig-cur? convert-curr-fn
                                      (convert-curr-fn monetary col-datum))))
-                 (cons* (gnc:html-markup-br)
-                        (if anchor
+                 (cons* (if anchor
                             (gnc:html-markup-anchor anchor (or converted monetary))
                             (or converted monetary))
                         (if converted
                             (gnc:html-markup-i (gnc:html-markup "small" monetary " "))
                             "")
+                        (if (null? accum) "" (gnc:html-markup-br))
                         accum)))))))
 
   (define (account->depth acc)
