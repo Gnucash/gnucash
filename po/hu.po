@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-25 04:01+0000\n"
+"PO-Revision-Date: 2024-01-26 12:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3158,7 +3158,6 @@ msgstr "Új kimenőszámla"
 
 #: gnucash/gnome/dialog-invoice.c:2323 gnucash/gnome/dialog-invoice.c:2342
 #: gnucash/gnome/dialog-invoice.c:2361
-#, fuzzy
 msgid "Edit Credit Note"
 msgstr "Jóváírás szerkesztése"
 
@@ -9357,16 +9356,15 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:15
 msgid "Prompt for credit card payment"
-msgstr "Figyelmeztetés hitelkártya-fizetésre"
+msgstr "Kérés hitelkártya-törlesztésre"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:16
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
 msgstr ""
-"Ha aktív, a hitelkártya-számlakivonat egyeztetése után figyelmeztetés a "
-"felhasználónak,a hitelkártyás törlesztés bevitelére. Különben nincs "
-"figyelmeztetés."
+"Ha aktív, a hitelkártya-számla egyeztetése után kéri a felhasználót, egy "
+"hitelkártya-törlesztés megadására. Egyébként nem kéri meg erre."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:20
 msgid "Always reconcile to today"
@@ -15416,8 +15414,8 @@ msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
 msgstr ""
-"Egy hitelkártya-számlakivonat egyeztetése után figyelmeztetés a "
-"felhasználónak a hitelkártyás törlesztés bevitelére."
+"Egy hitelkártya-számlakivonat egyeztetése után megkéri a felhasználót egy "
+"hitelkártya-törlesztés megadására."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2627
 msgid "Always reconcile to t_oday"
