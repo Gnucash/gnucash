@@ -32,6 +32,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash engine))
 (use-modules (gnucash app-utils))
+(use-modules (gnucash utilities))
 (use-modules (srfi srfi-1))
 (use-modules (gnucash qif-import qif-utils))
 
