@@ -2579,6 +2579,34 @@ xaccAccountSetNotes (Account *acc, const char *str)
     set_kvp_string_tag (acc, "notes", str);
 }
 
+
+void
+xaccAccountSetAssociatedAccount (Account *acc, const char *tag, const Account* assoc_acct)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+    g_return_if_fail (tag && *tag);
+
+    std::vector<std::string> path = { "associated-account", tag };
+    xaccAccountBeginEdit(acc);
+
+    PINFO ("setting %s assoc %s account = %s", xaccAccountGetName (acc), tag,
+           assoc_acct ? xaccAccountGetName (assoc_acct) : nullptr);
+
+    if (GNC_IS_ACCOUNT(assoc_acct))
+    {
+        GValue v = G_VALUE_INIT;
+        g_value_init (&v, GNC_TYPE_GUID);
+        g_value_set_static_boxed (&v, xaccAccountGetGUID (assoc_acct));
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), &v, path);
+        g_value_unset (&v);
+    }
+    else
+        qof_instance_set_path_kvp (QOF_INSTANCE (acc), nullptr, path);
+
+    mark_account (acc);
+    xaccAccountCommitEdit(acc);
+}
+
 void
 xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
 {
@@ -3366,6 +3394,28 @@ xaccAccountGetNotes (const Account *acc)
     g_value_unset (&v);
     return rv;
 }
+
+Account*
+xaccAccountGetAssociatedAccount (const Account *acc, const char *tag)
+{
+    g_return_val_if_fail (GNC_IS_ACCOUNT(acc), nullptr);
+    g_return_val_if_fail (tag && *tag, nullptr);
+
+    GValue v = G_VALUE_INIT;
+    qof_instance_get_path_kvp (QOF_INSTANCE (acc), &v, { "associated-account", tag });
+
+    auto guid = static_cast<GncGUID*>(G_VALUE_HOLDS_BOXED (&v) ? g_value_get_boxed(&v) : nullptr);
+    g_value_unset (&v);
+
+    if (!guid)
+        return nullptr;
+
+    auto assoc_acct = xaccAccountLookup (guid, gnc_account_get_book (acc));
+    PINFO ("retuning %s assoc %s account = %s", xaccAccountGetName (acc), tag,
+           xaccAccountGetName (assoc_acct));
+    return assoc_acct;
+}
+
 
 gnc_commodity *
 DxaccAccountGetCurrency (const Account *acc)

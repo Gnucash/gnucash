@@ -88,6 +88,11 @@ void stock_assistant_cancel_cb  (GtkAssistant *gtkassistant, gpointer user_data)
 static const char* GNC_PREFS_GROUP = "dialogs.stock-assistant";
 static const char* ASSISTANT_STOCK_TRANSACTION_CM_CLASS = "assistant-stock-transaction";
 
+static const char* DIVIDEND_KVP_TAG = "stock-dividends";
+static const char* CAPGAINS_KVP_TAG = "stock-capgains";
+static const char* PROCEEDS_KVP_TAG = "stock-cash-proceeds";
+static const char* FEES_KVP_TAG = "stock-broker-fees";
+
 /** A mask-enumerator for defining what information will be collected for a split.
  */
 enum class FieldMask : unsigned
@@ -531,13 +536,16 @@ protected:
     const char* m_memo;
     const char* m_action;
     gnc_numeric m_balance = gnc_numeric_zero();
+    const char* m_kvp_tag;
 public:
     StockTransactionEntry() :
         m_enabled{false}, m_debit_side{false}, m_allow_zero{false},  m_account{nullptr},
-        m_value{gnc_numeric_error(GNC_ERROR_ARG)}, m_memo{nullptr}, m_action{nullptr} {}
-    StockTransactionEntry(const char* action) :
+        m_value{gnc_numeric_error(GNC_ERROR_ARG)}, m_memo{nullptr}, m_action{nullptr},
+        m_kvp_tag{nullptr} {}
+    StockTransactionEntry(const char* action, const char* kvp_tag) :
         m_enabled{false}, m_debit_side{false}, m_allow_zero{false},  m_account{nullptr},
-        m_value{gnc_numeric_error(GNC_ERROR_ARG)}, m_memo{nullptr}, m_action{action} {}
+        m_value{gnc_numeric_error(GNC_ERROR_ARG)}, m_memo{nullptr}, m_action{action},
+        m_kvp_tag{kvp_tag} {}
     StockTransactionEntry(const StockTransactionEntry&) = default;
     virtual ~StockTransactionEntry() = default;
     /** Set up the state variables from the FieldMask.
@@ -554,6 +562,7 @@ public:
     virtual Account* account() const { return m_account; }
     virtual const char* print_account() const;
     virtual void set_memo(const char* memo) { m_memo = memo; }
+    virtual const char* get_kvp_tag () { return m_kvp_tag; }
     virtual const char* memo() const { return m_memo; }
     virtual void set_value(gnc_numeric amount);
     virtual GncNumeric value() { return (gnc_numeric_check(m_value) ? GncNumeric{} : GncNumeric(m_value)); }
@@ -766,7 +775,7 @@ public:
         PINFO("Stock Entry");
     }
     StockTransactionStockEntry(const char* action) :
-        StockTransactionEntry{action}, m_amount{gnc_numeric_error(GNC_ERROR_ARG)}
+        StockTransactionEntry{action, nullptr}, m_amount{gnc_numeric_error(GNC_ERROR_ARG)}
     {
         PINFO("Stock Entry");
     }
@@ -983,7 +992,7 @@ class StockTransactionFeesEntry : public StockTransactionEntry
     bool m_capitalize;
 public:
     StockTransactionFeesEntry() : StockTransactionEntry{}, m_capitalize{false} {}
-    StockTransactionFeesEntry(const char* action) : StockTransactionEntry{action}, m_capitalize{false} {}
+    StockTransactionFeesEntry(const char* action, const char *tag) : StockTransactionEntry{action, tag}, m_capitalize{false} {}
     void set_fieldmask(FieldMask mask) override;
     void set_capitalize(bool capitalize) override { m_capitalize = capitalize; }
     bool do_capitalize() const override { return m_capitalize; }
@@ -1098,10 +1107,10 @@ public:
         m_acct{account},
         m_currency{gnc_account_get_currency_or_parent(account)},
         m_stock_entry{std::make_unique<StockTransactionStockEntry>(NC_ ("Stock Assistant: Page name","Stock"))},
-        m_cash_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Cash"))},
-        m_fees_entry{std::make_unique<StockTransactionFeesEntry>(NC_ ("Stock Assistant: Page name","Fees"))},
-        m_dividend_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Dividend"))},
-        m_capgains_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Capital Gains"))}
+        m_cash_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Cash"), PROCEEDS_KVP_TAG)},
+        m_fees_entry{std::make_unique<StockTransactionFeesEntry>(NC_ ("Stock Assistant: Page name","Fees"), FEES_KVP_TAG)},
+        m_dividend_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Dividend"), DIVIDEND_KVP_TAG)},
+        m_capgains_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Capital Gains"), CAPGAINS_KVP_TAG)}
     {
         DEBUG ("StockAssistantModel constructor\n");
         m_stock_entry->set_account(m_acct);
@@ -1417,7 +1426,12 @@ StockAssistantModel::create_transaction ()
     xaccTransSetDatePostedSecsNormalized (trans, m_transaction_date);
     AccountVec accounts;
     std::for_each (m_list_of_splits.begin(), m_list_of_splits.end(),
-                   [&](auto& entry){ entry->create_split (trans, accounts); });
+                   [&](auto& entry)
+                   {
+                       entry->create_split (trans, accounts);
+                       if (entry->get_kvp_tag() && entry->account())
+                           xaccAccountSetAssociatedAccount (m_acct, entry->get_kvp_tag(), entry->account());
+                   });
     add_price (book);
     xaccTransCommitEdit (trans);
     std::for_each (accounts.begin(), accounts.end(), xaccAccountCommitEdit);
@@ -1596,7 +1610,7 @@ class GncAccountSelector
     GtkWidget* m_selector;
 public:
     GncAccountSelector (GtkBuilder *builder, AccountTypeList types,
-                        gnc_commodity *currency);
+                        gnc_commodity *currency, Account *default_acct);
     void attach (GtkBuilder *builder, const char *table_id,
                  const char *label_ID, int row);
     void connect (StockTransactionEntry*);
@@ -1613,7 +1627,7 @@ gnc_account_sel_changed_cb (GtkWidget* widget, StockTransactionEntry* entry)
 }
 
 GncAccountSelector::GncAccountSelector (GtkBuilder *builder, AccountTypeList types,
-                                        gnc_commodity *currency) :
+                                        gnc_commodity *currency, Account *default_acct) :
     m_selector{gnc_account_sel_new ()}
 {
     auto accum = [](auto a, auto b) { return g_list_prepend(a, (gpointer)b); };
@@ -1624,6 +1638,8 @@ GncAccountSelector::GncAccountSelector (GtkBuilder *builder, AccountTypeList typ
     gnc_account_sel_set_acct_filters(GNC_ACCOUNT_SEL(m_selector), acct_list, curr_list);
     gnc_account_sel_set_default_new_commodity(GNC_ACCOUNT_SEL(m_selector), currency);
     gnc_account_sel_set_new_account_modal (GNC_ACCOUNT_SEL(m_selector), true);
+    if (default_acct)
+        gnc_account_sel_set_account (GNC_ACCOUNT_SEL(m_selector), default_acct, true);
     g_list_free(acct_list);
     g_list_free(curr_list);
 }
@@ -2006,7 +2022,8 @@ public:
 PageCash::PageCash(GtkBuilder *builder, Account* account)
     : m_page(get_widget(builder, "cash_details_page")),
       m_account(builder, {ACCT_TYPE_ASSET, ACCT_TYPE_BANK},
-                gnc_account_get_currency_or_parent(account)),
+                gnc_account_get_currency_or_parent(account),
+                xaccAccountGetAssociatedAccount (account, PROCEEDS_KVP_TAG)),
       m_memo(get_widget(builder, "cash_memo_entry")),
       m_value(builder, gnc_account_get_currency_or_parent(account))
 {
@@ -2068,7 +2085,8 @@ PageFees::PageFees(GtkBuilder *builder, Account* account)
     : m_page(get_widget(builder, "fees_details_page")),
       m_capitalize(
           get_widget(builder, "capitalize_fees_checkbutton")),
-      m_account(builder, {ACCT_TYPE_EXPENSE}, gnc_account_get_currency_or_parent(account)),
+      m_account(builder, {ACCT_TYPE_EXPENSE}, gnc_account_get_currency_or_parent(account),
+                xaccAccountGetAssociatedAccount (account, FEES_KVP_TAG)),
       m_memo(get_widget(builder, "fees_memo_entry")),
       m_value(builder, gnc_account_get_currency_or_parent(account)),
       m_stock_account(account)
@@ -2155,7 +2173,8 @@ public:
 
 PageDividend::PageDividend(GtkBuilder *builder, Account* account)
     : m_page(get_widget(builder, "dividend_details_page")),
-      m_account(builder, {ACCT_TYPE_INCOME}, gnc_account_get_currency_or_parent(account)),
+      m_account(builder, {ACCT_TYPE_INCOME}, gnc_account_get_currency_or_parent(account),
+                xaccAccountGetAssociatedAccount (account, DIVIDEND_KVP_TAG)),
       m_memo(get_widget(builder, "dividend_memo_entry")),
       m_value(builder, gnc_account_get_currency_or_parent(account))
 {
@@ -2204,7 +2223,8 @@ public:
 
 PageCapGain::PageCapGain (GtkBuilder *builder, Account* account) :
     m_page (get_widget (builder, "capgains_details_page")),
-    m_account (builder, { ACCT_TYPE_INCOME }, gnc_account_get_currency_or_parent(account)),
+    m_account (builder, { ACCT_TYPE_INCOME }, gnc_account_get_currency_or_parent(account),
+               xaccAccountGetAssociatedAccount (account, CAPGAINS_KVP_TAG)),
     m_memo (get_widget (builder, "capgains_memo_entry")),
     m_value (builder, gnc_account_get_currency_or_parent(account))
 {
