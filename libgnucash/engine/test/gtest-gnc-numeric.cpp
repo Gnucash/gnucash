@@ -427,6 +427,28 @@ TEST(gncnumeric_functions, test_cmp)
     EXPECT_EQ(1, a.cmp(INT64_C(12500)));
 }
 
+TEST(gncnumeric_functions, test_operators)
+{
+    GncNumeric a(123456789, 9876), b(567894321, 6543);
+    auto c = a;
+    EXPECT_TRUE (b > a);
+    EXPECT_TRUE (a < b);
+    EXPECT_TRUE (b >= a);
+    EXPECT_TRUE (a <= b);
+    EXPECT_TRUE (a == c);
+    EXPECT_TRUE (b != c);
+
+    auto zero = INT64_C(0);
+    EXPECT_TRUE (b > zero);
+    EXPECT_TRUE (zero < a);
+    EXPECT_TRUE (b >= zero);
+    EXPECT_TRUE (zero <= b);
+    EXPECT_TRUE (a != zero);
+    EXPECT_TRUE (zero != a);
+    EXPECT_FALSE (a == zero);
+    EXPECT_FALSE (zero == a);
+}
+
 TEST(gncnumeric_functions, test_invert)
 {
     GncNumeric a(123456789, 9876), b, c;
