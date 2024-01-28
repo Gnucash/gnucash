@@ -325,4 +325,5 @@
  'report-guid "415cd38d39054d9e9c4040455290c2b1"
  'menu-path (list gnc:menuname-budget)
  'options-generator (lambda () (options-generator))
+ 'chart? #t
  'renderer (lambda (report-obj) (net-renderer report-obj)))

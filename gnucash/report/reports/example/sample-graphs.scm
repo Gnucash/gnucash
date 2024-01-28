@@ -185,5 +185,13 @@
  ;; The options generator function defined above.
  'options-generator options-generator
 
+ ;; A flag that informs the renderer whether or not to include
+ ;; the chart.js library in the html header.
+ ;; Can be set directly to a #t or #f value or
+ ;; if it changes based on report options, it can be set to
+ ;; a procedure that will be called with the report object
+ ;; to retrieve a #t or #f value
+ 'chart? #t
+
  ;; The rendering function defined above.
  'renderer test-graphing-renderer)

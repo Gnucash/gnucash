@@ -2031,4 +2031,7 @@
  'report-guid "ab2acc24afd14630a551f98f1a35fa81"
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator options-generator
+ 'chart? (lambda (report_obj)
+          (let* ((options (gnc:report-options report_obj)))
+            (gnc-optiondb-lookup-value options pagename-chart optname-show-chart)))
  'renderer investment-lots-renderer)

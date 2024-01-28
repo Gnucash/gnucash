@@ -301,6 +301,7 @@
     'menu-name (caddr l)
     'menu-tip (car (cdddr l))
     'options-generator (lambda () (options-generator (cadr l)))
+    'chart? #t
     'renderer (lambda (report-obj)
                 (piechart-renderer report-obj
                                    (car l)

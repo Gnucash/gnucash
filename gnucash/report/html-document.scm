@@ -30,6 +30,7 @@
 (use-modules (gnucash report html-style-sheet))
 (use-modules (gnucash report html-table))
 (use-modules (gnucash report html-text))
+(use-modules (gnucash report html-utilities))
 (use-modules (gnucash report report-utilities))
 (use-modules (gnucash utilities))
 (use-modules (ice-9 match))
@@ -151,13 +152,13 @@
           (else (cons (object->string e) accum)))))
 
 ;; returns the html document as a string, I think.
-(define* (gnc:html-document-render doc #:optional (headers? #t))
+(define* (gnc:html-document-render doc #:optional (headers? #t) chart? export?)
   (let ((stylesheet (gnc:html-document-style-sheet doc))
         (style-text (gnc:html-document-style-text doc)))
 
     (if stylesheet
         ;; if there's a style sheet, let it do the rendering
-        (gnc:html-style-sheet-render stylesheet doc headers?)
+        (gnc:html-style-sheet-render stylesheet doc headers? chart? export?)
 
         ;; otherwise, do the trivial render.
         (let* ((retval '())
@@ -185,6 +186,10 @@
                 (push (list "</style>" style-text "<style type=\"text/css\">\n")))
             (if (not (string-null? title))
                 (push (list "</title>" title "<title>\n")))
+            (if chart?
+              (if export?
+                (push (gnc:html-js-embed "chartjs/Chart.bundle.min.js"))
+                (push (gnc:html-js-include "chartjs/Chart.bundle.min.js"))))
             (push "</head>")
 
             ;; this lovely little number just makes sure that <body>

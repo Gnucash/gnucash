@@ -472,6 +472,7 @@
  'report-guid net-worth-barchart-uuid
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (options-generator #f #f))
+ 'chart? #t
  'renderer (lambda (report-obj) (net-renderer report-obj #f #f #f))
  'export-types '(("CSV" . csv))
  'export-thunk (lambda (report-obj export-type)
@@ -484,6 +485,7 @@
  'menu-name (N_ "Income & Expense Barchart")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (options-generator #t #f))
+ 'chart? #t
  'renderer (lambda (report-obj) (net-renderer report-obj #t #f #f))
  'export-types '(("CSV" . csv))
  'export-thunk (lambda (report-obj export-type)
@@ -495,6 +497,7 @@
  'report-guid net-worth-linechart-uuid
  'menu-path (list gnc:menuname-asset-liability)
  'options-generator (lambda () (options-generator #f #t))
+ 'chart? #t
  'renderer (lambda (report-obj) (net-renderer report-obj #f #t #f))
  'export-types '(("CSV" . csv))
  'export-thunk (lambda (report-obj export-type)
@@ -509,6 +512,7 @@
  'menu-name (N_ "Income & Expense Linechart")
  'menu-path (list gnc:menuname-income-expense)
  'options-generator (lambda () (options-generator #t #t))
+ 'chart? #t
  'renderer (lambda (report-obj) (net-renderer report-obj #t #t #f))
  'export-types '(("CSV" . csv))
  'export-thunk (lambda (report-obj export-type)
