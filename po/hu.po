@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-26 12:01+0000\n"
+"PO-Revision-Date: 2024-01-29 16:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1420,7 +1420,7 @@ msgstr "Dátum"
 #: libgnucash/engine/Account.cpp:180 libgnucash/engine/gncOwner.c:836
 #: libgnucash/engine/gncOwner.c:859
 msgid "Payment"
-msgstr "Törlesztés"
+msgstr "Fizetés"
 
 #: gnucash/gnome/assistant-loan.cpp:1889 gnucash/gnome/assistant-loan.cpp:2957
 msgid "Principal"
@@ -3656,7 +3656,7 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:305
 #: gnucash/report/reports/standard/new-owner-report.scm:703
 msgid "Pre-Payment"
-msgstr "Előtörlesztés"
+msgstr "Előleg"
 
 #: gnucash/gnome/dialog-payment.c:1002
 msgid ""
@@ -5788,12 +5788,12 @@ msgstr "Rendezés:"
 
 #: gnucash/gnome/gnc-split-reg.c:2396
 msgid "This account register is read-only."
-msgstr "A számlaregiszter csak olvasható."
+msgstr "Ez a számlaregiszter csak olvasható."
 
 #: gnucash/gnome/gnc-split-reg.c:2397
 #, c-format
 msgid "The '%s' account register is read-only."
-msgstr "A '%s' számlaregiszter csak olvasható."
+msgstr "A(z) '%s' számlaregiszter csak olvasható."
 
 #: gnucash/gnome/gnc-split-reg.c:2456
 msgid ""
@@ -5826,20 +5826,18 @@ msgstr ""
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:5
 #: gnucash/gnome/gnucash.desktop.in.in:6
-#, fuzzy
 msgid "GnuCash"
-msgstr "GnuCash %s"
+msgstr "GnuCash"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:6
 #: gnucash/gnome/gnucash.desktop.in.in:8
 msgid "Manage your finances, accounts, and investments"
-msgstr "Igazgassa pénzügyeit, számláit és befektetéseit"
+msgstr "Kezelje a pénzügyeit, számláit és befektetéseit"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:8
 msgid ""
 "GnuCash is a program for personal and small-business financial-accounting."
-msgstr ""
-"A GnuCash egy személyi és kisvállalkozási pénzügyi elszámolási program."
+msgstr "A GnuCash egy személyi és kisvállalkozási pénzügyi számviteli program."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:11
 msgid ""
@@ -5860,40 +5858,44 @@ msgstr "Kövesse nyomon napi személyes bevételeit és kiadásait"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:18
 msgid "Manage your stock, bond and mutual fund accounts with ease"
-msgstr "Könnyedén kezelheti részvény-, kötvény- és befektetési alapszámláit"
+msgstr ""
+"Könnyedén kezelheti a részvényszámláit, kötvényszámláit és befektetésialap-"
+"számláit"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:19
-#, fuzzy
 msgid "Keep your small business' accounting up to date"
-msgstr "Normális számlarend megtartása"
+msgstr "Tartsa a kisvállalkozásának számvitelét naprakészen"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
 msgid "Create accurate reports and graphs from your financial data"
-msgstr "Készítsen pontos jelentéseket és grafikonokat pénzügyi adataiból"
+msgstr "Készítsen pontos jelentéseket és grafikonokat a pénzügyi adataiból"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
-#, fuzzy
 msgid "Set up scheduled transactions to avoid repeated data entry"
-msgstr "Ütemezett tranzakciók beállítása kölcsön törlesztésére"
+msgstr ""
+"Állítson be ütemezett tranzakciókat az ismételt adatbevitel elkerülése "
+"érdekében"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:22
 msgid ""
 "Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data "
 "including Transaction Matching"
 msgstr ""
+"Kereskedjen, váltson pénzt a CSV/FinTS(korábban HBCI) segítségével vagy "
+"importáljon SWIFT-MT9xx/QIF/OFX adatokat beleértve a tranzakciók "
+"összehasonlítását is"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Perform financial calculations, such as a loan repayment"
-msgstr "Végezzen pénzügyi számításokat, például hiteltörlesztést"
+msgstr "Végezzen pénzügyi számításokat, például kölcsönvisszafizetést"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:33
-#, fuzzy
 msgid "GnuCash Project"
-msgstr "GnuCash beállítások"
+msgstr "GnuCash-Projekt"
 
 #: gnucash/gnome/gnucash.desktop.in.in:7
 msgid "Finance Management"
-msgstr "Pénzügyi Igazgatás"
+msgstr "Pénzügyek kezelése"
 
 #: gnucash/gnome/reconcile-view.c:431
 #: gnucash/register/ledger-core/split-register-layout.c:697
@@ -10919,7 +10921,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:51
 msgid "Import Account Assistant"
-msgstr "Számlaimportsegéd"
+msgstr "Számlaimportálás-segéd"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
 msgid "Enter file name and location for the Import…"
@@ -10927,7 +10929,7 @@ msgstr "Válassza ki a fájlt, amit importálni szeretne…"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:77
 msgid "Choose File to Import"
-msgstr "Fájl kiválasztása"
+msgstr "Importálandó fájl kiválasztása"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:97
 msgid "Number of rows for the Header"
@@ -10994,7 +10996,7 @@ msgstr "Importálás eredménye"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:8
 msgid "CSV Export Assistant"
-msgstr "CSV Exportáló Segéd"
+msgstr "CSV exportálássegéd"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:25
 msgid ""
@@ -11161,15 +11163,15 @@ msgstr ""
 "A fájlnak tartalmaznia kell legalább a következő oszlopokat: Dátum, Ár, "
 "Névtér, Szimbólum és Pénznem. Ha minden sor ugyanarra az értékpapírra vagy "
 "pénznemre vonatkozik, akkor elég, ha a fájl csak a Dátum és Árfolyam "
-"oszlopokat tartalmazza, a szimbólumot pedig kiválasztja a legördülő "
-"menüből.\n"
+"oszlopokat tartalmazza, a szimbólumot pedig kiválasztja a legördülő menüből."
+"\n"
 "\n"
 "A fájl oszlopai lehetnek fix szélességűek vagy tagoltak. Utóbbihoz többféle "
 "határolójelet is beállíthat. Fix szélesség beállításához kattintson duplán a "
 "sorokra. A megadott szélességet a jobb gombbal kattintva megváltoztathatja.\n"
 "\n"
 "A fájl egy sora kinézhet például így: \"BUX\",\"OTP\",\"2017-09-14\",10435,"
-"\"HUF\" vagy CURRENCY;USD;2016-11-21;1.56;GBP\n"
+"\"HUF\" vagy CURRENCY;USD;2016-11-21;0.0028;HUF\n"
 "\n"
 "Beállíthatja, melyik legyen az első és az utolsó importált sor, illetve "
 "kihagyhat minden második sort, ha a fájl pl. feljécszövegeket tartalmaz. "
@@ -11182,8 +11184,8 @@ msgstr ""
 "Az importálás nem vonható vissza, ezért fontos, hogy előbb készítsen "
 "biztonsági másolatot.\n"
 "\n"
-"A folytatáshoz kattintson a \"Következő\" gombra, a kilépéshez pedig a "
-"\"Mégse\" gombra."
+"A folytatáshoz kattintson a „Következő” gombra, a kilépéshez pedig a „Mégse” "
+"gombra."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:72
 msgid "Price Import Assistant"
@@ -11202,7 +11204,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:100
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:90
 msgid "Select File for Import"
-msgstr "Fájl kiválasztása"
+msgstr "Fájl kiválasztása importáláshoz"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:139
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:127
@@ -11445,7 +11447,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:62
 msgid "Transaction Import Assistant"
-msgstr "Tranzakció Importáló Segéd"
+msgstr "Tranzakcióimportálási segéd"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:520
 msgid "Multi-split"
@@ -11745,17 +11747,16 @@ msgid "Years"
 msgstr "Év"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:26
-#, fuzzy
 msgid "Current Year"
-msgstr "Idei év vége"
+msgstr "Idei év"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:29
 msgid "Now + 1 Year"
-msgstr ""
+msgstr "Mostantól egy évig"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:32
 msgid "Whole Loan"
-msgstr ""
+msgstr "Teljes kölcsön"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:46
 #: gnucash/gtkbuilder/assistant-loan.glade:152
@@ -11764,44 +11765,43 @@ msgstr "Kamatláb"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:49
 msgid "APR (Compounded Daily)"
-msgstr ""
+msgstr "THM (összevont napi)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:52
 msgid "APR (Compounded Weekly)"
-msgstr ""
+msgstr "THM (összevont heti)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:55
 msgid "APR (Compounded Monthly)"
-msgstr ""
+msgstr "THM (összevont havi)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:58
 msgid "APR (Compounded Quarterly)"
-msgstr ""
+msgstr "THM (összevont negyedévi)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:61
 msgid "APR (Compounded Annually)"
-msgstr ""
+msgstr "THM (összevont éves)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:72
-#, fuzzy
 msgid "Fixed Rate"
-msgstr "Árfolyam lehívása"
+msgstr "fix kamatlábú"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:75
 msgid "3/1 Year ARM"
-msgstr ""
+msgstr "3 éves THM"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:78
 msgid "5/1 Year ARM"
-msgstr ""
+msgstr "5 éves THM"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:81
 msgid "7/1 Year ARM"
-msgstr ""
+msgstr "7 éves THM"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:84
 msgid "10/1 Year ARM"
-msgstr ""
+msgstr "10 éves THM"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:104
 msgid ""
@@ -11814,9 +11814,8 @@ msgid ""
 "created Scheduled Transactions directly."
 msgstr ""
 "Ez egy lépésről lépésre módszer, egy kölcsön-visszafizetés létrehozásához a "
-"GnuCash-ban. A segédben megadhatja a kölcsön részleteit és a törlesztési "
-"részleteket. Az információkat felhasználva a megfelelő ütemezett tranzakciók "
-"elkészülnek.\n"
+"GnuCash-ban. A segédben megadhatja a kölcsön és a törlesztés részleteit. Az "
+"információkat felhasználva a megfelelő ütemezett tranzakciók elkészülnek.\n"
 "\n"
 "Ha rontott vagy később változtatni kíván, közvetlenül szerkesztheti a "
 "létrehozott ütemezett tranzakciókat."
@@ -11882,6 +11881,8 @@ msgid ""
 "Enter the annual interest rate in percent. Accepts values from 0.001 - 100. "
 "The Mortgage Assistant does not support zero-interest loans."
 msgstr ""
+"Adja meg az éves kamatlábat százalékban. Az érték 0.001 és 100 között kell "
+"legyen. A segéd nem támogatja a nulla kamatlábú kölcsönöket."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:359
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:55
@@ -11899,11 +11900,11 @@ msgstr "Kölcsön részletei"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:451
 msgid "Do you utilize an escrow account, if so an account must be specified…"
-msgstr ""
+msgstr "Letéti számlát használ? Ha igen, ki kell választania egy számlát…"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:470
 msgid "… utilize an escrow account for payments?"
-msgstr ""
+msgstr "… letéti számlát használ a fizetésekhez?"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:495
 msgid "Escrow Account"
@@ -11916,6 +11917,7 @@ msgstr "Kölcsön-visszafizetési opciók"
 #: gnucash/gtkbuilder/assistant-loan.glade:544
 msgid "All accounts must have valid entries to continue."
 msgstr ""
+"A folytatáshoz minden számlának érvényes bejegyzésekkel kell rendelkeznie."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:584
 msgid "Principal To"
@@ -11927,7 +11929,7 @@ msgstr "Fizetendő kamat"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:679
 msgid "Repayment Frequency"
-msgstr "Törlesztés gyakorisága"
+msgstr "Visszafizetés gyakorisága"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:714
 msgid "Loan Repayment"
@@ -11941,11 +11943,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-loan.glade:798
 msgid "Payment To (Escrow)"
-msgstr "Törlesztés ide (letét)"
+msgstr "Fizetés ide (letét)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:811
 msgid "Payment From (Escrow)"
-msgstr "Törlesztés innen (letét)"
+msgstr "Fizetés innen (letét)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:834
 msgid "Specify Source Account"
@@ -11957,7 +11959,7 @@ msgstr "Letéti számla használata"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:940
 msgid "Part of Payment Transaction"
-msgstr "Törlesztés-tranzakció-rész"
+msgstr "Törlesztési tranzakció-rész"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1006
 msgid "Payment Frequency"
@@ -11980,6 +11982,8 @@ msgid ""
 "Review the details below and if correct press \"Apply\"\" to create the "
 "schedule."
 msgstr ""
+"Tekintse át az alábbi részleteket, és ha minden helyes nyomja meg az "
+"„Alkalmaz” gombot az ütemezés létrehozásához."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1108
 msgid "Range"
@@ -12009,16 +12013,15 @@ msgstr "Befejező dátum"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1244
 msgid "Loan Review"
-msgstr "Hitel-felülvizsgálat"
+msgstr "Kökcsön áttekintése"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1252
-#, fuzzy
 msgid "Schedule added successfully."
-msgstr "A könyvelés lezárása sikeres volt."
+msgstr "Ütemezés sikeresen hozzáadva."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1258
 msgid "Loan Summary"
-msgstr ""
+msgstr "Kölcsön-összefoglaló"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:14
 #, fuzzy
@@ -12050,7 +12053,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:35
 msgid "Import QIF files"
-msgstr "QIF-fájl importálása"
+msgstr "QIF fájl importálása"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:50
@@ -12076,7 +12079,7 @@ msgstr "Ki_jelölés…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:109
 msgid "Select a QIF file to load"
-msgstr "Betöltendő QIF-fájl kiválasztása"
+msgstr "Betöltendő QIF fájl kiválasztása"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:185
 msgid "_Start"
@@ -12125,7 +12128,7 @@ msgid ""
 "accounting program, you should use the same account name that was used in "
 "that program.\n"
 msgstr ""
-"Az éppen most betöltött QIF-fájl egyetlen számla tranzakcióit tartalmazza, "
+"Az éppen most betöltött QIF fájl egyetlen számla tranzakcióit tartalmazza, "
 "de nem tartalmazza e számlának a nevét.\n"
 "\n"
 "Adjon nevet a számlának! Ha a fájlt egy másik számlázó program exportálta, "
@@ -12149,7 +12152,7 @@ msgid ""
 "import process."
 msgstr ""
 "Kattintson a \"Másik fájl betöltése\" gombra, ha jelenleg több adatot "
-"szeretne importálni. Tegye ezt akkor, ha számláit különálló QIF-fájlokba "
+"szeretne importálni. Tegye ezt akkor, ha számláit különálló QIF fájlokba "
 "mentette.\n"
 "\n"
 "Kattintson a „Tovább” gombra a fájlok betöltésének befejezéséhez, és lépjen "
@@ -12165,7 +12168,7 @@ msgstr "Másik fájl _betöltése"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:495
 msgid "QIF files you have loaded"
-msgstr "Betöltött QIF-fájlok"
+msgstr "Betöltött QIF fájlok"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:510
 msgid ""
@@ -12184,7 +12187,7 @@ msgid ""
 "page so you can change them if you want to, but it is safe to leave them "
 "alone.\n"
 msgstr ""
-"A következő oldalon a QIF-fájljaiban lévő számlák és a tulajdonában lévő "
+"A következő oldalon a QIF fájljaiban lévő számlák és a tulajdonában lévő "
 "részvények vagy befektetési alapok össze lesznek egyeztetve a GnuCash-"
 "számlákkal. Ha már létezik egy GnuCash számla azonos névvel vagy hasonló "
 "névvel és kompatibilis típussal, akkor azt a fiókot használja a rendszer "
@@ -12287,13 +12290,12 @@ msgid ""
 "The QIF importer cannot currently handle multi-currency QIF files. All the "
 "accounts you are importing must be denominated in the same currency.\n"
 msgstr ""
-"A QIF-et importáló program jelenleg nem tud több pénznemű QIF fájlokat "
-"kezelni. A QIF fájl(ok) összes importált számlája ugyanarra a pénznemre kell "
-"vonatkozzon.\n"
+"A QIF-importáló jelenleg nem tud többpénznemű QIF fájlokat kezelni. Az "
+"összes importálandó számlának ugyanabban a pénznemben kell lennie.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:915
 msgid "_Select the currency to use for all imported transactions:"
-msgstr "Válasszon _devizát az importált tranzakcióknak:"
+msgstr "Válasszon _pénznemet az importált tranzakcióknak:"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:958
 msgid ""
@@ -14672,7 +14674,7 @@ msgstr "Új számlakészlet lét_rehozása"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:261
 msgid "_Import my QIF files"
-msgstr "QIF-fájljaim _importálása"
+msgstr "QIF fájljaim _importálása"
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:278
 msgid "_Open the new user tutorial"
@@ -15567,7 +15569,7 @@ msgstr "<b>Jelentés alapértelmezett pénzneme</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3111
 msgid "<b>Location</b>"
-msgstr "<b>Földrajzi pozíció</b>"
+msgstr "<b>Hely</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3121
 msgid "Report opens in a new _window"
@@ -19916,7 +19918,7 @@ msgstr "Ez a QIF fájl már be van töltve. Válasszon ki egy másikat."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1788
 msgid "Select QIF File"
-msgstr "QIF-fájl kiválasztása"
+msgstr "QIF fájl kiválasztása"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1851
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1854
@@ -19934,7 +19936,7 @@ msgstr "Megszakítva"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1951
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1955
 msgid "An error occurred while loading the QIF file."
-msgstr "A QIF fájl betöltésekor hiba történt."
+msgstr "Hiba történt a QIF fájl betöltésekor."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1952
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:1970
@@ -19958,7 +19960,7 @@ msgstr "Takarítás"
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2032
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2036
 msgid "A bug was detected while parsing the QIF file."
-msgstr "A QIF-fájl feldolgozásakor hiba történt."
+msgstr "A QIF fájl elemzésekor hibát észlelt a program."
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:2107
 msgid "Loading completed"
@@ -28480,7 +28482,7 @@ msgstr "_Jelzálogkölcsön és Kölcsön visszafizetése…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:96
 msgid "Setup scheduled transactions for repayment of a loan"
-msgstr "Ütemezett tranzakciók beállítása a kölcsön visszafizetéséhez"
+msgstr "Ütemezett tranzakciók beállítása a kölcsön törlesztéséhez"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:104
 msgid "_Price Database"
@@ -29668,11 +29670,11 @@ msgstr "A kiválasztott ütemezett tranzakciók törlése"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:6
 msgid "Import _QIF…"
-msgstr "_QIF-fájl…"
+msgstr "_QIF fájl…"
 
 #: gnucash/ui/gnc-plugin-qif-import.ui:8
 msgid "Import a Quicken QIF file"
-msgstr "Quicken QIF-fájl importálása"
+msgstr "Quicken QIF fájl importálása"
 
 #: gnucash/ui/gnc-plugin-register.ui:6
 msgid "_General Journal"
