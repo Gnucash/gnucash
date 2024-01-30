@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-29 16:01+0000\n"
+"PO-Revision-Date: 2024-01-30 22:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -5847,6 +5847,11 @@ msgid ""
 "principles like double-entry accounting to ensure balanced books and "
 "accurate reports."
 msgstr ""
+"A könnyen használható, ugyanakkor nagy tudású és rugalmas GnuCash lehetővé "
+"teszi a bankszámlák, részvények, bevételek és kiadások nyomon követését. "
+"Ugyanolyan gyors és egyszerű, mintha füzetben vezetnénk a "
+"nyilvántartásunkat, mégis professzionális számviteli elveken alapul, "
+"biztosítva ezzel a kiegyensúlyozott könyvelést és a jelentések pontosságát."
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:15
 msgid "With GnuCash you can (but are not limited to):"
@@ -5881,9 +5886,8 @@ msgid ""
 "Exchange by CSV/FinTS(former HBCI) or import SWIFT-MT9xx/QIF/OFX data "
 "including Transaction Matching"
 msgstr ""
-"Kereskedjen, váltson pénzt a CSV/FinTS(korábban HBCI) segítségével vagy "
-"importáljon SWIFT-MT9xx/QIF/OFX adatokat beleértve a tranzakciók "
-"összehasonlítását is"
+"Tőzsdézzen a CSV/FinTS(korábban HBCI) segítségével vagy importáljon "
+"SWIFT-MT9xx/QIF/OFX adatokat a tranzakciók egyezésének ellenőrzésével"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:23
 msgid "Perform financial calculations, such as a loan repayment"
@@ -9534,15 +9538,14 @@ msgid "Save window sizes and locations"
 msgstr "Ablakméret és hely elmentése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:16
-#, fuzzy
 msgid ""
 "If active, the size and location of each dialog window will be saved when it "
 "is closed. The sizes and locations of content windows will be remembered "
 "when you quit GnuCash. Otherwise the sizes will not be saved."
 msgstr ""
-"Aktiválva minden dialógus ablak helye és mérete rögzül bezáráskor. A "
-"tartalomablakokméretei és helyei szintén megmaradnak GnuCash-ből történő "
-"kilépés után. Különben a méretek nem maradnak meg."
+"Ha aktiv, minden dialógus ablak helye és mérete mentésre kerül a bezáráskor. "
+"A tartalomablakok méretei és helyei szintén mentésre kerülnek GnuCash "
+"programból történő kilépéskor. Másképp a méretek nem lesznek elmentve."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:20
 msgid "Character to use as separator between account names"
@@ -11518,7 +11521,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:971
 #: gnucash/import-export/import-account-matcher.cpp:166
 msgid "Account ID"
-msgstr "Folyószámla-azonosító"
+msgstr "Számlaazonosító"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1010
 msgid "Error text."
@@ -11529,11 +11532,11 @@ msgstr "Hiba."
 #: gnucash/gtkbuilder/assistant-qif-import.glade:734
 #: gnucash/gtkbuilder/assistant-qif-import.glade:863
 msgid "Change GnuCash _Account…"
-msgstr "GnuCash-_számla megváltoztatása…"
+msgstr "GnuCash _számla megváltoztatása…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1044
 msgid "Match Import and GnuCash accounts"
-msgstr "Importált és GnuCash számlák egyeztetése"
+msgstr "GnuCash számlák hozzárendelése az import számlákhoz"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:1060
 msgid ""
@@ -12188,24 +12191,24 @@ msgid ""
 "alone.\n"
 msgstr ""
 "A következő oldalon a QIF fájljaiban lévő számlák és a tulajdonában lévő "
-"részvények vagy befektetési alapok össze lesznek egyeztetve a GnuCash-"
+"részvények vagy befektetési alapok össze lesznek egyeztetve a GnuCash "
 "számlákkal. Ha már létezik egy GnuCash számla azonos névvel vagy hasonló "
-"névvel és kompatibilis típussal, akkor azt a fiókot használja a rendszer "
-"egyezésként; ellenkező esetben a GnuCash új fiókot hoz létre a QIF-fiókkal "
-"azonos néven és típussal. Ha nem tetszik a javasolt GnuCash számla, "
-"kattintson duplán a módosításhoz.\n"
+"névvel és kompatibilis típussal, akkor azt a számlát használja a rendszer "
+"egyezésként. Ellenkező esetben a GnuCash új számlát hoz létre a QIF "
+"számlával azonos néven és típussal. Ha nem tetszik a javasolt GnuCash "
+"számla, kattintson duplán a módosításhoz.\n"
 "\n"
 "Vegye figyelembe, hogy a GnuCash sok olyan számlát fog létrehozni, amelyek "
-"nem léteztek az Ön másik személyes pénzügyi programjában, beleértve egy "
-"külön számlát minden egyes tulajdonában lévő részvényhez, külön számlákat a "
-"közvetítői jutalékokhoz, speciális \"részvény\" számlákat (alapértelmezés "
-"szerint a felhalmozott nyereség alszámlái). amelyek a nyitó egyenlegek "
-"forrásai stb. Ezek a számlák mindegyike megjelenik a következő oldalon, így "
+"nem léteztek az Ön másik személyi pénzügyi programjában, beleértve egy külön "
+"számlát minden egyes tulajdonában lévő részvényhez, külön számlákat a "
+"közvetítői jutalékokhoz, speciális részvény számlákat (alapértelmezés "
+"szerint a felhalmozott nyereség alszámlái), amelyek a nyitó egyenlegek "
+"forrásai, stb. Ezek a számlák mindegyike megjelenik a következő oldalon, így "
 "ha akarja, módosíthatja őket, de nyugodtan hagyhatja is őket.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:524
 msgid "Accounts and stock holdings"
-msgstr "Folyószámlák és birtokolt részvények"
+msgstr "Számlák és birtokolt részvények"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:538
 #: gnucash/gtkbuilder/assistant-qif-import.glade:669
@@ -12239,14 +12242,14 @@ msgid ""
 msgstr ""
 "A GnuCash külön bevételi és kiadási számlákat használ, ahelyett, hogy "
 "kategóriákba sorolná a tranzakciókat. A QIF fájl mindegyik kategóriája egy "
-"GnuCash-számlára kerül.\n"
+"GnuCash számlára kerül.\n"
 "\n"
-"A következő oldalon látható a QIF kategóriák és a GnuCash-számlák "
-"megfelelője. Ezeket meg lehet változtatni. Ehhez a kategória nevét "
-"tartalmazó sorra kell kattintani.\n"
+"A következő oldalon láthatók a QIF kategóriák és az ezekhez hozzárendelt "
+"GnuCash számlák. Ha nem ért egyet ezekkel, meg tudja változtatni. Ehhez a "
+"kategória nevét tartalmazó sorra kell duplán kattintani.\n"
 "\n"
-"Ha később meggondolja magát, akkor a GnuCash-el a számlastruktúra "
-"biztonsággal átszervezhető."
+"Ha később meggondolja magát, akkor a GnuCash programon belül a "
+"számlastruktúra biztonságosan átszervezhető."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:655
 msgid "Income and Expense categories"
@@ -12254,7 +12257,7 @@ msgstr "Bevételi és költségkategóriák"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:757
 msgid "Match QIF categories with GnuCash accounts"
-msgstr "QIF-kategóriák és GnuCash-számlák összevetése"
+msgstr "QIF kategóriák és GnuCash számlák egymáshoz rendelése"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:771
 msgid ""
@@ -12406,7 +12409,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1344
 msgid "Update your GnuCash accounts"
-msgstr "GnuCash-számlák frissítése"
+msgstr "GnuCash számlák frissítése"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1352
 msgid "Summary Text"
@@ -13328,7 +13331,7 @@ msgstr "Számla kiválasztása"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:237
 msgid "_Select or add a GnuCash account:"
-msgstr "GnuCash-számla _kijelölése vagy hozzáadása:"
+msgstr "GnuCash számla _kijelölése vagy hozzáadása:"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:7
 msgid "Import transactions from text file"
@@ -17549,7 +17552,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/assistant-ab-initial.c:777
 msgid "GnuCash Account Name"
-msgstr "GnuCash-számla neve"
+msgstr "GnuCash számla neve"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.c:783
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:591
@@ -19863,7 +19866,7 @@ msgstr "OFX/QFX válaszfájl feldolgozása"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:575
 msgid "GnuCash account name"
-msgstr "GnuCash-számla neve"
+msgstr "GnuCash számla neve"
 
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:880
 msgid "Enter a name or short description, such as \"Red Hat Stock\"."
@@ -28377,7 +28380,7 @@ msgstr "_Megnyitás…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:15
 msgid "Open an existing GnuCash file"
-msgstr "Meglévő GnuCash-fájl megnyitása"
+msgstr "Meglévő GnuCash fájl megnyitása"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:27
 msgid "Save _As…"
