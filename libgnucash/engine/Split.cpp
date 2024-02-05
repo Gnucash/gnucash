@@ -242,25 +242,25 @@ gnc_split_set_property(GObject         *object,
             xaccSplitSetMemo(split, g_value_get_string(value));
             break;
         case PROP_VALUE:
-            number = g_value_get_boxed(value);
+            number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
             xaccSplitSetValue(split, *number);
             break;
         case PROP_AMOUNT:
-            number = g_value_get_boxed(value);
+            number = static_cast<gnc_numeric*>(g_value_get_boxed(value));
             xaccSplitSetAmount(split, *number);
             break;
         case PROP_RECONCILE_DATE:
-            t = g_value_get_boxed(value);
+            t = static_cast<Time64*>(g_value_get_boxed(value));
             xaccSplitSetDateReconciledSecs(split, t->t);
             break;
         case PROP_TX:
-            xaccSplitSetParent(split, g_value_get_object(value));
+            xaccSplitSetParent(split, GNC_TRANSACTION(g_value_get_object(value)));
             break;
         case PROP_ACCOUNT:
-            xaccSplitSetAccount(split, g_value_get_object(value));
+            xaccSplitSetAccount(split, GNC_ACCOUNT(g_value_get_object(value)));
             break;
         case PROP_LOT:
-            xaccSplitSetLot(split, g_value_get_object(value));
+            xaccSplitSetLot(split, GNC_LOT(g_value_get_object(value)));
             break;
         case PROP_SX_CREDIT_FORMULA:
             qof_instance_set_kvp (QOF_INSTANCE (split), value, 2, GNC_SX_ID, GNC_SX_CREDIT_FORMULA);
@@ -532,7 +532,7 @@ xaccMallocSplit(QofBook *book)
     Split *split;
     g_return_val_if_fail (book, NULL);
 
-    split = g_object_new (GNC_TYPE_SPLIT, NULL);
+    split = GNC_SPLIT(g_object_new (GNC_TYPE_SPLIT, NULL));
     xaccInitSplit (split, book);
 
     return split;
@@ -550,7 +550,7 @@ xaccMallocSplit(QofBook *book)
 Split *
 xaccDupeSplit (const Split *s)
 {
-    Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
+    Split *split = GNC_SPLIT(g_object_new (GNC_TYPE_SPLIT, NULL));
 
     /* Trash the entity table. We don't want to mistake the cloned
      * splits as something official.  If we ever use this split, we'll
@@ -588,7 +588,7 @@ xaccDupeSplit (const Split *s)
 Split *
 xaccSplitCloneNoKvp (const Split *s)
 {
-    Split *split = g_object_new (GNC_TYPE_SPLIT, NULL);
+    Split *split = GNC_SPLIT(g_object_new (GNC_TYPE_SPLIT, NULL));
 
     split->parent              = NULL;
     split->memo                = CACHE_INSERT(s->memo);
@@ -2104,7 +2104,7 @@ xaccSplitGetOtherSplit (const Split *split)
 
     for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
     {
-        Split *s = n->data;
+        Split *s = GNC_SPLIT(n->data);
         if ((s == split) ||
             (!xaccTransStillHasSplit(trans, s)) ||
             (xaccAccountGetType (xaccSplitGetAccount (s)) == ACCT_TYPE_TRADING) ||
@@ -2203,7 +2203,7 @@ static QofObject split_object_def =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) GNC_ID_SPLIT,
     DI(.type_label        = ) "Split",
-    DI(.create            = ) (gpointer)xaccMallocSplit,
+    DI(.create            = ) (void* (*)(QofBook*))xaccMallocSplit,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) NULL,
     DI(.is_dirty          = ) qof_collection_is_dirty,
@@ -2216,7 +2216,7 @@ static QofObject split_object_def =
 static gpointer
 split_account_guid_getter (gpointer obj, const QofParam *p)
 {
-    Split *s = obj;
+    Split *s = GNC_SPLIT(obj);
     Account *acc;
 
     if (!s) return NULL;

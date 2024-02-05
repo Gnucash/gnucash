@@ -35,7 +35,7 @@
 #include <gnc-lot.h>
 #include <gnc-event.h>
 
-#if defined(__clang__) && (__clang_major__ == 5 || (__clang_major__ == 3 && __clang_minor__ < 5))
+#if defined(__clang__)
 #define USE_CLANG_FUNC_SIG 1
 #endif
 
@@ -1282,7 +1282,7 @@ test_get_corr_account_split (Fixture *fixture, gconstpointer pData)
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "gboolean get_corr_account_split(const Split *, const Split **)"
 #else
-#define _func "get_corr_account_split"
+#define _func "gboolean get_corr_account_split(const Split*, const Split**)"
 #endif
     gchar *msg = _func ": assertion 'sa' failed";
 #undef _func

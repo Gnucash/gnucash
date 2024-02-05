@@ -147,7 +147,7 @@ set (engine_SOURCES
   Scrub3.c
   ScrubBusiness.c
   ScrubBudget.c
-  Split.c
+  Split.cpp
   TransLog.c
   Transaction.c
   cap-gains.c
