@@ -82,6 +82,10 @@ ToDo:
 
 #include "gnc-engine.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** The xaccSplitGetCapGains() method returns the value of
  *    capital gains (if any) associated with the indicated
  *    split. In order for there to be any capital gains,
@@ -204,6 +208,10 @@ Split * xaccSplitAssignToLot (Split *split, GNCLot *lot);
 
 void xaccSplitComputeCapGains(Split *split, Account *gain_acc);
 void xaccLotComputeCapGains (GNCLot *lot, Account *gain_acc);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* XACC_CAP_GAINS_H */
 /** @} */

@@ -37,9 +37,17 @@
 #ifndef GNC_LOT_P_H
 #define GNC_LOT_P_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define gnc_lot_set_guid(L,G)  qof_instance_set_guid(QOF_INSTANCE(L),&(G))
 
 /* Register with the Query engine */
 gboolean gnc_lot_register (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_LOT_P_H */
