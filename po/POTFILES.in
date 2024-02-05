@@ -683,7 +683,7 @@ libgnucash/engine/qof-string-cache.cpp
 libgnucash/engine/qofutil.cpp
 libgnucash/engine/qof-win32.cpp
 libgnucash/engine/Query.c
-libgnucash/engine/Recurrence.c
+libgnucash/engine/Recurrence.cpp
 libgnucash/engine/SchedXaction.c
 libgnucash/engine/Scrub2.c
 libgnucash/engine/Scrub3.c
