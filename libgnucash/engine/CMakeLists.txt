@@ -149,7 +149,7 @@ set (engine_SOURCES
   ScrubBudget.c
   Split.cpp
   TransLog.c
-  Transaction.c
+  Transaction.cpp
   cap-gains.c
   cashobjects.c
   gnc-accounting-period.c

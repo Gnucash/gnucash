@@ -35,7 +35,7 @@
 #include "../gnc-event.h"
 #include <qof.h>
 
-#if defined(__clang__) && (__clang_major__ == 5 || (__clang_major__ == 3 && __clang_minor__ < 5))
+#if defined(__clang__)
 #define USE_CLANG_FUNC_SIG 1
 #endif
 
@@ -459,7 +459,7 @@ test_xaccMallocTransaction (Fixture *fixture, gconstpointer pData)
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "Transaction *xaccMallocTransaction(QofBook *)"
 #else
-#define _func "xaccMallocTransaction"
+#define _func "Transaction* xaccMallocTransaction(QofBook*)"
 #endif
     auto msg = _func ": assertion 'book' failed";
 #undef _func
@@ -1242,7 +1242,7 @@ test_xaccTransGetAccountBalance (Fixture *fixture, gconstpointer pData)
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "gnc_numeric xaccTransGetAccountBalance(const Transaction *, const Account *)"
 #else
-#define _func "xaccTransGetAccountBalance"
+#define _func "gnc_numeric xaccTransGetAccountBalance(const Transaction*, const Account*)"
 #endif
     auto msg1 = _func ": assertion 'account && trans' failed";
 #undef _func

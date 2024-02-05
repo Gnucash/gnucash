@@ -35,7 +35,7 @@
 #include "../Transaction.h"
 #include "../gnc-lot.h"
 
-#if defined(__clang__) && (__clang_major__ == 5 || (__clang_major__ == 3 && __clang_minor__ < 5))
+#if defined(__clang__)
 #define USE_CLANG_FUNC_SIG 1
 #endif
 static const gchar *suitename = "/engine/Account";
@@ -861,7 +861,7 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "int xaccTransGetSplitIndex(const Transaction *, const Split *)"
 #else
-#define _func "xaccTransGetSplitIndex"
+#define _func "int xaccTransGetSplitIndex(const Transaction*, const Split*)"
 #endif
     auto msg2 = _func ": assertion 'trans && split' failed";
 #undef _func
@@ -975,7 +975,7 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
 #ifdef USE_CLANG_FUNC_SIG
 #define _func "int xaccTransGetSplitIndex(const Transaction *, const Split *)"
 #else
-#define _func "xaccTransGetSplitIndex"
+#define _func "int xaccTransGetSplitIndex(const Transaction*, const Split*)"
 #endif
     auto msg2 = _func ": assertion 'trans && split' failed";
 #undef _func
