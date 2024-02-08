@@ -1012,15 +1012,6 @@ gboolean gncVendorRegister (void)
         { NULL },
     };
 
-    if (!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_VENDOR, INVOICE_OWNER))
-    {
-        return FALSE;
-    }
-    if (!qof_choice_add_class(GNC_ID_JOB, GNC_ID_VENDOR, JOB_OWNER))
-    {
-        return FALSE;
-    }
-
     qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncVendorCompare, params);
 
     return qof_object_register (&gncVendorDesc);

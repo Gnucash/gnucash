@@ -2308,10 +2308,6 @@ gboolean gncInvoiceRegister (void)
         qofInvoiceSetBillTo (NULL, NULL);
         qofInvoiceGetBillTo (NULL);
     }
-    if (!qof_choice_create (GNC_ID_INVOICE))
-    {
-        return FALSE;
-    }
     return qof_object_register (&gncInvoiceDesc);
 }
 
