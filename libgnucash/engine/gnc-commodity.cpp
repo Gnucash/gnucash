@@ -166,7 +166,7 @@ struct gnc_quote_source_s
  * Apply changes here also to the FQ appendix of help.
  */
 static gnc_quote_source currency_quote_source =
-{ true, SOURCE_SINGLE, 0, "Currency", "currency" };
+{ true, SOURCE_CURRENCY, 0, "Currency", "currency" };
 
 /* The single quote method is usually the module name, but
  * sometimes it gets the suffix "_direct"
@@ -239,27 +239,27 @@ static gnc_quote_source single_quote_sources[] =
 
 static gnc_quote_source multiple_quote_sources[] =
 {
-    { false, SOURCE_SINGLE, 0, "Australia (ASX, ...)", "australia" },
-    { false, SOURCE_SINGLE, 0, "Canada (Alphavantage, TSX, ...)", "canada" },
-    { false, SOURCE_SINGLE, 0, "Canada Mutual (Fund Library, StockHouse, ...)", "canadamutual" },
-    { false, SOURCE_SINGLE, 0, "Dutch (AEX, ...)", "dutch" },
-    { false, SOURCE_SINGLE, 0, "Europe (asegr,.bsero, hex ...)", "europe" },
-    { false, SOURCE_SINGLE, 0, "Greece (ASE, ...)", "greece" },
-    { false, SOURCE_SINGLE, 0, "Hungary (Bamosz, BET, ...)", "hu" },
-    { false, SOURCE_SINGLE, 0, "India Mutual (AMFI, ...)", "indiamutual" },
-    { false, SOURCE_SINGLE, 0, "Fidelity (Fidelity, ...)", "fidelity" },
-    { false, SOURCE_SINGLE, 0, "Finland (HEX, ...)", "finland" },
-    { false, SOURCE_SINGLE, 0, "First Trust (First Trust, ...)", "ftportfolios" },
-    { false, SOURCE_SINGLE, 0, "France (bourso, ĺerevenu, ...)", "france" },
-    { false, SOURCE_SINGLE, 0, "Nasdaq (alphavantage, fool, ...)", "nasdaq" },
-    { false, SOURCE_SINGLE, 0, "New Zealand (NZX, ...)", "nz" },
-    { false, SOURCE_SINGLE, 0, "NYSE (alphavantage, fool, ...)", "nyse" },
-    { false, SOURCE_SINGLE, 0, "South Africa (Sharenet, ...)", "za" },
-    { false, SOURCE_SINGLE, 0, "Romania (BSE-RO, ...)", "romania" },
-    { false, SOURCE_SINGLE, 0, "T. Rowe Price", "troweprice" },
-    { false, SOURCE_SINGLE, 0, "U.K. Funds (citywire, FTfunds, MStar, tnetuk, ...)", "ukfunds" },
-    { false, SOURCE_SINGLE, 0, "U.K. Unit Trusts (trustnet, ...)", "uk_unit_trusts" },
-    { false, SOURCE_SINGLE, 0, "USA (Alphavantage, Fool, ...)", "usa" },
+    { false, SOURCE_MULTI, 0, "Australia (ASX, ...)", "australia" },
+    { false, SOURCE_MULTI, 0, "Canada (Alphavantage, TSX, ...)", "canada" },
+    { false, SOURCE_MULTI, 0, "Canada Mutual (Fund Library, StockHouse, ...)", "canadamutual" },
+    { false, SOURCE_MULTI, 0, "Dutch (AEX, ...)", "dutch" },
+    { false, SOURCE_MULTI, 0, "Europe (asegr,.bsero, hex ...)", "europe" },
+    { false, SOURCE_MULTI, 0, "Greece (ASE, ...)", "greece" },
+    { false, SOURCE_MULTI, 0, "Hungary (Bamosz, BET, ...)", "hu" },
+    { false, SOURCE_MULTI, 0, "India Mutual (AMFI, ...)", "indiamutual" },
+    { false, SOURCE_MULTI, 0, "Fidelity (Fidelity, ...)", "fidelity" },
+    { false, SOURCE_MULTI, 0, "Finland (HEX, ...)", "finland" },
+    { false, SOURCE_MULTI, 0, "First Trust (First Trust, ...)", "ftportfolios" },
+    { false, SOURCE_MULTI, 0, "France (bourso, ĺerevenu, ...)", "france" },
+    { false, SOURCE_MULTI, 0, "Nasdaq (alphavantage, fool, ...)", "nasdaq" },
+    { false, SOURCE_MULTI, 0, "New Zealand (NZX, ...)", "nz" },
+    { false, SOURCE_MULTI, 0, "NYSE (alphavantage, fool, ...)", "nyse" },
+    { false, SOURCE_MULTI, 0, "South Africa (Sharenet, ...)", "za" },
+    { false, SOURCE_MULTI, 0, "Romania (BSE-RO, ...)", "romania" },
+    { false, SOURCE_MULTI, 0, "T. Rowe Price", "troweprice" },
+    { false, SOURCE_MULTI, 0, "U.K. Funds (citywire, FTfunds, MStar, tnetuk, ...)", "ukfunds" },
+    { false, SOURCE_MULTI, 0, "U.K. Unit Trusts (trustnet, ...)", "uk_unit_trusts" },
+    { false, SOURCE_MULTI, 0, "USA (Alphavantage, Fool, ...)", "usa" },
 };
 
 static const int num_single_quote_sources =
@@ -325,18 +325,13 @@ gnc_quote_source_init_tables (void)
 
     for (i = 0; i < num_single_quote_sources; i++)
     {
-        single_quote_sources[i].type = SOURCE_SINGLE;
         single_quote_sources[i].index = i;
     }
 
     for (i = 0; i < num_multiple_quote_sources; i++)
     {
-        multiple_quote_sources[i].type = SOURCE_MULTI;
         multiple_quote_sources[i].index = i;
     }
-
-    currency_quote_source.type = SOURCE_CURRENCY;
-    currency_quote_source.index = 0;
 }
 
 
