@@ -153,8 +153,8 @@ struct gnc_quote_source_s
     gboolean supported;
     QuoteSourceType type;
     gint index;
-    char *user_name;		/* User friendly name incl. region code*/
-    char *internal_name;	/* Name used internally and by finance::quote. */
+    const char *user_name;		/* User friendly name incl. region code*/
+    const char *internal_name;	/* Name used internally and by finance::quote. */
 };
 
 /* To update the following lists scan
@@ -166,7 +166,7 @@ struct gnc_quote_source_s
  * Apply changes here also to the FQ appendix of help.
  */
 static gnc_quote_source currency_quote_source =
-{ TRUE, 0, 0, "Currency", "currency" };
+{ true, SOURCE_SINGLE, 0, "Currency", "currency" };
 
 /* The single quote method is usually the module name, but
  * sometimes it gets the suffix "_direct"
@@ -174,92 +174,92 @@ static gnc_quote_source currency_quote_source =
  */
 static gnc_quote_source single_quote_sources[] =
 {
-    { FALSE, 0, 0, "Alphavantage, US", "alphavantage" },
-    { FALSE, 0, 0, "Amsterdam Euronext eXchange, NL", "aex" },
-    { FALSE, 0, 0, "American International Assurance, HK", "aiahk" },
-    { FALSE, 0, 0, "Association of Mutual Funds in India", "amfiindia" },
-    { FALSE, 0, 0, "Athens Stock Exchange, GR", "asegr" },
-    { FALSE, 0, 0, "Australian Stock Exchange, AU", "asx" },
-    { FALSE, 0, 0, "BAMOSZ funds, HU", "bamosz" },
-    { FALSE, 0, 0, "BMO NesbittBurns, CA", "bmonesbittburns" },
-    { FALSE, 0, 0, "Bucharest Stock Exchange, RO", "bsero" },
-    { FALSE, 0, 0, "Budapest Stock Exchange (BET), ex-BUX, HU", "bse" },
-    { FALSE, 0, 0, "Canada Mutual", "canadamutual" },
-    { FALSE, 0, 0, "Citywire Funds, GB", "citywire" },
-    { FALSE, 0, 0, "Colombo Stock Exchange, LK", "cse" },
-    { FALSE, 0, 0, "Cominvest, ex-Adig, DE", "cominvest" },
-    { FALSE, 0, 0, "Deka Investments, DE", "deka" },
-    { FALSE, 0, 0, "Dutch", "dutch" },
-    { FALSE, 0, 0, "DWS, DE", "dwsfunds" },
-    { FALSE, 0, 0, "Equinox Unit Trusts, ZA", "za_unittrusts" },
-    { FALSE, 0, 0, "Fidelity Direct", "fidelity_direct" },
-    { FALSE, 0, 0, "Fidelity Fixed", "fidelityfixed" },
-    { FALSE, 0, 0, "Finance Canada", "financecanada" },
-    { FALSE, 0, 0, "Financial Times Funds service, GB", "ftfunds" },
-    { FALSE, 0, 0, "Finanzpartner, DE", "finanzpartner" },
-    { FALSE, 0, 0, "First Trust Portfolios, US", "ftportfolios" },
-    { FALSE, 0, 0, "Fund Library, CA", "fundlibrary" },
-    { FALSE, 0, 0, "GoldMoney spot rates, JE", "goldmoney" },
-    { FALSE, 0, 0, "Greece", "greece" },
-    { FALSE, 0, 0, "Helsinki stock eXchange, FI", "hex" },
-    { FALSE, 0, 0, "Hungary", "hu" },
-    { FALSE, 0, 0, "India Mutual", "indiamutual" },
-    { FALSE, 0, 0, "Man Investments, AU", "maninv" },
-    { FALSE, 0, 0, "Morningstar, GB", "mstaruk" },
-    { FALSE, 0, 0, "Morningstar, JP", "morningstarjp" },
-    { FALSE, 0, 0, "Morningstar, SE", "morningstar" },
-    { FALSE, 0, 0, "Motley Fool, US", "fool" },
-    { FALSE, 0, 0, "New Zealand stock eXchange, NZ", "nzx" },
-    { FALSE, 0, 0, "Paris Stock Exchange/Boursorama, FR", "bourso" },
-    { FALSE, 0, 0, "Paris Stock Exchange/LeRevenu, FR", "lerevenu" },
-    { FALSE, 0, 0, "Platinum Asset Management, AU", "platinum" },
-    { FALSE, 0, 0, "Romania", "romania" },
-    { FALSE, 0, 0, "SIX Swiss Exchange funds, CH", "sixfunds" },
-    { FALSE, 0, 0, "SIX Swiss Exchange shares, CH", "sixshares" },
-    { FALSE, 0, 0, "Skandinaviska Enskilda Banken, SE", "seb_funds" },
-    { FALSE, 0, 0, "Sharenet, ZA", "za" },
-    { FALSE, 0, 0, "StockHouse Canada", "stockhousecanada_fund" },
-    { FALSE, 0, 0, "TD Waterhouse Funds, CA", "tdwaterhouse" },
-    { FALSE, 0, 0, "TD Efunds, CA", "tdefunds" },
-    { FALSE, 0, 0, "TIAA-CREF, US", "tiaacref" },
-    { FALSE, 0, 0, "Toronto Stock eXchange, CA", "tsx" },
-    { FALSE, 0, 0, "T. Rowe Price", "troweprice" },
-    { FALSE, 0, 0, "T. Rowe Price, US", "troweprice_direct" },
-    { FALSE, 0, 0, "Trustnet via tnetuk.pm, GB", "tnetuk" },
-    { FALSE, 0, 0, "Trustnet via trustnet.pm, GB", "trustnet" },
-    { FALSE, 0, 0, "U.K. Unit Trusts", "uk_unit_trusts" },
-    { FALSE, 0, 0, "Union Investment, DE", "unionfunds" },
-    { FALSE, 0, 0, "US Treasury Bonds", "usfedbonds" },
-    { FALSE, 0, 0, "US Govt. Thrift Savings Plan", "tsp" },
-    { FALSE, 0, 0, "Vanguard", "vanguard" }, /* Method of Alphavantage */
-    { FALSE, 0, 0, "VWD, DE (unmaintained)", "vwd" },
-    { FALSE, 0, 0, "Yahoo as JSON", "yahoo_json" },
-    { FALSE, 0, 0, "Yahoo as YQL", "yahoo_yql" },
+    { false, SOURCE_SINGLE, 0, "Alphavantage, US", "alphavantage" },
+    { false, SOURCE_SINGLE, 0, "Amsterdam Euronext eXchange, NL", "aex" },
+    { false, SOURCE_SINGLE, 0, "American International Assurance, HK", "aiahk" },
+    { false, SOURCE_SINGLE, 0, "Association of Mutual Funds in India", "amfiindia" },
+    { false, SOURCE_SINGLE, 0, "Athens Stock Exchange, GR", "asegr" },
+    { false, SOURCE_SINGLE, 0, "Australian Stock Exchange, AU", "asx" },
+    { false, SOURCE_SINGLE, 0, "BAMOSZ funds, HU", "bamosz" },
+    { false, SOURCE_SINGLE, 0, "BMO NesbittBurns, CA", "bmonesbittburns" },
+    { false, SOURCE_SINGLE, 0, "Bucharest Stock Exchange, RO", "bsero" },
+    { false, SOURCE_SINGLE, 0, "Budapest Stock Exchange (BET), ex-BUX, HU", "bse" },
+    { false, SOURCE_SINGLE, 0, "Canada Mutual", "canadamutual" },
+    { false, SOURCE_SINGLE, 0, "Citywire Funds, GB", "citywire" },
+    { false, SOURCE_SINGLE, 0, "Colombo Stock Exchange, LK", "cse" },
+    { false, SOURCE_SINGLE, 0, "Cominvest, ex-Adig, DE", "cominvest" },
+    { false, SOURCE_SINGLE, 0, "Deka Investments, DE", "deka" },
+    { false, SOURCE_SINGLE, 0, "Dutch", "dutch" },
+    { false, SOURCE_SINGLE, 0, "DWS, DE", "dwsfunds" },
+    { false, SOURCE_SINGLE, 0, "Equinox Unit Trusts, ZA", "za_unittrusts" },
+    { false, SOURCE_SINGLE, 0, "Fidelity Direct", "fidelity_direct" },
+    { false, SOURCE_SINGLE, 0, "Fidelity Fixed", "fidelityfixed" },
+    { false, SOURCE_SINGLE, 0, "Finance Canada", "financecanada" },
+    { false, SOURCE_SINGLE, 0, "Financial Times Funds service, GB", "ftfunds" },
+    { false, SOURCE_SINGLE, 0, "Finanzpartner, DE", "finanzpartner" },
+    { false, SOURCE_SINGLE, 0, "First Trust Portfolios, US", "ftportfolios" },
+    { false, SOURCE_SINGLE, 0, "Fund Library, CA", "fundlibrary" },
+    { false, SOURCE_SINGLE, 0, "GoldMoney spot rates, JE", "goldmoney" },
+    { false, SOURCE_SINGLE, 0, "Greece", "greece" },
+    { false, SOURCE_SINGLE, 0, "Helsinki stock eXchange, FI", "hex" },
+    { false, SOURCE_SINGLE, 0, "Hungary", "hu" },
+    { false, SOURCE_SINGLE, 0, "India Mutual", "indiamutual" },
+    { false, SOURCE_SINGLE, 0, "Man Investments, AU", "maninv" },
+    { false, SOURCE_SINGLE, 0, "Morningstar, GB", "mstaruk" },
+    { false, SOURCE_SINGLE, 0, "Morningstar, JP", "morningstarjp" },
+    { false, SOURCE_SINGLE, 0, "Morningstar, SE", "morningstar" },
+    { false, SOURCE_SINGLE, 0, "Motley Fool, US", "fool" },
+    { false, SOURCE_SINGLE, 0, "New Zealand stock eXchange, NZ", "nzx" },
+    { false, SOURCE_SINGLE, 0, "Paris Stock Exchange/Boursorama, FR", "bourso" },
+    { false, SOURCE_SINGLE, 0, "Paris Stock Exchange/LeRevenu, FR", "lerevenu" },
+    { false, SOURCE_SINGLE, 0, "Platinum Asset Management, AU", "platinum" },
+    { false, SOURCE_SINGLE, 0, "Romania", "romania" },
+    { false, SOURCE_SINGLE, 0, "SIX Swiss Exchange funds, CH", "sixfunds" },
+    { false, SOURCE_SINGLE, 0, "SIX Swiss Exchange shares, CH", "sixshares" },
+    { false, SOURCE_SINGLE, 0, "Skandinaviska Enskilda Banken, SE", "seb_funds" },
+    { false, SOURCE_SINGLE, 0, "Sharenet, ZA", "za" },
+    { false, SOURCE_SINGLE, 0, "StockHouse Canada", "stockhousecanada_fund" },
+    { false, SOURCE_SINGLE, 0, "TD Waterhouse Funds, CA", "tdwaterhouse" },
+    { false, SOURCE_SINGLE, 0, "TD Efunds, CA", "tdefunds" },
+    { false, SOURCE_SINGLE, 0, "TIAA-CREF, US", "tiaacref" },
+    { false, SOURCE_SINGLE, 0, "Toronto Stock eXchange, CA", "tsx" },
+    { false, SOURCE_SINGLE, 0, "T. Rowe Price", "troweprice" },
+    { false, SOURCE_SINGLE, 0, "T. Rowe Price, US", "troweprice_direct" },
+    { false, SOURCE_SINGLE, 0, "Trustnet via tnetuk.pm, GB", "tnetuk" },
+    { false, SOURCE_SINGLE, 0, "Trustnet via trustnet.pm, GB", "trustnet" },
+    { false, SOURCE_SINGLE, 0, "U.K. Unit Trusts", "uk_unit_trusts" },
+    { false, SOURCE_SINGLE, 0, "Union Investment, DE", "unionfunds" },
+    { false, SOURCE_SINGLE, 0, "US Treasury Bonds", "usfedbonds" },
+    { false, SOURCE_SINGLE, 0, "US Govt. Thrift Savings Plan", "tsp" },
+    { false, SOURCE_SINGLE, 0, "Vanguard", "vanguard" }, /* Method of Alphavantage */
+    { false, SOURCE_SINGLE, 0, "VWD, DE (unmaintained)", "vwd" },
+    { false, SOURCE_SINGLE, 0, "Yahoo as JSON", "yahoo_json" },
+    { false, SOURCE_SINGLE, 0, "Yahoo as YQL", "yahoo_yql" },
 };
 
 static gnc_quote_source multiple_quote_sources[] =
 {
-    { FALSE, 0, 0, "Australia (ASX, ...)", "australia" },
-    { FALSE, 0, 0, "Canada (Alphavantage, TSX, ...)", "canada" },
-    { FALSE, 0, 0, "Canada Mutual (Fund Library, StockHouse, ...)", "canadamutual" },
-    { FALSE, 0, 0, "Dutch (AEX, ...)", "dutch" },
-    { FALSE, 0, 0, "Europe (asegr,.bsero, hex ...)", "europe" },
-    { FALSE, 0, 0, "Greece (ASE, ...)", "greece" },
-    { FALSE, 0, 0, "Hungary (Bamosz, BET, ...)", "hu" },
-    { FALSE, 0, 0, "India Mutual (AMFI, ...)", "indiamutual" },
-    { FALSE, 0, 0, "Fidelity (Fidelity, ...)", "fidelity" },
-    { FALSE, 0, 0, "Finland (HEX, ...)", "finland" },
-    { FALSE, 0, 0, "First Trust (First Trust, ...)", "ftportfolios" },
-    { FALSE, 0, 0, "France (bourso, ĺerevenu, ...)", "france" },
-    { FALSE, 0, 0, "Nasdaq (alphavantage, fool, ...)", "nasdaq" },
-    { FALSE, 0, 0, "New Zealand (NZX, ...)", "nz" },
-    { FALSE, 0, 0, "NYSE (alphavantage, fool, ...)", "nyse" },
-    { FALSE, 0, 0, "South Africa (Sharenet, ...)", "za" },
-    { FALSE, 0, 0, "Romania (BSE-RO, ...)", "romania" },
-    { FALSE, 0, 0, "T. Rowe Price", "troweprice" },
-    { FALSE, 0, 0, "U.K. Funds (citywire, FTfunds, MStar, tnetuk, ...)", "ukfunds" },
-    { FALSE, 0, 0, "U.K. Unit Trusts (trustnet, ...)", "uk_unit_trusts" },
-    { FALSE, 0, 0, "USA (Alphavantage, Fool, ...)", "usa" },
+    { false, SOURCE_SINGLE, 0, "Australia (ASX, ...)", "australia" },
+    { false, SOURCE_SINGLE, 0, "Canada (Alphavantage, TSX, ...)", "canada" },
+    { false, SOURCE_SINGLE, 0, "Canada Mutual (Fund Library, StockHouse, ...)", "canadamutual" },
+    { false, SOURCE_SINGLE, 0, "Dutch (AEX, ...)", "dutch" },
+    { false, SOURCE_SINGLE, 0, "Europe (asegr,.bsero, hex ...)", "europe" },
+    { false, SOURCE_SINGLE, 0, "Greece (ASE, ...)", "greece" },
+    { false, SOURCE_SINGLE, 0, "Hungary (Bamosz, BET, ...)", "hu" },
+    { false, SOURCE_SINGLE, 0, "India Mutual (AMFI, ...)", "indiamutual" },
+    { false, SOURCE_SINGLE, 0, "Fidelity (Fidelity, ...)", "fidelity" },
+    { false, SOURCE_SINGLE, 0, "Finland (HEX, ...)", "finland" },
+    { false, SOURCE_SINGLE, 0, "First Trust (First Trust, ...)", "ftportfolios" },
+    { false, SOURCE_SINGLE, 0, "France (bourso, ĺerevenu, ...)", "france" },
+    { false, SOURCE_SINGLE, 0, "Nasdaq (alphavantage, fool, ...)", "nasdaq" },
+    { false, SOURCE_SINGLE, 0, "New Zealand (NZX, ...)", "nz" },
+    { false, SOURCE_SINGLE, 0, "NYSE (alphavantage, fool, ...)", "nyse" },
+    { false, SOURCE_SINGLE, 0, "South Africa (Sharenet, ...)", "za" },
+    { false, SOURCE_SINGLE, 0, "Romania (BSE-RO, ...)", "romania" },
+    { false, SOURCE_SINGLE, 0, "T. Rowe Price", "troweprice" },
+    { false, SOURCE_SINGLE, 0, "U.K. Funds (citywire, FTfunds, MStar, tnetuk, ...)", "ukfunds" },
+    { false, SOURCE_SINGLE, 0, "U.K. Unit Trusts (trustnet, ...)", "uk_unit_trusts" },
+    { false, SOURCE_SINGLE, 0, "USA (Alphavantage, Fool, ...)", "usa" },
 };
 
 static const int num_single_quote_sources =
@@ -354,7 +354,7 @@ gnc_quote_source_add_new (const char *source_name, gboolean supported)
     gnc_quote_source *new_source;
 
     DEBUG("Creating new source %s", (source_name == NULL ? "(null)" : source_name));
-    new_source = malloc(sizeof(gnc_quote_source));
+    new_source = g_new0 (gnc_quote_source, 1);
     new_source->supported = supported;
     new_source->type = SOURCE_UNKNOWN;
     new_source->index = g_list_length(new_quote_sources);
@@ -411,7 +411,7 @@ gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
         node = g_list_nth(new_quote_sources, index);
         if (node)
         {
-            source = node->data;
+            source = static_cast<gnc_quote_source*>(node->data);
             LEAVE("found %s", source->user_name);
             return source;
         }
@@ -451,7 +451,7 @@ gnc_quote_source_lookup_by_internal(const char * name)
 
     for (i = 0, node = new_quote_sources; node; node = node->next, i++)
     {
-        source = node->data;
+        source = static_cast<gnc_quote_source*>(node->data);
         if (g_strcmp0(name, source->internal_name) == 0)
             return source;
     }
@@ -564,7 +564,7 @@ gnc_quote_source_set_fq_installed (const char* version_string,
 
     for (node = sources_list; node; node = node->next)
     {
-        source_name = node->data;
+        source_name = static_cast<char*>(node->data);
 
         source = gnc_quote_source_lookup_by_internal(source_name);
         if (source != NULL)
@@ -749,7 +749,7 @@ gnc_commodity_set_property (GObject         *object,
     switch (prop_id)
     {
     case PROP_NAMESPACE:
-        gnc_commodity_set_namespace(commodity, g_value_get_object(value));
+        gnc_commodity_set_namespace(commodity, static_cast<const char*>(g_value_get_object(value)));
         break;
     case PROP_FULL_NAME:
         gnc_commodity_set_fullname(commodity, g_value_get_string(value));
@@ -767,7 +767,7 @@ gnc_commodity_set_property (GObject         *object,
         gnc_commodity_set_quote_flag(commodity, g_value_get_boolean(value));
         break;
     case PROP_QUOTE_SOURCE:
-        gnc_commodity_set_quote_source(commodity, g_value_get_pointer(value));
+        gnc_commodity_set_quote_source(commodity, static_cast<gnc_quote_source*>(g_value_get_pointer(value)));
         break;
     case PROP_QUOTE_TZ:
         gnc_commodity_set_quote_tz(commodity, g_value_get_string(value));
@@ -872,7 +872,7 @@ gnc_commodity_new(QofBook *book, const char * fullname,
                   const char * name_space, const char * mnemonic,
                   const char * cusip, int fraction)
 {
-    gnc_commodity * retval = g_object_new(GNC_TYPE_COMMODITY, NULL);
+    auto retval = GNC_COMMODITY(g_object_new(GNC_TYPE_COMMODITY, NULL));
 
     qof_instance_init_data (&retval->inst, GNC_ID_COMMODITY, book);
     gnc_commodity_begin_edit(retval);
@@ -991,7 +991,7 @@ gnc_commodity_clone(const gnc_commodity *src, QofBook *dest_book)
     gnc_commodityPrivate* src_priv;
     gnc_commodityPrivate* dest_priv;
 
-    gnc_commodity * dest = g_object_new(GNC_TYPE_COMMODITY, NULL);
+    auto dest = GNC_COMMODITY (g_object_new(GNC_TYPE_COMMODITY, NULL));
     qof_instance_init_data (&dest->inst, GNC_ID_COMMODITY, dest_book);
     src_priv = GET_PRIVATE(src);
     dest_priv = GET_PRIVATE(dest);
@@ -1637,7 +1637,7 @@ int gnc_commodity_compare(const gnc_commodity * a, const gnc_commodity * b)
 // when the commodities match.
 int gnc_commodity_compare_void(const void * a, const void * b)
 {
-    return gnc_commodity_compare(a, b);
+    return gnc_commodity_compare(GNC_COMMODITY (a), GNC_COMMODITY (b));
 }
 
 /************************************************************
@@ -1707,7 +1707,7 @@ gnc_commodity_table *
 gnc_commodity_table_get_table(QofBook *book)
 {
     if (!book) return NULL;
-    return qof_book_get_data (book, GNC_COMMODITY_TABLE);
+    return static_cast<gnc_commodity_table*>(qof_book_get_data (book, GNC_COMMODITY_TABLE));
 }
 
 gnc_commodity *
@@ -1798,7 +1798,7 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
                 }
             }
         }
-        return g_hash_table_lookup(nsp->cm_table, (gpointer)mnemonic);
+        return GNC_COMMODITY(g_hash_table_lookup(nsp->cm_table, (gpointer)mnemonic));
     }
     else
     {
@@ -1860,10 +1860,11 @@ gnc_commodity_table_find_full(const gnc_commodity_table * table,
 
     for (iterator = all; iterator; iterator = iterator->next)
     {
+        auto commodity = GNC_COMMODITY (iterator->data);
         if (!strcmp(fullname,
-                    gnc_commodity_get_printname(iterator->data)))
+                    gnc_commodity_get_printname(commodity)))
         {
-            retval = iterator->data;
+            retval = commodity;
             break;
         }
     }
@@ -2017,7 +2018,7 @@ gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
 static void
 hash_keys_helper(gpointer key, gpointer value, gpointer data)
 {
-    GList ** l = data;
+    auto l = (GList**)data;
     *l = g_list_prepend(*l, key);
 }
 
@@ -2032,7 +2033,7 @@ g_hash_table_keys(GHashTable * table)
 static void
 hash_values_helper(gpointer key, gpointer value, gpointer data)
 {
-    GList ** l = data;
+    auto l = (GList**)data;
     *l = g_list_prepend(*l, value);
 }
 
@@ -2146,9 +2147,9 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 static void
 get_quotables_helper1(gpointer key, gpointer value, gpointer data)
 {
-    gnc_commodity *comm = value;
+    auto comm = GNC_COMMODITY(value);
     gnc_commodityPrivate* priv = GET_PRIVATE(comm);
-    GList ** l = data;
+    auto l = static_cast<GList**>(data);
 
     if (!priv->quote_flag ||
             !priv->quote_source || !priv->quote_source->supported)
@@ -2159,7 +2160,7 @@ get_quotables_helper1(gpointer key, gpointer value, gpointer data)
 static gboolean
 get_quotables_helper2 (gnc_commodity *comm, gpointer data)
 {
-    GList ** l = data;
+    auto l = static_cast<GList**>(data);
     gnc_commodityPrivate* priv = GET_PRIVATE(comm);
 
     if (!priv->quote_flag ||
@@ -2194,7 +2195,7 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
         nslist = gnc_commodity_table_get_namespaces(table);
         for (tmp = nslist; tmp; tmp = tmp->next)
         {
-            name_space = tmp->data;
+            name_space = static_cast<const char*>(tmp->data);
             if (regexec(&pattern, name_space, 0, NULL, 0) == 0)
             {
                 DEBUG("Running list of %s commodities", name_space);
@@ -2253,9 +2254,9 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
     ns = gnc_commodity_table_find_namespace(table, name_space);
     if (!ns)
     {
-        ns = g_object_new(GNC_TYPE_COMMODITY_NAMESPACE, NULL);
+        ns = static_cast<gnc_commodity_namespace*>(g_object_new(GNC_TYPE_COMMODITY_NAMESPACE, NULL));
         ns->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
-        ns->name = CACHE_INSERT((gpointer)name_space);
+        ns->name = CACHE_INSERT(static_cast<const char*>(name_space));
         ns->iso4217 = gnc_commodity_namespace_is_iso(name_space);
         qof_instance_init_data (&ns->inst, GNC_ID_COMMODITY_NAMESPACE, book);
         qof_event_gen (&ns->inst, QOF_EVENT_CREATE, NULL);
@@ -2278,7 +2279,7 @@ gnc_commodity_table_find_namespace(const gnc_commodity_table * table,
         return NULL;
 
     name_space = gnc_commodity_table_map_namespace(name_space);
-    return g_hash_table_lookup(table->ns_table, (gpointer)name_space);
+    return static_cast<gnc_commodity_namespace*>(g_hash_table_lookup(table->ns_table, (gpointer)name_space));
 }
 
 
@@ -2299,9 +2300,9 @@ gnc_commodity_find_commodity_by_guid(const GncGUID *guid, QofBook *book)
 static int
 ns_helper(gpointer key, gpointer value, gpointer user_data)
 {
-    gnc_commodity * c = value;
+    auto c = GNC_COMMODITY(value);
     gnc_commodity_destroy(c);
-    CACHE_REMOVE(key);  /* key is commodity mnemonic */
+    CACHE_REMOVE(static_cast<char*>(key));  /* key is commodity mnemonic */
     return TRUE;
 }
 
@@ -2400,7 +2401,7 @@ gnc_commodity_table_destroy(gnc_commodity_table * t)
     for (item = t->ns_list; item; item = next)
     {
         next = g_list_next(item);
-        ns = item->data;
+        ns = static_cast<gnc_commodity_namespace*>(item->data);
         gnc_commodity_table_delete_namespace(t, ns->name);
     }
 
@@ -2552,7 +2553,7 @@ gnc_monetary_list_add_monetary(MonetaryList *list, gnc_monetary add_mon)
     MonetaryList *l = list, *tmp;
     for (tmp = list; tmp; tmp = tmp->next)
     {
-        gnc_monetary *list_mon = tmp->data;
+        auto list_mon = static_cast<gnc_monetary*>(tmp->data);
         if (gnc_commodity_equiv(list_mon->commodity, add_mon.commodity))
         {
             list_mon->value = gnc_numeric_add(list_mon->value, add_mon.value,
@@ -2564,7 +2565,7 @@ gnc_monetary_list_add_monetary(MonetaryList *list, gnc_monetary add_mon)
     /* See if we found an entry, and add one if not */
     if (tmp == NULL)
     {
-        gnc_monetary *new_mon = g_new0(gnc_monetary, 1);
+        auto new_mon = static_cast<gnc_monetary*>(g_new0(gnc_monetary, 1));
         *new_mon = add_mon;
         l = g_list_prepend(l, new_mon);
     }
@@ -2580,7 +2581,7 @@ gnc_monetary_list_delete_zeros(MonetaryList *list)
     MonetaryList *node, *next;
     for (node = list; node; node = next)
     {
-        gnc_monetary *mon = node->data;
+        auto mon = static_cast<gnc_monetary*>(node->data);
         next = node->next;
         if (gnc_numeric_zero_p(mon->value))
         {

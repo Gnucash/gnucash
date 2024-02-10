@@ -155,7 +155,7 @@ set (engine_SOURCES
   gnc-accounting-period.c
   gnc-aqbanking-templates.cpp
   gnc-budget.cpp
-  gnc-commodity.c
+  gnc-commodity.cpp
   gnc-date.cpp
   gnc-datetime.cpp
   gnc-engine.c
