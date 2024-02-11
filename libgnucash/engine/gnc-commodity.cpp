@@ -146,7 +146,7 @@ struct gnc_new_iso_code
 #define GNC_NEW_ISO_CODES \
         (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))
 
-static char *fq_version = NULL;
+static std::string fq_version;
 
 struct gnc_quote_source_s
 {
@@ -278,7 +278,7 @@ static GList *new_quote_sources = NULL;
 gboolean
 gnc_quote_source_fq_installed (void)
 {
-    return (fq_version != NULL);
+    return (!fq_version.empty());
 }
 
 
@@ -291,7 +291,7 @@ gnc_quote_source_fq_installed (void)
 const char*
 gnc_quote_source_fq_version (void)
 {
-    return fq_version;
+    return fq_version.c_str();
 }
 
 /********************************************************************
@@ -548,14 +548,10 @@ gnc_quote_source_set_fq_installed (const char* version_string,
     if (!sources_list)
         return;
 
-    if (fq_version)
-    {
-        g_free (fq_version);
-        fq_version = NULL;
-    }
-
     if (version_string)
-        fq_version = g_strdup (version_string);
+        fq_version = version_string;
+    else
+        fq_version.clear();
 
     for (node = sources_list; node; node = node->next)
     {
