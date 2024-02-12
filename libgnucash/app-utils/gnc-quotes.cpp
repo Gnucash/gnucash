@@ -103,7 +103,6 @@ public:
 
     const std::string& version() noexcept { return m_quotesource->get_version(); }
     const QuoteSources& sources() noexcept { return m_sources; }
-    GList* sources_as_glist ();
     bool had_failures() noexcept { return !m_failures.empty(); }
     const QFVec& failures() noexcept;
     std::string report_failures() noexcept;
@@ -295,16 +294,6 @@ m_sources{}, m_book{book}, m_dflt_curr{gnc_default_currency()}
 {
     m_sources = m_quotesource->get_sources();
 }
-
-GList*
-GncQuotesImpl::sources_as_glist()
-{
-    GList* slist = nullptr;
-    std::for_each (m_sources.rbegin(), m_sources.rend(),
-                    [&slist](const std::string& source) { slist  = g_list_prepend (slist, g_strdup(source.c_str())); });
-    return slist;
-}
-
 
 void
 GncQuotesImpl::fetch (QofBook *book)
@@ -1079,11 +1068,6 @@ const std::string& GncQuotes::version() noexcept
 const QuoteSources& GncQuotes::sources() noexcept
 {
     return m_impl->sources ();
-}
-
-GList* GncQuotes::sources_as_glist ()
-{
-    return m_impl->sources_as_glist ();
 }
 
 GncQuotes::~GncQuotes() = default;
