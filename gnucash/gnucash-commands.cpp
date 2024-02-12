@@ -361,9 +361,8 @@ Gnucash::add_quotes (const bo_str& uri)
     {
         GncQuotes quotes;
         std::cout << bl::format (bl::translate ("Found Finance::Quote version {1}.")) % quotes.version() << std::endl;
-        auto quote_sources = quotes.sources_as_glist();
+        auto quote_sources = quotes.sources();
         gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
-        g_list_free_full (quote_sources, g_free);
         quotes.fetch(qof_session_get_book(session));
         if (quotes.had_failures())
             std::cerr << quotes.report_failures() << std::endl;

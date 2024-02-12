@@ -127,9 +127,8 @@ protected:
         gnc_commodity_set_quote_source(fkcm, source);
         gnc_commodity_commit_edit(fkcm);
         gnc_commodity_table_insert(comm_table, fkcm);
-        GList *sources = g_list_prepend(nullptr, (void*)"alphavantage");
+        std::vector<std::string> sources = {"alphavantage"};
         gnc_quote_source_set_fq_installed("TestSuite", sources);
-        g_list_free(sources);
     }
     ~GncQuotesTest() {
         gnc_clear_current_session();

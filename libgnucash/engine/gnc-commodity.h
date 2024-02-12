@@ -158,18 +158,6 @@ gboolean gnc_quote_source_fq_installed (void);
  */
 const char* gnc_quote_source_fq_version (void);
 
-/** Update gnucash internal tables based on what Finance::Quote
- *  sources are installed.  Sources that have been explicitly coded
- *  into gnucash are marked sensitive/insensitive based upon whether
- *  they are present. New sources that gnucash doesn't know about are
- *  added to its internal tables.
- *
- *  @param sources_list A list of strings containing the source names
- *  as they are known to F::Q.
- */
-void gnc_quote_source_set_fq_installed (const char* version_string,
-                                        const GList *sources_list);
-
 /** Return the number of entries for a given type of quote source.
  *
  *  @param type The quote source type whose count should be returned.

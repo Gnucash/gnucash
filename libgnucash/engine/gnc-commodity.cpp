@@ -35,6 +35,7 @@
 #include <regex.h>
 #include <qofinstance-p.h>
 
+#include "gnc-commodity.hpp"
 #include "gnc-commodity.h"
 #include "gnc-locale-utils.h"
 #include "gnc-prefs.h"
@@ -537,15 +538,11 @@ gnc_quote_source_get_internal_name (const gnc_quote_source *source)
  ********************************************************************/
 void
 gnc_quote_source_set_fq_installed (const char* version_string,
-                                   const GList *sources_list)
+                                   const std::vector<std::string>& sources_list)
 {
-    gnc_quote_source *source;
-    char *source_name;
-    const GList *node;
-
     ENTER(" ");
 
-    if (!sources_list)
+    if (sources_list.empty())
         return;
 
     if (version_string)
@@ -553,11 +550,11 @@ gnc_quote_source_set_fq_installed (const char* version_string,
     else
         fq_version.clear();
 
-    for (node = sources_list; node; node = node->next)
+    for (const auto& source_name_str : sources_list)
     {
-        source_name = static_cast<char*>(node->data);
+        auto source_name = source_name_str.c_str();
+        auto source = gnc_quote_source_lookup_by_internal(source_name);
 
-        source = gnc_quote_source_lookup_by_internal(source_name);
         if (source != NULL)
         {
             DEBUG("Found source %s: %s", source_name, source->user_name);

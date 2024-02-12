@@ -39,6 +39,18 @@
 
 using CommVec = std::vector<gnc_commodity*>;
 
+/** Update gnucash internal tables based on what Finance::Quote
+ *  sources are installed.  Sources that have been explicitly coded
+ *  into gnucash are marked sensitive/insensitive based upon whether
+ *  they are present. New sources that gnucash doesn't know about are
+ *  added to its internal tables.
+ *
+ *  @param sources_list A list of strings containing the source names
+ *  as they are known to F::Q.
+ */
+void gnc_quote_source_set_fq_installed (const char* version_string,
+                                        const std::vector<std::string>& sources_list);
+
 #endif /* GNC_COMMODITY_HPP */
 /** @} */
 /** @} */
