@@ -151,11 +151,27 @@ static std::string fq_version;
 
 struct gnc_quote_source_s
 {
-    gboolean supported;
-    QuoteSourceType type;
-    gint index;
-    const char *user_name;		/* User friendly name incl. region code*/
-    const char *internal_name;	/* Name used internally and by finance::quote. */
+private:
+    gboolean m_supported;
+    QuoteSourceType m_type;
+    gint m_index;
+    std::string m_user_name;		/* User friendly name incl. region code*/
+    std::string m_internal_name;	/* Name used internally and by finance::quote. */
+public:
+    bool get_supported () const { return m_supported; }
+    void set_supported (bool supported) { m_supported = supported; }
+    QuoteSourceType get_type () const { return m_type; }
+    size_t get_index () const { return m_index; }
+    void set_index (size_t index) { m_index = index; }
+    const char* get_user_name () const { return m_user_name.c_str(); }
+    const char* get_internal_name () const { return m_internal_name.c_str(); }
+    gnc_quote_source_s (gboolean supported, QuoteSourceType type, gint index,
+                        const char* username, const char* int_name)
+        : m_supported{supported}
+        , m_type{type}
+        , m_index{index}
+        , m_user_name{username}
+        , m_internal_name{int_name} { };
 };
 
 /* To update the following lists scan
@@ -267,7 +283,7 @@ static const int num_single_quote_sources =
     sizeof(single_quote_sources) / sizeof(gnc_quote_source);
 static const int num_multiple_quote_sources =
     sizeof(multiple_quote_sources) / sizeof(gnc_quote_source);
-static GList *new_quote_sources = NULL;
+static std::vector<gnc_quote_source> new_quote_sources;
 
 
 /********************************************************************
@@ -311,7 +327,7 @@ gint gnc_quote_source_num_entries(QuoteSourceType type)
     if (type == SOURCE_MULTI)
         return num_multiple_quote_sources;
 
-    return g_list_length(new_quote_sources);
+    return new_quote_sources.size();
 }
 
 /********************************************************************
@@ -326,12 +342,12 @@ gnc_quote_source_init_tables (void)
 
     for (i = 0; i < num_single_quote_sources; i++)
     {
-        single_quote_sources[i].index = i;
+        single_quote_sources[i].set_index(i);
     }
 
     for (i = 0; i < num_multiple_quote_sources; i++)
     {
-        multiple_quote_sources[i].index = i;
+        multiple_quote_sources[i].set_index(i);
     }
 }
 
@@ -347,24 +363,14 @@ gnc_quote_source_init_tables (void)
 gnc_quote_source *
 gnc_quote_source_add_new (const char *source_name, gboolean supported)
 {
-    gnc_quote_source *new_source;
-
     DEBUG("Creating new source %s", (source_name == NULL ? "(null)" : source_name));
-    new_source = g_new0 (gnc_quote_source, 1);
-    new_source->supported = supported;
-    new_source->type = SOURCE_UNKNOWN;
-    new_source->index = g_list_length(new_quote_sources);
-
     /* This name can be changed if/when support for this price source is
      * integrated into gnucash. */
-    new_source->user_name = g_strdup(source_name);
-
     /* This name is permanent and must be kept the same if/when support
      * for this price source is integrated into gnucash (i.e. for a
      * nice user name). */
-    new_source->internal_name = g_strdup(source_name);
-    new_quote_sources = g_list_append(new_quote_sources, new_source);
-    return new_source;
+    return &new_quote_sources.emplace_back (supported, SOURCE_UNKNOWN, (gint)new_quote_sources.size(),
+                                            source_name, source_name);
 }
 
 /********************************************************************
@@ -375,21 +381,18 @@ gnc_quote_source_add_new (const char *source_name, gboolean supported)
 gnc_quote_source *
 gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
 {
-    gnc_quote_source *source;
-    GList *node;
-
     ENTER("type/index is %d/%d", type, index);
     switch (type)
     {
     case SOURCE_CURRENCY:
-        LEAVE("found %s", currency_quote_source.user_name);
+        LEAVE("found %s", currency_quote_source.get_user_name());
         return &currency_quote_source;
         break;
 
     case SOURCE_SINGLE:
         if (index < num_single_quote_sources)
         {
-            LEAVE("found %s", single_quote_sources[index].user_name);
+            LEAVE("found %s", single_quote_sources[index].get_user_name());
             return &single_quote_sources[index];
         }
         break;
@@ -397,19 +400,18 @@ gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
     case SOURCE_MULTI:
         if (index < num_multiple_quote_sources)
         {
-            LEAVE("found %s", multiple_quote_sources[index].user_name);
+            LEAVE("found %s", multiple_quote_sources[index].get_user_name());
             return &multiple_quote_sources[index];
         }
         break;
 
     case SOURCE_UNKNOWN:
     default:
-        node = g_list_nth(new_quote_sources, index);
-        if (node)
+        if ((size_t)index < new_quote_sources.size())
         {
-            source = static_cast<gnc_quote_source*>(node->data);
-            LEAVE("found %s", source->user_name);
-            return source;
+            auto& source = new_quote_sources.at(index);
+            LEAVE("found %s", source.get_user_name());
+            return &source;
         }
         break;
     }
@@ -421,8 +423,6 @@ gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
 gnc_quote_source *
 gnc_quote_source_lookup_by_internal(const char * name)
 {
-    gnc_quote_source *source;
-    GList *node;
     gint i;
 
     if ((name == NULL) || (g_strcmp0(name, "") == 0))
@@ -430,26 +430,25 @@ gnc_quote_source_lookup_by_internal(const char * name)
         return NULL;
     }
 
-    if (g_strcmp0(name, currency_quote_source.internal_name) == 0)
+    if (g_strcmp0(name, currency_quote_source.get_internal_name()) == 0)
         return &currency_quote_source;
 
     for (i = 0; i < num_single_quote_sources; i++)
     {
-        if (g_strcmp0(name, single_quote_sources[i].internal_name) == 0)
+        if (g_strcmp0(name, single_quote_sources[i].get_internal_name()) == 0)
             return &single_quote_sources[i];
     }
 
     for (i = 0; i < num_multiple_quote_sources; i++)
     {
-        if (g_strcmp0(name, multiple_quote_sources[i].internal_name) == 0)
+        if (g_strcmp0(name, multiple_quote_sources[i].get_internal_name()) == 0)
             return &multiple_quote_sources[i];
     }
 
-    for (i = 0, node = new_quote_sources; node; node = node->next, i++)
+    for (auto& source : new_quote_sources)
     {
-        source = static_cast<gnc_quote_source*>(node->data);
-        if (g_strcmp0(name, source->internal_name) == 0)
-            return source;
+        if (g_strcmp0(name, source.get_internal_name()) == 0)
+            return &source;
     }
 
     DEBUG("gnc_quote_source_lookup_by_internal: Unknown source %s", name);
@@ -471,8 +470,8 @@ gnc_quote_source_get_type (const gnc_quote_source *source)
         return SOURCE_SINGLE;
     }
 
-    LEAVE("type is %d", source->type);
-    return source->type;
+    LEAVE("type is %d", source->get_type());
+    return source->get_type();
 }
 
 gint
@@ -485,8 +484,8 @@ gnc_quote_source_get_index (const gnc_quote_source *source)
         return 0;
     }
 
-    LEAVE("index is %d", source->index);
-    return source->index;
+    LEAVE("index is %ld", source->get_index());
+    return source->get_index();
 }
 
 gboolean
@@ -499,8 +498,8 @@ gnc_quote_source_get_supported (const gnc_quote_source *source)
         return FALSE;
     }
 
-    LEAVE("%ssupported", source && source->supported ? "" : "not ");
-    return source->supported;
+    LEAVE("%ssupported", source && source->get_supported() ? "" : "not ");
+    return source->get_supported();
 }
 
 const char *
@@ -512,8 +511,8 @@ gnc_quote_source_get_user_name (const gnc_quote_source *source)
         LEAVE("bad source");
         return NULL;
     }
-    LEAVE("user name %s", source->user_name);
-    return source->user_name;
+    LEAVE("user name %s", source->get_user_name());
+    return source->get_user_name();
 }
 
 const char *
@@ -525,8 +524,8 @@ gnc_quote_source_get_internal_name (const gnc_quote_source *source)
         LEAVE("bad source");
         return NULL;
     }
-    LEAVE("internal name %s", source->internal_name);
-    return source->internal_name;
+    LEAVE("internal name %s", source->get_internal_name());
+    return source->get_internal_name();
 }
 
 
@@ -557,8 +556,8 @@ gnc_quote_source_set_fq_installed (const char* version_string,
 
         if (source != NULL)
         {
-            DEBUG("Found source %s: %s", source_name, source->user_name);
-            source->supported = TRUE;
+            DEBUG("Found source %s: %s", source_name, source->get_user_name());
+            source->set_supported (true);
             continue;
         }
 
@@ -1410,7 +1409,7 @@ gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag)
 void
 gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src)
 {
-    ENTER ("(cm=%p, src=%p(%s))", cm, src, src ? src->internal_name : "unknown");
+    ENTER ("(cm=%p, src=%p(%s))", cm, src, src ? src->get_internal_name() : "unknown");
 
     if (!cm) return;
     gnc_commodity_begin_edit(cm);
@@ -2139,8 +2138,7 @@ get_quotables_helper1(gpointer key, gpointer value, gpointer data)
     gnc_commodityPrivate* priv = GET_PRIVATE(comm);
     auto l = static_cast<GList**>(data);
 
-    if (!priv->quote_flag ||
-            !priv->quote_source || !priv->quote_source->supported)
+    if (!priv->quote_flag || !priv->quote_source || !priv->quote_source->get_supported())
         return;
     *l = g_list_prepend(*l, value);
 }
@@ -2151,8 +2149,7 @@ get_quotables_helper2 (gnc_commodity *comm, gpointer data)
     auto l = static_cast<GList**>(data);
     gnc_commodityPrivate* priv = GET_PRIVATE(comm);
 
-    if (!priv->quote_flag ||
-            !priv->quote_source || !priv->quote_source->supported)
+    if (!priv->quote_flag || priv->quote_source || !priv->quote_source->get_supported())
         return TRUE;
     *l = g_list_prepend(*l, comm);
     return TRUE;
