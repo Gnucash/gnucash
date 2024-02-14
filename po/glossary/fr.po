@@ -13,14 +13,15 @@
 # Sébastien Ray <sebastien.ray@normalesup.org>, 2022.
 # aleksej0R <omolice@hotmail.fr>, 2022, 2023.
 # Vincent Dawans <dawansv@gmail.com>, 2023.
+# Laurent Aufrere <lecture@cbol.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-25 08:00+0200\n"
-"PO-Revision-Date: 2023-06-07 18:50+0000\n"
-"Last-Translator: Vincent Dawans <dawansv@gmail.com>\n"
+"PO-Revision-Date: 2024-02-05 17:01+0000\n"
+"Last-Translator: Laurent Aufrere <lecture@cbol.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/glossary/"
 "fr/>\n"
 "Language: fr\n"
@@ -28,7 +29,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -128,7 +129,7 @@ msgstr "compte : sous-compte"
 
 #. "-"
 msgid "account: top level account"
-msgstr "compte : compte le plus haut"
+msgstr "compte : compte racine"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
