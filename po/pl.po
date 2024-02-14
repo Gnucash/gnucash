@@ -8,14 +8,15 @@
 # Kaligula <kaligula.dev@gmail.com>, 2022, 2023.
 # vim <dev.getport@slmail.me>, 2023.
 # Rcvrvugyvgvb <xzdfrlhz@duck.com>, 2024.
+# Jacek Baszkiewicz <j.baszkiewicz@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-14 18:06+0000\n"
-"Last-Translator: Rcvrvugyvgvb <xzdfrlhz@duck.com>\n"
+"PO-Revision-Date: 2024-02-02 10:01+0000\n"
+"Last-Translator: Jacek Baszkiewicz <j.baszkiewicz@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -1885,9 +1886,8 @@ msgid "Next Balance"
 msgstr "Bilans netto"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1890
-#, fuzzy
 msgid "Enter the new balance of shares after the stock split."
-msgstr "Wprowadź liczbę udziałów kupionych lub sprzedanych"
+msgstr "Wprowadź liczbę udziałów kupionych lub sprzedanych."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1891
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
@@ -5075,9 +5075,8 @@ msgstr "Usuń bieżący wpis"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.c:382
-#, fuzzy
 msgid "Show Splits"
-msgstr "Split giełdowy"
+msgstr "Pokaż podział"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:383
 msgid "Jump"
@@ -28609,9 +28608,8 @@ msgstr "_Transakcja"
 #: gnucash/ui/gnc-plugin-page-register.ui:486
 #: gnucash/ui/gnc-plugin-page-register.ui:584
 #: gnucash/ui/gnc-plugin-page-register.ui:623
-#, fuzzy
 msgid "Remo_ve Other Splits"
-msgstr "_Usuń podziały"
+msgstr "Usuń _podziały"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:60
 #: gnucash/ui/gnc-embedded-register-window.ui:123
@@ -30172,9 +30170,8 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:437
 #: gnucash/ui/gnc-plugin-page-register.ui:549
 #: gnucash/ui/gnc-plugin-page-register.ui:832
-#, fuzzy
 msgid "_Jump to the other account"
-msgstr "Wyświetl drugi kod konta"
+msgstr "Skocz do drugiego _konta"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:439
@@ -30204,9 +30201,8 @@ msgid "Open a register report for this Account"
 msgstr "Otwórz raport rejestru dla bieżącego konta"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:338
-#, fuzzy
 msgid "Account Report - Single Transaction"
-msgstr "Wprowadź transakcję online"
+msgstr "Raport kont - pojedyncza transakcja"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:340
 msgid "Open a register report for the selected Transaction"
