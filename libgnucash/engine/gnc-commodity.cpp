@@ -154,22 +154,18 @@ struct gnc_quote_source_s
 private:
     gboolean m_supported;
     QuoteSourceType m_type;
-    gint m_index;
     std::string m_user_name;		/* User friendly name incl. region code*/
     std::string m_internal_name;	/* Name used internally and by finance::quote. */
 public:
     bool get_supported () const { return m_supported; }
     void set_supported (bool supported) { m_supported = supported; }
     QuoteSourceType get_type () const { return m_type; }
-    size_t get_index () const { return m_index; }
-    void set_index (size_t index) { m_index = index; }
     const char* get_user_name () const { return m_user_name.c_str(); }
     const char* get_internal_name () const { return m_internal_name.c_str(); }
-    gnc_quote_source_s (gboolean supported, QuoteSourceType type, gint index,
+    gnc_quote_source_s (gboolean supported, QuoteSourceType type,
                         const char* username, const char* int_name)
         : m_supported{supported}
         , m_type{type}
-        , m_index{index}
         , m_user_name{username}
         , m_internal_name{int_name} { };
 };
@@ -183,7 +179,7 @@ public:
  * Apply changes here also to the FQ appendix of help.
  */
 static gnc_quote_source currency_quote_source =
-{ true, SOURCE_CURRENCY, 0, "Currency", "currency" };
+{ true, SOURCE_CURRENCY, "Currency", "currency" };
 
 /* The single quote method is usually the module name, but
  * sometimes it gets the suffix "_direct"
@@ -191,92 +187,92 @@ static gnc_quote_source currency_quote_source =
  */
 static gnc_quote_source single_quote_sources[] =
 {
-    { false, SOURCE_SINGLE, 0, "Alphavantage, US", "alphavantage" },
-    { false, SOURCE_SINGLE, 0, "Amsterdam Euronext eXchange, NL", "aex" },
-    { false, SOURCE_SINGLE, 0, "American International Assurance, HK", "aiahk" },
-    { false, SOURCE_SINGLE, 0, "Association of Mutual Funds in India", "amfiindia" },
-    { false, SOURCE_SINGLE, 0, "Athens Stock Exchange, GR", "asegr" },
-    { false, SOURCE_SINGLE, 0, "Australian Stock Exchange, AU", "asx" },
-    { false, SOURCE_SINGLE, 0, "BAMOSZ funds, HU", "bamosz" },
-    { false, SOURCE_SINGLE, 0, "BMO NesbittBurns, CA", "bmonesbittburns" },
-    { false, SOURCE_SINGLE, 0, "Bucharest Stock Exchange, RO", "bsero" },
-    { false, SOURCE_SINGLE, 0, "Budapest Stock Exchange (BET), ex-BUX, HU", "bse" },
-    { false, SOURCE_SINGLE, 0, "Canada Mutual", "canadamutual" },
-    { false, SOURCE_SINGLE, 0, "Citywire Funds, GB", "citywire" },
-    { false, SOURCE_SINGLE, 0, "Colombo Stock Exchange, LK", "cse" },
-    { false, SOURCE_SINGLE, 0, "Cominvest, ex-Adig, DE", "cominvest" },
-    { false, SOURCE_SINGLE, 0, "Deka Investments, DE", "deka" },
-    { false, SOURCE_SINGLE, 0, "Dutch", "dutch" },
-    { false, SOURCE_SINGLE, 0, "DWS, DE", "dwsfunds" },
-    { false, SOURCE_SINGLE, 0, "Equinox Unit Trusts, ZA", "za_unittrusts" },
-    { false, SOURCE_SINGLE, 0, "Fidelity Direct", "fidelity_direct" },
-    { false, SOURCE_SINGLE, 0, "Fidelity Fixed", "fidelityfixed" },
-    { false, SOURCE_SINGLE, 0, "Finance Canada", "financecanada" },
-    { false, SOURCE_SINGLE, 0, "Financial Times Funds service, GB", "ftfunds" },
-    { false, SOURCE_SINGLE, 0, "Finanzpartner, DE", "finanzpartner" },
-    { false, SOURCE_SINGLE, 0, "First Trust Portfolios, US", "ftportfolios" },
-    { false, SOURCE_SINGLE, 0, "Fund Library, CA", "fundlibrary" },
-    { false, SOURCE_SINGLE, 0, "GoldMoney spot rates, JE", "goldmoney" },
-    { false, SOURCE_SINGLE, 0, "Greece", "greece" },
-    { false, SOURCE_SINGLE, 0, "Helsinki stock eXchange, FI", "hex" },
-    { false, SOURCE_SINGLE, 0, "Hungary", "hu" },
-    { false, SOURCE_SINGLE, 0, "India Mutual", "indiamutual" },
-    { false, SOURCE_SINGLE, 0, "Man Investments, AU", "maninv" },
-    { false, SOURCE_SINGLE, 0, "Morningstar, GB", "mstaruk" },
-    { false, SOURCE_SINGLE, 0, "Morningstar, JP", "morningstarjp" },
-    { false, SOURCE_SINGLE, 0, "Morningstar, SE", "morningstar" },
-    { false, SOURCE_SINGLE, 0, "Motley Fool, US", "fool" },
-    { false, SOURCE_SINGLE, 0, "New Zealand stock eXchange, NZ", "nzx" },
-    { false, SOURCE_SINGLE, 0, "Paris Stock Exchange/Boursorama, FR", "bourso" },
-    { false, SOURCE_SINGLE, 0, "Paris Stock Exchange/LeRevenu, FR", "lerevenu" },
-    { false, SOURCE_SINGLE, 0, "Platinum Asset Management, AU", "platinum" },
-    { false, SOURCE_SINGLE, 0, "Romania", "romania" },
-    { false, SOURCE_SINGLE, 0, "SIX Swiss Exchange funds, CH", "sixfunds" },
-    { false, SOURCE_SINGLE, 0, "SIX Swiss Exchange shares, CH", "sixshares" },
-    { false, SOURCE_SINGLE, 0, "Skandinaviska Enskilda Banken, SE", "seb_funds" },
-    { false, SOURCE_SINGLE, 0, "Sharenet, ZA", "za" },
-    { false, SOURCE_SINGLE, 0, "StockHouse Canada", "stockhousecanada_fund" },
-    { false, SOURCE_SINGLE, 0, "TD Waterhouse Funds, CA", "tdwaterhouse" },
-    { false, SOURCE_SINGLE, 0, "TD Efunds, CA", "tdefunds" },
-    { false, SOURCE_SINGLE, 0, "TIAA-CREF, US", "tiaacref" },
-    { false, SOURCE_SINGLE, 0, "Toronto Stock eXchange, CA", "tsx" },
-    { false, SOURCE_SINGLE, 0, "T. Rowe Price", "troweprice" },
-    { false, SOURCE_SINGLE, 0, "T. Rowe Price, US", "troweprice_direct" },
-    { false, SOURCE_SINGLE, 0, "Trustnet via tnetuk.pm, GB", "tnetuk" },
-    { false, SOURCE_SINGLE, 0, "Trustnet via trustnet.pm, GB", "trustnet" },
-    { false, SOURCE_SINGLE, 0, "U.K. Unit Trusts", "uk_unit_trusts" },
-    { false, SOURCE_SINGLE, 0, "Union Investment, DE", "unionfunds" },
-    { false, SOURCE_SINGLE, 0, "US Treasury Bonds", "usfedbonds" },
-    { false, SOURCE_SINGLE, 0, "US Govt. Thrift Savings Plan", "tsp" },
-    { false, SOURCE_SINGLE, 0, "Vanguard", "vanguard" }, /* Method of Alphavantage */
-    { false, SOURCE_SINGLE, 0, "VWD, DE (unmaintained)", "vwd" },
-    { false, SOURCE_SINGLE, 0, "Yahoo as JSON", "yahoo_json" },
-    { false, SOURCE_SINGLE, 0, "Yahoo as YQL", "yahoo_yql" },
+    { false, SOURCE_SINGLE, "Alphavantage, US", "alphavantage" },
+    { false, SOURCE_SINGLE, "Amsterdam Euronext eXchange, NL", "aex" },
+    { false, SOURCE_SINGLE, "American International Assurance, HK", "aiahk" },
+    { false, SOURCE_SINGLE, "Association of Mutual Funds in India", "amfiindia" },
+    { false, SOURCE_SINGLE, "Athens Stock Exchange, GR", "asegr" },
+    { false, SOURCE_SINGLE, "Australian Stock Exchange, AU", "asx" },
+    { false, SOURCE_SINGLE, "BAMOSZ funds, HU", "bamosz" },
+    { false, SOURCE_SINGLE, "BMO NesbittBurns, CA", "bmonesbittburns" },
+    { false, SOURCE_SINGLE, "Bucharest Stock Exchange, RO", "bsero" },
+    { false, SOURCE_SINGLE, "Budapest Stock Exchange (BET), ex-BUX, HU", "bse" },
+    { false, SOURCE_SINGLE, "Canada Mutual", "canadamutual" },
+    { false, SOURCE_SINGLE, "Citywire Funds, GB", "citywire" },
+    { false, SOURCE_SINGLE, "Colombo Stock Exchange, LK", "cse" },
+    { false, SOURCE_SINGLE, "Cominvest, ex-Adig, DE", "cominvest" },
+    { false, SOURCE_SINGLE, "Deka Investments, DE", "deka" },
+    { false, SOURCE_SINGLE, "Dutch", "dutch" },
+    { false, SOURCE_SINGLE, "DWS, DE", "dwsfunds" },
+    { false, SOURCE_SINGLE, "Equinox Unit Trusts, ZA", "za_unittrusts" },
+    { false, SOURCE_SINGLE, "Fidelity Direct", "fidelity_direct" },
+    { false, SOURCE_SINGLE, "Fidelity Fixed", "fidelityfixed" },
+    { false, SOURCE_SINGLE, "Finance Canada", "financecanada" },
+    { false, SOURCE_SINGLE, "Financial Times Funds service, GB", "ftfunds" },
+    { false, SOURCE_SINGLE, "Finanzpartner, DE", "finanzpartner" },
+    { false, SOURCE_SINGLE, "First Trust Portfolios, US", "ftportfolios" },
+    { false, SOURCE_SINGLE, "Fund Library, CA", "fundlibrary" },
+    { false, SOURCE_SINGLE, "GoldMoney spot rates, JE", "goldmoney" },
+    { false, SOURCE_SINGLE, "Greece", "greece" },
+    { false, SOURCE_SINGLE, "Helsinki stock eXchange, FI", "hex" },
+    { false, SOURCE_SINGLE, "Hungary", "hu" },
+    { false, SOURCE_SINGLE, "India Mutual", "indiamutual" },
+    { false, SOURCE_SINGLE, "Man Investments, AU", "maninv" },
+    { false, SOURCE_SINGLE, "Morningstar, GB", "mstaruk" },
+    { false, SOURCE_SINGLE, "Morningstar, JP", "morningstarjp" },
+    { false, SOURCE_SINGLE, "Morningstar, SE", "morningstar" },
+    { false, SOURCE_SINGLE, "Motley Fool, US", "fool" },
+    { false, SOURCE_SINGLE, "New Zealand stock eXchange, NZ", "nzx" },
+    { false, SOURCE_SINGLE, "Paris Stock Exchange/Boursorama, FR", "bourso" },
+    { false, SOURCE_SINGLE, "Paris Stock Exchange/LeRevenu, FR", "lerevenu" },
+    { false, SOURCE_SINGLE, "Platinum Asset Management, AU", "platinum" },
+    { false, SOURCE_SINGLE, "Romania", "romania" },
+    { false, SOURCE_SINGLE, "SIX Swiss Exchange funds, CH", "sixfunds" },
+    { false, SOURCE_SINGLE, "SIX Swiss Exchange shares, CH", "sixshares" },
+    { false, SOURCE_SINGLE, "Skandinaviska Enskilda Banken, SE", "seb_funds" },
+    { false, SOURCE_SINGLE, "Sharenet, ZA", "za" },
+    { false, SOURCE_SINGLE, "StockHouse Canada", "stockhousecanada_fund" },
+    { false, SOURCE_SINGLE, "TD Waterhouse Funds, CA", "tdwaterhouse" },
+    { false, SOURCE_SINGLE, "TD Efunds, CA", "tdefunds" },
+    { false, SOURCE_SINGLE, "TIAA-CREF, US", "tiaacref" },
+    { false, SOURCE_SINGLE, "Toronto Stock eXchange, CA", "tsx" },
+    { false, SOURCE_SINGLE, "T. Rowe Price", "troweprice" },
+    { false, SOURCE_SINGLE, "T. Rowe Price, US", "troweprice_direct" },
+    { false, SOURCE_SINGLE, "Trustnet via tnetuk.pm, GB", "tnetuk" },
+    { false, SOURCE_SINGLE, "Trustnet via trustnet.pm, GB", "trustnet" },
+    { false, SOURCE_SINGLE, "U.K. Unit Trusts", "uk_unit_trusts" },
+    { false, SOURCE_SINGLE, "Union Investment, DE", "unionfunds" },
+    { false, SOURCE_SINGLE, "US Treasury Bonds", "usfedbonds" },
+    { false, SOURCE_SINGLE, "US Govt. Thrift Savings Plan", "tsp" },
+    { false, SOURCE_SINGLE, "Vanguard", "vanguard" }, /* Method of Alphavantage */
+    { false, SOURCE_SINGLE, "VWD, DE (unmaintained)", "vwd" },
+    { false, SOURCE_SINGLE, "Yahoo as JSON", "yahoo_json" },
+    { false, SOURCE_SINGLE, "Yahoo as YQL", "yahoo_yql" },
 };
 
 static gnc_quote_source multiple_quote_sources[] =
 {
-    { false, SOURCE_MULTI, 0, "Australia (ASX, ...)", "australia" },
-    { false, SOURCE_MULTI, 0, "Canada (Alphavantage, TSX, ...)", "canada" },
-    { false, SOURCE_MULTI, 0, "Canada Mutual (Fund Library, StockHouse, ...)", "canadamutual" },
-    { false, SOURCE_MULTI, 0, "Dutch (AEX, ...)", "dutch" },
-    { false, SOURCE_MULTI, 0, "Europe (asegr,.bsero, hex ...)", "europe" },
-    { false, SOURCE_MULTI, 0, "Greece (ASE, ...)", "greece" },
-    { false, SOURCE_MULTI, 0, "Hungary (Bamosz, BET, ...)", "hu" },
-    { false, SOURCE_MULTI, 0, "India Mutual (AMFI, ...)", "indiamutual" },
-    { false, SOURCE_MULTI, 0, "Fidelity (Fidelity, ...)", "fidelity" },
-    { false, SOURCE_MULTI, 0, "Finland (HEX, ...)", "finland" },
-    { false, SOURCE_MULTI, 0, "First Trust (First Trust, ...)", "ftportfolios" },
-    { false, SOURCE_MULTI, 0, "France (bourso, ĺerevenu, ...)", "france" },
-    { false, SOURCE_MULTI, 0, "Nasdaq (alphavantage, fool, ...)", "nasdaq" },
-    { false, SOURCE_MULTI, 0, "New Zealand (NZX, ...)", "nz" },
-    { false, SOURCE_MULTI, 0, "NYSE (alphavantage, fool, ...)", "nyse" },
-    { false, SOURCE_MULTI, 0, "South Africa (Sharenet, ...)", "za" },
-    { false, SOURCE_MULTI, 0, "Romania (BSE-RO, ...)", "romania" },
-    { false, SOURCE_MULTI, 0, "T. Rowe Price", "troweprice" },
-    { false, SOURCE_MULTI, 0, "U.K. Funds (citywire, FTfunds, MStar, tnetuk, ...)", "ukfunds" },
-    { false, SOURCE_MULTI, 0, "U.K. Unit Trusts (trustnet, ...)", "uk_unit_trusts" },
-    { false, SOURCE_MULTI, 0, "USA (Alphavantage, Fool, ...)", "usa" },
+    { false, SOURCE_MULTI, "Australia (ASX, ...)", "australia" },
+    { false, SOURCE_MULTI, "Canada (Alphavantage, TSX, ...)", "canada" },
+    { false, SOURCE_MULTI, "Canada Mutual (Fund Library, StockHouse, ...)", "canadamutual" },
+    { false, SOURCE_MULTI, "Dutch (AEX, ...)", "dutch" },
+    { false, SOURCE_MULTI, "Europe (asegr,.bsero, hex ...)", "europe" },
+    { false, SOURCE_MULTI, "Greece (ASE, ...)", "greece" },
+    { false, SOURCE_MULTI, "Hungary (Bamosz, BET, ...)", "hu" },
+    { false, SOURCE_MULTI, "India Mutual (AMFI, ...)", "indiamutual" },
+    { false, SOURCE_MULTI, "Fidelity (Fidelity, ...)", "fidelity" },
+    { false, SOURCE_MULTI, "Finland (HEX, ...)", "finland" },
+    { false, SOURCE_MULTI, "First Trust (First Trust, ...)", "ftportfolios" },
+    { false, SOURCE_MULTI, "France (bourso, ĺerevenu, ...)", "france" },
+    { false, SOURCE_MULTI, "Nasdaq (alphavantage, fool, ...)", "nasdaq" },
+    { false, SOURCE_MULTI, "New Zealand (NZX, ...)", "nz" },
+    { false, SOURCE_MULTI, "NYSE (alphavantage, fool, ...)", "nyse" },
+    { false, SOURCE_MULTI, "South Africa (Sharenet, ...)", "za" },
+    { false, SOURCE_MULTI, "Romania (BSE-RO, ...)", "romania" },
+    { false, SOURCE_MULTI, "T. Rowe Price", "troweprice" },
+    { false, SOURCE_MULTI, "U.K. Funds (citywire, FTfunds, MStar, tnetuk, ...)", "ukfunds" },
+    { false, SOURCE_MULTI, "U.K. Unit Trusts (trustnet, ...)", "uk_unit_trusts" },
+    { false, SOURCE_MULTI, "USA (Alphavantage, Fool, ...)", "usa" },
 };
 
 static const int num_single_quote_sources =
@@ -330,26 +326,6 @@ gint gnc_quote_source_num_entries(QuoteSourceType type)
     return new_quote_sources.size();
 }
 
-/********************************************************************
- * gnc_quote_source_init_tables
- *
- * Update the type/index values for prices sources.
- ********************************************************************/
-static void
-gnc_quote_source_init_tables (void)
-{
-    gint i;
-
-    for (i = 0; i < num_single_quote_sources; i++)
-    {
-        single_quote_sources[i].set_index(i);
-    }
-
-    for (i = 0; i < num_multiple_quote_sources; i++)
-    {
-        multiple_quote_sources[i].set_index(i);
-    }
-}
 
 
 /********************************************************************
@@ -369,8 +345,7 @@ gnc_quote_source_add_new (const char *source_name, gboolean supported)
     /* This name is permanent and must be kept the same if/when support
      * for this price source is integrated into gnucash (i.e. for a
      * nice user name). */
-    return &new_quote_sources.emplace_back (supported, SOURCE_UNKNOWN, (gint)new_quote_sources.size(),
-                                            source_name, source_name);
+    return &new_quote_sources.emplace_back (supported, SOURCE_UNKNOWN, source_name, source_name);
 }
 
 /********************************************************************
@@ -477,15 +452,38 @@ gnc_quote_source_get_type (const gnc_quote_source *source)
 gint
 gnc_quote_source_get_index (const gnc_quote_source *source)
 {
-    ENTER("%p", source);
     if (!source)
     {
-        LEAVE("bad source");
+        PWARN ("bad source");
         return 0;
     }
 
-    LEAVE("index is %ld", source->get_index());
-    return source->get_index();
+    switch (source->get_type())
+    {
+    case SOURCE_CURRENCY:
+        return 0;
+    case SOURCE_SINGLE:
+        for (auto i = 0; i < num_single_quote_sources; ++i)
+            if (&single_quote_sources[i] == source)
+                return i;
+        break;
+    case SOURCE_MULTI:
+        for (auto i = 0; i < num_multiple_quote_sources; ++i)
+            if (&multiple_quote_sources[i] == source)
+                return i;
+        break;
+    case SOURCE_UNKNOWN:
+    {
+        for (size_t i = 0; i < new_quote_sources.size(); ++i)
+            if (&new_quote_sources[i] == source)
+                return i;
+        break;
+    }
+    default:
+        break;
+    }
+    PWARN ("couldn't locate source");
+    return 0;
 }
 
 gboolean
@@ -2518,8 +2516,6 @@ static QofObject commodity_table_object_def =
 gboolean
 gnc_commodity_table_register (void)
 {
-    gnc_quote_source_init_tables();
-
     if (!qof_object_register (&commodity_object_def))
         return FALSE;
     if (!qof_object_register (&namespace_object_def))
