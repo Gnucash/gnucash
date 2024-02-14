@@ -32,17 +32,18 @@
 # Gaël CATLLA <gcatlla@free.fr>, 2023.
 # Vincent Dawans <dawansv@gmail.com>, 2023.
 # Xavier Gandillot (aka xavier268), 2023.
+# Laurent Aufrere <lecture@cbol.org>, 2024.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2023-08-15 17:51+0000\n"
-"Last-Translator: Philippe Lamare <ph.lamare@free.fr>\n"
+"PO-Revision-Date: 2024-02-05 19:01+0000\n"
+"Last-Translator: Laurent Aufrere <lecture@cbol.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -50,7 +51,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.4-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1065,6 +1066,9 @@ msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 msgstr ""
+"Vous pouvez définir et modifier des raccourcis clavier pour de nombreuses "
+"fonctionnalités de GnuCash. Visitez https://wiki.gnucash.org/wiki/"
+"Keyboard_Shortcuts."
 
 #: doc/tip_of_the_day.list.c:132
 msgid ""
@@ -1884,10 +1888,9 @@ msgstr "Le montant pour %s doit être positif."
 # po/guile_strings.txt:100
 #: gnucash/gnome/assistant-stock-transaction.cpp:677
 #: gnucash/gnome/assistant-stock-transaction.cpp:1027
-#, fuzzy, c-format
-#| msgid "Include sub-accounts of all selected accounts."
+#, c-format
 msgid "The %s amount has no associated account."
-msgstr "Inclure les sous-comptes de tous les comptes sélectionnés."
+msgstr "Le montant %s n'est associé à aucun compte."
 
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
 #: gnucash/gnome/assistant-stock-transaction.cpp:743
@@ -2124,7 +2127,7 @@ msgstr "Facture fournisseur"
 #: gnucash/gnome/dialog-invoice.c:2809 gnucash/gnome/dialog-invoice.c:3035
 #: gnucash/gnome/dialog-invoice.c:3036
 msgid "Voucher"
-msgstr "Bon"
+msgstr "Bon d'achat"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -2148,7 +2151,7 @@ msgstr "Bon"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
 #: libgnucash/engine/Account.cpp:160 libgnucash/engine/gncInvoice.c:1096
 msgid "Invoice"
-msgstr "Facture"
+msgstr "Facture client"
 
 # po/guile_strings.txt:243
 #: gnucash/gnome/business-gnome-utils.c:580 gnucash/gnome/gnc-split-reg.c:648
@@ -2200,7 +2203,7 @@ msgstr "La durée de l'escompte ne peut être postérieure à l'échéance."
 
 #: gnucash/gnome/dialog-billterms.c:324
 msgid "You must provide a name for this Billing Term."
-msgstr "Vous devez fournir un nom pour ces conditions de facturation."
+msgstr "Vous devez fournir un nom pour ces Conditions de facturation."
 
 #: gnucash/gnome/dialog-billterms.c:331
 #, c-format
@@ -2208,7 +2211,7 @@ msgid ""
 "You must provide a unique name for this Billing Term. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Vous devez fournir un nom unique pour ces Conditions de Facturation. Votre "
+"Vous devez fournir un nom unique pour ces Conditions de facturation. Votre "
 "choix \"%s\" est déjà utilisé."
 
 # po/guile_strings.txt:101
@@ -2790,7 +2793,7 @@ msgstr "Afficher/Modifier un employé"
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/gnome/dialog-employee.c:669
 msgid "Expense Vouchers"
-msgstr "Bons de dépenses"
+msgstr "Bons d'achat"
 
 #: gnucash/gnome/dialog-employee.c:679
 msgid "Employee ID"
@@ -3211,8 +3214,8 @@ msgid ""
 "currency. You will be asked to enter a conversion rate for each."
 msgstr ""
 "Un ou plusieurs éléments de la facture sont associés à des comptes dont la "
-"devise est différente de celle de la facture. On vous demandera un taux de "
-"conversion pour chacune d'elles."
+"devise est différente de celle de la facture. Il vous sera demandé un taux "
+"de conversion pour chacune d'elles."
 
 #: gnucash/gnome/dialog-invoice.c:1301
 msgid "The post action was canceled because not all exchange rates were given."
@@ -3276,7 +3279,7 @@ msgstr "Nouvel avoir"
 #: gnucash/gnome-search/dialog-search.c:1095
 #: gnucash/gtkbuilder/dialog-invoice.glade:760
 msgid "New Invoice"
-msgstr "Nouvelle facture"
+msgstr "Nouvelle facture client"
 
 # po/guile_strings.txt:127
 #: gnucash/gnome/dialog-invoice.c:2323 gnucash/gnome/dialog-invoice.c:2342
@@ -3306,7 +3309,7 @@ msgstr "Afficher la facture"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:225
 #: gnucash/gnome-search/dialog-search.c:1079
 msgid "New Bill"
-msgstr "Nouvelle facture à payer"
+msgstr "Nouvelle facture fournisseur"
 
 #: gnucash/gnome/dialog-invoice.c:2343
 msgid "Edit Bill"
@@ -3322,19 +3325,19 @@ msgstr "Afficher la facture à payer"
 #: gnucash/gnome/dialog-invoice.c:2356
 #: gnucash/gnome-search/dialog-search.c:1091
 msgid "New Expense Voucher"
-msgstr "Nouveau bon de dépense"
+msgstr "Nouveau bon d'achat"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/gnome/dialog-invoice.c:2362
 msgid "Edit Expense Voucher"
-msgstr "Modification du bon de dépense"
+msgstr "Modification du bon d'achat"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/gnome/dialog-invoice.c:2366
 msgid "View Expense Voucher"
-msgstr "Afficher le bon de dépense"
+msgstr "Afficher le bon d'achat"
 
 # messages-i18n.c:190
 #: gnucash/gnome/dialog-invoice.c:2688
@@ -3354,12 +3357,12 @@ msgstr "N° de facturation"
 # messages-i18n.c:231
 #: gnucash/gnome/dialog-invoice.c:2808 gnucash/gnome/dialog-invoice.c:3034
 msgid "Voucher Information"
-msgstr "Informations sur le bon"
+msgstr "Informations sur le bon d'achat"
 
 #: gnucash/gnome/dialog-invoice.c:2810 gnucash/gnome/dialog-invoice.c:3037
 #: gnucash/gnome/dialog-invoice.c:3645
 msgid "Voucher ID"
-msgstr "N° de bon"
+msgstr "N° de bon d'achat"
 
 # messages-i18n.c:280
 #: gnucash/gnome/dialog-invoice.c:3368
@@ -3412,7 +3415,7 @@ msgstr "Afficher/Modifier la facture"
 #. interchangeably in gnucash and mean the same thing.
 #: gnucash/gnome/dialog-invoice.c:3535
 msgid "View/Edit Voucher"
-msgstr "Afficher/Modifier le bon"
+msgstr "Afficher/Modifier le bon d'achat"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -3481,13 +3484,13 @@ msgstr "Notes de la facture"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/gnome/dialog-invoice.c:3617
 msgid "Voucher Owner"
-msgstr "Destinataire du bon"
+msgstr "Destinataire du bon d'achat"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/gnome/dialog-invoice.c:3620
 msgid "Voucher Notes"
-msgstr "Notes du bon"
+msgstr "Notes du bon d'achat"
 
 # messages-i18n.c:345 po/guile_strings.txt:254
 # src/gnome/glade-gnc-dialogs.c:354 src/gnome/glade-gnc-dialogs.c:408
@@ -3561,7 +3564,7 @@ msgstr "Recherche de facture fournisseur"
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/gnome/dialog-invoice.c:3756
 msgid "Find Expense Voucher"
-msgstr "Recherche de bon de dépense"
+msgstr "Recherche de bon d'achat"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
@@ -3569,13 +3572,13 @@ msgstr "Recherche de bon de dépense"
 #: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/report/reports/standard/invoice.scm:732
 msgid "Expense Voucher"
-msgstr "Bon de dépense"
+msgstr "Bon d'achat"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/gnome/dialog-invoice.c:3763
 msgid "Find Invoice"
-msgstr "Recherche de facture"
+msgstr "Recherche de facture client"
 
 # messages-i18n.c:242 po/guile_strings.txt:50
 #: gnucash/gnome/dialog-invoice.c:3810 gnucash/gnome/dialog-lot-viewer.c:1014
@@ -3628,7 +3631,7 @@ msgstr[1] "Les %d factures clients suivantes sont dues :"
 
 #: gnucash/gnome/dialog-invoice.c:3912
 msgid "Due Invoices Reminder"
-msgstr "Rappel des factures à payer"
+msgstr "Rappel des factures à encaisser"
 
 # messages-i18n.c:18
 #: gnucash/gnome/dialog-job.c:136
@@ -3663,7 +3666,7 @@ msgstr "Afficher/Modifier une prestation"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/gnome/dialog-job.c:550
 msgid "View Invoices"
-msgstr "Afficher les factures"
+msgstr "Afficher les factures clients"
 
 # po/guile_strings.txt:188
 #: gnucash/gnome/dialog-job.c:560
@@ -3770,7 +3773,7 @@ msgid ""
 "want to close it out before you invoice all the entries?"
 msgstr ""
 "Cette commande contient des lignes qui n'ont pas été facturées. Confirmez-"
-"vous la fermeture avant de facturer toutes les entrées ?"
+"vous la fermeture avant de facturer toutes les entrées ?"
 
 # messages-i18n.c:56
 #: gnucash/gnome/dialog-order.c:308
@@ -4836,7 +4839,7 @@ msgstr "_Dupliquer la facture"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:24
 #: gnucash/ui/gnc-plugin-page-invoice.ui:384
 msgid "Create a new invoice as a duplicate of the current one"
-msgstr "Créer une nouvelle facture comme double de l'actuelle"
+msgstr "Créer une nouvelle facture en dupliquant l'actuelle"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -4869,7 +4872,7 @@ msgstr "Suspendre cette facture et la rendre modifiable"
 #: gnucash/gnome/gnc-plugin-page-invoice.c:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:352
 msgid "New _Invoice"
-msgstr "Nouvelle _facture"
+msgstr "Nouvelle _facture client"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:354
@@ -4904,7 +4907,7 @@ msgstr "Recevoir _paiement de la facture"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:200
 #: gnucash/ui/gnc-plugin-page-invoice.ui:554
 msgid "Enter a payment for the owner of this invoice"
-msgstr "Saisir un paiement pour le destinataire de cette facture"
+msgstr "Saisir un paiement du destinataire de cette facture"
 
 # messages-i18n.c:325 po/guile_strings.txt:175
 #: gnucash/gnome/gnc-plugin-page-invoice.c:197
@@ -4996,7 +4999,7 @@ msgstr "Créer une facture imprimable"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:215
 msgid "_Edit Bill"
-msgstr "_Modifier le reçu"
+msgstr "_Modifier la facture"
 
 # messages-i18n.c:105
 #: gnucash/gnome/gnc-plugin-page-invoice.c:215
@@ -5006,15 +5009,15 @@ msgstr "Modifier cette facture"
 # messages-i18n.c:280
 #: gnucash/gnome/gnc-plugin-page-invoice.c:216
 msgid "_Duplicate Bill"
-msgstr "_Dupliquer le reçu"
+msgstr "_Dupliquer la facture"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:216
 msgid "Create a new bill as a duplicate of the current one"
-msgstr "Créer une nouvelle facture comme double de l'actuelle"
+msgstr "Créer une nouvelle facture en dupliquant l'actuelle"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:217
 msgid "_Post Bill"
-msgstr "_Payer une facture"
+msgstr "_Enregistrer la facture"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:217
 msgid "Post this bill to your Chart of Accounts"
@@ -5033,11 +5036,11 @@ msgstr "Suspendre cette facture et la rendre modifiable"
 # messages-i18n.c:192
 #: gnucash/gnome/gnc-plugin-page-invoice.c:219
 msgid "New _Bill"
-msgstr "Nouvelle _facture"
+msgstr "Nouvelle _facture fournisseur"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:219
 msgid "Create a new bill for the same owner as the current one"
-msgstr "Créer une nouvelle facture pour le même client que l'actuel"
+msgstr "Créer une nouvelle facture du même fournisseur que l'actuel"
 
 # messages-i18n.c:71
 #: gnucash/gnome/gnc-plugin-page-invoice.c:220
@@ -5051,13 +5054,13 @@ msgstr "_Payer une facture"
 # messages-i18n.c:123
 #: gnucash/gnome/gnc-plugin-page-invoice.c:221
 msgid "Enter a payment for the owner of this bill"
-msgstr "Saisissez un paiement pour le destinataire de cette facture"
+msgstr "Saisissez un paiement pour l'émetteur de cette facture"
 
 # messages-i18n.c:104
 #: gnucash/gnome/gnc-plugin-page-invoice.c:222
 msgid "Open a vendor report window for the owner of this bill"
 msgstr ""
-"Ouvre une fenêtre de rapport de fournisseur pour l'émetteur de cette facture"
+"Ouvre une fenêtre de rapport fournisseur pour l'émetteur de cette facture"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:230
 msgid "_Use as Default Layout for Vendor Documents"
@@ -5067,8 +5070,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.c:231
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
-"Utiliser par défaut la mise en page actuelle pour toutes les factures des "
-"fournisseurs et les notes de crédit"
+"Utiliser par défaut la mise en page actuelle pour toutes les factures et "
+"avoirs des fournisseurs"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:232
 msgid "_Reset Default Layout for Vendor Documents"
@@ -5080,82 +5083,83 @@ msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
-"Réinitialiser la mise en page par défaut, pour toutes les factures des "
-"fournisseurs et les notes de crédits, à celle intégrée par défaut et mettre "
-"à jour la page actuelle en fonction"
+"Réinitialiser la mise en page par défaut à celle intégrée par défaut, pour "
+"toutes les factures et les avoirs des fournisseurs, et mettre à jour la page "
+"actuelle en fonction"
 
 # src/gnome/glade-gnc-dialogs.c:1149
 #: gnucash/gnome/gnc-plugin-page-invoice.c:239
 msgid "_Print Voucher"
-msgstr "Im_primer le bon"
+msgstr "Im_primer le bon d'achat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:239
 msgid "Make a printable voucher"
-msgstr "Créer un bon imprimable"
+msgstr "Créer un bon d'achat imprimable"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:240
 msgid "_Edit Voucher"
-msgstr "Modifi_er le bon"
+msgstr "Modifi_er le bon d'achat"
 
 # messages-i18n.c:105
 #: gnucash/gnome/gnc-plugin-page-invoice.c:240
 msgid "Edit this voucher"
-msgstr "Modifier ce bon"
+msgstr "Modifier ce bon d'achat"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/gnome/gnc-plugin-page-invoice.c:241
 msgid "_Duplicate Voucher"
-msgstr "_Dupliquer le bon"
+msgstr "_Dupliquer le bon d'achat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:241
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Créer un nouveau bon comme double de l'actuel"
+msgstr "Créer un nouveau bon d'achat en dupliquant l'actuel"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:242
 msgid "_Post Voucher"
-msgstr "_Enregistrer ce bon"
+msgstr "_Enregistrer ce bon d'achat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:242
 msgid "Post this voucher to your Chart of Accounts"
-msgstr "Enregistre ce bon dans votre plan comptable"
+msgstr "Enregistre ce bon d'achat dans votre plan comptable"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/gnome/gnc-plugin-page-invoice.c:243
 msgid "_Unpost Voucher"
-msgstr "S_uspendre le bon"
+msgstr "S_uspendre le bon d'achat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:243
 msgid "Unpost this voucher and make it editable"
-msgstr "Suspendre ce bon et le rendre modifiable"
+msgstr "Suspendre ce bon d'achat et le rendre modifiable"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:244
 msgid "New _Voucher"
-msgstr "Nou_veau bon de dépense"
+msgstr "Nou_veau bon d'achat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:244
 msgid "Create a new voucher for the same owner as the current one"
-msgstr "Créer un nouveau bon pour le même destinataire que l'actuel"
+msgstr "Créer un nouveau bon d'achat pour le même destinataire que l'actuel"
 
 # messages-i18n.c:71
 #: gnucash/gnome/gnc-plugin-page-invoice.c:245
 msgid "Move to the blank entry at the bottom of the voucher"
-msgstr "Aller à la ligne vide en bas du bon"
+msgstr "Aller à la ligne vide en bas du bon d'achat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:246
 msgid "_Pay Voucher"
-msgstr "_Payer le bon"
+msgstr "_Payer le bon d'achat"
 
 # messages-i18n.c:123
 #: gnucash/gnome/gnc-plugin-page-invoice.c:246
 msgid "Enter a payment for the owner of this voucher"
-msgstr "Saisir un paiement pour le destinataire de ce bon"
+msgstr "Saisir un paiement pour le destinataire de ce bon d'achat"
 
 # messages-i18n.c:104
 #: gnucash/gnome/gnc-plugin-page-invoice.c:247
 msgid "Open a employee report window for the owner of this voucher"
-msgstr "Ouvrir une fenêtre de rapport société pour le destinataire de ce bon"
+msgstr ""
+"Ouvrir une fenêtre de rapport société pour le destinataire de ce bon d'achat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:255
 msgid "_Use as Default Layout for Employee Documents"
@@ -5212,7 +5216,7 @@ msgstr "Créer un nouvel avoir comme doublon de l'actuel"
 # po/guile_strings.txt:127
 #: gnucash/gnome/gnc-plugin-page-invoice.c:267
 msgid "_Post Credit Note"
-msgstr "_Payer l'avoir"
+msgstr "_Poster l'avoir"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:267
 msgid "Post this credit note to your Chart of Accounts"
@@ -5287,7 +5291,7 @@ msgstr "Payer"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:227
 msgid "New Voucher"
-msgstr "Nouveau bon de dépense"
+msgstr "Nouveau bon d'achat"
 
 # po/guile_strings.txt:122
 #: gnucash/gnome/gnc-plugin-page-owner-tree.c:228
@@ -5488,7 +5492,7 @@ msgstr "Ouvrir un document liée pour la transaction actuelle"
 #: gnucash/ui/gnc-plugin-page-register.ui:407
 #: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr "Accéder à la facture ou au bon lié"
+msgstr "Accéder à la facture ou au bon d'achat lié"
 
 # messages-i18n.c:80
 #: gnucash/gnome/gnc-plugin-page-register.c:276
@@ -5944,24 +5948,18 @@ msgstr "Facture améliorée"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:393
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:47
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_New Schedule"
-msgstr "_Programmé"
+msgstr "_Nouvelle programmation"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:399
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Edit Schedule"
-msgstr "_Programmé"
+msgstr "_Modifier la programmation"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:405
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
-#, fuzzy
-#| msgid "_Schedule"
 msgid "_Delete Schedule"
-msgstr "_Programmé"
+msgstr "_Effacer la programmation"
 
 # messages-i18n.c:162
 #: gnucash/gnome/gnc-plugin-page-sx-list.c:487
@@ -7732,7 +7730,7 @@ msgstr "Le compte a déjà un bilan en mode auto-effacement."
 #, fuzzy, c-format
 #| msgid "Too many uncleared splits"
 msgid "No uncleared splits found."
-msgstr "Trop de répartitions non pointées"
+msgstr "Aucune répartition non pointée trouvée"
 
 #: gnucash/gnome-utils/gnc-autoclear.c:171
 #, c-format
@@ -9519,7 +9517,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:112
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:154
 msgid "Auto pay when posting."
-msgstr "Payer automatiquement à l'emission."
+msgstr "Payer automatiquement à l'émission."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:113
 #: gnucash/gtkbuilder/business-prefs.glade:167
@@ -9530,7 +9528,7 @@ msgid ""
 "are documents with opposite sign. For example for an invoice, customer "
 "credit notes and negative invoices are considered counter documents."
 msgstr ""
-"Au moment de l'émission, essayer automatiquement de payer les documents "
+"Au moment de l'émission, essayer automatiquement d'encaisser les factures "
 "clients avec des prépaiements et des contre-documents en attente. Les "
 "prépaiements et les documents doivent évidemment être affectés au même "
 "client. Les contre-documents sont des documents avec le signe opposé. Par "
@@ -9539,7 +9537,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:117
 msgid "Show invoices due reminder at startup"
-msgstr "Afficher le rappel des factures dues au démarrage"
+msgstr "Afficher le rappel des factures à encaisser au démarrage"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:118
 msgid ""
@@ -9584,7 +9582,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:132
 #: libgnucash/engine/gnc-optiondb.cpp:1331
 msgid "The invoice report to be used for printing."
-msgstr "Le rapport facture à utiliser pour l’impression."
+msgstr "Le rapport de facture à utiliser pour l’impression."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:133
 msgid "The name of the report to be used for invoice printing."
@@ -9593,7 +9591,7 @@ msgstr "Le nom du rapport qui sera utilisé pour l'impression des factures."
 # messages-i18n.c:171
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:137
 msgid "Open new invoice in new window"
-msgstr "Ouvre la facture dans une nouvelle fenêtre"
+msgstr "Ouvre une nouvelle facture dans une nouvelle fenêtre"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:138
 msgid ""
@@ -9630,17 +9628,16 @@ msgid ""
 "opposite sign. For example for a bill, vendor credit notes and negative "
 "bills are considered counter documents."
 msgstr ""
-"Au moment de l'enregistrement, essayer automatiquement de payer les "
-"documents fournisseurs avec des prépaiements et des contre-documents en "
-"attente. Les prépaiements et les documents doivent évidemment être affectés "
-"au même fournisseur. Les contre-documents sont des documents avec le signe "
-"opposé. Par exemple, pour une facture fournisseur, les avoirs fournisseurs "
-"et les factures fournisseur négatives sont considérés comme des contre-"
-"documents."
+"Au moment de l'enregistrement, essayer automatiquement de payer les factures "
+"fournisseurs avec des prépaiements et des contre-documents en attente. Les "
+"prépaiements et les documents doivent évidemment être affectés au même "
+"fournisseur. Les contre-documents sont des documents avec le signe opposé. "
+"Par exemple, pour une facture fournisseur, les avoirs fournisseurs et les "
+"factures fournisseur négatives sont considérés comme des contre-documents."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:159
 msgid "Show bills due reminder at startup"
-msgstr "Afficher les notification de factures au démarrage"
+msgstr "Afficher les notification de factures à payer au démarrage"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:160
 msgid ""
@@ -9656,7 +9653,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
 msgid "Show bills due within this many days"
-msgstr "Afficher les factures à échéance d'ici ce nombre de jour"
+msgstr "Afficher les factures arrivant à échéance d'ici ce nombre de jour"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:165
 msgid ""
@@ -9664,8 +9661,8 @@ msgid ""
 "due bills. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
-"Ce champs défini le nombre de jours que GnuCash utilise pour notifier des "
-"factures dues. Sa valeur est utilisée uniquement si l'option \"Avertir "
+"Ce champs défini le nombre de jours que GnuCash utilise pour notifier les "
+"factures à payer. Sa valeur est utilisée uniquement si l'option \"Avertir "
 "lorsque due\" est active."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
@@ -10354,8 +10351,7 @@ msgstr ""
 #| "run\" dialog."
 msgid "Set the sort column in the \"since last run\" dialog."
 msgstr ""
-"Lancer 'Vérifier les transactions crées' par défaut dans le dialogue "
-"\"depuis le dernier lancement\"."
+"Définir la colonne de tri  dans le dialogue \"depuis le dernier lancement\"."
 
 # messages-i18n.c:80
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:33
@@ -10365,8 +10361,8 @@ msgstr ""
 #| "run\" dialog."
 msgid "This settings sets the sort column in the \"since last run\" dialog."
 msgstr ""
-"Lancer 'Vérifier les transactions crées' par défaut dans le dialogue "
-"\"depuis le dernier lancement\"."
+"Ces réglages définissent la colonne de tri dans le dialogue \"depuis le "
+"dernier lancement\"."
 
 # messages-i18n.c:80
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:37
@@ -10376,8 +10372,7 @@ msgstr ""
 #| "run\" dialog."
 msgid "Set the sort direction in the \"since last run\" dialog."
 msgstr ""
-"Lancer 'Vérifier les transactions crées' par défaut dans le dialogue "
-"\"depuis le dernier lancement\"."
+"Définit l'ordre de tri dans le dialogue \"depuis le dernier lancement\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:38
 #, fuzzy
@@ -10386,8 +10381,8 @@ msgstr ""
 #| "transactions\" is set for the \"since last run\" dialog."
 msgid "This settings sets the sort direction in the \"since last run\" dialog."
 msgstr ""
-"Ce réglage permet de changer quand \"étudier les transactions créées\" est "
-"actif par défaut pour le dialogue \"depuis la dernière exécution\"."
+"Ce réglage permet de définir l'ordre de tri dans le dialogue \"depuis la "
+"dernière exécution\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:44
 msgid "Set the \"auto create\" flag by default"
@@ -11556,7 +11551,7 @@ msgstr "Ce dialogue est affiché quand il y a plusieurs fenêtres."
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:19
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:142
 msgid "Commit changes to a invoice entry"
-msgstr "Appliquer ces modifications pour l'entrée de la facture"
+msgstr "Appliquer ces modifications aux éléments de la facture"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:20
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:143
@@ -11564,15 +11559,15 @@ msgid ""
 "This dialog is presented when you attempt to move out of a modified invoice "
 "entry. The changed data must be either saved or discarded."
 msgstr ""
-"Cette boîte de dialogue est presentée quand vous essayez de déplacer une "
-"entrée d'une facture client en cours de modification. Les modifications "
-"doivent être sauvées ou annulées."
+"Cette boîte de dialogue est présentée quand vous essayez de sortir d'une "
+"ligne de facture client en cours de modification. Les modifications doivent "
+"être sauvées ou annulées."
 
 # messages-i18n.c:176
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:24
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:147
 msgid "Duplicating a changed invoice entry"
-msgstr "Duplication d'une entrée de facture modifiée"
+msgstr "Duplication d'un élément de facture modifié"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:25
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:148
@@ -11580,7 +11575,7 @@ msgid ""
 "This dialog is presented when you attempt to duplicate a modified invoice "
 "entry. The changed data must be saved or the duplication canceled."
 msgstr ""
-"Cette boîte de dialogue est presentée quand vous essayez de dupliquer une "
+"Cette boîte de dialogue est présentée quand vous essayez de dupliquer une "
 "entrée d'une facture client en cours de modification. Les modifications "
 "doivent être sauvées ou la duplication annulée."
 
@@ -14267,14 +14262,14 @@ msgid ""
 "changed in the Post dialog."
 msgstr ""
 "Indique si par défaut, les entrées multiples d'une facture ciblant le même "
-"compte doivent être accumulées en une seule répartition. Cette option peut "
+"compte doivent être cumulées en une seule répartition. Cette option peut "
 "être modifiée au cas par cas dans la boîte de dialogue d'émission."
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/gtkbuilder/business-prefs.glade:115
 msgid "<b>Invoices</b>"
-msgstr "<b>Factures</b>"
+msgstr "<b>Factures client</b>"
 
 #: gnucash/gtkbuilder/business-prefs.glade:125
 msgid "Not_ify when due"
@@ -14295,8 +14290,8 @@ msgid ""
 "inherited by new customers and vendors."
 msgstr ""
 "Indique si par défaut, les taxes sont incluses dans les factures "
-"fournisseur. Cette option est par ailleurs surchargée dans les définitions "
-"clients et fournisseurs."
+"fournisseur. Cette option sera appliquée aux nouveaux clients et "
+"fournisseurs."
 
 #. See the tooltip "At post time…" for details.
 #: gnucash/gtkbuilder/business-prefs.glade:161
@@ -14321,8 +14316,7 @@ msgid ""
 "inherited by new customers and vendors."
 msgstr ""
 "Indique si par défaut, les taxes sont incluses dans les factures. Cette "
-"option est par ailleurs surchargée dans les définitions clients et "
-"fournisseurs."
+"option sera appliquée aux nouveaux clients et fournisseurs."
 
 #. See the tooltip "At post time…" for details.
 #: gnucash/gtkbuilder/business-prefs.glade:238
@@ -14343,7 +14337,7 @@ msgstr ""
 msgid "How many days in the future to warn about Invoices coming due."
 msgstr ""
 "Combien de jours à l'avance faut-il prévenir de l'échéance de factures à "
-"payer."
+"encaisser."
 
 #: gnucash/gtkbuilder/business-prefs.glade:300
 msgid "_Days in advance"
@@ -14862,7 +14856,7 @@ msgstr "Importer une facture au format CSV"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:173
 msgid "Import invoice CSV data"
-msgstr "Importer les revenus au format CSV"
+msgstr "Importer les factures clients au format CSV"
 
 # src/gnome/glade-gnc-dialogs.c:506
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:191
@@ -14952,7 +14946,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:155
 msgid "The number of days to pay the bill after the post date."
-msgstr "Nombre de jours pour effectuer le paiement après date de facturation."
+msgstr ""
+"Nombre de jours pour effectuer le paiement après la date de facturation."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:212
 msgid "Due Day"
@@ -14972,8 +14967,8 @@ msgid ""
 "are applied to the following month. Negative values count backwards from the "
 "end of the month."
 msgstr ""
-"Le jour de pivot pour que les factures soient appliquées au mois prochain. "
-"Après ce jour, les factures seront appliquées au mois suivant. Les valeurs "
+"Le jour de pivot pour que les factures soient rapportées mois prochain. "
+"Après ce jour, les factures seront rapportées au mois suivant. Les valeurs "
 "négatives sont soustraites à partir de la fin du mois."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:287
@@ -15091,11 +15086,11 @@ msgstr "Enregistrer ces conditions de facturation"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:1023
 msgid "The internal name of the Billing Term."
-msgstr "Le nom interne de ces conditions de facturation."
+msgstr "Le nom interne de ces Conditions de facturation."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:1072
 msgid "<b>New Billing Term</b>"
-msgstr "<b>Nouvelles conditions de facturation</b>"
+msgstr "<b>Nouvelles Conditions de facturation</b>"
 
 # po/guile_strings.txt:188
 #: gnucash/gtkbuilder/dialog-billterms.glade:1120
@@ -16180,7 +16175,7 @@ msgid ""
 "The invoice ID number. If left blank a reasonable number will be chosen for "
 "you."
 msgstr ""
-"Le numéro de la facture. Si laissé vide, un numéro logique sera choisi pour "
+"Le numéro de facturation. Si laissé vide, un numéro logique sera choisi pour "
 "vous."
 
 # messages-i18n.c:48
@@ -16189,8 +16184,8 @@ msgid ""
 "Unposting this Invoice will delete the posted transaction.\n"
 "Are you sure you want to unpost it?"
 msgstr ""
-"Annuler cette facture supprimera la transaction enregistrée.\n"
-"Confirmez-vous l'annulation ?"
+"Suspendre cette facture supprimera la transaction enregistrée.\n"
+"Confirmez-vous la suspension ?"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1410
 msgid "Yes, reset the Tax Tables"
@@ -16376,7 +16371,7 @@ msgstr "Saisie de commande"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/gtkbuilder/dialog-order.glade:58
 msgid "_Invoices"
-msgstr "_Factures"
+msgstr "_Factures client"
 
 # messages-i18n.c:324 po/guile_strings.txt:181
 #: gnucash/gtkbuilder/dialog-order.glade:74
@@ -16443,15 +16438,15 @@ msgid ""
 "automatically assign the remaining amount to the first unpaid invoice for "
 "this company."
 msgstr ""
-"Le montant à payer pour cette facture.\n"
+"Le montant à encaisser pour cette facture.\n"
 "\n"
 "Si vous avez sélectionné une facture, GnuCash proposera le montant encore dû "
-"à son sujet. Vous pouvez changement ce montant pour créer un paiement "
-"partiel ou un trop-perçu.\n"
+"à son sujet. Vous pouvez changer ce montant pour créer un paiement partiel "
+"ou un trop-perçu.\n"
 "\n"
 "En cas de trop-perçu ou si aucune facture n’a été sélectionnée, GnuCash "
 "assignera automatiquement le montant restant à la première facture impayée "
-"pour cette entreprise."
+"pour ce client."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:469
 #: gnucash/report/reports/standard/new-owner-report.scm:282
@@ -20691,13 +20686,13 @@ msgstr "Validation…\n"
 #, c-format
 msgid "Row %d: no invoice ID in first row of import file.\n"
 msgstr ""
-"Ligne %d : aucun identifiant de facture dans la première ligne du fichier "
-"importé\n"
+"Ligne %d : aucun identifiant de facturation dans la première ligne du "
+"fichier importé\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:335
 #, c-format
 msgid "Row %d, invoice %s/%u: owner not set.\n"
-msgstr "Ligne %d, facture %s/%u : le propriétaire n'est pas renseigné.\n"
+msgstr "Ligne %d, facture %s/%u : le client n'est pas renseigné.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:347
 #, c-format
@@ -20712,8 +20707,7 @@ msgstr "Ligne %d, facture %s/%u : le client %s n'existe pas.\n"
 #: gnucash/import-export/bi-import/dialog-bi-import.c:372
 #, c-format
 msgid "Row %d, invoice %s/%u: %s is not a valid posting date.\n"
-msgstr ""
-"Ligne %d, facture %s/%u : %s n'est pas une date d'enregistrement valide.\n"
+msgstr "Ligne %d, facture %s/%u : %s n'est pas une date d'émission valide.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:380
 #, c-format
@@ -20731,13 +20725,13 @@ msgstr "Ligne %d, facture %s/%u : le compte %s n'existe pas.\n"
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Payable.\n"
 msgstr ""
-"Ligne %d, facture %s/%u : le compte %s n'est pas du type Comptes Payables.\n"
+"Ligne %d, facture %s/%u : le compte %s n'est pas du type Comptes A payer.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:426
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s is not of type Accounts Receivable.\n"
 msgstr ""
-"Ligne %d, facture %s/%u : le compte %s n'est pas du type Compte client.\n"
+"Ligne %d, facture %s/%u : le compte %s n'est pas du type Compte A recevoir.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:464
 #, c-format
@@ -20773,7 +20767,7 @@ msgstr "Facture %s créée.\n"
 # messages-i18n.c:56
 #: gnucash/import-export/bi-import/dialog-bi-import.c:729
 msgid "Do you want to update existing bills/invoices?"
-msgstr "Voulez-vous mettre à jour ces factures existantes ?"
+msgstr "Voulez-vous mettre à jour les factures existantes ?"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:737
 #, c-format
@@ -22470,10 +22464,8 @@ msgstr "Ignore la ligne de sécurité"
 
 # messages-i18n.c:67
 #: gnucash/import-export/qif-imp/qif-file.scm:532
-#, fuzzy
-#| msgid "Could not create opening balance."
 msgid "Could not parse price line"
-msgstr "Impossible de créer le solde initial."
+msgstr "Impossible d'analyser la ligne de cours."
 
 #: gnucash/import-export/qif-imp/qif-file.scm:540
 msgid "File does not appear to be in QIF format"
@@ -22549,10 +22541,8 @@ msgstr "Analyse des comptes"
 
 # messages-i18n.c:151
 #: gnucash/import-export/qif-imp/qif-file.scm:816
-#, fuzzy
-#| msgid "Parsing categories"
 msgid "Parsing prices"
-msgstr "Analyse des catégories"
+msgstr "Analyse des cours"
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: gnucash/import-export/qif-imp/qif-file.scm:849
@@ -22628,11 +22618,8 @@ msgstr "Conversion"
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:486
-#, fuzzy
-#| msgid "%d duplicate price"
-#| msgid_plural "%d duplicate prices"
 msgid "Discarding duplicate prices"
-msgstr "%d prix en doublon"
+msgstr "Ignore les cours en doublon"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:516
 #, fuzzy
@@ -22647,10 +22634,8 @@ msgstr "Date de transaction manquante."
 
 # src/gnome/glade-gnc-dialogs.c:340 src/gnome/glade-gnc-dialogs.c:394
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1419
-#, fuzzy
-#| msgid "Invalid Transactions"
 msgid "Invalid transaction date."
-msgstr "Transactions invalides"
+msgstr "Date de transaction invalide."
 
 #: gnucash/python/init.py:18
 msgid "Welcome to GnuCash"
@@ -24228,7 +24213,7 @@ msgstr "_Affaires"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/report/report-core.scm:168
 msgid "Invoice Number"
-msgstr "N° de facture"
+msgstr "N° de facturation"
 
 #: gnucash/report/report-core.scm:216
 msgid ""
@@ -28371,7 +28356,7 @@ msgstr "Nom, adresse et N° de fiscal de la société"
 #: gnucash/report/reports/standard/invoice.scm:113
 msgid "Invoice date, due date, billing ID, terms, job details"
 msgstr ""
-"Date de la facture, échéance, id. du paiement, termes et détails de la "
+"Date de la facture, échéance, id. de facture, termes et détails de la "
 "prestation"
 
 # src/gnome/glade-gnc-dialogs.c:191 src/gnome/glade-gnc-dialogs.c:1194
@@ -28398,7 +28383,7 @@ msgstr "Titre personnalisé"
 
 #: gnucash/report/reports/standard/invoice.scm:177
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
-msgstr "Un texte personnalisé pour remplacer la facture ou le bon de dépense."
+msgstr "Un texte personnalisé pour remplacer la facture ou le bon d'achat."
 
 #: gnucash/report/reports/standard/invoice.scm:181
 #: gnucash/report/stylesheets/css.scm:118
@@ -28556,7 +28541,7 @@ msgstr "Nombre minimum d'entrées"
 # po/guile_strings.txt:241
 #: gnucash/report/reports/standard/invoice.scm:258
 msgid "The minimum number of invoice entries to display."
-msgstr "Le nombre minimum d'entrées de factures à afficher."
+msgstr "Le nombre minimum de lignes de factures à afficher."
 
 #: gnucash/report/reports/standard/invoice.scm:262
 msgid "Use Detailed Tax Summary"
@@ -28578,7 +28563,7 @@ msgstr "Références"
 # messages-i18n.c:127
 #: gnucash/report/reports/standard/invoice.scm:267
 msgid "Display the invoice references?"
-msgstr "Afficher les références de la facture ?"
+msgstr "Afficher les références de la facturation ?"
 
 #: gnucash/report/reports/standard/invoice.scm:270
 msgid "Billing Terms"
@@ -28627,7 +28612,7 @@ msgstr "Détails de la prestation"
 # po/guile_strings.txt:219
 #: gnucash/report/reports/standard/invoice.scm:291
 msgid "Display the job name for this invoice?"
-msgstr "Afficher le nom de la prestation effectué sur cette facture ?"
+msgstr "Afficher le nom de la prestation effectuée sur cette facture ?"
 
 #: gnucash/report/reports/standard/invoice.scm:295
 msgid "Extra notes to put on the invoice."
@@ -29201,15 +29186,15 @@ msgstr "Les transactions liées sont masquées."
 #: gnucash/report/reports/standard/new-owner-report.scm:920
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
-"Les factures sont affichées si payées, et chaque paiement affiche le numéro "
-"de facture."
+"Les factures sont affichées si payées, chaque paiement affiche le numéro de "
+"facture."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:921
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
-"Les factures affichent la liste des paiements, et les paiements affichent "
-"les factures et montants."
+"Les factures affichent la liste des paiements, les paiements affichent les "
+"factures et montants."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:925
 msgid "Simple"
@@ -29757,7 +29742,7 @@ msgstr "ligne : Contact"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/report/reports/standard/taxinvoice.scm:78
 msgid "row: Invoice Number"
-msgstr "ligne : N° de facture"
+msgstr "ligne : N° de facturation"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:79
 msgid "row: Company Name"
@@ -29767,7 +29752,7 @@ msgstr "ligne : Nom de Société"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/report/reports/standard/taxinvoice.scm:80
 msgid "Invoice number text"
-msgstr "Texte du N° de facture"
+msgstr "Texte du N° de facturation"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:81
 msgid "To text"
@@ -29806,7 +29791,7 @@ msgstr "Afficher les prix nets"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/report/reports/standard/taxinvoice.scm:88
 msgid "Invoice number next to title"
-msgstr "N° de la facture à côté du titre"
+msgstr "N° de facturation à côté du titre"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:89
 msgid "table-border-collapse"
@@ -29855,7 +29840,7 @@ msgstr "Afficher l'adresse ?"
 # po/guile_strings.txt:219
 #: gnucash/report/reports/standard/taxinvoice.scm:134
 msgid "Display the Invoice Number?"
-msgstr "Afficher le numéro de la transaction ?"
+msgstr "Afficher le numéro de facturation ?"
 
 # messages-i18n.c:96
 #: gnucash/report/reports/standard/taxinvoice.scm:136
@@ -29866,7 +29851,7 @@ msgstr "Afficher le nom de la société ?"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/report/reports/standard/taxinvoice.scm:138
 msgid "Invoice Number next to title?"
-msgstr "N° de facture à côté du titre ?"
+msgstr "N° de facturation à côté du titre ?"
 
 # messages-i18n.c:96
 #: gnucash/report/reports/standard/taxinvoice.scm:140
@@ -29877,7 +29862,7 @@ msgstr "Afficher le nom de la prestation ?"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/report/reports/standard/taxinvoice.scm:142
 msgid "Invoice Job number?"
-msgstr "N° de facture de la prestation ?"
+msgstr "N° de prestation de la facture ?"
 
 # po/guile_strings.txt:238
 #: gnucash/report/reports/standard/taxinvoice.scm:144
@@ -29912,7 +29897,7 @@ msgstr "Couleur CSS."
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/report/reports/standard/taxinvoice.scm:205
 msgid "Invoice number:"
-msgstr "N° de facture :"
+msgstr "N° de facture :"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:208
 msgid "To:"
@@ -29973,7 +29958,7 @@ msgstr "Investissement : "
 #: gnucash/report/reports/standard/taxinvoice.scm:328
 #: gnucash/report/reports/standard/taxinvoice.scm:330
 msgid "Australian Tax Invoice"
-msgstr "Facture de la taxe australienne"
+msgstr "Facture selon taxe australienne"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:331
 msgid ""
@@ -30189,7 +30174,7 @@ msgstr "Descr."
 msgid ""
 "No invoice has been selected -- please use the Options menu to select one."
 msgstr ""
-"Aucune facture a été sélectionnée -- utilisez le menu Options et "
+"Aucune facture n'a été sélectionnée -- utilisez le menu Options et "
 "sélectionnez une facture."
 
 #: gnucash/report/reports/support/receipt.eguile.scm:284
@@ -30197,9 +30182,9 @@ msgid ""
 "This report is designed for customer (sales) invoices only. Please use the "
 "Options menu to select an <em>Invoice</em>, not a Bill or Expense Voucher."
 msgstr ""
-"Ce rapport est uniquement prévu pour les factures des client (ventes). "
-"Veuillez utiliser le menu des préférences pour sélectionner <em>Facture</"
-"em>, et non Bon, ou autre."
+"Ce rapport est uniquement prévu pour les factures clients (ventes). Veuillez "
+"utiliser le menu des préférences pour sélectionner une <em>Facture client</"
+"em>, et non une facture fournisseur ou un bon d'achat."
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
@@ -30209,7 +30194,7 @@ msgstr "Site Web"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:229
 msgid "Invoice Date"
-msgstr "Date de Facture"
+msgstr "Date de Facturation"
 
 # messages-i18n.c:338 po/guile_strings.txt:298
 # src/gnome/glade-gnc-dialogs.c:635
@@ -31662,7 +31647,7 @@ msgstr "Enregistre ce fichier"
 #: gnucash/ui/gnc-plugin-page-report.ui:147
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:124
 msgid "Open the New Invoice dialog"
-msgstr "Ouvre la boîte de dialogue de création de facture"
+msgstr "Ouvre la boîte de dialogue de création de facture client"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -31679,7 +31664,7 @@ msgstr "Ouvre la boîte de dialogue de création de facture"
 #: gnucash/ui/gnc-plugin-page-report.ui:145
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:122
 msgid "New _Invoice…"
-msgstr "Nouvelle _facture…"
+msgstr "Nouvelle _facture client…"
 
 # messages-i18n.c:190
 #: gnucash/ui/gnc-plugin-account-tree.ui:6
@@ -31887,11 +31872,11 @@ msgstr "Affiche les astuces du jour"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:6
 msgid "Import Bills & _Invoices…"
-msgstr "_Importer les factures et revenus…"
+msgstr "_Importer les factures clients et fournisseurs…"
 
 #: gnucash/ui/gnc-plugin-bi-import.ui:8
 msgid "Import bills and invoices from a CSV text file"
-msgstr "Importer les factures depuis un fichier CSV"
+msgstr "Importer les factures clients et fournisseurs depuis un fichier CSV"
 
 # messages-i18n.c:348 po/guile_strings.txt:57
 #: gnucash/ui/gnc-plugin-budget.ui:10
@@ -31977,13 +31962,13 @@ msgstr "Ouvre l'assistant de recherche de client"
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/ui/gnc-plugin-business.ui:29
 msgid "Find In_voice…"
-msgstr "Recherche de _facture…"
+msgstr "Recherche de _facture client…"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: gnucash/ui/gnc-plugin-business.ui:31
 msgid "Open the Find Invoice dialog"
-msgstr "Ouvre la boîte de dialogue de recherche d'une facture à se faire payer"
+msgstr "Ouvre la boîte de dialogue de recherche d'une facture client"
 
 # messages-i18n.c:303
 #: gnucash/ui/gnc-plugin-business.ui:34 gnucash/ui/gnc-plugin-business.ui:83
@@ -32018,11 +32003,11 @@ msgstr "Ouvre la boîte de dialogue de saisie de paiement"
 
 #: gnucash/ui/gnc-plugin-business.ui:49
 msgid "Invoices _Due Reminder"
-msgstr "_Rappel des factures à payer"
+msgstr "_Rappel des factures à encaisser"
 
 #: gnucash/ui/gnc-plugin-business.ui:51
 msgid "Open the Invoices Due Reminder dialog"
-msgstr "Ouvrir la boîte de dialogue de rappel des factures à payer"
+msgstr "Ouvrir la boîte de dialogue de rappel des factures à encaisser"
 
 #: gnucash/ui/gnc-plugin-business.ui:55
 msgid "_Vendor"
@@ -32123,25 +32108,25 @@ msgstr "Ouvre la boîte de dialogue de recherche d'un employé"
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/ui/gnc-plugin-business.ui:122
 msgid "New _Expense Voucher…"
-msgstr "Nouveau _bon de dépense…"
+msgstr "Nouveau _bon d'achat…"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/ui/gnc-plugin-business.ui:124
 msgid "Open the New Voucher dialog"
-msgstr "Ouvre la boîte de dialogue de création d'un bon de dépense"
+msgstr "Ouvre la boîte de dialogue de création d'un bon d'achat"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/ui/gnc-plugin-business.ui:127
 msgid "Find Expense _Voucher…"
-msgstr "Recherche de bon de _dépense…"
+msgstr "Recherche de bon _d'achat…"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/ui/gnc-plugin-business.ui:129
 msgid "Open the Find Expense Voucher dialog"
-msgstr "Ouvrir la boîte de dialogue de recherche d'un bon de dépense"
+msgstr "Ouvrir la boîte de dialogue de recherche d'un bon d'achat"
 
 #: gnucash/ui/gnc-plugin-business.ui:138
 msgid "Business Linked Documents"
@@ -32167,7 +32152,7 @@ msgstr "Éditeur de conditions de _facturation"
 
 #: gnucash/ui/gnc-plugin-business.ui:153
 msgid "View and edit the list of Billing Terms"
-msgstr "Affiche et modifie la liste des conditions de facturation"
+msgstr "Affiche et modifie la liste des Conditions de facturation"
 
 #: gnucash/ui/gnc-plugin-business.ui:163 gnucash/ui/gnc-plugin-business.ui:165
 msgid "Test Search Dialog"
@@ -32704,8 +32689,7 @@ msgstr "Ouvrir le document lié"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
 msgid "Open a company report window for the owner of this invoice"
 msgstr ""
-"Ouvrir une fenêtre de rapport de société pour le destinataire de cette "
-"facture"
+"Ouvrir une fenêtre de rapport client pour le destinataire de cette facture"
 
 # messages-i18n.c:71
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
@@ -32803,7 +32787,7 @@ msgstr "Affiche le rapport employé"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:161
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:359
 msgid "Create a new invoice"
-msgstr "Crée une nouvelle facture"
+msgstr "Crée une nouvelle facture client"
 
 # messages-i18n.c:93
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:195
@@ -32814,13 +32798,13 @@ msgstr "Crée une nouvelle facture fournisseur"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:227
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:667
 msgid "New _Voucher…"
-msgstr "Nou_veau bon de dépense…"
+msgstr "Nou_veau bon d'achat…"
 
 # messages-i18n.c:93
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:229
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:669
 msgid "Create a new voucher"
-msgstr "Crée un nouveau bon de dépense"
+msgstr "Crée un nouveau bon d'achat"
 
 # src/gnome/glade-gnc-dialogs.c:1149
 #: gnucash/ui/gnc-plugin-page-register.ui:6
@@ -33343,10 +33327,8 @@ msgid "GncQuotes::Fetch called with no commodities."
 msgstr "GncQuotes::Fetch appelé sans produits ou valeurs boursières."
 
 #: libgnucash/app-utils/gnc-quotes.cpp:342
-#, fuzzy
-#| msgid "GncQuotes::Fetch called with no book."
 msgid "GncQuotes::Report called with no source."
-msgstr "GncQuotes::Report appelé sans source."
+msgstr "GncQuotes::Rapport demandé sans source."
 
 # messages-i18n.c:124
 #: libgnucash/app-utils/gnc-quotes.cpp:348
@@ -34088,21 +34070,21 @@ msgid ""
 "The previous invoice number generated. This number will be incremented to "
 "generate the next invoice number."
 msgstr ""
-"Précédent numéro de facture généré. Ce numéro sera augmenté pour obtenir le "
-"prochain numéro de facture."
+"Précédent numéro de facturation généré. Ce numéro sera augmenté pour obtenir "
+"le prochain numéro de facturation."
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
 #: libgnucash/engine/gnc-optiondb.cpp:1252
 msgid "Invoice number format"
-msgstr "Format de n° de facture"
+msgstr "Format de n° de facturation"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1254
 msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
 msgstr ""
-"La chaîne de format à utiliser pour générer les numéros de facture. Il "
+"La chaîne de format à utiliser pour générer les numéros de facturation. Il "
 "s'agit d'une chaîne de format de type printf."
 
 # messages-i18n.c:294 po/guile_strings.txt:205
@@ -34136,29 +34118,29 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:647
 #: libgnucash/engine/gnc-optiondb.cpp:1265
 msgid "Expense voucher number"
-msgstr "N° de bon de dépense"
+msgstr "N° de bon d'achat"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1266
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
 msgstr ""
-"Le précédent numéro généré pour le bon de dépense. Ce numéro sera incrémenté "
+"Le précédent numéro généré pour le bon d'achat. Ce numéro sera incrémenté "
 "lors de la génération du bon suivant."
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: libgnucash/engine/gnc-optiondb.cpp:1269
 msgid "Expense voucher number format"
-msgstr "Format de n° de bon de dépense"
+msgstr "Format de n° de bon d'achat"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1271
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
-"La chaîne de format à utiliser pour générer les numéros de bons de dépenses. "
-"Il s'agit d'une chaîne de format de type printf."
+"La chaîne de format à utiliser pour générer les numéros de bons d'achat. Il "
+"s'agit d'une chaîne de format de type printf."
 
 # po/guile_strings.txt:173
 #: libgnucash/engine/gnc-optiondb.cpp:1274
