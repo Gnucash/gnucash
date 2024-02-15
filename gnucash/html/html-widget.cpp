@@ -1,6 +1,36 @@
+/*******************************************************************\
+ * html-widget.cpp -- litehtml widget                               *
+ *                                                                  *
+ * Copyright (C) 2024 Robert Fewell                                 *
+ *                                                                  *
+ * This is a modified version of source file from litehtml example  *
+ * browser.                                                         *
+ *                                                                  *
+ * This program is free software; you can redistribute it and/or    *
+ * modify it under the terms of the GNU General Public License as   *
+ * published by the Free Software Foundation; either version 2 of   *
+ * the License, or (at your option) any later version.              *
+ *                                                                  *
+ * This program is distributed in the hope that it will be useful,  *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of   *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the    *
+ * GNU General Public License for more details.                     *
+ *                                                                  *
+ * You should have received a copy of the GNU General Public License*
+ * along with this program; if not, contact:                        *
+ *                                                                  *
+ * Free Software Foundation           Voice:  +1-617-542-5942       *
+ * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
+ * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
+\********************************************************************/
+/** @file html-widget.cpp
+    @brief Litehtml Widget
+    @author Copyright (c) 2024 Robert Fewell
+*/
 #include <config.h>
 
 #include "html-widget.hpp"
+#include "html-widget-wrapped.h"
 
 #include <litehtml/url_path.h>
 #include <litehtml/url.h>
@@ -74,8 +104,6 @@ public:
 static gboolean
 draw_callback (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 {
-printf("%s called, %p\n",__FUNCTION__, widget);
-
     html_widget *hw = (html_widget*)user_data;
 
     litehtml::position pos;
@@ -112,7 +140,7 @@ static gboolean
 button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
     html_widget *hw = (html_widget*)user_data;
-printf("%s called, ###\n",__FUNCTION__);
+
     if(hw->m_html)
     {
         litehtml::position::vector redraw_boxes;
@@ -131,7 +159,7 @@ static gboolean
 motion_notify_event(GtkWidget *widget, GdkEventMotion *event, gpointer user_data)
 {
     html_widget *hw = (html_widget*)user_data;
-//printf("%s called\n",__FUNCTION__);
+
     if(hw->m_html)
     {
         litehtml::position::vector redraw_boxes;
@@ -150,7 +178,6 @@ static void
 size_allocate(GtkWidget *widget, GtkAllocation *allocation, gpointer user_data)
 {
     html_widget *hw = (html_widget*)user_data;
-printf("%s called\n",__FUNCTION__);
 
     if(hw->m_html && hw->m_rendered_width != allocation->width)
     {
@@ -164,7 +191,6 @@ printf("%s called\n",__FUNCTION__);
 
 html_widget::html_widget()
 {
-printf("%s called\n",__FUNCTION__);
     m_rendered_width    = 0;
     m_html              = nullptr;
     m_size_alloc        = 0;
@@ -187,13 +213,10 @@ printf("%s called\n",__FUNCTION__);
 
 html_widget::~html_widget()
 {
-printf("%s called\n",__FUNCTION__);
 }
 
 const char * html_widget::get_anchor(GdkEventButton *event)
 {
-printf("%s called\n",__FUNCTION__);
-
     if(m_html)
     {
         litehtml::position::vector redraw_boxes;
@@ -215,7 +238,6 @@ printf("%s called\n",__FUNCTION__);
 
 void html_widget::get_client_rect(litehtml::position& client) const
 {
-printf("%s called\n",__FUNCTION__);
     GtkAllocation allocation;
     gtk_widget_get_allocation(m_drawing_area, &allocation);
 
@@ -228,7 +250,6 @@ printf("%s called\n",__FUNCTION__);
 
 void html_widget::on_anchor_click(const char* url, const litehtml::element::ptr& el)
 {
-printf("%s called\n",__FUNCTION__);
     if(url)
     {
         make_url(url, m_base_url.c_str(), m_clicked_url);
@@ -237,7 +258,6 @@ printf("%s called\n",__FUNCTION__);
 
 void html_widget::set_cursor(const char* cursor)
 {
-//printf("%s called\n",__FUNCTION__);
     if(cursor)
     {
         if(m_cursor != cursor)
@@ -250,7 +270,6 @@ void html_widget::set_cursor(const char* cursor)
 
 void html_widget::import_css(litehtml::string& text, const litehtml::string& url, litehtml::string& baseurl)
 {
-printf("%s called\n",__FUNCTION__);
     std::string css_url;
     make_url(url.c_str(), baseurl.c_str(), css_url);
     load_text_file(css_url, text);
@@ -262,12 +281,10 @@ printf("%s called\n",__FUNCTION__);
 
 void html_widget::set_caption(const char* caption)
 {
-printf("%s called\n",__FUNCTION__);
 }
 
 void html_widget::set_base_url(const char* base_url)
 {
-printf("%s called\n",__FUNCTION__);
     if(base_url)
     {
         m_base_url = litehtml::resolve(litehtml::url(m_url), litehtml::url(base_url)).str();
@@ -279,12 +296,8 @@ printf("%s called\n",__FUNCTION__);
 
 GdkPixbuf* html_widget::get_image(const char* url, bool redraw_on_ready)
 {
-printf("#### %s called, url '%s', '%s'\n",__FUNCTION__, url, m_base_url.c_str());
     GdkPixbuf *ptr = nullptr;
     std::string file_path(url);
-//    file_path.erase (0, 8); //FIXME for linux "file:///"
-
-//    GFile *file = g_file_new_for_path(file_path.c_str());
 
     GFile *file = g_file_new_for_uri(file_path.c_str());
 
@@ -301,7 +314,6 @@ printf("#### %s called, url '%s', '%s'\n",__FUNCTION__, url, m_base_url.c_str())
 
 GtkAllocation html_widget::get_parent_allocation()
 {
-printf("%s called\n",__FUNCTION__);
     GtkAllocation alloc;
     GtkWidget *parent = gtk_widget_get_parent(m_drawing_area);
     gtk_widget_get_allocation(parent, &alloc);
@@ -310,7 +322,6 @@ printf("%s called\n",__FUNCTION__);
 
 void html_widget::open_page(const litehtml::string& url)
 {
-printf("%s called\n",__FUNCTION__);
     m_url       = url;
     m_base_url  = url;
 
@@ -337,7 +348,6 @@ printf("%s called\n",__FUNCTION__);
 
 void html_widget::scroll_to(int x, int y)
 {
-printf("%s called\n",__FUNCTION__);
 //    auto vadj = m_browser->get_scrolled()->get_vadjustment();
 //    auto hadj = m_browser->get_scrolled()->get_hadjustment();
 //    vadj->set_value(vadj->get_lower() + y);
@@ -346,7 +356,6 @@ printf("%s called\n",__FUNCTION__);
 
 void html_widget::make_url(const char* url, const char* basepath, litehtml::string& out)
 {
-printf("%s called, urk '%s', basepath '%s'\n",__FUNCTION__, url, basepath);
     if(!basepath || !basepath[0])
     {
         if(!m_base_url.empty())
@@ -360,12 +369,10 @@ printf("%s called, urk '%s', basepath '%s'\n",__FUNCTION__, url, basepath);
     {
         out = litehtml::resolve(litehtml::url(basepath), litehtml::url(url)).str();
     }
-printf(" out is '%s'\n", out.c_str());
 }
 
 void html_widget::update_cursor()
 {
-printf("%s called\n",__FUNCTION__);
     GdkDisplay *display = gdk_display_get_default();
     GdkWindow *window = gtk_widget_get_window(m_drawing_area);
     GdkCursor *cursor;
@@ -387,10 +394,7 @@ printf("%s called\n",__FUNCTION__);
 
 void html_widget::load_text_file(const litehtml::string& url, litehtml::string& out)
 {
-printf("%s called\n",__FUNCTION__);
     out.clear();
-
-//    GFile *file = g_file_new_for_path(url.c_str());
 
     GFile *file = g_file_new_for_uri(url.c_str());
 
@@ -412,7 +416,6 @@ printf("%s called\n",__FUNCTION__);
 
 void html_widget::dump(const litehtml::string& file_name)
 {
-printf("%s called\n",__FUNCTION__);
     if(m_html)
     {
         html_dumper dumper(file_name);
@@ -421,3 +424,52 @@ printf("%s called\n",__FUNCTION__);
     }
 }
 
+extern "C" {
+
+
+/*******************************************************
+ * gnc_html_litehtml_widget_new
+ *******************************************************/
+html_widget_wrapped *
+gnc_html_litehtml_widget_new(void)
+{
+    return new html_widget;
+}
+
+/*******************************************************
+ * gnc_html_litehtml_get_anchor
+ *******************************************************/
+const gchar *
+gnc_html_litehtml_get_anchor(html_widget_wrapped *html_widget_ptr, GdkEventButton *event)
+{
+    return html_widget_ptr->get_anchor(event);
+}
+
+/*******************************************************
+ * gnc_html_litehtml_get_drawing_area
+ *******************************************************/
+GtkWidget *
+gnc_html_litehtml_get_drawing_area(html_widget_wrapped *html_widget_ptr)
+{
+    return html_widget_ptr->get_drawing_area();
+}
+
+/*******************************************************
+ * gnc_html_litehtml_load_file
+ *******************************************************/
+void
+gnc_html_litehtml_load_file(html_widget_wrapped *html_widget_ptr, const gchar *filename)
+{
+    html_widget_ptr->open_page((filename));
+}
+
+/*******************************************************
+ * gnc_html_litehtml_delete
+ *******************************************************/
+void
+gnc_html_litehtml_delete(html_widget_wrapped *html_widget_ptr)
+{
+    delete html_widget_ptr;
+}
+
+}

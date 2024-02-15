@@ -10,6 +10,7 @@ set (html_HEADERS
   container-linux.hpp
   cairo-borders.hpp
   html-widget.hpp
+  html-widget-wrapped.h
 )
 
 # Command to generate the swig-gnc-html.c wrapper file
