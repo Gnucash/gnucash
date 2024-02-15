@@ -216,6 +216,7 @@ g_print("%s called, self %p\n",__FUNCTION__, self);
     priv = self->priv = new_priv;
     GNC_HTML(self)->priv = (GncHtmlPrivate*)priv;
 
+    priv->file_name = NULL;
     priv->html_string = NULL;
     priv->html_wrapped_widget = gnc_html_litehtml_widget_new ();
 
@@ -270,6 +271,9 @@ g_print("%s called\n",__FUNCTION__);
         g_free (priv->html_string);
         priv->html_string = NULL;
     }
+
+    priv->file_name = NULL;
+
     if (priv->html_wrapped_widget)
         gnc_html_litehtml_delete (priv->html_wrapped_widget);
 
@@ -635,7 +639,6 @@ impl_litehtml_show_data (GncHtml* self, const gchar* data, int datalen)
 #define TEMPLATE_REPORT_FILE_NAME "gnc-report-XXXXXX.html"
     int fd;
     gchar* uri;
-    gchar *filename;
 g_print("%s called\n",__FUNCTION__);
     g_return_if_fail (self != NULL);
     g_return_if_fail (GNC_IS_HTML_LITEHTML(self));
@@ -649,24 +652,34 @@ g_print("%s called\n",__FUNCTION__);
        viewed because they are local resources).  On Windows, this allows the embedded images to
        be viewed (maybe for the same reason as on Linux, but I haven't found where it puts those
        messages. */
-     filename = g_build_filename (g_get_tmp_dir(), TEMPLATE_REPORT_FILE_NAME, (gchar *)NULL);
-     fd = g_mkstemp (filename);
-     impl_litehtml_export_to_file (self, filename);
-     close (fd);
+
+g_print(" priv->filename '%s'\n", priv->file_name);
+
+    if (!priv->file_name)
+    {
+        gchar *filename;
+        fd = g_file_open_tmp (TEMPLATE_REPORT_FILE_NAME, &filename, NULL);
+        priv->file_name = g_strdup (filename);
+        g_free (filename);
+    }
+    else
+    {
+        g_remove (priv->file_name);
+        fd = g_open (priv->file_name, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
+    }
+    impl_litehtml_export_to_file (self, priv->file_name);
+    close (fd);
 
 #ifdef G_OS_WIN32
-    uri = g_strdup_printf ("file:///%s", filename);
+    uri = g_strdup_printf ("file:///%s", priv->file_name);
 #else
-    uri = g_strdup_printf ("file://%s", filename);
+    uri = g_strdup_printf ("file://%s", priv->file_name);
 #endif
 
-g_print("#### Do something with uri %p filename '%s' ####\n", priv->html_wrapped_widget, uri);
-
-g_print("#### Do something with uri ####\n");
+g_print("#### Do something with uri %p uri '%s' ####\n", priv->html_wrapped_widget, uri);
 
     gnc_html_litehtml_load_file (priv->html_wrapped_widget, uri);
 
-    g_free (filename);
     g_free (uri);
 
     LEAVE("");

@@ -34,6 +34,8 @@ struct _GncHtmlLitehtmlPrivate
     html_widget_wrapped *html_wrapped_widget;
     gchar               *html_string;         /* html string being displayed */
 
+    const gchar         *file_name;
+
 };
 
 #endif
