@@ -29,7 +29,6 @@
 # Jan Schneider <grimpeur78@gmail.com>, 2022.
 # Steffen Möller <steffen_moeller@gmx.de>, 2022.
 # Carsten Hütter <Carsten.Huetter@gmx.de>, 2023.
-# Alexej <alexejkirsch@outlook.de>, 2024.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -41,8 +40,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-12-09 16:05-0800\n"
-"PO-Revision-Date: 2024-01-31 20:01+0000\n"
-"Last-Translator: Alexej <alexejkirsch@outlook.de>\n"
+"PO-Revision-Date: 2024-01-27 13:01+0000\n"
+"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
 "Language: de\n"
@@ -1412,7 +1411,7 @@ msgstr "Symbol"
 #: gnucash/report/trep-engine.scm:925 gnucash/report/trep-engine.scm:1177
 #: gnucash/report/trep-engine.scm:2249
 msgid "Shares"
-msgstr "Aktien"
+msgstr "Anteile"
 
 #: gnucash/gnome/assistant-stock-split.c:787
 msgid "You don't have any stock accounts with balances!"
@@ -3676,7 +3675,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-account.c:858
 #: gnucash/report/trep-engine.scm:158
 msgid "Cleared"
-msgstr "erledigt"
+msgstr "Bestätigt"
 
 #: gnucash/gnome/dialog-payment.c:1576
 #: gnucash/gnome/gnc-plugin-page-register.c:3221
@@ -21578,7 +21577,7 @@ msgstr "Zinsen aus langfristigen Kapitalanlagen"
 
 #: gnucash/register/ledger-core/split-register.c:2635
 msgid "STCG"
-msgstr "kurzfristiger Kapitalgewinn"
+msgstr "Zinsen aus kurzfristigen Anlagen"
 
 #: gnucash/register/ledger-core/split-register.c:2638
 msgid "Dist"
@@ -23610,7 +23609,7 @@ msgstr "Zeige Kontobemerkungen an."
 #: gnucash/report/reports/standard/income-statement.scm:101
 #: gnucash/report/reports/standard/trial-balance.scm:122
 msgid "Commodities"
-msgstr "Güter"
+msgstr "Währungen/Wertpapiere"
 
 #: gnucash/report/reports/standard/account-summary.scm:126
 #: gnucash/report/reports/standard/balance-sheet.scm:132
