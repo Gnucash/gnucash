@@ -456,6 +456,14 @@ document.getElementById(chartid).onclick = function(evt) {
 
     (push (gnc:html-js-include "chartjs/Chart.bundle.min.js"))
 
+    (push "<div id='myImage' align='center'>\n")
+    (push "<img src='file:///tmp/vbar.svg' alt='bob1' width='740' height='460'>\n")
+    (push "<img src='file:///tmp/hbar.svg' alt='bob2' width='740' height='460'>\n")
+    (push "<img src='file:///tmp/pie.svg' alt='bob3' width='740' height='460'>\n")
+    (push "<img src='file:///tmp/doughnut.svg' alt='bob4' width='740' height='460'>\n")
+    (push "<img src='file:///tmp/graph.svg' alt='bob5' width='740' height='460'>\n")
+    (push "</div>\n")
+
     ;; the following hidden h3 is used to query style and copy onto chartjs
     (push "<h3 style='display:none'></h3>")
     (push (format #f "<div style='width:~a;height:~a;'>\n"
@@ -485,6 +493,13 @@ document.getElementById(chartid).onclick = function(evt) {
     (push "chartjsoptions.options.tooltips.callbacks.label = tooltipLabel;\n")
     (push "chartjsoptions.options.tooltips.callbacks.title = tooltipTitle;\n")
     (push JS-setup)
+
+    (push "function hideMyImage () {\n")
+    (push "  var x = document.getElementById('myImage');\n")
+    (push "  x.style.display = 'none';\n")
+    (push "}\n") 
+
+    (push "hideMyImage();\n")
 
     (push "var myChart = new Chart(chartid, chartjsoptions);\n")
     (push "</script>")
