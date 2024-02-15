@@ -9,6 +9,7 @@ set (html_HEADERS
   gnc-html-litehtml.h
   container-linux.hpp
   cairo-borders.hpp
+  html-widget.hpp
 )
 
 # Command to generate the swig-gnc-html.c wrapper file
@@ -24,6 +25,7 @@ set (html_SOURCES
   gnc-html-litehtml.c
   container-linux.cpp
   cairo-borders.cpp
+  html-widget.cpp
 )
 
 set (gnc_html_SCHEME html.scm)
