@@ -7,6 +7,8 @@ set (html_HEADERS
   gnc-html-extras.h
   gnc-html-litehtml-p.h
   gnc-html-litehtml.h
+  container-linux.hpp
+  cairo-borders.hpp
 )
 
 # Command to generate the swig-gnc-html.c wrapper file
@@ -20,6 +22,8 @@ set (html_SOURCES
   gnc-html-history.c
   gnc-html-factory.c
   gnc-html-litehtml.c
+  container-linux.cpp
+  cairo-borders.cpp
 )
 
 set (gnc_html_SCHEME html.scm)
@@ -54,6 +58,11 @@ target_compile_definitions(gnc-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")
 target_include_directories (gnc-html
 PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+PRIVATE
+    ${CMAKE_SOURCE_DIR}/borrowed/litehtml/include
+    ${CMAKE_SOURCE_DIR}/borrowed/litehtml/include/litehtml
+    ${CMAKE_SOURCE_DIR}/borrowed/litehtml/src/gumbo/include
+    ${CMAKE_SOURCE_DIR}/borrowed/litehtml/src/gumbo/include/gumbo
 )
 
 if (APPLE)
