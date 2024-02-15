@@ -62,6 +62,7 @@ static void gnc_html_litehtml_finalize (GObject* obj);
 #define GNC_HTML_LITEHTML_GET_PRIVATE(o) (GNC_HTML_LITEHTML(o)->priv)
 
 #include "gnc-html-litehtml-p.h"
+#include "my-test-of-cglib.h"
 
 /* indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_HTML;
@@ -677,6 +678,8 @@ g_print(" priv->filename '%s'\n", priv->file_name);
 #endif
 
 g_print("#### Do something with uri %p uri '%s' ####\n", priv->html_wrapped_widget, uri);
+
+    my_test_of_cglib_charts();
 
     gnc_html_litehtml_load_file (priv->html_wrapped_widget, uri);
 

@@ -11,6 +11,12 @@ set (html_HEADERS
   cairo-borders.hpp
   html-widget.hpp
   html-widget-wrapped.h
+  my-test-of-cglib.h
+)
+
+set(cglib_remote_HEADERS
+  ${CMAKE_SOURCE_DIR}/borrowed/cglib/cglib.h
+  ${CMAKE_SOURCE_DIR}/borrowed/cglib/cglib-other.h
 )
 
 # Command to generate the swig-gnc-html.c wrapper file
@@ -27,6 +33,17 @@ set (html_SOURCES
   container-linux.cpp
   cairo-borders.cpp
   html-widget.cpp
+  my-test-of-cglib.c
+)
+
+set(cglib_remote_SOURCES
+  ${CMAKE_SOURCE_DIR}/borrowed/cglib/cglib.c
+  ${CMAKE_SOURCE_DIR}/borrowed/cglib/color.c
+  ${CMAKE_SOURCE_DIR}/borrowed/cglib/doughnut.c
+  ${CMAKE_SOURCE_DIR}/borrowed/cglib/graph.c
+  ${CMAKE_SOURCE_DIR}/borrowed/cglib/hbar.c
+  ${CMAKE_SOURCE_DIR}/borrowed/cglib/pie.c
+  ${CMAKE_SOURCE_DIR}/borrowed/cglib/vbar.c
 )
 
 set (gnc_html_SCHEME html.scm)
@@ -46,6 +63,8 @@ add_library (gnc-html
   ${html_SOURCES}
   ${SWIG_GNC_HTML_C}
   ${html_HEADERS}
+  ${cglib_remote_SOURCES}
+  ${cglib_remote_HEADERS}
 )
 
 target_link_libraries(gnc-html
@@ -68,6 +87,7 @@ PRIVATE
     ${CMAKE_SOURCE_DIR}/borrowed/litehtml/include/litehtml
     ${CMAKE_SOURCE_DIR}/borrowed/litehtml/src/gumbo/include
     ${CMAKE_SOURCE_DIR}/borrowed/litehtml/src/gumbo/include/gumbo
+    ${CMAKE_SOURCE_DIR}/borrowed/cglib
 )
 
 if (APPLE)
