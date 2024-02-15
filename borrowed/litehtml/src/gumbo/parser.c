@@ -772,7 +772,7 @@ typedef struct {
   int index;
 } InsertionLocation;
 
-InsertionLocation get_appropriate_insertion_location(
+static InsertionLocation get_appropriate_insertion_location(
     GumboParser* parser, GumboNode* override_target) {
   InsertionLocation retval = {override_target, -1};
   if (retval.target == NULL) {
@@ -982,7 +982,7 @@ static void clear_stack_to_table_context(GumboParser* parser) {
 }
 
 // http://www.whatwg.org/specs/web-apps/current-work/complete/tokenization.html#clear-the-stack-back-to-a-table-body-context
-void clear_stack_to_table_body_context(GumboParser* parser) {
+static void clear_stack_to_table_body_context(GumboParser* parser) {
   while (!node_tag_in_set(get_current_node(parser),
              (gumbo_tagset){TAG(HTML), TAG(TBODY), TAG(TFOOT), TAG(THEAD),
                  TAG(TEMPLATE)})) {
@@ -1224,7 +1224,7 @@ static bool is_open_element(GumboParser* parser, const GumboNode* node) {
 // Clones attributes, tags, etc. of a node, but does not copy the content.  The
 // clone shares no structure with the original node: all owned strings and
 // values are fresh copies.
-GumboNode* clone_node(
+static GumboNode* clone_node(
     GumboParser* parser, GumboNode* node, GumboParseFlags reason) {
   assert(node->type == GUMBO_NODE_ELEMENT || node->type == GUMBO_NODE_TEMPLATE);
   GumboNode* new_node = gumbo_parser_allocate(parser, sizeof(GumboNode));
@@ -4166,13 +4166,13 @@ GumboOutput* gumbo_parse_with_options(
   return parser._output;
 }
 
-void gumbo_destroy_node(GumboOptions* options, GumboNode* node) {
+//void gumbo_destroy_node(GumboOptions* options, GumboNode* node) {
   // Need a dummy GumboParser because the allocator comes along with the
   // options object.
-  GumboParser parser;
-  parser._options = options;
-  destroy_node(&parser, node);
-}
+//  GumboParser parser;
+//  parser._options = options;
+//  destroy_node(&parser, node);
+//}
 
 void gumbo_destroy_output(const GumboOptions* options, GumboOutput* output) {
   // Need a dummy GumboParser because the allocator comes along with the
