@@ -24,13 +24,15 @@
 #define GNC_HTML_LITEHTML_P_H
 
 #include "gnc-html-p.h"
+#include "html-widget-wrapped.h"
 
 struct _GncHtmlLitehtmlPrivate
 {
     struct _GncHtmlPrivate base;
 
-    GtkWidget *web_view;
-    gchar* html_string;         /* html string being displayed */
+    GtkWidget           *web_view;
+    html_widget_wrapped *html_wrapped_widget;
+    gchar               *html_string;         /* html string being displayed */
 
 };
 

@@ -103,113 +103,105 @@ static gboolean load_to_stream (GncHtmlLitehtml* self, URLType type,
                                 const gchar* location, const gchar* label);
 
 
-#ifdef skip
-/* hashes handlers for handling different URLType data */
-extern GHashTable* gnc_html_url_handlers;
-
-static void
-ws_message_cb (GncWsServer *gws, const gchar *id, const gchar *message, gpointer user_data)
+static gboolean
+button_release_event (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
 {
-    GncHtmlLitehtml *ghb = user_data;
-    GncHtmlLitehtmlPrivate *priv = GNC_HTML_LITEHTML_GET_PRIVATE(ghb);
+    GncHtmlLitehtml *ghlh = user_data;
+    GncHtmlLitehtmlPrivate *priv = GNC_HTML_LITEHTML_GET_PRIVATE(ghlh);
 
-    if (!priv->file_name)
-        return;
+g_print("%s called, self %p\n",__FUNCTION__, ghlh);
 
-g_print("%s called, self %p, message is '%s', '%s', id '%s'\n",__FUNCTION__, ghb, message, priv->file_name, id);
+    const gchar *anchor = gnc_html_litehtml_get_anchor (priv->html_wrapped_widget, event);
 
-    if (g_str_has_suffix (priv->file_name, id))
+    if (!anchor)
+        return FALSE;
+
+    GncHtml *self = (GncHtml*)ghlh;
+    GncHTMLUrlCB url_handler;
+
+    gchar *location = NULL, *label = NULL, *uri = NULL;
+    const gchar *scheme = gnc_html_parse_url (self, anchor, &location, &label);
+    URLType type = scheme;
+    gboolean stream_loaded = FALSE;
+
+    if (gnc_html_url_handlers)
+        url_handler = (GncHTMLUrlCB)g_hash_table_lookup ((GHashTable*)gnc_html_url_handlers, type);
+    else
+        url_handler = NULL;
+
+    if (url_handler)
     {
-        GncHtml *self = (GncHtml*)ghb;
-        GncHTMLUrlCB url_handler;
+        GNCURLResult result;
+        gboolean ok;
 
-        gchar *location = NULL, *label = NULL, *uri = NULL;
-g_print(" use message\n");
-        const gchar *scheme = gnc_html_parse_url (self, message, &location, &label);
-        URLType type = scheme;
-        gboolean stream_loaded = FALSE;
+        result.load_to_stream = FALSE;
+        result.url_type = type;
+        result.location = NULL;
+        result.label = NULL;
+        result.base_type = URL_TYPE_FILE;
+        result.base_location = NULL;
+        result.error_message = NULL;
+        result.parent = GTK_WINDOW(gnc_html_get_widget(self));
+        result.parent = NULL;
 
-g_print(" location '%s', label '%s'\n", location, label);
+        ok = url_handler (location, label, FALSE, &result);
 
-        if (gnc_html_url_handlers)
-            url_handler = (GncHTMLUrlCB)g_hash_table_lookup ((GHashTable*)gnc_html_url_handlers, type);
-        else
-            url_handler = NULL;
-
-        if (url_handler)
+        if (!ok)
         {
-            GNCURLResult result;
-            gboolean ok;
-
-            result.load_to_stream = FALSE;
-            result.url_type = type;
-            result.location = NULL;
-            result.label = NULL;
-            result.base_type = URL_TYPE_FILE;
-            result.base_location = NULL;
-            result.error_message = NULL;
-//            result.parent = GTK_WINDOW(gnc_html_get_widget(self));
-            result.parent = NULL;
-
-            ok = url_handler (location, label, FALSE, &result);
-g_print(" ok is %d\n", ok);
-
-            if (!ok)
+            if (result.error_message)
+                gnc_error_dialog (GTK_WINDOW(priv->base.parent), "%s", result.error_message);
+            else
             {
-                if (result.error_message)
-                    gnc_error_dialog (GTK_WINDOW(priv->base.parent), "%s", result.error_message);
-                else
-                {
-                    /* %s is a URL (some location somewhere). */
-                    gnc_error_dialog (GTK_WINDOW(priv->base.parent),
-                                      _("There was an error accessing %s."), location );
-                }
-
-                if (priv->base.load_cb)
-                {
-                    priv->base.load_cb (GNC_HTML(self), result.url_type,
-                                        location, label, priv->base.load_cb_data);
-                }
+                /* %s is a URL (some location somewhere). */
+                gnc_error_dialog (GTK_WINDOW(priv->base.parent),
+                                  _("There was an error accessing %s."), location );
             }
-            else if (result.load_to_stream)
+
+            if (priv->base.load_cb)
             {
-                gnc_html_history_node *hnode;
-                const char *new_location;
-                const char *new_label;
-
-                new_location = result.location ? result.location : location;
-                new_label = result.label ? result.label : label;
-                hnode = gnc_html_history_node_new (result.url_type, new_location, new_label);
-                gnc_html_history_append (priv->base.history, hnode);
-
-                g_free (priv->base.base_location);
-                priv->base.base_type = result.base_type;
-                priv->base.base_location = g_strdup (extract_base_name (result.base_type, new_location));
-
-                DEBUG("resetting base location to %s",
-                        priv->base.base_location ? priv->base.base_location : "(null)");
-
-                stream_loaded = load_to_stream (GNC_HTML_LITEHTML(self),
-                                                result.url_type,
-                                                new_location, new_label);
-
-                if (stream_loaded && priv->base.load_cb != NULL)
-                {
-                    priv->base.load_cb (GNC_HTML(self), result.url_type,
-                                        new_location, new_label, priv->base.load_cb_data);
-                }
+                priv->base.load_cb (GNC_HTML(self), result.url_type,
+                                    location, label, priv->base.load_cb_data);
             }
-            g_free (result.location);
-            g_free (result.label);
-            g_free (result.base_location);
-            g_free (result.error_message);
         }
-        g_free (uri);
-        g_free (location);
-        g_free (label);
+        else if (result.load_to_stream)
+        {
+            gnc_html_history_node *hnode;
+            const char *new_location;
+            const char *new_label;
+
+            new_location = result.location ? result.location : location;
+            new_label = result.label ? result.label : label;
+            hnode = gnc_html_history_node_new (result.url_type, new_location, new_label);
+            gnc_html_history_append (priv->base.history, hnode);
+
+            g_free (priv->base.base_location);
+            priv->base.base_type = result.base_type;
+            priv->base.base_location = g_strdup (extract_base_name (result.base_type, new_location));
+
+            DEBUG("resetting base location to %s",
+                    priv->base.base_location ? priv->base.base_location : "(null)");
+
+            stream_loaded = load_to_stream (GNC_HTML_LITEHTML(self),
+                                            result.url_type,
+                                            new_location, new_label);
+
+            if (stream_loaded && priv->base.load_cb != NULL)
+            {
+                priv->base.load_cb (GNC_HTML(self), result.url_type,
+                                    new_location, new_label, priv->base.load_cb_data);
+            }
+        }
+        g_free (result.location);
+        g_free (result.label);
+        g_free (result.base_location);
+        g_free (result.error_message);
     }
+    g_free (uri);
+    g_free (location);
+    g_free (label);
+
+    return TRUE;
 }
-#endif
 
 static void
 gnc_html_litehtml_init (GncHtmlLitehtml* self)
@@ -225,28 +217,17 @@ g_print("%s called, self %p\n",__FUNCTION__, self);
     GNC_HTML(self)->priv = (GncHtmlPrivate*)priv;
 
     priv->html_string = NULL;
-    priv->web_view = gtk_label_new ("Just a Label");
+    priv->html_wrapped_widget = gnc_html_litehtml_widget_new ();
 
+    priv->web_view = gnc_html_litehtml_get_drawing_area (priv->html_wrapped_widget);
 
-
-
-
-
+    g_signal_connect (G_OBJECT(priv->web_view), "button-release-event",
+                      G_CALLBACK(button_release_event), (gpointer)self);
 
     gtk_container_add (GTK_CONTAINER(priv->base.container),
                        GTK_WIDGET(priv->web_view));
 
     g_object_ref_sink (priv->base.container);
-
-     /* signals */
-//    g_signal_connect (G_OBJECT(priv->gws), "close",
-//                      G_CALLBACK (ws_close_cb), self);
-
-//    g_signal_connect (G_OBJECT(priv->gws), "open",
-//                      G_CALLBACK (ws_open_cb), self);
-
-//    g_signal_connect (G_OBJECT(priv->gws), "message",
-//                      G_CALLBACK (ws_message_cb), self);
 
     LEAVE("retval %p", self);
 }
@@ -289,6 +270,9 @@ g_print("%s called\n",__FUNCTION__);
         g_free (priv->html_string);
         priv->html_string = NULL;
     }
+    if (priv->html_wrapped_widget)
+        gnc_html_litehtml_delete (priv->html_wrapped_widget);
+
     G_OBJECT_CLASS(gnc_html_litehtml_parent_class)->dispose (obj);
 }
 
@@ -647,7 +631,7 @@ g_print("%s called\n",__FUNCTION__);
 static void
 impl_litehtml_show_data (GncHtml* self, const gchar* data, int datalen)
 {
-//    GncHtmlLitehtmlPrivate* priv;
+    GncHtmlLitehtmlPrivate* priv;
 #define TEMPLATE_REPORT_FILE_NAME "gnc-report-XXXXXX.html"
     int fd;
     gchar* uri;
@@ -658,7 +642,7 @@ g_print("%s called\n",__FUNCTION__);
 
     ENTER("datalen %d, data %20.20s", datalen, data);
 
-//    priv = GNC_HTML_LITEHTML_GET_PRIVATE(self);
+    priv = GNC_HTML_LITEHTML_GET_PRIVATE(self);
 
     /* Export the HTML to a file and load the file URI.   On Linux, this seems to get around some
        security problems (otherwise, it can complain that embedded images aren't permitted to be
@@ -676,11 +660,13 @@ g_print("%s called\n",__FUNCTION__);
     uri = g_strdup_printf ("file://%s", filename);
 #endif
 
-    g_free (filename);
-    DEBUG("Loading uri '%s'", uri);
+g_print("#### Do something with uri %p filename '%s' ####\n", priv->html_wrapped_widget, uri);
 
 g_print("#### Do something with uri ####\n");
 
+    gnc_html_litehtml_load_file (priv->html_wrapped_widget, uri);
+
+    g_free (filename);
     g_free (uri);
 
     LEAVE("");
