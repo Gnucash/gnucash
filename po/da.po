@@ -107,7 +107,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-12-09 16:05-0800\n"
+"POT-Creation-Date: 2024-02-16 01:11+0100\n"
 "PO-Revision-Date: 2018-03-03 22:41+0200\n"
 "Last-Translator: Joe Hansen <joedalton2@yahoo.dk>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
@@ -122,7 +122,7 @@ msgstr ""
 #: gnucash/report/reports/example/daily-reports.scm:260
 #: gnucash/report/reports/standard/account-piecharts.scm:514
 #: gnucash/report/reports/standard/balance-forecast.scm:274
-#: gnucash/report/reports/standard/balsheet-pnl.scm:875
+#: gnucash/report/reports/standard/balsheet-pnl.scm:870
 #: gnucash/report/reports/standard/budget.scm:468
 #: gnucash/report/reports/standard/cashflow-barchart.scm:259
 #: gnucash/report/reports/standard/cash-flow.scm:183
@@ -361,7 +361,7 @@ msgstr "Tilpasset"
 
 #: bindings/guile/options.scm:399
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
-#: gnucash/report/reports/standard/invoice.scm:496
+#: gnucash/report/reports/standard/invoice.scm:716
 #: gnucash/report/reports/standard/new-owner-report.scm:55
 #: libgnucash/engine/gnc-optiondb.cpp:1353
 msgid "Tax"
@@ -1151,8 +1151,8 @@ msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:594
 #: gnucash/gtkbuilder/dialog-fincalc.glade:650
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1208
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1213
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1218
 #: gnucash/report/reports/standard/budget-flow.scm:44
 msgid "Period"
 msgstr "Periode"
@@ -1216,7 +1216,7 @@ msgstr "Sumkonto"
 #: gnucash/gnome-utils/dialog-account.c:402
 #: gnucash/gnome-utils/gnc-tree-view-account.c:995
 #: gnucash/gtkbuilder/dialog-account.glade:1945
-#: libgnucash/app-utils/gnc-ui-util.c:711
+#: libgnucash/app-utils/gnc-ui-util.cpp:693
 msgid "Opening Balance"
 msgstr "Åbningssaldo"
 
@@ -1316,8 +1316,8 @@ msgstr "Låntilbagebetalingsindstilling: »%s«"
 #: gnucash/register/ledger-core/split-register-model.c:233
 #: gnucash/report/reports/standard/account-summary.scm:77
 #: gnucash/report/reports/standard/advanced-portfolio.scm:68
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1041
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1046
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1051
 #: gnucash/report/reports/standard/cashflow-barchart.scm:319
 #: gnucash/report/reports/standard/category-barchart.scm:646
 #: gnucash/report/reports/standard/category-barchart.scm:666
@@ -1325,8 +1325,8 @@ msgstr "Låntilbagebetalingsindstilling: »%s«"
 #: gnucash/report/reports/standard/general-ledger.scm:66
 #: gnucash/report/reports/standard/general-ledger.scm:87
 #: gnucash/report/reports/standard/invoice.scm:87
-#: gnucash/report/reports/standard/invoice.scm:190
-#: gnucash/report/reports/standard/invoice.scm:547
+#: gnucash/report/reports/standard/invoice.scm:246
+#: gnucash/report/reports/standard/invoice.scm:410
 #: gnucash/report/reports/standard/net-charts.scm:398
 #: gnucash/report/reports/standard/new-owner-report.scm:49
 #: gnucash/report/reports/standard/new-owner-report.scm:225
@@ -1336,7 +1336,7 @@ msgstr "Låntilbagebetalingsindstilling: »%s«"
 #: gnucash/report/reports/support/receipt.eguile.scm:143
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:268
 #: gnucash/report/trep-engine.scm:191 gnucash/report/trep-engine.scm:911
-#: gnucash/report/trep-engine.scm:1081 gnucash/report/trep-engine.scm:2238
+#: gnucash/report/trep-engine.scm:1082 gnucash/report/trep-engine.scm:2236
 msgid "Date"
 msgstr "Dato"
 
@@ -1385,7 +1385,7 @@ msgid "Error adding price."
 msgstr "Fejl ved tilføjelse af pris."
 
 #: gnucash/gnome/assistant-stock-split.c:582
-#: gnucash/gnome/assistant-stock-transaction.cpp:2282
+#: gnucash/gnome/assistant-stock-transaction.cpp:2302
 #: gnucash/gnome/dialog-find-transactions.c:109
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
@@ -1404,7 +1404,7 @@ msgstr "Fejl ved tilføjelse af pris."
 #: gnucash/report/reports/standard/portfolio.scm:244
 #: gnucash/report/reports/standard/register.scm:142
 #: gnucash/report/reports/standard/register.scm:366
-#: gnucash/report/trep-engine.scm:1153
+#: gnucash/report/trep-engine.scm:1154
 msgid "Account"
 msgstr "Konto"
 
@@ -1417,6 +1417,7 @@ msgstr "Konto"
 msgid "Symbol"
 msgstr "Kode"
 
+#. Translators: The number of units of any kind of investment (shares, fonds, bonds, …)
 #: gnucash/gnome/assistant-stock-split.c:594
 #: gnucash/gnome/dialog-find-transactions.c:122
 #: gnucash/register/ledger-core/split-register-model.c:424
@@ -1426,8 +1427,8 @@ msgstr "Kode"
 #: gnucash/report/reports/standard/general-ledger.scm:98
 #: gnucash/report/reports/standard/register.scm:145
 #: gnucash/report/reports/standard/register.scm:370
-#: gnucash/report/trep-engine.scm:925 gnucash/report/trep-engine.scm:1177
-#: gnucash/report/trep-engine.scm:2249
+#: gnucash/report/trep-engine.scm:926 gnucash/report/trep-engine.scm:1178
+#: gnucash/report/trep-engine.scm:2247
 msgid "Shares"
 msgstr "Aktier"
 
@@ -1437,31 +1438,31 @@ msgstr "Du har ingen aktiekonti med balancer!"
 
 #. Translators: this is a stock transaction describing an
 #. Initial stock long purchase
-#: gnucash/gnome/assistant-stock-transaction.cpp:154
+#: gnucash/gnome/assistant-stock-transaction.cpp:159
 #, fuzzy
 #| msgid "Open"
 msgid "Open buy"
 msgstr "Åbn"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:155
+#: gnucash/gnome/assistant-stock-transaction.cpp:160
 msgid "Initial stock long purchase."
 msgstr ""
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
-#: gnucash/gnome/assistant-stock-transaction.cpp:165
+#: gnucash/gnome/assistant-stock-transaction.cpp:170
 #, fuzzy
 #| msgid "place_holder"
 msgid "Open short"
 msgstr "sum_konto"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:166
+#: gnucash/gnome/assistant-stock-transaction.cpp:171
 msgid "Initial stock short sale."
 msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:180
+#: gnucash/gnome/assistant-stock-transaction.cpp:185
 #: gnucash/register/ledger-core/split-register.c:2566
 #: gnucash/register/ledger-core/split-register.c:2570
 #: gnucash/register/ledger-core/split-register.c:2577
@@ -1475,13 +1476,13 @@ msgstr ""
 msgid "Buy"
 msgstr "Køb"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:181
+#: gnucash/gnome/assistant-stock-transaction.cpp:186
 msgid "Buying stock long."
 msgstr ""
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
-#: gnucash/gnome/assistant-stock-transaction.cpp:191
+#: gnucash/gnome/assistant-stock-transaction.cpp:196
 #: gnucash/register/ledger-core/split-register.c:2567
 #: gnucash/register/ledger-core/split-register.c:2571
 #: gnucash/register/ledger-core/split-register.c:2582
@@ -1495,7 +1496,7 @@ msgstr ""
 msgid "Sell"
 msgstr "Sælg"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:192
+#: gnucash/gnome/assistant-stock-transaction.cpp:197
 msgid ""
 "Selling stock long, and record capital gain/loss.\n"
 "\n"
@@ -1505,7 +1506,7 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
-#: gnucash/gnome/assistant-stock-transaction.cpp:204
+#: gnucash/gnome/assistant-stock-transaction.cpp:209
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:733
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:778
 #: gnucash/register/ledger-core/split-register.c:2630
@@ -1513,7 +1514,7 @@ msgstr ""
 msgid "Dividend"
 msgstr "Udbytter"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:205
+#: gnucash/gnome/assistant-stock-transaction.cpp:210
 msgid ""
 "Company issues cash dividends to holder.\n"
 "\n"
@@ -1523,26 +1524,26 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital
-#: gnucash/gnome/assistant-stock-transaction.cpp:216
+#: gnucash/gnome/assistant-stock-transaction.cpp:221
 #, fuzzy
 #| msgid "Decrease in capital"
 msgid "Return of capital"
 msgstr "Nedgang i kapital"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:217
+#: gnucash/gnome/assistant-stock-transaction.cpp:222
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
-#: gnucash/gnome/assistant-stock-transaction.cpp:227
+#: gnucash/gnome/assistant-stock-transaction.cpp:232
 #, fuzzy
 #| msgid "Decrease in capital"
 msgid "Return of capital (reclassification)"
 msgstr "Nedgang i kapital"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:228
+#: gnucash/gnome/assistant-stock-transaction.cpp:233
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units. "
 "A distribution previously recorded as a dividend is reclassified to return "
@@ -1551,13 +1552,13 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
-#: gnucash/gnome/assistant-stock-transaction.cpp:240
+#: gnucash/gnome/assistant-stock-transaction.cpp:245
 #, fuzzy
 #| msgid "No description provided."
 msgid "Notional distribution (dividend)"
 msgstr "Ingen beskrivelse angivet."
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:241
+#: gnucash/gnome/assistant-stock-transaction.cpp:246
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
@@ -1565,11 +1566,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
-#: gnucash/gnome/assistant-stock-transaction.cpp:252
+#: gnucash/gnome/assistant-stock-transaction.cpp:257
 msgid "Notional distribution (capital gain)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:253
+#: gnucash/gnome/assistant-stock-transaction.cpp:258
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
@@ -1579,14 +1580,14 @@ msgstr ""
 #. split
 #. Translators: this is a stock transaction describing a stock
 #. split when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:264
-#: gnucash/gnome/assistant-stock-transaction.cpp:390
+#: gnucash/gnome/assistant-stock-transaction.cpp:269
+#: gnucash/gnome/assistant-stock-transaction.cpp:395
 #, fuzzy
 #| msgid "Stock Split"
 msgid "Stock split"
 msgstr "Aktieopdeling"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:265
+#: gnucash/gnome/assistant-stock-transaction.cpp:270
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor , while keeping the total monetary value of the overall investment "
@@ -1599,14 +1600,14 @@ msgstr ""
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
 #. reverse split when shorting stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:277
-#: gnucash/gnome/assistant-stock-transaction.cpp:404
+#: gnucash/gnome/assistant-stock-transaction.cpp:282
+#: gnucash/gnome/assistant-stock-transaction.cpp:409
 #, fuzzy
 #| msgid "_Review created transactions"
 msgid "Reverse split"
 msgstr "_Kontroller oprettede transaktioner"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:278
+#: gnucash/gnome/assistant-stock-transaction.cpp:283
 msgid ""
 "Company redeems units, thereby increasing the stock price by a multiple, "
 "while keeping the total monetary value of the overall investment constant.\n"
@@ -1618,23 +1619,23 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:295
+#: gnucash/gnome/assistant-stock-transaction.cpp:300
 #, fuzzy
 #| msgid "Sort Order"
 msgid "Short sell"
 msgstr "Sorteringsorden"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:296
+#: gnucash/gnome/assistant-stock-transaction.cpp:301
 msgid "Selling stock short."
 msgstr ""
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
-#: gnucash/gnome/assistant-stock-transaction.cpp:306
+#: gnucash/gnome/assistant-stock-transaction.cpp:311
 msgid "Buy to cover short"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:307
+#: gnucash/gnome/assistant-stock-transaction.cpp:312
 msgid ""
 "Buy back stock to cover short position, and record capital gain/loss. \n"
 "\n"
@@ -1644,11 +1645,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:319
+#: gnucash/gnome/assistant-stock-transaction.cpp:324
 msgid "Compensatory dividend"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:320
+#: gnucash/gnome/assistant-stock-transaction.cpp:325
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
@@ -1656,11 +1657,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:331
+#: gnucash/gnome/assistant-stock-transaction.cpp:336
 msgid "Compensatory return of capital"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:332
+#: gnucash/gnome/assistant-stock-transaction.cpp:337
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1670,11 +1671,11 @@ msgstr ""
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:345
+#: gnucash/gnome/assistant-stock-transaction.cpp:350
 msgid "Compensatory return of capital (reclassification)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:346
+#: gnucash/gnome/assistant-stock-transaction.cpp:351
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1686,11 +1687,11 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:361
+#: gnucash/gnome/assistant-stock-transaction.cpp:366
 msgid "Compensatory notional distribution (dividend)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:362
+#: gnucash/gnome/assistant-stock-transaction.cpp:367
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1701,11 +1702,11 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:376
+#: gnucash/gnome/assistant-stock-transaction.cpp:381
 msgid "Compensatory notional distribution (capital gain)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:377
+#: gnucash/gnome/assistant-stock-transaction.cpp:382
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1713,7 +1714,7 @@ msgid ""
 "0.00 value) without affecting # units."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:391
+#: gnucash/gnome/assistant-stock-transaction.cpp:396
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor, while keeping the total monetary value of the overall investment "
@@ -1724,7 +1725,7 @@ msgid ""
 "split."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:405
+#: gnucash/gnome/assistant-stock-transaction.cpp:410
 msgid ""
 "Company redeems units, thereby increasing the stock price by a multiple, "
 "while keeping the total monetary value of the overall investment constant.\n"
@@ -1734,126 +1735,126 @@ msgid ""
 "record the reverse split."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:497
+#: gnucash/gnome/assistant-stock-transaction.cpp:502
 msgid "No errors found. Click Apply to create transaction."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:502
+#: gnucash/gnome/assistant-stock-transaction.cpp:507
 #, fuzzy
 #| msgid "The following vendor document is due:"
 #| msgid_plural "The following %d vendor documents are due:"
 msgid "The following errors must be fixed:"
 msgstr "Det følgende leverandørdokument er forfalden:"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:507
+#: gnucash/gnome/assistant-stock-transaction.cpp:512
 #, fuzzy
 #| msgid "The following vendor document is due:"
 #| msgid_plural "The following %d vendor documents are due:"
 msgid "The following warnings exist:"
 msgstr "Det følgende leverandørdokument er forfalden:"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:627
-#: gnucash/gnome/assistant-stock-transaction.cpp:688
-#: gnucash/report/reports/standard/balsheet-pnl.scm:812
+#: gnucash/gnome/assistant-stock-transaction.cpp:636
+#: gnucash/gnome/assistant-stock-transaction.cpp:697
+#: gnucash/report/reports/standard/balsheet-pnl.scm:807
 #, fuzzy
 #| msgid "Commission"
 msgid "missing"
 msgstr "Kurtage"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:666
-#: gnucash/gnome/assistant-stock-transaction.cpp:1016
+#: gnucash/gnome/assistant-stock-transaction.cpp:675
+#: gnucash/gnome/assistant-stock-transaction.cpp:1025
 #, c-format
 msgid "Amount for %s is missing."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:671
-#: gnucash/gnome/assistant-stock-transaction.cpp:1021
+#: gnucash/gnome/assistant-stock-transaction.cpp:680
+#: gnucash/gnome/assistant-stock-transaction.cpp:1030
 #, c-format
 msgid "Amount for %s must not be negative."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:674
-#: gnucash/gnome/assistant-stock-transaction.cpp:1024
+#: gnucash/gnome/assistant-stock-transaction.cpp:683
+#: gnucash/gnome/assistant-stock-transaction.cpp:1033
 #, c-format
 msgid "Amount for %s must be positive."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:677
-#: gnucash/gnome/assistant-stock-transaction.cpp:1027
+#: gnucash/gnome/assistant-stock-transaction.cpp:686
+#: gnucash/gnome/assistant-stock-transaction.cpp:1036
 #, fuzzy, c-format
 msgid "The %s amount has no associated account."
 msgstr "Inkludér underkonti fra alle valgte konti"
 
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
-#: gnucash/gnome/assistant-stock-transaction.cpp:743
+#: gnucash/gnome/assistant-stock-transaction.cpp:752
 msgid "N/A"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:835
+#: gnucash/gnome/assistant-stock-transaction.cpp:844
 #, fuzzy
 #| msgid "Accounts in '%s'"
 msgid "Amount for stock value is missing."
 msgstr "Konti i »%s«"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:847
+#: gnucash/gnome/assistant-stock-transaction.cpp:856
 #, fuzzy
 msgid "Invalid stock new balance."
 msgstr "Ugyldig konto i opdeling"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:849
+#: gnucash/gnome/assistant-stock-transaction.cpp:858
 msgid "New balance must be higher than old balance."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:851
+#: gnucash/gnome/assistant-stock-transaction.cpp:860
 msgid "New balance must be lower than old balance."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:858
+#: gnucash/gnome/assistant-stock-transaction.cpp:867
 #, fuzzy
 msgid "Stock amount must be positive."
 msgstr "Aktiemængder, der rapporteres om"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:862
+#: gnucash/gnome/assistant-stock-transaction.cpp:871
 msgid "Cannot sell more units than owned."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:864
+#: gnucash/gnome/assistant-stock-transaction.cpp:873
 msgid "Cannot cover buy more units than owed."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1100
+#: gnucash/gnome/assistant-stock-transaction.cpp:1109
 #, fuzzy
 #| msgid "Stock"
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
 msgstr "Aktie"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1101
+#: gnucash/gnome/assistant-stock-transaction.cpp:1110
 #, fuzzy
 #| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "Kontant"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1102
+#: gnucash/gnome/assistant-stock-transaction.cpp:1111
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1103
+#: gnucash/gnome/assistant-stock-transaction.cpp:1112
 #, fuzzy
 msgctxt "Stock Assistant: Page name"
 msgid "Dividend"
 msgstr "Udbytter"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1104
+#: gnucash/gnome/assistant-stock-transaction.cpp:1113
 #, fuzzy
 #| msgid "Capital"
 msgctxt "Stock Assistant: Page name"
 msgid "Capital Gains"
 msgstr "Kapital"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1267
+#: gnucash/gnome/assistant-stock-transaction.cpp:1276
 #, c-format
 msgid ""
 "You will enter a transaction with date %s which is earlier than the latest "
@@ -1864,28 +1865,28 @@ msgstr ""
 
 #. Translators: %s refer to: stock mnemonic, broker currency,
 #. date of transaction.
-#: gnucash/gnome/assistant-stock-transaction.cpp:1309
+#: gnucash/gnome/assistant-stock-transaction.cpp:1318
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1379
+#: gnucash/gnome/assistant-stock-transaction.cpp:1388
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1385
+#: gnucash/gnome/assistant-stock-transaction.cpp:1394
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1883
+#: gnucash/gnome/assistant-stock-transaction.cpp:1899
 #, fuzzy
 #| msgid "Get _Balance"
 msgid "Ne_w Balance"
 msgstr "Hent _balance"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1883
+#: gnucash/gnome/assistant-stock-transaction.cpp:1899
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:234
 #: gnucash/register/ledger-core/split-register.c:2091
@@ -1894,32 +1895,32 @@ msgstr "Hent _balance"
 msgid "_Shares"
 msgstr "Aktier"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1886
+#: gnucash/gnome/assistant-stock-transaction.cpp:1902
 #, fuzzy
 #| msgid "_Rotation"
 msgid "Ratio"
 msgstr "_Rotation"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1886
+#: gnucash/gnome/assistant-stock-transaction.cpp:1902
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
 #, fuzzy
 #| msgid "Get _Balance"
 msgid "Next Balance"
 msgstr "Hent _balance"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1890
+#: gnucash/gnome/assistant-stock-transaction.cpp:1906
 #, fuzzy
 msgid "Enter the new balance of shares after the stock split."
 msgstr "Indtast antallet af købte eller solgte aktier"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1891
+#: gnucash/gnome/assistant-stock-transaction.cpp:1907
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
 #, fuzzy
 #| msgid "Enter the number of shares bought or sold"
 msgid "Enter the number of shares you gained or lost in the transaction."
 msgstr "Indtast antallet af købte eller solgte aktier"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2288
+#: gnucash/gnome/assistant-stock-transaction.cpp:2308
 #: gnucash/gnome/dialog-find-transactions.c:153
 #: gnucash/gnome/gnc-split-reg.c:669
 #: gnucash/gtkbuilder/dialog-payment.glade:495
@@ -1934,25 +1935,25 @@ msgstr "Indtast antallet af købte eller solgte aktier"
 #: gnucash/report/reports/standard/general-ledger.scm:91
 #: gnucash/report/reports/standard/register.scm:139
 #: gnucash/report/reports/standard/register.scm:362
-#: gnucash/report/trep-engine.scm:263 gnucash/report/trep-engine.scm:941
-#: gnucash/report/trep-engine.scm:1142 gnucash/report/trep-engine.scm:1143
-#: gnucash/report/trep-engine.scm:2257
+#: gnucash/report/trep-engine.scm:263 gnucash/report/trep-engine.scm:942
+#: gnucash/report/trep-engine.scm:1143 gnucash/report/trep-engine.scm:1144
+#: gnucash/report/trep-engine.scm:2255
 msgid "Memo"
 msgstr "Note"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2296
+#: gnucash/gnome/assistant-stock-transaction.cpp:2316
 #: gnucash/gnome/gnc-plugin-page-register.c:3383
 #: gnucash/gtkbuilder/dialog-payment.glade:300
 #: gnucash/register/ledger-core/split-register.c:2441
 #: gnucash/report/reports/standard/general-journal.scm:82
 #: gnucash/report/reports/standard/register.scm:336
 #: gnucash/report/reports/standard/trial-balance.scm:555
-#: gnucash/report/trep-engine.scm:1342 gnucash/report/trep-engine.scm:1446
+#: gnucash/report/trep-engine.scm:1343 gnucash/report/trep-engine.scm:1447
 #: libgnucash/engine/Account.cpp:164
 msgid "Debit"
 msgstr "Debet"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2303
+#: gnucash/gnome/assistant-stock-transaction.cpp:2323
 #: gnucash/gnome/gnc-plugin-page-register.c:3379
 #: gnucash/gtkbuilder/dialog-payment.glade:316
 #: gnucash/register/ledger-core/split-register.c:2464
@@ -1962,12 +1963,12 @@ msgstr "Debet"
 #: gnucash/report/reports/standard/general-journal.scm:83
 #: gnucash/report/reports/standard/register.scm:338
 #: gnucash/report/reports/standard/trial-balance.scm:558
-#: gnucash/report/trep-engine.scm:1349 gnucash/report/trep-engine.scm:1453
+#: gnucash/report/trep-engine.scm:1350 gnucash/report/trep-engine.scm:1454
 #: libgnucash/engine/Account.cpp:184
 msgid "Credit"
 msgstr "Kredit"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2310
+#: gnucash/gnome/assistant-stock-transaction.cpp:2330
 #: gnucash/report/reports/standard/portfolio.scm:247
 #: gnucash/report/reports/standard/receipt.scm:52
 #: gnucash/report/reports/standard/receipt.scm:114
@@ -1997,7 +1998,7 @@ msgstr "Redigér"
 #: gnucash/gnome/dialog-invoice.c:3029 gnucash/gnome/dialog-invoice.c:3750
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
-#: gnucash/report/reports/standard/invoice.scm:730
+#: gnucash/report/reports/standard/invoice.scm:774
 #: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1098
 msgid "Bill"
 msgstr "Regning"
@@ -2020,8 +2021,8 @@ msgstr "Bilag"
 #: gnucash/gtkbuilder/dialog-invoice.glade:935
 #: gnucash/gtkbuilder/dialog-invoice.glade:959
 #: gnucash/register/ledger-core/split-register.c:2593
-#: gnucash/report/reports/standard/invoice.scm:719
-#: gnucash/report/reports/standard/invoice.scm:738
+#: gnucash/report/reports/standard/invoice.scm:765
+#: gnucash/report/reports/standard/invoice.scm:782
 #: gnucash/report/reports/standard/receipt.scm:112
 #: gnucash/report/reports/standard/taxinvoice.scm:177
 #: gnucash/report/reports/support/receipt.eguile.scm:91
@@ -2038,8 +2039,8 @@ msgstr "Faktura"
 #: gnucash/import-export/import-pending-matches.cpp:189
 #: gnucash/report/reports/standard/register.scm:216
 #: gnucash/report/trep-engine.scm:275 gnucash/report/trep-engine.scm:306
-#: gnucash/report/trep-engine.scm:999 libgnucash/engine/gncOwner.c:212
-#: libgnucash/engine/Recurrence.c:502 libgnucash/engine/Recurrence.c:691
+#: gnucash/report/trep-engine.scm:1000 libgnucash/engine/gncOwner.c:212
+#: libgnucash/engine/Recurrence.cpp:502 libgnucash/engine/Recurrence.cpp:691
 msgid "None"
 msgstr "Ingen"
 
@@ -2250,7 +2251,7 @@ msgstr "Slet vare?"
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2101
 #: gnucash/register/ledger-core/gncEntryLedger.c:921
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
-#: gnucash/register/ledger-core/split-register-control.c:1537
+#: gnucash/register/ledger-core/split-register-control.c:1543
 #: gnucash/ui/gnc-plugin-page-invoice.ui:141
 #: gnucash/ui/gnc-plugin-page-invoice.ui:230
 #: gnucash/ui/gnc-plugin-page-invoice.ui:422
@@ -2605,14 +2606,14 @@ msgstr "Transaktionsdetaljer"
 #: gnucash/report/reports/standard/general-ledger.scm:70
 #: gnucash/report/reports/standard/general-ledger.scm:90
 #: gnucash/report/reports/standard/invoice.scm:89
-#: gnucash/report/reports/standard/invoice.scm:194
+#: gnucash/report/reports/standard/invoice.scm:414
 #: gnucash/report/reports/standard/new-owner-report.scm:53
 #: gnucash/report/reports/standard/new-owner-report.scm:228
 #: gnucash/report/reports/standard/register.scm:137
 #: gnucash/report/reports/standard/register.scm:358
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:270
 #: gnucash/report/trep-engine.scm:238 gnucash/report/trep-engine.scm:917
-#: gnucash/report/trep-engine.scm:1131 gnucash/report/trep-engine.scm:2244
+#: gnucash/report/trep-engine.scm:1132 gnucash/report/trep-engine.scm:2242
 msgid "Description"
 msgstr "Beskrivelse"
 
@@ -2791,7 +2792,7 @@ msgstr "Aktiepris"
 
 #: gnucash/gnome/dialog-find-transactions.c:124
 #: gnucash/gnome/dialog-lot-viewer.c:1020
-#: gnucash/gnome/dialog-sx-since-last-run.c:1252
+#: gnucash/gnome/dialog-sx-since-last-run.c:1446
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:79
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1055
@@ -2814,8 +2815,8 @@ msgstr "Dato bogført"
 #: gnucash/report/reports/standard/general-ledger.scm:67
 #: gnucash/report/reports/standard/general-ledger.scm:88
 #: gnucash/report/trep-engine.scm:197 gnucash/report/trep-engine.scm:540
-#: gnucash/report/trep-engine.scm:912 gnucash/report/trep-engine.scm:1101
-#: gnucash/report/trep-engine.scm:2239
+#: gnucash/report/trep-engine.scm:912 gnucash/report/trep-engine.scm:1102
+#: gnucash/report/trep-engine.scm:2237
 msgid "Reconciled Date"
 msgstr "Afstemningsdato"
 
@@ -2844,7 +2845,7 @@ msgstr "Nummer/handling"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
 #: gnucash/register/ledger-core/split-register-model.c:332
 #: gnucash/report/reports/standard/invoice.scm:91
-#: gnucash/report/reports/standard/invoice.scm:198
+#: gnucash/report/reports/standard/invoice.scm:418
 msgid "Action"
 msgstr "Handling"
 
@@ -2905,8 +2906,8 @@ msgstr "Beskrivelse, bemærkning eller note"
 #: gnucash/report/reports/standard/receipt.scm:38
 #: gnucash/report/reports/standard/taxinvoice.scm:69
 #: gnucash/report/trep-engine.scm:269 gnucash/report/trep-engine.scm:901
-#: gnucash/report/trep-engine.scm:918 gnucash/report/trep-engine.scm:1142
-#: gnucash/report/trep-engine.scm:2258
+#: gnucash/report/trep-engine.scm:918 gnucash/report/trep-engine.scm:1143
+#: gnucash/report/trep-engine.scm:2256
 msgid "Notes"
 msgstr "Bemærkninger"
 
@@ -2999,8 +3000,8 @@ msgstr ""
 #: gnucash/gnome/dialog-invoice.c:3604 gnucash/gnome/dialog-invoice.c:3638
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:158
 #: gnucash/register/ledger-core/split-register-model.c:240
-#: gnucash/report/reports/standard/invoice.scm:226
-#: gnucash/report/reports/standard/invoice.scm:552
+#: gnucash/report/reports/standard/invoice.scm:251
+#: gnucash/report/reports/standard/invoice.scm:446
 #: gnucash/report/reports/standard/new-aging.scm:112
 #: gnucash/report/reports/standard/new-owner-report.scm:50
 #: gnucash/report/reports/standard/new-owner-report.scm:936
@@ -3063,7 +3064,7 @@ msgstr "Samlet betaling:"
 
 #: gnucash/gnome/dialog-invoice.c:2071 gnucash/gnome/dialog-payment.c:1358
 #: gnucash/gtkbuilder/dialog-invoice.glade:976
-#: gnucash/report/reports/standard/invoice.scm:736
+#: gnucash/report/reports/standard/invoice.scm:780
 #: libgnucash/engine/gncInvoice.c:1104
 msgid "Credit Note"
 msgstr "Kreditnota"
@@ -3209,7 +3210,7 @@ msgid "Invoice Owner"
 msgstr "Fakturaejer"
 
 #: gnucash/gnome/dialog-invoice.c:3552
-#: gnucash/report/reports/standard/invoice.scm:282
+#: gnucash/report/reports/standard/invoice.scm:502
 msgid "Invoice Notes"
 msgstr "Fakturabemærkninger"
 
@@ -3219,7 +3220,7 @@ msgstr "Fakturabemærkninger"
 #: gnucash/gnome/dialog-order.c:885 gnucash/gtkbuilder/dialog-invoice.glade:304
 #: gnucash/gtkbuilder/dialog-invoice.glade:1064
 #: gnucash/gtkbuilder/dialog-job.glade:219
-#: gnucash/report/reports/standard/invoice.scm:274
+#: gnucash/report/reports/standard/invoice.scm:494
 msgid "Billing ID"
 msgstr "Regnings-id"
 
@@ -3318,8 +3319,8 @@ msgstr "Åbnet"
 #: gnucash/report/reports/standard/general-ledger.scm:89
 #: gnucash/report/reports/standard/register.scm:135
 #: gnucash/report/reports/standard/register.scm:354
-#: gnucash/report/trep-engine.scm:916 gnucash/report/trep-engine.scm:1115
-#: gnucash/report/trep-engine.scm:2243
+#: gnucash/report/trep-engine.scm:916 gnucash/report/trep-engine.scm:1116
+#: gnucash/report/trep-engine.scm:2241
 msgid "Num"
 msgstr "Nr."
 
@@ -3333,7 +3334,7 @@ msgstr "Find udgiftsbilag"
 
 #: gnucash/gnome/dialog-invoice.c:3757
 #: gnucash/gnome-search/dialog-search.c:1089
-#: gnucash/report/reports/standard/invoice.scm:732
+#: gnucash/report/reports/standard/invoice.scm:776
 msgid "Expense Voucher"
 msgstr "Udgiftsbilag"
 
@@ -3361,9 +3362,9 @@ msgstr "Find faktura"
 #: gnucash/report/reports/standard/new-owner-report.scm:232
 #: gnucash/report/reports/standard/register.scm:382
 #: gnucash/report/reports/standard/register.scm:627
-#: gnucash/report/trep-engine.scm:231 gnucash/report/trep-engine.scm:974
-#: gnucash/report/trep-engine.scm:1332 gnucash/report/trep-engine.scm:1435
-#: gnucash/report/trep-engine.scm:2190 gnucash/report/trep-engine.scm:2210
+#: gnucash/report/trep-engine.scm:231 gnucash/report/trep-engine.scm:975
+#: gnucash/report/trep-engine.scm:1333 gnucash/report/trep-engine.scm:1436
+#: gnucash/report/trep-engine.scm:2188 gnucash/report/trep-engine.scm:2208
 msgid "Amount"
 msgstr "Beløb"
 
@@ -3990,43 +3991,43 @@ msgstr ""
 "Kan ikke oprette en planlagt transaktion fra en transaktion under "
 "redigering. Indtast transaktionen før planlægning."
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:363
+#: gnucash/gnome/dialog-sx-since-last-run.c:369
 msgid "Ignored"
 msgstr "Ignoreret"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:364
+#: gnucash/gnome/dialog-sx-since-last-run.c:370
 msgid "Postponed"
 msgstr "Udsat"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:365
+#: gnucash/gnome/dialog-sx-since-last-run.c:371
 msgid "To-Create"
 msgstr "At-oprette"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:366
+#: gnucash/gnome/dialog-sx-since-last-run.c:372
 msgid "Reminder"
 msgstr "Påmindelse"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:367
+#: gnucash/gnome/dialog-sx-since-last-run.c:373
 #: gnucash/gnome/gnc-plugin-budget.c:192
 msgid "Created"
 msgstr "Oprettet"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:430
+#: gnucash/gnome/dialog-sx-since-last-run.c:436
 #: gnucash/gtkbuilder/dialog-preferences.glade:1737
 #: gnucash/report/reports/standard/balsheet-pnl.scm:195
 #: gnucash/report/trep-engine.scm:578
 msgid "Never"
 msgstr "Aldrig"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:507
+#: gnucash/gnome/dialog-sx-since-last-run.c:522
 msgid "(Need Value)"
 msgstr "(Kræver værdi)"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:792
+#: gnucash/gnome/dialog-sx-since-last-run.c:895
 msgid "Invalid Transactions"
 msgstr "Ugyldige transaktioner"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:843
+#: gnucash/gnome/dialog-sx-since-last-run.c:946
 #, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (One "
@@ -4041,17 +4042,25 @@ msgstr[1] ""
 "Der er ingen Planlagte transaktioner til indtasnting på nuværende tidspunkt. "
 "(%d transaktioner blev automatisk oprettet)"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1185
+#: gnucash/gnome/dialog-sx-since-last-run.c:1266
+msgid "Highlight a date first to sort by occurrence date."
+msgstr ""
+
+#: gnucash/gnome/dialog-sx-since-last-run.c:1267
+msgid "Highlight a schedule first to sort by schedule name."
+msgstr ""
+
+#: gnucash/gnome/dialog-sx-since-last-run.c:1379
 #: gnucash/gnome-search/dialog-search.c:1105
 msgid "Transaction"
 msgstr "Transaktion"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1206
+#: gnucash/gnome/dialog-sx-since-last-run.c:1402
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:512
 msgid "Status"
 msgstr "Status"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1303
+#: gnucash/gnome/dialog-sx-since-last-run.c:1497
 msgid "Created Transactions"
 msgstr "Oprettede transaktioner"
 
@@ -4139,11 +4148,11 @@ msgstr "Find leverandør"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
 #: gnucash/register/ledger-core/split-register.c:2636
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1062
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1224
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1219
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:401
 #: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:177
-#: libgnucash/engine/Account.cpp:4457
+#: libgnucash/engine/Account.cpp:4507
 msgid "Income"
 msgstr "Indtægt"
 
@@ -4183,13 +4192,13 @@ msgstr "Åbn et eksisterende budget"
 #: gnucash/report/reports/standard/customer-summary.scm:438
 #: gnucash/report/reports/standard/customer-summary.scm:440
 #: gnucash/report/reports/standard/invoice.scm:103
-#: gnucash/report/reports/standard/invoice.scm:222
+#: gnucash/report/reports/standard/invoice.scm:442
 #: gnucash/report/reports/standard/new-aging.scm:183
 #: gnucash/report/reports/standard/new-aging.scm:304
 #: gnucash/report/reports/standard/new-owner-report.scm:311
 #: gnucash/report/reports/standard/portfolio.scm:269
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
-#: gnucash/report/trep-engine.scm:2088
+#: gnucash/report/trep-engine.scm:2086
 msgid "Total"
 msgstr "Total"
 
@@ -5546,7 +5555,7 @@ msgid "GnuCash-Report"
 msgstr "Fjerde option"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1912
-#: gnucash/report/reports/standard/invoice.scm:848
+#: gnucash/report/reports/standard/invoice.scm:877
 msgid "Printable Invoice"
 msgstr "Faktura der kan udskrives"
 
@@ -5559,12 +5568,12 @@ msgid "Tax Invoice"
 msgstr "Skatteopgørelse"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1914
-#: gnucash/report/reports/standard/invoice.scm:858
+#: gnucash/report/reports/standard/invoice.scm:887
 msgid "Easy Invoice"
 msgstr "Nem faktura"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1915
-#: gnucash/report/reports/standard/invoice.scm:868
+#: gnucash/report/reports/standard/invoice.scm:897
 msgid "Fancy Invoice"
 msgstr "Smart faktura"
 
@@ -6823,7 +6832,7 @@ msgstr "Va_luta"
 #: gnucash/gtkbuilder/dialog-transfer.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:431
 #: gnucash/gtkbuilder/dialog-vendor.glade:502
-#: gnucash/report/trep-engine.scm:110 libgnucash/engine/Account.cpp:4456
+#: gnucash/report/trep-engine.scm:110 libgnucash/engine/Account.cpp:4506
 msgid "Currency"
 msgstr "Valuta"
 
@@ -7089,7 +7098,7 @@ msgid "Show the income and expense accounts"
 msgstr "Vis indtægts- og udgiftskonti"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:674
-#: gnucash/report/trep-engine.scm:2439 gnucash/report/trep-engine.scm:2445
+#: gnucash/report/trep-engine.scm:2437 gnucash/report/trep-engine.scm:2443
 msgid "Error"
 msgstr "Fejl"
 
@@ -8097,8 +8106,8 @@ msgstr "Ny topniveaukonto"
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
 #: gnucash/report/reports/standard/trial-balance.scm:561
-#: gnucash/report/trep-engine.scm:179 gnucash/report/trep-engine.scm:949
-#: gnucash/report/trep-engine.scm:2245
+#: gnucash/report/trep-engine.scm:179 gnucash/report/trep-engine.scm:950
+#: gnucash/report/trep-engine.scm:2243
 msgid "Account Name"
 msgstr "Kontonavn"
 
@@ -8114,7 +8123,7 @@ msgstr "Vare"
 #: gnucash/report/reports/standard/general-ledger.scm:74
 #: gnucash/report/reports/standard/general-ledger.scm:94
 #: gnucash/report/trep-engine.scm:185 gnucash/report/trep-engine.scm:921
-#: gnucash/report/trep-engine.scm:2259
+#: gnucash/report/trep-engine.scm:2257
 msgid "Account Code"
 msgstr "Kontonummer"
 
@@ -8412,15 +8421,15 @@ msgstr "Værdipapir"
 #: gnucash/report/reports/standard/general-journal.scm:99
 #: gnucash/report/reports/standard/general-ledger.scm:79
 #: gnucash/report/reports/standard/general-ledger.scm:99
-#: gnucash/report/reports/standard/invoice.scm:206
+#: gnucash/report/reports/standard/invoice.scm:426
 #: gnucash/report/reports/standard/portfolio.scm:248
 #: gnucash/report/reports/standard/price-scatter.scm:40
 #: gnucash/report/reports/standard/price-scatter.scm:286
 #: gnucash/report/reports/standard/price-scatter.scm:300
 #: gnucash/report/reports/standard/register.scm:149
 #: gnucash/report/reports/standard/register.scm:378
-#: gnucash/report/trep-engine.scm:927 gnucash/report/trep-engine.scm:1201
-#: gnucash/report/trep-engine.scm:2250
+#: gnucash/report/trep-engine.scm:928 gnucash/report/trep-engine.scm:1202
+#: gnucash/report/trep-engine.scm:2248
 msgid "Price"
 msgstr "Pris"
 
@@ -8547,7 +8556,6 @@ msgid "Not enough information for quotes dump"
 msgstr "Ikke nok information for tom transaktion?"
 
 #: gnucash/gnucash-cli.cpp:170
-#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8556,7 +8564,6 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
-#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8567,7 +8574,6 @@ msgstr "Dette er en farvevalgmulighed"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:180
-#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
@@ -8589,13 +8595,11 @@ msgstr "Meld fejl og andre problemer til gnucash-devel@gnucash.org."
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
-#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "Du kan også finde og anmelde fejlrapporter på {1}"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
-#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "For at finde den sidste stabile version, så gå venligst til {1}"
 
@@ -8613,7 +8617,6 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash, finanshåndtering for personer og små virksomheder"
 
 #: gnucash/gnucash-core-app.cpp:208
-#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8623,12 +8626,10 @@ msgid "GnuCash Paths"
 msgstr "GnuCash"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1} udviklingsversion"
 
@@ -8756,7 +8757,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:41
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:25
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:10
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:54
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:59
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:10
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:6
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:5
@@ -8801,7 +8802,7 @@ msgstr "Sidste vinduesposition og -størrelse"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:26
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:11
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:60
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:11
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:7
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:6
@@ -9603,11 +9604,18 @@ msgstr "_Kontroller oprettede transaktioner"
 msgid "This settings sets the sort direction in the \"since last run\" dialog."
 msgstr "_Kontroller oprettede transaktioner"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:44
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:42
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:43
+#, fuzzy
+#| msgid "_Review created transactions"
+msgid "The depth used in the tree to sort in the \"since last run\" dialog."
+msgstr "_Kontroller oprettede transaktioner"
+
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:49
 msgid "Set the \"auto create\" flag by default"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:50
 msgid ""
 "If active, any newly created scheduled transaction will have its 'auto "
 "create' flag set active by default. The user can change this flag during "
@@ -9615,16 +9623,16 @@ msgid ""
 "transaction."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:49
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:54
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:55
 msgid "How many days in advance to notify the user."
 msgstr "Hvor mange dage i forvejen, brugeren skal have besked."
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:61
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:66
 msgid "Set the \"notify\" flag by default"
 msgstr "Sæt flaget »notify« til dets standardværdi"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:62
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:67
 msgid ""
 "If active, any newly created scheduled transaction will have its 'notify' "
 "flag set by default. The user can change this flag during transaction "
@@ -9632,8 +9640,8 @@ msgid ""
 "setting only has meaning if the create-auto setting is active."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:66
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:67
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:71
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:72
 msgid "How many days in advance to remind the user."
 msgstr "Hvor mange dage i forvejen, brugeren skal huskes på."
 
@@ -12799,7 +12807,7 @@ msgstr ""
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4450
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4500
 msgid "Cash"
 msgstr "Kontant"
 
@@ -13974,7 +13982,7 @@ msgstr "Faktureringsadresse"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:152
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:72
 #: gnucash/report/reports/standard/invoice.scm:97
-#: gnucash/report/reports/standard/invoice.scm:210
+#: gnucash/report/reports/standard/invoice.scm:430
 msgid "Discount"
 msgstr "Rabat"
 
@@ -14247,14 +14255,14 @@ msgstr "Hver anden måned"
 #: gnucash/gtkbuilder/gnc-frequency.glade:1410
 #: gnucash/report/reports/standard/account-piecharts.scm:112
 #: gnucash/report/reports/standard/category-barchart.scm:120
-#: gnucash/report/trep-engine.scm:326 libgnucash/engine/Recurrence.c:761
-#: libgnucash/engine/Recurrence.c:775
+#: gnucash/report/trep-engine.scm:326 libgnucash/engine/Recurrence.cpp:761
+#: libgnucash/engine/Recurrence.cpp:775
 msgid "Monthly"
 msgstr "Månedligt"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:30
 #: gnucash/gtkbuilder/dialog-fincalc.glade:71
-#: libgnucash/engine/Recurrence.c:712
+#: libgnucash/engine/Recurrence.cpp:712
 msgid "Semi-monthly"
 msgstr "Halvmånedligt"
 
@@ -14270,7 +14278,7 @@ msgstr "Hver anden uge"
 #: gnucash/gtkbuilder/gnc-frequency.glade:995
 #: gnucash/report/reports/standard/account-piecharts.scm:113
 #: gnucash/report/reports/standard/category-barchart.scm:121
-#: gnucash/report/trep-engine.scm:318 libgnucash/engine/Recurrence.c:622
+#: gnucash/report/trep-engine.scm:318 libgnucash/engine/Recurrence.cpp:622
 msgid "Weekly"
 msgstr "Ugentligt"
 
@@ -15718,14 +15726,14 @@ msgid "Show vertical borders on the cells."
 msgstr "Vis som standard lodrette kanter på cellerne."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2753
-#: gnucash/report/reports/standard/invoice.scm:181
-#: gnucash/report/reports/standard/invoice.scm:186
-#: gnucash/report/reports/standard/invoice.scm:299
-#: gnucash/report/reports/standard/invoice.scm:305
-#: gnucash/report/reports/standard/invoice.scm:311
-#: gnucash/report/reports/standard/invoice.scm:317
-#: gnucash/report/reports/standard/invoice.scm:323
-#: gnucash/report/reports/standard/invoice.scm:329
+#: gnucash/report/reports/standard/invoice.scm:401
+#: gnucash/report/reports/standard/invoice.scm:406
+#: gnucash/report/reports/standard/invoice.scm:519
+#: gnucash/report/reports/standard/invoice.scm:525
+#: gnucash/report/reports/standard/invoice.scm:531
+#: gnucash/report/reports/standard/invoice.scm:537
+#: gnucash/report/reports/standard/invoice.scm:543
+#: gnucash/report/reports/standard/invoice.scm:549
 #, fuzzy
 msgid "Layout"
 msgstr "<b>Beløb</b>"
@@ -16459,7 +16467,7 @@ msgstr ""
 #: gnucash/gtkbuilder/gnc-frequency.glade:171
 #: gnucash/gtkbuilder/gnc-frequency.glade:760
 #: gnucash/report/reports/standard/category-barchart.scm:122
-#: gnucash/report/trep-engine.scm:312 libgnucash/engine/Recurrence.c:744
+#: gnucash/report/trep-engine.scm:312 libgnucash/engine/Recurrence.cpp:744
 msgid "Daily"
 msgstr "Dagligt"
 
@@ -16471,7 +16479,7 @@ msgstr "Ugentligt"
 # Den her har jeg rettet til t da ovenfor er i den form.
 #: gnucash/gtkbuilder/dialog-sx.glade:138
 #: gnucash/report/reports/standard/account-piecharts.scm:111
-#: gnucash/report/trep-engine.scm:342 libgnucash/engine/Recurrence.c:787
+#: gnucash/report/trep-engine.scm:342 libgnucash/engine/Recurrence.cpp:787
 msgid "Yearly"
 msgstr "Årligt"
 
@@ -16850,28 +16858,28 @@ msgstr "Datoformat"
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
 #: gnucash/gtkbuilder/gnc-frequency.glade:434
-#: libgnucash/engine/Recurrence.c:666
+#: libgnucash/engine/Recurrence.cpp:666
 msgid "1st"
 msgstr "1."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:43
 #: gnucash/gtkbuilder/gnc-frequency.glade:211
 #: gnucash/gtkbuilder/gnc-frequency.glade:437
-#: libgnucash/engine/Recurrence.c:666
+#: libgnucash/engine/Recurrence.cpp:666
 msgid "2nd"
 msgstr "2."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:46
 #: gnucash/gtkbuilder/gnc-frequency.glade:214
 #: gnucash/gtkbuilder/gnc-frequency.glade:440
-#: libgnucash/engine/Recurrence.c:666
+#: libgnucash/engine/Recurrence.cpp:666
 msgid "3rd"
 msgstr "3."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:49
 #: gnucash/gtkbuilder/gnc-frequency.glade:217
 #: gnucash/gtkbuilder/gnc-frequency.glade:443
-#: libgnucash/engine/Recurrence.c:666
+#: libgnucash/engine/Recurrence.cpp:666
 msgid "4th"
 msgstr "4."
 
@@ -17087,7 +17095,7 @@ msgstr "Sidste søndag"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:168
 #: gnucash/gtkbuilder/gnc-frequency.glade:692
-#: libgnucash/engine/Recurrence.c:739
+#: libgnucash/engine/Recurrence.cpp:739
 msgid "Once"
 msgstr "En enkel gang"
 
@@ -17416,7 +17424,7 @@ msgstr "Budgetperiode"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:620
 #: gnucash/report/reports/standard/general-ledger.scm:126
-#: gnucash/report/trep-engine.scm:91 gnucash/report/trep-engine.scm:2288
+#: gnucash/report/trep-engine.scm:91 gnucash/report/trep-engine.scm:2286
 msgid "Show Account Code"
 msgstr "Vis kontokode"
 
@@ -18590,7 +18598,7 @@ msgid "Unspecified"
 msgstr "Uspecificeret"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:478
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4449
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4499
 msgid "Bank"
 msgstr "Bank"
 
@@ -19016,7 +19024,7 @@ msgstr "Regnings-id"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:148
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:92
 #: gnucash/report/reports/standard/invoice.scm:93
-#: gnucash/report/reports/standard/invoice.scm:202
+#: gnucash/report/reports/standard/invoice.scm:422
 msgid "Quantity"
 msgstr "Antal"
 
@@ -19034,7 +19042,7 @@ msgstr "Rabat"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:153
 #: gnucash/report/reports/standard/invoice.scm:99
-#: gnucash/report/reports/standard/invoice.scm:214
+#: gnucash/report/reports/standard/invoice.scm:434
 msgid "Taxable"
 msgstr "Beskattes"
 
@@ -19207,7 +19215,7 @@ msgstr ""
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
 #: gnucash/import-export/import-main-matcher.cpp:1845
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.c:1616 libgnucash/engine/Split.c:1633
+#: libgnucash/engine/Split.cpp:1616 libgnucash/engine/Split.cpp:1633
 msgid "-- Split Transaction --"
 msgstr "-- Opdelt transaktion --"
 
@@ -19450,7 +19458,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy, c++-format
+#, fuzzy
 msgid "The transactions were imported from file '{1}'."
 msgstr "Der opstod en fejl under tolkning af filen %s."
 
@@ -19671,7 +19679,6 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
-#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -20424,19 +20431,19 @@ msgstr "Kapitalgevinst (kort sigt)"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:113
 #: gnucash/register/ledger-core/split-register.c:2620
 #: gnucash/report/reports/standard/balance-sheet.scm:468
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1064
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1059
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:685
-#: libgnucash/app-utils/gnc-ui-util.c:650 libgnucash/engine/Account.cpp:4459
+#: libgnucash/app-utils/gnc-ui-util.cpp:637 libgnucash/engine/Account.cpp:4509
 msgid "Equity"
 msgstr "Udligning"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:110
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:114
 #: gnucash/report/reports/standard/balance-sheet.scm:475
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1073
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1088
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1068
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1083
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
-#: libgnucash/app-utils/gnc-ui-util.c:559
+#: libgnucash/app-utils/gnc-ui-util.cpp:554
 msgid "Retained Earnings"
 msgstr "Overført resultat"
 
@@ -20593,7 +20600,7 @@ msgstr "Fortolk tvetydighed mellem formater"
 msgid "Value '~a' could be ~a or ~a."
 msgstr "Værdi '~a' kan være ~a eller ~a."
 
-#: gnucash/import-export/qif-imp/qif-merge-groups.scm:105
+#: gnucash/import-export/qif-imp/qif-merge-groups.scm:110
 msgid "Finding duplicate transactions"
 msgstr "Finder identiske transaktioner"
 
@@ -20651,7 +20658,13 @@ msgstr "Tilføj en ny pris."
 msgid "Missing transaction date."
 msgstr "Manglende transaktionsdato."
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:1419
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:601
+#, fuzzy, scheme-format
+#| msgid "Missing transaction date."
+msgid "Missing QIF investment action for transaction dated ~a."
+msgstr "Manglende transaktionsdato."
+
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:1426
 #, fuzzy
 #| msgid "Invalid Transactions"
 msgid "Invalid transaction date."
@@ -20923,7 +20936,7 @@ msgid "Invoiced?"
 msgstr "Faktureret?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:117
-#: gnucash/report/reports/standard/invoice.scm:230
+#: gnucash/report/reports/standard/invoice.scm:450
 msgid "Subtotal"
 msgstr "Delsum"
 
@@ -21235,50 +21248,50 @@ msgstr "Kortsigtet gevinst"
 msgid "Dist"
 msgstr "Udlod"
 
-#: gnucash/register/ledger-core/split-register-control.c:59
+#: gnucash/register/ledger-core/split-register-control.c:60
 msgid "Rebalance Transaction"
 msgstr "Genbalancér transaktion"
 
-#: gnucash/register/ledger-core/split-register-control.c:60
+#: gnucash/register/ledger-core/split-register-control.c:61
 msgid "The current transaction is not balanced."
 msgstr "Den nuværende transaktion balancerer ikke."
 
-#: gnucash/register/ledger-core/split-register-control.c:138
+#: gnucash/register/ledger-core/split-register-control.c:139
 msgid "Balance it _manually"
 msgstr "Balancer den _manuelt"
 
-#: gnucash/register/ledger-core/split-register-control.c:140
+#: gnucash/register/ledger-core/split-register-control.c:141
 msgid "Let GnuCash _add an adjusting split"
 msgstr "Lad GnuCash _tilføje en justerende opdeling"
 
-#: gnucash/register/ledger-core/split-register-control.c:145
+#: gnucash/register/ledger-core/split-register-control.c:146
 msgid "Adjust current account _split total"
 msgstr "Juster aktuel konto_opdelingstotal"
 
-#: gnucash/register/ledger-core/split-register-control.c:151
+#: gnucash/register/ledger-core/split-register-control.c:152
 msgid "Adjust _other account split total"
 msgstr "Juster _anden kontoopdelingstotal"
 
-#: gnucash/register/ledger-core/split-register-control.c:162
+#: gnucash/register/ledger-core/split-register-control.c:163
 msgid "_Rebalance"
 msgstr "_Rebalancere"
 
-#: gnucash/register/ledger-core/split-register-control.c:1307
-#: gnucash/register/ledger-core/split-register-control.c:1320
+#: gnucash/register/ledger-core/split-register-control.c:1313
+#: gnucash/register/ledger-core/split-register-control.c:1326
 msgid "This register does not support editing exchange rates."
 msgstr "Denne kassekladde understøtter ikke redigering af valutakurser."
 
-#: gnucash/register/ledger-core/split-register-control.c:1346
+#: gnucash/register/ledger-core/split-register-control.c:1352
 msgid "You need to select a split in order to modify its exchange rate."
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-control.c:1361
-#: gnucash/register/ledger-core/split-register-control.c:1436
+#: gnucash/register/ledger-core/split-register-control.c:1367
+#: gnucash/register/ledger-core/split-register-control.c:1442
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
 msgstr "Du skal udvide transaktionen for at ændre dens valutakurser."
 
-#: gnucash/register/ledger-core/split-register-control.c:1373
+#: gnucash/register/ledger-core/split-register-control.c:1379
 #, fuzzy
 msgid "The entered account could not be found."
 msgstr ""
@@ -21286,21 +21299,21 @@ msgstr ""
 "    %s\n"
 "kunne ikke findes."
 
-#: gnucash/register/ledger-core/split-register-control.c:1408
-#: gnucash/register/ledger-core/split-register-control.c:1421
+#: gnucash/register/ledger-core/split-register-control.c:1414
+#: gnucash/register/ledger-core/split-register-control.c:1427
 msgid "The two currencies involved equal each other."
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-control.c:1472
+#: gnucash/register/ledger-core/split-register-control.c:1478
 msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-control.c:1521
+#: gnucash/register/ledger-core/split-register-control.c:1527
 #, fuzzy
 msgid "Save the changed transaction?"
 msgstr "Afbryd den nuværende transaktion"
 
-#: gnucash/register/ledger-core/split-register-control.c:1523
+#: gnucash/register/ledger-core/split-register-control.c:1529
 #, fuzzy
 msgid ""
 "The current transaction has been changed. Would you like to record the "
@@ -21310,21 +21323,21 @@ msgstr ""
 "Den aktuelle transaktion er blevet ændret. Vil du gemme ændringerne før "
 "kopiering af transaktionen, eller afbryde kopieringen?"
 
-#: gnucash/register/ledger-core/split-register-control.c:1536
+#: gnucash/register/ledger-core/split-register-control.c:1542
 #, fuzzy
 msgid "_Discard Changes"
 msgstr "Bekræft ændringer"
 
-#: gnucash/register/ledger-core/split-register-control.c:1538
+#: gnucash/register/ledger-core/split-register-control.c:1544
 #, fuzzy
 msgid "_Record Changes"
 msgstr "Bekræft ændringer"
 
-#: gnucash/register/ledger-core/split-register-control.c:1825
+#: gnucash/register/ledger-core/split-register-control.c:1831
 msgid "Mark split as unreconciled?"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-control.c:1827
+#: gnucash/register/ledger-core/split-register-control.c:1833
 #, fuzzy
 msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
@@ -21333,7 +21346,7 @@ msgstr ""
 "Vil du virkelig markere denne transaktion som ikke-afstemt?\n"
 "Hvis du gør det kan fremtidige afstemninger blive svære!"
 
-#: gnucash/register/ledger-core/split-register-control.c:1844
+#: gnucash/register/ledger-core/split-register-control.c:1850
 #, fuzzy
 msgid "_Unreconcile"
 msgstr "_Afstem"
@@ -21368,7 +21381,7 @@ msgstr "prøve:Beskrivelse af transaktionen"
 #: gnucash/register/ledger-core/split-register-model.c:339
 #: gnucash/report/reports/standard/new-owner-report.scm:209
 #: gnucash/report/reports/standard/new-owner-report.scm:436
-#: gnucash/report/trep-engine.scm:1197 gnucash/report/trep-engine.scm:1198
+#: gnucash/report/trep-engine.scm:1198 gnucash/report/trep-engine.scm:1199
 msgctxt "Column header for 'Document Link'"
 msgid "L"
 msgstr ""
@@ -22030,8 +22043,8 @@ msgstr "Vis ikke saldi på samlekonti."
 
 #: gnucash/report/options-utilities.scm:217
 #: gnucash/report/reports/standard/account-summary.scm:112
-#: gnucash/report/trep-engine.scm:930 gnucash/report/trep-engine.scm:1367
-#: gnucash/report/trep-engine.scm:1472
+#: gnucash/report/trep-engine.scm:931 gnucash/report/trep-engine.scm:1368
+#: gnucash/report/trep-engine.scm:1473
 msgid "Account Balance"
 msgstr "Kontosaldo"
 
@@ -22097,22 +22110,22 @@ msgid "_Multicolumn"
 msgstr "Flerkolonnevisning"
 
 #: gnucash/report/report-core.scm:164
-#: gnucash/report/reports/standard/invoice.scm:226
-#: gnucash/report/reports/standard/invoice.scm:230
-#: gnucash/report/reports/standard/invoice.scm:234
-#: gnucash/report/reports/standard/invoice.scm:241
-#: gnucash/report/reports/standard/invoice.scm:246
-#: gnucash/report/reports/standard/invoice.scm:252
-#: gnucash/report/reports/standard/invoice.scm:257
-#: gnucash/report/reports/standard/invoice.scm:262
-#: gnucash/report/reports/standard/invoice.scm:266
-#: gnucash/report/reports/standard/invoice.scm:270
-#: gnucash/report/reports/standard/invoice.scm:274
-#: gnucash/report/reports/standard/invoice.scm:278
-#: gnucash/report/reports/standard/invoice.scm:282
-#: gnucash/report/reports/standard/invoice.scm:286
-#: gnucash/report/reports/standard/invoice.scm:290
-#: gnucash/report/reports/standard/invoice.scm:294
+#: gnucash/report/reports/standard/invoice.scm:446
+#: gnucash/report/reports/standard/invoice.scm:450
+#: gnucash/report/reports/standard/invoice.scm:454
+#: gnucash/report/reports/standard/invoice.scm:461
+#: gnucash/report/reports/standard/invoice.scm:466
+#: gnucash/report/reports/standard/invoice.scm:472
+#: gnucash/report/reports/standard/invoice.scm:477
+#: gnucash/report/reports/standard/invoice.scm:482
+#: gnucash/report/reports/standard/invoice.scm:486
+#: gnucash/report/reports/standard/invoice.scm:490
+#: gnucash/report/reports/standard/invoice.scm:494
+#: gnucash/report/reports/standard/invoice.scm:498
+#: gnucash/report/reports/standard/invoice.scm:502
+#: gnucash/report/reports/standard/invoice.scm:506
+#: gnucash/report/reports/standard/invoice.scm:510
+#: gnucash/report/reports/standard/invoice.scm:514
 #: gnucash/report/reports/standard/receipt.scm:40
 #: gnucash/report/reports/standard/register.scm:346
 #: gnucash/report/reports/standard/register.scm:351
@@ -22322,7 +22335,7 @@ msgstr "Den type graf, der skal genereres."
 
 #: gnucash/report/reports/example/average-balance.scm:116
 #: gnucash/report/reports/example/average-balance.scm:136
-#: gnucash/report/trep-engine.scm:2089 libgnucash/engine/policy.c:58
+#: gnucash/report/trep-engine.scm:2087 libgnucash/engine/policy.c:58
 msgid "Average"
 msgstr "Gennemsnit"
 
@@ -23835,8 +23848,8 @@ msgid "Trading Losses"
 msgstr "Handelstab"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:485
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1068
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1083
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1063
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1078
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:725
 #: gnucash/report/reports/standard/trial-balance.scm:697
 msgid "Unrealized Gains"
@@ -23949,7 +23962,7 @@ msgstr ""
 "GnuCashs installationsmapper."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:175
-#: gnucash/report/reports/standard/invoice.scm:294
+#: gnucash/report/reports/standard/invoice.scm:514
 #: gnucash/report/reports/standard/receipt.scm:64
 #: gnucash/report/reports/standard/taxinvoice.scm:112
 msgid "Extra Notes"
@@ -24161,64 +24174,64 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:437
 #: gnucash/report/reports/standard/balsheet-pnl.scm:595
-#: gnucash/report/trep-engine.scm:1736
+#: gnucash/report/trep-engine.scm:1737
 msgid "Total For "
 msgstr "Total for "
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1057
-#: libgnucash/engine/Account.cpp:4451
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1052
+#: libgnucash/engine/Account.cpp:4501
 msgid "Asset"
 msgstr "Aktiv"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1060
-#: libgnucash/engine/Account.cpp:4453
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1055
+#: libgnucash/engine/Account.cpp:4503
 msgid "Liability"
 msgstr "Passiv"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1078
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1073
 #, fuzzy
 #| msgid "_Liability/Equity"
 msgid "Liability and Equity"
 msgstr "_Passiv/egenkapital"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1096
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1239
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1091
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1234
 #, fuzzy
 #| msgid "Exchange Rate:"
 msgid "Exchange Rates"
 msgstr "Vekselkurs:"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1106
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1101
 #, fuzzy
 msgid "Barchart"
 msgstr "Aktivsøjlediagram"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1169
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1164
 #, fuzzy
 msgid " to "
 msgstr "%s til %s"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1228
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1223
 #: gnucash/report/reports/standard/customer-summary.scm:110
 #: gnucash/report/reports/standard/customer-summary.scm:286
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:401
-#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4458
+#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4508
 #: libgnucash/engine/gncInvoice.c:1100
 msgid "Expense"
 msgstr "Omkostning"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1232
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1227
 #: gnucash/report/reports/standard/trial-balance.scm:823
 msgid "Net Income"
 msgstr "Nettoindtægt"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1265
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1260
 #, fuzzy
 msgid "Balance Sheet (Multicolumn)"
 msgstr "Statusopgørelsedato"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1266
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1261
 #, fuzzy
 msgid "Income Statement (Multicolumn)"
 msgstr "Indtægtsdiagram"
@@ -24955,8 +24968,8 @@ msgstr "Saldi ~a til ~a"
 #: gnucash/report/reports/standard/category-barchart.scm:654
 #: gnucash/report/reports/standard/category-barchart.scm:674
 #: gnucash/report/reports/standard/investment-lots.scm:132
-#: gnucash/report/trep-engine.scm:77 gnucash/report/trep-engine.scm:1803
-#: gnucash/report/trep-engine.scm:2074
+#: gnucash/report/trep-engine.scm:77 gnucash/report/trep-engine.scm:1804
+#: gnucash/report/trep-engine.scm:2072
 msgid "Grand Total"
 msgstr "Hovedtotal"
 
@@ -25158,7 +25171,7 @@ msgstr "Nedgang i kapital"
 #: gnucash/report/reports/standard/general-ledger.scm:68
 #: gnucash/report/reports/standard/register.scm:134
 #: gnucash/report/reports/standard/register.scm:351
-#: gnucash/report/trep-engine.scm:915 gnucash/report/trep-engine.scm:2242
+#: gnucash/report/trep-engine.scm:915 gnucash/report/trep-engine.scm:2240
 #, fuzzy
 msgid "Num/Action"
 msgstr "Handling"
@@ -25167,7 +25180,7 @@ msgstr "Handling"
 #: gnucash/report/reports/standard/general-ledger.scm:82
 #: gnucash/report/reports/standard/general-ledger.scm:102
 #: gnucash/report/reports/standard/register.scm:394
-#: gnucash/report/trep-engine.scm:1360 gnucash/report/trep-engine.scm:1465
+#: gnucash/report/trep-engine.scm:1361 gnucash/report/trep-engine.scm:1466
 msgid "Running Balance"
 msgstr "Løbende saldo"
 
@@ -25189,42 +25202,42 @@ msgid "Sorting"
 msgstr "Sorterer"
 
 #: gnucash/report/reports/standard/general-ledger.scm:69
-#: gnucash/report/trep-engine.scm:935 gnucash/report/trep-engine.scm:2267
+#: gnucash/report/trep-engine.scm:936 gnucash/report/trep-engine.scm:2265
 msgid "Trans Number"
 msgstr "Transaktionsnummer"
 
 #: gnucash/report/reports/standard/general-ledger.scm:73
 #: gnucash/report/reports/standard/general-ledger.scm:93
 #: gnucash/report/trep-engine.scm:873 gnucash/report/trep-engine.scm:920
-#: gnucash/report/trep-engine.scm:2256
+#: gnucash/report/trep-engine.scm:2254
 msgid "Use Full Account Name"
 msgstr "Benyt fulde kontonavn"
 
 #: gnucash/report/reports/standard/general-ledger.scm:75
 #: gnucash/report/reports/standard/general-ledger.scm:95
 #: gnucash/report/trep-engine.scm:219 gnucash/report/trep-engine.scm:877
-#: gnucash/report/trep-engine.scm:957 gnucash/report/trep-engine.scm:2248
+#: gnucash/report/trep-engine.scm:958 gnucash/report/trep-engine.scm:2246
 msgid "Other Account Name"
 msgstr "Anden kontos navn"
 
 #: gnucash/report/reports/standard/general-ledger.scm:76
 #: gnucash/report/reports/standard/general-ledger.scm:96
 #: gnucash/report/trep-engine.scm:893 gnucash/report/trep-engine.scm:923
-#: gnucash/report/trep-engine.scm:2265
+#: gnucash/report/trep-engine.scm:2263
 msgid "Use Full Other Account Name"
 msgstr "Benyt fuldt andet kontonavn"
 
 #: gnucash/report/reports/standard/general-ledger.scm:77
 #: gnucash/report/reports/standard/general-ledger.scm:97
 #: gnucash/report/trep-engine.scm:225 gnucash/report/trep-engine.scm:897
-#: gnucash/report/trep-engine.scm:924 gnucash/report/trep-engine.scm:2262
+#: gnucash/report/trep-engine.scm:924 gnucash/report/trep-engine.scm:2260
 msgid "Other Account Code"
 msgstr "Anden kontos nummer"
 
 #: gnucash/report/reports/standard/general-ledger.scm:84
 #: gnucash/report/reports/standard/general-ledger.scm:104
-#: gnucash/report/trep-engine.scm:881 gnucash/report/trep-engine.scm:990
-#: gnucash/report/trep-engine.scm:2191
+#: gnucash/report/trep-engine.scm:881 gnucash/report/trep-engine.scm:991
+#: gnucash/report/trep-engine.scm:2189
 msgid "Sign Reverses"
 msgstr "Skift fortegn"
 
@@ -25239,7 +25252,7 @@ msgid "Primary Key"
 msgstr "Primær nøgle"
 
 #: gnucash/report/reports/standard/general-ledger.scm:125
-#: gnucash/report/trep-engine.scm:90 gnucash/report/trep-engine.scm:2290
+#: gnucash/report/trep-engine.scm:90 gnucash/report/trep-engine.scm:2288
 msgid "Show Full Account Name"
 msgstr "Vis fuld kontonavn"
 
@@ -25498,7 +25511,7 @@ msgid ""
 msgstr "Hvorvidt der skal inkluderes en linje som indikerer samlet indtægt"
 
 #: gnucash/report/reports/standard/income-statement.scm:477
-#: libgnucash/engine/Account.cpp:4463 libgnucash/engine/Scrub.c:538
+#: libgnucash/engine/Account.cpp:4513 libgnucash/engine/Scrub.c:538
 msgid "Trading"
 msgstr "Handel"
 
@@ -26053,7 +26066,7 @@ msgid "Account Lot Gains"
 msgstr "Kontobemærkninger"
 
 #: gnucash/report/reports/standard/invoice.scm:101
-#: gnucash/report/reports/standard/invoice.scm:218
+#: gnucash/report/reports/standard/invoice.scm:438
 #: gnucash/report/reports/standard/receipt.scm:59
 #: gnucash/report/reports/standard/receipt.scm:128
 #: gnucash/report/reports/standard/taxinvoice.scm:107
@@ -26061,76 +26074,103 @@ msgstr "Kontobemærkninger"
 msgid "Tax Amount"
 msgstr "Skattebeløb"
 
-#: gnucash/report/reports/standard/invoice.scm:111
+#: gnucash/report/reports/standard/invoice.scm:157
+msgid "REF"
+msgstr ""
+
+#: gnucash/report/reports/standard/invoice.scm:258
+#: gnucash/report/reports/support/taxinvoice.eguile.scm:225
+msgid "Invoice in progress…"
+msgstr "Faktura i gang…"
+
+#: gnucash/report/reports/standard/invoice.scm:266
+#, fuzzy
+msgid "Reference:"
+msgstr "Reference"
+
+#: gnucash/report/reports/standard/invoice.scm:278
+msgid "Terms:"
+msgstr "Betingelser:"
+
+#: gnucash/report/reports/standard/invoice.scm:288
+#: gnucash/report/reports/standard/taxinvoice.scm:214
+msgid "Job number:"
+msgstr "Jobnummer:"
+
+#: gnucash/report/reports/standard/invoice.scm:293
+#: gnucash/report/reports/standard/taxinvoice.scm:217
+msgid "Job name:"
+msgstr "Jobnavn:"
+
+#: gnucash/report/reports/standard/invoice.scm:317
 msgid "Client or vendor name, address and ID"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:112
+#: gnucash/report/reports/standard/invoice.scm:321
 #, fuzzy
 #| msgid "Company Email Address"
 msgid "Company name, address and tax-ID"
 msgstr "Firmaets e-post-adresse"
 
-#: gnucash/report/reports/standard/invoice.scm:113
+#: gnucash/report/reports/standard/invoice.scm:325
 msgid "Invoice date, due date, billing ID, terms, job details"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:114
+#: gnucash/report/reports/standard/invoice.scm:329
 #, fuzzy
 msgid "Today's date"
 msgstr "I dag-datoformat"
 
-#: gnucash/report/reports/standard/invoice.scm:115
+#: gnucash/report/reports/standard/invoice.scm:333
 msgid "Picture"
 msgstr ""
 
-#. Translators: "Empty space" refers to invoice header section being left blank
-#: gnucash/report/reports/standard/invoice.scm:118
+#: gnucash/report/reports/standard/invoice.scm:338
 #, fuzzy
 #| msgid "Namespace"
 msgid "Empty space"
 msgstr "Navnerum"
 
-#: gnucash/report/reports/standard/invoice.scm:176
+#: gnucash/report/reports/standard/invoice.scm:396
 msgid "Custom Title"
 msgstr "Selvvalgt titel"
 
-#: gnucash/report/reports/standard/invoice.scm:177
+#: gnucash/report/reports/standard/invoice.scm:397
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
 msgstr ""
 "En selvvalgt streng til erstatning af faktura, regning eller udgiftsbilag."
 
-#: gnucash/report/reports/standard/invoice.scm:181
+#: gnucash/report/reports/standard/invoice.scm:401
 #: gnucash/report/stylesheets/css.scm:118
 #: gnucash/report/stylesheets/css.scm:224
 msgid "CSS"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:181
+#: gnucash/report/reports/standard/invoice.scm:401
 msgid ""
 "CSS code. This field specifies the CSS code for styling the invoice. Please "
 "see the exported report for the CSS class names."
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:186
+#: gnucash/report/reports/standard/invoice.scm:406
 #, fuzzy
 #| msgid "Associate Location"
 msgid "Picture Location"
 msgstr "Forbind placering"
 
-#: gnucash/report/reports/standard/invoice.scm:186
+#: gnucash/report/reports/standard/invoice.scm:406
 msgid "Location for Picture"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:190
-#: gnucash/report/reports/standard/invoice.scm:194
-#: gnucash/report/reports/standard/invoice.scm:198
-#: gnucash/report/reports/standard/invoice.scm:202
-#: gnucash/report/reports/standard/invoice.scm:206
-#: gnucash/report/reports/standard/invoice.scm:210
-#: gnucash/report/reports/standard/invoice.scm:214
-#: gnucash/report/reports/standard/invoice.scm:218
-#: gnucash/report/reports/standard/invoice.scm:222
+#: gnucash/report/reports/standard/invoice.scm:410
+#: gnucash/report/reports/standard/invoice.scm:414
+#: gnucash/report/reports/standard/invoice.scm:418
+#: gnucash/report/reports/standard/invoice.scm:422
+#: gnucash/report/reports/standard/invoice.scm:426
+#: gnucash/report/reports/standard/invoice.scm:430
+#: gnucash/report/reports/standard/invoice.scm:434
+#: gnucash/report/reports/standard/invoice.scm:438
+#: gnucash/report/reports/standard/invoice.scm:442
 #: gnucash/report/reports/standard/new-owner-report.scm:874
 #: gnucash/report/reports/standard/new-owner-report.scm:878
 #: gnucash/report/reports/standard/new-owner-report.scm:882
@@ -26146,225 +26186,225 @@ msgstr ""
 msgid "Display Columns"
 msgstr "Vis kolonner"
 
-#: gnucash/report/reports/standard/invoice.scm:191
+#: gnucash/report/reports/standard/invoice.scm:411
 #: gnucash/report/reports/standard/register.scm:347
 #: gnucash/report/reports/standard/taxinvoice.scm:124
 #: gnucash/report/trep-engine.scm:911
 msgid "Display the date?"
 msgstr "Vis datoen?"
 
-#: gnucash/report/reports/standard/invoice.scm:195
+#: gnucash/report/reports/standard/invoice.scm:415
 #: gnucash/report/reports/standard/register.scm:359
 #: gnucash/report/trep-engine.scm:917
 msgid "Display the description?"
 msgstr "Vis beskrivelsen?"
 
-#: gnucash/report/reports/standard/invoice.scm:199
+#: gnucash/report/reports/standard/invoice.scm:419
 msgid "Display the action?"
 msgstr "Vis handlingen?"
 
-#: gnucash/report/reports/standard/invoice.scm:203
+#: gnucash/report/reports/standard/invoice.scm:423
 msgid "Display the quantity of items?"
 msgstr "Vis antallet af enheder?"
 
-#: gnucash/report/reports/standard/invoice.scm:207
+#: gnucash/report/reports/standard/invoice.scm:427
 msgid "Display the price per item?"
 msgstr "Vis prisen per enhed?"
 
-#: gnucash/report/reports/standard/invoice.scm:211
+#: gnucash/report/reports/standard/invoice.scm:431
 msgid "Display the entry's discount?"
 msgstr "Vis postens rabat?"
 
-#: gnucash/report/reports/standard/invoice.scm:215
+#: gnucash/report/reports/standard/invoice.scm:435
 msgid "Display the entry's taxable status?"
 msgstr "Vis postens skattestatus?"
 
-#: gnucash/report/reports/standard/invoice.scm:219
+#: gnucash/report/reports/standard/invoice.scm:439
 msgid "Display each entry's total total tax?"
 msgstr "Vis postens samlet skattestatus?"
 
-#: gnucash/report/reports/standard/invoice.scm:223
+#: gnucash/report/reports/standard/invoice.scm:443
 msgid "Display the entry's value?"
 msgstr "Vis postens værdi?"
 
-#: gnucash/report/reports/standard/invoice.scm:227
+#: gnucash/report/reports/standard/invoice.scm:447
 msgid "Display due date?"
 msgstr "Vis forfaldsdato?"
 
-#: gnucash/report/reports/standard/invoice.scm:231
+#: gnucash/report/reports/standard/invoice.scm:451
 msgid "Display the subtotals?"
 msgstr "Vis delsummerne?"
 
-#: gnucash/report/reports/standard/invoice.scm:234
+#: gnucash/report/reports/standard/invoice.scm:454
 msgid "Payable to"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:235
+#: gnucash/report/reports/standard/invoice.scm:455
 #, fuzzy
 msgid "Display the Payable to: information."
 msgstr "Vis beskrivelsen?"
 
-#: gnucash/report/reports/standard/invoice.scm:241
+#: gnucash/report/reports/standard/invoice.scm:461
 msgid "Payable to string"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:242
+#: gnucash/report/reports/standard/invoice.scm:462
 #, fuzzy
 msgid "The phrase for specifying to whom payments should be made."
 msgstr "Frasen til specificering af hvem betalinger skal foretages til"
 
-#: gnucash/report/reports/standard/invoice.scm:243
+#: gnucash/report/reports/standard/invoice.scm:463
 msgid "Please make all checks payable to"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:246
+#: gnucash/report/reports/standard/invoice.scm:466
 msgid "Company contact"
 msgstr "Firmakontakt"
 
-#: gnucash/report/reports/standard/invoice.scm:247
+#: gnucash/report/reports/standard/invoice.scm:467
 #, fuzzy
 msgid "Display the Company contact information."
 msgstr "Vis firmakontaktinformationen"
 
-#: gnucash/report/reports/standard/invoice.scm:252
+#: gnucash/report/reports/standard/invoice.scm:472
 msgid "Company contact string"
 msgstr "Firmakontaktstreng"
 
-#: gnucash/report/reports/standard/invoice.scm:253
+#: gnucash/report/reports/standard/invoice.scm:473
 #, fuzzy
 msgid "The phrase used to introduce the company contact."
 msgstr "Frasen brugt til at introducere firmakontakten"
 
-#: gnucash/report/reports/standard/invoice.scm:254
+#: gnucash/report/reports/standard/invoice.scm:474
 #, fuzzy
 #| msgid "Direct all inquiries to"
 msgid "Please direct all enquiries to"
 msgstr "Send alle forespørgsler til"
 
-#: gnucash/report/reports/standard/invoice.scm:257
+#: gnucash/report/reports/standard/invoice.scm:477
 msgid "Minimum # of entries"
 msgstr "Minimum # af poster"
 
-#: gnucash/report/reports/standard/invoice.scm:258
+#: gnucash/report/reports/standard/invoice.scm:478
 #, fuzzy
 msgid "The minimum number of invoice entries to display."
 msgstr "Det mindste antal fakturaposter der skal vises. (-1)"
 
-#: gnucash/report/reports/standard/invoice.scm:262
+#: gnucash/report/reports/standard/invoice.scm:482
 msgid "Use Detailed Tax Summary"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:263
+#: gnucash/report/reports/standard/invoice.scm:483
 msgid ""
 "Display all tax categories separately (one per line) instead of one single "
 "tax line.?"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:266
+#: gnucash/report/reports/standard/invoice.scm:486
 msgid "References"
 msgstr "Referencer"
 
-#: gnucash/report/reports/standard/invoice.scm:267
+#: gnucash/report/reports/standard/invoice.scm:487
 msgid "Display the invoice references?"
 msgstr "Vis fakturens referencer?"
 
-#: gnucash/report/reports/standard/invoice.scm:270
+#: gnucash/report/reports/standard/invoice.scm:490
 msgid "Billing Terms"
 msgstr "Betalingsbetingelser"
 
-#: gnucash/report/reports/standard/invoice.scm:271
+#: gnucash/report/reports/standard/invoice.scm:491
 msgid "Display the invoice billing terms?"
 msgstr "Vis fakturaens betalingsbetingelser?"
 
-#: gnucash/report/reports/standard/invoice.scm:275
+#: gnucash/report/reports/standard/invoice.scm:495
 msgid "Display the billing id?"
 msgstr "Vis betalings-id'et?"
 
-#: gnucash/report/reports/standard/invoice.scm:278
+#: gnucash/report/reports/standard/invoice.scm:498
 #, fuzzy
 #| msgid "Invoice Owner"
 msgid "Invoice owner ID"
 msgstr "Fakturaejer"
 
-#: gnucash/report/reports/standard/invoice.scm:279
+#: gnucash/report/reports/standard/invoice.scm:499
 #, fuzzy
 #| msgid "Display the action?"
 msgid "Display the customer/vendor id?"
 msgstr "Vis handlingen?"
 
-#: gnucash/report/reports/standard/invoice.scm:283
+#: gnucash/report/reports/standard/invoice.scm:503
 msgid "Display the invoice notes?"
 msgstr "Vis fakturabemærkningerne?"
 
-#: gnucash/report/reports/standard/invoice.scm:286
+#: gnucash/report/reports/standard/invoice.scm:506
 msgid "Payments"
 msgstr "Betalinger"
 
-#: gnucash/report/reports/standard/invoice.scm:287
+#: gnucash/report/reports/standard/invoice.scm:507
 msgid "Display the payments applied to this invoice?"
 msgstr "Vis betalingerne anvendt på denne faktura?"
 
-#: gnucash/report/reports/standard/invoice.scm:290
+#: gnucash/report/reports/standard/invoice.scm:510
 #, fuzzy
 msgid "Job Details"
 msgstr "Aktieopdelingsdetaljer"
 
-#: gnucash/report/reports/standard/invoice.scm:291
+#: gnucash/report/reports/standard/invoice.scm:511
 #, fuzzy
 msgid "Display the job name for this invoice?"
 msgstr "Vis betalingerne anvendt på denne faktura?"
 
-#: gnucash/report/reports/standard/invoice.scm:295
+#: gnucash/report/reports/standard/invoice.scm:515
 #, fuzzy
 msgid "Extra notes to put on the invoice."
 msgstr "Ekstra bemærkninger, der skal på fakturaen"
 
-#: gnucash/report/reports/standard/invoice.scm:296
+#: gnucash/report/reports/standard/invoice.scm:516
 #: gnucash/report/reports/standard/taxinvoice.scm:222
 msgid "Thank you for your patronage!"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:299
+#: gnucash/report/reports/standard/invoice.scm:519
 msgid "Row 1 Left"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:305
+#: gnucash/report/reports/standard/invoice.scm:525
 #, fuzzy
 #| msgid "Right"
 msgid "Row 1 Right"
 msgstr "Højre"
 
-#: gnucash/report/reports/standard/invoice.scm:311
+#: gnucash/report/reports/standard/invoice.scm:531
 msgid "Row 2 Left"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:317
+#: gnucash/report/reports/standard/invoice.scm:537
 #, fuzzy
 #| msgid "Right"
 msgid "Row 2 Right"
 msgstr "Højre"
 
-#: gnucash/report/reports/standard/invoice.scm:323
+#: gnucash/report/reports/standard/invoice.scm:543
 msgid "Row 3 Left"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:329
+#: gnucash/report/reports/standard/invoice.scm:549
 #, fuzzy
 #| msgid "Right"
 msgid "Row 3 Right"
 msgstr "Højre"
 
-#: gnucash/report/reports/standard/invoice.scm:379
+#: gnucash/report/reports/standard/invoice.scm:599
 msgid "Payment, thank you!"
 msgstr "Betaling, mange tak!"
 
 # Går ud fra at det er forkortelsen for Tax
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
-#: gnucash/report/reports/standard/invoice.scm:436
+#: gnucash/report/reports/standard/invoice.scm:656
 msgid "T"
 msgstr "S"
 
-#: gnucash/report/reports/standard/invoice.scm:483
+#: gnucash/report/reports/standard/invoice.scm:703
 #: gnucash/report/reports/standard/receipt.scm:57
 #: gnucash/report/reports/standard/receipt.scm:124
 #: gnucash/report/reports/standard/taxinvoice.scm:105
@@ -26372,7 +26412,7 @@ msgstr "S"
 msgid "Net Price"
 msgstr "Nettopris"
 
-#: gnucash/report/reports/standard/invoice.scm:499
+#: gnucash/report/reports/standard/invoice.scm:719
 #: gnucash/report/reports/standard/receipt.scm:60
 #: gnucash/report/reports/standard/receipt.scm:130
 #: gnucash/report/reports/standard/taxinvoice.scm:108
@@ -26380,7 +26420,7 @@ msgstr "Nettopris"
 msgid "Total Price"
 msgstr "Samlet pris"
 
-#: gnucash/report/reports/standard/invoice.scm:519
+#: gnucash/report/reports/standard/invoice.scm:739
 #: gnucash/report/reports/standard/receipt.scm:62
 #: gnucash/report/reports/standard/receipt.scm:134
 #: gnucash/report/reports/standard/taxinvoice.scm:110
@@ -26388,35 +26428,7 @@ msgstr "Samlet pris"
 msgid "Amount Due"
 msgstr "Forfalden beløb"
 
-#: gnucash/report/reports/standard/invoice.scm:559
-#: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-msgid "Invoice in progress…"
-msgstr "Faktura i gang…"
-
-#: gnucash/report/reports/standard/invoice.scm:567
-#, fuzzy
-msgid "Reference:"
-msgstr "Reference"
-
-#: gnucash/report/reports/standard/invoice.scm:579
-msgid "Terms:"
-msgstr "Betingelser:"
-
-#: gnucash/report/reports/standard/invoice.scm:589
-#: gnucash/report/reports/standard/taxinvoice.scm:214
-msgid "Job number:"
-msgstr "Jobnummer:"
-
-#: gnucash/report/reports/standard/invoice.scm:594
-#: gnucash/report/reports/standard/taxinvoice.scm:217
-msgid "Job name:"
-msgstr "Jobnavn:"
-
-#: gnucash/report/reports/standard/invoice.scm:639
-msgid "REF"
-msgstr ""
-
-#: gnucash/report/reports/standard/invoice.scm:720
+#: gnucash/report/reports/standard/invoice.scm:766
 #, fuzzy
 msgid ""
 "No valid invoice selected. Click on the Options button and select the "
@@ -26430,7 +26442,7 @@ msgstr ""
 #. Note", and so on and the second the number.  Replace
 #. " #" by whatever is common as number abbreviation,
 #. i.e. "~a Nr. ~a"
-#: gnucash/report/reports/standard/invoice.scm:745
+#: gnucash/report/reports/standard/invoice.scm:789
 #, scheme-format
 msgid "~a #~a"
 msgstr ""
@@ -26799,7 +26811,7 @@ msgid "Partial Amount"
 msgstr "_Samlekonto"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:283
-#: gnucash/report/trep-engine.scm:926 gnucash/report/trep-engine.scm:2251
+#: gnucash/report/trep-engine.scm:927 gnucash/report/trep-engine.scm:2249
 msgid "Link"
 msgstr ""
 
@@ -27280,7 +27292,7 @@ msgstr "Afstemt (a)"
 
 #: gnucash/report/reports/standard/register.scm:147
 #: gnucash/report/reports/standard/register.scm:374
-#: libgnucash/engine/gnc-lot.c:791
+#: libgnucash/engine/gnc-lot.cpp:791
 msgid "Lot"
 msgstr ""
 
@@ -27310,7 +27322,7 @@ msgid "Display the check number?"
 msgstr "Vis checknummeret?"
 
 #: gnucash/report/reports/standard/register.scm:363
-#: gnucash/report/trep-engine.scm:942
+#: gnucash/report/trep-engine.scm:943
 msgid "Display the memo?"
 msgstr "Vis noten?"
 
@@ -27319,7 +27331,7 @@ msgid "Display the account?"
 msgstr "Vis kontoen?"
 
 #: gnucash/report/reports/standard/register.scm:371
-#: gnucash/report/trep-engine.scm:925
+#: gnucash/report/trep-engine.scm:926
 msgid "Display the number of shares?"
 msgstr "Vis antal aktier"
 
@@ -27329,23 +27341,23 @@ msgid "Display the name of lot the shares are in?"
 msgstr "Vis antal aktier"
 
 #: gnucash/report/reports/standard/register.scm:379
-#: gnucash/report/trep-engine.scm:927
+#: gnucash/report/trep-engine.scm:928
 msgid "Display the shares price?"
 msgstr "Vis aktiernes pris?"
 
 #: gnucash/report/reports/standard/register.scm:383
-#: gnucash/report/trep-engine.scm:975
+#: gnucash/report/trep-engine.scm:976
 msgid "Display the amount?"
 msgstr "Vis beløbet?"
 
 #: gnucash/report/reports/standard/register.scm:386
-#: gnucash/report/trep-engine.scm:979
+#: gnucash/report/trep-engine.scm:980
 #, fuzzy
 msgid "Single Column"
 msgstr "Enkeltrækkevisning"
 
 #: gnucash/report/reports/standard/register.scm:387
-#: gnucash/report/trep-engine.scm:980
+#: gnucash/report/trep-engine.scm:981
 #, fuzzy
 msgid "Two Columns"
 msgstr "Tokolonnevisning"
@@ -27864,17 +27876,17 @@ msgstr "Kontonavn"
 msgid "Credit Lines"
 msgstr "Kreditlinjer"
 
-#: gnucash/report/report-utilities.scm:642
+#: gnucash/report/report-utilities.scm:639
 #, scheme-format
 msgid "Building '~a' report …"
 msgstr "Bygger rapport »~a« …"
 
-#: gnucash/report/report-utilities.scm:648
+#: gnucash/report/report-utilities.scm:645
 #, scheme-format
 msgid "Rendering '~a' report …"
 msgstr "Optegner rapport »~a« …"
 
-#: gnucash/report/report-utilities.scm:650
+#: gnucash/report/report-utilities.scm:647
 #, fuzzy
 #| msgid "Until:"
 msgid "Untitled"
@@ -27926,7 +27938,7 @@ msgstr "Navn på organisation eller firma."
 
 #: gnucash/report/stylesheets/footer.scm:68
 #: gnucash/report/stylesheets/head-or-tail.scm:85
-#: gnucash/report/stylesheets/plain.scm:50 gnucash/report/trep-engine.scm:986
+#: gnucash/report/stylesheets/plain.scm:50 gnucash/report/trep-engine.scm:987
 msgid "Enable Links"
 msgstr "Aktivér henvisninger"
 
@@ -28306,7 +28318,7 @@ msgstr "Delsum"
 msgid "Running Totals"
 msgstr "Løbende saldo"
 
-#: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2292
+#: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2290
 #, fuzzy
 msgid "Show Account Description"
 msgstr "Kontobeskrivelse"
@@ -28486,7 +28498,7 @@ msgid "Specify date to filter by…"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:541 gnucash/report/trep-engine.scm:913
-#: gnucash/report/trep-engine.scm:1092 gnucash/report/trep-engine.scm:2240
+#: gnucash/report/trep-engine.scm:1093 gnucash/report/trep-engine.scm:2238
 msgid "Date Entered"
 msgstr "Dato indtast"
 
@@ -28655,38 +28667,38 @@ msgstr "Vis kontonummeret?"
 msgid "Display the other account code?"
 msgstr "Vis det andet kontonummer?"
 
-#: gnucash/report/trep-engine.scm:926
+#: gnucash/report/trep-engine.scm:927
 #, fuzzy
 msgid "Display the transaction linked document"
 msgstr "Vis transaktionsdatoen?"
 
-#: gnucash/report/trep-engine.scm:929
+#: gnucash/report/trep-engine.scm:930
 #, fuzzy
 #| msgid "Display the subtotals?"
 msgid "Display a subtotal summary table."
 msgstr "Vis delsummerne?"
 
-#: gnucash/report/trep-engine.scm:930
+#: gnucash/report/trep-engine.scm:931
 #, fuzzy
 #| msgid "Display the other account code?"
 msgid "Display the balance of the underlying account on each line?"
 msgstr "Vis det andet kontonummer?"
 
-#: gnucash/report/trep-engine.scm:931
+#: gnucash/report/trep-engine.scm:932
 #, fuzzy
 #| msgid "Display the transaction date?"
 msgid "Display a grand total section at the bottom?"
 msgstr "Vis transaktionsdatoen?"
 
-#: gnucash/report/trep-engine.scm:936
+#: gnucash/report/trep-engine.scm:937
 msgid "Display the trans number?"
 msgstr "Vis transaktionsnummeret?"
 
-#: gnucash/report/trep-engine.scm:950
+#: gnucash/report/trep-engine.scm:951
 msgid "Display the account name?"
 msgstr "Vis kontonavnet?"
 
-#: gnucash/report/trep-engine.scm:958
+#: gnucash/report/trep-engine.scm:959
 #, fuzzy
 #| msgid ""
 #| "Display the other account name? (if this is a split transaction, this "
@@ -28698,62 +28710,62 @@ msgstr ""
 "Vis det andet kontonavn? (hvis dette er en opdelt transaktion, gættes "
 "værdien på denne parameter)."
 
-#: gnucash/report/trep-engine.scm:965
+#: gnucash/report/trep-engine.scm:966
 #, fuzzy
 msgid "Amount of detail to display per transaction."
 msgstr "Udskriv alle opdelingsdetaljer for transaktioner med flere opdelinger."
 
-#: gnucash/report/trep-engine.scm:967
+#: gnucash/report/trep-engine.scm:968
 msgid "One split per line"
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:968
+#: gnucash/report/trep-engine.scm:969
 #, fuzzy
 #| msgid "Get Transactions Online"
 msgid "One transaction per line"
 msgstr "Hent transaktioner online"
 
-#: gnucash/report/trep-engine.scm:978
+#: gnucash/report/trep-engine.scm:979
 msgid "Hide"
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:987
+#: gnucash/report/trep-engine.scm:988
 #, fuzzy
 #| msgid "Enable hyperlinks in reports."
 msgid "Enable hyperlinks in amounts."
 msgstr "Aktivér henvisninger i rapporter."
 
-#: gnucash/report/trep-engine.scm:991
+#: gnucash/report/trep-engine.scm:992
 msgid "Reverse amount display for certain account types."
 msgstr "Omvendt beløbsvisning for visse kontotyper."
 
-#: gnucash/report/trep-engine.scm:997
+#: gnucash/report/trep-engine.scm:998
 msgid "Display running totals as per report sort order?"
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:1000
+#: gnucash/report/trep-engine.scm:1001
 #, fuzzy
 #| msgid "Grand Total Cell Color"
 msgid "Grand Total and Subtotals"
 msgstr "Hovedtotal cellefarve"
 
-#: gnucash/report/trep-engine.scm:1001
+#: gnucash/report/trep-engine.scm:1002
 #, fuzzy
 #| msgid "Grand Total"
 msgid "Grand Total Only"
 msgstr "Hovedtotal"
 
-#: gnucash/report/trep-engine.scm:1002
+#: gnucash/report/trep-engine.scm:1003
 #, fuzzy
 #| msgid "Subtotal"
 msgid "Subtotals Only"
 msgstr "Delsum"
 
-#: gnucash/report/trep-engine.scm:1114
+#: gnucash/report/trep-engine.scm:1115
 msgid "Num/T-Num"
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:1164
+#: gnucash/report/trep-engine.scm:1165
 msgid "Transfer from/to"
 msgstr "Overfør fra/til"
 
@@ -28761,7 +28773,7 @@ msgstr "Overfør fra/til"
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals”,
 #. "Secondary Subtotal” and "Running Primary Subtotal"
-#: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:1483
+#: gnucash/report/trep-engine.scm:1383 gnucash/report/trep-engine.scm:1484
 #, fuzzy
 #| msgid "Secondary Subtotal"
 msgid "Running Secondary Subtotal"
@@ -28771,7 +28783,7 @@ msgstr "Sekundær delsum"
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. “Primary Subtotal”
-#: gnucash/report/trep-engine.scm:1398 gnucash/report/trep-engine.scm:1496
+#: gnucash/report/trep-engine.scm:1399 gnucash/report/trep-engine.scm:1497
 #, fuzzy
 #| msgid "Primary Subtotal"
 msgid "Running Primary Subtotal"
@@ -28780,7 +28792,7 @@ msgstr "Primær delsum"
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
-#: gnucash/report/trep-engine.scm:1402 gnucash/report/trep-engine.scm:1497
+#: gnucash/report/trep-engine.scm:1403 gnucash/report/trep-engine.scm:1498
 #, fuzzy
 #| msgid "Running Sum"
 msgid "Running Subtotal"
@@ -28790,7 +28802,7 @@ msgstr "Løbende saldo"
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. "Grand Total”
-#: gnucash/report/trep-engine.scm:1419 gnucash/report/trep-engine.scm:1511
+#: gnucash/report/trep-engine.scm:1420 gnucash/report/trep-engine.scm:1512
 #, fuzzy
 #| msgid "Grand Total"
 msgid "Running Grand Total"
@@ -28800,7 +28812,7 @@ msgstr "Hovedtotal"
 #. "Running Grand Total" used when the running grand total is
 #. displayed without subtotals. To be consistent, also consider
 #. how the plural form "Running Totals" is translated.
-#: gnucash/report/trep-engine.scm:1424 gnucash/report/trep-engine.scm:1512
+#: gnucash/report/trep-engine.scm:1425 gnucash/report/trep-engine.scm:1513
 #, fuzzy
 #| msgid "Running Balance"
 msgid "Running Total"
@@ -28808,22 +28820,22 @@ msgstr "Løbende saldo"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
-#: gnucash/report/trep-engine.scm:1570
+#: gnucash/report/trep-engine.scm:1571
 #, fuzzy
 #| msgid "Balance"
 msgid "Balance b/f"
 msgstr "Saldo"
 
-#: gnucash/report/trep-engine.scm:1747
+#: gnucash/report/trep-engine.scm:1748
 msgid "Split Transaction"
 msgstr "Opdelt transaktion"
 
-#: gnucash/report/trep-engine.scm:2008
+#: gnucash/report/trep-engine.scm:2006
 msgid "CSV disabled for double column amounts"
 msgstr ""
 
 #. Translators: Both ~a's are dates
-#: gnucash/report/trep-engine.scm:2554
+#: gnucash/report/trep-engine.scm:2552
 #, scheme-format
 msgid "From ~a to ~a"
 msgstr "Fra ~a til ~a"
@@ -31018,59 +31030,59 @@ msgstr ""
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:369
+#: libgnucash/app-utils/gnc-ui-balances.cpp:369
 #, c-format
 msgid "%s balance of %s is above the upper limit %s."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:370
+#: libgnucash/app-utils/gnc-ui-balances.cpp:370
 #, c-format
 msgid "%s balance of %s is below the lower limit %s."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:371
+#: libgnucash/app-utils/gnc-ui-balances.cpp:371
 #, c-format
 msgid "%s balance of %s should be zero."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:477
+#: libgnucash/app-utils/gnc-ui-util.cpp:472
 msgctxt "Reconciled flag 'not cleared'"
 msgid "n"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:479
+#: libgnucash/app-utils/gnc-ui-util.cpp:474
 msgctxt "Reconciled flag 'cleared'"
 msgid "c"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:481
+#: libgnucash/app-utils/gnc-ui-util.cpp:476
 #, fuzzy
 #| msgid "y"
 msgctxt "Reconciled flag 'reconciled'"
 msgid "y"
 msgstr "y"
 
-#: libgnucash/app-utils/gnc-ui-util.c:483
+#: libgnucash/app-utils/gnc-ui-util.cpp:478
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:485
+#: libgnucash/app-utils/gnc-ui-util.cpp:480
 msgctxt "Reconciled flag 'void'"
 msgid "v"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:525
+#: libgnucash/app-utils/gnc-ui-util.cpp:520
 msgctxt "Document Link flag for 'web'"
 msgid "w"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:527
+#: libgnucash/app-utils/gnc-ui-util.cpp:522
 msgctxt "Document Link flag for 'file'"
 msgid "f"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:556
+#: libgnucash/app-utils/gnc-ui-util.cpp:551
 msgid "Opening Balances"
 msgstr "Åbningssaldi"
 
@@ -31102,7 +31114,6 @@ msgstr "Ny opdelingsinformation"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
-#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -31113,14 +31124,14 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, fuzzy, c++-format
+#, fuzzy
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "Denne kodning er allerede blevet tilføjet listen."
 msgstr[1] "Denne kodning er allerede blevet tilføjet listen."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
-#, fuzzy, c++-format
+#, fuzzy
 #| msgid "The following bill is due:"
 #| msgid_plural "The following %d bills are due:"
 msgid "The following file in {1} has been renamed:"
@@ -31134,7 +31145,7 @@ msgstr[0] "Denne kodning er allerede blevet tilføjet listen."
 msgstr[1] "Denne kodning er allerede blevet tilføjet listen."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, fuzzy, c++-format
+#, fuzzy
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Filen kunne ikke genåbnes."
@@ -31175,40 +31186,40 @@ msgstr ""
 "Nedenfor kan du se listen over ugyldige kontonavne:\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4452
+#: libgnucash/engine/Account.cpp:4502
 msgid "Credit Card"
 msgstr "Kreditkort"
 
-#: libgnucash/engine/Account.cpp:4454
+#: libgnucash/engine/Account.cpp:4504
 msgid "Stock"
 msgstr "Aktie"
 
-#: libgnucash/engine/Account.cpp:4455
+#: libgnucash/engine/Account.cpp:4505
 msgid "Mutual Fund"
 msgstr "Investeringsbevis"
 
-#: libgnucash/engine/Account.cpp:4460
+#: libgnucash/engine/Account.cpp:4510
 msgid "A/Receivable"
 msgstr "A/Tilgodehavende"
 
-#: libgnucash/engine/Account.cpp:4461
+#: libgnucash/engine/Account.cpp:4511
 msgid "A/Payable"
 msgstr "A/Kreditor"
 
-#: libgnucash/engine/Account.cpp:4462
+#: libgnucash/engine/Account.cpp:4512
 msgid "Root"
 msgstr "Rod"
 
-#: libgnucash/engine/Account.cpp:5174
+#: libgnucash/engine/Account.cpp:5224
 msgid "Orphaned Gains"
 msgstr "Forældreløse gevinster"
 
-#: libgnucash/engine/Account.cpp:5188 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:5238 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "Realiseret overskud/tab"
 
-#: libgnucash/engine/Account.cpp:5190
+#: libgnucash/engine/Account.cpp:5240
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -31230,12 +31241,12 @@ msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "Valutaer"
 
-#: libgnucash/engine/gnc-date.cpp:77
+#: libgnucash/engine/gnc-date.cpp:76
 msgid "%B %#d, %Y"
 msgstr ""
 
 #. Translators: call "man strftime" for possible values.
-#: libgnucash/engine/gnc-date.cpp:81
+#: libgnucash/engine/gnc-date.cpp:80
 msgid "%B %e, %Y"
 msgstr ""
 
@@ -31783,7 +31794,7 @@ msgid "Default Invoice Report Timeout"
 msgstr ""
 
 #. Translators: " + " is an separator in a list of string-representations of recurrence frequencies
-#: libgnucash/engine/Recurrence.c:511
+#: libgnucash/engine/Recurrence.cpp:511
 msgid " + "
 msgstr " + "
 
@@ -31792,28 +31803,28 @@ msgstr " + "
 #. event should occur every %u'th week.
 #. Translators: %u is the recurrence multiplier number
 #. Translators: %u is the recurrence multiplier.
-#: libgnucash/engine/Recurrence.c:627 libgnucash/engine/Recurrence.c:717
-#: libgnucash/engine/Recurrence.c:748 libgnucash/engine/Recurrence.c:765
-#: libgnucash/engine/Recurrence.c:779 libgnucash/engine/Recurrence.c:791
+#: libgnucash/engine/Recurrence.cpp:627 libgnucash/engine/Recurrence.cpp:717
+#: libgnucash/engine/Recurrence.cpp:748 libgnucash/engine/Recurrence.cpp:765
+#: libgnucash/engine/Recurrence.cpp:779 libgnucash/engine/Recurrence.cpp:791
 #, c-format
 msgid " (x%u)"
 msgstr " (x%u)"
 
 #. Translators: %s is an already-localized form of the day of the week.
-#: libgnucash/engine/Recurrence.c:660
+#: libgnucash/engine/Recurrence.cpp:660
 #, c-format
 msgid "last %s"
 msgstr "sidste %s"
 
 #. Translators: %s is the string 1st, 2nd, 3rd and so on, and
 #. %s is an already-localized form of the day of the week.
-#: libgnucash/engine/Recurrence.c:674
+#: libgnucash/engine/Recurrence.cpp:674
 #, c-format
 msgid "%s %s"
 msgstr "%s %s"
 
 #. Translators: %d is the number of Recurrences in the list.
-#: libgnucash/engine/Recurrence.c:727
+#: libgnucash/engine/Recurrence.cpp:727
 #, c-format
 msgid "Unknown, %d-size list."
 msgstr "Ukendt, %d-størrelse liste."
@@ -31850,7 +31861,7 @@ msgstr ""
 msgid "Looking for imbalances in transaction date %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/Split.c:1649
+#: libgnucash/engine/Split.cpp:1649
 #, fuzzy
 #| msgid "Split"
 msgctxt ""
@@ -31858,11 +31869,11 @@ msgctxt ""
 msgid "Split"
 msgstr "Del"
 
-#: libgnucash/engine/Transaction.c:2741
+#: libgnucash/engine/Transaction.cpp:2735
 msgid "Voided transaction"
 msgstr "Ugyldig transaktion"
 
-#: libgnucash/engine/Transaction.c:2754
+#: libgnucash/engine/Transaction.cpp:2748
 msgid "Transaction Voided"
 msgstr "Transaktion ugyldig"
 

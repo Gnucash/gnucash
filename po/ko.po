@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-12-09 16:05-0800\n"
+"POT-Creation-Date: 2024-02-16 01:11+0100\n"
 "PO-Revision-Date: 2022-10-23 08:02+0000\n"
 "Last-Translator: 이정희 <daemul72@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -24,7 +24,7 @@ msgstr ""
 #: gnucash/report/reports/example/daily-reports.scm:260
 #: gnucash/report/reports/standard/account-piecharts.scm:514
 #: gnucash/report/reports/standard/balance-forecast.scm:274
-#: gnucash/report/reports/standard/balsheet-pnl.scm:875
+#: gnucash/report/reports/standard/balsheet-pnl.scm:870
 #: gnucash/report/reports/standard/budget.scm:468
 #: gnucash/report/reports/standard/cashflow-barchart.scm:259
 #: gnucash/report/reports/standard/cash-flow.scm:183
@@ -280,7 +280,7 @@ msgstr "고객"
 
 #: bindings/guile/options.scm:399
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
-#: gnucash/report/reports/standard/invoice.scm:496
+#: gnucash/report/reports/standard/invoice.scm:716
 #: gnucash/report/reports/standard/new-owner-report.scm:55
 #: libgnucash/engine/gnc-optiondb.cpp:1353
 msgid "Tax"
@@ -1049,8 +1049,8 @@ msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:594
 #: gnucash/gtkbuilder/dialog-fincalc.glade:650
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1208
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1213
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1218
 #: gnucash/report/reports/standard/budget-flow.scm:44
 msgid "Period"
 msgstr "기간"
@@ -1114,7 +1114,7 @@ msgstr "자리표시자"
 #: gnucash/gnome-utils/dialog-account.c:402
 #: gnucash/gnome-utils/gnc-tree-view-account.c:995
 #: gnucash/gtkbuilder/dialog-account.glade:1945
-#: libgnucash/app-utils/gnc-ui-util.c:711
+#: libgnucash/app-utils/gnc-ui-util.cpp:693
 msgid "Opening Balance"
 msgstr "기초 잔액"
 
@@ -1212,8 +1212,8 @@ msgstr "대출 상환 옵션: \"%s\""
 #: gnucash/register/ledger-core/split-register-model.c:233
 #: gnucash/report/reports/standard/account-summary.scm:77
 #: gnucash/report/reports/standard/advanced-portfolio.scm:68
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1041
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1046
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1051
 #: gnucash/report/reports/standard/cashflow-barchart.scm:319
 #: gnucash/report/reports/standard/category-barchart.scm:646
 #: gnucash/report/reports/standard/category-barchart.scm:666
@@ -1221,8 +1221,8 @@ msgstr "대출 상환 옵션: \"%s\""
 #: gnucash/report/reports/standard/general-ledger.scm:66
 #: gnucash/report/reports/standard/general-ledger.scm:87
 #: gnucash/report/reports/standard/invoice.scm:87
-#: gnucash/report/reports/standard/invoice.scm:190
-#: gnucash/report/reports/standard/invoice.scm:547
+#: gnucash/report/reports/standard/invoice.scm:246
+#: gnucash/report/reports/standard/invoice.scm:410
 #: gnucash/report/reports/standard/net-charts.scm:398
 #: gnucash/report/reports/standard/new-owner-report.scm:49
 #: gnucash/report/reports/standard/new-owner-report.scm:225
@@ -1232,7 +1232,7 @@ msgstr "대출 상환 옵션: \"%s\""
 #: gnucash/report/reports/support/receipt.eguile.scm:143
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:268
 #: gnucash/report/trep-engine.scm:191 gnucash/report/trep-engine.scm:911
-#: gnucash/report/trep-engine.scm:1081 gnucash/report/trep-engine.scm:2238
+#: gnucash/report/trep-engine.scm:1082 gnucash/report/trep-engine.scm:2236
 msgid "Date"
 msgstr "날짜"
 
@@ -1281,7 +1281,7 @@ msgid "Error adding price."
 msgstr "가격 더하는 중 오류."
 
 #: gnucash/gnome/assistant-stock-split.c:582
-#: gnucash/gnome/assistant-stock-transaction.cpp:2282
+#: gnucash/gnome/assistant-stock-transaction.cpp:2302
 #: gnucash/gnome/dialog-find-transactions.c:109
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
@@ -1300,7 +1300,7 @@ msgstr "가격 더하는 중 오류."
 #: gnucash/report/reports/standard/portfolio.scm:244
 #: gnucash/report/reports/standard/register.scm:142
 #: gnucash/report/reports/standard/register.scm:366
-#: gnucash/report/trep-engine.scm:1153
+#: gnucash/report/trep-engine.scm:1154
 msgid "Account"
 msgstr "계정"
 
@@ -1312,6 +1312,7 @@ msgstr "계정"
 msgid "Symbol"
 msgstr "심볼"
 
+#. Translators: The number of units of any kind of investment (shares, fonds, bonds, …)
 #: gnucash/gnome/assistant-stock-split.c:594
 #: gnucash/gnome/dialog-find-transactions.c:122
 #: gnucash/register/ledger-core/split-register-model.c:424
@@ -1321,8 +1322,8 @@ msgstr "심볼"
 #: gnucash/report/reports/standard/general-ledger.scm:98
 #: gnucash/report/reports/standard/register.scm:145
 #: gnucash/report/reports/standard/register.scm:370
-#: gnucash/report/trep-engine.scm:925 gnucash/report/trep-engine.scm:1177
-#: gnucash/report/trep-engine.scm:2249
+#: gnucash/report/trep-engine.scm:926 gnucash/report/trep-engine.scm:1178
+#: gnucash/report/trep-engine.scm:2247
 msgid "Shares"
 msgstr "구매 계좌수"
 
@@ -1332,31 +1333,31 @@ msgstr "수지가 맞는 특정 주식 계정이 없습니다!"
 
 #. Translators: this is a stock transaction describing an
 #. Initial stock long purchase
-#: gnucash/gnome/assistant-stock-transaction.cpp:154
+#: gnucash/gnome/assistant-stock-transaction.cpp:159
 #, fuzzy
 #| msgid "Open"
 msgid "Open buy"
 msgstr "열기"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:155
+#: gnucash/gnome/assistant-stock-transaction.cpp:160
 msgid "Initial stock long purchase."
 msgstr ""
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
-#: gnucash/gnome/assistant-stock-transaction.cpp:165
+#: gnucash/gnome/assistant-stock-transaction.cpp:170
 #, fuzzy
 #| msgid "Open _Folder"
 msgid "Open short"
 msgstr "폴더 열기(_F)"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:166
+#: gnucash/gnome/assistant-stock-transaction.cpp:171
 msgid "Initial stock short sale."
 msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:180
+#: gnucash/gnome/assistant-stock-transaction.cpp:185
 #: gnucash/register/ledger-core/split-register.c:2566
 #: gnucash/register/ledger-core/split-register.c:2570
 #: gnucash/register/ledger-core/split-register.c:2577
@@ -1370,13 +1371,13 @@ msgstr ""
 msgid "Buy"
 msgstr "구매 가격"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:181
+#: gnucash/gnome/assistant-stock-transaction.cpp:186
 msgid "Buying stock long."
 msgstr ""
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
-#: gnucash/gnome/assistant-stock-transaction.cpp:191
+#: gnucash/gnome/assistant-stock-transaction.cpp:196
 #: gnucash/register/ledger-core/split-register.c:2567
 #: gnucash/register/ledger-core/split-register.c:2571
 #: gnucash/register/ledger-core/split-register.c:2582
@@ -1390,7 +1391,7 @@ msgstr ""
 msgid "Sell"
 msgstr "판매 가격"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:192
+#: gnucash/gnome/assistant-stock-transaction.cpp:197
 msgid ""
 "Selling stock long, and record capital gain/loss.\n"
 "\n"
@@ -1400,7 +1401,7 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
-#: gnucash/gnome/assistant-stock-transaction.cpp:204
+#: gnucash/gnome/assistant-stock-transaction.cpp:209
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:733
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:778
 #: gnucash/register/ledger-core/split-register.c:2630
@@ -1408,7 +1409,7 @@ msgstr ""
 msgid "Dividend"
 msgstr "배당금"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:205
+#: gnucash/gnome/assistant-stock-transaction.cpp:210
 msgid ""
 "Company issues cash dividends to holder.\n"
 "\n"
@@ -1418,26 +1419,26 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital
-#: gnucash/gnome/assistant-stock-transaction.cpp:216
+#: gnucash/gnome/assistant-stock-transaction.cpp:221
 #, fuzzy
 #| msgid "Decrease in capital"
 msgid "Return of capital"
 msgstr "자본금 감소"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:217
+#: gnucash/gnome/assistant-stock-transaction.cpp:222
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
-#: gnucash/gnome/assistant-stock-transaction.cpp:227
+#: gnucash/gnome/assistant-stock-transaction.cpp:232
 #, fuzzy
 #| msgid "Decrease in capital"
 msgid "Return of capital (reclassification)"
 msgstr "자본금 감소"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:228
+#: gnucash/gnome/assistant-stock-transaction.cpp:233
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units. "
 "A distribution previously recorded as a dividend is reclassified to return "
@@ -1446,13 +1447,13 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
-#: gnucash/gnome/assistant-stock-transaction.cpp:240
+#: gnucash/gnome/assistant-stock-transaction.cpp:245
 #, fuzzy
 #| msgid "No description provided."
 msgid "Notional distribution (dividend)"
 msgstr "설명이 규정되지 않았습니다."
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:241
+#: gnucash/gnome/assistant-stock-transaction.cpp:246
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
@@ -1460,11 +1461,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
-#: gnucash/gnome/assistant-stock-transaction.cpp:252
+#: gnucash/gnome/assistant-stock-transaction.cpp:257
 msgid "Notional distribution (capital gain)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:253
+#: gnucash/gnome/assistant-stock-transaction.cpp:258
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
@@ -1474,14 +1475,14 @@ msgstr ""
 #. split
 #. Translators: this is a stock transaction describing a stock
 #. split when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:264
-#: gnucash/gnome/assistant-stock-transaction.cpp:390
+#: gnucash/gnome/assistant-stock-transaction.cpp:269
+#: gnucash/gnome/assistant-stock-transaction.cpp:395
 #, fuzzy
 #| msgid "Stock Split"
 msgid "Stock split"
 msgstr "주식 분할"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:265
+#: gnucash/gnome/assistant-stock-transaction.cpp:270
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor , while keeping the total monetary value of the overall investment "
@@ -1494,14 +1495,14 @@ msgstr ""
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
 #. reverse split when shorting stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:277
-#: gnucash/gnome/assistant-stock-transaction.cpp:404
+#: gnucash/gnome/assistant-stock-transaction.cpp:282
+#: gnucash/gnome/assistant-stock-transaction.cpp:409
 #, fuzzy
 #| msgid "_Review cleared splits"
 msgid "Reverse split"
 msgstr "지워진 분할 검토하기(_R)"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:278
+#: gnucash/gnome/assistant-stock-transaction.cpp:283
 msgid ""
 "Company redeems units, thereby increasing the stock price by a multiple, "
 "while keeping the total monetary value of the overall investment constant.\n"
@@ -1513,23 +1514,23 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:295
+#: gnucash/gnome/assistant-stock-transaction.cpp:300
 #, fuzzy
 #| msgid "Sort Order"
 msgid "Short sell"
 msgstr "정렬 순서"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:296
+#: gnucash/gnome/assistant-stock-transaction.cpp:301
 msgid "Selling stock short."
 msgstr ""
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
-#: gnucash/gnome/assistant-stock-transaction.cpp:306
+#: gnucash/gnome/assistant-stock-transaction.cpp:311
 msgid "Buy to cover short"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:307
+#: gnucash/gnome/assistant-stock-transaction.cpp:312
 msgid ""
 "Buy back stock to cover short position, and record capital gain/loss. \n"
 "\n"
@@ -1539,11 +1540,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:319
+#: gnucash/gnome/assistant-stock-transaction.cpp:324
 msgid "Compensatory dividend"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:320
+#: gnucash/gnome/assistant-stock-transaction.cpp:325
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
@@ -1551,11 +1552,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:331
+#: gnucash/gnome/assistant-stock-transaction.cpp:336
 msgid "Compensatory return of capital"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:332
+#: gnucash/gnome/assistant-stock-transaction.cpp:337
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1565,11 +1566,11 @@ msgstr ""
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:345
+#: gnucash/gnome/assistant-stock-transaction.cpp:350
 msgid "Compensatory return of capital (reclassification)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:346
+#: gnucash/gnome/assistant-stock-transaction.cpp:351
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1581,11 +1582,11 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:361
+#: gnucash/gnome/assistant-stock-transaction.cpp:366
 msgid "Compensatory notional distribution (dividend)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:362
+#: gnucash/gnome/assistant-stock-transaction.cpp:367
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1596,11 +1597,11 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:376
+#: gnucash/gnome/assistant-stock-transaction.cpp:381
 msgid "Compensatory notional distribution (capital gain)"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:377
+#: gnucash/gnome/assistant-stock-transaction.cpp:382
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1608,7 +1609,7 @@ msgid ""
 "0.00 value) without affecting # units."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:391
+#: gnucash/gnome/assistant-stock-transaction.cpp:396
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor, while keeping the total monetary value of the overall investment "
@@ -1619,7 +1620,7 @@ msgid ""
 "split."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:405
+#: gnucash/gnome/assistant-stock-transaction.cpp:410
 msgid ""
 "Company redeems units, thereby increasing the stock price by a multiple, "
 "while keeping the total monetary value of the overall investment constant.\n"
@@ -1629,125 +1630,125 @@ msgid ""
 "record the reverse split."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:497
+#: gnucash/gnome/assistant-stock-transaction.cpp:502
 msgid "No errors found. Click Apply to create transaction."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:502
+#: gnucash/gnome/assistant-stock-transaction.cpp:507
 #, fuzzy
 #| msgid "The following vendor document is due:"
 #| msgid_plural "The following %d vendor documents are due:"
 msgid "The following errors must be fixed:"
 msgstr "다음 %d개 거래처 전표가 지불기일이 됨:"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:507
+#: gnucash/gnome/assistant-stock-transaction.cpp:512
 #, fuzzy
 #| msgid "The following vendor document is due:"
 #| msgid_plural "The following %d vendor documents are due:"
 msgid "The following warnings exist:"
 msgstr "다음 %d개 거래처 전표가 지불기일이 됨:"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:627
-#: gnucash/gnome/assistant-stock-transaction.cpp:688
-#: gnucash/report/reports/standard/balsheet-pnl.scm:812
+#: gnucash/gnome/assistant-stock-transaction.cpp:636
+#: gnucash/gnome/assistant-stock-transaction.cpp:697
+#: gnucash/report/reports/standard/balsheet-pnl.scm:807
 #, fuzzy
 msgid "missing"
 msgstr "커미션"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:666
-#: gnucash/gnome/assistant-stock-transaction.cpp:1016
+#: gnucash/gnome/assistant-stock-transaction.cpp:675
+#: gnucash/gnome/assistant-stock-transaction.cpp:1025
 #, c-format
 msgid "Amount for %s is missing."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:671
-#: gnucash/gnome/assistant-stock-transaction.cpp:1021
+#: gnucash/gnome/assistant-stock-transaction.cpp:680
+#: gnucash/gnome/assistant-stock-transaction.cpp:1030
 #, c-format
 msgid "Amount for %s must not be negative."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:674
-#: gnucash/gnome/assistant-stock-transaction.cpp:1024
+#: gnucash/gnome/assistant-stock-transaction.cpp:683
+#: gnucash/gnome/assistant-stock-transaction.cpp:1033
 #, c-format
 msgid "Amount for %s must be positive."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:677
-#: gnucash/gnome/assistant-stock-transaction.cpp:1027
+#: gnucash/gnome/assistant-stock-transaction.cpp:686
+#: gnucash/gnome/assistant-stock-transaction.cpp:1036
 #, fuzzy, c-format
 msgid "The %s amount has no associated account."
 msgstr "전체 선택된 계정의 하위 계정을 포함"
 
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
-#: gnucash/gnome/assistant-stock-transaction.cpp:743
+#: gnucash/gnome/assistant-stock-transaction.cpp:752
 msgid "N/A"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:835
+#: gnucash/gnome/assistant-stock-transaction.cpp:844
 #, fuzzy
 #| msgid "Accounts in %s"
 msgid "Amount for stock value is missing."
 msgstr "%s의 계정과목"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:847
+#: gnucash/gnome/assistant-stock-transaction.cpp:856
 #, fuzzy
 msgid "Invalid stock new balance."
 msgstr "선택된 유효한 청구서 없음"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:849
+#: gnucash/gnome/assistant-stock-transaction.cpp:858
 msgid "New balance must be higher than old balance."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:851
+#: gnucash/gnome/assistant-stock-transaction.cpp:860
 msgid "New balance must be lower than old balance."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:858
+#: gnucash/gnome/assistant-stock-transaction.cpp:867
 #, fuzzy
 msgid "Stock amount must be positive."
 msgstr "보고하기 위한 주식 계정"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:862
+#: gnucash/gnome/assistant-stock-transaction.cpp:871
 msgid "Cannot sell more units than owned."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:864
+#: gnucash/gnome/assistant-stock-transaction.cpp:873
 msgid "Cannot cover buy more units than owed."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1100
+#: gnucash/gnome/assistant-stock-transaction.cpp:1109
 #, fuzzy
 #| msgid "Stock"
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
 msgstr "주식"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1101
+#: gnucash/gnome/assistant-stock-transaction.cpp:1110
 #, fuzzy
 #| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "현금"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1102
+#: gnucash/gnome/assistant-stock-transaction.cpp:1111
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1103
+#: gnucash/gnome/assistant-stock-transaction.cpp:1112
 #, fuzzy
 msgctxt "Stock Assistant: Page name"
 msgid "Dividend"
 msgstr "배당금"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1104
+#: gnucash/gnome/assistant-stock-transaction.cpp:1113
 #, fuzzy
 #| msgid "Capital"
 msgctxt "Stock Assistant: Page name"
 msgid "Capital Gains"
 msgstr "자본"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1267
+#: gnucash/gnome/assistant-stock-transaction.cpp:1276
 #, c-format
 msgid ""
 "You will enter a transaction with date %s which is earlier than the latest "
@@ -1758,27 +1759,27 @@ msgstr ""
 
 #. Translators: %s refer to: stock mnemonic, broker currency,
 #. date of transaction.
-#: gnucash/gnome/assistant-stock-transaction.cpp:1309
+#: gnucash/gnome/assistant-stock-transaction.cpp:1318
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1379
+#: gnucash/gnome/assistant-stock-transaction.cpp:1388
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1385
+#: gnucash/gnome/assistant-stock-transaction.cpp:1394
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1883
+#: gnucash/gnome/assistant-stock-transaction.cpp:1899
 #, fuzzy
 msgid "Ne_w Balance"
 msgstr "계정 잔액 얻기(_B)"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1883
+#: gnucash/gnome/assistant-stock-transaction.cpp:1899
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:234
 #: gnucash/register/ledger-core/split-register.c:2091
@@ -1786,31 +1787,31 @@ msgstr "계정 잔액 얻기(_B)"
 msgid "_Shares"
 msgstr "구매 계좌수(_S)"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1886
+#: gnucash/gnome/assistant-stock-transaction.cpp:1902
 #, fuzzy
 #| msgid "_Rotation"
 msgid "Ratio"
 msgstr "회전(_R)"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1886
+#: gnucash/gnome/assistant-stock-transaction.cpp:1902
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
 #, fuzzy
 msgid "Next Balance"
 msgstr "계정 잔액 얻기(_B)"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1890
+#: gnucash/gnome/assistant-stock-transaction.cpp:1906
 #, fuzzy
 msgid "Enter the new balance of shares after the stock split."
 msgstr "사고 팔은 주식수 입력"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1891
+#: gnucash/gnome/assistant-stock-transaction.cpp:1907
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
 #, fuzzy
 #| msgid "Enter the number of shares bought or sold"
 msgid "Enter the number of shares you gained or lost in the transaction."
 msgstr "사고 팔은 주식수 입력"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2288
+#: gnucash/gnome/assistant-stock-transaction.cpp:2308
 #: gnucash/gnome/dialog-find-transactions.c:153
 #: gnucash/gnome/gnc-split-reg.c:669
 #: gnucash/gtkbuilder/dialog-payment.glade:495
@@ -1825,25 +1826,25 @@ msgstr "사고 팔은 주식수 입력"
 #: gnucash/report/reports/standard/general-ledger.scm:91
 #: gnucash/report/reports/standard/register.scm:139
 #: gnucash/report/reports/standard/register.scm:362
-#: gnucash/report/trep-engine.scm:263 gnucash/report/trep-engine.scm:941
-#: gnucash/report/trep-engine.scm:1142 gnucash/report/trep-engine.scm:1143
-#: gnucash/report/trep-engine.scm:2257
+#: gnucash/report/trep-engine.scm:263 gnucash/report/trep-engine.scm:942
+#: gnucash/report/trep-engine.scm:1143 gnucash/report/trep-engine.scm:1144
+#: gnucash/report/trep-engine.scm:2255
 msgid "Memo"
 msgstr "메모"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2296
+#: gnucash/gnome/assistant-stock-transaction.cpp:2316
 #: gnucash/gnome/gnc-plugin-page-register.c:3383
 #: gnucash/gtkbuilder/dialog-payment.glade:300
 #: gnucash/register/ledger-core/split-register.c:2441
 #: gnucash/report/reports/standard/general-journal.scm:82
 #: gnucash/report/reports/standard/register.scm:336
 #: gnucash/report/reports/standard/trial-balance.scm:555
-#: gnucash/report/trep-engine.scm:1342 gnucash/report/trep-engine.scm:1446
+#: gnucash/report/trep-engine.scm:1343 gnucash/report/trep-engine.scm:1447
 #: libgnucash/engine/Account.cpp:164
 msgid "Debit"
 msgstr "입금"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2303
+#: gnucash/gnome/assistant-stock-transaction.cpp:2323
 #: gnucash/gnome/gnc-plugin-page-register.c:3379
 #: gnucash/gtkbuilder/dialog-payment.glade:316
 #: gnucash/register/ledger-core/split-register.c:2464
@@ -1853,12 +1854,12 @@ msgstr "입금"
 #: gnucash/report/reports/standard/general-journal.scm:83
 #: gnucash/report/reports/standard/register.scm:338
 #: gnucash/report/reports/standard/trial-balance.scm:558
-#: gnucash/report/trep-engine.scm:1349 gnucash/report/trep-engine.scm:1453
+#: gnucash/report/trep-engine.scm:1350 gnucash/report/trep-engine.scm:1454
 #: libgnucash/engine/Account.cpp:184
 msgid "Credit"
 msgstr "신용"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2310
+#: gnucash/gnome/assistant-stock-transaction.cpp:2330
 #: gnucash/report/reports/standard/portfolio.scm:247
 #: gnucash/report/reports/standard/receipt.scm:52
 #: gnucash/report/reports/standard/receipt.scm:114
@@ -1888,7 +1889,7 @@ msgstr "편집하기"
 #: gnucash/gnome/dialog-invoice.c:3029 gnucash/gnome/dialog-invoice.c:3750
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
-#: gnucash/report/reports/standard/invoice.scm:730
+#: gnucash/report/reports/standard/invoice.scm:774
 #: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1098
 msgid "Bill"
 msgstr "계산서"
@@ -1911,8 +1912,8 @@ msgstr "내역서"
 #: gnucash/gtkbuilder/dialog-invoice.glade:935
 #: gnucash/gtkbuilder/dialog-invoice.glade:959
 #: gnucash/register/ledger-core/split-register.c:2593
-#: gnucash/report/reports/standard/invoice.scm:719
-#: gnucash/report/reports/standard/invoice.scm:738
+#: gnucash/report/reports/standard/invoice.scm:765
+#: gnucash/report/reports/standard/invoice.scm:782
 #: gnucash/report/reports/standard/receipt.scm:112
 #: gnucash/report/reports/standard/taxinvoice.scm:177
 #: gnucash/report/reports/support/receipt.eguile.scm:91
@@ -1929,8 +1930,8 @@ msgstr "청구서"
 #: gnucash/import-export/import-pending-matches.cpp:189
 #: gnucash/report/reports/standard/register.scm:216
 #: gnucash/report/trep-engine.scm:275 gnucash/report/trep-engine.scm:306
-#: gnucash/report/trep-engine.scm:999 libgnucash/engine/gncOwner.c:212
-#: libgnucash/engine/Recurrence.c:502 libgnucash/engine/Recurrence.c:691
+#: gnucash/report/trep-engine.scm:1000 libgnucash/engine/gncOwner.c:212
+#: libgnucash/engine/Recurrence.cpp:502 libgnucash/engine/Recurrence.cpp:691
 msgid "None"
 msgstr "없음"
 
@@ -2135,7 +2136,7 @@ msgstr "상품을 삭제할까요?"
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2101
 #: gnucash/register/ledger-core/gncEntryLedger.c:921
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
-#: gnucash/register/ledger-core/split-register-control.c:1537
+#: gnucash/register/ledger-core/split-register-control.c:1543
 #: gnucash/ui/gnc-plugin-page-invoice.ui:141
 #: gnucash/ui/gnc-plugin-page-invoice.ui:230
 #: gnucash/ui/gnc-plugin-page-invoice.ui:422
@@ -2470,14 +2471,14 @@ msgstr "거래 전표 링크"
 #: gnucash/report/reports/standard/general-ledger.scm:70
 #: gnucash/report/reports/standard/general-ledger.scm:90
 #: gnucash/report/reports/standard/invoice.scm:89
-#: gnucash/report/reports/standard/invoice.scm:194
+#: gnucash/report/reports/standard/invoice.scm:414
 #: gnucash/report/reports/standard/new-owner-report.scm:53
 #: gnucash/report/reports/standard/new-owner-report.scm:228
 #: gnucash/report/reports/standard/register.scm:137
 #: gnucash/report/reports/standard/register.scm:358
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:270
 #: gnucash/report/trep-engine.scm:238 gnucash/report/trep-engine.scm:917
-#: gnucash/report/trep-engine.scm:1131 gnucash/report/trep-engine.scm:2244
+#: gnucash/report/trep-engine.scm:1132 gnucash/report/trep-engine.scm:2242
 msgid "Description"
 msgstr "세부 항목"
 
@@ -2652,7 +2653,7 @@ msgstr "주식 가격"
 
 #: gnucash/gnome/dialog-find-transactions.c:124
 #: gnucash/gnome/dialog-lot-viewer.c:1020
-#: gnucash/gnome/dialog-sx-since-last-run.c:1252
+#: gnucash/gnome/dialog-sx-since-last-run.c:1446
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:79
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1055
@@ -2675,8 +2676,8 @@ msgstr "붙인 날짜"
 #: gnucash/report/reports/standard/general-ledger.scm:67
 #: gnucash/report/reports/standard/general-ledger.scm:88
 #: gnucash/report/trep-engine.scm:197 gnucash/report/trep-engine.scm:540
-#: gnucash/report/trep-engine.scm:912 gnucash/report/trep-engine.scm:1101
-#: gnucash/report/trep-engine.scm:2239
+#: gnucash/report/trep-engine.scm:912 gnucash/report/trep-engine.scm:1102
+#: gnucash/report/trep-engine.scm:2237
 msgid "Reconciled Date"
 msgstr "통장정리한 날짜"
 
@@ -2705,7 +2706,7 @@ msgstr "번호/작업"
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:57
 #: gnucash/register/ledger-core/split-register-model.c:332
 #: gnucash/report/reports/standard/invoice.scm:91
-#: gnucash/report/reports/standard/invoice.scm:198
+#: gnucash/report/reports/standard/invoice.scm:418
 msgid "Action"
 msgstr "작업"
 
@@ -2766,8 +2767,8 @@ msgstr ""
 #: gnucash/report/reports/standard/receipt.scm:38
 #: gnucash/report/reports/standard/taxinvoice.scm:69
 #: gnucash/report/trep-engine.scm:269 gnucash/report/trep-engine.scm:901
-#: gnucash/report/trep-engine.scm:918 gnucash/report/trep-engine.scm:1142
-#: gnucash/report/trep-engine.scm:2258
+#: gnucash/report/trep-engine.scm:918 gnucash/report/trep-engine.scm:1143
+#: gnucash/report/trep-engine.scm:2256
 msgid "Notes"
 msgstr "장부"
 
@@ -2857,8 +2858,8 @@ msgstr ""
 #: gnucash/gnome/dialog-invoice.c:3604 gnucash/gnome/dialog-invoice.c:3638
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:158
 #: gnucash/register/ledger-core/split-register-model.c:240
-#: gnucash/report/reports/standard/invoice.scm:226
-#: gnucash/report/reports/standard/invoice.scm:552
+#: gnucash/report/reports/standard/invoice.scm:251
+#: gnucash/report/reports/standard/invoice.scm:446
 #: gnucash/report/reports/standard/new-aging.scm:112
 #: gnucash/report/reports/standard/new-owner-report.scm:50
 #: gnucash/report/reports/standard/new-owner-report.scm:936
@@ -2920,7 +2921,7 @@ msgstr "총 청구금액:"
 
 #: gnucash/gnome/dialog-invoice.c:2071 gnucash/gnome/dialog-payment.c:1358
 #: gnucash/gtkbuilder/dialog-invoice.glade:976
-#: gnucash/report/reports/standard/invoice.scm:736
+#: gnucash/report/reports/standard/invoice.scm:780
 #: libgnucash/engine/gncInvoice.c:1104
 msgid "Credit Note"
 msgstr "대변표"
@@ -3065,7 +3066,7 @@ msgid "Invoice Owner"
 msgstr "청구서 소유자"
 
 #: gnucash/gnome/dialog-invoice.c:3552
-#: gnucash/report/reports/standard/invoice.scm:282
+#: gnucash/report/reports/standard/invoice.scm:502
 msgid "Invoice Notes"
 msgstr "청구서 장부"
 
@@ -3075,7 +3076,7 @@ msgstr "청구서 장부"
 #: gnucash/gnome/dialog-order.c:885 gnucash/gtkbuilder/dialog-invoice.glade:304
 #: gnucash/gtkbuilder/dialog-invoice.glade:1064
 #: gnucash/gtkbuilder/dialog-job.glade:219
-#: gnucash/report/reports/standard/invoice.scm:274
+#: gnucash/report/reports/standard/invoice.scm:494
 msgid "Billing ID"
 msgstr "계산서 발부 ID"
 
@@ -3174,8 +3175,8 @@ msgstr "개봉"
 #: gnucash/report/reports/standard/general-ledger.scm:89
 #: gnucash/report/reports/standard/register.scm:135
 #: gnucash/report/reports/standard/register.scm:354
-#: gnucash/report/trep-engine.scm:916 gnucash/report/trep-engine.scm:1115
-#: gnucash/report/trep-engine.scm:2243
+#: gnucash/report/trep-engine.scm:916 gnucash/report/trep-engine.scm:1116
+#: gnucash/report/trep-engine.scm:2241
 msgid "Num"
 msgstr "번호"
 
@@ -3189,7 +3190,7 @@ msgstr "비용 내역서 찾기"
 
 #: gnucash/gnome/dialog-invoice.c:3757
 #: gnucash/gnome-search/dialog-search.c:1089
-#: gnucash/report/reports/standard/invoice.scm:732
+#: gnucash/report/reports/standard/invoice.scm:776
 msgid "Expense Voucher"
 msgstr "비용 내역서"
 
@@ -3217,9 +3218,9 @@ msgstr "청구서 찾기"
 #: gnucash/report/reports/standard/new-owner-report.scm:232
 #: gnucash/report/reports/standard/register.scm:382
 #: gnucash/report/reports/standard/register.scm:627
-#: gnucash/report/trep-engine.scm:231 gnucash/report/trep-engine.scm:974
-#: gnucash/report/trep-engine.scm:1332 gnucash/report/trep-engine.scm:1435
-#: gnucash/report/trep-engine.scm:2190 gnucash/report/trep-engine.scm:2210
+#: gnucash/report/trep-engine.scm:231 gnucash/report/trep-engine.scm:975
+#: gnucash/report/trep-engine.scm:1333 gnucash/report/trep-engine.scm:1436
+#: gnucash/report/trep-engine.scm:2188 gnucash/report/trep-engine.scm:2208
 msgid "Amount"
 msgstr "금액"
 
@@ -3819,43 +3820,43 @@ msgstr ""
 "현재 편집 중인 거래에서 예약된 거래를 만들 수 없습니다. 예약하기 전에 거래를 "
 "입력하십시오."
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:363
+#: gnucash/gnome/dialog-sx-since-last-run.c:369
 msgid "Ignored"
 msgstr "무시"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:364
+#: gnucash/gnome/dialog-sx-since-last-run.c:370
 msgid "Postponed"
 msgstr "연기"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:365
+#: gnucash/gnome/dialog-sx-since-last-run.c:371
 msgid "To-Create"
 msgstr "생성"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:366
+#: gnucash/gnome/dialog-sx-since-last-run.c:372
 msgid "Reminder"
 msgstr "잉여"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:367
+#: gnucash/gnome/dialog-sx-since-last-run.c:373
 #: gnucash/gnome/gnc-plugin-budget.c:192
 msgid "Created"
 msgstr "생성됨"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:430
+#: gnucash/gnome/dialog-sx-since-last-run.c:436
 #: gnucash/gtkbuilder/dialog-preferences.glade:1737
 #: gnucash/report/reports/standard/balsheet-pnl.scm:195
 #: gnucash/report/trep-engine.scm:578
 msgid "Never"
 msgstr "결코아님"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:507
+#: gnucash/gnome/dialog-sx-since-last-run.c:522
 msgid "(Need Value)"
 msgstr "(값 필요)"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:792
+#: gnucash/gnome/dialog-sx-since-last-run.c:895
 msgid "Invalid Transactions"
 msgstr "유효하지 않은 거래"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:843
+#: gnucash/gnome/dialog-sx-since-last-run.c:946
 #, c-format
 msgid ""
 "There are no Scheduled Transactions to be entered at this time. (One "
@@ -3866,17 +3867,25 @@ msgid_plural ""
 msgstr[0] ""
 "현재 입력할 표에 기입된 거래가 없습니다. (%d개 거래가 자동으로 만들어짐)"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1185
+#: gnucash/gnome/dialog-sx-since-last-run.c:1266
+msgid "Highlight a date first to sort by occurrence date."
+msgstr ""
+
+#: gnucash/gnome/dialog-sx-since-last-run.c:1267
+msgid "Highlight a schedule first to sort by schedule name."
+msgstr ""
+
+#: gnucash/gnome/dialog-sx-since-last-run.c:1379
 #: gnucash/gnome-search/dialog-search.c:1105
 msgid "Transaction"
 msgstr "거래"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1206
+#: gnucash/gnome/dialog-sx-since-last-run.c:1402
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:512
 msgid "Status"
 msgstr "상태"
 
-#: gnucash/gnome/dialog-sx-since-last-run.c:1303
+#: gnucash/gnome/dialog-sx-since-last-run.c:1497
 msgid "Created Transactions"
 msgstr "생성된 거래"
 
@@ -3963,11 +3972,11 @@ msgstr "거래처 찾기"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
 #: gnucash/register/ledger-core/split-register.c:2636
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1062
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1224
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1219
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:401
 #: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:177
-#: libgnucash/engine/Account.cpp:4457
+#: libgnucash/engine/Account.cpp:4507
 msgid "Income"
 msgstr "수입"
 
@@ -4005,13 +4014,13 @@ msgstr "남은 예산"
 #: gnucash/report/reports/standard/customer-summary.scm:438
 #: gnucash/report/reports/standard/customer-summary.scm:440
 #: gnucash/report/reports/standard/invoice.scm:103
-#: gnucash/report/reports/standard/invoice.scm:222
+#: gnucash/report/reports/standard/invoice.scm:442
 #: gnucash/report/reports/standard/new-aging.scm:183
 #: gnucash/report/reports/standard/new-aging.scm:304
 #: gnucash/report/reports/standard/new-owner-report.scm:311
 #: gnucash/report/reports/standard/portfolio.scm:269
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
-#: gnucash/report/trep-engine.scm:2088
+#: gnucash/report/trep-engine.scm:2086
 msgid "Total"
 msgstr "합계"
 
@@ -5234,7 +5243,7 @@ msgid "GnuCash-Report"
 msgstr "GnuCash 설정"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1912
-#: gnucash/report/reports/standard/invoice.scm:848
+#: gnucash/report/reports/standard/invoice.scm:877
 msgid "Printable Invoice"
 msgstr "인쇄 가능한 청구서"
 
@@ -5248,12 +5257,12 @@ msgid "Tax Invoice"
 msgstr "청구서 지불"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1914
-#: gnucash/report/reports/standard/invoice.scm:858
+#: gnucash/report/reports/standard/invoice.scm:887
 msgid "Easy Invoice"
 msgstr "쉬운 청구서"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1915
-#: gnucash/report/reports/standard/invoice.scm:868
+#: gnucash/report/reports/standard/invoice.scm:897
 msgid "Fancy Invoice"
 msgstr "팬시 청구서"
 
@@ -6428,7 +6437,7 @@ msgstr "통화(_R)"
 #: gnucash/gtkbuilder/dialog-transfer.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:431
 #: gnucash/gtkbuilder/dialog-vendor.glade:502
-#: gnucash/report/trep-engine.scm:110 libgnucash/engine/Account.cpp:4456
+#: gnucash/report/trep-engine.scm:110 libgnucash/engine/Account.cpp:4506
 msgid "Currency"
 msgstr "통화"
 
@@ -6691,7 +6700,7 @@ msgid "Show the income and expense accounts"
 msgstr "수익 및 비용 계정과목 표시하기"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:674
-#: gnucash/report/trep-engine.scm:2439 gnucash/report/trep-engine.scm:2445
+#: gnucash/report/trep-engine.scm:2437 gnucash/report/trep-engine.scm:2443
 msgid "Error"
 msgstr "오류"
 
@@ -7685,8 +7694,8 @@ msgstr "새 최상위 레벨 계정"
 #: gnucash/report/reports/standard/general-ledger.scm:72
 #: gnucash/report/reports/standard/general-ledger.scm:92
 #: gnucash/report/reports/standard/trial-balance.scm:561
-#: gnucash/report/trep-engine.scm:179 gnucash/report/trep-engine.scm:949
-#: gnucash/report/trep-engine.scm:2245
+#: gnucash/report/trep-engine.scm:179 gnucash/report/trep-engine.scm:950
+#: gnucash/report/trep-engine.scm:2243
 msgid "Account Name"
 msgstr "계정명"
 
@@ -7702,7 +7711,7 @@ msgstr "상품"
 #: gnucash/report/reports/standard/general-ledger.scm:74
 #: gnucash/report/reports/standard/general-ledger.scm:94
 #: gnucash/report/trep-engine.scm:185 gnucash/report/trep-engine.scm:921
-#: gnucash/report/trep-engine.scm:2259
+#: gnucash/report/trep-engine.scm:2257
 msgid "Account Code"
 msgstr "계정 코드"
 
@@ -7994,15 +8003,15 @@ msgstr "증권"
 #: gnucash/report/reports/standard/general-journal.scm:99
 #: gnucash/report/reports/standard/general-ledger.scm:79
 #: gnucash/report/reports/standard/general-ledger.scm:99
-#: gnucash/report/reports/standard/invoice.scm:206
+#: gnucash/report/reports/standard/invoice.scm:426
 #: gnucash/report/reports/standard/portfolio.scm:248
 #: gnucash/report/reports/standard/price-scatter.scm:40
 #: gnucash/report/reports/standard/price-scatter.scm:286
 #: gnucash/report/reports/standard/price-scatter.scm:300
 #: gnucash/report/reports/standard/register.scm:149
 #: gnucash/report/reports/standard/register.scm:378
-#: gnucash/report/trep-engine.scm:927 gnucash/report/trep-engine.scm:1201
-#: gnucash/report/trep-engine.scm:2250
+#: gnucash/report/trep-engine.scm:928 gnucash/report/trep-engine.scm:1202
+#: gnucash/report/trep-engine.scm:2248
 msgid "Price"
 msgstr "가격"
 
@@ -8129,7 +8138,6 @@ msgid "Not enough information for quotes dump"
 msgstr "공백 표시 거래에 대한 정보가 충분하지 않습니까?"
 
 #: gnucash/gnucash-cli.cpp:170
-#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8138,7 +8146,6 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
-#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8149,7 +8156,7 @@ msgstr "이것은 색상 설정입니다"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:180
-#, fuzzy, c++-format
+#, fuzzy
 #| msgid "Found Finance::Quote version ~A."
 msgid "Found Finance::Quote version {1}."
 msgstr "Finance::Quote ~A 버전을 찾았습니다."
@@ -8174,13 +8181,11 @@ msgstr "버그 및 기타 문제를 gnucash-devel@gnucash.org에 보고하십시
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
-#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "{1}에서 버그 보고서를 조회하고 제출할 수도 있습니다"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
-#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr ""
 
@@ -8198,7 +8203,6 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:208
-#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8208,12 +8212,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash %s"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, fuzzy, c++-format
+#, fuzzy
 msgid "GnuCash {1}"
 msgstr "GnuCash %s"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy, c++-format
+#, fuzzy
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s 개발 버전"
 
@@ -8336,7 +8340,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:41
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:25
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:10
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:54
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:59
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:10
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:6
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:5
@@ -8381,7 +8385,7 @@ msgstr "마지막 창 위치 및 크기"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:26
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:11
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:55
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:60
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:11
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:7
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:6
@@ -9152,11 +9156,21 @@ msgid "This settings sets the sort direction in the \"since last run\" dialog."
 msgstr ""
 "\"마지막 실행 이후\" 대화상자에서 '생성된 거래 검토'를 기본값으로 설정합니다."
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:44
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:42
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:43
+#, fuzzy
+#| msgid ""
+#| "Set 'Review created transactions' as the default in the \"since last "
+#| "run\" dialog."
+msgid "The depth used in the tree to sort in the \"since last run\" dialog."
+msgstr ""
+"\"마지막 실행 이후\" 대화상자에서 '생성된 거래 검토'를 기본값으로 설정합니다."
+
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:49
 msgid "Set the \"auto create\" flag by default"
 msgstr "기본은 \"auto create\" 플래그 설정"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:45
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:50
 msgid ""
 "If active, any newly created scheduled transaction will have its 'auto "
 "create' flag set active by default. The user can change this flag during "
@@ -9164,16 +9178,16 @@ msgid ""
 "transaction."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:49
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:50
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:54
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:55
 msgid "How many days in advance to notify the user."
 msgstr "사전에 얼마나 많은 날을 사용자에게 통보."
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:61
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:66
 msgid "Set the \"notify\" flag by default"
 msgstr "기본은 \"notify\" 플래그 설정"
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:62
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:67
 msgid ""
 "If active, any newly created scheduled transaction will have its 'notify' "
 "flag set by default. The user can change this flag during transaction "
@@ -9181,8 +9195,8 @@ msgid ""
 "setting only has meaning if the create-auto setting is active."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:66
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:67
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:71
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:72
 msgid "How many days in advance to remind the user."
 msgstr "사용자에게 알리기 위해 몇 일 전에 미리 알립니다."
 
@@ -12385,7 +12399,7 @@ msgstr ""
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4450
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4500
 msgid "Cash"
 msgstr "현금"
 
@@ -13518,7 +13532,7 @@ msgstr "계산서 발부 주소"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:152
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:72
 #: gnucash/report/reports/standard/invoice.scm:97
-#: gnucash/report/reports/standard/invoice.scm:210
+#: gnucash/report/reports/standard/invoice.scm:430
 msgid "Discount"
 msgstr "할인"
 
@@ -13802,14 +13816,14 @@ msgstr "2개월"
 #: gnucash/gtkbuilder/gnc-frequency.glade:1410
 #: gnucash/report/reports/standard/account-piecharts.scm:112
 #: gnucash/report/reports/standard/category-barchart.scm:120
-#: gnucash/report/trep-engine.scm:326 libgnucash/engine/Recurrence.c:761
-#: libgnucash/engine/Recurrence.c:775
+#: gnucash/report/trep-engine.scm:326 libgnucash/engine/Recurrence.cpp:761
+#: libgnucash/engine/Recurrence.cpp:775
 msgid "Monthly"
 msgstr "매월"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:30
 #: gnucash/gtkbuilder/dialog-fincalc.glade:71
-#: libgnucash/engine/Recurrence.c:712
+#: libgnucash/engine/Recurrence.cpp:712
 msgid "Semi-monthly"
 msgstr "반 달"
 
@@ -13825,7 +13839,7 @@ msgstr "2주"
 #: gnucash/gtkbuilder/gnc-frequency.glade:995
 #: gnucash/report/reports/standard/account-piecharts.scm:113
 #: gnucash/report/reports/standard/category-barchart.scm:121
-#: gnucash/report/trep-engine.scm:318 libgnucash/engine/Recurrence.c:622
+#: gnucash/report/trep-engine.scm:318 libgnucash/engine/Recurrence.cpp:622
 msgid "Weekly"
 msgstr "매주"
 
@@ -15195,14 +15209,14 @@ msgid "Show vertical borders on the cells."
 msgstr "셀에 세로 테두리를 표시합니다."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2753
-#: gnucash/report/reports/standard/invoice.scm:181
-#: gnucash/report/reports/standard/invoice.scm:186
-#: gnucash/report/reports/standard/invoice.scm:299
-#: gnucash/report/reports/standard/invoice.scm:305
-#: gnucash/report/reports/standard/invoice.scm:311
-#: gnucash/report/reports/standard/invoice.scm:317
-#: gnucash/report/reports/standard/invoice.scm:323
-#: gnucash/report/reports/standard/invoice.scm:329
+#: gnucash/report/reports/standard/invoice.scm:401
+#: gnucash/report/reports/standard/invoice.scm:406
+#: gnucash/report/reports/standard/invoice.scm:519
+#: gnucash/report/reports/standard/invoice.scm:525
+#: gnucash/report/reports/standard/invoice.scm:531
+#: gnucash/report/reports/standard/invoice.scm:537
+#: gnucash/report/reports/standard/invoice.scm:543
+#: gnucash/report/reports/standard/invoice.scm:549
 msgid "Layout"
 msgstr "레이아웃"
 
@@ -15933,7 +15947,7 @@ msgstr ""
 #: gnucash/gtkbuilder/gnc-frequency.glade:171
 #: gnucash/gtkbuilder/gnc-frequency.glade:760
 #: gnucash/report/reports/standard/category-barchart.scm:122
-#: gnucash/report/trep-engine.scm:312 libgnucash/engine/Recurrence.c:744
+#: gnucash/report/trep-engine.scm:312 libgnucash/engine/Recurrence.cpp:744
 msgid "Daily"
 msgstr "일"
 
@@ -15944,7 +15958,7 @@ msgstr "2주"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:138
 #: gnucash/report/reports/standard/account-piecharts.scm:111
-#: gnucash/report/trep-engine.scm:342 libgnucash/engine/Recurrence.c:787
+#: gnucash/report/trep-engine.scm:342 libgnucash/engine/Recurrence.cpp:787
 msgid "Yearly"
 msgstr "매년"
 
@@ -16313,28 +16327,28 @@ msgstr "날짜 형식"
 #: gnucash/gtkbuilder/gnc-frequency.glade:40
 #: gnucash/gtkbuilder/gnc-frequency.glade:208
 #: gnucash/gtkbuilder/gnc-frequency.glade:434
-#: libgnucash/engine/Recurrence.c:666
+#: libgnucash/engine/Recurrence.cpp:666
 msgid "1st"
 msgstr "1일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:43
 #: gnucash/gtkbuilder/gnc-frequency.glade:211
 #: gnucash/gtkbuilder/gnc-frequency.glade:437
-#: libgnucash/engine/Recurrence.c:666
+#: libgnucash/engine/Recurrence.cpp:666
 msgid "2nd"
 msgstr "2일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:46
 #: gnucash/gtkbuilder/gnc-frequency.glade:214
 #: gnucash/gtkbuilder/gnc-frequency.glade:440
-#: libgnucash/engine/Recurrence.c:666
+#: libgnucash/engine/Recurrence.cpp:666
 msgid "3rd"
 msgstr "3일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:49
 #: gnucash/gtkbuilder/gnc-frequency.glade:217
 #: gnucash/gtkbuilder/gnc-frequency.glade:443
-#: libgnucash/engine/Recurrence.c:666
+#: libgnucash/engine/Recurrence.cpp:666
 msgid "4th"
 msgstr "4일"
 
@@ -16550,7 +16564,7 @@ msgstr "마지막 일요일"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:168
 #: gnucash/gtkbuilder/gnc-frequency.glade:692
-#: libgnucash/engine/Recurrence.c:739
+#: libgnucash/engine/Recurrence.cpp:739
 msgid "Once"
 msgstr "한번"
 
@@ -16877,7 +16891,7 @@ msgstr "예산 기간"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:620
 #: gnucash/report/reports/standard/general-ledger.scm:126
-#: gnucash/report/trep-engine.scm:91 gnucash/report/trep-engine.scm:2288
+#: gnucash/report/trep-engine.scm:91 gnucash/report/trep-engine.scm:2286
 msgid "Show Account Code"
 msgstr "계정 코드 표시하기"
 
@@ -18010,7 +18024,7 @@ msgid "Unspecified"
 msgstr "지정안됨"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:478
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4449
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4499
 msgid "Bank"
 msgstr "은행"
 
@@ -18417,7 +18431,7 @@ msgstr "계산서 발부 ID"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:148
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:92
 #: gnucash/report/reports/standard/invoice.scm:93
-#: gnucash/report/reports/standard/invoice.scm:202
+#: gnucash/report/reports/standard/invoice.scm:422
 msgid "Quantity"
 msgstr "분량"
 
@@ -18433,7 +18447,7 @@ msgstr "할인"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:153
 #: gnucash/report/reports/standard/invoice.scm:99
-#: gnucash/report/reports/standard/invoice.scm:214
+#: gnucash/report/reports/standard/invoice.scm:434
 msgid "Taxable"
 msgstr "과세가능"
 
@@ -18627,7 +18641,7 @@ msgstr "파일을 성공적으로 내보냈습니다!\n"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
 #: gnucash/import-export/import-main-matcher.cpp:1845
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.c:1616 libgnucash/engine/Split.c:1633
+#: libgnucash/engine/Split.cpp:1616 libgnucash/engine/Split.cpp:1633
 msgid "-- Split Transaction --"
 msgstr "-- 거래 분할 --"
 
@@ -18884,7 +18898,7 @@ msgstr "변경할 행을 두 번 클릭한 다음, 가져오기에 적용하기�
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy, c++-format
+#, fuzzy
 msgid "The transactions were imported from file '{1}'."
 msgstr "파일 %s를 파싱 중 오류입니다."
 
@@ -19102,7 +19116,6 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
-#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -19820,19 +19833,19 @@ msgstr ""
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:113
 #: gnucash/register/ledger-core/split-register.c:2620
 #: gnucash/report/reports/standard/balance-sheet.scm:468
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1064
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1059
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:685
-#: libgnucash/app-utils/gnc-ui-util.c:650 libgnucash/engine/Account.cpp:4459
+#: libgnucash/app-utils/gnc-ui-util.cpp:637 libgnucash/engine/Account.cpp:4509
 msgid "Equity"
 msgstr "자기자본"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:110
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:114
 #: gnucash/report/reports/standard/balance-sheet.scm:475
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1073
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1088
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1068
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1083
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
-#: libgnucash/app-utils/gnc-ui-util.c:559
+#: libgnucash/app-utils/gnc-ui-util.cpp:554
 msgid "Retained Earnings"
 msgstr "이익 잉여금"
 
@@ -20005,7 +20018,7 @@ msgstr ""
 msgid "Value '~a' could be ~a or ~a."
 msgstr ""
 
-#: gnucash/import-export/qif-imp/qif-merge-groups.scm:105
+#: gnucash/import-export/qif-imp/qif-merge-groups.scm:110
 #, fuzzy
 msgid "Finding duplicate transactions"
 msgstr "복제된 거래 찾는 중..."
@@ -20069,7 +20082,13 @@ msgstr "새 가격을 추가합니다."
 msgid "Missing transaction date."
 msgstr "거래 날짜가 누락되었습니다."
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:1419
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:601
+#, fuzzy, scheme-format
+#| msgid "Missing transaction date."
+msgid "Missing QIF investment action for transaction dated ~a."
+msgstr "거래 날짜가 누락되었습니다."
+
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:1426
 #, fuzzy
 #| msgid "Invalid Transactions"
 msgid "Invalid transaction date."
@@ -20316,7 +20335,7 @@ msgid "Invoiced?"
 msgstr "청구됩니까?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:117
-#: gnucash/report/reports/standard/invoice.scm:230
+#: gnucash/report/reports/standard/invoice.scm:450
 msgid "Subtotal"
 msgstr "소계"
 
@@ -20614,69 +20633,69 @@ msgstr ""
 msgid "Dist"
 msgstr "분배"
 
-#: gnucash/register/ledger-core/split-register-control.c:59
+#: gnucash/register/ledger-core/split-register-control.c:60
 msgid "Rebalance Transaction"
 msgstr "거래 재결산"
 
-#: gnucash/register/ledger-core/split-register-control.c:60
+#: gnucash/register/ledger-core/split-register-control.c:61
 msgid "The current transaction is not balanced."
 msgstr "현재 거래의 대차가 맞지 않습니다."
 
-#: gnucash/register/ledger-core/split-register-control.c:138
+#: gnucash/register/ledger-core/split-register-control.c:139
 msgid "Balance it _manually"
 msgstr "수작업으로 대차 대조하기(_M)"
 
-#: gnucash/register/ledger-core/split-register-control.c:140
+#: gnucash/register/ledger-core/split-register-control.c:141
 msgid "Let GnuCash _add an adjusting split"
 msgstr "GnuCash에 조정 스플릿 더하기(_A)"
 
-#: gnucash/register/ledger-core/split-register-control.c:145
+#: gnucash/register/ledger-core/split-register-control.c:146
 msgid "Adjust current account _split total"
 msgstr "현재 계정 스플릿 총합계 조정(_S)"
 
-#: gnucash/register/ledger-core/split-register-control.c:151
+#: gnucash/register/ledger-core/split-register-control.c:152
 msgid "Adjust _other account split total"
 msgstr "다른 계정 스플릿 총합계 조정(_O)"
 
-#: gnucash/register/ledger-core/split-register-control.c:162
+#: gnucash/register/ledger-core/split-register-control.c:163
 msgid "_Rebalance"
 msgstr "재 수지화(_R)"
 
-#: gnucash/register/ledger-core/split-register-control.c:1307
-#: gnucash/register/ledger-core/split-register-control.c:1320
+#: gnucash/register/ledger-core/split-register-control.c:1313
+#: gnucash/register/ledger-core/split-register-control.c:1326
 msgid "This register does not support editing exchange rates."
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-control.c:1346
+#: gnucash/register/ledger-core/split-register-control.c:1352
 #, fuzzy
 msgid "You need to select a split in order to modify its exchange rate."
 msgstr "환전비율을 수정하기 위하여 거래를 확대할 필요가 있습니다."
 
-#: gnucash/register/ledger-core/split-register-control.c:1361
-#: gnucash/register/ledger-core/split-register-control.c:1436
+#: gnucash/register/ledger-core/split-register-control.c:1367
+#: gnucash/register/ledger-core/split-register-control.c:1442
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
 msgstr "환전비율을 수정하기 위하여 거래를 확대할 필요가 있습니다."
 
-#: gnucash/register/ledger-core/split-register-control.c:1373
+#: gnucash/register/ledger-core/split-register-control.c:1379
 #, fuzzy
 msgid "The entered account could not be found."
 msgstr "파일 %s를 찾을 수 없습니다."
 
-#: gnucash/register/ledger-core/split-register-control.c:1408
-#: gnucash/register/ledger-core/split-register-control.c:1421
+#: gnucash/register/ledger-core/split-register-control.c:1414
+#: gnucash/register/ledger-core/split-register-control.c:1427
 msgid "The two currencies involved equal each other."
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-control.c:1472
+#: gnucash/register/ledger-core/split-register-control.c:1478
 msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-control.c:1521
+#: gnucash/register/ledger-core/split-register-control.c:1527
 msgid "Save the changed transaction?"
 msgstr "변경된 거래를 저장하시겠습니까?"
 
-#: gnucash/register/ledger-core/split-register-control.c:1523
+#: gnucash/register/ledger-core/split-register-control.c:1529
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
@@ -20685,19 +20704,19 @@ msgstr ""
 "현재 거래가 변경되었습니다. 새 거래로 이동하지 전 변경을 기록, 변경을 무시, "
 "또는 변경된 거래를 되돌리겠습니까?"
 
-#: gnucash/register/ledger-core/split-register-control.c:1536
+#: gnucash/register/ledger-core/split-register-control.c:1542
 msgid "_Discard Changes"
 msgstr "변경 무시(_D)"
 
-#: gnucash/register/ledger-core/split-register-control.c:1538
+#: gnucash/register/ledger-core/split-register-control.c:1544
 msgid "_Record Changes"
 msgstr "변경 기록(_R)"
 
-#: gnucash/register/ledger-core/split-register-control.c:1825
+#: gnucash/register/ledger-core/split-register-control.c:1831
 msgid "Mark split as unreconciled?"
 msgstr "분할을 미조정으로 표시하시겠습니까?"
 
-#: gnucash/register/ledger-core/split-register-control.c:1827
+#: gnucash/register/ledger-core/split-register-control.c:1833
 msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
 "make future reconciliation difficult! Continue with this change?"
@@ -20705,7 +20724,7 @@ msgstr ""
 "통장정리되지 않은 것으로 통장정리 분리를 표시합니다. 이 작업은 미래 통장정리"
 "와 다를 수 있습니다! 이것으로 변경하겠습니까?"
 
-#: gnucash/register/ledger-core/split-register-control.c:1844
+#: gnucash/register/ledger-core/split-register-control.c:1850
 msgid "_Unreconcile"
 msgstr "통장정리 안함(_U)"
 
@@ -20738,7 +20757,7 @@ msgstr "샘플: 거래 세부 항목"
 #: gnucash/register/ledger-core/split-register-model.c:339
 #: gnucash/report/reports/standard/new-owner-report.scm:209
 #: gnucash/report/reports/standard/new-owner-report.scm:436
-#: gnucash/report/trep-engine.scm:1197 gnucash/report/trep-engine.scm:1198
+#: gnucash/report/trep-engine.scm:1198 gnucash/report/trep-engine.scm:1199
 msgctxt "Column header for 'Document Link'"
 msgid "L"
 msgstr "L"
@@ -21375,8 +21394,8 @@ msgstr "부모 계정의 수지를 보이지 않기."
 
 #: gnucash/report/options-utilities.scm:217
 #: gnucash/report/reports/standard/account-summary.scm:112
-#: gnucash/report/trep-engine.scm:930 gnucash/report/trep-engine.scm:1367
-#: gnucash/report/trep-engine.scm:1472
+#: gnucash/report/trep-engine.scm:931 gnucash/report/trep-engine.scm:1368
+#: gnucash/report/trep-engine.scm:1473
 msgid "Account Balance"
 msgstr ""
 
@@ -21435,22 +21454,22 @@ msgid "_Multicolumn"
 msgstr "다수열 보기"
 
 #: gnucash/report/report-core.scm:164
-#: gnucash/report/reports/standard/invoice.scm:226
-#: gnucash/report/reports/standard/invoice.scm:230
-#: gnucash/report/reports/standard/invoice.scm:234
-#: gnucash/report/reports/standard/invoice.scm:241
-#: gnucash/report/reports/standard/invoice.scm:246
-#: gnucash/report/reports/standard/invoice.scm:252
-#: gnucash/report/reports/standard/invoice.scm:257
-#: gnucash/report/reports/standard/invoice.scm:262
-#: gnucash/report/reports/standard/invoice.scm:266
-#: gnucash/report/reports/standard/invoice.scm:270
-#: gnucash/report/reports/standard/invoice.scm:274
-#: gnucash/report/reports/standard/invoice.scm:278
-#: gnucash/report/reports/standard/invoice.scm:282
-#: gnucash/report/reports/standard/invoice.scm:286
-#: gnucash/report/reports/standard/invoice.scm:290
-#: gnucash/report/reports/standard/invoice.scm:294
+#: gnucash/report/reports/standard/invoice.scm:446
+#: gnucash/report/reports/standard/invoice.scm:450
+#: gnucash/report/reports/standard/invoice.scm:454
+#: gnucash/report/reports/standard/invoice.scm:461
+#: gnucash/report/reports/standard/invoice.scm:466
+#: gnucash/report/reports/standard/invoice.scm:472
+#: gnucash/report/reports/standard/invoice.scm:477
+#: gnucash/report/reports/standard/invoice.scm:482
+#: gnucash/report/reports/standard/invoice.scm:486
+#: gnucash/report/reports/standard/invoice.scm:490
+#: gnucash/report/reports/standard/invoice.scm:494
+#: gnucash/report/reports/standard/invoice.scm:498
+#: gnucash/report/reports/standard/invoice.scm:502
+#: gnucash/report/reports/standard/invoice.scm:506
+#: gnucash/report/reports/standard/invoice.scm:510
+#: gnucash/report/reports/standard/invoice.scm:514
 #: gnucash/report/reports/standard/receipt.scm:40
 #: gnucash/report/reports/standard/register.scm:346
 #: gnucash/report/reports/standard/register.scm:351
@@ -21662,7 +21681,7 @@ msgstr "생성하기 위한 그래프 형태"
 
 #: gnucash/report/reports/example/average-balance.scm:116
 #: gnucash/report/reports/example/average-balance.scm:136
-#: gnucash/report/trep-engine.scm:2089 libgnucash/engine/policy.c:58
+#: gnucash/report/trep-engine.scm:2087 libgnucash/engine/policy.c:58
 msgid "Average"
 msgstr "평균"
 
@@ -23152,8 +23171,8 @@ msgid "Trading Losses"
 msgstr "매매 손실"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:485
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1068
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1083
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1063
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1078
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:725
 #: gnucash/report/reports/standard/trial-balance.scm:697
 msgid "Unrealized Gains"
@@ -23257,7 +23276,7 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:175
-#: gnucash/report/reports/standard/invoice.scm:294
+#: gnucash/report/reports/standard/invoice.scm:514
 #: gnucash/report/reports/standard/receipt.scm:64
 #: gnucash/report/reports/standard/taxinvoice.scm:112
 msgid "Extra Notes"
@@ -23463,61 +23482,61 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:437
 #: gnucash/report/reports/standard/balsheet-pnl.scm:595
-#: gnucash/report/trep-engine.scm:1736
+#: gnucash/report/trep-engine.scm:1737
 msgid "Total For "
 msgstr "총계 "
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1057
-#: libgnucash/engine/Account.cpp:4451
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1052
+#: libgnucash/engine/Account.cpp:4501
 msgid "Asset"
 msgstr "자산"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1060
-#: libgnucash/engine/Account.cpp:4453
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1055
+#: libgnucash/engine/Account.cpp:4503
 msgid "Liability"
 msgstr "부채"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1078
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1073
 #, fuzzy
 msgid "Liability and Equity"
 msgstr "부채"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1096
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1239
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1091
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1234
 #, fuzzy
 msgid "Exchange Rates"
 msgstr "환전 비율"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1106
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1101
 #, fuzzy
 msgid "Barchart"
 msgstr "자산 막대차트"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1169
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1164
 msgid " to "
 msgstr " ～ "
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1228
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1223
 #: gnucash/report/reports/standard/customer-summary.scm:110
 #: gnucash/report/reports/standard/customer-summary.scm:286
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:401
-#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4458
+#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4508
 #: libgnucash/engine/gncInvoice.c:1100
 msgid "Expense"
 msgstr "비용"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1232
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1227
 #: gnucash/report/reports/standard/trial-balance.scm:823
 msgid "Net Income"
 msgstr "순수입"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1265
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1260
 #, fuzzy
 msgid "Balance Sheet (Multicolumn)"
 msgstr "대차 대조표 날짜"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1266
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1261
 #, fuzzy
 msgid "Income Statement (Multicolumn)"
 msgstr "손익 계산서"
@@ -24233,8 +24252,8 @@ msgstr "~a - ~a 잔액"
 #: gnucash/report/reports/standard/category-barchart.scm:654
 #: gnucash/report/reports/standard/category-barchart.scm:674
 #: gnucash/report/reports/standard/investment-lots.scm:132
-#: gnucash/report/trep-engine.scm:77 gnucash/report/trep-engine.scm:1803
-#: gnucash/report/trep-engine.scm:2074
+#: gnucash/report/trep-engine.scm:77 gnucash/report/trep-engine.scm:1804
+#: gnucash/report/trep-engine.scm:2072
 msgid "Grand Total"
 msgstr "전체 합계"
 
@@ -24437,7 +24456,7 @@ msgstr "자본금 감소"
 #: gnucash/report/reports/standard/general-ledger.scm:68
 #: gnucash/report/reports/standard/register.scm:134
 #: gnucash/report/reports/standard/register.scm:351
-#: gnucash/report/trep-engine.scm:915 gnucash/report/trep-engine.scm:2242
+#: gnucash/report/trep-engine.scm:915 gnucash/report/trep-engine.scm:2240
 #, fuzzy
 msgid "Num/Action"
 msgstr "작업"
@@ -24446,7 +24465,7 @@ msgstr "작업"
 #: gnucash/report/reports/standard/general-ledger.scm:82
 #: gnucash/report/reports/standard/general-ledger.scm:102
 #: gnucash/report/reports/standard/register.scm:394
-#: gnucash/report/trep-engine.scm:1360 gnucash/report/trep-engine.scm:1465
+#: gnucash/report/trep-engine.scm:1361 gnucash/report/trep-engine.scm:1466
 msgid "Running Balance"
 msgstr "운용중인 잔고"
 
@@ -24468,7 +24487,7 @@ msgid "Sorting"
 msgstr "분류"
 
 #: gnucash/report/reports/standard/general-ledger.scm:69
-#: gnucash/report/trep-engine.scm:935 gnucash/report/trep-engine.scm:2267
+#: gnucash/report/trep-engine.scm:936 gnucash/report/trep-engine.scm:2265
 #, fuzzy
 msgid "Trans Number"
 msgstr "세금 번호"
@@ -24476,21 +24495,21 @@ msgstr "세금 번호"
 #: gnucash/report/reports/standard/general-ledger.scm:73
 #: gnucash/report/reports/standard/general-ledger.scm:93
 #: gnucash/report/trep-engine.scm:873 gnucash/report/trep-engine.scm:920
-#: gnucash/report/trep-engine.scm:2256
+#: gnucash/report/trep-engine.scm:2254
 msgid "Use Full Account Name"
 msgstr "전체 계정 이름 사용하기"
 
 #: gnucash/report/reports/standard/general-ledger.scm:75
 #: gnucash/report/reports/standard/general-ledger.scm:95
 #: gnucash/report/trep-engine.scm:219 gnucash/report/trep-engine.scm:877
-#: gnucash/report/trep-engine.scm:957 gnucash/report/trep-engine.scm:2248
+#: gnucash/report/trep-engine.scm:958 gnucash/report/trep-engine.scm:2246
 msgid "Other Account Name"
 msgstr "기타 계정명"
 
 #: gnucash/report/reports/standard/general-ledger.scm:76
 #: gnucash/report/reports/standard/general-ledger.scm:96
 #: gnucash/report/trep-engine.scm:893 gnucash/report/trep-engine.scm:923
-#: gnucash/report/trep-engine.scm:2265
+#: gnucash/report/trep-engine.scm:2263
 #, fuzzy
 msgid "Use Full Other Account Name"
 msgstr "전체 기타 계정명을 사용합니까"
@@ -24498,14 +24517,14 @@ msgstr "전체 기타 계정명을 사용합니까"
 #: gnucash/report/reports/standard/general-ledger.scm:77
 #: gnucash/report/reports/standard/general-ledger.scm:97
 #: gnucash/report/trep-engine.scm:225 gnucash/report/trep-engine.scm:897
-#: gnucash/report/trep-engine.scm:924 gnucash/report/trep-engine.scm:2262
+#: gnucash/report/trep-engine.scm:924 gnucash/report/trep-engine.scm:2260
 msgid "Other Account Code"
 msgstr "기타 계정 코드"
 
 #: gnucash/report/reports/standard/general-ledger.scm:84
 #: gnucash/report/reports/standard/general-ledger.scm:104
-#: gnucash/report/trep-engine.scm:881 gnucash/report/trep-engine.scm:990
-#: gnucash/report/trep-engine.scm:2191
+#: gnucash/report/trep-engine.scm:881 gnucash/report/trep-engine.scm:991
+#: gnucash/report/trep-engine.scm:2189
 msgid "Sign Reverses"
 msgstr "부호 변경"
 
@@ -24520,7 +24539,7 @@ msgid "Primary Key"
 msgstr "1차 키"
 
 #: gnucash/report/reports/standard/general-ledger.scm:125
-#: gnucash/report/trep-engine.scm:90 gnucash/report/trep-engine.scm:2290
+#: gnucash/report/trep-engine.scm:90 gnucash/report/trep-engine.scm:2288
 msgid "Show Full Account Name"
 msgstr "전체 계정 이름 표시하기"
 
@@ -24778,7 +24797,7 @@ msgid ""
 msgstr "전체 매출을 지시하는 라인 포함할 지 안할지"
 
 #: gnucash/report/reports/standard/income-statement.scm:477
-#: libgnucash/engine/Account.cpp:4463 libgnucash/engine/Scrub.c:538
+#: libgnucash/engine/Account.cpp:4513 libgnucash/engine/Scrub.c:538
 #, fuzzy
 msgid "Trading"
 msgstr "헤딩"
@@ -25329,7 +25348,7 @@ msgid "Account Lot Gains"
 msgstr "계정 장부"
 
 #: gnucash/report/reports/standard/invoice.scm:101
-#: gnucash/report/reports/standard/invoice.scm:218
+#: gnucash/report/reports/standard/invoice.scm:438
 #: gnucash/report/reports/standard/receipt.scm:59
 #: gnucash/report/reports/standard/receipt.scm:128
 #: gnucash/report/reports/standard/taxinvoice.scm:107
@@ -25337,48 +25356,75 @@ msgstr "계정 장부"
 msgid "Tax Amount"
 msgstr "세액"
 
-#: gnucash/report/reports/standard/invoice.scm:111
+#: gnucash/report/reports/standard/invoice.scm:157
+msgid "REF"
+msgstr "참조"
+
+#: gnucash/report/reports/standard/invoice.scm:258
+#: gnucash/report/reports/support/taxinvoice.eguile.scm:225
+#, fuzzy
+msgid "Invoice in progress…"
+msgstr "진행중인 청구서…"
+
+#: gnucash/report/reports/standard/invoice.scm:266
+msgid "Reference:"
+msgstr "참조:"
+
+#: gnucash/report/reports/standard/invoice.scm:278
+msgid "Terms:"
+msgstr "지불 조건:"
+
+#: gnucash/report/reports/standard/invoice.scm:288
+#: gnucash/report/reports/standard/taxinvoice.scm:214
+msgid "Job number:"
+msgstr "묶음 번호:"
+
+#: gnucash/report/reports/standard/invoice.scm:293
+#: gnucash/report/reports/standard/taxinvoice.scm:217
+msgid "Job name:"
+msgstr "묶음 이름:"
+
+#: gnucash/report/reports/standard/invoice.scm:317
 msgid "Client or vendor name, address and ID"
 msgstr "클라이언트 또는 거래처 이름, 주소 및 ID"
 
-#: gnucash/report/reports/standard/invoice.scm:112
+#: gnucash/report/reports/standard/invoice.scm:321
 msgid "Company name, address and tax-ID"
 msgstr "회사 이름, 주소 및 세금 ID"
 
-#: gnucash/report/reports/standard/invoice.scm:113
+#: gnucash/report/reports/standard/invoice.scm:325
 msgid "Invoice date, due date, billing ID, terms, job details"
 msgstr "청구서 날짜, 기한, 계산서 발부 ID, 조건, 묶음 세부사항"
 
-#: gnucash/report/reports/standard/invoice.scm:114
+#: gnucash/report/reports/standard/invoice.scm:329
 msgid "Today's date"
 msgstr "오늘 날짜"
 
-#: gnucash/report/reports/standard/invoice.scm:115
+#: gnucash/report/reports/standard/invoice.scm:333
 msgid "Picture"
 msgstr "사진"
 
-#. Translators: "Empty space" refers to invoice header section being left blank
-#: gnucash/report/reports/standard/invoice.scm:118
+#: gnucash/report/reports/standard/invoice.scm:338
 #, fuzzy
 msgid "Empty space"
 msgstr "네임스페이스"
 
-#: gnucash/report/reports/standard/invoice.scm:176
+#: gnucash/report/reports/standard/invoice.scm:396
 #, fuzzy
 msgid "Custom Title"
 msgstr "소비자"
 
-#: gnucash/report/reports/standard/invoice.scm:177
+#: gnucash/report/reports/standard/invoice.scm:397
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
 msgstr "청구서, 계산서 또는 비용 내역서를 대체할 사용자 지정 문자열입니다."
 
-#: gnucash/report/reports/standard/invoice.scm:181
+#: gnucash/report/reports/standard/invoice.scm:401
 #: gnucash/report/stylesheets/css.scm:118
 #: gnucash/report/stylesheets/css.scm:224
 msgid "CSS"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:181
+#: gnucash/report/reports/standard/invoice.scm:401
 msgid ""
 "CSS code. This field specifies the CSS code for styling the invoice. Please "
 "see the exported report for the CSS class names."
@@ -25386,23 +25432,23 @@ msgstr ""
 "CSS 코드입니다. 이 필드는 청구서 스타일을 지정하기 위한 CSS 코드를 지정합니"
 "다. CSS 클래스 이름에 대해서는 내보낸 보고서를 참조하십시오."
 
-#: gnucash/report/reports/standard/invoice.scm:186
+#: gnucash/report/reports/standard/invoice.scm:406
 msgid "Picture Location"
 msgstr "사진 위치"
 
-#: gnucash/report/reports/standard/invoice.scm:186
+#: gnucash/report/reports/standard/invoice.scm:406
 msgid "Location for Picture"
 msgstr "사진 위치"
 
-#: gnucash/report/reports/standard/invoice.scm:190
-#: gnucash/report/reports/standard/invoice.scm:194
-#: gnucash/report/reports/standard/invoice.scm:198
-#: gnucash/report/reports/standard/invoice.scm:202
-#: gnucash/report/reports/standard/invoice.scm:206
-#: gnucash/report/reports/standard/invoice.scm:210
-#: gnucash/report/reports/standard/invoice.scm:214
-#: gnucash/report/reports/standard/invoice.scm:218
-#: gnucash/report/reports/standard/invoice.scm:222
+#: gnucash/report/reports/standard/invoice.scm:410
+#: gnucash/report/reports/standard/invoice.scm:414
+#: gnucash/report/reports/standard/invoice.scm:418
+#: gnucash/report/reports/standard/invoice.scm:422
+#: gnucash/report/reports/standard/invoice.scm:426
+#: gnucash/report/reports/standard/invoice.scm:430
+#: gnucash/report/reports/standard/invoice.scm:434
+#: gnucash/report/reports/standard/invoice.scm:438
+#: gnucash/report/reports/standard/invoice.scm:442
 #: gnucash/report/reports/standard/new-owner-report.scm:874
 #: gnucash/report/reports/standard/new-owner-report.scm:878
 #: gnucash/report/reports/standard/new-owner-report.scm:882
@@ -25418,213 +25464,213 @@ msgstr "사진 위치"
 msgid "Display Columns"
 msgstr "열 화면표시"
 
-#: gnucash/report/reports/standard/invoice.scm:191
+#: gnucash/report/reports/standard/invoice.scm:411
 #: gnucash/report/reports/standard/register.scm:347
 #: gnucash/report/reports/standard/taxinvoice.scm:124
 #: gnucash/report/trep-engine.scm:911
 msgid "Display the date?"
 msgstr "날짜를 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:195
+#: gnucash/report/reports/standard/invoice.scm:415
 #: gnucash/report/reports/standard/register.scm:359
 #: gnucash/report/trep-engine.scm:917
 msgid "Display the description?"
 msgstr "설명을 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:199
+#: gnucash/report/reports/standard/invoice.scm:419
 msgid "Display the action?"
 msgstr "작업을 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:203
+#: gnucash/report/reports/standard/invoice.scm:423
 msgid "Display the quantity of items?"
 msgstr "항목의 수량을 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:207
+#: gnucash/report/reports/standard/invoice.scm:427
 msgid "Display the price per item?"
 msgstr "항목당 가격을 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:211
+#: gnucash/report/reports/standard/invoice.scm:431
 msgid "Display the entry's discount?"
 msgstr "항목의 할인을 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:215
+#: gnucash/report/reports/standard/invoice.scm:435
 msgid "Display the entry's taxable status?"
 msgstr "항목의 과세 상태를 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:219
+#: gnucash/report/reports/standard/invoice.scm:439
 msgid "Display each entry's total total tax?"
 msgstr "각 항목의 총 세금을 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:223
+#: gnucash/report/reports/standard/invoice.scm:443
 msgid "Display the entry's value?"
 msgstr "항목의 값을 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:227
+#: gnucash/report/reports/standard/invoice.scm:447
 msgid "Display due date?"
 msgstr "만기 날짜를 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:231
+#: gnucash/report/reports/standard/invoice.scm:451
 msgid "Display the subtotals?"
 msgstr "소계를 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:234
+#: gnucash/report/reports/standard/invoice.scm:454
 msgid "Payable to"
 msgstr "수취인"
 
-#: gnucash/report/reports/standard/invoice.scm:235
+#: gnucash/report/reports/standard/invoice.scm:455
 msgid "Display the Payable to: information."
 msgstr "수취인: 정보를 표시합니다."
 
-#: gnucash/report/reports/standard/invoice.scm:241
+#: gnucash/report/reports/standard/invoice.scm:461
 msgid "Payable to string"
 msgstr "수취인 문자열"
 
-#: gnucash/report/reports/standard/invoice.scm:242
+#: gnucash/report/reports/standard/invoice.scm:462
 msgid "The phrase for specifying to whom payments should be made."
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:243
+#: gnucash/report/reports/standard/invoice.scm:463
 #, fuzzy
 msgid "Please make all checks payable to"
 msgstr "전체 수표로 지불"
 
-#: gnucash/report/reports/standard/invoice.scm:246
+#: gnucash/report/reports/standard/invoice.scm:466
 msgid "Company contact"
 msgstr "회사 접촉"
 
-#: gnucash/report/reports/standard/invoice.scm:247
+#: gnucash/report/reports/standard/invoice.scm:467
 #, fuzzy
 msgid "Display the Company contact information."
 msgstr "회사 접촉 정보 보이기"
 
-#: gnucash/report/reports/standard/invoice.scm:252
+#: gnucash/report/reports/standard/invoice.scm:472
 msgid "Company contact string"
 msgstr "회사 접촉 문자열"
 
-#: gnucash/report/reports/standard/invoice.scm:253
+#: gnucash/report/reports/standard/invoice.scm:473
 #, fuzzy
 msgid "The phrase used to introduce the company contact."
 msgstr "회사 접촉을 소개하기 위하여 이용된 구절"
 
-#: gnucash/report/reports/standard/invoice.scm:254
+#: gnucash/report/reports/standard/invoice.scm:474
 msgid "Please direct all enquiries to"
 msgstr "모든 문의사항은"
 
-#: gnucash/report/reports/standard/invoice.scm:257
+#: gnucash/report/reports/standard/invoice.scm:477
 msgid "Minimum # of entries"
 msgstr "엔트리의 최소값 #"
 
-#: gnucash/report/reports/standard/invoice.scm:258
+#: gnucash/report/reports/standard/invoice.scm:478
 #, fuzzy
 msgid "The minimum number of invoice entries to display."
 msgstr "보일 청구서 엔트리의 최소 번호. (-1)"
 
-#: gnucash/report/reports/standard/invoice.scm:262
+#: gnucash/report/reports/standard/invoice.scm:482
 msgid "Use Detailed Tax Summary"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:263
+#: gnucash/report/reports/standard/invoice.scm:483
 msgid ""
 "Display all tax categories separately (one per line) instead of one single "
 "tax line.?"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:266
+#: gnucash/report/reports/standard/invoice.scm:486
 msgid "References"
 msgstr "참조"
 
-#: gnucash/report/reports/standard/invoice.scm:267
+#: gnucash/report/reports/standard/invoice.scm:487
 msgid "Display the invoice references?"
 msgstr "청구서 참조 보일까요?"
 
-#: gnucash/report/reports/standard/invoice.scm:270
+#: gnucash/report/reports/standard/invoice.scm:490
 msgid "Billing Terms"
 msgstr "계산서 발부 조건"
 
-#: gnucash/report/reports/standard/invoice.scm:271
+#: gnucash/report/reports/standard/invoice.scm:491
 msgid "Display the invoice billing terms?"
 msgstr "청구서 계산서 발부 조건을 화면표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:275
+#: gnucash/report/reports/standard/invoice.scm:495
 msgid "Display the billing id?"
 msgstr "계산서 발부 ID를 화면표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:278
+#: gnucash/report/reports/standard/invoice.scm:498
 #, fuzzy
 msgid "Invoice owner ID"
 msgstr "청구서 소유자"
 
-#: gnucash/report/reports/standard/invoice.scm:279
+#: gnucash/report/reports/standard/invoice.scm:499
 msgid "Display the customer/vendor id?"
 msgstr "고객/거래처 ID를 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:283
+#: gnucash/report/reports/standard/invoice.scm:503
 msgid "Display the invoice notes?"
 msgstr "청구서 장부 보일까요?"
 
-#: gnucash/report/reports/standard/invoice.scm:286
+#: gnucash/report/reports/standard/invoice.scm:506
 msgid "Payments"
 msgstr "지불"
 
-#: gnucash/report/reports/standard/invoice.scm:287
+#: gnucash/report/reports/standard/invoice.scm:507
 msgid "Display the payments applied to this invoice?"
 msgstr "이 청구서에 적용된 지불비용 보입니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:290
+#: gnucash/report/reports/standard/invoice.scm:510
 msgid "Job Details"
 msgstr "묶음 세부사항"
 
-#: gnucash/report/reports/standard/invoice.scm:291
+#: gnucash/report/reports/standard/invoice.scm:511
 msgid "Display the job name for this invoice?"
 msgstr "이 청구서의 묶음 이름을 표시하시겠습니까?"
 
-#: gnucash/report/reports/standard/invoice.scm:295
+#: gnucash/report/reports/standard/invoice.scm:515
 #, fuzzy
 msgid "Extra notes to put on the invoice."
 msgstr "청구서에 넣을 별도 장부"
 
-#: gnucash/report/reports/standard/invoice.scm:296
+#: gnucash/report/reports/standard/invoice.scm:516
 #: gnucash/report/reports/standard/taxinvoice.scm:222
 msgid "Thank you for your patronage!"
 msgstr "당신의 후원에 감사드립니다!"
 
-#: gnucash/report/reports/standard/invoice.scm:299
+#: gnucash/report/reports/standard/invoice.scm:519
 msgid "Row 1 Left"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:305
+#: gnucash/report/reports/standard/invoice.scm:525
 #, fuzzy
 msgid "Row 1 Right"
 msgstr "오른쪽"
 
-#: gnucash/report/reports/standard/invoice.scm:311
+#: gnucash/report/reports/standard/invoice.scm:531
 msgid "Row 2 Left"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:317
+#: gnucash/report/reports/standard/invoice.scm:537
 #, fuzzy
 msgid "Row 2 Right"
 msgstr "오른쪽"
 
-#: gnucash/report/reports/standard/invoice.scm:323
+#: gnucash/report/reports/standard/invoice.scm:543
 msgid "Row 3 Left"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:329
+#: gnucash/report/reports/standard/invoice.scm:549
 #, fuzzy
 msgid "Row 3 Right"
 msgstr "오른쪽"
 
-#: gnucash/report/reports/standard/invoice.scm:379
+#: gnucash/report/reports/standard/invoice.scm:599
 msgid "Payment, thank you!"
 msgstr "결제, 감사합니다!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
-#: gnucash/report/reports/standard/invoice.scm:436
+#: gnucash/report/reports/standard/invoice.scm:656
 msgid "T"
 msgstr "T"
 
-#: gnucash/report/reports/standard/invoice.scm:483
+#: gnucash/report/reports/standard/invoice.scm:703
 #: gnucash/report/reports/standard/receipt.scm:57
 #: gnucash/report/reports/standard/receipt.scm:124
 #: gnucash/report/reports/standard/taxinvoice.scm:105
@@ -25632,7 +25678,7 @@ msgstr "T"
 msgid "Net Price"
 msgstr "순 가격"
 
-#: gnucash/report/reports/standard/invoice.scm:499
+#: gnucash/report/reports/standard/invoice.scm:719
 #: gnucash/report/reports/standard/receipt.scm:60
 #: gnucash/report/reports/standard/receipt.scm:130
 #: gnucash/report/reports/standard/taxinvoice.scm:108
@@ -25641,7 +25687,7 @@ msgstr "순 가격"
 msgid "Total Price"
 msgstr "합계 (기간)"
 
-#: gnucash/report/reports/standard/invoice.scm:519
+#: gnucash/report/reports/standard/invoice.scm:739
 #: gnucash/report/reports/standard/receipt.scm:62
 #: gnucash/report/reports/standard/receipt.scm:134
 #: gnucash/report/reports/standard/taxinvoice.scm:110
@@ -25649,35 +25695,7 @@ msgstr "합계 (기간)"
 msgid "Amount Due"
 msgstr ""
 
-#: gnucash/report/reports/standard/invoice.scm:559
-#: gnucash/report/reports/support/taxinvoice.eguile.scm:225
-#, fuzzy
-msgid "Invoice in progress…"
-msgstr "진행중인 청구서…"
-
-#: gnucash/report/reports/standard/invoice.scm:567
-msgid "Reference:"
-msgstr "참조:"
-
-#: gnucash/report/reports/standard/invoice.scm:579
-msgid "Terms:"
-msgstr "지불 조건:"
-
-#: gnucash/report/reports/standard/invoice.scm:589
-#: gnucash/report/reports/standard/taxinvoice.scm:214
-msgid "Job number:"
-msgstr "묶음 번호:"
-
-#: gnucash/report/reports/standard/invoice.scm:594
-#: gnucash/report/reports/standard/taxinvoice.scm:217
-msgid "Job name:"
-msgstr "묶음 이름:"
-
-#: gnucash/report/reports/standard/invoice.scm:639
-msgid "REF"
-msgstr "참조"
-
-#: gnucash/report/reports/standard/invoice.scm:720
+#: gnucash/report/reports/standard/invoice.scm:766
 #, fuzzy
 msgid ""
 "No valid invoice selected. Click on the Options button and select the "
@@ -25689,7 +25707,7 @@ msgstr "선택된 유효 계정 없음. 설정 버튼을 클릭하고 사용하�
 #. Note", and so on and the second the number.  Replace
 #. " #" by whatever is common as number abbreviation,
 #. i.e. "~a Nr. ~a"
-#: gnucash/report/reports/standard/invoice.scm:745
+#: gnucash/report/reports/standard/invoice.scm:789
 #, scheme-format
 msgid "~a #~a"
 msgstr ""
@@ -26037,7 +26055,7 @@ msgid "Partial Amount"
 msgstr "부모 계정(_P)"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:283
-#: gnucash/report/trep-engine.scm:926 gnucash/report/trep-engine.scm:2251
+#: gnucash/report/trep-engine.scm:927 gnucash/report/trep-engine.scm:2249
 msgid "Link"
 msgstr ""
 
@@ -26495,7 +26513,7 @@ msgstr "통장정리 (자동) 일치"
 
 #: gnucash/report/reports/standard/register.scm:147
 #: gnucash/report/reports/standard/register.scm:374
-#: libgnucash/engine/gnc-lot.c:791
+#: libgnucash/engine/gnc-lot.cpp:791
 msgid "Lot"
 msgstr "몫"
 
@@ -26527,7 +26545,7 @@ msgid "Display the check number?"
 msgstr "체크 번호를 보일까요?"
 
 #: gnucash/report/reports/standard/register.scm:363
-#: gnucash/report/trep-engine.scm:942
+#: gnucash/report/trep-engine.scm:943
 msgid "Display the memo?"
 msgstr "메모를 보일까요?"
 
@@ -26536,7 +26554,7 @@ msgid "Display the account?"
 msgstr "계정을 보일까요?"
 
 #: gnucash/report/reports/standard/register.scm:371
-#: gnucash/report/trep-engine.scm:925
+#: gnucash/report/trep-engine.scm:926
 msgid "Display the number of shares?"
 msgstr "주식 수를 드러내시겠습니까?"
 
@@ -26545,23 +26563,23 @@ msgid "Display the name of lot the shares are in?"
 msgstr "지분 및 주식 수를 포함하는 로트의 이름을 표시하시겠습니까?"
 
 #: gnucash/report/reports/standard/register.scm:379
-#: gnucash/report/trep-engine.scm:927
+#: gnucash/report/trep-engine.scm:928
 msgid "Display the shares price?"
 msgstr "주식 가격 보일까요?"
 
 #: gnucash/report/reports/standard/register.scm:383
-#: gnucash/report/trep-engine.scm:975
+#: gnucash/report/trep-engine.scm:976
 msgid "Display the amount?"
 msgstr "수량을 보일까요?"
 
 #: gnucash/report/reports/standard/register.scm:386
-#: gnucash/report/trep-engine.scm:979
+#: gnucash/report/trep-engine.scm:980
 #, fuzzy
 msgid "Single Column"
 msgstr "단일 열 보이기"
 
 #: gnucash/report/reports/standard/register.scm:387
-#: gnucash/report/trep-engine.scm:980
+#: gnucash/report/trep-engine.scm:981
 #, fuzzy
 msgid "Two Columns"
 msgstr "2 열 보이기"
@@ -27078,17 +27096,17 @@ msgstr "외상매입금"
 msgid "Credit Lines"
 msgstr ""
 
-#: gnucash/report/report-utilities.scm:642
+#: gnucash/report/report-utilities.scm:639
 #, scheme-format
 msgid "Building '~a' report …"
 msgstr "'~a' 보고서 생성 중…"
 
-#: gnucash/report/report-utilities.scm:648
+#: gnucash/report/report-utilities.scm:645
 #, scheme-format
 msgid "Rendering '~a' report …"
 msgstr "'~a' 보고서 렌더 중…"
 
-#: gnucash/report/report-utilities.scm:650
+#: gnucash/report/report-utilities.scm:647
 #, fuzzy
 msgid "Untitled"
 msgstr "까지"
@@ -27138,7 +27156,7 @@ msgstr "기관이나 회사 이름."
 
 #: gnucash/report/stylesheets/footer.scm:68
 #: gnucash/report/stylesheets/head-or-tail.scm:85
-#: gnucash/report/stylesheets/plain.scm:50 gnucash/report/trep-engine.scm:986
+#: gnucash/report/stylesheets/plain.scm:50 gnucash/report/trep-engine.scm:987
 msgid "Enable Links"
 msgstr "링크 가능"
 
@@ -27516,7 +27534,7 @@ msgstr "소계 표"
 msgid "Running Totals"
 msgstr "운용중인 잔고"
 
-#: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2292
+#: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2290
 #, fuzzy
 msgid "Show Account Description"
 msgstr "계정 세부 항목"
@@ -27683,7 +27701,7 @@ msgid "Specify date to filter by…"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:541 gnucash/report/trep-engine.scm:913
-#: gnucash/report/trep-engine.scm:1092 gnucash/report/trep-engine.scm:2240
+#: gnucash/report/trep-engine.scm:1093 gnucash/report/trep-engine.scm:2238
 #, fuzzy
 msgid "Date Entered"
 msgstr "붙인 날짜"
@@ -27865,36 +27883,36 @@ msgstr "계정 코드를 표시하시겠습니까?"
 msgid "Display the other account code?"
 msgstr "다른 계정 코드를 표시하시겠습니까?"
 
-#: gnucash/report/trep-engine.scm:926
+#: gnucash/report/trep-engine.scm:927
 msgid "Display the transaction linked document"
 msgstr "거래 링크된 전표 화면표시"
 
-#: gnucash/report/trep-engine.scm:929
+#: gnucash/report/trep-engine.scm:930
 msgid "Display a subtotal summary table."
 msgstr "소계 요약 표를 표시합니다."
 
-#: gnucash/report/trep-engine.scm:930
+#: gnucash/report/trep-engine.scm:931
 #, fuzzy
 #| msgid "Display the other account code?"
 msgid "Display the balance of the underlying account on each line?"
 msgstr "다른 계정 코드를 표시하시겠습니까?"
 
-#: gnucash/report/trep-engine.scm:931
+#: gnucash/report/trep-engine.scm:932
 #, fuzzy
 #| msgid "Display the transaction date?"
 msgid "Display a grand total section at the bottom?"
 msgstr "거래 날짜를 보입니까?"
 
-#: gnucash/report/trep-engine.scm:936
+#: gnucash/report/trep-engine.scm:937
 #, fuzzy
 msgid "Display the trans number?"
 msgstr "체크 번호를 보일까요?"
 
-#: gnucash/report/trep-engine.scm:950
+#: gnucash/report/trep-engine.scm:951
 msgid "Display the account name?"
 msgstr "계정 이름을 보일까요?"
 
-#: gnucash/report/trep-engine.scm:958
+#: gnucash/report/trep-engine.scm:959
 #, fuzzy
 #| msgid ""
 #| "Display the other account name? (if this is a split transaction, this "
@@ -27904,61 +27922,61 @@ msgid ""
 "parameter is guessed."
 msgstr "다른 계정명을 보일까요?(분할거래시 이 인자로 추측함)."
 
-#: gnucash/report/trep-engine.scm:965
+#: gnucash/report/trep-engine.scm:966
 #, fuzzy
 msgid "Amount of detail to display per transaction."
 msgstr "이 거래를 수정하거나 삭제할 수 없습니다."
 
-#: gnucash/report/trep-engine.scm:967
+#: gnucash/report/trep-engine.scm:968
 msgid "One split per line"
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:968
+#: gnucash/report/trep-engine.scm:969
 #, fuzzy
 #| msgid "Get Transactions Online"
 msgid "One transaction per line"
 msgstr "온라인 거래 하기"
 
-#: gnucash/report/trep-engine.scm:978
+#: gnucash/report/trep-engine.scm:979
 msgid "Hide"
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:987
+#: gnucash/report/trep-engine.scm:988
 msgid "Enable hyperlinks in amounts."
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:991
+#: gnucash/report/trep-engine.scm:992
 #, fuzzy
 msgid "Reverse amount display for certain account types."
 msgstr "계정 형태의 역 수량 보이기"
 
-#: gnucash/report/trep-engine.scm:997
+#: gnucash/report/trep-engine.scm:998
 msgid "Display running totals as per report sort order?"
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:1000
+#: gnucash/report/trep-engine.scm:1001
 #, fuzzy
 #| msgid "Grand Total Cell Color"
 msgid "Grand Total and Subtotals"
 msgstr "총 합계 셀 색상"
 
-#: gnucash/report/trep-engine.scm:1001
+#: gnucash/report/trep-engine.scm:1002
 #, fuzzy
 #| msgid "Grand Total"
 msgid "Grand Total Only"
 msgstr "전체 합계"
 
-#: gnucash/report/trep-engine.scm:1002
+#: gnucash/report/trep-engine.scm:1003
 #, fuzzy
 #| msgid "Subtotal"
 msgid "Subtotals Only"
 msgstr "소계"
 
-#: gnucash/report/trep-engine.scm:1114
+#: gnucash/report/trep-engine.scm:1115
 msgid "Num/T-Num"
 msgstr ""
 
-#: gnucash/report/trep-engine.scm:1164
+#: gnucash/report/trep-engine.scm:1165
 msgid "Transfer from/to"
 msgstr "이동"
 
@@ -27966,7 +27984,7 @@ msgstr "이동"
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals”,
 #. "Secondary Subtotal” and "Running Primary Subtotal"
-#: gnucash/report/trep-engine.scm:1382 gnucash/report/trep-engine.scm:1483
+#: gnucash/report/trep-engine.scm:1383 gnucash/report/trep-engine.scm:1484
 #, fuzzy
 #| msgid "Secondary Subtotal"
 msgid "Running Secondary Subtotal"
@@ -27976,7 +27994,7 @@ msgstr "2차 소계"
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. “Primary Subtotal”
-#: gnucash/report/trep-engine.scm:1398 gnucash/report/trep-engine.scm:1496
+#: gnucash/report/trep-engine.scm:1399 gnucash/report/trep-engine.scm:1497
 #, fuzzy
 #| msgid "Primary Subtotal"
 msgid "Running Primary Subtotal"
@@ -27985,7 +28003,7 @@ msgstr "1차 소계"
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
-#: gnucash/report/trep-engine.scm:1402 gnucash/report/trep-engine.scm:1497
+#: gnucash/report/trep-engine.scm:1403 gnucash/report/trep-engine.scm:1498
 #, fuzzy
 #| msgid "Subtotal"
 msgid "Running Subtotal"
@@ -27995,7 +28013,7 @@ msgstr "소계"
 #. For translation to be consistent, make sure it follows the same
 #. pattern as for these other strings: “Running Totals” and
 #. "Grand Total”
-#: gnucash/report/trep-engine.scm:1419 gnucash/report/trep-engine.scm:1511
+#: gnucash/report/trep-engine.scm:1420 gnucash/report/trep-engine.scm:1512
 #, fuzzy
 #| msgid "Grand Total"
 msgid "Running Grand Total"
@@ -28005,7 +28023,7 @@ msgstr "전체 합계"
 #. "Running Grand Total" used when the running grand total is
 #. displayed without subtotals. To be consistent, also consider
 #. how the plural form "Running Totals" is translated.
-#: gnucash/report/trep-engine.scm:1424 gnucash/report/trep-engine.scm:1512
+#: gnucash/report/trep-engine.scm:1425 gnucash/report/trep-engine.scm:1513
 #, fuzzy
 #| msgid "Running Balance"
 msgid "Running Total"
@@ -28013,22 +28031,22 @@ msgstr "운용중인 잔고"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
-#: gnucash/report/trep-engine.scm:1570
+#: gnucash/report/trep-engine.scm:1571
 #, fuzzy
 msgid "Balance b/f"
 msgstr "잔액"
 
-#: gnucash/report/trep-engine.scm:1747
+#: gnucash/report/trep-engine.scm:1748
 #, fuzzy
 msgid "Split Transaction"
 msgstr "거래 나누기(_P)"
 
-#: gnucash/report/trep-engine.scm:2008
+#: gnucash/report/trep-engine.scm:2006
 msgid "CSV disabled for double column amounts"
 msgstr ""
 
 #. Translators: Both ~a's are dates
-#: gnucash/report/trep-engine.scm:2554
+#: gnucash/report/trep-engine.scm:2552
 #, scheme-format
 msgid "From ~a to ~a"
 msgstr "~a 에서 ~a 까지"
@@ -30220,58 +30238,58 @@ msgstr ""
 msgid "No exchange rate available in SX [%s] for %s -> %s, value is zero."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:369
+#: libgnucash/app-utils/gnc-ui-balances.cpp:369
 #, c-format
 msgid "%s balance of %s is above the upper limit %s."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:370
+#: libgnucash/app-utils/gnc-ui-balances.cpp:370
 #, c-format
 msgid "%s balance of %s is below the lower limit %s."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-balances.c:371
+#: libgnucash/app-utils/gnc-ui-balances.cpp:371
 #, c-format
 msgid "%s balance of %s should be zero."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:477
+#: libgnucash/app-utils/gnc-ui-util.cpp:472
 msgctxt "Reconciled flag 'not cleared'"
 msgid "n"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:479
+#: libgnucash/app-utils/gnc-ui-util.cpp:474
 msgctxt "Reconciled flag 'cleared'"
 msgid "c"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:481
+#: libgnucash/app-utils/gnc-ui-util.cpp:476
 #, fuzzy
 msgctxt "Reconciled flag 'reconciled'"
 msgid "y"
 msgstr "y"
 
-#: libgnucash/app-utils/gnc-ui-util.c:483
+#: libgnucash/app-utils/gnc-ui-util.cpp:478
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:485
+#: libgnucash/app-utils/gnc-ui-util.cpp:480
 msgctxt "Reconciled flag 'void'"
 msgid "v"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-ui-util.c:525
+#: libgnucash/app-utils/gnc-ui-util.cpp:520
 msgctxt "Document Link flag for 'web'"
 msgid "w"
 msgstr "w"
 
-#: libgnucash/app-utils/gnc-ui-util.c:527
+#: libgnucash/app-utils/gnc-ui-util.cpp:522
 msgctxt "Document Link flag for 'file'"
 msgid "f"
 msgstr "f"
 
-#: libgnucash/app-utils/gnc-ui-util.c:556
+#: libgnucash/app-utils/gnc-ui-util.cpp:551
 msgid "Opening Balances"
 msgstr "잔고"
 
@@ -30300,7 +30318,6 @@ msgstr "새 위치:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
-#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -30311,14 +30328,12 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] ""
 msgstr[1] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
-#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -30329,7 +30344,6 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "다음 파일을 {1}(으)로 이동할 수 없습니다."
@@ -30362,41 +30376,41 @@ msgid ""
 "%s"
 msgstr ""
 
-#: libgnucash/engine/Account.cpp:4452
+#: libgnucash/engine/Account.cpp:4502
 msgid "Credit Card"
 msgstr "신용 카드"
 
-#: libgnucash/engine/Account.cpp:4454
+#: libgnucash/engine/Account.cpp:4504
 msgid "Stock"
 msgstr "주식"
 
-#: libgnucash/engine/Account.cpp:4455
+#: libgnucash/engine/Account.cpp:4505
 msgid "Mutual Fund"
 msgstr "투자신탁회사"
 
-#: libgnucash/engine/Account.cpp:4460
+#: libgnucash/engine/Account.cpp:4510
 msgid "A/Receivable"
 msgstr "A/받을 어음"
 
-#: libgnucash/engine/Account.cpp:4461
+#: libgnucash/engine/Account.cpp:4511
 msgid "A/Payable"
 msgstr "A/지불 어음"
 
-#: libgnucash/engine/Account.cpp:4462
+#: libgnucash/engine/Account.cpp:4512
 #, fuzzy
 msgid "Root"
 msgstr "보고서"
 
-#: libgnucash/engine/Account.cpp:5174
+#: libgnucash/engine/Account.cpp:5224
 msgid "Orphaned Gains"
 msgstr "버린 이익"
 
-#: libgnucash/engine/Account.cpp:5188 libgnucash/engine/cap-gains.c:806
+#: libgnucash/engine/Account.cpp:5238 libgnucash/engine/cap-gains.c:806
 #: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
 msgid "Realized Gain/Loss"
 msgstr "실제 이익/손실"
 
-#: libgnucash/engine/Account.cpp:5190
+#: libgnucash/engine/Account.cpp:5240
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -30412,12 +30426,12 @@ msgctxt "Commodity Type"
 msgid "Currencies"
 msgstr "통화"
 
-#: libgnucash/engine/gnc-date.cpp:77
+#: libgnucash/engine/gnc-date.cpp:76
 msgid "%B %#d, %Y"
 msgstr "%B %#d, %Y"
 
 #. Translators: call "man strftime" for possible values.
-#: libgnucash/engine/gnc-date.cpp:81
+#: libgnucash/engine/gnc-date.cpp:80
 msgid "%B %e, %Y"
 msgstr "%B %e, %Y"
 
@@ -30981,7 +30995,7 @@ msgid "Default Invoice Report Timeout"
 msgstr ""
 
 #. Translators: " + " is an separator in a list of string-representations of recurrence frequencies
-#: libgnucash/engine/Recurrence.c:511
+#: libgnucash/engine/Recurrence.cpp:511
 msgid " + "
 msgstr " + "
 
@@ -30989,28 +31003,28 @@ msgstr " + "
 #. event should occur every %u'th week.
 #. Translators: %u is the recurrence multiplier number
 #. Translators: %u is the recurrence multiplier.
-#: libgnucash/engine/Recurrence.c:627 libgnucash/engine/Recurrence.c:717
-#: libgnucash/engine/Recurrence.c:748 libgnucash/engine/Recurrence.c:765
-#: libgnucash/engine/Recurrence.c:779 libgnucash/engine/Recurrence.c:791
+#: libgnucash/engine/Recurrence.cpp:627 libgnucash/engine/Recurrence.cpp:717
+#: libgnucash/engine/Recurrence.cpp:748 libgnucash/engine/Recurrence.cpp:765
+#: libgnucash/engine/Recurrence.cpp:779 libgnucash/engine/Recurrence.cpp:791
 #, c-format
 msgid " (x%u)"
 msgstr " (x%u)"
 
 #. Translators: %s is an already-localized form of the day of the week.
-#: libgnucash/engine/Recurrence.c:660
+#: libgnucash/engine/Recurrence.cpp:660
 #, c-format
 msgid "last %s"
 msgstr "마지막 %s"
 
 #. Translators: %s is the string 1st, 2nd, 3rd and so on, and
 #. %s is an already-localized form of the day of the week.
-#: libgnucash/engine/Recurrence.c:674
+#: libgnucash/engine/Recurrence.cpp:674
 #, c-format
 msgid "%s %s"
 msgstr "%s %s"
 
 #. Translators: %d is the number of Recurrences in the list.
-#: libgnucash/engine/Recurrence.c:727
+#: libgnucash/engine/Recurrence.cpp:727
 #, c-format
 msgid "Unknown, %d-size list."
 msgstr "알 수 없음, %d 크기 목록입니다."
@@ -31049,18 +31063,18 @@ msgstr ""
 msgid "Looking for imbalances in transaction date %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/Split.c:1649
+#: libgnucash/engine/Split.cpp:1649
 #, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"
 msgstr "분할"
 
-#: libgnucash/engine/Transaction.c:2741
+#: libgnucash/engine/Transaction.cpp:2735
 msgid "Voided transaction"
 msgstr "공 거래"
 
-#: libgnucash/engine/Transaction.c:2754
+#: libgnucash/engine/Transaction.cpp:2748
 msgid "Transaction Voided"
 msgstr "공 거래"
 
