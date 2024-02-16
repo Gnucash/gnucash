@@ -318,10 +318,13 @@ gnc_quote_source_fq_version (void)
 static QuoteSourceVec&
 get_quote_source_from_type (QuoteSourceType type)
 {
-    for (const auto& [s_type, sources] : quote_sources_map)
-        if (type == s_type)
-            return sources;
+    auto quote_sources_it = std::find_if (quote_sources_map.begin(), quote_sources_map.end(),
+                                          [type] (const auto& qs) { return type == qs.first; });
 
+    if (quote_sources_it != quote_sources_map.end())
+        return quote_sources_it->second;
+
+    PWARN ("Invalid Quote Source %d, returning new_quote_sources", type);
     return new_quote_sources;
 }
 
@@ -386,11 +389,11 @@ gnc_quote_source_lookup_by_internal(const char * name)
 
     for (const auto& [_, sources] : quote_sources_map)
     {
-        for (const auto& source : sources)
-        {
-            if (g_strcmp0(name, source.get_internal_name()) == 0)
-                return (gnc_quote_source*)&source;
-        }
+        auto source_it = std::find_if (sources.begin(), sources.end(),
+                                       [name] (const auto& qs)
+                                       { return (g_strcmp0(name, qs.get_internal_name()) == 0); });
+        if (source_it != sources.end())
+            return &(*source_it);
     }
 
     DEBUG("gnc_quote_source_lookup_by_internal: Unknown source %s", name);
