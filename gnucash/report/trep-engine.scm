@@ -922,6 +922,7 @@ be excluded from periodic reporting.")
       ;; other account name option appears here
       (list (N_ "Use Full Other Account Name")  "i"  (G_ "Display the full account name?") #f)
       (list (N_ "Other Account Code")           "j"  (G_ "Display the other account code?") #f)
+      ;; Translators: The number of units of any kind of investment (shares, fonds, bonds, …)
       (list (N_ "Shares")                       "k"  (G_ "Display the number of shares?") #f)
       (list (N_ "Link")                         "l5" (G_ "Display the transaction linked document") #f)
       (list (N_ "Price")                        "l"  (G_ "Display the shares price?") #f)
