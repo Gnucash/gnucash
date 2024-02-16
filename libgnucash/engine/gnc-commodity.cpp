@@ -348,7 +348,7 @@ gint gnc_quote_source_num_entries(QuoteSourceType type)
 gnc_quote_source *
 gnc_quote_source_add_new (const char *source_name, gboolean supported)
 {
-    DEBUG("Creating new source %s", (source_name == NULL ? "(null)" : source_name));
+    DEBUG("Creating new source %s", (!source_name ? "(null)" : source_name));
     /* This name can be changed if/when support for this price source is
      * integrated into gnucash. */
     /* This name is permanent and must be kept the same if/when support
@@ -375,16 +375,14 @@ gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
     }
 
     LEAVE("not found");
-    return NULL;
+    return nullptr;
 }
 
 gnc_quote_source *
 gnc_quote_source_lookup_by_internal(const char * name)
 {
-    if ((name == NULL) || (g_strcmp0(name, "") == 0))
-    {
-        return NULL;
-    }
+    if (!name || !*name)
+        return nullptr;
 
     for (const auto& [_, sources] : quote_sources_map)
     {
@@ -396,7 +394,7 @@ gnc_quote_source_lookup_by_internal(const char * name)
     }
 
     DEBUG("gnc_quote_source_lookup_by_internal: Unknown source %s", name);
-    return NULL;
+    return nullptr;
 }
 
 /********************************************************************
@@ -449,7 +447,7 @@ gnc_quote_source_get_supported (const gnc_quote_source *source)
         return FALSE;
     }
 
-    LEAVE("%ssupported", source && source->get_supported() ? "" : "not ");
+    LEAVE("%s supported", source && source->get_supported() ? "" : "not ");
     return source->get_supported();
 }
 
@@ -460,7 +458,7 @@ gnc_quote_source_get_user_name (const gnc_quote_source *source)
     if (!source)
     {
         LEAVE("bad source");
-        return NULL;
+        return nullptr;
     }
     LEAVE("user name %s", source->get_user_name());
     return source->get_user_name();
@@ -473,7 +471,7 @@ gnc_quote_source_get_internal_name (const gnc_quote_source *source)
     if (!source)
     {
         LEAVE("bad source");
-        return NULL;
+        return nullptr;
     }
     LEAVE("internal name %s", source->get_internal_name());
     return source->get_internal_name();
@@ -505,7 +503,7 @@ gnc_quote_source_set_fq_installed (const char* version_string,
         auto source_name = source_name_str.c_str();
         auto source = gnc_quote_source_lookup_by_internal(source_name);
 
-        if (source != NULL)
+        if (source)
         {
             DEBUG("Found source %s: %s", source_name, source->get_user_name());
             source->set_supported (true);
