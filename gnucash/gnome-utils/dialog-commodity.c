@@ -771,7 +771,7 @@ gnc_ui_source_menu_create(QuoteSourceType type)
             source = gnc_quote_source_lookup_by_ti(type, i);
             if (source == NULL)
                 break;
-            name = gnc_quote_source_get_user_name(source);
+            name = gnc_quote_source_get_name(source);
             supported = gnc_quote_source_get_supported(source);
             gtk_list_store_append(store, &iter);
             gtk_list_store_set(store, &iter,

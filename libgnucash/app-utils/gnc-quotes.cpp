@@ -69,6 +69,8 @@ namespace bpt = boost::property_tree;
 namespace bio = boost::iostreams;
 
 using QuoteResult = std::tuple<int, StrVec, StrVec>;
+using ListMap = std::map<std::string, std::vector<std::string>>;
+using KeyMap = std::map<std::string, ListMap>;
 
 struct GncQuoteSourceError : public std::runtime_error
 {
@@ -82,11 +84,12 @@ class GncQuoteSource
 {
 public:
     virtual ~GncQuoteSource() = default;
-    virtual const StrVec& get_sources() const noexcept = 0;
+    virtual const StrVec& get_currency_sources() const noexcept = 0;
+    virtual const StrVec& get_single_sources() const noexcept = 0;
+    virtual const StrVec& get_multiple_sources() const noexcept = 0;
     virtual const std::string & get_version() const noexcept = 0;
     virtual QuoteResult get_quotes(const std::string& json_str) const = 0;
 };
-
 
 class GncQuotesImpl
 {
@@ -102,8 +105,14 @@ public:
     void report (const char* source, const StrVec& commodities, bool verbose);
 
     const std::string& version() noexcept { return m_quotesource->get_version(); }
-    const QuoteSources& sources() noexcept { return m_sources; }
-    GList* sources_as_glist ();
+ 
+    const QuoteSources& currency_sources() noexcept { return m_currency_sources; }
+    GList* currency_sources_as_glist ();
+    const QuoteSources& single_sources() noexcept { return m_single_sources; }
+    GList* single_sources_as_glist ();
+    const QuoteSources& multiple_sources() noexcept { return m_multiple_sources; }
+    GList* multiple_sources_as_glist ();
+ 
     bool had_failures() noexcept { return !m_failures.empty(); }
     const QFVec& failures() noexcept;
     std::string report_failures() noexcept;
@@ -117,7 +126,11 @@ private:
     GNCPrice* parse_one_quote(const bpt::ptree&, gnc_commodity*);
 
     std::unique_ptr<GncQuoteSource> m_quotesource;
-    QuoteSources m_sources;
+
+    QuoteSources m_currency_sources;
+    QuoteSources m_single_sources;
+    QuoteSources m_multiple_sources;
+    
     QFVec m_failures;
     QofBook *m_book;
     gnc_commodity *m_dflt_curr;
@@ -128,13 +141,17 @@ class GncFQQuoteSource final : public GncQuoteSource
     const bfs::path c_cmd;
     std::string c_fq_wrapper;
     std::string m_version;
-    StrVec m_sources;
+    StrVec m_currency_sources;
+    StrVec m_single_sources;
+    StrVec m_multiple_sources;
     std::string m_api_key;
 public:
     GncFQQuoteSource();
     ~GncFQQuoteSource() = default;
     const std::string& get_version() const noexcept override { return m_version; }
-    const StrVec& get_sources() const noexcept override { return m_sources; }
+    const StrVec& get_currency_sources() const noexcept override { return m_currency_sources; }
+    const StrVec& get_single_sources() const noexcept override { return m_single_sources; }
+    const StrVec& get_multiple_sources() const noexcept override { return m_multiple_sources; }
     QuoteResult get_quotes(const std::string&) const override;
 private:
     QuoteResult run_cmd (const StrVec& args, const std::string& json_string) const;
@@ -149,37 +166,89 @@ static const std::string empty_string{};
 
 GncFQQuoteSource::GncFQQuoteSource() :
 c_cmd{bp::search_path("perl")},
-m_version{}, m_sources{}, m_api_key{}
+m_version{}, m_currency_sources{}, m_single_sources{}, m_multiple_sources{}, m_api_key{}
 {
-    char *bindir = gnc_path_get_bindir();
-    c_fq_wrapper = std::string(bindir) + "/finance-quote-wrapper";
-    g_free(bindir);
-    StrVec args{"-w", c_fq_wrapper, "-v"};
-    auto [rv, sources, errors] = run_cmd(args, empty_string);
-    if (rv)
     {
-        std::string err{bl::translate("Failed to initialize Finance::Quote: ")};
-        for (const auto& err_line : errors)
-            err += err_line.empty() ? "" : err_line + "\n";
-        throw(GncQuoteSourceError(err));
+        // Call Finance::Quote wrapper with info flag
+        char *bindir = gnc_path_get_bindir();
+        c_fq_wrapper = std::string(bindir) + "/finance-quote-wrapper";
+        g_free(bindir);
+        StrVec args{"-w", c_fq_wrapper, "-i"};
+        auto [rv, info, errors] = run_cmd(args, empty_string);
+
+        // Check for 0 exit code and exactly one line from wrapper
+        if (rv || info.size() != 1)
+        {
+            std::string err{bl::translate("Failed to initialize Finance::Quote: ")};
+            for (const auto& err_line : errors)
+                err += err_line.empty() ? "" : err_line + "\n";
+            throw(GncQuoteSourceError(err));
+        }
+        // errors should be empty too
+        if (!errors.empty())
+        {
+            std::string err{bl::translate("Finance::Quote check returned error ")};
+            for(const auto& err_line : errors)
+                err += err.empty() ? "" : err_line + "\n";
+            throw(GncQuoteSourceError(err));
+        }
+
+        // Parse JSON
+        try 
+        {
+            std::istringstream is(info.front());
+            bpt::ptree root;
+            bpt::read_json(is, root);
+
+            // Get version and remove it from the tree
+            auto version = root.get<std::string>("version");
+            root.erase("version");
+
+            // Remaining entries look like: key : {key : [value, ...], ...}
+            // Parse as KeyMap, which is string -> ListMap (string -> vec)
+            KeyMap info;
+            for (auto& [outer_k, outer_v]: root) {
+                auto& outer_entry = info[outer_k];
+                for (auto& [inner_k, inner_v]: outer_v) {
+                    auto& inner_entry = outer_entry[inner_k];
+                    for (auto& value : inner_v) {
+                        inner_entry.push_back(value.second.data());
+                    }
+                }
+            }
+
+            // info["currency_modules"] = { "name" : ["feature_name", ...] }
+            // info["quote_methods"]    = { "name" : ["module_name", ...] }
+            // info["quote_modules"]    = { "name" : ["feature_name", ...] }
+            //
+            // A quote_method is the name for one or more quote sources, such as nasdaq (multiple) or alphavantage (single)
+            // A quote_module is backs one or more methods and may have required features.
+            // A "feature_name" is something like "API_KEY", a need value for the source
+
+            m_version = std::move(version);
+
+            for (auto& it : info["currency_modules"]) {
+                m_currency_sources.push_back(it.first);
+            }
+            std::sort (m_currency_sources.begin(), m_currency_sources.end());
+            
+            for (auto& it : info["quote_methods"]) {
+                // Sort methods into single vs multiple sources
+                if (info["quote_methods"][it.first].size() == 1)
+                    m_single_sources.push_back(it.first);
+                else
+                    m_multiple_sources.push_back(it.first);
+            }
+            std::sort (m_single_sources.begin(), m_single_sources.end());
+            std::sort (m_multiple_sources.begin(), m_multiple_sources.end());
+        }
+        catch (std::exception &e)
+        {
+            std::string err{bl::translate("Finance::Quote failed in parsing quote sources ")};
+            err += e.what();
+            throw(GncQuoteException(err));
+        }
     }
-    if (!errors.empty())
-    {
-        std::string err{bl::translate("Finance::Quote check returned error ")};
-        for(const auto& err_line : errors)
-            err += err.empty() ? "" : err_line + "\n";
-        throw(GncQuoteSourceError(err));
-    }
-    auto version{sources.front()};
-    if (version.empty())
-    {
-        std::string err{bl::translate("No Finance::Quote Version")};
-        throw(GncQuoteSourceError(err));
-    }
-    m_version = std::move(version);
-    sources.erase(sources.begin());
-    m_sources = std::move(sources);
-    std::sort (m_sources.begin(), m_sources.end());
 
     auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
     if (!(av_key && *av_key))
@@ -275,36 +344,59 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
 
 /* GncQuotes implementation */
 GncQuotesImpl::GncQuotesImpl() : m_quotesource{new GncFQQuoteSource},
-                                 m_sources{}, m_failures{},
+                                 m_currency_sources{}, m_single_sources{}, m_multiple_sources{}, m_failures{},
                                  m_book{qof_session_get_book(gnc_get_current_session())},
                                  m_dflt_curr{gnc_default_currency()}
 {
-    m_sources = m_quotesource->get_sources();
+    m_currency_sources = m_quotesource->get_currency_sources();
+    m_single_sources = m_quotesource->get_single_sources();
+    m_multiple_sources = m_quotesource->get_multiple_sources();
 }
 
 GncQuotesImpl::GncQuotesImpl(QofBook* book) : m_quotesource{new GncFQQuoteSource},
-m_sources{}, m_book{book},
+m_currency_sources{}, m_single_sources{}, m_multiple_sources{}, m_book{book},
 m_dflt_curr{gnc_default_currency()}
 {
-    m_sources = m_quotesource->get_sources();
+    m_currency_sources = m_quotesource->get_currency_sources();
+    m_single_sources = m_quotesource->get_single_sources();
+    m_multiple_sources = m_quotesource->get_multiple_sources();
 }
 
 GncQuotesImpl::GncQuotesImpl(QofBook* book, std::unique_ptr<GncQuoteSource> quote_source) :
 m_quotesource{std::move(quote_source)},
-m_sources{}, m_book{book}, m_dflt_curr{gnc_default_currency()}
+m_currency_sources{}, m_single_sources{}, m_multiple_sources{}, m_book{book}, m_dflt_curr{gnc_default_currency()}
 {
-    m_sources = m_quotesource->get_sources();
+    m_currency_sources = m_quotesource->get_currency_sources();
+    m_single_sources = m_quotesource->get_single_sources();
+    m_multiple_sources = m_quotesource->get_multiple_sources();
 }
 
 GList*
-GncQuotesImpl::sources_as_glist()
+GncQuotesImpl::currency_sources_as_glist()
 {
     GList* slist = nullptr;
-    std::for_each (m_sources.rbegin(), m_sources.rend(),
+    std::for_each (m_currency_sources.rbegin(), m_currency_sources.rend(),
                     [&slist](const std::string& source) { slist  = g_list_prepend (slist, g_strdup(source.c_str())); });
     return slist;
 }
 
+GList*
+GncQuotesImpl::single_sources_as_glist()
+{
+    GList* slist = nullptr;
+    std::for_each (m_single_sources.rbegin(), m_single_sources.rend(),
+                    [&slist](const std::string& source) { slist  = g_list_prepend (slist, g_strdup(source.c_str())); });
+    return slist;
+}
+
+GList*
+GncQuotesImpl::multiple_sources_as_glist()
+{
+    GList* slist = nullptr;
+    std::for_each (m_multiple_sources.rbegin(), m_multiple_sources.rend(),
+                    [&slist](const std::string& source) { slist  = g_list_prepend (slist, g_strdup(source.c_str())); });
+    return slist;
+}
 
 void
 GncQuotesImpl::fetch (QofBook *book)
@@ -451,7 +543,7 @@ GncQuotesImpl::comm_vec_to_json_string(const CommVec &comm_vec) const
                                return;
                        }
                        else
-                           comm_ns = gnc_quote_source_get_internal_name(gnc_commodity_get_quote_source(comm));
+                           comm_ns = gnc_quote_source_get_name(gnc_commodity_get_quote_source(comm));
 
                        pt.put (make_quote_path(comm_ns, comm_mnemonic), "");
                    }
@@ -1076,14 +1168,34 @@ const std::string& GncQuotes::version() noexcept
     return m_impl->version ();
 }
 
-const QuoteSources& GncQuotes::sources() noexcept
+const QuoteSources& GncQuotes::currency_sources() noexcept
 {
-    return m_impl->sources ();
+    return m_impl->currency_sources ();
 }
 
-GList* GncQuotes::sources_as_glist ()
+GList* GncQuotes::currency_sources_as_glist ()
 {
-    return m_impl->sources_as_glist ();
+    return m_impl->currency_sources_as_glist ();
+}
+
+const QuoteSources& GncQuotes::single_sources() noexcept
+{
+    return m_impl->single_sources ();
+}
+
+GList* GncQuotes::single_sources_as_glist ()
+{
+    return m_impl->single_sources_as_glist ();
+}
+
+const QuoteSources& GncQuotes::multiple_sources() noexcept
+{
+    return m_impl->multiple_sources ();
+}
+
+GList* GncQuotes::multiple_sources_as_glist ()
+{
+    return m_impl->multiple_sources_as_glist ();
 }
 
 GncQuotes::~GncQuotes() = default;

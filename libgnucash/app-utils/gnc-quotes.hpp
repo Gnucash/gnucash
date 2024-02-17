@@ -103,18 +103,52 @@ public:
      */
     const std::string& version() noexcept;
 
-    /** Get the available Finance::Quote sources as a std::vector
+    /** Get currency sources as a std::vector. Finance::Quote has a default
+     * currency module but may support multiple currency modules.
      *
-     * @return The quote sources configured in Finance::Quote
+     * @return The currency sources configured in Finance::Quote
      */
-    const QuoteSources& sources() noexcept;
+    const QuoteSources& currency_sources() noexcept;
 
-    /** Get the available Finance::Quote sources as a GList
+    /** Get currency sources as a GList
      *
-     * @return A double-linked list containing the names of the installed quote sources.
+     * @return A double-linked list containing the names of the installed currency sources.
      * @note the list and its contents are owned by the caller and should be freed with `g_list_free_full(list, g_free)`.
      */
-    GList* sources_as_glist () ;
+    GList* currency_sources_as_glist ();
+
+    /** Get quote sources that use a single upstream source as a std::vector.
+     * Finance::Quote has "modules" that gather quotes from a single upstream
+     * source and "methods" that use one or more modules to retrieve quotes
+     * (trying one and then falling back to other modules if the first fails).
+     * 
+     * A module typically provides a method with the same name (eg the AlphaVantage
+     * module provides the alphavantage method as well as being one of the sources
+     * for the nasdaq method).
+     *
+     * @return The single sources configured in Finance::Quote
+     */
+    const QuoteSources& single_sources() noexcept;
+    
+    /** Get single_sources as a GList.  See single_sources() for description of single sources.
+     *
+     * @return A double-linked list containing the names of the installed Fiannce::Quote modules.
+     * @note the list and its contents are owned by the caller and should be freed with `g_list_free_full(list, g_free)`.
+     */
+    GList* single_sources_as_glist ();
+
+    /** Get list of quotes souces that use multiple upstream sources.  See single_sources() for more details.
+     *
+     * @return The sources in Finance::Quote that use multiple sources
+     */
+    const QuoteSources& multiple_sources() noexcept;
+    
+    /** Get multiple_sources as a GList.  See multiple_sources() for description of multiple sources.
+     *
+     * @return A double-linked list containing the names of the available Fiannce::Quote methods.
+     * @note the list and its contents are owned by the caller and should be freed with `g_list_free_full(list, g_free)`.
+     */
+    GList* multiple_sources_as_glist ();
 
     /** Report if there were quotes requested but not retrieved.
      *

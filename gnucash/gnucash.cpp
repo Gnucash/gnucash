@@ -178,9 +178,13 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
         gnc_update_splash_screen (checking, GNC_SPLASH_PERCENTAGE_UNKNOWN);
         GncQuotes quotes;
         auto found = (bl::format (std::string{_("Found Finance::Quote version {1}.")}) % quotes.version()).str();
-        auto quote_sources = quotes.sources_as_glist();
-        gnc_quote_source_set_fq_installed (quotes.version().c_str(), quote_sources);
-        g_list_free_full (quote_sources, g_free);
+        auto currency_quote_sources = quotes.currency_sources_as_glist();
+        auto single_quote_sources = quotes.single_sources_as_glist();
+        auto multiple_quote_sources = quotes.multiple_sources_as_glist();
+        gnc_quote_source_set_fq_installed (quotes.version().c_str(), currency_quote_sources, single_quote_sources, multiple_quote_sources);
+        g_list_free_full (currency_quote_sources, g_free);
+        g_list_free_full (single_quote_sources, g_free);
+        g_list_free_full (multiple_quote_sources, g_free);
         gnc_update_splash_screen (found.c_str(), GNC_SPLASH_PERCENTAGE_UNKNOWN);
     }
     catch (const GncQuoteException& err)
