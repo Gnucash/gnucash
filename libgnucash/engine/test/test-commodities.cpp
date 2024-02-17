@@ -31,6 +31,32 @@
 #include "test-stuff.h"
 
 static void
+test_quote_sources ()
+{
+    do_test (gnc_quote_source_num_entries(SOURCE_CURRENCY) == 1, "source currency = 1 source");
+    do_test (gnc_quote_source_lookup_by_ti (SOURCE_CURRENCY, 0) != nullptr, "lookup_by_ti currency exists");
+    do_test (gnc_quote_source_lookup_by_internal("currency") != nullptr, "lookup_by_internal: currency exists");
+    do_test (gnc_quote_source_lookup_by_internal("CURRENCY") != nullptr, "lookup_by_internal: CURRENCY exists"); // old internal name
+
+    do_test (gnc_quote_source_num_entries(SOURCE_UNKNOWN) == 0, "source unknown = 0 source");
+    do_test (gnc_quote_source_lookup_by_ti (SOURCE_UNKNOWN, 0) == nullptr, "lookup_by_ti unknown fails");
+
+    do_test (gnc_quote_source_num_entries((QuoteSourceType)500) == 0, "invalid = 0 entries");
+    do_test (gnc_quote_source_lookup_by_ti ((QuoteSourceType)500, 0) == nullptr, "lookup_by_ti invalid returns null, same as new_quote_sources");
+
+    gnc_quote_source_add_new ("test-source", true);
+
+    do_test (gnc_quote_source_num_entries(SOURCE_UNKNOWN) == 1, "source unknown = 1 source");
+    do_test (gnc_quote_source_lookup_by_ti (SOURCE_UNKNOWN, 0) != nullptr, "lookup_by_ti unknown exists");
+
+    do_test (gnc_quote_source_num_entries((QuoteSourceType)500) == 1, "invalid = 1 entry from new_quote_sources");
+    do_test (gnc_quote_source_lookup_by_ti ((QuoteSourceType)500, 0) != nullptr, "lookup_by_ti invalid returns new_quote_sources");
+
+    // internal name:
+    do_test (gnc_quote_source_lookup_by_internal("treasure") == nullptr, "lookup_by_internal: treasure doesn't exist");
+}
+
+static void
 test_commodity(void)
 {
     gnc_commodity *com;
@@ -205,6 +231,7 @@ main (int argc, char **argv)
     gnc_commodity_table_register();
 
     test_commodity();
+    test_quote_sources ();
 
     print_test_results();
 
