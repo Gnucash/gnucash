@@ -12,15 +12,15 @@
 # Jan Willem Harmanny <jwharmanny@zeelandnet.nl>, 2002.
 # Geert Janssens <info@kobaltwit.be>, 2021.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2022.
-# Stephan Paternotte <stephan@paternottes.net>, 2023.
+# Stephan Paternotte <stephan@paternottes.net>, 2023, 2024.
 # Rene Lambers <jbh.lambers@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-02-16 01:11+0100\n"
-"PO-Revision-Date: 2023-12-19 08:07+0000\n"
+"PO-Revision-Date: 2024-02-17 15:02+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
 ">\n"
@@ -29,9 +29,9 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3\n"
-"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"X-Generator: Weblate 5.4\n"
+"X-Bugs: Report translation errors to https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -4030,11 +4030,11 @@ msgstr[1] ""
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1266
 msgid "Highlight a date first to sort by occurrence date."
-msgstr ""
+msgstr "Markeer een datum die eerst wordt gesorteerd op de datum van optreden."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
 msgid "Highlight a schedule first to sort by schedule name."
-msgstr ""
+msgstr "Markeer een schema om te sorteren op schemanaam."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1379
 #: gnucash/gnome-search/dialog-search.c:1105
@@ -9542,12 +9542,10 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:43
-#, fuzzy
-#| msgid "This settings sets the sort column in the \"since last run\" dialog."
 msgid "The depth used in the tree to sort in the \"since last run\" dialog."
 msgstr ""
-"Deze instellingen stellen de sorteerkolom in het dialoogvenster \"sinds "
-"laatste uitvoering\" in."
+"De diepte van de sorteerboom in het dialoogvenster \"sinds laatste "
+"uitvoering\"."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:49
 msgid "Set the \"auto create\" flag by default"
@@ -20868,10 +20866,9 @@ msgid "Missing transaction date."
 msgstr "Onbrekende boekdatum."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:601
-#, fuzzy, scheme-format
-#| msgid "Missing transaction date."
+#, scheme-format
 msgid "Missing QIF investment action for transaction dated ~a."
-msgstr "Onbrekende boekdatum."
+msgstr "Ontbrekende QIF-investeringsactie voor transactie met datum ~a."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1426
 msgid "Invalid transaction date."
