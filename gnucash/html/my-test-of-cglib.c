@@ -10,7 +10,7 @@
 typedef struct general_data mygeneral_data;
 
 void
-my_test_of_cglib_charts(void)
+my_test_of_cglib_charts(char *image_path)
 {
 g_print("%s called\n",__FUNCTION__);
   srand(time(NULL));
@@ -127,8 +127,10 @@ g_print("%s called\n",__FUNCTION__);
 
   struct pie_data* pd = malloc(sizeof(struct pie_data));
   free(general->file_name);
-  general->file_name = malloc(sizeof(char) * 30);
-  strcpy(general->file_name, "/tmp/pie.svg\0");
+  general->file_name = malloc(sizeof(char) * 60);
+//  strcpy(general->file_name, "/tmp/pie.svg\0");
+  strcpy(general->file_name, image_path);
+
   general->margin = 40.0;
   pd->general = general;
   pd->axel_data = axel;

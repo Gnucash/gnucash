@@ -4,7 +4,7 @@
 
 
 void
-my_test_of_cglib_charts(void);
+my_test_of_cglib_charts(char *image_path);
 
 #endif
 

@@ -627,6 +627,49 @@ g_print("%s called\n",__FUNCTION__);
 }
 
 
+static gboolean
+impl_litehtml_create_charts (GncHtml* self, const gchar* data, const gchar *report_uri, int file_temp_len)
+{
+    GncHtmlLitehtmlPrivate* priv;
+
+    gchar *ptr = g_strstr_len (data, -1, "'gnc-report-chart");
+
+    if (!ptr)
+        return FALSE;
+
+//g_print("ptr '%s'\n", ptr);
+
+    priv = GNC_HTML_LITEHTML_GET_PRIVATE(self);
+    
+    gchar *ptr_end = g_strstr_len (ptr + 1, -1, "'");
+
+    gchar *image_name = strndup (ptr + 1, ptr_end - (ptr + 1));
+
+g_print("image_name '%s'\n", image_name);
+
+    gchar *start = g_strndup (data, (ptr + 1) - data);
+    gchar *end = g_strdup (data + (ptr_end - data));
+
+    gchar *image_uri_start = g_strndup (report_uri, strlen(report_uri) - file_temp_len);
+
+    g_free (priv->html_string);
+        
+    priv->html_string = g_strconcat (start, image_uri_start, image_name, end, NULL);
+
+    gchar *image_path = g_strndup (priv->file_name, strlen(priv->file_name) - file_temp_len);
+
+    my_test_of_cglib_charts (g_strconcat (image_path, image_name, NULL));
+
+    g_free (start);
+    g_free (end);
+    g_free (image_path);
+    g_free (image_uri_start);
+    g_free (image_name);
+
+    return TRUE;
+}
+
+
 /********************************************************************
  * impl_litehtml_show_data
  * display some HTML that the creator of the gnc-html got from
@@ -654,7 +697,7 @@ g_print("%s called\n",__FUNCTION__);
        be viewed (maybe for the same reason as on Linux, but I haven't found where it puts those
        messages. */
 
-g_print(" priv->filename '%s'\n", priv->file_name);
+//g_print(" priv->filename '%s'\n'%s'\n", priv->file_name, priv->html_string);
 
     if (!priv->file_name)
     {
@@ -668,8 +711,6 @@ g_print(" priv->filename '%s'\n", priv->file_name);
         g_remove (priv->file_name);
         fd = g_open (priv->file_name, O_CREAT | O_WRONLY, S_IRUSR | S_IWUSR);
     }
-    impl_litehtml_export_to_file (self, priv->file_name);
-    close (fd);
 
 #ifdef G_OS_WIN32
     uri = g_strdup_printf ("file:///%s", priv->file_name);
@@ -677,9 +718,17 @@ g_print(" priv->filename '%s'\n", priv->file_name);
     uri = g_strdup_printf ("file://%s", priv->file_name);
 #endif
 
-g_print("#### Do something with uri %p uri '%s' ####\n", priv->html_wrapped_widget, uri);
+    gboolean loop = TRUE;
+    do
+    {
+       loop = impl_litehtml_create_charts (self, priv->html_string, uri, strlen(TEMPLATE_REPORT_FILE_NAME));
+    }
+    while (loop);
 
-    my_test_of_cglib_charts();
+    impl_litehtml_export_to_file (self, priv->file_name);
+    close (fd);
+
+g_print("#### Do something with uri %p uri '%s' ####\n", priv->html_wrapped_widget, uri);
 
     gnc_html_litehtml_load_file (priv->html_wrapped_widget, uri);
 
