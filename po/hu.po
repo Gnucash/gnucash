@@ -12,10 +12,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-02-16 01:11+0100\n"
-"PO-Revision-Date: 2024-02-14 01:02+0000\n"
+"PO-Revision-Date: 2024-02-17 22:44+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.4\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -5247,9 +5247,8 @@ msgstr "Vég-dátum:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3217
 #: gnucash/report/trep-engine.scm:157
-#, fuzzy
 msgid "Unreconciled"
-msgstr "_Nem egyeztetett"
+msgstr "Nem egyeztetett"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3223
 #: gnucash/gnome-search/search-reconciled.c:222
@@ -5312,7 +5311,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3539
 msgid "_Print checks"
-msgstr "_Csekk nyomtatása"
+msgstr "Csekk _nyomtatása"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3558
 msgid ""
@@ -5450,7 +5449,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-report.ui:74
 #: gnucash/ui/gnc-plugin-page-report.ui:255
 msgid "Save _Report Configuration"
-msgstr "Jelentéskonfiguráció _mentése"
+msgstr "_Jelentéskonfiguráció mentése"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1272
 #: gnucash/ui/gnc-plugin-page-report.ui:81
@@ -5513,7 +5512,7 @@ msgstr "%s fájlt nem lehet megnyitni. A hiba: %s"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1863
 msgid "GnuCash-Report"
-msgstr "GnuCash Jelentés"
+msgstr "GnuCash jelentés"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1912
 #: gnucash/report/reports/standard/invoice.scm:877
@@ -5571,7 +5570,7 @@ msgstr[0] "Biztosan törölni kívánja ezeket az ütemezett tranzakciókat?"
 #: gnucash/gnome/gnc-plugin-report-system.c:163
 #: gnucash/report/reports/standard/view-column.scm:95
 msgid "Report error"
-msgstr "Jelentés hiba"
+msgstr "Jelentéshiba"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:164
 #: gnucash/report/reports/standard/view-column.scm:96
@@ -5590,18 +5589,16 @@ msgid "Badly-formed report id: %s"
 msgstr "Rosszul formázott jelentés azonosító: %s"
 
 #: gnucash/gnome/gnc-split-reg.c:651
-#, fuzzy
 msgid "Standard Order"
-msgstr "_Szabványos sorrend"
+msgstr "Normál sorrend"
 
 #: gnucash/gnome/gnc-split-reg.c:657
-#, fuzzy
 msgid "Date of Entry"
-msgstr "Tét_el dátuma"
+msgstr "Bevitel dátuma"
 
 #: gnucash/gnome/gnc-split-reg.c:660 gnucash/gnome/window-reconcile.c:2059
 msgid "Statement Date"
-msgstr "Számlakivonat dátuma"
+msgstr "Kimutatás dátuma"
 
 #: gnucash/gnome/gnc-split-reg.c:683
 #: gnucash/report/reports/standard/customer-summary.scm:118
@@ -5618,14 +5615,13 @@ msgid "Ascending"
 msgstr "Növekvő"
 
 #: gnucash/gnome/gnc-split-reg.c:711
-#, fuzzy
 msgid "Filtered"
-msgstr "Szűrőtípus"
+msgstr "Szűrt"
 
 #: gnucash/gnome/gnc-split-reg.c:877
 #, c-format
 msgid "Cut the split '%s' from the transaction '%s'?"
-msgstr "\"%s\" felosztás törlése \"%s\" tranzakcióból?"
+msgstr "„%s” felosztás törlése „%s” tranzakcióból?"
 
 #: gnucash/gnome/gnc-split-reg.c:878
 msgid ""
@@ -6771,7 +6767,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:237
 msgid "Path head for files is,"
-msgstr "útvonal előtag:"
+msgstr "A fájlok elérési útja:"
 
 #: gnucash/gnome-utils/dialog-doclink-utils.c:239
 msgid "Path head does not exist,"
@@ -8546,6 +8542,9 @@ msgid ""
 "quotes was not set.\n"
 "Perhaps you need to set the $DISPLAY environment variable?"
 msgstr ""
+"Hiba: nem sikerült elindítani a grafikus felhasználói felületet, és az „add-"
+"price-quotes” lehetőség nincs beállítva.\n"
+"Lehet, hogy be kell állítani az $DISPLAY környezeti változót?"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:17
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:32
@@ -8589,9 +8588,8 @@ msgstr ""
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:6
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:5
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:64
-#, fuzzy
 msgid "Last window position and size"
-msgstr "Ablak helye és mérete"
+msgstr "Az ablak legutóbbi helyzete és mérete"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:18
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:33
@@ -8635,15 +8633,14 @@ msgstr "Ablak helye és mérete"
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:7
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:6
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:65
-#, fuzzy
 msgid ""
 "This setting describes the size and position of the window when it was last "
 "closed. The numbers are the X and Y coordinates of the top left corner of "
 "the window followed by the width and height of the window."
 msgstr ""
-"E beállítás tartalmazza az ablak utolsó helyének koordinátáit. A számok az "
-"ablak bal felső sarkának koordinátái, illetve az ablak szélessége és "
-"magassága."
+"Ez a beállítás tartalmazza az ablak méretét és helyzetét amikor legutóbb "
+"bezárta. A számok: az ablak bal felső sarkának koordinátái, majd az ablak "
+"szélessége és a magassága."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:24
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:39
@@ -11670,10 +11667,8 @@ msgstr "<b>Kategória-leírás</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, fuzzy
-#| msgid "Accounts in '%s'"
 msgid "Accounts in %s"
-msgstr "%s számlasablon számlái"
+msgstr "%s számlái"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:470
 msgid ""
@@ -11878,7 +11873,7 @@ msgstr ""
 #: gnucash/report/reports/standard/price-scatter.scm:36
 #: gnucash/report/trep-engine.scm:103
 msgid "Start Date"
-msgstr "Kezdő dátum"
+msgstr "Kezdődátum"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:178
 msgid "Length"
@@ -12033,11 +12028,11 @@ msgstr "Időtartam"
 #: gnucash/report/reports/standard/price-scatter.scm:37
 #: gnucash/report/trep-engine.scm:104
 msgid "End Date"
-msgstr "Befejező dátum"
+msgstr "Befejezés dátuma"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1244
 msgid "Loan Review"
-msgstr "Kökcsön áttekintése"
+msgstr "Kölcsön áttekintése"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1252
 msgid "Schedule added successfully."
@@ -19864,9 +19859,8 @@ msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr ""
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1459
-#, fuzzy
 msgid "Select one or multiple OFX/QFX file(s) to process"
-msgstr "Válassza ki a feldolgozandó OFX/QFX fájlt"
+msgstr "Feldolgozandó OFX/QFX fájl(ok) kiválasztása"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
 msgid "Import _OFX/QFX…"
@@ -20316,10 +20310,9 @@ msgid "Missing transaction date."
 msgstr "Tranzakciódátum hiányzik."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:601
-#, fuzzy, scheme-format
-#| msgid "Missing transaction date."
+#, scheme-format
 msgid "Missing QIF investment action for transaction dated ~a."
-msgstr "Tranzakciódátum hiányzik."
+msgstr "Hiányzó QIF befektetési művelet a ~a dátumú tranzakcióhoz."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1426
 msgid "Invalid transaction date."
@@ -29498,7 +29491,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:534
 #: gnucash/ui/gnc-plugin-page-register.ui:817
 msgid "S_plit Transaction"
-msgstr "T_ranzakció felosztása"
+msgstr "Tranzakció _felosztása"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:285
 #: gnucash/ui/gnc-plugin-page-register.ui:424
@@ -29579,7 +29572,7 @@ msgstr "Egy nyilvántartásjelentés megnyitása a kiválasztott számlához"
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
 msgid "_Print Report…"
-msgstr "_Jelentés nyomtatása…"
+msgstr "Jelentés _nyomtatása…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:9
 #: gnucash/ui/gnc-plugin-page-report.ui:302
@@ -29589,7 +29582,7 @@ msgstr "A jelenlegi jelentés nyomtatása"
 #: gnucash/ui/gnc-plugin-page-report.ui:26
 #: gnucash/ui/gnc-plugin-page-report.ui:240
 msgid "_Report Options"
-msgstr "Jelentés_opciók"
+msgstr "_Jelentésopciók"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:28
 #: gnucash/ui/gnc-plugin-report-system.ui:8
