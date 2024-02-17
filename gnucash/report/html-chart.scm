@@ -454,24 +454,32 @@ document.getElementById(chartid).onclick = function(evt) {
          ;; clashing on multi-column reports
          (id (symbol->string (gensym "chart"))))
 
-    (push (gnc:html-js-include "chartjs/Chart.bundle.min.js"))
+;;    (push (gnc:html-js-include "chartjs/Chart.bundle.min.js"))
 
-    (push "<div id='myImage' align='center'>\n")
-    (push "<img src='file:///tmp/vbar.svg' alt='bob1' width='740' height='460'>\n")
-    (push "<img src='file:///tmp/hbar.svg' alt='bob2' width='740' height='460'>\n")
-    (push "<img src='file:///tmp/pie.svg' alt='bob3' width='740' height='460'>\n")
-    (push "<img src='file:///tmp/doughnut.svg' alt='bob4' width='740' height='460'>\n")
-    (push "<img src='file:///tmp/graph.svg' alt='bob5' width='740' height='460'>\n")
+;;    (push "<div id='myImage' align='center'>\n")
+
+    (push (format #f "<div id='chartImage' align='center' style='width:~a;height:~a;'>\n"
+                  (size->str (gnc:html-chart-width chart))
+                  (size->str (gnc:html-chart-height chart))))
+
+    (push (format #f "<img src='gnc-report-~a.svg' alt='chart-image' width='740' height='460'>\n" id ))
+
+;;    (push "<img src='file:///tmp/vbar.svg' alt='bob1' width='740' height='460'>\n")
+;;    (push "<img src='file:///tmp/hbar.svg' alt='bob2' width='740' height='460'>\n")
+;;    (push "<img src='file:///tmp/pie.svg' alt='bob3' width='740' height='460'>\n")
+;;    (push "<img src='file:///tmp/doughnut.svg' alt='bob4' width='740' height='460'>\n")
+;;    (push "<img src='file:///tmp/graph.svg' alt='bob5' width='740' height='460'>\n")
     (push "</div>\n")
 
     ;; the following hidden h3 is used to query style and copy onto chartjs
-    (push "<h3 style='display:none'></h3>")
-    (push (format #f "<div style='width:~a;height:~a;'>\n"
-                  (size->str (gnc:html-chart-width chart))
-                  (size->str (gnc:html-chart-height chart))))
-    (push (format #f "<a id='jump-~a' href='' style='display:none'></a>\n" id))
-    (push (format #f "<canvas id=~s></canvas>\n" id))
-    (push "</div>\n")
+;;    (push "<h3 style='display:none'></h3>")
+;;    (push (format #f "<div style='width:~a;height:~a;'>\n"
+;;                  (size->str (gnc:html-chart-width chart))
+;;                  (size->str (gnc:html-chart-height chart))))
+
+;;    (push (format #f "<a id='jump-~a' href='' style='display:none'></a>\n" id))
+;;    (push (format #f "<canvas id=~s></canvas>\n" id))
+;;    (push "</div>\n")
     (push (format #f "<script id='script-~a'>\n" id))
     (push (format #f "var curriso = ~s;\n" (gnc:html-chart-currency-iso chart)))
     (push (format #f "var currsym = ~s;\n" (gnc:html-chart-currency-symbol chart)))
@@ -482,26 +490,26 @@ document.getElementById(chartid).onclick = function(evt) {
     (push (format #f "var chartjsoptions = ~a;\n\n"
                   (get-options-string chart)))
 
-    (push JS-Number-to-String)
-    (when (gnc:html-chart-custom-y-axis-ticks? chart)
-      (push "chartjsoptions.options.scales.yAxes[0].ticks.callback = yAxisDisplay;\n")
-      (push "function yAxisDisplay(value,index,values) { return numformat(value); };\n"))
-    (when (gnc:html-chart-custom-x-axis-ticks? chart)
-      (push "chartjsoptions.options.scales.xAxes[0].ticks.callback = xAxisDisplay;\n")
-      (push "function xAxisDisplay(value,index,values) { return chartjsoptions.data.labels[index]; };\n"))
+;;    (push JS-Number-to-String)
+;;    (when (gnc:html-chart-custom-y-axis-ticks? chart)
+;;      (push "chartjsoptions.options.scales.yAxes[0].ticks.callback = yAxisDisplay;\n")
+;;      (push "function yAxisDisplay(value,index,values) { return numformat(value); };\n"))
+;;    (when (gnc:html-chart-custom-x-axis-ticks? chart)
+;;      (push "chartjsoptions.options.scales.xAxes[0].ticks.callback = xAxisDisplay;\n")
+;;      (push "function xAxisDisplay(value,index,values) { return chartjsoptions.data.labels[index]; };\n"))
 
-    (push "chartjsoptions.options.tooltips.callbacks.label = tooltipLabel;\n")
-    (push "chartjsoptions.options.tooltips.callbacks.title = tooltipTitle;\n")
-    (push JS-setup)
+;;    (push "chartjsoptions.options.tooltips.callbacks.label = tooltipLabel;\n")
+;;    (push "chartjsoptions.options.tooltips.callbacks.title = tooltipTitle;\n")
+;;    (push JS-setup)
 
-    (push "function hideMyImage () {\n")
-    (push "  var x = document.getElementById('myImage');\n")
-    (push "  x.style.display = 'none';\n")
-    (push "}\n") 
+;;    (push "function hideMyImage () {\n")
+;;    (push "  var x = document.getElementById('myImage');\n")
+;;    (push "  x.style.display = 'none';\n")
+;;    (push "}\n") 
 
-    (push "hideMyImage();\n")
+;;    (push "hideMyImage();\n")
 
-    (push "var myChart = new Chart(chartid, chartjsoptions);\n")
+;;    (push "var myChart = new Chart(chartid, chartjsoptions);\n")
     (push "</script>")
 
     retval))
