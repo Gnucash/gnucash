@@ -170,6 +170,8 @@ public:
         , m_internal_name{int_name} { };
 };
 
+using QuoteSourceVec = std::vector<gnc_quote_source>;
+
 /* To update the following lists scan
  * from github.com/finance-quote/finance-quote
  * in lib/Finance/Quote/ all *.pm for "methods"
@@ -178,14 +180,16 @@ public:
  *
  * Apply changes here also to the FQ appendix of help.
  */
-static gnc_quote_source currency_quote_source =
-{ true, SOURCE_CURRENCY, "Currency", "currency" };
+static QuoteSourceVec currency_quote_sources =
+{
+    { true, SOURCE_CURRENCY, "Currency", "currency" }
+};
 
 /* The single quote method is usually the module name, but
  * sometimes it gets the suffix "_direct"
  * and the failover method is without suffix.
  */
-static gnc_quote_source single_quote_sources[] =
+static QuoteSourceVec single_quote_sources =
 {
     { false, SOURCE_SINGLE, "Alphavantage, US", "alphavantage" },
     { false, SOURCE_SINGLE, "Amsterdam Euronext eXchange, NL", "aex" },
@@ -250,7 +254,7 @@ static gnc_quote_source single_quote_sources[] =
     { false, SOURCE_SINGLE, "Yahoo as YQL", "yahoo_yql" },
 };
 
-static gnc_quote_source multiple_quote_sources[] =
+static QuoteSourceVec multiple_quote_sources =
 {
     { false, SOURCE_MULTI, "Australia (ASX, ...)", "australia" },
     { false, SOURCE_MULTI, "Canada (Alphavantage, TSX, ...)", "canada" },
@@ -275,12 +279,16 @@ static gnc_quote_source multiple_quote_sources[] =
     { false, SOURCE_MULTI, "USA (Alphavantage, Fool, ...)", "usa" },
 };
 
-static const int num_single_quote_sources =
-    sizeof(single_quote_sources) / sizeof(gnc_quote_source);
-static const int num_multiple_quote_sources =
-    sizeof(multiple_quote_sources) / sizeof(gnc_quote_source);
-static std::vector<gnc_quote_source> new_quote_sources;
+static QuoteSourceVec new_quote_sources;
 
+// cannot use map or unordered_map because order must be preserved
+static const std::vector<std::pair<QuoteSourceType,QuoteSourceVec&>> quote_sources_map =
+    {
+        { SOURCE_CURRENCY, currency_quote_sources },
+        { SOURCE_SINGLE, single_quote_sources },
+        { SOURCE_MULTI, multiple_quote_sources },
+        { SOURCE_UNKNOWN, new_quote_sources }
+    };
 
 /********************************************************************
  * gnc_quote_source_fq_installed
@@ -307,6 +315,16 @@ gnc_quote_source_fq_version (void)
     return fq_version.c_str();
 }
 
+static QuoteSourceVec&
+get_quote_source_from_type (QuoteSourceType type)
+{
+    for (const auto& [s_type, sources] : quote_sources_map)
+        if (type == s_type)
+            return sources;
+
+    return new_quote_sources;
+}
+
 /********************************************************************
  * gnc_quote_source_num_entries
  *
@@ -314,16 +332,7 @@ gnc_quote_source_fq_version (void)
  ********************************************************************/
 gint gnc_quote_source_num_entries(QuoteSourceType type)
 {
-    if  (type == SOURCE_CURRENCY)
-        return 1;
-
-    if  (type == SOURCE_SINGLE)
-        return num_single_quote_sources;
-
-    if (type == SOURCE_MULTI)
-        return num_multiple_quote_sources;
-
-    return new_quote_sources.size();
+    return get_quote_source_from_type(type).size();
 }
 
 
@@ -357,38 +366,12 @@ gnc_quote_source *
 gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
 {
     ENTER("type/index is %d/%d", type, index);
-    switch (type)
+    auto& sources = get_quote_source_from_type (type);
+    if ((size_t) index < sources.size())
     {
-    case SOURCE_CURRENCY:
-        LEAVE("found %s", currency_quote_source.get_user_name());
-        return &currency_quote_source;
-        break;
-
-    case SOURCE_SINGLE:
-        if (index < num_single_quote_sources)
-        {
-            LEAVE("found %s", single_quote_sources[index].get_user_name());
-            return &single_quote_sources[index];
-        }
-        break;
-
-    case SOURCE_MULTI:
-        if (index < num_multiple_quote_sources)
-        {
-            LEAVE("found %s", multiple_quote_sources[index].get_user_name());
-            return &multiple_quote_sources[index];
-        }
-        break;
-
-    case SOURCE_UNKNOWN:
-    default:
-        if ((size_t)index < new_quote_sources.size())
-        {
-            auto& source = new_quote_sources.at(index);
-            LEAVE("found %s", source.get_user_name());
-            return &source;
-        }
-        break;
+        auto& source = sources[index];
+        LEAVE("found %s", source.get_user_name());
+        return &source;
     }
 
     LEAVE("not found");
@@ -398,32 +381,18 @@ gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
 gnc_quote_source *
 gnc_quote_source_lookup_by_internal(const char * name)
 {
-    gint i;
-
     if ((name == NULL) || (g_strcmp0(name, "") == 0))
     {
         return NULL;
     }
 
-    if (g_strcmp0(name, currency_quote_source.get_internal_name()) == 0)
-        return &currency_quote_source;
-
-    for (i = 0; i < num_single_quote_sources; i++)
+    for (const auto& [_, sources] : quote_sources_map)
     {
-        if (g_strcmp0(name, single_quote_sources[i].get_internal_name()) == 0)
-            return &single_quote_sources[i];
-    }
-
-    for (i = 0; i < num_multiple_quote_sources; i++)
-    {
-        if (g_strcmp0(name, multiple_quote_sources[i].get_internal_name()) == 0)
-            return &multiple_quote_sources[i];
-    }
-
-    for (auto& source : new_quote_sources)
-    {
-        if (g_strcmp0(name, source.get_internal_name()) == 0)
-            return &source;
+        for (const auto& source : sources)
+        {
+            if (g_strcmp0(name, source.get_internal_name()) == 0)
+                return (gnc_quote_source*)&source;
+        }
     }
 
     DEBUG("gnc_quote_source_lookup_by_internal: Unknown source %s", name);
@@ -458,30 +427,14 @@ gnc_quote_source_get_index (const gnc_quote_source *source)
         return 0;
     }
 
-    switch (source->get_type())
-    {
-    case SOURCE_CURRENCY:
-        return 0;
-    case SOURCE_SINGLE:
-        for (auto i = 0; i < num_single_quote_sources; ++i)
-            if (&single_quote_sources[i] == source)
-                return i;
-        break;
-    case SOURCE_MULTI:
-        for (auto i = 0; i < num_multiple_quote_sources; ++i)
-            if (&multiple_quote_sources[i] == source)
-                return i;
-        break;
-    case SOURCE_UNKNOWN:
-    {
-        for (size_t i = 0; i < new_quote_sources.size(); ++i)
-            if (&new_quote_sources[i] == source)
-                return i;
-        break;
-    }
-    default:
-        break;
-    }
+    auto& sources = get_quote_source_from_type (source->get_type());
+    auto is_source = [&source](const auto& findif_source)
+    { return &findif_source == source; };
+
+    auto iter = std::find_if (sources.begin(), sources.end(), is_source);
+    if (iter != sources.end())
+        return std::distance (sources.begin(), iter);
+
     PWARN ("couldn't locate source");
     return 0;
 }
@@ -1130,7 +1083,7 @@ gnc_commodity_get_quote_source(const gnc_commodity *cm)
     if (!cm) return NULL;
     priv = GET_PRIVATE(cm);
     if (!priv->quote_source && gnc_commodity_is_iso(cm))
-        return &currency_quote_source;
+        return &currency_quote_sources[0];
     return priv->quote_source;
 }
 
@@ -1138,7 +1091,7 @@ gnc_quote_source*
 gnc_commodity_get_default_quote_source(const gnc_commodity *cm)
 {
     if (cm && gnc_commodity_is_iso(cm))
-        return &currency_quote_source;
+        return &currency_quote_sources[0];
     /* Should make this a user option at some point. */
     return gnc_quote_source_lookup_by_internal("alphavantage");
 }
