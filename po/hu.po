@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-02-16 01:11+0100\n"
-"PO-Revision-Date: 2024-02-17 22:44+0000\n"
+"PO-Revision-Date: 2024-02-18 22:45+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3084,11 +3084,11 @@ msgstr "Határidő"
 #: gnucash/report/reports/standard/new-aging.scm:113
 #: gnucash/report/reports/standard/new-owner-report.scm:937
 msgid "Post Date"
-msgstr "Kiállítás dátuma"
+msgstr "Könyvelés dátuma"
 
 #: gnucash/gnome/dialog-invoice.c:1037
 msgid "Post to Account"
-msgstr "Rögzítés folyószámlája"
+msgstr "Könyvelés számlára"
 
 #: gnucash/gnome/dialog-invoice.c:1038
 msgid "Accumulate Splits?"
@@ -3282,12 +3282,12 @@ msgstr "Utalvány megtekintése/szerkesztése"
 
 #: gnucash/gnome/dialog-invoice.c:3549
 msgid "Invoice Owner"
-msgstr "Számlatulajdonos"
+msgstr "Kimenőszámla tulajdonosa"
 
 #: gnucash/gnome/dialog-invoice.c:3552
 #: gnucash/report/reports/standard/invoice.scm:502
 msgid "Invoice Notes"
-msgstr ""
+msgstr "Kimenőszámla-megjegyzések"
 
 #: gnucash/gnome/dialog-invoice.c:3555 gnucash/gnome/dialog-invoice.c:3589
 #: gnucash/gnome/dialog-invoice.c:3623 gnucash/gnome/dialog-invoice.c:3652
@@ -3297,7 +3297,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-job.glade:219
 #: gnucash/report/reports/standard/invoice.scm:494
 msgid "Billing ID"
-msgstr "Számlaszám"
+msgstr "Számlázási azonosító"
 
 #: gnucash/gnome/dialog-invoice.c:3558 gnucash/gnome/dialog-invoice.c:3592
 #: gnucash/gnome/dialog-invoice.c:3626
@@ -3327,19 +3327,19 @@ msgstr "Számlaszám"
 
 #: gnucash/gnome/dialog-invoice.c:3583
 msgid "Bill Owner"
-msgstr "Számlatulajdonos"
+msgstr "Bejövőszámla tulajdonosa"
 
 #: gnucash/gnome/dialog-invoice.c:3586
 msgid "Bill Notes"
-msgstr ""
+msgstr "Bejövőszámla-megjegyzések"
 
 #: gnucash/gnome/dialog-invoice.c:3617
 msgid "Voucher Owner"
-msgstr "Bizonylattulajdonos"
+msgstr "Bizonylat tulajdonosa"
 
 #: gnucash/gnome/dialog-invoice.c:3620
 msgid "Voucher Notes"
-msgstr "Bizonylat megjegyzések"
+msgstr "Bizonylatmegjegyzések"
 
 #: gnucash/gnome/dialog-invoice.c:3654 gnucash/gnome/dialog-invoice.c:3813
 #: gnucash/gnome/dialog-lot-viewer.c:907 gnucash/gnome/dialog-tax-info.c:1235
@@ -3510,7 +3510,7 @@ msgstr "Csak aktívat?"
 #: gnucash/gtkbuilder/dialog-job.glade:206
 #: gnucash/register/ledger-core/split-register-model.c:374
 msgid "Rate"
-msgstr ""
+msgstr "Érték"
 
 #: gnucash/gnome/dialog-job.c:568 gnucash/gnome-utils/gnc-tree-view-owner.c:341
 #: gnucash/gtkbuilder/dialog-job.glade:103
@@ -3599,7 +3599,7 @@ msgstr "Biztosan, le kívánja zárni a rendelést?"
 
 #: gnucash/gnome/dialog-order.c:309
 msgid "Close Date"
-msgstr "Lezárás dátuma"
+msgstr "Záródátum"
 
 #: gnucash/gnome/dialog-order.c:859
 msgid "View/Edit Order"
@@ -3607,7 +3607,7 @@ msgstr "Rendelés szerkesztése/megtekintése"
 
 #: gnucash/gnome/dialog-order.c:868
 msgid "Order Notes"
-msgstr ""
+msgstr "Rendelésmegjegyzések"
 
 #: gnucash/gnome/dialog-order.c:870 gnucash/gtkbuilder/dialog-order.glade:149
 msgid "Date Closed"
@@ -3871,7 +3871,7 @@ msgstr "alkalmazás"
 #. * user herself.
 #: gnucash/gnome/dialog-print-check.c:1611
 msgid "user"
-msgstr "Felhasználó"
+msgstr "felhasználó"
 
 #: gnucash/gnome/dialog-print-check.c:1635
 #: gnucash/gnome/dialog-print-check.c:2653
@@ -5235,7 +5235,7 @@ msgstr "A keresés eredménye"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3192
 msgid "Start Date:"
-msgstr "Kezdő dátum:"
+msgstr "Kezdődátum:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3199
 msgid "Show previous number of days:"
@@ -5243,7 +5243,7 @@ msgstr "Mutasd az előző napokat:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3207
 msgid "End Date:"
-msgstr "Vég-dátum:"
+msgstr "Záródátum:"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3217
 #: gnucash/report/trep-engine.scm:157
@@ -5385,10 +5385,8 @@ msgid "Select"
 msgstr "Kiválasztás"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4674
-#, fuzzy
-#| msgid "Post Date"
 msgid "Go to Date"
-msgstr "Kiállítás dátuma"
+msgstr "Ugrás a dátumra"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:4976
 #, c-format
@@ -5995,14 +5993,14 @@ msgstr "Elszámolt tranzakciók"
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
-msgstr[0] "A számlakivonat dátuma %d nappal a mai nap után van."
+msgstr[0] "A kimutatás dátuma %d nappal a mai nap után van."
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:387
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
-msgstr[0] "A számlakivonat megadott dátuma %d nappal a mai nap után van."
+msgstr[0] "A választott kimutatásdátum %d nappal a mai nap után van."
 
 #: gnucash/gnome/window-reconcile.c:392
 msgid ""
@@ -6014,11 +6012,11 @@ msgstr ""
 
 #: gnucash/gnome/window-reconcile.c:481
 msgid "Interest Payment"
-msgstr "Folyószámlakamat"
+msgstr "Számlakamat"
 
 #: gnucash/gnome/window-reconcile.c:484
 msgid "Interest Charge"
-msgstr "Terhelt kamat"
+msgstr "Kamatdíj"
 
 #: gnucash/gnome/window-reconcile.c:492
 #: gnucash/gtkbuilder/dialog-vendor.glade:630
@@ -6044,11 +6042,11 @@ msgstr "Kifizetés ide"
 #: gnucash/gnome/window-reconcile.c:785
 #: gnucash/gtkbuilder/window-reconcile.glade:215
 msgid "Enter _Interest Payment…"
-msgstr "_Folyószámlakamat megadása…"
+msgstr "Számla_kamat megadása…"
 
 #: gnucash/gnome/window-reconcile.c:787
 msgid "Enter _Interest Charge…"
-msgstr "_Kamatköltség megadása…"
+msgstr "_Kamatdíj megadása…"
 
 #: gnucash/gnome/window-reconcile.c:1389
 msgid "Are you sure you want to delete the selected transaction?"
@@ -6060,7 +6058,7 @@ msgid ""
 "date. Reconciliation may be difficult."
 msgstr ""
 "FIGYELEM! A számlán egyes felosztások egyeztetési dátuma későbbi, mint a "
-"számlakivonat dátuma. Emiatt az egyeztetés nehézségekbe ütközhet."
+"kimutatás dátuma. Emiatt az egyeztetés nehézségekbe ütközhet."
 
 #: gnucash/gnome/window-reconcile.c:1963
 msgid ""
@@ -6070,9 +6068,9 @@ msgid ""
 "reconcile."
 msgstr ""
 "Ezen a számlán egyes felosztások egyeztetési dátuma későbbi, mint a "
-"számlakivonat dátuma. Emiatt az egyeztetés nehézségekbe ütközhet. Ilyen "
-"esetben a Tranzakciók keresésével megkeresheti a felosztásokat, "
-"visszavonhatja az egyeztetésüket, majd újra próbálkozhat az egyeztetéssel."
+"kimutatás dátuma. Emiatt az egyeztetés nehézségekbe ütközhet. Ilyen esetben "
+"a Tranzakciók keresésével megkeresheti a felosztásokat, visszavonhatja az "
+"egyeztetésüket, majd újra próbálkozhat az egyeztetéssel."
 
 #: gnucash/gnome/window-reconcile.c:2069
 #: gnucash/gtkbuilder/window-reconcile.glade:106
@@ -8482,7 +8480,7 @@ msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:284
 msgid "Enable extra/development/debugging features."
-msgstr "Extrta / fejlesztői hibajelentés engedélyezése."
+msgstr "Extra/fejlesztői hibajelentés engedélyezése."
 
 #: gnucash/gnucash-core-app.cpp:286
 msgid ""
@@ -8520,16 +8518,15 @@ msgstr "Pénzügyek ellenőrzése::Árfolyam…"
 
 #: gnucash/gnucash.cpp:188
 msgid "Unable to load Finance::Quote."
-msgstr "Pénzügyek ellenőrzése::Árfolyam..."
+msgstr "Nem sikerült betölteni, Pénzügyek::Árfolyam..."
 
 #: gnucash/gnucash.cpp:199
 msgid "Loading data…"
 msgstr "Adatok betöltése…"
 
 #: gnucash/gnucash.cpp:271
-#, fuzzy
 msgid "Application Options"
-msgstr "alkalmazás"
+msgstr "Alkalmazásbeállítások"
 
 #: gnucash/gnucash.cpp:274
 msgid "Do not load the last file opened"
@@ -8638,7 +8635,7 @@ msgid ""
 "closed. The numbers are the X and Y coordinates of the top left corner of "
 "the window followed by the width and height of the window."
 msgstr ""
-"Ez a beállítás tartalmazza az ablak méretét és helyzetét amikor legutóbb "
+"Ez a beállítás tartalmazza az ablak méretét és a helyzetét amikor legutóbb "
 "bezárta. A számok: az ablak bal felső sarkának koordinátái, majd az ablak "
 "szélessége és a magassága."
 
@@ -8695,38 +8692,35 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:117
-#, fuzzy
 msgid "Show invoices due reminder at startup"
-msgstr "Számlaemlékeztető megjelenítése induláskor"
+msgstr "Kimenőszámlák esedékessége emlékeztető megjelenítése indításkor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:118
-#, fuzzy
 msgid ""
 "If active, at startup GnuCash will check to see whether any invoices will "
 "become due soon. If so, it will present the user with a reminder dialog. The "
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due invoices."
 msgstr ""
-"Ha aktív, a GNUCash indításakor ellenőrzi van-e hamarosan esedékes számla. "
-"Ha igen, felmutat a használónak egy emlékeztetőt. Az értesítés előtti napok "
-"számát a \"nappal előbb\" beállítás határozza meg. Különben GnuCash nem "
-"ellenőriz esedékes számlákat."
+"Ha aktív, a GNUCash indításakor ellenőrzi van-e hamarosan esedékessé váló "
+"kimenőszámla. Ha igen, megjelenít egy emlékeztető párbeszédet a "
+"felhasználónak. Az esedékesség előtti napok számát a „nappal előbb” "
+"beállítás határozza meg. Máskülönben GnuCash nem ellenőrzi esedékes "
+"kimenőszámlákat."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
-#, fuzzy
 msgid "Show invoices due within this many days"
-msgstr "Ennyi napon belül esedékes számlák megjelenítése"
+msgstr "Ennyi napon belül esedékes kimenőszámlák megjelenítése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:123
-#, fuzzy
 msgid ""
 "This field defines the number of days in advance that GnuCash will check for "
 "due invoices. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
-"E mező határozza meg, hány nappal korábban ellenőrizze GnuCash az esedékes "
-"számlákat. Az értéket csak akkor használják, ha az \"Esedékesség-értesítés\" "
-"beállítás aktív."
+"Ez a mező határozza meg, hány nappal korábban ellenőrizze GnuCash az "
+"esedékes kimenőszámlákat. Az érték csak akkor lesz használva, ha az "
+"„Esedékesség-értesítés” beállítás aktív."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:127
 msgid "Enable extra toolbar buttons for business"
@@ -8783,7 +8777,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:159
 msgid "Show bills due reminder at startup"
-msgstr "Számlaemlékeztető megjelenítése induláskor"
+msgstr "Bejövőszámlák esedékessége emlékeztető megjelenítése induláskor"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:160
 msgid ""
@@ -8792,10 +8786,11 @@ msgid ""
 "definition of \"soon\" is controlled by the \"Days in Advance\" setting. "
 "Otherwise GnuCash does not check for due bills."
 msgstr ""
-"Ha aktív, a GNUCash indításakor ellenőrzi van-e hamarosan esedékes számla. "
-"Ha igen, felmutat a használónak egy emlékeztetőt. Az értesítés előtti napok "
-"számát a \"nappal előbb\" beállítás határozza meg. Különben GnuCash nem "
-"ellenőriz esedékes számlákat."
+"Ha aktív, a GNUCash indításakor ellenőrzi van-e hamarosan esedékessé váló "
+"bejövőszámla. Ha igen, megjelenít egy emlékeztető párbeszédet a "
+"felhasználónak. Az esedékesség előtti napok számát a „nappal előbb” "
+"beállítás határozza meg. Máskülönben GnuCash nem ellenőrzi az esedékes "
+"bejövőszámlákat."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
 msgid "Show bills due within this many days"
@@ -8807,9 +8802,9 @@ msgid ""
 "due bills. Its value is only used if the \"Notify when due\" setting is "
 "active."
 msgstr ""
-"E mező határozza meg, hány nappal korábban ellenőrizze GnuCash az esedékes "
-"számlákat. Az értéket csak akkor használják, ha az \"Esedékesség-értesítés\" "
-"beállítás aktív."
+"Ez a mező határozza meg, hány nappal korábban ellenőrizze GnuCash az "
+"esedékes bejövőszámlákat. Az érték csak akkor lesz használva, ha az "
+"„Esedékesség-értesítés” beállítás aktív."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:5
 #, fuzzy
@@ -8880,12 +8875,12 @@ msgid ""
 "This value contains the X,Y coordinates for the start of the payee line on "
 "the check."
 msgstr ""
-"Ez az érték tartalmazza a kedvezményezett sorának kezdetének X,Y "
-"koordinátáit a csekken."
+"Ez az érték tartalmazza a kedvezményezett sor kezdetének X,Y koordinátáit a "
+"csekken."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:40
 msgid "Position of date line"
-msgstr "A dátumvonal pozíciója"
+msgstr "A dátumsor pozíciója"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:41
 msgid ""
@@ -8906,8 +8901,8 @@ msgid ""
 "line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Ez az érték tartalmazza az összeg szöveggel sorának kezdetének X,Y "
-"koordinátáit a csekken. A koordinátákat a csekk bal felső sarkától számítják."
+"Ez az érték tartalmazza az összeg szöveggel sor kezdetének X,Y koordinátáit "
+"a csekken. A koordinátákat a csekk bal felső sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:50
 msgid "Position of check amount in numbers"
@@ -8919,8 +8914,8 @@ msgid ""
 "amount line on the check. Coordinates are from the lower left corner of the "
 "specified check position."
 msgstr ""
-"Ez az érték tartalmazza az összeg számmal sorának kezdetének X,Y "
-"koordinátáit a csekken. A koordinátákat a csekk bal alsó sarkától számítják."
+"Ez az érték tartalmazza az összeg számmal sor kezdetének X,Y koordinátáit a "
+"csekken. A koordinátákat a csekk bal alsó sarkától számítják."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:55
 #, fuzzy
@@ -9055,7 +9050,7 @@ msgstr "Pénznemek megjelenítése a párbeszédablakban"
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:55
 #: gnucash/import-export/ofx/gschemas/org.gnucash.GnuCash.dialogs.import.ofx.gschema.xml.in:5
 msgid "Last pathname used"
-msgstr "Utoljára használt elérési út"
+msgstr "Legutóbb használt elérési út"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:13
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:144
@@ -9070,8 +9065,8 @@ msgid ""
 "This field contains the last pathname used by this window. It will be used "
 "as the initial filename/pathname the next time this window is opened."
 msgstr ""
-"Ez a mező tartalmazza az utolsó elérési utat, amit a párbeszédablak "
-"használt. Ez lesz a kezdő fájlnév/elérési út a párbeszédablak következő "
+"Ez a mező tartalmazza az legutóbbi elérési utat, amit a párbeszédablak "
+"használt. Ez lesz a kezdő fájlnév/elérésiút-név a párbeszédablak következő "
 "megnyitásakor."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:17
@@ -9080,7 +9075,7 @@ msgstr "Ablakgeometria"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.export.csv.gschema.xml.in:18
 msgid "The position of paned window when it was last closed."
-msgstr "A beágyazot ablak helyzete az utolsó bezáráskor."
+msgstr "A párbeszédablak helyzete az utolsó bezáráskor."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:103
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:104
@@ -10776,7 +10771,7 @@ msgstr "Nyereség/veszteség kezdő dátum típus"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:25
 msgid "Starting date (in seconds from Jan 1, 1970)"
-msgstr "Kezdő dátum (másodpercben 1970. jan. 1-től)"
+msgstr "Kezdődátum (másodpercben 1970. jan. 1-től)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:26
 msgid ""
@@ -10817,7 +10812,7 @@ msgstr "Nyereség/veszteség záró dátum típus"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:45
 msgid "Ending date (in seconds from Jan 1, 1970)"
-msgstr "Záró dátum (másodpercben 1970. jan. 1-től)"
+msgstr "Záródátum (másodpercben 1970. jan. 1-től)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:46
 msgid ""
@@ -12028,7 +12023,7 @@ msgstr "Időtartam"
 #: gnucash/report/reports/standard/price-scatter.scm:37
 #: gnucash/report/trep-engine.scm:104
 msgid "End Date"
-msgstr "Befejezés dátuma"
+msgstr "Befejeződátum"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1244
 msgid "Loan Review"
@@ -12043,9 +12038,8 @@ msgid "Loan Summary"
 msgstr "Kölcsön-összefoglaló"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:14
-#, fuzzy
 msgid "QIF Import Assistant"
-msgstr "QIF-importálás"
+msgstr "QIF-importálási segéd"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:26
@@ -12122,12 +12116,12 @@ msgid ""
 msgstr ""
 "A QIF formátum nem határozza meg, milyen formában kell egy dátum évét, "
 "hónapját és napját nyomtatni. Legtöbb esetben automatikusan meg lehet "
-"állapítani, hogy egy adott fájl milyen formátumot használ.A most importált "
+"állapítani, hogy egy adott fájl milyen formátumot használ. A most importált "
 "fájlban azonban több formátum is alkalmazható az adatokra.\n"
 "\n"
 "Válasszon egy dátumformátumot a fájlnak. Az európai szoftverek által "
-"készített QIF fájlok \"n-h-é\" vagy nap-hónap-év formátumban vannak. Az US "
-"szoftverek által készítettek pedig \"h-n-é\" hónap-nap-év formátumban.\n"
+"készített QIF fájlok „n-h-é” nap-hónap-év formátumban vannak. A „US” "
+"szoftverek által készítettek pedig „h-n-é” hónap-nap-év formátumban.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:304
 #: gnucash/gtkbuilder/assistant-qif-import.glade:389
@@ -15429,7 +15423,7 @@ msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
 msgstr ""
-"Egy hitelkártya-számlakivonat egyeztetése után megkéri a felhasználót egy "
+"Egy hitelkártya-kimutatás egyeztetése után megkéri a felhasználót egy "
 "hitelkártya-törlesztés megadására."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2627
@@ -15802,9 +15796,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:591
-#, fuzzy
 msgid "First Date"
-msgstr "Kiállítás dátuma"
+msgstr "Első dátum"
 
 #: gnucash/gtkbuilder/dialog-price.glade:622
 #, fuzzy
@@ -17140,26 +17133,27 @@ msgid "Estimate Budget Values"
 msgstr "Költségvetés becslése"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:299
-#, fuzzy
 msgid "Use Average"
-msgstr "közepes"
+msgstr "Az átlag használata"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:303
 msgid "Use the average value over all actual periods for all projected periods"
 msgstr ""
+"Az összes tényleges időszak átlagos értékének használata az összes tervezett "
+"időszakra"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:372
 msgid ""
 "GnuCash will estimate budget values for the selected accounts from past "
 "transactions."
 msgstr ""
-"GnuCash megbecsüli a költségvetési értékeket a kiválasztott számlák korábbi "
-"tranzakcióiból."
+"A GnuCash megbecsüli a költségvetési értékeket a kiválasztott számlák "
+"korábbi tranzakcióiból."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:410
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:658
 msgid "Budget Options"
-msgstr "Költségvetés lehetőségei"
+msgstr "Költségvetés beállításai"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:477
 msgid "Budget Name"
@@ -17317,7 +17311,7 @@ msgstr "Bankszámlakivona_t dátuma"
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr ""
-"Rendezés a bankszámlakivonat dátuma szerint (és csoportosítás az elszámolt, "
+"Rendezés a kimutatás dátuma szerint (és csoportosítás az elszámolt, "
 "egyeztetett és nem egyeztetett állapot alapján)."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:919
@@ -17510,7 +17504,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/window-reconcile.glade:258
 msgid "Statement Date is after today"
-msgstr "A nyilatkozat dátuma a mai nap után van"
+msgstr "A kimutatás dátuma a mai nap után van"
 
 #: gnucash/html/gnc-html-webkit1.c:78 gnucash/html/gnc-html-webkit2.c:87
 msgid "Not found"
@@ -20175,11 +20169,11 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-file.scm:716
 msgid "Transaction date"
-msgstr "Tranzakció dátum"
+msgstr "Tranzakciódátum"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:717
 msgid "Transaction amount"
-msgstr "Tranzakció összeg"
+msgstr "Tranzakcióösszeg"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:718
 msgid "Share price"
@@ -20413,10 +20407,9 @@ msgid "X"
 msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:81
-#, fuzzy
 msgctxt "sample for 'Date'"
 msgid "12/12/2000"
-msgstr "sample: 2000-12-12"
+msgstr "2000.12.12"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:86
 msgctxt "sample for 'Description'"
@@ -20792,7 +20785,7 @@ msgstr "ATM bankautomata pénzautomata betét"
 #: gnucash/register/ledger-core/split-register.c:2545
 #: gnucash/register/ledger-core/split-register.c:2576
 msgid "ATM Draw"
-msgstr ""
+msgstr "ATM pénzfelvétel"
 
 #: gnucash/register/ledger-core/split-register.c:2546
 msgid "Teller"
@@ -20970,10 +20963,9 @@ msgstr "Nem e_gyeztet"
 #. used to estimate widths.
 #: gnucash/register/ledger-core/split-register-layout.c:646
 #: gnucash/register/ledger-core/split-register-layout.c:654
-#, fuzzy
 msgctxt "sample"
 msgid "22/02/2000"
-msgstr "sample: 2000-12-12"
+msgstr "2000.02.22"
 
 #. Translators: The 'sample' items are
 #. strings which are not displayed, but only
@@ -20982,7 +20974,7 @@ msgstr "sample: 2000-12-12"
 #: gnucash/register/ledger-core/split-register-layout.c:673
 msgctxt "sample"
 msgid "99999"
-msgstr ""
+msgstr "99999"
 
 #: gnucash/register/ledger-core/split-register-layout.c:681
 msgctxt "sample"
@@ -20997,7 +20989,7 @@ msgstr "Egy tranzakció leírása"
 #: gnucash/report/trep-engine.scm:1198 gnucash/report/trep-engine.scm:1199
 msgctxt "Column header for 'Document Link'"
 msgid "L"
-msgstr ""
+msgstr "H"
 
 #: gnucash/register/ledger-core/split-register-layout.c:713
 #: gnucash/register/ledger-core/split-register-layout.c:753
@@ -21009,10 +21001,9 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-layout.c:803
 #: gnucash/register/ledger-core/split-register-layout.c:811
 #: gnucash/register/ledger-core/split-register-layout.c:859
-#, fuzzy
 msgctxt "sample"
 msgid "999,999.000"
-msgstr "példa:999.999,000"
+msgstr "999.999,000"
 
 #: gnucash/register/ledger-core/split-register-layout.c:745
 msgctxt "sample"
@@ -21020,10 +21011,9 @@ msgid "Memo field sample text string"
 msgstr "Feljegyzés mező mintaszövege"
 
 #: gnucash/register/ledger-core/split-register-layout.c:819
-#, fuzzy
 msgctxt "Column header for 'Type'"
 msgid "T"
-msgstr "A"
+msgstr "T"
 
 #: gnucash/register/ledger-core/split-register-layout.c:827
 msgctxt "sample"
@@ -21031,17 +21021,15 @@ msgid "Notes field sample text string"
 msgstr "Megjegyzésekmező mintaszövege"
 
 #: gnucash/register/ledger-core/split-register-layout.c:835
-#, fuzzy
 msgctxt "sample"
 msgid "No Particular Reason"
-msgstr "példa:Semmi különös ok"
+msgstr "Nincs különösebb ok"
 
 #: gnucash/register/ledger-core/split-register-layout.c:843
 #: gnucash/register/ledger-core/split-register-layout.c:851
-#, fuzzy
 msgctxt "sample"
 msgid "(x + 0.33 * y + (x+y) )"
-msgstr "példa:(x + 0.33 * y + (x+y) )"
+msgstr "(x + 0.33 * y + (x+y) )"
 
 #: gnucash/register/ledger-core/split-register-load.c:297
 msgid ""
@@ -21902,7 +21890,7 @@ msgstr "A készítendő grafikon típusa."
 #: gnucash/report/reports/example/average-balance.scm:136
 #: gnucash/report/trep-engine.scm:2087 libgnucash/engine/policy.c:58
 msgid "Average"
-msgstr "közepes"
+msgstr "Átlagos"
 
 #: gnucash/report/reports/example/average-balance.scm:117
 #: gnucash/report/reports/example/average-balance.scm:138
@@ -21948,11 +21936,11 @@ msgstr "Költségek a hét napjain"
 
 #: gnucash/report/reports/example/daily-reports.scm:42
 msgid "Shows a piechart with the total income for each day of the week"
-msgstr "Bevétel-tortadiagram a hét napjai szerinti bontásban"
+msgstr "Kördiagram ami mutatja a hét napjain a teljes bevételt"
 
 #: gnucash/report/reports/example/daily-reports.scm:44
 msgid "Shows a piechart with the total expenses for each day of the week"
-msgstr "Költség-tortadiagram a hét napjai szerinti bontásban"
+msgstr "Kördiagram ami mutatja a hét napjain a teljes költséget"
 
 #: gnucash/report/reports/example/daily-reports.scm:58
 #: gnucash/report/reports/standard/account-piecharts.scm:71
@@ -22556,45 +22544,44 @@ msgstr ""
 
 #: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
-msgstr "Bevétel-tortadiagram"
+msgstr "Bevételkördiagram"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:37
 msgid "Expense Piechart"
-msgstr "Költség-tortadiagram"
+msgstr "Költségkördiagram"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:38
 msgid "Asset Piechart"
-msgstr "Eszköz-tortadiagram"
+msgstr "Eszközkördiagram"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:39
-#, fuzzy
 msgid "Security Piechart"
-msgstr "Eszköz-tortadiagram"
+msgstr "Értékpapír-kördiagram"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:40
 msgid "Liability Piechart"
-msgstr "Kötelezettség-tortadiagram"
+msgstr "Kötelezettség-kördiagram"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
-msgstr "Bevétel-tortadiagram a megadott időszak szerinti bontásban"
+msgstr "Bevételkördiagram a megadott időszak szerinti bontásban"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
-msgstr "Költség-tortadiagram a megadott időszak szerinti bontásban"
+msgstr "Költségkördiagram a megadott időszak szerinti bontásban"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:49
 msgid "Shows a piechart with the Assets balance at a given time"
-msgstr "Eszköz-tortadiagram egy adott időpontban"
+msgstr "Eszközkördiagram egy adott időpontban"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:51
-#, fuzzy
 msgid "Shows a piechart with distribution of assets over securities"
-msgstr "Kötelezettség-tortadiagram egy adott időpontban"
+msgstr ""
+"Egy kördiagramot jelenít meg az eszközök és az értékpapírok megoszlásával"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:53
 msgid "Shows a piechart with the Liabilities balance at a given time"
-msgstr "Kötelezettség-tortadiagram egy adott időpontban"
+msgstr "Kötelezettség-kördiagram egy adott időpontban"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:59
 #: gnucash/report/reports/standard/customer-summary.scm:48
@@ -22690,7 +22677,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/account-piecharts.scm:150
 msgid "Maximum number of slices in pie."
-msgstr "A tortadiagram szeleteinek maximális száma."
+msgstr "A kördiagram szeleteinek maximális száma."
 
 #: gnucash/report/reports/standard/account-piecharts.scm:383
 msgid "Yearly Average"
@@ -23592,14 +23579,12 @@ msgid "Whether or not to include a line indicating total amounts."
 msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:106
-#, fuzzy
 msgid "Enable chart"
-msgstr "Nettó érték oszlopdiagramja"
+msgstr "Diagram engedélyezése"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:107
-#, fuzzy
 msgid "Enable link to chart"
-msgstr "Hivatkozások engedélyezése"
+msgstr "Diagram-hivatkozások engedélyezése"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:109
 #: gnucash/report/trep-engine.scm:112
@@ -23653,9 +23638,8 @@ msgid "Liability"
 msgstr "Kötelezettség"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1073
-#, fuzzy
 msgid "Liability and Equity"
-msgstr "_Kötelezettség"
+msgstr "Kötelezettség és saját tőke"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1091
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1234
@@ -23663,9 +23647,8 @@ msgid "Exchange Rates"
 msgstr "Árfolyamok"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1101
-#, fuzzy
 msgid "Barchart"
-msgstr "Eszköz-oszlopdiagram"
+msgstr "Oszlopdiagram"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1164
 msgid " to "
@@ -23687,9 +23670,8 @@ msgid "Net Income"
 msgstr "Nettó bevétel"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1260
-#, fuzzy
 msgid "Balance Sheet (Multicolumn)"
-msgstr "Balance Sheet (eguile)"
+msgstr "Mérleg (Többoszlopos)"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1261
 msgid "Income Statement (Multicolumn)"
@@ -23872,15 +23854,13 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-barchart.scm:134
 #: gnucash/report/reports/standard/category-barchart.scm:149
 #: gnucash/report/reports/standard/investment-lots.scm:188
-#, fuzzy
 msgid "Bar Chart"
-msgstr "Eszköz-oszlopdiagram"
+msgstr "Oszlopdiagram"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:135
 #: gnucash/report/reports/standard/category-barchart.scm:150
-#, fuzzy
 msgid "Line Chart"
-msgstr "Bevétel-ábra"
+msgstr "Vonaldiagram"
 
 #. Translators: Bgt and Act refer to budgeted and
 #. actual total amounts.
@@ -24914,9 +24894,8 @@ msgid "Chart"
 msgstr "Diagram"
 
 #: gnucash/report/reports/standard/investment-lots.scm:41
-#, fuzzy
 msgid "Columns"
-msgstr "Kétoszlopos ábrázolás"
+msgstr "Oszlopok"
 
 #: gnucash/report/reports/standard/investment-lots.scm:42
 msgid "Validation"
@@ -24928,18 +24907,16 @@ msgid "Include accounts with no lots"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:50
-#, fuzzy
 msgid "Show Chart"
-msgstr "Táblázat megjelenítése"
+msgstr "Diagram megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:51
-#, fuzzy
 msgid "Chart type"
-msgstr "Fizetési mód"
+msgstr "Diagramtípus"
 
 #: gnucash/report/reports/standard/investment-lots.scm:52
 msgid "Chart location"
-msgstr "Diagram elhelyezése"
+msgstr "A diagram helye"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
 msgid "Plot width"
@@ -24956,7 +24933,7 @@ msgstr "Számlakód megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:58
 msgid "Show date columns"
-msgstr "Dátum oszlopok megjelenítése"
+msgstr "Dátumoszlopok megjelenítése"
 
 #: gnucash/report/reports/standard/investment-lots.scm:59
 #, fuzzy
@@ -25601,9 +25578,8 @@ msgid "Display the billing id?"
 msgstr "Számlázási azonosító megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:498
-#, fuzzy
 msgid "Invoice owner ID"
-msgstr "Számlatulajdonos"
+msgstr "Kimenőszámla tulajdonosának azonosítója"
 
 #: gnucash/report/reports/standard/invoice.scm:499
 #, fuzzy
@@ -25816,7 +25792,7 @@ msgstr "Nulla egyenlegű elemek feltüntetése"
 #: gnucash/report/reports/standard/new-aging.scm:43
 #: gnucash/report/reports/standard/new-owner-report.scm:46
 msgid "Due or Post Date"
-msgstr "Kiállítás dátuma"
+msgstr "Esedékesség vagy könyvelés dátuma"
 
 #: gnucash/report/reports/standard/new-aging.scm:46
 msgid "Address Source"
@@ -29006,7 +28982,7 @@ msgstr "A kiválasztott folyószámla egyeztetése"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:239
 #: gnucash/ui/gnc-plugin-page-register.ui:242
 msgid "_Auto-clear…"
-msgstr "Auto-_törlés…"
+msgstr "_Automatikus igazolás(elszámolás)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
 #: gnucash/ui/gnc-plugin-page-register.ui:244
@@ -29014,6 +28990,8 @@ msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
 msgstr ""
+"Automatikusan elszámol egyes tranzakciókat, hogy elérjen egy meghatározott "
+"elszámolt összeget"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:144
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:249
