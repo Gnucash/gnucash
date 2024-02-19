@@ -785,10 +785,12 @@ gnc_prefs_split_widget_name (const gchar *name, gchar **group, gchar **pref)
 {
     const gchar *group_with_pref = name + PREF_PREFIX_LEN;
     gchar **splits = g_strsplit (group_with_pref, "/", 0);
+    gchar **value_splits = g_strsplit (splits[1], "=", 0);
 
     *group = g_strdup (splits[0]);
-    *pref = g_strdup (splits[1]);
+    *pref = g_strdup (value_splits[0]);
     g_strfreev (splits);
+    g_strfreev (value_splits);
 }
 
 /****************************************************************************/

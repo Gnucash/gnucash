@@ -749,18 +749,12 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
         return response;
 
     /* Add in the checkboxes to find out if the answer should be remembered. */
-#if 0
     if (GTK_IS_MESSAGE_DIALOG(dialog))
     {
         GtkMessageType type;
         g_object_get(dialog, "message-type", &type, (gchar*)NULL);
-        ask = (type == GTK_MESSAGE_QUESTION);
+        ask = (type == GTK_MESSAGE_QUESTION || type == GTK_MESSAGE_WARNING);
     }
-    else
-    {
-        ask = FALSE;
-    }
-#endif
     perm = gtk_check_button_new_with_mnemonic
            (ask
             ? _("Remember and don't _ask me again.")
