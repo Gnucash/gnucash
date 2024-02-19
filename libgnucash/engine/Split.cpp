@@ -706,7 +706,13 @@ xaccFreeSplit (Split *split)
     }
     CACHE_REMOVE(split->memo);
     CACHE_REMOVE(split->action);
-
+    if (GNC_IS_ACCOUNT (split->acc) && !qof_instance_get_destroying (QOF_INSTANCE (split->acc)))
+        gnc_account_remove_split (split->acc, split);
+    if (GNC_IS_LOT (split->lot) && !qof_instance_get_destroying (QOF_INSTANCE (split->lot)))
+        gnc_lot_remove_split (split->lot, split);
+/* We should do the same for split->parent but we might be getting
+ * called from xaccFreeTransactiob abd tgat would cause trouble.
+ */
     /* Just in case someone looks up freed memory ... */
     split->memo        = (char *) 1;
     split->action      = NULL;

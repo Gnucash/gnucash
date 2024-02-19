@@ -1509,7 +1509,11 @@ do_destroy (Transaction *trans)
        done for the next split, then a split will still be on the split list after it
        has been freed.  This can cause other parts of the code (e.g. in xaccSplitDestroy())
        to reference the split after it has been freed. */
-    for (node = trans->splits; node; node = node->next)
+
+    auto splits = trans->splits;
+    trans->splits = NULL;
+
+    for (node = splits; node; node = node->next)
     {
         Split *s = GNC_SPLIT(node->data);
         if (s && s->parent == trans)
@@ -1517,7 +1521,7 @@ do_destroy (Transaction *trans)
             xaccSplitDestroy(s);
         }
     }
-    for (node = trans->splits; node; node = node->next)
+    for (node = splits; node; node = node->next)
     {
         Split *s = GNC_SPLIT(node->data);
         if (s && s->parent == trans)
@@ -1526,7 +1530,6 @@ do_destroy (Transaction *trans)
         }
     }
     g_list_free (trans->splits);
-    trans->splits = NULL;
     xaccFreeTransaction (trans);
 }
 
