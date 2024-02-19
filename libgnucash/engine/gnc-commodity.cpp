@@ -42,6 +42,8 @@
 #include "guid.h"
 #include "qofinstance.h"
 
+#include <unordered_map>
+
 static QofLogModule log_module = GNC_MOD_COMMODITY;
 
 /* Parts per unit is nominal, i.e. number of 'partname' units in
@@ -125,11 +127,7 @@ struct gnc_commodity_table_s
     GList      * ns_list;
 };
 
-struct gnc_new_iso_code
-{
-    const char *old_code;
-    const char *new_code;
-} gnc_new_iso_codes[] =
+static const std::unordered_map<std::string,std::string> gnc_new_iso_codes =
 {
     {"RUR", "RUB"}, /* Russian Ruble: RUR through 1997-12, RUB from 1998-01 onwards; see bug #393185 */
     {"PLZ", "PLN"}, /* Polish Zloty */
@@ -144,8 +142,6 @@ struct gnc_new_iso_code
     /* Only add currencies to this table when the old currency no longer
      * exists in the file iso-4217-currencies.xml */
 };
-#define GNC_NEW_ISO_CODES \
-        (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))
 
 static std::string fq_version;
 
@@ -1714,7 +1710,6 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
                            const char * name_space, const char * mnemonic)
 {
     gnc_commodity_namespace * nsp = NULL;
-    unsigned int i;
 
     if (!table || !name_space || !mnemonic) return NULL;
 
@@ -1728,14 +1723,9 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
          */
         if (nsp->iso4217)
         {
-            for (i = 0; i < GNC_NEW_ISO_CODES; i++)
-            {
-                if (strcmp(mnemonic, gnc_new_iso_codes[i].old_code) == 0)
-                {
-                    mnemonic = gnc_new_iso_codes[i].new_code;
-                    break;
-                }
-            }
+            auto it = gnc_new_iso_codes.find (mnemonic);
+            if (it != gnc_new_iso_codes.end())
+                mnemonic = it->second.c_str();
         }
         return GNC_COMMODITY(g_hash_table_lookup(nsp->cm_table, (gpointer)mnemonic));
     }
@@ -1852,16 +1842,9 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
          * recently changed. */
         if (priv->name_space->iso4217)
         {
-            guint i;
-            for (i = 0; i < GNC_NEW_ISO_CODES; i++)
-            {
-                if (!priv->mnemonic
-                        || !strcmp(priv->mnemonic, gnc_new_iso_codes[i].old_code))
-                {
-                    gnc_commodity_set_mnemonic(comm, gnc_new_iso_codes[i].new_code);
-                    break;
-                }
-            }
+            auto it = gnc_new_iso_codes.find (priv->mnemonic);
+            if (it != gnc_new_iso_codes.end())
+                gnc_commodity_set_mnemonic(comm, it->second.c_str());
         }
         gnc_commodity_copy (c, comm);
         gnc_commodity_destroy (comm);
