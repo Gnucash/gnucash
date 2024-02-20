@@ -656,7 +656,7 @@ gnc_lot_remove_split (GNCLot *lot, Split *split)
     xaccSplitSetLot(split, NULL);
     priv->is_closed = LOT_CLOSED_UNKNOWN;   /* force an is-closed computation */
 
-    if (NULL == priv->splits)
+    if (!priv->splits && priv->account)
     {
         xaccAccountRemoveLot (priv->account, lot);
         priv->account = NULL;

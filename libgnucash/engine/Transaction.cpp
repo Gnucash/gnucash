@@ -24,6 +24,7 @@
  *                                                                  *
 \********************************************************************/
 
+#include "qofinstance.h"
 #include <config.h>
 
 #include <platform.h>
@@ -1485,8 +1486,9 @@ destroy_gains (Transaction *trans)
 }
 
 static void
-do_destroy (Transaction *trans)
+do_destroy (QofInstance* inst)
 {
+    Transaction *trans{GNC_TRANSACTION (inst)};
     SplitList *node;
     gboolean shutting_down = qof_book_shutting_down(qof_instance_get_book(trans));
 
@@ -1551,8 +1553,10 @@ static gboolean was_trans_emptied(Transaction *trans)
     return TRUE;
 }
 
-static void trans_on_error(Transaction *trans, QofBackendError errcode)
+static void trans_on_error(QofInstance *inst, QofBackendError errcode)
 {
+    Transaction *trans{GNC_TRANSACTION(inst)};
+
     /* If the backend puked, then we must roll-back
      * at this point, and let the user know that we failed.
      * The GUI should check for error conditions ...
@@ -1568,8 +1572,9 @@ static void trans_on_error(Transaction *trans, QofBackendError errcode)
     gnc_engine_signal_commit_error( errcode );
 }
 
-static void trans_cleanup_commit(Transaction *trans)
+static void trans_cleanup_commit(QofInstance *inst)
 {
+    Transaction *trans{GNC_TRANSACTION(inst)};
     GList *slist, *node;
 
     /* ------------------------------------------------- */
@@ -1684,11 +1689,8 @@ xaccTransCommitEdit (Transaction *trans)
     }
 
     trans->txn_type = TXN_TYPE_UNCACHED;
-    qof_commit_edit_part2(QOF_INSTANCE(trans),
-                          (void (*) (QofInstance *, QofBackendError))
-                          trans_on_error,
-                          (void (*) (QofInstance *)) trans_cleanup_commit,
-                          (void (*) (QofInstance *)) do_destroy);
+    qof_commit_edit_part2(QOF_INSTANCE(trans), trans_on_error,
+                          trans_cleanup_commit, do_destroy);
     LEAVE ("(trans=%p)", trans);
 }
 
@@ -1829,7 +1831,7 @@ xaccTransRollbackEdit (Transaction *trans)
              * out about it until this user tried to edit it.
              */
             xaccTransDestroy (trans);
-            do_destroy (trans);
+            do_destroy (QOF_INSTANCE(trans));
 
             /* push error back onto the stack */
             qof_backend_set_error (be, errcode);

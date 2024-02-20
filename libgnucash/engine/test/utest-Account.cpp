@@ -858,29 +858,18 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
 {
     auto msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call\n"
                   " xaccAccountBeginEdit(); xaccAccountDestroy();\n";
-#ifdef USE_CLANG_FUNC_SIG
-#define _func "int xaccTransGetSplitIndex(const Transaction *, const Split *)"
-#else
-#define _func "int xaccTransGetSplitIndex(const Transaction*, const Split*)"
-#endif
-    auto msg2 = _func ": assertion 'trans && split' failed";
-#undef _func
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check1 = test_error_struct_new("gnc.account", loglevel, msg1);
-    auto check2 = test_error_struct_new("gnc.engine", loglevel, msg2);
     QofBook *book = gnc_account_get_book (fixture->acct);
     Account *parent = gnc_account_get_parent (fixture->acct);
     AccountPrivate *p_priv = fixture->func->get_private (parent);
     const guint numItems = 3;
     guint i = 0;
-    guint hdlr1, hdlr2;
+    guint hdlr1;
     gnc_commodity *commodity = gnc_commodity_new (book, "US Dollar", "CURRENCY", "USD", "0", 100);
     test_add_error (check1);
-    test_add_error (check2);
     hdlr1 = g_log_set_handler ("gnc.account", loglevel,
                                (GLogFunc)test_checked_handler, check1);
-    hdlr2 = g_log_set_handler ("gnc.engine", loglevel,
-                               (GLogFunc)test_checked_handler, check2);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
     for (i = 0; i < numItems; i++)
     {
@@ -897,7 +886,6 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
     g_assert_true (p_priv->parent != NULL);
     g_assert_true (p_priv->commodity != NULL);
     g_assert_cmpint (check1->hits, ==, 0);
-    g_assert_cmpint (check2->hits, ==, 0);
     /* Now set the other private parts to something so that they can be set back */
     p_priv->cleared_balance = gnc_numeric_create ( 5, 12);
     p_priv->reconciled_balance = gnc_numeric_create ( 5, 12);
@@ -906,10 +894,8 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
     p_priv->sort_dirty = TRUE;
     fixture->func->xaccFreeAccount (parent);
     g_assert_cmpint (check1->hits, ==, 6);
-    g_assert_cmpint (check2->hits, ==, 6);
     /* cleanup what's left */
     g_log_remove_handler ("gnc.account", hdlr1);
-    g_log_remove_handler ("gnc.engine", hdlr2);
     test_clear_error_list ();
     qof_book_destroy (book);
     g_free (fixture->func);
@@ -972,17 +958,9 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
 {
     auto msg1 = "[xaccFreeAccount()]  instead of calling xaccFreeAccount(), please call\n"
                   " xaccAccountBeginEdit(); xaccAccountDestroy();\n";
-#ifdef USE_CLANG_FUNC_SIG
-#define _func "int xaccTransGetSplitIndex(const Transaction *, const Split *)"
-#else
-#define _func "int xaccTransGetSplitIndex(const Transaction*, const Split*)"
-#endif
-    auto msg2 = _func ": assertion 'trans && split' failed";
-#undef _func
     auto loglevel = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto check1 = test_error_struct_new("gnc.account", loglevel, msg1);
-    auto check2 = test_error_struct_new("gnc.engine", loglevel, msg2);
-    guint hdlr1, hdlr2;
+    guint hdlr1;
     TestSignal sig1, sig2;
     QofBook *book = gnc_account_get_book (fixture->acct);
     Account *parent = gnc_account_get_parent (fixture->acct);
@@ -991,11 +969,8 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     guint i = 0;
     gnc_commodity *commodity = gnc_commodity_new (book, "US Dollar", "CURRENCY", "USD", "0", 100);
     test_add_error (check1);
-    test_add_error (check2);
     hdlr1 = g_log_set_handler ("gnc.account", loglevel,
                                (GLogFunc)test_checked_handler, check1);
-    hdlr2 = g_log_set_handler ("gnc.engine", loglevel,
-                               (GLogFunc)test_checked_handler, check2);
     g_test_log_set_fatal_handler ((GTestLogFatalFunc)test_list_handler, NULL);
     for (i = 0; i < numItems; i++)
     {
@@ -1012,7 +987,6 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     g_assert_true (p_priv->parent != NULL);
     g_assert_true (p_priv->commodity != NULL);
     g_assert_cmpint (check1->hits, ==, 0);
-    g_assert_cmpint (check2->hits, ==, 0);
 
     sig1 = test_signal_new (&parent->inst, QOF_EVENT_MODIFY, NULL);
     sig2 = test_signal_new (&parent->inst, QOF_EVENT_DESTROY, NULL);
@@ -1028,7 +1002,6 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     g_assert_true (p_priv->parent != NULL);
     g_assert_true (p_priv->commodity != NULL);
     g_assert_cmpint (check1->hits, ==, 0);
-    g_assert_cmpint (check2->hits, ==, 0);
     /* xaccAccountDestroy destroys the account by calling
      * qof_instance_set_destroying (), then xaccAccountCommitEdit ();
      */
@@ -1038,12 +1011,10 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     test_signal_assert_hits (sig1, 2);
     test_signal_assert_hits (sig2, 1);
     g_assert_cmpint (check1->hits, ==, 2);
-    g_assert_cmpint (check2->hits, ==, 12);
     /* And clean up */
     test_signal_free (sig1);
     test_signal_free (sig2);
     g_log_remove_handler ("gnc.account", hdlr1);
-    g_log_remove_handler ("gnc.engine", hdlr2);
     test_clear_error_list ();
     qof_book_destroy (book);
     g_free (fixture->func);

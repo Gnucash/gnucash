@@ -1419,7 +1419,7 @@ test_do_destroy (GainsFixture *fixture, gconstpointer pData)
    /* Protect against recursive calls to do_destroy from xaccTransCommitEdit */
     xaccTransBeginEdit(base->txn);
 
-    base->func->do_destroy (base->txn);
+    base->func->do_destroy (QOF_INSTANCE(base->txn));
     g_assert_cmpint (test_signal_return_hits (sig), ==, 1);
     g_assert_true (base->txn->description == NULL);
     g_assert_cmpint (GPOINTER_TO_INT(base->txn->num), ==, 1);
@@ -1472,7 +1472,7 @@ test_trans_on_error (Fixture *fixture, gconstpointer pData)
     gnc_engine_add_commit_error_callback ((EngineCommitErrorCallback)commit_error_cb, NULL);
     xaccTransBeginEdit (fixture->txn);
     g_assert_cmpint (qof_instance_get_editlevel (fixture->txn), ==, 1);
-    fixture->func->trans_on_error (fixture->txn, errcode);
+    fixture->func->trans_on_error (QOF_INSTANCE(fixture->txn), errcode);
     g_assert_cmpint (check->hits, ==, 1);
     g_assert_cmpint ((guint)errorvalue, ==, (guint)errcode);
     g_assert_cmpint (qof_instance_get_editlevel (fixture->txn), ==, 0);
@@ -1515,7 +1515,7 @@ test_trans_cleanup_commit (Fixture *fixture, gconstpointer pData)
     /*Reverse the splits list so we can check later that it got sorted */
     fixture->txn->splits = g_list_reverse (fixture->txn->splits);
     g_assert_true (fixture->txn->splits->data != split0);
-    fixture->func->trans_cleanup_commit (fixture->txn);
+    fixture->func->trans_cleanup_commit (QOF_INSTANCE(fixture->txn));
 
     g_assert_cmpint (test_signal_return_hits (sig_d_remove), ==, 1);
     g_assert_cmpint (test_signal_return_hits (sig_b_remove), ==, 1);
@@ -1540,7 +1540,7 @@ test_trans_cleanup_commit (Fixture *fixture, gconstpointer pData)
     fixture->txn->orig = orig;
     orig->num = fixture->txn->num;
     g_object_ref (orig);
-    fixture->func->trans_cleanup_commit (fixture->txn);
+    fixture->func->trans_cleanup_commit (QOF_INSTANCE(fixture->txn));
 
     g_assert_cmpint (test_signal_return_hits (sig_d_remove), ==, 2);
     g_assert_cmpint (test_signal_return_hits (sig_b_remove), ==, 1);

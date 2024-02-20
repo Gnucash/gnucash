@@ -184,10 +184,10 @@ typedef struct
     void (*gen_event_trans)(Transaction*);
     void (*xaccFreeTransaction)(Transaction*);
     void (*destroy_gains)(Transaction*);
-    void (*do_destroy)(Transaction*);
+    void (*do_destroy)(QofInstance*);
     gboolean (*was_trans_emptied)(Transaction*);
-    void (*trans_on_error)(Transaction*, QofBackendError);
-    void (*trans_cleanup_commit)(Transaction*);
+    void (*trans_on_error)(QofInstance*, QofBackendError);
+    void (*trans_cleanup_commit)(QofInstance*);
     void (*xaccTransScrubGainsDate)(Transaction*);
     Transaction *(*dupe_trans)(const Transaction*);
 

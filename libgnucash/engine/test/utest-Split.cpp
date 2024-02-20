@@ -75,7 +75,7 @@ setup (Fixture *fixture, gconstpointer pData)
     xaccTransSetCurrency (txn, fixture->curr);
     xaccSplitSetParent (fixture->split, txn);
     xaccTransCommitEdit (txn);
-    gnc_lot_set_account (lot, acc);
+    xaccAccountInsertLot (acc, lot);
     fixture->split->action = CACHE_INSERT ("foo");
     fixture->split->memo = CACHE_INSERT ("bar");
     fixture->split->acc = acc;
