@@ -35,11 +35,14 @@
 #include <regex.h>
 #include <qofinstance-p.h>
 
+#include "gnc-commodity.hpp"
 #include "gnc-commodity.h"
 #include "gnc-locale-utils.h"
 #include "gnc-prefs.h"
 #include "guid.h"
 #include "qofinstance.h"
+
+#include <unordered_map>
 
 static QofLogModule log_module = GNC_MOD_COMMODITY;
 
@@ -124,11 +127,7 @@ struct gnc_commodity_table_s
     GList      * ns_list;
 };
 
-struct gnc_new_iso_code
-{
-    const char *old_code;
-    const char *new_code;
-} gnc_new_iso_codes[] =
+static const std::unordered_map<std::string,std::string> gnc_new_iso_codes =
 {
     {"RUR", "RUB"}, /* Russian Ruble: RUR through 1997-12, RUB from 1998-01 onwards; see bug #393185 */
     {"PLZ", "PLN"}, /* Polish Zloty */
@@ -143,19 +142,31 @@ struct gnc_new_iso_code
     /* Only add currencies to this table when the old currency no longer
      * exists in the file iso-4217-currencies.xml */
 };
-#define GNC_NEW_ISO_CODES \
-        (sizeof(gnc_new_iso_codes) / sizeof(struct gnc_new_iso_code))
 
-static char *fq_version = NULL;
+static std::string fq_version;
 
 struct gnc_quote_source_s
 {
-    gboolean supported;
-    QuoteSourceType type;
-    gint index;
-    char *user_name;		/* User friendly name incl. region code*/
-    char *internal_name;	/* Name used internally and by finance::quote. */
+private:
+    gboolean m_supported;
+    QuoteSourceType m_type;
+    std::string m_user_name;		/* User friendly name incl. region code*/
+    std::string m_internal_name;	/* Name used internally and by finance::quote. */
+public:
+    bool get_supported () const { return m_supported; }
+    void set_supported (bool supported) { m_supported = supported; }
+    QuoteSourceType get_type () const { return m_type; }
+    const char* get_user_name () const { return m_user_name.c_str(); }
+    const char* get_internal_name () const { return m_internal_name.c_str(); }
+    gnc_quote_source_s (gboolean supported, QuoteSourceType type,
+                        const char* username, const char* int_name)
+        : m_supported{supported}
+        , m_type{type}
+        , m_user_name{username}
+        , m_internal_name{int_name} { };
 };
+
+using QuoteSourceVec = std::vector<gnc_quote_source>;
 
 /* To update the following lists scan
  * from github.com/finance-quote/finance-quote
@@ -165,109 +176,115 @@ struct gnc_quote_source_s
  *
  * Apply changes here also to the FQ appendix of help.
  */
-static gnc_quote_source currency_quote_source =
-{ TRUE, 0, 0, "Currency", "currency" };
+static QuoteSourceVec currency_quote_sources =
+{
+    { true, SOURCE_CURRENCY, "Currency", "currency" }
+};
 
 /* The single quote method is usually the module name, but
  * sometimes it gets the suffix "_direct"
  * and the failover method is without suffix.
  */
-static gnc_quote_source single_quote_sources[] =
+static QuoteSourceVec single_quote_sources =
 {
-    { FALSE, 0, 0, "Alphavantage, US", "alphavantage" },
-    { FALSE, 0, 0, "Amsterdam Euronext eXchange, NL", "aex" },
-    { FALSE, 0, 0, "American International Assurance, HK", "aiahk" },
-    { FALSE, 0, 0, "Association of Mutual Funds in India", "amfiindia" },
-    { FALSE, 0, 0, "Athens Stock Exchange, GR", "asegr" },
-    { FALSE, 0, 0, "Australian Stock Exchange, AU", "asx" },
-    { FALSE, 0, 0, "BAMOSZ funds, HU", "bamosz" },
-    { FALSE, 0, 0, "BMO NesbittBurns, CA", "bmonesbittburns" },
-    { FALSE, 0, 0, "Bucharest Stock Exchange, RO", "bsero" },
-    { FALSE, 0, 0, "Budapest Stock Exchange (BET), ex-BUX, HU", "bse" },
-    { FALSE, 0, 0, "Canada Mutual", "canadamutual" },
-    { FALSE, 0, 0, "Citywire Funds, GB", "citywire" },
-    { FALSE, 0, 0, "Colombo Stock Exchange, LK", "cse" },
-    { FALSE, 0, 0, "Cominvest, ex-Adig, DE", "cominvest" },
-    { FALSE, 0, 0, "Deka Investments, DE", "deka" },
-    { FALSE, 0, 0, "Dutch", "dutch" },
-    { FALSE, 0, 0, "DWS, DE", "dwsfunds" },
-    { FALSE, 0, 0, "Equinox Unit Trusts, ZA", "za_unittrusts" },
-    { FALSE, 0, 0, "Fidelity Direct", "fidelity_direct" },
-    { FALSE, 0, 0, "Fidelity Fixed", "fidelityfixed" },
-    { FALSE, 0, 0, "Finance Canada", "financecanada" },
-    { FALSE, 0, 0, "Financial Times Funds service, GB", "ftfunds" },
-    { FALSE, 0, 0, "Finanzpartner, DE", "finanzpartner" },
-    { FALSE, 0, 0, "First Trust Portfolios, US", "ftportfolios" },
-    { FALSE, 0, 0, "Fund Library, CA", "fundlibrary" },
-    { FALSE, 0, 0, "GoldMoney spot rates, JE", "goldmoney" },
-    { FALSE, 0, 0, "Greece", "greece" },
-    { FALSE, 0, 0, "Helsinki stock eXchange, FI", "hex" },
-    { FALSE, 0, 0, "Hungary", "hu" },
-    { FALSE, 0, 0, "India Mutual", "indiamutual" },
-    { FALSE, 0, 0, "Man Investments, AU", "maninv" },
-    { FALSE, 0, 0, "Morningstar, GB", "mstaruk" },
-    { FALSE, 0, 0, "Morningstar, JP", "morningstarjp" },
-    { FALSE, 0, 0, "Morningstar, SE", "morningstar" },
-    { FALSE, 0, 0, "Motley Fool, US", "fool" },
-    { FALSE, 0, 0, "New Zealand stock eXchange, NZ", "nzx" },
-    { FALSE, 0, 0, "Paris Stock Exchange/Boursorama, FR", "bourso" },
-    { FALSE, 0, 0, "Paris Stock Exchange/LeRevenu, FR", "lerevenu" },
-    { FALSE, 0, 0, "Platinum Asset Management, AU", "platinum" },
-    { FALSE, 0, 0, "Romania", "romania" },
-    { FALSE, 0, 0, "SIX Swiss Exchange funds, CH", "sixfunds" },
-    { FALSE, 0, 0, "SIX Swiss Exchange shares, CH", "sixshares" },
-    { FALSE, 0, 0, "Skandinaviska Enskilda Banken, SE", "seb_funds" },
-    { FALSE, 0, 0, "Sharenet, ZA", "za" },
-    { FALSE, 0, 0, "StockHouse Canada", "stockhousecanada_fund" },
-    { FALSE, 0, 0, "TD Waterhouse Funds, CA", "tdwaterhouse" },
-    { FALSE, 0, 0, "TD Efunds, CA", "tdefunds" },
-    { FALSE, 0, 0, "TIAA-CREF, US", "tiaacref" },
-    { FALSE, 0, 0, "Toronto Stock eXchange, CA", "tsx" },
-    { FALSE, 0, 0, "T. Rowe Price", "troweprice" },
-    { FALSE, 0, 0, "T. Rowe Price, US", "troweprice_direct" },
-    { FALSE, 0, 0, "Trustnet via tnetuk.pm, GB", "tnetuk" },
-    { FALSE, 0, 0, "Trustnet via trustnet.pm, GB", "trustnet" },
-    { FALSE, 0, 0, "U.K. Unit Trusts", "uk_unit_trusts" },
-    { FALSE, 0, 0, "Union Investment, DE", "unionfunds" },
-    { FALSE, 0, 0, "US Treasury Bonds", "usfedbonds" },
-    { FALSE, 0, 0, "US Govt. Thrift Savings Plan", "tsp" },
-    { FALSE, 0, 0, "Vanguard", "vanguard" }, /* Method of Alphavantage */
-    { FALSE, 0, 0, "VWD, DE (unmaintained)", "vwd" },
-    { FALSE, 0, 0, "Yahoo as JSON", "yahoo_json" },
-    { FALSE, 0, 0, "Yahoo as YQL", "yahoo_yql" },
+    { false, SOURCE_SINGLE, "Alphavantage, US", "alphavantage" },
+    { false, SOURCE_SINGLE, "Amsterdam Euronext eXchange, NL", "aex" },
+    { false, SOURCE_SINGLE, "American International Assurance, HK", "aiahk" },
+    { false, SOURCE_SINGLE, "Association of Mutual Funds in India", "amfiindia" },
+    { false, SOURCE_SINGLE, "Athens Stock Exchange, GR", "asegr" },
+    { false, SOURCE_SINGLE, "Australian Stock Exchange, AU", "asx" },
+    { false, SOURCE_SINGLE, "BAMOSZ funds, HU", "bamosz" },
+    { false, SOURCE_SINGLE, "BMO NesbittBurns, CA", "bmonesbittburns" },
+    { false, SOURCE_SINGLE, "Bucharest Stock Exchange, RO", "bsero" },
+    { false, SOURCE_SINGLE, "Budapest Stock Exchange (BET), ex-BUX, HU", "bse" },
+    { false, SOURCE_SINGLE, "Canada Mutual", "canadamutual" },
+    { false, SOURCE_SINGLE, "Citywire Funds, GB", "citywire" },
+    { false, SOURCE_SINGLE, "Colombo Stock Exchange, LK", "cse" },
+    { false, SOURCE_SINGLE, "Cominvest, ex-Adig, DE", "cominvest" },
+    { false, SOURCE_SINGLE, "Deka Investments, DE", "deka" },
+    { false, SOURCE_SINGLE, "Dutch", "dutch" },
+    { false, SOURCE_SINGLE, "DWS, DE", "dwsfunds" },
+    { false, SOURCE_SINGLE, "Equinox Unit Trusts, ZA", "za_unittrusts" },
+    { false, SOURCE_SINGLE, "Fidelity Direct", "fidelity_direct" },
+    { false, SOURCE_SINGLE, "Fidelity Fixed", "fidelityfixed" },
+    { false, SOURCE_SINGLE, "Finance Canada", "financecanada" },
+    { false, SOURCE_SINGLE, "Financial Times Funds service, GB", "ftfunds" },
+    { false, SOURCE_SINGLE, "Finanzpartner, DE", "finanzpartner" },
+    { false, SOURCE_SINGLE, "First Trust Portfolios, US", "ftportfolios" },
+    { false, SOURCE_SINGLE, "Fund Library, CA", "fundlibrary" },
+    { false, SOURCE_SINGLE, "GoldMoney spot rates, JE", "goldmoney" },
+    { false, SOURCE_SINGLE, "Greece", "greece" },
+    { false, SOURCE_SINGLE, "Helsinki stock eXchange, FI", "hex" },
+    { false, SOURCE_SINGLE, "Hungary", "hu" },
+    { false, SOURCE_SINGLE, "India Mutual", "indiamutual" },
+    { false, SOURCE_SINGLE, "Man Investments, AU", "maninv" },
+    { false, SOURCE_SINGLE, "Morningstar, GB", "mstaruk" },
+    { false, SOURCE_SINGLE, "Morningstar, JP", "morningstarjp" },
+    { false, SOURCE_SINGLE, "Morningstar, SE", "morningstar" },
+    { false, SOURCE_SINGLE, "Motley Fool, US", "fool" },
+    { false, SOURCE_SINGLE, "New Zealand stock eXchange, NZ", "nzx" },
+    { false, SOURCE_SINGLE, "Paris Stock Exchange/Boursorama, FR", "bourso" },
+    { false, SOURCE_SINGLE, "Paris Stock Exchange/LeRevenu, FR", "lerevenu" },
+    { false, SOURCE_SINGLE, "Platinum Asset Management, AU", "platinum" },
+    { false, SOURCE_SINGLE, "Romania", "romania" },
+    { false, SOURCE_SINGLE, "SIX Swiss Exchange funds, CH", "sixfunds" },
+    { false, SOURCE_SINGLE, "SIX Swiss Exchange shares, CH", "sixshares" },
+    { false, SOURCE_SINGLE, "Skandinaviska Enskilda Banken, SE", "seb_funds" },
+    { false, SOURCE_SINGLE, "Sharenet, ZA", "za" },
+    { false, SOURCE_SINGLE, "StockHouse Canada", "stockhousecanada_fund" },
+    { false, SOURCE_SINGLE, "TD Waterhouse Funds, CA", "tdwaterhouse" },
+    { false, SOURCE_SINGLE, "TD Efunds, CA", "tdefunds" },
+    { false, SOURCE_SINGLE, "TIAA-CREF, US", "tiaacref" },
+    { false, SOURCE_SINGLE, "Toronto Stock eXchange, CA", "tsx" },
+    { false, SOURCE_SINGLE, "T. Rowe Price", "troweprice" },
+    { false, SOURCE_SINGLE, "T. Rowe Price, US", "troweprice_direct" },
+    { false, SOURCE_SINGLE, "Trustnet via tnetuk.pm, GB", "tnetuk" },
+    { false, SOURCE_SINGLE, "Trustnet via trustnet.pm, GB", "trustnet" },
+    { false, SOURCE_SINGLE, "U.K. Unit Trusts", "uk_unit_trusts" },
+    { false, SOURCE_SINGLE, "Union Investment, DE", "unionfunds" },
+    { false, SOURCE_SINGLE, "US Treasury Bonds", "usfedbonds" },
+    { false, SOURCE_SINGLE, "US Govt. Thrift Savings Plan", "tsp" },
+    { false, SOURCE_SINGLE, "Vanguard", "vanguard" }, /* Method of Alphavantage */
+    { false, SOURCE_SINGLE, "VWD, DE (unmaintained)", "vwd" },
+    { false, SOURCE_SINGLE, "Yahoo as JSON", "yahoo_json" },
+    { false, SOURCE_SINGLE, "Yahoo as YQL", "yahoo_yql" },
 };
 
-static gnc_quote_source multiple_quote_sources[] =
+static QuoteSourceVec multiple_quote_sources =
 {
-    { FALSE, 0, 0, "Australia (ASX, ...)", "australia" },
-    { FALSE, 0, 0, "Canada (Alphavantage, TSX, ...)", "canada" },
-    { FALSE, 0, 0, "Canada Mutual (Fund Library, StockHouse, ...)", "canadamutual" },
-    { FALSE, 0, 0, "Dutch (AEX, ...)", "dutch" },
-    { FALSE, 0, 0, "Europe (asegr,.bsero, hex ...)", "europe" },
-    { FALSE, 0, 0, "Greece (ASE, ...)", "greece" },
-    { FALSE, 0, 0, "Hungary (Bamosz, BET, ...)", "hu" },
-    { FALSE, 0, 0, "India Mutual (AMFI, ...)", "indiamutual" },
-    { FALSE, 0, 0, "Fidelity (Fidelity, ...)", "fidelity" },
-    { FALSE, 0, 0, "Finland (HEX, ...)", "finland" },
-    { FALSE, 0, 0, "First Trust (First Trust, ...)", "ftportfolios" },
-    { FALSE, 0, 0, "France (bourso, ĺerevenu, ...)", "france" },
-    { FALSE, 0, 0, "Nasdaq (alphavantage, fool, ...)", "nasdaq" },
-    { FALSE, 0, 0, "New Zealand (NZX, ...)", "nz" },
-    { FALSE, 0, 0, "NYSE (alphavantage, fool, ...)", "nyse" },
-    { FALSE, 0, 0, "South Africa (Sharenet, ...)", "za" },
-    { FALSE, 0, 0, "Romania (BSE-RO, ...)", "romania" },
-    { FALSE, 0, 0, "T. Rowe Price", "troweprice" },
-    { FALSE, 0, 0, "U.K. Funds (citywire, FTfunds, MStar, tnetuk, ...)", "ukfunds" },
-    { FALSE, 0, 0, "U.K. Unit Trusts (trustnet, ...)", "uk_unit_trusts" },
-    { FALSE, 0, 0, "USA (Alphavantage, Fool, ...)", "usa" },
+    { false, SOURCE_MULTI, "Australia (ASX, ...)", "australia" },
+    { false, SOURCE_MULTI, "Canada (Alphavantage, TSX, ...)", "canada" },
+    { false, SOURCE_MULTI, "Canada Mutual (Fund Library, StockHouse, ...)", "canadamutual" },
+    { false, SOURCE_MULTI, "Dutch (AEX, ...)", "dutch" },
+    { false, SOURCE_MULTI, "Europe (asegr,.bsero, hex ...)", "europe" },
+    { false, SOURCE_MULTI, "Greece (ASE, ...)", "greece" },
+    { false, SOURCE_MULTI, "Hungary (Bamosz, BET, ...)", "hu" },
+    { false, SOURCE_MULTI, "India Mutual (AMFI, ...)", "indiamutual" },
+    { false, SOURCE_MULTI, "Fidelity (Fidelity, ...)", "fidelity" },
+    { false, SOURCE_MULTI, "Finland (HEX, ...)", "finland" },
+    { false, SOURCE_MULTI, "First Trust (First Trust, ...)", "ftportfolios" },
+    { false, SOURCE_MULTI, "France (bourso, ĺerevenu, ...)", "france" },
+    { false, SOURCE_MULTI, "Nasdaq (alphavantage, fool, ...)", "nasdaq" },
+    { false, SOURCE_MULTI, "New Zealand (NZX, ...)", "nz" },
+    { false, SOURCE_MULTI, "NYSE (alphavantage, fool, ...)", "nyse" },
+    { false, SOURCE_MULTI, "South Africa (Sharenet, ...)", "za" },
+    { false, SOURCE_MULTI, "Romania (BSE-RO, ...)", "romania" },
+    { false, SOURCE_MULTI, "T. Rowe Price", "troweprice" },
+    { false, SOURCE_MULTI, "U.K. Funds (citywire, FTfunds, MStar, tnetuk, ...)", "ukfunds" },
+    { false, SOURCE_MULTI, "U.K. Unit Trusts (trustnet, ...)", "uk_unit_trusts" },
+    { false, SOURCE_MULTI, "USA (Alphavantage, Fool, ...)", "usa" },
 };
 
-static const int num_single_quote_sources =
-    sizeof(single_quote_sources) / sizeof(gnc_quote_source);
-static const int num_multiple_quote_sources =
-    sizeof(multiple_quote_sources) / sizeof(gnc_quote_source);
-static GList *new_quote_sources = NULL;
+static QuoteSourceVec new_quote_sources;
 
+// cannot use map or unordered_map because order must be preserved
+static const std::vector<std::pair<QuoteSourceType,QuoteSourceVec&>> quote_sources_map =
+    {
+        { SOURCE_CURRENCY, currency_quote_sources },
+        { SOURCE_SINGLE, single_quote_sources },
+        { SOURCE_MULTI, multiple_quote_sources },
+        { SOURCE_UNKNOWN, new_quote_sources }
+    };
 
 /********************************************************************
  * gnc_quote_source_fq_installed
@@ -278,7 +295,7 @@ static GList *new_quote_sources = NULL;
 gboolean
 gnc_quote_source_fq_installed (void)
 {
-    return (fq_version != NULL);
+    return (!fq_version.empty());
 }
 
 
@@ -291,7 +308,20 @@ gnc_quote_source_fq_installed (void)
 const char*
 gnc_quote_source_fq_version (void)
 {
-    return fq_version;
+    return fq_version.c_str();
+}
+
+static QuoteSourceVec&
+get_quote_source_from_type (QuoteSourceType type)
+{
+    auto quote_sources_it = std::find_if (quote_sources_map.begin(), quote_sources_map.end(),
+                                          [type] (const auto& qs) { return type == qs.first; });
+
+    if (quote_sources_it != quote_sources_map.end())
+        return quote_sources_it->second;
+
+    PWARN ("Invalid Quote Source %d, returning new_quote_sources", type);
+    return new_quote_sources;
 }
 
 /********************************************************************
@@ -301,43 +331,9 @@ gnc_quote_source_fq_version (void)
  ********************************************************************/
 gint gnc_quote_source_num_entries(QuoteSourceType type)
 {
-    if  (type == SOURCE_CURRENCY)
-        return 1;
-
-    if  (type == SOURCE_SINGLE)
-        return num_single_quote_sources;
-
-    if (type == SOURCE_MULTI)
-        return num_multiple_quote_sources;
-
-    return g_list_length(new_quote_sources);
+    return get_quote_source_from_type(type).size();
 }
 
-/********************************************************************
- * gnc_quote_source_init_tables
- *
- * Update the type/index values for prices sources.
- ********************************************************************/
-static void
-gnc_quote_source_init_tables (void)
-{
-    gint i;
-
-    for (i = 0; i < num_single_quote_sources; i++)
-    {
-        single_quote_sources[i].type = SOURCE_SINGLE;
-        single_quote_sources[i].index = i;
-    }
-
-    for (i = 0; i < num_multiple_quote_sources; i++)
-    {
-        multiple_quote_sources[i].type = SOURCE_MULTI;
-        multiple_quote_sources[i].index = i;
-    }
-
-    currency_quote_source.type = SOURCE_CURRENCY;
-    currency_quote_source.index = 0;
-}
 
 
 /********************************************************************
@@ -351,24 +347,13 @@ gnc_quote_source_init_tables (void)
 gnc_quote_source *
 gnc_quote_source_add_new (const char *source_name, gboolean supported)
 {
-    gnc_quote_source *new_source;
-
-    DEBUG("Creating new source %s", (source_name == NULL ? "(null)" : source_name));
-    new_source = malloc(sizeof(gnc_quote_source));
-    new_source->supported = supported;
-    new_source->type = SOURCE_UNKNOWN;
-    new_source->index = g_list_length(new_quote_sources);
-
+    DEBUG("Creating new source %s", (!source_name ? "(null)" : source_name));
     /* This name can be changed if/when support for this price source is
      * integrated into gnucash. */
-    new_source->user_name = g_strdup(source_name);
-
     /* This name is permanent and must be kept the same if/when support
      * for this price source is integrated into gnucash (i.e. for a
      * nice user name). */
-    new_source->internal_name = g_strdup(source_name);
-    new_quote_sources = g_list_append(new_quote_sources, new_source);
-    return new_source;
+    return &new_quote_sources.emplace_back (supported, SOURCE_UNKNOWN, source_name, source_name);
 }
 
 /********************************************************************
@@ -379,85 +364,36 @@ gnc_quote_source_add_new (const char *source_name, gboolean supported)
 gnc_quote_source *
 gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
 {
-    gnc_quote_source *source;
-    GList *node;
-
     ENTER("type/index is %d/%d", type, index);
-    switch (type)
+    auto& sources = get_quote_source_from_type (type);
+    if ((size_t) index < sources.size())
     {
-    case SOURCE_CURRENCY:
-        LEAVE("found %s", currency_quote_source.user_name);
-        return &currency_quote_source;
-        break;
-
-    case SOURCE_SINGLE:
-        if (index < num_single_quote_sources)
-        {
-            LEAVE("found %s", single_quote_sources[index].user_name);
-            return &single_quote_sources[index];
-        }
-        break;
-
-    case SOURCE_MULTI:
-        if (index < num_multiple_quote_sources)
-        {
-            LEAVE("found %s", multiple_quote_sources[index].user_name);
-            return &multiple_quote_sources[index];
-        }
-        break;
-
-    case SOURCE_UNKNOWN:
-    default:
-        node = g_list_nth(new_quote_sources, index);
-        if (node)
-        {
-            source = node->data;
-            LEAVE("found %s", source->user_name);
-            return source;
-        }
-        break;
+        auto& source = sources[index];
+        LEAVE("found %s", source.get_user_name());
+        return &source;
     }
 
     LEAVE("not found");
-    return NULL;
+    return nullptr;
 }
 
 gnc_quote_source *
 gnc_quote_source_lookup_by_internal(const char * name)
 {
-    gnc_quote_source *source;
-    GList *node;
-    gint i;
+    if (!name || !*name)
+        return nullptr;
 
-    if ((name == NULL) || (g_strcmp0(name, "") == 0))
+    for (const auto& [_, sources] : quote_sources_map)
     {
-        return NULL;
-    }
-
-    if (g_strcmp0(name, currency_quote_source.internal_name) == 0)
-        return &currency_quote_source;
-
-    for (i = 0; i < num_single_quote_sources; i++)
-    {
-        if (g_strcmp0(name, single_quote_sources[i].internal_name) == 0)
-            return &single_quote_sources[i];
-    }
-
-    for (i = 0; i < num_multiple_quote_sources; i++)
-    {
-        if (g_strcmp0(name, multiple_quote_sources[i].internal_name) == 0)
-            return &multiple_quote_sources[i];
-    }
-
-    for (i = 0, node = new_quote_sources; node; node = node->next, i++)
-    {
-        source = node->data;
-        if (g_strcmp0(name, source->internal_name) == 0)
-            return source;
+        auto source_it = std::find_if (sources.begin(), sources.end(),
+                                       [name] (const auto& qs)
+                                       { return (g_strcmp0(name, qs.get_internal_name()) == 0); });
+        if (source_it != sources.end())
+            return &(*source_it);
     }
 
     DEBUG("gnc_quote_source_lookup_by_internal: Unknown source %s", name);
-    return NULL;
+    return nullptr;
 }
 
 /********************************************************************
@@ -475,22 +411,29 @@ gnc_quote_source_get_type (const gnc_quote_source *source)
         return SOURCE_SINGLE;
     }
 
-    LEAVE("type is %d", source->type);
-    return source->type;
+    LEAVE("type is %d", source->get_type());
+    return source->get_type();
 }
 
 gint
 gnc_quote_source_get_index (const gnc_quote_source *source)
 {
-    ENTER("%p", source);
     if (!source)
     {
-        LEAVE("bad source");
+        PWARN ("bad source");
         return 0;
     }
 
-    LEAVE("index is %d", source->index);
-    return source->index;
+    auto& sources = get_quote_source_from_type (source->get_type());
+    auto is_source = [&source](const auto& findif_source)
+    { return &findif_source == source; };
+
+    auto iter = std::find_if (sources.begin(), sources.end(), is_source);
+    if (iter != sources.end())
+        return std::distance (sources.begin(), iter);
+
+    PWARN ("couldn't locate source");
+    return 0;
 }
 
 gboolean
@@ -503,8 +446,8 @@ gnc_quote_source_get_supported (const gnc_quote_source *source)
         return FALSE;
     }
 
-    LEAVE("%ssupported", source && source->supported ? "" : "not ");
-    return source->supported;
+    LEAVE("%s supported", source && source->get_supported() ? "" : "not ");
+    return source->get_supported();
 }
 
 const char *
@@ -514,10 +457,10 @@ gnc_quote_source_get_user_name (const gnc_quote_source *source)
     if (!source)
     {
         LEAVE("bad source");
-        return NULL;
+        return nullptr;
     }
-    LEAVE("user name %s", source->user_name);
-    return source->user_name;
+    LEAVE("user name %s", source->get_user_name());
+    return source->get_user_name();
 }
 
 const char *
@@ -527,10 +470,10 @@ gnc_quote_source_get_internal_name (const gnc_quote_source *source)
     if (!source)
     {
         LEAVE("bad source");
-        return NULL;
+        return nullptr;
     }
-    LEAVE("internal name %s", source->internal_name);
-    return source->internal_name;
+    LEAVE("internal name %s", source->get_internal_name());
+    return source->get_internal_name();
 }
 
 
@@ -542,35 +485,27 @@ gnc_quote_source_get_internal_name (const gnc_quote_source *source)
  ********************************************************************/
 void
 gnc_quote_source_set_fq_installed (const char* version_string,
-                                   const GList *sources_list)
+                                   const std::vector<std::string>& sources_list)
 {
-    gnc_quote_source *source;
-    char *source_name;
-    const GList *node;
-
     ENTER(" ");
 
-    if (!sources_list)
+    if (sources_list.empty())
         return;
 
-    if (fq_version)
-    {
-        g_free (fq_version);
-        fq_version = NULL;
-    }
-
     if (version_string)
-        fq_version = g_strdup (version_string);
+        fq_version = version_string;
+    else
+        fq_version.clear();
 
-    for (node = sources_list; node; node = node->next)
+    for (const auto& source_name_str : sources_list)
     {
-        source_name = node->data;
+        auto source_name = source_name_str.c_str();
+        auto source = gnc_quote_source_lookup_by_internal(source_name);
 
-        source = gnc_quote_source_lookup_by_internal(source_name);
-        if (source != NULL)
+        if (source)
         {
-            DEBUG("Found source %s: %s", source_name, source->user_name);
-            source->supported = TRUE;
+            DEBUG("Found source %s: %s", source_name, source->get_user_name());
+            source->set_supported (true);
             continue;
         }
 
@@ -749,7 +684,7 @@ gnc_commodity_set_property (GObject         *object,
     switch (prop_id)
     {
     case PROP_NAMESPACE:
-        gnc_commodity_set_namespace(commodity, g_value_get_object(value));
+        gnc_commodity_set_namespace(commodity, static_cast<const char*>(g_value_get_object(value)));
         break;
     case PROP_FULL_NAME:
         gnc_commodity_set_fullname(commodity, g_value_get_string(value));
@@ -767,7 +702,7 @@ gnc_commodity_set_property (GObject         *object,
         gnc_commodity_set_quote_flag(commodity, g_value_get_boolean(value));
         break;
     case PROP_QUOTE_SOURCE:
-        gnc_commodity_set_quote_source(commodity, g_value_get_pointer(value));
+        gnc_commodity_set_quote_source(commodity, static_cast<gnc_quote_source*>(g_value_get_pointer(value)));
         break;
     case PROP_QUOTE_TZ:
         gnc_commodity_set_quote_tz(commodity, g_value_get_string(value));
@@ -872,7 +807,7 @@ gnc_commodity_new(QofBook *book, const char * fullname,
                   const char * name_space, const char * mnemonic,
                   const char * cusip, int fraction)
 {
-    gnc_commodity * retval = g_object_new(GNC_TYPE_COMMODITY, NULL);
+    auto retval = GNC_COMMODITY(g_object_new(GNC_TYPE_COMMODITY, NULL));
 
     qof_instance_init_data (&retval->inst, GNC_ID_COMMODITY, book);
     gnc_commodity_begin_edit(retval);
@@ -991,7 +926,7 @@ gnc_commodity_clone(const gnc_commodity *src, QofBook *dest_book)
     gnc_commodityPrivate* src_priv;
     gnc_commodityPrivate* dest_priv;
 
-    gnc_commodity * dest = g_object_new(GNC_TYPE_COMMODITY, NULL);
+    auto dest = GNC_COMMODITY (g_object_new(GNC_TYPE_COMMODITY, NULL));
     qof_instance_init_data (&dest->inst, GNC_ID_COMMODITY, dest_book);
     src_priv = GET_PRIVATE(src);
     dest_priv = GET_PRIVATE(dest);
@@ -1145,7 +1080,7 @@ gnc_commodity_get_quote_source(const gnc_commodity *cm)
     if (!cm) return NULL;
     priv = GET_PRIVATE(cm);
     if (!priv->quote_source && gnc_commodity_is_iso(cm))
-        return &currency_quote_source;
+        return &currency_quote_sources[0];
     return priv->quote_source;
 }
 
@@ -1153,7 +1088,7 @@ gnc_quote_source*
 gnc_commodity_get_default_quote_source(const gnc_commodity *cm)
 {
     if (cm && gnc_commodity_is_iso(cm))
-        return &currency_quote_source;
+        return &currency_quote_sources[0];
     /* Should make this a user option at some point. */
     return gnc_quote_source_lookup_by_internal("alphavantage");
 }
@@ -1422,7 +1357,7 @@ gnc_commodity_set_quote_flag(gnc_commodity *cm, const gboolean flag)
 void
 gnc_commodity_set_quote_source(gnc_commodity *cm, gnc_quote_source *src)
 {
-    ENTER ("(cm=%p, src=%p(%s))", cm, src, src ? src->internal_name : "unknown");
+    ENTER ("(cm=%p, src=%p(%s))", cm, src, src ? src->get_internal_name() : "unknown");
 
     if (!cm) return;
     gnc_commodity_begin_edit(cm);
@@ -1637,7 +1572,7 @@ int gnc_commodity_compare(const gnc_commodity * a, const gnc_commodity * b)
 // when the commodities match.
 int gnc_commodity_compare_void(const void * a, const void * b)
 {
-    return gnc_commodity_compare(a, b);
+    return gnc_commodity_compare(GNC_COMMODITY (a), GNC_COMMODITY (b));
 }
 
 /************************************************************
@@ -1707,7 +1642,7 @@ gnc_commodity_table *
 gnc_commodity_table_get_table(QofBook *book)
 {
     if (!book) return NULL;
-    return qof_book_get_data (book, GNC_COMMODITY_TABLE);
+    return static_cast<gnc_commodity_table*>(qof_book_get_data (book, GNC_COMMODITY_TABLE));
 }
 
 gnc_commodity *
@@ -1775,7 +1710,6 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
                            const char * name_space, const char * mnemonic)
 {
     gnc_commodity_namespace * nsp = NULL;
-    unsigned int i;
 
     if (!table || !name_space || !mnemonic) return NULL;
 
@@ -1789,16 +1723,11 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
          */
         if (nsp->iso4217)
         {
-            for (i = 0; i < GNC_NEW_ISO_CODES; i++)
-            {
-                if (strcmp(mnemonic, gnc_new_iso_codes[i].old_code) == 0)
-                {
-                    mnemonic = gnc_new_iso_codes[i].new_code;
-                    break;
-                }
-            }
+            auto it = gnc_new_iso_codes.find (mnemonic);
+            if (it != gnc_new_iso_codes.end())
+                mnemonic = it->second.c_str();
         }
-        return g_hash_table_lookup(nsp->cm_table, (gpointer)mnemonic);
+        return GNC_COMMODITY(g_hash_table_lookup(nsp->cm_table, (gpointer)mnemonic));
     }
     else
     {
@@ -1860,10 +1789,11 @@ gnc_commodity_table_find_full(const gnc_commodity_table * table,
 
     for (iterator = all; iterator; iterator = iterator->next)
     {
+        auto commodity = GNC_COMMODITY (iterator->data);
         if (!strcmp(fullname,
-                    gnc_commodity_get_printname(iterator->data)))
+                    gnc_commodity_get_printname(commodity)))
         {
-            retval = iterator->data;
+            retval = commodity;
             break;
         }
     }
@@ -1912,16 +1842,9 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
          * recently changed. */
         if (priv->name_space->iso4217)
         {
-            guint i;
-            for (i = 0; i < GNC_NEW_ISO_CODES; i++)
-            {
-                if (!priv->mnemonic
-                        || !strcmp(priv->mnemonic, gnc_new_iso_codes[i].old_code))
-                {
-                    gnc_commodity_set_mnemonic(comm, gnc_new_iso_codes[i].new_code);
-                    break;
-                }
-            }
+            auto it = gnc_new_iso_codes.find (priv->mnemonic);
+            if (it != gnc_new_iso_codes.end())
+                gnc_commodity_set_mnemonic(comm, it->second.c_str());
         }
         gnc_commodity_copy (c, comm);
         gnc_commodity_destroy (comm);
@@ -2017,7 +1940,7 @@ gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
 static void
 hash_keys_helper(gpointer key, gpointer value, gpointer data)
 {
-    GList ** l = data;
+    auto l = (GList**)data;
     *l = g_list_prepend(*l, key);
 }
 
@@ -2032,7 +1955,7 @@ g_hash_table_keys(GHashTable * table)
 static void
 hash_values_helper(gpointer key, gpointer value, gpointer data)
 {
-    GList ** l = data;
+    auto l = (GList**)data;
     *l = g_list_prepend(*l, value);
 }
 
@@ -2146,12 +2069,11 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 static void
 get_quotables_helper1(gpointer key, gpointer value, gpointer data)
 {
-    gnc_commodity *comm = value;
+    auto comm = GNC_COMMODITY(value);
     gnc_commodityPrivate* priv = GET_PRIVATE(comm);
-    GList ** l = data;
+    auto l = static_cast<GList**>(data);
 
-    if (!priv->quote_flag ||
-            !priv->quote_source || !priv->quote_source->supported)
+    if (!priv->quote_flag || !priv->quote_source || !priv->quote_source->get_supported())
         return;
     *l = g_list_prepend(*l, value);
 }
@@ -2159,11 +2081,10 @@ get_quotables_helper1(gpointer key, gpointer value, gpointer data)
 static gboolean
 get_quotables_helper2 (gnc_commodity *comm, gpointer data)
 {
-    GList ** l = data;
+    auto l = static_cast<GList**>(data);
     gnc_commodityPrivate* priv = GET_PRIVATE(comm);
 
-    if (!priv->quote_flag ||
-            !priv->quote_source || !priv->quote_source->supported)
+    if (!priv->quote_flag || priv->quote_source || !priv->quote_source->get_supported())
         return TRUE;
     *l = g_list_prepend(*l, comm);
     return TRUE;
@@ -2194,7 +2115,7 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
         nslist = gnc_commodity_table_get_namespaces(table);
         for (tmp = nslist; tmp; tmp = tmp->next)
         {
-            name_space = tmp->data;
+            name_space = static_cast<const char*>(tmp->data);
             if (regexec(&pattern, name_space, 0, NULL, 0) == 0)
             {
                 DEBUG("Running list of %s commodities", name_space);
@@ -2253,9 +2174,9 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
     ns = gnc_commodity_table_find_namespace(table, name_space);
     if (!ns)
     {
-        ns = g_object_new(GNC_TYPE_COMMODITY_NAMESPACE, NULL);
+        ns = static_cast<gnc_commodity_namespace*>(g_object_new(GNC_TYPE_COMMODITY_NAMESPACE, NULL));
         ns->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
-        ns->name = CACHE_INSERT((gpointer)name_space);
+        ns->name = CACHE_INSERT(static_cast<const char*>(name_space));
         ns->iso4217 = gnc_commodity_namespace_is_iso(name_space);
         qof_instance_init_data (&ns->inst, GNC_ID_COMMODITY_NAMESPACE, book);
         qof_event_gen (&ns->inst, QOF_EVENT_CREATE, NULL);
@@ -2278,7 +2199,7 @@ gnc_commodity_table_find_namespace(const gnc_commodity_table * table,
         return NULL;
 
     name_space = gnc_commodity_table_map_namespace(name_space);
-    return g_hash_table_lookup(table->ns_table, (gpointer)name_space);
+    return static_cast<gnc_commodity_namespace*>(g_hash_table_lookup(table->ns_table, (gpointer)name_space));
 }
 
 
@@ -2299,9 +2220,9 @@ gnc_commodity_find_commodity_by_guid(const GncGUID *guid, QofBook *book)
 static int
 ns_helper(gpointer key, gpointer value, gpointer user_data)
 {
-    gnc_commodity * c = value;
+    auto c = GNC_COMMODITY(value);
     gnc_commodity_destroy(c);
-    CACHE_REMOVE(key);  /* key is commodity mnemonic */
+    CACHE_REMOVE(static_cast<char*>(key));  /* key is commodity mnemonic */
     return TRUE;
 }
 
@@ -2400,7 +2321,7 @@ gnc_commodity_table_destroy(gnc_commodity_table * t)
     for (item = t->ns_list; item; item = next)
     {
         next = g_list_next(item);
-        ns = item->data;
+        ns = static_cast<gnc_commodity_namespace*>(item->data);
         gnc_commodity_table_delete_namespace(t, ns->name);
     }
 
@@ -2532,8 +2453,6 @@ static QofObject commodity_table_object_def =
 gboolean
 gnc_commodity_table_register (void)
 {
-    gnc_quote_source_init_tables();
-
     if (!qof_object_register (&commodity_object_def))
         return FALSE;
     if (!qof_object_register (&namespace_object_def))
@@ -2552,7 +2471,7 @@ gnc_monetary_list_add_monetary(MonetaryList *list, gnc_monetary add_mon)
     MonetaryList *l = list, *tmp;
     for (tmp = list; tmp; tmp = tmp->next)
     {
-        gnc_monetary *list_mon = tmp->data;
+        auto list_mon = static_cast<gnc_monetary*>(tmp->data);
         if (gnc_commodity_equiv(list_mon->commodity, add_mon.commodity))
         {
             list_mon->value = gnc_numeric_add(list_mon->value, add_mon.value,
@@ -2564,7 +2483,7 @@ gnc_monetary_list_add_monetary(MonetaryList *list, gnc_monetary add_mon)
     /* See if we found an entry, and add one if not */
     if (tmp == NULL)
     {
-        gnc_monetary *new_mon = g_new0(gnc_monetary, 1);
+        auto new_mon = static_cast<gnc_monetary*>(g_new0(gnc_monetary, 1));
         *new_mon = add_mon;
         l = g_list_prepend(l, new_mon);
     }
@@ -2580,7 +2499,7 @@ gnc_monetary_list_delete_zeros(MonetaryList *list)
     MonetaryList *node, *next;
     for (node = list; node; node = next)
     {
-        gnc_monetary *mon = node->data;
+        auto mon = static_cast<gnc_monetary*>(node->data);
         next = node->next;
         if (gnc_numeric_zero_p(mon->value))
         {

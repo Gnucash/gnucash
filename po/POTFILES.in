@@ -631,7 +631,7 @@ libgnucash/engine/gnc-aqbanking-templates.cpp
 libgnucash/engine/gncBillTerm.c
 libgnucash/engine/gnc-budget.cpp
 libgnucash/engine/gncBusiness.c
-libgnucash/engine/gnc-commodity.c
+libgnucash/engine/gnc-commodity.cpp
 libgnucash/engine/gnc-commodity.h
 libgnucash/engine/gncCustomer.c
 libgnucash/engine/gnc-date.cpp
