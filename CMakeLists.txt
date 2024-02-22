@@ -278,7 +278,6 @@ endif()
 # SWIG
 find_package (SWIG 3.0.12 REQUIRED)
 include (${SWIG_USE_FILE})
-string(REGEX MATCH "^[0-9]+[.]" SWIG_MAJOR ${SWIG_VERSION})
 
 # Find Guile and determine which version we are using.
 # Look for guile versions in this order: 3.0 > 2.2 > 2.0
