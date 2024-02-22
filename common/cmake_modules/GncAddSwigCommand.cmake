@@ -68,16 +68,14 @@ macro (gnc_add_swig_python_command _target _out_var _py_out_var _output _py_outp
     set(py_outfile ${SW_CURR_BUILD_SOURCE_DIR}/${_py_output})
     set(${_py_out_var} ${py_outfile}) # This variable is set for convenience to use in the calling CMakeLists.txt
 
+    if (${SWIG_VERSION} VERSION_LESS 4.1)
+        set (SWIG_EXTRA_OPT -py3)
+        endif()
     set (DEFAULT_SWIG_PYTHON_FLAGS
-        -python
+        -python ${SWIG_EXTRA_OPT}
         -Wall -Werror
         ${SWIG_ARGS}
         )
-    if (${SWIG_VERSION} VERSION_LESS 4.1)
-        set (DEFAULT_SWIG_PYTHON_FLAGS
-            ${SWIG_ARGS} -py3
-            )
-    endif()
     set (DEFAULT_SWIG_PYTHON_C_INCLUDES
          ${GLIB2_INCLUDE_DIRS}
          ${CMAKE_SOURCE_DIR}/common
