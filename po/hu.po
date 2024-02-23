@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-02-16 01:11+0100\n"
-"PO-Revision-Date: 2024-02-18 22:45+0000\n"
+"PO-Revision-Date: 2024-02-23 00:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -12689,7 +12689,7 @@ msgid ""
 "income account. Capital gains are positive, and capital losses are negative."
 msgstr ""
 "Ezen az oldalon adja meg a keletkezett tőkenyereséget vagy veszteséget, "
-"valamint a kapcsolódó bevételi számlát. A tőkenyereségek pozitívak, a "
+"valamint az ehez tartozó bevételszámlát. A tőkenyereségek pozitívak, a "
 "veszteségek pedig negatívak."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:846
@@ -14748,11 +14748,11 @@ msgstr "A rendelés sorszáma. Üresen hagyva megfelelő érték kerül kiválas
 #: gnucash/gtkbuilder/dialog-payment.glade:136
 #: gnucash/gtkbuilder/dialog-payment.glade:168
 msgid "The company associated with this payment."
-msgstr "A fizetéshez kapcsolódó vállalkozás."
+msgstr "Ehez a fizetéshez tartozó vállalkozás."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:169
 msgid "Partner"
-msgstr ""
+msgstr "Partner"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:207
 msgid "Post To"
@@ -20989,7 +20989,7 @@ msgstr "Egy tranzakció leírása"
 #: gnucash/report/trep-engine.scm:1198 gnucash/report/trep-engine.scm:1199
 msgctxt "Column header for 'Document Link'"
 msgid "L"
-msgstr "H"
+msgstr "K"
 
 #: gnucash/register/ledger-core/split-register-layout.c:713
 #: gnucash/register/ledger-core/split-register-layout.c:753
@@ -25883,7 +25883,7 @@ msgstr "Sorrend."
 
 #: gnucash/report/reports/standard/new-aging.scm:105
 msgid "Show all vendors/customers even if they have a zero balance."
-msgstr "Minden szállító/vevő feltüntetése nulla egyenleg esetén is."
+msgstr "Minden beszállító/ügyfél feltüntetése nulla egyenleg esetén is."
 
 #: gnucash/report/reports/standard/new-aging.scm:109
 #: gnucash/report/reports/standard/new-owner-report.scm:934
@@ -26019,7 +26019,7 @@ msgstr "E jelentéshez ki kell választani számlákat."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:105
 msgid "No valid vendor selected."
-msgstr "Nincs kiválasztva érvényes szállító."
+msgstr "Nincs kiválasztva érvényes beszállító."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:106
 #, fuzzy
@@ -26832,7 +26832,7 @@ msgstr "Zárás/igazítás kezdete"
 
 #: gnucash/report/reports/standard/trial-balance.scm:66
 msgid "Date of Report"
-msgstr "Jelentés kelt"
+msgstr "Jelentés dátuma"
 
 #: gnucash/report/reports/standard/trial-balance.scm:67
 msgid "Report variation"
