@@ -189,7 +189,7 @@ gnc_book_option_num_field_source_change (gboolean num_action)
 }
 
 void
-gnc_book_option_register_cb (gchar *key, GncBOCb func, gpointer user_data)
+gnc_book_option_register_cb (const gchar *key, GncBOCb func, gpointer user_data)
 {
     GHookList *hook_list;
     GHook *hook;
@@ -216,7 +216,7 @@ gnc_book_option_register_cb (gchar *key, GncBOCb func, gpointer user_data)
 }
 
 void
-gnc_book_option_remove_cb (gchar *key, GncBOCb func, gpointer user_data)
+gnc_book_option_remove_cb (const gchar *key, GncBOCb func, gpointer user_data)
 {
     GHookList *hook_list;
     GHook *hook;

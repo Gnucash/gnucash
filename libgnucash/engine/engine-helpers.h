@@ -77,11 +77,11 @@ gnc_book_option_num_field_source_change (gboolean num_action);
 /** Registers callbacks to be called when the book option changes for the
   * specified book option key */
 void
-gnc_book_option_register_cb (gchar *key, GncBOCb func, gpointer user_data);
+gnc_book_option_register_cb (const gchar *key, GncBOCb func, gpointer user_data);
 
 /** Removes previously registered callbacks for the specified book option key */
 void
-gnc_book_option_remove_cb (gchar *key, GncBOCb func, gpointer user_data);
+gnc_book_option_remove_cb (const gchar *key, GncBOCb func, gpointer user_data);
 
 #ifdef __cplusplus
 }
