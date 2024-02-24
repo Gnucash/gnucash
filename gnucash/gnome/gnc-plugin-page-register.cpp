@@ -127,6 +127,8 @@ static gchar* gnc_plugin_page_register_get_long_name (GncPluginPage*
 static void gnc_plugin_page_register_summarybar_position_changed (
     gpointer prefs, gchar* pref, gpointer user_data);
 
+extern "C"
+{
 /* Callbacks for the "Sort By" dialog */
 void gnc_plugin_page_register_sort_button_cb (GtkToggleButton* button,
                                               GncPluginPageRegister* page);
@@ -136,6 +138,7 @@ void gnc_plugin_page_register_sort_order_save_cb (GtkToggleButton* button,
                                                   GncPluginPageRegister* page);
 void gnc_plugin_page_register_sort_order_reverse_cb (GtkToggleButton* button,
                                                      GncPluginPageRegister* page);
+}
 
 static gchar* gnc_plugin_page_register_get_sort_order (GncPluginPage*
                                                        plugin_page);
@@ -146,6 +149,8 @@ static gboolean gnc_plugin_page_register_get_sort_reversed (
 void gnc_plugin_page_register_set_sort_reversed (GncPluginPage* plugin_page,
                                                  gboolean reverse_order);
 
+extern "C"
+{
 /* Callbacks for the "Filter By" dialog */
 void gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
                                                       GncPluginPageRegister* page);
@@ -163,6 +168,7 @@ void gnc_plugin_page_register_filter_save_cb (GtkToggleButton* button,
                                               GncPluginPageRegister* page);
 void gnc_plugin_page_register_filter_days_changed_cb (GtkSpinButton* button,
                                                       GncPluginPageRegister* page);
+}
 
 static time64 gnc_plugin_page_register_filter_dmy2time (char* date_string);
 static gchar* gnc_plugin_page_register_filter_time2dmy (time64 raw_time);
@@ -503,7 +509,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay* ledger)
         gnc_set_use_equity_type_opening_balance_account (gnc_get_current_book());
 
     /* Is there an existing page? */
-    gsr = gnc_ledger_display_get_user_data (ledger);
+    gsr = GNC_SPLIT_REG(gnc_ledger_display_get_user_data (ledger));
     if (gsr)
     {
         item = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_REGISTER_NAME);
@@ -516,7 +522,7 @@ gnc_plugin_page_register_new_common (GNCLedgerDisplay* ledger)
         }
     }
 
-    register_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER, NULL);
+    register_page = GNC_PLUGIN_PAGE_REGISTER(g_object_new (GNC_TYPE_PLUGIN_PAGE_REGISTER, nullptr));
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (register_page);
     priv->ledger = ledger;
     priv->key = *guid_null();
@@ -566,8 +572,9 @@ gnc_plugin_page_register_new (Account* account, gboolean subaccounts)
            subaccounts ? "TRUE" : "FALSE");
 
     com0 = gnc_account_get_currency_or_parent (account);
-    com1 = gnc_account_foreach_descendant_until (account,
-                                                 gnc_plug_page_register_check_commodity, com0);
+    com1 = GNC_COMMODITY(gnc_account_foreach_descendant_until (account,
+                                                               gnc_plug_page_register_check_commodity,
+                                                               static_cast<gpointer>(com0)));
 
     if (subaccounts)
         ledger = gnc_ledger_display_subaccounts (account, com1 != NULL);
@@ -869,9 +876,9 @@ gnc_plugin_page_register_ui_update (gpointer various,
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "SplitTransactionAction");
     g_simple_action_set_enabled (G_SIMPLE_ACTION(action), reg->style == REG_STYLE_LEDGER);
 
-    g_signal_handlers_block_by_func (action, gnc_plugin_page_register_cmd_expand_transaction, page);
+    g_signal_handlers_block_by_func (action, (gpointer)gnc_plugin_page_register_cmd_expand_transaction, page);
     g_action_change_state (G_ACTION(action), g_variant_new_boolean (expanded));
-    g_signal_handlers_unblock_by_func (action, gnc_plugin_page_register_cmd_expand_transaction, page);
+    g_signal_handlers_unblock_by_func (action, (gpointer)gnc_plugin_page_register_cmd_expand_transaction, page);
 
     account = gnc_plugin_page_register_get_account (page);
 
@@ -1120,18 +1127,18 @@ gnc_plugin_page_register_ui_initial_state (GncPluginPageRegister* page)
     reg = gnc_ledger_display_get_split_register (priv->ledger);
 
     g_signal_handlers_block_by_func (action,
-                                     gnc_plugin_page_register_cmd_style_changed, page);
+                                     (gpointer)gnc_plugin_page_register_cmd_style_changed, page);
     g_action_change_state (G_ACTION(action), g_variant_new_int32 (reg->style));
     g_signal_handlers_unblock_by_func (action,
-                                       gnc_plugin_page_register_cmd_style_changed, page);
+                                       (gpointer)gnc_plugin_page_register_cmd_style_changed, page);
 
     /* Set "double line" toggle button */
     action = gnc_plugin_page_get_action (GNC_PLUGIN_PAGE(page), "ViewStyleDoubleLineAction");
     g_signal_handlers_block_by_func (action,
-                                     gnc_plugin_page_register_cmd_style_double_line, page);
+                                     (gpointer)gnc_plugin_page_register_cmd_style_double_line, page);
     g_action_change_state (G_ACTION(action), g_variant_new_boolean (reg->use_double_line));
     g_signal_handlers_unblock_by_func (action,
-                                       gnc_plugin_page_register_cmd_style_double_line, page);
+                                       (gpointer)gnc_plugin_page_register_cmd_style_double_line, page);
 }
 
 /* Virtual Functions */
@@ -1279,7 +1286,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
 
         PINFO ("Loaded Filter Status is %s", filter[0]);
 
-        priv->fd.cleared_match = (gint)g_ascii_strtoll (filter[0], NULL, 16);
+        priv->fd.cleared_match = (cleared_match_t)g_ascii_strtoll (filter[0], NULL, 16);
 
         if (filtersize > 0 && (g_strcmp0 (filter[0], DEFAULT_FILTER) != 0))
             filter_changed = filter_changed + 1;
@@ -1334,7 +1341,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         else // search ledger and the like
         {
             priv->fd.days = 0;
-            priv->fd.cleared_match = (gint)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
+            priv->fd.cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
             gnc_split_reg_set_sort_type (priv->gsr,
                                          SortTypefromString (DEFAULT_SORT_ORDER));
             priv->sd.reverse_order = FALSE;
@@ -1382,11 +1389,11 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
         gnc_plugin_page_register_summarybar_position_changed (NULL, NULL, page);
         gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                                GNC_PREF_SUMMARYBAR_POSITION_TOP,
-                               gnc_plugin_page_register_summarybar_position_changed,
+                               (gpointer)gnc_plugin_page_register_summarybar_position_changed,
                                page);
         gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                                GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
-                               gnc_plugin_page_register_summarybar_position_changed,
+                               (gpointer)gnc_plugin_page_register_summarybar_position_changed,
                                page);
     }
 
@@ -1429,11 +1436,11 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage* plugin_page)
 
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_SUMMARYBAR_POSITION_TOP,
-                                 gnc_plugin_page_register_summarybar_position_changed,
+                                 (gpointer)gnc_plugin_page_register_summarybar_position_changed,
                                  page);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
-                                 gnc_plugin_page_register_summarybar_position_changed,
+                                 (gpointer)gnc_plugin_page_register_summarybar_position_changed,
                                  page);
 
     // Remove the page_changed signal callback
@@ -1783,6 +1790,9 @@ gnc_plugin_page_register_update_edit_menu (GncPluginPage* page, gboolean hide)
 static gboolean is_scrubbing = FALSE;
 static gboolean show_abort_verify = TRUE;
 
+static const char*
+check_repair_abort_YN = N_("'Check & Repair' is currently running, do you want to abort it?");
+
 static gboolean
 finish_scrub (GncPluginPage* page)
 {
@@ -1790,10 +1800,8 @@ finish_scrub (GncPluginPage* page)
 
     if (is_scrubbing)
     {
-        ret = gnc_verify_dialog (GTK_WINDOW(gnc_plugin_page_get_window
-                                (GNC_PLUGIN_PAGE(page))),
-                                FALSE,
-                                _("'Check & Repair' is currently running, do you want to abort it?"));
+        ret = gnc_verify_dialog (GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))),
+                                 false, "%s", _(check_repair_abort_YN));
 
         show_abort_verify = FALSE;
 
@@ -2300,7 +2308,7 @@ gnc_plugin_page_register_sort_book_option_changed (gpointer new_val,
                                                    gpointer user_data)
 {
     GncPluginPageRegisterPrivate* priv;
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     gboolean* new_data = (gboolean*)new_val;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
@@ -2317,7 +2325,7 @@ gnc_plugin_page_register_sort_book_option_changed (gpointer new_val,
         gtk_button_set_label (GTK_BUTTON (priv->sd.num_radio), _ ("Number"));
         gtk_button_set_label (GTK_BUTTON (priv->sd.act_radio), _ ("Action"));
     }
-    gnc_split_reg_set_sort_type_force (priv->gsr, priv->gsr->sort_type, TRUE);
+    gnc_split_reg_set_sort_type_force (priv->gsr, (SortType)priv->gsr->sort_type, TRUE);
 }
 
 /** This function is called when the "Sort By…" dialog is closed.
@@ -2721,9 +2729,9 @@ gnc_plugin_page_register_filter_status_one_cb (GtkToggleButton* button,
     /* Compute the new match status */
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     if (gtk_toggle_button_get_active (button))
-        priv->fd.cleared_match |= value;
+        priv->fd.cleared_match = (cleared_match_t)(priv->fd.cleared_match | value);
     else
-        priv->fd.cleared_match &= ~value;
+        priv->fd.cleared_match = (cleared_match_t)(priv->fd.cleared_match & ~value);
     gnc_ppr_update_status_query (page);
     LEAVE (" ");
 }
@@ -2756,10 +2764,10 @@ gnc_plugin_page_register_filter_status_all_cb (GtkButton* button,
     {
         widget = status_actions[i].widget;
         g_signal_handlers_block_by_func (widget,
-                                         gnc_plugin_page_register_filter_status_one_cb, page);
+                                         (gpointer)gnc_plugin_page_register_filter_status_one_cb, page);
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (widget), TRUE);
         g_signal_handlers_unblock_by_func (widget,
-                                           gnc_plugin_page_register_filter_status_one_cb, page);
+                                           (gpointer)gnc_plugin_page_register_filter_status_one_cb, page);
     }
 
     /* Set the requested status */
@@ -2893,7 +2901,7 @@ gnc_plugin_page_register_clear_current_filter (GncPluginPage* plugin_page)
     priv->fd.days = 0;
     priv->fd.start_time = 0;
     priv->fd.end_time = 0;
-    priv->fd.cleared_match = (gint)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
+    priv->fd.cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
 
     gnc_ppr_update_date_query (GNC_PLUGIN_PAGE_REGISTER(plugin_page));
 }
@@ -3451,7 +3459,7 @@ gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple,
                                           GVariant      *paramter,
                                           gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     Split*          split;
@@ -3568,7 +3576,7 @@ gnc_plugin_page_register_cmd_cut (GSimpleAction *simple,
                                   GVariant      *paramter,
                                   gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
@@ -3585,7 +3593,7 @@ gnc_plugin_page_register_cmd_copy (GSimpleAction *simple,
                                    GVariant      *paramter,
                                    gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
@@ -3602,7 +3610,7 @@ gnc_plugin_page_register_cmd_paste (GSimpleAction *simple,
                                     GVariant      *paramter,
                                     gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
@@ -3619,7 +3627,7 @@ gnc_plugin_page_register_cmd_edit_account (GSimpleAction *simple,
                                            GVariant      *paramter,
                                            gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     Account* account;
     GtkWindow* parent = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page)));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
@@ -3637,7 +3645,7 @@ gnc_plugin_page_register_cmd_find_account (GSimpleAction *simple,
                                            GVariant      *paramter,
                                            gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GtkWidget* window;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
@@ -3652,7 +3660,7 @@ gnc_plugin_page_register_cmd_find_transactions (GSimpleAction *simple,
                                                 GVariant      *paramter,
                                                 gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     GtkWindow* window;
 
@@ -3671,7 +3679,7 @@ gnc_plugin_page_register_cmd_edit_tax_options (GSimpleAction *simple,
                                                GVariant      *paramter,
                                                gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GtkWidget *window;
     Account* account;
 
@@ -3689,7 +3697,7 @@ gnc_plugin_page_register_cmd_cut_transaction (GSimpleAction *simple,
                                               GVariant      *paramter,
                                               gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     ENTER ("(action %p, page %p)", simple, page);
@@ -3707,7 +3715,7 @@ gnc_plugin_page_register_cmd_copy_transaction (GSimpleAction *simple,
                                                GVariant      *paramter,
                                                gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
 
@@ -3726,7 +3734,7 @@ gnc_plugin_page_register_cmd_paste_transaction (GSimpleAction *simple,
                                                 GVariant      *paramter,
                                                 gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
 
@@ -3745,7 +3753,7 @@ gnc_plugin_page_register_cmd_void_transaction (GSimpleAction *simple,
                                                GVariant      *paramter,
                                                gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     GtkWidget* dialog, *entry;
     SplitRegister* reg;
@@ -3814,7 +3822,7 @@ gnc_plugin_page_register_cmd_unvoid_transaction (GSimpleAction *simple,
                                                  GVariant      *paramter,
                                                  gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     Transaction* trans;
@@ -3838,7 +3846,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GSimpleAction *simple,
                                                   GVariant      *paramter,
                                                   gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     GNCSplitReg* gsr;
@@ -3940,7 +3948,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple,
                                            GVariant      *paramter,
                                            gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     GtkWidget* dialog, *button;
@@ -4009,7 +4017,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple,
         gtk_button_set_label (GTK_BUTTON (priv->sd.act_radio), _ ("Number/Action"));
     }
     gnc_book_option_register_cb (OPTION_NAME_NUM_FIELD_SOURCE,
-                                 gnc_plugin_page_register_sort_book_option_changed,
+                                 (GncBOCb)gnc_plugin_page_register_sort_book_option_changed,
                                  page);
 
     /* Wire it up */
@@ -4027,7 +4035,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
                                              GVariant      *paramter,
                                              gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     GtkWidget* dialog, *toggle, *button, *table, *hbox;
     time64 start_time, end_time, time_val;
@@ -4219,7 +4227,7 @@ gnc_plugin_page_register_cmd_reload (GSimpleAction *simple,
                                      GVariant      *paramter,
                                      gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
 
@@ -4245,7 +4253,7 @@ gnc_plugin_page_register_cmd_style_changed (GSimpleAction *simple,
                                             GVariant      *parameter,
                                             gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegisterStyle value;
 
@@ -4270,7 +4278,7 @@ gnc_plugin_page_register_cmd_style_double_line (GSimpleAction *simple,
                                                 GVariant      *parameter,
                                                 gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     gboolean use_double_line;
@@ -4304,7 +4312,7 @@ gnc_plugin_page_register_cmd_transfer (GSimpleAction *simple,
                                        GVariant      *paramter,
                                        gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     Account* account;
     GncWindow* gnc_window;
     GtkWidget* window;
@@ -4325,7 +4333,7 @@ gnc_plugin_page_register_cmd_reconcile (GSimpleAction *simple,
                                         GVariant      *paramter,
                                         gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     Account* account;
     GtkWindow* window;
     RecnWindow* recnData;
@@ -4359,7 +4367,7 @@ gnc_plugin_page_register_cmd_stock_assistant (GSimpleAction *simple,
                                               GVariant      *paramter,
                                               gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     Account *account;
     GtkWindow *window;
 
@@ -4378,7 +4386,7 @@ gnc_plugin_page_register_cmd_autoclear (GSimpleAction *simple,
                                         GVariant      *paramter,
                                         gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     Account* account;
     GtkWindow* window;
     AutoClearWindow* autoClearData;
@@ -4401,7 +4409,7 @@ gnc_plugin_page_register_cmd_stock_split (GSimpleAction *simple,
                                           GVariant      *paramter,
                                           gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     Account* account;
     GtkWindow* window;
 
@@ -4420,7 +4428,7 @@ gnc_plugin_page_register_cmd_lots (GSimpleAction *simple,
                                    GVariant      *paramter,
                                    gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GtkWindow* window;
     Account* account;
 
@@ -4440,7 +4448,7 @@ gnc_plugin_page_register_cmd_enter_transaction (GSimpleAction *simple,
                                                 GVariant      *paramter,
                                                 gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     ENTER ("(action %p, page %p)", simple, page);
@@ -4457,7 +4465,7 @@ gnc_plugin_page_register_cmd_cancel_transaction (GSimpleAction *simple,
                                                  GVariant      *paramter,
                                                  gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     ENTER ("(action %p, page %p)", simple, page);
@@ -4475,7 +4483,7 @@ gnc_plugin_page_register_cmd_delete_transaction (GSimpleAction *simple,
                                                  GVariant      *paramter,
                                                  gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     ENTER ("(action %p, page %p)", simple, page);
@@ -4493,7 +4501,7 @@ gnc_plugin_page_register_cmd_linked_transaction (GSimpleAction *simple,
                                                  GVariant      *paramter,
                                                  gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     ENTER ("(action %p, page %p)", simple, page);
@@ -4511,7 +4519,7 @@ gnc_plugin_page_register_cmd_linked_transaction_open (GSimpleAction *simple,
                                                       GVariant      *paramter,
                                                       gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     ENTER ("(action %p, page %p)", simple, page);
@@ -4565,7 +4573,7 @@ gnc_plugin_page_register_cmd_jump_linked_invoice (GSimpleAction *simple,
                                                   GVariant      *paramter,
                                                   gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     GncInvoice* invoice;
@@ -4595,7 +4603,7 @@ gnc_plugin_page_register_cmd_jump_linked_invoice (GSimpleAction *simple,
             const gchar *amt;
             for (GList *node = invoices; node; node = node->next)
             {
-                GncInvoice* inv = node->data;
+                auto inv = GNC_INVOICE(node->data);
                 gchar *date = qof_print_date (gncInvoiceGetDatePosted (inv));
                 amt = xaccPrintAmount
                     (gncInvoiceGetTotal (inv),
@@ -4638,7 +4646,7 @@ gnc_plugin_page_register_cmd_blank_transaction (GSimpleAction *simple,
                                                 GVariant      *paramter,
                                                 gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
 
@@ -4661,7 +4669,7 @@ gnc_plugin_page_register_cmd_goto_date (GSimpleAction *simple,
                                         GVariant      *paramter,
                                         gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GNCSplitReg* gsr;
     Query* query;
     time64 date = gnc_time (NULL);
@@ -4684,9 +4692,9 @@ gnc_plugin_page_register_cmd_goto_date (GSimpleAction *simple,
 
     for (GList *lp = splits; lp; lp = lp->next)
     {
-        if (xaccTransGetDate (xaccSplitGetParent (lp->data)) >= date)
+        if (xaccTransGetDate (xaccSplitGetParent (GNC_SPLIT(lp->data))) >= date)
         {
-            gnc_split_reg_jump_to_split (gsr, lp->data);
+            gnc_split_reg_jump_to_split (gsr, GNC_SPLIT(lp->data));
             break;
         }
     }
@@ -4700,7 +4708,7 @@ gnc_plugin_page_register_cmd_duplicate_transaction (GSimpleAction *simple,
                                                     GVariant      *paramter,
                                                     gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     ENTER ("(action %p, page %p)", simple, page);
@@ -4718,7 +4726,7 @@ gnc_plugin_page_register_cmd_reinitialize_transaction (GSimpleAction *simple,
                                                        GVariant      *paramter,
                                                        gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     ENTER ("(action %p, page %p)", simple, page);
@@ -4735,7 +4743,7 @@ gnc_plugin_page_register_cmd_expand_transaction (GSimpleAction *simple,
                                                  GVariant      *parameter,
                                                  gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
     gboolean expand;
@@ -4766,7 +4774,7 @@ gnc_plugin_page_register_cmd_exchange_rate (GSimpleAction *simple,
                                             GVariant      *paramter,
                                             gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     SplitRegister* reg;
 
@@ -4787,7 +4795,7 @@ gnc_plugin_page_register_cmd_jump (GSimpleAction *simple,
                                    GVariant      *paramter,
                                    gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     GncPluginPage* new_page;
     GtkWidget* window;
@@ -4871,7 +4879,7 @@ gnc_plugin_page_register_cmd_schedule (GSimpleAction *simple,
                                        GVariant      *paramter,
                                        gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     GtkWindow* window;
 
@@ -4913,7 +4921,7 @@ gnc_plugin_page_register_cmd_scrub_current (GSimpleAction *simple,
                                             GVariant      *paramter,
                                             gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     Query* query;
     SplitRegister* reg;
@@ -4947,8 +4955,8 @@ scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
     {
     case GDK_KEY_Escape:
         {
-            gboolean abort_scrub = gnc_verify_dialog (GTK_WINDOW(widget), FALSE,
-                 _("'Check & Repair' is currently running, do you want to abort it?"));
+            auto abort_scrub = gnc_verify_dialog (GTK_WINDOW(widget), false,
+                                                  "%s", _(check_repair_abort_YN));
 
             if (abort_scrub)
                 gnc_set_abort_scrub (TRUE);
@@ -4966,7 +4974,7 @@ gnc_plugin_page_register_cmd_scrub_all (GSimpleAction *simple,
                                         GVariant      *paramter,
                                         gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     Query* query;
     GncWindow* window;
@@ -4999,7 +5007,7 @@ gnc_plugin_page_register_cmd_scrub_all (GSimpleAction *simple,
     split_count = g_list_length (splits);
     for (node = splits; node && !gnc_get_abort_scrub (); node = node->next, curr_split_no++)
     {
-        Split* split = node->data;
+        auto split = GNC_SPLIT(node->data);
 
         if (!split) continue;
 
@@ -5034,7 +5042,7 @@ gnc_plugin_page_register_cmd_account_report (GSimpleAction *simple,
                                              GVariant      *paramter,
                                              gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     GncMainWindow* window;
     int id;
@@ -5056,7 +5064,7 @@ gnc_plugin_page_register_cmd_transaction_report (GSimpleAction *simple,
                                                  GVariant      *paramter,
                                                  gpointer       user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
     GncMainWindow* window;
     SplitRegister* reg;
@@ -5178,7 +5186,7 @@ gnc_plugin_page_popup_menu_cb (GNCSplitReg* gsr,
 static void
 gnc_plugin_page_register_refresh_cb (GHashTable* changes, gpointer user_data)
 {
-    GncPluginPageRegister* page = user_data;
+    auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GncPluginPageRegisterPrivate* priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
