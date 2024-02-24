@@ -25,6 +25,15 @@
 
 #include "Account.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 void gnc_find_account_dialog (GtkWidget *parent, Account *account);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

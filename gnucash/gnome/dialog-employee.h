@@ -25,6 +25,10 @@
 #ifndef GNC_DIALOG_EMPLOYEE_H_
 #define GNC_DIALOG_EMPLOYEE_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _employee_window EmployeeWindow;
 
 #include "gncEmployee.h"
@@ -45,5 +49,9 @@ GNCSearchWindow * gnc_employee_search (GtkWindow *parent, GncEmployee *start, Qo
  */
 GNCSearchWindow * gnc_employee_search_select (GtkWindow *parent, gpointer start, gpointer book);
 GNCSearchWindow * gnc_employee_search_edit (GtkWindow *parent, gpointer start, gpointer book);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_DIALOG_EMPLOYEE_H_ */

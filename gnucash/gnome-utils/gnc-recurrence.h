@@ -32,6 +32,10 @@
 #include <glib.h>
 #include "Recurrence.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_TYPE_RECURRENCE	  (gnc_recurrence_get_type())
 G_DECLARE_FINAL_TYPE (GncRecurrence, gnc_recurrence, GNC, RECURRENCE, GtkBox)
 
@@ -42,5 +46,9 @@ void gnc_recurrence_set(GncRecurrence *gr, const Recurrence *r);
 /* The returned Recurrence is internally owned and is only valid as
    long as the GncRecurrence is around. */
 const Recurrence * gnc_recurrence_get(GncRecurrence *gr);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

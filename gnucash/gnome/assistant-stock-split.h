@@ -28,6 +28,11 @@
 
 #include "Account.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 /********************************************************************\
  * gnc_stock_split_dialog                                           *
  *   opens up a window to record a stock split                      *
@@ -37,5 +42,8 @@
  * Return: nothing                                                  *
 \********************************************************************/
 void gnc_stock_split_dialog (GtkWidget *parent, Account * initial);
+#ifdef __cplusplus
+}
+#endif
 
 #endif

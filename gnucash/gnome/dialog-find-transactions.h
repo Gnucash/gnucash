@@ -27,7 +27,16 @@
 #include "gnc-ledger-display.h"
 #include "dialog-search.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 GNCSearchWindow *
 gnc_ui_find_transactions_dialog_create (GtkWindow *parent, GNCLedgerDisplay * ledger);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

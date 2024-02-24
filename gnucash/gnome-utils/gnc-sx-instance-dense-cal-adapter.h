@@ -27,9 +27,17 @@
 #include <glib.h>
 #include "gnc-sx-instance-model.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define GNC_TYPE_SX_INSTANCE_DENSE_CAL_ADAPTER	          (gnc_sx_instance_dense_cal_adapter_get_type ())
 G_DECLARE_FINAL_TYPE (GncSxInstanceDenseCalAdapter, gnc_sx_instance_dense_cal_adapter, GNC, SX_INSTANCE_DENSE_CAL_ADAPTER, GObject)
 
 GncSxInstanceDenseCalAdapter* gnc_sx_instance_dense_cal_adapter_new(GncSxInstanceModel *instances);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // _GNC_SX_INSTANCE_DENSE_CAL_ADAPTER_H

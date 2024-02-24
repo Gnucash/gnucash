@@ -25,6 +25,10 @@
 #ifndef GNC_DIALOG_VENDOR_H_
 #define GNC_DIALOG_VENDOR_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _vendor_window VendorWindow;
 
 #include "gncVendor.h"
@@ -45,5 +49,9 @@ GNCSearchWindow * gnc_vendor_search (GtkWindow *parent, GncVendor *start, QofBoo
  */
 GNCSearchWindow * gnc_vendor_search_select (GtkWindow *parent, gpointer start, gpointer book);
 GNCSearchWindow * gnc_vendor_search_edit (GtkWindow *parent, gpointer start, gpointer book);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_DIALOG_VENDOR_H_ */

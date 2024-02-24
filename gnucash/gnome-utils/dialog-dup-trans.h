@@ -30,6 +30,11 @@
 #include <gtk/gtk.h>
 #include <gnc-date.h>
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 
 /***********************************************************************\
  * gnc_dup_trans_dialog                                                 *
@@ -88,5 +93,9 @@ gnc_dup_date_dialog (GtkWidget * parent, const char* title, GDate *date);
 gboolean
 gnc_dup_time64_dialog (GtkWidget * parent, const char *window_title,
                        const char* title, time64 *date);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // DIALOGDUPTRANS_H

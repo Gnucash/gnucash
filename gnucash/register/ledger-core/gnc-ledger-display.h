@@ -25,6 +25,11 @@
 #ifndef GNC_LEDGER_DISPLAY_H
 #define GNC_LEDGER_DISPLAY_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include <glib.h>
 
 #include "Account.h"
@@ -130,5 +135,9 @@ void gnc_ledger_display_close (GNCLedgerDisplay* ledger_display);
 /** Returns a boolean of whether this display should be single or double lined
  * mode by default */
 gboolean gnc_ledger_display_default_double_line (GNCLedgerDisplay* gld);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

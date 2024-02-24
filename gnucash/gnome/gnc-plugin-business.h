@@ -29,6 +29,11 @@
 
 #include "gnc-plugin.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 G_BEGIN_DECLS
 
 /* type macros */
@@ -51,5 +56,9 @@ void gnc_invoice_remind_invoices_due_cb (void);
 
 void gnc_plugin_business_split_reg_ui_update (GncPluginPage *plugin_page);
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __GNC_PLUGIN_BUSINESS_H */

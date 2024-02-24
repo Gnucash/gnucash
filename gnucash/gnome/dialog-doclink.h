@@ -23,6 +23,10 @@
 #ifndef DIALOG_DOCLINK_H
 #define DIALOG_DOCLINK_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** Present the right edit dialog for the uri.
  *
  *  The function allocates memory for the uri. The calling function should
@@ -67,5 +71,9 @@ void gnc_doclink_business_dialog (GtkWindow *parent);
  *  @param parent The GtkWindow for the parent widget
  */
 void gnc_doclink_trans_dialog (GtkWindow *parent);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

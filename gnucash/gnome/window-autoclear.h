@@ -23,9 +23,18 @@
 #ifndef WINDOW_AUTOCLEAR_H
 #define WINDOW_AUTOCLEAR_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef struct _AutoClearWindow AutoClearWindow;
 
 AutoClearWindow *autoClearWindow (GtkWidget *parent, Account *account);
 void gnc_ui_autoclear_window_raise(AutoClearWindow * autoClearData);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

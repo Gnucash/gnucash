@@ -25,6 +25,10 @@
 #ifndef GNC_DIALOG_JOB_H_
 #define GNC_DIALOG_JOB_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _job_window JobWindow;
 
 #include "gncJob.h"
@@ -47,5 +51,9 @@ GNCSearchWindow * gnc_job_search (GtkWindow *parent, GncJob *start,
  */
 GNCSearchWindow * gnc_job_search_select (GtkWindow *parent, gpointer start, gpointer book);
 GNCSearchWindow * gnc_job_search_edit (GtkWindow *parent, gpointer start, gpointer book);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_DIALOG_JOB_H_ */

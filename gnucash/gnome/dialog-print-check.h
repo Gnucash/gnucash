@@ -26,10 +26,19 @@
 
 #include "print-session.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef struct _print_check_dialog PrintCheckDialog;
 
 void gnc_ui_print_check_dialog_create(GtkWidget *parent,
                                       GList *splits,
                                       Account* account);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

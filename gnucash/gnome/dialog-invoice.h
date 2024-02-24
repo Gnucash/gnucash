@@ -35,6 +35,11 @@ typedef struct _invoice_window InvoiceWindow;
 #include "dialog-search.h"
 #include "dialog-query-view.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef enum
 {
     INVSORT_BY_STANDARD = 0,
@@ -128,5 +133,9 @@ gboolean gnc_invoice_window_document_has_user_state (InvoiceWindow *iw);
 
 void gnc_invoice_window_entryUpCB (GtkWidget *widget, gpointer data);
 void gnc_invoice_window_entryDownCB (GtkWidget *widget, gpointer data);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_DIALOG_INVOICE_H_ */

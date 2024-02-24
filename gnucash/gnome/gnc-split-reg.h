@@ -32,6 +32,11 @@
 #include "gnc-ledger-display.h"
 #include "gnucash-register.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #define GNC_SPLIT_REG(obj)         G_TYPE_CHECK_INSTANCE_CAST( obj, gnc_split_reg_get_type(), GNCSplitReg )
 #define GNC_SPLIT_REG_CLASS(klass) G_TYPE_CHECK_CLASS_CAST( klass, gnc_split_reg_get_type(), GNCSplitRegClass )
 #define IS_GNC_SPLIT_REG(obj)      G_TYPE_CHECK_INSTANCE_TYPE( obj, gnc_split_reg_get_type() )
@@ -307,5 +312,9 @@ void gsr_default_schedule_handler( GNCSplitReg *gsr, gpointer data );
 gchar *gsr_get_register_state_section (GNCSplitReg *gsr);
 
 void gnc_split_reg_set_moved_cb( GNCSplitReg *gsr, GFunc cb, gpointer cb_data );
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_SPLIT_REG_H */

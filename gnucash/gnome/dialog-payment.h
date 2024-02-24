@@ -24,6 +24,10 @@
 #ifndef _DIALOG_PAYMENT_H
 #define _DIALOG_PAYMENT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _payment_window PaymentWindow;
 
 #include "gncOwner.h"
@@ -50,5 +54,9 @@ void gnc_ui_payment_window_set_date (PaymentWindow *pw, const GDate *date);
 void gnc_ui_payment_window_set_amount (PaymentWindow *pw, gnc_numeric amount);
 void gnc_ui_payment_window_set_postaccount (PaymentWindow *pw, const Account* account);
 void gnc_ui_payment_window_set_xferaccount (PaymentWindow *pw, const Account* account);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* _DIALOG_PAYMENT_H */

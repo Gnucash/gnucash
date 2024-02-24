@@ -24,6 +24,14 @@
 #ifndef WINDOW_MAIN_SUMMARYBAR_H
 #define WINDOW_MAIN_SUMMARYBAR_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 GtkWidget * gnc_main_window_summary_new(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

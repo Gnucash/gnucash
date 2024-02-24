@@ -26,6 +26,10 @@
 #include "SchedXaction.h"
 #include <gtk/gtk.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define DIALOG_SCHEDXACTION_CM_CLASS "dialog-scheduledtransactions"
 #define DIALOG_SCHEDXACTION_EDITOR_CM_CLASS "dialog-scheduledtransaction-editor"
 
@@ -47,5 +51,9 @@ void gnc_ui_scheduled_xaction_editor_dialog_destroy(GncSxEditorDialog *sxd);
  * last run" dialog based upon the user's preferences.
  **/
 void gnc_ui_sx_initialize (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -25,6 +25,10 @@
 #ifndef GNC_DIALOG_CUSTOMER_H_
 #define GNC_DIALOG_CUSTOMER_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct _customer_window CustomerWindow;
 
 #include "gncCustomer.h"
@@ -45,5 +49,9 @@ GNCSearchWindow *gnc_customer_search (GtkWindow *parent, GncCustomer *start, Qof
  */
 GNCSearchWindow * gnc_customer_search_select (GtkWindow *parent, gpointer start, gpointer book);
 GNCSearchWindow * gnc_customer_search_edit (GtkWindow *parent, gpointer start, gpointer book);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_DIALOG_CUSTOMER_H_ */

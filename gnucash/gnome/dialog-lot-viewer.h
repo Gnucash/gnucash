@@ -27,9 +27,18 @@
 
 #include "Account.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 typedef struct _GNCLotViewer GNCLotViewer;
 
 /** Create and realize and show a lot-viewing dialog. */
 GNCLotViewer * gnc_lot_viewer_dialog (GtkWindow *parent, Account *account);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* LOT_VIEWER_H */

@@ -43,6 +43,11 @@
 #include "gnc-split-reg.h"
 #include "Query.h"
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 G_BEGIN_DECLS
 
 /* type macros */
@@ -176,6 +181,11 @@ gnc_plugin_page_register_clear_current_filter (GncPluginPage* plugin_page);
 G_END_DECLS
 /** @} */
 /** @} */
+
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* __GNC_PLUGIN_PAGE_REGISTER_H */
 
