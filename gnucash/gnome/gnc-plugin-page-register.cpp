@@ -3898,29 +3898,31 @@ gnc_plugin_page_register_cmd_reverse_transaction (GSimpleAction *simple,
     {
         const char *rev = _("A reversing entry has already been created for this transaction.");
         const char *jump = _("Jump to the transaction?");
-        if (gnc_verify_dialog (GTK_WINDOW (window), TRUE, "%s\n\n%s", rev, jump))
-            goto jump_to_trans;
-        else
+        if (!gnc_verify_dialog (GTK_WINDOW (window), TRUE, "%s\n\n%s", rev, jump))
+        {
+            LEAVE ("reverse cancelled");
             return;
+        }
     }
-
-    if (!gnc_dup_time64_dialog (window, _("Reverse Transaction"),
-                                _("New Transaction Information"), &date))
+    else
     {
-        LEAVE ("reverse cancelled");
-        return;
+        if (!gnc_dup_time64_dialog (window, _("Reverse Transaction"),
+                                    _("New Transaction Information"), &date))
+        {
+            LEAVE ("reverse cancelled");
+            return;
+        }
+
+        gnc_suspend_gui_refresh ();
+        new_trans = xaccTransReverse (trans);
+
+        /* Clear transaction level info */
+        xaccTransSetDatePostedSecsNormalized (new_trans, date);
+        xaccTransSetDateEnteredSecs (new_trans, gnc_time (NULL));
+
+        gnc_resume_gui_refresh();
     }
 
-    gnc_suspend_gui_refresh();
-    new_trans = xaccTransReverse (trans);
-
-    /* Clear transaction level info */
-    xaccTransSetDatePostedSecsNormalized (new_trans, date);
-    xaccTransSetDateEnteredSecs (new_trans, gnc_time (NULL));
-
-    gnc_resume_gui_refresh();
-
- jump_to_trans:
     /* Now jump to new trans */
     gsr = gnc_plugin_page_register_get_gsr (GNC_PLUGIN_PAGE (page));
     split = xaccTransFindSplitByAccount(new_trans, account);
