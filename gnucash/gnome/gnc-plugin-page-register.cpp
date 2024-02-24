@@ -244,7 +244,6 @@ static void gnc_plugin_page_register_event_handler (QofInstance* entity,
                                                     GncEventData* ed);
 
 static GncInvoice* invoice_from_split (Split* split);
-static GList* invoices_from_transaction (Transaction* trans);
 
 /************************************************************/
 /*                          Actions                         */
@@ -836,6 +835,26 @@ static const char* split_action_tips[] =
     NULL
 };
 
+static std::vector<GncInvoice*>
+invoices_from_transaction (const Transaction* trans)
+{
+    std::vector<GncInvoice*> rv;
+
+    g_return_val_if_fail (GNC_IS_TRANSACTION (trans), rv);
+
+    for (auto node = xaccTransGetSplitList (trans); node; node = g_list_next (node))
+    {
+        auto split = GNC_SPLIT(node->data);
+        auto account = xaccSplitGetAccount (split);
+        if (!account || !xaccAccountIsAPARType(xaccAccountGetType(account)))
+            continue;
+        auto inv = invoice_from_split (split);
+        if (inv)
+            rv.push_back (inv);
+    }
+    return rv;
+}
+
 static void
 gnc_plugin_page_register_ui_update (gpointer various,
                                     GncPluginPageRegister* page)
@@ -846,7 +865,6 @@ gnc_plugin_page_register_ui_update (gpointer various,
     GNCLedgerDisplayType ledger_type;
     gboolean expanded, voided, read_only = FALSE, read_only_reg = FALSE;
     Transaction* trans;
-    GList* invoices;
     CursorClass cursor_class;
     const char* uri;
     Account *account;
@@ -1002,9 +1020,8 @@ gnc_plugin_page_register_ui_update (gpointer various,
                                          "JumpLinkedInvoiceAction");
     if (trans)
     {
-        invoices = invoices_from_transaction (trans);
-        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), (invoices != NULL));
-        g_list_free (invoices);
+        auto invoices = invoices_from_transaction (trans);
+        g_simple_action_set_enabled (G_SIMPLE_ACTION(action), !invoices.empty());
     }
 
     gnc_plugin_business_split_reg_ui_update (GNC_PLUGIN_PAGE(page));
@@ -4550,23 +4567,6 @@ static GncInvoice* invoice_from_split (Split* split)
     return invoice;
 }
 
-GList* invoices_from_transaction (Transaction* trans)
-{
-    GList *invoices = NULL;
-    GList *apar_splits;
-    if (!trans) return NULL;
-
-    apar_splits = xaccTransGetAPARAcctSplitList (trans, TRUE);
-    if (!apar_splits) return NULL;
-
-    for (GList *node = apar_splits; node; node = node->next)
-    {
-        GncInvoice* inv = invoice_from_split ((Split*) node->data);
-        if (inv) invoices = g_list_prepend (invoices, inv);
-    }
-    g_list_free (apar_splits);
-    return invoices;
-}
 
 static void
 gnc_plugin_page_register_cmd_jump_linked_invoice (GSimpleAction *simple,
@@ -4591,19 +4591,18 @@ gnc_plugin_page_register_cmd_jump_linked_invoice (GSimpleAction *simple,
 
     if (!invoice)
     {
-        GList *invoices = invoices_from_transaction (txn);
-        if (!invoices)
+        auto invoices = invoices_from_transaction (txn);
+        if (invoices.empty())
             PERR ("shouldn't happen: if no invoices, function is never called");
-        else if (!invoices->next)
-            invoice = (GncInvoice*) invoices->data;
+        else if (invoices.size() == 1)
+            invoice = invoices[0];
         else
         {
             GList *details = NULL;
             gint choice;
             const gchar *amt;
-            for (GList *node = invoices; node; node = node->next)
+            for (const auto& inv : invoices)
             {
-                auto inv = GNC_INVOICE(node->data);
                 gchar *date = qof_print_date (gncInvoiceGetDatePosted (inv));
                 amt = xaccPrintAmount
                     (gncInvoiceGetTotal (inv),
@@ -4625,11 +4624,10 @@ gnc_plugin_page_register_cmd_jump_linked_invoice (GSimpleAction *simple,
                 (window, _("Select document"),
                  _("Several documents are linked with this transaction. \
 Please choose one:"), _("Select"), 0, details);
-            if (choice >= 0)
-                invoice = (GncInvoice *)(g_list_nth (invoices, choice))->data;
+            if ((choice >= 0) && ((size_t)choice < invoices.size()))
+                invoice = invoices[choice];
             g_list_free_full (details, g_free);
         }
-        g_list_free (invoices);
     }
 
     if (invoice)
