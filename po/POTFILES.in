@@ -101,7 +101,7 @@ gnucash/gnome/gnc-plugin-page-invoice.cpp
 gnucash/gnome/gnc-plugin-page-owner-tree.cpp
 gnucash/gnome/gnc-plugin-page-register.cpp
 gnucash/gnome/gnc-plugin-page-report.cpp
-gnucash/gnome/gnc-plugin-page-sx-list.c
+gnucash/gnome/gnc-plugin-page-sx-list.cpp
 gnucash/gnome/gnc-plugin-register.c
 gnucash/gnome/gnc-plugin-report-system.c
 gnucash/gnome/gnc-split-reg.c

@@ -115,7 +115,7 @@ set (gnc_gnome_SOURCES
   gnc-plugin-page-owner-tree.cpp
   gnc-plugin-page-register.cpp
   gnc-plugin-page-report.cpp
-  gnc-plugin-page-sx-list.c
+  gnc-plugin-page-sx-list.cpp
   gnc-split-reg.c
   reconcile-view.c
   search-owner.c

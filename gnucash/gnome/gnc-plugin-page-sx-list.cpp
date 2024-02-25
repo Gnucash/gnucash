@@ -156,7 +156,7 @@ gnc_plugin_page_sx_list_new (void)
         plugin_page = GNC_PLUGIN_PAGE_SX_LIST (object->data);
     else
     {
-        plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_SX_LIST, NULL);
+        plugin_page = GNC_PLUGIN_PAGE_SX_LIST (g_object_new (GNC_TYPE_PLUGIN_PAGE_SX_LIST, nullptr));
     }
     return GNC_PLUGIN_PAGE(plugin_page);
 }
@@ -282,7 +282,7 @@ gnc_plugin_page_sx_list_finalize (GObject *object)
 static void
 gnc_plugin_page_sx_list_refresh_cb (GHashTable *changes, gpointer user_data)
 {
-    GncPluginPageSxList *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
     GncPluginPageSxListPrivate *priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(page));
@@ -349,7 +349,7 @@ gppsl_model_populated_cb (GtkTreeModel *tree_model, GncPluginPageSxList *page)
         // walk the list to see if we can reselect the sx
         for (GList *list = priv->selected_list; list != NULL; list = list->next)
         {
-            SchedXaction *sx = list->data;
+            SchedXaction *sx = GNC_SCHEDXACTION(list->data);
             GtkTreePath *path = gtk_tree_path_new_first ();
 
             // loop through the model trying to find selected sx's
@@ -715,7 +715,7 @@ gnc_plugin_page_sx_list_cmd_new (GSimpleAction *simple,
                                  GVariant      *parameter,
                                  gpointer       user_data)
 {
-    GncPluginPageSxList *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
     GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
     SchedXaction *new_sx;
     gboolean new_sx_flag = TRUE;
@@ -742,7 +742,7 @@ gnc_plugin_page_sx_list_cmd_refresh (GSimpleAction *simple,
                                      GVariant      *parameter,
                                      gpointer       user_data)
 {
-    GncPluginPageSxList *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
     GncPluginPageSxListPrivate *priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(plugin_page));
@@ -755,7 +755,7 @@ static void
 _edit_sx(gpointer data, gpointer user_data)
 {
     gnc_ui_scheduled_xaction_editor_dialog_create (GTK_WINDOW(user_data),
-        (SchedXaction*)data, FALSE);
+                                                   GNC_SCHEDXACTION(data), FALSE);
 }
 
 static SchedXaction*
@@ -770,7 +770,7 @@ gnc_plugin_page_sx_list_cmd_edit (GSimpleAction *simple,
                                   GVariant      *parameter,
                                   gpointer       user_data)
 {
-    GncPluginPageSxList *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
     GtkWindow *window = GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
     GtkTreeSelection *selection;
@@ -792,8 +792,8 @@ gnc_plugin_page_sx_list_cmd_edit (GSimpleAction *simple,
     gppsl_update_selected_list (plugin_page, TRUE, NULL);
     for (GList *list = to_edit; list != NULL; list = list->next)
     {
-        DEBUG ("to-edit [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
-        gppsl_update_selected_list (plugin_page, FALSE, list->data);
+        DEBUG ("to-edit [%s]\n", xaccSchedXactionGetName (GNC_SCHEDXACTION(list->data)));
+        gppsl_update_selected_list (plugin_page, FALSE, GNC_SCHEDXACTION(list->data));
     }
 
     g_list_foreach (to_edit, (GFunc)_edit_sx, window);
@@ -808,7 +808,7 @@ gnc_plugin_page_sx_list_cmd_edit_tax_options (GSimpleAction *simple,
                                               GVariant      *parameter,
                                               gpointer       user_data)
 {
-    GncPluginPageSxList *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
     GtkWidget *window = GTK_WIDGET(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(plugin_page)));
 
     ENTER ("(action %p, page %p)", simple, plugin_page);
@@ -838,7 +838,7 @@ static void
 _destroy_sx(gpointer data, gpointer user_data)
 {
     SchedXactions *sxes;
-    SchedXaction *sx = (SchedXaction*)data;
+    auto sx = GNC_SCHEDXACTION(data);
     QofBook *book;
     book = gnc_get_current_book ();
     sxes = gnc_book_get_schedxactions (book);
@@ -851,7 +851,7 @@ _destroy_sx(gpointer data, gpointer user_data)
 static void
 _destroy_sx_names (gpointer data, gpointer user_data)
 {
-    SchedXaction *sx = (SchedXaction*)data;
+    auto sx = GNC_SCHEDXACTION(data);
     GList **to_delete_names = (GList**)user_data;
     *to_delete_names = g_list_append (*to_delete_names, xaccSchedXactionGetName (sx));
 }
@@ -862,7 +862,7 @@ gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
                                     GVariant      *parameter,
                                     gpointer       user_data)
 {
-    GncPluginPageSxList *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
     GtkTreeSelection *selection = gtk_tree_view_get_selection (priv->tree_view);
     GList *selected_paths, *to_delete = NULL, *to_delete_names = NULL;
@@ -906,8 +906,8 @@ gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple,
         gppsl_update_selected_list (plugin_page, TRUE, NULL);
         for (GList *list = to_delete; list != NULL; list = list->next)
         {
-            DEBUG("to-delete [%s]\n", xaccSchedXactionGetName ((SchedXaction*)list->data));
-            gppsl_update_selected_list (plugin_page, FALSE, list->data);
+            DEBUG("to-delete [%s]\n", xaccSchedXactionGetName (GNC_SCHEDXACTION(list->data)));
+            gppsl_update_selected_list (plugin_page, FALSE, GNC_SCHEDXACTION(list->data));
         }
         g_list_foreach (to_delete, (GFunc)_destroy_sx, NULL);
     }
