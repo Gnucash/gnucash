@@ -96,7 +96,7 @@ gnucash/gnome/gnc-plugin-basic-commands.c
 gnucash/gnome/gnc-plugin-budget.c
 gnucash/gnome/gnc-plugin-business.c
 gnucash/gnome/gnc-plugin-page-account-tree.cpp
-gnucash/gnome/gnc-plugin-page-budget.c
+gnucash/gnome/gnc-plugin-page-budget.cpp
 gnucash/gnome/gnc-plugin-page-invoice.c
 gnucash/gnome/gnc-plugin-page-owner-tree.c
 gnucash/gnome/gnc-plugin-page-register.cpp

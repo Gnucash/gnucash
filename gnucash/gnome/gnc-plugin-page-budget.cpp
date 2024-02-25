@@ -233,7 +233,6 @@ G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageBudget, gnc_plugin_page_budget, GNC_TYPE
 GncPluginPage *
 gnc_plugin_page_budget_new (GncBudget *budget)
 {
-    GncPluginPageBudget *plugin_page;
     GncPluginPageBudgetPrivate *priv;
     gchar* label;
     const GList *item;
@@ -245,7 +244,7 @@ gnc_plugin_page_budget_new (GncBudget *budget)
     item = gnc_gobject_tracking_get_list (GNC_PLUGIN_PAGE_BUDGET_NAME);
     for ( ; item; item = g_list_next (item))
     {
-        plugin_page = (GncPluginPageBudget *)item->data;
+        auto plugin_page = GNC_PLUGIN_PAGE_BUDGET(item->data);
         priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
         if (priv->budget == budget)
         {
@@ -254,7 +253,7 @@ gnc_plugin_page_budget_new (GncBudget *budget)
         }
     }
 
-    plugin_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_BUDGET, NULL);
+    auto plugin_page = GNC_PLUGIN_PAGE_BUDGET (g_object_new (GNC_TYPE_PLUGIN_PAGE_BUDGET, nullptr));
 
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(plugin_page);
     priv->budget = budget;
@@ -712,12 +711,11 @@ gnc_plugin_page_budget_cmd_open_account (GSimpleAction *simple,
                                          GVariant *parameter,
                                          gpointer user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
     GtkWidget *window;
     GncPluginPage *new_page;
     GList *acct_list, *tmp;
-    Account *account;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
@@ -726,7 +724,7 @@ gnc_plugin_page_budget_cmd_open_account (GSimpleAction *simple,
     window = GNC_PLUGIN_PAGE(page)->window;
     for (tmp = acct_list; tmp; tmp = g_list_next (tmp))
     {
-        account = tmp->data;
+        auto account = GNC_ACCOUNT (tmp->data);
         new_page = gnc_plugin_page_register_new (account, FALSE);
         gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
     }
@@ -739,12 +737,11 @@ gnc_plugin_page_budget_cmd_open_subaccounts (GSimpleAction *simple,
                                              GVariant *parameter,
                                              gpointer user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
     GtkWidget *window;
     GncPluginPage *new_page;
     GList *acct_list, *tmp;
-    Account *account;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
@@ -753,7 +750,7 @@ gnc_plugin_page_budget_cmd_open_subaccounts (GSimpleAction *simple,
     window = GNC_PLUGIN_PAGE(page)->window;
     for (tmp = acct_list; tmp; tmp = g_list_next (tmp))
     {
-        account = tmp->data;
+        auto account = GNC_ACCOUNT(tmp->data);
         new_page = gnc_plugin_page_register_new (account, TRUE);
         gnc_main_window_open_page (GNC_MAIN_WINDOW(window), new_page);
     }
@@ -766,7 +763,7 @@ gnc_plugin_page_budget_cmd_delete_budget (GSimpleAction *simple,
                                           GVariant *parameter,
                                           gpointer user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
     GncBudget *budget;
 
@@ -784,7 +781,7 @@ gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple,
                                              GVariant      *parameter,
                                              gpointer       user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
     GtkTreeSelection *selection;
     Account *account = NULL;
@@ -803,7 +800,7 @@ gnc_plugin_page_budget_cmd_edit_tax_options (GSimpleAction *simple,
     if (gtk_tree_selection_count_selected_rows (selection) == 1)
     {
         GList *acc_list = gnc_budget_view_get_selected_accounts (priv->budget_view);
-        account = acc_list->data;
+        account = GNC_ACCOUNT (acc_list->data);
         g_list_free (acc_list);
     }
     gnc_tax_info_dialog (window, account);
@@ -818,7 +815,7 @@ gnc_plugin_page_budget_cmd_view_options (GSimpleAction *simple,
                                          GVariant *parameter,
                                          gpointer user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
     GncRecurrence *gr;
     GtkBuilder *builder;
@@ -963,7 +960,7 @@ estimate_budget_helper (GtkTreeModel *model, GtkTreePath *path,
     guint num_periods, i;
     gnc_numeric num;
     GncPluginPageBudgetPrivate *priv;
-    GncPluginPageBudget *page = data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET(data);
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
@@ -1017,7 +1014,7 @@ gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
                                             GVariant *parameter,
                                             gpointer user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
     GtkTreeSelection *sel;
     GtkWidget *dialog, *gde, *dtr, *hb, *avg;
@@ -1035,7 +1032,7 @@ gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
     {
         dialog = gtk_message_dialog_new (
                      GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))),
-                     GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                     (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
                      GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
                      _("You must select at least one account to estimate."));
         gtk_dialog_run (GTK_DIALOG(dialog));
@@ -1102,7 +1099,7 @@ allperiods_budget_helper (GtkTreeModel *model, GtkTreePath *path,
     guint num_periods, i;
     gnc_numeric num, allvalue;
     GncPluginPageBudgetPrivate *priv;
-    GncPluginPageBudget *page = data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET(data);
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
     priv = GNC_PLUGIN_PAGE_BUDGET_GET_PRIVATE(page);
@@ -1150,7 +1147,7 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
                                               GVariant *parameter,
                                               gpointer user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
     GtkTreeSelection *sel;
     GtkWidget *dialog, *val, *dtr, *add, *mult;
@@ -1166,7 +1163,7 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
     {
         dialog = gtk_message_dialog_new (
                     GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))),
-                    GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+                    (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
                     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
                     _("You must select at least one account to edit."));
         gtk_dialog_run (GTK_DIALOG(dialog));
@@ -1236,7 +1233,7 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
                                         GVariant *parameter,
                                         gpointer user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
     GtkWidget *dialog, *note;
     gint result;
@@ -1267,7 +1264,7 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
     {
         dialog = gtk_message_dialog_new(
             GTK_WINDOW(gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page))),
-            GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL,
+            (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
             GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
             _("You must select one budget cell to edit."));
         gtk_dialog_run(GTK_DIALOG(dialog));
@@ -1323,7 +1320,7 @@ gnc_plugin_page_budget_cmd_budget_report (GSimpleAction *simple,
                                           GVariant *parameter,
                                           gpointer user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET (page));
@@ -1358,7 +1355,7 @@ gnc_plugin_page_budget_cmd_view_filter_by (GSimpleAction *simple,
                                            GVariant *parameter,
                                            gpointer user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_BUDGET(page));
@@ -1375,7 +1372,7 @@ gnc_plugin_page_budget_cmd_refresh (GSimpleAction *simple,
                                     GVariant *parameter,
                                     gpointer user_data)
 {
-    GncPluginPageBudget *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_BUDGET (user_data);
     GncPluginPageBudgetPrivate *priv;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_BUDGET(page));
