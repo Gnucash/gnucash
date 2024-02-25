@@ -353,7 +353,7 @@ gnc_plugin_page_invoice_new (InvoiceWindow *iw)
             return GNC_PLUGIN_PAGE(invoice_page);
     }
 
-    invoice_page = g_object_new (GNC_TYPE_PLUGIN_PAGE_INVOICE, (char *)NULL);
+    invoice_page = GNC_PLUGIN_PAGE_INVOICE (g_object_new (GNC_TYPE_PLUGIN_PAGE_INVOICE, nullptr));
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(invoice_page);
     priv->iw = iw;
 
@@ -667,11 +667,11 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
     gnc_plugin_page_invoice_summarybar_position_changed(NULL, NULL, page);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_SUMMARYBAR_POSITION_TOP,
-                           gnc_plugin_page_invoice_summarybar_position_changed,
+                           (gpointer)gnc_plugin_page_invoice_summarybar_position_changed,
                            page);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
-                           gnc_plugin_page_invoice_summarybar_position_changed,
+                           (gpointer)gnc_plugin_page_invoice_summarybar_position_changed,
                            page);
 
     regWidget = gnc_invoice_get_register(priv->iw);
@@ -706,11 +706,11 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
 
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_SUMMARYBAR_POSITION_TOP,
-                                 gnc_plugin_page_invoice_summarybar_position_changed,
+                                 (gpointer)gnc_plugin_page_invoice_summarybar_position_changed,
                                  page);
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL,
                                  GNC_PREF_SUMMARYBAR_POSITION_BOTTOM,
-                                 gnc_plugin_page_invoice_summarybar_position_changed,
+                                 (gpointer)gnc_plugin_page_invoice_summarybar_position_changed,
                                  page);
 
     // Remove the page_changed signal callback
@@ -849,7 +849,7 @@ gnc_plugin_page_invoice_cmd_new_invoice (GSimpleAction *simple,
                                          GVariant *paramter,
                                          gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
 
@@ -867,7 +867,7 @@ gnc_plugin_page_invoice_cmd_new_account (GSimpleAction *simple,
                                          GVariant *paramter,
                                          gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GtkWindow *parent = NULL;
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
     parent = GTK_WINDOW (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (plugin_page)));
@@ -881,7 +881,7 @@ gnc_plugin_page_invoice_cmd_print (GSimpleAction *simple,
                                    GVariant *paramter,
                                    gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
 
@@ -899,7 +899,7 @@ gnc_plugin_page_invoice_cmd_cut (GSimpleAction *simple,
                                  GVariant *paramter,
                                  gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -915,7 +915,7 @@ gnc_plugin_page_invoice_cmd_copy (GSimpleAction *simple,
                                   GVariant *paramter,
                                   gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -931,7 +931,7 @@ gnc_plugin_page_invoice_cmd_paste (GSimpleAction *simple,
                                    GVariant *paramter,
                                    gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -947,7 +947,7 @@ gnc_plugin_page_invoice_cmd_edit (GSimpleAction *simple,
                                   GVariant *paramter,
                                   gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
 
@@ -965,7 +965,7 @@ gnc_plugin_page_invoice_cmd_edit_tax (GSimpleAction *simple,
                                       GVariant *paramter,
                                       gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GtkWidget *parent;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -981,7 +981,7 @@ gnc_plugin_page_invoice_cmd_duplicateInvoice (GSimpleAction *simple,
                                               GVariant *paramter,
                                               gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
 
@@ -999,7 +999,7 @@ gnc_plugin_page_invoice_cmd_post (GSimpleAction *simple,
                                   GVariant *paramter,
                                   gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -1015,7 +1015,7 @@ gnc_plugin_page_invoice_cmd_unpost (GSimpleAction *simple,
                                     GVariant *paramter,
                                     gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -1032,7 +1032,7 @@ gnc_plugin_page_invoice_cmd_sort_changed (GSimpleAction *simple,
                                           gpointer user_data)
 {
     GncPluginPageInvoicePrivate *priv;
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     gint item;
 
     g_return_if_fail (G_IS_SIMPLE_ACTION(simple));
@@ -1044,7 +1044,7 @@ gnc_plugin_page_invoice_cmd_sort_changed (GSimpleAction *simple,
     priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
     item = g_variant_get_int32 (parameter);
     g_action_change_state (G_ACTION(simple), parameter);
-    gnc_invoice_window_sort (priv->iw, item);
+    gnc_invoice_window_sort (priv->iw, (invoice_sort_type_t)item);
     LEAVE(" ");
 }
 
@@ -1053,7 +1053,7 @@ gnc_plugin_page_invoice_cmd_refresh (GSimpleAction *simple,
                                      GVariant *paramter,
                                      gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -1070,7 +1070,7 @@ gnc_plugin_page_invoice_cmd_enter (GSimpleAction *simple,
                                    GVariant *paramter,
                                    gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -1086,7 +1086,7 @@ gnc_plugin_page_invoice_cmd_cancel (GSimpleAction *simple,
                                     GVariant *paramter,
                                     gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -1102,7 +1102,7 @@ gnc_plugin_page_invoice_cmd_delete (GSimpleAction *simple,
                                     GVariant *paramter,
                                     gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -1118,7 +1118,7 @@ gnc_plugin_page_invoice_cmd_blank (GSimpleAction *simple,
                                    GVariant *paramter,
                                    gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -1134,7 +1134,7 @@ gnc_plugin_page_invoice_cmd_duplicateEntry (GSimpleAction *simple,
                                             GVariant *paramter,
                                             gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
@@ -1150,7 +1150,7 @@ gnc_plugin_page_invoice_cmd_entryUp (GSimpleAction *simple,
                                      GVariant *paramter,
                                      gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
 
@@ -1165,7 +1165,7 @@ gnc_plugin_page_invoice_cmd_entryDown (GSimpleAction *simple,
                                        GVariant *paramter,
                                        gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
 
@@ -1180,7 +1180,7 @@ gnc_plugin_page_invoice_cmd_pay_invoice (GSimpleAction *simple,
                                          GVariant *paramter,
                                          gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
 
@@ -1198,7 +1198,7 @@ gnc_plugin_page_invoice_cmd_save_layout (GSimpleAction *simple,
                                          GVariant *paramter,
                                          gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     GAction *layout_action;
 
@@ -1220,7 +1220,7 @@ gnc_plugin_page_invoice_cmd_reset_layout (GSimpleAction *simple,
                                           GVariant *paramter,
                                           gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     GAction *layout_action;
 
@@ -1242,7 +1242,7 @@ gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple,
                                   GVariant *paramter,
                                   gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
     GncInvoice *invoice;
@@ -1300,7 +1300,7 @@ gnc_plugin_page_invoice_cmd_link_open (GSimpleAction *simple,
                                        GVariant *paramter,
                                        gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
     GncInvoice *invoice;
@@ -1325,7 +1325,7 @@ gnc_plugin_page_invoice_cmd_company_report (GSimpleAction *simple,
                                             GVariant *paramter,
                                             gpointer user_data)
 {
-    GncPluginPageInvoice *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
 
@@ -1383,7 +1383,7 @@ gnc_plugin_page_invoice_update_title (GncPluginPage *plugin_page)
 static void
 gnc_plugin_page_invoice_refresh_cb (GHashTable *changes, gpointer user_data)
 {
-    GncPluginPageInvoice *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_INVOICE(user_data);
     GncPluginPageInvoicePrivate *priv;
     GtkWidget *reg;
 
