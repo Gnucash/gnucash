@@ -112,7 +112,7 @@ set (gnc_gnome_SOURCES
   gnc-plugin-page-account-tree.cpp
   gnc-plugin-page-budget.cpp
   gnc-plugin-page-invoice.cpp
-  gnc-plugin-page-owner-tree.c
+  gnc-plugin-page-owner-tree.cpp
   gnc-plugin-page-register.cpp
   gnc-plugin-page-report.cpp
   gnc-plugin-page-sx-list.c

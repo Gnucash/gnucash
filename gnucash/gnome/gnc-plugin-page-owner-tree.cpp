@@ -267,7 +267,7 @@ gnc_plugin_page_owner_tree_new (GncOwnerType owner_type)
         }
     }
 
-    plugin_page = g_object_new(GNC_TYPE_PLUGIN_PAGE_OWNER_TREE, NULL);
+    plugin_page = GNC_PLUGIN_PAGE_OWNER_TREE(g_object_new(GNC_TYPE_PLUGIN_PAGE_OWNER_TREE, nullptr));
 
     priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(plugin_page);
     priv->owner_type = owner_type;
@@ -469,7 +469,7 @@ gnc_plugin_page_owner_tree_get_current_owner (GncPluginPageOwnerTree *page)
 static void
 gnc_plugin_page_owner_refresh_cb (GHashTable *changes, gpointer user_data)
 {
-    GncPluginPageOwnerTree *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_OWNER_TREE(user_data);
     GncPluginPageOwnerTreePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_OWNER_TREE(page));
@@ -501,7 +501,7 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     GtkWidget *scrolled_window;
     GtkTreeViewColumn *col;
     const gchar *state_section = NULL;
-    gchar* label = "";
+    const gchar* label = "";
     const gchar *style_label = NULL;
 
     ENTER("page %p", plugin_page);
@@ -714,7 +714,7 @@ gnc_plugin_page_owner_tree_recreate_page (GtkWidget *window,
     ENTER("key_file %p, group_name %s", key_file, group_name);
 
     /* Create the new page. */
-    owner_type = g_key_file_get_integer(key_file, group_name, OWNER_TYPE_LABEL, NULL);
+    owner_type = static_cast<GncOwnerType>(g_key_file_get_integer(key_file, group_name, OWNER_TYPE_LABEL, NULL));
     page = gnc_plugin_page_owner_tree_new(owner_type);
     owner_page = GNC_PLUGIN_PAGE_OWNER_TREE(page);
     priv = GNC_PLUGIN_PAGE_OWNER_TREE_GET_PRIVATE(owner_page);
@@ -837,8 +837,8 @@ gnc_plugin_page_owner_tree_selection_changed_cb (GtkTreeSelection *selection,
 static int
 build_aging_report (GncOwnerType owner_type)
 {
-    gchar *report_name = NULL;
-    gchar *report_title = NULL;
+    const gchar *report_name = NULL;
+    const gchar *report_title = NULL;
     SCM args;
     SCM func;
     SCM arg;
@@ -951,7 +951,7 @@ gnc_plugin_page_owner_tree_cmd_new_owner (GSimpleAction *simple,
                                           gpointer user_data)
 
 {
-    GncPluginPageOwnerTree *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_OWNER_TREE (user_data);
     GncPluginPageOwnerTreePrivate *priv;
     GtkWindow *parent;
 
@@ -995,7 +995,7 @@ gnc_plugin_page_owner_tree_cmd_edit_owner (GSimpleAction *simple,
                                            gpointer user_data)
 
 {
-    GncPluginPageOwnerTree *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_OWNER_TREE (user_data);
     GtkWindow *parent;
     GncOwner *owner = gnc_plugin_page_owner_tree_get_current_owner (page);
     if (NULL == owner) return;
@@ -1015,7 +1015,7 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GSimpleAction *simple,
                                              gpointer user_data)
 
 {
-    GncPluginPageOwnerTree *page = user_data;
+    auto page = GNC_PLUGIN_PAGE_OWNER_TREE (user_data);
     GncOwner *owner = gnc_plugin_page_owner_tree_get_current_owner (page);
     gchar *owner_name;
     GtkWidget *window;
@@ -1089,7 +1089,7 @@ gnc_plugin_page_owner_tree_cmd_view_filter_by (GSimpleAction *simple,
                                                gpointer user_data)
 
 {
-    GncPluginPageOwnerTree *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_OWNER_TREE(user_data);
     GncPluginPageOwnerTreePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_OWNER_TREE(plugin_page));
@@ -1106,7 +1106,7 @@ gnc_plugin_page_owner_tree_cmd_refresh (GSimpleAction *simple,
                                         gpointer user_data)
 
 {
-    GncPluginPageOwnerTree *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_OWNER_TREE(user_data);
     GncPluginPageOwnerTreePrivate *priv;
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_OWNER_TREE(plugin_page));
@@ -1120,7 +1120,7 @@ gnc_plugin_page_owner_tree_cmd_edit_tax (GSimpleAction *simple,
                                          GVariant *parameter,
                                          gpointer user_data)
 {
-    GncPluginPageOwnerTree *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_OWNER_TREE(user_data);
     GtkWidget *parent;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_OWNER_TREE(plugin_page));
@@ -1136,7 +1136,7 @@ gnc_plugin_page_owner_tree_cmd_new_invoice (GSimpleAction *simple,
                                             gpointer user_data)
 
 {
-    GncPluginPageOwnerTree *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_OWNER_TREE(user_data);
     GncPluginPageOwnerTreePrivate *priv;
     GncOwner current_owner;
     GtkWindow *parent;
@@ -1189,7 +1189,7 @@ gnc_plugin_page_owner_tree_cmd_owners_report (GSimpleAction *simple,
                                               gpointer user_data)
 
 {
-    GncPluginPageOwnerTree *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_OWNER_TREE(user_data);
     GncPluginPageOwnerTreePrivate *priv;
     int id;
 
@@ -1215,7 +1215,7 @@ gnc_plugin_page_owner_tree_cmd_owner_report (GSimpleAction *simple,
                                              gpointer user_data)
 
 {
-    GncPluginPageOwnerTree *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_OWNER_TREE(user_data);
     GncOwner *current_owner;
     int id;
 
@@ -1242,7 +1242,7 @@ gnc_plugin_page_owner_tree_cmd_process_payment (GSimpleAction *simple,
                                                 gpointer user_data)
 
 {
-    GncPluginPageOwnerTree *plugin_page = user_data;
+    auto plugin_page = GNC_PLUGIN_PAGE_OWNER_TREE(user_data);
     ENTER("(action %p, plugin_page %p)", simple, plugin_page);
 
     g_return_if_fail(GNC_IS_PLUGIN_PAGE_OWNER_TREE(plugin_page));
