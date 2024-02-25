@@ -35,6 +35,8 @@
 
 #include <config.h>
 
+#include <optional>
+
 #include <libguile.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -3857,6 +3859,15 @@ gnc_plugin_page_register_cmd_unvoid_transaction (GSimpleAction *simple,
     LEAVE (" ");
 }
 
+static std::optional<time64>
+input_date (GtkWidget * parent, const char *window_title, const char* title)
+{
+    time64 rv = gnc_time (nullptr);
+    if (!gnc_dup_time64_dialog (parent, window_title, title, &rv))
+        return {};
+
+    return rv;
+}
 
 static void
 gnc_plugin_page_register_cmd_reverse_transaction (GSimpleAction *simple,
@@ -3868,7 +3879,6 @@ gnc_plugin_page_register_cmd_reverse_transaction (GSimpleAction *simple,
     SplitRegister* reg;
     GNCSplitReg* gsr;
     Transaction* trans, *new_trans;
-    time64 date = gnc_time (NULL);
     GtkWidget *window;
     Account *account;
     Split *split;
@@ -3906,8 +3916,8 @@ gnc_plugin_page_register_cmd_reverse_transaction (GSimpleAction *simple,
     }
     else
     {
-        if (!gnc_dup_time64_dialog (window, _("Reverse Transaction"),
-                                    _("New Transaction Information"), &date))
+        auto date = input_date (window, _("Reverse Transaction"), _("New Transaction Information"));
+        if (!date)
         {
             LEAVE ("reverse cancelled");
             return;
@@ -3917,7 +3927,7 @@ gnc_plugin_page_register_cmd_reverse_transaction (GSimpleAction *simple,
         new_trans = xaccTransReverse (trans);
 
         /* Clear transaction level info */
-        xaccTransSetDatePostedSecsNormalized (new_trans, date);
+        xaccTransSetDatePostedSecsNormalized (new_trans, date.value());
         xaccTransSetDateEnteredSecs (new_trans, gnc_time (NULL));
 
         gnc_resume_gui_refresh();
@@ -4672,14 +4682,14 @@ gnc_plugin_page_register_cmd_goto_date (GSimpleAction *simple,
     auto page = GNC_PLUGIN_PAGE_REGISTER(user_data);
     GNCSplitReg* gsr;
     Query* query;
-    time64 date = gnc_time (NULL);
     GList *splits;
+    GtkWidget *window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page));
 
     ENTER ("(action %p, page %p)", simple, page);
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    if (!gnc_dup_time64_dialog (gnc_plugin_page_get_window (GNC_PLUGIN_PAGE (page)),
-                                _("Go to Date"), _("Go to Date"), &date))
+    auto date = input_date (window, _("Go to Date"), _("Go to Date"));
+    if (!date)
     {
         LEAVE ("goto_date cancelled");
         return;
@@ -4692,7 +4702,7 @@ gnc_plugin_page_register_cmd_goto_date (GSimpleAction *simple,
 
     for (GList *lp = splits; lp; lp = lp->next)
     {
-        if (xaccTransGetDate (xaccSplitGetParent (GNC_SPLIT(lp->data))) >= date)
+        if (xaccTransGetDate (xaccSplitGetParent (GNC_SPLIT(lp->data))) >= date.value())
         {
             gnc_split_reg_jump_to_split (gsr, GNC_SPLIT(lp->data));
             break;
