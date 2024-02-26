@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-02-16 01:11+0100\n"
-"PO-Revision-Date: 2024-02-23 00:01+0000\n"
+"PO-Revision-Date: 2024-02-26 22:45+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1627,7 +1627,7 @@ msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
-"A társaság nem pénzbeli kifizetést nyújt, amit osztalékjövedelemként "
+"A társaság nem pénzbeli kifizetést nyújt, amit osztalékbevételként "
 "könyvelünk el. Ez növeli a bekerülési értéket, miközben a részvények száma "
 "nem változik."
 
@@ -1788,9 +1788,9 @@ msgid ""
 msgstr ""
 "A társaság nem pénzbeli kifizetést nyújt és a shortolt részvény "
 "tulajdonosának kompenzációt kell fizetnie érte. Ezt veszteségként, azaz "
-"negatív osztalékjövedelemként könyveljük, ami növeli a bekerülési értéket "
-"(még negatívabbá teszi, távolítja a nullától), miközben a részvények száma "
-"nem változik."
+"negatív osztalékbevételként könyveljük, ami növeli a bekerülési értéket (még "
+"negatívabbá teszi, távolítja a nullától), miközben a részvények száma nem "
+"változik."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
@@ -7446,13 +7446,13 @@ msgid ""
 "Could not write to file %s. Check that you have permission to write to this "
 "file and that there is sufficient space to create it."
 msgstr ""
-"Nem sikerült %s fájlba írni. Ellenőrizze, hogy van-e írási engedélye e "
-"fájlra, és hogy van-e elég hely az elkészítéséhez."
+"Nem sikerült ebbe a fájlba írni: %s. Ellenőrizze, hogy van-e írási engedélye "
+"ehez a fájlhoz, és van-e elég tárhely a végrehajtáshoz."
 
 #: gnucash/gnome-utils/gnc-file.c:475
 #, c-format
 msgid "No read permission to read from file %s."
-msgstr "Önnek nincs hozzáférési joga %s fájlhoz."
+msgstr "%s fájlhoz nincs olvasási joga."
 
 #. Translators: the first %s is a path in the filesystem,
 #. the second %s is PACKAGE_NAME, which by default is "GnuCash"
@@ -9420,55 +9420,31 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:32
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "Set the sort column in the \"since last run\" dialog."
 msgstr ""
-"A \"Létrehozott tranzakciók felülvizsgálata\" legyen alapértelmezett az "
-"\"Utolsó futtatás óta\" párbeszédpanelen."
+"A rendezési oszlop beállítása az „Utolsó futtatás óta” párbeszédpanelen.."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:33
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "This settings sets the sort column in the \"since last run\" dialog."
 msgstr ""
-"A \"Létrehozott tranzakciók felülvizsgálata\" legyen alapértelmezett az "
-"\"Utolsó futtatás óta\" párbeszédpanelen."
+"Ez a beállítás a rendezési oszlopot állítja be az „Utolsó futtatás óta” "
+"párbeszédpanelen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:37
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "Set the sort direction in the \"since last run\" dialog."
-msgstr ""
-"A \"Létrehozott tranzakciók felülvizsgálata\" legyen alapértelmezett az "
-"\"Utolsó futtatás óta\" párbeszédpanelen."
+msgstr "A rendezési irány beállítása az „Utolsó futtatás óta” párbeszédpanelen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:38
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "This settings sets the sort direction in the \"since last run\" dialog."
 msgstr ""
-"A \"Létrehozott tranzakciók felülvizsgálata\" legyen alapértelmezett az "
-"\"Utolsó futtatás óta\" párbeszédpanelen."
+"Ez a beállítás a rendezési irányt állítja be az „Utolsó futtatás óta” "
+"párbeszédpanelen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:43
-#, fuzzy
-#| msgid ""
-#| "Set 'Review created transactions' as the default in the \"since last "
-#| "run\" dialog."
 msgid "The depth used in the tree to sort in the \"since last run\" dialog."
 msgstr ""
-"A \"Létrehozott tranzakciók felülvizsgálata\" legyen alapértelmezett az "
-"\"Utolsó futtatás óta\" párbeszédpanelen."
+"A rendezési fában használt mélység az „Utolsó futtatás óta” párbeszédpanelen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:49
 msgid "Set the \"auto create\" flag by default"
@@ -22411,17 +22387,17 @@ msgstr "Adójelentés és XML exportálás"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:839
 msgid "Taxable Income / Deductible Expenses / Export to .XML file"
-msgstr "Adóköteles jövedelem / Levonható költségek / Exportálás .XML fájlba"
+msgstr "Adóköteles bevétel / Levonható költségek / Exportálás .XML fájlba"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:843
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:851
 msgid "Taxable Income / Deductible Expenses"
-msgstr "Adóköteles jövedelem / Levonható költségek"
+msgstr "Adóköteles bevétel / Levonható költségek"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:844
 msgid "This report shows your Taxable Income and Deductible Expenses."
 msgstr ""
-"E jelentés az adóköteles jövedelemet és a levonható költségeket mutatja."
+"Ez a jelentés az adóköteles bevételt és a levonható költségeket mutatja."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:848
 msgid "XML"
@@ -22429,8 +22405,7 @@ msgstr "XML"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:852
 msgid "This page shows your Taxable Income and Deductible Expenses."
-msgstr ""
-"Ez az oldal az adóköteles jövedelemet és a levonható költségeket mutatja."
+msgstr "Ez az oldal az adóköteles bevételt és a levonható költségeket mutatja."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:119
 msgid "Tax Schedule Report/TXF Export"
@@ -22524,13 +22499,12 @@ msgid ""
 "Taxable Income/Deductible Expenses with Transaction Detail/Export to .TXF "
 "file"
 msgstr ""
-"Adóköteles jövedelem / Levonható költségek tranzakciókkal / Export .TXF "
-"fájlba"
+"Adóköteles bevétel / Levonható költségek tranzakciókkal / Export .TXF fájlba"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3316
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3324
 msgid "Taxable Income/Deductible Expenses"
-msgstr "Adóköteles jövedelem / Levonható költségek"
+msgstr "Adóköteles bevétel / Levonható költségek"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:3317
 msgid ""
@@ -23907,22 +23881,22 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:95
 #: gnucash/report/reports/standard/income-statement.scm:82
 msgid "Label the revenue section"
-msgstr "A jövedelemszakasz megcímkézése"
+msgstr "Árbevételrész megjelölése"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:97
 #: gnucash/report/reports/standard/income-statement.scm:84
 msgid "Whether or not to include a label for the revenue section."
-msgstr ""
+msgstr "Tartalmazza az árbevétel részének megjelölését."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:98
 #: gnucash/report/reports/standard/income-statement.scm:85
 msgid "Include revenue total"
-msgstr "Jövedelemösszeg feltüntetése"
+msgstr "Teljes árbevétel feltüntetése"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:100
 #: gnucash/report/reports/standard/income-statement.scm:87
 msgid "Whether or not to include a line indicating total revenue."
-msgstr ""
+msgstr "Tartalmazzon egy sort, amely feltünteti a teljes árbevételt."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:101
 #: gnucash/report/reports/standard/income-statement.scm:94
@@ -23937,17 +23911,17 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:104
 #: gnucash/report/reports/standard/income-statement.scm:97
 msgid "Include expense total"
-msgstr "Költségösszeg feltüntetése"
+msgstr "Teljes költség feltüntetése"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:106
 #: gnucash/report/reports/standard/income-statement.scm:99
 msgid "Whether or not to include a line indicating total expense."
-msgstr ""
+msgstr "Tartalmazzon egy sort, amely feltünteti a teljes költséget."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:118
 #: gnucash/report/reports/standard/income-statement.scm:123
 msgid "Display as a two column report"
-msgstr "két oszlopos jelentés megjelenítése"
+msgstr "Kétoszlopos jelentésként jelenítse meg"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:120
 #: gnucash/report/reports/standard/income-statement.scm:125
@@ -23977,17 +23951,17 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-income-statement.scm:482
 #: gnucash/report/reports/standard/income-statement.scm:461
 msgid "Revenues"
-msgstr "Jövedelmek"
+msgstr "Árbevétel"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:485
 #: gnucash/report/reports/standard/income-statement.scm:464
 msgid "Total Revenue"
-msgstr "Jövedelem összesen"
+msgstr "Teljes árbevétel"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:495
 #: gnucash/report/reports/standard/income-statement.scm:472
 msgid "Total Expenses"
-msgstr "Költségek összesen"
+msgstr "Teljes költség"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:503
 #, scheme-format
@@ -24022,7 +23996,7 @@ msgstr "Nettó veszteség"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:577
 msgid "Budget Income Statement"
-msgstr ""
+msgstr "Költségvetés-bevételkimutatás"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:578
 msgid "Budget Profit & Loss"
@@ -24673,7 +24647,7 @@ msgstr "Másodlagos sorrend"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:43
 msgid "Income and GST Statement"
-msgstr "Bevétel- és GST-jelentés"
+msgstr "Bevétel- és GST-kimutatás"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:45
 #: gnucash/report/trep-engine.scm:117
@@ -24883,7 +24857,7 @@ msgstr "Összes kereskedés"
 #: gnucash/report/reports/standard/income-statement.scm:552
 #: gnucash/report/reports/standard/trial-balance.scm:535
 msgid "Income Statement"
-msgstr "Bevételjelentés"
+msgstr "Bevételkimutatás"
 
 #: gnucash/report/reports/standard/income-statement.scm:553
 msgid "Profit & Loss"
@@ -25582,13 +25556,12 @@ msgid "Invoice owner ID"
 msgstr "Kimenőszámla tulajdonosának azonosítója"
 
 #: gnucash/report/reports/standard/invoice.scm:499
-#, fuzzy
 msgid "Display the customer/vendor id?"
-msgstr "Művelet megjelenítése?"
+msgstr "Ügyfél-/beszállító-azonosító megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:503
 msgid "Display the invoice notes?"
-msgstr "Számlamegjegyzések megjelenítése?"
+msgstr "Kimenőszámla megjegyzéseinek megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:506
 msgid "Payments"
@@ -25596,21 +25569,19 @@ msgstr "Befizetések"
 
 #: gnucash/report/reports/standard/invoice.scm:507
 msgid "Display the payments applied to this invoice?"
-msgstr "E számlához tartozó befizetések megjelenítése?"
+msgstr "Ehez a kimenőszámlához tartozó befizetések megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:510
-#, fuzzy
 msgid "Job Details"
-msgstr "Megbízás párbeszédablak"
+msgstr "Megbízás részletei"
 
 #: gnucash/report/reports/standard/invoice.scm:511
-#, fuzzy
 msgid "Display the job name for this invoice?"
-msgstr "E számlához tartozó befizetések megjelenítése?"
+msgstr "Ehez a kimenőszámlához tartozó megbízás nevének megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:515
 msgid "Extra notes to put on the invoice."
-msgstr "A számlán feltüntetendő további megjegyzések."
+msgstr "A kimenőszámlán feltüntetendő további megjegyzések."
 
 #: gnucash/report/reports/standard/invoice.scm:516
 #: gnucash/report/reports/standard/taxinvoice.scm:222
@@ -25693,39 +25664,35 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:789
 #, scheme-format
 msgid "~a #~a"
-msgstr ""
+msgstr "~a Sz.: ~a"
 
 #: gnucash/report/reports/standard/lot-viewer.scm:56
 msgid "The account to search for lots."
-msgstr ""
+msgstr "A gyüjtemények keresési számlája."
 
 #: gnucash/report/reports/standard/net-charts.scm:48
 msgid "Show Net Profit"
 msgstr "Nettó nyereség megjelenítése"
 
 #: gnucash/report/reports/standard/net-charts.scm:50
-#, fuzzy
 msgid "Show Asset & Liability"
-msgstr "Eszköz és forrás oszlopok megjelenítése"
+msgstr "Eszköz és kötelezettség megjelenítése"
 
 #: gnucash/report/reports/standard/net-charts.scm:51
-#, fuzzy
 msgid "Show Net Worth"
-msgstr "Nettó érték oszlopok megjelenítése"
+msgstr "Nettó vagyon megjelenítése"
 
 #: gnucash/report/reports/standard/net-charts.scm:56
-#, fuzzy
 msgid "Line Width"
-msgstr "Számla szélessége"
+msgstr "Vonalvastagság"
 
 #: gnucash/report/reports/standard/net-charts.scm:57
-#, fuzzy
 msgid "Set line width in pixels."
-msgstr "A rajz magassága képpontban."
+msgstr "Vonalvastagság beállítása pixelben."
 
 #: gnucash/report/reports/standard/net-charts.scm:62
 msgid "Grid"
-msgstr ""
+msgstr "Rács"
 
 #: gnucash/report/reports/standard/net-charts.scm:103
 msgid "Show Income and Expenses?"
@@ -25733,7 +25700,7 @@ msgstr "Bevételek és költségek megjelenítése?"
 
 #: gnucash/report/reports/standard/net-charts.scm:104
 msgid "Show the Asset and the Liability bars?"
-msgstr "Eszköz és forrás oszlopok megjelenítése?"
+msgstr "Eszköz- és kötelezettségoszlopok megjelenítése?"
 
 #: gnucash/report/reports/standard/net-charts.scm:112
 msgid "Show the net profit?"
@@ -25741,11 +25708,11 @@ msgstr "Nettó profit megjelenítése?"
 
 #: gnucash/report/reports/standard/net-charts.scm:113
 msgid "Show a Net Worth bar?"
-msgstr "Nettó érték oszlop megjelenítése?"
+msgstr "Nettóvagyon-oszlop megjelenítése?"
 
 #: gnucash/report/reports/standard/net-charts.scm:136
 msgid "Add grid lines."
-msgstr ""
+msgstr "Rácsvonalak hozzáadása."
 
 #: gnucash/report/reports/standard/net-charts.scm:375
 #: gnucash/report/reports/standard/net-charts.scm:406
@@ -25755,31 +25722,28 @@ msgstr "Nettó nyereség"
 #: gnucash/report/reports/standard/net-charts.scm:375
 #: gnucash/report/reports/standard/net-charts.scm:407
 msgid "Net Worth"
-msgstr "Nettó érték"
+msgstr "Nettó vagyon"
 
 #: gnucash/report/reports/standard/net-charts.scm:471
 msgid "Net Worth Barchart"
-msgstr "Nettó érték oszlopdiagramja"
+msgstr "Nettóvagyon-oszlopdiagram"
 
 #: gnucash/report/reports/standard/net-charts.scm:482
 msgid "Income/Expense Chart"
-msgstr "Bevétel/költség ábra"
+msgstr "Bevétel/költségdiagram"
 
 #: gnucash/report/reports/standard/net-charts.scm:484
-#, fuzzy
 msgid "Income & Expense Barchart"
-msgstr "Bevétel és költség ábrája"
+msgstr "Bevétel- és költség-oszlopdiagram"
 
 #: gnucash/report/reports/standard/net-charts.scm:494
-#, fuzzy
 msgid "Net Worth Linechart"
-msgstr "Nettó érték oszlopdiagramja"
+msgstr "Nettóvagyon-vonaldiagram"
 
 #: gnucash/report/reports/standard/net-charts.scm:507
 #: gnucash/report/reports/standard/net-charts.scm:509
-#, fuzzy
 msgid "Income & Expense Linechart"
-msgstr "Bevétel és költség ábrája"
+msgstr "Bevétel- és költség-vonaldiagram"
 
 #: gnucash/report/reports/standard/new-aging.scm:40
 msgid "Sort By"
@@ -26844,7 +26808,7 @@ msgstr "Készítendő próbaegyenleg fajtája."
 
 #: gnucash/report/reports/standard/trial-balance.scm:77
 msgid "Merchandising"
-msgstr ""
+msgstr "Értékesítés"
 
 #: gnucash/report/reports/standard/trial-balance.scm:78
 msgid "Gross adjustment accounts."
@@ -26855,8 +26819,8 @@ msgid ""
 "Do not net, but show gross debit/credit adjustments to these accounts. "
 "Merchandising businesses will normally select their inventory accounts here."
 msgstr ""
-"Nem nettó, hanem bruttó tartozik/követel korrekciók feltüntetése ezen "
-"számlákon.Kereskedelmi vállalatok rendszerint a leltárszámláikat választják "
+"Nem a nettó, hanem bruttó tartozik/követel korrekciók feltüntetése ezeken a "
+"számlákon. Kereskedelmi vállalatok rendszerint a leltárszámláikat választják "
 "ki itt."
 
 #: gnucash/report/reports/standard/trial-balance.scm:81
@@ -26870,7 +26834,7 @@ msgid ""
 "useful for merchandising businesses."
 msgstr ""
 "A korrekciók ezen számlákon bruttók (lásd fent) a Korrekciók, Korrigált "
-"próbaegyenleg és a Bevételjelentés oszlopokban. Leginkább kereskedelmi "
+"próbaegyenleg és a Bevételkimutatás oszlopokban. Leginkább kereskedelmi "
 "vállalatoknak hasznos."
 
 #: gnucash/report/reports/standard/trial-balance.scm:86
