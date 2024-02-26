@@ -37,10 +37,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-02-16 01:11+0100\n"
-"PO-Revision-Date: 2024-01-27 13:01+0000\n"
+"PO-Revision-Date: 2024-02-25 15:02+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -49,7 +49,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -4088,11 +4088,11 @@ msgstr[1] ""
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1266
 msgid "Highlight a date first to sort by occurrence date."
-msgstr ""
+msgstr "Zuerst ein Datum auswählen um danach zu Suchen."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
 msgid "Highlight a schedule first to sort by schedule name."
-msgstr ""
+msgstr "Zuerst einen Zeitplan auswählen um danach zu Suchen."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1379
 #: gnucash/gnome-search/dialog-search.c:1105
@@ -9666,12 +9666,10 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:43
-#, fuzzy
-#| msgid "This settings sets the sort column in the \"since last run\" dialog."
 msgid "The depth used in the tree to sort in the \"since last run\" dialog."
 msgstr ""
-"Diese Einstellung legt die Sortierspalte im \"seit letzten Aufruf\"-Dialog "
-"fest."
+"Die Tiefe, die im Baum verwendet wird, um im Dialogfeld \"seit dem letzten "
+"Lauf\" zu sortieren."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:49
 msgid "Set the \"auto create\" flag by default"
@@ -21029,10 +21027,9 @@ msgid "Missing transaction date."
 msgstr "Buchungsdatum fehlt."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:601
-#, fuzzy, scheme-format
-#| msgid "Missing transaction date."
+#, scheme-format
 msgid "Missing QIF investment action for transaction dated ~a."
-msgstr "Buchungsdatum fehlt."
+msgstr "Fehlende QIF Investition für Buchung vom ~a."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1426
 msgid "Invalid transaction date."
@@ -28000,7 +27997,7 @@ msgstr "Hintergrundkachel für Berichte."
 #: gnucash/report/stylesheets/footer.scm:86
 #: gnucash/report/stylesheets/head-or-tail.scm:127
 msgid "Heading Banner"
-msgstr "Titel"
+msgstr "Kopfleiste"
 
 #: gnucash/report/stylesheets/footer.scm:86
 #: gnucash/report/stylesheets/footer.scm:91
@@ -28012,7 +28009,7 @@ msgstr "Titel für die Titelzeile des Berichts."
 #: gnucash/report/stylesheets/footer.scm:91
 #: gnucash/report/stylesheets/head-or-tail.scm:131
 msgid "Heading Alignment"
-msgstr "Ausrichtung Überschrift"
+msgstr "Ausrichtung Kopfzeile"
 
 #: gnucash/report/stylesheets/footer.scm:93
 #: gnucash/report/stylesheets/head-or-tail.scm:133
