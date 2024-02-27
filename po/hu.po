@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-02-16 01:11+0100\n"
-"PO-Revision-Date: 2024-02-26 22:45+0000\n"
+"PO-Revision-Date: 2024-02-27 15:03+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -23571,9 +23571,8 @@ msgstr "Minden összeg átváltása egy közös pénznembe."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:116
 #: gnucash/report/trep-engine.scm:113
-#, fuzzy
 msgid "Show original currency amount"
-msgstr "Nem pénzjavak megjelenítése"
+msgstr "Az eredeti pénznemű összeg megjelenítése"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:117
 #: gnucash/report/trep-engine.scm:556
@@ -23653,7 +23652,7 @@ msgstr "Bevételkimutatás (Többoszlopos)"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
-msgstr ""
+msgstr "Költségvetés-mérleg"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:94
 msgid "Include new/existing totals"
@@ -23726,9 +23725,8 @@ msgid "New Equity"
 msgstr ""
 
 #: gnucash/report/reports/standard/budget-barchart.scm:36
-#, fuzzy
 msgid "Budget Chart"
-msgstr "Budget Barchart"
+msgstr "Költségvetés-diagram"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:41
 msgid "Running Sum"
@@ -23736,38 +23734,36 @@ msgstr "Futó egyenleg"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:42
 #: gnucash/report/reports/standard/category-barchart.scm:84
-#, fuzzy
 msgid "Chart Type"
-msgstr "Fizetési mód"
+msgstr "Diagramtípus"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:50
 #: gnucash/report/reports/standard/budget-income-statement.scm:60
 #: gnucash/report/reports/standard/budget.scm:74
 msgid "Range start"
-msgstr ""
+msgstr "Tartomány kezdete"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:52
 #: gnucash/report/reports/standard/budget.scm:76
-#, fuzzy
 msgid "Select a budget period type that starts the reporting range."
-msgstr "Select a budget period that ends the reporting range."
+msgstr ""
+"Válasszon ki egy költségvetési időszaktípust, a jelentéstartomány kezdetének."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:53
 #: gnucash/report/reports/standard/budget.scm:77
 msgid "Exact start period"
-msgstr ""
+msgstr "Pontos kezdőidőszak"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:55
 #: gnucash/report/reports/standard/budget.scm:79
-#, fuzzy
 msgid "Select exact period that starts the reporting range."
-msgstr "Select a budget period that ends the reporting range."
+msgstr "Válassza ki a jelentéstartomány pontos kezdőidőszakát."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
 #: gnucash/report/reports/standard/budget-income-statement.scm:64
 #: gnucash/report/reports/standard/budget.scm:81
 msgid "Range end"
-msgstr ""
+msgstr "Tartomány vége"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:59
 #: gnucash/report/reports/standard/budget.scm:83
@@ -23896,17 +23892,21 @@ msgstr "Teljes árbevétel feltüntetése"
 #: gnucash/report/reports/standard/budget-income-statement.scm:100
 #: gnucash/report/reports/standard/income-statement.scm:87
 msgid "Whether or not to include a line indicating total revenue."
-msgstr "Tartalmazzon egy sort, amely feltünteti a teljes árbevételt."
+msgstr ""
+"Függetlenül attól, hogy a diagram tartalmazza vagy nem tartalmazza a teljes "
+"árbevételt, egy vonallal feltünteti azt."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:101
 #: gnucash/report/reports/standard/income-statement.scm:94
 msgid "Label the expense section"
-msgstr "A költségszakasz megcímkézése"
+msgstr "A költségrész megjelölése"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:103
 #: gnucash/report/reports/standard/income-statement.scm:96
 msgid "Whether or not to include a label for the expense section."
 msgstr ""
+"Függetlenül attól, hogy a diagram tartalmazza vagy nem tartalmazza a "
+"költségrészt, megjelöli azt."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:104
 #: gnucash/report/reports/standard/income-statement.scm:97
@@ -23916,7 +23916,9 @@ msgstr "Teljes költség feltüntetése"
 #: gnucash/report/reports/standard/budget-income-statement.scm:106
 #: gnucash/report/reports/standard/income-statement.scm:99
 msgid "Whether or not to include a line indicating total expense."
-msgstr "Tartalmazzon egy sort, amely feltünteti a teljes költséget."
+msgstr ""
+"Függetlenül attól, hogy a diagram tartalmazza vagy nem tartalmazza a teljes "
+"költséget, egy vonallal feltünteti azt."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:118
 #: gnucash/report/reports/standard/income-statement.scm:123
