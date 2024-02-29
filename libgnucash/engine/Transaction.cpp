@@ -25,6 +25,7 @@
 \********************************************************************/
 
 #include "qofinstance.h"
+#include <__nullptr>
 #include <config.h>
 
 #include <platform.h>
@@ -754,10 +755,7 @@ xaccTransCopyFromClipBoard(const Transaction *from_trans, Transaction *to_trans,
     change_accounts = from_acc && GNC_IS_ACCOUNT(to_acc) && from_acc != to_acc;
     xaccTransBeginEdit(to_trans);
 
-    FOR_EACH_SPLIT(to_trans, xaccSplitDestroy(s));
-    g_list_free(to_trans->splits);
-    to_trans->splits = NULL;
-
+    xaccTransClearSplits(to_trans);
     xaccTransSetCurrency(to_trans, xaccTransGetCurrency(from_trans));
     xaccTransSetDescription(to_trans, xaccTransGetDescription(from_trans));
 
@@ -1489,7 +1487,6 @@ static void
 do_destroy (QofInstance* inst)
 {
     Transaction *trans{GNC_TRANSACTION (inst)};
-    SplitList *node;
     gboolean shutting_down = qof_book_shutting_down(qof_instance_get_book(trans));
 
     /* If there are capital-gains transactions associated with this,
@@ -1503,32 +1500,10 @@ do_destroy (QofInstance* inst)
         xaccTransWriteLog (trans, 'D');
 
     qof_event_gen (&trans->inst, QOF_EVENT_DESTROY, NULL);
-
-    /* We only own the splits that still think they belong to us.   This is done
-       in 2 steps.  In the first, the splits are marked as being destroyed, but they
-       are not destroyed yet.  In the second, the destruction is committed which will
-       do the actual destruction.  If both steps are done for a split before they are
-       done for the next split, then a split will still be on the split list after it
-       has been freed.  This can cause other parts of the code (e.g. in xaccSplitDestroy())
-       to reference the split after it has been freed. */
-    for (node = trans->splits; node; node = node->next)
-    {
-        Split *s = GNC_SPLIT(node->data);
-        if (s && s->parent == trans)
-        {
-            xaccSplitDestroy(s);
-        }
-    }
-    for (node = trans->splits; node; node = node->next)
-    {
-        Split *s = GNC_SPLIT(node->data);
-        if (s && s->parent == trans)
-        {
-            xaccSplitCommitEdit(s);
-        }
-    }
-    g_list_free (trans->splits);
-    trans->splits = NULL;
+    /* xaccFreeTransaction will also clean up the splits but without
+     * emitting GNC_EVENT_ITEM_REMOVED.
+     */
+    xaccTransClearSplits(trans);
     xaccFreeTransaction (trans);
 }
 
@@ -2232,9 +2207,32 @@ void
 xaccTransClearSplits(Transaction* trans)
 {
     xaccTransBeginEdit(trans);
-    FOR_EACH_SPLIT(trans, xaccSplitDestroy(s));
+    /* We only own the splits that still think they belong to us.   This is done
+       in 2 steps.  In the first, the splits are marked as being destroyed, but they
+       are not destroyed yet.  In the second, the destruction is committed which will
+       do the actual destruction.  If both steps are done for a split before they are
+       done for the next split, then a split will still be on the split list after it
+       has been freed.  This can cause other parts of the code (e.g. in xaccSplitDestroy())
+       to reference the split after it has been freed. */
+    for (auto node = trans->splits; node; node = node->next)
+    {
+        auto s = GNC_SPLIT(node->data);
+        if (s && s->parent == trans)
+        {
+            xaccSplitDestroy(s);
+        }
+    }
+    for (auto node = trans->splits; node; node = node->next)
+    {
+        auto s = GNC_SPLIT(node->data);
+        if (s && s->parent == trans)
+        {
+            xaccSplitCommitEdit(s);
+        }
+    }
     g_list_free (trans->splits);
-    trans->splits = NULL;
+    trans->splits = nullptr;
+
     xaccTransCommitEdit(trans);
 }
 
