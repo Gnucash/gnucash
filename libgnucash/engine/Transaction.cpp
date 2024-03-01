@@ -25,7 +25,6 @@
 \********************************************************************/
 
 #include "qofinstance.h"
-#include <__nullptr>
 #include <config.h>
 
 #include <platform.h>
