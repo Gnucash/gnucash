@@ -499,7 +499,7 @@ endif()
 # ############################################################
 
 if (WITH_PYTHON)
-  set (PYTHON_MIN_VERSION 3.6.0)
+  set (PYTHON_MIN_VERSION 3.8.0)
   if (NOT DEFINED Python3_FIND_UNVERSIONED_NAMES)
     set (Python3_FIND_UNVERSIONED_NAMES FIRST)
   endif()

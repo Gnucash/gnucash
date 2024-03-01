@@ -96,7 +96,7 @@ Libraries/Deps
   aqbanking             6.4.0                    online banking and SWIFT
   gwenhywfar            5.8.0                    file imports.
 
-  python                3.6.0                    python bindings; headers
+  python                3.8.0                    python bindings; headers
                                                  required, not just binaries.
   libofx                0.9.12                   OFX/QFX import
 
