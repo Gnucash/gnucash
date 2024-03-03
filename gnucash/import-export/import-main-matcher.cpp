@@ -38,6 +38,7 @@
 #include <glib/gi18n.h>
 #include <stdbool.h>
 
+#include <algorithm>
 #include <vector>
 
 #include "import-main-matcher.h"
@@ -804,6 +805,25 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
     LEAVE("");
 }
 
+// bug 799246. return a vector of GtkTreeRowReference*. don't forget to
+// gtk_tree_row_reference_free the elements before the vector is destroyed.
+static std::vector<GtkTreeRowReference*>
+get_treeview_selection_refs (GtkTreeView *treeview, GtkTreeModel *model)
+{
+    std::vector<GtkTreeRowReference*> rv;
+
+    g_return_val_if_fail (GTK_IS_TREE_VIEW (treeview) && GTK_IS_TREE_MODEL (model), rv);
+
+    auto selection = gtk_tree_view_get_selection (treeview);
+    auto selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+
+    for (auto n = selected_rows; n; n = g_list_next (n))
+        rv.push_back (gtk_tree_row_reference_new (model, static_cast<GtkTreePath*>(n->data)));
+
+    g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
+    return rv;
+}
+
 static void
 gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
                                                        GNCImportMainMatcher *info)
@@ -813,47 +833,49 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     GtkTreeView *treeview = GTK_TREE_VIEW(info->view);
     GtkTreeModel *model = gtk_tree_view_get_model (treeview);
     GtkTreeSelection *selection = gtk_tree_view_get_selection (treeview);
-    GList *selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+    auto selected_refs = get_treeview_selection_refs (treeview, model);
     Account *assigned_account = NULL;
     bool first = true;
     bool is_selection = true;
+    auto debugging_enabled{qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG)};
 
-    DEBUG("Rows in selection = %i",
-          gtk_tree_selection_count_selected_rows (selection));
+    DEBUG("Rows in selection = %ld", selected_refs.size());
 
-    GList *refs = NULL;
-    for (GList *l = selected_rows; l; l = l->next)
+    for (const auto& ref : selected_refs)
     {
-        auto path = static_cast<GtkTreePath*>(l->data);
-        gchar *path_str = gtk_tree_path_to_string (path);
-        GtkTreeRowReference *ref = gtk_tree_row_reference_new (model, path);
-        DEBUG("passing first = %s", first ? "true" : "false");
-        DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
-        DEBUG("passing path = %s", path_str);
-        g_free (path_str);
-        refs = g_list_prepend (refs, ref);
+        auto path = gtk_tree_row_reference_get_path (ref);
+        if (debugging_enabled)
+        {
+            auto path_str = gtk_tree_path_to_string (path);
+            DEBUG("passing first = %s", first ? "true" : "false");
+            DEBUG("passing is_selection = %s", is_selection ? "true" : "false");
+            DEBUG("passing path = %s", path_str);
+            g_free (path_str);
+        }
         gnc_gen_trans_assign_transfer_account (treeview,
                                                 &first, is_selection, path,
                                                 &assigned_account, info);
-        gchar *fullname = gnc_account_get_full_name (assigned_account);
-        DEBUG("returned value of account = %s", fullname);
-        DEBUG("returned value of first = %s", first ? "true" : "false");
-        g_free (fullname);
+        if (debugging_enabled)
+        {
+            auto fullname = gnc_account_get_full_name (assigned_account);
+            DEBUG("returned value of account = %s", fullname);
+            DEBUG("returned value of first = %s", first ? "true" : "false");
+            g_free (fullname);
+        }
+
+        gtk_tree_path_free (path);
         if (!assigned_account)
             break;
     }
-    g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
 
     // now reselect the transaction rows. This is very slow if there are lots of transactions.
-    for (GList *l = refs; l; l = l->next)
+    for (const auto& ref : selected_refs)
     {
-        auto ref = static_cast<GtkTreeRowReference*>(l->data);
         GtkTreePath *path = gtk_tree_row_reference_get_path (ref);
         gtk_tree_selection_select_path (selection, path);
         gtk_tree_path_free (path);
         gtk_tree_row_reference_free (ref);
     }
-    g_list_free (refs);
 
     LEAVE("");
 }
@@ -863,14 +885,13 @@ class RowInfo
 public:
     RowInfo (GtkTreePath *path, GNCImportMainMatcher *info)
     {
-        auto model = gtk_tree_view_get_model (info->view);
-        gtk_tree_model_get_iter (model, &m_iter, path);
-        gtk_tree_model_get (model, &m_iter,
-                            DOWNLOADED_COL_DATA, &m_trans_info,
-                            DOWNLOADED_COL_DESCRIPTION_ORIGINAL, &m_orig_desc,
-                            DOWNLOADED_COL_NOTES_ORIGINAL, &m_orig_notes,
-                            DOWNLOADED_COL_MEMO_ORIGINAL, &m_orig_memo,
-                            -1);
+        init_from_path (path, info);
+    }
+    RowInfo (GtkTreeRowReference *ref, GNCImportMainMatcher *info)
+    {
+        auto path = gtk_tree_row_reference_get_path (ref);
+        init_from_path (path, info);
+        gtk_tree_path_free (path);
     }
     ~RowInfo ()
     {
@@ -884,6 +905,17 @@ public:
     const char* get_orig_notes () { return m_orig_notes; };
     const char* get_orig_memo () { return m_orig_memo; };
 private:
+    void init_from_path (GtkTreePath *path, GNCImportMainMatcher *info)
+    {
+        auto model = gtk_tree_view_get_model (info->view);
+        gtk_tree_model_get_iter (model, &m_iter, path);
+        gtk_tree_model_get (model, &m_iter,
+                            DOWNLOADED_COL_DATA, &m_trans_info,
+                            DOWNLOADED_COL_DESCRIPTION_ORIGINAL, &m_orig_desc,
+                            DOWNLOADED_COL_NOTES_ORIGINAL, &m_orig_notes,
+                            DOWNLOADED_COL_MEMO_ORIGINAL, &m_orig_memo,
+                            -1);
+    }
     GNCImportTransInfo *m_trans_info;
     GtkTreeIter m_iter;
     char *m_orig_desc, *m_orig_notes, *m_orig_memo;
@@ -1115,22 +1147,21 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
     GtkTreeView *treeview = GTK_TREE_VIEW(info->view);
     GtkTreeModel *model = gtk_tree_view_get_model (treeview);
     GtkTreeStore *store  = GTK_TREE_STORE (model);
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (treeview);
-    GList *selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+    auto selected_refs = get_treeview_selection_refs (treeview, model);
 
-    if (!selected_rows)
+    if (selected_refs.empty())
     {
         LEAVE ("No selected rows");
         return;
     }
 
     char *new_desc = NULL, *new_notes = NULL, *new_memo = NULL;
-    RowInfo first_row{static_cast<GtkTreePath*>(selected_rows->data), info};
+    RowInfo first_row{selected_refs[0], info};
     if (input_new_fields (info, first_row, &new_desc, &new_notes, &new_memo))
     {
-        for (GList *n = selected_rows; n; n = g_list_next (n))
+        for (const auto& ref : selected_refs)
         {
-            RowInfo row{static_cast<GtkTreePath*>(n->data), info};
+            RowInfo row{ref, info};
             auto trans = gnc_import_TransInfo_get_trans (row.get_trans_info ());
             auto split = gnc_import_TransInfo_get_fsplit (row.get_trans_info ());
             if (info->can_edit_desc)
@@ -1167,7 +1198,7 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
         g_free (new_memo);
         g_free (new_notes);
     }
-    g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
+    std::for_each (selected_refs.begin(), selected_refs.end(), gtk_tree_row_reference_free);
     LEAVE("");
 }
 
@@ -1180,18 +1211,17 @@ gnc_gen_trans_reset_edits_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
     GtkTreeView *treeview = GTK_TREE_VIEW(info->view);
     GtkTreeModel *model = gtk_tree_view_get_model (treeview);
     GtkTreeStore *store  = GTK_TREE_STORE (model);
-    GtkTreeSelection *selection = gtk_tree_view_get_selection (treeview);
-    GList *selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
+    auto selected_refs = get_treeview_selection_refs (treeview, model);
 
-    if (!selected_rows)
+    if (selected_refs.empty())
     {
         LEAVE ("No selected rows");
         return;
     }
 
-    for (GList *n = selected_rows; n; n = g_list_next (n))
+    for (const auto& ref : selected_refs)
     {
-        RowInfo rowinfo{static_cast<GtkTreePath*>(n->data), info};
+        RowInfo rowinfo{ref, info};
         auto trans = gnc_import_TransInfo_get_trans (rowinfo.get_trans_info ());
         auto split = gnc_import_TransInfo_get_fsplit (rowinfo.get_trans_info ());
         xaccTransSetDescription (trans, rowinfo.get_orig_desc());
@@ -1203,8 +1233,8 @@ gnc_gen_trans_reset_edits_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
                             DOWNLOADED_COL_DESCRIPTION_STYLE, PANGO_STYLE_NORMAL,
                             DOWNLOADED_COL_MEMO_STYLE, PANGO_STYLE_NORMAL,
                             -1);
+        gtk_tree_row_reference_free (ref);
     };
-    g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     LEAVE("");
 }
 
