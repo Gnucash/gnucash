@@ -1394,41 +1394,34 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
     }
 
     GtkWidget *menu = gtk_menu_new();
-    GtkWidget *menuitem = gtk_menu_item_new_with_mnemonic (
-        /* Translators: Menu entry, no full stop */
-        _("_Assign transfer account"));
-    gtk_widget_set_sensitive (menuitem, can_assign_acct);
-    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK(
-                          gnc_gen_trans_assign_transfer_account_to_selection_cb),
-                      info);
-    DEBUG("Callback to assign destination account to selection connected");
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+
+    auto add_menu_item = [&menu, &info](const char* name, bool sensitive, GCallback callback)
+    {
+        auto menuitem = gtk_menu_item_new_with_mnemonic (_(name));
+        gtk_widget_set_sensitive (menuitem, sensitive);
+        g_signal_connect (menuitem, "activate", callback, info);
+        gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    };
 
     /* Translators: Menu entry, no full stop */
-    menuitem = gtk_menu_item_new_with_mnemonic (_("Assign e_xchange rate"));
-    gtk_widget_set_sensitive (menuitem, can_update_prices);
-    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (gnc_gen_trans_set_price_to_selection_cb),
-                      info);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    add_menu_item (N_("_Assign transfer account"),
+                   can_assign_acct,
+                   G_CALLBACK(gnc_gen_trans_assign_transfer_account_to_selection_cb));
 
     /* Translators: Menu entry, no full stop */
-    menuitem = gtk_menu_item_new_with_mnemonic (_("_Edit description, notes, or memo"));
-    gtk_widget_set_sensitive (menuitem,
-                              info->can_edit_desc || info->can_edit_notes || info->can_edit_memo);
-    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (gnc_gen_trans_edit_fields),
-                      info);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    add_menu_item (N_("Assign e_xchange rate"),
+                   can_update_prices,
+                   G_CALLBACK (gnc_gen_trans_set_price_to_selection_cb));
 
     /* Translators: Menu entry, no full stop */
-    menuitem = gtk_menu_item_new_with_mnemonic (_("_Reset all edits"));
-    gtk_widget_set_sensitive (menuitem, can_undo_edits);
-    g_signal_connect (menuitem, "activate",
-                      G_CALLBACK (gnc_gen_trans_reset_edits_cb),
-                      info);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
+    add_menu_item (N_("_Edit description, notes, or memo"),
+                   info->can_edit_desc || info->can_edit_notes || info->can_edit_memo,
+                   G_CALLBACK (gnc_gen_trans_edit_fields));
+
+    /* Translators: Menu entry, no full stop */
+    add_menu_item (N_("_Reset all edits"),
+                   can_undo_edits,
+                   G_CALLBACK (gnc_gen_trans_reset_edits_cb));
 
     gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (treeview), NULL);
 
