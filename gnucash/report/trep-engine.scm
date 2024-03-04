@@ -1734,7 +1734,10 @@ be excluded from periodic reporting.")
               (data-columns (car list-of-commodities))))
             (loop "" (cdr list-of-commodities))))))
 
-    (define (total-string str) (string-append (G_ "Total For ") str))
+    (define (total-string str)
+      (if (opt-val pagename-sorting optname-show-subtotals-only)
+        str
+        (string-append (G_ "Total For ") str)))
 
     ;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
     ;; renderers
