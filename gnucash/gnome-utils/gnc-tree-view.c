@@ -1381,9 +1381,10 @@ gnc_tree_view_update_column_menu_item (GtkCheckMenuItem *checkmenuitem,
     else
     {
         GBinding *binding = g_object_get_data (G_OBJECT(checkmenuitem), "column-binding");
-        GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(g_binding_get_target (binding));
+        GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(g_binding_dup_target (binding));
 
         visible = gtk_tree_view_column_get_visible (column);
+        g_object_unref(column);
     }
     gtk_check_menu_item_set_active (checkmenuitem, visible);
 }
