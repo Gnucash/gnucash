@@ -107,7 +107,9 @@ void pie(struct pie_data* pd)
       sum_counter = 0.0;
       print_slice(file, pd, origin, &sum_counter, 0, radius, sum, 0);
     }
-    print_slice_pointers(file, pd);
+//    print_slice_pointers(file, pd);
+
+    print_legend(file, pd, pd->general->margin + radius * 2.0, pd->general->margin);
     fprintf(file, svg_group_stop);
   }
   fprintf(file, svg_group_stop);

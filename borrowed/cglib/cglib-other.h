@@ -48,6 +48,7 @@
   void get_gradient(struct theme_data* td);
   void print_top_header(FILE* file, struct general_data* gd);
   void print_slice_pointers(FILE* file, struct pie_data* pd);
+  void print_legend(FILE* file, struct pie_data* pd, float x, float y);
   void print_font_size_group(FILE* file, struct general_data* gd);
   void destroy_group_dat(struct group_data* grp_dat);
   

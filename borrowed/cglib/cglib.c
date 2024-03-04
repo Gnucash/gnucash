@@ -1,6 +1,35 @@
 #include "cglib.h"
 #include "cglib-other.h"
 
+
+void print_legend(FILE* file, struct pie_data* pd, float x, float y)
+{
+  char* ret;
+  ret = stringify("text-anchor = \"start\" font-size=\"%d\"", pd->general->font_size);
+  fprintf(file, svg_custom_group, ret);
+  free(ret);
+
+  for(int i = 0; i < pd->n_slices; i++)
+  {
+    fprintf(file, svg_box,
+      pd->slices[i].color.r,
+      pd->slices[i].color.g,
+      pd->slices[i].color.b,
+      x,
+      y + (i * (pd->general->font_size + 5)),
+
+      (double)30,
+      (double)pd->general->font_size);
+
+    fprintf(file, svg_text, 
+      x + 40,
+      y + (i * (pd->general->font_size + 5)) + pd->general->font_size,
+
+      pd->slices[i].name);
+  }
+  fprintf(file, svg_group_stop);
+}
+
 void print_slice_pointers(FILE* file, struct pie_data* pd)
 {
   float pointer_len = 120.0;
