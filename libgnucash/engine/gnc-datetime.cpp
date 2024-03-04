@@ -44,6 +44,9 @@
 #include "gnc-timezone.hpp"
 #include "gnc-datetime.hpp"
 
+#include "unicode/smpdtfmt.h"
+#include <unicode/gregocal.h>
+
 #define N_(string) string //So that xgettext will find it
 
 using PTZ = boost::local_time::posix_time_zone;
@@ -95,6 +98,15 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         ")"
     },
     GncDateFormat {
+        // Translators: b is for the month name
+        N_("y-b-d"),
+        "(?:"                                   // either y-b-d
+        "(?<YEAR>[0-9]+)[-/.' ]+"
+        "(?<MONTH>[[:alpha:]]+)[-/.' ]+"
+        "(?<DAY>[0-9]+)"
+        ")"
+    },
+    GncDateFormat {
         N_("d-m-y"),
         "(?:"                                   // either d-m-y
         "(?<DAY>[0-9]+)[-/.' ]+"
@@ -107,6 +119,15 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         ")"
     },
     GncDateFormat {
+        // Translators: b is for the month name
+        N_("d-b-y"),
+        "(?:"                                   // either d-b-y
+        "(?<DAY>[0-9]+)[-/.' ]"
+        "(?<MONTH>[[:alpha:]]+)[-/.' ]+"
+        "(?<YEAR>[0-9]+)+"
+        ")"
+    },
+    GncDateFormat {
         N_("m-d-y"),
         "(?:"                                   // either m-d-y
         "(?<MONTH>[0-9]+)[-/.' ]+"
@@ -116,6 +137,15 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         "(?<MONTH>[0-9]{2})"
         "(?<DAY>[0-9]{2})"
         "(?<YEAR>[0-9]{4})"
+        ")"
+    },
+    GncDateFormat {
+        // Translators: b is for the month name
+        N_("b-d-y"),
+        "(?:"                                   // either b-d-y
+        "(?<MONTH>[[:alpha:]]+)[-/.' ]+"
+        "(?<DAY>[0-9]+)[-/.' ]"
+        "(?<YEAR>[0-9]+)+"
         ")"
     },
     // Note year is still checked for in the regexes below
@@ -133,6 +163,14 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         ")"
     },
     GncDateFormat {
+        (N_("d-b")),
+        "(?:"                                   // either d-b(-y)
+        "(?<DAY>[0-9]+)[-/.' ]+"
+        "(?<MONTH>[[:alpha:]]+)(?:[-/.' ]+"
+        "(?<YEAR>[0-9]+))?"
+        ")"
+    },
+    GncDateFormat {
         (N_("m-d")),
         "(?:"                                   // either m-d(-y)
         "(?<MONTH>[0-9]+)[-/.' ]+"
@@ -142,6 +180,14 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         "(?<MONTH>[0-9]{2})"
         "(?<DAY>[0-9]{2})"
         "(?<YEAR>[0-9]+)?"
+        ")"
+    },
+    GncDateFormat {
+        (N_("b-d")),
+        "(?:"                                   // either b-d(-y)
+        "(?<MONTH>[[:alpha:]]+)[-/.' ]+"
+        "(?<DAY>[0-9]+)(?:[-/.' ]+"
+        "(?<YEAR>[0-9]+))?"
         ")"
     }
 });
@@ -555,6 +601,36 @@ GncDateTimeImpl::timestamp()
     return str.substr(0, 8) + str.substr(9, 15);
 }
 
+static Date
+interpret_date (const std::string day_in, const std::string month_in, const std::string year_in)
+{
+    UErrorCode status = U_ZERO_ERROR;
+    static const icu::SimpleDateFormat df("dd/MMM/yyyy", icu::Locale(), status);
+    static icu::GregorianCalendar calendar = icu::GregorianCalendar (status);
+
+    auto myDate = df.parse(icu::UnicodeString::fromUTF8(day_in + '/' + month_in + '/' + year_in), status);
+
+    // Convert UDate to components
+    calendar.setTime(myDate, status);
+
+    /*
+    icu::UnicodeString str;
+    std::string converted;
+    df.format (myDate, str);
+    str.toUTF8String(converted);
+    std::cout << day_in << '/' << month_in << '/' << year_in << ' ' << converted
+              << " = "
+              << calendar.get(UCAL_DATE, status) << '/'
+              << calendar.get(UCAL_MONTH, status) + 1 << '/'
+              << calendar.get(UCAL_YEAR, status) << std::endl;
+    */
+
+    return Date (calendar.get(UCAL_YEAR, status),
+                 calendar.get(UCAL_MONTH, status) + 1,
+                 calendar.get(UCAL_DATE, status));
+}
+
+
 /* Member function definitions for GncDateImpl.
  */
 GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
@@ -590,9 +666,12 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
     else /* The input dates have no year, so use current year */
         year = m_greg.year(); // Can use m_greg here as it was already initialized in the initializer list earlier
 
-    m_greg = Date(year,
-                  static_cast<Month>(std::stoi (what.str("MONTH"))),
-                  std::stoi (what.str("DAY")));
+    if (fmt.find('b') != std::string::npos)
+        m_greg = interpret_date (what.str("DAY"), what.str("MONTH"), std::to_string (year));
+    else
+        m_greg = Date(year,
+                      Month(std::stoi (what.str("MONTH"))),
+                      std::stoi (what.str("DAY")));
 }
 
 gnc_ymd
