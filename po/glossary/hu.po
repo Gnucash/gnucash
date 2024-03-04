@@ -5,15 +5,15 @@
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2020.
 # Kárász Attila <cult.edie@gmail.com>, 2022.
 # Szia Tomi <sziatomi01@gmail.com>, 2022, 2023, 2024.
-# mocsa <csaba@feltoltve.hu>, 2023.
+# mocsa <csaba@feltoltve.hu>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-25 08:00+0200\n"
-"PO-Revision-Date: 2024-02-03 22:45+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2024-03-04 20:01+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/hu/>\n"
 "Language: hu\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -649,7 +649,7 @@ msgstr "nyereség"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
-msgstr "Nyereség és Veszteség"
+msgstr "Eredménykimutatás"
 
 #. "-"
 msgid "quick-fill"

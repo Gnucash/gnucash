@@ -6,7 +6,7 @@
 # Kornel Tako <takokornel@gmail.com>, 2007.
 # Kárász Attila <cult.edie@gmail.com>, 2022, 2023.
 # Szia Tomi <sziatomi01@gmail.com>, 2022, 2023, 2024.
-# mocsa <csaba@feltoltve.hu>, 2022, 2023.
+# mocsa <csaba@feltoltve.hu>, 2022, 2023, 2024.
 # ovari <ovari123@zoho.com>, 2022, 2023.
 # Geza Kiss <geza.openstreetmap@reallymymail.com>, 2023.
 msgid ""
@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-02-16 01:11+0100\n"
-"PO-Revision-Date: 2024-02-27 15:03+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2024-03-04 20:01+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -48,9 +48,9 @@ msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
-"Megpróbált megkeresni egy nem definiált dátumszimbólumot '~a'. Ezt a "
-"jelentést valószínűleg a GnuCash egy későbbi verziója mentette el. "
-"Alapértelmezés szerint ma."
+"A '~a' nem definiált dátumszimbólum keresésére történt kísérlet, "
+"valószínűleg azért, mert a kimutatás a GnuCash egy későbbi verziójában lett "
+"elmentve. A dátum a mai napra lesz beállítva."
 
 #: bindings/guile/date-utilities.scm:717
 #: gnucash/gnome-utils/gnc-period-select.c:70
@@ -2882,7 +2882,7 @@ msgstr "Érték"
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:157
 #: gnucash/report/trep-engine.scm:539
 msgid "Date Posted"
-msgstr "Rögzítés dátuma"
+msgstr "Könyvelés dátuma"
 
 #: gnucash/gnome/dialog-find-transactions.c:129
 #: gnucash/report/reports/standard/general-ledger.scm:67
@@ -5278,7 +5278,7 @@ msgstr "Szűrés:"
 #: gnucash/gnome/gnc-plugin-page-register.c:3334
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
-msgstr "Tranzakció-jelentés"
+msgstr "Tranzakciókimutatás"
 
 #: gnucash/gnome/gnc-plugin-page-register.c:3322
 msgid "Portfolio Report"
@@ -5993,14 +5993,14 @@ msgstr "Elszámolt tranzakciók"
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
-msgstr[0] "A kimutatás dátuma %d nappal a mai nap után van."
+msgstr[0] "A számlakivonat dátuma %d nappal a mai nap után van."
 
 #. Translators: %d is the number of days in the future
 #: gnucash/gnome/window-reconcile.c:387
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
-msgstr[0] "A választott kimutatásdátum %d nappal a mai nap után van."
+msgstr[0] "A számlakivonat megadott dátuma %d nappal a mai nap után van."
 
 #: gnucash/gnome/window-reconcile.c:392
 msgid ""
@@ -9465,7 +9465,7 @@ msgstr "Hány nappal előtte figyelmeztessen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:66
 msgid "Set the \"notify\" flag by default"
-msgstr "Az értesítési lehetőség alapértelmezettként lesz beállítva"
+msgstr "Az értesítési lehetőség alapértelmezettként be lesz állítva"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:67
 msgid ""
@@ -9483,7 +9483,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:6
 msgid "The next tip to show."
-msgstr "A következő tipp megjelenítése."
+msgstr "A következő megjelenítendő tipp."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:17
 msgid "Show \"Tip Of The Day\" at GnuCash start"
@@ -10875,7 +10875,7 @@ msgstr "Összefoglaló oldal"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:13
 msgid "CSV Import Assistant"
-msgstr "CSV Importálássegéd"
+msgstr "CSV Importáló Segéd"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:30
@@ -10911,7 +10911,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:51
 msgid "Import Account Assistant"
-msgstr "Számlaimportálás-segéd"
+msgstr "Számla Importáló Segéd"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
 msgid "Enter file name and location for the Import…"
@@ -11112,9 +11112,8 @@ msgid "Export Summary"
 msgstr "Exportálás eredménye"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:38
-#, fuzzy
 msgid "CSV Price Import"
-msgstr "Tranzakció-jelentés"
+msgstr ""
 
 #. You should localize the (british) examples to your region.
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:53
@@ -21244,7 +21243,7 @@ msgstr "Követelés-képlet megadása valós tranzakcióhoz"
 
 #: gnucash/register/register-gnome/completioncell-gnome.c:75
 msgid "Don't autocomplete"
-msgstr ""
+msgstr "Ne egészítse ki"
 
 #: gnucash/register/register-gnome/datecell-gnome.c:104
 msgid ""
@@ -21359,7 +21358,7 @@ msgstr ""
 #: gnucash/report/html-utilities.scm:293
 #: gnucash/ui/gnc-plugin-page-report.ui:242
 msgid "Edit report options"
-msgstr "Jelentésbeállítások szerkesztése"
+msgstr "Kimutatás beállításainak szerkesztése"
 
 #: gnucash/report/html-utilities.scm:309
 #: gnucash/report/reports/standard/balsheet-pnl.scm:143
@@ -21377,8 +21376,7 @@ msgstr "Nincs kiválasztott számla"
 
 #: gnucash/report/html-utilities.scm:369
 msgid "This report requires accounts to be selected in the report options."
-msgstr ""
-"Ez a jelentés a jelentésbeállításokban kiválasztandó számlákat igényel."
+msgstr "A kimutatás használatához jelöljön ki néhány számlát a Beállításokban."
 
 #: gnucash/report/html-utilities.scm:376
 #: gnucash/report/reports/standard/price-scatter.scm:250
@@ -23495,12 +23493,12 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:68
 #: gnucash/report/trep-engine.scm:107
 msgid "Add options summary"
-msgstr ""
+msgstr "Beállítások összefoglaló táblázata"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:69
 #: gnucash/report/trep-engine.scm:571
 msgid "Add summary of options."
-msgstr ""
+msgstr "A kimutatáshoz használt beállítások megjelenítése."
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:71
 msgid "Account full name instead of indenting"
@@ -23572,7 +23570,7 @@ msgstr "Minden összeg átváltása egy közös pénznembe."
 #: gnucash/report/reports/standard/balsheet-pnl.scm:116
 #: gnucash/report/trep-engine.scm:113
 msgid "Show original currency amount"
-msgstr "Az eredeti pénznemű összeg megjelenítése"
+msgstr "Megjelenítés eredeti pénznemben is"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:117
 #: gnucash/report/trep-engine.scm:556
@@ -23592,7 +23590,7 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:194
 #: gnucash/report/trep-engine.scm:577
 msgid "Always"
-msgstr ""
+msgstr "Mindig"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:437
 #: gnucash/report/reports/standard/balsheet-pnl.scm:595
@@ -24038,7 +24036,7 @@ msgstr "A költségvetési feljegyzések oszlopának megjelenítése."
 
 #: gnucash/report/reports/standard/budget.scm:55
 msgid "Show Actual"
-msgstr "A jelenlegi megjelenítése"
+msgstr "A jelenlegi összegek megjelenítése"
 
 #: gnucash/report/reports/standard/budget.scm:56
 msgid "Display a column for the actual values."
@@ -24863,7 +24861,7 @@ msgstr "Bevételkimutatás"
 
 #: gnucash/report/reports/standard/income-statement.scm:553
 msgid "Profit & Loss"
-msgstr "Nyereség és Veszteség"
+msgstr "Eredménykimutatás"
 
 #: gnucash/report/reports/standard/investment-lots.scm:40
 msgid "Chart"
@@ -27453,7 +27451,7 @@ msgstr "Részösszeg"
 #. To be consistent, also consider how the singular form "Running Total" is translated.
 #: gnucash/report/trep-engine.scm:82
 msgid "Running Totals"
-msgstr ""
+msgstr "Göngyölített összegek"
 
 #: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2290
 msgid "Show Account Description"
@@ -27479,45 +27477,39 @@ msgstr "%s fájlba mentése"
 
 #: gnucash/report/trep-engine.scm:106
 msgid "Table for Exporting"
-msgstr "Tábla az exportáláshoz"
+msgstr "Formázás egyszerű exportáláshoz"
 
 #: gnucash/report/trep-engine.scm:118
-#, fuzzy
 msgid "Account Name Filter"
-msgstr "Folyószámla Neve"
+msgstr "Számlanévszűrő"
 
 #: gnucash/report/trep-engine.scm:120
 msgid "Use regular expressions for account name filter"
-msgstr ""
+msgstr "A Számlanévszűrő egy reguláris kifejezés"
 
 #: gnucash/report/trep-engine.scm:122
-#, fuzzy
 msgid "Account Name Filter excludes matched strings"
-msgstr "Folyószámla Neve"
+msgstr "A Számlanévszűrővel egyező számlákat hagyja ki"
 
 #: gnucash/report/trep-engine.scm:123
-#, fuzzy
 msgid "Transaction Filter"
-msgstr "Tranzakció dátum"
+msgstr "Tranzakciószűrő"
 
 #: gnucash/report/trep-engine.scm:125
-#, fuzzy
 msgid "Use regular expressions for transaction filter"
-msgstr "Use nearest to transaction date"
+msgstr "A Tranzakciószűrő egy reguláris kifejezés"
 
 #: gnucash/report/trep-engine.scm:127
 msgid "Transaction Filter excludes matched strings"
-msgstr ""
+msgstr "A Tranzakciószűrővel egyező számlákat hagyja ki"
 
 #: gnucash/report/trep-engine.scm:129
-#, fuzzy
 msgid "Transaction Filter is case insensitive"
-msgstr "Tranzakció dátum"
+msgstr "A Tranzakciószűrőben a kis- és nagybetűk azonosak"
 
 #: gnucash/report/trep-engine.scm:130 gnucash/report/trep-engine.scm:205
-#, fuzzy
 msgid "Reconciled Status"
-msgstr "Egyeztetett dátum"
+msgstr "Egyeztetett állapot"
 
 #: gnucash/report/trep-engine.scm:131
 msgid "Void Transactions"
@@ -27541,32 +27533,28 @@ msgid "Register Order"
 msgstr "Főkönyvi sorrend"
 
 #: gnucash/report/trep-engine.scm:350
-#, fuzzy
 msgid "Do not do any filtering"
-msgstr "Ne szűrjön"
+msgstr "Nincs szűrés"
 
 #: gnucash/report/trep-engine.scm:353
 msgid "Include Transactions to/from Filter Accounts"
-msgstr ""
+msgstr "A kiválasztott számlákat érintő tranzakciók beszámítása"
 
 #: gnucash/report/trep-engine.scm:356
 msgid "Exclude Transactions to/from Filter Accounts"
-msgstr ""
+msgstr "A kiválasztott számlákat érintő tranzakciók kihagyása"
 
 #: gnucash/report/trep-engine.scm:362
 msgid "Non-void only"
-msgstr "Csak a nem érvénytelen"
+msgstr "Csak a nem érvénytelenek"
 
 #: gnucash/report/trep-engine.scm:366
 msgid "Void only"
-msgstr "Csak az érvénytelen"
+msgstr "Csak az érvénytelenek"
 
 #: gnucash/report/trep-engine.scm:370
-#, fuzzy
 msgid "Both (and include void transactions in totals)"
-msgstr ""
-"Mindkettő megjelenítése (és az érvénytelen tranzakciók belevétele az "
-"összesítésekbe)"
+msgstr "Az összes (és az érvénytelenek beszámítása az összegekbe)"
 
 #: gnucash/report/trep-engine.scm:375
 msgid "Exclude closing transactions"
@@ -27582,11 +27570,11 @@ msgstr "Csak a záró tranzakciók megjelenítése"
 
 #: gnucash/report/trep-engine.scm:393
 msgid "Show All Transactions"
-msgstr "Minden tranzakció megjelenítése"
+msgstr "Összes tranzakció megjelenítése"
 
 #: gnucash/report/trep-engine.scm:397
 msgid "Unreconciled only"
-msgstr "Csak a nem egyeztetett"
+msgstr "Csak a nem egyeztetettek"
 
 #: gnucash/report/trep-engine.scm:401
 msgid "Cleared only"
@@ -27594,7 +27582,7 @@ msgstr "Csak az elszámoltak"
 
 #: gnucash/report/trep-engine.scm:405
 msgid "Reconciled only"
-msgstr "Csak az egyeztetett"
+msgstr "Csak az egyeztetettek"
 
 #: gnucash/report/trep-engine.scm:419
 msgid "Use Global Preference"
@@ -27618,7 +27606,6 @@ msgstr ""
 
 #: gnucash/report/trep-engine.scm:541 gnucash/report/trep-engine.scm:913
 #: gnucash/report/trep-engine.scm:1093 gnucash/report/trep-engine.scm:2238
-#, fuzzy
 msgid "Date Entered"
 msgstr "Rögzítés dátuma"
 
@@ -27650,6 +27637,11 @@ msgid ""
 "match both Expenses:Car and Expenses:Flights. Use a period (.) to match a "
 "single character e.g. '20../.' will match 'Travel 2017/1 London'. "
 msgstr ""
+"A Számlanévszűrő alapértelmezés szerint a név részletére keres, de ezzel a "
+"kapcsolóval engedélyezhetők a POSIX reguláris kifejezések összes funkciója. "
+"Az \"Autó|Repülő\" megtalálja a Költségek:Autó és a Költségek:Repülő "
+"számlát. A pont (.) karakter egy tetszőleges karaktert helyettesít, tehát a "
+"\"20../.\" megtalálja az \"Utazás 2017/1 London\" számlát. "
 
 #: gnucash/report/trep-engine.scm:600
 msgid "If this option is selected, accounts matching filter are excluded."
@@ -27798,7 +27790,7 @@ msgstr "A kapcsolódó számla egyenlegének megjelenítése minden sorban?"
 
 #: gnucash/report/trep-engine.scm:932
 msgid "Display a grand total section at the bottom?"
-msgstr ""
+msgstr "Végösszeg megjelenítése alul?"
 
 #: gnucash/report/trep-engine.scm:937
 #, fuzzy
@@ -27850,15 +27842,15 @@ msgstr ""
 
 #: gnucash/report/trep-engine.scm:1001
 msgid "Grand Total and Subtotals"
-msgstr ""
+msgstr "Végösszeg és Részösszegek"
 
 #: gnucash/report/trep-engine.scm:1002
 msgid "Grand Total Only"
-msgstr ""
+msgstr "Csak Végösszeg"
 
 #: gnucash/report/trep-engine.scm:1003
 msgid "Subtotals Only"
-msgstr ""
+msgstr "Csak Részösszegek"
 
 #: gnucash/report/trep-engine.scm:1115
 msgid "Num/T-Num"
@@ -27874,7 +27866,7 @@ msgstr "Átvitel innen/ide"
 #. "Secondary Subtotal” and "Running Primary Subtotal"
 #: gnucash/report/trep-engine.scm:1383 gnucash/report/trep-engine.scm:1484
 msgid "Running Secondary Subtotal"
-msgstr ""
+msgstr "Göngyölített Másodlagos Részösszeg"
 
 #. Translators: this is the running total for the primary subtotal.
 #. For translation to be consistent, make sure it follows the same
@@ -27882,14 +27874,14 @@ msgstr ""
 #. “Primary Subtotal”
 #: gnucash/report/trep-engine.scm:1399 gnucash/report/trep-engine.scm:1497
 msgid "Running Primary Subtotal"
-msgstr ""
+msgstr "Göngyölített Elsődleges Részösszeg"
 
 #. Translators: "Running Subtotal" is a shorter version of
 #. "Running Primary Subtotal" used when a running primary subtotal
 #. is displayed without a secondary subtotal.
 #: gnucash/report/trep-engine.scm:1403 gnucash/report/trep-engine.scm:1498
 msgid "Running Subtotal"
-msgstr ""
+msgstr "Göngyölített Részösszeg"
 
 #. Translators: this is the running total for the grand total.
 #. For translation to be consistent, make sure it follows the same
@@ -27897,7 +27889,7 @@ msgstr ""
 #. "Grand Total”
 #: gnucash/report/trep-engine.scm:1420 gnucash/report/trep-engine.scm:1512
 msgid "Running Grand Total"
-msgstr ""
+msgstr "Göngyölített Végösszeg"
 
 #. Translators: "Running Total" is a shorter version of
 #. "Running Grand Total" used when the running grand total is
@@ -27905,7 +27897,7 @@ msgstr ""
 #. how the plural form "Running Totals" is translated.
 #: gnucash/report/trep-engine.scm:1425 gnucash/report/trep-engine.scm:1513
 msgid "Running Total"
-msgstr ""
+msgstr "Göngyölített Összeg"
 
 #. Translators: Balance b/f stands for "Balance
 #. brought forward".
