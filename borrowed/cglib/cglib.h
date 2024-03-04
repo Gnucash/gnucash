@@ -93,8 +93,9 @@
 
   struct pie_slice
   {
-    float percentage;
-    char* name;
+    struct rgb  color;
+    float       percentage;
+    char*       name;
   };
   
   struct pie_data

@@ -17,23 +17,41 @@ static void print_slice(FILE* file, struct pie_data* pd, float* origin, float* s
   stop[0] =  cos(radians[1]) * radius + origin[0];
   stop[1] =  sin(radians[1]) * radius + origin[1];
 
-  pd->theme->percentage = (i + 1) / (pd->n_slices*1.0);
+  if (pd->theme)
+  {
+    pd->theme->percentage = (i + 1) / (pd->n_slices*1.0);
+    pd->theme->color_function(pd->theme);
 
-  pd->theme->color_function(pd->theme);
-
-  fprintf(file, svg_slice,
-    start[0],
-    start[1],
-    radius,
-    radius,
-    large_arc_flag,
-    stop[0],
-    stop[1],
-    origin[0],
-    origin[1],
-    pd->theme->out.r,
-    pd->theme->out.g,
-    pd->theme->out.b);
+    fprintf(file, svg_slice,
+      start[0],
+      start[1],
+      radius,
+      radius,
+      large_arc_flag,
+      stop[0],
+      stop[1],
+      origin[0],
+      origin[1],
+      pd->theme->out.r,
+      pd->theme->out.g,
+      pd->theme->out.b);
+  }
+  else
+  {
+    fprintf(file, svg_slice,
+      start[0],
+      start[1],
+      radius,
+      radius,
+      large_arc_flag,
+      stop[0],
+      stop[1],
+      origin[0],
+      origin[1],
+      pd->slices[i].color.r,
+      pd->slices[i].color.g,
+      pd->slices[i].color.b);
+  }
   return;
 }
 
@@ -56,14 +74,16 @@ void pie(struct pie_data* pd)
   
   print_top_header(file, pd->general);
   radius = (pd->general->viewport_y <= pd->general->viewport_x) ? (pd->general->viewport_y - pd->general->margin) / 2 : (pd->general->viewport_x - pd->general->margin) / 2;
-  origin[0] = pd->general->viewport_x / 2.0 + pd->general->margin / 2.0;
+//  origin[0] = pd->general->viewport_x / 2.0 + pd->general->margin / 2.0;
+  origin[0] = radius + pd->general->margin / 2.0;
   origin[1] = pd->general->viewport_y / 2.0 + pd->general->margin / 2.0;
 
   fprintf(file, svg_circle, origin[0], origin[1], origin_radius);
 
   float sum = 0.0;
 
-  select_color_function(pd->theme);
+  if (pd->theme)
+    select_color_function(pd->theme);
 
   loop(pd->n_slices)
   {
