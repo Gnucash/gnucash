@@ -39,10 +39,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-02-16 01:11+0100\n"
-"PO-Revision-Date: 2024-02-05 19:01+0000\n"
+"PO-Revision-Date: 2024-03-03 20:01+0000\n"
 "Last-Translator: Laurent Aufrere <lecture@cbol.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
@@ -51,7 +51,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -3338,7 +3338,7 @@ msgstr "Modification du bon d'achat"
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/gnome/dialog-invoice.c:2366
 msgid "View Expense Voucher"
-msgstr "Afficher le bon d'achat"
+msgstr "Afficher la fiche de frais"
 
 # messages-i18n.c:190
 #: gnucash/gnome/dialog-invoice.c:2688
@@ -3363,7 +3363,7 @@ msgstr "Informations sur le bon d'achat"
 #: gnucash/gnome/dialog-invoice.c:2810 gnucash/gnome/dialog-invoice.c:3037
 #: gnucash/gnome/dialog-invoice.c:3645
 msgid "Voucher ID"
-msgstr "N° de bon d'achat"
+msgstr "N° de fiche de frais"
 
 # messages-i18n.c:280
 #: gnucash/gnome/dialog-invoice.c:3368
@@ -3416,7 +3416,7 @@ msgstr "Afficher/Modifier la facture"
 #. interchangeably in gnucash and mean the same thing.
 #: gnucash/gnome/dialog-invoice.c:3535
 msgid "View/Edit Voucher"
-msgstr "Afficher/Modifier le bon d'achat"
+msgstr "Afficher/Modifier la fiche de frais"
 
 # messages-i18n.c:294 po/guile_strings.txt:205
 # src/gnome/glade-gnc-dialogs.c:644
@@ -3565,7 +3565,7 @@ msgstr "Recherche de facture fournisseur"
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/gnome/dialog-invoice.c:3756
 msgid "Find Expense Voucher"
-msgstr "Recherche de bon d'achat"
+msgstr "Recherche de fiche de frais"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
@@ -5148,12 +5148,13 @@ msgstr "Nou_veau bon d'achat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:244
 msgid "Create a new voucher for the same owner as the current one"
-msgstr "Créer un nouveau bon d'achat pour le même destinataire que l'actuel"
+msgstr ""
+"Créer une nouvelle fiche de frais pour le même bénéficiaire que l'actuel"
 
 # messages-i18n.c:71
 #: gnucash/gnome/gnc-plugin-page-invoice.c:245
 msgid "Move to the blank entry at the bottom of the voucher"
-msgstr "Aller à la ligne vide en bas du bon d'achat"
+msgstr "Aller à la ligne vide en bas de la fiche de frais"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:246
 msgid "_Pay Voucher"
@@ -5162,13 +5163,14 @@ msgstr "_Payer le bon d'achat"
 # messages-i18n.c:123
 #: gnucash/gnome/gnc-plugin-page-invoice.c:246
 msgid "Enter a payment for the owner of this voucher"
-msgstr "Saisir un paiement pour le destinataire de ce bon d'achat"
+msgstr "Saisir un paiement pour le bénéficiaire de cette fiche de frais"
 
 # messages-i18n.c:104
 #: gnucash/gnome/gnc-plugin-page-invoice.c:247
 msgid "Open a employee report window for the owner of this voucher"
 msgstr ""
-"Ouvrir une fenêtre de rapport société pour le destinataire de ce bon d'achat"
+"Ouvrir une fenêtre de rapport employé pour le bénéficiaire de cette fiche de "
+"frais"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.c:255
 msgid "_Use as Default Layout for Employee Documents"
@@ -5501,7 +5503,7 @@ msgstr "Ouvrir un document liée pour la transaction actuelle"
 #: gnucash/ui/gnc-plugin-page-register.ui:407
 #: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr "Accéder à la facture ou au bon d'achat lié"
+msgstr "Accéder à la facture ou à la fiche de frais liée"
 
 # messages-i18n.c:80
 #: gnucash/gnome/gnc-plugin-page-register.c:276
@@ -30201,7 +30203,7 @@ msgid ""
 msgstr ""
 "Ce rapport est uniquement prévu pour les factures clients (ventes). Veuillez "
 "utiliser le menu des préférences pour sélectionner une <em>Facture client</"
-"em>, et non une facture fournisseur ou un bon d'achat."
+"em>, et non une facture fournisseur ou une fiche de frais."
 
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:193
 msgid "Website"
@@ -32131,19 +32133,19 @@ msgstr "Nouveau _bon d'achat…"
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/ui/gnc-plugin-business.ui:124
 msgid "Open the New Voucher dialog"
-msgstr "Ouvre la boîte de dialogue de création d'un bon d'achat"
+msgstr "Ouvre la boîte de dialogue de création d'une fiche de frais"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/ui/gnc-plugin-business.ui:127
 msgid "Find Expense _Voucher…"
-msgstr "Recherche de bon _d'achat…"
+msgstr "Recherche de fiche _de frais…"
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: gnucash/ui/gnc-plugin-business.ui:129
 msgid "Open the Find Expense Voucher dialog"
-msgstr "Ouvrir la boîte de dialogue de recherche d'un bon d'achat"
+msgstr "Ouvrir la boîte de dialogue de recherche d'une fiche de frais"
 
 #: gnucash/ui/gnc-plugin-business.ui:138
 msgid "Business Linked Documents"
@@ -34131,29 +34133,29 @@ msgstr ""
 # src/gnome/glade-gnc-dialogs.c:647
 #: libgnucash/engine/gnc-optiondb.cpp:1265
 msgid "Expense voucher number"
-msgstr "N° de bon d'achat"
+msgstr "N° de fiche de frais"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1266
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
 msgstr ""
-"Le précédent numéro généré pour le bon d'achat. Ce numéro sera incrémenté "
-"lors de la génération du bon suivant."
+"Le précédent numéro généré pour la fiche de frais. Ce numéro sera incrémenté "
+"lors de la génération de la fiche suivante."
 
 # messages-i18n.c:284 po/guile_strings.txt:274
 # src/gnome/glade-gnc-dialogs.c:647
 #: libgnucash/engine/gnc-optiondb.cpp:1269
 msgid "Expense voucher number format"
-msgstr "Format de n° de bon d'achat"
+msgstr "Format de n° de fiche de frais"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1271
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
-"La chaîne de format à utiliser pour générer les numéros de bons d'achat. Il "
-"s'agit d'une chaîne de format de type printf."
+"La chaîne de format à utiliser pour générer les numéros de fiches de frais. "
+"Il s'agit d'une chaîne de format de type printf."
 
 # po/guile_strings.txt:173
 #: libgnucash/engine/gnc-optiondb.cpp:1274
