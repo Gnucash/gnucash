@@ -63,6 +63,7 @@ static void gnc_html_litehtml_finalize (GObject* obj);
 
 #include "gnc-html-litehtml-p.h"
 #include "my-test-of-cglib.h"
+#include "gnc-html-litehtml-json.h"
 
 /* indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_HTML;
@@ -637,18 +638,28 @@ impl_litehtml_create_charts (GncHtml* self, const gchar* data, const gchar *repo
     if (!ptr)
         return FALSE;
 
-//g_print("ptr '%s'\n", ptr);
-
     priv = GNC_HTML_LITEHTML_GET_PRIVATE(self);
     
     gchar *ptr_end = g_strstr_len (ptr + 1, -1, "'");
 
     gchar *image_name = strndup (ptr + 1, ptr_end - (ptr + 1));
 
-g_print("image_name '%s'\n", image_name);
-
     gchar *start = g_strndup (data, (ptr + 1) - data);
     gchar *end = g_strdup (data + (ptr_end - data));
+
+    gchar *json_start_ptr = g_strstr_len (end, -1, "var chartjsoptions = ");
+
+    if (!json_start_ptr)
+    {
+        g_free (start);
+        g_free (end);
+        g_free (image_name);
+        return FALSE;
+    }
+
+    gchar *json_end_ptr = g_strstr_len (end, -1, "};");
+
+    gchar *json_text = g_strndup (json_start_ptr + 20, json_end_ptr - (json_start_ptr + 19));
 
     gchar *image_uri_start = g_strndup (report_uri, strlen(report_uri) - file_temp_len);
 
@@ -656,15 +667,19 @@ g_print("image_name '%s'\n", image_name);
         
     priv->html_string = g_strconcat (start, image_uri_start, image_name, end, NULL);
 
-    gchar *image_path = g_strndup (priv->file_name, strlen(priv->file_name) - file_temp_len);
+    gchar *image_path_start = g_strndup (priv->file_name, strlen(priv->file_name) - file_temp_len);
 
-    my_test_of_cglib_charts (g_strconcat (image_path, image_name, NULL));
+    gchar *image_path = g_strconcat (image_path_start, image_name, NULL);
+
+    gnc_html_litehtml_json_create_chart (json_text, image_path);
 
     g_free (start);
     g_free (end);
     g_free (image_path);
+    g_free (image_path_start);
     g_free (image_uri_start);
     g_free (image_name);
+    g_free (json_text);
 
     return TRUE;
 }

@@ -462,7 +462,11 @@ document.getElementById(chartid).onclick = function(evt) {
                   (size->str (gnc:html-chart-width chart))
                   (size->str (gnc:html-chart-height chart))))
 
-    (push (format #f "<img src='gnc-report-~a.svg' alt='chart-image' width='740' height='460'>\n" id ))
+;;    (push (format #f "<img src='gnc-report-~a.svg' alt='chart-image' width='960' height='400'>\n" id ))
+
+    (push (format #f "<img src='gnc-report-~a.svg' alt='chart-image' height='~a'>\n" id
+                  (size->str (gnc:html-chart-height chart))))
+
 
 ;;    (push "<img src='file:///tmp/vbar.svg' alt='bob1' width='740' height='460'>\n")
 ;;    (push "<img src='file:///tmp/hbar.svg' alt='bob2' width='740' height='460'>\n")
@@ -480,6 +484,7 @@ document.getElementById(chartid).onclick = function(evt) {
 ;;    (push (format #f "<a id='jump-~a' href='' style='display:none'></a>\n" id))
 ;;    (push (format #f "<canvas id=~s></canvas>\n" id))
 ;;    (push "</div>\n")
+    (push "\n")
     (push (format #f "<script id='script-~a'>\n" id))
     (push (format #f "var curriso = ~s;\n" (gnc:html-chart-currency-iso chart)))
     (push (format #f "var currsym = ~s;\n" (gnc:html-chart-currency-symbol chart)))
@@ -510,6 +515,6 @@ document.getElementById(chartid).onclick = function(evt) {
 ;;    (push "hideMyImage();\n")
 
 ;;    (push "var myChart = new Chart(chartid, chartjsoptions);\n")
-    (push "</script>")
+    (push "</script>\n")
 
     retval))

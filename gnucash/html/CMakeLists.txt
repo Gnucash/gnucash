@@ -12,6 +12,7 @@ set (html_HEADERS
   html-widget.hpp
   html-widget-wrapped.h
   my-test-of-cglib.h
+  gnc-html-litehtml-json.h
 )
 
 set(cglib_remote_HEADERS
@@ -34,6 +35,7 @@ set (html_SOURCES
   cairo-borders.cpp
   html-widget.cpp
   my-test-of-cglib.c
+  gnc-html-litehtml-json.c
 )
 
 set(cglib_remote_SOURCES
@@ -74,7 +76,8 @@ target_link_libraries(gnc-html
         PkgConfig::GTK3
         ${LITEHTML_LDFLAGS}
         ${GUILE_LDFLAGS}
-        litehtml)
+        litehtml
+        ${JSON_GLIB_LDFLAGS})
 
 target_compile_definitions(gnc-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")
 
@@ -88,6 +91,7 @@ PRIVATE
     ${CMAKE_SOURCE_DIR}/borrowed/litehtml/src/gumbo/include
     ${CMAKE_SOURCE_DIR}/borrowed/litehtml/src/gumbo/include/gumbo
     ${CMAKE_SOURCE_DIR}/borrowed/cglib
+    ${JSON_GLIB_INCLUDE_DIRS}
 )
 
 if (APPLE)
