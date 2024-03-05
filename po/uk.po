@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-02-16 01:11+0100\n"
+"POT-Creation-Date: 2024-03-05 14:50+0100\n"
 "PO-Revision-Date: 2023-08-03 22:45+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
@@ -1164,7 +1164,7 @@ msgid "Placeholder"
 msgstr "Проміжний"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1356
-#: gnucash/gnome-utils/dialog-account.c:402
+#: gnucash/gnome-utils/dialog-account.c:429
 #: gnucash/gnome-utils/gnc-tree-view-account.c:995
 #: gnucash/gtkbuilder/dialog-account.glade:1945
 #: libgnucash/app-utils/gnc-ui-util.cpp:693
@@ -1255,7 +1255,7 @@ msgstr "Параметри виплати за боргом: «%s»"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:374
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.cpp:1543
+#: gnucash/import-export/import-main-matcher.cpp:1566
 #: gnucash/import-export/import-match-picker.cpp:313
 #: gnucash/import-export/import-match-picker.cpp:353
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3823
@@ -1338,7 +1338,7 @@ msgstr "Помилка при додаванні ціни."
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.cpp:1544
+#: gnucash/import-export/import-main-matcher.cpp:1567
 #: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
@@ -1926,7 +1926,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.cpp:1548
+#: gnucash/import-export/import-main-matcher.cpp:1571
 #: gnucash/import-export/import-match-picker.cpp:316
 #: gnucash/import-export/import-match-picker.cpp:356
 #: gnucash/register/ledger-core/split-register-model.c:360
@@ -1941,7 +1941,7 @@ msgid "Memo"
 msgstr "Пам'ятка"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2316
-#: gnucash/gnome/gnc-plugin-page-register.c:3383
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3410
 #: gnucash/gtkbuilder/dialog-payment.glade:300
 #: gnucash/register/ledger-core/split-register.c:2441
 #: gnucash/report/reports/standard/general-journal.scm:82
@@ -1953,7 +1953,7 @@ msgid "Debit"
 msgstr "Дебет"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2323
-#: gnucash/gnome/gnc-plugin-page-register.c:3379
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3406
 #: gnucash/gtkbuilder/dialog-payment.glade:316
 #: gnucash/register/ledger-core/split-register.c:2464
 #: gnucash/register/ledger-core/split-register.c:2559
@@ -2006,8 +2006,8 @@ msgstr "Розписка"
 
 #: gnucash/gnome/business-gnome-utils.c:357 gnucash/gnome/dialog-doclink.c:821
 #: gnucash/gnome/dialog-invoice.c:3764
-#: gnucash/gnome/gnc-plugin-page-invoice.c:396
-#: gnucash/gnome/gnc-plugin-page-register.c:390
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:396
+#: gnucash/gnome/gnc-plugin-page-register.cpp:397
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1920
 #: gnucash/gnome-search/dialog-search.c:1093
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:167
@@ -2103,7 +2103,7 @@ msgstr "Proximo"
 
 #: gnucash/gnome/dialog-billterms.c:537 gnucash/gnome/dialog-doclink.c:587
 #: gnucash/gnome/dialog-doclink.c:840 gnucash/gnome/dialog-doclink.c:884
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:552
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:552
 #: gnucash/gtkbuilder/dialog-price.glade:24
 #: gnucash/report/reports/standard/new-owner-report.scm:284
 msgid "Unknown"
@@ -2163,13 +2163,13 @@ msgstr "Вилучити товат?"
 #: gnucash/gnome/dialog-price-edit-db.cpp:214
 #: gnucash/gnome/dialog-price-editor.c:238 gnucash/gnome/dialog-tax-info.c:1189
 #: gnucash/gnome/gnc-plugin-budget.c:321
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1658
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1061
-#: gnucash/gnome/gnc-plugin-page-register.c:1848
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1655
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1061
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1875
 #: gnucash/gnome/gnc-split-reg.c:939 gnucash/gnome/gnc-split-reg.c:977
 #: gnucash/gnome/gnc-split-reg.c:1199 gnucash/gnome/gnc-split-reg.c:1466
 #: gnucash/gnome/gnc-split-reg.c:1506 gnucash/gnome-search/search-account.c:239
-#: gnucash/gnome-utils/dialog-account.c:821
+#: gnucash/gnome-utils/dialog-account.c:844
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gnome-utils/dialog-tax-table.c:667
 #: gnucash/gnome-utils/gnc-file.c:120 gnucash/gnome-utils/gnc-file.c:368
@@ -2258,8 +2258,8 @@ msgstr "_Скасувати"
 
 #: gnucash/gnome/dialog-commodities.c:218
 #: gnucash/gnome/dialog-price-edit-db.cpp:215
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1659
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1062
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1656
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1062
 #: gnucash/gtkbuilder/dialog-account.glade:396
 #: gnucash/gtkbuilder/dialog-billterms.glade:476
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:66
@@ -2319,7 +2319,7 @@ msgstr "Рахунок-фактура клієнта"
 #: gnucash/gnome/dialog-invoice.c:3516 gnucash/gnome/dialog-invoice.c:3525
 #: gnucash/gnome/dialog-invoice.c:3536 gnucash/gnome/dialog-invoice.c:3791
 #: gnucash/gnome/dialog-invoice.c:3797 gnucash/gnome/dialog-job.c:551
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:230
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:230
 #: gnucash/gtkbuilder/dialog-payment.glade:61
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:169
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:171
@@ -2416,13 +2416,13 @@ msgid "Placeholder account selected. Please try again."
 msgstr "Обрано проміжний рахунок. Спробуйте ще раз, будь ласка."
 
 #: gnucash/gnome/dialog-doclink.c:160
-#: gnucash/gnome/gnc-plugin-page-register.c:4617
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4636
 msgid "Select document"
 msgstr "Виберіть документ"
 
 #: gnucash/gnome/dialog-doclink.c:163 gnucash/gnome/gnc-plugin-budget.c:322
 #: gnucash/gnome-search/search-account.c:240
-#: gnucash/gnome-utils/dialog-account.c:822
+#: gnucash/gnome-utils/dialog-account.c:845
 #: gnucash/gnome-utils/gnc-gui-query.c:297
 #: gnucash/gnome-utils/gnc-gui-query.c:331
 #: gnucash/gnome-utils/gnc-gui-query.c:417
@@ -2531,11 +2531,11 @@ msgid "Business item can not be modified."
 msgstr "Не вдалося внести зміни до бізнес-запису."
 
 #: gnucash/gnome/dialog-doclink.c:668 gnucash/gnome/dialog-doclink.c:769
-#: gnucash/gnome/gnc-plugin-page-invoice.c:198
-#: gnucash/gnome/gnc-plugin-page-invoice.c:223
-#: gnucash/gnome/gnc-plugin-page-invoice.c:248
-#: gnucash/gnome/gnc-plugin-page-invoice.c:1261
-#: gnucash/gnome/gnc-plugin-page-register.c:388
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:223
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:248
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:1261
+#: gnucash/gnome/gnc-plugin-page-register.cpp:395
 msgid "Manage Document Link"
 msgstr "Керування прив'язками до документа"
 
@@ -2571,7 +2571,7 @@ msgstr "Прив'язки транзакції до документів"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:377
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.cpp:1547
+#: gnucash/import-export/import-main-matcher.cpp:1570
 #: gnucash/import-export/import-match-picker.cpp:315
 #: gnucash/import-export/import-match-picker.cpp:355
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3833
@@ -2756,7 +2756,7 @@ msgid "Closing Entries"
 msgstr "Закривання записів"
 
 #: gnucash/gnome/dialog-find-transactions.c:118
-#: gnucash/gnome/gnc-plugin-page-register.c:386
+#: gnucash/gnome/gnc-plugin-page-register.cpp:393
 #: gnucash/gnome/window-reconcile.c:1444
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:364
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:389
@@ -2800,8 +2800,8 @@ msgstr "Дата узгодження"
 #: gnucash/gnome/dialog-find-transactions.c:132
 #: gnucash/gnome/dialog-find-transactions.c:171
 #: gnucash/gnome/dialog-find-transactions.c:177
-#: gnucash/gnome/gnc-plugin-page-register.c:2313
-#: gnucash/gnome/gnc-plugin-page-register.c:4009
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2340
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4046
 #: gnucash/gnome-search/dialog-search.c:879
 #: gnucash/gnome-search/dialog-search.c:885
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:381
@@ -2812,7 +2812,7 @@ msgstr "Номер/Дія"
 #: gnucash/gnome/dialog-find-transactions.c:133
 #: gnucash/gnome/dialog-find-transactions.c:170
 #: gnucash/gnome/dialog-find-transactions.c:178
-#: gnucash/gnome/gnc-plugin-page-register.c:2318
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2345
 #: gnucash/gnome/gnc-split-reg.c:675 gnucash/gnome-search/dialog-search.c:878
 #: gnucash/gnome-search/dialog-search.c:886
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:103
@@ -2829,8 +2829,8 @@ msgstr "Дія"
 #: gnucash/gnome/dialog-find-transactions.c:136
 #: gnucash/gnome/dialog-find-transactions.c:173
 #: gnucash/gnome/dialog-find-transactions.c:179
-#: gnucash/gnome/gnc-plugin-page-register.c:2312
-#: gnucash/gnome/gnc-plugin-page-register.c:4008
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2339
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4045
 #: gnucash/gnome-search/dialog-search.c:881
 #: gnucash/gnome-search/dialog-search.c:887
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:361
@@ -2842,7 +2842,7 @@ msgstr "Номер транзакції"
 #: gnucash/gnome/dialog-find-transactions.c:137
 #: gnucash/gnome/dialog-find-transactions.c:172
 #: gnucash/gnome/dialog-find-transactions.c:180
-#: gnucash/gnome/gnc-plugin-page-register.c:2317
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2344
 #: gnucash/gnome/gnc-split-reg.c:663 gnucash/gnome-search/dialog-search.c:880
 #: gnucash/gnome-search/dialog-search.c:888
 #: gnucash/gtkbuilder/dialog-payment.glade:268
@@ -3073,7 +3073,7 @@ msgid "New Credit Note"
 msgstr "Створити сторно"
 
 #: gnucash/gnome/dialog-invoice.c:2318
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:226
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:226
 #: gnucash/gnome-search/dialog-search.c:1095
 #: gnucash/gtkbuilder/dialog-invoice.glade:760
 msgid "New Invoice"
@@ -3098,7 +3098,7 @@ msgid "View Invoice"
 msgstr "Переглянути рахунок-фактуру"
 
 #: gnucash/gnome/dialog-invoice.c:2337
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:225
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:225
 #: gnucash/gnome-search/dialog-search.c:1079
 msgid "New Bill"
 msgstr "Створити платіж"
@@ -3168,15 +3168,15 @@ msgstr "Переглянути/виправити рахунок-фактуру"
 
 #: gnucash/gnome/dialog-invoice.c:3517 gnucash/gnome/dialog-invoice.c:3526
 #: gnucash/gnome/dialog-invoice.c:3537
-#: gnucash/gnome/gnc-plugin-page-invoice.c:284
-#: gnucash/gnome/gnc-plugin-page-register.c:379
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:284
+#: gnucash/gnome/gnc-plugin-page-register.cpp:386
 #: gnucash/ui/gnc-embedded-register-window.ui:155
 msgid "Duplicate"
 msgstr "Зробити копію"
 
 #: gnucash/gnome/dialog-invoice.c:3518 gnucash/gnome/dialog-invoice.c:3527
 #: gnucash/gnome/dialog-invoice.c:3538
-#: gnucash/gnome/gnc-plugin-page-invoice.c:288
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:288
 msgid "Post"
 msgstr "Надіслати"
 
@@ -3341,7 +3341,7 @@ msgstr "Зайти рахунок-фактуру"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.cpp:1546
+#: gnucash/import-export/import-main-matcher.cpp:1569
 #: gnucash/import-export/import-match-picker.cpp:314
 #: gnucash/import-export/import-match-picker.cpp:354
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3844
@@ -3633,7 +3633,7 @@ msgstr ""
 "створити рахунок-фактуру або рахунок?"
 
 #: gnucash/gnome/dialog-payment.c:1574
-#: gnucash/gnome/gnc-plugin-page-register.c:3219
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3246
 #: gnucash/gnome-search/search-reconciled.c:216
 #: gnucash/gnome-utils/gnc-tree-view-account.c:858
 #: gnucash/report/trep-engine.scm:158
@@ -3641,7 +3641,7 @@ msgid "Cleared"
 msgstr "Очищено"
 
 #: gnucash/gnome/dialog-payment.c:1576
-#: gnucash/gnome/gnc-plugin-page-register.c:3221
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3248
 #: gnucash/gnome-search/search-reconciled.c:219
 #: gnucash/gnome-utils/gnc-tree-view-account.c:872
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:73
@@ -3678,8 +3678,8 @@ msgid "Continue"
 msgstr "Продовжити"
 
 #: gnucash/gnome/dialog-payment.c:1634
-#: gnucash/gnome/gnc-plugin-page-invoice.c:282
-#: gnucash/gnome/gnc-plugin-page-register.c:377
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:282
+#: gnucash/gnome/gnc-plugin-page-register.cpp:384
 #: gnucash/ui/gnc-embedded-register-window.ui:210
 msgid "Cancel"
 msgstr "Скасувати"
@@ -3969,7 +3969,7 @@ msgid ""
 msgstr "Поточний шаблон транзакції був змінений. Записати зміни?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1845
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:228
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:228
 msgid "Scheduled Transactions"
 msgstr "Заплановані транзакції"
 
@@ -4168,7 +4168,7 @@ msgid "Expenses"
 msgstr "Видатки"
 
 #: gnucash/gnome/gnc-budget-view.c:506
-#: gnucash/gnome/gnc-plugin-page-register.c:375
+#: gnucash/gnome/gnc-plugin-page-register.cpp:382
 #: gnucash/register/ledger-core/split-register.c:2561
 #: gnucash/register/ledger-core/split-register-layout.c:721
 #: gnucash/register/ledger-core/split-register-model.c:353
@@ -4233,43 +4233,42 @@ msgstr[3] ""
 msgid "Select a Budget"
 msgstr "Вибрати бюджет"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:288
-#: gnucash/gnome/gnc-plugin-page-budget.c:177 gnucash/gnome-utils/gnc-file.c:92
-#: gnucash/gnome-utils/gnc-file.c:329 gnucash/gnome-utils/gnc-file.c:1182
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:288
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:177
+#: gnucash/gnome-utils/gnc-file.c:92 gnucash/gnome-utils/gnc-file.c:329
+#: gnucash/gnome-utils/gnc-file.c:1182
 msgid "Open"
 msgstr "Відкрити"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:289
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:219
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:220
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:221
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:289
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:219
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:220
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:221
 msgid "Edit"
 msgstr "Змінити"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:290
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:222
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:223
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:224
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:290
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:222
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:223
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:224
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "New"
 msgstr "Створити"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:291
-#: gnucash/gnome/gnc-plugin-page-budget.c:178
-#: gnucash/gnome/gnc-plugin-page-invoice.c:283
-#: gnucash/gnome/gnc-plugin-page-register.c:378
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:291
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:178
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:283
+#: gnucash/gnome/gnc-plugin-page-register.cpp:385
 #: gnucash/ui/gnc-embedded-register-window.ui:170
 msgid "Delete"
 msgstr "Вилучити"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:336
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1909
-#: gnucash/gnome/gnc-plugin-page-register.c:1796
-#: gnucash/gnome/gnc-plugin-page-register.c:4951
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:326
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1813
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr "Зараз виконуємо дію «Перевірити і відновити». Хочете її перервати?"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:399
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:400
 #: gnucash/gtkbuilder/assistant-csv-export.glade:270
 #: gnucash/gtkbuilder/dialog-preferences.glade:1002
 #: gnucash/report/report-core.scm:163
@@ -4299,7 +4298,7 @@ msgstr "Зараз виконуємо дію «Перевірити і відн�
 msgid "Accounts"
 msgstr "Рахунки"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1301
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1298
 #, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
@@ -4310,26 +4309,26 @@ msgstr ""
 "пересуваєте транзакцію.\n"
 "Ви справді хочете виконати цю операцію?"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1309
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1306
 msgid "_Pick another account"
 msgstr "_Вибрати інший рахунок"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1310
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1307
 msgid "_Do it anyway"
 msgstr "_Виконати попри усе"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1393
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1532
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1044
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1390
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1529
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1044
 msgid "(no name)"
 msgstr "(немає імені)"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1405
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1402
 #, c-format
 msgid "Deleting account %s"
 msgstr "Видалення рахунку %s"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1522
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1519
 msgid ""
 "The list below shows objects which make use of the account which you want to "
 "delete.\n"
@@ -4343,7 +4342,7 @@ msgstr ""
 "якось змінити їх так, щоб вони використовували\n"
 "інший рахунок"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1535
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1532
 #, c-format
 msgid ""
 "The account \"%s\" has more than one subaccount.\n"
@@ -4355,46 +4354,43 @@ msgstr ""
 "Виконайте пересування підлеглих рахунків або вилучіть їх до того, як "
 "вилучатимете цей рахунок."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1597
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1594
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "Рахунок %s буде видалений."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1606
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1603
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "Усі транзакції у цьому рахунку будуть видалені на рахунок %s."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1613
-#, c-format
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1610
 msgid "All transactions in this account will be deleted."
 msgstr "Усі транзакції у цьому рахунку будуть видалені."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1622
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1619
 #, c-format
 msgid "Its sub-account will be moved to the account %s."
 msgstr "Його субрахунки буде пересунуто до рахунку %s."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1628
-#, c-format
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1625
 msgid "Its subaccount will be deleted."
 msgstr "Його субрахунок буде вилучено."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1632
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1629
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "Усі субрахунки будуть переміщені на рахунок %s."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1639
-#, c-format
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1636
 msgid "All sub-account transactions will be deleted."
 msgstr "Усі субрахунки будуть видалені."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.c:1645
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1642
 msgid "Are you sure you want to do this?"
 msgstr "Ви справді хочете це зробити?"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:179
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:179
 #: gnucash/gnome/gnc-plugin-page-report.cpp:236
 #: gnucash/gtkbuilder/assistant-csv-export.glade:99
 #: gnucash/gtkbuilder/dialog-print-check.glade:641
@@ -4402,25 +4398,25 @@ msgstr "Ви справді хочете це зробити?"
 msgid "Options"
 msgstr "Параметри"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:180
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:180
 msgid "Estimate"
 msgstr "Оцінити"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:181
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:181
 msgid "All Periods"
 msgstr "Усі періоди"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:182
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:182
 msgid "Note"
 msgstr "Нотатка"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:183
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:183
 msgid "Run Report"
 msgstr "Створити звіт"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:264
-#: gnucash/gnome/gnc-plugin-page-budget.c:303
-#: gnucash/gnome/gnc-plugin-page-budget.c:888
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:263
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:302
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:885
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:107
 #: gnucash/report/reports/standard/budget-barchart.scm:39
 #: gnucash/report/reports/standard/budget-barchart.scm:201
@@ -4430,137 +4426,137 @@ msgstr "Створити звіт"
 msgid "Budget"
 msgstr "Бюджет"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:938
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:935
 #: libgnucash/engine/gnc-budget.cpp:111
 msgid "Unnamed Budget"
 msgstr "Бюджет без назви"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:940
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:937
 #, c-format
 msgid "Delete %s?"
 msgstr "Вилучити %s?"
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1040
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:1037
 msgid "You must select at least one account to estimate."
 msgstr "Необхідно вибрати принаймні один рахунок для оцінки."
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1171
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:1168
 msgid "You must select at least one account to edit."
 msgstr "Необхідно вибрати принаймні один рахунок для редагування."
 
-#: gnucash/gnome/gnc-plugin-page-budget.c:1272
+#: gnucash/gnome/gnc-plugin-page-budget.cpp:1269
 msgid "You must select one budget cell to edit."
 msgstr "Вам слід позначити одну комірку бюджету для редагування."
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:189
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:189
 #: gnucash/ui/gnc-plugin-page-invoice.ui:287
 msgid "_Print Invoice"
 msgstr "На_друкувати рахунок-фактуру"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:189
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:189
 #: gnucash/ui/gnc-plugin-page-invoice.ui:289
 msgid "Make a printable invoice"
 msgstr "Зробити друкований рахунок-фактуру"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:190
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:367
 msgid "_Edit Invoice"
 msgstr "_Редагувати рахунок-фактуру"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:190
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:18
 #: gnucash/ui/gnc-plugin-page-invoice.ui:369
 msgid "Edit this invoice"
 msgstr "Редагувати рахунок-фактуру"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:191
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:191
 #: gnucash/ui/gnc-plugin-page-invoice.ui:382
 msgid "_Duplicate Invoice"
 msgstr "_Дублювати рахунок-фактуру"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:191
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:191
 #: gnucash/ui/gnc-plugin-page-invoice.ui:24
 #: gnucash/ui/gnc-plugin-page-invoice.ui:384
 msgid "Create a new invoice as a duplicate of the current one"
 msgstr "Створити новий рахунок-фактуру як дублікат поточного"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:192
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:522
 msgid "_Post Invoice"
 msgstr "_Надіслати рахунок-фактуру"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:192
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:30
 #: gnucash/ui/gnc-plugin-page-invoice.ui:524
 msgid "Post this invoice to your Chart of Accounts"
 msgstr "Занести цей рахунок-фактуру у графік рахунків"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:193
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:537
 msgid "_Unpost Invoice"
 msgstr "_Скасувати надсилання рахунку-фактури"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:193
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:36
 #: gnucash/ui/gnc-plugin-page-invoice.ui:539
 msgid "Unpost this invoice and make it editable"
 msgstr "Скасувати надсилання цього рахунку-фактури та зробити його редагованим"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:194
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:352
 msgid "New _Invoice"
 msgstr "Створити _рахунок-фактуру"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:194
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:354
 msgid "Create a new invoice for the same owner as the current one"
 msgstr "Створити новий рахунок-фактуру для того самого власника, що і поточний"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:195
-#: gnucash/gnome/gnc-plugin-page-invoice.c:220
-#: gnucash/gnome/gnc-plugin-page-invoice.c:245
-#: gnucash/gnome/gnc-plugin-page-invoice.c:270
-#: gnucash/gnome/gnc-plugin-page-invoice.c:287
-#: gnucash/gnome/gnc-plugin-page-register.c:385
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:270
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:287
+#: gnucash/gnome/gnc-plugin-page-register.cpp:392
 #: gnucash/ui/gnc-embedded-register-window.ui:225
 msgid "Blank"
 msgstr "Нова"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:195
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
 msgid "Move to the blank entry at the bottom of the invoice"
 msgstr "Перейти на чистий запис внизу рахунку-фактури"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:196
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
 #: gnucash/ui/gnc-plugin-page-invoice.ui:552
 msgid "_Pay Invoice"
 msgstr "_Оплачені рахунки"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:196
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
 #: gnucash/ui/gnc-plugin-page-invoice.ui:200
 #: gnucash/ui/gnc-plugin-page-invoice.ui:554
 msgid "Enter a payment for the owner of this invoice"
 msgstr "Введіть платіж для власника цього рахунку-фактури"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:197
-#: gnucash/gnome/gnc-plugin-page-invoice.c:222
-#: gnucash/gnome/gnc-plugin-page-invoice.c:247
-#: gnucash/gnome/gnc-plugin-page-invoice.c:272
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:197
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:222
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:272
 #: gnucash/ui/gnc-plugin-page-invoice.ui:207
 msgid "_Company Report"
 msgstr "Звіт про _фірму"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:197
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:197
 msgid "Open a customer report window for the owner of this invoice"
 msgstr "Відкрити вікно звіту про клієнта для власника цього рахунку-фактури"
 
 #. Translators: This is a menu item that opens a dialog for linking an
 #. external file or URL with the bill, invoice, transaction, or voucher or
 #. removing such an link.
-#: gnucash/gnome/gnc-plugin-page-invoice.c:198
-#: gnucash/gnome/gnc-plugin-page-invoice.c:223
-#: gnucash/gnome/gnc-plugin-page-invoice.c:248
-#: gnucash/gnome/gnc-plugin-page-invoice.c:273
-#: gnucash/gnome/gnc-plugin-page-register.c:255
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:223
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:248
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
+#: gnucash/gnome/gnc-plugin-page-register.cpp:262
 #: gnucash/ui/gnc-plugin-page-register.ui:205
 #: gnucash/ui/gnc-plugin-page-register.ui:393
 #: gnucash/ui/gnc-plugin-page-register.ui:505
@@ -4570,30 +4566,30 @@ msgstr "_Керування прив'язками до документа…"
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
 #. the operating system's default application for the file or URI mime type.
-#: gnucash/gnome/gnc-plugin-page-invoice.c:199
-#: gnucash/gnome/gnc-plugin-page-invoice.c:224
-#: gnucash/gnome/gnc-plugin-page-invoice.c:249
-#: gnucash/gnome/gnc-plugin-page-invoice.c:274
-#: gnucash/gnome/gnc-plugin-page-register.c:259
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:199
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:224
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:249
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
+#: gnucash/gnome/gnc-plugin-page-register.cpp:266
 #: gnucash/ui/gnc-plugin-page-register.ui:211
 #: gnucash/ui/gnc-plugin-page-register.ui:398
 #: gnucash/ui/gnc-plugin-page-register.ui:510
 msgid "_Open Linked Document"
 msgstr "_Відкрити пов'язаний документ"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:199
-#: gnucash/gnome/gnc-plugin-page-invoice.c:224
-#: gnucash/gnome/gnc-plugin-page-invoice.c:249
-#: gnucash/gnome/gnc-plugin-page-invoice.c:274
-#: gnucash/gnome/gnc-plugin-page-register.c:389
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:199
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:224
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:249
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
+#: gnucash/gnome/gnc-plugin-page-register.cpp:396
 msgid "Open Linked Document"
 msgstr "Відкриття пов'язаного документа"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:205
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:205
 msgid "_Use as Default Layout for Customer Documents"
 msgstr "_Використовувати як типове компонування для документів клієнта"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:206
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:206
 #: gnucash/ui/gnc-plugin-page-invoice.ui:66
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
@@ -4601,11 +4597,11 @@ msgstr ""
 "Використовувати поточне компонування як типове для усіх рахунків та сторно "
 "клієнта"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:207
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:207
 msgid "_Reset Default Layout for Customer Documents"
 msgstr "С_кинути типове компонування для документів клієнта"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:208
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:208
 #: gnucash/ui/gnc-plugin-page-invoice.ui:72
 msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
@@ -4614,85 +4610,85 @@ msgstr ""
 "Скинути типове компонування для усіх рахунків-фактур та сторно клієнта до "
 "вбудованого типового і оновити відповідним чином поточну сторінку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:214
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:214
 msgid "_Print Bill"
 msgstr "_Надрукувати рахунок"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:214
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:214
 msgid "Make a printable bill"
 msgstr "Зробити друкований рахунок"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:215
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
 msgid "_Edit Bill"
 msgstr "_Редагувати рахунок"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:215
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
 msgid "Edit this bill"
 msgstr "Редагувати цей рахунок"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:216
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
 msgid "_Duplicate Bill"
 msgstr "Зробити _копію рахунка"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:216
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
 msgid "Create a new bill as a duplicate of the current one"
 msgstr "Створити новий рахунок як дублікат поточного"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:217
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
 msgid "_Post Bill"
 msgstr "З_анести рахунок до книги"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:217
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
 msgid "Post this bill to your Chart of Accounts"
 msgstr "Занести цей рахунок у графік рахунків"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:218
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
 msgid "_Unpost Bill"
 msgstr "С_касувати занесення рахунка до книги"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:218
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
 msgid "Unpost this bill and make it editable"
 msgstr "Скасувати занесення цього рахунку до книги і зробити його редагованим"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:219
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:219
 msgid "New _Bill"
 msgstr "Створити _рахунок"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:219
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:219
 msgid "Create a new bill for the same owner as the current one"
 msgstr "Створити новий рахунок для того самого власника, що і поточний"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:220
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
 msgid "Move to the blank entry at the bottom of the bill"
 msgstr "Перейти на чистий запис внизу рахунку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:221
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
 msgid "_Pay Bill"
 msgstr "Сп_латити рахунок"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:221
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
 msgid "Enter a payment for the owner of this bill"
 msgstr "Введіть платіж для власника цього рахунку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:222
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:222
 msgid "Open a vendor report window for the owner of this bill"
 msgstr "Відкрити вікно звіту про постачальника для власника цього рахунку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:230
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:230
 msgid "_Use as Default Layout for Vendor Documents"
 msgstr "_Використовувати як типове компонування для документів постачальника"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:231
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:231
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
 "Використовувати поточне компонування як типове для усіх рахунків та сторно "
 "постачальника"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:232
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:232
 msgid "_Reset Default Layout for Vendor Documents"
 msgstr "С_кинути типове компонування для документів постачальника"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:233
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:233
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
@@ -4700,88 +4696,88 @@ msgstr ""
 "Скинути типове компонування для усіх рахунків-фактур та сторно постачальника "
 "до вбудованого типового і оновити відповідним чином поточну сторінку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:239
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:239
 msgid "_Print Voucher"
 msgstr "На_друкувати розписку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:239
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:239
 msgid "Make a printable voucher"
 msgstr "Зробити друковану розписку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:240
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
 msgid "_Edit Voucher"
 msgstr "_Редагувати розписку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:240
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
 msgid "Edit this voucher"
 msgstr "Редагувати цю розписку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:241
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
 msgid "_Duplicate Voucher"
 msgstr "_Дублювати розписку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:241
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
 msgid "Create a new voucher as a duplicate of the current one"
 msgstr "Створити нову розписку як дублікат поточної"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:242
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
 msgid "_Post Voucher"
 msgstr "З_анести розписку до книги"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:242
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
 msgid "Post this voucher to your Chart of Accounts"
 msgstr "Додати цю розписку у графік рахунків"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:243
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
 msgid "_Unpost Voucher"
 msgstr "_Скасувати занесення розписки до книги"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:243
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
 msgid "Unpost this voucher and make it editable"
 msgstr "Скасувати занесення цієї розписки до книги і зробити її редагованою"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:244
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
 msgid "New _Voucher"
 msgstr "Створити _розписку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:244
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
 msgid "Create a new voucher for the same owner as the current one"
 msgstr "Створити нову розписку для того самого власника, що і поточний"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:245
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
 msgid "Move to the blank entry at the bottom of the voucher"
 msgstr "Перейти на чистий запис внизу розписки"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:246
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
 msgid "_Pay Voucher"
 msgstr "С_платити за розпискою"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:246
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
 msgid "Enter a payment for the owner of this voucher"
 msgstr "Введіть платіж для власника цієї розписки"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:247
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
 msgid "Open a employee report window for the owner of this voucher"
 msgstr ""
 "Відкрити вікно звіту про найманого працівника для власника цієї розписки"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:255
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:255
 msgid "_Use as Default Layout for Employee Documents"
 msgstr ""
 "_Використовувати як типове компонування для документів найманого робітника"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:256
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:256
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
 "Використовувати поточне компонування як типове для усіх розписок та сторно "
 "найманого робітника"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:257
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
 msgid "_Reset Default Layout for Employee Documents"
 msgstr "С_кинути типове компонування для документів найманого робітника"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:258
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
@@ -4789,135 +4785,135 @@ msgstr ""
 "Скинути типове компонування для усіх розписок та сторно найманого робітника "
 "до вбудованого типового і оновити відповідним чином поточну сторінку"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:264
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:264
 msgid "_Print Credit Note"
 msgstr "Н_адрукувати сторно"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:264
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:264
 msgid "Make a printable credit note"
 msgstr "Зробити друковане сторно"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:265
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
 msgid "_Edit Credit Note"
 msgstr "З_мінити сторно"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:265
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
 msgid "Edit this credit note"
 msgstr "Змінити сторно"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:266
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
 msgid "_Duplicate Credit Note"
 msgstr "_Дублювати сторно"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:266
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
 msgid "Create a new credit note as a duplicate of the current one"
 msgstr "Створити нове сторно як дублікат поточного"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:267
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:267
 msgid "_Post Credit Note"
 msgstr "З_анести сторно до книги"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:267
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:267
 msgid "Post this credit note to your Chart of Accounts"
 msgstr "Додати це сторно у графік рахунків"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:268
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
 msgid "_Unpost Credit Note"
 msgstr "Скасувати з_анесення сторно до книги"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:268
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
 msgid "Unpost this credit note and make it editable"
 msgstr "Скасувати надсилання цього сторно та зробити його редагованим"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:269
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:269
 msgid "New _Credit Note"
 msgstr "С_творити сторно"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:269
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:269
 msgid "Create a new credit note for the same owner as the current one"
 msgstr "Створити нове сторно для того самого власника, що і поточний"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:270
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:270
 msgid "Move to the blank entry at the bottom of the credit note"
 msgstr "Перейти на чистий запис внизу сторно"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:271
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:271
 msgid "_Pay Credit Note"
 msgstr "С_платити сторно"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:271
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:271
 msgid "Enter a payment for the owner of this credit note"
 msgstr "Введіть платіж для власника цього сторно"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:272
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:272
 msgid "Open a company report window for the owner of this credit note"
 msgstr "Відкрити вікно звіту про фірму для власника цього сторно"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:273
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
 msgid "Manage Document Link…"
 msgstr "Керування прив'язками до документа…"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:281
-#: gnucash/gnome/gnc-plugin-page-register.c:376
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:281
+#: gnucash/gnome/gnc-plugin-page-register.cpp:383
 #: gnucash/ui/gnc-embedded-register-window.ui:195
 msgid "Enter"
 msgstr "Ввести"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:285
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:285
 msgid "Up"
 msgstr "↑"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:286
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:286
 msgid "Down"
 msgstr "↓"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:289
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:289
 msgid "Unpost"
 msgstr "Скасувати надсилання"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.c:290
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:290
 msgid "Pay"
 msgstr "Сплатити"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:227
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:227
 msgid "New Voucher"
 msgstr "Новий товарний чек"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:228
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:860
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:228
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:860
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:125
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:527
 msgid "Vendor Listing"
 msgstr "Список постачальників"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:229
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:866
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:229
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:866
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:372
 msgid "Customer Listing"
 msgstr "Список клієнтів"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:359
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:359
 msgid "Owners"
 msgstr "Власники"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:556
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:556
 msgid "Customers"
 msgstr "Клієнти"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:561
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:561
 msgid "Jobs"
 msgstr "Посади"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:566
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:566
 msgid "Vendors"
 msgstr "Постачальники"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:571
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:571
 msgid "Employees"
 msgstr "Працівники"
 
-#: gnucash/gnome/gnc-plugin-page-owner-tree.c:1052
+#: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1052
 #, c-format
 msgid ""
 "The owner %s will be deleted.\n"
@@ -4926,22 +4922,22 @@ msgstr ""
 "Запис власника %s буде вилучено.\n"
 "Ви справді цього хочете?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:247
+#: gnucash/gnome/gnc-plugin-page-register.cpp:254
 #: gnucash/ui/gnc-plugin-page-register.ui:130
 msgid "Cu_t Transaction"
 msgstr "_Вирізати транзакцію"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:248
+#: gnucash/gnome/gnc-plugin-page-register.cpp:255
 #: gnucash/ui/gnc-plugin-page-register.ui:136
 msgid "_Copy Transaction"
 msgstr "_Копіювати транзакцію"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:249
+#: gnucash/gnome/gnc-plugin-page-register.cpp:256
 #: gnucash/ui/gnc-plugin-page-register.ui:142
 msgid "_Paste Transaction"
 msgstr "Вст_авити транзакцію"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:250
+#: gnucash/gnome/gnc-plugin-page-register.cpp:257
 #: gnucash/ui/gnc-embedded-register-window.ui:111
 #: gnucash/ui/gnc-plugin-page-register.ui:148
 #: gnucash/ui/gnc-plugin-page-register.ui:364
@@ -4950,7 +4946,7 @@ msgstr "Вст_авити транзакцію"
 msgid "Dup_licate Transaction"
 msgstr "З_робити копію транзакції"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:251
+#: gnucash/gnome/gnc-plugin-page-register.cpp:258
 #: gnucash/gnome/gnc-split-reg.c:1507
 #: gnucash/ui/gnc-embedded-register-window.ui:116
 #: gnucash/ui/gnc-plugin-page-register.ui:154
@@ -4962,57 +4958,57 @@ msgstr "В_идалити транзакцію"
 
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
-#: gnucash/gnome/gnc-plugin-page-register.c:262
+#: gnucash/gnome/gnc-plugin-page-register.cpp:269
 #: gnucash/ui/gnc-plugin-page-register.ui:220
 #: gnucash/ui/gnc-plugin-page-register.ui:405
 #: gnucash/ui/gnc-plugin-page-register.ui:517
 msgid "Jump to Invoice"
 msgstr "Перейти до рахунка-фактури"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:263
+#: gnucash/gnome/gnc-plugin-page-register.cpp:270
 msgid "Cu_t Split"
 msgstr "Ви_різати частину"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:264
+#: gnucash/gnome/gnc-plugin-page-register.cpp:271
 msgid "_Copy Split"
 msgstr "_Копіювати частину"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:265
+#: gnucash/gnome/gnc-plugin-page-register.cpp:272
 msgid "_Paste Split"
 msgstr "_Вставити частину"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:266
+#: gnucash/gnome/gnc-plugin-page-register.cpp:273
 #: gnucash/ui/gnc-plugin-page-register.ui:476
 #: gnucash/ui/gnc-plugin-page-register.ui:613
 msgid "Dup_licate Split"
 msgstr "Д_ублювати частину"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:267
+#: gnucash/gnome/gnc-plugin-page-register.cpp:274
 #: gnucash/gnome/gnc-split-reg.c:1467
 #: gnucash/ui/gnc-plugin-page-register.ui:481
 #: gnucash/ui/gnc-plugin-page-register.ui:618
 msgid "_Delete Split"
 msgstr "В_идалити частину"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:268
+#: gnucash/gnome/gnc-plugin-page-register.cpp:275
 #: gnucash/ui/gnc-embedded-register-window.ui:35
 #: gnucash/ui/gnc-plugin-page-register.ui:132
 msgid "Cut the selected transaction into clipboard"
 msgstr "Вирізати поточну транзакцію у буфер обміну"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:269
+#: gnucash/gnome/gnc-plugin-page-register.cpp:276
 #: gnucash/ui/gnc-embedded-register-window.ui:40
 #: gnucash/ui/gnc-plugin-page-register.ui:138
 msgid "Copy the selected transaction into clipboard"
 msgstr "Копіювати виділену транзакцію у буфер обміну"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:270
+#: gnucash/gnome/gnc-plugin-page-register.cpp:277
 #: gnucash/ui/gnc-embedded-register-window.ui:45
 #: gnucash/ui/gnc-plugin-page-register.ui:144
 msgid "Paste the transaction from the clipboard"
 msgstr "Вставити транзакцію з буферу обміну"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:271
+#: gnucash/gnome/gnc-plugin-page-register.cpp:278
 #: gnucash/ui/gnc-embedded-register-window.ui:50
 #: gnucash/ui/gnc-embedded-register-window.ui:113
 #: gnucash/ui/gnc-embedded-register-window.ui:157
@@ -5023,7 +5019,7 @@ msgstr "Вставити транзакцію з буферу обміну"
 msgid "Make a copy of the current transaction"
 msgstr "Зробити копію поточної транзакції"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:272
+#: gnucash/gnome/gnc-plugin-page-register.cpp:279
 #: gnucash/ui/gnc-embedded-register-window.ui:55
 #: gnucash/ui/gnc-embedded-register-window.ui:118
 #: gnucash/ui/gnc-embedded-register-window.ui:172
@@ -5034,7 +5030,7 @@ msgstr "Зробити копію поточної транзакції"
 msgid "Delete the current transaction"
 msgstr "Вилучити поточну транзакцію"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:273
+#: gnucash/gnome/gnc-plugin-page-register.cpp:280
 #: gnucash/ui/gnc-plugin-page-register.ui:207
 #: gnucash/ui/gnc-plugin-page-register.ui:395
 #: gnucash/ui/gnc-plugin-page-register.ui:507
@@ -5043,63 +5039,63 @@ msgstr ""
 "Додати, змінити або відв'язати документ, який пов'язано із поточною "
 "транзакцією"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:274
+#: gnucash/gnome/gnc-plugin-page-register.cpp:281
 #: gnucash/ui/gnc-plugin-page-register.ui:213
 #: gnucash/ui/gnc-plugin-page-register.ui:400
 #: gnucash/ui/gnc-plugin-page-register.ui:512
 msgid "Open the linked document for the current transaction"
 msgstr "Відкрити пов'язаний із поточною транзакцією документ"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:275
+#: gnucash/gnome/gnc-plugin-page-register.cpp:282
 #: gnucash/ui/gnc-plugin-page-register.ui:222
 #: gnucash/ui/gnc-plugin-page-register.ui:407
 #: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher"
 msgstr "Перейти до пов'язаного рахунка, рахунка-фактури або розписки"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:276
+#: gnucash/gnome/gnc-plugin-page-register.cpp:283
 msgid "Cut the selected split into clipboard"
 msgstr "Вирізати позначену частину до буфера обміну"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:277
+#: gnucash/gnome/gnc-plugin-page-register.cpp:284
 msgid "Copy the selected split into clipboard"
 msgstr "Копіювати позначену частину до буфера обміну"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:278
+#: gnucash/gnome/gnc-plugin-page-register.cpp:285
 msgid "Paste the split from the clipboard"
 msgstr "Вставити частину з буферу обміну"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:279
+#: gnucash/gnome/gnc-plugin-page-register.cpp:286
 #: gnucash/ui/gnc-plugin-page-register.ui:478
 #: gnucash/ui/gnc-plugin-page-register.ui:615
 msgid "Make a copy of the current split"
 msgstr "Зробити копію поточної частини"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:280
+#: gnucash/gnome/gnc-plugin-page-register.cpp:287
 #: gnucash/ui/gnc-plugin-page-register.ui:483
 #: gnucash/ui/gnc-plugin-page-register.ui:620
 msgid "Delete the current split"
 msgstr "Вилучити поточну частину"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
-#: gnucash/gnome/gnc-plugin-page-register.c:382
+#: gnucash/gnome/gnc-plugin-page-register.cpp:389
 msgid "Show Splits"
 msgstr "Показати дроблення"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:383
+#: gnucash/gnome/gnc-plugin-page-register.cpp:390
 msgid "Jump"
 msgstr "Перейти"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:384
+#: gnucash/gnome/gnc-plugin-page-register.cpp:391
 msgid "Schedule"
 msgstr "Розклад"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:387
+#: gnucash/gnome/gnc-plugin-page-register.cpp:394
 #: gnucash/gnome/window-autoclear.c:88
 msgid "Auto-clear"
 msgstr "Автоперевірка"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:391
+#: gnucash/gnome/gnc-plugin-page-register.cpp:398
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:146
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:251
 #: gnucash/ui/gnc-plugin-page-register.ui:250
@@ -5107,21 +5103,21 @@ msgstr "Автоперевірка"
 msgid "Stock Assistant"
 msgstr "Помічник фондового ринку"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:639
-#: gnucash/gnome/gnc-plugin-page-register.c:1903
-#: gnucash/gnome/gnc-plugin-page-register.c:3314
+#: gnucash/gnome/gnc-plugin-page-register.cpp:647
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1930
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3341
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
 msgstr "Загальний журнал"
 
 #. Translators: %s is the name
 #. of the tab page
-#: gnucash/gnome/gnc-plugin-page-register.c:1837
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1864
 #, c-format
 msgid "Save changes to %s?"
 msgstr "Зберегти зміни у %s?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1842
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1869
 msgid ""
 "This register has pending changes to a transaction. Would you like to save "
 "the changes to this transaction, discard the transaction, or cancel the "
@@ -5130,104 +5126,104 @@ msgstr ""
 "Цей реєстр містить незбережені зміни в транзакції. Хочете зберегти зміни до "
 "цієї транзакції, скасувати транзакцію, чи скасувати операцію?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1845
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1872
 msgid "_Discard Transaction"
 msgstr "_Скасувати транзакцію"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1849
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1876
 msgid "_Save Transaction"
 msgstr "З_берегти транзакцію"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1882
-#: gnucash/gnome/gnc-plugin-page-register.c:1917
-#: gnucash/gnome/gnc-plugin-page-register.c:1930
-#: gnucash/gnome/gnc-plugin-page-register.c:1987
-#: gnucash/gnome/gnc-plugin-page-register.c:2085
-#: gnucash/gnome/gnc-plugin-page-register.c:2208
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1909
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1944
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1957
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2014
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2112
+#: gnucash/gnome/gnc-plugin-page-register.cpp:2235
 msgid "unknown"
 msgstr "(невідомо)"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1905
-#: gnucash/gnome/gnc-plugin-page-register.c:3320
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1932
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3347
 msgid "Portfolio"
 msgstr "Портфель"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:1907
-#: gnucash/gnome/gnc-plugin-page-register.c:3326
+#: gnucash/gnome/gnc-plugin-page-register.cpp:1934
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3353
 msgid "Search Results"
 msgstr "Результати пошуку"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3192
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3219
 msgid "Start Date:"
 msgstr "Дата початку:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3199
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3226
 msgid "Show previous number of days:"
 msgstr "Показувати попередню кількість днів:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3207
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3234
 msgid "End Date:"
 msgstr "Дата завершення:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3217
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3244
 #: gnucash/report/trep-engine.scm:157
 msgid "Unreconciled"
 msgstr "Не узгоджено"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3223
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3250
 #: gnucash/gnome-search/search-reconciled.c:222
 #: gnucash/report/trep-engine.scm:160
 msgid "Frozen"
 msgstr "Заморожено"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3225
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3252
 #: gnucash/gnome-search/search-reconciled.c:225
 #: gnucash/report/trep-engine.scm:161
 msgid "Voided"
 msgstr "Порожнє"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3235
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3262
 msgid "Show:"
 msgstr "Показувати:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3243
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3270
 msgid "Hide:"
 msgstr "Приховати:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3254
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3281
 msgid "Filter By:"
 msgstr "Критерій фільтрування:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3316
-#: gnucash/gnome/gnc-plugin-page-register.c:3334
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3343
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3361
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
 msgstr "Звіт про транзакції"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3322
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3349
 msgid "Portfolio Report"
 msgstr "Параметри звіту"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3328
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3355
 msgid "Search Results Report"
 msgstr "Звіт про результати пошуку"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3332
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3359
 #: gnucash/gtkbuilder/dialog-preferences.glade:2791
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
 msgstr "Журнал"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3350
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3377
 msgid "and subaccounts"
 msgstr "та субрахунки"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3527
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3554
 msgid "Print checks from multiple accounts?"
 msgstr "Друкувати чеки з декількох рахунків?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3529
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3556
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
@@ -5235,53 +5231,53 @@ msgstr ""
 "Цей результат пошуку містить дроблення із декількох рахунків. Хочете "
 "надрукувати чеки, навіть якщо вони не усі належать до одного рахунку?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3539
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3566
 msgid "_Print checks"
 msgstr "_Друкувати чеки"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3558
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3585
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr ""
 "Друкувати чеки можна лише з реєстру банківського рахунку або результатів "
 "пошуку."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3774
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3801
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr "Показати розширені транзакції з узгодженими чи очищеними частинами."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3781
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3808
 #: gnucash/gnome/gnc-split-reg.c:1124
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
 msgstr "Ця транзакція позначена лише для читання з коментарем: «%s»"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3874
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3909
 #: gnucash/gnome/gnc-split-reg.c:1095
 msgid "A reversing entry has already been created for this transaction."
 msgstr "Для цієї транзакції вже було створено реверсивний запис."
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3875
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3910
 msgid "Jump to the transaction?"
 msgstr "Перейти до транзакції?"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3882
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3919
 msgid "Reverse Transaction"
 msgstr "Зворотня транзакція"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:3883
+#: gnucash/gnome/gnc-plugin-page-register.cpp:3919
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
 msgid "New Transaction Information"
 msgstr "Інформація про нову транзакцію"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:3973
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4010
 #, c-format
 msgid "Sort %s by…"
 msgstr "Сортувати %s за…"
 
 #. Translators: The %s is the name of the plugin page
-#: gnucash/gnome/gnc-plugin-page-register.c:4063
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4100
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1148
 #, c-format
 msgid "Filter %s by…"
@@ -5290,27 +5286,27 @@ msgstr "Фільтрувати %s за…"
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
 #. posted date, amount
-#: gnucash/gnome/gnc-plugin-page-register.c:4608
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4627
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
 msgstr "%s %s від %s, розміщено %s, сума %s"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4618
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4637
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr ""
 "Із цією операцією пов'язано декілька документів. Будь ласка, виберіть один з "
 "них:"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4619
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4638
 #: gnucash/gnome-search/dialog-search.c:323
 msgid "Select"
 msgstr "Вибрати"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4674
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4691
 msgid "Go to Date"
 msgstr "Перейти до дати"
 
-#: gnucash/gnome/gnc-plugin-page-register.c:4976
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4994
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr "Перевіряємо дроблення у поточному реєстрі: %u з %u"
@@ -5458,37 +5454,37 @@ msgstr "Простий рахунок-фактура"
 msgid "Fancy Invoice"
 msgstr "Гарний рахунок-фактура"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:393
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:393
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:47
 #, fuzzy
 #| msgid "_Schedule"
 msgid "_New Schedule"
 msgstr "_Запланувати"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:399
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:399
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
 #, fuzzy
 #| msgid "_Schedule"
 msgid "_Edit Schedule"
 msgstr "_Запланувати"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:405
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:405
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
 #, fuzzy
 #| msgid "_Schedule"
 msgid "_Delete Schedule"
 msgstr "_Запланувати"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:487
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:487
 #: gnucash/gtkbuilder/dialog-account.glade:553
 msgid "Transactions"
 msgstr "Транзакції"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:559
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:559
 msgid "Upcoming Transactions"
 msgstr "Майбутні транзакції"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.c:896
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:896
 #, fuzzy
 #| msgid "Do you really want to delete this scheduled transaction?"
 #| msgid_plural "Do you really want to delete %d scheduled transactions?"
@@ -6457,7 +6453,7 @@ msgstr "Обробляємо файл…"
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1124
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:423
-#: gnucash/import-export/csv-imp/gnc-tokenizer-csv.cpp:107
+#: gnucash/import-export/csv-imp/gnc-tokenizer-csv.cpp:131
 msgid "There was an error parsing the file."
 msgstr "Під час спроби обробити файл сталася помилка."
 
@@ -6474,66 +6470,66 @@ msgstr "Цей кодування вже додано до списку."
 msgid "This is an invalid encoding."
 msgstr "Це - неправильне кодування."
 
-#: gnucash/gnome-utils/dialog-account.c:632
+#: gnucash/gnome-utils/dialog-account.c:659
 msgid "Could not create opening balance."
 msgstr "Не створювати початкове сальдо."
 
-#: gnucash/gnome-utils/dialog-account.c:837
+#: gnucash/gnome-utils/dialog-account.c:860
 msgid "Give the children the same type?"
 msgstr "Призначити дочірнім рахункам такий самий тип?"
 
-#: gnucash/gnome-utils/dialog-account.c:848
+#: gnucash/gnome-utils/dialog-account.c:871
 #, c-format
 msgid ""
 "The children of the edited account have to be changed to type \"%s\" to make "
 "them compatible."
 msgstr "Дочірні рахунки були змінені на тип «%s», щоб зробити їх сумісними."
 
-#: gnucash/gnome-utils/dialog-account.c:859
+#: gnucash/gnome-utils/dialog-account.c:882
 msgid "_Show children accounts"
 msgstr "Показувати _дочірні рахунки"
 
-#: gnucash/gnome-utils/dialog-account.c:931
+#: gnucash/gnome-utils/dialog-account.c:954
 msgid "The account must be given a name."
 msgstr "У рахунку повинна бути одна назва."
 
-#: gnucash/gnome-utils/dialog-account.c:957
+#: gnucash/gnome-utils/dialog-account.c:980
 msgid "There is already an account with that name."
 msgstr "Рахунок з такою назвою вже є."
 
-#: gnucash/gnome-utils/dialog-account.c:966
+#: gnucash/gnome-utils/dialog-account.c:989
 msgid "You must choose a valid parent account."
 msgstr "Потрібно вибрати коректний батьківський рахунок."
 
-#: gnucash/gnome-utils/dialog-account.c:975
+#: gnucash/gnome-utils/dialog-account.c:998
 msgid "You must select an account type."
 msgstr "Потрібно вибрати тип рахунку."
 
-#: gnucash/gnome-utils/dialog-account.c:984
+#: gnucash/gnome-utils/dialog-account.c:1007
 msgid ""
 "The selected account type is incompatible with the one of the selected "
 "parent."
 msgstr ""
 "Вибраний рахунок має тип, що не сумісний з одним із батьківських рахунків."
 
-#: gnucash/gnome-utils/dialog-account.c:996
+#: gnucash/gnome-utils/dialog-account.c:1019
 msgid "You must choose a commodity."
 msgstr "Потрібно вибрати товар."
 
-#: gnucash/gnome-utils/dialog-account.c:1016
+#: gnucash/gnome-utils/dialog-account.c:1039
 msgid "Balance limits must be different unless they are both zero."
 msgstr "Межі балансу мають бути різними, якщо вони не є обидві нульовими."
 
-#: gnucash/gnome-utils/dialog-account.c:1023
+#: gnucash/gnome-utils/dialog-account.c:1046
 msgid "The lower balance limit must be less than the higher limit."
 msgstr "Нижня межа балансу має бути меншою за верхню межу."
 
-#: gnucash/gnome-utils/dialog-account.c:1079
+#: gnucash/gnome-utils/dialog-account.c:1102
 msgid "You must enter a valid opening balance or leave it blank."
 msgstr ""
 "Треба ввести допустимий залишок на початок або залишити це поле порожнім."
 
-#: gnucash/gnome-utils/dialog-account.c:1103
+#: gnucash/gnome-utils/dialog-account.c:1126
 msgid ""
 "You must select a transfer account or choose the opening balances equity "
 "account."
@@ -6541,16 +6537,16 @@ msgstr ""
 "Треба вказати рахунок для передачі або вибрати рахунок вирівнювання для "
 "початкового сальдо."
 
-#: gnucash/gnome-utils/dialog-account.c:1456
+#: gnucash/gnome-utils/dialog-account.c:1481
 msgid ""
 "An account with opening balance already exists for the desired currency."
 msgstr "Для бажаної валюти вже існує рахунок із початковим балансом."
 
-#: gnucash/gnome-utils/dialog-account.c:1457
+#: gnucash/gnome-utils/dialog-account.c:1482
 msgid "Cannot change currency"
 msgstr "Неможливо змінити валюту"
 
-#: gnucash/gnome-utils/dialog-account.c:1546
+#: gnucash/gnome-utils/dialog-account.c:1571
 msgid ""
 "This Account contains Transactions.\n"
 "Changing this option is not possible."
@@ -6558,32 +6554,32 @@ msgstr ""
 "У записі цього рахунку містяться транзакції.\n"
 "Зміна значення цього параметра неможлива."
 
-#: gnucash/gnome-utils/dialog-account.c:1723
+#: gnucash/gnome-utils/dialog-account.c:1745
 #: gnucash/gnome-utils/dialog-utils.c:842
 msgid "<No name>"
 msgstr "<Без назви>"
 
-#: gnucash/gnome-utils/dialog-account.c:1753
+#: gnucash/gnome-utils/dialog-account.c:1775
 msgid "Edit Account"
 msgstr "Змінити параметри рахунку"
 
-#: gnucash/gnome-utils/dialog-account.c:1756
+#: gnucash/gnome-utils/dialog-account.c:1778
 #, c-format
 msgid "(%d) New Accounts"
 msgstr "(%d) Нові рахунки"
 
-#: gnucash/gnome-utils/dialog-account.c:1764
+#: gnucash/gnome-utils/dialog-account.c:1786
 #: gnucash/gtkbuilder/dialog-account.glade:1104
 #: gnucash/gtkbuilder/dialog-account-picker.glade:176
 msgid "New Account"
 msgstr "Новий рахунок"
 
-#: gnucash/gnome-utils/dialog-account.c:2333
+#: gnucash/gnome-utils/dialog-account.c:2355
 #, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
 msgstr "Перенумерувати прямі субрахунки «%s»?"
 
-#: gnucash/gnome-utils/dialog-account.c:2439
+#: gnucash/gnome-utils/dialog-account.c:2461
 #, c-format
 msgid ""
 "Set the account color for account '%s' including all sub-accounts to the "
@@ -6592,7 +6588,7 @@ msgstr ""
 "Встановити колір рахунка для рахунка «%s», включно з усіма субрахунками, "
 "таким"
 
-#: gnucash/gnome-utils/dialog-account.c:2466
+#: gnucash/gnome-utils/dialog-account.c:2488
 #, c-format
 msgid ""
 "Set the account placeholder value for account '%s' including all sub-accounts"
@@ -6600,7 +6596,7 @@ msgstr ""
 "Встановити значення заповнювача рахунка для рахунка «%s», включно з усіма "
 "субрахунками"
 
-#: gnucash/gnome-utils/dialog-account.c:2480
+#: gnucash/gnome-utils/dialog-account.c:2502
 #, c-format
 msgid ""
 "Set the account hidden value for account '%s' including all sub-accounts"
@@ -8476,7 +8472,7 @@ msgstr "Знайдено версію Finance::Quote {1}."
 msgid "Finance::Quote sources:\n"
 msgstr "Джерела Finance::Quote:\n"
 
-#: gnucash/gnucash-commands.cpp:373 gnucash/gnucash-commands.cpp:397
+#: gnucash/gnucash-commands.cpp:372 gnucash/gnucash-commands.cpp:396
 msgid "Price retrieval failed: "
 msgstr "Не вдалося отримати ціну: "
 
@@ -8592,24 +8588,24 @@ msgstr "[файл даних]"
 msgid "Checking Finance::Quote…"
 msgstr "Перевірка Finance::Quote…"
 
-#: gnucash/gnucash.cpp:188
+#: gnucash/gnucash.cpp:187
 msgid "Unable to load Finance::Quote."
 msgstr "Не вдалося завантажити Finance::Quote."
 
-#: gnucash/gnucash.cpp:199
+#: gnucash/gnucash.cpp:198
 msgid "Loading data…"
 msgstr "Завантажуємо дані…"
 
-#: gnucash/gnucash.cpp:271
+#: gnucash/gnucash.cpp:270
 msgid "Application Options"
 msgstr "Параметри програми"
 
-#: gnucash/gnucash.cpp:274
+#: gnucash/gnucash.cpp:273
 msgid "Do not load the last file opened"
 msgstr "Не завантажувати останній відкритий файл"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:312
+#: gnucash/gnucash.cpp:311
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
@@ -19457,9 +19453,9 @@ msgid "File exported successfully!\n"
 msgstr "Файл успішно експортовано!\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
-#: gnucash/import-export/import-main-matcher.cpp:1845
+#: gnucash/import-export/import-main-matcher.cpp:1868
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.cpp:1616 libgnucash/engine/Split.cpp:1633
+#: libgnucash/engine/Split.cpp:1634 libgnucash/engine/Split.cpp:1651
 msgid "-- Split Transaction --"
 msgstr "-- Транзакція з частин --"
 
@@ -20223,118 +20219,118 @@ msgstr "р/м/д"
 msgid "y/d/m"
 msgstr "р/д/м"
 
-#: gnucash/import-export/import-main-matcher.cpp:501
+#: gnucash/import-export/import-main-matcher.cpp:502
 msgid "No new transactions were found in this import."
 msgstr "В цих імпортованих даних не знайдено нових транзакцій."
 
-#: gnucash/import-export/import-main-matcher.cpp:773
+#: gnucash/import-export/import-main-matcher.cpp:774
 msgid "Destination account for the auto-balance split."
 msgstr "Рахунок призначення для дроблення для автоматичного балансування."
 
-#: gnucash/import-export/import-main-matcher.cpp:964
+#: gnucash/import-export/import-main-matcher.cpp:996
 msgid "Click Edit to modify"
 msgstr "Натисніть «Редагувати», щоб змінити"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1369
+#: gnucash/import-export/import-main-matcher.cpp:1407
 msgid "_Assign transfer account"
 msgstr "_Призначити рахунок для переносу"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1379
+#: gnucash/import-export/import-main-matcher.cpp:1412
 msgid "Assign e_xchange rate"
 msgstr "Призначити _курс обміну"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1387
+#: gnucash/import-export/import-main-matcher.cpp:1417
 msgid "_Edit description, notes, or memo"
 msgstr "_Редагувати опис, нотатки або примітку"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1396
+#: gnucash/import-export/import-main-matcher.cpp:1422
 msgid "_Reset all edits"
 msgstr "_Скинути усі редагування"
 
-#: gnucash/import-export/import-main-matcher.cpp:1549
+#: gnucash/import-export/import-main-matcher.cpp:1572
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "Д"
 
-#: gnucash/import-export/import-main-matcher.cpp:1553
+#: gnucash/import-export/import-main-matcher.cpp:1576
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "О+У"
 
-#: gnucash/import-export/import-main-matcher.cpp:1557
+#: gnucash/import-export/import-main-matcher.cpp:1580
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "У"
 
-#: gnucash/import-export/import-main-matcher.cpp:1564
+#: gnucash/import-export/import-main-matcher.cpp:1587
 msgid "Info"
 msgstr "Інформація"
 
-#: gnucash/import-export/import-main-matcher.cpp:1571
+#: gnucash/import-export/import-main-matcher.cpp:1594
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 msgid "Additional Comments"
 msgstr "Додаткові коментарі"
 
-#: gnucash/import-export/import-main-matcher.cpp:1956
+#: gnucash/import-export/import-main-matcher.cpp:1979
 msgid "New, already balanced"
 msgstr "Новий, вже збалансований"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:1978
+#: gnucash/import-export/import-main-matcher.cpp:2001
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Новий, трансфер %s у (вручну) «%s»"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:1986
+#: gnucash/import-export/import-main-matcher.cpp:2009
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Новий, трансфер %s у (автоматично) «%s»"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:1999
+#: gnucash/import-export/import-main-matcher.cpp:2022
 #, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr "Новий, НЕЗБАЛАНСОВАНИЙ (потрібна ціна для переказу %s до рахунку %s)!"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2015
+#: gnucash/import-export/import-main-matcher.cpp:2038
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Новий, НЕЗБАЛАНСОВАНИЙ (потрібен рахунок для трансферу %s)!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2033
+#: gnucash/import-export/import-main-matcher.cpp:2056
 #, c-format
 msgid "Reconcile (manual) match to %s"
 msgstr "Узгодити (вручну) відповідність до %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2038
+#: gnucash/import-export/import-main-matcher.cpp:2061
 #, c-format
 msgid "Reconcile (auto) match to %s"
 msgstr "Узгодити (автоматично) відповідність до %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2047
-#: gnucash/import-export/import-main-matcher.cpp:2076
+#: gnucash/import-export/import-main-matcher.cpp:2070
+#: gnucash/import-export/import-main-matcher.cpp:2099
 msgid "Match missing!"
 msgstr "Немає відповідності!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2062
+#: gnucash/import-export/import-main-matcher.cpp:2085
 #, c-format
 msgid "Update and reconcile (manual) match to %s"
 msgstr "Оновити і узгодити (вручну) відповідність до %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2067
+#: gnucash/import-export/import-main-matcher.cpp:2090
 #, c-format
 msgid "Update and reconcile (auto) match to %s"
 msgstr "Оновити і узгодити (автоматично) відповідність до %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2084
+#: gnucash/import-export/import-main-matcher.cpp:2107
 msgid "Do not import (no action selected)"
 msgstr "Не імпортувати (дію не вибрано)"
 
@@ -30390,73 +30386,73 @@ msgstr "Недостатньо пам'яті"
 msgid "Numeric error"
 msgstr "Числова помилка"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:161
+#: libgnucash/app-utils/gnc-quotes.cpp:160
 msgid "Failed to initialize Finance::Quote: "
 msgstr "Не вдалося ініціалізувати Finance::Quote: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:168
+#: libgnucash/app-utils/gnc-quotes.cpp:167
 msgid "Finance::Quote check returned error "
 msgstr "Перевіркою Finance::Quote повернуто помилку "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:176
+#: libgnucash/app-utils/gnc-quotes.cpp:175
 msgid "No Finance::Quote Version"
 msgstr "Немає версії Finance::Quote"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:313
+#: libgnucash/app-utils/gnc-quotes.cpp:302
 msgid "GncQuotes::Fetch called with no book."
 msgstr "GncQuotes::Fetch викликано без книги."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:331
+#: libgnucash/app-utils/gnc-quotes.cpp:320
 msgid "GncQuotes::Fetch called with no commodities."
 msgstr "GncQuotes::Fetch викликано без зазначення активів."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:342
+#: libgnucash/app-utils/gnc-quotes.cpp:331
 msgid "GncQuotes::Report called with no source."
 msgstr "GncQuotes::Report викликано без джерела."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:348
+#: libgnucash/app-utils/gnc-quotes.cpp:337
 msgid "There were no commodities for which to retrieve quotes."
 msgstr "Немає активів, для яких слід отримати курси."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:362
+#: libgnucash/app-utils/gnc-quotes.cpp:351
 msgid "Finance::Quote retrieval failed with error "
 msgstr ""
 "Отримання даних Finance::Quote завершилося невдало з повідомленням про "
 "помилку "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:380
-#: libgnucash/app-utils/gnc-quotes.cpp:856
+#: libgnucash/app-utils/gnc-quotes.cpp:369
+#: libgnucash/app-utils/gnc-quotes.cpp:845
 msgid "Finance::Quote returned no data and set no error."
 msgstr "Finance::Quote не повернуто даних і не встановлено помилки."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:382
+#: libgnucash/app-utils/gnc-quotes.cpp:371
 msgid "Finance::Quote returned an error: "
 msgstr "Finance::Quote повернуто повідомлення про помилку: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:386
+#: libgnucash/app-utils/gnc-quotes.cpp:375
 msgid "Finance::Quote reported failure set no error."
 msgstr "Finance::Quote повідомлено про невдачу без помилки."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:388
+#: libgnucash/app-utils/gnc-quotes.cpp:377
 msgid "Finance::Quote reported failure with error: "
 msgstr "Finance::Quote повідомлено про невдачу із такою помилкою: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:391
+#: libgnucash/app-utils/gnc-quotes.cpp:380
 msgid "Finance::Quote returned a quote with no currency."
 msgstr "Finance::Quote повернуто курс без запису валюти."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:394
+#: libgnucash/app-utils/gnc-quotes.cpp:383
 msgid ""
 "Finance::Quote returned a quote with a currency GnuCash doesn't know about."
 msgstr ""
 "Finance::Quote повернуто курс із записом валюти, який є невідомим для "
 "GnuCash."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:397
+#: libgnucash/app-utils/gnc-quotes.cpp:386
 msgid "Finance::Quote returned a quote with no price element."
 msgstr "Finance::Quote повернуто курс без елемента ціни."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:400
+#: libgnucash/app-utils/gnc-quotes.cpp:389
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
@@ -30464,115 +30460,115 @@ msgstr ""
 "Finance::Quote повернуто курс з ціною, яку GnuCash не вдалося перетворити на "
 "число."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:404
+#: libgnucash/app-utils/gnc-quotes.cpp:393
 msgid "The quote has no error set."
 msgstr "Для курсу не встановлено помилки."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:413
+#: libgnucash/app-utils/gnc-quotes.cpp:402
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr ""
 "Курси для вказаних нижче активів недоступні або непридатні до використання:\n"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:499
+#: libgnucash/app-utils/gnc-quotes.cpp:488
 msgid "Currency quotes requires at least two currencies"
 msgstr "Для курсу потрібно принаймні дві валюти"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:758
-#: libgnucash/app-utils/gnc-quotes.cpp:768
+#: libgnucash/app-utils/gnc-quotes.cpp:747
+#: libgnucash/app-utils/gnc-quotes.cpp:757
 msgid "Failed to parse result returned by Finance::Quote."
 msgstr "Не вдалося обробити результат, який повернуто Finance::Quote."
 
 #. Translators: This labels the return value of a query to Finance::Quote written in an error.
-#: libgnucash/app-utils/gnc-quotes.cpp:761
-#: libgnucash/app-utils/gnc-quotes.cpp:776
+#: libgnucash/app-utils/gnc-quotes.cpp:750
+#: libgnucash/app-utils/gnc-quotes.cpp:765
 msgid "Result:"
 msgstr ""
 
 #. Translators: This is the error message reported by the Online Quotes processing code.
-#: libgnucash/app-utils/gnc-quotes.cpp:771
+#: libgnucash/app-utils/gnc-quotes.cpp:760
 msgid "Error message:"
 msgstr "Повідомлення про помилку:"
 
 #. Translators: Means that the preceding element is required
-#: libgnucash/app-utils/gnc-quotes.cpp:816
+#: libgnucash/app-utils/gnc-quotes.cpp:805
 msgctxt "Finance::Quote"
 msgid "required"
 msgstr "обов'язковий"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
-#: libgnucash/app-utils/gnc-quotes.cpp:818
+#: libgnucash/app-utils/gnc-quotes.cpp:807
 msgctxt "Finance::Quote"
 msgid "recommended"
 msgstr "рекомендований"
 
 #. Translators: Means that one of the indicated elements is required
-#: libgnucash/app-utils/gnc-quotes.cpp:820
+#: libgnucash/app-utils/gnc-quotes.cpp:809
 msgctxt "Finance::Quote"
 msgid "one of these"
 msgstr "один з цих"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
-#: libgnucash/app-utils/gnc-quotes.cpp:822
+#: libgnucash/app-utils/gnc-quotes.cpp:811
 msgctxt "Finance::Quote"
 msgid "**missing**"
 msgstr "**пропущений**"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:829
+#: libgnucash/app-utils/gnc-quotes.cpp:818
 msgid "Finance::Quote fields GnuCash uses:"
 msgstr "Поля Finance::Quote, які використовує GnuCash:"
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
-#: libgnucash/app-utils/gnc-quotes.cpp:831
+#: libgnucash/app-utils/gnc-quotes.cpp:820
 msgctxt "Finance::Quote"
 msgid "symbol: "
 msgstr "символ: "
 
 #. Translators: The date of the quote.
-#: libgnucash/app-utils/gnc-quotes.cpp:833
+#: libgnucash/app-utils/gnc-quotes.cpp:822
 msgctxt "Finance::Quote"
 msgid "date: "
 msgstr "дата: "
 
 #. Translators: The quote currency
-#: libgnucash/app-utils/gnc-quotes.cpp:835
+#: libgnucash/app-utils/gnc-quotes.cpp:824
 msgctxt "Finance::Quote"
 msgid "currency: "
 msgstr "валюта: "
 
 #. Translators: The quote is for the most recent trade on the exchange
-#: libgnucash/app-utils/gnc-quotes.cpp:841
+#: libgnucash/app-utils/gnc-quotes.cpp:830
 msgctxt "Finance::Quote"
 msgid "last: "
 msgstr "остання "
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
-#: libgnucash/app-utils/gnc-quotes.cpp:843
+#: libgnucash/app-utils/gnc-quotes.cpp:832
 msgctxt "Finance::Quote"
 msgid "nav: "
 msgstr "чиста вартість: "
 
 #. Translators: The quote is neither a last trade nor an NAV.
-#: libgnucash/app-utils/gnc-quotes.cpp:845
+#: libgnucash/app-utils/gnc-quotes.cpp:834
 msgctxt "Finance::Quote"
 msgid "price: "
 msgstr "ціна: "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:865
+#: libgnucash/app-utils/gnc-quotes.cpp:854
 msgid "Finance::Quote reported a failure for symbol "
 msgstr "Finance::Quote повідомлено про помилку для символу "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:868
+#: libgnucash/app-utils/gnc-quotes.cpp:857
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr "Finance::Quote не вдалося без повідомлень отримати курс для символу "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:931
+#: libgnucash/app-utils/gnc-quotes.cpp:920
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
 "GnuCash подано некоректний json до Finance::Quote. Подробиці записано до "
 "журналу."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:937
+#: libgnucash/app-utils/gnc-quotes.cpp:926
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
@@ -30581,7 +30577,7 @@ msgstr ""
 "вмістом сторінки https://wiki.gnucash.org/wiki/Online_Quotes#Finance::Quote, "
 "щоб дізнатися про те, як це виправити. "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:943
+#: libgnucash/app-utils/gnc-quotes.cpp:932
 msgid "Unrecognized Finance::Quote Error: "
 msgstr "Нерозпізнана помилка Finance::Quote: "
 
@@ -31438,17 +31434,17 @@ msgstr "Шукаємо осиротілі записи у транзакції: 
 msgid "Looking for imbalances in transaction date %s: %u of %u"
 msgstr "Шукаємо дизбаланси на дату транзакції %s: %u з %u"
 
-#: libgnucash/engine/Split.cpp:1649
+#: libgnucash/engine/Split.cpp:1667
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"
 msgstr "Частинами"
 
-#: libgnucash/engine/Transaction.cpp:2735
+#: libgnucash/engine/Transaction.cpp:2734
 msgid "Voided transaction"
 msgstr "Порожні транзакції"
 
-#: libgnucash/engine/Transaction.cpp:2748
+#: libgnucash/engine/Transaction.cpp:2747
 msgid "Transaction Voided"
 msgstr "Порожні транзакції"
 
