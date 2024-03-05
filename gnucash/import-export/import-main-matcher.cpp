@@ -38,6 +38,7 @@
 #include <glib/gi18n.h>
 #include <stdbool.h>
 
+#include <memory>
 #include <algorithm>
 #include <vector>
 
@@ -805,12 +806,20 @@ gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
     LEAVE("");
 }
 
-// bug 799246. return a vector of GtkTreeRowReference*. don't forget to
-// gtk_tree_row_reference_free the elements before the vector is destroyed.
-static std::vector<GtkTreeRowReference*>
+class TreeRowRefDestructor
+{
+public:
+    void operator()(GtkTreeRowReference* ptr) const { gtk_tree_row_reference_free (ptr); }
+};
+
+using TreeRowReferencePtr = std::unique_ptr<GtkTreeRowReference, TreeRowRefDestructor>;
+
+// bug 799246. return a vector of TreeRowReferencePtr, from which
+// get() will return the GtkTreeRowReference*
+static std::vector<TreeRowReferencePtr>
 get_treeview_selection_refs (GtkTreeView *treeview, GtkTreeModel *model)
 {
-    std::vector<GtkTreeRowReference*> rv;
+    std::vector<TreeRowReferencePtr> rv;
 
     g_return_val_if_fail (GTK_IS_TREE_VIEW (treeview) && GTK_IS_TREE_MODEL (model), rv);
 
@@ -818,7 +827,7 @@ get_treeview_selection_refs (GtkTreeView *treeview, GtkTreeModel *model)
     auto selected_rows = gtk_tree_selection_get_selected_rows (selection, &model);
 
     for (auto n = selected_rows; n; n = g_list_next (n))
-        rv.push_back (gtk_tree_row_reference_new (model, static_cast<GtkTreePath*>(n->data)));
+        rv.emplace_back (gtk_tree_row_reference_new (model, static_cast<GtkTreePath*>(n->data)));
 
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     return rv;
@@ -843,7 +852,7 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
 
     for (const auto& ref : selected_refs)
     {
-        auto path = gtk_tree_row_reference_get_path (ref);
+        auto path = gtk_tree_row_reference_get_path (ref.get());
         if (debugging_enabled)
         {
             auto path_str = gtk_tree_path_to_string (path);
@@ -871,10 +880,9 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
     // now reselect the transaction rows. This is very slow if there are lots of transactions.
     for (const auto& ref : selected_refs)
     {
-        GtkTreePath *path = gtk_tree_row_reference_get_path (ref);
+        GtkTreePath *path = gtk_tree_row_reference_get_path (ref.get());
         gtk_tree_selection_select_path (selection, path);
         gtk_tree_path_free (path);
-        gtk_tree_row_reference_free (ref);
     }
 
     LEAVE("");
@@ -887,9 +895,9 @@ public:
     {
         init_from_path (path, info);
     }
-    RowInfo (GtkTreeRowReference *ref, GNCImportMainMatcher *info)
+    RowInfo (const TreeRowReferencePtr &ref, GNCImportMainMatcher *info)
     {
-        auto path = gtk_tree_row_reference_get_path (ref);
+        auto path = gtk_tree_row_reference_get_path (ref.get());
         init_from_path (path, info);
         gtk_tree_path_free (path);
     }
@@ -1198,7 +1206,6 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
         g_free (new_memo);
         g_free (new_notes);
     }
-    std::for_each (selected_refs.begin(), selected_refs.end(), gtk_tree_row_reference_free);
     LEAVE("");
 }
 
@@ -1233,7 +1240,6 @@ gnc_gen_trans_reset_edits_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
                             DOWNLOADED_COL_DESCRIPTION_STYLE, PANGO_STYLE_NORMAL,
                             DOWNLOADED_COL_MEMO_STYLE, PANGO_STYLE_NORMAL,
                             -1);
-        gtk_tree_row_reference_free (ref);
     };
     LEAVE("");
 }
