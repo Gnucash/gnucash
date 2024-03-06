@@ -6,15 +6,15 @@
 # Nigel Titley <nigel@titley.com>, 2002 - 2007.
 # Neil Williams <linux@codehelp.co.uk>, 2006.
 # Adithya K <adithyak04@gmail.com>, 2021.
-# Simon Arlott <weblate.simon@arlott.org>, 2022, 2023.
+# Simon Arlott <weblate.simon@arlott.org>, 2022, 2023, 2024.
 # John Ralls <jralls@ceridwen.us>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-05 14:50+0100\n"
-"PO-Revision-Date: 2023-12-11 09:05+0000\n"
+"PO-Revision-Date: 2024-03-06 21:01+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (Australia) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/en_AU/>\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -3987,11 +3987,11 @@ msgstr[1] ""
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1266
 msgid "Highlight a date first to sort by occurrence date."
-msgstr ""
+msgstr "Highlight a date first to sort by occurrence date."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
 msgid "Highlight a schedule first to sort by schedule name."
-msgstr ""
+msgstr "Highlight a schedule first to sort by schedule name."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1379
 #: gnucash/gnome-search/dialog-search.c:1105
@@ -9401,10 +9401,8 @@ msgstr "This setting sets the sort direction in the \"since last run\" dialog."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:43
-#, fuzzy
-#| msgid "This settings sets the sort column in the \"since last run\" dialog."
 msgid "The depth used in the tree to sort in the \"since last run\" dialog."
-msgstr "This setting sets the sort column in the \"since last run\" dialog."
+msgstr "The depth used in the tree to sort in the \"since last run\" dialog."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:49
 msgid "Set the \"auto create\" flag by default"
@@ -20509,10 +20507,9 @@ msgid "Missing transaction date."
 msgstr "Missing transaction date."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:601
-#, fuzzy, scheme-format
-#| msgid "Missing transaction date."
+#, scheme-format
 msgid "Missing QIF investment action for transaction dated ~a."
-msgstr "Missing transaction date."
+msgstr "Missing QIF investment action for transaction dated ~a."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1426
 msgid "Invalid transaction date."
