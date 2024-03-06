@@ -12,10 +12,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-05 14:50+0100\n"
-"PO-Revision-Date: 2024-03-04 20:01+0000\n"
+"PO-Revision-Date: 2024-03-06 12:01+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1101,7 +1101,7 @@ msgid ""
 "report as a report option, and use the Edit->Style Sheets menu to customize "
 "style sheets."
 msgstr ""
-"A stíluslapok határozzák meg a jelentések megjelenését. A beállításokban "
+"A stíluslapok határozzák meg a kimutatások megjelenését. A beállításokban "
 "válasszon a jelentés számára egy stíluslapot, és a testreszabáshoz használja "
 "a „Szerkesztés” -> „Stíluslapok” menüt."
 
@@ -5436,9 +5436,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
-"Az aktuális jelentéskonfiguráció hozzáadása a „Jelentések -> Mentett "
-"jelentéskonfigurációk” menühöz. A jelentéskonfiguráció a következő fájlba "
-"lesz elmentve: %s"
+"A kimutatás beállításainak hozzáadása a „Kimutatások -> Mentett kimutatások” "
+"menühöz. A beállítások a következő fájlba lesznek elmentve: %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1271
 #: gnucash/ui/gnc-plugin-page-report.ui:74
@@ -5879,7 +5878,7 @@ msgstr "Tartsa a kisvállalkozásának számvitelét naprakészen"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:20
 msgid "Create accurate reports and graphs from your financial data"
-msgstr "Készítsen pontos jelentéseket és grafikonokat a pénzügyi adataiból"
+msgstr "Készítsen pontos kimutatásokat és grafikonokat a pénzügyi adataiból"
 
 #: gnucash/gnome/gnucash.appdata.xml.in.in:21
 msgid "Set up scheduled transactions to avoid repeated data entry"
@@ -10268,7 +10267,7 @@ msgstr "A megadott pénznem használata minden új jelentésben."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:359
 msgid "Default currency for new reports"
-msgstr "Új jelentések alapértelmezett pénzneme"
+msgstr "Új kimutatások alapértelmezett pénzneme"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:364
 msgid "Zoom factor to use by default for reports."
@@ -15570,7 +15569,7 @@ msgstr "<b>Alapértelmezett stílus</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3270
 msgid "Reports"
-msgstr "Jelentések"
+msgstr "Kimutatások"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3290
 msgid "<b>Window Geometry</b>"
@@ -16004,11 +16003,11 @@ msgstr "A művelet végrehajtása folyik…"
 
 #: gnucash/gtkbuilder/dialog-report.glade:55
 msgid "<b>A_vailable reports</b>"
-msgstr "<b>_Elérhető jelentések</b>"
+msgstr "<b>_Elérhető kimutatások</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:71
 msgid "<b>_Selected Reports</b>"
-msgstr "<b>Kivála_sztott jelentések</b>"
+msgstr "<b>Kivála_sztott kimutatások</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:101
 msgid "A_dd >>"
@@ -22148,8 +22147,8 @@ msgid ""
 "For help on writing reports, or to contribute your brand new, totally cool "
 "report, consult the mailing list ~a."
 msgstr ""
-"Új jelentések reportok írásához segítséget kaphatsz, vadonatúj remek "
-"jelentésedet közkincssé teheted a következő levelező-listán: ~a."
+"A ~a levelezőlistán segítséget kaphatsz új kimutatások írásához vagy "
+"közkincssé is teheted a vadonatúj, fantasztikus kimutatásodat."
 
 #: gnucash/report/reports/example/sample-report.scm:297
 msgid ""
@@ -27090,7 +27089,7 @@ msgstr "Hivatkozások engedélyezése"
 #: gnucash/report/stylesheets/head-or-tail.scm:86
 #: gnucash/report/stylesheets/plain.scm:50
 msgid "Enable hyperlinks in reports."
-msgstr "Hiperhivatkozások engedélyezése a jelentésekben."
+msgstr "Hiperhivatkozások engedélyezése a kimutatásokban."
 
 #: gnucash/report/stylesheets/footer.scm:74
 #: gnucash/report/stylesheets/footer.scm:392
@@ -28197,7 +28196,7 @@ msgstr "_Ütemezett"
 
 #: gnucash/ui/gnc-main-window.ui:403
 msgid "_Reports"
-msgstr "_Jelentések"
+msgstr "_Kimutatások"
 
 #: gnucash/ui/gnc-main-window.ui:422
 msgid "_Tools"
@@ -30346,10 +30345,10 @@ msgid ""
 "register. Has corresponding effect on business features, reporting and "
 "imports/exports."
 msgstr ""
-"Bekapcsolásakor a regiszter „Szám” mezőjében a felosztásművelet értékét "
-"lehet kezelni, a tranzakció száma pedig „Tr. Szám” néven a regiszter második "
-"sorában jelenik meg. A beállítás hatással van a üzleti funkciókra, a "
-"jelentésekre és az importálásra, exportálásra."
+"Bekapcsolásakor a regiszter „Szám” mezőjében a felosztás „Művelet” értékét "
+"lehet kezelni, a tranzakció „Szám”-a pedig „Tr. Szám” néven a regiszter "
+"második sorában jelenik meg. A beállítás hatással van a vállalkozási "
+"funkciókra, a kimutatásokra és az importálásra, exportálásra."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1217
 msgid ""
