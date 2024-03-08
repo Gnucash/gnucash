@@ -15,3 +15,7 @@ libgnucash/engine/iso-4217-currencies.c
 
 # This file containing @PROJECT_NAME@ shouldn't be translated.
 gnucash/gschemas/org.gnucash.GnuCash.deprecated.gschema.xml.in
+
+# These files are example scripts for gnucash-cli
+doc/examples/book-to-hledger.scm
+doc/examples/simple-book-add-txn.scm

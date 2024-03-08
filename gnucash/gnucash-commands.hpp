@@ -46,5 +46,11 @@ namespace Gnucash {
     int report_list (void);
     int report_show (const bo_str& file_to_load,
                      const bo_str& run_report);
+    int run_scripting (std::vector<const char*> newArgv,
+                       const bo_str& m_file_to_load,
+                       std::string& m_language,
+                       const bo_str& m_script,
+                       bool m_open_readwrite,
+                       bool m_interactive);
 }
 #endif
