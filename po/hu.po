@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-05 14:50+0100\n"
-"PO-Revision-Date: 2024-03-06 12:01+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2024-03-10 20:01+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -1101,15 +1101,17 @@ msgid ""
 "report as a report option, and use the Edit->Style Sheets menu to customize "
 "style sheets."
 msgstr ""
-"A stíluslapok határozzák meg a kimutatások megjelenését. A beállításokban "
-"válasszon a jelentés számára egy stíluslapot, és a testreszabáshoz használja "
-"a „Szerkesztés” -> „Stíluslapok” menüt."
+"Stíluslapok határozzák meg a jelentések megjelenését. A beállításokban "
+"válasszon ki a jelentése számára egy stíluslapot, a testreszabásához "
+"használja a „Szerkesztés” -> „Stíluslapok” menüt."
 
 #: doc/tip_of_the_day.list.c:105
 msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
+"A regiszteroldal átutalásmezőjében a számlamenü megnyitásához nyomja meg a "
+"menügombot vagy a Ctrl-Le billentyűkombinációt."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
@@ -1181,12 +1183,12 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
-"Ebben a főkönyvben a legkorábbi tranzakció dátuma %s. A fenti választás "
-"alapján a könyv %d felé lesz szétosztva."
+"Ebben a könyvben a legkorábbi tranzakció dátuma %s. A fenti választás "
+"alapján a könyv %d részre lesz felosztva."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "You have asked for a book to be created. This book will contain all "
 "transactions up to midnight %s (for a total of %d transactions spread over "
@@ -1195,16 +1197,17 @@ msgid ""
 "Amend the Title and Notes or Click on \"Next\" to proceed.\n"
 "Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
-"Egy könyv létrehozását választotta. Az új könyv minden tranzakciót %s "
-"éjfélig tartalmazni fog(összesen %d tranzakció a %d folyószámlákon). \n"
+"Egy könyv létrehozását választotta. Az új könyv %s éjfélig terjedően minden "
+"tranzakciót tartalmazni fog (összesen %d tranzakció a %d számlán). \n"
 "\n"
-"Kattintson a 'Következő' -re a könyv létrehozásához.\n"
-"Kattintson a 'Vissza' gombra az adatok megváltoztatásához."
+"Módosítsa a címet és a megjegyzéseket, vagy kattintson a „Következő” gombra "
+"a könyv létrehozásához.\n"
+"Kattintson a „Vissza” gombra a dátumok beállításához."
 
 #: gnucash/gnome/assistant-acct-period.c:388
 #, c-format
 msgid "Period %s - %s"
-msgstr "Időszak %s -tól %s -ig"
+msgstr "Időszak %s és %s között"
 
 #: gnucash/gnome/assistant-acct-period.c:406
 #, c-format
@@ -2460,7 +2463,7 @@ msgid "Find Customer"
 msgstr "Ügyfél keresése"
 
 #: gnucash/gnome/dialog-custom-report.c:330
-#, fuzzy, c-format
+#, c-format
 msgid "Are you sure you want to delete %s?"
 msgstr "Biztosan törölni kívánja ezt: \"%s\"?"
 
@@ -23747,12 +23750,12 @@ msgstr ""
 #: gnucash/report/reports/standard/budget-barchart.scm:53
 #: gnucash/report/reports/standard/budget.scm:77
 msgid "Exact start period"
-msgstr "Pontos kezdőidőszak"
+msgstr "Pontos kezdő időszak"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:55
 #: gnucash/report/reports/standard/budget.scm:79
 msgid "Select exact period that starts the reporting range."
-msgstr "Válassza ki a jelentéstartomány pontos kezdőidőszakát."
+msgstr "Válassza ki a jelentéstartomány pontos kezdő időszakát."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:57
 #: gnucash/report/reports/standard/budget-income-statement.scm:64
@@ -23762,21 +23765,19 @@ msgstr "Tartomány vége"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:59
 #: gnucash/report/reports/standard/budget.scm:83
-#, fuzzy
 msgid "Select a budget period type that ends the reporting range."
-msgstr "Select a budget period that ends the reporting range."
+msgstr ""
+"Válasszon ki egy költségvetési időszaktípust, a jelentéstartomány végének."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:60
 #: gnucash/report/reports/standard/budget.scm:84
-#, fuzzy
 msgid "Exact end period"
-msgstr "Fizetési időszakok"
+msgstr "Pontos befejező időszak"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:62
 #: gnucash/report/reports/standard/budget.scm:86
-#, fuzzy
 msgid "Select exact period that ends the reporting range."
-msgstr "Select a budget period that ends the reporting range."
+msgstr "Válassza ki a jelentéstartomány pontos befejező időszakát."
 
 #: gnucash/report/reports/standard/budget-barchart.scm:65
 #: gnucash/report/reports/standard/budget.scm:111
@@ -28763,27 +28764,27 @@ msgstr "Az éppen látható regiszter exportálása CSV fájlba"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:6
 msgid "Import _Accounts from CSV…"
-msgstr "Számlák _CSV fájlból…"
+msgstr "Számlák importálás_a CSV fájlból…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:8
 msgid "Import Accounts from a CSV file"
-msgstr "Számlák importálása CSV fájlból"
+msgstr "Számlák importálása egy CSV fájlból"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:11
 msgid "Import _Transactions from CSV…"
-msgstr "Tranzakció_k CSV fájlból…"
+msgstr "_Tranzakciók importálása CSV fájlból…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:13
 msgid "Import Transactions from a CSV file"
-msgstr "Tranzakciók importálása CSV fájlból"
+msgstr "Tranzakciók importálása egy CSV fájlból"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
 msgid "Import _Prices from a CSV file…"
-msgstr "Árfolyamok _CSV fájlból…"
+msgstr "Árfolyamok im_portálása CSV fájlból…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
-msgstr "Árfolyamok importálása CSV fájlból"
+msgstr "Árfolyamok importálása egy CSV fájlból"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
 msgid "Import _Customers & Vendors…"
@@ -30412,50 +30413,50 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1248
 msgid "Invoice number"
-msgstr "Kimenő számlaszám"
+msgstr "Kimenőszámlaszám"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1249
 msgid ""
 "The previous invoice number generated. This number will be incremented to "
 "generate the next invoice number."
 msgstr ""
-"Adja meg az utoljára használt kimenő számlaszámot. Ez lesz megnövelve a "
+"Adja meg az utoljára használt kimenőszámlaszámot. Ez lesz megnövelve a "
 "következő szám előállításához."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1252
 msgid "Invoice number format"
-msgstr "Kimenő számlaszámformátum"
+msgstr "Kimenőszámlaszám-formátum"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1254
 msgid ""
 "The format string to use for generating invoice numbers. This is a printf-"
 "style format string."
 msgstr ""
-"Az automatikusan generált kimenő számlaszámok formátuma. A printf formázási "
+"Az automatikusan generált kimenőszámlaszámok formátuma. A printf formázási "
 "szabályai szerint kell megadni."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1257
 msgid "Bill number"
-msgstr "Bejövő számlaszám"
+msgstr "Bejövőszámlaszám"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1258
 msgid ""
 "The previous bill number generated. This number will be incremented to "
 "generate the next bill number."
 msgstr ""
-"Adja meg az utoljára használt bejövő számlaszámot. Ez lesz megnövelve a "
+"Adja meg az utoljára használt bejövőszámlaszámot. Ez lesz megnövelve a "
 "következő szám előállításához."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1261
 msgid "Bill number format"
-msgstr "Bejövő számlaszámformátum"
+msgstr "Bejövőszámlaszám-formátum"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1262
 msgid ""
 "The format string to use for generating bill numbers. This is a printf-style "
 "format string."
 msgstr ""
-"Az automatikusan generált bejövő számlaszámok formátuma. A printf formázási "
+"Az automatikusan generált bejövőszámlaszámok formátuma. A printf formázási "
 "szabályai szerint kell megadni."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1265
