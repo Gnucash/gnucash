@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-05 14:50+0100\n"
-"PO-Revision-Date: 2024-01-22 16:01+0000\n"
+"PO-Revision-Date: 2024-03-09 22:01+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -16,9 +16,9 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4-dev\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -3953,11 +3953,11 @@ msgstr[2] ""
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1266
 msgid "Highlight a date first to sort by occurrence date."
-msgstr ""
+msgstr "Najprije označi datum za razvrstavanje prema datumu pojavljivanja."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
 msgid "Highlight a schedule first to sort by schedule name."
-msgstr ""
+msgstr "Najprije označi termin za razvrstavanje prema imenu termina."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1379
 #: gnucash/gnome-search/dialog-search.c:1105
@@ -19515,6 +19515,8 @@ msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value."
 msgstr ""
+"Odabiri tekućeg računa će generirati viševalutne transakcije. Odaberi jedan "
+"od sljedećih stupaca: cijena, (negirana) vrijednost."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:531
 msgid ""
@@ -19522,6 +19524,9 @@ msgid ""
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
 msgstr ""
+"Odabiri tekućeg računa će generirati viševalutne transakcije. Odaberi jedan "
+"od sljedećih stupaca: cijena, (negirana) vrijednost, (negirani) iznos "
+"prijenosa."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
 msgid ""
@@ -19632,14 +19637,12 @@ msgid "Transaction Commodity"
 msgstr "Robna transakcija"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:68
-#, fuzzy
-#| msgid "Amount (_words)"
 msgid "Amount (Negated)"
-msgstr "Iznos (_slovima)"
+msgstr "Iznos (negirano)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:70
 msgid "Value (Negated)"
-msgstr ""
+msgstr "Vrijednost (negirano)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:75
 msgid "Transfer Action"
@@ -19650,10 +19653,8 @@ msgid "Transfer Amount"
 msgstr "Iznos prijenosa"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:78
-#, fuzzy
-#| msgid "Transfer Account"
 msgid "Transfer Amount (Negated)"
-msgstr "Konto prijenosa"
+msgstr "Iznos prijenosa (negirano)"
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:79
 msgid "Transfer Memo"
@@ -19706,10 +19707,8 @@ msgid "Transfer account value can't be mapped back to an account."
 msgstr "Vrijednost konta prijenosa se ne može mapirati natrag na konto."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:641
-#, fuzzy
-#| msgid "No amount column."
 msgid "No amount or negated amount column."
-msgstr "Nema stupca iznosa."
+msgstr "Nema iznosa ili stupca negiranog iznosa."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:644
 msgid "Split is reconciled but reconcile date column is missing or invalid."
@@ -20531,10 +20530,9 @@ msgid "Missing transaction date."
 msgstr "Nedostaje datum transakcije."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:601
-#, fuzzy, scheme-format
-#| msgid "Missing transaction date."
+#, scheme-format
 msgid "Missing QIF investment action for transaction dated ~a."
-msgstr "Nedostaje datum transakcije."
+msgstr "Nedostaje radnja QIF investicija za transakciju na datum ~a."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1426
 msgid "Invalid transaction date."
