@@ -42,6 +42,9 @@
 #include "gnc-numeric.hpp"
 #include "gnc-rational.hpp"
 
+#include <optional>
+#include <charconv>
+
 static QofLogModule log_module = "qof";
 
 static const uint8_t max_leg_digits{18};
@@ -207,6 +210,37 @@ numeric_from_scientific_match(smatch &m)
     return std::make_pair(num, denom);
 }
 
+static std::optional<gnc_numeric>
+fast_numeral_rational (const char* str)
+{
+    if (!str || !str[0])
+        return {};
+
+    // because minint64 = -9223372036854775808 and has 20 characters,
+    // the maximum strlen to handle is 20+19+1 = 40. 48 is a nice
+    // number in 64-bit.
+    auto end_ptr{(const char*)memchr (str, '\0', 48)};
+    if (!end_ptr)
+        return {};
+
+    int64_t num, denom{};
+    auto result = std::from_chars (str, end_ptr, num);
+    if (result.ec != std::errc())
+        return {};
+
+    if (result.ptr == end_ptr)
+        return gnc_numeric_create (num, 1);
+
+    if (*result.ptr != '/')
+        return {};
+
+    result = std::from_chars (result.ptr + 1, end_ptr, denom);
+    if (result.ec != std::errc() || result.ptr != end_ptr || denom <= 0)
+        return {};
+
+    return gnc_numeric_create (num, denom);
+}
+
 GncNumeric::GncNumeric(const std::string &str, bool autoround) {
     static const std::string maybe_sign ("(-?)");
     static const std::string opt_signed_int("(-?[0-9]*)");
@@ -236,6 +270,12 @@ GncNumeric::GncNumeric(const std::string &str, bool autoround) {
     if (str.empty())
         throw std::invalid_argument(
             "Can't construct a GncNumeric from an empty string.");
+    if (auto res = fast_numeral_rational (str.c_str()))
+    {
+        m_num = res->num;
+        m_den = res->denom;
+        return;
+    }
     if (regex_search(str, m, hex_rational))
     {
         GncNumeric n(stoll(m[1].str(), nullptr, 16),
@@ -1319,6 +1359,13 @@ gnc_numeric_from_string (const gchar* str)
 {
     if (!str)
         return gnc_numeric_error (GNC_ERROR_ARG);
+
+    // the default gnc_numeric string format is "num/denom", whereby
+    // the denom must be >= 1. this speedily parses it. this also
+    // parses "num" as num/1.
+    if (auto res = fast_numeral_rational (str))
+        return *res;
+
     try
     {
         return GncNumeric (str);
