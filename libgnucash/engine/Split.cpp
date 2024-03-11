@@ -720,7 +720,17 @@ xaccFreeSplit (Split *split)
             gnc_lot_remove_split (split->lot, split);
         if (GNC_IS_ACCOUNT (split->acc)
             && !qof_instance_get_destroying (QOF_INSTANCE (split->acc)))
+        {
             gnc_account_remove_split (split->acc, split);
+            /* gnc_float_split_to_split generates a qof_event_gen via
+             * xaccAccountCommitEdit even though it doesn't touch the
+             * account. That causes QofQueryViews to notice the split
+             * even though it isn't added to the account. We need a
+             * countervailing event so that they'll notice it's not
+             * there any more.
+             */
+            qof_event_gen(&split->acc->inst, QOF_EVENT_MODIFY, nullptr);
+        }
         /* We should do the same for split->parent but we might be getting
          * called from xaccFreeTransaction and that would cause trouble.
          */
