@@ -294,7 +294,7 @@
     <item>
       <attribute name="label" translatable="yes">Sche_dule…</attribute>
       <attribute name="action">GncPluginPageRegisterActions.ScheduleTransactionAction</attribute>
-      <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</attribute>
+      <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template or edit the Scheduled Transaction that current transaction was created by</attribute>
       <attribute name="temp" translatable="no">yes</attribute>
     </item>
     <item>
@@ -431,7 +431,7 @@
       <item>
         <attribute name="label" translatable="yes">Sche_dule…</attribute>
         <attribute name="action">GncPluginPageRegisterActions.ScheduleTransactionAction</attribute>
-        <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</attribute>
+        <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template or edit the Scheduled Transaction that current transaction was created by</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Jump to the other account</attribute>
@@ -543,7 +543,7 @@
       <item>
         <attribute name="label" translatable="yes">Sche_dule…</attribute>
         <attribute name="action">GncPluginPageRegisterActions.ScheduleTransactionAction</attribute>
-        <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</attribute>
+        <attribute name="tooltip" translatable="yes">Create a Scheduled Transaction with the current transaction as a template or edit the Scheduled Transaction that current transaction was created by</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">_Jump to the other account</attribute>
@@ -846,7 +846,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">Sche_dule…</property>
         <property name="action-name">GncPluginPageRegisterActions.ScheduleTransactionAction</property>
-        <property name="tooltip-text" translatable="yes">Create a Scheduled Transaction with the current transaction as a template</property>
+        <property name="tooltip-text" translatable="yes">Create a Scheduled Transaction with the current transaction as a template or edit the Scheduled Transaction that current transaction was created by</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-sx-new</property>
       </object>
