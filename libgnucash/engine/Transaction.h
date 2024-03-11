@@ -796,6 +796,14 @@ void xaccTransDump (const Transaction *trans, const char *tag);
 void xaccTransRecordPrice (Transaction *trans, PriceSource source);
 
 
+/** The gnc_transaction_get_warnings() method analyses a newly created
+ *  transaction and generates common warnings for user
+ *
+ *  @param trans The transaction whose price is recorded
+ *  @param source The price priority level
+ */
+char* gnc_transaction_get_warnings (const Transaction* txn);
+
 #define RECONCILED_MATCH_TYPE	"reconciled-match"
 
 /** \deprecated */
