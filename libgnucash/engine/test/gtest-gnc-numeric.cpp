@@ -206,6 +206,9 @@ TEST(gncnumeric_constructors, test_string_constructor)
     EXPECT_THROW(GncNumeric overflow("12345678987654321.123456"),
                  std::overflow_error);
     EXPECT_NO_THROW(GncNumeric overflow("12345678987654321.123456", true));
+    EXPECT_NO_THROW(GncNumeric limit64a("-9223372036854775808/9223372036854775807"));
+    EXPECT_THROW(GncNumeric limit64b("-9223372036854775809/9223372036854775807"), std::out_of_range);
+    EXPECT_THROW(GncNumeric limit64c("-9223372036854775808/9223372036854775808"), std::out_of_range);
     GncNumeric overflow("12345678987654321.123456", true);
     EXPECT_EQ(6028163568190586486, overflow.num());
     EXPECT_EQ(488, overflow.denom());
