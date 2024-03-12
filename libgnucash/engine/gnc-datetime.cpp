@@ -37,6 +37,8 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <optional>
+#include <charconv>
 #ifdef __MINGW32__
 #include <codecvt>
 #endif
@@ -282,7 +284,8 @@ public:
     GncDateTimeImpl(const time64 time) : m_time(LDT_from_unix_local(time)) {}
     GncDateTimeImpl(const struct tm tm) : m_time(LDT_from_struct_tm(tm)) {}
     GncDateTimeImpl(const GncDateImpl& date, DayPart part = DayPart::neutral);
-    GncDateTimeImpl(std::string str);
+    GncDateTimeImpl(const std::string& str) : GncDateTimeImpl (str.c_str()) {};
+    GncDateTimeImpl(const char* str);
     GncDateTimeImpl(PTime&& pt) : m_time(pt, tzp->get(pt.date().year())) {}
     GncDateTimeImpl(LDT&& ldt) : m_time(ldt) {}
 
@@ -339,6 +342,50 @@ GncDateTimeImpl::GncDateTimeImpl(const GncDateImpl& date, DayPart part) :
 /* Member function definitions for GncDateTimeImpl.
  */
 
+static bool
+parse_chars_into_num (const char* ptr, const char *end_ptr, int32_t& rv) noexcept
+{
+    auto result = std::from_chars (ptr, end_ptr, rv);
+    return (result.ec == std::errc() && result.ptr == end_ptr);
+}
+
+static std::optional<PTime>
+fast_iso8601_utc_parse (const char* str)
+{
+    int32_t year, month, mday, hour, min, sec;
+
+    // parse the first 4 bytes into year
+    if (!str || !parse_chars_into_num (str, str + 4, year))
+        return {};
+
+    // parse iso-8601 utc format "YYYY-MM-DD HH:MM:SS +0000"
+    if (str[4] == '-' &&
+        parse_chars_into_num (str +  5, str +  7, month) && str[ 7] == '-' &&
+        parse_chars_into_num (str +  8, str + 10, mday)  && str[10] == ' ' &&
+        parse_chars_into_num (str + 11, str + 13, hour)  && str[13] == ':' &&
+        parse_chars_into_num (str + 14, str + 16, min)   && str[16] == ':' &&
+        parse_chars_into_num (str + 17, str + 19, sec)   && str[19] == ' ' &&
+        !strcmp (str + 20, "+0000"))
+    {
+        return PTime (boost::gregorian::date (year, month, mday),
+                      boost::posix_time::time_duration (hour, min, sec));
+    }
+
+    // parse compressed iso-8601 format "YYYYMMDDHHMMSS"
+    if (parse_chars_into_num (str +  4, str +  6, month) &&
+        parse_chars_into_num (str +  6, str +  8, mday)  &&
+        parse_chars_into_num (str +  8, str + 10, hour)  &&
+        parse_chars_into_num (str + 10, str + 12, min)   &&
+        parse_chars_into_num (str + 12, str + 14, sec)   &&
+        str[14] == '\0')
+    {
+        return PTime (boost::gregorian::date (year, month, mday),
+                      boost::posix_time::time_duration (hour, min, sec));
+    }
+
+    return {};
+}
+
 static TZ_Ptr
 tz_from_string(std::string str)
 {
@@ -353,17 +400,22 @@ tz_from_string(std::string str)
     return TZ_Ptr(new PTZ(tzstr));
 }
 
-GncDateTimeImpl::GncDateTimeImpl(std::string str) :
+GncDateTimeImpl::GncDateTimeImpl(const char* str) :
     m_time(unix_epoch, utc_zone)
 {
-    if (str.empty()) return;
+    if (!str || !str[0]) return;
     TZ_Ptr tzptr;
     try
     {
+        if (auto res = fast_iso8601_utc_parse (str))
+        {
+            m_time = LDT_from_date_time(res->date(), res->time_of_day(), utc_zone);
+            return;
+        }
         static const boost::regex delim_iso("^(\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}(?:\\.\\d{0,9})?)\\s*([+-]\\d{2}(?::?\\d{2})?)?$");
         static const boost::regex non_delim("^(\\d{14}(?:\\.\\d{0,9})?)\\s*([+-]\\d{2}\\s*(:?\\d{2})?)?$");
         PTime pdt;
-        boost::smatch sm;
+        boost::cmatch sm;
         if (regex_match(str, sm, non_delim))
         {
             std::string time_str(sm[1]);
@@ -376,7 +428,7 @@ GncDateTimeImpl::GncDateTimeImpl(std::string str) :
         }
         else
         {
-            throw(std::invalid_argument("The date string was not formatted in a way that GncDateTime(std::string) knows how to parse."));
+            throw(std::invalid_argument("The date string was not formatted in a way that GncDateTime(const char*) knows how to parse."));
         }
         std::string tzstr("");
         if (sm[2].matched)
@@ -633,7 +685,9 @@ GncDateTime::GncDateTime(const time64 time) :
     m_impl(new GncDateTimeImpl(time)) {}
 GncDateTime::GncDateTime(const struct tm tm) :
     m_impl(new GncDateTimeImpl(tm)) {}
-GncDateTime::GncDateTime(std::string str) :
+GncDateTime::GncDateTime(const std::string& str) :
+    m_impl(new GncDateTimeImpl(str)) {}
+GncDateTime::GncDateTime(const char* str) :
     m_impl(new GncDateTimeImpl(str)) {}
 GncDateTime::~GncDateTime() = default;
 
