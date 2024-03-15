@@ -694,6 +694,31 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
     return TRUE;
 }
 
+static void
+check_limit (Account *acct, GList **list)
+{
+    char *expl = gnc_ui_account_get_balance_limit_explanation (acct);
+    if (expl)
+        *list = g_list_prepend (*list, expl);
+}
+
+static char*
+collect_balance_limit_warnings (QofBook *book)
+{
+    g_return_val_if_fail (book, NULL);
+    GList *list = NULL;
+    gnc_account_foreach_descendant (gnc_book_get_root_account (book),
+                                    (AccountCb) check_limit, &list);
+    if (!list)
+        return NULL;
+
+    const char *header = N_("Account limit warnings:");
+    list = g_list_sort (list, (GCompareFunc)g_utf8_collate);
+    list = g_list_prepend (list, g_strdup (_(header)));
+    char *rv = gnc_g_list_stringjoin (list, "\n");
+    g_list_free_full (list, g_free);
+    return rv;
+}
 
 
 static char*
@@ -745,6 +770,10 @@ run_post_load_scrubs (GtkWindow *parent, QofBook *book)
     char *sep_warning = get_account_sep_warning (book);
     if (sep_warning)
         infos = g_list_prepend (infos, sep_warning);
+
+    char *limit_warnings = collect_balance_limit_warnings (book);
+    if (limit_warnings)
+        infos = g_list_prepend (infos, limit_warnings);
 
     qof_event_resume();
 
