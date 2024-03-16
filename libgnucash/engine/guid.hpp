@@ -24,6 +24,7 @@
 
 #include <boost/uuid/uuid.hpp>
 #include <stdexcept>
+#include <string>
 
 #include "guid.h"
 
@@ -48,8 +49,10 @@ struct GUID
     operator GncGUID () const noexcept;
     static GUID create_random () noexcept;
     static GUID const & null_guid () noexcept;
-    static GUID from_string (std::string const &);
-    static bool is_valid_guid (std::string const &);
+    static GUID from_string (const char*);
+    static GUID from_string (std::string const& s) { return from_string (s.c_str()); };
+    static bool is_valid_guid (const char*);
+    static bool is_valid_guid (std::string const &s) { return is_valid_guid (s.c_str()); };
     std::string to_string () const noexcept;
     auto begin () const noexcept -> decltype (implementation.begin ());
     auto end () const noexcept -> decltype (implementation.end ());

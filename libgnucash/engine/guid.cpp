@@ -331,8 +331,10 @@ GUID::to_string () const noexcept
 }
 
 GUID
-GUID::from_string (std::string const & str)
+GUID::from_string (const char* str)
 {
+    if (!str)
+        throw guid_syntax_exception {};
     try
     {
         static boost::uuids::string_generator strgen;
@@ -345,7 +347,7 @@ GUID::from_string (std::string const & str)
 }
 
 bool
-GUID::is_valid_guid (std::string const & str)
+GUID::is_valid_guid (const char* str)
 {
     try
     {
