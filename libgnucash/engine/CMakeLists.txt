@@ -151,7 +151,7 @@ set (engine_SOURCES
   TransLog.c
   Transaction.cpp
   cap-gains.c
-  cashobjects.c
+  cashobjects.cpp
   gnc-accounting-period.c
   gnc-aqbanking-templates.cpp
   gnc-budget.cpp
