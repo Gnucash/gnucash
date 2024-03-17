@@ -753,7 +753,7 @@ test_xaccTransEqual (Fixture *fixture, gconstpointer pData)
     Transaction *txn1 = xaccTransClone (txn0);
     const GncGUID *guid_f_txn = qof_instance_get_guid (txn0);
     gchar entered[DATE_BUF_SIZE], posted[DATE_BUF_SIZE];
-    auto msg1 = "[xaccTransEqual] one is NULL";
+    auto msg1 = "[xaccTransEqual] one is nullptr";
     gchar *msg2 = NULL;
     auto cleanup_fmt = "[trans_cleanup_commit] get rid of rollback trans=%p";
     gchar split_guid0[GUID_ENCODING_LENGTH + 1];
