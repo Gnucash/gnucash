@@ -142,7 +142,7 @@ set (engine_SOURCES
   SchedXaction.c
   SX-book.c
   SX-ttinfo.c
-  Scrub.c
+  Scrub.cpp
   Scrub2.c
   Scrub3.c
   ScrubBusiness.c
