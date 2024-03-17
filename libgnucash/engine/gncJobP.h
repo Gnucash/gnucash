@@ -31,9 +31,17 @@
 
 #include "gncJob.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 gboolean gncJobRegister (void);
 gchar *gncJobNextID (QofBook *book);
 
 #define gncJobSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_JOBP_H_ */

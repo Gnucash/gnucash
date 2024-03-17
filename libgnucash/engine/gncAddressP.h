@@ -30,6 +30,14 @@
 
 #include "gncAddress.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 gboolean gncAddressRegister (void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_ADDRESSP_H_ */
