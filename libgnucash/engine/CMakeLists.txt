@@ -143,7 +143,7 @@ set (engine_SOURCES
   SX-book.c
   SX-ttinfo.c
   Scrub.cpp
-  Scrub2.c
+  Scrub2.cpp
   Scrub3.c
   ScrubBusiness.c
   ScrubBudget.c
