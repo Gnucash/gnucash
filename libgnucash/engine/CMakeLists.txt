@@ -158,7 +158,7 @@ set (engine_SOURCES
   gnc-commodity.cpp
   gnc-date.cpp
   gnc-datetime.cpp
-  gnc-engine.c
+  gnc-engine.cpp
   gnc-euro.c
   gnc-event.c
   gnc-features.cpp
