@@ -133,9 +133,9 @@ static void qof_instance_class_init(QofInstanceClass *klass)
     object_class->set_property = qof_instance_set_property;
     object_class->get_property = qof_instance_get_property;
 
-    klass->get_display_name = NULL;
-    klass->refers_to_object = NULL;
-    klass->get_typed_referring_object_list = NULL;
+    klass->get_display_name = nullptr;
+    klass->refers_to_object = nullptr;
+    klass->get_typed_referring_object_list = nullptr;
 
     g_object_class_install_property
     (object_class,
@@ -257,7 +257,7 @@ qof_instance_init (QofInstance *inst)
     QofInstancePrivate *priv;
 
     priv = GET_PRIVATE(inst);
-    priv->book = NULL;
+    priv->book = nullptr;
     inst->kvp_data = new KvpFrame;
     priv->last_update = 0;
     priv->editlevel = 0;
@@ -279,7 +279,7 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
 
     priv->book = book;
     col = qof_book_get_collection (book, type);
-    g_return_if_fail(col != NULL);
+    g_return_if_fail(col != nullptr);
 
     /* XXX We passed redundant info to this routine ... but I think that's
      * OK, it might eliminate programming errors. */
@@ -297,7 +297,7 @@ qof_instance_init_data (QofInstance *inst, QofIdType type, QofBook *book)
     {
         guid_replace(&priv->guid);
 
-        if (NULL == qof_collection_lookup_entity (col, &priv->guid))
+        if (nullptr == qof_collection_lookup_entity (col, &priv->guid))
             break;
 
         PWARN("duplicate id created, trying again");
@@ -320,7 +320,7 @@ qof_instance_dispose (GObject *instp)
         qof_collection_remove_entity(inst);
 
     CACHE_REMOVE(inst->e_type);
-    inst->e_type = NULL;
+    inst->e_type = nullptr;
 
     G_OBJECT_CLASS(qof_instance_parent_class)->dispose(instp);
 }
@@ -457,7 +457,7 @@ qof_instance_get_guid (gconstpointer inst)
 {
     QofInstancePrivate *priv;
 
-    if (!inst) return NULL;
+    if (!inst) return nullptr;
     g_return_val_if_fail(QOF_IS_INSTANCE(inst), guid_null());
     priv = GET_PRIVATE(inst);
     return &(priv->guid);
@@ -516,7 +516,7 @@ QofCollection *
 qof_instance_get_collection (gconstpointer ptr)
 {
 
-    g_return_val_if_fail(QOF_IS_INSTANCE(ptr), NULL);
+    g_return_val_if_fail(QOF_IS_INSTANCE(ptr), nullptr);
     return GET_PRIVATE(ptr)->collection;
 }
 
@@ -530,8 +530,8 @@ qof_instance_set_collection (gconstpointer ptr, QofCollection *col)
 QofBook *
 qof_instance_get_book (gconstpointer inst)
 {
-    if (!inst) return NULL;
-    g_return_val_if_fail(QOF_IS_INSTANCE(inst), NULL);
+    if (!inst) return nullptr;
+    g_return_val_if_fail(QOF_IS_INSTANCE(inst), nullptr);
     return GET_PRIVATE(inst)->book;
 }
 
@@ -569,7 +569,7 @@ qof_instance_books_equal (gconstpointer ptr1, gconstpointer ptr2)
 KvpFrame*
 qof_instance_get_slots (const QofInstance *inst)
 {
-    if (!inst) return NULL;
+    if (!inst) return nullptr;
     return inst->kvp_data;
 }
 
@@ -785,9 +785,9 @@ void qof_instance_set_idata(gpointer inst, guint32 idata)
 /* Returns a displayable name to represent this object */
 gchar* qof_instance_get_display_name(const QofInstance* inst)
 {
-    g_return_val_if_fail( inst != NULL, NULL );
+    g_return_val_if_fail( inst != nullptr, nullptr );
 
-    if ( QOF_INSTANCE_GET_CLASS(inst)->get_display_name != NULL )
+    if ( QOF_INSTANCE_GET_CLASS(inst)->get_display_name != nullptr )
     {
         return QOF_INSTANCE_GET_CLASS(inst)->get_display_name(inst);
     }
@@ -811,7 +811,7 @@ get_referring_object_instance_helper(QofInstance* inst, gpointer user_data)
 {
     QofInstance** pInst = (QofInstance**)user_data;
 
-    if (*pInst == NULL)
+    if (*pInst == nullptr)
     {
         *pInst = inst;
     }
@@ -820,12 +820,12 @@ get_referring_object_instance_helper(QofInstance* inst, gpointer user_data)
 static void
 get_referring_object_helper(QofCollection* coll, gpointer user_data)
 {
-    QofInstance* first_instance = NULL;
+    QofInstance* first_instance = nullptr;
     GetReferringObjectHelperData* data = (GetReferringObjectHelperData*)user_data;
 
     qof_collection_foreach(coll, get_referring_object_instance_helper, &first_instance);
 
-    if (first_instance != NULL)
+    if (first_instance != nullptr)
     {
         GList* new_list = qof_instance_get_typed_referring_object_list(first_instance, data->inst);
         data->list = g_list_concat(data->list, new_list);
@@ -837,11 +837,11 @@ GList* qof_instance_get_referring_object_list(const QofInstance* inst)
 {
     GetReferringObjectHelperData data;
 
-    g_return_val_if_fail( inst != NULL, NULL );
+    g_return_val_if_fail( inst != nullptr, nullptr );
 
     /* scan all collections */
     data.inst = inst;
-    data.list = NULL;
+    data.list = nullptr;
 
     qof_book_foreach_collection(qof_instance_get_book(inst),
                                 get_referring_object_helper,
@@ -865,11 +865,11 @@ qof_instance_get_referring_object_list_from_collection(const QofCollection* coll
 {
     GetReferringObjectHelperData data;
 
-    g_return_val_if_fail( coll != NULL, NULL );
-    g_return_val_if_fail( ref != NULL, NULL );
+    g_return_val_if_fail( coll != nullptr, nullptr );
+    g_return_val_if_fail( ref != nullptr, nullptr );
 
     data.inst = ref;
-    data.list = NULL;
+    data.list = nullptr;
 
     qof_collection_foreach(coll, get_typed_referring_object_instance_helper, &data);
     return data.list;
@@ -878,10 +878,10 @@ qof_instance_get_referring_object_list_from_collection(const QofCollection* coll
 GList*
 qof_instance_get_typed_referring_object_list(const QofInstance* inst, const QofInstance* ref)
 {
-    g_return_val_if_fail( inst != NULL, NULL );
-    g_return_val_if_fail( ref != NULL, NULL );
+    g_return_val_if_fail( inst != nullptr, nullptr );
+    g_return_val_if_fail( ref != nullptr, nullptr );
 
-    if ( QOF_INSTANCE_GET_CLASS(inst)->get_typed_referring_object_list != NULL )
+    if ( QOF_INSTANCE_GET_CLASS(inst)->get_typed_referring_object_list != nullptr )
     {
         return QOF_INSTANCE_GET_CLASS(inst)->get_typed_referring_object_list(inst, ref);
     }
@@ -899,10 +899,10 @@ qof_instance_get_typed_referring_object_list(const QofInstance* inst, const QofI
 /* Check if this object refers to a specific object */
 gboolean qof_instance_refers_to_object(const QofInstance* inst, const QofInstance* ref)
 {
-    g_return_val_if_fail( inst != NULL, FALSE );
-    g_return_val_if_fail( ref != NULL, FALSE );
+    g_return_val_if_fail( inst != nullptr, FALSE );
+    g_return_val_if_fail( ref != nullptr, FALSE );
 
-    if ( QOF_INSTANCE_GET_CLASS(inst)->refers_to_object != NULL )
+    if ( QOF_INSTANCE_GET_CLASS(inst)->refers_to_object != nullptr )
     {
         return QOF_INSTANCE_GET_CLASS(inst)->refers_to_object(inst, ref);
     }
@@ -1043,7 +1043,7 @@ qof_commit_edit_part2(QofInstance *inst,
 gboolean
 qof_instance_has_kvp (QofInstance *inst)
 {
-    return (inst->kvp_data != NULL && !inst->kvp_data->empty());
+    return (inst->kvp_data != nullptr && !inst->kvp_data->empty());
 }
 
 void qof_instance_set_path_kvp (QofInstance * inst, GValue const * value, std::vector<std::string> const & path)
@@ -1111,7 +1111,7 @@ qof_instance_kvp_add_guid (const QofInstance *inst, const char* path,
                            time64 time, const char *key,
                            const GncGUID *guid)
 {
-    g_return_if_fail (inst->kvp_data != NULL);
+    g_return_if_fail (inst->kvp_data != nullptr);
 
     auto container = new KvpFrame;
     Time64 t{time};
@@ -1138,8 +1138,8 @@ gboolean
 qof_instance_kvp_has_guid (const QofInstance *inst, const char *path,
                            const char* key, const GncGUID *guid)
 {
-    g_return_val_if_fail (inst->kvp_data != NULL, FALSE);
-    g_return_val_if_fail (guid != NULL, FALSE);
+    g_return_val_if_fail (inst->kvp_data != nullptr, FALSE);
+    g_return_val_if_fail (guid != nullptr, FALSE);
 
     auto v = inst->kvp_data->get_slot({path});
     if (v == nullptr) return FALSE;
@@ -1152,7 +1152,7 @@ qof_instance_kvp_has_guid (const QofInstance *inst, const char *path,
     case KvpValue::Type::GLIST:
     {
         auto list = v->get<GList*>();
-        for (auto node = list; node != NULL; node = node->next)
+        for (auto node = list; node != nullptr; node = node->next)
         {
             auto val = static_cast<KvpValue*>(node->data);
             if (kvp_match_guid (val, {key}, guid))
@@ -1173,11 +1173,11 @@ void
 qof_instance_kvp_remove_guid (const QofInstance *inst, const char *path,
                           const char *key, const GncGUID *guid)
 {
-    g_return_if_fail (inst->kvp_data != NULL);
-    g_return_if_fail (guid != NULL);
+    g_return_if_fail (inst->kvp_data != nullptr);
+    g_return_if_fail (guid != nullptr);
 
     auto v = inst->kvp_data->get_slot({path});
-    if (v == NULL) return;
+    if (v == nullptr) return;
 
     switch (v->get_type())
     {
@@ -1215,12 +1215,12 @@ void
 qof_instance_kvp_merge_guids (const QofInstance *target,
                               const QofInstance *donor, const char *path)
 {
-    g_return_if_fail (target != NULL);
-    g_return_if_fail (donor != NULL);
+    g_return_if_fail (target != nullptr);
+    g_return_if_fail (donor != nullptr);
 
     if (! qof_instance_has_slot (donor, path)) return;
     auto v = donor->kvp_data->get_slot({path});
-    if (v == NULL) return;
+    if (v == nullptr) return;
 
     auto target_val = target->kvp_data->get_slot({path});
     switch (v->get_type())
@@ -1257,7 +1257,7 @@ bool qof_instance_has_path_slot (QofInstance const * inst, std::vector<std::stri
 gboolean
 qof_instance_has_slot (const QofInstance *inst, const char *path)
 {
-    return inst->kvp_data->get_slot({path}) != NULL;
+    return inst->kvp_data->get_slot({path}) != nullptr;
 }
 
 void qof_instance_slot_path_delete (QofInstance const * inst, std::vector<std::string> const & path)
