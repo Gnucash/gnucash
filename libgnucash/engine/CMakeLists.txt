@@ -148,7 +148,7 @@ set (engine_SOURCES
   ScrubBusiness.c
   ScrubBudget.c
   Split.cpp
-  TransLog.c
+  TransLog.cpp
   Transaction.cpp
   cap-gains.cpp
   cashobjects.cpp
