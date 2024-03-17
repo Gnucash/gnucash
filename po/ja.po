@@ -22,7 +22,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-05 14:50+0100\n"
+"POT-Creation-Date: 2024-03-17 08:37+0100\n"
 "PO-Revision-Date: 2023-04-29 06:48+0000\n"
 "Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -1232,7 +1232,7 @@ msgstr "ローン返済オプション: \"%s\""
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:374
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.cpp:1566
+#: gnucash/import-export/import-main-matcher.cpp:1572
 #: gnucash/import-export/import-match-picker.cpp:313
 #: gnucash/import-export/import-match-picker.cpp:353
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3823
@@ -1316,7 +1316,7 @@ msgstr "価格追加中にエラーが発生しました。"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.cpp:1567
+#: gnucash/import-export/import-main-matcher.cpp:1573
 #: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
@@ -1853,7 +1853,7 @@ msgstr "購入または売却した株数を入力します。"
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.cpp:1571
+#: gnucash/import-export/import-main-matcher.cpp:1577
 #: gnucash/import-export/import-match-picker.cpp:316
 #: gnucash/import-export/import-match-picker.cpp:356
 #: gnucash/register/ledger-core/split-register-model.c:360
@@ -2501,7 +2501,7 @@ msgstr "取引の文書リンク"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:377
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.cpp:1570
+#: gnucash/import-export/import-main-matcher.cpp:1576
 #: gnucash/import-export/import-match-picker.cpp:315
 #: gnucash/import-export/import-match-picker.cpp:355
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3833
@@ -3254,7 +3254,7 @@ msgstr "請求書を検索"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.cpp:1569
+#: gnucash/import-export/import-main-matcher.cpp:1575
 #: gnucash/import-export/import-match-picker.cpp:314
 #: gnucash/import-export/import-match-picker.cpp:354
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3844
@@ -4852,19 +4852,16 @@ msgstr "スプリットを削除(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:275
 #: gnucash/ui/gnc-embedded-register-window.ui:35
-#: gnucash/ui/gnc-plugin-page-register.ui:132
 msgid "Cut the selected transaction into clipboard"
 msgstr "選択されている取引をクリップボードに切り取ります。"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:276
 #: gnucash/ui/gnc-embedded-register-window.ui:40
-#: gnucash/ui/gnc-plugin-page-register.ui:138
 msgid "Copy the selected transaction into clipboard"
 msgstr "選択された取引をクリップボードにコピーします。"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:277
 #: gnucash/ui/gnc-embedded-register-window.ui:45
-#: gnucash/ui/gnc-plugin-page-register.ui:144
 msgid "Paste the transaction from the clipboard"
 msgstr "クリップボードにある取引を貼り付けます。"
 
@@ -4872,9 +4869,6 @@ msgstr "クリップボードにある取引を貼り付けます。"
 #: gnucash/ui/gnc-embedded-register-window.ui:50
 #: gnucash/ui/gnc-embedded-register-window.ui:113
 #: gnucash/ui/gnc-embedded-register-window.ui:157
-#: gnucash/ui/gnc-plugin-page-register.ui:150
-#: gnucash/ui/gnc-plugin-page-register.ui:366
-#: gnucash/ui/gnc-plugin-page-register.ui:576
 #: gnucash/ui/gnc-plugin-page-register.ui:724
 msgid "Make a copy of the current transaction"
 msgstr "現在の取引の複製を作成します。"
@@ -4883,31 +4877,19 @@ msgstr "現在の取引の複製を作成します。"
 #: gnucash/ui/gnc-embedded-register-window.ui:55
 #: gnucash/ui/gnc-embedded-register-window.ui:118
 #: gnucash/ui/gnc-embedded-register-window.ui:172
-#: gnucash/ui/gnc-plugin-page-register.ui:156
-#: gnucash/ui/gnc-plugin-page-register.ui:371
-#: gnucash/ui/gnc-plugin-page-register.ui:581
 #: gnucash/ui/gnc-plugin-page-register.ui:739
 msgid "Delete the current transaction"
 msgstr "現在の取引を削除します。"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:280
-#: gnucash/ui/gnc-plugin-page-register.ui:207
-#: gnucash/ui/gnc-plugin-page-register.ui:395
-#: gnucash/ui/gnc-plugin-page-register.ui:507
 msgid "Add, change, or unlink the document linked with the current transaction"
 msgstr "現在の取引にリンクする文書を追加、変更、または削除します。"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:281
-#: gnucash/ui/gnc-plugin-page-register.ui:213
-#: gnucash/ui/gnc-plugin-page-register.ui:400
-#: gnucash/ui/gnc-plugin-page-register.ui:512
 msgid "Open the linked document for the current transaction"
 msgstr "現在の取引にリンクされた文書を開きます。"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:282
-#: gnucash/ui/gnc-plugin-page-register.ui:222
-#: gnucash/ui/gnc-plugin-page-register.ui:407
-#: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher"
 msgstr ""
 "リンクされた仕入先請求書、得意先請求書、または立替払請求書へジャンプします。"
@@ -4925,14 +4907,10 @@ msgid "Paste the split from the clipboard"
 msgstr "クリップボードにあるスプリットを貼り付けます。"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:286
-#: gnucash/ui/gnc-plugin-page-register.ui:478
-#: gnucash/ui/gnc-plugin-page-register.ui:615
 msgid "Make a copy of the current split"
 msgstr "現在のスプリットの複製を作成します。"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:287
-#: gnucash/ui/gnc-plugin-page-register.ui:483
-#: gnucash/ui/gnc-plugin-page-register.ui:620
 msgid "Delete the current split"
 msgstr "現在のスプリットを削除します。"
 
@@ -8201,6 +8179,7 @@ msgid "Not enough information for quotes dump"
 msgstr "quotes dump のための情報が不足しています。"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr "不明な相場表コマンド '{1}'。"
 
@@ -8209,6 +8188,7 @@ msgid "Missing --name parameter"
 msgstr "--name パラメータがありません。"
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr "不明な帳票コマンド '{1}'。"
 
@@ -8218,6 +8198,7 @@ msgstr "コマンドまたはオプションがありません。"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:180
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr "Finance::Quote バージョン {1} が見つかりました。"
 
@@ -8239,11 +8220,13 @@ msgstr "バグやその他の問題は gnucash-devel@gnucash.org に報告して
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
+#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "また、{1} でバグを探したり登録することができます。"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "最新の安定版に関しては、{1} を参照してください。"
 
@@ -8261,6 +8244,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash、個人および小規模ビジネス向け財務管理"
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr "{1} [オプション] [データファイル]"
 
@@ -8269,10 +8253,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash のパス"
 
 #: gnucash/gnucash-core-app.cpp:249
+#, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
+#, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1} 開発バージョン"
 
@@ -18765,9 +18751,9 @@ msgid "File exported successfully!\n"
 msgstr "ファイルが正常にエクスポートされました!\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
-#: gnucash/import-export/import-main-matcher.cpp:1868
+#: gnucash/import-export/import-main-matcher.cpp:1874
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.cpp:1634 libgnucash/engine/Split.cpp:1651
+#: libgnucash/engine/Split.cpp:1644 libgnucash/engine/Split.cpp:1661
 msgid "-- Split Transaction --"
 msgstr "-- スプリット取引 --"
 
@@ -19032,6 +19018,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
+#, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "取引はファイル '{1}' からインポートされました。"
 
@@ -19260,6 +19247,7 @@ msgstr "種類が通貨の列で、値を有効な通貨に解析できません
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr "{1}: {2}"
 
@@ -19504,118 +19492,118 @@ msgstr "年/月/日"
 msgid "y/d/m"
 msgstr "年/日/月"
 
-#: gnucash/import-export/import-main-matcher.cpp:502
+#: gnucash/import-export/import-main-matcher.cpp:503
 msgid "No new transactions were found in this import."
 msgstr "このインポートに新しい取引はありませんでした。"
 
-#: gnucash/import-export/import-main-matcher.cpp:774
+#: gnucash/import-export/import-main-matcher.cpp:775
 msgid "Destination account for the auto-balance split."
 msgstr "自動で貸借一致させるために追加されるスプリットの相手勘定科目です。"
 
-#: gnucash/import-export/import-main-matcher.cpp:996
+#: gnucash/import-export/import-main-matcher.cpp:1004
 msgid "Click Edit to modify"
 msgstr ""
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1407
+#: gnucash/import-export/import-main-matcher.cpp:1413
 msgid "_Assign transfer account"
 msgstr "資金移動先勘定科目を選択(_A)"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1412
+#: gnucash/import-export/import-main-matcher.cpp:1418
 msgid "Assign e_xchange rate"
 msgstr "為替レートを選択(_X)"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1417
+#: gnucash/import-export/import-main-matcher.cpp:1423
 msgid "_Edit description, notes, or memo"
 msgstr "説明、備考、または摘要を編集(_E)"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1422
+#: gnucash/import-export/import-main-matcher.cpp:1428
 msgid "_Reset all edits"
 msgstr "すべての編集をリセット(_R)"
 
-#: gnucash/import-export/import-main-matcher.cpp:1572
+#: gnucash/import-export/import-main-matcher.cpp:1578
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "追加"
 
-#: gnucash/import-export/import-main-matcher.cpp:1576
+#: gnucash/import-export/import-main-matcher.cpp:1582
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "更新+清算"
 
-#: gnucash/import-export/import-main-matcher.cpp:1580
+#: gnucash/import-export/import-main-matcher.cpp:1586
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "清算"
 
-#: gnucash/import-export/import-main-matcher.cpp:1587
+#: gnucash/import-export/import-main-matcher.cpp:1593
 msgid "Info"
 msgstr "情報"
 
-#: gnucash/import-export/import-main-matcher.cpp:1594
+#: gnucash/import-export/import-main-matcher.cpp:1600
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 msgid "Additional Comments"
 msgstr "追加コメント"
 
-#: gnucash/import-export/import-main-matcher.cpp:1979
+#: gnucash/import-export/import-main-matcher.cpp:1985
 msgid "New, already balanced"
 msgstr "新規、貸借一致済"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2001
+#: gnucash/import-export/import-main-matcher.cpp:2007
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "新規、%s を (手動) \"%s\" に資金移動"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2009
+#: gnucash/import-export/import-main-matcher.cpp:2015
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "新規、%s を (自動) \"%s\" に資金移動"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2022
+#: gnucash/import-export/import-main-matcher.cpp:2028
 #, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr "新規、貸借不一致 (%s を勘定科目 %s へ資金移動するための価格が必要)!"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2038
+#: gnucash/import-export/import-main-matcher.cpp:2044
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "新規、貸借不一致 (%s を資金移動する勘定科目が必要)!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2056
+#: gnucash/import-export/import-main-matcher.cpp:2062
 #, c-format
 msgid "Reconcile (manual) match to %s"
 msgstr "%s への (手動) 合致を照合"
 
-#: gnucash/import-export/import-main-matcher.cpp:2061
+#: gnucash/import-export/import-main-matcher.cpp:2067
 #, c-format
 msgid "Reconcile (auto) match to %s"
 msgstr "%s への (自動) 合致を照合"
 
-#: gnucash/import-export/import-main-matcher.cpp:2070
-#: gnucash/import-export/import-main-matcher.cpp:2099
+#: gnucash/import-export/import-main-matcher.cpp:2076
+#: gnucash/import-export/import-main-matcher.cpp:2105
 msgid "Match missing!"
 msgstr "合致するものがありません!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2085
+#: gnucash/import-export/import-main-matcher.cpp:2091
 #, c-format
 msgid "Update and reconcile (manual) match to %s"
 msgstr "%s への (手動) 合致を更新して照合"
 
-#: gnucash/import-export/import-main-matcher.cpp:2090
+#: gnucash/import-export/import-main-matcher.cpp:2096
 #, c-format
 msgid "Update and reconcile (auto) match to %s"
 msgstr "%s への (自動) 合致を更新して照合"
 
-#: gnucash/import-export/import-main-matcher.cpp:2107
+#: gnucash/import-export/import-main-matcher.cpp:2113
 msgid "Do not import (no action selected)"
 msgstr "インポートしない (アクションを選択しない)"
 
@@ -27916,11 +27904,6 @@ msgstr "他のスプリットを除去(_V)"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:60
 #: gnucash/ui/gnc-embedded-register-window.ui:123
-#: gnucash/ui/gnc-plugin-page-register.ui:162
-#: gnucash/ui/gnc-plugin-page-register.ui:376
-#: gnucash/ui/gnc-plugin-page-register.ui:488
-#: gnucash/ui/gnc-plugin-page-register.ui:586
-#: gnucash/ui/gnc-plugin-page-register.ui:625
 msgid "Remove all splits in the current transaction"
 msgstr "現在の取引のスプリットをすべて除去します。"
 
@@ -27938,11 +27921,6 @@ msgstr "取引を記帳(_E)"
 #: gnucash/ui/gnc-embedded-register-window.ui:67
 #: gnucash/ui/gnc-embedded-register-window.ui:130
 #: gnucash/ui/gnc-embedded-register-window.ui:197
-#: gnucash/ui/gnc-plugin-page-register.ui:171
-#: gnucash/ui/gnc-plugin-page-register.ui:383
-#: gnucash/ui/gnc-plugin-page-register.ui:495
-#: gnucash/ui/gnc-plugin-page-register.ui:593
-#: gnucash/ui/gnc-plugin-page-register.ui:632
 #: gnucash/ui/gnc-plugin-page-register.ui:764
 msgid "Record the current transaction"
 msgstr "現在の取引を記帳します。"
@@ -27961,11 +27939,6 @@ msgstr "取引をキャンセル(_N)"
 #: gnucash/ui/gnc-embedded-register-window.ui:72
 #: gnucash/ui/gnc-embedded-register-window.ui:135
 #: gnucash/ui/gnc-embedded-register-window.ui:212
-#: gnucash/ui/gnc-plugin-page-register.ui:177
-#: gnucash/ui/gnc-plugin-page-register.ui:388
-#: gnucash/ui/gnc-plugin-page-register.ui:500
-#: gnucash/ui/gnc-plugin-page-register.ui:598
-#: gnucash/ui/gnc-plugin-page-register.ui:637
 #: gnucash/ui/gnc-plugin-page-register.ui:779
 msgid "Cancel the current transaction"
 msgstr "現在の取引をキャンセルします。"
@@ -27992,7 +27965,6 @@ msgstr "資金移動(_T)…"
 #: gnucash/ui/gnc-embedded-register-window.ui:95
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:128
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:246
-#: gnucash/ui/gnc-plugin-page-register.ui:232
 #: gnucash/ui/gnc-plugin-page-register.ui:874
 msgid "Transfer funds from one account to another"
 msgstr "資金を別の勘定科目へ移動します。"
@@ -28137,8 +28109,6 @@ msgstr "ページ名変更(_N)"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:147
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:215
-#: gnucash/ui/gnc-plugin-page-register.ui:359
-#: gnucash/ui/gnc-plugin-page-register.ui:471
 msgid "Rename this page"
 msgstr "このページの名前を変更します。"
 
@@ -28316,7 +28286,6 @@ msgstr "検索(_F)…"
 #: gnucash/ui/gnc-plugin-page-budget.ui:52
 #: gnucash/ui/gnc-plugin-page-invoice.ui:46
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:68
-#: gnucash/ui/gnc-plugin-page-register.ui:52
 #: gnucash/ui/gnc-plugin-page-report.ui:19
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:19
 msgid "Find transactions with a search"
@@ -28340,7 +28309,6 @@ msgstr "税金帳票オプション(_X)"
 #: gnucash/ui/gnc-plugin-page-budget.ui:63
 #: gnucash/ui/gnc-plugin-page-invoice.ui:57
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:79
-#: gnucash/ui/gnc-plugin-page-register.ui:63
 #: gnucash/ui/gnc-plugin-page-report.ui:39
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:30
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
@@ -28751,7 +28719,6 @@ msgstr "勘定科目の編集(_E)"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:219
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:389
 #: gnucash/ui/gnc-plugin-page-budget.ui:18
-#: gnucash/ui/gnc-plugin-page-register.ui:35
 msgid "Edit the selected account"
 msgstr "選択した勘定科目を編集します。"
 
@@ -28767,7 +28734,6 @@ msgstr "勘定科目を検索(_I)"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:33
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:229
-#: gnucash/ui/gnc-plugin-page-register.ui:42
 msgid "Find an account"
 msgstr "勘定科目を検索します。"
 
@@ -28837,7 +28803,6 @@ msgstr "再表示(_R)"
 #: gnucash/ui/gnc-plugin-page-budget.ui:90
 #: gnucash/ui/gnc-plugin-page-invoice.ui:128
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:97
-#: gnucash/ui/gnc-plugin-page-register.ui:123
 #: gnucash/ui/gnc-plugin-page-report.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:40
 msgid "Refresh this window"
@@ -28866,7 +28831,6 @@ msgstr "照合(_R)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
-#: gnucash/ui/gnc-plugin-page-register.ui:238
 #: gnucash/ui/gnc-plugin-page-register.ui:889
 msgid "Reconcile the selected account"
 msgstr "選択した勘定科目を照合します。"
@@ -28878,7 +28842,6 @@ msgid "_Auto-clear…"
 msgstr "自動清算(_A)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
-#: gnucash/ui/gnc-plugin-page-register.ui:244
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
@@ -28899,7 +28862,6 @@ msgstr "株式分割(_K)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
-#: gnucash/ui/gnc-plugin-page-register.ui:256
 msgid "Record a stock split or a stock merger"
 msgstr "株式の分割または併合を記録します。"
 
@@ -28911,7 +28873,6 @@ msgstr "ロットの表示(_L)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261
-#: gnucash/ui/gnc-plugin-page-register.ui:262
 msgid "Bring up the lot viewer/editor window"
 msgstr "ロットの表示/編集ウインドウを表示します。"
 
@@ -29255,7 +29216,9 @@ msgstr "支払として選択…"
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:446
 #: gnucash/ui/gnc-plugin-page-register.ui:558
-msgid "Assign the selected transaction as payment"
+#, fuzzy
+#| msgid "Assign the selected transaction as payment"
+msgid "Assign the selected transaction as payment."
 msgstr "選択されている取引を支払として扱います。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
@@ -29267,8 +29230,35 @@ msgstr "支払を編集…"
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:452
 #: gnucash/ui/gnc-plugin-page-register.ui:564
-msgid "Edit the payment this transaction is a part of"
+#, fuzzy
+#| msgid "Edit the payment this transaction is a part of"
+msgid "Edit the payment this transaction is a part of."
 msgstr "この取引が含まれる支払を編集します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:35
+#, fuzzy
+#| msgid "Edit the selected account"
+msgid "Edit the selected account."
+msgstr "選択した勘定科目を編集します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:42
+#, fuzzy
+#| msgid "Find an account"
+msgid "Find an account."
+msgstr "勘定科目を検索します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:52
+#, fuzzy
+#| msgid "Find transactions with a search"
+msgid "Find transactions with a search."
+msgstr "検索により取引を見つけます。"
+
+#. Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string
+#: gnucash/ui/gnc-plugin-page-register.ui:63
+#, fuzzy
+#| msgid "Setup relevant accounts for tax reports, e.g. US income tax"
+msgid "Setup relevant accounts for tax reports, e.g. US income tax."
+msgstr "税金帳票に関連付ける勘定科目を設定します。例: 所得税"
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/ui/gnc-plugin-page-register.ui:71
@@ -29276,7 +29266,9 @@ msgid "_Basic Ledger"
 msgstr "基本元帳(_B)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:74
-msgid "Show transactions on one or two lines"
+#, fuzzy
+#| msgid "Show transactions on one or two lines"
+msgid "Show transactions on one or two lines."
 msgstr "取引を1行あるいは2行で表示します。"
 
 #. Translators: This is a menu item in the View menu
@@ -29285,12 +29277,17 @@ msgid "_Auto-Split Ledger"
 msgstr "自動スプリット元帳(_A)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:82
+#, fuzzy
+#| msgid ""
+#| "Show transactions on one or two lines and expand the current transaction"
 msgid ""
-"Show transactions on one or two lines and expand the current transaction"
+"Show transactions on one or two lines and expand the current transaction."
 msgstr "取引を1行あるいは2行で表示し、編集中の取引を展開します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
-msgid "Show expanded transactions with all splits"
+#, fuzzy
+#| msgid "Show expanded transactions with all splits"
+msgid "Show expanded transactions with all splits."
 msgstr "すべてのスプリットを含めて展開した取引を表示します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:107
@@ -29299,12 +29296,84 @@ msgstr "すべてのスプリットを含めて展開した取引を表示しま
 msgid "_Sort By…"
 msgstr "ソート(_S)…"
 
+#: gnucash/ui/gnc-plugin-page-register.ui:123
+#, fuzzy
+#| msgid "Refresh this window"
+msgid "Refresh this window."
+msgstr "このウィンドウを再表示します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:132
+#, fuzzy
+#| msgid "Cut the selected transaction into clipboard"
+msgid "Cut the selected transaction into clipboard."
+msgstr "選択されている取引をクリップボードに切り取ります。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:138
+#, fuzzy
+#| msgid "Copy the selected transaction into clipboard"
+msgid "Copy the selected transaction into clipboard."
+msgstr "選択された取引をクリップボードにコピーします。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:144
+#, fuzzy
+#| msgid "Paste the transaction from the clipboard"
+msgid "Paste the transaction from the clipboard."
+msgstr "クリップボードにある取引を貼り付けます。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:150
+#: gnucash/ui/gnc-plugin-page-register.ui:366
+#: gnucash/ui/gnc-plugin-page-register.ui:576
+#, fuzzy
+#| msgid "Make a copy of the current transaction"
+msgid "Make a copy of the current transaction."
+msgstr "現在の取引の複製を作成します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:156
+#: gnucash/ui/gnc-plugin-page-register.ui:371
+#: gnucash/ui/gnc-plugin-page-register.ui:581
+#, fuzzy
+#| msgid "Delete the current transaction"
+msgid "Delete the current transaction."
+msgstr "現在の取引を削除します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:162
+#: gnucash/ui/gnc-plugin-page-register.ui:376
+#: gnucash/ui/gnc-plugin-page-register.ui:488
+#: gnucash/ui/gnc-plugin-page-register.ui:586
+#: gnucash/ui/gnc-plugin-page-register.ui:625
+#, fuzzy
+#| msgid "Remove all splits in the current transaction"
+msgid "Remove all splits in the current transaction."
+msgstr "現在の取引のスプリットをすべて除去します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:171
+#: gnucash/ui/gnc-plugin-page-register.ui:383
+#: gnucash/ui/gnc-plugin-page-register.ui:495
+#: gnucash/ui/gnc-plugin-page-register.ui:593
+#: gnucash/ui/gnc-plugin-page-register.ui:632
+#, fuzzy
+#| msgid "Record the current transaction"
+msgid "Record the current transaction."
+msgstr "現在の取引を記帳します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:177
+#: gnucash/ui/gnc-plugin-page-register.ui:388
+#: gnucash/ui/gnc-plugin-page-register.ui:500
+#: gnucash/ui/gnc-plugin-page-register.ui:598
+#: gnucash/ui/gnc-plugin-page-register.ui:637
+#, fuzzy
+#| msgid "Cancel the current transaction"
+msgid "Cancel the current transaction."
+msgstr "現在の取引をキャンセルします。"
+
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
 msgstr "取引を無効化(_V)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-msgid "Void the current transaction"
+#, fuzzy
+#| msgid "Void the current transaction"
+msgid "Void the current transaction."
 msgstr "現在の取引を無効化します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
@@ -29312,7 +29381,9 @@ msgid "_Unvoid Transaction"
 msgstr "取引無効化を解除(_U)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-msgid "Unvoid the current transaction"
+#, fuzzy
+#| msgid "Unvoid the current transaction"
+msgid "Unvoid the current transaction."
 msgstr "現在の取引の無効化を解除します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
@@ -29320,18 +29391,80 @@ msgid "Add _Reversing Transaction"
 msgstr "逆方向の取引を追加(_R)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
-msgid "Add a reversing transaction"
+#, fuzzy
+#| msgid "Add a reversing transaction"
+msgid "Add a reversing transaction."
 msgstr "逆方向の取引を追加します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:207
+#: gnucash/ui/gnc-plugin-page-register.ui:395
+#: gnucash/ui/gnc-plugin-page-register.ui:507
+#, fuzzy
+#| msgid ""
+#| "Add, change, or unlink the document linked with the current transaction"
+msgid ""
+"Add, change, or unlink the document linked with the current transaction."
+msgstr "現在の取引にリンクする文書を追加、変更、または削除します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:213
+#: gnucash/ui/gnc-plugin-page-register.ui:400
+#: gnucash/ui/gnc-plugin-page-register.ui:512
+#, fuzzy
+#| msgid "Open the linked document for the current transaction"
+msgid "Open the linked document for the current transaction."
+msgstr "現在の取引にリンクされた文書を開きます。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:222
+#: gnucash/ui/gnc-plugin-page-register.ui:407
+#: gnucash/ui/gnc-plugin-page-register.ui:519
+#, fuzzy
+#| msgid "Jump to the linked bill, invoice, or voucher"
+msgid "Jump to the linked bill, invoice, or voucher."
+msgstr ""
+"リンクされた仕入先請求書、得意先請求書、または立替払請求書へジャンプします。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:232
+#, fuzzy
+#| msgid "Transfer funds from one account to another"
+msgid "Transfer funds from one account to another."
+msgstr "資金を別の勘定科目へ移動します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:238
+#, fuzzy
+#| msgid "Reconcile the selected account"
+msgid "Reconcile the selected account."
+msgstr "選択した勘定科目を照合します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:244
+#, fuzzy
+#| msgid ""
+#| "Automatically clear individual transactions, so as to reach a certain "
+#| "cleared amount"
+msgid ""
+"Automatically clear individual transactions, so as to reach a certain "
+"cleared amount."
+msgstr "特定の清算金額に達するまで各取引を自動清算します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:256
+#, fuzzy
+#| msgid "Record a stock split or a stock merger"
+msgid "Record a stock split or a stock merger."
+msgstr "株式の分割または併合を記録します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:262
+#, fuzzy
+#| msgid "Bring up the lot viewer/editor window"
+msgid "Bring up the lot viewer/editor window."
+msgstr "ロットの表示/編集ウインドウを表示します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:272
 #: gnucash/ui/gnc-plugin-page-register.ui:414
 #: gnucash/ui/gnc-plugin-page-register.ui:526
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
-#: gnucash/ui/gnc-plugin-page-register.ui:804
 #, fuzzy
 #| msgid "Move to the blank transaction at the bottom of the register"
-msgid "Move to the blank transaction in the register"
+msgid "Move to the blank transaction in the register."
 msgstr "記録簿の一番下の空白の取引に移動します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
@@ -29343,7 +29476,9 @@ msgstr "日付へ移動(_G)"
 #: gnucash/ui/gnc-plugin-page-register.ui:279
 #: gnucash/ui/gnc-plugin-page-register.ui:419
 #: gnucash/ui/gnc-plugin-page-register.ui:531
-msgid "Move to the split at the specified date"
+#, fuzzy
+#| msgid "Move to the split at the specified date"
+msgid "Move to the split at the specified date."
 msgstr "指定された日付のスプリットへ移動します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:283
@@ -29356,8 +29491,9 @@ msgstr "スプリット取引(_P)"
 #: gnucash/ui/gnc-plugin-page-register.ui:285
 #: gnucash/ui/gnc-plugin-page-register.ui:424
 #: gnucash/ui/gnc-plugin-page-register.ui:536
-#: gnucash/ui/gnc-plugin-page-register.ui:819
-msgid "Show all splits in the current transaction"
+#, fuzzy
+#| msgid "Show all splits in the current transaction"
+msgid "Show all splits in the current transaction."
 msgstr "現在の取引のスプリットをすべて表示します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:289
@@ -29369,7 +29505,9 @@ msgstr "為替・交換レートを編集(_X)"
 #: gnucash/ui/gnc-plugin-page-register.ui:291
 #: gnucash/ui/gnc-plugin-page-register.ui:429
 #: gnucash/ui/gnc-plugin-page-register.ui:541
-msgid "Edit the exchange rate for the current transaction"
+#, fuzzy
+#| msgid "Edit the exchange rate for the current transaction"
+msgid "Edit the exchange rate for the current transaction."
 msgstr "現在の取引の為替・交換レートを編集します。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:295
@@ -29382,9 +29520,12 @@ msgstr "予定取引を作成(_D)…"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
-#: gnucash/ui/gnc-plugin-page-register.ui:849
+#, fuzzy
+#| msgid ""
+#| "Create a Scheduled Transaction with the current transaction as a template"
 msgid ""
-"Create a Scheduled Transaction with the current transaction as a template"
+"Create a Scheduled Transaction with the current transaction as a template or "
+"edit the Scheduled Transaction that current transaction was created by."
 msgstr "現在の取引をテンプレートとして予定取引を作成します。"
 
 #. Translators: This is a menu item that will open a register tab for the
@@ -29400,9 +29541,12 @@ msgstr "相手勘定科目へジャンプ(_J)"
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:439
 #: gnucash/ui/gnc-plugin-page-register.ui:551
-#: gnucash/ui/gnc-plugin-page-register.ui:834
+#, fuzzy
+#| msgid ""
+#| "Open a new register tab for the other account with focus on this "
+#| "transaction"
 msgid ""
-"Open a new register tab for the other account with focus on this transaction"
+"Open a new register tab for the other account with focus on this transaction."
 msgstr "相手勘定科目の記録簿タブを開いてフォーカスをこの取引に合わせます。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
@@ -29418,7 +29562,9 @@ msgid "Account Report"
 msgstr "勘定科目帳票"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:334
-msgid "Open a register report for this Account"
+#, fuzzy
+#| msgid "Open a register report for this Account"
+msgid "Open a register report for this Account."
 msgstr "この勘定科目の記録簿帳票を開きます。"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:338
@@ -29426,8 +29572,55 @@ msgid "Account Report - Single Transaction"
 msgstr "勘定科目帳票 - 単一取引"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:340
-msgid "Open a register report for the selected Transaction"
+#, fuzzy
+#| msgid "Open a register report for the selected Transaction"
+msgid "Open a register report for the selected Transaction."
 msgstr "選択した取引の記録簿帳票を開きます。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:359
+#: gnucash/ui/gnc-plugin-page-register.ui:471
+#, fuzzy
+#| msgid "Rename this page"
+msgid "Rename this page."
+msgstr "このページの名前を変更します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:478
+#: gnucash/ui/gnc-plugin-page-register.ui:615
+#, fuzzy
+#| msgid "Make a copy of the current split"
+msgid "Make a copy of the current split."
+msgstr "現在のスプリットの複製を作成します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:483
+#: gnucash/ui/gnc-plugin-page-register.ui:620
+#, fuzzy
+#| msgid "Delete the current split"
+msgid "Delete the current split."
+msgstr "現在のスプリットを削除します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:804
+#, fuzzy
+#| msgid "Move to the blank transaction at the bottom of the register"
+msgid "Move to the blank transaction in the register"
+msgstr "記録簿の一番下の空白の取引に移動します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:819
+msgid "Show all splits in the current transaction"
+msgstr "現在の取引のスプリットをすべて表示します。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:834
+msgid ""
+"Open a new register tab for the other account with focus on this transaction"
+msgstr "相手勘定科目の記録簿タブを開いてフォーカスをこの取引に合わせます。"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:849
+#, fuzzy
+#| msgid ""
+#| "Create a Scheduled Transaction with the current transaction as a template"
+msgid ""
+"Create a Scheduled Transaction with the current transaction as a template or "
+"edit the Scheduled Transaction that current transaction was created by"
+msgstr "現在の取引をテンプレートとして予定取引を作成します。"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
@@ -29961,6 +30154,7 @@ msgstr "新しい場所:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -29973,11 +30167,13 @@ msgid "In addition:"
 msgstr "さらに:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "次のファイルは {1} にコピーされました:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr "{1} 内にあった次のファイルは名前が変更されました:"
 
@@ -29987,6 +30183,7 @@ msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] "次のファイルは使われなくなったため今後は無視されます:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "次のファイルは {1} に移動できませんでした:"
@@ -30085,35 +30282,35 @@ msgstr "%B %#d, %Y"
 msgid "%B %e, %Y"
 msgstr "%B %e, %Y"
 
-#: libgnucash/engine/gnc-datetime.cpp:86
+#: libgnucash/engine/gnc-datetime.cpp:88
 msgid "y-m-d"
 msgstr "年-月-日"
 
-#: libgnucash/engine/gnc-datetime.cpp:98
+#: libgnucash/engine/gnc-datetime.cpp:100
 msgid "d-m-y"
 msgstr "日-月-年"
 
-#: libgnucash/engine/gnc-datetime.cpp:110
+#: libgnucash/engine/gnc-datetime.cpp:112
 msgid "m-d-y"
 msgstr "月-日-年"
 
-#: libgnucash/engine/gnc-datetime.cpp:124
+#: libgnucash/engine/gnc-datetime.cpp:126
 msgid "d-m"
 msgstr "日-月"
 
-#: libgnucash/engine/gnc-datetime.cpp:136
+#: libgnucash/engine/gnc-datetime.cpp:138
 msgid "m-d"
 msgstr "月-日"
 
-#: libgnucash/engine/gnc-datetime.cpp:566
+#: libgnucash/engine/gnc-datetime.cpp:618
 msgid "Unknown date format specifier passed as argument."
 msgstr "不明な日付書式指定文字が引数に渡されました。"
 
-#: libgnucash/engine/gnc-datetime.cpp:571
+#: libgnucash/engine/gnc-datetime.cpp:623
 msgid "Value can't be parsed into a date using the selected date format."
 msgstr "選択された日付書式で値を日付に解析できませんでした。"
 
-#: libgnucash/engine/gnc-datetime.cpp:576
+#: libgnucash/engine/gnc-datetime.cpp:628
 msgid "Value appears to contain a year while the selected format forbids this."
 msgstr ""
 "選択された書式では年が含まれてはいけませんが、値には含まれているようです。"
@@ -30694,7 +30891,7 @@ msgstr "勘定科目 %s 内のどの取引にも属さないものを探して�
 msgid "Looking for imbalances in transaction date %s: %u of %u"
 msgstr "勘定科目 %s 内の貸借が一致しないものを探しています: %u 件、%u 件中"
 
-#: libgnucash/engine/Split.cpp:1667
+#: libgnucash/engine/Split.cpp:1677
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"

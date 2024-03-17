@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-05 14:50+0100\n"
+"POT-Creation-Date: 2024-03-17 08:37+0100\n"
 "PO-Revision-Date: 2021-03-05 11:50+0000\n"
 "Last-Translator: bruh <quangtrung02hn16@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/gnucash/"
@@ -1212,7 +1212,7 @@ msgstr "Bàn tính tài chính"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:374
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.cpp:1566
+#: gnucash/import-export/import-main-matcher.cpp:1572
 #: gnucash/import-export/import-match-picker.cpp:313
 #: gnucash/import-export/import-match-picker.cpp:353
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3823
@@ -1297,7 +1297,7 @@ msgstr "Gặp lỗi khi thêm giá."
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.cpp:1567
+#: gnucash/import-export/import-main-matcher.cpp:1573
 #: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
@@ -1823,7 +1823,7 @@ msgstr "Hãy gõ số các chứng khoán được mua hay bán"
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.cpp:1571
+#: gnucash/import-export/import-main-matcher.cpp:1577
 #: gnucash/import-export/import-match-picker.cpp:316
 #: gnucash/import-export/import-match-picker.cpp:356
 #: gnucash/register/ledger-core/split-register-model.c:360
@@ -2486,7 +2486,7 @@ msgstr "Báo cáo giao dịch"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:377
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.cpp:1570
+#: gnucash/import-export/import-main-matcher.cpp:1576
 #: gnucash/import-export/import-match-picker.cpp:315
 #: gnucash/import-export/import-match-picker.cpp:355
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3833
@@ -3257,7 +3257,7 @@ msgstr "Tìm đơn hàng gửi"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.cpp:1569
+#: gnucash/import-export/import-main-matcher.cpp:1575
 #: gnucash/import-export/import-match-picker.cpp:314
 #: gnucash/import-export/import-match-picker.cpp:354
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3844
@@ -4945,19 +4945,16 @@ msgstr "_Xoá sự phân tách"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:275
 #: gnucash/ui/gnc-embedded-register-window.ui:35
-#: gnucash/ui/gnc-plugin-page-register.ui:132
 msgid "Cut the selected transaction into clipboard"
 msgstr "Cắt giao dịch đã chọn vào bảng nháp"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:276
 #: gnucash/ui/gnc-embedded-register-window.ui:40
-#: gnucash/ui/gnc-plugin-page-register.ui:138
 msgid "Copy the selected transaction into clipboard"
 msgstr "Sao chép giao dịch đã chọn vào bảng nháp"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:277
 #: gnucash/ui/gnc-embedded-register-window.ui:45
-#: gnucash/ui/gnc-plugin-page-register.ui:144
 msgid "Paste the transaction from the clipboard"
 msgstr "Dán giao dịch từ bảng nháp"
 
@@ -4965,9 +4962,6 @@ msgstr "Dán giao dịch từ bảng nháp"
 #: gnucash/ui/gnc-embedded-register-window.ui:50
 #: gnucash/ui/gnc-embedded-register-window.ui:113
 #: gnucash/ui/gnc-embedded-register-window.ui:157
-#: gnucash/ui/gnc-plugin-page-register.ui:150
-#: gnucash/ui/gnc-plugin-page-register.ui:366
-#: gnucash/ui/gnc-plugin-page-register.ui:576
 #: gnucash/ui/gnc-plugin-page-register.ui:724
 msgid "Make a copy of the current transaction"
 msgstr "Tạo một bản sao của giao dịch hiện thời"
@@ -4976,33 +4970,21 @@ msgstr "Tạo một bản sao của giao dịch hiện thời"
 #: gnucash/ui/gnc-embedded-register-window.ui:55
 #: gnucash/ui/gnc-embedded-register-window.ui:118
 #: gnucash/ui/gnc-embedded-register-window.ui:172
-#: gnucash/ui/gnc-plugin-page-register.ui:156
-#: gnucash/ui/gnc-plugin-page-register.ui:371
-#: gnucash/ui/gnc-plugin-page-register.ui:581
 #: gnucash/ui/gnc-plugin-page-register.ui:739
 msgid "Delete the current transaction"
 msgstr "Xoá giao dịch hiện thời"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:280
-#: gnucash/ui/gnc-plugin-page-register.ui:207
-#: gnucash/ui/gnc-plugin-page-register.ui:395
-#: gnucash/ui/gnc-plugin-page-register.ui:507
 #, fuzzy
 msgid "Add, change, or unlink the document linked with the current transaction"
 msgstr "Xoá giao dịch hiện thời"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:281
-#: gnucash/ui/gnc-plugin-page-register.ui:213
-#: gnucash/ui/gnc-plugin-page-register.ui:400
-#: gnucash/ui/gnc-plugin-page-register.ui:512
 #, fuzzy
 msgid "Open the linked document for the current transaction"
 msgstr "Tạo một bản sao của giao dịch hiện thời"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:282
-#: gnucash/ui/gnc-plugin-page-register.ui:222
-#: gnucash/ui/gnc-plugin-page-register.ui:407
-#: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher"
 msgstr ""
 
@@ -5022,15 +5004,11 @@ msgid "Paste the split from the clipboard"
 msgstr "Dán giao dịch từ bảng nháp"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:286
-#: gnucash/ui/gnc-plugin-page-register.ui:478
-#: gnucash/ui/gnc-plugin-page-register.ui:615
 #, fuzzy
 msgid "Make a copy of the current split"
 msgstr "Tạo bản sao của mục nhập hiện tại"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:287
-#: gnucash/ui/gnc-plugin-page-register.ui:483
-#: gnucash/ui/gnc-plugin-page-register.ui:620
 #, fuzzy
 msgid "Delete the current split"
 msgstr "Xoá mục nhập hiện tại"
@@ -8361,6 +8339,7 @@ msgid "Not enough information for quotes dump"
 msgstr "Hiển thị hai dòng thông tin về mỗi giao dịch"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8369,6 +8348,7 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8379,6 +8359,7 @@ msgstr "Đây là một tùy chọn màu sắc"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:180
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
@@ -8402,12 +8383,13 @@ msgstr "Hãy thông báo lỗi cho <gnucash-devel@gnucash.org>.\n"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
-#, fuzzy
+#, fuzzy, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "Cũng có thể tra tìm và thông báo lỗi ở « https://bugs.gnucash.org »\n"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr ""
 
@@ -8425,6 +8407,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8434,12 +8417,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash %s"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash %s"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s phiên bản phát triển"
 
@@ -19262,9 +19245,9 @@ msgid "File exported successfully!\n"
 msgstr ""
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
-#: gnucash/import-export/import-main-matcher.cpp:1868
+#: gnucash/import-export/import-main-matcher.cpp:1874
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.cpp:1634 libgnucash/engine/Split.cpp:1651
+#: libgnucash/engine/Split.cpp:1644 libgnucash/engine/Split.cpp:1661
 msgid "-- Split Transaction --"
 msgstr "— Giao dịch phân tách —"
 
@@ -19503,7 +19486,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "Gặp lỗi khi phân tích tập tin %s."
 
@@ -19721,6 +19704,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -19982,131 +19966,131 @@ msgstr "y/m/d"
 msgid "y/d/m"
 msgstr "y/d/m"
 
-#: gnucash/import-export/import-main-matcher.cpp:502
+#: gnucash/import-export/import-main-matcher.cpp:503
 #, fuzzy
 msgid "No new transactions were found in this import."
 msgstr "Giao dịch hiện thời chưa được cân bằng."
 
-#: gnucash/import-export/import-main-matcher.cpp:774
+#: gnucash/import-export/import-main-matcher.cpp:775
 msgid "Destination account for the auto-balance split."
 msgstr "Tài khoản đích cho sự phân tách tự động cân bằng."
 
-#: gnucash/import-export/import-main-matcher.cpp:996
+#: gnucash/import-export/import-main-matcher.cpp:1004
 msgid "Click Edit to modify"
 msgstr ""
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1407
+#: gnucash/import-export/import-main-matcher.cpp:1413
 #, fuzzy
 #| msgid "_Select transfer account"
 msgid "_Assign transfer account"
 msgstr "Chọn tài khoản chu_yển"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1412
+#: gnucash/import-export/import-main-matcher.cpp:1418
 #, fuzzy
 #| msgid "Exchange rate"
 msgid "Assign e_xchange rate"
 msgstr "Tỷ lệ hội suất"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1417
+#: gnucash/import-export/import-main-matcher.cpp:1423
 #, fuzzy
 msgid "_Edit description, notes, or memo"
 msgstr "Mô tả"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1422
+#: gnucash/import-export/import-main-matcher.cpp:1428
 #, fuzzy
 msgid "_Reset all edits"
 msgstr "Mặc định sổ cái"
 
-#: gnucash/import-export/import-main-matcher.cpp:1572
+#: gnucash/import-export/import-main-matcher.cpp:1578
 #, fuzzy
 #| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.cpp:1576
+#: gnucash/import-export/import-main-matcher.cpp:1582
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.cpp:1580
+#: gnucash/import-export/import-main-matcher.cpp:1586
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.cpp:1587
+#: gnucash/import-export/import-main-matcher.cpp:1593
 msgid "Info"
 msgstr "Thông tin"
 
-#: gnucash/import-export/import-main-matcher.cpp:1594
+#: gnucash/import-export/import-main-matcher.cpp:1600
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 #, fuzzy
 msgid "Additional Comments"
 msgstr "Phụ vào Thẻ:"
 
-#: gnucash/import-export/import-main-matcher.cpp:1979
+#: gnucash/import-export/import-main-matcher.cpp:1985
 msgid "New, already balanced"
 msgstr "Mới, đã cân bằng"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2001
+#: gnucash/import-export/import-main-matcher.cpp:2007
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "Mới, chuyển %s cho « %s » (bằng tay)"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2009
+#: gnucash/import-export/import-main-matcher.cpp:2015
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "Mới, chuyển %s cho « %s » (tự động)"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2022
+#: gnucash/import-export/import-main-matcher.cpp:2028
 #, fuzzy, c-format
 #| msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr "Mới, CHƯA CÂN BẰNG (cần tài khoản chuyển %s)"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2038
+#: gnucash/import-export/import-main-matcher.cpp:2044
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "Mới, CHƯA CÂN BẰNG (cần tài khoản chuyển %s)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2056
+#: gnucash/import-export/import-main-matcher.cpp:2062
 #, fuzzy, c-format
 #| msgid "Reconcile (manual) match"
 msgid "Reconcile (manual) match to %s"
 msgstr "Chỉnh hợp sự khớp (bằng tay)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2061
+#: gnucash/import-export/import-main-matcher.cpp:2067
 #, fuzzy, c-format
 #| msgid "Reconcile (auto) match"
 msgid "Reconcile (auto) match to %s"
 msgstr "Chỉnh hợp sự khớp (tự động)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2070
-#: gnucash/import-export/import-main-matcher.cpp:2099
+#: gnucash/import-export/import-main-matcher.cpp:2076
+#: gnucash/import-export/import-main-matcher.cpp:2105
 msgid "Match missing!"
 msgstr "Thiếu sự khớp !"
 
-#: gnucash/import-export/import-main-matcher.cpp:2085
+#: gnucash/import-export/import-main-matcher.cpp:2091
 #, fuzzy, c-format
 msgid "Update and reconcile (manual) match to %s"
 msgstr "Chỉnh hợp sự khớp (bằng tay)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2090
+#: gnucash/import-export/import-main-matcher.cpp:2096
 #, fuzzy, c-format
 msgid "Update and reconcile (auto) match to %s"
 msgstr "Chỉnh hợp sự khớp (tự động)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2107
+#: gnucash/import-export/import-main-matcher.cpp:2113
 msgid "Do not import (no action selected)"
 msgstr "Đừng nhập khẩu (chưa chọn hành động)"
 
@@ -29006,11 +28990,6 @@ msgstr "_Bỏ các sự phân tách"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:60
 #: gnucash/ui/gnc-embedded-register-window.ui:123
-#: gnucash/ui/gnc-plugin-page-register.ui:162
-#: gnucash/ui/gnc-plugin-page-register.ui:376
-#: gnucash/ui/gnc-plugin-page-register.ui:488
-#: gnucash/ui/gnc-plugin-page-register.ui:586
-#: gnucash/ui/gnc-plugin-page-register.ui:625
 msgid "Remove all splits in the current transaction"
 msgstr "Gỡ bỏ mọi sự phân tách trong giao dịch hiện tại"
 
@@ -29028,11 +29007,6 @@ msgstr "Th_u giao dịch"
 #: gnucash/ui/gnc-embedded-register-window.ui:67
 #: gnucash/ui/gnc-embedded-register-window.ui:130
 #: gnucash/ui/gnc-embedded-register-window.ui:197
-#: gnucash/ui/gnc-plugin-page-register.ui:171
-#: gnucash/ui/gnc-plugin-page-register.ui:383
-#: gnucash/ui/gnc-plugin-page-register.ui:495
-#: gnucash/ui/gnc-plugin-page-register.ui:593
-#: gnucash/ui/gnc-plugin-page-register.ui:632
 #: gnucash/ui/gnc-plugin-page-register.ui:764
 msgid "Record the current transaction"
 msgstr "Ghi giao dịch hiện thời"
@@ -29051,11 +29025,6 @@ msgstr "Thô_i giao dịch"
 #: gnucash/ui/gnc-embedded-register-window.ui:72
 #: gnucash/ui/gnc-embedded-register-window.ui:135
 #: gnucash/ui/gnc-embedded-register-window.ui:212
-#: gnucash/ui/gnc-plugin-page-register.ui:177
-#: gnucash/ui/gnc-plugin-page-register.ui:388
-#: gnucash/ui/gnc-plugin-page-register.ui:500
-#: gnucash/ui/gnc-plugin-page-register.ui:598
-#: gnucash/ui/gnc-plugin-page-register.ui:637
 #: gnucash/ui/gnc-plugin-page-register.ui:779
 msgid "Cancel the current transaction"
 msgstr "Thôi giao dịch hiện thời"
@@ -29084,7 +29053,6 @@ msgstr "Chuyển"
 #: gnucash/ui/gnc-embedded-register-window.ui:95
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:128
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:246
-#: gnucash/ui/gnc-plugin-page-register.ui:232
 #: gnucash/ui/gnc-plugin-page-register.ui:874
 msgid "Transfer funds from one account to another"
 msgstr "Chuyển tiền từ tài khoản này sang tài khoản khác"
@@ -29245,8 +29213,6 @@ msgstr "Thay tê_n trang"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:147
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:215
-#: gnucash/ui/gnc-plugin-page-register.ui:359
-#: gnucash/ui/gnc-plugin-page-register.ui:471
 #, fuzzy
 #| msgid "Rename this page."
 msgid "Rename this page"
@@ -29437,7 +29403,6 @@ msgstr "_Tìm…"
 #: gnucash/ui/gnc-plugin-page-budget.ui:52
 #: gnucash/ui/gnc-plugin-page-invoice.ui:46
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:68
-#: gnucash/ui/gnc-plugin-page-register.ui:52
 #: gnucash/ui/gnc-plugin-page-report.ui:19
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:19
 msgid "Find transactions with a search"
@@ -29462,7 +29427,6 @@ msgstr "Tùy chọn _báo cáo"
 #: gnucash/ui/gnc-plugin-page-budget.ui:63
 #: gnucash/ui/gnc-plugin-page-invoice.ui:57
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:79
-#: gnucash/ui/gnc-plugin-page-register.ui:63
 #: gnucash/ui/gnc-plugin-page-report.ui:39
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:30
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
@@ -29942,7 +29906,6 @@ msgstr "_Sửa tài khoản"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:219
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:389
 #: gnucash/ui/gnc-plugin-page-budget.ui:18
-#: gnucash/ui/gnc-plugin-page-register.ui:35
 msgid "Edit the selected account"
 msgstr "Chỉnh sửa tài khoản đã chọn"
 
@@ -29961,7 +29924,6 @@ msgstr "một tài khoản"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:33
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:229
-#: gnucash/ui/gnc-plugin-page-register.ui:42
 #, fuzzy
 msgid "Find an account"
 msgstr "một tài khoản"
@@ -30036,7 +29998,6 @@ msgstr "_Cập nhật"
 #: gnucash/ui/gnc-plugin-page-budget.ui:90
 #: gnucash/ui/gnc-plugin-page-invoice.ui:128
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:97
-#: gnucash/ui/gnc-plugin-page-register.ui:123
 #: gnucash/ui/gnc-plugin-page-report.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:40
 msgid "Refresh this window"
@@ -30069,7 +30030,6 @@ msgstr "_Chỉnh hợp"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
-#: gnucash/ui/gnc-plugin-page-register.ui:238
 #: gnucash/ui/gnc-plugin-page-register.ui:889
 msgid "Reconcile the selected account"
 msgstr "Chỉnh hợp tài khoản đã chọn"
@@ -30082,7 +30042,6 @@ msgid "_Auto-clear…"
 msgstr "Ngưỡng tự động chu_yển"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
-#: gnucash/ui/gnc-plugin-page-register.ui:244
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
@@ -30106,7 +30065,6 @@ msgstr "Chia nhỏ chứng khoán"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
-#: gnucash/ui/gnc-plugin-page-register.ui:256
 msgid "Record a stock split or a stock merger"
 msgstr "Ghi chép sự chia nhỏ chứng khoán hay sáp nhập chứng khoán"
 
@@ -30118,7 +30076,6 @@ msgstr "Xem các _lô…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261
-#: gnucash/ui/gnc-plugin-page-register.ui:262
 msgid "Bring up the lot viewer/editor window"
 msgstr "Hiển thị cửa sổ xem/sửa lô"
 
@@ -30502,7 +30459,7 @@ msgstr "_Xử lý tiền trả…"
 #: gnucash/ui/gnc-plugin-page-register.ui:446
 #: gnucash/ui/gnc-plugin-page-register.ui:558
 #, fuzzy
-msgid "Assign the selected transaction as payment"
+msgid "Assign the selected transaction as payment."
 msgstr "Cắt vùng chọn"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
@@ -30516,8 +30473,30 @@ msgstr "_Xử lý tiền trả…"
 #: gnucash/ui/gnc-plugin-page-register.ui:452
 #: gnucash/ui/gnc-plugin-page-register.ui:564
 #, fuzzy
-msgid "Edit the payment this transaction is a part of"
+msgid "Edit the payment this transaction is a part of."
 msgstr "Chỉnh sửa giao dịch hiện tại"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:35
+#, fuzzy
+#| msgid "Edit the selected account"
+msgid "Edit the selected account."
+msgstr "Chỉnh sửa tài khoản đã chọn"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:42
+#, fuzzy
+msgid "Find an account."
+msgstr "một tài khoản"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:52
+#, fuzzy
+#| msgid "Find transactions with a search"
+msgid "Find transactions with a search."
+msgstr "Tìm giao dịch bằng cách tìm kiếm"
+
+#. Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string
+#: gnucash/ui/gnc-plugin-page-register.ui:63
+msgid "Setup relevant accounts for tax reports, e.g. US income tax."
+msgstr ""
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/ui/gnc-plugin-page-register.ui:71
@@ -30525,7 +30504,9 @@ msgid "_Basic Ledger"
 msgstr "Sổ cái cơ _bản"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:74
-msgid "Show transactions on one or two lines"
+#, fuzzy
+#| msgid "Show transactions on one or two lines"
+msgid "Show transactions on one or two lines."
 msgstr "Hiển thị giao dịch trên một hay hai dòng"
 
 #. Translators: This is a menu item in the View menu
@@ -30534,13 +30515,18 @@ msgid "_Auto-Split Ledger"
 msgstr "_Tự động phân tách sổ cái"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:82
+#, fuzzy
+#| msgid ""
+#| "Show transactions on one or two lines and expand the current transaction"
 msgid ""
-"Show transactions on one or two lines and expand the current transaction"
+"Show transactions on one or two lines and expand the current transaction."
 msgstr ""
 "Hiển thị giao dịch trên một hay hai dòng và mở rộng giao dịch hiện thời"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
-msgid "Show expanded transactions with all splits"
+#, fuzzy
+#| msgid "Show expanded transactions with all splits"
+msgid "Show expanded transactions with all splits."
 msgstr "Hiển thị giao dịch đã mở rộng với mọi sự phân tách"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:107
@@ -30551,6 +30537,76 @@ msgstr "Hiển thị giao dịch đã mở rộng với mọi sự phân tách"
 msgid "_Sort By…"
 msgstr "Sắp xếp theo"
 
+#: gnucash/ui/gnc-plugin-page-register.ui:123
+#, fuzzy
+#| msgid "Refresh this window"
+msgid "Refresh this window."
+msgstr "Cập nhật cửa sổ này"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:132
+#, fuzzy
+#| msgid "Cut the selected transaction into clipboard"
+msgid "Cut the selected transaction into clipboard."
+msgstr "Cắt giao dịch đã chọn vào bảng nháp"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:138
+#, fuzzy
+#| msgid "Copy the selected transaction into clipboard"
+msgid "Copy the selected transaction into clipboard."
+msgstr "Sao chép giao dịch đã chọn vào bảng nháp"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:144
+#, fuzzy
+#| msgid "Paste the transaction from the clipboard"
+msgid "Paste the transaction from the clipboard."
+msgstr "Dán giao dịch từ bảng nháp"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:150
+#: gnucash/ui/gnc-plugin-page-register.ui:366
+#: gnucash/ui/gnc-plugin-page-register.ui:576
+#, fuzzy
+#| msgid "Make a copy of the current transaction"
+msgid "Make a copy of the current transaction."
+msgstr "Tạo một bản sao của giao dịch hiện thời"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:156
+#: gnucash/ui/gnc-plugin-page-register.ui:371
+#: gnucash/ui/gnc-plugin-page-register.ui:581
+#, fuzzy
+#| msgid "Delete the current transaction"
+msgid "Delete the current transaction."
+msgstr "Xoá giao dịch hiện thời"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:162
+#: gnucash/ui/gnc-plugin-page-register.ui:376
+#: gnucash/ui/gnc-plugin-page-register.ui:488
+#: gnucash/ui/gnc-plugin-page-register.ui:586
+#: gnucash/ui/gnc-plugin-page-register.ui:625
+#, fuzzy
+#| msgid "Remove all splits in the current transaction"
+msgid "Remove all splits in the current transaction."
+msgstr "Gỡ bỏ mọi sự phân tách trong giao dịch hiện tại"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:171
+#: gnucash/ui/gnc-plugin-page-register.ui:383
+#: gnucash/ui/gnc-plugin-page-register.ui:495
+#: gnucash/ui/gnc-plugin-page-register.ui:593
+#: gnucash/ui/gnc-plugin-page-register.ui:632
+#, fuzzy
+#| msgid "Record the current transaction"
+msgid "Record the current transaction."
+msgstr "Ghi giao dịch hiện thời"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:177
+#: gnucash/ui/gnc-plugin-page-register.ui:388
+#: gnucash/ui/gnc-plugin-page-register.ui:500
+#: gnucash/ui/gnc-plugin-page-register.ui:598
+#: gnucash/ui/gnc-plugin-page-register.ui:637
+#, fuzzy
+#| msgid "Cancel the current transaction"
+msgid "Cancel the current transaction."
+msgstr "Thôi giao dịch hiện thời"
+
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
 msgstr "_Bãi bỏ giao dịch"
@@ -30558,7 +30614,7 @@ msgstr "_Bãi bỏ giao dịch"
 #: gnucash/ui/gnc-plugin-page-register.ui:186
 #, fuzzy
 #| msgid "Record the current transaction"
-msgid "Void the current transaction"
+msgid "Void the current transaction."
 msgstr "Ghi giao dịch hiện thời"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
@@ -30568,7 +30624,7 @@ msgstr "_Phục hồi giao dịch bị bãi bỏ"
 #: gnucash/ui/gnc-plugin-page-register.ui:192
 #, fuzzy
 #| msgid "Record the current transaction"
-msgid "Unvoid the current transaction"
+msgid "Unvoid the current transaction."
 msgstr "Ghi giao dịch hiện thời"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
@@ -30578,18 +30634,68 @@ msgstr "Thê_m giao dịch đảo ngược"
 #: gnucash/ui/gnc-plugin-page-register.ui:198
 #, fuzzy
 #| msgid "Add _Reversing Transaction"
-msgid "Add a reversing transaction"
+msgid "Add a reversing transaction."
 msgstr "Thê_m giao dịch đảo ngược"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:207
+#: gnucash/ui/gnc-plugin-page-register.ui:395
+#: gnucash/ui/gnc-plugin-page-register.ui:507
+#, fuzzy
+msgid ""
+"Add, change, or unlink the document linked with the current transaction."
+msgstr "Xoá giao dịch hiện thời"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:213
+#: gnucash/ui/gnc-plugin-page-register.ui:400
+#: gnucash/ui/gnc-plugin-page-register.ui:512
+#, fuzzy
+msgid "Open the linked document for the current transaction."
+msgstr "Tạo một bản sao của giao dịch hiện thời"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:222
+#: gnucash/ui/gnc-plugin-page-register.ui:407
+#: gnucash/ui/gnc-plugin-page-register.ui:519
+msgid "Jump to the linked bill, invoice, or voucher."
+msgstr ""
+
+#: gnucash/ui/gnc-plugin-page-register.ui:232
+#, fuzzy
+#| msgid "Transfer funds from one account to another"
+msgid "Transfer funds from one account to another."
+msgstr "Chuyển tiền từ tài khoản này sang tài khoản khác"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:238
+#, fuzzy
+#| msgid "Reconcile the selected account"
+msgid "Reconcile the selected account."
+msgstr "Chỉnh hợp tài khoản đã chọn"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:244
+msgid ""
+"Automatically clear individual transactions, so as to reach a certain "
+"cleared amount."
+msgstr ""
+
+#: gnucash/ui/gnc-plugin-page-register.ui:256
+#, fuzzy
+#| msgid "Record a stock split or a stock merger"
+msgid "Record a stock split or a stock merger."
+msgstr "Ghi chép sự chia nhỏ chứng khoán hay sáp nhập chứng khoán"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:262
+#, fuzzy
+#| msgid "Bring up the lot viewer/editor window"
+msgid "Bring up the lot viewer/editor window."
+msgstr "Hiển thị cửa sổ xem/sửa lô"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:272
 #: gnucash/ui/gnc-plugin-page-register.ui:414
 #: gnucash/ui/gnc-plugin-page-register.ui:526
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
-#: gnucash/ui/gnc-plugin-page-register.ui:804
 #, fuzzy
 #| msgid "Move to the blank transaction at the bottom of the register"
-msgid "Move to the blank transaction in the register"
+msgid "Move to the blank transaction in the register."
 msgstr "Di chuyển xuống giao dịch trắng ở đáy sổ cái"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
@@ -30604,7 +30710,7 @@ msgstr "Ngày vào"
 #: gnucash/ui/gnc-plugin-page-register.ui:419
 #: gnucash/ui/gnc-plugin-page-register.ui:531
 #, fuzzy
-msgid "Move to the split at the specified date"
+msgid "Move to the split at the specified date."
 msgstr "Hiện cả hai (và bao gồm giao dịch bị bãi bỏ trong tổng số)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:283
@@ -30617,8 +30723,9 @@ msgstr "_Phân tách giao dịch"
 #: gnucash/ui/gnc-plugin-page-register.ui:285
 #: gnucash/ui/gnc-plugin-page-register.ui:424
 #: gnucash/ui/gnc-plugin-page-register.ui:536
-#: gnucash/ui/gnc-plugin-page-register.ui:819
-msgid "Show all splits in the current transaction"
+#, fuzzy
+#| msgid "Show all splits in the current transaction"
+msgid "Show all splits in the current transaction."
 msgstr "Hiển thị mọi sự phân tách trong giao dịch hiện thời"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:289
@@ -30630,7 +30737,9 @@ msgstr "_Sửa tỷ lệ hội suất"
 #: gnucash/ui/gnc-plugin-page-register.ui:291
 #: gnucash/ui/gnc-plugin-page-register.ui:429
 #: gnucash/ui/gnc-plugin-page-register.ui:541
-msgid "Edit the exchange rate for the current transaction"
+#, fuzzy
+#| msgid "Edit the exchange rate for the current transaction"
+msgid "Edit the exchange rate for the current transaction."
 msgstr "Chỉnh sửa tỷ lệ hội suất cho giao dịch hiện tại"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:295
@@ -30645,9 +30754,12 @@ msgstr "Lịch biểu"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
-#: gnucash/ui/gnc-plugin-page-register.ui:849
+#, fuzzy
+#| msgid ""
+#| "Create a Scheduled Transaction with the current transaction as a template"
 msgid ""
-"Create a Scheduled Transaction with the current transaction as a template"
+"Create a Scheduled Transaction with the current transaction as a template or "
+"edit the Scheduled Transaction that current transaction was created by."
 msgstr "Tạo một Giao dịch đã Định thời theo mẫu là giao dịch hiện thời"
 
 #. Translators: This is a menu item that will open a register tab for the
@@ -30664,11 +30776,10 @@ msgstr "Hiển thị mã tài khoản khác"
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:439
 #: gnucash/ui/gnc-plugin-page-register.ui:551
-#: gnucash/ui/gnc-plugin-page-register.ui:834
 #, fuzzy
 #| msgid "Open a register report for the selected Transaction"
 msgid ""
-"Open a new register tab for the other account with focus on this transaction"
+"Open a new register tab for the other account with focus on this transaction."
 msgstr "Mở một báo cáo sổ cái cho giao dịch đã chọn"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
@@ -30688,7 +30799,9 @@ msgid "Account Report"
 msgstr "Báo cáo tài khoản"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:334
-msgid "Open a register report for this Account"
+#, fuzzy
+#| msgid "Open a register report for this Account"
+msgid "Open a register report for this Account."
 msgstr "Mở một báo cáo sổ cái cho tài khoản này"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:338
@@ -30697,8 +30810,55 @@ msgid "Account Report - Single Transaction"
 msgstr "Gõ giao dịch trực tuyến"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:340
-msgid "Open a register report for the selected Transaction"
+#, fuzzy
+#| msgid "Open a register report for the selected Transaction"
+msgid "Open a register report for the selected Transaction."
 msgstr "Mở một báo cáo sổ cái cho giao dịch đã chọn"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:359
+#: gnucash/ui/gnc-plugin-page-register.ui:471
+#, fuzzy
+#| msgid "Rename this page."
+msgid "Rename this page."
+msgstr "Thay đổi tên của trang này."
+
+#: gnucash/ui/gnc-plugin-page-register.ui:478
+#: gnucash/ui/gnc-plugin-page-register.ui:615
+#, fuzzy
+msgid "Make a copy of the current split."
+msgstr "Tạo bản sao của mục nhập hiện tại"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:483
+#: gnucash/ui/gnc-plugin-page-register.ui:620
+#, fuzzy
+msgid "Delete the current split."
+msgstr "Xoá mục nhập hiện tại"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:804
+#, fuzzy
+#| msgid "Move to the blank transaction at the bottom of the register"
+msgid "Move to the blank transaction in the register"
+msgstr "Di chuyển xuống giao dịch trắng ở đáy sổ cái"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:819
+msgid "Show all splits in the current transaction"
+msgstr "Hiển thị mọi sự phân tách trong giao dịch hiện thời"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:834
+#, fuzzy
+#| msgid "Open a register report for the selected Transaction"
+msgid ""
+"Open a new register tab for the other account with focus on this transaction"
+msgstr "Mở một báo cáo sổ cái cho giao dịch đã chọn"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:849
+#, fuzzy
+#| msgid ""
+#| "Create a Scheduled Transaction with the current transaction as a template"
+msgid ""
+"Create a Scheduled Transaction with the current transaction as a template or "
+"edit the Scheduled Transaction that current transaction was created by"
+msgstr "Tạo một Giao dịch đã Định thời theo mẫu là giao dịch hiện thời"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
@@ -31258,6 +31418,7 @@ msgstr "<b>Thông tin phân tách</b>"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -31268,12 +31429,13 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "Bảng mã này đã được thêm vào danh sách."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -31283,7 +31445,7 @@ msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Không thể mở tập tin."
@@ -31380,38 +31542,38 @@ msgstr ""
 msgid "%B %e, %Y"
 msgstr ""
 
-#: libgnucash/engine/gnc-datetime.cpp:86
+#: libgnucash/engine/gnc-datetime.cpp:88
 msgid "y-m-d"
 msgstr "y-m-d"
 
-#: libgnucash/engine/gnc-datetime.cpp:98
+#: libgnucash/engine/gnc-datetime.cpp:100
 msgid "d-m-y"
 msgstr "d-m-y"
 
-#: libgnucash/engine/gnc-datetime.cpp:110
+#: libgnucash/engine/gnc-datetime.cpp:112
 msgid "m-d-y"
 msgstr "m-d-y"
 
-#: libgnucash/engine/gnc-datetime.cpp:124
+#: libgnucash/engine/gnc-datetime.cpp:126
 #, fuzzy
 msgid "d-m"
 msgstr "d-m-y"
 
-#: libgnucash/engine/gnc-datetime.cpp:136
+#: libgnucash/engine/gnc-datetime.cpp:138
 #, fuzzy
 msgid "m-d"
 msgstr "m-d-y"
 
-#: libgnucash/engine/gnc-datetime.cpp:566
+#: libgnucash/engine/gnc-datetime.cpp:618
 #, fuzzy
 msgid "Unknown date format specifier passed as argument."
 msgstr "Dùng định dạng ngày tháng được miền địa phương hệ thống ghi rõ."
 
-#: libgnucash/engine/gnc-datetime.cpp:571
+#: libgnucash/engine/gnc-datetime.cpp:623
 msgid "Value can't be parsed into a date using the selected date format."
 msgstr ""
 
-#: libgnucash/engine/gnc-datetime.cpp:576
+#: libgnucash/engine/gnc-datetime.cpp:628
 msgid "Value appears to contain a year while the selected format forbids this."
 msgstr ""
 
@@ -32004,7 +32166,7 @@ msgstr ""
 msgid "Looking for imbalances in transaction date %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/Split.cpp:1667
+#: libgnucash/engine/Split.cpp:1677
 #, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"

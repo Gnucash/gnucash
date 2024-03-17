@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-05 14:50+0100\n"
+"POT-Creation-Date: 2024-03-17 08:37+0100\n"
 "PO-Revision-Date: 2023-11-16 08:03+0000\n"
 "Last-Translator: derxi <happycxin@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -1185,7 +1185,7 @@ msgstr "贷款偿还选项：“ %s”"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:374
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.cpp:1566
+#: gnucash/import-export/import-main-matcher.cpp:1572
 #: gnucash/import-export/import-match-picker.cpp:313
 #: gnucash/import-export/import-match-picker.cpp:353
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3823
@@ -1268,7 +1268,7 @@ msgstr "添加价格时出错。"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.cpp:1567
+#: gnucash/import-export/import-main-matcher.cpp:1573
 #: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
@@ -1845,7 +1845,7 @@ msgstr "输入在这次交易中赚到或亏损的股票数量。"
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.cpp:1571
+#: gnucash/import-export/import-main-matcher.cpp:1577
 #: gnucash/import-export/import-match-picker.cpp:316
 #: gnucash/import-export/import-match-picker.cpp:356
 #: gnucash/register/ledger-core/split-register-model.c:360
@@ -2476,7 +2476,7 @@ msgstr "交易原始凭证"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:377
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.cpp:1570
+#: gnucash/import-export/import-main-matcher.cpp:1576
 #: gnucash/import-export/import-match-picker.cpp:315
 #: gnucash/import-export/import-match-picker.cpp:355
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3833
@@ -3224,7 +3224,7 @@ msgstr "查找发票"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.cpp:1569
+#: gnucash/import-export/import-main-matcher.cpp:1575
 #: gnucash/import-export/import-match-picker.cpp:314
 #: gnucash/import-export/import-match-picker.cpp:354
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3844
@@ -4800,19 +4800,16 @@ msgstr "删除分录(_D)"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:275
 #: gnucash/ui/gnc-embedded-register-window.ui:35
-#: gnucash/ui/gnc-plugin-page-register.ui:132
 msgid "Cut the selected transaction into clipboard"
 msgstr "剪切选定的交易"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:276
 #: gnucash/ui/gnc-embedded-register-window.ui:40
-#: gnucash/ui/gnc-plugin-page-register.ui:138
 msgid "Copy the selected transaction into clipboard"
 msgstr "将选中的交易事项复制到剪贴板"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:277
 #: gnucash/ui/gnc-embedded-register-window.ui:45
-#: gnucash/ui/gnc-plugin-page-register.ui:144
 msgid "Paste the transaction from the clipboard"
 msgstr "从剪贴板中粘贴交易事项"
 
@@ -4820,9 +4817,6 @@ msgstr "从剪贴板中粘贴交易事项"
 #: gnucash/ui/gnc-embedded-register-window.ui:50
 #: gnucash/ui/gnc-embedded-register-window.ui:113
 #: gnucash/ui/gnc-embedded-register-window.ui:157
-#: gnucash/ui/gnc-plugin-page-register.ui:150
-#: gnucash/ui/gnc-plugin-page-register.ui:366
-#: gnucash/ui/gnc-plugin-page-register.ui:576
 #: gnucash/ui/gnc-plugin-page-register.ui:724
 msgid "Make a copy of the current transaction"
 msgstr "复制当前交易"
@@ -4831,31 +4825,19 @@ msgstr "复制当前交易"
 #: gnucash/ui/gnc-embedded-register-window.ui:55
 #: gnucash/ui/gnc-embedded-register-window.ui:118
 #: gnucash/ui/gnc-embedded-register-window.ui:172
-#: gnucash/ui/gnc-plugin-page-register.ui:156
-#: gnucash/ui/gnc-plugin-page-register.ui:371
-#: gnucash/ui/gnc-plugin-page-register.ui:581
 #: gnucash/ui/gnc-plugin-page-register.ui:739
 msgid "Delete the current transaction"
 msgstr "删除当前交易"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:280
-#: gnucash/ui/gnc-plugin-page-register.ui:207
-#: gnucash/ui/gnc-plugin-page-register.ui:395
-#: gnucash/ui/gnc-plugin-page-register.ui:507
 msgid "Add, change, or unlink the document linked with the current transaction"
 msgstr "编辑当前交易事项的汇率"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:281
-#: gnucash/ui/gnc-plugin-page-register.ui:213
-#: gnucash/ui/gnc-plugin-page-register.ui:400
-#: gnucash/ui/gnc-plugin-page-register.ui:512
 msgid "Open the linked document for the current transaction"
 msgstr "打开当前交易原始凭证"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:282
-#: gnucash/ui/gnc-plugin-page-register.ui:222
-#: gnucash/ui/gnc-plugin-page-register.ui:407
-#: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher"
 msgstr "转至关联的发票、账单或报销单"
 
@@ -4872,14 +4854,10 @@ msgid "Paste the split from the clipboard"
 msgstr "从剪贴板中粘贴交易事项"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:286
-#: gnucash/ui/gnc-plugin-page-register.ui:478
-#: gnucash/ui/gnc-plugin-page-register.ui:615
 msgid "Make a copy of the current split"
 msgstr "复制当前分录"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:287
-#: gnucash/ui/gnc-plugin-page-register.ui:483
-#: gnucash/ui/gnc-plugin-page-register.ui:620
 msgid "Delete the current split"
 msgstr "删除当前的分录"
 
@@ -8085,6 +8063,7 @@ msgid "Not enough information for quotes dump"
 msgstr "没有足够的信息来进行报价导出"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr "未知报价命令\"{1}\""
 
@@ -8093,6 +8072,7 @@ msgid "Missing --name parameter"
 msgstr "缺少--名称参数"
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr "未知的报表命令'{1}'"
 
@@ -8102,6 +8082,7 @@ msgstr "这是一个颜色选项"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:180
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr "已找到 Finance::Quote 版本 {1}。"
 
@@ -8123,11 +8104,13 @@ msgstr "请将程序错误或其它的问题反馈给 gnucash-devel@gnucash.org"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
+#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "当然，也可以在 {1} 查询、报告错误"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "对于最新的稳定版本，请参阅{1}"
 
@@ -8145,6 +8128,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "-Gnucash，个人和小企业财务管理"
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr "{1} [选项] [数据文件]"
 
@@ -8153,11 +8137,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash 路径"
 
 #: gnucash/gnucash-core-app.cpp:249
+#, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "GnuCash {1} development version"
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s 开发版本"
@@ -18322,9 +18307,9 @@ msgid "File exported successfully!\n"
 msgstr "科目已成功导出！\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
-#: gnucash/import-export/import-main-matcher.cpp:1868
+#: gnucash/import-export/import-main-matcher.cpp:1874
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.cpp:1634 libgnucash/engine/Split.cpp:1651
+#: libgnucash/engine/Split.cpp:1644 libgnucash/engine/Split.cpp:1661
 msgid "-- Split Transaction --"
 msgstr "-- 复合分录 --"
 
@@ -18581,6 +18566,7 @@ msgstr "双击要改变的行，然后点击应用导入"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
+#, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "交易从文件'{1}'中导入。"
 
@@ -18794,6 +18780,7 @@ msgstr "无法将类型为货币的列中的数值解析为有效的货币。"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr "{1}: {2}"
 
@@ -19030,118 +19017,118 @@ msgstr "年/月/日"
 msgid "y/d/m"
 msgstr "年/日/月"
 
-#: gnucash/import-export/import-main-matcher.cpp:502
+#: gnucash/import-export/import-main-matcher.cpp:503
 msgid "No new transactions were found in this import."
 msgstr "这个导入中没有找到新交易。"
 
-#: gnucash/import-export/import-main-matcher.cpp:774
+#: gnucash/import-export/import-main-matcher.cpp:775
 msgid "Destination account for the auto-balance split."
 msgstr "自动结算分录的目标科目。"
 
-#: gnucash/import-export/import-main-matcher.cpp:996
+#: gnucash/import-export/import-main-matcher.cpp:1004
 msgid "Click Edit to modify"
 msgstr "点击编辑以更改"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1407
+#: gnucash/import-export/import-main-matcher.cpp:1413
 msgid "_Assign transfer account"
 msgstr "指定科目(_A)"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1412
+#: gnucash/import-export/import-main-matcher.cpp:1418
 msgid "Assign e_xchange rate"
 msgstr "指定汇率（_X）"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1417
+#: gnucash/import-export/import-main-matcher.cpp:1423
 msgid "_Edit description, notes, or memo"
 msgstr "编辑描述、说明或备注(_E)"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1422
+#: gnucash/import-export/import-main-matcher.cpp:1428
 msgid "_Reset all edits"
 msgstr "重置所有编辑(_R)"
 
-#: gnucash/import-export/import-main-matcher.cpp:1572
+#: gnucash/import-export/import-main-matcher.cpp:1578
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.cpp:1576
+#: gnucash/import-export/import-main-matcher.cpp:1582
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "U+C"
 
-#: gnucash/import-export/import-main-matcher.cpp:1580
+#: gnucash/import-export/import-main-matcher.cpp:1586
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "C"
 
-#: gnucash/import-export/import-main-matcher.cpp:1587
+#: gnucash/import-export/import-main-matcher.cpp:1593
 msgid "Info"
 msgstr "信息"
 
-#: gnucash/import-export/import-main-matcher.cpp:1594
+#: gnucash/import-export/import-main-matcher.cpp:1600
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 msgid "Additional Comments"
 msgstr "额外注释"
 
-#: gnucash/import-export/import-main-matcher.cpp:1979
+#: gnucash/import-export/import-main-matcher.cpp:1985
 msgid "New, already balanced"
 msgstr "新的，已结算"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2001
+#: gnucash/import-export/import-main-matcher.cpp:2007
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "新的，将 %s 转账到(手动)“%s”"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2009
+#: gnucash/import-export/import-main-matcher.cpp:2015
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "新的，将 %s 转账到(自动)“%s”"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2022
+#: gnucash/import-export/import-main-matcher.cpp:2028
 #, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr "新的，未结算(需要价格才能转账 %s到账号%s)！"
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2038
+#: gnucash/import-export/import-main-matcher.cpp:2044
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "新的，未结算(需要科目才能转账 %s)！"
 
-#: gnucash/import-export/import-main-matcher.cpp:2056
+#: gnucash/import-export/import-main-matcher.cpp:2062
 #, c-format
 msgid "Reconcile (manual) match to %s"
 msgstr "对账(手动)匹配 %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2061
+#: gnucash/import-export/import-main-matcher.cpp:2067
 #, c-format
 msgid "Reconcile (auto) match to %s"
 msgstr "对账(自动)匹配 %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2070
-#: gnucash/import-export/import-main-matcher.cpp:2099
+#: gnucash/import-export/import-main-matcher.cpp:2076
+#: gnucash/import-export/import-main-matcher.cpp:2105
 msgid "Match missing!"
 msgstr "匹配遗漏！"
 
-#: gnucash/import-export/import-main-matcher.cpp:2085
+#: gnucash/import-export/import-main-matcher.cpp:2091
 #, c-format
 msgid "Update and reconcile (manual) match to %s"
 msgstr "更新并对账(手动)匹配 %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2090
+#: gnucash/import-export/import-main-matcher.cpp:2096
 #, c-format
 msgid "Update and reconcile (auto) match to %s"
 msgstr "更新并对账(自动)匹配 %s"
 
-#: gnucash/import-export/import-main-matcher.cpp:2107
+#: gnucash/import-export/import-main-matcher.cpp:2113
 msgid "Do not import (no action selected)"
 msgstr "不要导入(未选定操作)"
 
@@ -27219,11 +27206,6 @@ msgstr "删除其他分录(_V)"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:60
 #: gnucash/ui/gnc-embedded-register-window.ui:123
-#: gnucash/ui/gnc-plugin-page-register.ui:162
-#: gnucash/ui/gnc-plugin-page-register.ui:376
-#: gnucash/ui/gnc-plugin-page-register.ui:488
-#: gnucash/ui/gnc-plugin-page-register.ui:586
-#: gnucash/ui/gnc-plugin-page-register.ui:625
 msgid "Remove all splits in the current transaction"
 msgstr "删除当前交易的所有分录"
 
@@ -27241,11 +27223,6 @@ msgstr "确认交易(_E)"
 #: gnucash/ui/gnc-embedded-register-window.ui:67
 #: gnucash/ui/gnc-embedded-register-window.ui:130
 #: gnucash/ui/gnc-embedded-register-window.ui:197
-#: gnucash/ui/gnc-plugin-page-register.ui:171
-#: gnucash/ui/gnc-plugin-page-register.ui:383
-#: gnucash/ui/gnc-plugin-page-register.ui:495
-#: gnucash/ui/gnc-plugin-page-register.ui:593
-#: gnucash/ui/gnc-plugin-page-register.ui:632
 #: gnucash/ui/gnc-plugin-page-register.ui:764
 msgid "Record the current transaction"
 msgstr "确认当前交易"
@@ -27264,11 +27241,6 @@ msgstr "取消交易(_N)"
 #: gnucash/ui/gnc-embedded-register-window.ui:72
 #: gnucash/ui/gnc-embedded-register-window.ui:135
 #: gnucash/ui/gnc-embedded-register-window.ui:212
-#: gnucash/ui/gnc-plugin-page-register.ui:177
-#: gnucash/ui/gnc-plugin-page-register.ui:388
-#: gnucash/ui/gnc-plugin-page-register.ui:500
-#: gnucash/ui/gnc-plugin-page-register.ui:598
-#: gnucash/ui/gnc-plugin-page-register.ui:637
 #: gnucash/ui/gnc-plugin-page-register.ui:779
 msgid "Cancel the current transaction"
 msgstr "取消当前交易"
@@ -27295,7 +27267,6 @@ msgstr "转账(_T)…"
 #: gnucash/ui/gnc-embedded-register-window.ui:95
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:128
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:246
-#: gnucash/ui/gnc-plugin-page-register.ui:232
 #: gnucash/ui/gnc-plugin-page-register.ui:874
 msgid "Transfer funds from one account to another"
 msgstr "将资金从一个科目转移至另一个科目"
@@ -27439,8 +27410,6 @@ msgstr "账簿改名(_N)"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:147
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:215
-#: gnucash/ui/gnc-plugin-page-register.ui:359
-#: gnucash/ui/gnc-plugin-page-register.ui:471
 msgid "Rename this page"
 msgstr "重命名该页"
 
@@ -27618,7 +27587,6 @@ msgstr "查找(_F)…"
 #: gnucash/ui/gnc-plugin-page-budget.ui:52
 #: gnucash/ui/gnc-plugin-page-invoice.ui:46
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:68
-#: gnucash/ui/gnc-plugin-page-register.ui:52
 #: gnucash/ui/gnc-plugin-page-report.ui:19
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:19
 msgid "Find transactions with a search"
@@ -27642,7 +27610,6 @@ msgstr "所得税(_X)"
 #: gnucash/ui/gnc-plugin-page-budget.ui:63
 #: gnucash/ui/gnc-plugin-page-invoice.ui:57
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:79
-#: gnucash/ui/gnc-plugin-page-register.ui:63
 #: gnucash/ui/gnc-plugin-page-report.ui:39
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:30
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
@@ -28051,7 +28018,6 @@ msgstr "编辑科目(_E)"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:219
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:389
 #: gnucash/ui/gnc-plugin-page-budget.ui:18
-#: gnucash/ui/gnc-plugin-page-register.ui:35
 msgid "Edit the selected account"
 msgstr "编辑选中的科目"
 
@@ -28067,7 +28033,6 @@ msgstr "查找科目(_I)"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:33
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:229
-#: gnucash/ui/gnc-plugin-page-register.ui:42
 msgid "Find an account"
 msgstr "查找一个科目"
 
@@ -28137,7 +28102,6 @@ msgstr "刷新(_R)"
 #: gnucash/ui/gnc-plugin-page-budget.ui:90
 #: gnucash/ui/gnc-plugin-page-invoice.ui:128
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:97
-#: gnucash/ui/gnc-plugin-page-register.ui:123
 #: gnucash/ui/gnc-plugin-page-report.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:40
 msgid "Refresh this window"
@@ -28166,7 +28130,6 @@ msgstr "对账(_R)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
-#: gnucash/ui/gnc-plugin-page-register.ui:238
 #: gnucash/ui/gnc-plugin-page-register.ui:889
 msgid "Reconcile the selected account"
 msgstr "核实选中的科目"
@@ -28178,7 +28141,6 @@ msgid "_Auto-clear…"
 msgstr "自动核实(_A)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
-#: gnucash/ui/gnc-plugin-page-register.ui:244
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
@@ -28199,7 +28161,6 @@ msgstr "股票拆分(_K)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
-#: gnucash/ui/gnc-plugin-page-register.ui:256
 msgid "Record a stock split or a stock merger"
 msgstr "记录一次股票拆分或合并"
 
@@ -28211,7 +28172,6 @@ msgstr "查看批次(_L)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261
-#: gnucash/ui/gnc-plugin-page-register.ui:262
 msgid "Bring up the lot viewer/editor window"
 msgstr "显示 Lot 查看和编辑窗口"
 
@@ -28545,7 +28505,9 @@ msgstr "转为应收应付…"
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:446
 #: gnucash/ui/gnc-plugin-page-register.ui:558
-msgid "Assign the selected transaction as payment"
+#, fuzzy
+#| msgid "Assign the selected transaction as payment"
+msgid "Assign the selected transaction as payment."
 msgstr "将选定的交易调整为走应收应付"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
@@ -28557,8 +28519,35 @@ msgstr "编辑付款…"
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:452
 #: gnucash/ui/gnc-plugin-page-register.ui:564
-msgid "Edit the payment this transaction is a part of"
+#, fuzzy
+#| msgid "Edit the payment this transaction is a part of"
+msgid "Edit the payment this transaction is a part of."
 msgstr "编辑包含此事务的付款"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:35
+#, fuzzy
+#| msgid "Edit the selected account"
+msgid "Edit the selected account."
+msgstr "编辑选中的科目"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:42
+#, fuzzy
+#| msgid "Find an account"
+msgid "Find an account."
+msgstr "查找一个科目"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:52
+#, fuzzy
+#| msgid "Find transactions with a search"
+msgid "Find transactions with a search."
+msgstr "通过搜索寻找交易事项"
+
+#. Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string
+#: gnucash/ui/gnc-plugin-page-register.ui:63
+#, fuzzy
+#| msgid "Setup relevant accounts for tax reports, e.g. US income tax"
+msgid "Setup relevant accounts for tax reports, e.g. US income tax."
+msgstr "为税务报表设置相关科目，如个人所得税、增值税等"
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/ui/gnc-plugin-page-register.ui:71
@@ -28566,7 +28555,9 @@ msgid "_Basic Ledger"
 msgstr "基本模式(_B)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:74
-msgid "Show transactions on one or two lines"
+#, fuzzy
+#| msgid "Show transactions on one or two lines"
+msgid "Show transactions on one or two lines."
 msgstr "用一行或两行显示交易事项"
 
 #. Translators: This is a menu item in the View menu
@@ -28575,12 +28566,17 @@ msgid "_Auto-Split Ledger"
 msgstr "分录模式(_A)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:82
+#, fuzzy
+#| msgid ""
+#| "Show transactions on one or two lines and expand the current transaction"
 msgid ""
-"Show transactions on one or two lines and expand the current transaction"
+"Show transactions on one or two lines and expand the current transaction."
 msgstr "用一行或两行显示交易事项并展开当前交易事项"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
-msgid "Show expanded transactions with all splits"
+#, fuzzy
+#| msgid "Show expanded transactions with all splits"
+msgid "Show expanded transactions with all splits."
 msgstr "显示展开的交易事项，包含所有分录"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:107
@@ -28589,12 +28585,84 @@ msgstr "显示展开的交易事项，包含所有分录"
 msgid "_Sort By…"
 msgstr "排序(_S)…"
 
+#: gnucash/ui/gnc-plugin-page-register.ui:123
+#, fuzzy
+#| msgid "Refresh this window"
+msgid "Refresh this window."
+msgstr "刷新本窗口"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:132
+#, fuzzy
+#| msgid "Cut the selected transaction into clipboard"
+msgid "Cut the selected transaction into clipboard."
+msgstr "剪切选定的交易"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:138
+#, fuzzy
+#| msgid "Copy the selected transaction into clipboard"
+msgid "Copy the selected transaction into clipboard."
+msgstr "将选中的交易事项复制到剪贴板"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:144
+#, fuzzy
+#| msgid "Paste the transaction from the clipboard"
+msgid "Paste the transaction from the clipboard."
+msgstr "从剪贴板中粘贴交易事项"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:150
+#: gnucash/ui/gnc-plugin-page-register.ui:366
+#: gnucash/ui/gnc-plugin-page-register.ui:576
+#, fuzzy
+#| msgid "Make a copy of the current transaction"
+msgid "Make a copy of the current transaction."
+msgstr "复制当前交易"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:156
+#: gnucash/ui/gnc-plugin-page-register.ui:371
+#: gnucash/ui/gnc-plugin-page-register.ui:581
+#, fuzzy
+#| msgid "Delete the current transaction"
+msgid "Delete the current transaction."
+msgstr "删除当前交易"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:162
+#: gnucash/ui/gnc-plugin-page-register.ui:376
+#: gnucash/ui/gnc-plugin-page-register.ui:488
+#: gnucash/ui/gnc-plugin-page-register.ui:586
+#: gnucash/ui/gnc-plugin-page-register.ui:625
+#, fuzzy
+#| msgid "Remove all splits in the current transaction"
+msgid "Remove all splits in the current transaction."
+msgstr "删除当前交易的所有分录"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:171
+#: gnucash/ui/gnc-plugin-page-register.ui:383
+#: gnucash/ui/gnc-plugin-page-register.ui:495
+#: gnucash/ui/gnc-plugin-page-register.ui:593
+#: gnucash/ui/gnc-plugin-page-register.ui:632
+#, fuzzy
+#| msgid "Record the current transaction"
+msgid "Record the current transaction."
+msgstr "确认当前交易"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:177
+#: gnucash/ui/gnc-plugin-page-register.ui:388
+#: gnucash/ui/gnc-plugin-page-register.ui:500
+#: gnucash/ui/gnc-plugin-page-register.ui:598
+#: gnucash/ui/gnc-plugin-page-register.ui:637
+#, fuzzy
+#| msgid "Cancel the current transaction"
+msgid "Cancel the current transaction."
+msgstr "取消当前交易"
+
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
 msgstr "无效的交易(_V)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-msgid "Void the current transaction"
+#, fuzzy
+#| msgid "Void the current transaction"
+msgid "Void the current transaction."
 msgstr "无效当前交易"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
@@ -28602,7 +28670,9 @@ msgid "_Unvoid Transaction"
 msgstr "复原交易(_U)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-msgid "Unvoid the current transaction"
+#, fuzzy
+#| msgid "Unvoid the current transaction"
+msgid "Unvoid the current transaction."
 msgstr "确认当前交易"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
@@ -28610,16 +28680,79 @@ msgid "Add _Reversing Transaction"
 msgstr "对冲交易(_R)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
-msgid "Add a reversing transaction"
+#, fuzzy
+#| msgid "Add a reversing transaction"
+msgid "Add a reversing transaction."
 msgstr "增加一个对冲交易"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:207
+#: gnucash/ui/gnc-plugin-page-register.ui:395
+#: gnucash/ui/gnc-plugin-page-register.ui:507
+#, fuzzy
+#| msgid ""
+#| "Add, change, or unlink the document linked with the current transaction"
+msgid ""
+"Add, change, or unlink the document linked with the current transaction."
+msgstr "编辑当前交易事项的汇率"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:213
+#: gnucash/ui/gnc-plugin-page-register.ui:400
+#: gnucash/ui/gnc-plugin-page-register.ui:512
+#, fuzzy
+#| msgid "Open the linked document for the current transaction"
+msgid "Open the linked document for the current transaction."
+msgstr "打开当前交易原始凭证"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:222
+#: gnucash/ui/gnc-plugin-page-register.ui:407
+#: gnucash/ui/gnc-plugin-page-register.ui:519
+#, fuzzy
+#| msgid "Jump to the linked bill, invoice, or voucher"
+msgid "Jump to the linked bill, invoice, or voucher."
+msgstr "转至关联的发票、账单或报销单"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:232
+#, fuzzy
+#| msgid "Transfer funds from one account to another"
+msgid "Transfer funds from one account to another."
+msgstr "将资金从一个科目转移至另一个科目"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:238
+#, fuzzy
+#| msgid "Reconcile the selected account"
+msgid "Reconcile the selected account."
+msgstr "核实选中的科目"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:244
+#, fuzzy
+#| msgid ""
+#| "Automatically clear individual transactions, so as to reach a certain "
+#| "cleared amount"
+msgid ""
+"Automatically clear individual transactions, so as to reach a certain "
+"cleared amount."
+msgstr "只要达到一定的结清金额，就自动结清独立的交易事项"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:256
+#, fuzzy
+#| msgid "Record a stock split or a stock merger"
+msgid "Record a stock split or a stock merger."
+msgstr "记录一次股票拆分或合并"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:262
+#, fuzzy
+#| msgid "Bring up the lot viewer/editor window"
+msgid "Bring up the lot viewer/editor window."
+msgstr "显示 Lot 查看和编辑窗口"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:272
 #: gnucash/ui/gnc-plugin-page-register.ui:414
 #: gnucash/ui/gnc-plugin-page-register.ui:526
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
-#: gnucash/ui/gnc-plugin-page-register.ui:804
-msgid "Move to the blank transaction in the register"
+#, fuzzy
+#| msgid "Move to the blank transaction in the register"
+msgid "Move to the blank transaction in the register."
 msgstr "在账簿的末尾添加空白交易"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
@@ -28631,7 +28764,9 @@ msgstr "转至日期(_G)"
 #: gnucash/ui/gnc-plugin-page-register.ui:279
 #: gnucash/ui/gnc-plugin-page-register.ui:419
 #: gnucash/ui/gnc-plugin-page-register.ui:531
-msgid "Move to the split at the specified date"
+#, fuzzy
+#| msgid "Move to the split at the specified date"
+msgid "Move to the split at the specified date."
 msgstr "不打印指定日期的交易事项"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:283
@@ -28644,8 +28779,9 @@ msgstr "交易分录(_P)"
 #: gnucash/ui/gnc-plugin-page-register.ui:285
 #: gnucash/ui/gnc-plugin-page-register.ui:424
 #: gnucash/ui/gnc-plugin-page-register.ui:536
-#: gnucash/ui/gnc-plugin-page-register.ui:819
-msgid "Show all splits in the current transaction"
+#, fuzzy
+#| msgid "Show all splits in the current transaction"
+msgid "Show all splits in the current transaction."
 msgstr "显示当前交易的所有分录"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:289
@@ -28657,7 +28793,9 @@ msgstr "编辑汇率(_X)"
 #: gnucash/ui/gnc-plugin-page-register.ui:291
 #: gnucash/ui/gnc-plugin-page-register.ui:429
 #: gnucash/ui/gnc-plugin-page-register.ui:541
-msgid "Edit the exchange rate for the current transaction"
+#, fuzzy
+#| msgid "Edit the exchange rate for the current transaction"
+msgid "Edit the exchange rate for the current transaction."
 msgstr "编辑当前交易事项的汇率"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:295
@@ -28670,9 +28808,12 @@ msgstr "计划(_D)…"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
-#: gnucash/ui/gnc-plugin-page-register.ui:849
+#, fuzzy
+#| msgid ""
+#| "Create a Scheduled Transaction with the current transaction as a template"
 msgid ""
-"Create a Scheduled Transaction with the current transaction as a template"
+"Create a Scheduled Transaction with the current transaction as a template or "
+"edit the Scheduled Transaction that current transaction was created by."
 msgstr "以当前交易为模板新建计划交易"
 
 #. Translators: This is a menu item that will open a register tab for the
@@ -28688,9 +28829,12 @@ msgstr "跳转(_J)"
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:439
 #: gnucash/ui/gnc-plugin-page-register.ui:551
-#: gnucash/ui/gnc-plugin-page-register.ui:834
+#, fuzzy
+#| msgid ""
+#| "Open a new register tab for the other account with focus on this "
+#| "transaction"
 msgid ""
-"Open a new register tab for the other account with focus on this transaction"
+"Open a new register tab for the other account with focus on this transaction."
 msgstr "为其他科目打开一个新标签页，并聚焦于这个交易"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
@@ -28706,7 +28850,9 @@ msgid "Account Report"
 msgstr "标签页报表"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:334
-msgid "Open a register report for this Account"
+#, fuzzy
+#| msgid "Open a register report for this Account"
+msgid "Open a register report for this Account."
 msgstr "为本科目打开一个账簿报表"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:338
@@ -28714,8 +28860,53 @@ msgid "Account Report - Single Transaction"
 msgstr "标签页报表 - 当前交易"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:340
-msgid "Open a register report for the selected Transaction"
+#, fuzzy
+#| msgid "Open a register report for the selected Transaction"
+msgid "Open a register report for the selected Transaction."
 msgstr "为选中的交易事项打开一个账簿报表"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:359
+#: gnucash/ui/gnc-plugin-page-register.ui:471
+#, fuzzy
+#| msgid "Rename this page"
+msgid "Rename this page."
+msgstr "重命名该页"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:478
+#: gnucash/ui/gnc-plugin-page-register.ui:615
+#, fuzzy
+#| msgid "Make a copy of the current split"
+msgid "Make a copy of the current split."
+msgstr "复制当前分录"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:483
+#: gnucash/ui/gnc-plugin-page-register.ui:620
+#, fuzzy
+#| msgid "Delete the current split"
+msgid "Delete the current split."
+msgstr "删除当前的分录"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:804
+msgid "Move to the blank transaction in the register"
+msgstr "在账簿的末尾添加空白交易"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:819
+msgid "Show all splits in the current transaction"
+msgstr "显示当前交易的所有分录"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:834
+msgid ""
+"Open a new register tab for the other account with focus on this transaction"
+msgstr "为其他科目打开一个新标签页，并聚焦于这个交易"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:849
+#, fuzzy
+#| msgid ""
+#| "Create a Scheduled Transaction with the current transaction as a template"
+msgid ""
+"Create a Scheduled Transaction with the current transaction as a template or "
+"edit the Scheduled Transaction that current transaction was created by"
+msgstr "以当前交易为模板新建计划交易"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
@@ -29239,6 +29430,7 @@ msgstr "新文件位置："
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -29250,11 +29442,13 @@ msgid "In addition:"
 msgstr "更多："
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "以下文件已被复制至 {1} 作为替代："
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr "{1}中的下一个文件更改了名称："
 
@@ -29264,6 +29458,7 @@ msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] "不再使用以下文件："
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "以下文件无法移动至 {1}："
@@ -29360,35 +29555,35 @@ msgstr "%B %#d, %Y"
 msgid "%B %e, %Y"
 msgstr "%Y年%b%e日"
 
-#: libgnucash/engine/gnc-datetime.cpp:86
+#: libgnucash/engine/gnc-datetime.cpp:88
 msgid "y-m-d"
 msgstr "年-月-日"
 
-#: libgnucash/engine/gnc-datetime.cpp:98
+#: libgnucash/engine/gnc-datetime.cpp:100
 msgid "d-m-y"
 msgstr "日-月-年"
 
-#: libgnucash/engine/gnc-datetime.cpp:110
+#: libgnucash/engine/gnc-datetime.cpp:112
 msgid "m-d-y"
 msgstr "月-日-年"
 
-#: libgnucash/engine/gnc-datetime.cpp:124
+#: libgnucash/engine/gnc-datetime.cpp:126
 msgid "d-m"
 msgstr "日-月"
 
-#: libgnucash/engine/gnc-datetime.cpp:136
+#: libgnucash/engine/gnc-datetime.cpp:138
 msgid "m-d"
 msgstr "月-日"
 
-#: libgnucash/engine/gnc-datetime.cpp:566
+#: libgnucash/engine/gnc-datetime.cpp:618
 msgid "Unknown date format specifier passed as argument."
 msgstr "使用系统本地区域设置的日期格式。"
 
-#: libgnucash/engine/gnc-datetime.cpp:571
+#: libgnucash/engine/gnc-datetime.cpp:623
 msgid "Value can't be parsed into a date using the selected date format."
 msgstr "无法以所选日期格式的日期解析该值。"
 
-#: libgnucash/engine/gnc-datetime.cpp:576
+#: libgnucash/engine/gnc-datetime.cpp:628
 msgid "Value appears to contain a year while the selected format forbids this."
 msgstr "所选格式不包含多年，但似乎包含该值。"
 
@@ -29930,7 +30125,7 @@ msgstr "寻找账户中的孤儿%s。第%u号的%u"
 msgid "Looking for imbalances in transaction date %s: %u of %u"
 msgstr "寻找账户中的不平衡%s。%u的%u"
 
-#: libgnucash/engine/Split.cpp:1667
+#: libgnucash/engine/Split.cpp:1677
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"

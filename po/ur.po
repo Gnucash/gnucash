@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-05 14:50+0100\n"
+"POT-Creation-Date: 2024-03-17 08:37+0100\n"
 "PO-Revision-Date: 2022-10-17 18:53+0000\n"
 "Last-Translator: Abdul Quddos (AQN) <yousufi81@gmail.com>\n"
 "Language-Team: Urdu <https://hosted.weblate.org/projects/gnucash/gnucash/ur/"
@@ -1229,7 +1229,7 @@ msgstr "قرض کی واپسی آپشن: \"%s\""
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:374
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.cpp:1566
+#: gnucash/import-export/import-main-matcher.cpp:1572
 #: gnucash/import-export/import-match-picker.cpp:313
 #: gnucash/import-export/import-match-picker.cpp:353
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3823
@@ -1313,7 +1313,7 @@ msgstr "قیمت جمع كرنے میں خامی۔"
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.cpp:1567
+#: gnucash/import-export/import-main-matcher.cpp:1573
 #: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
@@ -1844,7 +1844,7 @@ msgstr "بچے یا خریدے گئے شیئرز كی تعداد داخل كرو
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.cpp:1571
+#: gnucash/import-export/import-main-matcher.cpp:1577
 #: gnucash/import-export/import-match-picker.cpp:316
 #: gnucash/import-export/import-match-picker.cpp:356
 #: gnucash/register/ledger-core/split-register-model.c:360
@@ -2505,7 +2505,7 @@ msgstr "لین دین کی تفصیلات"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:377
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.cpp:1570
+#: gnucash/import-export/import-main-matcher.cpp:1576
 #: gnucash/import-export/import-match-picker.cpp:315
 #: gnucash/import-export/import-match-picker.cpp:355
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3833
@@ -3274,7 +3274,7 @@ msgstr "اِنوائس تلاش كریں"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.cpp:1569
+#: gnucash/import-export/import-main-matcher.cpp:1575
 #: gnucash/import-export/import-match-picker.cpp:314
 #: gnucash/import-export/import-match-picker.cpp:354
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3844
@@ -4952,19 +4952,16 @@ msgstr "_علیحدہ كو خارج كرو "
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:275
 #: gnucash/ui/gnc-embedded-register-window.ui:35
-#: gnucash/ui/gnc-plugin-page-register.ui:132
 msgid "Cut the selected transaction into clipboard"
 msgstr "منتخب كیے گئے لین دین كو كلپ بورڈ میں كاٹو"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:276
 #: gnucash/ui/gnc-embedded-register-window.ui:40
-#: gnucash/ui/gnc-plugin-page-register.ui:138
 msgid "Copy the selected transaction into clipboard"
 msgstr "منتخب لین دین كو كلپ بورڈ میں نقل كرو"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:277
 #: gnucash/ui/gnc-embedded-register-window.ui:45
-#: gnucash/ui/gnc-plugin-page-register.ui:144
 msgid "Paste the transaction from the clipboard"
 msgstr "كلپ بورڈ سے لین دین كوچسپاں كرو "
 
@@ -4972,9 +4969,6 @@ msgstr "كلپ بورڈ سے لین دین كوچسپاں كرو "
 #: gnucash/ui/gnc-embedded-register-window.ui:50
 #: gnucash/ui/gnc-embedded-register-window.ui:113
 #: gnucash/ui/gnc-embedded-register-window.ui:157
-#: gnucash/ui/gnc-plugin-page-register.ui:150
-#: gnucash/ui/gnc-plugin-page-register.ui:366
-#: gnucash/ui/gnc-plugin-page-register.ui:576
 #: gnucash/ui/gnc-plugin-page-register.ui:724
 msgid "Make a copy of the current transaction"
 msgstr "جاری لین دین كی ایك نقل بنائے "
@@ -4983,34 +4977,22 @@ msgstr "جاری لین دین كی ایك نقل بنائے "
 #: gnucash/ui/gnc-embedded-register-window.ui:55
 #: gnucash/ui/gnc-embedded-register-window.ui:118
 #: gnucash/ui/gnc-embedded-register-window.ui:172
-#: gnucash/ui/gnc-plugin-page-register.ui:156
-#: gnucash/ui/gnc-plugin-page-register.ui:371
-#: gnucash/ui/gnc-plugin-page-register.ui:581
 #: gnucash/ui/gnc-plugin-page-register.ui:739
 msgid "Delete the current transaction"
 msgstr "موجودہ لین دین كو خارج كرو"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:280
-#: gnucash/ui/gnc-plugin-page-register.ui:207
-#: gnucash/ui/gnc-plugin-page-register.ui:395
-#: gnucash/ui/gnc-plugin-page-register.ui:507
 #, fuzzy
 #| msgid "Associate a file with the current transaction"
 msgid "Add, change, or unlink the document linked with the current transaction"
 msgstr "موجودہ لین دین کے ساتھ ایک فائل منسلک"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:281
-#: gnucash/ui/gnc-plugin-page-register.ui:213
-#: gnucash/ui/gnc-plugin-page-register.ui:400
-#: gnucash/ui/gnc-plugin-page-register.ui:512
 #, fuzzy
 msgid "Open the linked document for the current transaction"
 msgstr "موجودہ لین دین کے ساتھ مقام منسلک كریں"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:282
-#: gnucash/ui/gnc-plugin-page-register.ui:222
-#: gnucash/ui/gnc-plugin-page-register.ui:407
-#: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher"
 msgstr ""
 
@@ -5027,14 +5009,10 @@ msgid "Paste the split from the clipboard"
 msgstr "كلپ بورڈ سے اسپلیٹ چسپاں كریں"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:286
-#: gnucash/ui/gnc-plugin-page-register.ui:478
-#: gnucash/ui/gnc-plugin-page-register.ui:615
 msgid "Make a copy of the current split"
 msgstr "حالیہ اسپلیٹ كی كاپی بنائیں"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:287
-#: gnucash/ui/gnc-plugin-page-register.ui:483
-#: gnucash/ui/gnc-plugin-page-register.ui:620
 msgid "Delete the current split"
 msgstr "حالیہ اسپلیٹ ڈیلیٹ كریں"
 
@@ -8383,6 +8361,7 @@ msgid "Not enough information for quotes dump"
 msgstr "خالی ٹرانزیکشن کے لئے کافی معلومات نہیں؟"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8391,6 +8370,7 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8401,6 +8381,7 @@ msgstr "یہ ایك رنگ آپشن ہے"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:180
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
@@ -8422,14 +8403,14 @@ msgstr "gnucash-devel@gnucash.org پر بگس اور دیگر مسائل کی ر
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
-#, fuzzy
+#, fuzzy, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr ""
 "آپ بھی تلاش اور https://bugs.gnucash.org پر بگ کی رپورٹ درج کرا سکتے ہیں"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
-#, fuzzy
+#, fuzzy, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "آخری مستحکم ورژن تلاش کرنے کے لئے، http://www.gnucash.org ملاحظہ کیجیے"
 
@@ -8448,6 +8429,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash ذاتی اور چھوٹے کاروبار کے فائنانس مینجمنٹ"
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8457,12 +8439,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s ترقی ورژن"
 
@@ -19412,9 +19394,9 @@ msgid "File exported successfully!\n"
 msgstr "فائل کامیابی سے برآمد ہوئی!\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
-#: gnucash/import-export/import-main-matcher.cpp:1868
+#: gnucash/import-export/import-main-matcher.cpp:1874
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.cpp:1634 libgnucash/engine/Split.cpp:1651
+#: libgnucash/engine/Split.cpp:1644 libgnucash/engine/Split.cpp:1661
 msgid "-- Split Transaction --"
 msgstr "-- علاحدہ لین دین --"
 
@@ -19676,7 +19658,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "ایک '%s فائل سے ٹرانسیكشنس درآمد كیے گئے"
 
@@ -19895,6 +19877,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -20162,137 +20145,137 @@ msgstr "y/m/d"
 msgid "y/d/m"
 msgstr "y/d/m"
 
-#: gnucash/import-export/import-main-matcher.cpp:502
+#: gnucash/import-export/import-main-matcher.cpp:503
 #, fuzzy
 msgid "No new transactions were found in this import."
 msgstr "یہ ٹرانسیكشن ایک URI کے ساتھ منسلک نہیں ہے."
 
-#: gnucash/import-export/import-main-matcher.cpp:774
+#: gnucash/import-export/import-main-matcher.cpp:775
 msgid "Destination account for the auto-balance split."
 msgstr "خود كار متوازن علحیدہ كے لیے مقامی اكاؤنٹ"
 
-#: gnucash/import-export/import-main-matcher.cpp:996
+#: gnucash/import-export/import-main-matcher.cpp:1004
 msgid "Click Edit to modify"
 msgstr ""
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1407
+#: gnucash/import-export/import-main-matcher.cpp:1413
 #, fuzzy
 #| msgid "_Select transfer account"
 msgid "_Assign transfer account"
 msgstr "_ ٹرانسفراكاؤنٹ كو منتخب كرو"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1412
+#: gnucash/import-export/import-main-matcher.cpp:1418
 #, fuzzy
 #| msgid "Exchange rate"
 msgid "Assign e_xchange rate"
 msgstr "ایكسچینج قیمت"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1417
+#: gnucash/import-export/import-main-matcher.cpp:1423
 #, fuzzy
 msgid "_Edit description, notes, or memo"
 msgstr "وضاحت/نوٹس/میمو"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1422
+#: gnucash/import-export/import-main-matcher.cpp:1428
 #, fuzzy
 #| msgid "Reset defaults"
 msgid "_Reset all edits"
 msgstr "ڈیفالٹ كو دوبارہ سیٹ كرو"
 
-#: gnucash/import-export/import-main-matcher.cpp:1572
+#: gnucash/import-export/import-main-matcher.cpp:1578
 #, fuzzy
 #| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "A"
 
-#: gnucash/import-export/import-main-matcher.cpp:1576
+#: gnucash/import-export/import-main-matcher.cpp:1582
 #, fuzzy
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "U+R"
 
-#: gnucash/import-export/import-main-matcher.cpp:1580
+#: gnucash/import-export/import-main-matcher.cpp:1586
 #, fuzzy
 #| msgid "C"
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "C"
 
-#: gnucash/import-export/import-main-matcher.cpp:1587
+#: gnucash/import-export/import-main-matcher.cpp:1593
 msgid "Info"
 msgstr "معلومات"
 
-#: gnucash/import-export/import-main-matcher.cpp:1594
+#: gnucash/import-export/import-main-matcher.cpp:1600
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 #, fuzzy
 msgid "Additional Comments"
 msgstr "كارڈ میں مزید"
 
-#: gnucash/import-export/import-main-matcher.cpp:1979
+#: gnucash/import-export/import-main-matcher.cpp:1985
 msgid "New, already balanced"
 msgstr "نیا، پہلے سے متوازن"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2001
+#: gnucash/import-export/import-main-matcher.cpp:2007
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr "نیا, ٹرانسفر %s to (مینول) \"%s\""
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2009
+#: gnucash/import-export/import-main-matcher.cpp:2015
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr "نیا, ٹرانسفر %s to (خود كار) \"%s\""
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2022
+#: gnucash/import-export/import-main-matcher.cpp:2028
 #, fuzzy, c-format
 #| msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr "نیا,(UNBALANCED %sكو منتقل كرنے كے لیے اكاؤنٹ كی ضرورت ہے)! "
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2038
+#: gnucash/import-export/import-main-matcher.cpp:2044
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr "نیا,(UNBALANCED %sكو منتقل كرنے كے لیے اكاؤنٹ كی ضرورت ہے)! "
 
-#: gnucash/import-export/import-main-matcher.cpp:2056
+#: gnucash/import-export/import-main-matcher.cpp:2062
 #, fuzzy, c-format
 #| msgid "Reconcile (manual) match"
 msgid "Reconcile (manual) match to %s"
 msgstr "موافق (مینول) میچ "
 
-#: gnucash/import-export/import-main-matcher.cpp:2061
+#: gnucash/import-export/import-main-matcher.cpp:2067
 #, fuzzy, c-format
 #| msgid "Reconcile (auto) match"
 msgid "Reconcile (auto) match to %s"
 msgstr "موافق (خودكار) میچ"
 
-#: gnucash/import-export/import-main-matcher.cpp:2070
-#: gnucash/import-export/import-main-matcher.cpp:2099
+#: gnucash/import-export/import-main-matcher.cpp:2076
+#: gnucash/import-export/import-main-matcher.cpp:2105
 msgid "Match missing!"
 msgstr "میچ موجود نہیں ہے!"
 
-#: gnucash/import-export/import-main-matcher.cpp:2085
+#: gnucash/import-export/import-main-matcher.cpp:2091
 #, fuzzy, c-format
 #| msgid "Update and reconcile (manual) match"
 msgid "Update and reconcile (manual) match to %s"
 msgstr "میچ اپ ڈیٹ اور موافق (مینول)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2090
+#: gnucash/import-export/import-main-matcher.cpp:2096
 #, fuzzy, c-format
 #| msgid "Update and reconcile (auto) match"
 msgid "Update and reconcile (auto) match to %s"
 msgstr "میچ اپ ڈیٹ اور موافق (خود كار)"
 
-#: gnucash/import-export/import-main-matcher.cpp:2107
+#: gnucash/import-export/import-main-matcher.cpp:2113
 msgid "Do not import (no action selected)"
 msgstr "درآمد مت كرو( كوئی كاكردگی منتخب نہیں كی گئی)"
 
@@ -28940,11 +28923,6 @@ msgstr "دیگر اسپلیٹس نكالیں"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:60
 #: gnucash/ui/gnc-embedded-register-window.ui:123
-#: gnucash/ui/gnc-plugin-page-register.ui:162
-#: gnucash/ui/gnc-plugin-page-register.ui:376
-#: gnucash/ui/gnc-plugin-page-register.ui:488
-#: gnucash/ui/gnc-plugin-page-register.ui:586
-#: gnucash/ui/gnc-plugin-page-register.ui:625
 msgid "Remove all splits in the current transaction"
 msgstr "جاری لین دین میں سبھی علیحدہ كو نكالو"
 
@@ -28962,11 +28940,6 @@ msgstr "_لین دین كو داخل كرو"
 #: gnucash/ui/gnc-embedded-register-window.ui:67
 #: gnucash/ui/gnc-embedded-register-window.ui:130
 #: gnucash/ui/gnc-embedded-register-window.ui:197
-#: gnucash/ui/gnc-plugin-page-register.ui:171
-#: gnucash/ui/gnc-plugin-page-register.ui:383
-#: gnucash/ui/gnc-plugin-page-register.ui:495
-#: gnucash/ui/gnc-plugin-page-register.ui:593
-#: gnucash/ui/gnc-plugin-page-register.ui:632
 #: gnucash/ui/gnc-plugin-page-register.ui:764
 msgid "Record the current transaction"
 msgstr "جاری لین دین كو ریكارڈ كرو"
@@ -28985,11 +28958,6 @@ msgstr "لین دین كو منسوخ كرو"
 #: gnucash/ui/gnc-embedded-register-window.ui:72
 #: gnucash/ui/gnc-embedded-register-window.ui:135
 #: gnucash/ui/gnc-embedded-register-window.ui:212
-#: gnucash/ui/gnc-plugin-page-register.ui:177
-#: gnucash/ui/gnc-plugin-page-register.ui:388
-#: gnucash/ui/gnc-plugin-page-register.ui:500
-#: gnucash/ui/gnc-plugin-page-register.ui:598
-#: gnucash/ui/gnc-plugin-page-register.ui:637
 #: gnucash/ui/gnc-plugin-page-register.ui:779
 msgid "Cancel the current transaction"
 msgstr "موجودہ لین دین كو منسوخ كرو"
@@ -29018,7 +28986,6 @@ msgstr "منتقل كرو"
 #: gnucash/ui/gnc-embedded-register-window.ui:95
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:128
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:246
-#: gnucash/ui/gnc-plugin-page-register.ui:232
 #: gnucash/ui/gnc-plugin-page-register.ui:874
 msgid "Transfer funds from one account to another"
 msgstr "ایك اكاؤنٹ سے دوسرے میں فنڈ كو منتقل كرو"
@@ -29179,8 +29146,6 @@ msgstr "صفحہ كو دوبارہ نام دو"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:147
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:215
-#: gnucash/ui/gnc-plugin-page-register.ui:359
-#: gnucash/ui/gnc-plugin-page-register.ui:471
 #, fuzzy
 #| msgid "Rename this page."
 msgid "Rename this page"
@@ -29372,7 +29337,6 @@ msgstr "_تلاش كرو…"
 #: gnucash/ui/gnc-plugin-page-budget.ui:52
 #: gnucash/ui/gnc-plugin-page-invoice.ui:46
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:68
-#: gnucash/ui/gnc-plugin-page-register.ui:52
 #: gnucash/ui/gnc-plugin-page-report.ui:19
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:19
 msgid "Find transactions with a search"
@@ -29396,7 +29360,6 @@ msgstr "ٹیكس رپورٹ آپشنس"
 #: gnucash/ui/gnc-plugin-page-budget.ui:63
 #: gnucash/ui/gnc-plugin-page-invoice.ui:57
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:79
-#: gnucash/ui/gnc-plugin-page-register.ui:63
 #: gnucash/ui/gnc-plugin-page-report.ui:39
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:30
 msgid "Setup relevant accounts for tax reports, e.g. US income tax"
@@ -29859,7 +29822,6 @@ msgstr "_اكاؤنٹ مرتب كرو"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:219
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:389
 #: gnucash/ui/gnc-plugin-page-budget.ui:18
-#: gnucash/ui/gnc-plugin-page-register.ui:35
 msgid "Edit the selected account"
 msgstr "منتخب اكاؤنٹ كو مرتب كرو"
 
@@ -29878,7 +29840,6 @@ msgstr "_اكاؤنٹ مرتب كرو"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:33
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:229
-#: gnucash/ui/gnc-plugin-page-register.ui:42
 #, fuzzy
 msgid "Find an account"
 msgstr "لین دین تلاش كرو"
@@ -29952,7 +29913,6 @@ msgstr "_ریفریش"
 #: gnucash/ui/gnc-plugin-page-budget.ui:90
 #: gnucash/ui/gnc-plugin-page-invoice.ui:128
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:97
-#: gnucash/ui/gnc-plugin-page-register.ui:123
 #: gnucash/ui/gnc-plugin-page-report.ui:49
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:40
 msgid "Refresh this window"
@@ -29984,7 +29944,6 @@ msgstr "_موافق"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
-#: gnucash/ui/gnc-plugin-page-register.ui:238
 #: gnucash/ui/gnc-plugin-page-register.ui:889
 msgid "Reconcile the selected account"
 msgstr "منتخب اكاؤنٹ كو ری كونسل كرو"
@@ -29998,7 +29957,6 @@ msgid "_Auto-clear…"
 msgstr "خود كار صاف"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
-#: gnucash/ui/gnc-plugin-page-register.ui:244
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
@@ -30025,7 +29983,6 @@ msgstr "اسٹاك علیحدہ"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
-#: gnucash/ui/gnc-plugin-page-register.ui:256
 msgid "Record a stock split or a stock merger"
 msgstr "ایك اسٹاك علیحدہ یا ایك اسٹاك مرجر كو ریكارڈ كرو"
 
@@ -30037,7 +29994,6 @@ msgstr "لاٹس دیكھو…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:158
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:261
-#: gnucash/ui/gnc-plugin-page-register.ui:262
 msgid "Bring up the lot viewer/editor window"
 msgstr "لاٹ ویور/ ایڈیٹر ونڈو كو سامنے لاؤ"
 
@@ -30401,7 +30357,9 @@ msgstr "ادائیگی کے طور پر تفویض کریں …"
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:446
 #: gnucash/ui/gnc-plugin-page-register.ui:558
-msgid "Assign the selected transaction as payment"
+#, fuzzy
+#| msgid "Assign the selected transaction as payment"
+msgid "Assign the selected transaction as payment."
 msgstr "ادائیگی کے طور پر منتخبہ لین دین تفویض کریں"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
@@ -30415,8 +30373,32 @@ msgstr "ادائیگی کے طور پر تفویض کریں …"
 #: gnucash/ui/gnc-plugin-page-register.ui:452
 #: gnucash/ui/gnc-plugin-page-register.ui:564
 #, fuzzy
-msgid "Edit the payment this transaction is a part of"
+msgid "Edit the payment this transaction is a part of."
 msgstr "جاری لین دین كو مرتب كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:35
+#, fuzzy
+#| msgid "Edit the selected account"
+msgid "Edit the selected account."
+msgstr "منتخب اكاؤنٹ كو مرتب كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:42
+#, fuzzy
+msgid "Find an account."
+msgstr "لین دین تلاش كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:52
+#, fuzzy
+#| msgid "Find transactions with a search"
+msgid "Find transactions with a search."
+msgstr "ایك سرچ كے ساتھ لین دین كی تلاش كرو"
+
+#. Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string
+#: gnucash/ui/gnc-plugin-page-register.ui:63
+#, fuzzy
+#| msgid "Setup relevant accounts for tax reports, e.g. US income tax"
+msgid "Setup relevant accounts for tax reports, e.g. US income tax."
+msgstr "ٹیكس رپورٹوں كے لیے متعلقہ اكاؤنٹوں كا سیٹ اپ كرو، جیسے US آمدنی ٹیكس"
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/ui/gnc-plugin-page-register.ui:71
@@ -30424,7 +30406,9 @@ msgid "_Basic Ledger"
 msgstr "_بنیادی لیجر"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:74
-msgid "Show transactions on one or two lines"
+#, fuzzy
+#| msgid "Show transactions on one or two lines"
+msgid "Show transactions on one or two lines."
 msgstr "لین دینوں كو ایك یا دو لائنوں میں دكھائے"
 
 #. Translators: This is a menu item in the View menu
@@ -30433,12 +30417,17 @@ msgid "_Auto-Split Ledger"
 msgstr "_خود كار علیحدہ لیجر"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:82
+#, fuzzy
+#| msgid ""
+#| "Show transactions on one or two lines and expand the current transaction"
 msgid ""
-"Show transactions on one or two lines and expand the current transaction"
+"Show transactions on one or two lines and expand the current transaction."
 msgstr "لین دینوں كو ایك یا دو لائنوں میں دكھائے اور جاری لین دین كو وسعت دیں"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
-msgid "Show expanded transactions with all splits"
+#, fuzzy
+#| msgid "Show expanded transactions with all splits"
+msgid "Show expanded transactions with all splits."
 msgstr "وسعت دئیے گئے لین دینوں كو سبھی علیحدگی كے ساتھ دكھاؤ"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:107
@@ -30449,6 +30438,76 @@ msgstr "وسعت دئیے گئے لین دینوں كو سبھی علیحدگی 
 msgid "_Sort By…"
 msgstr "كے ذریعہ ترتیب دو"
 
+#: gnucash/ui/gnc-plugin-page-register.ui:123
+#, fuzzy
+#| msgid "Refresh this window"
+msgid "Refresh this window."
+msgstr "یہ ونڈو كو ریفریش كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:132
+#, fuzzy
+#| msgid "Cut the selected transaction into clipboard"
+msgid "Cut the selected transaction into clipboard."
+msgstr "منتخب كیے گئے لین دین كو كلپ بورڈ میں كاٹو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:138
+#, fuzzy
+#| msgid "Copy the selected transaction into clipboard"
+msgid "Copy the selected transaction into clipboard."
+msgstr "منتخب لین دین كو كلپ بورڈ میں نقل كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:144
+#, fuzzy
+#| msgid "Paste the transaction from the clipboard"
+msgid "Paste the transaction from the clipboard."
+msgstr "كلپ بورڈ سے لین دین كوچسپاں كرو "
+
+#: gnucash/ui/gnc-plugin-page-register.ui:150
+#: gnucash/ui/gnc-plugin-page-register.ui:366
+#: gnucash/ui/gnc-plugin-page-register.ui:576
+#, fuzzy
+#| msgid "Make a copy of the current transaction"
+msgid "Make a copy of the current transaction."
+msgstr "جاری لین دین كی ایك نقل بنائے "
+
+#: gnucash/ui/gnc-plugin-page-register.ui:156
+#: gnucash/ui/gnc-plugin-page-register.ui:371
+#: gnucash/ui/gnc-plugin-page-register.ui:581
+#, fuzzy
+#| msgid "Delete the current transaction"
+msgid "Delete the current transaction."
+msgstr "موجودہ لین دین كو خارج كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:162
+#: gnucash/ui/gnc-plugin-page-register.ui:376
+#: gnucash/ui/gnc-plugin-page-register.ui:488
+#: gnucash/ui/gnc-plugin-page-register.ui:586
+#: gnucash/ui/gnc-plugin-page-register.ui:625
+#, fuzzy
+#| msgid "Remove all splits in the current transaction"
+msgid "Remove all splits in the current transaction."
+msgstr "جاری لین دین میں سبھی علیحدہ كو نكالو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:171
+#: gnucash/ui/gnc-plugin-page-register.ui:383
+#: gnucash/ui/gnc-plugin-page-register.ui:495
+#: gnucash/ui/gnc-plugin-page-register.ui:593
+#: gnucash/ui/gnc-plugin-page-register.ui:632
+#, fuzzy
+#| msgid "Record the current transaction"
+msgid "Record the current transaction."
+msgstr "جاری لین دین كو ریكارڈ كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:177
+#: gnucash/ui/gnc-plugin-page-register.ui:388
+#: gnucash/ui/gnc-plugin-page-register.ui:500
+#: gnucash/ui/gnc-plugin-page-register.ui:598
+#: gnucash/ui/gnc-plugin-page-register.ui:637
+#, fuzzy
+#| msgid "Cancel the current transaction"
+msgid "Cancel the current transaction."
+msgstr "موجودہ لین دین كو منسوخ كرو"
+
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
 msgstr "_بے اثر لین دین "
@@ -30456,7 +30515,7 @@ msgstr "_بے اثر لین دین "
 #: gnucash/ui/gnc-plugin-page-register.ui:186
 #, fuzzy
 #| msgid "Record the current transaction"
-msgid "Void the current transaction"
+msgid "Void the current transaction."
 msgstr "جاری لین دین كو ریكارڈ كرو"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
@@ -30466,7 +30525,7 @@ msgstr "_ اثر دار لین دین"
 #: gnucash/ui/gnc-plugin-page-register.ui:192
 #, fuzzy
 #| msgid "Record the current transaction"
-msgid "Unvoid the current transaction"
+msgid "Unvoid the current transaction."
 msgstr "جاری لین دین كو ریكارڈ كرو"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
@@ -30476,18 +30535,75 @@ msgstr "مخالف لین دین كو جمع كرو"
 #: gnucash/ui/gnc-plugin-page-register.ui:198
 #, fuzzy
 #| msgid "Add _Reversing Transaction"
-msgid "Add a reversing transaction"
+msgid "Add a reversing transaction."
 msgstr "مخالف لین دین كو جمع كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:207
+#: gnucash/ui/gnc-plugin-page-register.ui:395
+#: gnucash/ui/gnc-plugin-page-register.ui:507
+#, fuzzy
+#| msgid "Associate a file with the current transaction"
+msgid ""
+"Add, change, or unlink the document linked with the current transaction."
+msgstr "موجودہ لین دین کے ساتھ ایک فائل منسلک"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:213
+#: gnucash/ui/gnc-plugin-page-register.ui:400
+#: gnucash/ui/gnc-plugin-page-register.ui:512
+#, fuzzy
+msgid "Open the linked document for the current transaction."
+msgstr "موجودہ لین دین کے ساتھ مقام منسلک كریں"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:222
+#: gnucash/ui/gnc-plugin-page-register.ui:407
+#: gnucash/ui/gnc-plugin-page-register.ui:519
+msgid "Jump to the linked bill, invoice, or voucher."
+msgstr ""
+
+#: gnucash/ui/gnc-plugin-page-register.ui:232
+#, fuzzy
+#| msgid "Transfer funds from one account to another"
+msgid "Transfer funds from one account to another."
+msgstr "ایك اكاؤنٹ سے دوسرے میں فنڈ كو منتقل كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:238
+#, fuzzy
+#| msgid "Reconcile the selected account"
+msgid "Reconcile the selected account."
+msgstr "منتخب اكاؤنٹ كو ری كونسل كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:244
+#, fuzzy
+#| msgid ""
+#| "Automatically clear individual transactions, so as to reach a certain "
+#| "cleared amount"
+msgid ""
+"Automatically clear individual transactions, so as to reach a certain "
+"cleared amount."
+msgstr ""
+"منفرد لین دینوں كو خود كار طریقہ سے صاف كریں جس سے ایك یقینی صاف رقم تك "
+"پہنچا جاسكے"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:256
+#, fuzzy
+#| msgid "Record a stock split or a stock merger"
+msgid "Record a stock split or a stock merger."
+msgstr "ایك اسٹاك علیحدہ یا ایك اسٹاك مرجر كو ریكارڈ كرو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:262
+#, fuzzy
+#| msgid "Bring up the lot viewer/editor window"
+msgid "Bring up the lot viewer/editor window."
+msgstr "لاٹ ویور/ ایڈیٹر ونڈو كو سامنے لاؤ"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:272
 #: gnucash/ui/gnc-plugin-page-register.ui:414
 #: gnucash/ui/gnc-plugin-page-register.ui:526
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
-#: gnucash/ui/gnc-plugin-page-register.ui:804
 #, fuzzy
 #| msgid "Move to the blank transaction at the bottom of the register"
-msgid "Move to the blank transaction in the register"
+msgid "Move to the blank transaction in the register."
 msgstr "رجسٹر كے نچلے حصّہ میں خالی لین دین كو ہٹائیں"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
@@ -30503,7 +30619,7 @@ msgstr "بھیجنے كی تاریخ"
 #: gnucash/ui/gnc-plugin-page-register.ui:531
 #, fuzzy
 #| msgid "Do not print transactions out of specified dates."
-msgid "Move to the split at the specified date"
+msgid "Move to the split at the specified date."
 msgstr "مخصوص تاریخوں کے باہر ٹرانسیكشنس پرنٹ نہیں كریں"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:283
@@ -30516,8 +30632,9 @@ msgstr "لین دین كو علیحدہ كرو"
 #: gnucash/ui/gnc-plugin-page-register.ui:285
 #: gnucash/ui/gnc-plugin-page-register.ui:424
 #: gnucash/ui/gnc-plugin-page-register.ui:536
-#: gnucash/ui/gnc-plugin-page-register.ui:819
-msgid "Show all splits in the current transaction"
+#, fuzzy
+#| msgid "Show all splits in the current transaction"
+msgid "Show all splits in the current transaction."
 msgstr "جاری لین دین میں سبھی علیحدگی كو دكھاؤ"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:289
@@ -30529,7 +30646,9 @@ msgstr "ایكسچینج ریٹ مرتب كرو"
 #: gnucash/ui/gnc-plugin-page-register.ui:291
 #: gnucash/ui/gnc-plugin-page-register.ui:429
 #: gnucash/ui/gnc-plugin-page-register.ui:541
-msgid "Edit the exchange rate for the current transaction"
+#, fuzzy
+#| msgid "Edit the exchange rate for the current transaction"
+msgid "Edit the exchange rate for the current transaction."
 msgstr "جاری لین دین كے لیے ایكسچینج ریٹ كو مرتب كرو"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:295
@@ -30544,9 +30663,12 @@ msgstr "شیڈول"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
-#: gnucash/ui/gnc-plugin-page-register.ui:849
+#, fuzzy
+#| msgid ""
+#| "Create a Scheduled Transaction with the current transaction as a template"
 msgid ""
-"Create a Scheduled Transaction with the current transaction as a template"
+"Create a Scheduled Transaction with the current transaction as a template or "
+"edit the Scheduled Transaction that current transaction was created by."
 msgstr "جیسے ایك ٹیمپلٹ موجودہ لین دین كے ساتھ ایك لین دین كی فہرست تخلیق كرو"
 
 #. Translators: This is a menu item that will open a register tab for the
@@ -30564,11 +30686,10 @@ msgstr "دیگر اكاؤنٹ كوڈ ڈسپلے كریں؟"
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:439
 #: gnucash/ui/gnc-plugin-page-register.ui:551
-#: gnucash/ui/gnc-plugin-page-register.ui:834
 #, fuzzy
 #| msgid "Open a register report for the selected Transaction"
 msgid ""
-"Open a new register tab for the other account with focus on this transaction"
+"Open a new register tab for the other account with focus on this transaction."
 msgstr "منتخب لین دین كے لیے ایك رجسٹر رپورٹ كو كھولو"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
@@ -30588,7 +30709,9 @@ msgid "Account Report"
 msgstr "اكاؤنٹ رپورٹ"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:334
-msgid "Open a register report for this Account"
+#, fuzzy
+#| msgid "Open a register report for this Account"
+msgid "Open a register report for this Account."
 msgstr "یہ اكاؤنٹ كے لیے ایك رجسٹر رپورٹ كھولو"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:338
@@ -30596,8 +30719,57 @@ msgid "Account Report - Single Transaction"
 msgstr "اكاؤنٹ رپورٹ ۔ ایك لین دین"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:340
-msgid "Open a register report for the selected Transaction"
+#, fuzzy
+#| msgid "Open a register report for the selected Transaction"
+msgid "Open a register report for the selected Transaction."
 msgstr "منتخب لین دین كے لیے ایك رجسٹر رپورٹ كو كھولو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:359
+#: gnucash/ui/gnc-plugin-page-register.ui:471
+#, fuzzy
+#| msgid "Rename this page."
+msgid "Rename this page."
+msgstr "یہ صفحح كو دوبارہ نام دو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:478
+#: gnucash/ui/gnc-plugin-page-register.ui:615
+#, fuzzy
+#| msgid "Make a copy of the current split"
+msgid "Make a copy of the current split."
+msgstr "حالیہ اسپلیٹ كی كاپی بنائیں"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:483
+#: gnucash/ui/gnc-plugin-page-register.ui:620
+#, fuzzy
+#| msgid "Delete the current split"
+msgid "Delete the current split."
+msgstr "حالیہ اسپلیٹ ڈیلیٹ كریں"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:804
+#, fuzzy
+#| msgid "Move to the blank transaction at the bottom of the register"
+msgid "Move to the blank transaction in the register"
+msgstr "رجسٹر كے نچلے حصّہ میں خالی لین دین كو ہٹائیں"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:819
+msgid "Show all splits in the current transaction"
+msgstr "جاری لین دین میں سبھی علیحدگی كو دكھاؤ"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:834
+#, fuzzy
+#| msgid "Open a register report for the selected Transaction"
+msgid ""
+"Open a new register tab for the other account with focus on this transaction"
+msgstr "منتخب لین دین كے لیے ایك رجسٹر رپورٹ كو كھولو"
+
+#: gnucash/ui/gnc-plugin-page-register.ui:849
+#, fuzzy
+#| msgid ""
+#| "Create a Scheduled Transaction with the current transaction as a template"
+msgid ""
+"Create a Scheduled Transaction with the current transaction as a template or "
+"edit the Scheduled Transaction that current transaction was created by"
+msgstr "جیسے ایك ٹیمپلٹ موجودہ لین دین كے ساتھ ایك لین دین كی فہرست تخلیق كرو"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
@@ -31157,6 +31329,7 @@ msgstr "نئی تقسیم کی معلومات"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -31167,13 +31340,14 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "یہ ان كوڈینگ كو فہرست میں پہلے ہی شامل كر لیا گیا ہے"
 msgstr[1] "یہ ان كوڈینگ كو فہرست میں پہلے ہی شامل كر لیا گیا ہے"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -31184,7 +31358,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "فائل كو دوبارہ نہیں كھولاجاسكتا۔"
@@ -31287,36 +31461,36 @@ msgstr "%B %#d, %Y "
 msgid "%B %e, %Y"
 msgstr "%B %e, %Y "
 
-#: libgnucash/engine/gnc-datetime.cpp:86
+#: libgnucash/engine/gnc-datetime.cpp:88
 msgid "y-m-d"
 msgstr "y-m-d"
 
-#: libgnucash/engine/gnc-datetime.cpp:98
+#: libgnucash/engine/gnc-datetime.cpp:100
 msgid "d-m-y"
 msgstr "d-m-y"
 
-#: libgnucash/engine/gnc-datetime.cpp:110
+#: libgnucash/engine/gnc-datetime.cpp:112
 msgid "m-d-y"
 msgstr "m-d-y"
 
-#: libgnucash/engine/gnc-datetime.cpp:124
+#: libgnucash/engine/gnc-datetime.cpp:126
 msgid "d-m"
 msgstr "d-m"
 
-#: libgnucash/engine/gnc-datetime.cpp:136
+#: libgnucash/engine/gnc-datetime.cpp:138
 msgid "m-d"
 msgstr "m-d"
 
-#: libgnucash/engine/gnc-datetime.cpp:566
+#: libgnucash/engine/gnc-datetime.cpp:618
 #, fuzzy
 msgid "Unknown date format specifier passed as argument."
 msgstr "سسٹم لوكل كے ذریعہ واضح تاریخ فارمیٹ كا استعمال كرو۔"
 
-#: libgnucash/engine/gnc-datetime.cpp:571
+#: libgnucash/engine/gnc-datetime.cpp:623
 msgid "Value can't be parsed into a date using the selected date format."
 msgstr ""
 
-#: libgnucash/engine/gnc-datetime.cpp:576
+#: libgnucash/engine/gnc-datetime.cpp:628
 msgid "Value appears to contain a year while the selected format forbids this."
 msgstr ""
 
@@ -31896,7 +32070,7 @@ msgstr ""
 msgid "Looking for imbalances in transaction date %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/Split.cpp:1667
+#: libgnucash/engine/Split.cpp:1677
 #, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
