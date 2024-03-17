@@ -638,7 +638,7 @@ libgnucash/engine/gncCustomer.c
 libgnucash/engine/gnc-date.cpp
 libgnucash/engine/gnc-datetime.cpp
 libgnucash/engine/gncEmployee.c
-libgnucash/engine/gnc-engine.c
+libgnucash/engine/gnc-engine.cpp
 libgnucash/engine/gncEntry.c
 libgnucash/engine/gnc-euro.c
 libgnucash/engine/gnc-event.c
