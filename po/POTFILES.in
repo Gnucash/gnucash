@@ -666,7 +666,7 @@ libgnucash/engine/gncVendor.c
 libgnucash/engine/guid.cpp
 libgnucash/engine/kvp-frame.cpp
 libgnucash/engine/kvp-value.cpp
-libgnucash/engine/policy.c
+libgnucash/engine/policy.cpp
 libgnucash/engine/qof-backend.cpp
 libgnucash/engine/qofbook.cpp
 libgnucash/engine/qofbookslots.h
