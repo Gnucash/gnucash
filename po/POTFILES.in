@@ -687,7 +687,7 @@ libgnucash/engine/Query.c
 libgnucash/engine/Recurrence.cpp
 libgnucash/engine/SchedXaction.c
 libgnucash/engine/Scrub2.cpp
-libgnucash/engine/Scrub3.c
+libgnucash/engine/Scrub3.cpp
 libgnucash/engine/ScrubBudget.c
 libgnucash/engine/ScrubBusiness.c
 libgnucash/engine/Scrub.cpp
