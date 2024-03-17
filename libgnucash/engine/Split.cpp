@@ -108,10 +108,10 @@ static void
 gnc_split_init(Split* split)
 {
     /* fill in some sane defaults */
-    split->acc         = NULL;
-    split->orig_acc    = NULL;
-    split->parent      = NULL;
-    split->lot         = NULL;
+    split->acc         = nullptr;
+    split->orig_acc    = nullptr;
+    split->parent      = nullptr;
+    split->lot         = nullptr;
 
     split->action      = CACHE_INSERT("");
     split->memo        = CACHE_INSERT("");
@@ -127,7 +127,7 @@ gnc_split_init(Split* split)
     split->noclosing_balance   = gnc_numeric_zero();
 
     split->gains = GAINS_STATUS_UNKNOWN;
-    split->gains_split = NULL;
+    split->gains_split = nullptr;
 }
 
 static void
@@ -231,7 +231,7 @@ gnc_split_set_property(GObject         *object,
     g_return_if_fail(GNC_IS_SPLIT(object));
 
     split = GNC_SPLIT(object);
-    if (prop_id < PROP_RUNTIME_0 && split->parent != NULL)
+    if (prop_id < PROP_RUNTIME_0 && split->parent != nullptr)
         g_assert (qof_instance_get_editlevel(split->parent));
 
     switch (prop_id)
@@ -315,7 +315,7 @@ gnc_split_class_init(SplitClass* klass)
                              "by the user.  It is intended to be a short "
                              "string that contains extra information about "
                              "this split.",
-                             NULL,
+                             nullptr,
                              G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -327,7 +327,7 @@ gnc_split_class_init(SplitClass* klass)
                              "by the user.  It is intended to be a short "
                              "string that describes the purpose of "
                              "this split.",
-                             NULL,
+                             nullptr,
                              G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -396,7 +396,7 @@ gnc_split_class_init(SplitClass* klass)
                              "The formula used to calculate the actual debit "
                              "amount when a real split is generated from this "
                              "SX split.",
-                             NULL,
+                             nullptr,
                              G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -417,7 +417,7 @@ gnc_split_class_init(SplitClass* klass)
                              "The formula used to calculate the actual credit "
                              "amount when a real split is generated from this "
                              "SX split.",
-                             NULL,
+                             nullptr,
                              G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -441,7 +441,7 @@ gnc_split_class_init(SplitClass* klass)
                              "Scheduled Transaction Shares",
                              "Numeric value of shares to insert in a new split when "
                              "it's generated from this SX split.",
-                             NULL,
+                             nullptr,
                              G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -460,7 +460,7 @@ gnc_split_class_init(SplitClass* klass)
                               "Online Account ID",
                               "The online account which corresponds to this "
                               "account for OFX/HCBI import",
-                              NULL,
+                              nullptr,
                               G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -500,10 +500,10 @@ void
 xaccSplitReinit(Split * split)
 {
     /* fill in some sane defaults */
-    split->acc         = NULL;
-    split->orig_acc    = NULL;
-    split->parent      = NULL;
-    split->lot         = NULL;
+    split->acc         = nullptr;
+    split->orig_acc    = nullptr;
+    split->parent      = nullptr;
+    split->lot         = nullptr;
 
     CACHE_REPLACE(split->action, "");
     CACHE_REPLACE(split->memo, "");
@@ -521,7 +521,7 @@ xaccSplitReinit(Split * split)
     qof_instance_set_idata(split, 0);
 
     split->gains = GAINS_STATUS_UNKNOWN;
-    split->gains_split = NULL;
+    split->gains_split = nullptr;
 }
 
 /********************************************************************\
@@ -531,9 +531,9 @@ Split *
 xaccMallocSplit(QofBook *book)
 {
     Split *split;
-    g_return_val_if_fail (book, NULL);
+    g_return_val_if_fail (book, nullptr);
 
-    split = GNC_SPLIT(g_object_new (GNC_TYPE_SPLIT, NULL));
+    split = GNC_SPLIT(g_object_new (GNC_TYPE_SPLIT, nullptr));
     xaccInitSplit (split, book);
 
     return split;
@@ -551,13 +551,13 @@ xaccMallocSplit(QofBook *book)
 Split *
 xaccDupeSplit (const Split *s)
 {
-    Split *split = GNC_SPLIT(g_object_new (GNC_TYPE_SPLIT, NULL));
+    Split *split = GNC_SPLIT(g_object_new (GNC_TYPE_SPLIT, nullptr));
 
     /* Trash the entity table. We don't want to mistake the cloned
      * splits as something official.  If we ever use this split, we'll
      * have to fix this up.
      */
-    split->inst.e_type = NULL;
+    split->inst.e_type = nullptr;
     qof_instance_copy_guid(split, s);
     qof_instance_copy_book(split, s);
 
@@ -589,9 +589,9 @@ xaccDupeSplit (const Split *s)
 Split *
 xaccSplitCloneNoKvp (const Split *s)
 {
-    Split *split = GNC_SPLIT(g_object_new (GNC_TYPE_SPLIT, NULL));
+    Split *split = GNC_SPLIT(g_object_new (GNC_TYPE_SPLIT, nullptr));
 
-    split->parent              = NULL;
+    split->parent              = nullptr;
     split->memo                = CACHE_INSERT(s->memo);
     split->action              = CACHE_INSERT(s->action);
     split->reconciled          = s->reconciled;
@@ -604,7 +604,7 @@ xaccSplitCloneNoKvp (const Split *s)
     split->noclosing_balance   = s->noclosing_balance;
 
     split->gains = GAINS_STATUS_UNKNOWN;
-    split->gains_split = NULL;
+    split->gains_split = nullptr;
 
     qof_instance_init_data(&split->inst, GNC_ID_SPLIT,
                            qof_instance_get_book(s));
@@ -622,7 +622,7 @@ xaccSplitCopyKvp (const Split *from, Split *to)
 {
     qof_instance_copy_kvp (QOF_INSTANCE (to), QOF_INSTANCE (from));
     /* But not the online-id */
-    qof_instance_set (QOF_INSTANCE (to), "online-id", NULL, NULL);
+    qof_instance_set (QOF_INSTANCE (to), "online-id", nullptr, nullptr);
 }
 
 /*################## Added for Reg2 #################*/
@@ -738,14 +738,14 @@ xaccFreeSplit (Split *split)
 
     /* Just in case someone looks up freed memory ... */
     split->memo        = (char *) 1;
-    split->action      = NULL;
+    split->action      = nullptr;
     split->reconciled  = NREC;
     split->amount      = gnc_numeric_zero();
     split->value       = gnc_numeric_zero();
-    split->parent      = NULL;
-    split->lot         = NULL;
-    split->acc         = NULL;
-    split->orig_acc    = NULL;
+    split->parent      = nullptr;
+    split->lot         = nullptr;
+    split->acc         = nullptr;
+    split->orig_acc    = nullptr;
 
     split->date_reconciled = 0;
     G_OBJECT_CLASS (QOF_INSTANCE_GET_CLASS (&split->inst))->dispose(G_OBJECT (split));
@@ -753,9 +753,9 @@ xaccFreeSplit (Split *split)
     if (split->gains_split)
     {
         Split *other = xaccSplitGetOtherSplit(split->gains_split);
-        split->gains_split->gains_split = NULL;
+        split->gains_split->gains_split = nullptr;
         if (other)
-          other->gains_split = NULL;
+          other->gains_split = nullptr;
     }
 
     g_object_unref(split);
@@ -765,7 +765,7 @@ void mark_split (Split *s)
 {
     if (s->acc)
     {
-        g_object_set(s->acc, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
+        g_object_set(s->acc, "sort-dirty", TRUE, "balance-dirty", TRUE, nullptr);
     }
 
     /* set dirty flag on lot too. */
@@ -809,7 +809,7 @@ xaccSplitEqual(const Split *sa, const Split *sb,
 
     if (!sa || !sb)
     {
-        PINFO ("one is NULL");
+        PINFO ("one is nullptr");
         return FALSE;
     }
 
@@ -933,8 +933,8 @@ xaccSplitEqual(const Split *sa, const Split *sb,
 GList *
 xaccSplitListGetUniqueTransactionsReversed (const GList *splits)
 {
-    GHashTable *txn_hash = g_hash_table_new (NULL, NULL);
-    GList *transList = NULL;
+    GHashTable *txn_hash = g_hash_table_new (nullptr, nullptr);
+    GList *transList = nullptr;
     const GList *snode;
 
     for (snode = splits; snode; snode = snode->next)
@@ -944,7 +944,7 @@ xaccSplitListGetUniqueTransactionsReversed (const GList *splits)
         if (g_hash_table_contains (txn_hash, trans))
             continue;
 
-        g_hash_table_insert (txn_hash, trans, NULL);
+        g_hash_table_insert (txn_hash, trans, nullptr);
         transList = g_list_prepend (transList, trans);
     }
     g_hash_table_destroy (txn_hash);
@@ -967,7 +967,7 @@ xaccSplitListGetUniqueTransactions(const GList *splits)
 Account *
 xaccSplitGetAccount (const Split *s)
 {
-    return s ? s->acc : NULL;
+    return s ? s->acc : nullptr;
 }
 
 void
@@ -999,8 +999,8 @@ static void commit_err (QofInstance *inst, QofBackendError errcode)
 void
 xaccSplitCommitEdit(Split *s)
 {
-    Account *acc = NULL;
-    Account *orig_acc = NULL;
+    Account *acc = nullptr;
+    Account *orig_acc = nullptr;
 
     g_return_if_fail(s);
     if (!qof_instance_is_dirty(QOF_INSTANCE(s)))
@@ -1032,7 +1032,7 @@ xaccSplitCommitEdit(Split *s)
         {
             /* If the split's lot belonged to some other account, we
                leave it so. */
-            if (s->lot && (NULL == gnc_lot_get_account(s->lot)))
+            if (s->lot && (nullptr == gnc_lot_get_account(s->lot)))
                 xaccAccountInsertLot (acc, s->lot);
         }
         else
@@ -1047,12 +1047,12 @@ xaccSplitCommitEdit(Split *s)
         //FIXME: find better event
         if (s->orig_parent)
             qof_event_gen(&s->orig_parent->inst, QOF_EVENT_MODIFY,
-                          NULL);
+                          nullptr);
     }
     if (s->lot)
     {
         /* A change of value/amnt affects gains display, etc. */
-        qof_event_gen (QOF_INSTANCE(s->lot), QOF_EVENT_MODIFY, NULL);
+        qof_event_gen (QOF_INSTANCE(s->lot), QOF_EVENT_MODIFY, nullptr);
     }
 
     /* Important: we save off the original parent transaction and account
@@ -1060,12 +1060,12 @@ xaccSplitCommitEdit(Split *s)
        original and new transactions, for the _next_ begin/commit cycle. */
     s->orig_acc = s->acc;
     s->orig_parent = s->parent;
-    if (!qof_commit_edit_part2(QOF_INSTANCE(s), commit_err, NULL, do_destroy))
+    if (!qof_commit_edit_part2(QOF_INSTANCE(s), commit_err, nullptr, do_destroy))
         return;
 
     if (acc)
     {
-        g_object_set(acc, "sort-dirty", TRUE, "balance-dirty", TRUE, NULL);
+        g_object_set(acc, "sort-dirty", TRUE, "balance-dirty", TRUE, nullptr);
         xaccAccountRecomputeBalance(acc);
     }
 }
@@ -1075,7 +1075,7 @@ void
 xaccSplitRollbackEdit(Split *s)
 {
 
-    /* Don't use setters because we want to allow NULL.  This is legit
+    /* Don't use setters because we want to allow nullptr.  This is legit
        only because we don't emit events for changing accounts until
        the final commit. */
     if (s->acc != s->orig_acc)
@@ -1103,7 +1103,7 @@ Split *
 xaccSplitLookup (const GncGUID *guid, QofBook *book)
 {
     QofCollection *col;
-    if (!guid || !book) return NULL;
+    if (!guid || !book) return nullptr;
     col = qof_book_get_collection (book, GNC_ID_SPLIT);
     return (Split *) qof_collection_lookup_entity (col, guid);
 }
@@ -1123,7 +1123,7 @@ xaccSplitDetermineGainStatus (Split *split)
 {
     Split *other;
     GValue v = G_VALUE_INIT;
-    GncGUID *guid = NULL;
+    GncGUID *guid = nullptr;
 
     if (GAINS_STATUS_UNKNOWN != split->gains) return;
 
@@ -1618,7 +1618,7 @@ xaccSplitOrderDateOnly (const Split *sa, const Split *sb)
 static gboolean
 get_corr_account_split(const Split *sa, const Split **retval)
 {
-    *retval = NULL;
+    *retval = nullptr;
     g_return_val_if_fail(sa, FALSE);
 
     if (xaccTransCountSplits (sa->parent) > 2)
@@ -1635,7 +1635,7 @@ get_corr_account_split(const Split *sa, const Split **retval)
 const char *
 xaccSplitGetCorrAccountName(const Split *sa)
 {
-    static const char *split_const = NULL;
+    static const char *split_const = nullptr;
     const Split *other_split;
 
     if (!get_corr_account_split(sa, &other_split))
@@ -1652,7 +1652,7 @@ xaccSplitGetCorrAccountName(const Split *sa)
 char *
 xaccSplitGetCorrAccountFullName(const Split *sa)
 {
-    static const char *split_const = NULL;
+    static const char *split_const = nullptr;
     const Split *other_split;
 
     if (!get_corr_account_split(sa, &other_split))
@@ -1668,7 +1668,7 @@ xaccSplitGetCorrAccountFullName(const Split *sa)
 const char *
 xaccSplitGetCorrAccountCode(const Split *sa)
 {
-    static const char *split_const = NULL;
+    static const char *split_const = nullptr;
     const Split *other_split;
 
     if (!get_corr_account_split(sa, &other_split))
@@ -1864,7 +1864,7 @@ xaccSplitGetDateReconciled (const Split * split)
 Transaction *
 xaccSplitGetParent (const Split *split)
 {
-    return split ? split->parent : NULL;
+    return split ? split->parent : nullptr;
 }
 
 void
@@ -1901,7 +1901,7 @@ xaccSplitSetParent(Split *s, Transaction *t)
         xaccSplitSetValue(s, xaccSplitGetValue(s));
 
         /* add ourselves to the new transaction's list of pending splits. */
-        if (NULL == g_list_find(t->splits, s))
+        if (nullptr == g_list_find(t->splits, s))
             t->splits = g_list_append(t->splits, s);
 
         ed.idx = -1; /* unused */
@@ -1914,7 +1914,7 @@ xaccSplitSetParent(Split *s, Transaction *t)
 GNCLot *
 xaccSplitGetLot (const Split *split)
 {
-    return split ? split->lot : NULL;
+    return split ? split->lot : nullptr;
 }
 
 void
@@ -1929,13 +1929,13 @@ xaccSplitSetLot(Split* split, GNCLot* lot)
 const char *
 xaccSplitGetMemo (const Split *split)
 {
-    return split ? split->memo : NULL;
+    return split ? split->memo : nullptr;
 }
 
 const char *
 xaccSplitGetAction (const Split *split)
 {
-    return split ? split->action : NULL;
+    return split ? split->action : nullptr;
 }
 
 char
@@ -2004,12 +2004,12 @@ xaccSplitGetBook (const Split *split)
 const char *
 xaccSplitGetType(const Split *s)
 {
-    if (!s) return NULL;
+    if (!s) return nullptr;
 
     GValue v = G_VALUE_INIT;
     const char* type;
     qof_instance_get_kvp (QOF_INSTANCE (s), &v, 1, "split-type");
-    type = G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : NULL;
+    type = G_VALUE_HOLDS_STRING (&v) ? g_value_get_string (&v) : nullptr;
     const char *rv;
     if (!type || !g_strcmp0 (type, split_type_normal))
         rv = split_type_normal;
@@ -2049,13 +2049,13 @@ xaccSplitAddPeerSplit (Split *split, const Split *other_split,
 {
     const GncGUID* guid;
 
-    g_return_if_fail (split != NULL);
-    g_return_if_fail (other_split != NULL);
+    g_return_if_fail (split != nullptr);
+    g_return_if_fail (other_split != nullptr);
 
     guid = qof_instance_get_guid (QOF_INSTANCE (other_split));
     xaccTransBeginEdit (split->parent);
     qof_instance_kvp_add_guid (QOF_INSTANCE (split), "lot-split",
-                               gnc_time(NULL), "peer_guid", guid_copy(guid));
+                               gnc_time(nullptr), "peer_guid", guid_copy(guid));
     mark_split (split);
     qof_instance_set_dirty (QOF_INSTANCE (split));
     xaccTransCommitEdit (split->parent);
@@ -2072,8 +2072,8 @@ xaccSplitIsPeerSplit (const Split *split, const Split *other_split)
 {
     const GncGUID* guid;
 
-    g_return_val_if_fail (split != NULL, FALSE);
-    g_return_val_if_fail (other_split != NULL, FALSE);
+    g_return_val_if_fail (split != nullptr, FALSE);
+    g_return_val_if_fail (other_split != nullptr, FALSE);
 
     guid = qof_instance_get_guid (QOF_INSTANCE (other_split));
     return qof_instance_kvp_has_guid (QOF_INSTANCE (split), "lot-split",
@@ -2085,8 +2085,8 @@ xaccSplitRemovePeerSplit (Split *split, const Split *other_split)
 {
     const GncGUID* guid;
 
-    g_return_if_fail (split != NULL);
-    g_return_if_fail (other_split != NULL);
+    g_return_if_fail (split != nullptr);
+    g_return_if_fail (other_split != nullptr);
 
     guid = qof_instance_get_guid (QOF_INSTANCE (other_split));
     xaccTransBeginEdit (split->parent);
@@ -2124,11 +2124,11 @@ Split *
 xaccSplitGetOtherSplit (const Split *split)
 {
     Transaction *trans;
-    Split *other = NULL;
+    Split *other = nullptr;
 
-    if (!split) return NULL;
+    if (!split) return nullptr;
     trans = split->parent;
-    if (!trans) return NULL;
+    if (!trans) return nullptr;
 
     for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
     {
@@ -2140,7 +2140,7 @@ xaccSplitGetOtherSplit (const Split *split)
             continue;
 
         if (other)
-            return NULL;
+            return nullptr;
 
         other = s;
     }
@@ -2154,7 +2154,7 @@ gnc_numeric
 xaccSplitVoidFormerAmount(const Split *split)
 {
     GValue v = G_VALUE_INIT;
-    gnc_numeric *num = NULL;
+    gnc_numeric *num = nullptr;
     gnc_numeric retval;
     g_return_val_if_fail(split, gnc_numeric_zero());
     qof_instance_get_kvp (QOF_INSTANCE (split), &v, 1, void_former_amt_str);
@@ -2169,7 +2169,7 @@ gnc_numeric
 xaccSplitVoidFormerValue(const Split *split)
 {
     GValue v = G_VALUE_INIT;
-    gnc_numeric *num = NULL;
+    gnc_numeric *num = nullptr;
     gnc_numeric retval;
     g_return_val_if_fail(split, gnc_numeric_zero());
     qof_instance_get_kvp (QOF_INSTANCE (split), &v, 1, void_former_val_str);
@@ -2208,8 +2208,8 @@ xaccSplitUnvoid(Split *split)
     xaccSplitSetAmount (split, xaccSplitVoidFormerAmount(split));
     xaccSplitSetValue (split, xaccSplitVoidFormerValue(split));
     xaccSplitSetReconcile(split, NREC);
-    qof_instance_set_kvp (QOF_INSTANCE (split), NULL, 1, void_former_amt_str);
-    qof_instance_set_kvp (QOF_INSTANCE (split), NULL, 1, void_former_val_str);
+    qof_instance_set_kvp (QOF_INSTANCE (split), nullptr, 1, void_former_amt_str);
+    qof_instance_set_kvp (QOF_INSTANCE (split), nullptr, 1, void_former_val_str);
     qof_instance_set_dirty (QOF_INSTANCE (split));
 }
 
@@ -2232,8 +2232,8 @@ static QofObject split_object_def =
     DI(.e_type            = ) GNC_ID_SPLIT,
     DI(.type_label        = ) "Split",
     DI(.create            = ) (void* (*)(QofBook*))xaccMallocSplit,
-    DI(.book_begin        = ) NULL,
-    DI(.book_end          = ) NULL,
+    DI(.book_begin        = ) nullptr,
+    DI(.book_end          = ) nullptr,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
     DI(.foreach           = ) qof_collection_foreach,
@@ -2247,9 +2247,9 @@ split_account_guid_getter (gpointer obj, const QofParam *p)
     Split *s = GNC_SPLIT(obj);
     Account *acc;
 
-    if (!s) return NULL;
+    if (!s) return nullptr;
     acc = xaccSplitGetAccount (s);
-    if (!acc) return NULL;
+    if (!acc) return nullptr;
     return ((gpointer)xaccAccountGetGUID (acc));
 }
 
@@ -2297,23 +2297,23 @@ gboolean xaccSplitRegister (void)
              * queries, should be removed from old queries. */
             {
                 "d-share-amount", QOF_TYPE_DOUBLE,
-                (QofAccessFunc)DxaccSplitGetShareAmount, NULL
+                (QofAccessFunc)DxaccSplitGetShareAmount, nullptr
             },
             {
                 "d-share-int64", QOF_TYPE_INT64,
-                (QofAccessFunc)qof_entity_get_guid, NULL
+                (QofAccessFunc)qof_entity_get_guid, nullptr
             },
             {
                 SPLIT_BALANCE, QOF_TYPE_NUMERIC,
-                (QofAccessFunc)xaccSplitGetBalance, NULL
+                (QofAccessFunc)xaccSplitGetBalance, nullptr
             },
             {
                 SPLIT_CLEARED_BALANCE, QOF_TYPE_NUMERIC,
-                (QofAccessFunc)xaccSplitGetClearedBalance, NULL
+                (QofAccessFunc)xaccSplitGetClearedBalance, nullptr
             },
             {
                 SPLIT_RECONCILED_BALANCE, QOF_TYPE_NUMERIC,
-                (QofAccessFunc)xaccSplitGetReconciledBalance, NULL
+                (QofAccessFunc)xaccSplitGetReconciledBalance, nullptr
             },
             {
                 SPLIT_MEMO, QOF_TYPE_STRING,
@@ -2341,16 +2341,16 @@ gboolean xaccSplitRegister (void)
                 SPLIT_VALUE, QOF_TYPE_DEBCRED,
                 (QofAccessFunc)xaccSplitGetValue, (QofSetterFunc)qofSplitSetValue
             },
-            { SPLIT_TYPE, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetType, NULL },
+            { SPLIT_TYPE, QOF_TYPE_STRING, (QofAccessFunc)xaccSplitGetType, nullptr },
             {
                 SPLIT_VOIDED_AMOUNT, QOF_TYPE_NUMERIC,
-                (QofAccessFunc)xaccSplitVoidFormerAmount, NULL
+                (QofAccessFunc)xaccSplitVoidFormerAmount, nullptr
             },
             {
                 SPLIT_VOIDED_VALUE, QOF_TYPE_NUMERIC,
-                (QofAccessFunc)xaccSplitVoidFormerValue, NULL
+                (QofAccessFunc)xaccSplitVoidFormerValue, nullptr
             },
-            { SPLIT_LOT, GNC_ID_LOT, (QofAccessFunc)xaccSplitGetLot, NULL },
+            { SPLIT_LOT, GNC_ID_LOT, (QofAccessFunc)xaccSplitGetLot, nullptr },
             {
                 SPLIT_TRANS, GNC_ID_TRANS,
                 (QofAccessFunc)xaccSplitGetParent,
@@ -2360,28 +2360,28 @@ gboolean xaccSplitRegister (void)
                 SPLIT_ACCOUNT, GNC_ID_ACCOUNT,
                 (QofAccessFunc)xaccSplitGetAccount, (QofSetterFunc)qofSplitSetAccount
             },
-            { SPLIT_ACCOUNT_GUID, QOF_TYPE_GUID, split_account_guid_getter, NULL },
+            { SPLIT_ACCOUNT_GUID, QOF_TYPE_GUID, split_account_guid_getter, nullptr },
             /*  these are no-ops to register the parameter names (for sorting) but
                 they return an allocated object which getters cannot do.  */
-            { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op, NULL },
-            { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op, NULL },
-            { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op, NULL },
-            { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, NULL },
+            { SPLIT_ACCT_FULLNAME, SPLIT_ACCT_FULLNAME, no_op, nullptr },
+            { SPLIT_CORR_ACCT_NAME, SPLIT_CORR_ACCT_NAME, no_op, nullptr },
+            { SPLIT_CORR_ACCT_CODE, SPLIT_CORR_ACCT_CODE, no_op, nullptr },
+            { QOF_PARAM_BOOK, QOF_ID_BOOK, (QofAccessFunc)xaccSplitGetBook, nullptr },
             {
                 QOF_PARAM_GUID, QOF_TYPE_GUID,
-                (QofAccessFunc)qof_entity_get_guid, NULL
+                (QofAccessFunc)qof_entity_get_guid, nullptr
             },
-            { NULL },
+            { nullptr },
         };
 
     qof_class_register (GNC_ID_SPLIT, (QofSortFunc)xaccSplitOrder, params);
     qof_class_register (SPLIT_ACCT_FULLNAME,
-                        (QofSortFunc)xaccSplitCompareAccountFullNames, NULL);
+                        (QofSortFunc)xaccSplitCompareAccountFullNames, nullptr);
     qof_class_register (SPLIT_CORR_ACCT_NAME,
                         (QofSortFunc)xaccSplitCompareOtherAccountFullNames,
-                        NULL);
+                        nullptr);
     qof_class_register (SPLIT_CORR_ACCT_CODE,
-                        (QofSortFunc)xaccSplitCompareOtherAccountCodes, NULL);
+                        (QofSortFunc)xaccSplitCompareOtherAccountCodes, nullptr);
 
     return qof_object_register (&split_object_def);
 }
