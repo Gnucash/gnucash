@@ -72,7 +72,6 @@ namespace bl = boost::locale;
 
 /* This static indicates the debugging module that this .o belongs to. */
 static QofLogModule log_module = GNC_MOD_GUI;
-static gchar *userdata_migration_msg = NULL;
 
 static void
 load_gnucash_plugins()
@@ -207,18 +206,6 @@ scm_run_gnucash (void *data, [[maybe_unused]] int argc, [[maybe_unused]] char **
         gnc_ui_new_user_dialog();
     }
 
-    if (userdata_migration_msg)
-    {
-        GtkWidget *dialog = gtk_message_dialog_new(NULL, GTK_DIALOG_MODAL,
-                                                   GTK_MESSAGE_INFO,
-                                                   GTK_BUTTONS_OK,
-                                                   "%s",
-                                                   userdata_migration_msg);
-        gnc_destroy_splash_screen();
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
-        g_free (userdata_migration_msg);
-    }
     /* Ensure temporary preferences are temporary */
     gnc_prefs_reset_group (GNC_PREFS_GROUP_WARNINGS_TEMP);
 
