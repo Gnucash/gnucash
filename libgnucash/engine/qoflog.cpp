@@ -61,11 +61,11 @@
 #define QOF_LOG_INDENT_WIDTH 4
 #define NUM_CLOCKS 10
 
-static FILE *fout = NULL;
-static gchar* function_buffer = NULL;
+static FILE *fout = nullptr;
+static gchar* function_buffer = nullptr;
 static gint qof_log_num_spaces = 0;
-static GLogFunc previous_handler = NULL;
-static gchar* qof_logger_format = NULL;
+static GLogFunc previous_handler = nullptr;
+static gchar* qof_logger_format = nullptr;
 static QofLogModule log_module = "qof";
 
 using StrVec = std::vector<std::string>;
@@ -90,7 +90,7 @@ struct ModuleEntry
     MEVec m_children;
 };
 
-static ModuleEntryPtr _modules = NULL;
+static ModuleEntryPtr _modules = nullptr;
 
 static ModuleEntry*
 get_modules()
@@ -155,7 +155,7 @@ qof_log_set_file(FILE *outfile)
 void
 qof_log_init(void)
 {
-    qof_log_init_filename(NULL);
+    qof_log_init_filename(nullptr);
 }
 
 static void
@@ -180,14 +180,14 @@ log4glib_handler(const gchar     *log_domain,
 #endif
             ;
         const char *level_str = qof_log_level_to_string(level);
-        now = gnc_time (NULL);
+        now = gnc_time (nullptr);
         gnc_localtime_r (&now, &now_tm);
         qof_strftime(timestamp_buf, 9, format_24hour, &now_tm);
 
         fprintf(fout, qof_logger_format,
                 timestamp_buf,
                 5, level_str,
-                (log_domain == NULL ? "" : log_domain),
+                (log_domain == nullptr ? "" : log_domain),
                 qof_log_num_spaces, "",
                 message,
                 (g_str_has_suffix(message, "\n") ? "" : "\n"));
@@ -198,7 +198,7 @@ log4glib_handler(const gchar     *log_domain,
     else
     {
          // chain
-         previous_handler(log_domain, log_level, message, NULL);
+         previous_handler(log_domain, log_level, message, nullptr);
     }
     */
 }
@@ -217,7 +217,7 @@ qof_log_init_filename(const gchar* log_filename)
         int fd;
         gchar *fname;
 
-        if (fout != NULL && fout != stderr && fout != stdout)
+        if (fout != nullptr && fout != stderr && fout != stdout)
             fclose(fout);
 
         fname = g_strconcat(log_filename, ".XXXXXX.log", nullptr);
@@ -251,7 +251,7 @@ qof_log_init_filename(const gchar* log_filename)
     if (!fout)
         fout = stderr;
 
-    if (previous_handler == NULL)
+    if (previous_handler == nullptr)
         previous_handler = g_log_set_default_handler(log4glib_handler, modules);
 
     if (warn_about_missing_permission)
@@ -266,24 +266,24 @@ qof_log_shutdown (void)
     if (fout && fout != stderr && fout != stdout)
     {
         fclose(fout);
-        fout = NULL;
+        fout = nullptr;
     }
 
     if (function_buffer)
     {
         g_free(function_buffer);
-        function_buffer = NULL;
+        function_buffer = nullptr;
     }
 
-    if (_modules != NULL)
+    if (_modules != nullptr)
     {
         _modules = nullptr;
     }
 
-    if (previous_handler != NULL)
+    if (previous_handler != nullptr)
     {
-        g_log_set_default_handler(previous_handler, NULL);
-        previous_handler = NULL;
+        g_log_set_default_handler(previous_handler, nullptr);
+        previous_handler = nullptr;
     }
 }
 
@@ -376,11 +376,11 @@ qof_log_prettify (const char *name)
     p = g_strstr_len (buffer, length, "(");
     if (p) *p = '\0';
     begin = g_strrstr (buffer, "*");
-    if (begin == NULL)
+    if (begin == nullptr)
         begin = g_strrstr (buffer, " ");
     else if (* (begin + 1) == ' ')
         ++ begin;
-    if (begin != NULL)
+    if (begin != nullptr)
         p = begin + 1;
     else
         p = buffer;
@@ -415,7 +415,7 @@ void
 qof_log_parse_log_config(const char *filename)
 {
     const gchar *levels_group = "levels", *output_group = "output";
-    GError *err = NULL;
+    GError *err = nullptr;
     GKeyFile *conf = g_key_file_new();
 
     if (!g_key_file_load_from_file(conf, filename, G_KEY_FILE_NONE, &err))
@@ -432,18 +432,18 @@ qof_log_parse_log_config(const char *filename)
         unsigned int key_idx;
         gchar **levels;
         gint logger_max_name_length = 12;
-        gchar *str = NULL;
+        gchar *str = nullptr;
 
-        levels = g_key_file_get_keys(conf, levels_group, &num_levels, NULL);
+        levels = g_key_file_get_keys(conf, levels_group, &num_levels, nullptr);
 
-        for (key_idx = 0; key_idx < num_levels && levels[key_idx] != NULL; key_idx++)
+        for (key_idx = 0; key_idx < num_levels && levels[key_idx] != nullptr; key_idx++)
         {
             QofLogLevel level;
-            gchar *logger_name = NULL, *level_str = NULL;
+            gchar *logger_name = nullptr, *level_str = nullptr;
 
             logger_name = g_strdup(levels[key_idx]);
             logger_max_name_length = MAX (logger_max_name_length, (gint) strlen (logger_name));
-            level_str = g_key_file_get_string(conf, levels_group, logger_name, NULL);
+            level_str = g_key_file_get_string(conf, levels_group, logger_name, nullptr);
             level = qof_log_level_from_string(level_str);
 
             DEBUG("setting log [%s] to level [%s=%d]", logger_name, level_str, level);
@@ -468,8 +468,8 @@ qof_log_parse_log_config(const char *filename)
         unsigned int output_idx;
         gchar **outputs;
 
-        outputs = g_key_file_get_keys(conf, output_group, &num_outputs, NULL);
-        for (output_idx = 0; output_idx < num_outputs && outputs[output_idx] != NULL; output_idx++)
+        outputs = g_key_file_get_keys(conf, output_group, &num_outputs, nullptr);
+        for (output_idx = 0; output_idx < num_outputs && outputs[output_idx] != nullptr; output_idx++)
         {
             gchar *key = outputs[output_idx];
             gchar *value;
@@ -480,7 +480,7 @@ qof_log_parse_log_config(const char *filename)
                 continue;
             }
 
-            value = g_key_file_get_string(conf, output_group, key, NULL);
+            value = g_key_file_get_string(conf, output_group, key, nullptr);
             DEBUG("setting [output].to=[%s]", value);
             qof_log_init_filename_special(value);
             g_free(value);
