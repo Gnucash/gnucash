@@ -150,7 +150,7 @@ set (engine_SOURCES
   Split.cpp
   TransLog.c
   Transaction.cpp
-  cap-gains.c
+  cap-gains.cpp
   cashobjects.cpp
   gnc-accounting-period.c
   gnc-aqbanking-templates.cpp
