@@ -138,7 +138,7 @@ add_custom_target(iso-4217-c DEPENDS ${ISO_4217_C})
 set (engine_SOURCES
   Account.cpp
   Recurrence.cpp
-  Query.c
+  Query.cpp
   SchedXaction.c
   SX-book.c
   SX-ttinfo.c
