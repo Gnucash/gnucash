@@ -32,8 +32,8 @@
 static QofLogModule log_module = QOF_MOD_OBJECT;
 
 static gboolean object_is_initialized = FALSE;
-static GList *object_modules = NULL;
-static GList *book_list = NULL;
+static GList *object_modules = nullptr;
+static GList *book_list = nullptr;
 
 /*
  * These getters are used in tests to reach static vars from outside
@@ -66,15 +66,15 @@ qof_object_new_instance (QofIdTypeConst type_name, QofBook *book)
 {
     const QofObject *obj;
 
-    if (!type_name) return NULL;
+    if (!type_name) return nullptr;
 
     obj = qof_object_lookup (type_name);
-    if (!obj) return NULL;
+    if (!obj) return nullptr;
 
     if (obj->create)
         return (obj->create (book));
 
-    return NULL;
+    return nullptr;
 }
 
 void qof_object_book_begin (QofBook *book)
@@ -169,7 +169,7 @@ qof_object_compliance (QofIdTypeConst type_name, gboolean warn)
     const QofObject *obj;
 
     obj = qof_object_lookup(type_name);
-    if ((obj->create == NULL) || (obj->foreach == NULL))
+    if ((obj->create == nullptr) || (obj->foreach == nullptr))
     {
         if (warn)
         {
@@ -222,7 +222,7 @@ do_prepend (QofInstance *qof_p, gpointer list_p)
 void
 qof_object_foreach_sorted (QofIdTypeConst type_name, QofBook *book, QofInstanceForeachCB cb, gpointer user_data)
 {
-    GList *list = NULL;
+    GList *list = nullptr;
     GList *iter;
 
     qof_object_foreach(type_name, book, do_prepend, &list);
@@ -249,25 +249,25 @@ qof_object_printable (QofIdTypeConst type_name, gpointer obj)
 {
     const QofObject *b_obj;
 
-    if (!type_name || !obj) return NULL;
+    if (!type_name || !obj) return nullptr;
 
     b_obj = qof_object_lookup (type_name);
-    if (!b_obj) return NULL;
+    if (!b_obj) return nullptr;
 
     if (b_obj->printable)
         return (b_obj->printable (obj));
 
-    return NULL;
+    return nullptr;
 }
 
 const char * qof_object_get_type_label (QofIdTypeConst type_name)
 {
     const QofObject *obj;
 
-    if (!type_name) return NULL;
+    if (!type_name) return nullptr;
 
     obj = qof_object_lookup (type_name);
-    if (!obj) return NULL;
+    if (!obj) return nullptr;
 
     return (obj->type_label);
 }
@@ -285,9 +285,9 @@ void qof_object_shutdown (void)
     g_return_if_fail (object_is_initialized == TRUE);
 
     g_list_free (object_modules);
-    object_modules = NULL;
+    object_modules = nullptr;
     g_list_free (book_list);
-    book_list = NULL;
+    book_list = nullptr;
     object_is_initialized = FALSE;
 }
 
@@ -324,9 +324,9 @@ const QofObject * qof_object_lookup (QofIdTypeConst name)
     GList *iter;
     const QofObject *obj;
 
-    g_return_val_if_fail (object_is_initialized, NULL);
+    g_return_val_if_fail (object_is_initialized, nullptr);
 
-    if (!name) return NULL;
+    if (!name) return nullptr;
 
     for (iter = object_modules; iter; iter = iter->next)
     {
@@ -334,7 +334,7 @@ const QofObject * qof_object_lookup (QofIdTypeConst name)
         if (!g_strcmp0 (obj->e_type, name))
             return obj;
     }
-    return NULL;
+    return nullptr;
 }
 
 /* ========================= END OF FILE =================== */

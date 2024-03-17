@@ -471,7 +471,7 @@ test_gnc_account_list_name_violations (Fixture *fixture, gconstpointer pData)
 {
     auto log_level = static_cast<GLogLevelFlags>(G_LOG_LEVEL_CRITICAL | G_LOG_FLAG_FATAL);
     auto log_domain = "gnc.engine";
-    auto msg = ": assertion 'separator != NULL' failed";
+    auto msg = ": assertion 'separator != nullptr' failed";
     auto check = test_error_struct_new(log_domain, log_level, msg);
     GList *results, *res_iter;
     auto sep = ":";

@@ -90,31 +90,31 @@ static const char * query_choice_type = QOF_TYPE_CHOICE;
 
 /* Tables for predicate storage and lookup */
 static gboolean initialized = FALSE;
-static GHashTable *predTable = NULL;
-static GHashTable *cmpTable = NULL;
-static GHashTable *copyTable = NULL;
-static GHashTable *freeTable = NULL;
-static GHashTable *toStringTable = NULL;
-static GHashTable *predEqualTable = NULL;
+static GHashTable *predTable = nullptr;
+static GHashTable *cmpTable = nullptr;
+static GHashTable *copyTable = nullptr;
+static GHashTable *freeTable = nullptr;
+static GHashTable *toStringTable = nullptr;
+static GHashTable *predEqualTable = nullptr;
 
 #define COMPARE_ERROR -3
 #define PREDICATE_ERROR -2
 
 #define VERIFY_PDATA(str) { \
-        g_return_if_fail (pd != NULL); \
+        g_return_if_fail (pd != nullptr); \
         g_return_if_fail (pd->type_name == str || \
                         !g_strcmp0 (str, pd->type_name)); \
 }
 #define VERIFY_PDATA_R(str) { \
-        g_return_val_if_fail (pd != NULL, NULL); \
+        g_return_val_if_fail (pd != nullptr, nullptr); \
         g_return_val_if_fail (pd->type_name == str || \
                                 !g_strcmp0 (str, pd->type_name), \
-                                NULL); \
+                                nullptr); \
 }
 #define VERIFY_PREDICATE(str) { \
-        g_return_val_if_fail (getter != NULL, PREDICATE_ERROR); \
-        g_return_val_if_fail (getter->param_getfcn != NULL, PREDICATE_ERROR); \
-        g_return_val_if_fail (pd != NULL, PREDICATE_ERROR); \
+        g_return_val_if_fail (getter != nullptr, PREDICATE_ERROR); \
+        g_return_val_if_fail (getter->param_getfcn != nullptr, PREDICATE_ERROR); \
+        g_return_val_if_fail (pd != nullptr, PREDICATE_ERROR); \
         g_return_val_if_fail (pd->type_name == str || \
                                 !g_strcmp0 (str, pd->type_name), \
                                 PREDICATE_ERROR); \
@@ -220,7 +220,7 @@ qof_string_number_compare_func (gpointer a, gpointer b, gint options,
     s1 = ((query_string_getter)getter->param_getfcn) (a, getter);
     s2 = ((query_string_getter)getter->param_getfcn) (b, getter);
 
-    // Deal with NULL strings
+    // Deal with nullptr strings
     if (s1 == s2)  return 0;
     if (!s1 && s2) return -1;
     if (s1 && !s2) return 1;
@@ -282,10 +282,10 @@ qof_query_string_predicate (QofQueryCompare how,
 {
     query_string_t pdata;
 
-    g_return_val_if_fail (str, NULL);
-//    g_return_val_if_fail (*str != '\0', NULL);
+    g_return_val_if_fail (str, nullptr);
+//    g_return_val_if_fail (*str != '\0', nullptr);
     g_return_val_if_fail (how == QOF_COMPARE_CONTAINS || how == QOF_COMPARE_NCONTAINS ||
-                          how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, NULL);
+                          how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, nullptr);
 
     pdata = g_new0 (query_string_def, 1);
     pdata->pd.type_name = query_string_type;
@@ -305,7 +305,7 @@ qof_query_string_predicate (QofQueryCompare how,
         {
             g_free(pdata->matchstring);
             g_free(pdata);
-            return NULL;
+            return nullptr;
         }
         pdata->is_regex = TRUE;
     }
@@ -320,7 +320,7 @@ string_to_string (gpointer object, QofParam *getter)
     res = ((query_string_getter)getter->param_getfcn)(object, getter);
     if (res)
         return g_strdup (res);
-    return NULL;
+    return nullptr;
 }
 
 /* QOF_TYPE_DATE =================================================== */
@@ -452,7 +452,7 @@ date_to_string (gpointer object, QofParam *getter)
     if (tt != INT64_MAX)
         return qof_print_date (tt);
 
-    return NULL;
+    return nullptr;
 }
 
 /* QOF_TYPE_NUMERIC ================================================= */
@@ -595,7 +595,7 @@ guid_match_predicate (gpointer object, QofParam *getter,
 {
     query_guid_t pdata = (query_guid_t)pd;
     GList *node, *o_list;
-    const GncGUID *guid = NULL;
+    const GncGUID *guid = nullptr;
 
     VERIFY_PREDICATE (query_guid_type);
 
@@ -620,15 +620,15 @@ guid_match_predicate (gpointer object, QofParam *getter,
             }
 
             /*
-             * If o_list is NULL, we've walked the whole list without finding
+             * If o_list is nullptr, we've walked the whole list without finding
              * a match.  Therefore break out now, the match has failed.
              */
-            if (o_list == NULL)
+            if (o_list == nullptr)
                 break;
         }
 
         /*
-         * The match is complete.  If node == NULL then we've successfully
+         * The match is complete.  If node == nullptr then we've successfully
          * found a match for all the guids in the predicate.  Return
          * appropriately below.
          */
@@ -657,14 +657,14 @@ guid_match_predicate (gpointer object, QofParam *getter,
             }
 
             /* Check to see if we found a match.  If so, break now */
-            if (node2 != NULL)
+            if (node2 != nullptr)
                 break;
         }
 
         g_list_free(o_list);
 
         /* yea, node may point to an invalid location, but that's ok.
-         * we're not _USING_ the value, just checking that it's non-NULL
+         * we're not _USING_ the value, just checking that it's non-nullptr
          */
 
         break;
@@ -687,14 +687,14 @@ guid_match_predicate (gpointer object, QofParam *getter,
     {
     case QOF_GUID_MATCH_ANY:
     case QOF_GUID_MATCH_LIST_ANY:
-        return (node != NULL);
+        return (node != nullptr);
         break;
     case QOF_GUID_MATCH_NONE:
     case QOF_GUID_MATCH_ALL:
-        return (node == NULL);
+        return (node == nullptr);
         break;
     case QOF_GUID_MATCH_NULL:
-        return ((guid == NULL) || guid_equal(guid, guid_null()));
+        return ((guid == nullptr) || guid_equal(guid, guid_null()));
         break;
     default:
         PWARN ("bad match type");
@@ -751,7 +751,7 @@ qof_query_guid_predicate (QofGuidMatch options, GList *guid_list)
 
     /* An empty list of guids is only valid when testing for a null GUID value */
     if (!guid_list)
-        g_return_val_if_fail (options == QOF_GUID_MATCH_NULL, NULL);
+        g_return_val_if_fail (options == QOF_GUID_MATCH_NULL, nullptr);
 
     pdata = g_new0 (query_guid_def, 1);
     pdata->pd.how = QOF_COMPARE_EQUAL;
@@ -1111,7 +1111,7 @@ QofQueryPredData *
 qof_query_boolean_predicate (QofQueryCompare how, gboolean val)
 {
     query_boolean_t pdata;
-    g_return_val_if_fail (how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, NULL);
+    g_return_val_if_fail (how == QOF_COMPARE_EQUAL || how == QOF_COMPARE_NEQ, nullptr);
 
     pdata = g_new0 (query_boolean_def, 1);
     pdata->pd.type_name = query_boolean_type;
@@ -1196,7 +1196,7 @@ QofQueryPredData *
 qof_query_char_predicate (QofCharMatch options, const char *chars)
 {
     query_char_t pdata;
-    g_return_val_if_fail (chars, NULL);
+    g_return_val_if_fail (chars, nullptr);
     pdata = g_new0 (query_char_def, 1);
     pdata->pd.type_name = query_char_type;
     pdata->pd.how = QOF_COMPARE_EQUAL;
@@ -1225,7 +1225,7 @@ collect_match_predicate (gpointer object, QofParam *getter,
 
     pdata = (query_coll_t)pd;
     VERIFY_PREDICATE (query_collect_type);
-    guid = NULL;
+    guid = nullptr;
     switch (pdata->options)
     {
     case QOF_GUID_MATCH_ALL :
@@ -1242,7 +1242,7 @@ collect_match_predicate (gpointer object, QofParam *getter,
                     break;
                 }
             }
-            if (o_list == NULL)
+            if (o_list == nullptr)
             {
                 break;
             }
@@ -1262,7 +1262,7 @@ collect_match_predicate (gpointer object, QofParam *getter,
                     break;
                 }
             }
-            if (node2 != NULL)
+            if (node2 != nullptr)
             {
                 break;
             }
@@ -1286,18 +1286,18 @@ collect_match_predicate (gpointer object, QofParam *getter,
     case QOF_GUID_MATCH_ANY :
     case QOF_GUID_MATCH_LIST_ANY :
     {
-        return (node != NULL);
+        return (node != nullptr);
         break;
     }
     case QOF_GUID_MATCH_NONE :
     case QOF_GUID_MATCH_ALL :
     {
-        return (node == NULL);
+        return (node == nullptr);
         break;
     }
     case QOF_GUID_MATCH_NULL :
     {
-        return ((guid == NULL) || guid_equal(guid, guid_null()));
+        return ((guid == nullptr) || guid_equal(guid, guid_null()));
         break;
     }
     default :
@@ -1328,7 +1328,7 @@ collect_free_pdata (QofQueryPredData *pd)
     query_coll_t pdata;
     GList *node;
 
-    node = NULL;
+    node = nullptr;
     pdata = (query_coll_t) pd;
     VERIFY_PDATA (query_collect_type);
     for (node = pdata->guids; node; node = node->next)
@@ -1380,14 +1380,14 @@ qof_query_collect_predicate (QofGuidMatch options, QofCollection *coll)
 {
     query_coll_t pdata;
 
-    g_return_val_if_fail (coll, NULL);
+    g_return_val_if_fail (coll, nullptr);
     pdata = g_new0 (query_coll_def, 1);
     pdata->pd.type_name = query_collect_type;
     pdata->options = options;
     qof_collection_foreach(coll, query_collect_cb, pdata);
-    if (NULL == pdata->guids)
+    if (nullptr == pdata->guids)
     {
-        return NULL;
+        return nullptr;
     }
     return ((QofQueryPredData*)pdata);
 }
@@ -1400,7 +1400,7 @@ choice_match_predicate (gpointer object, QofParam *getter,
 {
     query_choice_t pdata = (query_choice_t)pd;
     GList *node, *o_list;
-    const GncGUID *guid = NULL;
+    const GncGUID *guid = nullptr;
 
     VERIFY_PREDICATE (query_choice_type);
 
@@ -1425,15 +1425,15 @@ choice_match_predicate (gpointer object, QofParam *getter,
             }
 
             /*
-             * If o_list is NULL, we've walked the whole list without finding
+             * If o_list is nullptr, we've walked the whole list without finding
              * a match.  Therefore break out now, the match has failed.
              */
-            if (o_list == NULL)
+            if (o_list == nullptr)
                 break;
         }
 
         /*
-         * The match is complete.  If node == NULL then we've successfully
+         * The match is complete.  If node == nullptr then we've successfully
          * found a match for all the guids in the predicate.  Return
          * appropriately below.
          */
@@ -1455,7 +1455,7 @@ choice_match_predicate (gpointer object, QofParam *getter,
                     break;
             }
 
-            if (node2 != NULL)
+            if (node2 != nullptr)
                 break;
         }
 
@@ -1481,14 +1481,14 @@ choice_match_predicate (gpointer object, QofParam *getter,
     {
     case QOF_GUID_MATCH_ANY:
     case QOF_GUID_MATCH_LIST_ANY:
-        return (node != NULL);
+        return (node != nullptr);
         break;
     case QOF_GUID_MATCH_NONE:
     case QOF_GUID_MATCH_ALL:
-        return (node == NULL);
+        return (node == nullptr);
         break;
     case QOF_GUID_MATCH_NULL:
-        return ((guid == NULL) || guid_equal(guid, guid_null()));
+        return ((guid == nullptr) || guid_equal(guid, guid_null()));
         break;
     default:
         PWARN ("bad match type");
@@ -1543,7 +1543,7 @@ qof_query_choice_predicate (QofGuidMatch options, GList *guid_list)
     query_choice_t pdata;
     GList *node;
 
-    if (NULL == guid_list) return NULL;
+    if (nullptr == guid_list) return nullptr;
 
     pdata = g_new0 (query_choice_def, 1);
     pdata->pd.how = QOF_COMPARE_EQUAL;
@@ -1645,8 +1645,8 @@ static void init_tables (void)
             numeric_predicate_equal
         },
         {
-            QOF_TYPE_GUID, guid_match_predicate, NULL,
-            guid_copy_predicate, guid_free_pdata, NULL,
+            QOF_TYPE_GUID, guid_match_predicate, nullptr,
+            guid_copy_predicate, guid_free_pdata, nullptr,
             guid_predicate_equal
         },
         {
@@ -1676,12 +1676,12 @@ static void init_tables (void)
         },
         {
             QOF_TYPE_COLLECT, collect_match_predicate, collect_compare_func,
-            collect_copy_predicate, collect_free_pdata, NULL,
+            collect_copy_predicate, collect_free_pdata, nullptr,
             collect_predicate_equal
         },
         {
-            QOF_TYPE_CHOICE, choice_match_predicate, NULL,
-            choice_copy_predicate, choice_free_pdata, NULL, choice_predicate_equal
+            QOF_TYPE_CHOICE, choice_match_predicate, nullptr,
+            choice_copy_predicate, choice_free_pdata, nullptr, choice_predicate_equal
         },
     };
 
@@ -1702,7 +1702,7 @@ static QueryPredicateCopyFunc
 qof_query_copy_predicate (QofType type)
 {
     QueryPredicateCopyFunc rc;
-    g_return_val_if_fail (type, NULL);
+    g_return_val_if_fail (type, nullptr);
     rc = reinterpret_cast<QueryPredicateCopyFunc>(g_hash_table_lookup (copyTable, type));
     return rc;
 }
@@ -1710,7 +1710,7 @@ qof_query_copy_predicate (QofType type)
 static QueryPredDataFree
 qof_query_predicate_free (QofType type)
 {
-    g_return_val_if_fail (type, NULL);
+    g_return_val_if_fail (type, nullptr);
     return reinterpret_cast<QueryPredDataFree>(g_hash_table_lookup (freeTable, type));
 }
 
@@ -1750,14 +1750,14 @@ void qof_query_core_shutdown (void)
 QofQueryPredicateFunc
 qof_query_core_get_predicate (QofType type)
 {
-    g_return_val_if_fail (type, NULL);
+    g_return_val_if_fail (type, nullptr);
     return reinterpret_cast<QofQueryPredicateFunc>(g_hash_table_lookup (predTable, type));
 }
 
 QofCompareFunc
 qof_query_core_get_compare (QofType type)
 {
-    g_return_val_if_fail (type, NULL);
+    g_return_val_if_fail (type, nullptr);
     return reinterpret_cast<QofCompareFunc>(g_hash_table_lookup (cmpTable, type));
 }
 
@@ -1778,8 +1778,8 @@ qof_query_core_predicate_copy (const QofQueryPredData *pdata)
 {
     QueryPredicateCopyFunc copy;
 
-    g_return_val_if_fail (pdata, NULL);
-    g_return_val_if_fail (pdata->type_name, NULL);
+    g_return_val_if_fail (pdata, nullptr);
+    g_return_val_if_fail (pdata->type_name, nullptr);
 
     copy = qof_query_copy_predicate (pdata->type_name);
     return (copy (pdata));
@@ -1791,12 +1791,12 @@ qof_query_core_to_string (QofType type, gpointer object,
 {
     QueryToString toString;
 
-    g_return_val_if_fail (type, NULL);
-    g_return_val_if_fail (object, NULL);
-    g_return_val_if_fail (getter, NULL);
+    g_return_val_if_fail (type, nullptr);
+    g_return_val_if_fail (object, nullptr);
+    g_return_val_if_fail (getter, nullptr);
 
     toString = reinterpret_cast<QueryToString>(g_hash_table_lookup (toStringTable, type));
-    g_return_val_if_fail (toString, NULL);
+    g_return_val_if_fail (toString, nullptr);
 
     return toString (object, getter);
 }
