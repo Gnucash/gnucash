@@ -177,7 +177,7 @@ set (engine_SOURCES
   gnc-uri-utils.c
   engine-helpers.c
   guid.cpp
-  policy.c
+  policy.cpp
   gncAddress.c
   gncBillTerm.c
   gncBusiness.c
