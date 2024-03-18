@@ -83,10 +83,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-17 08:37+0100\n"
-"PO-Revision-Date: 2024-02-17 17:02+0000\n"
+"PO-Revision-Date: 2024-03-17 12:01+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
@@ -95,11 +95,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -30153,10 +30153,8 @@ msgstr "Asignar como remuneración…"
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:446
 #: gnucash/ui/gnc-plugin-page-register.ui:558
-#, fuzzy
-#| msgid "Assign the selected transaction as payment"
 msgid "Assign the selected transaction as payment."
-msgstr "Asigna la transacción seleccionada como remuneración"
+msgstr "Asigna la transacción seleccionada como pago."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:450
@@ -30167,37 +30165,27 @@ msgstr "Editar remuneración…"
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:452
 #: gnucash/ui/gnc-plugin-page-register.ui:564
-#, fuzzy
-#| msgid "Edit the payment this transaction is a part of"
 msgid "Edit the payment this transaction is a part of."
-msgstr "Edita la remuneración de esta transacción es una parte de"
+msgstr "Edite el pago del que forma parte esta transacción."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:35
-#, fuzzy
-#| msgid "Edit the selected account"
 msgid "Edit the selected account."
-msgstr "Edita la cuenta seleccionada"
+msgstr "Edita la cuenta seleccionada."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:42
-#, fuzzy
-#| msgid "Find an account"
 msgid "Find an account."
-msgstr "Busca una cuenta"
+msgstr "Busca una cuenta."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:52
-#, fuzzy
-#| msgid "Find transactions with a search"
 msgid "Find transactions with a search."
-msgstr "Encuentra transacciones con una búsqueda"
+msgstr "Encuentra transacciones con una búsqueda."
 
 #. Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string
 #: gnucash/ui/gnc-plugin-page-register.ui:63
-#, fuzzy
-#| msgid "Setup relevant accounts for tax reports, e.g. US income tax"
 msgid "Setup relevant accounts for tax reports, e.g. US income tax."
 msgstr ""
-"Configura cuentas relevantes para los boletines imponibles, p. e. "
-"imposiciones sobre ingresos EUA"
+"Configure cuentas relevantes para informes de impuestos, por ejemplo, "
+"impuesto sobre la renta de EE. UU."
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/ui/gnc-plugin-page-register.ui:71
@@ -30205,10 +30193,8 @@ msgid "_Basic Ledger"
 msgstr "Libro _Básico"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:74
-#, fuzzy
-#| msgid "Show transactions on one or two lines"
 msgid "Show transactions on one or two lines."
-msgstr "Muestra las transacciones en una o dos líneas"
+msgstr "Muestra las transacciones en una o dos líneas."
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/ui/gnc-plugin-page-register.ui:79
@@ -30216,20 +30202,15 @@ msgid "_Auto-Split Ledger"
 msgstr "_Libro General Auto-Desglosado"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:82
-#, fuzzy
-#| msgid ""
-#| "Show transactions on one or two lines and expand the current transaction"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction."
 msgstr ""
 "Muestra las transacciones en una o dos líneas y expande la transacción "
-"efectiva"
+"actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
-#, fuzzy
-#| msgid "Show expanded transactions with all splits"
 msgid "Show expanded transactions with all splits."
-msgstr "Muestra transacciones expandidas con todos los desgloses"
+msgstr "Muestra transacciones ampliadas con todas las divisiones."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:107
 #: gnucash/ui/gnc-plugin-page-register.ui:349
@@ -30238,177 +30219,133 @@ msgid "_Sort By…"
 msgstr "_Ordenar por…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:123
-#, fuzzy
-#| msgid "Refresh this window"
 msgid "Refresh this window."
-msgstr "Recarga esta ventana"
+msgstr "Recarga esta ventana."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:132
-#, fuzzy
-#| msgid "Cut the selected transaction into clipboard"
 msgid "Cut the selected transaction into clipboard."
-msgstr "Corta la transacción seleccionada al portapapeles"
+msgstr "Corta la transacción seleccionada al portapapeles."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:138
-#, fuzzy
-#| msgid "Copy the selected transaction into clipboard"
 msgid "Copy the selected transaction into clipboard."
-msgstr "Copia la transacción seleccionada al portapapeles"
+msgstr "Copia la transacción seleccionada al portapapeles."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:144
-#, fuzzy
-#| msgid "Paste the transaction from the clipboard"
 msgid "Paste the transaction from the clipboard."
-msgstr "Pega la transacción desde el portapapeles"
+msgstr "Pega la transacción desde el portapapeles."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:150
 #: gnucash/ui/gnc-plugin-page-register.ui:366
 #: gnucash/ui/gnc-plugin-page-register.ui:576
-#, fuzzy
-#| msgid "Make a copy of the current transaction"
 msgid "Make a copy of the current transaction."
-msgstr "Crea una copia de la transacción efectiva"
+msgstr "Crea una copia de la transacción actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:156
 #: gnucash/ui/gnc-plugin-page-register.ui:371
 #: gnucash/ui/gnc-plugin-page-register.ui:581
-#, fuzzy
-#| msgid "Delete the current transaction"
 msgid "Delete the current transaction."
-msgstr "Borra la transacción efectiva"
+msgstr "Borra la transacción actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:162
 #: gnucash/ui/gnc-plugin-page-register.ui:376
 #: gnucash/ui/gnc-plugin-page-register.ui:488
 #: gnucash/ui/gnc-plugin-page-register.ui:586
 #: gnucash/ui/gnc-plugin-page-register.ui:625
-#, fuzzy
-#| msgid "Remove all splits in the current transaction"
 msgid "Remove all splits in the current transaction."
-msgstr "Quita todos los desgloses dentro de la transacción efectiva"
+msgstr "Quita todos los desgloses dentro de la transacción actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:171
 #: gnucash/ui/gnc-plugin-page-register.ui:383
 #: gnucash/ui/gnc-plugin-page-register.ui:495
 #: gnucash/ui/gnc-plugin-page-register.ui:593
 #: gnucash/ui/gnc-plugin-page-register.ui:632
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Record the current transaction."
-msgstr "Registra la transacción efectiva"
+msgstr "Registra la transacción actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:177
 #: gnucash/ui/gnc-plugin-page-register.ui:388
 #: gnucash/ui/gnc-plugin-page-register.ui:500
 #: gnucash/ui/gnc-plugin-page-register.ui:598
 #: gnucash/ui/gnc-plugin-page-register.ui:637
-#, fuzzy
-#| msgid "Cancel the current transaction"
 msgid "Cancel the current transaction."
-msgstr "Cancela la transacción efectiva"
+msgstr "Cancela la transacción actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
 msgstr "_Transacción vacía"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-#, fuzzy
-#| msgid "Void the current transaction"
 msgid "Void the current transaction."
-msgstr "Anular la transacción actual"
+msgstr "Anular la transacción actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
 msgid "_Unvoid Transaction"
 msgstr "Transacción _desanulada"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-#, fuzzy
-#| msgid "Unvoid the current transaction"
 msgid "Unvoid the current transaction."
-msgstr "Revertir anulación de la transacción actual"
+msgstr "Anular la transacción actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
 msgstr "Agregar transacción de _reversión"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
-#, fuzzy
-#| msgid "Add a reversing transaction"
 msgid "Add a reversing transaction."
-msgstr "Añadir una transacción de reversión"
+msgstr "Añadir una transacción de reversión."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:207
 #: gnucash/ui/gnc-plugin-page-register.ui:395
 #: gnucash/ui/gnc-plugin-page-register.ui:507
-#, fuzzy
-#| msgid ""
-#| "Add, change, or unlink the document linked with the current transaction"
 msgid ""
 "Add, change, or unlink the document linked with the current transaction."
 msgstr ""
-"Agrega, cambia, o desenlaza el documento enlazado con la transacción efectiva"
+"Agregue, cambie o desvincule el documento vinculado con la transacción "
+"actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:213
 #: gnucash/ui/gnc-plugin-page-register.ui:400
 #: gnucash/ui/gnc-plugin-page-register.ui:512
-#, fuzzy
-#| msgid "Open the linked document for the current transaction"
 msgid "Open the linked document for the current transaction."
-msgstr "Abre el documento enlazado para la transacción efectiva"
+msgstr "Abre el documento vinculado para la transacción actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:222
 #: gnucash/ui/gnc-plugin-page-register.ui:407
 #: gnucash/ui/gnc-plugin-page-register.ui:519
-#, fuzzy
-#| msgid "Jump to the linked bill, invoice, or voucher"
 msgid "Jump to the linked bill, invoice, or voucher."
-msgstr "Ir al cargo, factura o comprobante enlazado"
+msgstr "Ir al cargo, factura o comprobante vinculado."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:232
-#, fuzzy
-#| msgid "Transfer funds from one account to another"
 msgid "Transfer funds from one account to another."
-msgstr "Transfiere fondos desde una cuenta a otra"
+msgstr "Transfiere fondos desde una cuenta a otra."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:238
-#, fuzzy
-#| msgid "Reconcile the selected account"
 msgid "Reconcile the selected account."
-msgstr "Conciliar la cuenta seleccionada"
+msgstr "Conciliar la cuenta seleccionada."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:244
-#, fuzzy
-#| msgid ""
-#| "Automatically clear individual transactions, so as to reach a certain "
-#| "cleared amount"
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount."
 msgstr ""
-"Puntea automáticamente transacciones individuales, tal como alcanzar una "
-"cierta cantidad punteada"
+"Borre automáticamente transacciones individuales, para alcanzar una cierta "
+"cantidad compensada."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:256
-#, fuzzy
-#| msgid "Record a stock split or a stock merger"
 msgid "Record a stock split or a stock merger."
-msgstr "Registrar un desglose o una unión de provisión"
+msgstr "Registrar una división de acciones o una fusión de acciones."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:262
-#, fuzzy
-#| msgid "Bring up the lot viewer/editor window"
 msgid "Bring up the lot viewer/editor window."
-msgstr "Elevar la ventana del visor/editor del lote"
+msgstr "Abra la ventana del visor/editor de lotes."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:272
 #: gnucash/ui/gnc-plugin-page-register.ui:414
 #: gnucash/ui/gnc-plugin-page-register.ui:526
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
-#, fuzzy
-#| msgid "Move to the blank transaction in the register"
 msgid "Move to the blank transaction in the register."
-msgstr "Mover a la transacción vacía en el registro"
+msgstr "Mover a la transacción vacía en el registro."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:417
@@ -30419,10 +30356,8 @@ msgstr "_Ir a la fecha"
 #: gnucash/ui/gnc-plugin-page-register.ui:279
 #: gnucash/ui/gnc-plugin-page-register.ui:419
 #: gnucash/ui/gnc-plugin-page-register.ui:531
-#, fuzzy
-#| msgid "Move to the split at the specified date"
 msgid "Move to the split at the specified date."
-msgstr "Ir al desglose en la fecha especificada"
+msgstr "Ir al desglose en la fecha especificada."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:283
 #: gnucash/ui/gnc-plugin-page-register.ui:422
@@ -30434,10 +30369,8 @@ msgstr "Transacción Múlti_ple"
 #: gnucash/ui/gnc-plugin-page-register.ui:285
 #: gnucash/ui/gnc-plugin-page-register.ui:424
 #: gnucash/ui/gnc-plugin-page-register.ui:536
-#, fuzzy
-#| msgid "Show all splits in the current transaction"
 msgid "Show all splits in the current transaction."
-msgstr "Muestra todos los desgloses dentro de la transacción efectiva"
+msgstr "Mostrar todas las divisiones en la transacción actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:289
 #: gnucash/ui/gnc-plugin-page-register.ui:427
@@ -30448,10 +30381,8 @@ msgstr "Editar tipo de _cambio"
 #: gnucash/ui/gnc-plugin-page-register.ui:291
 #: gnucash/ui/gnc-plugin-page-register.ui:429
 #: gnucash/ui/gnc-plugin-page-register.ui:541
-#, fuzzy
-#| msgid "Edit the exchange rate for the current transaction"
 msgid "Edit the exchange rate for the current transaction."
-msgstr "Edita el tipo de cambio para la transacción efectiva"
+msgstr "Edita el tipo de cambio para la transacción actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:295
 #: gnucash/ui/gnc-plugin-page-register.ui:432
@@ -30463,14 +30394,13 @@ msgstr "Agen_da…"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template or "
 "edit the Scheduled Transaction that current transaction was created by."
 msgstr ""
-"Crea una Transacción Planificada con la transacción efectiva como plantilla"
+"Cree una transacción programada con la transacción actual como plantilla o "
+"edite la transacción programada mediante la cual se creó la transacción "
+"actual."
 
 #. Translators: This is a menu item that will open a register tab for the
 #. account of the first other account in the current transaction's split list
@@ -30485,15 +30415,11 @@ msgstr "_Ir a la otra cuenta"
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:439
 #: gnucash/ui/gnc-plugin-page-register.ui:551
-#, fuzzy
-#| msgid ""
-#| "Open a new register tab for the other account with focus on this "
-#| "transaction"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
 msgstr ""
-"Abre un boletín de registro nuevo para la otra cuenta con foco en esta "
-"transacción"
+"Abra una nueva pestaña de registro para la otra cuenta centrándose en esta "
+"transacción."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
 msgid "All Transactions"
@@ -30508,41 +30434,31 @@ msgid "Account Report"
 msgstr "Boletín de Cuenta"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:334
-#, fuzzy
-#| msgid "Open a register report for this Account"
 msgid "Open a register report for this Account."
-msgstr "Abre un boletín de registro para esta Cuenta"
+msgstr "Abra un informe de registro para esta cuenta."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:338
 msgid "Account Report - Single Transaction"
 msgstr "Boletín de Cuenta - Transacción Única"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:340
-#, fuzzy
-#| msgid "Open a register report for the selected Transaction"
 msgid "Open a register report for the selected Transaction."
-msgstr "Abre un boletín de registro para la Transacción seleccionada"
+msgstr "Abra un informe de registro para la transacción seleccionada."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:359
 #: gnucash/ui/gnc-plugin-page-register.ui:471
-#, fuzzy
-#| msgid "Rename this page"
 msgid "Rename this page."
-msgstr "Renombra esta página"
+msgstr "Renombra esta página."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:478
 #: gnucash/ui/gnc-plugin-page-register.ui:615
-#, fuzzy
-#| msgid "Make a copy of the current split"
 msgid "Make a copy of the current split."
-msgstr "Crea una copia del desglose efectivo"
+msgstr "Haga una copia de la división actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:483
 #: gnucash/ui/gnc-plugin-page-register.ui:620
-#, fuzzy
-#| msgid "Delete the current split"
 msgid "Delete the current split."
-msgstr "Borra el desglose efectivo"
+msgstr "Eliminar la división actual."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:804
 msgid "Move to the blank transaction in the register"
@@ -30560,14 +30476,13 @@ msgstr ""
 "transacción"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:849
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template or "
 "edit the Scheduled Transaction that current transaction was created by"
 msgstr ""
-"Crea una Transacción Planificada con la transacción efectiva como plantilla"
+"Cree una transacción programada con la transacción actual como plantilla o "
+"edite la transacción programada mediante la cual se creó la transacción "
+"actual"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
