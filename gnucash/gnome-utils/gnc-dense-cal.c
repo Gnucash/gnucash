@@ -1246,8 +1246,6 @@ populate_hover_window(GncDenseCal *dcal)
 {
     GtkWidget *w;
     GDate *date;
-    static const int MAX_STRFTIME_BUF_LEN = 64;
-    gchar strftimeBuf[MAX_STRFTIME_BUF_LEN];
 
     if (dcal->doc >= 0)
     {
@@ -1262,9 +1260,13 @@ populate_hover_window(GncDenseCal *dcal)
          * %Y-%m-%d) is not a good idea here since many
          * locales will want to use a very different date
          * format. Please leave the specification of the date
-         * format up to the locale and use %x here.  */
-        g_date_strftime(strftimeBuf, MAX_STRFTIME_BUF_LEN - 1, "%x", date);
-        gtk_label_set_text(GTK_LABEL(w), strftimeBuf);
+         * format up to the preference.  */
+        time64 t64 = gnc_dmy2time64_neutral (g_date_get_day(date),
+                                             g_date_get_month(date),
+                                             g_date_get_year(date));
+        gchar date_buff [MAX_DATE_LENGTH + 1];
+        qof_print_date_buff (date_buff, MAX_DATE_LENGTH, t64);
+        gtk_label_set_text (GTK_LABEL(w), date_buff);
 
         o = G_OBJECT(dcal->transPopup);
         model = GTK_LIST_STORE(g_object_get_data(o, "model"));
