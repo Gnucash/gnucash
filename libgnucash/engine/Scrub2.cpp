@@ -36,7 +36,7 @@
 
 #include "qof.h"
 #include "Account.h"
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "Scrub2.h"

@@ -30,7 +30,7 @@
 /* Add specific headers for this class */
 #include "gnc-glib-utils.h"
 #include "../Account.h"
-#include "../AccountP.h"
+#include "../AccountP.hpp"
 #include "../Split.h"
 #include "../Transaction.h"
 #include "../gnc-lot.h"

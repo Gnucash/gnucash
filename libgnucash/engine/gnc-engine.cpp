@@ -27,7 +27,7 @@
 #include "gnc-engine.h"
 #include "qof.h"
 #include "cashobjects.h"
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "SX-book-p.h"
 #include "gnc-budget.h"
 #include "TransactionP.h"

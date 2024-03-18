@@ -47,7 +47,7 @@
 #include "qof.h"
 #include "qofbook.h"
 #include "Split.h"
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "Scrub.h"
 #include "TransactionP.h"
 #include "TransLog.h"

@@ -26,7 +26,7 @@
 #include <config.h>
 #include "qof.h"
 #include "cashobjects.h"
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "TransLog.h"
 #include "gnc-engine.h"
 #include "test-engine-stuff.h"
