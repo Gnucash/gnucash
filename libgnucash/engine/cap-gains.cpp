@@ -58,7 +58,7 @@ ToDo:
 #include <glib.h>
 #include <glib/gi18n.h>
 
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "Scrub2.h"
 #include "Scrub3.h"
 #include "Transaction.h"

@@ -39,7 +39,7 @@
 #include "gnc-lot.h"
 #include "policy-p.h"
 #include "Account.h"
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "Scrub2.h"
 #include "Scrub3.h"
 #include "Transaction.h"

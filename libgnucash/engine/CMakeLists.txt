@@ -5,7 +5,7 @@ add_subdirectory(test)
 add_subdirectory(mocks)
 
 set(engine_noinst_HEADERS
-  AccountP.h
+  AccountP.hpp
   SplitP.h
   SX-book.h
   SX-ttinfo.h

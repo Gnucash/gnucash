@@ -56,7 +56,7 @@
 #include "kvp-frame.hpp"
 #include "gnc-lot.h"
 // For GNC_ID_ROOT_ACCOUNT:
-#include "AccountP.h"
+#include "AccountP.hpp"
 
 #include "qofbook.hpp"
 

@@ -46,7 +46,7 @@
 #include <stdbool.h>
 
 #include "Account.h"
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "Scrub.h"
 #include "Transaction.h"
 #include "TransactionP.h"

@@ -42,7 +42,7 @@
 # include <unistd.h>
 #endif
 
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "TransactionP.h"
