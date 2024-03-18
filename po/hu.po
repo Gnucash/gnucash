@@ -12,11 +12,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-17 08:37+0100\n"
-"PO-Revision-Date: 2024-03-16 14:01+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2024-03-18 14:01+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -4400,11 +4400,14 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"%s számlának egynél több alszámlája van.\n"
+"\n"
+"Mielőtt törölné a számlát, ezeket helyezze át vagy törölje ki."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1594
 #, c-format
 msgid "The account %s will be deleted."
-msgstr "%s számla törölésre kerül."
+msgstr "%s számla törölve lesz."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1603
 #, c-format
@@ -4413,30 +4416,29 @@ msgstr "A számla minden tranzakciója átkerül %s számlára."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1610
 msgid "All transactions in this account will be deleted."
-msgstr "A számla minden tranzakciója törlésre kerül."
+msgstr "A számla minden tranzakciója törölve lesz."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1619
-#, fuzzy, c-format
+#, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr "E számla minden alszámlája átkerül %s számla alá."
+msgstr "Az alszámlája átkerül %s számla alá."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1625
-#, fuzzy
 msgid "Its subaccount will be deleted."
-msgstr "Minden alszámlája törlésre kerül."
+msgstr "Az alszámlája törölve lesz."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1629
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
-msgstr "Minden alszámla tranzakciói átkerülnek %s számlára."
+msgstr "Az alszámlán lévő összes tranzakció átkerül %s számlára."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1636
 msgid "All sub-account transactions will be deleted."
-msgstr "Minden alszámla tranzakciói törlésre kerülnek."
+msgstr "Az alszámlán lévő összes tranzakció törölve lesz."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1642
 msgid "Are you sure you want to do this?"
-msgstr "Biztosan ezt akarja tenni?"
+msgstr "Biztos benne?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:179
 #: gnucash/gnome/gnc-plugin-page-report.cpp:236
@@ -12926,18 +12928,16 @@ msgid "<b>Sub-accounts</b>"
 msgstr "<b>Alszámlák</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:469
-#, fuzzy
 msgid "This account has a sub-account. What would you like to do with it?"
-msgstr "A számla tartalmaz alszámlákat. Mit akar tenni az alszámlákkal?"
+msgstr "A számlához alszámla tartozik. Mi történjen vele?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:480
 msgid "_Move to"
-msgstr "_Mozgatás"
+msgstr "Át_helyezés"
 
 #: gnucash/gtkbuilder/dialog-account.glade:498
-#, fuzzy
 msgid "Delete the _subaccount"
-msgstr "Minden al_számla törlése"
+msgstr "Al_számla törlése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:574
 #: gnucash/gtkbuilder/dialog-account.glade:693
@@ -12947,13 +12947,13 @@ msgstr "M_ozgatás"
 #: gnucash/gtkbuilder/dialog-account.glade:590
 #: gnucash/gtkbuilder/dialog-account.glade:709
 msgid "Delete all _transactions"
-msgstr "Minden _tranzakció törlése"
+msgstr "Összes _tranzakció törlése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:611
 msgid ""
 "This account contains transactions. What would you like to do with these "
 "transactions?"
-msgstr "A számla tartalmaz tranzakciókat. Mit akar tenni e tranzakciókkal?"
+msgstr "A számla tranzakciókat tartalmaz. Mi történjen velük?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:625
 msgid "This account contains read-only transactions which may not be deleted."
@@ -12962,16 +12962,15 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:674
 msgid "<b>Sub-account Transactions</b>"
-msgstr "<b>Alszámlás tranzakciók</b>"
+msgstr "<b>Alszámlán lévő tranzakciók</b>"
 
 #: gnucash/gtkbuilder/dialog-account.glade:730
-#, fuzzy
 msgid ""
 "You've said to delete the subaccount and it contains transactions. What "
 "would you like to do with these transactions?"
 msgstr ""
-"A számla egy vagy több alszámlája tranzakciókat tartalmaz. Mit akar tenni "
-"ezekkel a tranzakciókkal?"
+"Az alszámla törlését választotta, de tranzakciók találhatók rajta. Mi "
+"történjen velük?"
 
 #: gnucash/gtkbuilder/dialog-account.glade:744
 msgid ""
