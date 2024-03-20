@@ -156,6 +156,8 @@ extern "C"
 /* Callbacks for the "Filter By" dialog */
 void gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
                                                       GncPluginPageRegister* page);
+void gnc_plugin_page_register_filter_desc_changed_cb (GtkEntry *entry,
+                                                      GncPluginPageRegister* page);
 void gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
                                                GncPluginPageRegister* page);
 void gnc_plugin_page_register_filter_end_cb (GtkWidget* radio,
@@ -175,12 +177,14 @@ void gnc_plugin_page_register_filter_days_changed_cb (GtkSpinButton* button,
 static time64 gnc_plugin_page_register_filter_dmy2time (char* date_string);
 static gchar* gnc_plugin_page_register_filter_time2dmy (time64 raw_time);
 static gchar* gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page);
+static gchar* gnc_plugin_page_register_get_desc_filter (GncPluginPage* plugin_page);
 void gnc_plugin_page_register_set_filter (GncPluginPage* plugin_page,
                                           const gchar* filter);
 static void gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page);
 
 static void gnc_ppr_update_status_query (GncPluginPageRegister* page);
 static void gnc_ppr_update_date_query (GncPluginPageRegister* page);
+static void gnc_ppr_update_text_query (GncPluginPageRegister* page);
 
 /* Command callbacks */
 static void gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
@@ -465,6 +469,7 @@ typedef struct GncPluginPageRegisterPrivate
         GtkWidget* end_date_today;
         GtkWidget* end_date;
         GtkWidget* num_days;
+        GString* desc_filter;
         cleared_match_t original_cleared_match;
         cleared_match_t cleared_match;
         time64 original_start_time;
@@ -476,6 +481,10 @@ typedef struct GncPluginPageRegisterPrivate
         gboolean original_save_filter;
         gboolean save_filter;
     } fd;
+
+    void set_desc_filter (const char *new_str) { g_string_assign (fd.desc_filter, new_str); };
+    const char *get_desc_filter () const { return fd.desc_filter ? fd.desc_filter->str : nullptr; };
+
 } GncPluginPageRegisterPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GncPluginPageRegister, gnc_plugin_page_register,
@@ -660,6 +669,7 @@ gnc_plugin_page_register_init (GncPluginPageRegister* plugin_page)
     priv->read_only         = FALSE;
     priv->fd.cleared_match  = CLEARED_ALL;
     priv->fd.days           = 0;
+    priv->fd.desc_filter    = g_string_new ("");
     priv->enable_refresh    = TRUE;
     priv->search_query      = NULL;
     priv->filter_query      = NULL;
@@ -1341,6 +1351,15 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
             filter_changed = filter_changed + 1;
         }
 
+        auto desc_filter = gnc_plugin_page_register_get_desc_filter (plugin_page);
+        if (desc_filter && *desc_filter)
+        {
+            PINFO ("Loaded Description Filter is %s", desc_filter);
+            priv->set_desc_filter (desc_filter);
+            ++filter_changed;
+        }
+        g_free (desc_filter);
+
         if (filter_changed != 0)
             priv->fd.save_filter = TRUE;
 
@@ -1387,6 +1406,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     /* Update Query with Filter Status and Dates */
     gnc_ppr_update_status_query (page);
     gnc_ppr_update_date_query (page);
+    gnc_ppr_update_text_query (page);
 
     /* Now do the refresh if this is a new page instead of restore */
     if (create_new_page)
@@ -1492,6 +1512,7 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage* plugin_page)
     if (priv->fd.dialog)
     {
         gtk_widget_destroy (priv->fd.dialog);
+        g_string_free (priv->fd.desc_filter, true);
         memset (&priv->fd, 0, sizeof (priv->fd));
     }
 
@@ -2025,6 +2046,43 @@ gnc_plugin_page_register_get_filter (GncPluginPage* plugin_page)
 
     return g_strdup_printf ("%s,%s,%s,%s", DEFAULT_FILTER,
                             "0", "0", get_filter_default_num_of_days (ledger_type));
+}
+
+static const char* KEY_FILE_DESC_FILTER = "register_desc_filter";
+
+static gchar*
+gnc_plugin_page_register_get_desc_filter (GncPluginPage* plugin_page)
+{
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (plugin_page), nullptr);
+
+    auto priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    auto state_file = gnc_state_get_current();
+    auto state_section = gsr_get_register_state_section (priv->gsr);
+    GError* error = NULL;
+    auto filter = g_key_file_get_string (state_file, state_section,
+                                         KEY_FILE_DESC_FILTER, &error);
+    if (error)
+        g_clear_error (&error);
+
+    g_free (state_section);
+
+    return filter;
+}
+
+static void
+gnc_plugin_page_register_set_desc_filter (GncPluginPage* plugin_page, const char *desc_filter)
+{
+    auto state_file = gnc_state_get_current();
+    auto priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (plugin_page);
+    auto state_section = gsr_get_register_state_section (priv->gsr);
+    if (desc_filter && *desc_filter)
+        g_key_file_set_string (state_file, state_section, KEY_FILE_DESC_FILTER, desc_filter);
+    else if (g_key_file_has_key (state_file, state_section, KEY_FILE_DESC_FILTER, nullptr))
+    {
+        g_key_file_remove_key (state_file, state_section, KEY_FILE_DESC_FILTER, nullptr);
+        gnc_plugin_page_register_check_for_empty_group (state_file, state_section);
+    }
+    g_free (state_section);
 }
 
 static void
@@ -2674,6 +2732,52 @@ gnc_ppr_update_date_query (GncPluginPageRegister* page)
     LEAVE (" ");
 }
 
+static void
+gnc_ppr_update_text_query (GncPluginPageRegister* page)
+{
+    ENTER (" ");
+
+    auto priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
+    if (!priv || !priv->ledger)
+    {
+        LEAVE ("no ledger");
+        return;
+    }
+
+    // check if this a search register and save query
+    gnc_ppr_update_for_search_query (page);
+
+    auto query = gnc_ledger_display_get_query (priv->ledger);
+    if (!query)
+    {
+        LEAVE ("no query");
+        return;
+    }
+
+    if (gnc_ledger_display_get_split_register (priv->ledger)->type != SEARCH_LEDGER)
+    {
+        auto param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DESCRIPTION, NULL);
+        qof_query_purge_terms (query, param_list);
+        g_slist_free (param_list);
+    }
+
+    auto desc_filter = priv->get_desc_filter ();
+    if (desc_filter && *desc_filter)
+        xaccQueryAddDescriptionMatch (query, desc_filter, true, false, QOF_COMPARE_CONTAINS,
+                                      QOF_QUERY_AND);
+
+    // Set filter tooltip for summary bar
+    gnc_plugin_page_register_set_filter_tooltip (page);
+
+    // clear previous filter query and save current
+    qof_query_destroy (priv->filter_query);
+    priv->filter_query = qof_query_copy (query);
+
+    if (priv->enable_refresh)
+        gnc_ledger_display_refresh (priv->ledger);
+    LEAVE (" ");
+}
+
 
 /* This function converts a time64 value date to a string */
 static gchar*
@@ -2909,6 +3013,24 @@ gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
 }
 
 void
+gnc_plugin_page_register_filter_desc_changed_cb (GtkEntry *entry,
+                                                 GncPluginPageRegister* page)
+{
+
+    g_return_if_fail (GTK_IS_ENTRY (entry));
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
+
+    ENTER ("(entry %p, page %p)", entry, page);
+
+    auto priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
+    priv->set_desc_filter (gtk_entry_get_text (entry));
+    gnc_ppr_update_text_query (page);
+
+    LEAVE (" ");
+}
+
+
+void
 gnc_plugin_page_register_clear_current_filter (GncPluginPage* plugin_page)
 {
     GncPluginPageRegisterPrivate* priv;
@@ -2921,8 +3043,10 @@ gnc_plugin_page_register_clear_current_filter (GncPluginPage* plugin_page)
     priv->fd.start_time = 0;
     priv->fd.end_time = 0;
     priv->fd.cleared_match = (cleared_match_t)g_ascii_strtoll (DEFAULT_FILTER, NULL, 16);
+    priv->set_desc_filter("");
 
     gnc_ppr_update_date_query (GNC_PLUGIN_PAGE_REGISTER(plugin_page));
+    gnc_ppr_update_text_query (GNC_PLUGIN_PAGE_REGISTER(plugin_page));
 }
 
 /** This function is called when the "number of days" spin button is
@@ -3140,6 +3264,7 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog* dialog,
         priv->fd.days = priv->fd.original_days;
         priv->fd.save_filter = priv->fd.original_save_filter;
         gnc_ppr_update_date_query (page);
+        gnc_ppr_update_text_query (page);
     }
     else
     {
@@ -3183,6 +3308,8 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog* dialog,
             gnc_plugin_page_register_set_filter (plugin_page, filter);
             g_free (filter);
             g_list_free_full (flist, g_free);
+
+            gnc_plugin_page_register_set_desc_filter (plugin_page, priv->get_desc_filter());
         }
     }
     priv->fd.dialog = NULL;
@@ -3273,6 +3400,14 @@ gnc_plugin_page_register_set_filter_tooltip (GncPluginPageRegister* page)
 
         g_list_free_full (show, g_free);
         g_list_free_full (hide, g_free);
+    }
+
+    // filtered end time
+    const char *desc_filter = priv->get_desc_filter ();
+    if (desc_filter && *desc_filter)
+    {
+        t_list = g_list_prepend
+            (t_list, g_strdup_printf ("%s %s", _("Desciption Filter:"), desc_filter));
     }
 
     t_list = g_list_reverse (t_list);
@@ -4170,6 +4305,8 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
                                            "end_date_choose"));
     priv->fd.end_date_today = GTK_WIDGET (gtk_builder_get_object (builder,
                                           "end_date_today"));
+    gtk_entry_set_text (GTK_ENTRY (gtk_builder_get_object (builder, "desc_filter_entry")),
+                        priv->get_desc_filter());
 
     {
         /* Start date info */
