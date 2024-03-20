@@ -1,7 +1,6 @@
 /********************************************************************
- * gnc-html_factory.c -- Factory to create HTML component           *
- *                                                                  *
- * Copyright (C) 2009 Phil Longstaff <plongstaff@rogers.com>        *
+ * gnc-html-browser-p.h -- display html with gnc special tags       *
+ * Copyright (C) 2024 Bob Fewell                                    *
  *                                                                  *
  * This program is free software; you can redistribute it and/or    *
  * modify it under the terms of the GNU General Public License as   *
@@ -19,29 +18,23 @@
  * Free Software Foundation           Voice:  +1-617-542-5942       *
  * 51 Franklin Street, Fifth Floor    Fax:    +1-617-542-2652       *
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
- ********************************************************************/
+\********************************************************************/
 
-#include <config.h>
+#ifndef GNC_HTML_BROWSER_P_H
+#define GNC_HTML_BROWSER_P_H
 
-#include <gtk/gtk.h>
+#include "gnc-html-p.h"
 
-#include "gnc-html.h"
-#include "gnc-html-browser.h"
-#include "qoflog.h"
-#include "gnc-engine.h"
-
-#include "gnc-html-factory.h"
-
-/* indicates the debugging module that this .o belongs to.  */
-G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_HTML;
-
-GncHtml* gnc_html_factory_create_html (void)
+struct _GncHtmlBrowserPrivate
 {
-    return gnc_html_browser_new ();
-}
+    struct _GncHtmlPrivate base;
 
-gboolean
-gnc_html_engine_supports_css (void)
-{
-    return TRUE;
-}
+    GtkWidget *web_view;
+    gchar* html_string;         /* html string being displayed */
+
+    GncWsServer *gws;
+
+    const gchar *file_name;
+};
+
+#endif
