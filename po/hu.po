@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-17 08:37+0100\n"
-"PO-Revision-Date: 2024-03-18 14:01+0000\n"
+"PO-Revision-Date: 2024-03-21 21:01+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1080,10 +1080,10 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
-"Az értékpapír-szerkesztő képernyőn beállíthatja, hogy az értékpapír "
-"idézetforrása jelenjen meg, ami megkönnyíti az értékpapírok által használt "
-"online források megtekintését. A megjelenítés megváltoztatásához kattintson "
-"az oszlopfejlécek jobb szélén található háromszögre."
+"Az Értékpapír-szerkesztő ablakban külön oszlopban megjelenítheti az "
+"árfolyamforrásokat, így könnyedén áttekintheti, az egyes értékpapírok "
+"árfolyama mely online forrásból lesz letöltve. Ezt az oszlopot az "
+"oszlopfejlécek jobb szélén található háromszögre kattintva adhatja hozzá."
 
 #: doc/tip_of_the_day.list.c:96
 msgid ""
@@ -6957,9 +6957,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1296
-#, fuzzy
 msgid "Finance::Quote must be installed to enable this button."
-msgstr "Figyelmeztetés: Pénzügy::Árfolyam nincs megfelelően telepítve."
+msgstr "A gomb csak a Finance::Quote telepítése után használható."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1398
 msgid ""
@@ -6999,7 +6998,7 @@ msgstr "Érvényes célösszeget kell megadni."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1688
 msgid "You must enter an amount to transfer."
-msgstr "Meg kell adni az átvivendő összeget."
+msgstr "Meg kell adni az átutalandó összeget."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1914
 #: gnucash/gtkbuilder/dialog-employee.glade:629
@@ -7027,7 +7026,7 @@ msgstr "Terhelendő összeg"
 #: gnucash/gnome-utils/dialog-transfer.cpp:2002
 #: gnucash/gtkbuilder/dialog-transfer.glade:560
 msgid "To Amount"
-msgstr "Összeget erre"
+msgstr "Átváltott összeg"
 
 #. Translators: Use your locale date format here!
 #: gnucash/gnome-utils/dialog-utils.c:435
@@ -8091,9 +8090,8 @@ msgid "Print Name"
 msgstr "Nyomtatási név"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:369
-#, fuzzy
 msgid "Display symbol"
-msgstr "Rövid jelölések megjelenítése"
+msgstr "Megjelenített szimbólum"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:375
 msgid "Unique Name"
@@ -8111,12 +8109,12 @@ msgstr "Egység"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:395
 msgid "Get Quotes"
-msgstr "Adatszerzés"
+msgstr "Árfolyamletöltés"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:396
 msgctxt "Column letter for 'Get Quotes'"
 msgid "Q"
-msgstr ""
+msgstr "L"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:402
 #: gnucash/gnome-utils/gnc-tree-view-price.c:404
@@ -13546,7 +13544,6 @@ msgid "Income Total"
 msgstr "Összes bevétel"
 
 #: gnucash/gtkbuilder/dialog-book-close.glade:110
-#, fuzzy
 msgid "Expense Total"
 msgstr "Összes költség"
 
@@ -13570,18 +13567,19 @@ msgstr "Új pénznem hozzáadása."
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:144
 msgid "Remove the current commodity."
-msgstr "A jelenlegi pénznem eltávolítása."
+msgstr "A jelenlegi értékpapír eltávolítása."
 
 #: gnucash/gtkbuilder/dialog-commodities.glade:162
-#, fuzzy
 msgid "Edit the current commodity."
-msgstr "A jelenlegi pénznem eltávolítása."
+msgstr "A jelenlegi értékpapír szerkesztése."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:120
 msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
-msgstr "Adja meg az értékpapír teljes nevét. Pl. OTP Bank Nyrt vagy MOL Nyrt."
+msgstr ""
+"Adja meg az értékpapír teljes nevét. Pl. OTP Bank Nyrt vagy Optimum Trend "
+"abszolút hozamú alap."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:138
 msgid ""
@@ -13589,17 +13587,15 @@ msgid ""
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case)."
 msgstr ""
-"Adja meg az áru jelét (pl. OTP vagy MOL). Ha elektronikusan szerzi be az "
-"adatokat, akkor e mezőnek pontosan meg kell egyeznie a forrás által használt "
-"jellel (kisbetűket beleértve)."
+"Adja meg az értékpapír jelölését (pl. OTP vagy MOL). Ha elektronikusan "
+"szerzi be az adatokat, akkor e mezőnek pontosan meg kell egyeznie a forrás "
+"által használt jellel (kisbetűket beleértve)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:156
 msgid ""
 "Enter a unique code used to identify the commodity. Or, you may safely leave "
 "this field blank."
-msgstr ""
-"Adjon meg egy egyedi kódot az áru azonosítására. Vagy a mező biztonsággal "
-"üresen is hagyható."
+msgstr "Adja meg az értékpapír hivatalos kódját, vagy hagyja üresen."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:191
 msgid ""
@@ -13611,7 +13607,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:215
 msgid "<b>Quote Source Information</b>"
-msgstr "<b>Adatforrás-információ</b>"
+msgstr "<b>Árfolyamforrás adatai</b>"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:296
 msgid ""
@@ -13619,12 +13615,17 @@ msgid ""
 "investment categories like STOCKS and BONDS or exchange names like NASDAQ "
 "and LSE."
 msgstr ""
+"Válasszon ki egy kategóriát vagy hozzon létre újat. A kategória lehet a "
+"befektetés típusa, pl. RÉSZVÉNYEK vagy KÖTVÉNYEK, vagy a tőzsde neve, pl. "
+"NADSAQ vagy LSE."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:319
 msgid ""
 "Enter a display symbol. This can safely be left blank, in which case the "
 "ticker symbol or the currency ISO code will be used."
 msgstr ""
+"Adja meg a megjeleníteni kívánt szimbólumot. Nyugodtan üresen is hagyhatja. "
+"Ez esetben az értékpapír jelölése vagy a pénznem ISO kódja lesz megjelenítve."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:335
 msgid "Type of quote source"
@@ -13632,7 +13633,7 @@ msgstr "Adatforrástípus"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:348
 msgid "_Display symbol"
-msgstr "Szimbólum meg_jelenítése"
+msgstr "Meg_jelenített szimbólum"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:363
 msgid "Time_zone"
@@ -13648,12 +13649,12 @@ msgid ""
 "know if these sources retrieve information from a single site or from "
 "multiple sites on the internet."
 msgstr ""
-"Ezek az adatforrások, amiket nemrég adtak hozzá F::Q-hoz. GnuCash nem tudja, "
-"hogy e források az interneten egy vagy több helyről hívnak-e le adatokat."
+"Ezeket az árfolyamforrásokat nemrég adtak hozzá az F::Q-hoz, ezért a GnuCash "
+"nem tudja, hogy egy vagy több helyről töltik-e le az árfolyamokat."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:395
 msgid "_Multiple"
-msgstr "T_öbbszörös"
+msgstr "Gyűjt_emény"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:401
 msgid ""
@@ -13661,13 +13662,13 @@ msgid ""
 "on the internet. If one of the sites is unavailable, F::Q will attempt to "
 "retrieve the information from another site."
 msgstr ""
-"Ezek az F::Q adatforrások, amik az interneten keresztül több oldalról hívnak "
-"le adatokat. Ha egy hely elérhetetlen, akkor F::Q megpróbálja lehívni az "
-"adatokat egy másik helyről."
+"Ezek az F::Q árfolyamforrások több internetes oldalról töltenek le "
+"árfolyamokat. Ha az egyik hely elérhetetlen, akkor az F::Q egy másik helyről "
+"próbálja meg a letöltést."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:416
 msgid "Si_ngle"
-msgstr "Egyetle_n"
+msgstr "E_gyedi"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:422
 msgid ""
@@ -13675,13 +13676,12 @@ msgid ""
 "the internet. If that site is unavailable, you will not be able to retrieve "
 "quotes."
 msgstr ""
-"Ezek az F::Q adatforrások, amik az interneten keresztül egy egyszerű "
-"oldalról lehívnak adatokat. Ha az a hely elérhetetlen, akkor nem jutnak "
-"hozzá az adatokhoz."
+"Ezek az F::Q árfolyamforrások egyetlen internetes oldalról töltenek le "
+"árfolyamokat. Ha az oldal elérhetetlen, akkor a letöltés sikertelen lesz."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:437
 msgid "_Get Online Quotes"
-msgstr "Árfolyamok online le_hívása"
+msgstr "Árfolyamok online le_töltése"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:456
 msgid "F_raction traded"
@@ -13695,10 +13695,8 @@ msgstr "ISIN, CUSI_P vagy más kód"
 #: gnucash/gtkbuilder/dialog-commodity.glade:485
 #: gnucash/gtkbuilder/dialog-commodity.glade:767
 #: gnucash/gtkbuilder/dialog-price.glade:138
-#, fuzzy
-#| msgid "Namespace"
 msgid "Nam_espace"
-msgstr "Névtér"
+msgstr "Név_tér"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:500
 msgid "_Symbol/abbreviation"
@@ -13710,7 +13708,7 @@ msgstr "_Teljes név"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:553
 msgid "Warning: Finance::Quote not installed properly."
-msgstr "Figyelmeztetés: Pénzügy::Árfolyam nincs megfelelően telepítve."
+msgstr "Figyelem! A Finance::Quote nincs megfelelően telepítve."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:713
 msgid "Select user information here…"
@@ -16063,7 +16061,7 @@ msgstr "Sa_blon"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
-msgstr "Alaphelyzet figyelmeztetés"
+msgstr "Figyelmeztetések alaphelyzetbe"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:86
 msgid ""
@@ -16081,15 +16079,15 @@ msgstr "_Semmit sem választ"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:146
 msgid "No warnings to reset."
-msgstr "Nincs figyelmeztetés alaphelyzetre való visszaállításkor."
+msgstr "Nincs alaphelyzetbe állítható figyelmeztetés."
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:164
 msgid "Permanent Warnings"
-msgstr "Állandó figyelmeztetés"
+msgstr "Állandó figyelmeztetések"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:205
 msgid "Temporary Warnings"
-msgstr "Ideiglenes figyelmeztetés"
+msgstr "Ideiglenes figyelmeztetések"
 
 #: gnucash/gtkbuilder/dialog-search.glade:37
 msgid "_New item…"
@@ -16477,7 +16475,7 @@ msgstr "Árfolyam"
 
 #: gnucash/gtkbuilder/dialog-transfer.glade:601
 msgid "_Fetch Rate"
-msgstr "Árfolyam le_hívása"
+msgstr "Árfolyam le_töltése"
 
 #: gnucash/gtkbuilder/dialog-userpass.glade:7
 msgid "Username and Password"
@@ -28591,7 +28589,7 @@ msgstr "Új b_eszállító…"
 
 #: gnucash/ui/gnc-plugin-business.ui:65
 msgid "Open the New Vendor dialog"
-msgstr "Új beszállítói párbeszédablak megnyitása"
+msgstr "Új beszállító párbeszédablak megnyitása"
 
 #: gnucash/ui/gnc-plugin-business.ui:68
 msgid "_Find Vendor…"
