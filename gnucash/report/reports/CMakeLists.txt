@@ -45,6 +45,7 @@ set (reports_standard_SCHEME
     standard/reconcile-report.scm
     standard/transaction.scm
     standard/trial-balance.scm
+    standard/txn-columns.scm
     standard/view-column.scm
     standard/taxinvoice.scm
     standard/receipt.scm
