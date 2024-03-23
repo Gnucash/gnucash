@@ -4,7 +4,7 @@
 # Copyright (C) 1999-2001, 2004 Free Software Foundation, Inc.
 # Copyright (C) 2005-2020 by the GnuCash developers and the translators:
 # Christian Stimming <stimming@tuhh.de>, 2001-2020.
-# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2023.
+# Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2007, 2009-2024.
 # Andreas Hentze <pictarus@gmx.de>, 2019
 # Joachim Wetzig <jo.wetzig@web.de>, 2019, 2022.
 # Dmitriy Mangul <dimang.freetime@gmail.com>, 2017-2018
@@ -18,8 +18,8 @@
 # K. Herbert <herbert.ka@mailo.com>, 2020.
 # Milo Ivir <mail@milotype.de>, 2020.
 # Alois Spitzbart <spitz234@hotmail.com>, 2020, 2021.
-# Christian Wehling <christian.wehling@web.de>, 2020-2023, 2024.
-# Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021.
+# Christian Wehling <christian.wehling@web.de>, 2020-2024.
+# Marco Zietzling <marco.zietzling@gmail.com>, 2020-2021.
 # Christian Stimming <christian@cstimming.de>, 2021, 2023.
 # Julian Heinzel <jeinzi@gmx.de>, 2021.
 # Christoph Franzen <christoph@alte-pflasterei.de>, 2021.
@@ -29,7 +29,6 @@
 # Jan Schneider <grimpeur78@gmail.com>, 2022.
 # Steffen Möller <steffen_moeller@gmx.de>, 2022.
 # Carsten Hütter <Carsten.Huetter@gmx.de>, 2023.
-# "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024.
 #
 # Konventionen/Tastenkürzel:
 # »Zitate«: [altgr]+[Y]/[X]
@@ -7898,9 +7897,9 @@ msgstr "Finanzverwaltung für Privatanwender und Kleinbetriebe."
 #: gnucash/gnome-utils/gnc-main-window.cpp:5268
 msgid "translator-credits"
 msgstr ""
+"Frank H. Ellenberger, 2007, 2009-2024\n"
+"Christian Wehling, 2020-2024\n"
 "Christian Stimming, 2001-2021, 2023\n"
-"Frank H. Ellenberger, 2007, 2009-2023\n"
-"Christian Wehling, 2020-2023\n"
 "Carsten Hütter, 2022-2023\n"
 "Joachim Wetzig, 2019-2022\n"
 "Steffen Möller, 2022\n"
