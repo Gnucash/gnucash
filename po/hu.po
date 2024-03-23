@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-17 08:37+0100\n"
-"PO-Revision-Date: 2024-03-21 21:01+0000\n"
+"PO-Revision-Date: 2024-03-22 17:01+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -13587,9 +13587,9 @@ msgid ""
 "retrieving quotes online, this field must exactly match the ticker symbol "
 "used by the quote source (including case)."
 msgstr ""
-"Adja meg az értékpapír jelölését (pl. OTP vagy MOL). Ha elektronikusan "
-"szerzi be az adatokat, akkor e mezőnek pontosan meg kell egyeznie a forrás "
-"által használt jellel (kisbetűket beleértve)."
+"Adja meg az értékpapír jelölését (pl. OTP vagy MOL). Ha online tölti le az "
+"árfolyamokat, akkor e mezőnek pontosan meg kell egyeznie a forrás által "
+"használt jellel (kisbetűket beleértve)."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:156
 msgid ""
@@ -15829,7 +15829,7 @@ msgstr "A felhasználó által megadott dátumnál régebbi árak eltávolítás
 
 #: gnucash/gtkbuilder/dialog-price.glade:918
 msgid "_Get Quotes"
-msgstr "_Árfolyamok beszerzése"
+msgstr "_Árfolyamok letöltése"
 
 #: gnucash/gtkbuilder/dialog-price.glade:923
 msgid "Get new online quotes for stock accounts."
@@ -20710,7 +20710,7 @@ msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
 msgstr ""
-"Az ebben a tranzakcióban szereplő értékek nem stimmelnek. Melyik értéket "
+"Az ebben a tranzakcióban szereplő értékek nem illenek össze. Melyik értéket "
 "szeretné újraszámoltatni?"
 
 #: gnucash/register/ledger-core/split-register.c:2092
