@@ -5,14 +5,15 @@
 # eol <joshua.de.clercq@gmail.com>, 2021.
 # Jaimie85 <alsemgeest@gmail.com>, 2022.
 # Stephan Paternotte <stephan@paternottes.net>, 2023.
+# Paul Oranje <por@oranjevos.nl>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-25 08:00+0200\n"
-"PO-Revision-Date: 2023-07-08 13:48+0000\n"
-"Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
+"PO-Revision-Date: 2024-03-22 14:01+0000\n"
+"Last-Translator: Paul Oranje <por@oranjevos.nl>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/glossary/"
 "nl/>\n"
 "Language: nl\n"
@@ -20,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -71,10 +72,12 @@ msgid "account type: Equity"
 msgstr "rekening type: Eigen kapitaal"
 
 #. "-"
+#, fuzzy
 msgid "account type: Expense"
 msgstr "rekening type: Uitgaven"
 
 #. "-"
+#, fuzzy
 msgid "account type: Income"
 msgstr "rekening type: Inkomsten"
 
