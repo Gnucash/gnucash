@@ -6,10 +6,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.5\n"
+"Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-17 08:37+0100\n"
+"POT-Creation-Date: 2024-03-23 03:13+0100\n"
 "PO-Revision-Date: 2017-08-16 12:19+0300\n"
 "Last-Translator: Valdis Vītoliņš <valdis.vitolins@odo.lv>\n"
 "Language-Team: Latvian <translation-team-lv@lists.sourceforge.net>\n"
@@ -7163,7 +7163,7 @@ msgstr "datums:"
 msgid "Frequency"
 msgstr "Biežums"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1279
+#: gnucash/gnome-utils/gnc-dense-cal.c:1281
 msgid "(unnamed)"
 msgstr "(bez nosaukuma)"
 
@@ -8375,7 +8375,7 @@ msgid "Missing command or option"
 msgstr "Šī ir krāsu izvēlne."
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
-#: gnucash/gnucash.cpp:180
+#: gnucash/gnucash.cpp:179
 #, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
@@ -8505,29 +8505,29 @@ msgstr "Budžeta izvēlnes"
 msgid "[datafile]"
 msgstr "[datufails]"
 
-#: gnucash/gnucash.cpp:177
+#: gnucash/gnucash.cpp:176
 msgid "Checking Finance::Quote…"
 msgstr "Pārbaudīt Finanses::Kvota…"
 
-#: gnucash/gnucash.cpp:187
+#: gnucash/gnucash.cpp:186
 msgid "Unable to load Finance::Quote."
 msgstr "Pārbaudīt Finanses::Kvota..."
 
-#: gnucash/gnucash.cpp:198
+#: gnucash/gnucash.cpp:197
 msgid "Loading data…"
 msgstr "Ielādē datus…"
 
-#: gnucash/gnucash.cpp:270
+#: gnucash/gnucash.cpp:257
 #, fuzzy
 msgid "Application Options"
 msgstr "pielietojums"
 
-#: gnucash/gnucash.cpp:273
+#: gnucash/gnucash.cpp:260
 msgid "Do not load the last file opened"
 msgstr "Nevarēja ielādēt pēdējo atvērto failu"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:311
+#: gnucash/gnucash.cpp:298
 #, fuzzy
 #| msgid ""
 #| "Error: could not initialize graphical user interface and option add-price-"
@@ -30659,6 +30659,7 @@ msgstr "Grafiks"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
+#: gnucash/ui/gnc-plugin-page-register.ui:849
 #, fuzzy
 #| msgid ""
 #| "Create a Scheduled Transaction with the current transaction as a template"
@@ -30757,15 +30758,6 @@ msgstr "Parādīt visus sadalījumus pašreizējā grāmatojumā"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
 msgstr "Atvērt izvēlētā grāmatojuma reģistra pārskatu "
-
-#: gnucash/ui/gnc-plugin-page-register.ui:849
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template or "
-"edit the Scheduled Transaction that current transaction was created by"
-msgstr "Izveidot plānoto grāmatojumu ar tekošo transakciju kā veidni"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300

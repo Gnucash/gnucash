@@ -82,10 +82,10 @@
 # Comentarios extraídos:
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-17 08:37+0100\n"
+"Project-Id-Version: GnuCash 5.6\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2024-03-23 03:13+0100\n"
 "PO-Revision-Date: 2024-03-17 12:01+0000\n"
 "Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -98,8 +98,8 @@ msgstr ""
 "X-Generator: Weblate 5.5-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
-">;</span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
+"span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -7319,7 +7319,7 @@ msgstr "Fecha: "
 msgid "Frequency"
 msgstr "Frecuencia"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1279
+#: gnucash/gnome-utils/gnc-dense-cal.c:1281
 msgid "(unnamed)"
 msgstr "(sin nombre)"
 
@@ -8533,7 +8533,7 @@ msgid "Missing command or option"
 msgstr "Falta un mandato u opción"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
-#: gnucash/gnucash.cpp:180
+#: gnucash/gnucash.cpp:179
 #, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr "Encontrada la versión de Finance::Quote {1}."
@@ -8655,28 +8655,28 @@ msgstr "Opciones ocultas"
 msgid "[datafile]"
 msgstr "[fichero-dato]"
 
-#: gnucash/gnucash.cpp:177
+#: gnucash/gnucash.cpp:176
 msgid "Checking Finance::Quote…"
 msgstr "Comprobando Finanzas::Cotizaciones…"
 
-#: gnucash/gnucash.cpp:187
+#: gnucash/gnucash.cpp:186
 msgid "Unable to load Finance::Quote."
 msgstr "Comprobando Finanzas::Cotizaciones..."
 
-#: gnucash/gnucash.cpp:198
+#: gnucash/gnucash.cpp:197
 msgid "Loading data…"
 msgstr "Cargando datos…"
 
-#: gnucash/gnucash.cpp:270
+#: gnucash/gnucash.cpp:257
 msgid "Application Options"
 msgstr "Opciones de la aplicación"
 
-#: gnucash/gnucash.cpp:273
+#: gnucash/gnucash.cpp:260
 msgid "Do not load the last file opened"
 msgstr "No cargar el último fichero abierto"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:311
+#: gnucash/gnucash.cpp:298
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
@@ -9929,8 +9929,8 @@ msgstr ""
 "\"never\" significa no conservar los ficheros de bitácora/respaldo más "
 "antiguos. Cada vez que guarda, las versiones más antiguas del fichero se "
 "eliminan. \"days\" significa conservar los ficheros antiguos por un número "
-"de días. Cuanta cantidad de días está especificado en la clave 'retain-"
-"days' (días de conservación)"
+"de días. Cuanta cantidad de días está especificado en la clave 'retain-days' "
+"(días de conservación)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1761
@@ -30394,6 +30394,7 @@ msgstr "Agen_da…"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
+#: gnucash/ui/gnc-plugin-page-register.ui:849
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template or "
 "edit the Scheduled Transaction that current transaction was created by."
@@ -30474,15 +30475,6 @@ msgid ""
 msgstr ""
 "Abre un boletín de registro nuevo para la otra cuenta con foco en esta "
 "transacción"
-
-#: gnucash/ui/gnc-plugin-page-register.ui:849
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template or "
-"edit the Scheduled Transaction that current transaction was created by"
-msgstr ""
-"Cree una transacción programada con la transacción actual como plantilla o "
-"edite la transacción programada mediante la cual se creó la transacción "
-"actual"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300

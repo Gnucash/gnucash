@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.5\n"
+"Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-17 08:37+0100\n"
+"POT-Creation-Date: 2024-03-23 03:13+0100\n"
 "PO-Revision-Date: 2014-04-28 20:16-0500\n"
 "Last-Translator: Chandrakant Dhutadmal <chandrakantd@cdac.in>\n"
 "Language-Team: NONE\n"
@@ -7194,7 +7194,7 @@ msgstr "तरीक: "
 msgid "Frequency"
 msgstr "फ्रीक्विंसी"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1279
+#: gnucash/gnome-utils/gnc-dense-cal.c:1281
 msgid "(unnamed)"
 msgstr "(अनामत)"
 
@@ -8398,7 +8398,7 @@ msgid "Missing command or option"
 msgstr "एह् इक रंग आप्शन ऐ"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
-#: gnucash/gnucash.cpp:180
+#: gnucash/gnucash.cpp:179
 #, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
@@ -8522,30 +8522,30 @@ msgstr "बजट दियां आप्शनां:"
 msgid "[datafile]"
 msgstr ""
 
-#: gnucash/gnucash.cpp:177
+#: gnucash/gnucash.cpp:176
 msgid "Checking Finance::Quote…"
 msgstr "फाइनांस::कोटेशन… दी जांच कीती जा करदी ऐ"
 
-#: gnucash/gnucash.cpp:187
+#: gnucash/gnucash.cpp:186
 msgid "Unable to load Finance::Quote."
 msgstr "फाइनांस::कोटेशन... दी जांच कीती जा करदी ऐ"
 
-#: gnucash/gnucash.cpp:198
+#: gnucash/gnucash.cpp:197
 msgid "Loading data…"
 msgstr "डैटा लोड होआ करदा ऐ…"
 
-#: gnucash/gnucash.cpp:270
+#: gnucash/gnucash.cpp:257
 #, fuzzy
 #| msgid "application"
 msgid "Application Options"
 msgstr "ऐप्लीकेशन"
 
-#: gnucash/gnucash.cpp:273
+#: gnucash/gnucash.cpp:260
 msgid "Do not load the last file opened"
 msgstr "खीर च खोह्‌ल्ली दी फ़ाइल गी लोड नेईं करो"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:311
+#: gnucash/gnucash.cpp:298
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
@@ -30767,6 +30767,7 @@ msgstr "कम्म-क्रम"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
+#: gnucash/ui/gnc-plugin-page-register.ui:849
 #, fuzzy
 #| msgid ""
 #| "Create a Scheduled Transaction with the current transaction as a template"
@@ -30863,15 +30864,6 @@ msgstr "सभनें स्प्लिटें गी चालू लै�
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
 msgstr "चुनिंदा लैन-देन आस्तै रजिस्टर रिपोट खोह्‌ल्लो"
-
-#: gnucash/ui/gnc-plugin-page-register.ui:849
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template or "
-"edit the Scheduled Transaction that current transaction was created by"
-msgstr "चालू लैन-देन थमां इक टैम्प्लेट दे रूप च इक नियत लैन-देन बनाओ"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300

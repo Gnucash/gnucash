@@ -7,10 +7,10 @@
 # Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.5\n"
+"Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-17 08:37+0100\n"
+"POT-Creation-Date: 2024-03-23 03:13+0100\n"
 "PO-Revision-Date: 2023-06-06 21:50+0000\n"
 "Last-Translator: Tadas Masiulionis <tadzikaz@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/gnucash/"
@@ -7260,7 +7260,7 @@ msgstr "Data: "
 msgid "Frequency"
 msgstr "Dažnumas"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1279
+#: gnucash/gnome-utils/gnc-dense-cal.c:1281
 msgid "(unnamed)"
 msgstr "(be pavadinimo)"
 
@@ -8470,7 +8470,7 @@ msgid "Missing command or option"
 msgstr "Tai spalvos parinktis."
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
-#: gnucash/gnucash.cpp:180
+#: gnucash/gnucash.cpp:179
 #, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
@@ -8595,29 +8595,29 @@ msgstr "Biudžeto parinktys"
 msgid "[datafile]"
 msgstr "[duomenų failas]"
 
-#: gnucash/gnucash.cpp:177
+#: gnucash/gnucash.cpp:176
 msgid "Checking Finance::Quote…"
 msgstr "Tikrinama Finance::Quote…"
 
-#: gnucash/gnucash.cpp:187
+#: gnucash/gnucash.cpp:186
 msgid "Unable to load Finance::Quote."
 msgstr "Tikrinama Finance::Quote..."
 
-#: gnucash/gnucash.cpp:198
+#: gnucash/gnucash.cpp:197
 msgid "Loading data…"
 msgstr "Įkeliami duomenys…"
 
-#: gnucash/gnucash.cpp:270
+#: gnucash/gnucash.cpp:257
 #, fuzzy
 msgid "Application Options"
 msgstr "programa"
 
-#: gnucash/gnucash.cpp:273
+#: gnucash/gnucash.cpp:260
 msgid "Do not load the last file opened"
 msgstr "Neįkelti paskutinio atverto failo"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:311
+#: gnucash/gnucash.cpp:298
 #, fuzzy
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
@@ -30478,6 +30478,7 @@ msgstr "Planas"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
+#: gnucash/ui/gnc-plugin-page-register.ui:849
 #, fuzzy
 #| msgid ""
 #| "Create a Scheduled Transaction with the current transaction as a template"
@@ -30576,15 +30577,6 @@ msgstr "Rodyti visus dabartinės operacijos skaidymus"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
 msgstr "Atverti registro ataskaitą pasirinktai operacijai"
-
-#: gnucash/ui/gnc-plugin-page-register.ui:849
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template or "
-"edit the Scheduled Transaction that current transaction was created by"
-msgstr "Sukurti planinę operaciją su dabartine operacija kaip šablonu"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300

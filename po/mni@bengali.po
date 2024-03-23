@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.5\n"
+"Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-17 08:37+0100\n"
+"POT-Creation-Date: 2024-03-23 03:13+0100\n"
 "PO-Revision-Date: 2014-08-19 15:04+0530\n"
 "Last-Translator: Chandrakant Dhutadmal <cpdhutadmal@yahoo.com>\n"
 "Language-Team: Manipuri (Bengali Script) <gistlrc@gmail.com>\n"
@@ -7218,7 +7218,7 @@ msgstr "তাং:"
 msgid "Frequency"
 msgstr "ফ্রিক্বেনসি"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1279
+#: gnucash/gnome-utils/gnc-dense-cal.c:1281
 msgid "(unnamed)"
 msgstr "(মিংথোন্দবা)"
 
@@ -8428,7 +8428,7 @@ msgid "Missing command or option"
 msgstr "মসি মচুগী ওপসন অমনি।"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
-#: gnucash/gnucash.cpp:180
+#: gnucash/gnucash.cpp:179
 #, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
@@ -8550,29 +8550,29 @@ msgstr "বজেতকী ওপসনস"
 msgid "[datafile]"
 msgstr "[দেতাফাইল]"
 
-#: gnucash/gnucash.cpp:177
+#: gnucash/gnucash.cpp:176
 msgid "Checking Finance::Quote…"
 msgstr "ফাইনান্স য়েংশিনবা::কোত…"
 
-#: gnucash/gnucash.cpp:187
+#: gnucash/gnucash.cpp:186
 msgid "Unable to load Finance::Quote."
 msgstr "ফাইনান্স য়েংশিনবা::কোত..."
 
-#: gnucash/gnucash.cpp:198
+#: gnucash/gnucash.cpp:197
 msgid "Loading data…"
 msgstr "দাতা লোদ তৌরি…"
 
-#: gnucash/gnucash.cpp:270
+#: gnucash/gnucash.cpp:257
 #, fuzzy
 msgid "Application Options"
 msgstr "এপ্লিকেসন"
 
-#: gnucash/gnucash.cpp:273
+#: gnucash/gnucash.cpp:260
 msgid "Do not load the last file opened"
 msgstr "অকোনবগী অহাংবা ফাইল লোদ তৌগনু"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:311
+#: gnucash/gnucash.cpp:298
 #, fuzzy
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
@@ -30644,6 +30644,7 @@ msgstr "সেদিউল"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
+#: gnucash/ui/gnc-plugin-page-register.ui:849
 #, fuzzy
 #| msgid ""
 #| "Create a Scheduled Transaction with the current transaction as a template"
@@ -30742,15 +30743,6 @@ msgstr "হৌজিক্কী ত্রান্সেকসনদা খা�
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
 msgstr "খল্লবা ত্রান্সেকসন অসিগী রেজিস্তর রিপোর্ত হাংদোকউ"
-
-#: gnucash/ui/gnc-plugin-page-register.ui:849
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template or "
-"edit the Scheduled Transaction that current transaction was created by"
-msgstr "হৌজিক্কী ত্রান্সেকসনগা লোয়ননা সেদিউল ত্রান্সেকসন তেমপ্লেত ওইনা শেমগৎলো"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300

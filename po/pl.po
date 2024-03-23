@@ -11,10 +11,10 @@
 # Jacek Baszkiewicz <j.baszkiewicz@gmail.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.5\n"
+"Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-17 08:37+0100\n"
+"POT-Creation-Date: 2024-03-23 03:13+0100\n"
 "PO-Revision-Date: 2024-03-16 21:01+0000\n"
 "Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -7197,7 +7197,7 @@ msgstr "Data: "
 msgid "Frequency"
 msgstr "Częstotliwość"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1279
+#: gnucash/gnome-utils/gnc-dense-cal.c:1281
 msgid "(unnamed)"
 msgstr "(bez nazwy)"
 
@@ -8389,7 +8389,7 @@ msgid "Missing command or option"
 msgstr "To jest opcja koloru"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
-#: gnucash/gnucash.cpp:180
+#: gnucash/gnucash.cpp:179
 #, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
@@ -8507,29 +8507,29 @@ msgstr "Opcje budżetu"
 msgid "[datafile]"
 msgstr "[plik danych]"
 
-#: gnucash/gnucash.cpp:177
+#: gnucash/gnucash.cpp:176
 msgid "Checking Finance::Quote…"
 msgstr "Sprawdzanie Finance::Quote…"
 
-#: gnucash/gnucash.cpp:187
+#: gnucash/gnucash.cpp:186
 msgid "Unable to load Finance::Quote."
 msgstr "Sprawdzanie Finance::Quote..."
 
-#: gnucash/gnucash.cpp:198
+#: gnucash/gnucash.cpp:197
 msgid "Loading data…"
 msgstr "Wczytywanie danych…"
 
-#: gnucash/gnucash.cpp:270
+#: gnucash/gnucash.cpp:257
 #, fuzzy
 msgid "Application Options"
 msgstr "aplikacja"
 
-#: gnucash/gnucash.cpp:273
+#: gnucash/gnucash.cpp:260
 msgid "Do not load the last file opened"
 msgstr "Nie wczytuj ostatniego otwartego pliku"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:311
+#: gnucash/gnucash.cpp:298
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
@@ -9626,9 +9626,9 @@ msgid ""
 "\"backslash\", \"dash\" and \"period\"."
 msgstr ""
 "Ustawienie określa znak separujący nazwy kont. Możliwe wartości to "
-"niealfanumeryczne znaki Unicode lub dowolny z tekstów: "
-"\"colon\" (dwukropek), \"slash\" (ukośnik), \"backslash\" (ukośnik "
-"wsteczny), \"dash\" (myślnik) i \"period\" (kropka)."
+"niealfanumeryczne znaki Unicode lub dowolny z tekstów: \"colon\" "
+"(dwukropek), \"slash\" (ukośnik), \"backslash\" (ukośnik wsteczny), \"dash\" "
+"(myślnik) i \"period\" (kropka)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 #, fuzzy
@@ -30295,6 +30295,7 @@ msgstr "Har_monogram…"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
+#: gnucash/ui/gnc-plugin-page-register.ui:849
 #, fuzzy
 #| msgid ""
 #| "Create a Scheduled Transaction with the current transaction as a template"
@@ -30384,16 +30385,6 @@ msgstr "Pokaż wszystkie podziały w bieżącej transakcji"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
 msgstr "Otwórz drugie konto w nowej zakładce z kursorem w tej transakcji."
-
-#: gnucash/ui/gnc-plugin-page-register.ui:849
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template or "
-"edit the Scheduled Transaction that current transaction was created by"
-msgstr ""
-"Utwórz transakcję zaplanowaną, używając bieżącej transakcji jako szablonu"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300

@@ -36,10 +36,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.5\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-17 08:37+0100\n"
+"Project-Id-Version: GnuCash 5.6\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2024-03-23 03:13+0100\n"
 "PO-Revision-Date: 2024-03-23 00:41+0000\n"
 "Last-Translator: \"Frank H. Ellenberger\" <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -7277,7 +7277,7 @@ msgstr "Datum: "
 msgid "Frequency"
 msgstr "Häufigkeit"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1279
+#: gnucash/gnome-utils/gnc-dense-cal.c:1281
 msgid "(unnamed)"
 msgstr "(unbenannt)"
 
@@ -8543,7 +8543,7 @@ msgid "Missing command or option"
 msgstr "Befehl oder Option fehlt"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
-#: gnucash/gnucash.cpp:180
+#: gnucash/gnucash.cpp:179
 #, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr "Finance::Quote Version {1} wurde gefunden."
@@ -8668,28 +8668,28 @@ msgstr "Versteckte Optionen"
 msgid "[datafile]"
 msgstr "[Datei]"
 
-#: gnucash/gnucash.cpp:177
+#: gnucash/gnucash.cpp:176
 msgid "Checking Finance::Quote…"
 msgstr "Modul Finance::Quote prüfen…"
 
-#: gnucash/gnucash.cpp:187
+#: gnucash/gnucash.cpp:186
 msgid "Unable to load Finance::Quote."
 msgstr "Modul Finance::Quote prüfen..."
 
-#: gnucash/gnucash.cpp:198
+#: gnucash/gnucash.cpp:197
 msgid "Loading data…"
 msgstr "Daten laden…"
 
-#: gnucash/gnucash.cpp:270
+#: gnucash/gnucash.cpp:257
 msgid "Application Options"
 msgstr "Anwendungs-Optionen"
 
-#: gnucash/gnucash.cpp:273
+#: gnucash/gnucash.cpp:260
 msgid "Do not load the last file opened"
 msgstr "Zuletzt geöffnete Datei nicht öffnen"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:311
+#: gnucash/gnucash.cpp:298
 msgid ""
 "Error: could not initialize graphical user interface and option add-price-"
 "quotes was not set.\n"
@@ -18749,10 +18749,9 @@ msgid ""
 msgstr ""
 "Der Betrag ist Null oder der eingegebene Betrag konnte nicht korrekt "
 "interpretiert werden. Eventuell haben Sie Komma und Dezimalpunkt "
-"verwechselt. Wenn die länderspezifischen Einstellungen auf "
-"»Deutschland« (locale de, LANG=de_DE) gestellt sind, müssen Sie ein Komma "
-"eingeben, andernfalls einen Punkt. Dies ergibt keinen zulässigen "
-"Zahlungsauftrag."
+"verwechselt. Wenn die länderspezifischen Einstellungen auf »Deutschland« "
+"(locale de, LANG=de_DE) gestellt sind, müssen Sie ein Komma eingeben, "
+"andernfalls einen Punkt. Dies ergibt keinen zulässigen Zahlungsauftrag."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:645
 msgid ""
@@ -30403,6 +30402,7 @@ msgstr "_Terminiert…"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
+#: gnucash/ui/gnc-plugin-page-register.ui:849
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template or "
 "edit the Scheduled Transaction that current transaction was created by."
@@ -30483,14 +30483,6 @@ msgid ""
 msgstr ""
 "Ein neues Kontofenster für das Gegenkonto öffnen und die aktuelle Buchung "
 "auswählen"
-
-#: gnucash/ui/gnc-plugin-page-register.ui:849
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template or "
-"edit the Scheduled Transaction that current transaction was created by"
-msgstr ""
-"Erstelle eine geplante Buchung mit der aktuellem Buchung als Vorlage oder "
-"bearbeite die geplante Buchung, von der die aktuelle Buchung erzeugt wurde."
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300

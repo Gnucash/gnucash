@@ -4,10 +4,10 @@
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2015—2017.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.5\n"
+"Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-17 08:37+0100\n"
+"POT-Creation-Date: 2024-03-23 03:13+0100\n"
 "PO-Revision-Date: 2017-11-05 08:54+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
@@ -7189,7 +7189,7 @@ msgstr "Датум: "
 msgid "Frequency"
 msgstr "Учесталост"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1279
+#: gnucash/gnome-utils/gnc-dense-cal.c:1281
 msgid "(unnamed)"
 msgstr "(неименовано)"
 
@@ -8408,7 +8408,7 @@ msgid "Missing command or option"
 msgstr "Ово је опција боје."
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
-#: gnucash/gnucash.cpp:180
+#: gnucash/gnucash.cpp:179
 #, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
@@ -8533,29 +8533,29 @@ msgstr "Опције буџета"
 msgid "[datafile]"
 msgstr "[датотека података]"
 
-#: gnucash/gnucash.cpp:177
+#: gnucash/gnucash.cpp:176
 msgid "Checking Finance::Quote…"
 msgstr "Проверавам „Финансије::Курс“…"
 
-#: gnucash/gnucash.cpp:187
+#: gnucash/gnucash.cpp:186
 msgid "Unable to load Finance::Quote."
 msgstr "Проверавам „Финансије::Курс“..."
 
-#: gnucash/gnucash.cpp:198
+#: gnucash/gnucash.cpp:197
 msgid "Loading data…"
 msgstr "Учитавам податке…"
 
-#: gnucash/gnucash.cpp:270
+#: gnucash/gnucash.cpp:257
 #, fuzzy
 msgid "Application Options"
 msgstr "програм"
 
-#: gnucash/gnucash.cpp:273
+#: gnucash/gnucash.cpp:260
 msgid "Do not load the last file opened"
 msgstr "Немој поново учитавати последњу отворену датотеку"
 
 #. Translators: Do not translate $DISPLAY! It is an environment variable for X11
-#: gnucash/gnucash.cpp:311
+#: gnucash/gnucash.cpp:298
 #, fuzzy
 #| msgid ""
 #| "Error: could not initialize graphical user interface and option add-price-"
@@ -9772,11 +9772,11 @@ msgid ""
 "days'"
 msgstr ""
 "Ово подешавање одређује шта ће да се ради са старим датотекама дневника/"
-"резерви. „forever“ (заувек) значи задржавање свих старих датотека. "
-"„never“ (никада) значи да ниједна стара датотека дневника/резерве неће бити "
-"задржана. Сваки пут када сачувате, стара издања датотеке се уклањају. "
-"„days“ (дани) значи задржавање старих датотека за одређени број дана. Број "
-"дана се одређује у кључу „retain-days“ (дани-задржавања)."
+"резерви. „forever“ (заувек) значи задржавање свих старих датотека. „never“ "
+"(никада) значи да ниједна стара датотека дневника/резерве неће бити "
+"задржана. Сваки пут када сачувате, стара издања датотеке се уклањају. „days“ "
+"(дани) значи задржавање старих датотека за одређени број дана. Број дана се "
+"одређује у кључу „retain-days“ (дани-задржавања)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1761
@@ -9819,11 +9819,11 @@ msgid ""
 "balances."
 msgstr ""
 "Ово подешавање омогућава одређеним рачунима да могу да промене знак својих "
-"салда из позитивног у негативно, или обрнуто. Подешавање „income-"
-"expense“ (приход-расход) је за кориснике који воле да виде негативне расходе "
-"а позитвне приходе. Подешавање „credit“ (кредит) је за кориснике који желе "
-"да виде да салда одражавају стања дуга/кредита рачуна. Подешавање "
-"„none“ (ништа) не преокреће знак ни у једном од салда."
+"салда из позитивног у негативно, или обрнуто. Подешавање „income-expense“ "
+"(приход-расход) је за кориснике који воле да виде негативне расходе а "
+"позитвне приходе. Подешавање „credit“ (кредит) је за кориснике који желе да "
+"виде да салда одражавају стања дуга/кредита рачуна. Подешавање „none“ "
+"(ништа) не преокреће знак ни у једном од салда."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:100
 #: gnucash/gtkbuilder/dialog-preferences.glade:675
@@ -10082,8 +10082,8 @@ msgid ""
 "\"right\". It defaults to \"top\"."
 msgstr ""
 "Ово подешавање одређује ивицу на којој се језичци за пребацивање страница у "
-"књижицама цртају. Могуће вредности су „top“ (горе), „left“ (лево), "
-"„bottom“ (доле) и „right“ (десно). Основно је „top“."
+"књижицама цртају. Могуће вредности су „top“ (горе), „left“ (лево), „bottom“ "
+"(доле) и „right“ (десно). Основно је „top“."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3396
@@ -11084,8 +11084,8 @@ msgid ""
 "This setting controls whether the given column will be visible in the view. "
 "TRUE means visible, FALSE means hidden."
 msgstr ""
-"Ово подешавање управља да ли ће дата колона бити видљива у прегледу. "
-"„TRUE“ (изабрано) значи видљива, „FALSE“ (поништено) значи скривена."
+"Ово подешавање управља да ли ће дата колона бити видљива у прегледу. „TRUE“ "
+"(изабрано) значи видљива, „FALSE“ (поништено) значи скривена."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:10
 msgid "Width of this column"
@@ -15350,9 +15350,9 @@ msgid ""
 "\"period\"."
 msgstr ""
 "Знак који ће се користити између делова назива налога. Дозвољена вредност је "
-"сваки знак осим слова и бројева, или било која од следећих ниски: "
-"„colon“ (двотачка), „slash“ (коса црта), „backslash“ (контра коса црта), "
-"„dash“ (црта) и „period“ (тачка)."
+"сваки знак осим слова и бројева, или било која од следећих ниски: „colon“ "
+"(двотачка), „slash“ (коса црта), „backslash“ (контра коса црта), „dash“ "
+"(црта) и „period“ (тачка)."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:916
 #: gnucash/gtkbuilder/dialog-preferences.glade:3177
@@ -30630,6 +30630,7 @@ msgstr "Планирање"
 #: gnucash/ui/gnc-plugin-page-register.ui:297
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
+#: gnucash/ui/gnc-plugin-page-register.ui:849
 #, fuzzy
 #| msgid ""
 #| "Create a Scheduled Transaction with the current transaction as a template"
@@ -30728,15 +30729,6 @@ msgstr "Прикажите све поделе у текућој трансак�
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
 msgstr "Отворите извештај регистра за изабрану трансакцију"
-
-#: gnucash/ui/gnc-plugin-page-register.ui:849
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
-msgid ""
-"Create a Scheduled Transaction with the current transaction as a template or "
-"edit the Scheduled Transaction that current transaction was created by"
-msgstr "Направите заказану трансакцију са текућом трансакцијом као шаблоном"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
