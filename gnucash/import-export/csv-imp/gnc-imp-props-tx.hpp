@@ -89,6 +89,13 @@ using ErrPair = std::pair<GncTransPropType, std::string>;
  *  changes to enum class GncTransPropType ! */
 extern std::map<GncTransPropType, const char*> gnc_csv_col_type_strs;
 
+/** Maps all account types to a string representation for
+ *  the AMOUNT and AMOUNT_NEG informal labels
+ *  Attention: these definitions should be adjusted for any
+ *  changes to enum class GNCAccountType in Account.h */
+extern std::map<GNCAccountType, const char*> gnc_imp_amount_strs;
+extern std::map<GNCAccountType, const char*> gnc_imp_amtneg_strs;
+
 /** Functor to check if the above map has an element of which
  *  the value equals name. To be used with std::find_if.
  */

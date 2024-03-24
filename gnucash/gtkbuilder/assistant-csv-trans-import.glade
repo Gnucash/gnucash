@@ -43,12 +43,29 @@
         <property name="margin-end">12</property>
         <property name="label" translatable="yes">This assistant will help you import a delimited file containing a list of transactions. It supports both token separated files (such as comma separated or semi-colon separated) and fixed width data.
 
-For a successful import three columns have to be available in the import data:
-• a Date column
-• a Description column
-• a Deposit or Withdrawal column
+For a successful import at least three columns have to be available in the import data:
+• a Date column,
+• a Description column,
+• an Amount column.
 
 If there is no Account data available, a base account can be selected to which all data will be imported.
+
+After selecting a base account, the Amount column headings will guide you in selecting the correct label for you data column(s) depending on the number of amount columns in your data and signs used (positive or negative).
+
+For instance, when selecting a bank account as a base account, the column heading labelled "Amount: +Deposit -Withdrawal" could be used on a single column containing both positive deposit amounts and negative withdrawal amounts, or on a column with positive deposit amounts only. The same label could then be used on a second column with negative withdrawal amounts only. However, if that second column comes with POSITIVE withdrawal amounts, then the opposite column heading labelled "Amount: +Withdrawal -Deposit" would need be used for that column.
+
+When separate Account data is provided for each transaction, then the heading(s) to select for the Amount data depends on whether it follows this standard sign format or its opposite:
+• for bank and cash accounts, deposits are positive and withdrawals are negative;
+• for credit card accounts, charges are negative and payments/refunds are positive;
+• for mortgages and loans, debt proceeds are negative and repayments are positive;
+• for brokerage accounts, "shares bought" are positive and "shares sold" are negative;
+• for other account types, refer to the concept guide, chapter 2 (available in the help menu).
+
+If it follows that format, select the "Amount (sign-standard)" heading; otherwise select "Amount (sign-reversed)".
+
+Note that when "formal accounting labels" are selected in Preferences, the formal "Debit/Credit" labels are used in Amount column headings:
+• "Amount: +Debit -Credit" for the sign-standard label, accepting positive debit amounts and negative credit amounts,
+• "Amount: +Credit -Debit" for the sign-reversed label, accepting positive credit amounts and negative debit amounts.
 
 Apart from a choice of delimiter, there are several options to tweak the importer. For example a number of lines can be skipped at the start or the end of the data, as well as odd rows. Several date and number formats are supported. The file encoding can be defined.
 

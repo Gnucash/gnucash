@@ -42,6 +42,7 @@
 #include "gnc-uri-utils.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
+#include "gnc-prefs.h"
 
 #include "gnc-component-manager.h"
 
@@ -1531,9 +1532,23 @@ CsvImpTransAssist::preview_style_column (uint32_t col_num, GtkTreeModel* model)
 /* Helper to create a shared store for the header comboboxes in the preview treeview.
  * It holds the possible column types */
 static GtkTreeModel*
-make_column_header_model (bool multi_split)
+make_column_header_model (bool multi_split, const Account* acct=NULL)
 {
     auto combostore = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
+
+    /* Set labels for Amount columns as per global label preference and account type */
+    if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_ACCOUNTING_LABELS))
+    {
+        gnc_csv_col_type_strs[GncTransPropType::AMOUNT] = _("Amount: +Debit -Credit");
+        gnc_csv_col_type_strs[GncTransPropType::AMOUNT_NEG] = _("Amount: +Credit -Debit");
+    }
+    else
+    {
+        GNCAccountType acct_type = xaccAccountGetType (acct);
+        gnc_csv_col_type_strs[GncTransPropType::AMOUNT] = gnc_imp_amount_strs[acct_type];
+        gnc_csv_col_type_strs[GncTransPropType::AMOUNT_NEG] = gnc_imp_amtneg_strs[acct_type];
+    }
+
     for (auto col_type : gnc_csv_col_type_strs)
     {
         /* Only add column types that make sense in
@@ -1625,7 +1640,7 @@ void CsvImpTransAssist::preview_refresh_table ()
     }
 
     /* Reset column attributes as they are undefined after recreating the model */
-    auto combostore = make_column_header_model (tx_imp->multi_split());
+    auto combostore = make_column_header_model (tx_imp->multi_split(), tx_imp->base_account());
     for (uint32_t i = 0; i < ntcols; i++)
         preview_style_column (i, combostore);
 
