@@ -3058,6 +3058,63 @@ xaccTransRecordPrice (Transaction *trans, PriceSource source)
     g_list_foreach (xaccTransGetSplitList (trans), (GFunc)record_price, (gpointer)source);
 }
 
+
+
+#include <optional>
+#include <sstream>
+#include <iostream>
+
+// expensive function; retrieve from account's kvp
+static std::optional<time64>
+acct_retrieve_last_recn_date (const Account* acc)
+{
+    time64 get_date;
+    if (!xaccAccountGetReconcileLastDate (acc, &get_date))
+        return std::nullopt;
+
+    return get_date;
+}
+
+char*
+gnc_transaction_get_warnings (const Transaction* txn)
+{
+    auto post_date{xaccTransGetDate (txn)};
+    std::ostringstream ss;
+
+    for (auto m = xaccTransGetSplitList (txn); m; m = g_list_next (m))
+    {
+        auto txn_split{GNC_SPLIT(m->data)};
+        auto txn_split_account{xaccSplitGetAccount (txn_split)};
+        auto acct_name{gnc_account_get_full_name (txn_split_account)};
+
+        // check for account reconcile date
+        auto last_recn_date{acct_retrieve_last_recn_date (txn_split_account)};
+        if (last_recn_date && *last_recn_date >= post_date)
+        {
+            auto post_date_str{qof_print_date (post_date)};
+            auto recn_date_str{qof_print_date (*last_recn_date)};
+            ss << "The posting date " << post_date_str << " preceeds the account "
+               << acct_name << " reconcile date " << recn_date_str
+               << ". Further reconciliation of this account may be difficult. ";
+            g_free (recn_date_str);
+            g_free (post_date_str);
+        }
+
+        if (xaccAccountIsHidden (txn_split_account))
+            ss << "The transaction includes the account " << acct_name << " which is "
+               << "hidden. ";
+
+        if (xaccAccountGetPlaceholder (txn_split_account))
+            ss << "The transaction includes the account " << acct_name << " which is "
+               << "a placeholder. ";
+
+        g_free (acct_name);
+    }
+
+    auto str{ss.str()};
+    return str.empty() ? nullptr : g_strdup (str.c_str());
+}
+
 /********************************************************************\
 \********************************************************************/
 /* QofObject function implementation */

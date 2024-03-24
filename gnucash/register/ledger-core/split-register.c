@@ -1952,6 +1952,22 @@ gnc_split_register_save (SplitRegister* reg, gboolean do_commit)
      * transaction to NULL. */
     if (do_commit)
     {
+        char* warnings = gnc_transaction_get_warnings (trans);
+        if (warnings)
+        {
+            GtkWindow* parent = GTK_WINDOW (gnc_split_register_get_parent (reg));
+            const char* verify_header = N_("The following warnings were found:\n\n%s\n\n\
+Do you still wish to continue?");
+            gchar* verify = g_strdup_printf (_(verify_header), warnings);
+            gboolean leave_early = !gnc_verify_dialog (parent, TRUE, "%s", verify);
+            g_free (verify);
+            g_free (warnings);
+            if (leave_early)
+            {
+                gnc_resume_gui_refresh ();
+                return FALSE;
+            }
+        }
         g_assert (trans == blank_trans || trans == pending_trans);
         if (pending_trans == trans)
         {
