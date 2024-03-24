@@ -221,6 +221,10 @@ gnc_run_report_with_error_handling (gint report_id, gchar ** data, gchar **errms
     html = scm_car (res);
     captured_error = scm_cadr (res);
 
+    /* Force a gc run after the report is finished to ensure that
+       guardians are called to unref objects */
+    scm_gc();
+
     if (!scm_is_false (html))
     {
         *data = gnc_scm_to_utf8_string (html);
