@@ -1727,7 +1727,7 @@
                     <property name="model">imexporter-list</property>
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="tooltip-text" translatable="yes">This list contains the file formats that AQBanking knows how to import. The profile list contains specializations and is populated according to which format you select in this list.</property>
+                    <property name="tooltip-text" translatable="yes">This list contains the file formats that AqBanking knows how to import. The profile list contains specializations and is populated according to which format you select in this list.</property>
                     <child>
                       <object class="GtkTreeViewColumn" id="imexporter-name">
                         <property name="title" translatable="yes">File Format</property>
