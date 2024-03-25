@@ -12,10 +12,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-03-22 17:01+0000\n"
+"PO-Revision-Date: 2024-03-23 11:01+0000\n"
 "Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -29303,22 +29303,16 @@ msgid "Edit the payment this transaction is a part of."
 msgstr "A jelenlegi tranzakció szerkesztése"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:35
-#, fuzzy
-#| msgid "Edit the selected account"
 msgid "Edit the selected account."
-msgstr "A kiválasztott számla szerkesztése"
+msgstr "A kiválasztott számla szerkesztése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:42
-#, fuzzy
-#| msgid "Find an account"
 msgid "Find an account."
-msgstr "Számla keresése"
+msgstr "Számla keresése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:52
-#, fuzzy
-#| msgid "Find transactions with a search"
 msgid "Find transactions with a search."
-msgstr "Tranzakció keresése"
+msgstr "Tranzakciók keresése."
 
 #. Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string
 #: gnucash/ui/gnc-plugin-page-register.ui:63
@@ -29331,10 +29325,8 @@ msgid "_Basic Ledger"
 msgstr "Felosztások be_zárva"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:74
-#, fuzzy
-#| msgid "Show transactions on one or two lines"
 msgid "Show transactions on one or two lines."
-msgstr "Tranzakciók megjelenítése egy vagy két sorban"
+msgstr "Tranzakciók megjelenítése egy vagy két sorban."
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/ui/gnc-plugin-page-register.ui:79
@@ -29342,20 +29334,15 @@ msgid "_Auto-Split Ledger"
 msgstr "_Szerkesztett felosztás kinyitva"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:82
-#, fuzzy
-#| msgid ""
-#| "Show transactions on one or two lines and expand the current transaction"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction."
 msgstr ""
 "Tranzakciók megjelenítése egy vagy két sorban, és az éppen szerkesztett "
-"tranzakció felosztásának kinyitása"
+"tranzakció felosztásának kinyitása."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
-#, fuzzy
-#| msgid "Show expanded transactions with all splits"
 msgid "Show expanded transactions with all splits."
-msgstr "Az összes felosztás kinyitása"
+msgstr "Az összes felosztás kinyitása."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:107
 #: gnucash/ui/gnc-plugin-page-register.ui:349
@@ -29364,64 +29351,48 @@ msgid "_Sort By…"
 msgstr "_Rendezés…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:123
-#, fuzzy
-#| msgid "Refresh this window"
 msgid "Refresh this window."
-msgstr "Ezen ablak frissítése"
+msgstr "Ezen ablak frissítése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:132
-#, fuzzy
-#| msgid "Cut the selected transaction into clipboard"
 msgid "Cut the selected transaction into clipboard."
-msgstr "A jelenlegi tranzakció kivágása a vágólapra"
+msgstr "A jelenlegi tranzakció kivágása a vágólapra."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:138
-#, fuzzy
-#| msgid "Copy the selected transaction into clipboard"
 msgid "Copy the selected transaction into clipboard."
-msgstr "A jelenlegi tranzakció másolása a vágólapra"
+msgstr "A jelenlegi tranzakció másolása a vágólapra."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:144
-#, fuzzy
-#| msgid "Paste the transaction from the clipboard"
 msgid "Paste the transaction from the clipboard."
-msgstr "Tranzakció beillesztése a vágólapról"
+msgstr "Tranzakció beillesztése a vágólapról."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:150
 #: gnucash/ui/gnc-plugin-page-register.ui:366
 #: gnucash/ui/gnc-plugin-page-register.ui:576
-#, fuzzy
-#| msgid "Make a copy of the current transaction"
 msgid "Make a copy of the current transaction."
-msgstr "Másolat létrehozása a jelenlegi tranzakcióról"
+msgstr "Másolat létrehozása a jelenlegi tranzakcióról."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:156
 #: gnucash/ui/gnc-plugin-page-register.ui:371
 #: gnucash/ui/gnc-plugin-page-register.ui:581
-#, fuzzy
-#| msgid "Delete the current transaction"
 msgid "Delete the current transaction."
-msgstr "A jelenlegi tranzakció törlése"
+msgstr "A jelenlegi tranzakció törlése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:162
 #: gnucash/ui/gnc-plugin-page-register.ui:376
 #: gnucash/ui/gnc-plugin-page-register.ui:488
 #: gnucash/ui/gnc-plugin-page-register.ui:586
 #: gnucash/ui/gnc-plugin-page-register.ui:625
-#, fuzzy
-#| msgid "Remove all splits in the current transaction"
 msgid "Remove all splits in the current transaction."
-msgstr "Összes felosztás törlése a jelenlegi tranzakcióból"
+msgstr "Összes felosztás törlése a jelenlegi tranzakcióból."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:171
 #: gnucash/ui/gnc-plugin-page-register.ui:383
 #: gnucash/ui/gnc-plugin-page-register.ui:495
 #: gnucash/ui/gnc-plugin-page-register.ui:593
 #: gnucash/ui/gnc-plugin-page-register.ui:632
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Record the current transaction."
-msgstr "A jelenlegi tranzakció rögzítése"
+msgstr "A jelenlegi tranzakció rögzítése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:177
 #: gnucash/ui/gnc-plugin-page-register.ui:388
@@ -29438,30 +29409,24 @@ msgid "_Void Transaction"
 msgstr "Tranzakció ér_vénytelenítése"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-#, fuzzy
-#| msgid "Void the current transaction"
 msgid "Void the current transaction."
-msgstr "A jelenlegi tranzakció érvénytelenítése"
+msgstr "A jelenlegi tranzakció érvénytelenítése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
 msgid "_Unvoid Transaction"
 msgstr "Tranzakció _érvényesítése"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-#, fuzzy
-#| msgid "Unvoid the current transaction"
 msgid "Unvoid the current transaction."
-msgstr "A jelenlegi tranzakció újra érvényesítése"
+msgstr "A jelenlegi tranzakció újra érvényesítése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
 msgstr "Fo_rdított tranzakció felvétele(Storno)"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
-#, fuzzy
-#| msgid "Add a reversing transaction"
 msgid "Add a reversing transaction."
-msgstr "Fordított tranzakció felvétele (Storno)"
+msgstr "Fordított tranzakció felvétele (Storno)."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:207
 #: gnucash/ui/gnc-plugin-page-register.ui:395
@@ -29481,57 +29446,41 @@ msgstr "Másolat létrehozása a jelenlegi tranzakcióról"
 #: gnucash/ui/gnc-plugin-page-register.ui:222
 #: gnucash/ui/gnc-plugin-page-register.ui:407
 #: gnucash/ui/gnc-plugin-page-register.ui:519
-#, fuzzy
-#| msgid "Jump to the linked bill, invoice, or voucher"
 msgid "Jump to the linked bill, invoice, or voucher."
 msgstr ""
-"Ugrás a kapcsolódó bejövő vagy kimenő számlára, vagy költségbizonylatra"
+"Ugrás a kapcsolódó bejövő vagy kimenő számlára, vagy költségbizonylatra."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:232
-#, fuzzy
-#| msgid "Transfer funds from one account to another"
 msgid "Transfer funds from one account to another."
-msgstr "Pénz átvezetése egyik számláról a másikra"
+msgstr "Pénz átvezetése egyik számláról a másikra."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:238
-#, fuzzy
-#| msgid "Reconcile the selected account"
 msgid "Reconcile the selected account."
-msgstr "A kiválasztott folyószámla egyeztetése"
+msgstr "A kiválasztott folyószámla egyeztetése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:244
-#, fuzzy
-#| msgid ""
-#| "Automatically clear individual transactions, so as to reach a certain "
-#| "cleared amount"
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount."
 msgstr ""
 "Automatikusan elszámol egyes tranzakciókat, hogy elérjen egy meghatározott "
-"elszámolt összeget"
+"elszámolt összeget."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:256
-#, fuzzy
-#| msgid "Record a stock split or a stock merger"
 msgid "Record a stock split or a stock merger."
-msgstr "Részvényfelaprózás vagy -összevonás rögzítése"
+msgstr "Részvényfelaprózás vagy -összevonás rögzítése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:262
-#, fuzzy
-#| msgid "Bring up the lot viewer/editor window"
 msgid "Bring up the lot viewer/editor window."
-msgstr "A tétel néző/szerkesztő ablak megnyitása"
+msgstr "A tétel néző/szerkesztő ablak megnyitása."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:272
 #: gnucash/ui/gnc-plugin-page-register.ui:414
 #: gnucash/ui/gnc-plugin-page-register.ui:526
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
-#, fuzzy
-#| msgid "Move to the blank transaction in the register"
 msgid "Move to the blank transaction in the register."
-msgstr "Ugrás a regiszterben lévő üres tranzakcióra"
+msgstr "Ugrás a regiszterben lévő üres tranzakcióra."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:417
@@ -29555,10 +29504,8 @@ msgstr "Tranzakció _felosztása"
 #: gnucash/ui/gnc-plugin-page-register.ui:285
 #: gnucash/ui/gnc-plugin-page-register.ui:424
 #: gnucash/ui/gnc-plugin-page-register.ui:536
-#, fuzzy
-#| msgid "Show all splits in the current transaction"
 msgid "Show all splits in the current transaction."
-msgstr "A jelenlegi tranzakció összes felosztásának megjelenítése"
+msgstr "A jelenlegi tranzakció összes felosztásának megjelenítése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:289
 #: gnucash/ui/gnc-plugin-page-register.ui:427
@@ -29569,10 +29516,8 @@ msgstr "_Árfolyam szerkesztése"
 #: gnucash/ui/gnc-plugin-page-register.ui:291
 #: gnucash/ui/gnc-plugin-page-register.ui:429
 #: gnucash/ui/gnc-plugin-page-register.ui:541
-#, fuzzy
-#| msgid "Edit the exchange rate for the current transaction"
 msgid "Edit the exchange rate for the current transaction."
-msgstr "A jelen tranzakció árfolyamának szerkesztése"
+msgstr "A jelen tranzakció árfolyamának szerkesztése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:295
 #: gnucash/ui/gnc-plugin-page-register.ui:432
@@ -29585,13 +29530,12 @@ msgstr "Ü_temezés…"
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
 #: gnucash/ui/gnc-plugin-page-register.ui:849
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template or "
 "edit the Scheduled Transaction that current transaction was created by."
-msgstr "Ütemezett tranzakció létrehozása a jelenlegi tranzakció mintájára"
+msgstr ""
+"Ütemezett tranzakció létrehozása a jelenlegi tranzakció mintájára, vagy a "
+"jelenlegi tranzakciót létrehozó Ütemezett tranzakció szerkesztése."
 
 #. Translators: This is a menu item that will open a register tab for the
 #. account of the first other account in the current transaction's split list
@@ -29606,13 +29550,9 @@ msgstr "_Ugrás a másik számlára"
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:439
 #: gnucash/ui/gnc-plugin-page-register.ui:551
-#, fuzzy
-#| msgid ""
-#| "Open a new register tab for the other account with focus on this "
-#| "transaction"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
-msgstr "A másik számla megnyitása új fülön és ugrás erre a tranzakcióra"
+msgstr "A másik számla megnyitása új fülön és ugrás erre a tranzakcióra."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
 msgid "All Transactions"
@@ -29627,41 +29567,31 @@ msgid "Account Report"
 msgstr "Számlajelentés"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:334
-#, fuzzy
-#| msgid "Open a register report for this Account"
 msgid "Open a register report for this Account."
-msgstr "Egy nyilvántartásjelentés megnyitása ehez a számlához"
+msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-register.ui:338
 msgid "Account Report - Single Transaction"
 msgstr "Számlajelentés - Egyetlen tranzakció"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:340
-#, fuzzy
-#| msgid "Open a register report for the selected Transaction"
 msgid "Open a register report for the selected Transaction."
-msgstr "Egy nyilvántartásjelentés megnyitása a kiválasztott számlához"
+msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-register.ui:359
 #: gnucash/ui/gnc-plugin-page-register.ui:471
-#, fuzzy
-#| msgid "Rename this page"
 msgid "Rename this page."
-msgstr "E lap átnevezése"
+msgstr "E lap átnevezése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:478
 #: gnucash/ui/gnc-plugin-page-register.ui:615
-#, fuzzy
-#| msgid "Make a copy of the current entry"
 msgid "Make a copy of the current split."
-msgstr "Tétel másolata"
+msgstr "Jelenlegi felosztás másolása."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:483
 #: gnucash/ui/gnc-plugin-page-register.ui:620
-#, fuzzy
-#| msgid "Delete the current entry"
 msgid "Delete the current split."
-msgstr "Bejegyzés törlése"
+msgstr "Jelenlegi felosztás törlése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:804
 msgid "Move to the blank transaction in the register"
