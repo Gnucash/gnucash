@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-03-23 11:01+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2024-03-24 22:01+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -898,7 +898,7 @@ msgid ""
 "follow the instructions provided."
 msgstr ""
 "Meglévő pénzügyi adatait könnyedén importálhatja a Quicken-ből, az MS Money-"
-"ból vagy más programból, ami QIF vagy OFX fájlt exportál. A fájl menüben "
+"ből vagy más programból, ami QIF vagy OFX fájlt exportál. A fájlmenüben "
 "kattintson az importálási almenüre majd a QIF vagy OFX fájl menüpontra. "
 "Ezután kövesse az utasításokat."
 
@@ -3753,14 +3753,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/dialog-payment.c:1630
-#, fuzzy
 msgid "Warning"
-msgstr "Alaphelyzet figyelmeztetés"
+msgstr "Figyelem"
 
 #: gnucash/gnome/dialog-payment.c:1633
-#, fuzzy
 msgid "Continue"
-msgstr "Folyamatos"
+msgstr "Folytatás"
 
 #: gnucash/gnome/dialog-payment.c:1634
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:282
@@ -12863,12 +12861,11 @@ msgstr "_Nappal korábban"
 
 #: gnucash/gtkbuilder/business-prefs.glade:273
 msgid "How many days in the future to warn about Bills coming due."
-msgstr "Hány nappal előre figyelmeztessen esedékessé váló számlákról."
+msgstr "Hány nappal előre figyelmeztessen az esedékessé váló bejövőszámlákról."
 
 #: gnucash/gtkbuilder/business-prefs.glade:288
-#, fuzzy
 msgid "How many days in the future to warn about Invoices coming due."
-msgstr "Hány nappal előre figyelmeztessen esedékessé váló számlákról."
+msgstr "Hány nappal előre figyelmeztessen az esedékessé váló kimenőszámlákról."
 
 #: gnucash/gtkbuilder/business-prefs.glade:300
 msgid "_Days in advance"
@@ -13649,7 +13646,7 @@ msgid ""
 "know if these sources retrieve information from a single site or from "
 "multiple sites on the internet."
 msgstr ""
-"Ezeket az árfolyamforrásokat nemrég adtak hozzá az F::Q-hoz, ezért a GnuCash "
+"Ezeket az árfolyamforrásokat nemrég adták hozzá az F::Q-hoz, ezért a GnuCash "
 "nem tudja, hogy egy vagy több helyről töltik-e le az árfolyamokat."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:395
@@ -29399,10 +29396,8 @@ msgstr "A jelenlegi tranzakció rögzítése."
 #: gnucash/ui/gnc-plugin-page-register.ui:500
 #: gnucash/ui/gnc-plugin-page-register.ui:598
 #: gnucash/ui/gnc-plugin-page-register.ui:637
-#, fuzzy
-#| msgid "Cancel the current transaction"
 msgid "Cancel the current transaction."
-msgstr "A jelenlegi tranzakció elvetése"
+msgstr "A jelenlegi tranzakció elvetése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
@@ -29439,9 +29434,8 @@ msgstr "A jelenlegi tranzakció törlése"
 #: gnucash/ui/gnc-plugin-page-register.ui:213
 #: gnucash/ui/gnc-plugin-page-register.ui:400
 #: gnucash/ui/gnc-plugin-page-register.ui:512
-#, fuzzy
 msgid "Open the linked document for the current transaction."
-msgstr "Másolat létrehozása a jelenlegi tranzakcióról"
+msgstr "Az aktuális tranzakcióhoz kapcsolódó dokumentum megnyitása."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:222
 #: gnucash/ui/gnc-plugin-page-register.ui:407
@@ -29468,7 +29462,7 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-register.ui:256
 msgid "Record a stock split or a stock merger."
-msgstr "Részvényfelaprózás vagy -összevonás rögzítése."
+msgstr "Részvényfelaprózás vagy összevonás rögzítése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:262
 msgid "Bring up the lot viewer/editor window."
