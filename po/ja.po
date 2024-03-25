@@ -17,14 +17,15 @@
 # YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>, 2018, 2020, 2021, 2022, 2023.
 # Takuro Onoue <kusanaginoturugi@gmail.com>, 2020, 2021.
 # TANIGUCHI Yasuaki <yasuakit+weblate@gmail.com>, 2021.
+# soramikan <sora_yana@icloud.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2023-04-29 06:48+0000\n"
-"Last-Translator: YOSHINO Yoshihito <yy.y.ja.jp@gmail.com>\n"
+"PO-Revision-Date: 2024-03-24 02:01+0000\n"
+"Last-Translator: soramikan <sora_yana@icloud.com>\n"
 "Language-Team: Japanese <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ja/>\n"
 "Language: ja\n"
@@ -32,7 +33,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -1012,6 +1013,8 @@ msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 msgstr ""
+"多くのGnuCashアクションにキーボードショートカットを割り当てたり変更したりでき"
+"ます。https://wiki.gnucash.org/wiki/Keyboard_Shortcuts を参照してください。"
 
 #: doc/tip_of_the_day.list.c:132
 msgid ""
@@ -1031,7 +1034,7 @@ msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
-msgstr ""
+msgstr "帳簿は安全に閉じられました。"
 
 #. Translators: %s is a date string. %d is the number of books
 #. that will be created. This is a ngettext(3) message (but
@@ -1044,7 +1047,8 @@ msgid ""
 msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
-msgstr[0] ""
+msgstr[0] "この帳簿で見つかった最も古い取引日は %s です。上記の選択に基づいて、"
+"この帳簿は %d 冊に分割されます。"
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
