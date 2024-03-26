@@ -26,7 +26,7 @@
 #include <gtk/gtk.h>
 
 #include "gnc-html.h"
-#include "gnc-html-webkit.h"
+#include "gnc-html-litehtml.h"
 #include "qoflog.h"
 #include "gnc-engine.h"
 
@@ -35,13 +35,13 @@
 /* indicates the debugging module that this .o belongs to.  */
 G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_HTML;
 
-GncHtml* gnc_html_factory_create_html( void )
+GncHtml* gnc_html_factory_create_html (void)
 {
-    return gnc_html_webkit_new();
+    return gnc_html_litehtml_new ();
 }
 
 gboolean
-gnc_html_engine_supports_css( void )
+gnc_html_engine_supports_css (void)
 {
     return TRUE;
 }

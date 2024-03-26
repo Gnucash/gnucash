@@ -226,6 +226,8 @@ endif()
 
 pkg_check_modules (ZLIB REQUIRED zlib)
 
+pkg_check_modules (JSON_GLIB REQUIRED json-glib-1.0)
+
 if (MSVC)
   message (STATUS "Hint: To create the import libraries for the gnome DLLs (e.g. gconf-2.lib), use the dlltool as follows: pexports bin/libgconf-2-4.dll > lib/libgconf-2.def ; dlltool -d lib/libgconf-2.def -D bin/libgconf-2-4.dll -l lib/gconf-2.lib")
 
