@@ -656,7 +656,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">_Save</property>
         <property name="action-name">gnc-plugin-basic-commands-actions.FileSaveAction</property>
-        <property name="tooltip-text" translatable="yes">Save the current file</property>
+        <property name="tooltip-text" translatable="yes">Save the current file.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">document-save</property>
       </object>
@@ -671,7 +671,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">_Close</property>
         <property name="action-name">mainwin.FileCloseAction</property>
-        <property name="tooltip-text" translatable="yes">Close the currently active page</property>
+        <property name="tooltip-text" translatable="yes">Close the currently active page.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">window-close</property>
       </object>
@@ -696,7 +696,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">New _Invoice…</property>
         <property name="action-name">gnc-plugin-business-actions.ToolbarNewInvoiceAction</property>
-        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog</property>
+        <property name="tooltip-text" translatable="yes">Open the New Invoice dialog.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-invoice-new</property>
       </object>
@@ -721,7 +721,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">Dup_licate Transaction</property>
         <property name="action-name">GncPluginPageRegisterActions.DuplicateTransactionAction</property>
-        <property name="tooltip-text" translatable="yes">Make a copy of the current transaction</property>
+        <property name="tooltip-text" translatable="yes">Make a copy of the current transaction.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">edit-copy</property>
       </object>
@@ -736,7 +736,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">_Delete Transaction</property>
         <property name="action-name">GncPluginPageRegisterActions.DeleteTransactionAction</property>
-        <property name="tooltip-text" translatable="yes">Delete the current transaction</property>
+        <property name="tooltip-text" translatable="yes">Delete the current transaction.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">edit-delete</property>
       </object>
@@ -761,7 +761,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">_Enter Transaction</property>
         <property name="action-name">GncPluginPageRegisterActions.RecordTransactionAction</property>
-        <property name="tooltip-text" translatable="yes">Record the current transaction</property>
+        <property name="tooltip-text" translatable="yes">Record the current transaction.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">list-add</property>
       </object>
@@ -776,7 +776,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">Ca_ncel Transaction</property>
         <property name="action-name">GncPluginPageRegisterActions.CancelTransactionAction</property>
-        <property name="tooltip-text" translatable="yes">Cancel the current transaction</property>
+        <property name="tooltip-text" translatable="yes">Cancel the current transaction.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">process-stop</property>
       </object>
@@ -801,7 +801,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">_Blank Transaction</property>
         <property name="action-name">GncPluginPageRegisterActions.BlankTransactionAction</property>
-        <property name="tooltip-text" translatable="yes">Move to the blank transaction in the register</property>
+        <property name="tooltip-text" translatable="yes">Move to the blank transaction in the register.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">go-jump</property>
       </object>
@@ -816,7 +816,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">S_plit Transaction</property>
         <property name="action-name">GncPluginPageRegisterActions.SplitTransactionAction</property>
-        <property name="tooltip-text" translatable="yes">Show all splits in the current transaction</property>
+        <property name="tooltip-text" translatable="yes">Show all splits in the current transaction.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-split-trans</property>
       </object>
@@ -831,7 +831,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">_Jump to the other account</property>
         <property name="action-name">GncPluginPageRegisterActions.JumpTransactionAction</property>
-        <property name="tooltip-text" translatable="yes">Open a new register tab for the other account with focus on this transaction</property>
+        <property name="tooltip-text" translatable="yes">Open a new register tab for the other account with focus on this transaction.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-jumpto</property>
       </object>
@@ -871,7 +871,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">_Transfer…</property>
         <property name="action-name">GncPluginPageRegisterActions.ActionsTransferAction</property>
-        <property name="tooltip-text" translatable="yes">Transfer funds from one account to another</property>
+        <property name="tooltip-text" translatable="yes">Transfer funds from one account to another.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">gnc-transfer</property>
       </object>
@@ -886,7 +886,7 @@
         <property name="can-focus">False</property>
         <property name="label" translatable="yes">_Reconcile…</property>
         <property name="action-name">GncPluginPageRegisterActions.ActionsReconcileAction</property>
-        <property name="tooltip-text" translatable="yes">Reconcile the selected account</property>
+        <property name="tooltip-text" translatable="yes">Reconcile the selected account.</property>
         <property name="use-underline">True</property>
         <property name="icon-name">edit-select-all</property>
       </object>
