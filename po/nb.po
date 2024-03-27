@@ -4,17 +4,17 @@
 # Tor Harald Thorland <linux@strigen.com>, 2005-2006.
 # Sigve Indregard <sigve.indregard@gmail.com>, 2006.
 # John Erling Blad <jeblad@gmail.com>, 2018, 2020
-# Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022.
+# Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022, 2024.
 # Petter Reinholdtsen <pere-weblate@hungry.com>, 2022, 2023.
 # Rune Osnes <osnes.rune@gmail.com>, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2023-11-20 05:11+0000\n"
-"Last-Translator: Petter Reinholdtsen <pere-weblate@hungry.com>\n"
+"PO-Revision-Date: 2024-03-27 13:02+0000\n"
+"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
 "Language: nb\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.5-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -707,8 +707,8 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
-"Epostlister er den foretrukne kommunkasjonsformen i GnuCash-fellesskapet. "
-"Epostlister for annonseringer av nye utgaver, brukergrupper og så videre "
+"E-postlister er den foretrukne kommunkasjonsformen i GnuCash-fellesskapet. E-"
+"postlister for annonseringer av nye utgaver, brukergrupper og så videre "
 "finner du via tabellen på https://wiki.gnucash.org/wiki/Mailing_Lists"
 
 #: doc/tip_of_the_day.list.c:11
@@ -7726,14 +7726,14 @@ msgid "translator-credits"
 msgstr ""
 "Oversettelse til norsk bokmål av:\n"
 "\n"
+"Allan Nordhøy <epost@anotheragency.no>, 2021–2024\n"
 "Rune Osnes <osnes.rune@gmail.com>, 2023\n"
-"Allan Nordhøy <epost@anotheragency.no>, 2021,2022\n"
 "John Erling Blad <jeblad@gmail.com>, 2018, 2020\n"
 "Sigve Indregard <sigve.indregard@gmail.com>, 2006\n"
 "Tor Harald Thorland <tortho@strigen.com>, 2005-2006\n"
 "Kjartan Maraas <kmaraas@gnome.org>, 2000\n"
 "\n"
-"Ta kontakt via e-post for tilbakemelding på oversettelsen"
+"Ta kontakt per e-post for tilbakemelding på oversettelsen"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5271
 msgid "Visit the GnuCash website."
@@ -13970,7 +13970,7 @@ msgstr "Adresse"
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:132
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:187
 msgid "Email"
-msgstr "Epost"
+msgstr "E-post"
 
 #: gnucash/gtkbuilder/dialog-customer.glade:414
 msgid "Billing Address"
