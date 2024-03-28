@@ -76,18 +76,18 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
     time64 open_time;
     Account* lot_account;
 
-    if (!pcy || !lot || !gnc_lot_get_split_list(lot)) return NULL;
+    if (!pcy || !lot || !gnc_lot_get_split_list(lot)) return nullptr;
     lot_account = gnc_lot_get_account(lot);
-    if (!lot_account) return NULL;
+    if (!lot_account) return nullptr;
 
     /* Recomputing the balance re-evaluates the lot closure */
     baln = gnc_lot_get_balance (lot);
-    if (gnc_lot_is_closed(lot)) return NULL;
+    if (gnc_lot_is_closed(lot)) return nullptr;
 
     want_positive = gnc_numeric_negative_p (baln);
 
     /* All splits in lot must share a common transaction currency. */
-    split = gnc_lot_get_split_list(lot)->data;
+    split = GNC_SPLIT(gnc_lot_get_split_list(lot)->data);
     common_currency = split->parent->common_currency;
 
     /* Don't add a split to the lot unless it will be the new last
@@ -111,7 +111,7 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
         gboolean is_match;
         gboolean is_positive;
         time64 this_time;
-        split = node->data;
+        split = GNC_SPLIT(node->data);
         if (split->lot) goto donext;
 
         /* Skip it if it's too early */
@@ -145,7 +145,7 @@ donext:
             node = node->next;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /* ============================================================== */
@@ -153,7 +153,7 @@ donext:
 static GNCLot *
 FIFOPolicyGetLot (GNCPolicy *pcy, Split *split)
 {
-    if (!split) return NULL;
+    if (!split) return nullptr;
     return xaccAccountFindEarliestOpenLot (split->acc, split->amount,
                                            split->parent->common_currency);
 }
@@ -189,7 +189,7 @@ FIFOPolicyIsOpeningSplit (GNCPolicy *pcy, GNCLot *lot, Split *split)
 GNCPolicy *
 xaccGetFIFOPolicy (void)
 {
-    static GNCPolicy *pcy = NULL;
+    static GNCPolicy *pcy = nullptr;
 
     if (!pcy)
     {

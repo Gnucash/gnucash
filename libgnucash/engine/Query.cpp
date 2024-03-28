@@ -50,7 +50,7 @@ static QofLogModule log_module = GNC_MOD_QUERY;
 static GSList *
 build_param_list_internal (const char *first, va_list rest)
 {
-    GSList *list = NULL;
+    GSList *list = nullptr;
     char const *param;
 
     for (param = first; param; param = va_arg (rest, const char *))
@@ -69,12 +69,12 @@ xaccQueryGetSplitsUniqueTrans(QofQuery *q)
 {
     GList       * splits = qof_query_run(q);
     GList       * current;
-    GList       * result = NULL;
+    GList       * result = nullptr;
     GHashTable  * trans_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
 
     for (current = splits; current; current = current->next)
     {
-        Split *split = current->data;
+        Split *split = GNC_SPLIT (current->data);
         Transaction *trans = xaccSplitGetParent (split);
 
         if (!g_hash_table_lookup (trans_hash, trans))
@@ -98,9 +98,9 @@ xaccQueryGetSplitsUniqueTrans(QofQuery *q)
 static void
 query_match_all_filter_func(gpointer key, gpointer value, gpointer user_data)
 {
-    Transaction * t = key;
+    Transaction * t = GNC_TRANSACTION(key);
     int         num_matches = GPOINTER_TO_INT(value);
-    GList       ** matches = user_data;
+    auto matches = static_cast<GList**>(user_data);
 
     if (num_matches == xaccTransCountSplits(t))
     {
@@ -111,8 +111,8 @@ query_match_all_filter_func(gpointer key, gpointer value, gpointer user_data)
 static void
 query_match_any_filter_func(gpointer key, gpointer value, gpointer user_data)
 {
-    Transaction * t = key;
-    GList       ** matches = user_data;
+    Transaction * t = GNC_TRANSACTION(key);
+    auto matches = static_cast<GList**>(user_data);
     *matches = g_list_prepend(*matches, t);
 }
 
@@ -120,18 +120,18 @@ TransList *
 xaccQueryGetTransactions (QofQuery * q, query_txn_match_t runtype)
 {
     GList       * splits = qof_query_run(q);
-    GList       * current = NULL;
-    GList       * retval = NULL;
+    GList       * current = nullptr;
+    GList       * retval = nullptr;
     GHashTable  * trans_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
-    Transaction * trans = NULL;
-    gpointer    val = NULL;
+    Transaction * trans = nullptr;
+    gpointer    val = nullptr;
     int         count = 0;
 
     /* iterate over matching splits, incrementing a match-count in
      * the hash table */
     for (current = splits; current; current = current->next)
     {
-        trans = xaccSplitGetParent((Split *)(current->data));
+        trans = xaccSplitGetParent(GNC_SPLIT(current->data));
 
         /* don't waste time looking up unless we need the count
          * information */
@@ -169,9 +169,9 @@ xaccQueryGetTransactions (QofQuery * q, query_txn_match_t runtype)
 static void
 query_match_all_lot_filter_func(gpointer key, gpointer value, gpointer user_data)
 {
-    GNCLot *	l = key;
+    GNCLot *	l = GNC_LOT(key);
     int		num_matches = GPOINTER_TO_INT(value);
-    GList **	matches = user_data;
+    auto matches = static_cast<GList**>(user_data);
 
     if (num_matches == gnc_lot_count_splits(l))
     {
@@ -182,8 +182,8 @@ query_match_all_lot_filter_func(gpointer key, gpointer value, gpointer user_data
 static void
 query_match_any_lot_filter_func(gpointer key, gpointer value, gpointer user_data)
 {
-    GNCLot *	t = key;
-    GList **	matches = user_data;
+    GNCLot *	t = GNC_LOT(key);
+    auto matches = static_cast<GList**>(user_data);
     *matches = g_list_prepend(*matches, t);
 }
 
@@ -191,18 +191,18 @@ LotList *
 xaccQueryGetLots (QofQuery * q, query_txn_match_t runtype)
 {
     GList       * splits = qof_query_run(q);
-    GList       * current = NULL;
-    GList       * retval = NULL;
+    GList       * current = nullptr;
+    GList       * retval = nullptr;
     GHashTable  * lot_hash = g_hash_table_new(g_direct_hash, g_direct_equal);
-    GNCLot      * lot = NULL;
-    gpointer    val = NULL;
+    GNCLot      * lot = nullptr;
+    gpointer    val = nullptr;
     int         count = 0;
 
     /* iterate over matching splits, incrementing a match-count in
      * the hash table */
     for (current = splits; current; current = current->next)
     {
-        lot = xaccSplitGetLot((Split *)(current->data));
+        lot = xaccSplitGetLot((GNC_SPLIT (current->data)));
 
         /* don't waste time looking up unless we need the count
          * information */
@@ -239,24 +239,24 @@ void
 xaccQueryAddAccountMatch(QofQuery *q, AccountList *acct_list,
                          QofGuidMatch how, QofQueryOp op)
 {
-    GList *list = NULL;
+    GList *list = nullptr;
 
     if (!q) return;
     for (; acct_list; acct_list = acct_list->next)
     {
-        Account *acc = acct_list->data;
+        Account *acc = GNC_ACCOUNT (acct_list->data);
         const GncGUID *guid;
 
         if (!acc)
         {
-            PWARN ("acct_list has NULL account");
+            PWARN ("acct_list has nullptr account");
             continue;
         }
 
         guid = qof_entity_get_guid (QOF_INSTANCE(acc));
         if (!guid)
         {
-            PWARN ("acct returns NULL GncGUID");
+            PWARN ("acct returns nullptr GncGUID");
             continue;
         }
 
@@ -271,13 +271,13 @@ xaccQueryAddAccountGUIDMatch(QofQuery *q, AccountGUIDList *guid_list,
                              QofGuidMatch how, QofQueryOp op)
 {
     QofQueryPredData *pred_data;
-    GSList *param_list = NULL;
+    GSList *param_list = nullptr;
 
     if (!q) return;
 
     if (!guid_list && how != QOF_GUID_MATCH_NULL)
     {
-        g_warning("Got a NULL guid_list but the QofGuidMatch is not MATCH_NULL (but instead %d). In other words, the list of GUID matches is empty but it must contain something non-empty.", how);
+        g_warning("Got a nullptr guid_list but the QofGuidMatch is not MATCH_nullptr (but instead %d). In other words, the list of GUID matches is empty but it must contain something non-empty.", how);
         /* qof_query_guid_predicate() would trigger a g_warning as well */
         return;
     }
@@ -289,11 +289,11 @@ xaccQueryAddAccountGUIDMatch(QofQuery *q, AccountGUIDList *guid_list,
     {
     case QOF_GUID_MATCH_ANY:
     case QOF_GUID_MATCH_NONE:
-        param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_PARAM_GUID, NULL);
+        param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_PARAM_GUID, nullptr);
         break;
     case QOF_GUID_MATCH_ALL:
         param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_SPLITLIST,
-                     SPLIT_ACCOUNT_GUID, NULL);
+                     SPLIT_ACCOUNT_GUID, nullptr);
         break;
     default:
         PERR ("Invalid match type: %d", how);
@@ -315,7 +315,7 @@ xaccQueryAddSingleAccountMatch(QofQuery *q, Account *acc, QofQueryOp op)
     guid = qof_entity_get_guid (QOF_INSTANCE(acc));
     g_return_if_fail (guid);
 
-    list = g_list_prepend (NULL, (gpointer)guid);
+    list = g_list_prepend (nullptr, (gpointer)guid);
     xaccQueryAddAccountGUIDMatch (q, list, QOF_GUID_MATCH_ANY, op);
     g_list_free (list);
 }
@@ -385,7 +385,7 @@ xaccQueryAddDateMatchTT (QofQuery * q,
                          gboolean use_end, time64 ett,
                          QofQueryOp op)
 {
-    QofQuery *tmp_q = NULL;
+    QofQuery *tmp_q = nullptr;
     QofQueryPredData *pred_data;
     GSList *param_list;
 
@@ -403,7 +403,7 @@ xaccQueryAddDateMatchTT (QofQuery * q,
             return;
         }
 
-        param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+        param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, nullptr);
         qof_query_add_term (tmp_q, param_list, pred_data, QOF_QUERY_AND);
     }
 
@@ -416,7 +416,7 @@ xaccQueryAddDateMatchTT (QofQuery * q,
             return;
         }
 
-        param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+        param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, nullptr);
         qof_query_add_term (tmp_q, param_list, pred_data, QOF_QUERY_AND);
     }
 
@@ -436,13 +436,13 @@ xaccQueryGetDateMatchTT (QofQuery * q,
     *stt = 0;
     *ett = 0;
 
-    param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, NULL);
+    param_list = qof_query_build_param_list (SPLIT_TRANS, TRANS_DATE_POSTED, nullptr);
     terms = qof_query_get_term_type (q, param_list);
     g_slist_free(param_list);
 
     for (tmp = terms; tmp; tmp = g_slist_next(tmp))
     {
-        term_data = tmp->data;
+        term_data = static_cast<QofQueryPredData*>(tmp->data);
         if (term_data->how == QOF_COMPARE_GTE)
             qof_query_date_predicate_get_date(term_data, stt);
         if (term_data->how == QOF_COMPARE_LTE)
@@ -497,7 +497,7 @@ xaccQueryAddClearedMatch(QofQuery * q, cleared_match_t how, QofQueryOp op)
     if (!pred_data)
         return;
 
-    param_list = qof_query_build_param_list (SPLIT_RECONCILE, NULL);
+    param_list = qof_query_build_param_list (SPLIT_RECONCILE, nullptr);
 
     qof_query_add_term (q, param_list, pred_data, op);
 }
@@ -506,17 +506,17 @@ void
 xaccQueryAddGUIDMatch(QofQuery * q, const GncGUID *guid,
                       QofIdType id_type, QofQueryOp op)
 {
-    GSList *param_list = NULL;
+    GSList *param_list = nullptr;
 
     if (!q || !guid || !id_type)
         return;
 
     if (!g_strcmp0 (id_type, GNC_ID_SPLIT))
-        param_list = qof_query_build_param_list (QOF_PARAM_GUID, NULL);
+        param_list = qof_query_build_param_list (QOF_PARAM_GUID, nullptr);
     else if (!g_strcmp0 (id_type, GNC_ID_TRANS))
-        param_list = qof_query_build_param_list (SPLIT_TRANS, QOF_PARAM_GUID, NULL);
+        param_list = qof_query_build_param_list (SPLIT_TRANS, QOF_PARAM_GUID, nullptr);
     else if (!g_strcmp0 (id_type, GNC_ID_ACCOUNT))
-        param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_PARAM_GUID, NULL);
+        param_list = qof_query_build_param_list (SPLIT_ACCOUNT, QOF_PARAM_GUID, nullptr);
     else
         PERR ("Invalid match type: %s", id_type);
 
@@ -534,7 +534,7 @@ xaccQueryAddClosingTransMatch(QofQuery *q, gboolean value, QofQueryOp op)
 {
     GSList *param_list; 
     
-    param_list = qof_query_build_param_list(SPLIT_TRANS, TRANS_IS_CLOSING, NULL);
+    param_list = qof_query_build_param_list(SPLIT_TRANS, TRANS_IS_CLOSING, nullptr);
     qof_query_add_boolean_match(q, param_list, value, op);
 }
 
@@ -554,11 +554,11 @@ xaccQueryGetEarliestDateFound(QofQuery * q)
     if (!spl) return 0;
 
     /* Safe until 2038 on archs where time64 is 32bit */
-    sp = spl->data;
+    sp = GNC_SPLIT (spl->data);
     earliest = sp->parent->date_posted;
     for (; spl; spl = spl->next)
     {
-        sp = spl->data;
+        sp = GNC_SPLIT (spl->data);
         if (sp->parent->date_posted < earliest)
         {
             earliest = sp->parent->date_posted;
@@ -584,7 +584,7 @@ xaccQueryGetLatestDateFound(QofQuery * q)
 
     for (; spl; spl = spl->next)
     {
-        sp = spl->data;
+        sp = GNC_SPLIT (spl->data);
         if (sp->parent->date_posted > latest)
         {
             latest = sp->parent->date_posted;
@@ -598,7 +598,7 @@ xaccQueryAddDescriptionMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
                              QofQueryCompare h, QofQueryOp o)
 {
     xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_TRANS,
-                             TRANS_DESCRIPTION, NULL);
+                             TRANS_DESCRIPTION, nullptr);
 }
 
 void
@@ -606,7 +606,7 @@ xaccQueryAddNotesMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
                              QofQueryCompare h, QofQueryOp o)
 {
     xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_TRANS,
-                             TRANS_NOTES, NULL);
+                             TRANS_NOTES, nullptr);
 }
 
 void
@@ -614,21 +614,21 @@ xaccQueryAddNumberMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
                         QofQueryCompare h, QofQueryOp o)
 {
     xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_TRANS,
-                             TRANS_NUM, NULL);
+                             TRANS_NUM, nullptr);
 }
 
 void
 xaccQueryAddActionMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
                         QofQueryCompare h, QofQueryOp o)
 {
-    xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_ACTION, NULL);
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_ACTION, nullptr);
 }
 
 void
 xaccQueryAddMemoMatch(QofQuery *q, const char *m, gboolean c, gboolean r,
                       QofQueryCompare h, QofQueryOp o)
 {
-    xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_MEMO, NULL);
+    xaccQueryAddStringMatch ((q), (m), (c), (r), (h), (o), SPLIT_MEMO, nullptr);
 }
 
 void
@@ -636,7 +636,7 @@ xaccQueryAddValueMatch(QofQuery *q, gnc_numeric amt, QofNumericMatch sgn,
                        QofQueryCompare how, QofQueryOp op)
 {
     xaccQueryAddNumericMatch ((q), (amt), (sgn), (how), (op),
-                              SPLIT_VALUE, NULL);
+                              SPLIT_VALUE, nullptr);
 }
 
 void
@@ -644,7 +644,7 @@ xaccQueryAddSharePriceMatch(QofQuery *q, gnc_numeric amt, QofQueryCompare how,
                             QofQueryOp op)
 {
     xaccQueryAddNumericMatch ((q), (amt), QOF_NUMERIC_MATCH_ANY, (how), (op),
-                              SPLIT_SHARE_PRICE, NULL);
+                              SPLIT_SHARE_PRICE, nullptr);
 }
 
 void
@@ -652,7 +652,7 @@ xaccQueryAddSharesMatch(QofQuery *q, gnc_numeric amt, QofQueryCompare how,
                         QofQueryOp op)
 {
     xaccQueryAddNumericMatch ((q), (amt), QOF_NUMERIC_MATCH_ANY, (how), (op),
-                              SPLIT_AMOUNT, NULL);
+                              SPLIT_AMOUNT, nullptr);
 }
 
 void
@@ -661,7 +661,7 @@ xaccQueryAddBalanceMatch(QofQuery *q, QofQueryCompare bal, QofQueryOp op)
     xaccQueryAddNumericMatch(
         (q), gnc_numeric_zero(), QOF_NUMERIC_MATCH_ANY,
         ((bal) ? QOF_COMPARE_EQUAL : QOF_COMPARE_NEQ), (op),
-        SPLIT_TRANS, TRANS_IMBALANCE, NULL);
+        SPLIT_TRANS, TRANS_IMBALANCE, nullptr);
 }
 
 

@@ -102,10 +102,10 @@ struct tm*
 gnc_localtime (const time64 *secs)
 {
     auto time = static_cast<struct tm*>(calloc(1, sizeof(struct tm)));
-    if (gnc_localtime_r (secs, time) == NULL)
+    if (gnc_localtime_r (secs, time) == nullptr)
     {
         gnc_tm_free (time);
-        return NULL;
+        return nullptr;
     }
     return time;
 }
@@ -120,7 +120,7 @@ gnc_localtime_r (const time64 *secs, struct tm* time)
     }
     catch(std::invalid_argument&)
     {
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -185,7 +185,7 @@ gnc_gmtime (const time64 *secs)
     }
     catch(std::invalid_argument&)
     {
-        return NULL;
+        return nullptr;
     }
 
 }
@@ -262,7 +262,7 @@ gnc_time (time64 *tbuf)
 {
     GncDateTime gncdt;
     auto time = static_cast<time64>(gncdt);
-    if (tbuf != NULL)
+    if (tbuf != nullptr)
         *tbuf = time;
     return time;
 }
@@ -297,7 +297,7 @@ gnc_date_dateformat_to_string(QofDateFormat format)
     case QOF_DATE_FORMAT_UNSET:
         return "unset";
     default:
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -342,7 +342,7 @@ gnc_date_monthformat_to_string(GNCDateMonthFormat format)
     case GNCDATE_MONTH_NAME:
         return "name";
     default:
-        return NULL;
+        return nullptr;
     }
 }
 
@@ -702,9 +702,9 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
     dupe = g_strdup (buff);
 
     tmp = dupe;
-    first_field = NULL;
-    second_field = NULL;
-    third_field = NULL;
+    first_field = nullptr;
+    second_field = nullptr;
+    third_field = nullptr;
 
     /* Use strtok to find delimiters */
     if (tmp)
@@ -714,10 +714,10 @@ qof_scan_date_internal (const char *buff, int *day, int *month, int *year,
         first_field = strtok (tmp, delims);
         if (first_field)
         {
-            second_field = strtok (NULL, delims);
+            second_field = strtok (nullptr, delims);
             if (second_field)
             {
-                third_field = strtok (NULL, delims);
+                third_field = strtok (nullptr, delims);
             }
         }
     }
@@ -948,7 +948,7 @@ char dateSeparator (void)
             time64 secs;
             gchar *s;
 
-            secs = gnc_time (NULL);
+            secs = gnc_time (nullptr);
             gnc_localtime_r(&secs, &tm);
             auto normalized_fmt =
                 normalize_format(qof_date_format_get_string(dateFormat));
@@ -969,9 +969,9 @@ gchar *
 qof_time_format_from_utf8(const gchar *utf8_format)
 {
     gchar *retval;
-    GError *error = NULL;
+    GError *error = nullptr;
 
-    retval = g_locale_from_utf8(utf8_format, -1, NULL, NULL, &error);
+    retval = g_locale_from_utf8(utf8_format, -1, nullptr, nullptr, &error);
 
     if (!retval)
     {
@@ -986,9 +986,9 @@ gchar *
 qof_formatted_time_to_utf8(const gchar *locale_string)
 {
     gchar *retval;
-    GError *error = NULL;
+    GError *error = nullptr;
 
-    retval = g_locale_to_utf8(locale_string, -1, NULL, NULL, &error);
+    retval = g_locale_to_utf8(locale_string, -1, nullptr, nullptr, &error);
 
     if (!retval)
     {
@@ -1011,7 +1011,7 @@ qof_format_time(const gchar *format, const struct tm *tm)
 
     locale_format = qof_time_format_from_utf8(format);
     if (!locale_format)
-        return NULL;
+        return nullptr;
 
     tmpbufsize = MAX(128, strlen(locale_format) * 2);
     while (TRUE)
@@ -1035,7 +1035,7 @@ qof_format_time(const gchar *format, const struct tm *tm)
                           "exceeded: giving up");
                 g_free(locale_format);
 
-                return NULL;
+                return nullptr;
             }
         }
         else
@@ -1075,7 +1075,7 @@ qof_strftime(gchar *buf, gsize max, const gchar *format, const struct tm *tm)
     {
         /* Ensure only whole characters are copied into the buffer. */
         gchar *end = g_utf8_find_prev_char(convbuf, convbuf + max);
-        g_assert(end != NULL);
+        g_assert(end != nullptr);
         convlen = end - convbuf;
 
         /* Return 0 because the buffer isn't large enough. */
@@ -1138,7 +1138,7 @@ gnc_iso8601_to_time64_gmt(const char *cstr)
 char *
 gnc_time64_to_iso8601_buff (time64 time, char * buff)
 {
-    if (! buff) return NULL;
+    if (!buff) return nullptr;
     try
     {
         GncDateTime gncdt(time);

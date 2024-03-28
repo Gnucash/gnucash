@@ -34,6 +34,10 @@
 
 #include "gnc-engine.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** @name Lot Management Routines
  * Provides the low-level API for checking and repairing ('scrubbing
  * clean') the usage of Lots and lot balances in stock and commodity
@@ -109,6 +113,10 @@ gboolean xaccScrubMergeSubSplits (Split *split, gboolean strict);
  *    for all of the splits in the lot.
  */
 gboolean xaccScrubMergeLotSubSplits (GNCLot *lot, gboolean strict);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* XACC_SCRUB2_H */
 /** @} */

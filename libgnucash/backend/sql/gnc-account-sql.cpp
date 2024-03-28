@@ -32,7 +32,7 @@
 
 #include "qof.h"
 #include "Account.h"
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "gnc-commodity.h"
 
 #if defined( S_SPLINT_S )

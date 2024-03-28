@@ -219,7 +219,7 @@ gnc_budget_class_init(GncBudgetClass* klass)
                              "to be a short, 5 to 30 character long string "
                              "that is displayed by the GUI as the "
                              "budget mnemonic",
-                             NULL,
+                             nullptr,
                              G_PARAM_READWRITE));
 
     g_object_class_install_property(
@@ -231,7 +231,7 @@ gnc_budget_class_init(GncBudgetClass* klass)
                              "assigned by the user.  It is intended "
                              "to be a longer, 1-5 sentence description of "
                              "what the budget is all about.",
-                             NULL,
+                             nullptr,
                              G_PARAM_READWRITE));
 
     g_object_class_install_property(
@@ -266,7 +266,7 @@ gnc_budget_free(QofInstance *inst)
     GncBudget *budget;
     GncBudgetPrivate* priv;
 
-    if (inst == NULL)
+    if (inst == nullptr)
         return;
     g_return_if_fail(GNC_IS_BUDGET(inst));
 
@@ -276,7 +276,7 @@ gnc_budget_free(QofInstance *inst)
     /* We first send the message that this object is about to be
      * destroyed so that any GUI elements can remove it before it is
      * actually gone. */
-    qof_event_gen( &budget->inst, QOF_EVENT_DESTROY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_DESTROY, nullptr);
 
     CACHE_REMOVE(priv->name);
     CACHE_REMOVE(priv->description);
@@ -305,14 +305,14 @@ gnc_budget_commit_edit(GncBudget *bgt)
 GncBudget*
 gnc_budget_new(QofBook *book)
 {
-    g_return_val_if_fail(book, NULL);
+    g_return_val_if_fail(book, nullptr);
 
     ENTER(" ");
 
     auto budget { static_cast<GncBudget*>(g_object_new(GNC_TYPE_BUDGET, nullptr)) };
     qof_instance_init_data (&budget->inst, GNC_ID_BUDGET, book);
 
-    qof_event_gen( &budget->inst, QOF_EVENT_CREATE , NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_CREATE , nullptr);
 
     LEAVE(" ");
     return budget;
@@ -359,7 +359,7 @@ gnc_budget_clone(const GncBudget* old_b)
     Account* root;
     CloneBudgetData_t clone_data;
 
-    g_return_val_if_fail(old_b != NULL, NULL);
+    g_return_val_if_fail(old_b != nullptr, nullptr);
 
     ENTER(" ");
 
@@ -398,13 +398,13 @@ gnc_budget_set_name(GncBudget* budget, const gchar* name)
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, nullptr);
 }
 
 const gchar*
 gnc_budget_get_name(const GncBudget* budget)
 {
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
+    g_return_val_if_fail(GNC_IS_BUDGET(budget), nullptr);
     return GET_PRIVATE(budget)->name;
 }
 
@@ -423,13 +423,13 @@ gnc_budget_set_description(GncBudget* budget, const gchar* description)
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, nullptr);
 }
 
 const gchar*
 gnc_budget_get_description(const GncBudget* budget)
 {
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
+    g_return_val_if_fail(GNC_IS_BUDGET(budget), nullptr);
     return GET_PRIVATE(budget)->description;
 }
 
@@ -446,21 +446,21 @@ gnc_budget_set_recurrence(GncBudget *budget, const Recurrence *r)
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen(&budget->inst, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen(&budget->inst, QOF_EVENT_MODIFY, nullptr);
 }
 
 const Recurrence *
 gnc_budget_get_recurrence(const GncBudget *budget)
 {
-    g_return_val_if_fail(budget, NULL);
+    g_return_val_if_fail(budget, nullptr);
     return (&GET_PRIVATE(budget)->recurrence);
 }
 
 const GncGUID*
 gnc_budget_get_guid(const GncBudget* budget)
 {
-    g_return_val_if_fail(budget, NULL);
-    g_return_val_if_fail(GNC_IS_BUDGET(budget), NULL);
+    g_return_val_if_fail(budget, nullptr);
+    g_return_val_if_fail(GNC_IS_BUDGET(budget), nullptr);
     return qof_instance_get_guid(QOF_INSTANCE(budget));
 }
 
@@ -486,7 +486,7 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, nullptr);
 }
 
 guint
@@ -522,8 +522,8 @@ void
 gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
                                       guint period_num)
 {
-    g_return_if_fail (budget != NULL);
-    g_return_if_fail (account != NULL);
+    g_return_if_fail (budget != nullptr);
+    g_return_if_fail (account != nullptr);
     g_return_if_fail (period_num < GET_PRIVATE(budget)->num_periods);
 
     auto& data = get_perioddata (budget, account, period_num);
@@ -536,7 +536,7 @@ gnc_budget_unset_account_period_value(GncBudget *budget, const Account *account,
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, nullptr);
 
 }
 
@@ -554,8 +554,8 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
         return;
     }
 
-    g_return_if_fail (budget != NULL);
-    g_return_if_fail (account != NULL);
+    g_return_if_fail (budget != nullptr);
+    g_return_if_fail (account != nullptr);
 
     auto& perioddata = get_perioddata (budget, account, period_num);
     auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
@@ -576,7 +576,7 @@ gnc_budget_set_account_period_value(GncBudget *budget, const Account *account,
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, nullptr);
 
 }
 
@@ -613,15 +613,15 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
         return;
     }
 
-    g_return_if_fail (budget != NULL);
-    g_return_if_fail (account != NULL);
+    g_return_if_fail (budget != nullptr);
+    g_return_if_fail (account != nullptr);
 
     auto& perioddata = get_perioddata (budget, account, period_num);
     auto budget_kvp { QOF_INSTANCE (budget)->kvp_data };
     auto path = make_period_note_path (account, period_num);
 
     gnc_budget_begin_edit(budget);
-    if (note == NULL)
+    if (note == nullptr)
     {
         delete budget_kvp->set_path (path, nullptr);
         perioddata.note.clear ();
@@ -636,7 +636,7 @@ gnc_budget_set_account_period_note(GncBudget *budget, const Account *account,
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
-    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, NULL);
+    qof_event_gen( &budget->inst, QOF_EVENT_MODIFY, nullptr);
 
 }
 
@@ -710,8 +710,8 @@ gnc_budget_lookup (const GncGUID *guid, const QofBook *book)
 {
     QofCollection *col;
 
-    g_return_val_if_fail(guid, NULL);
-    g_return_val_if_fail(book, NULL);
+    g_return_val_if_fail(guid, nullptr);
+    g_return_val_if_fail(book, nullptr);
     col = qof_book_get_collection (book, GNC_ID_BUDGET);
     return GNC_BUDGET(qof_collection_lookup_entity (col, guid));
 }
@@ -726,14 +726,14 @@ GncBudget*
 gnc_budget_get_default (QofBook *book)
 {
     QofCollection *col;
-    GncBudget *bgt = NULL;
-    GncGUID *default_budget_guid = NULL;
+    GncBudget *bgt = nullptr;
+    GncGUID *default_budget_guid = nullptr;
 
-    g_return_val_if_fail(book, NULL);
+    g_return_val_if_fail(book, nullptr);
 
     qof_instance_get (QOF_INSTANCE (book),
                       "default-budget", &default_budget_guid,
-                      NULL);
+                      nullptr);
     if (default_budget_guid)
     {
         col = qof_book_get_collection(book, GNC_ID_BUDGET);
@@ -743,7 +743,7 @@ gnc_budget_get_default (QofBook *book)
 
     /* Revert to 2.2.x behavior if the book has no default budget. */
 
-    if ( bgt == NULL )
+    if ( bgt == nullptr )
     {
         col = qof_book_get_collection(book, GNC_ID_BUDGET);
         if (qof_collection_count(col) > 0)
@@ -774,7 +774,7 @@ gnc_budget_book_end(QofBook* book)
     QofCollection *col;
 
     col = qof_book_get_collection(book, GNC_ID_BUDGET);
-    qof_collection_foreach(col, destroy_budget_on_book_close, NULL);
+    qof_collection_foreach(col, destroy_budget_on_book_close, nullptr);
 }
 
 #ifdef _MSC_VER
@@ -792,7 +792,7 @@ static QofObject budget_object_def =
     DI(.e_type            = ) GNC_ID_BUDGET,
     DI(.type_label        = ) "Budget",
     DI(.create            = ) (void*(*)(QofBook*)) gnc_budget_new,
-    DI(.book_begin        = ) NULL,
+    DI(.book_begin        = ) nullptr,
     DI(.book_end          = ) gnc_budget_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
     DI(.mark_clean        = ) qof_collection_mark_clean,
@@ -833,19 +833,19 @@ gboolean gnc_budget_register (void)
         },
         {
             "recurrence_period_type", QOF_TYPE_INT32,
-            (QofAccessFunc) gnc_budget_get_rec_pt, NULL
+            (QofAccessFunc) gnc_budget_get_rec_pt, nullptr
         },
         /* Signedness problem: Should be unsigned. */
         {
             "recurrence_multiplier", QOF_TYPE_INT32,
-            (QofAccessFunc) gnc_budget_get_rec_mult, NULL
+            (QofAccessFunc) gnc_budget_get_rec_mult, nullptr
         },
         /* This is the same way that SchedXaction.c uses QOF_TYPE_DATE
            but I don't think QOF actually supports a GDate, so I think
            this is wrong. */
         {
             "recurrence_date", QOF_TYPE_DATE,
-            (QofAccessFunc) gnc_budget_get_rec_time, NULL
+            (QofAccessFunc) gnc_budget_get_rec_time, nullptr
         },
         /* Signedness problem: Should be unsigned. */
         {
@@ -855,15 +855,15 @@ gboolean gnc_budget_register (void)
         },
         {
             QOF_PARAM_BOOK, QOF_ID_BOOK,
-            (QofAccessFunc) qof_instance_get_book, NULL
+            (QofAccessFunc) qof_instance_get_book, nullptr
         },
         {
             QOF_PARAM_GUID, QOF_TYPE_GUID,
-            (QofAccessFunc) qof_instance_get_guid, NULL
+            (QofAccessFunc) qof_instance_get_guid, nullptr
         },
-        { NULL },
+        { nullptr },
     };
 
-    qof_class_register(GNC_ID_BUDGET, (QofSortFunc) NULL, params);
+    qof_class_register(GNC_ID_BUDGET, (QofSortFunc) nullptr, params);
     return qof_object_register(&budget_object_def);
 }

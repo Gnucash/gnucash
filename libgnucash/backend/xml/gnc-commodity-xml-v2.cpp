@@ -25,7 +25,7 @@
 
 #include <config.h>
 #include <string.h>
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "Account.h"
 
 #include "gnc-xml-helper.h"

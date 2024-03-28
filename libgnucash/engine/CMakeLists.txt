@@ -5,7 +5,7 @@ add_subdirectory(test)
 add_subdirectory(mocks)
 
 set(engine_noinst_HEADERS
-  AccountP.h
+  AccountP.hpp
   SplitP.h
   SX-book.h
   SX-ttinfo.h
@@ -138,27 +138,27 @@ add_custom_target(iso-4217-c DEPENDS ${ISO_4217_C})
 set (engine_SOURCES
   Account.cpp
   Recurrence.cpp
-  Query.c
+  Query.cpp
   SchedXaction.c
   SX-book.c
   SX-ttinfo.c
-  Scrub.c
-  Scrub2.c
-  Scrub3.c
+  Scrub.cpp
+  Scrub2.cpp
+  Scrub3.cpp
   ScrubBusiness.c
   ScrubBudget.c
   Split.cpp
-  TransLog.c
+  TransLog.cpp
   Transaction.cpp
-  cap-gains.c
-  cashobjects.c
+  cap-gains.cpp
+  cashobjects.cpp
   gnc-accounting-period.c
   gnc-aqbanking-templates.cpp
   gnc-budget.cpp
   gnc-commodity.cpp
   gnc-date.cpp
   gnc-datetime.cpp
-  gnc-engine.c
+  gnc-engine.cpp
   gnc-euro.c
   gnc-event.c
   gnc-features.cpp
@@ -177,7 +177,7 @@ set (engine_SOURCES
   gnc-uri-utils.c
   engine-helpers.c
   guid.cpp
-  policy.c
+  policy.cpp
   gncAddress.c
   gncBillTerm.c
   gncBusiness.c

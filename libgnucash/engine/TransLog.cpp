@@ -85,9 +85,9 @@ static QofLogModule log_module = "gnc.translog";
 
 
 static int gen_logs = 1;
-static FILE * trans_log = NULL; /**< current log file handle */
-static char * trans_log_name = NULL; /**< current log file name */
-static char * log_base_name = NULL;
+static FILE * trans_log = nullptr; /**< current log file handle */
+static char * trans_log_name = nullptr; /**< current log file name */
+static char * log_base_name = nullptr;
 
 /********************************************************************\
 \********************************************************************/
@@ -173,7 +173,7 @@ xaccOpenLog (void)
     /* tag each filename with a timestamp */
     timestamp = gnc_date_timestamp ();
 
-    filename = g_strconcat (log_base_name, ".", timestamp, ".log", NULL);
+    filename = g_strconcat (log_base_name, ".", timestamp, ".log", nullptr);
 
     trans_log = g_fopen (filename, "a");
     if (!trans_log)
@@ -213,7 +213,7 @@ xaccCloseLog (void)
     if (!trans_log) return;
     fflush (trans_log);
     fclose (trans_log);
-    trans_log = NULL;
+    trans_log = nullptr;
 }
 
 /********************************************************************\
@@ -235,7 +235,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
     }
     if (!trans_log) return;
 
-    gnc_time64_to_iso8601_buff (gnc_time(NULL), dnow);
+    gnc_time64_to_iso8601_buff (gnc_time(nullptr), dnow);
     gnc_time64_to_iso8601_buff (trans->date_entered, dent);
     gnc_time64_to_iso8601_buff (trans->date_posted, dpost);
     guid_to_string_buff (xaccTransGetGUID(trans), trans_guid_str);
@@ -244,7 +244,7 @@ xaccTransWriteLog (Transaction *trans, char flag)
 
     for (node = trans->splits; node; node = node->next)
     {
-        Split *split = node->data;
+        Split *split = GNC_SPLIT(node->data);
         const char * accname = "";
         char acc_guid_str[GUID_ENCODING_LENGTH + 1];
         gnc_numeric amt, val;

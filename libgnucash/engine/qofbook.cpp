@@ -56,7 +56,7 @@
 #include "kvp-frame.hpp"
 #include "gnc-lot.h"
 // For GNC_ID_ROOT_ACCOUNT:
-#include "AccountP.h"
+#include "AccountP.hpp"
 
 #include "qofbook.hpp"
 
@@ -114,7 +114,7 @@ qof_book_init (QofBook *book)
     qof_instance_init_data (&book->inst, QOF_ID_BOOK, book);
 
     book->data_tables = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                               (GDestroyNotify)qof_string_cache_remove, NULL);
+                                               (GDestroyNotify)qof_string_cache_remove, nullptr);
     book->data_table_finalizers = g_hash_table_new (g_str_hash, g_str_equal);
 
     book->book_open = 'y';
@@ -239,10 +239,10 @@ qof_book_class_init (QofBookClass *klass)
      PROP_OPT_TRADING_ACCOUNTS,
      g_param_spec_string("trading-accts",
                          "Use Trading Accounts",
-                         "Scheme true ('t') or NULL. If 't', then the book "
+                         "Scheme true ('t') or nullptr. If 't', then the book "
                          "uses trading accounts for managing multiple-currency "
                          "transactions.",
-                         NULL,
+                         nullptr,
                          G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -250,9 +250,9 @@ qof_book_class_init (QofBookClass *klass)
      PROP_OPT_NUM_FIELD_SOURCE,
      g_param_spec_string(PARAM_NAME_NUM_FIELD_SOURCE,
                          "Use Split-Action in the Num Field",
-                         "Scheme true ('t') or NULL. If 't', then the book "
+                         "Scheme true ('t') or nullptr. If 't', then the book "
                          "will put the split action value in the Num field.",
-                         NULL,
+                         nullptr,
                          G_PARAM_READWRITE));
 
     g_object_class_install_property
@@ -292,10 +292,10 @@ qof_book_new (void)
     QofBook *book;
 
     ENTER (" ");
-    book = static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, NULL));
+    book = static_cast<QofBook*>(g_object_new(QOF_TYPE_BOOK, nullptr));
     qof_object_book_begin (book);
 
-    qof_event_gen (&book->inst, QOF_EVENT_CREATE, NULL);
+    qof_event_gen (&book->inst, QOF_EVENT_CREATE, nullptr);
     LEAVE ("book=%p", book);
     return book;
 }
@@ -336,7 +336,7 @@ qof_book_destroy (QofBook *book)
     ENTER ("book=%p", book);
 
     book->shutting_down = TRUE;
-    qof_event_force (&book->inst, QOF_EVENT_DESTROY, NULL);
+    qof_event_force (&book->inst, QOF_EVENT_DESTROY, nullptr);
 
     /* Call the list of finalizers, let them do their thing.
      * Do this before tearing into the rest of the book.
@@ -351,9 +351,9 @@ qof_book_destroy (QofBook *book)
     qof_object_book_end (book);
 
     g_hash_table_destroy (book->data_table_finalizers);
-    book->data_table_finalizers = NULL;
+    book->data_table_finalizers = nullptr;
     g_hash_table_destroy (book->data_tables);
-    book->data_tables = NULL;
+    book->data_tables = nullptr;
 
     /* qof_instance_release (&book->inst); */
 
@@ -401,7 +401,7 @@ void qof_book_mark_session_dirty (QofBook *book)
     {
         /* Set the session dirty upfront, because the callback will check. */
         book->session_dirty = TRUE;
-        book->dirty_time = gnc_time (NULL);
+        book->dirty_time = gnc_time (nullptr);
         if (book->dirty_cb)
             book->dirty_cb(book, TRUE, book->dirty_data);
     }
@@ -413,7 +413,7 @@ qof_book_print_dirty (const QofBook *book)
     if (qof_book_session_not_saved(book))
         PINFO("book is dirty.");
     qof_book_foreach_collection
-    (book, (QofCollectionForeachCB)qof_collection_print_dirty, NULL);
+    (book, (QofCollectionForeachCB)qof_collection_print_dirty, nullptr);
 }
 
 time64
@@ -439,7 +439,7 @@ qof_book_set_dirty_cb(QofBook *book, QofBookDirtyCB cb, gpointer user_data)
 QofBackend *
 qof_book_get_backend (const QofBook *book)
 {
-    if (!book) return NULL;
+    if (!book) return nullptr;
     return book->backend;
 }
 
@@ -488,7 +488,7 @@ qof_book_set_data_fin (QofBook *book, const char *key, gpointer data, QofBookFin
 gpointer
 qof_book_get_data (const QofBook *book, const char *key)
 {
-    if (!book || !key) return NULL;
+    if (!book || !key) return nullptr;
     return g_hash_table_lookup (book->data_tables, (gpointer)key);
 }
 
@@ -496,14 +496,14 @@ qof_book_get_data (const QofBook *book, const char *key)
 gboolean
 qof_book_is_readonly(const QofBook *book)
 {
-    g_return_val_if_fail( book != NULL, TRUE );
+    g_return_val_if_fail( book != nullptr, TRUE );
     return book->read_only;
 }
 
 void
 qof_book_mark_readonly(QofBook *book)
 {
-    g_return_if_fail( book != NULL );
+    g_return_if_fail( book != nullptr );
     book->read_only = TRUE;
 }
 
@@ -522,7 +522,7 @@ qof_book_get_collection (const QofBook *book, QofIdType entity_type)
 {
     QofCollection *col;
 
-    if (!book || !entity_type) return NULL;
+    if (!book || !entity_type) return nullptr;
 
     col = static_cast<QofCollection*>(g_hash_table_lookup (book->hash_of_collections, entity_type));
     if (!col)
@@ -633,13 +633,13 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     if (!book)
     {
         PWARN ("No book!!!");
-        return NULL;
+        return nullptr;
     }
 
     if (!counter_name || *counter_name == '\0')
     {
         PWARN ("Invalid counter name.");
-        return NULL;
+        return nullptr;
     }
 
     /* Get the current counter value from the KVP in the book. */
@@ -647,7 +647,7 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
 
     /* Check if an error occurred */
     if (counter < 0)
-        return NULL;
+        return nullptr;
 
     /* Increment the counter */
     counter++;
@@ -658,7 +658,7 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     if (!kvp)
     {
         PWARN ("Book has no KVP_Frame");
-        return NULL;
+        return nullptr;
     }
 
     /* Save off the new counter */
@@ -673,7 +673,7 @@ qof_book_increment_and_format_counter (QofBook *book, const char *counter_name)
     if (!format)
     {
         PWARN("Cannot get format for counter");
-        return NULL;
+        return nullptr;
     }
 
     /* Generate a string version of the counter */
@@ -686,21 +686,21 @@ char *
 qof_book_get_counter_format(const QofBook *book, const char *counter_name)
 {
     KvpFrame *kvp;
-    const char *user_format = NULL;
-    gchar *norm_format = NULL;
+    const char *user_format = nullptr;
+    gchar *norm_format = nullptr;
     KvpValue *value;
-    gchar *error = NULL;
+    gchar *error = nullptr;
 
     if (!book)
     {
         PWARN ("No book!!!");
-        return NULL;
+        return nullptr;
     }
 
     if (!counter_name || *counter_name == '\0')
     {
         PWARN ("Invalid counter name.");
-        return NULL;
+        return nullptr;
     }
 
     /* Get the KVP from the current book */
@@ -709,7 +709,7 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
     if (!kvp)
     {
         PWARN ("Book has no KVP_Frame");
-        return NULL;
+        return nullptr;
     }
 
     /* Get the format string */
@@ -722,7 +722,7 @@ qof_book_get_counter_format(const QofBook *book, const char *counter_name)
         {
             PWARN("Invalid counter format string. Format string: '%s' Counter: '%s' Error: '%s')", user_format, counter_name, error);
             /* Invalid format string */
-            user_format = NULL;
+            user_format = nullptr;
             g_free(error);
         }
     }
@@ -746,10 +746,10 @@ qof_book_normalize_counter_format(const gchar *p, gchar **err_msg)
             "I64i",
             PRIi64,
             "li",
-            NULL,
+            nullptr,
     };
     int i = 0;
-    gchar *normalized_spec = NULL;
+    gchar *normalized_spec = nullptr;
 
     while (valid_formats[i])
     {
@@ -757,7 +757,7 @@ qof_book_normalize_counter_format(const gchar *p, gchar **err_msg)
         if (err_msg && *err_msg)
         {
             g_free (*err_msg);
-            *err_msg = NULL;
+            *err_msg = nullptr;
         }
 
         normalized_spec = qof_book_normalize_counter_format_internal(p, valid_formats[i], err_msg);
@@ -766,15 +766,15 @@ qof_book_normalize_counter_format(const gchar *p, gchar **err_msg)
         i++;
     }
 
-    return NULL;
+    return nullptr;
 }
 
 gchar *
 qof_book_normalize_counter_format_internal(const gchar *p,
         const gchar *gint64_format, gchar **err_msg)
 {
-    const gchar *conv_start, *base, *tmp = NULL;
-    gchar *normalized_str = NULL, *aux_str = NULL;
+    const gchar *conv_start, *base, *tmp = nullptr;
+    gchar *normalized_str = nullptr, *aux_str = nullptr;
 
     /* Validate a counter format. This is a very simple "parser" that
      * simply checks for a single gint64 conversion specification,
@@ -804,7 +804,7 @@ qof_book_normalize_counter_format_internal(const gchar *p,
     {
         if (err_msg)
             *err_msg = g_strdup("Format string ended without any conversion specification");
-        return NULL;
+        return nullptr;
     }
 
     /* Store the start of the conversion for error messages */
@@ -821,7 +821,7 @@ qof_book_normalize_counter_format_internal(const gchar *p,
     {
         if (err_msg)
             *err_msg = g_strdup_printf("Format string doesn't contain requested format specifier: %s", gint64_format);
-        return NULL;
+        return nullptr;
     }
 
     /* Skip any number of flag characters */
@@ -843,23 +843,23 @@ qof_book_normalize_counter_format_internal(const gchar *p,
     {
         if (err_msg)
             *err_msg = g_strdup_printf("Format string ended during the conversion specification. Conversion seen so far: %s", conv_start);
-        return NULL;
+        return nullptr;
     }
 
     /* See if the format string starts with the correct format
      * specification. */
     tmp = strstr(p, gint64_format);
-    if (tmp == NULL)
+    if (tmp == nullptr)
     {
         if (err_msg)
             *err_msg = g_strdup_printf("Invalid length modifier and/or conversion specifier ('%.4s'), it should be: %s", p, gint64_format);
-        return NULL;
+        return nullptr;
     }
     else if (tmp != p)
     {
         if (err_msg)
             *err_msg = g_strdup_printf("Garbage before length modifier and/or conversion specifier: '%*s'", (int)(tmp - p), p);
-        return NULL;
+        return nullptr;
     }
 
     /* Copy the string we have so far and add normalized format specifier for long int */
@@ -888,7 +888,7 @@ qof_book_normalize_counter_format_internal(const gchar *p,
             if (err_msg)
                 *err_msg = g_strdup_printf("Format string contains unescaped %% signs (or multiple conversion specifications) at '%s'", p);
             g_free (normalized_str);
-            return NULL;
+            return nullptr;
         }
         /* Skip all other characters */
         p++;
@@ -925,10 +925,10 @@ qof_book_use_split_action_for_num_field (const QofBook *book)
     {
         // No cached value? Then do the expensive KVP lookup
         gboolean result;
-        char *opt = NULL;
+        char *opt = nullptr;
         qof_instance_get (QOF_INSTANCE (book),
                           PARAM_NAME_NUM_FIELD_SOURCE, &opt,
-                          NULL);
+                          nullptr);
 
         if (opt && opt[0] == 't' && opt[1] == 0)
             result = TRUE;
@@ -976,7 +976,7 @@ gint qof_book_get_num_days_autoreadonly (const QofBook *book)
         // No cached value? Then do the expensive KVP lookup
         qof_instance_get (QOF_INSTANCE (book),
               PARAM_NAME_NUM_AUTOREAD_ONLY, &tmp,
-              NULL);
+              nullptr);
 
         const_cast<QofBook*>(book)->cached_num_days_autoreadonly = tmp;
         const_cast<QofBook*>(book)->cached_num_days_autoreadonly_isvalid = TRUE;
@@ -988,7 +988,7 @@ gint qof_book_get_num_days_autoreadonly (const QofBook *book)
 GDate* qof_book_get_autoreadonly_gdate (const QofBook *book)
 {
     gint num_days;
-    GDate* result = NULL;
+    GDate* result = nullptr;
 
     g_assert(book);
     num_days = qof_book_get_num_days_autoreadonly(book);
@@ -1237,7 +1237,7 @@ qof_book_get_features (QofBook *book)
 {
     KvpFrame *frame = qof_instance_get_slots (QOF_INSTANCE (book));
     GHashTable *features = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                  NULL, g_free);
+                                                  nullptr, g_free);
 
     PWARN ("qof_book_get_features is now deprecated.");
 
@@ -1398,12 +1398,12 @@ gboolean qof_book_register (void)
 {
     static QofParam params[] =
     {
-        { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, NULL },
-        { QOF_PARAM_KVP,  QOF_TYPE_KVP,  (QofAccessFunc)qof_instance_get_slots, NULL },
-        { NULL },
+        { QOF_PARAM_GUID, QOF_TYPE_GUID, (QofAccessFunc)qof_entity_get_guid, nullptr },
+        { QOF_PARAM_KVP,  QOF_TYPE_KVP,  (QofAccessFunc)qof_instance_get_slots, nullptr },
+        { nullptr },
     };
 
-    qof_class_register (QOF_ID_BOOK, NULL, params);
+    qof_class_register (QOF_ID_BOOK, nullptr, params);
 
     return TRUE;
 }
