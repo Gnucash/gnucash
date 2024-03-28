@@ -180,8 +180,7 @@
       ;; disable animation; with multiple accounts selected this report
       ;; will create several charts, all will want to animate. Initial
       ;; animation is already disabled globally.
-      (gnc:html-chart-set! chart '(options hover animationDuration) 0)
-      (gnc:html-chart-set! chart '(options responsiveAnimationDuration) 0)
+      (gnc:html-chart-set! chart '(options animation) #f)
       (gnc:html-chart-set-title!
        chart (if running-sum
                  (list (xaccAccountGetName acct)

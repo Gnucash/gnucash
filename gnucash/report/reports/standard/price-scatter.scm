@@ -203,7 +203,7 @@
 
     (gnc:html-chart-set-x-axis-label! chart int-label)
 
-    (gnc:html-chart-set! chart '(options scales xAxes (0) type) 'linear)
+    (gnc:html-chart-set! chart '(options scales x type) 'linear)
     (gnc:html-chart-set-custom-x-axis-ticks?! chart #f)
 
     (cond
