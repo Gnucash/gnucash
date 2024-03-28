@@ -42,6 +42,9 @@
 #include "sixtp.h"
 #include "sixtp-utils.h"
 
+#include <charconv>
+#include <cctype>
+
 static QofLogModule log_module = GNC_MOD_IO;
 
 gboolean
@@ -138,6 +141,27 @@ concatenate_child_result_chars (GSList* data_from_children)
  */
 
 
+template <typename T>
+static bool parse_chars_into_num (const char* str, T* num_ptr)
+{
+    if (!str || !num_ptr)
+        return false;
+
+    while (std::isspace (*str))
+        ++str;
+
+    const char* end_ptr = str + std::strlen (str);
+
+    auto res = std::from_chars (str, end_ptr, *num_ptr);
+    if (res.ec != std::errc{})
+        return false;
+
+    while (std::isspace (*res.ptr))
+        ++res.ptr;
+
+    return (res.ptr == end_ptr);
+}
+
 /*********/
 /* double
  */
@@ -145,78 +169,42 @@ concatenate_child_result_chars (GSList* data_from_children)
 gboolean
 string_to_double (const char* str, double* result)
 {
-    char* endptr = 0x0;
-
-    g_return_val_if_fail (str, FALSE);
-    g_return_val_if_fail (result, FALSE);
-
-    *result = strtod (str, &endptr);
-    if (endptr == str) return (FALSE);
-
-    return (TRUE);
+#if __cpp_lib_to_chars >= 201611L
+    return parse_chars_into_num<double>(str, result);
+#else
+    // because from_chars in cpp < 201611L cannot parse floats
+    char* endptr = nullptr;
+    g_return_val_if_fail (str && result, false);
+    *result = std::strtod (str, &endptr);
+    return (endptr != str);
+#endif
 }
 
 /*********/
 /* gint64
  */
-/* Maybe there should be a comment here explaining why this function
-   doesn't call g_ascii_strtoull, because it's not so obvious. -CAS */
 gboolean
 string_to_gint64 (const gchar* str, gint64* v)
 {
-    /* convert a string to a gint64. only whitespace allowed before and after. */
-    long long int v_in;
-    int num_read;
-
-    g_return_val_if_fail (str, FALSE);
-
-    /* must use "<" here because %n's effects aren't well defined */
-    if (sscanf (str, " %lld%n", &v_in, &num_read) < 1)
-    {
-        return (FALSE);
-    }
-
-    /*
-     * Mac OS X version 10.1 and under has a silly bug where scanf
-     * returns bad values in num_read if there is a space before %n. It
-     * is fixed in the next release 10.2 afaik
-     */
-    while ((* ((gchar*)str + num_read) != '\0') &&
-           isspace (* ((unsigned char*)str + num_read)))
-        num_read++;
-
-    if (v)
-        *v = v_in;
-
-    if (!isspace_str (str + num_read, -1)) return (FALSE);
-    return (TRUE);
+    return parse_chars_into_num<gint64>(str, v);
 }
 
 /*********/
-/* gint32
+/* guint16
  */
-
 gboolean
-string_to_gint32 (const gchar* str, gint32* v)
+string_to_guint16 (const gchar* str, guint16* v)
 {
-    /* convert a string to a gint32. only whitespace allowed before and after. */
-    int num_read;
-    int v_in;
+    return parse_chars_into_num<guint16>(str, v);
+}
 
-    /* must use "<" here because %n's effects aren't well defined */
-    if (sscanf (str, " %d%n", &v_in, &num_read) < 1)
-    {
-        return (FALSE);
-    }
-    while ((* ((gchar*)str + num_read) != '\0') &&
-           isspace (* ((unsigned char*)str + num_read)))
-        num_read++;
-
-    if (v)
-        *v = v_in;
-
-    if (!isspace_str (str + num_read, -1)) return (FALSE);
-    return (TRUE);
+/*********/
+/* guint
+ */
+gboolean
+string_to_guint (const gchar* str, guint* v)
+{
+    return parse_chars_into_num<guint>(str, v);
 }
 
 /************/

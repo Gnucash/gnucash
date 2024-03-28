@@ -98,46 +98,32 @@ dom_tree_to_integer_kvp_value (xmlNodePtr node)
     return ret;
 }
 
+template <typename T>
+static bool
+dom_tree_to_num (xmlNodePtr node, std::function<bool(const char*, T*)>string_to_num, T* num_ptr)
+{
+    auto text = dom_tree_to_text (node);
+    auto ret = string_to_num (text, num_ptr);
+    g_free (text);
+    return ret;
+}
+
 gboolean
 dom_tree_to_integer (xmlNodePtr node, gint64* daint)
 {
-    gchar* text;
-    gboolean ret;
-
-    text = dom_tree_to_text (node);
-
-    ret = string_to_gint64 (text, daint);
-
-    g_free (text);
-
-    return ret;
+    return dom_tree_to_num<gint64>(node, string_to_gint64, daint);
 }
 
 gboolean
 dom_tree_to_guint16 (xmlNodePtr node, guint16* i)
 {
-    gboolean ret;
-    guint j = 0;
-
-    ret = dom_tree_to_guint (node, &j);
-    *i = (guint16) j;
-    return ret;
+    return dom_tree_to_num<guint16>(node, string_to_guint16, i);
 }
 
 gboolean
 dom_tree_to_guint (xmlNodePtr node, guint* i)
 {
-    gchar* text, *endptr;
-    gboolean ret;
-
-    text = dom_tree_to_text (node);
-    /* In spite of the strange string_to_gint64 function, I'm just
-       going to use strtoul here until someone shows me the error of
-       my ways. -CAS */
-    *i = (guint) strtoul (text, &endptr, 0);
-    ret = (endptr != text);
-    g_free (text);
-    return ret;
+    return dom_tree_to_num<guint>(node, string_to_guint, i);
 }
 
 gboolean

@@ -63,7 +63,9 @@ gboolean string_to_double (const char* str, double* result);
 
 gboolean string_to_gint64 (const gchar* str, gint64* v);
 
-gboolean string_to_gint32 (const gchar* str, gint32* v);
+gboolean string_to_guint16 (const gchar* str, guint16* v);
+
+gboolean string_to_guint (const gchar* str, guint* v);
 
 gboolean hex_string_to_binary (const gchar* str,  void** v, guint64* data_len);
 
