@@ -135,8 +135,6 @@ typedef struct AccountPrivate
     LotList   *lots;		/* list of lot pointers */
     GNCPolicy *policy;		/* Cached pointer to policy method */
 
-    TriState sort_reversed;
-    TriState equity_type;
     char *notes;
     char *color;
     char *tax_us_code;
