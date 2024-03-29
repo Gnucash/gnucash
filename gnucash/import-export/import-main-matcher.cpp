@@ -59,7 +59,6 @@
 #include "guid.h"
 #include "gnc-session.h"
 #include "Query.h"
-#include "SplitP.h"
 
 #define GNC_PREFS_GROUP "dialogs.import.generic.transaction-list"
 #define IMPORT_MAIN_MATCHER_CM_CLASS "transaction-matcher-dialog"
