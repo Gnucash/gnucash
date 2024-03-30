@@ -8,7 +8,7 @@ if (POLICY CMP0094)
 endif()
 
 project (gnucash
-    VERSION 5.5
+    VERSION 5.6
 )
 
 enable_testing()
@@ -725,6 +725,7 @@ set(gnucash_DOCS
     ChangeLog.2020
     ChangeLog.2021
     ChangeLog.2022
+    ChangeLog.2023
     DOCUMENTERS
     HACKING
     LICENSE

@@ -1,5 +1,75 @@
 Version history:
 ------- -------
+5.6  - 31 March 2024
+The following bugs have been fixed:
+
+    Bug 798946 - start/end of current/last quarter have off-by-one error
+    Bug 799093 - Cannot reconcile since v5.4
+    Bug 799179 - SLR won't allow change from "Reminder" to any other state
+    Bug 799210 - Bad encoding of accented chars in account names in
+                 "Import CSV" wizard
+    Bug 799213 - SIGSEGV caused by revising an auto completed transaction
+    Bug 799222 - Crash when changing the parent of an account that has had two
+                 or more levels of sub-accounts auto-created using the register
+                 in the current session.
+    Bug 799224 - Import of QIF gets Bug detected during duplicates (partial
+                 fix: If the new-splits object is null, it means the new
+                 account tree from the current import has no splits. Therefore
+                 the (apply min|max dates) will fail. Omitting the date query
+                 is a simple fix to prevent crashing. This is a partial fix
+                 because the crash is likely a symptom of another bug which
+                 causes the new account-tree to be empty.
+    Bug 799225 - QIF Importer Crashes Silently after "Start Import" Button:
+                 Don't allow a QIF investment transaction without an action
+                 (buy/sell/etc)
+    Bug 799246 - import matcher will rename incorrect splits
+
+Other repairs or enhancements not marked as bugs:
+
+    Numeric parsing and string handling improvements in the Engine and XML
+        backend.
+    [gnc-dense-cal.c] sx popup: show date in preference (cf.locale) format
+        because the date format preference is user-facing and customisable.
+        It's jarring if the preference is dd/mm/yyyy and the display shows
+        mm/dd/yyyy in accordance to the locale.
+    Correct misleading description about creating Scheduled Transaction.
+    Date parsing efficiency improvements.
+    Update minumum Python version to 3.8, made necessary by updating the C API
+        in the Python bindings.
+    Replace deprecated distutils.sysconfig with sysconfig. distutils is not
+        present in Python 3.12.2.
+    Query user via dialog for date when creating a reverse transaction.
+    More C++ conversions
+    Avoid deprecation warning for -py3 in swig >= 4.1
+    [gnc-commodities.cpp] gnc_new_iso_codes is a std::unordered_map
+    Replace some naked for loops with C++ algorithms
+    Convert gnc-commodity to C++ and make GncQuoteSources a C++ class.
+    [test-commodities.cpp] add some tests for gnc_quote_sources
+    Remove the SLR status sort as it is too confusing
+    Allow sorting of the transaction column in the Since Last Run dialog by
+        schedule name or occurrence date. To sort by schedule name, a schedule
+        name is first selected and then the column header is pressed to change
+        order. To sort by occurrence date, a date is selected and then the
+        column header is pressed to change order based on the date of the
+        first occurrence. A tool tip has been added to indicate the sort order
+        being used.
+    [gtest-gnc-numeric] add operator comparisons with example int64 numbers
+    [assistant-stock-transaction] store & retrieve associated account as
+        metadata
+    Update Form/Schedule line references for 2023 for the US Income Tax Report
+    Update another gnucash-help to gnucash-manual
+    [invoice.scm] centralize layout components into layout-key-list instead of
+        maintaining 2 assoc lists.
+    [invoice.scm] normalize header section generators, changing the functions
+        to require 1 options argument only
+    Update invoice.scm: Add spacing for long Invoice ID's (Displayed as
+        "Reference" on the Invoice)
+
+New and Updated Translations: Croatian, Dutch, English (Australia),
+    English (New Zealand), English (United Kingdom), French, German,
+    Hebrew, Hungarian, Indonesian, Japanese, Norwegian Bokmål, Polish,
+    Portuguese, Slovak, Spanish, Swedish
+
 5.5  - 17 December 2023
 The following bugs have been fixed:
 
