@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-03-24 22:01+0000\n"
+"PO-Revision-Date: 2024-03-30 07:02+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -6941,7 +6941,7 @@ msgstr "Biztosan törölni kívánja ezt a tételt?"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:572
 msgid "Show the income and expense accounts"
-msgstr "Bevételi- és költségszámlák megjelenítése"
+msgstr "Bevétel- és költségszámlák megjelenítése"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:674
 #: gnucash/report/trep-engine.scm:2437 gnucash/report/trep-engine.scm:2443
@@ -7211,7 +7211,7 @@ msgstr "Dátum: "
 #: gnucash/gtkbuilder/dialog-sx.glade:1420
 #: gnucash/gtkbuilder/gnc-frequency.glade:593
 msgid "Frequency"
-msgstr "Gyakoriság"
+msgstr "Időköz"
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:1281
 msgid "(unnamed)"
@@ -12861,11 +12861,11 @@ msgstr "_Nappal korábban"
 
 #: gnucash/gtkbuilder/business-prefs.glade:273
 msgid "How many days in the future to warn about Bills coming due."
-msgstr "Hány nappal előre figyelmeztessen az esedékessé váló bejövőszámlákról."
+msgstr "Hány nappal előbb figyelmeztessen az esedékessé váló bejövőszámlákról."
 
 #: gnucash/gtkbuilder/business-prefs.glade:288
 msgid "How many days in the future to warn about Invoices coming due."
-msgstr "Hány nappal előre figyelmeztessen az esedékessé váló kimenőszámlákról."
+msgstr "Hány nappal előbb figyelmeztessen az esedékessé váló kimenőszámlákról."
 
 #: gnucash/gtkbuilder/business-prefs.glade:300
 msgid "_Days in advance"
@@ -16235,7 +16235,7 @@ msgstr "Tranzakció létrehozás ennyi nappal a hatályos dátum előtt."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:670
 msgid "_Notify before transactions are created"
-msgstr "Figyelmeztetés tra_nzakció létrehozása előtt"
+msgstr "Értesítés a tra_nzakció létrehozása előtt"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:675
 msgid "Set the 'notify' flag on newly created scheduled transactions."
@@ -16303,7 +16303,7 @@ msgstr "Ismétlések:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1243
 msgid "Until"
-msgstr "-ig"
+msgstr "Eddig:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
 #, fuzzy
@@ -16317,7 +16317,7 @@ msgstr "előfordulások"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1290
 msgid "remaining"
-msgstr "maradék"
+msgstr "hátralevő"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1372
 msgid "Overview"
