@@ -495,6 +495,7 @@ gnucash/report/reports/standard/register.scm
 gnucash/report/reports/standard/taxinvoice.scm
 gnucash/report/reports/standard/transaction.scm
 gnucash/report/reports/standard/trial-balance.scm
+gnucash/report/reports/standard/txn-columns.scm
 gnucash/report/reports/standard/view-column.scm
 gnucash/report/reports/support/balsheet-eg.eguile.scm
 gnucash/report/reports/support/receipt.eguile.scm
