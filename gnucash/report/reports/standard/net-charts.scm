@@ -212,7 +212,7 @@
       (fold
        (lambda (mon acc)
          (+ acc (gnc-numeric-convert
-                 (gnc:gnc-monetary-amount (exchange-fn mon report-currency date))
+                 (gnc:gnc-monetary-amount ((exchange-fn date) mon report-currency date))
                  (gnc-commodity-get-fraction report-currency)
                  GNC-RND-ROUND)))
        0 (c 'format gnc:make-gnc-monetary #f)))
@@ -281,9 +281,9 @@
                           (gnc-accounts-and-all-descendants accounts)
                           report-currency))
     (gnc:report-percent-done 10)
-    (set! exchange-fn (gnc:case-exchange-time-fn
-                       price-source report-currency
-                       commodity-list to-date-t64
+    (set! exchange-fn (gnc:make-date-exchange-time-fn
+                       price-source report-currency (gnc:accounts-get-commodities accounts #f)
+                       to-date-t64
                        10 40))
     (gnc:report-percent-done 50)
 
