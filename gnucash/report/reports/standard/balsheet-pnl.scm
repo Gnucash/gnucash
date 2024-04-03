@@ -738,15 +738,9 @@ also show overall period profit & loss."))
 
          ;; generate an exchange-fn for date, and cache its result.
          (get-date-exchange-fn
-          (let ((h (make-hash-table))
-                (commodities (gnc:accounts-get-commodities accounts #f)))
-            (lambda (date)
-              (or (hashv-ref h date)
-                  (let ((exchangefn (gnc:case-exchange-time-fn
-                                     price-source common-currency commodities
-                                     date #f #f)))
-                    (hashv-set! h date exchangefn)
-                    exchangefn)))))
+          (gnc:make-date-exchange-time-fn price-source common-currency
+                                          (gnc:accounts-get-commodities accounts #f)
+                                          enddate #f #f))
 
          ;; from col-idx, find effective date to retrieve pricedb
          ;; entry or to limit transactions to calculate average-cost
