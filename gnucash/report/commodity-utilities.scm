@@ -55,6 +55,7 @@
 (export gnc:case-exchange-fn)
 (export gnc:case-exchange-time-fn)
 (export gnc:case-price-fn)
+(export gnc:make-date-exchange-time-fn)
 (export gnc:sum-collector-commodity)
 (export gnc:uniform-commodity?)
 
@@ -215,12 +216,13 @@
 ;; extended to a commodity-list. Returns an alist. Each pair consists
 ;; of the foreign-currency and the appropriate list from
 ;; gnc:get-commodity-totalavg-prices, see there.
-(define (gnc:get-commoditylist-totalavg-prices
-         commodity-list report-currency end-date
-         start-percent delta-percent)
+(define* (gnc:get-commoditylist-totalavg-prices
+          commodity-list report-currency end-date
+          start-percent delta-percent #:key all-forex-splits)
   (let* ((currency-accounts
           (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
-         (interesting-splits (gnc:get-match-commodity-splits-sorted currency-accounts end-date #f))
+         (interesting-splits (or all-forex-splits (gnc:get-match-commodity-splits-sorted
+                                                   currency-accounts end-date #f)))
          (commodity-list (delete-duplicates commodity-list))
          (work-to-do (length commodity-list)))
     (map
@@ -532,11 +534,12 @@
 ;; Sum the net amounts and values in the report commodity, including booked
 ;; gains and losses, of each commodity across all accounts. Returns a
 ;; report-list.
-(define (gnc:get-exchange-cost-totals report-commodity end-date)
+(define* (gnc:get-exchange-cost-totals report-commodity end-date #:key all-forex-splits)
   (let ((curr-accounts (gnc-account-get-descendants-sorted
                         (gnc-get-current-root-account))))
 
-    (let loop ((comm-splits (gnc:get-all-commodity-splits curr-accounts end-date))
+    (let loop ((comm-splits (or all-forex-splits
+                                (gnc:get-all-commodity-splits curr-accounts end-date)))
                (sumlist (list (list report-commodity '()))))
       (cond
        ((null? comm-splits)
@@ -621,7 +624,7 @@
       (list comm (abs (/ (foreign 'total #f) (domestic 'total #f))))))
    (gnc:get-exchange-totals report-commodity end-date)))
 
-(define (gnc:make-exchange-cost-alist report-commodity end-date)
+(define* (gnc:make-exchange-cost-alist report-commodity end-date #:key all-forex-splits)
   ;; This returns the alist with the actual exchange rates, i.e. the
   ;; total balances from get-exchange-totals are divided by each
   ;; other.
@@ -630,7 +633,7 @@
      ((comm (domestic . foreign))
       (let ((denom (domestic 'total #f)))
         (list comm (if (zero? denom) 0 (abs (/ (foreign 'total #f) denom)))))))
-   (gnc:get-exchange-cost-totals report-commodity end-date)))
+   (gnc:get-exchange-cost-totals report-commodity end-date #:all-forex-splits all-forex-splits)))
 
 
 
@@ -841,20 +844,21 @@
 ;;    foreign  - foreign commodity/currency
 ;;    domestic - a gnc-monetary pair
 ;;    date     - time64 price
-(define (gnc:case-exchange-time-fn
-         source-option report-currency commodity-list to-date-tp
-         start-percent delta-percent)
+(define* (gnc:case-exchange-time-fn
+          source-option report-currency commodity-list to-date-tp
+          start-percent delta-percent #:key all-forex-splits)
   (case source-option
     ;; Make this the same as gnc:case-exchange-fn
     ((average-cost) (let* ((exchange-fn (gnc:make-exchange-function
                                          (gnc:make-exchange-cost-alist
-                                          report-currency to-date-tp))))
+                                          report-currency to-date-tp
+                                          #:all-forex-splits all-forex-splits))))
                       (lambda (foreign domestic date)
                         (exchange-fn foreign domestic))))
     ((weighted-average) (let ((pricealist
                                (gnc:get-commoditylist-totalavg-prices
                                 commodity-list report-currency to-date-tp
-                                start-percent delta-percent)))
+                                start-percent delta-percent #:all-forex-splits all-forex-splits)))
                           (gnc:debug "weighted-average pricealist " pricealist)
                           (lambda (foreign domestic date)
                             (gnc:exchange-by-pricealist-nearest
@@ -872,6 +876,21 @@
        gnc:exchange-by-pricedb-nearest))))
 
 
+(define (gnc:make-date-exchange-time-fn price-source common-currency commodities
+                                        end-date start-percent delta-percent)
+  (let* ((h (make-hash-table))
+         (currency-accounts (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
+         (all-forex-splits (gnc:get-match-commodity-splits-sorted currency-accounts end-date #f)))
+    (lambda (date)
+      (cond
+       ((hashv-ref h date) => identity)
+       (else
+        (let ((exchangefn (gnc:case-exchange-time-fn
+                           price-source common-currency commodities
+                           date start-percent delta-percent
+                           #:all-forex-splits all-forex-splits)))
+          (hashv-set! h date exchangefn)
+          exchangefn))))))
 
 
 
