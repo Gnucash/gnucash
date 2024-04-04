@@ -1248,7 +1248,7 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 }
 
 static gboolean
-gnucash_sheet_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
+gnucash_sheet_focus_in_event (GtkWidget *widget, GdkEventFocus *event) //FIXME gtk4
 {
     GnucashSheet *sheet = GNUCASH_SHEET(widget);
 
@@ -1262,7 +1262,7 @@ gnucash_sheet_focus_in_event (GtkWidget *widget, GdkEventFocus *event)
 }
 
 static gboolean
-gnucash_sheet_focus_out_event (GtkWidget *widget, GdkEventFocus *event)
+gnucash_sheet_focus_out_event (GtkWidget *widget, GdkEventFocus *event) //FIXME gtk4
 {
     GnucashSheet *sheet = GNUCASH_SHEET(widget);
 
@@ -1321,7 +1321,7 @@ gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
 }
 
 static gboolean
-gnucash_sheet_button_release_event (GtkWidget *widget, GdkEventButton *event)
+gnucash_sheet_button_release_event (GtkWidget *widget, GdkEventButton *event) //FIXME gtk4
 {
     GnucashSheet *sheet;
 
@@ -1331,12 +1331,16 @@ gnucash_sheet_button_release_event (GtkWidget *widget, GdkEventButton *event)
 
     sheet = GNUCASH_SHEET(widget);
 
-    if (sheet->button != event->button)
+    guint button;
+    if (!gdk_event_get_button ((GdkEvent*)event, &button)) //FIXME gtk4
+        return TRUE;
+
+    if (sheet->button != button)
         return FALSE;
 
     sheet->button = 0;
 
-    if (event->button != 1)
+    if (button != 1)
         return FALSE;
 
     gtk_grab_remove (widget);
@@ -1355,7 +1359,7 @@ clamp_scrollable_value (float value, GtkAdjustment* adj)
 
 }
 static gboolean
-gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
+gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event) //FIXME gtk4
 {
     GnucashSheet *sheet;
     GtkAdjustment *vadj;
@@ -1369,38 +1373,45 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event)
     vadj = sheet->vadj;
     v_value = gtk_adjustment_get_value (vadj);
 
-    switch (event->direction)
+    GdkScrollDirection direction;
+    gdouble delta_x = 0.0, delta_y = 0.0;
+    if (gdk_event_get_scroll_direction ((GdkEvent*)event, &direction)) //FIXME gtk4
     {
-    case GDK_SCROLL_UP:
-        v_value -= gtk_adjustment_get_step_increment (vadj);
-        break;
-    case GDK_SCROLL_DOWN:
-        v_value += gtk_adjustment_get_step_increment (vadj);
-        break;
+        switch (direction)
+        {
+        case GDK_SCROLL_UP:
+            v_value -= gtk_adjustment_get_step_increment (vadj);
+            break;
+        case GDK_SCROLL_DOWN:
+            v_value += gtk_adjustment_get_step_increment (vadj);
+            break;
+        default:
+            // no scrolling
+            break;
+        }
+    }
+    else if (gdk_event_get_scroll_deltas ((GdkEvent*)event, &delta_x, &delta_y)) //FIXME gtk4
+    {
 /* GdkQuartz reserves GDK_SCROLL_SMOOTH for high-resolution touchpad
  * scrolling events, and in that case scrolling by line is much too
  * fast. Gdk/Wayland and Gdk/Win32 pass GDK_SCROLL_SMOOTH for all
  * scroll-wheel events and expect coarse resolution.
  */
-    case GDK_SCROLL_SMOOTH:
         h_value = gtk_adjustment_get_value (sheet->hadj);
-        h_value += event->delta_x;
+        h_value += delta_x;
         h_value = clamp_scrollable_value (h_value, sheet->hadj);
         gtk_adjustment_set_value (sheet->hadj, h_value);
 #if defined MAC_INTEGRATION
-        v_value += event->delta_y;
+        v_value += delta_y;
 #else
-        int direction = event->delta_y > 0 ? 1 : event->delta_y < 0 ? -1 : 0;
+        int direction = delta_y > 0 ? 1 : delta_y < 0 ? -1 : 0;
         v_value += gtk_adjustment_get_step_increment (vadj) * direction;
 #endif
-        break;
-    default:
-        return FALSE;
     }
     v_value = clamp_scrollable_value (v_value, vadj);
     gtk_adjustment_set_value (vadj, v_value);
 
-    if (event->delta_y == 0)
+    if (delta_y == 0)
     {
         /* There are problems with the slider not tracking the value so
            when delta_y is 0 hide and showing the scrollbar seems to fix it
@@ -1437,7 +1448,7 @@ gnucash_sheet_check_grab (GnucashSheet *sheet)
 }
 
 static gboolean
-gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
+gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event) //FIXME gtk4
 {
     GnucashSheet *sheet;
     VirtualCell *vcell;
@@ -1455,10 +1466,14 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
     sheet = GNUCASH_SHEET(widget);
     table = sheet->table;
 
-    if (sheet->button && (sheet->button != event->button))
+    guint button;
+    if (!gdk_event_get_button ((GdkEvent*)event, &button)) //FIXME gtk4
+        return TRUE;
+
+    if (sheet->button && (sheet->button != button))
         return FALSE;
 
-    sheet->button = event->button;
+    sheet->button = button;
     if (sheet->button == 3)
         sheet->button = 0;
 
@@ -1468,13 +1483,13 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
     button_1 = FALSE;
     do_popup = FALSE;
 
-    switch (event->button)
+    switch (button)
     {
     case 1:
         button_1 = TRUE;
         break;
     case 2:
-        if (event->type != GDK_BUTTON_PRESS)
+        if (gdk_event_get_event_type ((GdkEvent*)event) != GDK_BUTTON_PRESS) //FIXME gtk4
             return FALSE;
         gnc_item_edit_paste_clipboard (GNC_ITEM_EDIT(sheet->item_editor));
         return TRUE;
@@ -1490,18 +1505,22 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
     sheet->button_x = -1;
     sheet->button_y = -1;
 
-    if (!gnucash_sheet_find_loc_by_pixel (sheet, event->x, event->y,
+    gdouble x_win, y_win;
+    if (!gdk_event_get_coords ((GdkEvent*)event, &x_win, &y_win)) //FIXME gtk4
+        return FALSE;
+
+    if (!gnucash_sheet_find_loc_by_pixel (sheet, x_win, y_win,
                                           &new_virt_loc))
         return TRUE;
 
-    sheet->button_x = event->x;
-    sheet->button_y = event->y;
+    sheet->button_x = x_win;
+    sheet->button_y = y_win;
 
     vcell = gnc_table_get_virtual_cell (table, new_virt_loc.vcell_loc);
     if (vcell == NULL)
         return TRUE;
 
-    if (event->type != GDK_BUTTON_PRESS)
+    if (gdk_event_get_event_type ((GdkEvent*)event) != GDK_BUTTON_PRESS) //FIXME gtk4
         return FALSE;
 
     if (button_1)
@@ -1513,7 +1532,7 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
     if (virt_loc_equal (new_virt_loc, cur_virt_loc) &&
         sheet->editing && do_popup)
     {
-        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event);
+        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event); //FIXME gtk4
         return TRUE;
     }
 
@@ -1542,7 +1561,7 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event)
         gnucash_sheet_check_grab (sheet);
 
     if (do_popup)
-        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event);
+        gtk_menu_popup_at_pointer (GTK_MENU(sheet->popup), (GdkEvent *) event); //FIXME gtk4
 
     return button_1 || do_popup;
 }
@@ -1586,18 +1605,24 @@ gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet)
 }
 
 static gboolean
-gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
+gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event) //FIXME gtk4
 {
     GncItemEdit *item_edit;
     gboolean handled = FALSE;
 
     item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
-    switch (event->keyval)
+    guint           keyval;
+    GdkModifierType state;
+    if (!gdk_event_get_keyval ((GdkEvent*)event, &keyval) ||
+        !gdk_event_get_state ((GdkEvent*)event, &state)) //FIXME gtk4
+        return FALSE;
+
+    switch (keyval)
     {
     case GDK_KEY_C:
     case GDK_KEY_c:
-        if (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
+        if (state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
         {
             gnc_item_edit_copy_clipboard (item_edit);
             handled = TRUE;
@@ -1605,7 +1630,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
         break;
     case GDK_KEY_X:
     case GDK_KEY_x:
-        if (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
+        if (state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
         {
             gnc_item_edit_cut_clipboard (item_edit);
             handled = TRUE;
@@ -1613,19 +1638,19 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event)
         break;
     case GDK_KEY_V:
     case GDK_KEY_v:
-        if (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
+        if (state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
         {
             gnc_item_edit_paste_clipboard (item_edit);
             handled = TRUE;
         }
         break;
     case GDK_KEY_Insert:
-        if (event->state & GDK_SHIFT_MASK)
+        if (state & GDK_SHIFT_MASK)
         {
             gnc_item_edit_paste_clipboard (item_edit);
             handled = TRUE;
         }
-        else if (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
+        else if (state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR)
         {
             gnc_item_edit_copy_clipboard (item_edit);
             handled = TRUE;
@@ -1650,7 +1675,7 @@ gnucash_sheet_need_horizontal_scroll (GnucashSheet *sheet,
     hscroll_val = (gint) gtk_adjustment_get_value (sheet->hadj);
 
     // offset is the start of the cell for column
-    offset = gnc_header_get_cell_offset (GNC_HEADER(sheet->header_item), 
+    offset = gnc_header_get_cell_offset (GNC_HEADER(sheet->header_item),
                                          new_virt_loc->phys_col_offset, &cell_width);
 
     if (((offset + cell_width) > sheet->window_width) || (offset < hscroll_val))
@@ -1660,12 +1685,18 @@ gnucash_sheet_need_horizontal_scroll (GnucashSheet *sheet,
 static gboolean
 process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
                      gncTableTraversalDir *direction,
-                     VirtualLocation* new_virt_loc)
+                     VirtualLocation* new_virt_loc) //FIXME gtk4
 {
     int distance;
     VirtualLocation cur_virt_loc = *new_virt_loc;
 
-    switch (event->keyval)
+    guint           keyval;
+    GdkModifierType state;
+    if (!gdk_event_get_keyval ((GdkEvent*)event, &keyval) ||
+        !gdk_event_get_state ((GdkEvent*)event, &state)) //FIXME gtk4
+        return FALSE;
+
+    switch (keyval)
     {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
@@ -1676,7 +1707,7 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
             break;
         case GDK_KEY_Tab:
         case GDK_KEY_ISO_Left_Tab:
-            if (event->state & GDK_SHIFT_MASK)
+            if (state & GDK_SHIFT_MASK)
             {
                 *direction = GNC_TABLE_TRAVERSE_LEFT;
                 gnc_table_move_tab (sheet->table, new_virt_loc, FALSE);
@@ -1691,7 +1722,7 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
         case GDK_KEY_Page_Up:
             *direction = GNC_TABLE_TRAVERSE_UP;
             new_virt_loc->phys_col_offset = 0;
-            if (event->state & GDK_SHIFT_MASK)
+            if (state & GDK_SHIFT_MASK)
                 new_virt_loc->vcell_loc.virt_row = 1;
             else
             {
@@ -1704,7 +1735,7 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
         case GDK_KEY_Page_Down:
             *direction = GNC_TABLE_TRAVERSE_DOWN;
             new_virt_loc->phys_col_offset = 0;
-            if (event->state & GDK_SHIFT_MASK)
+            if (state & GDK_SHIFT_MASK)
                 new_virt_loc->vcell_loc.virt_row =
                     sheet->num_virt_rows - 1;
             else
@@ -1723,8 +1754,8 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
         case GDK_KEY_KP_Down:
         case GDK_KEY_Down:
         case GDK_KEY_Menu:
-            if (event->keyval == GDK_KEY_Menu ||
-                (event->state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR))
+            if (keyval == GDK_KEY_Menu ||
+                (state & GDK_MODIFIER_INTENT_PRIMARY_ACCELERATOR))
             {
                 GncItemEdit *item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
@@ -1767,7 +1798,7 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
 }
 
 static gboolean
-pass_to_entry_handler (GnucashSheet *sheet, GdkEventKey *event)
+pass_to_entry_handler (GnucashSheet *sheet, GdkEventKey *event) //FIXME gtk4
 {
     gboolean result = FALSE;
     GtkEditable *editable = GTK_EDITABLE(sheet->entry);
@@ -1775,14 +1806,14 @@ pass_to_entry_handler (GnucashSheet *sheet, GdkEventKey *event)
     // If sheet is readonly, entry is not realized
     if (gtk_widget_get_realized (GTK_WIDGET(editable)))
     {
-        result = gtk_widget_event (GTK_WIDGET(editable), (GdkEvent*)event);
+        result = gtk_widget_event (GTK_WIDGET(editable), (GdkEvent*)event); //FIXME gtk4
         gnucash_sheet_set_selection_from_entry (sheet);
     }
     return result;
 }
 
 static gint
-gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
+gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event) //FIXME gtk4
 {
     Table *table;
     GnucashSheet *sheet;
@@ -1800,14 +1831,14 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     sheet = GNUCASH_SHEET(widget);
     table = sheet->table;
     /* Don't respond to stand-alone modifier keys. */
-    if (event->is_modifier)
+    if (event->is_modifier) //FIXME in GTK4, gdk_key_event_is_modifier (GdkEvent*)event)
         return TRUE;
     /* Initially sync the selection, the user might have adjusted it with the
      * mouse.
      */
     gnucash_sheet_set_selection_from_entry (sheet);
     /* Direct_event gets first whack */
-    if (gnucash_sheet_direct_event (sheet, (GdkEvent *) event))
+    if (gnucash_sheet_direct_event (sheet, (GdkEvent *) event)) //FIXME gtk4
         return TRUE;
     /* Followed by the input method */
     if (gtk_entry_im_context_filter_keypress (GTK_ENTRY(sheet->entry), event))
@@ -1829,14 +1860,18 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
     gnucash_cursor_get_virt (GNUCASH_CURSOR(sheet->cursor), &cur_virt_loc);
     new_virt_loc = cur_virt_loc;
 
+    GdkModifierType state;
+    if (!gdk_event_get_state ((GdkEvent*)event, &state)) //FIXME gtk4
+        return TRUE;
+
     /* Don't process any keystrokes where a modifier key (Alt, Meta, etc.) is
      * being held down.  This shouldn't include NUM LOCK.
      */
-    if (event->state & modifiers & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
+    if (state & modifiers & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
         pass_on = TRUE;
     else if (process_motion_keys (sheet, event, &pass_on,
                                   &direction, &new_virt_loc)) //may set pass_on
-            return TRUE;
+        return TRUE;
 
     /* Forward the keystroke to the input line */
     if (pass_on)
@@ -1865,7 +1900,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event)
 }
 
 static gint
-gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
+gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event) //FIXME gtk4
 {
     GnucashSheet *sheet;
 
@@ -1874,25 +1909,38 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event)
     g_return_val_if_fail (event != NULL, TRUE);
 
     sheet = GNUCASH_SHEET(widget);
+
+    guint           keyval;
+    GdkModifierType state;
+    if (!gdk_event_get_keyval ((GdkEvent*)event, &keyval) ||
+        !gdk_event_get_state ((GdkEvent*)event, &state)) //FIXME gtk4
+    {
+        return FALSE;
+    }
+
+#ifdef G_OS_WIN32
+    guint16 hardware_keycode;
+    /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
+    if (gdk_event_get_keycode ((GdkEvent*)event, &hardware_keycode)) //FIXME gtk4
+    {
+        if (hardware_keycode == VK_DECIMAL)
+            keyval = GDK_KEY_KP_Decimal;
+    }
+#endif
     /* bug#60582 comment#27 2
            save shift state to enable <shift minus> and <shift equal>
        bug#618434
            save keyval to handle GDK_KEY_KP_Decimal event
      */
-#ifdef G_OS_WIN32
-    /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
-    if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KEY_KP_Decimal;
-#endif
-    sheet->shift_state = event->state & GDK_SHIFT_MASK;
+    sheet->shift_state = state & GDK_SHIFT_MASK;
     sheet->keyval_state =
-        (event->keyval == GDK_KEY_KP_Decimal) ? GDK_KEY_KP_Decimal : 0;
+        (keyval == GDK_KEY_KP_Decimal) ? GDK_KEY_KP_Decimal : 0;
 
     return gnucash_sheet_key_press_event_internal (widget, event);
 }
 
 static gint
-gnucash_sheet_key_release_event (GtkWidget *widget, GdkEventKey *event)
+gnucash_sheet_key_release_event (GtkWidget *widget, GdkEventKey *event) //FIXME gtk4
 {
     g_return_val_if_fail (widget != NULL, TRUE);
     g_return_val_if_fail (GNUCASH_IS_SHEET(widget), TRUE);
