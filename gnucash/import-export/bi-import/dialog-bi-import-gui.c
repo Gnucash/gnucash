@@ -107,6 +107,7 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
     gui->open_mode = "ALL";
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(gui));
     gnc_builder_add_from_file (builder, "dialog-bi-import-gui.glade", "bi_import_dialog");
     gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "bi_import_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW(gui->dialog), GTK_WINDOW(parent));
@@ -166,7 +167,7 @@ gnc_plugin_bi_import_showGUI (GtkWindow *parent)
                         gui);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
 
 //FIXME gtk4    gtk_widget_show_all ( gui->dialog );
 

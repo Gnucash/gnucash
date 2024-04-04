@@ -398,6 +398,7 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
 
     /* Find the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(vw));
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "terms_store");
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "tax_included_store");
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "taxtable_store");
@@ -439,9 +440,9 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
     gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full( builder,
-                                      gnc_builder_connect_full_func,
-                                      vw);
+//FIXME gtk4    gtk_builder_connect_signals_full( builder,
+//                                      gnc_builder_connect_full_func,
+//                                      vw);
 
     /* Setup initial values */
     if (vendor != NULL)

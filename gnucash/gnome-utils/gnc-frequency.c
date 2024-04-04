@@ -181,6 +181,7 @@ gnc_frequency_init(GncFrequency *gf)
     gtk_widget_set_name (GTK_WIDGET(gf), "gnc-id-frequency");
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(gf));
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment1");
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment2");
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment3");
@@ -249,7 +250,7 @@ gnc_frequency_init(GncFrequency *gf)
     /* respond to start date changes */
     g_signal_connect(gf->startDate, "date_changed", G_CALLBACK(start_date_changed), gf);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gf);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gf);
 
 }
 

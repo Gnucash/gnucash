@@ -1572,6 +1572,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     data->new_book = gnc_is_new_book();
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(data));
     gnc_builder_add_from_file (builder, "assistant-hierarchy.glade", "hierarchy_assistant");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "hierarchy_assistant"));
@@ -1636,7 +1637,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     g_signal_connect (G_OBJECT(dialog), "destroy",
                       G_CALLBACK (gnc_hierarchy_destroy_cb), data);
 
-    gtk_builder_connect_signals(builder, data);
+//FIXME gtk4    gtk_builder_connect_signals(builder, data);
     g_object_unref(G_OBJECT(builder));
 
     data->when_completed = when_completed;

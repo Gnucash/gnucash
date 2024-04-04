@@ -4051,6 +4051,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple,
     /* Create the dialog */
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(page));
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
                                "sort_by_dialog");
     dialog = GTK_WIDGET (gtk_builder_get_object (builder, "sort_by_dialog"));
@@ -4101,8 +4102,8 @@ gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple,
                                  page);
 
     /* Wire it up */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
-                                      page);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
+//                                      page);
 
     /* Show it */
     gtk_widget_set_visible (GTK_WIDGET(dialog), true);
@@ -4138,6 +4139,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
 
     /* Create the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(page));
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
                                "days_adjustment");
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade",
@@ -4293,8 +4295,8 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
     }
 
     /* Wire it up */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
-                                      page);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
+//                                      page);
 
     /* Show it */
     gtk_widget_set_visible (GTK_WIDGET(dialog), true);

@@ -201,6 +201,7 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
     g_return_if_fail(progress);
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(progress));
     gnc_builder_add_from_file (builder, "dialog-progress.glade", "progress_dialog");
 
 
@@ -258,7 +259,7 @@ gnc_progress_dialog_create(GtkWidget * parent, GNCProgressDialog *progress)
     progress->destroyed = FALSE;
     progress->title_set = FALSE;
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, progress);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, progress);
     g_object_unref(G_OBJECT(builder));
 }
 

@@ -361,6 +361,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
 
     ENTER(" ");
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(facc_dialog));
     gnc_builder_add_from_file (builder, "dialog-find-account.glade", "list-store");
     gnc_builder_add_from_file (builder, "dialog-find-account.glade", "find_account_window");
 
@@ -478,7 +479,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
                       "key-pressed",
                       G_CALLBACK(gnc_find_account_dialog_window_key_press_cb), facc_dialog);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, facc_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, facc_dialog);
 
     g_object_unref (G_OBJECT(builder));
 

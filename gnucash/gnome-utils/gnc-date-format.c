@@ -123,10 +123,11 @@ gnc_date_format_init (GNCDateFormat *gdf)
 
     /* Open up the Glade and set the signals */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(gdf));
     gnc_builder_add_from_file (builder, "gnc-date-format.glade", "format-liststore");
     gnc_builder_add_from_file (builder, "gnc-date-format.glade", "gnc_date_format_window");
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gdf);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gdf);
 
     /* pull in all the child widgets */
     gdf->label = GTK_WIDGET(gtk_builder_get_object (builder, "widget_label"));

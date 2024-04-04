@@ -567,6 +567,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     gchar *mnemonic_desc = NULL;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(info));
     gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "num_hrows_adj");
     gnc_builder_add_from_file  (builder, "assistant-csv-account-import.glade", "csv_account_import_assistant");
     info->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "csv_account_import_assistant"));
@@ -656,7 +657,7 @@ csv_import_assistant_create (CsvImportInfo *info)
     gnc_restore_window_size (GNC_PREFS_GROUP,
                              GTK_WINDOW(info->assistant), gnc_ui_get_main_window(NULL));
 
-    gtk_builder_connect_signals (builder, info);
+//FIXME gtk4    gtk_builder_connect_signals (builder, info);
     g_object_unref (G_OBJECT(builder));
     return info->assistant;
 }

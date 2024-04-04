@@ -295,6 +295,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
 
     /* Open the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(faw));
     gnc_builder_add_from_file (builder, "dialog-file-access.glade", "file_access_dialog" );
     faw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "file_access_dialog" ));
     gtk_window_set_transient_for (GTK_WINDOW (faw->dialog), parent);
@@ -407,7 +408,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
                       NULL );
 
     /* Autoconnect signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, faw);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, faw);
 
     /* See what qof backends are available and add appropriate ones to the combo box */
     list = qof_backend_get_registered_access_method_list();

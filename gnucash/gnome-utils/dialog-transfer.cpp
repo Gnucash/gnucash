@@ -1977,6 +1977,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         xferData->curr_xfer_table = table;
 
         edit = gnc_amount_edit_new();
+        gtk_builder_set_current_object (builder, G_OBJECT(xferData));
         gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
                                        gnc_default_print_info (FALSE));
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "price_hbox"));
@@ -2014,7 +2015,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         }
     }
 
-    gtk_builder_connect_signals(builder, xferData);
+//FIXME gtk4    gtk_builder_connect_signals(builder, xferData);
     gnc_restore_window_size (GNC_PREFS_GROUP,
                              GTK_WINDOW (xferData->dialog), GTK_WINDOW (parent));
     LEAVE(" ");

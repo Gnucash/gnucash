@@ -391,6 +391,7 @@ gnc_employee_new_window (GtkWindow *parent,
 
     /* Find the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(ew));
     gnc_builder_add_from_file (builder, "dialog-employee.glade", "employee_dialog");
     ew->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "employee_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(ew->dialog), parent);
@@ -466,7 +467,7 @@ gnc_employee_new_window (GtkWindow *parent,
     gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ew);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ew);
 
     /* Setup initial values */
     if (employee != NULL)

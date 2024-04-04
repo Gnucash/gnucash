@@ -470,6 +470,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     gchar     *name_space;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(pedit_dialog));
     gnc_builder_add_from_file (builder, "dialog-price.glade", "liststore1");
     gnc_builder_add_from_file (builder, "dialog-price.glade", "liststore2");
     gnc_builder_add_from_file (builder, "dialog-price.glade", "liststore3");
@@ -563,7 +564,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
 
     gnc_prices_set_changed (pedit_dialog, FALSE);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pedit_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pedit_dialog);
 
     g_object_unref(G_OBJECT(builder));
 }

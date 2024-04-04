@@ -321,6 +321,7 @@ gnc_xml_convert_single_file (const gchar *filename)
     {
         /* common assistant initialization */
         builder = gtk_builder_new();
+        gtk_builder_set_current_object (builder, G_OBJECT(data));
         gnc_builder_add_from_file  (builder , "assistant-xml-encoding.glade", "assistant_xml_encoding");
         data->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "assistant_xml_encoding"));
 
@@ -352,7 +353,7 @@ gnc_xml_convert_single_file (const gchar *filename)
         widget = GTK_WIDGET(gtk_builder_get_object(builder, "end_page"));
         gtk_label_set_text (GTK_LABEL(widget), gettext (finish_convert_string));
 
-        gtk_builder_connect_signals(builder, data);
+//FIXME gtk4        gtk_builder_connect_signals(builder, data);
 
 //FIXME gtk4        gtk_widget_show_all (data->assistant);
 
@@ -1183,6 +1184,7 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     gint i, j;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(data));
     gnc_builder_add_from_file (builder, "assistant-xml-encoding.glade", "encodings_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "encodings_dialog"));
     data->encodings_dialog = dialog;
@@ -1190,7 +1192,7 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     // Set the name for this assistant so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-assistant-xml-encoding");
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->assistant));
 

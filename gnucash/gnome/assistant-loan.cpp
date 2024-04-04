@@ -466,7 +466,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
     loan_assistant_data_init( ldd );
 
     builder = gtk_builder_new();
-
+    gtk_builder_set_current_object (builder, G_OBJECT(ldd));
     gnc_builder_add_from_file  (builder , "assistant-loan.glade", "len_liststore");
     gnc_builder_add_from_file  (builder , "assistant-loan.glade", "range_liststore");
     gnc_builder_add_from_file  (builder , "assistant-loan.glade", "type_liststore");
@@ -892,7 +892,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                       G_CALLBACK(loan_assistant_window_destroy_cb),
                       ldd );
 
-    gtk_builder_connect_signals(builder, ldd);
+//FIXME gtk4    gtk_builder_connect_signals(builder, ldd);
     g_object_unref(G_OBJECT(builder));
 
 //FIXME gtk4    gtk_widget_show_all( ldd->window );

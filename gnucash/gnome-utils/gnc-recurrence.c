@@ -187,6 +187,7 @@ gnc_recurrence_init( GncRecurrence *gr )
 
     /* Open up the builder file */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(gr));
     gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "GCB_PeriodType_liststore");
     gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "GSB_Mult_Adj");
     gnc_builder_add_from_file (builder, "gnc-recurrence.glade", "RecurrenceEntryVBox");
@@ -225,7 +226,7 @@ gnc_recurrence_init( GncRecurrence *gr )
 
 //FIXME gtk4    gtk_widget_show_all( GTK_WIDGET(&gr->widget) );
 
-    gtk_builder_connect_signals(builder, gr);
+//FIXME gtk4    gtk_builder_connect_signals(builder, gr);
     g_object_unref(G_OBJECT(builder));
 }
 

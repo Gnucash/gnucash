@@ -894,6 +894,7 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
 
     ENTER(" ");
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(imap_dialog));
     gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "tree-store");
     gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "treemodelfilter");
     gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "import_map_dialog");
@@ -958,7 +959,7 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
                                             imap_dialog,
                                             NULL);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, imap_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, imap_dialog);
 
     g_object_unref (G_OBJECT(builder));
 

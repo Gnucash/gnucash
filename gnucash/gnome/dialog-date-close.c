@@ -137,6 +137,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     ddc->t = t;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(ddc));
     gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_close_dialog");
     ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_close_dialog"));
 
@@ -158,7 +159,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     gtk_label_set_text (label, label_message);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
 
 //FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
@@ -230,6 +231,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     ddc->terms = terms;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(ddc));
     gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_account_dialog");
     ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_account_dialog"));
     ddc->memo_entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
@@ -294,7 +296,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     fill_in_acct_info (ddc, set_default_acct);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
 
 //FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
@@ -348,6 +350,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     ddc->acct = *acct;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(ddc));
     gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_account_dialog");
     ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_account_dialog"));
 
@@ -383,7 +386,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     fill_in_acct_info (ddc, FALSE);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
 
 //FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
