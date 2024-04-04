@@ -171,7 +171,8 @@ if (WIN32)
   #
   set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "")
   set(CMAKE_FRAMEWORK_PATH_TMP ${CMAKE_PREFIX_PATH})
-  set(DEV_SUBDIRS aqbanking gnome guile gwenhywfar libgsf libofx libsoup libxslt webkit)
+#  set(DEV_SUBDIRS aqbanking gnome guile gwenhywfar libgsf libofx libsoup libxslt webkit)
+  set(DEV_SUBDIRS aqbanking gnome guile gwenhywfar libgsf libofx libsoup libxslt)
   foreach(subdir ${DEV_SUBDIRS})
     list(APPEND CMAKE_FRAMEWORK_PATH_TMP ${CMAKE_PREFIX_PATH}/${subdir})
   endforeach()
@@ -210,16 +211,16 @@ pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
 pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.9.4)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 if (WITH_GNUCASH)
-  if (WIN32)
-    pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkitgtk-3.0)
-    set(WEBKIT1 1 CACHE INTERNAL "WebKitGtk")
-  else()
-    pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0>=2.14.0)
-    if (NOT WEBKIT_FOUND)
-      pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkit2gtk-4.1)
-    endif()
-    set(WEBKIT2 1 CACHE INTERNAL "WebKit2Gtk4")
-  endif()
+#  if (WIN32)
+#    pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkitgtk-3.0)
+#    set(WEBKIT1 1 CACHE INTERNAL "WebKitGtk")
+#  else()
+#    pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0>=2.14.0)
+#    if (NOT WEBKIT_FOUND)
+#      pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkit2gtk-4.1)
+#    endif()
+#    set(WEBKIT2 1 CACHE INTERNAL "WebKit2Gtk4")
+#  endif()
 
   pkg_check_modules (GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0>=${GTK_MIN_VERSION})
 endif()
@@ -604,8 +605,8 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
 if (UNIX)
-  set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
-  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations ${CMAKE_CXX_FLAGS}")
+  set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED ${CMAKE_C_FLAGS}")
+  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 endif()
 if (MINGW)
@@ -728,7 +729,6 @@ set(gnucash_DOCS
     ChangeLog.2023
     DOCUMENTERS
     HACKING
-    LICENSE
     NEWS
     README.dependencies
 )
@@ -983,21 +983,6 @@ if (WIN32)
   )
 endif()
 
-#Link LICENSE to COPYING so that people expecting to find it,
-#will. COPYING is normally linked by autogen.sh to the latest
-#automake-provided version.
-set (_CMD create_symlink)
-if (WIN32)
-  set(_CMD copy)
-endif()
-
-install(CODE
-" execute_process(
-      COMMAND ${CMAKE_COMMAND} -E ${_CMD} LICENSE COPYING
-      WORKING_DIRECTORY ${CMAKE_INSTALL_DOCDIR}
-  )"
-)
-
 #For windows, copy in some DLLs from Mingw
 
 if (WIN32)
@@ -1024,3 +1009,14 @@ if(UNIX)
 endif()
 
 include (CPack)
+
+message(STATUS "<<< Gentoo configuration >>>
+Build type      ${CMAKE_BUILD_TYPE}
+Install path    ${CMAKE_INSTALL_PREFIX}
+Compiler flags:
+C               ${CMAKE_C_FLAGS}
+C++             ${CMAKE_CXX_FLAGS}
+Linker flags:
+Executable      ${CMAKE_EXE_LINKER_FLAGS}
+Module          ${CMAKE_MODULE_LINKER_FLAGS}
+Shared          ${CMAKE_SHARED_LINKER_FLAGS}\n")
