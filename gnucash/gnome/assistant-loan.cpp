@@ -769,9 +769,9 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                     GTK_CHECK_BUTTON(
                         gtk_check_button_new_with_label(
                             str->str ));
-                gtk_box_pack_start( GTK_BOX(vb),
-                                    GTK_WIDGET(rouid->optCb),
-                                    FALSE, FALSE, 2 );
+                gtk_box_append (GTK_BOX(vb), GTK_WIDGET(rouid->optCb));
+                gtk_box_set_spacing (GTK_BOX(vb), 2);
+
                 rouid->escrowCb =
                     GTK_CHECK_BUTTON(
                         gtk_check_button_new_with_label(
@@ -780,7 +780,9 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                     GTK_WIDGET(rouid->escrowCb),
                     FALSE );
 
-                gtk_box_pack_start( GTK_BOX(vb), GTK_WIDGET(rouid->escrowCb), FALSE, FALSE, 2 );
+                gtk_box_append (GTK_BOX(vb), GTK_WIDGET(rouid->escrowCb));
+                gtk_box_set_spacing (GTK_BOX(vb), 2);
+
                 gtk_widget_set_margin_start (GTK_WIDGET(rouid->escrowCb), 12);
 
                 g_signal_connect( rouid->optCb, "toggled",
@@ -793,7 +795,8 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                                   G_CALLBACK(loan_opt_escrow_toggled_cb),
                                   rouid );
 
-                gtk_box_pack_start( GTK_BOX(ldd->optVBox), GTK_WIDGET(vb), FALSE, FALSE, 2 );
+                gtk_box_append (GTK_BOX(ldd->optVBox), GTK_WIDGET(vb));
+                gtk_box_set_spacing (GTK_BOX(ldd->optVBox), 2);
 //FIXME gtk4                gtk_widget_show_all( GTK_WIDGET(ldd->optVBox) );
             }
             g_string_free( str, TRUE );
@@ -810,7 +813,8 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
             GtkBox *hbox;
             hbox = GTK_BOX(gtk_builder_get_object(builder, "type_freq_hbox"));
             ldd->prmVarGncFreq = GNC_FREQUENCY(gnc_frequency_new( NULL, NULL ));
-            gtk_box_pack_start( GTK_BOX(hbox) , GTK_WIDGET(ldd->prmVarGncFreq), TRUE, FALSE, 0 );
+            gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(ldd->prmVarGncFreq));
+
             g_signal_connect (ldd->prmVarGncFreq, "changed",
                               G_CALLBACK (loan_info_page_valid_cb), ldd);
         }
@@ -818,7 +822,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
             GtkBox *hbox;
             hbox = GTK_BOX(gtk_builder_get_object(builder, "freq_frame_hbox"));
             ldd->repGncFreq = GNC_FREQUENCY(gnc_frequency_new( NULL, NULL ));
-            gtk_box_pack_start( GTK_BOX(hbox) , GTK_WIDGET(ldd->repGncFreq), TRUE, FALSE, 0 );
+            gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(ldd->repGncFreq));
             g_signal_connect (ldd->repGncFreq, "changed",
                               G_CALLBACK (loan_rep_page_valid_cb), ldd);
         }

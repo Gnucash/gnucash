@@ -436,7 +436,7 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
     vw->currency_edit = edit;
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "currency_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
     gtk_builder_connect_signals_full( builder,

@@ -554,12 +554,12 @@ gbv_create_widget (GncBudgetView *budget_view)
 
     gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
 
-    gtk_box_pack_start (GTK_BOX(vbox), scrolled_window, /*expand*/TRUE, /*fill*/TRUE, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
 
     h_separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_box_pack_end (GTK_BOX(vbox), h_separator, /*expand*/FALSE, /*fill*/TRUE, 0);
 
-    gtk_box_pack_start (GTK_BOX(vbox), GTK_WIDGET(priv->totals_scroll_window), /*expand*/FALSE, /*fill*/TRUE, 0);
+    gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(h_separator));
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(priv->totals_scroll_window));
 
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(vbox));
 

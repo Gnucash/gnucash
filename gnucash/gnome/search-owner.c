@@ -246,7 +246,8 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the "how" option menu. */
     how_menu = make_how_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), how_menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(how_menu));
+    gtk_box_set_spacing (GTK_BOX(box), 3);
 
     /* Create the owner box */
     fi->owner_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -257,11 +258,11 @@ gncs_get_widget (GNCSearchCoreType *fe)
      * put it in the owner_box we just created.
      */
     type_menu = make_type_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), type_menu, FALSE, FALSE, 3);
-
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(type_menu));
+    gtk_box_set_spacing (GTK_BOX(box), 3);
     /* connect the owner box */
-    gtk_box_pack_start (GTK_BOX (box), fi->owner_box, FALSE, FALSE, 3);
-
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(fi->owner_box));
+    gtk_box_set_spacing (GTK_BOX(box), 3);
     /* And return the box */
     return box;
 }

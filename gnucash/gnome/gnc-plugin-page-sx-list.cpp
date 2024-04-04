@@ -501,7 +501,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gnc_label_set_alignment (label, 0.0, 0);
 
     gtk_widget_set_visible (GTK_WIDGET(label), true);
-    gtk_box_pack_start (GTK_BOX(vbox), label, false, false, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(label));
     gtk_widget_set_visible (GTK_WIDGET(vbox), true);
 
     /* Create scrolled window for top area */
@@ -510,7 +510,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
 
-    gtk_box_pack_start (GTK_BOX(vbox), swin, true, true, 5);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(swin));
+    gtk_box_set_spacing (GTK_BOX(vbox), 5);
     gtk_widget_set_visible (GTK_WIDGET(swin), true);
 
     /* Set the paned position from the preferences, default 160 */
@@ -575,7 +576,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gnc_label_set_alignment (label, 0.0, 0);
     gtk_widget_set_visible (GTK_WIDGET(label), true);
 
-    gtk_box_pack_start (GTK_BOX(vbox), label, false, false, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(label));
     gtk_widget_set_visible (GTK_WIDGET(vbox), true);
 
     /* Create scrolled window for bottom area */
@@ -584,7 +585,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
 
-    gtk_box_pack_start (GTK_BOX(vbox), swin, true, true, 5);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(swin));
+    gtk_box_set_spacing (GTK_BOX(vbox), 5);
     gtk_widget_set_visible (GTK_WIDGET(swin), true);
 
     {

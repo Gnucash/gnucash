@@ -145,7 +145,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_box"));
     ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(date_box), GTK_WIDGET(ddc->date));
     gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), *t);
 
     if (parent)
@@ -239,15 +239,15 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 
     acct_box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_hbox"));
     ddc->acct_combo = gnc_account_sel_new();
-    gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(acct_box), GTK_WIDGET(ddc->acct_combo));
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
     ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(date_box), GTK_WIDGET(ddc->date));
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box"));
     ddc->post_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->post_date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(date_box), GTK_WIDGET(ddc->post_date));
 
     ddc->question_check = GTK_WIDGET(gtk_builder_get_object (builder, "question_check"));
 
@@ -358,11 +358,11 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     ddc->acct_combo = gnc_account_sel_new();
     if (*acct)
         gnc_account_sel_set_account (GNC_ACCOUNT_SEL(ddc->acct_combo), *acct, FALSE);
-    gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(acct_box), GTK_WIDGET(ddc->acct_combo));
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
     ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(date_box), GTK_WIDGET(ddc->date));
 
     if (parent)
         gtk_window_set_transient_for (GTK_WINDOW(ddc->dialog), GTK_WINDOW(parent));

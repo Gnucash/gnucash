@@ -251,7 +251,7 @@ static GtkWidget * gnc_owner_new (GtkWidget *label, GtkWidget *hbox,
 
     gnc_general_search_set_selected (GNC_GENERAL_SEARCH (edit),
                                      owner->owner.undefined);
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
     if (label)
         gtk_label_set_text (GTK_LABEL (label), _(qof_object_get_type_label (type_name)));
 
@@ -399,7 +399,7 @@ GtkWidget * gnc_invoice_select_create (GtkWidget *hbox, QofBook *book,
     }
 
     gnc_general_search_set_selected (GNC_GENERAL_SEARCH (edit), invoice);
-    gtk_box_pack_start (GTK_BOX (hbox), edit, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_object_set_data_full(G_OBJECT(edit), "isi-state", isi, g_free);
 
     /* Set the label */

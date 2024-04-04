@@ -265,11 +265,11 @@ setup_file_dialog (GtkBuilder *builder, const gchar *path_head, const gchar *uri
         GtkWidget *label = gtk_label_new (uri_label);
 
         if (g_file_test (display_uri, G_FILE_TEST_EXISTS))
-            gtk_box_pack_start (GTK_BOX(existing_hbox), label, FALSE, TRUE, 0);
+            gtk_box_append (GTK_BOX(existing_hbox), GTK_WIDGET(label));
         else
         {
-            gtk_box_pack_start (GTK_BOX(existing_hbox), image, FALSE, FALSE, 0);
-            gtk_box_pack_start (GTK_BOX(existing_hbox), label, FALSE, TRUE, 0);
+            gtk_box_append (GTK_BOX(existing_hbox), GTK_WIDGET(image));
+            gtk_box_append (GTK_BOX(existing_hbox), GTK_WIDGET(label));
         }
 
         PINFO("Path head: '%s', URI: '%s', Filename: '%s'", path_head, uri, display_uri);

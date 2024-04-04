@@ -1223,8 +1223,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
         gtk_widget_set_visible (GTK_WIDGET(sxed->endDateEntry), TRUE);
         g_signal_connect (sxed->endDateEntry, "date-changed",
                           G_CALLBACK (sxed_excal_update_adapt_cb), sxed);
-        gtk_box_pack_start (GTK_BOX (endDateBox), GTK_WIDGET (sxed->endDateEntry),
-                            TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(endDateBox), GTK_WIDGET(sxed->endDateEntry));
     }
 
     id = gnc_register_gui_component (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
@@ -1309,14 +1308,14 @@ schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
                       G_CALLBACK (gnc_sxed_freq_changed),
                       sxed);
 
-    gtk_box_pack_start (GTK_BOX (b), GTK_WIDGET (sxed->gncfreq), TRUE, TRUE, 0);
-
+    gtk_box_append (GTK_BOX(b), GTK_WIDGET(sxed->gncfreq));
+        
     b = GTK_BOX (gtk_builder_get_object (sxed->builder, "example_cal_hbox"));
 
     example_cal_scrolled_win = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (example_cal_scrolled_win),
                                     GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-    gtk_box_pack_start (GTK_BOX (b), example_cal_scrolled_win, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(b), GTK_WIDGET(example_cal_scrolled_win));
 
     sxed->dense_cal_model = gnc_dense_cal_store_new (EX_CAL_NUM_MONTHS * 31);
     sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model (GTK_WINDOW(sxed->dialog),
@@ -1352,8 +1351,7 @@ schedXact_editor_create_ledger (GncSxEditorDialog *sxed)
                                  sxed->dialog,
                                  FALSE, /* no accelerators */
                                  sxed);
-    gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (sxed->embed_window),
-                        TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(sxed->embed_window));
 
     /* Now create the register plugin page. */
     sxed->plugin_page = gnc_plugin_page_register_new_ledger (sxed->ledger);

@@ -237,7 +237,7 @@ autoClearWindow (GtkWidget *parent, Account *account)
                      G_CALLBACK(gnc_autoclear_window_ok_cb), data);
 
     box   = GTK_BOX(gtk_builder_get_object (builder, "end_value_box"));
-    gtk_box_pack_start(box, GTK_WIDGET(data->end_value), TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(data->end_value));
 
     label = GTK_WIDGET(gtk_builder_get_object (builder, "end_label"));
     gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(data->end_value), label);
