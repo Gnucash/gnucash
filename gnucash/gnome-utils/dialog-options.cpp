@@ -207,8 +207,7 @@ static GtkGrid*
 create_options_box(GtkBox* content_box)
 {
     auto options_scrolled_win = gtk_scrolled_window_new(NULL, NULL);
-    gtk_box_pack_start(GTK_BOX(content_box), options_scrolled_win,
-                       TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(content_box), GTK_WIDGET(options_scrolled_win));
 
     /* Build space for the content - the options box */
     auto options_box = gtk_grid_new(); // this will have two columns
@@ -233,7 +232,7 @@ create_reset_button_box(GtkBox* page_content_box)
     gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
                                GTK_BUTTONBOX_EDGE);
     gtk_container_set_border_width(GTK_CONTAINER (buttonbox), 5);
-    gtk_box_pack_end(GTK_BOX(page_content_box), buttonbox, FALSE, FALSE, 0);
+    gtk_box_prepend (GTK_BOX(page_content_box), GTK_WIDGET(buttonbox));
     return GTK_BUTTON_BOX(buttonbox);
 }
 
@@ -311,7 +310,7 @@ dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
                      G_CALLBACK(dialog_reset_cb), dlg);
     g_object_set_data(G_OBJECT(reset_button), "section",
                       static_cast<void*>(section.get()));
-    gtk_box_pack_end(GTK_BOX(buttonbox), reset_button, FALSE, FALSE, 0);
+    gtk_box_prepend (GTK_BOX(buttonbox), GTK_WIDGET(reset_button));
 //FIXME gtk4    gtk_widget_show_all(GTK_WIDGET(page_content_box));
     gtk_notebook_append_page(GTK_NOTEBOOK(dlg->get_notebook()),
                              GTK_WIDGET(page_content_box), page_label);
@@ -607,7 +606,8 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
     gtk_widget_set_vexpand (m_notebook, TRUE);
 
     gtk_widget_set_visible (GTK_WIDGET(m_notebook), true);
-    gtk_box_pack_start(GTK_BOX(hbox), m_notebook, TRUE, TRUE, 5);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(m_notebook));
+    gtk_box_set_spacing (GTK_BOX(hbox), 5);
 
     auto component_id = gnc_register_gui_component (m_component_class,
                                                     nullptr,

@@ -279,11 +279,11 @@ gnc_tree_view_init (GncTreeView *view)
 
     gtk_widget_set_margin_start (GTK_WIDGET(icon), 5);
 
-    gtk_box_pack_end (GTK_BOX(priv->column_menu_icon_box), icon, FALSE, FALSE, 0);
+    gtk_box_prepend (GTK_BOX(priv->column_menu_icon_box), GTK_WIDGET(icon));
 
     sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-    gtk_box_pack_end (GTK_BOX(priv->column_menu_icon_box), sep, FALSE, FALSE, 0);
-
+    gtk_box_prepend (GTK_BOX(priv->column_menu_icon_box), GTK_WIDGET(sep));
+    
 //FIXME gtk4    gtk_widget_show_all (priv->column_menu_icon_box);
 
     column = gnc_tree_view_add_text_column (view, NULL, NULL, NULL, NULL,

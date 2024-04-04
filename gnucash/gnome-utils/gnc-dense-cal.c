@@ -335,10 +335,9 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
         gtk_widget_set_halign (label, GTK_ALIGN_END);
         gtk_widget_set_margin_end (label, 5);
-        gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
-        gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(dcal->view_options), FALSE, FALSE, 0);
-
-        gtk_box_pack_start(GTK_BOX(dcal), GTK_WIDGET(hbox), FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(label));
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(dcal->view_options));
+        gtk_box_append (GTK_BOX(period), GTK_WIDGET(hbox));
     }
     dcal->cal_drawing_area = GTK_DRAWING_AREA(gtk_drawing_area_new());
 
@@ -347,7 +346,8 @@ gnc_dense_cal_init(GncDenseCal *dcal)
                           | GDK_BUTTON_RELEASE_MASK
                           | GDK_POINTER_MOTION_MASK
                           | GDK_POINTER_MOTION_HINT_MASK));
-    gtk_box_pack_start(GTK_BOX(dcal), GTK_WIDGET(dcal->cal_drawing_area), TRUE, TRUE, 0);
+
+    gtk_box_append (GTK_BOX(dcal), GTK_WIDGET(dcal->cal_drawing_area));
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "draw", G_CALLBACK(gnc_dense_cal_draw), (gpointer)dcal);
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "realize", G_CALLBACK(gnc_dense_cal_realize), (gpointer)dcal);
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "configure_event", G_CALLBACK(gnc_dense_cal_configure), (gpointer)dcal);

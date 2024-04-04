@@ -1248,7 +1248,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
         gtk_widget_set_visible (GTK_WIDGET(label), true);
 
         msg_area = gtk_message_dialog_get_message_area (GTK_MESSAGE_DIALOG(dialog));
-        gtk_box_pack_end (GTK_BOX(msg_area), label, TRUE, TRUE, 0);
+        gtk_box_prepend (GTK_BOX(msg_area), GTK_WIDGET(label));
         g_object_set (G_OBJECT (label), "xalign", 0.0, nullptr);
 
         g_object_set_data (G_OBJECT (dialog), "count-down-label", label);
@@ -3273,12 +3273,12 @@ gnc_main_window_open_page (GncMainWindow *window,
     {
         image = gtk_image_new_from_icon_name (icon, GTK_ICON_SIZE_MENU);
         gtk_widget_set_visible (GTK_WIDGET(image), true);
-        gtk_box_pack_start (GTK_BOX (tab_hbox), image, FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(tab_hbox), GTK_WIDGET(image));
         gtk_widget_set_margin_start (GTK_WIDGET(image), 5);
-        gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(tab_hbox), GTK_WIDGET(label));
     }
     else
-        gtk_box_pack_start (GTK_BOX (tab_hbox), label, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(tab_hbox), GTK_WIDGET(label));
 
     text = gnc_plugin_page_get_page_long_name(page);
     if (text)
@@ -3288,7 +3288,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 
     entry = gtk_entry_new();
     gtk_widget_set_visible (GTK_WIDGET(entry), false);
-    gtk_box_pack_start (GTK_BOX (tab_hbox), entry, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(tab_hbox), GTK_WIDGET(entry));
     g_signal_connect(G_OBJECT(entry), "activate",
                      G_CALLBACK(gnc_main_window_tab_entry_activate), page);
 
@@ -3326,7 +3326,7 @@ gnc_main_window_open_page (GncMainWindow *window,
         g_signal_connect_swapped (G_OBJECT (close_button), "clicked",
                                   G_CALLBACK(gnc_main_window_close_page), page);
 
-        gtk_box_pack_start (GTK_BOX (tab_hbox), close_button, FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(tab_hbox), GTK_WIDGET(close_button));
         gtk_widget_set_margin_end (GTK_WIDGET(close_button), 5);
         g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
     }
@@ -4112,8 +4112,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
     priv->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->menu_dock), FALSE);
     gtk_widget_set_visible (GTK_WIDGET(priv->menu_dock), true);
-    gtk_box_pack_start (GTK_BOX (main_vbox), priv->menu_dock,
-                        FALSE, TRUE, 0);
+    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(priv->menu_dock));
 
     priv->notebook = gtk_notebook_new ();
     g_object_set(G_OBJECT(priv->notebook),
@@ -4127,20 +4126,17 @@ gnc_main_window_setup_window (GncMainWindow *window)
                       G_CALLBACK (gnc_main_window_page_reordered), window);
     g_signal_connect (G_OBJECT (priv->notebook), "focus-in-event",
                       G_CALLBACK (gnc_main_window_page_focus_in), window);
-    gtk_box_pack_start (GTK_BOX (main_vbox), priv->notebook,
-                        TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(priv->notebook));
 
     priv->statusbar = gtk_statusbar_new ();
     gtk_widget_set_visible (GTK_WIDGET(priv->statusbar), true);
-    gtk_box_pack_start (GTK_BOX (main_vbox), priv->statusbar,
-                        FALSE, TRUE, 0);
+    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(priv->statusbar));
 
     priv->progressbar = gtk_progress_bar_new ();
     gtk_progress_bar_set_show_text (GTK_PROGRESS_BAR(priv->progressbar), TRUE);
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(priv->progressbar), " ");
     gtk_widget_set_visible (GTK_WIDGET(priv->progressbar), true);
-    gtk_box_pack_start (GTK_BOX (priv->statusbar), priv->progressbar,
-                        FALSE, TRUE, 0);
+    gtk_box_append (GTK_BOX(priv->statusbar), GTK_WIDGET(priv->progressbar));
     gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(priv->progressbar),
                                     0.01);
 

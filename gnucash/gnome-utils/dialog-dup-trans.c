@@ -182,7 +182,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
 
         gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), dt_dialog->date_label);
 
-        gtk_box_pack_end (GTK_BOX(hbox), date_edit, TRUE, TRUE, 0);
+        gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(date_edit));
         dt_dialog->date_edit = date_edit;
     }
     else

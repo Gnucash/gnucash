@@ -1866,7 +1866,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
         amount = gnc_amount_edit_new();
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "amount_hbox"));
-        gtk_box_pack_end(GTK_BOX(hbox), amount, TRUE, TRUE, 0);
+        gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(amount));
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         xferData->amount_edit = amount;
 
@@ -1879,7 +1879,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         gnc_date_activates_default (GNC_DATE_EDIT(date), TRUE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
 
-        gtk_box_pack_end(GTK_BOX(hbox), date, TRUE, TRUE, 0);
+        gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(date));
         xferData->date_entry = date;
         g_signal_connect (G_OBJECT (date), "date_changed",
                           G_CALLBACK (gnc_xfer_date_changed_cb), xferData);
@@ -1980,7 +1980,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         gnc_amount_edit_set_print_info(GNC_AMOUNT_EDIT(edit),
                                        gnc_default_print_info (FALSE));
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "price_hbox"));
-        gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
         xferData->price_edit = edit;
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
         g_signal_connect (G_OBJECT (entry), "focus-out-event",
@@ -1989,7 +1989,7 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
         edit = gnc_amount_edit_new();
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "right_amount_hbox"));
-        gtk_box_pack_start(GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
         xferData->to_amount_edit = edit;
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
         g_signal_connect (G_OBJECT (entry), "focus-out-event",
@@ -2194,7 +2194,7 @@ void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
         auto button = gtk_button_new_with_label( label );
         auto box = GTK_WIDGET (gtk_builder_get_object (builder,
                                                        "transfermain-vbox" ));
-        gtk_box_pack_end( GTK_BOX(box), button, FALSE, FALSE, 0 );
+        gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(button));
         g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (callback), user_data);
         gtk_widget_set_visible (GTK_WIDGET(button), true);
     }

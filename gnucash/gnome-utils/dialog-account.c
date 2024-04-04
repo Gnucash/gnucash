@@ -852,9 +852,8 @@ verify_children_compatible (AccountWindow *aw)
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
     gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
 
-    gtk_box_pack_start (GTK_BOX(hbox),
-                        gtk_image_new_from_icon_name ("dialog-information",
-                        GTK_ICON_SIZE_DIALOG), FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(gtk_image_new_from_icon_name ("dialog-information",
+                                               GTK_ICON_SIZE_DIALOG)));
 
     /* primary label */
     label = gtk_label_new (_("Give the children the same type?"));
@@ -865,7 +864,7 @@ verify_children_compatible (AccountWindow *aw)
     /* make label large */
     gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-title");
 
-    gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(label));
 
     /* secondary label */
     str = g_strdup_printf (_("The children of the edited account have to be "
@@ -876,19 +875,18 @@ verify_children_compatible (AccountWindow *aw)
     gtk_label_set_line_wrap (GTK_LABEL(label), TRUE);
     gtk_label_set_selectable (GTK_LABEL(label), TRUE);
     gnc_label_set_alignment (label, 0.0, 0.0);
-    gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(label));
 
     /* children */
     expander = gtk_expander_new_with_mnemonic (_("_Show children accounts"));
     gtk_expander_set_spacing (GTK_EXPANDER(expander), 6);
     g_signal_connect (G_OBJECT(expander), "notify::expanded",
                       G_CALLBACK(add_children_to_expander), account);
-    gtk_box_pack_start (GTK_BOX(vbox), expander, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(expander));
 
-    gtk_box_pack_start (GTK_BOX(hbox), vbox, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(vbox));
 
-    gtk_box_pack_start (GTK_BOX(gtk_dialog_get_content_area (GTK_DIALOG(dialog))),
-                        hbox, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (GTK_DIALOG(dialog))), GTK_WIDGET(hbox));
 
     /* spacings */
     gtk_container_set_border_width (GTK_CONTAINER(dialog), 5);
@@ -1611,7 +1609,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
                                                  gnc_commodity_edit_new_select,
                                                  &aw->commodity_mode);
 
-    gtk_box_pack_start (GTK_BOX(box), aw->commodity_edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(aw->commodity_edit));
     gtk_widget_set_visible (GTK_WIDGET(aw->commodity_edit), TRUE);
     // If the account has transactions, prevent changes by displaying a label and tooltip
     if (xaccAccountGetSplitsSize (aw_get_account (aw)) != 0)
@@ -1639,7 +1637,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
 
     box  = GTK_WIDGET(gtk_builder_get_object (builder, "higher_balance_limit_hbox"));
     aw->higher_balance_limit_edit = gnc_amount_edit_new ();
-    gtk_box_pack_start (GTK_BOX(box), aw->higher_balance_limit_edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(aw->higher_balance_limit_edit));
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit), TRUE);
     gnc_amount_edit_set_validate_on_change (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit), TRUE);
     gnc_amount_edit_show_warning_symbol (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit), TRUE);
@@ -1647,7 +1645,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
 
     box  = GTK_WIDGET(gtk_builder_get_object (builder, "lower_balance_limit_hbox"));
     aw->lower_balance_limit_edit = gnc_amount_edit_new ();
-    gtk_box_pack_start (GTK_BOX(box), aw->lower_balance_limit_edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(aw->lower_balance_limit_edit));
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit), TRUE);
     gnc_amount_edit_set_validate_on_change (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit), TRUE);
     gnc_amount_edit_show_warning_symbol (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit), TRUE);
@@ -1669,7 +1667,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     box = GTK_WIDGET(gtk_builder_get_object (builder, "opening_balance_box"));
     amount = gnc_amount_edit_new ();
     aw->opening_balance_edit = amount;
-    gtk_box_pack_start (GTK_BOX(box), amount, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(amount));
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(amount), TRUE);
     gtk_widget_set_visible (GTK_WIDGET(amount), TRUE);
 
@@ -1681,7 +1679,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     date_edit = gnc_date_edit_new (gnc_time (NULL), 0, 0);
     gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), label);
     aw->opening_balance_date_edit = date_edit;
-    gtk_box_pack_start (GTK_BOX(box), date_edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(date_edit));
     gtk_widget_set_visible (GTK_WIDGET(date_edit), TRUE);
 
     aw->opening_balance_page =

@@ -820,7 +820,7 @@ gxi_update_string_box (GncXmlImportData *data)
         g_object_set_data (G_OBJECT (combo), "ambiguous", amb);
         g_signal_connect (G_OBJECT (combo), "changed",
                           G_CALLBACK (gxi_string_combo_changed_cb), data);
-        gtk_box_pack_start (vbox, GTK_WIDGET (combo), FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(combo));
         gtk_widget_set_visible (GTK_WIDGET(combo), TRUE);
 
     } /* next word */

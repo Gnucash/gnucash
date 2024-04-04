@@ -326,10 +326,11 @@ gnc_amount_edit_new (void)
 {
     GNCAmountEdit *gae = g_object_new (GNC_TYPE_AMOUNT_EDIT, NULL);
 
-    gtk_box_pack_start (GTK_BOX(gae), GTK_WIDGET(gae->entry), TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(gae), GTK_WIDGET(gae->entry));
     gtk_entry_set_width_chars (GTK_ENTRY(gae->entry), 12);
     gae->image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_box_pack_start (GTK_BOX(gae), GTK_WIDGET(gae->image), FALSE, FALSE, 6);
+    gtk_box_append (GTK_BOX(gae), GTK_WIDGET(gae->image));
+    gtk_box_set_spacing (GTK_BOX(gae), 6);
     gtk_widget_set_no_show_all (GTK_WIDGET(gae->image), TRUE);
     gtk_widget_set_visible (GTK_WIDGET(gae->image), FALSE);
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(gae));

@@ -985,8 +985,7 @@ gnc_account_sel_set_new_account_ability (GNCAccountSel *gas,
                       G_CALLBACK(gas_new_account_click),
                       gas);
 
-    gtk_box_pack_start (GTK_BOX(gas), gas->newAccountButton,
-                        FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(gas), GTK_WIDGET(gas->newAccountButton));
 }
 
 void
