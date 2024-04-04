@@ -66,7 +66,9 @@ GHashTable* gnc_html_url_handlers = NULL;
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 extern GHashTable* gnc_html_object_handlers;
 
-G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, GTK_TYPE_BIN)
+//FIXME gtk4 G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, GTK_TYPE_BIN)
+G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, GTK_TYPE_BOX)
+
 
 static void gnc_html_dispose( GObject* obj );
 static void gnc_html_finalize( GObject* obj );
@@ -581,7 +583,7 @@ gnc_html_get_webview( GncHtml* self )
 
     if (vp) // the scroll window has only one child
     {
-        webview = gtk_widget_get_first_child (GTK_WIDGET(sw));
+        webview = gtk_widget_get_first_child (GTK_WIDGET(vp));
     }
     return webview;
 }
