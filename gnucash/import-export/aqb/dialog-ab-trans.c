@@ -700,7 +700,9 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     gtk_widget_set_visible (GTK_WIDGET(td->dialog), TRUE);
 
     /* Now run the dialog until it gets closed by a button press */
-    result = gtk_dialog_run (GTK_DIALOG (td->dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG (td->dialog));
+gtk_window_set_modal (GTK_WINDOW(td->dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
     /* Was cancel pressed or dialog closed?
      *  GNC_RESPONSE_NOW == execute now
@@ -1011,7 +1013,10 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
 
     do
     {
-        retval = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        retval = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+retval = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         if (retval != GTK_RESPONSE_OK)
             break;
 

@@ -109,7 +109,8 @@ gnc_customer_import_read_file (const gchar *filename, const gchar *parser_regexp
                                          GTK_MESSAGE_ERROR,
                                          GTK_BUTTONS_OK,
                                          "%s", errmsg);
-        gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4        gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_free (errmsg);
         errmsg = 0;

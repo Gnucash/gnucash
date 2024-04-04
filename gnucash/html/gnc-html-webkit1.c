@@ -1262,7 +1262,10 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         }
         g_free(export_dirname);
 
-        result = gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4        result = gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         // Weird. In gtk_dialog_run, the gtk code will run a fstat() on the
         // proposed new output filename, which of course fails with "file not
         // found" as this file doesn't exist. It will still show a warning output

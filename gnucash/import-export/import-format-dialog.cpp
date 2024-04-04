@@ -125,7 +125,8 @@ add_menu_and_run_dialog(GtkWidget *dialog, GtkWidget *menu_box, GncImportFormat 
 
 //FIXME gtk4    gtk_widget_show_all(dialog);
     gtk_window_set_modal(GTK_WINDOW(dialog), TRUE);
-    gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4    gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     return formats[index];
