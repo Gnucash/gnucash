@@ -1140,6 +1140,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gboolean           active;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(sw));
     gnc_builder_add_from_file (builder, "dialog-search.glade", "search_dialog");
 
     /* Grab the dialog, save the dialog info */
@@ -1256,7 +1257,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
         gtk_widget_set_visible (GTK_WIDGET(new_item_button), FALSE);
 
     /* Connect all the signals */
-    gtk_builder_connect_signals (builder, sw);
+//FIXME gtk4    gtk_builder_connect_signals (builder, sw);
 
     /* Register ourselves */
     sw->component_id = gnc_register_gui_component (DIALOG_SEARCH_CM_CLASS,

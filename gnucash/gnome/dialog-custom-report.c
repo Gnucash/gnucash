@@ -568,6 +568,7 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
     crd = g_new0(CustomReportDialog, 1);
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(crd));
     gnc_builder_add_from_file (builder, "dialog-custom-report.glade", "custom_report_dialog");
 
     crd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "custom_report_dialog"));
@@ -593,7 +594,7 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
                              GTK_WINDOW(crd->dialog), GTK_WINDOW(window));
 
     /* connect the signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, crd);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, crd);
 
 //FIXME gtk4    gtk_widget_show_all(crd->dialog);
 

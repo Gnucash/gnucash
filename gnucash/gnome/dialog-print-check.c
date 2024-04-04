@@ -898,6 +898,7 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
     gchar *title;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(pcd));
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "format_title_dialog");
 
     /* Get a title for the new check format. */
@@ -905,7 +906,7 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "format_title"));
     button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
     gnc_check_format_title_changed(GTK_EDITABLE(entry), button);
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
 
     gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(pcd->dialog));
     if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
@@ -1665,6 +1666,7 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     pcd->account = account;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(pcd));
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment1");
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment2");
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment3");
@@ -1694,7 +1696,7 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "liststore3");
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "print_check_dialog");
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
 
     pcd->builder = builder;
     pcd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "print_check_dialog"));

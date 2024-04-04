@@ -490,6 +490,7 @@ gnc_style_sheet_select_dialog_create (GtkWindow *parent)
     GtkTreeSelection  * selection;
 
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(ss));
     gnc_builder_add_from_file (builder, "dialog-report.glade", "select_style_sheet_window");
 
     ss->toplevel = GTK_WIDGET(gtk_builder_get_object (builder, "select_style_sheet_window"));
@@ -529,7 +530,7 @@ gnc_style_sheet_select_dialog_create (GtkWindow *parent)
 
     gnc_style_sheet_select_dialog_fill (ss);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ss);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ss);
     g_object_unref (G_OBJECT(builder));
     return ss;
 }

@@ -750,6 +750,7 @@ gnc_ab_initial_assistant_new(void)
 
     ABInitialInfo *info = g_new0(ABInitialInfo, 1);
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(info));
     gnc_builder_add_from_file (builder, "assistant-ab-initial.glade", "aqbanking_init_assistant");
 
     info->window = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_init_assistant"));
@@ -798,7 +799,7 @@ gnc_ab_initial_assistant_new(void)
     g_signal_connect (G_OBJECT(info->window), "destroy",
                       G_CALLBACK (aai_destroy_cb), info);
 
-    gtk_builder_connect_signals(builder, info);
+//FIXME gtk4    gtk_builder_connect_signals(builder, info);
     g_object_unref(G_OBJECT(builder));
 
     component_id = gnc_register_gui_component(ASSISTANT_AB_INITIAL_CM_CLASS,

@@ -390,6 +390,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
 
     ENTER(" ");
     auto builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(pdb_dialog));
     gnc_builder_add_from_file (builder, "dialog-price.glade", "liststore4");
     gnc_builder_add_from_file (builder, "dialog-price.glade", "deletion_date_dialog");
 
@@ -426,7 +427,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
     gtk_tree_selection_select_all (selection);
     g_signal_connect (selection, "changed", G_CALLBACK(selection_changed_cb), pdb_dialog);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pdb_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pdb_dialog);
 
     gtk_window_set_transient_for (GTK_WINDOW (pdb_dialog->remove_dialog), GTK_WINDOW (pdb_dialog->window));
 
@@ -682,6 +683,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
 
     ENTER(" ");
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(pdb_dialog));
     gnc_builder_add_from_file (builder, "dialog-price.glade", "prices_window");
 
     window = GTK_WIDGET(gtk_builder_get_object (builder, "prices_window"));
@@ -754,7 +756,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     g_signal_connect (pdb_dialog->window, "destroy",
                       G_CALLBACK(gnc_prices_dialog_destroy_cb), pdb_dialog);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pdb_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pdb_dialog);
     g_object_unref(G_OBJECT(builder));
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(pdb_dialog->window), GTK_WINDOW (parent));

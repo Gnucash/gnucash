@@ -1010,6 +1010,7 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
 
     ENTER(" ");
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(doclink_dialog));
     gnc_builder_add_from_file (builder, "dialog-doclink.glade", "list-store");
     gnc_builder_add_from_file (builder, "dialog-doclink.glade",
                                "linked_doc_window");
@@ -1121,8 +1122,8 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
         get_bus_info (doclink_dialog);
     }
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
-                                      doclink_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
+//                                      doclink_dialog);
 
     g_object_unref (G_OBJECT(builder));
 

@@ -93,6 +93,7 @@ gnc_plugin_customer_import_showGUI(GtkWindow *parent)
     gui = g_new0 (CustomerImportGui, 1);
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(gui));
     gnc_builder_add_from_file (builder, "dialog-customer-import-gui.glade", "customer_import_dialog");
     gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "customer_import_dialog"));
     gui->tree_view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview1"));
@@ -146,7 +147,7 @@ gnc_plugin_customer_import_showGUI(GtkWindow *parent)
                         gui);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
 //FIXME gtk4    gtk_widget_show_all ( gui->dialog );
     g_object_unref (G_OBJECT (builder));
     return gui;

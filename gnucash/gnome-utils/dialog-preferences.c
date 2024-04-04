@@ -647,7 +647,7 @@ gnc_preferences_build_page (gpointer data,
 
     DEBUG("Opening %s to get %s", add_in->filename, add_in->widgetname);
     builder = gtk_builder_new ();
-
+    gtk_builder_set_current_object (builder, G_OBJECT(dialog));
     /* Adjustments etc... must come before dialog information */
     widgetname = g_strsplit (add_in->widgetname, ",", -1);
 
@@ -669,7 +669,7 @@ gnc_preferences_build_page (gpointer data,
     /* Connect the signals in this glade file. The dialog is passed in
      * so the callback can find "interesting" widgets from other
      * glade files if necessary (via the GPREFS_WIDGET_HASH hash table). */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     /* Prepare for recursion */
     notebook = g_object_get_data (G_OBJECT(dialog), NOTEBOOK);
@@ -1343,7 +1343,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     ENTER("");
     DEBUG("Opening dialog-preferences.glade:");
     builder = gtk_builder_new ();
-
+    gtk_builder_set_current_object (builder, G_OBJECT(dialog));
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "auto_decimal_places_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "autosave_interval_minutes_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "save_on_close_adj");
@@ -1384,7 +1384,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     g_object_set_data (G_OBJECT(dialog), "save_on_close_wait_time", spinner);
 
     DEBUG("autoconnect");
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     DEBUG("done");
 

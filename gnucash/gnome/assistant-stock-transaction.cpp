@@ -2605,7 +2605,7 @@ void
 StockAssistantController::connect_signals (GtkBuilder *builder)
 {
     m_view.connect(m_model.get());
-    gtk_builder_connect_signals (builder, this); //Stock Assistant View: cancel, close, prepare
+//FIXME gtk4    gtk_builder_connect_signals (builder, this); //Stock Assistant View: cancel, close, prepare
     g_signal_connect (m_view.window(), "destroy",
                       G_CALLBACK (stock_assistant_window_destroy_cb), this);
 

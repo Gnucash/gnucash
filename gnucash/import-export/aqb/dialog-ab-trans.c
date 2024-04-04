@@ -286,6 +286,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     td->trans_type = trans_type;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(td));
     gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_transaction_dialog");
     td->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_transaction_dialog"));
 
@@ -471,7 +472,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     gtk_tree_view_append_column(td->template_gtktreeview, column);
 
     /* Connect the Signals */
-    gtk_builder_connect_signals_full(builder, gnc_builder_connect_full_func, td);
+//FIXME gtk4    gtk_builder_connect_signals_full(builder, gnc_builder_connect_full_func, td);
 
     g_object_unref(G_OBJECT(builder));
 

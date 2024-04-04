@@ -1482,7 +1482,7 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
     /* default to cancel */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
-    gtk_builder_connect_signals(builder, dialog);
+//FIXME gtk4    gtk_builder_connect_signals(builder, dialog);
     g_object_unref(G_OBJECT(builder));
 
     return dialog;

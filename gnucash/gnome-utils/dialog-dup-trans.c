@@ -153,6 +153,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     const gchar *tt = _("You can type '+' or '-' to increment or decrement the number.");
 
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(dt_dialog));
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "num_adjustment");
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "tnum_adjustment");
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "duplicate_transaction_dialog");
@@ -236,7 +237,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
         dt_dialog->link_edit = GTK_WIDGET(gtk_builder_get_object (builder, "link_check_button"));
     }
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dt_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dt_dialog);
 
     g_object_unref (G_OBJECT(builder));
 }

@@ -625,6 +625,7 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     auto info = static_cast<GNCImportMainMatcher*>(user_data);
 
     GtkBuilder *builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(help_dialog));
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer2");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer3");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer4");
@@ -657,7 +658,7 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     gnc_widget_style_context_add_class (GTK_WIDGET(help_dialog), "gnc-class-imports");
 
     /* Connect the signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, help_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, help_dialog);
 
     g_object_unref (G_OBJECT(builder));
 
@@ -1716,7 +1717,7 @@ gnc_gen_trans_common_setup (GNCImportMainMatcher *info,
     info->transaction_processed_cb = NULL;
 
     /* Connect the signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, info);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, info);
 
     g_object_unref (G_OBJECT(builder));
 }

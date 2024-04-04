@@ -450,6 +450,7 @@ setup_dialog(GncGWENGui *gui)
     ENTER("gui=%p", gui);
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(gui));
     gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_connection_dialog");
 
     gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_connection_dialog"));
@@ -470,7 +471,7 @@ setup_dialog(GncGWENGui *gui)
     gui->showbox_id = 1;
 
     /* Connect the Signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
 
     gtk_toggle_button_set_active(
         GTK_TOGGLE_BUTTON(gui->close_checkbutton),

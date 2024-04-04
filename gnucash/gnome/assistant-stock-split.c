@@ -537,6 +537,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
     GtkWidget *window;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(info));
     gnc_builder_add_from_file  (builder , "assistant-stock-split.glade", "stock_split_assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "stock_split_assistant"));
     info->window = window;
@@ -723,7 +724,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
     g_signal_connect (G_OBJECT(window), "destroy",
                       G_CALLBACK (gnc_stock_split_assistant_window_destroy_cb), info);
 
-    gtk_builder_connect_signals(builder, info);
+//FIXME gtk4    gtk_builder_connect_signals(builder, info);
     g_object_unref(G_OBJECT(builder));
     return window;
 

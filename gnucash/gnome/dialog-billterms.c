@@ -432,6 +432,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
         dialog_nb = "notebook_hbox";
     }
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(nbt));
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "type_liststore");
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", dialog_name);
     nbt->dialog = GTK_WIDGET(gtk_builder_get_object (builder, dialog_name));
@@ -467,7 +468,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     show_notebook (&nbt->notebook);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, nbt);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, nbt);
 
     gtk_window_set_transient_for (GTK_WINDOW(nbt->dialog),
                                   GTK_WINDOW(btw->window));
@@ -798,6 +799,7 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
 
     /* Open and read the Glade File */
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(btw));
     gnc_builder_add_from_file (builder, "dialog-billterms.glade", "terms_window");
     btw->window = GTK_WIDGET(gtk_builder_get_object (builder, "terms_window"));
     btw->terms_view = GTK_WIDGET(gtk_builder_get_object (builder, "terms_view"));
@@ -842,7 +844,7 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
     g_object_unref (btw->notebook.notebook);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, btw);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, btw);
 
     /* register with component manager */
     btw->component_id =

@@ -326,6 +326,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
 
     /* Load the Glade File */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(jw));
     gnc_builder_add_from_file (builder, "dialog-job.glade", "job_dialog");
 
     /* Find the dialog */
@@ -355,7 +356,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
     gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, jw);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, jw);
 
 
     /* Set initial entries */

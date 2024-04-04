@@ -242,11 +242,12 @@ gnc_ui_select_commodity_create(const gnc_commodity * orig_sel,
     GtkWidget *button, *label;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(retval));
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore1");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore2");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "security_selector_dialog");
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
     retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "security_selector_dialog"));
     retval->namespace_combo = GTK_WIDGET(gtk_builder_get_object (builder, "ss_namespace_cbwe"));
@@ -894,11 +895,12 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
           parent, selected_namespace, fullname, mnemonic);
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(retval));
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "liststore2");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "adjustment1");
     gnc_builder_add_from_file (builder, "dialog-commodity.glade", "security_dialog");
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, retval);
 
     retval->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "security_dialog"));
 

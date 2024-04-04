@@ -536,6 +536,7 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
     m_component_class{component_class ? component_class : DIALOG_OPTIONS_CM_CLASS}
 {
     auto builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(this));
     gnc_builder_add_from_file (builder, "dialog-options.glade", "gnucash_options_window");
     m_window = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_window"));
     g_object_ref(m_window);
@@ -582,8 +583,8 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
     g_signal_connect(m_ok_button, "clicked",
                      G_CALLBACK(dialog_ok_button_cb), this);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
-                                      this);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
+//                                      this);
 
     // when added to a page of the hierarchy assistant there will be no parent
     if (parent)

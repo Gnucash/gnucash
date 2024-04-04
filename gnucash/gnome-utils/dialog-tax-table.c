@@ -292,6 +292,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 
     /* Open and read the Glade File */
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(ntt));
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "type_liststore");
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "new_tax_table_dialog");
 
@@ -351,7 +352,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     gtk_window_set_transient_for (GTK_WINDOW(ntt->dialog), GTK_WINDOW(ttw->dialog));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ntt);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ntt);
 
     /* Show what we should */
 //FIXME gtk4    gtk_widget_show_all (ntt->dialog);
@@ -910,6 +911,7 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
 
     /* Open and read the Glade File */
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(ttw));
     gnc_builder_add_from_file (builder, "dialog-tax-table.glade", "tax_table_window");
     ttw->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "tax_table_window"));
     ttw->names_view = GTK_WIDGET(gtk_builder_get_object (builder, "tax_tables_view"));
@@ -979,7 +981,7 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
                       G_CALLBACK(tax_table_entry_row_activated), ttw);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ttw);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ttw);
 
     /* register with component manager */
     ttw->component_id =

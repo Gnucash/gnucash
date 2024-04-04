@@ -616,6 +616,7 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     fcd = g_new0 (FinCalcDialog, 1);
 
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(fcd));
     gnc_builder_add_from_file (builder, "dialog-fincalc.glade", "liststore1");
     gnc_builder_add_from_file (builder, "dialog-fincalc.glade", "liststore2");
     gnc_builder_add_from_file (builder, "dialog-fincalc.glade", "financial_calculator_dialog");
@@ -725,7 +726,7 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     gtk_widget_grab_focus (fcd->amounts[PAYMENT_PERIODS]);
 
     /* Connect all signals specified in glade. */
-    gtk_builder_connect_signals (builder, fcd);
+//FIXME gtk4    gtk_builder_connect_signals (builder, fcd);
     g_object_unref (G_OBJECT(builder));
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(fcd->dialog), parent);

@@ -854,6 +854,7 @@ csv_export_assistant_create (CsvExportInfo *info)
     GtkWidget *table, *hbox;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(info));
     gnc_builder_add_from_file  (builder , "assistant-csv-export.glade", "csv_export_assistant");
     info->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "csv_export_assistant"));
 
@@ -996,7 +997,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_PANED_POS, object, "position");
     }
 
-    gtk_builder_connect_signals (builder, info);
+//FIXME gtk4    gtk_builder_connect_signals (builder, info);
     g_object_unref (G_OBJECT(builder));
     return info->assistant;
 }

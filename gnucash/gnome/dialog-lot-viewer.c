@@ -1079,6 +1079,7 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
     GtkBuilder *builder;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(lv));
     gnc_builder_add_from_file (builder, "dialog-lot-viewer.glade", "lot_viewer_dialog");
 
     lv->window = GTK_WIDGET(gtk_builder_get_object (builder, "lot_viewer_dialog"));
@@ -1142,7 +1143,7 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
                       G_CALLBACK(window_realize_set_split_paned_position_cb), lv);
 
     /* Setup signals */
-    gtk_builder_connect_signals(builder, lv);
+//FIXME gtk4    gtk_builder_connect_signals(builder, lv);
     g_object_unref(G_OBJECT(builder));
 
     lv_update_split_buttons(lv);

@@ -2653,12 +2653,13 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
 
     /* Find the dialog */
     iw->builder = builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(iw));
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "terms_store");
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "invoice_entry_vbox");
     dialog = GTK_WIDGET (gtk_builder_get_object (builder, "invoice_entry_vbox"));
 
     /* Autoconnect all the signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, iw);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, iw);
 
     /* Grab the widgets */
     iw->id_label = GTK_WIDGET (gtk_builder_get_object (builder, "label3"));
@@ -2995,6 +2996,7 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
 
     /* Find the glade page layout */
     iw->builder = builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(iw));
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "terms_store");
     gnc_builder_add_from_file (builder, "dialog-invoice.glade", "new_invoice_dialog");
     iw->dialog = GTK_WIDGET (gtk_builder_get_object (builder, "new_invoice_dialog"));
@@ -3090,9 +3092,9 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
                               (iw->dialog_type == DUP_INVOICE));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full( builder,
-                                      gnc_builder_connect_full_func,
-                                      iw);
+//FIXME gtk4    gtk_builder_connect_signals_full( builder,
+//                                      gnc_builder_connect_full_func,
+//                                      iw);
 
     /* Setup initial values */
     iw->reportPage = NULL;

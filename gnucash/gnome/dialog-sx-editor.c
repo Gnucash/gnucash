@@ -1184,6 +1184,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
 
     /* Load up Glade file */
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(sxed));
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "advance_days_adj");
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "remind_days_adj");
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "end_spin_adj");
@@ -1285,7 +1286,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     /* Move keyboard focus to the name entry */
     gtk_widget_grab_focus (GTK_WIDGET (sxed->nameEntry));
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, sxed);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, sxed);
     g_object_unref (G_OBJECT (builder));
 
     return sxed;
@@ -1781,7 +1782,10 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         GtkTreeViewColumn *name_column;
         GtkCellRenderer *renderer;
 
+        data = (acct_deletion_handler_data*)g_new0(acct_deletion_handler_data, 1);
+
         builder = gtk_builder_new ();
+        gtk_builder_set_current_object (builder, G_OBJECT(data));
         gnc_builder_add_from_file (builder, "dialog-sx.glade", "account_deletion_dialog");
 
         dialog = GTK_WIDGET (gtk_builder_get_object (builder, "account_deletion_dialog"));
@@ -1794,7 +1798,6 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         // Set grid lines option to preference
         gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (list), gnc_tree_view_get_grid_lines_pref ());
 
-        data = (acct_deletion_handler_data*)g_new0(acct_deletion_handler_data, 1);
         data->dialog = dialog;
         data->parent = parent;
         data->affected_sxes = affected_sxes;
@@ -1823,7 +1826,7 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
                           G_CALLBACK (_open_editors), data);
 
 //FIXME gtk4        gtk_widget_show_all (GTK_WIDGET (dialog));
-        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
+//FIXME gtk4        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
         g_object_unref (G_OBJECT (builder));
     }
 }

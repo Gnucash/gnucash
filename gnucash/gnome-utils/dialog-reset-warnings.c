@@ -370,6 +370,7 @@ gnc_reset_warnings_dialog (GtkWindow *parent)
 
     DEBUG("Opening dialog-reset-warnings.glade:");
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(rw_dialog));
     gnc_builder_add_from_file (builder, "dialog-reset-warnings.glade", "reset_warnings_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "reset_warnings_dialog"));
 
@@ -383,7 +384,7 @@ gnc_reset_warnings_dialog (GtkWindow *parent)
     PINFO("rw_dialog %p, dialog %p", rw_dialog, dialog);
 
     /* Connect the signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, rw_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, rw_dialog);
 
     DEBUG("permanent");
     rw_dialog->perm_vbox_label = GTK_WIDGET(gtk_builder_get_object (builder, "perm_vbox_and_label"));

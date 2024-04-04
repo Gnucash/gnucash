@@ -1329,6 +1329,7 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
     dialog = g_new0 (GncSxSinceLastRunDialog, 1);
 
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(dialog));
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "since_last_run_dialog");
 
     dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since_last_run_dialog"));
@@ -1467,7 +1468,7 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
 
 //FIXME gtk4    gtk_widget_show_all (dialog->dialog);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     g_object_unref (G_OBJECT(builder));
 

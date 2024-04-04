@@ -1139,6 +1139,7 @@ owner_filter_dialog_create(OwnerFilterDialog *fd, GncPluginPage *page)
 
     /* Create the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(fd));
     gnc_builder_add_from_file (builder, "gnc-tree-view-owner.glade", "filter_by_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "filter_by_dialog"));
     fd->dialog = dialog;
@@ -1163,7 +1164,7 @@ owner_filter_dialog_create(OwnerFilterDialog *fd, GncPluginPage *page)
                                   fd->show_zero_total);
 
     /* Wire up the rest of the callbacks */
-    gtk_builder_connect_signals (builder, fd);
+//FIXME gtk4    gtk_builder_connect_signals (builder, fd);
     g_object_unref(G_OBJECT(builder));
 
     /* Show it */

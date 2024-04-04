@@ -467,6 +467,7 @@ bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, const GdkEvent *ev
 CsvImpTransAssist::CsvImpTransAssist ()
 {
     auto builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(this));
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "start_row_adj");
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "end_row_adj");
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "account_match_store");
@@ -674,7 +675,7 @@ CsvImpTransAssist::CsvImpTransAssist ()
     gnc_restore_window_size (GNC_PREFS_GROUP,
                              GTK_WINDOW(csv_imp_asst), gnc_ui_get_main_window(nullptr));
 
-    gtk_builder_connect_signals (builder, this);
+//FIXME gtk4    gtk_builder_connect_signals (builder, this);
     g_object_unref (G_OBJECT(builder));
 
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(csv_imp_asst));

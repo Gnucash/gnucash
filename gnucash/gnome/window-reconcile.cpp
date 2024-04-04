@@ -710,6 +710,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
     /* Create the dialog box */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(&data));
     gnc_builder_add_from_file (builder, "window-reconcile.glade", "reconcile_start_dialog");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_start_dialog"));
@@ -759,7 +760,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
         label = GTK_WIDGET(gtk_builder_get_object (builder, "end_label"));
         gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(end_value), label);
 
-        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, &data);
+//FIXME gtk4        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, &data);
 
         gnc_date_activates_default(GNC_DATE_EDIT(date_value), TRUE);
 

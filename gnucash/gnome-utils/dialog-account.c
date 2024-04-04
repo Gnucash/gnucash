@@ -1572,6 +1572,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
 
     ENTER("aw %p, modal %d", aw, aw->modal);
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(aw));
     gnc_builder_add_from_file (builder, "dialog-account.glade", "fraction_liststore");
     gnc_builder_add_from_file (builder, "dialog-account.glade", "account_dialog");
 
@@ -1726,7 +1727,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
 
     gtk_widget_grab_focus (GTK_WIDGET(aw->name_entry));
 
-    gtk_builder_connect_signals (builder, aw);
+//FIXME gtk4    gtk_builder_connect_signals (builder, aw);
     g_object_unref (G_OBJECT(builder));
 
     LEAVE(" ");
@@ -2340,6 +2341,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     data->num_children = gnc_account_n_children (account);
 
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(data));
     gnc_builder_add_from_file (builder, "dialog-account.glade", "interval_adjustment");
     gnc_builder_add_from_file (builder, "dialog-account.glade", "digit_spin_adjustment");
     gnc_builder_add_from_file (builder, "dialog-account.glade", "account_renumber_dialog");
@@ -2366,7 +2368,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     gnc_entry_set_text (GTK_ENTRY(data->prefix), xaccAccountGetCode (account));
     gnc_account_renumber_update_examples (data);
 
-    gtk_builder_connect_signals (builder, data);
+//FIXME gtk4    gtk_builder_connect_signals (builder, data);
 
 //FIXME gtk4    gtk_widget_show_all (data->dialog);
 }
@@ -2435,6 +2437,7 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
     g_return_if_fail (gnc_account_n_children (account) > 0);
 
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(dialog));
     gnc_builder_add_from_file (builder, "dialog-account.glade", "account_cascade_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_cascade_dialog"));
     gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(window));
@@ -2508,7 +2511,7 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
     /* default to cancel */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
-    gtk_builder_connect_signals (builder, dialog);
+//FIXME gtk4    gtk_builder_connect_signals (builder, dialog);
     g_object_unref (G_OBJECT(builder));
 
 //FIXME gtk4    gtk_widget_show_all (dialog);

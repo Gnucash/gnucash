@@ -330,6 +330,7 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
 
     /* Open the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(cbw->dialog));
     gnc_builder_add_from_file (builder, "dialog-book-close.glade", "close_book_dialog");
     cbw->dialog = GTK_WIDGET(gtk_builder_get_object (builder,  "close_book_dialog"));
 
@@ -368,7 +369,7 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     cbw->desc_widget = GTK_WIDGET(gtk_builder_get_object (builder, "desc_entry"));
 
     /* Autoconnect signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, cbw->dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, cbw->dialog);
 
     /* Register dialog with component manager */
     cbw->component_manager_id =
