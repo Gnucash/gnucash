@@ -219,8 +219,7 @@ create_options_box(GtkBox* content_box)
     gtk_widget_set_halign (GTK_WIDGET(options_box), GTK_ALIGN_START);
     
     gtk_container_set_border_width(GTK_CONTAINER(options_box), 0);
-    gtk_container_add (GTK_CONTAINER(options_scrolled_win),
-                       GTK_WIDGET(options_box));
+    gtk_box_prepend (GTK_BOX(options_scrolled_win), GTK_WIDGET(options_box));
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(options_scrolled_win),
                                    GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
     return GTK_GRID(options_box);

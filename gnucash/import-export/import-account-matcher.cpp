@@ -169,8 +169,7 @@ build_acct_tree(AccountPickerDialog *picker)
     // the color background data function is part of the add_property_column
     // function which will color the background based on preference setting
 
-    gtk_container_add(GTK_CONTAINER(picker->account_tree_sw),
-                      GTK_WIDGET(picker->account_tree));
+    gtk_box_prepend (GTK_BOX(picker->account_tree_sw), GTK_WIDGET(picker->account_tree));
 
     /* Configure the columns */
     gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree));

@@ -225,7 +225,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
     accounts_scroller = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(accounts_scroller),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_container_add(GTK_CONTAINER(accounts_scroller), account_tree);
+    gtk_box_prepend (GTK_BOX(accounts_scroller), GTK_WIDGET(account_tree));
     gtk_widget_set_size_request(GTK_WIDGET(accounts_scroller), 300, 300);
 
     /* Create the label */
@@ -288,7 +288,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     gnc_label_set_alignment (label, 0.5, 0.5);
 
     button = gtk_button_new ();
-    gtk_container_add (GTK_CONTAINER (button), label);
+    gtk_box_prepend (GTK_BOX(button), GTK_WIDGET(label));
     g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (button_clicked), fe);
     gtk_box_append (GTK_BOX(box), GTK_WIDGET(button));
 

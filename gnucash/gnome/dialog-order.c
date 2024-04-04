@@ -431,7 +431,7 @@ gnc_order_update_window (OrderWindow *ow)
 
     if (ow->owner_choice)
     {
-        gtk_container_remove (GTK_CONTAINER (ow->owner_box), ow->owner_choice);
+        gtk_box_remove (GTK_BOX(ow->owner_box), GTK_WIDGET(ow->owner_choice));
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(ow->owner_choice));
     }
 

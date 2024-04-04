@@ -181,9 +181,7 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
                  GNC_PREF_RPT_DFLT_ZOOM);
      webkit_web_view_set_zoom_level (priv->web_view, zoom);
 
-
-     gtk_container_add( GTK_CONTAINER(priv->base.container),
-                        GTK_WIDGET(priv->web_view) );
+     gtk_box_prepend (GTK_BOX(priv->base.container), GTK_WIDGET(priv->web_view));
 
      g_object_ref_sink( priv->base.container );
 
@@ -241,8 +239,7 @@ gnc_html_webkit_dispose( GObject* obj )
 
      if ( priv->web_view != NULL )
      {
-          gtk_container_remove (GTK_CONTAINER(priv->base.container),
-                                GTK_WIDGET(priv->web_view));
+          gtk_box_remove (GTK_BOX(priv->base.container), GTK_WIDGET(priv->web_view);
 
           priv->web_view = NULL;
      }

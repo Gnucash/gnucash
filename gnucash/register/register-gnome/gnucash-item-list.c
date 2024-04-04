@@ -524,8 +524,8 @@ gnc_item_list_new (GtkListStore* list_store)
 
     item_list->scrollwin =
         GTK_SCROLLED_WINDOW (gtk_scrolled_window_new(NULL, NULL));
-    gtk_container_add (GTK_CONTAINER (item_list),
-                       GTK_WIDGET (item_list->scrollwin));
+
+    gtk_box_prepend (GTK_BOX(item_list), GTK_WIDGET(item_list->scrollwin));
 
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (item_list->scrollwin),
                                     GTK_POLICY_AUTOMATIC,
@@ -552,7 +552,7 @@ gnc_item_list_new (GtkListStore* list_store)
                                                        NULL);
     gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
-    gtk_container_add (GTK_CONTAINER (item_list->scrollwin), tree_view);
+    gtk_box_prepend (GTK_BOX(item_list->scrollwin), GTK_WIDGET(tree_view));
 
     item_list->tree_view = GTK_TREE_VIEW (tree_view);
     item_list->list_store = list_store;

@@ -594,7 +594,8 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     gtk_tree_view_set_headers_visible(tree_view, TRUE);
     gnc_plugin_page_owner_tree_selection_changed_cb (NULL, page);
     gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
-    gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
+    gtk_box_prepend (GTK_BOX(scrolled_window), GTK_WIDGET(tree_view));
+
 
     priv->fd.tree_view = GNC_TREE_VIEW_OWNER(priv->tree_view);
     gnc_tree_view_owner_set_filter (

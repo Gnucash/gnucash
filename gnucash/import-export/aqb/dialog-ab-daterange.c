@@ -87,13 +87,11 @@ gnc_ab_enter_daterange(GtkWidget *parent,
     info.enter_to_button  = GTK_WIDGET(gtk_builder_get_object (builder, "enter_to_button"));
 
     info.from_dateedit = gnc_date_edit_new (*from_date, FALSE, FALSE);
-    gtk_container_add(GTK_CONTAINER(gtk_builder_get_object (builder, "enter_from_box")),
-                      info.from_dateedit);
+    gtk_box_prepend (GTK_BOX(gtk_builder_get_object (builder, "enter_from_box")), GTK_WIDGET(info.from_dateedit));
     gtk_widget_set_visible (GTK_WIDGET(info.from_dateedit), TRUE);
 
     info.to_dateedit = gnc_date_edit_new (*to_date, FALSE, FALSE);
-    gtk_container_add(GTK_CONTAINER(gtk_builder_get_object (builder, "enter_to_box")),
-                      info.to_dateedit);
+    gtk_box_prepend (GTK_BOX(gtk_builder_get_object (builder, "enter_to_box")), GTK_WIDGET(info.to_dateedit));
     gtk_widget_set_visible (GTK_WIDGET(info.to_dateedit), TRUE);
     if (*last_retv_date)
     {

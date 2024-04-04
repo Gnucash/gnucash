@@ -536,8 +536,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->container), "gnc-id-report-page");
 
-    gtk_container_add(GTK_CONTAINER(priv->container),
-                      gnc_html_get_widget(priv->html));
+    gtk_box_prepend (GTK_BOX(priv->container), GTK_WIDGET(gnc_html_get_widget(priv->html)));
 
     priv->component_manager_id =
         gnc_register_gui_component(WINDOW_REPORT_CM_CLASS, nullptr,

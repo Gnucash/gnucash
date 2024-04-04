@@ -206,7 +206,7 @@ gnc_recurrence_init( GncRecurrence *gr )
     gtk_widget_set_no_show_all(GTK_WIDGET(gr->gcb_eom), TRUE);
     gtk_widget_set_no_show_all(GTK_WIDGET(gr->nth_weekday), TRUE);
 
-    gtk_container_add( GTK_CONTAINER(&gr->widget), GTK_WIDGET(vb) );
+    gtk_box_prepend (GTK_BOX(&gr->widget), GTK_WIDGET(vb));
 
     gnc_recurrence_set(gr, &gr->recurrence);
     something_changed( GTK_WIDGET(gr), gr);
