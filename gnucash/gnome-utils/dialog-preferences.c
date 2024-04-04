@@ -844,7 +844,7 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
         PINFO("Failed to save preference at %s, %s with %s", group, pref, folder_uri);
     else
         gnc_doclink_pref_path_head_changed (
-            GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(fc))),
+            GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(fc))),
             old_path_head_uri);
 
     g_free (old_path_head_uri);
@@ -949,7 +949,7 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
         PINFO("Failed to Clear preference at %s, %s", group, pref);
     else
         gnc_doclink_pref_path_head_changed (
-            GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(fcb))),
+            GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(fcb))),
             old_path_head_uri);
 
 //FIXME gtk4    gtk_widget_destroy (GTK_WIDGET(fcb));

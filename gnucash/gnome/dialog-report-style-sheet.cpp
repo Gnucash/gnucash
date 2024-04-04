@@ -165,7 +165,7 @@ gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
     SCM            scm_dispatch = scm_call_1 (get_options, sheet_info);
     ss_info        * ssinfo = g_new0 (ss_info, 1);
     gchar          * title;
-    GtkWindow      * parent = GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(ss->list_view)));
+    GtkWindow      * parent = GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(ss->list_view)));
 
     title = g_strdup_printf(_("HTML Style Sheet Properties: %s"), name);
     ssinfo->odialog = new GncOptionsDialog(title, parent);

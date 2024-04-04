@@ -526,7 +526,7 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
     dlg = GTK_WIDGET(gtk_builder_get_object (builder, "edit_report_size"));
 
     gtk_window_set_transient_for (GTK_WINDOW(dlg),
-                         GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(button))));
+                         GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(button))));
 
     /* get the spinner widgets */
     rowspin = GTK_WIDGET(gtk_builder_get_object (builder, "row_spin"));

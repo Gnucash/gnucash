@@ -1002,7 +1002,7 @@ static void
 gas_new_account_click (GtkButton *b, gpointer user_data)
 {
     GNCAccountSel *gas = (GNCAccountSel*)user_data;
-    GtkWindow *parent = GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(gas)));
+    GtkWindow *parent = GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(gas)));
 
     if (gas->isModal)
     {

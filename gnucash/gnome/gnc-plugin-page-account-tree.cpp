@@ -1248,7 +1248,7 @@ gppat_populate_trans_mas_list(GtkToggleButton *sa_mrb,
 void
 gppat_set_insensitive_iff_rb_active(GtkWidget *widget, GtkToggleButton *b)
 {
-    GtkWidget *dialog = gtk_widget_get_toplevel(widget);
+    GtkRoot *dialog = gtk_widget_get_root (widget);
     auto subaccount_trans = GTK_WIDGET(g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_TRANS));
     auto sa_mas = GTK_WIDGET(g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_MAS));
     auto have_splits = g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_SPLITS) != nullptr;
@@ -1261,7 +1261,7 @@ gppat_set_insensitive_iff_rb_active(GtkWidget *widget, GtkToggleButton *b)
     else
         gtk_widget_set_sensitive(subaccount_trans, FALSE);
 
-    set_ok_sensitivity(dialog);
+    set_ok_sensitivity(GTK_WIDGET(dialog));
 }
 
 static GtkWidget *

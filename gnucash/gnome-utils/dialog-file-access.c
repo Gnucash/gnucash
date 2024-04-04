@@ -217,13 +217,13 @@ set_widget_sensitivity_for_uri_type( FileAccessWindow* faw, const gchar* uri_typ
 static void
 cb_uri_type_changed_cb( GtkComboBoxText* cb )
 {
-    GtkWidget* dialog;
+    GtkRoot* dialog;
     FileAccessWindow* faw;
     const gchar* type;
 
     g_return_if_fail( cb != NULL );
 
-    dialog = gtk_widget_get_toplevel( GTK_WIDGET(cb) );
+    dialog = gtk_widget_get_root( GTK_WIDGET(cb) );
     g_return_if_fail( dialog != NULL );
     faw = g_object_get_data( G_OBJECT(dialog), "FileAccessWindow" );
     g_return_if_fail( faw != NULL );

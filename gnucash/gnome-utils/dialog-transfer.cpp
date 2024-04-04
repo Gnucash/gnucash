@@ -357,10 +357,10 @@ gnc_xfer_dialog_key_press_cb (GtkEventControllerKey *key, guint keyval,
     if ((keyval == GDK_KEY_Return) || (keyval == GDK_KEY_KP_Enter))
     {
         GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
-        auto toplevel = gtk_widget_get_toplevel (widget);
-        if (gtk_widget_is_toplevel(toplevel) && GTK_IS_WINDOW(toplevel))
+        auto toplevel = gtk_widget_get_root (widget);
+        if (GTK_IS_WINDOW(toplevel))
         {
-            gtk_window_activate_default (GTK_WINDOW(toplevel));
+            gtk_widget_activate_default (GTK_WIDGET(toplevel));
             return true;
         }
     }

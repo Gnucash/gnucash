@@ -5297,12 +5297,12 @@ gnc_main_window_show_all_windows(void)
 GtkWindow *
 gnc_ui_get_gtk_window (GtkWidget *widget)
 {
-    GtkWidget *toplevel;
+    GtkRoot *toplevel;
 
     if (!widget)
         return nullptr;
 
-    toplevel = gtk_widget_get_toplevel (widget);
+    toplevel = gtk_widget_get_root (widget);
     if (toplevel && GTK_IS_WINDOW (toplevel))
         return GTK_WINDOW (toplevel);
     else
