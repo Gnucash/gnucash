@@ -87,7 +87,7 @@ gnc_ui_new_user_cancel_cb (GtkWidget * widget, gpointer data)
     GNCNewUserDialog *new_user = data;
 
     g_return_if_fail(new_user);
-    gtk_widget_destroy (new_user->window);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(new_user->window));
 }
 
 static void
@@ -124,7 +124,7 @@ gnc_ui_new_user_ok_cb (GtkWidget * widget, gpointer data)
     {
         gnc_gnome_help (GTK_WINDOW(new_user->window), DF_GUIDE, NULL);
     }
-    gtk_widget_destroy (new_user->window);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(new_user->window));
 }
 
 static gboolean
@@ -197,7 +197,7 @@ gnc_ui_new_user_cancel_dialog (GtkWindow *parent)
     gnc_set_first_startup (keepshowing);
 
     g_object_unref(G_OBJECT(builder));
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(dialog));
 }
 
 void

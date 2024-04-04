@@ -1169,7 +1169,7 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
 #define FUNC_NAME "gtk_widget_destroy"
             auto w{static_cast<GtkWidget*>(SWIG_MustGetPtr(editor, SWIG_TypeQuery("_p_GtkWidget"), 1, 0))};
 #undef FUNC_NAME
-            gtk_widget_destroy(GTK_WIDGET(w));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(w));
         }
     }
 

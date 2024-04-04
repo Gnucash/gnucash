@@ -181,7 +181,7 @@ sxed_close_handler (gpointer user_data)
 
     gnc_sxed_reg_check_close (sxed);
     gnc_save_window_size (GNC_PREFS_GROUP_SXED, GTK_WINDOW (sxed->dialog));
-    gtk_widget_destroy (sxed->dialog);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(sxed->dialog));
     /* The data will be cleaned up in the destroy handler. */
 }
 
@@ -706,8 +706,8 @@ split_error_warning_dialog (GtkWidget *parent, const gchar *title,
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                               "%s", message);
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
-    g_signal_connect_swapped (dialog, "response",
-                              G_CALLBACK (gtk_widget_destroy), dialog);
+//FIXME gtk4    g_signal_connect_swapped (dialog, "response",
+//                              G_CALLBACK (gtk_window_destroy), GTK_WINDOW(dialog));
     gtk_dialog_run (GTK_DIALOG (dialog));
 
 }
@@ -1081,7 +1081,7 @@ scheduledxaction_editor_dialog_destroy (GtkWidget *object, gpointer data)
         (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 
     gnc_embedded_window_close_page (sxed->embed_window, sxed->plugin_page);
-    gtk_widget_destroy (GTK_WIDGET (sxed->embed_window));
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(sxed->embed_window));
     sxed->embed_window = NULL;
     sxed->plugin_page = NULL;
     sxed->ledger = NULL;
@@ -1750,7 +1750,7 @@ _open_editors (GtkDialog *dialog, gint response_code, gpointer data)
         }
     }
     g_list_free (adhd->affected_sxes);
-    gtk_widget_destroy (GTK_WIDGET (adhd->dialog));
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(adhd->dialog));
     g_free (adhd);
 }
 

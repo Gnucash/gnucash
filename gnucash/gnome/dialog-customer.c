@@ -450,7 +450,7 @@ gnc_customer_window_close_handler (gpointer user_data)
 {
     CustomerWindow *cw = user_data;
 
-    gtk_widget_destroy (cw->dialog);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(cw->dialog));
     // cw has already been freed by this point.
     // cw->dialog = NULL;
 }

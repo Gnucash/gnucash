@@ -737,7 +737,7 @@ identity_edit_destroy_cb (GtkDialog *dialog, gpointer data)
     ti_dialog->entity_name_entry = NULL;
     ti_dialog->entity_type_combo = NULL;
 
-    gtk_widget_destroy(GTK_WIDGET(dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 static void
@@ -1522,7 +1522,7 @@ close_handler (gpointer user_data)
     TaxInfoDialog *ti_dialog = user_data;
 
     gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(ti_dialog->dialog));
-    gtk_widget_destroy (ti_dialog->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ti_dialog->dialog));
 }
 
 static void

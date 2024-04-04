@@ -1305,7 +1305,7 @@ commodity_mismatch_dialog (const Account* account, GtkWindow* parent)
                             _("_Do it anyway"), GTK_RESPONSE_ACCEPT,
                             (gchar *)NULL);
     response = gtk_dialog_run (GTK_DIALOG (error_dialog));
-    gtk_widget_destroy (error_dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(error_dialog));
     g_free (message);
     return response;
 }
@@ -1548,7 +1548,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple,
 
         if (response != GTK_RESPONSE_ACCEPT)
         {
-            gtk_widget_destroy(dialog);
+//FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
             return;
         }
         adopter_set_account_and_match (&adopt.trans);
@@ -1560,7 +1560,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple,
             adopter_match (&adopt.subtrans, GTK_WINDOW (window)))
             break;
     }
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     if (confirm_delete_account (simple, page, adopt.trans.new_account,
                                 adopt.subtrans.new_account,
                                 adopt.subacct.new_account,
@@ -1652,7 +1652,7 @@ confirm_delete_account (GSimpleAction *simple, GncPluginPageAccountTree *page,
                            (gchar *)NULL);
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
     response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     return response;
 }
 

@@ -80,8 +80,8 @@ gnc_progress_maybe_destroy(GNCProgressDialog *progress)
     if (!(progress->closed && progress->destroyed))
         return;
 
-    if (progress->dialog != NULL)
-        gtk_widget_destroy(progress->dialog);
+//FIXME gtk4    if (progress->dialog != NULL)
+//        gtk_window_destroy (GTK_WINDOW(progress->dialog));
 }
 
 

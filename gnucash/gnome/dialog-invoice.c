@@ -299,7 +299,7 @@ iw_ask_unpost (InvoiceWindow *iw)
         iw->reset_tax_tables =
             gtk_toggle_button_get_active(toggle);
 
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_object_unref(G_OBJECT(builder));
 
     return (response == GTK_RESPONSE_OK);
@@ -624,7 +624,7 @@ gnc_invoice_window_destroy_cb (GtkWidget *widget, gpointer data)
         iw->invoice_guid = *guid_null ();
     }
 
-    gtk_widget_destroy(widget);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(widget));
     gnc_entry_ledger_destroy (iw->ledger);
     gnc_unregister_gui_component (iw->component_id);
     g_object_unref (G_OBJECT (iw->builder));
@@ -935,7 +935,7 @@ use_default_report_template_or_change (GtkWindow *parent)
     if (result == GTK_RESPONSE_OK)
         ret_guid = gnc_report_combo_get_active_guid (GNC_REPORT_COMBO(combo));
 
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_free (args);
 
     return ret_guid;
@@ -1862,10 +1862,8 @@ gnc_invoice_dialog_close_handler (gpointer user_data)
 {
     InvoiceWindow *iw = user_data;
 
-    if (iw)
-    {
-        gtk_widget_destroy (iw->dialog);
-    }
+//FIXME gtk4    if (iw)
+//        gtk_window_destroy (GTK_WINDOW(iw->dialog));
 }
 
 static void

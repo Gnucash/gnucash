@@ -918,7 +918,7 @@ gnc_plugin_page_budget_cmd_view_options (GSimpleAction *simple,
             break;
         }
         g_object_unref (G_OBJECT(builder));
-        gtk_widget_destroy (priv->dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(priv->dialog));
     }
     priv->dialog = NULL;
 }
@@ -1036,7 +1036,7 @@ gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
                      GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
                      _("You must select at least one account to estimate."));
         gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         return;
     }
 
@@ -1087,7 +1087,7 @@ gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
     default:
         break;
     }
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_object_unref (G_OBJECT(builder));
 }
 
@@ -1167,7 +1167,7 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
                     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
                     _("You must select at least one account to edit."));
         gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         return;
     }
 
@@ -1224,7 +1224,7 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
     default:
         break;
     }
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_object_unref (G_OBJECT(builder));
 }
 
@@ -1268,7 +1268,7 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
             GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
             _("You must select one budget cell to edit."));
         gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         return;
     }
 
@@ -1299,7 +1299,7 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
     default:
         break;
     }
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_object_unref(G_OBJECT(builder));
 }
 

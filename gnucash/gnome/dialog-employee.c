@@ -306,7 +306,7 @@ gnc_employee_window_close_handler (gpointer user_data)
 {
     EmployeeWindow *ew = user_data;
 
-    gtk_widget_destroy (ew->dialog);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(ew->dialog));
 }
 
 static void

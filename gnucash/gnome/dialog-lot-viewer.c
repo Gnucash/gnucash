@@ -634,7 +634,7 @@ lv_close_handler (gpointer user_data)
     lv_save_current_lot (lv);
 
     gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(lv->window));
-    gtk_widget_destroy (lv->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(lv->window));
 }
 
 /* ===========================    Callbacks    ============================ */

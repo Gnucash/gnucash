@@ -111,7 +111,7 @@ gnc_imap_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
 
     if (imap_dialog->dialog)
     {
-        gtk_widget_destroy (imap_dialog->dialog);
+//FIXME gtk4        gtk_window_destroy(GTK_WINDOW(imap_dialog->dialog));
         imap_dialog->dialog = NULL;
     }
     g_free (imap_dialog);
@@ -975,7 +975,7 @@ close_handler (gpointer user_data)
 
     ENTER(" ");
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(imap_dialog->dialog));
-    gtk_widget_destroy (GTK_WIDGET(imap_dialog->dialog));
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(imap_dialog->dialog));
     LEAVE(" ");
 }
 

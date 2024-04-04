@@ -324,8 +324,8 @@ gnc_payment_window_close_handler (gpointer data)
 {
     PaymentWindow *pw = data;
 
-    if (pw)
-        gtk_widget_destroy (pw->dialog);
+//FIXME gtk4    if (pw)
+//        gtk_window_destroy (GTK_WINDOW(pw->dialog));
 }
 
 static void
@@ -700,8 +700,8 @@ gnc_payment_dialog_owner_type_changed (PaymentWindow *pw)
     g_object_unref (G_OBJECT (pw->amount_credit_edit));
 
     /* Redo the owner_choice widget */
-    if (pw->owner_choice)
-        gtk_widget_destroy(pw->owner_choice);
+//FIXME gtk4    if (pw->owner_choice)
+//        gtk_window_destroy (GTK_WINDOW(pw->owner_choice));
     pw->owner_choice = gnc_owner_select_create (NULL, pw->owner_box, pw->book, &pw->owner);
     gtk_widget_set_visible (GTK_WIDGET(pw->owner_choice), TRUE);
     gnc_payment_dialog_owner_changed (pw);
@@ -1610,7 +1610,7 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
                                          "%s",
                                          _("The selected transaction doesn't have splits that can be assigned as a payment"));
         gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         PINFO("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
                   xaccTransGetDescription(txn));
         return NULL;
@@ -1674,7 +1674,7 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
             }
         }
 
-        gtk_widget_destroy (GTK_WIDGET(dialog));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
     }
     else
         selected_split = payment_splits->data;
@@ -1757,7 +1757,7 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
                                          "Please correct this manually by editing the transaction directly and then try again."),
                                          split_str);
         gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         PINFO("Multiple asset accounts in splits of txn \"%s\"; cannot use this for assigning a payment.",
               xaccTransGetDescription(txn));
         g_free (split_str);

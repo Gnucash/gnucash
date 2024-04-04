@@ -156,7 +156,7 @@ init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
     g_object_ref (notebook->notebook);
     gtk_container_remove (GTK_CONTAINER(parent), notebook->notebook);
     g_object_unref (G_OBJECT(builder));
-    gtk_widget_destroy (parent);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(parent));
 
     /* NOTE: The caller needs to unref once they attach */
 }
@@ -502,7 +502,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
 
     g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_destroy (nbt->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(nbt->dialog));
     g_free (nbt);
 
     return created_term;
@@ -711,7 +711,7 @@ billterms_window_close_handler (gpointer data)
     BillTermsWindow *btw = data;
     g_return_if_fail (btw);
 
-    gtk_widget_destroy (btw->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(btw->window));
 }
 
 void
@@ -732,7 +732,7 @@ billterms_window_destroy_cb (GtkWidget *widget, gpointer data)
 
     if (btw->window)
     {
-        gtk_widget_destroy (btw->window);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(btw->window));
         btw->window = NULL;
     }
     g_free (btw);

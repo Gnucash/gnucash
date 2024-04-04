@@ -2468,7 +2468,7 @@ StockAssistantView::StockAssistantView (GtkBuilder *builder, Account* account, G
 StockAssistantView::~StockAssistantView()
 {
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window));
-    gtk_widget_destroy (m_window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(m_window));
     DEBUG ("StockAssistantView destructor\n");
 };
 

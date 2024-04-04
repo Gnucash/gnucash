@@ -741,7 +741,7 @@ gnc_plugin_page_register_focus_widget (GncPluginPage* register_plugin_page)
         }
 
         // setup any short toolbar names
-        gnc_plugin_init_short_names (gnc_window_get_toolbar (gnc_window), toolbar_labels);
+//FIXME gtk4        gnc_plugin_init_short_names (gnc_window_get_toolbar (gnc_window), toolbar_labels);
 
         gnc_plugin_page_register_ui_update (NULL, GNC_PLUGIN_PAGE_REGISTER(register_plugin_page));
 
@@ -1485,13 +1485,13 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage* plugin_page)
 
     if (priv->sd.dialog)
     {
-        gtk_widget_destroy (priv->sd.dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(priv->sd.dialog));
         memset (&priv->sd, 0, sizeof (priv->sd));
     }
 
     if (priv->fd.dialog)
     {
-        gtk_widget_destroy (priv->fd.dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(priv->fd.dialog));
         memset (&priv->fd, 0, sizeof (priv->fd));
     }
 
@@ -1877,7 +1877,7 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
                                "document-save", GTK_RESPONSE_ACCEPT);
 
     response = gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     switch (response)
     {
@@ -2409,7 +2409,7 @@ gnc_plugin_page_register_sort_response_cb (GtkDialog* dialog,
     priv->sd.dialog = NULL;
     priv->sd.num_radio = NULL;
     priv->sd.act_radio = NULL;
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     LEAVE (" ");
 }
 
@@ -3186,7 +3186,7 @@ gnc_plugin_page_register_filter_response_cb (GtkDialog* dialog,
         }
     }
     priv->fd.dialog = NULL;
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     LEAVE (" ");
 }
 
@@ -3567,7 +3567,7 @@ gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple,
                                            GTK_RESPONSE_YES);
                     response = gnc_dialog_run (GTK_DIALOG (dialog),
                                                GNC_PREF_WARN_CHECKPRINTING_MULTI_ACCT);
-                    gtk_widget_destroy (dialog);
+//FIXME gtk4                    gtk_window_destroy (GTK_WINDOW(dialog));
                     if (response != GTK_RESPONSE_YES)
                     {
                         LEAVE ("Multiple accounts");
@@ -3831,7 +3831,7 @@ gnc_plugin_page_register_cmd_void_transaction (GSimpleAction *simple,
     }
 
     /* All done. Get rid of it. */
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_object_unref (G_OBJECT (builder));
 }
 

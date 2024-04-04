@@ -751,7 +751,7 @@ close_handler (gpointer user_data)
 {
     StockSplitInfo *info = user_data;
 
-    gtk_widget_destroy (info->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(info->window));
 }
 
 /********************************************************************\

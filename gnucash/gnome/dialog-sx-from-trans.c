@@ -529,7 +529,7 @@ sxftd_close(SXFromTransInfo *sxfti, gboolean delete_sx)
     }
     sxfti->sx = NULL;
 
-    gtk_widget_destroy (GTK_WIDGET (sxfti->dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(sxfti->dialog));
 }
 
 
