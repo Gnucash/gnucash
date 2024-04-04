@@ -69,7 +69,7 @@ void csv_export_simple_cb (GtkToggleButton *button, gpointer user_data);
 void csv_export_sep_cb (GtkWidget *radio, gpointer user_data);
 void csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data);
 
-void csv_export_show_range_cb (GtkRadioButton *button, gpointer user_data);
+void csv_export_show_range_cb (GtkToggleButton *button, gpointer user_data);
 void csv_export_start_date_cb (GtkWidget *radio, gpointer user_data);
 void csv_export_end_date_cb (GtkWidget *radio, gpointer user_data);
 
@@ -522,12 +522,12 @@ get_filter_times (CsvExportInfo *info)
  * call back for show range button
  *******************************************************/
 void
-csv_export_show_range_cb (GtkRadioButton *button, gpointer user_data)
+csv_export_show_range_cb (GtkToggleButton *button, gpointer user_data)
 {
     CsvExportInfo *info = user_data;
     gboolean active;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON(button));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON(button));
 
     active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button));
 
@@ -569,7 +569,7 @@ csv_export_start_date_cb (GtkWidget *radio, gpointer user_data)
     const gchar *name;
     gboolean active;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON(radio));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON(radio));
 
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(radio)))
     {
@@ -596,7 +596,7 @@ csv_export_end_date_cb (GtkWidget *radio, gpointer user_data)
     const gchar *name;
     gboolean active;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON(radio));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON(radio));
 
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(radio)))
     {

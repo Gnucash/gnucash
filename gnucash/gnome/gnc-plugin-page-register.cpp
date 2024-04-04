@@ -154,7 +154,7 @@ void gnc_plugin_page_register_set_sort_reversed (GncPluginPage* plugin_page,
 extern "C"
 {
 /* Callbacks for the "Filter By" dialog */
-void gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
+void gnc_plugin_page_register_filter_select_range_cb (GtkToggleButton* button,
                                                       GncPluginPageRegister* page);
 void gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
                                                GncPluginPageRegister* page);
@@ -2868,14 +2868,14 @@ get_filter_times (GncPluginPageRegister* page)
  *  associated with this filter dialog.
  */
 void
-gnc_plugin_page_register_filter_select_range_cb (GtkRadioButton* button,
+gnc_plugin_page_register_filter_select_range_cb (GtkToggleButton* button,
                                                  GncPluginPageRegister* page)
 {
     GncPluginPageRegisterPrivate* priv;
     gboolean active;
     const gchar* name;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON (button));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (button));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(button %p, page %p)", button, page);
@@ -3003,7 +3003,7 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
     const gchar* name;
     gboolean active;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON (radio));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (radio));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(radio %s(%p), page %p)",
@@ -3051,7 +3051,7 @@ gnc_plugin_page_register_filter_end_cb (GtkWidget* radio,
     const gchar* name;
     gboolean active;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON (radio));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON (radio));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(radio %s(%p), page %p)",

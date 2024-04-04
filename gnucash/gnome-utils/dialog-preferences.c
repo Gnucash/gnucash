@@ -977,19 +977,19 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
 
 /****************************************************************************/
 
-/** Connect a GtkRadioButton widget to its stored value in the preferences database.
+/** Connect a GtkToggleButton widget to its stored value in the preferences database.
  *
  *  @internal
  *
- *  @param button A pointer to the radio button that should be
+ *  @param button A pointer to the toggle button that should be
  *  connected.
  */
 static void
-gnc_prefs_connect_radio_button (GtkRadioButton *button)
+gnc_prefs_connect_toggle_button (GtkToggleButton *button)
 {
     gchar *group, *pref;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON(button));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON(button));
 
     gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref);
 
@@ -1251,10 +1251,10 @@ gnc_prefs_connect_one (const gchar *name,
         DEBUG("  %s - file chooser button", name);
         gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget), NULL);
     }
-    else if (GTK_IS_RADIO_BUTTON(widget))
+    else if (GTK_IS_TOGGLE_BUTTON(widget))
     {
         DEBUG("  %s - radio button", name);
-        gnc_prefs_connect_radio_button (GTK_RADIO_BUTTON(widget));
+        gnc_prefs_connect_radio_button (GTK_TOGGLE_BUTTON(widget)); //FIXME gtk4 needs rename
     }
     else if (GTK_IS_CHECK_BUTTON(widget))
     {

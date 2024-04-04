@@ -1644,11 +1644,14 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
 
             if (node == payment_splits)
             {
-                first_rb = gtk_radio_button_new_with_label (NULL, split_str);
+                first_rb = gtk_check_button_new_with_label (split_str);
                 rbutton = first_rb;
             }
             else
-                rbutton = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(first_rb), split_str);
+            {
+                rbutton = gtk_check_button_new_with_label (split_str);
+                gtk_check_button_set_group (GTK_CHECK_BUTTON(first_rb), GTK_CHECK_BUTTON(rbutton));
+            }
 
             g_object_set_data(G_OBJECT(rbutton), "split", split);
             gtk_box_append (GTK_BOX(content), GTK_WIDGET(rbutton));
@@ -1662,17 +1665,17 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
 
         if (answer == GTK_BUTTONS_OK)
         {
-            GSList *rbgroup = gtk_radio_button_get_group(GTK_RADIO_BUTTON(first_rb));
-            GSList *rbnode;
-            for (rbnode = rbgroup; rbnode; rbnode = rbnode->next)
-            {
-                GtkWidget *rbutton = rbnode->data;
-                if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rbutton)))
-                {
-                    selected_split = g_object_get_data(G_OBJECT(rbutton), "split");
-                    break;
-                }
-            }
+//FIXME gtk4            GSList *rbgroup = gtk_radio_button_get_group (GTK_RADIO_BUTTON(first_rb));
+//            GSList *rbnode;
+//            for (rbnode = rbgroup; rbnode; rbnode = rbnode->next)
+//            {
+//                GtkWidget *rbutton = rbnode->data;
+//                if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rbutton)))
+//                {
+//                    selected_split = g_object_get_data(G_OBJECT(rbutton), "split");
+//                    break;
+//                }
+//            }
         }
 
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));

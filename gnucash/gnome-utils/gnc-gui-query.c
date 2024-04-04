@@ -275,22 +275,22 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
 
     for (node = radio_list, i = 0; node; node = node->next, i++)
     {
-        radio_button = gtk_radio_button_new_with_mnemonic(group, node->data);
-        group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio_button));
-        gtk_widget_set_halign (GTK_WIDGET(radio_button), GTK_ALIGN_START);
+//FIXME gtk4        radio_button = gtk_radio_button_new_with_mnemonic(group, node->data);
+//        group = gtk_radio_button_get_group(GTK_RADIO_BUTTON(radio_button));
+//        gtk_widget_set_halign (GTK_WIDGET(radio_button), GTK_ALIGN_START);
 
-        if (i == default_value) /* default is first radio button */
-        {
-            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button), TRUE);
-            radio_result = default_value;
-        }
+//        if (i == default_value) /* default is first radio button */
+//        {
+//            gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(radio_button), TRUE);
+//            radio_result = default_value;
+//        }
 
-        gtk_widget_set_visible (GTK_WIDGET(radio_button), TRUE);
-        gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(radio_button));
-        g_object_set_data(G_OBJECT(radio_button), INDEX_LABEL, GINT_TO_POINTER(i));
-        g_signal_connect(radio_button, "clicked",
-                         G_CALLBACK(gnc_choose_radio_button_cb),
-                         &radio_result);
+//        gtk_widget_set_visible (GTK_WIDGET(radio_button), TRUE);
+//        gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(radio_button));
+//        g_object_set_data(G_OBJECT(radio_button), INDEX_LABEL, GINT_TO_POINTER(i));
+//        g_signal_connect(radio_button, "clicked",
+//                         G_CALLBACK(gnc_choose_radio_button_cb),
+//                         &radio_result);
     }
 
     if (!button_name)

@@ -1641,11 +1641,15 @@ create_radiobutton_widget(char *name, GncOption& option)
     {
         auto label = option.permissible_value_name(i);
 
-        widget =
-            gtk_radio_button_new_with_label_from_widget (widget ?
-                                                         GTK_RADIO_BUTTON (widget) :
-                                                         NULL,
-                                                         label && *label ? _(label) : "");
+//FIXME gtk4        widget =
+//            gtk_radio_button_new_with_label_from_widget (widget ?
+//                                                         GTK_RADIO_BUTTON (widget) :
+//                                                         NULL,
+//                                                         label && *label ? _(label) : "");
+
+        widget = gtk_check_button_new_with_label (label && *label ? _(label) : "");
+//        gtk_check_button_set_group (GTK_CHECK_BUTTON(first_rb), GTK_CHECK_BUTTON(rbutton));
+
         g_object_set_data (G_OBJECT (widget), "gnc_radiobutton_index",
                            GINT_TO_POINTER (i));
         g_signal_connect(G_OBJECT(widget), "toggled",
@@ -1738,12 +1742,14 @@ public:
 };
 
 PlotSize::PlotSize(GncOption& option) :
-    m_widget{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4)}, m_pixel_button{gtk_radio_button_new_with_label(nullptr, _("Pixels"))},
-    m_percent_button{gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(m_pixel_button), _("Percent"))},
+    m_widget{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4)}, 
+    m_pixel_button{gtk_check_button_new_with_label(_("Pixels"))},
+    m_percent_button{gtk_check_button_new_with_label(_("Percent"))},
     m_range_spinner{GTK_WIDGET(create_range_spinner(option))},
     m_adj_pct{GTK_ADJUSTMENT(g_object_ref(gtk_adjustment_new(100.0, 10.0, 100.0, 1.0, 5.0, 0.0)))},
     m_adj_px{GTK_ADJUSTMENT(g_object_ref(gtk_adjustment_new(1000.0, 110.0, 10000.0, 10.0, 250.0, 0.0)))}
 {
+    gtk_check_button_set_group (GTK_CHECK_BUTTON(m_pixel_button), GTK_CHECK_BUTTON(m_percent_button));
     gtk_box_set_homogeneous(GTK_BOX(m_widget), FALSE);
     g_object_set (G_OBJECT(m_widget), "margin", 3, NULL);
     set_tool_tip(option, m_widget);

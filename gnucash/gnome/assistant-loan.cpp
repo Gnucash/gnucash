@@ -280,8 +280,8 @@ typedef struct LoanAssistantData_
     GtkLabel         *payAcctFromLabel;
     GtkLabel         *payEscToLabel;
     GtkLabel         *payEscFromLabel;
-    GtkRadioButton   *payTxnFreqPartRb;
-    GtkRadioButton   *payTxnFreqUniqRb;
+    GtkToggleButton   *payTxnFreqPartTb;
+    GtkToggleButton   *payTxnFreqUniqTb;
     GtkBox           *payFreqHBox;
     GncFrequency     *payGncFreq;
 
@@ -528,8 +528,8 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
         ldd->payAcctFromLabel = GTK_LABEL(gtk_builder_get_object(builder, "pay_from_account_label"));
         ldd->payEscToLabel = GTK_LABEL(gtk_builder_get_object(builder, "pay_escrow_to_label"));
         ldd->payEscFromLabel = GTK_LABEL(gtk_builder_get_object(builder, "pay_escrow_from_label"));
-        ldd->payTxnFreqPartRb = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "pay_txn_part_rb"));
-        ldd->payTxnFreqUniqRb = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "pay_uniq_freq_rb"));
+        ldd->payTxnFreqPartTb = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "pay_txn_part_rb"));
+        ldd->payTxnFreqUniqTb = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "pay_uniq_freq_rb"));
         ldd->payFreqHBox = GTK_BOX(gtk_builder_get_object(builder, "pay_freq_hbox"));
     }
     /* Review Page */
@@ -805,7 +805,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                           G_CALLBACK(loan_pay_use_esc_toggle_cb), ldd );
         g_signal_connect( ldd->paySpecSrcAcct, "toggled",
                           G_CALLBACK(loan_pay_spec_src_toggle_cb), ldd );
-        g_signal_connect( ldd->payTxnFreqUniqRb, "toggled",
+        g_signal_connect( ldd->payTxnFreqUniqTb, "toggled",
                           G_CALLBACK(loan_pay_freq_toggle_cb), ldd );
 
         {
@@ -1523,11 +1523,11 @@ loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
                                           (gpointer) loan_pay_page_valid_cb, ldd );
 
 
-        g_signal_handlers_block_by_func(ldd->payTxnFreqUniqRb,
+        g_signal_handlers_block_by_func(ldd->payTxnFreqUniqTb,
                                         (gpointer) loan_pay_freq_toggle_cb, ldd );
-        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqPartRb), !rod->FreqUniq );
-        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb), rod->FreqUniq );
-        g_signal_handlers_unblock_by_func(ldd->payTxnFreqUniqRb,
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqPartTb), !rod->FreqUniq );
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqTb), rod->FreqUniq );
+        g_signal_handlers_unblock_by_func(ldd->payTxnFreqUniqTb,
                                           (gpointer) loan_pay_freq_toggle_cb, ldd );
 
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqHBox), rod->FreqUniq );
@@ -1647,7 +1647,7 @@ loan_pay_freq_toggle_cb( GtkToggleButton *tb, gpointer user_data )
 
     rod = ldd->ld.repayOpts[ldd->currentIdx];
 
-    rod->FreqUniq = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb) );
+    rod->FreqUniq = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqTb) );
     gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqHBox), rod->FreqUniq );
 
     if ( rod->FreqUniq )
