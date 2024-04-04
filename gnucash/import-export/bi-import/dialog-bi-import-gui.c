@@ -257,7 +257,7 @@ gnc_bi_import_gui_close_handler (gpointer user_data)
 {
     BillImportGui *gui = user_data;
 
-    gtk_widget_destroy (gui->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(gui->dialog));
     // gui has already been freed by this point.
     // gui->dialog = NULL;
 }

@@ -1579,7 +1579,6 @@ transaction_changed_confirm (VirtualLocation *p_new_virt_loc,
                             _("_Record Changes"), GTK_RESPONSE_ACCEPT,
                             NULL);
     response = gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_MOD);
-    gtk_widget_destroy (dialog);
 
     switch (response)
     {
@@ -1875,17 +1874,17 @@ gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
 
     /* Does the user want to be warned? */
     window = gnc_split_register_get_parent (reg);
-    dialog = gtk_message_dialog_new (GTK_WINDOW(window),
-                                     GTK_DIALOG_DESTROY_WITH_PARENT,
-                                     GTK_MESSAGE_WARNING,
-                                     GTK_BUTTONS_CANCEL,
-                                    "%s", title);
+    dialog =
+        gtk_message_dialog_new (GTK_WINDOW(window),
+                                GTK_DIALOG_DESTROY_WITH_PARENT,
+                                GTK_MESSAGE_WARNING,
+                                GTK_BUTTONS_CANCEL,
+                                "%s", title);
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                                               "%s", message);
-    gtk_dialog_add_button (GTK_DIALOG(dialog),
-                           _("_Unreconcile"),
+    gtk_dialog_add_button (GTK_DIALOG(dialog), _("_Unreconcile"),
                            GTK_RESPONSE_YES);
     response = gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_RECD_SPLIT_UNREC);
-    gtk_widget_destroy (dialog);
+
     return (response == GTK_RESPONSE_YES);
 }

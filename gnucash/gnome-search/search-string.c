@@ -161,7 +161,7 @@ gncs_validate (GNCSearchCoreType *fe)
                                          "%s",
                                          _("You need to enter some search text."));
         gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         return FALSE;
     }
 
@@ -198,7 +198,7 @@ gncs_validate (GNCSearchCoreType *fe)
                                              GTK_BUTTONS_OK,
                                              "%s", errmsg);
             gtk_dialog_run (GTK_DIALOG (dialog));
-            gtk_widget_destroy(dialog);
+//FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
             g_free (errmsg);
             valid = FALSE;
         }

@@ -212,7 +212,7 @@ gnc_ab_gettrans(GtkWidget *parent, Account *gnc_acc)
                                 _("The Online Banking import returned no transactions "
                                   "for the selected time period."));
         gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
     }
 
     /* Store the date of this retrieval */

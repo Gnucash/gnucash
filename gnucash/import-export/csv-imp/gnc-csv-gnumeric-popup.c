@@ -80,8 +80,8 @@ popup_item_activate (GtkWidget *item, gpointer *user_data)
     g_return_if_fail (elem != NULL);
     g_return_if_fail (handler != NULL);
 
-    if (handler (elem, user_data))
-        gtk_widget_destroy (gtk_widget_get_toplevel (item));
+//FIXME gtk4    if (handler (elem, user_data))
+//        gtk_window_destroy (GTK_WINDOW(gtk_widget_get_toplevel (item)));
 }
 
 static void

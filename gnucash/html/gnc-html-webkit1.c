@@ -1284,7 +1284,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
             }
             g_free(dirname);
         }
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
 
         if (result != GTK_RESPONSE_ACCEPT)
         {
@@ -1341,7 +1341,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
                             "%s", error->message );
         g_error_free( error );
 
-        g_signal_connect( dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
+//FIXME gtk4        g_signal_connect( dialog, "response", G_CALLBACK(gtk_window_destroy), NULL);
         gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
     }
 

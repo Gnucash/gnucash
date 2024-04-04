@@ -708,7 +708,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
      *  GTK_RESPONSE_DELETE_EVENT == window destroyed */
     if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
     {
-        gtk_widget_destroy(td->dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(td->dialog));
         td->dialog = NULL;
         return result;
     }
@@ -751,8 +751,8 @@ gnc_ab_trans_dialog_free(GncABTransDialog *td)
     if (!td) return;
     if (td->ab_trans)
         AB_Transaction_free(td->ab_trans);
-    if (td->dialog)
-        gtk_widget_destroy(td->dialog);
+//FIXME gtk4    if (td->dialog)
+//        gtk_window_destroy (GTK_WINDOW(td->dialog));
 
 #if (AQBANKING_VERSION_INT >= 60400)
     if (td->template_list_store)
@@ -1063,7 +1063,7 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     LEAVE(" ");
 }

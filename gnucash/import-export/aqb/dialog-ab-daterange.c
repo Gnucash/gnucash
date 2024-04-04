@@ -133,7 +133,7 @@ gnc_ab_enter_daterange(GtkWidget *parent,
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     LEAVE("");
     return result == GTK_RESPONSE_OK;

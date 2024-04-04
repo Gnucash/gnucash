@@ -1011,7 +1011,7 @@ bal_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
                        "(AqBanking or HBCI) Setup. After that, try again to "
                        "download the Online Banking Balance."));
         gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
 
     }
     else
@@ -1043,7 +1043,7 @@ bal_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
                          "%s\n%s\n%s",
                          message1, message2, message3);
             gtk_dialog_run (GTK_DIALOG(dialog));
-            gtk_widget_destroy (GTK_WIDGET(dialog));
+//FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
 
         }
         else
