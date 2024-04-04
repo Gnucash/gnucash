@@ -796,7 +796,7 @@ void CsvImpTransAssist::preview_handle_save_del_sensitivity (GtkComboBox* combo)
     auto can_delete = false;
     auto can_save = false;
     auto entry = gtk_bin_get_child (GTK_BIN(combo));
-    auto entry_text = gtk_entry_get_text (GTK_ENTRY(entry));
+    auto entry_text = gnc_entry_get_text (GTK_ENTRY(entry));
     /* Handle sensitivity of the delete and save button */
     if (gtk_combo_box_get_active_iter (combo, &iter))
     {
@@ -823,7 +823,7 @@ void CsvImpTransAssist::preview_handle_save_del_sensitivity (GtkComboBox* combo)
 void
 CsvImpTransAssist::preview_settings_name (GtkEntry* entry)
 {
-    auto text = gtk_entry_get_text (entry);
+    auto text = gnc_entry_get_text (entry);
     if (text)
         tx_imp->settings_name(text);
 
@@ -1010,7 +1010,7 @@ void CsvImpTransAssist::preview_update_separators (GtkWidget* widget)
     /* Add the custom separator if the user checked its button. */
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(custom_cbutton)))
     {
-        auto custom_sep = gtk_entry_get_text (custom_entry);
+        auto custom_sep = gnc_entry_get_text (custom_entry);
         if (custom_sep[0] != '\0') /* Don't add a blank separator (bad things will happen!). */
             checked_separators += custom_sep;
     }
@@ -1038,7 +1038,7 @@ void CsvImpTransAssist::preview_update_separators (GtkWidget* widget)
             return;
         /* If the user changed the custom separator, erase that custom separator. */
         if (widget == GTK_WIDGET(custom_entry))
-            gtk_entry_set_text (GTK_ENTRY(widget), "");
+            gnc_entry_set_text (GTK_ENTRY(widget), "");
         /* If the user checked a checkbutton, toggle that checkbutton back. */
         else
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget),
@@ -1732,7 +1732,7 @@ CsvImpTransAssist::preview_refresh ()
         g_signal_handlers_block_by_func (custom_entry, (gpointer) csv_tximp_preview_sep_button_cb, this);
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(custom_cbutton),
                                       !separators.empty());
-        gtk_entry_set_text (GTK_ENTRY(custom_entry), separators.c_str());
+        gnc_entry_set_text (GTK_ENTRY(custom_entry), separators.c_str());
         g_signal_handlers_unblock_by_func (custom_cbutton, (gpointer) csv_tximp_preview_sep_button_cb, this);
         g_signal_handlers_unblock_by_func (custom_entry, (gpointer) csv_tximp_preview_sep_button_cb, this);
         try

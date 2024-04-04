@@ -519,8 +519,8 @@ reset_dialog(GncGWENGui *gui)
 
     ENTER("gui=%p", gui);
 
-    gtk_entry_set_text(GTK_ENTRY(gui->top_entry), "");
-    gtk_entry_set_text(GTK_ENTRY(gui->second_entry), "");
+    gnc_entry_set_text(GTK_ENTRY(gui->top_entry), "");
+    gnc_entry_set_text(GTK_ENTRY(gui->second_entry), "");
     g_list_foreach(gui->progresses, (GFunc) free_progress, NULL);
     g_list_free(gui->progresses);
     gui->progresses = NULL;
@@ -703,12 +703,12 @@ show_progress(GncGWENGui *gui, Progress *progress)
         {
             /* Top-level progress */
             show_dialog(gui, TRUE);
-            gtk_entry_set_text(GTK_ENTRY(gui->top_entry), current->title);
+            gnc_entry_set_text(GTK_ENTRY(gui->top_entry), current->title);
         }
         else if (!item->next->next)
         {
             /* Second-level progress */
-            gtk_entry_set_text(GTK_ENTRY(gui->second_entry), current->title);
+            gnc_entry_set_text(GTK_ENTRY(gui->second_entry), current->title);
         }
         else
         {
@@ -717,7 +717,7 @@ show_progress(GncGWENGui *gui, Progress *progress)
             GtkWidget *box = gui->other_entries_box;
             gboolean new_box = box == NULL;
 
-            gtk_entry_set_text(GTK_ENTRY(entry), current->title);
+            gnc_entry_set_text(GTK_ENTRY(entry), current->title);
             if (new_box)
             {
                 gui->other_entries_box = box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
@@ -781,12 +781,12 @@ hide_progress(GncGWENGui *gui, Progress *progress)
         if (!item->next)
         {
             /* Top-level progress */
-            gtk_entry_set_text(GTK_ENTRY(gui->second_entry), "");
+            gnc_entry_set_text(GTK_ENTRY(gui->second_entry), "");
         }
         else if (!item->next->next)
         {
             /* Second-level progress */
-            gtk_entry_set_text(GTK_ENTRY(gui->second_entry), "");
+            gnc_entry_set_text(GTK_ENTRY(gui->second_entry), "");
         }
         else
         {
@@ -1045,7 +1045,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
 
     if (*input)
     {
-        gtk_entry_set_text(GTK_ENTRY(input_entry), *input);
+        gnc_entry_set_text(GTK_ENTRY(input_entry), *input);
         erase_password(*input);
         *input = NULL;
     }
@@ -1084,7 +1084,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
                                remember_pin);
         }
 
-        internal_input = gtk_entry_get_text(GTK_ENTRY(input_entry));
+        internal_input = gnc_entry_get_text(GTK_ENTRY(input_entry));
         if (strlen(internal_input) < min_len)
         {
             gboolean retval;
@@ -1104,7 +1104,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
             break;
         }
 
-        internal_confirmed = gtk_entry_get_text(GTK_ENTRY(confirm_entry));
+        internal_confirmed = gnc_entry_get_text(GTK_ENTRY(confirm_entry));
         if (strcmp(internal_input, internal_confirmed) == 0)
         {
             *input = g_strdup(internal_input);

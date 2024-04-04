@@ -191,29 +191,29 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
     if (gnc_ab_trans_isSEPA(td->trans_type))
     {
         AB_Transaction_SetRemoteBic(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
         AB_Transaction_SetRemoteIban(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
         AB_Transaction_SetLocalName(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->orig_name_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->orig_name_entry)));
     }
     else
     {
         AB_Transaction_SetRemoteBankCode(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
         AB_Transaction_SetRemoteAccountNumber(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
     }
     AB_Transaction_SetRemoteCountry(trans, "DE");
     AB_Transaction_SetRemoteName(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
 
     AB_Transaction_AddPurposeLine(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->purpose_entry)));
     AB_Transaction_AddPurposeLine(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->purpose_cont_entry)));
     AB_Transaction_AddPurposeLine(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont2_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->purpose_cont2_entry)));
     value = AB_Value_fromDouble(gnc_amount_edit_get_damount(
                                     GNC_AMOUNT_EDIT(td->amount_edit)));
     /* FIXME: Replace "EUR" by account-dependent string here. */
@@ -437,7 +437,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
         gtk_entry_set_max_length(GTK_ENTRY(td->recp_account_entry), 34);
     }
 
-    gtk_entry_set_text(GTK_ENTRY(td->orig_name_entry), ab_ownername);
+    gnc_entry_set_text(GTK_ENTRY(td->orig_name_entry), ab_ownername);
     gtk_label_set_text(GTK_LABEL(orig_bankname_label), ab_bankname);
     if (gnc_ab_trans_isSEPA(trans_type))
     {
@@ -932,11 +932,11 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
     if (!new_purpose_cont) new_purpose_cont = "";
 
     /* Fill in */
-    gtk_entry_set_text(GTK_ENTRY(td->recp_name_entry), new_name);
-    gtk_entry_set_text(GTK_ENTRY(td->recp_account_entry), new_account);
-    gtk_entry_set_text(GTK_ENTRY(td->recp_bankcode_entry), new_bankcode);
-    gtk_entry_set_text(GTK_ENTRY(td->purpose_entry), new_purpose);
-    gtk_entry_set_text(GTK_ENTRY(td->purpose_cont_entry), new_purpose_cont);
+    gnc_entry_set_text(GTK_ENTRY(td->recp_name_entry), new_name);
+    gnc_entry_set_text(GTK_ENTRY(td->recp_account_entry), new_account);
+    gnc_entry_set_text(GTK_ENTRY(td->recp_bankcode_entry), new_bankcode);
+    gnc_entry_set_text(GTK_ENTRY(td->purpose_entry), new_purpose);
+    gnc_entry_set_text(GTK_ENTRY(td->purpose_cont_entry), new_purpose_cont);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(td->amount_edit), new_amount);
     LEAVE(" ");
 }
@@ -1005,8 +1005,8 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "template_name"));
 
     /* Suggest recipient name as name of the template */
-    gtk_entry_set_text(GTK_ENTRY(entry),
-                       gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
+    gnc_entry_set_text(GTK_ENTRY(entry),
+                       gnc_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
 
     do
     {
@@ -1014,7 +1014,7 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
         if (retval != GTK_RESPONSE_OK)
             break;
 
-        name = gtk_entry_get_text(GTK_ENTRY(entry));
+        name = gnc_entry_get_text(GTK_ENTRY(entry));
         if (!*name)
             break;
 
@@ -1033,12 +1033,12 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
         /* Create a new template */
         templ = gnc_ab_trans_templ_new_full(
                     name,
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)),
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)),
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)),
+                    gnc_entry_get_text(GTK_ENTRY(td->recp_name_entry)),
+                    gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry)),
+                    gnc_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)),
                     gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(td->amount_edit)),
-                    gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)),
-                    gtk_entry_get_text (GTK_ENTRY(td->purpose_cont_entry)));
+                    gnc_entry_get_text(GTK_ENTRY(td->purpose_entry)),
+                    gnc_entry_get_text (GTK_ENTRY(td->purpose_cont_entry)));
 
         /* Insert it, either after the selected one or at the end */
         selection = gtk_tree_view_get_selection(td->template_gtktreeview);
@@ -1213,7 +1213,7 @@ gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
             // SEPA: The rest depends on the country code: Either Alpha-numeric or numeric only
             else
             {
-                const gchar* acct_text = gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry));
+                const gchar* acct_text = gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry));
                 // Special case for German ("DE") IBAN: Numeric only. Otherwise allow alpha-numeric
                 if (acct_text[0] == 'D' && acct_text[1] == 'E')
                 {

@@ -920,7 +920,7 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
 
     /* Name entry */
     comm_nb_page->name_entry = gtk_entry_new ();
-    gtk_entry_set_text (GTK_ENTRY(comm_nb_page->name_entry),
+    gnc_entry_set_text (GTK_ENTRY(comm_nb_page->name_entry),
                         gnc_commodity_get_fullname (comm));
     label = gtk_label_new_with_mnemonic (_("Name or _description"));
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), comm_nb_page->name_entry);
@@ -943,7 +943,7 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
 
     /* Mnemonic entry */
     comm_nb_page->mnemonic_entry = gtk_entry_new ();
-    gtk_entry_set_text (GTK_ENTRY(comm_nb_page->mnemonic_entry),
+    gnc_entry_set_text (GTK_ENTRY(comm_nb_page->mnemonic_entry),
                        gnc_commodity_get_mnemonic (comm));
     label = gtk_label_new_with_mnemonic (
                 _("_Ticker symbol or other abbreviation"));
@@ -1083,9 +1083,9 @@ gnc_ui_qif_import_commodity_update (QIFImportWindow * wind)
         comm_nb_page  = g_object_get_data (G_OBJECT(notebook_page), "page_struct");
 
         /* Get any changes from the commodity page. */
-        mnemonic  = gtk_entry_get_text (GTK_ENTRY(comm_nb_page->mnemonic_entry));
+        mnemonic  = gnc_entry_get_text (GTK_ENTRY(comm_nb_page->mnemonic_entry));
         name_space = gnc_ui_namespace_picker_ns (comm_nb_page->namespace_combo);
-        fullname  = gtk_entry_get_text (GTK_ENTRY(comm_nb_page->name_entry));
+        fullname  = gnc_entry_get_text (GTK_ENTRY(comm_nb_page->name_entry));
 
         /* Update the commodity with the new values. */
         gnc_commodity_set_namespace (comm_nb_page->commodity, name_space);
@@ -1703,7 +1703,7 @@ gnc_ui_qif_import_load_file_complete (GtkAssistant  *assistant,
     const gchar * path_to_load;
 
     /* Get the file name. */
-    path_to_load = gtk_entry_get_text (GTK_ENTRY(wind->filename_entry));
+    path_to_load = gnc_entry_get_text (GTK_ENTRY(wind->filename_entry));
 
     /* Validate the chosen filename. */
     if (strlen (path_to_load) == 0)
@@ -1748,7 +1748,7 @@ gnc_ui_qif_import_load_file_prepare (GtkAssistant *assistant, gpointer user_data
 
 
     /* Get the file name. */
-    path_to_load = gtk_entry_get_text (GTK_ENTRY(wind->filename_entry));
+    path_to_load = gnc_entry_get_text (GTK_ENTRY(wind->filename_entry));
 
     /* Calculate status for the Assistant "Next" Button */
     if (strlen (path_to_load) != 0)
@@ -1811,7 +1811,7 @@ gnc_ui_qif_import_select_file_cb (GtkButton * button,
     g_free (default_dir);
 
     /* set the filename entry for what was selected */
-    gtk_entry_set_text (GTK_ENTRY(wind->filename_entry), file_name);
+    gnc_entry_set_text (GTK_ENTRY(wind->filename_entry), file_name);
     g_free (file_name);
 
     mark_page_complete (assistant,
@@ -1890,7 +1890,7 @@ gnc_ui_qif_import_load_progress_start_cb (GtkButton * button,
     gtk_widget_set_sensitive (wind->load_pause, TRUE);
 
     /* Get the file name. */
-    path_to_load = gtk_entry_get_text (GTK_ENTRY(wind->filename_entry));
+    path_to_load = gnc_entry_get_text (GTK_ENTRY(wind->filename_entry));
 
     /* Create the <qif-file> object. */
     scm_qiffile          = scm_call_0 (make_qif_file);
@@ -2229,7 +2229,7 @@ gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
     if (wind->selected_file == SCM_BOOL_F)
     {
         GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
-        gtk_entry_set_text (GTK_ENTRY(wind->filename_entry), "");
+        gnc_entry_set_text (GTK_ENTRY(wind->filename_entry), "");
         gtk_assistant_set_current_page (assistant, 1);
     }
     else
@@ -2242,7 +2242,7 @@ gnc_ui_qif_import_account_prepare (GtkAssistant  *assistant, gpointer user_data)
             gchar * default_acctname = NULL;
 
             default_acctname = gnc_scm_call_1_to_string (default_acct, wind->selected_file);
-            gtk_entry_set_text (GTK_ENTRY(wind->acct_entry), default_acctname);
+            gnc_entry_set_text (GTK_ENTRY(wind->acct_entry), default_acctname);
             g_free (default_acctname);
         }
     }
@@ -2276,7 +2276,7 @@ gnc_ui_qif_import_acct_enter_cb (GtkWidget * widget,
 
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
 
-    const gchar * acct_name = gtk_entry_get_text (GTK_ENTRY(wind->acct_entry));
+    const gchar * acct_name = gnc_entry_get_text (GTK_ENTRY(wind->acct_entry));
 
     if (!acct_name || acct_name[0] == 0)
     {
@@ -2307,7 +2307,7 @@ gnc_ui_qif_import_acct_valid_cb (GtkWidget * widget,
 
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
 
-    const gchar * acct_name = gtk_entry_get_text (GTK_ENTRY(wind->acct_entry));
+    const gchar * acct_name = gnc_entry_get_text (GTK_ENTRY(wind->acct_entry));
 
     if (!acct_name || acct_name[0] == 0)
     {
@@ -2337,7 +2337,7 @@ gnc_ui_qif_import_loaded_files_prepare (GtkAssistant *assistant,
 {
     QIFImportWindow * wind = user_data;
 
-    const gchar * acct_name = gtk_entry_get_text (GTK_ENTRY(wind->acct_entry));
+    const gchar * acct_name = gnc_entry_get_text (GTK_ENTRY(wind->acct_entry));
     SCM    fix_default = scm_c_eval_string ("qif-import:fix-from-acct");
     SCM    scm_name;
 
@@ -2366,7 +2366,7 @@ gnc_ui_qif_import_load_another_cb (GtkButton * button,
     QIFImportWindow * wind = user_data;
     GtkAssistant *assistant = GTK_ASSISTANT(wind->window);
 
-    gtk_entry_set_text (GTK_ENTRY(wind->filename_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(wind->filename_entry), "");
 
     gtk_assistant_set_current_page (assistant, 1);
 }
@@ -2868,7 +2868,7 @@ gnc_ui_qif_import_commodity_notebook_update_combos (QIFImportWindow * wind, gboo
                 DIAG_COMM_ALL);
 
             if(!init_combos)
-                gtk_entry_set_text (GTK_ENTRY(gtk_bin_get_child (
+                gnc_entry_set_text (GTK_ENTRY(gtk_bin_get_child (
                                     GTK_BIN(comm_nb_page->namespace_combo))), "");
         }
         else
@@ -2957,8 +2957,8 @@ gnc_ui_qif_import_comm_valid (GtkAssistant *assistant, gpointer user_data)
     gnc_commodity_namespace *newns;
 
     gchar       *name_space = gnc_ui_namespace_picker_ns (comm_nb_page->namespace_combo);
-    const gchar *name       = gtk_entry_get_text (GTK_ENTRY(comm_nb_page->name_entry));
-    const gchar *mnemonic   = gtk_entry_get_text (GTK_ENTRY(comm_nb_page->mnemonic_entry));
+    const gchar *name       = gnc_entry_get_text (GTK_ENTRY(comm_nb_page->name_entry));
+    const gchar *mnemonic   = gnc_entry_get_text (GTK_ENTRY(comm_nb_page->mnemonic_entry));
 
     /* set the page complete flag to TRUE to start with */
     comm_nb_page->page_complete = TRUE;
@@ -3137,7 +3137,7 @@ gnc_ui_qif_import_convert_progress_start_cb (GtkButton * button,
                                        0);
 
     /* The default currency. */
-    const gchar *currname = gtk_entry_get_text (GTK_ENTRY(gtk_bin_get_child (
+    const gchar *currname = gnc_entry_get_text (GTK_ENTRY(gtk_bin_get_child (
                                                 GTK_BIN(GTK_COMBO_BOX(wind->currency_picker)))));
 
     /* Raise the busy flag so the assistant can't be canceled unexpectedly. */

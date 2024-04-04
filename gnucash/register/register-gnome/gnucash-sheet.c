@@ -152,7 +152,7 @@ gnucash_sheet_set_entry_value (GnucashSheet *sheet, const char* value)
     g_signal_handler_block (G_OBJECT(sheet->entry),
                             sheet->delete_signal);
 
-    gtk_entry_set_text (GTK_ENTRY(sheet->entry), value);
+    gnc_entry_set_text (GTK_ENTRY(sheet->entry), value);
 
     g_signal_handler_unblock (G_OBJECT(sheet->entry),
                               sheet->delete_signal);
@@ -991,7 +991,7 @@ make_new_text (GnucashSheet *sheet, const char* new_text, int *position)
 {
     GtkEditable* editable = (GTK_EDITABLE(sheet->entry));
     int pos, bound;
-    const char* old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
+    const char* old_text = gnc_entry_get_text (GTK_ENTRY(sheet->entry));
     int old_length = g_utf8_strlen (old_text, -1);
     int insert_length = g_utf8_strlen (new_text, -1);
 
@@ -1046,7 +1046,7 @@ gnucash_sheet_insert_cb (GtkEditable *editable,
     const char *retval;
     int start_sel = 0, end_sel = 0;
     int old_position = *position;
-    const char* old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
+    const char* old_text = gnc_entry_get_text (GTK_ENTRY(sheet->entry));
 
     g_assert (GTK_WIDGET(editable) == sheet->entry);
     if (sheet->input_cancelled)
@@ -1109,7 +1109,7 @@ gnucash_sheet_insert_cb (GtkEditable *editable,
 static char*
 delete_text (GnucashSheet *sheet, int pos, int bound)
 {
-    const char* old_text = gtk_entry_get_text (GTK_ENTRY(sheet->entry));
+    const char* old_text = gnc_entry_get_text (GTK_ENTRY(sheet->entry));
     int old_length = g_utf8_strlen (old_text, -1);
     char* begin, *end;
     char *retval = NULL;
@@ -1307,7 +1307,7 @@ gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
     gnc_item_edit_configure (GNC_ITEM_EDIT(sheet->item_editor));
     gtk_widget_set_visible (GTK_WIDGET(sheet->item_editor), TRUE);
 
-    gtk_entry_set_text (GTK_ENTRY(sheet->entry), text);
+    gnc_entry_set_text (GTK_ENTRY(sheet->entry), text);
 
     sheet->editing = TRUE;
 

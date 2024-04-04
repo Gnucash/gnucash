@@ -286,7 +286,7 @@ csv_export_custom_entry_cb (GtkWidget *widget, gpointer user_data)
     GtkAssistant *assistant = GTK_ASSISTANT(info->assistant);
     const gchar *custom_str;
 
-    custom_str = gtk_entry_get_text (GTK_ENTRY(info->custom_entry));
+    custom_str = gnc_entry_get_text (GTK_ENTRY(info->custom_entry));
     info->separator_str = strdup (custom_str);
 
     if (info->use_custom == TRUE && gtk_entry_get_text_length (GTK_ENTRY(info->custom_entry)) == 0)

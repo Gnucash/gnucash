@@ -242,7 +242,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
 
     /* Run the dialog to get the new account name. */
     response = gtk_dialog_run(GTK_DIALOG(dlg));
-    name = gtk_entry_get_text(GTK_ENTRY(entry));
+    name = gnc_entry_get_text(GTK_ENTRY(entry));
 
     /* Did the user enter a name and click OK? */
     if (response == GTK_RESPONSE_OK && name && *name)

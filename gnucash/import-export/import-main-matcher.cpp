@@ -979,7 +979,7 @@ static void override_widget_clicked (GtkWidget *widget, EntryInfo *entryinfo)
 {
     gtk_widget_set_visible (GTK_WIDGET (entryinfo->override_widget), false);
     gtk_widget_set_sensitive (entryinfo->entry, true);
-    gtk_entry_set_text (GTK_ENTRY (entryinfo->entry), "");
+    gnc_entry_set_text (GTK_ENTRY (entryinfo->entry), "");
     gtk_widget_grab_focus (entryinfo->entry);
     *entryinfo->can_edit = true;
 }
@@ -997,10 +997,10 @@ setup_entry (EntryInfo *entryinfo)
     gtk_widget_set_visible (override_widget, !sensitive);
 
     if (sensitive && initial && *initial)
-        gtk_entry_set_text (GTK_ENTRY (entry), initial);
+        gnc_entry_set_text (GTK_ENTRY (entry), initial);
     else if (!sensitive)
     {
-        gtk_entry_set_text (GTK_ENTRY (entry), _("Click Edit to modify"));
+        gnc_entry_set_text (GTK_ENTRY (entry), _("Click Edit to modify"));
         g_signal_connect (override_widget, "clicked", G_CALLBACK (override_widget_clicked),
                           entryinfo);
     }
@@ -1069,9 +1069,9 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo& rowinfo,
     switch (gtk_dialog_run (GTK_DIALOG(dialog)))
     {
     case GTK_RESPONSE_OK:
-        *new_desc = g_strdup (gtk_entry_get_text (GTK_ENTRY (desc_entry)));
-        *new_notes = g_strdup (gtk_entry_get_text (GTK_ENTRY (notes_entry)));
-        *new_memo = g_strdup (gtk_entry_get_text (GTK_ENTRY (memo_entry)));
+        *new_desc = g_strdup (gnc_entry_get_text (GTK_ENTRY (desc_entry)));
+        *new_notes = g_strdup (gnc_entry_get_text (GTK_ENTRY (notes_entry)));
+        *new_memo = g_strdup (gnc_entry_get_text (GTK_ENTRY (memo_entry)));
         retval = true;
         break;
     default:

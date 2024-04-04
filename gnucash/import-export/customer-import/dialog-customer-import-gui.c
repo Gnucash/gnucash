@@ -178,7 +178,7 @@ void
 gnc_customer_import_gui_ok_cb (GtkWidget *widget, gpointer data)
 {
     CustomerImportGui *gui = data;
-    gchar *filename = g_strdup( gtk_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
+    gchar *filename = g_strdup( gnc_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
     customer_import_stats stats;
     customer_import_result res;
     guint n_fixed, n_deleted, n_customers_created, n_customers_updated;
@@ -260,7 +260,7 @@ void gnc_customer_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
     filename = gnc_plugin_customer_import_getFilename (gnc_ui_get_gtk_window (widget));
     if (filename)
     {
-        gtk_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );
+        gnc_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );
         g_free( filename );
     }
 }
@@ -268,7 +268,7 @@ void gnc_customer_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
 void gnc_customer_import_gui_filenameChanged_cb (GtkWidget *widget, gpointer data)
 {
     CustomerImportGui *gui = data;
-    gchar *filename = g_strdup( gtk_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
+    gchar *filename = g_strdup( gnc_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
 
     // generate preview
     gtk_list_store_clear (gui->store);

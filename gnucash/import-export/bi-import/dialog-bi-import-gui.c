@@ -200,7 +200,7 @@ void
 gnc_bi_import_gui_ok_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    gchar *filename = g_strdup( gtk_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
+    gchar *filename = g_strdup( gnc_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
     bi_import_stats stats;
     bi_import_result res;
     guint n_fixed, n_deleted, n_invoices_created, n_invoices_updated;
@@ -285,7 +285,7 @@ void gnc_bi_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
     if (filename)
     {
         //printf("Setting filename"); // debug
-        gtk_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );
+        gnc_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );
         //printf("Set filename"); // debug
         g_free( filename );
     }
@@ -294,7 +294,7 @@ void gnc_bi_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
 void gnc_bi_import_gui_filenameChanged_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
-    gchar *filename = g_strdup( gtk_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
+    gchar *filename = g_strdup( gnc_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
 
     // generate preview
     gtk_list_store_clear (gui->store);
