@@ -153,7 +153,7 @@ reset_selection_text (GNCGeneralSearch *gsl)
     else
         text = qof_object_printable (priv->type, gsl->selected_item);
 
-    gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
+    gnc_entry_set_text(GTK_ENTRY(gsl->entry), text);
 }
 
 /* We've got a refresh event */
@@ -295,7 +295,7 @@ gnc_gsl_focus_out_cb (GtkEntry         *entry,
     if (!valid_iter)
         return FALSE;
 
-    text = gtk_entry_get_text(entry);
+    text = gnc_entry_get_text(entry);
     lc_text = g_utf8_strdown(text, -1);
 
     /* The last, valid selected entry can match the entered text

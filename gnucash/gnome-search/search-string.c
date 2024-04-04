@@ -220,7 +220,7 @@ entry_changed (GtkEntry *entry, GNCSearchString *fe)
 {
     const char *new_str;
 
-    new_str = gtk_entry_get_text(entry);
+    new_str = gnc_entry_get_text(entry);
     gnc_search_string_set_value (fe, new_str);
 }
 
@@ -298,7 +298,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     /* Build and connect the entry window */
     entry = gtk_entry_new ();
     if (fi->value)
-        gtk_entry_set_text (GTK_ENTRY (entry), fi->value);
+        gnc_entry_set_text (GTK_ENTRY (entry), fi->value);
     g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), fe);
     gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
     fi->entry = entry;
