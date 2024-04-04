@@ -1076,7 +1076,10 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     {
         gboolean remember_pin;
 
-        if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+//FIXME gtk4        if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+
+//        if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
             break;
 
         if (!is_tan)
@@ -1158,7 +1161,9 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     gtk_box_prepend (GTK_BOX(gtk_dialog_get_content_area (GTK_DIALOG(dialog))), GTK_WIDGET(vbox));
     gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
 
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4    result = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     if (result < 1 || result > 3)

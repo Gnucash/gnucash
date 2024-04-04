@@ -113,7 +113,8 @@ check_readonly_threshold (const gchar *datestr, GDate *d, gboolean warn)
                                    "%s", dialog_title);
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                                  "%s", dialog_msg);
-            gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4            gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
 
 //        g_warning("Entered date %s is before the \"auto-read-only threshold\";"

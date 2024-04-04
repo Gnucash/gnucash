@@ -443,7 +443,10 @@ Account * gnc_import_select_account(GtkWidget *parent,
 
         do
         {
-            response = gtk_dialog_run(GTK_DIALOG(picker->dialog));
+//FIXME gtk4            response = gtk_dialog_run(GTK_DIALOG(picker->dialog));
+gtk_window_set_modal (GTK_WINDOW(picker->dialog), true); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
             switch (response)
             {
             case GNC_RESPONSE_NEW:

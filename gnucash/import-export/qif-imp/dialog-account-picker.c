@@ -241,7 +241,10 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
     gtk_box_prepend (GTK_BOX(gtk_dialog_get_content_area (GTK_DIALOG(dlg))), GTK_WIDGET(entry));
 
     /* Run the dialog to get the new account name. */
-    response = gtk_dialog_run(GTK_DIALOG(dlg));
+//FIXME gtk4    response = gtk_dialog_run(GTK_DIALOG(dlg));
+gtk_window_set_modal (GTK_WINDOW(dlg), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     name = gnc_entry_get_text(GTK_ENTRY(entry));
 
     /* Did the user enter a name and click OK? */
@@ -481,7 +484,9 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
 
     do
     {
-        response = gtk_dialog_run(GTK_DIALOG(wind->dialog));
+//FIXME gtk4        response = gtk_dialog_run(GTK_DIALOG(wind->dialog));
+gtk_window_set_modal (GTK_WINDOW(wind->dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
     }
     while (response == GNC_RESPONSE_NEW);
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(wind->dialog));

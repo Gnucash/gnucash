@@ -250,17 +250,21 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET (dialog));
 
     /* Now run the dialog */
-    if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK)
-    {
-        if (priv->selected_accounts)
-            g_list_free (priv->selected_accounts);
 
-        priv->selected_accounts =
-            gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
+//FIXME gtk4    if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 
-        desc = describe_button (fi);
-        gtk_label_set_text (GTK_LABEL (gtk_check_button_get_child (GTK_CHECK_BUTTON(button))), desc);
-    }
+//    if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK)
+//    {
+//        if (priv->selected_accounts)
+//            g_list_free (priv->selected_accounts);
+
+//        priv->selected_accounts =
+//            gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
+
+//        desc = describe_button (fi);
+//        gtk_label_set_text (GTK_LABEL (gtk_check_button_get_child (GTK_CHECK_BUTTON(button))), desc);
+//    }
 
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }

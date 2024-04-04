@@ -1067,7 +1067,12 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo& rowinfo,
     gtk_widget_set_visible (GTK_WIDGET(dialog), true);
 
     bool  retval = false;
-    switch (gtk_dialog_run (GTK_DIALOG(dialog)))
+
+//FIXME gtk4    switch (gtk_dialog_run (GTK_DIALOG(dialog)))
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
+gint response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
+    switch (response)
     {
     case GTK_RESPONSE_OK:
         *new_desc = g_strdup (gnc_entry_get_text (GTK_ENTRY (desc_entry)));
@@ -1830,7 +1835,11 @@ bool
 gnc_gen_trans_list_run (GNCImportMainMatcher *info)
 {
     /* DEBUG("Begin"); */
-    bool result = gtk_dialog_run (GTK_DIALOG (info->main_widget));
+
+//FIXME gtk4    bool result = gtk_dialog_run (GTK_DIALOG (info->main_widget));
+gtk_window_set_modal (GTK_WINDOW(info->main_widget), true); //FIXME gtk4
+bool result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     /* DEBUG("Result was %d", result); */
 
     /* No destroying here since the dialog was already destroyed through

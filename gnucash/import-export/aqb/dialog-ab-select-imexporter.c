@@ -213,8 +213,10 @@ profile_changed (GtkTreeSelection* sel, gpointer data)
 gboolean
 gnc_ab_select_imex_dlg_run (GncABSelectImExDlg* imexd)
 {
+//FIXME gtk4    int response = gtk_dialog_run (GTK_DIALOG (imexd->dialog));
+gtk_window_set_modal (GTK_WINDOW(imexd->dialog), TRUE); //FIXME gtk4
+int response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
-    int response = gtk_dialog_run (GTK_DIALOG (imexd->dialog));
     return response == GTK_RESPONSE_OK ? TRUE : FALSE;
 }
 

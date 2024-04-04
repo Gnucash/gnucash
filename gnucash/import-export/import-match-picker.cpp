@@ -457,7 +457,10 @@ gnc_import_match_picker_run_and_close (GtkWidget *parent, GNCImportTransInfo *tr
     /* Let this dialog run and close. */
     /*DEBUG("Right before run and close");*/
     gtk_window_set_modal(GTK_WINDOW(matcher->transaction_matcher), TRUE);
-    response = gtk_dialog_run (GTK_DIALOG (matcher->transaction_matcher));
+
+//FIXME gtk4    response = gtk_dialog_run (GTK_DIALOG (matcher->transaction_matcher));
+gtk_window_set_modal (GTK_WINDOW(matcher->transaction_matcher), true); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
     
     gnc_save_window_size(GNC_PREFS_GROUP,
                          GTK_WINDOW (matcher->transaction_matcher));

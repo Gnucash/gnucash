@@ -642,7 +642,8 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
                 gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                                           "%s", _ ("The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book. "
                                                                    "This setting can be changed in File->Properties->Accounts."));
-                gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4                gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4                gtk_window_destroy (GTK_WINDOW(dialog));
 
                 g_date_free (readonly_threshold);
