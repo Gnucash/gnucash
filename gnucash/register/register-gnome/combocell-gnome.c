@@ -203,12 +203,17 @@ activate_item_cb (GncItemList* item_list, char* item_string, gpointer data)
 }
 
 static void
-key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer data)
+key_press_item_cb (GncItemList* item_list, const GdkEvent* event, gpointer data)
 {
     ComboCell* cell = data;
     PopBox* box = cell->cell.gui_private;
+    guint keyval;
 
-    switch (event->keyval)
+    if ((gdk_event_get_event_type (event) != GDK_KEY_PRESS) ||
+         !gdk_event_get_keyval (event, &keyval))
+        return;
+
+    switch (keyval)
     {
     case GDK_KEY_Escape:
         gnc_item_edit_hide_popup (box->item_edit);
@@ -217,7 +222,7 @@ key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer data)
 
     default:
         gtk_widget_event (GTK_WIDGET (box->sheet),
-                          (GdkEvent*) event);
+                          (GdkEvent*)event);
         break;
     }
 }
@@ -720,7 +725,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
 {
     ComboCell* cell = (ComboCell*) bcell;
     PopBox* box = cell->cell.gui_private;
-    GdkEventKey* event = gui_data;
+    const GdkEvent* event = (GdkEvent*)gui_data; //FIXME gtk4
     gboolean keep_on_going = FALSE;
     gboolean extra_colon;
     gunichar unicode_value;
@@ -730,14 +735,22 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     int find_pos;
     int new_pos;
 
-    if (event->type != GDK_KEY_PRESS)
+    if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return FALSE;
 
-    unicode_value = gdk_keyval_to_unicode (event->keyval);
-    switch (event->keyval)
+    guint           keyval;
+    GdkModifierType state;
+    if (!gdk_event_get_keyval (event, &keyval) ||
+        !gdk_event_get_state (event, &state))
+    {
+        return FALSE;
+    }
+
+    unicode_value = gdk_keyval_to_unicode (keyval);
+    switch (keyval)
     {
     case GDK_KEY_slash:
-        if (! (event->state & GDK_MOD1_MASK))
+        if (! (state & GDK_MOD1_MASK))
         {
             if (unicode_value == box->complete_char)
                 break;
@@ -756,7 +769,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
             g_free (string);
             return FALSE;
         }
-        if (! (event->state & GDK_CONTROL_MASK) &&
+        if (! (state & GDK_CONTROL_MASK) &&
             !keep_on_going)
             return FALSE;
 
@@ -798,7 +811,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     if (unicode_value != box->complete_char)
         return FALSE;
 
-    if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    if (state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
         return FALSE;
 
     if ((*cursor_position < bcell->value_chars) &&
