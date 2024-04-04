@@ -485,7 +485,10 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     done = FALSE;
     while (!done)
     {
-        response = gtk_dialog_run (GTK_DIALOG(nbt->dialog));
+//FIXME gtk4        response = gtk_dialog_run (GTK_DIALOG(nbt->dialog));
+gtk_window_set_modal (GTK_WINDOW(nbt->dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         switch (response)
         {
         case GTK_RESPONSE_OK:

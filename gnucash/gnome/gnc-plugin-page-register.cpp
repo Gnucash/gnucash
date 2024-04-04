@@ -1875,7 +1875,9 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
     gnc_gtk_dialog_add_button (dialog, _ ("_Save Transaction"),
                                "document-save", GTK_RESPONSE_ACCEPT);
 
-    response = gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    response = gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     switch (response)
@@ -3820,7 +3822,10 @@ gnc_plugin_page_register_cmd_void_transaction (GSimpleAction *simple,
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), window);
 
-    result = gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     if (result == GTK_RESPONSE_OK)
     {
         reason = gnc_entry_get_text (GTK_ENTRY (entry));

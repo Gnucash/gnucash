@@ -164,12 +164,16 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
 //FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
     ddc->retval = FALSE;
-    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
-    {
+
+//FIXME gtk4    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(ddc->dialog), TRUE); //FIXME gtk4
+
+//    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+//    {
         /* If response is OK but flag is not set, try again */
-        if (ddc->retval)
-            break;
-    }
+//        if (ddc->retval)
+//            break;
+//    }
 
     g_object_unref(G_OBJECT(builder));
 
@@ -305,12 +309,16 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     gnc_date_grab_focus (GNC_DATE_EDIT (ddc->post_date));
 
     ddc->retval = FALSE;
-    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
-    {
+
+//FIXME gtk4        while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(ddc->dialog), TRUE); //FIXME gtk4
+
+//    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+//    {
         /* If response is OK but flag is not set, try again */
-        if (ddc->retval)
-            break;
-    }
+//        if (ddc->retval)
+//            break;
+//    }
 
     g_object_unref(G_OBJECT(builder));
 
@@ -397,12 +405,16 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "memo_label")), FALSE);
 
     ddc->retval = FALSE;
-    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
-    {
+
+//FIXME gtk4    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(ddc->dialog), TRUE); //FIXME gtk4
+
+//    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+//    {
         /* If response is OK but flag is not set, try again */
-        if (ddc->retval)
-            break;
-    }
+//        if (ddc->retval)
+//            break;
+//    }
 
     g_object_unref(G_OBJECT(builder));
 

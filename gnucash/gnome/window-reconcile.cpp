@@ -821,15 +821,19 @@ startRecnWindow(GtkWidget *parent, Account *account,
         gnc_reconcile_interest_xfer_run( &data );
     }
 
-    while (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
-    {
+//FIXME gtk4    while (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL;
+
+//    while (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+//    {
         /* If response is OK but end_value not valid, try again */
-        if (gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(end_value), NULL))
-        {
-            result = GTK_RESPONSE_OK;
-            break;
-        }
-    }
+//        if (gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(end_value), NULL))
+//        {
+//            result = GTK_RESPONSE_OK;
+//            break;
+//        }
+//    }
 
     if (result == GTK_RESPONSE_OK)
     {

@@ -1062,7 +1062,9 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GSimpleAction *simple,
                                _("_Delete"), GTK_RESPONSE_ACCEPT,
                                (gchar *)NULL);
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4    response = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy(GTK_WINDOW(dialog));
 
         if (GTK_RESPONSE_ACCEPT == response)

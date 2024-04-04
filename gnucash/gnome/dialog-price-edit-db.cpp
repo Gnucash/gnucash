@@ -439,7 +439,10 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
     button = GTK_WIDGET(gtk_builder_get_object (builder, "checkbutton_app"));
     g_signal_connect (button, "toggled", G_CALLBACK (check_event_app_cb), pdb_dialog);
 
-    auto result = gtk_dialog_run (GTK_DIALOG (pdb_dialog->remove_dialog));
+//FIXME gtk4    auto result = gtk_dialog_run (GTK_DIALOG (pdb_dialog->remove_dialog));
+gtk_window_set_modal (GTK_WINDOW(pdb_dialog->remove_dialog), true); //FIXME gtk4
+auto result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     if (result == GTK_RESPONSE_OK)
     {
         const char *fmt = _("Are you sure you want to delete these prices?");

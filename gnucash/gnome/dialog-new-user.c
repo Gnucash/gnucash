@@ -191,7 +191,10 @@ gnc_ui_new_user_cancel_dialog (GtkWindow *parent)
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 
-    result = gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     keepshowing = (result == GTK_RESPONSE_YES);
 
     gnc_set_first_startup (keepshowing);

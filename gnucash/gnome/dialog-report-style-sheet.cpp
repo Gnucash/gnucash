@@ -123,7 +123,8 @@ gnc_style_sheet_options_apply_cb (GncOptionsDialog * propertybox,
                                                    GTK_BUTTONS_OK,
                                                    "%s",
                                                    (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_free (iter->data);
     }
@@ -245,7 +246,10 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
 
     /* get the name */
     gtk_window_set_transient_for (GTK_WINDOW(dlg), GTK_WINDOW(ssd->toplevel));
-    dialog_retval = gtk_dialog_run (GTK_DIALOG(dlg));
+
+//FIXME gtk4    dialog_retval = gtk_dialog_run (GTK_DIALOG(dlg));
+gtk_window_set_modal (GTK_WINDOW(dlg), true); //FIXME gtk4
+dialog_retval = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
     if (dialog_retval == GTK_RESPONSE_OK)
     {

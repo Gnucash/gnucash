@@ -294,7 +294,10 @@ iw_ask_unpost (InvoiceWindow *iw)
 
 //FIXME gtk4    gtk_widget_show_all(dialog);
 
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4    response = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     if (response == GTK_RESPONSE_OK)
         iw->reset_tax_tables =
             gtk_toggle_button_get_active(toggle);
@@ -928,7 +931,9 @@ use_default_report_template_or_change (GtkWindow *parent)
     else
         g_timeout_add (100, update_progress_bar, args);
 
-    result = gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
     g_source_remove_by_user_data (args);
 

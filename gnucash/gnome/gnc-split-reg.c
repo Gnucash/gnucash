@@ -903,7 +903,8 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
                                                  "%s", anchor_error);
                 gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                          "%s", anchor_split);
-                gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4                gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4                gtk_window_destroy (GTK_WINDOW(dialog));
                 return;
             }
@@ -1135,7 +1136,8 @@ is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans)
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book. "
                         "This setting can be changed in File->Properties->Accounts."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         return TRUE;
     }
@@ -1150,7 +1152,8 @@ is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans)
                                         "%s", title);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 message, reason);
-        gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         return TRUE;
     }
@@ -1429,7 +1432,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
                                                 "%s", anchor_error);
                 gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                         "%s", anchor_split);
-                gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4                gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4                gtk_window_destroy (GTK_WINDOW(dialog));
                 return;
             }
