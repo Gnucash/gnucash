@@ -644,7 +644,7 @@ static const char
 
     main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX(main_vbox), FALSE);
-    gtk_container_set_border_width (GTK_CONTAINER(main_vbox), 6);
+    gnc_box_set_all_margins (GTK_BOX(main_vbox), 6);
     gtk_widget_set_visible (GTK_WIDGET(main_vbox), TRUE);
 
     label = gtk_label_new (msg);
@@ -654,7 +654,7 @@ static const char
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX(vbox), TRUE);
-    gtk_container_set_border_width (GTK_CONTAINER(vbox), 6);
+    gnc_box_set_all_margins (GTK_BOX(vbox), 6);
     gtk_box_prepend (GTK_BOX(main_vbox), GTK_WIDGET(vbox));
     gtk_widget_set_visible (GTK_WIDGET(vbox), TRUE);
 

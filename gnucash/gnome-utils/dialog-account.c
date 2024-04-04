@@ -890,8 +890,8 @@ verify_children_compatible (AccountWindow *aw)
     gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (GTK_DIALOG(dialog))), GTK_WIDGET(hbox));
 
     /* spacings */
-    gtk_container_set_border_width (GTK_CONTAINER(dialog), 5);
-    gtk_container_set_border_width (GTK_CONTAINER(hbox), 5);
+    gnc_box_set_all_margins (GTK_BOX(dialog), 5);
+    gnc_box_set_all_margins (GTK_BOX(hbox), 5);
     gtk_box_set_spacing (GTK_BOX(gtk_dialog_get_content_area (GTK_DIALOG(dialog))), 14);
 
 //FIXME gtk4    gtk_widget_show_all (hbox);

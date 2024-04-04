@@ -995,7 +995,7 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     g_object_set (label, "margin", 0, NULL);
 
     gtk_grid_attach (GTK_GRID(table), comm_nb_page->namespace_combo, 1, 2, 1, 1);
-    gtk_container_set_border_width (GTK_CONTAINER(notebook_page), 12);
+    gnc_box_set_all_margins (GTK_BOX(notebook_page), 12);
     gtk_box_append (GTK_BOX(notebook_page), GTK_WIDGET(table));
     gtk_box_set_spacing (GTK_BOX(notebook_page), 12);
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(wind->commodity_notebook));
