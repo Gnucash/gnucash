@@ -1212,7 +1212,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
                                               _("_Cancel"), GTK_RESPONSE_CANCEL,
                                               _("_Save"), GTK_RESPONSE_ACCEPT,
                                               NULL);
-        gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
+//FIXME gtk4        gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog), TRUE);
 
         // Does the jobname look like a valid full file path?
         basename = g_path_get_basename(jobname);
@@ -1256,7 +1256,9 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         // If we have an already existing directory, propose it now.
         if (export_dirname)
         {
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(dialog), export_dirname);
+            GFile *file = g_file_new_for_path (export_dirname);
+            gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(dialog), file, NULL);
+            g_object_unref (file);
         }
         g_free(export_dirname);
 
@@ -1270,8 +1272,11 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         {
             // The user pressed "Ok", so use the file name for the actual file output.
             gchar *dirname;
-            char *tmp = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-            g_free(export_filename);
+ 
+            GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(dialog));
+            char *tmp = g_file_get_path (file);
+            g_object_unref (file);
+            g_free (export_filename);
             export_filename = tmp;
 
             // Store the directory part of the file for later
