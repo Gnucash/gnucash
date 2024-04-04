@@ -270,7 +270,7 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
-    gtk_container_add(GTK_CONTAINER(main_vbox), vbox);
+    gtk_box_prepend (GTK_BOX(main_vbox), GTK_WIDGET(vbox));
     gtk_widget_set_visible (GTK_WIDGET(vbox), TRUE);
 
     for (node = radio_list, i = 0; node; node = node->next, i++)
@@ -427,8 +427,8 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
     gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
     gtk_text_buffer_set_text (buffer, msg, -1);
-    gtk_container_add (GTK_CONTAINER (scrolledwindow), view);
-    
+    gtk_box_prepend (GTK_BOX(scrolledwindow), GTK_WIDGET(view));
+
     // run the dialog
     if (parent)
     {

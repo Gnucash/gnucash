@@ -149,7 +149,7 @@ gnc_embedded_window_close_page (GncEmbeddedWindow *window,
         return;
     }
 
-    gtk_container_remove (GTK_CONTAINER(window), GTK_WIDGET(page->notebook_page));
+    gtk_box_remove (GTK_BOX(window), GTK_WIDGET(page->notebook_page));
     window->page = NULL;
     gnc_plugin_page_removed (page);
 
@@ -350,12 +350,12 @@ gnc_embedded_window_new (const gchar *action_group_name,
     window->menubar_model = (GMenuModel *)gtk_builder_get_object (builder, "embeddedwin-menu");
 
     window->menubar = gtk_menu_bar_new_from_model (window->menubar_model);
-    gtk_container_add (GTK_CONTAINER(window->menu_dock), window->menubar);
+    gtk_box_prepend (GTK_BOX(window->menu_dock), GTK_WIDGET(window->menubar));
     gtk_widget_set_visible (GTK_WIDGET(window->menubar), TRUE);
 
     window->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "embeddedwin-toolbar");
     g_object_set (window->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-    gtk_container_add (GTK_CONTAINER(window->menu_dock), GTK_WIDGET(window->toolbar));
+    gtk_box_prepend (GTK_BOX(window->menu_dock), GTK_WIDGET(window->toolbar));
     gtk_widget_set_visible (GTK_WIDGET(window->toolbar), TRUE);
 
     g_object_unref (builder);

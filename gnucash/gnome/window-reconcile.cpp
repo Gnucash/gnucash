@@ -1168,8 +1168,8 @@ gnc_reconcile_window_create_view_box(Account *account,
                                    GTK_POLICY_AUTOMATIC);
     gtk_container_set_border_width(GTK_CONTAINER(scrollWin), 5);
 
-    gtk_container_add(GTK_CONTAINER(frame), scrollWin);
-    gtk_container_add(GTK_CONTAINER(scrollWin), view);
+    gtk_box_append (GTK_BOX(frame), GTK_WIDGET(scrollWin));
+    gtk_box_append (GTK_BOX(scrollWin), GTK_WIDGET(view));
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(frame));
 
     // get the vertical scroll bar width
@@ -1859,7 +1859,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
-    gtk_container_add(GTK_CONTAINER(recnData->window), vbox);
+    gtk_box_prepend (GTK_BOX(recnData->window), GTK_WIDGET(vbox));
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(recnData->window), "gnc-id-reconcile");
@@ -1894,7 +1894,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
         menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder, "recwin-menu");
         menu_bar = gtk_menu_bar_new_from_model (menu_model);
-        gtk_container_add (GTK_CONTAINER(vbox), menu_bar);
+        gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(menu_bar));
 #ifdef MAC_INTEGRATION
         auto theApp = static_cast<GtkosxApplication*>(g_object_new (GTKOSX_TYPE_APPLICATION, NULL));
         gtk_widget_set_visible (GTK_WIDGET(menu_bar), FALSE);
@@ -1910,7 +1910,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         gtk_toolbar_set_icon_size (GTK_TOOLBAR(tool_bar),
                                    GTK_ICON_SIZE_SMALL_TOOLBAR);
 
-        gtk_container_add (GTK_CONTAINER(vbox), GTK_WIDGET(tool_bar));
+        gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(tool_bar));
 
         gtk_window_add_accel_group (GTK_WINDOW(recnData->window), accel_group);
 
@@ -2006,8 +2006,8 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
         gnc_restore_window_size (GNC_PREFS_GROUP_RECONCILE,
                                  GTK_WINDOW(recnData->window), GTK_WINDOW(parent));
 
-        gtk_container_add(GTK_CONTAINER(frame), main_area);
         gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
+        gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(main_area));
 
         debits_box = gnc_reconcile_window_create_view_box
                      (account, RECLIST_DEBIT, recnData,
@@ -2061,9 +2061,9 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
             /* hbox to hold title/value vboxes */
             totals_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
             gtk_box_set_homogeneous (GTK_BOX (totals_hbox), FALSE);
-            gtk_container_add(GTK_CONTAINER(frame), totals_hbox);
             gtk_container_set_border_width(GTK_CONTAINER(totals_hbox), 5);
 
+            gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(totals_hbox));
             /* vbox to hold titles */
             title_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
             gtk_box_set_homogeneous (GTK_BOX (title_vbox), FALSE);

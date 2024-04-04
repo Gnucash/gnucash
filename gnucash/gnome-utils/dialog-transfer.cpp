@@ -616,7 +616,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
         info = from_info;
 
     auto tree_view = GTK_TREE_VIEW(gnc_tree_view_account_new(FALSE));
-    gtk_container_add(GTK_CONTAINER(scroll_win), GTK_WIDGET(tree_view));
+    gtk_box_prepend (GTK_BOX(scroll_win), GTK_WIDGET(tree_view));
     info->show_inc_exp = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(button));
     info->show_hidden = FALSE;
     gnc_tree_view_account_set_filter (GNC_TREE_VIEW_ACCOUNT (tree_view),

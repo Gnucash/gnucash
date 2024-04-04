@@ -902,7 +902,7 @@ csv_export_assistant_create (CsvExportInfo *info)
 
         gtk_widget_set_visible (GTK_WIDGET(info->csva.account_treeview), TRUE);
         box = GTK_WIDGET(gtk_builder_get_object (builder, "account_scroll"));
-        gtk_container_add (GTK_CONTAINER(box), info->csva.account_treeview);
+        gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(info->csva.account_treeview));
 
         label = GTK_WIDGET(gtk_builder_get_object (builder, "accounts_label"));
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), GTK_WIDGET(tree_view));

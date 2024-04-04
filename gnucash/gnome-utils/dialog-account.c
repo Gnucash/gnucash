@@ -742,9 +742,9 @@ gnc_finish_ok (AccountWindow *aw)
         Account *account;
 
         /* Drop the old parent_tree so we can update it with an up to date one */
-        gtk_container_remove (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
+        gtk_box_remove (GTK_BOX(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
         aw->parent_tree = gnc_tree_view_account_new (TRUE);
-        gtk_container_add (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
+        gtk_box_prepend (GTK_BOX(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
         gtk_widget_set_visible (GTK_WIDGET(aw->parent_tree), TRUE);
 
         aw_connect_selection_changed (aw);
@@ -805,9 +805,10 @@ add_children_to_expander (GObject *object, GParamSpec *param_spec, gpointer data
                                         GTK_POLICY_AUTOMATIC);
         gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW(scrolled_window),
                                              GTK_SHADOW_IN);
-        gtk_container_add (GTK_CONTAINER(scrolled_window), GTK_WIDGET(view));
 
-        gtk_container_add (GTK_CONTAINER(expander), scrolled_window);
+        gtk_box_prepend (GTK_BOX(scrolled_window), GTK_WIDGET(view));
+        gtk_box_prepend (GTK_BOX(expander), GTK_WIDGET(scrolled_window));
+
         gtk_widget_set_vexpand (GTK_WIDGET(scrolled_window), TRUE);
 //FIXME gtk4        gtk_widget_show_all (scrolled_window);
     }
@@ -1629,7 +1630,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     aw->parent_scroll = GTK_WIDGET(gtk_builder_get_object (builder, "parent_scroll"));
 
     aw->parent_tree = gnc_tree_view_account_new (TRUE);
-    gtk_container_add (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
+    gtk_box_prepend (GTK_BOX(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
     gtk_widget_set_visible (GTK_WIDGET(aw->parent_tree), TRUE);
     aw_connect_selection_changed (aw);
 
@@ -1695,7 +1696,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(aw->transfer_tree));
     gtk_tree_selection_set_select_function (selection, account_commodity_filter, aw, NULL);
 
-    gtk_container_add (GTK_CONTAINER(box), GTK_WIDGET(aw->transfer_tree));
+    gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(aw->transfer_tree));
     gtk_widget_set_visible (GTK_WIDGET(aw->transfer_tree), TRUE);
 
     label = GTK_WIDGET(gtk_builder_get_object (builder, "parent_label"));

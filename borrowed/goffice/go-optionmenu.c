@@ -383,5 +383,5 @@ static void go_option_menu_init(GOOptionMenu *option_menu)
 
     gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(sep));
 
-    gtk_container_add(GTK_CONTAINER(option_menu), GTK_WIDGET(box));
+    gtk_box_append (GTK_BOX(option_menu), GTK_WIDGET(box));
 }

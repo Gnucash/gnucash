@@ -149,7 +149,7 @@ set_owner_widget (GNCSearchOwner *fe)
 {
     /* Remove the old choice widget */
     if (fe->owner_choice)
-        gtk_container_remove (GTK_CONTAINER (fe->owner_box), fe->owner_choice);
+        gtk_box_remove (GTK_BOX(fe->owner_box), GTK_WIDGET(fe->owner_choice));
 
     /* Create a new choice widget */
     fe->owner_choice =

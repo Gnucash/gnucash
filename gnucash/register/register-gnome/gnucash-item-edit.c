@@ -924,8 +924,8 @@ gnc_item_edit_new (GnucashSheet *sheet)
      * Without one the button would disappear behind the grid object. */
     item_edit->popup_toggle.ebox = gtk_event_box_new ();
     g_object_ref (item_edit->popup_toggle.ebox);
-    gtk_container_add (GTK_CONTAINER(item_edit->popup_toggle.ebox),
-                       item_edit->popup_toggle.tbutton);
+    gtk_box_prepend (GTK_BOX(item_edit->popup_toggle.ebox),
+                     GTK_WIDGET(item_edit->popup_toggle.tbutton));
 
     // This call back intercepts the right mouse button event to stop the
     // gnucash_sheet_button_press_event from running.
@@ -962,7 +962,7 @@ check_popup_height_is_true (GtkWidget    *widget,
     if (allocation->height != item_edit->popup_returned_height)
     {
         item_edit->popup_allocation_height = allocation->height;
-        gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
+        gtk_box_remove (GTK_BOX(item_edit->sheet), GTK_WIDGET(item_edit->popup_item));
 
         g_idle_add_full (G_PRIORITY_HIGH_IDLE,
                         (GSourceFunc)gnc_item_edit_update, item_edit, NULL);
@@ -1106,7 +1106,7 @@ gnc_item_edit_hide_popup (GncItemEdit *item_edit)
     if (gtk_widget_get_parent (GTK_WIDGET(item_edit->popup_item)) != GTK_WIDGET(item_edit->sheet))
         return;
 
-    gtk_container_remove (GTK_CONTAINER(item_edit->sheet), item_edit->popup_item);
+    gtk_box_remove (GTK_BOX(item_edit->sheet), GTK_WIDGET(item_edit->popup_item));
 
     // set the popup arrow direction down
     item_edit->popup_toggle.arrow_down = TRUE;

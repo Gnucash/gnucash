@@ -843,7 +843,7 @@ create_children (GNCDateEdit *gde)
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-    gtk_container_add (GTK_CONTAINER (gde->date_button), hbox);
+    gtk_box_prepend (GTK_BOX(gde->date_button), GTK_WIDGET(hbox));
     gtk_widget_set_visible (GTK_WIDGET(hbox), TRUE);
 
     /* Calendar label, only shown if the date editor has a time field */
@@ -921,7 +921,7 @@ create_children (GNCDateEdit *gde)
 
     frame = gtk_frame_new (NULL);
     gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
-    gtk_container_add (GTK_CONTAINER (gde->cal_popup), frame);
+    gtk_box_prepend (GTK_BOX(gde->cal_popup), GTK_WIDGET(frame));
     gtk_widget_set_visible (GTK_WIDGET(frame), TRUE);
 
     gde->calendar = gtk_calendar_new ();
@@ -936,7 +936,7 @@ create_children (GNCDateEdit *gde)
     g_signal_connect (G_OBJECT (gde->calendar),
                       "day-selected-double-click",
                       G_CALLBACK  (day_selected_double_click), gde);
-    gtk_container_add (GTK_CONTAINER (frame), gde->calendar);
+    gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(gde->calendar));
     gtk_widget_set_visible (GTK_WIDGET(gde->calendar), TRUE);
 }
 

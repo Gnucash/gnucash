@@ -399,7 +399,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
 
     uri_type_container = GTK_WIDGET(gtk_builder_get_object (builder, "vb_uri_type_container" ));
     faw->cb_uri_type = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
-    gtk_container_add( GTK_CONTAINER(uri_type_container), GTK_WIDGET(faw->cb_uri_type) );
+    gtk_box_prepend (GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type));
     gtk_box_set_child_packing( GTK_BOX(uri_type_container), GTK_WIDGET(faw->cb_uri_type),
                                /*expand*/TRUE, /*fill*/FALSE, /*padding*/0, GTK_PACK_START );
     g_object_connect( G_OBJECT(faw->cb_uri_type),

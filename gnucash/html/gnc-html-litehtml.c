@@ -227,14 +227,7 @@ g_print("%s called, self %p\n",__FUNCTION__, self);
     priv->html_string = NULL;
     priv->web_view = gtk_label_new ("Just a Label");
 
-
-
-
-
-
-
-    gtk_container_add (GTK_CONTAINER(priv->base.container),
-                       GTK_WIDGET(priv->web_view));
+    gtk_box_prepend (GTK_BOX(priv->base.container), GTK_WIDGET(priv->web_view));
 
     g_object_ref_sink (priv->base.container);
 
@@ -278,8 +271,7 @@ gnc_html_litehtml_dispose (GObject* obj)
 g_print("%s called\n",__FUNCTION__);
     if (priv->web_view != NULL)
     {
-        gtk_container_remove (GTK_CONTAINER(priv->base.container),
-                              GTK_WIDGET(priv->web_view));
+        gtk_box_remove (GTK_BOX(priv->base.container), GTK_WIDGET(priv->web_view));
 
         priv->web_view = NULL;
     }

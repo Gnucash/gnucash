@@ -687,7 +687,7 @@ gnc_account_sel_init (GNCAccountSel *gas)
     gas->combo = GTK_COMBO_BOX(widget);
     gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(widget), ACCT_COL_NAME);
 
-    gtk_container_add (GTK_CONTAINER(gas), widget);
+    gtk_box_prepend (GTK_BOX(gas), GTK_WIDGET(widget));
 
     // set the default horizontal expansion to TRUE
     gtk_widget_set_hexpand (GTK_WIDGET(gas), TRUE);
@@ -969,7 +969,7 @@ gnc_account_sel_set_new_account_ability (GNCAccountSel *gas,
     {
         g_assert (state == TRUE);
         /* destroy the existing button. */
-        gtk_container_remove (GTK_CONTAINER(gas), gas->newAccountButton);
+        gtk_box_remove (GTK_BOX(gas), GTK_WIDGET(gas->newAccountButton));
 //FIXME gtk4        gtk_widget_destroy (gas->newAccountButton);
         gas->newAccountButton = NULL;
         return;

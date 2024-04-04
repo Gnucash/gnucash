@@ -154,7 +154,7 @@ init_notebook_widgets (BillTermNB *notebook, gboolean read_only,
 
     /* Disconnect the notebook from the window */
     g_object_ref (notebook->notebook);
-    gtk_container_remove (GTK_CONTAINER(parent), notebook->notebook);
+    gtk_box_remove (GTK_BOX(parent), GTK_WIDGET(notebook->notebook));
     g_object_unref (G_OBJECT(builder));
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(parent));
 

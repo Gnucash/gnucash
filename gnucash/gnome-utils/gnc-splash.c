@@ -117,14 +117,14 @@ gnc_show_splash_screen (void)
 
     progress_bar = gtk_progress_bar_new ();
 
-    gtk_container_add (GTK_CONTAINER (frame), pixmap);
+    gtk_box_append (GTK_BOX(frame), GTK_WIDGET(pixmap));
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(frame));
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(version));
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(separator));
     gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(progress));
     gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(progress_bar));
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(hbox));
-    gtk_container_add (GTK_CONTAINER (splash), vbox);
+    gtk_box_append (GTK_BOX(splash), GTK_WIDGET(vbox));
 
     gtk_widget_add_events(splash, GDK_BUTTON_PRESS_MASK);
     g_signal_connect(splash, "button_press_event",

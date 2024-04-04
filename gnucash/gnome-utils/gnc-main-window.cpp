@@ -2436,7 +2436,7 @@ main_window_update_page_color (GncPluginPage *page,
             g_object_ref (tab_widget);
             gtk_notebook_set_tab_label (GTK_NOTEBOOK(priv->notebook),
                                         page->notebook_page, event_box);
-            gtk_container_add (GTK_CONTAINER(event_box), tab_widget);
+            gtk_box_prepend (GTK_BOX(event_box), GTK_WIDGET(tab_widget));
             g_object_unref (tab_widget);
             tab_widget = event_box;
         }
@@ -2458,7 +2458,7 @@ main_window_update_page_color (GncPluginPage *page,
         {
             GtkWidget *tab_hbox = gtk_bin_get_child(GTK_BIN(tab_widget));
             g_object_ref (tab_hbox);
-            gtk_container_remove (GTK_CONTAINER(tab_widget), tab_hbox);
+            gtk_box_remove (GTK_BOX(tab_widget), GTK_WIDGET(tab_hbox));
             gtk_notebook_set_tab_label (GTK_NOTEBOOK(priv->notebook),
                                         page->notebook_page, tab_hbox);
             g_object_unref (tab_hbox);
@@ -2530,11 +2530,11 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
         g_free (image_name);
         return;
     }
-    gtk_container_remove (GTK_CONTAINER(tab_widget), image);
+    gtk_box_remove (GTK_BOX(tab_widget), GTK_WIDGET(image));
     image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
     gtk_widget_set_visible (GTK_WIDGET(image), true);
 
-    gtk_container_add (GTK_CONTAINER(tab_widget), image);
+    gtk_box_prepend (GTK_BOX(tab_widget), GTK_WIDGET(image));
     gtk_widget_set_margin_start (GTK_WIDGET(image), 5);
     gtk_box_reorder_child (GTK_BOX(tab_widget), image, 0);
 
@@ -3319,7 +3319,7 @@ gnc_main_window_open_page (GncMainWindow *window,
         gtk_widget_get_preferred_size (close_image, &requisition, nullptr);
         gtk_widget_set_size_request(close_button, requisition.width + 4,
                                     requisition.height + 2);
-        gtk_container_add(GTK_CONTAINER(close_button), close_image);
+        gtk_box_prepend (GTK_BOX(close_button), GTK_WIDGET(close_image));
         gtk_widget_set_visible (GTK_WIDGET(close_button), 
                                 gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_CLOSE_BUTTON));
 
@@ -3739,7 +3739,7 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
     if (builder)
     {
         gchar *toolbar_name;
-        gtk_container_remove (GTK_CONTAINER(priv->menu_dock), priv->toolbar);
+        gtk_box_remove (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->toolbar));
 
         if (toolbar_qualifier)
             toolbar_name = g_strconcat ("mainwin-toolbar-", toolbar_qualifier, nullptr);
@@ -3752,7 +3752,7 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
             priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
 
         g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-        gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->toolbar);
+        gtk_box_prepend (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->toolbar));
         g_free (toolbar_name);
     }
 
@@ -4106,7 +4106,7 @@ gnc_main_window_setup_window (GncMainWindow *window)
     main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (main_vbox), FALSE);
     gtk_widget_set_visible (GTK_WIDGET(main_vbox), true);
-    gtk_container_add (GTK_CONTAINER (window), main_vbox);
+    gtk_box_prepend (GTK_BOX(window), GTK_WIDGET(main_vbox));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     priv->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
@@ -4158,12 +4158,12 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     priv->menubar_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-menu");
     priv->menubar = gtk_menu_bar_new_from_model (priv->menubar_model);
-    gtk_container_add (GTK_CONTAINER(priv->menu_dock), priv->menubar);
+    gtk_box_prepend (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->menubar));
     gtk_widget_set_visible (GTK_WIDGET(priv->menubar), true);
 
     priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
     g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-    gtk_container_add (GTK_CONTAINER(priv->menu_dock), GTK_WIDGET(priv->toolbar));
+    gtk_box_prepend (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->toolbar));
     gtk_widget_set_visible (GTK_WIDGET(priv->toolbar), true);
 
     g_object_unref (builder);
@@ -5220,8 +5220,7 @@ add_about_paths (GtkDialog *dialog)
         g_free (display_uri);
         g_free (env_name);
     }
-    gtk_container_add_with_properties (GTK_CONTAINER(page_vbox), grid,
-                                       "position", 1, NULL);
+    gtk_box_prepend (GTK_BOX(page_vbox), GTK_WIDGET(grid));
 //FIXME gtk4    gtk_widget_show_all (grid);
 }
 

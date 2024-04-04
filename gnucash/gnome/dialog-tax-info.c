@@ -1245,7 +1245,7 @@ identity_edit_clicked_cb (GtkButton *button,
     gtk_widget_set_margin_top (GTK_WIDGET(label), 5);
     gtk_grid_attach (GTK_GRID(table), label, 0, 2, 2, 1);
 
-    gtk_container_add (GTK_CONTAINER (content_area), table);
+    gtk_box_prepend (GTK_BOX(content_area), GTK_WIDGET(table));
     gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_APPLY);
     g_signal_connect (G_OBJECT (dialog), "response",
                       G_CALLBACK (identity_edit_response_cb), ti_dialog);
@@ -1454,7 +1454,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
 
         gtk_widget_set_visible (GTK_WIDGET(ti_dialog->account_treeview), TRUE);
         box = GTK_WIDGET(gtk_builder_get_object (builder, "account_scroll"));
-        gtk_container_add (GTK_CONTAINER (box), ti_dialog->account_treeview);
+        gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(ti_dialog->account_treeview));
 
         label = GTK_WIDGET(gtk_builder_get_object (builder, "accounts_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), GTK_WIDGET(tree_view));

@@ -352,7 +352,7 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
                                        "show-column-menu", TRUE,
                                        NULL);
     cd->commodity_tree = GNC_TREE_VIEW_COMMODITY(view);
-    gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(view));
+    gtk_box_prepend (GTK_BOX(scrolled_window), GTK_WIDGET(view));
     gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(cd->commodity_tree), TRUE);
     gnc_tree_view_commodity_set_filter (cd->commodity_tree,
                                         gnc_commodities_dialog_filter_ns_func,

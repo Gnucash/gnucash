@@ -78,7 +78,7 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
     gtk_tree_view_append_column( GTK_TREE_VIEW(listview), column );
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "hbox_list" ));
-    gtk_container_add( GTK_CONTAINER(box), listview );
+    gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(listview));
 
     /* Autoconnect signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);

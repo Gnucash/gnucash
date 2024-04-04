@@ -73,7 +73,7 @@ gnc_cell_view_init (GncCellView *cv)
     gtk_widget_set_tooltip_text (GTK_WIDGET(cv->text_view),
             _("Use Shift combined with Return or Keypad Enter to finish editing"));
 
-    gtk_container_add (GTK_CONTAINER(cv), GTK_WIDGET(cv->text_view));
+    gtk_box_prepend (GTK_BOX(cv), GTK_WIDGET(cv->text_view));
     gtk_widget_set_visible (GTK_WIDGET(cv->text_view), TRUE);
 
     cv->focus_out_id = 0;

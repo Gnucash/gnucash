@@ -711,7 +711,7 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
                                    "show-column-menu", TRUE,
                                    NULL);
     pdb_dialog->price_tree = GNC_TREE_VIEW_PRICE(view);
-    gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(view));
+    gtk_box_prepend (GTK_BOX(scrolled_window), GTK_WIDGET(view));
     gnc_tree_view_price_set_filter (pdb_dialog->price_tree,
                                     gnc_price_dialog_filter_ns_func,
                                     gnc_price_dialog_filter_cm_func,

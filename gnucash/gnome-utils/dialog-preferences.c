@@ -604,7 +604,7 @@ gnc_prefs_move_grid_entry (GtkWidget *child,
     g_object_get (child, "margin-left", &leftm, "margin-right", &rightm, NULL);
 
     g_object_ref (child);
-    gtk_container_remove (GTK_CONTAINER(copydata->grid_from), child);
+    gtk_box_remove (GTK_BOX(copydata->grid_from), GTK_WIDGET(child));
 
     gtk_grid_attach (copydata->grid_to, child, left, copydata->rows + top , width, height);
 

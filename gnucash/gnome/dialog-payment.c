@@ -687,9 +687,9 @@ gnc_payment_dialog_owner_type_changed (PaymentWindow *pw)
     g_object_ref (G_OBJECT (pw->amount_credit_edit));
 
     if (gtk_widget_is_ancestor(pw->amount_debit_edit, credit_box))
-        gtk_container_remove (GTK_CONTAINER (credit_box), pw->amount_debit_edit);
+        gtk_box_remove (GTK_BOX(credit_box), GTK_WIDGET(pw->amount_debit_edit));
     if (gtk_widget_is_ancestor(pw->amount_credit_edit, debit_box))
-        gtk_container_remove (GTK_CONTAINER (debit_box), pw->amount_credit_edit);
+        gtk_box_remove (GTK_BOX(debit_box), GTK_WIDGET(pw->amount_credit_edit));
 
     if (!gtk_widget_is_ancestor(pw->amount_debit_edit, debit_box))
         gtk_box_append (GTK_BOX(debit_box), GTK_WIDGET(pw->amount_debit_edit));
@@ -1377,7 +1377,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
 
     box = GTK_WIDGET (gtk_builder_get_object (builder, "acct_window"));
     pw->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
-    gtk_container_add (GTK_CONTAINER (box), pw->acct_tree);
+    gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(pw->acct_tree));
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(pw->acct_tree), FALSE);
     gnc_payment_set_account_types (GNC_TREE_VIEW_ACCOUNT (pw->acct_tree));
 

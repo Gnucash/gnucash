@@ -212,7 +212,7 @@ gnc_frequency_init(GncFrequency *gf)
     }
     vb = GTK_BOX(gtk_builder_get_object (builder, "gncfreq_vbox"));
     gf->vb = vb;
-    gtk_container_add(GTK_CONTAINER(&gf->widget), GTK_WIDGET(gf->vb));
+    gtk_box_prepend (GTK_BOX(&gf->widget), GTK_WIDGET(gf->vb));
 
     /* initialize the combo boxes */
     for (i = 0; comboBoxes[i].name != NULL; i++)

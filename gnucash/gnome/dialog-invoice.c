@@ -1659,7 +1659,7 @@ static void
 gnc_invoice_update_job_choice (InvoiceWindow *iw)
 {
     if (iw->job_choice)
-        gtk_container_remove (GTK_CONTAINER (iw->job_box), iw->job_choice);
+        gtk_box_remove (GTK_BOX(iw->job_box), GTK_WIDGET(iw->job_choice));
 
     /* If we don't have a real owner, then we obviously can't have a job */
     if (iw->owner.owner.undefined == NULL)
@@ -1735,8 +1735,7 @@ static void
 gnc_invoice_update_proj_job (InvoiceWindow *iw)
 {
     if (iw->proj_job_choice)
-        gtk_container_remove (GTK_CONTAINER (iw->proj_job_box),
-                              iw->proj_job_choice);
+        gtk_box_remove (GTK_BOX(iw->proj_job_box), GTK_WIDGET(iw->proj_job_choice));
 
     switch (iw->dialog_type)
     {
@@ -2032,11 +2031,10 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     invoice = iw_get_invoice (iw);
 
     if (iw->owner_choice)
-        gtk_container_remove (GTK_CONTAINER (iw->owner_box), iw->owner_choice);
+        gtk_box_remove (GTK_BOX(iw->owner_box), GTK_WIDGET(iw->owner_choice));
 
     if (iw->proj_cust_choice)
-        gtk_container_remove (GTK_CONTAINER (iw->proj_cust_box),
-                              iw->proj_cust_choice);
+        gtk_box_remove (GTK_BOX(iw->proj_cust_box), GTK_WIDGET(iw->proj_cust_choice));
 
     switch (iw->dialog_type)
     {
@@ -2859,7 +2857,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         gtk_widget_set_visible (GTK_WIDGET(regWidget), TRUE);
     
         frame = GTK_WIDGET (gtk_builder_get_object (builder, "ledger_frame"));
-        gtk_container_add (GTK_CONTAINER (frame), regWidget);
+        gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(regWidget));
 
         iw->reg = GNUCASH_REGISTER (regWidget);
         window = gnc_plugin_page_get_window(iw->page);

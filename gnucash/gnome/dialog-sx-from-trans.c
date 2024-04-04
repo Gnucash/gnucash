@@ -386,7 +386,7 @@ sxftd_init( SXFromTransInfo *sxfti )
         g_assert(sxfti->example_cal);
         gnc_dense_cal_set_num_months( sxfti->example_cal, SXFTD_EXCAL_NUM_MONTHS );
         gnc_dense_cal_set_months_per_col( sxfti->example_cal, SXFTD_EXCAL_MONTHS_PER_COL );
-        gtk_container_add( GTK_CONTAINER(w), GTK_WIDGET(sxfti->example_cal) );
+        gtk_box_prepend (GTK_BOX(w), GTK_WIDGET(sxfti->example_cal));
     }
 
     /* Setup the start and end dates as GNCDateEdits */

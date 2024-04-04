@@ -538,7 +538,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                       "state-section", STATE_SECTION,
                       "show-column-menu", TRUE,
                       NULL);
-        gtk_container_add (GTK_CONTAINER( swin ), GTK_WIDGET(priv->tree_view));
+        gtk_box_prepend (GTK_BOX(swin), GTK_WIDGET(priv->tree_view));
 
         selection = gtk_tree_view_get_selection (priv->tree_view);
         gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
@@ -588,7 +588,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         gnc_dense_cal_set_months_per_col (priv->gdcal, 4);
         gnc_dense_cal_set_num_months (priv->gdcal, 12);
 
-        gtk_container_add (GTK_CONTAINER(swin), GTK_WIDGET(priv->gdcal));
+        gtk_box_prepend (GTK_BOX(swin), GTK_WIDGET(priv->gdcal));
     }
 
     priv->gnc_component_id = gnc_register_gui_component ("plugin-page-sx-list",

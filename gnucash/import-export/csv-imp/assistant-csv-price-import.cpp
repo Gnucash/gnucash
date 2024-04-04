@@ -637,7 +637,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
                          G_CALLBACK(csv_price_imp_preview_enc_sel_cb), this);
 
         auto encoding_container = GTK_CONTAINER(gtk_builder_get_object (builder, "encoding_container"));
-        gtk_container_add (encoding_container, GTK_WIDGET(encselector));
+        gtk_box_prepend (GTK_BOX(encoding_container), GTK_WIDGET(encselector));
         gtk_widget_set_hexpand (GTK_WIDGET(encselector), true);
 //FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(encoding_container));
 
@@ -669,7 +669,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
 
         /* Add it to the assistant. */
         auto date_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "date_format_container"));
-        gtk_container_add (date_format_container, GTK_WIDGET(date_format_combo));
+        gtk_box_prepend (GTK_BOX(date_format_container), GTK_WIDGET(date_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(date_format_combo), true);
 //FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(date_format_container));
 
@@ -686,7 +686,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
 
         /* Add it to the assistant. */
         auto currency_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "currency_format_container"));
-        gtk_container_add (currency_format_container, GTK_WIDGET(currency_format_combo));
+        gtk_box_prepend (GTK_BOX(currency_format_container), GTK_WIDGET(currency_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(currency_format_combo), true);
 //FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(currency_format_container));
 
