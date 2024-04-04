@@ -560,7 +560,7 @@ set_window_geometry(GncMainWindow *window, GncMainWindowSaveData *data, gchar *w
     }
     else
     {
-        gtk_window_resize(GTK_WINDOW(window), geom[0], geom[1]);
+        gtk_window_set_default_size (GTK_WINDOW(window), geom[0], geom[1]);
         DEBUG("window (%p) size %dx%d", window, geom[0], geom[1]);
     }
 
@@ -2953,7 +2953,7 @@ gnc_main_window_new (void)
     {
         gint width, height;
         gtk_window_get_size (old_window, &width, &height);
-        gtk_window_resize (GTK_WINDOW (window), width, height);
+        gtk_window_set_default_size (GTK_WINDOW(window), width, height);
         if ((gdk_window_get_state((gtk_widget_get_window (GTK_WIDGET(old_window))))
                 & GDK_WINDOW_STATE_MAXIMIZED) != 0)
         {
