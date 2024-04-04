@@ -42,7 +42,7 @@ set_source_files_properties (${register_gnome_SOURCES} PROPERTIES OBJECT_DEPENDS
 
 add_library (gnc-register-gnome ${register_gnome_SOURCES} ${register_gnome_noinst_HEADERS})
 
-target_link_libraries(gnc-register-gnome gnc-register-core PkgConfig::GTK3)
+target_link_libraries(gnc-register-gnome gnc-register-core PkgConfig::GTK4)
 
 target_compile_definitions(gnc-register-gnome PRIVATE -DG_LOG_DOMAIN=\"gnc.register.gnome\")
 
