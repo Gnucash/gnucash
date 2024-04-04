@@ -262,16 +262,14 @@ unblock_list_signals (CompletionCell* cell)
                                        0, 0, NULL, NULL, cell);
 }
 
-static void
-key_press_item_cb (GncItemList* item_list, const GdkEvent* event, gpointer user_data)
+static gboolean
+key_press_item_cb (GtkEventControllerKey *key, guint keyval,
+                   guint keycode, GdkModifierType state,
+                   gpointer user_data)
 {
     CompletionCell* cell = user_data;
     PopBox* box = cell->cell.gui_private;
-    guint keyval;
-
-    if ((gdk_event_get_event_type (event) != GDK_KEY_PRESS) ||
-         !gdk_event_get_keyval (event, &keyval))
-        return;
+    gboolean ret_val = FALSE;
 
     switch (keyval)
     {
@@ -280,13 +278,13 @@ key_press_item_cb (GncItemList* item_list, const GdkEvent* event, gpointer user_
         gnc_item_list_select (box->item_list, NULL);
         unblock_list_signals (cell);
         hide_popup (box);
+        ret_val = TRUE;
         break;
 
     default:
-        gtk_widget_event (GTK_WIDGET (box->sheet),
-                          (GdkEvent*)event);
         break;
     }
+    return ret_val;
 }
 
 static void
@@ -321,7 +319,8 @@ completion_connect_signals (CompletionCell* cell)
     g_signal_connect (G_OBJECT(box->item_list), "activate_item",
                       G_CALLBACK(activate_item_cb), cell);
 
-    g_signal_connect (G_OBJECT(box->item_list), "key_press_event",
+    g_signal_connect (gtk_event_controller_key_new (GTK_WIDGET(box->item_list)), 
+                      "key-pressed",
                       G_CALLBACK(key_press_item_cb), cell);
 
     box->signals_connected = TRUE;

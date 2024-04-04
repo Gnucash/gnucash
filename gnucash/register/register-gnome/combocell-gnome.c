@@ -202,29 +202,27 @@ activate_item_cb (GncItemList* item_list, char* item_string, gpointer data)
     box->list_popped = FALSE;
 }
 
-static void
-key_press_item_cb (GncItemList* item_list, const GdkEvent* event, gpointer data)
+static gboolean
+key_press_item_cb (GtkEventControllerKey *key, guint keyval,
+                   guint keycode, GdkModifierType state,
+                   gpointer user_data)
 {
-    ComboCell* cell = data;
+    ComboCell* cell = user_data;
     PopBox* box = cell->cell.gui_private;
-    guint keyval;
-
-    if ((gdk_event_get_event_type (event) != GDK_KEY_PRESS) ||
-         !gdk_event_get_keyval (event, &keyval))
-        return;
+    gboolean ret_val = FALSE;
 
     switch (keyval)
     {
     case GDK_KEY_Escape:
         gnc_item_edit_hide_popup (box->item_edit);
         box->list_popped = FALSE;
+        ret_val = TRUE;
         break;
 
     default:
-        gtk_widget_event (GTK_WIDGET (box->sheet),
-                          (GdkEvent*)event);
         break;
     }
+    return ret_val;
 }
 
 static void
@@ -259,8 +257,9 @@ combo_connect_signals (ComboCell* cell)
     g_signal_connect (G_OBJECT (box->item_list), "activate_item",
                       G_CALLBACK (activate_item_cb), cell);
 
-    g_signal_connect (G_OBJECT (box->item_list), "key_press_event",
-                      G_CALLBACK (key_press_item_cb), cell);
+    g_signal_connect (gtk_event_controller_key_new (GTK_WIDGET(box->item_list)), 
+                      "key-pressed",
+                      G_CALLBACK(key_press_item_cb), cell);
 
     box->signals_connected = TRUE;
 }
