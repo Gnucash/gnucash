@@ -1166,7 +1166,7 @@ gnc_reconcile_window_create_view_box(Account *account,
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_AUTOMATIC);
-    gtk_container_set_border_width(GTK_CONTAINER(scrollWin), 5);
+    gnc_box_set_all_margins (GTK_BOX(scrollwin), 5);
 
     gtk_box_append (GTK_BOX(frame), GTK_WIDGET(scrollWin));
     gtk_box_append (GTK_BOX(scrollWin), GTK_WIDGET(view));
@@ -2006,8 +2006,8 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
         gnc_restore_window_size (GNC_PREFS_GROUP_RECONCILE,
                                  GTK_WINDOW(recnData->window), GTK_WINDOW(parent));
 
-        gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
         gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(main_area));
+        gnc_box_set_all_margins (GTK_BOX(main_area), 10);
 
         debits_box = gnc_reconcile_window_create_view_box
                      (account, RECLIST_DEBIT, recnData,
@@ -2061,9 +2061,8 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
             /* hbox to hold title/value vboxes */
             totals_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
             gtk_box_set_homogeneous (GTK_BOX (totals_hbox), FALSE);
-            gtk_container_set_border_width(GTK_CONTAINER(totals_hbox), 5);
-
             gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(totals_hbox));
+            gnc_box_set_all_margins (GTK_BOX(totals_hbox), 5);
             /* vbox to hold titles */
             title_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
             gtk_box_set_homogeneous (GTK_BOX (title_vbox), FALSE);

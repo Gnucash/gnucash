@@ -1147,9 +1147,9 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
-    gtk_container_set_border_width(GTK_CONTAINER(vbox), 5);
-    gtk_container_set_border_width(GTK_CONTAINER(dialog), 5);
+    gnc_box_set_all_margins (GTK_BOX(vbox), 5);
     gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(label));
+    gnc_box_set_all_margins (GTK_BOX(dialog), 5);
     gtk_box_prepend (GTK_BOX(gtk_dialog_get_content_area (GTK_DIALOG(dialog))), GTK_WIDGET(vbox));
     gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
 

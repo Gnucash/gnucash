@@ -668,7 +668,7 @@ gnc_main_window_summary_new (void)
         gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, cdf, retval, NULL);
     }
 
-    gtk_container_set_border_width (GTK_CONTAINER (retval->hbox), 2);
+    gnc_box_set_all_margins (GTK_BOX(retval->hbox), 2);
     gtk_box_append (GTK_BOX(retval->hbox), GTK_WIDGET(retval->totals_combo));
     gtk_widget_set_visible (GTK_WIDGET(retval->totals_combo), TRUE);
     gtk_widget_set_visible (GTK_WIDGET(retval->hbox), TRUE);

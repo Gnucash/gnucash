@@ -199,7 +199,7 @@ create_content_box()
     gtk_widget_set_name (content_box, "page-content-box");
     gtk_box_set_homogeneous (GTK_BOX (content_box), FALSE);
 
-    gtk_container_set_border_width(GTK_CONTAINER(content_box), 12);
+    gnc_box_set_all_margins (GTK_BOX(content_box), 12);
     return GTK_BOX(content_box);
 }
 
@@ -217,7 +217,7 @@ create_options_box(GtkBox* content_box)
     gtk_grid_set_row_spacing (GTK_GRID(options_box), 6);
     gtk_grid_set_column_spacing (GTK_GRID(options_box), 6);
 
-    gtk_container_set_border_width(GTK_CONTAINER(options_box), 0);
+    gnc_box_set_all_margins (GTK_BOX(options_box), 0);
     gtk_box_prepend (GTK_BOX(options_scrolled_win), GTK_WIDGET(options_box));
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(options_scrolled_win),
                                    GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
@@ -230,7 +230,7 @@ create_reset_button_box(GtkBox* page_content_box)
     auto buttonbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
                                GTK_BUTTONBOX_EDGE);
-    gtk_container_set_border_width(GTK_CONTAINER (buttonbox), 5);
+    gnc_box_set_all_margins (GTK_BOX(buttonbox), 5);
     gtk_box_prepend (GTK_BOX(page_content_box), GTK_WIDGET(buttonbox));
     return GTK_BUTTON_BOX(buttonbox);
 }

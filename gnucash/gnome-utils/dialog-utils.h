@@ -180,6 +180,11 @@ void gnc_entry_set_text (GtkEntry *entry, const gchar *text);
 /** This function gets the text of the entry buffer */
 const gchar * gnc_entry_get_text (GtkEntry *entry);
 
+/** This function sets all margins of a GtkBox */
+void gnc_box_set_all_margins (GtkBox *box, gint margin);
+
+
+
 #ifdef __cplusplus
 }
 #endif

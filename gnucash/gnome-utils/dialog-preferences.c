@@ -705,7 +705,7 @@ gnc_preferences_build_page (gpointer data,
     {
         /* No existing content with this name.  Create a blank page */
         existing_content = gtk_grid_new ();
-        gtk_container_set_border_width (GTK_CONTAINER(existing_content), 6);
+        gnc_box_set_all_margins (GTK_BOX(existing_content), 6);
         label = gtk_label_new (add_in->tabname);
         gnc_label_set_alignment (label, 0.0, 0.5);
         gtk_notebook_append_page (notebook, existing_content, label);

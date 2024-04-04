@@ -870,7 +870,6 @@ gnc_entry_set_text (GtkEntry *entry, const gchar *text)
     gtk_entry_buffer_set_text (buffer, text, -1);
 }
 
-
 const gchar *
 gnc_entry_get_text (GtkEntry *entry)
 {
@@ -879,4 +878,15 @@ gnc_entry_get_text (GtkEntry *entry)
     GtkEntryBuffer *buffer = gtk_entry_get_buffer (entry);
 
     return gtk_entry_buffer_get_text (buffer);
+}
+
+void
+gnc_box_set_all_margins (GtkBox *box, gint margin)
+{
+    g_return_if_fail (GTK_IS_BOX(box));
+
+    gtk_widget_set_margin_start (GTK_WIDGET(box), margin);
+    gtk_widget_set_margin_end (GTK_WIDGET(box), margin);
+    gtk_widget_set_margin_top (GTK_WIDGET(box), margin);
+    gtk_widget_set_margin_bottom (GTK_WIDGET(box), margin);
 }

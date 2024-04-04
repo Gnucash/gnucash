@@ -38,6 +38,7 @@
 #include "gnc-tree-view-account.h" // for GNC_TREE_VIEW_ACCOUNT
 #include "gnc-tree-model-budget.h" // for gnc_tree_model_budget
 #include "misc-gnome-utils.h" // for xxxgtk_textview_set_text
+#include "dialog-utils.h"
 
 /*Something somewhere in windows.h defines ABSOLUTE to something and
  *that contaminates using it in RelativeDateType.  Undef it.
@@ -265,8 +266,7 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
                                    GTK_POLICY_NEVER,
                                    GTK_POLICY_AUTOMATIC);
-    gtk_container_set_border_width(GTK_CONTAINER(scroll), 2);
-
+    gnc_box_set_all_margins (GTK_BOX(scroll), 2);
     auto frame = gtk_frame_new(NULL);
     gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(scroll));
 
@@ -973,7 +973,7 @@ create_account_widget(GncOption& option, char *name)
                                    GTK_POLICY_AUTOMATIC);
 
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scroll_win));
-    gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
+    gnc_box_set_all_margins (GTK_BOX(scroll_win), 5);
 
     bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);

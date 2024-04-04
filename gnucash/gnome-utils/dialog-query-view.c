@@ -210,7 +210,7 @@ gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q)
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_AUTOMATIC);
-    gtk_container_set_border_width(GTK_CONTAINER(scrollWin), 5);
+    gnc_box_set_all_margins (GTK_BOX(scrollWin), 5);
 
     gtk_box_append (GTK_BOX(scrollWin), GTK_WIDGET(dqv->qview));
     gtk_box_append (GTK_BOX(frame), GTK_WIDGET(scrollWin));
