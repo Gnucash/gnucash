@@ -854,7 +854,8 @@ create_children (GNCDateEdit *gde)
         gtk_widget_set_visible (GTK_WIDGET(gde->cal_label), TRUE);
 
     /* Graphic for the popup button. */
-    arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
+    arrow = gtk_image_new_from_icon_name ("pan-down-symbolic");
+    gtk_image_set_icon_size (GTK_IMAGE(arrow), GTK_ICON_SIZE_INHERIT);
 
     gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(arrow));
     gtk_widget_set_visible (GTK_WIDGET(arrow), TRUE);

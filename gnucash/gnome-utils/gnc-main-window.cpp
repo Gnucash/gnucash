@@ -2505,7 +2505,8 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
         return;
     }
     gtk_box_remove (GTK_BOX(tab_widget), GTK_WIDGET(image));
-    image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+    image = gtk_image_new_from_icon_name (icon_name);
+    gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_NORMAL);
     gtk_widget_set_visible (GTK_WIDGET(image), true);
 
     gtk_box_prepend (GTK_BOX(tab_widget), GTK_WIDGET(image));
@@ -3245,7 +3246,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 
     if (icon != nullptr)
     {
-        image = gtk_image_new_from_icon_name (icon, GTK_ICON_SIZE_MENU);
+        image = gtk_image_new_from_icon_name (icon);
+        gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_NORMAL);
         gtk_widget_set_visible (GTK_WIDGET(image), true);
         gtk_box_append (GTK_BOX(tab_hbox), GTK_WIDGET(image));
         gtk_widget_set_margin_start (GTK_WIDGET(image), 5);
@@ -3288,7 +3290,8 @@ gnc_main_window_open_page (GncMainWindow *window,
 
         close_button = gtk_button_new();
         gtk_button_set_relief(GTK_BUTTON(close_button), GTK_RELIEF_NONE);
-        close_image = gtk_image_new_from_icon_name ("window-close", GTK_ICON_SIZE_MENU);
+        close_image = gtk_image_new_from_icon_name ("window-close");
+        gtk_image_set_icon_size (GTK_IMAGE(close_image), GTK_ICON_SIZE_NORMAL);
         gtk_widget_set_visible (GTK_WIDGET(close_image), true);
         gtk_widget_get_preferred_size (close_image, &requisition, nullptr);
         gtk_widget_set_size_request(close_button, requisition.width + 4,

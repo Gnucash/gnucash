@@ -2317,7 +2317,8 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
     }
 
     gsr->filter_label = add_summary_label (summarybar, FALSE, "", NULL);
-    gsr->sort_arrow = gtk_image_new_from_icon_name ("image-missing", GTK_ICON_SIZE_SMALL_TOOLBAR);
+    gsr->sort_arrow = gtk_image_new_from_icon_name ("image-missing");
+    gtk_image_set_icon_size (GTK_IMAGE(gsr->sort_arrow), GTK_ICON_SIZE_NORMAL);
     gsr->sort_label = add_summary_label (summarybar, FALSE, _("Sort By:"), gsr->sort_arrow);
 
     gnc_widget_style_context_add_class (GTK_WIDGET(gsr->filter_label), "gnc-class-highlight");

@@ -117,8 +117,8 @@ gnumeric_create_popup_menu_list (GSList *elements,
 
             if (pix_name != NULL)
             {
-                GtkWidget *image = gtk_image_new_from_icon_name (pix_name,
-                                   GTK_ICON_SIZE_MENU);
+                GtkWidget *image = gtk_image_new_from_icon_name (pix_name);
+                gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_NORMAL);
 
                 gtk_box_append (GTK_BOX(box), GTK_WIDGET(image));
                 gtk_widget_set_visible (GTK_WIDGET(image), TRUE);

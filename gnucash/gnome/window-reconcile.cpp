@@ -1962,8 +1962,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         GtkStatusbar *bar = GTK_STATUSBAR (statusbar);
         guint context = gtk_statusbar_get_context_id (bar, "future_dates");
         GtkWidget *box = gtk_statusbar_get_message_area (bar);
-        GtkWidget *image = gtk_image_new_from_icon_name
-            ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
+        GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning");
+        gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_NORMAL);
 
         auto find_split = [statement_date](const Split *split)
         { return (xaccSplitGetReconcile (split) == YREC &&
