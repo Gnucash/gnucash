@@ -157,7 +157,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     toggle = gtk_check_button_new ();
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle), fi->value);
     g_signal_connect (G_OBJECT (toggle), "toggled", G_CALLBACK (toggle_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     /* And return the box */
     return box;

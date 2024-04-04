@@ -881,7 +881,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     item_edit->editor = gtk_entry_new ();
     sheet->entry = item_edit->editor;
     gtk_entry_set_width_chars (GTK_ENTRY(item_edit->editor), 1);
-    gtk_box_pack_start (GTK_BOX(item_edit), item_edit->editor, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(item_edit), GTK_WIDGET(item_edit->editor));
 
     // Get the CSS space settings for the entry
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(item_edit->editor));
@@ -932,7 +932,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     g_signal_connect (item_edit->popup_toggle.ebox, "button-press-event",
                       G_CALLBACK(tb_button_press_cb), NULL);
 
-    gtk_box_pack_start (GTK_BOX(item_edit), item_edit->popup_toggle.ebox, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(item_edit), GTK_WIDGET(item_edit->popup_toggle.ebox));
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(item_edit));
     g_signal_connect (G_OBJECT(item_edit), "destroy",
                       G_CALLBACK(gnc_item_edit_destroying), NULL);

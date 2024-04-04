@@ -282,17 +282,17 @@ gncs_get_widget (GNCSearchCoreType *fe)
     if (fi->is_debcred)
     {
         menu = make_option_menu (fe);
-        gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+        gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
     }
 
     menu = make_how_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the entry window */
     entry = gnc_amount_edit_new ();
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (entry), fi->value);
     g_signal_connect (G_OBJECT (entry), "amount_changed", G_CALLBACK (entry_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(entry));
     fi->gae = GNC_AMOUNT_EDIT (entry);
     fi->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
 

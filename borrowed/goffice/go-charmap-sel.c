@@ -361,8 +361,9 @@ static void go_charmap_sel_init(GOCharmapSel *cs)
     cs->encodings = GO_OPTION_MENU(go_option_menu_new());
 
     g_signal_connect(G_OBJECT(cs->encodings), "changed",
-            G_CALLBACK(encodings_changed_cb), cs);
-    gtk_box_pack_start(GTK_BOX(cs), GTK_WIDGET(cs->encodings), TRUE, TRUE, 0);
+                     G_CALLBACK(encodings_changed_cb), cs);
+
+    gtk_box_append (GTK_BOX(cs), GTK_WIDGET(cs->encodings));
 }
 
 static void cs_build_menu(GOCharmapSel *cs)

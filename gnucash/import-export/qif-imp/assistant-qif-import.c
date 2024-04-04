@@ -996,7 +996,8 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
 
     gtk_grid_attach (GTK_GRID(table), comm_nb_page->namespace_combo, 1, 2, 1, 1);
     gtk_container_set_border_width (GTK_CONTAINER(notebook_page), 12);
-    gtk_box_pack_start (GTK_BOX(notebook_page), table, FALSE, FALSE, 12);
+    gtk_box_append (GTK_BOX(notebook_page), GTK_WIDGET(table));
+    gtk_box_set_spacing (GTK_BOX(notebook_page), 12);
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(wind->commodity_notebook));
     return comm_nb_page;
 }
@@ -3967,7 +3968,7 @@ gnc_ui_qif_import_assistant_make (QIFImportWindow *qif_win)
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(qif_win->currency_picker), gnc_default_currency ());
     gtk_widget_set_visible (GTK_WIDGET(qif_win->currency_picker), TRUE);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_picker_hbox"));
-    gtk_box_pack_start (GTK_BOX(box), qif_win->currency_picker, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(qif_win->currency_picker));
 
     gnc_restore_window_size (GNC_PREFS_GROUP,
                              GTK_WINDOW(qif_win->window), gnc_ui_get_main_window (NULL));

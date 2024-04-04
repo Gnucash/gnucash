@@ -373,14 +373,15 @@ static void go_option_menu_init(GOOptionMenu *option_menu)
     option_menu->selected = NULL;
 
     option_menu->button_label = GTK_LABEL(gtk_label_new(""));
-    gtk_box_pack_start(GTK_BOX(box), GTK_WIDGET(option_menu->button_label), FALSE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(option_menu->button_label));
     arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
     gtk_widget_set_margin_start (GTK_WIDGET(arrow), 5);
 
-    gtk_box_pack_end(GTK_BOX(box), arrow, FALSE, FALSE, 0);
+    gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(arrow));
 
     sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-    gtk_box_pack_end(GTK_BOX(box), sep, FALSE, FALSE, 0);
+
+    gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(sep));
 
     gtk_container_add(GTK_CONTAINER(option_menu), GTK_WIDGET(box));
 }

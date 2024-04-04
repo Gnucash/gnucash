@@ -293,20 +293,20 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the entry window */
     entry = gtk_entry_new ();
     if (fi->value)
         gnc_entry_set_text (GTK_ENTRY (entry), fi->value);
     g_signal_connect (G_OBJECT (entry), "changed", G_CALLBACK (entry_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(entry));
     fi->entry = entry;
 
     /* Build and connect the case-sensitive check button; defaults to off */
     toggle = gtk_check_button_new_with_label (_("Match case"));
     g_signal_connect (G_OBJECT(toggle), "toggled", G_CALLBACK (toggle_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     /* And return the box */
     return box;
