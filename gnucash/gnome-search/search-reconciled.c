@@ -207,23 +207,23 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the toggles */
     toggle = make_toggle (fi, _("Not Cleared"), CLEARED_NO);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     toggle = make_toggle (fi, _("Cleared"), CLEARED_CLEARED);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     toggle = make_toggle (fi, _("Reconciled"), CLEARED_RECONCILED);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     toggle = make_toggle (fi, _("Frozen"), CLEARED_FROZEN);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     toggle = make_toggle (fi, _("Voided"), CLEARED_VOIDED);
-    gtk_box_pack_start (GTK_BOX (box), toggle, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(toggle));
 
     /* And return the box */
     return box;

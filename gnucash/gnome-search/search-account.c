@@ -241,10 +241,11 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
                    NULL));
 
     /* Put the dialog together */
-    gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area (dialog), label,
-                        FALSE, FALSE, 3);
-    gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area (dialog), accounts_scroller,
-                        TRUE, TRUE, 3);
+    gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (dialog)), GTK_WIDGET(label));
+    gtk_box_set_spacing (GTK_BOX(gtk_dialog_get_content_area (dialog)), 3);
+
+    gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (dialog)), GTK_WIDGET(accounts_scroller));
+    gtk_box_set_spacing (GTK_BOX(gtk_dialog_get_content_area (dialog)), 3);
 
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET (dialog));
 
@@ -279,7 +280,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the account entry window */
     desc = describe_button (fi);
@@ -289,7 +290,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
     button = gtk_button_new ();
     gtk_container_add (GTK_CONTAINER (button), label);
     g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (button_clicked), fe);
-    gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(button));
 
     /* And return the box */
     return box;

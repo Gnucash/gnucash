@@ -323,7 +323,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
             button = gtk_button_new_with_label (_("Select"));
             g_signal_connect (G_OBJECT (button), "clicked",
                               G_CALLBACK (gnc_search_dialog_select_cb), sw);
-            gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 3);
+            gtk_box_append (GTK_BOX(button_box), GTK_WIDGET(button));
             sw->select_button = button;
 
             for (i = 0; sw->buttons[i].label; i++)
@@ -340,13 +340,14 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
 
                 g_signal_connect (G_OBJECT (button), "clicked",
                                   G_CALLBACK (gnc_search_dialog_result_clicked), sw);
-                gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 3);
+                gtk_box_append (GTK_BOX(button_box), GTK_WIDGET(button));
             }
         }
 
         /* Add the scrolled-view and button-box to the results_box */
-        gtk_box_pack_end (GTK_BOX (sw->result_hbox), button_box, FALSE, FALSE, 3);
-        gtk_box_pack_end (GTK_BOX (sw->result_hbox), frame, TRUE, TRUE, 3);
+        gtk_box_prepend (GTK_BOX(sw->result_hbox), GTK_WIDGET(button_box));
+        gtk_box_prepend (GTK_BOX(sw->result_hbox), GTK_WIDGET(frame));
+        gtk_box_set_spacing (GTK_BOX(sw->result_hbox), 3);
 
         /* And show the results */
 //FIXME gtk4        gtk_widget_show_all (sw->result_hbox);
@@ -750,10 +751,7 @@ combo_box_changed (GtkComboBox *combo_box, struct _crit_data *data)
     data->element = newelem;
     data->elemwidget = gnc_search_core_type_get_widget (newelem);
     if (data->elemwidget)
-    {
-        gtk_box_pack_start (GTK_BOX (data->container), data->elemwidget,
-                            FALSE, FALSE, 0);
-    }
+        gtk_box_append (GTK_BOX(data->container), GTK_WIDGET(data->elemwidget));
 
     gnc_search_core_type_pass_parent (data->element, GTK_WINDOW(data->dialog));
 
@@ -847,9 +845,9 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     data->param = sw->last_param;
 
     combo_box = get_comb_box_widget (sw, data);
-    gtk_box_pack_start (GTK_BOX (hbox), combo_box, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(combo_box));
     if (p)
-        gtk_box_pack_start (GTK_BOX (hbox), p, FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(p));
 //FIXME gtk4    gtk_widget_show_all (hbox);
 
     return hbox;
@@ -915,8 +913,7 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
 //FIXME gtk4                gtk_widget_destroy(combo_box);
                 /* Set new combo_box to current active item */
                 gtk_combo_box_set_active(GTK_COMBO_BOX(new_combo_box), index);
-                gtk_box_pack_start (GTK_BOX (data->container), new_combo_box,
-                                                               FALSE, FALSE, 0);
+                gtk_box_append (GTK_BOX(data->container), GTK_WIDGET(new_combo_box));
                 gtk_box_reorder_child(GTK_BOX (data->container), new_combo_box, 0);
 //FIXME gtk4                gtk_widget_show_all (data->container);
             }
@@ -1164,7 +1161,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     g_signal_connect (G_OBJECT (add), "clicked", G_CALLBACK (add_criterion), sw);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "add_button_box"));
-    gtk_box_pack_start (GTK_BOX (box), add, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(add));
     gtk_widget_set_visible (GTK_WIDGET(add), TRUE);
 
     /* Set the match-type menu */
@@ -1176,7 +1173,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     g_signal_connect(combo_box, "changed", G_CALLBACK (match_combo_changed), sw);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "type_menu_box"));
-    gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET(combo_box), FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(combo_box));
     gtk_widget_set_visible (GTK_WIDGET(combo_box), TRUE);
 
     /* Grab the 'all items match' label */

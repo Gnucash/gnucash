@@ -328,7 +328,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
 
     /* Amount edit */
     td->amount_edit = gnc_amount_edit_new();
-    gtk_box_pack_start(GTK_BOX(amount_hbox), td->amount_edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(amount_hbox), GTK_WIDGET(td->amount_edit));
     gnc_amount_edit_make_mnemonic_target(GNC_AMOUNT_EDIT(td->amount_edit), amount_label);
     gnc_amount_edit_set_evaluate_on_enter(GNC_AMOUNT_EDIT(td->amount_edit),
                                           TRUE);

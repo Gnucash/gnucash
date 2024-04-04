@@ -222,14 +222,14 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the entry window */
     entry = gnc_amount_edit_new ();
     if (fi->value)
         gnc_amount_edit_set_damount (GNC_AMOUNT_EDIT (entry), fi->value);
     g_signal_connect (G_OBJECT (entry), "amount_changed", G_CALLBACK (entry_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(entry));
     fi->entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (entry));
     fi->gae = GNC_AMOUNT_EDIT (entry);
 

@@ -1742,7 +1742,7 @@ gnc_gen_trans_list_new (GtkWidget *parent,
     /* Pack the content into the dialog vbox */
     GtkWidget *pbox = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_vbox"));
     GtkWidget *box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
-    gtk_box_pack_start (GTK_BOX(pbox), box, true, true, 0);
+    gtk_box_append (GTK_BOX(pbox), GTK_WIDGET(box));
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(info->main_widget), "gnc-id-import-matcher-transactions");
@@ -1793,7 +1793,8 @@ gnc_gen_trans_assist_new (GtkWidget *parent,
     /* Pack content into Assistant page widget */
     GtkWidget *box = GTK_WIDGET(gtk_builder_get_object (builder, "transaction_matcher_content"));
     g_assert (box != NULL);
-    gtk_box_pack_start (GTK_BOX(assistant_page), box, true, true, 6);
+    gtk_box_append (GTK_BOX(assistant_page), GTK_WIDGET(box));
+    gtk_box_set_spacing (GTK_BOX(assistant_page), 6);
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(box), "gnc-id-import-transaction-content");

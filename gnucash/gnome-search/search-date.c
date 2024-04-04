@@ -234,12 +234,12 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the date entry window */
     entry = gnc_date_edit_new (fi->tt, FALSE, FALSE);
     g_signal_connect (G_OBJECT (entry), "date_changed", G_CALLBACK (date_changed), fe);
-    gtk_box_pack_start (GTK_BOX (box), entry, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(entry));
     g_object_ref (entry);
     fi->entry = entry;
 

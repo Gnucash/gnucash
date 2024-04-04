@@ -725,7 +725,7 @@ show_progress(GncGWENGui *gui, Progress *progress)
                 gtk_box_set_homogeneous (GTK_BOX (box), TRUE);
             }
 
-            gtk_box_pack_start(GTK_BOX(box), entry, TRUE, TRUE, 0);
+            gtk_box_append (GTK_BOX(box), GTK_WIDGET(entry));
             gtk_widget_set_visible (GTK_WIDGET(entry), TRUE);
             if (new_box)
             {

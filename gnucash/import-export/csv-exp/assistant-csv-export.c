@@ -944,7 +944,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         info->csvd.start_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         gtk_widget_set_sensitive (info->csvd.start_date, FALSE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_hbox"));
-        gtk_box_pack_start (GTK_BOX(hbox), info->csvd.start_date, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(info->csvd.start_date));
         gtk_widget_set_visible (GTK_WIDGET(info->csvd.start_date), TRUE);
         gnc_date_edit_set_time (GNC_DATE_EDIT(info->csvd.start_date), info->csvd.start_time);
         g_signal_connect (G_OBJECT(info->csvd.start_date), "date-changed",
@@ -954,7 +954,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         info->csvd.end_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         gtk_widget_set_sensitive (info->csvd.end_date, FALSE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
-        gtk_box_pack_start (GTK_BOX(hbox), info->csvd.end_date, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(info->csvd.end_date));
         gtk_widget_set_visible (GTK_WIDGET(info->csvd.end_date), TRUE);
         gnc_date_edit_set_time (GNC_DATE_EDIT(info->csvd.end_date), info->csvd.end_time);
         g_signal_connect (G_OBJECT (info->csvd.end_date), "date-changed",
@@ -975,7 +975,8 @@ csv_export_assistant_create (CsvExportInfo *info)
     g_signal_connect (G_OBJECT(info->file_chooser), "file-activated",
                       G_CALLBACK(csv_export_file_chooser_file_activated_cb), info);
 
-    gtk_box_pack_start (GTK_BOX (info->file_page), info->file_chooser, TRUE, TRUE, 6);
+    gtk_box_append (GTK_BOX(info->file_page), GTK_WIDGET(info->file_chooser));
+    gtk_box_set_spacing (GTK_BOX(info->file_page), 6);
     gtk_widget_set_visible (GTK_WIDGET(info->file_chooser), TRUE);
 
     /* Finish Page */

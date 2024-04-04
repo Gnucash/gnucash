@@ -509,7 +509,8 @@ CsvImpTransAssist::CsvImpTransAssist ()
                       G_CALLBACK(csv_tximp_file_activated_cb), this);
 
     auto box = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
-    gtk_box_pack_start (GTK_BOX(box), file_chooser, TRUE, TRUE, 6);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(file_chooser));
+    gtk_box_set_spacing (GTK_BOX(box), 6);
     gtk_widget_set_visible (GTK_WIDGET(file_chooser), true);
 
     /* Preview Settings Page */
@@ -524,7 +525,8 @@ CsvImpTransAssist::CsvImpTransAssist ()
         gtk_combo_box_set_active (GTK_COMBO_BOX(settings_combo), 0);
 
         combo_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "combo_hbox"));
-        gtk_box_pack_start (GTK_BOX(combo_hbox), GTK_WIDGET(settings_combo), true, true, 6);
+        gtk_box_append (GTK_BOX(combo_hbox), GTK_WIDGET(settings_combo));
+        gtk_box_set_spacing (GTK_BOX(combo_hbox), 6);
         gtk_widget_set_visible (GTK_WIDGET(settings_combo), true);
     
         g_signal_connect (G_OBJECT(settings_combo), "changed",
@@ -578,7 +580,8 @@ CsvImpTransAssist::CsvImpTransAssist ()
         /* Add account selection widget */
         acct_selector = gnc_account_sel_new();
         auto account_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "account_hbox"));
-        gtk_box_pack_start (GTK_BOX(account_hbox), acct_selector, TRUE, TRUE, 6);
+        gtk_box_append (GTK_BOX(account_hbox), GTK_WIDGET(acct_selector));
+        gtk_box_set_spacing (GTK_BOX(account_hbox), 6);
         gtk_widget_set_visible (GTK_WIDGET(acct_selector), true);
 
         g_signal_connect(G_OBJECT(acct_selector), "account_sel_changed",

@@ -353,8 +353,7 @@ create_children (GNCGeneralSearch *gsl,
     gsl->entry = gtk_entry_new ();
     if (!text_editable)
         gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
-    gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
-
+    gtk_box_append (GTK_BOX(gsl), GTK_WIDGET(gsl->entry));
 
     /* Setup a GtkEntryCompletion auxiliary widget for our Entry box
      * This requires an internal table ("model") with the possible
@@ -406,7 +405,7 @@ create_children (GNCGeneralSearch *gsl,
 
     /* Add the search button */
     gsl->button = gtk_button_new_with_label (label);
-    gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(gsl), GTK_WIDGET(gsl->button));
     g_signal_connect (G_OBJECT (gsl->button), "clicked",
                       G_CALLBACK (search_cb), gsl);
     gtk_widget_set_visible (GTK_WIDGET(gsl->button), TRUE);
