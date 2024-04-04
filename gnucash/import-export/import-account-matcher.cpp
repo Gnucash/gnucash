@@ -257,7 +257,7 @@ account_tree_row_changed_cb (GtkTreeSelection *selection,
     Account *sel_account = gnc_tree_view_account_get_selected_account (picker->account_tree);
 
     /* Reset buttons and warnings */
-    gtk_widget_hide (GTK_WIDGET(picker->whbox));
+    gtk_widget_set_visible (GTK_WIDGET(picker->whbox), false);
     gtk_widget_set_sensitive (picker->ok_button, (sel_account != NULL));
 
     /* See if the selected account is a placeholder. */

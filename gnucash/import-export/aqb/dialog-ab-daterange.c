@@ -89,13 +89,12 @@ gnc_ab_enter_daterange(GtkWidget *parent,
     info.from_dateedit = gnc_date_edit_new (*from_date, FALSE, FALSE);
     gtk_container_add(GTK_CONTAINER(gtk_builder_get_object (builder, "enter_from_box")),
                       info.from_dateedit);
-    gtk_widget_show(info.from_dateedit);
+    gtk_widget_set_visible (GTK_WIDGET(info.from_dateedit), TRUE);
 
     info.to_dateedit = gnc_date_edit_new (*to_date, FALSE, FALSE);
     gtk_container_add(GTK_CONTAINER(gtk_builder_get_object (builder, "enter_to_box")),
                       info.to_dateedit);
-    gtk_widget_show(info.to_dateedit);
-
+    gtk_widget_set_visible (GTK_WIDGET(info.to_dateedit), TRUE);
     if (*last_retv_date)
     {
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(last_retrieval_button),
@@ -115,10 +114,10 @@ gnc_ab_enter_daterange(GtkWidget *parent,
     if (heading)
         gtk_label_set_text(GTK_LABEL(heading_label), heading);
 
-    gtk_widget_show(dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
 
     result = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_hide(dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), FALSE);
 
     if (result == GTK_RESPONSE_OK)
     {

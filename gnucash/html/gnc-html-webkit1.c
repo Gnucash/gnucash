@@ -1342,7 +1342,7 @@ impl_webkit_print( GncHtml* self, const gchar* jobname, gboolean export_pdf )
         g_error_free( error );
 
         g_signal_connect( dialog, "response", G_CALLBACK(gtk_widget_destroy), NULL);
-        gtk_widget_show( dialog );
+        gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
     }
 
     // Remember to save the printing settings after this print job

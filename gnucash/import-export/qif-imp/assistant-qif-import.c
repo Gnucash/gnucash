@@ -2774,15 +2774,15 @@ gnc_ui_qif_import_currency_prepare (GtkAssistant *assistant, gpointer user_data)
     {
         gtk_assistant_set_page_title (assistant, page,
                                       _("Choose the QIF file currency and select Book Options"));
-        gtk_widget_show (wind->book_option_label);
-        gtk_widget_show (wind->book_option_message);
+        gtk_widget_set_visible (GTK_WIDGET(wind->book_option_label), TRUE);
+        gtk_widget_set_visible (GTK_WIDGET(wind->book_option_message), TRUE);
     }
     else
     {
         gtk_assistant_set_page_title (assistant, page,
                                       _("Choose the QIF file currency"));
-        gtk_widget_hide (wind->book_option_label);
-        gtk_widget_hide (wind->book_option_message);
+        gtk_widget_set_visible (GTK_WIDGET(wind->book_option_label), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(wind->book_option_message), FALSE);
     }
 
     /* Enable the Assistant "Next" Button */
@@ -3965,7 +3965,7 @@ gnc_ui_qif_import_assistant_make (QIFImportWindow *qif_win)
     /* Set a default currency for new accounts */
     qif_win->currency_picker = gnc_currency_edit_new ();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(qif_win->currency_picker), gnc_default_currency ());
-    gtk_widget_show (qif_win->currency_picker);
+    gtk_widget_set_visible (GTK_WIDGET(qif_win->currency_picker), TRUE);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_picker_hbox"));
     gtk_box_pack_start (GTK_BOX(box), qif_win->currency_picker, TRUE, TRUE, 0);
 

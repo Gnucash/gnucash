@@ -121,7 +121,7 @@ gnumeric_create_popup_menu_list (GSList *elements,
                                    GTK_ICON_SIZE_MENU);
 
                 gtk_container_add (GTK_CONTAINER (box), image);
-                gtk_widget_show (image);
+                gtk_widget_set_visible (GTK_WIDGET(image), TRUE);
             }
             gtk_box_pack_end (GTK_BOX (box), label, TRUE, TRUE, 0);
             gtk_container_add (GTK_CONTAINER (item), box);
@@ -148,7 +148,7 @@ gnumeric_create_popup_menu_list (GSList *elements,
                 G_OBJECT (item), "handler", (gpointer)handler);
         }
 
-        gtk_widget_show (item);
+        gtk_widget_set_visible (GTK_WIDGET(item), TRUE);
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     }
 

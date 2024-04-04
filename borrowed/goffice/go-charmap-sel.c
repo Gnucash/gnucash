@@ -398,7 +398,7 @@ static void cs_build_menu(GOCharmapSel *cs)
                             _(charset_trans->charset_title));
                     gtk_check_menu_item_set_draw_as_radio(
                             GTK_CHECK_MENU_ITEM(subitem), TRUE);
-                    gtk_widget_show(subitem);
+                    gtk_widget_set_visible (GTK_WIDGET(subitem), TRUE);
                     gtk_menu_shell_append(GTK_MENU_SHELL(submenu), subitem);
                     if (charset_trans->imp == CI_MAJOR)
                         cs_emphasize_label(
@@ -419,14 +419,14 @@ static void cs_build_menu(GOCharmapSel *cs)
                     _(lgroup->group_name));
 
             gtk_menu_item_set_submenu(GTK_MENU_ITEM(item), GTK_WIDGET(submenu));
-            gtk_widget_show(item);
+            gtk_widget_set_visible (GTK_WIDGET(item), TRUE);
             gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
             lg_cnt++;
         }
         lgroup++;
     }
     item = gtk_separator_menu_item_new();
-    gtk_widget_show(item);
+    gtk_widget_set_visible (GTK_WIDGET(item), TRUE);
     gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
     lg_cnt++;
 
@@ -437,7 +437,7 @@ static void cs_build_menu(GOCharmapSel *cs)
         item = gtk_check_menu_item_new_with_label(locale_encoding_menu_title);
         gtk_check_menu_item_set_draw_as_radio(GTK_CHECK_MENU_ITEM(item), TRUE);
         g_free(locale_encoding_menu_title);
-        gtk_widget_show(item);
+        gtk_widget_set_visible (GTK_WIDGET(item), TRUE);
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
         lg_cnt++;
         cs_emphasize_label(GTK_LABEL(gtk_bin_get_child(GTK_BIN(item))));

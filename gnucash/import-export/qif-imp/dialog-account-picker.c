@@ -237,7 +237,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
     entry = gtk_entry_new();
     gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
     gtk_entry_set_max_length(GTK_ENTRY(entry), 250);
-    gtk_widget_show(entry);
+    gtk_widget_set_visible (GTK_WIDGET(entry), TRUE);
     gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area (GTK_DIALOG(dlg))), entry);
 
     /* Run the dialog to get the new account name. */
@@ -307,7 +307,7 @@ gnc_ui_qif_account_picker_changed_cb(GtkTreeSelection *selection,
             gtk_widget_set_sensitive (wind->ok_button, FALSE); // disable OK button
         }
         else
-            gtk_widget_hide (GTK_WIDGET(wind->pwhbox)); // hide the placeholder warning
+            gtk_widget_set_visible (GTK_WIDGET(wind->pwhbox), FALSE);  // hide the placeholder warning
     }
     else
     {
