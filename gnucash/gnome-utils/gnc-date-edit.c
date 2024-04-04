@@ -822,7 +822,7 @@ create_children (GNCDateEdit *gde)
 
     /* Create the text entry area. */
     gde->date_entry  = gtk_entry_new ();
-    gtk_entry_set_width_chars (GTK_ENTRY (gde->date_entry), 11);
+    gtk_editable_set_max_width_chars (GTK_EDITABLE(gde->date_entry), 11);
     gtk_box_append (GTK_BOX(gde), GTK_WIDGET(gde->date_entry));
     gtk_widget_set_visible (GTK_WIDGET(gde->date_entry), TRUE);
 

@@ -148,7 +148,7 @@ gas_set_property (GObject *object, guint param_id,
                 gtk_widget_set_hexpand (GTK_WIDGET(gas), expand);
                 gtk_widget_set_hexpand (GTK_WIDGET(gas->combo), expand);
 
-                gtk_entry_set_width_chars (entry, width);
+                gtk_editable_set_max_width_chars (GTK_EDITABLE(entry), width);
                 gtk_widget_queue_resize (GTK_WIDGET(gas));
             }
             break;
@@ -187,7 +187,7 @@ gas_get_property (GObject *object, guint param_id,
         case PROP_COMBO_ENTRY_WIDTH:
             {
                 GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
-                g_value_set_int (value, gtk_entry_get_width_chars (entry));
+                g_value_set_int (value, gtk_editable_get_width_chars (GTK_EDITABLE(entry)));
             }
             break;
 
