@@ -377,7 +377,10 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     done = FALSE;
     while (!done)
     {
-        response = gtk_dialog_run (GTK_DIALOG(ntt->dialog));
+//FIXME gtk4        response = gtk_dialog_run (GTK_DIALOG(ntt->dialog));
+gtk_window_set_modal (GTK_WINDOW(ntt->dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         switch (response)
         {
         case GTK_RESPONSE_OK:
@@ -674,11 +677,13 @@ static const char
     dvbox = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
     gtk_box_append (GTK_BOX(dvbox), GTK_WIDGET(main_vbox));
 
-    if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
-    {
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
-        return NULL;
-    }
+//FIXME gtk4    if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+//    if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+//    {
+//        gtk_window_destroy (GTK_WINDOW(dialog));
+//        return NULL;
+//    }
 
     text = g_strdup (gnc_entry_get_text (GTK_ENTRY(textbox)));
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));

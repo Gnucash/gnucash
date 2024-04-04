@@ -442,7 +442,8 @@ gnc_gdate_in_valid_range (GDate *test_date, gboolean warn)
                                "%s", dialog_title);
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                              "%s", dialog_msg);
-        gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4        gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
     }
     g_date_free (max_date);
@@ -783,7 +784,10 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
     g_signal_connect(perm, "clicked", G_CALLBACK(gnc_perm_button_cb), temp);
 
     /* OK. Present the dialog. */
-    response = gtk_dialog_run(dialog);
+//FIXME gtk4    response = gtk_dialog_run(dialog);
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     if ((response == GTK_RESPONSE_NONE) || (response == GTK_RESPONSE_DELETE_EVENT))
     {
         return GTK_RESPONSE_CANCEL;
@@ -821,7 +825,9 @@ gnc_new_book_option_display (GtkWidget *parent)
         /* close dialog and proceed unless help button selected */
         while (result == GTK_RESPONSE_HELP)
         {
-            result = gtk_dialog_run(GTK_DIALOG(window));
+//FIXME gtk4            result = gtk_dialog_run(GTK_DIALOG(window));
+gtk_window_set_modal (GTK_WINDOW(window), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
         }
         return FALSE;
     }

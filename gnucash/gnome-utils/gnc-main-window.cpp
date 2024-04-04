@@ -1255,7 +1255,10 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
         timer_source = g_timeout_add_seconds (1, (GSourceFunc)auto_save_countdown, dialog);
     }
 
-    response = gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    response = gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     if (timer_source)
         g_source_remove (timer_source);
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
@@ -3002,7 +3005,8 @@ gnc_main_window_engine_commit_error_callback( gpointer data,
                                      GTK_BUTTONS_CLOSE,
                                      "%s",
                                      reason );
-    gtk_dialog_run(GTK_DIALOG (dialog));
+//FIXME gtk4    gtk_dialog_run(GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
@@ -4530,7 +4534,8 @@ gnc_book_options_dialog_apply_helper(GncOptionDB * options)
                                                    GTK_BUTTONS_OK,
                                                    "%s",
                                                    (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_free (iter->data);
     }
@@ -5266,7 +5271,8 @@ gnc_main_window_cmd_help_about (GSimpleAction *simple,
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog),
                                   GTK_WINDOW (window));
-    gtk_dialog_run (dialog);
+//FIXME gtk4    gtk_dialog_run (dialog);
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 

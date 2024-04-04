@@ -325,8 +325,9 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
         gtk_widget_set_visible (dt_dialog->link_label, FALSE);
         gtk_widget_set_visible (dt_dialog->link_edit, FALSE);
     }
-
-    result = gtk_dialog_run (GTK_DIALOG(dt_dialog->dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG(dt_dialog->dialog));
+gtk_window_set_modal (GTK_WINDOW(dt_dialog->dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
     if (result == GTK_RESPONSE_OK)
     {

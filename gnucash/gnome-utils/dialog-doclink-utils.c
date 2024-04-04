@@ -429,7 +429,10 @@ gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_hea
     g_object_unref (G_OBJECT(builder));
 
     // run the dialog
-    result = gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     if (result == GTK_RESPONSE_OK)
     {
         gboolean use_old = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(use_old_path_head));

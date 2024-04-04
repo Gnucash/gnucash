@@ -86,7 +86,10 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
 
     /* Run the dialog */
 //FIXME gtk4    gtk_widget_show_all( dialog );
-    gtk_dialog_run( GTK_DIALOG(dialog) );
+
+//FIXME gtk4    gtk_dialog_run( GTK_DIALOG(dialog) );
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+
     g_object_unref(G_OBJECT(builder));
     g_object_unref (store);
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));

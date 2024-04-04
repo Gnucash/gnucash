@@ -1263,27 +1263,31 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
 
     /* run the dialog */
     encodings_bak = g_list_copy (data->encodings);
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
-    {
-        g_list_free (encodings_bak);
-        if (data->encodings && !g_list_find (data->encodings,
-                          GUINT_TO_POINTER (data->default_encoding)))
-        {
+
+//FIXME gtk4    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+
+//    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
+//    {
+//        g_list_free (encodings_bak);
+//        if (data->encodings && !g_list_find (data->encodings,
+//                          GUINT_TO_POINTER (data->default_encoding)))
+//        {
             /* choose top level encoding then */
-            data->default_encoding = GPOINTER_TO_UINT (data->encodings->data);
-        }
+//            data->default_encoding = GPOINTER_TO_UINT (data->encodings->data);
+//        }
 
         /* update whole page */
-        gxi_check_file (data);
-        gxi_update_default_enc_combo (data);
-        gxi_update_string_box (data);
-        gxi_update_conversion_forward (data);
-    }
-    else
-    {
-        g_list_free (data->encodings);
-        data->encodings = encodings_bak;
-    }
+//        gxi_check_file (data);
+//        gxi_update_default_enc_combo (data);
+//        gxi_update_string_box (data);
+//        gxi_update_conversion_forward (data);
+//    }
+//    else
+//    {
+//        g_list_free (data->encodings);
+//        data->encodings = encodings_bak;
+//    }
     g_object_unref(G_OBJECT(builder));
 
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
