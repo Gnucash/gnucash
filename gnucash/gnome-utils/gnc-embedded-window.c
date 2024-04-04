@@ -91,9 +91,9 @@ struct _GncEmbeddedWindow
      *  plugins. */
     GSimpleActionGroup *simple_action_group;
 
-    /** The accelerator group of all actions provided by the embedded
+    /** The shortcut controller of all actions provided by the embedded
      *  window. */
-    GtkAccelGroup *accel_group;
+    GtkEventController *shortcut_controller;
 
     /** The currently selected page. */
     GncPluginPage *page;
@@ -373,9 +373,10 @@ gnc_embedded_window_new (const gchar *action_group_name,
     window->parent_window = enclosing_win;
 
     // need to add the accelerator keys
-    window->accel_group = gtk_accel_group_new ();
-    gtk_window_add_accel_group (GTK_WINDOW(enclosing_win), window->accel_group);
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(window->menubar), window->menubar_model, window->accel_group);
+    window->shortcut_controller = gtk_shortcut_controller_new ();
+    gtk_widget_add_controller (GTK_WIDGET(enclosing_win), GTK_EVENT_CONTROLLER(window->shortcut_controller));
+
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(window->menubar), window->menubar_model, window->shortcut_controller);
 
     g_free (ui_fullname);
     LEAVE("window %p", window);
@@ -461,12 +462,12 @@ gnc_embedded_window_get_menubar_model (GncWindow *window)
  *  interface.
  *
  *  @param window_in A pointer to a generic window. */
-static GtkAccelGroup *
-gnc_embedded_window_get_accel_group (GncWindow *window)
+static GtkEventController *
+gnc_embedded_window_get_accel_group (GncWindow *window) //FIXME gtk4 rename
 {
     g_return_val_if_fail (GNC_IS_EMBEDDED_WINDOW(window), NULL);
 
-    return GNC_EMBEDDED_WINDOW (window)->accel_group;
+    return GNC_EMBEDDED_WINDOW (window)->shortcut_controller;
 }
 
 /** Initialize the generic window interface for an embedded window.

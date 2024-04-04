@@ -62,7 +62,7 @@ struct _GncWindowInterface
     GtkWidget  * (* get_menubar) (GncWindow *window);
     GtkWidget  * (* get_toolbar) (GncWindow *window);
     GMenuModel  * (* get_menubar_model) (GncWindow *window);
-    GtkAccelGroup * (* get_accel_group) (GncWindow *window);
+    GtkEventController * (* get_accel_group) (GncWindow *window); //FIXME gtk4 rename
     void (* ui_set_sensitive) (GncWindow *window, gboolean sensitive);
 };
 
@@ -80,7 +80,7 @@ GtkWidget     *gnc_window_get_menubar (GncWindow *window);
 GtkWidget     *gnc_window_get_toolbar (GncWindow *window);
 GtkWidget     *gnc_window_get_statusbar (GncWindow *window);
 GMenuModel    *gnc_window_get_menubar_model (GncWindow *window);
-GtkAccelGroup *gnc_window_get_accel_group (GncWindow *window);
+GtkEventController *gnc_window_get_accel_group (GncWindow *window); //FIXME gtk4 rename
 
 G_END_DECLS
 

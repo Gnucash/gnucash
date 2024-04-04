@@ -426,14 +426,14 @@ add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
  *  @param accel_group The accelerator group to use.
  */
 void
-gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GMenuModel *model, GtkAccelGroup *accel_group)
+gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GMenuModel *model, GtkEventController *shortcut_controller)
 {
     g_return_if_fail (GTK_IS_WIDGET(menu));
     g_return_if_fail (model != NULL);
-    g_return_if_fail (accel_group != NULL);
+    g_return_if_fail (shortcut_controller != NULL);
 
     // this updates the menu accelerators based on accelerator-map
-    gtk_accel_map_foreach (model, (GtkAccelMapForeach)accel_map_foreach_func);
+//FIXME gtk4    gtk_accel_map_foreach (model, (GtkAccelMapForeach)accel_map_foreach_func);
 
 //FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(menu), add_accel_for_menu_lookup, accel_group);
 }
