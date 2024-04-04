@@ -305,7 +305,7 @@ gnc_item_list_init (GncItemList* item_list)
 
 
 static gboolean
-gnc_item_list_button_event (GtkWidget* widget, GdkEventButton* event,
+gnc_item_list_button_event (GtkWidget* widget, const GdkEvent* event,
                             gpointer data)
 {
     GncItemList* item_list;
@@ -319,12 +319,18 @@ gnc_item_list_button_event (GtkWidget* widget, GdkEventButton* event,
 
     item_list = GNC_ITEM_LIST (data);
 
-    switch (event->button)
+    guint button;
+    gdouble x_win, y_win;
+    if (!gdk_event_get_button (event, &button) ||
+        !gdk_event_get_coords (event, &x_win, &y_win))
+        return FALSE;
+
+    switch (button)
     {
     case 1:
         if (!gtk_tree_view_get_path_at_pos (item_list->tree_view,
-                                            event->x,
-                                            event->y,
+                                            x_win,
+                                            y_win,
                                             &path,
                                             NULL,
                                             NULL,
@@ -359,13 +365,17 @@ gnc_item_list_button_event (GtkWidget* widget, GdkEventButton* event,
 }
 
 static gboolean
-gnc_item_list_key_event (GtkWidget* widget, GdkEventKey* event, gpointer data)
+gnc_item_list_key_event (GtkWidget* widget, const GdkEvent* event, gpointer data)
 {
     GncItemList* item_list = GNC_ITEM_LIST (data);
     gchar* string;
     gboolean retval;
+    guint keyval;
 
-    switch (event->keyval)
+    if (!gdk_event_get_keyval (event, &keyval))
+        return FALSE;
+
+    switch (keyval)
     {
     case GDK_KEY_Return:
         string = gnc_item_list_get_selection (item_list);

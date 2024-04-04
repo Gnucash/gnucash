@@ -188,11 +188,16 @@ gnc_item_edit_tb_new (GnucashSheet *sheet)
 }
 
 static gboolean
-tb_button_press_cb (G_GNUC_UNUSED GtkWidget *widget, GdkEventButton *event,
+tb_button_press_cb (G_GNUC_UNUSED GtkWidget *widget, const GdkEvent *event,
                     G_GNUC_UNUSED gpointer *user_data)
 {
+    guint button;
+
+    if (!gdk_event_get_button (event, &button))
+        return FALSE;
+
     /* Ignore double-clicks and triple-clicks */
-    if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS && button == 3)
     {
         // block a right click
         return TRUE;
@@ -260,21 +265,21 @@ gnc_item_edit_update (GncItemEdit *item_edit)
 void
 gnc_item_edit_focus_in (GncItemEdit *item_edit)
 {
-    GdkEventFocus ev;
+    GdkEventFocus event; //FIXME gtk4
 
     g_return_if_fail (item_edit != NULL);
     g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
 
-    ev.type = GDK_FOCUS_CHANGE;
-    ev.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
-    ev.in = TRUE;
-    gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
+    event.type = GDK_FOCUS_CHANGE;
+    event.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
+    event.in = TRUE;
+    gtk_widget_event (item_edit->editor, (GdkEvent*) &event); //FIXME gtk4
 }
 
 void
 gnc_item_edit_focus_out (GncItemEdit *item_edit)
 {
-    GdkEventFocus ev;
+    GdkEventFocus event; //FIXME gtk4
 
     g_return_if_fail (item_edit != NULL);
     g_return_if_fail (GNC_IS_ITEM_EDIT(item_edit));
@@ -282,10 +287,10 @@ gnc_item_edit_focus_out (GncItemEdit *item_edit)
     if (item_edit->show_popup)
         return; // Prevent recursion
 
-    ev.type = GDK_FOCUS_CHANGE;
-    ev.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
-    ev.in = FALSE;
-    gtk_widget_event (item_edit->editor, (GdkEvent*) &ev);
+    event.type = GDK_FOCUS_CHANGE;
+    event.window = gtk_widget_get_window (GTK_WIDGET(item_edit->sheet));
+    event.in = FALSE;
+    gtk_widget_event (item_edit->editor, (GdkEvent*) &event); //FIXME gtk4
 }
 
 /*
@@ -427,13 +432,13 @@ gnc_item_edit_paste_clipboard (GncItemEdit *item_edit)
 
 
 static gboolean
-key_press_popup_cb (GtkWidget *widget, GdkEventKey *event, gpointer data)
+key_press_popup_cb (GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT(data);
 
     g_signal_stop_emission_by_name (widget, "key_press_event");
 
-    gtk_widget_event (GTK_WIDGET(item_edit->sheet), (GdkEvent *) event);
+    gtk_widget_event (GTK_WIDGET(item_edit->sheet), (GdkEvent *)event);
 
     return TRUE;
 }
@@ -835,13 +840,17 @@ gnc_item_edit_get_button_width (GncItemEdit *item_edit)
 }
 
 static gboolean
-button_press_cb (GtkWidget *widget, GdkEventButton *event, gpointer *pointer)
+button_press_cb (GtkWidget *widget, const GdkEvent *event, gpointer *pointer)
 {
     GncItemEdit *item_edit = GNC_ITEM_EDIT(pointer);
     GnucashSheet *sheet = item_edit->sheet;
+    guint button;
+
+    if (!gdk_event_get_button (event, &button))
+        return FALSE;
 
     /* Ignore double-clicks and triple-clicks */
-    if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS && button == 3)
     {
         if (!item_edit->show_popup)
         {
