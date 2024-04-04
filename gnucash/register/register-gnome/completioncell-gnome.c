@@ -263,12 +263,17 @@ unblock_list_signals (CompletionCell* cell)
 }
 
 static void
-key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer user_data)
+key_press_item_cb (GncItemList* item_list, const GdkEvent* event, gpointer user_data)
 {
     CompletionCell* cell = user_data;
     PopBox* box = cell->cell.gui_private;
+    guint keyval;
 
-    switch (event->keyval)
+    if ((gdk_event_get_event_type (event) != GDK_KEY_PRESS) ||
+         !gdk_event_get_keyval (event, &keyval))
+        return;
+
+    switch (keyval)
     {
     case GDK_KEY_Escape:
         block_list_signals (cell); // Prevent recursion, unselect all
@@ -279,7 +284,7 @@ key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer user_dat
 
     default:
         gtk_widget_event (GTK_WIDGET (box->sheet),
-                          (GdkEvent*) event);
+                          (GdkEvent*)event);
         break;
     }
 }
@@ -780,17 +785,25 @@ gnc_completion_cell_direct_update (BasicCell* bcell,
 {
     CompletionCell* cell = (CompletionCell*) bcell;
     PopBox* box = cell->cell.gui_private;
-    GdkEventKey* event = gui_data;
+    const GdkEvent* event = (GdkEvent*)gui_data; //FIXME gtk4
 
-    if (event->type != GDK_KEY_PRESS)
+    if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return FALSE;
 
-    switch (event->keyval)
+    guint           keyval;
+    GdkModifierType state;
+    if (!gdk_event_get_keyval (event, &keyval) ||
+        !gdk_event_get_state (event, &state))
+    {
+        return FALSE;
+    }
+
+    switch (keyval)
     {
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
         {
-            if (event->state & GDK_CONTROL_MASK)
+            if (state & GDK_CONTROL_MASK) // only one description in register
             {
                 char* hash_string = get_entry_from_hash_if_size_is_one (cell);
 
