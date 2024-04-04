@@ -55,11 +55,17 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
                                 void *gui_data )
 {
     FormulaCell *cell = (FormulaCell *)bcell;
-    GdkEventKey *event = gui_data;
+    const GdkEvent *event = (GdkEvent*)gui_data; //FIXME gtk4
     struct lconv *lc;
     gboolean is_return;
 
-    if (event->type != GDK_KEY_PRESS)
+    if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+        return FALSE;
+
+    guint           keyval;
+    GdkModifierType state;
+    if (!gdk_event_get_keyval (event, &keyval) ||
+        !gdk_event_get_state (event, &state))
         return FALSE;
 
     lc = gnc_localeconv ();
@@ -72,15 +78,18 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
      * other not.  So, fix this.
      */
 #ifdef G_OS_WIN32
+    guint16 hardware_keycode;
     /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
-    if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KEY_KP_Decimal;
+    if (gdk_event_get_keycode (event, &hardware_keycode))
+    {
+        if (hardware_keycode == VK_DECIMAL)
+            keyval = GDK_KEY_KP_Decimal;
+    }
 #endif
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Return:
-        if (!(event->state &
-                (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK)))
+        if (!(state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK)))
             is_return = TRUE;
         /* FALL THROUGH */
 

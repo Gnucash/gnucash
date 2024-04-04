@@ -70,7 +70,7 @@ gnc_date_picker_init (GNCDatePicker *date_picker)
 }
 
 static gboolean
-gnc_date_picker_button_event (GtkWidget *widget, GdkEventButton *event,
+gnc_date_picker_button_event (GtkWidget *widget, const GdkEvent *event,
                               gpointer data)
 {
     /* So the sheet doesn't use it. */
@@ -80,12 +80,16 @@ gnc_date_picker_button_event (GtkWidget *widget, GdkEventButton *event,
 }
 
 static gboolean
-gnc_date_picker_key_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+gnc_date_picker_key_event (GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     GNCDatePicker *date_picker = GNC_DATE_PICKER (data);
     gboolean retval;
+    guint keyval;
 
-    switch (event->keyval)
+    if (!gdk_event_get_keyval (event, &keyval))
+        return FALSE;
+
+    switch (keyval)
     {
     case GDK_KEY_Return:
     case GDK_KEY_KP_Enter:
