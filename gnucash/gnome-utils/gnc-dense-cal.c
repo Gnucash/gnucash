@@ -79,7 +79,7 @@ static const int COL_BORDER_SIZE = 3;
 static void gnc_dense_cal_finalize(GObject *object);
 static void gnc_dense_cal_dispose(GObject *object);
 static void gnc_dense_cal_realize(GtkWidget *widget, gpointer user_data);
-static void gnc_dense_cal_configure(GtkWidget *widget, GdkEventConfigure *event, gpointer user_data);
+static void gnc_dense_cal_configure(GtkWidget *widget, GdkEventConfigure *event, gpointer user_data); //FIXME in GTK4
 static void gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal);
 static gboolean gnc_dense_cal_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
 
@@ -91,9 +91,9 @@ static void _gdc_compute_min_size(GncDenseCal *dcal,
                                   guint *min_width, guint *min_height);
 static void _gdc_set_cal_min_size_req(GncDenseCal *dcal);
 static gint gnc_dense_cal_motion_notify(GtkWidget      *widget,
-                                        GdkEventMotion *event);
+                                        GdkEventMotion *event); //FIXME in GTK4
 static gint gnc_dense_cal_button_press(GtkWidget *widget,
-                                       GdkEventButton *evt);
+                                       GdkEventButton *event); //FIXME in GTK4
 
 static void _gdc_view_option_changed(GtkComboBox *widget, gpointer user_data);
 
@@ -738,15 +738,20 @@ gnc_dense_cal_finalize (GObject *object)
 
 static void
 gnc_dense_cal_configure(GtkWidget *widget,
-                        GdkEventConfigure *event,
+                        GdkEventConfigure *event, //FIXME in GTK4
                         gpointer user_data)
 {
     GncDenseCal *dcal = GNC_DENSE_CAL(user_data);
     recompute_x_y_scales(dcal);
     gdc_reconfig(dcal);
-    gtk_widget_queue_draw_area(widget,
-                               event->x, event->y,
-                               event->width, event->height);
+
+    gdouble x_win, y_win;
+    if (gdk_event_get_coords ((GdkEvent*)event, &x_win, &y_win)) //FIXME in GTK4
+    {
+        gtk_widget_queue_draw_area (widget,
+                                    x_win, y_win,
+                                    event->width, event->height); //FIXME in GTK4
+    }
 }
 
 static void
@@ -1298,22 +1303,31 @@ populate_hover_window(GncDenseCal *dcal)
 
 static gint
 gnc_dense_cal_button_press(GtkWidget *widget,
-                           GdkEventButton *evt)
+                           GdkEventButton *event) //FIXME in GTK4
 {
     GdkWindow *win = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
     GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (widget), win);
     GdkRectangle work_area_size;
     GtkAllocation alloc;
     GncDenseCal *dcal = GNC_DENSE_CAL(widget);
-    gint win_xpos = evt->x_root + 5;
-    gint win_ypos = evt->y_root + 5;
+
+    gdouble x_root, y_root;
+    if (!gdk_event_get_root_coords ((GdkEvent*)event, &x_root, &y_root)) //FIXME in GTK4
+        return FALSE;
+
+    gint win_xpos = x_root + 5;
+    gint win_ypos = y_root + 5;
 
     gdk_monitor_get_workarea (mon, &work_area_size);
 
     dcal->screen_width = work_area_size.width;
     dcal->screen_height = work_area_size.height;
 
-    dcal->doc = wheres_this(dcal, evt->x, evt->y);
+    gdouble x_win, y_win;
+    if (!gdk_event_get_coords ((GdkEvent*)event, &x_win, &y_win)) //FIXME in GTK4
+        return FALSE;
+
+    dcal->doc = wheres_this (dcal, x_win, y_win);
     dcal->showPopup = ~(dcal->showPopup);
     if (dcal->showPopup && dcal->doc >= 0)
     {
@@ -1323,7 +1337,7 @@ gnc_dense_cal_button_press(GtkWidget *widget,
         // strategy, but hopefully it'll listen to us.  Certainly the
         // second move after show_all'ing the window should do the
         // trick with a bit of flicker.
-        gtk_window_move(GTK_WINDOW(dcal->transPopup), evt->x_root + 5, evt->y_root + 5);
+        gtk_window_move(GTK_WINDOW(dcal->transPopup), x_root + 5, y_root + 5);
 
         populate_hover_window(dcal);
         gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
@@ -1331,11 +1345,11 @@ gnc_dense_cal_button_press(GtkWidget *widget,
 
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 
-        if (evt->x_root + 5 + alloc.width > dcal->screen_width)
-            win_xpos = evt->x_root - 2 - alloc.width;
+        if (x_root + 5 + alloc.width > dcal->screen_width)
+            win_xpos = x_root - 2 - alloc.width;
 
-        if (evt->y_root + 5 + alloc.height > dcal->screen_height)
-            win_ypos = evt->y_root - 2 - alloc.height;
+        if (y_root + 5 + alloc.height > dcal->screen_height)
+            win_ypos = y_root - 2 - alloc.height;
 
         gtk_window_move(GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
     }
@@ -1349,30 +1363,35 @@ gnc_dense_cal_button_press(GtkWidget *widget,
 
 static gint
 gnc_dense_cal_motion_notify(GtkWidget *widget,
-                            GdkEventMotion *event)
+                            GdkEventMotion *event) //FIXME in GTK4
 {
     GncDenseCal *dcal;
     GtkAllocation alloc;
     gint doc;
     int unused;
     GdkModifierType unused2;
-    gint win_xpos = event->x_root + 5;
-    gint win_ypos = event->y_root + 5;
-
     dcal = GNC_DENSE_CAL(widget);
     if (!dcal->showPopup)
         return FALSE;
 
-    /* As per https://www.gtk.org/tutorial/sec-eventhandling.html */
-    if (event->is_hint)
-    {
-        GdkSeat *seat = gdk_display_get_default_seat (gdk_window_get_display (event->window));
-        GdkDevice *pointer = gdk_seat_get_pointer (seat);
+    gdouble x_root, y_root;
+    if (!gdk_event_get_root_coords ((GdkEvent*)event, &x_root, &y_root)) //FIXME in GTK4
+        return FALSE;
 
-        gdk_window_get_device_position (event->window, pointer,  &unused,  &unused, &unused2);
-    }
+    gint win_xpos = x_root + 5;
+    gint win_ypos = y_root + 5;
 
-    doc = wheres_this(dcal, event->x, event->y);
+    GdkSeat *seat = gdk_display_get_default_seat (gdk_window_get_display (
+                                                  gdk_event_get_window ((GdkEvent*)event)));
+    GdkDevice *pointer = gdk_seat_get_pointer (seat);
+    gdk_window_get_device_position (gdk_event_get_window ((GdkEvent*)event),
+                                    pointer,  &unused,  &unused, &unused2);
+
+    gdouble x_win, y_win;
+    if (!gdk_event_get_coords ((GdkEvent*)event, &x_win, &y_win)) //FIXME in GTK4
+        return FALSE;
+
+    doc = wheres_this (dcal, x_win, y_win);
     if (doc >= 0)
     {
         if (dcal->doc != doc) // if we are on the same day, no need to reload
@@ -1384,11 +1403,11 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
         }
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 
-        if (event->x_root + 5 + alloc.width > dcal->screen_width)
-            win_xpos = event->x_root - 2 - alloc.width;
+        if (x_root + 5 + alloc.width > dcal->screen_width)
+            win_xpos = x_root - 2 - alloc.width;
 
-        if (event->y_root + 5 + alloc.height > dcal->screen_height)
-            win_ypos = event->y_root - 2 - alloc.height;
+        if (y_root + 5 + alloc.height > dcal->screen_height)
+            win_ypos = y_root - 2 - alloc.height;
 
         gtk_window_move(GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
     }

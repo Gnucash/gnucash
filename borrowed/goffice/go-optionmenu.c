@@ -117,32 +117,41 @@ static void go_option_menu_select_item(GOOptionMenu *option_menu,
 }
 
 static gint go_option_menu_button_press(GtkWidget *widget,
-        GdkEventButton *event)
+        GdkEventButton *event) //FIXME in GTK4
 {
     GOOptionMenu *option_menu;
+    guint button;
 
     g_return_val_if_fail(GO_IS_OPTION_MENU(widget), FALSE);
     g_return_val_if_fail(event != NULL, FALSE);
 
     option_menu = GO_OPTION_MENU(widget);
 
-    if (event->type == GDK_BUTTON_PRESS && event->button == 1)
+    if (!gdk_event_get_button ((GdkEvent*)event, &button)) //FIXME in GTK4
+        return FALSE;
+
+    if ((gdk_event_get_event_type ((GdkEvent*)event) == GDK_BUTTON_PRESS) && (button == 1)) //FIXME in GTK4
     {
         gtk_menu_popup_at_widget (GTK_MENU(option_menu->menu),
                                   widget,
                                   GDK_GRAVITY_SOUTH_WEST,
                                   GDK_GRAVITY_NORTH_WEST,
-                                  (GdkEvent *) event);
+                                  (GdkEvent *) event); //FIXME in GTK4
         return TRUE;
     }
     return FALSE;
 }
 
-static gint go_option_menu_key_press(GtkWidget *widget, GdkEventKey *event)
+static gint go_option_menu_key_press(GtkWidget *widget, GdkEventKey *event) //FIXME in GTK4
 {
     GOOptionMenu *option_menu = GO_OPTION_MENU(widget);
 
-    switch (event->keyval)
+    guint keyval;
+
+    if (!gdk_event_get_keyval ((GdkEvent*)event, &keyval)) //FIXME in GTK4
+        return FALSE;
+
+    switch (keyval)
     {
     case GDK_KEY_KP_Space:
     case GDK_KEY_space:
@@ -150,7 +159,7 @@ static gint go_option_menu_key_press(GtkWidget *widget, GdkEventKey *event)
                                   widget,
                                   GDK_GRAVITY_SOUTH_WEST,
                                   GDK_GRAVITY_NORTH_WEST,
-                                  (GdkEvent *) event);
+                                  (GdkEvent *) event); //FIXME in GTK4
         return TRUE;
     }
 

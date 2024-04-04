@@ -58,7 +58,7 @@ static void gnc_amount_edit_changed (GtkEditable *gae,
 static void gnc_amount_edit_paste_clipboard (GtkEntry *entry,
                                              gpointer user_data);
 static gint gnc_amount_edit_key_press (GtkWidget   *widget,
-                                       GdkEventKey *event,
+                                       const GdkEvent *event,
                                        gpointer user_data);
 
 #define GNC_AMOUNT_EDIT_PATH "gnc-amount-edit-path"
@@ -267,7 +267,7 @@ gnc_amount_edit_paste_clipboard (GtkEntry *entry, gpointer user_data)
 }
 
 static gint
-gnc_amount_edit_key_press (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gnc_amount_edit_key_press (GtkWidget *widget, const GdkEvent *event, gpointer user_data)
 {
     GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
     gint result;
@@ -278,27 +278,38 @@ gnc_amount_edit_key_press (GtkWidget *widget, GdkEventKey *event, gpointer user_
         gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
     }
 
+    guint           keyval;
+    GdkModifierType state;
+    if (!gdk_event_get_keyval (event, &keyval) ||
+        !gdk_event_get_state (event, &state))
+        return FALSE;
+
 #ifdef G_OS_WIN32
+    guint16 hardware_keycode;
     /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
-    if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KEY_KP_Decimal;
+    if (gdk_event_get_keycode (event, &hardware_keycode))
+    {
+        if (hardware_keycode == VK_DECIMAL)
+            keyval = GDK_KEY_KP_Decimal;
+    }
 #endif
-    if (event->keyval == GDK_KEY_KP_Decimal)
+
+    if (keyval == GDK_KEY_KP_Decimal)
     {
         if (gae->print_info.monetary)
         {
             struct lconv *lc = gnc_localeconv ();
-            event->keyval = lc->mon_decimal_point[0];
-            event->string[0] = lc->mon_decimal_point[0];
+            keyval = lc->mon_decimal_point[0];
+            event->key.string[0] = lc->mon_decimal_point[0]; //FIXME in GTK4
         }
     }
 
-    result = (* GTK_WIDGET_GET_CLASS(widget)->key_press_event)(widget, event);
+    result = (* GTK_WIDGET_GET_CLASS(widget)->key_press_event)(widget, (GdkEventKey*)event); //FIXME in GTK4
 
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Return:
-        if (event->state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
+        if (state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
             break;
     case GDK_KEY_KP_Enter:
         if (gae->evaluate_on_enter)
