@@ -684,7 +684,7 @@ webkit_notification_cb (WebKitWebView* web_view, WebKitNotification *note,
                                       webkit_notification_get_title (note),
                                       webkit_notification_get_body (note));
      gtk_dialog_run (GTK_DIALOG (dialog));
-     gtk_widget_destroy (dialog);
+//FIXME gtk4     gtk_window_destroy (GTK_WINDOW(dialog));
      return TRUE;
 }
 

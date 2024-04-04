@@ -312,7 +312,7 @@ gnc_GWEN_Gui_shutdown(void)
         GWEN_DB_Group_free(gui->permanently_accepted_certs);
     if (gui->accepted_certs)
         g_hash_table_destroy(gui->accepted_certs);
-    gtk_widget_destroy(gui->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(gui->dialog));
     g_free(gui);
 
     full_gui = NULL;
@@ -529,14 +529,14 @@ reset_dialog(GncGWENGui *gui)
     {
         gtk_grid_remove_row (GTK_GRID(gui->entries_grid),
                              OTHER_ENTRIES_ROW_OFFSET);
-        gtk_widget_destroy(gui->other_entries_box);
+//FIXME gtk4        gtk_widget_destroy(gui->other_entries_box);
         gui->other_entries_box = NULL;
     }
     if (gui->showbox_hash)
         g_hash_table_destroy(gui->showbox_hash);
     gui->showbox_last = NULL;
-    gui->showbox_hash = g_hash_table_new_full(
-                            NULL, NULL, NULL, (GDestroyNotify) gtk_widget_destroy);
+//FIXME gtk4    gui->showbox_hash = g_hash_table_new_full(
+//                            NULL, NULL, NULL, (GDestroyNotify) gtk_window_destroy);
 
     if (gui->parent)
         gtk_window_set_transient_for(GTK_WINDOW(gui->dialog),
@@ -800,7 +800,7 @@ hide_progress(GncGWENGui *gui, Progress *progress)
             if (entries->next)
             {
                 /* Another progress is still to be showed */
-                gtk_widget_destroy(GTK_WIDGET(g_list_last(entries)->data));
+//FIXME gtk4                gtk_widget_destroy(GTK_WIDGET(g_list_last(entries)->data));
             }
             else
             {
@@ -1115,7 +1115,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     g_object_unref(G_OBJECT(builder));
 
     /* This trashes passwords in the entries' memory as well */
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     LEAVE("input %s", *input ? "non-NULL" : "NULL");
 }
@@ -1154,7 +1154,7 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
 
     result = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     if (result < 1 || result > 3)
     {

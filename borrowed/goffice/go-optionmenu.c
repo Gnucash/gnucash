@@ -328,7 +328,7 @@ static void go_option_menu_destroy(GtkWidget *widget)
 
     if (option_menu->menu)
     {
-        gtk_widget_destroy(GTK_WIDGET(option_menu->menu));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(option_menu->menu));
         g_object_unref(option_menu->menu);
         option_menu->menu = NULL;
     }

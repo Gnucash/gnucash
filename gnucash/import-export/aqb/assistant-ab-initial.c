@@ -166,7 +166,7 @@ aai_key_press_event_cb(GtkWidget *widget, const GdkEvent *event, gpointer user_d
 
     if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
-        gtk_widget_destroy(widget);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(widget));
         return TRUE;
     }
     else
@@ -180,7 +180,7 @@ aai_on_cancel (GtkAssistant *gtkassistant, gpointer user_data)
 {
     ABInitialInfo *info = user_data;
 
-    gtk_widget_destroy(info->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(info->window));
 }
 
 void
@@ -218,7 +218,7 @@ aai_destroy_cb(GtkWidget *object, gpointer user_data)
         info->api = NULL;
     }
 
-    gtk_widget_destroy(info->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(info->window));
     info->window = NULL;
 
     g_free(info);
@@ -434,7 +434,7 @@ aai_on_finish (GtkAssistant *assistant, gpointer user_data)
     g_hash_table_foreach(info->gnc_revhash, (GHFunc) clear_kvp_acc_cb, NULL);
     g_hash_table_foreach(info->gnc_hash, (GHFunc) save_kvp_acc_cb, NULL);
 
-    gtk_widget_destroy(info->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(info->window));
 }
 
 static gboolean
@@ -721,7 +721,7 @@ aai_close_handler(gpointer user_data)
     ABInitialInfo *info = user_data;
 
     gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(info->window));
-    gtk_widget_destroy(info->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(info->window));
 }
 
 void aai_on_prepare (GtkAssistant  *assistant, GtkWidget *page,

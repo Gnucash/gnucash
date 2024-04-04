@@ -119,7 +119,7 @@ csv_import_read_file (GtkWindow *window, const gchar *filename,
                                          GTK_MESSAGE_ERROR,
                                          GTK_BUTTONS_OK, "%s", errmsg);
         gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_free (errmsg);
         g_free (contents);
 

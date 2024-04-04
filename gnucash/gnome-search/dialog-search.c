@@ -912,7 +912,7 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
                 /* If current combo_box has focus, point to new_combo-box */
                 if (focused_widget == combo_box)
                     focused_widget = new_combo_box;
-                gtk_widget_destroy(combo_box);
+//FIXME gtk4                gtk_widget_destroy(combo_box);
                 /* Set new combo_box to current active item */
                 gtk_combo_box_set_active(GTK_COMBO_BOX(new_combo_box), index);
                 gtk_box_pack_start (GTK_BOX (data->container), new_combo_box,
@@ -1067,7 +1067,7 @@ close_handler (gpointer data)
     GNCSearchWindow * sw = data;
 
     g_return_if_fail (sw);
-    gtk_widget_destroy (sw->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(sw->dialog));
     /* DRH: should sw be freed here? */
 }
 

@@ -226,7 +226,7 @@ gnc_gen_trans_list_delete (GNCImportMainMatcher *info)
         gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->main_widget));
         gnc_import_Settings_delete (info->user_settings);
         gnc_unregister_gui_component (info->id);
-        gtk_widget_destroy (GTK_WIDGET(info->main_widget));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(info->main_widget));
     }
     else
         gnc_import_Settings_delete (info->user_settings);
@@ -616,7 +616,7 @@ on_matcher_help_close_clicked (GtkButton *button, gpointer user_data)
 {
     auto help_dialog = static_cast<GtkWidget *>(user_data);
 
-    gtk_widget_destroy (help_dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(help_dialog));
 }
 
 void
@@ -1078,7 +1078,7 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo& rowinfo,
         break;
     }
 
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_object_unref (G_OBJECT(builder));
     return retval;
 }

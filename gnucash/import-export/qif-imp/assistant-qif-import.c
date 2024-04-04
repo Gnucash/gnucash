@@ -466,7 +466,7 @@ gnc_ui_qif_import_assistant_destroy (GtkWidget *object, gpointer user_data)
 
     gnc_unregister_gui_component_by_data (ASSISTANT_QIF_IMPORT_CM_CLASS, wind);
 
-    gtk_widget_destroy (wind->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(wind->window));
 
     scm_gc_unprotect_object (wind->imported_files);
     scm_gc_unprotect_object (wind->selected_file);
@@ -3995,7 +3995,7 @@ gnc_ui_qif_import_assistant_close_handler (gpointer user_data)
     QIFImportWindow *qif_win = user_data;
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(qif_win->window));
-    gtk_widget_destroy (qif_win->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(qif_win->window));
 }
 
 

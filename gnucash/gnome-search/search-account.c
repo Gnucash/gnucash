@@ -261,7 +261,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
         gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), desc);
     }
 
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 static GtkWidget *

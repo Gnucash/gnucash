@@ -461,7 +461,7 @@ gnc_import_match_picker_run_and_close (GtkWidget *parent, GNCImportTransInfo *tr
     
     gnc_save_window_size(GNC_PREFS_GROUP,
                          GTK_WINDOW (matcher->transaction_matcher));
-    gtk_widget_destroy (matcher->transaction_matcher);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(matcher->transaction_matcher));
     /*DEBUG("Right after run and close");*/
     /* DEBUG("Response was %d.", response); */
     if (response == GTK_RESPONSE_OK && matcher->selected_match_info != old)

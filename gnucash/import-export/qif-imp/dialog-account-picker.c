@@ -260,7 +260,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
         wind->selected_name = fullname;
         scm_call_2(name_setter, wind->map_entry, scm_from_utf8_string(fullname));
     }
-    gtk_widget_destroy(dlg);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dlg));
 
     /* Refresh the tree display and give it the focus. */
     build_acct_tree(wind, wind->qif_wind);
@@ -484,7 +484,7 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
     }
     while (response == GNC_RESPONSE_NEW);
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(wind->dialog));
-    gtk_widget_destroy(wind->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(wind->dialog));
     g_object_unref(G_OBJECT(builder));
 
     scm_gc_unprotect_object(wind->map_entry);

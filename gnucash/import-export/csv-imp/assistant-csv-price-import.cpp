@@ -723,7 +723,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
  *******************************************************/
 CsvImpPriceAssist::~CsvImpPriceAssist ()
 {
-    gtk_widget_destroy (GTK_WIDGET(csv_imp_asst));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(csv_imp_asst));
 }
 
 /**************************************************

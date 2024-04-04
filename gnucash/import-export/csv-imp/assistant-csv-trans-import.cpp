@@ -693,7 +693,7 @@ CsvImpTransAssist::~CsvImpTransAssist ()
     /* The call above frees gnc_csv_importer_gui but can't nullify it.
      * Do it here so no one accidentally can access it still */
     gnc_csv_importer_gui = nullptr;
-    gtk_widget_destroy (GTK_WIDGET(csv_imp_asst));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(csv_imp_asst));
 }
 
 

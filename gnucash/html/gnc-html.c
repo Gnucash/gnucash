@@ -120,7 +120,7 @@ gnc_html_dispose( GObject* obj )
 
     if ( priv->container != NULL )
     {
-        gtk_widget_destroy( GTK_WIDGET(priv->container) );
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(priv->container));
         g_object_unref( G_OBJECT(priv->container) );
         priv->container = NULL;
     }

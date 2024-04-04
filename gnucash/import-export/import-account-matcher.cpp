@@ -486,7 +486,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
 
         g_object_unref(G_OBJECT(builder));
         gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(picker->dialog));
-        gtk_widget_destroy(picker->dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(picker->dialog));
     }
     else
     {

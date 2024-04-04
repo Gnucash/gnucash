@@ -552,7 +552,7 @@ csv_import_close_handler (gpointer user_data)
     g_object_unref (info->store);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->assistant));
-    gtk_widget_destroy (info->assistant);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(info->assistant));
 }
 
 /*******************************************************

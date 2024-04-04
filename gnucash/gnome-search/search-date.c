@@ -95,8 +95,8 @@ gnc_search_date_finalize (GObject *obj)
     g_assert (GNC_IS_SEARCH_DATE (obj));
 
     o = GNC_SEARCH_DATE(obj);
-    if (o->entry)
-        gtk_widget_destroy (o->entry);
+//FIXME gtk4    if (o->entry)
+//        gtk_window_destroy (GTK_WINDOW(o->entry));
 
     G_OBJECT_CLASS (gnc_search_date_parent_class)->finalize(obj);
 }

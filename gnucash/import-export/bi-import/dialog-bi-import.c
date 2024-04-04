@@ -143,7 +143,7 @@ gnc_bi_import_read_file (const gchar * filename, const gchar * parser_regexp,
                                          GTK_MESSAGE_ERROR,
                                          GTK_BUTTONS_OK, "%s", errmsg);
         gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_free (errmsg);
         errmsg = 0;
 
@@ -728,7 +728,7 @@ gnc_bi_import_create_bis (GtkListStore * store, QofBook * book,
                                                      "%s",
                                                      _("Do you want to update existing bills/invoices?"));
                     update = gtk_dialog_run (GTK_DIALOG (dialog));
-                    gtk_widget_destroy (dialog);
+//FIXME gtk4                    gtk_window_destroy (GTK_WINDOW(dialog));
                 }
 
                 if (update == NO)

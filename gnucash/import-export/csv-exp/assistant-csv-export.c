@@ -840,7 +840,7 @@ csv_export_close_handler (gpointer user_data)
         g_free (info->mid_sep);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->assistant));
-    gtk_widget_destroy (info->assistant);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(info->assistant));
 }
 
 /*******************************************************
@@ -878,9 +878,9 @@ csv_export_assistant_create (CsvExportInfo *info)
         GtkWidget *chkbox = GTK_WIDGET(gtk_builder_get_object(builder, "simple_layout"));
 
         // Don't provide simple export layout for search registers and General Journal
-        if ((info->export_type == XML_EXPORT_TREE) ||
-            (g_list_length (info->csva.account_list) == 0))
-            gtk_widget_destroy (chkbox);
+//FIXME gtk4        if ((info->export_type == XML_EXPORT_TREE) ||
+//            (g_list_length (info->csva.account_list) == 0))
+//            gtk_widget_destroy (chkbox);
         gtk_assistant_remove_page (GTK_ASSISTANT(info->assistant), 1); //remove accounts page
     }
     else
