@@ -846,7 +846,7 @@ gnc_plugin_page_budget_cmd_view_options (GSimpleAction *simple,
             GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))));
 
         gbname = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetName"));
-        gtk_entry_set_text (GTK_ENTRY(gbname), gnc_budget_get_name (priv->budget));
+        gnc_entry_set_text (GTK_ENTRY(gbname), gnc_budget_get_name (priv->budget));
 
         gbtreeview = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetDescription"));
         buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(gbtreeview));
@@ -876,7 +876,7 @@ gnc_plugin_page_budget_cmd_view_options (GSimpleAction *simple,
         switch (result)
         {
         case GTK_RESPONSE_OK:
-            name = (gchar *) gtk_entry_get_text (GTK_ENTRY(gbname));
+            name = (gchar *) gnc_entry_get_text (GTK_ENTRY(gbname));
             DEBUG("%s", name);
             if (name)
             {
@@ -1185,7 +1185,7 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
         GTK_WINDOW(gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(page))));
 
     val = GTK_WIDGET(gtk_builder_get_object (builder, "Value"));
-    gtk_entry_set_text (GTK_ENTRY(val), "");
+    gnc_entry_set_text (GTK_ENTRY(val), "");
 
     dtr = GTK_WIDGET(gtk_builder_get_object (builder, "DigitsToRound1"));
     gtk_spin_button_set_value (GTK_SPIN_BUTTON(dtr), (gdouble)priv->sigFigs);
@@ -1201,7 +1201,7 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
 
         priv->sigFigs = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(dtr));
         priv->action = REPLACE;
-        txt = gtk_entry_get_text (GTK_ENTRY(val));
+        txt = gnc_entry_get_text (GTK_ENTRY(val));
 
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(add)))
             priv->action = ADD;

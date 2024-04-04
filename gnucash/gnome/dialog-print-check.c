@@ -361,11 +361,11 @@ gchar *
 get_check_address( PrintCheckDialog *pcd)
 {
     gchar *address;
-    address = g_strconcat(gtk_entry_get_text(GTK_ENTRY(pcd->check_address_name)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_1)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_2)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_3)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_4)),
+    address = g_strconcat(gnc_entry_get_text(GTK_ENTRY(pcd->check_address_name)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_1)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_2)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_3)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_4)),
                           NULL);
     return address;
 }
@@ -880,7 +880,7 @@ gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
     const gchar *text;
     gboolean sensitive;
 
-    text = gtk_entry_get_text(GTK_ENTRY(editable));
+    text = gnc_entry_get_text(GTK_ENTRY(editable));
     sensitive = text && *text;
     gtk_widget_set_sensitive(ok_button, sensitive);
 }
@@ -915,7 +915,7 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
         return;
     }
 
-    title = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
+    title = g_strdup(gnc_entry_get_text(GTK_ENTRY(entry)));
     gtk_widget_destroy (dialog);
 
     g_object_unref(G_OBJECT(builder));
@@ -1768,17 +1768,17 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
             gncOwnerCopy (gncOwnerGetEndOwner (&txn_owner), &owner);
 
             /* Got a business owner, get the address */
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), gncOwnerGetName(&owner));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_1), gncAddressGetAddr1 (gncOwnerGetAddr(&owner)));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_2), gncAddressGetAddr2 (gncOwnerGetAddr(&owner)));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_3), gncAddressGetAddr3 (gncOwnerGetAddr(&owner)));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_4), gncAddressGetAddr4 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_name), gncOwnerGetName(&owner));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_1), gncAddressGetAddr1 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_2), gncAddressGetAddr2 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_3), gncAddressGetAddr3 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_4), gncAddressGetAddr4 (gncOwnerGetAddr(&owner)));
         }
     }
 
     /* Use transaction description as address name if no better address has been found */
     if ( trans && (0 == gtk_entry_get_text_length (GTK_ENTRY(pcd->check_address_name))) )
-        gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), xaccTransGetDescription(trans));
+        gnc_entry_set_text(GTK_ENTRY(pcd->check_address_name), xaccTransGetDescription(trans));
 
     gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "lower_left")));
 

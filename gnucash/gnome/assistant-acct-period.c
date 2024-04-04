@@ -386,7 +386,7 @@ ap_assistant_book_prepare (GtkAssistant *assistant, gpointer user_data)
                              g_date_get_year(&info->prev_closing_date));
 
     str = g_strdup_printf (_("Period %s - %s"), prev_close_date_str, close_date_str);
-    gtk_entry_set_text (GTK_ENTRY(info->book_title), str);
+    gnc_entry_set_text (GTK_ENTRY(info->book_title), str);
 
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(info->book_notes));
     gtk_text_buffer_set_text(buffer, str, -1);
@@ -407,7 +407,7 @@ ap_assistant_apply_prepare (GtkAssistant *assistant, gpointer user_data)
           "click on \"Apply\". Click on \"Back\" to adjust, "
 	  "or \"Cancel\" to not create any book.");
 
-    btitle = gtk_entry_get_text (GTK_ENTRY(info->book_title));
+    btitle = gnc_entry_get_text (GTK_ENTRY(info->book_title));
     str = g_strdup_printf (apply_text, btitle);
     gtk_label_set_text (GTK_LABEL(info->apply_label), str);
     g_free (str);
@@ -472,7 +472,7 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 
     ENTER("info=%p", info);
 
-    btitle = gtk_entry_get_text (GTK_ENTRY(info->book_title));
+    btitle = gnc_entry_get_text (GTK_ENTRY(info->book_title));
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(info->book_notes));
     len = gtk_text_buffer_get_char_count (buffer);
     gtk_text_buffer_get_iter_at_offset(buffer, &startiter, 0);

@@ -472,9 +472,7 @@ filter_button_cb (GtkButton *button, ImapDialog *imap_dialog)
 {
     GtkTreeIter   iter;
     gboolean      valid;
-    const gchar  *filter_text;
-
-    filter_text = gtk_entry_get_text (GTK_ENTRY(imap_dialog->filter_text_entry));
+    const gchar  *filter_text = gnc_entry_get_text (GTK_ENTRY(imap_dialog->filter_text_entry));
 
     // Collapse all nodes
     gtk_tree_view_collapse_all (GTK_TREE_VIEW(imap_dialog->view));
@@ -501,7 +499,7 @@ static void
 expand_button_cb (GtkButton *button, ImapDialog *imap_dialog)
 {
     // Clear the filter
-    gtk_entry_set_text (GTK_ENTRY(imap_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(imap_dialog->filter_text_entry), "");
 
     filter_button_cb (button, imap_dialog);
 
@@ -512,7 +510,7 @@ static void
 collapse_button_cb (GtkButton *button, ImapDialog *imap_dialog)
 {
     // Clear the filter
-    gtk_entry_set_text (GTK_ENTRY(imap_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(imap_dialog->filter_text_entry), "");
 
     filter_button_cb (button, imap_dialog);
 
@@ -810,7 +808,7 @@ get_account_info (ImapDialog *imap_dialog)
     gtk_tree_store_clear (GTK_TREE_STORE(imap_dialog->model));
 
     // Clear the filter
-    gtk_entry_set_text (GTK_ENTRY(imap_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(imap_dialog->filter_text_entry), "");
     imap_dialog->apply_selection_filter = FALSE;
 
     // Hide Count Column

@@ -1498,7 +1498,7 @@ static void
 stock_assistant_model_description_changed_cb(GtkWidget* widget, void* data)
 {
     auto model{static_cast<StockAssistantModel*>(data)};
-    model->set_transaction_desc(gtk_entry_get_text(GTK_ENTRY(widget)));
+    model->set_transaction_desc(gnc_entry_get_text(GTK_ENTRY(widget)));
 }
 
 /* ********************* View Classes ************************/
@@ -1507,7 +1507,7 @@ stock_assistant_model_description_changed_cb(GtkWidget* widget, void* data)
 static void
 text_entry_changed_cb (GtkWidget *widget, StockTransactionEntry* entry)
 {
-    entry->set_memo(gtk_entry_get_text (GTK_ENTRY (widget)));
+    entry->set_memo(gnc_entry_get_text (GTK_ENTRY (widget)));
 }
 
 
@@ -1844,7 +1844,7 @@ class PageTransDeets
 public:
     PageTransDeets (GtkBuilder *builder);
     time64 get_date_time () { return m_date.get_date_time(); }
-    const char* get_description () { return gtk_entry_get_text (GTK_ENTRY (m_description)); }
+    const char* get_description () { return gnc_entry_get_text (GTK_ENTRY (m_description)); }
     void connect (StockAssistantModel*);
     void prepare(StockAssistantModel*);
 };
@@ -2014,7 +2014,7 @@ PageStockValue::prepare(StockTransactionEntry* entry)
 const char *
 PageStockValue::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 void
@@ -2075,7 +2075,7 @@ PageCash::prepare(StockTransactionEntry* entry)
 const char *
 PageCash::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 /** Fees page. Controls for selecting whether to capitalize
@@ -2128,7 +2128,7 @@ PageFees::get_capitalize_fees()
 const char *
 PageFees::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 void
@@ -2227,7 +2227,7 @@ PageDividend::prepare(StockTransactionEntry* entry)
 const char *
 PageDividend::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 class PageCapGain
@@ -2258,7 +2258,7 @@ PageCapGain::PageCapGain (GtkBuilder *builder, Account* account) :
 const char *
 PageCapGain::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 
