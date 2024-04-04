@@ -3824,7 +3824,7 @@ gnc_plugin_page_register_cmd_void_transaction (GSimpleAction *simple,
     result = gtk_dialog_run (GTK_DIALOG (dialog));
     if (result == GTK_RESPONSE_OK)
     {
-        reason = gtk_entry_get_text (GTK_ENTRY (entry));
+        reason = gnc_entry_get_text (GTK_ENTRY (entry));
         if (reason == NULL)
             reason = "";
         gnc_split_register_void_current_trans (reg, reason);

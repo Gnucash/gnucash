@@ -370,7 +370,7 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
     {
         const char *description;
 
-        description = gtk_entry_get_text (GTK_ENTRY (info->description_entry));
+        description = gnc_entry_get_text (GTK_ENTRY (info->description_entry));
         xaccTransSetDescription (trans, description);
     }
 
@@ -423,7 +423,7 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
     {
         const char *memo;
 
-        memo = gtk_entry_get_text (GTK_ENTRY (info->memo_entry));
+        memo = gnc_entry_get_text (GTK_ENTRY (info->memo_entry));
 
         /* asset split */
         account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));

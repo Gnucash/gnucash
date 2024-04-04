@@ -1087,7 +1087,7 @@ identity_edit_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
     if (response == GTK_RESPONSE_APPLY)
     {
-        entry_name = gtk_entry_get_text (GTK_ENTRY (ti_dialog->entity_name_entry));
+        entry_name = gnc_entry_get_text (GTK_ENTRY (ti_dialog->entity_name_entry));
         active_item = gtk_combo_box_get_active
                       (GTK_COMBO_BOX (ti_dialog->entity_type_combo));
         if (active_item != -1)  /* -1 if there's no active item */
@@ -1197,7 +1197,7 @@ identity_edit_clicked_cb (GtkButton *button,
     name_entry = gtk_entry_new();
     ti_dialog->entity_name_entry = name_entry;
     if (!(g_strcmp0 (ti_dialog->tax_name, NULL) == 0))
-        gtk_entry_set_text (GTK_ENTRY (name_entry), ti_dialog->tax_name);
+        gnc_entry_set_text (GTK_ENTRY (name_entry), ti_dialog->tax_name);
     label = gtk_label_new (_("Name"));
     gnc_label_set_alignment (label, 1.00, 0.50);
     table = gtk_grid_new ();

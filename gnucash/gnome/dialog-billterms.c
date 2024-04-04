@@ -216,7 +216,7 @@ ui_to_billterm (NewBillTerm *nbt)
     term = nbt->this_term;
     notebook = &nbt->notebook;
 
-    text = gtk_entry_get_text (GTK_ENTRY(nbt->desc_entry));
+    text = gnc_entry_get_text (GTK_ENTRY(nbt->desc_entry));
     if (text)
         gncBillTermSetDescription (term, text);
 
@@ -244,7 +244,7 @@ ui_to_billterm (NewBillTerm *nbt)
 static void
 billterm_to_ui (GncBillTerm *term, GtkWidget *desc, BillTermNB *notebook)
 {
-    gtk_entry_set_text (GTK_ENTRY(desc), gncBillTermGetDescription (term));
+    gnc_entry_set_text (GTK_ENTRY(desc), gncBillTermGetDescription (term));
     notebook->type = gncBillTermGetType (term);
 
     switch (notebook->type)
@@ -318,7 +318,7 @@ new_billterm_ok_cb (NewBillTerm *nbt)
     /* verify the name, maybe */
     if (nbt->this_term == NULL)
     {
-        name = gtk_entry_get_text (GTK_ENTRY(nbt->name_entry));
+        name = gnc_entry_get_text (GTK_ENTRY(nbt->name_entry));
         if (name == NULL || *name == '\0')
         {
             message = _("You must provide a name for this Billing Term.");
@@ -443,7 +443,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
     gnc_widget_style_context_add_class (GTK_WIDGET(nbt->dialog), "gnc-class-bill-terms");
 
     if (name)
-        gtk_entry_set_text (GTK_ENTRY(nbt->name_entry), name);
+        gnc_entry_set_text (GTK_ENTRY(nbt->name_entry), name);
 
     /* Initialize the notebook widgets */
     init_notebook_widgets (&nbt->notebook, FALSE, nbt);

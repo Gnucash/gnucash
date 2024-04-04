@@ -191,7 +191,7 @@ gui_to_fi (FinCalcDialog *fcd)
 
     /* treat PAYMENT_PERIODS as a plain GtkEntry */
     entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(fcd->amounts[PAYMENT_PERIODS]));
-    text = gtk_entry_get_text (GTK_ENTRY(entry));
+    text = gnc_entry_get_text (GTK_ENTRY(entry));
     if (text && *text)
     {
         gnc_numeric out = gnc_numeric_from_string (text);
@@ -245,7 +245,7 @@ fincalc_update_calc_button_cb (GtkWidget *unused, FinCalcDialog *fcd)
     for (i = 0; i < NUM_FIN_CALC_VALUES; i++)
     {
         GtkWidget *entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(fcd->amounts[i]));
-        text = gtk_entry_get_text (GTK_ENTRY(entry));
+        text = gnc_entry_get_text (GTK_ENTRY(entry));
         if ((text == NULL) || (*text == '\0'))
         {
             gtk_widget_set_sensitive (GTK_WIDGET(fcd->calc_button), TRUE);
@@ -294,7 +294,7 @@ fincalc_amount_clear_clicked_cb (GtkButton *button, FinCalcDialog *fcd)
     gnc_numeric value;
 
     if (entry && GTK_IS_ENTRY(entry))
-        gtk_entry_set_text (GTK_ENTRY(entry), "");
+        gnc_entry_set_text (GTK_ENTRY(entry), "");
 
     gnc_amount_edit_expr_is_valid (edit, &value, TRUE, NULL);
 }
@@ -350,7 +350,7 @@ can_calc_value (FinCalcDialog *fcd, FinCalcValue value, int *error_item)
         if (i != value)
         {
             GtkWidget *entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(fcd->amounts[i]));
-            string = gtk_entry_get_text (GTK_ENTRY(entry));
+            string = gnc_entry_get_text (GTK_ENTRY(entry));
             if ((string == NULL) || (*string == '\0'))
             {
                 *error_item = i;
@@ -483,7 +483,7 @@ fincalc_calc_clicked_cb (GtkButton *button, FinCalcDialog *fcd)
     for (i = 0; i < NUM_FIN_CALC_VALUES; i++)
     {
         GtkWidget *entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT(fcd->amounts[i]));
-        text = gtk_entry_get_text (GTK_ENTRY(entry));
+        text = gnc_entry_get_text (GTK_ENTRY(entry));
         if ((text != NULL) && (*text != '\0'))
             continue;
         calc_value (fcd, i);

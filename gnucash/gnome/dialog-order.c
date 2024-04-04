@@ -133,14 +133,14 @@ static void gnc_ui_to_order (OrderWindow *ow, GncOrder *order)
     gnc_suspend_gui_refresh ();
     gncOrderBeginEdit (order);
 
-    gncOrderSetID (order, gtk_entry_get_text (GTK_ENTRY (ow->id_entry)));
+    gncOrderSetID (order, gnc_entry_get_text (GTK_ENTRY (ow->id_entry)));
 
     text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(ow->notes_text));
     gtk_text_buffer_get_bounds (text_buffer, &start, &end);
     text = gtk_text_buffer_get_text (text_buffer, &start, &end, FALSE);
     gncOrderSetNotes (order, text);
 
-    gncOrderSetReference (order, gtk_entry_get_text (GTK_ENTRY (ow->ref_entry)));
+    gncOrderSetReference (order, gnc_entry_get_text (GTK_ENTRY (ow->ref_entry)));
 
     tt = gnc_date_edit_get_date (GNC_DATE_EDIT (ow->opened_date));
     gncOrderSetDateOpened (order, tt);
@@ -163,7 +163,7 @@ gnc_order_window_verify_ok (OrderWindow *ow)
     const char *res;
 
     /* Check the ID */
-    res = gtk_entry_get_text (GTK_ENTRY (ow->id_entry));
+    res = gnc_entry_get_text (GTK_ENTRY (ow->id_entry));
     if (g_strcmp0 (res, "") == 0)
     {
         gnc_error_dialog (GTK_WINDOW (ow->dialog), "%s",
@@ -374,11 +374,11 @@ gnc_order_owner_changed_cb (GtkWidget *widget, gpointer data)
     case GNC_OWNER_JOB:
     {
         char const *msg = gncJobGetReference (gncOwnerGetJob (&(ow->owner)));
-        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), msg ? msg : "");
+        gnc_entry_set_text (GTK_ENTRY (ow->ref_entry), msg ? msg : "");
         break;
     }
     default:
-        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry), "");
+        gnc_entry_set_text (GTK_ENTRY (ow->ref_entry), "");
         break;
     }
 
@@ -461,7 +461,7 @@ gnc_order_update_window (OrderWindow *ow)
         const char *string;
         time64 tt;
 
-        gtk_entry_set_text (GTK_ENTRY (ow->ref_entry),
+        gnc_entry_set_text (GTK_ENTRY (ow->ref_entry),
                             gncOrderGetReference (order));
 
         string = gncOrderGetNotes (order);
@@ -657,7 +657,7 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
     /* Setup initial values */
     ow->order_guid = *gncOrderGetGUID (order);
 
-    gtk_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
+    gnc_entry_set_text (GTK_ENTRY (ow->id_entry), gncOrderGetID (order));
 
     ow->component_id =
         gnc_register_gui_component (class_name,
@@ -730,7 +730,7 @@ gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
     /* Setup initial values */
     ow->order_guid = *gncOrderGetGUID (order);
     string = gncOrderNextID(bookp);
-    gtk_entry_set_text (GTK_ENTRY (ow->id_entry), string);
+    gnc_entry_set_text (GTK_ENTRY (ow->id_entry), string);
     g_free(string);
 
     ow->component_id =

@@ -265,7 +265,7 @@ editor_ok_button_clicked_cb (GtkButton *b, GncSxEditorDialog *sxed)
 static gboolean
 gnc_sxed_check_name_changed (GncSxEditorDialog *sxed)
 {
-    const char *name = gtk_entry_get_text (sxed->nameEntry);
+    const char *name = gnc_entry_get_text (sxed->nameEntry);
 
     if (!name || !name[0])
         return TRUE;
@@ -482,7 +482,7 @@ check_credit_debit_balance (gpointer key, gpointer val, gpointer ud)
 static gboolean
 gnc_sxed_check_names (GncSxEditorDialog *sxed)
 {
-    const gchar *name = gtk_entry_get_text (sxed->nameEntry);
+    const gchar *name = gnc_entry_get_text (sxed->nameEntry);
     if (!name || !name[0])
     {
         const char *sx_has_no_name_msg =
@@ -900,7 +900,7 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
     gnc_sx_begin_edit (sxed->sx);
 
     /* name */
-    const gchar *name = gtk_entry_get_text (sxed->nameEntry);
+    const gchar *name = gnc_entry_get_text (sxed->nameEntry);
     if (name && *name)
         xaccSchedXactionSetName (sxed->sx, name);
 
@@ -1393,7 +1393,7 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
     name = xaccSchedXactionGetName (sxed->sx);
     if (name)
     {
-        gtk_entry_set_text (sxed->nameEntry, name);
+        gnc_entry_set_text (sxed->nameEntry, name);
     }
     {
         gd = xaccSchedXactionGetLastOccurDate (sxed->sx);

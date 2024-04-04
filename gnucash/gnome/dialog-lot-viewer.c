@@ -254,7 +254,7 @@ lv_save_current_lot (GNCLotViewer *lv)
         gnc_lot_begin_edit(lot);
 
         /* Get the title, save_the_title */
-        str = gtk_entry_get_text (lv->title_entry);
+        str = gnc_entry_get_text (lv->title_entry);
         gnc_lot_set_title (lot, str);
 
         /* Get the notes, save the notes */
@@ -276,7 +276,7 @@ lv_unset_lot (GNCLotViewer *lv)
     lv->selected_lot = NULL;
 
     /* Blank the title widget */
-    gtk_entry_set_text (lv->title_entry, "");
+    gnc_entry_set_text (lv->title_entry, "");
     gtk_editable_set_editable (GTK_EDITABLE(lv->title_entry), FALSE);
 
     /* Blank the notes area */
@@ -306,7 +306,7 @@ lv_select_row (GNCLotViewer *lv,
 
     str = gnc_lot_get_title (lot);
     if (!str) str = "";
-    gtk_entry_set_text (lv->title_entry, str);
+    gnc_entry_set_text (lv->title_entry, str);
     gtk_editable_set_editable (GTK_EDITABLE(lv->title_entry), TRUE);
 
     /* Set the notes field */
@@ -649,7 +649,7 @@ lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
     GtkTreeIter iter;
     GtkTreeSelection *selection;
     const char * title;
-    title = gtk_entry_get_text (lv->title_entry);
+    title = gnc_entry_get_text (lv->title_entry);
 
     selection = gtk_tree_view_get_selection(lv->lot_view);
     if (gtk_tree_selection_get_selected (selection, &model, &iter))

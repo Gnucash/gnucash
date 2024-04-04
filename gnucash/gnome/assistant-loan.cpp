@@ -1339,10 +1339,10 @@ loan_rep_prep( GtkAssistant *assistant, gpointer user_data )
     ldd->ld.repAmount = g_string_free (str, false);
 
     if ( ldd->ld.repMemo )
-        gtk_entry_set_text( ldd->repTxnName, ldd->ld.repMemo );
+        gnc_entry_set_text( ldd->repTxnName, ldd->ld.repMemo );
 
     if ( ldd->ld.repAmount )
-        gtk_entry_set_text( ldd->repAmtEntry, ldd->ld.repAmount );
+        gnc_entry_set_text( ldd->repAmtEntry, ldd->ld.repAmount );
 
     gnc_account_sel_set_account( ldd->repAssetsFromGAS, ldd->ld.repFromAcct, FALSE );
     gnc_account_sel_set_account( ldd->repPrincToGAS, ldd->ld.repPriAcct, FALSE );
@@ -1476,9 +1476,9 @@ loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
         gtk_assistant_set_page_title (assistant, page, str->str );
 
         /* copy in the relevant data from the currently-indexed option. */
-        gtk_entry_set_text( ldd->payTxnName, rod->txnMemo );
+        gnc_entry_set_text( ldd->payTxnName, rod->txnMemo );
         g_string_printf( str, "%0.2f", rod->amount );
-        gtk_entry_set_text( ldd->payAmtEntry, str->str );
+        gnc_entry_set_text( ldd->payAmtEntry, str->str );
 
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->payUseEscrow),
                                   (ldd->ld.escrowAcct != NULL) );

@@ -251,7 +251,7 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
     {
         gint choice = gtk_combo_box_get_active (GTK_COMBO_BOX(template_combo));
         auto template_str{static_cast<const char *>(g_list_nth_data (template_names, choice))};
-        const char *name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
+        const char *name_str     = gnc_entry_get_text(GTK_ENTRY(name_entry));
         if (name_str && strlen(name_str) == 0)
         {
             /* If the name is empty, we display an error dialog but

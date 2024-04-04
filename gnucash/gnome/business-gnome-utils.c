@@ -50,6 +50,7 @@
 #include "dialog-vendor.h"
 #include "dialog-employee.h"
 #include "dialog-invoice.h"
+#include "dialog-utils.h"
 
 #include "guile-mappings.h"
 #include "gnc-guile-utils.h"
@@ -457,7 +458,7 @@ gnc_account_select_combo_fill (GtkWidget *combo, QofBook *book,
     g_return_val_if_fail (acct_types, NULL);
 
     /* Figure out if anything is set in the combo */
-    text = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(combo)))));
+    text = gnc_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(combo)))));
 
     g_object_set_data (G_OBJECT(combo), "book", book);
     list = gnc_account_get_descendants (gnc_book_get_root_account (book));
@@ -522,7 +523,7 @@ gnc_account_select_combo_get_active (GtkWidget *combo)
     if (!book)
         return NULL;
 
-    text = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(combo)))));
+    text = gnc_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(combo)))));
 
     if (!text || g_strcmp0 (text, "") == 0)
         return NULL;

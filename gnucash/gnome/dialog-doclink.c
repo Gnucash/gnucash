@@ -113,7 +113,7 @@ location_ok_cb (GtkEntry *entry, gpointer user_data)
 {
     GtkWidget *ok_button = user_data;
     gboolean have_scheme = FALSE;
-    const gchar *text = gtk_entry_get_text (entry);
+    const gchar *text = gnc_entry_get_text (entry);
     GtkWidget *warning_hbox = g_object_get_data (G_OBJECT(entry), "whbox");
 
     if (text && *text)
@@ -239,7 +239,7 @@ setup_location_dialog (GtkBuilder *builder, GtkWidget *button_loc, const gchar *
     if (uri)
     {
         gtk_label_set_text (location_label, _("Amend the URL"));
-        gtk_entry_set_text (entry, uri);
+        gnc_entry_set_text (entry, uri);
     }
     else
         {
@@ -418,7 +418,7 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
     {
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button_loc))) // location
         {
-            const gchar *dialog_uri = gtk_entry_get_text (GTK_ENTRY(entry));
+            const gchar *dialog_uri = gnc_entry_get_text (GTK_ENTRY(entry));
 
             ret_uri = g_strdup (dialog_uri);
 

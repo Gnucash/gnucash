@@ -179,7 +179,7 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     {
         guint n_occs;
 
-        const gchar *text = gtk_entry_get_text (GTK_ENTRY(sxfti->n_occurences));
+        const gchar *text = gnc_entry_get_text (GTK_ENTRY(sxfti->n_occurences));
         if (!text || !text[0])
         {
             n_occs = 0;
@@ -454,7 +454,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
     SchedXaction *sx = sxfti->sx;
 
     /* get the name */
-    xaccSchedXactionSetName(sx, gtk_entry_get_text (sxfti->name));
+    xaccSchedXactionSetName(sx, gnc_entry_get_text (sxfti->name));
 
     gnc_gdate_set_time64( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
 
@@ -691,7 +691,7 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
     recurrenceListNextInstance(schedule, &date, &nextDate);
 
     gnc_dense_cal_store_update_name (sxfti->dense_cal_model,
-                                     gtk_entry_get_text (sxfti->name));
+                                     gnc_entry_get_text (sxfti->name));
 
     {
         gchar *schedule_desc;

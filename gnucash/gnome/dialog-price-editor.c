@@ -186,7 +186,7 @@ price_to_gui (PriceEditDialog *pedit_dialog)
 
     gnc_date_edit_set_time (GNC_DATE_EDIT (pedit_dialog->date_edit), date);
 
-    gtk_entry_set_text (GTK_ENTRY (pedit_dialog->source_entry), source);
+    gnc_entry_set_text (GTK_ENTRY (pedit_dialog->source_entry), source);
 
     gtk_combo_box_set_active (GTK_COMBO_BOX(pedit_dialog->type_combobox),
                               type_string_to_index (type));
@@ -263,7 +263,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
     time64 date;
 
     name_space = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
-    fullname = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe)))));
+    fullname = gnc_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe)))));
 
     commodity = gnc_commodity_table_find_full(gnc_get_current_commodities(), name_space, fullname);
     if (!commodity)
@@ -276,7 +276,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
 
     date = gnc_date_edit_get_date (GNC_DATE_EDIT (pedit_dialog->date_edit));
 
-    source = gtk_entry_get_text (GTK_ENTRY (pedit_dialog->source_entry));
+    source = gnc_entry_get_text (GTK_ENTRY (pedit_dialog->source_entry));
 
     type = type_index_to_string
            (gtk_combo_box_get_active (GTK_COMBO_BOX (pedit_dialog->type_combobox)));
@@ -413,7 +413,7 @@ pedit_commodity_changed_cb (GtkComboBox *cbwe, gpointer data)
     gnc_prices_set_changed (pedit_dialog, TRUE);
 
     name_space = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
-    fullname = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe)))));
+    fullname = gnc_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe)))));
 
     commodity = gnc_commodity_table_find_full(gnc_get_current_commodities(), name_space, fullname);
 

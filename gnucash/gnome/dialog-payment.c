@@ -120,12 +120,12 @@ struct _payment_window
 void gnc_ui_payment_window_set_num (PaymentWindow *pw, const char* num)
 {
     g_assert(pw);
-    gtk_entry_set_text(GTK_ENTRY (pw->num_entry), num);
+    gnc_entry_set_text(GTK_ENTRY (pw->num_entry), num);
 }
 void gnc_ui_payment_window_set_memo (PaymentWindow *pw, const char* memo)
 {
     g_assert(pw);
-    gtk_entry_set_text(GTK_ENTRY (pw->memo_entry), memo);
+    gnc_entry_set_text(GTK_ENTRY (pw->memo_entry), memo);
 }
 void gnc_ui_payment_window_set_date (PaymentWindow *pw, const GDate *date)
 {
@@ -975,8 +975,8 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
         gboolean auto_pay;
 
         /* Obtain all our ancillary information */
-        memo = gtk_entry_get_text (GTK_ENTRY (pw->memo_entry));
-        num = gtk_entry_get_text (GTK_ENTRY (pw->num_entry));
+        memo = gnc_entry_get_text (GTK_ENTRY (pw->memo_entry));
+        num = gnc_entry_get_text (GTK_ENTRY (pw->num_entry));
         g_date_clear (&date, 1);
         gnc_date_edit_get_gdate (GNC_DATE_EDIT (pw->date_edit), &date);
         t = gdate_to_time64 (date);
@@ -1433,7 +1433,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
         const gchar *text;
         const char *acct_type;
 
-        text = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(pw->post_combo)))));
+        text = gnc_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(pw->post_combo)))));
 
         if (!text || g_strcmp0 (text, "") == 0)
         {

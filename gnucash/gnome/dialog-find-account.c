@@ -242,7 +242,7 @@ get_account_info (FindAccountDialog *facc_dialog, gboolean use_saved_filter)
     if (use_saved_filter)
         filter_text = g_ascii_strdown (facc_dialog->saved_filter_text, -1);
     else
-        filter_text = g_ascii_strdown (gtk_entry_get_text (GTK_ENTRY(facc_dialog->filter_text_entry)), -1);
+        filter_text = g_ascii_strdown (gnc_entry_get_text (GTK_ENTRY(facc_dialog->filter_text_entry)), -1);
 
     /* disconnect the model from the treeview */
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(facc_dialog->view));
@@ -290,11 +290,11 @@ filter_button_cb (GtkButton *button, FindAccountDialog *facc_dialog)
         g_free (facc_dialog->saved_filter_text);
 
     // save the filter in case of an account event
-    facc_dialog->saved_filter_text = g_strdup (gtk_entry_get_text
+    facc_dialog->saved_filter_text = g_strdup (gnc_entry_get_text
                                      (GTK_ENTRY(facc_dialog->filter_text_entry)));
 
     // Clear the filter
-    gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
 }
 
 static void
@@ -306,7 +306,7 @@ filter_active_cb (GtkEntry *entry, FindAccountDialog *facc_dialog)
         g_free (facc_dialog->saved_filter_text);
 
     // save the filter in case of an account event
-    facc_dialog->saved_filter_text = g_strdup (gtk_entry_get_text
+    facc_dialog->saved_filter_text = g_strdup (gnc_entry_get_text
                                      (GTK_ENTRY(facc_dialog->filter_text_entry)));
 
     gtk_editable_select_region (GTK_EDITABLE(facc_dialog->filter_text_entry), 0, -1);
@@ -505,7 +505,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
         gtk_widget_set_visible (GTK_WIDGET(facc_dialog->radio_frame), FALSE);
 
     // Set the filter to Wildcard
-    gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
 
     // add a handler to listen for account events
     facc_dialog->event_handler_id = qof_event_register_handler

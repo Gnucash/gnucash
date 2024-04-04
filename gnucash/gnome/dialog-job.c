@@ -105,9 +105,9 @@ static void gnc_ui_to_job (JobWindow *jw, GncJob *job)
 
     qof_event_gen(QOF_INSTANCE(job), QOF_EVENT_ADD, NULL);
 
-    gncJobSetID (job, gtk_entry_get_text (GTK_ENTRY (jw->id_entry)));
-    gncJobSetName (job, gtk_entry_get_text (GTK_ENTRY (jw->name_entry)));
-    gncJobSetReference (job, gtk_entry_get_text (GTK_ENTRY (jw->desc_entry)));
+    gncJobSetID (job, gnc_entry_get_text (GTK_ENTRY (jw->id_entry)));
+    gncJobSetName (job, gnc_entry_get_text (GTK_ENTRY (jw->name_entry)));
+    gncJobSetReference (job, gnc_entry_get_text (GTK_ENTRY (jw->desc_entry)));
     gncJobSetRate (job, gnc_amount_edit_get_amount
                         (GNC_AMOUNT_EDIT (jw->rate_entry)));
     gncJobSetActive (job, gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON
@@ -130,7 +130,7 @@ gnc_job_verify_ok (JobWindow *jw)
     gchar *string;
 
     /* Check for valid name */
-    res = gtk_entry_get_text (GTK_ENTRY (jw->name_entry));
+    res = gnc_entry_get_text (GTK_ENTRY (jw->name_entry));
     if (g_strcmp0 (res, "") == 0)
     {
         const char *message = _("The Job must be given a name.");
@@ -157,11 +157,11 @@ gnc_job_verify_ok (JobWindow *jw)
     }
 
     /* Set a valid id if one was not created */
-    res = gtk_entry_get_text (GTK_ENTRY (jw->id_entry));
+    res = gnc_entry_get_text (GTK_ENTRY (jw->id_entry));
     if (g_strcmp0 (res, "") == 0)
     {
         string = gncJobNextID(jw->book);
-        gtk_entry_set_text (GTK_ENTRY (jw->id_entry), string);
+        gnc_entry_set_text (GTK_ENTRY (jw->id_entry), string);
         g_free(string);
     }
 
@@ -367,9 +367,9 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
         jw->cust_edit = gnc_owner_edit_create (owner_label, owner_box,
                                                bookp, owner);
 
-        gtk_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
-        gtk_entry_set_text (GTK_ENTRY (jw->name_entry), gncJobGetName (job));
-        gtk_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetReference (job));
+        gnc_entry_set_text (GTK_ENTRY (jw->id_entry), gncJobGetID (job));
+        gnc_entry_set_text (GTK_ENTRY (jw->name_entry), gncJobGetName (job));
+        gnc_entry_set_text (GTK_ENTRY (jw->desc_entry), gncJobGetReference (job));
         gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (jw->rate_entry),
                                       gncJobGetRate (job));
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (jw->active_check),

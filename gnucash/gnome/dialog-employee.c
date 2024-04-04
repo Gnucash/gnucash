@@ -131,20 +131,20 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
     if (ew->dialog_type == NEW_EMPLOYEE)
         qof_event_gen(QOF_INSTANCE(employee), QOF_EVENT_ADD, NULL);
 
-    gncEmployeeSetID (employee, gtk_entry_get_text (GTK_ENTRY (ew->id_entry)));
-    gncEmployeeSetUsername (employee, gtk_entry_get_text (GTK_ENTRY (ew->username_entry)));
+    gncEmployeeSetID (employee, gnc_entry_get_text (GTK_ENTRY (ew->id_entry)));
+    gncEmployeeSetUsername (employee, gnc_entry_get_text (GTK_ENTRY (ew->username_entry)));
 
-    gncAddressSetName (addr, gtk_entry_get_text (GTK_ENTRY (ew->name_entry)));
-    gncAddressSetAddr1 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr1_entry)));
-    gncAddressSetAddr2 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr2_entry)));
-    gncAddressSetAddr3 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr3_entry)));
-    gncAddressSetAddr4 (addr, gtk_entry_get_text (GTK_ENTRY (ew->addr4_entry)));
-    gncAddressSetPhone (addr, gtk_entry_get_text (GTK_ENTRY (ew->phone_entry)));
-    gncAddressSetFax (addr, gtk_entry_get_text (GTK_ENTRY (ew->fax_entry)));
-    gncAddressSetEmail (addr, gtk_entry_get_text (GTK_ENTRY (ew->email_entry)));
+    gncAddressSetName (addr, gnc_entry_get_text (GTK_ENTRY (ew->name_entry)));
+    gncAddressSetAddr1 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr1_entry)));
+    gncAddressSetAddr2 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr2_entry)));
+    gncAddressSetAddr3 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr3_entry)));
+    gncAddressSetAddr4 (addr, gnc_entry_get_text (GTK_ENTRY (ew->addr4_entry)));
+    gncAddressSetPhone (addr, gnc_entry_get_text (GTK_ENTRY (ew->phone_entry)));
+    gncAddressSetFax (addr, gnc_entry_get_text (GTK_ENTRY (ew->fax_entry)));
+    gncAddressSetEmail (addr, gnc_entry_get_text (GTK_ENTRY (ew->email_entry)));
     gncEmployeeSetActive (employee, gtk_toggle_button_get_active
                           (GTK_TOGGLE_BUTTON (ew->active_check)));
-    gncEmployeeSetLanguage (employee, gtk_entry_get_text (GTK_ENTRY (ew->language_entry)));
+    gncEmployeeSetLanguage (employee, gnc_entry_get_text (GTK_ENTRY (ew->language_entry)));
 
     /* Parse and set the workday and rate amounts */
     gncEmployeeSetWorkday (employee, gnc_amount_edit_get_amount
@@ -168,7 +168,7 @@ static void gnc_ui_to_employee (EmployeeWindow *ew, GncEmployee *employee)
 static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
-    const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
+    const char *res = gnc_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
@@ -205,10 +205,10 @@ gnc_employee_window_ok_cb (GtkWidget *widget, gpointer data)
 
 
     /* Set the employee id if one has not been chosen */
-    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0)
+    if (g_strcmp0 (gnc_entry_get_text (GTK_ENTRY (ew->id_entry)), "") == 0)
     {
         string = gncEmployeeNextID (ew->book);
-        gtk_entry_set_text (GTK_ENTRY (ew->id_entry), string);
+        gnc_entry_set_text (GTK_ENTRY (ew->id_entry), string);
         g_free(string);
     }
 
@@ -478,20 +478,20 @@ gnc_employee_new_window (GtkWindow *parent,
 
         addr = gncEmployeeGetAddr (employee);
 
-        gtk_entry_set_text (GTK_ENTRY (ew->id_entry), gncEmployeeGetID (employee));
-        gtk_entry_set_text (GTK_ENTRY (ew->username_entry), gncEmployeeGetUsername (employee));
+        gnc_entry_set_text (GTK_ENTRY (ew->id_entry), gncEmployeeGetID (employee));
+        gnc_entry_set_text (GTK_ENTRY (ew->username_entry), gncEmployeeGetUsername (employee));
 
         /* Setup Address */
-        gtk_entry_set_text (GTK_ENTRY (ew->name_entry), gncAddressGetName (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr1_entry), gncAddressGetAddr1 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr2_entry), gncAddressGetAddr2 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr3_entry), gncAddressGetAddr3 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->addr4_entry), gncAddressGetAddr4 (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->phone_entry), gncAddressGetPhone (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->fax_entry), gncAddressGetFax (addr));
-        gtk_entry_set_text (GTK_ENTRY (ew->email_entry), gncAddressGetEmail (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->name_entry), gncAddressGetName (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr1_entry), gncAddressGetAddr1 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr2_entry), gncAddressGetAddr2 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr3_entry), gncAddressGetAddr3 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->addr4_entry), gncAddressGetAddr4 (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->phone_entry), gncAddressGetPhone (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->fax_entry), gncAddressGetFax (addr));
+        gnc_entry_set_text (GTK_ENTRY (ew->email_entry), gncAddressGetEmail (addr));
 
-        gtk_entry_set_text (GTK_ENTRY (ew->language_entry),
+        gnc_entry_set_text (GTK_ENTRY (ew->language_entry),
                             gncEmployeeGetLanguage (employee));
 
         /* Set toggle buttons */

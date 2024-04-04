@@ -391,8 +391,8 @@ static void gnc_ui_to_invoice (InvoiceWindow *iw, GncInvoice *invoice)
     /* Only set these values for NEW/MOD INVOICE types */
     if (iw->dialog_type != EDIT_INVOICE)
     {
-        gncInvoiceSetID (invoice, gtk_entry_get_text (GTK_ENTRY (iw->id_entry)));
-        gncInvoiceSetBillingID (invoice, gtk_entry_get_text (GTK_ENTRY (iw->billing_id_entry)));
+        gncInvoiceSetID (invoice, gnc_entry_get_text (GTK_ENTRY (iw->id_entry)));
+        gncInvoiceSetBillingID (invoice, gnc_entry_get_text (GTK_ENTRY (iw->billing_id_entry)));
         gncInvoiceSetTerms (invoice, iw->terms);
 
         gncInvoiceSetDateOpened (invoice, time);
@@ -470,7 +470,7 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
     }
 
     /* Check the ID; set one if necessary */
-    res = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
+    res = gnc_entry_get_text (GTK_ENTRY (iw->id_entry));
     if (g_strcmp0 (res, "") == 0)
     {
         /* Invoices and bills have separate counters.
@@ -478,7 +478,7 @@ gnc_invoice_window_verify_ok (InvoiceWindow *iw)
            so it knows whether we are creating a bill
            or an invoice. */
         string = gncInvoiceNextID(iw->book, &(iw->owner));
-        gtk_entry_set_text (GTK_ENTRY (iw->id_entry), string);
+        gnc_entry_set_text (GTK_ENTRY (iw->id_entry), string);
         g_free(string);
     }
 
@@ -1628,7 +1628,7 @@ gnc_invoice_job_changed_cb (GtkWidget *widget, gpointer data)
         return FALSE;
 
     msg = gncJobGetReference (gncOwnerGetJob (&(iw->job)));
-    gtk_entry_set_text (GTK_ENTRY (iw->billing_id_entry), msg ? msg : "");
+    gnc_entry_set_text (GTK_ENTRY (iw->billing_id_entry), msg ? msg : "");
 
     return FALSE;
 
@@ -2103,9 +2103,9 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
         gchar * tmp_string;
         time64 time;
 
-        gtk_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
+        gnc_entry_set_text (GTK_ENTRY (iw->id_entry), gncInvoiceGetID (invoice));
 
-        gtk_entry_set_text (GTK_ENTRY (iw->billing_id_entry),
+        gnc_entry_set_text (GTK_ENTRY (iw->billing_id_entry),
                             gncInvoiceGetBillingID (invoice));
 
         string = gncInvoiceGetNotes (invoice);
@@ -2142,9 +2142,9 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
             case VIEW_INVOICE:
                 // Fill in the invoice view version
                 if(gncBillTermGetName (iw->terms) != NULL)
-                    gtk_entry_set_text (GTK_ENTRY (iw->terms_menu),gncBillTermGetName (iw->terms));
+                    gnc_entry_set_text (GTK_ENTRY (iw->terms_menu),gncBillTermGetName (iw->terms));
                 else
-                    gtk_entry_set_text (GTK_ENTRY (iw->terms_menu),"None");
+                    gnc_entry_set_text (GTK_ENTRY (iw->terms_menu),"None");
                 break;
 
             default:
@@ -2171,7 +2171,7 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
             gnc_date_edit_set_time (GNC_DATE_EDIT (iw->posted_date), time);
 
             tmp_string = gnc_account_get_full_name (acct);
-            gtk_entry_set_text (GTK_ENTRY (acct_entry), tmp_string);
+            gnc_entry_set_text (GTK_ENTRY (acct_entry), tmp_string);
             g_free(tmp_string);
         }
     }
@@ -2377,7 +2377,7 @@ gnc_invoice_get_title (InvoiceWindow *iw)
     }
 
     if (iw->id_entry)
-        id = gtk_entry_get_text (GTK_ENTRY (iw->id_entry));
+        id = gnc_entry_get_text (GTK_ENTRY (iw->id_entry));
     if (id && *id)
         return g_strconcat (wintitle, " - ", id, (char *)NULL);
     return g_strdup (wintitle);
@@ -3127,9 +3127,9 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
         case VIEW_INVOICE:
             // Fill in the invoice view version
             if(gncBillTermGetName (iw->terms) != NULL)
-                gtk_entry_set_text (GTK_ENTRY (iw->terms_menu),gncBillTermGetName (iw->terms));
+                gnc_entry_set_text (GTK_ENTRY (iw->terms_menu),gncBillTermGetName (iw->terms));
             else
-                gtk_entry_set_text (GTK_ENTRY (iw->terms_menu),"None");
+                gnc_entry_set_text (GTK_ENTRY (iw->terms_menu),"None");
         break;
     }
 
@@ -3227,7 +3227,7 @@ InvoiceWindow * gnc_ui_invoice_duplicate (GtkWindow *parent, GncInvoice *old_inv
          // Open the newly created invoice in the "edit" window
         iw = gnc_ui_invoice_edit (parent, new_invoice);
         // Check the ID; set one if necessary
-        if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (iw->id_entry)), "") == 0)
+        if (g_strcmp0 (gnc_entry_get_text (GTK_ENTRY (iw->id_entry)), "") == 0)
         {
             gncInvoiceSetID (new_invoice, gncInvoiceNextID(iw->book, &(iw->owner)));
         }
