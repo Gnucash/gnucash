@@ -129,8 +129,11 @@ gnc_file_dialog_int (GtkWindow *parent,
                               okbutton, GTK_RESPONSE_ACCEPT);
 
     if (starting_dir)
-        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER (file_box),
-                                            starting_dir);
+    {
+        GFile *file = g_file_new_for_path (starting_dir);
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(file_box), file, NULL);
+        g_object_unref (file);
+    }
 
     gtk_window_set_modal(GTK_WINDOW(file_box), TRUE);
 
@@ -168,19 +171,24 @@ gnc_file_dialog_int (GtkWindow *parent,
     {
         if (multi)
         {
-            file_name_list = gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (file_box));
+//FIXME gtk4            file_name_list = gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (file_box));
         }
         else
         {
             /* look for constructs like postgres://foo */
-            file_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
+            GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(file_box));
+            file_name = g_file_get_path (file);
+            g_object_unref (file);
+
             if (file_name != NULL)
             {
                 if (strstr (file_name, "file://") == file_name)
                 {
                     g_free (file_name);
                     /* nope, a local file name */
-                    file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
+                    GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(file_box));
+                    file_name = g_file_get_path (file);
+                    g_object_unref (file);
                 }
                 file_name_list = g_slist_append (file_name_list, file_name);
             }

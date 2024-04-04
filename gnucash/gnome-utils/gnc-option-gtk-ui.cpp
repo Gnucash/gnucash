@@ -1447,7 +1447,8 @@ update_preview_cb (GtkFileChooser *chooser, void* data)
     g_return_if_fail(chooser != NULL);
 
     ENTER("chooser %p", chooser);
-    auto filename = gtk_file_chooser_get_preview_filename(chooser);
+//FIXME gtk4    auto filename = gtk_file_chooser_get_preview_filename(chooser);
+auto filename = nullptr;
     DEBUG("chooser preview name is %s.", filename ? filename : "(null)");
     if (filename == NULL)
     {
@@ -1460,23 +1461,25 @@ update_preview_cb (GtkFileChooser *chooser, void* data)
         }
     }
 
-    auto image = GTK_IMAGE(gtk_file_chooser_get_preview_widget(chooser));
-    auto pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, NULL);
+//FIXME gtk4    auto image = GTK_IMAGE(gtk_file_chooser_get_preview_widget(chooser));
+//    auto pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, NULL);
     g_free(filename);
-    auto have_preview = (pixbuf != NULL);
+//    auto have_preview = (pixbuf != NULL);
 
-    gtk_image_set_from_pixbuf(image, pixbuf);
-    if (pixbuf)
-        g_object_unref(pixbuf);
+//    gtk_image_set_from_pixbuf(image, pixbuf);
+//    if (pixbuf)
+//        g_object_unref(pixbuf);
 
-    gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
+//FIXME gtk4    gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
     LEAVE("preview visible is %d", have_preview);
 }
 
 static void
 change_image_cb (GtkFileChooser *chooser, void* data)
 {
-    auto filename{gtk_file_chooser_get_preview_filename(chooser)};
+//FIXME gtk4
+//    auto filename{gtk_file_chooser_get_preview_filename(chooser)};
+auto filename = nullptr;
     if (!filename)
         return;
     g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION, filename, g_free);
@@ -1494,8 +1497,9 @@ public:
         {
             DEBUG("string = %s", string.c_str());
             auto chooser{GTK_FILE_CHOOSER(get_widget())};
-            gtk_file_chooser_select_filename(chooser, string.c_str());
-            auto filename{gtk_file_chooser_get_filename(chooser)};
+//FIXME gtk4            gtk_file_chooser_select_filename(chooser, string.c_str());
+//            auto filename{gtk_file_chooser_get_filename(chooser)};
+auto filename = nullptr;
             g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION,
                                    g_strdup(string.c_str()), g_free);
             DEBUG("Set %s, retrieved %s", string.c_str(),
@@ -1505,7 +1509,8 @@ public:
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(get_widget()));
+//FIXME gtk4        auto string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(get_widget()));
+auto string = nullptr;
         DEBUG("filename %s", string ? string : "(null)");
         if (string)
         {

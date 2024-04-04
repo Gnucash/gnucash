@@ -826,7 +826,11 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
     GtkImage    *image = g_object_get_data (G_OBJECT(fc), "path_head_error");
     const gchar *group = g_object_get_data (G_OBJECT(fc), "group");
     const gchar  *pref = g_object_get_data (G_OBJECT(fc), "pref");
-    gchar        *folder_uri = gtk_file_chooser_get_uri (fc);
+
+    GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(fc));
+    gchar *folder_uri = g_file_get_uri (file);
+    g_object_unref (file);
+
     gchar *old_path_head_uri = gnc_doclink_get_path_head ();
 
     // make sure path_head ends with a trailing '/', 3.5 onwards
@@ -884,7 +888,11 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
 
         // test for current folder present and set chooser to it
         if (g_file_test (path_head, G_FILE_TEST_IS_DIR))
-            gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER(fcb), uri);
+        {
+            GFile *file = g_file_new_for_uri (uri);
+            gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(fcb), file, NULL);
+            g_object_unref (file);
+        }
         else
             folder_set = FALSE;
 

@@ -738,7 +738,10 @@ CsvImpPriceAssist::~CsvImpPriceAssist ()
 bool
 CsvImpPriceAssist::check_for_valid_filename ()
 {
-    auto file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(file_chooser));
+    GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(file_chooser));
+    auto file_name = g_file_get_path (file);
+    g_object_unref (file);
+
     if (!file_name || g_file_test (file_name, G_FILE_TEST_IS_DIR))
     {
         g_free (file_name);
@@ -1866,7 +1869,9 @@ CsvImpPriceAssist::assist_file_page_prepare ()
         auto starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
         if (starting_dir)
         {
-            gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(file_chooser), starting_dir);
+            GFile *file = g_file_new_for_path (starting_dir);
+            gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(file_chooser), file, NULL);
+            g_object_unref (file);
             g_free (starting_dir);
         }
     }

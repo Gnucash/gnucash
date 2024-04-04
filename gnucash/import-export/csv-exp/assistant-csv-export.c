@@ -130,7 +130,9 @@ static gboolean
 csv_export_assistant_check_filename (GtkFileChooser *chooser,
                                      CsvExportInfo *info)
 {
-    gchar *file_name = gtk_file_chooser_get_filename (chooser);
+    GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(chooser));
+    gchar *file_name = g_file_get_path (file);
+    g_object_unref (file);
 
     /* Test for a valid filename and not a directory */
     if (file_name && !g_file_test (file_name, G_FILE_TEST_IS_DIR))
@@ -702,7 +704,11 @@ csv_export_assistant_file_page_prepare (GtkAssistant *assistant,
 
     /* Set the default directory */
     if (info->starting_dir)
-        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(info->file_chooser), info->starting_dir);
+    {
+        GFile *file = g_file_new_for_path (info->starting_dir);
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(info->file_chooser), file, NULL);
+        g_object_unref (file);
+    }
     gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER(info->file_chooser), "");
 
     /* Disable the "Next" Assistant Button */

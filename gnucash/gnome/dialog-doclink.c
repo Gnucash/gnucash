@@ -168,18 +168,25 @@ fcb_clicked_cb (GtkButton *button, GtkWidget *ok_button)
         gchar *scheme = gnc_uri_get_scheme (uri);
         gchar *full_filename = gnc_doclink_get_unescape_uri (path_head, uri, scheme);
         gchar *path = g_path_get_dirname (full_filename);
-        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(native), path);
+        GFile *file = g_file_new_for_path (path);
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(native), file, NULL);
+        g_object_unref (file);
         g_free (full_filename);
         g_free (scheme);
         g_free (path);
     }
     else if (path_head)
-        gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER(native), path_head);
+    {
+        GFile *file = g_file_new_for_uri (path_head);
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(native), file, NULL);
+        g_object_unref (file);
+    }
 
     res = gtk_native_dialog_run (GTK_NATIVE_DIALOG(native));
     if (res == GTK_RESPONSE_ACCEPT)
     {
-        gchar *uri = gtk_file_chooser_get_uri (GTK_FILE_CHOOSER(native));
+        GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(native));
+        gchar *uri = g_file_get_uri (file);
 
         if (uri && *uri)
         {
@@ -194,6 +201,7 @@ fcb_clicked_cb (GtkButton *button, GtkWidget *ok_button)
             g_free (unescape_filename);
         }
         g_free (uri);
+        g_object_unref (file);
         file_ok_cb (button, ok_button);
     }
     g_object_unref (native);

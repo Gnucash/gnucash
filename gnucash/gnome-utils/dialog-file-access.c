@@ -84,7 +84,10 @@ geturl( FileAccessWindow* faw )
     type = gtk_combo_box_text_get_active_text (faw->cb_uri_type);
     if (gnc_uri_is_file_scheme (type))
     {
-        path = gtk_file_chooser_get_filename (faw->fileChooser);
+        GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(faw->fileChooser));
+        path = g_file_get_path (file);
+        g_object_unref (file);
+
         if ( !path ) /* file protocol was chosen but no filename was set */
         {
             g_free (type);
@@ -143,7 +146,9 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
             if ( g_file_test( g_filename_from_uri( url, NULL, NULL ),
                               G_FILE_TEST_IS_DIR ))
             {
-                gtk_file_chooser_set_current_folder_uri( faw->fileChooser, url );
+                GFile *file = g_file_new_for_uri (url);
+                gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(faw->fileChooser), file, NULL);
+                g_object_unref (file);
                 return;
             }
         }
@@ -185,7 +190,10 @@ set_widget_sensitivity( FileAccessWindow* faw, gboolean is_file_based_uri )
     {
         gtk_widget_set_visible (GTK_WIDGET(faw->frame_file), TRUE);
         gtk_widget_set_visible (GTK_WIDGET(faw->frame_database), FALSE);
-        gtk_file_chooser_set_current_folder(faw->fileChooser, faw->starting_dir);
+
+        GFile *file = g_file_new_for_path (faw->starting_dir);
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(faw->fileChooser), file, NULL);
+        g_object_unref (file);
     }
     else
     {
@@ -393,7 +401,10 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     }
     if (!faw->starting_dir)
         faw->starting_dir = gnc_get_default_directory(settings_section);
-    gtk_file_chooser_set_current_folder(faw->fileChooser, faw->starting_dir);
+
+    GFile *file = g_file_new_for_path (faw->starting_dir);
+    gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(faw->fileChooser), file, NULL);
+    g_object_unref (file);
 
     g_object_connect( G_OBJECT(faw->fileChooser), "signal::file-activated",
                       gnc_ui_file_access_file_activated_cb, faw, NULL );
