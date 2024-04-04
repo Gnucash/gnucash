@@ -528,13 +528,9 @@ gnc_html_export_to_file( GncHtml* self, const gchar* filepath )
         return FALSE;
     }
 }
-#ifdef WEBKIT1
-void
-gnc_html_print (GncHtml* self, const char *jobname, gboolean export_pdf)
-#else
+
 void
 gnc_html_print (GncHtml* self, const char *jobname)
-#endif
 {
     g_return_if_fail( self != NULL );
      g_return_if_fail( jobname != NULL );
@@ -542,11 +538,7 @@ gnc_html_print (GncHtml* self, const char *jobname)
 
     if ( GNC_HTML_GET_CLASS(self)->print != NULL )
     {
-#ifdef WEBKIT1
-      GNC_HTML_GET_CLASS(self)->print (self, jobname, export_pdf);
-#else
         GNC_HTML_GET_CLASS(self)->print (self, jobname);
-#endif
     }
     else
     {
@@ -589,17 +581,13 @@ gnc_html_get_webview( GncHtml* self )
 
     if (sw_list) // the scroll window has only one child
     {
-#ifdef WEBKIT1
-        webview = sw_list->data;
-#else
         GList *vp_list = gtk_container_get_children (GTK_CONTAINER(sw_list->data));
- 
+
         if (vp_list) // the viewport has only one child
         {
             webview = vp_list->data;
             g_list_free (vp_list);
         }
-#endif
     }
     g_list_free (sw_list);
     return webview;
