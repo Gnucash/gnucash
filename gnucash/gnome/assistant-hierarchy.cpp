@@ -1601,7 +1601,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_chooser_hbox"));
     data->currency_selector_label = GTK_WIDGET(gtk_builder_get_object (builder,
                                            "choose_currency_label"));
-    gtk_box_pack_start(GTK_BOX(box), data->currency_selector, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(data->currency_selector));
 
     /* Categories Page */
     tree_view = GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_categories_tree_view"));

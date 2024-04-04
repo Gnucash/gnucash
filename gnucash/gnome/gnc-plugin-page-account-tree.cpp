@@ -633,8 +633,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
-    gtk_box_pack_start (GTK_BOX (priv->widget), scrolled_window,
-                        TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(scrolled_window));
 
     tree_view = gnc_tree_view_account_new(FALSE);
     col = gnc_tree_view_find_column_by_name(
@@ -692,8 +691,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
                                    gnc_get_current_session());
 
     plugin_page->summarybar = gnc_main_window_summary_new();
-    gtk_box_pack_start (GTK_BOX (priv->widget), plugin_page->summarybar,
-                        FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(plugin_page->summarybar));
     gtk_widget_set_visible (GTK_WIDGET(plugin_page->summarybar), true);
     gnc_plugin_page_account_tree_summarybar_position_changed(NULL, NULL, page);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
@@ -1273,7 +1271,7 @@ gppat_setup_account_selector (GtkBuilder *builder, GtkWidget *dialog,
     GtkWidget *selector = gnc_account_sel_new();
     GtkWidget *box = GTK_WIDGET(gtk_builder_get_object (builder, hbox));
 
-    gtk_box_pack_start (GTK_BOX(box), selector, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(selector));
 
     // placeholder accounts are OK for this GAS
     if (g_strcmp0 (sel_name, DELETE_DIALOG_SA_MAS) == 0)

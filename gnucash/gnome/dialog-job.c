@@ -352,7 +352,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
     gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "rate_entry"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, jw);

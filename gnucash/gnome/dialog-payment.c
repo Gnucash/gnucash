@@ -692,9 +692,9 @@ gnc_payment_dialog_owner_type_changed (PaymentWindow *pw)
         gtk_container_remove (GTK_CONTAINER (debit_box), pw->amount_credit_edit);
 
     if (!gtk_widget_is_ancestor(pw->amount_debit_edit, debit_box))
-        gtk_box_pack_start (GTK_BOX (debit_box), pw->amount_debit_edit, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(debit_box), GTK_WIDGET(pw->amount_debit_edit));
     if (!gtk_widget_is_ancestor(pw->amount_credit_edit, credit_box))
-        gtk_box_pack_start (GTK_BOX (credit_box), pw->amount_credit_edit, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(credit_box), GTK_WIDGET(pw->amount_credit_edit));
 
     g_object_unref (G_OBJECT (pw->amount_debit_edit));
     g_object_unref (G_OBJECT (pw->amount_credit_edit));
@@ -1324,7 +1324,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
 
     box = GTK_WIDGET (gtk_builder_get_object (builder, "date_box"));
     pw->date_edit = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (box), pw->date_edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(pw->date_edit));
     pw->print_check = GTK_WIDGET (gtk_builder_get_object (builder, "print_check"));
 
     pw->docs_list_tree_view = GTK_WIDGET (gtk_builder_get_object (builder, "docs_list_tree_view"));
@@ -1632,7 +1632,7 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
                                                          NULL));
         GtkWidget *content = gtk_dialog_get_content_area(dialog);
         GtkWidget *label = gtk_label_new (message);
-        gtk_box_pack_start (GTK_BOX(content), label, FALSE, TRUE, 0);
+        gtk_box_append (GTK_BOX(content), GTK_WIDGET(label));
 
         /* Add splits as selectable options to the dialog */
         for (GList *node = payment_splits; node; node = node->next)
@@ -1650,7 +1650,7 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
                 rbutton = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(first_rb), split_str);
 
             g_object_set_data(G_OBJECT(rbutton), "split", split);
-            gtk_box_pack_start (GTK_BOX(content), rbutton, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(content), GTK_WIDGET(rbutton));
 
             g_free (split_str);
         }

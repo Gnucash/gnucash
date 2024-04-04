@@ -609,13 +609,13 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
     /* Setup Date Widgets */
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "opened_date_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(date));
     gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->opened_date = date;
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "closed_date_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(date));
     gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->closed_date = date;
 
@@ -649,7 +649,8 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
     gnc_entry_ledger_set_parent (entry_ledger, ow->dialog);
 
     vbox = GTK_WIDGET(gtk_builder_get_object (builder, "ledger_vbox"));
-    gtk_box_pack_start (GTK_BOX(vbox), regWidget, TRUE, TRUE, 2);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(regWidget));
+    gtk_box_set_spacing (GTK_BOX(vbox), 2);
 
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ow);
@@ -720,7 +721,7 @@ gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
     /* Setup date Widget */
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_opened_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(date));
     gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->opened_date = date;
 

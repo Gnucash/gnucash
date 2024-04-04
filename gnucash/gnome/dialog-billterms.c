@@ -450,7 +450,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
 
     /* Attach the notebook */
     box = GTK_WIDGET(gtk_builder_get_object (builder, dialog_nb));
-    gtk_box_pack_start (GTK_BOX(box), nbt->notebook.notebook, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(nbt->notebook.notebook));
     g_object_unref (nbt->notebook.notebook);
 
     /* Fill in the widgets appropriately */
@@ -838,8 +838,7 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
 
     /* Attach the notebook */
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "notebook_box"));
-    gtk_box_pack_start (GTK_BOX(widget), btw->notebook.notebook,
-                        TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(widget), GTK_WIDGET(btw->notebook.notebook));
     g_object_unref (btw->notebook.notebook);
 
     /* Setup signals */

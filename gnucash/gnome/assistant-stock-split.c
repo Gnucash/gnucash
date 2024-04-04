@@ -667,7 +667,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         g_signal_connect (amount, "changed",
                           G_CALLBACK (gnc_stock_split_cash_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
-        gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(box), GTK_WIDGET(amount));
         info->cash_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "cash_label"));

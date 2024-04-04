@@ -660,10 +660,10 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
 
     widget = gnc_invoice_create_page(priv->iw, page);
     gtk_widget_set_visible (GTK_WIDGET(widget), true);
-    gtk_box_pack_start(GTK_BOX (priv->widget), widget, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(widget));
 
     plugin_page->summarybar = gnc_invoice_window_create_summary_bar(priv->iw);
-    gtk_box_pack_start(GTK_BOX (priv->widget), plugin_page->summarybar, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(plugin_page->summarybar));
     gnc_plugin_page_invoice_summarybar_position_changed(NULL, NULL, page);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_SUMMARYBAR_POSITION_TOP,

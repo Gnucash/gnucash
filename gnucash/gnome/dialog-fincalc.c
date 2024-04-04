@@ -639,7 +639,7 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     edit = gnc_amount_edit_new ();
     fincalc_init_gae (GNC_AMOUNT_EDIT(edit), 0, 0, 1);
     fcd->amounts[PAYMENT_PERIODS] = edit;
-    gtk_box_pack_end (GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_signal_connect (G_OBJECT(edit), "changed",
                       G_CALLBACK(fincalc_update_calc_button_cb), fcd);
 
@@ -650,7 +650,7 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     edit = gnc_amount_edit_new ();
     fincalc_init_gae (GNC_AMOUNT_EDIT(edit), 2, 5, 100000);
     fcd->amounts[INTEREST_RATE] = edit;
-    gtk_box_pack_end (GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_signal_connect (G_OBJECT(edit), "changed",
                       G_CALLBACK(fincalc_update_calc_button_cb), fcd);
 
@@ -661,7 +661,7 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     edit = gnc_amount_edit_new ();
     fincalc_init_commodity_gae (GNC_AMOUNT_EDIT(edit));
     fcd->amounts[PRESENT_VALUE] = edit;
-    gtk_box_pack_end (GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_signal_connect (G_OBJECT(edit), "changed",
                       G_CALLBACK(fincalc_update_calc_button_cb), fcd);
 
@@ -672,7 +672,7 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     edit = gnc_amount_edit_new ();
     fincalc_init_commodity_gae (GNC_AMOUNT_EDIT(edit));
     fcd->amounts[PERIODIC_PAYMENT] = edit;
-    gtk_box_pack_end (GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_signal_connect (G_OBJECT(edit), "changed",
                       G_CALLBACK(fincalc_update_calc_button_cb), fcd);
 
@@ -683,7 +683,7 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     edit = gnc_amount_edit_new ();
     fincalc_init_commodity_gae (GNC_AMOUNT_EDIT(edit));
     fcd->amounts[FUTURE_VALUE] = edit;
-    gtk_box_pack_end (GTK_BOX(hbox), edit, TRUE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(edit));
     g_signal_connect (G_OBJECT(edit), "changed",
                       G_CALLBACK(fincalc_update_calc_button_cb), fcd);
 

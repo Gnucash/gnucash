@@ -524,8 +524,7 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
-    gtk_box_pack_start (GTK_BOX (priv->widget), scrolled_window,
-                        TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(scrolled_window));
 
     tree_view = gnc_tree_view_owner_new(priv->owner_type);
 

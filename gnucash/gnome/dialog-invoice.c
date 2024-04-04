@@ -891,7 +891,7 @@ use_default_report_template_or_change (GtkWindow *parent)
     progress_bar = GTK_WIDGET(gtk_builder_get_object (builder, "progress_bar"));
     label = GTK_WIDGET(gtk_builder_get_object (builder, "label"));
 
-    gtk_box_pack_start (GTK_BOX(report_combo_hbox), GTK_WIDGET(combo), TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(report_combo_hbox), GTK_WIDGET(combo));
 
     gtk_widget_grab_focus (ok_button);
 
@@ -1559,15 +1559,16 @@ add_summary_label (GtkWidget *summarybar, const char *label_str)
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-    gtk_box_pack_start (GTK_BOX(summarybar), hbox, FALSE, FALSE, 5);
+    gtk_box_append (GTK_BOX(summarybar), GTK_WIDGET(hbox));
+    gtk_box_set_spacing (GTK_BOX(summarybar), 5);
 
     label = gtk_label_new (label_str);
     gnc_label_set_alignment (label, 1.0, 0.5);
-    gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(label));
 
     label = gtk_label_new ("");
     gnc_label_set_alignment (label, 1.0, 0.5);
-    gtk_box_pack_start (GTK_BOX(hbox), label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(label));
 
     return label;
 }
@@ -1684,8 +1685,7 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
                                              gncOwnerGetJob (&iw->job));
             gnc_general_search_allow_clear (GNC_GENERAL_SEARCH (iw->job_choice),
                                             TRUE);
-            gtk_box_pack_start (GTK_BOX (iw->job_box), iw->job_choice,
-                                TRUE, TRUE, 0);
+            gtk_box_append (GTK_BOX(iw->job_box), GTK_WIDGET(iw->job_choice));
 
             g_signal_connect (G_OBJECT (iw->job_choice), "changed",
                               G_CALLBACK (gnc_invoice_job_changed_cb), iw);
@@ -1762,8 +1762,7 @@ gnc_invoice_update_proj_job (InvoiceWindow *iw)
                                              gncOwnerGetJob (&iw->proj_job));
             gnc_general_search_allow_clear (GNC_GENERAL_SEARCH (iw->proj_job_choice),
                                             TRUE);
-            gtk_box_pack_start (GTK_BOX (iw->proj_job_box), iw->proj_job_choice,
-                                TRUE, TRUE, 0);
+            gtk_box_append (GTK_BOX(iw->proj_job_box), GTK_WIDGET(iw->proj_job_choice));
 
             g_signal_connect (G_OBJECT (iw->proj_job_choice), "changed",
                               G_CALLBACK (gnc_invoice_proj_job_changed_cb), iw);
@@ -2722,7 +2721,7 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         iw->to_charge_edit = edit;
         gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
         hbox = GTK_WIDGET (gtk_builder_get_object (builder, "to_charge_box"));
-        gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
         g_signal_connect(G_OBJECT(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(edit))),
                          "focus-out-event",
@@ -2734,13 +2733,12 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "page_date_opened_hbox"));
     iw->opened_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gtk_widget_set_visible (GTK_WIDGET(iw->opened_date), TRUE);
-    gtk_box_pack_start (GTK_BOX(hbox), iw->opened_date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(iw->opened_date));
 
     iw->posted_date_hbox = GTK_WIDGET (gtk_builder_get_object (builder, "date_posted_hbox"));
     iw->posted_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gtk_widget_set_visible (GTK_WIDGET(iw->posted_date), TRUE);
-    gtk_box_pack_start (GTK_BOX(iw->posted_date_hbox), iw->posted_date,
-                        TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(iw->posted_date_hbox), GTK_WIDGET(iw->posted_date));
 
     /* Make the opened and posted dates insensitive in this window */
     gtk_widget_set_sensitive (iw->opened_date, FALSE);
@@ -3086,7 +3084,7 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "dialog_date_opened_hbox"));
     iw->opened_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gtk_widget_set_visible (GTK_WIDGET(iw->opened_date), TRUE);
-    gtk_box_pack_start (GTK_BOX(hbox), iw->opened_date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(iw->opened_date));
 
     /* If this is a New Invoice, reset the Notes file to read/write */
     gtk_widget_set_sensitive (iw->notes_text,

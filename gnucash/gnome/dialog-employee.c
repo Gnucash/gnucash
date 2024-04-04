@@ -423,7 +423,7 @@ gnc_employee_new_window (GtkWindow *parent,
     ew->currency_edit = edit;
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "currency_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* WORKDAY: Value */
     edit = gnc_amount_edit_new();
@@ -436,7 +436,7 @@ gnc_employee_new_window (GtkWindow *parent,
     gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "hours_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* RATE: Monetary Value */
     edit = gnc_amount_edit_new();
@@ -449,7 +449,7 @@ gnc_employee_new_window (GtkWindow *parent,
     gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "rate_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* CCard Account Selection */
     ew->ccard_acct_check = GTK_WIDGET(gtk_builder_get_object (builder, "ccard_check"));
@@ -463,7 +463,7 @@ gnc_employee_new_window (GtkWindow *parent,
     gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "ccard_acct_hbox"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ew);

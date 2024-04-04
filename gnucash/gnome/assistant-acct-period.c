@@ -597,7 +597,7 @@ ap_assistant_create (AcctPeriodInfo *info)
     /* Reparent to the correct location */
 
     box = GTK_WIDGET(gtk_builder_get_object(builder, "period_hbox"));
-    gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (info->period_menu), TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(info->period_menu));
     g_signal_connect (info->period_menu, "changed",
                       G_CALLBACK (ap_assistant_menu_changed_cb), info);
 

@@ -455,7 +455,7 @@ gsr_create_table( GNCSplitReg *gsr )
     register_widget = gnucash_register_new( sr->table, register_state_section );
     gsr->reg = GNUCASH_REGISTER( register_widget );
 
-    gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(gsr), GTK_WIDGET(gsr->reg));
     gnucash_sheet_set_window (gnucash_register_get_sheet (gsr->reg), gsr->window);
 
     // setup the callback for when the doclink cell clicked on
@@ -2247,23 +2247,24 @@ add_summary_label (GtkWidget *summarybar, gboolean pack_start, const char *label
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     if (pack_start)
-        gtk_box_pack_start( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
+        gtk_box_append (GTK_BOX(summarybar), GTK_WIDGET(hbox));
     else
-        gtk_box_pack_end( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
+        gtk_box_prepend (GTK_BOX(summarybar), GTK_WIDGET(hbox));
+    gtk_box_set_spacing (GTK_BOX(summarybar), 5);
 
     text_label = gtk_label_new (label_str);
     gnc_label_set_alignment (text_label, 1.0, 0.5 );
     gtk_label_set_ellipsize (GTK_LABEL(text_label), PANGO_ELLIPSIZE_END);
-    gtk_box_pack_start (GTK_BOX(hbox), text_label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(text_label));
 
     secondary_label = gtk_label_new ( "" );
     g_object_set_data (G_OBJECT(secondary_label), "text_label", text_label);
     g_object_set_data (G_OBJECT(secondary_label), "text_box", hbox);
     gnc_label_set_alignment (secondary_label, 1.0, 0.5 );
-    gtk_box_pack_start (GTK_BOX(hbox), secondary_label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(secondary_label));
 
     if (extra != NULL)
-        gtk_box_pack_start( GTK_BOX(hbox), extra, FALSE, FALSE, 0 );
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(extra));
 
     return secondary_label;
 }

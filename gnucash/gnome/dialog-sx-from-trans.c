@@ -410,9 +410,7 @@ sxftd_init( SXFromTransInfo *sxfti )
         sxfti->endDateGDE =
             GNC_DATE_EDIT( gnc_date_edit_new (gnc_time (NULL),
                                               FALSE, FALSE));
-        gtk_box_pack_start( GTK_BOX( endDateBox ),
-                            GTK_WIDGET( sxfti->endDateGDE ),
-                            TRUE, TRUE, 0 );
+        gtk_box_append (GTK_BOX(endDateBox), GTK_WIDGET(sxfti->endDateGDE));
         g_signal_connect( sxfti->endDateGDE, "date-changed",
                           G_CALLBACK( sxftd_update_excal_adapt ),
                           sxfti );

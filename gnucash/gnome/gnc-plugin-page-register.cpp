@@ -1250,7 +1250,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     priv->gsr = (GNCSplitReg *)gsr;
 
     gtk_widget_set_visible (GTK_WIDGET(gsr), true);
-    gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(gsr));
 
     g_signal_connect (G_OBJECT (gsr), "help-changed",
                       G_CALLBACK (gnc_plugin_page_help_changed_cb),
@@ -1402,8 +1402,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     if (plugin_page->summarybar)
     {
 //FIXME gtk4        gtk_widget_show_all (plugin_page->summarybar);
-        gtk_box_pack_start (GTK_BOX (priv->widget), plugin_page->summarybar,
-                            FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(plugin_page->summarybar));
 
         gnc_plugin_page_register_summarybar_position_changed (NULL, NULL, page);
         gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
@@ -4197,7 +4196,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
         priv->fd.start_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         hbox = GTK_WIDGET (gtk_builder_get_object (builder, "start_date_hbox"));
-        gtk_box_pack_start (GTK_BOX (hbox), priv->fd.start_date, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(priv->fd.start_date));
         gtk_widget_set_visible (GTK_WIDGET(priv->fd.start_date), true);
         gtk_widget_set_sensitive (GTK_WIDGET (priv->fd.start_date), sensitive);
         gnc_date_edit_set_time (GNC_DATE_EDIT (priv->fd.start_date), time_val);
@@ -4232,7 +4231,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
         priv->fd.end_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         hbox = GTK_WIDGET (gtk_builder_get_object (builder, "end_date_hbox"));
-        gtk_box_pack_start (GTK_BOX (hbox), priv->fd.end_date, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(priv->fd.end_date));
         gtk_widget_set_visible (GTK_WIDGET(priv->fd.end_date), true);
         gtk_widget_set_sensitive (GTK_WIDGET (priv->fd.end_date), sensitive);
         gnc_date_edit_set_time (GNC_DATE_EDIT (priv->fd.end_date), time_val);

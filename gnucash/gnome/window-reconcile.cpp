@@ -742,7 +742,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
         date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
         data.date_value = date_value;
         box = GTK_WIDGET(gtk_builder_get_object (builder, "date_value_box"));
-        gtk_box_pack_start(GTK_BOX(box), date_value, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(box), GTK_WIDGET(date_value));
         label = GTK_WIDGET(gtk_builder_get_object (builder, "date_label"));
         gnc_date_make_mnemonic_target(GNC_DATE_EDIT(date_value), label);
 
@@ -755,7 +755,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
         data.future_text = GTK_WIDGET(gtk_builder_get_object (builder, "future_text"));
 
         box = GTK_WIDGET(gtk_builder_get_object (builder, "ending_value_box"));
-        gtk_box_pack_start(GTK_BOX(box), end_value, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(box), GTK_WIDGET(end_value));
         label = GTK_WIDGET(gtk_builder_get_object (builder, "end_label"));
         gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(end_value), label);
 
@@ -1170,7 +1170,7 @@ gnc_reconcile_window_create_view_box(Account *account,
 
     gtk_container_add(GTK_CONTAINER(frame), scrollWin);
     gtk_container_add(GTK_CONTAINER(scrollWin), view);
-    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(frame));
 
     // get the vertical scroll bar width
     vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (scrollWin));
@@ -1181,14 +1181,14 @@ gnc_reconcile_window_create_view_box(Account *account,
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-    gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(hbox));
 
     label = gtk_label_new(_("Total"));
     gnc_label_set_alignment(label, 1.0, 0.5);
-    gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(label));
 
     label = gtk_label_new("");
-    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(label));
     *total_save = label;
     gtk_widget_set_margin_end (GTK_WIDGET(label), 10 + nat_sb.width);
 
@@ -1867,7 +1867,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
     dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (dock), FALSE);
     gtk_widget_set_visible (GTK_WIDGET(dock), TRUE);
-    gtk_box_pack_start(GTK_BOX (vbox), dock, FALSE, TRUE, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(dock));
 
     {
         GtkToolbar *tool_bar;
@@ -1940,7 +1940,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
                      G_CALLBACK(gnc_reconcile_window_popup_menu_cb), recnData);
 
     statusbar = gtk_statusbar_new();
-    gtk_box_pack_end(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
+    gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(statusbar));
 
     g_signal_connect (recnData->window, "destroy",
                       G_CALLBACK(recn_destroy_cb), recnData);
@@ -1981,7 +1981,7 @@ has splits whose Reconciled Date is after this reconciliation statement date. \
 These splits may make reconciliation difficult. If this is the case, you may \
 use Find Transactions to find them, unreconcile, and re-reconcile."));
 
-            gtk_box_pack_start (GTK_BOX(box), image, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(box), GTK_WIDGET(image));
             gtk_box_reorder_child (GTK_BOX(box), image, 0);
 
             g_free (datestr);
@@ -1998,7 +1998,8 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
         GtkWidget *credits_box;
 
         gtk_box_set_homogeneous (GTK_BOX (main_area), FALSE);
-        gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 10);
+        gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(frame));
+        gtk_box_set_spacing (GTK_BOX(vbox), 10);
 
         /* Force a reasonable starting size */
         gtk_window_set_default_size(GTK_WINDOW(recnData->window), 800, 600);
@@ -2025,7 +2026,7 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
         GNC_RECONCILE_VIEW(recnData->debit)->sibling = GNC_RECONCILE_VIEW(recnData->credit);
         GNC_RECONCILE_VIEW(recnData->credit)->sibling = GNC_RECONCILE_VIEW(recnData->debit);
 
-        gtk_box_pack_start(GTK_BOX(main_area), debcred_area, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(main_area), GTK_WIDGET(debcred_area));
 
         gtk_grid_set_column_homogeneous (GTK_GRID(debcred_area), TRUE);
         gtk_grid_set_column_spacing (GTK_GRID(debcred_area), 15);
@@ -2048,11 +2049,11 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
             /* lower horizontal bar below reconcile lists */
             hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
             gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-            gtk_box_pack_start(GTK_BOX(main_area), hbox, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(main_area), GTK_WIDGET(hbox));
 
             /* frame to hold totals */
             frame = gtk_frame_new(NULL);
-            gtk_box_pack_end(GTK_BOX(hbox), frame, FALSE, FALSE, 0);
+            gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(frame));
 
             // Set the name for this widget so it can be easily manipulated with css
             gtk_widget_set_name (GTK_WIDGET(frame), "gnc-id-reconcile-totals");
@@ -2066,62 +2067,64 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
             /* vbox to hold titles */
             title_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
             gtk_box_set_homogeneous (GTK_BOX (title_vbox), FALSE);
-            gtk_box_pack_start(GTK_BOX(totals_hbox), title_vbox, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(totals_hbox), GTK_WIDGET(title_vbox));
 
             /* vbox to hold values */
             value_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
             gtk_box_set_homogeneous (GTK_BOX (value_vbox), FALSE);
-            gtk_box_pack_start(GTK_BOX(totals_hbox), value_vbox, TRUE, TRUE, 0);
+            gtk_box_append (GTK_BOX(totals_hbox), GTK_WIDGET(value_vbox));
 
             /* statement date title/value */
             title = gtk_label_new(_("Statement Date"));
             gnc_label_set_alignment(title, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(title_vbox), GTK_WIDGET(title));
 
             value = gtk_label_new("");
             recnData->recn_date = value;
             gnc_label_set_alignment(value, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(value_vbox), GTK_WIDGET(value));
 
             /* starting balance title/value */
             title = gtk_label_new(_("Starting Balance"));
             gnc_label_set_alignment(title, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 3);
+            gtk_box_append (GTK_BOX(title_vbox), GTK_WIDGET(title));
+            gtk_box_set_spacing (GTK_BOX(title_vbox), 3);
 
             value = gtk_label_new("");
             recnData->starting = value;
             gnc_label_set_alignment(value, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 3);
+            gtk_box_append (GTK_BOX(value_vbox), GTK_WIDGET(value));
+            gtk_box_set_spacing (GTK_BOX(value_vbox), 3);
 
             /* ending balance title/value */
             title = gtk_label_new(_("Ending Balance"));
             gnc_label_set_alignment(title, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(title_vbox), GTK_WIDGET(title));
 
             value = gtk_label_new("");
             recnData->ending = value;
             gnc_label_set_alignment(value, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(value_vbox), GTK_WIDGET(value));
 
             /* reconciled balance title/value */
             title = gtk_label_new(_("Reconciled Balance"));
             gnc_label_set_alignment(title, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(title_vbox), GTK_WIDGET(title));
 
             value = gtk_label_new("");
             recnData->reconciled = value;
             gnc_label_set_alignment(value, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(value_vbox), GTK_WIDGET(value));
 
             /* difference title/value */
             title = gtk_label_new(_("Difference"));
             gnc_label_set_alignment(title, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(title_vbox), GTK_WIDGET(title));
 
             value = gtk_label_new("");
             recnData->difference = value;
             gnc_label_set_alignment(value, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(value_vbox), GTK_WIDGET(value));
         }
 
         /* Set up the data */
