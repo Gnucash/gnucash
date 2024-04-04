@@ -245,7 +245,7 @@ static void close_handler(gpointer data)
 {
     GtkWidget *dialog = data;
 
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 static void destroy_cb(GObject *object, gpointer data)
@@ -309,7 +309,7 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
 
         /* FALL THROUGH */
     default:
-        gtk_widget_destroy(GTK_WIDGET(dialog));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         break;
     }
     LEAVE("");

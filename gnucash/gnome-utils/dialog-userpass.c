@@ -79,7 +79,7 @@ gnc_get_username_password (GtkWidget *parent,
         *username = gtk_editable_get_chars (GTK_EDITABLE (username_entry), 0, -1);
         *password = gtk_editable_get_chars (GTK_EDITABLE (password_entry), 0, -1);
 
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         return TRUE;
     }
 
@@ -88,6 +88,6 @@ gnc_get_username_password (GtkWidget *parent,
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     return FALSE;
 }

@@ -347,7 +347,7 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
     else
         ok = FALSE;
 
-    gtk_widget_destroy (GTK_WIDGET(dt_dialog->dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dt_dialog->dialog));
     g_free (dt_dialog);
 
     return ok;

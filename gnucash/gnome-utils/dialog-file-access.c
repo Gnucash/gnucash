@@ -173,10 +173,8 @@ gnc_ui_file_access_response_cb(GtkDialog *dialog, gint response, GtkDialog *unus
         break;
     }
 
-    if ( response != GTK_RESPONSE_HELP )
-    {
-        gtk_widget_destroy( GTK_WIDGET(dialog) );
-    }
+//FIXME gtk4    if ( response != GTK_RESPONSE_HELP )
+//        gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 /* Activate the file chooser and deactivate the db selection fields */
@@ -331,7 +329,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
         button_label = _("_Save As");
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
         settings_section = GNC_PREFS_GROUP_OPEN_SAVE;
-        gtk_widget_destroy(faw->readonly_checkbutton);
+//FIXME gtk4        gtk_widget_destroy(faw->readonly_checkbutton);
         faw->readonly_checkbutton = NULL;
         break;
 
@@ -340,7 +338,7 @@ gnc_ui_file_access (GtkWindow *parent, int type)
         button_label = _("_Save As");
         fileChooserAction = GTK_FILE_CHOOSER_ACTION_SAVE;
         settings_section = GNC_PREFS_GROUP_EXPORT;
-        gtk_widget_destroy(faw->readonly_checkbutton);
+//FIXME gtk4        gtk_widget_destroy(faw->readonly_checkbutton);
         faw->readonly_checkbutton = NULL;
         break;
     }

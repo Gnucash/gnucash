@@ -186,7 +186,7 @@ gnc_file_dialog_int (GtkWindow *parent,
             }
         }
     }
-    gtk_widget_destroy(GTK_WIDGET(file_box));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(file_box));
     LEAVE("%s", file_name ? file_name : "(null)");
     return file_name_list;
 }
@@ -371,7 +371,7 @@ show_session_error (GtkWindow *parent,
         if (!parent)
             gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
         response = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         uh_oh = (response != GTK_RESPONSE_YES);
         break;
 
@@ -670,7 +670,7 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 
         response = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
 
         switch (response)
         {
@@ -927,7 +927,7 @@ RESTART:
             gtk_dialog_set_default_response (GTK_DIALOG(dialog), RESPONSE_FILE);
 
         rc = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_free (displayname);
 
         if (rc == GTK_RESPONSE_DELETE_EVENT)

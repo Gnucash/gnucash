@@ -670,16 +670,16 @@ gnc_date_edit_dispose (GObject *object)
 
     /* Only explicitly destroy the toplevel elements */
 
-    gtk_widget_destroy (GTK_WIDGET(gde->date_entry));
+//FIXME gtk4    gtk_widget_destroy (GTK_WIDGET(gde->date_entry));
     gde->date_entry = NULL;
 
-    gtk_widget_destroy (GTK_WIDGET(gde->date_button));
+//FIXME gtk4    gtk_widget_destroy (GTK_WIDGET(gde->date_button));
     gde->date_button = NULL;
 
-    gtk_widget_destroy (GTK_WIDGET(gde->time_entry));
+//FIXME gtk4    gtk_widget_destroy (GTK_WIDGET(gde->time_entry));
     gde->time_entry = NULL;
 
-    gtk_widget_destroy (GTK_WIDGET(gde->time_combo));
+//FIXME gtk4    gtk_widget_destroy (GTK_WIDGET(gde->time_combo));
     gde->time_combo = NULL;
 
     G_OBJECT_CLASS (gnc_date_edit_parent_class)->dispose (object);

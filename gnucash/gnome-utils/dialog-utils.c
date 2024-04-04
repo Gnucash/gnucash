@@ -443,7 +443,7 @@ gnc_gdate_in_valid_range (GDate *test_date, gboolean warn)
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                              "%s", dialog_msg);
         gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
     }
     g_date_free (max_date);
     g_date_free (min_date);

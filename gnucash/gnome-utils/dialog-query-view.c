@@ -131,7 +131,7 @@ gnc_dialog_query_view_delete_cb (GtkDialog *dialog, GdkEvent  *event, DialogQuer
     dqv_clear_booklist (dqv);
 
     /* Destroy and exit */
-    gtk_widget_destroy(dqv->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dqv->dialog));
     g_free (dqv);
     return FALSE;
 }

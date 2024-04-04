@@ -707,7 +707,7 @@ gnc_dense_cal_dispose (GObject *object)
     if (gtk_widget_get_realized(GTK_WIDGET(dcal->transPopup)))
     {
         gtk_widget_set_visible (GTK_WIDGET(dcal->transPopup), FALSE);
-        gtk_widget_destroy(GTK_WIDGET(dcal->transPopup));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dcal->transPopup));
         dcal->transPopup = NULL;
     }
 

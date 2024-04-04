@@ -78,7 +78,7 @@ gnc_ok_cancel_dialog(GtkWindow *parent,
 
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), default_result);
     result = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     return(result);
 }
 
@@ -127,7 +127,7 @@ gnc_verify_dialog(GtkWindow *parent, gboolean yes_is_default,
     gtk_dialog_set_default_response(GTK_DIALOG(dialog),
                                     (yes_is_default ? GTK_RESPONSE_YES : GTK_RESPONSE_NO));
     result = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     return (result == GTK_RESPONSE_YES);
 }
 
@@ -153,7 +153,7 @@ gnc_message_dialog_common (GtkWindow *parent, const gchar *format, GtkMessageTyp
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
     gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 /********************************************************************\
@@ -311,7 +311,7 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
         radio_result = -1;
 
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     return radio_result;
 }
@@ -368,7 +368,7 @@ gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *m
         }
     }
     
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     
     return user_input;
 }
@@ -437,5 +437,5 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
     }
 //FIXME gtk4    gtk_widget_show_all (dialog);
     gtk_dialog_run (GTK_DIALOG (dialog));
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
