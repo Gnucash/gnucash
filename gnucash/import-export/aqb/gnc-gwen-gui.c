@@ -620,7 +620,7 @@ show_dialog(GncGWENGui *gui, gboolean clear_log)
 
     ENTER("gui=%p, clear_log=%d", gui, clear_log);
 
-    gtk_widget_show(gui->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(gui->dialog), TRUE);
 
     gnc_plugin_aqbanking_set_logwindow_visible(TRUE);
 
@@ -642,7 +642,7 @@ hide_dialog(GncGWENGui *gui)
     ENTER("gui=%p", gui);
 
     /* Hide the dialog */
-    gtk_widget_hide(gui->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(gui->dialog), FALSE);
 
     gnc_plugin_aqbanking_set_logwindow_visible(FALSE);
 
@@ -726,12 +726,12 @@ show_progress(GncGWENGui *gui, Progress *progress)
             }
 
             gtk_box_pack_start(GTK_BOX(box), entry, TRUE, TRUE, 0);
-            gtk_widget_show(entry);
+            gtk_widget_set_visible (GTK_WIDGET(entry), TRUE);
             if (new_box)
             {
                 gtk_grid_attach (GTK_GRID(gui->entries_grid), box,
                                  1, OTHER_ENTRIES_ROW_OFFSET, 1, 1);
-                gtk_widget_show(box);
+                gtk_widget_set_visible (GTK_WIDGET(box), TRUE);
             }
         }
 
@@ -967,7 +967,7 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     }
     if (is_tan)
     {
-        gtk_widget_hide(remember_pin_checkbutton);
+        gtk_widget_set_visible (GTK_WIDGET(remember_pin_checkbutton), FALSE);
     }
     else
     {
@@ -1061,8 +1061,8 @@ get_input(GncGWENGui *gui, guint32 flags, const gchar *title,
     {
         gtk_entry_set_activates_default(GTK_ENTRY(input_entry), TRUE);
         gtk_entry_set_max_length(GTK_ENTRY(input_entry), max_len);
-        gtk_widget_hide(confirm_entry);
-        gtk_widget_hide(confirm_label);
+        gtk_widget_set_visible (GTK_WIDGET(confirm_entry), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(confirm_label), FALSE);
     }
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
@@ -1151,7 +1151,7 @@ messagebox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     gtk_container_add(GTK_CONTAINER(vbox), label);
     gtk_container_set_border_width(GTK_CONTAINER(dialog), 5);
     gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area (GTK_DIALOG(dialog))), vbox);
-    gtk_widget_show_all(dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
 
     result = gtk_dialog_run(GTK_DIALOG(dialog));
     gtk_widget_destroy(dialog);
@@ -1210,7 +1210,7 @@ showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
     if (title)
         gtk_window_set_title(GTK_WINDOW(dialog), title);
 
-    g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_hide), NULL);
+//FIXME gtk4    g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_hide), NULL);
 //FIXME gtk4    gtk_widget_show_all(dialog);
 
     showbox_id = gui->showbox_id++;

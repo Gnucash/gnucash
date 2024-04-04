@@ -562,7 +562,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
 
     auto box = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
     gtk_box_pack_start (GTK_BOX(box), file_chooser, TRUE, TRUE, 6);
-    gtk_widget_show (file_chooser);
+    gtk_widget_set_visible (GTK_WIDGET(file_chooser), true);
 
     /* Preview Settings Page */
     {
@@ -578,8 +578,8 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
 
         combo_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "combo_hbox"));
         gtk_box_pack_start (GTK_BOX(combo_hbox), GTK_WIDGET(settings_combo), true, true, 6);
-        gtk_widget_show (GTK_WIDGET(settings_combo));
-
+        gtk_widget_set_visible (GTK_WIDGET(settings_combo), true);
+    
         g_signal_connect (G_OBJECT(settings_combo), "changed",
                          G_CALLBACK(csv_price_imp_preview_settings_sel_changed_cb), this);
 
@@ -1551,7 +1551,7 @@ CsvImpPriceAssist::preview_cbox_factory (GtkTreeModel* model, uint32_t colnum)
     g_signal_connect (G_OBJECT(cbox), "changed",
                      G_CALLBACK(csv_price_imp_preview_col_type_changed_cb), (gpointer)this);
 
-    gtk_widget_show (cbox);
+    gtk_widget_set_visible (GTK_WIDGET(cbox), true);
     return cbox;
 }
 

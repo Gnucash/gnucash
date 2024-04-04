@@ -417,7 +417,7 @@ init_match_picker_gui(GtkWidget *parent, GNCImportMatchPicker * matcher)
     
     gnc_restore_window_size(GNC_PREFS_GROUP,
                             GTK_WINDOW (matcher->transaction_matcher), GTK_WINDOW(parent));
-    gtk_widget_show(matcher->transaction_matcher);
+    gtk_widget_set_visible (GTK_WIDGET(matcher->transaction_matcher), true);
 
     g_object_unref(G_OBJECT(builder));
 

@@ -900,7 +900,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         g_signal_connect (G_OBJECT(selection), "changed",
                           G_CALLBACK(csv_export_account_changed_cb), info);
 
-        gtk_widget_show (info->csva.account_treeview);
+        gtk_widget_set_visible (GTK_WIDGET(info->csva.account_treeview), TRUE);
         box = GTK_WIDGET(gtk_builder_get_object (builder, "account_scroll"));
         gtk_container_add (GTK_CONTAINER(box), info->csva.account_treeview);
 
@@ -945,7 +945,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         gtk_widget_set_sensitive (info->csvd.start_date, FALSE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "start_date_hbox"));
         gtk_box_pack_start (GTK_BOX(hbox), info->csvd.start_date, TRUE, TRUE, 0);
-        gtk_widget_show (info->csvd.start_date);
+        gtk_widget_set_visible (GTK_WIDGET(info->csvd.start_date), TRUE);
         gnc_date_edit_set_time (GNC_DATE_EDIT(info->csvd.start_date), info->csvd.start_time);
         g_signal_connect (G_OBJECT(info->csvd.start_date), "date-changed",
                         G_CALLBACK(csv_export_date_changed_cb), info);
@@ -955,7 +955,7 @@ csv_export_assistant_create (CsvExportInfo *info)
         gtk_widget_set_sensitive (info->csvd.end_date, FALSE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "end_date_hbox"));
         gtk_box_pack_start (GTK_BOX(hbox), info->csvd.end_date, TRUE, TRUE, 0);
-        gtk_widget_show (info->csvd.end_date);
+        gtk_widget_set_visible (GTK_WIDGET(info->csvd.end_date), TRUE);
         gnc_date_edit_set_time (GNC_DATE_EDIT(info->csvd.end_date), info->csvd.end_time);
         g_signal_connect (G_OBJECT (info->csvd.end_date), "date-changed",
                         G_CALLBACK (csv_export_date_changed_cb), info);
@@ -976,7 +976,7 @@ csv_export_assistant_create (CsvExportInfo *info)
                       G_CALLBACK(csv_export_file_chooser_file_activated_cb), info);
 
     gtk_box_pack_start (GTK_BOX (info->file_page), info->file_chooser, TRUE, TRUE, 6);
-    gtk_widget_show (info->file_chooser);
+    gtk_widget_set_visible (GTK_WIDGET(info->file_chooser), TRUE);
 
     /* Finish Page */
     info->finish_label = GTK_WIDGET(gtk_builder_get_object (builder, "end_page"));

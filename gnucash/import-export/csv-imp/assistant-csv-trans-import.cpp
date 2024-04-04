@@ -510,7 +510,7 @@ CsvImpTransAssist::CsvImpTransAssist ()
 
     auto box = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
     gtk_box_pack_start (GTK_BOX(box), file_chooser, TRUE, TRUE, 6);
-    gtk_widget_show (file_chooser);
+    gtk_widget_set_visible (GTK_WIDGET(file_chooser), true);
 
     /* Preview Settings Page */
     {
@@ -525,8 +525,8 @@ CsvImpTransAssist::CsvImpTransAssist ()
 
         combo_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "combo_hbox"));
         gtk_box_pack_start (GTK_BOX(combo_hbox), GTK_WIDGET(settings_combo), true, true, 6);
-        gtk_widget_show (GTK_WIDGET(settings_combo));
-
+        gtk_widget_set_visible (GTK_WIDGET(settings_combo), true);
+    
         g_signal_connect (G_OBJECT(settings_combo), "changed",
                          G_CALLBACK(csv_tximp_preview_settings_sel_changed_cb), this);
 
@@ -579,7 +579,7 @@ CsvImpTransAssist::CsvImpTransAssist ()
         acct_selector = gnc_account_sel_new();
         auto account_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "account_hbox"));
         gtk_box_pack_start (GTK_BOX(account_hbox), acct_selector, TRUE, TRUE, 6);
-        gtk_widget_show (acct_selector);
+        gtk_widget_set_visible (GTK_WIDGET(acct_selector), true);
 
         g_signal_connect(G_OBJECT(acct_selector), "account_sel_changed",
                          G_CALLBACK(csv_tximp_preview_acct_sel_cb), this);
@@ -1492,7 +1492,7 @@ CsvImpTransAssist::preview_cbox_factory (GtkTreeModel* model, uint32_t colnum)
     g_signal_connect (G_OBJECT(cbox), "changed",
                      G_CALLBACK(csv_tximp_preview_col_type_changed_cb), (gpointer)this);
 
-    gtk_widget_show (cbox);
+    gtk_widget_set_visible (GTK_WIDGET(cbox), true);
     return cbox;
 }
 
@@ -2127,7 +2127,7 @@ CsvImpTransAssist::assist_doc_page_prepare ()
 
     g_signal_connect (cancel_button, "clicked",
                      G_CALLBACK(csv_tximp_assist_close_cb), this);
-    gtk_widget_show (GTK_WIDGET(cancel_button));
+    gtk_widget_set_visible (GTK_WIDGET(cancel_button), true);
 }
 
 
@@ -2186,7 +2186,7 @@ CsvImpTransAssist::assist_match_page_prepare ()
     g_signal_connect (help_button, "clicked",
                      G_CALLBACK(on_matcher_help_clicked), gnc_csv_importer_gui);
 
-    gtk_widget_show (GTK_WIDGET(help_button));
+    gtk_widget_set_visible (GTK_WIDGET(help_button), true);
 
     /* Copy all of the transactions to the importer GUI. */
     for (auto trans_it : tx_imp->m_transactions)

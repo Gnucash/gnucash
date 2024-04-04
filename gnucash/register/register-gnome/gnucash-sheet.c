@@ -257,7 +257,7 @@ gnucash_sheet_hide_editing_cursor (GnucashSheet *sheet)
     if (sheet->item_editor == NULL)
         return;
 
-    gtk_widget_hide (sheet->item_editor);
+    gtk_widget_set_visible (GTK_WIDGET(sheet->item_editor), FALSE);
     gnc_item_edit_hide_popup (GNC_ITEM_EDIT(sheet->item_editor));
 }
 
@@ -1305,7 +1305,7 @@ gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
     text = gnc_table_get_entry (sheet->table, virt_loc);
 
     gnc_item_edit_configure (GNC_ITEM_EDIT(sheet->item_editor));
-    gtk_widget_show (GTK_WIDGET(sheet->item_editor));
+    gtk_widget_set_visible (GTK_WIDGET(sheet->item_editor), TRUE);
 
     gtk_entry_set_text (GTK_ENTRY(sheet->entry), text);
 
@@ -1416,8 +1416,8 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event) //FIXME gtk4
         /* There are problems with the slider not tracking the value so
            when delta_y is 0 hide and showing the scrollbar seems to fix it
            observed when using mouse wheel on sheet after a page-up or down */
-        gtk_widget_hide (GTK_WIDGET(sheet->vscrollbar));
-        gtk_widget_show (GTK_WIDGET(sheet->vscrollbar));
+        gtk_widget_set_visible (GTK_WIDGET(sheet->vscrollbar), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(sheet->vscrollbar), TRUE);
     }
     return TRUE;
 }

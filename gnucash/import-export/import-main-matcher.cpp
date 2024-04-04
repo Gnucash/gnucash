@@ -665,7 +665,7 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     g_free (int_prob_required_class);
     g_free (int_not_required_class);
 
-    gtk_widget_show (help_dialog);
+    gtk_widget_set_visible (GTK_WIDGET(help_dialog), true);
 }
 
 static void
@@ -1063,7 +1063,7 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo& rowinfo,
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (info->main_widget));
 
     // run the dialog
-    gtk_widget_show (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), true);
 
     bool  retval = false;
     switch (gtk_dialog_run (GTK_DIALOG(dialog)))

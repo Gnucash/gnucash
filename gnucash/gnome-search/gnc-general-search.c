@@ -402,14 +402,14 @@ create_children (GNCGeneralSearch *gsl,
 
     g_object_unref (list_store);
     g_object_unref(completion);
-    gtk_widget_show (gsl->entry);
+    gtk_widget_set_visible (GTK_WIDGET(gsl->entry), TRUE);
 
     /* Add the search button */
     gsl->button = gtk_button_new_with_label (label);
     gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (gsl->button), "clicked",
                       G_CALLBACK (search_cb), gsl);
-    gtk_widget_show (gsl->button);
+    gtk_widget_set_visible (GTK_WIDGET(gsl->button), TRUE);
 }
 
 /**

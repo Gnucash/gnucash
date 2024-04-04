@@ -353,7 +353,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
 
         /* But may be hide the select button */
         if (!sw->selected_cb)
-            gtk_widget_hide (sw->select_button);
+            gtk_widget_set_visible (GTK_WIDGET(sw->select_button), FALSE);
     }
     else
         /* Update the query in the view */
@@ -536,13 +536,13 @@ gnc_search_dialog_show_close_cancel (GNCSearchWindow *sw)
 {
     if (sw->selected_cb)
     {
-        gtk_widget_show (sw->cancel_button);
-        gtk_widget_hide (sw->close_button);
+        gtk_widget_set_visible (GTK_WIDGET(sw->cancel_button), TRUE);
+        gtk_widget_set_visible (GTK_WIDGET(sw->close_button), FALSE);
     }
     else
     {
-        gtk_widget_hide (sw->cancel_button);
-        gtk_widget_show (sw->close_button);
+        gtk_widget_set_visible (GTK_WIDGET(sw->cancel_button), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(sw->close_button), TRUE);
     }
 }
 
@@ -683,8 +683,8 @@ remove_element (GtkWidget *button, GNCSearchWindow *sw)
     if (!sw->crit_list)
     {
         gtk_widget_set_sensitive(sw->grouping_combo, FALSE);
-        gtk_widget_show(sw->match_all_label);
-        gtk_widget_hide(sw->criteria_scroll_window);
+        gtk_widget_set_visible (GTK_WIDGET(sw->match_all_label), TRUE);
+        gtk_widget_set_visible (GTK_WIDGET(sw->criteria_scroll_window), FALSE);
     }
 }
 
@@ -712,7 +712,7 @@ attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
     gtk_widget_set_halign (remove, GTK_ALIGN_CENTER);
     g_object_set (remove, "margin", 0, NULL);
 
-    gtk_widget_show (remove);
+    gtk_widget_set_visible (GTK_WIDGET(remove), TRUE);
     data->button = remove;  /* Save the button for later */
 }
 
@@ -975,8 +975,8 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
 
         /* no match-all situation anymore */
         gtk_widget_set_sensitive(sw->grouping_combo, TRUE);
-        gtk_widget_hide(sw->match_all_label);
-        gtk_widget_show(sw->criteria_scroll_window);
+        gtk_widget_set_visible (GTK_WIDGET(sw->match_all_label), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(sw->criteria_scroll_window), TRUE);
     }
     /* create a new criterion element */
     new_sct = gnc_search_core_type_new_type_name
@@ -1165,7 +1165,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     g_signal_connect (G_OBJECT (add), "clicked", G_CALLBACK (add_criterion), sw);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "add_button_box"));
     gtk_box_pack_start (GTK_BOX (box), add, FALSE, FALSE, 3);
-    gtk_widget_show (add);
+    gtk_widget_set_visible (GTK_WIDGET(add), TRUE);
 
     /* Set the match-type menu */
     sw->grouping_combo = gtk_combo_box_text_new();
@@ -1177,7 +1177,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "type_menu_box"));
     gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET(combo_box), FALSE, FALSE, 3);
-    gtk_widget_show(GTK_WIDGET(combo_box));
+    gtk_widget_set_visible (GTK_WIDGET(combo_box), TRUE);
 
     /* Grab the 'all items match' label */
     sw->match_all_label = GTK_WIDGET(gtk_builder_get_object (builder, "match_all_label"));
@@ -1246,7 +1246,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     /* Hide the 'new' button if there is no new_item_cb */
     if (!sw->new_item_cb)
-        gtk_widget_hide (new_item_button);
+        gtk_widget_set_visible (GTK_WIDGET(new_item_button), FALSE);
 
     /* Connect all the signals */
     gtk_builder_connect_signals (builder, sw);
@@ -1332,7 +1332,7 @@ gnc_search_dialog_create (GtkWindow *parent,
     if (sw->prefs_group)
         gnc_restore_window_size(sw->prefs_group, GTK_WINDOW(sw->dialog), parent);
     gtk_window_set_transient_for(GTK_WINDOW(sw->dialog), parent);
-    gtk_widget_show(sw->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(sw->dialog), TRUE);
 
     /* For some reason on Ubuntu 18.04 that uses Gtk3.22.30 and maybe others we
      * have to set the scroll window content min height after the dialog has been
@@ -1395,10 +1395,10 @@ void gnc_search_dialog_set_select_cb (GNCSearchWindow *sw,
     /* Show or hide the select button */
     if (sw->select_button)
     {
-        if (selected_cb)
-            gtk_widget_show (sw->select_button);
+        if (sw->selected_cb)
+            gtk_widget_set_visible (GTK_WIDGET(sw->select_button), TRUE);
         else
-            gtk_widget_hide (sw->select_button);
+            gtk_widget_set_visible (GTK_WIDGET(sw->select_button), FALSE);
     }
 
     /* Show the proper close/cancel button */

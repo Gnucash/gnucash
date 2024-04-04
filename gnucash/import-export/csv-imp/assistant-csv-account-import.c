@@ -606,7 +606,7 @@ csv_import_assistant_create (CsvImportInfo *info)
                       G_CALLBACK(csv_import_file_chooser_file_activated_cb), info);
 
     gtk_box_pack_start (GTK_BOX(info->file_page), info->file_chooser, TRUE, TRUE, 6);
-    gtk_widget_show (info->file_chooser);
+    gtk_widget_set_visible (GTK_WIDGET(info->file_chooser), TRUE);
 
     /* Account Tree Page */
     info->account_page = GTK_WIDGET(gtk_builder_get_object(builder, "import_tree_page"));

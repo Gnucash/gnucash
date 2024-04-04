@@ -696,7 +696,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     }
 
     /* Show the dialog */
-    gtk_widget_show(td->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(td->dialog), TRUE);
 
     /* Now run the dialog until it gets closed by a button press */
     result = gtk_dialog_run (GTK_DIALOG (td->dialog));
@@ -724,7 +724,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
 
     /* Hide the dialog */
     if (td->dialog)
-        gtk_widget_hide(td->dialog);
+        gtk_widget_set_visible (GTK_WIDGET(td->dialog), FALSE);
 
     return result;
 }

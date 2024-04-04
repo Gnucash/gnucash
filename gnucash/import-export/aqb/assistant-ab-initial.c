@@ -813,6 +813,6 @@ gnc_ab_initial_assistant(void)
 {
     if (!single_info)
         single_info = gnc_ab_initial_assistant_new();
-    gtk_widget_show(single_info->window);
+    gtk_widget_set_visible (GTK_WIDGET(single_info->window), TRUE);
 }
 

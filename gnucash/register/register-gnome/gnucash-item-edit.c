@@ -255,7 +255,7 @@ gnc_item_edit_update (GncItemEdit *item_edit)
 
     if (item_edit->is_popup)
     {
-        gtk_widget_show (item_edit->popup_toggle.ebox);
+        gtk_widget_set_visible (GTK_WIDGET(item_edit->popup_toggle.ebox), TRUE);
         if (item_edit->show_popup)
             gnc_item_edit_show_popup (item_edit);
     }
@@ -1170,7 +1170,7 @@ gnc_item_edit_set_popup (GncItemEdit    *item_edit,
         disconnect_popup_toggle_signals (item_edit);
 
         gnc_item_edit_hide_popup (item_edit);
-        gtk_widget_hide (item_edit->popup_toggle.ebox);
+        gtk_widget_set_visible (GTK_WIDGET(item_edit->popup_toggle.ebox), FALSE);
     }
 }
 
