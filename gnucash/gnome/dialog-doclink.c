@@ -150,7 +150,7 @@ file_ok_cb (GtkButton *button, GtkWidget *ok_button)
 static void
 fcb_clicked_cb (GtkButton *button, GtkWidget *ok_button)
 {
-    GtkWidget *dialog = gtk_widget_get_toplevel (GTK_WIDGET(button));
+    GtkRoot *dialog = gtk_widget_get_root (GTK_WIDGET(button));
     GtkWidget *label = g_object_get_data (G_OBJECT(button), "fcb_label");
     const gchar *path_head = g_object_get_data (G_OBJECT(button), "path_head");
     const gchar *uri = g_object_get_data (G_OBJECT(button), "uri");
@@ -202,7 +202,7 @@ fcb_clicked_cb (GtkButton *button, GtkWidget *ok_button)
 static void
 uri_type_selected_cb (GtkToggleButton *button, GtkWidget *widget)
 {
-    GtkWidget *top = gtk_widget_get_toplevel (widget);
+    GtkRoot *top = gtk_widget_get_root (widget);
     GtkWidget *parent_hbox = gtk_widget_get_parent (widget);
     GtkWidget *ok_button = g_object_get_data (G_OBJECT(widget), "okbut");
     gboolean active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button));

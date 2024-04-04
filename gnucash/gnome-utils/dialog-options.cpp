@@ -92,8 +92,8 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
 {
     g_return_if_fail(widget);
 
-    auto toplevel{gtk_widget_get_toplevel(widget)};
-    if (toplevel == widget && !GTK_IS_WINDOW(toplevel))
+    auto toplevel{gtk_widget_get_root(widget)};
+    if (GTK_WIDGET(toplevel) == widget && !GTK_IS_WINDOW(toplevel))
         return;
     g_assert(toplevel && GTK_IS_WINDOW(toplevel));
 

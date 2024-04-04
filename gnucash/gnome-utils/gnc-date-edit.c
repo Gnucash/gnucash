@@ -243,7 +243,7 @@ popup_grab_on_window (GdkWindow *window,
 static void
 gnc_date_edit_popup (GNCDateEdit *gde)
 {
-    GtkWidget *toplevel;
+    GtkRoot *toplevel;
     struct tm mtm;
     gboolean date_was_valid;
     GdkDevice *device, *keyboard, *pointer;
@@ -281,7 +281,7 @@ gnc_date_edit_popup (GNCDateEdit *gde)
 
     /* Make sure we'll get notified of clicks outside the popup
      * window so we can properly pop down if that happens. */
-    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (gde));
+    toplevel = gtk_widget_get_root (GTK_WIDGET (gde));
     if (GTK_IS_WINDOW (toplevel))
     {
         gtk_window_group_add_window (

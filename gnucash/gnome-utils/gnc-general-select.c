@@ -153,9 +153,9 @@ select_cb(GtkButton * button, gpointer user_data)
 {
     GNCGeneralSelect *gsl = user_data;
     gpointer new_selection;
-    GtkWidget *toplevel;
+    GtkRoot *toplevel;
 
-    toplevel = gtk_widget_get_toplevel (GTK_WIDGET (button));
+    toplevel = gtk_widget_get_root (GTK_WIDGET (button));
 
     new_selection = (gsl->new_select)(gsl->cb_arg, gsl->selected_item,
                                       toplevel);

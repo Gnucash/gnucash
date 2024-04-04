@@ -674,7 +674,7 @@ webkit_notification_cb (WebKitWebView* web_view, WebKitNotification *note,
      g_return_val_if_fail (self != NULL, FALSE);
      g_return_val_if_fail (note != NULL, FALSE);
 
-     top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view)));
+     top = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (web_view)));
      dialog = gtk_message_dialog_new (top, GTK_DIALOG_MODAL,
                                       GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
                                       "%s\n%s",
@@ -1135,7 +1135,7 @@ impl_webkit_print (GncHtml* self,const gchar* jobname)
                     export_filename);
      webkit_print_operation_set_print_settings(op, print_settings);
      // Open a print dialog
-     top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (priv->web_view)));
+     top = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (priv->web_view)));
      print_response = webkit_print_operation_run_dialog (op, top);
      if (print_response == WEBKIT_PRINT_OPERATION_RESPONSE_PRINT)
      {
