@@ -180,7 +180,7 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
             wsize[0] = MIN(wsize[0], monitor_size.width - 10);
             wsize[1] = MIN(wsize[1], monitor_size.height - 10);
 
-            gtk_window_resize(window, wsize[0], wsize[1]);
+            gtk_window_set_default_size (GTK_WINDOW(window), wsize[0], wsize[1]);
         }
     }
     g_variant_unref (geometry);
@@ -292,7 +292,7 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 
     DEBUG("resize window to width %d, height %d", width, height);
 
-    gtk_window_resize(GTK_WINDOW(window), width, height);
+    gtk_window_set_default_size (GTK_WINDOW(window), width, height);
     gtk_widget_queue_resize(GTK_WIDGET(window));
     LEAVE("");
 }

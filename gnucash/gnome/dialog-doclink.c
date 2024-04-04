@@ -219,7 +219,7 @@ uri_type_selected_cb (GtkToggleButton *button, GtkWidget *widget)
         else
             file_ok_cb (GTK_BUTTON(widget), ok_button);
 
-        gtk_window_resize (GTK_WINDOW(top), 600, 10); // width, height
+        gtk_window_set_default_size (GTK_WINDOW(top), 600, 10); // width, height
     }
 }
 
