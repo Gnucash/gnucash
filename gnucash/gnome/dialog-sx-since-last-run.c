@@ -897,7 +897,8 @@ gnc_ui_sx_creation_error_dialog (GList **creation_errors)
                                               "%s", message);
 //FIXME gtk4    g_signal_connect_swapped (dialog, "response",
 //                              G_CALLBACK(gtk_window_destroy), GTK_WINDOW(dialog));
-    gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4    gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
     g_free (message);
 }
 

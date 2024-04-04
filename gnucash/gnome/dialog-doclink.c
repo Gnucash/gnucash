@@ -182,7 +182,10 @@ fcb_clicked_cb (GtkButton *button, GtkWidget *ok_button)
         g_object_unref (file);
     }
 
-    res = gtk_native_dialog_run (GTK_NATIVE_DIALOG(native));
+//FIXME gtk4    res = gtk_native_dialog_run (GTK_NATIVE_DIALOG(native));
+gtk_window_set_modal (GTK_WINDOW(native), TRUE); //FIXME gtk4
+res = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     if (res == GTK_RESPONSE_ACCEPT)
     {
         GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(native));
@@ -423,7 +426,10 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
     g_object_unref (G_OBJECT(builder));
 
     // run the dialog
-    result = gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     if (result == GTK_RESPONSE_OK) //ok button
     {
         if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(button_loc))) // location

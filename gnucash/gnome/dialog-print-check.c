@@ -863,7 +863,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                                                  _("Cannot open file %s"),
                                                  _(error->message));
-        gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_error_free(error);
     }
@@ -909,12 +910,14 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
 //FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
 
     gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(pcd->dialog));
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
-    {
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
-        g_object_unref(G_OBJECT(builder));
-        return;
-    }
+//FIXME gtk4    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+//    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
+//    {
+//        gtk_window_destroy (GTK_WINDOW(dialog));
+//        g_object_unref(G_OBJECT(builder));
+//        return;
+//    }
 
     title = g_strdup(gnc_entry_get_text(GTK_ENTRY(entry)));
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
@@ -1563,7 +1566,8 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
                "the %s check format file '%s' match."),
              existing->group, existing->filename,
              format->group, format->filename);
-            gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
             free_check_format (format);
         }

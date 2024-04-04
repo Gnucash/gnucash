@@ -274,7 +274,8 @@ gnc_column_view_edit_apply_cb(GncOptionsDialog *dlg, gpointer user_data)
                                    GTK_BUTTONS_OK,
                                    "%s",
                                    (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4    gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy(GTK_WINDOW(dialog));
         g_free (iter->data);
     }
@@ -541,7 +542,10 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
         gtk_spin_button_set_value(GTK_SPIN_BUTTON(rowspin),
                                   static_cast<float>(high));
 
-        dlg_ret = gtk_dialog_run(GTK_DIALOG(dlg));
+//FIXME gtk4    dlg_ret = gtk_dialog_run(GTK_DIALOG(dlg));
+gtk_window_set_modal (GTK_WINDOW(dlg), true); //FIXME gtk4
+dlg_ret = GTK_RESPONSE_CANCEL; //FIXME gtk4
+        
         gtk_widget_set_visible (GTK_WIDGET(dlg), false);
 
         if (dlg_ret == GTK_RESPONSE_OK)

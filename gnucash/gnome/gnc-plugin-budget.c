@@ -342,7 +342,11 @@ gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book)
     }
 
     bgt = NULL;
-    response = gtk_dialog_run (dlg);
+
+//FIXME gtk4    response = gtk_dialog_run (dlg);
+gtk_window_set_modal (GTK_WINDOW(dlg), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
     switch (response)
     {
     case GTK_RESPONSE_OK:

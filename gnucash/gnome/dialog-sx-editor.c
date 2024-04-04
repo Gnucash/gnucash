@@ -708,7 +708,8 @@ split_error_warning_dialog (GtkWidget *parent, const gchar *title,
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
 //FIXME gtk4    g_signal_connect_swapped (dialog, "response",
 //                              G_CALLBACK (gtk_window_destroy), GTK_WINDOW(dialog));
-    gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 
 }
 
