@@ -1117,7 +1117,7 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
         {
             GdkRGBA color;
             GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(priv->tree_view));
-            gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+            gtk_style_context_get_color (stylectxt, &color);
 
             numeric = gbv_get_accumulated_budget_amount (priv->budget, account, period_num);
 
@@ -1502,17 +1502,22 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
     GtkTreeViewColumn *col, *code_col, *desc_col;
     GList *col_list;
     GList *totals_col_list;
-    GdkRGBA *note_color, *note_color_selected;
-    GtkStyleContext *stylectxt;
+    GdkRGBA note_color, note_color_selected;
+//FIXME gtk4    GtkStyleContext *stylectxt;
 
     ENTER("view %p", budget_view);
 
     g_return_if_fail (budget_view != NULL);
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
-    stylectxt = gtk_widget_get_style_context (GTK_WIDGET(priv->tree_view));
-    gtk_style_context_get (stylectxt, GTK_STATE_FLAG_SELECTED, "background-color", &note_color, NULL);
-    gtk_style_context_get (stylectxt, GTK_STATE_FLAG_NORMAL, "background-color", &note_color_selected, NULL);
+//FIXME gtk4    stylectxt = gtk_widget_get_style_context (GTK_WIDGET(priv->tree_view));
+//FIXME gtk4    gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_SELECTED);
+//FIXME gtk4    gtk_style_context_get (stylectxt, "background-color", &note_color_selected, NULL);
+//FIXME gtk4    gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_NORMAL);
+//FIXME gtk4    gtk_style_context_get (stylectxt, "background-color", &note_color, NULL);
+
+    gdk_rgba_parse (&note_color, "green"); //FIXME gtk4
+    gdk_rgba_parse (&note_color_selected, "blue"); //FIXME gtk4
 
     num_periods = gnc_budget_get_num_periods (priv->budget);
 
@@ -1593,8 +1598,8 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
         num_periods_visible++;
     }
 
-    gdk_rgba_free (note_color);
-    gdk_rgba_free (note_color_selected);
+    gdk_rgba_free (&note_color);
+    gdk_rgba_free (&note_color_selected);
 
     priv->period_col_list = g_list_reverse (col_list);
     priv->totals_col_list = g_list_reverse (totals_col_list);

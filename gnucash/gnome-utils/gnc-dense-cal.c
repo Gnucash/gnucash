@@ -417,6 +417,55 @@ gnc_dense_cal_init (GncDenseCal *dcal)
         gtk_widget_realize (GTK_WIDGET(dcal->transPopup));
     }
 
+    /* Deal with the various label sizes. */
+    {
+        PangoLayout *layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
+        GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(dcal));
+        gint font_size_reduction_units = 1;
+        PangoFontDescription *font_desc;
+        GtkCssProvider *provider;
+        gint font_size, px_size;
+        gint i;
+        gint maxWidth, maxHeight;
+        gchar *px_str, *widget_css;
+        gdouble dpi;
+
+//FIXME gtk4        gtk_style_context_get (stylectxt, state_flags,
+//                               GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
+//        font_size = pango_font_description_get_size(font_desc);
+
+        provider = gtk_css_provider_new();
+//        dpi = gdk_screen_get_resolution (gdk_screen_get_default ());
+//        px_size = ((font_size / PANGO_SCALE) - font_size_reduction_units) * (dpi / 72.);
+//        px_str = g_strdup_printf("%i", px_size);
+//        widget_css = g_strconcat ("*{\n  font-size:", px_str, "px;\n}\n", NULL);
+
+//        gtk_css_provider_load_from_data (provider, widget_css, -1, NULL);
+//        gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
+//                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        g_object_unref (provider);
+        g_free (px_str);
+        g_free (widget_css);
+
+        pango_font_description_free (font_desc);
+
+        maxWidth = maxHeight = 0;
+        for (i = 0; i < 12; i++)
+        {
+            gint w, h;
+            pango_layout_set_text(layout, month_name(i), -1);
+            pango_layout_get_pixel_size(layout, &w, &h);
+            maxWidth = MAX(maxWidth, w);
+            maxHeight = MAX(maxHeight, h);
+        }
+
+        // these two were reversed, before...
+        dcal->label_width    = maxWidth;
+        dcal->label_height   = maxHeight;
+
+        g_object_unref(layout);
+    }
+
     dcal->month = G_DATE_JANUARY;
     dcal->year  = 1970;
 
@@ -1008,7 +1057,7 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
          GdkRGBA color;
          gchar *class_extension = NULL;
 
-         gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+         gtk_style_context_get_color (stylectxt, &color);
 
           if (gnc_is_dark_theme (&color))
               class_extension = "-dark";

@@ -137,12 +137,12 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     priv->web_view = WEBKIT_WEB_VIEW(webkit_web_view_new());
 
     /* Get the default font family from GtkStyleContext of a GtkWidget(priv->web_view). */
-    stylecontext = gtk_widget_get_style_context (GTK_WIDGET(priv->web_view));
-    gtk_style_context_get (stylecontext, gtk_widget_get_state_flags (GTK_WIDGET(priv->web_view)),
-                           "font", &font_desc, NULL);
+//FIXME gtk4     stylecontext = gtk_widget_get_style_context (GTK_WIDGET(priv->web_view));
+//FIXME gtk4     gtk_style_context_get (stylecontext, gtk_widget_get_state_flags (GTK_WIDGET(priv->web_view)),
+//                           "font", &font_desc, NULL);
 
-    default_font_family = pango_font_description_get_family (font_desc);
-    pango_font_description_free (font_desc);
+//    default_font_family = pango_font_description_get_family (font_desc);
+//    pango_font_description_free (font_desc);
 
     /* Set default webkit settings */
     webkit_settings = webkit_web_view_get_settings (priv->web_view);
@@ -153,10 +153,10 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
     }
     else
     {
-        g_object_set (G_OBJECT(webkit_settings),
-                      "default-font-family", default_font_family,
-                      NULL);
-        PINFO("webkit_settings: Set default font to [%s]", default_font_family);
+//FIXME gtk4        g_object_set (G_OBJECT(webkit_settings),
+//                      "default-font-family", default_font_family,
+//                      NULL);
+//        PINFO("webkit_settings: Set default font to [%s]", default_font_family);
     }
     /* Scale everything up */
     zoom = gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REPORT, GNC_PREF_RPT_DFLT_ZOOM);

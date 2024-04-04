@@ -125,7 +125,7 @@ gnc_item_edit_tb_get_preferred_width (GtkWidget *widget,
     gnc_item_edit_get_pixel_coords (GNC_ITEM_EDIT(item_edit), &x, &y, &w, &h);
     width = ((h - 2)*2)/3;
 
-    gtk_style_context_get_border (context, GTK_STATE_FLAG_NORMAL, &border);
+    gtk_style_context_get_border (context, &border);
 
     if (width < MIN_BUTT_WIDTH + border.left + border.right)
         width = MIN_BUTT_WIDTH + border.left + border.right;
@@ -554,7 +554,6 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
     GncItemEdit *item_edit = GNC_ITEM_EDIT(user_data);
     GtkEditable *editable = GTK_EDITABLE(widget);
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(widget));
-    GtkStateFlags flags = gtk_widget_get_state_flags (GTK_WIDGET(widget));
     gint height = gtk_widget_get_allocated_height (widget);
     PangoLayout *layout = gtk_entry_get_layout (GTK_ENTRY(widget));
     const char *pango_text = pango_layout_get_text (layout);
@@ -568,7 +567,7 @@ draw_text_cursor_cb (GtkWidget *widget, cairo_t *cr, gpointer user_data)
 
     // Get the foreground color
     gdk_rgba_parse (&color, "black");
-    gtk_style_context_get_color (stylectxt, flags, &color);
+    gtk_style_context_get_color (stylectxt, &color);
     fg_color = &color;
 
 
@@ -887,9 +886,9 @@ gnc_item_edit_new (GnucashSheet *sheet)
     // Get the CSS space settings for the entry
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(item_edit->editor));
     gtk_style_context_add_class (stylectxt, "gnc-class-register-foreground");
-    gtk_style_context_get_padding (stylectxt, GTK_STATE_FLAG_NORMAL, &padding);
-    gtk_style_context_get_margin (stylectxt, GTK_STATE_FLAG_NORMAL, &margin);
-    gtk_style_context_get_border (stylectxt, GTK_STATE_FLAG_NORMAL, &border);
+    gtk_style_context_get_padding (stylectxt, &padding);
+    gtk_style_context_get_margin (stylectxt, &margin);
+    gtk_style_context_get_border (stylectxt, &border);
 
     item_edit->padding = padding;
     item_edit->margin = margin;
