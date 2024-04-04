@@ -213,8 +213,8 @@ uri_type_selected_cb (GtkToggleButton *button, GtkWidget *widget)
     // make the window resize after hiding widgets
     if (active)
     {
-        if (g_strcmp0 (gtk_buildable_get_name (
-                             GTK_BUILDABLE(parent_hbox)), "location_hbox") == 0)
+        if (g_strcmp0 (gtk_buildable_get_buildable_id (
+                       GTK_BUILDABLE(parent_hbox)), "location_hbox") == 0)
             location_ok_cb (GTK_ENTRY (widget), ok_button);
         else
             file_ok_cb (GTK_BUTTON(widget), ok_button);

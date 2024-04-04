@@ -213,7 +213,7 @@ csv_export_sep_cb (GtkWidget *radio, gpointer user_data)
         return;
     }
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE(radio));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE(radio));
 
     gtk_widget_set_sensitive (info->custom_entry, FALSE);
     info->use_custom = FALSE;
@@ -577,7 +577,7 @@ csv_export_start_date_cb (GtkWidget *radio, gpointer user_data)
         return;
     }
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE(radio));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE(radio));
     active = (g_strcmp0 (name, "start_date_choose") == 0 ? 1 : 0 );
     gtk_widget_set_sensitive (info->csvd.start_date, active);
     get_filter_times (info);
@@ -604,7 +604,7 @@ csv_export_end_date_cb (GtkWidget *radio, gpointer user_data)
         return;
     }
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE(radio));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE(radio));
     active = (g_strcmp0 (name, "end_date_choose") == 0 ? 1 : 0 );
     gtk_widget_set_sensitive (info->csvd.end_date, active);
     get_filter_times (info);

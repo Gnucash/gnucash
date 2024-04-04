@@ -979,7 +979,7 @@ bind_extra_toolbuttons_visibility (GncMainWindow *mainwindow)
 
         if (GTK_IS_SEPARATOR_TOOL_ITEM(tool_item))
         {
-            if (g_str_has_prefix (gtk_buildable_get_name (GTK_BUILDABLE(tool_item)),
+            if (g_str_has_prefix (gtk_buildable_get_buildable_id (GTK_BUILDABLE(tool_item)),
                            "extra_separator"))
             {
                 gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE,

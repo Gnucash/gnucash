@@ -910,7 +910,7 @@ gnc_tax_info_acct_type_cb (GtkWidget *w, gpointer data)
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
     {
-        button_name = gtk_buildable_get_name(GTK_BUILDABLE(w));
+        button_name = gtk_buildable_get_buildable_id(GTK_BUILDABLE(w));
         if (g_strcmp0 (button_name, "income_radio") == 0)
             ti_dialog->account_type = ACCT_TYPE_INCOME;
         else if (g_strcmp0 (button_name, "expense_radio") == 0)
