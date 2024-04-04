@@ -394,7 +394,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 
     g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_destroy (ntt->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ntt->dialog));
     g_free (ntt);
 
     return created_table;
@@ -675,12 +675,12 @@ static const char
 
     if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
     {
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         return NULL;
     }
 
     text = g_strdup (gnc_entry_get_text (GTK_ENTRY(textbox)));
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     return text;
 }
 
@@ -812,7 +812,7 @@ tax_table_window_close_handler (gpointer data)
     g_return_if_fail (ttw);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ttw->dialog));
-    gtk_widget_destroy (ttw->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ttw->dialog));
 }
 
 void
@@ -845,7 +845,7 @@ tax_table_window_destroy_cb (GtkWidget *widget, gpointer data)
 
     if (ttw->dialog)
     {
-        gtk_widget_destroy (ttw->dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(ttw->dialog));
         ttw->dialog = NULL;
     }
     g_free (ttw);

@@ -322,7 +322,7 @@ gnc_period_select_set_date_common (GncPeriodSelect *period, const GDate *date)
     {
         g_date_free(period->date_base);
         period->date_base = NULL;
-        gtk_widget_destroy(period->date_label);
+//FIXME gtk4        gtk_widget_destroy(period->date_label);
         period->date_label = NULL;
     }
 }

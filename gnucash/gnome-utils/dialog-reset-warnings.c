@@ -153,7 +153,7 @@ gnc_reset_warnings_apply_one (GtkWidget *widget,
     prefs_group = g_object_get_data (G_OBJECT (widget), "prefs-group");
     if (prefs_group)
         gnc_prefs_reset (prefs_group, pref);
-    gtk_widget_destroy(widget);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(widget));
     LEAVE(" ");
 }
 
@@ -198,13 +198,13 @@ gnc_reset_warnings_response_cb (GtkDialog *dialog,
         gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(rw_dialog->dialog));
         gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
                                              rw_dialog);
-        gtk_widget_destroy(GTK_WIDGET(rw_dialog->dialog));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(rw_dialog->dialog));
         break;
 
     default:
         gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS,
                                              rw_dialog);
-        gtk_widget_destroy(GTK_WIDGET(rw_dialog->dialog));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(rw_dialog->dialog));
         break;
     }
     LEAVE("");
@@ -351,7 +351,7 @@ close_handler (gpointer user_data)
 
     ENTER(" ");
     gnc_unregister_gui_component_by_data(DIALOG_RESET_WARNINGS_CM_CLASS, rw_dialog);
-    gtk_widget_destroy(rw_dialog->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(rw_dialog->dialog));
     LEAVE(" ");
 }
 

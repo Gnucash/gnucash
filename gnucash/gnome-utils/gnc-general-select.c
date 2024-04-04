@@ -139,10 +139,10 @@ gnc_general_select_dispose (GObject *object)
     gsl->disposed = TRUE;
 
 
-    gtk_widget_destroy(GTK_WIDGET(gsl->entry));
+//FIXME gtk4    gtk_widget_destroy(GTK_WIDGET(gsl->entry));
     gsl->entry = NULL;
 
-    gtk_widget_destroy(GTK_WIDGET(gsl->button));
+//FIXME gtk4    gtk_widget_destroy(GTK_WIDGET(gsl->button));
     gsl->button = NULL;
 
     G_OBJECT_CLASS (gnc_general_select_parent_class)->dispose (object);

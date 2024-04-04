@@ -153,7 +153,7 @@ void gnc_totd_dialog_response_cb (GtkDialog *dialog,
 
     default:
         gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, totd_dialog);
-        gtk_widget_destroy(GTK_WIDGET(totd_dialog->dialog));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(totd_dialog->dialog));
         break;
     }
     LEAVE("");

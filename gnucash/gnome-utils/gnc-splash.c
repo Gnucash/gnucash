@@ -86,7 +86,7 @@ gnc_show_splash_screen (void)
     if (!pixmap)
     {
         g_warning ("can't find splash pixmap");
-        gtk_widget_destroy (splash);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(splash));
         return;
     }
 
@@ -144,7 +144,7 @@ gnc_destroy_splash_screen (void)
 {
     if (splash)
     {
-        gtk_widget_destroy (splash);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(splash));
         progress = NULL;
         progress_bar = NULL;
         splash = NULL;

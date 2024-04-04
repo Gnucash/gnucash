@@ -440,5 +440,5 @@ gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_hea
                                                     new_path_head_uri, use_new);
     }
     g_free (new_path_head_uri);
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }

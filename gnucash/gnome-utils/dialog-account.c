@@ -901,7 +901,7 @@ verify_children_compatible (AccountWindow *aw)
 
     result = (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK);
 
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     return result;
 }
@@ -1488,7 +1488,7 @@ commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                                                       "%s", dialog_msg);
             gtk_dialog_run (GTK_DIALOG(dialog));
-            gtk_widget_destroy (dialog);
+//FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
             g_signal_handlers_block_by_func (gsl, commodity_changed_cb, data);
             gnc_general_select_set_selected (gsl, xaccAccountGetCommodity (account));
             g_signal_handlers_unblock_by_func (gsl, commodity_changed_cb, data);
@@ -1799,7 +1799,7 @@ close_handler (gpointer user_data)
     ENTER("aw %p, modal %d", aw, aw->modal);
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(aw->dialog));
 
-    gtk_widget_destroy (GTK_WIDGET(aw->dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(aw->dialog));
     LEAVE(" ");
 }
 
@@ -2319,7 +2319,7 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
         gnc_unset_busy_cursor (NULL);
         g_list_free (children);
     }
-    gtk_widget_destroy (data->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(data->dialog));
     g_free (data);
 }
 
@@ -2573,5 +2573,5 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
     if (old_color_string)
         g_free (old_color_string);
 
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }

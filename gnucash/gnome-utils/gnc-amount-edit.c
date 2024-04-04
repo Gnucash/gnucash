@@ -114,10 +114,10 @@ gnc_amount_edit_dispose (GObject *object)
 
     gae->disposed = TRUE;
 
-    gtk_widget_destroy (GTK_WIDGET(gae->entry));
+//FIXME gtk4    gtk_widget_destroy (GTK_WIDGET(gae->entry));
     gae->entry = NULL;
 
-    gtk_widget_destroy (GTK_WIDGET(gae->image));
+//FIXME gtk4    gtk_widget_destroy (GTK_WIDGET(gae->image));
     gae->image = NULL;
 
     G_OBJECT_CLASS (gnc_amount_edit_parent_class)->dispose (object);

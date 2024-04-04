@@ -129,7 +129,7 @@ static gboolean autosave_confirm(GtkWidget *toplevel)
 
     /* Run the modal dialog */
     response = gtk_dialog_run( GTK_DIALOG( dialog ) );
-    gtk_widget_destroy( dialog );
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     /* Evaluate the response */
     switch (response)

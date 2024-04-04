@@ -1296,7 +1296,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
     response = gtk_dialog_run (GTK_DIALOG (dialog));
     if (timer_source)
         g_source_remove (timer_source);
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     switch (response)
     {
@@ -1388,8 +1388,8 @@ gnc_main_window_quit(GncMainWindow *window)
             priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
             // if there are no pages destroy window
-            if (priv->installed_pages == NULL)
-                gtk_widget_destroy (GTK_WIDGET(window));
+//FIXME gtk4            if (priv->installed_pages == NULL)
+//                gtk_window_destroy (GTK_WINDOW(window));
         }
         /* remove the preference callbacks from the main window */
         gnc_main_window_remove_prefs (window);
@@ -1429,7 +1429,7 @@ gnc_main_window_delete_event (GtkWidget *window,
                                (gchar *)NULL);
         gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_YES);
         response = gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_CLOSING_WINDOW_QUESTION);
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
 
         if (response == GTK_RESPONSE_CANCEL)
             return TRUE;
@@ -1502,8 +1502,8 @@ gnc_main_window_event_handler (QofInstance *entity,  QofEventId event_type,
             gnc_main_window_close_page (page);
     }
 
-    if (GTK_IS_WIDGET(window) && window->window_quitting)
-        gtk_widget_destroy (GTK_WIDGET(window));
+//FIXME gtk4    if (GTK_IS_WIDGET(window) && window->window_quitting)
+//        gtk_window_destroy (GTK_WINDOW(window));
 
     LEAVE(" ");
 }
@@ -3101,8 +3101,7 @@ gnc_main_window_engine_commit_error_callback( gpointer data,
                                      "%s",
                                      reason );
     gtk_dialog_run(GTK_DIALOG (dialog));
-    gtk_widget_destroy(dialog);
-
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 /** Connect a GncPluginPage to the window.  This function will insert
@@ -3496,8 +3495,8 @@ gnc_main_window_close_page (GncPluginPage *page)
             /* remove the preference callbacks from the main window */
             gnc_main_window_remove_prefs (window);
         }
-        if (window && (gnc_list_length_cmp (active_windows, 1) > 0))
-            gtk_widget_destroy (GTK_WIDGET(window));
+//FIXME gtk4        if (window && (gnc_list_length_cmp (active_windows, 1) > 0))
+//            gtk_window_destroy (GTK_WINDOW(window));
     }
 }
 
@@ -4658,7 +4657,7 @@ gnc_book_options_dialog_apply_helper(GncOptionDB * options)
                                                    "%s",
                                                    (char*)iter->data);
         gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_free (iter->data);
     }
     g_list_free (results);
@@ -5395,7 +5394,7 @@ gnc_main_window_cmd_help_about (GSimpleAction *simple,
     gtk_window_set_transient_for (GTK_WINDOW (dialog),
                                   GTK_WINDOW (window));
     gtk_dialog_run (dialog);
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 

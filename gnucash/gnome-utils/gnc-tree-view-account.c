@@ -2265,7 +2265,7 @@ gppat_filter_response_cb (GtkWidget *dialog,
     g_atomic_pointer_compare_and_exchange(&gptemp,
                                           (gpointer)dialog, NULL);
     fd->dialog = gptemp;
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     LEAVE("types 0x%x", fd->visible_types);
 }
 

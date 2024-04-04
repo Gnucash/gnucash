@@ -400,13 +400,13 @@ gxi_data_destroy (GncXmlImportData *data)
 
     if (data->string_box)
     {
-        gtk_widget_destroy (data->string_box);
+//FIXME gtk4        gtk_widget_destroy (data->string_box);
         data->string_box = NULL;
     }
 
     if (data->assistant)
     {
-        gtk_widget_destroy (data->assistant);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(data->assistant));
         data->assistant = NULL;
     }
 }
@@ -646,8 +646,8 @@ gxi_update_default_enc_combo (GncXmlImportData *data)
     GList *enc_iter;
 
     /* add encodings list */
-    if (data->default_encoding_combo)
-        gtk_widget_destroy (data->default_encoding_combo);
+//FIXME gtk4    if (data->default_encoding_combo)
+//FIXME gtk4        gtk_widget_destroy (data->default_encoding_combo);
     data->default_encoding_combo = gtk_combo_box_text_new();
     combo = GTK_COMBO_BOX_TEXT (data->default_encoding_combo);
 
@@ -735,8 +735,8 @@ gxi_update_string_box (GncXmlImportData *data)
     ambiguous_type *amb;
     conv_type *conv;
 
-    if (data->string_box)
-        gtk_widget_destroy (data->string_box);
+//FIXME gtk4    if (data->string_box)
+//FIXME gtk4        gtk_widget_destroy (data->string_box);
 
     data->string_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
     gtk_box_set_homogeneous (GTK_BOX (data->string_box), FALSE);
@@ -1285,7 +1285,7 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     }
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     data->encodings_dialog = NULL;
 }
 

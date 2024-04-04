@@ -160,7 +160,7 @@ gnc_date_format_init (GNCDateFormat *gdf)
     g_object_unref(G_OBJECT(builder));
 
     /* Destroy the now empty window */
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 
