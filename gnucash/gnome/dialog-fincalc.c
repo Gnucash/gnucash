@@ -524,7 +524,7 @@ close_handler (gpointer user_data)
 {
     FinCalcDialog *fcd = user_data;
 
-    gtk_widget_destroy (fcd->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(fcd->dialog));
 }
 
 static gboolean

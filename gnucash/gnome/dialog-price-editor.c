@@ -240,7 +240,7 @@ pedit_dialog_replace_found_price (PriceEditDialog *pedit_dialog,
                                (gchar *)NULL);
         gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_YES);
         response = gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_PRICE_QUOTES_REPLACE);
-        gtk_widget_destroy (dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
 
         if (response == GTK_RESPONSE_CANCEL)
             return FALSE;
@@ -379,7 +379,7 @@ pedit_dialog_response_cb (GtkDialog *dialog, gint response, gpointer data)
     else
     {
         gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pedit_dialog->dialog));
-        gtk_widget_destroy (GTK_WIDGET (pedit_dialog->dialog));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(pedit_dialog->dialog));
         pedit_dialog_destroy_cb (NULL, pedit_dialog);
     }
 }

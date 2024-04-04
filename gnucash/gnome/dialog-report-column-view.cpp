@@ -275,7 +275,7 @@ gnc_column_view_edit_apply_cb(GncOptionsDialog *dlg, gpointer user_data)
                                    "%s",
                                    (char*)iter->data);
         gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy(GTK_WINDOW(dialog));
         g_free (iter->data);
     }
     g_list_free (results);
@@ -558,6 +558,6 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
 
         g_object_unref(G_OBJECT(builder));
 
-        gtk_widget_destroy(dlg);
+//FIXME gtk4        gtk_window_destroy(GTK_WINDOW(dlg));
     }
 }

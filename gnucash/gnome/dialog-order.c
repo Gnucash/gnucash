@@ -390,7 +390,7 @@ gnc_order_window_close_handler (gpointer user_data)
 {
     OrderWindow *ow = user_data;
 
-    gtk_widget_destroy (ow->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ow->dialog));
 }
 
 static void
@@ -432,7 +432,7 @@ gnc_order_update_window (OrderWindow *ow)
     if (ow->owner_choice)
     {
         gtk_container_remove (GTK_CONTAINER (ow->owner_box), ow->owner_choice);
-        gtk_widget_destroy (ow->owner_choice);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(ow->owner_choice));
     }
 
     switch (ow->dialog_type)

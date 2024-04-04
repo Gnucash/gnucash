@@ -318,7 +318,7 @@ gnc_vendor_window_close_handler (gpointer user_data)
 {
     VendorWindow *vw = user_data;
 
-    gtk_widget_destroy (vw->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(vw->dialog));
 }
 
 static void

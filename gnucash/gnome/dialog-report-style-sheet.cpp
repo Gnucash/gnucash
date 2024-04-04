@@ -124,7 +124,7 @@ gnc_style_sheet_options_apply_cb (GncOptionsDialog * propertybox,
                                                    "%s",
                                                    (char*)iter->data);
         gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_free (iter->data);
     }
     g_list_free (results);
@@ -271,7 +271,7 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
 
     g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_destroy (dlg);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dlg));
     return (new_ss);
 }
 
@@ -450,7 +450,7 @@ gnc_style_sheet_select_dialog_destroy_cb (GtkWidget *widget, gpointer user_data)
     g_object_unref (ss->list_store);
     if (ss->toplevel)
     {
-        gtk_widget_destroy (ss->toplevel);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(ss->toplevel));
         ss->toplevel = NULL;
     }
     gnc_style_sheet_dialog = NULL;
@@ -464,7 +464,7 @@ gnc_style_sheet_window_close_handler (gpointer user_data)
     g_return_if_fail (ss);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ss->toplevel));
-    gtk_widget_destroy (ss->toplevel);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ss->toplevel));
 }
 
 static gboolean

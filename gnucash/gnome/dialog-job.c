@@ -251,7 +251,7 @@ gnc_job_window_close_handler (gpointer user_data)
 {
     JobWindow *jw = user_data;
 
-    gtk_widget_destroy (jw->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(jw->dialog));
     /* jw is already freed at this point
     jw->dialog = NULL; */
 }

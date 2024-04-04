@@ -167,7 +167,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         g_list_free (toclear_list);
 
         /* Close window */
-        gtk_widget_destroy (data->window);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(data->window));
         g_free (data);
     }
 }
@@ -177,7 +177,7 @@ gnc_autoclear_window_cancel_cb (GtkWidget *widget,
                                 AutoClearWindow *data)
 {
     /* Close window */
-    gtk_widget_destroy(data->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(data->window));
     g_free(data);
 }
 

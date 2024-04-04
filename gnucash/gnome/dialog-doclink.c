@@ -448,7 +448,7 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
         ret_uri = g_strdup (uri); // any other button
 
     g_free (path_head);
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     return ret_uri;
 }
 
@@ -485,7 +485,7 @@ gnc_doclink_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
     if (doclink_dialog->window)
     {
         g_free (doclink_dialog->path_head);
-        gtk_widget_destroy (doclink_dialog->window);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(doclink_dialog->window));
         doclink_dialog->window = NULL;
     }
     g_free (doclink_dialog);
@@ -1143,7 +1143,7 @@ close_handler (gpointer user_data)
     else
         gnc_save_window_size (GNC_PREFS_GROUP_BUS,
                               GTK_WINDOW (doclink_dialog->window));
-    gtk_widget_destroy (GTK_WIDGET (doclink_dialog->window));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(doclink_dialog->window));
     LEAVE(" ");
 }
 

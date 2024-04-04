@@ -100,7 +100,7 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
 
     if (facc_dialog->window)
     {
-        gtk_widget_destroy (facc_dialog->window);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(facc_dialog->window));
         facc_dialog->window = NULL;
     }
     g_free (facc_dialog);
@@ -523,7 +523,7 @@ close_handler (gpointer user_data)
     ENTER(" ");
     gnc_save_window_size (GNC_PREFS_GROUP,
                           GTK_WINDOW(facc_dialog->window));
-    gtk_widget_destroy (GTK_WIDGET(facc_dialog->window));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(facc_dialog->window));
     LEAVE(" ");
 }
 

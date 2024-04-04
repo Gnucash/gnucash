@@ -895,8 +895,8 @@ gnc_ui_sx_creation_error_dialog (GList **creation_errors)
                                      "\t%s\t", _("Invalid Transactions"));
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                               "%s", message);
-    g_signal_connect_swapped (dialog, "response",
-                              G_CALLBACK(gtk_widget_destroy), dialog);
+//FIXME gtk4    g_signal_connect_swapped (dialog, "response",
+//                              G_CALLBACK(gtk_window_destroy), GTK_WINDOW(dialog));
     gtk_dialog_run (GTK_DIALOG(dialog));
     g_free (message);
 }
@@ -1524,7 +1524,7 @@ close_handler (gpointer user_data)
     }
 
     gnc_save_window_size (GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(app_dialog->dialog));
-    gtk_widget_destroy (app_dialog->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(app_dialog->dialog));
     g_free (app_dialog);
 }
 

@@ -172,7 +172,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(ddc->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ddc->dialog));
     retval = ddc->retval;
     g_list_free (ddc->acct_types);
     g_free (ddc);
@@ -311,7 +311,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(ddc->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ddc->dialog));
     retval = ddc->retval;
     *acct = ddc->acct;
     if (question_check_message)
@@ -402,7 +402,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(ddc->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ddc->dialog));
     retval = ddc->retval;
     *acct = ddc->acct;
     g_free (ddc);

@@ -126,7 +126,7 @@ custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
     CustomReportDialog *crd = data;
     gnc_save_window_size(GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS, GTK_WINDOW(crd->dialog));
 
-    gtk_widget_destroy(crd->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(crd->dialog));
 }
 
 void

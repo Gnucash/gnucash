@@ -791,7 +791,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
             gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Charge…") );
         else
         {
-            gtk_widget_destroy(interest);
+//FIXME gtk4            gtk_widget_destroy(interest);
             interest = NULL;
         }
 
@@ -846,7 +846,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     }
     // must remove the focus-out handler
     g_signal_handler_disconnect (G_OBJECT(entry), fo_handler_id);
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_object_unref(G_OBJECT(builder));
 
     return (result == GTK_RESPONSE_OK);
@@ -1715,7 +1715,7 @@ close_handler (gpointer user_data)
     auto recnData = static_cast<RecnWindow*>(user_data);
 
     gnc_save_window_size(GNC_PREFS_GROUP_RECONCILE, GTK_WINDOW(recnData->window));
-    gtk_widget_destroy (recnData->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(recnData->window));
 }
 
 

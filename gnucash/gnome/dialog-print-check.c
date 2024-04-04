@@ -864,7 +864,7 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
                                                  _("Cannot open file %s"),
                                                  _(error->message));
         gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_error_free(error);
     }
     g_free(pathname);
@@ -910,13 +910,13 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
     gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(pcd->dialog));
     if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
     {
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_object_unref(G_OBJECT(builder));
         return;
     }
 
     title = g_strdup(gnc_entry_get_text(GTK_ENTRY(entry)));
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     g_object_unref(G_OBJECT(builder));
 
@@ -1563,7 +1563,7 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
              existing->group, existing->filename,
              format->group, format->filename);
             gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
+//FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
             free_check_format (format);
         }
         else
@@ -1780,7 +1780,7 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     if ( trans && (0 == gtk_entry_get_text_length (GTK_ENTRY(pcd->check_address_name))) )
         gnc_entry_set_text(GTK_ENTRY(pcd->check_address_name), xaccTransGetDescription(trans));
 
-    gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "lower_left")));
+//FIXME gtk4    gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "lower_left")));
 
     gnc_ui_print_restore_dialog(pcd);
     gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pcd->dialog), GTK_WINDOW (parent));
@@ -2044,7 +2044,7 @@ draw_picture(GtkPrintContext *context, check_item_t *data)
 
     /* Clean up after ourselves */
     cairo_restore(cr);
-    gtk_widget_destroy(GTK_WIDGET(image));
+//FIXME gtk4    gtk_widget_destroy(GTK_WIDGET(image));
 }
 
 
@@ -2733,7 +2733,7 @@ gnc_ui_print_check_response_cb(GtkDialog *dialog,
         break;
     }
 
-    gtk_widget_destroy(pcd->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(pcd->dialog));
     g_free(pcd->default_font);
     g_list_free(pcd->splits);
     g_free(pcd);

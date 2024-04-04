@@ -353,8 +353,7 @@ gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book)
     default:
         break;
     }
-
-    gtk_widget_destroy (GTK_WIDGET(dlg));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dlg));
     return bgt;
 }
 
