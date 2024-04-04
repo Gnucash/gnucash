@@ -231,7 +231,7 @@ setup_location_dialog (GtkBuilder *builder, GtkWidget *button_loc, const gchar *
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button_loc), TRUE);
 
     // set entry settings
-    gtk_entry_set_width_chars (entry, 80);
+    gtk_editable_set_max_width_chars (GTK_EDITABLE(entry), 80);
     gtk_entry_set_activates_default (entry, TRUE);
     gtk_widget_grab_focus (GTK_WIDGET(entry));
 

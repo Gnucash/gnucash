@@ -327,7 +327,7 @@ gnc_amount_edit_new (void)
     GNCAmountEdit *gae = g_object_new (GNC_TYPE_AMOUNT_EDIT, NULL);
 
     gtk_box_append (GTK_BOX(gae), GTK_WIDGET(gae->entry));
-    gtk_entry_set_width_chars (GTK_ENTRY(gae->entry), 12);
+    gtk_editable_set_max_width_chars (GTK_EDITABLE(gae->entry), 12);
     gae->image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_box_append (GTK_BOX(gae), GTK_WIDGET(gae->image));
     gtk_box_set_spacing (GTK_BOX(gae), 6);

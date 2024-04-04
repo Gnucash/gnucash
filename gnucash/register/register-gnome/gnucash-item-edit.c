@@ -880,7 +880,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
     /* Create the text entry */
     item_edit->editor = gtk_entry_new ();
     sheet->entry = item_edit->editor;
-    gtk_entry_set_width_chars (GTK_ENTRY(item_edit->editor), 1);
+    gtk_editable_set_max_width_chars (GTK_EDITABLE(item_edit->editor), 1);
     gtk_box_append (GTK_BOX(item_edit), GTK_WIDGET(item_edit->editor));
 
     // Get the CSS space settings for the entry

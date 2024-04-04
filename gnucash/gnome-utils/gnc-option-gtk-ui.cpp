@@ -1328,7 +1328,7 @@ create_range_spinner(GncOption& option)
          bigger >= 1; bigger /= 10.0)
         ++num_digits;
     num_digits += num_decimals;
-    gtk_entry_set_width_chars(GTK_ENTRY(widget), num_digits);
+    gtk_editable_set_max_width_chars (GTK_EDITABLE(widget), num_digits);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),
                               (upper_bound / 2)); //default
     return GTK_SPIN_BUTTON(widget);
