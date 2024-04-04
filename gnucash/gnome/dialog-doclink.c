@@ -259,10 +259,12 @@ setup_file_dialog (GtkBuilder *builder, const gchar *path_head, const gchar *uri
     if (display_uri)
     {
         GtkWidget *existing_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "existing_hbox"));
-        GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
+        GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning");
         gchar     *use_uri = gnc_doclink_get_use_uri (path_head, uri, scheme);
         gchar     *uri_label = g_strdup_printf ("%s \"%s\"", _("Existing Document Link is"), display_uri);
         GtkWidget *label = gtk_label_new (uri_label);
+
+        gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_NORMAL);
 
         if (g_file_test (display_uri, G_FILE_TEST_EXISTS))
             gtk_box_append (GTK_BOX(existing_hbox), GTK_WIDGET(label));

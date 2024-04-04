@@ -272,8 +272,8 @@ gnc_tree_view_init (GncTreeView *view)
     /* Create the last column which contains the column selection
      * widget.  gnc_tree_view_add_text_column will do most of the
      * work. */
-    icon = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-
+    icon = gtk_image_new_from_icon_name ("pan-down-symbolic");
+    gtk_image_set_icon_size (GTK_IMAGE(icon), GTK_ICON_SIZE_NORMAL);
     priv->column_menu_icon_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(priv->column_menu_icon_box), FALSE);
 

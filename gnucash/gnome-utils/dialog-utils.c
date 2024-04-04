@@ -719,9 +719,8 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *i
     button = gtk_button_new_with_mnemonic(label);
     if (icon_name)
     {
-        GtkWidget *image;
-
-        image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_BUTTON);
+        GtkWidget *image = gtk_image_new_from_icon_name (icon_name);
+        gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_INHERIT);
         gtk_button_set_image (GTK_BUTTON(button), image);
         g_object_set (button, "always-show-image", TRUE, NULL);
     }

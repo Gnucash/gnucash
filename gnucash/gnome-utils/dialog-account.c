@@ -821,7 +821,7 @@ static gboolean
 verify_children_compatible (AccountWindow *aw)
 {
     Account *account;
-    GtkWidget *dialog, *vbox, *hbox, *label, *expander;
+    GtkWidget *dialog, *vbox, *hbox, *label, *expander, *image;
     gchar *str;
     gboolean result;
 
@@ -853,8 +853,9 @@ verify_children_compatible (AccountWindow *aw)
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 12);
     gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
 
-    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(gtk_image_new_from_icon_name ("dialog-information",
-                                               GTK_ICON_SIZE_DIALOG)));
+    image = gtk_image_new_from_icon_name ("dialog-information");
+    gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_LARGE);
+    gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(image));
 
     /* primary label */
     label = gtk_label_new (_("Give the children the same type?"));
