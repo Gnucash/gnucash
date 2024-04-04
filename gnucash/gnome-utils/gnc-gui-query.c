@@ -264,7 +264,7 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
 
     label = gtk_label_new(msg);
     gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
-    gtk_box_pack_start(GTK_BOX(main_vbox), label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(label));
     gtk_widget_set_visible (GTK_WIDGET(label), TRUE);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
@@ -286,7 +286,7 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
         }
 
         gtk_widget_set_visible (GTK_WIDGET(radio_button), TRUE);
-        gtk_box_pack_start(GTK_BOX(vbox), radio_button, FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(radio_button));
         g_object_set_data(G_OBJECT(radio_button), INDEX_LABEL, GINT_TO_POINTER(i));
         g_signal_connect(radio_button, "clicked",
                          G_CALLBACK(gnc_choose_radio_button_cb),
@@ -306,7 +306,7 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
 
     dvbox = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
 
-    gtk_box_pack_start(GTK_BOX(dvbox), main_vbox, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(dvbox), GTK_WIDGET(main_vbox));
 
     if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
         radio_result = -1;
@@ -335,8 +335,8 @@ gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *m
     
     // add a label
     GtkWidget* label = gtk_label_new (msg);
-    gtk_box_pack_start(GTK_BOX(content_area), label, FALSE, FALSE, 0);
-    
+    gtk_box_append (GTK_BOX(content_area), GTK_WIDGET(label));
+
     // add a textview or an entry.
     if (use_entry)
     {
@@ -350,7 +350,7 @@ gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *m
         buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
         gtk_text_buffer_set_text (buffer, default_input, -1);
     }
-    gtk_box_pack_start(GTK_BOX(content_area), view, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(content_area), GTK_WIDGET(view));
 
     // run the dialog
 //FIXME gtk4    gtk_widget_show_all (dialog);
@@ -420,8 +420,8 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
     
     // add a scroll area
     GtkWidget* scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
-    gtk_box_pack_start(GTK_BOX(content_area), scrolledwindow, TRUE, TRUE, 0);
-    
+    gtk_box_append (GTK_BOX(content_area), GTK_WIDGET(scrolledwindow));
+
     // add a textview
     view = gtk_text_view_new ();
     gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);

@@ -172,7 +172,7 @@ create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
 {
     gsl->entry = gtk_entry_new ();
     gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
-    gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(gsl), GTK_WIDGET(gsl->entry));
     gtk_widget_set_visible (GTK_WIDGET(gsl->entry), TRUE);
 
     if (type == GNC_GENERAL_SELECT_TYPE_SELECT)
@@ -182,7 +182,7 @@ create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
     else if (type == GNC_GENERAL_SELECT_TYPE_VIEW)
         gsl->button = gtk_button_new_with_label (_("View…"));
 
-    gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(gsl), GTK_WIDGET(gsl->button));
     g_signal_connect (G_OBJECT (gsl->button), "clicked",
                       G_CALLBACK (select_cb), gsl);
     gtk_widget_set_visible (GTK_WIDGET(gsl->button), TRUE);

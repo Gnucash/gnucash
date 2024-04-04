@@ -316,7 +316,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     ntt->amount_entry = widget = gnc_amount_edit_new ();
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(widget), TRUE);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT(widget), 100000);
-    gtk_box_pack_start (GTK_BOX(box), widget, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(widget));
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_window"));
     ntt->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
@@ -649,7 +649,7 @@ static const char
 
     label = gtk_label_new (msg);
     gtk_label_set_justify (GTK_LABEL(label), GTK_JUSTIFY_LEFT);
-    gtk_box_pack_start (GTK_BOX(main_vbox), label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(label));
     gtk_widget_set_visible (GTK_WIDGET(label), TRUE);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
@@ -661,7 +661,7 @@ static const char
     textbox = gtk_entry_new ();
     gtk_widget_set_visible (GTK_WIDGET(textbox), TRUE);
     gnc_entry_set_text (GTK_ENTRY(textbox), text);
-    gtk_box_pack_start (GTK_BOX(vbox), textbox, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(textbox));
 
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
                                           GTK_DIALOG_DESTROY_WITH_PARENT,
@@ -671,7 +671,7 @@ static const char
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
     dvbox = gtk_dialog_get_content_area (GTK_DIALOG(dialog));
-    gtk_box_pack_start (GTK_BOX(dvbox), main_vbox, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(dvbox), GTK_WIDGET(main_vbox));
 
     if (gtk_dialog_run (GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
     {

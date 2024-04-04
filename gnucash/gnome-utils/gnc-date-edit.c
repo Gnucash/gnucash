@@ -823,7 +823,7 @@ create_children (GNCDateEdit *gde)
     /* Create the text entry area. */
     gde->date_entry  = gtk_entry_new ();
     gtk_entry_set_width_chars (GTK_ENTRY (gde->date_entry), 11);
-    gtk_box_pack_start (GTK_BOX (gde), gde->date_entry, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(gde), GTK_WIDGET(gde->date_entry));
     gtk_widget_set_visible (GTK_WIDGET(gde->date_entry), TRUE);
 
     GtkEventController *event_controller1 = gtk_event_controller_key_new ();
@@ -839,7 +839,7 @@ create_children (GNCDateEdit *gde)
                       G_CALLBACK(gnc_date_edit_button_pressed), gde);
     g_signal_connect (G_OBJECT (gde->date_button), "toggled",
                       G_CALLBACK (gnc_date_edit_button_toggled), gde);
-    gtk_box_pack_start (GTK_BOX (gde), gde->date_button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(gde), GTK_WIDGET(gde->date_button));
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
@@ -849,14 +849,14 @@ create_children (GNCDateEdit *gde)
     /* Calendar label, only shown if the date editor has a time field */
     gde->cal_label = gtk_label_new (_("Calendar"));
     gnc_label_set_alignment (gde->cal_label, 0.0, 0.5);
-    gtk_box_pack_start (GTK_BOX (hbox), gde->cal_label, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(gde->cal_label));
     if (gde->flags & GNC_DATE_EDIT_SHOW_TIME)
         gtk_widget_set_visible (GTK_WIDGET(gde->cal_label), TRUE);
 
     /* Graphic for the popup button. */
     arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
 
-    gtk_box_pack_start (GTK_BOX (hbox), arrow, TRUE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(arrow));
     gtk_widget_set_visible (GTK_WIDGET(arrow), TRUE);
     gtk_widget_set_visible (GTK_WIDGET(gde->date_button), TRUE);
 
@@ -864,7 +864,7 @@ create_children (GNCDateEdit *gde)
     gde->time_entry = gtk_entry_new ();
     gtk_entry_set_max_length (GTK_ENTRY(gde->time_entry), 12);
     gtk_widget_set_size_request (GTK_WIDGET(gde->time_entry), 88, -1);
-    gtk_box_pack_start (GTK_BOX (gde), gde->time_entry, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(gde), GTK_WIDGET(gde->time_entry));
 
     store = gtk_tree_store_new(1, G_TYPE_STRING);
     gde->time_combo = GTK_WIDGET(gtk_combo_box_new_with_model(GTK_TREE_MODEL(store)));
@@ -879,7 +879,7 @@ create_children (GNCDateEdit *gde)
     g_signal_connect (G_OBJECT (gde->time_combo), "changed",
                       G_CALLBACK  (set_time), gde);
 
-    gtk_box_pack_start (GTK_BOX (gde), gde->time_combo, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(gde), GTK_WIDGET(gde->time_combo));
 
     /* We do not create the popup menu with the hour range until we are
      * realized, so that it uses the values that the user might supply in a

@@ -273,7 +273,7 @@ gnc_reset_warnings_add_one (RWDialog *rw_dialog, const gchar *prefs_group,
                             (GDestroyNotify) g_free);
     g_signal_connect_swapped(G_OBJECT(checkbox), "toggled",
                              (GCallback)gnc_reset_warnings_update_widgets, rw_dialog);
-    gtk_box_pack_start(GTK_BOX(box), checkbox, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(checkbox));
     LEAVE(" ");
 }
 

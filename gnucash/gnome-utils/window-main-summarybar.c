@@ -669,10 +669,9 @@ gnc_main_window_summary_new (void)
     }
 
     gtk_container_set_border_width (GTK_CONTAINER (retval->hbox), 2);
-    gtk_box_pack_start (GTK_BOX(retval->hbox), retval->totals_combo, TRUE, TRUE, 5);
+    gtk_box_append (GTK_BOX(retval->hbox), GTK_WIDGET(retval->totals_combo));
     gtk_widget_set_visible (GTK_WIDGET(retval->totals_combo), TRUE);
     gtk_widget_set_visible (GTK_WIDGET(retval->hbox), TRUE);
-
 
     g_signal_connect_swapped (G_OBJECT (retval->hbox), "destroy",
                               G_CALLBACK (gnc_main_window_summary_destroy_cb),

@@ -124,7 +124,9 @@ gnc_embedded_window_open_page (GncEmbeddedWindow *window,
     page->window = GTK_WIDGET(window);
     page->notebook_page = gnc_plugin_page_create_widget (page);
 
-    gtk_box_pack_end(GTK_BOX(window), page->notebook_page, TRUE, TRUE, 2);
+    gtk_box_prepend (GTK_BOX(window), GTK_WIDGET(page->notebook_page));
+    gtk_box_set_spacing (GTK_BOX(window), 2);
+
     gnc_plugin_page_inserted (page);
     LEAVE(" ");
 }
@@ -299,11 +301,11 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
     window->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (window->menu_dock), FALSE);
     gtk_widget_set_visible (GTK_WIDGET(window->menu_dock), TRUE);
-    gtk_box_pack_start (GTK_BOX (window), window->menu_dock, FALSE, TRUE, 0);
+    gtk_box_append (GTK_BOX(window), GTK_WIDGET(window->menu_dock));
 
     window->statusbar = gtk_statusbar_new ();
     gtk_widget_set_visible (GTK_WIDGET(window->statusbar), TRUE);
-    gtk_box_pack_end (GTK_BOX (window), window->statusbar, FALSE, TRUE, 0);
+    gtk_box_prepend (GTK_BOX(window), GTK_WIDGET(window->statusbar));
 
     window->simple_action_group = NULL;
     LEAVE(" ");

@@ -497,10 +497,11 @@ gnc_report_combo_new (GSList *report_list)
     gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT(grc->combo), renderer,
                                     "text", RC_NAME, NULL);
 
-    gtk_box_pack_start (GTK_BOX(grc), GTK_WIDGET(grc->combo), TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(grc), GTK_WIDGET(grc->combo));
     grc->warning_image = gtk_image_new_from_icon_name ("dialog-warning",
                                                         GTK_ICON_SIZE_SMALL_TOOLBAR);
-    gtk_box_pack_start (GTK_BOX(grc), GTK_WIDGET(grc->warning_image), FALSE, FALSE, 6);
+    gtk_box_append (GTK_BOX(grc), GTK_WIDGET(grc->warning_image));
+    gtk_box_set_spacing (GTK_BOX(grc), 6);
     gtk_widget_set_no_show_all (GTK_WIDGET(grc->warning_image), TRUE);
     gtk_widget_set_visible (GTK_WIDGET(grc->warning_image), FALSE);
 

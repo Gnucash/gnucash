@@ -350,7 +350,8 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     file_chooser = GTK_WIDGET(gtk_builder_get_object (builder, "file_chooser" ));
     fileChooser = GTK_FILE_CHOOSER_WIDGET(gtk_file_chooser_widget_new( fileChooserAction ));
     faw->fileChooser = GTK_FILE_CHOOSER(fileChooser);
-    gtk_box_pack_start( GTK_BOX(file_chooser), GTK_WIDGET(fileChooser), TRUE, TRUE, 6 );
+    gtk_box_append (GTK_BOX(file_chooser), GTK_WIDGET(fileChooser));
+    gtk_box_set_spacing (GTK_BOX(file_chooser), 6);
 
     /* set up .gnucash filters for Datafile operations */
     GtkFileFilter *filter = gtk_file_filter_new ();
