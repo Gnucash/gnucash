@@ -899,7 +899,9 @@ verify_children_compatible (AccountWindow *aw)
 
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
-    result = (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK);
+//FIXME gtk4    result = (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK);
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
@@ -1487,7 +1489,8 @@ commodity_changed_cb (GNCGeneralSelect *gsl, gpointer data)
                                                         "%s", dialog_title);
             gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                                                       "%s", dialog_msg);
-            gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4            gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
             g_signal_handlers_block_by_func (gsl, commodity_changed_cb, data);
             gnc_general_select_set_selected (gsl, xaccAccountGetCommodity (account));
@@ -2046,7 +2049,9 @@ gnc_ui_new_accounts_from_name_with_defaults (GtkWindow *parent,
 
     while (!done)
     {
-        response = gtk_dialog_run (GTK_DIALOG(aw->dialog));
+//FIXME gtk4        response = gtk_dialog_run (GTK_DIALOG(aw->dialog));
+gtk_window_set_modal (GTK_WINDOW(aw->dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
         /* This can destroy the dialog */
         gnc_account_window_response_cb (GTK_DIALOG(aw->dialog), response, (gpointer)aw);
@@ -2517,7 +2522,9 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
 
 //FIXME gtk4    gtk_widget_show_all (dialog);
 
-    response = gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4    response = gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
     if (response == GTK_RESPONSE_OK)
     {

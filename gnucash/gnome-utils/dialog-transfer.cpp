@@ -2247,7 +2247,10 @@ gboolean gnc_xfer_dialog_run_until_done( XferDialog *xferData )
     while ( TRUE )
     {
         DEBUG("calling gtk_dialog_run");
-        response = gtk_dialog_run (dialog);
+//FIXME gtk4        response = gtk_dialog_run (dialog);
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         DEBUG("gtk_dialog_run returned %d", response);
         gnc_xfer_dialog_response_cb (dialog, response, xferData);
 

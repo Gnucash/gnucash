@@ -185,7 +185,11 @@ gnc_ui_select_commodity_modal_full(gnc_commodity * orig_sel,
     done = FALSE;
     while (!done)
     {
-        switch (value = gtk_dialog_run(GTK_DIALOG(win->dialog)))
+//FIXME gtk4        value = gtk_dialog_run(GTK_DIALOG(win->dialog));
+gtk_window_set_modal (GTK_WINDOW(win->dialog), TRUE); //FIXME gtk4
+value = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
+        switch (value)
         {
         case GTK_RESPONSE_OK:
             DEBUG("case OK");
@@ -1139,7 +1143,10 @@ gnc_ui_common_commodity_modal(gnc_commodity *commodity,
     done = FALSE;
     while (!done)
     {
-        value = gtk_dialog_run(GTK_DIALOG(win->dialog));
+//FIXME gtk4        value = gtk_dialog_run(GTK_DIALOG(win->dialog));
+gtk_window_set_modal (GTK_WINDOW(win->dialog), TRUE); //FIXME gtk4
+value = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         switch (value)
         {
         case GTK_RESPONSE_OK:

@@ -162,7 +162,9 @@ gnc_file_dialog_int (GtkWindow *parent,
         g_list_free (filters);
     }
 
-    response = gtk_dialog_run(GTK_DIALOG(file_box));
+//FIXME gtk4    response = gtk_dialog_run(GTK_DIALOG(file_box));
+gtk_window_set_modal (GTK_WINDOW(file_box), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(file_box), "gnc-id-file");
@@ -378,7 +380,9 @@ show_session_error (GtkWindow *parent,
                                NULL);
         if (!parent)
             gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        response = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         uh_oh = (response != GTK_RESPONSE_YES);
         break;
@@ -677,7 +681,9 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        response = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
 
         switch (response)
@@ -934,7 +940,9 @@ RESTART:
         else
             gtk_dialog_set_default_response (GTK_DIALOG(dialog), RESPONSE_FILE);
 
-        rc = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        rc = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+rc = GTK_RESPONSE_CANCEL; //FIXME gtk4
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
         g_free (displayname);
 

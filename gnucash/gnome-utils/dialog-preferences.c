@@ -227,7 +227,10 @@ gnc_account_separator_validate (GtkWidget *dialog)
         g_object_unref (G_OBJECT(builder));
 //FIXME gtk4        gtk_widget_show_all (msg_dialog);
 
-        response = gtk_dialog_run (GTK_DIALOG(msg_dialog));
+//FIXME gtk4        response = gtk_dialog_run (GTK_DIALOG(msg_dialog));
+gtk_window_set_modal (GTK_WINDOW(msg_dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         if (response == GTK_RESPONSE_ACCEPT) // reset to original
         {
             gchar *original_sep = g_object_get_data (G_OBJECT(entry), "original_text");

@@ -77,7 +77,9 @@ gnc_ok_cancel_dialog(GtkWindow *parent,
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), default_result);
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4    result = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     return(result);
 }
@@ -126,7 +128,9 @@ gnc_verify_dialog(GtkWindow *parent, gboolean yes_is_default,
 
     gtk_dialog_set_default_response(GTK_DIALOG(dialog),
                                     (yes_is_default ? GTK_RESPONSE_YES : GTK_RESPONSE_NO));
-    result = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4    result = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     return (result == GTK_RESPONSE_YES);
 }
@@ -152,7 +156,8 @@ gnc_message_dialog_common (GtkWindow *parent, const gchar *format, GtkMessageTyp
     if (!parent)
         gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
-    gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
@@ -308,7 +313,10 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
 
     gtk_box_append (GTK_BOX(dvbox), GTK_WIDGET(main_vbox));
 
-    if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+//FIXME gtk4    if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+
+//    if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_OK)
         radio_result = -1;
 
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
@@ -354,7 +362,10 @@ gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *m
 
     // run the dialog
 //FIXME gtk4    gtk_widget_show_all (dialog);
-    result = gtk_dialog_run (GTK_DIALOG (dialog));
+
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
     
     if (result != GTK_RESPONSE_REJECT)
     {
@@ -436,6 +447,7 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
         gtk_window_set_default_size (GTK_WINDOW(dialog), width, height);
     }
 //FIXME gtk4    gtk_widget_show_all (dialog);
-    gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
