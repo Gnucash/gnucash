@@ -253,8 +253,8 @@ typedef struct GncMainWindowPrivate
     const gchar   *previous_plugin_page_name;
     const gchar   *previous_menu_qualifier;
 
-    /** The accelerator group for the window */
-    GtkAccelGroup *accel_group;
+    /** The shortcut controller for the window */
+    GtkEventController *shortcut_controller;
 
     GHashTable    *display_item_hash;
 
@@ -2720,8 +2720,8 @@ gnc_main_window_init (GncMainWindow *window)
     priv->previous_plugin_page_name = nullptr;
     priv->previous_menu_qualifier = nullptr;
 
-    priv->accel_group = gtk_accel_group_new ();
-    gtk_window_add_accel_group (GTK_WINDOW(window), priv->accel_group);
+    priv->shortcut_controller = gtk_shortcut_controller_new ();
+    gtk_widget_add_controller (GTK_WIDGET(window), GTK_EVENT_CONTROLLER(priv->shortcut_controller));
 
     /* Get the show_color_tabs value preference */
     priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
@@ -5437,8 +5437,8 @@ gnc_main_window_get_menubar_model (GncWindow *window)
  *  interface.
  *
  *  @param window_in A pointer to a generic window. */
-static GtkAccelGroup *
-gnc_main_window_get_accel_group (GncWindow *window)
+static GtkEventController *
+gnc_main_window_get_accel_group (GncWindow *window) //FIXME gtk4 rename
 {
     GncMainWindowPrivate *priv;
 
@@ -5446,7 +5446,7 @@ gnc_main_window_get_accel_group (GncWindow *window)
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    return priv->accel_group;
+    return priv->shortcut_controller;
 }
 
 /** Initialize the generic window interface for a main window.

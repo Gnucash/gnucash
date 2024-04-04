@@ -1874,7 +1874,9 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         GtkToolbar *tool_bar;
         GMenuModel *menu_model;
         GtkWidget *menu_bar;
-        GtkAccelGroup *accel_group = gtk_accel_group_new ();
+//FIXME gtk4        GtkAccelGroup *accel_group = gtk_accel_group_new ();
+        GtkEventController *shortcut_controller = gtk_shortcut_controller_new ();
+
         const gchar *ui = GNUCASH_RESOURCE_PREFIX "/gnc-reconcile-window.ui";
         GError *error = NULL;
 
@@ -1913,10 +1915,10 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
         gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(tool_bar));
 
-        gtk_window_add_accel_group (GTK_WINDOW(recnData->window), accel_group);
+        gtk_widget_add_controller (GTK_WIDGET(recnData->window), GTK_EVENT_CONTROLLER(shortcut_controller));
 
         // need to add the accelerator keys
-        gnc_add_accelerator_keys_for_menu (menu_bar, menu_model, accel_group);
+        gnc_add_accelerator_keys_for_menu (menu_bar, menu_model, shortcut_controller);
 
 #ifdef MAC_INTEGRATION
         gtkosx_application_sync_menubar (theApp);
