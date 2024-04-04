@@ -200,7 +200,7 @@ if (NOT PKG_CONFIG_FOUND)
 
 # glib et al.
 set(GLIB_MIN_VERSION 2.56.1)
-set(GTK_MIN_VERSION 3.24.0)
+set(GTK_MIN_VERSION 4.8.3)
 
 pkg_check_modules (GLIB2 REQUIRED IMPORTED_TARGET glib-2.0>=${GLIB_MIN_VERSION})
 pkg_check_modules (GIO REQUIRED gio-2.0)
@@ -222,7 +222,7 @@ if (WITH_GNUCASH)
 #    set(WEBKIT2 1 CACHE INTERNAL "WebKit2Gtk4")
 #  endif()
 
-  pkg_check_modules (GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0>=${GTK_MIN_VERSION})
+  pkg_check_modules (GTK4 REQUIRED IMPORTED_TARGET gtk4>=${GTK_MIN_VERSION})
 endif()
 
 pkg_check_modules (ZLIB REQUIRED zlib)
@@ -391,7 +391,7 @@ if (WITH_AQBANKING)
   set(CMAKE_REQUIRED_INCLUDES)
   set(CMAKE_REQUIRED_LIBRARIES)
   if(WITH_GNUCASH)
-    pkg_check_modules (GWEN_GTK3 REQUIRED gwengui-gtk3)
+    pkg_check_modules (GWEN_GTK4 REQUIRED gwengui-gtk4)
   endif()
 endif()
 
@@ -605,12 +605,12 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
 if (UNIX)
-  set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED ${CMAKE_C_FLAGS}")
-  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED ${CMAKE_CXX_FLAGS}")
+  set( CMAKE_C_FLAGS "-Werror  -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED ${CMAKE_C_FLAGS}")
+  set( CMAKE_CXX_FLAGS "-Werror -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 endif()
 if (MINGW)
-  set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
+  set( CMAKE_C_FLAGS "-Werror ${CMAKE_C_FLAGS}")
   set( CMAKE_CXX_FLAGS "-DWINVER=0x0500 -D_EMULATE_GLIBC=0 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 endif()
 
@@ -833,7 +833,7 @@ set_property(TARGET PkgConfig::GLIB2 PROPERTY INTERFACE_COMPILE_DEFINITIONS
 if (WITH_GNUCASH)
 string(REGEX MATCH "^([0-9]+)\.([0-9]+)" GTK_MIN_MATCH ${GTK_MIN_VERSION})
 set(GTK_API ${CMAKE_MATCH_1}_${CMAKE_MATCH_2})
-set_property(TARGET PkgConfig::GTK3 PROPERTY INTERFACE_COMPILE_DEFINITIONS
+set_property(TARGET PkgConfig::GTK4 PROPERTY INTERFACE_COMPILE_DEFINITIONS
   GDK_VERSION_MIN_REQUIRED=GDK_VERSION_${GTK_API}
   GDK_VERSION_MAX_ALLOWED=GDK_VERSION_${GTK_API})
 endif()

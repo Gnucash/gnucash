@@ -45,7 +45,7 @@ target_link_libraries(gnc-html
     PRIVATE
         gnc-engine
         gnc-gnome-utils
-        PkgConfig::GTK3
+        PkgConfig::GTK4
         ${GUILE_LDFLAGS})
 
 target_compile_definitions(gnc-html PRIVATE -DG_LOG_DOMAIN=\"gnc.html\")

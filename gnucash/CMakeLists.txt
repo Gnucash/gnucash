@@ -109,7 +109,7 @@ target_link_libraries (gnucash
    gnc-engine gnc-module gnc-core-utils gnucash-guile
    gnc-qif-import gnc-csv-import gnc-csv-export gnc-log-replay
    gnc-bi-import gnc-customer-import gnc-report
-   PkgConfig::GTK3 ${GUILE_LDFLAGS} PkgConfig::GLIB2
+   PkgConfig::GTK4 ${GUILE_LDFLAGS} PkgConfig::GLIB2
    ${Boost_LIBRARIES}
 )
 
