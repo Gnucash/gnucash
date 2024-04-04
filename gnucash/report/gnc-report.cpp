@@ -283,22 +283,21 @@ gnc_get_default_report_font_family(void)
     top_widget = GTK_WIDGET(top_list->data);
     g_list_free(top_list);
     top_widget_style_c = gtk_widget_get_style_context (top_widget);
-    gtk_style_context_get (top_widget_style_c, gtk_widget_get_state_flags (GTK_WIDGET(top_widget)),
-                           "font", &font_desc, NULL);
+//FIXME gtk4    gtk_style_context_get (top_widget_style_c, "font", &font_desc, NULL);
 
-    default_font_family = g_strdup(pango_font_description_get_family (font_desc));
+//    default_font_family = g_strdup(pango_font_description_get_family (font_desc));
 
-    pango_font_description_free (font_desc);
+//    pango_font_description_free (font_desc);
 
-    if (!default_font_family)
+//    if (!default_font_family)
+//        return g_strdup ("Arial");
+//    else if (g_str_has_prefix (default_font_family, ".AppleSystemUIFont"))
+//    {
+//        g_free (default_font_family);
         return g_strdup ("Arial");
-    else if (g_str_has_prefix (default_font_family, ".AppleSystemUIFont"))
-    {
-        g_free (default_font_family);
-        return g_strdup ("Arial");
-    }
-    else
-        return default_font_family;
+//    }
+//    else
+//        return default_font_family;
 }
 
 static gboolean

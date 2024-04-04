@@ -209,7 +209,7 @@ gnc_tree_view_select_column_icon_cb (GtkWidget *widget,
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
-    gtk_style_context_get_padding (stylectxt, GTK_STATE_FLAG_NORMAL, &padding);
+    gtk_style_context_get_padding (stylectxt, &padding);
 
     gdouble x_win, y_win;
     if (!gdk_event_get_coords (event, &x_win, &y_win))

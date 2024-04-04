@@ -55,10 +55,8 @@ void gnc_cbwe_require_list_item (GtkComboBox *cbwe);
 
 gboolean gnc_is_dark_theme (GdkRGBA *fg_color);
 void gnc_style_context_get_background_color (GtkStyleContext *context,
-                                             GtkStateFlags    state,
                                              GdkRGBA         *color);
 void gnc_style_context_get_border_color (GtkStyleContext *context,
-                                         GtkStateFlags    state,
                                          GdkRGBA         *color);
 
 GtkWidget *gnc_get_dialog_widget_from_id (GtkDialog *dialog, const gchar *id);

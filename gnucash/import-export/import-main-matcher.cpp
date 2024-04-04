@@ -1673,7 +1673,7 @@ gnc_gen_trans_common_setup (GNCImportMainMatcher *info,
 
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(parent));
     GdkRGBA color;
-    gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+    gtk_style_context_get_color (stylectxt, &color);
     info->dark_theme = gnc_is_dark_theme (&color);
 
     /* Get the view */
@@ -1844,7 +1844,7 @@ get_required_color (const gchar *class_name)
     GtkWidget *label = gtk_label_new ("Color");
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
     gtk_style_context_add_class (context, class_name);
-    gnc_style_context_get_background_color (context, GTK_STATE_FLAG_NORMAL, &color);
+    gnc_style_context_get_background_color (context, &color);
     static gchar *strbuf = NULL;
     if (strbuf)
         g_free (strbuf);

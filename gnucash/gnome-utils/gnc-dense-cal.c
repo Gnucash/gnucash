@@ -405,7 +405,6 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     {
         PangoLayout *layout = gtk_widget_create_pango_layout(GTK_WIDGET(dcal), NULL);
         GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(dcal));
-        GtkStateFlags state_flags = gtk_style_context_get_state (stylectxt);
         gint font_size_reduction_units = 1;
         PangoFontDescription *font_desc;
         GtkCssProvider *provider;
@@ -415,19 +414,19 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         gchar *px_str, *widget_css;
         gdouble dpi;
 
-        gtk_style_context_get (stylectxt, state_flags,
-                               GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
-        font_size = pango_font_description_get_size(font_desc);
+//FIXME gtk4        gtk_style_context_get (stylectxt, state_flags,
+//                               GTK_STYLE_PROPERTY_FONT, &font_desc, NULL);
+//        font_size = pango_font_description_get_size(font_desc);
 
         provider = gtk_css_provider_new();
-        dpi = gdk_screen_get_resolution (gdk_screen_get_default ());
-        px_size = ((font_size / PANGO_SCALE) - font_size_reduction_units) * (dpi / 72.);
-        px_str = g_strdup_printf("%i", px_size);
-        widget_css = g_strconcat ("*{\n  font-size:", px_str, "px;\n}\n", NULL);
+//        dpi = gdk_screen_get_resolution (gdk_screen_get_default ());
+//        px_size = ((font_size / PANGO_SCALE) - font_size_reduction_units) * (dpi / 72.);
+//        px_str = g_strdup_printf("%i", px_size);
+//        widget_css = g_strconcat ("*{\n  font-size:", px_str, "px;\n}\n", NULL);
 
-        gtk_css_provider_load_from_data (provider, widget_css, -1, NULL);
-        gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
-                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+//        gtk_css_provider_load_from_data (provider, widget_css, -1, NULL);
+//        gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
+//                                   GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
         g_object_unref (provider);
         g_free (px_str);
         g_free (widget_css);
@@ -983,7 +982,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
          GdkRGBA color;
          gchar *class_extension = NULL;
 
-         gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+         gtk_style_context_get_color (stylectxt, &color);
 
           if (gnc_is_dark_theme (&color))
               class_extension = "-dark";
