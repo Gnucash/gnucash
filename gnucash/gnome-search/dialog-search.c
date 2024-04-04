@@ -389,13 +389,13 @@ match_combo_changed (GtkComboBoxText *combo_box, GNCSearchWindow *sw)
 static void
 search_type_cb (GtkToggleButton *button, GNCSearchWindow *sw)
 {
-    GSList * buttongroup = gtk_radio_button_get_group (GTK_RADIO_BUTTON(button));
+//FIXME gtk4    GSList * buttongroup = gtk_radio_button_get_group (GTK_RADIO_BUTTON(button));
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-    {
-        sw->search_type =
-            g_slist_length (buttongroup) - g_slist_index (buttongroup, button) - 1;
-    }
+//    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+//    {
+//        sw->search_type =
+//            g_slist_length (buttongroup) - g_slist_index (buttongroup, button) - 1;
+//    }
 }
 
 static void
