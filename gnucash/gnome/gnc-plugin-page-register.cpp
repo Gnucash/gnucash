@@ -2443,7 +2443,7 @@ gnc_plugin_page_register_sort_button_cb (GtkToggleButton* button,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    name = gtk_buildable_get_name (GTK_BUILDABLE (button));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
     ENTER ("button %s(%p), page %p", name, button, page);
     type = SortTypefromString (name);
     gnc_split_reg_set_sort_type (priv->gsr, type);
@@ -2740,7 +2740,7 @@ gnc_plugin_page_register_filter_status_one_cb (GtkToggleButton* button,
     g_return_if_fail (GTK_IS_CHECK_BUTTON (button));
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE (button));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
     ENTER ("toggle button %s (%p), plugin_page %p", name, button, page);
 
     /* Determine what status bit to change */
@@ -2932,7 +2932,7 @@ gnc_plugin_page_register_filter_select_range_cb (GtkToggleButton* button,
 
     ENTER ("(button %p, page %p)", button, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
-    name = gtk_buildable_get_name (GTK_BUILDABLE (button));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (button));
     active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
     if (active && g_strcmp0 (name, "filter_show_range") == 0)
@@ -3021,7 +3021,7 @@ gnc_plugin_page_register_filter_gde_changed_cb (GtkWidget* unused,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(widget %s(%p), page %p)",
-           gtk_buildable_get_name (GTK_BUILDABLE (unused)), unused, page);
+           gtk_buildable_get_buildable_id (GTK_BUILDABLE (unused)), unused, page);
     get_filter_times (page);
     gnc_ppr_update_date_query (page);
     LEAVE (" ");
@@ -3059,7 +3059,7 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(radio %s(%p), page %p)",
-           gtk_buildable_get_name (GTK_BUILDABLE (radio)), radio, page);
+           gtk_buildable_get_buildable_id (GTK_BUILDABLE (radio)), radio, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio)))
     {
@@ -3067,7 +3067,7 @@ gnc_plugin_page_register_filter_start_cb (GtkWidget* radio,
         return;
     }
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE (radio));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (radio));
     active = !g_strcmp0 (name, "start_date_choose");
     gtk_widget_set_sensitive (priv->fd.start_date, active);
     get_filter_times (page);
@@ -3107,7 +3107,7 @@ gnc_plugin_page_register_filter_end_cb (GtkWidget* radio,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     ENTER ("(radio %s(%p), page %p)",
-           gtk_buildable_get_name (GTK_BUILDABLE (radio)), radio, page);
+           gtk_buildable_get_buildable_id (GTK_BUILDABLE (radio)), radio, page);
     priv = GNC_PLUGIN_PAGE_REGISTER_GET_PRIVATE (page);
     if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (radio)))
     {
@@ -3115,7 +3115,7 @@ gnc_plugin_page_register_filter_end_cb (GtkWidget* radio,
         return;
     }
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE (radio));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE (radio));
     active = !g_strcmp0 (name, "end_date_choose");
     gtk_widget_set_sensitive (priv->fd.end_date, active);
     get_filter_times (page);

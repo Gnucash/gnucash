@@ -364,7 +364,7 @@ void gnc_bi_import_gui_open_mode_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
     const gchar *name = NULL;
-    name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+    name = gtk_buildable_get_buildable_id(GTK_BUILDABLE(widget));
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
     if  (g_ascii_strcasecmp(name, "radiobuttonOpenAll") == 0)gui->open_mode = "ALL";
@@ -380,7 +380,7 @@ void gnc_import_gui_type_cb (GtkWidget *widget, gpointer data)
 {
     BillImportGui *gui = data;
     const gchar *name = NULL;
-    name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+    name = gtk_buildable_get_buildable_id(GTK_BUILDABLE(widget));
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
     if  (g_ascii_strcasecmp(name, "radiobuttonInvoice") == 0)gui->type = "INVOICE";

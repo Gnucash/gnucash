@@ -340,7 +340,7 @@ void gnc_customer_import_gui_type_cb (GtkWidget *widget, gpointer data)
     const gchar *name;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+    name = gtk_buildable_get_buildable_id(GTK_BUILDABLE(widget));
     if (name)
     {
         if  (g_ascii_strcasecmp(name, "radiobutton_customer") == 0)gui->type = "CUSTOMER";

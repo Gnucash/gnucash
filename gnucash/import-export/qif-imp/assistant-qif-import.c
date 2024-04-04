@@ -1389,7 +1389,7 @@ gnc_ui_qif_import_cancel_cb (GtkAssistant *gtkassistant, gpointer user_data)
     QIFImportWindow  *wind = user_data;
     gint currentpage = gtk_assistant_get_current_page (gtkassistant);
     GtkWidget *mypage = gtk_assistant_get_nth_page (gtkassistant, currentpage);
-    const char *pagename = gtk_buildable_get_name (GTK_BUILDABLE(mypage));
+    const char *pagename = gtk_buildable_get_buildable_id (GTK_BUILDABLE(mypage));
     const char *fmt = _("Are you sure you want to cancel?");
 
     if (!g_strcmp0 (pagename, "summary_page"))
@@ -1495,7 +1495,7 @@ static int gnc_ui_qif_import_assistant_page_forward (int current_page, gpointer 
 static gboolean
 gnc_ui_qif_import_assistant_skip_page (GtkAssistant *assistant, GtkWidget *page, QIFImportWindow *wind)
 {
-    const char *pagename = gtk_buildable_get_name (GTK_BUILDABLE(page));
+    const char *pagename = gtk_buildable_get_buildable_id (GTK_BUILDABLE(page));
     gboolean rv = FALSE;
 
     ENTER("Page %s", pagename);
@@ -3588,7 +3588,7 @@ void gnc_ui_qif_import_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
 {
     gint currentpage = gtk_assistant_get_current_page (assistant);
     GtkWidget *mypage = gtk_assistant_get_nth_page (assistant, currentpage);
-    const char *pagename = gtk_buildable_get_name (GTK_BUILDABLE(mypage));
+    const char *pagename = gtk_buildable_get_buildable_id (GTK_BUILDABLE(mypage));
 
     ENTER("Page %s", pagename);
 

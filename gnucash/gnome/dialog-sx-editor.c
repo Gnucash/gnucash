@@ -1698,7 +1698,7 @@ on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data)
     GHashTable *table;
 
     PINFO ("Togglebutton is %p and user_data is %p", togglebutton, user_data);
-    PINFO ("Togglebutton builder name is %s", gtk_buildable_get_name (GTK_BUILDABLE (togglebutton)));
+    PINFO ("Togglebutton builder name is %s", gtk_buildable_get_buildable_id (GTK_BUILDABLE (togglebutton)));
 
     /* We need to use the hash table to find the required widget to activate. */
     table = g_object_get_data (G_OBJECT (user_data), "prefs_widget_hash");

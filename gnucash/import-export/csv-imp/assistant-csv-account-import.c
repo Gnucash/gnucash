@@ -286,7 +286,7 @@ void csv_import_sep_cb (GtkWidget *radio, gpointer user_data)
         return;
     }
 
-    name = gtk_buildable_get_name (GTK_BUILDABLE(radio));
+    name = gtk_buildable_get_buildable_id (GTK_BUILDABLE(radio));
     if (g_strcmp0 (name, "radio_semi") == 0)
         sep = ";";
     else if (g_strcmp0 (name, "radio_colon") == 0)

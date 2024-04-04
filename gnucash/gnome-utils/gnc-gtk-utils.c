@@ -298,7 +298,7 @@ gnc_style_context_get_border_color (GtkStyleContext *context,
 static gpointer
 find_widget_func (GtkWidget *widget, const gchar *id)
 {
-    const gchar *name = gtk_buildable_get_name (GTK_BUILDABLE(widget));
+    const gchar *name = gtk_buildable_get_buildable_id (GTK_BUILDABLE(widget));
     GtkWidget *ret = NULL;
 
     if (g_strcmp0 (name, id) == 0)

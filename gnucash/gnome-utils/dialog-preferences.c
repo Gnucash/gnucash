@@ -470,7 +470,7 @@ gnc_prefs_build_widget_table (GtkBuilder *builder,
         if (GTK_IS_WIDGET(widget))
         {
             wname = gtk_widget_get_name (widget);
-            name = gtk_buildable_get_name (GTK_BUILDABLE(widget));
+            name = gtk_buildable_get_buildable_id (GTK_BUILDABLE(widget));
             DEBUG("Widget type is %s and buildable get name is %s", wname, name);
             if (g_str_has_prefix (name, "pref"))
                 g_hash_table_insert (prefs_table, (gchar *)name, widget);
@@ -807,8 +807,8 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
 
     g_return_if_fail (GTK_IS_FONT_BUTTON(fb));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fb)), &group, &pref, NULL);
-    gnc_prefs_bind (group, pref, NULL, G_OBJECT (fb), "font-name");
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(fb)), &group, &pref, NULL);
+    gnc_prefs_bind (group, pref, NULL, G_OBJECT(fb), "font-name");
 
     g_free (group);
     g_free (pref);
@@ -874,7 +874,7 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
     g_return_if_fail (GTK_FILE_CHOOSER_BUTTON(fcb));
 
     if (boxname == NULL)
-        gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fcb)), &group, &pref, NULL);
+        gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(fcb)), &group, &pref, NULL);
     else
         gnc_prefs_split_widget_name (boxname, &group, &pref, NULL);
 
@@ -995,7 +995,7 @@ gnc_prefs_connect_toggle_button (GtkToggleButton *button)
 
     g_return_if_fail (GTK_IS_TOGGLE_BUTTON(button));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref, &value);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(button)), &group, &pref, NULL);
 
     gnc_prefs_bind (group, pref, value, G_OBJECT(button), "active");
 
@@ -1020,7 +1020,7 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
 
     g_return_if_fail (GTK_IS_CHECK_BUTTON(button));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref, &value);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(button)), &group, &pref, &value);
 
     gnc_prefs_bind (group, pref, NULL, G_OBJECT(button), "active");
 
@@ -1045,7 +1045,7 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 
     g_return_if_fail (GTK_IS_SPIN_BUTTON(spin));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(spin)), &group, &pref, NULL);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(spin)), &group, &pref, NULL);
 
     gnc_prefs_bind (group, pref, NULL, G_OBJECT(spin), "value");
 
@@ -1068,7 +1068,7 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
 
     g_return_if_fail (GTK_IS_COMBO_BOX(box));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(box)), &group, &pref, NULL);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(box)), &group, &pref, NULL);
 
     gnc_prefs_bind (group, pref, NULL, G_OBJECT(box), "active");
 
@@ -1116,7 +1116,7 @@ gnc_prefs_connect_entry (GtkEntry *entry)
 
     g_return_if_fail (GTK_IS_ENTRY(entry));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(entry)), &group, &pref, NULL);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(entry)), &group, &pref, NULL);
 
     gnc_prefs_bind (group, pref, NULL, G_OBJECT(entry), "text");
 
