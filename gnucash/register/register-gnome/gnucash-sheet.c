@@ -89,7 +89,7 @@ gboolean gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr,
 
 /** Implementation *****************************************************/
 
-G_DEFINE_TYPE (GnucashSheet, gnucash_sheet, GTK_TYPE_LAYOUT);
+G_DEFINE_TYPE (GnucashSheet, gnucash_sheet, GTK_TYPE_FIXED);
 
 /* gtk_editable_set_position sets both current_pos and selection_bound to the
  * supplied value. gtk_editable_select_region(start, end) sets current_pos to
@@ -205,15 +205,15 @@ gnucash_sheet_cursor_set (GnucashSheet *sheet, VirtualLocation virt_loc)
     g_return_if_fail (virt_loc.vcell_loc.virt_col >= 0 ||
                       virt_loc.vcell_loc.virt_col <= sheet->num_virt_cols);
 
-    gtk_widget_queue_draw_area (GTK_WIDGET(sheet),
-                                sheet->cursor->x, sheet->cursor->y,
-                                sheet->cursor->w, sheet->cursor->h);
+//FIXME gtk4    gtk_widget_queue_draw_area (GTK_WIDGET(sheet),
+//                                sheet->cursor->x, sheet->cursor->y,
+//                                sheet->cursor->w, sheet->cursor->h);
 
     gnucash_cursor_set (GNUCASH_CURSOR(sheet->cursor), virt_loc);
 
-    gtk_widget_queue_draw_area (GTK_WIDGET(sheet),
-                                sheet->cursor->x, sheet->cursor->y,
-                                sheet->cursor->w, sheet->cursor->h);
+//FIXME gtk4    gtk_widget_queue_draw_area (GTK_WIDGET(sheet),
+//                                sheet->cursor->x, sheet->cursor->y,
+//                                sheet->cursor->w, sheet->cursor->h);
 }
 
 void
@@ -766,7 +766,7 @@ gnucash_sheet_redraw_block (GnucashSheet *sheet, VirtualCellLocation vcell_loc)
     h = block->style->dimensions->height;
     w = MIN(block->style->dimensions->width, alloc.width);
 
-    gtk_widget_queue_draw_area (GTK_WIDGET(sheet), x, y, w + 1, h + 1);
+//FIXME gtk4    gtk_widget_queue_draw_area (GTK_WIDGET(sheet), x, y, w + 1, h + 1);
 }
 
 gboolean
@@ -1189,7 +1189,7 @@ gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer da
     gtk_widget_get_allocation (widget, &alloc);
 
     gtk_style_context_save (context);
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_BACKGROUND);
+    gtk_style_context_add_class (context, "background");
     gtk_render_background (context, cr, 0, 0, alloc.width, alloc.height);
     gtk_style_context_restore (context);
 
@@ -1199,7 +1199,8 @@ gnucash_sheet_draw_cb (GtkWidget *widget, cairo_t *cr, G_GNUC_UNUSED gpointer da
     return FALSE;
 }
 
-
+//FIXME gtk4
+#ifdef skip
 static void
 gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
 {
@@ -1246,7 +1247,9 @@ gnucash_sheet_size_allocate (GtkWidget *widget, GtkAllocation *allocation)
     gnc_header_request_redraw (GNC_HEADER(sheet->header_item));
     LEAVE(" ");
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnucash_sheet_focus_in_event (GtkWidget *widget, GdkEventFocus *event) //FIXME gtk4
 {
@@ -1260,7 +1263,9 @@ gnucash_sheet_focus_in_event (GtkWidget *widget, GdkEventFocus *event) //FIXME g
 
     return FALSE;
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnucash_sheet_focus_out_event (GtkWidget *widget, GdkEventFocus *event) //FIXME gtk4
 {
@@ -1273,7 +1278,7 @@ gnucash_sheet_focus_out_event (GtkWidget *widget, GdkEventFocus *event) //FIXME 
     gnc_item_edit_focus_out (GNC_ITEM_EDIT(sheet->item_editor));
     return FALSE;
 }
-
+#endif
 static gboolean
 gnucash_sheet_check_direct_update_cell (GnucashSheet *sheet,
                                         const VirtualLocation virt_loc)
@@ -1319,7 +1324,8 @@ gnucash_sheet_start_editing_at_cursor (GnucashSheet *sheet)
         g_signal_connect (G_OBJECT(sheet->entry), "delete_text",
                           G_CALLBACK(gnucash_sheet_delete_cb), sheet);
 }
-
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnucash_sheet_button_release_event (GtkWidget *widget, GdkEventButton *event) //FIXME gtk4
 {
@@ -1348,7 +1354,7 @@ gnucash_sheet_button_release_event (GtkWidget *widget, GdkEventButton *event) //
 
     return TRUE;
 }
-
+#endif
 static float
 clamp_scrollable_value (float value, GtkAdjustment* adj)
 {
@@ -1358,6 +1364,8 @@ clamp_scrollable_value (float value, GtkAdjustment* adj)
     return CLAMP(value, lower, upper - size);
 
 }
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event) //FIXME gtk4
 {
@@ -1421,7 +1429,9 @@ gnucash_scroll_event (GtkWidget *widget, GdkEventScroll *event) //FIXME gtk4
     }
     return TRUE;
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static void
 gnucash_sheet_check_grab (GnucashSheet *sheet)
 {
@@ -1446,7 +1456,9 @@ gnucash_sheet_check_grab (GnucashSheet *sheet)
         sheet->grabbed = FALSE;
     }
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event) //FIXME gtk4
 {
@@ -1565,7 +1577,7 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event) //FI
 
     return button_1 || do_popup;
 }
-
+#endif
 void
 gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet)
 {
@@ -1585,25 +1597,26 @@ gnucash_sheet_refresh_from_prefs (GnucashSheet *sheet)
 
     item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
-    stylectxt = gtk_widget_get_style_context (GTK_WIDGET(item_edit->editor));
+//FIXME gtk4    stylectxt = gtk_widget_get_style_context (GTK_WIDGET(item_edit->editor));
 
     // Get the CSS classes for the editor
-    classes = gtk_style_context_list_classes (stylectxt);
+//    classes = gtk_style_context_list_classes (stylectxt);
 
-    for (GList *l = classes; l; l = l->next)
-    {
-        if (g_str_has_prefix (l->data, "gnc-class-"))
-            gtk_style_context_remove_class (stylectxt, l->data);
-    }
-    g_list_free (classes);
+//    for (GList *l = classes; l; l = l->next)
+//    {
+//        if (g_str_has_prefix (l->data, "gnc-class-"))
+//            gtk_style_context_remove_class (stylectxt, l->data);
+//    }
+//    g_list_free (classes);
 
-    gtk_style_context_remove_class (stylectxt, GTK_STYLE_CLASS_VIEW);
+    gtk_style_context_remove_class (stylectxt, "view");
 
     // Note: COLOR_PRIMARY_ACTIVE, COLOR_SECONDARY_ACTIVE, COLOR_SPLIT_ACTIVE
     // all equate to *-cursor style class used for the editor
     gnucash_get_style_classes (sheet, stylectxt, COLOR_PRIMARY_ACTIVE, FALSE);
 }
-
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event) //FIXME gtk4
 {
@@ -1656,6 +1669,7 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event) //FIXME 
     }
     return handled;
 }
+#endif
 
 static void
 gnucash_sheet_need_horizontal_scroll (GnucashSheet *sheet,
@@ -1678,7 +1692,8 @@ gnucash_sheet_need_horizontal_scroll (GnucashSheet *sheet,
     if (((offset + cell_width) > sheet->window_width) || (offset < hscroll_val))
         gtk_adjustment_set_value (sheet->hadj, offset);
 }
-
+//FIXME gtk4
+#ifdef skip
 static gboolean
 process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
                      gncTableTraversalDir *direction,
@@ -1790,7 +1805,9 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
 
     return FALSE;
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gboolean
 pass_to_entry_handler (GnucashSheet *sheet, GdkEventKey *event) //FIXME gtk4
 {
@@ -1805,7 +1822,9 @@ pass_to_entry_handler (GnucashSheet *sheet, GdkEventKey *event) //FIXME gtk4
     }
     return result;
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gint
 gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event) //FIXME gtk4
 {
@@ -1892,7 +1911,9 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event) /
     /* return true because we handled the key press */
     return TRUE;
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gint
 gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event) //FIXME gtk4
 {
@@ -1925,9 +1946,12 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event) //FIXME gt
     sheet->keyval_state =
         (keyval == GDK_KEY_KP_Decimal) ? GDK_KEY_KP_Decimal : 0;
 
-    return gnucash_sheet_key_press_event_internal (widget, event);
+//FIXME gtk4    return gnucash_sheet_key_press_event_internal (widget, event);
+return 0;
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gint
 gnucash_sheet_key_release_event (GtkWidget *widget, GdkEventKey *event) //FIXME gtk4
 {
@@ -1937,7 +1961,7 @@ gnucash_sheet_key_release_event (GtkWidget *widget, GdkEventKey *event) //FIXME 
 
     return FALSE;
 }
-
+#endif
 
 void
 gnucash_sheet_goto_virt_loc (GnucashSheet *sheet, VirtualLocation virt_loc)
@@ -2134,14 +2158,14 @@ gnucash_sheet_set_scroll_region (GnucashSheet *sheet)
     if (!sheet->header_item || !GNC_HEADER(sheet->header_item)->style)
         return;
 
-    gtk_layout_get_size (GTK_LAYOUT(sheet), &old_w, &old_h);
+//FIXME gtk4    gtk_layout_get_size (GTK_LAYOUT(sheet), &old_w, &old_h);
 
     gtk_widget_get_allocation (GTK_WIDGET(sheet), &alloc);
     new_h = MAX(sheet->height, alloc.height);
     new_w  = MAX(sheet->width, alloc.width);
 
-    if (new_w != old_w || new_h != old_h)
-        gtk_layout_set_size (GTK_LAYOUT(sheet), new_w, new_h);
+//FIXME gtk4    if (new_w != old_w || new_h != old_h)
+//        gtk_layout_set_size (GTK_LAYOUT(sheet), new_w, new_h);
 }
 
 static void
@@ -2311,7 +2335,7 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
     {
     default:
     case COLOR_UNDEFINED:
-        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
+        gtk_style_context_add_class (stylectxt, "background");
         return;
 
     case COLOR_HEADER:
@@ -2342,7 +2366,7 @@ gnucash_get_style_classes (GnucashSheet *sheet, GtkStyleContext *stylectxt,
         full_class = g_strconcat ("gnc-class-register-", style_class, NULL);
     else
     {
-        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_VIEW);
+        gtk_style_context_add_class (stylectxt, "view");
         full_class = g_strconcat ("gnc-class-user-register-", style_class, NULL);
     }
 
@@ -2367,18 +2391,18 @@ gnucash_sheet_class_init (GnucashSheetClass *klass)
     /* Method override */
     gobject_class->finalize = gnucash_sheet_finalize;
 
-    widget_class->get_preferred_width = gnucash_sheet_get_preferred_width;
-    widget_class->get_preferred_height = gnucash_sheet_get_preferred_height;
-    widget_class->size_allocate = gnucash_sheet_size_allocate;
+//FIXME gtk4    widget_class->get_preferred_width = gnucash_sheet_get_preferred_width;
+//FIXME gtk4    widget_class->get_preferred_height = gnucash_sheet_get_preferred_height;
+//FIXME gtk4    widget_class->size_allocate = gnucash_sheet_size_allocate;
 
-    widget_class->focus_in_event = gnucash_sheet_focus_in_event;
-    widget_class->focus_out_event = gnucash_sheet_focus_out_event;
+//FIXME gtk4    widget_class->focus_in_event = gnucash_sheet_focus_in_event;
+//FIXME gtk4    widget_class->focus_out_event = gnucash_sheet_focus_out_event;
 
-    widget_class->key_press_event = gnucash_sheet_key_press_event;
-    widget_class->key_release_event = gnucash_sheet_key_release_event;
-    widget_class->button_press_event = gnucash_sheet_button_press_event;
-    widget_class->button_release_event = gnucash_sheet_button_release_event;
-    widget_class->scroll_event = gnucash_scroll_event;
+//FIXME gtk4    widget_class->key_press_event = gnucash_sheet_key_press_event;
+//FIXME gtk4    widget_class->key_release_event = gnucash_sheet_key_release_event;
+//FIXME gtk4    widget_class->button_press_event = gnucash_sheet_button_press_event;
+//FIXME gtk4    widget_class->button_release_event = gnucash_sheet_button_release_event;
+//FIXME gtk4    widget_class->scroll_event = gnucash_scroll_event;
 }
 
 
@@ -2386,7 +2410,7 @@ static void
 gnucash_sheet_init (GnucashSheet *sheet)
 {
     gtk_widget_set_can_focus (GTK_WIDGET(sheet), TRUE);
-    gtk_widget_set_can_default (GTK_WIDGET(sheet), TRUE);
+//FIXME gtk4    gtk_widget_set_can_default (GTK_WIDGET(sheet), TRUE);
 
     sheet->num_visible_blocks = 1;
     sheet->num_visible_phys_rows = 1;

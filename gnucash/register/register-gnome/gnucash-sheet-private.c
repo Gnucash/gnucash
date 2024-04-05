@@ -353,7 +353,7 @@ draw_divider_line (cairo_t *cr, VirtualLocation virt_loc,
 static void
 set_cell_insensitive (GtkStyleContext *stylectxt)
 {
-    if (!gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
+    if (!gtk_style_context_has_class (stylectxt, "background"))
         gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_INSENSITIVE);
 }
 
@@ -395,7 +395,7 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
         set_cell_insensitive (stylectxt);
     else
     {
-        if (gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND))
+        if (gtk_style_context_has_class (stylectxt, "background"))
             gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_NORMAL);
     }
 
@@ -490,8 +490,8 @@ draw_cell (GnucashSheet *sheet, SheetBlock *block,
 
     layout = gtk_widget_create_pango_layout (GTK_WIDGET (sheet), text);
 
-    if (gtk_style_context_has_class (stylectxt, GTK_STYLE_CLASS_VIEW))
-        gtk_style_context_remove_class (stylectxt, GTK_STYLE_CLASS_VIEW);
+    if (gtk_style_context_has_class (stylectxt, "view"))
+        gtk_style_context_remove_class (stylectxt, "view");
 
     // We don't need word wrap or line wrap
     pango_layout_set_width (layout, -1);

@@ -423,7 +423,7 @@ gnucash_register_init (GnucashRegister *g_reg)
     GtkGrid *table = GTK_GRID(g_reg);
 
     gtk_widget_set_can_focus (GTK_WIDGET(table), FALSE);
-    gtk_widget_set_can_default (GTK_WIDGET(table), FALSE);
+//FIXME gtk4    gtk_widget_set_can_default (GTK_WIDGET(table), FALSE);
 
     gtk_grid_set_row_homogeneous (GTK_GRID(table), FALSE);
     gtk_grid_set_column_homogeneous (GTK_GRID(table), FALSE);

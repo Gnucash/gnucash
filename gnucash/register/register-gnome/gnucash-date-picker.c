@@ -47,9 +47,9 @@ gnc_date_picker_set_date (GNCDatePicker *date_picker,
     g_return_if_fail (IS_GNC_DATE_PICKER (date_picker));
     g_return_if_fail (date_picker->calendar != NULL);
 
-    gtk_calendar_select_day (date_picker->calendar, 1);
-    gtk_calendar_select_month (date_picker->calendar, mon, year);
-    gtk_calendar_select_day (date_picker->calendar, day);
+//FIXME gtk4    gtk_calendar_select_day (date_picker->calendar, 1);
+//FIXME gtk4    gtk_calendar_select_month (date_picker->calendar, mon, year);
+//FIXME gtk4    gtk_calendar_select_day (date_picker->calendar, day);
 }
 
 void
@@ -59,7 +59,7 @@ gnc_date_picker_get_date (GNCDatePicker *date_picker,
     g_return_if_fail (IS_GNC_DATE_PICKER (date_picker));
     g_return_if_fail (date_picker->calendar != NULL);
 
-    gtk_calendar_get_date (date_picker->calendar, year, mon, day);
+//FIXME gtk4    gtk_calendar_get_date (date_picker->calendar, year, mon, day);
 }
 
 static void
@@ -180,7 +180,7 @@ gnc_date_picker_new (void)
     allocation.y = 0;
     allocation.width = requisition.width;
     allocation.height = requisition.height;
-    gtk_widget_size_allocate (calendar, &allocation);
+    gtk_widget_size_allocate (calendar, &allocation, -1);
 
     g_signal_connect_after (calendar, "button_press_event",
                             G_CALLBACK (gnc_date_picker_button_event),

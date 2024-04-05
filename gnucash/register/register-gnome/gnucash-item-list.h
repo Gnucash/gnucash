@@ -39,7 +39,7 @@
 
 typedef struct
 {
-    GtkEventBox ebox;
+    GtkBox ebox;
 
     GtkTreeView *tree_view;
     GtkScrolledWindow* scrollwin;
@@ -51,7 +51,7 @@ typedef struct
 
 typedef struct
 {
-    GtkEventBoxClass parent_class;
+    GtkBoxClass parent_class;
 
     void (*select_item) (GncItemList *item_list,
                          char        *item_string);

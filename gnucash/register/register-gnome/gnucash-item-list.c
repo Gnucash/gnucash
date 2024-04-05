@@ -49,7 +49,7 @@ static guint gnc_item_list_signals[LAST_SIGNAL];
 gboolean _gnc_item_find_selection (GtkTreeModel* model, GtkTreePath* path,
                                    GtkTreeIter* iter, gpointer data);
 
-G_DEFINE_TYPE (GncItemList, gnc_item_list, GTK_TYPE_EVENT_BOX);
+G_DEFINE_TYPE (GncItemList, gnc_item_list, GTK_TYPE_BOX);
 
 gint
 gnc_item_list_num_entries (GncItemList* item_list)
@@ -303,7 +303,8 @@ gnc_item_list_init (GncItemList* item_list)
     item_list->cell_height = 0;
 }
 
-
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnc_item_list_button_event (GtkWidget* widget, const GdkEvent* event,
                             gpointer data)
@@ -363,7 +364,9 @@ gnc_item_list_button_event (GtkWidget* widget, const GdkEvent* event,
 
     return FALSE;
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnc_item_list_key_event (GtkWidget* widget, const GdkEvent* event, gpointer data)
 {
@@ -407,7 +410,7 @@ gnc_item_list_key_event (GtkWidget* widget, const GdkEvent* event, gpointer data
 
     return retval;
 }
-
+#endif
 
 static void
 gnc_item_list_class_init (GncItemListClass* item_list_class)
@@ -502,7 +505,15 @@ gnc_item_list_get_popup_height (GncItemList *item_list)
     if (!overlay)
     {
         gint minh, nath;
-        gtk_widget_get_preferred_height (hsbar, &minh, &nath);
+//FIXME gtk4        gtk_widget_get_preferred_height (hsbar, &minh, &nath);
+// may be...
+       gtk_widget_measure (GTK_WIDGET (hsbar),
+                           GTK_ORIENTATION_VERTICAL,
+                           gtk_widget_get_width (GTK_WIDGET (hsbar)),
+                           NULL,
+                           &minh,
+                           NULL, NULL);
+
         height = height + minh;
     }
     return height;
@@ -554,11 +565,11 @@ gnc_item_list_new (GtkListStore* list_store)
     item_list->tree_view = GTK_TREE_VIEW (tree_view);
     item_list->list_store = list_store;
 
-    g_signal_connect (G_OBJECT (tree_view), "button_press_event",
-                      G_CALLBACK (gnc_item_list_button_event), item_list);
+//FIXME gtk4    g_signal_connect (G_OBJECT (tree_view), "button_press_event",
+//                      G_CALLBACK (gnc_item_list_button_event), item_list);
 
-    g_signal_connect (G_OBJECT (tree_view), "key_press_event",
-                      G_CALLBACK (gnc_item_list_key_event), item_list);
+//FIXME gtk4    g_signal_connect (G_OBJECT (tree_view), "key_press_event",
+//                      G_CALLBACK (gnc_item_list_key_event), item_list);
 
     g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (
                                 GTK_TREE_VIEW (tree_view))), "changed",
