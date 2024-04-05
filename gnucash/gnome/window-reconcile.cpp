@@ -1132,7 +1132,7 @@ gnc_reconcile_window_create_view_box(Account *account,
                                      GtkWidget **list_save,
                                      GtkWidget **total_save)
 {
-    GtkWidget *frame, *scrollWin, *view, *vbox, *label, *hbox;
+    GtkWidget *frame, *scrolled_window, *view, *vbox, *label, *hbox;
     GtkWidget *vscroll;
     GtkRequisition nat_sb;
 
@@ -1174,18 +1174,20 @@ gnc_reconcile_window_create_view_box(Account *account,
                       "key-pressed",
                       G_CALLBACK(gnc_reconcile_key_press_cb), recnData);
 
-    scrollWin = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrolled_window),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_AUTOMATIC);
-    gnc_box_set_all_margins (GTK_BOX(scrollwin), 5);
+    gnc_box_set_all_margins (GTK_BOX(scrolled_window), 5);
 
-    gtk_box_append (GTK_BOX(frame), GTK_WIDGET(scrollWin));
-    gtk_box_append (GTK_BOX(scrollWin), GTK_WIDGET(view));
+    gtk_box_append (GTK_BOX(frame), GTK_WIDGET(scrolled_window));
+    gtk_box_append (GTK_BOX(scrolled_window), GTK_WIDGET(view));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(view));
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(frame));
 
     // get the vertical scroll bar width
-    vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (scrollWin));
+    vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW(scrolled_window));
     gtk_widget_get_preferred_size (vscroll, NULL, &nat_sb);
 
     // add xpadding to recn column so scrollbar does not cover

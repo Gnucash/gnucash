@@ -181,7 +181,7 @@ gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q)
 {
     GtkBuilder  *builder;
     DialogQueryView *dqv;
-    GtkWidget *result_hbox, *close, *scrollWin, *frame;
+    GtkWidget *result_hbox, *close, *scrolled_window, *frame;
     GList *node;
 
     dqv = g_new0 (DialogQueryView, 1);
@@ -206,14 +206,15 @@ gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q)
 
     frame = gtk_frame_new(NULL);
 
-    scrollWin = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrolled_window),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_AUTOMATIC);
-    gnc_box_set_all_margins (GTK_BOX(scrollWin), 5);
+    gnc_box_set_all_margins (GTK_BOX(scrolled_window), 5);
 
-    gtk_box_append (GTK_BOX(scrollWin), GTK_WIDGET(dqv->qview));
-    gtk_box_append (GTK_BOX(frame), GTK_WIDGET(scrollWin));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(dqv->qview));
+    gtk_box_append (GTK_BOX(frame), GTK_WIDGET(scrolled_window));
 
     gtk_box_append (GTK_BOX(result_hbox), GTK_WIDGET(frame));
 

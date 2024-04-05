@@ -206,8 +206,8 @@ create_content_box()
 static GtkGrid*
 create_options_box(GtkBox* content_box)
 {
-    auto options_scrolled_win = gtk_scrolled_window_new(NULL, NULL);
-    gtk_box_append (GTK_BOX(content_box), GTK_WIDGET(options_scrolled_win));
+    auto scrolled_window = gtk_scrolled_window_new ();
+    gtk_box_append (GTK_BOX(content_box), GTK_WIDGET(scrolled_window));
 
     /* Build space for the content - the options box */
     auto options_box = gtk_grid_new(); // this will have two columns
@@ -218,8 +218,10 @@ create_options_box(GtkBox* content_box)
     gtk_grid_set_column_spacing (GTK_GRID(options_box), 6);
 
     gnc_box_set_all_margins (GTK_BOX(options_box), 0);
-    gtk_box_prepend (GTK_BOX(options_scrolled_win), GTK_WIDGET(options_box));
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(options_scrolled_win),
+    gtk_box_prepend (GTK_BOX(scrolled_window), GTK_WIDGET(options_box));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(options_box));
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
     return GTK_GRID(options_box);
 }

@@ -105,7 +105,7 @@ gnc_html_init( GncHtml* self )
     GncHtmlPrivate* priv;
     priv = self->priv = g_new0( GncHtmlPrivate, 1 );
 
-    priv->container = gtk_scrolled_window_new( NULL, NULL );
+    priv->container = gtk_scrolled_window_new();
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(priv->container),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC );

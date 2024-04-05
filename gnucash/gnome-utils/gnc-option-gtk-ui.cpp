@@ -262,13 +262,13 @@ public:
 template<> void
 create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_box, int row)
 {
-    auto scroll = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
+    auto scrolled_window = gtk_scrolled_window_new();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_NEVER,
                                    GTK_POLICY_AUTOMATIC);
-    gnc_box_set_all_margins (GTK_BOX(scroll), 2);
+    gnc_box_set_all_margins (GTK_BOX(scrolled_window), 2);
     auto frame = gtk_frame_new(NULL);
-    gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(scroll));
+    gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(scrolled_window));
 
     auto enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_widget_set_vexpand (GTK_WIDGET(enclosing), TRUE);
@@ -286,7 +286,8 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
 
     g_signal_connect(G_OBJECT(text_buffer), "changed",
                      G_CALLBACK(gnc_option_changed_option_cb), &option);
-    gtk_box_append (GTK_BOX(scroll), GTK_WIDGET(widget));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(widget));
     gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(frame));
     set_name_label(option, page_box, row, true);
     set_tool_tip(option, enclosing);
@@ -905,7 +906,7 @@ static GtkWidget*
 create_account_widget(GncOption& option, char *name)
 {
     bool multiple_selection;
-    GtkWidget *scroll_win;
+    GtkWidget *scrolled_window;
     GtkWidget *button;
     GtkWidget *frame;
     GtkWidget *tree;
@@ -967,13 +968,13 @@ create_account_widget(GncOption& option, char *name)
         gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
     }
 
-    scroll_win = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_win),
+    scrolled_window = gtk_scrolled_window_new();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_AUTOMATIC);
 
-    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scroll_win));
-    gnc_box_set_all_margins (GTK_BOX(scroll_win), 5);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
+    gnc_box_set_all_margins (GTK_BOX(scrolled_window), 5);
 
     bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
     gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
@@ -1032,7 +1033,8 @@ create_account_widget(GncOption& option, char *name)
     g_signal_connect(G_OBJECT(button), "toggled",
                      G_CALLBACK(show_hidden_toggled_cb), &option);
 
-    gtk_box_prepend (GTK_BOX(scroll_win), GTK_WIDGET(tree));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(tree));
     return frame;
 }
 

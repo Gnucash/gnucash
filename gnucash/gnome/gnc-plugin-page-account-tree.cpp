@@ -629,7 +629,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-account-page");
 
-    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    scrolled_window = gtk_scrolled_window_new ();
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
     gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
@@ -675,7 +675,8 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     gtk_tree_view_set_headers_visible(tree_view, TRUE);
     gnc_plugin_page_account_tree_selection_changed_cb (NULL, page);
     gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
-    gtk_box_prepend (GTK_BOX(scrolled_window), GTK_WIDGET(tree_view));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(tree_view));
 
     priv->fd.tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
     gnc_tree_view_account_set_filter (

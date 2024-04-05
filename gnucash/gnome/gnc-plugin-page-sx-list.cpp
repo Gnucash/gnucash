@@ -466,7 +466,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     GtkWidget *widget;
     GtkWidget *vbox;
     GtkWidget *label;
-    GtkWidget *swin;
+    GtkWidget *scrolled_window;
     GtkWindow *window;
 
     page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
@@ -498,13 +498,13 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_widget_set_visible (GTK_WIDGET(vbox), true);
 
     /* Create scrolled window for top area */
-    swin = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(swin),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
-    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(swin));
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
     gtk_box_set_spacing (GTK_BOX(vbox), 5);
-    gtk_widget_set_visible (GTK_WIDGET(swin), true);
+    gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
 
     {
         // gint half_way;
@@ -538,7 +538,9 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                       "state-section", STATE_SECTION,
                       "show-column-menu", TRUE,
                       NULL);
-        gtk_box_prepend (GTK_BOX(swin), GTK_WIDGET(priv->tree_view));
+
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                       GTK_WIDGET(priv->tree_view));
 
         selection = gtk_tree_view_get_selection (priv->tree_view);
         gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
@@ -572,13 +574,13 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_widget_set_visible (GTK_WIDGET(vbox), true);
 
     /* Create scrolled window for bottom area */
-    swin = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(swin),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
-    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(swin));
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
     gtk_box_set_spacing (GTK_BOX(vbox), 5);
-    gtk_widget_set_visible (GTK_WIDGET(swin), true);
+    gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
 
     {
         priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new (GNC_SX_INSTANCE_MODEL(priv->instances));
@@ -588,7 +590,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         gnc_dense_cal_set_months_per_col (priv->gdcal, 4);
         gnc_dense_cal_set_num_months (priv->gdcal, 12);
 
-        gtk_box_prepend (GTK_BOX(swin), GTK_WIDGET(priv->gdcal));
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                       GTK_WIDGET(priv->gdcal));
     }
 
     priv->gnc_component_id = gnc_register_gui_component ("plugin-page-sx-list",
