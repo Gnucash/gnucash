@@ -378,8 +378,8 @@ show_session_error (GtkWindow *parent,
                                _("_Cancel"), GTK_RESPONSE_CANCEL,
                                label, GTK_RESPONSE_YES,
                                NULL);
-        if (!parent)
-            gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+//FIXME gtk4        if (!parent)
+//            gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 //FIXME gtk4        response = gtk_dialog_run(GTK_DIALOG(dialog));
 gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 response = GTK_RESPONSE_CANCEL; //FIXME gtk4
@@ -917,7 +917,7 @@ RESTART:
                                         fmt1, displayname);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", fmt2);
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+//FIXME gtk4        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
         gnc_gtk_dialog_add_button(dialog, _("Open _Read-Only"),
                                   "emblem-readonly", RESPONSE_READONLY);

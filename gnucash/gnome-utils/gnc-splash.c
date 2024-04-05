@@ -69,7 +69,7 @@ gnc_show_splash_screen (void)
 
     splash = gtk_window_new ();
     gtk_window_set_decorated(GTK_WINDOW (splash), FALSE);
-    gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
+//FIXME gtk4    gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(splash), "gnc-id-splash");
