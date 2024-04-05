@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-03-30 07:02+0000\n"
+"PO-Revision-Date: 2024-04-04 22:02+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -378,7 +378,7 @@ msgstr "Nyugati"
 #: gnucash/report/reports/standard/account-piecharts.scm:457
 #: gnucash/report/reports/standard/category-barchart.scm:547
 msgid "Other"
-msgstr "egyéb"
+msgstr "Egyéb"
 
 # #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
 # src/trans.h:283
@@ -5525,7 +5525,7 @@ msgstr "Ütemezés szerkesztés_e"
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:405
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
 msgid "_Delete Schedule"
-msgstr ""
+msgstr "Ütemezés _törlése"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:487
 #: gnucash/gtkbuilder/dialog-account.glade:553
@@ -5533,9 +5533,8 @@ msgid "Transactions"
 msgstr "Tranzakciók"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:559
-#, fuzzy
 msgid "Upcoming Transactions"
-msgstr "Érvénytelen tranzakciók"
+msgstr "Hátralevő tranzakciók"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:896
 msgid "Do you really want to delete this scheduled transaction?"
@@ -6645,7 +6644,7 @@ msgid ""
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 "\n"
-"Váltási kód (ISIN, CUSIP vagy ilyesmi): "
+"Tőzsdei kód (ISIN, SEDOL, CUSIP, stb.): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:176
 msgid ""
@@ -12820,8 +12819,8 @@ msgid ""
 "Whether tax is included by default in entries on Bills. This setting is "
 "inherited by new customers and vendors."
 msgstr ""
-"Alapértelmezésként szerepeljen-e adó,a bejövő számlákban. E beállítást az új "
-"ügyfelek és beszállítók öröklik."
+"Alapértelmezésként szerepeljen-e adó, a bejövő számlákban. E beállítást az "
+"új ügyfelek és beszállítók öröklik."
 
 #. See the tooltip "At post time…" for details.
 #: gnucash/gtkbuilder/business-prefs.glade:161
@@ -12846,8 +12845,8 @@ msgid ""
 "Whether tax is included by default in entries on Invoices. This setting is "
 "inherited by new customers and vendors."
 msgstr ""
-"Alapértelmezésként szerepeljen-e adó,a bejövő számlákban. E beállítást az új "
-"ügyfelek és beszállítók öröklik."
+"Alapértelmezésként szerepeljen-e adó, a kimenő számlákban. E beállítást az "
+"új ügyfelek és beszállítók öröklik."
 
 #. See the tooltip "At post time…" for details.
 #: gnucash/gtkbuilder/business-prefs.glade:238
@@ -13626,7 +13625,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:335
 msgid "Type of quote source"
-msgstr "Adatforrástípus"
+msgstr "Az árfolyamforrás típusa"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:348
 msgid "_Display symbol"
@@ -14056,7 +14055,7 @@ msgstr "Kölcsön-visszafizetési kalkulátor"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:151
 msgid "_Schedule"
-msgstr "_Ütemezés"
+msgstr "Ütemezé_s"
 
 #: gnucash/gtkbuilder/dialog-fincalc.glade:186
 msgid "<b>Calculations</b>"
@@ -14697,8 +14696,8 @@ msgstr "Rendelési tételek"
 msgid ""
 "The order ID number. If left blank a reasonable number will be chosen for you"
 msgstr ""
-"A rendelés azonosító száma. Üresen hagyva a megfelelő érték automatikusan "
-"kerül kiválasztásra."
+"A rendelés azonosító száma. Üresen hagyva egy megfelelő szám kerül "
+"kiválasztásra."
 
 #: gnucash/gtkbuilder/dialog-payment.glade:136
 #: gnucash/gtkbuilder/dialog-payment.glade:168
@@ -16303,7 +16302,7 @@ msgstr "Ismétlések:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1243
 msgid "Until"
-msgstr "Eddig:"
+msgstr "Amíg"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
 #, fuzzy
@@ -16430,7 +16429,7 @@ msgstr "_Számla"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:8
 msgid "GnuCash Tip Of The Day"
-msgstr "GnuCash A nap tippje"
+msgstr "A GnuCash napi tippje"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:26
 msgid "_Previous"
@@ -16496,7 +16495,8 @@ msgid ""
 "The vendor ID number. If left blank a reasonable number will be chosen for "
 "you"
 msgstr ""
-"A beszállító sorszáma. Üresen hagyva megfelelő szám kerül kiválasztásra"
+"A beszállító azonosító száma. Üresen hagyva egy megfelelő szám kerül "
+"kiválasztásra."
 
 #: gnucash/gtkbuilder/gnc-date-format.glade:12
 msgid "US (12/31/2001)"
@@ -18038,28 +18038,24 @@ msgid "Debited Account Owner"
 msgstr "Terhelt számla tulajdonosa"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:414
-#, fuzzy
 msgid "Debited IBAN (International Account Number)"
-msgstr "Terhelt számlaszám"
+msgstr "Terhelt IBAN szám (nemzetközi számlaszám)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:416
-#, fuzzy
 msgid "Debited BIC (Bank Code)"
-msgstr "Terhelt számla bankkódja"
+msgstr "Terhelt BIC kód (SWIFT bankazonosító)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:419
 msgid "Credited Account Owner"
 msgstr "Jóváírt számla tulajdonosa"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:421
-#, fuzzy
 msgid "Credited IBAN (International Account Number)"
-msgstr "Terhelt számlaszám"
+msgstr "Jóváírt IBAN szám (nemzetközi számlaszám)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:423
-#, fuzzy
 msgid "Credited BIC (Bank Code)"
-msgstr "Terhelt számla bankkódja"
+msgstr "Jóváírt BIC kód (SWIFT bankazonosító)"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:504
 #, c-format
@@ -18067,7 +18063,7 @@ msgid ""
 "The internal check of the destination IBAN '%s' failed. This means the "
 "account number might contain an error."
 msgstr ""
-"A célszámla belső ellenőrzése a megadott IBAN '%s' számmal sikertelen. Ez "
+"A célszámla belső ellenőrzése a megadott '%s' IBAN számmal sikertelen. Ez "
 "azt jelenti, hogy a számlaszám hibás lehet."
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:559
@@ -26426,7 +26422,7 @@ msgstr "Egyeztetési státusz"
 #: gnucash/report/reports/standard/register.scm:374
 #: libgnucash/engine/gnc-lot.cpp:791
 msgid "Lot"
-msgstr "Gyüjtemény"
+msgstr "Kötési tétel (darabszám)"
 
 #: gnucash/report/reports/standard/register.scm:159
 msgid "Debit Value"
@@ -29282,9 +29278,8 @@ msgstr "_Kifizetés lebonyolítása…"
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:446
 #: gnucash/ui/gnc-plugin-page-register.ui:558
-#, fuzzy
 msgid "Assign the selected transaction as payment."
-msgstr "A kiválasztott tranzakció kivágása"
+msgstr "A kiválasztott tranzakció hozzárendelése fizetésként."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:450
@@ -29413,7 +29408,7 @@ msgstr "Tranzakció _érvényesítése"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
 msgid "Unvoid the current transaction."
-msgstr "A jelenlegi tranzakció újra érvényesítése."
+msgstr "A jelenlegi tranzakció újraérvényesítése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
@@ -29426,10 +29421,11 @@ msgstr "Fordított tranzakció felvétele (Storno)."
 #: gnucash/ui/gnc-plugin-page-register.ui:207
 #: gnucash/ui/gnc-plugin-page-register.ui:395
 #: gnucash/ui/gnc-plugin-page-register.ui:507
-#, fuzzy
 msgid ""
 "Add, change, or unlink the document linked with the current transaction."
-msgstr "A jelenlegi tranzakció törlése"
+msgstr ""
+"A jelenlegi tranzakcióhoz egy kapcsolódó dokumentum hozzáadása, módosítása, "
+"vagy a hivatkozás törlése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:213
 #: gnucash/ui/gnc-plugin-page-register.ui:400
