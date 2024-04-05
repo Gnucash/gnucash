@@ -158,8 +158,8 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
             {
                 gint parent_wpos[2], parent_wsize[2], window_wsize[2];
                 gtk_window_get_position (GTK_WINDOW(parent), &parent_wpos[0], &parent_wpos[1]);
-                gtk_window_get_size (GTK_WINDOW(parent), &parent_wsize[0], &parent_wsize[1]);
-                gtk_window_get_size (GTK_WINDOW(window), &window_wsize[0], &window_wsize[1]);
+                gtk_window_get_default_size (GTK_WINDOW(parent), &parent_wsize[0], &parent_wsize[1]);
+                gtk_window_get_default_size (GTK_WINDOW(window), &window_wsize[0], &window_wsize[1]);
 
                 DEBUG("parent window - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d - window size is %dx%d",
                       parent_wpos[0],  parent_wpos[1], parent_wsize[0], parent_wsize[1],
@@ -213,7 +213,7 @@ gnc_save_window_size(const char *group, GtkWindow *window)
         return;
 
     gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
-    gtk_window_get_size(GTK_WINDOW(window), &wsize[0], &wsize[1]);
+    gtk_window_get_default_size(GTK_WINDOW(window), &wsize[0], &wsize[1]);
 
     DEBUG("save geometry - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
                   wpos[0],  wpos[1], wsize[0], wsize[1]);
@@ -257,7 +257,7 @@ gnc_window_adjust_for_screen(GtkWindow * window)
     display = gdk_window_get_display (win);
 
     gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
-    gtk_window_get_size(GTK_WINDOW(window), &width, &height);
+    gtk_window_get_default_size(GTK_WINDOW(window), &width, &height);
 
     mon = gdk_display_get_monitor_at_point (display, wpos[0], wpos[1]);
     gdk_monitor_get_geometry (mon, &monitor_size);

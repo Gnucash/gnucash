@@ -443,7 +443,7 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
     // run the dialog
     if (parent)
     {
-        gtk_window_get_size (GTK_WINDOW(parent), &width, &height);
+        gtk_window_get_default_size (GTK_WINDOW(parent), &width, &height);
         gtk_window_set_default_size (GTK_WINDOW(dialog), width, height);
     }
 //FIXME gtk4    gtk_widget_show_all (dialog);
