@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-04 22:02+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2024-04-05 09:01+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -20714,7 +20714,7 @@ msgstr "Módosítva"
 
 #: gnucash/register/ledger-core/split-register.c:2117
 msgid "_Recalculate"
-msgstr "Új_ra számítás"
+msgstr "Új_raszámítás"
 
 #: gnucash/register/ledger-core/split-register.c:2540
 #, fuzzy
