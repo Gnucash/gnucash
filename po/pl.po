@@ -9,14 +9,15 @@
 # vim <dev.getport@slmail.me>, 2023.
 # Rcvrvugyvgvb <xzdfrlhz@duck.com>, 2024.
 # Jacek Baszkiewicz <j.baszkiewicz@gmail.com>, 2024.
+# наб <nabijaczleweli@nabijaczleweli.xyz>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-03-16 21:01+0000\n"
-"Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
+"PO-Revision-Date: 2024-04-05 17:01+0000\n"
+"Last-Translator: наб <nabijaczleweli@nabijaczleweli.xyz>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
 "Language: pl\n"
@@ -8019,7 +8020,7 @@ msgstr "K"
 #: gnucash/gtkbuilder/dialog-preferences.glade:816
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 msgid "Account Color"
-msgstr "Ko_lor konta"
+msgstr "Kolor konta"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:944
 msgctxt "Column header for 'Balance Limit'"
@@ -15078,12 +15079,12 @@ msgstr "Konto transferu"
 #. Date format label for 07/31/2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:50
 msgid "US"
-msgstr "_US"
+msgstr "US"
 
 #. Date format label for 31/07/2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:54
 msgid "UK"
-msgstr "_Anglia"
+msgstr "Anglia"
 
 #. Date format label for 31.07.2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:58
