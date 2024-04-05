@@ -257,7 +257,7 @@ struct _GOCharmapSel
 {
     GtkBox box;
     GOOptionMenu *encodings;
-    GtkMenu *encodings_menu;
+//FIXME gtk4    GtkMenu *encodings_menu;
     GOCharmapSelTestDirection test;
 };
 
@@ -365,7 +365,8 @@ static void go_charmap_sel_init(GOCharmapSel *cs)
 
     gtk_box_append (GTK_BOX(cs), GTK_WIDGET(cs->encodings));
 }
-
+//FIXME gtk4
+#ifdef skip
 static void cs_build_menu(GOCharmapSel *cs)
 {
     GtkWidget *item;
@@ -448,7 +449,7 @@ static void cs_build_menu(GOCharmapSel *cs)
     cs->encodings_menu = menu;
     set_menu_to_default(cs, lg_cnt);
 }
-
+#endif
 static void go_charmap_sel_class_init(GOCharmapSelClass *klass)
 {
     CharsetInfo *ci;
@@ -590,7 +591,7 @@ go_charmap_sel_new(GOCharmapSelTestDirection test)
 gchar const *
 go_charmap_sel_get_encoding(GOCharmapSel *cs)
 {
-    GtkMenuItem *selection;
+//FIXME gtk4    GtkMenuItem *selection;
     char const *locale_encoding;
     char const *encoding;
 
@@ -598,10 +599,11 @@ go_charmap_sel_get_encoding(GOCharmapSel *cs)
 
     g_return_val_if_fail(GO_IS_CHARMAP_SEL(cs), locale_encoding);
 
-    selection = GTK_MENU_ITEM(go_option_menu_get_history(cs->encodings));
-    encoding = (char const *) g_object_get_data(G_OBJECT(selection),
-    CHARMAP_NAME_KEY);
-    return encoding ? encoding : locale_encoding;
+//    selection = GTK_MENU_ITEM(go_option_menu_get_history(cs->encodings));
+//    encoding = (char const *) g_object_get_data(G_OBJECT(selection),
+//    CHARMAP_NAME_KEY);
+//    return encoding ? encoding : locale_encoding;
+return NULL;
 }
 
 struct cb_find_entry
@@ -611,7 +613,8 @@ struct cb_find_entry
     int i;
     GSList *path;
 };
-
+//FIXME gtk4
+#ifdef skip
 static void cb_find_entry(GtkMenuItem *w, struct cb_find_entry *cl)
 {
     GtkWidget *sub;
@@ -648,7 +651,7 @@ static void cb_find_entry(GtkMenuItem *w, struct cb_find_entry *cl)
     }
     cl->i++;
 }
-
+#endif
 gboolean go_charmap_sel_set_encoding(GOCharmapSel *cs, const char *enc)
 {
     struct cb_find_entry cl;
@@ -690,7 +693,7 @@ static void cs_set_property(GObject *object, guint prop_id, const GValue *value,
     {
     case PROP_TEST_DIRECTION:
         cs->test = g_value_get_uint(value);
-        cs_build_menu(cs);
+//FIXME gtk4        cs_build_menu(cs);
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);

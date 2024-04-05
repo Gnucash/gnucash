@@ -40,6 +40,7 @@
 #include "qof.h"
 #include "gnc-general-search.h"
 #include "gnc-ui.h"
+#include "dialog-utils.h"
 
 #define GNCGENERALSEARCH_CLASS	"gnc-general-search-widget"
 
@@ -95,7 +96,7 @@ gnc_general_search_class_init (GNCGeneralSearchClass *klass)
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
-    object_class->destroy = gnc_general_search_destroy;
+//FIXME gtk4    object_class->destroy = gnc_general_search_destroy;
 
     klass->changed = NULL;
 }
@@ -137,7 +138,7 @@ gnc_general_search_destroy (GtkWidget *widget)
         priv->component_id = 0;
     }
 
-    GTK_WIDGET_CLASS (gnc_general_search_parent_class)->destroy (widget);
+//FIXME gtk4    GTK_WIDGET_CLASS (gnc_general_search_parent_class)->destroy (widget);
 }
 
 /* The "selection" contents have changed.  Change the text. */
@@ -289,7 +290,7 @@ gnc_gsl_focus_out_cb (GtkEventControllerFocus *controller,
     GtkWidget *entry = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(controller));
 
     /* Attempt to match the current text to a qofobject. */
-    completion = gtk_entry_get_completion(entry);
+    completion = gtk_entry_get_completion(GTK_ENTRY(entry));
     model = gtk_entry_completion_get_model(completion);
 
     /* Return if completion tree is empty */
@@ -297,7 +298,7 @@ gnc_gsl_focus_out_cb (GtkEventControllerFocus *controller,
     if (!valid_iter)
         return FALSE;
 
-    text = gnc_entry_get_text(entry);
+    text = gnc_entry_get_text(GTK_ENTRY(entry));
     lc_text = g_utf8_strdown(text, -1);
 
     /* The last, valid selected entry can match the entered text
