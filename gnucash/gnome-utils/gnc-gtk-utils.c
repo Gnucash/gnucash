@@ -143,6 +143,8 @@ gnc_cbwe_match_selected_cb (GtkEntryCompletion *completion,
  *   @param event Unused.
  *
  *   @param cbwe A pointer to a currency entry widget. */
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnc_cbwe_focus_out_cb (GtkEntry *entry,
                        GdkEventFocus *event,
@@ -160,7 +162,7 @@ gnc_cbwe_focus_out_cb (GtkEntry *entry,
     gtk_combo_box_set_active(GTK_COMBO_BOX(cbwe), index);
     return FALSE;
 }
-
+#endif
 void
 gnc_cbwe_add_completion (GtkComboBox *cbwe)
 {
@@ -217,8 +219,8 @@ gnc_cbwe_require_list_item (GtkComboBox *cbwe)
                           G_CALLBACK(gnc_cbwe_changed_cb), cbwe);
     g_signal_connect(completion, "match_selected",
                      G_CALLBACK(gnc_cbwe_match_selected_cb), cbwe);
-    g_signal_connect(entry, "focus-out-event",
-                     G_CALLBACK(gnc_cbwe_focus_out_cb), cbwe);
+//FIXME gtk4    g_signal_connect(entry, "focus-out-event",
+//                     G_CALLBACK(gnc_cbwe_focus_out_cb), cbwe);
 
     g_object_set_data(G_OBJECT(cbwe), CHANGED_ID, GINT_TO_POINTER(id));
 }
@@ -256,7 +258,7 @@ void
 gnc_style_context_get_background_color (GtkStyleContext *context,
                                         GdkRGBA         *color)
 {
-    GdkRGBA *c;
+    GdkRGBA c;
 
     g_return_if_fail (color != NULL);
     g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
@@ -266,9 +268,8 @@ gnc_style_context_get_background_color (GtkStyleContext *context,
 //                           NULL);
     gdk_rgba_parse (&c, "lightblue"); //FIXME gtk4
 
-
-    *color = *c;
-    gdk_rgba_free (c);
+    color = gdk_rgba_copy (&c);
+    gdk_rgba_free (&c);
 }
 
 /** Wrapper to get the border color of a widget for a given state
@@ -281,7 +282,7 @@ void
 gnc_style_context_get_border_color (GtkStyleContext *context,
                                     GdkRGBA         *color)
 {
-    GdkRGBA *c;
+    GdkRGBA c;
 
     g_return_if_fail (color != NULL);
     g_return_if_fail (GTK_IS_STYLE_CONTEXT (context));
@@ -291,8 +292,8 @@ gnc_style_context_get_border_color (GtkStyleContext *context,
 //                           NULL);
     gdk_rgba_parse (&c, "black"); //FIXME gtk4
 
-    *color = *c;
-    gdk_rgba_free (c);
+    color = gdk_rgba_copy (&c);
+    gdk_rgba_free (&c);
 }
 
 static gpointer
@@ -388,6 +389,8 @@ accel_map_foreach_func (gpointer user_data, const gchar* accel_path, guint accel
 static void
 add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
 {
+//FIXME gtk4
+#ifdef skip
     if (GTK_IS_MENU_ITEM(widget))
     {
         GtkMenuItem* menuItem = GTK_MENU_ITEM(widget);
@@ -415,6 +418,7 @@ add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
 //            gtk_container_foreach (GTK_CONTAINER(subMenu),
 //                                   add_accel_for_menu_lookup, user_data);
     }
+#endif
 }
 
 /** Add accelerator keys for menu item widgets
@@ -443,7 +447,8 @@ static gpointer
 find_menu_item_func (GtkWidget *widget, const gchar *action_name, const gchar *action_label)
 {
     GtkWidget *ret = NULL;
-
+//FIXME gtk4
+#ifdef skip
     if (GTK_IS_MENU_ITEM(widget))
     {
         GtkWidget* subMenu;
@@ -484,6 +489,8 @@ find_menu_item_func (GtkWidget *widget, const gchar *action_name, const gchar *a
         ret = find_menu_item_func (child, action_name, action_label);
     }
     return ret;
+#endif
+return NULL;
 }
 
 /** Search the menu for the menu item based on action name
@@ -547,6 +554,8 @@ gnc_find_menu_item_by_action_label (GtkWidget *menu, const gchar *action_label)
 static void
 menu_item_list (GtkWidget *widget, gpointer user_data)
 {
+//FIXME gtk4
+#ifdef skip
     GList **list = user_data;
 
     if (GTK_IS_MENU_ITEM(widget))
@@ -559,6 +568,7 @@ menu_item_list (GtkWidget *widget, gpointer user_data)
 //            gtk_container_foreach (GTK_CONTAINER(subMenu),
 //                                   menu_item_list, user_data);
     }
+#endif
 }
 
 /** Return a list of GtkMenuItems
@@ -614,7 +624,7 @@ gnc_find_toolbar_item (GtkWidget *toolbar, const gchar *action_name)
 {
     struct find_tool_item_struct ftis;
 
-    g_return_val_if_fail (GTK_IS_TOOLBAR(toolbar), NULL);
+//FIXME gtk4    g_return_val_if_fail (GTK_IS_TOOLBAR(toolbar), NULL);
     g_return_val_if_fail (action_name != NULL, NULL);
 
     ftis.action_name = action_name;

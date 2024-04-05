@@ -44,7 +44,8 @@ splash_destroy_cb (GtkWidget *object, gpointer user_data)
 {
     splash = NULL;
 }
-
+//FIXME gtk4
+#ifdef skip
 static gboolean
 button_press_cb(GtkWidget *widget, GdkEventButton *event, gpointer unused)
 {
@@ -52,7 +53,7 @@ button_press_cb(GtkWidget *widget, GdkEventButton *event, gpointer unused)
         gtk_window_iconify (GTK_WINDOW (splash));
     return TRUE;
 }
-
+#endif
 void
 gnc_show_splash_screen (void)
 {
@@ -78,8 +79,8 @@ gnc_show_splash_screen (void)
                       G_CALLBACK (splash_destroy_cb), NULL);
 
     gtk_window_set_title (GTK_WINDOW (splash), "GnuCash");
-    gtk_window_set_position (GTK_WINDOW (splash), GTK_WIN_POS_CENTER);
-    gtk_window_set_type_hint (GTK_WINDOW (splash), GDK_WINDOW_TYPE_HINT_DIALOG);
+//FIXME gtk4    gtk_window_set_position (GTK_WINDOW (splash), GTK_WIN_POS_CENTER);
+//FIXME gtk4    gtk_window_set_type_hint (GTK_WINDOW (splash), GDK_WINDOW_TYPE_HINT_DIALOG);
 
     pixmap = gnc_gnome_get_pixmap ("gnucash_splash.png");
 

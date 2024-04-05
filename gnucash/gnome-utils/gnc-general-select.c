@@ -54,6 +54,8 @@ static guint general_select_signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (GNCGeneralSelect, gnc_general_select, GTK_TYPE_BOX)
 
+//FIXME gtk4
+#ifdef skip
 static void
 gnc_general_select_forall (GtkBox *box, gboolean include_internals,
                            GtkCallback callback, gpointer callback_data)
@@ -75,7 +77,7 @@ gnc_general_select_forall (GtkBox *box, gboolean include_internals,
             callback,
             callback_data);
 }
-
+#endif
 static void
 gnc_general_select_class_init (GNCGeneralSelectClass *klass)
 {
@@ -94,7 +96,7 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
-    box_class->forall = gnc_general_select_forall;
+//FIXME gtk4    box_class->forall = gnc_general_select_forall;
 
     object_class->dispose = gnc_general_select_dispose;
     object_class->finalize = gnc_general_select_finalize;
@@ -158,7 +160,7 @@ select_cb(GtkButton * button, gpointer user_data)
     toplevel = gtk_widget_get_root (GTK_WIDGET (button));
 
     new_selection = (gsl->new_select)(gsl->cb_arg, gsl->selected_item,
-                                      toplevel);
+                                      GTK_WIDGET(toplevel));
 
     /* NULL return means cancel; no change */
     if (new_selection == NULL)

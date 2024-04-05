@@ -531,7 +531,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
                                          (gpointer)priv);
 
     priv->frame = gtk_frame_new (nullptr);
-    gtk_frame_set_shadow_type (GTK_FRAME(priv->frame), GTK_SHADOW_NONE);
+//FIXME gtk4    gtk_frame_set_shadow_type (GTK_FRAME(priv->frame), GTK_SHADOW_NONE);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->frame), "gnc-id-report-page");

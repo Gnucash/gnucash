@@ -593,12 +593,13 @@ static void date_set_relative_cb(GtkWidget *widget, gpointer data1);
 
 BothDateEntry::BothDateEntry(GncOption& option) :
     m_widget{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)},
-    m_abs_button{gtk_radio_button_new(NULL)},
+    m_abs_button{gtk_check_button_new()},
     m_abs_entry{std::make_unique<AbsoluteDateEntry>(option)},
-    m_rel_button{
-        gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(m_abs_button))},
+//FIXME gtk4    m_rel_button{gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(m_abs_button))},
+    m_rel_button{gtk_check_button_new()},
     m_rel_entry{std::make_unique<RelativeDateEntry>(option)}
 {
+    gtk_check_button_set_group (GTK_CHECK_BUTTON(m_abs_button), GTK_CHECK_BUTTON(m_rel_button));
     gtk_box_set_homogeneous (GTK_BOX(m_widget), FALSE);
     m_abs_hdlr = g_signal_connect(G_OBJECT(m_abs_button), "toggled",
                                   G_CALLBACK(date_set_absolute_cb), &option);
@@ -1452,11 +1453,11 @@ update_preview_cb (GtkFileChooser *chooser, void* data)
 //FIXME gtk4    auto filename = gtk_file_chooser_get_preview_filename(chooser);
 auto filename = nullptr;
     DEBUG("chooser preview name is %s.", filename ? filename : "(null)");
-    if (filename == NULL)
+    if (filename == nullptr)
     {
-        filename = g_strdup(static_cast<const char*>(g_object_get_data(G_OBJECT(chooser), LAST_SELECTION)));
+//FIXME gtk4        filename = g_strdup(static_cast<const char*>(g_object_get_data(G_OBJECT(chooser), LAST_SELECTION)));
         DEBUG("using last selection of %s", filename ? filename : "(null)");
-        if (filename == NULL)
+        if (filename == nullptr)
         {
             LEAVE("no usable name");
             return;
@@ -1473,7 +1474,7 @@ auto filename = nullptr;
 //        g_object_unref(pixbuf);
 
 //FIXME gtk4    gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
-    LEAVE("preview visible is %d", have_preview);
+//    LEAVE("preview visible is %d", have_preview);
 }
 
 static void
@@ -1482,7 +1483,7 @@ change_image_cb (GtkFileChooser *chooser, void* data)
 //FIXME gtk4
 //    auto filename{gtk_file_chooser_get_preview_filename(chooser)};
 auto filename = nullptr;
-    if (!filename)
+//    if (!filename)
         return;
     g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION, filename, g_free);
 }
@@ -1528,6 +1529,8 @@ create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
 {
     auto enclosing{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5)};
     gtk_box_set_homogeneous(GTK_BOX(enclosing), FALSE);
+//FIXME gtk4
+#ifdef skip
     auto button{gtk_button_new_with_label(_("Clear"))};
     gtk_widget_set_tooltip_text(button, _("Clear any selected image file."));
     auto widget{ gtk_file_chooser_button_new(_("Select image"),
@@ -1557,6 +1560,7 @@ create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
     set_tool_tip(option, enclosing);
     gtk_widget_set_visible (GTK_WIDGET(enclosing), true);
     grid_attach_widget(page_box, enclosing, row);
+#endif
 }
 
 static void
@@ -1602,18 +1606,18 @@ public:
 //            button = GTK_BUTTON(node->data);
 //        }
 //        else
-        {
-            PERR("Invalid Radio Button Selection %hu", index);
+//        {
+//            PERR("Invalid Radio Button Selection %hu", index);
 //            g_list_free(list);
-            return;
+//            return;
         }
 //        g_list_free(list);
-        auto val{g_object_get_data (G_OBJECT (button),
-                                    "gnc_radiobutton_index")};
-        g_return_if_fail (GPOINTER_TO_UINT (val) == index);
+//        auto val{g_object_get_data (G_OBJECT (button),
+//                                    "gnc_radiobutton_index")};
+//        g_return_if_fail (GPOINTER_TO_UINT (val) == index);
 
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    }
+//        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+//    }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto index{g_object_get_data(G_OBJECT(get_widget()),

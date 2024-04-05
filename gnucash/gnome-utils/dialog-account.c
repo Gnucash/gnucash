@@ -803,8 +803,8 @@ add_children_to_expander (GObject *object, GParamSpec *param_spec, gpointer data
         gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
                                         GTK_POLICY_AUTOMATIC,
                                         GTK_POLICY_AUTOMATIC);
-        gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW(scrolled_window),
-                                             GTK_SHADOW_IN);
+//FIXME gtk4        gtk_scrolled_window_set_shadow_type (GTK_SCROLLED_WINDOW(scrolled_window),
+//                                             GTK_SHADOW_IN);
 
         gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
                                        GTK_WIDGET(view));
@@ -882,7 +882,7 @@ verify_children_compatible (AccountWindow *aw)
 
     /* children */
     expander = gtk_expander_new_with_mnemonic (_("_Show children accounts"));
-    gtk_expander_set_spacing (GTK_EXPANDER(expander), 6);
+//FIXME gtk4    gtk_expander_set_spacing (GTK_EXPANDER(expander), 6);
     g_signal_connect (G_OBJECT(expander), "notify::expanded",
                       G_CALLBACK(add_children_to_expander), account);
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(expander));

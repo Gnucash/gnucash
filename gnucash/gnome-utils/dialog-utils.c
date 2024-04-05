@@ -112,15 +112,16 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
 
     if (g_variant_is_of_type (geometry, (const GVariantType *) "(iiii)") )
     {
-        GdkWindow *win = gtk_widget_get_window (GTK_WIDGET(parent));
-        GdkRectangle monitor_size;
-        GdkDisplay *display = gdk_window_get_display (win);
-        GdkMonitor *mon;
+//FIXME gtk4        GdkWindow *win = gtk_widget_get_window (GTK_WIDGET(parent));
+//        GdkRectangle monitor_size;
+//        GdkDisplay *display = gdk_window_get_display (win);
+//        GdkMonitor *mon;
 
         g_variant_get (geometry, "(iiii)",
                        &wpos[0],  &wpos[1],
                        &wsize[0], &wsize[1]);
-
+//FIXME gtk4
+#ifdef skip
         mon = gdk_display_get_monitor_at_point (display, wpos[0], wpos[1]);
         gdk_monitor_get_geometry (mon, &monitor_size);
 
@@ -173,16 +174,17 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
                                              parent_wpos[1] + (parent_wsize[1] - window_wsize[1])/2);
             }
         }
-
+#endif
         /* Don't attempt to restore invalid sizes */
         if ((wsize[0] > 0) && (wsize[1] > 0))
         {
-            wsize[0] = MIN(wsize[0], monitor_size.width - 10);
-            wsize[1] = MIN(wsize[1], monitor_size.height - 10);
+//FIXME gtk4            wsize[0] = MIN(wsize[0], monitor_size.width - 10);
+//            wsize[1] = MIN(wsize[1], monitor_size.height - 10);
 
             gtk_window_set_default_size (GTK_WINDOW(window), wsize[0], wsize[1]);
         }
     }
+
     g_variant_unref (geometry);
     LEAVE("");
 }
@@ -212,8 +214,12 @@ gnc_save_window_size(const char *group, GtkWindow *window)
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
         return;
 
-    gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
-    gtk_window_get_default_size(GTK_WINDOW(window), &wsize[0], &wsize[1]);
+//FIXME gtk4    gtk_window_get_position (GTK_WINDOW(window), &wpos[0], &wpos[1]);
+// not supported
+wpos[0] = -1;
+wpos[1] = -1;
+
+    gtk_window_get_default_size (GTK_WINDOW(window), &wsize[0], &wsize[1]);
 
     DEBUG("save geometry - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
                   wpos[0],  wpos[1], wsize[0], wsize[1]);
@@ -222,6 +228,7 @@ gnc_save_window_size(const char *group, GtkWindow *window)
                               wsize[0], wsize[1]);
     gnc_prefs_set_value (group, GNC_PREF_LAST_GEOMETRY, geometry);
     /* Don't unref geometry here, it is consumed by gnc_prefs_set_value */
+
     LEAVE("");
 }
 
@@ -236,7 +243,7 @@ gnc_save_window_size(const char *group, GtkWindow *window)
 void
 gnc_window_adjust_for_screen(GtkWindow * window)
 {
-    GdkWindow *win;
+//FIXME gtk4    GdkWindow *win;
     GdkDisplay *display;
     GdkMonitor *mon;
     GdkRectangle monitor_size;
@@ -250,6 +257,10 @@ gnc_window_adjust_for_screen(GtkWindow * window)
         return;
 
     g_return_if_fail(GTK_IS_WINDOW(window));
+
+//FIXME gtk4
+#ifdef skip
+
     if (gtk_widget_get_window (GTK_WIDGET(window)) == NULL)
         return;
 
@@ -294,6 +305,7 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 
     gtk_window_set_default_size (GTK_WINDOW(window), width, height);
     gtk_widget_queue_resize(GTK_WIDGET(window));
+#endif
     LEAVE("");
 }
 
@@ -386,7 +398,7 @@ gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction)
     gint size;
 
     gtk_render_background (context, cr, 0, 0, width, height);
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
+//FIXME gtk4    gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
 
     size = MIN(width / 2, height / 2);
 
@@ -644,7 +656,7 @@ gnc_builder_add_from_file (GtkBuilder *builder, const char *filename, const char
 
     {
         gchar *localroot = g_strdup(root);
-        gchar *objects[] = { localroot, NULL };
+        const gchar *objects[] = { localroot, NULL };
         result = gtk_builder_add_objects_from_file (builder, fname, objects, &error);
         if (!result)
         {
@@ -718,10 +730,10 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *i
     {
         GtkWidget *image = gtk_image_new_from_icon_name (icon_name);
         gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_INHERIT);
-        gtk_button_set_image (GTK_BUTTON(button), image);
+        gtk_button_set_child (GTK_BUTTON(button), GTK_WIDGET(image));
         g_object_set (button, "always-show-image", TRUE, NULL);
     }
-    g_object_set (button, "can-default", TRUE, NULL);
+//    g_object_set (button, "can-default", TRUE, NULL);
 //FIXME gtk4    gtk_widget_show_all(button);
     gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, response);
 }

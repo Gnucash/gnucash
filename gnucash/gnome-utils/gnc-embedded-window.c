@@ -349,12 +349,12 @@ gnc_embedded_window_new (const gchar *action_group_name,
 
     window->menubar_model = (GMenuModel *)gtk_builder_get_object (builder, "embeddedwin-menu");
 
-    window->menubar = gtk_menu_bar_new_from_model (window->menubar_model);
+//FIXME gtk4    window->menubar = gtk_menu_bar_new_from_model (window->menubar_model);
     gtk_box_prepend (GTK_BOX(window->menu_dock), GTK_WIDGET(window->menubar));
     gtk_widget_set_visible (GTK_WIDGET(window->menubar), TRUE);
 
     window->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "embeddedwin-toolbar");
-    g_object_set (window->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
+//FIXME gtk4    g_object_set (window->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
     gtk_box_prepend (GTK_BOX(window->menu_dock), GTK_WIDGET(window->toolbar));
     gtk_widget_set_visible (GTK_WIDGET(window->toolbar), TRUE);
 

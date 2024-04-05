@@ -265,7 +265,7 @@ void gxi_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
 void
 gxi_finish_cb (GtkAssistant *assistant, GncXmlImportData *data)
 {
-    gtk_main_quit();
+//FIXME gtk4    gtk_main_quit();
 }
 
 static void
@@ -287,7 +287,7 @@ gxi_cancel_cb (GtkAssistant *gtkassistant, GncXmlImportData *data)
     gnc_suspend_gui_refresh ();
     data->canceled = TRUE;
     gnc_resume_gui_refresh ();
-    gtk_main_quit();
+//FIXME gtk4    gtk_main_quit();
 }
 
 /***************************************************/
@@ -363,7 +363,7 @@ gnc_xml_convert_single_file (const gchar *filename)
         g_object_unref(G_OBJECT(builder));
 
         /* This won't return until the assistant is finished */
-        gtk_main();
+//FIXME gtk4        gtk_main();
 
         if (data->canceled)
             success = FALSE;
@@ -1177,7 +1177,8 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     GtkListStore *list_store;
     GtkTreeStore *tree_store;
     GtkTreeIter iter, parent, *parent_ptr;
-    GList *encodings_bak, *enc_iter;
+//FIXME gtk4    GList *encodings_bak;
+    GList *enc_iter;
     const gchar *encoding;
     system_encoding_type *system_enc;
     gpointer enc_ptr;
@@ -1262,7 +1263,7 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     g_object_unref (tree_store);
 
     /* run the dialog */
-    encodings_bak = g_list_copy (data->encodings);
+//FIXME gtk4    encodings_bak = g_list_copy (data->encodings);
 
 //FIXME gtk4    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
 gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4

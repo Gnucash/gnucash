@@ -858,6 +858,8 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
     g_free (folder_uri);
 }
 
+//FIXME gtk4 GtkFileChooserButton removed
+#ifdef skip
 /** Connect a GtkFileChooserButton widget to its stored value in the preferences database.
  *
  *  @internal
@@ -930,7 +932,8 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
 
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(fcb));
 }
-
+#endif
+#ifdef skip
 /** Callback for a 'Clear' button for GtkFileChooserButton widget.
  *
  *  @internal
@@ -985,7 +988,7 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
     g_free (boxname);
     g_free (old_path_head_uri);
 }
-
+#endif
 /****************************************************************************/
 
 /** Connect a GtkToggleButton widget to its stored value in the preferences database.
@@ -1257,15 +1260,15 @@ gnc_prefs_connect_one (const gchar *name,
         DEBUG("  %s - font button", name);
         gnc_prefs_connect_font_button (GTK_FONT_BUTTON(widget));
     }
-    else if (GTK_IS_FILE_CHOOSER_BUTTON(widget))
-    {
-        DEBUG("  %s - file chooser button", name);
-        gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget), NULL);
-    }
+//FIXME gtk4    else if (GTK_IS_FILE_CHOOSER_BUTTON(widget))
+//    {
+//        DEBUG("  %s - file chooser button", name);
+//        gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget), NULL);
+//    }
     else if (GTK_IS_TOGGLE_BUTTON(widget))
     {
         DEBUG("  %s - radio button", name);
-        gnc_prefs_connect_radio_button (GTK_TOGGLE_BUTTON(widget)); //FIXME gtk4 needs rename
+//FIXME gtk4        gnc_prefs_connect_radio_button (GTK_TOGGLE_BUTTON(widget)); //FIXME gtk4 needs rename
     }
     else if (GTK_IS_CHECK_BUTTON(widget))
     {
@@ -1309,11 +1312,11 @@ gnc_prefs_connect_one (const gchar *name,
             DEBUG("  %s - date_edit", name);
             gnc_prefs_connect_date_edit (GNC_DATE_EDIT(widget_child), name );
         }
-        else if (GTK_FILE_CHOOSER_BUTTON(widget_child))
-        {
-            DEBUG("  %s - file chooser button", name);
-            gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget_child), name );
-        }
+//FIXME gtk4        else if (GTK_FILE_CHOOSER_BUTTON(widget_child))
+//        {
+//            DEBUG("  %s - file chooser button", name);
+//            gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget_child), name );
+//        }
     }
     else
     {
@@ -1458,17 +1461,17 @@ gnc_preferences_dialog_create (GtkWindow *parent)
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL "/" GNC_DOC_LINK_PATH_HEAD));
-    fcb = gtk_file_chooser_button_new (_("Select a folder"),
-                                       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-    gtk_box_append (GTK_BOX(box), GTK_WIDGET(fcb));
-    button = gtk_button_new_with_label (_("Clear"));
-    gtk_box_append (GTK_BOX(box), GTK_WIDGET(button));
-    gtk_widget_set_visible (GTK_WIDGET(button), TRUE);
-    g_signal_connect (GTK_BUTTON(button), "clicked",
-                      G_CALLBACK(file_chooser_clear_cb), fcb);
+//FIXME gtk4    fcb = gtk_file_chooser_button_new (_("Select a folder"),
+//                                       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+//    gtk_box_append (GTK_BOX(box), GTK_WIDGET(fcb));
+//    button = gtk_button_new_with_label (_("Clear"));
+//    gtk_box_append (GTK_BOX(box), GTK_WIDGET(button));
+//    gtk_widget_set_visible (GTK_WIDGET(button), TRUE);
+//    g_signal_connect (GTK_BUTTON(button), "clicked",
+//                      G_CALLBACK(file_chooser_clear_cb), fcb);
 
-    image = GTK_WIDGET(gtk_builder_get_object (builder, "path_head_error"));
-    g_object_set_data (G_OBJECT(fcb), "path_head_error", image);
+//    image = GTK_WIDGET(gtk_builder_get_object (builder, "path_head_error"));
+//    g_object_set_data (G_OBJECT(fcb), "path_head_error", image);
 
     /* Add to the list of interesting widgets */
     gnc_prefs_build_widget_table (builder, dialog);

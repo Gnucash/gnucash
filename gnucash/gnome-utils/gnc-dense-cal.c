@@ -79,7 +79,7 @@ static const int COL_BORDER_SIZE = 3;
 static void gnc_dense_cal_finalize(GObject *object);
 static void gnc_dense_cal_dispose(GObject *object);
 static void gnc_dense_cal_realize(GtkWidget *widget, gpointer user_data);
-static void gnc_dense_cal_configure(GtkWidget *widget, GdkEventConfigure *event, gpointer user_data); //FIXME in GTK4
+//FIXME gtk4 static void gnc_dense_cal_configure(GtkWidget *widget, GdkEventConfigure *event, gpointer user_data);
 static void gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal);
 static gboolean gnc_dense_cal_draw(GtkWidget *widget, cairo_t *cr, gpointer user_data);
 
@@ -90,10 +90,10 @@ static void gdc_free_all_mark_data(GncDenseCal *dcal);
 static void _gdc_compute_min_size(GncDenseCal *dcal,
                                   guint *min_width, guint *min_height);
 static void _gdc_set_cal_min_size_req(GncDenseCal *dcal);
-static gint gnc_dense_cal_motion_notify(GtkWidget      *widget,
-                                        GdkEventMotion *event); //FIXME in GTK4
-static gint gnc_dense_cal_button_press(GtkWidget *widget,
-                                       GdkEventButton *event); //FIXME in GTK4
+//FIXME gtk4 static gint gnc_dense_cal_motion_notify(GtkWidget      *widget,
+//                                        GdkEventMotion *event);
+//FIXME gtk4 static gint gnc_dense_cal_button_press(GtkWidget *widget,
+//                                       GdkEventButton *event);
 
 static void _gdc_view_option_changed(GtkComboBox *widget, gpointer user_data);
 
@@ -272,8 +272,8 @@ gnc_dense_cal_class_init(GncDenseCalClass *klass)
     object_class->finalize = gnc_dense_cal_finalize;
     object_class->dispose = gnc_dense_cal_dispose;
 
-    widget_class->motion_notify_event = gnc_dense_cal_motion_notify;
-    widget_class->button_press_event = gnc_dense_cal_button_press;
+//FIXME gtk4    widget_class->motion_notify_event = gnc_dense_cal_motion_notify;
+//FIXME gtk4    widget_class->button_press_event = gnc_dense_cal_button_press;
 }
 
 enum _GdcViewOptsColumns
@@ -313,7 +313,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     // Set the name of this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(dcal), "gnc-id-dense-calendar");
 
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_CALENDAR);
+//FIXME gtk4    gtk_style_context_add_class (context, GTK_STYLE_CLASS_CALENDAR);
     {
         GtkTreeModel *options;
         GtkCellRenderer *text_rend;
@@ -337,7 +337,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         gtk_widget_set_margin_end (label, 5);
         gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(label));
         gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(dcal->view_options));
-        gtk_box_append (GTK_BOX(period), GTK_WIDGET(hbox));
+        gtk_box_append (GTK_BOX(dcal), GTK_WIDGET(hbox));
     }
     dcal->cal_drawing_area = GTK_DRAWING_AREA(gtk_drawing_area_new());
 
@@ -350,7 +350,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     gtk_box_append (GTK_BOX(dcal), GTK_WIDGET(dcal->cal_drawing_area));
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "draw", G_CALLBACK(gnc_dense_cal_draw), (gpointer)dcal);
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "realize", G_CALLBACK(gnc_dense_cal_realize), (gpointer)dcal);
-    g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "configure_event", G_CALLBACK(gnc_dense_cal_configure), (gpointer)dcal);
+//FIXME gtk4    g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "configure_event", G_CALLBACK(gnc_dense_cal_configure), (gpointer)dcal);
 
     dcal->disposed = FALSE;
     dcal->initialized = FALSE;
@@ -735,6 +735,8 @@ gnc_dense_cal_finalize (GObject *object)
     G_OBJECT_CLASS(gnc_dense_cal_parent_class)->finalize(object);
 }
 
+//FIXME gtk4
+#ifdef skip
 static void
 gnc_dense_cal_configure(GtkWidget *widget,
                         GdkEventConfigure *event, //FIXME in GTK4
@@ -752,7 +754,7 @@ gnc_dense_cal_configure(GtkWidget *widget,
                                     event->width, event->height); //FIXME in GTK4
     }
 }
-
+#endif
 static void
 gnc_dense_cal_realize (GtkWidget *widget, gpointer user_data)
 {
@@ -968,14 +970,14 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(dcal->cal_drawing_area));
     state_flags = gtk_style_context_get_state (stylectxt);
 
-    gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
-    gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_CALENDAR);
+//FIXME gtk4    gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
+//FIXME gtk4    gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_CALENDAR);
 
     gtk_render_background (stylectxt, cr, 0, 0,
                            cairo_image_surface_get_width (dcal->surface),
                            cairo_image_surface_get_height (dcal->surface));
 
-    gtk_style_context_remove_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
+//FIXME gtk4    gtk_style_context_remove_class (stylectxt, GTK_STYLE_CLASS_BACKGROUND);
 
     /* get the colors */
     {
@@ -1047,7 +1049,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
 
         gtk_style_context_save (stylectxt);
         gtk_style_context_add_class (stylectxt, marker_color_class);
-        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_VIEW);
+//FIXME gtk4        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_VIEW);
         gtk_style_context_set_state (stylectxt, GTK_STATE_FLAG_SELECTED);
 
         for (i = 0; i < dcal->numMarks; i++)
@@ -1096,11 +1098,11 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         gtk_style_context_save (stylectxt);
 
         /* draw the outside border [inside the month labels] */
-        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_FRAME);
+//FIXME gtk4        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_FRAME);
 
         gtk_render_frame (stylectxt, cr, x, y, w + 1, h + 1);
 
-        gnc_style_context_get_border_color (stylectxt, state_flags, &color);
+        gnc_style_context_get_border_color (stylectxt, &color); //FIXME gtk4 only one use
         cairo_set_source_rgb (cr, color.red, color.green, color.blue);
         cairo_set_line_width (cr, 1);
 
@@ -1132,7 +1134,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         if (dcal->x_scale > maxWidth)
         {
             gtk_style_context_save (stylectxt);
-            gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_HEADER);
+//FIXME gtk4            gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_HEADER);
 
             gtk_render_background (stylectxt, cr, x, y - dcal->dayLabelHeight, (day_width(dcal) * 7) + 1, dcal->dayLabelHeight);
 
@@ -1165,7 +1167,7 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
         gint x_offset = dcal->leftPadding;
 
         gtk_style_context_save (stylectxt);
-        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_HEADER);
+//FIXME gtk4        gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_HEADER);
 
         for (i = 0; i < 12; i++)
         {
@@ -1227,11 +1229,11 @@ gnc_dense_cal_draw_to_buffer(GncDenseCal *dcal)
     LOG_AND_RESET(timer, "dates");
 
     gtk_widget_get_allocation (widget, &alloc);
-    gtk_widget_queue_draw_area(GTK_WIDGET(dcal),
-                               alloc.x,
-                               alloc.y,
-                               alloc.width,
-                               alloc.height);
+//FIXME gtk4    gtk_widget_queue_draw_area(GTK_WIDGET(dcal),
+//                               alloc.x,
+//                               alloc.y,
+//                               alloc.width,
+//                               alloc.height);
 
     LOG_AND_RESET(timer, "queue draw");
 
@@ -1300,9 +1302,11 @@ populate_hover_window(GncDenseCal *dcal)
     }
 }
 
+//FIXME gtk4
+#ifdef skip
 static gint
 gnc_dense_cal_button_press(GtkWidget *widget,
-                           GdkEventButton *event) //FIXME in GTK4
+                           GdkEventButton *event)
 {
     GdkWindow *win = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
     GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (widget), win);
@@ -1359,10 +1363,12 @@ gnc_dense_cal_button_press(GtkWidget *widget,
     }
     return TRUE;
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gint
 gnc_dense_cal_motion_notify(GtkWidget *widget,
-                            GdkEventMotion *event) //FIXME in GTK4
+                            GdkEventMotion *event)
 {
     GncDenseCal *dcal;
     GtkAllocation alloc;
@@ -1417,7 +1423,7 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
     }
     return TRUE;
 }
-
+#endif
 
 static void
 _gdc_view_option_changed(GtkComboBox *widget, gpointer user_data)

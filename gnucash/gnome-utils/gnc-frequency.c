@@ -133,7 +133,7 @@ gnc_frequency_class_init( GncFrequencyClass *klass )
                       0);
 
     /* GtkWidget signals */
-    gtkwidget_class->destroy = gnc_frequency_destroy;
+//FIXME gtk4    gtkwidget_class->destroy = gnc_frequency_destroy;
 }
 
 
@@ -280,7 +280,7 @@ gnc_frequency_destroy (GtkWidget *widget)
         gf->builder = NULL;
     }
 
-    GTK_WIDGET_CLASS (gnc_frequency_parent_class)->destroy (widget);
+//FIXME gtk4    GTK_WIDGET_CLASS (gnc_frequency_parent_class)->destroy (widget);
     LEAVE(" ");
 }
 
