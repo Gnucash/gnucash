@@ -391,6 +391,8 @@ gnc_item_edit_copy_clipboard (GncItemEdit *item_edit)
 void
 gnc_item_edit_paste_clipboard (GncItemEdit *item_edit)
 {
+//FIXME gtk4
+#ifdef skip
     GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(item_edit->editor),
                                                         GDK_SELECTION_CLIPBOARD);
     gchar *text = gtk_clipboard_wait_for_text (clipboard);
@@ -428,6 +430,7 @@ gnc_item_edit_paste_clipboard (GncItemEdit *item_edit)
 
     g_free (text);
     g_free (filtered_text);
+#endif
 }
 
 

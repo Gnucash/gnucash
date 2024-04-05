@@ -4712,12 +4712,13 @@ gnc_main_window_cmd_edit_cut (GSimpleAction *simple,
     else if (GTK_IS_TEXT_VIEW(widget))
     {
         GtkTextBuffer *text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
-        GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(widget),
-                                                            GDK_SELECTION_CLIPBOARD);
-        gboolean editable = gtk_text_view_get_editable (GTK_TEXT_VIEW(widget));
+//FIXME gtk4
+//        GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(widget),
+//                                                            GDK_SELECTION_CLIPBOARD);
+//        gboolean editable = gtk_text_view_get_editable (GTK_TEXT_VIEW(widget));
 
-        if (clipboard)
-            gtk_text_buffer_cut_clipboard (text_buffer, clipboard, editable);
+//        if (clipboard)
+//            gtk_text_buffer_cut_clipboard (text_buffer, clipboard, editable);
     }
 }
 
@@ -4747,11 +4748,11 @@ gnc_main_window_cmd_edit_copy (GSimpleAction *simple,
     }
     else if (GTK_IS_TEXT_VIEW(widget))
     {
-        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
-        GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(widget),
-                                                            GDK_SELECTION_CLIPBOARD);
-        if (clipboard)
-            gtk_text_buffer_copy_clipboard (text_buffer, clipboard);
+//FIXME gtk4        GtkTextBuffer *text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
+//        GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(widget),
+//                                                            GDK_SELECTION_CLIPBOARD);
+//        if (clipboard)
+//            gtk_text_buffer_copy_clipboard (text_buffer, clipboard);
     }
 }
 
@@ -4781,15 +4782,15 @@ gnc_main_window_cmd_edit_paste (GSimpleAction *simple,
     }
     else if (GTK_IS_TEXT_VIEW(widget))
     {
-        auto clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_CLIPBOARD);
+//FIXME gtk4        auto clipboard = gtk_widget_get_clipboard (widget, GDK_SELECTION_CLIPBOARD);
 
-        if (clipboard)
-        {
-            auto text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
-            auto editable = gtk_text_view_get_editable (GTK_TEXT_VIEW(widget));
-            gtk_text_buffer_paste_clipboard (text_buffer, clipboard, nullptr,
-                                             editable);
-        }
+//        if (clipboard)
+//        {
+//            auto text_buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW(widget));
+//            auto editable = gtk_text_view_get_editable (GTK_TEXT_VIEW(widget));
+//            gtk_text_buffer_paste_clipboard (text_buffer, clipboard, nullptr,
+//                                             editable);
+//        }
     }
 }
 
