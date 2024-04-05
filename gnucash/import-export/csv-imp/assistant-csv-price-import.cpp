@@ -1457,6 +1457,8 @@ CsvImpPriceAssist::preview_split_column (int col, int offset)
 void
 CsvImpPriceAssist::preview_update_fw_columns (GtkTreeView* treeview, const GdkEvent* event)
 {
+//FIXME gtk4
+#ifdef skip
     /* Nothing to do if this was not triggered on our treeview body */
     if (gdk_event_get_window (event) != gtk_tree_view_get_bin_window (treeview))
         return;
@@ -1497,6 +1499,7 @@ CsvImpPriceAssist::preview_update_fw_columns (GtkTreeView* treeview, const GdkEv
             /* Right clicking brings up a context menu. */
             fixed_context_menu (event, dcol, offset);
     }
+#endif
 }
 
 /* Convert state info (errors/skipped) in visual feedback to decorate the preview table */
@@ -1573,7 +1576,7 @@ CsvImpPriceAssist::preview_style_column (uint32_t col_num, GtkTreeModel* model)
         gtk_tree_view_column_set_attributes (col, renderer,
                 "icon-name", PREV_COL_ERR_ICON,
                 "cell-background", PREV_COL_BCOLOR, nullptr);
-        g_object_set (G_OBJECT(renderer), "stock-size", GTK_ICON_SIZE_MENU, nullptr);
+//FIXME gtk4        g_object_set (G_OBJECT(renderer), "stock-size", GTK_ICON_SIZE_MENU, nullptr);
         g_object_set (G_OBJECT(col), "sizing", GTK_TREE_VIEW_COLUMN_FIXED,
                 "fixed-width", 20, nullptr);
         gtk_tree_view_column_set_resizable (col, false);
@@ -1862,8 +1865,11 @@ CsvImpPriceAssist::assist_file_page_prepare ()
 
     /* Set the default directory */
     if (!m_final_file_name.empty())
-        gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(file_chooser),
-                                       m_final_file_name.c_str());
+    {
+        GFile *file = g_file_new_for_path (m_final_file_name.c_str());
+        gtk_file_chooser_set_file (GTK_FILE_CHOOSER(file_chooser), file, nullptr);
+        g_object_unref (file);
+    }
     else
     {
         auto starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);

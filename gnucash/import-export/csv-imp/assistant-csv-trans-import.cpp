@@ -1380,6 +1380,8 @@ CsvImpTransAssist::preview_split_column (int col, int offset)
 void
 CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, const GdkEvent* event)
 {
+//FIXME gtk4
+#ifdef skip
     /* Nothing to do if this was not triggered on our treeview body */
     if (gdk_event_get_window (event) != gtk_tree_view_get_bin_window (treeview))
         return;
@@ -1420,6 +1422,7 @@ CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, const GdkEv
             /* Right clicking brings up a context menu. */
             fixed_context_menu (event, dcol, offset);
     }
+#endif
 }
 
 
@@ -1514,7 +1517,7 @@ CsvImpTransAssist::preview_style_column (uint32_t col_num, GtkTreeModel* model)
         gtk_tree_view_column_set_attributes (col, renderer,
                 "icon-name", PREV_COL_ERR_ICON,
                 "cell-background", PREV_COL_BCOLOR, nullptr);
-        g_object_set (G_OBJECT(renderer), "stock-size", GTK_ICON_SIZE_MENU, nullptr);
+//FIXME gtk4        g_object_set (G_OBJECT(renderer), "stock-size", GTK_ICON_SIZE_MENU, nullptr);
         g_object_set (G_OBJECT(col), "sizing", GTK_TREE_VIEW_COLUMN_FIXED,
                 "fixed-width", 20, nullptr);
         gtk_tree_view_column_set_resizable (col, false);
@@ -1964,6 +1967,8 @@ CsvImpTransAssist::acct_match_via_button ()
 bool
 CsvImpTransAssist::acct_match_via_view_dblclick (const GdkEvent *event)
 {
+//FIXME
+#ifdef skip
     guint button;
 
     if (!gdk_event_get_button (event, &button))
@@ -1995,6 +2000,7 @@ CsvImpTransAssist::acct_match_via_view_dblclick (const GdkEvent *event)
         }
         return true;
     }
+#endif
     return false;
 }
 
@@ -2008,8 +2014,11 @@ CsvImpTransAssist::assist_file_page_prepare ()
 {
     /* Set the default directory */
     if (!m_final_file_name.empty())
-        gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(file_chooser),
-                                       m_final_file_name.c_str());
+    {
+        GFile *file = g_file_new_for_path (m_final_file_name.c_str());
+        gtk_file_chooser_set_file (GTK_FILE_CHOOSER(file_chooser), file, nullptr);
+        g_object_unref (file);
+    }
     else
     {
         auto starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
@@ -2189,8 +2198,8 @@ CsvImpTransAssist::assist_match_page_prepare ()
         // align the help button on the left side
         gtk_widget_set_halign (GTK_WIDGET(button_area), GTK_ALIGN_FILL);
         gtk_widget_set_hexpand (GTK_WIDGET(button_area), TRUE);
-        gtk_box_set_child_packing (GTK_BOX(button_area), help_button,
-                                   FALSE, FALSE, 0, GTK_PACK_START);
+//FIXME gtk4        gtk_box_set_child_packing (GTK_BOX(button_area), help_button,
+//                                   FALSE, FALSE, 0, GTK_PACK_START);
     }
     g_signal_connect (help_button, "clicked",
                      G_CALLBACK(on_matcher_help_clicked), gnc_csv_importer_gui);

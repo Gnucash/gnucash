@@ -971,7 +971,7 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     g_object_unref (store);
 
     entry = gtk_combo_box_get_child (GTK_COMBO_BOX(comm_nb_page->namespace_combo));
-    gtk_widget_set_events (GTK_WIDGET(entry), GDK_FOCUS_CHANGE_MASK);
+//FIXME gtk4    gtk_widget_set_events (GTK_WIDGET(entry), GDK_FOCUS_CHANGE_MASK);
     g_signal_connect (G_OBJECT (entry), "changed",
                       G_CALLBACK(gnc_ui_qif_import_comm_namespace_changed_cb), wind);
 

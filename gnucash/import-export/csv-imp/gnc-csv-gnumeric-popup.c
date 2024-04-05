@@ -92,6 +92,8 @@ gnumeric_create_popup_menu_list (GSList *elements,
                                  int sensitive_filter,
                                  const GdkEvent *event)
 {
+//FIXME gtk4
+#ifdef skip
     GtkWidget *menu = gtk_menu_new ();
     GtkWidget *item;
 
@@ -152,7 +154,8 @@ gnumeric_create_popup_menu_list (GSList *elements,
         gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
     }
 
-    gnumeric_popup_menu (GTK_MENU (menu), event);
+//FIXME gtk4    gnumeric_popup_menu (GTK_MENU (menu), event);
+#endif
 }
 
 void
@@ -173,7 +176,8 @@ gnumeric_create_popup_menu (GnumericPopupMenuElement const *elements,
                                      display_filter, sensitive_filter, event);
     g_slist_free (tmp);
 }
-
+//FIXME gtk4
+#ifdef skip
 static void
 kill_popup_menu (GtkWidget *widget, GtkMenu *menu)
 {
@@ -182,7 +186,7 @@ kill_popup_menu (GtkWidget *widget, GtkMenu *menu)
 
     g_object_unref (G_OBJECT (menu));
 }
-
+#endif
 /**
  * gnumeric_popup_menu :
  * @menu : #GtkMenu
@@ -192,8 +196,10 @@ kill_popup_menu (GtkWidget *widget, GtkMenu *menu)
  * right screen.
  **/
 void
-gnumeric_popup_menu (GtkMenu *menu, const GdkEvent *event)
+gnumeric_popup_menu (GMenu *menu, const GdkEvent *event)
 {
+//FIXME gtk4
+#ifdef skip
     g_return_if_fail (menu != NULL);
     g_return_if_fail (GTK_IS_MENU (menu));
 
@@ -212,4 +218,5 @@ gnumeric_popup_menu (GtkMenu *menu, const GdkEvent *event)
      * the right button will disable clicking on the menu with the left.
      */
     gtk_menu_popup_at_pointer (GTK_MENU(menu), event);
+#endif
 }

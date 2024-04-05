@@ -151,14 +151,14 @@ static void gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
                                                    GtkTreePath *path,
                                                    Account **new_acc,
                                                    GNCImportMainMatcher *info);
-static void gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
-                                                                   GNCImportMainMatcher *info);
+//FIXME gtk4 static void gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
+//                                                                   GNCImportMainMatcher *info);
 static void gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
                                            const GdkEvent *event,
                                            GNCImportMainMatcher *info);
-static bool gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
-                                              const GdkEvent *event,
-                                              GNCImportMainMatcher *info);
+//FIXME gtk4 static bool gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
+//                                              const GdkEvent *event,
+//                                              GNCImportMainMatcher *info);
 static bool gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
                                           GNCImportMainMatcher *info);
 static void refresh_model_row (GNCImportMainMatcher *gui,
@@ -625,7 +625,7 @@ on_matcher_help_clicked (GtkButton *button, gpointer user_data)
     auto info = static_cast<GNCImportMainMatcher*>(user_data);
 
     GtkBuilder *builder = gtk_builder_new ();
-    gtk_builder_set_current_object (builder, G_OBJECT(help_dialog));
+//FIXME gtk4    gtk_builder_set_current_object (builder, G_OBJECT(help_dialog));
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer2");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer3");
     gnc_builder_add_from_file (builder, "dialog-import.glade", "textbuffer4");
@@ -832,7 +832,8 @@ get_treeview_selection_refs (GtkTreeView *treeview, GtkTreeModel *model)
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     return rv;
 }
-
+//FIXME gtk4
+#ifdef skip
 static void
 gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
                                                        GNCImportMainMatcher *info)
@@ -887,7 +888,7 @@ gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
 
     LEAVE("");
 }
-
+#endif
 class RowInfo
 {
 public:
@@ -1098,7 +1099,8 @@ maybe_add_string (GNCImportMainMatcher *info, GHashTable *hash, const char *str)
     info->new_strings = g_list_prepend (info->new_strings, new_string);
     g_hash_table_insert (hash, new_string, one);
 }
-
+//FIXME gtk4
+#ifdef skip
 static void
 gnc_gen_trans_set_price_to_selection_cb (GtkMenuItem *menuitem,
                                          GNCImportMainMatcher *info)
@@ -1149,7 +1151,9 @@ gnc_gen_trans_set_price_to_selection_cb (GtkMenuItem *menuitem,
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     LEAVE("");
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static void
 gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
 {
@@ -1213,7 +1217,9 @@ gnc_gen_trans_edit_fields (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
     }
     LEAVE("");
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static void
 gnc_gen_trans_reset_edits_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
 {
@@ -1248,7 +1254,7 @@ gnc_gen_trans_reset_edits_cb (GtkMenuItem *menuitem, GNCImportMainMatcher *info)
     };
     LEAVE("");
 }
-
+#endif
 static void
 gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
                                 GtkTreePath *path,
@@ -1403,7 +1409,8 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
             can_undo_edits)
             break;
     }
-
+//FIXME gtk4
+#ifdef skip
     GtkWidget *menu = gtk_menu_new();
 
     auto add_menu_item = [&menu, &info](const char* name, bool sensitive, GCallback callback)
@@ -1439,11 +1446,12 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
 //FIXME gtk4    gtk_widget_show_all (menu);
     /* Note: event can be NULL here when called from view_onPopupMenu; */
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent*)event);
-
+#endif
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     LEAVE ("");
 }
-
+//FIXME gtk4
+#ifdef skip
 static bool
 gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
                                   const GdkEvent *event,
@@ -1483,7 +1491,7 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
     LEAVE("return false");
     return false;
 }
-
+#endif
 static bool
 gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
                               GNCImportMainMatcher *info)
@@ -1624,8 +1632,8 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                       G_CALLBACK(gnc_gen_trans_row_activated_cb), info);
     g_signal_connect (selection, "changed",
                       G_CALLBACK(gnc_gen_trans_row_changed_cb), info);
-    g_signal_connect (view, "button-press-event",
-                      G_CALLBACK(gnc_gen_trans_onButtonPressed_cb), info);
+//FIXME gtk4    g_signal_connect (view, "button-press-event",
+//                      G_CALLBACK(gnc_gen_trans_onButtonPressed_cb), info);
     g_signal_connect (view, "popup-menu",
                       G_CALLBACK(gnc_gen_trans_onPopupMenu_cb), info);
 }
