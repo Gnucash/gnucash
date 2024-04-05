@@ -145,7 +145,7 @@ gnc_ui_new_user_dialog_create (GNCNewUserDialog *new_user)
     gnc_builder_add_from_file (builder, "dialog-new-user.glade", "new_user_window");
     new_user->window = GTK_WIDGET(gtk_builder_get_object (builder, "new_user_window"));
 
-    gtk_window_set_keep_above (GTK_WINDOW(new_user->window), TRUE);
+    gtk_window_present (GTK_WINDOW(new_user->window));
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(new_user->window), "gnc-id-new-user");
