@@ -37,7 +37,7 @@ typedef struct _GncCellViewClass GncCellViewClass;
 
 struct _GncCellView
 {
-    GtkEventBox    parent;
+    GtkBox         parent;
 
     GtkWidget     *text_view;
     GtkTextBuffer *buffer;
@@ -51,7 +51,7 @@ struct _GncCellView
 
 struct _GncCellViewClass
 {
-    GtkEventBoxClass parent_class;
+    GtkBoxClass parent_class;
 };
 
 GType        gnc_cell_view_get_type (void) G_GNUC_CONST;
