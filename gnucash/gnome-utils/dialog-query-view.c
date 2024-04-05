@@ -231,7 +231,7 @@ gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q, const
     /* build the query list */
     dqv->qview = gnc_query_view_new (param_list, q);
 
-    frame = gtk_frame_new(NULL);
+    frame = gtk_frame_new (NULL);
 
     scrolled_window = gtk_scrolled_window_new ();
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrolled_window),
@@ -241,7 +241,7 @@ gnc_dialog_query_view_new (GtkWindow *parent, GList *param_list, Query *q, const
 
     gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_WIDGET(dqv->qview));
-    gtk_box_append (GTK_BOX(frame), GTK_WIDGET(scrolled_window));
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(scrolled_window));
 
     gtk_box_append (GTK_BOX(result_hbox), GTK_WIDGET(frame));
 

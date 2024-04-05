@@ -937,7 +937,7 @@ create_children (GNCDateEdit *gde)
     g_signal_connect (G_OBJECT (gde->calendar),
                       "day-selected-double-click",
                       G_CALLBACK  (day_selected_double_click), gde);
-    gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(gde->calendar));
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(gde->calendar));
     gtk_widget_set_visible (GTK_WIDGET(gde->calendar), TRUE);
 }
 

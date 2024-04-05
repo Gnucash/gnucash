@@ -300,7 +300,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
         /* Create the view */
         gnc_search_dialog_init_result_view (sw);
 
-        frame = gtk_frame_new(NULL);
+        frame = gtk_frame_new (NULL);
 
         /* Create the scrolled_window and add the view to the scrolled_window */
         scrolled_window = gtk_scrolled_window_new ();
@@ -310,8 +310,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
         gtk_widget_set_size_request (GTK_WIDGET(scrolled_window), 300, 100);
         gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
                                        GTK_WIDGET(sw->result_view));
-        gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(scrolled_window));
-
+        gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(scrolled_window));
         /* Create the button_box */
         button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
         gtk_box_set_homogeneous (GTK_BOX (button_box), FALSE);

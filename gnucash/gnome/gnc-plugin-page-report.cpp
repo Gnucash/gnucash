@@ -129,7 +129,7 @@ typedef struct GncPluginPageReportPrivate
     GncHtml *html;
 
     /// the container the above HTML widget is in.
-    GtkContainer *container;
+    GtkWidget *frame;
 } GncPluginPageReportPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GncPluginPageReport, gnc_plugin_page_report, GNC_TYPE_PLUGIN_PAGE)
@@ -435,7 +435,7 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     g_free(child_name);
 
     g_object_add_weak_pointer(G_OBJECT(page), (gpointer*)(&weak_page));
-//FIXME gtk4    gtk_widget_show_all( GTK_WIDGET(priv->container) );
+//FIXME gtk4    gtk_widget_show_all( GTK_WIDGET(priv->frame) );
 
     priv->loaded = TRUE;
 
@@ -478,7 +478,7 @@ webkit_key_press_event_cb (GtkEventControllerKey *key, guint keyval,
          keyval == GDK_KEY_KP_Page_Up || keyval == GDK_KEY_KP_Page_Down)
           && (state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
     {
-        GtkNotebook *notebook = GTK_NOTEBOOK(gtk_widget_get_parent (GTK_WIDGET(priv->container)));
+        GtkNotebook *notebook = GTK_NOTEBOOK(gtk_widget_get_parent (GTK_WIDGET(priv->frame)));
         gint pages = gtk_notebook_get_n_pages (notebook);
         gint current_page = gtk_notebook_get_current_page (notebook);
 
@@ -530,13 +530,14 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
                                          gnc_plugin_page_report_history_destroy_cb,
                                          (gpointer)priv);
 
-    priv->container = GTK_BOX(gtk_frame_new(nullptr));
-    gtk_frame_set_shadow_type(GTK_FRAME(priv->container), GTK_SHADOW_NONE);
+    priv->frame = gtk_frame_new (nullptr);
+    gtk_frame_set_shadow_type (GTK_FRAME(priv->frame), GTK_SHADOW_NONE);
 
     // Set the name for this widget so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(priv->container), "gnc-id-report-page");
+    gtk_widget_set_name (GTK_WIDGET(priv->frame), "gnc-id-report-page");
 
-    gtk_box_prepend (GTK_BOX(priv->container), GTK_WIDGET(gnc_html_get_widget(priv->html)));
+    gtk_frame_set_child (GTK_FRAME(priv->frame),
+                         GTK_WIDGET(gnc_html_get_widget(priv->html)));
 
     priv->component_manager_id =
         gnc_register_gui_component(WINDOW_REPORT_CM_CLASS, nullptr,
@@ -580,9 +581,9 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
                           G_CALLBACK(webkit_key_press_event_cb), page);
     }
 
-//FIXME gtk4    gtk_widget_show_all( GTK_WIDGET(priv->container) );
-    LEAVE("container %p", priv->container);
-    return GTK_WIDGET( priv->container );
+//FIXME gtk4    gtk_widget_show_all( GTK_WIDGET(priv->frame) );
+    LEAVE("container %p", priv->frame);
+    return GTK_WIDGET( priv->frame );
 }
 
 /********************************************************************
@@ -1181,8 +1182,8 @@ gnc_plugin_page_report_destroy(GncPluginPageReportPrivate * priv)
 
     gnc_html_destroy(priv->html);
 
-    priv->container     = nullptr;
-    priv->html          = nullptr;
+    priv->frame = nullptr;
+    priv->html = nullptr;
 
     if (priv->cur_report != SCM_BOOL_F)
         scm_gc_unprotect_object(priv->cur_report);
