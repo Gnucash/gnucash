@@ -135,8 +135,8 @@ gnc_show_splash_screen (void)
     gtk_window_set_auto_startup_notification (TRUE);
 
     /* make sure splash is up */
-    while (gtk_events_pending ())
-        gtk_main_iteration ();
+//FIXME gtk4    while (gtk_events_pending ())
+//        gtk_main_iteration ();
 }
 
 void
@@ -165,8 +165,8 @@ gnc_update_splash_screen (const gchar *string, double percentage)
             g_free (markup);
 
             /* make sure new text is up */
-            while (gtk_events_pending ())
-                gtk_main_iteration ();
+//FIXME gtk4            while (gtk_events_pending ())
+//                gtk_main_iteration ();
         }
     }
 
@@ -196,8 +196,8 @@ gnc_update_splash_screen (const gchar *string, double percentage)
         }
 
         /* make sure new status bar is up */
-        while (gtk_events_pending ())
-            gtk_main_iteration ();
+//FIXME gtk4        while (gtk_events_pending ())
+//            gtk_main_iteration ();
     }
 }
 

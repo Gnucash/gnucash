@@ -536,10 +536,10 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 
                if ( label )
                {
-                    while ( gtk_events_pending() )
-                    {
-                         gtk_main_iteration();
-                    }
+//FIXME gtk4                    while ( gtk_events_pending() )
+//                    {
+//                         gtk_main_iteration();
+//                    }
                     /* No action required: Webkit jumps to the anchor on its own. */
                }
                return TRUE;

@@ -1406,8 +1406,8 @@ populate_hover_window (GncDenseCal *dcal)
         }
 
         // make sure all pending events are processed
-        while(gtk_events_pending ())
-            gtk_main_iteration ();
+//FIXME gtk4        while(gtk_events_pending())
+//            gtk_main_iteration();
 
         g_date_free (date);
     }
