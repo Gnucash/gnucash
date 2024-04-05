@@ -268,7 +268,7 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
                                    GTK_POLICY_AUTOMATIC);
     gnc_box_set_all_margins (GTK_BOX(scrolled_window), 2);
     auto frame = gtk_frame_new(NULL);
-    gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(scrolled_window));
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(scrolled_window));
 
     auto enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_widget_set_vexpand (GTK_WIDGET(enclosing), TRUE);
@@ -756,7 +756,7 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box, int row)
         enclosing = gtk_frame_new(nullptr);
         g_object_set(G_OBJECT(widget), "margin", 3, NULL);
 
-        gtk_box_prepend (GTK_BOX(enclosing), GTK_WIDGET(widget));
+        gtk_frame_set_child (GTK_FRAME(enclosing), GTK_WIDGET(widget));
     }
 
     gtk_widget_set_halign (GTK_WIDGET(enclosing), GTK_ALIGN_START);
@@ -923,7 +923,7 @@ create_account_widget(GncOption& option, char *name)
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
 
-    gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(vbox));
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(vbox));
 
     tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(tree), FALSE);
@@ -1190,7 +1190,7 @@ create_list_widget(GncOption& option, char *name)
     auto frame = gtk_frame_new(name);
     auto hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-    gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(hbox));
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(hbox));
 
     auto store = gtk_list_store_new(1, G_TYPE_STRING);
     auto view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(store)));
@@ -1638,7 +1638,7 @@ create_radiobutton_widget(char *name, GncOption& option)
     /* Create the button box */
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
-    gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(box));
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(box));
 
     option.set_ui_item(std::make_unique<GncGtkPixmapUIItem>(frame));
     option.set_ui_item_from_option();
@@ -1858,7 +1858,7 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     option.set_ui_item_from_option();
 
     auto widget{option_get_gtk_widget(&option)};
-    gtk_box_prepend (GTK_BOX(enclosing), GTK_WIDGET(widget));
+    gtk_frame_set_child (GTK_FRAME(enclosing), GTK_WIDGET(widget));
 
 //FIXME gtk4    gtk_widget_show_all(enclosing);
     grid_attach_widget(page_box, enclosing, row);
