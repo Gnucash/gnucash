@@ -73,8 +73,8 @@ gnc_ok_cancel_dialog(GtkWindow *parent,
     g_free(buffer);
     va_end(args);
 
-    if (!parent)
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+//FIXME gtk4    if (!parent)
+//        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), default_result);
 //FIXME gtk4    result = gtk_dialog_run(GTK_DIALOG(dialog));
@@ -123,8 +123,8 @@ gnc_verify_dialog(GtkWindow *parent, gboolean yes_is_default,
     g_free(buffer);
     va_end(args);
 
-    if (!parent)
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+//FIXME gtk4    if (!parent)
+//        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
     gtk_dialog_set_default_response(GTK_DIALOG(dialog),
                                     (yes_is_default ? GTK_RESPONSE_YES : GTK_RESPONSE_NO));
@@ -153,8 +153,8 @@ gnc_message_dialog_common (GtkWindow *parent, const gchar *format, GtkMessageTyp
                                      buffer);
     g_free(buffer);
 
-    if (!parent)
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+//FIXME gtk4    if (!parent)
+//        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
 //FIXME gtk4    gtk_dialog_run (GTK_DIALOG (dialog));
 gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4

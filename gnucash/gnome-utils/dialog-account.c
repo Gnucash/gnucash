@@ -847,7 +847,7 @@ verify_children_compatible (AccountWindow *aw)
                                           _("_OK"), GTK_RESPONSE_OK,
                                           NULL);
 
-    gtk_window_set_skip_taskbar_hint (GTK_WINDOW(dialog), TRUE);
+//FIXME gtk4    gtk_window_set_skip_taskbar_hint (GTK_WINDOW(dialog), TRUE);
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 12);
     gtk_box_set_homogeneous (GTK_BOX(hbox), FALSE);
