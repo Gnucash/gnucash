@@ -1240,7 +1240,7 @@ identity_edit_clicked_cb (GtkButton *button,
 
     label = gtk_label_new (_("CAUTION: If you set TXF categories, and later change 'Type', you will need to manually reset those categories one at a time"));
     gtk_label_set_max_width_chars (GTK_LABEL (label), 50);
-    gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+    gtk_label_set_wrap (GTK_LABEL (label), TRUE);
     gnc_label_set_alignment (label, 0.50, 0.50);
     gtk_widget_set_margin_top (GTK_WIDGET(label), 5);
     gtk_grid_attach (GTK_GRID(table), label, 0, 2, 2, 1);

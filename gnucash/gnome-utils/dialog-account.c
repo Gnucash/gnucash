@@ -860,7 +860,7 @@ verify_children_compatible (AccountWindow *aw)
 
     /* primary label */
     label = gtk_label_new (_("Give the children the same type?"));
-    gtk_label_set_line_wrap (GTK_LABEL(label), TRUE);
+    gtk_label_set_wrap (GTK_LABEL(label), TRUE);
     gtk_label_set_selectable (GTK_LABEL(label), TRUE);
     gnc_label_set_alignment (label, 0.0, 0.0);
 
@@ -875,7 +875,7 @@ verify_children_compatible (AccountWindow *aw)
                            xaccAccountGetTypeStr (aw->type));
     label = gtk_label_new (str);
     g_free (str);
-    gtk_label_set_line_wrap (GTK_LABEL(label), TRUE);
+    gtk_label_set_wrap (GTK_LABEL(label), TRUE);
     gtk_label_set_selectable (GTK_LABEL(label), TRUE);
     gnc_label_set_alignment (label, 0.0, 0.0);
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(label));
