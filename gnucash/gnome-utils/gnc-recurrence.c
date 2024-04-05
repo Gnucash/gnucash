@@ -199,13 +199,13 @@ gnc_recurrence_init( GncRecurrence *gr )
     gtk_box_append (GTK_BOX(hb), GTK_WIDGET(w));
     gtk_widget_set_visible (GTK_WIDGET(w), TRUE);
 
-    gtk_widget_set_no_show_all(GTK_WIDGET(gr->gde_start), TRUE);
+//FIXME gtk4    gtk_widget_set_no_show_all(GTK_WIDGET(gr->gde_start), TRUE);
     gr->gcb_period = GTK_COMBO_BOX(gtk_builder_get_object (builder, "GCB_PeriodType"));
     gr->gsb_mult = GTK_SPIN_BUTTON(gtk_builder_get_object (builder, "GSB_Mult"));
     gr->gcb_eom = GTK_CHECK_BUTTON(gtk_builder_get_object (builder, "GCB_EndOfMonth"));
     gr->nth_weekday = GTK_CHECK_BUTTON(gtk_builder_get_object (builder, "GCB_NthWeekday"));
-    gtk_widget_set_no_show_all(GTK_WIDGET(gr->gcb_eom), TRUE);
-    gtk_widget_set_no_show_all(GTK_WIDGET(gr->nth_weekday), TRUE);
+//FIXME gtk4    gtk_widget_set_no_show_all(GTK_WIDGET(gr->gcb_eom), TRUE);
+//FIXME gtk4    gtk_widget_set_no_show_all(GTK_WIDGET(gr->nth_weekday), TRUE);
 
     gtk_box_prepend (GTK_BOX(&gr->widget), GTK_WIDGET(vb));
 

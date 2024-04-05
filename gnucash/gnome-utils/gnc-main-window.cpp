@@ -4257,7 +4257,7 @@ gnc_quartz_set_menu (GncMainWindow* window)
     GClosure *quit_closure;
 
     gtk_widget_set_visible (GTK_WIDGET(priv->menubar), false);
-    gtk_widget_set_no_show_all (priv->menubar, true);
+//FIXME gtk4    gtk_widget_set_no_show_all (priv->menubar, true);
 
     gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL(priv->menubar));
 

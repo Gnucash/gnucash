@@ -335,7 +335,7 @@ gnc_amount_edit_new (void)
     gtk_image_set_icon_size (GTK_IMAGE(gae->image), GTK_ICON_SIZE_NORMAL);
     gtk_box_append (GTK_BOX(gae), GTK_WIDGET(gae->image));
     gtk_box_set_spacing (GTK_BOX(gae), 6);
-    gtk_widget_set_no_show_all (GTK_WIDGET(gae->image), TRUE);
+//FIXME gtk4    gtk_widget_set_no_show_all (GTK_WIDGET(gae->image), TRUE);
     gtk_widget_set_visible (GTK_WIDGET(gae->image), FALSE);
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(gae));
 

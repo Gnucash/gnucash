@@ -1914,7 +1914,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 #ifdef MAC_INTEGRATION
         auto theApp = static_cast<GtkosxApplication*>(g_object_new (GTKOSX_TYPE_APPLICATION, NULL));
         gtk_widget_set_visible (GTK_WIDGET(menu_bar), FALSE);
-        gtk_widget_set_no_show_all (menu_bar, TRUE);
+//FIXME gtk4        gtk_widget_set_no_show_all (menu_bar, TRUE);
         if (GTK_IS_MENU_ITEM (menu_bar))
             menu_bar = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menu_bar));
 
