@@ -751,9 +751,8 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
         }
         /* default to 'close' button */
         button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
-        gtk_widget_grab_default (button);
+        gtk_window_set_default_widget (GTK_WINDOW(pdb_dialog->window), GTK_WIDGET(button));
         gtk_widget_grab_focus (button);
-
     }
 
     g_signal_connect (pdb_dialog->window, "destroy",
