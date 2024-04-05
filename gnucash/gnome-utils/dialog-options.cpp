@@ -226,15 +226,15 @@ create_options_box(GtkBox* content_box)
     return GTK_GRID(options_box);
 }
 
-static GtkButtonBox*
+static GtkBox*
 create_reset_button_box(GtkBox* page_content_box)
 {
-    auto buttonbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
-                               GTK_BUTTONBOX_EDGE);
+    auto buttonbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+//FIXME gtk4    gtk_button_box_set_layout (GTK_BOX (buttonbox),
+//                               GTK_BOX_EDGE);
     gnc_box_set_all_margins (GTK_BOX(buttonbox), 5);
     gtk_box_prepend (GTK_BOX(page_content_box), GTK_WIDGET(buttonbox));
-    return GTK_BUTTON_BOX(buttonbox);
+    return GTK_BOX(buttonbox);
 }
 
 static int

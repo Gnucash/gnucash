@@ -976,8 +976,8 @@ create_account_widget(GncOption& option, char *name)
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
     gnc_box_set_all_margins (GTK_BOX(scrolled_window), 5);
 
-    bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
+    bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+//FIXME gtk4    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(bbox));
 
     option.set_ui_item(std::make_unique<GncGtkAccountListUIItem>(tree));
@@ -986,7 +986,7 @@ create_account_widget(GncOption& option, char *name)
     if (multiple_selection)
     {
         button = gtk_button_new_with_label(_("Select All"));
-        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(button));
+        gtk_box_append (GTK_BOX(bbox), GTK_WIDGET(button));
         gtk_widget_set_tooltip_text(button, _("Select all accounts."));
 
         g_signal_connect(G_OBJECT(button), "clicked",
@@ -1021,8 +1021,8 @@ create_account_widget(GncOption& option, char *name)
     {
         /* Put the "Show hidden" checkbox on a separate line since
            the 4 buttons make the dialog too wide. */
-        bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-        gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_START);
+        bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+//FIXME gtk4        gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_START);
         gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(bbox));
     }
 
@@ -1222,8 +1222,8 @@ create_list_widget(GncOption& option, char *name)
     g_signal_connect(selection, "changed",
                      G_CALLBACK(list_changed_cb), &option);
 
-    auto bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
-    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
+    auto bbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+//FIXME gtk4    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
     gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(bbox));
 
     auto button = gtk_button_new_with_label(_("Select All"));
