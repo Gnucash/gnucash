@@ -638,8 +638,8 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     // Sort label
     if (gsr->sort_label != NULL)
     {
-        gchar *old_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->sort_label));
-        gchar *new_tt_text;
+        const gchar *old_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->sort_label));
+        const gchar *new_tt_text;
         gchar *text = NULL;
 
         switch (gsr->sort_type)
@@ -690,19 +690,13 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
         if (g_strcmp0 (old_tt_text, new_tt_text) != 0)
             gsr_summarybar_set_arrow_draw (gsr);
 
-        if (old_tt_text)
-            g_free (old_tt_text);
-
-        if (new_tt_text)
-            g_free (new_tt_text);
-
         gtk_label_set_text (GTK_LABEL(gsr->sort_label), text);
     }
 
     // Filter label
     if (gsr->filter_label != NULL)
     {
-        gchar *old_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->filter_label));
+        const gchar *old_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->filter_label));
 
         // check for a change in text
         if (g_strcmp0 (old_tt_text, gsr->filter_text) != 0)
@@ -715,7 +709,6 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
             gtk_widget_set_tooltip_text (GTK_WIDGET(gsr->filter_label), gsr->filter_text);
 
         }
-        g_free (old_tt_text);
     }
 
     if (gsr->shares_label == NULL && gsr->value_label == NULL)

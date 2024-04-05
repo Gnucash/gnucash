@@ -1076,9 +1076,8 @@ tool_item_enter_event (GtkWidget *button, GdkEvent *event,
                        gpointer user_data)
 {
     GtkWidget *tool_item = gtk_widget_get_parent (button);
-    gchar *tooltip = gtk_widget_get_tooltip_text (tool_item);
+    const gchar *tooltip = gtk_widget_get_tooltip_text (tool_item);
     statusbar_push (user_data, tooltip);
-    g_free (tooltip);
     return FALSE;
 }
 
