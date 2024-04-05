@@ -218,6 +218,8 @@ gnc_amount_edit_changed (GtkEditable *editable, gpointer user_data)
 static void
 gnc_amount_edit_paste_clipboard (GtkEntry *entry, gpointer user_data)
 {
+//FIXME gtk4
+#ifdef skip
     GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
     GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(entry),
                                                         GDK_SELECTION_CLIPBOARD);
@@ -266,6 +268,7 @@ gnc_amount_edit_paste_clipboard (GtkEntry *entry, gpointer user_data)
 
     g_free (text);
     g_free (filtered_text);
+#endif
 }
 
 static gint
