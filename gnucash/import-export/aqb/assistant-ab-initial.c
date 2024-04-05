@@ -162,9 +162,9 @@ enum account_list_cols
 gboolean
 aai_key_press_event_cb(GtkWidget *widget, const GdkEvent *event, gpointer user_data)
 {
-    guint keyval;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
 
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (gdk_event_get_keyval ((GdkEvent*)event, &keyval) && keyval == GDK_KEY_Escape)
     {
 //FIXME gtk4        gtk_window_destroy (GTK_WINDOW(widget));
         return TRUE;

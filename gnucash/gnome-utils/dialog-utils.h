@@ -116,7 +116,7 @@ gboolean gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction);
 
 gboolean gnc_gdate_in_valid_range (GDate *test_date, gboolean warn);
 
-gboolean gnc_handle_date_accelerator (const GdkEvent *event,
+gboolean gnc_handle_date_accelerator (GdkEvent *event,
                                       struct tm *tm,
                                       const char *date_str);
 

@@ -1612,11 +1612,8 @@ gnucash_sheet_clipboard_event (GnucashSheet *sheet, GdkEventKey *event) //FIXME 
 
     item_edit = GNC_ITEM_EDIT(sheet->item_editor);
 
-    guint           keyval;
-    GdkModifierType state;
-    if (!gdk_event_get_keyval ((GdkEvent*)event, &keyval) ||
-        !gdk_event_get_state ((GdkEvent*)event, &state)) //FIXME gtk4
-        return FALSE;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers ((GdkEvent*)event);
 
     switch (keyval)
     {
@@ -1690,11 +1687,8 @@ process_motion_keys (GnucashSheet *sheet, GdkEventKey *event, gboolean *pass_on,
     int distance;
     VirtualLocation cur_virt_loc = *new_virt_loc;
 
-    guint           keyval;
-    GdkModifierType state;
-    if (!gdk_event_get_keyval ((GdkEvent*)event, &keyval) ||
-        !gdk_event_get_state ((GdkEvent*)event, &state)) //FIXME gtk4
-        return FALSE;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers ((GdkEvent*)event);
 
     switch (keyval)
     {
@@ -1867,7 +1861,7 @@ gnucash_sheet_key_press_event_internal (GtkWidget *widget, GdkEventKey *event) /
     /* Don't process any keystrokes where a modifier key (Alt, Meta, etc.) is
      * being held down.  This shouldn't include NUM LOCK.
      */
-    if (state & modifiers & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
+    if (state & modifiers & (GDK_CONTROL_MASK | GDK_ALT_MASK))
         pass_on = TRUE;
     else if (process_motion_keys (sheet, event, &pass_on,
                                   &direction, &new_virt_loc)) //may set pass_on
@@ -1910,13 +1904,8 @@ gnucash_sheet_key_press_event (GtkWidget *widget, GdkEventKey *event) //FIXME gt
 
     sheet = GNUCASH_SHEET(widget);
 
-    guint           keyval;
-    GdkModifierType state;
-    if (!gdk_event_get_keyval ((GdkEvent*)event, &keyval) ||
-        !gdk_event_get_state ((GdkEvent*)event, &state)) //FIXME gtk4
-    {
-        return FALSE;
-    }
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers ((GdkEvent*)event);
 
 #ifdef G_OS_WIN32
     guint16 hardware_keycode;

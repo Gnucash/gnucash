@@ -2169,15 +2169,11 @@ gnc_tree_view_keynav (GncTreeView *view, GtkTreeViewColumn **col,
     GtkTreeView *tv = GTK_TREE_VIEW(view);
     gint depth;
     gboolean shifted;
-    guint keyval;
-    GdkModifierType state;
-
     if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return;
 
-    if (!gdk_event_get_keyval (event, &keyval) ||
-        !gdk_event_get_state (event, &state))
-        return;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers ((GdkEvent*)event);
 
     switch (keyval)
     {

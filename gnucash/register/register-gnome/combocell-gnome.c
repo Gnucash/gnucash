@@ -726,7 +726,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
 {
     ComboCell* cell = (ComboCell*) bcell;
     PopBox* box = cell->cell.gui_private;
-    const GdkEvent* event = (GdkEvent*)gui_data; //FIXME gtk4
+    GdkEvent* event = (GdkEvent*)gui_data; //FIXME gtk4
     gboolean keep_on_going = FALSE;
     gboolean extra_colon;
     gunichar unicode_value;
@@ -739,13 +739,8 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return FALSE;
 
-    guint           keyval;
-    GdkModifierType state;
-    if (!gdk_event_get_keyval (event, &keyval) ||
-        !gdk_event_get_state (event, &state))
-    {
-        return FALSE;
-    }
+    guint keyval = gdk_key_event_get_keyval (event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers (event);
 
     unicode_value = gdk_keyval_to_unicode (keyval);
     switch (keyval)

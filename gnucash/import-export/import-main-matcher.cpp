@@ -1454,11 +1454,11 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
     g_return_val_if_fail (event != NULL, false);
 
     /* handle single click with the right mouse button? */
-    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
+    if (gdk_event_get_event_type ((GdkEvent*)event) == GDK_BUTTON_PRESS)
     {
         guint button;
 
-        if (!gdk_event_get_button (event, &button))
+        if (!gdk_event_get_button ((GdkEvent*)event, &button))
             return false;
 
         if (button == GDK_BUTTON_SECONDARY)

@@ -292,10 +292,7 @@ key_press_item_cb (GNCDatePicker *gdp, const GdkEvent *event, gpointer data)
 {
     DateCell *cell = data;
     PopBox *box = cell->cell.gui_private;
-    guint keyval;
-
-    if (!gdk_event_get_keyval (event, &keyval))
-        return;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
 
     switch (keyval)
     {
@@ -305,7 +302,7 @@ key_press_item_cb (GNCDatePicker *gdp, const GdkEvent *event, gpointer data)
         break;
 
     default:
-        gtk_widget_event (GTK_WIDGET (box->sheet), (GdkEvent*)event);
+//FIXME gtk4        gtk_widget_event (GTK_WIDGET (box->sheet), (GdkEvent*)event);
         break;
     }
 }
@@ -503,7 +500,7 @@ gnc_date_cell_direct_update (BasicCell *bcell,
     const GdkEvent *event = (GdkEvent*)gui_data; //FIXME gtk4
     char buff[DATE_BUF];
 
-    if (!gnc_handle_date_accelerator (event, &(box->date), bcell->value))
+    if (!gnc_handle_date_accelerator ((GdkEvent*)event, &(box->date), bcell->value))
         return FALSE;
 
     qof_print_date_dmy_buff (buff, MAX_DATE_LENGTH,

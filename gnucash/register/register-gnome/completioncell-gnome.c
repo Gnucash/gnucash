@@ -786,18 +786,13 @@ gnc_completion_cell_direct_update (BasicCell* bcell,
 {
     CompletionCell* cell = (CompletionCell*) bcell;
     PopBox* box = cell->cell.gui_private;
-    const GdkEvent* event = (GdkEvent*)gui_data; //FIXME gtk4
+    GdkEvent* event = (GdkEvent*)gui_data; //FIXME gtk4
 
     if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return FALSE;
 
-    guint           keyval;
-    GdkModifierType state;
-    if (!gdk_event_get_keyval (event, &keyval) ||
-        !gdk_event_get_state (event, &state))
-    {
-        return FALSE;
-    }
+    guint keyval = gdk_key_event_get_keyval (event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers (event);
 
     switch (keyval)
     {

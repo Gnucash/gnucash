@@ -84,10 +84,7 @@ gnc_date_picker_key_event (GtkWidget *widget, const GdkEvent *event, gpointer da
 {
     GNCDatePicker *date_picker = GNC_DATE_PICKER (data);
     gboolean retval;
-    guint keyval;
-
-    if (!gdk_event_get_keyval (event, &keyval))
-        return FALSE;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
 
     switch (keyval)
     {

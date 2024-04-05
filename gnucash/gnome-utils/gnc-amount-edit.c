@@ -300,13 +300,15 @@ gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
 //FIXME in GTK4            event->key.string[0] = lc->mon_decimal_point[0];
         }
     }
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
 
-    result = (* GTK_WIDGET_GET_CLASS(widget)->key_press_event)(widget, (GdkEventKey*)event); //FIXME in GTK4
+//FIXME in GTK4    result = (* GTK_WIDGET_GET_CLASS(widget)->key_press_event)(widget, (GdkEventKey*)event);
+result = 0;
 
     switch (keyval)
     {
     case GDK_KEY_Return:
-        if (state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
+        if (state & (GDK_CONTROL_MASK | GDK_ALT_MASK))
             break;
     case GDK_KEY_KP_Enter:
         if (gae->evaluate_on_enter)
