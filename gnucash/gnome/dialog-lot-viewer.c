@@ -1068,7 +1068,7 @@ window_realize_set_split_paned_position_cb (GtkWidget *widget, gpointer user_dat
     GNCLotViewer *lv = user_data;
     gint width;
 
-    gtk_window_get_size (GTK_WINDOW(lv->window), &width, NULL);
+    gtk_window_get_default_size (GTK_WINDOW(lv->window), &width, NULL);
     gtk_paned_set_position (GTK_PANED(lv->split_hpaned), width / 2);
 }
 
