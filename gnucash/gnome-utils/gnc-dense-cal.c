@@ -361,7 +361,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
 
     dcal->showPopup = FALSE;
 
-    dcal->transPopup = GTK_WINDOW(gtk_window_new(GTK_WINDOW_POPUP));
+    dcal->transPopup = GTK_WINDOW(gtk_window_new());
     {
         GtkWidget *vbox, *hbox;
         GtkWidget *l;
@@ -394,7 +394,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         g_object_unref (tree_data);
 
         gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(tree_view));
-        gtk_box_prepend (GTK_BOX(dcal->transPopup), GTK_WIDGET(vbox));
+        gtk_window_set_child (GTK_WINDOW(dcal->transPopup), GTK_WIDGET(vbox));
 
         gtk_window_set_resizable(GTK_WINDOW(dcal->transPopup), FALSE);
 

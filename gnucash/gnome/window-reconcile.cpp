@@ -1866,14 +1866,14 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
     recnData->new_ending = new_ending;
     recnData->statement_date = statement_date;
-    recnData->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    recnData->window = gtk_window_new();
     recnData->delete_refresh = FALSE;
 
     gnc_recn_set_window_name(recnData);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
-    gtk_box_prepend (GTK_BOX(recnData->window), GTK_WIDGET(vbox));
+    gtk_window_set_child (GTK_WINDOW(recnData->window), GTK_WIDGET(vbox));
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(recnData->window), "gnc-id-reconcile");

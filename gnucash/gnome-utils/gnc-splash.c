@@ -67,7 +67,7 @@ gnc_show_splash_screen (void)
     if (splash) return;
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_SPLASH)) return;
 
-    splash = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    splash = gtk_window_new ();
     gtk_window_set_decorated(GTK_WINDOW (splash), FALSE);
     gtk_window_set_skip_taskbar_hint (GTK_WINDOW (splash), TRUE);
 
@@ -124,7 +124,7 @@ gnc_show_splash_screen (void)
     gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(progress));
     gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(progress_bar));
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(hbox));
-    gtk_box_append (GTK_BOX(splash), GTK_WIDGET(vbox));
+    gtk_window_set_child (GTK_WINDOW(splash), GTK_WIDGET(vbox));
 
     gtk_widget_add_events(splash, GDK_BUTTON_PRESS_MASK);
     g_signal_connect(splash, "button_press_event",

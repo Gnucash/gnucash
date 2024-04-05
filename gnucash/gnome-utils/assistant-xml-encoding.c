@@ -615,10 +615,10 @@ gxi_update_progress_bar (const gchar *message, double percentage)
 {
     if (!progress_window)
     {
-        progress_window = gtk_window_new (GTK_WINDOW_POPUP);
+        progress_window = gtk_window_new ();
         progress_bar = GTK_PROGRESS_BAR (gtk_progress_bar_new ());
         gnc_box_set_all_margins (GTK_BOX(progress_window), 12);
-        gtk_box_prepend (GTK_BOX(progress_window), GTK_WIDGET(progress_bar));
+        gtk_window_set_child (GTK_WINDOW(progress_window), GTK_WIDGET(progress_bar));
         gtk_widget_set_visible (GTK_WIDGET(progress_bar), TRUE);
     }
 
