@@ -1506,7 +1506,7 @@ gnucash_sheet_button_press_event (GtkWidget *widget, GdkEventButton *event) //FI
     sheet->button_y = -1;
 
     gdouble x_win, y_win;
-    if (!gdk_event_get_coords ((GdkEvent*)event, &x_win, &y_win)) //FIXME gtk4
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win)) //FIXME gtk4
         return FALSE;
 
     if (!gnucash_sheet_find_loc_by_pixel (sheet, x_win, y_win,

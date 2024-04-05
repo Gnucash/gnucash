@@ -427,7 +427,7 @@ treeview_button_press (GtkTreeView *treeview, const GdkEvent *event,
         if (gdk_event_get_button (event, &button) && button == GDK_BUTTON_SECONDARY)
         {
             gdouble x_win, y_win;
-            if (gdk_event_get_coords (event, &x_win, &y_win))
+            if (gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
             {
                 GtkTreePath *path = nullptr;
 

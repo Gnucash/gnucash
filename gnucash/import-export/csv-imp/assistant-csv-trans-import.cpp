@@ -1385,7 +1385,7 @@ CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, const GdkEv
         return;
 
     gdouble x_win, y_win;
-    if (!gdk_event_get_coords (event, &x_win, &y_win))
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
         return;
 
     /* Find the column that was clicked. */
@@ -1977,7 +1977,7 @@ CsvImpTransAssist::acct_match_via_view_dblclick (const GdkEvent *event)
             return false;
 
         gdouble x_win, y_win;
-        if (!gdk_event_get_coords (event, &x_win, &y_win))
+        if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
             return false;
 
         /* Get tree path for row that was clicked, true if row exists */

@@ -990,7 +990,7 @@ gnc_reconcile_window_button_press_cb (GtkWidget *widget,
         GNCQueryView *qview = GNC_QUERY_VIEW(widget);
         gdouble x_win, y_win;
 
-        if (gdk_event_get_coords (event, &x_win, &y_win))
+        if (gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
         {
             GtkTreePath *path;
             /* Get tree path for row that was clicked */

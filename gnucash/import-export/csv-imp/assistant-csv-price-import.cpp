@@ -1462,7 +1462,7 @@ CsvImpPriceAssist::preview_update_fw_columns (GtkTreeView* treeview, const GdkEv
         return;
 
     gdouble x_win, y_win;
-    if (!gdk_event_get_coords (event, &x_win, &y_win))
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
         return;
 
     /* Find the column that was clicked. */
