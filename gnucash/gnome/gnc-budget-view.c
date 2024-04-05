@@ -858,8 +858,8 @@ gbv_key_press_cb (GtkEventControllerKey *key, guint keyval,
             gtk_cell_editable_editing_done (priv->temp_ce);
             gtk_cell_editable_remove_widget (priv->temp_ce);
 
-            while (gtk_events_pending())
-                gtk_main_iteration ();
+//FIXME gtk4            while (gtk_events_pending())
+//                gtk_main_iteration ();
         }
 
         if (gnc_tree_view_path_is_valid (GNC_TREE_VIEW(tv), path))

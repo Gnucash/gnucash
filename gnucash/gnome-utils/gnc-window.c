@@ -241,6 +241,6 @@ gnc_window_show_progress (const char *message, double percentage)
     }
 
     /* make sure new text is up */
-    while (gtk_events_pending ())
-        gtk_main_iteration ();
+//FIXME gtk4    while (gtk_events_pending ())
+//        gtk_main_iteration ();
 }

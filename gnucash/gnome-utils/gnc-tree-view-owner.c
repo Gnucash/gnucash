@@ -821,8 +821,8 @@ gnc_tree_view_owner_set_selected_owner (GncTreeViewOwner *view,
 
     /* give gtk+ a chance to resize the tree view first by handling pending
      * configure events */
-    while (gtk_events_pending ())
-        gtk_main_iteration ();
+//FIXME gtk4    while (gtk_events_pending ())
+//        gtk_main_iteration ();
     gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), s_path, NULL, FALSE, 0.0, 0.0);
     debug_path(LEAVE, s_path);
     gtk_tree_path_free(s_path);

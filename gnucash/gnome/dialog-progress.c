@@ -743,8 +743,8 @@ gnc_progress_dialog_reset_value(GNCProgressDialog *progress)
 void
 gnc_progress_dialog_update(GNCProgressDialog *progress)
 {
-    while (gtk_events_pending())
-        gtk_main_iteration();
+//FIXME gtk4    while (gtk_events_pending())
+//        gtk_main_iteration();
 }
 
 
