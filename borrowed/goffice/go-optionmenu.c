@@ -146,10 +146,7 @@ static gint go_option_menu_key_press(GtkWidget *widget, GdkEventKey *event) //FI
 {
     GOOptionMenu *option_menu = GO_OPTION_MENU(widget);
 
-    guint keyval;
-
-    if (!gdk_event_get_keyval ((GdkEvent*)event, &keyval)) //FIXME in GTK4
-        return FALSE;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
 
     switch (keyval)
     {

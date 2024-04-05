@@ -49,18 +49,15 @@ gnc_price_cell_direct_update (BasicCell *bcell,
                               void *gui_data)
 {
     PriceCell *cell = (PriceCell *) bcell;
-    const GdkEvent *event = (GdkEvent*)gui_data; //FIXME gtk4
+    GdkEvent *event = (GdkEvent*)gui_data; //FIXME gtk4
     struct lconv *lc;
     gboolean is_return;
 
     if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return FALSE;
 
-    guint           keyval;
-    GdkModifierType state;
-    if (!gdk_event_get_keyval (event, &keyval) ||
-        !gdk_event_get_state (event, &state))
-        return FALSE;
+    guint keyval = gdk_key_event_get_keyval (event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers (event);
 
     lc = gnc_localeconv ();
 
@@ -78,7 +75,7 @@ gnc_price_cell_direct_update (BasicCell *bcell,
     switch (keyval)
     {
     case GDK_KEY_Return:
-        if (!(state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK)))
+        if (!(state & (GDK_CONTROL_MASK | GDK_ALT_MASK)))
             is_return = TRUE;
         /* fall through */
 

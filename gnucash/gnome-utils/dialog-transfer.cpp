@@ -887,12 +887,8 @@ gnc_xfer_description_key_press_cb( GtkEntry       *entry,
      */
     ENTER(" ");
 
-    guint keyval;
-    GdkModifierType state;
-
-    if ( !gdk_event_get_keyval( event, &keyval ) ||
-         !gdk_event_get_state( event, &state ) )
-        return false;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers ((GdkEvent*)event);
 
     switch ( keyval )
     {

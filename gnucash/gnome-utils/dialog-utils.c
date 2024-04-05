@@ -453,7 +453,7 @@ gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 
 
 gboolean
-gnc_handle_date_accelerator (const GdkEvent *event,
+gnc_handle_date_accelerator (GdkEvent *event,
                              struct tm *tm,
                              const char *date_str)
 {
@@ -478,12 +478,8 @@ gnc_handle_date_accelerator (const GdkEvent *event,
                     tm->tm_mon + 1,
                     tm->tm_year + 1900);
 
-    guint keyval;
-    GdkModifierType state;
-
-    if (!gdk_event_get_keyval (event, &keyval) ||
-        !gdk_event_get_state (event, &state))
-        return FALSE;
+    guint keyval = gdk_key_event_get_keyval (event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers (event);
 
     /*
      * Check those keys where the code does different things depending
@@ -554,7 +550,7 @@ gnc_handle_date_accelerator (const GdkEvent *event,
      * prevents weird behavior of the menu accelerators (i.e. work in
      * some widgets but not others.)
      */
-    if (state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
+    if (state & (GDK_CONTROL_MASK | GDK_ALT_MASK))
         return FALSE;
 
     /* Now check for the remaining keystrokes. */

@@ -277,7 +277,6 @@ gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
                            gpointer user_data)
 {
     GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
-    gint result;
 
     if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
     {
@@ -326,13 +325,12 @@ gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
         g_free (decimal);
         result = TRUE;
     }
-    else
-        result = (* GTK_WIDGET_GET_CLASS(widget)->key_press_event)(widget, (GdkEventKey*)event); //FIXME in GTK4
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
 
     switch (keyval)
     {
     case GDK_KEY_Return:
-        if (state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
+        if (state & (GDK_CONTROL_MASK | GDK_ALT_MASK))
             break;
     case GDK_KEY_KP_Enter:
         if (gae->evaluate_on_enter)
