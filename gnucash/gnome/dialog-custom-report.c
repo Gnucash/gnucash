@@ -427,7 +427,7 @@ custom_report_list_view_clicked_cb(GtkTreeView *view, const GdkEvent *event, gpo
 
     g_return_val_if_fail ( view != NULL, FALSE );
 
-    if (!gdk_event_get_coords (event, &x_win, &y_win))
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
         return FALSE;
 
     if (gtk_tree_view_get_path_at_pos (view, x_win, y_win,

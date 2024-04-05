@@ -427,7 +427,7 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
     gdouble x_win, y_win;
     int col;
 
-    if (!gdk_event_get_coords (event, &x_win, &y_win))
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
         return FALSE;
 
     if (!header->resize_cursor)

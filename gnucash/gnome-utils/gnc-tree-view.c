@@ -212,7 +212,7 @@ gnc_tree_view_select_column_icon_cb (GtkWidget *widget,
     gtk_style_context_get_padding (stylectxt, &padding);
 
     gdouble x_win, y_win;
-    if (!gdk_event_get_coords (event, &x_win, &y_win))
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
         return FALSE;
 
     if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)

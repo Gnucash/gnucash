@@ -322,7 +322,7 @@ gnc_item_list_button_event (GtkWidget* widget, const GdkEvent* event,
     guint button;
     gdouble x_win, y_win;
     if (!gdk_event_get_button (event, &button) ||
-        !gdk_event_get_coords (event, &x_win, &y_win))
+        !gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
         return FALSE;
 
     switch (button)

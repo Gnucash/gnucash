@@ -753,7 +753,7 @@ gnc_dense_cal_configure(GtkWidget *widget,
     gdc_reconfig(dcal);
 
     gdouble x_win, y_win;
-    if (gdk_event_get_coords ((GdkEvent*)event, &x_win, &y_win)) //FIXME in GTK4
+    if (gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win)) //FIXME in GTK4
     {
         gtk_widget_queue_draw_area (widget,
                                     x_win, y_win,
@@ -1468,7 +1468,7 @@ gnc_dense_cal_button_press(GtkWidget *widget,
     dcal->screen_height = work_area_size.height;
 
     gdouble x_win, y_win;
-    if (!gdk_event_get_coords ((GdkEvent*)event, &x_win, &y_win)) //FIXME in GTK4
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win)) //FIXME in GTK4
         return FALSE;
 
     dcal->doc = wheres_this (dcal, x_win, y_win);
@@ -1533,7 +1533,7 @@ gnc_dense_cal_motion_notify (GtkWidget *widget,
                                     pointer,  &unused,  &unused, &unused2);
 
     gdouble x_win, y_win;
-    if (!gdk_event_get_coords ((GdkEvent*)event, &x_win, &y_win)) //FIXME in GTK4
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win)) //FIXME in GTK4
         return FALSE;
 
     doc = wheres_this (dcal, x_win, y_win);
