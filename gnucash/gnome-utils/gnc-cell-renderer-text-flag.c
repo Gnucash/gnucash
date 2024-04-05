@@ -96,7 +96,7 @@ gnc_cell_renderer_text_flag_class_init(GncCellRendererTextFlagClass *class)
     object_class->get_property = gnc_cell_renderer_text_flag_get_property;
     object_class->set_property = gnc_cell_renderer_text_flag_set_property;
 
-    cell_class->render = gnc_cell_renderer_text_flag_render;
+//FIXME gtk4    cell_class->render = gnc_cell_renderer_text_flag_render;
 
     g_object_class_install_property(
         object_class, PROP_FLAG_SIZE,
@@ -251,8 +251,8 @@ gnc_cell_renderer_text_flag_render(GtkCellRenderer *cell, cairo_t *cr,
     GncCellRendererTextFlag *celltext    = GNC_CELL_RENDERER_TEXT_FLAG(cell);
 
     // call the parent renderer to do the standard drawing
-    GTK_CELL_RENDERER_CLASS(gnc_cell_renderer_text_flag_parent_class)
-        ->render(cell, cr, widget, background_area, cell_area, flags);
+//FIXME gtk4    GTK_CELL_RENDERER_CLASS(gnc_cell_renderer_text_flag_parent_class)
+//        ->render(cell, cr, widget, background_area, cell_area, flags);
 
     // add the flag (triangle in the top right corner)
     if (celltext->flagged)

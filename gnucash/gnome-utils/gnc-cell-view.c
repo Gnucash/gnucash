@@ -44,7 +44,7 @@ enum {
     PROP_EDITING_CANCELED,
 };
 
-G_DEFINE_TYPE_WITH_CODE (GncCellView, gnc_cell_view, GTK_TYPE_EVENT_BOX,
+G_DEFINE_TYPE_WITH_CODE (GncCellView, gnc_cell_view, GTK_TYPE_BOX,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_CELL_EDITABLE,
                          gnc_cell_view_editable_init))
 
@@ -164,12 +164,14 @@ gtk_cell_editable_key_press_event (GtkEventControllerKey *key, guint keyval,
     }
     return FALSE;
 }
-
+//FIXME gtk4
+#ifdef skip
 static void
 gcv_popup_unmap (GtkMenu *menu, GncCellView *cv)
 {
   cv->in_popup_menu = FALSE;
 }
+#endif
 
 static void
 gcv_populate_popup (GtkTextView *text_view,
@@ -177,8 +179,8 @@ gcv_populate_popup (GtkTextView *text_view,
                     GncCellView *cv)
 {
     cv->in_popup_menu = TRUE;
-    g_signal_connect (popup, "unmap",
-                      G_CALLBACK (gcv_popup_unmap), cv);
+//FIXME gtk4    g_signal_connect (popup, "unmap",
+//                      G_CALLBACK (gcv_popup_unmap), cv);
 }
 
 static gboolean

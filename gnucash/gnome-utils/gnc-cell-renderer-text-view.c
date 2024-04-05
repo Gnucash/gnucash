@@ -107,7 +107,8 @@ gcrtv_editing_done (GtkCellEditable         *editable,
 
     g_free (new_text);
 }
-
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gcrtv_button_press_event (GtkWidget      *widget,
                           GdkEventButton *event,
@@ -116,7 +117,7 @@ gcrtv_button_press_event (GtkWidget      *widget,
     // allows mouse clicks in text view
     return TRUE;
 }
-
+#endif
 static GtkCellEditable *
 gcrtv_start_editing (GtkCellRenderer      *cell,
                      GdkEvent             *event,
@@ -139,9 +140,9 @@ gcrtv_start_editing (GtkCellRenderer      *cell,
 
     editable = g_object_new (GNC_TYPE_CELL_VIEW, NULL);
 
-    g_signal_connect (editable, "button-press-event",
-                      G_CALLBACK(gcrtv_button_press_event),
-                      NULL);
+//FIXME gtk4    g_signal_connect (editable, "button-press-event",
+//                      G_CALLBACK(gcrtv_button_press_event),
+//                      NULL);
 
     g_object_get (G_OBJECT(cell), "text", &text, NULL);
 
