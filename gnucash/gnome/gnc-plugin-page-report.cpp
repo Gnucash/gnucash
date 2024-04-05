@@ -571,8 +571,8 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
     webview = gnc_html_get_webview (priv->html);
     if (webview)
     {
-        gtk_widget_add_events (webview, gtk_widget_get_events (webview) |
-                               GDK_KEY_PRESS_MASK);
+//FIXME gtk4        gtk_widget_add_events (webview, gtk_widget_get_events (webview) |
+//                               GDK_KEY_PRESS_MASK);
 
         GtkEventController *event_controller = gtk_event_controller_key_new ();
         gtk_widget_add_controller (GTK_WIDGET(webview), event_controller);
