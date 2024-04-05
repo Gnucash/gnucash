@@ -33,17 +33,18 @@
 # Vincent Dawans <dawansv@gmail.com>, 2023.
 # Xavier Gandillot (aka xavier268), 2023.
 # Laurent Aufrere <lecture@cbol.org>, 2024.
+# aleksej0R <omolice@hotmail.fr>, 2024.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-03-03 20:01+0000\n"
-"Last-Translator: Laurent Aufrere <lecture@cbol.org>\n"
+"PO-Revision-Date: 2024-04-05 13:01+0000\n"
+"Last-Translator: aleksej0R <omolice@hotmail.fr>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -4367,7 +4368,7 @@ msgstr[1] ""
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1266
 msgid "Highlight a date first to sort by occurrence date."
-msgstr ""
+msgstr "Surlignez d'abord une date pour trier par date d'occurrence."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
 msgid "Highlight a schedule first to sort by schedule name."
@@ -5799,7 +5800,7 @@ msgstr "Enregistrer la config sous…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:243
 msgid "Make Pdf"
-msgstr "Créer le PDF"
+msgstr "Créer en PDF"
 
 # po/guile_strings.txt:22
 #: gnucash/gnome/gnc-plugin-page-report.cpp:377
@@ -7120,7 +7121,7 @@ msgstr "Un compte avec un solde initial existe déjà pour la devise souhaitée.
 # messages-i18n.c:72
 #: gnucash/gnome-utils/dialog-account.c:1482
 msgid "Cannot change currency"
-msgstr "La devise ne peut être changée"
+msgstr "Impossible de changer la devise"
 
 # messages-i18n.c:17
 #: gnucash/gnome-utils/dialog-account.c:1571
@@ -33627,7 +33628,7 @@ msgstr "Échec de l'analyse du résultat renvoyé par Finance::Quote."
 #: libgnucash/app-utils/gnc-quotes.cpp:750
 #: libgnucash/app-utils/gnc-quotes.cpp:765
 msgid "Result:"
-msgstr ""
+msgstr "Résultat :"
 
 #. Translators: This is the error message reported by the Online Quotes processing code.
 #: libgnucash/app-utils/gnc-quotes.cpp:760
