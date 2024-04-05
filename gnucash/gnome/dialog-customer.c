@@ -87,23 +87,29 @@ void gnc_customer_shipaddr4_insert_cb(GtkEditable *editable,
                                       gchar *new_text, gint new_text_length,
                                       gint *position, gpointer user_data);
 gboolean
-gnc_customer_addr2_key_press_cb( GtkEntry *entry, const GdkEvent *event,
-                                 gpointer user_data );
+gnc_customer_addr2_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data);
 gboolean
-gnc_customer_addr3_key_press_cb( GtkEntry *entry, const GdkEvent *event,
-                                 gpointer user_data );
+gnc_customer_addr3_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data);
 gboolean
-gnc_customer_addr4_key_press_cb( GtkEntry *entry, const GdkEvent *event,
-                                 gpointer user_data );
+gnc_customer_addr4_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data);
 gboolean
-gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry, const GdkEvent *event,
-                                     gpointer user_data );
+gnc_customer_shipaddr2_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data);
 gboolean
-gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry, const GdkEvent *event,
-                                     gpointer user_data );
+gnc_customer_shipaddr3_key_press_cb(GtkEventControllerKey *key, guint keyval,
+                                    guint keycode, GdkModifierType state,
+                                    gpointer user_data);
 gboolean
-gnc_customer_shipaddr4_key_press_cb( GtkEntry *entry, const GdkEvent *event,
-                                     gpointer user_data );
+gnc_customer_shipaddr4_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data);
 
 #define ADDR_QUICKFILL "GncAddress-Quickfill"
 
@@ -1231,97 +1237,87 @@ void gnc_customer_shipaddr4_insert_cb(GtkEditable *editable,
     }
 }
 
+
 static gboolean
-gnc_customer_common_key_press_cb( GtkEntry *entry,
-                                  const GdkEvent *event,
-                                  gpointer user_data,
-                                  GtkWidget* editable )
+gnc_customer_common_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                  guint keycode, GdkModifierType state,
+                                  GtkWidget* editable)
 {
     gboolean done_with_input = FALSE;
-    guint keyval;
-
-    if ( !gdk_event_get_keyval ( event, &keyval) )
-        return FALSE;
 
     /* Most "special" keys are allowed to be handled directly by
      * the entry's key press handler, but in some cases that doesn't
      * seem to work right, so handle them here.
      */
-    switch ( keyval )
+    switch (keyval)
     {
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
         {
-            GdkModifierType state;
-            if ( gdk_event_get_state ( event, &state) )
+            if (!(state & GDK_SHIFT_MASK)) /* Complete on Tab,
+                                               * but not Shift-Tab */
             {
-                if ( !( state & GDK_SHIFT_MASK) ) /* Complete on Tab,
-                                                   * but not Shift-Tab */
-                {
-                    /* NOT done with input, though, since we need to focus to the next
-                     * field.  Unselect the current field, though.
-                     */
-                    gtk_editable_select_region( GTK_EDITABLE(editable),
-                                                0, 0 );
-                }
+                /* NOT done with input, though, since we need to focus to the next
+                 * field.  Unselect the current field, though.
+                 */
+                gtk_editable_select_region (GTK_EDITABLE(editable), 0, 0);
             }
         }
         break;
     }
+    return (done_with_input);
+}
 
-    return( done_with_input );
-}
 gboolean
-gnc_customer_addr2_key_press_cb( GtkEntry *entry,
-                                 const GdkEvent *event,
-                                 gpointer user_data )
+gnc_customer_addr2_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->addr2_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->addr2_entry);
 }
+
 gboolean
-gnc_customer_addr3_key_press_cb( GtkEntry *entry,
-                                 const GdkEvent *event,
-                                 gpointer user_data )
+gnc_customer_addr3_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->addr3_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->addr3_entry);
 }
+
 gboolean
-gnc_customer_addr4_key_press_cb( GtkEntry *entry,
-                                 const GdkEvent *event,
-                                 gpointer user_data )
+gnc_customer_addr4_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
+                                 gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->addr4_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->addr4_entry);
 }
+
 gboolean
-gnc_customer_shipaddr2_key_press_cb( GtkEntry *entry,
-                                     const GdkEvent *event,
-                                     gpointer user_data )
+gnc_customer_shipaddr2_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->shipaddr2_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->shipaddr2_entry);
 }
+
 gboolean
-gnc_customer_shipaddr3_key_press_cb( GtkEntry *entry,
-                                     const GdkEvent *event,
-                                     gpointer user_data )
+gnc_customer_shipaddr3_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->shipaddr3_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->shipaddr3_entry);
 }
+
 gboolean
-gnc_customer_shipaddr4_key_press_cb( GtkEntry *entry,
-                                     const GdkEvent *event,
-                                     gpointer user_data )
+gnc_customer_shipaddr4_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data)
 {
     CustomerWindow *wdata = user_data;
-    return gnc_customer_common_key_press_cb(entry, event, user_data,
-                                            wdata->shipaddr4_entry);
+    return gnc_customer_common_key_press_cb (key, keyval, keycode, state, wdata->shipaddr4_entry);
 }
