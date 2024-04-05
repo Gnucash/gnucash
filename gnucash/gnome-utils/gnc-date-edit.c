@@ -895,7 +895,7 @@ create_children (GNCDateEdit *gde)
         gtk_widget_set_visible (GTK_WIDGET(gde->time_combo), TRUE);
     }
 
-    gde->cal_popup = gtk_window_new (GTK_WINDOW_POPUP);
+    gde->cal_popup = gtk_window_new ();
     gtk_widget_set_name (gde->cal_popup, "gnc-date-edit-popup-window");
 
     gtk_window_set_type_hint (GTK_WINDOW (gde->cal_popup),
@@ -922,7 +922,7 @@ create_children (GNCDateEdit *gde)
 
     frame = gtk_frame_new (NULL);
     gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
-    gtk_box_prepend (GTK_BOX(gde->cal_popup), GTK_WIDGET(frame));
+    gtk_window_set_child (GTK_WINDOW(gde->cal_popup), GTK_WIDGET(frame));
     gtk_widget_set_visible (GTK_WIDGET(frame), TRUE);
 
     gde->calendar = gtk_calendar_new ();
