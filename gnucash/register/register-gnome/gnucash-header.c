@@ -618,12 +618,12 @@ gnc_header_init (GncHeader *header)
     header->width = 400;
     header->style = NULL;
 
-    gtk_widget_add_events (GTK_WIDGET(header),
-                          (GDK_EXPOSURE_MASK
-                          | GDK_BUTTON_PRESS_MASK
-                          | GDK_BUTTON_RELEASE_MASK
-                          | GDK_POINTER_MOTION_MASK
-                          | GDK_POINTER_MOTION_HINT_MASK));
+//FIXME gtk4    gtk_widget_add_events (GTK_WIDGET(header),
+//                          (GDK_EXPOSURE_MASK
+//                          | GDK_BUTTON_PRESS_MASK
+//                          | GDK_BUTTON_RELEASE_MASK
+//                          | GDK_POINTER_MOTION_MASK
+//                          | GDK_POINTER_MOTION_HINT_MASK));
 
     g_signal_connect (G_OBJECT(header), "configure_event",
                       G_CALLBACK(gnc_header_reconfigure), NULL);

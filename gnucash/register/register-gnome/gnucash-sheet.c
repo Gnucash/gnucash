@@ -2423,12 +2423,12 @@ gnucash_sheet_init (GnucashSheet *sheet)
                                  gnucash_sheet_block_construct,
                                  gnucash_sheet_block_destroy, sheet);
 
-    gtk_widget_add_events (GTK_WIDGET(sheet),
-                          (GDK_EXPOSURE_MASK
-                          | GDK_BUTTON_PRESS_MASK
-                          | GDK_BUTTON_RELEASE_MASK
-                          | GDK_POINTER_MOTION_MASK
-                          | GDK_POINTER_MOTION_HINT_MASK));
+//FIXME gtk4    gtk_widget_add_events (GTK_WIDGET(sheet),
+//                          (GDK_EXPOSURE_MASK
+//                          | GDK_BUTTON_PRESS_MASK
+//                          | GDK_BUTTON_RELEASE_MASK
+//                          | GDK_POINTER_MOTION_MASK
+//                          | GDK_POINTER_MOTION_HINT_MASK));
 
     /* setup IMContext */
     sheet->direct_update_cell = FALSE;

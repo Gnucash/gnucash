@@ -126,9 +126,9 @@ gnc_show_splash_screen (void)
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(hbox));
     gtk_window_set_child (GTK_WINDOW(splash), GTK_WIDGET(vbox));
 
-    gtk_widget_add_events(splash, GDK_BUTTON_PRESS_MASK);
-    g_signal_connect(splash, "button_press_event",
-                     G_CALLBACK(button_press_cb), NULL);
+//FIXME gtk4    gtk_widget_add_events(splash, GDK_BUTTON_PRESS_MASK);
+//FIXME gtk4    g_signal_connect(splash, "button_press_event",
+//                     G_CALLBACK(button_press_cb), NULL);
 
     gtk_window_set_auto_startup_notification (FALSE);
 //FIXME gtk4    gtk_widget_show_all (splash);

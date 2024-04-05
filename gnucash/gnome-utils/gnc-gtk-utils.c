@@ -1107,9 +1107,9 @@ gnc_tool_item_setup_tooltip_to_statusbar_callback (GtkWidget *tool_item,
 
     child = gtk_widget_get_first_child (GTK_WIDGET(tool_item));
 
-    gtk_widget_add_events (GTK_WIDGET(child),
-                           GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK
-                           | GDK_FOCUS_CHANGE_MASK);
+//FIXME gtk4    gtk_widget_add_events (GTK_WIDGET(child),
+//                           GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK
+//                           | GDK_FOCUS_CHANGE_MASK);
 
     g_signal_connect (child, "enter-notify-event",
                       G_CALLBACK (tool_item_enter_event),

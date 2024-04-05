@@ -81,8 +81,8 @@ gnc_cell_view_init (GncCellView *cv)
     cv->tooltip_id = 0;
 
     gtk_widget_set_can_focus (GTK_WIDGET(cv->text_view), TRUE);
-    gtk_widget_add_events (GTK_WIDGET(cv), GDK_KEY_PRESS_MASK);
-    gtk_widget_add_events (GTK_WIDGET(cv), GDK_KEY_RELEASE_MASK);
+//FIXME gtk4    gtk_widget_add_events (GTK_WIDGET(cv), GDK_KEY_PRESS_MASK);
+//    gtk_widget_add_events (GTK_WIDGET(cv), GDK_KEY_RELEASE_MASK);
 }
 
 static void

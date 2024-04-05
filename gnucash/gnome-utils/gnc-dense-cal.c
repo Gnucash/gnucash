@@ -341,11 +341,11 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     }
     dcal->cal_drawing_area = GTK_DRAWING_AREA(gtk_drawing_area_new());
 
-    gtk_widget_add_events(GTK_WIDGET(dcal->cal_drawing_area), (GDK_EXPOSURE_MASK
-                          | GDK_BUTTON_PRESS_MASK
-                          | GDK_BUTTON_RELEASE_MASK
-                          | GDK_POINTER_MOTION_MASK
-                          | GDK_POINTER_MOTION_HINT_MASK));
+//FIXME gtk4    gtk_widget_add_events(GTK_WIDGET(dcal->cal_drawing_area), (GDK_EXPOSURE_MASK
+//                          | GDK_BUTTON_PRESS_MASK
+//                          | GDK_BUTTON_RELEASE_MASK
+//                          | GDK_POINTER_MOTION_MASK
+//                          | GDK_POINTER_MOTION_HINT_MASK));
 
     gtk_box_append (GTK_BOX(dcal), GTK_WIDGET(dcal->cal_drawing_area));
     g_signal_connect(G_OBJECT(dcal->cal_drawing_area), "draw", G_CALLBACK(gnc_dense_cal_draw), (gpointer)dcal);
