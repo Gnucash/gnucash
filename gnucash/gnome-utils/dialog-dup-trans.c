@@ -125,7 +125,7 @@ gnc_dup_key_press_event_cb (GtkEventControllerKey *key, guint keyval,
         GdkModifierType state;
 
         if ((state & modifiers) == GDK_CONTROL_MASK ||
-            (state & modifiers) == GDK_MOD1_MASK)
+            (state & modifiers) == GDK_ALT_MASK)
             return FALSE;
 
         /* See https://bugs.gnucash.org/show_bug.cgi?id=798386 for semicolon */

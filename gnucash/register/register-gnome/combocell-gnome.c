@@ -751,7 +751,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     switch (keyval)
     {
     case GDK_KEY_slash:
-        if (! (state & GDK_MOD1_MASK))
+        if (! (state & GDK_ALT_MASK))
         {
             if (unicode_value == box->complete_char)
                 break;
@@ -812,7 +812,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     if (unicode_value != box->complete_char)
         return FALSE;
 
-    if (state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    if (state & (GDK_CONTROL_MASK | GDK_ALT_MASK))
         return FALSE;
 
     if ((*cursor_position < bcell->value_chars) &&

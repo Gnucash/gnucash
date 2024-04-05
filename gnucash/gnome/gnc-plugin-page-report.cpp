@@ -476,7 +476,7 @@ webkit_key_press_event_cb (GtkEventControllerKey *key, guint keyval,
 
     if ((keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_Page_Down ||
          keyval == GDK_KEY_KP_Page_Up || keyval == GDK_KEY_KP_Page_Down)
-          && (state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+          && (state & modifiers) == (GDK_CONTROL_MASK | GDK_ALT_MASK))
     {
         GtkNotebook *notebook = GTK_NOTEBOOK(gtk_widget_get_parent (GTK_WIDGET(priv->frame)));
         gint pages = gtk_notebook_get_n_pages (notebook);

@@ -497,7 +497,7 @@ gnc_handle_date_accelerator (const GdkEvent *event,
     case GDK_KEY_semicolon: // See https://bugs.gnucash.org/show_bug.cgi?id=798386
          if (state & GDK_SHIFT_MASK)
             g_date_add_days (&gdate, 7);
-        else if (state & GDK_MOD1_MASK)
+        else if (state & GDK_ALT_MASK)
             g_date_add_months (&gdate, 1);
         else if (state & GDK_CONTROL_MASK)
             g_date_add_years (&gdate, 1);
@@ -533,7 +533,7 @@ gnc_handle_date_accelerator (const GdkEvent *event,
 
         if (state & GDK_SHIFT_MASK)
             g_date_subtract_days (&gdate, 7);
-        else if (state & GDK_MOD1_MASK)
+        else if (state & GDK_ALT_MASK)
             g_date_subtract_months (&gdate, 1);
         else if (state & GDK_CONTROL_MASK)
             g_date_subtract_years (&gdate, 1);

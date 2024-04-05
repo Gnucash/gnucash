@@ -2904,7 +2904,7 @@ gnc_main_window_key_press_event (GtkEventControllerKey *key, guint keyval,
 
     GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
 
-    if ((state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK)) // Ctrl+Alt+
+    if ((state & modifiers) == (GDK_CONTROL_MASK | GDK_ALT_MASK)) // Ctrl+Alt+
     {
         const gchar *account_key = C_ ("lower case key for short cut to 'Accounts'", "a");
         guint account_keyval = gdk_keyval_from_name (account_key);

@@ -61,7 +61,7 @@ gnc_quickfill_cell_direct_update (BasicCell *bcell,
     switch (keyval)
     {
     case GDK_KEY_slash:
-        if (!(state & GDK_MOD1_MASK))
+        if (!(state & GDK_ALT_MASK))
             return FALSE;
         break;
     case GDK_KEY_Tab:
