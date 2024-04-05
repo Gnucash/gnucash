@@ -295,21 +295,22 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
      */
     if (sw->result_view == NULL)
     {
-        GtkWidget *scroller, *frame, *button_box, *button;
+        GtkWidget *scrolled_window, *frame, *button_box, *button;
 
         /* Create the view */
         gnc_search_dialog_init_result_view (sw);
 
         frame = gtk_frame_new(NULL);
 
-        /* Create the scroller and add the view to the scroller */
-        scroller = gtk_scrolled_window_new (NULL, NULL);
-        gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroller),
+        /* Create the scrolled_window and add the view to the scrolled_window */
+        scrolled_window = gtk_scrolled_window_new ();
+        gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                         GTK_POLICY_AUTOMATIC,
                                         GTK_POLICY_AUTOMATIC);
-        gtk_widget_set_size_request(GTK_WIDGET(scroller), 300, 100);
-        gtk_box_prepend (GTK_BOX(scroller), GTK_WIDGET(sw->result_view));
-        gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(scroller));
+        gtk_widget_set_size_request (GTK_WIDGET(scrolled_window), 300, 100);
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                       GTK_WIDGET(sw->result_view));
+        gtk_box_prepend (GTK_BOX(frame), GTK_WIDGET(scrolled_window));
 
         /* Create the button_box */
         button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);

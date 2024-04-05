@@ -430,15 +430,16 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
     GtkWidget* content_area = gtk_dialog_get_content_area (GTK_DIALOG (dialog));
     
     // add a scroll area
-    GtkWidget* scrolledwindow = gtk_scrolled_window_new (NULL, NULL);
-    gtk_box_append (GTK_BOX(content_area), GTK_WIDGET(scrolledwindow));
+    GtkWidget* scrolled_window = gtk_scrolled_window_new ();
+    gtk_box_append (GTK_BOX(content_area), GTK_WIDGET(scrolled_window));
 
     // add a textview
     view = gtk_text_view_new ();
     gtk_text_view_set_editable (GTK_TEXT_VIEW (view), FALSE);
     buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
     gtk_text_buffer_set_text (buffer, msg, -1);
-    gtk_box_prepend (GTK_BOX(scrolledwindow), GTK_WIDGET(view));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(view));
 
     // run the dialog
     if (parent)

@@ -425,7 +425,7 @@ gbv_create_widget (GncBudgetView *budget_view)
     gtk_widget_set_name (GTK_WIDGET(vbox), "gnc-id-budget-page");
 
     // Accounts scroll window
-    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    scrolled_window = gtk_scrolled_window_new ();
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
@@ -465,7 +465,8 @@ gbv_create_widget (GncBudgetView *budget_view)
     gtk_tree_view_column_set_reorderable (desc_col, FALSE);
 
     // Add accounts tree view to scroll window
-    gtk_box_prepend (GTK_BOX(scrolled_window), GTK_WIDGET(tree_view));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(tree_view));
 
     g_object_set (tree_view, "has-tooltip", TRUE, NULL);
     g_signal_connect (G_OBJECT(tree_view), "query-tooltip",
@@ -487,7 +488,7 @@ gbv_create_widget (GncBudgetView *budget_view)
 #endif
 
     // Totals scroll window
-    priv->totals_scroll_window = gtk_scrolled_window_new (NULL, NULL);
+    priv->totals_scroll_window = gtk_scrolled_window_new ();
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(priv->totals_scroll_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER); // horizontal/vertical
 
@@ -536,7 +537,8 @@ gbv_create_widget (GncBudgetView *budget_view)
     gtk_tree_view_column_set_visible (desc_col, priv->show_account_desc);
 
     // Add totals tree view to scroll window
-    gtk_box_prepend (GTK_BOX(priv->totals_scroll_window), GTK_WIDGET(totals_tree_view));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(priv->totals_scroll_window),
+                                   GTK_WIDGET(totals_tree_view));
 
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(totals_tree_view), gnc_tree_view_get_grid_lines_pref ());

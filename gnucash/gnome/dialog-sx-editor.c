@@ -1298,7 +1298,7 @@ static void
 schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
 {
     GtkBox *b;
-    GtkWidget *example_cal_scrolled_win = NULL;
+    GtkWidget *scrolled_window = NULL;
 
     b = GTK_BOX (gtk_builder_get_object (sxed->builder, "gncfreq_hbox"));
 
@@ -1314,10 +1314,10 @@ schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
         
     b = GTK_BOX (gtk_builder_get_object (sxed->builder, "example_cal_hbox"));
 
-    example_cal_scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (example_cal_scrolled_win),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-    gtk_box_append (GTK_BOX(b), GTK_WIDGET(example_cal_scrolled_win));
+    gtk_box_append (GTK_BOX(b), GTK_WIDGET(scrolled_window));
 
     sxed->dense_cal_model = gnc_dense_cal_store_new (EX_CAL_NUM_MONTHS * 31);
     sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model (GTK_WINDOW(sxed->dialog),
@@ -1325,9 +1325,10 @@ schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
     g_assert (sxed->example_cal);
     gnc_dense_cal_set_num_months (sxed->example_cal, EX_CAL_NUM_MONTHS);
     gnc_dense_cal_set_months_per_col (sxed->example_cal, EX_CAL_MO_PER_COL);
-    gtk_box_prepend (GTK_BOX(example_cal_scrolled_win), GTK_WIDGET(sxed->example_cal));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(sxed->example_cal));
 
-//FIXME gtk4    gtk_widget_show_all (example_cal_scrolled_win);
+//FIXME gtk4    gtk_widget_show_all (scrolled_window);
 }
 
 

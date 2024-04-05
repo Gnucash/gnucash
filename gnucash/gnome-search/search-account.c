@@ -204,7 +204,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
     GNCSearchAccountPrivate *priv;
     GtkDialog *dialog;
     GtkWidget *account_tree;
-    GtkWidget *accounts_scroller;
+    GtkWidget *scrolled_window;
     GtkWidget *label;
     char *desc;
     GtkTreeSelection *selection;
@@ -222,11 +222,12 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
                 priv->selected_accounts, FALSE);
 
     /* Create the account scroller and put the tree in it */
-    accounts_scroller = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(accounts_scroller),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_box_prepend (GTK_BOX(accounts_scroller), GTK_WIDGET(account_tree));
-    gtk_widget_set_size_request(GTK_WIDGET(accounts_scroller), 300, 300);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(account_tree));
+    gtk_widget_set_size_request(GTK_WIDGET(scrolled_window), 300, 300);
 
     /* Create the label */
     label = gtk_label_new (_("Select Accounts to Match"));
@@ -244,7 +245,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
     gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (dialog)), GTK_WIDGET(label));
     gtk_box_set_spacing (GTK_BOX(gtk_dialog_get_content_area (dialog)), 3);
 
-    gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (dialog)), GTK_WIDGET(accounts_scroller));
+    gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (dialog)), GTK_WIDGET(scrolled_window));
     gtk_box_set_spacing (GTK_BOX(gtk_dialog_get_content_area (dialog)), 3);
 
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET (dialog));
