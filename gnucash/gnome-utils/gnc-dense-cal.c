@@ -496,30 +496,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
     dcal->initialized = TRUE;
 
 
-    dcal->week_starts_monday = 0;
-    {
-        gchar **parts;
-        const char *week_start_str;
-
-        /* Use this renaming macro to avoid extraction of the message
-           string into the gnucash.pot file when calling xgettext. */
-#define dgettext_noextract dgettext
-        /* Translators: This string must not show up in gnucash.pot as
-           it is looked up in the "gtk20" translation domain
-           instead. */
-        week_start_str = dgettext_noextract("gtk20", "calendar:week_start:0");
-#undef dgettext_noextract
-
-        parts = g_strsplit(week_start_str, ":", 3);
-        if (parts[0] != NULL
-                && parts[1] != NULL
-                && parts[2] != NULL)
-        {
-            if (strcmp("1", parts[2]) == 0)
-                dcal->week_starts_monday = 1;
-        }
-        g_strfreev(parts);
-    }
+    dcal->week_starts_monday = gnc_start_of_week() == 2;
 
     gtk_widget_show_all(GTK_WIDGET(dcal));
 }
