@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-05 17:01+0000\n"
+"PO-Revision-Date: 2024-04-07 03:54+0000\n"
 "Last-Translator: наб <nabijaczleweli@nabijaczleweli.xyz>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -5847,7 +5847,7 @@ msgstr "Wyświetl raport ~a"
 #: gnucash/gnome/report-menus.scm:90
 #: gnucash/gtkbuilder/dialog-custom-report.glade:8
 msgid "Saved Report Configurations"
-msgstr "Zapisane kon_figuracje raportów"
+msgstr "Zapisane konfiguracje raportów"
 
 #: gnucash/gnome/report-menus.scm:92
 msgid "Manage and run saved report configurations"
@@ -7835,7 +7835,7 @@ msgstr "Wybierz domyślną selekcję kont."
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1033
 msgid "Show Hidden Accounts"
-msgstr "_Pokaż ukryte konta"
+msgstr "Pokaż ukryte konta"
 
 #: gnucash/gnome-utils/gnc-option-gtk-ui.cpp:1035
 #: gnucash/gtkbuilder/dialog-account.glade:972
@@ -25464,9 +25464,8 @@ msgid "Show realized gain column(s)"
 msgstr "Pokaż tylko unieważnione transakcje"
 
 #: gnucash/report/reports/standard/investment-lots.scm:65
-#, fuzzy
 msgid "Show unrealized gain column(s)"
-msgstr "_Pokaż ukryte konta"
+msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:67
 msgid "Group gains by age (short term and long term)"
@@ -25477,9 +25476,8 @@ msgid "Long term gains age (years)"
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:72
-#, fuzzy
 msgid "Show mnemonic in amounts"
-msgstr "_Pokaż konta podrzędne"
+msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:73
 #, fuzzy
