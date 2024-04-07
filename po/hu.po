@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-05 09:01+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2024-04-06 21:01+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -5910,7 +5910,7 @@ msgstr "Mentett jelentéskonfigurációk kezelése és futtatása"
 #: gnucash/gnome/report-menus.scm:116
 #: gnucash/report/reports/standard/dashboard.scm:51
 msgid "Dashboard"
-msgstr "Üzletmenet"
+msgstr "Üzletmenet-jelentés"
 
 #: gnucash/gnome/report-menus.scm:118
 msgid "A basic dashboard for your accounting data"
@@ -7210,7 +7210,7 @@ msgstr "Dátum: "
 #: gnucash/gtkbuilder/dialog-sx.glade:1420
 #: gnucash/gtkbuilder/gnc-frequency.glade:593
 msgid "Frequency"
-msgstr "Időköz"
+msgstr "Gyakoriság"
 
 #: gnucash/gnome-utils/gnc-dense-cal.c:1281
 msgid "(unnamed)"
