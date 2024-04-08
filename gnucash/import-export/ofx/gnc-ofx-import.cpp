@@ -53,6 +53,8 @@
 #include "dialog-utils.h"
 #include "window-reconcile.h"
 
+#include <string>
+
 #define GNC_PREFS_GROUP "dialogs.import.ofx"
 #define GNC_PREF_AUTO_COMMODITY "auto-create-commodity"
 
@@ -464,80 +466,57 @@ static void
 fill_transaction_notes(Transaction *transaction, OfxTransactionData *data)
 {
     /* Put everything else in the Notes field */
-    char *notes = g_strdup_printf("OFX ext. info: ");
+    std::string notes = "OFX ext. info: ";
 
     if (data->transactiontype_valid)
     {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Trans type:",
-                                gnc_ofx_ttype_to_string(data->transactiontype));
-        g_free(tmp);
+        notes += "|Trans type:";
+        notes += gnc_ofx_ttype_to_string(data->transactiontype);
     }
 
     if (data->invtransactiontype_valid)
     {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Investment Trans type:",
-                                gnc_ofx_invttype_to_str(data->invtransactiontype));
-        g_free(tmp);
+        notes += "|Investment Trans type:";
+        notes += gnc_ofx_invttype_to_str(data->invtransactiontype);
     }
     if (data->memo_valid && data->name_valid) /* Copy only if memo wasn't put in Description */
     {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Memo:", data->memo);
-        g_free(tmp);
+        notes += "|Memo:";
+        notes += data->memo;
     }
     if (data->date_funds_available_valid)
     {
         char dest_string[MAX_DATE_LENGTH];
-        time64 time = data->date_funds_available;
-        char *tmp = notes;
-
-        gnc_time64_to_iso8601_buff (time, dest_string);
-        notes = g_strdup_printf("%s%s%s", tmp,
-				"|Date funds available:", dest_string);
-        g_free(tmp);
+        gnc_time64_to_iso8601_buff (data->date_funds_available, dest_string);
+        notes += "|Date funds available:";
+        notes += dest_string;
     }
     if (data->server_transaction_id_valid)
     {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp,
-				"|Server trans ID (conf. number):",
-				sanitize_string (data->server_transaction_id));
-        g_free(tmp);
+        notes += "|Server trans ID (conf. number):";
+        notes += sanitize_string (data->server_transaction_id);
     }
     if (data->standard_industrial_code_valid)
     {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%ld", tmp,
-				"|Standard Industrial Code:",
-                                data->standard_industrial_code);
-        g_free(tmp);
-
+        notes += "|Standard Industrial Code:";
+        notes += data->standard_industrial_code;
     }
     if (data->payee_id_valid)
     {
-        char *tmp = notes;
-        notes = g_strdup_printf("%s%s%s", tmp, "|Payee ID:",
-				sanitize_string (data->payee_id));
-        g_free(tmp);
+        notes += "|Payee ID:";
+        notes += sanitize_string (data->payee_id);
     }
     //PERR("WRITEME: GnuCash ofx_proc_transaction():Add PAYEE and ADDRESS here once supported by libofx! Notes=%s\n", notes);
 
     /* Ideally, gnucash should process the corrected transactions */
     if (data->fi_id_corrected_valid)
     {
-        char *tmp = notes;
         PERR("WRITEME: GnuCash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
-        notes = g_strdup_printf("%s%s%s%s", tmp,
-				"|This corrects transaction #",
-				sanitize_string (data->fi_id_corrected),
-				"but GnuCash didn't process the correction!");
-        g_free(tmp);
+        notes += "|This corrects transaction #";
+        notes += sanitize_string (data->fi_id_corrected);
+        notes += " but GnuCash didn't process the correction!";
     }
-    xaccTransSetNotes(transaction, notes);
-    g_free(notes);
-
+    xaccTransSetNotes (transaction, notes.c_str());
 }
 
 static void
