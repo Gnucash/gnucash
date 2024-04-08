@@ -202,7 +202,6 @@ static QuoteSourceVec single_quote_sources =
     { false, SOURCE_SINGLE, "India Mutual", "indiamutual" },
     { false, SOURCE_SINGLE, "Morningstar, GB", "morningstaruk" },
     { false, SOURCE_SINGLE, "Morningstar, JP", "morningstarjp" },
-    { false, SOURCE_SINGLE, "Motley Fool, US", "fool" },
     { false, SOURCE_SINGLE, "New Zealand stock eXchange, NZ", "nzx" },
     { false, SOURCE_SINGLE, "Paris Stock Exchange/Boursorama, FR", "bourso" },
     { false, SOURCE_SINGLE, "Romania", "romania" },
@@ -228,13 +227,13 @@ static QuoteSourceVec multiple_quote_sources =
     { false, SOURCE_MULTI, "Europe (asegr,.bsero, hex ...)", "europe" },
     { false, SOURCE_MULTI, "India Mutual (AMFI, ...)", "indiamutual" },
     { false, SOURCE_MULTI, "France (bourso, ĺerevenu, ...)", "france" },
-    { false, SOURCE_MULTI, "Nasdaq (alphavantage, fool, ...)", "nasdaq" },
-    { false, SOURCE_MULTI, "NYSE (alphavantage, fool, ...)", "nyse" },
+    { false, SOURCE_MULTI, "Nasdaq (alphavantage, yahoo_json, ...)", "nasdaq" },
+    { false, SOURCE_MULTI, "NYSE (alphavantage, yahoo_json, ...)", "nyse" },
     { false, SOURCE_MULTI, "South Africa (Sharenet, ...)", "za" },
     { false, SOURCE_MULTI, "Romania (BSE-RO, ...)", "romania" },
     { false, SOURCE_MULTI, "T. Rowe Price", "troweprice" },
     { false, SOURCE_MULTI, "U.K. Funds (citywire, FTfunds, MStar, tnetuk, ...)", "ukfunds" },
-    { false, SOURCE_MULTI, "USA (Alphavantage, Fool, ...)", "usa" },
+    { false, SOURCE_MULTI, "USA (alphavantage, yahoo_json, ...)", "usa" },
 };
 
 static QuoteSourceVec new_quote_sources;
