@@ -514,6 +514,19 @@ fill_transaction_notes(Transaction *transaction, OfxTransactionData *data)
         PERR("WRITEME: GnuCash ofx_proc_transaction(): WARNING: This transaction corrected a previous transaction, but we created a new one instead!\n");
         notes += "|This corrects transaction #";
         notes += sanitize_string (data->fi_id_corrected);
+        notes += " via a ";
+        switch (data->fi_id_correction_action)
+        {
+        case FiIdCorrectionAction::REPLACE:
+            notes += "REPLACE";
+            break;
+        case FiIdCorrectionAction::DELETE:
+            notes += "DELETE";
+            break;
+        default:
+            notes += "UKNOWN";
+            break;
+        }
         notes += " but GnuCash didn't process the correction!";
     }
     xaccTransSetNotes (transaction, notes.c_str());
