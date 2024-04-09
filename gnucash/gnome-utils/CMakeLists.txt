@@ -33,7 +33,7 @@ set (gnome_utils_SOURCES
   dialog-account.c
   dialog-doclink-utils.c
   dialog-book-close.c
-  dialog-commodity.c
+  dialog-commodity.cpp
   dialog-dup-trans.c
   dialog-file-access.c
   dialog-object-references.c

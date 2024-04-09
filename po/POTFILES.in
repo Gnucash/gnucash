@@ -131,7 +131,7 @@ gnucash/gnome-utils/assistant-xml-encoding.c
 gnucash/gnome-utils/cursors.c
 gnucash/gnome-utils/dialog-account.c
 gnucash/gnome-utils/dialog-book-close.c
-gnucash/gnome-utils/dialog-commodity.c
+gnucash/gnome-utils/dialog-commodity.cpp
 gnucash/gnome-utils/dialog-doclink-utils.c
 gnucash/gnome-utils/dialog-dup-trans.c
 gnucash/gnome-utils/dialog-file-access.c
