@@ -55,7 +55,7 @@ set (gnome_utils_SOURCES
   gnc-cell-view.c
   gnc-commodity-edit.c
   gnc-component-manager.c
-  gnc-currency-edit.c
+  gnc-currency-edit.cpp
   gnc-date-edit.c
   gnc-date-format.c
   gnc-dense-cal.c

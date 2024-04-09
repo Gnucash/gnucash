@@ -92,7 +92,7 @@ enum
     N_PROPERTIES
 };
 
-static GParamSpec *obj_properties[N_PROPERTIES] = { NULL, };
+static GParamSpec *obj_properties[N_PROPERTIES] = { nullptr, };
 
 static void
 gnc_currency_edit_set_property (GObject      *object,
@@ -198,7 +198,7 @@ gnc_currency_edit_init (GNCCurrencyEdit *gce)
 static void
 gnc_currency_edit_finalize (GObject *object)
 {
-    g_return_if_fail (object != NULL);
+    g_return_if_fail (object != nullptr);
     g_return_if_fail (GNC_IS_CURRENCY_EDIT (object));
 
     GNCCurrencyEdit *self = GNC_CURRENCY_EDIT(object);
@@ -230,10 +230,12 @@ gnc_currency_edit_mnemonic_changed (GObject    *gobject,
     }
 
     g_signal_handlers_block_by_func(G_OBJECT(self),
-                                    G_CALLBACK(gnc_currency_edit_mnemonic_changed), user_data);
+                                    (gpointer)gnc_currency_edit_mnemonic_changed,
+                                    user_data);
     gnc_currency_edit_set_currency(self, currency);
     g_signal_handlers_unblock_by_func(G_OBJECT(self),
-                                      G_CALLBACK(gnc_currency_edit_mnemonic_changed), user_data);
+                                      (gpointer)gnc_currency_edit_mnemonic_changed,
+                                      user_data);
 }
 
 
@@ -250,10 +252,10 @@ static void gnc_currency_edit_active_changed (GtkComboBox *gobject,
         const gchar *mnemonic = gnc_commodity_get_mnemonic (currency);
 
         g_signal_handlers_block_by_func(G_OBJECT(self),
-                                        G_CALLBACK(gnc_currency_edit_active_changed), user_data);
-        g_object_set (G_OBJECT (self), "mnemonic", mnemonic, NULL);
+                                        (gpointer)gnc_currency_edit_active_changed, user_data);
+        g_object_set (G_OBJECT (self), "mnemonic", mnemonic, nullptr);
         g_signal_handlers_unblock_by_func(G_OBJECT(self),
-                                        G_CALLBACK(gnc_currency_edit_active_changed), user_data);
+                                          (gpointer)gnc_currency_edit_active_changed, user_data);
     }
 }
 
@@ -286,7 +288,7 @@ add_item(gnc_commodity *commodity, GNCCurrencyEdit *gce)
 
     string = gnc_commodity_get_printname(commodity);
     normalized = g_utf8_normalize (string, -1, G_NORMALIZE_NFC);
-    normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : NULL;
+    normalized_folded = normalized ? g_utf8_casefold (normalized, -1) : nullptr;
 
     gtk_list_store_append(GTK_LIST_STORE(model), &iter);
     gtk_list_store_set (GTK_LIST_STORE(model), &iter,
@@ -346,10 +348,10 @@ gnc_currency_edit_new (void)
     GtkEntryCompletion* completion;
 
     store = gtk_list_store_new (NUM_CURRENCY_COLS, G_TYPE_STRING, G_TYPE_STRING);
-    gce = g_object_new (GNC_TYPE_CURRENCY_EDIT,
-                        "model", store,
-                        "has-entry", TRUE,
-                        NULL);
+    gce = GNC_CURRENCY_EDIT(g_object_new (GNC_TYPE_CURRENCY_EDIT,
+                                          "model", store,
+                                          "has-entry", true,
+                                          nullptr));
     g_object_unref (store);
 
     /* Set the column for the text */
@@ -370,7 +372,7 @@ gnc_currency_edit_new (void)
     gtk_entry_completion_set_text_column (completion, CURRENCY_COL_NAME);
     gtk_entry_completion_set_match_func (completion,
                                          (GtkEntryCompletionMatchFunc)match_func,
-                                         GTK_TREE_MODEL(store), NULL);
+                                         GTK_TREE_MODEL(store), nullptr);
     gtk_entry_set_completion (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (gce))),
                               completion);
 
@@ -395,9 +397,9 @@ gnc_currency_edit_set_currency (GNCCurrencyEdit *gce,
 {
     const gchar *printname;
 
-    g_return_if_fail(gce != NULL);
+    g_return_if_fail(gce != nullptr);
     g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
-    g_return_if_fail(currency != NULL);
+    g_return_if_fail(currency != nullptr);
 
     printname = gnc_commodity_get_printname(currency);
     gnc_cbwe_set_by_string(GTK_COMBO_BOX(gce), printname);
@@ -419,8 +421,8 @@ gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
     GtkTreeModel *model;
     GtkTreeIter iter;
 
-    g_return_val_if_fail(gce != NULL, NULL);
-    g_return_val_if_fail(GNC_IS_CURRENCY_EDIT(gce), NULL);
+    g_return_val_if_fail(gce != nullptr, nullptr);
+    g_return_val_if_fail(GNC_IS_CURRENCY_EDIT(gce), nullptr);
 
     if (gtk_combo_box_get_active_iter(GTK_COMBO_BOX(gce), &iter))
     {
@@ -428,7 +430,7 @@ gnc_currency_edit_get_currency (GNCCurrencyEdit *gce)
         gtk_tree_model_get (model, &iter, 0, &mnemonic, -1);
 
         name = strchr(mnemonic, ' ');
-        if (name != NULL)
+        if (name != nullptr)
             *name = '\0';
         commodity = gnc_commodity_table_lookup (gnc_get_current_commodities (),
                                                 GNC_COMMODITY_NS_CURRENCY,
@@ -458,7 +460,7 @@ gnc_currency_edit_clear_display (GNCCurrencyEdit *gce)
     GtkTreeModel *model;
     GtkWidget *entry;
 
-    g_return_if_fail(gce != NULL);
+    g_return_if_fail(gce != nullptr);
     g_return_if_fail(GNC_IS_CURRENCY_EDIT(gce));
 
     model = gtk_combo_box_get_model (GTK_COMBO_BOX(gce));
@@ -468,15 +470,15 @@ gnc_currency_edit_clear_display (GNCCurrencyEdit *gce)
     g_object_ref (model);
 
     g_signal_handlers_block_by_func (G_OBJECT(gce),
-                                    G_CALLBACK(gnc_currency_edit_active_changed), gce);
+                                     (gpointer)gnc_currency_edit_active_changed, gce);
 
-    gtk_combo_box_set_model (GTK_COMBO_BOX(gce), NULL);
+    gtk_combo_box_set_model (GTK_COMBO_BOX(gce), nullptr);
     gtk_entry_set_text (GTK_ENTRY(entry),"");
     gtk_combo_box_set_active (GTK_COMBO_BOX(gce), -1);
     gtk_combo_box_set_model (GTK_COMBO_BOX(gce), model);
 
     g_signal_handlers_block_by_func (G_OBJECT(gce),
-                                    G_CALLBACK(gnc_currency_edit_active_changed), gce);
+                                     (gpointer)gnc_currency_edit_active_changed, gce);
 
     g_object_unref (model);
 }
