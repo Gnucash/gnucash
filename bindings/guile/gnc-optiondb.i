@@ -64,6 +64,7 @@ namespace std {
 
 %begin
 %{
+#include <gnc-commodity.hpp>
 #include <gnc-optiondb.h>
 #include <gnc-optiondb.hpp>
 #include <gnc-optiondb-impl.hpp>
@@ -1975,26 +1976,13 @@ gnc_register_multichoice_callback_option(GncOptionDBPtr& db,
                               const char* key, const char* doc_string,
                               const char *value)
     {
-        gnc_commodity* commodity{};
         const auto book{qof_session_get_book(gnc_get_current_session())};
         const auto commodity_table{gnc_commodity_table_get_table(book)};
-        const auto namespaces{gnc_commodity_table_get_namespaces(commodity_table)};
-        GncOption* rv = nullptr;
-        for (auto node = namespaces; node && commodity == nullptr;
-             node = g_list_next(node))
-        {
-            commodity = gnc_commodity_table_lookup(commodity_table,
-                                                   (const char*)(node->data),
-                                                   value);
-
-            if (commodity)
-            {
-                rv = gnc_make_commodity_option(section, name, key, doc_string, commodity);
-                break;
-            }
-        }
-        g_list_free (namespaces);
-        return rv;
+        for (const auto& name_space : gnc_commodity_table_get_namespaces(commodity_table))
+            if (auto commodity = gnc_commodity_table_lookup (commodity_table, name_space.c_str(),
+                                                             value))
+                return gnc_make_commodity_option(section, name, key, doc_string, commodity);
+        return nullptr;
     }
 
     static GncOption*

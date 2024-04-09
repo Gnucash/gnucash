@@ -34,6 +34,7 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "dialog-commodity.h"
+#include "gnc-commodity.hpp"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
@@ -64,11 +65,10 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
     DEBUG("Looking for commodity with exchange_code: %s", cusip);
 
     g_assert(commodity_table);
-    GList *namespace_list = gnc_commodity_table_get_namespaces(commodity_table);
 
-    for (GList *n = namespace_list; !retval && n; n = g_list_next (n))
+    for (const auto& ns_str : gnc_commodity_table_get_namespaces(commodity_table))
     {
-        auto ns = static_cast<const char*>(n->data);
+        auto ns = ns_str.c_str();
         DEBUG("Looking at namespace %s", ns);
         GList *comm_list = gnc_commodity_table_get_commodities (commodity_table, ns);
         for (GList *m = comm_list; !retval && m; m = g_list_next (m))
@@ -82,9 +82,9 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
             }
         }
         g_list_free (comm_list);
+        if (retval)
+            break;
     }
-
-    g_list_free(namespace_list);
 
     if (retval == NULL && ask_on_unknown != 0)
     {

@@ -34,6 +34,7 @@
 #define GNC_COMMODITY_HPP
 
 #include <vector>
+#include <string>
 
 #include <gnc-commodity.h>
 
@@ -50,6 +51,14 @@ using CommVec = std::vector<gnc_commodity*>;
  */
 void gnc_quote_source_set_fq_installed (const char* version_string,
                                         const std::vector<std::string>& sources_list);
+
+
+/** Return a list of all namespaces in the commodity table.  This
+ *  returns both system and user defined namespaces.
+ *
+ *  @return A vector to the list of names. An empty vector if an
+ *  invalid argument was supplied. */
+std::vector<std::string> gnc_commodity_table_get_namespaces (const gnc_commodity_table * t);
 
 #endif /* GNC_COMMODITY_HPP */
 /** @} */

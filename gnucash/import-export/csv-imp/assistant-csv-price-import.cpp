@@ -40,6 +40,7 @@
 #include "gnc-uri-utils.h"
 #include "gnc-ui-util.h"
 #include "dialog-utils.h"
+#include "gnc-commodity.hpp"
 
 #include "gnc-component-manager.h"
 
@@ -446,8 +447,6 @@ GtkTreeModel *get_model (bool all_commodity)
     GtkTreeModel *store, *model;
     const gnc_commodity_table *commodity_table = gnc_get_current_commodities ();
     gnc_commodity *tmp_commodity = nullptr;
-    char  *tmp_namespace = nullptr;
-    GList *namespace_list = gnc_commodity_table_get_namespaces (commodity_table);
     GtkTreeIter iter;
 
     store = GTK_TREE_MODEL(gtk_list_store_new (4, G_TYPE_STRING, G_TYPE_STRING,
@@ -460,9 +459,9 @@ GtkTreeModel *get_model (bool all_commodity)
     gtk_list_store_set (GTK_LIST_STORE(store), &iter,
                             DISPLAYED_COMM, " ", SORT_COMM, " ", COMM_PTR, nullptr, SEP, false, -1);
 
-    for (auto node = namespace_list; node; node = g_list_next (node))
+    for (const auto& tmp_namespace_str : gnc_commodity_table_get_namespaces (commodity_table))
     {
-        tmp_namespace = (char*)node->data;
+        auto tmp_namespace = tmp_namespace_str.c_str();
         DEBUG("Looking at namespace %s", tmp_namespace);
 
         /* Hide the template entry */
@@ -506,7 +505,6 @@ GtkTreeModel *get_model (bool all_commodity)
             }
         }
     }
-    g_list_free (namespace_list);
     g_object_unref (store);
 
     return model;
