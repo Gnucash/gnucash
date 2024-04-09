@@ -59,6 +59,7 @@
 
 #include "Account.h"
 #include "AccountP.hpp"
+#include "gnc-commodity.hpp"
 #include "gnc-engine.h"
 #include "gnc-session.h"
 #include "Transaction.h"
@@ -447,21 +448,19 @@ get_random_commodity_namespace(void)
 static gnc_commodity *
 get_random_commodity_from_table (gnc_commodity_table *table)
 {
-    GList *namespaces;
     gnc_commodity *com = NULL;
 
     g_return_val_if_fail (table, NULL);
 
-    namespaces = gnc_commodity_table_get_namespaces (table);
+    auto namespaces = gnc_commodity_table_get_namespaces (table);
 
     do
     {
         GList *commodities;
-        char *name_space;
 
-        name_space = static_cast<char*>(get_random_list_element (namespaces));
+        auto name_space = namespaces.at (get_random_int_in_range (0, namespaces.size() - 1));
 
-        commodities = gnc_commodity_table_get_commodities (table, name_space);
+        commodities = gnc_commodity_table_get_commodities (table, name_space.c_str());
         if (!commodities)
             continue;
 
@@ -471,9 +470,6 @@ get_random_commodity_from_table (gnc_commodity_table *table)
 
     }
     while (!com);
-
-
-    g_list_free (namespaces);
 
     return com;
 }
@@ -558,16 +554,13 @@ make_random_changes_to_commodity (gnc_commodity *com)
 void
 make_random_changes_to_commodity_table (gnc_commodity_table *table)
 {
-    GList *namespaces;
-    GList *node;
-
     g_return_if_fail (table);
 
-    namespaces = gnc_commodity_table_get_namespaces (table);
+    auto namespaces = gnc_commodity_table_get_namespaces (table);
 
-    for (node = namespaces; node; node = node->next)
+    for (const auto& ns_str : namespaces)
     {
-        auto ns = static_cast<const char *>(node->data);
+        auto ns = ns_str.c_str();
         GList *commodities;
         GList *com_node;
 
@@ -587,8 +580,6 @@ make_random_changes_to_commodity_table (gnc_commodity_table *table)
 
         g_list_free (commodities);
     }
-
-    g_list_free (namespaces);
 }
 /* ================================================================= */
 /* Price stuff */

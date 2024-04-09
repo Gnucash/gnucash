@@ -829,15 +829,6 @@ GList * gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace
 int gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
                                       const char * commodity_namespace);
 
-/** Return a list of all namespaces in the commodity table.  This
- *  returns both system and user defined namespaces.
- *
- *  @return A pointer to the list of names.  NULL if an invalid
- *  argument was supplied.
- *
- *  @note It is the callers responsibility to free the list. */
-GList * gnc_commodity_table_get_namespaces(const gnc_commodity_table * t);
-
 /** Return a list of all namespace data structures in the commodity table.  This
  *  returns both system and user defined namespace structures.
  *

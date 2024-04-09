@@ -45,6 +45,7 @@
 #include <zlib.h>
 #include <errno.h>
 
+#include "gnc-commodity.hpp"
 #include "gnc-engine.h"
 #include "gnc-pricedb-p.h"
 #include "Scrub.h"
@@ -929,14 +930,6 @@ write_counts (FILE* out, ...)
 }
 
 static gint
-compare_namespaces (gconstpointer a, gconstpointer b)
-{
-    const gchar* sa = (const gchar*) a;
-    const gchar* sb = (const gchar*) b;
-    return (g_strcmp0 (sa, sb));
-}
-
-static gint
 compare_commodity_ids (gconstpointer a, gconstpointer b)
 {
     const gnc_commodity* ca = (const gnc_commodity*) a;
@@ -1038,25 +1031,20 @@ gboolean
 write_commodities (FILE* out, QofBook* book, sixtp_gdv2* gd)
 {
     gnc_commodity_table* tbl;
-    GList* namespaces;
-    GList* lp;
     gboolean success = TRUE;
 
     tbl = gnc_commodity_table_get_table (book);
 
-    namespaces = gnc_commodity_table_get_namespaces (tbl);
-    if (namespaces)
-    {
-        namespaces = g_list_sort (namespaces, compare_namespaces);
-    }
+    auto namespaces = gnc_commodity_table_get_namespaces (tbl);
 
-    for (lp = namespaces; success && lp; lp = lp->next)
+    std::sort (namespaces.begin(), namespaces.end());
+
+    for (const auto& name_space : namespaces)
     {
         GList* comms, *lp2;
         xmlNodePtr comnode;
 
-        comms = gnc_commodity_table_get_commodities (tbl,
-                                                     static_cast<const char*> (lp->data));
+        comms = gnc_commodity_table_get_commodities (tbl, name_space.c_str());
         comms = g_list_sort (comms, compare_commodity_ids);
 
         for (lp2 = comms; lp2; lp2 = lp2->next)
@@ -1079,9 +1067,9 @@ write_commodities (FILE* out, QofBook* book, sixtp_gdv2* gd)
         }
 
         g_list_free (comms);
+        if (!success)
+            break;
     }
-
-    if (namespaces) g_list_free (namespaces);
 
     return success;
 }

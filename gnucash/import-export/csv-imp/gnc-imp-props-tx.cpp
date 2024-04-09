@@ -32,6 +32,7 @@
 #include "gnc-ui-util.h"
 #include "Account.h"
 #include "Transaction.h"
+#include "gnc-commodity.hpp"
 #include "gnc-pricedb.h"
 #include <gnc-exp-parser.h>
 
@@ -201,15 +202,13 @@ gnc_commodity* parse_commodity (const std::string& comm_str)
     if (!comm)
     {
         /* If that fails try mnemonic in all other namespaces */
-        auto namespaces = gnc_commodity_table_get_namespaces(table);
-        for (auto ns = namespaces; ns; ns = ns->next)
+        for (const auto& ns_str : gnc_commodity_table_get_namespaces(table))
         {
-            gchar* ns_str = (gchar*)ns->data;
-            if (g_utf8_collate(ns_str, GNC_COMMODITY_NS_CURRENCY) == 0)
+            if (ns_str == GNC_COMMODITY_NS_CURRENCY)
                 continue;
 
             comm = gnc_commodity_table_lookup (table,
-                    ns_str, comm_str.c_str());
+                                               ns_str.c_str(), comm_str.c_str());
             if (comm)
                 break;
         }

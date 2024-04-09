@@ -1901,18 +1901,9 @@ gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
 }
 
 static void
-hash_keys_helper(gpointer key, gpointer value, gpointer data)
+hash_keys_helper (const char* key, gnc_commodity* value, std::vector<std::string> *l)
 {
-    auto l = (GList**)data;
-    *l = g_list_prepend(*l, key);
-}
-
-static GList *
-g_hash_table_keys(GHashTable * table)
-{
-    GList * l = nullptr;
-    g_hash_table_foreach(table, &hash_keys_helper, (gpointer) &l);
-    return l;
+    l->push_back (key);
 }
 
 static void
@@ -1935,13 +1926,15 @@ g_hash_table_values(GHashTable * table)
  * see if any commodities in the namespace exist
  ********************************************************************/
 
-GList *
+std::vector<std::string>
 gnc_commodity_table_get_namespaces(const gnc_commodity_table * table)
 {
+    std::vector<std::string> rv;
     if (!table)
-        return nullptr;
+        return rv;
 
-    return g_hash_table_keys(table->ns_table);
+    g_hash_table_foreach(table->ns_table, (GHFunc)hash_keys_helper, &rv);
+    return rv;
 }
 
 GList *
@@ -1990,20 +1983,17 @@ gnc_commodity_is_currency(const gnc_commodity *cm)
 static CommodityList*
 commodity_table_get_all_noncurrency_commodities(const gnc_commodity_table* table)
 {
-    GList *node = nullptr, *nslist = gnc_commodity_table_get_namespaces(table);
-    CommodityList *retval = nullptr;
-    for (node = nslist; node; node=g_list_next(node))
+    CommodityList *retval = NULL;
+    for (const auto& name_space : gnc_commodity_table_get_namespaces(table))
     {
-        gnc_commodity_namespace *ns = nullptr;
-        if (g_strcmp0((char*)(node->data), GNC_COMMODITY_NS_CURRENCY) == 0
-            || g_strcmp0((char*)(node->data), GNC_COMMODITY_NS_TEMPLATE) == 0)
+        gnc_commodity_namespace *ns = NULL;
+        if (name_space == GNC_COMMODITY_NS_CURRENCY || name_space == GNC_COMMODITY_NS_TEMPLATE)
             continue;
-        ns = gnc_commodity_table_find_namespace(table, (char*)(node->data));
+        ns = gnc_commodity_table_find_namespace(table, name_space.c_str());
         if (!ns)
             continue;
         retval = g_list_concat(g_hash_table_values(ns->cm_table), retval);
     }
-    g_list_free(nslist);
     return retval;
 }
 
@@ -2057,8 +2047,6 @@ CommodityList *
 gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
 {
     gnc_commodity_namespace * ns = nullptr;
-    const char *name_space;
-    GList * nslist, * tmp;
     GList * l = nullptr;
     regex_t pattern;
     const char *expression = gnc_prefs_get_namespace_regexp();
@@ -2075,11 +2063,10 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
             return nullptr;
         }
 
-        nslist = gnc_commodity_table_get_namespaces(table);
-        for (tmp = nslist; tmp; tmp = tmp->next)
+        for (const auto& name_space_str : gnc_commodity_table_get_namespaces(table))
         {
-            name_space = static_cast<const char*>(tmp->data);
-            if (regexec(&pattern, name_space, 0, nullptr, 0) == 0)
+            auto name_space = name_space_str.c_str();
+            if (regexec(&pattern, name_space, 0, NULL, 0) == 0)
             {
                 DEBUG("Running list of %s commodities", name_space);
                 ns = gnc_commodity_table_find_namespace(table, name_space);
@@ -2089,7 +2076,6 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
                 }
             }
         }
-        g_list_free(nslist);
         regfree(&pattern);
     }
     else

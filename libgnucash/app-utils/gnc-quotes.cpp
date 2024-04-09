@@ -978,8 +978,6 @@ CommVec
 gnc_quotes_get_quotable_commodities (const gnc_commodity_table * table)
 {
     gnc_commodity_namespace * ns = NULL;
-    const char *name_space;
-    GList * nslist, * tmp;
     CommVec l;
     regex_t pattern;
     const char *expression = gnc_prefs_get_namespace_regexp ();
@@ -996,10 +994,9 @@ gnc_quotes_get_quotable_commodities (const gnc_commodity_table * table)
             return CommVec ();
         }
 
-        nslist = gnc_commodity_table_get_namespaces (table);
-        for (tmp = nslist; tmp; tmp = tmp->next)
+        for (const auto& name_space_str : gnc_commodity_table_get_namespaces (table))
         {
-            name_space = static_cast<const char *> (tmp->data);
+            auto name_space = name_space_str.c_str();
             if (regexec (&pattern, name_space, 0, NULL, 0) == 0)
             {
                 // DEBUG ("Running list of %s commodities", name_space);
@@ -1011,7 +1008,6 @@ gnc_quotes_get_quotable_commodities (const gnc_commodity_table * table)
                 }
             }
         }
-        g_list_free (nslist);
         regfree (&pattern);
     }
     else

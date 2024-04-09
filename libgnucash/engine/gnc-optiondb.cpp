@@ -31,6 +31,7 @@
 #include "kvp-frame.hpp"
 #include "qofbookslots.h"
 #include "guid.hpp"
+#include "gnc-commodity.hpp"
 #include "gnc-optiondb.h"
 #include "gnc-optiondb.hpp"
 #include "gnc-optiondb-impl.hpp"
@@ -693,13 +694,9 @@ gnc_register_commodity_option(GncOptionDB* db, const char* section,
     gnc_commodity* commodity{};
     const auto book{qof_session_get_book(gnc_get_current_session())};
     const auto commodity_table{gnc_commodity_table_get_table(book)};
-    const auto namespaces{gnc_commodity_table_get_namespaces(commodity_table)};
-    for (auto node = namespaces; node && commodity == nullptr;
-         node = g_list_next(node))
+    for (const auto& name_space : gnc_commodity_table_get_namespaces(commodity_table))
     {
-        commodity = gnc_commodity_table_lookup(commodity_table,
-                                               (const char*)(node->data),
-                                               value);
+        commodity = gnc_commodity_table_lookup(commodity_table, name_space.c_str(), value);
         if (commodity)
             break;
     }
