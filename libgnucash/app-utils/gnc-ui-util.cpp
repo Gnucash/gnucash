@@ -22,6 +22,8 @@
 
 #include <config.h>
 
+#include <numeric>
+
 #ifdef __MINGW32__
 #define __USE_MINGW_ANSI_STDIO 1
 #endif
@@ -43,6 +45,7 @@
 #include <string.h>
 #include <cinttypes>
 #include <unicode/listformatter.h>
+#include <boost/locale.hpp>
 
 #include "qof.h"
 #include "gnc-prefs.h"
@@ -54,6 +57,7 @@
 #include "gnc-session.h"
 #include "engine-helpers.h"
 #include "gnc-locale-utils.h"
+#include "gnc-locale-utils.hpp"
 
 #define GNC_PREF_CURRENCY_CHOICE_LOCALE "currency-choice-locale"
 #define GNC_PREF_CURRENCY_CHOICE_OTHER  "currency-choice-other"
@@ -1496,106 +1500,18 @@ gnc_wrap_text_with_bidi_ltr_isolate (const char* text)
 /********************************************************************\
  ********************************************************************/
 
-#define FUDGE .00001
-
-/* This function is basically untranslatable. I'd
-   guess out of the 29 translations we have, 20 will have their number
-   wordings in a totally different way than English has (not to
-   mention gender-dependent number endings). Which means this
-   word-by-word translation will be useless or even plain
-   wrong. For this reason, we don't even start to pretend a
-   word-by-word translation would be of any use, so we don't mark any
-   of these strings for translation. cstim, 2007-04-15. */
-static const char* small_numbers[] =
+static std::string
+number_to_words(double val, int64_t denom)
 {
-    /* Translators: This section is for generating the "amount, in
-       words" field when printing a check. This function gets the
-       wording right for English, but unfortunately not for most other
-       languages. Decide for yourself whether the check printing is
-       actually needed in your language; if not, you can safely skip the
-       translation of all of these strings.  */
-    "Zero", "One", "Two", "Three", "Four",
-    "Five", "Six", "Seven", "Eight", "Nine",
-    "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen",
-    "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen",
-    "Twenty"
-};
-static const char* medium_numbers[] =
-{
-    "Zero", "Ten", "Twenty", "Thirty", "Forty",
-    "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"
-};
-static const char* big_numbers[] =
-{
-    /* Translators: This is the word for the number 10^2 */
-    "Hundred",
-    /* Translators: This is the word for the number 10^3 */
-    "Thousand",
-    /* Translators: This is the word for the number 10^6, one thousand
-       thousands. */
-    "Million",
-    /* Translators: This is the word for the number 10^9, one thousand
-       millions. WATCH OUT: In British English and many other languages
-       this word is used for 10^12 which is one million millions! In
-       contrast to this, here in GnuCash this is used in the American
-       English meaning of 10^9.  */
-    "Billion",
-    /* Translators: This is the word for the number 10^12, one million
-       millions. */
-    "Trillion",
-    /* Translators: This is the word for the number 10^15 */
-    "Quadrillion",
-    /* Translators: This is the word for the number 10^18 */
-    "Quintillion"
-};
+    double int_part;
+    const int frac_part = std::round(std::modf (std::fabs(val), &int_part) * denom);
+    const std::vector<std::string> tail =
+        { " ", _("and"), " ", std::to_string (frac_part), "/", std::to_string (denom) };
+    std::ostringstream ss;
 
-static char*
-integer_to_words(gint64 val)
-{
-    if (val == 0)
-        return g_strdup("zero");
-    if (val < 0)
-        val = -val;
-
-    auto result = g_string_sized_new(100);
-
-    while (val >= 1000)
-    {
-        int log_val = log10(val) / 3 + FUDGE;
-        int pow_val = exp(log_val * 3 * G_LN10) + FUDGE;
-        int this_part = val / pow_val;
-        val -= this_part * pow_val;
-        auto tmp = integer_to_words(this_part);
-        g_string_append_printf(result, "%s %s ", tmp, gettext(big_numbers[log_val]));
-        g_free(tmp);
-    }
-
-    if (val >= 100)
-    {
-        int this_part = val / 100;
-        val -= this_part * 100;
-        g_string_append_printf(result, "%s %s ",
-                               gettext(small_numbers[this_part]),
-                               gettext(big_numbers[0]));
-    }
-
-    if (val > 20)
-    {
-        int this_part = val / 10;
-        val -= this_part * 10;
-        g_string_append(result, gettext(medium_numbers[this_part]));
-        g_string_append_c(result, ' ');
-    }
-
-    if (val > 0)
-    {
-        int this_part = val;
-        g_string_append(result, gettext(small_numbers[this_part]));
-        g_string_append_c(result, ' ');
-    }
-
-    result = g_string_truncate(result, result->len - 1);
-    return g_string_free(result, FALSE);
+    ss.imbue(gnc_get_boost_locale());
+    ss << boost::locale::as::spellout << int_part;
+    return std::accumulate (tail.begin(), tail.end(), ss.str());
 }
 
 #ifdef _MSC_VER
@@ -1607,38 +1523,11 @@ static double round(double x)
 #endif
 
 char*
-number_to_words(double val, int64_t denom)
-{
-    if (val < 0) val = -val;
-    if (denom < 0) denom = -denom;
-
-    auto int_part = floor(val);
-    auto frac_part = static_cast<int64_t>(round((val - int_part) * denom));
-
-    auto int_string = integer_to_words(int_part);
-    /* Inside of the gettext macro _(...) we must not use any macros but
-       only plain string literals. For this reason, convert the strings
-       separately. */
-    auto nomin_string = g_strdup_printf("%02" PRId64, frac_part);
-    auto denom_string = g_strdup_printf("%" PRId64, denom);
-    auto full_string =
-        /* Translators: This is for the "amount, in words" field in check
-           printing. The first %s is the integer amount of dollars (or
-           whatever currency), the second and third %s the cent amount as
-           a fraction, e.g. 47/100.  */
-        g_strdup_printf("%s and %s/%s",
-                        int_string, nomin_string, denom_string);
-    g_free(int_string);
-    g_free(nomin_string);
-    g_free(denom_string);
-    return full_string;
-}
-
-char*
 numeric_to_words(gnc_numeric val)
 {
-    return number_to_words(gnc_numeric_to_double(val),
-                           gnc_numeric_denom(val));
+    auto words = number_to_words (gnc_numeric_to_double(val), gnc_numeric_denom(val));
+    PWARN ("Number %s in words: %s", gnc_num_dbg_to_string (val), words.c_str());
+    return g_strdup(words.c_str());
 }
 
 const char*

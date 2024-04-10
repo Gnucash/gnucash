@@ -315,7 +315,6 @@ const char*  xaccPrintAmount (gnc_numeric val, GNCPrintAmountInfo info);
 int xaccSPrintAmount (char* buf, gnc_numeric val, GNCPrintAmountInfo info);
 
 const char* printable_value(gdouble val, gint denom);
-char* number_to_words(gdouble val, gint64 denom);
 char* numeric_to_words(gnc_numeric val);
 
 /**  Parses in_str to obtain a numeric result. The
