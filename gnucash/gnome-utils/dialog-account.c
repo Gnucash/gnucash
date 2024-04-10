@@ -795,7 +795,7 @@ add_children_to_expander (GObject *object, GParamSpec *param_spec, gpointer data
     GtkTreeView *view;
 
     if (gtk_expander_get_expanded (expander) &&
-            !gtk_bin_get_child (GTK_BIN(expander)))
+            !gtk_expander_get_child (GTK_EXPANDER(expander)))
     {
         view = gnc_tree_view_account_new_with_root (account, FALSE);
 

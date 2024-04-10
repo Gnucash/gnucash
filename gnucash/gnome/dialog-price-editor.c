@@ -263,7 +263,7 @@ gui_to_price (PriceEditDialog *pedit_dialog)
     time64 date;
 
     name_space = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
-    fullname = gnc_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe)))));
+    fullname = gnc_entry_get_text( GTK_ENTRY(gtk_combo_box_get_child( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe))));
 
     commodity = gnc_commodity_table_find_full(gnc_get_current_commodities(), name_space, fullname);
     if (!commodity)
@@ -413,7 +413,7 @@ pedit_commodity_changed_cb (GtkComboBox *cbwe, gpointer data)
     gnc_prices_set_changed (pedit_dialog, TRUE);
 
     name_space = gnc_ui_namespace_picker_ns (pedit_dialog->namespace_cbwe);
-    fullname = gnc_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe)))));
+    fullname = gnc_entry_get_text( GTK_ENTRY(gtk_combo_box_get_child( GTK_COMBO_BOX(pedit_dialog->commodity_cbwe))));
 
     commodity = gnc_commodity_table_find_full(gnc_get_current_commodities(), name_space, fullname);
 

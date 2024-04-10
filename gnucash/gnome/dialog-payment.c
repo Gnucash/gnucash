@@ -1434,7 +1434,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
         const gchar *text;
         const char *acct_type;
 
-        text = gnc_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(pw->post_combo)))));
+        text = gnc_entry_get_text (GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(pw->post_combo))));
 
         if (!text || g_strcmp0 (text, "") == 0)
         {

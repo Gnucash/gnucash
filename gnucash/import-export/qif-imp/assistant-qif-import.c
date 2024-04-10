@@ -970,7 +970,7 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     comm_nb_page->namespace_combo = gtk_combo_box_new_with_model_and_entry (GTK_TREE_MODEL(store));
     g_object_unref (store);
 
-    entry = gtk_bin_get_child (GTK_BIN(comm_nb_page->namespace_combo));
+    entry = gtk_combo_box_get_child (GTK_COMBO_BOX(comm_nb_page->namespace_combo));
     gtk_widget_set_events (GTK_WIDGET(entry), GDK_FOCUS_CHANGE_MASK);
     g_signal_connect (G_OBJECT (entry), "changed",
                       G_CALLBACK(gnc_ui_qif_import_comm_namespace_changed_cb), wind);
@@ -2869,8 +2869,8 @@ gnc_ui_qif_import_commodity_notebook_update_combos (QIFImportWindow * wind, gboo
                 DIAG_COMM_ALL);
 
             if(!init_combos)
-                gnc_entry_set_text (GTK_ENTRY(gtk_bin_get_child (
-                                    GTK_BIN(comm_nb_page->namespace_combo))), "");
+                gnc_entry_set_text (GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX
+                                              (comm_nb_page->namespace_combo))), "");
         }
         else
             gnc_ui_update_namespace_picker (comm_nb_page->namespace_combo, ns, DIAG_COMM_ALL);
@@ -3138,8 +3138,8 @@ gnc_ui_qif_import_convert_progress_start_cb (GtkButton * button,
                                        0);
 
     /* The default currency. */
-    const gchar *currname = gnc_entry_get_text (GTK_ENTRY(gtk_bin_get_child (
-                                                GTK_BIN(GTK_COMBO_BOX(wind->currency_picker)))));
+    const gchar *currname = gnc_entry_get_text (GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX
+                                                          (GTK_COMBO_BOX(wind->currency_picker)))));
 
     /* Raise the busy flag so the assistant can't be canceled unexpectedly. */
     wind->busy = TRUE;

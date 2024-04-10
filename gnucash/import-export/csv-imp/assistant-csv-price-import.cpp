@@ -587,7 +587,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
                          G_CALLBACK(csv_price_imp_preview_settings_sel_changed_cb), this);
 
         // Additionally connect to the changed signal of the embedded GtkEntry
-        auto emb_entry = gtk_bin_get_child (GTK_BIN (settings_combo));
+        auto emb_entry = gtk_combo_box_get_child (GTK_COMBO_BOX(settings_combo));
         g_signal_connect (G_OBJECT(emb_entry), "changed",
                          G_CALLBACK(csv_price_imp_preview_settings_text_changed_cb), this);
         g_signal_connect (G_OBJECT(emb_entry), "insert-text",
@@ -827,7 +827,7 @@ void CsvImpPriceAssist::preview_handle_save_del_sensitivity (GtkComboBox* combo)
     GtkTreeIter iter;
     auto can_delete = false;
     auto can_save = false;
-    auto entry = gtk_bin_get_child (GTK_BIN(combo));
+    auto entry = gtk_combo_box_get_child (GTK_COMBO_BOX(combo));
     auto entry_text = gnc_entry_get_text (GTK_ENTRY(entry));
     /* Handle sensitivity of the delete and save button */
     if (gtk_combo_box_get_active_iter (combo, &iter))

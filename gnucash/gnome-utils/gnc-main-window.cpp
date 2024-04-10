@@ -2235,9 +2235,7 @@ main_window_find_tab_items (GncMainWindow *window,
 
     tab_widget = gtk_notebook_get_tab_label(GTK_NOTEBOOK(priv->notebook),
                                            page->notebook_page);
-    if (GTK_IS_EVENT_BOX (tab_widget))
-        tab_hbox = gtk_bin_get_child(GTK_BIN(tab_widget));
-    else if (GTK_IS_BOX (tab_widget))
+    if (GTK_IS_BOX(tab_widget))
         tab_hbox = tab_widget;
     else
     {
@@ -2430,16 +2428,8 @@ main_window_update_page_color (GncPluginPage *page,
         GtkStyleContext *stylectxt;
         gchar *col_str, *widget_css;
 
-        if (!GTK_IS_EVENT_BOX (tab_widget))
-        {
-            GtkWidget *event_box = gtk_event_box_new ();
-            g_object_ref (tab_widget);
-            gtk_notebook_set_tab_label (GTK_NOTEBOOK(priv->notebook),
-                                        page->notebook_page, event_box);
-            gtk_box_prepend (GTK_BOX(event_box), GTK_WIDGET(tab_widget));
-            g_object_unref (tab_widget);
-            tab_widget = event_box;
-        }
+        gtk_notebook_set_tab_label (GTK_NOTEBOOK(priv->notebook),
+                                    page->notebook_page, tab_widget);
 
         stylectxt = gtk_widget_get_style_context (GTK_WIDGET (tab_widget));
         col_str = gdk_rgba_to_string (&tab_color);
@@ -2451,18 +2441,6 @@ main_window_update_page_color (GncPluginPage *page,
         g_object_unref (provider);
         g_free (col_str);
         g_free (widget_css);
-    }
-    else
-    {
-        if (GTK_IS_EVENT_BOX (tab_widget))
-        {
-            GtkWidget *tab_hbox = gtk_bin_get_child(GTK_BIN(tab_widget));
-            g_object_ref (tab_hbox);
-            gtk_box_remove (GTK_BOX(tab_widget), GTK_WIDGET(tab_hbox));
-            gtk_notebook_set_tab_label (GTK_NOTEBOOK(priv->notebook),
-                                        page->notebook_page, tab_hbox);
-            g_object_unref (tab_hbox);
-        }
     }
     g_free(color_string);
     LEAVE("done");
@@ -2496,9 +2474,6 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
         LEAVE("no tab widget");
         return;
     }
-
-    if (GTK_IS_EVENT_BOX(tab_widget))
-        tab_widget = gtk_bin_get_child (GTK_BIN(tab_widget));
 
 //FIXME gtk4
     GtkWidget *child;

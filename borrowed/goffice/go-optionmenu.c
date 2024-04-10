@@ -81,7 +81,7 @@ static void go_option_menu_update_contents(GOOptionMenu *option_menu)
     GtkWidget *w;
     g_return_if_fail(GO_IS_OPTION_MENU(option_menu));
 
-    w = gtk_bin_get_child(GTK_BIN(option_menu->selected));
+    w = gtk_combo_box_get_child (GTK_COMBO_BOX(option_menu->selected));
     text = g_object_get_data(G_OBJECT(w), "option-menu-text");
 
     if (!text && GTK_IS_LABEL(w))
