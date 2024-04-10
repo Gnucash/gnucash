@@ -1561,19 +1561,18 @@ integer_to_words(gint64 val)
 
     while (val >= 1000)
     {
-        auto log_val = log10(val) / 3 + FUDGE;
-        auto pow_val = exp(log_val * 3 * G_LN10) + FUDGE;
-        auto this_part = val / pow_val;
+        int log_val = log10(val) / 3 + FUDGE;
+        int pow_val = exp(log_val * 3 * G_LN10) + FUDGE;
+        int this_part = val / pow_val;
         val -= this_part * pow_val;
         auto tmp = integer_to_words(this_part);
-        g_string_append_printf(result, "%s %s ", tmp,
-                               gettext(big_numbers[static_cast<int>(log_val)]));
+        g_string_append_printf(result, "%s %s ", tmp, gettext(big_numbers[log_val]));
         g_free(tmp);
     }
 
     if (val >= 100)
     {
-        auto this_part = val / 100;
+        int this_part = val / 100;
         val -= this_part * 100;
         g_string_append_printf(result, "%s %s ",
                                gettext(small_numbers[this_part]),
@@ -1582,7 +1581,7 @@ integer_to_words(gint64 val)
 
     if (val > 20)
     {
-        auto this_part = val / 10;
+        int this_part = val / 10;
         val -= this_part * 10;
         g_string_append(result, gettext(medium_numbers[this_part]));
         g_string_append_c(result, ' ');
@@ -1590,7 +1589,7 @@ integer_to_words(gint64 val)
 
     if (val > 0)
     {
-        auto this_part = val;
+        int this_part = val;
         g_string_append(result, gettext(small_numbers[this_part]));
         g_string_append_c(result, ' ');
     }
