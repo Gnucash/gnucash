@@ -792,12 +792,16 @@ hide_progress(GncGWENGui *gui, Progress *progress)
         {
             /* Other progress */
             GtkWidget *box = gui->other_entries_box;
-            GList *entries;
+
+//FIXME gtk4            GList *entries;
 
             g_return_if_fail(box);
-            entries = gtk_container_get_children(GTK_CONTAINER(box));
-            g_return_if_fail(entries);
-            if (entries->next)
+//FIXME gtk4            entries = gtk_container_get_children(GTK_CONTAINER(box));
+//            g_return_if_fail(entries);
+
+            GtkWidget *child =  gtk_widget_get_first_child (GTK_WIDGET(box));
+
+            if (child)
             {
                 /* Another progress is still to be showed */
 //FIXME gtk4                gtk_widget_destroy(GTK_WIDGET(g_list_last(entries)->data));
@@ -810,7 +814,7 @@ hide_progress(GncGWENGui *gui, Progress *progress)
                 /* Box destroyed, Null the reference. */
                 gui->other_entries_box = NULL;
             }
-            g_list_free(entries);
+//            g_list_free(entries);
         }
 
         if (current == progress)

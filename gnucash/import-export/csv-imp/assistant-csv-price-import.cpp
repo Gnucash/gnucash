@@ -636,10 +636,10 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
         g_signal_connect (G_OBJECT(encselector), "charmap_changed",
                          G_CALLBACK(csv_price_imp_preview_enc_sel_cb), this);
 
-        auto encoding_container = GTK_CONTAINER(gtk_builder_get_object (builder, "encoding_container"));
-        gtk_box_prepend (GTK_BOX(encoding_container), GTK_WIDGET(encselector));
+        auto encoding_box = GTK_BOX(gtk_builder_get_object (builder, "encoding_container"));
+        gtk_box_prepend (GTK_BOX(encoding_box), GTK_WIDGET(encselector));
         gtk_widget_set_hexpand (GTK_WIDGET(encselector), true);
-//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(encoding_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(encoding_box));
 
         /* Add commodity selection widget */
         commodity_selector = GTK_WIDGET(gtk_builder_get_object (builder, "commodity_cbox"));
@@ -668,10 +668,10 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
                          G_CALLBACK(csv_price_imp_preview_date_fmt_sel_cb), this);
 
         /* Add it to the assistant. */
-        auto date_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "date_format_container"));
-        gtk_box_prepend (GTK_BOX(date_format_container), GTK_WIDGET(date_format_combo));
+        auto date_format_box = GTK_BOX(gtk_builder_get_object (builder, "date_format_container"));
+        gtk_box_prepend (GTK_BOX(date_format_box), GTK_WIDGET(date_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(date_format_combo), true);
-//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(date_format_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(date_format_box));
 
         /* Add in the currency format combo box and hook it up to an event handler. */
         currency_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
@@ -685,10 +685,10 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
                          G_CALLBACK(csv_price_imp_preview_currency_fmt_sel_cb), this);
 
         /* Add it to the assistant. */
-        auto currency_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "currency_format_container"));
-        gtk_box_prepend (GTK_BOX(currency_format_container), GTK_WIDGET(currency_format_combo));
+        auto currency_format_box = GTK_BOX(gtk_builder_get_object (builder, "currency_format_container"));
+        gtk_box_prepend (GTK_BOX(currency_format_box), GTK_WIDGET(currency_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(currency_format_combo), true);
-//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(currency_format_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(currency_format_box));
 
         /* Connect the CSV/Fixed-Width radio button event handler. */
         csv_button = GTK_WIDGET(gtk_builder_get_object (builder, "csv_button"));

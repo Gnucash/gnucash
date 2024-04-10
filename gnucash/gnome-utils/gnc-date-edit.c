@@ -66,7 +66,7 @@ static guint date_edit_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_date_edit_dispose      (GObject          *object);
 static void gnc_date_edit_finalize     (GObject          *object);
-static void gnc_date_edit_forall       (GtkContainer       *container,
+static void gnc_date_edit_forall       (GtkBox           *box,
                                         gboolean	    include_internals,
                                         GtkCallback	    callback,
                                         gpointer	    callbabck_data);
@@ -586,10 +586,10 @@ gnc_date_edit_set_property (GObject      *object,
 static void
 gnc_date_edit_class_init (GNCDateEditClass *klass)
 {
-    GtkContainerClass *container_class = (GtkContainerClass *) klass;
+    GtkBocClass *box_class = (GtkBoxClass *) klass;
     GObjectClass *object_class = (GObjectClass *) klass;
 
-    container_class->forall = gnc_date_edit_forall;
+    box_class->forall = gnc_date_edit_forall;
     object_class->set_property = gnc_date_edit_set_property;
     object_class->get_property = gnc_date_edit_get_property;
     object_class->dispose = gnc_date_edit_dispose;
@@ -686,11 +686,11 @@ gnc_date_edit_dispose (GObject *object)
 }
 
 static void
-gnc_date_edit_forall (GtkContainer *container, gboolean include_internals,
+gnc_date_edit_forall (GtkBox *box, gboolean include_internals,
                       GtkCallback callback, gpointer callback_data)
 {
-    g_return_if_fail (container != NULL);
-    g_return_if_fail (GNC_IS_DATE_EDIT (container));
+    g_return_if_fail (box != NULL);
+    g_return_if_fail (GNC_IS_DATE_EDIT (box));
     g_return_if_fail (callback != NULL);
 
     /* Let GtkBox handle things only if the internal widgets need
@@ -698,10 +698,10 @@ gnc_date_edit_forall (GtkContainer *container, gboolean include_internals,
     if (!include_internals)
         return;
 
-    if (!GTK_CONTAINER_CLASS (gnc_date_edit_parent_class)->forall)
+    if (!GTK_BOX_CLASS (gnc_date_edit_parent_class)->forall)
         return;
 
-    GTK_CONTAINER_CLASS (gnc_date_edit_parent_class)->forall (container,
+    GTK_BOX_CLASS (gnc_date_edit_parent_class)->forall (box,
             include_internals,
             callback,
             callback_data);

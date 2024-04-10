@@ -1423,9 +1423,9 @@ gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
         return;
 
     /* Synchronize the menu before display */
-    gtk_container_foreach (GTK_CONTAINER(menu),
-                           (GtkCallback)gnc_tree_view_update_column_menu_item,
-                           view);
+//FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(menu),
+//                           (GtkCallback)gnc_tree_view_update_column_menu_item,
+//                           view);
 
     /* Ensure all components are visible */
 //FIXME gtk4    gtk_widget_show_all (menu);

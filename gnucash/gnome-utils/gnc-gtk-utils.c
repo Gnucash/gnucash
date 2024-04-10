@@ -304,12 +304,13 @@ find_widget_func (GtkWidget *widget, const gchar *id)
     if (g_strcmp0 (name, id) == 0)
         return widget;
 
-    if (GTK_IS_CONTAINER(widget))
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(widget));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-        GList *container_list = gtk_container_get_children (GTK_CONTAINER(widget));
-        for (GList *n = container_list; !ret && n; n = n->next)
-            ret = find_widget_func (n->data, id);
-        g_list_free (container_list);
+            ret = find_widget_func (child, id);
     }
 
     return ret;
@@ -391,7 +392,7 @@ add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
     {
         GtkMenuItem* menuItem = GTK_MENU_ITEM(widget);
         GtkWidget* subMenu = gtk_menu_item_get_submenu (menuItem);
-        GtkWidget *accel_label = gtk_bin_get_child (GTK_BIN(widget));
+        GtkWidget *accel_label = gtk_widget_get_first_child (GTK_BIN(widget));
 
         if (accel_label)
         {
@@ -410,9 +411,9 @@ add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
                                             key, mods, GTK_ACCEL_VISIBLE);
             }
         }
-        if (GTK_IS_CONTAINER(subMenu))
-            gtk_container_foreach (GTK_CONTAINER(subMenu),
-                                   add_accel_for_menu_lookup, user_data);
+//FIXME gtk4        if (GTK_IS_CONTAINER(subMenu))
+//            gtk_container_foreach (GTK_CONTAINER(subMenu),
+//                                   add_accel_for_menu_lookup, user_data);
     }
 }
 
@@ -434,7 +435,7 @@ gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GMenuModel *model, GtkAccelG
     // this updates the menu accelerators based on accelerator-map
     gtk_accel_map_foreach (model, (GtkAccelMapForeach)accel_map_foreach_func);
 
-    gtk_container_foreach (GTK_CONTAINER(menu), add_accel_for_menu_lookup, accel_group);
+//FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(menu), add_accel_for_menu_lookup, accel_group);
 }
 
 
@@ -460,7 +461,7 @@ find_menu_item_func (GtkWidget *widget, const gchar *action_name, const gchar *a
 
         if (action_label)
         {
-            GtkWidget *accel_label = gtk_bin_get_child (GTK_BIN(widget));
+            GtkWidget *accel_label = gtk_widget_get_first_child (GTK_BIN(widget));
 
             if (accel_label)
             {
@@ -474,13 +475,13 @@ find_menu_item_func (GtkWidget *widget, const gchar *action_name, const gchar *a
 
         subMenu = gtk_menu_item_get_submenu (GTK_MENU_ITEM(widget));
 
-        if (GTK_IS_CONTAINER(subMenu))
-        {
-            GList *container_list = gtk_container_get_children (GTK_CONTAINER(subMenu));
-            for (GList *n = container_list; !ret && n; n = n->next)
-                ret = find_menu_item_func (n->data, action_name, action_label);
-            g_list_free (container_list);
-        }
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(subMenu));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
+    {
+        ret = find_menu_item_func (child, action_name, action_label);
     }
     return ret;
 }
@@ -502,12 +503,13 @@ gnc_find_menu_item_by_action_name (GtkWidget *menu, const gchar *action_name)
     g_return_val_if_fail (GTK_IS_WIDGET(menu), NULL);
     g_return_val_if_fail (action_name != NULL, NULL);
 
-    if (GTK_IS_CONTAINER(menu))
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(menu));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-        GList *container_list = gtk_container_get_children (GTK_CONTAINER(menu));
-        for (GList *n = container_list; !ret && n; n = n->next)
-            ret = find_menu_item_func (n->data, action_name, action_label);
-        g_list_free (container_list);
+        ret = find_menu_item_func (child, action_name, action_label);
     }
     return ret;
 }
@@ -530,12 +532,13 @@ gnc_find_menu_item_by_action_label (GtkWidget *menu, const gchar *action_label)
     g_return_val_if_fail (GTK_IS_WIDGET(menu), NULL);
     g_return_val_if_fail (action_label != NULL, NULL);
 
-    if (GTK_IS_CONTAINER(menu))
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(menu));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-        GList *container_list = gtk_container_get_children (GTK_CONTAINER(menu));
-        for (GList *n = container_list; !ret && n; n = n->next)
-            ret = find_menu_item_func (n->data, action_name, action_label);
-        g_list_free (container_list);
+        ret = find_menu_item_func (child, action_name, action_label);
     }
     return ret;
 }
@@ -552,9 +555,9 @@ menu_item_list (GtkWidget *widget, gpointer user_data)
 
         *list = g_list_prepend (*list, widget);
 
-        if (GTK_IS_CONTAINER(subMenu))
-            gtk_container_foreach (GTK_CONTAINER(subMenu),
-                                   menu_item_list, user_data);
+//FIXME gtk4        if (GTK_IS_CONTAINER(subMenu))
+//            gtk_container_foreach (GTK_CONTAINER(subMenu),
+//                                   menu_item_list, user_data);
     }
 }
 
@@ -571,7 +574,7 @@ gnc_menu_get_items (GtkWidget *menu)
 
     g_return_val_if_fail (GTK_IS_WIDGET(menu), NULL);
 
-    gtk_container_foreach (GTK_CONTAINER(menu), menu_item_list, &list);
+//FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(menu), menu_item_list, &list);
 
     return list;
 }
@@ -617,7 +620,7 @@ gnc_find_toolbar_item (GtkWidget *toolbar, const gchar *action_name)
     ftis.action_name = action_name;
     ftis.found_tool_item = NULL;
 
-    gtk_container_foreach (GTK_CONTAINER(toolbar), find_tool_action, &ftis);
+//FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(toolbar), find_tool_action, &ftis);
 
     return ftis.found_tool_item;
 }
@@ -1011,7 +1014,7 @@ statusbar_pop (GtkWidget *statusbar)
 static void
 menu_item_select_cb (GtkWidget *menu_item, GtkWidget *statusbar)
 {
-    GtkWidget *accel_label = gtk_bin_get_child (GTK_BIN(menu_item));
+    GtkWidget *accel_label = gtk_widget_get_first_child (GTK_BIN(menu_item));
     GMenuModel *menubar_model = g_object_get_data (G_OBJECT(statusbar), "menu-model");
 
     if (!menubar_model)
@@ -1103,7 +1106,7 @@ gnc_tool_item_setup_tooltip_to_statusbar_callback (GtkWidget *tool_item,
     g_return_if_fail (tool_item != NULL);
     g_return_if_fail (statusbar != NULL);
 
-    child = gtk_bin_get_child (GTK_BIN(tool_item));
+    child = gtk_widget_get_first_child (GTK_BIN(tool_item));
 
     gtk_widget_add_events (GTK_WIDGET(child),
                            GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK

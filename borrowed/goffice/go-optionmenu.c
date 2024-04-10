@@ -174,33 +174,44 @@ static void cb_select(GtkMenuItem *item, GOOptionMenu *option_menu)
 
 static void handle_menu_signals(GOOptionMenu *option_menu, gboolean connect)
 {
-    GList *children = gtk_container_get_children(
-            GTK_CONTAINER(option_menu->menu));
+//FIXME gtk4    GList *children = gtk_container_get_children(
+//            GTK_CONTAINER(option_menu->menu));
 
-    while (children)
+
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(option_menu->menu));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-        GtkWidget *child = children->data;
-        children = g_list_remove(children, child);
 
-        if (GTK_IS_MENU_ITEM(child))
-        {
-            GtkWidget *sub = gtk_menu_item_get_submenu(GTK_MENU_ITEM(child));
 
-            if (sub)
-                children = g_list_concat(children,
-                        gtk_container_get_children(GTK_CONTAINER(sub)));
-            else if (connect)
-                g_signal_connect(child, "activate", G_CALLBACK(cb_select),
-                        option_menu);
-
-            else
-                g_signal_handlers_disconnect_by_func(child,
-                        G_CALLBACK(cb_select), option_menu);
-
-        }
     }
 
-    g_list_free (children);
+//    while (children)
+//    {
+//        GtkWidget *child = children->data;
+//        children = g_list_remove(children, child);
+
+//        if (GTK_IS_MENU_ITEM(child))
+//        {
+//            GtkWidget *sub = gtk_menu_item_get_submenu(GTK_MENU_ITEM(child));
+
+//            if (sub)
+//                children = g_list_concat(children,
+//                        gtk_container_get_children(GTK_CONTAINER(sub)));
+//            else if (connect)
+//                g_signal_connect(child, "activate", G_CALLBACK(cb_select),
+//                        option_menu);
+
+//            else
+//                g_signal_handlers_disconnect_by_func(child,
+//                        G_CALLBACK(cb_select), option_menu);
+
+//        }
+//    }
+
+//    g_list_free (children);
 }
 
 void go_option_menu_set_menu(GOOptionMenu *option_menu, GtkWidget *menu)
@@ -251,21 +262,21 @@ void go_option_menu_set_history(GOOptionMenu *option_menu, GSList *selection)
     {
         GtkMenuShell *menu = option_menu->menu;
 
-        while (1)
-        {
-            int n = GPOINTER_TO_INT(selection->data);
-            GList *children = gtk_container_get_children (GTK_CONTAINER(menu));
-            GtkMenuItem *item = g_list_nth_data (children, n);
-            g_list_free (children);
-            selection = selection->next;
-            if (selection)
-                menu = GTK_MENU_SHELL(gtk_menu_item_get_submenu(item));
-            else
-            {
-                go_option_menu_select_item(option_menu, item);
-                break;
-            }
-        }
+//FIXME gtk4        while (1)
+//        {
+//            int n = GPOINTER_TO_INT(selection->data);
+//            GList *children = gtk_container_get_children (GTK_CONTAINER(menu));
+//            GtkMenuItem *item = g_list_nth_data (children, n);
+//            g_list_free (children);
+//            selection = selection->next;
+//            if (selection)
+//                menu = GTK_MENU_SHELL(gtk_menu_item_get_submenu(item));
+//            else
+//            {
+//                go_option_menu_select_item(option_menu, item);
+//                break;
+//            }
+//        }
     }
 }
 

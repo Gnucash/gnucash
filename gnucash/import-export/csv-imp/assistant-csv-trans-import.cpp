@@ -594,10 +594,10 @@ CsvImpTransAssist::CsvImpTransAssist ()
         g_signal_connect (G_OBJECT(encselector), "charmap_changed",
                          G_CALLBACK(csv_tximp_preview_enc_sel_cb), this);
 
-        auto encoding_container = GTK_CONTAINER(gtk_builder_get_object (builder, "encoding_container"));
-        gtk_box_prepend (GTK_BOX(encoding_container), GTK_WIDGET(encselector));
+        auto encoding_box = GTK_BOX(gtk_builder_get_object (builder, "encoding_container"));
+        gtk_box_prepend (GTK_BOX(encoding_box), GTK_WIDGET(encselector));
         gtk_widget_set_hexpand (GTK_WIDGET(encselector), true);
-//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(encoding_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(encoding_box));
 
         /* The instructions label and image */
         instructions_label = GTK_LABEL(gtk_builder_get_object (builder, "instructions_label"));
@@ -612,10 +612,10 @@ CsvImpTransAssist::CsvImpTransAssist ()
                          G_CALLBACK(csv_tximp_preview_date_fmt_sel_cb), this);
 
         /* Add it to the assistant. */
-        auto date_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "date_format_container"));
-        gtk_box_prepend (GTK_BOX(date_format_container), GTK_WIDGET(date_format_combo));
+        auto date_format_box = GTK_BOX(gtk_builder_get_object (builder, "date_format_container"));
+        gtk_box_prepend (GTK_BOX(date_format_box), GTK_WIDGET(date_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(date_format_combo), true);
-//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(date_format_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(date_format_box));
 
         /* Add in the currency format combo box and hook it up to an event handler. */
         currency_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
@@ -629,10 +629,10 @@ CsvImpTransAssist::CsvImpTransAssist ()
                          G_CALLBACK(csv_tximp_preview_currency_fmt_sel_cb), this);
 
         /* Add it to the assistant. */
-        auto currency_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "currency_format_container"));
-        gtk_box_prepend (GTK_BOX(currency_format_container), GTK_WIDGET(currency_format_combo));
+        auto currency_format_box = GTK_BOX(gtk_builder_get_object (builder, "currency_format_container"));
+        gtk_box_prepend (GTK_BOX(currency_format_box), GTK_WIDGET(currency_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(currency_format_combo), true);
-//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(currency_format_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(currency_format_box));
 
         /* Connect the CSV/Fixed-Width radio button event handler. */
         csv_button = GTK_WIDGET(gtk_builder_get_object (builder, "csv_button"));
@@ -2122,11 +2122,11 @@ CsvImpTransAssist::assist_doc_page_prepare ()
     gtk_assistant_add_action_widget (csv_imp_asst, cancel_button);
     auto button_area = gtk_widget_get_parent (cancel_button);
 
-    if (GTK_IS_HEADER_BAR(button_area))
-        gtk_container_child_set (GTK_CONTAINER(button_area),
-                                 cancel_button,
-                                 "pack-type", GTK_PACK_START,
-                                 nullptr);
+//FIXME gtk4    if (GTK_IS_HEADER_BAR(button_area))
+//        gtk_container_child_set (GTK_CONTAINER(button_area),
+//                                 cancel_button,
+//                                 "pack-type", GTK_PACK_START,
+//                                 nullptr);
 
     g_signal_connect (cancel_button, "clicked",
                      G_CALLBACK(csv_tximp_assist_close_cb), this);
@@ -2173,10 +2173,10 @@ CsvImpTransAssist::assist_match_page_prepare ()
 
     if (GTK_IS_HEADER_BAR(button_area))
     {
-        gtk_container_child_set (GTK_CONTAINER(button_area),
-                                 help_button,
-                                 "pack-type", GTK_PACK_START,
-                                 nullptr);
+//FIXME gtk4        gtk_container_child_set (GTK_CONTAINER(button_area),
+//                                 help_button,
+//                                 "pack-type", GTK_PACK_START,
+//                                 nullptr);
     }
     else
     {

@@ -890,12 +890,21 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
     for (l = sw->crit_list; l; l = l->next)
     {
         struct _crit_data *data = l->data;
-        GList *children = gtk_container_get_children (GTK_CONTAINER(data->container));
+//FIXME gtk4        GList *children = gtk_container_get_children (GTK_CONTAINER(data->container));
+
+        GtkWidget *child;
+        for (child = gtk_widget_get_first_child (GTK_WIDGET(data->container));
+             !GTK_IS_COMBO_BOX(child);
+             child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
+        {
+        
 
         /* For each, walk the list of container children to get combo_box */
-        for (GList *child = children; child; child = g_list_next (child))
-        {
-            GtkWidget *combo_box = child->data;
+//FIXME gtk4        for (GList *child = children; child; child = g_list_next (child))
+//FIXME gtk4        {
+//FIXME gtk4            GtkWidget *combo_box = child->data;
+
+            GtkWidget *combo_box = child;
 
             /* Get current active item if combo_box */
             if (GTK_IS_COMBO_BOX(combo_box))
@@ -918,7 +927,8 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
 //FIXME gtk4                gtk_widget_show_all (data->container);
             }
         }
-        g_list_free (children);
+//FIXME gtk4        }
+//FIXME gtk4        g_list_free (children);
     }
     gtk_widget_grab_focus(focused_widget);
 }
@@ -937,18 +947,18 @@ get_grid_size (GtkWidget *child, gpointer data)
     struct grid_size *gridsize = data;
     gint top, left, height, width;
 
-    gtk_container_child_get(GTK_CONTAINER(gridsize->grid), child,
-                            "left-attach", &left,
-                            "top-attach", &top,
-                            "height", &height,
-                            "width", &width,
-                            NULL);
+//FIXME gtk4    gtk_container_child_get(GTK_CONTAINER(gridsize->grid), child,
+//                            "left-attach", &left,
+//                            "top-attach", &top,
+//                            "height", &height,
+//                            "width", &width,
+//                            NULL);
 
-    if (left + width >= gridsize->cols)
-        gridsize->cols = left + width;
+//    if (left + width >= gridsize->cols)
+//        gridsize->cols = left + width;
 
-    if (top + height >= gridsize->rows)
-        gridsize->rows = top + height;
+//    if (top + height >= gridsize->rows)
+//        gridsize->rows = top + height;
 }
 
 static void
@@ -989,9 +999,9 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
         sw->crit_list = g_list_append (sw->crit_list, data);
 
         gridsize.grid = GTK_GRID (sw->criteria_table);
-        gtk_container_foreach(GTK_CONTAINER(sw->criteria_table), get_grid_size, &gridsize);
+//FIXME gtk4        gtk_container_foreach(GTK_CONTAINER(sw->criteria_table), get_grid_size, &gridsize);
 
-        attach_element (w, sw, gridsize.rows);
+//        attach_element (w, sw, gridsize.rows);
 
         gnc_search_core_type_grab_focus (new_sct);
         gnc_search_core_type_editable_enters (new_sct);

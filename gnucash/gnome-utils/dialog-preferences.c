@@ -258,25 +258,22 @@ static void
 gnc_preferences_select_account_page (GtkDialog *dialog)
 {
     GtkWidget *notebook = g_object_get_data (G_OBJECT(dialog), NOTEBOOK);
-    GList *children = gtk_container_get_children (GTK_CONTAINER(notebook));
-
-    if (children)
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(notebook));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
         GtkWidget *acc_page = NULL;
-        GList *node;
 
-        for (node = children; node; node = node->next)
-        {
-            if (g_strcmp0 (gtk_widget_get_name (GTK_WIDGET(node->data)), "accounts_page") == 0)
-                acc_page = node->data;
-        }
+        if (g_strcmp0 (gtk_widget_get_name (GTK_WIDGET(child)), "accounts_page") == 0)
+            acc_page = child;
 
         if (acc_page)
             gtk_notebook_set_current_page (GTK_NOTEBOOK(notebook),
                                            gtk_notebook_page_num (GTK_NOTEBOOK(notebook),
                                            acc_page));
     }
-    g_list_free (children);
 }
 
 
@@ -551,18 +548,18 @@ gnc_prefs_get_grid_size (GtkWidget *child, gpointer data)
     struct copy_data *copydata = data;
     gint top, left, height, width;
 
-    gtk_container_child_get (GTK_CONTAINER(copydata->grid_to), child,
-                             "left-attach", &left,
-                             "top-attach", &top,
-                             "height", &height,
-                             "width", &width,
-                             NULL);
+//FIXME gtk4    gtk_container_child_get (GTK_CONTAINER(copydata->grid_to), child,
+//                             "left-attach", &left,
+//                             "top-attach", &top,
+//                             "height", &height,
+//                             "width", &width,
+//                             NULL);
 
-    if (left + width >= copydata->cols)
-        copydata->cols = left + width;
+//    if (left + width >= copydata->cols)
+//        copydata->cols = left + width;
 
-    if (top + height >= copydata->rows)
-        copydata->rows = top + height;
+//    if (top + height >= copydata->rows)
+//        copydata->rows = top + height;
 }
 
 
@@ -589,12 +586,12 @@ gnc_prefs_move_grid_entry (GtkWidget *child,
     gint topm, bottomm, leftm, rightm;
 
     ENTER("child %p, copy data %p", child, data);
-    gtk_container_child_get (GTK_CONTAINER(copydata->grid_from), child,
-                             "left-attach", &left,
-                             "top-attach", &top,
-                             "height", &height,
-                             "width", &width,
-                             NULL);
+//FIXME gtk4    gtk_container_child_get (GTK_CONTAINER(copydata->grid_from), child,
+//                             "left-attach", &left,
+//                             "top-attach", &top,
+//                             "height", &height,
+//                             "width", &width,
+//                             NULL);
     hexpand = gtk_widget_get_hexpand (child);
     vexpand = gtk_widget_get_vexpand (child);
     halign = gtk_widget_get_halign (child);
@@ -716,7 +713,7 @@ gnc_preferences_build_page (gpointer data,
     {
         /* Lets get the size of the existing grid */
         copydata.grid_to = GTK_GRID(existing_content);
-        gtk_container_foreach (GTK_CONTAINER(existing_content), gnc_prefs_get_grid_size, &copydata);
+//FIXME gtk4        gtk_container_foreach (GTK_CONTAINER(existing_content), gnc_prefs_get_grid_size, &copydata);
 
         DEBUG("found existing page %s, grid size is %d x %d", add_in->tabname, copydata.rows, copydata.cols);
     }
@@ -735,7 +732,7 @@ gnc_preferences_build_page (gpointer data,
     /* Now copy all the entries in the grid */
     copydata.grid_from = GTK_GRID(new_content);
     copydata.grid_to = GTK_GRID(existing_content);
-    gtk_container_foreach (GTK_CONTAINER(new_content), gnc_prefs_move_grid_entry, &copydata);
+//FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(new_content), gnc_prefs_move_grid_entry, &copydata);
 
     g_object_ref_sink (new_content);
     g_object_unref (G_OBJECT(builder));
@@ -1282,10 +1279,8 @@ gnc_prefs_connect_one (const gchar *name,
     else if (GTK_IS_BOX(widget))
     {
         /* Test custom widgets are all children of a hbox */
-        GtkWidget *widget_child;
-        GList* child = gtk_container_get_children (GTK_CONTAINER(widget));
-        widget_child = child->data;
-        g_list_free (child);
+        GtkWidget *widget_child = gtk_widget_get_first_child  (GTK_WIDGET(widget));
+
         DEBUG("  %s - box", name);
         DEBUG("Box widget type is %s and name is %s", gtk_widget_get_name (GTK_WIDGET(widget_child)), name);
         if (GNC_IS_CURRENCY_EDIT(widget_child))

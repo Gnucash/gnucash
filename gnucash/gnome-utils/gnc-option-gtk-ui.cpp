@@ -1583,24 +1583,24 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto index{option.get_value<uint16_t>()};
-        auto list{gtk_container_get_children(GTK_CONTAINER(get_widget()))};
-        auto box{GTK_WIDGET(list->data)};
-        g_list_free(list);
+//FIXME gtk4        auto list{gtk_container_get_children(GTK_CONTAINER(get_widget()))};
+//        auto box{GTK_WIDGET(list->data)};
+//        g_list_free(list);
 
-        list = gtk_container_get_children(GTK_CONTAINER(box));
-        auto node{g_list_nth(list, index)};
-        GtkButton* button{};
-        if (node)
-        {
-            button = GTK_BUTTON(node->data);
-        }
-        else
+//FIXME gtk4        list = gtk_container_get_children(GTK_CONTAINER(box));
+//        auto node{g_list_nth(list, index)};
+//        GtkButton* button{};
+//        if (node)
+//        {
+//            button = GTK_BUTTON(node->data);
+//        }
+//        else
         {
             PERR("Invalid Radio Button Selection %hu", index);
-            g_list_free(list);
+//            g_list_free(list);
             return;
         }
-        g_list_free(list);
+//        g_list_free(list);
         auto val{g_object_get_data (G_OBJECT (button),
                                     "gnc_radiobutton_index")};
         g_return_if_fail (GPOINTER_TO_UINT (val) == index);

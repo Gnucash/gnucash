@@ -301,7 +301,7 @@ gnc_plugin_add_toolbar_tooltip_callbacks (GtkWidget *toolbar, GtkWidget *statusb
     g_return_if_fail (GTK_IS_TOOLBAR(toolbar));
     g_return_if_fail (GTK_IS_STATUSBAR(statusbar));
 
-    gtk_container_foreach (GTK_CONTAINER(toolbar), for_each_tool_action, statusbar);
+//FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(toolbar), for_each_tool_action, statusbar);
 }
 
 /** @} */

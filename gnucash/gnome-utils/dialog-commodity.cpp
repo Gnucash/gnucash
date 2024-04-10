@@ -507,9 +507,9 @@ gnc_set_commodity_section_sensitivity (GtkWidget *widget, gpointer user_data)
     auto cw = static_cast<CommodityWindow*>(user_data);
     guint offset = 0;
 
-    gtk_container_child_get(GTK_CONTAINER(cw->table), widget,
-                            "top-attach", &offset,
-                            nullptr);
+//FIXME gtk4    gtk_container_child_get(GTK_CONTAINER(cw->table), widget,
+//                            "top-attach", &offset,
+//                            nullptr);
 
     if ((offset < cw->comm_section_top) || (offset >= cw->comm_section_bottom))
         return;
@@ -520,8 +520,8 @@ gnc_set_commodity_section_sensitivity (GtkWidget *widget, gpointer user_data)
 static void
 gnc_ui_update_commodity_info (CommodityWindow *cw)
 {
-    gtk_container_foreach(GTK_CONTAINER(cw->table),
-                          gnc_set_commodity_section_sensitivity, cw);
+//FIXME gtk4    gtk_container_foreach(GTK_CONTAINER(cw->table),
+//                          gnc_set_commodity_section_sensitivity, cw);
 }
 
 
@@ -531,9 +531,9 @@ gnc_set_fq_sensitivity (GtkWidget *widget, gpointer user_data)
     auto cw = static_cast<CommodityWindow*>(user_data);
     guint offset = 0;
 
-    gtk_container_child_get(GTK_CONTAINER(cw->table), widget,
-                            "top-attach", &offset,
-                            nullptr);
+//FIXME gtk4    gtk_container_child_get(GTK_CONTAINER(cw->table), widget,
+//                            "top-attach", &offset,
+//                            nullptr);
 
     if ((offset < cw->fq_section_top) || (offset >= cw->fq_section_bottom))
         return;
@@ -544,8 +544,8 @@ gnc_set_fq_sensitivity (GtkWidget *widget, gpointer user_data)
 static void
 gnc_ui_update_fq_info (CommodityWindow *cw)
 {
-    gtk_container_foreach(GTK_CONTAINER(cw->table),
-                          gnc_set_fq_sensitivity, cw);
+//FIXME gtk4    gtk_container_foreach(GTK_CONTAINER(cw->table),
+//                          gnc_set_fq_sensitivity, cw);
 }
 
 
@@ -928,16 +928,17 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     /* Determine the commodity section of the dialog */
     retval->table = GTK_WIDGET(gtk_builder_get_object (builder, "edit_table"));
     sec_label = GTK_WIDGET(gtk_builder_get_object (builder, "security_label"));
-    gtk_container_child_get(GTK_CONTAINER(retval->table), sec_label,
-                            "top-attach", &retval->comm_section_top, nullptr);
+
+//FIXME gtk4    gtk_container_child_get(GTK_CONTAINER(retval->table), sec_label,
+//                            "top-attach", &retval->comm_section_top, nullptr);
 
     widget = GTK_WIDGET(gtk_builder_get_object (builder, "quote_label"));
-    gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
-                            "top-attach", &retval->comm_section_bottom, nullptr);
+//FIXME gtk4    gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
+//                            "top-attach", &retval->comm_section_bottom, nullptr);
 
-    gtk_container_child_get(GTK_CONTAINER(retval->table),
-                            retval->user_symbol_entry, "top-attach",
-                            &retval->comm_symbol_line, nullptr);
+//FIXME gtk4    gtk_container_child_get(GTK_CONTAINER(retval->table),
+//                            retval->user_symbol_entry, "top-attach",
+//                            &retval->comm_symbol_line, nullptr);
 
     /* Build custom widgets */
     box = GTK_WIDGET(gtk_builder_get_object (builder, "single_source_box"));
@@ -1009,12 +1010,13 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
     {
         /* Determine the price quote of the dialog */
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "fq_warning_alignment"));
-        gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
-                                "top-attach", &retval->fq_section_top, nullptr);
+
+//FIXME gtk4        gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
+//                                "top-attach", &retval->fq_section_top, nullptr);
 
         widget = GTK_WIDGET(gtk_builder_get_object (builder, "bottom_alignment"));
-        gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
-                                "top-attach", &retval->fq_section_bottom, nullptr);
+//FIXME gtk4        gtk_container_child_get(GTK_CONTAINER(retval->table), widget,
+//                                "top-attach", &retval->fq_section_bottom, nullptr);
 
         gnc_ui_update_fq_info (retval);
     }

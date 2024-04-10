@@ -2220,8 +2220,7 @@ main_window_find_tab_items (GncMainWindow *window,
                             GtkWidget **entry_p)
 {
     GncMainWindowPrivate *priv;
-    GtkWidget *tab_hbox, *widget, *tab_widget;
-    GList *children, *tmp;
+    GtkWidget *tab_hbox, *tab_widget;
 
     ENTER("window %p, page %p, label_p %p, entry_p %p",
           window, page, label_p, entry_p);
@@ -2246,20 +2245,21 @@ main_window_find_tab_items (GncMainWindow *window,
         return FALSE;
     }
 
-    children = gtk_container_get_children(GTK_CONTAINER(tab_hbox));
-    for (tmp = children; tmp; tmp = g_list_next(tmp))
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(tab_hbox));
+         child != nullptr;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-        widget = static_cast<GtkWidget*>(tmp->data);
-        if (GTK_IS_LABEL(widget))
+        if (GTK_IS_LABEL(child))
         {
-            *label_p = widget;
+            *label_p = child;
         }
-        else if (GTK_IS_ENTRY(widget))
+        else if (GTK_IS_ENTRY(child))
         {
-            *entry_p = widget;
+            *entry_p = child;
         }
     }
-    g_list_free(children);
 
     LEAVE("label %p, entry %p", *label_p, *entry_p);
     return (*label_p && *entry_p);
@@ -2476,7 +2476,6 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
     GncMainWindow *window;
     GtkWidget *tab_widget;
     GtkWidget *image = NULL;
-    GList *children;
     gchar *image_name = NULL;
     const gchar *icon_name;
 
@@ -2501,15 +2500,15 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
     if (GTK_IS_EVENT_BOX(tab_widget))
         tab_widget = gtk_bin_get_child (GTK_BIN(tab_widget));
 
-    children = gtk_container_get_children (GTK_CONTAINER(tab_widget));
-    /* For each, walk the list of container children to get image widget */
-    for (GList *child = children; child; child = g_list_next (child))
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(tab_widget));
+         child != nullptr;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-        GtkWidget *widget = static_cast<GtkWidget*>(child->data);
-        if (GTK_IS_IMAGE(widget))
-            image = widget;
+        if (GTK_IS_IMAGE(child))
+            image = child;
     }
-    g_list_free (children);
 
     if (!image)
     {

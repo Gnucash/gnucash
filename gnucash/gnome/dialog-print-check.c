@@ -2661,9 +2661,9 @@ gnc_print_check_format_changed (GtkComboBox *widget,
        entry in the position combo box since gnc_print_check_position_changed
        will adjust these settings in some cases. */
     sensitive = (!separator && !format);
-    gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
-                          gnc_print_check_set_sensitive,
-                          GINT_TO_POINTER(sensitive));
+//FIXME gtk4    gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
+//                          gnc_print_check_set_sensitive,
+//                          GINT_TO_POINTER(sensitive));
 
     /* Set the active entry in the position combo box, this will trigger a
        call to gnc_print_check_position_changed */
