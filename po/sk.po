@@ -8,14 +8,15 @@
 # Zdenko Podobný <zdenop@gmail.com>, 2022, 2023, 2024.
 # ZdPo Ster <zdposter@gmail.com>, 2023.
 # Milan Šalka <salka.milan@googlemail.com>, 2023.
+# Robert Zelnik <rzelnik@tvorivo.sk>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-02-16 22:02+0000\n"
-"Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
+"PO-Revision-Date: 2024-04-10 06:01+0000\n"
+"Last-Translator: Robert Zelnik <rzelnik@tvorivo.sk>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
 "Language: sk\n"
@@ -23,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=((n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2);\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-Language: Slovak\n"
 "X-Poedit-Country: SLOVAKIA\n"
@@ -10966,7 +10967,7 @@ msgstr "Čiarka (,)"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:349
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:338
 msgid "Semicolon (;)"
-msgstr "Podkočiarka(;)"
+msgstr "Bodkočiarka (;)"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:175
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:288
