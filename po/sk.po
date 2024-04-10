@@ -10966,7 +10966,7 @@ msgstr "Čiarka (,)"
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:349
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:338
 msgid "Semicolon (;)"
-msgstr "Podkočiarka(;)"
+msgstr "Bodkočiarka(;)"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:175
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:288
