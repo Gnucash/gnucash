@@ -2560,7 +2560,7 @@ gnc_main_window_tab_entry_activate (GtkWidget *entry,
         return;
     }
 
-    main_window_update_page_name(page, gtk_entry_get_text(GTK_ENTRY(entry)));
+    main_window_update_page_name(page, gnc_entry_get_text(GTK_ENTRY(entry)));
 
     gtk_widget_set_visible (GTK_WIDGET(entry), false);
     gtk_widget_set_visible (GTK_WIDGET(label), true);
@@ -2611,7 +2611,7 @@ gnc_main_window_tab_entry_key_press_event (GtkEventControllerKey *key, guint key
             return false;
         }
 
-        gtk_entry_set_text(GTK_ENTRY(widget), gtk_label_get_text(GTK_LABEL(label)));
+        gnc_entry_set_text(GTK_ENTRY(widget), gtk_label_get_text(GTK_LABEL(label)));
         gtk_widget_set_visible (GTK_WIDGET(widget), false);
         gtk_widget_set_visible (GTK_WIDGET(label), true);
 
@@ -4866,7 +4866,7 @@ gnc_main_window_cmd_actions_rename_page (GSimpleAction *simple,
         return;
     }
 
-    gtk_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
+    gnc_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
     gtk_editable_select_region(GTK_EDITABLE(entry), 0, -1);
     gtk_widget_set_visible (GTK_WIDGET(label), false);
     gtk_widget_set_visible (GTK_WIDGET(entry), true);

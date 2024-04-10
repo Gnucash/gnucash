@@ -174,6 +174,11 @@ gchar* gnc_get_negative_color (void);
 /** This function sets the title of an owner dialog */
 void gnc_owner_window_set_title (GtkWindow*, const char*, GtkWidget*, GtkWidget*);
 
+/** This function sets the entry buffer with text */
+void gnc_entry_set_text (GtkEntry *entry, const gchar *text);
+
+/** This function gets the text of the entry buffer */
+const gchar * gnc_entry_get_text (GtkEntry *entry);
 
 #ifdef __cplusplus
 }

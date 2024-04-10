@@ -398,7 +398,7 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     g_return_val_if_fail (gae != NULL, -1);
     g_return_val_if_fail (GNC_IS_AMOUNT_EDIT(gae), -1);
 
-    string = gtk_entry_get_text (GTK_ENTRY(gae->entry));
+    string = gnc_entry_get_text (GTK_ENTRY(gae->entry));
 
     if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
     {
@@ -547,7 +547,7 @@ gnc_amount_edit_set_amount (GNCAmountEdit *gae, gnc_numeric amount)
 
     /* Update the display. */
     amount_string = xaccPrintAmount (amount, gae->print_info);
-    gtk_entry_set_text (GTK_ENTRY(gae->entry), amount_string);
+    gnc_entry_set_text (GTK_ENTRY(gae->entry), amount_string);
 
     gae->amount = amount;
     gae->need_to_parse = FALSE;

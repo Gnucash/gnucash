@@ -844,11 +844,11 @@ void
 gnc_owner_window_set_title (GtkWindow *window, const char *header,
                             GtkWidget *owner_entry, GtkWidget *id_entry)
 {
-    const char *name = gtk_entry_get_text (GTK_ENTRY (owner_entry));
+    const char *name = gnc_entry_get_text (GTK_ENTRY (owner_entry));
     if (!name || *name == '\0')
         name = _("<No name>");
 
-    const char *id = gtk_entry_get_text (GTK_ENTRY (id_entry));
+    const char *id = gnc_entry_get_text (GTK_ENTRY (id_entry));
 
     char *title = (id && *id) ?
         g_strdup_printf ("%s - %s (%s)", header, name, id) :
@@ -857,4 +857,25 @@ gnc_owner_window_set_title (GtkWindow *window, const char *header,
     gtk_window_set_title (window, title);
 
     g_free (title);
+}
+
+void
+gnc_entry_set_text (GtkEntry *entry, const gchar *text)
+{
+    g_return_if_fail (GTK_IS_ENTRY(entry));
+    g_return_if_fail (text != NULL);
+    
+    GtkEntryBuffer *buffer = gtk_entry_get_buffer (entry);
+    gtk_entry_buffer_set_text (buffer, text, -1);
+}
+
+
+const gchar *
+gnc_entry_get_text (GtkEntry *entry)
+{
+    g_return_val_if_fail (GTK_IS_ENTRY(entry), NULL);
+
+    GtkEntryBuffer *buffer = gtk_entry_get_buffer (entry);
+
+    return gtk_entry_buffer_get_text (buffer);
 }

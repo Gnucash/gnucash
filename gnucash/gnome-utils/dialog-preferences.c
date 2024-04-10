@@ -158,7 +158,7 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
     gchar *sample;
     gchar *separator = NULL;
 
-    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (entry), &separator);
+    gchar *conflict_msg = gnc_account_separator_is_valid (gnc_entry_get_text (entry), &separator);
 
     label = g_object_get_data (G_OBJECT(dialog), "sample_account");
     DEBUG("Sample Account pointer is %p", label);
@@ -206,7 +206,7 @@ gnc_account_separator_validate (GtkWidget *dialog)
     GtkWidget *entry = g_object_get_data (G_OBJECT(dialog), "account-separator");
     gboolean ret = TRUE;
     gchar *separator = NULL;
-    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (GTK_ENTRY(entry)), &separator);
+    gchar *conflict_msg = gnc_account_separator_is_valid (gnc_entry_get_text (GTK_ENTRY(entry)), &separator);
 
     /* Check if the new separator clashes with existing account names */
     if (conflict_msg)
@@ -233,7 +233,7 @@ gnc_account_separator_validate (GtkWidget *dialog)
             gchar *original_sep = g_object_get_data (G_OBJECT(entry), "original_text");
 
             if (original_sep != NULL)
-                gtk_entry_set_text (GTK_ENTRY(entry), original_sep);
+                gnc_entry_set_text (GTK_ENTRY(entry), original_sep);
         }
         else
             ret = FALSE;
@@ -1503,7 +1503,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
 
     /* save the original account separator in case it changes */
     g_object_set_data_full (G_OBJECT(entry), "original_text",
-                            g_strdup (gtk_entry_get_text (GTK_ENTRY(entry))),
+                            g_strdup (gnc_entry_get_text (GTK_ENTRY(entry))),
                             g_free);
 
     LEAVE("dialog %p", dialog);

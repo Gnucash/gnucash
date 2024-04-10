@@ -473,7 +473,8 @@ gnc_currency_edit_clear_display (GNCCurrencyEdit *gce)
                                      (gpointer)gnc_currency_edit_active_changed, gce);
 
     gtk_combo_box_set_model (GTK_COMBO_BOX(gce), nullptr);
-    gtk_entry_set_text (GTK_ENTRY(entry),"");
+    gnc_entry_set_text (GTK_ENTRY(entry),"");
+
     gtk_combo_box_set_active (GTK_COMBO_BOX(gce), -1);
     gtk_combo_box_set_model (GTK_COMBO_BOX(gce), model);
 

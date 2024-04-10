@@ -327,7 +327,7 @@ gnc_date_format_set_custom (GNCDateFormat *gdf, const char *format)
     if (format == NULL || *format == '\0')
         return;
 
-    gtk_entry_set_text(GTK_ENTRY(gdf->custom_entry), format);
+    gnc_entry_set_text(GTK_ENTRY(gdf->custom_entry), format);
     gnc_date_format_compute_format(gdf);
 }
 
@@ -338,7 +338,7 @@ gnc_date_format_get_custom (GNCDateFormat *gdf)
     g_return_val_if_fail(gdf, "");
     g_return_val_if_fail(GNC_IS_DATE_FORMAT(gdf), "");
 
-    return gtk_entry_get_text(GTK_ENTRY(gdf->custom_entry));
+    return gnc_entry_get_text(GTK_ENTRY(gdf->custom_entry));
 }
 
 
@@ -396,7 +396,7 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
     switch (sel_option)
     {
     case QOF_DATE_FORMAT_CUSTOM:
-        format = g_strdup(gtk_entry_get_text(GTK_ENTRY(gdf->custom_entry)));
+        format = g_strdup(gnc_entry_get_text(GTK_ENTRY(gdf->custom_entry)));
         enable_year = enable_month = check_modifiers = FALSE;
         enable_custom = TRUE;
         break;
@@ -457,7 +457,7 @@ gnc_date_format_refresh (GNCDateFormat *gdf)
      */
     g_signal_handlers_block_matched(gdf->custom_entry, G_SIGNAL_MATCH_DATA,
                                     0, 0, NULL, NULL, gdf);
-    gtk_entry_set_text(GTK_ENTRY(gdf->custom_entry), format);
+    gnc_entry_set_text(GTK_ENTRY(gdf->custom_entry), format);
     g_signal_handlers_unblock_matched(gdf->custom_entry, G_SIGNAL_MATCH_DATA,
                                       0, 0, NULL, NULL, gdf);
 

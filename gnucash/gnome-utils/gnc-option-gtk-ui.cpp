@@ -206,12 +206,12 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GTK_ENTRY(get_widget())};
-        gtk_entry_set_text(widget, option.get_value<std::string>().c_str());
+        gnc_entry_set_text(widget, option.get_value<std::string>().c_str());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GTK_ENTRY(get_widget())};
-        option.set_value(std::string{gtk_entry_get_text(widget)});
+        option.set_value(std::string{gnc_entry_get_text(widget)});
     }
 };
 

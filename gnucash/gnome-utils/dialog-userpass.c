@@ -65,11 +65,11 @@ gnc_get_username_password (GtkWidget *parent,
         gtk_label_set_text (GTK_LABEL (heading_label), heading);
 
     if (initial_username)
-        gtk_entry_set_text (GTK_ENTRY (username_entry), initial_username);
+        gnc_entry_set_text (GTK_ENTRY (username_entry), initial_username);
     gtk_editable_select_region (GTK_EDITABLE (username_entry), 0, -1);
 
     if (initial_password)
-        gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
+        gnc_entry_set_text (GTK_ENTRY (password_entry), initial_password);
 
     result = gtk_dialog_run(GTK_DIALOG (dialog));
     gtk_widget_set_visible (GTK_WIDGET(dialog), FALSE);
