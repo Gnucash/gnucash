@@ -1402,7 +1402,7 @@ gxi_custom_enc_activate_cb (GtkEntry *entry, GncXmlImportData *data)
 {
     const gchar *enc_string;
 
-    enc_string = gtk_entry_get_text (entry);
+    enc_string = gnc_entry_get_text (entry);
     if (!enc_string)
         return;
     gxi_add_encoding (data, GUINT_TO_POINTER (g_quark_from_string (enc_string)));

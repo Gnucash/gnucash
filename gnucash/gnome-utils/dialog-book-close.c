@@ -283,7 +283,7 @@ gnc_book_close_response_cb(GtkDialog *dialog, gint response, GtkDialog *unused)
         break;
     case GTK_RESPONSE_OK:
         cbw->close_date = gnc_date_edit_get_date(GNC_DATE_EDIT(cbw->close_date_widget));
-        cbw->desc = gtk_entry_get_text(GTK_ENTRY(cbw->desc_widget));
+        cbw->desc = gnc_entry_get_text(GTK_ENTRY(cbw->desc_widget));
 
         income_acct = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(cbw->income_acct_widget));
         expense_acct = gnc_account_sel_get_account(GNC_ACCOUNT_SEL(cbw->expense_acct_widget));

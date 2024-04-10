@@ -255,7 +255,7 @@ gnc_date_edit_popup (GNCDateEdit *gde)
     device = gtk_get_current_event_device ();
 
     /* This code is pretty much just copied from gtk_date_edit_get_date */
-    date_was_valid = qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
+    date_was_valid = qof_scan_date (gnc_entry_get_text (GTK_ENTRY (gde->date_entry)),
                                     &mtm.tm_mday, &mtm.tm_mon, &mtm.tm_year);
     if (!date_was_valid)
     {
@@ -437,7 +437,7 @@ set_time (GtkWidget *widget, GNCDateEdit *gde)
     gtk_combo_box_get_active_iter (GTK_COMBO_BOX(gde->time_combo), &iter);
     gtk_tree_model_get( model, &iter, 0, &text, -1 );
 
-    gtk_entry_set_text (GTK_ENTRY (gde->time_entry), text);
+    gnc_entry_set_text (GTK_ENTRY (gde->time_entry), text);
     if(text)
         g_free(text);
     g_signal_emit (G_OBJECT (gde), date_edit_signals [TIME_CHANGED], 0);
@@ -504,7 +504,7 @@ gnc_date_edit_set_time_internal (GNCDateEdit *gde, time64 the_time)
                             mytm->tm_mday,
                             mytm->tm_mon + 1,
                             1900 + mytm->tm_year);
-    gtk_entry_set_text(GTK_ENTRY(gde->date_entry), buffer);
+    gnc_entry_set_text(GTK_ENTRY(gde->date_entry), buffer);
 
     /* Update the calendar. */
     if (!gde->in_selected_handler)
@@ -520,7 +520,7 @@ gnc_date_edit_set_time_internal (GNCDateEdit *gde, time64 the_time)
         qof_strftime (buffer, sizeof (buffer), "%H:%M", mytm);
     else
         qof_strftime (buffer, sizeof (buffer), "%I:%M %p", mytm);
-    gtk_entry_set_text(GTK_ENTRY(gde->time_entry), buffer);
+    gnc_entry_set_text(GTK_ENTRY(gde->time_entry), buffer);
 
     gnc_tm_free (mytm);
 
@@ -770,7 +770,7 @@ date_accel_key_press(GtkWidget *widget, const GdkEvent *event, gpointer data)
     const char *string;
     struct tm tm;
 
-    string = gtk_entry_get_text (GTK_ENTRY (widget));
+    string = gnc_entry_get_text (GTK_ENTRY (widget));
 
     tm = gnc_date_edit_get_date_internal (gde);
 
@@ -1016,7 +1016,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
     g_assert(gde != NULL);
     g_assert(GNC_IS_DATE_EDIT(gde));
 
-    date_was_valid = qof_scan_date (gtk_entry_get_text (GTK_ENTRY (gde->date_entry)),
+    date_was_valid = qof_scan_date (gnc_entry_get_text (GTK_ENTRY (gde->date_entry)),
                                     &tm.tm_mday, &tm.tm_mon, &tm.tm_year);
 
     if (!date_was_valid)
@@ -1038,7 +1038,7 @@ gnc_date_edit_get_date_internal (GNCDateEdit *gde)
         char *tokp = NULL;
         gchar *temp;
 
-        str = g_strdup (gtk_entry_get_text
+        str = g_strdup (gnc_entry_get_text
                         (GTK_ENTRY (gde->time_entry)));
         temp = gnc_strtok_r (str, ": ", &tokp);
         if (temp)

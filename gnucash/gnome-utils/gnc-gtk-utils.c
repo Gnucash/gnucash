@@ -152,7 +152,7 @@ gnc_cbwe_focus_out_cb (GtkEntry *entry,
     gint index;
 
     /* Make a final attempt to match the current text. */
-    text = gtk_entry_get_text(entry);
+    text = gnc_entry_get_text(entry);
     gnc_cbwe_set_by_string(cbwe, text);
 
     /* Get the last known index (which may have just been set). */

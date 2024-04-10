@@ -299,12 +299,12 @@ gnc_account_to_ui (AccountWindow *aw)
     string = xaccAccountGetName (account);
     if (string == NULL)
         string = "";
-    gtk_entry_set_text (GTK_ENTRY(aw->name_entry), string);
+    gnc_entry_set_text (GTK_ENTRY(aw->name_entry), string);
 
     string = xaccAccountGetDescription (account);
     if (string == NULL)
         string = "";
-    gtk_entry_set_text (GTK_ENTRY(aw->description_entry), string);
+    gnc_entry_set_text (GTK_ENTRY(aw->description_entry), string);
 
     string = xaccAccountGetColor (account);
 
@@ -336,7 +336,7 @@ gnc_account_to_ui (AccountWindow *aw)
     string = xaccAccountGetCode (account);
     if (string == NULL)
         string = "";
-    gtk_entry_set_text (GTK_ENTRY(aw->code_entry), string);
+    gnc_entry_set_text (GTK_ENTRY(aw->code_entry), string);
 
     string = xaccAccountGetNotes (account);
     if (string == NULL)
@@ -494,12 +494,12 @@ gnc_ui_to_account (AccountWindow *aw)
 
     last_used_account_type = aw->type;
 
-    string = gtk_entry_get_text (GTK_ENTRY(aw->name_entry));
+    string = gnc_entry_get_text (GTK_ENTRY(aw->name_entry));
     old_string = xaccAccountGetName (account);
     if (g_strcmp0 (string, old_string) != 0)
         xaccAccountSetName (account, string);
 
-    string = gtk_entry_get_text (GTK_ENTRY(aw->description_entry));
+    string = gnc_entry_get_text (GTK_ENTRY(aw->description_entry));
     old_string = xaccAccountGetDescription (account);
     if (g_strcmp0 (string, old_string) != 0)
         xaccAccountSetDescription (account, string);
@@ -541,7 +541,7 @@ gnc_ui_to_account (AccountWindow *aw)
     if (old_scu != new_scu)
         xaccAccountSetCommoditySCU (account, new_scu);
 
-    string = gtk_entry_get_text (GTK_ENTRY(aw->code_entry));
+    string = gnc_entry_get_text (GTK_ENTRY(aw->code_entry));
     old_string = xaccAccountGetCode (account);
     if (g_strcmp0 (string, old_string) != 0)
         xaccAccountSetCode (account, string);
@@ -948,7 +948,7 @@ gnc_common_ok (AccountWindow *aw)
     separator = gnc_get_account_separator_string ();
 
     /* check for valid name */
-    name = gtk_entry_get_text (GTK_ENTRY(aw->name_entry));
+    name = gnc_entry_get_text (GTK_ENTRY(aw->name_entry));
     if (g_strcmp0 (name, "") == 0)
     {
         const char *message = _("The account must be given a name.");
@@ -1740,7 +1740,7 @@ get_ui_fullname (AccountWindow *aw)
     char *fullname;
     const gchar *name;
 
-    name = gtk_entry_get_text (GTK_ENTRY(aw->name_entry));
+    name = gnc_entry_get_text (GTK_ENTRY(aw->name_entry));
     if (!name || *name == '\0')
         name = _("<No name>");
 
@@ -1905,9 +1905,9 @@ gnc_ui_new_account_window_internal (GtkWindow *parent,
         commodity = default_commodity;
         if ((aw->type == ACCT_TYPE_STOCK) || (aw->type == ACCT_TYPE_MUTUAL))
         {
-            gtk_entry_set_text (GTK_ENTRY(aw->name_entry),
+            gnc_entry_set_text (GTK_ENTRY(aw->name_entry),
                                 (gpointer) gnc_commodity_get_mnemonic (commodity));
-            gtk_entry_set_text (GTK_ENTRY(aw->description_entry),
+            gnc_entry_set_text (GTK_ENTRY(aw->description_entry),
                                 (gpointer) gnc_commodity_get_fullname (commodity));
         }
     }
@@ -2216,7 +2216,7 @@ gnc_account_renumber_update_examples (RenumberDialog *data)
 
     g_return_if_fail (data->num_children > 0);
 
-    const gchar *prefix = gtk_entry_get_text (GTK_ENTRY(data->prefix));
+    const gchar *prefix = gnc_entry_get_text (GTK_ENTRY(data->prefix));
     interval = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->interval));
     digits = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->digits));
 
@@ -2299,7 +2299,7 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
             g_free (data);
             return;
         }
-        const gchar *prefix = gtk_entry_get_text (GTK_ENTRY(data->prefix));
+        const gchar *prefix = gnc_entry_get_text (GTK_ENTRY(data->prefix));
         interval = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->interval));
         num_digits = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON(data->digits));
 
@@ -2364,7 +2364,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
     data->example1 = GTK_WIDGET(gtk_builder_get_object (builder, "example1_label"));
     data->example2 = GTK_WIDGET(gtk_builder_get_object (builder, "example2_label"));
 
-    gtk_entry_set_text (GTK_ENTRY(data->prefix), xaccAccountGetCode (account));
+    gnc_entry_set_text (GTK_ENTRY(data->prefix), xaccAccountGetCode (account));
     gnc_account_renumber_update_examples (data);
 
     gtk_builder_connect_signals (builder, data);

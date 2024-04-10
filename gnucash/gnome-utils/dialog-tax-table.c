@@ -153,7 +153,7 @@ new_tax_table_ok_cb (NewTaxTable *ntt)
     /* verify the name, maybe */
     if (ntt->new_table)
     {
-        name = gtk_entry_get_text (GTK_ENTRY(ntt->name_entry));
+        name = gnc_entry_get_text (GTK_ENTRY(ntt->name_entry));
         if (name == NULL || *name == '\0')
         {
             message = _("You must provide a name for this Tax Table.");
@@ -303,7 +303,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 
     ntt->name_entry = GTK_WIDGET(gtk_builder_get_object (builder, "name_entry"));
     if (name)
-        gtk_entry_set_text (GTK_ENTRY(ntt->name_entry), name);
+        gnc_entry_set_text (GTK_ENTRY(ntt->name_entry), name);
 
     /* Create the menu */
     combo = GTK_WIDGET(gtk_builder_get_object (builder, "type_combobox"));
@@ -660,7 +660,7 @@ static const char
 
     textbox = gtk_entry_new ();
     gtk_widget_set_visible (GTK_WIDGET(textbox), TRUE);
-    gtk_entry_set_text (GTK_ENTRY(textbox), text);
+    gnc_entry_set_text (GTK_ENTRY(textbox), text);
     gtk_box_pack_start (GTK_BOX(vbox), textbox, FALSE, FALSE, 0);
 
     dialog = gtk_dialog_new_with_buttons (title, GTK_WINDOW(parent),
@@ -679,7 +679,7 @@ static const char
         return NULL;
     }
 
-    text = g_strdup (gtk_entry_get_text (GTK_ENTRY(textbox)));
+    text = g_strdup (gnc_entry_get_text (GTK_ENTRY(textbox)));
     gtk_widget_destroy (dialog);
     return text;
 }

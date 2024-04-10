@@ -256,7 +256,7 @@ gnc_general_select_set_selected (GNCGeneralSelect *gsl, gpointer selection)
     else
         text = gnc_general_select_get_printname(gsl, selection);
 
-    gtk_entry_set_text(GTK_ENTRY(gsl->entry), text);
+    gnc_entry_set_text(GTK_ENTRY(gsl->entry), text);
 
     g_signal_emit(gsl, general_select_signals[SELECTION_CHANGED], 0);
 }

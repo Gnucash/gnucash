@@ -101,7 +101,7 @@ gnc_dup_inc_dec (GtkWidget *widget, const gchar *text, gint inc_dec)
 
         out = g_strdup_printf (format, num);
 
-        gtk_entry_set_text (GTK_ENTRY(widget), out);
+        gnc_entry_set_text (GTK_ENTRY(widget), out);
         g_free (format);
         g_free (out);
         return TRUE;
@@ -115,7 +115,7 @@ gnc_dup_key_press_event_cb (GtkEventControllerKey *key, guint keyval,
                             gpointer user_data)
 {
     GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
-    const gchar *text = gtk_entry_get_text (GTK_ENTRY(widget));
+    const gchar *text = gnc_entry_get_text (GTK_ENTRY(widget));
 
     if (gnc_strisnum (text))
     {
@@ -201,9 +201,9 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     dt_dialog->tnum_edit = GTK_WIDGET(gtk_builder_get_object (builder, "tnum_entry"));
 
     if (num_str)
-        gtk_entry_set_text (GTK_ENTRY(dt_dialog->num_edit), num_str);
+        gnc_entry_set_text (GTK_ENTRY(dt_dialog->num_edit), num_str);
     if (tnum_str)
-        gtk_entry_set_text (GTK_ENTRY(dt_dialog->tnum_edit), tnum_str);
+        gnc_entry_set_text (GTK_ENTRY(dt_dialog->tnum_edit), tnum_str);
 
 //FIXME in Gtk4 this may need changing to use  GtkEditable::insert-text
 
@@ -334,9 +334,9 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
         if (gdate_p)
             gnc_date_edit_get_gdate (GNC_DATE_EDIT(dt_dialog->date_edit), gdate_p);
         if (out_num)
-            *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY(dt_dialog->num_edit)));
+            *out_num = g_strdup (gnc_entry_get_text (GTK_ENTRY(dt_dialog->num_edit)));
         if (tnum)
-            *out_tnum = g_strdup (gtk_entry_get_text (GTK_ENTRY(dt_dialog->tnum_edit)));
+            *out_tnum = g_strdup (gnc_entry_get_text (GTK_ENTRY(dt_dialog->tnum_edit)));
         if (tlink)
         {
             if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(dt_dialog->link_edit)))

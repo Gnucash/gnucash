@@ -421,7 +421,7 @@ entry_insert_text_cb (GtkEntry *entry, const gchar *text, gint length,
 
     memset (gas->sep_key_prefix, 0, BUFLEN);
 
-    const gchar *entered_text = gtk_entry_get_text (entry);
+    const gchar *entered_text = gnc_entry_get_text (entry);
 
     if (!(entered_text && *entered_text))
         return;

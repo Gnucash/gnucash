@@ -377,7 +377,7 @@ gnc_ui_select_commodity_changed_cb (GtkComboBox *cbwe,
 
     ENTER("cbwe=%p, user_data=%p", cbwe, user_data);
     name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
-    fullname = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(w->commodity_combo)))));
+    fullname = gnc_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(w->commodity_combo)))));
 
     DEBUG("namespace=%s, name=%s", name_space, fullname);
     w->selection = gnc_commodity_table_find_full(gnc_get_current_commodities(),
@@ -661,7 +661,7 @@ gnc_ui_namespace_picker_ns (GtkWidget *cbwe)
 
     g_return_val_if_fail(GTK_IS_COMBO_BOX (cbwe), nullptr);
 
-    name_space = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cbwe)))));
+    name_space = gnc_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cbwe)))));
 
     /* Map several currency related names to one common namespace */
     if ((g_strcmp0 (name_space, GNC_COMMODITY_NS_ISO) == 0) ||
@@ -687,7 +687,7 @@ gnc_ui_commodity_quote_info_cb (GtkWidget *w, gpointer data)
     ENTER(" ");
     get_quote = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w));
 
-    text = gtk_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cw->namespace_combo)))));
+    text = gnc_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cw->namespace_combo)))));
 
     allow_src = !gnc_commodity_namespace_is_iso(text);
 
@@ -721,8 +721,8 @@ gnc_ui_commodity_changed_cb(GtkWidget * dummy, gpointer user_data)
     if (!w->is_currency)
     {
         name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
-        fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
-        mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
+        fullname  = gnc_entry_get_text(GTK_ENTRY(w->fullname_entry));
+        mnemonic  = gnc_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
         DEBUG("namespace=%s, name=%s, mnemonic=%s", name_space, fullname, mnemonic);
         ok = (fullname    && name_space    && mnemonic &&
               fullname[0] && name_space[0] && mnemonic[0]);
@@ -1024,14 +1024,14 @@ gnc_ui_build_commodity_dialog(const char * selected_namespace,
                       G_CALLBACK (commodity_close), retval);
 #endif
     /* Fill in any data, top to bottom */
-    gtk_entry_set_text (GTK_ENTRY (retval->fullname_entry), fullname ? fullname : "");
-    gtk_entry_set_text (GTK_ENTRY (retval->mnemonic_entry), mnemonic ? mnemonic : "");
-    gtk_entry_set_text (GTK_ENTRY (retval->user_symbol_entry), user_symbol ? user_symbol : "");
+    gnc_entry_set_text (GTK_ENTRY (retval->fullname_entry), fullname ? fullname : "");
+    gnc_entry_set_text (GTK_ENTRY (retval->mnemonic_entry), mnemonic ? mnemonic : "");
+    gnc_entry_set_text (GTK_ENTRY (retval->user_symbol_entry), user_symbol ? user_symbol : "");
     gnc_cbwe_add_completion(GTK_COMBO_BOX(retval->namespace_combo));
     gnc_ui_update_namespace_picker(retval->namespace_combo,
                                    selected_namespace,
                                    include_iso ? DIAG_COMM_ALL : DIAG_COMM_NON_CURRENCY);
-    gtk_entry_set_text (GTK_ENTRY (retval->code_entry), cusip ? cusip : "");
+    gnc_entry_set_text (GTK_ENTRY (retval->code_entry), cusip ? cusip : "");
 
     if (fraction > 0)
         gtk_spin_button_set_value (GTK_SPIN_BUTTON (retval->fraction_spinbutton),
@@ -1232,11 +1232,11 @@ gnc_ui_commodity_dialog_to_object(CommodityWindow * w)
 {
     gnc_quote_source *source;
     QuoteSourceType type;
-    const char * fullname  = gtk_entry_get_text(GTK_ENTRY(w->fullname_entry));
+    const char * fullname  = gnc_entry_get_text(GTK_ENTRY(w->fullname_entry));
     gchar *name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
-    const char * mnemonic  = gtk_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
-    const char * user_symbol = gtk_entry_get_text(GTK_ENTRY(w->user_symbol_entry));
-    const char * code      = gtk_entry_get_text(GTK_ENTRY(w->code_entry));
+    const char * mnemonic  = gnc_entry_get_text(GTK_ENTRY(w->mnemonic_entry));
+    const char * user_symbol = gnc_entry_get_text(GTK_ENTRY(w->user_symbol_entry));
+    const char * code      = gnc_entry_get_text(GTK_ENTRY(w->code_entry));
     QofBook * book = gnc_get_current_book ();
     int fraction = gtk_spin_button_get_value_as_int
                    (GTK_SPIN_BUTTON(w->fraction_spinbutton));

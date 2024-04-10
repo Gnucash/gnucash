@@ -93,10 +93,10 @@ geturl( FileAccessWindow* faw )
     }
     else                    /* db protocol was chosen */
     {
-        host = gtk_entry_get_text( faw->tf_host );
-        path = g_strdup(gtk_entry_get_text(faw->tf_database));
-        username = gtk_entry_get_text( faw->tf_username );
-        password = gtk_entry_get_text( faw->tf_password );
+        host = gnc_entry_get_text( faw->tf_host );
+        path = g_strdup(gnc_entry_get_text(faw->tf_database));
+        username = gnc_entry_get_text( faw->tf_username );
+        password = gnc_entry_get_text( faw->tf_password );
     }
 
     url = gnc_uri_create_uri (type, host, 0, username, password, path);
@@ -310,10 +310,10 @@ gnc_ui_file_access (GtkWindow *parent, int type)
     faw->frame_database = GTK_WIDGET(gtk_builder_get_object (builder, "frame_database" ));
     faw->readonly_checkbutton = GTK_WIDGET(gtk_builder_get_object (builder, "readonly_checkbutton"));
     faw->tf_host = GTK_ENTRY(gtk_builder_get_object (builder, "tf_host" ));
-    gtk_entry_set_text( faw->tf_host, DEFAULT_HOST );
+    gnc_entry_set_text( faw->tf_host, DEFAULT_HOST );
     faw->tf_database = GTK_ENTRY(gtk_builder_get_object (builder, "tf_database" ));
     default_db = get_default_database();
-    gtk_entry_set_text( faw->tf_database, default_db );
+    gnc_entry_set_text( faw->tf_database, default_db );
     faw->tf_username = GTK_ENTRY(gtk_builder_get_object (builder, "tf_username" ));
     faw->tf_password = GTK_ENTRY(gtk_builder_get_object (builder, "tf_password" ));
 

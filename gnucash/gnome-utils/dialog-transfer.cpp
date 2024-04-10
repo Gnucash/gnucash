@@ -378,7 +378,7 @@ gnc_xfer_dialog_set_price_auto (XferDialog *xferData,
         gnc_xfer_dialog_set_price_edit(xferData, gnc_numeric_zero());
         auto entry = GTK_ENTRY(gnc_amount_edit_gtk_entry
                           (GNC_AMOUNT_EDIT(xferData->price_edit)));
-        gtk_entry_set_text(entry, "");
+        gnc_entry_set_text(entry, "");
 
         gnc_xfer_update_to_amount (xferData);
 
@@ -440,7 +440,7 @@ gnc_xfer_dialog_curr_acct_activate(XferDialog *xferData)
                                    gnc_numeric_zero ());
         auto entry = GTK_ENTRY(gnc_amount_edit_gtk_entry
                                (GNC_AMOUNT_EDIT(xferData->to_amount_edit)));
-        gtk_entry_set_text(entry, "");
+        gnc_entry_set_text(entry, "");
     }
 }
 
@@ -705,7 +705,7 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
 
     match_account = gnc_transfer_dialog_get_selected_account (xferData, xferData->quickfill);
 
-    desc = gtk_entry_get_text( GTK_ENTRY(xferData->description_entry) );
+    desc = gnc_entry_get_text( GTK_ENTRY(xferData->description_entry) );
 
     if ( !desc || desc[0] == '\0' )  /* no description to match */
         return( FALSE );
@@ -743,10 +743,10 @@ gnc_xfer_dialog_quickfill( XferDialog *xferData )
         changed = TRUE;
     }
 
-    if ( !g_strcmp0(gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry)), "" ))
+    if ( !g_strcmp0(gnc_entry_get_text(GTK_ENTRY(xferData->memo_entry)), "" ))
     {
         DEBUG("updating memo");
-        gtk_entry_set_text( GTK_ENTRY(xferData->memo_entry),
+        gnc_entry_set_text( GTK_ENTRY(xferData->memo_entry),
                             xaccSplitGetMemo( split ) );
         changed = TRUE;
     }
@@ -1021,7 +1021,7 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
     /* Update the dialog. */
     gnc_amount_edit_set_amount(to_amount_edit, to_amount);
     if (gnc_numeric_zero_p(to_amount))
-        gtk_entry_set_text(GTK_ENTRY(gnc_amount_edit_gtk_entry(to_amount_edit)),
+        gnc_entry_set_text(GTK_ENTRY(gnc_amount_edit_gtk_entry(to_amount_edit)),
                            "");
 
     gnc_xfer_dialog_update_conv_info(xferData);
@@ -1322,7 +1322,7 @@ gnc_xfer_dialog_set_description(XferDialog *xferData, const char *description)
     if (xferData == NULL)
         return;
 
-    gtk_entry_set_text(GTK_ENTRY(xferData->description_entry), description);
+    gnc_entry_set_text(GTK_ENTRY(xferData->description_entry), description);
     gnc_quickfill_insert( xferData->qf, description, QUICKFILL_LIFO );
 }
 
@@ -1340,7 +1340,7 @@ gnc_xfer_dialog_set_memo(XferDialog *xferData, const char *memo)
     if (xferData == NULL)
         return;
 
-    gtk_entry_set_text(GTK_ENTRY(xferData->memo_entry), memo);
+    gnc_entry_set_text(GTK_ENTRY(xferData->memo_entry), memo);
     /* gnc_quickfill_insert( xferData->qf, memo, QUICKFILL_LIFO ); */
 }
 
@@ -1358,7 +1358,7 @@ gnc_xfer_dialog_set_num(XferDialog *xferData, const char *num)
     if (xferData == NULL)
         return;
 
-    gtk_entry_set_text(GTK_ENTRY(xferData->num_entry), num);
+    gnc_entry_set_text(GTK_ENTRY(xferData->num_entry), num);
     /* gnc_quickfill_insert( xferData->qf, num, QUICKFILL_LIFO ); */
 }
 
@@ -1501,7 +1501,7 @@ create_transaction(XferDialog *xferData, time64 time,
     /* Trans-Num or Split-Action set with gnc_set_num_action below per book
      * option */
 
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->description_entry));
+    string = gnc_entry_get_text(GTK_ENTRY(xferData->description_entry));
     xaccTransSetDescription(trans, string);
 
     /* create from split */
@@ -1524,15 +1524,15 @@ create_transaction(XferDialog *xferData, time64 time,
     xaccSplitSetBaseValue(to_split, to_amount, xferData->to_commodity);
 
     /* Set the transaction number or split action field based on book option*/
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->num_entry));
+    string = gnc_entry_get_text(GTK_ENTRY(xferData->num_entry));
     gnc_set_num_action (trans, from_split, string, NULL);
 
     /* Set the transaction notes */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->notes_entry));
+    string = gnc_entry_get_text(GTK_ENTRY(xferData->notes_entry));
     xaccTransSetNotes(trans, string);
 
     /* Set the memo fields */
-    string = gtk_entry_get_text(GTK_ENTRY(xferData->memo_entry));
+    string = gnc_entry_get_text(GTK_ENTRY(xferData->memo_entry));
     xaccSplitSetMemo(from_split, string);
     xaccSplitSetMemo(to_split, string);
 

@@ -341,7 +341,7 @@ gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *m
     if (use_entry)
     {
         view = gtk_entry_new ();
-        gtk_entry_set_text (GTK_ENTRY (view), default_input);
+        gnc_entry_set_text (GTK_ENTRY (view), default_input);
     }
     else
     {
@@ -359,7 +359,7 @@ gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *m
     if (result != GTK_RESPONSE_REJECT)
     {
         if (use_entry)
-            user_input = g_strdup (gtk_entry_get_text ((GTK_ENTRY (view))));
+            user_input = g_strdup (gnc_entry_get_text ((GTK_ENTRY (view))));
         else
         {
             gtk_text_buffer_get_start_iter (buffer, &start);
