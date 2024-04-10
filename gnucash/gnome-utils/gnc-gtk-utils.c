@@ -168,7 +168,7 @@ gnc_cbwe_add_completion (GtkComboBox *cbwe)
     GtkEntryCompletion *completion;
     GtkTreeModel *model;
 
-    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbwe)));
+    entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(cbwe)));
     completion = gtk_entry_get_completion(entry);
     if (completion)
         return;
@@ -197,7 +197,7 @@ gnc_cbwe_require_list_item (GtkComboBox *cbwe)
     /* If an item in the combo box isn't already selected, then force
      * select the first item. Take care, the combo box may not have been
      * filled yet.  */
-    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(cbwe)));
+    entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(cbwe)));
     completion = gtk_entry_get_completion(entry);
     index = gtk_combo_box_get_active(GTK_COMBO_BOX(cbwe));
     if (index == -1)
@@ -392,7 +392,7 @@ add_accel_for_menu_lookup (GtkWidget *widget, gpointer user_data)
     {
         GtkMenuItem* menuItem = GTK_MENU_ITEM(widget);
         GtkWidget* subMenu = gtk_menu_item_get_submenu (menuItem);
-        GtkWidget *accel_label = gtk_widget_get_first_child (GTK_BIN(widget));
+        GtkWidget *accel_label = gtk_widget_get_first_child (GTK_WIDGET(widget));
 
         if (accel_label)
         {
@@ -461,7 +461,7 @@ find_menu_item_func (GtkWidget *widget, const gchar *action_name, const gchar *a
 
         if (action_label)
         {
-            GtkWidget *accel_label = gtk_widget_get_first_child (GTK_BIN(widget));
+            GtkWidget *accel_label = gtk_widget_get_first_child (GTK_WIDGET(widget));
 
             if (accel_label)
             {
@@ -1014,7 +1014,7 @@ statusbar_pop (GtkWidget *statusbar)
 static void
 menu_item_select_cb (GtkWidget *menu_item, GtkWidget *statusbar)
 {
-    GtkWidget *accel_label = gtk_widget_get_first_child (GTK_BIN(menu_item));
+    GtkWidget *accel_label = gtk_widget_get_first_child (GTK_WIDGET(menu_item));
     GMenuModel *menubar_model = g_object_get_data (G_OBJECT(statusbar), "menu-model");
 
     if (!menubar_model)
@@ -1106,7 +1106,7 @@ gnc_tool_item_setup_tooltip_to_statusbar_callback (GtkWidget *tool_item,
     g_return_if_fail (tool_item != NULL);
     g_return_if_fail (statusbar != NULL);
 
-    child = gtk_widget_get_first_child (GTK_BIN(tool_item));
+    child = gtk_widget_get_first_child (GTK_WIDGET(tool_item));
 
     gtk_widget_add_events (GTK_WIDGET(child),
                            GDK_ENTER_NOTIFY_MASK | GDK_LEAVE_NOTIFY_MASK

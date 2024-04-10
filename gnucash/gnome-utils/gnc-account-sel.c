@@ -138,7 +138,7 @@ gas_set_property (GObject *object, guint param_id,
 
         case PROP_COMBO_ENTRY_WIDTH:
             {
-                GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+                GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX((gas->combo))));
                 gboolean expand = FALSE;
                 gint width = g_value_get_int (value);
 
@@ -186,7 +186,7 @@ gas_get_property (GObject *object, guint param_id,
 
         case PROP_COMBO_ENTRY_WIDTH:
             {
-                GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+                GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
                 g_value_set_int (value, gtk_entry_get_width_chars (entry));
             }
             break;
@@ -480,7 +480,7 @@ entry_insert_text_cb (GtkEntry *entry, const gchar *text, gint length,
 static void
 update_entry_and_refilter (GNCAccountSel *gas)
 {
-    GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+    GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
     GtkTreeModel *fmodel = gtk_combo_box_get_model (GTK_COMBO_BOX(gas->combo));
 
     gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
@@ -593,7 +593,7 @@ row_has_been_deleted_in_store_cb (GtkTreeModel *model, GtkTreePath *path, gpoint
 
     if (saved_account_path == NULL) // path is already invalid after row delete
     {
-        GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+        GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
 
         g_signal_handlers_block_by_func (gas->combo, combo_changed_cb , gas);
         gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), -1);
@@ -620,7 +620,7 @@ row_has_been_changed_in_store_cb (GtkTreeModel *model, GtkTreePath *path,
 
     if (gtk_tree_path_compare (path, saved_account_path) == 0)
     {
-        GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+        GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
         gchar *account_full_name = NULL;
         gint position = 0;
 
@@ -693,7 +693,7 @@ gnc_account_sel_init (GNCAccountSel *gas)
     gtk_widget_set_hexpand (GTK_WIDGET(gas), TRUE);
     gtk_widget_set_hexpand (GTK_WIDGET(gas->combo), TRUE);
 
-    entry = gtk_bin_get_child (GTK_BIN(gas->combo));
+    entry = gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo));
     gtk_entry_set_icon_from_icon_name (GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY,
                                        "preferences-system-symbolic");
     gtk_entry_set_icon_tooltip_text (GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY,
@@ -810,7 +810,7 @@ gnc_account_sel_set_account (GNCAccountSel *gas, Account *acct,
         gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), -1);
         if (!acct)
         {
-            GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+            GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
             gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
             return;
         }

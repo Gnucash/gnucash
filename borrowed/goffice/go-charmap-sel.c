@@ -403,7 +403,7 @@ static void cs_build_menu(GOCharmapSel *cs)
                     gtk_menu_shell_append(GTK_MENU_SHELL(submenu), subitem);
                     if (charset_trans->imp == CI_MAJOR)
                         cs_emphasize_label(
-                                GTK_LABEL(gtk_widget_get_first_child(GTK_BIN(subitem))));
+                                GTK_LABEL(gtk_widget_get_first_child(GTK_WIDGET(subitem))));
                     g_object_set_data(G_OBJECT(subitem), CHARMAP_NAME_KEY,
                             (gpointer) name);
                 }
@@ -441,7 +441,7 @@ static void cs_build_menu(GOCharmapSel *cs)
         gtk_widget_set_visible (GTK_WIDGET(item), TRUE);
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
         lg_cnt++;
-        cs_emphasize_label(GTK_LABEL(gtk_widget_get_first_child(GTK_BIN(item))));
+        cs_emphasize_label(GTK_LABEL(gtk_widget_get_first_child(GTK_WIDGET(item))));
     }
 
     go_option_menu_set_menu(cs->encodings, GTK_WIDGET(menu));

@@ -259,7 +259,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
             gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
 
         desc = describe_button (fi);
-        gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), desc);
+        gtk_label_set_text (GTK_LABEL (gtk_check_button_get_child (GTK_CHECK_BUTTON(button))), desc);
     }
 
 //FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));

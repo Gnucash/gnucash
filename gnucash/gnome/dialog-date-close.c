@@ -269,7 +269,8 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 
     if (question_check_message)
     {
-        gtk_label_set_text(GTK_LABEL(gtk_bin_get_child (GTK_BIN(ddc->question_check))), question_check_message);
+        gtk_label_set_text(GTK_LABEL(gtk_check_button_get_child (GTK_CHECK_BUTTON((ddc->question_check)))),
+                                                                 question_check_message);
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ddc->question_check), *answer);
     }
     else

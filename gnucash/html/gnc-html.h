@@ -126,7 +126,7 @@ typedef int  (* GncHTMLButtonCB)(GncHtml* html, GdkEventButton* event,
 
 struct _GncHtmlClass
 {
-    GtkBinClass parent_class;
+    GtkWidgetClass parent_class;
 
     /* Methods */
     void (*show_url)( GncHtml* html,
@@ -147,7 +147,7 @@ struct _GncHtmlClass
 
 struct _GncHtml
 {
-    GtkBin parent_instance;
+    GtkWidget parent_instance;
 
     /*< private >*/
     GncHtmlPrivate* priv;

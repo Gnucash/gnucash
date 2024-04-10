@@ -378,7 +378,7 @@ gnc_ui_select_commodity_changed_cb (GtkComboBox *cbwe,
 
     ENTER("cbwe=%p, user_data=%p", cbwe, user_data);
     name_space = gnc_ui_namespace_picker_ns (w->namespace_combo);
-    fullname = gnc_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(w->commodity_combo)))));
+    fullname = gnc_entry_get_text(GTK_ENTRY (gtk_combo_box_get_child (GTK_COMBO_BOX(w->commodity_combo))));
 
     DEBUG("namespace=%s, name=%s", name_space, fullname);
     w->selection = gnc_commodity_table_find_full(gnc_get_current_commodities(),
@@ -463,7 +463,7 @@ gnc_ui_update_commodity_picker (GtkWidget *cbwe,
     gtk_list_store_clear(GTK_LIST_STORE(model));
 
     /* Erase the entry text */
-    entry = GTK_ENTRY(gtk_bin_get_child(GTK_BIN(combo_box)));
+    entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(combo_box)));
     gtk_editable_delete_text(GTK_EDITABLE(entry), 0, -1);
 
     gtk_combo_box_set_active(combo_box, -1);
@@ -662,7 +662,7 @@ gnc_ui_namespace_picker_ns (GtkWidget *cbwe)
 
     g_return_val_if_fail(GTK_IS_COMBO_BOX (cbwe), nullptr);
 
-    name_space = gnc_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cbwe)))));
+    name_space = gnc_entry_get_text( GTK_ENTRY(gtk_combo_box_get_child( GTK_COMBO_BOX(cbwe))));
 
     /* Map several currency related names to one common namespace */
     if ((g_strcmp0 (name_space, GNC_COMMODITY_NS_ISO) == 0) ||
@@ -688,7 +688,7 @@ gnc_ui_commodity_quote_info_cb (GtkWidget *w, gpointer data)
     ENTER(" ");
     get_quote = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w));
 
-    text = gnc_entry_get_text( GTK_ENTRY( gtk_bin_get_child( GTK_BIN( GTK_COMBO_BOX(cw->namespace_combo)))));
+    text = gnc_entry_get_text( GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(cw->namespace_combo))));
 
     allow_src = !gnc_commodity_namespace_is_iso(text);
 
