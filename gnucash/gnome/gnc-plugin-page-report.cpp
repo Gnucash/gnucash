@@ -530,7 +530,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
                                          gnc_plugin_page_report_history_destroy_cb,
                                          (gpointer)priv);
 
-    priv->container = GTK_CONTAINER(gtk_frame_new(nullptr));
+    priv->container = GTK_BOX(gtk_frame_new(nullptr));
     gtk_frame_set_shadow_type(GTK_FRAME(priv->container), GTK_SHADOW_NONE);
 
     // Set the name for this widget so it can be easily manipulated with css

@@ -70,47 +70,41 @@ static void gnc_reset_warnings_update_widgets (RWDialog *rw_dialog);
 static void
 gnc_reset_warnings_update_widgets (RWDialog *rw_dialog)
 {
-    GList *list, *tmp;
     gboolean any = FALSE, checked = FALSE;
 
     ENTER("rw_dialog %p", rw_dialog);
 
-    list = gtk_container_get_children(GTK_CONTAINER(rw_dialog->perm_vbox));
-    if (list)
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(rw_dialog->perm_vbox));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-//FIXME gtk4        gtk_widget_show_all(rw_dialog->perm_vbox_label);
-        for (tmp = list; tmp; tmp = g_list_next(tmp))
+        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(child)))
         {
-            if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(tmp->data)))
-            {
-                checked = TRUE;
-                break;
-            }
+            checked = TRUE;
+            break;
         }
-        g_list_free(list);
         any = TRUE;
     }
-    else
+    if (!child)
     {
         gtk_widget_set_visible (GTK_WIDGET(rw_dialog->perm_vbox_label), FALSE);
     }
 
-    list = gtk_container_get_children(GTK_CONTAINER(rw_dialog->temp_vbox));
-    if (list)
+//FIXME gtk4
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(rw_dialog->temp_vbox));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
-//FIXME gtk4        gtk_widget_show_all(rw_dialog->temp_vbox_label);
-        for (tmp = list; tmp; tmp = g_list_next(tmp))
+        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(child)))
         {
-            if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(tmp->data)))
-            {
-                checked = TRUE;
-                break;
-            }
+            checked = TRUE;
+            break;
         }
-        g_list_free(list);
         any = TRUE;
     }
-    else
+    if (!child)
     {
         gtk_widget_set_visible (GTK_WIDGET(rw_dialog->temp_vbox_label), FALSE);
     }
@@ -163,13 +157,13 @@ gnc_reset_warnings_apply_changes (RWDialog *rw_dialog)
 {
     ENTER("rw_dialog %p", rw_dialog);
 
-    gtk_container_foreach(GTK_CONTAINER(rw_dialog->perm_vbox),
-                          (GtkCallback)gnc_reset_warnings_apply_one,
-                          rw_dialog->dialog);
+//FIXME gtk4    gtk_container_foreach(GTK_CONTAINER(rw_dialog->perm_vbox),
+//                          (GtkCallback)gnc_reset_warnings_apply_one,
+//                          rw_dialog->dialog);
 
-    gtk_container_foreach(GTK_CONTAINER(rw_dialog->temp_vbox),
-                          (GtkCallback)gnc_reset_warnings_apply_one,
-                          rw_dialog->dialog);
+//FIXME gtk4    gtk_container_foreach(GTK_CONTAINER(rw_dialog->temp_vbox),
+//                          (GtkCallback)gnc_reset_warnings_apply_one,
+//                          rw_dialog->dialog);
     gnc_reset_warnings_update_widgets(rw_dialog);
     LEAVE(" ");
 }
@@ -217,13 +211,13 @@ gnc_reset_warnings_select_common (RWDialog *rw_dialog,
 {
     ENTER("rw_dialog %p, selected %d", rw_dialog, selected);
 
-    gtk_container_foreach(GTK_CONTAINER(rw_dialog->perm_vbox),
-                          (GtkCallback)gtk_toggle_button_set_active,
-                          GINT_TO_POINTER(selected));
+//FIXME gtk4    gtk_container_foreach(GTK_CONTAINER(rw_dialog->perm_vbox),
+//                          (GtkCallback)gtk_toggle_button_set_active,
+//                          GINT_TO_POINTER(selected));
 
-    gtk_container_foreach(GTK_CONTAINER(rw_dialog->temp_vbox),
-                          (GtkCallback)gtk_toggle_button_set_active,
-                          GINT_TO_POINTER(selected));
+//FIXME gtk4    gtk_container_foreach(GTK_CONTAINER(rw_dialog->temp_vbox),
+//                          (GtkCallback)gtk_toggle_button_set_active,
+//                          GINT_TO_POINTER(selected));
     gnc_reset_warnings_update_widgets(rw_dialog);
     LEAVE(" ");
 }

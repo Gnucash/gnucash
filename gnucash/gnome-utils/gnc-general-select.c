@@ -55,11 +55,11 @@ static guint general_select_signals[LAST_SIGNAL];
 G_DEFINE_TYPE (GNCGeneralSelect, gnc_general_select, GTK_TYPE_BOX)
 
 static void
-gnc_general_select_forall (GtkContainer *container, gboolean include_internals,
+gnc_general_select_forall (GtkBox *box, gboolean include_internals,
                            GtkCallback callback, gpointer callback_data)
 {
-    g_return_if_fail (container != NULL);
-    g_return_if_fail (GNC_IS_GENERAL_SELECT (container));
+    g_return_if_fail (box != NULL);
+    g_return_if_fail (GNC_IS_GENERAL_SELECT (box));
     g_return_if_fail (callback != NULL);
 
     /* Let GtkBox handle things only if the internal widgets need
@@ -67,10 +67,10 @@ gnc_general_select_forall (GtkContainer *container, gboolean include_internals,
     if (!include_internals)
         return;
 
-    if (!GTK_CONTAINER_CLASS (gnc_general_select_parent_class)->forall)
+    if (!GTK_BOX_CLASS (gnc_general_select_parent_class)->forall)
         return;
 
-    GTK_CONTAINER_CLASS (gnc_general_select_parent_class)->forall (container,
+    GTK_BOX_CLASS (gnc_general_select_parent_class)->forall (box,
             include_internals,
             callback,
             callback_data);
@@ -80,7 +80,7 @@ static void
 gnc_general_select_class_init (GNCGeneralSelectClass *klass)
 {
     GObjectClass *object_class = (GObjectClass *) klass;
-    GtkContainerClass *container_class = (GtkContainerClass *) klass;
+    GtkBoxClass *box_class = (GtkBoxClass *) klass;
 
     object_class = (GObjectClass*) klass;
 
@@ -94,7 +94,7 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
 
-    container_class->forall = gnc_general_select_forall;
+    box_class->forall = gnc_general_select_forall;
 
     object_class->dispose = gnc_general_select_dispose;
     object_class->finalize = gnc_general_select_finalize;

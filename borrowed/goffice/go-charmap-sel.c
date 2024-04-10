@@ -403,7 +403,7 @@ static void cs_build_menu(GOCharmapSel *cs)
                     gtk_menu_shell_append(GTK_MENU_SHELL(submenu), subitem);
                     if (charset_trans->imp == CI_MAJOR)
                         cs_emphasize_label(
-                                GTK_LABEL(gtk_bin_get_child(GTK_BIN(subitem))));
+                                GTK_LABEL(gtk_widget_get_first_child(GTK_BIN(subitem))));
                     g_object_set_data(G_OBJECT(subitem), CHARMAP_NAME_KEY,
                             (gpointer) name);
                 }
@@ -441,7 +441,7 @@ static void cs_build_menu(GOCharmapSel *cs)
         gtk_widget_set_visible (GTK_WIDGET(item), TRUE);
         gtk_menu_shell_append(GTK_MENU_SHELL(menu), item);
         lg_cnt++;
-        cs_emphasize_label(GTK_LABEL(gtk_bin_get_child(GTK_BIN(item))));
+        cs_emphasize_label(GTK_LABEL(gtk_widget_get_first_child(GTK_BIN(item))));
     }
 
     go_option_menu_set_menu(cs->encodings, GTK_WIDGET(menu));
@@ -626,8 +626,8 @@ static void cb_find_entry(GtkMenuItem *w, struct cb_find_entry *cl)
                 GINT_TO_POINTER(cl->i));
         cl->i = 0;
 
-        gtk_container_foreach(GTK_CONTAINER(sub), (GtkCallback) cb_find_entry,
-                cl);
+//FIXME gtk4        gtk_container_foreach(GTK_CONTAINER(sub), (GtkCallback) cb_find_entry,
+//                cl);
         if (cl->found)
             return;
 
@@ -670,8 +670,8 @@ gboolean go_charmap_sel_set_encoding(GOCharmapSel *cs, const char *enc)
     cl.i = 0;
     cl.path = NULL;
 
-    gtk_container_foreach(GTK_CONTAINER(cs->encodings_menu),
-            (GtkCallback) cb_find_entry, &cl);
+//FIXME gtk4    gtk_container_foreach(GTK_CONTAINER(cs->encodings_menu),
+//            (GtkCallback) cb_find_entry, &cl);
     if (!cl.found)
         return FALSE;
 

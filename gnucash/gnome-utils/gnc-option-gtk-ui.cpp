@@ -1101,9 +1101,9 @@ create_option_widget<GncOptionUIType::ACCOUNT_SEL> (GncOption& option,
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
     wrap_widget(option, widget, page_box, row);
     // wrap_widget sets the parent so this comes after.
-    gtk_container_child_set(GTK_CONTAINER(gtk_widget_get_parent(widget)),
-                            widget, "fill", TRUE, "expand", TRUE,
-                            nullptr);
+//FIXME gtk4    gtk_container_child_set(GTK_CONTAINER(gtk_widget_get_parent(widget)),
+//                            widget, "fill", TRUE, "expand", TRUE,
+//                            nullptr);
 }
 
 static void
@@ -1588,24 +1588,24 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto index{option.get_value<uint16_t>()};
-        auto list{gtk_container_get_children(GTK_CONTAINER(get_widget()))};
-        auto box{GTK_WIDGET(list->data)};
-        g_list_free(list);
+//FIXME gtk4        auto list{gtk_container_get_children(GTK_CONTAINER(get_widget()))};
+//        auto box{GTK_WIDGET(list->data)};
+//        g_list_free(list);
 
-        list = gtk_container_get_children(GTK_CONTAINER(box));
-        auto node{g_list_nth(list, index)};
-        GtkButton* button{};
-        if (node)
-        {
-            button = GTK_BUTTON(node->data);
-        }
-        else
+//FIXME gtk4        list = gtk_container_get_children(GTK_CONTAINER(box));
+//        auto node{g_list_nth(list, index)};
+//        GtkButton* button{};
+//        if (node)
+//        {
+//            button = GTK_BUTTON(node->data);
+//        }
+//        else
         {
             PERR("Invalid Radio Button Selection %hu", index);
-            g_list_free(list);
+//            g_list_free(list);
             return;
         }
-        g_list_free(list);
+//        g_list_free(list);
         auto val{g_object_get_data (G_OBJECT (button),
                                     "gnc_radiobutton_index")};
         g_return_if_fail (GPOINTER_TO_UINT (val) == index);
