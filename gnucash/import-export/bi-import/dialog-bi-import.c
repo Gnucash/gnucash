@@ -68,7 +68,7 @@
                 g_strstrip( temp ); \
                 gtk_list_store_set (store, &iter, column, temp, -1); \
                 g_free (temp); \
-            }
+            } else gtk_list_store_set (store, &iter, column, "", -1);
 
 static QofLogModule log_module = G_LOG_DOMAIN; //G_LOG_BUSINESS;
 static char * un_escape(char *str);
