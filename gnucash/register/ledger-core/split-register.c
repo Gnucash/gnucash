@@ -35,6 +35,7 @@
 #include "gnc-component-manager.h"
 #include "split-register-p.h"
 #include "gnc-date.h"
+#include <gnc-hooks.h>
 #include "gnc-ledger-display.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
@@ -87,6 +88,19 @@ static gboolean gnc_split_register_auto_calc (SplitRegister *reg,
 
 
 /** implementations *******************************************************/
+
+static void
+clear_copied_item()
+{
+    if (copied_item.ftype == GNC_TYPE_SPLIT)
+        gnc_float_split_free (copied_item.fs);
+    if (copied_item.ftype == GNC_TYPE_TRANSACTION)
+        gnc_float_txn_free (copied_item.ft);
+    copied_item.ftype = 0;
+    copied_item.fs = NULL;
+    copied_class = CURSOR_CLASS_NONE;
+    copied_leader_guid = *guid_null();
+}
 
 static void
 gnc_copy_split_onto_split (Split* from, Split* to, gboolean use_cut_semantics)
@@ -821,11 +835,7 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
     }
 
     /* unprotect the old object, if any */
-    if (copied_item.ftype == GNC_TYPE_SPLIT)
-        gnc_float_split_free (copied_item.fs);
-    if (copied_item.ftype == GNC_TYPE_TRANSACTION)
-        gnc_float_txn_free (copied_item.ft);
-    copied_item.ftype = 0;
+    clear_copied_item();
 
     if (new_fs)
     {
@@ -839,6 +849,7 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
     }
 
     copied_class = cursor_class;
+    gnc_hook_add_dangler (HOOK_BOOK_CLOSED, clear_copied_item, NULL, NULL);
     LEAVE ("%s %s", use_cut_semantics ? "cut" : "copied",
            cursor_class == CURSOR_CLASS_SPLIT ? "split" : "transaction");
 }
