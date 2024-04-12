@@ -296,7 +296,8 @@ main(int argc, char ** argv)
         << "\n"
         // Translators: Do not translate $DISPLAY! It is an environment variable for X11
         << _("Error: could not initialize graphical user interface and option add-price-quotes was not set.\n"
-        "Perhaps you need to set the $DISPLAY environment variable?");
+        "Perhaps you need to set the $DISPLAY environment variable?")
+        << "\n";
         return 1;
     }
 
