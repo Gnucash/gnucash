@@ -34,7 +34,7 @@
 
 #include <gnc-xml-helper.h>
 #include <Account.h>
-#include <AccountP.h>
+#include <AccountP.hpp>
 #include <Query.h>
 #include <Scrub.h>
 #include <Transaction.h>

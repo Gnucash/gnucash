@@ -414,7 +414,7 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
 {
     Split *split1 = xaccSplitCloneNoKvp (fixture->split);
     Split *split2 = xaccDupeSplit (fixture->split);
-    gchar *msg01 = "[xaccSplitEqual] one is NULL";
+    gchar *msg01 = "[xaccSplitEqual] one is nullptr";
     gchar *msg02 = "[xaccSplitEqual] GUIDs differ";
     gchar *msg03;
     gchar *msg04 = "[xaccSplitEqual] actions differ: foo vs bar";
@@ -423,7 +423,7 @@ test_xaccSplitEqual (Fixture *fixture, gconstpointer pData)
     G_GNUC_UNUSED gchar *msg07 = "[xaccSplitEqual] reconciled date differs";
     G_GNUC_UNUSED gchar *msg08 = "[xaccSplitEqual] amounts differ: foo vs bar";
     gchar *msg10 = "[xaccSplitEqual] transactions differ";
-    gchar *msg11 = "[xaccTransEqual] one is NULL";
+    gchar *msg11 = "[xaccTransEqual] one is nullptr";
     gchar *msg12 = "[xaccSplitEqualCheckBal] balances differ: 321/1000 vs 0/1";
     gchar *msg13 = "[xaccSplitEqualCheckBal] cleared balances differ: 321/1000 vs 0/1";
     gchar *msg14 = "[xaccSplitEqualCheckBal] reconciled balances differ: 321/1000 vs 0/1";

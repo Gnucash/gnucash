@@ -4,7 +4,7 @@
 #include <gmock/gmock.h>
 
 #include <Account.h>
-#include <AccountP.h>
+#include <AccountP.hpp>
 #include <qofbook.h>
 
 #include "gmock-gobject.h"

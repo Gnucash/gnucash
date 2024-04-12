@@ -74,8 +74,8 @@ gnc_value_get_guid (const GValue *value)
     if (!value) return nullptr;
     GncGUID *val;
 
-    g_return_val_if_fail (value && G_IS_VALUE (value), NULL);
-    g_return_val_if_fail (GNC_VALUE_HOLDS_GUID (value), NULL);
+    g_return_val_if_fail (value && G_IS_VALUE (value), nullptr);
+    g_return_val_if_fail (GNC_VALUE_HOLDS_GUID (value), nullptr);
 
     val = (GncGUID*) g_value_get_boxed (value);
 
@@ -172,7 +172,7 @@ guid_to_string (const GncGUID * guid)
 gchar *
 guid_to_string_buff (const GncGUID * guid, gchar *str)
 {
-    if (!str || !guid) return NULL;
+    if (!str || !guid) return nullptr;
 
     gnc::GUID temp {*guid};
     auto val = temp.to_string ();
@@ -229,7 +229,7 @@ guid_hash_to_guint (gconstpointer ptr)
 {
     if (!ptr)
     {
-        PERR ("received NULL guid pointer.");
+        PERR ("received nullptr guid pointer.");
         return 0;
     }
     GncGUID const & guid = * reinterpret_cast <GncGUID const *> (ptr);

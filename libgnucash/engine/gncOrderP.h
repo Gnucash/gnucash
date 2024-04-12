@@ -31,9 +31,17 @@
 
 #include "gncOrder.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 gboolean gncOrderRegister (void);
 gchar *gncOrderNextID (QofBook *book);
 
 #define gncOrderSetGUID(O,G) qof_instance_set_guid(QOF_INSTANCE(O),(G))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_ORDERP_H_ */

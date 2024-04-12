@@ -1,5 +1,5 @@
 /********************************************************************\
- * AccountP.h -- Account engine-private data structure              *
+ * AccountP.hpp -- Account engine-private data structure              *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2002, Linas Vepstas <linas@linas.org>         *
  *                                                                  *
@@ -22,7 +22,7 @@
  *                                                                  *
 \********************************************************************/
 
-/** @file AccountP.h
+/** @file AccountP.hpp
  *
  * This is the *private* header for the account structure.
  * No one outside of the engine should ever include this file.
@@ -40,10 +40,6 @@
 #define XACC_ACCOUNT_P_H
 
 #include "Account.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 #define GNC_ID_ROOT_ACCOUNT        "RootAccount"
 
@@ -176,9 +172,5 @@ typedef struct
 } AccountTestFunctions;
 
 AccountTestFunctions* _utest_account_fill_functions(void);
-
-#ifdef __cplusplus
-} /* extern "C" */
-#endif
 
 #endif /* XACC_ACCOUNT_P_H */

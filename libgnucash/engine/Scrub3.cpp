@@ -39,7 +39,7 @@
 #include "gnc-lot.h"
 #include "policy-p.h"
 #include "Account.h"
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "Scrub2.h"
 #include "Scrub3.h"
 #include "Transaction.h"
@@ -68,7 +68,7 @@ gains_possible (GNCLot *lot)
 
     node = gnc_lot_get_split_list (lot);
     if (!node) return FALSE;
-    split = node->data;
+    split = GNC_SPLIT(node->data);
 
     acc_commodity = xaccAccountGetCommodity(acc);
     comeq = gnc_commodity_equiv (acc_commodity, split->parent->common_currency);
@@ -108,7 +108,7 @@ xaccScrubLot (GNCLot *lot)
         gnc_numeric opening_baln;
 
         /* Get the opening balance for this lot */
-        pcy->PolicyGetLotOpening (pcy, lot, &opening_baln, NULL, NULL);
+        pcy->PolicyGetLotOpening (pcy, lot, &opening_baln, nullptr, nullptr);
         PINFO ("lot opener baln=%s", gnc_num_dbg_to_string (opening_baln));
 
         /* If the lot is fat, give the boot to all the non-opening
@@ -121,7 +121,7 @@ xaccScrubLot (GNCLot *lot)
 rethin:
             for (node = gnc_lot_get_split_list(lot); node; node = node->next)
             {
-                Split *s = node->data;
+                Split *s = GNC_SPLIT(node->data);
                 if (pcy->PolicyIsOpeningSplit (pcy, lot, s)) continue;
                 gnc_lot_remove_split (lot, s);
                 goto rethin;
@@ -144,7 +144,7 @@ rethin:
      */
     if (gains_possible (lot))
     {
-        xaccLotComputeCapGains (lot, NULL);
+        xaccLotComputeCapGains (lot, nullptr);
         xaccLotScrubDoubleBalance (lot);
     }
     xaccAccountCommitEdit(acc);
@@ -169,7 +169,7 @@ xaccAccountScrubLots (Account *acc)
     lots = xaccAccountGetLotList(acc);
     for (node = lots; node; node = node->next)
     {
-        GNCLot *lot = node->data;
+        GNCLot *lot = GNC_LOT(node->data);
         xaccScrubLot (lot);
     }
     g_list_free(lots);
@@ -191,7 +191,7 @@ xaccAccountTreeScrubLots (Account *acc)
 {
     if (!acc) return;
 
-    gnc_account_foreach_descendant(acc, lot_scrub_cb, NULL);
+    gnc_account_foreach_descendant(acc, lot_scrub_cb, nullptr);
     xaccAccountScrubLots (acc);
 }
 

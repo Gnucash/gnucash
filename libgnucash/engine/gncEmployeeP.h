@@ -31,11 +31,19 @@
 
 #include "gncEmployee.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 gboolean gncEmployeeRegister (void);
 gchar *gncEmployeeNextID (QofBook *book);
 const gnc_numeric *gncEmployeeGetCachedBalance (GncEmployee *vend);
 void gncEmployeeSetCachedBalance (GncEmployee *vend, const gnc_numeric *new_bal);
 
 #define gncEmployeeSetGUID(E,G) qof_instance_set_guid(QOF_INSTANCE(E),(G))
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_EMPLOYEEP_H_ */

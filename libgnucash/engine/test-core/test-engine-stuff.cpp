@@ -58,7 +58,7 @@
 #include <qof.h>
 
 #include "Account.h"
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "gnc-engine.h"
 #include "gnc-session.h"
 #include "Transaction.h"

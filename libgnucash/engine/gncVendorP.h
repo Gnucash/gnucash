@@ -30,6 +30,10 @@
 
 #include "gncVendor.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 gboolean gncVendorRegister (void);
 gchar *gncVendorNextID (QofBook *book);
 const gnc_numeric *gncVendorGetCachedBalance (GncVendor *vend);
@@ -37,5 +41,9 @@ void gncVendorSetCachedBalance (GncVendor *vend, const gnc_numeric *new_bal);
 
 #define gncVendorSetGUID(V,G) qof_instance_set_guid(QOF_INSTANCE(V),(G))
 
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* GNC_VENDORP_H_ */

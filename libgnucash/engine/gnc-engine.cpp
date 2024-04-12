@@ -27,7 +27,7 @@
 #include "gnc-engine.h"
 #include "qof.h"
 #include "cashobjects.h"
-#include "AccountP.h"
+#include "AccountP.hpp"
 #include "SX-book-p.h"
 #include "gnc-budget.h"
 #include "TransactionP.h"
@@ -40,7 +40,7 @@
 /* gnc-backend-file location */
 #include "gnc-path.h"
 
-static GList * engine_init_hooks = NULL;
+static GList * engine_init_hooks = nullptr;
 static int engine_is_initialized = 0;
 
 EngineCommitErrorCallback g_error_cb;
@@ -77,7 +77,7 @@ gnc_engine_init_part2()
         { "", "gncmod-backend-dbi", TRUE },
 #endif
         { "", "gncmod-backend-xml", TRUE },
-        { NULL, NULL, FALSE }
+        { nullptr, nullptr, FALSE }
     }, *lib;
 
     for (lib = libs; lib->lib ; lib++)
@@ -172,7 +172,7 @@ gnc_engine_add_commit_error_callback( EngineCommitErrorCallback cb, gpointer dat
 void
 gnc_engine_signal_commit_error( QofBackendError errcode )
 {
-    if ( g_error_cb != NULL )
+    if ( g_error_cb != nullptr )
     {
         (*g_error_cb)( g_error_cb_data, errcode );
     }
