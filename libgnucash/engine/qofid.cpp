@@ -216,6 +216,7 @@ qof_collection_lookup_entity (const QofCollection *col, const GncGUID * guid)
     if (guid == NULL) return NULL;
     ent = static_cast<QofInstance*>(g_hash_table_lookup (col->hash_of_entities,
 							 guid));
+    if (qof_instance_get_destroying(ent)) return NULL;	
     return ent;
 }
 
