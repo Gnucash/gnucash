@@ -5,10 +5,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-03-09 22:01+0000\n"
+"PO-Revision-Date: 2024-04-13 19:01+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -4905,7 +4905,7 @@ msgstr "Kopiraj odabranu transakciju u međuspremnik"
 #: gnucash/gnome/gnc-plugin-page-register.cpp:277
 #: gnucash/ui/gnc-embedded-register-window.ui:45
 msgid "Paste the transaction from the clipboard"
-msgstr "Zalijepi transakciju iz spremnika"
+msgstr "Zalijepi transakciju iz međuspremnika"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:278
 #: gnucash/ui/gnc-embedded-register-window.ui:50
@@ -4945,7 +4945,7 @@ msgstr "Kopiraj odabranu stavku u međuspremnik"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:285
 msgid "Paste the split from the clipboard"
-msgstr "Zalijepi stavku iz spremnika"
+msgstr "Zalijepi stavku iz međuspremnika"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:286
 msgid "Make a copy of the current split"
@@ -28235,7 +28235,7 @@ msgstr "_Zalijepi"
 #: gnucash/ui/gnc-embedded-register-window.ui:24
 #: gnucash/ui/gnc-main-window.ui:117
 msgid "Paste the clipboard content at the cursor position"
-msgstr "Zalijepi sadržaj spremnika na mjesto kursora"
+msgstr "Zalijepi sadržaj međuspremnika na mjestu kursora"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:29
 #: gnucash/ui/gnc-reconcile-window.ui:55
@@ -29573,10 +29573,8 @@ msgstr "Odredi kao plaćanje …"
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:446
 #: gnucash/ui/gnc-plugin-page-register.ui:558
-#, fuzzy
-#| msgid "Assign the selected transaction as payment"
 msgid "Assign the selected transaction as payment."
-msgstr "Odredi odabranu transakciju kao plaćanje"
+msgstr "Odredi odabranu transakciju kao plaćanje."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:450
@@ -29587,35 +29585,25 @@ msgstr "Uredi plaćanje …"
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:452
 #: gnucash/ui/gnc-plugin-page-register.ui:564
-#, fuzzy
-#| msgid "Edit the payment this transaction is a part of"
 msgid "Edit the payment this transaction is a part of."
-msgstr "Uredi plaćanje, čiji dio je ova transakcija"
+msgstr "Uredi plaćanje koje je dio ove transakcije."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:35
-#, fuzzy
-#| msgid "Edit the selected account"
 msgid "Edit the selected account."
-msgstr "Uredi odabrani konto"
+msgstr "Uredi odabrani konto."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:42
-#, fuzzy
-#| msgid "Find an account"
 msgid "Find an account."
-msgstr "Nađi konto"
+msgstr "Nađi konto."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:52
-#, fuzzy
-#| msgid "Find transactions with a search"
 msgid "Find transactions with a search."
-msgstr "Nađi transakcije pomoću pretrage"
+msgstr "Nađi transakcije pomoću pretrage."
 
 #. Translators: currently implemented are, US: income tax and DE: VAT, So adjust this string
 #: gnucash/ui/gnc-plugin-page-register.ui:63
-#, fuzzy
-#| msgid "Setup relevant accounts for tax reports, e.g. US income tax"
 msgid "Setup relevant accounts for tax reports, e.g. US income tax."
-msgstr "Postavi značajna konta za porezne izvještaje, npr. porez na dohodak"
+msgstr "Postavi značajna konta za porezne izvještaje, npr. porez na dohodak."
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/ui/gnc-plugin-page-register.ui:71
@@ -29623,10 +29611,8 @@ msgid "_Basic Ledger"
 msgstr "_Glavna knjiga"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:74
-#, fuzzy
-#| msgid "Show transactions on one or two lines"
 msgid "Show transactions on one or two lines."
-msgstr "Prikaži transakcije u jednom ili dva retka"
+msgstr "Prikaži transakcije u jednom ili dva retka."
 
 #. Translators: This is a menu item in the View menu
 #: gnucash/ui/gnc-plugin-page-register.ui:79
@@ -29634,19 +29620,14 @@ msgid "_Auto-Split Ledger"
 msgstr "Podjela _aktivne transakcije"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:82
-#, fuzzy
-#| msgid ""
-#| "Show transactions on one or two lines and expand the current transaction"
 msgid ""
 "Show transactions on one or two lines and expand the current transaction."
 msgstr ""
-"Prikaži transakcije u jednom ili dva retka i rasklopi trenutačnu transakciju"
+"Prikaži transakcije u jednom ili dva retka i rasklopi trenutačnu transakciju."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
-#, fuzzy
-#| msgid "Show expanded transactions with all splits"
 msgid "Show expanded transactions with all splits."
-msgstr "Prikaži transakcije rasklopljeno sa svim stavkama"
+msgstr "Prikaži transakcije rasklopljeno sa svim stavkama."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:107
 #: gnucash/ui/gnc-plugin-page-register.ui:349
@@ -29655,176 +29636,131 @@ msgid "_Sort By…"
 msgstr "_Razvrstaj po …"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:123
-#, fuzzy
-#| msgid "Refresh this window"
 msgid "Refresh this window."
-msgstr "Aktualiziraj prikaz ovog prozora"
+msgstr "Aktualiziraj ovaj prozor."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:132
-#, fuzzy
-#| msgid "Cut the selected transaction into clipboard"
 msgid "Cut the selected transaction into clipboard."
-msgstr "Izreži odabranu transakciju u međuspremnik"
+msgstr "Izreži odabranu transakciju u međuspremnik."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:138
-#, fuzzy
-#| msgid "Copy the selected transaction into clipboard"
 msgid "Copy the selected transaction into clipboard."
-msgstr "Kopiraj odabranu transakciju u međuspremnik"
+msgstr "Kopiraj odabranu transakciju u međuspremnik."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:144
-#, fuzzy
-#| msgid "Paste the transaction from the clipboard"
 msgid "Paste the transaction from the clipboard."
-msgstr "Zalijepi transakciju iz spremnika"
+msgstr "Zalijepi transakciju iz međuspremnika."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:150
 #: gnucash/ui/gnc-plugin-page-register.ui:366
 #: gnucash/ui/gnc-plugin-page-register.ui:576
-#, fuzzy
-#| msgid "Make a copy of the current transaction"
 msgid "Make a copy of the current transaction."
-msgstr "Stvori kopiju trenutačne transakcije"
+msgstr "Stvori kopiju trenutačne transakcije."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:156
 #: gnucash/ui/gnc-plugin-page-register.ui:371
 #: gnucash/ui/gnc-plugin-page-register.ui:581
-#, fuzzy
-#| msgid "Delete the current transaction"
 msgid "Delete the current transaction."
-msgstr "Izbriši trenutačnu transakciju"
+msgstr "Izbriši trenutačnu transakciju."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:162
 #: gnucash/ui/gnc-plugin-page-register.ui:376
 #: gnucash/ui/gnc-plugin-page-register.ui:488
 #: gnucash/ui/gnc-plugin-page-register.ui:586
 #: gnucash/ui/gnc-plugin-page-register.ui:625
-#, fuzzy
-#| msgid "Remove all splits in the current transaction"
 msgid "Remove all splits in the current transaction."
-msgstr "Ukloni sve stavke u trenutačnoj transakciji"
+msgstr "Ukloni sve stavke u trenutačnoj transakciji."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:171
 #: gnucash/ui/gnc-plugin-page-register.ui:383
 #: gnucash/ui/gnc-plugin-page-register.ui:495
 #: gnucash/ui/gnc-plugin-page-register.ui:593
 #: gnucash/ui/gnc-plugin-page-register.ui:632
-#, fuzzy
-#| msgid "Record the current transaction"
 msgid "Record the current transaction."
-msgstr "Zabilježi trenutačnu transakciju"
+msgstr "Zabilježi trenutačnu transakciju."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:177
 #: gnucash/ui/gnc-plugin-page-register.ui:388
 #: gnucash/ui/gnc-plugin-page-register.ui:500
 #: gnucash/ui/gnc-plugin-page-register.ui:598
 #: gnucash/ui/gnc-plugin-page-register.ui:637
-#, fuzzy
-#| msgid "Cancel the current transaction"
 msgid "Cancel the current transaction."
-msgstr "Prekini trenutačnu transakciju"
+msgstr "Prekini trenutačnu transakciju."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:184
 msgid "_Void Transaction"
 msgstr "_Anuliraj transakciju"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-#, fuzzy
-#| msgid "Void the current transaction"
 msgid "Void the current transaction."
-msgstr "Anuliraj trenutačnu transakciju"
+msgstr "Anuliraj trenutačnu transakciju."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
 msgid "_Unvoid Transaction"
 msgstr "_Poništi anuliranje transakcije"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-#, fuzzy
-#| msgid "Unvoid the current transaction"
 msgid "Unvoid the current transaction."
-msgstr "Poništi anuliranje trenutačne transakcije"
+msgstr "Poništi anuliranje trenutačne transakcije."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
 msgstr "Dodaj _storno transakciju"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
-#, fuzzy
-#| msgid "Add _Reversing Transaction"
 msgid "Add a reversing transaction."
-msgstr "Dodaj _storno transakciju"
+msgstr "Dodaj storno transakciju."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:207
 #: gnucash/ui/gnc-plugin-page-register.ui:395
 #: gnucash/ui/gnc-plugin-page-register.ui:507
-#, fuzzy
-#| msgid ""
-#| "Add, change, or unlink the document linked with the current transaction"
 msgid ""
 "Add, change, or unlink the document linked with the current transaction."
-msgstr "Dodaj, promijeni ili prekini vezu dokumenta s trenutačnom transakcijom"
+msgstr "Dodaj, promijeni ili prekini vezu dokumenta s trenutačnom transakcijom."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:213
 #: gnucash/ui/gnc-plugin-page-register.ui:400
 #: gnucash/ui/gnc-plugin-page-register.ui:512
-#, fuzzy
-#| msgid "Open the linked document for the current transaction"
 msgid "Open the linked document for the current transaction."
-msgstr "Otvori povezani dokument za trenutačnu transakciju"
+msgstr "Otvori povezani dokument za trenutačnu transakciju."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:222
 #: gnucash/ui/gnc-plugin-page-register.ui:407
 #: gnucash/ui/gnc-plugin-page-register.ui:519
-#, fuzzy
-#| msgid "Jump to the linked bill, invoice, or voucher"
 msgid "Jump to the linked bill, invoice, or voucher."
-msgstr "Prijeđi na povezani izlazni račun, ulazni račun ili vaučer"
+msgstr "Prijeđi na povezani izlazni račun, ulazni račun ili vaučer."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:232
-#, fuzzy
-#| msgid "Transfer funds from one account to another"
 msgid "Transfer funds from one account to another."
-msgstr "Prijenos sredstva iz jednog konta u drugi"
+msgstr "Prenesi sredstva iz jednog konta u jedan drugi."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:238
-#, fuzzy
-#| msgid "Reconcile the selected account"
 msgid "Reconcile the selected account."
-msgstr "Uskladi odabrani konto"
+msgstr "Uskladi odabrani konto."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:244
-#, fuzzy
-#| msgid ""
-#| "Automatically clear individual transactions, so as to reach a certain "
-#| "cleared amount"
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount."
 msgstr ""
 "Automatski potvrdi pojedinačne transakcije, tako da dostigne određen "
-"potvrđeni iznos"
+"potvrđeni iznos."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:256
-#, fuzzy
-#| msgid "Record a stock split or a stock merger"
 msgid "Record a stock split or a stock merger."
-msgstr "Zabilježi podjelu dionice ili spajanje dionice"
+msgstr "Zabilježi podjelu dionice ili spajanje dionice."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:262
-#, fuzzy
-#| msgid "Bring up the lot viewer/editor window"
 msgid "Bring up the lot viewer/editor window."
-msgstr "Prikaži prozor preglednika/uređivača paketa"
+msgstr "Prikaži prozor preglednika/uređivača paketa."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:272
 #: gnucash/ui/gnc-plugin-page-register.ui:414
 #: gnucash/ui/gnc-plugin-page-register.ui:526
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
-#, fuzzy
-#| msgid "Move to the blank transaction at the bottom of the register"
 msgid "Move to the blank transaction in the register."
-msgstr "Premjesti na praznu transakciju na dnu registra"
+msgstr "Premjesti se na praznu transakciju u registru."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:417
@@ -29835,10 +29771,8 @@ msgstr "_Prijeđi na datum"
 #: gnucash/ui/gnc-plugin-page-register.ui:279
 #: gnucash/ui/gnc-plugin-page-register.ui:419
 #: gnucash/ui/gnc-plugin-page-register.ui:531
-#, fuzzy
-#| msgid "Move to the split at the specified date"
 msgid "Move to the split at the specified date."
-msgstr "Premjesti se na stavku određenog datuma"
+msgstr "Premjesti se na stavku određenog datuma."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:283
 #: gnucash/ui/gnc-plugin-page-register.ui:422
@@ -29850,10 +29784,8 @@ msgstr "_Podjela transakcije"
 #: gnucash/ui/gnc-plugin-page-register.ui:285
 #: gnucash/ui/gnc-plugin-page-register.ui:424
 #: gnucash/ui/gnc-plugin-page-register.ui:536
-#, fuzzy
-#| msgid "Show all splits in the current transaction"
 msgid "Show all splits in the current transaction."
-msgstr "Prikaži sve stavke u trenutačnoj transakciji"
+msgstr "Prikaži sve stavke u trenutačnoj transakciji."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:289
 #: gnucash/ui/gnc-plugin-page-register.ui:427
@@ -29864,10 +29796,8 @@ msgstr "Uredi _tečaj"
 #: gnucash/ui/gnc-plugin-page-register.ui:291
 #: gnucash/ui/gnc-plugin-page-register.ui:429
 #: gnucash/ui/gnc-plugin-page-register.ui:541
-#, fuzzy
-#| msgid "Edit the exchange rate for the current transaction"
 msgid "Edit the exchange rate for the current transaction."
-msgstr "Uredi tečaj za trenutačnu transakciju"
+msgstr "Uredi tečaj za trenutačnu transakciju."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:295
 #: gnucash/ui/gnc-plugin-page-register.ui:432
@@ -29880,14 +29810,13 @@ msgstr "Ter_miniraj …"
 #: gnucash/ui/gnc-plugin-page-register.ui:434
 #: gnucash/ui/gnc-plugin-page-register.ui:546
 #: gnucash/ui/gnc-plugin-page-register.ui:849
-#, fuzzy
-#| msgid ""
-#| "Create a Scheduled Transaction with the current transaction as a template"
 msgid ""
 "Create a Scheduled Transaction with the current transaction as a template or "
 "edit the Scheduled Transaction that current transaction was created by."
 msgstr ""
-"Stvori terminiranu transakciju s trenutačnom transakcijom, kao predložkom"
+"Stvori terminiranu transakciju s trenutačnom transakcijom kao predloškom ili "
+"uredi terminiranu transakciju koja je stvorena na osnovi trenutačna "
+"transakcije."
 
 #. Translators: This is a menu item that will open a register tab for the
 #. account of the first other account in the current transaction's split list
@@ -29902,14 +29831,10 @@ msgstr "_Prijeđi na drugi konto"
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:439
 #: gnucash/ui/gnc-plugin-page-register.ui:551
-#, fuzzy
-#| msgid ""
-#| "Open a new register tab for the other account with focus on this "
-#| "transaction"
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
 msgstr ""
-"Otvori novu karticu registra za drugi konto s fokusom na ovu transakciju"
+"Otvori novu karticu registra za drugi konto s fokusom na ovu transakciju."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
 msgid "All Transactions"
@@ -29924,41 +29849,31 @@ msgid "Account Report"
 msgstr "Izvještaj o kontu"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:334
-#, fuzzy
-#| msgid "Open a register report for this Account"
 msgid "Open a register report for this Account."
-msgstr "Otvori izvještaj registra za ovaj konto"
+msgstr "Otvori izvještaj registra za ovaj konto."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:338
 msgid "Account Report - Single Transaction"
 msgstr "Izvještaj o kontu – jedna transakcija"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:340
-#, fuzzy
-#| msgid "Open a register report for the selected Transaction"
 msgid "Open a register report for the selected Transaction."
-msgstr "Otvori izvještaj registra za odabranu transakciju"
+msgstr "Otvori izvještaj registra za odabranu transakciju."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:359
 #: gnucash/ui/gnc-plugin-page-register.ui:471
-#, fuzzy
-#| msgid "Rename this page"
 msgid "Rename this page."
-msgstr "Preimenuj ovu stranicu"
+msgstr "Preimenuj ovu stranicu."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:478
 #: gnucash/ui/gnc-plugin-page-register.ui:615
-#, fuzzy
-#| msgid "Make a copy of the current split"
 msgid "Make a copy of the current split."
-msgstr "Stvori kopiju trenutačne stavke"
+msgstr "Stvori kopiju trenutačne stavke."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:483
 #: gnucash/ui/gnc-plugin-page-register.ui:620
-#, fuzzy
-#| msgid "Delete the current split"
 msgid "Delete the current split."
-msgstr "Izbriši trenutačnu stavku"
+msgstr "Izbriši trenutačnu stavku."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:804
 #, fuzzy
