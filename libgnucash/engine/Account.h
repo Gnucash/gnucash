@@ -1493,12 +1493,6 @@ typedef enum
      */
     void gnc_account_tree_begin_staged_transaction_traversals(Account *acc);
 
-    /** xaccSplitsBeginStagedTransactionTraversals() resets the traversal
-     *    marker for each transaction which is a parent of one of the
-     *    splits in the list.
-     */
-    void xaccSplitsBeginStagedTransactionTraversals(SplitList *splits);
-
     /** xaccAccountBeginStagedTransactionTraversals() resets the traversal
      *    marker for each transaction which is a parent of one of the
      *    splits in the account.

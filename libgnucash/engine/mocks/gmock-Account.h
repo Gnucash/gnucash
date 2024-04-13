@@ -4,6 +4,7 @@
 #include <gmock/gmock.h>
 
 #include <Account.h>
+#include <Account.hpp>
 #include <AccountP.hpp>
 #include <qofbook.h>
 
@@ -45,6 +46,7 @@ public:
     MOCK_CONST_METHOD0(get_commodity, gnc_commodity*());
     MOCK_CONST_METHOD2(for_each_transaction, gint(TransactionCallback, void*));
     MOCK_CONST_METHOD0(xaccAccountGetSplitList, SplitList*());
+    MOCK_CONST_METHOD0(xaccAccountGetSplits, std::vector<Split*>());
     MOCK_METHOD2(find_account, Account *(const char*, const char*));
     MOCK_METHOD3(add_account, void(const char*, const char*, Account*));
     MOCK_METHOD1(find_account_bayes, Account *(std::vector<const char*>&));

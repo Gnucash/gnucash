@@ -39,6 +39,7 @@
 #ifndef XACC_ACCOUNT_P_H
 #define XACC_ACCOUNT_P_H
 
+#include <vector>
 #include <optional>
 
 #include "Account.h"
@@ -118,7 +119,7 @@ typedef struct AccountPrivate
  
     gboolean balance_dirty;     /* balances in splits incorrect */
 
-    GList *splits;              /* list of split pointers */
+    std::vector<Split*> splits;              /* list of split pointers */
     gboolean sort_dirty;        /* sort order of splits is bad */
 
     LotList   *lots;		/* list of lot pointers */
