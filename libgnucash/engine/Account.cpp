@@ -329,11 +329,9 @@ gnc_account_init(Account* acc)
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
 
-    priv->higher_balance_limit = gnc_numeric_create (1,0);
-    priv->higher_balance_cached = false;
-    priv->lower_balance_limit = gnc_numeric_create (1,0);
-    priv->lower_balance_cached = false;
-    priv->include_sub_account_balances = TriState::Unset;
+    priv->higher_balance_limit = {};
+    priv->lower_balance_limit = {};
+    priv->include_sub_account_balances = {};
 
     priv->splits = nullptr;
     priv->sort_dirty = FALSE;
@@ -4970,9 +4968,9 @@ xaccAccountGetHigherBalanceLimit (const Account *acc,
 {
     g_return_val_if_fail (GNC_IS_ACCOUNT(acc), false);
 
-    if (GET_PRIVATE(acc)->higher_balance_cached)
+    if (GET_PRIVATE(acc)->higher_balance_limit.has_value())
     {
-        *balance = GET_PRIVATE(acc)->higher_balance_limit;
+        *balance = GET_PRIVATE(acc)->higher_balance_limit.value();
 
         if (gnc_numeric_check (*balance) == 0)
             return true;
@@ -5000,7 +4998,6 @@ xaccAccountGetHigherBalanceLimit (const Account *acc,
         g_value_unset (&v);
 
         GET_PRIVATE(acc)->higher_balance_limit = bal;
-        GET_PRIVATE(acc)->higher_balance_cached = true;
         return retval;
     }
 }
@@ -5011,9 +5008,9 @@ xaccAccountGetLowerBalanceLimit (const Account *acc,
 {
     g_return_val_if_fail (GNC_IS_ACCOUNT(acc), false);
 
-    if (GET_PRIVATE(acc)->lower_balance_cached)
+    if (GET_PRIVATE(acc)->lower_balance_limit.has_value())
     {
-        *balance = GET_PRIVATE(acc)->lower_balance_limit;
+        *balance = GET_PRIVATE(acc)->lower_balance_limit.value();
 
         if (gnc_numeric_check (*balance) == 0)
             return true;
@@ -5041,7 +5038,6 @@ xaccAccountGetLowerBalanceLimit (const Account *acc,
         g_value_unset (&v);
 
         GET_PRIVATE(acc)->lower_balance_limit = bal;
-        GET_PRIVATE(acc)->lower_balance_cached = true;
         return retval;
     }
 }
@@ -5075,15 +5071,11 @@ set_balance_limits (Account *acc, gnc_numeric balance, gboolean higher)
         qof_instance_set_path_kvp (QOF_INSTANCE(acc), &v, path);
         if (higher)
         {
-            GET_PRIVATE(acc)->higher_balance_limit.denom = balance.denom;
-            GET_PRIVATE(acc)->higher_balance_limit.num = balance.num;
-            GET_PRIVATE(acc)->higher_balance_cached = true;
+            GET_PRIVATE(acc)->higher_balance_limit = balance;
         }
         else
         {
-            GET_PRIVATE(acc)->lower_balance_limit.denom = balance.denom;
-            GET_PRIVATE(acc)->lower_balance_limit.num = balance.num;
-            GET_PRIVATE(acc)->lower_balance_cached = true;
+            GET_PRIVATE(acc)->lower_balance_limit = balance;
         }
         mark_account (acc);
         xaccAccountCommitEdit (acc);
@@ -5138,9 +5130,9 @@ clear_balance_limits (Account *acc, gboolean higher)
         qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, path);
         qof_instance_slot_path_delete_if_empty (QOF_INSTANCE(acc), {KEY_BALANCE_LIMIT});
         if (higher)
-            GET_PRIVATE(acc)->higher_balance_cached = false;
+            GET_PRIVATE(acc)->higher_balance_limit.reset();
         else
-            GET_PRIVATE(acc)->lower_balance_cached = false;
+            GET_PRIVATE(acc)->lower_balance_limit.reset();
         mark_account (acc);
         xaccAccountCommitEdit (acc);
     }
@@ -5167,15 +5159,14 @@ xaccAccountGetIncludeSubAccountBalances (const Account *acc)
 {
     g_return_val_if_fail (GNC_IS_ACCOUNT(acc), false);
 
-    if (GET_PRIVATE(acc)->include_sub_account_balances == TriState::Unset)
+    if (!GET_PRIVATE(acc)->include_sub_account_balances.has_value())
     {
         gboolean inc_sub = boolean_from_key (acc, {KEY_BALANCE_LIMIT,
                                                    KEY_BALANCE_INCLUDE_SUB_ACCTS});
 
-        GET_PRIVATE(acc)->include_sub_account_balances = inc_sub ? TriState::True
-                                                                 : TriState::False;
+        GET_PRIVATE(acc)->include_sub_account_balances = inc_sub;
     }
-    return GET_PRIVATE(acc)->include_sub_account_balances == TriState::True;
+    return GET_PRIVATE(acc)->include_sub_account_balances.value();
 }
 
 void
@@ -5195,8 +5186,7 @@ xaccAccountSetIncludeSubAccountBalances (Account *acc, gboolean inc_sub)
             qof_instance_set_path_kvp (QOF_INSTANCE(acc), &v, path);
         else
             qof_instance_set_path_kvp (QOF_INSTANCE(acc), nullptr, path);
-        GET_PRIVATE(acc)->include_sub_account_balances =
-                              inc_sub ? TriState::True : TriState::False;
+        GET_PRIVATE(acc)->include_sub_account_balances = inc_sub;
         mark_account (acc);
         xaccAccountCommitEdit (acc);
         g_value_unset (&v);

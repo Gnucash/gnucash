@@ -39,6 +39,8 @@
 #ifndef XACC_ACCOUNT_P_H
 #define XACC_ACCOUNT_P_H
 
+#include <optional>
+
 #include "Account.h"
 
 #define GNC_ID_ROOT_ACCOUNT        "RootAccount"
@@ -50,13 +52,6 @@
  * This is the *private* header for the account structure.
  * No one outside of the engine should ever include this file.
 */
-
-typedef enum
-{
-    Unset = -1,
-    False,
-    True
-} TriState;
 
 /** \struct Account */
 typedef struct AccountPrivate
@@ -117,11 +112,9 @@ typedef struct AccountPrivate
     gnc_numeric cleared_balance;
     gnc_numeric reconciled_balance;
 
-    gnc_numeric higher_balance_limit;
-    gboolean    higher_balance_cached;
-    gnc_numeric lower_balance_limit;
-    gboolean    lower_balance_cached;
-    TriState    include_sub_account_balances;
+    std::optional<gnc_numeric> higher_balance_limit;
+    std::optional<gnc_numeric> lower_balance_limit;
+    std::optional<bool>    include_sub_account_balances;
  
     gboolean balance_dirty;     /* balances in splits incorrect */
 
