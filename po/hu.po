@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-06 21:01+0000\n"
+"PO-Revision-Date: 2024-04-13 17:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1286,7 +1286,7 @@ msgstr "Nem"
 #: gnucash/gtkbuilder/dialog-account.glade:273
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:63
 msgid "Placeholder"
-msgstr "Töltelék"
+msgstr "Töltelék (helyörző)"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1356
 #: gnucash/gnome-utils/dialog-account.c:429
@@ -2507,7 +2507,7 @@ msgstr "Nincs folyószámla kiválasztva. Próbálja újra."
 
 #: gnucash/gnome/dialog-date-close.c:82
 msgid "Placeholder account selected. Please try again."
-msgstr "Töltelék számla lett kiválasztva. Próbálja újra."
+msgstr "Töltelék (helyörző) számla lett kiválasztva. Próbálja újra."
 
 #: gnucash/gnome/dialog-doclink.c:160
 #: gnucash/gnome/gnc-plugin-page-register.cpp:4636
@@ -2807,7 +2807,7 @@ msgstr "egy folyószámla"
 
 #: gnucash/gnome/dialog-find-account.c:415
 msgid "Place Holder"
-msgstr "Töltelék"
+msgstr "Töltelék (helyörző)"
 
 #: gnucash/gnome/dialog-find-account.c:426
 #: gnucash/gnome-utils/gnc-tree-view-account.c:979
@@ -7055,7 +7055,7 @@ msgstr "Ne mondja megint e _munkamenetben."
 
 #: gnucash/gnome-utils/gnc-account-sel.c:521
 msgid "Hide _Placeholder Accounts"
-msgstr "_Töltelék számlák elrejtése"
+msgstr "_Töltelék (helyörző) számlák elrejtése"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:523
 msgid "Hide _Hidden Accounts"
@@ -9962,7 +9962,7 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
-"Új fájloknál legyen bekapcsolva a \"Felosztás Művelet mezője Számként "
+"Új fájloknál legyen bekapcsolva a \"Felosztásművelet mezője Számként "
 "használva\" beállítás"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
@@ -9976,7 +9976,7 @@ msgid ""
 "'num' field."
 msgstr ""
 "Bekapcsolásakor minden új fájlban a Könyvbeállítások között aktiválódik a "
-"Felosztás Művelet mezője Számként használva lehetőség. Ilyenkor a regiszter "
+"Felosztásművelet mezője Számként használva lehetőség. Ilyenkor a regiszter "
 "Szám mezőjében a felosztás Műveletét lehet kezelni, a tranzakció Száma pedig "
 "csak kétsoros nézetben fog látszódni a második sorban. Kikapcsolásakor nem "
 "aktiválódik ez a lehetőség és a regiszter Szám mezőjében a tranzakció Számát "
@@ -11668,17 +11668,17 @@ msgstr ""
 "Ha át szeretne nevezni egy számlát, először kattintson a számla sorára, majd "
 "a nevére, és változtassa meg.\n"
 "\n"
-"Egyes számlák „Töltelék(helyőrző)” számlaként vannak megjelölve. Ezek csak a "
-"hierarchia kialakítására szolgálnak, általában nem tartalmaznak "
+"Egyes számlák „Töltelék (helyőrző)” számlaként vannak megjelölve. Ezek csak "
+"a hierarchia kialakítására szolgálnak, általában nem tartalmaznak "
 "tranzakciókat és nincs nyitóegyenlegük. Ha szeretne egy számlát helyőrzőként "
-"használni, jelölje be a hozzá tartozó pipát a „Töltelék(helyőrző)” "
+"használni, jelölje be a hozzá tartozó pipát a „Töltelék (helyőrző)” "
 "oszlopban.\n"
 "\n"
 "Ha szeretne nyitóegyenleget adni egy számlának, először kattintson a számla "
 "sorára, majd a nyitóegyenleg-mezőre, és írja be a nyitóegyenleget.\n"
 "\n"
-"<b>Figyelem:</b> minden számlának lehet nyitóegyenlege, kivéve a „Saját "
-"tőke” és „Töltelék(helyőrző)” számláknak."
+"<b>Figyelem:</b> Minden számlának lehet nyitóegyenlege, kivéve a „Saját tőke”"
+" és a „Töltelék (helyőrző)” számlákat."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:563
 msgid "Setup selected accounts"
@@ -12697,13 +12697,12 @@ msgid "Convert the file"
 msgstr "Fájl átalakítása"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:145
-#, fuzzy
 msgid "finish placeholder"
-msgstr "Töltelék"
+msgstr "töltelék (helyörző) befejezése"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:150
 msgid "Finish GnuCash Datafile Import"
-msgstr "GnuCash import befejezése"
+msgstr "GnuCash adatfájl importálásának befejezése"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:163
 msgid "Edit the list of encodings"
@@ -13092,7 +13091,7 @@ msgstr "Szám_latípus"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1514
 msgid "Placeholde_r"
-msgstr "_Töltelék(helyőrző)"
+msgstr "_Töltelék (helyőrző)"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1518
 msgid ""
@@ -16158,7 +16157,7 @@ msgstr ""
 #: gnucash/report/reports/standard/category-barchart.scm:122
 #: gnucash/report/trep-engine.scm:312 libgnucash/engine/Recurrence.cpp:744
 msgid "Daily"
-msgstr "Naponta"
+msgstr "Napi"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:129
 msgid "Bi-Weekly"
@@ -16789,7 +16788,7 @@ msgstr "utolsó nap"
 #: gnucash/gtkbuilder/gnc-frequency.glade:692
 #: libgnucash/engine/Recurrence.cpp:739
 msgid "Once"
-msgstr "egyszer"
+msgstr "Egyszeri"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:177
 #: gnucash/gtkbuilder/gnc-frequency.glade:1239
@@ -30498,7 +30497,7 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1243
 msgid "Employee number format"
-msgstr "Alkalmazottszám-formátum"
+msgstr "Alkalmazottszám formátuma"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1245
 msgid ""
@@ -30522,7 +30521,7 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1252
 msgid "Invoice number format"
-msgstr "Kimenőszámlaszám-formátum"
+msgstr "Kimenőszámlaszám formátuma"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1254
 msgid ""
@@ -30546,7 +30545,7 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1261
 msgid "Bill number format"
-msgstr "Bejövőszámlaszám-formátum"
+msgstr "Bejövőszámlaszám formátuma"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1262
 msgid ""
@@ -30570,7 +30569,7 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1269
 msgid "Expense voucher number format"
-msgstr "Költségbizonylatszám-formátum"
+msgstr "Költségbizonylatszám formátuma"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1271
 msgid ""
@@ -30594,7 +30593,7 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1278
 msgid "Job number format"
-msgstr "Megbízásszám-formátum"
+msgstr "Megbízásszám formátuma"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1279
 msgid ""
@@ -30618,7 +30617,7 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1286
 msgid "Order number format"
-msgstr "Rendelésszám-formátum"
+msgstr "Rendelésszám formátuma"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1287
 msgid ""
@@ -30642,7 +30641,7 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1294
 msgid "Vendor number format"
-msgstr "Beszállítószám-formátum"
+msgstr "Beszállítószám formátuma"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1295
 msgid ""
@@ -30757,7 +30756,7 @@ msgstr "Ennyi nap után a tranzakciók írásvédetté válnak (vörös vonal je
 
 #: libgnucash/engine/qofbookslots.h:67
 msgid "Use Split Action Field for Number"
-msgstr "Felosztás Művelet mezője Számként használva"
+msgstr "Felosztásművelet mezője Számként használva"
 
 #: libgnucash/engine/qofbookslots.h:69
 msgid "Budgeting"
