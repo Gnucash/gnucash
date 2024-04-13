@@ -1500,18 +1500,41 @@ gnc_wrap_text_with_bidi_ltr_isolate (const char* text)
 /********************************************************************\
  ********************************************************************/
 
+using StrStrVec = std::vector<std::pair<std::string, std::string>>;
+
+static std::string
+string_replace_substring (const std::string& input, const StrStrVec& replacements)
+{
+    std::string result = input;
+    for (const auto& [key, val] : replacements)
+        for (auto pos = result.find(key); pos != std::string::npos; pos = result.find(key))
+            result.replace(pos, key.length(), val);
+    return result;
+}
+
 static std::string
 number_to_words(double val, int64_t denom)
 {
     double int_part;
     const int frac_part = std::round(std::modf (std::fabs(val), &int_part) * denom);
-    const std::vector<std::string> tail =
-        { " ", _("and"), " ", std::to_string (frac_part), "/", std::to_string (denom) };
     std::ostringstream ss;
-
     ss.imbue(gnc_get_boost_locale());
-    ss << boost::locale::as::spellout << int_part;
-    return std::accumulate (tail.begin(), tail.end(), ss.str());
+    auto num_to_words = [&ss](auto num)
+    {
+        ss.str("");
+        ss << boost::locale::as::spellout << num;
+        return ss.str();
+    };
+    StrStrVec replacements = {
+        {"{int_part}", num_to_words(int_part)},
+        {"{frac_part}", num_to_words(frac_part)},
+        {"{value}", num_to_words(val)},
+        {"{int_part_num}", std::to_string (int_part)},
+        {"{frac_part_num}", std::to_string (frac_part)},
+        {"{denom_num}", std::to_string (denom)},
+    };
+
+    return string_replace_substring("{int_part} and {frac_part_num}/{denom_num}", replacements);
 }
 
 #ifdef _MSC_VER
