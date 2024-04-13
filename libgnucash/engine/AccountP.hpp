@@ -122,6 +122,7 @@ typedef struct AccountPrivate
     gnc_numeric lower_balance_limit;
     gboolean    lower_balance_cached;
     TriState    include_sub_account_balances;
+    time64      cached_recn_date;
  
     gboolean balance_dirty;     /* balances in splits incorrect */
 

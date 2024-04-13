@@ -40,7 +40,9 @@
 
 #include <memory>
 #include <algorithm>
+#include <numeric>
 #include <vector>
+#include <string>
 
 #include "import-main-matcher.h"
 
@@ -59,6 +61,7 @@
 #include "guid.h"
 #include "gnc-session.h"
 #include "Query.h"
+#include <optional>
 
 #define GNC_PREFS_GROUP "dialogs.import.generic.transaction-list"
 #define IMPORT_MAIN_MATCHER_CM_CLASS "transaction-matcher-dialog"
@@ -116,6 +119,7 @@ enum downloaded_cols
     DOWNLOADED_COL_ACTION_UPDATE,
     DOWNLOADED_COL_ACTION_INFO,
     DOWNLOADED_COL_ACTION_PIXBUF,
+    DOWNLOADED_COL_ACTION_PIXBUF_TOOLTIP,
     DOWNLOADED_COL_DATA,
     DOWNLOADED_COL_COLOR,
     DOWNLOADED_COL_ENABLE,
@@ -1258,6 +1262,11 @@ gnc_gen_trans_row_activated_cb (GtkTreeView *treeview,
                                            &first, is_selection, path,
                                            &assigned_account, info);
 
+    auto model = gtk_tree_view_get_model (info->view);
+    GtkTreeIter iter;
+    gtk_tree_model_get_iter (model, &iter, path);
+    refresh_model_row (info, model, &iter, get_trans_info (model, &iter));
+
     gtk_tree_selection_select_path (gtk_tree_view_get_selection (treeview), path);
 
     gchar *namestr = gnc_account_get_full_name (assigned_account);
@@ -1559,7 +1568,7 @@ gnc_gen_trans_init_view (GNCImportMainMatcher *info,
                                 G_TYPE_STRING, G_TYPE_STRING, G_TYPE_INT, //memo stuff
                                 G_TYPE_STRING, G_TYPE_BOOLEAN,
                                 G_TYPE_BOOLEAN, G_TYPE_BOOLEAN, G_TYPE_STRING,
-                                GDK_TYPE_PIXBUF, G_TYPE_POINTER, G_TYPE_STRING,
+                                GDK_TYPE_PIXBUF, G_TYPE_STRING, G_TYPE_POINTER, G_TYPE_STRING,
                                 G_TYPE_BOOLEAN);
     gtk_tree_view_set_model (view, GTK_TREE_MODEL(store));
     g_object_unref (store);
@@ -1909,6 +1918,16 @@ get_peer_acct_names (Split *split)
     return retval;
 }
 
+static inline std::optional<time64>
+acct_recndate_warning (time64 trans_date, const Account* acc)
+{
+    time64 recn_date;
+    if (xaccAccountGetReconcileLastDate (acc, &recn_date) && trans_date < recn_date)
+        return recn_date;
+    else
+        return {};
+}
+
 static void
 refresh_model_row (GNCImportMainMatcher *gui,
                    GtkTreeModel *model,
@@ -1976,6 +1995,7 @@ refresh_model_row (GNCImportMainMatcher *gui,
     ro_text = text = NULL;
     const gchar *color = NULL;
     bool show_pixbuf = true;
+    std::vector<std::string> warnings;
     switch (gnc_import_TransInfo_get_action (info))
     {
     case GNCImport_ADD:
@@ -2027,6 +2047,22 @@ refresh_model_row (GNCImportMainMatcher *gui,
                     g_strdup_printf (_("New, UNBALANCED (need price to transfer %s to acct %s)!"),
                                      imbalance, acct_full_name);
 
+                }
+                if (auto recn_date = acct_recndate_warning (date, dest_acc))
+                {
+                    static const char* recn_date_warning = N_("The import date %s is \
+earlier than destination account %s whose last reconciled date is %s. Further \
+reconciliation of the destination account may be difficult.");
+                    auto trans_date_str = qof_print_date (date);
+                    auto recn_date_str = qof_print_date (*recn_date);
+                    auto acc_full_name = gnc_account_get_full_name (dest_acc);
+                    auto s = g_strdup_printf (_(recn_date_warning), trans_date_str,
+                                              acc_full_name, recn_date_str);
+                    warnings.push_back (s);
+                    g_free (s);
+                    g_free (acc_full_name);
+                    g_free (recn_date_str);
+                    g_free (trans_date_str);
                 }
 
                 g_free (acct_full_name);
@@ -2136,6 +2172,28 @@ refresh_model_row (GNCImportMainMatcher *gui,
                         DOWNLOADED_COL_ACTION_ADD,
                         gnc_import_TransInfo_get_action (info) == GNCImport_ADD,
                         -1);
+
+    if (gnc_import_TransInfo_get_action (info) == GNCImport_ADD && !warnings.empty())
+    {
+        auto icon_theme = gtk_icon_theme_get_default();
+        auto pixbuf = gtk_icon_theme_load_icon (icon_theme, "dialog-warning", 16,
+                                                GTK_ICON_LOOKUP_FORCE_SIZE, nullptr);
+        // in case theme changes, we copy and release old icon
+        auto warnings_str = std::accumulate (warnings.begin(), warnings.end(), std::string{},
+                                             [](const std::string& a, const std::string& b)
+                                             { return a.empty() ? b : a + "\n" + b; });
+        gtk_tree_store_set (store, iter,
+                            DOWNLOADED_COL_ACTION_PIXBUF, pixbuf,
+                            DOWNLOADED_COL_ACTION_PIXBUF_TOOLTIP, warnings_str.c_str(),
+                            -1);
+        g_object_unref (pixbuf);
+    }
+    else
+        gtk_tree_store_set (store, iter,
+                            DOWNLOADED_COL_ACTION_PIXBUF, nullptr,
+                            DOWNLOADED_COL_ACTION_PIXBUF_TOOLTIP, nullptr,
+                            -1);
+
     if (gnc_import_TransInfo_get_action (info) == GNCImport_SKIP)
     {
         /*If skipping the row, there is no best match's confidence pixmap*/
@@ -2475,6 +2533,10 @@ query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
                                 -1);
             break;
         default:
+            if (!g_strcmp0 (gtk_tree_view_column_get_title (column), _("Info")))
+                gtk_tree_model_get (model, &iter,
+                                    DOWNLOADED_COL_ACTION_PIXBUF_TOOLTIP, &tooltip_text,
+                                    -1);
             break;
         }
 

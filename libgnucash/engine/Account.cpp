@@ -328,6 +328,7 @@ gnc_account_init(Account* acc)
     priv->starting_cleared_balance = gnc_numeric_zero();
     priv->starting_reconciled_balance = gnc_numeric_zero();
     priv->balance_dirty = FALSE;
+    priv->cached_recn_date = INT64_MAX;
 
     priv->higher_balance_limit = gnc_numeric_create (1,0);
     priv->higher_balance_cached = false;
@@ -1416,6 +1417,7 @@ xaccFreeAccount (Account *acc)
     priv->noclosing_balance = gnc_numeric_zero();
     priv->cleared_balance = gnc_numeric_zero();
     priv->reconciled_balance = gnc_numeric_zero();
+    priv->cached_recn_date = INT64_MAX;
 
     priv->type = ACCT_TYPE_NONE;
     gnc_commodity_decrement_usage_count(priv->commodity);
@@ -4731,23 +4733,18 @@ xaccAccountIsPriced(const Account *acc)
 gboolean
 xaccAccountGetReconcileLastDate (const Account *acc, time64 *last_date)
 {
-    gint64 date = 0;
-    GValue v = G_VALUE_INIT;
-    gboolean retval = FALSE;
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
-    qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {KEY_RECONCILE_INFO, "last-date"});
-    if (G_VALUE_HOLDS_INT64 (&v))
-        date = g_value_get_int64 (&v);
-
-    g_value_unset (&v);
-    if (date)
+    auto priv = GET_PRIVATE(acc);
+    if (priv->cached_recn_date == INT64_MAX)
     {
-        if (last_date)
-            *last_date = date;
-        retval = TRUE;
+        GValue v = G_VALUE_INIT;
+        qof_instance_get_path_kvp (QOF_INSTANCE(acc), &v, {KEY_RECONCILE_INFO, "last-date"});
+        priv->cached_recn_date = G_VALUE_HOLDS_INT64 (&v) ? g_value_get_int64 (&v) : 0;
+        g_value_unset (&v);
     }
-    g_value_unset (&v);
-    return retval;
+    if (priv->cached_recn_date && last_date)
+        *last_date = priv->cached_recn_date;
+    return (priv->cached_recn_date != 0);
 }
 
 /********************************************************************\
@@ -4766,6 +4763,7 @@ xaccAccountSetReconcileLastDate (Account *acc, time64 last_date)
     mark_account (acc);
     xaccAccountCommitEdit (acc);
     g_value_unset (&v);
+    GET_PRIVATE(acc)->cached_recn_date = last_date;
 }
 
 /********************************************************************\

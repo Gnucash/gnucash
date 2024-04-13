@@ -1254,15 +1254,23 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
     g_assert_true (xaccAccountGetIncludeSubAccountBalances (account) == false);
 
     // Reconcile getter/setter
+    g_assert_false (xaccAccountGetReconcileLastDate (account, &returned_date));
     date = date - (60*60*24*7); // -7 days
     xaccAccountSetReconcileLastDate (account, date);
-    xaccAccountGetReconcileLastDate (account, &returned_date);
+    g_assert_true (xaccAccountGetReconcileLastDate (account, &returned_date));
     g_assert_true (date == returned_date);
 
     date = date + (60*60*24*2); // +2 days
     xaccAccountSetReconcilePostponeDate (account, date);
     xaccAccountGetReconcilePostponeDate (account, &returned_date);
     g_assert_true (date == returned_date);
+
+    // if last recn_date exists and is set to 0, getter returns false,
+    // and returned_date is unchanged
+    returned_date = 123;
+    xaccAccountSetReconcileLastDate (account, 0);
+    g_assert_false (xaccAccountGetReconcileLastDate (account, &returned_date));
+    g_assert_cmpint (returned_date, ==, 123);
 
     g_assert_true (xaccAccountGetReconcilePostponeBalance (account, &returned_post_balance) == false);
     xaccAccountSetReconcilePostponeBalance (account, post_balance);
