@@ -67,7 +67,6 @@ static Split *
 DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
 {
     Split *split;
-    SplitList *node;
     gnc_commodity *common_currency;
     gboolean want_positive;
     gnc_numeric baln;
@@ -101,51 +100,38 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
      * hasn't been assigned to a lot.  Return that split.
      * Make use of the fact that the splits in an account are
      * already in date order; so we don't have to sort. */
-    node = xaccAccountGetSplitList (lot_account);
-    if (reverse)
+    auto splits = xaccAccountGetSplitList (lot_account);
+
+    Split *rv = nullptr;
+
+    for (auto node = reverse ? g_list_last (splits) : splits; !rv && node;
+         node = reverse ? node->prev : node->next)
     {
-        node = g_list_last (node);
-    }
-    while (node)
-    {
-        gboolean is_match;
-        gboolean is_positive;
-        time64 this_time;
         split = GNC_SPLIT(node->data);
-        if (split->lot) goto donext;
+        if (split->lot)
+            continue;
 
         /* Skip it if it's too early */
-        this_time = xaccTransRetDatePosted ( xaccSplitGetParent (split));
-        if (this_time < open_time)
+        if (xaccTransRetDatePosted (xaccSplitGetParent (split)) < open_time)
         {
             if (reverse)
                 /* Going backwards, no point in looking further */
                 break;
-            goto donext;
+            continue;
         }
 
         /* Allow equiv currencies */
-        is_match = gnc_commodity_equiv (common_currency,
-                                        split->parent->common_currency);
-        if (FALSE == is_match) goto donext;
+        if (!gnc_commodity_equiv (common_currency, split->parent->common_currency))
+            continue;
 
         /* Disallow zero-amount splits in general. */
-        if (gnc_numeric_zero_p(split->amount)) goto donext;
+        if (gnc_numeric_zero_p(split->amount))
+            continue;
 
-        is_positive = gnc_numeric_positive_p (split->amount);
-        if ((want_positive && is_positive) ||
-                ((!want_positive) && (!is_positive))) return split;
-donext:
-        if (reverse)
-        {
-            node = node->prev;
-        }
-        else
-        {
-            node = node->next;
-        }
+        if (want_positive == gnc_numeric_positive_p (split->amount))
+            rv = split;
     }
-    return nullptr;
+    return rv;
 }
 
 /* ============================================================== */
