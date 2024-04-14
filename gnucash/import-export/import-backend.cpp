@@ -38,6 +38,7 @@
 #include "import-backend.h"
 #include "import-utilities.h"
 #include "Account.h"
+#include "Account.hpp"
 #include "Query.h"
 #include "gnc-engine.h"
 #include "engine-helpers.h"
@@ -996,9 +997,9 @@ hash_account_online_ids (Account *account)
 {
      auto acct_hash = g_hash_table_new_full
           (g_str_hash, g_str_equal, g_free, nullptr);
-     for (GList *n = xaccAccountGetSplitList (account) ; n; n = n->next)
+     for (auto split : xaccAccountGetSplits (account))
      {
-        auto id = gnc_import_get_split_online_id (static_cast<Split *>(n->data));
+        auto id = gnc_import_get_split_online_id (split);
         if (id && *id)
             g_hash_table_insert (acct_hash, (void*) id, GINT_TO_POINTER (1));
      }

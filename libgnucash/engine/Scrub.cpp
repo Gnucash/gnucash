@@ -47,6 +47,7 @@
 
 #include "Account.h"
 #include "AccountP.hpp"
+#include "Account.hpp"
 #include "Scrub.h"
 #include "Transaction.h"
 #include "TransactionP.h"
@@ -91,8 +92,8 @@ gnc_get_ongoing_scrub (void)
 
 static void add_transactions (const Account *account, GHashTable **ht)
 {
-    for (GList *m = xaccAccountGetSplitList (account); m; m = g_list_next (m))
-        g_hash_table_add (*ht, xaccSplitGetParent (GNC_SPLIT(m->data)));
+    for (auto s : xaccAccountGetSplits (account))
+        g_hash_table_add (*ht, xaccSplitGetParent (s));
 }
 
 static GList*
@@ -226,12 +227,11 @@ xaccAccountTreeScrubSplits (Account *account)
 void
 xaccAccountScrubSplits (Account *account)
 {
-    GList *node;
     scrub_depth++;
-    for (node = xaccAccountGetSplitList (account); node; node = node->next)
+    for (auto s : xaccAccountGetSplits (account))
     {
         if (abort_now) break;
-        xaccSplitScrub (GNC_SPLIT(node->data));
+        xaccSplitScrub (s);
     }
     scrub_depth--;
 }

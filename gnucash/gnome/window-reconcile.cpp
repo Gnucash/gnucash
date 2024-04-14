@@ -37,6 +37,7 @@
 #endif
 #include <gdk/gdkkeysyms.h>
 
+#include "Account.hpp"
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "dialog-account.h"
@@ -1621,10 +1622,8 @@ recn_set_watches_one_account (gpointer data, gpointer user_data)
                                     QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     /* add a watch on each unreconciled or cleared split for the account */
-    GList *splits = xaccAccountGetSplitList (account);
-    for (GList *node = splits; node; node = node->next)
+    for (auto split : xaccAccountGetSplits (account))
     {
-        auto split = GNC_SPLIT(node->data);
         Transaction *trans;
         char recn;
 
@@ -1942,22 +1941,16 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         GtkWidget *box = gtk_statusbar_get_message_area (bar);
         GtkWidget *image = gtk_image_new_from_icon_name
             ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
-        GList *splits = xaccAccountGetSplitList (account);
 
-        for (GList *n = splits; n; n = n->next)
+        auto find_split = [statement_date](const Split *split)
+        { return (xaccSplitGetReconcile (split) == YREC &&
+                  xaccSplitGetDateReconciled (split) > statement_date); };
+
+        if (auto split = gnc_account_find_split (account, find_split, true))
         {
-            auto split = GNC_SPLIT(n->data);
-            time64 recn_date = xaccSplitGetDateReconciled (split);
-            gchar *datestr, *recnstr;
-            if ((xaccSplitGetReconcile (split) != YREC) ||
-                (recn_date <= statement_date))
-                continue;
-
-            datestr = qof_print_date (xaccTransGetDate (xaccSplitGetParent (split)));
-            recnstr = qof_print_date (recn_date);
+            auto datestr = qof_print_date (xaccTransGetDate (xaccSplitGetParent (split)));
+            auto recnstr = qof_print_date (xaccSplitGetDateReconciled (split));
             PWARN ("split posting_date=%s, recn_date=%s", datestr, recnstr);
-            g_free (datestr);
-            g_free (recnstr);
 
             gtk_statusbar_push (bar, context, _("WARNING! Account contains \
 splits whose reconcile date is after statement date. Reconciliation may be \
@@ -1970,7 +1963,9 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
 
             gtk_box_pack_start (GTK_BOX(box), image, FALSE, FALSE, 0);
             gtk_box_reorder_child (GTK_BOX(box), image, 0);
-            break;
+
+            g_free (datestr);
+            g_free (recnstr);
         }
     }
 
@@ -2305,6 +2300,7 @@ find_payment_account(Account *account)
         }
     }
 
+    g_list_free (list);
     return rv;
 }
 

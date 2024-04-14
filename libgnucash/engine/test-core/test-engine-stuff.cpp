@@ -1074,7 +1074,6 @@ make_random_changes_to_level (QofBook *book, Account *parent)
     account = static_cast<Account*>(get_random_list_element (accounts));
 
     splits = xaccAccountGetSplitList (account);
-    splits = g_list_copy (splits);
 
     for (node = splits; node; node = node->next)
     {

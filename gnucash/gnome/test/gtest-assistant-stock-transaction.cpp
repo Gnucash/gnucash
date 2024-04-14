@@ -231,9 +231,8 @@ static void dump_acct (Account *acct)
     std::cout << '\n' << std::setw(20) << std::right << xaccAccountGetName (acct)
               << " Bal=" << std::setw(10) << std::right << GncNumeric (xaccAccountGetBalance (acct))
               << std::endl;
-    for (auto n = xaccAccountGetSplitList (acct); n; n = n->next)
+    for (auto s : xaccAccountGetSplits (acct))
     {
-        auto s = static_cast<Split*>(n->data);
         bal += xaccSplitGetAmount (s);
         std::cout << std::setw(20) << std::right << GncDateTime (xaccTransGetDate (xaccSplitGetParent (s))).format_iso8601()
                   << " amt=" << std::setw(10) << std::right << GncNumeric (xaccSplitGetAmount (s))
