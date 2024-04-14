@@ -1060,6 +1060,8 @@ typedef enum
      */
     SplitList* xaccAccountGetSplitList (const Account *account);
 
+    size_t xaccAccountGetSplitsSize (const Account *account);
+
     /** The xaccAccountMoveAllSplits() routine reassigns each of the splits
      *  in accfrom to accto. */
     void xaccAccountMoveAllSplits (Account *accfrom, Account *accto);

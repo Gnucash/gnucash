@@ -4048,6 +4048,11 @@ xaccAccountGetSplitList (const Account *acc)
     return GET_PRIVATE(acc)->splits;
 }
 
+size_t
+xaccAccountGetSplitsSize (const Account *account)
+{
+    return GNC_IS_ACCOUNT(account) ? g_list_length (GET_PRIVATE(account)->splits) : 0;
+}
 
 gboolean gnc_account_and_descendants_empty (Account *acc)
 {
