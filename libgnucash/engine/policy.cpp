@@ -101,11 +101,8 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
      * hasn't been assigned to a lot.  Return that split.
      * Make use of the fact that the splits in an account are
      * already in date order; so we don't have to sort. */
-    node = xaccAccountGetSplitList (lot_account);
-    if (reverse)
-    {
-        node = g_list_last (node);
-    }
+    auto splits = xaccAccountGetSplitList (lot_account);
+    node = reverse ? g_list_last (splits) : splits;
     while (node)
     {
         gboolean is_match;
@@ -145,6 +142,7 @@ donext:
             node = node->next;
         }
     }
+    g_list_free (splits);
     return nullptr;
 }
 

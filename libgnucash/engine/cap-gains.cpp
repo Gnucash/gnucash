@@ -58,6 +58,7 @@ ToDo:
 #include <glib.h>
 #include <glib/gi18n.h>
 
+#include "Account.hpp"
 #include "AccountP.hpp"
 #include "Scrub2.h"
 #include "Scrub3.h"
@@ -79,7 +80,6 @@ gboolean
 xaccAccountHasTrades (const Account *acc)
 {
     gnc_commodity *acc_comm;
-    SplitList *splits, *node;
 
     if (!acc) return FALSE;
 
@@ -88,10 +88,8 @@ xaccAccountHasTrades (const Account *acc)
 
     acc_comm = xaccAccountGetCommodity(acc);
 
-    splits = xaccAccountGetSplitList(acc);
-    for (node = splits; node; node = node->next)
+    for (const auto& s : xaccAccountGetSplits (acc))
     {
-        Split *s = GNC_SPLIT(node->data);
         Transaction *t = s->parent;
 	if (s->gains == GAINS_STATUS_GAINS) continue;
         if (acc_comm != t->common_currency) return TRUE;

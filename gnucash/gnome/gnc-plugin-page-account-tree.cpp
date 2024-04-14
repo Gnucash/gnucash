@@ -39,6 +39,7 @@
 #include "gnc-plugin-page-account-tree.h"
 #include "gnc-plugin-page-register.h"
 
+#include "Account.hpp"
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "ScrubBusiness.h"
@@ -1145,22 +1146,19 @@ static gpointer
 delete_account_helper (Account * account, gpointer data)
 {
     auto helper_res = static_cast<delete_helper_t*>(data);
-    GList *splits;
 
-    splits = xaccAccountGetSplitList (account);
-    if (splits)
+    auto splits = xaccAccountGetSplits (account);
+    if (!splits.empty())
     {
         helper_res->has_splits = TRUE;
-        while (splits)
+        for (const auto& s : splits)
         {
-            auto s = GNC_SPLIT(splits->data);
             Transaction *txn = xaccSplitGetParent (s);
             if (xaccTransGetReadOnly (txn))
             {
                 helper_res->has_ro_splits = TRUE;
                 break;
             }
-            splits = splits->next;
         }
     }
 
@@ -1383,7 +1381,7 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
     gchar *title = NULL;
     GtkBuilder *builder = gtk_builder_new();
     gchar *acct_name = gnc_account_get_full_name(account);
-    GList* splits = xaccAccountGetSplitList(account);
+    auto splits = xaccAccountGetSplits(account);
     GList* filter = g_list_prepend(NULL, (gpointer)xaccAccountGetType(account));
 
     if (!acct_name)
@@ -1416,7 +1414,7 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
                   account, FALSE);
 
     // Does the selected account have splits
-    if (splits)
+    if (!splits.empty())
     {
         delete_helper_t delete_res2 = { FALSE, FALSE };
 
@@ -1537,8 +1535,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple,
     }
 
     // If no transaction or children just delete it.
-    if (!(xaccAccountGetSplitList (account) != NULL ||
-          gnc_account_n_children (account)))
+    if (!xaccAccountGetSplits (account).empty() || !gnc_account_n_children (account))
     {
         do_delete_account (account, NULL, NULL, NULL);
         return;
@@ -1581,7 +1578,7 @@ confirm_delete_account (GSimpleAction *simple, GncPluginPageAccountTree *page,
                         delete_helper_t delete_res)
 {
     Account *account = gnc_plugin_page_account_tree_get_current_account (page);
-    GList* splits = xaccAccountGetSplitList(account);
+    auto splits = xaccAccountGetSplits (account);
     GtkWidget* window = gnc_plugin_page_get_window(GNC_PLUGIN_PAGE(page));
     gint response;
 
@@ -1595,7 +1592,7 @@ confirm_delete_account (GSimpleAction *simple, GncPluginPageAccountTree *page,
                                 acct_name);
     g_free(acct_name);
 
-    if (splits)
+    if (!splits.empty())
     {
         if (ta)
         {

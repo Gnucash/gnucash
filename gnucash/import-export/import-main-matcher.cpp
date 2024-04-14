@@ -44,6 +44,7 @@
 
 #include "import-main-matcher.h"
 
+#include "Account.hpp"
 #include "dialog-transfer.h"
 #include "dialog-utils.h"
 #include "gnc-glib-utils.h"
@@ -468,9 +469,8 @@ load_hash_tables (GNCImportMainMatcher *info)
     }
     for (GList *m = accounts_list; m; m = m->next)
     {
-        for (GList *n = xaccAccountGetSplitList (static_cast<Account*>(m->data)); n; n = n->next)
+        for (const auto& s : xaccAccountGetSplits (static_cast<Account*>(m->data)))
         {
-            auto s = static_cast<const Split*>(n->data);
             const Transaction *t = xaccSplitGetParent (s);
 
             const gchar *key = xaccTransGetDescription (t);

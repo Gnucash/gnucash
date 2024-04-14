@@ -37,6 +37,7 @@
 #include "qof.h"
 #include "Account.h"
 #include "AccountP.hpp"
+#include "Account.hpp"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "Scrub2.h"
@@ -57,19 +58,14 @@ static QofLogModule log_module = GNC_MOD_LOT;
 void
 xaccAccountAssignLots (Account *acc)
 {
-    SplitList *splits, *node;
-
     if (!acc) return;
 
     ENTER ("acc=%s", xaccAccountGetName(acc));
     xaccAccountBeginEdit (acc);
 
 restart_loop:
-    splits = xaccAccountGetSplitList(acc);
-    for (node = splits; node; node = node->next)
+    for (const auto& split : xaccAccountGetSplits (acc))
     {
-        Split * split = GNC_SPLIT(node->data);
-
         /* If already in lot, then no-op */
         if (split->lot) continue;
 
