@@ -247,7 +247,7 @@ gnc_account_opening_balance_button_update (AccountWindow *aw, gnc_commodity *com
 {
     Account *account = aw_get_account (aw);
     Account *ob_account = gnc_account_lookup_by_opening_balance (gnc_book_get_root_account (aw->book), commodity);
-    gboolean has_splits = (xaccAccountGetSplitList (account) != NULL);
+    gboolean has_splits = (xaccAccountGetSplitsSize (account) != 0);
 
     if (aw->type != ACCT_TYPE_EQUITY)
     {
@@ -1614,7 +1614,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     gtk_box_pack_start (GTK_BOX(box), aw->commodity_edit, TRUE, TRUE, 0);
     gtk_widget_show (aw->commodity_edit);
     // If the account has transactions, prevent changes by displaying a label and tooltip
-    if (xaccAccountGetSplitList (aw_get_account (aw)) != NULL)
+    if (xaccAccountGetSplitsSize (aw_get_account (aw)) != 0)
     {
         gtk_widget_set_tooltip_text (aw->commodity_edit, tt);
         gtk_widget_set_sensitive (aw->commodity_edit, FALSE);
@@ -1714,7 +1714,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     //   immutable if gnucash depends on details that would be lost/missing
     //   if changing from/to such a type. At the time of this writing the
     //   immutable types are AR, AP and trading types.
-    if (xaccAccountGetSplitList (aw_get_account (aw)) != NULL)
+    if (xaccAccountGetSplitsSize (aw_get_account (aw)) != 0)
     {
         GNCAccountType atype = xaccAccountGetType (aw_get_account (aw));
         compat_types = xaccAccountTypesCompatibleWith (atype);
@@ -2128,7 +2128,7 @@ gnc_ui_edit_account_window (GtkWindow *parent, Account *account)
     gnc_resume_gui_refresh ();
 
     gtk_widget_show_all (aw->dialog);
-    if (xaccAccountGetSplitList (account) != NULL)
+    if (xaccAccountGetSplitsSize (account) != 0)
         gtk_widget_hide (aw->opening_balance_page);
 
     parent_acct = gnc_account_get_parent (account);

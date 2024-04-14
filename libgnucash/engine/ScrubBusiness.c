@@ -695,7 +695,7 @@ gncScrubBusinessAccountSplits (Account *acc, QofPercentageFunc percentagefunc)
 restart:
     curr_split_no = 0;
     splits = xaccAccountGetSplitList(acc);
-    split_count = g_list_length (splits);
+    split_count = xaccAccountGetSplitsSize (acc);
     for (node = splits; node; node = node->next)
     {
         Split *split = node->data;
