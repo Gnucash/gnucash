@@ -143,6 +143,7 @@ gnc_autoclear_get_splits (Account *account, gnc_numeric toclear_value,
         else
             nc_list = g_list_prepend (nc_list, split);
     }
+    g_list_free (acc_splits);
 
     if (gnc_numeric_zero_p (toclear_value))
     {

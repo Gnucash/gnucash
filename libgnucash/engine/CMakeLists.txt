@@ -31,6 +31,7 @@ set(engine_noinst_HEADERS
 )
 
 set (engine_HEADERS
+  Account.hpp
   Account.h
   FreqSpec.h
   Recurrence.h

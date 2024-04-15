@@ -217,6 +217,7 @@ gint gnc_sx_get_instance_count( const SchedXaction *sx, /*@ null @*/ SXTmpStateD
 */
 void gnc_sx_set_instance_count( SchedXaction *sx, gint instanceNum );
 
+/* must be g_list_freed */
 GList *xaccSchedXactionGetSplits( const SchedXaction *sx );
 void xaccSchedXactionSetSplits( SchedXaction *sx, GList *newSplits );
 

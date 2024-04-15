@@ -847,6 +847,7 @@ gnc_sxed_check_consistent (GncSxEditorDialog *sxed)
         g_hash_table_foreach (txns, set_sums_to_zero, NULL);
 
         splitCount += g_list_length (splitList);
+        g_list_free (splitList);
 
         xaccAccountForEachTransaction (tmpl_acct, check_transaction_splits, &sd);
 
@@ -1510,6 +1511,7 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
             splitReg = gnc_ledger_display_get_split_register (sxed->ledger);
             gnc_split_register_load (splitReg, splitList, NULL);
         } /* otherwise, use the existing stuff. */
+        g_list_free (splitList);
     }
 
     /* Update the example cal */

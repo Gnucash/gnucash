@@ -34,6 +34,7 @@
 #include <string.h>
 
 #include "AccountP.hpp"
+#include "Account.hpp"
 #include "Split.h"
 #include "Transaction.h"
 #include "TransactionP.h"
@@ -331,7 +332,7 @@ gnc_account_init(Account* acc)
     priv->lower_balance_limit = {};
     priv->include_sub_account_balances = {};
 
-    priv->splits = nullptr;
+    priv->splits.clear();
     priv->sort_dirty = FALSE;
 }
 
@@ -1136,6 +1137,29 @@ xaccInitAccount (Account * acc, QofBook *book)
 /********************************************************************\
 \********************************************************************/
 
+Split*
+gnc_account_find_split (const Account *acc, std::function<bool(const Split*)> predicate,
+                        bool reverse)
+{
+    if (!GNC_IS_ACCOUNT (acc))
+        return nullptr;
+
+    auto splits{GET_PRIVATE(acc)->splits};
+    if (reverse)
+    {
+        auto latest = std::find_if(splits.rbegin(), splits.rend(), predicate);
+        return (latest == splits.rend()) ? nullptr : *latest;
+    }
+    else
+    {
+        auto earliest = std::find_if(splits.begin(), splits.end(), predicate);
+        return (earliest == splits.end()) ? nullptr : *earliest;
+    }
+}
+
+/********************************************************************\
+\********************************************************************/
+
 QofBook *
 gnc_account_get_book(const Account *account)
 {
@@ -1368,22 +1392,18 @@ xaccFreeAccount (Account *acc)
     /* NB there shouldn't be any splits by now ... they should
      * have been all been freed by CommitEdit().  We can remove this
      * check once we know the warning isn't occurring any more. */
-    if (priv->splits)
+    if (!priv->splits.empty())
     {
-        GList *slist;
         PERR (" instead of calling xaccFreeAccount(), please call\n"
               " xaccAccountBeginEdit(); xaccAccountDestroy();\n");
 
         qof_instance_reset_editlevel(acc);
 
-        slist = g_list_copy(priv->splits);
-        for (lp = slist; lp; lp = lp->next)
+        for (auto s : priv->splits)
         {
-            Split *s = (Split *) lp->data;
             g_assert(xaccSplitGetAccount(s) == acc);
             xaccSplitDestroy (s);
         }
-        g_list_free(slist);
 /* Nothing here (or in xaccAccountCommitEdit) nullptrs priv->splits, so this asserts every time.
         g_assert(priv->splits == nullptr);
 */
@@ -1416,6 +1436,7 @@ xaccFreeAccount (Account *acc)
     priv->type = ACCT_TYPE_NONE;
     gnc_commodity_decrement_usage_count(priv->commodity);
     priv->commodity = nullptr;
+    priv->splits.clear();
 
     priv->balance_dirty = FALSE;
     priv->sort_dirty = FALSE;
@@ -1483,7 +1504,6 @@ xaccAccountCommitEdit (Account *acc)
     priv = GET_PRIVATE(acc);
     if (qof_instance_get_destroying(acc))
     {
-        GList *lp, *slist;
         QofCollection *col;
 
         qof_instance_increase_editlevel(acc);
@@ -1500,18 +1520,12 @@ xaccAccountCommitEdit (Account *acc)
            themselves will be destroyed by the transaction code */
         if (!qof_book_shutting_down(book))
         {
-            slist = g_list_copy(priv->splits);
-            for (lp = slist; lp; lp = lp->next)
-            {
-                Split *s = static_cast<Split *>(lp->data);
+            for (auto s : priv->splits)
                 xaccSplitDestroy (s);
-            }
-            g_list_free(slist);
         }
         else
         {
-            g_list_free(priv->splits);
-            priv->splits = nullptr;
+            priv->splits.clear();
         }
 
         /* It turns out there's a case where this assertion does not hold:
@@ -1528,7 +1542,7 @@ xaccAccountCommitEdit (Account *acc)
             qof_collection_foreach(col, destroy_pending_splits_for_account, acc);
 
             /* the lots should be empty by now */
-            for (lp = priv->lots; lp; lp = lp->next)
+            for (auto lp = priv->lots; lp; lp = lp->next)
             {
                 GNCLot *lot = static_cast<GNCLot*>(lp->data);
                 gnc_lot_destroy (lot);
@@ -1822,37 +1836,23 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
     /* no parent; always compare downwards. */
 
     {
-        GList *la = priv_aa->splits;
-        GList *lb = priv_ab->splits;
-
-        if ((la && !lb) || (!la && lb))
+        if (priv_aa->splits.size() != priv_ab->splits.size())
         {
-            PWARN ("only one has splits");
-            return FALSE;
+            PWARN ("number of splits differs");
+            return false;
         }
 
-        if (la && lb)
+        for (auto it_a = priv_aa->splits.begin(), it_b = priv_ab->splits.begin();
+             it_a != priv_aa->splits.end() && it_b != priv_ab->splits.end();
+             ++it_a, ++it_b)
         {
-            /* presume that the splits are in the same order */
-            while (la && lb)
+            Split *sa = *it_a;
+            Split *sb = *it_b;
+
+            if (!xaccSplitEqual(sa, sb, check_guids, TRUE, FALSE))
             {
-                Split *sa = (Split *) la->data;
-                Split *sb = (Split *) lb->data;
-
-                if (!xaccSplitEqual(sa, sb, check_guids, TRUE, FALSE))
-                {
-                    PWARN ("splits differ");
-                    return(FALSE);
-                }
-
-                la = la->next;
-                lb = lb->next;
-            }
-
-            if ((la != nullptr) || (lb != nullptr))
-            {
-                PWARN ("number of splits differs");
-                return(FALSE);
+                PWARN ("splits differ");
+                return false;
             }
         }
     }
@@ -1922,30 +1922,29 @@ gboolean gnc_account_get_defer_bal_computation (Account *acc)
 /********************************************************************\
 \********************************************************************/
 
+static bool split_cmp_less (const Split* a, const Split* b)
+{
+    return xaccSplitOrder (a, b) < 0;
+}
+
 gboolean
 gnc_account_insert_split (Account *acc, Split *s)
 {
     AccountPrivate *priv;
-    GList *node;
 
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     g_return_val_if_fail(GNC_IS_SPLIT(s), FALSE);
 
     priv = GET_PRIVATE(acc);
-    node = g_list_find(priv->splits, s);
-    if (node)
+    if (std::find (priv->splits.begin(), priv->splits.end(), s) != priv->splits.end())
         return FALSE;
 
+    priv->splits.push_back (s);
+
     if (qof_instance_get_editlevel(acc) == 0)
-    {
-        priv->splits = g_list_insert_sorted(priv->splits, s,
-                                            (GCompareFunc)xaccSplitOrder);
-    }
+        std::sort (priv->splits.begin(), priv->splits.end(), split_cmp_less);
     else
-    {
-        priv->splits = g_list_prepend(priv->splits, s);
-        priv->sort_dirty = TRUE;
-    }
+        priv->sort_dirty = true;
 
     //FIXME: find better event
     qof_event_gen (&acc->inst, QOF_EVENT_MODIFY, nullptr);
@@ -1962,17 +1961,17 @@ gboolean
 gnc_account_remove_split (Account *acc, Split *s)
 {
     AccountPrivate *priv;
-    GList *node;
 
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), FALSE);
     g_return_val_if_fail(GNC_IS_SPLIT(s), FALSE);
 
     priv = GET_PRIVATE(acc);
-    node = g_list_find(priv->splits, s);
-    if (nullptr == node)
+
+    auto it = std::remove (priv->splits.begin(), priv->splits.end(), s);
+    if (it == priv->splits.end())
         return FALSE;
 
-    priv->splits = g_list_delete_link(priv->splits, node);
+    priv->splits.erase (it, priv->splits.end());
     //FIXME: find better event type
     qof_event_gen(&acc->inst, QOF_EVENT_MODIFY, nullptr);
     // And send the account-based event, too
@@ -1993,7 +1992,7 @@ xaccAccountSortSplits (Account *acc, gboolean force)
     priv = GET_PRIVATE(acc);
     if (!priv->sort_dirty || (!force && qof_instance_get_editlevel(acc) > 0))
         return;
-    priv->splits = g_list_sort(priv->splits, (GCompareFunc)xaccSplitOrder);
+    std::sort (priv->splits.begin(), priv->splits.end(), split_cmp_less);
     priv->sort_dirty = FALSE;
     priv->balance_dirty = TRUE;
 }
@@ -2166,7 +2165,7 @@ xaccAccountInsertLot (Account *acc, GNCLot *lot)
 /********************************************************************\
 \********************************************************************/
 static void
-xaccPreSplitMove (Split *split, gpointer dummy)
+xaccPreSplitMove (Split *split)
 {
     xaccTransBeginEdit (xaccSplitGetParent (split));
 }
@@ -2193,7 +2192,7 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
 
     /* optimizations */
     from_priv = GET_PRIVATE(accfrom);
-    if (!from_priv->splits || accfrom == accto)
+    if (from_priv->splits.empty() || accfrom == accto)
         return;
 
     /* check for book mix-up */
@@ -2203,7 +2202,7 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
     xaccAccountBeginEdit(accfrom);
     xaccAccountBeginEdit(accto);
     /* Begin editing both accounts and all transactions in accfrom. */
-    g_list_foreach(from_priv->splits, (GFunc)xaccPreSplitMove, nullptr);
+    std::for_each (from_priv->splits.begin(), from_priv->splits.end(), xaccPreSplitMove);
 
     /* Concatenate accfrom's lists of splits and lots to accto's lists. */
     //to_priv->splits = g_list_concat(to_priv->splits, from_priv->splits);
@@ -2220,10 +2219,11 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
      * Convert each split's amount to accto's commodity.
      * Commit to editing each transaction.
      */
-    g_list_foreach(from_priv->splits, (GFunc)xaccPostSplitMove, (gpointer)accto);
+    std::for_each (from_priv->splits.begin(), from_priv->splits.end(),
+                   [accto](Split *s){ xaccPostSplitMove (s, accto); });
 
     /* Finally empty accfrom. */
-    g_assert(from_priv->splits == nullptr);
+    g_assert(from_priv->splits.empty());
     g_assert(from_priv->lots == nullptr);
     xaccAccountCommitEdit(accfrom);
     xaccAccountCommitEdit(accto);
@@ -2268,7 +2268,6 @@ xaccAccountRecomputeBalance (Account * acc)
     gnc_numeric  noclosing_balance;
     gnc_numeric  cleared_balance;
     gnc_numeric  reconciled_balance;
-    GList *lp;
 
     if (nullptr == acc) return;
 
@@ -2285,9 +2284,8 @@ xaccAccountRecomputeBalance (Account * acc)
 
     PINFO ("acct=%s starting baln=%" G_GINT64_FORMAT "/%" G_GINT64_FORMAT,
            priv->accountName, balance.num, balance.denom);
-    for (lp = priv->splits; lp; lp = lp->next)
+    for (auto split : priv->splits)
     {
-        Split *split = (Split *) lp->data;
         gnc_numeric amt = xaccSplitGetAmount (split);
 
         balance = gnc_numeric_add_fixed(balance, amt);
@@ -2607,7 +2605,6 @@ void
 xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
 {
     AccountPrivate *priv;
-    GList *lp;
 
     /* errors */
     g_return_if_fail(GNC_IS_ACCOUNT(acc));
@@ -2626,9 +2623,8 @@ xaccAccountSetCommodity (Account * acc, gnc_commodity * com)
     priv->non_standard_scu = FALSE;
 
     /* iterate over splits */
-    for (lp = priv->splits; lp; lp = lp->next)
+    for (auto s : priv->splits)
     {
-        Split *s = (Split *) lp->data;
         Transaction *trans = xaccSplitGetParent (s);
 
         xaccTransBeginEdit (trans);
@@ -3540,35 +3536,20 @@ xaccAccountGetReconciledBalance (const Account *acc)
 gnc_numeric
 xaccAccountGetProjectedMinimumBalance (const Account *acc)
 {
-    AccountPrivate *priv;
-    GList *node;
-    time64 today;
-    gnc_numeric lowest = gnc_numeric_zero ();
-    int seen_a_transaction = 0;
+    auto today{gnc_time64_get_today_end()};
+    std::optional<gnc_numeric> minimum;
 
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
-
-    priv = GET_PRIVATE(acc);
-    today = gnc_time64_get_today_end();
-    for (node = g_list_last(priv->splits); node; node = node->prev)
+    auto before_today_end = [&minimum, today](const Split *s) -> bool
     {
-        Split *split = static_cast<Split*>(node->data);
-
-        if (!seen_a_transaction)
-        {
-            lowest = xaccSplitGetBalance (split);
-            seen_a_transaction = 1;
-        }
-        else if (gnc_numeric_compare(xaccSplitGetBalance (split), lowest) < 0)
-        {
-            lowest = xaccSplitGetBalance (split);
-        }
-
-        if (xaccTransGetDate (xaccSplitGetParent (split)) <= today)
-            return lowest;
-    }
-
-    return lowest;
+        auto bal{xaccSplitGetBalance(s)};
+        if (!minimum || gnc_numeric_compare (bal, *minimum) < 0)
+            minimum = bal;
+        return (xaccTransGetDate(xaccSplitGetParent(s)) < today);
+    };
+    // scan to find today's split, but we're really interested in the
+    // minimum balance
+    [[maybe_unused]] auto todays_split = gnc_account_find_split (acc, before_today_end, true);
+    return minimum ? *minimum : gnc_numeric_zero();
 }
 
 
@@ -3578,27 +3559,16 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
 static gnc_numeric
 GetBalanceAsOfDate (Account *acc, time64 date, std::function<gnc_numeric(Split*)> split_to_numeric)
 {
-    /* Ideally this could use xaccAccountForEachSplit, but
-     * it doesn't exist yet and I'm uncertain of exactly how
-     * it would work at this time, since it differs from
-     * xaccAccountForEachTransaction by using gpointer return
-     * values rather than gints.
-     */
-    Split *latest = nullptr;
-
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
 
     xaccAccountSortSplits (acc, TRUE); /* just in case, normally a noop */
     xaccAccountRecomputeBalance (acc); /* just in case, normally a noop */
 
-    for (GList *lp = GET_PRIVATE(acc)->splits; lp; lp = lp->next)
-    {
-        if (xaccTransGetDate (xaccSplitGetParent ((Split *)lp->data)) >= date)
-            break;
-        latest = (Split *)lp->data;
-    }
+    auto is_before_date = [date](auto s) -> bool
+    { return xaccTransGetDate(xaccSplitGetParent(s)) < date; };
 
-    return latest ? split_to_numeric (latest) : gnc_numeric_zero();
+    auto latest_split{gnc_account_find_split (acc, is_before_date, true)};
+    return latest_split ? split_to_numeric (latest_split) : gnc_numeric_zero();
 }
 
 gnc_numeric
@@ -3616,19 +3586,7 @@ xaccAccountGetNoclosingBalanceAsOfDate (Account *acc, time64 date)
 gnc_numeric
 xaccAccountGetReconciledBalanceAsOfDate (Account *acc, time64 date)
 {
-    gnc_numeric balance = gnc_numeric_zero();
-
-    g_return_val_if_fail(GNC_IS_ACCOUNT(acc), gnc_numeric_zero());
-
-    for (GList *node = GET_PRIVATE(acc)->splits; node; node = node->next)
-    {
-        Split *split = (Split*) node->data;
-        if ((xaccSplitGetReconcile (split) == YREC) &&
-            (xaccSplitGetDateReconciled (split) <= date))
-            balance = gnc_numeric_add_fixed (balance, xaccSplitGetAmount (split));
-    };
-
-    return balance;
+    return GetBalanceAsOfDate (acc, date, xaccSplitGetReconciledBalance);
 }
 
 /*
@@ -4021,36 +3979,32 @@ xaccAccountGetNoclosingBalanceChangeInCurrencyForPeriod (Account *acc, time64 t1
 /********************************************************************\
 \********************************************************************/
 
-/* THIS API NEEDS TO CHANGE.
- *
- * This code exposes the internal structure of the account object to
- * external callers by returning the actual list used by the object.
- * It should instead return a copy of the split list that the caller
- * is required to free.  That change would provide the freedom of
- * allowing the internal organization to change data structures if
- * necessary for whatever reason, while leaving the external API
- * unchanged. */
-/* XXX: violates the const'ness by forcing a sort before returning
- * the splitlist */
+const SplitsVec
+xaccAccountGetSplits (const Account *account)
+{
+    return GNC_IS_ACCOUNT(account) ? GET_PRIVATE(account)->splits : SplitsVec{};
+}
+
 SplitList *
 xaccAccountGetSplitList (const Account *acc)
 {
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), nullptr);
-    xaccAccountSortSplits((Account*)acc, FALSE);  // normally a noop
-    return GET_PRIVATE(acc)->splits;
+    auto priv{GET_PRIVATE(acc)};
+    return std::accumulate (priv->splits.rbegin(), priv->splits.rend(),
+                            static_cast<GList*>(nullptr), g_list_prepend);
 }
 
 size_t
 xaccAccountGetSplitsSize (const Account *account)
 {
-    return GNC_IS_ACCOUNT(account) ? g_list_length (GET_PRIVATE(account)->splits) : 0;
+    return GNC_IS_ACCOUNT(account) ? GET_PRIVATE(account)->splits.size() : 0;
 }
 
 gboolean gnc_account_and_descendants_empty (Account *acc)
 {
     g_return_val_if_fail (GNC_IS_ACCOUNT (acc), FALSE);
     auto priv = GET_PRIVATE (acc);
-    if (priv->splits != nullptr) return FALSE;
+    if (!priv->splits.empty()) return FALSE;
     for (auto *n = priv->children; n; n = n->next)
     {
 	if (!gnc_account_and_descendants_empty (static_cast<Account*>(n->data)))
@@ -5377,51 +5331,12 @@ xaccAccountGetReconcileChildrenStatus(const Account *acc)
 /********************************************************************\
 \********************************************************************/
 
-/* The caller of this function can get back one or both of the
- * matching split and transaction pointers, depending on whether
- * a valid pointer to the location to store those pointers is
- * passed.
- */
-static void
-finder_help_function(const Account *acc, const char *description,
-                     Split **split, Transaction **trans )
-{
-    AccountPrivate *priv;
-    GList *slp;
-
-    /* First, make sure we set the data to nullptr BEFORE we start */
-    if (split) *split = nullptr;
-    if (trans) *trans = nullptr;
-
-    /* Then see if we have any work to do */
-    if (acc == nullptr) return;
-
-    /* Why is this loop iterated backwards ?? Presumably because the split
-     * list is in date order, and the most recent matches should be
-     * returned!?  */
-    priv = GET_PRIVATE(acc);
-    for (slp = g_list_last(priv->splits); slp; slp = slp->prev)
-    {
-        Split *lsplit = static_cast<Split*>(slp->data);
-        Transaction *ltrans = xaccSplitGetParent(lsplit);
-
-        if (g_strcmp0 (description, xaccTransGetDescription (ltrans)) == 0)
-        {
-            if (split) *split = lsplit;
-            if (trans) *trans = ltrans;
-            return;
-        }
-    }
-}
-
 Split *
 xaccAccountFindSplitByDesc(const Account *acc, const char *description)
 {
-    Split *split;
-
-    /* Get the split which has a transaction matching the description. */
-    finder_help_function(acc, description, &split, nullptr);
-    return split;
+    auto has_description = [description](const Split* s) -> bool
+    { return !g_strcmp0 (description, xaccTransGetDescription (xaccSplitGetParent (s))); };
+    return gnc_account_find_split (acc, has_description, true);
 }
 
 /* This routine is for finding a matching transaction in an account by
@@ -5432,11 +5347,8 @@ xaccAccountFindSplitByDesc(const Account *acc, const char *description)
 Transaction *
 xaccAccountFindTransByDesc(const Account *acc, const char *description)
 {
-    Transaction *trans;
-
-    /* Get the translation matching the description. */
-    finder_help_function(acc, description, nullptr, &trans);
-    return trans;
+    auto split = xaccAccountFindSplitByDesc (acc, description);
+    return split ? xaccSplitGetParent (split) : nullptr;
 }
 
 /* ================================================================ */
@@ -5519,8 +5431,8 @@ gnc_account_merge_children (Account *parent)
             gnc_account_merge_children (acc_a);
 
             /* consolidate transactions */
-            while (priv_b->splits)
-                xaccSplitSetAccount (static_cast <Split*> (priv_b->splits->data), acc_a);
+            while (!priv_b->splits.empty())
+                xaccSplitSetAccount (priv_b->splits.front(), acc_a);
 
             /* move back one before removal. next iteration around the loop
              * will get the node after node_b */
@@ -5538,14 +5450,11 @@ gnc_account_merge_children (Account *parent)
 /* Transaction Traversal functions                                  */
 
 
-void
-xaccSplitsBeginStagedTransactionTraversals (GList *splits)
+static void
+xaccSplitsBeginStagedTransactionTraversals (SplitsVec splits)
 {
-    GList *lp;
-
-    for (lp = splits; lp; lp = lp->next)
+    for (auto s : splits)
     {
-        Split *s = static_cast <Split*> (lp->data);
         Transaction *trans = s->parent;
 
         if (trans)
@@ -5557,12 +5466,9 @@ xaccSplitsBeginStagedTransactionTraversals (GList *splits)
 void
 xaccAccountBeginStagedTransactionTraversals (const Account *account)
 {
-    AccountPrivate *priv;
-
     if (!account)
         return;
-    priv = GET_PRIVATE(account);
-    xaccSplitsBeginStagedTransactionTraversals(priv->splits);
+    xaccSplitsBeginStagedTransactionTraversals(GET_PRIVATE (account)->splits);
 }
 
 gboolean
@@ -5579,16 +5485,11 @@ xaccTransactionTraverse (Transaction *trans, int stage)
     return FALSE;
 }
 
-static void do_one_split (Split *s, gpointer data)
-{
-    Transaction *trans = s->parent;
-    trans->marker = 0;
-}
-
 static void do_one_account (Account *account, gpointer data)
 {
     AccountPrivate *priv = GET_PRIVATE(account);
-    g_list_foreach(priv->splits, (GFunc)do_one_split, nullptr);
+    std::for_each (priv->splits.begin(), priv->splits.end(),
+                   [](auto s){ s->parent->marker = 0; });
 }
 
 /* Replacement for xaccGroupBeginStagedTransactionTraversals */
@@ -5608,32 +5509,18 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
                                        TransactionCallback thunk,
                                        void *cb_data)
 {
-    AccountPrivate *priv;
-    GList *split_p;
-    GList *next;
-    Transaction *trans;
-    Split *s;
-    int retval;
-
     if (!acc) return 0;
 
-    priv = GET_PRIVATE(acc);
-    for (split_p = priv->splits; split_p; split_p = next)
+    auto splits = GET_PRIVATE(acc)->splits;
+    for (auto s : splits)
     {
-        /* Get the next element in the split list now, just in case some
-         * naughty thunk destroys the one we're using. This reduces, but
-         * does not eliminate, the possibility of undefined results if
-         * a thunk removes splits from this account. */
-        next = g_list_next(split_p);
-
-        s = static_cast <Split*> (split_p->data);
-        trans = s->parent;
+        auto trans = s->parent;
         if (trans && (trans->marker < stage))
         {
             trans->marker = stage;
             if (thunk)
             {
-                retval = thunk(trans, cb_data);
+                auto retval = thunk(trans, cb_data);
                 if (retval) return retval;
             }
         }
@@ -5649,16 +5536,14 @@ gnc_account_tree_staged_transaction_traversal (const Account *acc,
         void *cb_data)
 {
     const AccountPrivate *priv;
-    GList *acc_p, *split_p;
     Transaction *trans;
-    Split *s;
     int retval;
 
     if (!acc) return 0;
 
     /* depth first traversal */
     priv = GET_PRIVATE(acc);
-    for (acc_p = priv->children; acc_p; acc_p = g_list_next(acc_p))
+    for (auto acc_p = priv->children; acc_p; acc_p = g_list_next(acc_p))
     {
         retval = gnc_account_tree_staged_transaction_traversal(static_cast <Account*> (acc_p->data),
                 stage, thunk, cb_data);
@@ -5666,9 +5551,8 @@ gnc_account_tree_staged_transaction_traversal (const Account *acc,
     }
 
     /* Now this account */
-    for (split_p = priv->splits; split_p; split_p = g_list_next(split_p))
+    for (auto s : priv->splits)
     {
-        s = static_cast <Split*> (split_p->data);
         trans = s->parent;
         if (trans && (trans->marker < stage))
         {

@@ -34,6 +34,7 @@
 #include <glib.h>
 
 #include "Account.h"
+#include "Account.hpp"
 #include "Transaction.h"
 #include "TransactionP.h"
 #include "cap-gains.h"
@@ -100,38 +101,16 @@ DirectionPolicyGetSplit (GNCPolicy *pcy, GNCLot *lot, short reverse)
      * hasn't been assigned to a lot.  Return that split.
      * Make use of the fact that the splits in an account are
      * already in date order; so we don't have to sort. */
-    auto splits = xaccAccountGetSplitList (lot_account);
-
-    Split *rv = nullptr;
-
-    for (auto node = reverse ? g_list_last (splits) : splits; !rv && node;
-         node = reverse ? node->prev : node->next)
+    auto find_split = [open_time, common_currency, want_positive](const Split* split)
     {
-        split = GNC_SPLIT(node->data);
-        if (split->lot)
-            continue;
+        return (!split->lot &&
+                xaccTransRetDatePosted (xaccSplitGetParent (split)) >= open_time &&
+                gnc_commodity_equiv (common_currency, split->parent->common_currency) &&
+                !gnc_numeric_zero_p (split->amount) &&
+                want_positive == gnc_numeric_positive_p (split->amount));
+    };
 
-        /* Skip it if it's too early */
-        if (xaccTransRetDatePosted (xaccSplitGetParent (split)) < open_time)
-        {
-            if (reverse)
-                /* Going backwards, no point in looking further */
-                break;
-            continue;
-        }
-
-        /* Allow equiv currencies */
-        if (!gnc_commodity_equiv (common_currency, split->parent->common_currency))
-            continue;
-
-        /* Disallow zero-amount splits in general. */
-        if (gnc_numeric_zero_p(split->amount))
-            continue;
-
-        if (want_positive == gnc_numeric_positive_p (split->amount))
-            rv = split;
-    }
-    return rv;
+    return gnc_account_find_split (lot_account, find_split, reverse);
 }
 
 /* ============================================================== */

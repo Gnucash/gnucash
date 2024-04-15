@@ -882,7 +882,7 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
     /* Check that we've got children, lots, and splits to remove */
     g_assert_true (p_priv->children != NULL);
     g_assert_true (p_priv->lots != NULL);
-    g_assert_true (p_priv->splits != NULL);
+    g_assert_true (p_priv->splits.size());
     g_assert_true (p_priv->parent != NULL);
     g_assert_true (p_priv->commodity != NULL);
     g_assert_cmpint (check1->hits, ==, 0);
@@ -983,7 +983,7 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     /* Check that we've got children, lots, and splits to remove */
     g_assert_true (p_priv->children != NULL);
     g_assert_true (p_priv->lots != NULL);
-    g_assert_true (p_priv->splits != NULL);
+    g_assert_true (p_priv->splits.size());
     g_assert_true (p_priv->parent != NULL);
     g_assert_true (p_priv->commodity != NULL);
     g_assert_cmpint (check1->hits, ==, 0);
@@ -998,7 +998,7 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     test_signal_assert_hits (sig2, 0);
     g_assert_true (p_priv->children != NULL);
     g_assert_true (p_priv->lots != NULL);
-    g_assert_true (p_priv->splits != NULL);
+    g_assert_true (p_priv->splits.size());
     g_assert_true (p_priv->parent != NULL);
     g_assert_true (p_priv->commodity != NULL);
     g_assert_cmpint (check1->hits, ==, 0);
@@ -1393,19 +1393,19 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
 
     /* Check that the call fails with invalid account and split (throws) */
     g_assert_true (!gnc_account_insert_split (NULL, split1));
-    g_assert_cmpuint (g_list_length (priv->splits), == , 0);
+    g_assert_cmpuint (priv->splits.size(), == , 0);
     g_assert_true (!priv->sort_dirty);
     g_assert_true (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 0);
     test_signal_assert_hits (sig2, 0);
     g_assert_true (!gnc_account_insert_split (fixture->acct, NULL));
-    g_assert_cmpuint (g_list_length (priv->splits), == , 0);
+    g_assert_cmpuint (priv->splits.size(), == , 0);
     g_assert_true (!priv->sort_dirty);
     g_assert_true (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 0);
     test_signal_assert_hits (sig2, 0);
     /* g_assert_true (!gnc_account_insert_split (fixture->acct, (Split*)priv)); */
-    /* g_assert_cmpuint (g_list_length (priv->splits), == , 0); */
+    /* g_assert_cmpuint (priv->splits.size(), == , 0); */
     /* g_assert_true (!priv->sort_dirty); */
     /* g_assert_true (!priv->balance_dirty); */
     /* test_signal_assert_hits (sig1, 0); */
@@ -1418,7 +1418,7 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
 
     /* Check that it works the first time */
     g_assert_true (gnc_account_insert_split (fixture->acct, split1));
-    g_assert_cmpuint (g_list_length (priv->splits), == , 1);
+    g_assert_cmpuint (priv->splits.size(), == , 1);
     g_assert_true (!priv->sort_dirty);
     g_assert_true (priv->balance_dirty);
     test_signal_assert_hits (sig1, 1);
@@ -1430,7 +1430,7 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     sig3 = test_signal_new (&fixture->acct->inst, GNC_EVENT_ITEM_ADDED, split2);
     /* Now add a second split to the account and check that sort_dirty isn't set. We have to bump the editlevel to force this. */
     g_assert_true (gnc_account_insert_split (fixture->acct, split2));
-    g_assert_cmpuint (g_list_length (priv->splits), == , 2);
+    g_assert_cmpuint (priv->splits.size(), == , 2);
     g_assert_true (!priv->sort_dirty);
     g_assert_true (priv->balance_dirty);
     test_signal_assert_hits (sig1, 2);
@@ -1441,7 +1441,7 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     qof_instance_increase_editlevel (fixture->acct);
     g_assert_true (gnc_account_insert_split (fixture->acct, split3));
     qof_instance_decrease_editlevel (fixture->acct);
-    g_assert_cmpuint (g_list_length (priv->splits), == , 3);
+    g_assert_cmpuint (priv->splits.size(), == , 3);
     g_assert_true (priv->sort_dirty);
     g_assert_true (priv->balance_dirty);
     test_signal_assert_hits (sig1, 3);
@@ -1452,7 +1452,7 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     sig3 = test_signal_new (&fixture->acct->inst, GNC_EVENT_ITEM_REMOVED,
                             split3);
     g_assert_true (gnc_account_remove_split (fixture->acct, split3));
-    g_assert_cmpuint (g_list_length (priv->splits), == , 2);
+    g_assert_cmpuint (priv->splits.size(), == , 2);
     g_assert_true (priv->sort_dirty);
     g_assert_true (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 4);
@@ -1460,7 +1460,7 @@ test_gnc_account_insert_remove_split (Fixture *fixture, gconstpointer pData)
     /* And do it again to make sure that it fails when the split has
      * already been removed */
     g_assert_true (!gnc_account_remove_split (fixture->acct, split3));
-    g_assert_cmpuint (g_list_length (priv->splits), == , 2);
+    g_assert_cmpuint (priv->splits.size(), == , 2);
     g_assert_true (priv->sort_dirty);
     g_assert_true (!priv->balance_dirty);
     test_signal_assert_hits (sig1, 4);

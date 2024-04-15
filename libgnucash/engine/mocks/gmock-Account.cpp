@@ -76,6 +76,16 @@ xaccAccountGetSplitList (const Account *account)
     return mockaccount ? mockaccount->xaccAccountGetSplitList() : nullptr;
 }
 
+const std::vector<Split*>
+xaccAccountGetSplits (const Account *account)
+{
+    SCOPED_TRACE("");
+    auto mockaccount = gnc_mockaccount(account);
+    if (!mockaccount)
+        return {};
+    return mockaccount->xaccAccountGetSplits();
+}
+
 
 Account*
 gnc_account_imap_find_account (

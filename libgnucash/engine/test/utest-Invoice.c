@@ -329,8 +329,7 @@ test_invoice_doclink ( Fixture *fixture, gconstpointer pData )
 
 static gboolean account_has_one_split (const Account *acc)
 {
-    GList *splits = xaccAccountGetSplitList (acc);
-    return (splits && !(splits->next));
+    return (xaccAccountGetSplitsSize (acc) == 1);
 }
 
 static void

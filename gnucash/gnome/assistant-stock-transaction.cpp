@@ -37,6 +37,7 @@
 #include <sstream>
 
 #include "Account.h"
+#include "Account.hpp"
 #include "Transaction.h"
 #include "engine-helpers.h"
 #include "dialog-utils.h"
@@ -1262,9 +1263,8 @@ StockAssistantModel::set_txn_type (guint type_idx)
 };
 
 static void
-check_txn_date(GList* last_split_node, time64 txn_date, Logger& logger)
+check_txn_date(Split* last_split, time64 txn_date, Logger& logger)
 {
-    auto last_split = static_cast<const Split *>(last_split_node->data);
     auto last_split_date = xaccTransGetDate(xaccSplitGetParent(last_split));
     if (txn_date <= last_split_date) {
         auto last_split_date_str = qof_print_date(last_split_date);
@@ -1301,9 +1301,9 @@ StockAssistantModel::generate_list_of_splits() {
     // transactions dated after the date specified, it is very likely
     // the later stock transactions will be invalidated. warn the user
     // to review them.
-    auto last_split_node = g_list_last (xaccAccountGetSplitList (m_acct));
-    if (last_split_node)
-        check_txn_date(last_split_node, m_transaction_date, m_logger);
+    auto splits{xaccAccountGetSplits (m_acct)};
+    if (!splits.empty())
+        check_txn_date(splits.back(), m_transaction_date, m_logger);
 
     if (m_stock_entry->enabled()  || m_stock_entry->has_amount())
     {

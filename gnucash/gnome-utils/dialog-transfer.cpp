@@ -44,6 +44,7 @@
 #include "gnc-ui.h"
 #include "Transaction.h"
 #include "Account.h"
+#include "Account.hpp"
 #include "engine-helpers.h"
 #include "QuickFill.h"
 #include <gnc-commodity.h>
@@ -472,10 +473,8 @@ gnc_xfer_dialog_reload_quickfill( XferDialog *xferData )
     gnc_quickfill_destroy( xferData->qf );
     xferData->qf = gnc_quickfill_new();
 
-    auto splitlist = xaccAccountGetSplitList( account );
-    for ( GList *node = splitlist; node; node = node->next )
+    for (auto split : xaccAccountGetSplits (account))
     {
-        auto split = static_cast<Split *> (node->data);
         auto trans = xaccSplitGetParent (split);
         gnc_quickfill_insert( xferData->qf,
                               xaccTransGetDescription (trans), QUICKFILL_LIFO);
