@@ -23,6 +23,10 @@
 #ifndef TABLE_CONTROL_H
 #define TABLE_CONTROL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "register-common.h"
 
 /** @addtogroup Table Table
@@ -64,6 +68,10 @@ void gnc_table_control_destroy (TableControl *control);
 
 void gnc_table_control_allow_move (TableControl *control,
                                    gboolean allow_move);
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */
 #endif

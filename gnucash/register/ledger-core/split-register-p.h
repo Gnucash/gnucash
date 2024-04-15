@@ -23,6 +23,10 @@
 #ifndef SPLIT_REGISTER_P_H
 #define SPLIT_REGISTER_P_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "split-register.h"
 
 /** @addtogroup SplitRegister
@@ -208,6 +212,10 @@ gboolean gnc_split_register_split_needs_amount(
     SplitRegister *reg, Split *split);
 gboolean gnc_split_register_needs_conv_rate(
     SplitRegister *reg, Transaction *txn, Account *acc);
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */
 #endif

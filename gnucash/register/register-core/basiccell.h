@@ -157,6 +157,10 @@
 #ifndef BASIC_CELL_H
 #define BASIC_CELL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <gdk/gdk.h>
 #include <glib.h>
 #include <gtk/gtk.h>
@@ -284,6 +288,10 @@ char * gnc_basic_cell_validate (BasicCell *bcell,
                                 const char *newval,
                                 const char *toks,
                                 gint *cursor_position);
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} @} */
 #endif /* BASIC_CELL_H */

@@ -40,6 +40,10 @@
 #ifndef COMBO_CELL_H
 #define COMBO_CELL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <glib.h>
 
 #include "basiccell.h"
@@ -103,6 +107,10 @@ void         gnc_combo_cell_set_autosize (ComboCell* cell, gboolean autosize);
 void gnc_combo_cell_use_quickfill_cache (ComboCell* cell,
                                          QuickFill* shared_qf);
 void gnc_combo_cell_use_list_store_cache (ComboCell* cell, gpointer data);
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */
 #endif

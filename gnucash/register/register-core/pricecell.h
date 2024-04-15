@@ -43,6 +43,10 @@
 #ifndef PRICE_CELL_H
 #define PRICE_CELL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "basiccell.h"
 #include "qof.h"
 #include "gnc-ui-util.h"
@@ -87,5 +91,10 @@ void         gnc_price_cell_set_print_info (PriceCell *cell,
 void         gnc_price_cell_set_debt_credit_value (PriceCell *debit,
         PriceCell *credit,
         gnc_numeric amount);
+
+#ifdef __cplusplus
+}
+#endif
+
 /** @} */
 #endif

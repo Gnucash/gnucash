@@ -78,6 +78,10 @@
 #ifndef DATE_CELL_H
 #define DATE_CELL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <time.h>
 
 #include "basiccell.h"
@@ -126,6 +130,10 @@ void        gnc_date_cell_commit (DateCell *cell);
  * @param warn Whether to warn of parse errors or silently change to a valid one.
  */
 void        gnc_date_cell_get_date (DateCell *cell, time64 *time, gboolean warn);
+
+#ifdef __cplusplus
+}
+#endif
 
 /** @} */
 #endif
