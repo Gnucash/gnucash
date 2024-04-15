@@ -3985,17 +3985,6 @@ xaccAccountGetSplits (const Account *account)
     return GNC_IS_ACCOUNT(account) ? GET_PRIVATE(account)->splits : SplitsVec{};
 }
 
-/* THIS API NEEDS TO CHANGE.
- *
- * This code exposes the internal structure of the account object to
- * external callers by returning the actual list used by the object.
- * It should instead return a copy of the split list that the caller
- * is required to free.  That change would provide the freedom of
- * allowing the internal organization to change data structures if
- * necessary for whatever reason, while leaving the external API
- * unchanged. */
-/* XXX: violates the const'ness by forcing a sort before returning
- * the splitlist */
 SplitList *
 xaccAccountGetSplitList (const Account *acc)
 {
