@@ -82,7 +82,7 @@ gnc_split_register_balance_trans (SplitRegister *reg, Transaction *trans)
             multi_currency = TRUE;
         else
         {
-            imbal_mon = imbal_list->data;
+            imbal_mon = static_cast<gnc_monetary*>(imbal_list->data);
             if (!imbal_list->next &&
                     gnc_commodity_equiv(gnc_monetary_commodity(*imbal_mon),
                                         xaccTransGetCurrency(trans)))
@@ -369,7 +369,7 @@ gnc_split_register_move_cursor (VirtualLocation *p_new_virt_loc,
 {
     VirtualLocation new_virt_loc = *p_new_virt_loc;
     VirtualCellLocation old_trans_split_loc;
-    SplitRegister *reg = user_data;
+    auto reg = static_cast<SplitRegister*>(user_data);
     Transaction *pending_trans;
     Transaction *new_trans;
     Transaction *old_trans;
@@ -649,7 +649,7 @@ gnc_find_split_in_trans_by_memo (Transaction *trans, const char *memo,
 {
     for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
     {
-        Split *split = n->data;
+        auto split = GNC_SPLIT(n->data);
         if (unit_price)
         {
             gnc_numeric price = xaccSplitGetSharePrice (split);
@@ -668,23 +668,22 @@ static Split *
 gnc_find_split_in_account_by_memo (Account *account, const char *memo,
                                    gboolean unit_price)
 {
-    GList *slp;
-
     if (account == NULL) return NULL;
 
-    for (slp = g_list_last (xaccAccountGetSplitList (account));
-            slp;
-            slp = slp->prev)
+    Split *rv = nullptr;
+    auto splits = xaccAccountGetSplitList (account);
+    for (auto slp = g_list_last (splits); !rv && slp; slp = slp->prev)
     {
-        Split *split = slp->data;
+        auto split = GNC_SPLIT(slp->data);
         Transaction *trans = xaccSplitGetParent (split);
 
         split = gnc_find_split_in_trans_by_memo (trans, memo, unit_price);
 
-        if (split) return split;
+        if (split)
+            rv = split;
     }
 
-    return NULL;
+    return rv;
 }
 
 static Split *
@@ -908,7 +907,7 @@ gnc_split_register_auto_completion (SplitRegister *reg,
 
             for (GList *n = xaccTransGetSplitList (trans); n; n = n->next)
             {
-                Split *s = n->data;
+                auto s = GNC_SPLIT(n->data);
                 if (default_account == xaccSplitGetAccount(s))
                 {
                     blank_split = s;
@@ -1610,7 +1609,7 @@ gnc_split_register_traverse (VirtualLocation *p_new_virt_loc,
                              gncTableTraversalDir dir,
                              gpointer user_data)
 {
-    SplitRegister *reg = user_data;
+    auto reg = static_cast<SplitRegister*>(user_data);
     Transaction *pending_trans;
     VirtualLocation virt_loc;
     Transaction *trans, *new_trans;
@@ -1825,7 +1824,7 @@ gnc_split_register_control_new (void)
 gboolean
 gnc_split_register_recn_cell_confirm (char old_flag, gpointer data)
 {
-    SplitRegister *reg = data;
+    auto reg = static_cast<SplitRegister*>(data);
     GtkWidget *dialog, *window;
     gint response;
     const gchar *title = _("Mark split as unreconciled?");

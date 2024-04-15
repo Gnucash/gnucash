@@ -4,7 +4,7 @@ add_subdirectory(test)
 set (ledger_core_SOURCES
   gnc-ledger-display.c
   split-register.c
-  split-register-control.c
+  split-register-control.cpp
   split-register-copy-ops.c
   split-register-layout.c
   split-register-load.c
