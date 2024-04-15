@@ -139,8 +139,10 @@ static void   recnFinishCB (GSimpleAction *simple, GVariant *parameter, gpointer
 static void   recnPostponeCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void   recnCancelCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 
+extern "C" {
 void gnc_start_recn_children_changed (GtkWidget *widget, startRecnWindowData *data);
 void gnc_start_recn_interest_clicked_cb (GtkButton *button, startRecnWindowData *data);
+}
 
 static void   gnc_reconcile_window_set_sensitivity (RecnWindow *recnData);
 static char * gnc_recn_make_window_name (Account *account);
@@ -893,7 +895,7 @@ static void
 gnc_reconcile_window_toggled_cb(GNCReconcileView *view, Split *split,
                                 gpointer data)
 {
-    RecnWindow *recnData = data;
+    auto recnData = static_cast<RecnWindow*>(data);
     gnc_reconcile_window_set_sensitivity(recnData);
     recnRecalculateBalance(recnData);
 }
@@ -903,7 +905,7 @@ static void
 gnc_reconcile_window_row_cb(GNCReconcileView *view, gpointer item,
                             gpointer data)
 {
-    RecnWindow *recnData = data;
+    auto recnData = static_cast<RecnWindow*>(data);
     gnc_reconcile_window_set_sensitivity(recnData);
 }
 
@@ -1014,7 +1016,7 @@ static void
 gnc_reconcile_window_double_click_cb(GNCReconcileView *view, Split *split,
                                      gpointer data)
 {
-    RecnWindow *recnData = data;
+    auto recnData = static_cast<RecnWindow*>(data);
     GNCSplitReg *gsr;
 
     /* This should never be true, but be paranoid */
@@ -1037,7 +1039,7 @@ static void
 gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
                               gpointer data)
 {
-    RecnWindow *recnData = data;
+    auto recnData = static_cast<RecnWindow*>(data);
     GNCReconcileView *this_view, *other_view;
     GNCReconcileView *debit, *credit;
 
@@ -1057,7 +1059,7 @@ static gboolean
 gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
                             gpointer data)
 {
-    RecnWindow *recnData = data;
+    auto recnData = static_cast<RecnWindow*>(data);
     GtkWidget *this_view, *other_view;
     GtkWidget *debit, *credit;
 
@@ -1199,7 +1201,7 @@ gnc_ui_reconcile_window_help_cb (GSimpleAction *simple,
                                  GVariant      *parameter,
                                  gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     gnc_gnome_help (GTK_WINDOW(recnData->window), DF_MANUAL, DL_RECNWIN);
 }
 
@@ -1209,7 +1211,7 @@ gnc_ui_reconcile_window_change_cb (GSimpleAction *simple,
                                    GVariant      *parameter,
                                    gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     Account *account = recn_get_account (recnData);
     gnc_numeric new_ending = recnData->new_ending;
     time64 statement_date = recnData->statement_date;
@@ -1231,7 +1233,7 @@ gnc_ui_reconcile_window_balance_cb (GSimpleAction *simple,
                                     GVariant      *parameter,
                                     gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     GNCSplitReg *gsr;
     Account *account;
     gnc_numeric balancing_amount;
@@ -1263,7 +1265,7 @@ gnc_ui_reconcile_window_rec_cb (GSimpleAction *simple,
                                 GVariant      *parameter,
                                 gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     GNCReconcileView *debit, *credit;
 
     debit  = GNC_RECONCILE_VIEW(recnData->debit);
@@ -1279,7 +1281,7 @@ gnc_ui_reconcile_window_unrec_cb (GSimpleAction *simple,
                                   GVariant      *parameter,
                                   gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     GNCReconcileView *debit, *credit;
 
     debit  = GNC_RECONCILE_VIEW(recnData->debit);
@@ -1323,7 +1325,7 @@ gnc_reconcile_window_delete_set_next_selection (RecnWindow *recnData, Split *spl
     GtkTreeIter iter;
     GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
     GList *path_list, *node;
-    GtkTreePath *path, *save_del_path;
+    GtkTreePath *save_del_path;
     Transaction* trans = xaccSplitGetParent (split); // parent transaction of the split to delete
 
     if (!view)
@@ -1334,7 +1336,7 @@ gnc_reconcile_window_delete_set_next_selection (RecnWindow *recnData, Split *spl
     node = g_list_first (path_list);
     if (!node)
         return;
-    path = node->data;
+    auto path = static_cast<GtkTreePath*>(node->data);
     save_del_path = gtk_tree_path_copy (path);
 
     gtk_tree_path_next (path);
@@ -1376,7 +1378,7 @@ gnc_ui_reconcile_window_delete_cb (GSimpleAction *simple,
                                    GVariant      *parameter,
                                    gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     Transaction *trans;
     Split *split;
 
@@ -1413,7 +1415,7 @@ gnc_ui_reconcile_window_edit_cb (GSimpleAction *simple,
                                  GVariant      *parameter,
                                  gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     GNCSplitReg *gsr;
     Split *split;
 
@@ -1467,7 +1469,7 @@ gnc_recn_edit_account_cb (GSimpleAction *simple,
                           GVariant      *parameter,
                           gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     Account *account = recn_get_account (recnData);
 
     if (account == NULL)
@@ -1482,7 +1484,7 @@ gnc_recn_xfer_cb (GSimpleAction *simple,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     Account *account = recn_get_account (recnData);
 
     if (account == NULL)
@@ -1497,7 +1499,7 @@ gnc_recn_scrub_cb (GSimpleAction *simple,
                    GVariant      *parameter,
                    gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     Account *account = recn_get_account (recnData);
 
     if (account == NULL)
@@ -1521,7 +1523,7 @@ gnc_recn_open_cb (GSimpleAction *simple,
                   GVariant      *parameter,
                   gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
 
     gnc_reconcile_window_open_register(recnData);
 }
@@ -1597,8 +1599,8 @@ gnc_get_reconcile_info (Account *account,
 static gboolean
 find_by_account (gpointer find_data, gpointer user_data)
 {
-    Account *account = find_data;
-    RecnWindow *recnData = user_data;
+    auto account = GNC_ACCOUNT(find_data);
+    auto recnData = static_cast<RecnWindow*>(user_data);
 
     if (!recnData)
         return FALSE;
@@ -1612,7 +1614,6 @@ recn_set_watches_one_account (gpointer data, gpointer user_data)
 {
     Account *account = (Account *)data;
     RecnWindow *recnData = (RecnWindow *)user_data;
-    GList *node;
 
     /* add a watch on the account */
     gnc_gui_component_watch_entity (recnData->component_id,
@@ -1620,9 +1621,10 @@ recn_set_watches_one_account (gpointer data, gpointer user_data)
                                     QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
     /* add a watch on each unreconciled or cleared split for the account */
-    for (node = xaccAccountGetSplitList (account); node; node = node->next)
+    GList *splits = xaccAccountGetSplitList (account);
+    for (GList *node = splits; node; node = node->next)
     {
-        Split *split = node->data;
+        auto split = GNC_SPLIT(node->data);
         Transaction *trans;
         char recn;
 
@@ -1674,7 +1676,7 @@ recn_set_watches (RecnWindow *recnData)
 static void
 refresh_handler (GHashTable *changes, gpointer user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     const EventInfo *info;
     Account *account;
 
@@ -1705,7 +1707,7 @@ refresh_handler (GHashTable *changes, gpointer user_data)
 static void
 close_handler (gpointer user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
 
     gnc_save_window_size(GNC_PREFS_GROUP_RECONCILE, GTK_WINDOW(recnData->window));
     gtk_widget_destroy (recnData->window);
@@ -1812,8 +1814,8 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
     if (account == NULL)
         return NULL;
 
-    recnData = gnc_find_first_gui_component (WINDOW_RECONCILE_CM_CLASS,
-               find_by_account, account);
+    recnData = static_cast<RecnWindow*>(gnc_find_first_gui_component (WINDOW_RECONCILE_CM_CLASS,
+                                                                      find_by_account, account));
     if (recnData)
         return recnData;
 
@@ -1878,7 +1880,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         menu_bar = gtk_menu_bar_new_from_model (menu_model);
         gtk_container_add (GTK_CONTAINER(vbox), menu_bar);
 #ifdef MAC_INTEGRATION
-        GtkosxApplication *theApp = g_object_new (GTKOSX_TYPE_APPLICATION, NULL);
+        auto theApp = static_cast<GtkosxApplication*>(g_object_new (GTKOSX_TYPE_APPLICATION, NULL));
         gtk_widget_hide (menu_bar);
         gtk_widget_set_no_show_all (menu_bar, TRUE);
         if (GTK_IS_MENU_ITEM (menu_bar))
@@ -1940,10 +1942,11 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         GtkWidget *box = gtk_statusbar_get_message_area (bar);
         GtkWidget *image = gtk_image_new_from_icon_name
             ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
+        GList *splits = xaccAccountGetSplitList (account);
 
-        for (GList *n = xaccAccountGetSplitList (account); n; n = n->next)
+        for (GList *n = splits; n; n = n->next)
         {
-            Split* split = n->data;
+            auto split = GNC_SPLIT(n->data);
             time64 recn_date = xaccSplitGetDateReconciled (split);
             gchar *datestr, *recnstr;
             if ((xaccSplitGetReconcile (split) != YREC) ||
@@ -2177,7 +2180,7 @@ gnc_ui_reconcile_window_get_window (RecnWindow * recnData)
 static void
 recn_destroy_cb (GtkWidget *w, gpointer data)
 {
-    RecnWindow *recnData = data;
+    auto recnData = static_cast<RecnWindow*>(data);
     gchar **actions = g_action_group_list_actions (G_ACTION_GROUP(recnData->simple_action_group));
     gint num_actions = g_strv_length (actions);
 
@@ -2222,7 +2225,7 @@ recn_cancel(RecnWindow *recnData)
 static gboolean
 recn_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
-    RecnWindow *recnData = data;
+    auto recnData = static_cast<RecnWindow*>(data);
 
     recn_cancel(recnData);
     return TRUE;
@@ -2232,7 +2235,7 @@ recn_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 static gboolean
 recn_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 {
-    RecnWindow *recnData = data;
+    auto recnData = static_cast<RecnWindow*>(data);
 
     if (event->keyval == GDK_KEY_Escape)
     {
@@ -2258,22 +2261,19 @@ recn_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 static Account *
 find_payment_account(Account *account)
 {
-    GList *list;
-    GList *node;
-
     if (account == NULL)
         return NULL;
 
-    list = xaccAccountGetSplitList (account);
+    GList *list = xaccAccountGetSplitList (account);
+    Account *rv = nullptr;
 
     /* Search backwards to find the latest payment */
-    for (node = g_list_last (list); node; node = node->prev)
+    for (GList *node = g_list_last (list); !rv && node; node = node->prev)
     {
         Transaction *trans;
-        Split *split;
         GList *n;
 
-        split = node->data;
+        auto split = GNC_SPLIT(node->data);
         if (split == NULL)
             continue;
 
@@ -2289,9 +2289,8 @@ find_payment_account(Account *account)
         {
             GNCAccountType type;
             Account *a;
-            Split *s;
 
-            s = n->data;
+            auto s = GNC_SPLIT(n->data);
             if ((s == NULL) || (s == split))
                 continue;
 
@@ -2302,11 +2301,11 @@ find_payment_account(Account *account)
             type = xaccAccountGetType(a);
             if ((type == ACCT_TYPE_BANK) || (type == ACCT_TYPE_CASH) ||
                     (type == ACCT_TYPE_ASSET))
-                return a;
+                rv = a;
         }
     }
 
-    return NULL;
+    return rv;
 }
 
 typedef void (*AccountProc) (Account *a);
@@ -2320,7 +2319,7 @@ acct_traverse_descendants (Account *acct, AccountProc fn)
 {
     fn (acct);
     if (xaccAccountGetReconcileChildrenStatus (acct))
-        gnc_account_foreach_descendant (acct, (AccountCb)traverse_fn, fn);
+        gnc_account_foreach_descendant (acct, (AccountCb)traverse_fn, (gpointer)fn);
 }
 
 /********************************************************************\
@@ -2336,7 +2335,7 @@ recnFinishCB (GSimpleAction *simple,
               GVariant      *parameter,
               gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     gboolean auto_payment;
     Account *account;
     time64 date;
@@ -2399,7 +2398,7 @@ recnPostponeCB (GSimpleAction *simple,
                 GVariant      *parameter,
                 gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     Account *account;
 
     {
@@ -2431,6 +2430,6 @@ recnCancelCB (GSimpleAction *simple,
               GVariant      *parameter,
               gpointer       user_data)
 {
-    RecnWindow *recnData = user_data;
+    auto recnData = static_cast<RecnWindow*>(user_data);
     recn_cancel(recnData);
 }

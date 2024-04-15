@@ -120,7 +120,7 @@ set (gnc_gnome_SOURCES
   reconcile-view.c
   search-owner.c
   top-level.c
-  window-reconcile.c
+  window-reconcile.cpp
   window-report.cpp
   window-autoclear.c
 )
