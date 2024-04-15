@@ -947,7 +947,7 @@ create_account_widget(GncOption& option, char *name)
 
         for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
             avi.include_type[i] = FALSE;
-        avi.show_hidden = FALSE;
+        avi.show_hidden = TRUE;
 
         for (node = acct_type_list; node; node = node->next)
         {
@@ -968,7 +968,7 @@ create_account_widget(GncOption& option, char *name)
 
         for (i = 0; i < NUM_ACCOUNT_TYPES; i++)
             avi.include_type[i] = TRUE;
-        avi.show_hidden = FALSE;
+        avi.show_hidden = TRUE;
         gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
     }
 
@@ -1033,7 +1033,7 @@ create_account_widget(GncOption& option, char *name)
     button = gtk_check_button_new_with_label(_("Show Hidden Accounts"));
     gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
     gtk_widget_set_tooltip_text(button, _("Show accounts that have been marked hidden."));
-    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), FALSE);
+    gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
     g_signal_connect(G_OBJECT(button), "toggled",
                      G_CALLBACK(show_hidden_toggled_cb), &option);
 
