@@ -1094,6 +1094,7 @@ RESTART:
                     GList *splits = xaccAccountGetSplitList (acc);
                     g_list_foreach (splits,
                                     (GFunc)gnc_sx_scrub_split_numerics, NULL);
+                    g_list_free (splits);
                 }
                 g_list_free (children);
             }

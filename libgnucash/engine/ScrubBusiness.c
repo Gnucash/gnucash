@@ -410,6 +410,7 @@ gncScrubLotDanglingPayments (GNCLot *lot)
 
         filtered_list = g_list_prepend (filtered_list, free_split);
     }
+    g_list_free (split_list);
 
     filtered_list = g_list_reverse (filtered_list);
     match_list = gncSLFindOffsSplits (filtered_list, ll_val);
@@ -723,6 +724,7 @@ restart:
               curr_split_no + 1, split_count);
         curr_split_no++;
     }
+    g_list_free (splits);
     xaccAccountCommitEdit(acc);
     (percentagefunc)(NULL, -1.0);
     LEAVE ("(acc=%s)", str);

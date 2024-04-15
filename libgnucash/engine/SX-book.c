@@ -385,6 +385,7 @@ gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)
 
             guid_free (guid);
         }
+        g_list_free (splits);
     }
     return g_list_reverse (rtn);
 }

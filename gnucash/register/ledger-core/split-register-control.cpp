@@ -683,6 +683,7 @@ gnc_find_split_in_account_by_memo (Account *account, const char *memo,
             rv = split;
     }
 
+    g_list_free (splits);
     return rv;
 }
 
