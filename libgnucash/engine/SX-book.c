@@ -375,9 +375,9 @@ gnc_sx_get_sxes_referencing_account(QofBook *book, Account *acct)
     {
         SchedXaction *sx = (SchedXaction*)sx_list->data;
         GList *splits = xaccSchedXactionGetSplits(sx);
-        for (; splits != NULL; splits = splits->next)
+        for (GList *node = splits; node; node = node->next)
         {
-            Split *s = (Split*)splits->data;
+            Split *s = (Split*)node->data;
             GncGUID *guid = NULL;
             qof_instance_get (QOF_INSTANCE (s), "sx-account", &guid, NULL);
             if (guid_equal(acct_guid, guid))
