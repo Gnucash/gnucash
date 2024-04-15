@@ -76,8 +76,6 @@ static const std::string KEY_BALANCE_HIGHER_LIMIT_VALUE("higher-value");
 static const std::string KEY_BALANCE_LOWER_LIMIT_VALUE("lower-value");
 static const std::string KEY_BALANCE_INCLUDE_SUB_ACCTS("inlude-sub-accts");
 
-static gnc_numeric GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing);
-
 using FinalProbabilityVec=std::vector<std::pair<std::string, int32_t>>;
 using ProbabilityVec=std::vector<std::pair<std::string, struct AccountProbability>>;
 using FlatKvpEntry=std::pair<std::string, KvpValue*>;
@@ -3578,7 +3576,7 @@ xaccAccountGetProjectedMinimumBalance (const Account *acc)
 \********************************************************************/
 
 static gnc_numeric
-GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing)
+GetBalanceAsOfDate (Account *acc, time64 date, std::function<gnc_numeric(Split*)> split_to_numeric)
 {
     /* Ideally this could use xaccAccountForEachSplit, but
      * it doesn't exist yet and I'm uncertain of exactly how
@@ -3600,25 +3598,19 @@ GetBalanceAsOfDate (Account *acc, time64 date, gboolean ignclosing)
         latest = (Split *)lp->data;
     }
 
-    if (!latest)
-        return gnc_numeric_zero();
-
-    if (ignclosing)
-        return xaccSplitGetNoclosingBalance (latest);
-    else
-        return xaccSplitGetBalance (latest);
+    return latest ? split_to_numeric (latest) : gnc_numeric_zero();
 }
 
 gnc_numeric
 xaccAccountGetBalanceAsOfDate (Account *acc, time64 date)
 {
-    return GetBalanceAsOfDate (acc, date, FALSE);
+    return GetBalanceAsOfDate (acc, date, xaccSplitGetBalance);
 }
 
 static gnc_numeric
 xaccAccountGetNoclosingBalanceAsOfDate (Account *acc, time64 date)
 {
-    return GetBalanceAsOfDate (acc, date, TRUE);
+    return GetBalanceAsOfDate (acc, date, xaccSplitGetNoclosingBalance);
 }
 
 gnc_numeric
@@ -3995,8 +3987,8 @@ xaccAccountBalanceChangeHelper (Account *acc, gpointer data)
     CurrencyBalanceChange *cbdiff = static_cast<CurrencyBalanceChange*>(data);
 
     gnc_numeric b1, b2;
-    b1 = GetBalanceAsOfDate(acc, cbdiff->t1, TRUE);
-    b2 = GetBalanceAsOfDate(acc, cbdiff->t2, TRUE);
+    b1 = GetBalanceAsOfDate(acc, cbdiff->t1, xaccSplitGetNoclosingBalance);
+    b2 = GetBalanceAsOfDate(acc, cbdiff->t2, xaccSplitGetNoclosingBalance);
     gnc_numeric balanceChange = gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
     gnc_numeric balanceChange_conv = xaccAccountConvertBalanceToCurrencyAsOfDate(acc, balanceChange, xaccAccountGetCommodity(acc), cbdiff->currency, cbdiff->t2);
     cbdiff->balanceChange = gnc_numeric_add (cbdiff->balanceChange, balanceChange_conv,
@@ -4011,8 +4003,8 @@ xaccAccountGetNoclosingBalanceChangeInCurrencyForPeriod (Account *acc, time64 t1
     
 
     gnc_numeric b1, b2;
-    b1 = GetBalanceAsOfDate(acc, t1, TRUE);
-    b2 = GetBalanceAsOfDate(acc, t2, TRUE);
+    b1 = GetBalanceAsOfDate(acc, t1, xaccSplitGetNoclosingBalance);
+    b2 = GetBalanceAsOfDate(acc, t2, xaccSplitGetNoclosingBalance);
     gnc_numeric balanceChange = gnc_numeric_sub(b2, b1, GNC_DENOM_AUTO, GNC_HOW_DENOM_FIXED);
 
     gnc_commodity *report_commodity = xaccAccountGetCommodity(acc);
