@@ -5451,7 +5451,7 @@ gnc_account_merge_children (Account *parent)
 
 
 static void
-xaccSplitsBeginStagedTransactionTraversals (SplitsVec splits)
+xaccSplitsBeginStagedTransactionTraversals (SplitsVec& splits)
 {
     for (auto s : splits)
     {

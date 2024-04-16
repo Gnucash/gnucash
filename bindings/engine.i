@@ -83,6 +83,7 @@ engine-common.i */
 %newobject gnc_account_get_full_name;
 %newobject xaccTransGetAPARAcctSplitList;
 %newobject xaccTransGetPaymentAcctSplitList;
+%newobject xaccAccountGetSplitList;
 
 %include "engine-common.i"
 
