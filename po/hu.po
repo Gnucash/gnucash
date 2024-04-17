@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-14 22:45+0000\n"
+"PO-Revision-Date: 2024-04-15 22:45+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -887,8 +887,8 @@ msgid ""
 "org"
 msgstr ""
 "Könnyű a GnuCash fejlesztőivel kapcsolatot teremteni. Számos levelezőlista "
-"létezik, és élőben is cseveghet velük IRC-n. Csatlakozzon hozzájuk a "
-"#gnucash csatornán az irc.gnome.org-on"
+"létezik, és élőben is cseveghet velük IRC-n. Csatlakozzon hozzájuk az irc."
+"gnome.org-on a #gnucash csatornán."
 
 #: doc/tip_of_the_day.list.c:15
 msgid ""
@@ -9273,13 +9273,15 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:68
 msgid "Display or hide reconciled matches"
-msgstr "Egyeztetések mutatása vagy elrejtése"
+msgstr "Egyeztetettek mutatása vagy elrejtése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.generic.gschema.xml.in:69
 msgid ""
 "Shows or hides transactions from the match picker which are already of some "
 "reconciled state."
 msgstr ""
+"Az egyezésvizsgálatnál megjeleníti vagy elrejti azokat a tranzakciókat, "
+"amelyeknek már egyeztetett jelölést kaptak."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:10
@@ -9291,6 +9293,8 @@ msgstr "Alapértelmezett QIF tranzakció státusz"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:16
 msgid "Default status for QIF transaction when not specified in QIF file."
 msgstr ""
+"A QIF tranzakció alapértelmezett státusza ha a QIF fájlban nincs megadva a "
+"státusz."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:15
 #: gnucash/gtkbuilder/dialog-account-picker.glade:59
@@ -9298,6 +9302,8 @@ msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as reconciled."
 msgstr ""
+"Ha a QIF fájlban nincs megadva a státusz, a tranzakció egyeztetettnek lesz "
+"jelölve."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:32
 msgid "Show documentation"
@@ -13283,6 +13289,8 @@ msgstr ""
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
 msgstr ""
+"A tranzakció alapértelmezett státusza (ha a QIF fájlban nincs megadva a "
+"státusz)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:159
 #: gnucash/gtkbuilder/dialog-import.glade:12
@@ -13300,19 +13308,19 @@ msgstr "Tranzakciók importálása szöveges fájlból"
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:123
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:126
 msgid "1. Choose the file to import"
-msgstr "Importálandó fájl kiválasztása"
+msgstr "1. Importálandó fájl kiválasztása"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:153
 msgid "Import bill CSV data"
-msgstr "_Számla CSV Importálás"
+msgstr "CSV bejövőszámla importálása"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:173
 msgid "Import invoice CSV data"
-msgstr ""
+msgstr "CSV kimenőszámla importálása"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:191
 msgid "2. Select import type"
-msgstr "2. Válasszon import típust"
+msgstr "2. Válassza ki az import típusát"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
@@ -15585,12 +15593,12 @@ msgstr "_Alul"
 #: gnucash/gtkbuilder/dialog-preferences.glade:3409
 #: gnucash/ui/gnc-main-window.ui:207
 msgid "_Left"
-msgstr "_Baloldalt"
+msgstr "_Baloldalon"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3428
 #: gnucash/ui/gnc-main-window.ui:213
 msgid "_Right"
-msgstr "_Jobboldalt"
+msgstr "_Jobboldalon"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3450
 msgid "<b>Summary Bar Position</b>"
@@ -15636,7 +15644,7 @@ msgstr "_Szélesség"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3598
 msgid "Open new tabs _adjacent to current tab"
-msgstr "Új fül az aktív fül _mellett nyíljon meg"
+msgstr "Az új fül az aktív fül _mellett nyíljon meg"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3604
 msgid "Opens new tab adjacent to current tab instead of at the end."
@@ -15648,9 +15656,8 @@ msgstr "Ablakok"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3687
 #: gnucash/gtkbuilder/dialog-preferences.glade:3710
-#, fuzzy
 msgid "Online Quotes"
-msgstr "Árfolyamok on-line lehívása"
+msgstr "Internetes árfolyamok"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
