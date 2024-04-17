@@ -61,18 +61,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get splits with interesting data from accounts.
 
-;; helper function. queries book for all splits in accounts before
-;; end-date (end-date can be #f)
-(define (get-all-splits accounts end-date)
-  (let ((query (qof-query-create-for-splits)))
-    (qof-query-set-book query (gnc-get-current-book))
-    (xaccQueryAddClearedMatch
-     query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
-    (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT query #f 0 (and end-date #t) (or end-date 0) QOF-QUERY-AND)
-    (let ((splits (qof-query-run query)))
-      (qof-query-destroy query)
-      splits)))
+(define (get-all-commodity-splits currency-accounts end-date commodity sort?)
+  (gnc-get-match-commodity-splits currency-accounts (and end-date #t)
+                                  (or end-date 0) (or commodity '()) sort?))
+
 
 ;; Returns a list of all splits in the 'currency-accounts' up to
 ;; 'end-date' which have two different commodities involved, one of
@@ -80,15 +72,7 @@
 ;; 'commodity' != #f ).
 (define (gnc:get-match-commodity-splits
          currency-accounts end-date commodity)
-  (filter
-   (lambda (s)
-     (let ((txn-comm (xaccTransGetCurrency (xaccSplitGetParent s)))
-           (acc-comm (xaccAccountGetCommodity (xaccSplitGetAccount s))))
-       (and (not (gnc-commodity-equiv txn-comm acc-comm))
-            (or (not commodity)
-                (gnc-commodity-equiv commodity txn-comm)
-                (gnc-commodity-equiv commodity acc-comm)))))
-   (get-all-splits currency-accounts end-date)))
+  (get-all-commodity-splits currency-accounts end-date commodity #f))
 
 ;; Returns a sorted list of all splits in the 'currency-accounts' up
 ;; to 'end-date' which have the 'commodity' and one other commodity
@@ -96,12 +80,7 @@
 (define (gnc:get-match-commodity-splits-sorted currency-accounts
                                                end-date
                                                commodity)
-  (sort (gnc:get-match-commodity-splits currency-accounts
-                                        end-date commodity)
-        (lambda (a b)
-          (<
-           (xaccTransGetDate (xaccSplitGetParent a))
-           (xaccTransGetDate (xaccSplitGetParent b))))))
+  (get-all-commodity-splits currency-accounts end-date commodity #t))
 
 
 ;; Returns a list of all splits in the currency-accounts up to
