@@ -41,6 +41,7 @@
 #include "gnc-kvp-guile.h"
 #include "glib-guile.h"
 
+#include "Account.hpp"
 #include "gncAddress.h"
 #include "gncBillTerm.h"
 #include "gncCustomer.h"
@@ -56,6 +57,13 @@
 %}
 #if defined(SWIGGUILE) //Always C++
 %{
+
+using SplitsVec = std::vector<Split*>;
+using AccountVec = std::vector<Account*>;
+
+SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date,
+                                          time64 end_date, gnc_commodity *comm, bool sort);
+
 extern "C"
 {
 SCM scm_init_sw_engine_module (void);
@@ -117,6 +125,28 @@ static const GncGUID * gncPriceGetGUID(GNCPrice *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
 static const GncGUID * gncBudgetGetGUID(GncBudget *x)
 { return qof_instance_get_guid(QOF_INSTANCE(x)); }
+
+SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date,
+                                          time64 end_date, gnc_commodity *comm, bool sort)
+{
+    auto match = [use_end_date, end_date, comm](const Split* s) -> bool
+    {
+        if (xaccSplitGetReconcile (s) == VREC) return false;
+        auto trans{xaccSplitGetParent (s)};
+        if (use_end_date && xaccTransGetDate(trans) > end_date) return false;
+        auto txn_comm{xaccTransGetCurrency (trans)};
+        auto acc_comm{xaccAccountGetCommodity (xaccSplitGetAccount (s))};
+        return (txn_comm != acc_comm) && (!comm || comm == txn_comm || comm == acc_comm);
+    };
+    std::vector<Split*> rv;
+    auto maybe_accumulate_split = [&rv, match](auto s){ if (match(s)) rv.push_back (s); };
+    for (const auto acc : accounts)
+        gnc_account_foreach_split (acc, maybe_accumulate_split, true);
+    if (sort)
+        std::sort (rv.begin(), rv.end(), [](auto a, auto b){ return xaccSplitOrder (a, b) < 0; });
+    return rv;
+}
+
 %}
 
 /* NB: The object ownership annotations should already cover all the
