@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-16 13:01+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2024-04-17 19:03+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -9968,7 +9968,7 @@ msgid ""
 "Set book option on new files to use split \"action\" field for \"Num\" field "
 "on registers/reports"
 msgstr ""
-"Új fájloknál legyen bekapcsolva a \"Felosztásművelet mezője Számként "
+"Új fájloknál legyen bekapcsolva a \"Felosztás Művelet mezője Számként "
 "használva\" beállítás"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:231
@@ -9982,16 +9982,15 @@ msgid ""
 "'num' field."
 msgstr ""
 "Bekapcsolásakor minden új fájlban a Könyvbeállítások között aktiválódik a "
-"Felosztásművelet mezője Számként használva lehetőség. Ilyenkor a regiszter "
+"Felosztás Művelet mezője Számként használva lehetőség. Ilyenkor a regiszter "
 "Szám mezőjében a felosztás Műveletét lehet kezelni, a tranzakció Száma pedig "
 "csak kétsoros nézetben fog látszódni a második sorban. Kikapcsolásakor nem "
 "aktiválódik ez a lehetőség és a regiszter Szám mezőjében a tranzakció Számát "
 "lehet kezelni."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:241
-#, fuzzy
 msgid "Color the register using a gnucash specific color theme"
-msgstr "A regiszter színezése a rendszertéma szerint"
+msgstr "A regiszter színezése egy Gnucash specifikus színtéma segítségével"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:242
 msgid ""
@@ -11578,18 +11577,19 @@ msgid ""
 "\n"
 "Click 'Cancel' if you do not wish to create any new accounts now."
 msgstr ""
-"Ebben az ablakban a GnuCash segíteni fog létrehozni különböző eszközök (pl. "
-"befektetések, bankszámlák, megtakarítások), források (pl. kölcsönök), "
-"bevételek és költségek nyilvántartásához használható folyószámlákat.\n"
+"Ebben az ablakban a GnuCash segít Önnek a különböző eszközei (pl. "
+"befektetések, bankszámlák, megtakarítások), kötelezettségei (pl. kölcsönök), "
+"bevételei és költségei nyilvántartásához használható számlák létrehozásában."
 "\n"
-"Hamarosan kiválaszthatja azokat az előre elkészített számlakészleteket, amik "
-"megfelelnek az Ön pénzügyeinek. Természetesen az alábbi lépések befejezése "
-"után később is bármikor átnevezheti, módosíthatja vagy eltávolíthatja a "
+"\n"
+"Kiválaszthatja azokat az előre elkészített számlakészleteket, amik "
+"megfelelnek az Ön pénzügyeinek. Természetesen a kiválasztás befejezése után "
+"később is bármikor átnevezheti, módosíthatja vagy eltávolíthatja a "
 "létrehozott számlákat. Új számlákat vagy alszámlákat is hozzáadhat, valamint "
 "áthelyezhet számlákat (az alszámláikkal együtt) egy másik szülő számla alá.\n"
 "\n"
-"Ha most mégsem akar létrehozni új számlakészletet, akkor kattintson a "
-"\"Mégse\" gombra."
+"Ha most mégsem akar létrehozni új számlakészletet, akkor kattintson a \"Mégse"
+"\" gombra."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:30
 msgid "New Account Hierarchy Setup"
@@ -16164,7 +16164,7 @@ msgstr ""
 #: gnucash/report/reports/standard/category-barchart.scm:122
 #: gnucash/report/trep-engine.scm:312 libgnucash/engine/Recurrence.cpp:744
 msgid "Daily"
-msgstr "Napi"
+msgstr "Naponta"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:129
 msgid "Bi-Weekly"
@@ -16210,9 +16210,8 @@ msgid "Run the \"since last run\" process when a file is opened."
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:558
-#, fuzzy
 msgid "_Show notification window"
-msgstr "Mutassa a jelentés ablakot"
+msgstr "_Mutassa az értesítési ablakot"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:562
 msgid ""
@@ -16795,7 +16794,7 @@ msgstr "utolsó nap"
 #: gnucash/gtkbuilder/gnc-frequency.glade:692
 #: libgnucash/engine/Recurrence.cpp:739
 msgid "Once"
-msgstr "Egyszeri"
+msgstr "Egyszer"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:177
 #: gnucash/gtkbuilder/gnc-frequency.glade:1239
@@ -17021,9 +17020,8 @@ msgstr "Először a(z)"
 #: gnucash/gtkbuilder/gnc-frequency.glade:1111
 #: gnucash/gtkbuilder/gnc-frequency.glade:1188
 #: gnucash/gtkbuilder/gnc-frequency.glade:1358
-#, fuzzy
 msgid "except on weekends"
-msgstr "hétvégéket kivéve"
+msgstr "Ha hétvégére esik, akkor"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1155
 msgid "then on the"
@@ -22500,7 +22498,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/account-piecharts.scm:36
 msgid "Income Piechart"
-msgstr "Bevételkördiagram"
+msgstr "Bevétel-kördiagram"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:37
 msgid "Expense Piechart"
@@ -22520,7 +22518,7 @@ msgstr "Kötelezettség-kördiagram"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:45
 msgid "Shows a piechart with the Income per given time interval"
-msgstr "Bevételkördiagram a megadott időszak szerinti bontásban"
+msgstr "Bevétel-kördiagram a megadott időszak szerinti bontásban"
 
 #: gnucash/report/reports/standard/account-piecharts.scm:47
 msgid "Shows a piechart with the Expenses per given time interval"
@@ -30763,7 +30761,7 @@ msgstr "Ennyi nap után a tranzakciók írásvédetté válnak (vörös vonal je
 
 #: libgnucash/engine/qofbookslots.h:67
 msgid "Use Split Action Field for Number"
-msgstr "Felosztásművelet mezője Számként használva"
+msgstr "Felosztás Művelet mezője Számként használva"
 
 #: libgnucash/engine/qofbookslots.h:69
 msgid "Budgeting"
