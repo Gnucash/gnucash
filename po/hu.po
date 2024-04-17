@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-15 22:45+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2024-04-16 13:01+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -24112,7 +24112,7 @@ msgstr "Számlák elemzése"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:40
 msgid "Cash Flow Barchart"
-msgstr "Pénzforgalomi oszlopdiagram"
+msgstr "Pénzforgalmi oszlopdiagram"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
