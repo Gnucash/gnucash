@@ -823,19 +823,24 @@
 (define (gnc:case-exchange-time-fn
          source-option report-currency commodity-list to-date-tp
          start-percent delta-percent)
+  (define date-hash (make-hash-table))
+  (define-syntax-rule (memoize date expensive-fn)
+    (or (hash-ref date-hash date) (hashv-set! date-hash date expensive-fn)))
   (case source-option
     ;; Make this the same as gnc:case-exchange-fn
-    ((average-cost) (let* ((exchange-fn (gnc:make-exchange-function
-                                         (gnc:make-exchange-cost-alist
-                                          report-currency to-date-tp))))
-                      (lambda (foreign domestic date)
+    ((average-cost) (lambda (foreign domestic date)
+                      (let* ((end-day (gnc:time64-end-day-time date))
+                             (exchange-fn (memoize end-day
+                                                   (gnc:make-exchange-function
+                                                    (gnc:make-exchange-cost-alist
+                                                     report-currency end-day)))))
                         (exchange-fn foreign domestic))))
-    ((weighted-average) (let ((pricealist
-                               (gnc:get-commoditylist-totalavg-prices
-                                commodity-list report-currency to-date-tp
-                                start-percent delta-percent)))
-                          (gnc:debug "weighted-average pricealist " pricealist)
-                          (lambda (foreign domestic date)
+    ((weighted-average) (lambda (foreign domestic date)
+                          (let* ((end-day (gnc:time64-end-day-time date))
+                                 (pricealist (memoize end-day
+                                                      (gnc:get-commoditylist-totalavg-prices
+                                                       commodity-list report-currency end-day
+                                                       start-percent delta-percent))))
                             (gnc:exchange-by-pricealist-nearest
                              pricealist foreign domestic date))))
     ((pricedb-before) gnc:exchange-by-pricedb-nearest-before)

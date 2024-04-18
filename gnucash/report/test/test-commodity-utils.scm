@@ -655,7 +655,7 @@
                           (gnc-dmy2time64-neutral 20 02 2016)
                           #f #f)))
         (test-equal "gnc:case-exchange-time-fn weighted-average 20/02/2012"
-          307/5
+          0
           (gnc:gnc-monetary-amount
            (exchange-fn
             (gnc:make-gnc-monetary AAPL 1)
@@ -663,7 +663,7 @@
             (gnc-dmy2time64-neutral 20 02 2012))))
 
         (test-equal "gnc:case-exchange-time-fn weighted-average 20/02/2014"
-          9366/125
+          307/5
           (gnc:gnc-monetary-amount
            (exchange-fn
             (gnc:make-gnc-monetary AAPL 1)
@@ -687,7 +687,7 @@
             (gnc-dmy2time64-neutral 11 08 2014))))
 
         (test-equal "gnc:case-exchange-time-fn weighted-average 22/10/2015"
-          27663/325
+          9366/125
           (gnc:gnc-monetary-amount
            (exchange-fn
             (gnc:make-gnc-monetary AAPL 1)
@@ -708,7 +708,7 @@
                           (gnc-dmy2time64-neutral 20 02 2016)
                           #f #f)))
         (test-equal "gnc:case-exchange-time-fn average-cost 20/02/2012"
-          14127/175
+          0
           (gnc:gnc-monetary-amount
            (exchange-fn
             (gnc:make-gnc-monetary AAPL 1)
