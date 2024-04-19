@@ -1437,6 +1437,7 @@ xaccFreeAccount (Account *acc)
     gnc_commodity_decrement_usage_count(priv->commodity);
     priv->commodity = nullptr;
     priv->splits.clear();
+    priv->splits.shrink_to_fit();
 
     priv->balance_dirty = FALSE;
     priv->sort_dirty = FALSE;
