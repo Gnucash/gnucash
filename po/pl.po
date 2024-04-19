@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-18 19:03+0000\n"
+"PO-Revision-Date: 2024-04-19 14:03+0000\n"
 "Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -1882,12 +1882,12 @@ msgstr "Bilans"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1906
 msgid "Enter the new balance of shares after the stock split."
-msgstr "Wprowadź liczbę udziałów kupionych lub sprzedanych."
+msgstr "Wprowadź liczbę udziałów po podziale."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1907
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
 msgid "Enter the number of shares you gained or lost in the transaction."
-msgstr "Wprowadź liczbę udziałów kupionych lub sprzedanych."
+msgstr "Wprowadź liczbę udziałów nabytych lub utraconych w transakcji."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2308
 #: gnucash/gnome/dialog-find-transactions.c:153
@@ -3067,15 +3067,15 @@ msgstr "Pokaż rachunek"
 #: gnucash/gnome/dialog-invoice.c:2356
 #: gnucash/gnome-search/dialog-search.c:1091
 msgid "New Expense Voucher"
-msgstr "Nowy kwit"
+msgstr "Nowy kwit wydatku"
 
 #: gnucash/gnome/dialog-invoice.c:2362
 msgid "Edit Expense Voucher"
-msgstr "Edytuj kwit"
+msgstr "Edytuj kwit wydatku"
 
 #: gnucash/gnome/dialog-invoice.c:2366
 msgid "View Expense Voucher"
-msgstr "Pokaż kwit"
+msgstr "Pokaż kwit wydatku"
 
 #: gnucash/gnome/dialog-invoice.c:2688
 msgid "Open Linked Document:"
@@ -4637,84 +4637,68 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:239
-#, fuzzy
 msgid "_Print Voucher"
-msgstr "_Drukuj czeki"
+msgstr "_Drukuj kwit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:239
-#, fuzzy
 msgid "Make a printable voucher"
-msgstr "Utwórz fakturę do wydruku"
+msgstr "Utwórz kwit do wydruku"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
-#, fuzzy
 msgid "_Edit Voucher"
-msgstr "Pokaż/Edytuj kwit"
+msgstr "_Edytuj kwit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
-#, fuzzy
 msgid "Edit this voucher"
-msgstr "Zmodyfikuj tę fakturę"
+msgstr "Zmodyfikuj ten kwit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
-#, fuzzy
 msgid "_Duplicate Voucher"
-msgstr "_Zmodyfikuj fakturę"
+msgstr "_Zduplikuj kwit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
-#, fuzzy
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Utwórz nowe okno dla każdego nowego rejestru"
+msgstr "Utwórz nowy kwit jako duplikat obecnego"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
-#, fuzzy
 msgid "_Post Voucher"
-msgstr "Kwit"
+msgstr "_Księguj kwit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
-#, fuzzy
 msgid "Post this voucher to your Chart of Accounts"
-msgstr "Księguj fakturę do planu kont"
+msgstr "Księguj kwit do planu kont"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
-#, fuzzy
 msgid "_Unpost Voucher"
-msgstr "_Wyksięguj fakturę"
+msgstr "_Wyksięguj kwit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
-#, fuzzy
 msgid "Unpost this voucher and make it editable"
-msgstr "Wyksięguj tę fakturę i odblokuj dla edycji"
+msgstr "Wyksięguj ten kwit i odblokuj dla edycji"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
-#, fuzzy
 msgid "New _Voucher"
-msgstr "Kwit"
+msgstr "Nowy _kwit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
-#, fuzzy
 msgid "Create a new voucher for the same owner as the current one"
-msgstr "Utwórz nowe okno dla każdego nowego rejestru"
+msgstr "Utwórz nowy kwit dla tej samej osoby co bieżący"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the voucher"
-msgstr "Przenieś pusty wpis na dół faktury"
+msgstr "Przenieś pusty wpis na dół kwitu"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
-#, fuzzy
 msgid "_Pay Voucher"
-msgstr "Kwit"
+msgstr "O_płać kwit"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
-#, fuzzy
 msgid "Enter a payment for the owner of this voucher"
-msgstr "Wprowadź płatność dla właściciela tej faktury"
+msgstr "Wprowadź płatność dla właściciela tego kwitu"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
-#, fuzzy
 msgid "Open a employee report window for the owner of this voucher"
-msgstr "Otwiera okno raportu firmy dla właściciela tej faktury"
+msgstr "Otwiera okno raportu firmy dla właściciela tego kwitu"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:255
 msgid "_Use as Default Layout for Employee Documents"
@@ -4723,7 +4707,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:256
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
-msgstr ""
+msgstr "Użyj bieżącego układu domyślnie dla wszystkich kwitów i not kredytowych"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
 msgid "_Reset Default Layout for Employee Documents"
@@ -4734,6 +4718,8 @@ msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
+"Zresetuj układ dla wszystkich kwitów i not kredytowych do wartości "
+"domyślnych i odśwież bieżącą stronę"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:264
 #, fuzzy
@@ -4843,7 +4829,7 @@ msgstr "Zapłać"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:227
 msgid "New Voucher"
-msgstr "Nowy Voucher"
+msgstr "Nowy kwit"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:228
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:860
@@ -5004,7 +4990,7 @@ msgstr "Tworzy kopię bieżącej transakcji"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:282
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr ""
+msgstr "Przejdź do powiązanego rachunku, faktury lub kwitu"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:283
 #, fuzzy
@@ -23760,7 +23746,7 @@ msgstr "Kapitał własny i pasywa razem"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:136
 msgid "Balance Sheet (eguile)"
-msgstr "Bilans (eguile)"
+msgstr "Arkusz bilansu (eguile)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:144
 #, fuzzy
@@ -23903,7 +23889,7 @@ msgstr "Osierocone"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:554
 msgid "Balance Sheet using eguile-gnc"
-msgstr "Bilans (eguile-gnc)"
+msgstr "Arkusz bilansu (eguile-gnc)"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:555
 msgid "Display a balance sheet (using eguile template)"
@@ -25904,9 +25890,8 @@ msgid "Custom Title"
 msgstr "Tytuł własny"
 
 #: gnucash/report/reports/standard/invoice.scm:397
-#, fuzzy
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
-msgstr "Tekst własny zastępujący fakturę, rachunek lub kwit wydatków"
+msgstr "Tekst własny zastępujący fakturę, rachunek lub kwit wydatków."
 
 #: gnucash/report/reports/standard/invoice.scm:401
 #: gnucash/report/stylesheets/css.scm:118
@@ -26988,10 +26973,8 @@ msgid "Notes added at end of invoice -- may contain HTML markup"
 msgstr "Notatki dodawane na końcu faktury -- mogą zawierać wstawki HTML"
 
 #: gnucash/report/reports/standard/receipt.scm:204
-#, fuzzy
 msgid "Display a customer invoice as receipt, cash voucher"
-msgstr ""
-"Wyświetl fakturę klienta z kolumnami podatkowymi (używając szablonu eguile)"
+msgstr "Wyświetl fakturę klienta jako rachunek, kwit"
 
 #: gnucash/report/reports/standard/reconcile-report.scm:62
 msgid ""
@@ -27356,12 +27339,12 @@ msgid "Australian Tax Invoice"
 msgstr "Australijska faktura VAT"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:331
-#, fuzzy
 msgid ""
 "Display an Australian customer invoice with tax columns (using eguile "
 "template)"
 msgstr ""
-"Wyświetl fakturę klienta z kolumnami podatkowymi (używając szablonu eguile)"
+"Wyświetl australijską fakturę klienta z kolumnami podatkowymi (używając "
+"szablonu eguile)"
 
 #: gnucash/report/reports/standard/trial-balance.scm:58
 #: gnucash/report/reports/standard/trial-balance.scm:532
@@ -29289,10 +29272,9 @@ msgstr "Otwórz formularz wyszukiwania pracowników"
 
 #: gnucash/ui/gnc-plugin-business.ui:122
 msgid "New _Expense Voucher…"
-msgstr "Nowy _Kwit…"
+msgstr "Nowy _Kwit wydatków…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
-#, fuzzy
 msgid "Open the New Voucher dialog"
 msgstr "Otwórz formularz nowego kwitu wydatków"
 
@@ -29627,9 +29609,8 @@ msgstr ""
 "wszystkich kontach"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
-#, fuzzy
 msgid "Filter accounts"
-msgstr "Filtr dla konta"
+msgstr "Filtruj konta"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:217
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:387
@@ -29660,7 +29641,7 @@ msgstr "Osza_cuj budżet…"
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
 msgid "_All Periods…"
-msgstr "Wszystkie Okresy…"
+msgstr "_Wszystkie Okresy…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:24
 #: gnucash/ui/gnc-plugin-page-budget.ui:227
@@ -29674,18 +29655,17 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
 msgid "_Delete Budget…"
-msgstr "_Usuń Budżet…"
+msgstr "U_suń Budżet…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:30
 #: gnucash/ui/gnc-plugin-page-budget.ui:257
 msgid "Select this or another budget and delete it"
-msgstr ""
+msgstr "Wybierz ten lub inny budżet i usuń go"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:34
 #: gnucash/ui/gnc-plugin-page-budget.ui:270
-#, fuzzy
 msgid "Edit Note"
-msgstr "Nota kredytowa"
+msgstr "Edytuj notatkę"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:36
 #: gnucash/ui/gnc-plugin-page-budget.ui:272
@@ -29927,9 +29907,8 @@ msgstr "Nowy _Kwit…"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:229
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:669
-#, fuzzy
 msgid "Create a new voucher"
-msgstr "Utwórz nową fakturę"
+msgstr "Utwórz nowy kwit"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
 msgid "_Print Checks…"
@@ -30143,7 +30122,7 @@ msgstr "Tworzy kopię bieżącej transakcji"
 #: gnucash/ui/gnc-plugin-page-register.ui:407
 #: gnucash/ui/gnc-plugin-page-register.ui:519
 msgid "Jump to the linked bill, invoice, or voucher."
-msgstr ""
+msgstr "Przejdź do powiązanego rachunku, faktury lub kwitu."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:232
 #, fuzzy
@@ -31322,26 +31301,28 @@ msgid ""
 msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1265
-#, fuzzy
 msgid "Expense voucher number"
-msgstr "Kwit wydatków"
+msgstr "Numer kwit wydatków"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1266
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
 msgstr ""
+"Numer poprzedniego kwitu wydatków. Numer ten będzie zwiększony podczas "
+"tworzenia numeru następnego kwitu."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1269
-#, fuzzy
 msgid "Expense voucher number format"
-msgstr "Kwit wydatków"
+msgstr "Format numerowania kwitów wydatków"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1271
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
+"Formatowanie używane do generowania numerów kwitów wydatków (ciąg znaków z "
+"formacie printf)."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1274
 #, fuzzy
