@@ -545,7 +545,7 @@ If you make a mistake or want to make changes later, you can edit the created Sc
             <property name="justify">center</property>
             <property name="wrap">True</property>
             <style>
-              <class name="gnc-class-highlight"/>
+              <class name="gnc-class-strong"/>
             </style>
           </object>
           <packing>

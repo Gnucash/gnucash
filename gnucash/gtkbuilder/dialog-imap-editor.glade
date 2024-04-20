@@ -103,7 +103,10 @@
           <object class="GtkLabel" id="label1">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label" translatable="yes">&lt;b&gt;What type of information to display?&lt;/b&gt;</property>
+            <property name="label" translatable="yes">What type of information to display?</property>
+            <style>
+              <class name="gnc-class-strong"/>
+            </style>
             <property name="use-markup">True</property>
           </object>
           <packing>

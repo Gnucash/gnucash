@@ -180,7 +180,10 @@ There are two reserved names which can't be used to save custom settings:
                   <object class="GtkLabel" id="label12">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Load and Save Settings&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Load and Save Settings</property>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                     <property name="use-markup">True</property>
                     <property name="track-visited-links">False</property>
                   </object>
@@ -548,7 +551,10 @@ To know which lines belong to the same transaction, the importer will compare th
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                    <property name="label" translatable="yes">&lt;b&gt;File Format&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">File Format</property>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                     <property name="use-markup">True</property>
                   </object>
                 </child>
@@ -781,7 +787,10 @@ For example
                   <object class="GtkLabel" id="label13">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Miscellaneous&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Miscellaneous</property>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                     <property name="use-markup">True</property>
                   </object>
                 </child>
@@ -812,7 +821,10 @@ For example
                   <object class="GtkLabel" id="label1">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Account&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Account</property>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                     <property name="use-markup">True</property>
                   </object>
                 </child>

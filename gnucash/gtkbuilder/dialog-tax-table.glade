@@ -29,9 +29,9 @@
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
                     <property name="label" translatable="yes">Tax Tables</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"/>
-                    </attributes>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -139,7 +139,10 @@
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
                     <property name="halign">start</property>
-                    <property name="label" translatable="yes">&lt;b&gt;Tax Table Entries&lt;/b&gt;</property>
+                    <property name="label" translatable="yes">Tax Table Entries</property>
+                    <style>
+                      <class name="gnc-class-strong"/>
+                    </style>
                     <property name="use-markup">True</property>
                   </object>
                   <packing>
@@ -382,7 +385,10 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
-                <property name="label" translatable="yes">&lt;b&gt;Tax Table Entry&lt;/b&gt;</property>
+                <property name="label" translatable="yes">Tax Table Entry</property>
+                <style>
+                  <class name="gnc-class-strong"/>
+                </style>
                 <property name="use-markup">True</property>
               </object>
               <packing>
@@ -397,9 +403,9 @@
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="label" translatable="yes">Tax Table</property>
-                <attributes>
-                  <attribute name="weight" value="bold"/>
-                </attributes>
+                <style>
+                  <class name="gnc-class-strong"/>
+                </style>
               </object>
               <packing>
                 <property name="left-attach">0</property>

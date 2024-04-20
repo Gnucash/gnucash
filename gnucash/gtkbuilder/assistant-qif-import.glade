@@ -941,9 +941,9 @@ In the following page, you will see the text that appears in the Payee and Memo 
             <property name="visible">True</property>
             <property name="can-focus">False</property>
             <property name="label" translatable="yes">Book Options</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
+            <style>
+              <class name="gnc-class-strong"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>

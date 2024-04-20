@@ -623,9 +623,9 @@ If 0, all previous days included</property>
             <property name="can-focus">False</property>
             <property name="halign">start</property>
             <property name="label" translatable="yes">New Transaction Information</property>
-            <attributes>
-              <attribute name="weight" value="bold"/>
-            </attributes>
+            <style>
+              <class name="gnc-class-strong"/>
+            </style>
           </object>
           <packing>
             <property name="expand">False</property>
