@@ -41,6 +41,8 @@ using SplitsVec = std::vector<Split*>;
 
 const SplitsVec xaccAccountGetSplits (const Account*);
 
+void gnc_account_foreach_split (const Account*, std::function<void(Split*)>, bool);
+
 /** scans account split list (in forward or reverse order) until
  *    predicate split->bool returns true. Maybe return the split.
  *

@@ -1137,6 +1137,20 @@ xaccInitAccount (Account * acc, QofBook *book)
 /********************************************************************\
 \********************************************************************/
 
+void
+gnc_account_foreach_split (const Account *acc, std::function<void(Split*)> func,
+                           bool reverse)
+{
+    if (!GNC_IS_ACCOUNT (acc))
+        return;
+
+    auto splits{GET_PRIVATE(acc)->splits};
+    if (reverse)
+        std::for_each(splits.rbegin(), splits.rend(), func);
+    else
+        std::for_each(splits.begin(), splits.end(), func);
+}
+
 Split*
 gnc_account_find_split (const Account *acc, std::function<bool(const Split*)> predicate,
                         bool reverse)
