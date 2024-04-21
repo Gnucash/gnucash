@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-20 13:07+0000\n"
+"PO-Revision-Date: 2024-04-21 00:07+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1126,6 +1126,22 @@ msgid ""
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
 msgstr ""
+"Az ütemezett tranzakció szerkesztője nagyon rugalmas ismétlődési gyakoriság "
+"beállítását teszi lehetővé. A tranzkciók ütemezésének alap gyakoriságai a "
+"napi, heti, félhavi és havi. Ezekből jól használható ismétlődési "
+"gyakoriságok alakíthatók ki. Néhány példa a számtalan lehetőség közül:\n"
+"\n"
+"Egy háromhetente ismétlődő tranzakció beálításához válassza ki a heti alap "
+"gyakoriságot, majd állítsa be: Ismétlődés 3 hetente, és válassza ki, hogy a "
+"hét melyik napján történjenek a tranzakciók.\n"
+"\n"
+"Egy havonta kétszer ismétlődő tranzakció beállításához válassza ki a félhavi "
+"alap gyakoriságot, és állítsa be, hogy a hónap melyik napján történjen az "
+"első és melyik napján a második tranzakció.\n"
+"\n"
+"Egy évente ismétlődő tranzakció beállításához válassza ki a havi alap "
+"gyakoriságot, majd állítsa be: Ismétlődés 12 havonta, és válassza ki, hogy a "
+"hónap melyik napján történjenek a tranzakciók."
 
 #: doc/tip_of_the_day.list.c:117
 msgid ""
@@ -16928,31 +16944,27 @@ msgstr "Nem ütemezett"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:673
 msgid "Select occurrence date above."
-msgstr "Válasszon előfordulási dátumot fent."
+msgstr "Válassza ki fent az esemény dátumát."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:710
-#, fuzzy
 msgctxt "Daily"
 msgid "Every"
-msgstr "Minden"
+msgstr "Ismétlődés"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:741
-#, fuzzy
 msgctxt "Daily"
 msgid "days."
-msgstr "nap."
+msgstr "naponta."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:787
-#, fuzzy
 msgctxt "Weekly"
 msgid "Every"
-msgstr "Minden"
+msgstr "Ismétlődés"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:818
-#, fuzzy
 msgctxt "Weekly"
 msgid "weeks."
-msgstr "hét."
+msgstr "hetente."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:853
 #: gnucash/report/reports/example/daily-reports.scm:163
@@ -16990,20 +17002,18 @@ msgid "Tuesday"
 msgstr "kedd"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1023
-#, fuzzy
 msgctxt "Semimonthly"
 msgid "Every"
-msgstr "Minden"
+msgstr "Ismétlődés"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1053
-#, fuzzy
 msgctxt "Semimonthly"
 msgid "months."
-msgstr "hónap."
+msgstr "havonta."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1078
 msgid "First on the"
-msgstr "Először a(z)"
+msgstr "Az első napja"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1111
 #: gnucash/gtkbuilder/gnc-frequency.glade:1188
@@ -17013,23 +17023,21 @@ msgstr "Ha hétvégére esik"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1155
 msgid "then on the"
-msgstr "majd akkor"
+msgstr "A második napja"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1267
-#, fuzzy
 msgctxt "Monthly"
 msgid "Every"
-msgstr "Minden"
+msgstr "Ismétlődés"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1299
-#, fuzzy
 msgctxt "Monthly"
 msgid "months."
-msgstr "hónap."
+msgstr "havonta."
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:1325
 msgid "On the"
-msgstr "A hónap e napján"
+msgstr "Ezen a napon"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:15
 msgid "Edit budget for all periods"
@@ -27947,7 +27955,7 @@ msgstr "Összes felosztás törlése a jelenlegi tranzakcióból"
 #: gnucash/ui/gnc-plugin-page-register.ui:630
 #: gnucash/ui/gnc-plugin-page-register.ui:762
 msgid "_Enter Transaction"
-msgstr "Tranzakció meg_adása"
+msgstr "Tranzakció bevitel_e"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:67
 #: gnucash/ui/gnc-embedded-register-window.ui:130
