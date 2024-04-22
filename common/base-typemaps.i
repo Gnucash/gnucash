@@ -162,6 +162,29 @@ typedef char gchar;
   $result = scm_reverse(list);
 }
 %enddef
+
+
+%define VECTOR_HELPER_INOUT(VectorType, ElemSwigType, ElemType)
+%typemap(in) VectorType {
+  std::vector<ElemType*> accum;
+  for (auto node = $input; !scm_is_null (node); node = scm_cdr (node))
+  {
+      auto p_scm = scm_car (node);
+      auto p = (scm_is_false (p_scm) || scm_is_null (p_scm)) ? static_cast<ElemType*>(nullptr) :
+          static_cast<ElemType*>(SWIG_MustGetPtr(p_scm, ElemSwigType, 1, 0));
+      accum.push_back (p);
+  }
+  accum.swap ($1);
+}
+
+%typemap(out) VectorType {
+  SCM list = SCM_EOL;
+  std::for_each ($1.rbegin(), $1.rend(), [&list](auto n)
+                 { list = scm_cons(SWIG_NewPointerObj(n, ElemSwigType, 0), list); });
+  $result = list;
+}
+%enddef
+
 #elif defined(SWIGPYTHON) /* Typemaps for Python */
 
 %import "glib.h"
