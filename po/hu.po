@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-21 00:07+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2024-04-21 23:07+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -1069,9 +1069,9 @@ msgid ""
 "currency's amount will be available."
 msgstr ""
 "A különböző pénznemben tartott számlák közötti átutaláshoz kattintson az "
-"átutalásgombra a regiszter eszköztárában, válassza ki a számlákat és a "
-"pénznemátviteli lehetőséget, az árfolyam vagy az átváltott összeg "
-"beviteléhez."
+"Átutalás gombra a regiszter eszköztárában, válassza ki a számlákat, a "
+"Pénznem átváltása lehetőség alatt pedig írja be az árfolyamot vagy az "
+"átváltott összeget."
 
 #: doc/tip_of_the_day.list.c:91
 msgid ""
@@ -13673,7 +13673,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:395
 msgid "_Multiple"
-msgstr "Gyűjt_emény"
+msgstr "Gyűjt_eményes"
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:401
 msgid ""
@@ -15117,11 +15117,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1633
 msgid "Show splash scree_n"
-msgstr "Indító a_blak mutatása"
+msgstr "Indítóa_blak mutatása"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1639
 msgid "Show splash screen at startup."
-msgstr "Indító ablak megjelenítése."
+msgstr "Indítóablak megjelenítése a GnuCash indításakor."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1654
 msgid "Auto-save time _interval"
@@ -15321,23 +15321,23 @@ msgstr "<b>Csekkek</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2406
 msgid "The default check printing font."
-msgstr ""
+msgstr "A csekkek nyomtatásának alapértelmezett betűkészlete."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2416
 msgid "Print _date format"
-msgstr ""
+msgstr "_Dátumformátum nyomtatása"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2422
 msgid "Below the actual date, print the format of that date in 8 point type."
-msgstr ""
+msgstr "A dátumformátum nyomtatása 8-as betűvel az aktuális dátum alá."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2434
 msgid "Print _blocking chars"
-msgstr ""
+msgstr "_Lezáró karakterek nyomtatása"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2440
 msgid "Print '***' before and after each text field on the check."
-msgstr ""
+msgstr "'***' nyomtatása a csekken lévő összes szövegmező előtt és után."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2455
 msgid "Default _font"
