@@ -61,18 +61,10 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Functions to get splits with interesting data from accounts.
 
-;; helper function. queries book for all splits in accounts before
-;; end-date (end-date can be #f)
-(define (get-all-splits accounts end-date)
-  (let ((query (qof-query-create-for-splits)))
-    (qof-query-set-book query (gnc-get-current-book))
-    (xaccQueryAddClearedMatch
-     query (logand CLEARED-ALL (lognot CLEARED-VOIDED)) QOF-QUERY-AND)
-    (xaccQueryAddAccountMatch query accounts QOF-GUID-MATCH-ANY QOF-QUERY-AND)
-    (xaccQueryAddDateMatchTT query #f 0 (and end-date #t) (or end-date 0) QOF-QUERY-AND)
-    (let ((splits (qof-query-run query)))
-      (qof-query-destroy query)
-      splits)))
+(define (get-all-commodity-splits currency-accounts end-date commodity sort?)
+  (gnc-get-match-commodity-splits currency-accounts (and end-date #t)
+                                  (or end-date 0) (or commodity '()) sort?))
+
 
 ;; Returns a list of all splits in the 'currency-accounts' up to
 ;; 'end-date' which have two different commodities involved, one of
@@ -80,15 +72,7 @@
 ;; 'commodity' != #f ).
 (define (gnc:get-match-commodity-splits
          currency-accounts end-date commodity)
-  (filter
-   (lambda (s)
-     (let ((txn-comm (xaccTransGetCurrency (xaccSplitGetParent s)))
-           (acc-comm (xaccAccountGetCommodity (xaccSplitGetAccount s))))
-       (and (not (gnc-commodity-equiv txn-comm acc-comm))
-            (or (not commodity)
-                (gnc-commodity-equiv commodity txn-comm)
-                (gnc-commodity-equiv commodity acc-comm)))))
-   (get-all-splits currency-accounts end-date)))
+  (get-all-commodity-splits currency-accounts end-date commodity #f))
 
 ;; Returns a sorted list of all splits in the 'currency-accounts' up
 ;; to 'end-date' which have the 'commodity' and one other commodity
@@ -96,12 +80,7 @@
 (define (gnc:get-match-commodity-splits-sorted currency-accounts
                                                end-date
                                                commodity)
-  (sort (gnc:get-match-commodity-splits currency-accounts
-                                        end-date commodity)
-        (lambda (a b)
-          (<
-           (xaccTransGetDate (xaccSplitGetParent a))
-           (xaccTransGetDate (xaccSplitGetParent b))))))
+  (get-all-commodity-splits currency-accounts end-date commodity #t))
 
 
 ;; Returns a list of all splits in the currency-accounts up to
@@ -145,10 +124,12 @@
   (gnc:get-commodity-totalavg-prices-internal
    currency-accounts end-date price-commodity report-currency
    (gnc:get-match-commodity-splits-sorted
-    currency-accounts end-date price-commodity)))
+    currency-accounts end-date price-commodity)
+   #f))
 
 (define (gnc:get-commodity-totalavg-prices-internal
-         currency-accounts end-date price-commodity report-currency commodity-splits)
+         currency-accounts end-date price-commodity report-currency commodity-splits
+         hide-warnings?)
   (let loop ((tot-foreign 0)
              (tot-domestic 0)
              (commodity-splits commodity-splits)
@@ -194,16 +175,17 @@
                          (cons (list txn-date (/ new-domestic new-foreign)) result)))))
 
            (else
-            (warn "gnc:get-commodity-totalavg-prices: "
-                  "Sorry, currency exchange not yet implemented:"
-                  (gnc:monetary->string
-                   (gnc:make-gnc-monetary txn-comm value-amt))
-                  " (buying "
-                  (gnc:monetary->string
-                   (gnc:make-gnc-monetary price-commodity share-amt))
-                  ") =? "
-                  (gnc:monetary->string
-                   (gnc:make-gnc-monetary report-currency 0)))
+            (unless hide-warnings?
+              (warn "gnc:get-commodity-totalavg-prices: "
+                    "Sorry, currency exchange not yet implemented:"
+                    (gnc:monetary->string
+                     (gnc:make-gnc-monetary txn-comm value-amt))
+                    " (buying "
+                    (gnc:monetary->string
+                     (gnc:make-gnc-monetary price-commodity share-amt))
+                    ") =? "
+                    (gnc:monetary->string
+                     (gnc:make-gnc-monetary report-currency 0))))
             (loop tot-foreign
                   tot-domestic
                   (cdr commodity-splits)
@@ -215,9 +197,9 @@
 ;; extended to a commodity-list. Returns an alist. Each pair consists
 ;; of the foreign-currency and the appropriate list from
 ;; gnc:get-commodity-totalavg-prices, see there.
-(define (gnc:get-commoditylist-totalavg-prices
-         commodity-list report-currency end-date
-         start-percent delta-percent)
+(define* (gnc:get-commoditylist-totalavg-prices
+          commodity-list report-currency end-date
+          start-percent delta-percent #:key hide-warnings?)
   (let* ((currency-accounts
           (gnc-account-get-descendants-sorted (gnc-get-current-root-account)))
          (interesting-splits (gnc:get-match-commodity-splits-sorted currency-accounts end-date #f))
@@ -234,7 +216,8 @@
        (cons c
              (gnc:get-commodity-totalavg-prices-internal
               currency-accounts end-date c report-currency
-              (filter split-has-commodity? interesting-splits))))
+              (filter split-has-commodity? interesting-splits)
+              hide-warnings?)))
      commodity-list
      (iota work-to-do))))
 
@@ -327,7 +310,7 @@
 ;; (described in gnc:get-exchange-totals) and returns a report-list, This
 ;; resulting alist can immediately be plugged into gnc:make-exchange-alist.
 
-(define (gnc:resolve-unknown-comm sumlist report-commodity)
+(define* (gnc:resolve-unknown-comm sumlist report-commodity #:key hide-warnings?)
   ;; reportlist contains all known transactions with the
   ;; report-commodity, and now the transactions with unknown
   ;; currencies should be added to that list (with an appropriate
@@ -402,28 +385,30 @@
               ;; If neither the currency of (car sumlist) nor of pair
               ;; was found in reportlist then we can't resolve the
               ;; exchange rate to this currency.
-              (warn "gnc:resolve-unknown-comm:"
-                    "can't calculate rate for "
-                    (gnc:monetary->string
-                     (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
-                    " = "
-                    (gnc:monetary->string
-                     (gnc:make-gnc-monetary (caar sumlist) ((cdadr pair) 'total #f)))
-                    " to "
-                    (gnc:monetary->string (gnc:make-gnc-monetary report-commodity 0)))
+              (unless hide-warnings?
+                (warn "gnc:resolve-unknown-comm:"
+                      "can't calculate rate for "
+                      (gnc:monetary->string
+                       (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
+                      " = "
+                      (gnc:monetary->string
+                       (gnc:make-gnc-monetary (caar sumlist) ((cdadr pair) 'total #f)))
+                      " to "
+                      (gnc:monetary->string (gnc:make-gnc-monetary report-commodity 0))))
               (innerloop (cdr pairs) reportlist))
 
              ((and pair-a pair-b)
               ;; If both currencies are found then something went
               ;; wrong inside gnc:get-exchange-totals. FIXME: Find a
               ;; better thing to do in this case.
-              (warn "gnc:resolve-unknown-comm:"
-                    "Oops - exchange rate ambiguity error: "
-                    (gnc:monetary->string
-                     (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
-                    " = "
-                    (gnc:monetary->string
-                     (gnc:make-gnc-monetary (caar sumlist) ((cdadr pair) 'total #f))))
+              (unless hide-warnings?
+                (warn "gnc:resolve-unknown-comm:"
+                      "Oops - exchange rate ambiguity error: "
+                      (gnc:monetary->string
+                       (gnc:make-gnc-monetary (car pair) ((caadr pair) 'total #f)))
+                      " = "
+                      (gnc:monetary->string
+                       (gnc:make-gnc-monetary (caar sumlist) ((cdadr pair) 'total #f)))))
               (innerloop (cdr pairs) reportlist))
 
              ;; Usual case: one of pair-{a,b} was found in reportlist,
@@ -532,7 +517,7 @@
 ;; Sum the net amounts and values in the report commodity, including booked
 ;; gains and losses, of each commodity across all accounts. Returns a
 ;; report-list.
-(define (gnc:get-exchange-cost-totals report-commodity end-date)
+(define* (gnc:get-exchange-cost-totals report-commodity end-date #:key hide-warnings?)
   (let ((curr-accounts (gnc-account-get-descendants-sorted
                         (gnc-get-current-root-account))))
 
@@ -540,7 +525,7 @@
                (sumlist (list (list report-commodity '()))))
       (cond
        ((null? comm-splits)
-        (gnc:resolve-unknown-comm sumlist report-commodity))
+        (gnc:resolve-unknown-comm sumlist report-commodity #:hide-warnings? hide-warnings?))
 
        ;; However skip splits in trading accounts as these counterbalance
        ;; the actual value and share amounts back to zero
@@ -621,7 +606,7 @@
       (list comm (abs (/ (foreign 'total #f) (domestic 'total #f))))))
    (gnc:get-exchange-totals report-commodity end-date)))
 
-(define (gnc:make-exchange-cost-alist report-commodity end-date)
+(define* (gnc:make-exchange-cost-alist report-commodity end-date #:key hide-warnings?)
   ;; This returns the alist with the actual exchange rates, i.e. the
   ;; total balances from get-exchange-totals are divided by each
   ;; other.
@@ -630,7 +615,7 @@
      ((comm (domestic . foreign))
       (let ((denom (domestic 'total #f)))
         (list comm (if (zero? denom) 0 (abs (/ (foreign 'total #f) denom)))))))
-   (gnc:get-exchange-cost-totals report-commodity end-date)))
+   (gnc:get-exchange-cost-totals report-commodity end-date #:hide-warnings? hide-warnings?)))
 
 
 
@@ -844,19 +829,38 @@
 (define (gnc:case-exchange-time-fn
          source-option report-currency commodity-list to-date-tp
          start-percent delta-percent)
+  (define date-hash (make-hash-table))
+  (define-syntax-rule (memoize date expensive-fn)
+    (or (hash-ref date-hash date) (hashv-set! date-hash date expensive-fn)))
+  ;; call the expensive function ONCE with the warnings enabled. this
+  ;; will log any warnings related to impossible currency conversions
+  ;; for splits upto the report-date
+  (case source-option
+    ((average-cost) (memoize to-date-tp
+                             (gnc:make-exchange-function
+                              (gnc:make-exchange-cost-alist
+                               report-currency to-date-tp))))
+    ((weighted-average) (memoize to-date-tp
+                                 (gnc:get-commoditylist-totalavg-prices
+                                  commodity-list report-currency to-date-tp
+                                  start-percent delta-percent))))
   (case source-option
     ;; Make this the same as gnc:case-exchange-fn
-    ((average-cost) (let* ((exchange-fn (gnc:make-exchange-function
-                                         (gnc:make-exchange-cost-alist
-                                          report-currency to-date-tp))))
-                      (lambda (foreign domestic date)
+    ((average-cost) (lambda (foreign domestic date)
+                      (let* ((end-day (gnc:time64-end-day-time date))
+                             (exchange-fn (memoize end-day
+                                                   (gnc:make-exchange-function
+                                                    (gnc:make-exchange-cost-alist
+                                                     report-currency end-day
+                                                      #:hide-warnings? #t)))))
                         (exchange-fn foreign domestic))))
-    ((weighted-average) (let ((pricealist
-                               (gnc:get-commoditylist-totalavg-prices
-                                commodity-list report-currency to-date-tp
-                                start-percent delta-percent)))
-                          (gnc:debug "weighted-average pricealist " pricealist)
-                          (lambda (foreign domestic date)
+    ((weighted-average) (lambda (foreign domestic date)
+                          (let* ((end-day (gnc:time64-end-day-time date))
+                                 (pricealist (memoize end-day
+                                                      (gnc:get-commoditylist-totalavg-prices
+                                                       commodity-list report-currency end-day
+                                                       start-percent delta-percent
+                                                        #:hide-warnings? #t))))
                             (gnc:exchange-by-pricealist-nearest
                              pricealist foreign domestic date))))
     ((pricedb-before) gnc:exchange-by-pricedb-nearest-before)
