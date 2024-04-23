@@ -8,14 +8,14 @@
 # Ömer Faruk Çakmak <omerfarukckmk@protonmail.com>, 2021.
 # udo pton <udopton@gmail.com>, 2021.
 # Bora <boratici@gmail.com>, 2021, 2022.
-# Bora Atıcı <boratici.acc@gmail.com>, 2023.
+# Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2023-04-02 17:39+0000\n"
+"PO-Revision-Date: 2024-04-23 18:07+0000\n"
 "Last-Translator: Bora Atıcı <boratici.acc@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 5.5-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-POOTLE-MTIME: 1497808015.000000\n"
 
@@ -113,7 +113,7 @@ msgstr "Dönem sonu"
 #: bindings/guile/date-utilities.scm:755
 #: libgnucash/engine/gnc-option-date.cpp:320
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr "Genel tercihlerde ayarlanan hesap döneminin son günü"
+msgstr "Genel tercihlerde ayarlanan, hesap döneminin son günü."
 
 #: bindings/guile/date-utilities.scm:759
 #: gnucash/gnome-utils/gnc-period-select.c:66
