@@ -41,7 +41,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-07 20:02+0000\n"
+"PO-Revision-Date: 2024-04-23 18:07+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -3410,7 +3410,7 @@ msgstr[1] "Die folgenden %d Lieferantenbelege sind fällig:"
 
 #: gnucash/gnome/dialog-invoice.c:3901
 msgid "Due Bills Reminder"
-msgstr "Erinnerung an _fällige Rechnungen"
+msgstr "Erinnerung an fällige Rechnungen"
 
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
@@ -3423,7 +3423,7 @@ msgstr[1] "Die folgenden %d Kundenbelege sind fällig:"
 
 #: gnucash/gnome/dialog-invoice.c:3912
 msgid "Due Invoices Reminder"
-msgstr "Erinnerung an _fällige Rechnungen"
+msgstr "Erinnerung an fällige Rechnungen"
 
 #: gnucash/gnome/dialog-job.c:136
 msgid "The Job must be given a name."
@@ -15253,7 +15253,7 @@ msgstr "Buchen nach (Soll)"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:335
 msgid "Documents"
-msgstr "Buchungen"
+msgstr "Dokumente"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:412
 #: gnucash/gtkbuilder/dialog-payment.glade:439
