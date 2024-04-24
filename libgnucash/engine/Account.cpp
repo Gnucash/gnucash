@@ -1151,6 +1151,22 @@ gnc_account_foreach_split (const Account *acc, std::function<void(Split*)> func,
         std::for_each(splits.begin(), splits.end(), func);
 }
 
+void
+gnc_account_foreach_split_until_date (const Account *acc, time64 end_date,
+                                      std::function<void(Split*)> f)
+{
+    if (!GNC_IS_ACCOUNT (acc))
+        return;
+
+    auto after_date = [](time64 end_date, auto s) -> bool
+    { return (xaccTransGetDate (xaccSplitGetParent (s)) > end_date); };
+
+    auto splits{GET_PRIVATE(acc)->splits};
+    auto after_date_iter = std::upper_bound (splits.begin(), splits.end(), end_date, after_date);
+    std::for_each (splits.begin(), after_date_iter, f);
+}
+
+
 Split*
 gnc_account_find_split (const Account *acc, std::function<bool(const Split*)> predicate,
                         bool reverse)

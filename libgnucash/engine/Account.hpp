@@ -43,6 +43,9 @@ const SplitsVec xaccAccountGetSplits (const Account*);
 
 void gnc_account_foreach_split (const Account*, std::function<void(Split*)>, bool);
 
+void gnc_account_foreach_split_until_date (const Account *acc, time64 end_date,
+                                           std::function<void(Split*)> f);
+
 /** scans account split list (in forward or reverse order) until
  *    predicate split->bool returns true. Maybe return the split.
  *
