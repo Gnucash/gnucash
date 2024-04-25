@@ -558,7 +558,7 @@ void gnc_file_log_replay (GtkWindow *parent)
     if (!expected_header)
         expected_header = g_strdup(expected_header_orig);
 
-    qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
+    // qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
     ENTER(" ");
 
     /* Don't log the log replay. This would only result in redundant logs */
