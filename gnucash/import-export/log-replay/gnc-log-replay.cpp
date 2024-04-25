@@ -34,7 +34,7 @@
 
 #include "Account.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "TransLog.h"
 #include "Scrub.h"
 #include "gnc-log-replay.h"

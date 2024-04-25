@@ -43,7 +43,7 @@
 #include "Scrub2.h"
 #include "Scrub3.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 
 static QofLogModule log_module = GNC_MOD_LOT;
 

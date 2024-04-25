@@ -62,7 +62,7 @@
 #include "gnc-engine.h"
 #include "gnc-session.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "Recurrence.h"
 #include "SchedXaction.h"
 #include "SX-book.h"

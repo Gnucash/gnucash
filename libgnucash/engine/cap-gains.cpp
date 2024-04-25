@@ -63,7 +63,7 @@ ToDo:
 #include "Scrub2.h"
 #include "Scrub3.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "cap-gains.h"
 #include "gnc-engine.h"
 #include "engine-helpers.h"

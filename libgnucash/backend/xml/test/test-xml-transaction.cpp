@@ -42,7 +42,7 @@
 
 #include <AccountP.hpp>
 #include <Transaction.h>
-#include <TransactionP.h>
+#include <TransactionP.hpp>
 
 #include "../gnc-xml-helper.h"
 #include "../gnc-xml.h"

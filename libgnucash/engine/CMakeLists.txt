@@ -9,7 +9,7 @@ set(engine_noinst_HEADERS
   SplitP.h
   SX-book.h
   SX-ttinfo.h
-  TransactionP.h
+  TransactionP.hpp
   gnc-backend-prov.hpp
   gnc-date-p.h
   gnc-int128.hpp

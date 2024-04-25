@@ -45,7 +45,7 @@
 #include "AccountP.hpp"
 #include "Scrub.h"
 #include "Scrub3.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "SplitP.h"
 #include "TransLog.h"
 #include "cap-gains.h"

@@ -28,7 +28,7 @@
 #include <unittest-support.h>
 /* Add specific headers for this class */
 #include "../Transaction.h"
-#include "../TransactionP.h"
+#include "../TransactionP.hpp"
 #include "../Split.h"
 #include "../Account.h"
 #include "../gnc-lot.h"

@@ -38,7 +38,7 @@
 #include <Query.h>
 #include <Scrub.h>
 #include <Transaction.h>
-#include <TransactionP.h>
+#include <TransactionP.hpp>
 #include <TransLog.h>
 #include <gnc-pricedb.h>
 #include <gnc-pricedb-p.h>

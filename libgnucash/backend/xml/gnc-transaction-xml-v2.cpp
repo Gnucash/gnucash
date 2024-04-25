@@ -27,7 +27,7 @@
 #include <string.h>
 #include "AccountP.hpp"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "gnc-lot.h"
 #include "gnc-lot-p.h"
 

@@ -32,7 +32,7 @@
 
 #include "Account.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "TransLog.h"
 #include "qof.h"
 #ifdef _MSC_VER

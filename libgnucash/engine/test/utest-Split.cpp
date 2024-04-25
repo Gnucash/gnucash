@@ -31,7 +31,7 @@
 #include <SplitP.h>
 #include <Account.h>
 #include <Transaction.h>
-#include <TransactionP.h>
+#include <TransactionP.hpp>
 #include <gnc-lot.h>
 #include <gnc-event.h>
 

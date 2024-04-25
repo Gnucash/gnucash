@@ -50,7 +50,7 @@
 #include "Account.hpp"
 #include "Scrub.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "gnc-commodity.h"
 #include "qofinstance-p.h"
 #include "gnc-session.h"

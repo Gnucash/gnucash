@@ -1,5 +1,5 @@
 /********************************************************************\
- * TransactionP.h -- private header for transaction & splits        *
+ * TransactionP.hpp -- private header for transaction & splits        *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 2000 Bill Gribble                                  *
@@ -25,7 +25,7 @@
 
 /*
  * FILE:
- * TransactionP.h
+ * TransactionP.hpp
  *
  * FUNCTION:
  * The is the *private* transaction header file.  Code outside of
@@ -51,10 +51,6 @@
 #include "gnc-engine.h"   /* for typedefs */
 #include "SplitP.h"
 #include "qof.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 
 /** STRUCTS *********************************************************/
@@ -196,10 +192,6 @@ typedef struct
 TransTestFunctions* _utest_trans_fill_functions (void);
 
 /*@}*/
-
-#ifdef __cplusplus
-}
-#endif
 
 
 #endif /* XACC_TRANSACTION_P_H */
