@@ -28,7 +28,7 @@
 #include <unittest-support.h>
 /* Add specific headers for this class */
 #include <Split.h>
-#include <SplitP.h>
+#include <SplitP.hpp>
 #include <Account.h>
 #include <Transaction.h>
 #include <TransactionP.hpp>

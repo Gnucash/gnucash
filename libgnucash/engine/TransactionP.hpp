@@ -49,7 +49,7 @@
 #include <glib.h>
 
 #include "gnc-engine.h"   /* for typedefs */
-#include "SplitP.h"
+#include "SplitP.hpp"
 #include "qof.h"
 
 

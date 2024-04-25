@@ -46,7 +46,7 @@
 #include "Scrub.h"
 #include "Scrub3.h"
 #include "TransactionP.hpp"
-#include "SplitP.h"
+#include "SplitP.hpp"
 #include "TransLog.h"
 #include "cap-gains.h"
 #include "gnc-commodity.h"
