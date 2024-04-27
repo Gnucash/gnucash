@@ -520,7 +520,7 @@ gnc_dense_cal_init(GncDenseCal *dcal)
         g_strfreev(parts);
     }
 
-    gtk_widget_show_all(GTK_WIDGET(dcal));
+//FIXME gtk4    gtk_widget_show_all(GTK_WIDGET(dcal));
 }
 
 static void
@@ -1340,7 +1340,7 @@ gnc_dense_cal_button_press(GtkWidget *widget,
 
         populate_hover_window(dcal);
         gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
-        gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
+//FIXME gtk4        gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
 
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 
@@ -1398,7 +1398,7 @@ gnc_dense_cal_motion_notify(GtkWidget *widget,
             dcal->doc = doc;
             populate_hover_window(dcal);
             gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
-            gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
+//FIXME gtk4            gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
         }
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 

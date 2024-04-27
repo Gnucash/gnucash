@@ -1401,7 +1401,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
     plugin_page->summarybar = gsr_create_summary_bar (priv->gsr);
     if (plugin_page->summarybar)
     {
-        gtk_widget_show_all (plugin_page->summarybar);
+//FIXME gtk4        gtk_widget_show_all (plugin_page->summarybar);
         gtk_box_pack_start (GTK_BOX (priv->widget), plugin_page->summarybar,
                             FALSE, FALSE, 0);
 

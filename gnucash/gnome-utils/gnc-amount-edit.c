@@ -332,7 +332,7 @@ gnc_amount_edit_new (void)
     gtk_box_pack_start (GTK_BOX(gae), GTK_WIDGET(gae->image), FALSE, FALSE, 6);
     gtk_widget_set_no_show_all (GTK_WIDGET(gae->image), TRUE);
     gtk_widget_hide (GTK_WIDGET(gae->image));
-    gtk_widget_show_all (GTK_WIDGET(gae));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(gae));
 
     return GTK_WIDGET(gae);
 }

@@ -484,7 +484,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(facc_dialog->window), GTK_WINDOW(parent));
 
-    gtk_widget_show_all (GTK_WIDGET(facc_dialog->window));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(facc_dialog->window));
 
     if (facc_dialog->account != NULL)
     {

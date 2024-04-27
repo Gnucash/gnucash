@@ -907,7 +907,7 @@ gnc_combo_cell_gui_realize (BasicCell* bcell, gpointer data)
         box->item_list = GNC_ITEM_LIST (gnc_item_list_new (cell->shared_store));
     else
         box->item_list = GNC_ITEM_LIST (gnc_item_list_new (box->tmp_store));
-    gtk_widget_show_all (GTK_WIDGET (box->item_list));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET (box->item_list));
     g_object_ref_sink (box->item_list);
 
     /* to mark cell as realized, remove the realize method */

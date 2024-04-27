@@ -135,7 +135,7 @@ gnumeric_create_popup_menu_list (GSList *elements,
             /* separator */
             item = gtk_separator_menu_item_new ();
         }
-        gtk_widget_show_all (item);
+//FIXME gtk4        gtk_widget_show_all (item);
 
         if (element->index != 0)
         {

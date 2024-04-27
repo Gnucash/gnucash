@@ -148,7 +148,7 @@ wrap_check_button (const GncOption& option, GtkWidget* widget, GtkGrid* page_box
     gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
     gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
     set_tool_tip(option, enclosing);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     /* attach the option widget to the second column of the grid */
     grid_attach_widget (GTK_GRID(page_box), enclosing, row);
 }
@@ -235,7 +235,7 @@ create_option_widget<GncOptionUIType::STRING> (GncOption& option,
     gtk_box_pack_start(GTK_BOX(enclosing), widget, TRUE, TRUE, 0);
     set_name_label(option, page_box, row, true);
     set_tool_tip(option, enclosing);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     grid_attach_widget (GTK_GRID(page_box), enclosing, row);
 }
 
@@ -290,7 +290,7 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
     gtk_box_pack_start(GTK_BOX(enclosing), frame, TRUE, TRUE, 0);
     set_name_label(option, page_box, row, true);
     set_tool_tip(option, enclosing);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     grid_attach_widget(GTK_GRID(page_box), enclosing, row);
 }
 
@@ -776,7 +776,7 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box, int row)
         date_ui->block_signals(false);
     }
 
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
 }
 
 template<> void
@@ -1064,7 +1064,7 @@ create_option_widget<GncOptionUIType::ACCOUNT_LIST>(GncOption& option,
     auto selection{gtk_tree_view_get_selection(GTK_TREE_VIEW(widget))};
     g_signal_connect(G_OBJECT(selection), "changed",
                      G_CALLBACK(option_account_sel_changed_cb), &option);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
 }
 
 class GncGtkAccountSelUIItem : public GncOptionGtkUIItem
@@ -1670,7 +1670,7 @@ create_option_widget<GncOptionUIType::RADIOBUTTON> (GncOption& option, GtkGrid *
      set_tool_tip(option, enclosing);
      auto widget = create_radiobutton_widget(NULL, option);
      gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
-     gtk_widget_show_all(enclosing);
+//FIXME gtk4     gtk_widget_show_all(enclosing);
      grid_attach_widget(page_box, enclosing, row);
  }
 
@@ -1713,7 +1713,7 @@ create_option_widget<GncOptionUIType::DATE_FORMAT> (GncOption& option,
 
     g_signal_connect(G_OBJECT(enclosing), "format_changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     grid_attach_widget(page_box, enclosing, row);
 }
 
@@ -1852,7 +1852,7 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     auto widget{option_get_gtk_widget(&option)};
     gtk_container_add(GTK_CONTAINER(enclosing), widget);
 
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     grid_attach_widget(page_box, enclosing, row);
 
     auto ui_item{dynamic_cast<GncGtkPlotSizeUIItem*>(option.get_ui_item())};

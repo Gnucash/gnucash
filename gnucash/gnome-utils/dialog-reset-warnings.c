@@ -78,7 +78,7 @@ gnc_reset_warnings_update_widgets (RWDialog *rw_dialog)
     list = gtk_container_get_children(GTK_CONTAINER(rw_dialog->perm_vbox));
     if (list)
     {
-        gtk_widget_show_all(rw_dialog->perm_vbox_label);
+//FIXME gtk4        gtk_widget_show_all(rw_dialog->perm_vbox_label);
         for (tmp = list; tmp; tmp = g_list_next(tmp))
         {
             if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(tmp->data)))
@@ -98,7 +98,7 @@ gnc_reset_warnings_update_widgets (RWDialog *rw_dialog)
     list = gtk_container_get_children(GTK_CONTAINER(rw_dialog->temp_vbox));
     if (list)
     {
-        gtk_widget_show_all(rw_dialog->temp_vbox_label);
+//FIXME gtk4        gtk_widget_show_all(rw_dialog->temp_vbox_label);
         for (tmp = list; tmp; tmp = g_list_next(tmp))
         {
             if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(tmp->data)))

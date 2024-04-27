@@ -225,7 +225,7 @@ gnc_account_separator_validate (GtkWidget *dialog)
         gtk_label_set_text (GTK_LABEL(msg_label), conflict_msg);
 
         g_object_unref (G_OBJECT(builder));
-        gtk_widget_show_all (msg_dialog);
+//FIXME gtk4        gtk_widget_show_all (msg_dialog);
 
         response = gtk_dialog_run (GTK_DIALOG(msg_dialog));
         if (response == GTK_RESPONSE_ACCEPT) // reset to original
@@ -709,7 +709,7 @@ gnc_preferences_build_page (gpointer data,
         label = gtk_label_new (add_in->tabname);
         gnc_label_set_alignment (label, 0.0, 0.5);
         gtk_notebook_append_page (notebook, existing_content, label);
-        gtk_widget_show_all (existing_content);
+//FIXME gtk4        gtk_widget_show_all (existing_content);
         DEBUG("created new page %s, appended it", add_in->tabname);
     }
     else
@@ -812,7 +812,7 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
     g_free (group);
     g_free (pref);
 
-    gtk_widget_show_all (GTK_WIDGET(fb));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(fb));
 }
 
 /****************************************************************************/
@@ -920,7 +920,7 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
     g_free (pref);
     g_free (uri);
 
-    gtk_widget_show_all (GTK_WIDGET(fcb));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(fcb));
 }
 
 /** Callback for a 'Clear' button for GtkFileChooserButton widget.
@@ -1095,7 +1095,7 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
     g_free (group);
     g_free (pref);
 
-    gtk_widget_show_all (GTK_WIDGET(gce));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(gce));
 }
 
 /****************************************************************************/

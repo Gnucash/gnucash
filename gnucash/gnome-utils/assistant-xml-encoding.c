@@ -354,7 +354,7 @@ gnc_xml_convert_single_file (const gchar *filename)
 
         gtk_builder_connect_signals(builder, data);
 
-        gtk_widget_show_all (data->assistant);
+//FIXME gtk4        gtk_widget_show_all (data->assistant);
 
         gxi_update_default_enc_combo (data);
         gxi_update_string_box (data);

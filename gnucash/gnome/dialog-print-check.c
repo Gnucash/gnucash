@@ -1786,7 +1786,7 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pcd->dialog), GTK_WINDOW (parent));
 
     g_object_unref(G_OBJECT(builder));
-    gtk_widget_show_all(pcd->dialog);
+//FIXME gtk4    gtk_widget_show_all(pcd->dialog);
 }
 
 

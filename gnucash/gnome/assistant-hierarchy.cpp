@@ -1545,7 +1545,7 @@ assistant_insert_book_options_page (hierarchy_data *data)
     gtk_container_add (GTK_CONTAINER(vbox), options);
     g_object_unref (options);
 
-    gtk_widget_show_all (vbox);
+//FIXME gtk4    gtk_widget_show_all (vbox);
     gtk_assistant_insert_page (GTK_ASSISTANT(data->dialog), vbox, 1);
     gtk_assistant_set_page_title (GTK_ASSISTANT(data->dialog), vbox, _("New Book Options"));
     gtk_assistant_set_page_complete (GTK_ASSISTANT(data->dialog), vbox, TRUE);
@@ -1640,7 +1640,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
 
     data->when_completed = when_completed;
     data->use_defaults = use_defaults;
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
     return dialog;
 }
 

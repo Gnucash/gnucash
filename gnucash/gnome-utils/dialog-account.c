@@ -809,7 +809,7 @@ add_children_to_expander (GObject *object, GParamSpec *param_spec, gpointer data
 
         gtk_container_add (GTK_CONTAINER(expander), scrolled_window);
         gtk_widget_set_vexpand (GTK_WIDGET(scrolled_window), TRUE);
-        gtk_widget_show_all (scrolled_window);
+//FIXME gtk4        gtk_widget_show_all (scrolled_window);
     }
 }
 
@@ -895,7 +895,7 @@ verify_children_compatible (AccountWindow *aw)
     gtk_container_set_border_width (GTK_CONTAINER(hbox), 5);
     gtk_box_set_spacing (GTK_BOX(gtk_dialog_get_content_area (GTK_DIALOG(dialog))), 14);
 
-    gtk_widget_show_all (hbox);
+//FIXME gtk4    gtk_widget_show_all (hbox);
 
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_OK);
 
@@ -2127,8 +2127,8 @@ gnc_ui_edit_account_window (GtkWindow *parent, Account *account)
 
     gnc_resume_gui_refresh ();
 
-    gtk_widget_show_all (aw->dialog);
-    if (xaccAccountGetSplitsSize (account) != 0)
+//FIXME gtk4    gtk_widget_show_all (aw->dialog);
+    if (xaccAccountGetSplitList (account) != 0)
         gtk_widget_hide (aw->opening_balance_page);
 
     parent_acct = gnc_account_get_parent (account);
@@ -2369,7 +2369,7 @@ gnc_account_renumber_create_dialog (GtkWidget *window, Account *account)
 
     gtk_builder_connect_signals (builder, data);
 
-    gtk_widget_show_all (data->dialog);
+//FIXME gtk4    gtk_widget_show_all (data->dialog);
 }
 
 static void
@@ -2512,7 +2512,7 @@ gnc_account_cascade_properties_dialog (GtkWidget *window, Account *account)
     gtk_builder_connect_signals (builder, dialog);
     g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
 
     response = gtk_dialog_run (GTK_DIALOG(dialog));
 

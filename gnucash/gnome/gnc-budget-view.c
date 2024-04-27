@@ -561,7 +561,7 @@ gbv_create_widget (GncBudgetView *budget_view)
 
     gtk_box_pack_start (GTK_BOX(vbox), GTK_WIDGET(priv->totals_scroll_window), /*expand*/FALSE, /*fill*/TRUE, 0);
 
-    gtk_widget_show_all (GTK_WIDGET(vbox));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(vbox));
 
     // hide the account scroll window horizontal scroll bar
     h_scrollbar = gtk_scrolled_window_get_hscrollbar (GTK_SCROLLED_WINDOW(scrolled_window));

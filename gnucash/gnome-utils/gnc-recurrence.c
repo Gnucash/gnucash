@@ -223,7 +223,7 @@ gnc_recurrence_init( GncRecurrence *gr )
     g_signal_connect( G_OBJECT(gr->nth_weekday), "toggled",
                       G_CALLBACK(something_changed), gr );
 
-    gtk_widget_show_all( GTK_WIDGET(&gr->widget) );
+//FIXME gtk4    gtk_widget_show_all( GTK_WIDGET(&gr->widget) );
 
     gtk_builder_connect_signals(builder, gr);
     g_object_unref(G_OBJECT(builder));

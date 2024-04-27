@@ -223,7 +223,7 @@ show_warning (AccountPickerDialog *picker, gchar *text)
 {
     gtk_label_set_text (GTK_LABEL(picker->warning), text);
     gnc_label_set_alignment (picker->warning, 0.0, 0.5);
-    gtk_widget_show_all (GTK_WIDGET(picker->whbox));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(picker->whbox));
     g_free (text);
 
     gtk_widget_set_sensitive (picker->ok_button, FALSE); // disable OK button

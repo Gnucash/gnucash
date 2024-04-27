@@ -870,7 +870,7 @@ gnc_plugin_page_budget_cmd_view_options (GSimpleAction *simple,
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(show_account_desc),
                                       gnc_budget_view_get_show_account_description (priv->budget_view));
 
-        gtk_widget_show_all (priv->dialog);
+//FIXME gtk4        gtk_widget_show_all (priv->dialog);
         result = gtk_dialog_run (GTK_DIALOG(priv->dialog));
 
         switch (result)
@@ -1064,7 +1064,7 @@ gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
     avg = GTK_WIDGET(gtk_builder_get_object (builder, "UseAverage"));
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(avg), priv->useAvg);
 
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
     result = gtk_dialog_run (GTK_DIALOG(dialog));
     switch (result)
     {
@@ -1193,7 +1193,7 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
     add  = GTK_WIDGET(gtk_builder_get_object (builder, "RB_Add"));
     mult = GTK_WIDGET(gtk_builder_get_object (builder, "RB_Multiply"));
 
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
     result = gtk_dialog_run (GTK_DIALOG(dialog));
     switch (result)
     {
@@ -1286,7 +1286,7 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
     xxxgtk_textview_set_text(GTK_TEXT_VIEW(note),
                              gnc_budget_get_account_period_note(priv->budget, acc, period_num));
 
-    gtk_widget_show_all(dialog);
+//FIXME gtk4    gtk_widget_show_all(dialog);
     result = gtk_dialog_run(GTK_DIALOG(dialog));
     switch (result)
     {

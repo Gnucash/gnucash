@@ -301,7 +301,7 @@ gnc_ui_qif_account_picker_changed_cb(GtkTreeSelection *selection,
 
             gtk_label_set_text (GTK_LABEL(wind->pwarning), text);
             gnc_label_set_alignment (wind->pwarning, 0.0, 0.5);
-            gtk_widget_show_all (GTK_WIDGET(wind->pwhbox));
+//FIXME gtk4            gtk_widget_show_all (GTK_WIDGET(wind->pwhbox));
             g_free (text);
 
             gtk_widget_set_sensitive (wind->ok_button, FALSE); // disable OK button

@@ -1250,7 +1250,7 @@ identity_edit_clicked_cb (GtkButton *button,
                       G_CALLBACK (identity_edit_response_cb), ti_dialog);
     g_signal_connect (G_OBJECT (dialog), "destroy",
                       G_CALLBACK (identity_edit_destroy_cb), ti_dialog);
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
 }
 
 static void

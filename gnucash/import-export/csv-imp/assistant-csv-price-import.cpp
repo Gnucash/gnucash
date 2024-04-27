@@ -637,7 +637,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
         auto encoding_container = GTK_CONTAINER(gtk_builder_get_object (builder, "encoding_container"));
         gtk_container_add (encoding_container, GTK_WIDGET(encselector));
         gtk_widget_set_hexpand (GTK_WIDGET(encselector), true);
-        gtk_widget_show_all (GTK_WIDGET(encoding_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(encoding_container));
 
         /* Add commodity selection widget */
         commodity_selector = GTK_WIDGET(gtk_builder_get_object (builder, "commodity_cbox"));
@@ -669,7 +669,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
         auto date_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "date_format_container"));
         gtk_container_add (date_format_container, GTK_WIDGET(date_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(date_format_combo), true);
-        gtk_widget_show_all (GTK_WIDGET(date_format_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(date_format_container));
 
         /* Add in the currency format combo box and hook it up to an event handler. */
         currency_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
@@ -686,7 +686,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
         auto currency_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "currency_format_container"));
         gtk_container_add (currency_format_container, GTK_WIDGET(currency_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(currency_format_combo), true);
-        gtk_widget_show_all (GTK_WIDGET(currency_format_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(currency_format_container));
 
         /* Connect the CSV/Fixed-Width radio button event handler. */
         csv_button = GTK_WIDGET(gtk_builder_get_object (builder, "csv_button"));
@@ -714,7 +714,7 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
     gtk_builder_connect_signals (builder, this);
     g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_show_all (GTK_WIDGET(csv_imp_asst));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(csv_imp_asst));
     gnc_window_adjust_for_screen (GTK_WINDOW(csv_imp_asst));
 }
 
@@ -1727,7 +1727,7 @@ void CsvImpPriceAssist::preview_refresh_table ()
     g_object_unref (combostore);
 
     /* Make the things actually appear. */
-    gtk_widget_show_all (GTK_WIDGET(treeview));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(treeview));
 }
 
 /* Update the preview page based on the current state of the importer.

@@ -711,7 +711,7 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
                                          GNC_CUSTOMER_MODULE_NAME,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (cw->dialog);
+//FIXME gtk4    gtk_widget_show_all (cw->dialog);
     g_object_unref(G_OBJECT(builder));
 
     return cw;

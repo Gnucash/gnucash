@@ -304,7 +304,7 @@ void gnc_dialog_query_view_refresh (DialogQueryView *dqv)
     if (!dqv) return;
 
     gnc_query_view_refresh (GNC_QUERY_VIEW(dqv->qview));
-    gtk_widget_show_all (dqv->dialog);
+//FIXME gtk4    gtk_widget_show_all (dqv->dialog);
 }
 
 void gnc_dialog_query_view_destroy (DialogQueryView *dqv)

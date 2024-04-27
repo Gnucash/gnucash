@@ -97,7 +97,7 @@ gcoi_create_dialog(Split* split)
     dco->owner_choice = gnc_owner_select_create(widget, box, dco->book,
                         &(dco->owner));
 
-    gtk_widget_show_all(dco->dialog);
+//FIXME gtk4    gtk_widget_show_all(dco->dialog);
 
     g_object_unref(G_OBJECT(builder));
 

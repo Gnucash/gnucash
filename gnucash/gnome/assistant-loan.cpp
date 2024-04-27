@@ -794,7 +794,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                                   rouid );
 
                 gtk_box_pack_start( GTK_BOX(ldd->optVBox), GTK_WIDGET(vb), FALSE, FALSE, 2 );
-                gtk_widget_show_all( GTK_WIDGET(ldd->optVBox) );
+//FIXME gtk4                gtk_widget_show_all( GTK_WIDGET(ldd->optVBox) );
             }
             g_string_free( str, TRUE );
         }
@@ -892,7 +892,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
     gtk_builder_connect_signals(builder, ldd);
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_show_all( ldd->window );
+//FIXME gtk4    gtk_widget_show_all( ldd->window );
     return window;
 }
 
@@ -3137,7 +3137,7 @@ gnc_ui_sx_loan_assistant_create (void)
                                          GNC_ID_ACCOUNT,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (ldd->window);
+//FIXME gtk4    gtk_widget_show_all (ldd->window);
 
     gnc_window_adjust_for_screen (GTK_WINDOW(ldd->window));
 }

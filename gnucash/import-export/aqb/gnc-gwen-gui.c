@@ -1211,7 +1211,7 @@ showbox_cb(GWEN_GUI *gwen_gui, guint32 flags, const gchar *title,
         gtk_window_set_title(GTK_WINDOW(dialog), title);
 
     g_signal_connect(dialog, "response", G_CALLBACK(gtk_widget_hide), NULL);
-    gtk_widget_show_all(dialog);
+//FIXME gtk4    gtk_widget_show_all(dialog);
 
     showbox_id = gui->showbox_id++;
     g_hash_table_insert(gui->showbox_hash, GUINT_TO_POINTER(showbox_id),

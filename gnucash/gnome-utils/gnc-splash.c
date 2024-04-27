@@ -131,7 +131,7 @@ gnc_show_splash_screen (void)
                      G_CALLBACK(button_press_cb), NULL);
 
     gtk_window_set_auto_startup_notification (FALSE);
-    gtk_widget_show_all (splash);
+//FIXME gtk4    gtk_widget_show_all (splash);
     gtk_window_set_auto_startup_notification (TRUE);
 
     /* make sure splash is up */

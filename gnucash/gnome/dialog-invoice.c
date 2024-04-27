@@ -292,7 +292,7 @@ iw_ask_unpost (InvoiceWindow *iw)
 
     iw->reset_tax_tables = FALSE;
 
-    gtk_widget_show_all(dialog);
+//FIXME gtk4    gtk_widget_show_all(dialog);
 
     response = gtk_dialog_run(GTK_DIALOG(dialog));
     if (response == GTK_RESPONSE_OK)
@@ -902,7 +902,7 @@ use_default_report_template_or_change (GtkWindow *parent)
     args->pb = GTK_PROGRESS_BAR(progress_bar);
     args->timeout = timeout;
 
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
 
     g_object_unref (G_OBJECT(builder));
 
@@ -1606,7 +1606,7 @@ gnc_invoice_window_create_summary_bar (InvoiceWindow *iw)
         break;
     }
 
-    gtk_widget_show_all(summarybar);
+//FIXME gtk4    gtk_widget_show_all(summarybar);
     return summarybar;
 }
 
@@ -1692,8 +1692,8 @@ gnc_invoice_update_job_choice (InvoiceWindow *iw)
             break;
         }
 
-    if (iw->job_choice)
-        gtk_widget_show_all (iw->job_choice);
+//FIXME gtk4    if (iw->job_choice)
+//FIXME gtk4        gtk_widget_show_all (iw->job_choice);
 }
 
 static GNCSearchWindow *
@@ -1771,8 +1771,8 @@ gnc_invoice_update_proj_job (InvoiceWindow *iw)
         break;
     }
 
-    if (iw->proj_job_choice)
-        gtk_widget_show_all (iw->proj_job_choice);
+//FIXME gtk4    if (iw->proj_job_choice)
+//FIXME gtk4        gtk_widget_show_all (iw->proj_job_choice);
 }
 
 static int
@@ -2075,10 +2075,10 @@ gnc_invoice_update_window (InvoiceWindow *iw, GtkWidget *widget)
     gtk_label_set_text (GTK_LABEL(iw->type_label), iw->is_credit_note ? _("Credit Note")
                         : gtk_label_get_text (GTK_LABEL(iw->type_label)));
 
-    if (iw->owner_choice)
-        gtk_widget_show_all (iw->owner_choice);
-    if (iw->proj_cust_choice)
-        gtk_widget_show_all (iw->proj_cust_choice);
+//FIXME gtk4    if (iw->owner_choice)
+//FIXME gtk4        gtk_widget_show_all (iw->owner_choice);
+//FIXME gtk4    if (iw->proj_cust_choice)
+//FIXME gtk4        gtk_widget_show_all (iw->proj_cust_choice);
 
     gnc_invoice_update_job_choice (iw);
     gnc_invoice_update_proj_job (iw);
@@ -3053,9 +3053,9 @@ gnc_invoice_window_new_invoice (GtkWindow *parent, InvoiceDialogType dialog_type
     {
     case NEW_INVOICE:
     case DUP_INVOICE:
-        gtk_widget_show_all (iw->type_hbox);
         gtk_widget_hide (iw->type_label_hbox);
         gtk_widget_hide (iw->type_label);
+//FIXME gtk4        gtk_widget_show_all (iw->type_hbox);
         break;
     case MOD_INVOICE:
         gtk_widget_hide (iw->type_hbox);

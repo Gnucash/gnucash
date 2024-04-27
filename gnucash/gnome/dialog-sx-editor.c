@@ -1327,7 +1327,7 @@ schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
     gtk_container_add (GTK_CONTAINER (example_cal_scrolled_win), GTK_WIDGET (sxed->example_cal));
 
 
-    gtk_widget_show_all (example_cal_scrolled_win);
+//FIXME gtk4    gtk_widget_show_all (example_cal_scrolled_win);
 }
 
 
@@ -1825,7 +1825,7 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         g_signal_connect (G_OBJECT (dialog), "response",
                           G_CALLBACK (_open_editors), data);
 
-        gtk_widget_show_all (GTK_WIDGET (dialog));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET (dialog));
         gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
         g_object_unref (G_OBJECT (builder));
     }

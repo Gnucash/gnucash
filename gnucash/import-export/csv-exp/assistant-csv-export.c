@@ -1017,7 +1017,7 @@ gnc_file_csv_export_internal (CsvExportType export_type, Query *q, Account *acc)
     gnc_register_gui_component (ASSISTANT_CSV_EXPORT_CM_CLASS,
                                 NULL, csv_export_close_handler,
                                 info);
-    gtk_widget_show_all (info->assistant);
+//FIXME gtk4    gtk_widget_show_all (info->assistant);
     gnc_window_adjust_for_screen (GTK_WINDOW(info->assistant));
 }
 

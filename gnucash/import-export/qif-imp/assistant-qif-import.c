@@ -997,7 +997,7 @@ new_security_notebook_page (SCM security_hash_key, gnc_commodity *comm, QIFImpor
     gtk_grid_attach (GTK_GRID(table), comm_nb_page->namespace_combo, 1, 2, 1, 1);
     gtk_container_set_border_width (GTK_CONTAINER(notebook_page), 12);
     gtk_box_pack_start (GTK_BOX(notebook_page), table, FALSE, FALSE, 12);
-    gtk_widget_show_all (GTK_WIDGET(wind->commodity_notebook));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(wind->commodity_notebook));
     return comm_nb_page;
 }
 
@@ -1050,7 +1050,7 @@ prepare_security_pages (QIFImportWindow * wind)
             wind->commodity_notebook_pages = g_list_append (wind->commodity_notebook_pages,
                                                             new_comm_nb_page->notebook_page);
 
-            gtk_widget_show_all (new_comm_nb_page->notebook_page);
+//FIXME gtk4            gtk_widget_show_all (new_comm_nb_page->notebook_page);
         }
         wind->num_new_pages = wind->num_new_pages + 1;
         securities = SCM_CDR(securities);
@@ -3979,7 +3979,7 @@ gnc_ui_qif_import_assistant_make (QIFImportWindow *qif_win)
 
     g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_show_all (qif_win->window);
+//FIXME gtk4    gtk_widget_show_all (qif_win->window);
     gtk_window_present (GTK_WINDOW(qif_win->window));
 
     return qif_win->window;
@@ -4028,7 +4028,7 @@ gnc_file_qif_import (void)
                                          GNC_ID_ACCOUNT,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (qif_win->window);
+//FIXME gtk4    gtk_widget_show_all (qif_win->window);
 
     gnc_window_adjust_for_screen (GTK_WINDOW(qif_win->window));
 }

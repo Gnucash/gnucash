@@ -473,7 +473,7 @@ new_billterm_dialog (BillTermsWindow *btw, GncBillTerm *term,
                                   GTK_WINDOW(btw->window));
 
     /* Show what we should */
-    gtk_widget_show_all (nbt->dialog);
+//FIXME gtk4    gtk_widget_show_all (nbt->dialog);
     if (term)
     {
         gtk_widget_grab_focus (nbt->desc_entry);
@@ -523,7 +523,7 @@ billterms_term_refresh (BillTermsWindow *btw)
         return;
     }
 
-    gtk_widget_show_all (btw->term_vbox);
+//FIXME gtk4    gtk_widget_show_all (btw->term_vbox);
     billterm_to_ui (btw->current_term, btw->desc_entry, &btw->notebook);
     switch (gncBillTermGetType (btw->current_term))
     {
@@ -854,7 +854,7 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
 
     gnc_gui_component_set_session (btw->component_id, btw->session);
 
-    gtk_widget_show_all (btw->window);
+//FIXME gtk4    gtk_widget_show_all (btw->window);
     billterms_window_refresh (btw);
 
     g_object_unref (G_OBJECT(builder));

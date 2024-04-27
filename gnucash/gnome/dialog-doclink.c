@@ -278,7 +278,7 @@ setup_file_dialog (GtkBuilder *builder, const gchar *path_head, const gchar *uri
 
         // Set the style context for this label so it can be easily manipulated with css
         gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-highlight");
-        gtk_widget_show_all (existing_hbox);
+//FIXME gtk4        gtk_widget_show_all (existing_hbox);
 
         g_free (uri_label);
         g_free (use_uri);
@@ -353,7 +353,7 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
     button_file = GTK_WIDGET(gtk_builder_get_object (builder, "linked_file"));
     g_signal_connect (button_file, "toggled", G_CALLBACK(uri_type_selected_cb), fcb);
 
-    gtk_widget_show_all (GTK_WIDGET(gtk_builder_get_object (builder, "file_hbox")));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(gtk_builder_get_object (builder, "file_hbox")));
 
     warning_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "warning_hbox"));
     entry = GTK_ENTRY(gtk_builder_get_object (builder, "location_entry"));
@@ -1205,7 +1205,7 @@ gnc_doclink_business_dialog (GtkWindow *parent)
 
     gnc_restore_window_size (GNC_PREFS_GROUP_BUS,
                              GTK_WINDOW(doclink_dialog->window), parent);
-    gtk_widget_show_all (GTK_WIDGET(doclink_dialog->window));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(doclink_dialog->window));
     LEAVE(" ");
 }
 
@@ -1236,6 +1236,6 @@ gnc_doclink_trans_dialog (GtkWindow *parent)
 
     gnc_restore_window_size (GNC_PREFS_GROUP_TRANS,
                              GTK_WINDOW(doclink_dialog->window), parent);
-    gtk_widget_show_all (GTK_WIDGET(doclink_dialog->window));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(doclink_dialog->window));
     LEAVE(" ");
 }

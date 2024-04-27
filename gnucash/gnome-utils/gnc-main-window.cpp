@@ -5236,7 +5236,7 @@ add_about_paths (GtkDialog *dialog)
     }
     gtk_container_add_with_properties (GTK_CONTAINER(page_vbox), grid,
                                        "position", 1, NULL);
-    gtk_widget_show_all (grid);
+//FIXME gtk4    gtk_widget_show_all (grid);
 }
 
 /** Create and display the "about" dialog for gnucash.

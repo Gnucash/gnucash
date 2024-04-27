@@ -512,7 +512,7 @@ gnc_report_combo_new (GSList *report_list)
     g_signal_connect (G_OBJECT(grc->combo), "notify::popup-shown",
                       G_CALLBACK(combo_popped_cb), grc);
 
-    gtk_widget_show_all (GTK_WIDGET(grc));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(grc));
 
     return GTK_WIDGET(grc);
 }

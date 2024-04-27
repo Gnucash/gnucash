@@ -312,7 +312,7 @@ gnc_period_select_set_date_common (GncPeriodSelect *period, const GDate *date)
             period->date_label = gtk_label_new("");
             gtk_widget_set_margin_start (GTK_WIDGET(period->date_label), 6);
             gtk_box_pack_start(GTK_BOX(period), period->date_label, TRUE, TRUE, 0);
-            gtk_widget_show_all(period->date_label);
+//FIXME gtk4            gtk_widget_show_all(period->date_label);
         }
         gnc_period_sample_update_date_label(period);
         return;

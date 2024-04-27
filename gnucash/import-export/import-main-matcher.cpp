@@ -511,7 +511,7 @@ gnc_gen_trans_list_show_all (GNCImportMainMatcher *info)
     gnc_gen_trans_list_create_matches (info);
     load_hash_tables (info);
     resolve_conflicts (info);
-    gtk_widget_show_all (GTK_WIDGET(info->main_widget));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(info->main_widget));
     gnc_gen_trans_list_show_accounts_column (info);
 }
 
@@ -1430,7 +1430,7 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
 
     gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (treeview), NULL);
 
-    gtk_widget_show_all (menu);
+//FIXME gtk4    gtk_widget_show_all (menu);
     /* Note: event can be NULL here when called from view_onPopupMenu; */
     gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent*)event);
 
@@ -1758,8 +1758,8 @@ gnc_gen_trans_list_new (GtkWidget *parent,
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(info->main_widget), GTK_WINDOW(parent));
 
-    if (show_all)
-        gtk_widget_show_all (GTK_WIDGET(info->main_widget));
+//FIXME gtk4    if (show_all)
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(info->main_widget));
 
     // Register this UI, it needs to be closed when the session is closed.
     info->id = gnc_register_gui_component (IMPORT_MAIN_MATCHER_CM_CLASS,

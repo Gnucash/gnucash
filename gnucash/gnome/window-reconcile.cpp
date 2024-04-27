@@ -803,7 +803,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
                 gtk_widget_set_sensitive(GTK_WIDGET(interest), FALSE);
         }
 
-        gtk_widget_show_all(dialog);
+//FIXME gtk4        gtk_widget_show_all(dialog);
 
         gtk_widget_hide (data.future_text);
         gtk_widget_hide (data.future_icon);
@@ -2130,7 +2130,7 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
 
     /* Allow resize */
     gtk_window_set_resizable(GTK_WINDOW(recnData->window), TRUE);
-    gtk_widget_show_all(recnData->window);
+//FIXME gtk4    gtk_widget_show_all(recnData->window);
 
     gnc_reconcile_window_set_titles(recnData);
 

@@ -246,7 +246,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
     gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area (dialog), accounts_scroller,
                         TRUE, TRUE, 3);
 
-    gtk_widget_show_all (GTK_WIDGET (dialog));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET (dialog));
 
     /* Now run the dialog */
     if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK)

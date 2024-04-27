@@ -384,7 +384,7 @@ void gnc_ui_close_book (QofBook* book, GtkWindow *parent)
     g_object_unref(G_OBJECT(builder));
 
     /* Run the dialog */
-    gtk_widget_show_all(cbw->dialog);
+//FIXME gtk4    gtk_widget_show_all(cbw->dialog);
 
     g_list_free(equity_list);
 }

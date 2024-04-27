@@ -2461,7 +2461,7 @@ StockAssistantView::StockAssistantView (GtkBuilder *builder, Account* account, G
     gnc_window_adjust_for_screen (GTK_WINDOW(m_window));
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window),
                              GTK_WINDOW(parent));
-    gtk_widget_show_all (m_window);
+//FIXME gtk4    gtk_widget_show_all (m_window);
     DEBUG ("StockAssistantView constructor\n");
 };
 

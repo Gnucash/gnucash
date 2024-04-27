@@ -517,7 +517,7 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
                                          GNC_VENDOR_MODULE_NAME,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (vw->dialog);
+//FIXME gtk4    gtk_widget_show_all (vw->dialog);
     g_object_unref(G_OBJECT(builder));
 
     return vw;

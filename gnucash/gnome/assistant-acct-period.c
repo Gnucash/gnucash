@@ -654,7 +654,7 @@ gnc_acct_period_dialog (void)
     gnc_register_gui_component (ASSISTANT_ACCT_PERIOD_CM_CLASS,
 				NULL, ap_close_handler, info);
 
-    gtk_widget_show_all (info->window);
+//FIXME gtk4    gtk_widget_show_all (info->window);
 
     gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
 }

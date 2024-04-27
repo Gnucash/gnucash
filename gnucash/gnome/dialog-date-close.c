@@ -160,7 +160,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
 
-    gtk_widget_show_all (ddc->dialog);
+//FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
     ddc->retval = FALSE;
     while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
@@ -297,7 +297,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
 
-    gtk_widget_show_all (ddc->dialog);
+//FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
     /* Set the focus on the date widget */
     gnc_date_grab_focus (GNC_DATE_EDIT (ddc->post_date));
@@ -386,7 +386,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     /* Setup signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
 
-    gtk_widget_show_all (ddc->dialog);
+//FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
     gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "postdate_label")));
     gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box")));
