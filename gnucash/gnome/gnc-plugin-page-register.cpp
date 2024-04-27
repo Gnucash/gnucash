@@ -1235,7 +1235,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
 
     priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
-    gtk_widget_show (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), true);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-register-page");
@@ -1249,7 +1249,7 @@ gnc_plugin_page_register_create_widget (GncPluginPage* plugin_page)
                              numRows, priv->read_only);
     priv->gsr = (GNCSplitReg *)gsr;
 
-    gtk_widget_show (gsr);
+    gtk_widget_set_visible (GTK_WIDGET(gsr), true);
     gtk_box_pack_start (GTK_BOX (priv->widget), gsr, TRUE, TRUE, 0);
 
     g_signal_connect (G_OBJECT (gsr), "help-changed",
@@ -1498,7 +1498,7 @@ gnc_plugin_page_register_destroy_widget (GncPluginPage* plugin_page)
     qof_query_destroy (priv->search_query);
     qof_query_destroy (priv->filter_query);
 
-    gtk_widget_hide (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), false);
     gnc_ledger_display_close (priv->ledger);
     priv->ledger = NULL;
     LEAVE (" ");
@@ -4054,7 +4054,7 @@ gnc_plugin_page_register_cmd_view_sort_by (GSimpleAction *simple,
                                       page);
 
     /* Show it */
-    gtk_widget_show (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), true);
     g_object_unref (G_OBJECT (builder));
     LEAVE (" ");
 }
@@ -4198,7 +4198,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
         priv->fd.start_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         hbox = GTK_WIDGET (gtk_builder_get_object (builder, "start_date_hbox"));
         gtk_box_pack_start (GTK_BOX (hbox), priv->fd.start_date, TRUE, TRUE, 0);
-        gtk_widget_show (priv->fd.start_date);
+        gtk_widget_set_visible (GTK_WIDGET(priv->fd.start_date), true);
         gtk_widget_set_sensitive (GTK_WIDGET (priv->fd.start_date), sensitive);
         gnc_date_edit_set_time (GNC_DATE_EDIT (priv->fd.start_date), time_val);
         g_signal_connect (G_OBJECT (priv->fd.start_date), "date-changed",
@@ -4233,7 +4233,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
         priv->fd.end_date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         hbox = GTK_WIDGET (gtk_builder_get_object (builder, "end_date_hbox"));
         gtk_box_pack_start (GTK_BOX (hbox), priv->fd.end_date, TRUE, TRUE, 0);
-        gtk_widget_show (priv->fd.end_date);
+        gtk_widget_set_visible (GTK_WIDGET(priv->fd.end_date), true);
         gtk_widget_set_sensitive (GTK_WIDGET (priv->fd.end_date), sensitive);
         gnc_date_edit_set_time (GNC_DATE_EDIT (priv->fd.end_date), time_val);
         g_signal_connect (G_OBJECT (priv->fd.end_date), "date-changed",
@@ -4246,7 +4246,7 @@ gnc_plugin_page_register_cmd_view_filter_by (GSimpleAction *simple,
                                       page);
 
     /* Show it */
-    gtk_widget_show (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), true);
     g_object_unref (G_OBJECT (builder));
     LEAVE (" ");
 }

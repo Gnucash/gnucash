@@ -310,14 +310,11 @@ update_cleanup:
     /* Check if there are issues preventing a successful payment */
     gtk_label_set_text (GTK_LABEL(pw->conflict_message), conflict_msg);
     gtk_widget_set_sensitive (pw->ok_button, allow_payment);
+
     if (conflict_msg)
-    {
-        gtk_widget_show (pw->payment_warning);
-    }
+        gtk_widget_set_visible (GTK_WIDGET(pw->payment_warning), TRUE);
     else
-    {
-        gtk_widget_hide (pw->payment_warning);
-    }
+        gtk_widget_set_visible (GTK_WIDGET(pw->payment_warning), FALSE);
 
     return allow_payment;
 }
@@ -706,7 +703,7 @@ gnc_payment_dialog_owner_type_changed (PaymentWindow *pw)
     if (pw->owner_choice)
         gtk_widget_destroy(pw->owner_choice);
     pw->owner_choice = gnc_owner_select_create (NULL, pw->owner_box, pw->book, &pw->owner);
-    gtk_widget_show (pw->owner_choice);
+    gtk_widget_set_visible (GTK_WIDGET(pw->owner_choice), TRUE);
     gnc_payment_dialog_owner_changed (pw);
 
     g_signal_connect (G_OBJECT (pw->owner_choice), "changed",

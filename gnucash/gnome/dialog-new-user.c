@@ -213,6 +213,6 @@ gnc_ui_new_user_dialog (void)
 
     new_user = g_new0(GNCNewUserDialog, 1);
     gnc_ui_new_user_dialog_create (new_user);
-    gtk_widget_show (new_user->window);
+    gtk_widget_set_visible (GTK_WIDGET(new_user->window), TRUE);
 }
 

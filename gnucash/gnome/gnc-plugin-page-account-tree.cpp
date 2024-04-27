@@ -624,7 +624,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 
     priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
-    gtk_widget_show (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), true);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-account-page");
@@ -632,7 +632,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_widget_show (scrolled_window);
+    gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
     gtk_box_pack_start (GTK_BOX (priv->widget), scrolled_window,
                         TRUE, TRUE, 0);
 
@@ -675,7 +675,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 
     gtk_tree_view_set_headers_visible(tree_view, TRUE);
     gnc_plugin_page_account_tree_selection_changed_cb (NULL, page);
-    gtk_widget_show (GTK_WIDGET (tree_view));
+    gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
     gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
 
     priv->fd.tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
@@ -694,7 +694,7 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     plugin_page->summarybar = gnc_main_window_summary_new();
     gtk_box_pack_start (GTK_BOX (priv->widget), plugin_page->summarybar,
                         FALSE, FALSE, 0);
-    gtk_widget_show(plugin_page->summarybar);
+    gtk_widget_set_visible (GTK_WIDGET(plugin_page->summarybar), true);
     gnc_plugin_page_account_tree_summarybar_position_changed(NULL, NULL, page);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_SUMMARYBAR_POSITION_TOP,
@@ -1282,7 +1282,7 @@ gppat_setup_account_selector (GtkBuilder *builder, GtkWidget *dialog,
     g_object_set_data(G_OBJECT(dialog), sel_name, selector);
 
     gppat_populate_gas_list(dialog, GNC_ACCOUNT_SEL(selector), TRUE);
-    gtk_widget_show_all(box);
+    gtk_widget_set_visible (GTK_WIDGET(box), true);
 
     return selector;
 }
@@ -1420,17 +1420,17 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
         delete_account_helper(account, &delete_res2);
         if (delete_res2.has_ro_splits)
         {
-            gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "trans_rw")));
+            gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "trans_rw")), false);
             widget = GTK_WIDGET(gtk_builder_get_object (builder, "trans_drb"));
             gtk_widget_set_sensitive(widget, FALSE);
         }
         else
-            gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")));
+            gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")), false);
     }
     else
     {
         gtk_widget_set_sensitive (GTK_WIDGET(gtk_builder_get_object (builder, "transactions")), FALSE);
-        gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")));
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")), false);
     }
 
     // setup subaccount account selector
@@ -1458,12 +1458,12 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
         {
             if (adopt->delete_res.has_ro_splits)
             {
-                gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_rw")));
+                gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_rw")), false);
                 widget = GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_drb"));
                 gtk_widget_set_sensitive(widget, FALSE);
             }
             else
-                gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")));
+                gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")), false);
 
             g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_SA_SPLITS, GINT_TO_POINTER(1));
         }
@@ -1471,14 +1471,14 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
         {
             g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_SA_SPLITS, GINT_TO_POINTER(0));
             gtk_widget_set_sensitive (GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_trans")), FALSE);
-            gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")));
+            gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")), false);
         }
     }
     else
     {
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object (builder, "subaccounts")), FALSE);
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_trans")), FALSE);
-        gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")));
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")), false);
     }
 
     /* default to cancel */

@@ -327,7 +327,7 @@ gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
         r->optwin = std::make_unique<GncOptionsDialog>(nullptr, GTK_WINDOW(gnc_ui_get_main_window (nullptr)));
 
         /* Hide the generic dialog page list. */
-        gtk_widget_hide(r->optwin->get_page_list());
+        gtk_widget_set_visible (GTK_WIDGET(r->optwin->get_page_list()), false);
 
         builder = gtk_builder_new();
         gnc_builder_add_from_file (builder, "dialog-report.glade", "view_contents_table");
@@ -408,7 +408,7 @@ gnc_column_view_edit_options(GncOptionDB* odb, SCM view)
         r->optwin->set_apply_cb(gnc_column_view_edit_apply_cb, r);
         r->optwin->set_close_cb(gnc_column_view_edit_close_cb, r);
 
-        gtk_widget_show(r->optwin->get_widget());
+        gtk_widget_set_visible (GTK_WIDGET(r->optwin->get_widget()), true);
 
         gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, r);
 
@@ -541,7 +541,7 @@ gnc_column_view_edit_size_cb(GtkButton * button, gpointer user_data)
                                   static_cast<float>(high));
 
         dlg_ret = gtk_dialog_run(GTK_DIALOG(dlg));
-        gtk_widget_hide(dlg);
+        gtk_widget_set_visible (GTK_WIDGET(dlg), false);
 
         if (dlg_ret == GTK_RESPONSE_OK)
         {

@@ -462,7 +462,7 @@ gsr_create_table( GNCSplitReg *gsr )
     gnucash_register_set_open_doclink_cb (gsr->reg,
         (GFunc)gsr_default_doclink_from_sheet_handler, gsr);
 
-    gtk_widget_show ( GTK_WIDGET(gsr->reg) );
+    gtk_widget_set_visible (GTK_WIDGET(gsr->reg), TRUE);
     g_signal_connect (gsr->reg, "activate_cursor",
                       G_CALLBACK(gnc_split_reg_record_cb), gsr);
     g_signal_connect (gsr->reg, "redraw_all",

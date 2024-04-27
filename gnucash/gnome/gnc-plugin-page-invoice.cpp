@@ -656,10 +656,10 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-invoice-page");
 
-    gtk_widget_show (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), true);
 
     widget = gnc_invoice_create_page(priv->iw, page);
-    gtk_widget_show (widget);
+    gtk_widget_set_visible (GTK_WIDGET(widget), true);
     gtk_box_pack_start(GTK_BOX (priv->widget), widget, TRUE, TRUE, 0);
 
     plugin_page->summarybar = gnc_invoice_window_create_summary_bar(priv->iw);
@@ -731,7 +731,7 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
         priv->component_manager_id = 0;
     }
 
-    gtk_widget_hide(priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), false);
     gnc_invoice_window_destroy_cb(priv->widget, priv->iw);
     priv->widget = NULL;
     LEAVE("");
@@ -1272,7 +1272,7 @@ gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple,
         {
             has_uri = FALSE;
             if (doclink_button)
-                gtk_widget_hide (GTK_WIDGET(doclink_button));
+                gtk_widget_set_visible (GTK_WIDGET(doclink_button), false);
         }
         else
         {
@@ -1282,7 +1282,7 @@ gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple,
                     gnc_doclink_get_unescaped_just_uri (ret_uri);
                 gtk_link_button_set_uri (GTK_LINK_BUTTON(doclink_button),
                                          display_uri);
-                gtk_widget_show (GTK_WIDGET(doclink_button));
+                gtk_widget_set_visible (GTK_WIDGET(doclink_button), true);
                 g_free (display_uri);
             }
         }

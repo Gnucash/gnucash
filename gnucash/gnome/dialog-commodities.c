@@ -470,5 +470,5 @@ gnc_commodities_dialog (GtkWidget * parent)
 
     gtk_widget_grab_focus (GTK_WIDGET(cd->commodity_tree));
 
-    gtk_widget_show (cd->window);
+    gtk_widget_set_visible (GTK_WIDGET(cd->window), TRUE);
 }

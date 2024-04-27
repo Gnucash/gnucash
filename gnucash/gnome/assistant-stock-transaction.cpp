@@ -1521,7 +1521,7 @@ GncDateEdit::attach(GtkBuilder *builder, const char *table_ID,
     auto table = get_widget(builder, table_ID);
     auto label = get_widget (builder, label_ID);
     gtk_grid_attach(GTK_GRID(table), m_edit, 1, row, 1, 1);
-    gtk_widget_show(m_edit);
+    gtk_widget_set_visible (GTK_WIDGET(m_edit), true);
     gnc_date_make_mnemonic_target (GNC_DATE_EDIT(m_edit), label);
 }
 
@@ -1575,7 +1575,7 @@ GncAmountEdit::attach (GtkBuilder *builder, const char *table_ID,
     auto table = get_widget(builder, table_ID);
     auto label = get_widget(builder, label_ID);
     gtk_grid_attach(GTK_GRID(table), m_edit, 1, row, 1, 1);
-    gtk_widget_show(m_edit);
+    gtk_widget_set_visible (GTK_WIDGET(m_edit), true);
     gnc_amount_edit_make_mnemonic_target(GNC_AMOUNT_EDIT(m_edit), label);
 }
 
@@ -1651,7 +1651,7 @@ GncAccountSelector::attach (GtkBuilder *builder, const char *table_ID,
     auto table = get_widget(builder, table_ID);
     auto label = get_widget(builder, label_ID);
     gtk_grid_attach(GTK_GRID(table), m_selector, 1, row, 1, 1);
-    gtk_widget_show(m_selector);
+    gtk_widget_set_visible (GTK_WIDGET(m_selector), true);
     gtk_label_set_mnemonic_widget(GTK_LABEL(label), m_selector);
 }
 

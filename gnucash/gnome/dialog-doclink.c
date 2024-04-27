@@ -609,11 +609,11 @@ update_total_entries (DoclinkDialog *doclink_dialog)
         gchar *total = g_strdup_printf ("%s %d", _("Total Entries"), entries);
         gtk_label_set_text (GTK_LABEL (doclink_dialog->total_entries_label),
                             total);
-        gtk_widget_show (doclink_dialog->total_entries_label);
+        gtk_widget_set_visible (GTK_WIDGET(doclink_dialog->total_entries_label), TRUE);
         g_free (total);
     }
     else
-        gtk_widget_hide (doclink_dialog->total_entries_label);
+        gtk_widget_set_visible (GTK_WIDGET(doclink_dialog->total_entries_label), FALSE);
 }
 
 static void

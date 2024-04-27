@@ -805,8 +805,8 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
 //FIXME gtk4        gtk_widget_show_all(dialog);
 
-        gtk_widget_hide (data.future_text);
-        gtk_widget_hide (data.future_icon);
+        gtk_widget_set_visible (GTK_WIDGET(data.future_text), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(data.future_icon), FALSE);
 
         gtk_widget_grab_focus(gnc_amount_edit_gtk_entry
                               (GNC_AMOUNT_EDIT (end_value)));
@@ -1866,7 +1866,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
     dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (dock), FALSE);
-    gtk_widget_show(dock);
+    gtk_widget_set_visible (GTK_WIDGET(dock), TRUE);
     gtk_box_pack_start(GTK_BOX (vbox), dock, FALSE, TRUE, 0);
 
     {
@@ -1897,7 +1897,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         gtk_container_add (GTK_CONTAINER(vbox), menu_bar);
 #ifdef MAC_INTEGRATION
         auto theApp = static_cast<GtkosxApplication*>(g_object_new (GTKOSX_TYPE_APPLICATION, NULL));
-        gtk_widget_hide (menu_bar);
+        gtk_widget_set_visible (GTK_WIDGET(menu_bar), FALSE);
         gtk_widget_set_no_show_all (menu_bar, TRUE);
         if (GTK_IS_MENU_ITEM (menu_bar))
             menu_bar = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menu_bar));

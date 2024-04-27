@@ -603,7 +603,7 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
         g_warning("something bad happened in sxftd_compute_sx [%d]", sx_error);
         return;
     }
-    gtk_widget_hide( sxfti->dialog );
+    gtk_widget_set_visible (GTK_WIDGET(sxfti->dialog), FALSE);
     /* force a gui update. */
     context = g_main_context_default();
     while (g_main_context_iteration(context, FALSE));

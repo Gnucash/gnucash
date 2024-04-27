@@ -515,7 +515,7 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
 
     priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
-    gtk_widget_show (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), true);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-owner-page");
@@ -523,7 +523,7 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     scrolled_window = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_widget_show (scrolled_window);
+    gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
     gtk_box_pack_start (GTK_BOX (priv->widget), scrolled_window,
                         TRUE, TRUE, 0);
 
@@ -594,7 +594,7 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
 
     gtk_tree_view_set_headers_visible(tree_view, TRUE);
     gnc_plugin_page_owner_tree_selection_changed_cb (NULL, page);
-    gtk_widget_show (GTK_WIDGET (tree_view));
+    gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
     gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
 
     priv->fd.tree_view = GNC_TREE_VIEW_OWNER(priv->tree_view);

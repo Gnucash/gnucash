@@ -615,7 +615,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
 
         date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         gtk_grid_attach (GTK_GRID(table), date, 1, 0, 1, 1);
-        gtk_widget_show (date);
+        gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
         info->date_edit = date;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "date_label"));
@@ -626,7 +626,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         gtk_grid_attach (GTK_GRID(table), amount, 1, 1, 1, 1);
-        gtk_widget_show (amount);
+        gtk_widget_set_visible (GTK_WIDGET(amount), TRUE);
         info->distribution_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "distribution_label"));
@@ -639,7 +639,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         gtk_grid_attach (GTK_GRID(table), amount, 1, 5, 1, 1);
-        gtk_widget_show (amount);
+        gtk_widget_set_visible (GTK_WIDGET(amount), TRUE);
         info->price_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "price_label"));
@@ -647,7 +647,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
 
         info->price_currency_edit = gnc_currency_edit_new();
         gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(info->price_currency_edit), gnc_default_currency());
-        gtk_widget_show (info->price_currency_edit);
+        gtk_widget_set_visible (GTK_WIDGET(info->price_currency_edit), TRUE);
         gtk_grid_attach (GTK_GRID(table), info->price_currency_edit, 1, 6, 1, 1);
         g_signal_connect (info->price_currency_edit, "changed",
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
@@ -683,7 +683,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                                           NULL, /* user data */
                                           NULL  /* destroy callback */);
 
-        gtk_widget_show (tree);
+        gtk_widget_set_visible (GTK_WIDGET(tree), TRUE);
 
         gtk_tree_view_expand_all (GTK_TREE_VIEW(tree));
         selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
@@ -705,7 +705,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                                           NULL /* user data */,
                                           NULL /* destroy callback */);
 
-        gtk_widget_show (tree);
+        gtk_widget_set_visible (GTK_WIDGET(tree), TRUE);
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "asset_label"));
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);

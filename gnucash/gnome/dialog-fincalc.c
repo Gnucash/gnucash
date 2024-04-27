@@ -716,7 +716,7 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     fcd->payment_total_label = GTK_WIDGET(gtk_builder_get_object (builder, "payment_total_label"));
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "schedule_button"));
-    gtk_widget_hide (button);
+    gtk_widget_set_visible (GTK_WIDGET(button), FALSE);
 
     init_fi (fcd);
 
@@ -729,7 +729,7 @@ gnc_ui_fincalc_dialog_create (GtkWindow *parent)
     g_object_unref (G_OBJECT(builder));
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(fcd->dialog), parent);
-    gtk_widget_show (fcd->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(fcd->dialog), TRUE);
 }
 
 void

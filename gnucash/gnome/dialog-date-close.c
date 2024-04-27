@@ -272,10 +272,9 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     }
     else
     {
-        gtk_widget_hide(ddc->question_check);
-        gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "hide1")));
+        gtk_widget_set_visible (GTK_WIDGET(ddc->question_check), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "hide1")), FALSE);
     }
-
 
     /* Set the post date widget */
     gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->post_date), *post);
@@ -388,10 +387,10 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
 
 //FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "postdate_label")));
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box")));
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry")));
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "memo_label")));
+    gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "postdate_label")), FALSE);
+    gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box")), FALSE);
+    gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry")), FALSE);
+    gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "memo_label")), FALSE);
 
     ddc->retval = FALSE;
     while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)

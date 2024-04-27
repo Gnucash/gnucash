@@ -399,7 +399,7 @@ gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data)
     auto date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
 
     gtk_box_pack_start (GTK_BOX (box), date, FALSE, FALSE, 0);
-    gtk_widget_show (date);
+    gtk_widget_set_visible (GTK_WIDGET(date), true);
     gtk_entry_set_activates_default(GTK_ENTRY(GNC_DATE_EDIT(date)->date_entry), TRUE);
     auto label = GTK_WIDGET(gtk_builder_get_object (builder, "date_label"));
     gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date), label);
@@ -849,6 +849,6 @@ gnc_prices_dialog (GtkWidget * parent)
 
     gtk_widget_grab_focus (GTK_WIDGET(pdb_dialog->price_tree));
 
-    gtk_widget_show (pdb_dialog->window);
+    gtk_widget_set_visible (GTK_WIDGET(pdb_dialog->window), true);
     LEAVE(" ");
 }

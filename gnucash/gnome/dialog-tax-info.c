@@ -1051,7 +1051,7 @@ set_focus_sensitivity (TaxInfoDialog *ti_dialog)
         gtk_widget_grab_focus (ti_dialog->tax_identity_edit_button);
         gtk_widget_set_sensitive (ti_dialog->acct_info, FALSE);
         gtk_widget_set_sensitive (ti_dialog->txf_info, FALSE);
-        gtk_widget_hide (ti_dialog->txf_help_text); /* textview doesn't go insensitive!? */
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->txf_help_text), FALSE); /* textview doesn't go insensitive!? */
     }
     else if (ti_dialog->tax_type_changed)
     {
@@ -1065,13 +1065,14 @@ set_focus_sensitivity (TaxInfoDialog *ti_dialog)
         gtk_widget_grab_focus (ti_dialog->account_treeview);
     }
     if (ti_dialog->asset_txf_infos == NULL)
-        gtk_widget_hide (ti_dialog->asset_radio);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->asset_radio), FALSE);
     else
-        gtk_widget_show (ti_dialog->asset_radio);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->asset_radio), TRUE);
+    
     if (ti_dialog->liab_eq_txf_infos == NULL)
-        gtk_widget_hide (ti_dialog->liab_eq_radio);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->liab_eq_radio), FALSE);
     else
-        gtk_widget_show (ti_dialog->liab_eq_radio);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->liab_eq_radio), TRUE);
 }
 
 static void
@@ -1271,9 +1272,9 @@ tax_related_toggled_cb (GtkToggleButton *togglebutton,
     gtk_widget_set_sensitive (hbox, on);
 
     if (on == FALSE)
-        gtk_widget_hide (ti_dialog->txf_help_text); /* textview doesn't go insensitive!? */
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->txf_help_text), FALSE); /* textview doesn't go insensitive!? */
     else
-        gtk_widget_show (ti_dialog->txf_help_text);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->txf_help_text), TRUE);
 
     gnc_tax_info_set_changed (ti_dialog, TRUE);
 }
@@ -1451,7 +1452,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
                           G_CALLBACK (gnc_tax_info_account_changed_cb),
                           ti_dialog);
 
-        gtk_widget_show (ti_dialog->account_treeview);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->account_treeview), TRUE);
         box = GTK_WIDGET(gtk_builder_get_object (builder, "account_scroll"));
         gtk_container_add (GTK_CONTAINER (box), ti_dialog->account_treeview);
 
@@ -1563,5 +1564,5 @@ gnc_tax_info_dialog (GtkWidget * parent, Account * account)
 
     set_focus_sensitivity (ti_dialog);
 
-    gtk_widget_show (ti_dialog->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(ti_dialog->dialog), TRUE);
 }

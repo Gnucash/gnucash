@@ -519,7 +519,7 @@ billterms_term_refresh (BillTermsWindow *btw)
 
     if (!btw->current_term)
     {
-        gtk_widget_hide (btw->term_vbox);
+        gtk_widget_set_visible (GTK_WIDGET(btw->term_vbox), FALSE);
         return;
     }
 

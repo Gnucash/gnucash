@@ -888,7 +888,7 @@ categories_tree_selection_changed (GtkTreeSelection *selection,
         data->category_accounts_tree = tree_view;
         gtk_tree_view_expand_all (tree_view);
         gtk_container_add(GTK_CONTAINER(data->category_accounts_container), GTK_WIDGET(tree_view));
-        gtk_widget_show(GTK_WIDGET(tree_view));
+        gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
     }
     else
     {
@@ -1386,7 +1386,7 @@ on_final_account_prepare (hierarchy_data  *data)
 
     /* Expand the entire tree */
     gtk_tree_view_expand_all (tree_view);
-    gtk_widget_show(GTK_WIDGET(data->final_account_tree));
+    gtk_widget_set_visible (GTK_WIDGET(data->final_account_tree), true);
     gnc_resume_gui_refresh ();
 }
 
@@ -1597,7 +1597,7 @@ gnc_create_hierarchy_assistant (gboolean use_defaults, GncHierarchyAssistantFini
     data->currency_selector = gnc_currency_edit_new();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(data->currency_selector),
             gnc_default_currency());
-    gtk_widget_show (data->currency_selector);
+    gtk_widget_set_visible (GTK_WIDGET(data->currency_selector), true);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "currency_chooser_hbox"));
     data->currency_selector_label = GTK_WIDGET(gtk_builder_get_object (builder,
                                            "choose_currency_label"));

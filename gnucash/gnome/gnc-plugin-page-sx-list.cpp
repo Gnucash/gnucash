@@ -409,7 +409,7 @@ treeview_popup (GtkTreeView *treeview, const GdkEvent *event, GncPluginPageSxLis
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
     gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (priv->tree_view), NULL);
-    gtk_widget_show_all (menu);
+    gtk_widget_set_visible (GTK_WIDGET(menu), true);
     gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
 }
 
@@ -479,7 +479,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     /* Create Vpaned widget for top level */
     widget = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
     priv->widget = widget;
-    gtk_widget_show (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), true);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-sx-page");
@@ -493,9 +493,9 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-strong");
     gtk_widget_set_margin_start (GTK_WIDGET(label), 6);
     gnc_label_set_alignment (label, 0.0, 0);
-    gtk_widget_show (label);
+    gtk_widget_set_visible (GTK_WIDGET(label), true);
     gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
-    gtk_widget_show (vbox);
+    gtk_widget_set_visible (GTK_WIDGET(vbox), true);
 
     /* Create scrolled window for top area */
     swin = gtk_scrolled_window_new (NULL, NULL);
@@ -503,7 +503,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
     gtk_box_pack_start (GTK_BOX(vbox), swin, TRUE, TRUE, 5);
-    gtk_widget_show (swin);
+    gtk_widget_set_visible (GTK_WIDGET(swin), true);
 
     {
         // gint half_way;
@@ -565,10 +565,10 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-strong");
     gtk_widget_set_margin_start (GTK_WIDGET(label), 6);
     gnc_label_set_alignment (label, 0.0, 0);
-    gtk_widget_show (label);
+    gtk_widget_set_visible (GTK_WIDGET(label), true);
 
     gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
-    gtk_widget_show (vbox);
+    gtk_widget_set_visible (GTK_WIDGET(vbox), true);
 
     /* Create scrolled window for bottom area */
     swin = gtk_scrolled_window_new (NULL, NULL);
@@ -576,7 +576,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
     gtk_box_pack_start (GTK_BOX(vbox), swin, TRUE, TRUE, 5);
-    gtk_widget_show (swin);
+    gtk_widget_set_visible (GTK_WIDGET(swin), true);
 
     {
         priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new (GNC_SX_INSTANCE_MODEL(priv->instances));
