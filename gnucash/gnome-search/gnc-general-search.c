@@ -273,10 +273,10 @@ gnc_gsl_match_selected_cb (GtkEntryCompletion *completion,
  *
  *   @param gsl A pointer to a general search widget. */
 static gboolean
-gnc_gsl_focus_out_cb (GtkEntry         *entry,
-                      GdkEventFocus    *event,
-                      GNCGeneralSearch *gsl)
+gnc_gsl_focus_out_cb (GtkEventControllerFocus *controller,
+                      gpointer user_data)
 {
+    GNCGeneralSearch *gsl = user_data;
     const gchar	*text;
     GtkEntryCompletion *completion;
     GtkTreeModel *model;
@@ -285,6 +285,8 @@ gnc_gsl_focus_out_cb (GtkEntry         *entry,
     gboolean match, valid_iter;
     QofObject *qofobject;
     gpointer selected_item = NULL;
+
+    GtkWidget *entry = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(controller));
 
     /* Attempt to match the current text to a qofobject. */
     completion = gtk_entry_get_completion(entry);
@@ -396,6 +398,9 @@ create_children (GNCGeneralSearch *gsl,
 
     g_signal_connect (G_OBJECT (completion), "match_selected",
                       G_CALLBACK (gnc_gsl_match_selected_cb), gsl);
+
+    GtkEventController *event_controller = gtk_event_controller_focus_new ();
+    gtk_widget_add_controller (GTK_WIDGET(gsl->entry), event_controller);
     g_signal_connect (G_OBJECT (gsl->entry), "focus-out-event",
                       G_CALLBACK (gnc_gsl_focus_out_cb), gsl);
 
