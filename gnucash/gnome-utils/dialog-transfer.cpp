@@ -968,14 +968,14 @@ gnc_xfer_dialog_update_conv_info (XferDialog *xferData)
 }
 
 static gboolean
-gnc_xfer_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
-                          gpointer data)
+gnc_xfer_amount_update_cb (GtkEventControllerFocus *controller,
+                           gpointer user_data)
 {
-    g_return_val_if_fail (data, FALSE);
+    g_return_val_if_fail (user_data, false);
 
-    auto xferData = static_cast<XferDialog *> (data);
+    auto xferData = static_cast<XferDialog *> (user_data);
 
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->amount_edit), NULL);
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(xferData->amount_edit), nullptr);
 
     gnc_xfer_update_to_amount (xferData);
 
@@ -1029,15 +1029,15 @@ gnc_xfer_update_to_amount (XferDialog *xferData)
 
 
 static gboolean
-gnc_xfer_price_update_cb(GtkWidget *widget, GdkEventFocus *event,
-                         gpointer data)
+gnc_xfer_price_update_cb (GtkEventControllerFocus *controller,
+                          gpointer user_data)
 {
-    auto xferData = static_cast<XferDialog *> (data);
+    auto xferData = static_cast<XferDialog *> (user_data);
 
     gnc_xfer_update_to_amount (xferData);
     xferData->price_type = PRICE_TYPE_TRN;
 
-    return FALSE;
+    return false;
 }
 
 static gboolean
@@ -1052,12 +1052,12 @@ gnc_xfer_date_changed_cb(GtkWidget *widget, gpointer data)
 }
 
 static gboolean
-gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
-                             gpointer data)
+gnc_xfer_to_amount_update_cb (GtkEventControllerFocus *controller,
+                              gpointer user_data)
 {
-    auto xferData = static_cast<XferDialog *> (data);
+    auto xferData = static_cast<XferDialog *> (user_data);
 
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit), NULL);
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT (xferData->to_amount_edit), nullptr);
     auto price_value = gnc_xfer_dialog_compute_price_value (xferData);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(xferData->price_edit),
                                price_value);
@@ -1065,7 +1065,7 @@ gnc_xfer_to_amount_update_cb(GtkWidget *widget, GdkEventFocus *event,
     xferData->price_type = PRICE_TYPE_TRN;
     gnc_xfer_dialog_update_conv_info(xferData);
 
-    return FALSE;
+    return false;
 }
 
 
@@ -1872,8 +1872,11 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
 
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (amount));
         gtk_entry_set_activates_default (GTK_ENTRY(entry), TRUE);
-        g_signal_connect (G_OBJECT (entry), "focus-out-event",
-                          G_CALLBACK (gnc_xfer_amount_update_cb), xferData);
+
+        GtkEventController *event_controller1 = gtk_event_controller_focus_new ();
+        gtk_widget_add_controller (GTK_WIDGET(entry), event_controller1);
+        g_signal_connect (G_OBJECT(event_controller1), "leave",
+                          G_CALLBACK(gnc_xfer_amount_update_cb), xferData);
 
         date = gnc_date_edit_new(time (NULL), FALSE, FALSE);
         gnc_date_activates_default (GNC_DATE_EDIT(date), TRUE);
@@ -1984,7 +1987,10 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
         xferData->price_edit = edit;
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
-        g_signal_connect (G_OBJECT (entry), "focus-out-event",
+
+        GtkEventController *event_controller2 = gtk_event_controller_focus_new ();
+        gtk_widget_add_controller (GTK_WIDGET(entry), event_controller2);
+        g_signal_connect (G_OBJECT (event_controller2), "leave",
                           G_CALLBACK (gnc_xfer_price_update_cb), xferData);
         gtk_entry_set_activates_default(GTK_ENTRY (entry), TRUE);
 
@@ -1993,7 +1999,10 @@ gnc_xfer_dialog_create(GtkWidget *parent, XferDialog *xferData)
         gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
         xferData->to_amount_edit = edit;
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (edit));
-        g_signal_connect (G_OBJECT (entry), "focus-out-event",
+
+        GtkEventController *event_controller3 = gtk_event_controller_focus_new ();
+        gtk_widget_add_controller (GTK_WIDGET(entry), event_controller3);
+        g_signal_connect (G_OBJECT (event_controller3), "leave",
                           G_CALLBACK (gnc_xfer_to_amount_update_cb), xferData);
         gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
 

@@ -216,7 +216,8 @@ struct _invoice_window
 
 /* Forward definitions for CB functions */
 void gnc_invoice_window_active_toggled_cb (GtkWidget *widget, gpointer data);
-gboolean gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event, gpointer data);
+gboolean gnc_invoice_window_leave_notes_cb (GtkEventControllerFocus *controller,
+                                            gpointer user_data);
 DialogQueryView *gnc_invoice_show_docs_due (GtkWindow *parent, QofBook *book, double days_in_advance, GncWhichDueType duetype);
 
 #define INV_WIDTH_PREFIX "invoice_reg"
@@ -1517,10 +1518,10 @@ gnc_invoice_window_active_toggled_cb (GtkWidget *widget, gpointer data)
 }
 
 gboolean
-gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
-                                   gpointer data)
+gnc_invoice_window_leave_notes_cb (GtkEventControllerFocus *controller,
+                                   gpointer user_data)
 {
-    InvoiceWindow *iw = data;
+    InvoiceWindow *iw = user_data;
     GncInvoice *invoice = iw_get_invoice(iw);
     GtkTextBuffer* text_buffer;
     GtkTextIter start, end;
@@ -1537,10 +1538,10 @@ gnc_invoice_window_leave_notes_cb (GtkWidget *widget, GdkEventFocus *event,
 }
 
 static gboolean
-gnc_invoice_window_leave_to_charge_cb (GtkWidget *widget, GdkEventFocus *event,
-                                       gpointer data)
+gnc_invoice_window_leave_to_charge_cb (GtkEventControllerFocus *controller,
+                                       gpointer user_data)
 {
-    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(data), NULL);
+    gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(user_data), NULL);
     return FALSE;
 }
 
@@ -2727,9 +2728,11 @@ gnc_invoice_create_page (InvoiceWindow *iw, gpointer page)
         hbox = GTK_WIDGET (gtk_builder_get_object (builder, "to_charge_box"));
         gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
-        g_signal_connect(G_OBJECT(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(edit))),
-                         "focus-out-event",
+        GtkEventController *event_controller = gtk_event_controller_focus_new ();
+        gtk_widget_add_controller (GTK_WIDGET(edit), event_controller);
+        g_signal_connect (G_OBJECT (event_controller), "leave",
                          G_CALLBACK(gnc_invoice_window_leave_to_charge_cb), edit);
+
         g_signal_connect(G_OBJECT(edit), "amount_changed",
                          G_CALLBACK(gnc_invoice_window_changed_to_charge_cb), iw);
     }

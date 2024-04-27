@@ -203,8 +203,8 @@ void gnc_payment_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
         GtkTreeViewColumn *column, PaymentWindow *pw);
-void gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
-                                  PaymentWindow *pw);
+void gnc_payment_leave_amount_cb (GtkEventControllerFocus *controller,
+                                  gpointer user_data);
 void gnc_payment_activate_amount_cb (GtkWidget *widget, PaymentWindow *pw);
 void gnc_payment_window_fill_docs_list (PaymentWindow *pw);
 
@@ -1099,10 +1099,10 @@ gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
 }
 
 void
-gnc_payment_leave_amount_cb (G_GNUC_UNUSED GtkWidget *widget,
-                             G_GNUC_UNUSED GdkEventFocus *event,
-                             PaymentWindow *pw)
+gnc_payment_leave_amount_cb (GtkEventControllerFocus *controller,
+                             gpointer user_data)
 {
+    PaymentWindow *pw = user_data;
     gboolean d_payment_ok = FALSE;
     gboolean c_payment_ok = FALSE;
 
@@ -1134,7 +1134,7 @@ void
 gnc_payment_activate_amount_cb (G_GNUC_UNUSED GtkWidget *widget,
                                 PaymentWindow *pw)
 {
-      gnc_payment_leave_amount_cb (NULL, NULL, pw);
+//FIXME gtk4      gnc_payment_leave_amount_cb (NULL, NULL, pw);
 }
 
 /* Select the list of accounts to show in the tree */
@@ -1303,8 +1303,12 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_debit_edit),
                                            TRUE);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit), gnc_numeric_zero());
-    g_signal_connect(G_OBJECT(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(pw->amount_debit_edit))),
-                     "focus-out-event",
+
+    GtkEventController *event_controller1 = gtk_event_controller_focus_new ();
+    gtk_widget_add_controller (GTK_WIDGET(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(pw->amount_debit_edit))), 
+                                          event_controller1);
+    g_signal_connect(G_OBJECT(event_controller1),
+                     "leave",
                      G_CALLBACK(gnc_payment_leave_amount_cb), pw);
 
     g_signal_connect(G_OBJECT(pw->amount_debit_edit),
@@ -1315,8 +1319,12 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_credit_edit),
                                            TRUE);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit), gnc_numeric_zero());
-    g_signal_connect(G_OBJECT(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(pw->amount_credit_edit))),
-                     "focus-out-event",
+
+    GtkEventController *event_controller2 = gtk_event_controller_focus_new ();
+    gtk_widget_add_controller (GTK_WIDGET(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(pw->amount_credit_edit))), 
+                                          event_controller2);
+    g_signal_connect(G_OBJECT(event_controller2),
+                     "leave",
                      G_CALLBACK(gnc_payment_leave_amount_cb), pw);
 
     g_signal_connect(G_OBJECT(pw->amount_credit_edit),

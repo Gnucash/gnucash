@@ -324,23 +324,24 @@ recnRecalculateBalance (RecnWindow *recnData)
  * Returns:  False - propagate the event to the widget's parent.
  */
 static gboolean
-amount_edit_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
-                         startRecnWindowData *data)
+amount_edit_focus_out_cb (GtkEventControllerFocus *controller,
+                          gpointer user_data)
 {
+    startRecnWindowData *srwd = user_data
     gnc_numeric value;
-    gint result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(data->end_value),
+    gint result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(srwd->end_value),
                                                  &value, TRUE, NULL);
 
-    data->user_set_value = FALSE;
+    srwd->user_set_value = FALSE;
 
     if (result < 1) // OK
     {
         if (result == -1) // blank entry is valid
         {
-            gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(data->end_value), value);
-            gnc_amount_edit_select_region (GNC_AMOUNT_EDIT(data->end_value), 0, -1);
+            gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(srwd->end_value), value);
+            gnc_amount_edit_select_region (GNC_AMOUNT_EDIT(srwd->end_value), 0, -1);
         }
-        data->user_set_value = !gnc_numeric_equal (value, data->original_value);
+        data->user_set_value = !gnc_numeric_equal (value, srwd->original_value);
     }
     return FALSE;
 }
@@ -777,7 +778,10 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (end_value));
         gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
-        fo_handler_id = g_signal_connect (G_OBJECT(entry), "focus-out-event",
+
+        GtkEventController *event_controller = gtk_event_controller_focus_new ();
+        gtk_widget_add_controller (GTK_WIDGET(entry), event_controller);
+        fo_handler_id = g_signal_connect (G_OBJECT(event_controller), "leave",
                                           G_CALLBACK(amount_edit_focus_out_cb),
                                           (gpointer) &data);
         gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
@@ -1053,10 +1057,10 @@ gnc_reconcile_window_double_click_cb(GNCReconcileView *view, Split *split,
 
 
 static void
-gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
-                              gpointer data)
+gnc_reconcile_window_focus_cb (GtkEventControllerFocus *controller,
+                               gpointer user_data)
 {
-    auto recnData = static_cast<RecnWindow*>(data);
+    auto recnData = static_cast<RecnWindow*>(user_data);
     GNCReconcileView *this_view, *other_view;
     GNCReconcileView *debit, *credit;
 
@@ -1157,9 +1161,12 @@ gnc_reconcile_window_create_view_box(Account *account,
     g_signal_connect(view, "double_click_split",
                      G_CALLBACK(gnc_reconcile_window_double_click_cb),
                      recnData);
-    g_signal_connect(view, "focus_in_event",
-                     G_CALLBACK(gnc_reconcile_window_focus_cb),
-                     recnData);
+
+    GtkEventController *event_controller = gtk_event_controller_focus_new ();
+    gtk_widget_add_controller (GTK_WIDGET(view), event_controller);
+    g_signal_connect (G_OBJECT(event_controller), "enter",
+                      G_CALLBACK(gnc_reconcile_window_focus_cb),
+                      recnData);
 
     GtkEventController *event_controller = gtk_event_controller_key_new ();
     gtk_widget_add_controller (GTK_WIDGET(view), event_controller);
