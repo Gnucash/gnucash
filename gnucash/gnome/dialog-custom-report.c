@@ -611,12 +611,12 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
     {
         /* saved reports available
            -> hide the "no reports available" notification */
-        gtk_widget_hide(no_report_notification);
+        gtk_widget_set_visible (GTK_WIDGET(no_report_notification), FALSE);
     }
     else
     {
         /* hide the scrolled window of the report list */
-        gtk_widget_hide(crd->reportview);
+        gtk_widget_set_visible (GTK_WIDGET(crd->reportview), FALSE);
     }
 
     g_object_unref(G_OBJECT(builder));

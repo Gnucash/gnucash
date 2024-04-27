@@ -1038,7 +1038,7 @@ loan_info_calc_update_cb( GtkWidget *w, gpointer user_data )
                 == 1 ? 12 : 1 );
     remain = total - i;
     gtk_spin_button_set_value( ldd->prmRemainSpin, remain );
-    gtk_widget_show( GTK_WIDGET(ldd->prmRemainSpin) );
+    gtk_widget_set_visible (GTK_WIDGET(ldd->prmRemainSpin), true);
 }
 
 
@@ -1917,8 +1917,7 @@ loan_rev_prep( GtkAssistant *assistant, gpointer user_data )
 
     gtk_container_add( GTK_CONTAINER(ldd->revScrollWin),
                        GTK_WIDGET(ldd->revView) );
-    gtk_widget_show( GTK_WIDGET(ldd->revView) );
-
+    gtk_widget_set_visible (GTK_WIDGET(ldd->revView), true);
     loan_rev_recalc_schedule( ldd );
 
     {

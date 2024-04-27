@@ -856,7 +856,7 @@ gnc_plugin_page_budget_cmd_view_options (GSimpleAction *simple,
         gr = GNC_RECURRENCE(gnc_recurrence_new ());
         gnc_recurrence_set (gr, gnc_budget_get_recurrence (priv->budget));
         gtk_box_pack_start (GTK_BOX(gbhb), GTK_WIDGET(gr), TRUE, TRUE, 0);
-        gtk_widget_show (GTK_WIDGET(gr));
+        gtk_widget_set_visible (GTK_WIDGET(gr), true);
 
         gbnumperiods = GTK_WIDGET(gtk_builder_get_object (builder, "BudgetNumPeriods"));
         gtk_spin_button_set_value (GTK_SPIN_BUTTON(gbnumperiods), gnc_budget_get_num_periods (priv->budget));
@@ -1052,7 +1052,7 @@ gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
     hb = GTK_WIDGET(gtk_builder_get_object (builder, "StartDate_hbox"));
     gde = gnc_date_edit_new (time (NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX(hb), gde, TRUE, TRUE, 0);
-    gtk_widget_show (gde);
+    gtk_widget_set_visible (GTK_WIDGET(gde), true);
 
     date = recurrenceGetDate (&priv->r);
     gnc_date_edit_set_gdate (GNC_DATE_EDIT(gde), &date);

@@ -433,7 +433,7 @@ gnc_employee_new_window (GtkWindow *parent,
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 100000);
     ew->workday_amount = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "hours_hbox"));
     gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
@@ -446,7 +446,7 @@ gnc_employee_new_window (GtkWindow *parent,
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
                                   gnc_commodity_get_fraction (currency));
     ew->rate_amount = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "rate_hbox"));
     gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
@@ -460,7 +460,7 @@ gnc_employee_new_window (GtkWindow *parent,
     g_list_free (acct_types);
 
     ew->ccard_acct_sel = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "ccard_acct_hbox"));
     gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);

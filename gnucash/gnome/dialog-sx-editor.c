@@ -1220,7 +1220,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     {
         GtkWidget *endDateBox = GTK_WIDGET (gtk_builder_get_object (builder, "editor_end_date_box"));
         sxed->endDateEntry = GNC_DATE_EDIT (gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE));
-        gtk_widget_show (GTK_WIDGET (sxed->endDateEntry));
+        gtk_widget_set_visible (GTK_WIDGET(sxed->endDateEntry), TRUE);
         g_signal_connect (sxed->endDateEntry, "date-changed",
                           G_CALLBACK (sxed_excal_update_adapt_cb), sxed);
         gtk_box_pack_start (GTK_BOX (endDateBox), GTK_WIDGET (sxed->endDateEntry),
@@ -1275,7 +1275,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     schedXact_editor_populate (sxed);
 
     /* Do not call show_all here */
-    gtk_widget_show (sxed->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(sxed->dialog), TRUE);
     gtk_notebook_set_current_page (GTK_NOTEBOOK (sxed->notebook), 0);
 
     /* Refresh the cal and the ledger */
@@ -1740,7 +1740,7 @@ static void
 _open_editors (GtkDialog *dialog, gint response_code, gpointer data)
 {
     acct_deletion_handler_data *adhd = (acct_deletion_handler_data *)data;
-    gtk_widget_hide (adhd->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(adhd->dialog), FALSE);
     {
         GList *sx_iter;
         for (sx_iter = adhd->affected_sxes; sx_iter; sx_iter = sx_iter->next)

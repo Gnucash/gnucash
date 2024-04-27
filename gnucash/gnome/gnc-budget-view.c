@@ -565,7 +565,7 @@ gbv_create_widget (GncBudgetView *budget_view)
 
     // hide the account scroll window horizontal scroll bar
     h_scrollbar = gtk_scrolled_window_get_hscrollbar (GTK_SCROLLED_WINDOW(scrolled_window));
-    gtk_widget_hide (h_scrollbar);
+    gtk_widget_set_visible (GTK_WIDGET(h_scrollbar), FALSE);
 
     g_signal_connect (G_OBJECT(tree_view), "size-allocate",
                       G_CALLBACK(gbv_treeview_resized_cb), budget_view);

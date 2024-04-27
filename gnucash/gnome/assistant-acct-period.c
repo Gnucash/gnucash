@@ -377,7 +377,7 @@ ap_assistant_book_prepare (GtkAssistant *assistant, gpointer user_data)
     gtk_label_set_text (GTK_LABEL(info->book_details), str);
     g_free (str);
 
-    gtk_widget_show (GTK_WIDGET (info->book_details));
+    gtk_widget_set_visible (GTK_WIDGET(info->book_details), TRUE);
 
     /* Create default settings for the title, notes fields */
     qof_print_date_dmy_buff (prev_close_date_str, MAX_DATE_LENGTH,

@@ -593,7 +593,7 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (edit), print_info);
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit), 100000);
     cw->discount_amount = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "discount_box"));
     gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
@@ -606,7 +606,7 @@ gnc_customer_new_window (GtkWindow *parent, QofBook *bookp, GncCustomer *cust)
     gnc_amount_edit_set_fraction (GNC_AMOUNT_EDIT (edit),
                                   gnc_commodity_get_fraction (currency));
     cw->credit_amount = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "credit_box"));
     gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);

@@ -109,7 +109,7 @@ gnc_options_dialog_help_cb(GncOptionsDialog *opt_dialog,
                                          _("Set the report options you want using this dialog."));
     g_signal_connect(G_OBJECT(dialog), "response",
                      (GCallback)gtk_widget_destroy, nullptr);
-    gtk_widget_show(dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), true);
 }
 
 static void

@@ -507,7 +507,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
                                     gnc_default_currency ());
     pedit_dialog->currency_edit = w;
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
-    gtk_widget_show (w);
+    gtk_widget_set_visible (GTK_WIDGET(w), TRUE);
     g_signal_connect (G_OBJECT (GTK_COMBO_BOX(w)), "changed",
                       G_CALLBACK (pedit_data_changed_cb), pedit_dialog);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "currency_label"));
@@ -517,7 +517,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
     w = gnc_date_edit_new (time (NULL), FALSE, FALSE);
     pedit_dialog->date_edit = w;
     gtk_box_pack_start (GTK_BOX (box), w, TRUE, TRUE, 0);
-    gtk_widget_show (w);
+    gtk_widget_set_visible (GTK_WIDGET(w), TRUE);
     g_signal_connect (G_OBJECT (w), "date_changed",
                       G_CALLBACK (pedit_data_changed_cb), pedit_dialog);
     g_signal_connect (G_OBJECT (GNC_DATE_EDIT (w)->date_entry), "changed",
@@ -542,7 +542,7 @@ gnc_price_pedit_dialog_create (GtkWidget *parent,
                                               (GNC_CURRENCY_EDIT (pedit_dialog->currency_edit)));
     gnc_amount_edit_set_print_info (GNC_AMOUNT_EDIT (w), print_info);
     gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
-    gtk_widget_show (w);
+    gtk_widget_set_visible (GTK_WIDGET(w), TRUE);
     label = GTK_WIDGET(gtk_builder_get_object (builder, "price_label"));
     gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(w), label);
 
@@ -657,7 +657,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
                    pedit_dialog);
     gnc_gui_component_set_session (component_id, pedit_dialog->session);
     gtk_widget_grab_focus (pedit_dialog->commodity_cbwe);
-    gtk_widget_show (pedit_dialog->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(pedit_dialog->dialog), TRUE);
 }
 
 

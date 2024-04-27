@@ -349,7 +349,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (edit), TRUE);
 
     jw->rate_entry = edit;
-    gtk_widget_show (edit);
+    gtk_widget_set_visible (GTK_WIDGET(edit), TRUE);
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "rate_entry"));
     gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);

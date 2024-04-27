@@ -508,8 +508,8 @@ gnc_order_update_window (OrderWindow *ow)
 
     if (hide_cd)
     {
-        gtk_widget_hide (ow->closed_date);
-        gtk_widget_hide (ow->cd_label);
+        gtk_widget_set_visible (GTK_WIDGET(ow->closed_date), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(ow->cd_label), FALSE);
     }
 
     if (ow->dialog_type == VIEW_ORDER)
@@ -521,7 +521,7 @@ gnc_order_update_window (OrderWindow *ow)
         gtk_widget_set_sensitive (ow->notes_text, FALSE); /* XXX: Should notes remain writable? */
 
         /* Hide the 'close order' button */
-        gtk_widget_hide (ow->close_order_button);
+        gtk_widget_set_visible (GTK_WIDGET(ow->close_order_button), FALSE);
     }
 }
 
@@ -610,13 +610,13 @@ gnc_order_new_window (GtkWindow *parent, QofBook *bookp, OrderDialogType type,
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "opened_date_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
-    gtk_widget_show (date);
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->opened_date = date;
 
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "closed_date_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
-    gtk_widget_show (date);
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->closed_date = date;
 
     /* Build the ledger */
@@ -721,7 +721,7 @@ gnc_order_window_new_order (GtkWindow *parent, QofBook *bookp, GncOwner *owner)
     hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_opened_hbox"));
     date = gnc_date_edit_new (time (NULL), FALSE, FALSE);
     gtk_box_pack_start (GTK_BOX (hbox), date, TRUE, TRUE, 0);
-    gtk_widget_show (date);
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     ow->opened_date = date;
 
     /* Setup signals */

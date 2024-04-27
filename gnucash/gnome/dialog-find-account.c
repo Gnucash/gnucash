@@ -502,7 +502,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(facc_dialog->radio_subroot), TRUE);
     }
     else
-        gtk_widget_hide (facc_dialog->radio_frame);
+        gtk_widget_set_visible (GTK_WIDGET(facc_dialog->radio_frame), FALSE);
 
     // Set the filter to Wildcard
     gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");

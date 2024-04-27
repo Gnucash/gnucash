@@ -285,7 +285,7 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
                             imap_dialog);
 
     if (imap_dialog->tot_invalid_maps == 0)
-        gtk_widget_hide (imap_dialog->remove_button);
+        gtk_widget_set_visible (GTK_WIDGET(imap_dialog->remove_button), FALSE);
 
 }
 
@@ -355,7 +355,7 @@ gnc_imap_remove_invalid_maps (ImapDialog *imap_dialog)
 static void
 gnc_imap_invalid_maps_dialog (ImapDialog *imap_dialog)
 {
-    gtk_widget_hide (imap_dialog->remove_button);
+    gtk_widget_set_visible (GTK_WIDGET(imap_dialog->remove_button), FALSE);
 
     if (imap_dialog->tot_invalid_maps > 0)
     {
@@ -372,11 +372,11 @@ gnc_imap_invalid_maps_dialog (ImapDialog *imap_dialog)
         if (gnc_verify_dialog (GTK_WINDOW (imap_dialog->dialog), FALSE, "%s", text))
         {
             gnc_imap_remove_invalid_maps (imap_dialog);
-            gtk_widget_hide (imap_dialog->remove_button);
+            gtk_widget_set_visible (GTK_WIDGET(imap_dialog->remove_button), FALSE);
         }
         else
         {
-            gtk_widget_show (imap_dialog->remove_button);
+            gtk_widget_set_visible (GTK_WIDGET(imap_dialog->remove_button), TRUE);
 
             if (imap_dialog->type == BAYES)
                 imap_dialog->inv_dialog_shown.inv_dialog_shown_bayes = TRUE;
@@ -776,22 +776,11 @@ get_account_info_online (ImapDialog *imap_dialog, GList *accts)
 static void
 show_filter_option (ImapDialog *imap_dialog, gboolean show)
 {
-    if (show)
-    {
-        gtk_widget_show (imap_dialog->filter_text_entry);
-        gtk_widget_show (imap_dialog->filter_button);
-        gtk_widget_show (imap_dialog->filter_label);
-        gtk_widget_show (imap_dialog->expand_button);
-        gtk_widget_show (imap_dialog->collapse_button);
-    }
-    else
-    {
-        gtk_widget_hide (imap_dialog->filter_text_entry);
-        gtk_widget_hide (imap_dialog->filter_button);
-        gtk_widget_hide (imap_dialog->filter_label);
-        gtk_widget_hide (imap_dialog->expand_button);
-        gtk_widget_hide (imap_dialog->collapse_button);
-    }
+    gtk_widget_set_visible (GTK_WIDGET(imap_dialog->filter_text_entry), show);
+    gtk_widget_set_visible (GTK_WIDGET(imap_dialog->filter_button), show);
+    gtk_widget_set_visible (GTK_WIDGET(imap_dialog->filter_label), show);
+    gtk_widget_set_visible (GTK_WIDGET(imap_dialog->expand_button), show);
+    gtk_widget_set_visible (GTK_WIDGET(imap_dialog->collapse_button), show);
 }
 
 static void
@@ -859,13 +848,11 @@ get_account_info (ImapDialog *imap_dialog)
     // add the totals
     total = g_strdup_printf ("%s %d", _("Total Entries"), imap_dialog->tot_entries);
     gtk_label_set_text (GTK_LABEL(imap_dialog->total_entries_label), total);
-    gtk_widget_show (imap_dialog->total_entries_label);
+    gtk_widget_set_visible (GTK_WIDGET(imap_dialog->total_entries_label), TRUE);
     g_free (total);
 
-    if (imap_dialog->tot_invalid_maps > 0)
-        gtk_widget_show (imap_dialog->remove_button);
-    else
-        gtk_widget_hide (imap_dialog->remove_button);
+    gtk_widget_set_visible (GTK_WIDGET(imap_dialog->remove_button),
+                            (imap_dialog->tot_invalid_maps > 0));
 
     g_list_free (accts);
 }
@@ -1047,8 +1034,8 @@ gnc_imap_dialog (GtkWidget *parent)
 
     gnc_gui_component_set_session (component_id, imap_dialog->session);
 
-    gtk_widget_show (imap_dialog->dialog);
-    gtk_widget_hide (imap_dialog->remove_button);
+    gtk_widget_set_visible (GTK_WIDGET(imap_dialog->dialog), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET(imap_dialog->remove_button), FALSE);
     gnc_imap_invalid_maps_dialog (imap_dialog);
     LEAVE(" ");
 }
