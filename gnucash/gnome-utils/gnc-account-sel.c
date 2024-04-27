@@ -525,7 +525,7 @@ icon_release_cb (GtkEntry *entry, GtkEntryIconPosition icon_pos,
     gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(gas), NULL);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_placeholder);
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_hidden);
-    gtk_widget_show_all (menu);
+//FIXME gtk4    gtk_widget_show_all (menu);
 
     g_signal_connect (G_OBJECT(h_placeholder), "toggled",
                       G_CALLBACK(toggle_placeholder_cb), gas);

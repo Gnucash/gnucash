@@ -411,7 +411,7 @@ gnc_job_new_window (GtkWindow *parent, QofBook *bookp, GncOwner *owner, GncJob *
                                          GNC_JOB_MODULE_NAME,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (jw->dialog);
+//FIXME gtk4    gtk_widget_show_all (jw->dialog);
 
     // The job name should have keyboard focus
     gtk_widget_grab_focus(jw->name_entry);

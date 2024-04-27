@@ -1465,7 +1465,7 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
     gnc_gui_component_set_session (dialog->component_id,
                                    gnc_get_current_session ());
 
-    gtk_widget_show_all (dialog->dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog->dialog);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 

@@ -532,7 +532,7 @@ gnc_dense_cal_init (GncDenseCal *dcal)
     if (first_day > 0 && first_day < 8)
         dcal->day_of_week_start = first_day;
 
-    gtk_widget_show_all (GTK_WIDGET(dcal));
+//FIXME gtk4    gtk_widget_show_all(GTK_WIDGET(dcal));
 }
 
 static void
@@ -1484,9 +1484,9 @@ gnc_dense_cal_button_press(GtkWidget *widget,
         // trick with a bit of flicker.
         gtk_window_move(GTK_WINDOW(dcal->transPopup), x_root + 5, y_root + 5);
 
-        populate_hover_window (dcal);
-        gtk_widget_queue_resize (GTK_WIDGET(dcal->transPopup));
-        gtk_widget_show_all (GTK_WIDGET(dcal->transPopup));
+        populate_hover_window(dcal);
+        gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
+//FIXME gtk4        gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
 
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 
@@ -1543,9 +1543,9 @@ gnc_dense_cal_motion_notify (GtkWidget *widget,
         if (dcal->doc != doc) // if we are on the same day, no need to reload
         {
             dcal->doc = doc;
-            populate_hover_window (dcal);
-            gtk_widget_queue_resize (GTK_WIDGET(dcal->transPopup));
-            gtk_widget_show_all (GTK_WIDGET(dcal->transPopup));
+            populate_hover_window(dcal);
+            gtk_widget_queue_resize(GTK_WIDGET(dcal->transPopup));
+//FIXME gtk4            gtk_widget_show_all(GTK_WIDGET(dcal->transPopup));
         }
         gtk_widget_get_allocation(GTK_WIDGET(dcal->transPopup), &alloc);
 

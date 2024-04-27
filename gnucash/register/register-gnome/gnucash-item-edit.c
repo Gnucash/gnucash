@@ -933,7 +933,7 @@ gnc_item_edit_new (GnucashSheet *sheet)
                       G_CALLBACK(tb_button_press_cb), NULL);
 
     gtk_box_pack_start (GTK_BOX(item_edit), item_edit->popup_toggle.ebox, FALSE, FALSE, 0);
-    gtk_widget_show_all (GTK_WIDGET(item_edit));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(item_edit));
     g_signal_connect (G_OBJECT(item_edit), "destroy",
                       G_CALLBACK(gnc_item_edit_destroying), NULL);
     return GTK_WIDGET(item_edit);

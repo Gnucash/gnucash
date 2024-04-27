@@ -1167,7 +1167,7 @@ owner_filter_dialog_create(OwnerFilterDialog *fd, GncPluginPage *page)
     g_object_unref(G_OBJECT(builder));
 
     /* Show it */
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
     LEAVE(" ");
 }
 

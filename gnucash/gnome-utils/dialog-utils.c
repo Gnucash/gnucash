@@ -726,7 +726,7 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *i
         g_object_set (button, "always-show-image", TRUE, NULL);
     }
     g_object_set (button, "can-default", TRUE, NULL);
-    gtk_widget_show_all(button);
+//FIXME gtk4    gtk_widget_show_all(button);
     gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, response);
 }
 

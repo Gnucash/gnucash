@@ -557,6 +557,6 @@ gnc_style_sheet_dialog_open (GtkWindow *parent)
         gnc_restore_window_size (GNC_PREFS_GROUP,
                                  GTK_WINDOW(gnc_style_sheet_dialog->toplevel),
                                  GTK_WINDOW(parent));
-        gtk_widget_show_all (gnc_style_sheet_dialog->toplevel);
+//FIXME gtk4        gtk_widget_show_all (gnc_style_sheet_dialog->toplevel);
     }
 }

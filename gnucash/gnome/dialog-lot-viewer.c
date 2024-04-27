@@ -1175,7 +1175,7 @@ gnc_lot_viewer_dialog (GtkWindow *parent, Account *account)
                                          GNC_ID_LOT,
                                          QOF_EVENT_CREATE | QOF_EVENT_ADD | QOF_EVENT_REMOVE | QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (lv->window);
+//FIXME gtk4    gtk_widget_show_all (lv->window);
     gnc_window_adjust_for_screen (GTK_WINDOW(lv->window));
 
     return lv;

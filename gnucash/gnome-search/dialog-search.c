@@ -349,7 +349,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
         gtk_box_pack_end (GTK_BOX (sw->result_hbox), frame, TRUE, TRUE, 3);
 
         /* And show the results */
-        gtk_widget_show_all (sw->result_hbox);
+//FIXME gtk4        gtk_widget_show_all (sw->result_hbox);
 
         /* But may be hide the select button */
         if (!sw->selected_cb)
@@ -758,7 +758,7 @@ combo_box_changed (GtkComboBox *combo_box, struct _crit_data *data)
     gnc_search_core_type_pass_parent (data->element, GTK_WINDOW(data->dialog));
 
     /* Make sure it's visible */
-    gtk_widget_show_all (data->container);
+//FIXME gtk4    gtk_widget_show_all (data->container);
 
     /* Make sure we widen up if necessary */
     gtk_widget_queue_resize (GTK_WIDGET (data->dialog));
@@ -850,7 +850,7 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     gtk_box_pack_start (GTK_BOX (hbox), combo_box, FALSE, FALSE, 0);
     if (p)
         gtk_box_pack_start (GTK_BOX (hbox), p, FALSE, FALSE, 0);
-    gtk_widget_show_all (hbox);
+//FIXME gtk4    gtk_widget_show_all (hbox);
 
     return hbox;
 }
@@ -918,7 +918,7 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
                 gtk_box_pack_start (GTK_BOX (data->container), new_combo_box,
                                                                FALSE, FALSE, 0);
                 gtk_box_reorder_child(GTK_BOX (data->container), new_combo_box, 0);
-                gtk_widget_show_all (data->container);
+//FIXME gtk4                gtk_widget_show_all (data->container);
             }
         }
         g_list_free (children);

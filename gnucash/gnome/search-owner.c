@@ -160,7 +160,7 @@ set_owner_widget (GNCSearchOwner *fe)
     g_signal_connect (G_OBJECT (fe->owner_choice), "changed",
                       G_CALLBACK (owner_changed_cb), fe);
 
-    gtk_widget_show_all (fe->owner_choice);
+//FIXME gtk4    gtk_widget_show_all (fe->owner_choice);
 }
 
 static void

@@ -353,7 +353,7 @@ gnc_input_dialog_internal (GtkWidget *parent, const gchar *title, const gchar *m
     gtk_box_pack_start(GTK_BOX(content_area), view, TRUE, TRUE, 0);
 
     // run the dialog
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
     result = gtk_dialog_run (GTK_DIALOG (dialog));
     
     if (result != GTK_RESPONSE_REJECT)
@@ -435,7 +435,7 @@ gnc_info2_dialog (GtkWidget *parent, const gchar *title, const gchar *msg)
         gtk_window_get_size (GTK_WINDOW(parent), &width, &height);
         gtk_window_set_default_size (GTK_WINDOW(dialog), width, height);
     }
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
     gtk_dialog_run (GTK_DIALOG (dialog));
     gtk_widget_destroy (dialog);
 }

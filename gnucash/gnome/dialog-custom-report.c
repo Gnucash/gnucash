@@ -595,7 +595,7 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
     /* connect the signals */
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, crd);
 
-    gtk_widget_show_all(crd->dialog);
+//FIXME gtk4    gtk_widget_show_all(crd->dialog);
 
     // Use this event to capture the escape key being pressed
     GtkEventController *event_controller = gtk_event_controller_key_new ();

@@ -329,7 +329,7 @@ gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book)
     gnc_tree_view_budget_set_model (tv, tm);
     g_object_unref (tm);
     gtk_container_add (GTK_CONTAINER(gtk_dialog_get_content_area (dlg)), GTK_WIDGET(tv));
-    gtk_widget_show_all (GTK_WIDGET(dlg));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(dlg));
 
     // Preselect the default budget
     bgt = gnc_budget_get_default (book);

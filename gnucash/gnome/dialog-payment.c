@@ -1438,7 +1438,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(pw->dialog), GTK_WINDOW(parent));
 
     /* Show it all */
-    gtk_widget_show_all (pw->dialog);
+//FIXME gtk4    gtk_widget_show_all (pw->dialog);
     g_object_unref(G_OBJECT(builder));
 
     // The customer choice widget should have keyboard focus
@@ -1678,7 +1678,7 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
         }
 
         gtk_dialog_set_default_response (dialog, GTK_BUTTONS_CANCEL);
-        gtk_widget_show_all (GTK_WIDGET(dialog));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(dialog));
         answer = gtk_dialog_run (dialog);
 
         if (answer == GTK_BUTTONS_OK)

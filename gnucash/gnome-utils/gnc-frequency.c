@@ -244,7 +244,7 @@ gnc_frequency_init(GncFrequency *gf)
                          G_CALLBACK(weekly_days_changed), gf);
     }
 
-    gtk_widget_show_all(GTK_WIDGET(&gf->widget));
+//FIXME gtk4    gtk_widget_show_all(GTK_WIDGET(&gf->widget));
 
     /* respond to start date changes */
     g_signal_connect(gf->startDate, "date_changed", G_CALLBACK(start_date_changed), gf);

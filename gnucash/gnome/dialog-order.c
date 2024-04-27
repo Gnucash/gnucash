@@ -454,7 +454,7 @@ gnc_order_update_window (OrderWindow *ow)
                       G_CALLBACK (gnc_order_owner_changed_cb),
                       ow);
 
-    gtk_widget_show_all (ow->dialog);
+//FIXME gtk4    gtk_widget_show_all (ow->dialog);
 
     {
         GtkTextBuffer* text_buffer;

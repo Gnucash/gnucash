@@ -627,7 +627,7 @@ gnc_header_init (GncHeader *header)
 
     g_signal_connect (G_OBJECT(header), "configure_event",
                       G_CALLBACK(gnc_header_reconfigure), NULL);
-    gtk_widget_show_all (GTK_WIDGET(header));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(header));
 }
 
 

@@ -435,7 +435,7 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
     g_free(child_name);
 
     g_object_add_weak_pointer(G_OBJECT(page), (gpointer*)(&weak_page));
-    gtk_widget_show_all( GTK_WIDGET(priv->container) );
+//FIXME gtk4    gtk_widget_show_all( GTK_WIDGET(priv->container) );
 
     priv->loaded = TRUE;
 
@@ -581,7 +581,7 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
                           G_CALLBACK(webkit_key_press_event_cb), page);
     }
 
-    gtk_widget_show_all( GTK_WIDGET(priv->container) );
+//FIXME gtk4    gtk_widget_show_all( GTK_WIDGET(priv->container) );
     LEAVE("container %p", priv->container);
     return GTK_WIDGET( priv->container );
 }

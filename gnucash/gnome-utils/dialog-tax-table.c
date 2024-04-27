@@ -354,7 +354,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ntt);
 
     /* Show what we should */
-    gtk_widget_show_all (ntt->dialog);
+//FIXME gtk4    gtk_widget_show_all (ntt->dialog);
     if (new_table == FALSE)
     {
         gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "table_title")));
@@ -991,7 +991,7 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
 
     tax_table_window_refresh (ttw);
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ttw->dialog), parent);
-    gtk_widget_show_all (ttw->dialog);
+//FIXME gtk4    gtk_widget_show_all (ttw->dialog);
 
     g_object_unref (G_OBJECT(builder));
 

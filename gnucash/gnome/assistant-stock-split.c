@@ -790,7 +790,7 @@ gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
     }
 
     gtk_window_set_transient_for (GTK_WINDOW (info->window), GTK_WINDOW(parent));
-    gtk_widget_show_all (info->window);
+//FIXME gtk4    gtk_widget_show_all (info->window);
 
     gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
 }

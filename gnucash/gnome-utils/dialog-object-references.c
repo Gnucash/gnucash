@@ -84,7 +84,7 @@ gnc_ui_object_references_show( const gchar* explanation_text, GList* objlist )
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     /* Run the dialog */
-    gtk_widget_show_all( dialog );
+//FIXME gtk4    gtk_widget_show_all( dialog );
     gtk_dialog_run( GTK_DIALOG(dialog) );
     g_object_unref(G_OBJECT(builder));
     g_object_unref (store);
