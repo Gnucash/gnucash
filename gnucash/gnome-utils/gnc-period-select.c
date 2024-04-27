@@ -615,7 +615,7 @@ gnc_period_select_new (gboolean starting_labels)
 
     /* Add the internal widgets to the hbox */
     gtk_box_pack_start(GTK_BOX(period), period->selector, TRUE, TRUE, 0);
-    gtk_widget_show(period->selector);
+    gtk_widget_set_visible (GTK_WIDGET(period->selector), TRUE);
 
     /* Find out when the combo box changes */
     g_signal_connect(G_OBJECT(period->selector), "changed",
@@ -650,7 +650,7 @@ gnc_period_select_new_glade (gchar *widget_name,
     widget = gnc_period_select_new(int1 != 0);
     if (int2)
         gnc_period_select_set_show_date(GNC_PERIOD_SELECT(widget), TRUE);
-    gtk_widget_show(widget);
+    gtk_widget_set_visible (GTK_WIDGET(widget), TRUE);
     return widget;
 }
 

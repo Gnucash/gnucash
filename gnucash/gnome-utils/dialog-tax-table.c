@@ -357,10 +357,11 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
 //FIXME gtk4    gtk_widget_show_all (ntt->dialog);
     if (new_table == FALSE)
     {
-        gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "table_title")));
-        gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "table_name")));
-        gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "spacer")));
-        gtk_widget_hide (ntt->name_entry);
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "table_title")), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "table_name")), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "spacer")), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(ntt->name_entry), FALSE);
+
         /* Tables are great for layout, but a pain when you hide widgets */
         GTK_WIDGET(gtk_builder_get_object (builder, "ttd_table"));
         gtk_widget_grab_focus (gnc_amount_edit_gtk_entry
@@ -370,7 +371,7 @@ new_tax_table_dialog (TaxTableWindow *ttw, gboolean new_table,
         gtk_widget_grab_focus (ntt->name_entry);
 
     /* Display the dialog now that we're done manipulating it */
-    gtk_widget_show (ntt->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(ntt->dialog), TRUE);
 
     done = FALSE;
     while (!done)
@@ -644,21 +645,21 @@ static const char
     main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX(main_vbox), FALSE);
     gtk_container_set_border_width (GTK_CONTAINER(main_vbox), 6);
-    gtk_widget_show (main_vbox);
+    gtk_widget_set_visible (GTK_WIDGET(main_vbox), TRUE);
 
     label = gtk_label_new (msg);
     gtk_label_set_justify (GTK_LABEL(label), GTK_JUSTIFY_LEFT);
     gtk_box_pack_start (GTK_BOX(main_vbox), label, FALSE, FALSE, 0);
-    gtk_widget_show (label);
+    gtk_widget_set_visible (GTK_WIDGET(label), TRUE);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX(vbox), TRUE);
     gtk_container_set_border_width (GTK_CONTAINER(vbox), 6);
     gtk_container_add (GTK_CONTAINER(main_vbox), vbox);
-    gtk_widget_show (vbox);
+    gtk_widget_set_visible (GTK_WIDGET(vbox), TRUE);
 
     textbox = gtk_entry_new ();
-    gtk_widget_show (textbox);
+    gtk_widget_set_visible (GTK_WIDGET(textbox), TRUE);
     gtk_entry_set_text (GTK_ENTRY(textbox), text);
     gtk_box_pack_start (GTK_BOX(vbox), textbox, FALSE, FALSE, 0);
 

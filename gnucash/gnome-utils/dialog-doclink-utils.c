@@ -425,7 +425,7 @@ gnc_doclink_pref_path_head_changed (GtkWindow *parent, const gchar *old_path_hea
     gnc_doclink_set_path_head_label (old_head_label, old_path_head_uri, _("Existing"));
     gnc_doclink_set_path_head_label (new_head_label, new_path_head_uri, _("New"));
 
-    gtk_widget_show (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
     g_object_unref (G_OBJECT(builder));
 
     // run the dialog

@@ -437,7 +437,7 @@ gnc_tree_view_price_new (QofBook *book,
                                              GTK_SORT_ASCENDING);
     }
 
-    gtk_widget_show(GTK_WIDGET(view));
+    gtk_widget_set_visible (GTK_WIDGET(view), TRUE);
     LEAVE(" %p", view);
     return GTK_TREE_VIEW(view);
 }

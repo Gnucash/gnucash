@@ -480,7 +480,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                          GNC_TREE_MODEL_OWNER_COL_NAME,
                                          GTK_SORT_ASCENDING);
 
-    gtk_widget_show(GTK_WIDGET(view));
+    gtk_widget_set_visible (GTK_WIDGET(view), TRUE);
     LEAVE("%p", view);
     return GTK_TREE_VIEW(view);
 }

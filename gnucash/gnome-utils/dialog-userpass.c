@@ -72,7 +72,7 @@ gnc_get_username_password (GtkWidget *parent,
         gtk_entry_set_text (GTK_ENTRY (password_entry), initial_password);
 
     result = gtk_dialog_run(GTK_DIALOG (dialog));
-    gtk_widget_hide(dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), FALSE);
 
     if (result == GTK_RESPONSE_OK)
     {

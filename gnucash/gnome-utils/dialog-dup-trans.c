@@ -178,7 +178,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
         date_edit = gnc_date_edit_new (date, FALSE, FALSE);
         gnc_date_activates_default (GNC_DATE_EDIT(date_edit), TRUE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
-        gtk_widget_show (date_edit);
+        gtk_widget_set_visible (GTK_WIDGET(date_edit), TRUE);
 
         gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), dt_dialog->date_label);
 

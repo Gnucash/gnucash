@@ -1034,7 +1034,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     g_signal_connect (G_OBJECT(view), "query-tooltip",
                       G_CALLBACK(gnc_tree_view_tooltip_cb), NULL);
 
-    gtk_widget_show(GTK_WIDGET(view));
+    gtk_widget_set_visible (GTK_WIDGET(view), TRUE);
     LEAVE("%p", view);
     return GTK_TREE_VIEW(view);
 }

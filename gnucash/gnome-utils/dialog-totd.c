@@ -367,7 +367,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     gnc_new_tip_number(totd_dialog, 1);
 
     gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(totd_dialog->dialog), parent);
-    gtk_widget_show(GTK_WIDGET (totd_dialog->dialog));
+    gtk_widget_set_visible (GTK_WIDGET(totd_dialog->dialog), TRUE);
 
     gnc_register_gui_component(DIALOG_TOTD_CM_CLASS,
                                NULL, close_handler, totd_dialog);

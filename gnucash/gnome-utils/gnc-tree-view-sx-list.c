@@ -143,7 +143,7 @@ gnc_tree_view_sx_list_new (GncSxInstanceModel *sx_instances)
 
     gnc_tree_view_configure_columns (GNC_TREE_VIEW(view));
 
-    gtk_widget_show (GTK_WIDGET(view));
+    gtk_widget_set_visible (GTK_WIDGET(view), TRUE);
     return GTK_TREE_VIEW(view);
 }
 

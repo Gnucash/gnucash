@@ -173,7 +173,7 @@ create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
     gsl->entry = gtk_entry_new ();
     gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
     gtk_box_pack_start (GTK_BOX (gsl), gsl->entry, TRUE, TRUE, 0);
-    gtk_widget_show (gsl->entry);
+    gtk_widget_set_visible (GTK_WIDGET(gsl->entry), TRUE);
 
     if (type == GNC_GENERAL_SELECT_TYPE_SELECT)
         gsl->button = gtk_button_new_with_label (_("Select…"));
@@ -185,7 +185,7 @@ create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
     gtk_box_pack_start (GTK_BOX (gsl), gsl->button, FALSE, FALSE, 0);
     g_signal_connect (G_OBJECT (gsl->button), "clicked",
                       G_CALLBACK (select_cb), gsl);
-    gtk_widget_show (gsl->button);
+    gtk_widget_set_visible (GTK_WIDGET(gsl->button), TRUE);
 }
 
 /**

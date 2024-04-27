@@ -625,7 +625,7 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
                                       NULL    /* destroy callback */);
     g_object_set_data (G_OBJECT(tree_view), "filter-info", info);
 
-    gtk_widget_show(GTK_WIDGET(tree_view));
+    gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
 
     GtkEventController *event_controller = gtk_event_controller_key_new ();
     gtk_widget_add_controller (GTK_WIDGET(tree_view), event_controller);
@@ -1165,8 +1165,8 @@ gnc_xfer_dialog_lock_account_tree(XferDialog *xferData,
 
     if (hide)
     {
-        gtk_widget_hide( scroll_win );
-        gtk_widget_hide( GTK_WIDGET(show_button) );
+        gtk_widget_set_visible (GTK_WIDGET(scroll_win), false);
+        gtk_widget_set_visible (GTK_WIDGET(show_button), false);
     }
 }
 
@@ -2029,7 +2029,7 @@ close_handler (gpointer user_data)
     auto dialog = GTK_WIDGET (xferData->dialog);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW (dialog));
-    gtk_widget_hide (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), false);
     gnc_xfer_dialog_close_cb(GTK_DIALOG(dialog), xferData);
     gtk_widget_destroy (dialog);
     g_free (to_info);
@@ -2196,7 +2196,7 @@ void gnc_xfer_dialog_add_user_specified_button( XferDialog *xferData,
                                                        "transfermain-vbox" ));
         gtk_box_pack_end( GTK_BOX(box), button, FALSE, FALSE, 0 );
         g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (callback), user_data);
-        gtk_widget_show( button );
+        gtk_widget_set_visible (GTK_WIDGET(button), true);
     }
 }
 
@@ -2204,12 +2204,7 @@ void gnc_xfer_dialog_toggle_currency_table( XferDialog *xferData,
                                             gboolean show_table )
 {
     if (xferData && xferData->curr_xfer_table)
-    {
-        if (show_table)
-            gtk_widget_show(xferData->curr_xfer_table);
-        else
-            gtk_widget_hide(xferData->curr_xfer_table);
-    }
+        gtk_widget_set_visible (GTK_WIDGET(xferData->curr_xfer_table), show_table);
 }
 
 
