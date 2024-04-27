@@ -1998,7 +1998,8 @@ These splits may make reconciliation difficult. If this is the case, you may \
 use Find Transactions to find them, unreconcile, and re-reconcile."));
 
             gtk_box_append (GTK_BOX(box), GTK_WIDGET(image));
-            gtk_box_reorder_child (GTK_BOX(box), image, 0);
+
+            gtk_box_reorder_child_after (GTK_BOX(box), GTK_WIDGET(image), NULL);
 
             g_free (datestr);
             g_free (recnstr);

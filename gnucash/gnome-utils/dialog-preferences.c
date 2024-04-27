@@ -973,7 +973,7 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
     g_object_set_data_full (G_OBJECT(fcb_new),"pref", g_strdup (pref), (GDestroyNotify) g_free);
 
     gtk_box_append (GTK_BOX(box), GTK_WIDGET(fcb_new));
-    gtk_box_reorder_child (GTK_BOX(box), fcb_new, 0);
+    gtk_box_reorder_child_after (GTK_BOX(box), GTK_WIDGET(fcb_new), NULL);
     gtk_widget_set_visible (GTK_WIDGET(fcb_new), TRUE);
 
     g_signal_connect (GTK_BUTTON(button), "clicked",

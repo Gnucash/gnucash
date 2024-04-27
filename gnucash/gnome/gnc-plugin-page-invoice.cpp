@@ -834,9 +834,9 @@ gnc_plugin_page_invoice_summarybar_position_changed (gpointer prefs,
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
         position = GTK_POS_TOP;
 
-    gtk_box_reorder_child(GTK_BOX(priv->widget),
-                          plugin_page->summarybar,
-                          (position == GTK_POS_TOP ? 0 : -1) );
+//FIXME gtk4    gtk_box_reorder_child(GTK_BOX(priv->widget),
+//                          plugin_page->summarybar,
+//                          (position == GTK_POS_TOP ? 0 : -1) );
 }
 
 

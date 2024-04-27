@@ -2514,7 +2514,7 @@ main_window_update_page_set_read_only_icon (GncPluginPage *page,
 
     gtk_box_prepend (GTK_BOX(tab_widget), GTK_WIDGET(image));
     gtk_widget_set_margin_start (GTK_WIDGET(image), 5);
-    gtk_box_reorder_child (GTK_BOX(tab_widget), image, 0);
+    gtk_box_reorder_child_after (GTK_BOX(tab_widget), GTK_WIDGET(image), nullptr);
 
     g_free (image_name);
     LEAVE("done");

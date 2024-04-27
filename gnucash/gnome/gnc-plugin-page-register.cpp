@@ -2286,9 +2286,9 @@ gnc_plugin_page_register_summarybar_position_changed (gpointer prefs,
                             GNC_PREF_SUMMARYBAR_POSITION_TOP))
         position = GTK_POS_TOP;
 
-    gtk_box_reorder_child (GTK_BOX (priv->widget),
-                           plugin_page->summarybar,
-                           (position == GTK_POS_TOP ? 0 : -1));
+//FIXME gtk4    gtk_box_reorder_child (GTK_BOX (priv->widget),
+//                           plugin_page->summarybar,
+//                           (position == GTK_POS_TOP ? 0 : -1));
 }
 
 /** This function is called to get the query associated with this

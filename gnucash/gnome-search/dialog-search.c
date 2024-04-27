@@ -923,7 +923,8 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
                 /* Set new combo_box to current active item */
                 gtk_combo_box_set_active(GTK_COMBO_BOX(new_combo_box), index);
                 gtk_box_append (GTK_BOX(data->container), GTK_WIDGET(new_combo_box));
-                gtk_box_reorder_child(GTK_BOX (data->container), new_combo_box, 0);
+                gtk_box_reorder_child_after (GTK_BOX(data->container),
+                                             GTK_WIDGET(new_combo_box), NULL);
 //FIXME gtk4                gtk_widget_show_all (data->container);
             }
         }
