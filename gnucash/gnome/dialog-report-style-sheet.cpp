@@ -468,19 +468,17 @@ gnc_style_sheet_window_close_handler (gpointer user_data)
 }
 
 static gboolean
-gnc_style_sheet_select_dialog_check_escape_cb (GtkWidget *widget,
-                                               const GdkEvent *event,
+gnc_style_sheet_select_dialog_check_escape_cb (GtkEventControllerKey *key, guint keyval,
+                                               guint keycode, GdkModifierType state,
                                                gpointer user_data)
 {
-    guint keyval;
-
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
         gnc_close_gui_component (ss->component_id);
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 static StyleSheetDialog *
@@ -524,7 +522,9 @@ gnc_style_sheet_select_dialog_create (GtkWindow *parent)
     g_signal_connect (ss->toplevel, "delete-event",
                       G_CALLBACK(gnc_style_sheet_select_dialog_delete_event_cb), ss);
 
-    g_signal_connect (ss->toplevel, "key-press-event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(ss->toplevel), event_controller);
+    g_signal_connect (G_OBJECT(event_controller), "key-press-event",
                       G_CALLBACK(gnc_style_sheet_select_dialog_check_escape_cb), ss);
 
     gnc_style_sheet_select_dialog_fill (ss);

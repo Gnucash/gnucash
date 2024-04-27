@@ -164,21 +164,20 @@ delete_popup (GtkWidget *widget, const GdkEvent *event, gpointer data)
 }
 
 static gint
-key_press_popup (GtkWidget *widget, const GdkEvent *event, gpointer data)
+key_press_popup (GtkEventControllerKey *key, guint keyval,
+                 guint keycode, GdkModifierType state,
+                 gpointer user_data)
 {
-    GNCDateEdit *gde = data;
-    guint keyval;
+    GNCDateEdit *gde = user_data;
 
-    if (!gdk_event_get_keyval (event, &keyval))
-        return FALSE;
+//FIXME gtk4    if (keyval != GDK_KEY_Return &&
+//        keyval != GDK_KEY_KP_Enter &&
+//        keyval != GDK_KEY_Escape)
+//        return date_accel_key_press(gde->date_entry, event, user_data);
 
-    if (keyval != GDK_KEY_Return &&
-        keyval != GDK_KEY_KP_Enter &&
-        keyval != GDK_KEY_Escape)
-        return date_accel_key_press(gde->date_entry, event, data);
+//FIXME gtk4    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
 
-    gde = data;
-    g_signal_stop_emission_by_name (G_OBJECT (widget), "key-press-event");
+//FIXME gtk4    g_signal_stop_emission_by_name (G_OBJECT (widget), "key-press-event");
     gnc_date_edit_popdown (gde);
 
     return TRUE;
@@ -785,12 +784,14 @@ date_accel_key_press(GtkWidget *widget, const GdkEvent *event, gpointer data)
 }
 
 static gint
-key_press_entry (GtkWidget *widget, const GdkEvent *event, gpointer data)
+key_press_entry (GtkEventControllerKey *key, guint keyval,
+                 guint keycode, GdkModifierType state,
+                 gpointer user_data)
 {
-    if (!date_accel_key_press (widget, event, data))
-        return FALSE;
+//FIXME gtk4    if (!date_accel_key_press (widget, event, user_data))
+//        return FALSE;
 
-    g_signal_stop_emission_by_name (widget, "key-press-event");
+//FIXME gtk4    g_signal_stop_emission_by_name (widget, "key-press-event");
     return TRUE;
 }
 
@@ -824,7 +825,10 @@ create_children (GNCDateEdit *gde)
     gtk_entry_set_width_chars (GTK_ENTRY (gde->date_entry), 11);
     gtk_box_pack_start (GTK_BOX (gde), gde->date_entry, TRUE, TRUE, 0);
     gtk_widget_show (GTK_WIDGET(gde->date_entry));
-    g_signal_connect (G_OBJECT (gde->date_entry), "key-press-event",
+
+    GtkEventController *event_controller1 = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(gde->date_entry), event_controller1);
+    g_signal_connect (G_OBJECT(event_controller1), "key-press-event",
                       G_CALLBACK (key_press_entry), gde);
     g_signal_connect (G_OBJECT (gde->date_entry), "focus-out-event",
                       G_CALLBACK (date_focus_out_event), gde);
@@ -903,7 +907,10 @@ create_children (GNCDateEdit *gde)
 
     g_signal_connect (gde->cal_popup, "delete-event",
                       G_CALLBACK(delete_popup), gde);
-    g_signal_connect (gde->cal_popup, "key-press-event",
+
+    GtkEventController *event_controller2 = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(gde->cal_popup), event_controller2);
+    g_signal_connect (G_OBJECT(event_controller2), "key-press-event",
                       G_CALLBACK(key_press_popup), gde);
     g_signal_connect (gde->cal_popup, "button-press-event",
                       G_CALLBACK(gnc_date_edit_button_pressed), gde);

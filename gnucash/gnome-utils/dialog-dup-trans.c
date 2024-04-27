@@ -110,8 +110,11 @@ gnc_dup_inc_dec (GtkWidget *widget, const gchar *text, gint inc_dec)
 }
 
 static gboolean
-gnc_dup_key_press_event_cb (GtkWidget *widget, const GdkEvent *event, gpointer user_data)
+gnc_dup_key_press_event_cb (GtkEventControllerKey *key, guint keyval,
+                            guint keycode, GdkModifierType state,
+                            gpointer user_data)
 {
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
     const gchar *text = gtk_entry_get_text (GTK_ENTRY(widget));
 
     if (gnc_strisnum (text))
@@ -120,10 +123,6 @@ gnc_dup_key_press_event_cb (GtkWidget *widget, const GdkEvent *event, gpointer u
         gint increment;
         guint keyval;
         GdkModifierType state;
-
-        if (!gdk_event_get_keyval (event, &keyval) ||
-            !gdk_event_get_state (event, &state))
-            return FALSE;
 
         if ((state & modifiers) == GDK_CONTROL_MASK ||
             (state & modifiers) == GDK_MOD1_MASK)
@@ -206,11 +205,17 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     if (tnum_str)
         gtk_entry_set_text (GTK_ENTRY(dt_dialog->tnum_edit), tnum_str);
 
-    g_signal_connect (dt_dialog->num_edit, "key-press-event",
+//FIXME in Gtk4 this may need changing to use  GtkEditable::insert-text
+
+    GtkEventController *event_controller1 = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(dt_dialog->num_edit), event_controller1);
+    g_signal_connect (G_OBJECT(event_controller1), "key-press-event",
                       G_CALLBACK(gnc_dup_key_press_event_cb),
                       dt_dialog);
 
-    g_signal_connect (dt_dialog->tnum_edit, "key-press-event",
+    GtkEventController *event_controller2 = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(dt_dialog->tnum_edit), event_controller2);
+    g_signal_connect (G_OBJECT(event_controller2), "key-press-event",
                       G_CALLBACK(gnc_dup_key_press_event_cb),
                       dt_dialog);
 

@@ -462,21 +462,17 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
 /* used to capture Ctrl+Alt+PgUp/Down for tab selection */
 static gboolean
-webkit_key_press_event_cb (GtkWidget *widget, const GdkEvent *event, gpointer user_data)
+webkit_key_press_event_cb (GtkEventControllerKey *key, guint keyval,
+                           guint keycode, GdkModifierType state,
+                           gpointer user_data)
 {
     GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(user_data);
     GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
     GtkWidget *window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(report));
-    GdkModifierType state;
-    guint keyval;
 
     if (GNC_PLUGIN_PAGE(report) != gnc_main_window_get_current_page (GNC_MAIN_WINDOW(window)))
-        return FALSE;
-
-    if (!gdk_event_get_keyval (event, &keyval) ||
-        !gdk_event_get_state (event, &state))
-        return FALSE;
+        return false;
 
     if ((keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_Page_Down ||
          keyval == GDK_KEY_KP_Page_Up || keyval == GDK_KEY_KP_Page_Down)
@@ -500,9 +496,9 @@ webkit_key_press_event_cb (GtkWidget *widget, const GdkEvent *event, gpointer us
             else
                 gtk_notebook_next_page (notebook);
         }
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 static
@@ -578,9 +574,11 @@ gnc_plugin_page_report_create_widget( GncPluginPage *page )
         gtk_widget_add_events (webview, gtk_widget_get_events (webview) |
                                GDK_KEY_PRESS_MASK);
 
-        g_signal_connect (webview, "key-press-event",
-                          G_CALLBACK(webkit_key_press_event_cb),
-                          page);
+        GtkEventController *event_controller = gtk_event_controller_key_new ();
+        gtk_widget_add_controller (GTK_WIDGET(webview), event_controller);
+        g_signal_connect (event_controller, 
+                          "key-pressed",
+                          G_CALLBACK(webkit_key_press_event_cb), page);
     }
 
     gtk_widget_show_all( GTK_WIDGET(priv->container) );

@@ -851,13 +851,13 @@ tax_table_window_destroy_cb (GtkWidget *widget, gpointer data)
 }
 
 static gboolean
-tax_table_window_key_press_cb (GtkWidget *widget, const GdkEvent *event,
-                               gpointer data)
+tax_table_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                               guint keycode, GdkModifierType state,
+                               gpointer user_data)
 {
-    TaxTableWindow *ttw = data;
-    guint keyval;
+    TaxTableWindow *ttw = user_data;
 
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         tax_table_window_close_handler (ttw);
         return TRUE;
@@ -921,8 +921,11 @@ gnc_ui_tax_table_window_new (GtkWindow *parent, QofBook *book)
     g_signal_connect (ttw->dialog, "delete-event",
                       G_CALLBACK(tax_table_window_delete_event_cb), ttw);
 
-    g_signal_connect (ttw->dialog, "key_press_event",
-                      G_CALLBACK (tax_table_window_key_press_cb), ttw);
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(ttw->dialog), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
+                      G_CALLBACK(tax_table_window_key_press_cb), ttw);
 
     /* Create the tax tables view */
     view = GTK_TREE_VIEW(ttw->names_view);

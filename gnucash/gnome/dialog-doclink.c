@@ -289,13 +289,14 @@ setup_file_dialog (GtkBuilder *builder, const gchar *path_head, const gchar *uri
 }
 
 static gboolean
-gnc_doclink_get_uri_event_cb (GtkWidget *widget, const GdkEvent *event,
+gnc_doclink_get_uri_event_cb (GtkEventControllerKey *key, guint keyval,
+                              guint keycode, GdkModifierType state,
                               gpointer user_data)
 {
-    guint keyval;
-
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
+        GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
+
         gtk_dialog_response (GTK_DIALOG(widget),
                              GTK_RESPONSE_CANCEL);
         return TRUE;
@@ -334,7 +335,10 @@ gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
     gnc_widget_style_context_add_class (GTK_WIDGET(dialog), "gnc-class-doclink");
 
     // Use this event to capture the escape key being pressed
-    g_signal_connect (dialog, "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(dialog), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
                       G_CALLBACK(gnc_doclink_get_uri_event_cb), dialog);
 
     head_label = GTK_WIDGET(gtk_builder_get_object (builder, "path_head_label"));
@@ -489,13 +493,13 @@ gnc_doclink_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
 }
 
 static gboolean
-gnc_doclink_dialog_window_key_press_cb (GtkWidget *widget, const GdkEvent *event,
+gnc_doclink_dialog_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                        guint keycode, GdkModifierType state,
                                         gpointer user_data)
 {
     DoclinkDialog *doclink_dialog = user_data;
-    guint keyval;
 
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         close_handler (doclink_dialog);
         return TRUE;
@@ -1071,9 +1075,11 @@ gnc_doclink_dialog_create (GtkWindow *parent, DoclinkDialog *doclink_dialog)
     g_signal_connect (doclink_dialog->window, "delete-event",
                       G_CALLBACK(gnc_doclink_dialog_window_delete_event_cb), doclink_dialog);
 
-    g_signal_connect (doclink_dialog->window, "key_press_event",
-                      G_CALLBACK (gnc_doclink_dialog_window_key_press_cb),
-                      doclink_dialog);
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(doclink_dialog->window), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
+                      G_CALLBACK(gnc_doclink_dialog_window_key_press_cb), doclink_dialog);
 
     // Setup the correct parts for each dialog
     if (doclink_dialog->is_list_trans)
