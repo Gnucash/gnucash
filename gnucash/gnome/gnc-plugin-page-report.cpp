@@ -463,25 +463,31 @@ gnc_plugin_page_report_load_uri (GncPluginPage *page)
 
 /* used to capture Ctrl+Alt+PgUp/Down for tab selection */
 static gboolean
-webkit_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+webkit_key_press_event_cb (GtkWidget *widget, const GdkEvent *event, gpointer user_data)
 {
     GncPluginPageReport *report = GNC_PLUGIN_PAGE_REPORT(user_data);
     GncPluginPageReportPrivate *priv = GNC_PLUGIN_PAGE_REPORT_GET_PRIVATE(report);
     GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
     GtkWidget *window = gnc_plugin_page_get_window (GNC_PLUGIN_PAGE(report));
+    GdkModifierType state;
+    guint keyval;
 
     if (GNC_PLUGIN_PAGE(report) != gnc_main_window_get_current_page (GNC_MAIN_WINDOW(window)))
         return FALSE;
 
-    if ((event->keyval == GDK_KEY_Page_Up || event->keyval == GDK_KEY_Page_Down ||
-         event->keyval == GDK_KEY_KP_Page_Up || event->keyval == GDK_KEY_KP_Page_Down)
-          && (event->state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    if (!gdk_event_get_keyval (event, &keyval) ||
+        !gdk_event_get_state (event, &state))
+        return FALSE;
+
+    if ((keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_Page_Down ||
+         keyval == GDK_KEY_KP_Page_Up || keyval == GDK_KEY_KP_Page_Down)
+          && (state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK))
     {
         GtkNotebook *notebook = GTK_NOTEBOOK(gtk_widget_get_parent (GTK_WIDGET(priv->container)));
         gint pages = gtk_notebook_get_n_pages (notebook);
         gint current_page = gtk_notebook_get_current_page (notebook);
 
-        if (event->keyval == GDK_KEY_Page_Up || event->keyval == GDK_KEY_KP_Page_Up)
+        if (keyval == GDK_KEY_Page_Up || keyval == GDK_KEY_KP_Page_Up)
         {
             if (current_page == 0)
                 gtk_notebook_set_current_page (notebook, pages - 1);

@@ -195,7 +195,7 @@ static void gnc_main_window_cmd_help_tutorial (GSimpleAction *simple, GVariant *
 static void gnc_main_window_cmd_help_contents (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_main_window_cmd_help_about (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 
-static void do_popup_menu(GncPluginPage *page, GdkEventButton *event);
+static void do_popup_menu(GncPluginPage *page, const GdkEvent *event);
 static GtkWidget *gnc_main_window_get_statusbar (GncWindow *window_in);
 static void statusbar_notification_lastmodified (void);
 static void gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_data);
@@ -1363,7 +1363,7 @@ gnc_main_window_quit(GncMainWindow *window)
 
 static gboolean
 gnc_main_window_delete_event (GtkWidget *window,
-                              GdkEvent *event,
+                              const GdkEvent *event,
                               gpointer user_data)
 {
     static gboolean already_dead = FALSE;
@@ -2582,8 +2582,8 @@ gnc_main_window_tab_entry_editing_done (GtkWidget *entry,
 
 static gboolean
 gnc_main_window_tab_entry_focus_out_event (GtkWidget *entry,
-        GdkEvent *event,
-        GncPluginPage *page)
+                                           const GdkEvent *event,
+                                           GncPluginPage *page)
 {
     ENTER("");
     gtk_cell_editable_editing_done(GTK_CELL_EDITABLE(entry));
@@ -2593,10 +2593,12 @@ gnc_main_window_tab_entry_focus_out_event (GtkWidget *entry,
 
 static gboolean
 gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
-        GdkEventKey *event,
-        GncPluginPage *page)
+                                           const GdkEvent *event,
+                                           GncPluginPage *page)
 {
-    if (event->keyval == GDK_KEY_Escape)
+    guint keyval;
+
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         GtkWidget *label, *entry2;
 
@@ -2911,23 +2913,30 @@ gnc_main_window_destroy (GtkWidget *widget)
 
 
 static gboolean
-gnc_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gnc_main_window_key_press_event (GtkWidget *widget,
+                                 const GdkEvent *event,
+                                 gpointer user_data)
 {
     GncMainWindowPrivate *priv;
-    GdkModifierType modifiers;
 
-    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(widget), FALSE);
+    g_return_val_if_fail (GNC_IS_MAIN_WINDOW(widget), false);
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(widget);
 
-    modifiers = gtk_accelerator_get_default_mod_mask ();
+    GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
 
-    if ((event->state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK)) // Ctrl+Alt+
+    guint keyval;
+    GdkModifierType state;
+    if (!gdk_event_get_keyval (event, &keyval) ||
+        !gdk_event_get_state (event, &state))
+        return false;
+
+    if ((state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK)) // Ctrl+Alt+
     {
         const gchar *account_key = C_ ("lower case key for short cut to 'Accounts'", "a");
         guint account_keyval = gdk_keyval_from_name (account_key);
 
-        if ((account_keyval == event->keyval) || (account_keyval == gdk_keyval_to_lower (event->keyval)))
+        if ((account_keyval == keyval) || (account_keyval == gdk_keyval_to_lower (keyval)))
         {
             gint page = 0;
 
@@ -2938,12 +2947,12 @@ gnc_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer
                  if (g_strcmp0 (pname, "GncPluginPageAccountTree") == 0)
                  {
                      gtk_notebook_set_current_page (GTK_NOTEBOOK(priv->notebook), page);
-                     return TRUE;
+                     return true;
                  }
                  page++;
             }
         }
-        else if ((GDK_KEY_Menu == event->keyval) || (GDK_KEY_space == event->keyval))
+        else if ((keyval == GDK_KEY_Menu) || (keyval == GDK_KEY_space))
         {
             GList *menu = gtk_menu_get_for_attach_widget (GTK_WIDGET(priv->notebook));
 
@@ -2953,12 +2962,12 @@ gnc_main_window_key_press_event (GtkWidget *widget, GdkEventKey *event, gpointer
                                           GTK_WIDGET(priv->notebook),
                                           GDK_GRAVITY_SOUTH,
                                           GDK_GRAVITY_SOUTH,
-                                          NULL);
-                return TRUE;
+                                          nullptr);
+                return true;
             }
         }
     }
-    return FALSE;
+    return false;
 }
 
 
@@ -4024,7 +4033,7 @@ gnc_main_window_init_menu_updaters (GncMainWindow *window)
 
 /* This is used to prevent the tab having focus */
 static gboolean
-gnc_main_window_page_focus_in (GtkWidget *widget, GdkEvent  *event,
+gnc_main_window_page_focus_in (GtkWidget *widget, const GdkEvent *event,
                                gpointer user_data)
 {
     auto window{static_cast<GncMainWindow *>(user_data)};
@@ -5520,7 +5529,7 @@ gnc_main_window_set_progressbar_window (GncMainWindow *window)
  *  request).
  */
 static void
-do_popup_menu (GncPluginPage *page, GdkEventButton *event)
+do_popup_menu (GncPluginPage *page, const GdkEvent *event)
 {
     GtkBuilder *builder;
     GMenuModel *menu_model;
@@ -5573,7 +5582,7 @@ do_popup_menu (GncPluginPage *page, GdkEventButton *event)
     gnc_plugin_add_menu_tooltip_callbacks (menu, menu_model, statusbar);
 
     gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(page->window), nullptr);
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+    gtk_menu_popup_at_pointer (GTK_MENU(menu), event);
 
     g_free (popup_menu_name);
 
@@ -5611,22 +5620,27 @@ gnc_main_window_popup_menu_cb (GtkWidget *widget,
  */
 gboolean
 gnc_main_window_button_press_cb (GtkWidget *whatever,
-                                 GdkEventButton *event,
+                                 const GdkEvent *event,
                                  GncPluginPage *page)
 {
-    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
 
     ENTER("widget %p, event %p, page %p", whatever, event, page);
+
+    guint button;
+    if (!gdk_event_get_button (event, &button))
+        return false;
+
     /* Ignore double-clicks and triple-clicks */
-    if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS && button == 3)
     {
-        do_popup_menu(page, event);
+        do_popup_menu (page, event);
         LEAVE("menu shown");
-        return TRUE;
+        return true;
     }
 
     LEAVE("other click");
-    return FALSE;
+    return false;
 }
 
 void

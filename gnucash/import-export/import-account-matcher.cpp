@@ -269,13 +269,15 @@ account_tree_row_changed_cb (GtkTreeSelection *selection,
 }
 
 static gboolean
-account_tree_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+account_tree_key_press_cb(GtkWidget *widget, const GdkEvent *event, gpointer user_data)
 {
     // Expand the tree when the user starts typing, this will allow sub-accounts to be found.
-    if (event->length == 0)
-        return FALSE;
+    guint keyval;
+
+    if (!gdk_event_get_keyval (event, &keyval))
+        return false;
     
-    switch (event->keyval)
+    switch (keyval)
     {
         case GDK_KEY_plus:
         case GDK_KEY_minus:
@@ -307,11 +309,11 @@ account_tree_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_d
         case GDK_KEY_Return:
         case GDK_KEY_ISO_Enter:
         case GDK_KEY_KP_Enter:
-            return FALSE;
+            return false;
             break;
         default:
             gtk_tree_view_expand_all (GTK_TREE_VIEW(user_data));
-            return FALSE;
+            return false;
     }
     return FALSE;
 }

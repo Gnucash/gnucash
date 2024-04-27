@@ -86,7 +86,7 @@ void custom_report_help_cb(GtkWidget* widget, gpointer data);
 void close_custom_report_clicked_cb(GtkWidget* widget, gpointer data);
 void custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
         GtkTreeViewColumn *column, gpointer data);
-gboolean custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpointer data);
+gboolean custom_report_list_view_clicked_cb(GtkTreeView *view, const GdkEvent *event, gpointer data);
 void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gchar *new_text, gpointer data);
 gboolean custom_report_query_tooltip_cb (GtkTreeView  *view,
                                          gint        x,
@@ -417,16 +417,20 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
  * selected row.
  **************************************************************/
 gboolean
-custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpointer data)
+custom_report_list_view_clicked_cb(GtkTreeView *view, const GdkEvent *event, gpointer data)
 {
     CustomReportDialog *crd = data;
     GtkTreePath *path = NULL;
     GtkTreeViewColumn *column = NULL;
     gint cellx, celly;
+    gdouble x_win, y_win;
 
     g_return_val_if_fail ( view != NULL, FALSE );
 
-    if (gtk_tree_view_get_path_at_pos (view, event->x, event->y,
+    if (!gdk_event_get_coords (event, &x_win, &y_win))
+        return FALSE;
+
+    if (gtk_tree_view_get_path_at_pos (view, x_win, y_win,
                                        &path, &column,
                                        &cellx, &celly))
     {
@@ -533,10 +537,12 @@ custom_report_query_tooltip_cb (GtkTreeView  *view,
 }
 
 static gboolean
-custom_report_event_cb (GtkWidget *widget, GdkEventKey *event,
+custom_report_event_cb (GtkWidget *widget, const GdkEvent *event,
                         gpointer user_data)
 {
-    if (event->keyval == GDK_KEY_Escape)
+    guint keyval;
+
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         custom_report_dialog_close_cb (widget, user_data);
         return TRUE;

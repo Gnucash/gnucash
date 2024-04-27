@@ -193,30 +193,37 @@ gnc_tree_view_update_grid_lines (gpointer prefs, gchar* pref, gpointer user_data
 }
 
 static gboolean
-gnc_tree_view_select_column_icon_cb (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+gnc_tree_view_select_column_icon_cb (GtkWidget *widget,
+                                     const GdkEvent *event,
+                                     gpointer user_data)
 {
     GncTreeView *view = user_data;
     GncTreeViewPrivate *priv;
     GtkStyleContext *stylectxt = gtk_widget_get_style_context (widget);
     GtkBorder padding;
+    guint button;
 
     // if the event button is not the right one, leave.
-    if (event->button != 1)
+    if (gdk_event_get_button (event, &button) && button != 1)
         return FALSE;
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
     gtk_style_context_get_padding (stylectxt, GTK_STATE_FLAG_NORMAL, &padding);
 
+    gdouble x_win, y_win;
+    if (!gdk_event_get_coords (event, &x_win, &y_win))
+        return FALSE;
+
     if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     {
-        if (event->x < (gtk_widget_get_allocated_width (priv->column_menu_icon_box) + padding.left))
+        if (x_win < (gtk_widget_get_allocated_width (priv->column_menu_icon_box) + padding.left))
             gnc_tree_view_select_column_cb (priv->column_menu_column, view);
     }
     else
     {
-        if (event->x > (gtk_widget_get_allocated_width (widget) -
-                       (gtk_widget_get_allocated_width (priv->column_menu_icon_box) + padding.right)))
+        if (x_win > (gtk_widget_get_allocated_width (widget) -
+                    (gtk_widget_get_allocated_width (priv->column_menu_icon_box) + padding.right)))
             gnc_tree_view_select_column_cb (priv->column_menu_column, view);
     }
     return FALSE;
@@ -2157,20 +2164,27 @@ gnc_tree_view_path_is_valid (GncTreeView *view, GtkTreePath *path)
 
 void
 gnc_tree_view_keynav (GncTreeView *view, GtkTreeViewColumn **col,
-                      GtkTreePath *path, GdkEventKey *event)
+                      GtkTreePath *path, const GdkEvent *event)
 {
     GtkTreeView *tv = GTK_TREE_VIEW(view);
     gint depth;
     gboolean shifted;
+    guint keyval;
+    GdkModifierType state;
 
-    if (event->type != GDK_KEY_PRESS) return;
+    if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+        return;
 
-    switch (event->keyval)
+    if (!gdk_event_get_keyval (event, &keyval) ||
+        !gdk_event_get_state (event, &state))
+        return;
+
+    switch (keyval)
     {
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
     case GDK_KEY_KP_Tab:
-        shifted = event->state & GDK_SHIFT_MASK;
+        shifted = state & GDK_SHIFT_MASK;
         if (get_column_next_to (tv, col, shifted))
         {
             /* This is the end (or beginning) of the line, buddy. */

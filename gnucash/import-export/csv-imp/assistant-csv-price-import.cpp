@@ -115,7 +115,7 @@ public:
     void preview_update_commodity ();
     void preview_reparse_col_type (GncPricePropType type);
     void preview_update_col_type (GtkComboBox* cbox);
-    void preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event);
+    void preview_update_fw_columns (GtkTreeView* treeview, const GdkEvent* event);
 
     void preview_populate_settings_combo();
     void preview_handle_save_del_sensitivity (GtkComboBox* combo);
@@ -130,7 +130,7 @@ public:
 private:
     /* helper functions to manage the context menu for fixed with columns */
     uint32_t get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx);
-    void fixed_context_menu (GdkEventButton *event, int col, int dx);
+    void fixed_context_menu (const GdkEvent *event, int col, int dx);
     /* helper function to calculate row colors for the preview table (to visualize status) */
     void preview_row_fill_state_cells (GtkListStore *store, GtkTreeIter *iter,
             std::string& err_msg, bool skip);
@@ -374,8 +374,8 @@ static void csv_price_imp_preview_col_type_changed_cb (GtkComboBox* cbox, CsvImp
 }
 
 static gboolean
-csv_price_imp_preview_treeview_clicked_cb (GtkTreeView* treeview, GdkEventButton* event,
-                                        CsvImpPriceAssist* info)
+csv_price_imp_preview_treeview_clicked_cb (GtkTreeView* treeview, const GdkEvent* event,
+                                           CsvImpPriceAssist* info)
 {
     info->preview_update_fw_columns(treeview, event);
     return false;
@@ -1396,8 +1396,8 @@ fixed_context_menu_handler_price (GnumericPopupMenuElement const *element,
 }
 
 void
-CsvImpPriceAssist::fixed_context_menu (GdkEventButton *event,
-                    int col, int offset)
+CsvImpPriceAssist::fixed_context_menu (const GdkEvent *event,
+                                       int col, int offset)
 {
     auto fwtok = dynamic_cast<GncFwTokenizer*>(price_imp->m_tokenizer.get());
     fixed_context_col = col;
@@ -1449,17 +1449,21 @@ CsvImpPriceAssist::preview_split_column (int col, int offset)
  *               if other event handlers can have a go at this as well
  */
 void
-CsvImpPriceAssist::preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event)
+CsvImpPriceAssist::preview_update_fw_columns (GtkTreeView* treeview, const GdkEvent* event)
 {
     /* Nothing to do if this was not triggered on our treeview body */
-    if (event->window != gtk_tree_view_get_bin_window (treeview))
+    if (gdk_event_get_window (event) != gtk_tree_view_get_bin_window (treeview))
+        return;
+
+    gdouble x_win, y_win;
+    if (!gdk_event_get_coords (event, &x_win, &y_win))
         return;
 
     /* Find the column that was clicked. */
     GtkTreeViewColumn *tcol = nullptr;
     int cell_x = 0;
     auto success = gtk_tree_view_get_path_at_pos (treeview,
-            (int)event->x, (int)event->y,
+            (int)x_win, (int)y_win,
             nullptr, &tcol, &cell_x, nullptr);
     if (!success)
         return;
@@ -1477,12 +1481,16 @@ CsvImpPriceAssist::preview_update_fw_columns (GtkTreeView* treeview, GdkEventBut
      */
     auto dcol = tcol_num - 1;
     auto offset = get_new_col_rel_pos (tcol, cell_x);
-    if (event->type == GDK_2BUTTON_PRESS && event->button == 1)
-        /* Double clicks can split columns. */
-        preview_split_column (dcol, offset);
-    else if (event->type == GDK_BUTTON_PRESS && event->button == 3)
-        /* Right clicking brings up a context menu. */
-        fixed_context_menu (event, dcol, offset);
+    guint button;
+    if (gdk_event_get_button (event, &button))
+    {
+        if ((gdk_event_get_event_type (event) == GDK_2BUTTON_PRESS) && (button == 1))
+            /* Double clicks can split columns. */
+            preview_split_column (dcol, offset);
+        else if ((gdk_event_get_event_type (event) == GDK_BUTTON_PRESS) && (button == 3))
+            /* Right clicking brings up a context menu. */
+            fixed_context_menu (event, dcol, offset);
+    }
 }
 
 /* Convert state info (errors/skipped) in visual feedback to decorate the preview table */

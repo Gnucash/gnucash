@@ -81,7 +81,7 @@ void aai_on_finish (GtkAssistant *gtkassistant, gpointer user_data);
 void aai_on_cancel (GtkAssistant *assistant, gpointer user_data);
 void aai_destroy_cb(GtkWidget *object, gpointer user_data);
 
-gboolean aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
+gboolean aai_key_press_event_cb(GtkWidget *widget, const GdkEvent *event, gpointer user_data);
 
 void aai_page_prepare (GtkAssistant *assistant, gpointer user_data);
 void aai_button_clicked_cb(GtkButton *button, gpointer user_data);
@@ -160,9 +160,11 @@ enum account_list_cols
 };
 
 gboolean
-aai_key_press_event_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+aai_key_press_event_cb(GtkWidget *widget, const GdkEvent *event, gpointer user_data)
 {
-    if (event->keyval == GDK_KEY_Escape)
+    guint keyval;
+
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         gtk_widget_destroy(widget);
         return TRUE;

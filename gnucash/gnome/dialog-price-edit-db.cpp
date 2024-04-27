@@ -67,7 +67,7 @@ void gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_add_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data);
 static gboolean gnc_prices_dialog_key_press_cb (GtkWidget *widget,
-                                                GdkEventKey *event,
+                                                const GdkEvent *event,
                                                 gpointer data);
 }
 
@@ -111,9 +111,9 @@ gnc_prices_dialog_destroy_cb (GtkWidget *object, gpointer data)
 
 
 static gboolean
-gnc_prices_dialog_delete_event_cb (GtkWidget *widget,
-                                   GdkEvent  *event,
-                                   gpointer   data)
+gnc_prices_dialog_delete_event_cb (GtkWidget       *widget,
+                                   const GdkEvent  *event,
+                                   gpointer         data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (data);
     // this cb allows the window size to be saved on closing with the X
@@ -799,12 +799,13 @@ show_handler (const char *klass, gint component_id,
 
 
 gboolean
-gnc_prices_dialog_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+gnc_prices_dialog_key_press_cb (GtkWidget *widget, const GdkEvent *event,
                                 gpointer data)
 {
     auto pdb_dialog = static_cast<PricesDialog *> (data);
+    guint keyval;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         close_handler (pdb_dialog);
         return TRUE;

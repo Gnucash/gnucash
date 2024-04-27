@@ -134,8 +134,8 @@ static gnc_numeric recnRecalculateBalance (RecnWindow *recnData);
 
 static void   recn_destroy_cb (GtkWidget *w, gpointer data);
 static void   recn_cancel (RecnWindow *recnData);
-static gboolean recn_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data);
-static gboolean recn_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer data);
+static gboolean recn_delete_cb (GtkWidget *widget, const GdkEvent *event, gpointer data);
+static gboolean recn_key_press_cb (GtkWidget *widget, const GdkEvent *event, gpointer data);
 static void   recnFinishCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void   recnPostponeCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void   recnCancelCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
@@ -924,7 +924,7 @@ gnc_reconcile_window_row_cb(GNCReconcileView *view, gpointer item,
  *  request).
  */
 static void
-do_popup_menu(RecnWindow *recnData, GdkEventButton *event)
+do_popup_menu(RecnWindow *recnData, const GdkEvent *event)
 {
     GMenuModel *menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder,
                                                                    "recwin-popup");
@@ -934,7 +934,7 @@ do_popup_menu(RecnWindow *recnData, GdkEventButton *event)
         return;
 
     gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(recnData->window), NULL);
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+    gtk_menu_popup_at_pointer (GTK_MENU(menu), event);
 }
 
 
@@ -966,26 +966,35 @@ gnc_reconcile_window_popup_menu_cb (GtkWidget *widget,
  */
 static gboolean
 gnc_reconcile_window_button_press_cb (GtkWidget *widget,
-                                      GdkEventButton *event,
+                                      const GdkEvent *event,
                                       RecnWindow *recnData)
 {
-    if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    guint button;
+
+    if (!gdk_event_get_button (event, &button))
+        return FALSE;
+
+    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS && button == 3)
     {
         GNCQueryView *qview = GNC_QUERY_VIEW(widget);
-        GtkTreePath *path;
+        gdouble x_win, y_win;
 
-        /* Get tree path for row that was clicked */
-        gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW(qview),
-                                       (gint) event->x,
-                                       (gint) event->y,
-                                       &path, NULL, NULL, NULL);
-
-        if (path)
+        if (gdk_event_get_coords (event, &x_win, &y_win))
         {
-            GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
+            GtkTreePath *path;
+            /* Get tree path for row that was clicked */
+            gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW(qview),
+                                           (gint) x_win,
+                                           (gint) y_win,
+                                           &path, NULL, NULL, NULL);
 
-            gtk_tree_selection_select_path (selection, path);
-            gtk_tree_path_free (path);
+            if (path)
+            {
+                GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
+
+                gtk_tree_selection_select_path (selection, path);
+                gtk_tree_path_free (path);
+            }
         }
         do_popup_menu (recnData, event);
         return TRUE;
@@ -1057,14 +1066,18 @@ gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
 
 
 static gboolean
-gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+gnc_reconcile_key_press_cb (GtkWidget *widget, const GdkEvent *event,
                             gpointer data)
 {
     auto recnData = static_cast<RecnWindow*>(data);
     GtkWidget *this_view, *other_view;
     GtkWidget *debit, *credit;
+    guint keyval;
 
-    switch (event->keyval)
+    if (!gdk_event_get_keyval (event, &keyval))
+        return FALSE;
+
+    switch (keyval)
     {
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
@@ -2218,7 +2231,7 @@ recn_cancel(RecnWindow *recnData)
 
 
 static gboolean
-recn_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
+recn_delete_cb(GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     auto recnData = static_cast<RecnWindow*>(data);
 
@@ -2228,11 +2241,12 @@ recn_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 
 
 static gboolean
-recn_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
+recn_key_press_cb(GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     auto recnData = static_cast<RecnWindow*>(data);
+    guint keyval;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         recn_cancel(recnData);
         return TRUE;

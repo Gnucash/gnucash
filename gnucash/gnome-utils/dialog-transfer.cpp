@@ -167,7 +167,7 @@ void gnc_xfer_description_insert_cb(GtkEditable *editable,
                                     gint *start_pos,
                                     XferDialog *xferData);
 gboolean gnc_xfer_description_key_press_cb( GtkEntry *entry,
-                                            GdkEventKey *event,
+                                            const GdkEvent *event,
                                             XferDialog *xferData );
 void gnc_xfer_dialog_fetch (GtkButton *button, XferDialog *xferData);
 gboolean gnc_xfer_dialog_inc_exp_filter_func (Account *account,
@@ -350,11 +350,16 @@ gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
 }
 
 static gboolean
-gnc_xfer_dialog_key_press_cb (GtkWidget   *widget,
-                              GdkEventKey *event,
-                              gpointer     unused)
+gnc_xfer_dialog_key_press_cb (GtkWidget      *widget,
+                              const GdkEvent *event,
+                              gpointer        unused)
 {
-    if ((event->keyval == GDK_KEY_Return) || (event->keyval == GDK_KEY_KP_Enter))
+    guint keyval;
+
+    if (!gdk_event_get_keyval (event, &keyval))
+        return FALSE;
+
+    if ((keyval == GDK_KEY_Return) || (keyval == GDK_KEY_KP_Enter))
     {
         auto toplevel = gtk_widget_get_toplevel (widget);
         if (gtk_widget_is_toplevel(toplevel) && GTK_IS_WINDOW(toplevel))
@@ -871,9 +876,9 @@ gnc_xfer_description_insert_cb(GtkEditable *editable,
 }
 
 gboolean
-gnc_xfer_description_key_press_cb( GtkEntry *entry,
-                                   GdkEventKey *event,
-                                   XferDialog *xferData )
+gnc_xfer_description_key_press_cb( GtkEntry       *entry,
+                                   const GdkEvent *event,
+                                   XferDialog     *xferData )
 {
     gboolean done_with_input = FALSE;
 
@@ -882,7 +887,15 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
      * seem to work right, so handle them here.
      */
     ENTER(" ");
-    switch ( event->keyval )
+
+    guint keyval;
+    GdkModifierType state;
+
+    if ( !gdk_event_get_keyval( event, &keyval ) ||
+         !gdk_event_get_state( event, &state ) )
+        return false;
+
+    switch ( keyval )
     {
         case GDK_KEY_Return:
         case GDK_KEY_KP_Enter:
@@ -892,8 +905,8 @@ gnc_xfer_description_key_press_cb( GtkEntry *entry,
 
         case GDK_KEY_Tab:
         case GDK_KEY_ISO_Left_Tab:
-            if ( !( event->state & GDK_SHIFT_MASK) )    /* Complete on Tab,
-                                                         * but not Shift-Tab */
+            if ( !( state & GDK_SHIFT_MASK) ) /* Complete on Tab,
+                                               * but not Shift-Tab */
             {
                 gnc_xfer_dialog_quickfill( xferData );
                 /* NOT done with input, though, since we need to focus to the next

@@ -456,11 +456,12 @@ dialog_destroy_cb (GtkWidget *object, GncOptionsDialog *win)
 
 // "key_press_event" signal handler
 static int
-dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
+dialog_window_key_press_cb(GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     GncOptionsDialog *win = static_cast<decltype(win)>(data);
+    guint keyval;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         component_close_handler (win);
         return TRUE;

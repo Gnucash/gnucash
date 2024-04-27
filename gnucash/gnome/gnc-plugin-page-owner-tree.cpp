@@ -107,7 +107,7 @@ static void set_menu_and_toolbar_qualifier (GncPluginPage *plugin_page);
 
 /* Callbacks */
 static gboolean gnc_plugin_page_owner_tree_button_press_cb (GtkWidget *widget,
-                                                            GdkEventButton *event,
+                                                            const GdkEvent *event,
                                                             GncPluginPage *page);
 static void gnc_plugin_page_owner_tree_double_click_cb (GtkTreeView *treeview,
                                                         GtkTreePath *path,
@@ -773,7 +773,7 @@ static void gnc_ui_owner_edit (GtkWindow *parent, GncOwner *owner)
  *  registered in gnc-main-window.c. */
 static gboolean
 gnc_plugin_page_owner_tree_button_press_cb (GtkWidget *widget,
-                                            GdkEventButton *event,
+                                            const GdkEvent *event,
                                             GncPluginPage *page)
 {
     g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);

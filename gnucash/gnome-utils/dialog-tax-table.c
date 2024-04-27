@@ -851,12 +851,13 @@ tax_table_window_destroy_cb (GtkWidget *widget, gpointer data)
 }
 
 static gboolean
-tax_table_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+tax_table_window_key_press_cb (GtkWidget *widget, const GdkEvent *event,
                                gpointer data)
 {
     TaxTableWindow *ttw = data;
+    guint keyval;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         tax_table_window_close_handler (ttw);
         return TRUE;

@@ -71,9 +71,9 @@ static void gnc_date_edit_forall       (GtkContainer       *container,
                                         GtkCallback	    callback,
                                         gpointer	    callbabck_data);
 static struct tm gnc_date_edit_get_date_internal (GNCDateEdit *gde);
-static int date_accel_key_press(GtkWidget *widget,
-                                GdkEventKey *event,
-                                gpointer data);
+static int date_accel_key_press (GtkWidget *widget,
+                                 const GdkEvent *event,
+                                 gpointer data);
 
 G_DEFINE_TYPE (GNCDateEdit, gnc_date_edit, GTK_TYPE_BOX)
 
@@ -153,7 +153,7 @@ day_selected_double_click (GtkCalendar *calendar, GNCDateEdit *gde)
 }
 
 static gint
-delete_popup (GtkWidget *widget, GdkEvent *event, gpointer data)
+delete_popup (GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     GNCDateEdit *gde;
 
@@ -164,13 +164,17 @@ delete_popup (GtkWidget *widget, GdkEvent *event, gpointer data)
 }
 
 static gint
-key_press_popup (GtkWidget *widget, GdkEventKey *event, gpointer data)
+key_press_popup (GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     GNCDateEdit *gde = data;
+    guint keyval;
 
-    if (event->keyval != GDK_KEY_Return &&
-            event->keyval != GDK_KEY_KP_Enter &&
-            event->keyval != GDK_KEY_Escape)
+    if (!gdk_event_get_keyval (event, &keyval))
+        return FALSE;
+
+    if (keyval != GDK_KEY_Return &&
+        keyval != GDK_KEY_KP_Enter &&
+        keyval != GDK_KEY_Escape)
         return date_accel_key_press(gde->date_entry, event, data);
 
     gde = data;
@@ -219,7 +223,7 @@ popup_grab_on_window (GdkWindow *window,
 {
     GdkDisplay *display = gdk_window_get_display (window);
     GdkSeat *seat = gdk_display_get_default_seat (display);
-    GdkEvent *event = gtk_get_current_event ();
+    const GdkEvent *event = gtk_get_current_event ();
 
     if (keyboard && gdk_seat_grab (seat, window, GDK_SEAT_CAPABILITY_KEYBOARD, TRUE, NULL,
                                    event, NULL, NULL) != GDK_GRAB_SUCCESS)
@@ -326,11 +330,11 @@ gnc_date_edit_popup (GNCDateEdit *gde)
 /* This function is a customized gtk_combo_box_list_button_pressed(). */
 static gboolean
 gnc_date_edit_button_pressed (GtkWidget      *widget,
-                              GdkEventButton *event,
+                              const GdkEvent *event,
                               gpointer        data)
 {
     GNCDateEdit *gde     = GNC_DATE_EDIT(data);
-    GtkWidget   *ewidget = gtk_get_event_widget ((GdkEvent *)event);
+    GtkWidget   *ewidget = gtk_get_event_widget ((GdkEvent*)event);
 
     ENTER("widget=%p, ewidget=%p, event=%p, gde=%p", widget, ewidget, event, gde);
 
@@ -364,11 +368,11 @@ gnc_date_edit_button_pressed (GtkWidget      *widget,
 
 static gboolean
 gnc_date_edit_button_released (GtkWidget      *widget,
-                               GdkEventButton *event,
+                               const GdkEvent *event,
                                gpointer        data)
 {
     GNCDateEdit *gde     = GNC_DATE_EDIT(data);
-    GtkWidget   *ewidget = gtk_get_event_widget ((GdkEvent *)event);
+    GtkWidget   *ewidget = gtk_get_event_widget ((GdkEvent*)event);
     gboolean popup_in_progress = FALSE;
 
     ENTER("widget=%p, ewidget=%p, event=%p, gde=%p", widget, ewidget, event, gde);
@@ -761,7 +765,7 @@ gnc_date_edit_set_popup_range (GNCDateEdit *gde, int low_hour, int up_hour)
 
 /* This code should be kept in sync with src/register/datecell.c */
 static int
-date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
+date_accel_key_press(GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     GNCDateEdit *gde = data;
     const char *string;
@@ -781,9 +785,9 @@ date_accel_key_press(GtkWidget *widget, GdkEventKey *event, gpointer data)
 }
 
 static gint
-key_press_entry (GtkWidget *widget, GdkEventKey *event, gpointer data)
+key_press_entry (GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
-    if (!date_accel_key_press(widget, event, data))
+    if (!date_accel_key_press (widget, event, data))
         return FALSE;
 
     g_signal_stop_emission_by_name (widget, "key-press-event");
@@ -791,7 +795,7 @@ key_press_entry (GtkWidget *widget, GdkEventKey *event, gpointer data)
 }
 
 static int
-date_focus_out_event(GtkWidget *widget, GdkEventKey *event, gpointer data)
+date_focus_out_event(GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     GNCDateEdit *gde = data;
     struct tm tm;

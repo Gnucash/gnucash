@@ -412,8 +412,8 @@ void gnc_main_window_set_progressbar_window( GncMainWindow *window );
  *  handled the click.
  */
 gboolean gnc_main_window_button_press_cb (GtkWidget *whatever,
-        GdkEventButton *event,
-        GncPluginPage *page);
+                                          const GdkEvent *event,
+                                          GncPluginPage *page);
 
 
 /** Callback function invoked when the user requests that Gnucash

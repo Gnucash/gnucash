@@ -739,12 +739,13 @@ billterms_window_destroy_cb (GtkWidget *widget, gpointer data)
 }
 
 static gboolean
-billterms_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+billterms_window_key_press_cb (GtkWidget *widget, const GdkEvent *event,
                                gpointer data)
 {
     BillTermsWindow *btw = data;
+    guint keyval;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         billterms_window_close_handler (btw);
         return TRUE;

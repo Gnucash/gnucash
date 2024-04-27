@@ -187,7 +187,7 @@ public:
     void preview_update_date_format ();
     void preview_update_currency_format ();
     void preview_update_col_type (GtkComboBox* cbox);
-    void preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event);
+    void preview_update_fw_columns (GtkTreeView* treeview, const GdkEvent* event);
 
     void preview_populate_settings_combo();
     void preview_handle_save_del_sensitivity (GtkComboBox* combo);
@@ -197,7 +197,7 @@ public:
     void preview_validate_settings ();
 
     void acct_match_via_button ();
-    bool acct_match_via_view_dblclick (GdkEventButton *event);
+    bool acct_match_via_view_dblclick (const GdkEvent *event);
     void acct_match_select(GtkTreeModel *model, GtkTreeIter* iter);
     void acct_match_set_accounts ();
 
@@ -207,7 +207,7 @@ public:
 private:
     /* helper functions to manage the context menu for fixed with columns */
     uint32_t get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx);
-    void fixed_context_menu (GdkEventButton *event, int col, int dx);
+    void fixed_context_menu (const GdkEvent *event, int col, int dx);
     /* helper function to calculate row colors for the preview table (to visualize status) */
     void preview_row_fill_state_cells (GtkListStore *store, GtkTreeIter *iter,
             ErrMap& err_msg, bool skip);
@@ -306,7 +306,7 @@ void csv_tximp_preview_acct_sel_cb (GtkWidget* widget, CsvImpTransAssist* info);
 void csv_tximp_preview_enc_sel_cb (GOCharmapSel* selector, const char* encoding,
                               CsvImpTransAssist* info);
 void csv_tximp_acct_match_button_clicked_cb (GtkWidget *widget, CsvImpTransAssist* info);
-bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, GdkEventButton *event, CsvImpTransAssist* info);
+bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, const GdkEvent *event, CsvImpTransAssist* info);
 }
 
 void
@@ -442,8 +442,8 @@ static void csv_tximp_preview_col_type_changed_cb (GtkComboBox* cbox, CsvImpTran
 }
 
 static bool
-csv_tximp_preview_treeview_clicked_cb (GtkTreeView* treeview, GdkEventButton* event,
-                                        CsvImpTransAssist* info)
+csv_tximp_preview_treeview_clicked_cb (GtkTreeView* treeview, const GdkEvent* event,
+                                       CsvImpTransAssist* info)
 {
     info->preview_update_fw_columns(treeview, event);
     return false;
@@ -455,7 +455,7 @@ void csv_tximp_acct_match_button_clicked_cb (GtkWidget *widget, CsvImpTransAssis
     info->acct_match_via_button();
 }
 
-bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, GdkEventButton *event, CsvImpTransAssist* info)
+bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, const GdkEvent *event, CsvImpTransAssist* info)
 {
     return info->acct_match_via_view_dblclick(event);
 }
@@ -1321,8 +1321,8 @@ fixed_context_menu_handler (GnumericPopupMenuElement const *element,
 }
 
 void
-CsvImpTransAssist::fixed_context_menu (GdkEventButton *event,
-                    int col, int offset)
+CsvImpTransAssist::fixed_context_menu (const GdkEvent *event,
+                                       int col, int offset)
 {
     auto fwtok = dynamic_cast<GncFwTokenizer*>(tx_imp->m_tokenizer.get());
     fixed_context_col = col;
@@ -1371,17 +1371,21 @@ CsvImpTransAssist::preview_split_column (int col, int offset)
  * @param event The event that happened (where the user clicked)
  */
 void
-CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event)
+CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, const GdkEvent* event)
 {
     /* Nothing to do if this was not triggered on our treeview body */
-    if (event->window != gtk_tree_view_get_bin_window (treeview))
+    if (gdk_event_get_window (event) != gtk_tree_view_get_bin_window (treeview))
+        return;
+
+    gdouble x_win, y_win;
+    if (!gdk_event_get_coords (event, &x_win, &y_win))
         return;
 
     /* Find the column that was clicked. */
     GtkTreeViewColumn *tcol = nullptr;
     int cell_x = 0;
     auto success = gtk_tree_view_get_path_at_pos (treeview,
-            (int)event->x, (int)event->y,
+            (int)x_win, (int)y_win,
             nullptr, &tcol, &cell_x, nullptr);
     if (!success)
         return;
@@ -1399,12 +1403,16 @@ CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, GdkEventBut
      */
     auto dcol = tcol_num - 1;
     auto offset = get_new_col_rel_pos (tcol, cell_x);
-    if (event->type == GDK_2BUTTON_PRESS && event->button == 1)
-        /* Double clicks can split columns. */
-        preview_split_column (dcol, offset);
-    else if (event->type == GDK_BUTTON_PRESS && event->button == 3)
-        /* Right clicking brings up a context menu. */
-        fixed_context_menu (event, dcol, offset);
+    guint button;
+    if (gdk_event_get_button (event, &button))
+    {
+        if ((gdk_event_get_event_type (event) == GDK_2BUTTON_PRESS) && (button == 1))
+            /* Double clicks can split columns. */
+            preview_split_column (dcol, offset);
+        else if ((gdk_event_get_event_type (event) == GDK_BUTTON_PRESS) && (button == 3))
+            /* Right clicking brings up a context menu. */
+            fixed_context_menu (event, dcol, offset);
+    }
 }
 
 
@@ -1947,22 +1955,31 @@ CsvImpTransAssist::acct_match_via_button ()
 
 /* This is the callback for the mouse click */
 bool
-CsvImpTransAssist::acct_match_via_view_dblclick (GdkEventButton *event)
+CsvImpTransAssist::acct_match_via_view_dblclick (const GdkEvent *event)
 {
+    guint button;
+
+    if (!gdk_event_get_button (event, &button))
+        return false;
+
     /* This is for a double click */
-    if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+    if (button == 1 && (gdk_event_get_event_type (event) == GDK_2BUTTON_PRESS))
     {
         auto window = gtk_tree_view_get_bin_window (GTK_TREE_VIEW (account_match_view));
-        if (event->window != window)
+        if (gdk_event_get_window (event) != window)
+            return false;
+
+        gdouble x_win, y_win;
+        if (!gdk_event_get_coords (event, &x_win, &y_win))
             return false;
 
         /* Get tree path for row that was clicked, true if row exists */
         GtkTreePath *path;
-        if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (account_match_view), (gint) event->x, (gint) event->y,
-                                             &path, nullptr, nullptr, nullptr))
-        {
-            DEBUG("event->x is %d and event->y is %d", (gint)event->x, (gint)event->y);
 
+        if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW(account_match_view), (gint)x_win, (gint)y_win,
+                                           &path, nullptr, nullptr, nullptr))
+        {
+            DEBUG("event x_win is %d and y_win is %d", (gint)x_win, (gint)y_win);
             auto model = gtk_tree_view_get_model (GTK_TREE_VIEW(account_match_view));
             GtkTreeIter iter;
             if (gtk_tree_model_get_iter (model, &iter, path))

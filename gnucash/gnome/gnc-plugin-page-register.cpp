@@ -4957,11 +4957,14 @@ gnc_plugin_page_register_cmd_scrub_current (GSimpleAction *simple,
 }
 
 static gboolean
-scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
+scrub_kp_handler (GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
-    if (event->length == 0) return FALSE;
+    guint keyval;
 
-    switch (event->keyval)
+    if (!gdk_event_get_keyval (event, &keyval))
+        return false;
+
+    switch (keyval)
     {
     case GDK_KEY_Escape:
         {
@@ -4969,14 +4972,14 @@ scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
                                                   "%s", _(check_repair_abort_YN));
 
             if (abort_scrub)
-                gnc_set_abort_scrub (TRUE);
+                gnc_set_abort_scrub (true);
 
-            return TRUE;
+            return true;
         }
     default:
         break;
     }
-    return FALSE;
+    return false;
 }
 
 static void

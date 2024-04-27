@@ -142,10 +142,12 @@ gnc_cell_view_get_property (GObject    *object,
 
 static gboolean
 gtk_cell_editable_key_press_event (GtkTextView   *text_view,
-                                   GdkEventKey   *key_event,
+                                   const GdkEvent *event,
                                    GncCellView   *cv)
 {
-    if (key_event->keyval == GDK_KEY_Escape)
+    guint keyval;
+
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         cv->editing_canceled = TRUE;
 
@@ -154,11 +156,16 @@ gtk_cell_editable_key_press_event (GtkTextView   *text_view,
         return TRUE;
     }
 
-    if ((key_event->keyval == GDK_KEY_Return || key_event->keyval == GDK_KEY_KP_Enter)
-         && (key_event->state & GDK_SHIFT_MASK))
+    GdkModifierType state;
+
+    if (gdk_event_get_state (event, &state))
     {
-        gtk_cell_editable_editing_done (GTK_CELL_EDITABLE(cv));
-        return TRUE;
+        if ((keyval == GDK_KEY_Return || keyval == GDK_KEY_KP_Enter)
+             && (state & GDK_SHIFT_MASK))
+        {
+            gtk_cell_editable_editing_done (GTK_CELL_EDITABLE(cv));
+            return TRUE;
+        }
     }
     return FALSE;
 }
@@ -180,7 +187,7 @@ gcv_populate_popup (GtkTextView *text_view,
 }
 
 static gboolean
-gcv_focus_out_event (GtkWidget *widget, GdkEvent *event, GncCellView *cv)
+gcv_focus_out_event (GtkWidget *widget, const GdkEvent *event, GncCellView *cv)
 {
     if (cv->in_popup_menu)
         return FALSE;

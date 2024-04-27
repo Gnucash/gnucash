@@ -134,7 +134,7 @@ static GncPluginPage *gnc_plugin_page_account_tree_recreate_page (GtkWidget *win
 
 /* Callbacks */
 static void gnc_plugin_page_account_tree_summarybar_position_changed(gpointer prefs, gchar* pref, gpointer user_data);
-static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget, GdkEventButton *event, GncPluginPage *page);
+static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget, const GdkEvent *event, GncPluginPage *page);
 static void gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
                                                           GtkTreePath *path,
                                                           GtkTreeViewColumn *col,
@@ -936,7 +936,7 @@ gnc_plugin_page_account_tree_summarybar_position_changed (gpointer prefs,
  *  registered in gnc-main-window.c. */
 static gboolean
 gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
-                                              GdkEventButton *event,
+                                              const GdkEvent *event,
                                               GncPluginPage *page)
 {
 
@@ -1889,11 +1889,14 @@ gnc_plugin_page_account_tree_cmd_lots (GSimpleAction *simple,
 }
 
 static gboolean
-scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
+scrub_kp_handler (GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
-    if (event->length == 0) return FALSE;
+    guint keyval;
 
-    switch (event->keyval)
+    if (!gdk_event_get_keyval (event, &keyval))
+        return false;
+
+    switch (keyval)
     {
     case GDK_KEY_Escape:
         {
@@ -1901,14 +1904,14 @@ scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
                                                       "%s", _(check_repair_abort_YN));
 
             if (abort_scrub)
-                gnc_set_abort_scrub (TRUE);
+                gnc_set_abort_scrub (true);
 
-            return TRUE;
+            return true;
         }
     default:
         break;
     }
-    return FALSE;
+    return false;
 }
 
 static void

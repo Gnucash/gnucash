@@ -289,10 +289,12 @@ setup_file_dialog (GtkBuilder *builder, const gchar *path_head, const gchar *uri
 }
 
 static gboolean
-gnc_doclink_get_uri_event_cb (GtkWidget *widget, GdkEventKey *event,
+gnc_doclink_get_uri_event_cb (GtkWidget *widget, const GdkEvent *event,
                               gpointer user_data)
 {
-    if (event->keyval == GDK_KEY_Escape)
+    guint keyval;
+
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         gtk_dialog_response (GTK_DIALOG(widget),
                              GTK_RESPONSE_CANCEL);
@@ -487,12 +489,13 @@ gnc_doclink_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
 }
 
 static gboolean
-gnc_doclink_dialog_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+gnc_doclink_dialog_window_key_press_cb (GtkWidget *widget, const GdkEvent *event,
                                         gpointer user_data)
 {
     DoclinkDialog *doclink_dialog = user_data;
+    guint keyval;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         close_handler (doclink_dialog);
         return TRUE;
