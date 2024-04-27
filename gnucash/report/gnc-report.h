@@ -66,7 +66,7 @@ gint gnc_report_add(SCM report);
 
 void gnc_reports_flush_global(void);
 
-GHashTable* gnc_reports_get_global(void);
+void gnc_reports_foreach (GHFunc func, gpointer user_data);
 
 gchar* gnc_get_default_report_font_family(void);
 

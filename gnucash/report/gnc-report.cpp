@@ -200,11 +200,12 @@ gnc_reports_flush_global(void)
         g_hash_table_foreach_remove(reports, yes_remove, NULL);
 }
 
-GHashTable *
-gnc_reports_get_global(void)
+void
+gnc_reports_foreach (GHFunc func, gpointer user_data)
 {
     gnc_report_init_table();
-    return reports;
+    if (reports)
+        g_hash_table_foreach (reports, func, user_data);
 }
 
 gboolean
