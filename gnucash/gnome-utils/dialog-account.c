@@ -745,7 +745,7 @@ gnc_finish_ok (AccountWindow *aw)
         gtk_container_remove (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
         aw->parent_tree = gnc_tree_view_account_new (TRUE);
         gtk_container_add (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
-        gtk_widget_show (GTK_WIDGET(aw->parent_tree));
+        gtk_widget_set_visible (GTK_WIDGET(aw->parent_tree), TRUE);
 
         aw_connect_selection_changed (aw);
         gnc_suspend_gui_refresh ();
@@ -1612,7 +1612,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
                                                  &aw->commodity_mode);
 
     gtk_box_pack_start (GTK_BOX(box), aw->commodity_edit, TRUE, TRUE, 0);
-    gtk_widget_show (aw->commodity_edit);
+    gtk_widget_set_visible (GTK_WIDGET(aw->commodity_edit), TRUE);
     // If the account has transactions, prevent changes by displaying a label and tooltip
     if (xaccAccountGetSplitsSize (aw_get_account (aw)) != 0)
     {
@@ -1632,7 +1632,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
 
     aw->parent_tree = gnc_tree_view_account_new (TRUE);
     gtk_container_add (GTK_CONTAINER(aw->parent_scroll), GTK_WIDGET(aw->parent_tree));
-    gtk_widget_show (GTK_WIDGET(aw->parent_tree));
+    gtk_widget_set_visible (GTK_WIDGET(aw->parent_tree), TRUE);
     aw_connect_selection_changed (aw);
 
     aw->balance_grid = GTK_WIDGET(gtk_builder_get_object (builder, "balance_grid"));
@@ -1643,7 +1643,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit), TRUE);
     gnc_amount_edit_set_validate_on_change (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit), TRUE);
     gnc_amount_edit_show_warning_symbol (GNC_AMOUNT_EDIT(aw->higher_balance_limit_edit), TRUE);
-    gtk_widget_show (aw->higher_balance_limit_edit);
+    gtk_widget_set_visible (GTK_WIDGET(aw->higher_balance_limit_edit), TRUE);
 
     box  = GTK_WIDGET(gtk_builder_get_object (builder, "lower_balance_limit_hbox"));
     aw->lower_balance_limit_edit = gnc_amount_edit_new ();
@@ -1651,7 +1651,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit), TRUE);
     gnc_amount_edit_set_validate_on_change (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit), TRUE);
     gnc_amount_edit_show_warning_symbol (GNC_AMOUNT_EDIT(aw->lower_balance_limit_edit), TRUE);
-    gtk_widget_show (aw->lower_balance_limit_edit);
+    gtk_widget_set_visible (GTK_WIDGET(aw->lower_balance_limit_edit), TRUE);
 
     aw->include_balance_sub_accts = GTK_WIDGET(gtk_builder_get_object (builder, "include_sub_accts_tb"));
 
@@ -1671,7 +1671,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     aw->opening_balance_edit = amount;
     gtk_box_pack_start (GTK_BOX(box), amount, TRUE, TRUE, 0);
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT(amount), TRUE);
-    gtk_widget_show (amount);
+    gtk_widget_set_visible (GTK_WIDGET(amount), TRUE);
 
     label = GTK_WIDGET(gtk_builder_get_object (builder, "balance_label"));
     gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(amount), label);
@@ -1682,7 +1682,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), label);
     aw->opening_balance_date_edit = date_edit;
     gtk_box_pack_start (GTK_BOX(box), date_edit, TRUE, TRUE, 0);
-    gtk_widget_show (date_edit);
+    gtk_widget_set_visible (GTK_WIDGET(date_edit), TRUE);
 
     aw->opening_balance_page =
         gtk_notebook_get_nth_page (GTK_NOTEBOOK(aw->notebook), 2);
@@ -1698,7 +1698,7 @@ gnc_account_window_create (GtkWindow *parent, AccountWindow *aw)
     gtk_tree_selection_set_select_function (selection, account_commodity_filter, aw, NULL);
 
     gtk_container_add (GTK_CONTAINER(box), GTK_WIDGET(aw->transfer_tree));
-    gtk_widget_show (GTK_WIDGET(aw->transfer_tree));
+    gtk_widget_set_visible (GTK_WIDGET(aw->transfer_tree), TRUE);
 
     label = GTK_WIDGET(gtk_builder_get_object (builder, "parent_label"));
     gtk_label_set_mnemonic_widget (GTK_LABEL(label), GTK_WIDGET(aw->parent_tree));
@@ -1933,7 +1933,7 @@ gnc_ui_new_account_window_internal (GtkWindow *parent,
                                                 aw->parent_tree),
                                                 base_account);
 
-    gtk_widget_show (aw->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(aw->dialog), TRUE);
 
     gnc_window_adjust_for_screen (GTK_WINDOW(aw->dialog));
 
@@ -2129,7 +2129,7 @@ gnc_ui_edit_account_window (GtkWindow *parent, Account *account)
 
 //FIXME gtk4    gtk_widget_show_all (aw->dialog);
     if (xaccAccountGetSplitList (account) != 0)
-        gtk_widget_hide (aw->opening_balance_page);
+        gtk_widget_set_visible (GTK_WIDGET(aw->opening_balance_page), FALSE);
 
     parent_acct = gnc_account_get_parent (account);
     if (parent_acct == NULL)
@@ -2291,7 +2291,7 @@ gnc_account_renumber_response_cb (GtkDialog *dialog,
         gint interval;
         unsigned int num_digits, i;
 
-        gtk_widget_hide (data->dialog);
+        gtk_widget_set_visible (GTK_WIDGET(data->dialog), FALSE);
 
         if (children == NULL)
         {

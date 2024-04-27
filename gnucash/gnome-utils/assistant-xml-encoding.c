@@ -619,14 +619,14 @@ gxi_update_progress_bar (const gchar *message, double percentage)
         gtk_container_set_border_width (GTK_CONTAINER (progress_window), 12);
         gtk_container_add (GTK_CONTAINER (progress_window),
                            GTK_WIDGET (progress_bar));
-        gtk_widget_show (GTK_WIDGET (progress_bar));
+        gtk_widget_set_visible (GTK_WIDGET(progress_bar), TRUE);
     }
 
     if (percentage < 0)
     {
         gtk_progress_bar_set_text (progress_bar, NULL);
         gtk_progress_bar_set_fraction (progress_bar, 0.0);
-        gtk_widget_hide (progress_window);
+        gtk_widget_set_visible (GTK_WIDGET(progress_bar), FALSE);
     }
     else
     {
@@ -635,7 +635,7 @@ gxi_update_progress_bar (const gchar *message, double percentage)
             gtk_progress_bar_set_fraction (progress_bar, percentage / 100);
         else
             gtk_progress_bar_pulse (progress_bar);
-        gtk_widget_show (progress_window);
+        gtk_widget_set_visible (GTK_WIDGET(progress_window), TRUE);
     }
 }
 
@@ -663,7 +663,7 @@ gxi_update_default_enc_combo (GncXmlImportData *data)
     g_signal_connect (G_OBJECT (combo), "changed",
                       G_CALLBACK (gxi_default_enc_combo_changed_cb), data);
     gtk_container_add (GTK_CONTAINER (data->default_encoding_hbox), GTK_WIDGET (combo));
-    gtk_widget_show (GTK_WIDGET (combo));
+    gtk_widget_set_visible (GTK_WIDGET(combo), TRUE);
 }
 
 static void
@@ -711,11 +711,11 @@ gxi_update_summary_label (GncXmlImportData *data)
     {
         gtk_label_set_text (GTK_LABEL (data->summary_label), string);
         g_free (string);
-        gtk_widget_show (data->summary_label);
+        gtk_widget_set_visible (GTK_WIDGET(data->summary_label), TRUE);
     }
     else
     {
-        gtk_widget_hide (data->summary_label);
+        gtk_widget_set_visible (GTK_WIDGET(data->summary_label), FALSE);
     }
 }
 
@@ -821,13 +821,13 @@ gxi_update_string_box (GncXmlImportData *data)
         g_signal_connect (G_OBJECT (combo), "changed",
                           G_CALLBACK (gxi_string_combo_changed_cb), data);
         gtk_box_pack_start (vbox, GTK_WIDGET (combo), FALSE, FALSE, 0);
-        gtk_widget_show (GTK_WIDGET (combo));
+        gtk_widget_set_visible (GTK_WIDGET(combo), TRUE);
 
     } /* next word */
 
     /* wire up whole string vbox */
     gtk_container_add (GTK_CONTAINER (data->string_box_container), GTK_WIDGET (vbox));
-    gtk_widget_show (GTK_WIDGET (vbox));
+    gtk_widget_set_visible (GTK_WIDGET(vbox), TRUE);
 
     /* update label now, n_unassigned is calculated */
     if (!data->summary_label)

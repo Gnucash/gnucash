@@ -261,12 +261,12 @@ setup_notebook_pages(GncOptionsDialog* dlg, GtkBox* page_content_box,
 
         if (page_count > MAX_TAB_COUNT - 1)   /* Convert 1-based -> 0-based */
         {
-            gtk_widget_show(dlg->get_page_list());
+            gtk_widget_set_visible (GTK_WIDGET(dlg->get_page_list()), true);
             gtk_notebook_set_show_tabs(GTK_NOTEBOOK(notebook), FALSE);
             gtk_notebook_set_show_border(GTK_NOTEBOOK(notebook), FALSE);
         }
         else
-            gtk_widget_hide(dlg->get_page_list());
+            gtk_widget_set_visible (GTK_WIDGET(dlg->get_page_list()), false);
 
     }
     return page_count;
@@ -284,7 +284,7 @@ dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
 
     auto page_label = gtk_label_new(_(name));
     PINFO("Page_label is %s", _(name));
-    gtk_widget_show(page_label);
+    gtk_widget_set_visible (GTK_WIDGET(page_label), true);
 
     /* Build this options page */
     auto page_content_box = create_content_box();
@@ -367,7 +367,7 @@ GncOptionsDialog::build_contents(GncOptionDB  *odb, bool show_dialog)
     }
     dialog_changed_internal(m_window, FALSE);
     if (show_dialog)
-        gtk_widget_show(m_window);
+        gtk_widget_set_visible (GTK_WIDGET(m_window), true);
 }
 
 void GncOptionsDialog::call_apply_cb() noexcept
@@ -396,7 +396,7 @@ void GncOptionsDialog::call_close_cb() noexcept
     }
     else
     {
-        gtk_widget_hide(m_window);
+        gtk_widget_set_visible (GTK_WIDGET(m_window), false);
     }
 }
 
@@ -597,7 +597,7 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
 
     /* modal */
     if (modal)
-        gtk_widget_hide (GTK_WIDGET(m_apply_button));
+        gtk_widget_set_visible (GTK_WIDGET(m_apply_button), false);
 
     /* glade doesn't support a notebook with zero pages */
     auto hbox = GTK_WIDGET(gtk_builder_get_object (builder,
@@ -606,7 +606,7 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
 
     gtk_widget_set_vexpand (m_notebook, TRUE);
 
-    gtk_widget_show(m_notebook);
+    gtk_widget_set_visible (GTK_WIDGET(m_notebook), true);
     gtk_box_pack_start(GTK_BOX(hbox), m_notebook, TRUE, TRUE, 5);
 
     auto component_id = gnc_register_gui_component (m_component_class,

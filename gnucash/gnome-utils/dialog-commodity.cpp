@@ -793,7 +793,7 @@ gnc_ui_source_menu_create(QuoteSourceType type)
     gtk_cell_layout_add_attribute(GTK_CELL_LAYOUT(combo), renderer,
                                   "sensitive", SOURCE_COL_FQ_SUPPORTED);
     gtk_combo_box_set_active(GTK_COMBO_BOX(combo), 0);
-    gtk_widget_show(combo);
+    gtk_widget_set_visible (GTK_WIDGET(combo), TRUE);
     return combo;
 }
 
@@ -863,7 +863,7 @@ gnc_ui_quote_tz_menu_create(void)
         gtk_combo_box_text_append_text(GTK_COMBO_BOX_TEXT(combo), *itemstr);
     }
 
-    gtk_widget_show(combo);
+    gtk_widget_set_visible (GTK_WIDGET(combo), TRUE);
     return combo;
 }
 

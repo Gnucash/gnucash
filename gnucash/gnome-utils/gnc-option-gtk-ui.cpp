@@ -1264,7 +1264,7 @@ create_option_widget<GncOptionUIType::LIST> (GncOption& option,
     set_name_label(option, page_box, row, true);
     set_tool_tip(option, enclosing);
     grid_attach_widget (GTK_GRID(page_box), enclosing, row);
-    gtk_widget_show(enclosing);
+    gtk_widget_set_visible (GTK_WIDGET(enclosing), true);
 }
 
 class GncGtkNumberRangeUIItem : public GncOptionGtkUIItem
@@ -1550,10 +1550,10 @@ create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
     gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
     gtk_box_pack_start(GTK_BOX(enclosing), button, FALSE, FALSE, 0);
 
-    gtk_widget_show(widget);
+    gtk_widget_set_visible (GTK_WIDGET(widget), true);
     set_name_label(option, page_box, row, false);
     set_tool_tip(option, enclosing);
-    gtk_widget_show(enclosing);
+    gtk_widget_set_visible (GTK_WIDGET(enclosing), true);
     grid_attach_widget(page_box, enclosing, row);
 }
 

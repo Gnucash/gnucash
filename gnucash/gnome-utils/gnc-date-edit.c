@@ -122,7 +122,7 @@ gnc_date_edit_popdown(GNCDateEdit *gde)
     pointer = gdk_seat_get_pointer (seat);
 
     gtk_grab_remove (gde->cal_popup);
-    gtk_widget_hide (gde->cal_popup);
+    gtk_widget_set_visible (GTK_WIDGET(gde->cal_popup), FALSE);
 
     if (pointer)
         gdk_seat_ungrab (seat);
@@ -293,7 +293,7 @@ gnc_date_edit_popup (GNCDateEdit *gde)
 
     position_popup (gde);
 
-    gtk_widget_show (gde->cal_popup);
+    gtk_widget_set_visible (GTK_WIDGET(gde->cal_popup), TRUE);
 
     gtk_widget_grab_focus (gde->cal_popup);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (gde->date_button),
@@ -316,7 +316,7 @@ gnc_date_edit_popup (GNCDateEdit *gde)
     if (!popup_grab_on_window (gtk_widget_get_window ((GTK_WIDGET(gde->cal_popup))),
                                keyboard, pointer, GDK_CURRENT_TIME))
     {
-        gtk_widget_hide (gde->cal_popup);
+        gtk_widget_set_visible (GTK_WIDGET(gde->cal_popup), FALSE);
         LEAVE("Failed to grab window");
         return;
     }
@@ -824,7 +824,7 @@ create_children (GNCDateEdit *gde)
     gde->date_entry  = gtk_entry_new ();
     gtk_entry_set_width_chars (GTK_ENTRY (gde->date_entry), 11);
     gtk_box_pack_start (GTK_BOX (gde), gde->date_entry, TRUE, TRUE, 0);
-    gtk_widget_show (GTK_WIDGET(gde->date_entry));
+    gtk_widget_set_visible (GTK_WIDGET(gde->date_entry), TRUE);
 
     GtkEventController *event_controller1 = gtk_event_controller_key_new ();
     gtk_widget_add_controller (GTK_WIDGET(gde->date_entry), event_controller1);
@@ -844,22 +844,21 @@ create_children (GNCDateEdit *gde)
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     gtk_container_add (GTK_CONTAINER (gde->date_button), hbox);
-    gtk_widget_show (GTK_WIDGET(hbox));
+    gtk_widget_set_visible (GTK_WIDGET(hbox), TRUE);
 
     /* Calendar label, only shown if the date editor has a time field */
     gde->cal_label = gtk_label_new (_("Calendar"));
     gnc_label_set_alignment (gde->cal_label, 0.0, 0.5);
     gtk_box_pack_start (GTK_BOX (hbox), gde->cal_label, TRUE, TRUE, 0);
     if (gde->flags & GNC_DATE_EDIT_SHOW_TIME)
-        gtk_widget_show (GTK_WIDGET(gde->cal_label));
+        gtk_widget_set_visible (GTK_WIDGET(gde->cal_label), TRUE);
 
     /* Graphic for the popup button. */
     arrow = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_BUTTON);
 
     gtk_box_pack_start (GTK_BOX (hbox), arrow, TRUE, FALSE, 0);
-    gtk_widget_show (GTK_WIDGET(arrow));
-
-    gtk_widget_show (GTK_WIDGET(gde->date_button));
+    gtk_widget_set_visible (GTK_WIDGET(arrow), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET(gde->date_button), TRUE);
 
     /* Time entry controls. */
     gde->time_entry = gtk_entry_new ();
@@ -891,8 +890,8 @@ create_children (GNCDateEdit *gde)
 
     if (gde->flags & GNC_DATE_EDIT_SHOW_TIME)
     {
-        gtk_widget_show (GTK_WIDGET(gde->time_entry));
-        gtk_widget_show (GTK_WIDGET(gde->time_combo));
+        gtk_widget_set_visible (GTK_WIDGET(gde->time_entry), TRUE);
+        gtk_widget_set_visible (GTK_WIDGET(gde->time_combo), TRUE);
     }
 
     gde->cal_popup = gtk_window_new (GTK_WINDOW_POPUP);
@@ -923,7 +922,7 @@ create_children (GNCDateEdit *gde)
     frame = gtk_frame_new (NULL);
     gtk_frame_set_shadow_type (GTK_FRAME (frame), GTK_SHADOW_NONE);
     gtk_container_add (GTK_CONTAINER (gde->cal_popup), frame);
-    gtk_widget_show (GTK_WIDGET(frame));
+    gtk_widget_set_visible (GTK_WIDGET(frame), TRUE);
 
     gde->calendar = gtk_calendar_new ();
     gtk_calendar_set_display_options
@@ -933,12 +932,12 @@ create_children (GNCDateEdit *gde)
     g_signal_connect (gde->calendar, "button-release-event",
                       G_CALLBACK(gnc_date_edit_button_released), gde);
     g_signal_connect (G_OBJECT (gde->calendar), "day-selected",
-		      G_CALLBACK (day_selected), gde);
+                      G_CALLBACK (day_selected), gde);
     g_signal_connect (G_OBJECT (gde->calendar),
                       "day-selected-double-click",
                       G_CALLBACK  (day_selected_double_click), gde);
     gtk_container_add (GTK_CONTAINER (frame), gde->calendar);
-    gtk_widget_show (GTK_WIDGET(gde->calendar));
+    gtk_widget_set_visible (GTK_WIDGET(gde->calendar), TRUE);
 }
 
 /**
@@ -976,7 +975,7 @@ gnc_date_edit_new_glade (gchar *widget_name,
 
     /* None of the standard glade arguments are used. */
     widget = gnc_date_edit_new(time(NULL), FALSE, FALSE);
-    gtk_widget_show(widget);
+    gtk_widget_set_visible (GTK_WIDGET(widget), TRUE);
     return widget;
 }
 
@@ -1159,15 +1158,15 @@ gnc_date_edit_set_flags (GNCDateEdit *gde, GNCDateEditFlags flags)
     {
         if (flags & GNC_DATE_EDIT_SHOW_TIME)
         {
-            gtk_widget_show (gde->cal_label);
-            gtk_widget_show (gde->time_entry);
-            gtk_widget_show (gde->time_combo);
+            gtk_widget_set_visible (GTK_WIDGET(gde->cal_label), TRUE);
+            gtk_widget_set_visible (GTK_WIDGET(gde->time_entry), TRUE);
+            gtk_widget_set_visible (GTK_WIDGET(gde->time_combo), TRUE);
         }
         else
         {
-            gtk_widget_hide (gde->cal_label);
-            gtk_widget_hide (gde->time_entry);
-            gtk_widget_hide (gde->time_combo);
+            gtk_widget_set_visible (GTK_WIDGET(gde->cal_label), FALSE);
+            gtk_widget_set_visible (GTK_WIDGET(gde->time_entry), FALSE);
+            gtk_widget_set_visible (GTK_WIDGET(gde->time_combo), FALSE);
         }
     }
 

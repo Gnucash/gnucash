@@ -260,18 +260,18 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
     main_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (main_vbox), FALSE);
     gtk_container_set_border_width(GTK_CONTAINER(main_vbox), 6);
-    gtk_widget_show(main_vbox);
+    gtk_widget_set_visible (GTK_WIDGET(main_vbox), TRUE);
 
     label = gtk_label_new(msg);
     gtk_label_set_justify(GTK_LABEL(label), GTK_JUSTIFY_LEFT);
     gtk_box_pack_start(GTK_BOX(main_vbox), label, FALSE, FALSE, 0);
-    gtk_widget_show(label);
+    gtk_widget_set_visible (GTK_WIDGET(label), TRUE);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
     gtk_box_set_homogeneous (GTK_BOX (vbox), TRUE);
     gtk_container_set_border_width(GTK_CONTAINER(vbox), 6);
     gtk_container_add(GTK_CONTAINER(main_vbox), vbox);
-    gtk_widget_show(vbox);
+    gtk_widget_set_visible (GTK_WIDGET(vbox), TRUE);
 
     for (node = radio_list, i = 0; node; node = node->next, i++)
     {
@@ -285,7 +285,7 @@ gnc_choose_radio_option_dialog(GtkWidget *parent,
             radio_result = default_value;
         }
 
-        gtk_widget_show(radio_button);
+        gtk_widget_set_visible (GTK_WIDGET(radio_button), TRUE);
         gtk_box_pack_start(GTK_BOX(vbox), radio_button, FALSE, FALSE, 0);
         g_object_set_data(G_OBJECT(radio_button), INDEX_LABEL, GINT_TO_POINTER(i));
         g_signal_connect(radio_button, "clicked",

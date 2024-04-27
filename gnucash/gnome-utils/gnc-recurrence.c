@@ -196,7 +196,7 @@ gnc_recurrence_init( GncRecurrence *gr )
     w = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
     gr->gde_start = w;
     gtk_box_pack_start (GTK_BOX (hb), w, TRUE, TRUE, 0);
-    gtk_widget_show (w);
+    gtk_widget_set_visible (GTK_WIDGET(w), TRUE);
 
     gtk_widget_set_no_show_all(GTK_WIDGET(gr->gde_start), TRUE);
     gr->gcb_period = GTK_COMBO_BOX(gtk_builder_get_object (builder, "GCB_PeriodType"));

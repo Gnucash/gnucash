@@ -304,7 +304,7 @@ update_warning_tooltip (GncReportCombo *grc)
         tool_tip = g_strdup_printf (_("Report with GUID '%s' is missing"),
                                        grc->active_report_guid);
 
-    gtk_widget_show (grc->warning_image);
+    gtk_widget_set_visible (GTK_WIDGET(grc->warning_image), TRUE);
     gtk_widget_set_tooltip_text (grc->warning_image, tool_tip);
     g_free (tool_tip);
 }
@@ -502,7 +502,7 @@ gnc_report_combo_new (GSList *report_list)
                                                         GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_box_pack_start (GTK_BOX(grc), GTK_WIDGET(grc->warning_image), FALSE, FALSE, 6);
     gtk_widget_set_no_show_all (GTK_WIDGET(grc->warning_image), TRUE);
-    gtk_widget_hide (GTK_WIDGET(grc->warning_image));
+    gtk_widget_set_visible (GTK_WIDGET(grc->warning_image), FALSE);
 
     update_report_list (grc, report_list);
 

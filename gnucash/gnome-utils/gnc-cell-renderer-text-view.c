@@ -156,7 +156,7 @@ gcrtv_start_editing (GtkCellRenderer      *cell,
                             g_strdup (path),
                             g_free);
 
-    gtk_widget_show (editable);
+    gtk_widget_set_visible (GTK_WIDGET(editable), TRUE);
 
     g_signal_connect (editable, "editing-done", G_CALLBACK(gcrtv_editing_done), cell_tv);
 

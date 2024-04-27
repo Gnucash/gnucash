@@ -231,7 +231,7 @@ gnc_amount_edit_paste_clipboard (GtkEntry *entry, gpointer user_data)
 
     if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
     {
-        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_visible (GTK_WIDGET(gae->image), FALSE);
         gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
     }
 
@@ -278,7 +278,7 @@ gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
 
     if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
     {
-        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_visible (GTK_WIDGET(gae->image), FALSE);
         gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
     }
 
@@ -331,7 +331,7 @@ gnc_amount_edit_new (void)
     gae->image = gtk_image_new_from_icon_name ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
     gtk_box_pack_start (GTK_BOX(gae), GTK_WIDGET(gae->image), FALSE, FALSE, 6);
     gtk_widget_set_no_show_all (GTK_WIDGET(gae->image), TRUE);
-    gtk_widget_hide (GTK_WIDGET(gae->image));
+    gtk_widget_set_visible (GTK_WIDGET(gae->image), FALSE);
 //FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(gae));
 
     return GTK_WIDGET(gae);
@@ -402,7 +402,7 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
 
     if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
     {
-        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_visible (GTK_WIDGET(gae->image), FALSE);
         gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
     }
 
@@ -451,7 +451,7 @@ gnc_amount_edit_expr_is_valid (GNCAmountEdit *gae, gnc_numeric *amount,
     if (gae->show_warning_symbol)
     {
         gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), err_msg);
-        gtk_widget_show (GTK_WIDGET(gae->image));
+        gtk_widget_set_visible (GTK_WIDGET(gae->image), TRUE);
         gtk_widget_queue_resize (GTK_WIDGET(gae->entry));
     }
 
@@ -541,7 +541,7 @@ gnc_amount_edit_set_amount (GNCAmountEdit *gae, gnc_numeric amount)
 
     if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
     {
-        gtk_widget_hide (GTK_WIDGET(gae->image));
+        gtk_widget_set_visible (GTK_WIDGET(gae->image), FALSE);
         gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
     }
 

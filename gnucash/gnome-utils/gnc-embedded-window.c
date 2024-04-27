@@ -294,15 +294,15 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
     ENTER("window %p", window);
 
     /* Create widgets and add them to the window */
-    gtk_widget_show (GTK_WIDGET(window));
+    gtk_widget_set_visible (GTK_WIDGET(window), TRUE);
 
     window->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (window->menu_dock), FALSE);
-    gtk_widget_show (window->menu_dock);
+    gtk_widget_set_visible (GTK_WIDGET(window->menu_dock), TRUE);
     gtk_box_pack_start (GTK_BOX (window), window->menu_dock, FALSE, TRUE, 0);
 
     window->statusbar = gtk_statusbar_new ();
-    gtk_widget_show (window->statusbar);
+    gtk_widget_set_visible (GTK_WIDGET(window->statusbar), TRUE);
     gtk_box_pack_end (GTK_BOX (window), window->statusbar, FALSE, TRUE, 0);
 
     window->simple_action_group = NULL;
@@ -349,12 +349,12 @@ gnc_embedded_window_new (const gchar *action_group_name,
 
     window->menubar = gtk_menu_bar_new_from_model (window->menubar_model);
     gtk_container_add (GTK_CONTAINER(window->menu_dock), window->menubar);
-    gtk_widget_show (GTK_WIDGET(window->menubar));
+    gtk_widget_set_visible (GTK_WIDGET(window->menubar), TRUE);
 
     window->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "embeddedwin-toolbar");
     g_object_set (window->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
     gtk_container_add (GTK_CONTAINER(window->menu_dock), GTK_WIDGET(window->toolbar));
-    gtk_widget_show (GTK_WIDGET(window->toolbar));
+    gtk_widget_set_visible (GTK_WIDGET(window->toolbar), TRUE);
 
     g_object_unref (builder);
 

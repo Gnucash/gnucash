@@ -181,11 +181,11 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
     if (conflict_msg)
     {
         gtk_widget_set_tooltip_text (GTK_WIDGET(image), conflict_msg);
-        gtk_widget_show (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), TRUE);
         g_free (conflict_msg);
     }
     else
-        gtk_widget_hide (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), FALSE);
 
     g_free (separator);
 }
@@ -725,7 +725,7 @@ gnc_preferences_build_page (gpointer data,
     if (copydata.rows > 0)
     {
         label = gtk_label_new ("");
-        gtk_widget_show (label);
+        gtk_widget_set_visible (GTK_WIDGET(label), TRUE);
         gtk_grid_attach (GTK_GRID(existing_content), label, 0, copydata.rows, 1, 1);
         copydata.rows = copydata.rows + 1;
 
@@ -841,7 +841,7 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
         g_free (folder_with_slash);
     }
 
-    gtk_widget_hide (GTK_WIDGET(image));
+    gtk_widget_set_visible (GTK_WIDGET(image), FALSE);
 
     if (!gnc_prefs_set_string (group, pref, folder_uri))
         PINFO("Failed to save preference at %s, %s with %s", group, pref, folder_uri);
@@ -897,14 +897,14 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
     image = g_object_get_data (G_OBJECT(fcb), "path_head_error");
 
     if (folder_set) // If current folder missing, display error and tt message
-        gtk_widget_hide (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), FALSE);
     else
     {
         gchar *path_head = gnc_doclink_get_unescape_uri (NULL, uri, "file");
         gchar *ttip = g_strconcat (_("Path does not exist, "), path_head, NULL);
 
         gtk_widget_set_tooltip_text (GTK_WIDGET(image), ttip);
-        gtk_widget_show (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), TRUE);
 
         g_free (ttip);
         g_free (path_head);
@@ -966,7 +966,7 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
 
     gtk_box_pack_start (GTK_BOX(box), fcb_new, TRUE, TRUE, 0);
     gtk_box_reorder_child (GTK_BOX(box), fcb_new, 0);
-    gtk_widget_show (fcb_new);
+    gtk_widget_set_visible (GTK_WIDGET(fcb_new), TRUE);
 
     g_signal_connect (GTK_BUTTON(button), "clicked",
                       G_CALLBACK(file_chooser_clear_cb), fcb_new);
@@ -1411,7 +1411,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_PERIOD));
     period = gnc_period_select_new (TRUE);
-    gtk_widget_show (period);
+    gtk_widget_set_visible (GTK_WIDGET(period), TRUE);
     gtk_box_pack_start (GTK_BOX(box), period, TRUE, TRUE, 0);
     if (date_is_valid)
         gnc_period_select_set_fy_end (GNC_PERIOD_SELECT(period), &fy_end);
@@ -1419,7 +1419,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_PERIOD));
     period = gnc_period_select_new (FALSE);
-    gtk_widget_show (period);
+    gtk_widget_set_visible (GTK_WIDGET(period), TRUE);
     gtk_box_pack_start (GTK_BOX(box), period, TRUE, TRUE, 0);
     if (date_is_valid)
         gnc_period_select_set_fy_end (GNC_PERIOD_SELECT(period), &fy_end);
@@ -1427,27 +1427,27 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_DATE));
     date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-    gtk_widget_show (date);
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     gtk_box_pack_start (GTK_BOX(box), date, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_DATE));
     date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-    gtk_widget_show (date);
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
     gtk_box_pack_start (GTK_BOX(box), date, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL "/" GNC_PREF_CURRENCY_OTHER));
     currency = gnc_currency_edit_new ();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
-    gtk_widget_show (currency);
+    gtk_widget_set_visible (GTK_WIDGET(currency), TRUE);
     gtk_box_pack_start (GTK_BOX(box), currency, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL_REPORT "/" GNC_PREF_CURRENCY_OTHER));
     currency = gnc_currency_edit_new ();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
-    gtk_widget_show (currency);
+    gtk_widget_set_visible (GTK_WIDGET(currency), TRUE);
     gtk_box_pack_start (GTK_BOX(box), currency, TRUE, TRUE, 0);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
@@ -1457,7 +1457,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     gtk_box_pack_start (GTK_BOX(box), fcb, TRUE, TRUE, 0);
     button = gtk_button_new_with_label (_("Clear"));
     gtk_box_pack_start (GTK_BOX(box), button, TRUE, TRUE, 0);
-    gtk_widget_show (button);
+    gtk_widget_set_visible (GTK_WIDGET(button), TRUE);
     g_signal_connect (GTK_BUTTON(button), "clicked",
                       G_CALLBACK(file_chooser_clear_cb), fcb);
 
@@ -1584,7 +1584,7 @@ gnc_preferences_dialog (GtkWindow *parent)
     dialog = gnc_preferences_dialog_create(parent);
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(dialog), parent);
-    gtk_widget_show (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
 
     gnc_register_gui_component (DIALOG_PREFERENCES_CM_CLASS,
                                 NULL, close_handler, dialog);

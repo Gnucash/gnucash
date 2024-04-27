@@ -185,14 +185,14 @@ set_widget_sensitivity( FileAccessWindow* faw, gboolean is_file_based_uri )
 {
     if (is_file_based_uri)
     {
-        gtk_widget_show(faw->frame_file);
-        gtk_widget_hide(faw->frame_database);
+        gtk_widget_set_visible (GTK_WIDGET(faw->frame_file), TRUE);
+        gtk_widget_set_visible (GTK_WIDGET(faw->frame_database), FALSE);
         gtk_file_chooser_set_current_folder(faw->fileChooser, faw->starting_dir);
     }
     else
     {
-        gtk_widget_show(faw->frame_database);
-        gtk_widget_hide(faw->frame_file);
+        gtk_widget_set_visible (GTK_WIDGET(faw->frame_file), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(faw->frame_database), TRUE);
     }
 //    gtk_widget_set_sensitive( faw->frame_file, is_file_based_uri );
 //	gtk_widget_set_sensitive( faw->frame_database, !is_file_based_uri );

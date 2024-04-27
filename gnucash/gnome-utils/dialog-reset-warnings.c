@@ -92,7 +92,7 @@ gnc_reset_warnings_update_widgets (RWDialog *rw_dialog)
     }
     else
     {
-        gtk_widget_hide(rw_dialog->perm_vbox_label);
+        gtk_widget_set_visible (GTK_WIDGET(rw_dialog->perm_vbox_label), FALSE);
     }
 
     list = gtk_container_get_children(GTK_CONTAINER(rw_dialog->temp_vbox));
@@ -112,19 +112,19 @@ gnc_reset_warnings_update_widgets (RWDialog *rw_dialog)
     }
     else
     {
-        gtk_widget_hide(rw_dialog->temp_vbox_label);
+        gtk_widget_set_visible (GTK_WIDGET(rw_dialog->temp_vbox_label), FALSE);
     }
 
     if (any)
     {
-        gtk_widget_show(rw_dialog->buttonbox);
-        gtk_widget_hide(rw_dialog->nolabel);
+        gtk_widget_set_visible (GTK_WIDGET(rw_dialog->buttonbox), TRUE);
+        gtk_widget_set_visible (GTK_WIDGET(rw_dialog->nolabel), FALSE);
         gtk_widget_set_sensitive(rw_dialog->applybutton, checked);
     }
     else
     {
-        gtk_widget_hide(rw_dialog->buttonbox);
-        gtk_widget_show(rw_dialog->nolabel);
+        gtk_widget_set_visible (GTK_WIDGET(rw_dialog->buttonbox), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(rw_dialog->nolabel), TRUE);
         gtk_widget_set_sensitive(rw_dialog->applybutton, FALSE);
     }
     LEAVE(" ");
@@ -417,7 +417,7 @@ gnc_reset_warnings_dialog (GtkWindow *parent)
     gnc_register_gui_component (DIALOG_RESET_WARNINGS_CM_CLASS,
                                 NULL, close_handler, rw_dialog);
 
-    gtk_widget_show(GTK_WIDGET(rw_dialog->dialog));
+    gtk_widget_set_visible (GTK_WIDGET(rw_dialog->dialog), TRUE);
 
     g_object_unref(G_OBJECT(builder));
 

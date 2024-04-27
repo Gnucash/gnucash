@@ -776,8 +776,8 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
            (ask
             ? _("Remember and don't ask me again this _session.")
             : _("Don't tell me again this _session."));
-    gtk_widget_show(perm);
-    gtk_widget_show(temp);
+    gtk_widget_set_visible (GTK_WIDGET(perm), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET(temp), TRUE);
     gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)), perm, TRUE, TRUE, 0);
     gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)), temp, TRUE, TRUE, 0);
     g_signal_connect(perm, "clicked", G_CALLBACK(gnc_perm_button_cb), temp);
