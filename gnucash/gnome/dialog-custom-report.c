@@ -537,13 +537,14 @@ custom_report_query_tooltip_cb (GtkTreeView  *view,
 }
 
 static gboolean
-custom_report_event_cb (GtkWidget *widget, const GdkEvent *event,
+custom_report_event_cb (GtkEventControllerKey *key, guint keyval,
+                        guint keycode, GdkModifierType state,
                         gpointer user_data)
 {
-    guint keyval;
-
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
+        GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
+
         custom_report_dialog_close_cb (widget, user_data);
         return TRUE;
      }
@@ -597,7 +598,10 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
     gtk_widget_show_all(crd->dialog);
 
     // Use this event to capture the escape key being pressed
-    g_signal_connect (crd->dialog, "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(crd->dialog), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
                       G_CALLBACK(custom_report_event_cb), crd);
 
     /* check if there are currently saved reports available

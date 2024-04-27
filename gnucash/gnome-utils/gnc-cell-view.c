@@ -141,13 +141,13 @@ gnc_cell_view_get_property (GObject    *object,
 }
 
 static gboolean
-gtk_cell_editable_key_press_event (GtkTextView   *text_view,
-                                   const GdkEvent *event,
-                                   GncCellView   *cv)
+gtk_cell_editable_key_press_event (GtkEventControllerKey *key, guint keyval,
+                                   guint keycode, GdkModifierType state,
+                                   gpointer user_data)
 {
-    guint keyval;
+    GncCellView *cv = user_data;
 
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         cv->editing_canceled = TRUE;
 
@@ -156,16 +156,11 @@ gtk_cell_editable_key_press_event (GtkTextView   *text_view,
         return TRUE;
     }
 
-    GdkModifierType state;
-
-    if (gdk_event_get_state (event, &state))
+    if ((keyval == GDK_KEY_Return || keyval == GDK_KEY_KP_Enter)
+         && (state & GDK_SHIFT_MASK))
     {
-        if ((keyval == GDK_KEY_Return || keyval == GDK_KEY_KP_Enter)
-             && (state & GDK_SHIFT_MASK))
-        {
-            gtk_cell_editable_editing_done (GTK_CELL_EDITABLE(cv));
-            return TRUE;
-        }
+        gtk_cell_editable_editing_done (GTK_CELL_EDITABLE(cv));
+        return TRUE;
     }
     return FALSE;
 }
@@ -238,7 +233,10 @@ gcv_start_editing (GtkCellEditable *cell_editable,
 
     gtk_widget_grab_focus (GTK_WIDGET(cv->text_view));
 
-    g_signal_connect (G_OBJECT(cv->text_view), "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(cv->text_view), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
                       G_CALLBACK(gtk_cell_editable_key_press_event), cv);
 
     cv->focus_out_id = g_signal_connect (G_OBJECT(cv->text_view),

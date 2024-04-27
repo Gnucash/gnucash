@@ -2592,33 +2592,33 @@ gnc_main_window_tab_entry_focus_out_event (GtkWidget *entry,
 }
 
 static gboolean
-gnc_main_window_tab_entry_key_press_event (GtkWidget *entry,
-                                           const GdkEvent *event,
-                                           GncPluginPage *page)
+gnc_main_window_tab_entry_key_press_event (GtkEventControllerKey *key, guint keyval,
+                                           guint keycode, GdkModifierType state,
+                                           gpointer user_data)
 {
-    guint keyval;
-
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
+        GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
+        GncPluginPage *page = GNC_PLUGIN_PAGE(user_data);
         GtkWidget *label, *entry2;
 
-        g_return_val_if_fail(GTK_IS_ENTRY(entry), FALSE);
-        g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+        g_return_val_if_fail (GTK_IS_ENTRY(widget), false);
+        g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
 
         ENTER("");
         if (!main_window_find_tab_items(GNC_MAIN_WINDOW(page->window),
                                         page, &label, &entry2))
         {
             LEAVE("can't find required widgets");
-            return FALSE;
+            return false;
         }
 
-        gtk_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
-        gtk_widget_hide(entry);
+        gtk_entry_set_text(GTK_ENTRY(widget), gtk_label_get_text(GTK_LABEL(label)));
+        gtk_widget_hide(widget);
         gtk_widget_show(label);
         LEAVE("");
     }
-    return FALSE;
+    return false;
 }
 
 /************************************************************
@@ -2913,23 +2913,19 @@ gnc_main_window_destroy (GtkWidget *widget)
 
 
 static gboolean
-gnc_main_window_key_press_event (GtkWidget *widget,
-                                 const GdkEvent *event,
+gnc_main_window_key_press_event (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
                                  gpointer user_data)
 {
     GncMainWindowPrivate *priv;
+
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
 
     g_return_val_if_fail (GNC_IS_MAIN_WINDOW(widget), false);
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(widget);
 
     GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
-
-    guint keyval;
-    GdkModifierType state;
-    if (!gdk_event_get_keyval (event, &keyval) ||
-        !gdk_event_get_state (event, &state))
-        return false;
 
     if ((state & modifiers) == (GDK_CONTROL_MASK | GDK_MOD1_MASK)) // Ctrl+Alt+
     {
@@ -3003,9 +2999,12 @@ gnc_main_window_new (void)
     gnc_engine_add_commit_error_callback( gnc_main_window_engine_commit_error_callback, window );
 
     // set up a callback for notebook navigation
-    g_signal_connect (G_OBJECT(window), "key-press-event",
-                      G_CALLBACK(gnc_main_window_key_press_event),
-                      NULL);
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(window), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
+                      G_CALLBACK(gnc_main_window_key_press_event), nullptr);
+
 
     return window;
 }
@@ -3294,12 +3293,17 @@ gnc_main_window_open_page (GncMainWindow *window,
     gtk_box_pack_start (GTK_BOX (tab_hbox), entry, TRUE, TRUE, 0);
     g_signal_connect(G_OBJECT(entry), "activate",
                      G_CALLBACK(gnc_main_window_tab_entry_activate), page);
+
     g_signal_connect(G_OBJECT(entry), "focus-out-event",
                      G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
                      page);
-    g_signal_connect(G_OBJECT(entry), "key-press-event",
-                     G_CALLBACK(gnc_main_window_tab_entry_key_press_event),
-                     page);
+
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(entry), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
+                      G_CALLBACK(gnc_main_window_tab_entry_key_press_event), page);
+
     g_signal_connect(G_OBJECT(entry), "editing-done",
                      G_CALLBACK(gnc_main_window_tab_entry_editing_done),
                      page);

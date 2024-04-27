@@ -108,14 +108,13 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
 }
 
 static gboolean
-gnc_find_account_dialog_window_key_press_cb (GtkWidget *widget,
-                                             const GdkEvent *event,
+gnc_find_account_dialog_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                             guint keycode, GdkModifierType state,
                                              gpointer user_data)
 {
     FindAccountDialog *facc_dialog = user_data;
-    guint keyval;
 
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         close_handler (facc_dialog);
         return TRUE;
@@ -473,7 +472,10 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     g_signal_connect (facc_dialog->window, "delete-event",
                       G_CALLBACK(gnc_find_account_dialog_window_delete_event_cb), facc_dialog);
 
-    g_signal_connect (facc_dialog->window, "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(facc_dialog->window), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
                       G_CALLBACK(gnc_find_account_dialog_window_key_press_cb), facc_dialog);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, facc_dialog);

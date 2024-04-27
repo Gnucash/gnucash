@@ -350,25 +350,21 @@ gnc_xfer_dialog_toggle_cb(GtkToggleButton *button, gpointer data)
 }
 
 static gboolean
-gnc_xfer_dialog_key_press_cb (GtkWidget      *widget,
-                              const GdkEvent *event,
-                              gpointer        unused)
+gnc_xfer_dialog_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                              guint keycode, GdkModifierType state,
+                              gpointer user_data)
 {
-    guint keyval;
-
-    if (!gdk_event_get_keyval (event, &keyval))
-        return FALSE;
-
     if ((keyval == GDK_KEY_Return) || (keyval == GDK_KEY_KP_Enter))
     {
+        GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
         auto toplevel = gtk_widget_get_toplevel (widget);
         if (gtk_widget_is_toplevel(toplevel) && GTK_IS_WINDOW(toplevel))
         {
-            gtk_window_activate_default(GTK_WINDOW(toplevel));
-            return TRUE;
+            gtk_window_activate_default (GTK_WINDOW(toplevel));
+            return true;
         }
     }
-    return FALSE;
+    return false;
 }
 
 static void
@@ -630,8 +626,11 @@ gnc_xfer_dialog_fill_tree_view(XferDialog *xferData,
     g_object_set_data (G_OBJECT(tree_view), "filter-info", info);
 
     gtk_widget_show(GTK_WIDGET(tree_view));
-    g_signal_connect (G_OBJECT (tree_view), "key-press-event",
-                      G_CALLBACK (gnc_xfer_dialog_key_press_cb), NULL);
+
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(tree_view), event_controller);
+    g_signal_connect (G_OBJECT(event_controller), "key-press-event",
+                      G_CALLBACK (gnc_xfer_dialog_key_press_cb), nullptr);
 
     auto selection = gtk_tree_view_get_selection (tree_view);
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);

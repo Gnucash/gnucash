@@ -319,7 +319,9 @@ completion_connect_signals (CompletionCell* cell)
     g_signal_connect (G_OBJECT(box->item_list), "activate_item",
                       G_CALLBACK(activate_item_cb), cell);
 
-    g_signal_connect (gtk_event_controller_key_new (GTK_WIDGET(box->item_list)), 
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(box->item_list), event_controller);
+    g_signal_connect (event_controller,
                       "key-pressed",
                       G_CALLBACK(key_press_item_cb), cell);
 

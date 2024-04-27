@@ -456,18 +456,19 @@ dialog_destroy_cb (GtkWidget *object, GncOptionsDialog *win)
 
 // "key_press_event" signal handler
 static int
-dialog_window_key_press_cb(GtkWidget *widget, const GdkEvent *event, gpointer data)
+dialog_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                            guint keycode, GdkModifierType state,
+                            gpointer user_data)
 {
-    GncOptionsDialog *win = static_cast<decltype(win)>(data);
-    guint keyval;
+    GncOptionsDialog *win = static_cast<decltype(win)>(user_data);
 
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         component_close_handler (win);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 static void
@@ -616,7 +617,10 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
 
     g_signal_connect (m_window, "destroy", G_CALLBACK(dialog_destroy_cb), this);
 
-    g_signal_connect (m_window, "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(m_window), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
                       G_CALLBACK(dialog_window_key_press_cb), this);
 
     g_object_unref(G_OBJECT(builder));

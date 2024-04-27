@@ -120,7 +120,8 @@ static void gbv_create_widget (GncBudgetView *budget_view);
 static gboolean gbv_button_press_cb (GtkWidget *widget, GdkEventButton *event,
                                      GncBudgetView *budget_view);
 #endif
-static gboolean gbv_key_press_cb (GtkWidget *treeview, const GdkEvent *event,
+static gboolean gbv_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                  guint keycode, GdkModifierType state,
                                   gpointer user_data);
 static void gbv_row_activated_cb (GtkTreeView *treeview, GtkTreePath *path,
                                   GtkTreeViewColumn *col, GncBudgetView *budget_view);
@@ -760,7 +761,10 @@ gbv_button_press_cb (GtkWidget *widget, GdkEventButton *event,
  * The handler is for the cell-editable, not for the treeview
 */
 static gboolean
-gbv_key_press_cb (GtkWidget *widget, const GdkEvent *event, gpointer user_data)
+gbv_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                  guint keycode, GdkModifierType state,
+                  gpointer user_data)
+
 {
     GtkTreeViewColumn    *col;
     GtkTreePath          *path = NULL;
@@ -769,24 +773,14 @@ gbv_key_press_cb (GtkWidget *widget, const GdkEvent *event, gpointer user_data)
     gboolean              shifted;
     gint                  period_num, num_periods;
     gpointer              data;
-    guint                 keyval;
-    GdkModifierType       state;
 
-    if (gdk_event_get_event_type (event) != GDK_KEY_PRESS || !priv->temp_cr)
-        return FALSE;
-
-    if (!gdk_event_get_keyval (event, &keyval) ||
-        !gdk_event_get_state (event, &state))
+    if (!priv->temp_cr)
         return FALSE;
 
 #ifdef G_OS_WIN32
-    guint16 hardware_keycode;
     /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
-    if (gdk_event_get_keycode (event, &hardware_keycode))
-    {
-        if (hardware_keycode == VK_DECIMAL)
-            keyval = GDK_KEY_KP_Decimal;
-    }
+    if (keycode == VK_DECIMAL)
+        keyval = GDK_KEY_KP_Decimal;
 #endif
 
     switch (keyval)
@@ -796,7 +790,7 @@ gbv_key_press_cb (GtkWidget *widget, const GdkEvent *event, gpointer user_data)
         {
             struct lconv *lc = gnc_localeconv ();
             keyval = lc->mon_decimal_point[0];
-            event->key.string[0] = lc->mon_decimal_point[0];  //FIXME in GTK4
+  //FIXME in GTK4            event->key.string[0] = lc->mon_decimal_point[0];
         }
         return FALSE;
     case GDK_KEY_Tab:
@@ -1471,7 +1465,9 @@ gdv_editing_started_cb (GtkCellRenderer *cr, GtkCellEditable *editable,
     priv->temp_cr = cr;
     priv->temp_ce = editable;
 
-    g_signal_connect (G_OBJECT(editable), "key-press-event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(editable), event_controller);
+    g_signal_connect (G_OBJECT(event_controller), "key-press-event",
                       G_CALLBACK(gbv_key_press_cb), user_data);
 }
 

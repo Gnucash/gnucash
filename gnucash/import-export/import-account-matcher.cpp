@@ -269,14 +269,11 @@ account_tree_row_changed_cb (GtkTreeSelection *selection,
 }
 
 static gboolean
-account_tree_key_press_cb(GtkWidget *widget, const GdkEvent *event, gpointer user_data)
+account_tree_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                            guint keycode, GdkModifierType state,
+                            gpointer user_data)
 {
     // Expand the tree when the user starts typing, this will allow sub-accounts to be found.
-    guint keyval;
-
-    if (!gdk_event_get_keyval (event, &keyval))
-        return false;
-    
     switch (keyval)
     {
         case GDK_KEY_plus:
@@ -433,7 +430,11 @@ Account * gnc_import_select_account(GtkWidget *parent,
         
         /* Connect key press event so we can expand the tree when the user starts typing, allowing
         * any subaccount to match */
-        g_signal_connect (picker->account_tree, "key-press-event", G_CALLBACK (account_tree_key_press_cb), picker->account_tree);
+
+        GtkEventController *event_controller = gtk_event_controller_key_new ();
+        gtk_widget_add_controller (GTK_WIDGET(picker->account_tree), event_controller);
+        g_signal_connect (G_OBJECT(event_controller), "key-press-event",
+                          G_CALLBACK (account_tree_key_press_cb), picker->account_tree);
 
         selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(picker->account_tree));
         g_signal_connect(selection, "changed",

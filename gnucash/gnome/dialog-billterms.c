@@ -739,13 +739,13 @@ billterms_window_destroy_cb (GtkWidget *widget, gpointer data)
 }
 
 static gboolean
-billterms_window_key_press_cb (GtkWidget *widget, const GdkEvent *event,
-                               gpointer data)
+billterms_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                               guint keycode, GdkModifierType state,
+                               gpointer user_data)
 {
-    BillTermsWindow *btw = data;
-    guint keyval;
+    BillTermsWindow *btw = user_data;
 
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         billterms_window_close_handler (btw);
         return TRUE;
@@ -809,8 +809,11 @@ gnc_ui_billterms_window_new (GtkWindow *parent, QofBook *book)
     gtk_widget_set_name (GTK_WIDGET(btw->window), "gnc-id-bill-terms");
     gnc_widget_style_context_add_class (GTK_WIDGET(btw->window), "gnc-class-bill-terms");
 
-    g_signal_connect (btw->window, "key_press_event",
-                      G_CALLBACK (billterms_window_key_press_cb), btw);
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(btw->window), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
+                      G_CALLBACK(billterms_window_key_press_cb), btw);
 
     /* Initialize the view */
     view = GTK_TREE_VIEW(btw->terms_view);

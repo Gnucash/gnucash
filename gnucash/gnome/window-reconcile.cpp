@@ -135,7 +135,9 @@ static gnc_numeric recnRecalculateBalance (RecnWindow *recnData);
 static void   recn_destroy_cb (GtkWidget *w, gpointer data);
 static void   recn_cancel (RecnWindow *recnData);
 static gboolean recn_delete_cb (GtkWidget *widget, const GdkEvent *event, gpointer data);
-static gboolean recn_key_press_cb (GtkWidget *widget, const GdkEvent *event, gpointer data);
+static gboolean recn_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                   guint keycode, GdkModifierType state,
+                                   gpointer user_data);
 static void   recnFinishCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void   recnPostponeCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void   recnCancelCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
@@ -1066,16 +1068,13 @@ gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
 
 
 static gboolean
-gnc_reconcile_key_press_cb (GtkWidget *widget, const GdkEvent *event,
-                            gpointer data)
+gnc_reconcile_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                            guint keycode, GdkModifierType state,
+                            gpointer user_data)
 {
     auto recnData = static_cast<RecnWindow*>(data);
     GtkWidget *this_view, *other_view;
     GtkWidget *debit, *credit;
-    guint keyval;
-
-    if (!gdk_event_get_keyval (event, &keyval))
-        return FALSE;
 
     switch (keyval)
     {
@@ -1086,6 +1085,8 @@ gnc_reconcile_key_press_cb (GtkWidget *widget, const GdkEvent *event,
     default:
         return FALSE;
     }
+
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
 
     g_signal_stop_emission_by_name (widget, "key_press_event");
 
@@ -1154,9 +1155,12 @@ gnc_reconcile_window_create_view_box(Account *account,
     g_signal_connect(view, "focus_in_event",
                      G_CALLBACK(gnc_reconcile_window_focus_cb),
                      recnData);
-    g_signal_connect(view, "key_press_event",
-                     G_CALLBACK(gnc_reconcile_key_press_cb),
-                     recnData);
+
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(view), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
+                      G_CALLBACK(gnc_reconcile_key_press_cb), recnData);
 
     scrollWin = gtk_scrolled_window_new (NULL, NULL);
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
@@ -1942,9 +1946,12 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
                       G_CALLBACK(recn_destroy_cb), recnData);
     g_signal_connect (recnData->window, "delete_event",
                       G_CALLBACK(recn_delete_cb), recnData);
-    g_signal_connect (recnData->window, "key_press_event",
-                      G_CALLBACK(recn_key_press_cb), recnData);
 
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(recnData->window), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
+                      G_CALLBACK(recn_key_press_cb), recnData);
 
     /* if account has a reconciled split where reconciled_date is
        later than statement_date, emit a warning into statusbar */
@@ -2241,13 +2248,15 @@ recn_delete_cb(GtkWidget *widget, const GdkEvent *event, gpointer data)
 
 
 static gboolean
-recn_key_press_cb(GtkWidget *widget, const GdkEvent *event, gpointer data)
+recn_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                   guint keycode, GdkModifierType state,
+                   gpointer user_data)
 {
     auto recnData = static_cast<RecnWindow*>(data);
-    guint keyval;
 
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
+
         recn_cancel(recnData);
         return TRUE;
     }

@@ -820,7 +820,8 @@ combo_popped_cb (GObject    *gobject,
 }
 
 static gboolean
-dialog_key_press_event_cb (GtkWidget *widget, GdkEventKey *event,
+dialog_key_press_event_cb (GtkEventControllerKey *key, guint keyval,
+                           guint keycode, GdkModifierType state,
                            gpointer user_data)
 {
      g_source_remove_by_user_data (user_data);
@@ -908,7 +909,10 @@ use_default_report_template_or_change (GtkWindow *parent)
     g_signal_connect (G_OBJECT(combo), "changed",
                       G_CALLBACK(combo_changed_cb), args);
 
-    g_signal_connect (G_OBJECT(dialog), "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(dialog), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
                       G_CALLBACK(dialog_key_press_event_cb), args);
 
     g_signal_connect (G_OBJECT(combo), "notify::popup-shown",

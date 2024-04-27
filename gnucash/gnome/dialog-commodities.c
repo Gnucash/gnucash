@@ -70,9 +70,9 @@ void gnc_commodities_dialog_edit_clicked (GtkWidget *widget, gpointer data);
 void gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data);
 void gnc_commodities_dialog_close_clicked (GtkWidget *widget, gpointer data);
 void gnc_commodities_show_currencies_toggled (GtkToggleButton *toggle, CommoditiesDialog *cd);
-gboolean gnc_commodities_window_key_press_cb (GtkWidget *widget,
-                                              const GdkEvent *event,
-                                              gpointer data);
+gboolean gnc_commodities_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                              guint keycode, GdkModifierType state,
+                                              gpointer user_data);
 
 
 void
@@ -380,8 +380,11 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     g_signal_connect (cd->window, "delete-event",
                       G_CALLBACK(gnc_commodities_window_delete_event_cb), cd);
 
-    g_signal_connect (cd->window, "key_press_event",
-                      G_CALLBACK (gnc_commodities_window_key_press_cb), cd);
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(cd->window), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
+                      G_CALLBACK(gnc_commodities_window_key_press_cb), cd);
 
     gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, cd);
     g_object_unref (G_OBJECT(builder));
@@ -424,13 +427,13 @@ show_handler (const char *klass, gint component_id,
 }
 
 gboolean
-gnc_commodities_window_key_press_cb (GtkWidget *widget, const GdkEvent *event,
-                                     gpointer data)
+gnc_commodities_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                     guint keycode, GdkModifierType state,
+                                     gpointer user_data)
 {
-    CommoditiesDialog *cd = data;
-    guint keyval;
+    CommoditiesDialog *cd = user_data;
 
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         close_handler (cd);
         return TRUE;

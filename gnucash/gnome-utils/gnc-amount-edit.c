@@ -57,8 +57,8 @@ static void gnc_amount_edit_changed (GtkEditable *gae,
                                      gpointer user_data);
 static void gnc_amount_edit_paste_clipboard (GtkEntry *entry,
                                              gpointer user_data);
-static gint gnc_amount_edit_key_press (GtkWidget   *widget,
-                                       const GdkEvent *event,
+static gint gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
+                                       guint keycode, GdkModifierType state,
                                        gpointer user_data);
 
 #define GNC_AMOUNT_EDIT_PATH "gnc-amount-edit-path"
@@ -185,7 +185,9 @@ gnc_amount_edit_init (GNCAmountEdit *gae)
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(gae), "gnc-id-amount-edit");
 
-    g_signal_connect (G_OBJECT(gae->entry), "key-press-event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(gae->entry), event_controller);
+    g_signal_connect (G_OBJECT(event_controller), "key-press-event",
                       G_CALLBACK(gnc_amount_edit_key_press), gae);
 
     g_signal_connect (G_OBJECT(gae->entry), "changed",
@@ -267,7 +269,9 @@ gnc_amount_edit_paste_clipboard (GtkEntry *entry, gpointer user_data)
 }
 
 static gint
-gnc_amount_edit_key_press (GtkWidget *widget, const GdkEvent *event, gpointer user_data)
+gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
+                           guint keycode, GdkModifierType state,
+                           gpointer user_data)
 {
     GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
     gint result;
@@ -278,20 +282,10 @@ gnc_amount_edit_key_press (GtkWidget *widget, const GdkEvent *event, gpointer us
         gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
     }
 
-    guint           keyval;
-    GdkModifierType state;
-    if (!gdk_event_get_keyval (event, &keyval) ||
-        !gdk_event_get_state (event, &state))
-        return FALSE;
-
 #ifdef G_OS_WIN32
-    guint16 hardware_keycode;
     /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
-    if (gdk_event_get_keycode (event, &hardware_keycode))
-    {
-        if (hardware_keycode == VK_DECIMAL)
-            keyval = GDK_KEY_KP_Decimal;
-    }
+    if (keycode == VK_DECIMAL)
+        keyval = GDK_KEY_KP_Decimal;
 #endif
 
     if (keyval == GDK_KEY_KP_Decimal)
@@ -300,7 +294,7 @@ gnc_amount_edit_key_press (GtkWidget *widget, const GdkEvent *event, gpointer us
         {
             struct lconv *lc = gnc_localeconv ();
             keyval = lc->mon_decimal_point[0];
-            event->key.string[0] = lc->mon_decimal_point[0]; //FIXME in GTK4
+//FIXME in GTK4            event->key.string[0] = lc->mon_decimal_point[0];
         }
     }
 

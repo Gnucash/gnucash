@@ -1889,17 +1889,16 @@ gnc_plugin_page_account_tree_cmd_lots (GSimpleAction *simple,
 }
 
 static gboolean
-scrub_kp_handler (GtkWidget *widget, const GdkEvent *event, gpointer data)
+scrub_kp_handler (GtkEventControllerKey *key, guint keyval,
+                  guint keycode, GdkModifierType state,
+                  gpointer user_data)
 {
-    guint keyval;
-
-    if (!gdk_event_get_keyval (event, &keyval))
-        return false;
-
     switch (keyval)
     {
     case GDK_KEY_Escape:
         {
+            GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
+
             gboolean abort_scrub = gnc_verify_dialog (GTK_WINDOW(widget), FALSE,
                                                       "%s", _(check_repair_abort_YN));
 
@@ -1929,8 +1928,11 @@ gnc_plugin_page_account_tree_cmd_scrub (GSimpleAction *simple,
     prepare_scrubbing ();
 
     window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
-    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(window), "key-press-event",
-                                            G_CALLBACK(scrub_kp_handler), NULL);
+
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(window), event_controller);
+    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(event_controller), "key-press-event",
+                                            G_CALLBACK(scrub_kp_handler), nullptr);
     gnc_window_set_progressbar_window (window);
 
     xaccAccountScrubOrphans (account, gnc_window_show_progress);
@@ -1960,7 +1962,10 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (GSimpleAction *simple,
     prepare_scrubbing ();
 
     window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
-    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(window), "key-press-event",
+
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(window), event_controller);
+    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(event_controller), "key-press-event",
                                             G_CALLBACK(scrub_kp_handler), NULL);
     gnc_window_set_progressbar_window (window);
 
@@ -1989,7 +1994,9 @@ gnc_plugin_page_account_tree_cmd_scrub_all (GSimpleAction *simple,
     prepare_scrubbing ();
 
     window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
-    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(window), "key-press-event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(window), event_controller);
+    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(event_controller), "key-press-event",
                                             G_CALLBACK(scrub_kp_handler), NULL);
     gnc_window_set_progressbar_window (window);
 

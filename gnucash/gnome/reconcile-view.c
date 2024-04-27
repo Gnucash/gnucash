@@ -67,8 +67,8 @@ static void gnc_reconcile_view_double_click_entry (GNCQueryView *qview,
 static void gnc_reconcile_view_row_selected (GNCQueryView *qview,
                                              gpointer item,
                                              gpointer user_data);
-static gboolean gnc_reconcile_view_key_press_cb (GtkWidget *widget,
-                                                 const GdkEvent *event,
+static gboolean gnc_reconcile_view_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                                 guint keycode, GdkModifierType state,
                                                  gpointer user_data);
 static gboolean gnc_reconcile_view_tooltip_cb (GNCQueryView *qview,
                                                gint x, gint y,
@@ -279,8 +279,13 @@ gnc_reconcile_view_construct (GNCReconcileView *view, Query *query)
                       G_CALLBACK(gnc_reconcile_view_double_click_entry), view);
     g_signal_connect (G_OBJECT(qview), "row_selected",
                       G_CALLBACK(gnc_reconcile_view_row_selected), view);
-    g_signal_connect (G_OBJECT(qview), "key_press_event",
+
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(qview), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
                       G_CALLBACK(gnc_reconcile_view_key_press_cb), view);
+
     g_signal_connect (G_OBJECT(qview), "query-tooltip",
                       G_CALLBACK(gnc_reconcile_view_tooltip_cb), view);
 }
@@ -758,19 +763,19 @@ gnc_reconcile_view_set_toggle (GNCReconcileView  *view)
 }
 
 static gboolean
-gnc_reconcile_view_key_press_cb (GtkWidget *widget, const GdkEvent *event,
+gnc_reconcile_view_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                 guint keycode, GdkModifierType state,
                                  gpointer user_data)
 {
     GNCReconcileView  *view = GNC_RECONCILE_VIEW(user_data);
-    gboolean           toggle;
-    guint              keyval;
-
-    if (!gdk_event_get_keyval (event, &keyval))
-        return FALSE;
 
     switch (keyval)
     {
     case GDK_KEY_space:
+
+        GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
+        gboolean toggle;
+
         g_signal_stop_emission_by_name (widget, "key_press_event");
 
         toggle = gnc_reconcile_view_set_toggle (view);

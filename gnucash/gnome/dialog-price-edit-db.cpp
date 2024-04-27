@@ -66,9 +66,9 @@ void gnc_prices_dialog_remove_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_remove_old_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_add_clicked (GtkWidget *widget, gpointer data);
 void gnc_prices_dialog_get_quotes_clicked (GtkWidget *widget, gpointer data);
-static gboolean gnc_prices_dialog_key_press_cb (GtkWidget *widget,
-                                                const GdkEvent *event,
-                                                gpointer data);
+static gboolean gnc_prices_dialog_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                                guint keycode, GdkModifierType state,
+                                                gpointer user_data);
 }
 
 
@@ -698,8 +698,11 @@ gnc_prices_dialog_create (GtkWidget * parent, PricesDialog *pdb_dialog)
     g_signal_connect (pdb_dialog->window, "delete-event",
                       G_CALLBACK(gnc_prices_dialog_delete_event_cb), pdb_dialog);
 
-    g_signal_connect (pdb_dialog->window, "key_press_event",
-                      G_CALLBACK (gnc_prices_dialog_key_press_cb), pdb_dialog);
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(pdb_dialog->window), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
+                      G_CALLBACK(gnc_prices_dialog_key_press_cb), pdb_dialog);
 
     /* price tree */
     scrolled_window = GTK_WIDGET(gtk_builder_get_object (builder, "price_list_window"));
@@ -799,13 +802,13 @@ show_handler (const char *klass, gint component_id,
 
 
 gboolean
-gnc_prices_dialog_key_press_cb (GtkWidget *widget, const GdkEvent *event,
-                                gpointer data)
+gnc_prices_dialog_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                guint keycode, GdkModifierType state,
+                                gpointer user_data)
 {
-    auto pdb_dialog = static_cast<PricesDialog *> (data);
-    guint keyval;
+    auto pdb_dialog = static_cast<PricesDialog *> (user_data);
 
-    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         close_handler (pdb_dialog);
         return TRUE;
