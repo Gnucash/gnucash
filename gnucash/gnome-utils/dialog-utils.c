@@ -452,7 +452,7 @@ gnc_gdate_in_valid_range (GDate *test_date, gboolean warn)
 
 
 gboolean
-gnc_handle_date_accelerator (GdkEventKey *event,
+gnc_handle_date_accelerator (const GdkEvent *event,
                              struct tm *tm,
                              const char *date_str)
 {
@@ -462,7 +462,7 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     g_return_val_if_fail (tm != NULL, FALSE);
     g_return_val_if_fail (date_str != NULL, FALSE);
 
-    if (event->type != GDK_KEY_PRESS)
+    if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return FALSE;
 
     if ((tm->tm_mday <= 0) || (tm->tm_mon == -1) || (tm->tm_year == -1))
@@ -477,21 +477,28 @@ gnc_handle_date_accelerator (GdkEventKey *event,
                     tm->tm_mon + 1,
                     tm->tm_year + 1900);
 
+    guint keyval;
+    GdkModifierType state;
+
+    if (!gdk_event_get_keyval (event, &keyval) ||
+        !gdk_event_get_state (event, &state))
+        return FALSE;
+
     /*
      * Check those keys where the code does different things depending
      * upon the modifiers.
      */
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_KP_Add:
     case GDK_KEY_plus:
     case GDK_KEY_equal:
     case GDK_KEY_semicolon: // See https://bugs.gnucash.org/show_bug.cgi?id=798386
-         if (event->state & GDK_SHIFT_MASK)
+         if (state & GDK_SHIFT_MASK)
             g_date_add_days (&gdate, 7);
-        else if (event->state & GDK_MOD1_MASK)
+        else if (state & GDK_MOD1_MASK)
             g_date_add_months (&gdate, 1);
-        else if (event->state & GDK_CONTROL_MASK)
+        else if (state & GDK_CONTROL_MASK)
             g_date_add_years (&gdate, 1);
         else
             g_date_add_days (&gdate, 1);
@@ -523,11 +530,11 @@ gnc_handle_date_accelerator (GdkEventKey *event,
                 return FALSE;
         }
 
-        if (event->state & GDK_SHIFT_MASK)
+        if (state & GDK_SHIFT_MASK)
             g_date_subtract_days (&gdate, 7);
-        else if (event->state & GDK_MOD1_MASK)
+        else if (state & GDK_MOD1_MASK)
             g_date_subtract_months (&gdate, 1);
-        else if (event->state & GDK_CONTROL_MASK)
+        else if (state & GDK_CONTROL_MASK)
             g_date_subtract_years (&gdate, 1);
         else
             g_date_subtract_days (&gdate, 1);
@@ -546,11 +553,11 @@ gnc_handle_date_accelerator (GdkEventKey *event,
      * prevents weird behavior of the menu accelerators (i.e. work in
      * some widgets but not others.)
      */
-    if (event->state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
+    if (state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
         return FALSE;
 
     /* Now check for the remaining keystrokes. */
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_braceright:
     case GDK_KEY_bracketright:

@@ -110,7 +110,7 @@ gnc_dup_inc_dec (GtkWidget *widget, const gchar *text, gint inc_dec)
 }
 
 static gboolean
-gnc_dup_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gnc_dup_key_press_event_cb (GtkWidget *widget, const GdkEvent *event, gpointer user_data)
 {
     const gchar *text = gtk_entry_get_text (GTK_ENTRY(widget));
 
@@ -118,16 +118,21 @@ gnc_dup_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user
     {
         GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
         gint increment;
+        guint keyval;
+        GdkModifierType state;
 
-        if ((event->state & modifiers) == GDK_CONTROL_MASK ||
-            (event->state & modifiers) == GDK_MOD1_MASK)
+        if (!gdk_event_get_keyval (event, &keyval) ||
+            !gdk_event_get_state (event, &state))
+            return FALSE;
+
+        if ((state & modifiers) == GDK_CONTROL_MASK ||
+            (state & modifiers) == GDK_MOD1_MASK)
             return FALSE;
 
         /* See https://bugs.gnucash.org/show_bug.cgi?id=798386 for semicolon */
-        if (event->keyval == GDK_KEY_plus || event->keyval == GDK_KEY_KP_Add ||
-            event->keyval == GDK_KEY_semicolon)
+        if (keyval == GDK_KEY_plus || keyval == GDK_KEY_KP_Add || keyval == GDK_KEY_semicolon)
             increment = 1;
-        else if (event->keyval == GDK_KEY_minus || event->keyval == GDK_KEY_KP_Subtract)
+        else if (keyval == GDK_KEY_minus || keyval == GDK_KEY_KP_Subtract)
             increment = -1;
         else
             return FALSE;

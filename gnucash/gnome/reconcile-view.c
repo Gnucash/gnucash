@@ -68,7 +68,7 @@ static void gnc_reconcile_view_row_selected (GNCQueryView *qview,
                                              gpointer item,
                                              gpointer user_data);
 static gboolean gnc_reconcile_view_key_press_cb (GtkWidget *widget,
-                                                 GdkEventKey *event,
+                                                 const GdkEvent *event,
                                                  gpointer user_data);
 static gboolean gnc_reconcile_view_tooltip_cb (GNCQueryView *qview,
                                                gint x, gint y,
@@ -758,13 +758,17 @@ gnc_reconcile_view_set_toggle (GNCReconcileView  *view)
 }
 
 static gboolean
-gnc_reconcile_view_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+gnc_reconcile_view_key_press_cb (GtkWidget *widget, const GdkEvent *event,
                                  gpointer user_data)
 {
     GNCReconcileView  *view = GNC_RECONCILE_VIEW(user_data);
     gboolean           toggle;
+    guint              keyval;
 
-    switch (event->keyval)
+    if (!gdk_event_get_keyval (event, &keyval))
+        return FALSE;
+
+    switch (keyval)
     {
     case GDK_KEY_space:
         g_signal_stop_emission_by_name (widget, "key_press_event");

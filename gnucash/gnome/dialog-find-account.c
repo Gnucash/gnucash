@@ -109,12 +109,13 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
 
 static gboolean
 gnc_find_account_dialog_window_key_press_cb (GtkWidget *widget,
-                                             GdkEventKey *event,
+                                             const GdkEvent *event,
                                              gpointer user_data)
 {
     FindAccountDialog *facc_dialog = user_data;
+    guint keyval;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         close_handler (facc_dialog);
         return TRUE;

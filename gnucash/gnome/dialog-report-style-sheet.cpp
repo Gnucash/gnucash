@@ -327,7 +327,7 @@ gnc_style_sheet_select_dialog_fill (StyleSheetDialog * ss)
 
 static void
 gnc_style_sheet_select_dialog_event_cb (GtkWidget *widget,
-                                        GdkEvent *event,
+                                        const GdkEvent *event,
                                         gpointer user_data)
 {
     StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
@@ -335,7 +335,7 @@ gnc_style_sheet_select_dialog_event_cb (GtkWidget *widget,
     g_return_if_fail (event != NULL);
     g_return_if_fail (ss != NULL);
 
-    if (event->type != GDK_2BUTTON_PRESS)
+    if (gdk_event_get_event_type (event) != GDK_2BUTTON_PRESS)
         return;
 
     /* Synthesize a click of the edit button */
@@ -428,9 +428,9 @@ gnc_style_sheet_select_dialog_close_cb (GtkWidget *widget, gpointer user_data)
 }
 
 static gboolean
-gnc_style_sheet_select_dialog_delete_event_cb (GtkWidget *widget,
-                                               GdkEvent  *event,
-                                               gpointer   user_data)
+gnc_style_sheet_select_dialog_delete_event_cb (GtkWidget       *widget,
+                                               const GdkEvent  *event,
+                                               gpointer         user_data)
 {
     auto ss{static_cast<StyleSheetDialog*>(user_data)};
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ss->toplevel));
@@ -469,10 +469,12 @@ gnc_style_sheet_window_close_handler (gpointer user_data)
 
 static gboolean
 gnc_style_sheet_select_dialog_check_escape_cb (GtkWidget *widget,
-                                               GdkEventKey *event,
+                                               const GdkEvent *event,
                                                gpointer user_data)
 {
-    if (event->keyval == GDK_KEY_Escape)
+    guint keyval;
+
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
         gnc_close_gui_component (ss->component_id);

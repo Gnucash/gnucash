@@ -154,21 +154,21 @@ static void gnc_gen_trans_assign_transfer_account (GtkTreeView *treeview,
 static void gnc_gen_trans_assign_transfer_account_to_selection_cb (GtkMenuItem *menuitem,
                                                                    GNCImportMainMatcher *info);
 static void gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
-                                           GdkEvent *event,
+                                           const GdkEvent *event,
                                            GNCImportMainMatcher *info);
 static bool gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
-                                                  GdkEvent *event,
-                                                  GNCImportMainMatcher *info);
-static bool gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
+                                              const GdkEvent *event,
                                               GNCImportMainMatcher *info);
+static bool gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
+                                          GNCImportMainMatcher *info);
 static void refresh_model_row (GNCImportMainMatcher *gui,
                                GtkTreeModel *model,
                                GtkTreeIter *iter,
                                GNCImportTransInfo *info);
 static bool query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
-                                            bool keyboard_tip,
-                                            GtkTooltip *tooltip,
-                                            gpointer user_data);
+                                        bool keyboard_tip,
+                                        GtkTooltip *tooltip,
+                                        gpointer user_data);
 /* end local prototypes */
 
 static void
@@ -1333,7 +1333,7 @@ gnc_gen_trans_row_changed_cb (GtkTreeSelection *selection,
 
 static void
 gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
-                               GdkEvent *event,
+                               const GdkEvent *event,
                                GNCImportMainMatcher *info)
 {
     ENTER ("");
@@ -1447,17 +1447,22 @@ gnc_gen_trans_view_popup_menu (GtkTreeView *treeview,
 
 static bool
 gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
-                                  GdkEvent *event,
+                                  const GdkEvent *event,
                                   GNCImportMainMatcher *info)
 {
     ENTER("");
     g_return_val_if_fail (treeview != NULL, false);
     g_return_val_if_fail (event != NULL, false);
+
     /* handle single click with the right mouse button? */
-    if (event->type == GDK_BUTTON_PRESS)
+    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
     {
-        GdkEventButton *event_button = (GdkEventButton *) event;
-        if (event_button->button == GDK_BUTTON_SECONDARY)
+        guint button;
+
+        if (!gdk_event_get_button (event, &button))
+            return false;
+
+        if (button == GDK_BUTTON_SECONDARY)
         {
             DEBUG("Right mouseClick detected - popup the menu.");
 
@@ -1502,7 +1507,7 @@ gnc_gen_trans_onPopupMenu_cb (GtkTreeView *treeview,
     GtkTreeSelection *selection = gtk_tree_view_get_selection (treeview);
     if (gtk_tree_selection_count_selected_rows (selection) > 0)
     {
-      gnc_gen_trans_view_popup_menu (treeview, NULL, info);
+      gnc_gen_trans_view_popup_menu (treeview, nullptr, info);
       LEAVE ("true");
       return true;
     }

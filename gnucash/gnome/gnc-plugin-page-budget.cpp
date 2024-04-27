@@ -97,7 +97,7 @@ static GncPluginPage *gnc_plugin_page_budget_recreate_page (GtkWidget *window,
                                                             GKeyFile *file,
                                                             const gchar *group);
 static gboolean gppb_button_press_cb (GtkWidget *widget,
-                                      GdkEventButton *event,
+                                      const GdkEvent *event,
                                       GncPluginPage *page);
 static void gppb_account_activated_cb (GncBudgetView* view,
                                        Account* account,
@@ -642,7 +642,7 @@ gnc_plugin_page_budget_recreate_page (GtkWidget *window, GKeyFile *key_file,
  *  registered in gnc-main-window.c.
  **********************************************************************/
 static gboolean
-gppb_button_press_cb (GtkWidget *widget, GdkEventButton *event,
+gppb_button_press_cb (GtkWidget *widget, const GdkEvent *event,
                       GncPluginPage *page)
 {
     gboolean result;

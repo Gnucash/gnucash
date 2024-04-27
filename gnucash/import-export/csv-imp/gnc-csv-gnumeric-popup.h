@@ -90,14 +90,14 @@ typedef gboolean (*GnumericPopupMenuHandler) (GnumericPopupMenuElement const *e,
         gpointer user_data);
 
 /* Use this on menus that are popped up */
-void gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event);
+void gnumeric_popup_menu (GtkMenu *menu, const GdkEvent *event);
 
 void gnumeric_create_popup_menu (GnumericPopupMenuElement const *elements,
                                  GnumericPopupMenuHandler handler,
                                  gpointer user_data,
                                  int display_filter,
                                  int sensitive_filter,
-                                 GdkEventButton *event);
+                                 const GdkEvent *event);
 
 #ifdef __cplusplus
 }

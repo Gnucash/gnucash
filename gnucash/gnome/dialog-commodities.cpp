@@ -78,7 +78,7 @@ void gnc_commodities_show_currencies_toggled (GtkToggleButton *toggle, Commoditi
 }
 
 gboolean gnc_commodities_window_key_press_cb (GtkWidget *widget,
-                                              GdkEventKey *event,
+                                              const GdkEvent *event,
                                               gpointer data);
 
 
@@ -96,9 +96,9 @@ gnc_commodities_window_destroy_cb (GtkWidget *object,   CommoditiesDialog *cd)
 }
 
 static gboolean
-gnc_commodities_window_delete_event_cb (GtkWidget *widget,
-                                        GdkEvent  *event,
-                                        gpointer   data)
+gnc_commodities_window_delete_event_cb (GtkWidget      *widget,
+                                        const GdkEvent *event,
+                                        gpointer        data)
 {
     auto cd = static_cast<CommoditiesDialog*>(data);
     // this cb allows the window size to be saved on closing with the X
@@ -430,12 +430,12 @@ show_handler (const char *klass, gint component_id,
 }
 
 gboolean
-gnc_commodities_window_key_press_cb (GtkWidget *widget, GdkEventKey *event,
+gnc_commodities_window_key_press_cb (GtkWidget *widget, const GdkEvent *event,
                                      gpointer data)
 {
     auto cd = static_cast<CommoditiesDialog*>(data);
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (gdk_event_get_keyval (event, &keyval) && keyval == GDK_KEY_Escape)
     {
         close_handler (cd);
         return TRUE;

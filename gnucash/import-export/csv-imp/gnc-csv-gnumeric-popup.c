@@ -90,7 +90,7 @@ gnumeric_create_popup_menu_list (GSList *elements,
                                  gpointer user_data,
                                  int display_filter,
                                  int sensitive_filter,
-                                 GdkEventButton *event)
+                                 const GdkEvent *event)
 {
     GtkWidget *menu = gtk_menu_new ();
     GtkWidget *item;
@@ -160,7 +160,7 @@ gnumeric_create_popup_menu (GnumericPopupMenuElement const *elements,
                             GnumericPopupMenuHandler handler,
                             gpointer user_data,
                             int display_filter, int sensitive_filter,
-                            GdkEventButton *event)
+                            const GdkEvent *event)
 {
     int i;
     GSList *tmp = NULL;
@@ -192,7 +192,7 @@ kill_popup_menu (GtkWidget *widget, GtkMenu *menu)
  * right screen.
  **/
 void
-gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event)
+gnumeric_popup_menu (GtkMenu *menu, const GdkEvent *event)
 {
     g_return_if_fail (menu != NULL);
     g_return_if_fail (GTK_IS_MENU (menu));
@@ -201,7 +201,7 @@ gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event)
 
     if (event)
         gtk_menu_set_screen (menu,
-                             gdk_window_get_screen (event->window));
+                             gdk_window_get_screen (gdk_event_get_window(event)));
 
     g_signal_connect (G_OBJECT (menu),
                       "hide",
@@ -211,5 +211,5 @@ gnumeric_popup_menu (GtkMenu *menu, GdkEventButton *event)
      * instead pass 0.  Otherwise bringing up a menu with
      * the right button will disable clicking on the menu with the left.
      */
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+    gtk_menu_popup_at_pointer (GTK_MENU(menu), event);
 }
