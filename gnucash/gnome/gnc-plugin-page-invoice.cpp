@@ -446,7 +446,7 @@ gnc_plugin_page_invoice_action_update (GncPluginPage *plugin_page,
 
         if (tool_item)
         {
-            gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(action_list[i].label));
+//FIXME gtk4            gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(action_list[i].label));
             gtk_widget_set_tooltip_text (GTK_WIDGET(tool_item), _(action_list[i].tooltip));
             g_object_set (G_OBJECT(tool_item), "has-tooltip", FALSE, NULL);
         }

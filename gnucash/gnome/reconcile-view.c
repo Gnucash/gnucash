@@ -71,7 +71,7 @@ static gboolean gnc_reconcile_view_key_press_cb (GtkEventControllerKey *key, gui
                                                  guint keycode, GdkModifierType state,
                                                  gpointer user_data);
 static gboolean gnc_reconcile_view_tooltip_cb (GNCQueryView *qview,
-                                               gint x, gint y,
+                                               int x, int y,
                                                gboolean keyboard_mode,
                                                GtkTooltip* tooltip,
                                                gpointer* user_data);
@@ -79,7 +79,7 @@ static gboolean gnc_reconcile_view_tooltip_cb (GNCQueryView *qview,
 G_DEFINE_TYPE (GNCReconcileView, gnc_reconcile_view, GNC_TYPE_QUERY_VIEW)
 
 static gboolean
-gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
+gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, int x, int y,
                                gboolean keyboard_mode, GtkTooltip *tooltip,
                                gpointer *user_data)
 {
@@ -87,7 +87,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
     GtkTreeIter iter;
 
     // If the Description is longer than can be display, show it in a tooltip
-    if (gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW(qview), &x, &y,
+    if (gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW(qview), x, y,
                                            keyboard_mode, &model, NULL, &iter))
     {
         GtkTreeViewColumn *col;
@@ -120,8 +120,8 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
         {
             PangoLayout* layout;
             gint text_width;
-            gint root_x, root_y;
-            gint cur_x, cur_y;
+//FIXME gtk4            gint root_x, root_y;
+//            gint cur_x, cur_y;
 
             layout = gtk_widget_create_pango_layout (GTK_WIDGET(qview), desc_text);
             pango_layout_get_pixel_size (layout, &text_width, NULL);
@@ -136,10 +136,12 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
             if (keyboard_mode == FALSE)
             {
+//FIXME gtk4
+#ifdef skip
                 GdkSeat *seat;
                 GdkDevice *pointer;
                 GtkWindow *tip_win = NULL;
-                GdkWindow *parent_window;
+                GtkWindow *parent_window;
                 GList *win_list, *node;
 
                 parent_window = gtk_widget_get_parent_window (GTK_WIDGET(qview));
@@ -190,6 +192,7 @@ gnc_reconcile_view_tooltip_cb (GNCQueryView *qview, gint x, gint y,
 
                     gtk_window_move (tip_win, x, y);
                 }
+#endif
             }
             gtk_tooltip_set_text (tooltip, desc_text);
             g_free (desc_text);

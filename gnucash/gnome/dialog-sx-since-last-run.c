@@ -1249,16 +1249,16 @@ finish_editing_before_ok_cb (GtkWidget *button, GdkEvent *event,
     return FALSE;
 }
 
-static gboolean
-scroll_event (GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
-{
-    GncSxSinceLastRunDialog *dialog = user_data;
+//FIXME gtk4 static gboolean
+//scroll_event (GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
+//{
+//    GncSxSinceLastRunDialog *dialog = user_data;
 
-    if (dialog->temp_ce)
-        return TRUE;
-    else
-        return FALSE;
-}
+//    if (dialog->temp_ce)
+//        return TRUE;
+//    else
+//        return FALSE;
+//}
 
 static void
 set_transaction_sort_column_tooltip (GncSxSinceLastRunDialog *dialog)
@@ -1374,8 +1374,8 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
         gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(sort_model),
                                               sort_column, sort_type);
 
-        g_signal_connect (G_OBJECT(dialog->instance_view), "scroll-event",
-                          G_CALLBACK(scroll_event), dialog);
+//FIXME gtk4        g_signal_connect (G_OBJECT(dialog->instance_view), "scroll-event",
+//                          G_CALLBACK(scroll_event), dialog);
 
         renderer = gtk_cell_renderer_text_new ();
         col = gtk_tree_view_column_new_with_attributes (_("Transaction"), renderer,

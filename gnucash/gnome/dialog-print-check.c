@@ -1975,6 +1975,8 @@ read_image (const gchar *filename)
 static void
 draw_picture(GtkPrintContext *context, check_item_t *data)
 {
+//FIXME gtk4
+#ifdef skip
     cairo_t *cr;
     GdkPixbuf *pixbuf, *scaled_pixbuf;
     GtkImage *image;
@@ -2051,6 +2053,7 @@ draw_picture(GtkPrintContext *context, check_item_t *data)
     /* Clean up after ourselves */
     cairo_restore(cr);
 //FIXME gtk4    gtk_widget_destroy(GTK_WIDGET(image));
+#endif
 }
 
 

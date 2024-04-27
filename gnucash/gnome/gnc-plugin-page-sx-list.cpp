@@ -383,12 +383,15 @@ gppsl_model_populated_cb (GtkTreeModel *tree_model, GncPluginPageSxList *page)
 static void
 treeview_popup (GtkTreeView *treeview, const GdkEvent *event, GncPluginPageSxList *page)
 {
+//FIXME gtk4
+#ifdef skip
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE (page);
-    GtkWidget *menu, *menuitem;
+    GMenu *menu;
+    GMenuItem *menuitem;
     gchar *full_action_name;
     const gchar *group_name = gnc_plugin_page_get_simple_action_group_name (GNC_PLUGIN_PAGE(page));
 
-    menu = gtk_menu_new();
+    menu = g_menu_new();
 
     menuitem = gtk_menu_item_new_with_mnemonic (_("_New Schedule"));
     full_action_name = g_strconcat (group_name, ".SxListNewAction", NULL);
@@ -411,8 +414,11 @@ treeview_popup (GtkTreeView *treeview, const GdkEvent *event, GncPluginPageSxLis
     gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (priv->tree_view), NULL);
     gtk_widget_set_visible (GTK_WIDGET(menu), true);
     gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
+#endif
 }
 
+//FIXME gtk4
+#ifdef skip
 static gboolean
 treeview_button_press (GtkTreeView *treeview, const GdkEvent *event,
                        GncPluginPageSxList *page)
@@ -450,7 +456,7 @@ treeview_button_press (GtkTreeView *treeview, const GdkEvent *event,
     }
     return FALSE;
 }
-
+#endif
 static gboolean
 treeview_popup_menu (GtkTreeView *treeview, GncPluginPageSxList *page)
 {
@@ -487,7 +493,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     /* Add vbox and label */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
-    gtk_paned_pack1 (GTK_PANED(widget), vbox, TRUE, FALSE);
+//FIXME gtk4    gtk_paned_pack1 (GTK_PANED(widget), vbox, TRUE, FALSE);
+    gtk_paned_set_start_child (GTK_PANED(widget), GTK_WIDGET(vbox));
 
     label = gtk_label_new (_("Transactions"));
     gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-strong");
@@ -554,15 +561,16 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         gtk_tree_path_free (path);
     }
 
-    g_signal_connect (G_OBJECT(priv->tree_view), "button-press-event",
-                      G_CALLBACK(treeview_button_press), page);
+//FIXME gtk4    g_signal_connect (G_OBJECT(priv->tree_view), "button-press-event",
+//                      G_CALLBACK(treeview_button_press), page);
     g_signal_connect (G_OBJECT(priv->tree_view), "popup-menu",
                       G_CALLBACK(treeview_popup_menu), page);
 
     /* Add vbox and label */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
-    gtk_paned_pack2 (GTK_PANED(widget), vbox, TRUE, FALSE);
+//FIXME gtk4    gtk_paned_pack2 (GTK_PANED(widget), vbox, TRUE, FALSE);
+    gtk_paned_set_end_child (GTK_PANED(widget), GTK_WIDGET(vbox));
 
     label = gtk_label_new (_("Upcoming Transactions"));
     gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-strong");

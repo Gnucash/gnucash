@@ -1628,11 +1628,12 @@ gsr_default_expand_handler( GNCSplitReg *gsr, gpointer data )
     reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
     /* These should all be in agreement. */
-    activeCount =
-        ( ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_menu_check)) ? 1 : -1 )
-          + ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_popup_check)) ? 1 : -1 )
-          + ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(gsr->split_button) )
-              ? 1 : -1 ) );
+//FIXME gtk4    activeCount =
+//        ( ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_menu_check)) ? 1 : -1 )
+//          + ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_popup_check)) ? 1 : -1 )
+//          + ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(gsr->split_button) )
+//              ? 1 : -1 ) );
+activeCount = 0;
 
     /* If activeCount > 0, then there's more active than inactive; otherwise,
      * more inactive than active.  Both determine which state the user is
@@ -1888,8 +1889,8 @@ gnc_split_reg_style_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
-        return;
+//FIXME gtk4    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
+//        return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_LEDGER, TRUE);
 }
@@ -1899,8 +1900,8 @@ gnc_split_reg_style_auto_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
-        return;
+//FIXME gtk4    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
+//        return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_AUTO_LEDGER, TRUE);
 }
@@ -1910,8 +1911,8 @@ gnc_split_reg_style_journal_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
-        return;
+//FIXME gtk4    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
+//        return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_JOURNAL, TRUE);
 }
@@ -1923,9 +1924,10 @@ gnc_split_reg_double_line_cb (GtkWidget *w, gpointer data)
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
     gboolean use_double_line;
 
-    use_double_line = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w));
-    if ( use_double_line == reg->use_double_line )
-        return;
+//FIXME gtk4    use_double_line = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w));
+//    if ( use_double_line == reg->use_double_line )
+//        return;
+use_double_line = FALSE;
 
     gnc_split_register_config( reg, reg->type, reg->style, use_double_line );
     gnc_ledger_display_refresh( gsr->ledger );

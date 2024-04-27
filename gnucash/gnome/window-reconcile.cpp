@@ -327,7 +327,7 @@ static gboolean
 amount_edit_focus_out_cb (GtkEventControllerFocus *controller,
                           gpointer user_data)
 {
-    startRecnWindowData *srwd = user_data
+    startRecnWindowData *srwd = (startRecnWindowData*)user_data;
     gnc_numeric value;
     gint result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(srwd->end_value),
                                                  &value, TRUE, NULL);
@@ -341,7 +341,7 @@ amount_edit_focus_out_cb (GtkEventControllerFocus *controller,
             gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(srwd->end_value), value);
             gnc_amount_edit_select_region (GNC_AMOUNT_EDIT(srwd->end_value), 0, -1);
         }
-        data->user_set_value = !gnc_numeric_equal (value, srwd->original_value);
+        srwd->user_set_value = !gnc_numeric_equal (value, srwd->original_value);
     }
     return FALSE;
 }
@@ -937,15 +937,15 @@ gnc_reconcile_window_row_cb(GNCReconcileView *view, gpointer item,
 static void
 do_popup_menu(RecnWindow *recnData, const GdkEvent *event)
 {
-    GMenuModel *menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder,
-                                                                   "recwin-popup");
-    GtkWidget *menu = gtk_menu_new_from_model (menu_model);
+//FIXME gtk4    GMenuModel *menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder,
+//                                                                   "recwin-popup");
+//FIXME gtk4    GtkWidget *menu = gtk_menu_new_from_model (menu_model);
 
-    if (!menu)
-        return;
+//FIXME gtk4    if (!menu)
+//        return;
 
-    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(recnData->window), NULL);
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), event);
+//FIXME gtk4    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(recnData->window), NULL);
+//FIXME gtk4    gtk_menu_popup_at_pointer (GTK_MENU(menu), event);
 }
 
 
@@ -975,6 +975,8 @@ gnc_reconcile_window_popup_menu_cb (GtkWidget *widget,
  *  any Gnucash window.  If this was a "right-click" then Gnucash will
  *  popup the contextual menu.
  */
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnc_reconcile_window_button_press_cb (GtkWidget *widget,
                                       const GdkEvent *event,
@@ -1012,7 +1014,7 @@ gnc_reconcile_window_button_press_cb (GtkWidget *widget,
     }
     return FALSE;
 }
-
+#endif
 
 static GNCSplitReg *
 gnc_reconcile_window_open_register(RecnWindow *recnData)
@@ -1064,6 +1066,8 @@ gnc_reconcile_window_focus_cb (GtkEventControllerFocus *controller,
     GNCReconcileView *this_view, *other_view;
     GNCReconcileView *debit, *credit;
 
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(controller));
+
     this_view = GNC_RECONCILE_VIEW(widget);
 
     debit  = GNC_RECONCILE_VIEW(recnData->debit);
@@ -1081,7 +1085,7 @@ gnc_reconcile_key_press_cb (GtkEventControllerKey *key, guint keyval,
                             guint keycode, GdkModifierType state,
                             gpointer user_data)
 {
-    auto recnData = static_cast<RecnWindow*>(data);
+    auto recnData = static_cast<RecnWindow*>(user_data);
     GtkWidget *this_view, *other_view;
     GtkWidget *debit, *credit;
 
@@ -1155,22 +1159,22 @@ gnc_reconcile_window_create_view_box(Account *account,
     g_signal_connect(view, "line_selected",
                      G_CALLBACK(gnc_reconcile_window_row_cb),
                      recnData);
-    g_signal_connect(view, "button_press_event",
-                     G_CALLBACK(gnc_reconcile_window_button_press_cb),
-                     recnData);
+//FIXME gtk4    g_signal_connect(view, "button_press_event",
+//                     G_CALLBACK(gnc_reconcile_window_button_press_cb),
+//                     recnData);
     g_signal_connect(view, "double_click_split",
                      G_CALLBACK(gnc_reconcile_window_double_click_cb),
                      recnData);
 
-    GtkEventController *event_controller = gtk_event_controller_focus_new ();
-    gtk_widget_add_controller (GTK_WIDGET(view), event_controller);
-    g_signal_connect (G_OBJECT(event_controller), "enter",
+    GtkEventController *event_controller1 = gtk_event_controller_focus_new ();
+    gtk_widget_add_controller (GTK_WIDGET(view), event_controller1);
+    g_signal_connect (G_OBJECT(event_controller1), "enter",
                       G_CALLBACK(gnc_reconcile_window_focus_cb),
                       recnData);
 
-    GtkEventController *event_controller = gtk_event_controller_key_new ();
-    gtk_widget_add_controller (GTK_WIDGET(view), event_controller);
-    g_signal_connect (event_controller, 
+    GtkEventController *event_controller2 = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(view), event_controller2);
+    g_signal_connect (event_controller2, 
                       "key-pressed",
                       G_CALLBACK(gnc_reconcile_key_press_cb), recnData);
 
@@ -1178,7 +1182,7 @@ gnc_reconcile_window_create_view_box(Account *account,
     gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrolled_window),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_AUTOMATIC);
-    gnc_box_set_all_margins (GTK_BOX(scrolled_window), 5);
+//FIXME gtk4    gnc_box_set_all_margins (GTK_BOX(scrollwin), 5);
 
     gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(scrolled_window));
     gtk_box_append (GTK_BOX(scrolled_window), GTK_WIDGET(view));
@@ -1884,10 +1888,10 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
     gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(dock));
 
     {
-        GtkToolbar *tool_bar;
-        GMenuModel *menu_model;
-        GtkWidget *menu_bar;
-//FIXME gtk4        GtkAccelGroup *accel_group = gtk_accel_group_new ();
+//FIXME gtk4        GtkToolbar *tool_bar;
+//        GMenuModel *menu_model;
+//        GtkWidget *menu_bar;
+//        GtkAccelGroup *accel_group = gtk_accel_group_new ();
         GtkEventController *shortcut_controller = gtk_shortcut_controller_new ();
 
         const gchar *ui = GNUCASH_RESOURCE_PREFIX "/gnc-reconcile-window.ui";
@@ -1908,9 +1912,9 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
             return NULL;
         }
 
-        menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder, "recwin-menu");
-        menu_bar = gtk_menu_bar_new_from_model (menu_model);
-        gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(menu_bar));
+//FIXME gtk4        menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder, "recwin-menu");
+//        menu_bar = gtk_menu_bar_new_from_model (menu_model);
+//        gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(menu_bar));
 #ifdef MAC_INTEGRATION
         auto theApp = static_cast<GtkosxApplication*>(g_object_new (GTKOSX_TYPE_APPLICATION, NULL));
         gtk_widget_set_visible (GTK_WIDGET(menu_bar), FALSE);
@@ -1920,18 +1924,18 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
         gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL (menu_bar));
 #endif
-        tool_bar = (GtkToolbar *)gtk_builder_get_object (recnData->builder, "recwin-toolbar");
+//FIXME gtk4        tool_bar = (GtkToolbar *)gtk_builder_get_object (recnData->builder, "recwin-toolbar");
 
-        gtk_toolbar_set_style (GTK_TOOLBAR(tool_bar), GTK_TOOLBAR_BOTH);
-        gtk_toolbar_set_icon_size (GTK_TOOLBAR(tool_bar),
-                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
+//        gtk_toolbar_set_style (GTK_TOOLBAR(tool_bar), GTK_TOOLBAR_BOTH);
+//        gtk_toolbar_set_icon_size (GTK_TOOLBAR(tool_bar),
+//                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
 
-        gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(tool_bar));
+//        gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(tool_bar));
 
         gtk_widget_add_controller (GTK_WIDGET(recnData->window), GTK_EVENT_CONTROLLER(shortcut_controller));
 
         // need to add the accelerator keys
-        gnc_add_accelerator_keys_for_menu (menu_bar, menu_model, shortcut_controller);
+//        gnc_add_accelerator_keys_for_menu (menu_bar, menu_model, shortcut_controller);
 
 #ifdef MAC_INTEGRATION
         gtkosx_application_sync_menubar (theApp);
@@ -1974,9 +1978,9 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
     {
         GtkStatusbar *bar = GTK_STATUSBAR (statusbar);
         guint context = gtk_statusbar_get_context_id (bar, "future_dates");
-        GtkWidget *box = gtk_statusbar_get_message_area (bar);
-        GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning");
-        gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_NORMAL);
+//FIXME gtk4        GtkWidget *box = gtk_statusbar_get_message_area (bar);
+//        GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning");
+//        gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_NORMAL);
 
         auto find_split = [statement_date](const Split *split)
         { return (xaccSplitGetReconcile (split) == YREC &&
@@ -1997,9 +2001,8 @@ has splits whose Reconciled Date is after this reconciliation statement date. \
 These splits may make reconciliation difficult. If this is the case, you may \
 use Find Transactions to find them, unreconcile, and re-reconcile."));
 
-            gtk_box_append (GTK_BOX(box), GTK_WIDGET(image));
-
-            gtk_box_reorder_child_after (GTK_BOX(box), GTK_WIDGET(image), NULL);
+//FIXME gtk4            gtk_box_append (GTK_BOX(box), GTK_WIDGET(image));
+//            gtk_box_reorder_child_after (GTK_BOX(box), GTK_WIDGET(image), nullptr);
 
             g_free (datestr);
             g_free (recnstr);
@@ -2271,7 +2274,7 @@ recn_key_press_cb (GtkEventControllerKey *key, guint keyval,
                    guint keycode, GdkModifierType state,
                    gpointer user_data)
 {
-    auto recnData = static_cast<RecnWindow*>(data);
+    auto recnData = static_cast<RecnWindow*>(user_data);
 
     if (keyval == GDK_KEY_Escape)
     {

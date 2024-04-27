@@ -339,8 +339,8 @@ gnc_style_sheet_select_dialog_event_cb (GtkWidget *widget,
     g_return_if_fail (event != NULL);
     g_return_if_fail (ss != NULL);
 
-    if (gdk_event_get_event_type (event) != GDK_2BUTTON_PRESS)
-        return;
+//FIXME gtk4    if (gdk_event_get_event_type (event) != GDK_2BUTTON_PRESS)
+//        return;
 
     /* Synthesize a click of the edit button */
     gnc_style_sheet_select_dialog_edit_cb (NULL, ss);
