@@ -129,19 +129,27 @@ static const GncGUID * gncBudgetGetGUID(GncBudget *x)
 SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date,
                                           time64 end_date, gnc_commodity *comm, bool sort)
 {
-    auto match = [use_end_date, end_date, comm](const Split* s) -> bool
+    SplitsVec rv;
+
+    auto maybe_accumulate = [&rv, comm](auto s)
     {
-        if (xaccSplitGetReconcile (s) == VREC) return false;
-        auto trans{xaccSplitGetParent (s)};
-        if (use_end_date && xaccTransGetDate(trans) > end_date) return false;
-        auto txn_comm{xaccTransGetCurrency (trans)};
+        auto txn_comm{xaccTransGetCurrency (xaccSplitGetParent (s))};
         auto acc_comm{xaccAccountGetCommodity (xaccSplitGetAccount (s))};
-        return (txn_comm != acc_comm) && (!comm || comm == txn_comm || comm == acc_comm);
+        if ((xaccSplitGetReconcile (s) != VREC) &&
+            (txn_comm != acc_comm) &&
+            (!comm || comm == txn_comm || comm == acc_comm))
+            rv.push_back (s);
     };
-    std::vector<Split*> rv;
-    auto maybe_accumulate_split = [&rv, match](auto s){ if (match(s)) rv.push_back (s); };
-    for (const auto acc : accounts)
-        gnc_account_foreach_split (acc, maybe_accumulate_split, true);
+
+    std::function<void(Account*)> scan_account;
+    if (use_end_date)
+        scan_account = [end_date, maybe_accumulate](auto acc)
+            { gnc_account_foreach_split_until_date (acc, end_date, maybe_accumulate); };
+    else
+        scan_account = [maybe_accumulate](auto acc)
+            { gnc_account_foreach_split (acc, maybe_accumulate, false); };
+
+    std::for_each (accounts.begin(), accounts.end(), scan_account);
     if (sort)
         std::sort (rv.begin(), rv.end(), [](auto a, auto b){ return xaccSplitOrder (a, b) < 0; });
     return rv;
