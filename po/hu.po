@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-22 03:57+0000\n"
-"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
+"PO-Revision-Date: 2024-04-28 11:07+0000\n"
+"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.5.1\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -2007,7 +2007,7 @@ msgstr "Ú_j egyenleg"
 #: gnucash/register/ledger-core/split-register.c:2091
 #: gnucash/register/ledger-core/split-register.c:2094
 msgid "_Shares"
-msgstr "Ré_szvények"
+msgstr "Darab_szám"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1902
 msgid "Ratio"
@@ -15705,7 +15705,7 @@ msgstr "F_orrás"
 #: gnucash/register/ledger-core/split-register.c:2101
 #: gnucash/ui/gnc-plugin-page-invoice.ui:108
 msgid "_Price"
-msgstr "_Ár"
+msgstr "_Árfolyam"
 
 #: gnucash/gtkbuilder/dialog-price.glade:374
 #, fuzzy
@@ -20703,8 +20703,8 @@ msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
 msgstr ""
-"Az ebben a tranzakcióban szereplő értékek nem illenek össze. Melyik értéket "
-"szeretné újraszámoltatni?"
+"A tranzakcióban szereplő értékek nem illenek össze. Melyik értéket szeretné "
+"újraszámoltatni?"
 
 #: gnucash/register/ledger-core/split-register.c:2092
 #: gnucash/register/ledger-core/split-register.c:2099
