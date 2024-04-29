@@ -47,6 +47,7 @@
   (test-get-commodity-totalavg-prices)
   (test-get-commodity-inst-prices)
   (test-weighted-average)
+  (test-get-match-commodity-splits-sorted)
   (test-end "commodity-utils"))
 
 (define test-accounts
@@ -756,3 +757,75 @@
 
       (teardown))))
 
+(define (test-get-match-commodity-splits-sorted)
+  (test-group-with-cleanup "test-get-match-commodity-splits-sorted"
+    (let* ((account-alist (setup #f))
+           (book  (gnc-get-current-book))
+           (comm-table (gnc-commodity-table-get-table book))
+           (MSFT (gnc-commodity-table-lookup comm-table "NASDAQ" "MSFT"))
+           (AAPL (gnc-commodity-table-lookup comm-table "NASDAQ" "AAPL")))
+
+      (define (get-splits date commodity)
+        (gnc:get-match-commodity-splits-sorted
+         (gnc-account-get-descendants-sorted (gnc-get-current-root-account))
+         date commodity))
+
+      (let ((AAPL-splits (get-splits (gnc-dmy2time64-neutral 5 12 2014) AAPL)))
+        (test-equal "2 AAPL splits up to 05/12/14"
+                    '("Fri Aug 09 18:59:00 2013" "Fri Jul 11 18:59:00 2014")
+                    (map (compose gnc-ctime xaccTransGetDate xaccSplitGetParent) AAPL-splits)))
+
+      (let ((AAPL-splits (get-splits #f AAPL)))
+        (test-equal "2 AAPL splits undated"
+                    '("Fri Aug 09 18:59:00 2013" "Fri Jul 11 18:59:00 2014"
+                      "Fri Oct 23 18:59:00 2015" "Fri Oct 23 18:59:00 2015")
+                    (map (compose gnc-ctime xaccTransGetDate xaccSplitGetParent) AAPL-splits)))
+
+      (let ((MSFT-splits (get-splits (gnc-dmy2time64-neutral 5 12 2014) MSFT)))
+        (test-equal "3 MSFT splits up to 05/12/14"
+                    '("Sun Jan 15 18:59:00 2012" "Fri Dec 05 18:59:00 2014"
+                      "Fri Dec 05 18:59:00 2014")
+                    (map (compose gnc-ctime xaccTransGetDate xaccSplitGetParent) MSFT-splits)))
+
+      (let ((MSFT-splits (get-splits #f MSFT)))
+        (test-equal "3 MSFT splits undated"
+                    '("Sun Jan 15 18:59:00 2012" "Fri Dec 05 18:59:00 2014"
+                      "Fri Dec 05 18:59:00 2014" "Thu Apr 02 18:59:00 2015"
+                      "Fri Mar 11 18:59:00 2016" "Fri Mar 11 18:59:00 2016")
+                    (map (compose gnc-ctime xaccTransGetDate xaccSplitGetParent) MSFT-splits)))
+
+      (let ((AAPL-splits (get-splits (gnc-dmy2time64-neutral 20 02 2016) AAPL)))
+        (test-equal "4 AAPL splits up to 20/02/16"
+                    '("Fri Aug 09 18:59:00 2013" "Fri Jul 11 18:59:00 2014"
+                      "Fri Oct 23 18:59:00 2015" "Fri Oct 23 18:59:00 2015")
+                    (map (compose gnc-ctime xaccTransGetDate xaccSplitGetParent) AAPL-splits)))
+
+      (let ((MSFT-splits (get-splits (gnc-dmy2time64-neutral 20 02 2016) MSFT)))
+        (test-equal "4 MSFT splits up to 20/02/16"
+                    '("Sun Jan 15 18:59:00 2012" "Fri Dec 05 18:59:00 2014"
+                      "Fri Dec 05 18:59:00 2014" "Thu Apr 02 18:59:00 2015")
+                    (map (compose gnc-ctime xaccTransGetDate xaccSplitGetParent) MSFT-splits)))
+
+      (let ((any-splits (get-splits (gnc-dmy2time64-neutral 5 12 2014) #f)))
+        (test-equal "11 ANY splits up to 05/12/14"
+                    '("Sun Jan 15 18:59:00 2012" "Sun Jan 15 18:59:00 2012"
+                      "Fri Jan 20 18:59:00 2012" "Mon Feb 20 18:59:00 2012"
+                      "Mon Feb 20 18:59:00 2012" "Fri Aug 09 18:59:00 2013"
+                      "Fri Jul 11 18:59:00 2014" "Fri Aug 08 18:59:00 2014"
+                      "Fri Aug 08 18:59:00 2014" "Fri Dec 05 18:59:00 2014"
+                      "Fri Dec 05 18:59:00 2014")
+                    (map (compose gnc-ctime xaccTransGetDate xaccSplitGetParent) any-splits)))
+
+      (let ((all-splits (get-splits #f #f)))
+        (test-equal "16 ALL splits undated"
+                    '("Sun Jan 15 18:59:00 2012" "Sun Jan 15 18:59:00 2012"
+                      "Fri Jan 20 18:59:00 2012" "Mon Feb 20 18:59:00 2012"
+                      "Mon Feb 20 18:59:00 2012" "Fri Aug 09 18:59:00 2013"
+                      "Fri Jul 11 18:59:00 2014" "Fri Aug 08 18:59:00 2014"
+                      "Fri Aug 08 18:59:00 2014" "Fri Dec 05 18:59:00 2014"
+                      "Fri Dec 05 18:59:00 2014" "Thu Apr 02 18:59:00 2015"
+                      "Fri Oct 23 18:59:00 2015" "Fri Oct 23 18:59:00 2015"
+                      "Fri Mar 11 18:59:00 2016" "Fri Mar 11 18:59:00 2016")
+                    (map (compose gnc-ctime xaccTransGetDate xaccSplitGetParent) all-splits)))
+
+      (teardown))))
