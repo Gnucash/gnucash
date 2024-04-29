@@ -54,7 +54,7 @@
 
     (gnc-set-option option-db "foo" "bar" "pepper")
     (test-equal "pepper" (gnc-option-value option-db "foo" "bar")))
-  (test-end "test-gnc-make-string-option"))
+  (test-end "test-gnc-test-string-option"))
 
 (define (test-gnc-make-account-list-options)
   (define (create-account book parent type name)

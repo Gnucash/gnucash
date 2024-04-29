@@ -6,7 +6,7 @@
 
 (define (run-test)
   (test-runner-factory gnc:test-runner)
-  (test-begin "Testing/Temporary/test-report")
+  (test-begin "test-report")
   ;; if (test-runner-factory gnc:test-runner) is commented out, this
   ;; will create Testing/Temporary/test-asset-performance.log
   (test-check1)
@@ -18,7 +18,7 @@
   (test-report-template-getters)
   (test-make-report)
   (test-report)
-  (test-end "Testing/Temporary/test-report"))
+  (test-end "test-report"))
 
 (define test4-guid "54c2fc051af64a08ba2334c2e9179e24")
 ;; -----------------------------------------------------------------------

@@ -5,14 +5,8 @@
 (define (run-test)
   (test-runner-factory gnc:test-runner)
   (test-begin "test-engine")
-  (test-engine)
   (test-gnc-numeric-from-string)
   (test-end "test-engine"))
-
-(define (test-engine)
-  (test-begin "testing function availability")
-
-  (test-end "testing deprecated functions"))
 
 (define (test-gnc-numeric-from-string)
   (test-equal "gnc-numeric-from-string 1"

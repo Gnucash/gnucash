@@ -16,7 +16,7 @@
 
 (define (run-test)
     (test-runner-factory gnc:test-runner)
-    (test-begin "Testing/Temporary/test-report-html")
+    (test-begin "test-report-html")
       ;; if (test-runner-factory gnc:test-runner) is commented out, this
       ;; will create Testing/Temporary/test-report-html.log
     (test-html-document-defintion)
@@ -26,7 +26,7 @@
     (test-html-table)
     (test-gnc:html-table-add-labeled-amount-line!)
     (test-gnc:make-html-acct-table/env/accts)
-    (test-end "Testing/Temporary/test-report-html")
+    (test-end "test-report-html")
 )
 
 (define html-doc-header-no-title
@@ -84,7 +84,7 @@ HTML Document Title</title></head><body></body>\n\
     )
   )
 
-  (test-end "HTML Document - Creation")
+  (test-end "HTML Document - Basic Creation")
 )
 
 ;; -----------------------------------------------------------------------

@@ -542,7 +542,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
   ((lambda (o) (if o (gnc:option-set-value o '(~f ~f ~f ~f)))) option))
 
 " red blue green alpha)))
-    (test-begin "test-gnc-coloroption-to-scheme")
+    (test-begin "test-gnc-color-option-to-scheme")
     (let ((odb (gnc:new-options))
           (default-color (list #xb2 #x22 #x22 #xff))
           (new-color (list #x00 #xca #x3b #xff)))
@@ -579,7 +579,7 @@ veritatis et quasi architecto beatae vitae dicta sunt, explicabo.")
     (test-end  "test-gnc-invoice-option-to-scheme"))
 
 (define (test-gnc-owner-option-to-scheme)
-  (test-begin "test-owner-option-to-scheme")
+  (test-begin "test-gnc-owner-option-to-scheme")
     (let ((odb (gnc:new-options)))
       (gnc:register-option odb
                            (gnc:make-owner-option "foo" "bar" "a" "baz"

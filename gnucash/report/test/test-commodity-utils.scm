@@ -340,7 +340,7 @@
       (test-equal "DMLR 500 shares" 500 ((caadr (assoc DMLR return-alist)) 'total #f))
       (test-equal "DMLR EUR13631.27" 1364127/100 (gnc-numeric-convert ((cdadr (assoc DMLR return-alist)) 'total #f) 100 GNC-HOW-RND-ROUND)))
     (test-end "foreign-DEM>EUR")
-    (test-begin "foreign-3way-DEM>EUR")
+    (test-begin "foreign-3way-gbp->dem->eur->usd")
     ;; Three-way conversion, gbp->dem->eur->usd
     ;; Too many levels for resolve-unknown-comm to resolve.
     (collect gbp-dem-col  10000/100 23665543/100000)
@@ -350,7 +350,7 @@
            (return-alist  (gnc:resolve-unknown-comm sumlist USD)))
       (test-equal "Shares fails" #f ((caadr (assoc RDSA return-alist)) 'total #f))
       (test-equal "Value fails" #f ((cdadr (assoc RDSA return-alist)) 'total #f)))
-    (test-end "foreign-3way-GBP>DEM")
+    (test-end "foreign-3way-gbp->dem->eur->usd")
     (test-begin "foreign-3way-DEM>GBP")
     ;; Three-way conversion, gbp->dem->eur->usd
     ;; Too many levels for resolve-unknown-comm to resolve.
