@@ -445,7 +445,6 @@ gnc_ui_update_commodity_picker (GtkWidget *cbwe,
                                 const gchar * name_space,
                                 const gchar * init_string)
 {
-    GList      * commodities;
     GList      * iterator = nullptr;
     GList      * commodity_items = nullptr;
     GtkComboBox *combo_box;
@@ -471,14 +470,10 @@ gnc_ui_update_commodity_picker (GtkWidget *cbwe,
     gtk_combo_box_set_active(combo_box, -1);
 
     table = gnc_commodity_table_get_table (gnc_get_current_book ());
-    commodities = gnc_commodity_table_get_commodities(table, name_space);
-    for (iterator = commodities; iterator; iterator = iterator->next)
+    for (auto comm : gnc_commodity_table_get_commodities(table, name_space))
     {
-        commodity_items =
-            g_list_prepend (commodity_items,
-                            (gpointer) gnc_commodity_get_printname(GNC_COMMODITY(iterator->data)));
+        commodity_items = g_list_prepend (commodity_items, (gpointer) gnc_commodity_get_printname(comm));
     }
-    g_list_free(commodities);
 
     commodity_items = g_list_sort(commodity_items, collate);
     for (iterator = commodity_items; iterator; iterator = iterator->next)

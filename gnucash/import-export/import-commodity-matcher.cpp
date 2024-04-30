@@ -70,18 +70,16 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
     {
         auto ns = ns_str.c_str();
         DEBUG("Looking at namespace %s", ns);
-        GList *comm_list = gnc_commodity_table_get_commodities (commodity_table, ns);
-        for (GList *m = comm_list; !retval && m; m = g_list_next (m))
+        for (auto com : gnc_commodity_table_get_commodities (commodity_table, ns))
         {
-            auto com = static_cast<gnc_commodity*>(m->data);
             DEBUG("Looking at commodity %s", gnc_commodity_get_fullname (com));
             if (!g_strcmp0 (gnc_commodity_get_cusip (com), cusip))
             {
                 retval = com;
                 DEBUG("Commodity %s matches.", gnc_commodity_get_fullname (com));
+                break;
             }
         }
-        g_list_free (comm_list);
         if (retval)
             break;
     }

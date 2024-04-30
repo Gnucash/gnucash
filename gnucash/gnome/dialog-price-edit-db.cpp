@@ -247,10 +247,8 @@ gnc_prices_dialog_load_view (GtkTreeView *view, GNCPriceDB *pdb)
     {
         auto tmp_namespace = tmp_namespace_str.c_str();
         DEBUG("Looking at namespace %s", tmp_namespace);
-        auto commodity_list = gnc_commodity_table_get_commodities (commodity_table, tmp_namespace);
-        for (auto node_c = commodity_list; node_c; node_c = g_list_next (node_c))
+        for (auto tmp_commodity : gnc_commodity_table_get_commodities (commodity_table, tmp_namespace))
         {
-            auto tmp_commodity = static_cast<gnc_commodity*>(node_c->data);
             auto num = gnc_pricedb_num_prices (pdb, tmp_commodity);
             DEBUG("Looking at commodity %s, Number of prices %d", gnc_commodity_get_fullname (tmp_commodity), num);
 
@@ -278,7 +276,6 @@ gnc_prices_dialog_load_view (GtkTreeView *view, GNCPriceDB *pdb)
                 g_list_free_full (list, (GDestroyNotify)gnc_price_unref);
             }
         }
-        g_list_free (commodity_list);
     }
 
     return oldest;
