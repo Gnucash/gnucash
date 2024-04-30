@@ -24,6 +24,7 @@
   @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
 #include <config.h>
+#include <algorithm>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -70,18 +71,16 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
     {
         auto ns = ns_str.c_str();
         DEBUG("Looking at namespace %s", ns);
-        for (auto com : gnc_commodity_table_get_commodities (commodity_table, ns))
+        auto commodities{gnc_commodity_table_get_commodities (commodity_table, ns)};
+        auto it = std::find_if (commodities.begin(), commodities.end(),
+                                [cusip](auto com)
+                                { return !g_strcmp0 (gnc_commodity_get_cusip (com), cusip); });
+        if (it != commodities.end())
         {
-            DEBUG("Looking at commodity %s", gnc_commodity_get_fullname (com));
-            if (!g_strcmp0 (gnc_commodity_get_cusip (com), cusip))
-            {
-                retval = com;
-                DEBUG("Commodity %s matches.", gnc_commodity_get_fullname (com));
-                break;
-            }
-        }
-        if (retval)
+            retval = *it;
+            DEBUG("Commodity %s matches.", gnc_commodity_get_fullname (*it));
             break;
+        };
     }
 
     if (retval == NULL && ask_on_unknown != 0)
