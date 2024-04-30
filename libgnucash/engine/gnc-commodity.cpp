@@ -1741,29 +1741,15 @@ gnc_commodity_table_find_full(const gnc_commodity_table * table,
                               const char * name_space,
                               const char * fullname)
 {
-    gnc_commodity * retval = nullptr;
-    GList         * all;
-    GList         * iterator;
-
     if (!fullname || (fullname[0] == '\0'))
         return nullptr;
 
-    all = gnc_commodity_table_get_commodities(table, name_space);
+    auto commodities{gnc_commodity_table_get_commodities(table, name_space)};
+    auto it = std::find_if (commodities.begin(), commodities.end(),
+                            [fullname](auto comm)
+                            { return !g_strcmp0 (fullname, gnc_commodity_get_printname(comm)); });
 
-    for (iterator = all; iterator; iterator = iterator->next)
-    {
-        auto commodity = GNC_COMMODITY (iterator->data);
-        if (!strcmp(fullname,
-                    gnc_commodity_get_printname(commodity)))
-        {
-            retval = commodity;
-            break;
-        }
-    }
-
-    g_list_free (all);
-
-    return retval;
+    return it == commodities.end() ? nullptr : *it;;
 }
 
 
@@ -1980,10 +1966,10 @@ gnc_commodity_is_currency(const gnc_commodity *cm)
  * list commodities in a given namespace
  ********************************************************************/
 
-static CommodityList*
+static CommVec
 commodity_table_get_all_noncurrency_commodities(const gnc_commodity_table* table)
 {
-    CommodityList *retval = NULL;
+    CommVec retval;
     for (const auto& name_space : gnc_commodity_table_get_namespaces(table))
     {
         gnc_commodity_namespace *ns = NULL;
@@ -1992,26 +1978,33 @@ commodity_table_get_all_noncurrency_commodities(const gnc_commodity_table* table
         ns = gnc_commodity_table_find_namespace(table, name_space.c_str());
         if (!ns)
             continue;
-        retval = g_list_concat(g_hash_table_values(ns->cm_table), retval);
+        auto val = g_hash_table_values(ns->cm_table);
+        for (auto n = val; n; n = n->next)
+            retval.push_back (GNC_COMMODITY(n->data));
+        g_list_free (val);
     }
     return retval;
 }
 
-CommodityList *
+CommVec
 gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
                                     const char * name_space)
 {
-    gnc_commodity_namespace * ns = nullptr;
+    CommVec retval;
 
     if (!table)
-        return nullptr;
+        return retval;
     if (g_strcmp0(name_space, GNC_COMMODITY_NS_NONISO_GUI) == 0)
         return commodity_table_get_all_noncurrency_commodities(table);
-    ns = gnc_commodity_table_find_namespace(table, name_space);
+    auto ns = gnc_commodity_table_find_namespace(table, name_space);
     if (!ns)
-        return nullptr;
+        return retval;
 
-    return g_hash_table_values(ns->cm_table);
+    auto val = g_hash_table_values(ns->cm_table);
+    for (auto n = val; n; n = n->next)
+        retval.push_back (GNC_COMMODITY(n->data));
+    g_list_free (val);
+    return retval;
 }
 
 /********************************************************************
@@ -2022,45 +2015,45 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
 static void
 get_quotables_helper1(gpointer key, gpointer value, gpointer data)
 {
-    auto comm = GNC_COMMODITY(value);
+    auto comm{GNC_COMMODITY(value)};
+    auto rv{static_cast<CommVec*>(data)};
     gnc_commodityPrivate* priv = GET_PRIVATE(comm);
-    auto l = static_cast<GList**>(data);
 
     if (!priv->quote_flag || !priv->quote_source || !priv->quote_source->get_supported())
         return;
-    *l = g_list_prepend(*l, value);
+    rv->push_back (comm);
 }
 
 static gboolean
 get_quotables_helper2 (gnc_commodity *comm, gpointer data)
 {
-    auto l = static_cast<GList**>(data);
     gnc_commodityPrivate* priv = GET_PRIVATE(comm);
+    auto rv{static_cast<CommVec*>(data)};
 
     if (!priv->quote_flag || priv->quote_source || !priv->quote_source->get_supported())
         return TRUE;
-    *l = g_list_prepend(*l, comm);
+    rv->push_back (comm);
     return TRUE;
 }
 
-CommodityList *
+CommVec
 gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
 {
     gnc_commodity_namespace * ns = nullptr;
-    GList * l = nullptr;
+    CommVec rv;
     regex_t pattern;
     const char *expression = gnc_prefs_get_namespace_regexp();
 
     ENTER("table=%p, expression=%s", table, expression);
     if (!table)
-        return nullptr;
+        return {};
 
     if (expression && *expression)
     {
         if (regcomp(&pattern, expression, REG_EXTENDED | REG_ICASE) != 0)
         {
             LEAVE("Cannot compile regex");
-            return nullptr;
+            return {};
         }
 
         for (const auto& name_space_str : gnc_commodity_table_get_namespaces(table))
@@ -2072,7 +2065,7 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
                 ns = gnc_commodity_table_find_namespace(table, name_space);
                 if (ns)
                 {
-                    g_hash_table_foreach(ns->cm_table, &get_quotables_helper1, (gpointer) &l);
+                    g_hash_table_foreach(ns->cm_table, get_quotables_helper1, &rv);
                 }
             }
         }
@@ -2080,11 +2073,10 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
     }
     else
     {
-        gnc_commodity_table_foreach_commodity(table, get_quotables_helper2,
-                                              (gpointer) &l);
+        gnc_commodity_table_foreach_commodity(table, get_quotables_helper2, &rv);
     }
-    LEAVE("list head %p", l);
-    return l;
+    LEAVE("list head %p", &rv);
+    return rv;
 }
 
 /********************************************************************

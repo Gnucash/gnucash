@@ -930,12 +930,9 @@ write_counts (FILE* out, ...)
 }
 
 static gint
-compare_commodity_ids (gconstpointer a, gconstpointer b)
+compare_commodity_less (gnc_commodity* a, gnc_commodity* b)
 {
-    const gnc_commodity* ca = (const gnc_commodity*) a;
-    const gnc_commodity* cb = (const gnc_commodity*) b;
-    return (g_strcmp0 (gnc_commodity_get_mnemonic (ca),
-                       gnc_commodity_get_mnemonic (cb)));
+    return (g_strcmp0 (gnc_commodity_get_mnemonic (a), gnc_commodity_get_mnemonic (b)) < 0);
 }
 
 static gboolean write_pricedb (FILE* out, QofBook* book, sixtp_gdv2* gd);
@@ -1041,16 +1038,14 @@ write_commodities (FILE* out, QofBook* book, sixtp_gdv2* gd)
 
     for (const auto& name_space : namespaces)
     {
-        GList* comms, *lp2;
         xmlNodePtr comnode;
 
-        comms = gnc_commodity_table_get_commodities (tbl, name_space.c_str());
-        comms = g_list_sort (comms, compare_commodity_ids);
+        auto comms = gnc_commodity_table_get_commodities (tbl, name_space.c_str());
+        std::sort (comms.begin(), comms.end(), compare_commodity_less);
 
-        for (lp2 = comms; lp2; lp2 = lp2->next)
+        for (auto comm : comms)
         {
-            comnode = gnc_commodity_dom_tree_create (static_cast<const gnc_commodity*>
-                                                     (lp2->data));
+            comnode = gnc_commodity_dom_tree_create (comm);
             if (comnode == NULL)
                 continue;
 
@@ -1066,7 +1061,6 @@ write_commodities (FILE* out, QofBook* book, sixtp_gdv2* gd)
             sixtp_run_callback (gd, "commodities");
         }
 
-        g_list_free (comms);
         if (!success)
             break;
     }

@@ -32,7 +32,6 @@ static const GncGUID * gncAccountGetGUID(Account *x)
 %typemap(newfree) TransList * "g_list_free($1);"
 %typemap(newfree) PriceList * "g_list_free($1);"
 %typemap(newfree) LotList * "g_list_free($1);"
-%typemap(newfree) CommodityList * "g_list_free($1);"
 
 %typemap(freearg) AccountList * "g_list_free($1);"
 

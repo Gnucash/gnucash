@@ -80,7 +80,7 @@ GLIST_HELPER_INOUT(LotList, SWIGTYPE_p_GNCLot);
 GLIST_HELPER_INOUT(AccountList, SWIGTYPE_p_Account);
 GLIST_HELPER_INOUT(PriceList, SWIGTYPE_p_GNCPrice);
 // TODO: free PriceList?
-GLIST_HELPER_INOUT(CommodityList, SWIGTYPE_p_gnc_commodity);
+VECTOR_HELPER_INOUT(CommVec, SWIGTYPE_p_gnc_commodity, gnc_commodity);
 VECTOR_HELPER_INOUT(SplitsVec, SWIGTYPE_p_Split, Split);
 VECTOR_HELPER_INOUT(AccountVec, SWIGTYPE_p_Account, Account);
 

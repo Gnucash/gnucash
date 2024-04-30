@@ -456,18 +456,11 @@ get_random_commodity_from_table (gnc_commodity_table *table)
 
     do
     {
-        GList *commodities;
-
         auto name_space = namespaces.at (get_random_int_in_range (0, namespaces.size() - 1));
 
-        commodities = gnc_commodity_table_get_commodities (table, name_space.c_str());
-        if (!commodities)
-            continue;
+        auto commodities = gnc_commodity_table_get_commodities (table, name_space.c_str());
 
-        com = static_cast<gnc_commodity*>(get_random_list_element (commodities));
-
-        g_list_free (commodities);
-
+        com = commodities[std::rand() % commodities.size()];
     }
     while (!com);
 
@@ -561,24 +554,16 @@ make_random_changes_to_commodity_table (gnc_commodity_table *table)
     for (const auto& ns_str : namespaces)
     {
         auto ns = ns_str.c_str();
-        GList *commodities;
-        GList *com_node;
 
         if (gnc_commodity_namespace_is_iso (ns))
             continue;
 
-        commodities = gnc_commodity_table_get_commodities (table, ns);
-
-        for (com_node = commodities; com_node; com_node = com_node->next)
+        for (auto com : gnc_commodity_table_get_commodities (table, ns))
         {
-            auto com = static_cast<gnc_commodity *>(com_node->data);
-
             gnc_commodity_table_remove (table, com);
             make_random_changes_to_commodity (com);
             gnc_commodity_table_insert (table, com);
         }
-
-        g_list_free (commodities);
     }
 }
 /* ================================================================= */
