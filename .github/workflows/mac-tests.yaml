@@ -14,6 +14,7 @@ jobs:
         echo "PATH=$PATH:$HOME/gnucash/inst/bin" >> $GITHUB_ENV
         echo "PREFIX=$HOME/gnucash/inst" >> $GITHUB_ENV
         echo "SRCROOT=$HOME/gnucash/source" >> $GITHUB_ENV
+        brew install ninja
     - name: download dependency tarball
       uses: carlosperate/download-file-action@v2
       id: dependencies
