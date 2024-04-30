@@ -429,15 +429,6 @@ gnc_ui_select_commodity_namespace_changed_cb (GtkComboBox *cbwe,
 /********************************************************************
  * gnc_ui_update_commodity_picker
  ********************************************************************/
-static int
-collate(gconstpointer a, gconstpointer b)
-{
-    if (!a)
-        return -1;
-    if (!b)
-        return 1;
-    return g_utf8_collate (static_cast<const char*>(a), static_cast<const char*>(b));
-}
 
 
 void
@@ -445,15 +436,13 @@ gnc_ui_update_commodity_picker (GtkWidget *cbwe,
                                 const gchar * name_space,
                                 const gchar * init_string)
 {
-    GList      * iterator = nullptr;
-    GList      * commodity_items = nullptr;
+    std::vector<std::string> commodity_items;
     GtkComboBox *combo_box;
     GtkEntry *entry;
     GtkTreeModel *model;
     GtkTreeIter iter;
     gnc_commodity_table *table;
     gint current = 0, match = 0;
-    gchar *name;
 
     g_return_if_fail(GTK_IS_COMBO_BOX(cbwe));
     g_return_if_fail(name_space);
@@ -470,25 +459,23 @@ gnc_ui_update_commodity_picker (GtkWidget *cbwe,
     gtk_combo_box_set_active(combo_box, -1);
 
     table = gnc_commodity_table_get_table (gnc_get_current_book ());
+
     for (auto comm : gnc_commodity_table_get_commodities(table, name_space))
-    {
-        commodity_items = g_list_prepend (commodity_items, (gpointer) gnc_commodity_get_printname(comm));
-    }
+        commodity_items.push_back (gnc_commodity_get_printname(comm));
 
-    commodity_items = g_list_sort(commodity_items, collate);
-    for (iterator = commodity_items; iterator; iterator = iterator->next)
+    std::sort (commodity_items.end(), commodity_items.begin());
+
+    for (auto name : commodity_items)
     {
-        name = (char *)iterator->data;
         gtk_list_store_append(GTK_LIST_STORE(model), &iter);
-        gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, name, -1);
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, name.c_str(), -1);
 
-        if (init_string && g_utf8_collate(name, init_string) == 0)
+        if (init_string && name == init_string)
             match = current;
         current++;
     }
 
     gtk_combo_box_set_active(combo_box, match);
-    g_list_free(commodity_items);
 }
 
 
