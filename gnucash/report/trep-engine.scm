@@ -1749,8 +1749,10 @@ be excluded from periodic reporting.")
           (with-output-to-string
             (lambda ()
               (when show-account-code?
-                (display (xaccAccountGetCode account))
-                (display " "))
+                (let ((code (xaccAccountGetCode account)))
+                  (unless (string-null? code)
+                    (display code)
+                    (display " "))))
               (when show-account-name?
                 (display
                  (if show-account-full-name?
@@ -1768,17 +1770,10 @@ be excluded from periodic reporting.")
              (name (account-namestring account
                                        (report-uses? 'sort-account-code)
                                        #t
-                                       (report-uses? 'sort-account-full-name)))
-             (description (if (and (report-uses? 'sort-account-description)
-                                   (not (string-null?
-                                         (xaccAccountGetDescription account))))
-                              (string-append ": " (xaccAccountGetDescription account))
-                              "")))
-        (if (and anchor? (report-uses? 'links)
-                 (pair? account)) ;html anchor for 2-split transactions only
-            (gnc:make-html-text
-             (gnc:html-markup-anchor (gnc:account-anchor-text account) name)
-             description)
+                                       (report-uses? 'sort-account-full-name))))
+        (if (and (report-uses? 'sort-account-description)
+                 (not (string-null? (xaccAccountGetDescription account))))
+            (string-append name ": " (xaccAccountGetDescription account))
             name)))
 
     ;; generic renderer. retrieve renderer-fn which should return a str

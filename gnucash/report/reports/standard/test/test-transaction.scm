@@ -141,6 +141,10 @@
         (set-option! options "Display" "Amount" 'single)
         options))
 
+    ;; to test Sorting/Show Account Description
+    (xaccAccountSetDescription income "Salaries etc")
+    (xaccAccountSetCode expense "EXP-001")
+
     ;; This will make all accounts use default currency (I think depends on locale)
     (for-each
      (lambda(pair)
@@ -788,13 +792,24 @@
       (set-option! options "Sorting" "Secondary Key" 'date)
       (set-option! options "Sorting" "Secondary Subtotal for Date Key" 'quarterly)
       (set-option! options "Sorting" "Show Informal Debit/Credit Headers" #t)
-      (set-option! options "Sorting" "Show Account Description" #t)
+      (set-option! options "Sorting" "Show Account Description" #f)
+      (set-option! options "Sorting" "Show Account Code" #f)
       (let* ((sxml (options->sxml options "sorting=date, friendly headers")))
         (test-equal "expense acc friendly headers"
           '("Expenses" "Expense" "Rebate")
           (get-row-col sxml 69 #f))
         (test-equal "income acc friendly headers"
           '("Income" "Charge" "Income")
+          (get-row-col sxml 91 #f)))
+
+      (set-option! options "Sorting" "Show Account Description" #t)
+      (set-option! options "Sorting" "Show Account Code" #t)
+      (let* ((sxml (options->sxml options "sorting=date, friendly headers with acct desc/code")))
+        (test-equal "expense acc friendly headers"
+          '("EXP-001 Expenses" "Expense" "Rebate")
+          (get-row-col sxml 69 #f))
+        (test-equal "income acc friendly headers"
+          '("Income: Salaries etc" "Charge" "Income")
           (get-row-col sxml 91 #f)))
 
       (set-option! options "Accounts" "Accounts" (list bank))
