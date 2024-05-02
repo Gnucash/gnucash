@@ -15,8 +15,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-28 11:07+0000\n"
-"Last-Translator: mocsa <csaba@feltoltve.hu>\n"
+"PO-Revision-Date: 2024-05-02 01:07+0000\n"
+"Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
 "Language: hu\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.1\n"
+"X-Generator: Weblate 5.5.3-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -5907,7 +5907,7 @@ msgstr "Pénzügyek kezelése"
 #: gnucash/register/ledger-core/split-register-model.c:317
 msgctxt "Column header for 'Reconciled'"
 msgid "R"
-msgstr "Ö"
+msgstr "E"
 
 #: gnucash/gnome/report-menus.scm:57
 #, scheme-format
@@ -14467,7 +14467,7 @@ msgstr "_Egyezés után egyeztetettnek jelölés"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1186
 msgid "Generic import transaction matcher"
-msgstr "Általános tranzakcióimportálási egyezésvizsgáló"
+msgstr "Általános tranzakcióimportálási illesztő"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:120
 msgid "Posted Account"
@@ -28189,7 +28189,7 @@ msgstr "A jelenlegi lap megnyitása egy új GnuCash ablakban"
 
 #: gnucash/ui/gnc-main-window.ui:501
 msgid "Tutorial and Concepts _Guide"
-msgstr "Oktatóanyag és fo_galmi útmutató"
+msgstr "_Oktatóanyag és fogalmi útmutató"
 
 #: gnucash/ui/gnc-main-window.ui:504
 msgid "Open the GnuCash Tutorial"
@@ -28197,11 +28197,11 @@ msgstr "A GnuCash oktatóanyagának megnyitása"
 
 #: gnucash/ui/gnc-main-window.ui:512
 msgid "_Contents"
-msgstr "_Tartalom"
+msgstr "GnuCash _kézikönyv"
 
 #: gnucash/ui/gnc-main-window.ui:515
 msgid "Open the GnuCash Help"
-msgstr "A GnuCash súgójának megnyitása"
+msgstr "A GnuCash kézikönyvének megnyitása"
 
 #: gnucash/ui/gnc-main-window.ui:518
 msgid "_About"
@@ -28250,7 +28250,7 @@ msgstr "Nyissa meg az új számla párbeszédablakot"
 #: gnucash/ui/gnc-plugin-page-report.ui:145
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:122
 msgid "New _Invoice…"
-msgstr "Új _számla…"
+msgstr "Új kimenő_számla…"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:6
 msgid "New Accounts _Page"
@@ -28258,7 +28258,7 @@ msgstr "_Új számlák fül"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:8
 msgid "Open a new Account Tree page"
-msgstr "Új folyószámla-nézet oldal nyitása"
+msgstr "Új számlafa(számlahierarchia) oldal megnyitása"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:6
 msgid "New _File"
@@ -28424,12 +28424,11 @@ msgstr "Bayes-féle és nem Bayes-féle információk megtekintése és törlés
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:129
 msgid "_Transaction Linked Documents"
-msgstr ""
+msgstr "_Tranzakcióhoz kapcsolódó dokumentumok"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:131
-#, fuzzy
 msgid "View all Transaction Linked Documents"
-msgstr "<b>Új tranzakció-információ</b>"
+msgstr "Az összes tranzakcióhoz kapcsolódó dokumentum megtekintése"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:137
 msgid "_Tips Of The Day"
@@ -28490,14 +28489,12 @@ msgid "_Customer"
 msgstr "_Ügyfél"
 
 #: gnucash/ui/gnc-plugin-business.ui:9
-#, fuzzy
 msgid "Customers Overview"
-msgstr "Ügyfél számlái"
+msgstr "Ügyfelek áttekintése"
 
 #: gnucash/ui/gnc-plugin-business.ui:11
-#, fuzzy
 msgid "Open a Customer overview page"
-msgstr "Nyissa meg az új ügyfél párbeszédablakot"
+msgstr "Nyisson meg egy ügyféláttekintő ablakot"
 
 #: gnucash/ui/gnc-plugin-business.ui:14
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:23
