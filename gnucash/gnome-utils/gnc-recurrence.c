@@ -66,13 +66,12 @@ typedef enum
 
 G_DEFINE_TYPE (GncRecurrence, gnc_recurrence, GTK_TYPE_BOX)
 
-static UIPeriodType get_pt_ui(GncRecurrence *gr)
+static UIPeriodType get_pt_ui (GncRecurrence *gr)
 {
-    return (gtk_combo_box_get_active(gr->gcb_period));
+    return (gtk_combo_box_get_active (gr->gcb_period));
 }
 
-
-static void set_pt_ui(GncRecurrence *gr, PeriodType pt)
+static void set_pt_ui (GncRecurrence *gr, PeriodType pt)
 {
     UIPeriodType idx;
     switch (pt)
@@ -97,39 +96,31 @@ static void set_pt_ui(GncRecurrence *gr, PeriodType pt)
     }
     gtk_combo_box_set_active(gr->gcb_period, idx);
 
-    gtk_check_button_set_active(
-        GTK_CHECK_BUTTON(gr->nth_weekday),
+    gtk_check_button_set_active (GTK_CHECK_BUTTON(gr->nth_weekday),
         (pt == PERIOD_NTH_WEEKDAY || pt == PERIOD_LAST_WEEKDAY));
 
-    gtk_check_button_set_active(
-        GTK_CHECK_BUTTON(gr->gcb_eom),
+    gtk_check_button_set_active (GTK_CHECK_BUTTON(gr->gcb_eom),
         (pt == PERIOD_END_OF_MONTH || pt == PERIOD_LAST_WEEKDAY));
 }
 
-
 static gboolean
-is_ambiguous_relative(const GDate *date)
+is_ambiguous_relative (const GDate *date)
 {
-    GDateDay d;
-    guint8 dim;
-
-    d = g_date_get_day(date);
-    dim = g_date_get_days_in_month(
-              g_date_get_month(date), g_date_get_year(date));
+    GDateDay d = g_date_get_day (date);
+    guint8 dim = g_date_get_days_in_month (g_date_get_month (date),
+                                           g_date_get_year (date));
     return ((d - 1) / 7 == 3) && (dim - d < 7);
 }
 
-
 static gboolean
-is_ambiguous_absolute(const GDate *date)
+is_ambiguous_absolute (const GDate *date)
 {
-    return (g_date_is_last_of_month(date) &&
-            (g_date_get_day(date) < 31));
+    return (g_date_is_last_of_month (date) &&
+            (g_date_get_day (date) < 31));
 }
 
-
 static void
-something_changed( GtkWidget *wid, gpointer d )
+something_changed (GtkWidget *wid, gpointer d)
 {
     UIPeriodType pt;
     GDate start;
@@ -138,18 +129,16 @@ something_changed( GtkWidget *wid, gpointer d )
 
 
     pt = get_pt_ui(gr);
-    gnc_date_edit_get_gdate(GNC_DATE_EDIT(gr->gde_start), &start);
+    gnc_date_edit_get_gdate (GNC_DATE_EDIT(gr->gde_start), &start);
 
     if (pt == GNCR_MONTH)
-        g_object_set(G_OBJECT(gr->nth_weekday), "visible", TRUE, NULL);
+        g_object_set (G_OBJECT(gr->nth_weekday), "visible", TRUE, NULL);
     else
     {
-        g_object_set(G_OBJECT(gr->nth_weekday), "visible", FALSE, NULL);
-        gtk_check_button_set_active(
-            GTK_CHECK_BUTTON(gr->nth_weekday), FALSE);
+        g_object_set (G_OBJECT(gr->nth_weekday), "visible", FALSE, NULL);
+        gtk_check_button_set_active (GTK_CHECK_BUTTON(gr->nth_weekday), FALSE);
     }
-    use_wd = gtk_check_button_get_active(
-                 GTK_CHECK_BUTTON(gr->nth_weekday));
+    use_wd = gtk_check_button_get_active (GTK_CHECK_BUTTON(gr->nth_weekday));
     //TODO: change label
 
     /* The case under which we show the "end of month" flag is very
@@ -157,37 +146,35 @@ something_changed( GtkWidget *wid, gpointer d )
     if (pt == GNCR_MONTH)
     {
         if (use_wd)
-            show_last = is_ambiguous_relative(&start);
+            show_last = is_ambiguous_relative (&start);
         else
-            show_last = is_ambiguous_absolute(&start);
+            show_last = is_ambiguous_absolute (&start);
     }
     else
     {
         show_last = FALSE;
-        gtk_check_button_set_active(GTK_CHECK_BUTTON(gr->gcb_eom), FALSE);
+        gtk_check_button_set_active (GTK_CHECK_BUTTON(gr->gcb_eom), FALSE);
     }
-    g_object_set(G_OBJECT(gr->gcb_eom), "visible", show_last, NULL);
+    g_object_set (G_OBJECT(gr->gcb_eom), "visible", show_last, NULL);
 
-    g_signal_emit_by_name(d, "changed");
+    g_signal_emit_by_name (d, "changed");
 }
 
-
 static void
-gnc_recurrence_init( GncRecurrence *gr )
+gnc_recurrence_init (GncRecurrence *gr)
 {
     GtkBox  *vb;
     GtkBox  *hb;
     GtkWidget *w;
     GtkBuilder *builder;
 
-    recurrenceSet(&gr->recurrence, 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE);
+    recurrenceSet (&gr->recurrence, 1, PERIOD_MONTH, NULL, WEEKEND_ADJ_NONE);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(gr), "gnc-id-recurrence");
 
     /* Open up the builder file */
     builder = gtk_builder_new();
-    gtk_builder_set_current_object (builder, G_OBJECT(gr));
     gnc_builder_add_from_file (builder, "gnc-recurrence.ui", "GCB_PeriodType_liststore");
     gnc_builder_add_from_file (builder, "gnc-recurrence.ui", "GSB_Mult_Adj");
     gnc_builder_add_from_file (builder, "gnc-recurrence.ui", "RecurrenceEntryVBox");
@@ -206,38 +193,38 @@ gnc_recurrence_init( GncRecurrence *gr )
 
     gtk_box_prepend (GTK_BOX(&gr->widget), GTK_WIDGET(vb));
 
-    gnc_recurrence_set(gr, &gr->recurrence);
-    something_changed( GTK_WIDGET(gr), gr);
+    gnc_recurrence_set (gr, &gr->recurrence);
+    something_changed (GTK_WIDGET(gr), gr);
 
     /* Setup the signals */
-    g_signal_connect( G_OBJECT(gr->gde_start), "date_changed",
-                      G_CALLBACK(something_changed), gr );
-    g_signal_connect( G_OBJECT(gr->gcb_period), "changed",
-                      G_CALLBACK(something_changed), gr );
-    g_signal_connect( G_OBJECT(gr->gsb_mult), "value-changed",
-                      G_CALLBACK(something_changed), gr );
-    g_signal_connect( G_OBJECT(gr->gcb_eom), "toggled",
-                      G_CALLBACK(something_changed), gr );
-    g_signal_connect( G_OBJECT(gr->nth_weekday), "toggled",
-                      G_CALLBACK(something_changed), gr );
+    g_signal_connect (G_OBJECT(gr->gde_start), "date_changed",
+                      G_CALLBACK(something_changed), gr);
+    g_signal_connect (G_OBJECT(gr->gcb_period), "changed",
+                      G_CALLBACK(something_changed), gr);
+    g_signal_connect (G_OBJECT(gr->gsb_mult), "value-changed",
+                      G_CALLBACK(something_changed), gr);
+    g_signal_connect (G_OBJECT(gr->gcb_eom), "toggled",
+                      G_CALLBACK(something_changed), gr);
+    g_signal_connect (G_OBJECT(gr->nth_weekday), "toggled",
+                      G_CALLBACK(something_changed), gr);
 
-    g_object_unref(G_OBJECT(builder));
+    g_object_unref (G_OBJECT(builder));
 }
 
-
 void
-gnc_recurrence_set(GncRecurrence *gr, const Recurrence *r)
+gnc_recurrence_set (GncRecurrence *gr, const Recurrence *r)
 {
     PeriodType pt;
     guint mult;
     GDate start;
 
-    g_return_if_fail(gr && r);
-    pt = recurrenceGetPeriodType(r);
-    mult = recurrenceGetMultiplier(r);
-    start = recurrenceGetDate(r);
+    g_return_if_fail (gr && r);
 
-    gtk_spin_button_set_value(gr->gsb_mult, (gdouble) mult);
+    pt = recurrenceGetPeriodType (r);
+    mult = recurrenceGetMultiplier (r);
+    start = recurrenceGetDate (r);
+
+    gtk_spin_button_set_value (gr->gsb_mult, (gdouble)mult);
 
     // is there some better way?
     {
@@ -245,13 +232,11 @@ gnc_recurrence_set(GncRecurrence *gr, const Recurrence *r)
         t = gnc_time64_get_day_start_gdate (&start);
         gnc_date_edit_set_time (GNC_DATE_EDIT(gr->gde_start), t);
     }
-
-    set_pt_ui(gr, pt);
+    set_pt_ui (gr, pt);
 }
 
-
 const Recurrence *
-gnc_recurrence_get(GncRecurrence *gr)
+gnc_recurrence_get (GncRecurrence *gr)
 {
     guint mult;
     UIPeriodType period;
@@ -259,9 +244,9 @@ gnc_recurrence_get(GncRecurrence *gr)
     GDate start;
     gboolean use_eom = FALSE, rel;
 
-    mult = (guint) gtk_spin_button_get_value_as_int(gr->gsb_mult);
-    gnc_date_edit_get_gdate(GNC_DATE_EDIT(gr->gde_start), &start);
-    period = get_pt_ui(gr);
+    mult = (guint)gtk_spin_button_get_value_as_int (gr->gsb_mult);
+    gnc_date_edit_get_gdate (GNC_DATE_EDIT(gr->gde_start), &start);
+    period = get_pt_ui (gr);
 
     switch (period)
     {
@@ -272,19 +257,16 @@ gnc_recurrence_get(GncRecurrence *gr)
         pt = PERIOD_WEEK;
         break;
     case GNCR_MONTH:
-        rel = gtk_check_button_get_active(
-                  GTK_CHECK_BUTTON(gr->nth_weekday));
+        rel = gtk_check_button_get_active (GTK_CHECK_BUTTON(gr->nth_weekday));
         if (rel)
         {
-            if (is_ambiguous_relative(&start))
+            if (is_ambiguous_relative (&start))
             {
-                use_eom = gtk_check_button_get_active(
-                              GTK_CHECK_BUTTON(gr->gcb_eom));
+                use_eom = gtk_check_button_get_active (GTK_CHECK_BUTTON(gr->gcb_eom));
             }
             else
             {
-                GDateDay d;
-                d = g_date_get_day(&start);
+                GDateDay d = g_date_get_day (&start);
 
                 use_eom = ((d - 1) / 7 == 4);
             }
@@ -294,17 +276,17 @@ gnc_recurrence_get(GncRecurrence *gr)
         }
         else
         {
-            if (g_date_is_last_of_month(&start) &&
-                    (g_date_get_day(&start) < 31))
+            if (g_date_is_last_of_month (&start) &&
+                    (g_date_get_day (&start) < 31))
             {
                 // ambiguous, need to examine the checkbox
-                use_eom = gtk_check_button_get_active(
+                use_eom = gtk_check_button_get_active (
                               GTK_CHECK_BUTTON(gr->gcb_eom));
             }
             else
             {
                 // if it's the last dom, use eom anyway because it's the 31st.
-                use_eom = g_date_is_last_of_month(&start);
+                use_eom = g_date_is_last_of_month (&start);
             }
             if (use_eom)
                 pt = PERIOD_END_OF_MONTH;
@@ -317,48 +299,45 @@ gnc_recurrence_get(GncRecurrence *gr)
     default:
         pt = PERIOD_INVALID;
     }
-
-    recurrenceSet(&gr->recurrence, mult, pt, &start, WEEKEND_ADJ_NONE);
+    recurrenceSet (&gr->recurrence, mult, pt, &start, WEEKEND_ADJ_NONE);
     return &gr->recurrence;
 }
 
-
 static void
-gnc_recurrence_finalize(GObject *o)
+gnc_recurrence_finalize (GObject *o)
 {
     GncRecurrence *gr = GNC_RECURRENCE(o);
 
     if (gr)
-        G_OBJECT_CLASS (gnc_recurrence_parent_class)->finalize (o);
+        G_OBJECT_CLASS(gnc_recurrence_parent_class)->finalize (o);
 }
 
-
 static void
-gnc_recurrence_class_init( GncRecurrenceClass *klass )
+gnc_recurrence_class_init (GncRecurrenceClass *klass)
 {
     GObjectClass *object_class;
 
-    object_class = G_OBJECT_CLASS (klass);
+    object_class = G_OBJECT_CLASS(klass);
     g_signal_new ("changed",
-		  G_OBJECT_CLASS_TYPE (object_class),
-		  G_SIGNAL_RUN_FIRST,
-		  0,
-		  NULL,
-		  NULL,
-		  g_cclosure_marshal_VOID__VOID,
-		  G_TYPE_NONE,
-		  0);
+          G_OBJECT_CLASS_TYPE(object_class),
+          G_SIGNAL_RUN_FIRST,
+          0,
+          NULL,
+          NULL,
+          g_cclosure_marshal_VOID__VOID,
+          G_TYPE_NONE,
+          0);
 
     object_class->finalize = gnc_recurrence_finalize;
 }
 
 GtkWidget *
-gnc_recurrence_new()
+gnc_recurrence_new ()
 {
     GncRecurrence *gr;
 
     ENTER(" ");
-    gr = g_object_new(gnc_recurrence_get_type(), NULL);
+    gr = g_object_new (gnc_recurrence_get_type (), NULL);
     LEAVE(" ");
     return GTK_WIDGET(gr);
 }
