@@ -3211,7 +3211,7 @@ gnc_main_window_open_page (GncMainWindow *window,
 {
     GncMainWindowPrivate *priv;
     GtkWidget *tab_hbox;
-    GtkWidget *label, *entry;
+    GtkWidget *label;
     const gchar *icon, *text, *color_string, *lab_text;
     GtkWidget *image;
     GList *tmp;
@@ -3296,11 +3296,11 @@ gnc_main_window_open_page (GncMainWindow *window,
         gtk_widget_set_tooltip_text(tab_hbox, text);
     }
 
-    entry = gtk_entry_new();
+    GtkWidget *entry = gtk_entry_new();
     gtk_widget_set_visible (GTK_WIDGET(entry), false);
     gtk_box_append (GTK_BOX(tab_hbox), GTK_WIDGET(entry));
-    g_signal_connect(G_OBJECT(entry), "activate",
-                     G_CALLBACK(gnc_main_window_tab_entry_activate), page);
+    g_signal_connect (G_OBJECT(entry), "activate",
+                      G_CALLBACK(gnc_main_window_tab_entry_activate), page);
 
 //FIXME gtk4    g_signal_connect(G_OBJECT(entry), "focus-out-event",
 //invalid for instance                     G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
@@ -3308,51 +3308,45 @@ gnc_main_window_open_page (GncMainWindow *window,
 
     GtkEventController *event_controller_entry = gtk_event_controller_key_new ();
     gtk_widget_add_controller (GTK_WIDGET(entry), event_controller_entry);
-    g_signal_connect (event_controller_entry,
-                      "key-pressed",
+    g_signal_connect (G_OBJECT(event_controller_entry), "key-pressed",
                       G_CALLBACK(gnc_main_window_tab_entry_key_press_event), page);
 
-    g_signal_connect(G_OBJECT(entry), "editing-done",
-                     G_CALLBACK(gnc_main_window_tab_entry_editing_done),
-                     page);
+    g_signal_connect (G_OBJECT(entry), "editing-done",
+                      G_CALLBACK(gnc_main_window_tab_entry_editing_done), page);
 
     /* Add close button - Not for immutable pages */
-    if (!g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE))
+    if (!g_object_get_data (G_OBJECT(page), PLUGIN_PAGE_IMMUTABLE))
     {
-        GtkWidget *close_image, *close_button;
-        GtkRequisition requisition;
+        GtkWidget *close_button = gtk_button_new ();
+        GtkWidget *close_image = gtk_image_new_from_icon_name ("window-close");
 
-        close_button = gtk_button_new();
-//FIXME gtk4        gtk_button_set_relief(GTK_BUTTON(close_button), GTK_RELIEF_NONE);
-        close_image = gtk_image_new_from_icon_name ("window-close");
-        gtk_image_set_icon_size (GTK_IMAGE(close_image), GTK_ICON_SIZE_NORMAL);
+        gtk_image_set_icon_size (GTK_IMAGE(close_image), GTK_ICON_SIZE_INHERIT);
         gtk_widget_set_visible (GTK_WIDGET(close_image), true);
-        gtk_widget_get_preferred_size (close_image, &requisition, nullptr);
-        gtk_widget_set_size_request(close_button, requisition.width + 4,
-                                    requisition.height + 2);
-        gtk_box_prepend (GTK_BOX(close_button), GTK_WIDGET(close_image));
+        gtk_widget_add_css_class (GTK_WIDGET(close_button), "flat");
+        gtk_button_set_child (GTK_BUTTON(close_button), GTK_WIDGET(close_image));
         gtk_widget_set_visible (GTK_WIDGET(close_button), 
-                                gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SHOW_CLOSE_BUTTON));
+                                gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL,
+                                GNC_PREF_SHOW_CLOSE_BUTTON));
 
-        g_signal_connect_swapped (G_OBJECT (close_button), "clicked",
+        g_signal_connect_swapped (G_OBJECT(close_button), "clicked",
                                   G_CALLBACK(gnc_main_window_close_page), page);
 
         gtk_box_append (GTK_BOX(tab_hbox), GTK_WIDGET(close_button));
         gtk_widget_set_margin_end (GTK_WIDGET(close_button), 5);
-        g_object_set_data (G_OBJECT (page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
+        g_object_set_data (G_OBJECT(page), PLUGIN_PAGE_CLOSE_BUTTON, close_button);
     }
 
     /*
      * The popup menu
      */
-    label = gtk_label_new (gnc_plugin_page_get_page_name(page));
+    label = gtk_label_new (gnc_plugin_page_get_page_name (page));
 
     /*
      * Now install it all in the window.
      */
-    gnc_main_window_connect(window, page, tab_hbox, label);
+    gnc_main_window_connect (window, page, tab_hbox, label);
 
-    color_string = gnc_plugin_page_get_page_color(page);
+    color_string = gnc_plugin_page_get_page_color (page);
     main_window_update_page_color (page, color_string);
     LEAVE("");
 }
@@ -4927,17 +4921,21 @@ gnc_main_window_cmd_actions_rename_page (GSimpleAction *simple,
         return;
     }
 
-    if (!main_window_find_tab_items(window, page, &label, &entry))
+    if (!main_window_find_tab_items (window, page, &label, &entry))
     {
         LEAVE("can't find required widgets");
         return;
     }
 
-    gnc_entry_set_text(GTK_ENTRY(entry), gtk_label_get_text(GTK_LABEL(label)));
-    gtk_editable_select_region(GTK_EDITABLE(entry), 0, -1);
+    gnc_entry_set_text (GTK_ENTRY(entry), gtk_label_get_text (GTK_LABEL(label)));
+    gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
     gtk_widget_set_visible (GTK_WIDGET(label), false);
     gtk_widget_set_visible (GTK_WIDGET(entry), true);
-    gtk_widget_grab_focus(entry);
+
+    gint len = gtk_entry_get_text_length (GTK_ENTRY(entry));
+    gtk_editable_set_width_chars (GTK_EDITABLE(entry), len);
+    gtk_widget_grab_focus (entry); //FIXME gtk4 this may not work
+
     LEAVE("opened for editing");
 }
 
