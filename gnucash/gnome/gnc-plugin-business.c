@@ -973,21 +973,22 @@ bind_extra_toolbuttons_visibility (GncMainWindow *mainwindow)
     }
 
     // Set the 'extra' tool item separator visibility
-//FIXME gtk4    for (gint i = 0; i < gtk_toolbar_get_n_items (GTK_TOOLBAR(toolbar)); i++)
-//    {
-//        GtkToolItem *tool_item = gtk_toolbar_get_nth_item (GTK_TOOLBAR(toolbar), i);
-
-//        if (GTK_IS_SEPARATOR_TOOL_ITEM(tool_item))
-//        {
-//            if (g_str_has_prefix (gtk_buildable_get_buildable_id (GTK_BUILDABLE(tool_item)),
-//                           "extra_separator"))
-//            {
-//                gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE,
-//                                GNC_PREF_EXTRA_TOOLBUTTONS,
-//                                G_OBJECT(tool_item), "visible");
-//            }
-//        }
-//    }
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(toolbar));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
+    {
+        if (GTK_IS_SEPARATOR(child))
+        {
+            if (g_str_has_prefix (gtk_buildable_get_buildable_id (
+                                  GTK_BUILDABLE(child)), "extra_separator"))
+            {
+                gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE,
+                                GNC_PREF_EXTRA_TOOLBUTTONS,
+                                G_OBJECT(child), "visible");
+            }
+        }
+    }
 }
 
 /**

@@ -3755,7 +3755,7 @@ gnc_main_window_init_short_names (GncMainWindow *window,
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-//FIXME gtk4    gnc_plugin_init_short_names (priv->toolbar, toolbar_labels);
+    gnc_plugin_init_short_names (priv->toolbar, toolbar_labels);
 }
 
 
@@ -3773,12 +3773,13 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     builder = gnc_plugin_page_get_builder (page);
-//FIXME gtk4
-#ifdef skip
+
     if (builder)
     {
         gchar *toolbar_name;
-        gtk_box_remove (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->toolbar));
+
+        if (gtk_widget_get_parent (GTK_WIDGET(priv->toolbar)) == priv->menu_dock)
+            gtk_box_remove (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->toolbar));
 
         if (toolbar_qualifier)
             toolbar_name = g_strconcat ("mainwin-toolbar-", toolbar_qualifier, nullptr);
@@ -3790,8 +3791,11 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
         if (!priv->toolbar)
             priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
 
-        g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-        gtk_box_prepend (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->toolbar));
+        gtk_widget_set_name (GTK_WIDGET(priv->toolbar), "toolbar");
+        gtk_widget_add_css_class (GTK_WIDGET(priv->toolbar), "toolbar");
+        gtk_widget_add_css_class (GTK_WIDGET(priv->toolbar), "flat");
+
+        gtk_box_append (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->toolbar));
         g_free (toolbar_name);
     }
 
@@ -3805,8 +3809,7 @@ gnc_main_window_update_toolbar (GncMainWindow *window, GncPluginPage *page,
         g_variant_unref (state);
     }
     // add tooltip redirect call backs
-    gnc_plugin_add_toolbar_tooltip_callbacks (priv->toolbar, priv->statusbar);
-#endif
+//FIXME gtk4    gnc_plugin_add_toolbar_tooltip_callbacks (priv->toolbar, priv->statusbar);
 }
 
 
@@ -3857,7 +3860,7 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     priv->previous_plugin_page_name = plugin_page_actions_group_name;
     priv->previous_menu_qualifier = menu_qualifier;
 
-//FIXME gtk4    gnc_main_window_update_toolbar (window, page, menu_qualifier);
+    gnc_main_window_update_toolbar (window, page, menu_qualifier);
 
     // reset hash table and remove added menu items
     g_hash_table_remove_all (priv->display_item_hash);
@@ -4217,16 +4220,14 @@ gnc_main_window_setup_window (GncMainWindow *window)
                                      window);
 
     priv->menubar_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-menu");
-//FIXME gtk4    priv->menubar = gtk_menu_bar_new_from_model (priv->menubar_model);
     priv->menubar = gtk_popover_menu_bar_new_from_model (priv->menubar_model);
 
     gtk_box_append (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->menubar));
     gtk_widget_set_visible (GTK_WIDGET(priv->menubar), true);
 
     priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
-//    g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-//    gtk_box_prepend (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->toolbar));
-//    gtk_widget_set_visible (GTK_WIDGET(priv->toolbar), true);
+    gtk_box_append (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->toolbar));
+    gtk_widget_set_visible (GTK_WIDGET(priv->toolbar), true);
 
     g_object_unref (builder);
 

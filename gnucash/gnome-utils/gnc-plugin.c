@@ -231,19 +231,33 @@ gnc_plugin_init_short_names (GtkWidget *toolbar,
 {
     g_return_if_fail (toolbar != NULL);
     g_return_if_fail (toolbar_labels != NULL);
-//FIXME gtk4
-#ifdef skip
+
     for (gint i = 0; (toolbar_labels[i].action_name); i++)
     {
         GtkWidget *tool_item = gnc_find_toolbar_item (toolbar, toolbar_labels[i].action_name);
 
+        PINFO("tool item %p, for action '%s'", tool_item, toolbar_labels[i].action_name);
+
         if (!tool_item)
             continue;
 
-        gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(toolbar_labels[i].short_label));
-        gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
+        if (GTK_IS_BUTTON(tool_item))
+        {
+            GtkWidget *vbox = gtk_button_get_child (GTK_BUTTON(tool_item));
+
+            GtkWidget *child;
+            for (child = gtk_widget_get_first_child (GTK_WIDGET(vbox));
+                 child != NULL;
+                 child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
+            {
+                if (GTK_IS_LABEL(child))
+                {
+                    gtk_label_set_text (GTK_LABEL(child), _(toolbar_labels[i].short_label));
+                    gtk_button_set_use_underline (GTK_BUTTON(tool_item), TRUE);
+                }
+            }
+        }
     }
-#endif
 }
 
 
