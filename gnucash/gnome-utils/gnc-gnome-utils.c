@@ -582,6 +582,8 @@ gnc_ui_start_event_loop (void)
 
     /* Enter gnome event loop */
 //FIXME gtk4    gtk_main ();
+    while (g_list_model_get_n_items (gtk_window_get_toplevels ()) > 0)
+        g_main_context_iteration (NULL, TRUE);
 
     g_source_remove (id);
 
