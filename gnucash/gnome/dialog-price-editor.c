@@ -57,24 +57,24 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI;
 
 typedef struct
 {
-    GtkWidget * dialog;
+    GtkWidget  *dialog;
     QofSession *session;
-    QofBook *book;
+    QofBook    *book;
     GNCPriceDB *price_db;
     GNCPriceEditType type;
 
-    GtkWidget * namespace_cbwe;
-    GtkWidget * commodity_cbwe;
-    GtkWidget * currency_edit;
-    GtkWidget * date_edit;
-    GtkWidget * source_entry;
-    GtkWidget * type_combobox;
-    GtkWidget * price_edit;
+    GtkWidget *namespace_cbwe;
+    GtkWidget *commodity_cbwe;
+    GtkWidget *currency_edit;
+    GtkWidget *date_edit;
+    GtkWidget *source_entry;
+    GtkWidget *type_combobox;
+    GtkWidget *price_edit;
 
-    GtkWidget * help_button;
-    GtkWidget * cancel_button;
-    GtkWidget * apply_button;
-    GtkWidget * ok_button;
+    GtkWidget *help_button;
+    GtkWidget *cancel_button;
+    GtkWidget *apply_button;
+    GtkWidget *ok_button;
 
     GNCPrice *price;
     gboolean changed;
@@ -83,7 +83,7 @@ typedef struct
 } PriceEditDialog;
 
 void pedit_dialog_response_cb (GtkButton *button, gpointer user_data);
-void pedit_data_changed_cb (GtkWidget *w, gpointer user_data);
+void pedit_data_changed_cb (GtkWidget *widget, gpointer user_data);
 void pedit_commodity_ns_changed_cb (GtkComboBox *cbwe, gpointer user_data);
 void pedit_commodity_changed_cb (GtkComboBox *cbwe, gpointer user_data);
 
@@ -231,7 +231,7 @@ pedit_dialog_replace_found_price (PriceEditDialog *pedit_dialog,
                                          GTK_BUTTONS_NONE,
                                          "%s", _("Replace price?"));
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
-                        "%s", message);
+                                                  "%s", message);
 
         gtk_dialog_add_buttons (GTK_DIALOG(dialog),
                               _("_Cancel"), GTK_RESPONSE_CANCEL,
@@ -450,7 +450,7 @@ pedit_commodity_changed_cb (GtkComboBox *cbwe, gpointer user_data)
 
 
 void
-pedit_data_changed_cb (GtkWidget *w, gpointer user_data)
+pedit_data_changed_cb (GtkWidget *widget, gpointer user_data)
 {
     PriceEditDialog *pedit_dialog = user_data;
     gnc_prices_set_changed (pedit_dialog, TRUE);
@@ -637,9 +637,9 @@ show_handler (const char *klass, gint component_id,
  * Return: nothing                                                  *
 \********************************************************************/
 void
-gnc_price_edit_dialog (GtkWidget * parent,
+gnc_price_edit_dialog (GtkWidget *parent,
                        QofSession *session,
-                       GNCPrice * price,
+                       GNCPrice *price,
                        GNCPriceEditType type)
 {
     PriceEditDialog *pedit_dialog;
@@ -698,7 +698,7 @@ gnc_price_edit_dialog (GtkWidget * parent,
  * Return: nothing                                                  *
 \********************************************************************/
 GNCPrice *
-gnc_price_edit_by_guid (GtkWidget * parent, const GncGUID * guid)
+gnc_price_edit_by_guid (GtkWidget *parent, const GncGUID *guid)
 {
     GNCPrice *price;
     QofSession *session = gnc_get_current_session();
