@@ -160,7 +160,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
     if (GNC_PLUGIN_GET_CLASS (plugin)->add_to_window)
     {
         DEBUG ("Calling child class function %p", GNC_PLUGIN_GET_CLASS (plugin)->add_to_window);
-//FIXME gtk4        GNC_PLUGIN_GET_CLASS (plugin)->add_to_window (plugin, window, type);
+        GNC_PLUGIN_GET_CLASS (plugin)->add_to_window (plugin, window, type);
     }
     LEAVE ("");
 }

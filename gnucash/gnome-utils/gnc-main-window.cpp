@@ -258,6 +258,8 @@ typedef struct GncMainWindowPrivate
 
     GHashTable    *display_item_hash;
 
+    GHashTable    *simple_action_groups;
+
 } GncMainWindowPrivate;
 
 G_DEFINE_TYPE_WITH_CODE(GncMainWindow, gnc_main_window, GTK_TYPE_APPLICATION_WINDOW,
@@ -783,6 +785,8 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         /* give the page a chance to display */
 //FIXME gtk4        while (gtk_events_pending ())
 //            gtk_main_iteration ();
+        while (g_main_context_pending (nullptr))
+            g_main_context_iteration (nullptr, true);
     }
     priv->restoring_pages = FALSE;
     /* Restore page ordering within the notebook. Use +1 notation so the
@@ -975,11 +979,16 @@ gnc_main_window_save_window (GncMainWindow *window, GncMainWindowSaveData *data)
 
     /* Save the window coordinates, etc. */
 //FIXME gtk4    gtk_window_get_position(GTK_WINDOW(window), &coords[0], &coords[1]);
-//    gtk_window_get_default_size(GTK_WINDOW(window), &coords[2], &coords[3]);
+coords[0] = 0;
+coords[1] = 0;
+    gtk_window_get_default_size (GTK_WINDOW(window), &coords[2], &coords[3]);
 //    maximized = (gdk_window_get_state(gtk_widget_get_window ((GTK_WIDGET(window))))
 //                 & GDK_WINDOW_STATE_MAXIMIZED) != 0;
 //    minimized = (gdk_window_get_state(gtk_widget_get_window ((GTK_WIDGET(window))))
 //                 & GDK_WINDOW_STATE_ICONIFIED) != 0;
+
+    maximized = gtk_window_is_maximized (GTK_WINDOW(window));
+    minimized = false; //FIXME gtk4 there is no equivalent
 
     if (minimized)
     {
@@ -1354,8 +1363,8 @@ gnc_main_window_quit(GncMainWindow *window)
             priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
             // if there are no pages destroy window
-//FIXME gtk4            if (priv->installed_pages == NULL)
-//                gtk_window_destroy (GTK_WINDOW(window));
+            if (priv->installed_pages == nullptr)
+                gtk_window_destroy (GTK_WINDOW(window));
         }
         /* remove the preference callbacks from the main window */
         gnc_main_window_remove_prefs (window);
@@ -1468,8 +1477,8 @@ gnc_main_window_event_handler (QofInstance *entity,  QofEventId event_type,
             gnc_main_window_close_page (page);
     }
 
-//FIXME gtk4    if (GTK_IS_WIDGET(window) && window->window_quitting)
-//        gtk_window_destroy (GTK_WINDOW(window));
+    if (GTK_IS_WIDGET(window) && window->window_quitting)
+        gtk_window_destroy (GTK_WINDOW(window));
 
     LEAVE(" ");
 }
@@ -1558,9 +1567,9 @@ gnc_main_window_generate_title (GncMainWindow *window)
     /* Update the menus based upon whether this is an "immutable" page. */
     immutable = page &&
                 g_object_get_data (G_OBJECT (page), PLUGIN_PAGE_IMMUTABLE);
-//FIXME gtk4    gnc_plugin_set_actions_enabled (G_ACTION_MAP(window),
-//                                    immutable_page_actions,
-//                                    !immutable);
+    gnc_plugin_set_actions_enabled (G_ACTION_MAP(window),
+                                    immutable_page_actions,
+                                    !immutable);
     /* Trigger sensitivity updtates of other actions such as Save/Revert */
     g_signal_emit_by_name (window, "page_changed", page);
     g_free( filename );
@@ -2442,8 +2451,8 @@ main_window_update_page_color (GncPluginPage *page,
         widget_css = g_strconcat ("*{\n  background-color:", col_str, ";\n}\n", nullptr);
 
         gtk_css_provider_load_from_data (provider, widget_css, -1);
-//FIXME gtk4        gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
-//                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER (provider),
+                                        GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
         g_object_unref (provider);
         g_free (col_str);
         g_free (widget_css);
@@ -2724,11 +2733,16 @@ gnc_main_window_init (GncMainWindow *window)
 
     priv->display_item_hash = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
 
+    priv->simple_action_groups = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, nullptr);
+
     priv->previous_plugin_page_name = nullptr;
     priv->previous_menu_qualifier = nullptr;
 
-    priv->shortcut_controller = gtk_shortcut_controller_new ();
-    gtk_widget_add_controller (GTK_WIDGET(window), GTK_EVENT_CONTROLLER(priv->shortcut_controller));
+//FIXME gtk4    priv->shortcut_controller = gtk_shortcut_controller_new ();
+//    gtk_widget_add_controller (GTK_WIDGET(window), GTK_EVENT_CONTROLLER(priv->shortcut_controller));
+
+//FIXME gtk4 gtk_window_set_mnemonics_visible (GTK_WINDOW(window), true);
+// not sure about this, shows on top level menu only
 
     /* Get the show_color_tabs value preference */
     priv->show_color_tabs = gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_TAB_COLOR);
@@ -2880,6 +2894,8 @@ gnc_main_window_destroy (GtkWidget *widget)
         priv->event_handler_id = 0;
 
         g_hash_table_destroy (priv->display_item_hash);
+
+        g_hash_table_destroy (priv->simple_action_groups);
 
         /* GncPluginManager stuff */
         manager = gnc_plugin_manager_get ();
@@ -3129,6 +3145,8 @@ gnc_main_window_disconnect (GncMainWindow *window,
                by flushing all events to get rid of the timer interrupt. */
 //FIXME gtk4            while (gtk_events_pending())
 //                gtk_main_iteration();
+               while (g_main_context_pending (nullptr))
+                   g_main_context_iteration (nullptr, true);
         }
     }
 
@@ -3383,8 +3401,8 @@ gnc_main_window_close_page (GncPluginPage *page)
             /* remove the preference callbacks from the main window */
             gnc_main_window_remove_prefs (window);
         }
-//FIXME gtk4        if (window && (gnc_list_length_cmp (active_windows, 1) > 0))
-//            gtk_window_destroy (GTK_WINDOW(window));
+        if (window && (gnc_list_length_cmp (active_windows, 1) > 0))
+            gtk_window_destroy (GTK_WINDOW(window));
     }
 }
 
@@ -3416,12 +3434,18 @@ gnc_main_window_manual_merge_actions (GncMainWindow *window,
                                       const gchar *group_name,
                                       GSimpleActionGroup *group)
 {
+    GncMainWindowPrivate *priv;
+
     g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
     g_return_if_fail (group_name != nullptr);
     g_return_if_fail (G_IS_SIMPLE_ACTION_GROUP(group));
 
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
     gtk_widget_insert_action_group (GTK_WIDGET(window), group_name,
                                     G_ACTION_GROUP(group));
+
+    g_hash_table_insert (priv->simple_action_groups, g_strdup (group_name), group);
 }
 
 
@@ -3454,8 +3478,7 @@ update_menu_model (GncMainWindow *window, const gchar *ui_filename,
         g_error_free (error);
         return;
     }
-//FIXME gtk4
-#ifdef skip
+
     for (gint i = 0; ui_updates[i]; i++)
     {
         menu_model_part = (GMenuModel *)gtk_builder_get_object (builder, ui_updates[i]);
@@ -3469,7 +3492,6 @@ update_menu_model (GncMainWindow *window, const gchar *ui_filename,
         else
             PERR("Could not find '%s' in menu model", ui_updates[i]);
     }
-#endif
     g_free (gsm);
     g_object_unref (builder);
 }
@@ -3490,6 +3512,7 @@ gnc_main_window_merge_actions (GncMainWindow *window,
                                const gchar *ui_filename,
                                gpointer user_data)
 {
+    GncMainWindowPrivate *priv;
     GncMainWindowActionData *data;
     GSimpleActionGroup *simple_action_group;
 
@@ -3497,6 +3520,8 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     g_return_if_fail (group_name != nullptr);
     g_return_if_fail (actions != nullptr);
     g_return_if_fail (n_actions > 0);
+
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
     data = g_new0 (GncMainWindowActionData, 1);
     data->window = window;
@@ -3512,6 +3537,8 @@ gnc_main_window_merge_actions (GncMainWindow *window,
     gtk_widget_insert_action_group (GTK_WIDGET(window), group_name,
                                     G_ACTION_GROUP(simple_action_group));
 
+    g_hash_table_insert (priv->simple_action_groups, g_strdup (group_name), simple_action_group);
+
     if (ui_filename)
         update_menu_model (window, ui_filename, ui_updates);
 }
@@ -3526,10 +3553,16 @@ void
 gnc_main_window_unmerge_actions (GncMainWindow *window,
                                  const gchar *group_name)
 {
+    GncMainWindowPrivate *priv;
+
     g_return_if_fail (GNC_IS_MAIN_WINDOW (window));
     g_return_if_fail (group_name != nullptr);
 
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
     gtk_widget_insert_action_group (GTK_WIDGET(window), group_name, nullptr);
+
+    g_hash_table_remove (priv->simple_action_groups, group_name);
 }
 
 GAction *
@@ -3551,19 +3584,24 @@ gnc_main_window_find_action_in_group (GncMainWindow *window,
                                       const gchar *group_name,
                                       const gchar *action_name)
 {
+    GncMainWindowPrivate *priv;
+    GSimpleActionGroup *simple_action_group = nullptr;
     GAction *action = nullptr;
 
     g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
     g_return_val_if_fail (group_name != nullptr, nullptr);
     g_return_val_if_fail (action_name != nullptr, nullptr);
 
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
 //FIXME gtk4    auto action_group = gtk_widget_get_action_group (GTK_WIDGET(window), group_name);
+    simple_action_group = G_SIMPLE_ACTION_GROUP(g_hash_table_lookup (priv->simple_action_groups,
+                                                                     group_name));
 
-//    if (action_group)
-//        action = g_action_map_lookup_action (G_ACTION_MAP(action_group), action_name);
+    if (simple_action_group)
+        action = g_action_map_lookup_action (G_ACTION_MAP(simple_action_group), action_name);
 
-//    return action;
-return nullptr;
+    return action;
 }
 
 
@@ -3575,12 +3613,19 @@ GSimpleActionGroup *
 gnc_main_window_get_action_group (GncMainWindow *window,
                                   const gchar *group_name)
 {
+    GncMainWindowPrivate *priv;
+    GSimpleActionGroup *simple_action_group = nullptr;
+
     g_return_val_if_fail (GNC_IS_MAIN_WINDOW(window), nullptr);
     g_return_val_if_fail (group_name != nullptr, nullptr);
 
+    priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
+
 //FIXME gtk4    auto action_group = gtk_widget_get_action_group (GTK_WIDGET(window), group_name);
+    simple_action_group = G_SIMPLE_ACTION_GROUP(g_hash_table_lookup (priv->simple_action_groups, group_name));
+
 //    return (GSimpleActionGroup*)action_group;
-return nullptr;
+    return simple_action_group;
 }
 
 GtkWidget *
@@ -3710,7 +3755,7 @@ gnc_main_window_init_short_names (GncMainWindow *window,
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
 
-    gnc_plugin_init_short_names (priv->toolbar, toolbar_labels);
+//FIXME gtk4    gnc_plugin_init_short_names (priv->toolbar, toolbar_labels);
 }
 
 
@@ -3789,8 +3834,7 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
 
     if (!builder)
         return;
-//FIXME gtk4
-#ifdef skip
+
     menu_qualifier = gnc_plugin_page_get_menu_qualifier (page);
 
     plugin_page_actions_group_name = gnc_plugin_page_get_simple_action_group_name (page);
@@ -3801,6 +3845,9 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     gtk_widget_insert_action_group (GTK_WIDGET(window), gnc_plugin_page_get_simple_action_group_name (page),
                                     G_ACTION_GROUP(gnc_plugin_page_get_action_group (page)));
 
+    g_hash_table_insert (priv->simple_action_groups, g_strdup (gnc_plugin_page_get_simple_action_group_name (page)),
+                                                     gnc_plugin_page_get_action_group (page));
+
     if ((g_strcmp0 (priv->previous_plugin_page_name,
                     plugin_page_actions_group_name) == 0) &&
         (g_strcmp0 (priv->previous_menu_qualifier,
@@ -3810,7 +3857,7 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     priv->previous_plugin_page_name = plugin_page_actions_group_name;
     priv->previous_menu_qualifier = menu_qualifier;
 
-    gnc_main_window_update_toolbar (window, page, menu_qualifier);
+//FIXME gtk4    gnc_main_window_update_toolbar (window, page, menu_qualifier);
 
     // reset hash table and remove added menu items
     g_hash_table_remove_all (priv->display_item_hash);
@@ -3846,7 +3893,7 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     }
 
     // add tooltip redirect call backs
-    gnc_plugin_add_menu_tooltip_callbacks (priv->menubar, priv->menubar_model, priv->statusbar);
+//FIXME gtk4    gnc_plugin_add_menu_tooltip_callbacks (priv->menubar, priv->menubar_model, priv->statusbar);
 
     // need to add the accelerator keys
 //FIXME gtk4    gnc_add_accelerator_keys_for_menu (priv->menubar, priv->menubar_model, priv->accel_group);
@@ -3858,7 +3905,6 @@ gnc_main_window_update_menu_and_toolbar (GncMainWindow *window,
     g_signal_emit_by_name (window, "menu_changed", page);
 
     g_free (gsm);
-#endif
 }
 
 
@@ -4104,12 +4150,14 @@ gnc_main_window_setup_window (GncMainWindow *window)
     gtk_box_set_homogeneous (GTK_BOX (main_vbox), FALSE);
     gtk_widget_set_visible (GTK_WIDGET(main_vbox), true);
     gtk_window_set_child (GTK_WINDOW(window), GTK_WIDGET(main_vbox));
+    gtk_widget_set_name (GTK_WIDGET(main_vbox), "main_vbox");
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
     priv->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->menu_dock), FALSE);
     gtk_widget_set_visible (GTK_WIDGET(priv->menu_dock), true);
     gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(priv->menu_dock));
+    gtk_widget_set_name (GTK_WIDGET(priv->menu_dock), "menu_dock");
 
     priv->notebook = gtk_notebook_new ();
     g_object_set(G_OBJECT(priv->notebook),
@@ -4124,16 +4172,31 @@ gnc_main_window_setup_window (GncMainWindow *window)
 //FIXME gtk4    g_signal_connect (G_OBJECT (priv->notebook), "focus-in-event",
 //                      G_CALLBACK (gnc_main_window_page_focus_in), window);
     gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(priv->notebook));
+    gtk_widget_set_vexpand (GTK_WIDGET(priv->notebook), true);
 
     priv->statusbar = gtk_statusbar_new ();
     gtk_widget_set_visible (GTK_WIDGET(priv->statusbar), true);
-    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(priv->statusbar));
+//FIXME gtk4    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(priv->statusbar));
+    gtk_widget_set_vexpand (GTK_WIDGET(priv->statusbar), false);
+    gtk_widget_set_hexpand (GTK_WIDGET(priv->statusbar), true);
 
     priv->progressbar = gtk_progress_bar_new ();
     gtk_progress_bar_set_show_text (GTK_PROGRESS_BAR(priv->progressbar), TRUE);
     gtk_progress_bar_set_text(GTK_PROGRESS_BAR(priv->progressbar), " ");
     gtk_widget_set_visible (GTK_WIDGET(priv->progressbar), true);
 //FIXME gtk4    gtk_box_append (GTK_BOX(priv->statusbar), GTK_WIDGET(priv->progressbar));
+//not valid
+
+    GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_widget_set_hexpand (GTK_WIDGET(hbox), true);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(priv->statusbar));
+
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(priv->progressbar));
+    gtk_widget_set_halign (GTK_WIDGET(priv->progressbar), GTK_ALIGN_END);
+    gtk_widget_set_vexpand (GTK_WIDGET(hbox), false);
+
+    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(hbox));
+
     gtk_progress_bar_set_pulse_step(GTK_PROGRESS_BAR(priv->progressbar),
                                     0.01);
 
@@ -4155,8 +4218,10 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     priv->menubar_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-menu");
 //FIXME gtk4    priv->menubar = gtk_menu_bar_new_from_model (priv->menubar_model);
-//    gtk_box_prepend (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->menubar));
-//    gtk_widget_set_visible (GTK_WIDGET(priv->menubar), true);
+    priv->menubar = gtk_popover_menu_bar_new_from_model (priv->menubar_model);
+
+    gtk_box_append (GTK_BOX(priv->menu_dock), GTK_WIDGET(priv->menubar));
+    gtk_widget_set_visible (GTK_WIDGET(priv->menubar), true);
 
     priv->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "mainwin-toolbar");
 //    g_object_set (priv->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
@@ -4177,6 +4242,8 @@ gnc_main_window_setup_window (GncMainWindow *window)
 
     gtk_widget_insert_action_group (GTK_WIDGET(window), "mainwin",
                                     G_ACTION_GROUP(window));
+
+    g_hash_table_insert (priv->simple_action_groups, g_strdup ("mainwin"), window);
 
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_TAB_POSITION_TOP,
