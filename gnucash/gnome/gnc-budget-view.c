@@ -752,7 +752,8 @@ gbv_button_press_cb (GtkWidget *widget, GdkEventButton *event,
     g_return_val_if_fail (budget_view != NULL, FALSE);
 
     ENTER("widget %p, event %p, page %p", widget, event, page);
-    result = gnc_main_window_button_press_cb (widget, event, page);
+//FIXME gtk4    result = gnc_main_window_button_press_cb (widget, event, page);
+// I am inclined to remove this as it has been skipped for a while, check when testing budget
     LEAVE(" ");
     return result;
 }

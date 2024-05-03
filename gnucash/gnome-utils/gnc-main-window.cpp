@@ -195,7 +195,7 @@ static void gnc_main_window_cmd_help_tutorial (GSimpleAction *simple, GVariant *
 static void gnc_main_window_cmd_help_contents (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_main_window_cmd_help_about (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 
-//FIXME gtk4 static void do_popup_menu(GncPluginPage *page, const GdkEvent *event);
+static void do_popup_menu (GncPluginPage *page, double x, double y);
 static GtkWidget *gnc_main_window_get_statusbar (GncWindow *window_in);
 static void statusbar_notification_lastmodified (void);
 static void gnc_main_window_update_tab_position (gpointer prefs, gchar *pref, gpointer user_data);
@@ -2998,9 +2998,9 @@ gnc_main_window_new (void)
     gnc_engine_add_commit_error_callback( gnc_main_window_engine_commit_error_callback, window );
 
     // set up a callback for notebook navigation
-    GtkEventController *event_controller = gtk_event_controller_key_new ();
-    gtk_widget_add_controller (GTK_WIDGET(window), event_controller);
-    g_signal_connect (event_controller,
+    GtkEventController *event_controller_window = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(window), event_controller_window);
+    g_signal_connect (event_controller_window,
                       "key-pressed",
                       G_CALLBACK(gnc_main_window_key_press_event), nullptr);
 
@@ -3082,8 +3082,14 @@ gnc_main_window_connect (GncMainWindow *window,
 
 //FIXME gtk4    g_signal_connect(G_OBJECT(page->notebook_page), "popup-menu",
 //invalid for instance gtkbox                 G_CALLBACK(gnc_main_window_popup_menu_cb), page);
-//FIXME gtk4    g_signal_connect_after(G_OBJECT(page->notebook_page), "button-press-event",
-//                           G_CALLBACK(gnc_main_window_button_press_cb), page);
+//this is to do with Shift+F10
+
+//FIXME gtk4 Not sure we need this
+//    GtkGesture *event_gesture = gtk_gesture_click_new ();
+//    gtk_widget_add_controller (GTK_WIDGET(page->notebook_page), GTK_EVENT_CONTROLLER(event_gesture));
+//    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), 3);
+//    g_signal_connect_after (G_OBJECT(event_gesture), "pressed",
+//                            G_CALLBACK(gnc_main_window_button_press_cb), page);
 }
 
 
@@ -3112,8 +3118,8 @@ gnc_main_window_disconnect (GncMainWindow *window,
     /* Disconnect the callbacks */
     g_signal_handlers_disconnect_by_func(G_OBJECT(page->notebook_page),
                                          (gpointer)gnc_main_window_popup_menu_cb, page);
-//FIXME gtk4    g_signal_handlers_disconnect_by_func(G_OBJECT(page->notebook_page),
-//                                         (gpointer)gnc_main_window_button_press_cb, page);
+    g_signal_handlers_disconnect_by_func(G_OBJECT(page->notebook_page),
+                                         (gpointer)gnc_main_window_button_press_cb, page);
 
     // Remove the page_changed signal callback
     gnc_plugin_page_disconnect_page_changed (GNC_PLUGIN_PAGE(page));
@@ -3300,9 +3306,9 @@ gnc_main_window_open_page (GncMainWindow *window,
 //invalid for instance                     G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
 //                     page);
 
-    GtkEventController *event_controller = gtk_event_controller_key_new ();
-    gtk_widget_add_controller (GTK_WIDGET(entry), event_controller);
-    g_signal_connect (event_controller,
+    GtkEventController *event_controller_entry = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(entry), event_controller_entry);
+    g_signal_connect (event_controller_entry,
                       "key-pressed",
                       G_CALLBACK(gnc_main_window_tab_entry_key_press_event), page);
 
@@ -5595,14 +5601,12 @@ gnc_main_window_set_progressbar_window (GncMainWindow *window)
  *  @param page This is the GncPluginPage corresponding to the visible
  *  page.
  *
- *  @param event The event parameter passed to the "button-press"
- *  callback.  May be null if there was no event (aka keyboard
- *  request).
+ *  @param x The x position of the popup relative to main window
+ * 
+ *  @param y The y position of the popup relative to main window
  */
-//FIXME gtk4
-#ifdef skip
 static void
-do_popup_menu (GncPluginPage *page, const GdkEvent *event)
+do_popup_menu (GncPluginPage *page, double x, double y)
 {
     GtkBuilder *builder;
     GMenuModel *menu_model;
@@ -5614,7 +5618,7 @@ do_popup_menu (GncPluginPage *page, const GdkEvent *event)
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE(page));
 
-    ENTER("page %p, event %p", page, event);
+    ENTER("page %p", page);
 
     gnc_window = GNC_WINDOW(GNC_PLUGIN_PAGE(page)->window);
 
@@ -5643,7 +5647,7 @@ do_popup_menu (GncPluginPage *page, const GdkEvent *event)
     if (!menu_model)
         menu_model = (GMenuModel *)gtk_builder_get_object (builder, "mainwin-popup");
 
-    menu = gtk_menu_new_from_model (menu_model);
+    menu = gtk_popover_menu_new_from_model (menu_model);
 
     if (!menu)
     {
@@ -5652,16 +5656,27 @@ do_popup_menu (GncPluginPage *page, const GdkEvent *event)
     }
 
     // add tooltip redirect call backs
-    gnc_plugin_add_menu_tooltip_callbacks (menu, menu_model, statusbar);
+//FIXME gtk4    gnc_plugin_add_menu_tooltip_callbacks (menu, menu_model, statusbar);
 
-    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(page->window), nullptr);
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), event);
+    gtk_widget_set_parent (GTK_WIDGET(menu), GTK_WIDGET(page->window));
+
+    gtk_popover_set_position (GTK_POPOVER(menu), GTK_POS_LEFT);
+
+    GdkRectangle rect;
+    
+    rect.x = x;
+    rect.y = y;
+    rect.width = 5;
+    rect.height = 5;
+
+    gtk_popover_set_pointing_to (GTK_POPOVER(menu), &rect);
+
+    gtk_popover_popup (GTK_POPOVER(menu));
 
     g_free (popup_menu_name);
 
     LEAVE(" ");
 }
-#endif
 
 /** Callback function invoked when the user requests that Gnucash
  *  popup the contextual menu via the keyboard context-menu request
@@ -5691,30 +5706,22 @@ gnc_main_window_popup_menu_cb (GtkWidget *widget,
  *  any Gnucash window.  If this was a "right-click" then Gnucash will
  *  popup the contextual menu.
  */
-
 gboolean
-gnc_main_window_button_press_cb (GtkWidget *whatever,
-                                 const GdkEvent *event,
-                                 GncPluginPage *page)
+gnc_main_window_button_press_cb (GtkGestureClick *gesture,
+                                 int n_press,
+                                 double x,
+                                 double y,
+                                 gpointer user_data)
 {
+    GncPluginPage *page = (GncPluginPage*)user_data;
+
     g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
 
-    ENTER("widget %p, event %p, page %p", whatever, event, page);
-//FIXME gtk4
-#ifdef skip
-    guint button;
-    if (!gdk_event_get_button (event, &button))
-        return false;
+    ENTER("position x %f, position y %f, page %p", x, y, page);
 
-    /* Ignore double-clicks and triple-clicks */
-    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS && button == 3)
-    {
-        do_popup_menu (page, event);
-        LEAVE("menu shown");
-        return true;
-    }
-#endif
-    LEAVE("other click");
+    do_popup_menu (page, x, y);
+
+    LEAVE("menu shown");
     return false;
 }
 
