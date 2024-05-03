@@ -19,8 +19,8 @@ set (gtkbuilder_SOURCES
         dialog-billterms.glade
         dialog-book-close.glade
         dialog-choose-owner.glade
-        dialog-commodities.glade
-        dialog-commodity.glade
+        dialog-commodities.ui
+        dialog-commodity.ui
         dialog-custom-report.glade
         dialog-customer-import-gui.glade
         dialog-customer.glade

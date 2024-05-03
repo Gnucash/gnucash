@@ -64,46 +64,44 @@ typedef struct
 } CommoditiesDialog;
 
 
-void gnc_commodities_window_destroy_cb (GtkWidget *object, CommoditiesDialog *cd);
-void gnc_commodities_dialog_add_clicked (GtkWidget *widget, gpointer data);
-void gnc_commodities_dialog_edit_clicked (GtkWidget *widget, gpointer data);
-void gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data);
-void gnc_commodities_dialog_close_clicked (GtkWidget *widget, gpointer data);
-void gnc_commodities_show_currencies_toggled (GtkToggleButton *toggle, CommoditiesDialog *cd);
+void gnc_commodities_window_destroy_cb (GtkWidget *object, gpointer user_data);
+void gnc_commodities_dialog_add_clicked (GtkWidget *widget, gpointer user_data);
+void gnc_commodities_dialog_edit_clicked (GtkWidget *widget, gpointer user_data);
+void gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer user_data);
+void gnc_commodities_dialog_close_clicked (GtkWidget *widget, gpointer user_data);
+void gnc_commodities_show_currencies_toggled (GtkCheckButton *toggle, gpointer user_data);
 gboolean gnc_commodities_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
                                               guint keycode, GdkModifierType state,
                                               gpointer user_data);
 
 
 void
-gnc_commodities_window_destroy_cb (GtkWidget *object,   CommoditiesDialog *cd)
+gnc_commodities_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
+    CommoditiesDialog *cd = user_data;
+
     gnc_unregister_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
 
     if (cd->window)
-    {
-//FIXME gtk4        gtk_window_destroy(GTK_WINDOW(cd->window));
         cd->window = NULL;
-    }
+
     g_free (cd);
 }
 
 static gboolean
-gnc_commodities_window_delete_event_cb (GtkWidget      *widget,
-                                        const GdkEvent *event,
-                                        gpointer        data)
+gnc_commodities_window_close_event_cb (GtkWidget      *widget,
+                                       const GdkEvent *event,
+                                       gpointer        user_data)
 {
-    CommoditiesDialog *cd = data;
     // this cb allows the window size to be saved on closing with the X
-    gnc_save_window_size (GNC_PREFS_GROUP,
-                          GTK_WINDOW(cd->window));
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(widget));
     return FALSE;
 }
 
 void
-gnc_commodities_dialog_edit_clicked (GtkWidget *widget, gpointer data)
+gnc_commodities_dialog_edit_clicked (GtkWidget *widget, gpointer user_data)
 {
-    CommoditiesDialog *cd = data;
+    CommoditiesDialog *cd = g_object_get_data (G_OBJECT(user_data), "user-data");
     gnc_commodity *commodity;
 
     commodity = gnc_tree_view_commodity_get_selected_commodity (cd->commodity_tree);
@@ -145,9 +143,9 @@ row_activated_cb (GtkTreeView *view, GtkTreePath *path,
 }
 
 void
-gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data)
+gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer user_data)
 {
-    CommoditiesDialog *cd = data;
+    CommoditiesDialog *cd = g_object_get_data (G_OBJECT(user_data), "user-data");
     GNCPriceDB *pdb;
     GList *node;
     GList *prices;
@@ -240,9 +238,9 @@ gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data)
 }
 
 void
-gnc_commodities_dialog_add_clicked (GtkWidget *widget, gpointer data)
+gnc_commodities_dialog_add_clicked (GtkWidget *widget, gpointer user_data)
 {
-    CommoditiesDialog *cd = data;
+    CommoditiesDialog *cd = g_object_get_data (G_OBJECT(user_data), "user-data");
     gnc_commodity *commodity;
     gnc_commodity *ret_commodity;
     const char *name_space;
@@ -258,9 +256,9 @@ gnc_commodities_dialog_add_clicked (GtkWidget *widget, gpointer data)
 }
 
 void
-gnc_commodities_dialog_close_clicked (GtkWidget *widget, gpointer data)
+gnc_commodities_dialog_close_clicked (GtkWidget *widget, gpointer user_data)
 {
-    CommoditiesDialog *cd = data;
+    CommoditiesDialog *cd = g_object_get_data (G_OBJECT(user_data), "user-data");
 
     gnc_close_gui_component_by_data (DIALOG_COMMODITIES_CM_CLASS, cd);
 }
@@ -279,10 +277,11 @@ gnc_commodities_dialog_selection_changed (GtkTreeSelection *selection,
 }
 
 void
-gnc_commodities_show_currencies_toggled (GtkToggleButton *toggle,
-        CommoditiesDialog *cd)
+gnc_commodities_show_currencies_toggled (GtkCheckButton *toggle,
+        gpointer user_data)
 {
-    cd->show_currencies = gtk_toggle_button_get_active (toggle);
+    CommoditiesDialog *cd = g_object_get_data (G_OBJECT(user_data), "user-data");
+    cd->show_currencies = gtk_check_button_get_active (toggle);
     gnc_tree_view_commodity_refilter (cd->commodity_tree);
 }
 
@@ -329,8 +328,8 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
     GtkTreeSelection *selection;
 
     builder = gtk_builder_new();
-    gtk_builder_set_current_object (builder, G_OBJECT(cd));
-    gnc_builder_add_from_file (builder, "dialog-commodities.glade", "securities_window");
+    gnc_builder_set_current_object (builder, cd);
+    gnc_builder_add_from_file (builder, "dialog-commodities.ui", "securities_window");
 
     cd->window = GTK_WIDGET(gtk_builder_get_object (builder, "securities_window"));
     cd->session = gnc_get_current_session();
@@ -352,8 +351,8 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
                                        "show-column-menu", TRUE,
                                        NULL);
     cd->commodity_tree = GNC_TREE_VIEW_COMMODITY(view);
-    gtk_box_prepend (GTK_BOX(scrolled_window), GTK_WIDGET(view));
-    gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(cd->commodity_tree), TRUE);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window), GTK_WIDGET(view));
+    gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(cd->commodity_tree), TRUE);
     gnc_tree_view_commodity_set_filter (cd->commodity_tree,
                                         gnc_commodities_dialog_filter_ns_func,
                                         gnc_commodities_dialog_filter_cm_func,
@@ -367,26 +366,28 @@ gnc_commodities_dialog_create (GtkWidget * parent, CommoditiesDialog *cd)
 
     /* Show currency button */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "show_currencies_button"));
-    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(button), cd->show_currencies);
+    gtk_check_button_set_active (GTK_CHECK_BUTTON(button), cd->show_currencies);
 
     /* default to 'close' button */
     button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
-    gtk_window_set_default_widget (GTK_WINDOW(cd->window), GTK_WIDGET(button));
+    gtk_window_set_default_widget (GTK_WINDOW(cd->window),
+                                   GTK_WIDGET(button)); //FIXME gtk4, may not work
     gtk_widget_grab_focus (button);
 
-    g_signal_connect (cd->window, "destroy",
+    g_signal_connect (G_OBJECT(cd->window), "destroy",
                       G_CALLBACK(gnc_commodities_window_destroy_cb), cd);
 
-    g_signal_connect (cd->window, "delete-event",
-                      G_CALLBACK(gnc_commodities_window_delete_event_cb), cd);
+    g_signal_connect (G_OBJECT(cd->window), "close-request",
+                      G_CALLBACK(gnc_commodities_window_close_event_cb), cd);
 
-    GtkEventController *event_controller = gtk_event_controller_key_new ();
-    gtk_widget_add_controller (GTK_WIDGET(cd->window), event_controller);
-    g_signal_connect (event_controller, 
+    GtkEventController *event_controller_window = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(cd->window), event_controller_window);
+    g_signal_connect (G_OBJECT(event_controller_window), 
                       "key-pressed",
                       G_CALLBACK(gnc_commodities_window_key_press_cb), cd);
 
-//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, cd);
+    gtk_widget_set_visible (GTK_WIDGET(cd->window), TRUE);
+
     g_object_unref (G_OBJECT(builder));
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(cd->window), GTK_WINDOW(parent));
@@ -398,10 +399,8 @@ close_handler (gpointer user_data)
     CommoditiesDialog *cd = user_data;
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(cd->window));
-
     gnc_prefs_set_bool (GNC_PREFS_GROUP, GNC_PREF_INCL_ISO, cd->show_currencies);
-
-//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(cd->window));
+    gtk_window_destroy (GTK_WINDOW(cd->window));
 }
 
 static void

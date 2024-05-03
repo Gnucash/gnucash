@@ -1,0 +1,572 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkAdjustment" id="adjustment1">
+    <property name="lower">1</property>
+    <property name="page-increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="upper">1000000000</property>
+    <property name="value">10000</property>
+  </object>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkWindow" id="security_window">
+    <property name="modal">1</property>
+    <property name="title">New Security</property>
+    <property name="child">
+      <object class="GtkBox" id="dialog-vbox6">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkGrid" id="edit_table">
+            <property name="column-spacing">6</property>
+            <property name="row-spacing">3</property>
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkLabel" id="label828">
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">7</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="fullname_entry">
+                <property name="activates-default">1</property>
+                <property name="focusable">1</property>
+                <property name="has-tooltip">1</property>
+                <property name="tooltip-markup">Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple Computer, Inc.</property>
+                <property name="tooltip-text" translatable="yes">Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple Computer, Inc.</property>
+                <signal name="changed" handler="gnc_ui_commodity_changed_cb"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="mnemonic_entry">
+                <property name="activates-default">1</property>
+                <property name="focusable">1</property>
+                <property name="has-tooltip">1</property>
+                <property name="tooltip-markup">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case).</property>
+                <property name="tooltip-text" translatable="yes">Enter the ticker symbol for the commodity (e.g. CSCO or AAPL). If you are retrieving quotes online, this field must exactly match the ticker symbol used by the quote source (including case).</property>
+                <signal name="changed" handler="gnc_ui_commodity_changed_cb"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="code_entry">
+                <property name="activates-default">1</property>
+                <property name="focusable">1</property>
+                <property name="has-tooltip">1</property>
+                <property name="tooltip-markup">Enter a unique code used to identify the commodity. Or, you may safely leave this field blank.</property>
+                <property name="tooltip-text" translatable="yes">Enter a unique code used to identify the commodity. Or, you may safely leave this field blank.</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">5</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="hbox64">
+                <child>
+                  <object class="GtkLabel" id="label814">
+                    <property name="halign">center</property>
+                    <property name="justify">center</property>
+                    <property name="label">1 /</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="fraction_spinbutton">
+                    <property name="adjustment">adjustment1</property>
+                    <property name="climb-rate">1</property>
+                    <property name="focusable">1</property>
+                    <property name="has-tooltip">1</property>
+                    <property name="hexpand">1</property>
+                    <property name="tooltip-markup">Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1.</property>
+                    <property name="tooltip-text" translatable="yes">Enter the smallest fraction of the commodity which can be traded. For stocks which can only be traded in whole numbers, enter 1.</property>
+                  </object>
+                </child>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">6</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="quote_label">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">&lt;b&gt;Quote Source Information&lt;/b&gt;</property>
+                <property name="use-markup">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">8</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="security_label">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Security Information</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="single_source_box">
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">12</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="multi_source_box">
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">13</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="unknown_source_box">
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">14</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="quote_tz_box">
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">15</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="namespace_cbwe">
+                <property name="has-entry">1</property>
+                <property name="entry-text-column">0</property>
+                <property name="model">liststore2</property>
+                <property name="has-tooltip">1</property>
+                <property name="tooltip-markup" translatable="yes">Select a category for the commodity or enter a new one. One might use investment categories like STOCKS and BONDS or exchange names like NASDAQ and LSE.</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="combobox-entry5">
+                    <property name="visible">1</property>
+                    <property name="focusable">1</property>
+                  </object>
+                </child>
+                <signal name="changed" handler="gnc_ui_commodity_changed_cb"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="user_symbol_entry">
+                <property name="focusable">1</property>
+                <property name="has-tooltip">1</property>
+                <property name="tooltip-markup">Enter a display symbol. This can safely be left blank, in which case the ticker symbol or the currency ISO code will be used.</property>
+                <property name="tooltip-text" translatable="yes">Enter a display symbol. This can safely be left blank, in which case the ticker symbol or the currency ISO code will be used.</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="source_label">
+                <property name="halign">start</property>
+                <property name="justify">right</property>
+                <property name="label" translatable="yes">Type of quote source</property>
+                <property name="margin-top">6</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">11</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="user_symbol_label">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">_Display symbol</property>
+                <property name="mnemonic-widget">user_symbol_entry</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="quote_tz_label">
+                <property name="halign">end</property>
+                <property name="justify">right</property>
+                <property name="label" translatable="yes">Time_zone</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">15</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="unknown_source_button">
+                <property name="group">single_source_button</property>
+                <property name="halign">start</property>
+                <property name="has-tooltip">1</property>
+                <property name="label" translatable="yes">_Unknown</property>
+                <property name="margin-start">12</property>
+                <property name="tooltip-markup">These are quote sources that were recently added to F::Q. GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
+                <property name="tooltip-text" translatable="yes">These are quote sources that were recently added to F::Q. GnuCash does not know if these sources retrieve information from a single site or from multiple sites on the internet.</property>
+                <property name="use-underline">1</property>
+                <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb"/>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">14</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="multi_source_button">
+                <property name="group">single_source_button</property>
+                <property name="halign">start</property>
+                <property name="has-tooltip">1</property>
+                <property name="label" translatable="yes">_Multiple</property>
+                <property name="margin-start">12</property>
+                <property name="tooltip-markup">These are F::Q quote sources that retrieve information from multiple sites on the internet. If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
+                <property name="tooltip-text" translatable="yes">These are F::Q quote sources that retrieve information from multiple sites on the internet. If one of the sites is unavailable, F::Q will attempt to retrieve the information from another site.</property>
+                <property name="use-underline">1</property>
+                <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb"/>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">13</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="single_source_button">
+                <property name="active">1</property>
+                <property name="halign">start</property>
+                <property name="has-tooltip">1</property>
+                <property name="label" translatable="yes">Si_ngle</property>
+                <property name="margin-start">12</property>
+                <property name="tooltip-markup">These are F::Q quote sources that retrieve information from a single site on the internet. If that site is unavailable, you will not be able to retrieve quotes.</property>
+                <property name="tooltip-text" translatable="yes">These are F::Q quote sources that retrieve information from a single site on the internet. If that site is unavailable, you will not be able to retrieve quotes.</property>
+                <property name="use-underline">1</property>
+                <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb"/>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">12</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="get_quote_check">
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">_Get Online Quotes</property>
+                <property name="use-underline">1</property>
+                <signal name="toggled" handler="gnc_ui_commodity_quote_info_cb"/>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">10</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label813">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">F_raction traded</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">6</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label811">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes" comments="Again replace CUSIP by your National Securities Identifying Number.">ISIN, CUSI_P or other code</property>
+                <property name="mnemonic-widget">code_entry</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">5</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label812">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">Nam_espace</property>
+                <property name="mnemonic-widget">namespace_cbwe</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label810">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">_Symbol/abbreviation</property>
+                <property name="mnemonic-widget">mnemonic_entry</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label809">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">_Full name</property>
+                <property name="mnemonic-widget">fullname_entry</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="fq_warning_alignment">
+                <property name="halign">center</property>
+                <child>
+                  <object class="GtkBox" id="finance_quote_warning">
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkImage" id="arrow11">
+                        <property name="icon-name">dialog-warning</property>
+                        <property name="icon-size">large</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="label824">
+                        <property name="halign">center</property>
+                        <property name="justify">center</property>
+                        <property name="label" translatable="yes">Warning: Finance::Quote not installed properly.</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="arrow21">
+                        <property name="icon-name">dialog-warning</property>
+                        <property name="icon-size">large</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">9</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="bottom_alignment">
+                <property name="halign">center</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">16</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="dialog-action_area6">
+            <child>
+              <object class="GtkButton" id="help_button">
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">_Help</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="gnc_ui_commodity_response_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancel_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="gnc_ui_commodity_response_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="gnc_ui_commodity_response_cb"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+  <object class="GtkWindow" id="security_selector_window">
+    <property name="resizable">0</property>
+    <property name="title" translatable="yes">Select security/currency</property>
+    <property name="child">
+      <object class="GtkBox" id="dialog-vbox4">
+        <property name="orientation">vertical</property>
+        <property name="spacing">12</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkGrid" id="select_table">
+            <property name="column-spacing">6</property>
+            <property name="row-spacing">3</property>
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkLabel" id="select_user_prompt">
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">Select user information here…</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="ss_namespace_cbwe">
+                <property name="has-entry">1</property>
+                <property name="entry-text-column">0</property>
+                <property name="model">liststore2</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="combobox-entry">
+                    <property name="focusable">1</property>
+                  </object>
+                </child>
+                <signal name="changed" handler="gnc_ui_select_commodity_namespace_changed_cb"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="ss_commodity_cbwe">
+                <property name="has-entry">1</property>
+                <property name="entry-text-column">0</property>
+                <property name="model">liststore1</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="combobox-entry1">
+                    <property name="focusable">1</property>
+                  </object>
+                </child>
+                <signal name="changed" handler="gnc_ui_select_commodity_changed_cb"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label807">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">Nam_espace</property>
+                <property name="mnemonic-widget">ss_namespace_cbwe</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="item_label">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label">_Security/currency</property>
+                <property name="mnemonic-widget">ss_commodity_cbwe</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="dialog-action_area4">
+            <child>
+              <object class="GtkButton" id="ss_new_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">_New</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="gnc_ui_select_commodity_response_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="ss_cancel_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="gnc_ui_select_commodity_response_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="ss_ok_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="gnc_ui_select_commodity_response_cb"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>
