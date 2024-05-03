@@ -96,12 +96,15 @@ gnc_tree_view_budget_set_model(GtkTreeView *tv, GtkTreeModel *tm)
                  _("Name"), renderer, "text", BUDGET_NAME_COLUMN, NULL);
     gtk_tree_view_append_column (tv, column);
 
+    gtk_tree_view_column_set_sort_column_id (column, BUDGET_NAME_COLUMN);
+
     /* column for description */
     renderer = gtk_cell_renderer_text_new ();
     column = gtk_tree_view_column_new_with_attributes (
                  _("Description"), renderer, "text", BUDGET_DESCRIPTION_COLUMN, NULL);
     gtk_tree_view_append_column (tv, column);
 
+    gtk_tree_view_column_set_sort_column_id (column, BUDGET_DESCRIPTION_COLUMN);
 }
 
 GncBudget *

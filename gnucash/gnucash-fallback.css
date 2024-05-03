@@ -81,3 +81,7 @@ font-style: italic;
 *.markers-dark {
   background-color: shade(@marker_bg_color, 0.8);
 }
+
+/* The Budget flag defaults */
+@define-color budget_flag_bg_color_normal salmon;
+@define-color budget_flag_bg_color_selected red;

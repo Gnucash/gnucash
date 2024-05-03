@@ -27,6 +27,7 @@
 #include <glib/gi18n.h>
 #include <string.h>
 
+#include "dialog-utils.h"
 #include "gnc-plugin-budget.h"
 #include "gnc-plugin-page-budget.h"
 #include "gnc-tree-model-budget.h"
@@ -83,7 +84,7 @@ struct _GncPluginBudget
     GncPlugin gnc_plugin;
 };
 
-GncPlugin * 
+GncPlugin *
 gnc_plugin_budget_new (void)
 {
     GncPluginBudget *plugin;
@@ -161,6 +162,174 @@ gnc_plugin_budget_finalize (GObject *object)
 }
 
 /************************************************************
+ *                     Other Functions                      *
+ ************************************************************/
+
+static void
+copy_budget (GncBudget *bgt, GncMainWindow *window)
+{
+    GncBudget *copy = gnc_budget_clone (bgt);
+    gchar *name = g_strdup_printf ("Copy of %s", gnc_budget_get_name (bgt));
+    gnc_budget_set_name (copy, name);
+    g_free (name);
+
+    gnc_main_window_open_page (window, gnc_plugin_page_budget_new (copy));
+}
+
+static void
+row_activated_cb (GtkTreeView *tv, GtkTreePath *path,
+                  GtkTreeViewColumn *column, gpointer user_data)
+{
+    gtk_widget_activate (GTK_WIDGET(user_data)); //ok button
+}
+
+static void
+select_cancel_button_cb (GtkWidget *widget, gpointer user_data)
+{
+    gtk_window_destroy (GTK_WINDOW(user_data));
+}
+
+static GncBudget *
+get_budget_from_tree_view (GtkTreeView *tv)
+{
+    GncBudget *bgt = NULL;
+    GtkTreeIter iter;
+    GtkTreeSelection *sel = gtk_tree_view_get_selection (tv);
+    GtkTreeModel *tm = gtk_tree_view_get_model (tv);
+
+    if (gtk_tree_selection_get_selected (sel, &tm, &iter))
+        bgt = gnc_tree_model_budget_get_budget (tm, &iter);
+
+    return bgt;
+}
+
+static void
+select_open_ok_button_cb (GtkWidget *widget, gpointer user_data)
+{
+    GtkWidget *main_window = user_data;
+    GtkTreeView *tv = g_object_get_data (G_OBJECT(widget), "tree-view");
+    GncBudget *bgt = get_budget_from_tree_view (tv);
+
+    if (bgt)
+        gnc_main_window_open_page (GNC_MAIN_WINDOW(main_window),
+                                   gnc_plugin_page_budget_new (bgt));
+
+    gtk_window_destroy (GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(widget))));
+}
+
+static void
+select_copy_ok_button_cb (GtkWidget *widget, gpointer user_data)
+{
+    GtkWidget *main_window = user_data;
+    GtkTreeView *tv = g_object_get_data (G_OBJECT(widget), "tree-view");
+    GncBudget *bgt = get_budget_from_tree_view (tv);
+
+    if (bgt)
+        copy_budget (bgt, GNC_MAIN_WINDOW(main_window));
+
+    gtk_window_destroy (GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(widget))));
+}
+
+static void
+select_delete_ok_button_cb (GtkWidget *widget, gpointer user_data)
+{
+    GtkWidget *main_window = user_data;
+    GtkTreeView *tv = g_object_get_data (G_OBJECT(widget), "tree-view");
+    GncBudget *bgt = get_budget_from_tree_view (tv);
+
+    if (bgt)
+        gnc_budget_gui_delete_budget (bgt);
+
+    gtk_window_destroy (GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(widget))));
+}
+
+static gboolean
+select_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                            guint keycode, GdkModifierType state,
+                            gpointer user_data)
+{
+    if (keyval == GDK_KEY_Escape)
+    {
+        gtk_window_destroy (GTK_WINDOW(user_data));
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+static GtkWidget *
+gnc_budget_create_select_gui (GtkWindow *parent, QofBook *book)
+{
+    GtkWidget *win;
+    GtkWidget *sw;
+    GtkWidget *ok_button;
+    GtkWidget *cancel_button;
+    GtkBuilder  *builder;
+    GtkTreeView *tv;
+    GtkTreeIter iter;
+    GtkTreeSelection *sel;
+    GtkTreeModel *tm;
+
+    builder = gtk_builder_new ();
+    gnc_builder_add_from_file (builder, "gnc-plugin-page-budget.ui", "budget_select_window");
+    win = GTK_WIDGET(gtk_builder_get_object (builder, "budget_select_window"));
+
+   if (parent != NULL)
+        gtk_window_set_transient_for (GTK_WINDOW(win), GTK_WINDOW(parent));
+
+    sw = GTK_WIDGET(gtk_builder_get_object (builder, "select_sw"));
+    cancel_button = GTK_WIDGET(gtk_builder_get_object (builder, "select_cancel_button"));
+    ok_button = GTK_WIDGET(gtk_builder_get_object (builder, "select_ok_button"));
+
+    tv = GTK_TREE_VIEW(gtk_tree_view_new ());
+    sel = gtk_tree_view_get_selection (tv);
+    gtk_tree_selection_set_mode (sel, GTK_SELECTION_BROWSE);
+    g_signal_connect (tv, "row-activated", G_CALLBACK(row_activated_cb), ok_button);
+    tm = gnc_tree_model_budget_new (book);
+    gnc_tree_view_budget_set_model (tv, tm);
+
+    gboolean sort_ascending = TRUE;
+    GtkSortType sort_type = sort_ascending ? GTK_SORT_ASCENDING : GTK_SORT_DESCENDING;
+
+    gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(tm),
+                                          BUDGET_NAME_COLUMN, sort_type);
+
+    g_object_unref (tm);
+
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(sw), GTK_WIDGET(tv));
+    gtk_widget_set_vexpand (GTK_WIDGET(sw), TRUE);
+
+    g_object_set_data (G_OBJECT(ok_button), "tree-view", tv);
+
+    gtk_widget_set_visible (GTK_WIDGET(win), TRUE);
+
+    GtkEventController *event_controller_window = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(win), event_controller_window);
+    g_signal_connect (G_OBJECT(event_controller_window),
+                      "key-pressed",
+                      G_CALLBACK(select_window_key_press_cb), win);
+
+    g_object_set_data (G_OBJECT(win), "ok-button", ok_button);
+
+    g_signal_connect (G_OBJECT(cancel_button), "clicked",
+                      G_CALLBACK(select_cancel_button_cb), win);
+
+    // Preselect the default budget
+    GncBudget *bgt = gnc_budget_get_default (book);
+
+    if (bgt && gnc_tree_model_budget_get_iter_for_budget (tm, &iter, bgt))
+    {
+        GtkTreePath *path = gtk_tree_model_get_path (tm, &iter);
+        gtk_tree_view_set_cursor (tv, path, NULL, FALSE);
+        gtk_tree_path_free (path);
+    }
+
+    g_object_unref (G_OBJECT(builder));
+
+    return win;
+}
+
+/************************************************************
  *                    Command Callbacks                     *
  ************************************************************/
 
@@ -171,9 +340,6 @@ gnc_plugin_budget_cmd_new_budget (GSimpleAction *simple,
                                   gpointer       user_data)
 {
     GncMainWindowActionData *data = user_data;
-    GncBudget *budget;
-    GncPluginPage *page;
-    gchar *description, *date;
     QofBook *book = gnc_get_current_book();
 
     g_return_if_fail (data != NULL);
@@ -185,11 +351,12 @@ gnc_plugin_budget_cmd_new_budget (GSimpleAction *simple,
 GnuCash 3.8 or later.");
     }
 
-    budget = gnc_budget_new (gnc_get_current_book());
-    page = gnc_plugin_page_budget_new (budget);
+    GncBudget *budget = gnc_budget_new (gnc_get_current_book());
+    GncPluginPage *page = gnc_plugin_page_budget_new (budget);
 
-    date = gnc_print_time64 (gnc_time (NULL), qof_date_format_get_string (QOF_DATE_FORMAT_LOCALE));
-    description = g_strdup_printf ("%s: %s",  _("Created"), date);
+    gchar *date = gnc_print_time64 (gnc_time (NULL),
+                      qof_date_format_get_string (QOF_DATE_FORMAT_LOCALE));
+    gchar *description = g_strdup_printf ("%s: %s",  _("Created"), date);
     gnc_budget_set_description (budget, description);
     g_free (description);
     g_free (date);
@@ -204,26 +371,30 @@ gnc_plugin_budget_cmd_open_budget (GSimpleAction *simple,
                                    gpointer       user_data)
 {
     GncMainWindowActionData *data = user_data;
-    guint count;
-    QofBook *book;
-    GncBudget *bgt = NULL;
-    QofCollection *col;
 
     g_return_if_fail (data != NULL);
 
-    book = gnc_get_current_book ();
-    col = qof_book_get_collection (book, GNC_ID_BUDGET);
-    count = qof_collection_count (col);
+    QofBook *book = gnc_get_current_book ();
+    QofCollection *col = qof_book_get_collection (book, GNC_ID_BUDGET);
+    guint count = qof_collection_count (col);
     if (count > 0)
     {
         if (count == 1)
-            bgt = gnc_budget_get_default (book);
-        else
-            bgt = gnc_budget_gui_select_budget (GTK_WINDOW(data->window), book);
+        {
+            GncBudget *bgt = gnc_budget_get_default (book);
 
-        if (bgt)
-           gnc_main_window_open_page (data->window,
-                                      gnc_plugin_page_budget_new (bgt));
+            if (bgt)
+                gnc_main_window_open_page (data->window,
+                                           gnc_plugin_page_budget_new (bgt));
+
+        }
+        else
+        {
+            GtkWidget *win = gnc_budget_create_select_gui (GTK_WINDOW(data->window), book);
+            GtkWidget *ok_button = GTK_WIDGET(g_object_get_data (G_OBJECT(win), "ok-button"));
+            g_signal_connect (G_OBJECT(ok_button), "clicked",
+                              G_CALLBACK(select_open_ok_button_cb), data->window);
+        }
     }
     else     /* if no budgets exist yet, just open a new budget */
         gnc_plugin_budget_cmd_new_budget (simple, parameter, user_data);
@@ -236,35 +407,27 @@ gnc_plugin_budget_cmd_copy_budget (GSimpleAction *simple,
                                    gpointer       user_data)
 {
     GncMainWindowActionData *data = user_data;
-    guint count;
-    QofBook *book;
-    GncBudget *bgt = NULL;
-    QofCollection *col;
 
     g_return_if_fail (data != NULL);
 
-    book = gnc_get_current_book ();
-    col = qof_book_get_collection (book, GNC_ID_BUDGET);
-    count = qof_collection_count (col);
+    QofBook *book = gnc_get_current_book ();
+    QofCollection *col = qof_book_get_collection (book, GNC_ID_BUDGET);
+    guint count = qof_collection_count (col);
     if (count > 0)
     {
         if (count == 1)
-            bgt = gnc_budget_get_default(book);
-        else
-            bgt = gnc_budget_gui_select_budget (GTK_WINDOW(data->window), book);
-
-        if (bgt)
         {
-            GncBudget* copy;
-            gchar* name;
+            GncBudget *bgt = gnc_budget_get_default (book);
 
-            copy = gnc_budget_clone (bgt);
-            name = g_strdup_printf ("Copy of %s", gnc_budget_get_name (bgt));
-            gnc_budget_set_name (copy, name);
-            g_free (name);
-
-            gnc_main_window_open_page (data->window,
-                                       gnc_plugin_page_budget_new (copy));
+            if (bgt)
+                copy_budget (bgt, data->window);
+        }
+        else
+        {
+            GtkWidget *win = gnc_budget_create_select_gui (GTK_WINDOW(data->window), book);
+            GtkWidget *ok_button = GTK_WIDGET(g_object_get_data (G_OBJECT(win), "ok-button"));
+            g_signal_connect (G_OBJECT(ok_button), "clicked",
+                              G_CALLBACK(select_copy_ok_button_cb), data->window);
         }
     }
     else     /* if no budgets exist yet, just open a new budget */
@@ -278,86 +441,16 @@ gnc_plugin_budget_cmd_delete_budget (GSimpleAction *simple,
                                      gpointer       user_data)
 {
     GncMainWindowActionData *data = user_data;
-    GncBudget *bgt;
-    QofBook *book;
 
     g_return_if_fail (data != NULL);
 
-    book = gnc_get_current_book ();
+    QofBook *book = gnc_get_current_book ();
     if (qof_collection_count (qof_book_get_collection (book, GNC_ID_BUDGET)) == 0)
         return;
 
-    bgt = gnc_budget_gui_select_budget (GTK_WINDOW(data->window), book);
-    if (!bgt) return;
+    GtkWidget *win = gnc_budget_create_select_gui (GTK_WINDOW(data->window), book);
+    GtkWidget *ok_button = GTK_WIDGET(g_object_get_data (G_OBJECT(win), "ok-button"));
 
-    gnc_budget_gui_delete_budget (bgt);
+    g_signal_connect (G_OBJECT(ok_button), "clicked",
+                      G_CALLBACK(select_delete_ok_button_cb), data->window);
 }
-
-/************************************************************
- *                     Other Functions                      *
- ************************************************************/
-
-static void
-row_activated_cb (GtkTreeView *tv, GtkTreePath *path,
-                  GtkTreeViewColumn *column, gpointer user_data)
-{
-    gtk_dialog_response (GTK_DIALOG(user_data), GTK_RESPONSE_OK);
-}
-
-GncBudget *
-gnc_budget_gui_select_budget (GtkWindow *parent, QofBook *book)
-{
-    GncBudget *bgt;
-    GtkDialog *dlg;
-    GtkTreeView *tv;
-    GtkTreeIter iter;
-    GtkTreeSelection *sel;
-    GtkTreeModel *tm;
-    gint response;
-    gboolean ok;
-
-    dlg = GTK_DIALOG(gtk_dialog_new_with_buttons (
-                         _("Select a Budget"), parent, GTK_DIALOG_MODAL,
-                         _("_Cancel"), GTK_RESPONSE_CANCEL,
-                         _("_OK"), GTK_RESPONSE_OK, NULL));
-
-    tv = GTK_TREE_VIEW(gtk_tree_view_new ());
-    sel = gtk_tree_view_get_selection (tv);
-    gtk_tree_selection_set_mode (sel, GTK_SELECTION_BROWSE);
-    g_signal_connect (tv, "row-activated", G_CALLBACK(row_activated_cb), dlg);
-    tm = gnc_tree_model_budget_new (book);
-    gnc_tree_view_budget_set_model (tv, tm);
-    g_object_unref (tm);
-    gtk_box_prepend (GTK_BOX(gtk_dialog_get_content_area (dlg)), GTK_WIDGET(tv));
-//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(dlg));
-
-    // Preselect the default budget
-    bgt = gnc_budget_get_default (book);
-
-    if (bgt && gnc_tree_model_budget_get_iter_for_budget (tm, &iter, bgt))
-    {
-        GtkTreePath *path = gtk_tree_model_get_path (tm, &iter);
-        gtk_tree_view_set_cursor (tv, path, NULL, FALSE);
-        gtk_tree_path_free (path);
-    }
-
-    bgt = NULL;
-
-//FIXME gtk4    response = gtk_dialog_run (dlg);
-gtk_window_set_modal (GTK_WINDOW(dlg), TRUE); //FIXME gtk4
-response = GTK_RESPONSE_CANCEL; //FIXME gtk4
-
-    switch (response)
-    {
-    case GTK_RESPONSE_OK:
-        ok = gtk_tree_selection_get_selected (sel, &tm, &iter);
-        if (ok)
-            bgt = gnc_tree_model_budget_get_budget (tm, &iter);
-        break;
-    default:
-        break;
-    }
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dlg));
-    return bgt;
-}
-
