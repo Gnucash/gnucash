@@ -10,8 +10,9 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v4
-    - run: |
-        echo "PATH=$PATH:$HOME/gnucash/inst/bin" >> $GITHUB_ENV
+    - name: configure Environment
+      run: |
+        echo "PATH=$HOME/gnucash/inst/bin:$PATH" >> $GITHUB_ENV
         echo "PREFIX=$HOME/gnucash/inst" >> $GITHUB_ENV
         echo "SRCROOT=$HOME/gnucash/source" >> $GITHUB_ENV
         brew install ninja
