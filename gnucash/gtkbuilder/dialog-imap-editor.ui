@@ -1,0 +1,272 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkTreeStore" id="tree-store">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gpointer"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gpointer"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gboolean"/>
+    </columns>
+  </object>
+  <object class="GtkTreeModelFilter" id="treemodelfilter">
+    <property name="child-model">tree-store</property>
+  </object>
+  <object class="GtkWindow" id="import_map_window">
+    <property name="default-height">400</property>
+    <property name="default-width">600</property>
+    <property name="modal">1</property>
+    <property name="title" translatable="yes">Import Map Editor</property>
+    <property name="child">
+      <object class="GtkBox" id="dialog-vbox2">
+        <property name="orientation">vertical</property>
+        <property name="visible">1</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkLabel" id="label1">
+            <property name="label" translatable="yes">&lt;b&gt;What type of information to display?&lt;/b&gt;</property>
+            <property name="use-markup">1</property>
+            <property name="valign">center</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="hbox1">
+            <property name="homogeneous">1</property>
+            <property name="margin-bottom">6</property>
+            <property name="margin-end">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-top">6</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkCheckButton" id="radio-bayes">
+                <property name="active">1</property>
+                <property name="halign">center</property>
+                <property name="hexpand">1</property>
+                <property name="label" translatable="yes">Bayesian</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="radio-nbayes">
+                <property name="group">radio-bayes</property>
+                <property name="halign">center</property>
+                <property name="hexpand">1</property>
+                <property name="label" translatable="yes">Non-Bayesian</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="radio-online">
+                <property name="group">radio-bayes</property>
+                <property name="halign">center</property>
+                <property name="hexpand">1</property>
+                <property name="label" translatable="yes">Online</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow2">
+            <property name="child">
+              <object class="GtkTreeView" id="treeview">
+                <property name="focusable">1</property>
+                <property name="model">treemodelfilter</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection" id="treeview-selection1"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="source_account_name">
+                    <property name="resizable">1</property>
+                    <property name="title" translatable="yes">Source Account Name</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext3"/>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="based_on">
+                    <property name="resizable">1</property>
+                    <property name="title" translatable="yes">Based On</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext4">
+                        <property name="xpad">10</property>
+                      </object>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="match">
+                    <property name="resizable">1</property>
+                    <property name="title" translatable="yes">Match String</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext1">
+                        <property name="xpad">10</property>
+                      </object>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="text">3</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="map_account_name">
+                    <property name="resizable">1</property>
+                    <property name="title" translatable="yes">Mapped to Account Name</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext2">
+                        <property name="xpad">10</property>
+                      </object>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="text">4</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="count">
+                    <property name="resizable">1</property>
+                    <property name="title" translatable="yes">Count of Match String Usage</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext5">
+                        <property name="alignment">center</property>
+                        <property name="xpad">10</property>
+                      </object>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="text">8</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </property>
+            <property name="focusable">1</property>
+            <property name="vexpand">1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="total_entries_label">
+            <property name="halign">start</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-end">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-top">3</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="filter-label">
+            <property name="label" translatable="yes">Filter will be applied to 'Match String' and 'Mapped to Account Name' fields, case sensitive.</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-top">3</property>
+            <property name="valign">center</property>
+            <style>
+              <class name="gnc-class-highlight"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="hbox2">
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkLabel" id="label3">
+                <property name="hexpand">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="filter-text-entry">
+                <property name="focusable">1</property>
+                <property name="hexpand">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="filter-button">
+                <property name="focusable">1</property>
+                <property name="label" translatable="yes">_Filter</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="expand-button">
+                <property name="focusable">1</property>
+                <property name="label" translatable="yes">_Expand All</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="collapse-button">
+                <property name="focusable">1</property>
+                <property name="label" translatable="yes">Collapse _All</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label4">
+                <property name="hexpand">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label2">
+            <property name="label" translatable="yes">Multiple rows can be selected and then deleted by pressing the delete button.</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-top">3</property>
+            <property name="valign">center</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="dialog-action_area1">
+            <child>
+              <object class="GtkButton" id="remove_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">1</property>
+                <property name="label" translatable="yes">_Remove Invalid Mappings</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+                <property name="visible">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="delete_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">1</property>
+                <property name="label" translatable="yes">_Delete</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="close_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Close</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>
