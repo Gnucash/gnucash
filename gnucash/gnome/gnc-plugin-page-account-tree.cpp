@@ -635,6 +635,9 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
     gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(scrolled_window));
 
+    gtk_widget_set_vexpand (GTK_WIDGET(scrolled_window), true);
+    gtk_widget_set_hexpand (GTK_WIDGET(scrolled_window), true);
+
     tree_view = gnc_tree_view_account_new(FALSE);
     col = gnc_tree_view_find_column_by_name(
               GNC_TREE_VIEW(tree_view), "description");
@@ -677,6 +680,9 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
     gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_WIDGET(tree_view));
+
+    gtk_widget_set_vexpand (GTK_WIDGET(tree_view), true);
+    gtk_widget_set_hexpand (GTK_WIDGET(tree_view), true);
 
     priv->fd.tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
     gnc_tree_view_account_set_filter (
@@ -860,8 +866,6 @@ gnc_plugin_page_account_tree_save_page (GncPluginPage *plugin_page,
                                &priv->fd, key_file, group_name);
     LEAVE(" ");
 }
-
-
 
 /** Create a new account tree page based on the information saved
  *  during a previous instantiation of gnucash.
