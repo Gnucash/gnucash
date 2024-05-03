@@ -948,3 +948,14 @@ gnc_box_set_all_margins (GtkBox *box, gint margin)
     gtk_widget_set_margin_top (GTK_WIDGET(box), margin);
     gtk_widget_set_margin_bottom (GTK_WIDGET(box), margin);
 }
+
+void
+gnc_builder_set_current_object (GtkBuilder *builder, gpointer user_data)
+{
+    g_return_if_fail (GTK_IS_BUILDER(builder));
+
+    GObject *user_data_object = g_object_new (G_TYPE_OBJECT, NULL);
+    g_object_set_data (user_data_object, "user-data", (gpointer)user_data);
+
+    gtk_builder_set_current_object (builder, G_OBJECT(user_data_object));
+}
