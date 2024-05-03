@@ -1265,9 +1265,7 @@ gnc_main_window_prompt_for_save (GtkWidget *window)
         timer_source = g_timeout_add_seconds (1, (GSourceFunc)auto_save_countdown, dialog);
     }
 
-//FIXME gtk4    response = gtk_dialog_run (GTK_DIALOG (dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+    response = gnc_dialog_run (GTK_DIALOG(dialog));
 
     if (timer_source)
         g_source_remove (timer_source);
@@ -1403,8 +1401,7 @@ gnc_main_window_delete_event (GtkWidget *window,
                               _("_OK"), GTK_RESPONSE_YES,
                                (gchar *)NULL);
         gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_YES);
-        response = gnc_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_CLOSING_WINDOW_QUESTION);
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        response = gnc_warning_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_CLOSING_WINDOW_QUESTION);
 
         if (response == GTK_RESPONSE_CANCEL)
             return TRUE;
@@ -3027,9 +3024,7 @@ gnc_main_window_engine_commit_error_callback( gpointer data,
                                      GTK_BUTTONS_CLOSE,
                                      "%s",
                                      reason );
-//FIXME gtk4    gtk_dialog_run(GTK_DIALOG (dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
+    gnc_dialog_run (GTK_DIALOG(dialog));
 }
 
 /** Connect a GncPluginPage to the window.  This function will insert
@@ -4618,9 +4613,8 @@ gnc_book_options_dialog_apply_helper(GncOptionDB * options)
                                                    GTK_BUTTONS_OK,
                                                    "%s",
                                                    (char*)iter->data);
-//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         g_free (iter->data);
     }
     g_list_free (results);

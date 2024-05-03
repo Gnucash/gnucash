@@ -380,10 +380,8 @@ show_session_error (GtkWindow *parent,
                                NULL);
 //FIXME gtk4        if (!parent)
 //            gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
-//FIXME gtk4        response = gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-response = GTK_RESPONSE_CANCEL; //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        response = gnc_dialog_run (GTK_DIALOG(dialog));
+
         uh_oh = (response != GTK_RESPONSE_YES);
         break;
 
@@ -681,10 +679,7 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 
-//FIXME gtk4        response = gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-response = GTK_RESPONSE_CANCEL; //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        response = gnc_dialog_run (GTK_DIALOG(dialog));
 
         switch (response)
         {
@@ -940,10 +935,8 @@ RESTART:
         else
             gtk_dialog_set_default_response (GTK_DIALOG(dialog), RESPONSE_FILE);
 
-//FIXME gtk4        rc = gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-rc = GTK_RESPONSE_CANCEL; //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        rc = gnc_dialog_run (GTK_DIALOG(dialog));
+
         g_free (displayname);
 
         if (rc == GTK_RESPONSE_DELETE_EVENT)

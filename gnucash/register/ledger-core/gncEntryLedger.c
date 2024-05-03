@@ -921,8 +921,7 @@ gnc_entry_ledger_duplicate_current_entry (GncEntryLedger *ledger)
                                _("_Cancel"), GTK_RESPONSE_CANCEL,
                                _("_Record"), GTK_RESPONSE_ACCEPT,
                                NULL);
-        response = gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_INV_ENTRY_DUP);
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        response = gnc_warning_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_INV_ENTRY_DUP);
 
         if (response != GTK_RESPONSE_ACCEPT)
         {

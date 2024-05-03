@@ -274,9 +274,8 @@ gnc_column_view_edit_apply_cb(GncOptionsDialog *dlg, gpointer user_data)
                                    GTK_BUTTONS_OK,
                                    "%s",
                                    (char*)iter->data);
-//FIXME gtk4    gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy(GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         g_free (iter->data);
     }
     g_list_free (results);

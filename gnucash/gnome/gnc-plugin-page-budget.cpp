@@ -1066,9 +1066,8 @@ gnc_plugin_page_budget_cmd_estimate_budget (GSimpleAction *simple,
                      (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
                      GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
                      _("You must select at least one account to estimate."));
-//FIXME gtk4        gtk_dialog_run (GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         return;
     }
 
@@ -1202,9 +1201,8 @@ gnc_plugin_page_budget_cmd_allperiods_budget (GSimpleAction *simple,
                     (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
                     GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
                     _("You must select at least one account to edit."));
-//FIXME gtk4        gtk_dialog_run (GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         return;
     }
 
@@ -1308,9 +1306,8 @@ gnc_plugin_page_budget_cmd_budget_note (GSimpleAction *simple,
             (GtkDialogFlags)(GTK_DIALOG_DESTROY_WITH_PARENT | GTK_DIALOG_MODAL),
             GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE, "%s",
             _("You must select one budget cell to edit."));
-//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         return;
     }
 

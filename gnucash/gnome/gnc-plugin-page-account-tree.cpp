@@ -1336,10 +1336,8 @@ commodity_mismatch_dialog (const Account* account, GtkWindow* parent)
                             _("_Pick another account"), GTK_RESPONSE_CANCEL,
                             _("_Do it anyway"), GTK_RESPONSE_ACCEPT,
                             (gchar *)NULL);
-//FIXME gtk4    response = gtk_dialog_run (GTK_DIALOG (error_dialog));
-gtk_window_set_modal (GTK_WINDOW(error_dialog), true); //FIXME gtk4
-response = GTK_RESPONSE_CANCEL; //FIXME gtk4
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(error_dialog));
+    response = gnc_dialog_run (GTK_DIALOG (error_dialog));
+
     g_free (message);
     return response;
 }
@@ -1687,10 +1685,8 @@ confirm_delete_account (GSimpleAction *simple, GncPluginPageAccountTree *page,
                            _("_Delete"), GTK_RESPONSE_ACCEPT,
                            (gchar *)NULL);
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
-//FIXME gtk4    response = gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-response = GTK_RESPONSE_CANCEL; //FIXME gtk4
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
+    response = gnc_dialog_run(GTK_DIALOG(dialog));
+
     return response;
 }
 

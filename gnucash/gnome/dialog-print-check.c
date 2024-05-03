@@ -863,9 +863,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                                                  _("Cannot open file %s"),
                                                  _(error->message));
-//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         g_error_free(error);
     }
     g_free(pathname);
@@ -1566,9 +1565,9 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
                "the %s check format file '%s' match."),
              existing->group, existing->filename,
              format->group, format->filename);
-//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
+
+             gnc_dialog_run (GTK_DIALOG(dialog));
+
             free_check_format (format);
         }
         else

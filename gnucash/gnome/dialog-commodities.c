@@ -217,8 +217,7 @@ gnc_commodities_dialog_remove_clicked (GtkWidget *widget, gpointer data)
                             _("_Cancel"), GTK_RESPONSE_CANCEL,
                             _("_Delete"), GTK_RESPONSE_OK,
                             (gchar *)NULL);
-    response = gnc_dialog_run (GTK_DIALOG(dialog), warning);
-//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(dialog));
+    response = gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
 
     if (response == GTK_RESPONSE_OK)
     {

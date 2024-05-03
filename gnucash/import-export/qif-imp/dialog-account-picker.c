@@ -241,9 +241,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
     gtk_box_prepend (GTK_BOX(gtk_dialog_get_content_area (GTK_DIALOG(dlg))), GTK_WIDGET(entry));
 
     /* Run the dialog to get the new account name. */
-//FIXME gtk4    response = gtk_dialog_run(GTK_DIALOG(dlg));
-gtk_window_set_modal (GTK_WINDOW(dlg), TRUE); //FIXME gtk4
-response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+    response = gnc_dialog_run (GTK_DIALOG(dlg));
 
     name = gnc_entry_get_text(GTK_ENTRY(entry));
 

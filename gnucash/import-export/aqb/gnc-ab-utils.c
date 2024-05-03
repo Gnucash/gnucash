@@ -1010,10 +1010,7 @@ bal_accountinfo_cb (AB_IMEXPORTER_ACCOUNTINFO *element, gpointer user_data)
                        "Online Banking version number in the Online Banking "
                        "(AqBanking or HBCI) Setup. After that, try again to "
                        "download the Online Banking Balance."));
-//FIXME gtk4        gtk_dialog_run (GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
-
+        gnc_dialog_run (GTK_DIALOG(dialog));
     }
     else
     {
@@ -1043,10 +1040,7 @@ gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
                          GTK_BUTTONS_OK,
                          "%s\n%s\n%s",
                          message1, message2, message3);
-//FIXME gtk4            gtk_dialog_run (GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
-
+            gnc_dialog_run (GTK_DIALOG(dialog));
         }
         else
         {

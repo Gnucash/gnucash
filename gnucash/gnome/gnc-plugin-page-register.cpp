@@ -1875,10 +1875,7 @@ gnc_plugin_page_register_finish_pending (GncPluginPage* page)
     gnc_gtk_dialog_add_button (dialog, _ ("_Save Transaction"),
                                "document-save", GTK_RESPONSE_ACCEPT);
 
-//FIXME gtk4    response = gtk_dialog_run (GTK_DIALOG (dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-response = GTK_RESPONSE_CANCEL; //FIXME gtk4
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
+    response = gnc_dialog_run (GTK_DIALOG(dialog));
 
     switch (response)
     {
@@ -3566,9 +3563,9 @@ gnc_plugin_page_register_cmd_print_check (GSimpleAction *simple,
                                                               "%s", message);
                     gtk_dialog_add_button (GTK_DIALOG (dialog), _ ("_Print checks"),
                                            GTK_RESPONSE_YES);
-                    response = gnc_dialog_run (GTK_DIALOG (dialog),
-                                               GNC_PREF_WARN_CHECKPRINTING_MULTI_ACCT);
-//FIXME gtk4                    gtk_window_destroy (GTK_WINDOW(dialog));
+                    response = gnc_warning_dialog_run (GTK_DIALOG(dialog),
+                                                       GNC_PREF_WARN_CHECKPRINTING_MULTI_ACCT);
+
                     if (response != GTK_RESPONSE_YES)
                     {
                         LEAVE ("Multiple accounts");

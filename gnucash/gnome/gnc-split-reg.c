@@ -896,9 +896,7 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
                                                  "%s", anchor_error);
                 gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                          "%s", anchor_split);
-//FIXME gtk4                gtk_dialog_run (GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4                gtk_window_destroy (GTK_WINDOW(dialog));
+                gnc_dialog_run (GTK_DIALOG(dialog));
                 return;
             }
         }
@@ -933,8 +931,8 @@ gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
                                _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button (dialog, _("_Cut Split"),
                                    "edit-delete", GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run (GTK_DIALOG(dialog), warning);
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        response = gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
+
         if (response != GTK_RESPONSE_ACCEPT)
             return;
 
@@ -971,8 +969,8 @@ gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
                                _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button (dialog, _("_Cut Transaction"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
-        response =  gnc_dialog_run (GTK_DIALOG(dialog), warning);
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        response =  gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
+
         if (response != GTK_RESPONSE_ACCEPT)
             return;
 
@@ -1129,9 +1127,8 @@ is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans)
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book. "
                         "This setting can be changed in File->Properties->Accounts."));
-//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         return TRUE;
     }
 
@@ -1145,9 +1142,8 @@ gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
                                         "%s", title);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 message, reason);
-//FIXME gtk4        gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         return TRUE;
     }
     return FALSE;
@@ -1197,8 +1193,8 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
                               /* Translators: This is the confirmation button in a warning dialog */
                               _("_Remove Splits"),
                               "edit-delete", GTK_RESPONSE_ACCEPT);
-    response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
+    response = gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
+
     if (response != GTK_RESPONSE_ACCEPT)
         return;
 
@@ -1425,9 +1421,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
                                                 "%s", anchor_error);
                 gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                         "%s", anchor_split);
-//FIXME gtk4                gtk_dialog_run(GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4                gtk_window_destroy (GTK_WINDOW(dialog));
+                gnc_dialog_run (GTK_DIALOG(dialog));
+
                 return;
             }
         }
@@ -1463,8 +1458,8 @@ gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
                               _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button(dialog, _("_Delete Split"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        response = gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
+
         if (response != GTK_RESPONSE_ACCEPT)
             return;
 
@@ -1503,8 +1498,8 @@ gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
                               _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button(dialog, _("_Delete Transaction"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
-        response =  gnc_dialog_run(GTK_DIALOG(dialog), warning);
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        response =  gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
+
         if (response != GTK_RESPONSE_ACCEPT)
             return;
 
@@ -2425,8 +2420,8 @@ gtk_callback_bug_workaround (gpointer argp)
                                     "%s", read_only);
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
             "%s", args->string);
-    gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_REG_IS_READ_ONLY);
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
+    gnc_warning_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_IS_READ_ONLY);
+
     g_free(read_only);
     g_free(args);
     return FALSE;

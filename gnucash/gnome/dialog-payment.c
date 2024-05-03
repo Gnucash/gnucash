@@ -1618,9 +1618,8 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
                                          GTK_BUTTONS_CLOSE,
                                          "%s",
                                          _("The selected transaction doesn't have splits that can be assigned as a payment"));
-//FIXME gtk4        gtk_dialog_run (GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         PINFO("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
                   xaccTransGetDescription(txn));
         return NULL;
@@ -1772,9 +1771,8 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
                                          "GnuCash can only handle transactions that post to a single account.\n\n"
                                          "Please correct this manually by editing the transaction directly and then try again."),
                                          split_str);
-//FIXME gtk4        gtk_dialog_run (GTK_DIALOG(dialog));
-gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
-//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         PINFO("Multiple asset accounts in splits of txn \"%s\"; cannot use this for assigning a payment.",
               xaccTransGetDescription(txn));
         g_free (split_str);
