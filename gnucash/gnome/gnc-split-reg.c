@@ -1220,6 +1220,25 @@ gnc_split_reg_reinitialize_trans_cb(GtkWidget *widget, gpointer data)
     gsr_emit_simple_signal( gsr, "reinit_ent" );
 }
 
+static void
+update_trans_uri_gui_destroy_cb (GtkWidget *object, gpointer user_data)
+{
+    DoclinkReturn *dlr = user_data;
+    Transaction *trans = dlr->user_data;
+
+    if (dlr->response != GTK_RESPONSE_CANCEL)
+    {
+        if (dlr->updated_uri && g_strcmp0 (dlr->existing_uri, dlr->updated_uri) != 0)
+        {
+            if (GNC_IS_TRANSACTION(trans))
+                xaccTransSetDocLink (trans, dlr->updated_uri);
+        }
+    }
+    g_free (dlr->existing_uri);
+    g_free (dlr->updated_uri);
+    g_free (dlr);
+}
+
 /* Edit the document link for the current transaction. */
 void
 gsr_default_doclink_handler (GNCSplitReg *gsr)
@@ -1229,7 +1248,6 @@ gsr_default_doclink_handler (GNCSplitReg *gsr)
     Transaction *trans;
     CursorClass cursor_class;
     gchar *uri;
-    gchar *ret_uri;
 
     /* get the current split based on cursor position */
     if (!split)
@@ -1250,15 +1268,18 @@ gsr_default_doclink_handler (GNCSplitReg *gsr)
     // fix an earlier error when storing relative paths before version 3.5
     uri = gnc_doclink_convert_trans_link_uri (trans, gsr->read_only);
 
-    ret_uri =
-        gnc_doclink_get_uri_dialog (GTK_WINDOW (gsr->window),
-                                    _("Change a Transaction Linked Document"),
-                                    uri);
+    DoclinkReturn *dlr = g_new0 (DoclinkReturn, 1);
+    dlr->existing_uri = g_strdup (uri);
+    dlr->updated_uri = NULL;
+    dlr->user_data = trans;
 
-    if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
-        xaccTransSetDocLink (trans, ret_uri);
+    GtkWidget *win = gnc_doclink_get_uri_dialog (GTK_WINDOW (gsr->window),
+                                                 _("Change a Transaction Linked Document"),
+                                                 dlr);
 
-    g_free (ret_uri);
+    g_signal_connect (G_OBJECT(win), "destroy",
+                      G_CALLBACK(update_trans_uri_gui_destroy_cb), dlr);
+
     g_free (uri);
 }
 
