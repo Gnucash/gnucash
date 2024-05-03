@@ -54,30 +54,6 @@ static guint general_select_signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (GNCGeneralSelect, gnc_general_select, GTK_TYPE_BOX)
 
-//FIXME gtk4
-#ifdef skip
-static void
-gnc_general_select_forall (GtkBox *box, gboolean include_internals,
-                           GtkCallback callback, gpointer callback_data)
-{
-    g_return_if_fail (box != NULL);
-    g_return_if_fail (GNC_IS_GENERAL_SELECT (box));
-    g_return_if_fail (callback != NULL);
-
-    /* Let GtkBox handle things only if the internal widgets need
-     * to be poked. */
-    if (!include_internals)
-        return;
-
-    if (!GTK_BOX_CLASS (gnc_general_select_parent_class)->forall)
-        return;
-
-    GTK_BOX_CLASS (gnc_general_select_parent_class)->forall (box,
-            include_internals,
-            callback,
-            callback_data);
-}
-#endif
 static void
 gnc_general_select_class_init (GNCGeneralSelectClass *klass)
 {
@@ -95,8 +71,6 @@ gnc_general_select_class_init (GNCGeneralSelectClass *klass)
                      NULL, NULL,
                      g_cclosure_marshal_VOID__VOID,
                      G_TYPE_NONE, 0);
-
-//FIXME gtk4    box_class->forall = gnc_general_select_forall;
 
     object_class->dispose = gnc_general_select_dispose;
     object_class->finalize = gnc_general_select_finalize;
@@ -140,11 +114,10 @@ gnc_general_select_dispose (GObject *object)
 
     gsl->disposed = TRUE;
 
-
-//FIXME gtk4    gtk_widget_destroy(GTK_WIDGET(gsl->entry));
+    gtk_box_remove (GTK_BOX(gsl), GTK_WIDGET(gsl->entry));
     gsl->entry = NULL;
 
-//FIXME gtk4    gtk_widget_destroy(GTK_WIDGET(gsl->button));
+    gtk_box_remove (GTK_BOX(gsl), GTK_WIDGET(gsl->button));
     gsl->button = NULL;
 
     G_OBJECT_CLASS (gnc_general_select_parent_class)->dispose (object);
@@ -176,6 +149,7 @@ create_children (GNCGeneralSelect *gsl, GNCGeneralSelectType type)
     gtk_editable_set_editable (GTK_EDITABLE (gsl->entry), FALSE);
     gtk_box_append (GTK_BOX(gsl), GTK_WIDGET(gsl->entry));
     gtk_widget_set_visible (GTK_WIDGET(gsl->entry), TRUE);
+    gtk_widget_set_hexpand (GTK_WIDGET(gsl->entry), TRUE);
 
     if (type == GNC_GENERAL_SELECT_TYPE_SELECT)
         gsl->button = gtk_button_new_with_label (_("Select…"));
