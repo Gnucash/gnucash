@@ -55,7 +55,7 @@ static guint amount_edit_signals [LAST_SIGNAL] = { 0 };
 
 static void gnc_amount_edit_changed (GtkEditable *gae,
                                      gpointer user_data);
-static void gnc_amount_edit_paste_clipboard (GtkEntry *entry,
+static void gnc_amount_edit_paste_clipboard (GtkText *text,
                                              gpointer user_data);
 static gint gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
                                        guint keycode, GdkModifierType state,
@@ -85,7 +85,6 @@ struct _GNCAmountEdit
     gboolean validate_on_change;
 
     gboolean show_warning_symbol;
-
 };
 
 G_DEFINE_TYPE (GNCAmountEdit, gnc_amount_edit, GTK_TYPE_BOX)
@@ -114,13 +113,13 @@ gnc_amount_edit_dispose (GObject *object)
 
     gae->disposed = TRUE;
 
-//FIXME gtk4    gtk_widget_destroy (GTK_WIDGET(gae->entry));
+    gtk_box_remove (GTK_BOX(gae), GTK_WIDGET(gae->entry));
     gae->entry = NULL;
 
-//FIXME gtk4    gtk_widget_destroy (GTK_WIDGET(gae->image));
+    gtk_box_remove (GTK_BOX(gae), GTK_WIDGET(gae->image));
     gae->image = NULL;
 
-    G_OBJECT_CLASS (gnc_amount_edit_parent_class)->dispose (object);
+    G_OBJECT_CLASS(gnc_amount_edit_parent_class)->dispose (object);
 }
 
 static void
@@ -184,16 +183,21 @@ gnc_amount_edit_init (GNCAmountEdit *gae)
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(gae), "gnc-id-amount-edit");
+    gtk_widget_set_hexpand (GTK_WIDGET(gae), TRUE);
+    gtk_widget_set_hexpand (GTK_WIDGET(gae->entry), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET(gae), TRUE);
 
-    GtkEventController *event_controller = gtk_event_controller_key_new ();
-    gtk_widget_add_controller (GTK_WIDGET(gae->entry), event_controller);
-    g_signal_connect (G_OBJECT(event_controller), "key-press-event",
+    GtkEventController *event_controller_entry = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(gae->entry), event_controller_entry);
+    g_signal_connect (G_OBJECT(event_controller_entry), "key-pressed",
                       G_CALLBACK(gnc_amount_edit_key_press), gae);
 
     g_signal_connect (G_OBJECT(gae->entry), "changed",
                       G_CALLBACK(gnc_amount_edit_changed), gae);
 
-    g_signal_connect (G_OBJECT(gae->entry), "paste-clipboard",
+    GtkWidget *text_widget = gtk_widget_get_first_child (GTK_WIDGET(gae->entry));
+
+    g_signal_connect (G_OBJECT(text_widget), "paste-clipboard",
                       G_CALLBACK(gnc_amount_edit_paste_clipboard), gae);
 }
 
@@ -216,62 +220,79 @@ gnc_amount_edit_changed (GtkEditable *editable, gpointer user_data)
 }
 
 static void
-gnc_amount_edit_paste_clipboard (GtkEntry *entry, gpointer user_data)
+clipboard_finish (GObject* source_object, GAsyncResult* res, gpointer user_data)
 {
-//FIXME gtk4
-#ifdef skip
     GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
-    GtkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(entry),
-                                                        GDK_SELECTION_CLIPBOARD);
-    gchar *text = gtk_clipboard_wait_for_text (clipboard);
-    gchar *filtered_text;
-    gint start_pos, end_pos;
-    gint position;
+    GdkClipboard *clipboard = GDK_CLIPBOARD(source_object);
+    GError *error = NULL;
 
-    if (!text)
-        return;
+    gchar *text = gdk_clipboard_read_text_finish (clipboard, res, &error);
 
-    if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
+    if (text)
     {
-        gtk_widget_set_visible (GTK_WIDGET(gae->image), FALSE);
-        gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
-    }
+        GtkWidget *text_widget = gtk_widget_get_first_child (GTK_WIDGET(gae->entry));
+        gchar *filtered_text;
+        gint start_pos, end_pos;
+        gint position;
 
-    filtered_text = gnc_filter_text_for_control_chars (text);
+        if (gtk_widget_get_visible (GTK_WIDGET(gae->image)))
+        {
+            gtk_widget_set_visible (GTK_WIDGET(gae->image), FALSE);
+            gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
+        }
 
-    if (!filtered_text)
-    {
-        g_free (text);
-        return;
-    }
+        filtered_text = gnc_filter_text_for_control_chars (text);
 
-    position = gtk_editable_get_position (GTK_EDITABLE(entry));
+        if (!filtered_text)
+        {
+            return;
+        }
 
-    if (gtk_editable_get_selection_bounds (GTK_EDITABLE(entry),
-                                           &start_pos, &end_pos))
-    {
-        position = start_pos;
+        position = gtk_editable_get_position (GTK_EDITABLE(text_widget));
 
-        gae->block_changed = TRUE;
-        gtk_editable_delete_selection (GTK_EDITABLE(entry));
-        gae->block_changed = FALSE;
-        gtk_editable_insert_text (GTK_EDITABLE(entry),
-                                  filtered_text, -1, &position);
+        if (gtk_editable_get_selection_bounds (GTK_EDITABLE(text_widget),
+                                               &start_pos, &end_pos))
+        {
+            position = start_pos;
+
+            gae->block_changed = TRUE;
+            gtk_editable_delete_selection (GTK_EDITABLE(text_widget));
+            gae->block_changed = FALSE;
+            gtk_editable_insert_text (GTK_EDITABLE(text_widget),
+                                      filtered_text, -1, &position);
+        }
+        else
+            gtk_editable_insert_text (GTK_EDITABLE(text_widget),
+                                      filtered_text, -1, &position);
+
+        gtk_editable_set_position (GTK_EDITABLE(text_widget), position);
+
+        g_free (filtered_text);
     }
     else
-        gtk_editable_insert_text (GTK_EDITABLE(entry),
-                                  filtered_text, -1, &position);
-
-    gtk_editable_set_position (GTK_EDITABLE(entry), position);
-
-    g_signal_stop_emission_by_name (G_OBJECT(entry), "paste-clipboard");
-
+    {
+        if (gae->show_warning_symbol)
+        {
+            gtk_widget_set_visible (GTK_WIDGET(gae->image), TRUE);
+            gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), error->message);
+        }
+        g_clear_error (&error);
+    }
     g_free (text);
-    g_free (filtered_text);
-#endif
+ }
+
+static void
+gnc_amount_edit_paste_clipboard (GtkText *text, gpointer user_data)
+{
+    GNCAmountEdit *gae = GNC_AMOUNT_EDIT(user_data);
+    GdkClipboard *clipboard = gtk_widget_get_clipboard (GTK_WIDGET(gae->entry));
+
+    gdk_clipboard_read_text_async (clipboard, NULL, clipboard_finish, gae);
+
+    g_signal_stop_emission_by_name (G_OBJECT(text), "paste-clipboard");
 }
 
-static gint
+static gboolean
 gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
                            guint keycode, GdkModifierType state,
                            gpointer user_data)
@@ -302,9 +323,6 @@ gnc_amount_edit_key_press (GtkEventControllerKey *key, guint keyval,
     }
     GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
 
-//FIXME in GTK4    result = (* GTK_WIDGET_GET_CLASS(widget)->key_press_event)(widget, (GdkEventKey*)event);
-result = 0;
-
     switch (keyval)
     {
     case GDK_KEY_Return:
@@ -315,15 +333,15 @@ result = 0;
             break;
         else
             g_signal_emit (gae, amount_edit_signals [ACTIVATE], 0);
-        return result;
+        return TRUE;
     default:
-        return result;
+        return FALSE;
     }
 
     gnc_amount_edit_evaluate (gae, NULL);
     g_signal_emit (gae, amount_edit_signals [ACTIVATE], 0);
 
-    return TRUE;
+    return FALSE;
 }
 
 GtkWidget *
@@ -332,14 +350,12 @@ gnc_amount_edit_new (void)
     GNCAmountEdit *gae = g_object_new (GNC_TYPE_AMOUNT_EDIT, NULL);
 
     gtk_box_append (GTK_BOX(gae), GTK_WIDGET(gae->entry));
-    gtk_editable_set_max_width_chars (GTK_EDITABLE(gae->entry), 12);
+    gtk_entry_set_max_length (GTK_ENTRY(gae->entry), 12);
     gae->image = gtk_image_new_from_icon_name ("dialog-warning");
     gtk_image_set_icon_size (GTK_IMAGE(gae->image), GTK_ICON_SIZE_NORMAL);
     gtk_box_append (GTK_BOX(gae), GTK_WIDGET(gae->image));
     gtk_box_set_spacing (GTK_BOX(gae), 6);
-//FIXME gtk4    gtk_widget_set_no_show_all (GTK_WIDGET(gae->image), TRUE);
     gtk_widget_set_visible (GTK_WIDGET(gae->image), FALSE);
-//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(gae));
 
     return GTK_WIDGET(gae);
 }
