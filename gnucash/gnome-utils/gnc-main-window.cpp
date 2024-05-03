@@ -5183,15 +5183,15 @@ get_file (const gchar *partial)
     gchar *filename, *text = nullptr;
     gsize length;
 
-    filename = gnc_filepath_locate_doc_file(partial);
-    if (filename && g_file_get_contents(filename, &text, &length, nullptr))
+    filename = gnc_filepath_locate_doc_file (partial);
+    if (filename && g_file_get_contents (filename, &text, &length, nullptr))
     {
         if (length)
         {
-            g_free(filename);
+            g_free (filename);
             return text;
         }
-        g_free(text);
+        g_free (text);
     }
     g_free (filename);
     return nullptr;
@@ -5212,12 +5212,12 @@ get_file_strsplit (const gchar *partial)
 {
     gchar *text, **lines;
 
-    text = get_file(partial);
+    text = get_file (partial);
     if (!text)
         return nullptr;
 
-    lines = g_strsplit_set(text, "\r\n", -1);
-    g_free(text);
+    lines = g_strsplit_set (text, "\r\n", -1);
+    g_free (text);
     return lines;
 }
 /** URL activation callback.
@@ -5230,7 +5230,7 @@ static gboolean
 url_signal_cb (GtkAboutDialog *dialog, gchar *uri, gpointer data)
 {
     gnc_launch_doclink (GTK_WINDOW(dialog), uri);
-    return TRUE;
+    return true;
 }
 
 static gboolean
@@ -5240,13 +5240,14 @@ link_button_cb (GtkLinkButton *button, gpointer user_data)
    gchar *escaped_uri = g_uri_escape_string (uri, ":/.\\", true);
    gnc_launch_doclink (GTK_WINDOW(user_data), escaped_uri);
    g_free (escaped_uri);
-   return TRUE;
+   return true;
 }
 
 static void
 add_about_paths (GtkDialog *dialog)
 {
     GtkWidget *page_vbox = gnc_get_dialog_widget_from_id (dialog, "page_vbox");
+    GtkWidget *version_label = gnc_get_dialog_widget_from_id (dialog, "version_label");
     GtkWidget *grid;
     gint i = 0;
 
@@ -5256,7 +5257,14 @@ add_about_paths (GtkDialog *dialog)
         return;
     }
 
+    if (!version_label)
+    {
+        PWARN("Unable to find AboutDialog 'version_label' Widget");
+        return;
+    }
+
     grid = gtk_grid_new ();
+    gtk_widget_set_vexpand (GTK_WIDGET(grid), false);
 
     for (const auto& ep : gnc_list_all_paths ())
     {
@@ -5279,15 +5287,17 @@ add_about_paths (GtkDialog *dialog)
             gtk_grid_attach (GTK_GRID(grid), mod_lab, 2, i, 1, 1);
             gtk_widget_set_visible (GTK_WIDGET(mod_lab), true);
         }
-        g_signal_connect (widget, "activate-link",
+        g_signal_connect (G_OBJECT(widget), "activate-link",
                           G_CALLBACK(link_button_cb), dialog);
         i++;
 
         g_free (display_uri);
         g_free (env_name);
     }
-    gtk_box_prepend (GTK_BOX(page_vbox), GTK_WIDGET(grid));
-//FIXME gtk4    gtk_widget_show_all (grid);
+    gtk_box_insert_child_after (GTK_BOX(page_vbox), GTK_WIDGET(grid),
+                                                    GTK_WIDGET(version_label));
+
+    gtk_widget_set_visible (GTK_WIDGET(grid), true);
 }
 
 /** Create and display the "about" dialog for gnucash.
@@ -5297,35 +5307,37 @@ gnc_main_window_cmd_help_about (GSimpleAction *simple,
                                 GVariant      *paramter,
                                 gpointer       user_data)
 {
-//FIXME gtk4
-#ifdef skip
     GncMainWindow *window = (GncMainWindow*)user_data;
     /* Translators: %s will be replaced with the current year */
-    gchar *copyright = g_strdup_printf(_("Copyright © 1997-%s The GnuCash contributors."),
-                                       GNC_VCS_REV_YEAR);
-    gchar **authors = get_file_strsplit("AUTHORS");
-    gchar **documenters = get_file_strsplit("DOCUMENTERS");
-    gchar *license = get_file("LICENSE");
-    GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
-    GdkPixbuf *logo = gtk_icon_theme_load_icon (icon_theme,
-                                                GNC_ICON_APP,
-                                                128,
-                                                GTK_ICON_LOOKUP_USE_BUILTIN,
-                                                nullptr);
+    gchar *copyright = g_strdup_printf (_("Copyright © 1997-%s The GnuCash contributors."),
+                                        GNC_VCS_REV_YEAR);
+    gchar **authors = get_file_strsplit ("AUTHORS");
+    gchar **documenters = get_file_strsplit ("DOCUMENTERS");
+    gchar *license = get_file ("LICENSE");
+    GtkIconTheme *icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
+    GtkIconPaintable *paintable = gtk_icon_theme_lookup_icon (icon_theme,
+                                                              GNC_ICON_APP,
+                                                              nullptr,
+                                                              128,
+                                                              1,
+                                                              GTK_TEXT_DIR_NONE,
+                                                              GTK_ICON_LOOKUP_FORCE_REGULAR);
+
     gchar *version = g_strdup_printf ("%s: %s\n%s: %s\nFinance::Quote: %s",
-                                      _("Version"), gnc_version(),
-                                      _("Build ID"), gnc_build_id(),
+                                      _("Version"), gnc_version (),
+                                      _("Build ID"), gnc_build_id (),
                                       gnc_quote_source_fq_version ()
                                       ? gnc_quote_source_fq_version ()
                                       : "-");
-    GtkDialog *dialog = GTK_DIALOG (gtk_about_dialog_new ());
-    g_object_set (G_OBJECT (dialog),
+
+    GtkDialog *dialog = GTK_DIALOG(gtk_about_dialog_new ());
+    g_object_set (G_OBJECT(dialog),
                   "authors", authors,
                   "documenters", documenters,
                   "comments", _("Accounting for personal and small business finance."),
                   "copyright", copyright,
                   "license", license,
-                  "logo", logo,
+                  "logo", paintable,
                   "name", "GnuCash",
                   /* Translators: the following string will be shown in Help->About->Credits
                      Enter your name or that of your team and an email contact for feedback.
@@ -5337,30 +5349,30 @@ gnc_main_window_cmd_help_about (GSimpleAction *simple,
                   "website-label", _("Visit the GnuCash website."),
                   nullptr);
 
-    g_free(version);
-    g_free(copyright);
+    g_free (version);
+    g_free (copyright);
     if (license)
-        g_free(license);
+        g_free (license);
     if (documenters)
-        g_strfreev(documenters);
+        g_strfreev (documenters);
     if (authors)
-        g_strfreev(authors);
-    g_object_unref (logo);
-    g_signal_connect (dialog, "activate-link",
-                      G_CALLBACK (url_signal_cb), nullptr);
+        g_strfreev (authors);
+    g_object_unref (paintable);
+    g_signal_connect (G_OBJECT(dialog), "activate-link",
+                      G_CALLBACK(url_signal_cb), nullptr);
 
     // Add environment paths
     add_about_paths (dialog);
 
     /* Set dialog to resize. */
-    gtk_window_set_resizable(GTK_WINDOW (dialog), TRUE);
+    gtk_window_set_resizable (GTK_WINDOW(dialog), true);
 
-    gtk_window_set_transient_for (GTK_WINDOW (dialog),
-                                  GTK_WINDOW (window));
-//FIXME gtk4    gtk_dialog_run (dialog);
-gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
-//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
-#endif
+    gtk_widget_set_visible (GTK_WIDGET(dialog), true);
+
+    gtk_window_set_transient_for (GTK_WINDOW(dialog),
+                                  GTK_WINDOW(window));
+
+    gtk_window_set_modal (GTK_WINDOW(dialog), true);
 }
 
 

@@ -305,15 +305,15 @@ find_widget_func (GtkWidget *widget, const gchar *id)
     if (g_strcmp0 (name, id) == 0)
         return widget;
 
-//FIXME gtk4
     GtkWidget *child;
     for (child = gtk_widget_get_first_child (GTK_WIDGET(widget));
          child != NULL;
          child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
             ret = find_widget_func (child, id);
+            if (ret)
+                break;
     }
-
     return ret;
 }
 
@@ -328,8 +328,8 @@ find_widget_func (GtkWidget *widget, const gchar *id)
 GtkWidget *
 gnc_get_dialog_widget_from_id (GtkDialog *dialog, const gchar *id)
 {
-    GtkWidget *content_area = gtk_dialog_get_content_area (dialog);
-    return find_widget_func (content_area, id);
+    GtkWidget *first_child = gtk_widget_get_first_child (GTK_WIDGET(dialog));
+    return find_widget_func (first_child, id);
 }
 
 
