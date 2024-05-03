@@ -3064,8 +3064,8 @@ gnc_main_window_connect (GncMainWindow *window,
         (GNC_PLUGIN_PAGE_GET_CLASS(page)->window_changed)(page, GTK_WIDGET(window));
     g_signal_emit (window, main_window_signals[PAGE_ADDED], 0, page);
 
-    g_signal_connect(G_OBJECT(page->notebook_page), "popup-menu",
-                     G_CALLBACK(gnc_main_window_popup_menu_cb), page);
+//FIXME gtk4    g_signal_connect(G_OBJECT(page->notebook_page), "popup-menu",
+//invalid for instance gtkbox                 G_CALLBACK(gnc_main_window_popup_menu_cb), page);
 //FIXME gtk4    g_signal_connect_after(G_OBJECT(page->notebook_page), "button-press-event",
 //                           G_CALLBACK(gnc_main_window_button_press_cb), page);
 }
@@ -3278,9 +3278,9 @@ gnc_main_window_open_page (GncMainWindow *window,
     g_signal_connect(G_OBJECT(entry), "activate",
                      G_CALLBACK(gnc_main_window_tab_entry_activate), page);
 
-    g_signal_connect(G_OBJECT(entry), "focus-out-event",
-                     G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
-                     page);
+//FIXME gtk4    g_signal_connect(G_OBJECT(entry), "focus-out-event",
+//invalid for instance                     G_CALLBACK(gnc_main_window_tab_entry_focus_out_event),
+//                     page);
 
     GtkEventController *event_controller = gtk_event_controller_key_new ();
     gtk_widget_add_controller (GTK_WIDGET(entry), event_controller);
@@ -3454,7 +3454,8 @@ update_menu_model (GncMainWindow *window, const gchar *ui_filename,
         g_error_free (error);
         return;
     }
-
+//FIXME gtk4
+#ifdef skip
     for (gint i = 0; ui_updates[i]; i++)
     {
         menu_model_part = (GMenuModel *)gtk_builder_get_object (builder, ui_updates[i]);
@@ -3468,6 +3469,7 @@ update_menu_model (GncMainWindow *window, const gchar *ui_filename,
         else
             PERR("Could not find '%s' in menu model", ui_updates[i]);
     }
+#endif
     g_free (gsm);
     g_object_unref (builder);
 }
@@ -3666,7 +3668,8 @@ gnc_main_window_set_vis_of_items_by_action (GncMainWindow *window,
     g_return_if_fail (GNC_IS_MAIN_WINDOW(window));
 
     priv = GNC_MAIN_WINDOW_GET_PRIVATE(window);
-
+//FIXME gtk4
+#ifdef skip
     for (gint i = 0; action_names[i]; i++)
     {
         GtkWidget *tool_item = gnc_find_toolbar_item (priv->toolbar, action_names[i]);
@@ -3692,6 +3695,7 @@ gnc_main_window_set_vis_of_items_by_action (GncMainWindow *window,
              PINFO("Did not find tool_item with action name '%s' to set vis '%s'",
                     action_names[i], vis ? "true" : "false");
     }
+#endif
 }
 
 
@@ -4274,9 +4278,9 @@ gnc_quartz_set_menu (GncMainWindow* window)
     gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL(priv->menubar));
 
     // File Quit
-    item = gnc_main_window_menu_find_menu_item (window, "FileQuitAction");
-    if (item)
-        gtk_widget_set_visible (GTK_WIDGET(item), false);
+//FIXME gtk4    item = gnc_main_window_menu_find_menu_item (window, "FileQuitAction");
+//    if (item)
+//        gtk_widget_set_visible (GTK_WIDGET(item), false);
 
     quit_closure = g_cclosure_new (G_CALLBACK (gnc_quartz_should_quit),
                                    window, NULL);
@@ -4285,29 +4289,29 @@ gnc_quartz_set_menu (GncMainWindow* window)
 
 
     // Help About
-    item = gnc_main_window_menu_find_menu_item (window, "HelpAboutAction");
-    if (item)
-    {
-        gtk_widget_set_visible (GTK_WIDGET(item), false);
-        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET(item), 0);
-    }
+//FIXME gtk4    item = gnc_main_window_menu_find_menu_item (window, "HelpAboutAction");
+//    if (item)
+//    {
+//        gtk_widget_set_visible (GTK_WIDGET(item), false);
+//        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET(item), 0);
+//    }
 
     // Edit Preferences
-    item = gnc_main_window_menu_find_menu_item (window, "EditPreferencesAction");
-    if (item)
-    {
-        gtk_widget_set_visible (GTK_WIDGET(item), false);
-        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET(item), 2);
-    }
+//FIXME gtk4    item = gnc_main_window_menu_find_menu_item (window, "EditPreferencesAction");
+//    if (item)
+//    {
+//        gtk_widget_set_visible (GTK_WIDGET(item), false);
+//        gtkosx_application_insert_app_menu_item (theApp, GTK_WIDGET(item), 2);
+//    }
 
     // Help Menu
-    item = gnc_main_window_menu_find_menu_item (window, "HelpAction");
-    if (item)
-        gtkosx_application_set_help_menu (theApp, GTK_MENU_ITEM(item));
+//FIXME gtk4    item = gnc_main_window_menu_find_menu_item (window, "HelpAction");
+//    if (item)
+//        gtkosx_application_set_help_menu (theApp, GTK_MENU_ITEM(item));
     // Windows Menu
-    item = gnc_main_window_menu_find_menu_item (window, "WindowsAction");
-    if (item)
-        gtkosx_application_set_window_menu (theApp, GTK_MENU_ITEM(item));
+//FIXME gtk4    item = gnc_main_window_menu_find_menu_item (window, "WindowsAction");
+//    if (item)
+//        gtkosx_application_set_window_menu (theApp, GTK_MENU_ITEM(item));
 
     g_signal_connect (theApp, "NSApplicationBlockTermination",
                       G_CALLBACK(gnc_quartz_should_quit), window);

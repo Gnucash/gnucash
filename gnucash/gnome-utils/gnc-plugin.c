@@ -160,7 +160,7 @@ gnc_plugin_add_to_window (GncPlugin *plugin,
     if (GNC_PLUGIN_GET_CLASS (plugin)->add_to_window)
     {
         DEBUG ("Calling child class function %p", GNC_PLUGIN_GET_CLASS (plugin)->add_to_window);
-        GNC_PLUGIN_GET_CLASS (plugin)->add_to_window (plugin, window, type);
+//FIXME gtk4        GNC_PLUGIN_GET_CLASS (plugin)->add_to_window (plugin, window, type);
     }
     LEAVE ("");
 }
@@ -231,7 +231,8 @@ gnc_plugin_init_short_names (GtkWidget *toolbar,
 {
     g_return_if_fail (toolbar != NULL);
     g_return_if_fail (toolbar_labels != NULL);
-
+//FIXME gtk4
+#ifdef skip
     for (gint i = 0; (toolbar_labels[i].action_name); i++)
     {
         GtkWidget *tool_item = gnc_find_toolbar_item (toolbar, toolbar_labels[i].action_name);
@@ -239,9 +240,10 @@ gnc_plugin_init_short_names (GtkWidget *toolbar,
         if (!tool_item)
             continue;
 
-//FIXME gtk4        gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(toolbar_labels[i].short_label));
-//FIXME gtk4        gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
+        gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(toolbar_labels[i].short_label));
+        gtk_tool_button_set_use_underline (GTK_TOOL_BUTTON(tool_item), TRUE);
     }
+#endif
 }
 
 

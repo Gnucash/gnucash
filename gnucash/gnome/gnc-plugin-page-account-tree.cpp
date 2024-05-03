@@ -667,8 +667,8 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     selection = gtk_tree_view_get_selection(tree_view);
     g_signal_connect (G_OBJECT (selection), "changed",
                       G_CALLBACK (gnc_plugin_page_account_tree_selection_changed_cb), page);
-    g_signal_connect (G_OBJECT (tree_view), "button-press-event",
-                      G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
+//FIXME gtk4    g_signal_connect (G_OBJECT (tree_view), "button-press-event",
+//invalid for instance                      G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
     g_signal_connect (G_OBJECT (tree_view), "row-activated",
                       G_CALLBACK (gnc_plugin_page_account_tree_double_click_cb), page);
 
