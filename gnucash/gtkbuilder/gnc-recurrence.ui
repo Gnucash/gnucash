@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkListStore" id="GCB_PeriodType_liststore">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">day(s)</col>
+      </row>
+      <row>
+        <col id="0">week(s)</col>
+      </row>
+      <row>
+        <col id="0">month(s)</col>
+      </row>
+      <row>
+        <col id="0">year(s)</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkAdjustment" id="GSB_Mult_Adj">
+    <property name="lower">1</property>
+    <property name="page-increment">10</property>
+    <property name="step-increment">1</property>
+    <property name="upper">250</property>
+    <property name="value">1</property>
+  </object>
+  <object class="GtkWindow" id="gnc_recurrence_entry_window">
+    <property name="visible">1</property>
+    <property name="child">
+      <object class="GtkBox" id="RecurrenceEntryVBox">
+        <property name="hexpand">1</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">3</property>
+        <child>
+          <object class="GtkBox" id="hbox218">
+            <child>
+              <object class="GtkLabel" id="label90">
+                <property name="halign">start</property>
+                <property name="margin-end">6</property>
+                <property name="label" translatable="yes">Every</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkSpinButton" id="GSB_Mult">
+                <property name="adjustment">GSB_Mult_Adj</property>
+                <property name="climb-rate">1</property>
+                <property name="focusable">1</property>
+                <property name="numeric">1</property>
+                <property name="tooltip-text" translatable="yes">Number of calendar units in the recurrence: E.g. Biweekly = every 2 weeks; Quarterly = every 3 months</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="GCB_PeriodType">
+                <property name="hexpand">1</property>
+                <property name="model">GCB_PeriodType_liststore</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                  <!-- Custom child fragments -->
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="hbox219">
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel" id="label89">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">beginning on</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="Startdate_hbox">
+                <property name="hexpand">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="hbox220">
+            <child>
+              <object class="GtkCheckButton" id="GCB_EndOfMonth">
+                <property name="focusable">1</property>
+                <property name="halign">center</property>
+                <property name="label" translatable="yes">last of month</property>
+                <property name="tooltip-text" translatable="yes">Always use the last day (or day of week) in the month?</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="GCB_NthWeekday">
+                <property name="focusable">1</property>
+                <property name="halign">center</property>
+                <property name="label" translatable="yes">same week &amp; day</property>
+                <property name="tooltip-text" translatable="yes">Match the "day of week" and "week of month"? (for example, the "second Tuesday" of every month)</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>
