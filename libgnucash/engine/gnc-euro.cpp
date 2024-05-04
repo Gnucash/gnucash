@@ -19,27 +19,15 @@
  *                                                                  *
 \********************************************************************/
 
-#include <config.h>
+#include <string>
+#include <map>
+#include <optional>
 
 #include "gnc-euro.h"
-
-#include <glib/gi18n.h>
-#include <math.h>
-#include <stdlib.h>
-#include <string.h>
 #include "gnc-session.h"
 
-/* local structs */
-typedef struct
-{
-    const char *currency;
-    double rate;
-} gnc_euro_rate_struct;
-
-
-/* This array MUST be sorted ! */
 /* The rates are per EURO and are converted to GncNumeric  */
-static gnc_euro_rate_struct gnc_euro_rates[] =
+static const std::map<std::string,double> gnc_euro_rates =
 {
     { "ATS",  13.7603 },  /* austrian schilling */
     { "BEF",  40.3399 },  /* belgian franc */
@@ -63,55 +51,25 @@ static gnc_euro_rate_struct gnc_euro_rates[] =
     { "SKK",  30.1260 }   /* slovak koruna */
 };
 
-static int
-gnc_euro_rate_compare (const void * key, const void * value)
+static std::optional<double>
+get_euro_rate (const gnc_commodity * currency)
 {
-    auto curr = static_cast<const gnc_commodity*>(key);
-    auto euro = static_cast<const gnc_euro_rate_struct*>(value);
+    if (!currency || !gnc_commodity_is_iso(currency))
+        return {};
 
-    if (!key || !value)
-        return -1;
+    auto it = gnc_euro_rates.find (gnc_commodity_get_mnemonic(currency));
+    if (it == gnc_euro_rates.end())
+        return {};
 
-    return g_ascii_strcasecmp(gnc_commodity_get_mnemonic(curr), euro->currency);
+    return it->second;
 }
-
-#if 0 /* Not Used */
-static int
-gnc_euro_rate_compare_code (const void * key, const void * value)
-{
-    const char *code = key;
-    const gnc_euro_rate_struct * euro = value;
-
-    if (!key || !value)
-        return -1;
-
-    return g_ascii_strcasecmp (code, euro->currency);
-}
-#endif
 
 /* ------------------------------------------------------ */
 
 gboolean
 gnc_is_euro_currency(const gnc_commodity * currency)
 {
-    gnc_euro_rate_struct *result;
-
-    if (currency == NULL)
-        return FALSE;
-
-    if (!gnc_commodity_is_iso(currency))
-        return FALSE;
-
-    result = (gnc_euro_rate_struct*)bsearch(currency,
-                                            gnc_euro_rates,
-                                            sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
-                                            sizeof(gnc_euro_rate_struct),
-                                            gnc_euro_rate_compare);
-
-    if (result == NULL)
-        return FALSE;
-
-    return TRUE;
+    return get_euro_rate (currency).has_value();
 }
 
 /* ------------------------------------------------------ */
@@ -119,34 +77,17 @@ gnc_is_euro_currency(const gnc_commodity * currency)
 gnc_numeric
 gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value)
 {
-    gnc_euro_rate_struct *result;
+    auto euro_rate = get_euro_rate (currency);
+    if (!euro_rate)
+        return gnc_numeric_zero();
 
-    if (currency == NULL)
-        return gnc_numeric_zero ();
-
-    if (!gnc_commodity_is_iso(currency))
-        return gnc_numeric_zero ();
-
-    result = (gnc_euro_rate_struct*)bsearch(currency,
-                                            gnc_euro_rates,
-                                            sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
-                                            sizeof(gnc_euro_rate_struct),
-                                            gnc_euro_rate_compare);
-
-    if (result == NULL)
-        return gnc_numeric_zero ();
+    auto rate = double_to_gnc_numeric (*euro_rate, 100000, GNC_HOW_RND_ROUND_HALF_UP);
 
     /* round to 2 decimal places */
-    {
-        gnc_numeric rate;
-
-        rate = double_to_gnc_numeric (result->rate, 100000, GNC_HOW_RND_ROUND_HALF_UP);
-
-        /* EC Regulation 1103/97 states we should use "Round half away from zero"
-         * See https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A31997R1103&qid=1662917247821
-         */
-        return gnc_numeric_div (value, rate, 100, GNC_HOW_RND_ROUND_HALF_UP);
-    }
+    /* EC Regulation 1103/97 states we should use "Round half away from zero"
+     * See https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A31997R1103&qid=1662917247821
+     */
+    return gnc_numeric_div (value, rate, 100, GNC_HOW_RND_ROUND_HALF_UP);
 }
 
 /* ------------------------------------------------------ */
@@ -154,33 +95,16 @@ gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value)
 gnc_numeric
 gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value)
 {
-    gnc_euro_rate_struct * result;
+    auto euro_rate = get_euro_rate (currency);
+    if (!euro_rate)
+        return gnc_numeric_zero();
 
-    if (currency == NULL)
-        return gnc_numeric_zero ();
+    auto rate = double_to_gnc_numeric (*euro_rate, 100000, GNC_HOW_RND_ROUND_HALF_UP);
 
-    if (!gnc_commodity_is_iso(currency))
-        return gnc_numeric_zero ();
-
-    result = (gnc_euro_rate_struct*)bsearch(currency,
-                                            gnc_euro_rates,
-                                            sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
-                                            sizeof(gnc_euro_rate_struct),
-                                            gnc_euro_rate_compare);
-
-    if (result == NULL)
-        return gnc_numeric_zero ();
-
-    {
-        gnc_numeric rate;
-
-        rate = double_to_gnc_numeric (result->rate, 100000, GNC_HOW_RND_ROUND_HALF_UP);
-
-        /* EC Regulation 1103/97 states we should use "Round half away from zero"
-         * See http://europa.eu/legislation_summaries/economic_and_monetary_affairs/institutional_and_economic_framework/l25025_en.htm */
-        return gnc_numeric_mul (value, rate, gnc_commodity_get_fraction (currency),
-                                GNC_HOW_RND_ROUND_HALF_UP);
-    }
+    /* EC Regulation 1103/97 states we should use "Round half away from zero"
+     * See http://europa.eu/legislation_summaries/economic_and_monetary_affairs/institutional_and_economic_framework/l25025_en.htm */
+    return gnc_numeric_mul (value, rate, gnc_commodity_get_fraction (currency),
+                            GNC_HOW_RND_ROUND_HALF_UP);
 }
 
 /* ------------------------------------------------------ */
@@ -188,25 +112,11 @@ gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value)
 gnc_numeric
 gnc_euro_currency_get_rate (const gnc_commodity *currency)
 {
-    gnc_euro_rate_struct * result;
+    auto euro_rate = get_euro_rate (currency);
+    if (!euro_rate)
+        return gnc_numeric_zero();
 
-    if (currency == NULL)
-        return gnc_numeric_zero ();
-
-    if (!gnc_commodity_is_iso(currency))
-        return gnc_numeric_zero ();
-
-    result = (gnc_euro_rate_struct*)bsearch(currency,
-                                            gnc_euro_rates,
-                                            sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
-                                            sizeof(gnc_euro_rate_struct),
-                                            gnc_euro_rate_compare);
-
-    if (result == NULL)
-        return gnc_numeric_zero ();
-
-    return double_to_gnc_numeric (result->rate, GNC_DENOM_AUTO,
-                                  GNC_HOW_RND_ROUND_HALF_UP);
+    return double_to_gnc_numeric (*euro_rate, GNC_DENOM_AUTO, GNC_HOW_RND_ROUND_HALF_UP);
 }
 
 /* ------------------------------------------------------ */
