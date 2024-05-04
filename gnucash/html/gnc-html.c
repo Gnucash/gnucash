@@ -66,7 +66,9 @@ GHashTable* gnc_html_url_handlers = NULL;
 /* hashes an HTML <object classid="ID"> classid to a handler function */
 extern GHashTable* gnc_html_object_handlers;
 
-G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, GTK_TYPE_BIN)
+//FIXME gtk4 G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, GTK_TYPE_BIN)
+G_DEFINE_ABSTRACT_TYPE(GncHtml, gnc_html, GTK_TYPE_BOX)
+
 
 static void gnc_html_dispose( GObject* obj );
 static void gnc_html_finalize( GObject* obj );
@@ -103,7 +105,7 @@ gnc_html_init( GncHtml* self )
     GncHtmlPrivate* priv;
     priv = self->priv = g_new0( GncHtmlPrivate, 1 );
 
-    priv->container = gtk_scrolled_window_new( NULL, NULL );
+    priv->container = gtk_scrolled_window_new();
     gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW(priv->container),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC );
@@ -120,7 +122,7 @@ gnc_html_dispose( GObject* obj )
 
     if ( priv->container != NULL )
     {
-        gtk_widget_destroy( GTK_WIDGET(priv->container) );
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(priv->container));
         g_object_unref( G_OBJECT(priv->container) );
         priv->container = NULL;
     }
@@ -528,13 +530,9 @@ gnc_html_export_to_file( GncHtml* self, const gchar* filepath )
         return FALSE;
     }
 }
-#ifdef WEBKIT1
-void
-gnc_html_print (GncHtml* self, const char *jobname, gboolean export_pdf)
-#else
+
 void
 gnc_html_print (GncHtml* self, const char *jobname)
-#endif
 {
     g_return_if_fail( self != NULL );
      g_return_if_fail( jobname != NULL );
@@ -542,11 +540,7 @@ gnc_html_print (GncHtml* self, const char *jobname)
 
     if ( GNC_HTML_GET_CLASS(self)->print != NULL )
     {
-#ifdef WEBKIT1
-      GNC_HTML_GET_CLASS(self)->print (self, jobname, export_pdf);
-#else
         GNC_HTML_GET_CLASS(self)->print (self, jobname);
-#endif
     }
     else
     {
@@ -578,30 +572,19 @@ GtkWidget *
 gnc_html_get_webview( GncHtml* self )
 {
     GncHtmlPrivate* priv;
-    GList *sw_list = NULL;
     GtkWidget *webview = NULL;
 
     g_return_val_if_fail (self != NULL, NULL);
     g_return_val_if_fail (GNC_IS_HTML(self), NULL);
 
     priv = GNC_HTML_GET_PRIVATE(self);
-    sw_list = gtk_container_get_children (GTK_CONTAINER(priv->container));
 
-    if (sw_list) // the scroll window has only one child
+    GtkWidget *vp = gtk_widget_get_first_child (GTK_WIDGET(priv->container)); //FIXME gtk4
+
+    if (vp) // the scroll window has only one child
     {
-#ifdef WEBKIT1
-        webview = sw_list->data;
-#else
-        GList *vp_list = gtk_container_get_children (GTK_CONTAINER(sw_list->data));
- 
-        if (vp_list) // the viewport has only one child
-        {
-            webview = vp_list->data;
-            g_list_free (vp_list);
-        }
-#endif
+        webview = gtk_widget_get_first_child (GTK_WIDGET(vp));
     }
-    g_list_free (sw_list);
     return webview;
 }
 

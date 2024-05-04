@@ -45,7 +45,7 @@ set(gtest_import_backend_INCLUDE_DIRS
 )
 
 set(gtest_import_backend_LIBS
-  PkgConfig::GTK3
+  PkgConfig::GTK4
   ${Boost_LIBRARIES}
   ${GMODULE_LDFLAGS}
   ${GTHREAD_LDFLAGS}

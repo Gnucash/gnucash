@@ -38,6 +38,7 @@
 #include "gnc-tree-view-account.h" // for GNC_TREE_VIEW_ACCOUNT
 #include "gnc-tree-model-budget.h" // for gnc_tree_model_budget
 #include "misc-gnome-utils.h" // for xxxgtk_textview_set_text
+#include "dialog-utils.h"
 
 /*Something somewhere in windows.h defines ABSOLUTE to something and
  *that contaminates using it in RelativeDateType.  Undef it.
@@ -146,9 +147,9 @@ wrap_check_button (const GncOption& option, GtkWidget* widget, GtkGrid* page_box
 {
     auto enclosing{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)};
     gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
-    gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(widget));
     set_tool_tip(option, enclosing);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     /* attach the option widget to the second column of the grid */
     grid_attach_widget (GTK_GRID(page_box), enclosing, row);
 }
@@ -206,12 +207,12 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto widget{GTK_ENTRY(get_widget())};
-        gtk_entry_set_text(widget, option.get_value<std::string>().c_str());
+        gnc_entry_set_text(widget, option.get_value<std::string>().c_str());
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto widget{GTK_ENTRY(get_widget())};
-        option.set_value(std::string{gtk_entry_get_text(widget)});
+        option.set_value(std::string{gnc_entry_get_text(widget)});
     }
 };
 
@@ -232,10 +233,10 @@ create_option_widget<GncOptionUIType::STRING> (GncOption& option,
 
     g_signal_connect(G_OBJECT(widget), "changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    gtk_box_pack_start(GTK_BOX(enclosing), widget, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(widget));
     set_name_label(option, page_box, row, true);
     set_tool_tip(option, enclosing);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     grid_attach_widget (GTK_GRID(page_box), enclosing, row);
 }
 
@@ -261,14 +262,13 @@ public:
 template<> void
 create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_box, int row)
 {
-    auto scroll = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll),
+    auto scrolled_window = gtk_scrolled_window_new();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_NEVER,
                                    GTK_POLICY_AUTOMATIC);
-    gtk_container_set_border_width(GTK_CONTAINER(scroll), 2);
-
+    gnc_box_set_all_margins (GTK_BOX(scrolled_window), 2);
     auto frame = gtk_frame_new(NULL);
-    gtk_container_add(GTK_CONTAINER(frame), scroll);
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(scrolled_window));
 
     auto enclosing = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 10);
     gtk_widget_set_vexpand (GTK_WIDGET(enclosing), TRUE);
@@ -286,11 +286,12 @@ create_option_widget<GncOptionUIType::TEXT> (GncOption& option, GtkGrid *page_bo
 
     g_signal_connect(G_OBJECT(text_buffer), "changed",
                      G_CALLBACK(gnc_option_changed_option_cb), &option);
-    gtk_container_add (GTK_CONTAINER (scroll), widget);
-    gtk_box_pack_start(GTK_BOX(enclosing), frame, TRUE, TRUE, 0);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(widget));
+    gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(frame));
     set_name_label(option, page_box, row, true);
     set_tool_tip(option, enclosing);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     grid_attach_widget(GTK_GRID(page_box), enclosing, row);
 }
 
@@ -592,27 +593,23 @@ static void date_set_relative_cb(GtkWidget *widget, gpointer data1);
 
 BothDateEntry::BothDateEntry(GncOption& option) :
     m_widget{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)},
-    m_abs_button{gtk_radio_button_new(NULL)},
+    m_abs_button{gtk_check_button_new()},
     m_abs_entry{std::make_unique<AbsoluteDateEntry>(option)},
-    m_rel_button{
-        gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(m_abs_button))},
+//FIXME gtk4    m_rel_button{gtk_radio_button_new_from_widget(GTK_RADIO_BUTTON(m_abs_button))},
+    m_rel_button{gtk_check_button_new()},
     m_rel_entry{std::make_unique<RelativeDateEntry>(option)}
 {
+    gtk_check_button_set_group (GTK_CHECK_BUTTON(m_abs_button), GTK_CHECK_BUTTON(m_rel_button));
     gtk_box_set_homogeneous (GTK_BOX(m_widget), FALSE);
     m_abs_hdlr = g_signal_connect(G_OBJECT(m_abs_button), "toggled",
                                   G_CALLBACK(date_set_absolute_cb), &option);
     m_rel_hdlr = g_signal_connect(G_OBJECT(m_rel_button), "toggled",
                                   G_CALLBACK(date_set_relative_cb), &option);
 
-    gtk_box_pack_start(GTK_BOX(m_widget),
-                       m_abs_button, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(m_widget),
-                       m_abs_entry->get_entry(), FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(m_widget),
-                       m_rel_button, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(m_widget),
-                       m_rel_entry->get_entry(), FALSE, FALSE, 0);
-
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_abs_button));
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_abs_entry->get_entry()));
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_rel_button));
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_rel_entry->get_entry()));
 }
 
 GtkWidget*
@@ -753,14 +750,14 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box, int row)
         enclosing = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5);
         gtk_box_set_homogeneous(GTK_BOX (enclosing), FALSE);
 
-        gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(widget));
     }
     else
     {
         enclosing = gtk_frame_new(nullptr);
         g_object_set(G_OBJECT(widget), "margin", 3, NULL);
 
-        gtk_container_add (GTK_CONTAINER(enclosing), widget);
+        gtk_frame_set_child (GTK_FRAME(enclosing), GTK_WIDGET(widget));
     }
 
     gtk_widget_set_halign (GTK_WIDGET(enclosing), GTK_ALIGN_START);
@@ -776,7 +773,7 @@ create_date_option_widget(GncOption& option, GtkGrid *page_box, int row)
         date_ui->block_signals(false);
     }
 
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
 }
 
 template<> void
@@ -910,7 +907,7 @@ static GtkWidget*
 create_account_widget(GncOption& option, char *name)
 {
     bool multiple_selection;
-    GtkWidget *scroll_win;
+    GtkWidget *scrolled_window;
     GtkWidget *button;
     GtkWidget *frame;
     GtkWidget *tree;
@@ -924,10 +921,10 @@ create_account_widget(GncOption& option, char *name)
 
     frame = gtk_frame_new(name);
 
-    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+    vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
 
-    gtk_container_add(GTK_CONTAINER(frame), vbox);
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(vbox));
 
     tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(tree), FALSE);
@@ -972,17 +969,17 @@ create_account_widget(GncOption& option, char *name)
         gnc_tree_view_account_set_view_info (GNC_TREE_VIEW_ACCOUNT (tree), &avi);
     }
 
-    scroll_win = gtk_scrolled_window_new(NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scroll_win),
+    scrolled_window = gtk_scrolled_window_new();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_AUTOMATIC);
 
-    gtk_box_pack_start(GTK_BOX(vbox), scroll_win, TRUE, TRUE, 0);
-    gtk_container_set_border_width(GTK_CONTAINER(scroll_win), 5);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
+    gnc_box_set_all_margins (GTK_BOX(scrolled_window), 5);
 
-    bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
-    gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 10);
+    bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+//FIXME gtk4    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(bbox));
 
     option.set_ui_item(std::make_unique<GncGtkAccountListUIItem>(tree));
     option.set_ui_item_from_option();
@@ -990,21 +987,21 @@ create_account_widget(GncOption& option, char *name)
     if (multiple_selection)
     {
         button = gtk_button_new_with_label(_("Select All"));
-        gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(bbox), GTK_WIDGET(button));
         gtk_widget_set_tooltip_text(button, _("Select all accounts."));
 
         g_signal_connect(G_OBJECT(button), "clicked",
                          G_CALLBACK(account_select_all_cb), &option);
 
         button = gtk_button_new_with_label(_("Clear All"));
-        gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(bbox), GTK_WIDGET(button));
         gtk_widget_set_tooltip_text(button, _("Clear the selection and unselect all accounts."));
 
         g_signal_connect(G_OBJECT(button), "clicked",
                          G_CALLBACK(account_clear_all_cb), &option);
 
         button = gtk_button_new_with_label(_("Select Children"));
-        gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(bbox), GTK_WIDGET(button));
         gtk_widget_set_tooltip_text(button, _("Select all descendents of selected account."));
 
         g_signal_connect(G_OBJECT(button), "clicked",
@@ -1012,7 +1009,7 @@ create_account_widget(GncOption& option, char *name)
     }
 
     button = gtk_button_new_with_label(_("Select Default"));
-    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(bbox), GTK_WIDGET(button));
     gtk_widget_set_tooltip_text(button, _("Select the default account selection."));
 
     g_signal_connect(G_OBJECT(button), "clicked",
@@ -1025,19 +1022,20 @@ create_account_widget(GncOption& option, char *name)
     {
         /* Put the "Show hidden" checkbox on a separate line since
            the 4 buttons make the dialog too wide. */
-        bbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-        gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_START);
-        gtk_box_pack_start(GTK_BOX(vbox), bbox, FALSE, FALSE, 0);
+        bbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+//FIXME gtk4        gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_START);
+        gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(bbox));
     }
 
     button = gtk_check_button_new_with_label(_("Show Hidden Accounts"));
-    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(bbox), GTK_WIDGET(button));
     gtk_widget_set_tooltip_text(button, _("Show accounts that have been marked hidden."));
     gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(button), TRUE);
     g_signal_connect(G_OBJECT(button), "toggled",
                      G_CALLBACK(show_hidden_toggled_cb), &option);
 
-    gtk_container_add(GTK_CONTAINER(scroll_win), tree);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(tree));
     return frame;
 }
 
@@ -1064,7 +1062,7 @@ create_option_widget<GncOptionUIType::ACCOUNT_LIST>(GncOption& option,
     auto selection{gtk_tree_view_get_selection(GTK_TREE_VIEW(widget))};
     g_signal_connect(G_OBJECT(selection), "changed",
                      G_CALLBACK(option_account_sel_changed_cb), &option);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
 }
 
 class GncGtkAccountSelUIItem : public GncOptionGtkUIItem
@@ -1193,7 +1191,7 @@ create_list_widget(GncOption& option, char *name)
     auto frame = gtk_frame_new(name);
     auto hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-    gtk_container_add(GTK_CONTAINER(frame), hbox);
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(hbox));
 
     auto store = gtk_list_store_new(1, G_TYPE_STRING);
     auto view = GTK_TREE_VIEW(gtk_tree_view_new_with_model(GTK_TREE_MODEL(store)));
@@ -1218,33 +1216,33 @@ create_list_widget(GncOption& option, char *name)
     option.set_ui_item(std::make_unique<GncGtkListUIItem>(GTK_WIDGET(view)));
     option.set_ui_item_from_option();
 
-    gtk_box_pack_start(GTK_BOX(hbox), GTK_WIDGET(view), FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(view));
 
     auto selection = gtk_tree_view_get_selection(view);
     gtk_tree_selection_set_mode(selection, GTK_SELECTION_MULTIPLE);
     g_signal_connect(selection, "changed",
                      G_CALLBACK(list_changed_cb), &option);
 
-    auto bbox = gtk_button_box_new (GTK_ORIENTATION_VERTICAL);
-    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
-    gtk_box_pack_end(GTK_BOX(hbox), bbox, FALSE, FALSE, 0);
+    auto bbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+//FIXME gtk4    gtk_button_box_set_layout(GTK_BUTTON_BOX(bbox), GTK_BUTTONBOX_SPREAD);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(bbox));
 
     auto button = gtk_button_new_with_label(_("Select All"));
-    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(bbox), GTK_WIDGET(button));
     gtk_widget_set_tooltip_text(button, _("Select all entries."));
 
     g_signal_connect(G_OBJECT(button), "clicked",
                      G_CALLBACK(list_select_all_cb), &option);
 
     button = gtk_button_new_with_label(_("Clear All"));
-    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(bbox), GTK_WIDGET(button));
     gtk_widget_set_tooltip_text(button, _("Clear the selection and unselect all entries."));
 
     g_signal_connect(G_OBJECT(button), "clicked",
                      G_CALLBACK(list_clear_all_cb), &option);
 
     button = gtk_button_new_with_label(_("Select Default"));
-    gtk_box_pack_start(GTK_BOX(bbox), button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(bbox), GTK_WIDGET(button));
     gtk_widget_set_tooltip_text(button, _("Select the default selection."));
 
     g_signal_connect(G_OBJECT(button), "clicked",
@@ -1264,7 +1262,7 @@ create_option_widget<GncOptionUIType::LIST> (GncOption& option,
     set_name_label(option, page_box, row, true);
     set_tool_tip(option, enclosing);
     grid_attach_widget (GTK_GRID(page_box), enclosing, row);
-    gtk_widget_show(enclosing);
+    gtk_widget_set_visible (GTK_WIDGET(enclosing), true);
 }
 
 class GncGtkNumberRangeUIItem : public GncOptionGtkUIItem
@@ -1333,7 +1331,7 @@ create_range_spinner(GncOption& option)
          bigger >= 1; bigger /= 10.0)
         ++num_digits;
     num_digits += num_decimals;
-    gtk_entry_set_width_chars(GTK_ENTRY(widget), num_digits);
+    gtk_editable_set_max_width_chars (GTK_EDITABLE(widget), num_digits);
     gtk_spin_button_set_value(GTK_SPIN_BUTTON(widget),
                               (upper_bound / 2)); //default
     return GTK_SPIN_BUTTON(widget);
@@ -1452,37 +1450,40 @@ update_preview_cb (GtkFileChooser *chooser, void* data)
     g_return_if_fail(chooser != NULL);
 
     ENTER("chooser %p", chooser);
-    auto filename = gtk_file_chooser_get_preview_filename(chooser);
+//FIXME gtk4    auto filename = gtk_file_chooser_get_preview_filename(chooser);
+auto filename = nullptr;
     DEBUG("chooser preview name is %s.", filename ? filename : "(null)");
-    if (filename == NULL)
+    if (filename == nullptr)
     {
-        filename = g_strdup(static_cast<const char*>(g_object_get_data(G_OBJECT(chooser), LAST_SELECTION)));
+//FIXME gtk4        filename = g_strdup(static_cast<const char*>(g_object_get_data(G_OBJECT(chooser), LAST_SELECTION)));
         DEBUG("using last selection of %s", filename ? filename : "(null)");
-        if (filename == NULL)
+        if (filename == nullptr)
         {
             LEAVE("no usable name");
             return;
         }
     }
 
-    auto image = GTK_IMAGE(gtk_file_chooser_get_preview_widget(chooser));
-    auto pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, NULL);
+//FIXME gtk4    auto image = GTK_IMAGE(gtk_file_chooser_get_preview_widget(chooser));
+//    auto pixbuf = gdk_pixbuf_new_from_file_at_size(filename, 128, 128, NULL);
     g_free(filename);
-    auto have_preview = (pixbuf != NULL);
+//    auto have_preview = (pixbuf != NULL);
 
-    gtk_image_set_from_pixbuf(image, pixbuf);
-    if (pixbuf)
-        g_object_unref(pixbuf);
+//    gtk_image_set_from_pixbuf(image, pixbuf);
+//    if (pixbuf)
+//        g_object_unref(pixbuf);
 
-    gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
-    LEAVE("preview visible is %d", have_preview);
+//FIXME gtk4    gtk_file_chooser_set_preview_widget_active(chooser, have_preview);
+//    LEAVE("preview visible is %d", have_preview);
 }
 
 static void
 change_image_cb (GtkFileChooser *chooser, void* data)
 {
-    auto filename{gtk_file_chooser_get_preview_filename(chooser)};
-    if (!filename)
+//FIXME gtk4
+//    auto filename{gtk_file_chooser_get_preview_filename(chooser)};
+auto filename = nullptr;
+//    if (!filename)
         return;
     g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION, filename, g_free);
 }
@@ -1499,8 +1500,9 @@ public:
         {
             DEBUG("string = %s", string.c_str());
             auto chooser{GTK_FILE_CHOOSER(get_widget())};
-            gtk_file_chooser_select_filename(chooser, string.c_str());
-            auto filename{gtk_file_chooser_get_filename(chooser)};
+//FIXME gtk4            gtk_file_chooser_select_filename(chooser, string.c_str());
+//            auto filename{gtk_file_chooser_get_filename(chooser)};
+auto filename = nullptr;
             g_object_set_data_full(G_OBJECT(chooser), LAST_SELECTION,
                                    g_strdup(string.c_str()), g_free);
             DEBUG("Set %s, retrieved %s", string.c_str(),
@@ -1510,7 +1512,8 @@ public:
     }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
-        auto string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(get_widget()));
+//FIXME gtk4        auto string = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(get_widget()));
+auto string = nullptr;
         DEBUG("filename %s", string ? string : "(null)");
         if (string)
         {
@@ -1526,6 +1529,8 @@ create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
 {
     auto enclosing{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 5)};
     gtk_box_set_homogeneous(GTK_BOX(enclosing), FALSE);
+//FIXME gtk4
+#ifdef skip
     auto button{gtk_button_new_with_label(_("Clear"))};
     gtk_widget_set_tooltip_text(button, _("Clear any selected image file."));
     auto widget{ gtk_file_chooser_button_new(_("Select image"),
@@ -1547,14 +1552,15 @@ create_option_widget<GncOptionUIType::PIXMAP> (GncOption& option,
     g_signal_connect_swapped(G_OBJECT (button), "clicked",
                              G_CALLBACK(gtk_file_chooser_unselect_all), widget);
 
-    gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(enclosing), button, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(widget));
+    gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(button));
 
-    gtk_widget_show(widget);
+    gtk_widget_set_visible (GTK_WIDGET(widget), true);
     set_name_label(option, page_box, row, false);
     set_tool_tip(option, enclosing);
-    gtk_widget_show(enclosing);
+    gtk_widget_set_visible (GTK_WIDGET(enclosing), true);
     grid_attach_widget(page_box, enclosing, row);
+#endif
 }
 
 static void
@@ -1588,30 +1594,30 @@ public:
     void set_ui_item_from_option(GncOption& option) noexcept override
     {
         auto index{option.get_value<uint16_t>()};
-        auto list{gtk_container_get_children(GTK_CONTAINER(get_widget()))};
-        auto box{GTK_WIDGET(list->data)};
-        g_list_free(list);
+//FIXME gtk4        auto list{gtk_container_get_children(GTK_CONTAINER(get_widget()))};
+//        auto box{GTK_WIDGET(list->data)};
+//        g_list_free(list);
 
-        list = gtk_container_get_children(GTK_CONTAINER(box));
-        auto node{g_list_nth(list, index)};
-        GtkButton* button{};
-        if (node)
-        {
-            button = GTK_BUTTON(node->data);
+//FIXME gtk4        list = gtk_container_get_children(GTK_CONTAINER(box));
+//        auto node{g_list_nth(list, index)};
+//        GtkButton* button{};
+//        if (node)
+//        {
+//            button = GTK_BUTTON(node->data);
+//        }
+//        else
+//        {
+//            PERR("Invalid Radio Button Selection %hu", index);
+//            g_list_free(list);
+//            return;
         }
-        else
-        {
-            PERR("Invalid Radio Button Selection %hu", index);
-            g_list_free(list);
-            return;
-        }
-        g_list_free(list);
-        auto val{g_object_get_data (G_OBJECT (button),
-                                    "gnc_radiobutton_index")};
-        g_return_if_fail (GPOINTER_TO_UINT (val) == index);
+//        g_list_free(list);
+//        auto val{g_object_get_data (G_OBJECT (button),
+//                                    "gnc_radiobutton_index")};
+//        g_return_if_fail (GPOINTER_TO_UINT (val) == index);
 
-        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
-    }
+//        gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (button), TRUE);
+//    }
     void set_option_from_ui_item(GncOption& option) noexcept override
     {
         auto index{g_object_get_data(G_OBJECT(get_widget()),
@@ -1636,7 +1642,7 @@ create_radiobutton_widget(char *name, GncOption& option)
     /* Create the button box */
     box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (box), FALSE);
-    gtk_container_add (GTK_CONTAINER (frame), box);
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(box));
 
     option.set_ui_item(std::make_unique<GncGtkPixmapUIItem>(frame));
     option.set_ui_item_from_option();
@@ -1646,16 +1652,20 @@ create_radiobutton_widget(char *name, GncOption& option)
     {
         auto label = option.permissible_value_name(i);
 
-        widget =
-            gtk_radio_button_new_with_label_from_widget (widget ?
-                                                         GTK_RADIO_BUTTON (widget) :
-                                                         NULL,
-                                                         label && *label ? _(label) : "");
+//FIXME gtk4        widget =
+//            gtk_radio_button_new_with_label_from_widget (widget ?
+//                                                         GTK_RADIO_BUTTON (widget) :
+//                                                         NULL,
+//                                                         label && *label ? _(label) : "");
+
+        widget = gtk_check_button_new_with_label (label && *label ? _(label) : "");
+//        gtk_check_button_set_group (GTK_CHECK_BUTTON(first_rb), GTK_CHECK_BUTTON(rbutton));
+
         g_object_set_data (G_OBJECT (widget), "gnc_radiobutton_index",
                            GINT_TO_POINTER (i));
         g_signal_connect(G_OBJECT(widget), "toggled",
                          G_CALLBACK(radiobutton_set_cb), &option);
-        gtk_box_pack_start (GTK_BOX (box), widget, FALSE, FALSE, 0);
+        gtk_box_append (GTK_BOX(box), GTK_WIDGET(widget));
     }
 
     return frame;
@@ -1669,8 +1679,8 @@ create_option_widget<GncOptionUIType::RADIOBUTTON> (GncOption& option, GtkGrid *
      set_name_label(option, page_box, row, true);
      set_tool_tip(option, enclosing);
      auto widget = create_radiobutton_widget(NULL, option);
-     gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
-     gtk_widget_show_all(enclosing);
+     gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(widget));
+//FIXME gtk4     gtk_widget_show_all(enclosing);
      grid_attach_widget(page_box, enclosing, row);
  }
 
@@ -1713,7 +1723,7 @@ create_option_widget<GncOptionUIType::DATE_FORMAT> (GncOption& option,
 
     g_signal_connect(G_OBJECT(enclosing), "format_changed",
                      G_CALLBACK(gnc_option_changed_widget_cb), &option);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     grid_attach_widget(page_box, enclosing, row);
 }
 
@@ -1743,19 +1753,21 @@ public:
 };
 
 PlotSize::PlotSize(GncOption& option) :
-    m_widget{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4)}, m_pixel_button{gtk_radio_button_new_with_label(nullptr, _("Pixels"))},
-    m_percent_button{gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(m_pixel_button), _("Percent"))},
+    m_widget{gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 4)}, 
+    m_pixel_button{gtk_check_button_new_with_label(_("Pixels"))},
+    m_percent_button{gtk_check_button_new_with_label(_("Percent"))},
     m_range_spinner{GTK_WIDGET(create_range_spinner(option))},
     m_adj_pct{GTK_ADJUSTMENT(g_object_ref(gtk_adjustment_new(100.0, 10.0, 100.0, 1.0, 5.0, 0.0)))},
     m_adj_px{GTK_ADJUSTMENT(g_object_ref(gtk_adjustment_new(1000.0, 110.0, 10000.0, 10.0, 250.0, 0.0)))}
 {
+    gtk_check_button_set_group (GTK_CHECK_BUTTON(m_pixel_button), GTK_CHECK_BUTTON(m_percent_button));
     gtk_box_set_homogeneous(GTK_BOX(m_widget), FALSE);
     g_object_set (G_OBJECT(m_widget), "margin", 3, NULL);
     set_tool_tip(option, m_widget);
-    gtk_box_pack_start(GTK_BOX(m_widget), GTK_WIDGET(m_pixel_button), FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(m_widget), GTK_WIDGET(m_percent_button), FALSE, FALSE, 0);
-    gtk_box_pack_start(GTK_BOX(m_widget), GTK_WIDGET(m_range_spinner),
-                       FALSE, FALSE, 0);
+
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_pixel_button));
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_percent_button));
+    gtk_box_append (GTK_BOX(m_widget), GTK_WIDGET(m_range_spinner));
 
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(m_pixel_button), FALSE);
     gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(m_percent_button), TRUE);
@@ -1850,9 +1862,9 @@ create_option_widget<GncOptionUIType::PLOT_SIZE> (GncOption& option,
     option.set_ui_item_from_option();
 
     auto widget{option_get_gtk_widget(&option)};
-    gtk_container_add(GTK_CONTAINER(enclosing), widget);
+    gtk_frame_set_child (GTK_FRAME(enclosing), GTK_WIDGET(widget));
 
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     grid_attach_widget(page_box, enclosing, row);
 
     auto ui_item{dynamic_cast<GncGtkPlotSizeUIItem*>(option.get_ui_item())};

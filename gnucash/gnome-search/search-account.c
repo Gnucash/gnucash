@@ -204,7 +204,7 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
     GNCSearchAccountPrivate *priv;
     GtkDialog *dialog;
     GtkWidget *account_tree;
-    GtkWidget *accounts_scroller;
+    GtkWidget *scrolled_window;
     GtkWidget *label;
     char *desc;
     GtkTreeSelection *selection;
@@ -222,11 +222,12 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
                 priv->selected_accounts, FALSE);
 
     /* Create the account scroller and put the tree in it */
-    accounts_scroller = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(accounts_scroller),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_container_add(GTK_CONTAINER(accounts_scroller), account_tree);
-    gtk_widget_set_size_request(GTK_WIDGET(accounts_scroller), 300, 300);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(account_tree));
+    gtk_widget_set_size_request(GTK_WIDGET(scrolled_window), 300, 300);
 
     /* Create the label */
     label = gtk_label_new (_("Select Accounts to Match"));
@@ -241,27 +242,32 @@ button_clicked (GtkButton *button, GNCSearchAccount *fi)
                    NULL));
 
     /* Put the dialog together */
-    gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area (dialog), label,
-                        FALSE, FALSE, 3);
-    gtk_box_pack_start ((GtkBox *) gtk_dialog_get_content_area (dialog), accounts_scroller,
-                        TRUE, TRUE, 3);
+    gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (dialog)), GTK_WIDGET(label));
+    gtk_box_set_spacing (GTK_BOX(gtk_dialog_get_content_area (dialog)), 3);
 
-    gtk_widget_show_all (GTK_WIDGET (dialog));
+    gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (dialog)), GTK_WIDGET(scrolled_window));
+    gtk_box_set_spacing (GTK_BOX(gtk_dialog_get_content_area (dialog)), 3);
+
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET (dialog));
 
     /* Now run the dialog */
-    if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK)
-    {
-        if (priv->selected_accounts)
-            g_list_free (priv->selected_accounts);
 
-        priv->selected_accounts =
-            gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
+//FIXME gtk4    if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 
-        desc = describe_button (fi);
-        gtk_label_set_text (GTK_LABEL (gtk_bin_get_child (GTK_BIN (button))), desc);
-    }
+//    if (gtk_dialog_run (dialog) == GTK_RESPONSE_OK)
+//    {
+//        if (priv->selected_accounts)
+//            g_list_free (priv->selected_accounts);
 
-    gtk_widget_destroy (GTK_WIDGET (dialog));
+//        priv->selected_accounts =
+//            gnc_tree_view_account_get_selected_accounts (GNC_TREE_VIEW_ACCOUNT (account_tree));
+
+//        desc = describe_button (fi);
+//        gtk_label_set_text (GTK_LABEL (gtk_check_button_get_child (GTK_CHECK_BUTTON(button))), desc);
+//    }
+
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 static GtkWidget *
@@ -279,7 +285,7 @@ gncs_get_widget (GNCSearchCoreType *fe)
 
     /* Build and connect the option menu */
     menu = make_menu (fe);
-    gtk_box_pack_start (GTK_BOX (box), menu, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(menu));
 
     /* Build and connect the account entry window */
     desc = describe_button (fi);
@@ -287,9 +293,9 @@ gncs_get_widget (GNCSearchCoreType *fe)
     gnc_label_set_alignment (label, 0.5, 0.5);
 
     button = gtk_button_new ();
-    gtk_container_add (GTK_CONTAINER (button), label);
+    gtk_box_prepend (GTK_BOX(button), GTK_WIDGET(label));
     g_signal_connect (G_OBJECT (button), "clicked", G_CALLBACK (button_clicked), fe);
-    gtk_box_pack_start (GTK_BOX (box), button, FALSE, FALSE, 3);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(button));
 
     /* And return the box */
     return box;

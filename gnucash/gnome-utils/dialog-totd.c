@@ -153,7 +153,7 @@ void gnc_totd_dialog_response_cb (GtkDialog *dialog,
 
     default:
         gnc_unregister_gui_component_by_data(DIALOG_TOTD_CM_CLASS, totd_dialog);
-        gtk_widget_destroy(GTK_WIDGET(totd_dialog->dialog));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(totd_dialog->dialog));
         break;
     }
     LEAVE("");
@@ -342,6 +342,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     }
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(totd_dialog));
     gnc_builder_add_from_file (builder, "dialog-totd.glade", "totd_dialog");
     dialog  = GTK_WIDGET(gtk_builder_get_object (builder, "totd_dialog"));
     gtk_window_set_transient_for(GTK_WINDOW (dialog), parent);
@@ -354,7 +355,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
 
     ENTER("totd_dialog %p, dialog %p", totd_dialog, dialog);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, totd_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, totd_dialog);
 
     button = GTK_WIDGET(gtk_builder_get_object (builder, "show_checkbutton"));
     totd_dialog->showcheck_button = button;
@@ -367,7 +368,7 @@ gnc_totd_dialog (GtkWindow *parent, gboolean startup)
     gnc_new_tip_number(totd_dialog, 1);
 
     gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(totd_dialog->dialog), parent);
-    gtk_widget_show(GTK_WIDGET (totd_dialog->dialog));
+    gtk_widget_set_visible (GTK_WIDGET(totd_dialog->dialog), TRUE);
 
     gnc_register_gui_component(DIALOG_TOTD_CM_CLASS,
                                NULL, close_handler, totd_dialog);

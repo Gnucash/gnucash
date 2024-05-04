@@ -265,7 +265,7 @@ void gxi_prepare_cb (GtkAssistant  *assistant, GtkWidget *page,
 void
 gxi_finish_cb (GtkAssistant *assistant, GncXmlImportData *data)
 {
-    gtk_main_quit();
+//FIXME gtk4    gtk_main_quit();
 }
 
 static void
@@ -287,7 +287,7 @@ gxi_cancel_cb (GtkAssistant *gtkassistant, GncXmlImportData *data)
     gnc_suspend_gui_refresh ();
     data->canceled = TRUE;
     gnc_resume_gui_refresh ();
-    gtk_main_quit();
+//FIXME gtk4    gtk_main_quit();
 }
 
 /***************************************************/
@@ -321,6 +321,7 @@ gnc_xml_convert_single_file (const gchar *filename)
     {
         /* common assistant initialization */
         builder = gtk_builder_new();
+        gtk_builder_set_current_object (builder, G_OBJECT(data));
         gnc_builder_add_from_file  (builder , "assistant-xml-encoding.glade", "assistant_xml_encoding");
         data->assistant = GTK_WIDGET(gtk_builder_get_object (builder, "assistant_xml_encoding"));
 
@@ -352,9 +353,9 @@ gnc_xml_convert_single_file (const gchar *filename)
         widget = GTK_WIDGET(gtk_builder_get_object(builder, "end_page"));
         gtk_label_set_text (GTK_LABEL(widget), gettext (finish_convert_string));
 
-        gtk_builder_connect_signals(builder, data);
+//FIXME gtk4        gtk_builder_connect_signals(builder, data);
 
-        gtk_widget_show_all (data->assistant);
+//FIXME gtk4        gtk_widget_show_all (data->assistant);
 
         gxi_update_default_enc_combo (data);
         gxi_update_string_box (data);
@@ -362,7 +363,7 @@ gnc_xml_convert_single_file (const gchar *filename)
         g_object_unref(G_OBJECT(builder));
 
         /* This won't return until the assistant is finished */
-        gtk_main();
+//FIXME gtk4        gtk_main();
 
         if (data->canceled)
             success = FALSE;
@@ -400,13 +401,13 @@ gxi_data_destroy (GncXmlImportData *data)
 
     if (data->string_box)
     {
-        gtk_widget_destroy (data->string_box);
+//FIXME gtk4        gtk_widget_destroy (data->string_box);
         data->string_box = NULL;
     }
 
     if (data->assistant)
     {
-        gtk_widget_destroy (data->assistant);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(data->assistant));
         data->assistant = NULL;
     }
 }
@@ -614,19 +615,18 @@ gxi_update_progress_bar (const gchar *message, double percentage)
 {
     if (!progress_window)
     {
-        progress_window = gtk_window_new (GTK_WINDOW_POPUP);
+        progress_window = gtk_window_new ();
         progress_bar = GTK_PROGRESS_BAR (gtk_progress_bar_new ());
-        gtk_container_set_border_width (GTK_CONTAINER (progress_window), 12);
-        gtk_container_add (GTK_CONTAINER (progress_window),
-                           GTK_WIDGET (progress_bar));
-        gtk_widget_show (GTK_WIDGET (progress_bar));
+        gnc_box_set_all_margins (GTK_BOX(progress_window), 12);
+        gtk_window_set_child (GTK_WINDOW(progress_window), GTK_WIDGET(progress_bar));
+        gtk_widget_set_visible (GTK_WIDGET(progress_bar), TRUE);
     }
 
     if (percentage < 0)
     {
         gtk_progress_bar_set_text (progress_bar, NULL);
         gtk_progress_bar_set_fraction (progress_bar, 0.0);
-        gtk_widget_hide (progress_window);
+        gtk_widget_set_visible (GTK_WIDGET(progress_bar), FALSE);
     }
     else
     {
@@ -635,7 +635,7 @@ gxi_update_progress_bar (const gchar *message, double percentage)
             gtk_progress_bar_set_fraction (progress_bar, percentage / 100);
         else
             gtk_progress_bar_pulse (progress_bar);
-        gtk_widget_show (progress_window);
+        gtk_widget_set_visible (GTK_WIDGET(progress_window), TRUE);
     }
 }
 
@@ -646,8 +646,8 @@ gxi_update_default_enc_combo (GncXmlImportData *data)
     GList *enc_iter;
 
     /* add encodings list */
-    if (data->default_encoding_combo)
-        gtk_widget_destroy (data->default_encoding_combo);
+//FIXME gtk4    if (data->default_encoding_combo)
+//FIXME gtk4        gtk_widget_destroy (data->default_encoding_combo);
     data->default_encoding_combo = gtk_combo_box_text_new();
     combo = GTK_COMBO_BOX_TEXT (data->default_encoding_combo);
 
@@ -662,8 +662,8 @@ gxi_update_default_enc_combo (GncXmlImportData *data)
     /* show encodings */
     g_signal_connect (G_OBJECT (combo), "changed",
                       G_CALLBACK (gxi_default_enc_combo_changed_cb), data);
-    gtk_container_add (GTK_CONTAINER (data->default_encoding_hbox), GTK_WIDGET (combo));
-    gtk_widget_show (GTK_WIDGET (combo));
+    gtk_box_prepend (GTK_BOX(data->default_encoding_hbox), GTK_WIDGET(combo));
+    gtk_widget_set_visible (GTK_WIDGET(combo), TRUE);
 }
 
 static void
@@ -711,11 +711,11 @@ gxi_update_summary_label (GncXmlImportData *data)
     {
         gtk_label_set_text (GTK_LABEL (data->summary_label), string);
         g_free (string);
-        gtk_widget_show (data->summary_label);
+        gtk_widget_set_visible (GTK_WIDGET(data->summary_label), TRUE);
     }
     else
     {
-        gtk_widget_hide (data->summary_label);
+        gtk_widget_set_visible (GTK_WIDGET(data->summary_label), FALSE);
     }
 }
 
@@ -735,8 +735,8 @@ gxi_update_string_box (GncXmlImportData *data)
     ambiguous_type *amb;
     conv_type *conv;
 
-    if (data->string_box)
-        gtk_widget_destroy (data->string_box);
+//FIXME gtk4    if (data->string_box)
+//FIXME gtk4        gtk_widget_destroy (data->string_box);
 
     data->string_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 6);
     gtk_box_set_homogeneous (GTK_BOX (data->string_box), FALSE);
@@ -820,14 +820,14 @@ gxi_update_string_box (GncXmlImportData *data)
         g_object_set_data (G_OBJECT (combo), "ambiguous", amb);
         g_signal_connect (G_OBJECT (combo), "changed",
                           G_CALLBACK (gxi_string_combo_changed_cb), data);
-        gtk_box_pack_start (vbox, GTK_WIDGET (combo), FALSE, FALSE, 0);
-        gtk_widget_show (GTK_WIDGET (combo));
+        gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(combo));
+        gtk_widget_set_visible (GTK_WIDGET(combo), TRUE);
 
     } /* next word */
 
     /* wire up whole string vbox */
-    gtk_container_add (GTK_CONTAINER (data->string_box_container), GTK_WIDGET (vbox));
-    gtk_widget_show (GTK_WIDGET (vbox));
+    gtk_box_prepend (GTK_BOX(data->string_box_container), GTK_WIDGET(vbox));
+    gtk_widget_set_visible (GTK_WIDGET(vbox), TRUE);
 
     /* update label now, n_unassigned is calculated */
     if (!data->summary_label)
@@ -1177,13 +1177,15 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     GtkListStore *list_store;
     GtkTreeStore *tree_store;
     GtkTreeIter iter, parent, *parent_ptr;
-    GList *encodings_bak, *enc_iter;
+//FIXME gtk4    GList *encodings_bak;
+    GList *enc_iter;
     const gchar *encoding;
     system_encoding_type *system_enc;
     gpointer enc_ptr;
     gint i, j;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(data));
     gnc_builder_add_from_file (builder, "assistant-xml-encoding.glade", "encodings_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "encodings_dialog"));
     data->encodings_dialog = dialog;
@@ -1191,7 +1193,7 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     // Set the name for this assistant so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-assistant-xml-encoding");
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (data->assistant));
 
@@ -1261,31 +1263,35 @@ gxi_edit_encodings_clicked_cb (GtkButton *button, GncXmlImportData *data)
     g_object_unref (tree_store);
 
     /* run the dialog */
-    encodings_bak = g_list_copy (data->encodings);
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
-    {
-        g_list_free (encodings_bak);
-        if (data->encodings && !g_list_find (data->encodings,
-                          GUINT_TO_POINTER (data->default_encoding)))
-        {
+//FIXME gtk4    encodings_bak = g_list_copy (data->encodings);
+
+//FIXME gtk4    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+
+//    if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_OK)
+//    {
+//        g_list_free (encodings_bak);
+//        if (data->encodings && !g_list_find (data->encodings,
+//                          GUINT_TO_POINTER (data->default_encoding)))
+//        {
             /* choose top level encoding then */
-            data->default_encoding = GPOINTER_TO_UINT (data->encodings->data);
-        }
+//            data->default_encoding = GPOINTER_TO_UINT (data->encodings->data);
+//        }
 
         /* update whole page */
-        gxi_check_file (data);
-        gxi_update_default_enc_combo (data);
-        gxi_update_string_box (data);
-        gxi_update_conversion_forward (data);
-    }
-    else
-    {
-        g_list_free (data->encodings);
-        data->encodings = encodings_bak;
-    }
+//        gxi_check_file (data);
+//        gxi_update_default_enc_combo (data);
+//        gxi_update_string_box (data);
+//        gxi_update_conversion_forward (data);
+//    }
+//    else
+//    {
+//        g_list_free (data->encodings);
+//        data->encodings = encodings_bak;
+//    }
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     data->encodings_dialog = NULL;
 }
 
@@ -1402,7 +1408,7 @@ gxi_custom_enc_activate_cb (GtkEntry *entry, GncXmlImportData *data)
 {
     const gchar *enc_string;
 
-    enc_string = gtk_entry_get_text (entry);
+    enc_string = gnc_entry_get_text (entry);
     if (!enc_string)
         return;
     gxi_add_encoding (data, GUINT_TO_POINTER (g_quark_from_string (enc_string)));

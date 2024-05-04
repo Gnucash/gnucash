@@ -100,7 +100,7 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
 
     if (facc_dialog->window)
     {
-        gtk_widget_destroy (facc_dialog->window);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(facc_dialog->window));
         facc_dialog->window = NULL;
     }
     g_free (facc_dialog);
@@ -108,13 +108,13 @@ gnc_find_account_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data
 }
 
 static gboolean
-gnc_find_account_dialog_window_key_press_cb (GtkWidget *widget,
-                                             GdkEventKey *event,
+gnc_find_account_dialog_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                             guint keycode, GdkModifierType state,
                                              gpointer user_data)
 {
     FindAccountDialog *facc_dialog = user_data;
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         close_handler (facc_dialog);
         return TRUE;
@@ -242,7 +242,7 @@ get_account_info (FindAccountDialog *facc_dialog, gboolean use_saved_filter)
     if (use_saved_filter)
         filter_text = g_ascii_strdown (facc_dialog->saved_filter_text, -1);
     else
-        filter_text = g_ascii_strdown (gtk_entry_get_text (GTK_ENTRY(facc_dialog->filter_text_entry)), -1);
+        filter_text = g_ascii_strdown (gnc_entry_get_text (GTK_ENTRY(facc_dialog->filter_text_entry)), -1);
 
     /* disconnect the model from the treeview */
     model = gtk_tree_view_get_model (GTK_TREE_VIEW(facc_dialog->view));
@@ -290,11 +290,11 @@ filter_button_cb (GtkButton *button, FindAccountDialog *facc_dialog)
         g_free (facc_dialog->saved_filter_text);
 
     // save the filter in case of an account event
-    facc_dialog->saved_filter_text = g_strdup (gtk_entry_get_text
+    facc_dialog->saved_filter_text = g_strdup (gnc_entry_get_text
                                      (GTK_ENTRY(facc_dialog->filter_text_entry)));
 
     // Clear the filter
-    gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
 }
 
 static void
@@ -306,7 +306,7 @@ filter_active_cb (GtkEntry *entry, FindAccountDialog *facc_dialog)
         g_free (facc_dialog->saved_filter_text);
 
     // save the filter in case of an account event
-    facc_dialog->saved_filter_text = g_strdup (gtk_entry_get_text
+    facc_dialog->saved_filter_text = g_strdup (gnc_entry_get_text
                                      (GTK_ENTRY(facc_dialog->filter_text_entry)));
 
     gtk_editable_select_region (GTK_EDITABLE(facc_dialog->filter_text_entry), 0, -1);
@@ -361,6 +361,7 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
 
     ENTER(" ");
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(facc_dialog));
     gnc_builder_add_from_file (builder, "dialog-find-account.glade", "list-store");
     gnc_builder_add_from_file (builder, "dialog-find-account.glade", "find_account_window");
 
@@ -472,16 +473,19 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
     g_signal_connect (facc_dialog->window, "delete-event",
                       G_CALLBACK(gnc_find_account_dialog_window_delete_event_cb), facc_dialog);
 
-    g_signal_connect (facc_dialog->window, "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(facc_dialog->window), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
                       G_CALLBACK(gnc_find_account_dialog_window_key_press_cb), facc_dialog);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, facc_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, facc_dialog);
 
     g_object_unref (G_OBJECT(builder));
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(facc_dialog->window), GTK_WINDOW(parent));
 
-    gtk_widget_show_all (GTK_WIDGET(facc_dialog->window));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(facc_dialog->window));
 
     if (facc_dialog->account != NULL)
     {
@@ -499,10 +503,10 @@ gnc_find_account_dialog_create (GtkWidget *parent, FindAccountDialog *facc_dialo
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(facc_dialog->radio_subroot), TRUE);
     }
     else
-        gtk_widget_hide (facc_dialog->radio_frame);
+        gtk_widget_set_visible (GTK_WIDGET(facc_dialog->radio_frame), FALSE);
 
     // Set the filter to Wildcard
-    gtk_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(facc_dialog->filter_text_entry), "");
 
     // add a handler to listen for account events
     facc_dialog->event_handler_id = qof_event_register_handler
@@ -520,7 +524,7 @@ close_handler (gpointer user_data)
     ENTER(" ");
     gnc_save_window_size (GNC_PREFS_GROUP,
                           GTK_WINDOW(facc_dialog->window));
-    gtk_widget_destroy (GTK_WIDGET(facc_dialog->window));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(facc_dialog->window));
     LEAVE(" ");
 }
 

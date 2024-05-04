@@ -173,10 +173,7 @@ gnc_plugin_page_show_summarybar (GncPluginPage *page,
     if (!page->summarybar)
         return;
 
-    if (visible)
-        gtk_widget_show (page->summarybar);
-    else
-        gtk_widget_hide (page->summarybar);
+    gtk_widget_set_visible (GTK_WIDGET(page->summarybar), visible);
 }
 
 

@@ -449,7 +449,7 @@ get_negative_color_str (void)
     GtkWidget *label = gtk_label_new ("Color");
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
     gtk_style_context_add_class (context, "gnc-class-negative-numbers");
-    gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+    gtk_style_context_get_color (context, &color);
     rgba = gdk_rgba_copy (&color);
 
     color_str = g_strdup_printf ("#%02X%02X%02X",
@@ -668,10 +668,16 @@ gnc_main_window_summary_new (void)
         gtk_cell_layout_set_cell_data_func (GTK_CELL_LAYOUT(retval->totals_combo), textRenderer, cdf, retval, NULL);
     }
 
-    gtk_container_set_border_width (GTK_CONTAINER (retval->hbox), 2);
-    gtk_box_pack_start (GTK_BOX(retval->hbox), retval->totals_combo, TRUE, TRUE, 5);
-    gtk_widget_show (retval->totals_combo);
-    gtk_widget_show (retval->hbox);
+    gnc_box_set_all_margins (GTK_BOX(retval->hbox), 2);
+    gtk_box_append (GTK_BOX(retval->hbox), GTK_WIDGET(retval->totals_combo));
+    gtk_box_set_spacing (GTK_BOX(retval->hbox), 5);
+
+    gtk_widget_set_visible (GTK_WIDGET(retval->totals_combo), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET(retval->hbox), TRUE);
+
+    gtk_widget_set_vexpand (GTK_WIDGET(retval->totals_combo), FALSE);
+    gtk_widget_set_hexpand (GTK_WIDGET(retval->totals_combo), TRUE);
+    gtk_widget_set_valign (GTK_WIDGET(retval->totals_combo), GTK_ALIGN_END);
 
     g_signal_connect_swapped (G_OBJECT (retval->hbox), "destroy",
                               G_CALLBACK (gnc_main_window_summary_destroy_cb),

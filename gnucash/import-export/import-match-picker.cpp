@@ -417,7 +417,7 @@ init_match_picker_gui(GtkWidget *parent, GNCImportMatchPicker * matcher)
     
     gnc_restore_window_size(GNC_PREFS_GROUP,
                             GTK_WINDOW (matcher->transaction_matcher), GTK_WINDOW(parent));
-    gtk_widget_show(matcher->transaction_matcher);
+    gtk_widget_set_visible (GTK_WIDGET(matcher->transaction_matcher), true);
 
     g_object_unref(G_OBJECT(builder));
 
@@ -457,11 +457,14 @@ gnc_import_match_picker_run_and_close (GtkWidget *parent, GNCImportTransInfo *tr
     /* Let this dialog run and close. */
     /*DEBUG("Right before run and close");*/
     gtk_window_set_modal(GTK_WINDOW(matcher->transaction_matcher), TRUE);
-    response = gtk_dialog_run (GTK_DIALOG (matcher->transaction_matcher));
+
+//FIXME gtk4    response = gtk_dialog_run (GTK_DIALOG (matcher->transaction_matcher));
+gtk_window_set_modal (GTK_WINDOW(matcher->transaction_matcher), true); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
     
     gnc_save_window_size(GNC_PREFS_GROUP,
                          GTK_WINDOW (matcher->transaction_matcher));
-    gtk_widget_destroy (matcher->transaction_matcher);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(matcher->transaction_matcher));
     /*DEBUG("Right after run and close");*/
     /* DEBUG("Response was %d.", response); */
     if (response == GTK_RESPONSE_OK && matcher->selected_match_info != old)

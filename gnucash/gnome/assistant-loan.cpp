@@ -280,8 +280,8 @@ typedef struct LoanAssistantData_
     GtkLabel         *payAcctFromLabel;
     GtkLabel         *payEscToLabel;
     GtkLabel         *payEscFromLabel;
-    GtkRadioButton   *payTxnFreqPartRb;
-    GtkRadioButton   *payTxnFreqUniqRb;
+    GtkToggleButton   *payTxnFreqPartTb;
+    GtkToggleButton   *payTxnFreqUniqTb;
     GtkBox           *payFreqHBox;
     GncFrequency     *payGncFreq;
 
@@ -388,7 +388,7 @@ void
 loan_assistant_close_handler( gpointer user_data )
 {
     LoanAssistantData *ldd = static_cast<LoanAssistantData*> (user_data);
-    gtk_widget_destroy( ldd->window );
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(ldd->window));
 }
 
 
@@ -466,7 +466,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
     loan_assistant_data_init( ldd );
 
     builder = gtk_builder_new();
-
+    gtk_builder_set_current_object (builder, G_OBJECT(ldd));
     gnc_builder_add_from_file  (builder , "assistant-loan.glade", "len_liststore");
     gnc_builder_add_from_file  (builder , "assistant-loan.glade", "range_liststore");
     gnc_builder_add_from_file  (builder , "assistant-loan.glade", "type_liststore");
@@ -528,8 +528,8 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
         ldd->payAcctFromLabel = GTK_LABEL(gtk_builder_get_object(builder, "pay_from_account_label"));
         ldd->payEscToLabel = GTK_LABEL(gtk_builder_get_object(builder, "pay_escrow_to_label"));
         ldd->payEscFromLabel = GTK_LABEL(gtk_builder_get_object(builder, "pay_escrow_from_label"));
-        ldd->payTxnFreqPartRb = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "pay_txn_part_rb"));
-        ldd->payTxnFreqUniqRb = GTK_RADIO_BUTTON(gtk_builder_get_object(builder, "pay_uniq_freq_rb"));
+        ldd->payTxnFreqPartTb = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "pay_txn_part_rb"));
+        ldd->payTxnFreqUniqTb = GTK_TOGGLE_BUTTON(gtk_builder_get_object(builder, "pay_uniq_freq_rb"));
         ldd->payFreqHBox = GTK_BOX(gtk_builder_get_object(builder, "pay_freq_hbox"));
     }
     /* Review Page */
@@ -734,8 +734,7 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
         g_object_set (ldd->optEscrowGAS, "entry-width", 50, NULL);
         gnc_account_sel_set_new_account_modal (GNC_ACCOUNT_SEL(ldd->optEscrowGAS), true);
         gnc_account_sel_set_new_account_ability( ldd->optEscrowGAS, TRUE );
-        gtk_container_add( GTK_CONTAINER(ldd->optEscrowHBox),
-                           GTK_WIDGET(ldd->optEscrowGAS) );
+        gtk_box_prepend (GTK_BOX(ldd->optEscrowHBox), GTK_WIDGET(ldd->optEscrowGAS));
 
         {
             /* . Each RepayOpt gets an "entry" in the optContainer.
@@ -769,9 +768,9 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                     GTK_CHECK_BUTTON(
                         gtk_check_button_new_with_label(
                             str->str ));
-                gtk_box_pack_start( GTK_BOX(vb),
-                                    GTK_WIDGET(rouid->optCb),
-                                    FALSE, FALSE, 2 );
+                gtk_box_append (GTK_BOX(vb), GTK_WIDGET(rouid->optCb));
+                gtk_box_set_spacing (GTK_BOX(vb), 2);
+
                 rouid->escrowCb =
                     GTK_CHECK_BUTTON(
                         gtk_check_button_new_with_label(
@@ -780,7 +779,9 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                     GTK_WIDGET(rouid->escrowCb),
                     FALSE );
 
-                gtk_box_pack_start( GTK_BOX(vb), GTK_WIDGET(rouid->escrowCb), FALSE, FALSE, 2 );
+                gtk_box_append (GTK_BOX(vb), GTK_WIDGET(rouid->escrowCb));
+                gtk_box_set_spacing (GTK_BOX(vb), 2);
+
                 gtk_widget_set_margin_start (GTK_WIDGET(rouid->escrowCb), 12);
 
                 g_signal_connect( rouid->optCb, "toggled",
@@ -793,8 +794,9 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                                   G_CALLBACK(loan_opt_escrow_toggled_cb),
                                   rouid );
 
-                gtk_box_pack_start( GTK_BOX(ldd->optVBox), GTK_WIDGET(vb), FALSE, FALSE, 2 );
-                gtk_widget_show_all( GTK_WIDGET(ldd->optVBox) );
+                gtk_box_append (GTK_BOX(ldd->optVBox), GTK_WIDGET(vb));
+                gtk_box_set_spacing (GTK_BOX(ldd->optVBox), 2);
+//FIXME gtk4                gtk_widget_show_all( GTK_WIDGET(ldd->optVBox) );
             }
             g_string_free( str, TRUE );
         }
@@ -803,14 +805,15 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                           G_CALLBACK(loan_pay_use_esc_toggle_cb), ldd );
         g_signal_connect( ldd->paySpecSrcAcct, "toggled",
                           G_CALLBACK(loan_pay_spec_src_toggle_cb), ldd );
-        g_signal_connect( ldd->payTxnFreqUniqRb, "toggled",
+        g_signal_connect( ldd->payTxnFreqUniqTb, "toggled",
                           G_CALLBACK(loan_pay_freq_toggle_cb), ldd );
 
         {
             GtkBox *hbox;
             hbox = GTK_BOX(gtk_builder_get_object(builder, "type_freq_hbox"));
             ldd->prmVarGncFreq = GNC_FREQUENCY(gnc_frequency_new( NULL, NULL ));
-            gtk_box_pack_start( GTK_BOX(hbox) , GTK_WIDGET(ldd->prmVarGncFreq), TRUE, FALSE, 0 );
+            gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(ldd->prmVarGncFreq));
+
             g_signal_connect (ldd->prmVarGncFreq, "changed",
                               G_CALLBACK (loan_info_page_valid_cb), ldd);
         }
@@ -818,13 +821,13 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
             GtkBox *hbox;
             hbox = GTK_BOX(gtk_builder_get_object(builder, "freq_frame_hbox"));
             ldd->repGncFreq = GNC_FREQUENCY(gnc_frequency_new( NULL, NULL ));
-            gtk_box_pack_start( GTK_BOX(hbox) , GTK_WIDGET(ldd->repGncFreq), TRUE, FALSE, 0 );
+            gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(ldd->repGncFreq));
             g_signal_connect (ldd->repGncFreq, "changed",
                               G_CALLBACK (loan_rep_page_valid_cb), ldd);
         }
 
         ldd->payGncFreq = GNC_FREQUENCY(gnc_frequency_new( NULL, NULL ));
-        gtk_container_add( GTK_CONTAINER(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
+        gtk_box_prepend (GTK_BOX(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq));
 
         g_signal_connect (ldd->payGncFreq, "changed",
                           G_CALLBACK (loan_pay_page_valid_cb), ldd);
@@ -889,10 +892,10 @@ gnc_loan_assistant_create( LoanAssistantData *ldd )
                       G_CALLBACK(loan_assistant_window_destroy_cb),
                       ldd );
 
-    gtk_builder_connect_signals(builder, ldd);
+//FIXME gtk4    gtk_builder_connect_signals(builder, ldd);
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_show_all( ldd->window );
+//FIXME gtk4    gtk_widget_show_all( ldd->window );
     return window;
 }
 
@@ -1038,7 +1041,7 @@ loan_info_calc_update_cb( GtkWidget *w, gpointer user_data )
                 == 1 ? 12 : 1 );
     remain = total - i;
     gtk_spin_button_set_value( ldd->prmRemainSpin, remain );
-    gtk_widget_show( GTK_WIDGET(ldd->prmRemainSpin) );
+    gtk_widget_set_visible (GTK_WIDGET(ldd->prmRemainSpin), true);
 }
 
 
@@ -1339,10 +1342,10 @@ loan_rep_prep( GtkAssistant *assistant, gpointer user_data )
     ldd->ld.repAmount = g_string_free (str, false);
 
     if ( ldd->ld.repMemo )
-        gtk_entry_set_text( ldd->repTxnName, ldd->ld.repMemo );
+        gnc_entry_set_text( ldd->repTxnName, ldd->ld.repMemo );
 
     if ( ldd->ld.repAmount )
-        gtk_entry_set_text( ldd->repAmtEntry, ldd->ld.repAmount );
+        gnc_entry_set_text( ldd->repAmtEntry, ldd->ld.repAmount );
 
     gnc_account_sel_set_account( ldd->repAssetsFromGAS, ldd->ld.repFromAcct, FALSE );
     gnc_account_sel_set_account( ldd->repPrincToGAS, ldd->ld.repPriAcct, FALSE );
@@ -1476,9 +1479,9 @@ loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
         gtk_assistant_set_page_title (assistant, page, str->str );
 
         /* copy in the relevant data from the currently-indexed option. */
-        gtk_entry_set_text( ldd->payTxnName, rod->txnMemo );
+        gnc_entry_set_text( ldd->payTxnName, rod->txnMemo );
         g_string_printf( str, "%0.2f", rod->amount );
-        gtk_entry_set_text( ldd->payAmtEntry, str->str );
+        gnc_entry_set_text( ldd->payAmtEntry, str->str );
 
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->payUseEscrow),
                                   (ldd->ld.escrowAcct != NULL) );
@@ -1520,11 +1523,11 @@ loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
                                           (gpointer) loan_pay_page_valid_cb, ldd );
 
 
-        g_signal_handlers_block_by_func(ldd->payTxnFreqUniqRb,
+        g_signal_handlers_block_by_func(ldd->payTxnFreqUniqTb,
                                         (gpointer) loan_pay_freq_toggle_cb, ldd );
-        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqPartRb), !rod->FreqUniq );
-        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb), rod->FreqUniq );
-        g_signal_handlers_unblock_by_func(ldd->payTxnFreqUniqRb,
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqPartTb), !rod->FreqUniq );
+        gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqTb), rod->FreqUniq );
+        g_signal_handlers_unblock_by_func(ldd->payTxnFreqUniqTb,
                                           (gpointer) loan_pay_freq_toggle_cb, ldd );
 
         gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqHBox), rod->FreqUniq );
@@ -1533,10 +1536,10 @@ loan_pay_prep( GtkAssistant *assistant, gpointer user_data )
         {
             g_signal_handlers_disconnect_by_func( ldd->payGncFreq,
                                                   (gpointer) loan_pay_page_valid_cb, ldd );
-            gtk_container_remove( GTK_CONTAINER(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
+            gtk_box_remove (GTK_BOX(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq));
             ldd->payGncFreq = NULL;
             ldd->payGncFreq = GNC_FREQUENCY(gnc_frequency_new_from_recurrence( rod->schedule, rod->startDate ));
-            gtk_container_add( GTK_CONTAINER(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq) );
+            gtk_box_prepend (GTK_BOX(ldd->payFreqHBox), GTK_WIDGET(ldd->payGncFreq));
             g_signal_connect (ldd->payGncFreq, "changed",
                               G_CALLBACK (loan_pay_page_valid_cb), ldd);
         }
@@ -1644,7 +1647,7 @@ loan_pay_freq_toggle_cb( GtkToggleButton *tb, gpointer user_data )
 
     rod = ldd->ld.repayOpts[ldd->currentIdx];
 
-    rod->FreqUniq = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqRb) );
+    rod->FreqUniq = gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(ldd->payTxnFreqUniqTb) );
     gtk_widget_set_sensitive( GTK_WIDGET(ldd->payFreqHBox), rod->FreqUniq );
 
     if ( rod->FreqUniq )
@@ -1841,7 +1844,7 @@ loan_rev_prep( GtkAssistant *assistant, gpointer user_data )
     /* Cleanup old view */
     if ( ldd->revView != NULL )
     {
-        gtk_widget_destroy( GTK_WIDGET(ldd->revView) );
+//FIXME gtk4        gtk_window_destroy(GTK_WINDOW(ldd->revView));
         ldd->revView = NULL;
     }
 
@@ -1915,10 +1918,8 @@ loan_rev_prep( GtkAssistant *assistant, gpointer user_data )
         }
     }
 
-    gtk_container_add( GTK_CONTAINER(ldd->revScrollWin),
-                       GTK_WIDGET(ldd->revView) );
-    gtk_widget_show( GTK_WIDGET(ldd->revView) );
-
+    gtk_box_prepend (GTK_BOX(ldd->revScrollWin), GTK_WIDGET(ldd->revView));
+    gtk_widget_set_visible (GTK_WIDGET(ldd->revView), true);
     loan_rev_recalc_schedule( ldd );
 
     {
@@ -3137,7 +3138,7 @@ gnc_ui_sx_loan_assistant_create (void)
                                          GNC_ID_ACCOUNT,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (ldd->window);
+//FIXME gtk4    gtk_widget_show_all (ldd->window);
 
     gnc_window_adjust_for_screen (GTK_WINDOW(ldd->window));
 }

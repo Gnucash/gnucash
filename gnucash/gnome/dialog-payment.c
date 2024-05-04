@@ -120,12 +120,12 @@ struct _payment_window
 void gnc_ui_payment_window_set_num (PaymentWindow *pw, const char* num)
 {
     g_assert(pw);
-    gtk_entry_set_text(GTK_ENTRY (pw->num_entry), num);
+    gnc_entry_set_text(GTK_ENTRY (pw->num_entry), num);
 }
 void gnc_ui_payment_window_set_memo (PaymentWindow *pw, const char* memo)
 {
     g_assert(pw);
-    gtk_entry_set_text(GTK_ENTRY (pw->memo_entry), memo);
+    gnc_entry_set_text(GTK_ENTRY (pw->memo_entry), memo);
 }
 void gnc_ui_payment_window_set_date (PaymentWindow *pw, const GDate *date)
 {
@@ -203,8 +203,8 @@ void gnc_payment_cancel_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_window_destroy_cb (GtkWidget *widget, gpointer data);
 void gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
         GtkTreeViewColumn *column, PaymentWindow *pw);
-void gnc_payment_leave_amount_cb (GtkWidget *widget, GdkEventFocus *event,
-                                  PaymentWindow *pw);
+void gnc_payment_leave_amount_cb (GtkEventControllerFocus *controller,
+                                  gpointer user_data);
 void gnc_payment_activate_amount_cb (GtkWidget *widget, PaymentWindow *pw);
 void gnc_payment_window_fill_docs_list (PaymentWindow *pw);
 
@@ -310,14 +310,11 @@ update_cleanup:
     /* Check if there are issues preventing a successful payment */
     gtk_label_set_text (GTK_LABEL(pw->conflict_message), conflict_msg);
     gtk_widget_set_sensitive (pw->ok_button, allow_payment);
+
     if (conflict_msg)
-    {
-        gtk_widget_show (pw->payment_warning);
-    }
+        gtk_widget_set_visible (GTK_WIDGET(pw->payment_warning), TRUE);
     else
-    {
-        gtk_widget_hide (pw->payment_warning);
-    }
+        gtk_widget_set_visible (GTK_WIDGET(pw->payment_warning), FALSE);
 
     return allow_payment;
 }
@@ -327,8 +324,8 @@ gnc_payment_window_close_handler (gpointer data)
 {
     PaymentWindow *pw = data;
 
-    if (pw)
-        gtk_widget_destroy (pw->dialog);
+//FIXME gtk4    if (pw)
+//        gtk_window_destroy (GTK_WINDOW(pw->dialog));
 }
 
 static void
@@ -690,23 +687,23 @@ gnc_payment_dialog_owner_type_changed (PaymentWindow *pw)
     g_object_ref (G_OBJECT (pw->amount_credit_edit));
 
     if (gtk_widget_is_ancestor(pw->amount_debit_edit, credit_box))
-        gtk_container_remove (GTK_CONTAINER (credit_box), pw->amount_debit_edit);
+        gtk_box_remove (GTK_BOX(credit_box), GTK_WIDGET(pw->amount_debit_edit));
     if (gtk_widget_is_ancestor(pw->amount_credit_edit, debit_box))
-        gtk_container_remove (GTK_CONTAINER (debit_box), pw->amount_credit_edit);
+        gtk_box_remove (GTK_BOX(debit_box), GTK_WIDGET(pw->amount_credit_edit));
 
     if (!gtk_widget_is_ancestor(pw->amount_debit_edit, debit_box))
-        gtk_box_pack_start (GTK_BOX (debit_box), pw->amount_debit_edit, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(debit_box), GTK_WIDGET(pw->amount_debit_edit));
     if (!gtk_widget_is_ancestor(pw->amount_credit_edit, credit_box))
-        gtk_box_pack_start (GTK_BOX (credit_box), pw->amount_credit_edit, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(credit_box), GTK_WIDGET(pw->amount_credit_edit));
 
     g_object_unref (G_OBJECT (pw->amount_debit_edit));
     g_object_unref (G_OBJECT (pw->amount_credit_edit));
 
     /* Redo the owner_choice widget */
-    if (pw->owner_choice)
-        gtk_widget_destroy(pw->owner_choice);
+//FIXME gtk4    if (pw->owner_choice)
+//        gtk_window_destroy (GTK_WINDOW(pw->owner_choice));
     pw->owner_choice = gnc_owner_select_create (NULL, pw->owner_box, pw->book, &pw->owner);
-    gtk_widget_show (pw->owner_choice);
+    gtk_widget_set_visible (GTK_WIDGET(pw->owner_choice), TRUE);
     gnc_payment_dialog_owner_changed (pw);
 
     g_signal_connect (G_OBJECT (pw->owner_choice), "changed",
@@ -978,8 +975,8 @@ gnc_payment_ok_cb (G_GNUC_UNUSED GtkWidget *widget, gpointer data)
         gboolean auto_pay;
 
         /* Obtain all our ancillary information */
-        memo = gtk_entry_get_text (GTK_ENTRY (pw->memo_entry));
-        num = gtk_entry_get_text (GTK_ENTRY (pw->num_entry));
+        memo = gnc_entry_get_text (GTK_ENTRY (pw->memo_entry));
+        num = gnc_entry_get_text (GTK_ENTRY (pw->num_entry));
         g_date_clear (&date, 1);
         gnc_date_edit_get_gdate (GNC_DATE_EDIT (pw->date_edit), &date);
         t = gdate_to_time64 (date);
@@ -1102,10 +1099,10 @@ gnc_payment_acct_tree_row_activated_cb (GtkWidget *widget, GtkTreePath *path,
 }
 
 void
-gnc_payment_leave_amount_cb (G_GNUC_UNUSED GtkWidget *widget,
-                             G_GNUC_UNUSED GdkEventFocus *event,
-                             PaymentWindow *pw)
+gnc_payment_leave_amount_cb (GtkEventControllerFocus *controller,
+                             gpointer user_data)
 {
+    PaymentWindow *pw = user_data;
     gboolean d_payment_ok = FALSE;
     gboolean c_payment_ok = FALSE;
 
@@ -1137,7 +1134,7 @@ void
 gnc_payment_activate_amount_cb (G_GNUC_UNUSED GtkWidget *widget,
                                 PaymentWindow *pw)
 {
-      gnc_payment_leave_amount_cb (NULL, NULL, pw);
+//FIXME gtk4      gnc_payment_leave_amount_cb (NULL, NULL, pw);
 }
 
 /* Select the list of accounts to show in the tree */
@@ -1254,6 +1251,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
 
     /* Open and read the Glade File */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(pw));
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "docs_list_hor_adj");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "docs_list_vert_adj");
     gnc_builder_add_from_file (builder, "dialog-payment.glade", "docs_list_model");
@@ -1305,8 +1303,12 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_debit_edit),
                                            TRUE);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_debit_edit), gnc_numeric_zero());
-    g_signal_connect(G_OBJECT(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(pw->amount_debit_edit))),
-                     "focus-out-event",
+
+    GtkEventController *event_controller1 = gtk_event_controller_focus_new ();
+    gtk_widget_add_controller (GTK_WIDGET(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(pw->amount_debit_edit))), 
+                                          event_controller1);
+    g_signal_connect(G_OBJECT(event_controller1),
+                     "leave",
                      G_CALLBACK(gnc_payment_leave_amount_cb), pw);
 
     g_signal_connect(G_OBJECT(pw->amount_debit_edit),
@@ -1317,8 +1319,12 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
     gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (pw->amount_credit_edit),
                                            TRUE);
     gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT (pw->amount_credit_edit), gnc_numeric_zero());
-    g_signal_connect(G_OBJECT(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(pw->amount_credit_edit))),
-                     "focus-out-event",
+
+    GtkEventController *event_controller2 = gtk_event_controller_focus_new ();
+    gtk_widget_add_controller (GTK_WIDGET(gnc_amount_edit_gtk_entry(GNC_AMOUNT_EDIT(pw->amount_credit_edit))), 
+                                          event_controller2);
+    g_signal_connect(G_OBJECT(event_controller2),
+                     "leave",
                      G_CALLBACK(gnc_payment_leave_amount_cb), pw);
 
     g_signal_connect(G_OBJECT(pw->amount_credit_edit),
@@ -1327,7 +1333,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
 
     box = GTK_WIDGET (gtk_builder_get_object (builder, "date_box"));
     pw->date_edit = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX (box), pw->date_edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(pw->date_edit));
     pw->print_check = GTK_WIDGET (gtk_builder_get_object (builder, "print_check"));
 
     pw->docs_list_tree_view = GTK_WIDGET (gtk_builder_get_object (builder, "docs_list_tree_view"));
@@ -1380,7 +1386,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
 
     box = GTK_WIDGET (gtk_builder_get_object (builder, "acct_window"));
     pw->acct_tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
-    gtk_container_add (GTK_CONTAINER (box), pw->acct_tree);
+    gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(pw->acct_tree));
     gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(pw->acct_tree), FALSE);
     gnc_payment_set_account_types (GNC_TREE_VIEW_ACCOUNT (pw->acct_tree));
 
@@ -1390,9 +1396,9 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
     gnc_payment_set_owner_type (pw, gncOwnerGetType (&pw->tx_info->owner));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full( builder,
-                                      gnc_builder_connect_full_func,
-                                      pw);
+//FIXME gtk4    gtk_builder_connect_signals_full( builder,
+//                                      gnc_builder_connect_full_func,
+//                                      pw);
 
     g_signal_connect (G_OBJECT (pw->acct_tree), "row-activated",
                       G_CALLBACK (gnc_payment_acct_tree_row_activated_cb), pw);
@@ -1419,7 +1425,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
                                          QOF_EVENT_DESTROY);
 
     /* Show it all */
-    gtk_widget_show_all (pw->dialog);
+//FIXME gtk4    gtk_widget_show_all (pw->dialog);
     g_object_unref(G_OBJECT(builder));
 
     // The customer choice widget should have keyboard focus
@@ -1436,7 +1442,7 @@ new_payment_window (GtkWindow *parent, QofBook *book, InitialPaymentInfo *tx_inf
         const gchar *text;
         const char *acct_type;
 
-        text = gtk_entry_get_text(GTK_ENTRY (gtk_bin_get_child(GTK_BIN (GTK_COMBO_BOX(pw->post_combo)))));
+        text = gnc_entry_get_text (GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(pw->post_combo))));
 
         if (!text || g_strcmp0 (text, "") == 0)
         {
@@ -1612,8 +1618,8 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
                                          GTK_BUTTONS_CLOSE,
                                          "%s",
                                          _("The selected transaction doesn't have splits that can be assigned as a payment"));
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         PINFO("No asset splits in txn \"%s\"; cannot use this for assigning a payment.",
                   xaccTransGetDescription(txn));
         return NULL;
@@ -1635,7 +1641,7 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
                                                          NULL));
         GtkWidget *content = gtk_dialog_get_content_area(dialog);
         GtkWidget *label = gtk_label_new (message);
-        gtk_box_pack_start (GTK_BOX(content), label, FALSE, TRUE, 0);
+        gtk_box_append (GTK_BOX(content), GTK_WIDGET(label));
 
         /* Add splits as selectable options to the dialog */
         for (GList *node = payment_splits; node; node = node->next)
@@ -1646,38 +1652,44 @@ static Split *select_payment_split (GtkWindow *parent, Transaction *txn)
 
             if (node == payment_splits)
             {
-                first_rb = gtk_radio_button_new_with_label (NULL, split_str);
+                first_rb = gtk_check_button_new_with_label (split_str);
                 rbutton = first_rb;
             }
             else
-                rbutton = gtk_radio_button_new_with_label_from_widget(GTK_RADIO_BUTTON(first_rb), split_str);
+            {
+                rbutton = gtk_check_button_new_with_label (split_str);
+                gtk_check_button_set_group (GTK_CHECK_BUTTON(first_rb), GTK_CHECK_BUTTON(rbutton));
+            }
 
             g_object_set_data(G_OBJECT(rbutton), "split", split);
-            gtk_box_pack_start (GTK_BOX(content), rbutton, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(content), GTK_WIDGET(rbutton));
 
             g_free (split_str);
         }
 
         gtk_dialog_set_default_response (dialog, GTK_BUTTONS_CANCEL);
-        gtk_widget_show_all (GTK_WIDGET(dialog));
-        answer = gtk_dialog_run (dialog);
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(dialog));
+
+//FIXME gtk4    answer = gtk_dialog_run (dialog);
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+answer = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
         if (answer == GTK_BUTTONS_OK)
         {
-            GSList *rbgroup = gtk_radio_button_get_group(GTK_RADIO_BUTTON(first_rb));
-            GSList *rbnode;
-            for (rbnode = rbgroup; rbnode; rbnode = rbnode->next)
-            {
-                GtkWidget *rbutton = rbnode->data;
-                if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rbutton)))
-                {
-                    selected_split = g_object_get_data(G_OBJECT(rbutton), "split");
-                    break;
-                }
-            }
+//FIXME gtk4            GSList *rbgroup = gtk_radio_button_get_group (GTK_RADIO_BUTTON(first_rb));
+//            GSList *rbnode;
+//            for (rbnode = rbgroup; rbnode; rbnode = rbnode->next)
+//            {
+//                GtkWidget *rbutton = rbnode->data;
+//                if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(rbutton)))
+//                {
+//                    selected_split = g_object_get_data(G_OBJECT(rbutton), "split");
+//                    break;
+//                }
+//            }
         }
 
-        gtk_widget_destroy (GTK_WIDGET(dialog));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(dialog));
     }
     else
         selected_split = payment_splits->data;
@@ -1759,8 +1771,8 @@ static GList *select_txn_lots (GtkWindow *parent, Transaction *txn, Account **po
                                          "GnuCash can only handle transactions that post to a single account.\n\n"
                                          "Please correct this manually by editing the transaction directly and then try again."),
                                          split_str);
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         PINFO("Multiple asset accounts in splits of txn \"%s\"; cannot use this for assigning a payment.",
               xaccTransGetDescription(txn));
         g_free (split_str);

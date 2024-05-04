@@ -1,0 +1,482 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkWindow" id="link_path_head_changed_window">
+    <property name="default-width">450</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <property name="visible">1</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
+            <child>
+              <object class="GtkLabel">
+                <property name="label" translatable="yes">Change Linked Document path head</property>
+                <attributes>
+                  <attribute name="weight" value="bold"/>
+                </attributes>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="existing_path_head">
+                <property name="margin-top">6</property>
+                <style>
+                  <class name="gnc-class-highlight"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="existing_path_hbox">
+                <property name="margin-bottom">12</property>
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Existing relative file path links will be converted to absolute ones by combining them with the existing path head unless box unticked.</property>
+                    <property name="wrap">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="use_old_path_head">
+                    <property name="active">1</property>
+                    <property name="focusable">1</property>
+                    <property name="halign">start</property>
+                    <property name="valign">end</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="new_path_head">
+                <style>
+                  <class name="gnc-class-highlight"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="new_path_hbox">
+                <child>
+                  <object class="GtkLabel">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Existing absolute file path links will be converted to relative ones by comparing them to the new path head unless box unticked.</property>
+                    <property name="wrap">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="use_new_path_head">
+                    <property name="active">1</property>
+                    <property name="focusable">1</property>
+                    <property name="halign">start</property>
+                    <property name="valign">end</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Note: Only Document Links that are not read-only will be changed.</property>
+                <property name="margin-top">12</property>
+                <property name="wrap">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <child>
+              <object class="GtkButton" id="button4">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child internal-child="action_area">
+      <object class="GtkBox">
+        <property name="can-focus">False</property>
+        <property name="valign">center</property>
+      </object>
+    </child>
+  </object>
+
+  <object class="GtkWindow" id="linked_doc_uri_window">
+    <property name="default-width">600</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <property name="visible">1</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkBox">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox">
+                <property name="halign">center</property>
+                <property name="margin-bottom">6</property>
+                <property name="margin-top">6</property>
+                <child>
+                  <object class="GtkCheckButton" id="linked_file">
+                    <property name="active">1</property>
+                    <property name="label" translatable="yes">Linked _File</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="linked_loc">
+                    <property name="active">0</property>
+                    <property name="group">linked_file</property>
+                    <property name="label" translatable="yes">Linked _Location</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="file_hbox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkLabel" id="path_head_label">
+                    <property name="halign">center</property>
+                    <property name="margin-bottom">6</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="file_chooser_button">
+                    <property name="focusable">1</property>
+                    <property name="receives-default">1</property>
+                    <child>
+                      <object class="GtkBox">
+                        <child>
+                          <object class="GtkLabel" id="file_chooser_button_label">
+                            <property name="halign">start</property>
+                            <property name="hexpand">1</property>
+                            <property name="label" translatable="yes">(none)</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkImage">
+                            <property name="icon-name">document-open-symbolic</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="existing_hbox">
+                    <property name="margin-bottom">3</property>
+                    <property name="margin-top">3</property>
+                    <property name="vexpand">1</property>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="location_hbox">
+                <property name="orientation">vertical</property>
+                <property name="visible">0</property>
+                <child>
+                  <object class="GtkLabel" id="location_label">
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Enter an URL like "https://www.gnucash.org"</property>
+                    <property name="margin-bottom">3</property>
+                    <property name="margin-top">3</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="location_entry">
+                    <property name="focusable">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="warning_hbox">
+                    <property name="margin-bottom">3</property>
+                    <property name="margin-top">3</property>
+                    <property name="spacing">6</property>
+                    <child>
+                      <object class="GtkImage" id="warning_image">
+                        <property name="halign">start</property>
+                        <property name="icon-name">dialog-warning</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkLabel" id="warning_label">
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">Location does not start with a valid scheme</property>
+                        <style>
+                          <class name="gnc-class-highlight"/>
+                        </style>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="action_area">
+            <child>
+              <object class="GtkButton" id="remove_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">1</property>
+                <property name="label" translatable="yes">_Remove</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="cancel_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+
+  <object class="GtkListStore" id="list-store">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gint64"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+      <column type="gpointer"/>
+      <column type="gchararray"/>
+      <column type="gboolean"/>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkWindow" id="linked_doc_window">
+    <property name="child">
+      <object class="GtkBox" id="dialog-vbox">
+        <property name="orientation">vertical</property>
+        <property name="visible">1</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkLabel" id="title_label">
+            <property name="label" translatable="yes">All Linked Documents</property>
+            <property name="valign">center</property>
+            <attributes>
+              <attribute name="weight" value="bold"/>
+            </attributes>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="path-head">
+            <property name="valign">center</property>
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkScrolledWindow" id="scrolledwindow">
+            <property name="child">
+              <object class="GtkTreeView" id="treeview">
+                <property name="focusable">1</property>
+                <property name="model">list-store</property>
+                <property name="search-column">0</property>
+                <child internal-child="selection">
+                  <object class="GtkTreeSelection"/>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="trans-date">
+                    <property name="alignment">0.5</property>
+                    <property name="reorderable">1</property>
+                    <property name="resizable">1</property>
+                    <property name="sort-column-id">1</property>
+                    <property name="title" translatable="yes">Date</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="text">0</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="desc_id">
+                    <property name="sort-column-id">2</property>
+                    <property name="title" translatable="yes">Id</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext5"/>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="text">2</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="desc_item">
+                    <property name="alignment">0.5</property>
+                    <property name="reorderable">1</property>
+                    <property name="resizable">1</property>
+                    <property name="sort-column-id">3</property>
+                    <property name="title" translatable="yes">Type</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext2"/>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="text">3</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="doclink">
+                    <property name="alignment">0.5</property>
+                    <property name="reorderable">1</property>
+                    <property name="resizable">1</property>
+                    <property name="sort-column-id">4</property>
+                    <property name="title" translatable="yes">Linked Document</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext3">
+                        <property name="ellipsize">start</property>
+                      </object>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="text">4</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="available">
+                    <property name="alignment">0.5</property>
+                    <property name="resizable">1</property>
+                    <property name="sort-column-id">5</property>
+                    <property name="title" translatable="yes">Available</property>
+                    <child>
+                      <object class="GtkCellRendererText" id="cellrenderertext4">
+                        <property name="xpad">10</property>
+                      </object>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="text">5</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkTreeViewColumn" id="relative">
+                    <property name="sort-column-id">8</property>
+                    <property name="title" translatable="yes">Relative</property>
+                    <child>
+                      <object class="GtkCellRendererPixbuf" id="cellrendererpix1"/>
+                      <!-- Custom child fragments -->
+                      <attributes>
+                        <attribute name="icon-name">9</attribute>
+                      </attributes>
+                    </child>
+                  </object>
+                </child>
+                <style>
+                  <class name="gnc-class-treeview"/>
+                </style>
+              </object>
+            </property>
+            <property name="focusable">1</property>
+            <property name="vexpand">1</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="total_entries_label">
+            <property name="halign">start</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-end">6</property>
+            <property name="margin-start">6</property>
+            <property name="margin-top">3</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="help_label">
+            <property name="label" translatable="yes">Double click on the entry in the Description column to jump to the Transaction.
+Double click on the entry in the Link column to open the Linked Document.
+Double click on the entry in the Available column to modify the document link.</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-top">3</property>
+            <property name="valign">center</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="buttonbox">
+            <property name="can-focus">False</property>
+            <property name="valign">center</property>
+            <child>
+              <object class="GtkButton" id="reload_and_check_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">true</property>
+                <property name="label" translatable="yes">Reload and Locate Linked Documents</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="reload_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Reload</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="check_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Locate Linked Documents</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="close_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Close</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>

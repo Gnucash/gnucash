@@ -47,7 +47,7 @@ enum
     PROP_CURSOR_NAME, /* the name of the current cursor */
 };
 
-G_DEFINE_TYPE (GncHeader, gnc_header, GTK_TYPE_LAYOUT)
+G_DEFINE_TYPE (GncHeader, gnc_header, GTK_TYPE_FIXED)
 
 static void
 gnc_header_draw_offscreen (GncHeader *header)
@@ -216,11 +216,11 @@ static gboolean
 gnc_header_draw (GtkWidget *header, cairo_t *cr)
 {
     GnucashSheet *sheet = GNC_HEADER(header)->sheet;
-    GdkWindow *sheet_layout_win = gtk_layout_get_bin_window (GTK_LAYOUT(sheet));
+//FIXME gtk4    GdkWindow *sheet_layout_win = gtk_layout_get_bin_window (GTK_LAYOUT(sheet));
     gint x, y;
 
     // use this to get the scroll x value to align the header
-    gdk_window_get_position (sheet_layout_win, &x, &y);
+//FIXME gtk4    gdk_window_get_position (sheet_layout_win, &x, &y);
 
     // if the register page is moved to another window, the surface is
     // not created so test for a surface and create one if null
@@ -313,8 +313,8 @@ gnc_header_reconfigure (GncHeader *header)
     {
         header->height = h;
         header->width = w;
-        gtk_layout_set_size (GTK_LAYOUT(header), w, h);
-        gtk_widget_set_size_request (GTK_WIDGET(header), -1, h);
+//FIXME gtk4        gtk_layout_set_size (GTK_LAYOUT(header), w, h);
+//FIXME gtk4        gtk_widget_set_size_request (GTK_WIDGET(header), -1, h);
         gnc_header_request_redraw (header);
     }
 }
@@ -418,33 +418,34 @@ gnc_header_auto_resize_column (GncHeader *header, gint col)
 
     gnc_header_resize_column (header, col, width);
 }
-
+//FIXME gtk4
+#ifdef skip
 static gint
 gnc_header_event (GtkWidget *widget, GdkEvent *event)
 {
     GncHeader *header = GNC_HEADER(widget);
     GdkWindow *window = gtk_widget_get_window (widget);
-    int x, y;
+    gdouble x_win, y_win;
     int col;
+
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
+        return FALSE;
 
     if (!header->resize_cursor)
         header->resize_cursor = gdk_cursor_new_for_display (gdk_window_get_display (window),
                                                             GDK_SB_H_DOUBLE_ARROW);
 
-    switch (event->type)
+    switch (gdk_event_get_event_type (event))
     {
     case GDK_MOTION_NOTIFY:
-        x = event->motion.x;
-        y = event->motion.y;
-
         if (header->in_resize)
         {
-            int change = x - header->resize_x;
+            int change = x_win - header->resize_x;
             int new_width = header->resize_col_width + change;
 
             if (new_width >= 0)
             {
-                header->resize_x = x;
+                header->resize_x = x_win;
                 header->resize_col_width = new_width;
                 gnc_header_request_redraw (header);
             }
@@ -452,7 +453,7 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             break;
         }
 
-        if (pointer_on_resize_line (header, x, y, &col) &&
+        if (pointer_on_resize_line (header, x_win, y_win, &col) &&
                 gnucash_style_col_is_resizable (header->style, col))
             gdk_window_set_cursor (window, header->resize_cursor);
         else
@@ -462,14 +463,11 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
     case GDK_BUTTON_PRESS:
     {
         int col;
-
-        if (event->button.button != 1)
+        guint button;
+        if (gdk_event_get_button (event, &button) && button != 1)
             break;
 
-        x = event->button.x;
-        y = event->button.y;
-
-        if (pointer_on_resize_line (header, x, y, &col))
+        if (pointer_on_resize_line (header, x_win, y_win, &col))
             col = find_resize_col (header, col);
         else
             col = -1;
@@ -485,13 +483,14 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             header->in_resize = TRUE;
             header->resize_col = col;
             header->resize_col_width = cd->pixel_width;
-            header->resize_x = x;
+            header->resize_x = x_win;
         }
         break;
     }
     case GDK_BUTTON_RELEASE:
     {
-        if (event->button.button != 1)
+        guint button;
+        if (gdk_event_get_button (event, &button) && button != 1)
             break;
 
         if (header->in_resize)
@@ -499,10 +498,9 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
             if (header->resize_col_width == 0)
                 header->resize_col_width = 1;
 
-            gnc_header_resize_column
-                (header,
-                 header->resize_col,
-                 header->resize_col_width);
+            gnc_header_resize_column (header,
+                                      header->resize_col,
+                                      header->resize_col_width);
             header->in_resize = FALSE;
             header->resize_col = -1;
             gnc_header_request_redraw (header);
@@ -515,14 +513,11 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
         gboolean on_line;
         int ptr_col;
         int resize_col;
-
-        if (event->button.button != 1)
+        guint button;
+        if (gdk_event_get_button (event, &button) && button != 1)
             break;
 
-        x = event->button.x;
-        y = event->button.y;
-
-        on_line = pointer_on_resize_line (header, x, y, &ptr_col);
+        on_line = pointer_on_resize_line (header, x_win, y_win, &ptr_col);
 
         /* If we're on a resize line and the column to the right is zero
            width, resize that one. */
@@ -545,7 +540,7 @@ gnc_header_event (GtkWidget *widget, GdkEvent *event)
     }
     return FALSE;
 }
-
+#endif
 
 /* Note that g_value_set_object() refs the object, as does
  * g_object_get(). But g_object_get() only unrefs once when it disgorges
@@ -582,7 +577,7 @@ gnc_header_set_property (GObject *object,
                          GParamSpec *pspec)
 {
     GncHeader *header = GNC_HEADER(object);
-    GtkLayout *layout = GTK_LAYOUT(header);
+    GtkFixed *layout = GTK_FIXED(header);
     gboolean needs_update = FALSE;
     gchar *old_name;
 
@@ -624,16 +619,16 @@ gnc_header_init (GncHeader *header)
     header->width = 400;
     header->style = NULL;
 
-    gtk_widget_add_events (GTK_WIDGET(header),
-                          (GDK_EXPOSURE_MASK
-                          | GDK_BUTTON_PRESS_MASK
-                          | GDK_BUTTON_RELEASE_MASK
-                          | GDK_POINTER_MOTION_MASK
-                          | GDK_POINTER_MOTION_HINT_MASK));
+//FIXME gtk4    gtk_widget_add_events (GTK_WIDGET(header),
+//                          (GDK_EXPOSURE_MASK
+//                          | GDK_BUTTON_PRESS_MASK
+//                          | GDK_BUTTON_RELEASE_MASK
+//                          | GDK_POINTER_MOTION_MASK
+//                          | GDK_POINTER_MOTION_HINT_MASK));
 
     g_signal_connect (G_OBJECT(header), "configure_event",
                       G_CALLBACK(gnc_header_reconfigure), NULL);
-    gtk_widget_show_all (GTK_WIDGET(header));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(header));
 }
 
 
@@ -666,8 +661,8 @@ gnc_header_class_init (GncHeaderClass *header_class)
 
 
     item_class->unrealize = gnc_header_unrealize;
-    item_class->draw      = gnc_header_draw;
-    item_class->event     = gnc_header_event;
+//FIXME gtk4    item_class->draw      = gnc_header_draw;
+//FIXME gtk4    item_class->event     = gnc_header_event;
 }
 
 GtkWidget *

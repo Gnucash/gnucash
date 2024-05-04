@@ -116,7 +116,7 @@ gboolean gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction);
 
 gboolean gnc_gdate_in_valid_range (GDate *test_date, gboolean warn);
 
-gboolean gnc_handle_date_accelerator (GdkEventKey *event,
+gboolean gnc_handle_date_accelerator (GdkEvent *event,
                                       struct tm *tm,
                                       const char *date_str);
 
@@ -148,10 +148,21 @@ void gnc_gtk_dialog_add_button (GtkWidget *dialog,
                                 const gchar *icon_name,
                                 guint response);
 
-/** Note: This dialog is modal!  (It calls gtk_dialog_run() which is modal.)
+/** Note: This dialog is modal! Uses preference settings for default
  */
 gint
-gnc_dialog_run(GtkDialog *dialog, const gchar *pref_key);
+gnc_warning_dialog_run (GtkDialog *dialog, const gchar *pref_key);
+
+/** Note: This dialog is modal!
+ */
+gint
+gnc_dialog_run (GtkDialog *dialog);
+
+/** Note: This dialog is modal!
+ *  Ask OK to close window
+ */
+gboolean
+gnc_ok_to_close_window (GtkWidget *parent);
 
 /* If this is a new book, this function can be used to display book options
  * dialog so user can specify options, before any transactions can be
@@ -174,6 +185,16 @@ gchar* gnc_get_negative_color (void);
 /** This function sets the title of an owner dialog */
 void gnc_owner_window_set_title (GtkWindow*, const char*, GtkWidget*, GtkWidget*);
 
+/** This function sets the entry buffer with text */
+void gnc_entry_set_text (GtkEntry *entry, const gchar *text);
+
+/** This function gets the text of the entry buffer */
+const gchar * gnc_entry_get_text (GtkEntry *entry);
+
+/** This function sets all margins of a GtkBox */
+void gnc_box_set_all_margins (GtkBox *box, gint margin);
+
+void gnc_builder_set_current_object (GtkBuilder *builder, gpointer user_data);
 
 #ifdef __cplusplus
 }

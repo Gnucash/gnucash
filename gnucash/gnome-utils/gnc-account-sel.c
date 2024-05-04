@@ -138,7 +138,7 @@ gas_set_property (GObject *object, guint param_id,
 
         case PROP_COMBO_ENTRY_WIDTH:
             {
-                GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+                GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX((gas->combo))));
                 gboolean expand = FALSE;
                 gint width = g_value_get_int (value);
 
@@ -148,7 +148,7 @@ gas_set_property (GObject *object, guint param_id,
                 gtk_widget_set_hexpand (GTK_WIDGET(gas), expand);
                 gtk_widget_set_hexpand (GTK_WIDGET(gas->combo), expand);
 
-                gtk_entry_set_width_chars (entry, width);
+                gtk_editable_set_max_width_chars (GTK_EDITABLE(entry), width);
                 gtk_widget_queue_resize (GTK_WIDGET(gas));
             }
             break;
@@ -186,8 +186,8 @@ gas_get_property (GObject *object, guint param_id,
 
         case PROP_COMBO_ENTRY_WIDTH:
             {
-                GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
-                g_value_set_int (value, gtk_entry_get_width_chars (entry));
+                GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
+                g_value_set_int (value, gtk_editable_get_width_chars (GTK_EDITABLE(entry)));
             }
             break;
 
@@ -421,7 +421,7 @@ entry_insert_text_cb (GtkEntry *entry, const gchar *text, gint length,
 
     memset (gas->sep_key_prefix, 0, BUFLEN);
 
-    const gchar *entered_text = gtk_entry_get_text (entry);
+    const gchar *entered_text = gnc_entry_get_text (entry);
 
     if (!(entered_text && *entered_text))
         return;
@@ -480,7 +480,7 @@ entry_insert_text_cb (GtkEntry *entry, const gchar *text, gint length,
 static void
 update_entry_and_refilter (GNCAccountSel *gas)
 {
-    GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+    GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
     GtkTreeModel *fmodel = gtk_combo_box_get_model (GTK_COMBO_BOX(gas->combo));
 
     gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
@@ -495,16 +495,16 @@ static void
 toggle_placeholder_cb (GtkWidget *widget, gpointer user_data)
 {
     GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
-    gas->hide_placeholder = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
-    update_entry_and_refilter (gas);
+//FIXME gtk4    gas->hide_placeholder = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
+//FIXME gtk4    update_entry_and_refilter (gas);
 }
 
 static void
 toggle_hidden_cb (GtkWidget *widget, gpointer user_data)
 {
     GNCAccountSel *gas = GNC_ACCOUNT_SEL(user_data);
-    gas->hide_hidden = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
-    update_entry_and_refilter (gas);
+//FIXME gtk4    gas->hide_hidden = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(widget));
+//    update_entry_and_refilter (gas);
 }
 
 static void
@@ -517,22 +517,22 @@ icon_release_cb (GtkEntry *entry, GtkEntryIconPosition icon_pos,
     if (icon_pos != GTK_ENTRY_ICON_SECONDARY)
         return;
 
-    menu = gtk_menu_new ();
-    h_placeholder = gtk_check_menu_item_new_with_mnemonic (_("Hide _Placeholder Accounts"));
-    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(h_placeholder), gas->hide_placeholder);
-    h_hidden = gtk_check_menu_item_new_with_mnemonic (_("Hide _Hidden Accounts"));
-    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(h_hidden), gas->hide_hidden);
-    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(gas), NULL);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_placeholder);
-    gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_hidden);
-    gtk_widget_show_all (menu);
+//FIXME gtk4    menu = gtk_menu_new ();
+//FIXME gtk4    h_placeholder = gtk_check_menu_item_new_with_mnemonic (_("Hide _Placeholder Accounts"));
+//FIXME gtk4    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(h_placeholder), gas->hide_placeholder);
+//FIXME gtk4    h_hidden = gtk_check_menu_item_new_with_mnemonic (_("Hide _Hidden Accounts"));
+//FIXME gtk4    gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM(h_hidden), gas->hide_hidden);
+//FIXME gtk4    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(gas), NULL);
+//FIXME gtk4    gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_placeholder);
+//FIXME gtk4    gtk_menu_shell_append (GTK_MENU_SHELL(menu), h_hidden);
+//FIXME gtk4    gtk_widget_show_all (menu);
 
-    g_signal_connect (G_OBJECT(h_placeholder), "toggled",
-                      G_CALLBACK(toggle_placeholder_cb), gas);
-    g_signal_connect (G_OBJECT(h_hidden), "toggled",
-                      G_CALLBACK(toggle_hidden_cb), gas);
+//FIXME gtk4    g_signal_connect (G_OBJECT(h_placeholder), "toggled",
+//FIXME gtk4                      G_CALLBACK(toggle_placeholder_cb), gas);
+//FIXME gtk4    g_signal_connect (G_OBJECT(h_hidden), "toggled",
+//FIXME gtk4                      G_CALLBACK(toggle_hidden_cb), gas);
 
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *)event);
+//FIXME gtk4    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *)event);
 }
 
 /* An account is included if gas->acctTypeFilters or gas->acctCommodityFilters
@@ -593,7 +593,7 @@ row_has_been_deleted_in_store_cb (GtkTreeModel *model, GtkTreePath *path, gpoint
 
     if (saved_account_path == NULL) // path is already invalid after row delete
     {
-        GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+        GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
 
         g_signal_handlers_block_by_func (gas->combo, combo_changed_cb , gas);
         gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), -1);
@@ -620,7 +620,7 @@ row_has_been_changed_in_store_cb (GtkTreeModel *model, GtkTreePath *path,
 
     if (gtk_tree_path_compare (path, saved_account_path) == 0)
     {
-        GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+        GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
         gchar *account_full_name = NULL;
         gint position = 0;
 
@@ -687,13 +687,13 @@ gnc_account_sel_init (GNCAccountSel *gas)
     gas->combo = GTK_COMBO_BOX(widget);
     gtk_combo_box_set_entry_text_column (GTK_COMBO_BOX(widget), ACCT_COL_NAME);
 
-    gtk_container_add (GTK_CONTAINER(gas), widget);
+    gtk_box_prepend (GTK_BOX(gas), GTK_WIDGET(widget));
 
     // set the default horizontal expansion to TRUE
     gtk_widget_set_hexpand (GTK_WIDGET(gas), TRUE);
     gtk_widget_set_hexpand (GTK_WIDGET(gas->combo), TRUE);
 
-    entry = gtk_bin_get_child (GTK_BIN(gas->combo));
+    entry = gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo));
     gtk_entry_set_icon_from_icon_name (GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY,
                                        "preferences-system-symbolic");
     gtk_entry_set_icon_tooltip_text (GTK_ENTRY(entry), GTK_ENTRY_ICON_SECONDARY,
@@ -810,7 +810,7 @@ gnc_account_sel_set_account (GNCAccountSel *gas, Account *acct,
         gtk_combo_box_set_active (GTK_COMBO_BOX(gas->combo), -1);
         if (!acct)
         {
-            GtkEntry *entry = GTK_ENTRY(gtk_bin_get_child (GTK_BIN(gas->combo)));
+            GtkEntry *entry = GTK_ENTRY(gtk_combo_box_get_child (GTK_COMBO_BOX(gas->combo)));
             gtk_editable_delete_text (GTK_EDITABLE(entry), 0, -1);
             return;
         }
@@ -969,8 +969,8 @@ gnc_account_sel_set_new_account_ability (GNCAccountSel *gas,
     {
         g_assert (state == TRUE);
         /* destroy the existing button. */
-        gtk_container_remove (GTK_CONTAINER(gas), gas->newAccountButton);
-        gtk_widget_destroy (gas->newAccountButton);
+        gtk_box_remove (GTK_BOX(gas), GTK_WIDGET(gas->newAccountButton));
+//FIXME gtk4        gtk_widget_destroy (gas->newAccountButton);
         gas->newAccountButton = NULL;
         return;
     }
@@ -985,8 +985,7 @@ gnc_account_sel_set_new_account_ability (GNCAccountSel *gas,
                       G_CALLBACK(gas_new_account_click),
                       gas);
 
-    gtk_box_pack_start (GTK_BOX(gas), gas->newAccountButton,
-                        FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(gas), GTK_WIDGET(gas->newAccountButton));
 }
 
 void
@@ -1003,7 +1002,7 @@ static void
 gas_new_account_click (GtkButton *b, gpointer user_data)
 {
     GNCAccountSel *gas = (GNCAccountSel*)user_data;
-    GtkWindow *parent = GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(gas)));
+    GtkWindow *parent = GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(gas)));
 
     if (gas->isModal)
     {

@@ -1475,7 +1475,7 @@ static void
 stock_assistant_model_description_changed_cb(GtkWidget* widget, void* data)
 {
     auto model{static_cast<StockAssistantModel*>(data)};
-    model->set_transaction_desc(gtk_entry_get_text(GTK_ENTRY(widget)));
+    model->set_transaction_desc(gnc_entry_get_text(GTK_ENTRY(widget)));
 }
 
 /* ********************* View Classes ************************/
@@ -1484,7 +1484,7 @@ stock_assistant_model_description_changed_cb(GtkWidget* widget, void* data)
 static void
 text_entry_changed_cb (GtkWidget *widget, StockTransactionEntry* entry)
 {
-    entry->set_memo(gtk_entry_get_text (GTK_ENTRY (widget)));
+    entry->set_memo(gnc_entry_get_text (GTK_ENTRY (widget)));
 }
 
 
@@ -1521,7 +1521,7 @@ GncDateEdit::attach(GtkBuilder *builder, const char *table_ID,
     auto table = get_widget(builder, table_ID);
     auto label = get_widget (builder, label_ID);
     gtk_grid_attach(GTK_GRID(table), m_edit, 1, row, 1, 1);
-    gtk_widget_show(m_edit);
+    gtk_widget_set_visible (GTK_WIDGET(m_edit), true);
     gnc_date_make_mnemonic_target (GNC_DATE_EDIT(m_edit), label);
 }
 
@@ -1575,7 +1575,7 @@ GncAmountEdit::attach (GtkBuilder *builder, const char *table_ID,
     auto table = get_widget(builder, table_ID);
     auto label = get_widget(builder, label_ID);
     gtk_grid_attach(GTK_GRID(table), m_edit, 1, row, 1, 1);
-    gtk_widget_show(m_edit);
+    gtk_widget_set_visible (GTK_WIDGET(m_edit), true);
     gnc_amount_edit_make_mnemonic_target(GNC_AMOUNT_EDIT(m_edit), label);
 }
 
@@ -1651,7 +1651,7 @@ GncAccountSelector::attach (GtkBuilder *builder, const char *table_ID,
     auto table = get_widget(builder, table_ID);
     auto label = get_widget(builder, label_ID);
     gtk_grid_attach(GTK_GRID(table), m_selector, 1, row, 1, 1);
-    gtk_widget_show(m_selector);
+    gtk_widget_set_visible (GTK_WIDGET(m_selector), true);
     gtk_label_set_mnemonic_widget(GTK_LABEL(label), m_selector);
 }
 
@@ -1821,7 +1821,7 @@ class PageTransDeets
 public:
     PageTransDeets (GtkBuilder *builder);
     time64 get_date_time () { return m_date.get_date_time(); }
-    const char* get_description () { return gtk_entry_get_text (GTK_ENTRY (m_description)); }
+    const char* get_description () { return gnc_entry_get_text (GTK_ENTRY (m_description)); }
     void connect (StockAssistantModel*);
     void prepare(StockAssistantModel*);
 };
@@ -1991,7 +1991,7 @@ PageStockValue::prepare(StockTransactionEntry* entry)
 const char *
 PageStockValue::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 void
@@ -2052,7 +2052,7 @@ PageCash::prepare(StockTransactionEntry* entry)
 const char *
 PageCash::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 /** Fees page. Controls for selecting whether to capitalize
@@ -2105,7 +2105,7 @@ PageFees::get_capitalize_fees()
 const char *
 PageFees::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 void
@@ -2204,7 +2204,7 @@ PageDividend::prepare(StockTransactionEntry* entry)
 const char *
 PageDividend::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 class PageCapGain
@@ -2235,7 +2235,7 @@ PageCapGain::PageCapGain (GtkBuilder *builder, Account* account) :
 const char *
 PageCapGain::get_memo()
 {
-    return gtk_entry_get_text(GTK_ENTRY (m_memo));
+    return gnc_entry_get_text(GTK_ENTRY (m_memo));
 }
 
 
@@ -2461,14 +2461,14 @@ StockAssistantView::StockAssistantView (GtkBuilder *builder, Account* account, G
     gnc_window_adjust_for_screen (GTK_WINDOW(m_window));
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window),
                              GTK_WINDOW(parent));
-    gtk_widget_show_all (m_window);
+//FIXME gtk4    gtk_widget_show_all (m_window);
     DEBUG ("StockAssistantView constructor\n");
 };
 
 StockAssistantView::~StockAssistantView()
 {
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(m_window));
-    gtk_widget_destroy (m_window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(m_window));
     DEBUG ("StockAssistantView destructor\n");
 };
 
@@ -2605,7 +2605,7 @@ void
 StockAssistantController::connect_signals (GtkBuilder *builder)
 {
     m_view.connect(m_model.get());
-    gtk_builder_connect_signals (builder, this); //Stock Assistant View: cancel, close, prepare
+//FIXME gtk4    gtk_builder_connect_signals (builder, this); //Stock Assistant View: cancel, close, prepare
     g_signal_connect (m_view.window(), "destroy",
                       G_CALLBACK (stock_assistant_window_destroy_cb), this);
 

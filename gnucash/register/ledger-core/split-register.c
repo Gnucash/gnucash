@@ -489,8 +489,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
                                                   "%s", message);
         gtk_dialog_add_button (GTK_DIALOG (dialog),
                                _ ("_Record"), GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run (GTK_DIALOG (dialog), GNC_PREF_WARN_REG_TRANS_DUP);
-        gtk_widget_destroy (dialog);
+        response = gnc_warning_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_TRANS_DUP);
 
         if (response != GTK_RESPONSE_ACCEPT)
         {
@@ -642,8 +641,7 @@ gnc_split_register_duplicate_current (SplitRegister* reg)
                 gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                                           "%s", _ ("The entered date of the duplicated transaction is older than the \"Read-Only Threshold\" set for this book. "
                                                                    "This setting can be changed in File->Properties->Accounts."));
-                gtk_dialog_run (GTK_DIALOG (dialog));
-                gtk_widget_destroy (dialog);
+                gnc_dialog_run (GTK_DIALOG(dialog));
 
                 g_date_free (readonly_threshold);
                 return NULL;

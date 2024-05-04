@@ -36,6 +36,7 @@
 
 #include "gnc-ui.h"
 #include "gnc-ui-util.h"
+#include "dialog-utils.h"
 #include "gnc-gui-query.h"
 #include "gncAddress.h"
 #include "gncCustomerP.h"
@@ -109,8 +110,8 @@ gnc_customer_import_read_file (const gchar *filename, const gchar *parser_regexp
                                          GTK_MESSAGE_ERROR,
                                          GTK_BUTTONS_OK,
                                          "%s", errmsg);
-        gtk_dialog_run (GTK_DIALOG (dialog));
-        gtk_widget_destroy(dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         g_free (errmsg);
         errmsg = 0;
 

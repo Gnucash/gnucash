@@ -93,6 +93,7 @@ gnc_plugin_customer_import_showGUI(GtkWindow *parent)
     gui = g_new0 (CustomerImportGui, 1);
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(gui));
     gnc_builder_add_from_file (builder, "dialog-customer-import-gui.glade", "customer_import_dialog");
     gui->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "customer_import_dialog"));
     gui->tree_view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview1"));
@@ -146,8 +147,8 @@ gnc_plugin_customer_import_showGUI(GtkWindow *parent)
                         gui);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
-    gtk_widget_show_all ( gui->dialog );
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gui);
+//FIXME gtk4    gtk_widget_show_all ( gui->dialog );
     g_object_unref (G_OBJECT (builder));
     return gui;
 }
@@ -178,7 +179,7 @@ void
 gnc_customer_import_gui_ok_cb (GtkWidget *widget, gpointer data)
 {
     CustomerImportGui *gui = data;
-    gchar *filename = g_strdup( gtk_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
+    gchar *filename = g_strdup( gnc_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
     customer_import_stats stats;
     customer_import_result res;
     guint n_fixed, n_deleted, n_customers_created, n_customers_updated;
@@ -233,7 +234,7 @@ gnc_customer_import_gui_close_handler (gpointer user_data)
 {
     CustomerImportGui *gui = user_data;
 
-    gtk_widget_destroy (gui->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(gui->dialog));
     // gui has already been freed by this point.
     // gui->dialog = NULL;
 }
@@ -260,7 +261,7 @@ void gnc_customer_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
     filename = gnc_plugin_customer_import_getFilename (gnc_ui_get_gtk_window (widget));
     if (filename)
     {
-        gtk_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );
+        gnc_entry_set_text( GTK_ENTRY(gui->entryFilename), filename );
         g_free( filename );
     }
 }
@@ -268,7 +269,7 @@ void gnc_customer_import_gui_buttonOpen_cb (GtkWidget *widget, gpointer data)
 void gnc_customer_import_gui_filenameChanged_cb (GtkWidget *widget, gpointer data)
 {
     CustomerImportGui *gui = data;
-    gchar *filename = g_strdup( gtk_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
+    gchar *filename = g_strdup( gnc_entry_get_text( GTK_ENTRY(gui->entryFilename) ) );
 
     // generate preview
     gtk_list_store_clear (gui->store);
@@ -339,7 +340,7 @@ void gnc_customer_import_gui_type_cb (GtkWidget *widget, gpointer data)
     const gchar *name;
     if (!gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget) ))
         return;
-    name = gtk_buildable_get_name(GTK_BUILDABLE(widget));
+    name = gtk_buildable_get_buildable_id(GTK_BUILDABLE(widget));
     if (name)
     {
         if  (g_ascii_strcasecmp(name, "radiobutton_customer") == 0)gui->type = "CUSTOMER";

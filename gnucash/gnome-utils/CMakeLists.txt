@@ -207,7 +207,7 @@ target_link_libraries(gnc-gnome-utils
     gnc-locale-tax
     gnc-backend-xml-utils
     gnucash-guile
-    PkgConfig::GTK3
+    PkgConfig::GTK4
     ${CMAKE_DL_LIBS}
     ${LIBSECRET_LDFLAGS}
     ${GTK_MAC_LDFLAGS})

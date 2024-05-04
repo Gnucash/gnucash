@@ -295,22 +295,22 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
      */
     if (sw->result_view == NULL)
     {
-        GtkWidget *scroller, *frame, *button_box, *button;
+        GtkWidget *scrolled_window, *frame, *button_box, *button;
 
         /* Create the view */
         gnc_search_dialog_init_result_view (sw);
 
-        frame = gtk_frame_new(NULL);
+        frame = gtk_frame_new (NULL);
 
-        /* Create the scroller and add the view to the scroller */
-        scroller = gtk_scrolled_window_new (NULL, NULL);
-        gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scroller),
+        /* Create the scrolled_window and add the view to the scrolled_window */
+        scrolled_window = gtk_scrolled_window_new ();
+        gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                         GTK_POLICY_AUTOMATIC,
                                         GTK_POLICY_AUTOMATIC);
-        gtk_widget_set_size_request(GTK_WIDGET(scroller), 300, 100);
-        gtk_container_add (GTK_CONTAINER (scroller), sw->result_view);
-        gtk_container_add(GTK_CONTAINER(frame), scroller);
-
+        gtk_widget_set_size_request (GTK_WIDGET(scrolled_window), 300, 100);
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                       GTK_WIDGET(sw->result_view));
+        gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(scrolled_window));
         /* Create the button_box */
         button_box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
         gtk_box_set_homogeneous (GTK_BOX (button_box), FALSE);
@@ -323,7 +323,7 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
             button = gtk_button_new_with_label (_("Select"));
             g_signal_connect (G_OBJECT (button), "clicked",
                               G_CALLBACK (gnc_search_dialog_select_cb), sw);
-            gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 3);
+            gtk_box_append (GTK_BOX(button_box), GTK_WIDGET(button));
             sw->select_button = button;
 
             for (i = 0; sw->buttons[i].label; i++)
@@ -340,20 +340,21 @@ gnc_search_dialog_display_results (GNCSearchWindow *sw)
 
                 g_signal_connect (G_OBJECT (button), "clicked",
                                   G_CALLBACK (gnc_search_dialog_result_clicked), sw);
-                gtk_box_pack_start (GTK_BOX (button_box), button, FALSE, FALSE, 3);
+                gtk_box_append (GTK_BOX(button_box), GTK_WIDGET(button));
             }
         }
 
         /* Add the scrolled-view and button-box to the results_box */
-        gtk_box_pack_end (GTK_BOX (sw->result_hbox), button_box, FALSE, FALSE, 3);
-        gtk_box_pack_end (GTK_BOX (sw->result_hbox), frame, TRUE, TRUE, 3);
+        gtk_box_prepend (GTK_BOX(sw->result_hbox), GTK_WIDGET(button_box));
+        gtk_box_prepend (GTK_BOX(sw->result_hbox), GTK_WIDGET(frame));
+        gtk_box_set_spacing (GTK_BOX(sw->result_hbox), 3);
 
         /* And show the results */
-        gtk_widget_show_all (sw->result_hbox);
+//FIXME gtk4        gtk_widget_show_all (sw->result_hbox);
 
         /* But may be hide the select button */
         if (!sw->selected_cb)
-            gtk_widget_hide (sw->select_button);
+            gtk_widget_set_visible (GTK_WIDGET(sw->select_button), FALSE);
     }
     else
         /* Update the query in the view */
@@ -388,13 +389,13 @@ match_combo_changed (GtkComboBoxText *combo_box, GNCSearchWindow *sw)
 static void
 search_type_cb (GtkToggleButton *button, GNCSearchWindow *sw)
 {
-    GSList * buttongroup = gtk_radio_button_get_group (GTK_RADIO_BUTTON(button));
+//FIXME gtk4    GSList * buttongroup = gtk_radio_button_get_group (GTK_RADIO_BUTTON(button));
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
-    {
-        sw->search_type =
-            g_slist_length (buttongroup) - g_slist_index (buttongroup, button) - 1;
-    }
+//    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button)))
+//    {
+//        sw->search_type =
+//            g_slist_length (buttongroup) - g_slist_index (buttongroup, button) - 1;
+//    }
 }
 
 static void
@@ -536,13 +537,13 @@ gnc_search_dialog_show_close_cancel (GNCSearchWindow *sw)
 {
     if (sw->selected_cb)
     {
-        gtk_widget_show (sw->cancel_button);
-        gtk_widget_hide (sw->close_button);
+        gtk_widget_set_visible (GTK_WIDGET(sw->cancel_button), TRUE);
+        gtk_widget_set_visible (GTK_WIDGET(sw->close_button), FALSE);
     }
     else
     {
-        gtk_widget_hide (sw->cancel_button);
-        gtk_widget_show (sw->close_button);
+        gtk_widget_set_visible (GTK_WIDGET(sw->cancel_button), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(sw->close_button), TRUE);
     }
 }
 
@@ -676,15 +677,15 @@ remove_element (GtkWidget *button, GNCSearchWindow *sw)
     sw->crit_list = g_list_remove (sw->crit_list, data);
 
     /* and from the display */
-    gtk_container_remove (GTK_CONTAINER (sw->criteria_table), element);
-    gtk_container_remove (GTK_CONTAINER (sw->criteria_table), button);
+    gtk_box_remove (GTK_BOX(sw->criteria_table), GTK_WIDGET(element));
+    gtk_box_remove (GTK_BOX(sw->criteria_table), GTK_WIDGET(button));
 
     /* disable match-type menu when there is no criterion */
     if (!sw->crit_list)
     {
         gtk_widget_set_sensitive(sw->grouping_combo, FALSE);
-        gtk_widget_show(sw->match_all_label);
-        gtk_widget_hide(sw->criteria_scroll_window);
+        gtk_widget_set_visible (GTK_WIDGET(sw->match_all_label), TRUE);
+        gtk_widget_set_visible (GTK_WIDGET(sw->criteria_scroll_window), FALSE);
     }
 }
 
@@ -712,7 +713,7 @@ attach_element (GtkWidget *element, GNCSearchWindow *sw, int row)
     gtk_widget_set_halign (remove, GTK_ALIGN_CENTER);
     g_object_set (remove, "margin", 0, NULL);
 
-    gtk_widget_show (remove);
+    gtk_widget_set_visible (GTK_WIDGET(remove), TRUE);
     data->button = remove;  /* Save the button for later */
 }
 
@@ -742,7 +743,7 @@ combo_box_changed (GtkComboBox *combo_box, struct _crit_data *data)
      * the pointer to data stays the same.
      */
     if (data->elemwidget)
-        gtk_container_remove (GTK_CONTAINER (data->container), data->elemwidget);
+        gtk_box_remove (GTK_BOX(data->container), GTK_WIDGET(data->elemwidget));
     g_object_unref (G_OBJECT (data->element));
 
     newelem = gnc_search_core_type_new_type_name
@@ -750,15 +751,12 @@ combo_box_changed (GtkComboBox *combo_box, struct _crit_data *data)
     data->element = newelem;
     data->elemwidget = gnc_search_core_type_get_widget (newelem);
     if (data->elemwidget)
-    {
-        gtk_box_pack_start (GTK_BOX (data->container), data->elemwidget,
-                            FALSE, FALSE, 0);
-    }
+        gtk_box_append (GTK_BOX(data->container), GTK_WIDGET(data->elemwidget));
 
     gnc_search_core_type_pass_parent (data->element, GTK_WINDOW(data->dialog));
 
     /* Make sure it's visible */
-    gtk_widget_show_all (data->container);
+//FIXME gtk4    gtk_widget_show_all (data->container);
 
     /* Make sure we widen up if necessary */
     gtk_widget_queue_resize (GTK_WIDGET (data->dialog));
@@ -847,10 +845,10 @@ get_element_widget (GNCSearchWindow *sw, GNCSearchCoreType *element)
     data->param = sw->last_param;
 
     combo_box = get_comb_box_widget (sw, data);
-    gtk_box_pack_start (GTK_BOX (hbox), combo_box, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(combo_box));
     if (p)
-        gtk_box_pack_start (GTK_BOX (hbox), p, FALSE, FALSE, 0);
-    gtk_widget_show_all (hbox);
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(p));
+//FIXME gtk4    gtk_widget_show_all (hbox);
 
     return hbox;
 }
@@ -892,12 +890,21 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
     for (l = sw->crit_list; l; l = l->next)
     {
         struct _crit_data *data = l->data;
-        GList *children = gtk_container_get_children (GTK_CONTAINER(data->container));
+//FIXME gtk4        GList *children = gtk_container_get_children (GTK_CONTAINER(data->container));
+
+        GtkWidget *child;
+        for (child = gtk_widget_get_first_child (GTK_WIDGET(data->container));
+             !GTK_IS_COMBO_BOX(child);
+             child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
+        {
+        
 
         /* For each, walk the list of container children to get combo_box */
-        for (GList *child = children; child; child = g_list_next (child))
-        {
-            GtkWidget *combo_box = child->data;
+//FIXME gtk4        for (GList *child = children; child; child = g_list_next (child))
+//FIXME gtk4        {
+//FIXME gtk4            GtkWidget *combo_box = child->data;
+
+            GtkWidget *combo_box = child;
 
             /* Get current active item if combo_box */
             if (GTK_IS_COMBO_BOX(combo_box))
@@ -912,16 +919,17 @@ gnc_search_dialog_book_option_changed (gpointer new_val, gpointer user_data)
                 /* If current combo_box has focus, point to new_combo-box */
                 if (focused_widget == combo_box)
                     focused_widget = new_combo_box;
-                gtk_widget_destroy(combo_box);
+//FIXME gtk4                gtk_widget_destroy(combo_box);
                 /* Set new combo_box to current active item */
                 gtk_combo_box_set_active(GTK_COMBO_BOX(new_combo_box), index);
-                gtk_box_pack_start (GTK_BOX (data->container), new_combo_box,
-                                                               FALSE, FALSE, 0);
-                gtk_box_reorder_child(GTK_BOX (data->container), new_combo_box, 0);
-                gtk_widget_show_all (data->container);
+                gtk_box_append (GTK_BOX(data->container), GTK_WIDGET(new_combo_box));
+                gtk_box_reorder_child_after (GTK_BOX(data->container),
+                                             GTK_WIDGET(new_combo_box), NULL);
+//FIXME gtk4                gtk_widget_show_all (data->container);
             }
         }
-        g_list_free (children);
+//FIXME gtk4        }
+//FIXME gtk4        g_list_free (children);
     }
     gtk_widget_grab_focus(focused_widget);
 }
@@ -940,18 +948,18 @@ get_grid_size (GtkWidget *child, gpointer data)
     struct grid_size *gridsize = data;
     gint top, left, height, width;
 
-    gtk_container_child_get(GTK_CONTAINER(gridsize->grid), child,
-                            "left-attach", &left,
-                            "top-attach", &top,
-                            "height", &height,
-                            "width", &width,
-                            NULL);
+//FIXME gtk4    gtk_container_child_get(GTK_CONTAINER(gridsize->grid), child,
+//                            "left-attach", &left,
+//                            "top-attach", &top,
+//                            "height", &height,
+//                            "width", &width,
+//                            NULL);
 
-    if (left + width >= gridsize->cols)
-        gridsize->cols = left + width;
+//    if (left + width >= gridsize->cols)
+//        gridsize->cols = left + width;
 
-    if (top + height >= gridsize->rows)
-        gridsize->rows = top + height;
+//    if (top + height >= gridsize->rows)
+//        gridsize->rows = top + height;
 }
 
 static void
@@ -975,8 +983,8 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
 
         /* no match-all situation anymore */
         gtk_widget_set_sensitive(sw->grouping_combo, TRUE);
-        gtk_widget_hide(sw->match_all_label);
-        gtk_widget_show(sw->criteria_scroll_window);
+        gtk_widget_set_visible (GTK_WIDGET(sw->match_all_label), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(sw->criteria_scroll_window), TRUE);
     }
     /* create a new criterion element */
     new_sct = gnc_search_core_type_new_type_name
@@ -992,9 +1000,9 @@ gnc_search_dialog_add_criterion (GNCSearchWindow *sw)
         sw->crit_list = g_list_append (sw->crit_list, data);
 
         gridsize.grid = GTK_GRID (sw->criteria_table);
-        gtk_container_foreach(GTK_CONTAINER(sw->criteria_table), get_grid_size, &gridsize);
+//FIXME gtk4        gtk_container_foreach(GTK_CONTAINER(sw->criteria_table), get_grid_size, &gridsize);
 
-        attach_element (w, sw, gridsize.rows);
+//        attach_element (w, sw, gridsize.rows);
 
         gnc_search_core_type_grab_focus (new_sct);
         gnc_search_core_type_editable_enters (new_sct);
@@ -1067,7 +1075,7 @@ close_handler (gpointer data)
     GNCSearchWindow * sw = data;
 
     g_return_if_fail (sw);
-    gtk_widget_destroy (sw->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(sw->dialog));
     /* DRH: should sw be freed here? */
 }
 
@@ -1133,6 +1141,7 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     gboolean           active;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(sw));
     gnc_builder_add_from_file (builder, "dialog-search.glade", "search_dialog");
 
     /* Grab the dialog, save the dialog info */
@@ -1164,8 +1173,8 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     g_signal_connect (G_OBJECT (add), "clicked", G_CALLBACK (add_criterion), sw);
     box = GTK_WIDGET(gtk_builder_get_object (builder, "add_button_box"));
-    gtk_box_pack_start (GTK_BOX (box), add, FALSE, FALSE, 3);
-    gtk_widget_show (add);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(add));
+    gtk_widget_set_visible (GTK_WIDGET(add), TRUE);
 
     /* Set the match-type menu */
     sw->grouping_combo = gtk_combo_box_text_new();
@@ -1176,8 +1185,8 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
     g_signal_connect(combo_box, "changed", G_CALLBACK (match_combo_changed), sw);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder, "type_menu_box"));
-    gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET(combo_box), FALSE, FALSE, 3);
-    gtk_widget_show(GTK_WIDGET(combo_box));
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(combo_box));
+    gtk_widget_set_visible (GTK_WIDGET(combo_box), TRUE);
 
     /* Grab the 'all items match' label */
     sw->match_all_label = GTK_WIDGET(gtk_builder_get_object (builder, "match_all_label"));
@@ -1246,10 +1255,10 @@ gnc_search_dialog_init_widgets (GNCSearchWindow *sw, const gchar *title)
 
     /* Hide the 'new' button if there is no new_item_cb */
     if (!sw->new_item_cb)
-        gtk_widget_hide (new_item_button);
+        gtk_widget_set_visible (GTK_WIDGET(new_item_button), FALSE);
 
     /* Connect all the signals */
-    gtk_builder_connect_signals (builder, sw);
+//FIXME gtk4    gtk_builder_connect_signals (builder, sw);
 
     /* Register ourselves */
     sw->component_id = gnc_register_gui_component (DIALOG_SEARCH_CM_CLASS,
@@ -1332,7 +1341,7 @@ gnc_search_dialog_create (GtkWindow *parent,
     if (sw->prefs_group)
         gnc_restore_window_size(sw->prefs_group, GTK_WINDOW(sw->dialog), parent);
     gtk_window_set_transient_for(GTK_WINDOW(sw->dialog), parent);
-    gtk_widget_show(sw->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(sw->dialog), TRUE);
 
     /* For some reason on Ubuntu 18.04 that uses Gtk3.22.30 and maybe others we
      * have to set the scroll window content min height after the dialog has been
@@ -1395,10 +1404,10 @@ void gnc_search_dialog_set_select_cb (GNCSearchWindow *sw,
     /* Show or hide the select button */
     if (sw->select_button)
     {
-        if (selected_cb)
-            gtk_widget_show (sw->select_button);
+        if (sw->selected_cb)
+            gtk_widget_set_visible (GTK_WIDGET(sw->select_button), TRUE);
         else
-            gtk_widget_hide (sw->select_button);
+            gtk_widget_set_visible (GTK_WIDGET(sw->select_button), FALSE);
     }
 
     /* Show the proper close/cancel button */

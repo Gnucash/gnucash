@@ -79,7 +79,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 /**** Declarations ******************************************************/
 static void gnc_tree_view_constructed (GObject *object);
 static void gnc_tree_view_finalize (GObject *object);
-static void gnc_tree_view_destroy (GtkWidget *widget);
+static void gnc_tree_view_dispose (GObject *object);
 static void gnc_tree_view_set_property (GObject         *object,
                                         guint            prop_id,
                                         const GValue    *value,
@@ -89,27 +89,33 @@ static void gnc_tree_view_get_property (GObject         *object,
                                         GValue          *value,
                                         GParamSpec      *pspec);
 static gboolean gnc_tree_view_drop_ok_cb (GtkTreeView *view,
-        GtkTreeViewColumn *column,
-        GtkTreeViewColumn *prev_column,
-        GtkTreeViewColumn *next_column,
-        gpointer data);
+                                          GtkTreeViewColumn *column,
+                                          GtkTreeViewColumn *prev_column,
+                                          GtkTreeViewColumn *next_column,
+                                          gpointer user_data);
 static void gnc_tree_view_build_column_menu (GncTreeView *view);
 static void gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
-        GncTreeView *view);
+                                            GncTreeView *view);
 static gchar *gnc_tree_view_get_sort_order (GncTreeView *view);
 static gchar *gnc_tree_view_get_sort_column (GncTreeView *view);
 static gchar **gnc_tree_view_get_column_order (GncTreeView *view,
-        gsize *length);
+                                               gsize *length);
+
+static void gnc_tree_view_menu_action_new_cb (GSimpleAction *simple,
+                                              GVariant *parameter,
+                                              gpointer user_data);
 
 /** Private Data Structure ***********************************************/
 
 typedef struct GncTreeViewPrivate
 {
     /* Column selection menu related values */
-    GtkTreeViewColumn *column_menu_column;
-    GtkWidget         *column_menu;
-    gboolean           show_column_menu;
-    GtkWidget         *column_menu_icon_box;
+    GtkTreeViewColumn  *column_menu_column;
+    gboolean            show_column_menu;
+    GtkWidget          *column_menu_icon_box;
+
+    GMenu              *column_menu_model;
+    GSimpleActionGroup *group;
 
     /* Sort callback model */
     GtkTreeModel      *sort_model;
@@ -133,7 +139,6 @@ G_DEFINE_TYPE_WITH_CODE(GncTreeView, gnc_tree_view, GTK_TYPE_TREE_VIEW,
 #define GNC_TREE_VIEW_GET_PRIVATE(o)  \
    ((GncTreeViewPrivate*)gnc_tree_view_get_instance_private((GncTreeView*)o))
 
-
 /************************************************************/
 /*               g_object required functions                */
 /************************************************************/
@@ -154,10 +159,8 @@ static void
 gnc_tree_view_class_init (GncTreeViewClass *klass)
 {
     GObjectClass *gobject_class;
-    GtkWidgetClass *gtkwidget_class;
 
     gobject_class = G_OBJECT_CLASS(klass);
-    gtkwidget_class = GTK_WIDGET_CLASS(klass);
 
     gobject_class->set_property = gnc_tree_view_set_property;
     gobject_class->get_property = gnc_tree_view_get_property;
@@ -180,9 +183,7 @@ gnc_tree_view_class_init (GncTreeViewClass *klass)
     /* GObject signals */
     gobject_class->constructed = gnc_tree_view_constructed;
     gobject_class->finalize = gnc_tree_view_finalize;
-
-    /* GtkWidget signals */
-    gtkwidget_class->destroy = gnc_tree_view_destroy;
+    gobject_class->dispose = gnc_tree_view_dispose;
 }
 
 static void
@@ -193,30 +194,34 @@ gnc_tree_view_update_grid_lines (gpointer prefs, gchar* pref, gpointer user_data
 }
 
 static gboolean
-gnc_tree_view_select_column_icon_cb (GtkWidget *widget, GdkEventButton *event, gpointer user_data)
+gnc_tree_view_select_column_icon_cb (GtkGestureClick *gesture,
+                                     int n_press,
+                                     double x,
+                                     double y,
+                                     gpointer user_data)
 {
     GncTreeView *view = user_data;
     GncTreeViewPrivate *priv;
-    GtkStyleContext *stylectxt = gtk_widget_get_style_context (widget);
+    GtkStyleContext *stylectxt;
     GtkBorder padding;
 
-    // if the event button is not the right one, leave.
-    if (event->button != 1)
-        return FALSE;
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(gesture)); //tree view
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
-    gtk_style_context_get_padding (stylectxt, GTK_STATE_FLAG_NORMAL, &padding);
+    stylectxt = gtk_widget_get_style_context (widget);
+
+    gtk_style_context_get_padding (stylectxt, &padding);
 
     if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
     {
-        if (event->x < (gtk_widget_get_allocated_width (priv->column_menu_icon_box) + padding.left))
+        if (x < (gtk_widget_get_allocated_width (priv->column_menu_icon_box) + padding.left))
             gnc_tree_view_select_column_cb (priv->column_menu_column, view);
     }
     else
     {
-        if (event->x > (gtk_widget_get_allocated_width (widget) -
-                       (gtk_widget_get_allocated_width (priv->column_menu_icon_box) + padding.right)))
+        if (x > (gtk_widget_get_allocated_width (widget) -
+                    (gtk_widget_get_allocated_width (priv->column_menu_icon_box) + padding.right)))
             gnc_tree_view_select_column_cb (priv->column_menu_column, view);
     }
     return FALSE;
@@ -239,7 +244,7 @@ gnc_tree_view_init (GncTreeView *view)
     GtkWidget *sep, *icon;
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    priv->column_menu = NULL;
+    priv->column_menu_model = NULL;
     priv->show_column_menu = FALSE;
     priv->sort_model = NULL;
     priv->state_section = NULL;
@@ -265,19 +270,22 @@ gnc_tree_view_init (GncTreeView *view)
     /* Create the last column which contains the column selection
      * widget.  gnc_tree_view_add_text_column will do most of the
      * work. */
-    icon = gtk_image_new_from_icon_name ("pan-down-symbolic", GTK_ICON_SIZE_SMALL_TOOLBAR);
-
+    icon = gtk_image_new_from_icon_name ("pan-down-symbolic");
+    gtk_image_set_icon_size (GTK_IMAGE(icon), GTK_ICON_SIZE_NORMAL);
     priv->column_menu_icon_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(priv->column_menu_icon_box), FALSE);
+    gtk_widget_set_halign (GTK_WIDGET(priv->column_menu_icon_box), GTK_ALIGN_END);
 
-    gtk_widget_set_margin_start (GTK_WIDGET(icon), 5);
-
-    gtk_box_pack_end (GTK_BOX(priv->column_menu_icon_box), icon, FALSE, FALSE, 0);
+    // Create the action group for the menu actions
+    priv->group = g_simple_action_group_new ();
+    gtk_widget_insert_action_group (GTK_WIDGET(view), "tree-view",
+                                    G_ACTION_GROUP(priv->group));
 
     sep = gtk_separator_new (GTK_ORIENTATION_VERTICAL);
-    gtk_box_pack_end (GTK_BOX(priv->column_menu_icon_box), sep, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(priv->column_menu_icon_box), GTK_WIDGET(sep));
 
-    gtk_widget_show_all (priv->column_menu_icon_box);
+    gtk_widget_set_margin_start (GTK_WIDGET(icon), 5);
+    gtk_box_append (GTK_BOX(priv->column_menu_icon_box), GTK_WIDGET(icon));
 
     column = gnc_tree_view_add_text_column (view, NULL, NULL, NULL, NULL,
                                             -1, -1, NULL);
@@ -289,6 +297,10 @@ gnc_tree_view_init (GncTreeView *view)
                   (gchar *)NULL);
 
     priv->column_menu_column = column;
+
+    gtk_widget_set_halign (gtk_widget_get_parent (
+                           GTK_WIDGET(priv->column_menu_icon_box)),
+                           GTK_ALIGN_END);
 
     // get the actual column button by looking at the parents of the column_menu_icon
     {
@@ -309,11 +321,14 @@ gnc_tree_view_init (GncTreeView *view)
             /* this part will restrict the mouse click to just where the
                icon is, tried using an eventbox but it would only work
                some of the time */
-            gtk_widget_set_events (button, GDK_BUTTON_PRESS_MASK);
+            GtkGesture *event_gesture = gtk_gesture_click_new ();
+            gtk_widget_add_controller (GTK_WIDGET(button), GTK_EVENT_CONTROLLER(event_gesture));
 
-            g_signal_connect (G_OBJECT(button), "button_press_event",
-                              G_CALLBACK(gnc_tree_view_select_column_icon_cb),
-                              view);
+            gtk_event_controller_set_name (GTK_EVENT_CONTROLLER(event_gesture), "mytest");
+            gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER(event_gesture), GTK_PHASE_CAPTURE);
+            gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), 1);
+            g_signal_connect (G_OBJECT(event_gesture), "pressed",
+                              G_CALLBACK(gnc_tree_view_select_column_icon_cb), view);
         }
     }
     gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
@@ -368,16 +383,16 @@ gnc_tree_view_finalize (GObject *object)
  *  @internal
  */
 static void
-gnc_tree_view_destroy (GtkWidget *widget)
+gnc_tree_view_dispose (GObject *object)
 {
     GncTreeView *view;
     GncTreeViewPrivate *priv;
 
-    ENTER("view %p", widget);
-    g_return_if_fail (widget != NULL);
-    g_return_if_fail (GNC_IS_TREE_VIEW(widget));
+    ENTER("view %p", object);
+    g_return_if_fail (object != NULL);
+    g_return_if_fail (GNC_IS_TREE_VIEW(object));
 
-    view = GNC_TREE_VIEW(widget);
+    view = GNC_TREE_VIEW(object);
 
     gnc_prefs_remove_cb_by_func (GNC_PREFS_GROUP_GENERAL, GNC_PREF_GRID_LINES_HORIZONTAL,
                                  gnc_tree_view_update_grid_lines, view);
@@ -393,14 +408,14 @@ gnc_tree_view_destroy (GtkWidget *widget)
     g_free (priv->state_section);
     priv->state_section = NULL;
 
-    if (priv->column_menu)
+    if (priv->column_menu_model)
     {
         DEBUG("removing column selection menu");
-        g_object_unref (priv->column_menu);
-        priv->column_menu = NULL;
+        g_object_unref (priv->column_menu_model);
+        priv->column_menu_model = NULL;
     }
 
-    GTK_WIDGET_CLASS(gnc_tree_view_parent_class)->destroy (widget);
+    G_OBJECT_CLASS(gnc_tree_view_parent_class)->dispose (object);
     LEAVE(" ");
 }
 
@@ -1107,7 +1122,6 @@ gnc_tree_view_set_state_section (GncTreeView *view,
         }
         g_strfreev (keys);
     }
-
     /* Rebuild the column visibility menu */
     gnc_tree_view_build_column_menu (view);
     LEAVE ("set state section");
@@ -1187,6 +1201,7 @@ void gnc_tree_view_save_state (GncTreeView *view)
             if (!g_object_get_data (G_OBJECT(column), ALWAYS_VISIBLE))
             {
                 key = g_strjoin ("_", name, STATE_KEY_SUFF_VISIBLE, NULL);
+
                 g_key_file_set_boolean (state_file, priv->state_section, key,
                                         gtk_tree_view_column_get_visible (column));
                 g_free (key);
@@ -1216,6 +1231,37 @@ void gnc_tree_view_save_state (GncTreeView *view)
 /************************************************************/
 /*                   Column Selection Menu                  */
 /************************************************************/
+
+static void
+gnc_tree_view_menu_action_new_cb (GSimpleAction *simple,
+                                  GVariant      *parameter,
+                                  gpointer       user_data)
+{
+    GncTreeView *view = user_data;
+    GVariant *state = g_action_get_state (G_ACTION(simple));
+    const gchar *pref_name  = g_object_get_data (G_OBJECT(simple), PREF_NAME);
+
+    ENTER("column pref_nmae is ", pref_name);
+
+    g_action_change_state (G_ACTION(simple),
+                           g_variant_new_boolean (!g_variant_get_boolean (state)));
+
+    if (!pref_name)
+    {
+        LEAVE("no column pref_name");
+        return;
+    }
+
+    gboolean visible = !g_variant_get_boolean (state);
+
+    GtkTreeViewColumn *column = gnc_tree_view_find_column_by_name (view, pref_name);
+
+    gtk_tree_view_column_set_visible (column, visible);
+
+    g_variant_unref (state);
+
+    LEAVE("made %s", visible ? "visible" : "invisible");
+}
 
 /** @name Gnc Tree View Column Selection Menu Related Functions
  @{ */
@@ -1260,33 +1306,55 @@ gnc_tree_view_create_menu_item (GtkTreeViewColumn *column,
         return;
     }
 
-    /* Create the menu if we don't have one already */
-    if (!priv->column_menu)
+    /* Create the menu model if we don't have one already */
+    if (!priv->column_menu_model)
     {
-        priv->column_menu = gtk_menu_new();
-        g_object_ref_sink (priv->column_menu);
+        priv->column_menu_model = g_menu_new ();
+        g_object_ref_sink (priv->column_menu_model);
     }
 
     /* Create the check menu item */
     column_name = g_object_get_data (G_OBJECT(column), REAL_TITLE);
     if (!column_name)
         column_name = gtk_tree_view_column_get_title (column);
-    widget = gtk_check_menu_item_new_with_label (column_name);
-    gtk_menu_shell_append (GTK_MENU_SHELL(priv->column_menu), widget);
+
+    gboolean vis = gtk_tree_view_column_get_visible (column);
+
+    GVariant *state = g_variant_new_boolean (vis);
+
+    GMenuItem *item = g_menu_item_new (column_name, NULL);
+    gchar *action_action_name = g_strconcat ("MenuAction.", pref_name, NULL);
+    GSimpleAction *action = g_simple_action_new_stateful (action_action_name, NULL, state);
+    g_signal_connect (G_OBJECT(action), "activate",
+                      G_CALLBACK(gnc_tree_view_menu_action_new_cb), view);
+
+    g_action_map_add_action (G_ACTION_MAP(priv->group), G_ACTION(action));
+
+    gchar *menu_action_name = g_strconcat ("tree-view.MenuAction.", pref_name, NULL);
+    g_menu_item_set_action_and_target (item, menu_action_name, NULL, vis);
+    g_menu_append_item (priv->column_menu_model, item);
+
+    g_free (action_action_name);
+    g_free (menu_action_name);
 
     /* Should never be able to hide the first column */
     if (g_object_get_data (G_OBJECT(column), ALWAYS_VISIBLE))
     {
-        g_object_set_data (G_OBJECT(widget), ALWAYS_VISIBLE, GINT_TO_POINTER(1));
-        gtk_widget_set_sensitive (widget, FALSE);
+        g_object_set_data (G_OBJECT(action), ALWAYS_VISIBLE, GINT_TO_POINTER(1));
+        // disable the menu item, note does not show tick
+        g_simple_action_set_enabled (action, FALSE);
     }
-
-    binding = g_object_bind_property (G_OBJECT(widget), "active", G_OBJECT(column), "visible", 0);
-    g_object_set_data (G_OBJECT(widget), "column-binding", binding);
+//FIXME gtk4 not sure I need this
+//    binding = g_object_bind_property (G_OBJECT(widget), "active", G_OBJECT(column), "visible", 0);
+//    g_object_set_data (G_OBJECT(widget), "column-binding", binding);
 
     /* Store data on the widget for callbacks */
-    key = g_strdup_printf ("%s_%s", pref_name, STATE_KEY_SUFF_VISIBLE);
-    g_object_set_data_full (G_OBJECT(widget), STATE_KEY, key, g_free);
+//FIXME gtk4 not sure I need this
+//    key = g_strdup_printf ("%s_%s", pref_name, STATE_KEY_SUFF_VISIBLE);
+//    g_object_set_data_full (G_OBJECT(action), STATE_KEY, key, g_free);
+
+    g_object_set_data_full (G_OBJECT(action), PREF_NAME, g_strdup (pref_name), g_free);
+
     // LEAVE(" ");
 }
 
@@ -1328,10 +1396,11 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
     /* Destroy any old menu */
-    if (priv->column_menu)
+    if (priv->column_menu_model)
     {
-        g_object_unref (priv->column_menu);
-        priv->column_menu = NULL;
+        g_menu_remove_all (priv->column_menu_model);
+        g_object_unref (priv->column_menu_model);
+        priv->column_menu_model = NULL;
     }
 
     if (priv->show_column_menu && priv->state_section)
@@ -1365,27 +1434,41 @@ gnc_tree_view_build_column_menu (GncTreeView *view)
  *
  *  @internal
  */
+
 static void
-gnc_tree_view_update_column_menu_item (GtkCheckMenuItem *checkmenuitem,
+gnc_tree_view_update_column_menu_item (GtkTreeViewColumn *column,
                                        GncTreeView *view)
 {
-    gboolean visible;
+    GncTreeViewPrivate *priv;
+    gboolean visible = FALSE;;
 
-    g_return_if_fail (GTK_IS_CHECK_MENU_ITEM(checkmenuitem));
     g_return_if_fail (GNC_IS_TREE_VIEW(view));
 
-    if (g_object_get_data (G_OBJECT(checkmenuitem), ALWAYS_VISIBLE))
-    {
-        visible = TRUE;
-    }
-    else
-    {
-        GBinding *binding = g_object_get_data (G_OBJECT(checkmenuitem), "column-binding");
-        GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(g_binding_get_target (binding));
+    priv = GNC_TREE_VIEW_GET_PRIVATE(view);
 
-        visible = gtk_tree_view_column_get_visible (column);
+    const gchar *pref_name = g_object_get_data (G_OBJECT(column), PREF_NAME);
+
+    gchar *menu_action_name = g_strconcat ("MenuAction.", pref_name, NULL);
+
+    GAction *action = g_action_map_lookup_action (G_ACTION_MAP(priv->group), menu_action_name);
+
+    g_free (menu_action_name);
+
+    if (action)
+    {
+        if (g_object_get_data (G_OBJECT(action), ALWAYS_VISIBLE))
+            visible = TRUE;
+        else
+        {
+//FIXME gtk4 not sure I need this
+//            GBinding *binding = g_object_get_data (G_OBJECT(checkmenuitem), "column-binding");
+//            GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(g_binding_get_target (binding));
+
+            visible = gtk_tree_view_column_get_visible (column);
+        }
+        GVariant *state = g_variant_new_boolean (visible);
+        g_simple_action_set_state (G_SIMPLE_ACTION(action), state);
     }
-    gtk_check_menu_item_set_active (checkmenuitem, visible);
 }
 
 /** This function when the user clicks on the button to show the
@@ -1405,26 +1488,28 @@ gnc_tree_view_select_column_cb (GtkTreeViewColumn *column,
                                 GncTreeView *view)
 {
     GncTreeViewPrivate *priv;
-    GtkWidget *menu;
+    GMenu *gmenu;
 
     g_return_if_fail (GTK_IS_TREE_VIEW_COLUMN(column));
     g_return_if_fail (GNC_IS_TREE_VIEW(view));
 
     priv = GNC_TREE_VIEW_GET_PRIVATE(view);
-    menu = priv->column_menu;
-    if (!menu)
+
+    if (!priv->column_menu_model)
         return;
 
     /* Synchronize the menu before display */
-    gtk_container_foreach (GTK_CONTAINER(menu),
-                           (GtkCallback)gnc_tree_view_update_column_menu_item,
-                           view);
+    GList *column_list = gtk_tree_view_get_columns (GTK_TREE_VIEW(view));
+    g_list_foreach (column_list, (GFunc)gnc_tree_view_update_column_menu_item, view);
+    g_list_free (column_list);
 
-    /* Ensure all components are visible */
-    gtk_widget_show_all (menu);
+    GtkWidget *menu = gtk_popover_menu_new_from_model (G_MENU_MODEL(priv->column_menu_model));
 
-    /* Pop the menu up at the button */
-    gtk_menu_popup_at_pointer (GTK_MENU(priv->column_menu), NULL);
+    gtk_widget_set_parent (GTK_WIDGET(menu), GTK_WIDGET(priv->column_menu_icon_box));
+
+    gtk_popover_set_position (GTK_POPOVER(menu), GTK_POS_RIGHT);
+
+    gtk_popover_popup (GTK_POPOVER(menu));
 }
 
 
@@ -2157,20 +2242,25 @@ gnc_tree_view_path_is_valid (GncTreeView *view, GtkTreePath *path)
 
 void
 gnc_tree_view_keynav (GncTreeView *view, GtkTreeViewColumn **col,
-                      GtkTreePath *path, GdkEventKey *event)
+                      GtkTreePath *path, const GdkEvent *event)
 {
     GtkTreeView *tv = GTK_TREE_VIEW(view);
     gint depth;
     gboolean shifted;
+//FIXME gtk4
+#ifdef skip
+    if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
+        return;
 
-    if (event->type != GDK_KEY_PRESS) return;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers ((GdkEvent*)event);
 
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
     case GDK_KEY_KP_Tab:
-        shifted = event->state & GDK_SHIFT_MASK;
+        shifted = state & GDK_SHIFT_MASK;
         if (get_column_next_to (tv, col, shifted))
         {
             /* This is the end (or beginning) of the line, buddy. */
@@ -2225,6 +2315,7 @@ gnc_tree_view_keynav (GncTreeView *view, GtkTreeViewColumn **col,
         break;
     }
     return;
+#endif
 }
 
 void

@@ -181,7 +181,7 @@ sxed_close_handler (gpointer user_data)
 
     gnc_sxed_reg_check_close (sxed);
     gnc_save_window_size (GNC_PREFS_GROUP_SXED, GTK_WINDOW (sxed->dialog));
-    gtk_widget_destroy (sxed->dialog);
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(sxed->dialog));
     /* The data will be cleaned up in the destroy handler. */
 }
 
@@ -265,7 +265,7 @@ editor_ok_button_clicked_cb (GtkButton *b, GncSxEditorDialog *sxed)
 static gboolean
 gnc_sxed_check_name_changed (GncSxEditorDialog *sxed)
 {
-    const char *name = gtk_entry_get_text (sxed->nameEntry);
+    const char *name = gnc_entry_get_text (sxed->nameEntry);
 
     if (!name || !name[0])
         return TRUE;
@@ -482,7 +482,7 @@ check_credit_debit_balance (gpointer key, gpointer val, gpointer ud)
 static gboolean
 gnc_sxed_check_names (GncSxEditorDialog *sxed)
 {
-    const gchar *name = gtk_entry_get_text (sxed->nameEntry);
+    const gchar *name = gnc_entry_get_text (sxed->nameEntry);
     if (!name || !name[0])
     {
         const char *sx_has_no_name_msg =
@@ -706,9 +706,10 @@ split_error_warning_dialog (GtkWidget *parent, const gchar *title,
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                               "%s", message);
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (parent));
-    g_signal_connect_swapped (dialog, "response",
-                              G_CALLBACK (gtk_widget_destroy), dialog);
-    gtk_dialog_run (GTK_DIALOG (dialog));
+//FIXME gtk4    g_signal_connect_swapped (dialog, "response",
+//                              G_CALLBACK (gtk_window_destroy), GTK_WINDOW(dialog));
+//FIXME gtk4    gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
 
 }
 
@@ -900,7 +901,7 @@ gnc_sxed_save_sx (GncSxEditorDialog *sxed)
     gnc_sx_begin_edit (sxed->sx);
 
     /* name */
-    const gchar *name = gtk_entry_get_text (sxed->nameEntry);
+    const gchar *name = gnc_entry_get_text (sxed->nameEntry);
     if (name && *name)
         xaccSchedXactionSetName (sxed->sx, name);
 
@@ -1081,7 +1082,7 @@ scheduledxaction_editor_dialog_destroy (GtkWidget *object, gpointer data)
         (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS, sxed);
 
     gnc_embedded_window_close_page (sxed->embed_window, sxed->plugin_page);
-    gtk_widget_destroy (GTK_WIDGET (sxed->embed_window));
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(sxed->embed_window));
     sxed->embed_window = NULL;
     sxed->plugin_page = NULL;
     sxed->ledger = NULL;
@@ -1184,6 +1185,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
 
     /* Load up Glade file */
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(sxed));
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "advance_days_adj");
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "remind_days_adj");
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "end_spin_adj");
@@ -1220,11 +1222,10 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     {
         GtkWidget *endDateBox = GTK_WIDGET (gtk_builder_get_object (builder, "editor_end_date_box"));
         sxed->endDateEntry = GNC_DATE_EDIT (gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE));
-        gtk_widget_show (GTK_WIDGET (sxed->endDateEntry));
+        gtk_widget_set_visible (GTK_WIDGET(sxed->endDateEntry), TRUE);
         g_signal_connect (sxed->endDateEntry, "date-changed",
                           G_CALLBACK (sxed_excal_update_adapt_cb), sxed);
-        gtk_box_pack_start (GTK_BOX (endDateBox), GTK_WIDGET (sxed->endDateEntry),
-                            TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(endDateBox), GTK_WIDGET(sxed->endDateEntry));
     }
 
     id = gnc_register_gui_component (DIALOG_SCHEDXACTION_EDITOR_CM_CLASS,
@@ -1275,7 +1276,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     schedXact_editor_populate (sxed);
 
     /* Do not call show_all here */
-    gtk_widget_show (sxed->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(sxed->dialog), TRUE);
     gtk_notebook_set_current_page (GTK_NOTEBOOK (sxed->notebook), 0);
 
     /* Refresh the cal and the ledger */
@@ -1286,7 +1287,7 @@ gnc_ui_scheduled_xaction_editor_dialog_create (GtkWindow *parent,
     /* Move keyboard focus to the name entry */
     gtk_widget_grab_focus (GTK_WIDGET (sxed->nameEntry));
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, sxed);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, sxed);
     g_object_unref (G_OBJECT (builder));
 
     return sxed;
@@ -1297,7 +1298,7 @@ static void
 schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
 {
     GtkBox *b;
-    GtkWidget *example_cal_scrolled_win = NULL;
+    GtkWidget *scrolled_window = NULL;
 
     b = GTK_BOX (gtk_builder_get_object (sxed->builder, "gncfreq_hbox"));
 
@@ -1309,14 +1310,14 @@ schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
                       G_CALLBACK (gnc_sxed_freq_changed),
                       sxed);
 
-    gtk_box_pack_start (GTK_BOX (b), GTK_WIDGET (sxed->gncfreq), TRUE, TRUE, 0);
-
+    gtk_box_append (GTK_BOX(b), GTK_WIDGET(sxed->gncfreq));
+        
     b = GTK_BOX (gtk_builder_get_object (sxed->builder, "example_cal_hbox"));
 
-    example_cal_scrolled_win = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (example_cal_scrolled_win),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
-    gtk_box_pack_start (GTK_BOX (b), example_cal_scrolled_win, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(b), GTK_WIDGET(scrolled_window));
 
     sxed->dense_cal_model = gnc_dense_cal_store_new (EX_CAL_NUM_MONTHS * 31);
     sxed->example_cal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model (GTK_WINDOW(sxed->dialog),
@@ -1324,10 +1325,10 @@ schedXact_editor_create_freq_sel (GncSxEditorDialog *sxed)
     g_assert (sxed->example_cal);
     gnc_dense_cal_set_num_months (sxed->example_cal, EX_CAL_NUM_MONTHS);
     gnc_dense_cal_set_months_per_col (sxed->example_cal, EX_CAL_MO_PER_COL);
-    gtk_container_add (GTK_CONTAINER (example_cal_scrolled_win), GTK_WIDGET (sxed->example_cal));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(sxed->example_cal));
 
-
-    gtk_widget_show_all (example_cal_scrolled_win);
+//FIXME gtk4    gtk_widget_show_all (scrolled_window);
 }
 
 
@@ -1352,8 +1353,7 @@ schedXact_editor_create_ledger (GncSxEditorDialog *sxed)
                                  sxed->dialog,
                                  FALSE, /* no accelerators */
                                  sxed);
-    gtk_box_pack_start (GTK_BOX (main_vbox), GTK_WIDGET (sxed->embed_window),
-                        TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(main_vbox), GTK_WIDGET(sxed->embed_window));
 
     /* Now create the register plugin page. */
     sxed->plugin_page = gnc_plugin_page_register_new_ledger (sxed->ledger);
@@ -1393,7 +1393,7 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
     name = xaccSchedXactionGetName (sxed->sx);
     if (name)
     {
-        gtk_entry_set_text (sxed->nameEntry, name);
+        gnc_entry_set_text (sxed->nameEntry, name);
     }
     {
         gd = xaccSchedXactionGetLastOccurDate (sxed->sx);
@@ -1700,7 +1700,7 @@ on_sx_check_toggled_cb (GtkWidget *togglebutton, gpointer user_data)
     GHashTable *table;
 
     PINFO ("Togglebutton is %p and user_data is %p", togglebutton, user_data);
-    PINFO ("Togglebutton builder name is %s", gtk_buildable_get_name (GTK_BUILDABLE (togglebutton)));
+    PINFO ("Togglebutton builder name is %s", gtk_buildable_get_buildable_id (GTK_BUILDABLE (togglebutton)));
 
     /* We need to use the hash table to find the required widget to activate. */
     table = g_object_get_data (G_OBJECT (user_data), "prefs_widget_hash");
@@ -1740,7 +1740,7 @@ static void
 _open_editors (GtkDialog *dialog, gint response_code, gpointer data)
 {
     acct_deletion_handler_data *adhd = (acct_deletion_handler_data *)data;
-    gtk_widget_hide (adhd->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(adhd->dialog), FALSE);
     {
         GList *sx_iter;
         for (sx_iter = adhd->affected_sxes; sx_iter; sx_iter = sx_iter->next)
@@ -1750,7 +1750,7 @@ _open_editors (GtkDialog *dialog, gint response_code, gpointer data)
         }
     }
     g_list_free (adhd->affected_sxes);
-    gtk_widget_destroy (GTK_WIDGET (adhd->dialog));
+//FIXME gtk4    gtk_window_destroy(GTK_WINDOW(adhd->dialog));
     g_free (adhd);
 }
 
@@ -1784,7 +1784,10 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         GtkTreeViewColumn *name_column;
         GtkCellRenderer *renderer;
 
+        data = (acct_deletion_handler_data*)g_new0(acct_deletion_handler_data, 1);
+
         builder = gtk_builder_new ();
+        gtk_builder_set_current_object (builder, G_OBJECT(data));
         gnc_builder_add_from_file (builder, "dialog-sx.glade", "account_deletion_dialog");
 
         dialog = GTK_WIDGET (gtk_builder_get_object (builder, "account_deletion_dialog"));
@@ -1797,7 +1800,6 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         // Set grid lines option to preference
         gtk_tree_view_set_grid_lines (GTK_TREE_VIEW (list), gnc_tree_view_get_grid_lines_pref ());
 
-        data = (acct_deletion_handler_data*)g_new0(acct_deletion_handler_data, 1);
         data->dialog = dialog;
         data->parent = parent;
         data->affected_sxes = affected_sxes;
@@ -1825,8 +1827,8 @@ _sx_engine_event_handler (QofInstance *ent, QofEventId event_type, gpointer user
         g_signal_connect (G_OBJECT (dialog), "response",
                           G_CALLBACK (_open_editors), data);
 
-        gtk_widget_show_all (GTK_WIDGET (dialog));
-        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET (dialog));
+//FIXME gtk4        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, data);
         g_object_unref (G_OBJECT (builder));
     }
 }

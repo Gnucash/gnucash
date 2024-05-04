@@ -169,8 +169,7 @@ build_acct_tree(AccountPickerDialog *picker)
     // the color background data function is part of the add_property_column
     // function which will color the background based on preference setting
 
-    gtk_container_add(GTK_CONTAINER(picker->account_tree_sw),
-                      GTK_WIDGET(picker->account_tree));
+    gtk_box_prepend (GTK_BOX(picker->account_tree_sw), GTK_WIDGET(picker->account_tree));
 
     /* Configure the columns */
     gnc_tree_view_configure_columns (GNC_TREE_VIEW(picker->account_tree));
@@ -223,7 +222,7 @@ show_warning (AccountPickerDialog *picker, gchar *text)
 {
     gtk_label_set_text (GTK_LABEL(picker->warning), text);
     gnc_label_set_alignment (picker->warning, 0.0, 0.5);
-    gtk_widget_show_all (GTK_WIDGET(picker->whbox));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(picker->whbox));
     g_free (text);
 
     gtk_widget_set_sensitive (picker->ok_button, FALSE); // disable OK button
@@ -257,7 +256,7 @@ account_tree_row_changed_cb (GtkTreeSelection *selection,
     Account *sel_account = gnc_tree_view_account_get_selected_account (picker->account_tree);
 
     /* Reset buttons and warnings */
-    gtk_widget_hide (GTK_WIDGET(picker->whbox));
+    gtk_widget_set_visible (GTK_WIDGET(picker->whbox), false);
     gtk_widget_set_sensitive (picker->ok_button, (sel_account != NULL));
 
     /* See if the selected account is a placeholder. */
@@ -269,13 +268,12 @@ account_tree_row_changed_cb (GtkTreeSelection *selection,
 }
 
 static gboolean
-account_tree_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+account_tree_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                            guint keycode, GdkModifierType state,
+                            gpointer user_data)
 {
     // Expand the tree when the user starts typing, this will allow sub-accounts to be found.
-    if (event->length == 0)
-        return FALSE;
-    
-    switch (event->keyval)
+    switch (keyval)
     {
         case GDK_KEY_plus:
         case GDK_KEY_minus:
@@ -307,11 +305,11 @@ account_tree_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer user_d
         case GDK_KEY_Return:
         case GDK_KEY_ISO_Enter:
         case GDK_KEY_KP_Enter:
-            return FALSE;
+            return false;
             break;
         default:
             gtk_tree_view_expand_all (GTK_TREE_VIEW(user_data));
-            return FALSE;
+            return false;
     }
     return FALSE;
 }
@@ -431,7 +429,11 @@ Account * gnc_import_select_account(GtkWidget *parent,
         
         /* Connect key press event so we can expand the tree when the user starts typing, allowing
         * any subaccount to match */
-        g_signal_connect (picker->account_tree, "key-press-event", G_CALLBACK (account_tree_key_press_cb), picker->account_tree);
+
+        GtkEventController *event_controller = gtk_event_controller_key_new ();
+        gtk_widget_add_controller (GTK_WIDGET(picker->account_tree), event_controller);
+        g_signal_connect (G_OBJECT(event_controller), "key-press-event",
+                          G_CALLBACK (account_tree_key_press_cb), picker->account_tree);
 
         selection = gtk_tree_view_get_selection(GTK_TREE_VIEW(picker->account_tree));
         g_signal_connect(selection, "changed",
@@ -441,7 +443,10 @@ Account * gnc_import_select_account(GtkWidget *parent,
 
         do
         {
-            response = gtk_dialog_run(GTK_DIALOG(picker->dialog));
+//FIXME gtk4            response = gtk_dialog_run(GTK_DIALOG(picker->dialog));
+gtk_window_set_modal (GTK_WINDOW(picker->dialog), true); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
             switch (response)
             {
             case GNC_RESPONSE_NEW:
@@ -483,7 +488,7 @@ Account * gnc_import_select_account(GtkWidget *parent,
 
         g_object_unref(G_OBJECT(builder));
         gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(picker->dialog));
-        gtk_widget_destroy(picker->dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(picker->dialog));
     }
     else
     {

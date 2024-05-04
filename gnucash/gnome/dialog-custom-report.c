@@ -86,7 +86,7 @@ void custom_report_help_cb(GtkWidget* widget, gpointer data);
 void close_custom_report_clicked_cb(GtkWidget* widget, gpointer data);
 void custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
         GtkTreeViewColumn *column, gpointer data);
-gboolean custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpointer data);
+gboolean custom_report_list_view_clicked_cb(GtkTreeView *view, const GdkEvent *event, gpointer data);
 void custom_report_name_edited_cb(GtkCellRendererText *renderer, gchar *path, gchar *new_text, gpointer data);
 gboolean custom_report_query_tooltip_cb (GtkTreeView  *view,
                                          gint        x,
@@ -126,7 +126,7 @@ custom_report_dialog_close_cb(GtkWidget* widget, gpointer data)
     CustomReportDialog *crd = data;
     gnc_save_window_size(GNC_PREFS_GROUP_REPORT_SAVED_CONFIGS, GTK_WINDOW(crd->dialog));
 
-    gtk_widget_destroy(crd->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(crd->dialog));
 }
 
 void
@@ -417,16 +417,20 @@ custom_report_list_view_row_activated_cb(GtkTreeView *view, GtkTreePath *path,
  * selected row.
  **************************************************************/
 gboolean
-custom_report_list_view_clicked_cb(GtkTreeView *view, GdkEventButton *event, gpointer data)
+custom_report_list_view_clicked_cb(GtkTreeView *view, const GdkEvent *event, gpointer data)
 {
     CustomReportDialog *crd = data;
     GtkTreePath *path = NULL;
     GtkTreeViewColumn *column = NULL;
     gint cellx, celly;
+    gdouble x_win, y_win;
 
     g_return_val_if_fail ( view != NULL, FALSE );
 
-    if (gtk_tree_view_get_path_at_pos (view, event->x, event->y,
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
+        return FALSE;
+
+    if (gtk_tree_view_get_path_at_pos (view, x_win, y_win,
                                        &path, &column,
                                        &cellx, &celly))
     {
@@ -533,11 +537,14 @@ custom_report_query_tooltip_cb (GtkTreeView  *view,
 }
 
 static gboolean
-custom_report_event_cb (GtkWidget *widget, GdkEventKey *event,
+custom_report_event_cb (GtkEventControllerKey *key, guint keyval,
+                        guint keycode, GdkModifierType state,
                         gpointer user_data)
 {
-    if (event->keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
+        GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
+
         custom_report_dialog_close_cb (widget, user_data);
         return TRUE;
      }
@@ -561,6 +568,7 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
     crd = g_new0(CustomReportDialog, 1);
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(crd));
     gnc_builder_add_from_file (builder, "dialog-custom-report.glade", "custom_report_dialog");
 
     crd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "custom_report_dialog"));
@@ -586,12 +594,15 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
                              GTK_WINDOW(crd->dialog), GTK_WINDOW(window));
 
     /* connect the signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, crd);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, crd);
 
-    gtk_widget_show_all(crd->dialog);
+//FIXME gtk4    gtk_widget_show_all(crd->dialog);
 
     // Use this event to capture the escape key being pressed
-    g_signal_connect (crd->dialog, "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(crd->dialog), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
                       G_CALLBACK(custom_report_event_cb), crd);
 
     /* check if there are currently saved reports available
@@ -601,12 +612,12 @@ gnc_ui_custom_report_internal(GncMainWindow * window)
     {
         /* saved reports available
            -> hide the "no reports available" notification */
-        gtk_widget_hide(no_report_notification);
+        gtk_widget_set_visible (GTK_WIDGET(no_report_notification), FALSE);
     }
     else
     {
         /* hide the scrolled window of the report list */
-        gtk_widget_hide(crd->reportview);
+        gtk_widget_set_visible (GTK_WIDGET(crd->reportview), FALSE);
     }
 
     g_object_unref(G_OBJECT(builder));

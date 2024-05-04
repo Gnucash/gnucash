@@ -372,9 +372,10 @@ gnc_currency_edit_new (void)
     gtk_entry_completion_set_text_column (completion, CURRENCY_COL_NAME);
     gtk_entry_completion_set_match_func (completion,
                                          (GtkEntryCompletionMatchFunc)match_func,
-                                         GTK_TREE_MODEL(store), nullptr);
-    gtk_entry_set_completion (GTK_ENTRY (gtk_bin_get_child (GTK_BIN (gce))),
-                              completion);
+
+                                         GTK_TREE_MODEL(store), NULL);
+    gtk_entry_set_completion (GTK_ENTRY (gtk_combo_box_get_child (GTK_COMBO_BOX(gce))),
+                                         completion);
 
     return GTK_WIDGET (gce);
 }
@@ -465,7 +466,7 @@ gnc_currency_edit_clear_display (GNCCurrencyEdit *gce)
 
     model = gtk_combo_box_get_model (GTK_COMBO_BOX(gce));
 
-    entry = gtk_bin_get_child (GTK_BIN(gce));
+    entry = gtk_combo_box_get_child (GTK_COMBO_BOX(gce));
 
     g_object_ref (model);
 
@@ -473,7 +474,8 @@ gnc_currency_edit_clear_display (GNCCurrencyEdit *gce)
                                      (gpointer)gnc_currency_edit_active_changed, gce);
 
     gtk_combo_box_set_model (GTK_COMBO_BOX(gce), nullptr);
-    gtk_entry_set_text (GTK_ENTRY(entry),"");
+    gnc_entry_set_text (GTK_ENTRY(entry),"");
+
     gtk_combo_box_set_active (GTK_COMBO_BOX(gce), -1);
     gtk_combo_box_set_model (GTK_COMBO_BOX(gce), model);
 

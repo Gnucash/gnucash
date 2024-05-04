@@ -14,22 +14,22 @@ set (gtkbuilder_SOURCES
         business-prefs.glade
         dialog-account-picker.glade
         dialog-account.glade
-        dialog-doclink.glade
+        dialog-doclink.ui
         dialog-bi-import-gui.glade
         dialog-billterms.glade
-        dialog-book-close.glade
+        dialog-book-close.ui
         dialog-choose-owner.glade
-        dialog-commodities.glade
-        dialog-commodity.glade
+        dialog-commodities.ui
+        dialog-commodity.ui
         dialog-custom-report.glade
         dialog-customer-import-gui.glade
         dialog-customer.glade
         dialog-date-close.glade
         dialog-employee.glade
         dialog-file-access.glade
-        dialog-fincalc.glade
+        dialog-fincalc.ui
         dialog-find-account.glade
-        dialog-imap-editor.glade
+        dialog-imap-editor.ui
         dialog-import.glade
         dialog-invoice.glade
         dialog-job.glade
@@ -40,7 +40,7 @@ set (gtkbuilder_SOURCES
         dialog-order.glade
         dialog-payment.glade
         dialog-preferences.glade
-        dialog-price.glade
+        dialog-price.ui
         dialog-print-check.glade
         dialog-progress.glade
         dialog-query-view.glade
@@ -56,9 +56,9 @@ set (gtkbuilder_SOURCES
         dialog-vendor.glade
         gnc-date-format.glade
         gnc-frequency.glade
-        gnc-plugin-page-budget.glade
+        gnc-plugin-page-budget.ui
         gnc-plugin-page-register.glade
-        gnc-recurrence.glade
+        gnc-recurrence.ui
         gnc-tree-view-owner.glade
         window-autoclear.glade
         window-reconcile.glade

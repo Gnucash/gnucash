@@ -158,7 +158,7 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
     gchar *sample;
     gchar *separator = NULL;
 
-    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (entry), &separator);
+    gchar *conflict_msg = gnc_account_separator_is_valid (gnc_entry_get_text (entry), &separator);
 
     label = g_object_get_data (G_OBJECT(dialog), "sample_account");
     DEBUG("Sample Account pointer is %p", label);
@@ -181,11 +181,11 @@ gnc_account_separator_pref_changed_cb (GtkEntry *entry, GtkWidget *dialog)
     if (conflict_msg)
     {
         gtk_widget_set_tooltip_text (GTK_WIDGET(image), conflict_msg);
-        gtk_widget_show (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), TRUE);
         g_free (conflict_msg);
     }
     else
-        gtk_widget_hide (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), FALSE);
 
     g_free (separator);
 }
@@ -206,7 +206,7 @@ gnc_account_separator_validate (GtkWidget *dialog)
     GtkWidget *entry = g_object_get_data (G_OBJECT(dialog), "account-separator");
     gboolean ret = TRUE;
     gchar *separator = NULL;
-    gchar *conflict_msg = gnc_account_separator_is_valid (gtk_entry_get_text (GTK_ENTRY(entry)), &separator);
+    gchar *conflict_msg = gnc_account_separator_is_valid (gnc_entry_get_text (GTK_ENTRY(entry)), &separator);
 
     /* Check if the new separator clashes with existing account names */
     if (conflict_msg)
@@ -225,21 +225,24 @@ gnc_account_separator_validate (GtkWidget *dialog)
         gtk_label_set_text (GTK_LABEL(msg_label), conflict_msg);
 
         g_object_unref (G_OBJECT(builder));
-        gtk_widget_show_all (msg_dialog);
+//FIXME gtk4        gtk_widget_show_all (msg_dialog);
 
-        response = gtk_dialog_run (GTK_DIALOG(msg_dialog));
+//FIXME gtk4        response = gtk_dialog_run (GTK_DIALOG(msg_dialog));
+gtk_window_set_modal (GTK_WINDOW(msg_dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         if (response == GTK_RESPONSE_ACCEPT) // reset to original
         {
             gchar *original_sep = g_object_get_data (G_OBJECT(entry), "original_text");
 
             if (original_sep != NULL)
-                gtk_entry_set_text (GTK_ENTRY(entry), original_sep);
+                gnc_entry_set_text (GTK_ENTRY(entry), original_sep);
         }
         else
             ret = FALSE;
 
         g_free (conflict_msg);
-        gtk_widget_destroy (msg_dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(msg_dialog));
     }
     g_free (separator);
     return ret;
@@ -258,25 +261,22 @@ static void
 gnc_preferences_select_account_page (GtkDialog *dialog)
 {
     GtkWidget *notebook = g_object_get_data (G_OBJECT(dialog), NOTEBOOK);
-    GList *children = gtk_container_get_children (GTK_CONTAINER(notebook));
-
-    if (children)
+//FIXME gtk4
+    GtkWidget *child;
+    for (child = gtk_widget_get_first_child (GTK_WIDGET(notebook));
+         child != NULL;
+         child = gtk_widget_get_next_sibling (GTK_WIDGET(child)))
     {
         GtkWidget *acc_page = NULL;
-        GList *node;
 
-        for (node = children; node; node = node->next)
-        {
-            if (g_strcmp0 (gtk_widget_get_name (GTK_WIDGET(node->data)), "accounts_page") == 0)
-                acc_page = node->data;
-        }
+        if (g_strcmp0 (gtk_widget_get_name (GTK_WIDGET(child)), "accounts_page") == 0)
+            acc_page = child;
 
         if (acc_page)
             gtk_notebook_set_current_page (GTK_NOTEBOOK(notebook),
                                            gtk_notebook_page_num (GTK_NOTEBOOK(notebook),
                                            acc_page));
     }
-    g_list_free (children);
 }
 
 
@@ -473,7 +473,7 @@ gnc_prefs_build_widget_table (GtkBuilder *builder,
         if (GTK_IS_WIDGET(widget))
         {
             wname = gtk_widget_get_name (widget);
-            name = gtk_buildable_get_name (GTK_BUILDABLE(widget));
+            name = gtk_buildable_get_buildable_id (GTK_BUILDABLE(widget));
             DEBUG("Widget type is %s and buildable get name is %s", wname, name);
             if (g_str_has_prefix (name, "pref"))
                 g_hash_table_insert (prefs_table, (gchar *)name, widget);
@@ -551,18 +551,18 @@ gnc_prefs_get_grid_size (GtkWidget *child, gpointer data)
     struct copy_data *copydata = data;
     gint top, left, height, width;
 
-    gtk_container_child_get (GTK_CONTAINER(copydata->grid_to), child,
-                             "left-attach", &left,
-                             "top-attach", &top,
-                             "height", &height,
-                             "width", &width,
-                             NULL);
+//FIXME gtk4    gtk_container_child_get (GTK_CONTAINER(copydata->grid_to), child,
+//                             "left-attach", &left,
+//                             "top-attach", &top,
+//                             "height", &height,
+//                             "width", &width,
+//                             NULL);
 
-    if (left + width >= copydata->cols)
-        copydata->cols = left + width;
+//    if (left + width >= copydata->cols)
+//        copydata->cols = left + width;
 
-    if (top + height >= copydata->rows)
-        copydata->rows = top + height;
+//    if (top + height >= copydata->rows)
+//        copydata->rows = top + height;
 }
 
 
@@ -589,12 +589,12 @@ gnc_prefs_move_grid_entry (GtkWidget *child,
     gint topm, bottomm, leftm, rightm;
 
     ENTER("child %p, copy data %p", child, data);
-    gtk_container_child_get (GTK_CONTAINER(copydata->grid_from), child,
-                             "left-attach", &left,
-                             "top-attach", &top,
-                             "height", &height,
-                             "width", &width,
-                             NULL);
+//FIXME gtk4    gtk_container_child_get (GTK_CONTAINER(copydata->grid_from), child,
+//                             "left-attach", &left,
+//                             "top-attach", &top,
+//                             "height", &height,
+//                             "width", &width,
+//                             NULL);
     hexpand = gtk_widget_get_hexpand (child);
     vexpand = gtk_widget_get_vexpand (child);
     halign = gtk_widget_get_halign (child);
@@ -604,7 +604,7 @@ gnc_prefs_move_grid_entry (GtkWidget *child,
     g_object_get (child, "margin-left", &leftm, "margin-right", &rightm, NULL);
 
     g_object_ref (child);
-    gtk_container_remove (GTK_CONTAINER(copydata->grid_from), child);
+    gtk_box_remove (GTK_BOX(copydata->grid_from), GTK_WIDGET(child));
 
     gtk_grid_attach (copydata->grid_to, child, left, copydata->rows + top , width, height);
 
@@ -650,7 +650,7 @@ gnc_preferences_build_page (gpointer data,
 
     DEBUG("Opening %s to get %s", add_in->filename, add_in->widgetname);
     builder = gtk_builder_new ();
-
+    gtk_builder_set_current_object (builder, G_OBJECT(dialog));
     /* Adjustments etc... must come before dialog information */
     widgetname = g_strsplit (add_in->widgetname, ",", -1);
 
@@ -672,7 +672,7 @@ gnc_preferences_build_page (gpointer data,
     /* Connect the signals in this glade file. The dialog is passed in
      * so the callback can find "interesting" widgets from other
      * glade files if necessary (via the GPREFS_WIDGET_HASH hash table). */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     /* Prepare for recursion */
     notebook = g_object_get_data (G_OBJECT(dialog), NOTEBOOK);
@@ -705,18 +705,18 @@ gnc_preferences_build_page (gpointer data,
     {
         /* No existing content with this name.  Create a blank page */
         existing_content = gtk_grid_new ();
-        gtk_container_set_border_width (GTK_CONTAINER(existing_content), 6);
+        gnc_box_set_all_margins (GTK_BOX(existing_content), 6);
         label = gtk_label_new (add_in->tabname);
         gnc_label_set_alignment (label, 0.0, 0.5);
         gtk_notebook_append_page (notebook, existing_content, label);
-        gtk_widget_show_all (existing_content);
+//FIXME gtk4        gtk_widget_show_all (existing_content);
         DEBUG("created new page %s, appended it", add_in->tabname);
     }
     else
     {
         /* Lets get the size of the existing grid */
         copydata.grid_to = GTK_GRID(existing_content);
-        gtk_container_foreach (GTK_CONTAINER(existing_content), gnc_prefs_get_grid_size, &copydata);
+//FIXME gtk4        gtk_container_foreach (GTK_CONTAINER(existing_content), gnc_prefs_get_grid_size, &copydata);
 
         DEBUG("found existing page %s, grid size is %d x %d", add_in->tabname, copydata.rows, copydata.cols);
     }
@@ -725,7 +725,7 @@ gnc_preferences_build_page (gpointer data,
     if (copydata.rows > 0)
     {
         label = gtk_label_new ("");
-        gtk_widget_show (label);
+        gtk_widget_set_visible (GTK_WIDGET(label), TRUE);
         gtk_grid_attach (GTK_GRID(existing_content), label, 0, copydata.rows, 1, 1);
         copydata.rows = copydata.rows + 1;
 
@@ -735,7 +735,7 @@ gnc_preferences_build_page (gpointer data,
     /* Now copy all the entries in the grid */
     copydata.grid_from = GTK_GRID(new_content);
     copydata.grid_to = GTK_GRID(existing_content);
-    gtk_container_foreach (GTK_CONTAINER(new_content), gnc_prefs_move_grid_entry, &copydata);
+//FIXME gtk4    gtk_container_foreach (GTK_CONTAINER(new_content), gnc_prefs_move_grid_entry, &copydata);
 
     g_object_ref_sink (new_content);
     g_object_unref (G_OBJECT(builder));
@@ -806,13 +806,13 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
 
     g_return_if_fail (GTK_IS_FONT_BUTTON(fb));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fb)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(fb)), &group, &pref);
     gnc_prefs_bind (group, pref, G_OBJECT (fb), "font-name");
 
     g_free (group);
     g_free (pref);
 
-    gtk_widget_show_all (GTK_WIDGET(fb));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(fb));
 }
 
 /****************************************************************************/
@@ -829,7 +829,11 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
     GtkImage    *image = g_object_get_data (G_OBJECT(fc), "path_head_error");
     const gchar *group = g_object_get_data (G_OBJECT(fc), "group");
     const gchar  *pref = g_object_get_data (G_OBJECT(fc), "pref");
-    gchar        *folder_uri = gtk_file_chooser_get_uri (fc);
+
+    GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(fc));
+    gchar *folder_uri = g_file_get_uri (file);
+    g_object_unref (file);
+
     gchar *old_path_head_uri = gnc_doclink_get_path_head ();
 
     // make sure path_head ends with a trailing '/', 3.5 onwards
@@ -841,19 +845,21 @@ file_chooser_selected_cb (GtkFileChooser *fc, gpointer user_data)
         g_free (folder_with_slash);
     }
 
-    gtk_widget_hide (GTK_WIDGET(image));
+    gtk_widget_set_visible (GTK_WIDGET(image), FALSE);
 
     if (!gnc_prefs_set_string (group, pref, folder_uri))
         PINFO("Failed to save preference at %s, %s with %s", group, pref, folder_uri);
     else
         gnc_doclink_pref_path_head_changed (
-            GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(fc))),
+            GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(fc))),
             old_path_head_uri);
 
     g_free (old_path_head_uri);
     g_free (folder_uri);
 }
 
+//FIXME gtk4 GtkFileChooserButton removed
+#ifdef skip
 /** Connect a GtkFileChooserButton widget to its stored value in the preferences database.
  *
  *  @internal
@@ -873,7 +879,7 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
     g_return_if_fail (GTK_FILE_CHOOSER_BUTTON(fcb));
 
     if (boxname == NULL)
-        gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fcb)), &group, &pref);
+        gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(fcb)), &group, &pref);
     else
         gnc_prefs_split_widget_name (boxname, &group, &pref);
 
@@ -887,7 +893,11 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
 
         // test for current folder present and set chooser to it
         if (g_file_test (path_head, G_FILE_TEST_IS_DIR))
-            gtk_file_chooser_set_current_folder_uri (GTK_FILE_CHOOSER(fcb), uri);
+        {
+            GFile *file = g_file_new_for_uri (uri);
+            gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(fcb), file, NULL);
+            g_object_unref (file);
+        }
         else
             folder_set = FALSE;
 
@@ -897,14 +907,14 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
     image = g_object_get_data (G_OBJECT(fcb), "path_head_error");
 
     if (folder_set) // If current folder missing, display error and tt message
-        gtk_widget_hide (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), FALSE);
     else
     {
         gchar *path_head = gnc_doclink_get_unescape_uri (NULL, uri, "file");
         gchar *ttip = g_strconcat (_("Path does not exist, "), path_head, NULL);
 
         gtk_widget_set_tooltip_text (GTK_WIDGET(image), ttip);
-        gtk_widget_show (GTK_WIDGET(image));
+        gtk_widget_set_visible (GTK_WIDGET(image), TRUE);
 
         g_free (ttip);
         g_free (path_head);
@@ -920,9 +930,10 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
     g_free (pref);
     g_free (uri);
 
-    gtk_widget_show_all (GTK_WIDGET(fcb));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(fcb));
 }
-
+#endif
+#ifdef skip
 /** Callback for a 'Clear' button for GtkFileChooserButton widget.
  *
  *  @internal
@@ -952,10 +963,10 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
         PINFO("Failed to Clear preference at %s, %s", group, pref);
     else
         gnc_doclink_pref_path_head_changed (
-            GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(fcb))),
+            GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(fcb))),
             old_path_head_uri);
 
-    gtk_widget_destroy (GTK_WIDGET(fcb));
+//FIXME gtk4    gtk_widget_destroy (GTK_WIDGET(fcb));
 
     fcb_new = gtk_file_chooser_button_new (_("Select a folder"),
                                            GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
@@ -964,9 +975,9 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
     g_object_set_data_full (G_OBJECT(fcb_new),"group", g_strdup (group), (GDestroyNotify) g_free);
     g_object_set_data_full (G_OBJECT(fcb_new),"pref", g_strdup (pref), (GDestroyNotify) g_free);
 
-    gtk_box_pack_start (GTK_BOX(box), fcb_new, TRUE, TRUE, 0);
-    gtk_box_reorder_child (GTK_BOX(box), fcb_new, 0);
-    gtk_widget_show (fcb_new);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(fcb_new));
+    gtk_box_reorder_child_after (GTK_BOX(box), GTK_WIDGET(fcb_new), NULL);
+    gtk_widget_set_visible (GTK_WIDGET(fcb_new), TRUE);
 
     g_signal_connect (GTK_BUTTON(button), "clicked",
                       G_CALLBACK(file_chooser_clear_cb), fcb_new);
@@ -977,24 +988,24 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
     g_free (boxname);
     g_free (old_path_head_uri);
 }
-
+#endif
 /****************************************************************************/
 
-/** Connect a GtkRadioButton widget to its stored value in the preferences database.
+/** Connect a GtkToggleButton widget to its stored value in the preferences database.
  *
  *  @internal
  *
- *  @param button A pointer to the radio button that should be
+ *  @param button A pointer to the toggle button that should be
  *  connected.
  */
 static void
-gnc_prefs_connect_radio_button (GtkRadioButton *button)
+gnc_prefs_connect_toggle_button (GtkToggleButton *button)
 {
     gchar *group, *pref;
 
-    g_return_if_fail (GTK_IS_RADIO_BUTTON(button));
+    g_return_if_fail (GTK_IS_TOGGLE_BUTTON(button));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(button)), &group, &pref);
 
     gnc_prefs_bind (group, pref, G_OBJECT(button), "active");
 
@@ -1018,7 +1029,7 @@ gnc_prefs_connect_check_button (GtkCheckButton *button)
 
     g_return_if_fail (GTK_IS_CHECK_BUTTON(button));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(button)), &group, &pref);
 
     gnc_prefs_bind (group, pref, G_OBJECT(button), "active");
 
@@ -1042,7 +1053,7 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 
     g_return_if_fail (GTK_IS_SPIN_BUTTON(spin));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(spin)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(spin)), &group, &pref);
 
     gnc_prefs_bind (group, pref, G_OBJECT(spin), "value");
 
@@ -1065,7 +1076,7 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
 
     g_return_if_fail (GTK_IS_COMBO_BOX(box));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(box)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(box)), &group, &pref);
 
     gnc_prefs_bind (group, pref, G_OBJECT(box), "active");
 
@@ -1095,7 +1106,7 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
     g_free (group);
     g_free (pref);
 
-    gtk_widget_show_all (GTK_WIDGET(gce));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(gce));
 }
 
 /****************************************************************************/
@@ -1113,7 +1124,7 @@ gnc_prefs_connect_entry (GtkEntry *entry)
 
     g_return_if_fail (GTK_IS_ENTRY(entry));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(entry)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_buildable_id (GTK_BUILDABLE(entry)), &group, &pref);
 
     gnc_prefs_bind (group, pref, G_OBJECT(entry), "text");
 
@@ -1212,7 +1223,7 @@ gnc_preferences_response_cb (GtkDialog *dialog, gint response, GtkDialog *unused
             gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(dialog));
             gnc_unregister_gui_component_by_data (DIALOG_PREFERENCES_CM_CLASS,
                                                   dialog);
-            gtk_widget_destroy (GTK_WIDGET(dialog));
+//FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
         }
         else
             gnc_preferences_select_account_page (dialog);
@@ -1249,15 +1260,15 @@ gnc_prefs_connect_one (const gchar *name,
         DEBUG("  %s - font button", name);
         gnc_prefs_connect_font_button (GTK_FONT_BUTTON(widget));
     }
-    else if (GTK_IS_FILE_CHOOSER_BUTTON(widget))
-    {
-        DEBUG("  %s - file chooser button", name);
-        gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget), NULL);
-    }
-    else if (GTK_IS_RADIO_BUTTON(widget))
+//FIXME gtk4    else if (GTK_IS_FILE_CHOOSER_BUTTON(widget))
+//    {
+//        DEBUG("  %s - file chooser button", name);
+//        gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget), NULL);
+//    }
+    else if (GTK_IS_TOGGLE_BUTTON(widget))
     {
         DEBUG("  %s - radio button", name);
-        gnc_prefs_connect_radio_button (GTK_RADIO_BUTTON(widget));
+//FIXME gtk4        gnc_prefs_connect_radio_button (GTK_TOGGLE_BUTTON(widget)); //FIXME gtk4 needs rename
     }
     else if (GTK_IS_CHECK_BUTTON(widget))
     {
@@ -1282,10 +1293,8 @@ gnc_prefs_connect_one (const gchar *name,
     else if (GTK_IS_BOX(widget))
     {
         /* Test custom widgets are all children of a hbox */
-        GtkWidget *widget_child;
-        GList* child = gtk_container_get_children (GTK_CONTAINER(widget));
-        widget_child = child->data;
-        g_list_free (child);
+        GtkWidget *widget_child = gtk_widget_get_first_child  (GTK_WIDGET(widget));
+
         DEBUG("  %s - box", name);
         DEBUG("Box widget type is %s and name is %s", gtk_widget_get_name (GTK_WIDGET(widget_child)), name);
         if (GNC_IS_CURRENCY_EDIT(widget_child))
@@ -1303,11 +1312,11 @@ gnc_prefs_connect_one (const gchar *name,
             DEBUG("  %s - date_edit", name);
             gnc_prefs_connect_date_edit (GNC_DATE_EDIT(widget_child), name );
         }
-        else if (GTK_FILE_CHOOSER_BUTTON(widget_child))
-        {
-            DEBUG("  %s - file chooser button", name);
-            gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget_child), name );
-        }
+//FIXME gtk4        else if (GTK_FILE_CHOOSER_BUTTON(widget_child))
+//        {
+//            DEBUG("  %s - file chooser button", name);
+//            gnc_prefs_connect_file_chooser_button (GTK_FILE_CHOOSER_BUTTON(widget_child), name );
+//        }
     }
     else
     {
@@ -1348,7 +1357,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     ENTER("");
     DEBUG("Opening dialog-preferences.glade:");
     builder = gtk_builder_new ();
-
+    gtk_builder_set_current_object (builder, G_OBJECT(dialog));
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "auto_decimal_places_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "autosave_interval_minutes_adj");
     gnc_builder_add_from_file (builder, "dialog-preferences.glade", "save_on_close_adj");
@@ -1389,7 +1398,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     g_object_set_data (G_OBJECT(dialog), "save_on_close_wait_time", spinner);
 
     DEBUG("autoconnect");
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     DEBUG("done");
 
@@ -1411,58 +1420,58 @@ gnc_preferences_dialog_create (GtkWindow *parent)
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_PERIOD));
     period = gnc_period_select_new (TRUE);
-    gtk_widget_show (period);
-    gtk_box_pack_start (GTK_BOX(box), period, TRUE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(period), TRUE);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(period));
     if (date_is_valid)
         gnc_period_select_set_fy_end (GNC_PERIOD_SELECT(period), &fy_end);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_PERIOD));
     period = gnc_period_select_new (FALSE);
-    gtk_widget_show (period);
-    gtk_box_pack_start (GTK_BOX(box), period, TRUE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(period), TRUE);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(period));
     if (date_is_valid)
         gnc_period_select_set_fy_end (GNC_PERIOD_SELECT(period), &fy_end);
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_START_DATE));
     date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-    gtk_widget_show (date);
-    gtk_box_pack_start (GTK_BOX(box), date, TRUE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(date));
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_ACCT_SUMMARY "/" GNC_PREF_END_DATE));
     date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
-    gtk_widget_show (date);
-    gtk_box_pack_start (GTK_BOX(box), date, TRUE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(date));
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL "/" GNC_PREF_CURRENCY_OTHER));
     currency = gnc_currency_edit_new ();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
-    gtk_widget_show (currency);
-    gtk_box_pack_start (GTK_BOX(box), currency, TRUE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(currency), TRUE);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(currency));
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL_REPORT "/" GNC_PREF_CURRENCY_OTHER));
     currency = gnc_currency_edit_new ();
     gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(currency), gnc_default_currency());
-    gtk_widget_show (currency);
-    gtk_box_pack_start (GTK_BOX(box), currency, TRUE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(currency), TRUE);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(currency));
 
     box = GTK_WIDGET(gtk_builder_get_object (builder,
                      "pref/" GNC_PREFS_GROUP_GENERAL "/" GNC_DOC_LINK_PATH_HEAD));
-    fcb = gtk_file_chooser_button_new (_("Select a folder"),
-                                       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-    gtk_box_pack_start (GTK_BOX(box), fcb, TRUE, TRUE, 0);
-    button = gtk_button_new_with_label (_("Clear"));
-    gtk_box_pack_start (GTK_BOX(box), button, TRUE, TRUE, 0);
-    gtk_widget_show (button);
-    g_signal_connect (GTK_BUTTON(button), "clicked",
-                      G_CALLBACK(file_chooser_clear_cb), fcb);
+//FIXME gtk4    fcb = gtk_file_chooser_button_new (_("Select a folder"),
+//                                       GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+//    gtk_box_append (GTK_BOX(box), GTK_WIDGET(fcb));
+//    button = gtk_button_new_with_label (_("Clear"));
+//    gtk_box_append (GTK_BOX(box), GTK_WIDGET(button));
+//    gtk_widget_set_visible (GTK_WIDGET(button), TRUE);
+//    g_signal_connect (GTK_BUTTON(button), "clicked",
+//                      G_CALLBACK(file_chooser_clear_cb), fcb);
 
-    image = GTK_WIDGET(gtk_builder_get_object (builder, "path_head_error"));
-    g_object_set_data (G_OBJECT(fcb), "path_head_error", image);
+//    image = GTK_WIDGET(gtk_builder_get_object (builder, "path_head_error"));
+//    g_object_set_data (G_OBJECT(fcb), "path_head_error", image);
 
     /* Add to the list of interesting widgets */
     gnc_prefs_build_widget_table (builder, dialog);
@@ -1503,7 +1512,7 @@ gnc_preferences_dialog_create (GtkWindow *parent)
 
     /* save the original account separator in case it changes */
     g_object_set_data_full (G_OBJECT(entry), "original_text",
-                            g_strdup (gtk_entry_get_text (GTK_ENTRY(entry))),
+                            g_strdup (gnc_entry_get_text (GTK_ENTRY(entry))),
                             g_free);
 
     LEAVE("dialog %p", dialog);
@@ -1559,7 +1568,7 @@ close_handler (gpointer user_data)
     ENTER(" ");
     dialog = GTK_WIDGET(user_data);
     gnc_unregister_gui_component_by_data (DIALOG_PREFERENCES_CM_CLASS, dialog);
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     LEAVE(" ");
 }
 
@@ -1584,7 +1593,7 @@ gnc_preferences_dialog (GtkWindow *parent)
     dialog = gnc_preferences_dialog_create(parent);
 
     gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(dialog), parent);
-    gtk_widget_show (dialog);
+    gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
 
     gnc_register_gui_component (DIALOG_PREFERENCES_CM_CLASS,
                                 NULL, close_handler, dialog);

@@ -150,10 +150,10 @@ wrap_widget (const GncOption& option, GtkWidget* widget, GtkGrid* page_box, int 
 {
     auto enclosing{gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5)};
     gtk_box_set_homogeneous (GTK_BOX (enclosing), FALSE);
-    gtk_box_pack_start(GTK_BOX(enclosing), widget, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(enclosing), GTK_WIDGET(widget));
     set_name_label(option, page_box, row, false);
     set_tool_tip(option, enclosing);
-    gtk_widget_show_all(enclosing);
+//FIXME gtk4    gtk_widget_show_all(enclosing);
     grid_attach_widget(page_box, enclosing, row);
 }
 #endif //GNC_OPTION_GTK_UI_HPP

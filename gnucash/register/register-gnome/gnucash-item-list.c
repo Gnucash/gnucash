@@ -49,7 +49,7 @@ static guint gnc_item_list_signals[LAST_SIGNAL];
 gboolean _gnc_item_find_selection (GtkTreeModel* model, GtkTreePath* path,
                                    GtkTreeIter* iter, gpointer data);
 
-G_DEFINE_TYPE (GncItemList, gnc_item_list, GTK_TYPE_EVENT_BOX);
+G_DEFINE_TYPE (GncItemList, gnc_item_list, GTK_TYPE_BOX);
 
 gint
 gnc_item_list_num_entries (GncItemList* item_list)
@@ -303,9 +303,10 @@ gnc_item_list_init (GncItemList* item_list)
     item_list->cell_height = 0;
 }
 
-
+//FIXME gtk4
+#ifdef skip
 static gboolean
-gnc_item_list_button_event (GtkWidget* widget, GdkEventButton* event,
+gnc_item_list_button_event (GtkWidget* widget, const GdkEvent* event,
                             gpointer data)
 {
     GncItemList* item_list;
@@ -319,12 +320,18 @@ gnc_item_list_button_event (GtkWidget* widget, GdkEventButton* event,
 
     item_list = GNC_ITEM_LIST (data);
 
-    switch (event->button)
+    guint button;
+    gdouble x_win, y_win;
+    if (!gdk_event_get_button (event, &button) ||
+        !gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
+        return FALSE;
+
+    switch (button)
     {
     case 1:
         if (!gtk_tree_view_get_path_at_pos (item_list->tree_view,
-                                            event->x,
-                                            event->y,
+                                            x_win,
+                                            y_win,
                                             &path,
                                             NULL,
                                             NULL,
@@ -357,15 +364,18 @@ gnc_item_list_button_event (GtkWidget* widget, GdkEventButton* event,
 
     return FALSE;
 }
-
+#endif
+//FIXME gtk4
+#ifdef skip
 static gboolean
-gnc_item_list_key_event (GtkWidget* widget, GdkEventKey* event, gpointer data)
+gnc_item_list_key_event (GtkWidget* widget, const GdkEvent* event, gpointer data)
 {
     GncItemList* item_list = GNC_ITEM_LIST (data);
     gchar* string;
     gboolean retval;
+    guint keyval = gdk_key_event_get_keyval ((GdkEvent*)event);
 
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Return:
         string = gnc_item_list_get_selection (item_list);
@@ -400,7 +410,7 @@ gnc_item_list_key_event (GtkWidget* widget, GdkEventKey* event, gpointer data)
 
     return retval;
 }
-
+#endif
 
 static void
 gnc_item_list_class_init (GncItemListClass* item_list_class)
@@ -495,7 +505,15 @@ gnc_item_list_get_popup_height (GncItemList *item_list)
     if (!overlay)
     {
         gint minh, nath;
-        gtk_widget_get_preferred_height (hsbar, &minh, &nath);
+//FIXME gtk4        gtk_widget_get_preferred_height (hsbar, &minh, &nath);
+// may be...
+       gtk_widget_measure (GTK_WIDGET (hsbar),
+                           GTK_ORIENTATION_VERTICAL,
+                           gtk_widget_get_width (GTK_WIDGET (hsbar)),
+                           NULL,
+                           &minh,
+                           NULL, NULL);
+
         height = height + minh;
     }
     return height;
@@ -512,12 +530,11 @@ gnc_item_list_new (GtkListStore* list_store)
         GNC_ITEM_LIST (g_object_new (GNC_TYPE_ITEM_LIST,
                                      NULL));
 
-    item_list->scrollwin =
-        GTK_SCROLLED_WINDOW (gtk_scrolled_window_new(NULL, NULL));
-    gtk_container_add (GTK_CONTAINER (item_list),
-                       GTK_WIDGET (item_list->scrollwin));
+    item_list->scrollwin = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new ());
 
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (item_list->scrollwin),
+    gtk_box_prepend (GTK_BOX(item_list), GTK_WIDGET(item_list->scrollwin));
+
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(item_list->scrollwin),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
 
@@ -542,16 +559,17 @@ gnc_item_list_new (GtkListStore* list_store)
                                                        NULL);
     gtk_tree_view_append_column (GTK_TREE_VIEW (tree_view), column);
 
-    gtk_container_add (GTK_CONTAINER (item_list->scrollwin), tree_view);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(item_list->scrollwin),
+                                   GTK_WIDGET(tree_view));
 
     item_list->tree_view = GTK_TREE_VIEW (tree_view);
     item_list->list_store = list_store;
 
-    g_signal_connect (G_OBJECT (tree_view), "button_press_event",
-                      G_CALLBACK (gnc_item_list_button_event), item_list);
+//FIXME gtk4    g_signal_connect (G_OBJECT (tree_view), "button_press_event",
+//                      G_CALLBACK (gnc_item_list_button_event), item_list);
 
-    g_signal_connect (G_OBJECT (tree_view), "key_press_event",
-                      G_CALLBACK (gnc_item_list_key_event), item_list);
+//FIXME gtk4    g_signal_connect (G_OBJECT (tree_view), "key_press_event",
+//                      G_CALLBACK (gnc_item_list_key_event), item_list);
 
     g_signal_connect (G_OBJECT (gtk_tree_view_get_selection (
                                 GTK_TREE_VIEW (tree_view))), "changed",

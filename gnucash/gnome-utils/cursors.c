@@ -29,7 +29,7 @@
 typedef enum
 {
     GNC_CURSOR_NORMAL = -1,
-    GNC_CURSOR_BUSY   = GDK_WATCH
+//FIXME gtk4    GNC_CURSOR_BUSY   = GDK_WATCH
 } GNCCursorType;
 
 
@@ -41,9 +41,11 @@ typedef enum
  *       type - the type of cursor to make                          *
  * Return: none                                                     *
 \********************************************************************/
+#ifdef skip
 static void
 gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
 {
+
     GdkCursor *cursor = NULL;
 
     if (win == NULL)
@@ -57,14 +59,14 @@ gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
 
     if (update_now && type != GNC_CURSOR_NORMAL)
     {
-        while (gtk_events_pending ())
-            gtk_main_iteration ();
+//FIXME gtk4        while (gtk_events_pending ())
+//            gtk_main_iteration ();
     }
 
     if (type != GNC_CURSOR_NORMAL)
         g_object_unref (cursor);
 }
-
+#endif
 
 /********************************************************************\
  * gnc_set_busy_cursor                                              *
@@ -79,6 +81,7 @@ gnc_ui_set_cursor (GdkWindow *win, GNCCursorType type, gboolean update_now)
 void
 gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
 {
+#ifdef skip
     if (w != NULL)
         gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_BUSY, update_now);
     else
@@ -103,6 +106,7 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
         }
         g_list_free_full (containerstop, (GDestroyNotify)g_object_unref);
     }
+#endif
 }
 
 
@@ -117,6 +121,7 @@ gnc_set_busy_cursor (GtkWidget *w, gboolean update_now)
 void
 gnc_unset_busy_cursor (GtkWidget *w)
 {
+#ifdef skip
     if (w != NULL)
         gnc_ui_set_cursor (gtk_widget_get_window(w), GNC_CURSOR_NORMAL, FALSE);
     else
@@ -134,5 +139,6 @@ gnc_unset_busy_cursor (GtkWidget *w)
         }
         g_list_free (containerstop);
     }
+#endif
 }
 

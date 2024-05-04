@@ -311,8 +311,8 @@ gnc_period_select_set_date_common (GncPeriodSelect *period, const GDate *date)
         {
             period->date_label = gtk_label_new("");
             gtk_widget_set_margin_start (GTK_WIDGET(period->date_label), 6);
-            gtk_box_pack_start(GTK_BOX(period), period->date_label, TRUE, TRUE, 0);
-            gtk_widget_show_all(period->date_label);
+            gtk_box_append (GTK_BOX(period), GTK_WIDGET(period->date_label));
+//FIXME gtk4            gtk_widget_show_all(period->date_label);
         }
         gnc_period_sample_update_date_label(period);
         return;
@@ -322,7 +322,7 @@ gnc_period_select_set_date_common (GncPeriodSelect *period, const GDate *date)
     {
         g_date_free(period->date_base);
         period->date_base = NULL;
-        gtk_widget_destroy(period->date_label);
+//FIXME gtk4        gtk_widget_destroy(period->date_label);
         period->date_label = NULL;
     }
 }
@@ -614,8 +614,8 @@ gnc_period_select_new (gboolean starting_labels)
     period->start      = starting_labels;
 
     /* Add the internal widgets to the hbox */
-    gtk_box_pack_start(GTK_BOX(period), period->selector, TRUE, TRUE, 0);
-    gtk_widget_show(period->selector);
+    gtk_box_append (GTK_BOX(period), GTK_WIDGET(period->selector));
+    gtk_widget_set_visible (GTK_WIDGET(period->selector), TRUE);
 
     /* Find out when the combo box changes */
     g_signal_connect(G_OBJECT(period->selector), "changed",
@@ -650,7 +650,7 @@ gnc_period_select_new_glade (gchar *widget_name,
     widget = gnc_period_select_new(int1 != 0);
     if (int2)
         gnc_period_select_set_show_date(GNC_PERIOD_SELECT(widget), TRUE);
-    gtk_widget_show(widget);
+    gtk_widget_set_visible (GTK_WIDGET(widget), TRUE);
     return widget;
 }
 

@@ -146,17 +146,17 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
     if (vw->dialog_type == NEW_VENDOR)
         qof_event_gen(QOF_INSTANCE(vendor), QOF_EVENT_ADD, NULL);
 
-    gncVendorSetID (vendor, gtk_entry_get_text (GTK_ENTRY (vw->id_entry)));
-    gncVendorSetName (vendor, gtk_entry_get_text (GTK_ENTRY (vw->company_entry)));
+    gncVendorSetID (vendor, gnc_entry_get_text (GTK_ENTRY (vw->id_entry)));
+    gncVendorSetName (vendor, gnc_entry_get_text (GTK_ENTRY (vw->company_entry)));
 
-    gncAddressSetName (addr, gtk_entry_get_text (GTK_ENTRY (vw->name_entry)));
-    gncAddressSetAddr1 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr1_entry)));
-    gncAddressSetAddr2 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr2_entry)));
-    gncAddressSetAddr3 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr3_entry)));
-    gncAddressSetAddr4 (addr, gtk_entry_get_text (GTK_ENTRY (vw->addr4_entry)));
-    gncAddressSetPhone (addr, gtk_entry_get_text (GTK_ENTRY (vw->phone_entry)));
-    gncAddressSetFax (addr, gtk_entry_get_text (GTK_ENTRY (vw->fax_entry)));
-    gncAddressSetEmail (addr, gtk_entry_get_text (GTK_ENTRY (vw->email_entry)));
+    gncAddressSetName (addr, gnc_entry_get_text (GTK_ENTRY (vw->name_entry)));
+    gncAddressSetAddr1 (addr, gnc_entry_get_text (GTK_ENTRY (vw->addr1_entry)));
+    gncAddressSetAddr2 (addr, gnc_entry_get_text (GTK_ENTRY (vw->addr2_entry)));
+    gncAddressSetAddr3 (addr, gnc_entry_get_text (GTK_ENTRY (vw->addr3_entry)));
+    gncAddressSetAddr4 (addr, gnc_entry_get_text (GTK_ENTRY (vw->addr4_entry)));
+    gncAddressSetPhone (addr, gnc_entry_get_text (GTK_ENTRY (vw->phone_entry)));
+    gncAddressSetFax (addr, gnc_entry_get_text (GTK_ENTRY (vw->fax_entry)));
+    gncAddressSetEmail (addr, gnc_entry_get_text (GTK_ENTRY (vw->email_entry)));
 
     gncVendorSetActive (vendor, gtk_toggle_button_get_active
                         (GTK_TOGGLE_BUTTON (vw->active_check)));
@@ -184,7 +184,7 @@ static void gnc_ui_to_vendor (VendorWindow *vw, GncVendor *vendor)
 static gboolean check_entry_nonempty (GtkWidget *entry,
                                       const char * error_message)
 {
-    const char *res = gtk_entry_get_text (GTK_ENTRY (entry));
+    const char *res = gnc_entry_get_text (GTK_ENTRY (entry));
     if (g_strcmp0 (res, "") == 0)
     {
         if (error_message)
@@ -207,10 +207,10 @@ gnc_vendor_window_ok_cb (GtkWidget *widget, gpointer data)
         return;
 
     /* Check for valid id and set one if necessary */
-    if (g_strcmp0 (gtk_entry_get_text (GTK_ENTRY (vw->id_entry)), "") == 0)
+    if (g_strcmp0 (gnc_entry_get_text (GTK_ENTRY (vw->id_entry)), "") == 0)
     {
         string = gncVendorNextID(vw->book);
-        gtk_entry_set_text (GTK_ENTRY (vw->id_entry), string);
+        gnc_entry_set_text (GTK_ENTRY (vw->id_entry), string);
         g_free(string);
     }
 
@@ -318,7 +318,7 @@ gnc_vendor_window_close_handler (gpointer user_data)
 {
     VendorWindow *vw = user_data;
 
-    gtk_widget_destroy (vw->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(vw->dialog));
 }
 
 static void
@@ -398,6 +398,7 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
 
     /* Find the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(vw));
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "terms_store");
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "tax_included_store");
     gnc_builder_add_from_file (builder, "dialog-vendor.glade", "taxtable_store");
@@ -436,12 +437,12 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
     vw->currency_edit = edit;
 
     hbox = GTK_WIDGET (gtk_builder_get_object (builder, "currency_box"));
-    gtk_box_pack_start (GTK_BOX (hbox), edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(edit));
 
     /* Setup signals */
-    gtk_builder_connect_signals_full( builder,
-                                      gnc_builder_connect_full_func,
-                                      vw);
+//FIXME gtk4    gtk_builder_connect_signals_full( builder,
+//                                      gnc_builder_connect_full_func,
+//                                      vw);
 
     /* Setup initial values */
     if (vendor != NULL)
@@ -455,18 +456,18 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
 
         addr = gncVendorGetAddr (vendor);
 
-        gtk_entry_set_text (GTK_ENTRY (vw->id_entry), gncVendorGetID (vendor));
-        gtk_entry_set_text (GTK_ENTRY (vw->company_entry), gncVendorGetName (vendor));
+        gnc_entry_set_text (GTK_ENTRY (vw->id_entry), gncVendorGetID (vendor));
+        gnc_entry_set_text (GTK_ENTRY (vw->company_entry), gncVendorGetName (vendor));
 
         /* Setup Address */
-        gtk_entry_set_text (GTK_ENTRY (vw->name_entry), gncAddressGetName (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->addr1_entry), gncAddressGetAddr1 (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->addr2_entry), gncAddressGetAddr2 (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->addr3_entry), gncAddressGetAddr3 (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->addr4_entry), gncAddressGetAddr4 (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->phone_entry), gncAddressGetPhone (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->fax_entry), gncAddressGetFax (addr));
-        gtk_entry_set_text (GTK_ENTRY (vw->email_entry), gncAddressGetEmail (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->name_entry), gncAddressGetName (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->addr1_entry), gncAddressGetAddr1 (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->addr2_entry), gncAddressGetAddr2 (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->addr3_entry), gncAddressGetAddr3 (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->addr4_entry), gncAddressGetAddr4 (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->phone_entry), gncAddressGetPhone (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->fax_entry), gncAddressGetFax (addr));
+        gnc_entry_set_text (GTK_ENTRY (vw->email_entry), gncAddressGetEmail (addr));
 
         /* Set toggle buttons */
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (vw->active_check),
@@ -517,7 +518,7 @@ gnc_vendor_new_window (GtkWindow *parent, QofBook *bookp, GncVendor *vendor)
                                          GNC_VENDOR_MODULE_NAME,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (vw->dialog);
+//FIXME gtk4    gtk_widget_show_all (vw->dialog);
     g_object_unref(G_OBJECT(builder));
 
     return vw;

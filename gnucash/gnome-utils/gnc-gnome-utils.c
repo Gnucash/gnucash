@@ -139,19 +139,16 @@ gnc_add_css_file (void)
 {
     GtkCssProvider *provider_user, *provider_app, *provider_fallback;
     GdkDisplay *display;
-    GdkScreen *screen;
     const gchar *var;
-    GError *error = 0;
 
     provider_user = gtk_css_provider_new ();
     provider_app = gtk_css_provider_new ();
     provider_fallback = gtk_css_provider_new ();
     display = gdk_display_get_default ();
-    screen = gdk_display_get_default_screen (display);
 
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_fallback), GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_app), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-    gtk_style_context_add_provider_for_screen (screen, GTK_STYLE_PROVIDER (provider_user), GTK_STYLE_PROVIDER_PRIORITY_USER);
+    gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider_fallback), GTK_STYLE_PROVIDER_PRIORITY_FALLBACK);
+    gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider_app), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+    gtk_style_context_add_provider_for_display (display, GTK_STYLE_PROVIDER (provider_user), GTK_STYLE_PROVIDER_PRIORITY_USER);
 
     gtk_css_provider_load_from_resource (provider_app, GNUCASH_RESOURCE_PREFIX "/gnucash.css");
     gtk_css_provider_load_from_resource (provider_fallback,  GNUCASH_RESOURCE_PREFIX "/gnucash-fallback.css");
@@ -160,8 +157,8 @@ gnc_add_css_file (void)
     if (var)
     {
         gchar *str;
-        str = g_build_filename (var, "gtk-3.0.css", (char *)NULL);
-        gtk_css_provider_load_from_path (provider_user, str, &error);
+        str = g_build_filename (var, "gtk-4.0.css", (char *)NULL);
+        gtk_css_provider_load_from_path (provider_user, str);
         g_free (str);
     }
     g_object_unref (provider_user);
@@ -339,12 +336,26 @@ gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
     g_free (found);
 }
 #else
+
+static void
+ready_cb (GObject* source_object, GAsyncResult* res, gpointer user_data)
+{
+    GtkWindow *parent_window = GTK_WINDOW(source_object);
+    GError *error = NULL;
+
+    if (!gtk_show_uri_full_finish (parent_window, res, &error))
+    {
+        gnc_error_dialog (parent_window, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
+
+        PERR("%s", error->message);
+        g_error_free (error);
+    }
+}
+
 void
 gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 {
-    GError *error = NULL;
     gchar *uri = NULL;
-    gboolean success = TRUE;
 
     if (anchor)
         uri = g_strconcat ("help:", file_name, "/", anchor, NULL);
@@ -353,22 +364,11 @@ gnc_gnome_help (GtkWindow *parent, const char *file_name, const char *anchor)
 
     DEBUG ("Attempting to opening help uri %s", uri);
 
-    if (uri)
-        success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
+    gtk_show_uri_full (parent, uri, GDK_CURRENT_TIME, NULL, 
+                       ready_cb, NULL);
 
     g_free (uri);
-    if (success)
-        return;
-
-    g_assert(error != NULL);
-    {
-        gnc_error_dialog (parent, "%s\n%s", _(msg_no_help_found), _(msg_no_help_reason));
-    }
-    PERR ("%s", error->message);
-    g_error_free(error);
 }
-
-
 #endif
 
 #ifdef MAC_INTEGRATION
@@ -438,14 +438,14 @@ void
 gnc_launch_doclink (GtkWindow *parent, const char *uri)
 {
     GError *error = NULL;
-    gboolean success;
+    gboolean success = TRUE;
 
     if (!uri)
         return;
 
     DEBUG ("Attempting to open uri %s", uri);
 
-    success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
+//FIXME gtk4    success = gtk_show_uri_on_window (NULL, uri, gtk_get_current_event_time (), &error);
 
     if (success)
         return;
@@ -475,34 +475,41 @@ gnc_launch_doclink (GtkWindow *parent, const char *uri)
 #endif
 
 /********************************************************************\
- * gnc_gnome_get_pixmap                                             *
- *   returns a GtkWidget given a pixmap filename                    *
+ * gnc_gnome_get_picture                                            *
+ *   returns a GtkWidget of a given a picture for filename          *
  *                                                                  *
  * Args: none                                                       *
  * Returns: GtkWidget or NULL if there was a problem                *
  \*******************************************************************/
 GtkWidget *
-gnc_gnome_get_pixmap (const char *name)
+gnc_gnome_get_picture (const char *name)
 {
-    GtkWidget *pixmap;
+    GtkWidget *picture = NULL;
     char *fullname;
+    GError *error = NULL;
 
     g_return_val_if_fail (name != NULL, NULL);
 
     fullname = gnc_filepath_locate_pixmap (name);
+
     if (fullname == NULL)
         return NULL;
 
-    DEBUG ("Loading pixmap file %s", fullname);
+    DEBUG ("Loading picture file %s", fullname);
 
-    pixmap = gtk_image_new_from_file (fullname);
-    if (pixmap == NULL)
-    {
-        PERR ("Could not load pixmap");
-    }
+    GFile *file = g_file_new_for_path (fullname);
+    GdkTexture *texture = gdk_texture_new_from_file (file, &error);
+    g_object_unref (file);
     g_free (fullname);
 
-    return pixmap;
+    if (!error)
+        picture = gtk_picture_new_for_paintable (GDK_PAINTABLE(texture));
+    else
+        g_error_free (error);
+
+    g_object_unref (texture);
+
+    return picture;
 }
 
 /********************************************************************\
@@ -544,8 +551,8 @@ gnc_ui_check_events (gpointer not_used)
     QofSession *session;
     gboolean force;
 
-    if (gtk_main_level() != 1)
-        return TRUE;
+//FIXME gtk4    if (gtk_main_level() != 1)
+//        return TRUE;
 
     if (!gnc_current_session_exist())
         return TRUE;
@@ -583,7 +590,9 @@ gnc_ui_start_event_loop (void)
     scm_call_1(scm_c_eval_string("gnc:set-ui-status"), SCM_BOOL_T);
 
     /* Enter gnome event loop */
-    gtk_main ();
+//FIXME gtk4    gtk_main ();
+    while (g_list_model_get_n_items (gtk_window_get_toplevels ()) > 0)
+        g_main_context_iteration (NULL, TRUE);
 
     g_source_remove (id);
 
@@ -672,7 +681,7 @@ gnc_gui_init(void)
         g_free(data_dir);
     }
 
-    gtk_accel_map_load(map);
+//FIXME gtk4    gtk_accel_map_load(map);
     g_free(map);
 
     /* Load css configuration file */
@@ -736,7 +745,8 @@ gnc_gui_shutdown (void)
 //        gtk_accel_map_save(map);
 //        g_free(map);
         gnc_component_manager_shutdown ();
-        gtk_main_quit();
+//FIXME gtk4        gtk_main_quit();
+// maybe g_main_quit
     }
 }
 

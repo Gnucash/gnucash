@@ -64,7 +64,7 @@ static gchar *icon_files[] =
 void
 gnc_load_app_icons (void)
 {
-    GtkIconTheme *icon_theme = gtk_icon_theme_get_default ();
+    GtkIconTheme *icon_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
     gchar *default_path;
     gchar* pkgdatadir = gnc_path_get_pkgdatadir ();
     gchar* datadir = gnc_path_get_datadir ();
@@ -72,17 +72,17 @@ gnc_load_app_icons (void)
     gint n_elements, i;
 
     default_path = g_build_filename (pkgdatadir, "icons", NULL);
-    gtk_icon_theme_append_search_path (icon_theme, default_path);
+    gtk_icon_theme_add_search_path (icon_theme, default_path);
     g_free (default_path);
     default_path = g_build_filename (datadir, "icons", NULL);
-    gtk_icon_theme_append_search_path (icon_theme, default_path);
+    gtk_icon_theme_add_search_path (icon_theme, default_path);
     g_free (default_path);
     g_free (pkgdatadir);
     g_free (datadir);
 
-    gtk_icon_theme_get_search_path (icon_theme,
-                                    &path,
-                                    &n_elements);
+    path = gtk_icon_theme_get_search_path (icon_theme);
+    n_elements = g_strv_length (path);
+
     PINFO ("The icon theme search path has %i elements.", n_elements);
     if (n_elements > 0)
     {
@@ -96,7 +96,7 @@ gnc_load_app_icons (void)
     {
         gchar *file = icon_files[i];
         // check if we have at least one size for the named icons loaded
-        if (!gtk_icon_theme_has_icon (icon_theme, file))
-            PWARN ("No icon named '%s' found. Some gui elements may be missing their icons", file);
+//FIXME gtk4        if (!gtk_icon_theme_has_icon (icon_theme, file))
+//            PWARN ("No icon named '%s' found. Some gui elements may be missing their icons", file);
     }
 }

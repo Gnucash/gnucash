@@ -455,14 +455,14 @@ gsr_create_table( GNCSplitReg *gsr )
     register_widget = gnucash_register_new( sr->table, register_state_section );
     gsr->reg = GNUCASH_REGISTER( register_widget );
 
-    gtk_box_pack_start (GTK_BOX (gsr), GTK_WIDGET(gsr->reg), TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(gsr), GTK_WIDGET(gsr->reg));
     gnucash_sheet_set_window (gnucash_register_get_sheet (gsr->reg), gsr->window);
 
     // setup the callback for when the doclink cell clicked on
     gnucash_register_set_open_doclink_cb (gsr->reg,
         (GFunc)gsr_default_doclink_from_sheet_handler, gsr);
 
-    gtk_widget_show ( GTK_WIDGET(gsr->reg) );
+    gtk_widget_set_visible (GTK_WIDGET(gsr->reg), TRUE);
     g_signal_connect (gsr->reg, "activate_cursor",
                       G_CALLBACK(gnc_split_reg_record_cb), gsr);
     g_signal_connect (gsr->reg, "redraw_all",
@@ -509,7 +509,7 @@ gnc_split_reg_dispose(GObject *obj)
     if (gsr->reg)
     {
         g_signal_handlers_disconnect_by_data (gsr->reg, gsr);
-        gtk_widget_destroy (GTK_WIDGET (gsr->reg));
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(gsr->reg));
     }
     gsr->reg = NULL;
 }
@@ -638,8 +638,8 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
     // Sort label
     if (gsr->sort_label != NULL)
     {
-        gchar *old_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->sort_label));
-        gchar *new_tt_text;
+        const gchar *old_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->sort_label));
+        const gchar *new_tt_text;
         gchar *text = NULL;
 
         switch (gsr->sort_type)
@@ -690,19 +690,13 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
         if (g_strcmp0 (old_tt_text, new_tt_text) != 0)
             gsr_summarybar_set_arrow_draw (gsr);
 
-        if (old_tt_text)
-            g_free (old_tt_text);
-
-        if (new_tt_text)
-            g_free (new_tt_text);
-
         gtk_label_set_text (GTK_LABEL(gsr->sort_label), text);
     }
 
     // Filter label
     if (gsr->filter_label != NULL)
     {
-        gchar *old_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->filter_label));
+        const gchar *old_tt_text = gtk_widget_get_tooltip_text (GTK_WIDGET(gsr->filter_label));
 
         // check for a change in text
         if (g_strcmp0 (old_tt_text, gsr->filter_text) != 0)
@@ -715,7 +709,6 @@ gsr_redraw_all_cb (GnucashRegister *g_reg, gpointer data)
             gtk_widget_set_tooltip_text (GTK_WIDGET(gsr->filter_label), gsr->filter_text);
 
         }
-        g_free (old_tt_text);
     }
 
     if (gsr->shares_label == NULL && gsr->value_label == NULL)
@@ -903,8 +896,7 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
                                                  "%s", anchor_error);
                 gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                          "%s", anchor_split);
-                gtk_dialog_run (GTK_DIALOG(dialog));
-                gtk_widget_destroy (dialog);
+                gnc_dialog_run (GTK_DIALOG(dialog));
                 return;
             }
         }
@@ -939,8 +931,8 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
                                _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button (dialog, _("_Cut Split"),
                                    "edit-delete", GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run (GTK_DIALOG(dialog), warning);
-        gtk_widget_destroy (dialog);
+        response = gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
+
         if (response != GTK_RESPONSE_ACCEPT)
             return;
 
@@ -977,8 +969,8 @@ gsr_default_cut_txn_handler (GNCSplitReg *gsr, gpointer data)
                                _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button (dialog, _("_Cut Transaction"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
-        response =  gnc_dialog_run (GTK_DIALOG(dialog), warning);
-        gtk_widget_destroy (dialog);
+        response =  gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
+
         if (response != GTK_RESPONSE_ACCEPT)
             return;
 
@@ -1135,8 +1127,8 @@ is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans)
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", _("The date of this transaction is older than the \"Read-Only Threshold\" set for this book. "
                         "This setting can be changed in File->Properties->Accounts."));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         return TRUE;
     }
 
@@ -1150,8 +1142,8 @@ is_trans_readonly_and_warn (GtkWindow *parent, Transaction *trans)
                                         "%s", title);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 message, reason);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         return TRUE;
     }
     return FALSE;
@@ -1201,8 +1193,8 @@ gsr_default_reinit_handler( GNCSplitReg *gsr, gpointer data )
                               /* Translators: This is the confirmation button in a warning dialog */
                               _("_Remove Splits"),
                               "edit-delete", GTK_RESPONSE_ACCEPT);
-    response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
-    gtk_widget_destroy (dialog);
+    response = gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
+
     if (response != GTK_RESPONSE_ACCEPT)
         return;
 
@@ -1228,6 +1220,25 @@ gnc_split_reg_reinitialize_trans_cb(GtkWidget *widget, gpointer data)
     gsr_emit_simple_signal( gsr, "reinit_ent" );
 }
 
+static void
+update_trans_uri_gui_destroy_cb (GtkWidget *object, gpointer user_data)
+{
+    DoclinkReturn *dlr = user_data;
+    Transaction *trans = dlr->user_data;
+
+    if (dlr->response != GTK_RESPONSE_CANCEL)
+    {
+        if (dlr->updated_uri && g_strcmp0 (dlr->existing_uri, dlr->updated_uri) != 0)
+        {
+            if (GNC_IS_TRANSACTION(trans))
+                xaccTransSetDocLink (trans, dlr->updated_uri);
+        }
+    }
+    g_free (dlr->existing_uri);
+    g_free (dlr->updated_uri);
+    g_free (dlr);
+}
+
 /* Edit the document link for the current transaction. */
 void
 gsr_default_doclink_handler (GNCSplitReg *gsr)
@@ -1237,7 +1248,6 @@ gsr_default_doclink_handler (GNCSplitReg *gsr)
     Transaction *trans;
     CursorClass cursor_class;
     gchar *uri;
-    gchar *ret_uri;
 
     /* get the current split based on cursor position */
     if (!split)
@@ -1258,15 +1268,18 @@ gsr_default_doclink_handler (GNCSplitReg *gsr)
     // fix an earlier error when storing relative paths before version 3.5
     uri = gnc_doclink_convert_trans_link_uri (trans, gsr->read_only);
 
-    ret_uri =
-        gnc_doclink_get_uri_dialog (GTK_WINDOW (gsr->window),
-                                    _("Change a Transaction Linked Document"),
-                                    uri);
+    DoclinkReturn *dlr = g_new0 (DoclinkReturn, 1);
+    dlr->existing_uri = g_strdup (uri);
+    dlr->updated_uri = NULL;
+    dlr->user_data = trans;
 
-    if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
-        xaccTransSetDocLink (trans, ret_uri);
+    GtkWidget *win = gnc_doclink_get_uri_dialog (GTK_WINDOW (gsr->window),
+                                                 _("Change a Transaction Linked Document"),
+                                                 dlr);
 
-    g_free (ret_uri);
+    g_signal_connect (G_OBJECT(win), "destroy",
+                      G_CALLBACK(update_trans_uri_gui_destroy_cb), dlr);
+
     g_free (uri);
 }
 
@@ -1429,8 +1442,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
                                                 "%s", anchor_error);
                 gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                         "%s", anchor_split);
-                gtk_dialog_run(GTK_DIALOG(dialog));
-                gtk_widget_destroy (dialog);
+                gnc_dialog_run (GTK_DIALOG(dialog));
+
                 return;
             }
         }
@@ -1466,8 +1479,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
                               _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button(dialog, _("_Delete Split"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
-        response = gnc_dialog_run(GTK_DIALOG(dialog), warning);
-        gtk_widget_destroy (dialog);
+        response = gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
+
         if (response != GTK_RESPONSE_ACCEPT)
             return;
 
@@ -1506,8 +1519,8 @@ gsr_default_delete_handler( GNCSplitReg *gsr, gpointer data )
                               _("_Cancel"), GTK_RESPONSE_CANCEL);
         gnc_gtk_dialog_add_button(dialog, _("_Delete Transaction"),
                                   "edit-delete", GTK_RESPONSE_ACCEPT);
-        response =  gnc_dialog_run(GTK_DIALOG(dialog), warning);
-        gtk_widget_destroy (dialog);
+        response =  gnc_warning_dialog_run (GTK_DIALOG(dialog), warning);
+
         if (response != GTK_RESPONSE_ACCEPT)
             return;
 
@@ -1631,11 +1644,12 @@ gsr_default_expand_handler( GNCSplitReg *gsr, gpointer data )
     reg = gnc_ledger_display_get_split_register (gsr->ledger);
 
     /* These should all be in agreement. */
-    activeCount =
-        ( ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_menu_check)) ? 1 : -1 )
-          + ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_popup_check)) ? 1 : -1 )
-          + ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(gsr->split_button) )
-              ? 1 : -1 ) );
+//FIXME gtk4    activeCount =
+//        ( ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_menu_check)) ? 1 : -1 )
+//          + ( gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(gsr->split_popup_check)) ? 1 : -1 )
+//          + ( gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(gsr->split_button) )
+//              ? 1 : -1 ) );
+activeCount = 0;
 
     /* If activeCount > 0, then there's more active than inactive; otherwise,
      * more inactive than active.  Both determine which state the user is
@@ -1891,8 +1905,8 @@ gnc_split_reg_style_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
-        return;
+//FIXME gtk4    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
+//        return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_LEDGER, TRUE);
 }
@@ -1902,8 +1916,8 @@ gnc_split_reg_style_auto_ledger_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
-        return;
+//FIXME gtk4    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
+//        return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_AUTO_LEDGER, TRUE);
 }
@@ -1913,8 +1927,8 @@ gnc_split_reg_style_journal_cb (GtkWidget *w, gpointer data)
 {
     GNCSplitReg *gsr = data;
 
-    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
-        return;
+//FIXME gtk4    if (!gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w)))
+//        return;
 
     gnc_split_reg_change_style (gsr, REG_STYLE_JOURNAL, TRUE);
 }
@@ -1926,9 +1940,10 @@ gnc_split_reg_double_line_cb (GtkWidget *w, gpointer data)
     SplitRegister *reg = gnc_ledger_display_get_split_register (gsr->ledger);
     gboolean use_double_line;
 
-    use_double_line = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w));
-    if ( use_double_line == reg->use_double_line )
-        return;
+//FIXME gtk4    use_double_line = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM(w));
+//    if ( use_double_line == reg->use_double_line )
+//        return;
+use_double_line = FALSE;
 
     gnc_split_register_config( reg, reg->type, reg->style, use_double_line );
     gnc_ledger_display_refresh( gsr->ledger );
@@ -2247,23 +2262,24 @@ add_summary_label (GtkWidget *summarybar, gboolean pack_start, const char *label
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 2);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
     if (pack_start)
-        gtk_box_pack_start( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
+        gtk_box_append (GTK_BOX(summarybar), GTK_WIDGET(hbox));
     else
-        gtk_box_pack_end( GTK_BOX(summarybar), hbox, FALSE, FALSE, 5 );
+        gtk_box_prepend (GTK_BOX(summarybar), GTK_WIDGET(hbox));
+    gtk_box_set_spacing (GTK_BOX(summarybar), 5);
 
     text_label = gtk_label_new (label_str);
     gnc_label_set_alignment (text_label, 1.0, 0.5 );
     gtk_label_set_ellipsize (GTK_LABEL(text_label), PANGO_ELLIPSIZE_END);
-    gtk_box_pack_start (GTK_BOX(hbox), text_label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(text_label));
 
     secondary_label = gtk_label_new ( "" );
     g_object_set_data (G_OBJECT(secondary_label), "text_label", text_label);
     g_object_set_data (G_OBJECT(secondary_label), "text_box", hbox);
     gnc_label_set_alignment (secondary_label, 1.0, 0.5 );
-    gtk_box_pack_start (GTK_BOX(hbox), secondary_label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(secondary_label));
 
     if (extra != NULL)
-        gtk_box_pack_start( GTK_BOX(hbox), extra, FALSE, FALSE, 0 );
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(extra));
 
     return secondary_label;
 }
@@ -2316,7 +2332,8 @@ gsr_create_summary_bar( GNCSplitReg *gsr )
     }
 
     gsr->filter_label = add_summary_label (summarybar, FALSE, "", NULL);
-    gsr->sort_arrow = gtk_image_new_from_icon_name ("image-missing", GTK_ICON_SIZE_SMALL_TOOLBAR);
+    gsr->sort_arrow = gtk_image_new_from_icon_name ("image-missing");
+    gtk_image_set_icon_size (GTK_IMAGE(gsr->sort_arrow), GTK_ICON_SIZE_NORMAL);
     gsr->sort_label = add_summary_label (summarybar, FALSE, _("Sort By:"), gsr->sort_arrow);
 
     gnc_widget_style_context_add_class (GTK_WIDGET(gsr->filter_label), "gnc-class-highlight");
@@ -2424,8 +2441,8 @@ gtk_callback_bug_workaround (gpointer argp)
                                     "%s", read_only);
     gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
             "%s", args->string);
-    gnc_dialog_run(GTK_DIALOG(dialog), GNC_PREF_WARN_REG_IS_READ_ONLY);
-    gtk_widget_destroy(dialog);
+    gnc_warning_dialog_run (GTK_DIALOG(dialog), GNC_PREF_WARN_REG_IS_READ_ONLY);
+
     g_free(read_only);
     g_free(args);
     return FALSE;

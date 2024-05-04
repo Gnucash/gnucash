@@ -66,7 +66,7 @@ typedef struct
 
 typedef struct
 {
-    GtkWidget    *dialog;
+    GtkWidget    *window;
     QofSession   *session;
     GtkWidget    *view;
     GtkTreeModel *model;
@@ -88,44 +88,44 @@ typedef struct
     GtkWidget    *expand_button;
     GtkWidget    *collapse_button;
     GtkWidget    *remove_button;
+    GtkWidget    *delete_button;
+    GtkWidget    *close_button;
+
     GncInvFlags   inv_dialog_shown;
-}ImapDialog;
+}ImapStruct;
 
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
 
-void gnc_imap_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data);
-void gnc_imap_dialog_close_cb (GtkDialog *dialog, gpointer user_data);
-void gnc_imap_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data);
+static void get_account_info (ImapStruct *imap);
+static void close_handler (gpointer user_data);
 
-static void get_account_info (ImapDialog *imap_dialog);
-
-void
+static void
 gnc_imap_dialog_window_destroy_cb (GtkWidget *object, gpointer user_data)
 {
-    ImapDialog *imap_dialog = user_data;
+    ImapStruct *imap = user_data;
 
     ENTER(" ");
-    gnc_unregister_gui_component_by_data (DIALOG_IMAP_CM_CLASS, imap_dialog);
+    gnc_unregister_gui_component_by_data (DIALOG_IMAP_CM_CLASS, imap);
 
-    if (imap_dialog->dialog)
+    if (imap->window)
     {
-        gtk_widget_destroy (imap_dialog->dialog);
-        imap_dialog->dialog = NULL;
+        gtk_window_destroy (GTK_WINDOW(imap->window));
+        imap->window = NULL;
     }
-    g_free (imap_dialog);
+    g_free (imap);
     LEAVE(" ");
 }
 
-void
-gnc_imap_dialog_close_cb (GtkDialog *dialog, gpointer user_data)
+static gboolean
+gnc_imap_dialog_close_event_cb (GtkWidget       *widget,
+                                const GdkEvent  *event,
+                                gpointer         user_data)
 {
-    ImapDialog *imap_dialog = user_data;
-
-    ENTER(" ");
-    gnc_close_gui_component_by_data (DIALOG_IMAP_CM_CLASS, imap_dialog);
-    LEAVE(" ");
+    // this cb allows the window size to be saved on closing with the X
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(widget));
+    return false;
 }
 
 static void
@@ -153,7 +153,7 @@ delete_info_nbayes (Account *source_account, gchar *head,
 }
 
 static void
-delete_selected_row (ImapDialog *imap_dialog, GtkTreeIter *iter)
+delete_selected_row (ImapStruct *imap, GtkTreeIter *iter)
 {
     Account     *source_account = NULL;
     gchar       *full_source_account;
@@ -164,14 +164,14 @@ delete_selected_row (ImapDialog *imap_dialog, GtkTreeIter *iter)
     GtkTreeIter  parent;
 
     // get the parent iter and see how many children it has, if 1 we will remove
-    if (gtk_tree_model_iter_parent (imap_dialog->model, &parent, iter))
-        num = gtk_tree_model_iter_n_children (imap_dialog->model, &parent);
+    if (gtk_tree_model_iter_parent (imap->model, &parent, iter))
+        num = gtk_tree_model_iter_n_children (imap->model, &parent);
 
-    gtk_tree_model_get (imap_dialog->model, iter, SOURCE_ACCOUNT, &source_account,
-                                                  SOURCE_FULL_ACC, &full_source_account,
-                                                  HEAD, &head,
-                                                  CATEGORY, &category,
-                                                  MATCH_STRING, &match_string, -1);
+    gtk_tree_model_get (imap->model, iter, SOURCE_ACCOUNT, &source_account,
+                                           SOURCE_FULL_ACC, &full_source_account,
+                                           HEAD, &head,
+                                           CATEGORY, &category,
+                                           MATCH_STRING, &match_string, -1);
 
     PINFO("Account is '%s', Head is '%s', Category is '%s', Match String is '%s'",
            full_source_account, head, category, match_string);
@@ -182,26 +182,26 @@ delete_selected_row (ImapDialog *imap_dialog, GtkTreeIter *iter)
         gint         depth;
 
         // Get the level we are at in the tree-model
-        tree_path = gtk_tree_model_get_path (imap_dialog->model, iter);
+        tree_path = gtk_tree_model_get_path (imap->model, iter);
         depth = gtk_tree_path_get_depth (tree_path);
         gtk_tree_path_free (tree_path);
 
-        if (imap_dialog->type == ONLINE)
+        if (imap->type == ONLINE)
             gnc_account_delete_map_entry (source_account, head, NULL, NULL, FALSE);
 
-        if (imap_dialog->type == BAYES)
+        if (imap->type == BAYES)
             delete_info_bayes (source_account, head, depth);
 
-        if (imap_dialog->type == NBAYES)
+        if (imap->type == NBAYES)
             delete_info_nbayes (source_account, head, category, match_string, depth);
 
-        gtk_tree_store_remove (GTK_TREE_STORE(imap_dialog->model), iter);
+        gtk_tree_store_remove (GTK_TREE_STORE(imap->model), iter);
 
-        if (num == 1 && (imap_dialog->type != ONLINE))
-            gtk_tree_store_remove (GTK_TREE_STORE(imap_dialog->model), &parent);
+        if (num == 1 && (imap->type != ONLINE))
+            gtk_tree_store_remove (GTK_TREE_STORE(imap->model), &parent);
     }
     // Clear the total
-    gtk_label_set_text (GTK_LABEL(imap_dialog->total_entries_label), " ");
+    gtk_label_set_text (GTK_LABEL(imap->total_entries_label), " ");
 
     if (head)
         g_free (head);
@@ -215,7 +215,7 @@ delete_selected_row (ImapDialog *imap_dialog, GtkTreeIter *iter)
 
 static gboolean
 find_invalid_mappings_total (GtkTreeModel *model, GtkTreePath *path,
-                             GtkTreeIter *iter, ImapDialog *imap_dialog)
+                             GtkTreeIter *iter, ImapStruct *imap)
 {
     Account *source_account = NULL;
     Account *map_account = NULL;
@@ -231,14 +231,14 @@ find_invalid_mappings_total (GtkTreeModel *model, GtkTreePath *path,
     if ((source_account != NULL) && (map_account == NULL))
     {
         if (((g_strcmp0 (head, "online_id") == 0) && (depth == 1)) || (depth == 2))
-            imap_dialog->tot_invalid_maps ++;
+            imap->tot_invalid_maps ++;
     }
     g_free (head);
     return FALSE;
 }
 
 static void
-gnc_imap_dialog_delete (ImapDialog *imap_dialog)
+gnc_imap_dialog_delete (ImapStruct *imap)
 {
     GList            *list, *row;
     GtkTreeModel     *fmodel;
@@ -246,8 +246,8 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
     GtkTreeIter       iter;
     GtkTreeSelection *selection;
 
-    fmodel = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(imap_dialog->view));
+    fmodel = gtk_tree_view_get_model (GTK_TREE_VIEW(imap->view));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(imap->view));
 
     list = gtk_tree_selection_get_selected_rows (selection, &fmodel);
 
@@ -256,7 +256,7 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
         return;
 
     // reset the invalid map total
-    imap_dialog->tot_invalid_maps = 0;
+    imap->tot_invalid_maps = 0;
 
     // reverse list
     list = g_list_reverse (list);
@@ -270,7 +270,7 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
         if (gtk_tree_model_get_iter (fmodel, &fiter, row->data))
         {
             gtk_tree_model_filter_convert_iter_to_child_iter (GTK_TREE_MODEL_FILTER(fmodel), &iter, &fiter);
-            delete_selected_row (imap_dialog, &iter);
+            delete_selected_row (imap, &iter);
         }
     }
     g_list_foreach (list, (GFunc) gtk_tree_path_free, NULL);
@@ -280,18 +280,18 @@ gnc_imap_dialog_delete (ImapDialog *imap_dialog)
     gnc_resume_gui_refresh();
 
     // recount the number of invalid maps
-    gtk_tree_model_foreach (imap_dialog->model,
+    gtk_tree_model_foreach (imap->model,
                             (GtkTreeModelForeachFunc)find_invalid_mappings_total,
-                            imap_dialog);
+                            imap);
 
-    if (imap_dialog->tot_invalid_maps == 0)
-        gtk_widget_hide (imap_dialog->remove_button);
+    if (imap->tot_invalid_maps == 0)
+        gtk_widget_set_visible (GTK_WIDGET(imap->remove_button), FALSE);
 
 }
 
 static gboolean
 find_invalid_mappings (GtkTreeModel *model, GtkTreePath *path,
-                         GtkTreeIter *iter, GList **rowref_list)
+                       GtkTreeIter *iter, GList **rowref_list)
 {
     Account *source_account = NULL;
     Account *map_account = NULL;
@@ -317,12 +317,12 @@ find_invalid_mappings (GtkTreeModel *model, GtkTreePath *path,
 }
 
 static void
-gnc_imap_remove_invalid_maps (ImapDialog *imap_dialog)
+gnc_imap_remove_invalid_maps (ImapStruct *imap)
 {
     GList *rr_list = NULL;
     GList *node;
 
-    gtk_tree_model_foreach (imap_dialog->model,
+    gtk_tree_model_foreach (imap->model,
                             (GtkTreeModelForeachFunc)find_invalid_mappings,
                             &rr_list);
 
@@ -338,8 +338,8 @@ gnc_imap_remove_invalid_maps (ImapDialog *imap_dialog)
         {
             GtkTreeIter iter;
 
-            if (gtk_tree_model_get_iter (GTK_TREE_MODEL(imap_dialog->model), &iter, path))
-                delete_selected_row (imap_dialog, &iter);
+            if (gtk_tree_model_get_iter (GTK_TREE_MODEL(imap->model), &iter, path))
+                delete_selected_row (imap, &iter);
 
             gtk_tree_path_free (path);
         }
@@ -353,37 +353,37 @@ gnc_imap_remove_invalid_maps (ImapDialog *imap_dialog)
 }
 
 static void
-gnc_imap_invalid_maps_dialog (ImapDialog *imap_dialog)
+gnc_imap_invalid_maps_dialog (ImapStruct *imap)
 {
-    gtk_widget_hide (imap_dialog->remove_button);
+    gtk_widget_set_visible (GTK_WIDGET(imap->remove_button), FALSE);
 
-    if (imap_dialog->tot_invalid_maps > 0)
+    if (imap->tot_invalid_maps > 0)
     {
         /* Translators: This is a ngettext(3) message, %d is the number of maps missing */
         gchar *message = g_strdup_printf (ngettext ("There is %d invalid mapping,\n\nWould you like to remove it now?",
                                                     "There are %d invalid mappings,\n\nWould you like to remove them now?",
-                                                    imap_dialog->tot_invalid_maps),
-                                                    imap_dialog->tot_invalid_maps);
+                                                    imap->tot_invalid_maps),
+                                                    imap->tot_invalid_maps);
 
         gchar *message2 = g_strdup_printf (gettext ("To see the invalid mappings, use a filter of '%s'"), _("Map Account NOT found"));
 
         gchar *text = g_strdup_printf ("%s\n\n%s\n\n%s", message, message2, _("(Note, if there is a large number, it may take a while)"));
 
-        if (gnc_verify_dialog (GTK_WINDOW (imap_dialog->dialog), FALSE, "%s", text))
+        if (gnc_verify_dialog (GTK_WINDOW(imap->window), FALSE, "%s", text))
         {
-            gnc_imap_remove_invalid_maps (imap_dialog);
-            gtk_widget_hide (imap_dialog->remove_button);
+            gnc_imap_remove_invalid_maps (imap);
+            gtk_widget_set_visible (GTK_WIDGET(imap->remove_button), FALSE);
         }
         else
         {
-            gtk_widget_show (imap_dialog->remove_button);
+            gtk_widget_set_visible (GTK_WIDGET(imap->remove_button), TRUE);
 
-            if (imap_dialog->type == BAYES)
-                imap_dialog->inv_dialog_shown.inv_dialog_shown_bayes = TRUE;
-            if (imap_dialog->type == NBAYES)
-                imap_dialog->inv_dialog_shown.inv_dialog_shown_nbayes = TRUE;
-            if (imap_dialog->type == ONLINE)
-                imap_dialog->inv_dialog_shown.inv_dialog_shown_online = TRUE;
+            if (imap->type == BAYES)
+                imap->inv_dialog_shown.inv_dialog_shown_bayes = TRUE;
+            if (imap->type == NBAYES)
+                imap->inv_dialog_shown.inv_dialog_shown_nbayes = TRUE;
+            if (imap->type == ONLINE)
+                imap->inv_dialog_shown.inv_dialog_shown_online = TRUE;
         }
         g_free (message);
         g_free (message2);
@@ -391,30 +391,23 @@ gnc_imap_invalid_maps_dialog (ImapDialog *imap_dialog)
     }
 }
 
-void
-gnc_imap_dialog_response_cb (GtkDialog *dialog, gint response_id, gpointer user_data)
+static void
+response_button_cb (GtkWidget *widget, gpointer user_data)
 {
-    ImapDialog *imap_dialog = user_data;
+    ImapStruct *imap = user_data;
 
-    switch (response_id)
-    {
-    case GTK_RESPONSE_APPLY:
-        gnc_imap_dialog_delete (imap_dialog);
-        return;
+    if (widget == GTK_WIDGET(imap->delete_button))
+        gnc_imap_dialog_delete (imap);
 
-    case GTK_RESPONSE_REJECT:
-        gnc_imap_invalid_maps_dialog (imap_dialog);
-        return;
+    if (widget == GTK_WIDGET(imap->remove_button))
+        gnc_imap_invalid_maps_dialog (imap);
 
-    case GTK_RESPONSE_CLOSE:
-    default:
-        gnc_close_gui_component_by_data (DIALOG_IMAP_CM_CLASS, imap_dialog);
-        return;
-    }
+    if (widget == GTK_WIDGET(imap->close_button))
+        gnc_close_gui_component_by_data (DIALOG_IMAP_CM_CLASS, imap);
 }
 
 static gboolean
-filter_test_and_move_next (ImapDialog *imap_dialog, GtkTreeIter *iter,
+filter_test_and_move_next (ImapStruct *imap, GtkTreeIter *iter,
                            const gchar *filter_text)
 {
     GtkTreePath *tree_path;
@@ -424,14 +417,14 @@ filter_test_and_move_next (ImapDialog *imap_dialog, GtkTreeIter *iter,
     gchar       *map_full_acc;
 
     // Read the row
-    gtk_tree_model_get (imap_dialog->model, iter, MATCH_STRING, &match_string, MAP_FULL_ACC, &map_full_acc, -1);
+    gtk_tree_model_get (imap->model, iter, MATCH_STRING, &match_string, MAP_FULL_ACC, &map_full_acc, -1);
 
     // Get the level we are at in the tree-model
-    tree_path = gtk_tree_model_get_path (imap_dialog->model, iter);
+    tree_path = gtk_tree_model_get_path (imap->model, iter);
     depth = gtk_tree_path_get_depth (tree_path);
 
     // Reset filter to TRUE
-    gtk_tree_store_set (GTK_TREE_STORE(imap_dialog->model), iter, FILTER, TRUE, -1);
+    gtk_tree_store_set (GTK_TREE_STORE(imap->model), iter, FILTER, TRUE, -1);
 
     // Check for a filter_text entry
     if (filter_text && *filter_text != '\0')
@@ -440,9 +433,9 @@ filter_test_and_move_next (ImapDialog *imap_dialog, GtkTreeIter *iter,
         {
             if ((g_strrstr (match_string, filter_text) == NULL) &&
                 (g_strrstr (map_full_acc, filter_text) == NULL ))
-                gtk_tree_store_set (GTK_TREE_STORE(imap_dialog->model), iter, FILTER, FALSE, -1);
+                gtk_tree_store_set (GTK_TREE_STORE(imap->model), iter, FILTER, FALSE, -1);
             else
-                gtk_tree_view_expand_to_path (GTK_TREE_VIEW(imap_dialog->view), tree_path);
+                gtk_tree_view_expand_to_path (GTK_TREE_VIEW(imap->view), tree_path);
         }
     }
     // Select next entry based on path
@@ -451,14 +444,14 @@ filter_test_and_move_next (ImapDialog *imap_dialog, GtkTreeIter *iter,
     else
     {
         gtk_tree_path_next (tree_path);
-        if (!gtk_tree_model_get_iter (imap_dialog->model, iter, tree_path))
+        if (!gtk_tree_model_get_iter (imap->model, iter, tree_path))
         {
             gtk_tree_path_prev (tree_path);
             gtk_tree_path_up (tree_path);
             gtk_tree_path_next (tree_path);
         }
     }
-    valid = gtk_tree_model_get_iter (imap_dialog->model, iter, tree_path);
+    valid = gtk_tree_model_get_iter (imap->model, iter, tree_path);
 
     gtk_tree_path_free (tree_path);
     g_free (match_string);
@@ -468,115 +461,113 @@ filter_test_and_move_next (ImapDialog *imap_dialog, GtkTreeIter *iter,
 }
 
 static void
-filter_button_cb (GtkButton *button, ImapDialog *imap_dialog)
+filter_button_cb (GtkButton *button, ImapStruct *imap)
 {
     GtkTreeIter   iter;
     gboolean      valid;
-    const gchar  *filter_text;
-
-    filter_text = gtk_entry_get_text (GTK_ENTRY(imap_dialog->filter_text_entry));
+    const gchar  *filter_text = gnc_entry_get_text (GTK_ENTRY(imap->filter_text_entry));
 
     // Collapse all nodes
-    gtk_tree_view_collapse_all (GTK_TREE_VIEW(imap_dialog->view));
-    imap_dialog->apply_selection_filter = FALSE;
+    gtk_tree_view_collapse_all (GTK_TREE_VIEW(imap->view));
+    imap->apply_selection_filter = FALSE;
 
     // clear any selection
     gtk_tree_selection_unselect_all (gtk_tree_view_get_selection
-                                    (GTK_TREE_VIEW(imap_dialog->view)));
+                                    (GTK_TREE_VIEW(imap->view)));
 
     // do we have a filter, apply selection filter
     if (filter_text && *filter_text != '\0')
-        imap_dialog->apply_selection_filter = TRUE;
+        imap->apply_selection_filter = TRUE;
 
-    valid = gtk_tree_model_get_iter_first (imap_dialog->model, &iter);
+    valid = gtk_tree_model_get_iter_first (imap->model, &iter);
 
     while (valid)
     {
-        valid = filter_test_and_move_next (imap_dialog, &iter, filter_text);
+        valid = filter_test_and_move_next (imap, &iter, filter_text);
     }
-    gtk_widget_grab_focus (GTK_WIDGET(imap_dialog->view));
+    gtk_widget_grab_focus (GTK_WIDGET(imap->view));
 }
 
 static void
-expand_button_cb (GtkButton *button, ImapDialog *imap_dialog)
+expand_button_cb (GtkButton *button, ImapStruct *imap)
 {
     // Clear the filter
-    gtk_entry_set_text (GTK_ENTRY(imap_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(imap->filter_text_entry), "");
 
-    filter_button_cb (button, imap_dialog);
+    filter_button_cb (button, imap);
 
-    gtk_tree_view_expand_all (GTK_TREE_VIEW(imap_dialog->view));
+    gtk_tree_view_expand_all (GTK_TREE_VIEW(imap->view));
 }
 
 static void
-collapse_button_cb (GtkButton *button, ImapDialog *imap_dialog)
+collapse_button_cb (GtkButton *button, ImapStruct *imap)
 {
     // Clear the filter
-    gtk_entry_set_text (GTK_ENTRY(imap_dialog->filter_text_entry), "");
+    gnc_entry_set_text (GTK_ENTRY(imap->filter_text_entry), "");
 
-    filter_button_cb (button, imap_dialog);
+    filter_button_cb (button, imap);
 
-    gtk_tree_view_collapse_all (GTK_TREE_VIEW(imap_dialog->view));
+    gtk_tree_view_collapse_all (GTK_TREE_VIEW(imap->view));
 }
 
 static void
-list_type_selected_cb (GtkToggleButton* button, ImapDialog *imap_dialog)
+list_type_selected_cb (GtkCheckButton* button, ImapStruct *imap)
 {
     GncListType type;
 
-    if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(imap_dialog->radio_bayes)))
+    if (gtk_check_button_get_active (GTK_CHECK_BUTTON(imap->radio_bayes)))
         type = BAYES;
-    else if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(imap_dialog->radio_nbayes)))
+    else if (gtk_check_button_get_active (GTK_CHECK_BUTTON(imap->radio_nbayes)))
         type = NBAYES;
     else
         type = ONLINE;
 
     if (type != ONLINE)
-        gtk_widget_grab_focus (GTK_WIDGET(imap_dialog->filter_text_entry));
+        gtk_widget_grab_focus (GTK_WIDGET(imap->filter_text_entry));
 
     // Lets do this only on change of list type
-    if (type != imap_dialog->type)
+    if (type != imap->type)
     {
         gboolean inv_dialog_shown = FALSE;
 
-        imap_dialog->type = type;
-        get_account_info (imap_dialog);
+        imap->type = type;
+        get_account_info (imap);
 
-        if ((imap_dialog->type == BAYES) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_bayes))
+        if ((imap->type == BAYES) && (imap->inv_dialog_shown.inv_dialog_shown_bayes))
             inv_dialog_shown = TRUE;
 
-        if ((imap_dialog->type == NBAYES) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_nbayes))
+        if ((imap->type == NBAYES) && (imap->inv_dialog_shown.inv_dialog_shown_nbayes))
             inv_dialog_shown = TRUE;
 
-        if ((imap_dialog->type == ONLINE) && (imap_dialog->inv_dialog_shown.inv_dialog_shown_online))
+        if ((imap->type == ONLINE) && (imap->inv_dialog_shown.inv_dialog_shown_online))
             inv_dialog_shown = TRUE;
 
         if (!inv_dialog_shown)
-            gnc_imap_invalid_maps_dialog (imap_dialog);
+            gnc_imap_invalid_maps_dialog (imap);
     }
 }
 
 static void
-show_count_column (ImapDialog *imap_dialog, gboolean show)
+show_count_column (ImapStruct *imap, gboolean show)
 {
     GtkTreeViewColumn *tree_column;
 
     // Show Count Column
-    tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(imap_dialog->view), 4);
+    tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(imap->view), 4);
     gtk_tree_view_column_set_visible (tree_column, show);
 
     // Hide Based on Column
-    tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(imap_dialog->view), 1);
+    tree_column = gtk_tree_view_get_column (GTK_TREE_VIEW(imap->view), 1);
     gtk_tree_view_column_set_visible (tree_column, !show);
 
-    gtk_tree_view_columns_autosize (GTK_TREE_VIEW(imap_dialog->view));
+    gtk_tree_view_columns_autosize (GTK_TREE_VIEW(imap->view));
 }
 
 static void
-add_to_store (ImapDialog *imap_dialog, GtkTreeIter *iter, const gchar *text, GncImapInfo *imapInfo)
+add_to_store (ImapStruct *imap, GtkTreeIter *iter, const gchar *text, GncImapInfo *imapInfo)
 {
-    gchar       *fullname = NULL;
-    gchar       *map_fullname = NULL;
+    gchar *fullname = NULL;
+    gchar *map_fullname = NULL;
 
     fullname = gnc_account_get_full_name (imapInfo->source_account);
 
@@ -584,7 +575,7 @@ add_to_store (ImapDialog *imap_dialog, GtkTreeIter *iter, const gchar *text, Gnc
     if (imapInfo->map_account == NULL)
     {
         // count the total invalid maps
-        imap_dialog->tot_invalid_maps ++;
+        imap->tot_invalid_maps ++;
 
         map_fullname = g_strdup (_("Map Account NOT found"));
     }
@@ -592,12 +583,12 @@ add_to_store (ImapDialog *imap_dialog, GtkTreeIter *iter, const gchar *text, Gnc
         map_fullname = gnc_account_get_full_name (imapInfo->map_account);
 
     // count the total entries
-    imap_dialog->tot_entries ++;
+    imap->tot_entries ++;
 
     PINFO("Add to Store: Source Acc '%s', Head is '%s', Category is '%s', Match '%s', Map Acc '%s', Count is %s",
           fullname, imapInfo->head, imapInfo->category, imapInfo->match_string, map_fullname, imapInfo->count);
 
-    gtk_tree_store_set (GTK_TREE_STORE(imap_dialog->model), iter,
+    gtk_tree_store_set (GTK_TREE_STORE(imap->model), iter,
                         SOURCE_FULL_ACC, fullname, SOURCE_ACCOUNT, imapInfo->source_account,
                         BASED_ON, text,
                         MATCH_STRING, imapInfo->match_string,
@@ -610,7 +601,7 @@ add_to_store (ImapDialog *imap_dialog, GtkTreeIter *iter, const gchar *text, Gnc
 }
 
 static void
-get_imap_info (ImapDialog *imap_dialog, Account *acc, const gchar *category, const gchar *text)
+get_imap_info (ImapStruct *imap, Account *acc, const gchar *category, const gchar *text)
 {
     GtkTreeIter  toplevel, child;
     GList *imap_list, *node;
@@ -635,18 +626,22 @@ get_imap_info (ImapDialog *imap_dialog, Account *acc, const gchar *category, con
         PINFO("List length is %d", g_list_length (imap_list));
 
         // Add top level entry of Source full Account and Based on.
-        gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), &toplevel, NULL);
-        gtk_tree_store_set (GTK_TREE_STORE(imap_dialog->model), &toplevel,
-                        SOURCE_ACCOUNT, acc, SOURCE_FULL_ACC, acc_name,
-                        HEAD, head, CATEGORY, category, BASED_ON, text, FILTER, TRUE, -1);
+        gtk_tree_store_append (GTK_TREE_STORE(imap->model), &toplevel, NULL);
+        gtk_tree_store_set (GTK_TREE_STORE(imap->model), &toplevel,
+                            SOURCE_ACCOUNT, acc,
+                            SOURCE_FULL_ACC, acc_name,
+                            HEAD, head,
+                            CATEGORY, category,
+                            BASED_ON, text,
+                            FILTER, TRUE, -1);
 
         for (node = imap_list;  node; node = g_list_next (node))
         {
             GncImapInfo *imapInfo = node->data;
 
             // First add a child entry and pass iter to add_to_store
-            gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), &child, &toplevel);
-            add_to_store (imap_dialog, &child, text, imapInfo);
+            gtk_tree_store_append (GTK_TREE_STORE(imap->model), &child, &toplevel);
+            add_to_store (imap, &child, text, imapInfo);
         }
     }
     g_free (acc_name);
@@ -654,22 +649,22 @@ get_imap_info (ImapDialog *imap_dialog, Account *acc, const gchar *category, con
 }
 
 static void
-show_first_row (ImapDialog *imap_dialog)
+show_first_row (ImapStruct *imap)
 {
     GtkTreeIter   iter;
 
     // See if there are any entries
-    if (gtk_tree_model_get_iter_first (imap_dialog->model, &iter))
+    if (gtk_tree_model_get_iter_first (imap->model, &iter))
     {
         GtkTreePath *path;
         path = gtk_tree_path_new_first (); // Set Path to first entry
-        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(imap_dialog->view), path, NULL, TRUE, 0.0, 0.0);
+        gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(imap->view), path, NULL, TRUE, 0.0, 0.0);
         gtk_tree_path_free (path);
     }
 }
 
 static void
-get_account_info_bayes (ImapDialog *imap_dialog, GList *accts)
+get_account_info_bayes (ImapStruct *imap, GList *accts)
 {
     GList   *ptr;
 
@@ -678,12 +673,12 @@ get_account_info_bayes (ImapDialog *imap_dialog, GList *accts)
     {
         Account *acc = ptr->data;
 
-        get_imap_info (imap_dialog, acc, NULL, _("Bayesian"));
+        get_imap_info (imap, acc, NULL, _("Bayesian"));
     }
 }
 
 static void
-get_account_info_nbayes (ImapDialog *imap_dialog, GList *accts)
+get_account_info_nbayes (ImapStruct *imap, GList *accts)
 {
     GList   *ptr;
 
@@ -693,18 +688,18 @@ get_account_info_nbayes (ImapDialog *imap_dialog, GList *accts)
         Account *acc = ptr->data;
 
         // Description
-        get_imap_info (imap_dialog, acc, IMAP_FRAME_DESC, _("Description Field"));
+        get_imap_info (imap, acc, IMAP_FRAME_DESC, _("Description Field"));
 
         // Memo
-        get_imap_info (imap_dialog, acc, IMAP_FRAME_MEMO, _("Memo Field"));
+        get_imap_info (imap, acc, IMAP_FRAME_MEMO, _("Memo Field"));
 
         // CSV Account Map
-        get_imap_info (imap_dialog, acc, IMAP_FRAME_CSV, _("CSV Account Map"));
+        get_imap_info (imap, acc, IMAP_FRAME_CSV, _("CSV Account Map"));
     }
 }
 
 static void
-get_account_info_online (ImapDialog *imap_dialog, GList *accts)
+get_account_info_online (ImapStruct *imap, GList *accts)
 {
     GList       *ptr;
     GtkTreeIter  toplevel;
@@ -738,8 +733,8 @@ get_account_info_online (ImapDialog *imap_dialog, GList *accts)
             imapInfo.count = " ";
 
             // Add top level entry and pass iter to add_to_store
-            gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), &toplevel, NULL);
-            add_to_store (imap_dialog, &toplevel, _("Online Id"), &imapInfo);
+            gtk_tree_store_append (GTK_TREE_STORE(imap->model), &toplevel, NULL);
+            add_to_store (imap, &toplevel, _("Online Id"), &imapInfo);
         }
         g_free (text);
 
@@ -764,8 +759,8 @@ get_account_info_online (ImapDialog *imap_dialog, GList *accts)
             imapInfo.count = " ";
 
             // Add top level entry and pass iter to add_to_store
-            gtk_tree_store_append (GTK_TREE_STORE(imap_dialog->model), &toplevel, NULL);
-            add_to_store (imap_dialog, &toplevel, _("Online HBCI"), &imapInfo);
+            gtk_tree_store_append (GTK_TREE_STORE(imap->model), &toplevel, NULL);
+            add_to_store (imap, &toplevel, _("Online HBCI"), &imapInfo);
         }
         g_free (hbci_account_id);
         g_free (hbci_bank_code);
@@ -774,28 +769,17 @@ get_account_info_online (ImapDialog *imap_dialog, GList *accts)
 }
 
 static void
-show_filter_option (ImapDialog *imap_dialog, gboolean show)
+show_filter_option (ImapStruct *imap, gboolean show)
 {
-    if (show)
-    {
-        gtk_widget_show (imap_dialog->filter_text_entry);
-        gtk_widget_show (imap_dialog->filter_button);
-        gtk_widget_show (imap_dialog->filter_label);
-        gtk_widget_show (imap_dialog->expand_button);
-        gtk_widget_show (imap_dialog->collapse_button);
-    }
-    else
-    {
-        gtk_widget_hide (imap_dialog->filter_text_entry);
-        gtk_widget_hide (imap_dialog->filter_button);
-        gtk_widget_hide (imap_dialog->filter_label);
-        gtk_widget_hide (imap_dialog->expand_button);
-        gtk_widget_hide (imap_dialog->collapse_button);
-    }
+    gtk_widget_set_visible (GTK_WIDGET(imap->filter_text_entry), show);
+    gtk_widget_set_visible (GTK_WIDGET(imap->filter_button), show);
+    gtk_widget_set_visible (GTK_WIDGET(imap->filter_label), show);
+    gtk_widget_set_visible (GTK_WIDGET(imap->expand_button), show);
+    gtk_widget_set_visible (GTK_WIDGET(imap->collapse_button), show);
 }
 
 static void
-get_account_info (ImapDialog *imap_dialog)
+get_account_info (ImapStruct *imap)
 {
     Account      *root;
     GList        *accts;
@@ -806,66 +790,64 @@ get_account_info (ImapDialog *imap_dialog)
     root = gnc_book_get_root_account (gnc_get_current_book());
     accts = gnc_account_get_descendants_sorted (root);
 
-    imap_dialog->tot_entries = 0;
-    imap_dialog->tot_invalid_maps = 0;
+    imap->tot_entries = 0;
+    imap->tot_invalid_maps = 0;
 
-    fmodel = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
+    fmodel = gtk_tree_view_get_model (GTK_TREE_VIEW(imap->view));
 
-    imap_dialog->model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(fmodel));
+    imap->model = gtk_tree_model_filter_get_model (GTK_TREE_MODEL_FILTER(fmodel));
 
     // Disconnect the filter model from the treeview
-    g_object_ref (G_OBJECT(imap_dialog->model));
-    gtk_tree_view_set_model (GTK_TREE_VIEW(imap_dialog->view), NULL);
+    g_object_ref (G_OBJECT(imap->model));
+    gtk_tree_view_set_model (GTK_TREE_VIEW(imap->view), NULL);
 
     // Clear the tree store
-    gtk_tree_store_clear (GTK_TREE_STORE(imap_dialog->model));
+    gtk_tree_store_clear (GTK_TREE_STORE(imap->model));
 
     // Clear the filter
-    gtk_entry_set_text (GTK_ENTRY(imap_dialog->filter_text_entry), "");
-    imap_dialog->apply_selection_filter = FALSE;
+    gnc_entry_set_text (GTK_ENTRY(imap->filter_text_entry), "");
+    imap->apply_selection_filter = FALSE;
 
     // Hide Count Column
-    show_count_column (imap_dialog, FALSE);
+    show_count_column (imap, FALSE);
 
     // Show Filter Option
-    show_filter_option (imap_dialog, TRUE);
+    show_filter_option (imap, TRUE);
 
-    if (imap_dialog->type == BAYES)
+    if (imap->type == BAYES)
     {
-        get_account_info_bayes (imap_dialog, accts);
+        get_account_info_bayes (imap, accts);
 
         // Show Count Column
-        show_count_column (imap_dialog, TRUE);
+        show_count_column (imap, TRUE);
     }
-    else if (imap_dialog->type == NBAYES)
-        get_account_info_nbayes (imap_dialog, accts);
-    else if (imap_dialog->type == ONLINE)
+    else if (imap->type == NBAYES)
+        get_account_info_nbayes (imap, accts);
+    else if (imap->type == ONLINE)
     {
         // Hide Filter Option
-        show_filter_option (imap_dialog, FALSE);
-        get_account_info_online (imap_dialog, accts);
+        show_filter_option (imap, FALSE);
+        get_account_info_online (imap, accts);
     }
     // create a new filter model and reconnect to treeview
-    fmodel = gtk_tree_model_filter_new (GTK_TREE_MODEL(imap_dialog->model), NULL);
+    fmodel = gtk_tree_model_filter_new (GTK_TREE_MODEL(imap->model), NULL);
     gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER(fmodel), FILTER);
-    g_object_unref (G_OBJECT(imap_dialog->model));
+    g_object_unref (G_OBJECT(imap->model));
 
-    gtk_tree_view_set_model (GTK_TREE_VIEW(imap_dialog->view), fmodel);
+    gtk_tree_view_set_model (GTK_TREE_VIEW(imap->view), fmodel);
     g_object_unref (G_OBJECT(fmodel));
 
     // if there are any entries, show first row
-    show_first_row (imap_dialog);
+    show_first_row (imap);
 
     // add the totals
-    total = g_strdup_printf ("%s %d", _("Total Entries"), imap_dialog->tot_entries);
-    gtk_label_set_text (GTK_LABEL(imap_dialog->total_entries_label), total);
-    gtk_widget_show (imap_dialog->total_entries_label);
+    total = g_strdup_printf ("%s %d", _("Total Entries"), imap->tot_entries);
+    gtk_label_set_text (GTK_LABEL(imap->total_entries_label), total);
+    gtk_widget_set_visible (GTK_WIDGET(imap->total_entries_label), TRUE);
     g_free (total);
 
-    if (imap_dialog->tot_invalid_maps > 0)
-        gtk_widget_show (imap_dialog->remove_button);
-    else
-        gtk_widget_hide (imap_dialog->remove_button);
+    gtk_widget_set_visible (GTK_WIDGET(imap->remove_button),
+                            (imap->tot_invalid_maps > 0));
 
     g_list_free (accts);
 }
@@ -877,10 +859,10 @@ view_selection_function (GtkTreeSelection *selection,
                          gboolean path_currently_selected,
                          gpointer user_data)
 {
-    ImapDialog *imap_dialog = user_data;
+    ImapStruct *imap = user_data;
     GtkTreeIter iter;
 
-    if (!imap_dialog->apply_selection_filter)
+    if (!imap->apply_selection_filter)
         return TRUE;
 
     // do we have a valid row
@@ -899,86 +881,124 @@ view_selection_function (GtkTreeSelection *selection,
     return TRUE;
 }
 
-static void
-gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
+static gboolean
+gnc_imap_dialog_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                              guint keycode, GdkModifierType state,
+                              gpointer user_data)
 {
-    GtkWidget        *dialog;
+    ImapStruct *imap = user_data;
+
+    if (keyval == GDK_KEY_Escape)
+    {
+        if (gnc_ok_to_close_window (GTK_WIDGET(imap->window)))
+            close_handler (imap);
+
+        return TRUE;
+    }
+    else
+        return FALSE;
+}
+
+static void
+gnc_imap_dialog_create (GtkWidget *parent, ImapStruct *imap)
+{
     GtkBuilder       *builder;
     GtkTreeModel     *filter;
     GtkTreeSelection *selection;
 
     ENTER(" ");
     builder = gtk_builder_new();
-    gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "tree-store");
-    gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "treemodelfilter");
-    gnc_builder_add_from_file (builder, "dialog-imap-editor.glade", "import_map_dialog");
+    gnc_builder_add_from_file (builder, "dialog-imap-editor.ui", "tree-store");
+    gnc_builder_add_from_file (builder, "dialog-imap-editor.ui", "treemodelfilter");
+    gnc_builder_add_from_file (builder, "dialog-imap-editor.ui", "import_map_window");
 
-    dialog = GTK_WIDGET(gtk_builder_get_object (builder, "import_map_dialog"));
-    imap_dialog->dialog = dialog;
+    imap->window = GTK_WIDGET(gtk_builder_get_object (builder, "import_map_window"));
 
     // Set the name for this dialog so it can be easily manipulated with css
-    gtk_widget_set_name (GTK_WIDGET(dialog), "gnc-id-import-map");
+    gtk_widget_set_name (GTK_WIDGET(imap->window), "gnc-id-import-map");
 
-    imap_dialog->session = gnc_get_current_session();
-    imap_dialog->type = BAYES;
+    imap->session = gnc_get_current_session();
+    imap->type = BAYES;
 
     /* parent */
     if (parent != NULL)
-        gtk_window_set_transient_for (GTK_WINDOW(dialog), GTK_WINDOW(parent));
+        gtk_window_set_transient_for (GTK_WINDOW(imap->window), GTK_WINDOW(parent));
 
     /* Connect the radio buttons...*/
-    imap_dialog->radio_bayes = GTK_WIDGET(gtk_builder_get_object (builder, "radio-bayes"));
-    imap_dialog->radio_nbayes = GTK_WIDGET(gtk_builder_get_object (builder, "radio-nbayes"));
-    imap_dialog->radio_online = GTK_WIDGET(gtk_builder_get_object (builder, "radio-online"));
-    g_signal_connect (imap_dialog->radio_bayes, "toggled",
-                      G_CALLBACK(list_type_selected_cb), (gpointer)imap_dialog);
-    g_signal_connect (imap_dialog->radio_nbayes, "toggled",
-                      G_CALLBACK(list_type_selected_cb), (gpointer)imap_dialog);
+    imap->radio_bayes = GTK_WIDGET(gtk_builder_get_object (builder, "radio-bayes"));
+    imap->radio_nbayes = GTK_WIDGET(gtk_builder_get_object (builder, "radio-nbayes"));
+    imap->radio_online = GTK_WIDGET(gtk_builder_get_object (builder, "radio-online"));
+    g_signal_connect (G_OBJECT(imap->radio_bayes), "toggled",
+                      G_CALLBACK(list_type_selected_cb), (gpointer)imap);
+    g_signal_connect (G_OBJECT(imap->radio_nbayes), "toggled",
+                      G_CALLBACK(list_type_selected_cb), (gpointer)imap);
 
-    imap_dialog->total_entries_label = GTK_WIDGET(gtk_builder_get_object (builder, "total_entries_label"));
-    imap_dialog->filter_text_entry = GTK_WIDGET(gtk_builder_get_object (builder, "filter-text-entry"));
-    imap_dialog->filter_label = GTK_WIDGET(gtk_builder_get_object (builder, "filter-label"));
-    imap_dialog->filter_button = GTK_WIDGET(gtk_builder_get_object (builder, "filter-button"));
-    g_signal_connect (imap_dialog->filter_button, "clicked",
-                      G_CALLBACK(filter_button_cb), (gpointer)imap_dialog);
+    imap->total_entries_label = GTK_WIDGET(gtk_builder_get_object (builder, "total_entries_label"));
+    imap->filter_text_entry = GTK_WIDGET(gtk_builder_get_object (builder, "filter-text-entry"));
+    imap->filter_label = GTK_WIDGET(gtk_builder_get_object (builder, "filter-label"));
+    imap->filter_button = GTK_WIDGET(gtk_builder_get_object (builder, "filter-button"));
+    g_signal_connect (G_OBJECT(imap->filter_button), "clicked",
+                      G_CALLBACK(filter_button_cb), (gpointer)imap);
 
-    imap_dialog->expand_button = GTK_WIDGET(gtk_builder_get_object (builder, "expand-button"));
-    g_signal_connect (imap_dialog->expand_button, "clicked",
-                      G_CALLBACK(expand_button_cb), (gpointer)imap_dialog);
+    imap->expand_button = GTK_WIDGET(gtk_builder_get_object (builder, "expand-button"));
+    g_signal_connect (G_OBJECT(imap->expand_button), "clicked",
+                      G_CALLBACK(expand_button_cb), (gpointer)imap);
 
-    imap_dialog->collapse_button = GTK_WIDGET(gtk_builder_get_object (builder, "collapse-button"));
-    g_signal_connect (imap_dialog->collapse_button, "clicked",
-                      G_CALLBACK(collapse_button_cb), (gpointer)imap_dialog);
+    imap->collapse_button = GTK_WIDGET(gtk_builder_get_object (builder, "collapse-button"));
+    g_signal_connect (G_OBJECT(imap->collapse_button), "clicked",
+                      G_CALLBACK(collapse_button_cb), (gpointer)imap);
 
-    imap_dialog->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
+    imap->view = GTK_WIDGET(gtk_builder_get_object (builder, "treeview"));
 
-    imap_dialog->remove_button = GTK_WIDGET(gtk_builder_get_object (builder, "remove_button"));
+    imap->delete_button = GTK_WIDGET(gtk_builder_get_object (builder, "delete_button"));
+    g_signal_connect (G_OBJECT(imap->delete_button), "clicked",
+                      G_CALLBACK(response_button_cb), imap);
+    imap->close_button = GTK_WIDGET(gtk_builder_get_object (builder, "close_button"));
+    g_signal_connect (G_OBJECT(imap->close_button), "clicked",
+                      G_CALLBACK(response_button_cb), imap);
+    imap->remove_button = GTK_WIDGET(gtk_builder_get_object (builder, "remove_button"));
+    g_signal_connect (G_OBJECT(imap->remove_button), "clicked",
+                      G_CALLBACK(response_button_cb), imap);
+
+    /* default to 'close' button */
+    gtk_window_set_default_widget (GTK_WINDOW(imap->window),
+                                   GTK_WIDGET(imap->close_button)); //FIXME gtk4, may not work
 
     // Set filter column
-    filter = gtk_tree_view_get_model (GTK_TREE_VIEW(imap_dialog->view));
+    filter = gtk_tree_view_get_model (GTK_TREE_VIEW(imap->view));
     gtk_tree_model_filter_set_visible_column (GTK_TREE_MODEL_FILTER(filter), FILTER);
 
     // Set grid lines option to preference
-    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(imap_dialog->view), gnc_tree_view_get_grid_lines_pref ());
+    gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(imap->view), gnc_tree_view_get_grid_lines_pref ());
 
-    /* default to 'close' button */
-    gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CLOSE);
-
-    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(imap_dialog->view));
+    selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(imap->view));
     gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 
     /* add a select function  */
     gtk_tree_selection_set_select_function (selection,
                                             view_selection_function,
-                                            imap_dialog,
+                                            imap,
                                             NULL);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, imap_dialog);
+    g_signal_connect (G_OBJECT(imap->window), "destroy",
+                      G_CALLBACK(gnc_imap_dialog_window_destroy_cb), imap);
+
+    g_signal_connect (G_OBJECT(imap->window), "close-request",
+                      G_CALLBACK(gnc_imap_dialog_close_event_cb), NULL);
+
+    GtkEventController *event_controller_window = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(imap->window), event_controller_window);
+    g_signal_connect (G_OBJECT(event_controller_window),
+                      "key-pressed",
+                      G_CALLBACK(gnc_imap_dialog_key_press_cb), imap);
 
     g_object_unref (G_OBJECT(builder));
 
-    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(imap_dialog->dialog), GTK_WINDOW(parent));
-    get_account_info (imap_dialog);
+    gnc_restore_window_size (GNC_PREFS_GROUP, GTK_WINDOW(imap->window), GTK_WINDOW(parent));
+
+    gtk_widget_set_visible (GTK_WIDGET(imap->window), TRUE);
+
+    get_account_info (imap);
 
     LEAVE(" ");
 }
@@ -986,11 +1006,11 @@ gnc_imap_dialog_create (GtkWidget *parent, ImapDialog *imap_dialog)
 static void
 close_handler (gpointer user_data)
 {
-    ImapDialog *imap_dialog = user_data;
+    ImapStruct *imap = user_data;
 
     ENTER(" ");
-    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(imap_dialog->dialog));
-    gtk_widget_destroy (GTK_WIDGET(imap_dialog->dialog));
+    gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(imap->window));
+    gtk_window_destroy (GTK_WINDOW(imap->window));
     LEAVE(" ");
 }
 
@@ -1005,15 +1025,15 @@ static gboolean
 show_handler (const char *klass, gint component_id,
               gpointer user_data, gpointer iter_data)
 {
-    ImapDialog *imap_dialog = user_data;
+    ImapStruct *imap = user_data;
 
     ENTER(" ");
-    if (!imap_dialog)
+    if (!imap)
     {
         LEAVE("No data structure");
         return(FALSE);
     }
-    gtk_window_present (GTK_WINDOW(imap_dialog->dialog));
+    gtk_window_present (GTK_WINDOW(imap->window));
     LEAVE(" ");
     return(TRUE);
 }
@@ -1028,7 +1048,7 @@ show_handler (const char *klass, gint component_id,
 void
 gnc_imap_dialog (GtkWidget *parent)
 {
-    ImapDialog *imap_dialog;
+    ImapStruct *imap;
     gint component_id;
 
     ENTER(" ");
@@ -1037,18 +1057,18 @@ gnc_imap_dialog (GtkWidget *parent)
         LEAVE("Existing dialog raised");
         return;
     }
-    imap_dialog = g_new0 (ImapDialog, 1);
+    imap = g_new0 (ImapStruct, 1);
 
-    gnc_imap_dialog_create (parent, imap_dialog);
+    gnc_imap_dialog_create (parent, imap);
 
     component_id = gnc_register_gui_component (DIALOG_IMAP_CM_CLASS,
                    refresh_handler, close_handler,
-                   imap_dialog);
+                   imap);
 
-    gnc_gui_component_set_session (component_id, imap_dialog->session);
+    gnc_gui_component_set_session (component_id, imap->session);
 
-    gtk_widget_show (imap_dialog->dialog);
-    gtk_widget_hide (imap_dialog->remove_button);
-    gnc_imap_invalid_maps_dialog (imap_dialog);
+    gtk_widget_set_visible (GTK_WIDGET(imap->window), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET(imap->remove_button), FALSE);
+    gnc_imap_invalid_maps_dialog (imap);
     LEAVE(" ");
 }

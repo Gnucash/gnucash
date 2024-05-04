@@ -134,8 +134,10 @@ static gnc_numeric recnRecalculateBalance (RecnWindow *recnData);
 
 static void   recn_destroy_cb (GtkWidget *w, gpointer data);
 static void   recn_cancel (RecnWindow *recnData);
-static gboolean recn_delete_cb (GtkWidget *widget, GdkEvent *event, gpointer data);
-static gboolean recn_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer data);
+static gboolean recn_delete_cb (GtkWidget *widget, const GdkEvent *event, gpointer data);
+static gboolean recn_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                   guint keycode, GdkModifierType state,
+                                   gpointer user_data);
 static void   recnFinishCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void   recnPostponeCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
 static void   recnCancelCB (GSimpleAction *simple, GVariant *parameter, gpointer user_data);
@@ -322,23 +324,24 @@ recnRecalculateBalance (RecnWindow *recnData)
  * Returns:  False - propagate the event to the widget's parent.
  */
 static gboolean
-amount_edit_focus_out_cb(GtkWidget *widget, GdkEventFocus *event,
-                         startRecnWindowData *data)
+amount_edit_focus_out_cb (GtkEventControllerFocus *controller,
+                          gpointer user_data)
 {
+    startRecnWindowData *srwd = (startRecnWindowData*)user_data;
     gnc_numeric value;
-    gint result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(data->end_value),
+    gint result = gnc_amount_edit_expr_is_valid (GNC_AMOUNT_EDIT(srwd->end_value),
                                                  &value, TRUE, NULL);
 
-    data->user_set_value = FALSE;
+    srwd->user_set_value = FALSE;
 
     if (result < 1) // OK
     {
         if (result == -1) // blank entry is valid
         {
-            gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(data->end_value), value);
-            gnc_amount_edit_select_region (GNC_AMOUNT_EDIT(data->end_value), 0, -1);
+            gnc_amount_edit_set_amount (GNC_AMOUNT_EDIT(srwd->end_value), value);
+            gnc_amount_edit_select_region (GNC_AMOUNT_EDIT(srwd->end_value), 0, -1);
         }
-        data->user_set_value = !gnc_numeric_equal (value, data->original_value);
+        srwd->user_set_value = !gnc_numeric_equal (value, srwd->original_value);
     }
     return FALSE;
 }
@@ -708,6 +711,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
     /* Create the dialog box */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(&data));
     gnc_builder_add_from_file (builder, "window-reconcile.glade", "reconcile_start_dialog");
 
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "reconcile_start_dialog"));
@@ -740,7 +744,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
         date_value = gnc_date_edit_new(*statement_date, FALSE, FALSE);
         data.date_value = date_value;
         box = GTK_WIDGET(gtk_builder_get_object (builder, "date_value_box"));
-        gtk_box_pack_start(GTK_BOX(box), date_value, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(box), GTK_WIDGET(date_value));
         label = GTK_WIDGET(gtk_builder_get_object (builder, "date_label"));
         gnc_date_make_mnemonic_target(GNC_DATE_EDIT(date_value), label);
 
@@ -753,11 +757,11 @@ startRecnWindow(GtkWidget *parent, Account *account,
         data.future_text = GTK_WIDGET(gtk_builder_get_object (builder, "future_text"));
 
         box = GTK_WIDGET(gtk_builder_get_object (builder, "ending_value_box"));
-        gtk_box_pack_start(GTK_BOX(box), end_value, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(box), GTK_WIDGET(end_value));
         label = GTK_WIDGET(gtk_builder_get_object (builder, "end_label"));
         gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(end_value), label);
 
-        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, &data);
+//FIXME gtk4        gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, &data);
 
         gnc_date_activates_default(GNC_DATE_EDIT(date_value), TRUE);
 
@@ -774,7 +778,10 @@ startRecnWindow(GtkWidget *parent, Account *account,
 
         entry = gnc_amount_edit_gtk_entry (GNC_AMOUNT_EDIT (end_value));
         gtk_editable_select_region (GTK_EDITABLE(entry), 0, -1);
-        fo_handler_id = g_signal_connect (G_OBJECT(entry), "focus-out-event",
+
+        GtkEventController *event_controller = gtk_event_controller_focus_new ();
+        gtk_widget_add_controller (GTK_WIDGET(entry), event_controller);
+        fo_handler_id = g_signal_connect (G_OBJECT(event_controller), "leave",
                                           G_CALLBACK(amount_edit_focus_out_cb),
                                           (gpointer) &data);
         gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
@@ -790,7 +797,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
             gtk_button_set_label(GTK_BUTTON(interest), _("Enter _Interest Charge…") );
         else
         {
-            gtk_widget_destroy(interest);
+//FIXME gtk4            gtk_widget_destroy(interest);
             interest = NULL;
         }
 
@@ -801,10 +808,10 @@ startRecnWindow(GtkWidget *parent, Account *account,
                 gtk_widget_set_sensitive(GTK_WIDGET(interest), FALSE);
         }
 
-        gtk_widget_show_all(dialog);
+//FIXME gtk4        gtk_widget_show_all(dialog);
 
-        gtk_widget_hide (data.future_text);
-        gtk_widget_hide (data.future_icon);
+        gtk_widget_set_visible (GTK_WIDGET(data.future_text), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(data.future_icon), FALSE);
 
         gtk_widget_grab_focus(gnc_amount_edit_gtk_entry
                               (GNC_AMOUNT_EDIT (end_value)));
@@ -818,15 +825,19 @@ startRecnWindow(GtkWidget *parent, Account *account,
         gnc_reconcile_interest_xfer_run( &data );
     }
 
-    while (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
-    {
+//FIXME gtk4    while (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL;
+
+//    while (gtk_dialog_run (GTK_DIALOG(dialog)) == GTK_RESPONSE_OK)
+//    {
         /* If response is OK but end_value not valid, try again */
-        if (gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(end_value), NULL))
-        {
-            result = GTK_RESPONSE_OK;
-            break;
-        }
-    }
+//        if (gnc_amount_edit_evaluate (GNC_AMOUNT_EDIT(end_value), NULL))
+//        {
+//            result = GTK_RESPONSE_OK;
+//            break;
+//        }
+//    }
 
     if (result == GTK_RESPONSE_OK)
     {
@@ -842,7 +853,7 @@ startRecnWindow(GtkWidget *parent, Account *account,
     }
     // must remove the focus-out handler
     g_signal_handler_disconnect (G_OBJECT(entry), fo_handler_id);
-    gtk_widget_destroy (dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     g_object_unref(G_OBJECT(builder));
 
     return (result == GTK_RESPONSE_OK);
@@ -924,17 +935,17 @@ gnc_reconcile_window_row_cb(GNCReconcileView *view, gpointer item,
  *  request).
  */
 static void
-do_popup_menu(RecnWindow *recnData, GdkEventButton *event)
+do_popup_menu(RecnWindow *recnData, const GdkEvent *event)
 {
-    GMenuModel *menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder,
-                                                                   "recwin-popup");
-    GtkWidget *menu = gtk_menu_new_from_model (menu_model);
+//FIXME gtk4    GMenuModel *menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder,
+//                                                                   "recwin-popup");
+//FIXME gtk4    GtkWidget *menu = gtk_menu_new_from_model (menu_model);
 
-    if (!menu)
-        return;
+//FIXME gtk4    if (!menu)
+//        return;
 
-    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(recnData->window), NULL);
-    gtk_menu_popup_at_pointer (GTK_MENU(menu), (GdkEvent *) event);
+//FIXME gtk4    gtk_menu_attach_to_widget (GTK_MENU(menu), GTK_WIDGET(recnData->window), NULL);
+//FIXME gtk4    gtk_menu_popup_at_pointer (GTK_MENU(menu), event);
 }
 
 
@@ -964,35 +975,46 @@ gnc_reconcile_window_popup_menu_cb (GtkWidget *widget,
  *  any Gnucash window.  If this was a "right-click" then Gnucash will
  *  popup the contextual menu.
  */
+//FIXME gtk4
+#ifdef skip
 static gboolean
 gnc_reconcile_window_button_press_cb (GtkWidget *widget,
-                                      GdkEventButton *event,
+                                      const GdkEvent *event,
                                       RecnWindow *recnData)
 {
-    if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    guint button;
+
+    if (!gdk_event_get_button (event, &button))
+        return FALSE;
+
+    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS && button == 3)
     {
         GNCQueryView *qview = GNC_QUERY_VIEW(widget);
-        GtkTreePath *path;
+        gdouble x_win, y_win;
 
-        /* Get tree path for row that was clicked */
-        gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW(qview),
-                                       (gint) event->x,
-                                       (gint) event->y,
-                                       &path, NULL, NULL, NULL);
-
-        if (path)
+        if (gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
         {
-            GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
+            GtkTreePath *path;
+            /* Get tree path for row that was clicked */
+            gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW(qview),
+                                           (gint) x_win,
+                                           (gint) y_win,
+                                           &path, NULL, NULL, NULL);
 
-            gtk_tree_selection_select_path (selection, path);
-            gtk_tree_path_free (path);
+            if (path)
+            {
+                GtkTreeSelection *selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(qview));
+
+                gtk_tree_selection_select_path (selection, path);
+                gtk_tree_path_free (path);
+            }
         }
         do_popup_menu (recnData, event);
         return TRUE;
     }
     return FALSE;
 }
-
+#endif
 
 static GNCSplitReg *
 gnc_reconcile_window_open_register(RecnWindow *recnData)
@@ -1037,12 +1059,14 @@ gnc_reconcile_window_double_click_cb(GNCReconcileView *view, Split *split,
 
 
 static void
-gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
-                              gpointer data)
+gnc_reconcile_window_focus_cb (GtkEventControllerFocus *controller,
+                               gpointer user_data)
 {
-    auto recnData = static_cast<RecnWindow*>(data);
+    auto recnData = static_cast<RecnWindow*>(user_data);
     GNCReconcileView *this_view, *other_view;
     GNCReconcileView *debit, *credit;
+
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(controller));
 
     this_view = GNC_RECONCILE_VIEW(widget);
 
@@ -1057,14 +1081,15 @@ gnc_reconcile_window_focus_cb(GtkWidget *widget, GdkEventFocus *event,
 
 
 static gboolean
-gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
-                            gpointer data)
+gnc_reconcile_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                            guint keycode, GdkModifierType state,
+                            gpointer user_data)
 {
-    auto recnData = static_cast<RecnWindow*>(data);
+    auto recnData = static_cast<RecnWindow*>(user_data);
     GtkWidget *this_view, *other_view;
     GtkWidget *debit, *credit;
 
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
@@ -1073,6 +1098,8 @@ gnc_reconcile_key_press_cb (GtkWidget *widget, GdkEventKey *event,
     default:
         return FALSE;
     }
+
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
 
     g_signal_stop_emission_by_name (widget, "key_press_event");
 
@@ -1109,11 +1136,11 @@ gnc_reconcile_window_create_view_box(Account *account,
                                      GtkWidget **list_save,
                                      GtkWidget **total_save)
 {
-    GtkWidget *frame, *scrollWin, *view, *vbox, *label, *hbox;
+    GtkWidget *frame, *scrolled_window, *view, *vbox, *label, *hbox;
     GtkWidget *vscroll;
     GtkRequisition nat_sb;
 
-    frame = gtk_frame_new(NULL);
+    frame = gtk_frame_new (NULL);
 
     if (type == RECLIST_DEBIT)
         recnData->debit_frame = frame;
@@ -1132,31 +1159,39 @@ gnc_reconcile_window_create_view_box(Account *account,
     g_signal_connect(view, "line_selected",
                      G_CALLBACK(gnc_reconcile_window_row_cb),
                      recnData);
-    g_signal_connect(view, "button_press_event",
-                     G_CALLBACK(gnc_reconcile_window_button_press_cb),
-                     recnData);
+//FIXME gtk4    g_signal_connect(view, "button_press_event",
+//                     G_CALLBACK(gnc_reconcile_window_button_press_cb),
+//                     recnData);
     g_signal_connect(view, "double_click_split",
                      G_CALLBACK(gnc_reconcile_window_double_click_cb),
                      recnData);
-    g_signal_connect(view, "focus_in_event",
-                     G_CALLBACK(gnc_reconcile_window_focus_cb),
-                     recnData);
-    g_signal_connect(view, "key_press_event",
-                     G_CALLBACK(gnc_reconcile_key_press_cb),
-                     recnData);
 
-    scrollWin = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrollWin),
+    GtkEventController *event_controller1 = gtk_event_controller_focus_new ();
+    gtk_widget_add_controller (GTK_WIDGET(view), event_controller1);
+    g_signal_connect (G_OBJECT(event_controller1), "enter",
+                      G_CALLBACK(gnc_reconcile_window_focus_cb),
+                      recnData);
+
+    GtkEventController *event_controller2 = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(view), event_controller2);
+    g_signal_connect (event_controller2, 
+                      "key-pressed",
+                      G_CALLBACK(gnc_reconcile_key_press_cb), recnData);
+
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW (scrolled_window),
                                    GTK_POLICY_AUTOMATIC,
                                    GTK_POLICY_AUTOMATIC);
-    gtk_container_set_border_width(GTK_CONTAINER(scrollWin), 5);
+//FIXME gtk4    gnc_box_set_all_margins (GTK_BOX(scrollwin), 5);
 
-    gtk_container_add(GTK_CONTAINER(frame), scrollWin);
-    gtk_container_add(GTK_CONTAINER(scrollWin), view);
-    gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 0);
+    gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(scrolled_window));
+    gtk_box_append (GTK_BOX(scrolled_window), GTK_WIDGET(view));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(view));
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(frame));
 
     // get the vertical scroll bar width
-    vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (scrollWin));
+    vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW(scrolled_window));
     gtk_widget_get_preferred_size (vscroll, NULL, &nat_sb);
 
     // add xpadding to recn column so scrollbar does not cover
@@ -1164,14 +1199,14 @@ gnc_reconcile_window_create_view_box(Account *account,
 
     hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
     gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-    gtk_box_pack_start(GTK_BOX(vbox), hbox, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(hbox));
 
     label = gtk_label_new(_("Total"));
     gnc_label_set_alignment(label, 1.0, 0.5);
-    gtk_box_pack_start(GTK_BOX(hbox), label, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(label));
 
     label = gtk_label_new("");
-    gtk_box_pack_start(GTK_BOX(hbox), label, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(label));
     *total_save = label;
     gtk_widget_set_margin_end (GTK_WIDGET(label), 10 + nat_sb.width);
 
@@ -1709,7 +1744,7 @@ close_handler (gpointer user_data)
     auto recnData = static_cast<RecnWindow*>(user_data);
 
     gnc_save_window_size(GNC_PREFS_GROUP_RECONCILE, GTK_WINDOW(recnData->window));
-    gtk_widget_destroy (recnData->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(recnData->window));
 }
 
 
@@ -1835,28 +1870,30 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
 
     recnData->new_ending = new_ending;
     recnData->statement_date = statement_date;
-    recnData->window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    recnData->window = gtk_window_new();
     recnData->delete_refresh = FALSE;
 
     gnc_recn_set_window_name(recnData);
 
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (vbox), FALSE);
-    gtk_container_add(GTK_CONTAINER(recnData->window), vbox);
+    gtk_window_set_child (GTK_WINDOW(recnData->window), GTK_WIDGET(vbox));
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(recnData->window), "gnc-id-reconcile");
 
     dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (dock), FALSE);
-    gtk_widget_show(dock);
-    gtk_box_pack_start(GTK_BOX (vbox), dock, FALSE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(dock), TRUE);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(dock));
 
     {
-        GtkToolbar *tool_bar;
-        GMenuModel *menu_model;
-        GtkWidget *menu_bar;
-        GtkAccelGroup *accel_group = gtk_accel_group_new ();
+//FIXME gtk4        GtkToolbar *tool_bar;
+//        GMenuModel *menu_model;
+//        GtkWidget *menu_bar;
+//        GtkAccelGroup *accel_group = gtk_accel_group_new ();
+        GtkEventController *shortcut_controller = gtk_shortcut_controller_new ();
+
         const gchar *ui = GNUCASH_RESOURCE_PREFIX "/gnc-reconcile-window.ui";
         GError *error = NULL;
 
@@ -1875,30 +1912,30 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
             return NULL;
         }
 
-        menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder, "recwin-menu");
-        menu_bar = gtk_menu_bar_new_from_model (menu_model);
-        gtk_container_add (GTK_CONTAINER(vbox), menu_bar);
+//FIXME gtk4        menu_model = (GMenuModel *)gtk_builder_get_object (recnData->builder, "recwin-menu");
+//        menu_bar = gtk_menu_bar_new_from_model (menu_model);
+//        gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(menu_bar));
 #ifdef MAC_INTEGRATION
         auto theApp = static_cast<GtkosxApplication*>(g_object_new (GTKOSX_TYPE_APPLICATION, NULL));
-        gtk_widget_hide (menu_bar);
-        gtk_widget_set_no_show_all (menu_bar, TRUE);
+        gtk_widget_set_visible (GTK_WIDGET(menu_bar), FALSE);
+//FIXME gtk4        gtk_widget_set_no_show_all (menu_bar, TRUE);
         if (GTK_IS_MENU_ITEM (menu_bar))
             menu_bar = gtk_menu_item_get_submenu (GTK_MENU_ITEM (menu_bar));
 
         gtkosx_application_set_menu_bar (theApp, GTK_MENU_SHELL (menu_bar));
 #endif
-        tool_bar = (GtkToolbar *)gtk_builder_get_object (recnData->builder, "recwin-toolbar");
+//FIXME gtk4        tool_bar = (GtkToolbar *)gtk_builder_get_object (recnData->builder, "recwin-toolbar");
 
-        gtk_toolbar_set_style (GTK_TOOLBAR(tool_bar), GTK_TOOLBAR_BOTH);
-        gtk_toolbar_set_icon_size (GTK_TOOLBAR(tool_bar),
-                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
+//        gtk_toolbar_set_style (GTK_TOOLBAR(tool_bar), GTK_TOOLBAR_BOTH);
+//        gtk_toolbar_set_icon_size (GTK_TOOLBAR(tool_bar),
+//                                   GTK_ICON_SIZE_SMALL_TOOLBAR);
 
-        gtk_container_add (GTK_CONTAINER(vbox), GTK_WIDGET(tool_bar));
+//        gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(tool_bar));
 
-        gtk_window_add_accel_group (GTK_WINDOW(recnData->window), accel_group);
+        gtk_widget_add_controller (GTK_WIDGET(recnData->window), GTK_EVENT_CONTROLLER(shortcut_controller));
 
         // need to add the accelerator keys
-        gnc_add_accelerator_keys_for_menu (menu_bar, menu_model, accel_group);
+//        gnc_add_accelerator_keys_for_menu (menu_bar, menu_model, shortcut_controller);
 
 #ifdef MAC_INTEGRATION
         gtkosx_application_sync_menubar (theApp);
@@ -1923,24 +1960,27 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
                      G_CALLBACK(gnc_reconcile_window_popup_menu_cb), recnData);
 
     statusbar = gtk_statusbar_new();
-    gtk_box_pack_end(GTK_BOX(vbox), statusbar, FALSE, FALSE, 0);
+    gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(statusbar));
 
     g_signal_connect (recnData->window, "destroy",
                       G_CALLBACK(recn_destroy_cb), recnData);
     g_signal_connect (recnData->window, "delete_event",
                       G_CALLBACK(recn_delete_cb), recnData);
-    g_signal_connect (recnData->window, "key_press_event",
-                      G_CALLBACK(recn_key_press_cb), recnData);
 
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(recnData->window), event_controller);
+    g_signal_connect (event_controller, 
+                      "key-pressed",
+                      G_CALLBACK(recn_key_press_cb), recnData);
 
     /* if account has a reconciled split where reconciled_date is
        later than statement_date, emit a warning into statusbar */
     {
         GtkStatusbar *bar = GTK_STATUSBAR (statusbar);
         guint context = gtk_statusbar_get_context_id (bar, "future_dates");
-        GtkWidget *box = gtk_statusbar_get_message_area (bar);
-        GtkWidget *image = gtk_image_new_from_icon_name
-            ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
+//FIXME gtk4        GtkWidget *box = gtk_statusbar_get_message_area (bar);
+//        GtkWidget *image = gtk_image_new_from_icon_name ("dialog-warning");
+//        gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_NORMAL);
 
         auto find_split = [statement_date](const Split *split)
         { return (xaccSplitGetReconcile (split) == YREC &&
@@ -1961,8 +2001,8 @@ has splits whose Reconciled Date is after this reconciliation statement date. \
 These splits may make reconciliation difficult. If this is the case, you may \
 use Find Transactions to find them, unreconcile, and re-reconcile."));
 
-            gtk_box_pack_start (GTK_BOX(box), image, FALSE, FALSE, 0);
-            gtk_box_reorder_child (GTK_BOX(box), image, 0);
+//FIXME gtk4            gtk_box_append (GTK_BOX(box), GTK_WIDGET(image));
+//            gtk_box_reorder_child_after (GTK_BOX(box), GTK_WIDGET(image), nullptr);
 
             g_free (datestr);
             g_free (recnstr);
@@ -1971,22 +2011,23 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
 
     /* The main area */
     {
-        GtkWidget *frame = gtk_frame_new(NULL);
+        GtkWidget *frame = gtk_frame_new (NULL);
         GtkWidget *main_area = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
         GtkWidget *debcred_area = gtk_grid_new ();
         GtkWidget *debits_box;
         GtkWidget *credits_box;
 
         gtk_box_set_homogeneous (GTK_BOX (main_area), FALSE);
-        gtk_box_pack_start(GTK_BOX(vbox), frame, TRUE, TRUE, 10);
+        gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(frame));
+        gtk_box_set_spacing (GTK_BOX(vbox), 10);
 
         /* Force a reasonable starting size */
         gtk_window_set_default_size(GTK_WINDOW(recnData->window), 800, 600);
         gnc_restore_window_size (GNC_PREFS_GROUP_RECONCILE,
                                  GTK_WINDOW(recnData->window), GTK_WINDOW(parent));
 
-        gtk_container_add(GTK_CONTAINER(frame), main_area);
-        gtk_container_set_border_width(GTK_CONTAINER(main_area), 10);
+        gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(main_area));
+        gnc_box_set_all_margins (GTK_BOX(main_area), 10);
 
         debits_box = gnc_reconcile_window_create_view_box
                      (account, RECLIST_DEBIT, recnData,
@@ -2005,7 +2046,7 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
         GNC_RECONCILE_VIEW(recnData->debit)->sibling = GNC_RECONCILE_VIEW(recnData->credit);
         GNC_RECONCILE_VIEW(recnData->credit)->sibling = GNC_RECONCILE_VIEW(recnData->debit);
 
-        gtk_box_pack_start(GTK_BOX(main_area), debcred_area, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(main_area), GTK_WIDGET(debcred_area));
 
         gtk_grid_set_column_homogeneous (GTK_GRID(debcred_area), TRUE);
         gtk_grid_set_column_spacing (GTK_GRID(debcred_area), 15);
@@ -2028,11 +2069,11 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
             /* lower horizontal bar below reconcile lists */
             hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 5);
             gtk_box_set_homogeneous (GTK_BOX (hbox), FALSE);
-            gtk_box_pack_start(GTK_BOX(main_area), hbox, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(main_area), GTK_WIDGET(hbox));
 
             /* frame to hold totals */
-            frame = gtk_frame_new(NULL);
-            gtk_box_pack_end(GTK_BOX(hbox), frame, FALSE, FALSE, 0);
+            frame = gtk_frame_new (NULL);
+            gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(frame));
 
             // Set the name for this widget so it can be easily manipulated with css
             gtk_widget_set_name (GTK_WIDGET(frame), "gnc-id-reconcile-totals");
@@ -2040,68 +2081,69 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
             /* hbox to hold title/value vboxes */
             totals_hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
             gtk_box_set_homogeneous (GTK_BOX (totals_hbox), FALSE);
-            gtk_container_add(GTK_CONTAINER(frame), totals_hbox);
-            gtk_container_set_border_width(GTK_CONTAINER(totals_hbox), 5);
-
+            gtk_frame_set_child (GTK_FRAME(frame), GTK_WIDGET(totals_hbox));
+            gnc_box_set_all_margins (GTK_BOX(totals_hbox), 5);
             /* vbox to hold titles */
             title_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
             gtk_box_set_homogeneous (GTK_BOX (title_vbox), FALSE);
-            gtk_box_pack_start(GTK_BOX(totals_hbox), title_vbox, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(totals_hbox), GTK_WIDGET(title_vbox));
 
             /* vbox to hold values */
             value_vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 3);
             gtk_box_set_homogeneous (GTK_BOX (value_vbox), FALSE);
-            gtk_box_pack_start(GTK_BOX(totals_hbox), value_vbox, TRUE, TRUE, 0);
+            gtk_box_append (GTK_BOX(totals_hbox), GTK_WIDGET(value_vbox));
 
             /* statement date title/value */
             title = gtk_label_new(_("Statement Date"));
             gnc_label_set_alignment(title, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(title_vbox), GTK_WIDGET(title));
 
             value = gtk_label_new("");
             recnData->recn_date = value;
             gnc_label_set_alignment(value, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(value_vbox), GTK_WIDGET(value));
 
             /* starting balance title/value */
             title = gtk_label_new(_("Starting Balance"));
             gnc_label_set_alignment(title, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 3);
+            gtk_box_append (GTK_BOX(title_vbox), GTK_WIDGET(title));
+            gtk_box_set_spacing (GTK_BOX(title_vbox), 3);
 
             value = gtk_label_new("");
             recnData->starting = value;
             gnc_label_set_alignment(value, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 3);
+            gtk_box_append (GTK_BOX(value_vbox), GTK_WIDGET(value));
+            gtk_box_set_spacing (GTK_BOX(value_vbox), 3);
 
             /* ending balance title/value */
             title = gtk_label_new(_("Ending Balance"));
             gnc_label_set_alignment(title, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(title_vbox), GTK_WIDGET(title));
 
             value = gtk_label_new("");
             recnData->ending = value;
             gnc_label_set_alignment(value, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(value_vbox), GTK_WIDGET(value));
 
             /* reconciled balance title/value */
             title = gtk_label_new(_("Reconciled Balance"));
             gnc_label_set_alignment(title, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(title_vbox), GTK_WIDGET(title));
 
             value = gtk_label_new("");
             recnData->reconciled = value;
             gnc_label_set_alignment(value, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(value_vbox), GTK_WIDGET(value));
 
             /* difference title/value */
             title = gtk_label_new(_("Difference"));
             gnc_label_set_alignment(title, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(title_vbox), title, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(title_vbox), GTK_WIDGET(title));
 
             value = gtk_label_new("");
             recnData->difference = value;
             gnc_label_set_alignment(value, 1.0, 0.5);
-            gtk_box_pack_start(GTK_BOX(value_vbox), value, FALSE, FALSE, 0);
+            gtk_box_append (GTK_BOX(value_vbox), GTK_WIDGET(value));
         }
 
         /* Set up the data */
@@ -2110,7 +2152,7 @@ use Find Transactions to find them, unreconcile, and re-reconcile."));
 
     /* Allow resize */
     gtk_window_set_resizable(GTK_WINDOW(recnData->window), TRUE);
-    gtk_widget_show_all(recnData->window);
+//FIXME gtk4    gtk_widget_show_all(recnData->window);
 
     gnc_reconcile_window_set_titles(recnData);
 
@@ -2218,7 +2260,7 @@ recn_cancel(RecnWindow *recnData)
 
 
 static gboolean
-recn_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
+recn_delete_cb(GtkWidget *widget, const GdkEvent *event, gpointer data)
 {
     auto recnData = static_cast<RecnWindow*>(data);
 
@@ -2228,12 +2270,15 @@ recn_delete_cb(GtkWidget *widget, GdkEvent *event, gpointer data)
 
 
 static gboolean
-recn_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
+recn_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                   guint keycode, GdkModifierType state,
+                   gpointer user_data)
 {
-    auto recnData = static_cast<RecnWindow*>(data);
+    auto recnData = static_cast<RecnWindow*>(user_data);
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
+
         recn_cancel(recnData);
         return TRUE;
     }

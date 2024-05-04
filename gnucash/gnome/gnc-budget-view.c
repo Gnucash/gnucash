@@ -116,11 +116,9 @@ This enum is used to specify the specific type of account that the
 static void gnc_budget_view_finalize (GObject *object);
 
 static void gbv_create_widget (GncBudgetView *budget_view);
-#if 0
-static gboolean gbv_button_press_cb (GtkWidget *widget, GdkEventButton *event,
-                                     GncBudgetView *budget_view);
-#endif
-static gboolean gbv_key_press_cb (GtkWidget *treeview, GdkEventKey *event,
+
+static gboolean gbv_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                                  guint keycode, GdkModifierType state,
                                   gpointer user_data);
 static void gbv_row_activated_cb (GtkTreeView *treeview, GtkTreePath *path,
                                   GtkTreeViewColumn *col, GncBudgetView *budget_view);
@@ -128,12 +126,7 @@ static gboolean query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
                                             gboolean keyboard_tip,
                                             GtkTooltip *tooltip,
                                             GncBudgetView *budget_view);
-#if 0
-static void gbv_selection_changed_cb (GtkTreeSelection *selection,
-                                      GncBudgetView *budget_view);
-#endif
-static void gbv_treeview_resized_cb (GtkWidget *widget, GtkAllocation *allocation,
-                                     GncBudgetView *budget_view);
+
 static gnc_numeric gbv_get_accumulated_budget_amount (GncBudget *budget,
                                      Account *account, guint period_num);
 
@@ -424,7 +417,7 @@ gbv_create_widget (GncBudgetView *budget_view)
     gtk_widget_set_name (GTK_WIDGET(vbox), "gnc-id-budget-page");
 
     // Accounts scroll window
-    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    scrolled_window = gtk_scrolled_window_new ();
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
@@ -464,7 +457,10 @@ gbv_create_widget (GncBudgetView *budget_view)
     gtk_tree_view_column_set_reorderable (desc_col, FALSE);
 
     // Add accounts tree view to scroll window
-    gtk_container_add (GTK_CONTAINER(scrolled_window), GTK_WIDGET(tree_view));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(tree_view));
+
+    gtk_widget_set_vexpand (GTK_WIDGET(scrolled_window), TRUE);
 
     g_object_set (tree_view, "has-tooltip", TRUE, NULL);
     g_signal_connect (G_OBJECT(tree_view), "query-tooltip",
@@ -477,16 +473,8 @@ gbv_create_widget (GncBudgetView *budget_view)
 
     PINFO("Number of Created Account columns is %d", gtk_tree_view_get_n_columns (tree_view));
 
-#if 0
-    g_signal_connect (G_OBJECT(selection), "changed",
-                      G_CALLBACK(gbv_selection_changed_cb), budget_view);
-    g_signal_connect (G_OBJECT(tree_view), "button-press-event",
-                      G_CALLBACK(gbv_button_press_cb), budget_view);
-    gbv_selection_changed_cb (NULL, budget_view);
-#endif
-
     // Totals scroll window
-    priv->totals_scroll_window = gtk_scrolled_window_new (NULL, NULL);
+    priv->totals_scroll_window = gtk_scrolled_window_new ();
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(priv->totals_scroll_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_NEVER); // horizontal/vertical
 
@@ -535,7 +523,8 @@ gbv_create_widget (GncBudgetView *budget_view)
     gtk_tree_view_column_set_visible (desc_col, priv->show_account_desc);
 
     // Add totals tree view to scroll window
-    gtk_container_add (GTK_CONTAINER(priv->totals_scroll_window), GTK_WIDGET(totals_tree_view));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(priv->totals_scroll_window),
+                                   GTK_WIDGET(totals_tree_view));
 
     // Set grid lines option to preference
     gtk_tree_view_set_grid_lines (GTK_TREE_VIEW(totals_tree_view), gnc_tree_view_get_grid_lines_pref ());
@@ -553,21 +542,16 @@ gbv_create_widget (GncBudgetView *budget_view)
 
     gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
 
-    gtk_box_pack_start (GTK_BOX(vbox), scrolled_window, /*expand*/TRUE, /*fill*/TRUE, 0);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
 
     h_separator = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_box_pack_end (GTK_BOX(vbox), h_separator, /*expand*/FALSE, /*fill*/TRUE, 0);
 
-    gtk_box_pack_start (GTK_BOX(vbox), GTK_WIDGET(priv->totals_scroll_window), /*expand*/FALSE, /*fill*/TRUE, 0);
-
-    gtk_widget_show_all (GTK_WIDGET(vbox));
+    gtk_box_prepend (GTK_BOX(vbox), GTK_WIDGET(h_separator));
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(priv->totals_scroll_window));
 
     // hide the account scroll window horizontal scroll bar
     h_scrollbar = gtk_scrolled_window_get_hscrollbar (GTK_SCROLLED_WINDOW(scrolled_window));
-    gtk_widget_hide (h_scrollbar);
-
-    g_signal_connect (G_OBJECT(tree_view), "size-allocate",
-                      G_CALLBACK(gbv_treeview_resized_cb), budget_view);
+    gtk_widget_set_visible (GTK_WIDGET(h_scrollbar), FALSE);
 
     // Read account filter state information from budget section
     gnc_tree_view_account_restore_filter (GNC_TREE_VIEW_ACCOUNT(priv->tree_view),
@@ -730,37 +714,15 @@ gnc_budget_view_save_account_filter (GncBudgetView *budget_view)
     LEAVE(" ");
 }
 
-#if 0
-/***********************************************************************
- *   This button press handler calls the common button press handler
- *  for all pages.  The GtkTreeView eats all button presses and
- *  doesn't pass them up the widget tree, even when it doesn't do
- *  anything with them.  The only way to get access to the button
- *  presses in an account tree page is here on the tree view widget.
- *  Button presses on all other pages are caught by the signal
- *  registered in gnc-main-window.c.
- **********************************************************************/
-static gboolean
-gbv_button_press_cb (GtkWidget *widget, GdkEventButton *event,
-                     GncBudgetView *budget_view)
-{
-    gboolean result;
-
-    g_return_val_if_fail (budget_view != NULL, FALSE);
-
-    ENTER("widget %p, event %p, page %p", widget, event, page);
-    result = gnc_main_window_button_press_cb (widget, event, page);
-    LEAVE(" ");
-    return result;
-}
-#endif
-
 /** \brief Key press action for gnc budget view when in editing mode.
  * Used for navigating with tab while editing.
  * The handler is for the cell-editable, not for the treeview
 */
 static gboolean
-gbv_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gbv_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                  guint keycode, GdkModifierType state,
+                  gpointer user_data)
+
 {
     GtkTreeViewColumn    *col;
     GtkTreePath          *path = NULL;
@@ -770,29 +732,29 @@ gbv_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
     gint                  period_num, num_periods;
     gpointer              data;
 
-    if (event->type != GDK_KEY_PRESS || !priv->temp_cr)
+    if (!priv->temp_cr)
         return FALSE;
 
 #ifdef G_OS_WIN32
     /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
-    if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KEY_KP_Decimal;
+    if (keycode == VK_DECIMAL)
+        keyval = GDK_KEY_KP_Decimal;
 #endif
 
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_KP_Decimal:
-        if (event->keyval == GDK_KEY_KP_Decimal)
+        if (keyval == GDK_KEY_KP_Decimal)
         {
             struct lconv *lc = gnc_localeconv ();
-            event->keyval = lc->mon_decimal_point[0];
-            event->string[0] = lc->mon_decimal_point[0];
+            keyval = lc->mon_decimal_point[0];
+  //FIXME in GTK4            event->key.string[0] = lc->mon_decimal_point[0];
         }
         return FALSE;
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
     case GDK_KEY_KP_Tab:
-        shifted = event->state & GDK_SHIFT_MASK;
+        shifted = state & GDK_SHIFT_MASK;
         gtk_tree_view_get_cursor (tv, &path, &col);
         if (!path)
             return TRUE;
@@ -854,8 +816,8 @@ gbv_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
             gtk_cell_editable_editing_done (priv->temp_ce);
             gtk_cell_editable_remove_widget (priv->temp_ce);
 
-            while (gtk_events_pending())
-                gtk_main_iteration ();
+            while (g_main_context_pending (NULL))
+                g_main_context_iteration (NULL, TRUE);
         }
 
         if (gnc_tree_view_path_is_valid (GNC_TREE_VIEW(tv), path))
@@ -871,10 +833,10 @@ gbv_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 
 /** \brief gnc budget view actions for resize of treeview.
 */
-static void
-gbv_treeview_resized_cb (GtkWidget *widget, GtkAllocation *allocation,
-                         GncBudgetView *budget_view)
+void
+gnc_budget_view_resized_cb (GObject *gobject, GParamSpec *pspec, gpointer user_data)
 {
+    GncBudgetView *budget_view = user_data;
     GncBudgetViewPrivate* priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
     GList *columns = gtk_tree_view_get_columns (GTK_TREE_VIEW(priv->tree_view));
     GList *total_columns = gtk_tree_view_get_columns (GTK_TREE_VIEW (priv->totals_tree_view));
@@ -979,32 +941,6 @@ query_tooltip_tree_view_cb (GtkWidget *widget, gint x, gint y,
 
     return TRUE;
 }
-
-/** \brief Action for when a selection in a gnc budget view is changed
-*/
-#if 0
-static void
-gbv_selection_changed_cb (GtkTreeSelection *selection, GncBudgetView *budget_view)
-{
-    GtkTreeView *tree_view;
-    GList       *acct_list;
-    gboolean     sensitive;
-
-    if (!selection)
-        sensitive = FALSE;
-    else
-    {
-        g_return_if_fail (GTK_IS_TREE_SELECTION(selection));
-        tree_view = gtk_tree_selection_get_tree_view (selection);
-        acct_list = gnc_tree_view_account_get_selected_accounts (
-                        GNC_TREE_VIEW_ACCOUNT(tree_view));
-
-        /* Check here for placeholder accounts, etc. */
-        sensitive = (g_list_length (acct_list) > 0);
-        g_list_free (acct_list);
-    }
-}
-#endif
 
 /** \brief Structure to assist in calculating of sub account totals.
 
@@ -1113,7 +1049,7 @@ budget_col_source (Account *account, GtkTreeViewColumn *col,
         {
             GdkRGBA color;
             GtkStyleContext *stylectxt = gtk_widget_get_style_context (GTK_WIDGET(priv->tree_view));
-            gtk_style_context_get_color (stylectxt, GTK_STATE_FLAG_NORMAL, &color);
+            gtk_style_context_get_color (stylectxt, &color);
 
             numeric = gbv_get_accumulated_budget_amount (priv->budget, account, period_num);
 
@@ -1461,7 +1397,9 @@ gdv_editing_started_cb (GtkCellRenderer *cr, GtkCellEditable *editable,
     priv->temp_cr = cr;
     priv->temp_ce = editable;
 
-    g_signal_connect (G_OBJECT(editable), "key-press-event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(editable), event_controller);
+    g_signal_connect (G_OBJECT(event_controller), "key-press-event",
                       G_CALLBACK(gbv_key_press_cb), user_data);
 }
 
@@ -1496,7 +1434,7 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
     GtkTreeViewColumn *col, *code_col, *desc_col;
     GList *col_list;
     GList *totals_col_list;
-    GdkRGBA *note_color, *note_color_selected;
+    GdkRGBA note_color, note_color_selected;
     GtkStyleContext *stylectxt;
 
     ENTER("view %p", budget_view);
@@ -1505,8 +1443,12 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
     priv = GNC_BUDGET_VIEW_GET_PRIVATE(budget_view);
 
     stylectxt = gtk_widget_get_style_context (GTK_WIDGET(priv->tree_view));
-    gtk_style_context_get (stylectxt, GTK_STATE_FLAG_SELECTED, "background-color", &note_color, NULL);
-    gtk_style_context_get (stylectxt, GTK_STATE_FLAG_NORMAL, "background-color", &note_color_selected, NULL);
+
+    if (!gtk_style_context_lookup_color (stylectxt, "budget_flag_bg_color_selected", &note_color_selected))
+        gdk_rgba_parse (&note_color_selected, "red");
+
+    if (!gtk_style_context_lookup_color (stylectxt, "budget_flag_bg_color_normal", &note_color))
+        gdk_rgba_parse (&note_color, "red");
 
     num_periods = gnc_budget_get_num_periods (priv->budget);
 
@@ -1559,8 +1501,8 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
     while (num_periods_visible < num_periods)
     {
         GtkCellRenderer *renderer = gnc_cell_renderer_text_flag_new ();
-        g_object_set (renderer, "flag-color-rgba", note_color, NULL);
-        g_object_set (renderer, "flag-color-rgba-selected", note_color_selected, NULL);
+        g_object_set (renderer, "flag-color-rgba", &note_color, NULL);
+        g_object_set (renderer, "flag-color-rgba-selected", &note_color_selected, NULL);
 
         col = gnc_tree_view_account_add_custom_column_renderer (
                   GNC_TREE_VIEW_ACCOUNT(priv->tree_view), "",
@@ -1586,9 +1528,6 @@ gnc_budget_view_refresh (GncBudgetView *budget_view)
 
         num_periods_visible++;
     }
-
-    gdk_rgba_free (note_color);
-    gdk_rgba_free (note_color_selected);
 
     priv->period_col_list = g_list_reverse (col_list);
     priv->totals_col_list = g_list_reverse (totals_col_list);

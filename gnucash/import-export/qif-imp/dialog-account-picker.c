@@ -237,12 +237,13 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
     entry = gtk_entry_new();
     gtk_entry_set_activates_default(GTK_ENTRY(entry), TRUE);
     gtk_entry_set_max_length(GTK_ENTRY(entry), 250);
-    gtk_widget_show(entry);
-    gtk_container_add(GTK_CONTAINER(gtk_dialog_get_content_area (GTK_DIALOG(dlg))), entry);
+    gtk_widget_set_visible (GTK_WIDGET(entry), TRUE);
+    gtk_box_prepend (GTK_BOX(gtk_dialog_get_content_area (GTK_DIALOG(dlg))), GTK_WIDGET(entry));
 
     /* Run the dialog to get the new account name. */
-    response = gtk_dialog_run(GTK_DIALOG(dlg));
-    name = gtk_entry_get_text(GTK_ENTRY(entry));
+    response = gnc_dialog_run (GTK_DIALOG(dlg));
+
+    name = gnc_entry_get_text(GTK_ENTRY(entry));
 
     /* Did the user enter a name and click OK? */
     if (response == GTK_RESPONSE_OK && name && *name)
@@ -260,7 +261,7 @@ gnc_ui_qif_account_picker_new_cb(GtkButton * w, gpointer user_data)
         wind->selected_name = fullname;
         scm_call_2(name_setter, wind->map_entry, scm_from_utf8_string(fullname));
     }
-    gtk_widget_destroy(dlg);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dlg));
 
     /* Refresh the tree display and give it the focus. */
     build_acct_tree(wind, wind->qif_wind);
@@ -301,13 +302,13 @@ gnc_ui_qif_account_picker_changed_cb(GtkTreeSelection *selection,
 
             gtk_label_set_text (GTK_LABEL(wind->pwarning), text);
             gnc_label_set_alignment (wind->pwarning, 0.0, 0.5);
-            gtk_widget_show_all (GTK_WIDGET(wind->pwhbox));
+//FIXME gtk4            gtk_widget_show_all (GTK_WIDGET(wind->pwhbox));
             g_free (text);
 
             gtk_widget_set_sensitive (wind->ok_button, FALSE); // disable OK button
         }
         else
-            gtk_widget_hide (GTK_WIDGET(wind->pwhbox)); // hide the placeholder warning
+            gtk_widget_set_visible (GTK_WIDGET(wind->pwhbox), FALSE);  // hide the placeholder warning
     }
     else
     {
@@ -404,10 +405,11 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
         wind->selected_name = gnc_scm_to_utf8_string (orig_acct);
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(wind));
     gnc_builder_add_from_file (builder, "dialog-account-picker.glade", "qif_import_account_picker_dialog");
 
     /* Connect all the signals */
-    gtk_builder_connect_signals (builder, wind);
+//FIXME gtk4    gtk_builder_connect_signals (builder, wind);
 
     wind->dialog     = GTK_WIDGET(gtk_builder_get_object (builder, "qif_import_account_picker_dialog"));
     wind->treeview   = GTK_TREE_VIEW(gtk_builder_get_object (builder, "account_tree"));
@@ -480,11 +482,13 @@ qif_account_picker_dialog(GtkWindow *parent, QIFImportWindow * qif_wind, SCM map
 
     do
     {
-        response = gtk_dialog_run(GTK_DIALOG(wind->dialog));
+//FIXME gtk4        response = gtk_dialog_run(GTK_DIALOG(wind->dialog));
+gtk_window_set_modal (GTK_WINDOW(wind->dialog), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
     }
     while (response == GNC_RESPONSE_NEW);
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(wind->dialog));
-    gtk_widget_destroy(wind->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(wind->dialog));
     g_object_unref(G_OBJECT(builder));
 
     scm_gc_unprotect_object(wind->map_entry);

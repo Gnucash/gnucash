@@ -137,6 +137,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     ddc->t = t;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(ddc));
     gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_close_dialog");
     ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_close_dialog"));
 
@@ -145,7 +146,7 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_box"));
     ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(date_box), GTK_WIDGET(ddc->date));
     gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->date), *t);
 
     if (parent)
@@ -158,21 +159,25 @@ gnc_dialog_date_close_parented (GtkWidget *parent, const char *message,
     gtk_label_set_text (label, label_message);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
 
-    gtk_widget_show_all (ddc->dialog);
+//FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
     ddc->retval = FALSE;
-    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
-    {
+
+//FIXME gtk4    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(ddc->dialog), TRUE); //FIXME gtk4
+
+//    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+//    {
         /* If response is OK but flag is not set, try again */
-        if (ddc->retval)
-            break;
-    }
+//        if (ddc->retval)
+//            break;
+//    }
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(ddc->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ddc->dialog));
     retval = ddc->retval;
     g_list_free (ddc->acct_types);
     g_free (ddc);
@@ -230,6 +235,7 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     ddc->terms = terms;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(ddc));
     gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_account_dialog");
     ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_account_dialog"));
     ddc->memo_entry = GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry"));
@@ -239,15 +245,15 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 
     acct_box = GTK_WIDGET(gtk_builder_get_object (builder, "acct_hbox"));
     ddc->acct_combo = gnc_account_sel_new();
-    gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(acct_box), GTK_WIDGET(ddc->acct_combo));
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
     ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(date_box), GTK_WIDGET(ddc->date));
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box"));
     ddc->post_date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->post_date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(date_box), GTK_WIDGET(ddc->post_date));
 
     ddc->question_check = GTK_WIDGET(gtk_builder_get_object (builder, "question_check"));
 
@@ -267,15 +273,15 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
 
     if (question_check_message)
     {
-        gtk_label_set_text(GTK_LABEL(gtk_bin_get_child (GTK_BIN(ddc->question_check))), question_check_message);
+        gtk_label_set_text(GTK_LABEL(gtk_check_button_get_child (GTK_CHECK_BUTTON((ddc->question_check)))),
+                                                                 question_check_message);
         gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(ddc->question_check), *answer);
     }
     else
     {
-        gtk_widget_hide(ddc->question_check);
-        gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "hide1")));
+        gtk_widget_set_visible (GTK_WIDGET(ddc->question_check), FALSE);
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "hide1")), FALSE);
     }
-
 
     /* Set the post date widget */
     gnc_date_edit_set_time (GNC_DATE_EDIT (ddc->post_date), *post);
@@ -295,24 +301,28 @@ gnc_dialog_dates_acct_question_parented (GtkWidget *parent, const char *message,
     fill_in_acct_info (ddc, set_default_acct);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
 
-    gtk_widget_show_all (ddc->dialog);
+//FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
     /* Set the focus on the date widget */
     gnc_date_grab_focus (GNC_DATE_EDIT (ddc->post_date));
 
     ddc->retval = FALSE;
-    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
-    {
+
+//FIXME gtk4        while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(ddc->dialog), TRUE); //FIXME gtk4
+
+//    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+//    {
         /* If response is OK but flag is not set, try again */
-        if (ddc->retval)
-            break;
-    }
+//        if (ddc->retval)
+//            break;
+//    }
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(ddc->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ddc->dialog));
     retval = ddc->retval;
     *acct = ddc->acct;
     if (question_check_message)
@@ -349,6 +359,7 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     ddc->acct = *acct;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(ddc));
     gnc_builder_add_from_file (builder, "dialog-date-close.glade", "date_account_dialog");
     ddc->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "date_account_dialog"));
 
@@ -359,11 +370,11 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     ddc->acct_combo = gnc_account_sel_new();
     if (*acct)
         gnc_account_sel_set_account (GNC_ACCOUNT_SEL(ddc->acct_combo), *acct, FALSE);
-    gtk_box_pack_start (GTK_BOX(acct_box), ddc->acct_combo, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(acct_box), GTK_WIDGET(ddc->acct_combo));
 
     date_box = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
     ddc->date = gnc_date_edit_new (time(NULL), FALSE, FALSE);
-    gtk_box_pack_start (GTK_BOX(date_box), ddc->date, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(date_box), GTK_WIDGET(ddc->date));
 
     if (parent)
         gtk_window_set_transient_for (GTK_WINDOW(ddc->dialog), GTK_WINDOW(parent));
@@ -384,26 +395,30 @@ gnc_dialog_date_acct_parented (GtkWidget *parent, const char *message,
     fill_in_acct_info (ddc, FALSE);
 
     /* Setup signals */
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ddc);
 
-    gtk_widget_show_all (ddc->dialog);
+//FIXME gtk4    gtk_widget_show_all (ddc->dialog);
 
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "postdate_label")));
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box")));
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry")));
-    gtk_widget_hide (GTK_WIDGET(gtk_builder_get_object (builder, "memo_label")));
+    gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "postdate_label")), FALSE);
+    gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "post_date_box")), FALSE);
+    gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "memo_entry")), FALSE);
+    gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "memo_label")), FALSE);
 
     ddc->retval = FALSE;
-    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
-    {
+
+//FIXME gtk4    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(ddc->dialog), TRUE); //FIXME gtk4
+
+//    while (gtk_dialog_run (GTK_DIALOG (ddc->dialog)) == GTK_RESPONSE_OK)
+//    {
         /* If response is OK but flag is not set, try again */
-        if (ddc->retval)
-            break;
-    }
+//        if (ddc->retval)
+//            break;
+//    }
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(ddc->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ddc->dialog));
     retval = ddc->retval;
     *acct = ddc->acct;
     g_free (ddc);

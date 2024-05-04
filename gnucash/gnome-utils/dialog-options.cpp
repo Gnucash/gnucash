@@ -92,8 +92,8 @@ dialog_changed_internal (GtkWidget *widget, bool sensitive)
 {
     g_return_if_fail(widget);
 
-    auto toplevel{gtk_widget_get_toplevel(widget)};
-    if (toplevel == widget && !GTK_IS_WINDOW(toplevel))
+    auto toplevel{gtk_widget_get_root(widget)};
+    if (GTK_WIDGET(toplevel) == widget && !GTK_IS_WINDOW(toplevel))
         return;
     g_assert(toplevel && GTK_IS_WINDOW(toplevel));
 
@@ -199,16 +199,15 @@ create_content_box()
     gtk_widget_set_name (content_box, "page-content-box");
     gtk_box_set_homogeneous (GTK_BOX (content_box), FALSE);
 
-    gtk_container_set_border_width(GTK_CONTAINER(content_box), 12);
+    gnc_box_set_all_margins (GTK_BOX(content_box), 12);
     return GTK_BOX(content_box);
 }
 
 static GtkGrid*
 create_options_box(GtkBox* content_box)
 {
-    auto options_scrolled_win = gtk_scrolled_window_new(NULL, NULL);
-    gtk_box_pack_start(GTK_BOX(content_box), options_scrolled_win,
-                       TRUE, TRUE, 0);
+    auto scrolled_window = gtk_scrolled_window_new ();
+    gtk_box_append (GTK_BOX(content_box), GTK_WIDGET(scrolled_window));
 
     /* Build space for the content - the options box */
     auto options_box = gtk_grid_new(); // this will have two columns
@@ -218,23 +217,24 @@ create_options_box(GtkBox* content_box)
     gtk_grid_set_row_spacing (GTK_GRID(options_box), 6);
     gtk_grid_set_column_spacing (GTK_GRID(options_box), 6);
 
-    gtk_container_set_border_width(GTK_CONTAINER(options_box), 0);
-    gtk_container_add (GTK_CONTAINER(options_scrolled_win),
-                       GTK_WIDGET(options_box));
-    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(options_scrolled_win),
+    gnc_box_set_all_margins (GTK_BOX(options_box), 0);
+    gtk_box_prepend (GTK_BOX(scrolled_window), GTK_WIDGET(options_box));
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(options_box));
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scrolled_window),
                                    GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
     return GTK_GRID(options_box);
 }
 
-static GtkButtonBox*
+static GtkBox*
 create_reset_button_box(GtkBox* page_content_box)
 {
-    auto buttonbox = gtk_button_box_new (GTK_ORIENTATION_HORIZONTAL);
-    gtk_button_box_set_layout (GTK_BUTTON_BOX (buttonbox),
-                               GTK_BUTTONBOX_EDGE);
-    gtk_container_set_border_width(GTK_CONTAINER (buttonbox), 5);
-    gtk_box_pack_end(GTK_BOX(page_content_box), buttonbox, FALSE, FALSE, 0);
-    return GTK_BUTTON_BOX(buttonbox);
+    auto buttonbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+//FIXME gtk4    gtk_button_box_set_layout (GTK_BOX (buttonbox),
+//                               GTK_BOX_EDGE);
+    gnc_box_set_all_margins (GTK_BOX(buttonbox), 5);
+    gtk_box_prepend (GTK_BOX(page_content_box), GTK_WIDGET(buttonbox));
+    return GTK_BOX(buttonbox);
 }
 
 static int
@@ -261,12 +261,12 @@ setup_notebook_pages(GncOptionsDialog* dlg, GtkBox* page_content_box,
 
         if (page_count > MAX_TAB_COUNT - 1)   /* Convert 1-based -> 0-based */
         {
-            gtk_widget_show(dlg->get_page_list());
+            gtk_widget_set_visible (GTK_WIDGET(dlg->get_page_list()), true);
             gtk_notebook_set_show_tabs(GTK_NOTEBOOK(notebook), FALSE);
             gtk_notebook_set_show_border(GTK_NOTEBOOK(notebook), FALSE);
         }
         else
-            gtk_widget_hide(dlg->get_page_list());
+            gtk_widget_set_visible (GTK_WIDGET(dlg->get_page_list()), false);
 
     }
     return page_count;
@@ -284,7 +284,7 @@ dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
 
     auto page_label = gtk_label_new(_(name));
     PINFO("Page_label is %s", _(name));
-    gtk_widget_show(page_label);
+    gtk_widget_set_visible (GTK_WIDGET(page_label), true);
 
     /* Build this options page */
     auto page_content_box = create_content_box();
@@ -311,8 +311,8 @@ dialog_append_page(GncOptionsDialog* dlg, GncOptionSectionPtr& section)
                      G_CALLBACK(dialog_reset_cb), dlg);
     g_object_set_data(G_OBJECT(reset_button), "section",
                       static_cast<void*>(section.get()));
-    gtk_box_pack_end(GTK_BOX(buttonbox), reset_button, FALSE, FALSE, 0);
-    gtk_widget_show_all(GTK_WIDGET(page_content_box));
+    gtk_box_prepend (GTK_BOX(buttonbox), GTK_WIDGET(reset_button));
+//FIXME gtk4    gtk_widget_show_all(GTK_WIDGET(page_content_box));
     gtk_notebook_append_page(GTK_NOTEBOOK(dlg->get_notebook()),
                              GTK_WIDGET(page_content_box), page_label);
 
@@ -367,7 +367,7 @@ GncOptionsDialog::build_contents(GncOptionDB  *odb, bool show_dialog)
     }
     dialog_changed_internal(m_window, FALSE);
     if (show_dialog)
-        gtk_widget_show(m_window);
+        gtk_widget_set_visible (GTK_WIDGET(m_window), true);
 }
 
 void GncOptionsDialog::call_apply_cb() noexcept
@@ -396,7 +396,7 @@ void GncOptionsDialog::call_close_cb() noexcept
     }
     else
     {
-        gtk_widget_hide(m_window);
+        gtk_widget_set_visible (GTK_WIDGET(m_window), false);
     }
 }
 
@@ -456,17 +456,19 @@ dialog_destroy_cb (GtkWidget *object, GncOptionsDialog *win)
 
 // "key_press_event" signal handler
 static int
-dialog_window_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
+dialog_window_key_press_cb (GtkEventControllerKey *key, guint keyval,
+                            guint keycode, GdkModifierType state,
+                            gpointer user_data)
 {
-    GncOptionsDialog *win = static_cast<decltype(win)>(data);
+    GncOptionsDialog *win = static_cast<decltype(win)>(user_data);
 
-    if (event->keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         component_close_handler (win);
-        return TRUE;
+        return true;
     }
     else
-        return FALSE;
+        return false;
 }
 
 static void
@@ -536,6 +538,7 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
     m_component_class{component_class ? component_class : DIALOG_OPTIONS_CM_CLASS}
 {
     auto builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(this));
     gnc_builder_add_from_file (builder, "dialog-options.glade", "gnucash_options_window");
     m_window = GTK_WIDGET(gtk_builder_get_object (builder, "gnucash_options_window"));
     g_object_ref(m_window);
@@ -582,8 +585,8 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
     g_signal_connect(m_ok_button, "clicked",
                      G_CALLBACK(dialog_ok_button_cb), this);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
-                                      this);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func,
+//                                      this);
 
     // when added to a page of the hierarchy assistant there will be no parent
     if (parent)
@@ -595,7 +598,7 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
 
     /* modal */
     if (modal)
-        gtk_widget_hide (GTK_WIDGET(m_apply_button));
+        gtk_widget_set_visible (GTK_WIDGET(m_apply_button), false);
 
     /* glade doesn't support a notebook with zero pages */
     auto hbox = GTK_WIDGET(gtk_builder_get_object (builder,
@@ -604,8 +607,9 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
 
     gtk_widget_set_vexpand (m_notebook, TRUE);
 
-    gtk_widget_show(m_notebook);
-    gtk_box_pack_start(GTK_BOX(hbox), m_notebook, TRUE, TRUE, 5);
+    gtk_widget_set_visible (GTK_WIDGET(m_notebook), true);
+    gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(m_notebook));
+    gtk_box_set_spacing (GTK_BOX(hbox), 5);
 
     auto component_id = gnc_register_gui_component (m_component_class,
                                                     nullptr,
@@ -615,7 +619,10 @@ GncOptionsDialog::GncOptionsDialog(bool modal, const char* title,
 
     g_signal_connect (m_window, "destroy", G_CALLBACK(dialog_destroy_cb), this);
 
-    g_signal_connect (m_window, "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(m_window), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
                       G_CALLBACK(dialog_window_key_press_cb), this);
 
     g_object_unref(G_OBJECT(builder));

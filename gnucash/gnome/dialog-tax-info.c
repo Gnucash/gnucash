@@ -737,7 +737,7 @@ identity_edit_destroy_cb (GtkDialog *dialog, gpointer data)
     ti_dialog->entity_name_entry = NULL;
     ti_dialog->entity_type_combo = NULL;
 
-    gtk_widget_destroy(GTK_WIDGET(dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 }
 
 static void
@@ -910,7 +910,7 @@ gnc_tax_info_acct_type_cb (GtkWidget *w, gpointer data)
 
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (w)))
     {
-        button_name = gtk_buildable_get_name(GTK_BUILDABLE(w));
+        button_name = gtk_buildable_get_buildable_id(GTK_BUILDABLE(w));
         if (g_strcmp0 (button_name, "income_radio") == 0)
             ti_dialog->account_type = ACCT_TYPE_INCOME;
         else if (g_strcmp0 (button_name, "expense_radio") == 0)
@@ -1051,7 +1051,7 @@ set_focus_sensitivity (TaxInfoDialog *ti_dialog)
         gtk_widget_grab_focus (ti_dialog->tax_identity_edit_button);
         gtk_widget_set_sensitive (ti_dialog->acct_info, FALSE);
         gtk_widget_set_sensitive (ti_dialog->txf_info, FALSE);
-        gtk_widget_hide (ti_dialog->txf_help_text); /* textview doesn't go insensitive!? */
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->txf_help_text), FALSE); /* textview doesn't go insensitive!? */
     }
     else if (ti_dialog->tax_type_changed)
     {
@@ -1065,13 +1065,14 @@ set_focus_sensitivity (TaxInfoDialog *ti_dialog)
         gtk_widget_grab_focus (ti_dialog->account_treeview);
     }
     if (ti_dialog->asset_txf_infos == NULL)
-        gtk_widget_hide (ti_dialog->asset_radio);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->asset_radio), FALSE);
     else
-        gtk_widget_show (ti_dialog->asset_radio);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->asset_radio), TRUE);
+    
     if (ti_dialog->liab_eq_txf_infos == NULL)
-        gtk_widget_hide (ti_dialog->liab_eq_radio);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->liab_eq_radio), FALSE);
     else
-        gtk_widget_show (ti_dialog->liab_eq_radio);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->liab_eq_radio), TRUE);
 }
 
 static void
@@ -1086,7 +1087,7 @@ identity_edit_response_cb (GtkDialog *dialog, gint response, gpointer data)
 
     if (response == GTK_RESPONSE_APPLY)
     {
-        entry_name = gtk_entry_get_text (GTK_ENTRY (ti_dialog->entity_name_entry));
+        entry_name = gnc_entry_get_text (GTK_ENTRY (ti_dialog->entity_name_entry));
         active_item = gtk_combo_box_get_active
                       (GTK_COMBO_BOX (ti_dialog->entity_type_combo));
         if (active_item != -1)  /* -1 if there's no active item */
@@ -1196,7 +1197,7 @@ identity_edit_clicked_cb (GtkButton *button,
     name_entry = gtk_entry_new();
     ti_dialog->entity_name_entry = name_entry;
     if (!(g_strcmp0 (ti_dialog->tax_name, NULL) == 0))
-        gtk_entry_set_text (GTK_ENTRY (name_entry), ti_dialog->tax_name);
+        gnc_entry_set_text (GTK_ENTRY (name_entry), ti_dialog->tax_name);
     label = gtk_label_new (_("Name"));
     gnc_label_set_alignment (label, 1.00, 0.50);
     table = gtk_grid_new ();
@@ -1239,18 +1240,18 @@ identity_edit_clicked_cb (GtkButton *button,
 
     label = gtk_label_new (_("CAUTION: If you set TXF categories, and later change 'Type', you will need to manually reset those categories one at a time"));
     gtk_label_set_max_width_chars (GTK_LABEL (label), 50);
-    gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+    gtk_label_set_wrap (GTK_LABEL (label), TRUE);
     gnc_label_set_alignment (label, 0.50, 0.50);
     gtk_widget_set_margin_top (GTK_WIDGET(label), 5);
     gtk_grid_attach (GTK_GRID(table), label, 0, 2, 2, 1);
 
-    gtk_container_add (GTK_CONTAINER (content_area), table);
+    gtk_box_prepend (GTK_BOX(content_area), GTK_WIDGET(table));
     gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_APPLY);
     g_signal_connect (G_OBJECT (dialog), "response",
                       G_CALLBACK (identity_edit_response_cb), ti_dialog);
     g_signal_connect (G_OBJECT (dialog), "destroy",
                       G_CALLBACK (identity_edit_destroy_cb), ti_dialog);
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
 }
 
 static void
@@ -1271,9 +1272,9 @@ tax_related_toggled_cb (GtkToggleButton *togglebutton,
     gtk_widget_set_sensitive (hbox, on);
 
     if (on == FALSE)
-        gtk_widget_hide (ti_dialog->txf_help_text); /* textview doesn't go insensitive!? */
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->txf_help_text), FALSE); /* textview doesn't go insensitive!? */
     else
-        gtk_widget_show (ti_dialog->txf_help_text);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->txf_help_text), TRUE);
 
     gnc_tax_info_set_changed (ti_dialog, TRUE);
 }
@@ -1451,9 +1452,9 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
                           G_CALLBACK (gnc_tax_info_account_changed_cb),
                           ti_dialog);
 
-        gtk_widget_show (ti_dialog->account_treeview);
+        gtk_widget_set_visible (GTK_WIDGET(ti_dialog->account_treeview), TRUE);
         box = GTK_WIDGET(gtk_builder_get_object (builder, "account_scroll"));
-        gtk_container_add (GTK_CONTAINER (box), ti_dialog->account_treeview);
+        gtk_box_prepend (GTK_BOX(box), GTK_WIDGET(ti_dialog->account_treeview));
 
         label = GTK_WIDGET(gtk_builder_get_object (builder, "accounts_label"));
         gtk_label_set_mnemonic_widget(GTK_LABEL(label), GTK_WIDGET(tree_view));
@@ -1521,7 +1522,7 @@ close_handler (gpointer user_data)
     TaxInfoDialog *ti_dialog = user_data;
 
     gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(ti_dialog->dialog));
-    gtk_widget_destroy (ti_dialog->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ti_dialog->dialog));
 }
 
 static void
@@ -1563,5 +1564,5 @@ gnc_tax_info_dialog (GtkWidget * parent, Account * account)
 
     set_focus_sensitivity (ti_dialog);
 
-    gtk_widget_show (ti_dialog->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(ti_dialog->dialog), TRUE);
 }

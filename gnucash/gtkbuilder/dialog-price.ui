@@ -1,0 +1,705 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkListStore" id="liststore1">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0">Bid</col>
+      </row>
+      <row>
+        <col id="0">Ask</col>
+      </row>
+      <row>
+        <col id="0">Last</col>
+      </row>
+      <row>
+        <col id="0">Net Asset Value</col>
+      </row>
+      <row>
+        <col id="0">Unknown</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="liststore2">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkListStore" id="liststore3">
+    <columns>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkWindow" id="price_dialog">
+    <property name="modal">1</property>
+    <property name="title" translatable="yes">Price Editor</property>
+    <property name="child">
+      <object class="GtkBox" id="dialog-vbox18">
+        <property name="orientation">vertical</property>
+        <property name="spacing">6</property>
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <child>
+          <object class="GtkGrid" id="table1">
+            <property name="column-spacing">6</property>
+            <property name="row-spacing">3</property>
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkLabel" id="namespace_label">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">Nam_espace</property>
+                <property name="mnemonic-widget">namespace_cbwe</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="commodity_label">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">_Security</property>
+                <property name="mnemonic-widget">commodity_cbwe</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="currency_label">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">Cu_rrency</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="date__label">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">_Date</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="source_label">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">S_ource</property>
+                <property name="mnemonic-widget">source_entry</property>
+                <property name="use-underline">1</property>
+                <property name="visible">0</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="type_label">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">_Type</property>
+                <property name="mnemonic-widget">type_combobox</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">5</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="price_label">
+                <property name="halign">end</property>
+                <property name="justify">center</property>
+                <property name="label" translatable="yes">_Price</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">6</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="namespace_cbwe">
+                <property name="has-entry">1</property>
+                <property name="entry-text-column">0</property>
+                <property name="model">liststore3</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="combobox-entry3">
+                    <property name="visible">1</property>
+                  </object>
+                </child>
+                <signal name="changed" handler="pedit_commodity_ns_changed_cb"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="commodity_cbwe">
+                <property name="entry-text-column">0</property>
+                <property name="has-entry">1</property>
+                <property name="model">liststore2</property>
+                <child internal-child="entry">
+                  <object class="GtkEntry" id="combobox-entry2">
+                    <property name="visible">1</property>
+                  </object>
+                </child>
+                <signal name="changed" handler="pedit_commodity_changed_cb"/>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="currency_box">
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="date_box">
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkEntry" id="source_entry">
+                <property name="editable">0</property>
+                <property name="focusable">1</property>
+                <property name="visible">0</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="type_combobox">
+                <property name="model">liststore1</property>
+                <child>
+                  <object class="GtkCellRendererText" id="cellrenderertext1"/>
+                  <!-- Custom child fragments -->
+                  <attributes>
+                    <attribute name="text">0</attribute>
+                  </attributes>
+                </child>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">5</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="price_box">
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">6</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="dialog-action_area18">
+            <child>
+              <object class="GtkButton" id="pd_help_button">
+                <property name="focusable">1</property>
+                <property name="halign">start</property>
+                <property name="hexpand">1</property>
+                <property name="label" translatable="yes">_Help</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="pedit_dialog_response_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="pd_cancel_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="receives-default">1</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="pedit_dialog_response_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="pd_apply_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_Apply</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="pedit_dialog_response_cb"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="pd_ok_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="pedit_dialog_response_cb"/>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+  <object class="GtkListStore" id="liststore4">
+    <columns>
+      <column type="gchararray"/>
+      <column type="gpointer"/>
+      <column type="gchararray"/>
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkWindow" id="deletion_date_dialog">
+    <property name="default-height">500</property>
+    <property name="title" translatable="yes">Remove Old Prices</property>
+    <property name="child">
+      <object class="GtkBox" id="dialog-vbox2">
+        <property name="margin-bottom">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-start">6</property>
+        <property name="margin-top">6</property>
+        <property name="orientation">vertical</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkGrid" id="table2">
+            <property name="column-spacing">6</property>
+            <property name="row-spacing">3</property>
+            <property name="vexpand">1</property>
+            <child>
+              <object class="GtkLabel" id="label8477429">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Delete prices that meet the following criteria:</property>
+                <property name="wrap">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">0</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="hbox2">
+                <property name="halign">start</property>
+                <child>
+                  <object class="GtkCheckButton" id="radiobutton_none">
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">_None</property>
+                    <property name="tooltip-text" translatable="yes">Remove all prices before date.</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radiobutton_last_week">
+                    <property name="active">1</property>
+                    <property name="group">radiobutton_none</property>
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">Last of _Week</property>
+                    <property name="tooltip-text" translatable="yes">Keep the last price of each week if present before date.</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radiobutton_last_month">
+                    <property name="group">radiobutton_none</property>
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">Last of _Month</property>
+                    <property name="tooltip-text" translatable="yes">Keep the last price of each month if present before date.</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radiobutton_last_quarter">
+                    <property name="group">radiobutton_none</property>
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">Last of _Quarter</property>
+                    <property name="tooltip-text" translatable="yes">Keep the last price of each fiscal quarter if present before date. The fiscal quarter is derived from the accounting period end date.</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radiobutton_last_period">
+                    <property name="group">radiobutton_none</property>
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">Last of _Period</property>
+                    <property name="tooltip-text" translatable="yes">Keep the last price of each fiscal period if present before date. The fiscal period is derived from the accounting period end date.</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="radiobutton_scaled">
+                    <property name="group">radiobutton_none</property>
+                    <property name="halign">center</property>
+                    <property name="label" translatable="yes">_Scaled</property>
+                    <property name="tooltip-text" translatable="yes">With the scaled option, prices are removed relative to the date selected. 'One a month' is used for dates older than a year and 'One a week' is used for dates older than six months to a year.</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">6</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="hbox3">
+                <property name="vexpand">1</property>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                    <property name="child">
+                      <object class="GtkTreeView" id="commodty_treeview">
+                        <property name="focusable">1</property>
+                        <property name="model">liststore4</property>
+                        <child internal-child="selection">
+                          <object class="GtkTreeSelection" id="selection1"/>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="name_column">
+                            <property name="title" translatable="yes">Commodity</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="name_cellr"/>
+                              <!-- Custom child fragments -->
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkTreeViewColumn" id="date_column">
+                            <property name="title" translatable="yes">First Date</property>
+                            <child>
+                              <object class="GtkCellRendererText" id="date_cellr"/>
+                              <!-- Custom child fragments -->
+                              <attributes>
+                                <attribute name="text">2</attribute>
+                              </attributes>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </property>
+                    <property name="focusable">1</property>
+                    <property name="hexpand">1</property>
+                  </object>
+                </child>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">4</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label3">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">From these Commodities</property>
+                <property name="margin-top">6</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">3</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label2">
+                <property name="halign">start</property>
+                <property name="label" translatable="yes">Keeping the last available price for option</property>
+                <property name="margin-top">6</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="column-span">2</property>
+                  <property name="row">5</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="halign">end</property>
+                <property name="hexpand">0</property>
+                <property name="label" translatable="yes">Source</property>
+                <property name="margin-top">6</property>
+                <property name="valign">start</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="vbox1">
+                <property name="halign">start</property>
+                <property name="hexpand">1</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton_fq">
+                    <property name="active">1</property>
+                    <property name="focusable">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Include _Fetched online prices</property>
+                    <property name="margin-top">6</property>
+                    <property name="tooltip-text" translatable="yes">If activated, prices added by Finance::Quote will be included.</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton_user">
+                    <property name="focusable">1</property>
+                    <property name="halign">start</property>
+                    <property name="label" translatable="yes">Include manually _Entered prices</property>
+                    <property name="tooltip-text" translatable="yes">If activated, include manually entered prices.</property>
+                    <property name="use-underline">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="hbox4">
+                    <property name="valign">center</property>
+                    <child>
+                      <object class="GtkCheckButton" id="checkbutton_app">
+                        <property name="focusable">1</property>
+                        <property name="halign">start</property>
+                        <property name="label" translatable="yes">_Added by the application</property>
+                        <property name="tooltip-text" translatable="yes">If activated, include application added prices.
+
+These prices were added so that there's always a "nearest in time" price for every multi-commodity transaction so that the Accounts page and reports are able to correctly report values so removing them may make this less reliable.</property>
+                        <property name="use-underline">1</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkImage" id="image_source">
+                        <property name="halign">start</property>
+                        <property name="hexpand">1</property>
+                        <property name="icon-name">dialog-warning</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">1</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkLabel" id="date_label">
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">Before _Date</property>
+                <property name="margin-top">6</property>
+                <property name="use-underline">1</property>
+                <layout>
+                  <property name="column">0</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="date_hbox">
+                <property name="halign">start</property>
+                <property name="hexpand">1</property>
+                <property name="margin-top">6</property>
+                <layout>
+                  <property name="column">1</property>
+                  <property name="row">2</property>
+                </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="dialog-action_area2">
+            <child>
+              <object class="GtkButton" id="cancel_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="hexpand">1</property>
+                <property name="label" translatable="yes">_Cancel</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="ok_button">
+                <property name="focusable">1</property>
+                <property name="halign">end</property>
+                <property name="label" translatable="yes">_OK</property>
+                <property name="use-underline">1</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+  <object class="GtkWindow" id="prices_window">
+    <property name="child">
+      <object class="GtkGrid">
+      <property name="margin-bottom">6</property>
+      <property name="margin-end">6</property>
+      <property name="margin-start">6</property>
+      <property name="margin-top">6</property>
+        <child>
+          <object class="GtkBox" id="vbox11">
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkScrolledWindow" id="price_list_window">
+                <property name="focusable">1</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
+              </object>
+            </child>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="margin-bottom">6</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkBox" id="vbuttonbox1">
+                <property name="can-focus">False</property>
+                <property name="margin-bottom">6</property>
+                <property name="margin-end">6</property>
+                <property name="margin-start">6</property>
+                <property name="margin-top">6</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">12</property>
+                <property name="vexpand">1</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkButton" id="add_button">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">_Add</property>
+                    <property name="tooltip-text" translatable="yes">Add a new price.</property>
+                    <property name="use-underline">1</property>
+                    <signal name="clicked" handler="gnc_prices_dialog_add_clicked"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="remove_button">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">_Remove</property>
+                    <property name="sensitive">0</property>
+                    <property name="tooltip-text" translatable="yes">Remove the current price.</property>
+                    <property name="use-underline">1</property>
+                    <signal name="clicked" handler="gnc_prices_dialog_remove_clicked"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="edit_button">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">_Edit</property>
+                    <property name="sensitive">0</property>
+                    <property name="tooltip-text" translatable="yes">Edit the current price.</property>
+                    <property name="use-underline">1</property>
+                    <signal name="clicked" handler="gnc_prices_dialog_edit_clicked"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="remove_old_button">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">Remove _Old</property>
+                    <property name="tooltip-text" translatable="yes">Remove prices older than a user-entered date.</property>
+                    <property name="use-underline">1</property>
+                    <signal name="clicked" handler="gnc_prices_dialog_remove_old_clicked"/>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="get_quotes_button">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">_Get Quotes</property>
+                    <property name="tooltip-text" translatable="yes">Get new online quotes for stock accounts.</property>
+                    <property name="use-underline">1</property>
+                    <signal name="clicked" handler="gnc_prices_dialog_get_quotes_clicked"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkBox" id="vbuttonbox2">
+                <property name="can-focus">False</property>
+                <property name="margin-bottom">6</property>
+                <property name="margin-end">6</property>
+                <property name="margin-start">6</property>
+                <property name="margin-top">6</property>
+                <property name="orientation">vertical</property>
+                <property name="spacing">6</property>
+                <property name="valign">end</property>
+                <property name="vexpand">1</property>
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkButton" id="close_button">
+                    <property name="focusable">1</property>
+                    <property name="label" translatable="yes">_Close</property>
+                    <property name="use-underline">1</property>
+                    <property name="valign">start</property>
+                    <signal name="clicked" handler="gnc_prices_dialog_close_cb"/>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <layout>
+              <property name="column">1</property>
+              <property name="row">0</property>
+              <property name="row-span">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox">
+            <property name="can-focus">False</property>
+            <property name="valign">end</property>
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkButton" id="help_button">
+                <property name="focusable">1</property>
+                <property name="label" translatable="yes">_Help</property>
+                <property name="margin-bottom">9</property>
+                <property name="use-underline">1</property>
+                <signal name="clicked" handler="gnc_prices_dialog_help_cb"/>
+              </object>
+            </child>
+            <layout>
+              <property name="column">0</property>
+              <property name="row">1</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </property>
+    <property name="default-height">400</property>
+    <property name="default-width">800</property>
+    <property name="title" translatable="yes">Price Database</property>
+  </object>
+</interface>

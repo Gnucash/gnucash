@@ -370,7 +370,7 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
     {
         const char *description;
 
-        description = gtk_entry_get_text (GTK_ENTRY (info->description_entry));
+        description = gnc_entry_get_text (GTK_ENTRY (info->description_entry));
         xaccTransSetDescription (trans, description);
     }
 
@@ -423,7 +423,7 @@ gnc_stock_split_assistant_finish (GtkAssistant *assistant,
     {
         const char *memo;
 
-        memo = gtk_entry_get_text (GTK_ENTRY (info->memo_entry));
+        memo = gnc_entry_get_text (GTK_ENTRY (info->memo_entry));
 
         /* asset split */
         account = gnc_tree_view_account_get_selected_account (GNC_TREE_VIEW_ACCOUNT(info->asset_tree));
@@ -537,6 +537,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
     GtkWidget *window;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(info));
     gnc_builder_add_from_file  (builder , "assistant-stock-split.glade", "stock_split_assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "stock_split_assistant"));
     info->window = window;
@@ -615,7 +616,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
 
         date = gnc_date_edit_new (gnc_time (NULL), FALSE, FALSE);
         gtk_grid_attach (GTK_GRID(table), date, 1, 0, 1, 1);
-        gtk_widget_show (date);
+        gtk_widget_set_visible (GTK_WIDGET(date), TRUE);
         info->date_edit = date;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "date_label"));
@@ -626,7 +627,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         gtk_grid_attach (GTK_GRID(table), amount, 1, 1, 1, 1);
-        gtk_widget_show (amount);
+        gtk_widget_set_visible (GTK_WIDGET(amount), TRUE);
         info->distribution_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "distribution_label"));
@@ -639,7 +640,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
         gtk_grid_attach (GTK_GRID(table), amount, 1, 5, 1, 1);
-        gtk_widget_show (amount);
+        gtk_widget_set_visible (GTK_WIDGET(amount), TRUE);
         info->price_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "price_label"));
@@ -647,7 +648,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
 
         info->price_currency_edit = gnc_currency_edit_new();
         gnc_currency_edit_set_currency (GNC_CURRENCY_EDIT(info->price_currency_edit), gnc_default_currency());
-        gtk_widget_show (info->price_currency_edit);
+        gtk_widget_set_visible (GTK_WIDGET(info->price_currency_edit), TRUE);
         gtk_grid_attach (GTK_GRID(table), info->price_currency_edit, 1, 6, 1, 1);
         g_signal_connect (info->price_currency_edit, "changed",
                           G_CALLBACK (gnc_stock_split_details_valid_cb), info);
@@ -667,7 +668,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         g_signal_connect (amount, "changed",
                           G_CALLBACK (gnc_stock_split_cash_valid_cb), info);
         gnc_amount_edit_set_evaluate_on_enter (GNC_AMOUNT_EDIT (amount), TRUE);
-        gtk_box_pack_start (GTK_BOX (box), amount, TRUE, TRUE, 0);
+        gtk_box_append (GTK_BOX(box), GTK_WIDGET(amount));
         info->cash_edit = amount;
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "cash_label"));
@@ -683,7 +684,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                                           NULL, /* user data */
                                           NULL  /* destroy callback */);
 
-        gtk_widget_show (tree);
+        gtk_widget_set_visible (GTK_WIDGET(tree), TRUE);
 
         gtk_tree_view_expand_all (GTK_TREE_VIEW(tree));
         selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
@@ -695,7 +696,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
 
         scroll = GTK_WIDGET(gtk_builder_get_object(builder, "income_scroll"));
-        gtk_container_add (GTK_CONTAINER (scroll), tree);
+        gtk_box_prepend (GTK_BOX(scroll), GTK_WIDGET(tree));
 
         /* asset tree */
         tree = GTK_WIDGET(gnc_tree_view_account_new (FALSE));
@@ -705,13 +706,13 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
                                           NULL /* user data */,
                                           NULL /* destroy callback */);
 
-        gtk_widget_show (tree);
+        gtk_widget_set_visible (GTK_WIDGET(tree), TRUE);
 
         label = GTK_WIDGET(gtk_builder_get_object(builder, "asset_label"));
         gtk_label_set_mnemonic_widget (GTK_LABEL(label), tree);
 
         scroll = GTK_WIDGET(gtk_builder_get_object(builder, "asset_scroll"));
-        gtk_container_add (GTK_CONTAINER (scroll), tree);
+        gtk_box_prepend (GTK_BOX(scroll), GTK_WIDGET(tree));
 
         gtk_tree_view_expand_all (GTK_TREE_VIEW(tree));
         selection = gtk_tree_view_get_selection (GTK_TREE_VIEW(tree));
@@ -723,7 +724,7 @@ gnc_stock_split_assistant_create (StockSplitInfo *info)
     g_signal_connect (G_OBJECT(window), "destroy",
                       G_CALLBACK (gnc_stock_split_assistant_window_destroy_cb), info);
 
-    gtk_builder_connect_signals(builder, info);
+//FIXME gtk4    gtk_builder_connect_signals(builder, info);
     g_object_unref(G_OBJECT(builder));
     return window;
 
@@ -751,7 +752,7 @@ close_handler (gpointer user_data)
 {
     StockSplitInfo *info = user_data;
 
-    gtk_widget_destroy (info->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(info->window));
 }
 
 /********************************************************************\
@@ -790,7 +791,7 @@ gnc_stock_split_dialog (GtkWidget *parent, Account * initial)
     }
 
     gtk_window_set_transient_for (GTK_WINDOW (info->window), GTK_WINDOW(parent));
-    gtk_widget_show_all (info->window);
+//FIXME gtk4    gtk_widget_show_all (info->window);
 
     gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
 }

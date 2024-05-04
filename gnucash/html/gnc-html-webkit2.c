@@ -129,16 +129,16 @@ gnc_html_webkit_webview_new (void)
      const char *default_font_family = NULL;
      GtkStyleContext *style = gtk_widget_get_style_context (view);
      GValue val = G_VALUE_INIT;
-     GtkStateFlags state = gtk_style_context_get_state (style);
-     gtk_style_context_get_property (style, GTK_STYLE_PROPERTY_FONT,
-                     state, &val);
+//FIXME gtk4     GtkStateFlags state = gtk_style_context_get_state (style);
+//FIXME gtk4      gtk_style_context_get_property (style, GTK_STYLE_PROPERTY_FONT,
+//                     state, &val);
 
-     if (G_VALUE_HOLDS_BOXED (&val))
-     {
-      const PangoFontDescription *font =
-           (const PangoFontDescription*)g_value_get_boxed (&val);
-      default_font_family = pango_font_description_get_family (font);
-     }
+//     if (G_VALUE_HOLDS_BOXED (&val))
+//     {
+//      const PangoFontDescription *font =
+//           (const PangoFontDescription*)g_value_get_boxed (&val);
+//      default_font_family = pango_font_description_get_family (font);
+//     }
 /* Set default webkit settings */
      webkit_settings = webkit_web_view_get_settings (WEBKIT_WEB_VIEW (view));
      g_object_set (G_OBJECT(webkit_settings),
@@ -181,9 +181,8 @@ gnc_html_webkit_init( GncHtmlWebkit* self )
                  GNC_PREF_RPT_DFLT_ZOOM);
      webkit_web_view_set_zoom_level (priv->web_view, zoom);
 
-
-     gtk_container_add( GTK_CONTAINER(priv->base.container),
-                        GTK_WIDGET(priv->web_view) );
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(priv->base.container),
+                                   GTK_WIDGET(priv->web_view));
 
      g_object_ref_sink( priv->base.container );
 
@@ -241,8 +240,7 @@ gnc_html_webkit_dispose( GObject* obj )
 
      if ( priv->web_view != NULL )
      {
-          gtk_container_remove (GTK_CONTAINER(priv->base.container),
-                                GTK_WIDGET(priv->web_view));
+          gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(priv->base.container), NULL);
 
           priv->web_view = NULL;
      }
@@ -539,10 +537,10 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
 
                if ( label )
                {
-                    while ( gtk_events_pending() )
-                    {
-                         gtk_main_iteration();
-                    }
+//FIXME gtk4                    while ( gtk_events_pending() )
+//                    {
+//                         gtk_main_iteration();
+//                    }
                     /* No action required: Webkit jumps to the anchor on its own. */
                }
                return TRUE;
@@ -677,14 +675,15 @@ webkit_notification_cb (WebKitWebView* web_view, WebKitNotification *note,
      g_return_val_if_fail (self != NULL, FALSE);
      g_return_val_if_fail (note != NULL, FALSE);
 
-     top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (web_view)));
+     top = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (web_view)));
      dialog = gtk_message_dialog_new (top, GTK_DIALOG_MODAL,
                                       GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
                                       "%s\n%s",
                                       webkit_notification_get_title (note),
                                       webkit_notification_get_body (note));
-     gtk_dialog_run (GTK_DIALOG (dialog));
-     gtk_widget_destroy (dialog);
+//FIXME gtk4     gtk_dialog_run (GTK_DIALOG (dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+//FIXME gtk4     gtk_window_destroy (GTK_WINDOW(dialog));
      return TRUE;
 }
 
@@ -1138,7 +1137,7 @@ impl_webkit_print (GncHtml* self,const gchar* jobname)
                     export_filename);
      webkit_print_operation_set_print_settings(op, print_settings);
      // Open a print dialog
-     top = GTK_WINDOW (gtk_widget_get_toplevel (GTK_WIDGET (priv->web_view)));
+     top = GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (priv->web_view)));
      print_response = webkit_print_operation_run_dialog (op, top);
      if (print_response == WEBKIT_PRINT_OPERATION_RESPONSE_PRINT)
      {

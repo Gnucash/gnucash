@@ -262,26 +262,29 @@ unblock_list_signals (CompletionCell* cell)
                                        0, 0, NULL, NULL, cell);
 }
 
-static void
-key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer user_data)
+static gboolean
+key_press_item_cb (GtkEventControllerKey *key, guint keyval,
+                   guint keycode, GdkModifierType state,
+                   gpointer user_data)
 {
     CompletionCell* cell = user_data;
     PopBox* box = cell->cell.gui_private;
+    gboolean ret_val = FALSE;
 
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Escape:
         block_list_signals (cell); // Prevent recursion, unselect all
         gnc_item_list_select (box->item_list, NULL);
         unblock_list_signals (cell);
         hide_popup (box);
+        ret_val = TRUE;
         break;
 
     default:
-        gtk_widget_event (GTK_WIDGET (box->sheet),
-                          (GdkEvent*) event);
         break;
     }
+    return ret_val;
 }
 
 static void
@@ -316,7 +319,10 @@ completion_connect_signals (CompletionCell* cell)
     g_signal_connect (G_OBJECT(box->item_list), "activate_item",
                       G_CALLBACK(activate_item_cb), cell);
 
-    g_signal_connect (G_OBJECT(box->item_list), "key_press_event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(box->item_list), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
                       G_CALLBACK(key_press_item_cb), cell);
 
     box->signals_connected = TRUE;
@@ -780,17 +786,20 @@ gnc_completion_cell_direct_update (BasicCell* bcell,
 {
     CompletionCell* cell = (CompletionCell*) bcell;
     PopBox* box = cell->cell.gui_private;
-    GdkEventKey* event = gui_data;
+    GdkEvent* event = (GdkEvent*)gui_data; //FIXME gtk4
 
-    if (event->type != GDK_KEY_PRESS)
+    if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return FALSE;
 
-    switch (event->keyval)
+    guint keyval = gdk_key_event_get_keyval (event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers (event);
+
+    switch (keyval)
     {
     case GDK_KEY_Tab:
     case GDK_KEY_ISO_Left_Tab:
         {
-            if (event->state & GDK_CONTROL_MASK)
+            if (state & GDK_CONTROL_MASK) // only one description in register
             {
                 char* hash_string = get_entry_from_hash_if_size_is_one (cell);
 
@@ -858,7 +867,7 @@ gnc_completion_cell_gui_realize (BasicCell* bcell, gpointer data)
     set_sort_column_enabled (box, FALSE);
     unblock_list_signals (cell);
 
-    gtk_widget_show_all (GTK_WIDGET(box->item_list));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(box->item_list));
     g_object_ref_sink (box->item_list);
 
     /* to mark cell as realized, remove the realize method */

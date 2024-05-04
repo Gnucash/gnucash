@@ -112,15 +112,16 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
 
     if (g_variant_is_of_type (geometry, (const GVariantType *) "(iiii)") )
     {
-        GdkWindow *win = gtk_widget_get_window (GTK_WIDGET(parent));
-        GdkRectangle monitor_size;
-        GdkDisplay *display = gdk_window_get_display (win);
-        GdkMonitor *mon;
+//FIXME gtk4        GdkWindow *win = gtk_widget_get_window (GTK_WIDGET(parent));
+//        GdkRectangle monitor_size;
+//        GdkDisplay *display = gdk_window_get_display (win);
+//        GdkMonitor *mon;
 
         g_variant_get (geometry, "(iiii)",
                        &wpos[0],  &wpos[1],
                        &wsize[0], &wsize[1]);
-
+//FIXME gtk4
+#ifdef skip
         mon = gdk_display_get_monitor_at_point (display, wpos[0], wpos[1]);
         gdk_monitor_get_geometry (mon, &monitor_size);
 
@@ -158,8 +159,8 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
             {
                 gint parent_wpos[2], parent_wsize[2], window_wsize[2];
                 gtk_window_get_position (GTK_WINDOW(parent), &parent_wpos[0], &parent_wpos[1]);
-                gtk_window_get_size (GTK_WINDOW(parent), &parent_wsize[0], &parent_wsize[1]);
-                gtk_window_get_size (GTK_WINDOW(window), &window_wsize[0], &window_wsize[1]);
+                gtk_window_get_default_size (GTK_WINDOW(parent), &parent_wsize[0], &parent_wsize[1]);
+                gtk_window_get_default_size (GTK_WINDOW(window), &window_wsize[0], &window_wsize[1]);
 
                 DEBUG("parent window - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d - window size is %dx%d",
                       parent_wpos[0],  parent_wpos[1], parent_wsize[0], parent_wsize[1],
@@ -173,16 +174,17 @@ gnc_restore_window_size(const char *group, GtkWindow *window, GtkWindow *parent)
                                              parent_wpos[1] + (parent_wsize[1] - window_wsize[1])/2);
             }
         }
-
+#endif
         /* Don't attempt to restore invalid sizes */
         if ((wsize[0] > 0) && (wsize[1] > 0))
         {
-            wsize[0] = MIN(wsize[0], monitor_size.width - 10);
-            wsize[1] = MIN(wsize[1], monitor_size.height - 10);
+//FIXME gtk4            wsize[0] = MIN(wsize[0], monitor_size.width - 10);
+//            wsize[1] = MIN(wsize[1], monitor_size.height - 10);
 
-            gtk_window_resize(window, wsize[0], wsize[1]);
+            gtk_window_set_default_size (GTK_WINDOW(window), wsize[0], wsize[1]);
         }
     }
+
     g_variant_unref (geometry);
     LEAVE("");
 }
@@ -212,8 +214,12 @@ gnc_save_window_size(const char *group, GtkWindow *window)
     if (!gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
         return;
 
-    gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
-    gtk_window_get_size(GTK_WINDOW(window), &wsize[0], &wsize[1]);
+//FIXME gtk4    gtk_window_get_position (GTK_WINDOW(window), &wpos[0], &wpos[1]);
+// not supported
+wpos[0] = -1;
+wpos[1] = -1;
+
+    gtk_window_get_default_size (GTK_WINDOW(window), &wsize[0], &wsize[1]);
 
     DEBUG("save geometry - wpos[0]: %d, wpos[1]: %d, wsize[0]: %d, wsize[1]: %d",
                   wpos[0],  wpos[1], wsize[0], wsize[1]);
@@ -222,6 +228,7 @@ gnc_save_window_size(const char *group, GtkWindow *window)
                               wsize[0], wsize[1]);
     gnc_prefs_set_value (group, GNC_PREF_LAST_GEOMETRY, geometry);
     /* Don't unref geometry here, it is consumed by gnc_prefs_set_value */
+
     LEAVE("");
 }
 
@@ -236,7 +243,7 @@ gnc_save_window_size(const char *group, GtkWindow *window)
 void
 gnc_window_adjust_for_screen(GtkWindow * window)
 {
-    GdkWindow *win;
+//FIXME gtk4    GdkWindow *win;
     GdkDisplay *display;
     GdkMonitor *mon;
     GdkRectangle monitor_size;
@@ -250,6 +257,10 @@ gnc_window_adjust_for_screen(GtkWindow * window)
         return;
 
     g_return_if_fail(GTK_IS_WINDOW(window));
+
+//FIXME gtk4
+#ifdef skip
+
     if (gtk_widget_get_window (GTK_WIDGET(window)) == NULL)
         return;
 
@@ -257,7 +268,7 @@ gnc_window_adjust_for_screen(GtkWindow * window)
     display = gdk_window_get_display (win);
 
     gtk_window_get_position(GTK_WINDOW(window), &wpos[0], &wpos[1]);
-    gtk_window_get_size(GTK_WINDOW(window), &width, &height);
+    gtk_window_get_default_size(GTK_WINDOW(window), &width, &height);
 
     mon = gdk_display_get_monitor_at_point (display, wpos[0], wpos[1]);
     gdk_monitor_get_geometry (mon, &monitor_size);
@@ -292,8 +303,9 @@ gnc_window_adjust_for_screen(GtkWindow * window)
 
     DEBUG("resize window to width %d, height %d", width, height);
 
-    gtk_window_resize(GTK_WINDOW(window), width, height);
+    gtk_window_set_default_size (GTK_WINDOW(window), width, height);
     gtk_widget_queue_resize(GTK_WIDGET(window));
+#endif
     LEAVE("");
 }
 
@@ -386,7 +398,7 @@ gnc_draw_arrow_cb (GtkWidget *widget, cairo_t *cr, gpointer direction)
     gint size;
 
     gtk_render_background (context, cr, 0, 0, width, height);
-    gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
+//FIXME gtk4    gtk_style_context_add_class (context, GTK_STYLE_CLASS_ARROW);
 
     size = MIN(width / 2, height / 2);
 
@@ -442,8 +454,7 @@ gnc_gdate_in_valid_range (GDate *test_date, gboolean warn)
                                "%s", dialog_title);
         gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG(dialog),
                              "%s", dialog_msg);
-        gtk_dialog_run (GTK_DIALOG(dialog));
-        gtk_widget_destroy (dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
     }
     g_date_free (max_date);
     g_date_free (min_date);
@@ -452,7 +463,7 @@ gnc_gdate_in_valid_range (GDate *test_date, gboolean warn)
 
 
 gboolean
-gnc_handle_date_accelerator (GdkEventKey *event,
+gnc_handle_date_accelerator (GdkEvent *event,
                              struct tm *tm,
                              const char *date_str)
 {
@@ -462,7 +473,7 @@ gnc_handle_date_accelerator (GdkEventKey *event,
     g_return_val_if_fail (tm != NULL, FALSE);
     g_return_val_if_fail (date_str != NULL, FALSE);
 
-    if (event->type != GDK_KEY_PRESS)
+    if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return FALSE;
 
     if ((tm->tm_mday <= 0) || (tm->tm_mon == -1) || (tm->tm_year == -1))
@@ -477,21 +488,24 @@ gnc_handle_date_accelerator (GdkEventKey *event,
                     tm->tm_mon + 1,
                     tm->tm_year + 1900);
 
+    guint keyval = gdk_key_event_get_keyval (event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers (event);
+
     /*
      * Check those keys where the code does different things depending
      * upon the modifiers.
      */
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_KP_Add:
     case GDK_KEY_plus:
     case GDK_KEY_equal:
     case GDK_KEY_semicolon: // See https://bugs.gnucash.org/show_bug.cgi?id=798386
-         if (event->state & GDK_SHIFT_MASK)
+         if (state & GDK_SHIFT_MASK)
             g_date_add_days (&gdate, 7);
-        else if (event->state & GDK_MOD1_MASK)
+        else if (state & GDK_ALT_MASK)
             g_date_add_months (&gdate, 1);
-        else if (event->state & GDK_CONTROL_MASK)
+        else if (state & GDK_CONTROL_MASK)
             g_date_add_years (&gdate, 1);
         else
             g_date_add_days (&gdate, 1);
@@ -523,11 +537,11 @@ gnc_handle_date_accelerator (GdkEventKey *event,
                 return FALSE;
         }
 
-        if (event->state & GDK_SHIFT_MASK)
+        if (state & GDK_SHIFT_MASK)
             g_date_subtract_days (&gdate, 7);
-        else if (event->state & GDK_MOD1_MASK)
+        else if (state & GDK_ALT_MASK)
             g_date_subtract_months (&gdate, 1);
-        else if (event->state & GDK_CONTROL_MASK)
+        else if (state & GDK_CONTROL_MASK)
             g_date_subtract_years (&gdate, 1);
         else
             g_date_subtract_days (&gdate, 1);
@@ -546,11 +560,11 @@ gnc_handle_date_accelerator (GdkEventKey *event,
      * prevents weird behavior of the menu accelerators (i.e. work in
      * some widgets but not others.)
      */
-    if (event->state & (GDK_MODIFIER_INTENT_DEFAULT_MOD_MASK))
+    if (state & (GDK_CONTROL_MASK | GDK_ALT_MASK))
         return FALSE;
 
     /* Now check for the remaining keystrokes. */
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_braceright:
     case GDK_KEY_bracketright:
@@ -640,7 +654,7 @@ gnc_builder_add_from_file (GtkBuilder *builder, const char *filename, const char
 
     {
         gchar *localroot = g_strdup(root);
-        gchar *objects[] = { localroot, NULL };
+        const gchar *objects[] = { localroot, NULL };
         result = gtk_builder_add_objects_from_file (builder, fname, objects, &error);
         if (!result)
         {
@@ -709,58 +723,62 @@ gnc_gtk_dialog_add_button (GtkWidget *dialog, const gchar *label, const gchar *i
 {
     GtkWidget *button;
 
-    button = gtk_button_new_with_mnemonic(label);
-    if (icon_name)
-    {
-        GtkWidget *image;
+    if (label && !icon_name)
+        button = gtk_button_new_with_mnemonic (label);
 
-        image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_BUTTON);
-        gtk_button_set_image (GTK_BUTTON(button), image);
-        g_object_set (button, "always-show-image", TRUE, NULL);
+    if (!label && icon_name)
+        button = gtk_button_new_from_icon_name (icon_name);
+
+    if (label && icon_name)
+    {
+        GtkWidget *hbox = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 3);
+        GtkWidget *lab = gtk_label_new_with_mnemonic (label);
+        GtkWidget *image = gtk_image_new_from_icon_name (icon_name);
+
+        gtk_image_set_icon_size (GTK_IMAGE(image), GTK_ICON_SIZE_INHERIT);
+
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(image));
+        gtk_box_append (GTK_BOX(hbox), GTK_WIDGET(lab));
+
+        button = gtk_button_new ();
+
+        gtk_button_set_child (GTK_BUTTON(button), GTK_WIDGET(hbox));
     }
-    g_object_set (button, "can-default", TRUE, NULL);
-    gtk_widget_show_all(button);
-    gtk_dialog_add_action_widget(GTK_DIALOG(dialog), button, response);
+    gtk_widget_set_visible (GTK_WIDGET(button), TRUE);
+    gtk_dialog_add_action_widget (GTK_DIALOG(dialog), button, response);
 }
 
 static void
 gnc_perm_button_cb (GtkButton *perm, gpointer user_data)
 {
-    gboolean perm_active;
+    gboolean perm_active = gtk_check_button_get_active (GTK_CHECK_BUTTON(perm));
+    gtk_widget_set_sensitive (user_data, !perm_active);
+}
 
-    perm_active = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(perm));
-    gtk_widget_set_sensitive(user_data, !perm_active);
+static void
+response_cb (GtkDialog* widget, gint response_id, gpointer user_data)
+{
+    gint *ret = (gint*)user_data;
+   *ret = response_id;
 }
 
 gint
-gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
+gnc_warning_dialog_run (GtkDialog *dialog, const gchar *pref_name)
 {
     GtkWidget *perm, *temp;
     gboolean ask = TRUE;
-    gint response;
+    gint response = 0;
 
     /* Does the user want to see this question? If not, return the
      * previous answer. */
-    response = gnc_prefs_get_int(GNC_PREFS_GROUP_WARNINGS_PERM, pref_name);
+    response = gnc_prefs_get_int (GNC_PREFS_GROUP_WARNINGS_PERM, pref_name);
     if (response != 0)
         return response;
-    response = gnc_prefs_get_int(GNC_PREFS_GROUP_WARNINGS_TEMP, pref_name);
+    response = gnc_prefs_get_int (GNC_PREFS_GROUP_WARNINGS_TEMP, pref_name);
     if (response != 0)
         return response;
 
     /* Add in the checkboxes to find out if the answer should be remembered. */
-#if 0
-    if (GTK_IS_MESSAGE_DIALOG(dialog))
-    {
-        GtkMessageType type;
-        g_object_get(dialog, "message-type", &type, (gchar*)NULL);
-        ask = (type == GTK_MESSAGE_QUESTION);
-    }
-    else
-    {
-        ask = FALSE;
-    }
-#endif
     perm = gtk_check_button_new_with_mnemonic
            (ask
             ? _("Remember and don't _ask me again.")
@@ -769,14 +787,27 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
            (ask
             ? _("Remember and don't ask me again this _session.")
             : _("Don't tell me again this _session."));
-    gtk_widget_show(perm);
-    gtk_widget_show(temp);
-    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)), perm, TRUE, TRUE, 0);
-    gtk_box_pack_start (GTK_BOX (gtk_dialog_get_content_area (dialog)), temp, TRUE, TRUE, 0);
-    g_signal_connect(perm, "clicked", G_CALLBACK(gnc_perm_button_cb), temp);
+    gtk_widget_set_visible (GTK_WIDGET(perm), TRUE);
+    gtk_widget_set_visible (GTK_WIDGET(temp), TRUE);
+    gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (dialog)), GTK_WIDGET(perm));
+    gtk_box_append (GTK_BOX(gtk_dialog_get_content_area (dialog)), GTK_WIDGET(temp));
 
-    /* OK. Present the dialog. */
-    response = gtk_dialog_run(dialog);
+    g_signal_connect (G_OBJECT(perm), "toggled",
+                      G_CALLBACK(gnc_perm_button_cb), temp);
+
+    // stop other interactions
+    gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+
+    g_signal_connect (G_OBJECT(dialog), "response",
+                      G_CALLBACK(response_cb),
+                      &response);
+
+   gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
+
+//FIXME gtk4 this may need changing
+    while (response == 0)
+        g_main_context_iteration (NULL, FALSE);
+
     if ((response == GTK_RESPONSE_NONE) || (response == GTK_RESPONSE_DELETE_EVENT))
     {
         return GTK_RESPONSE_CANCEL;
@@ -785,16 +816,49 @@ gnc_dialog_run (GtkDialog *dialog, const gchar *pref_name)
     if (response != GTK_RESPONSE_CANCEL)
     {
         /* Save the answer? */
-        if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(perm)))
+        if (gtk_check_button_get_active (GTK_CHECK_BUTTON(perm)))
         {
-            gnc_prefs_set_int(GNC_PREFS_GROUP_WARNINGS_PERM, pref_name, response);
+            gnc_prefs_set_int (GNC_PREFS_GROUP_WARNINGS_PERM, pref_name, response);
         }
-        else if (gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(temp)))
+        else if (gtk_check_button_get_active (GTK_CHECK_BUTTON(temp)))
         {
-            gnc_prefs_set_int(GNC_PREFS_GROUP_WARNINGS_TEMP, pref_name, response);
+            gnc_prefs_set_int (GNC_PREFS_GROUP_WARNINGS_TEMP, pref_name, response);
         }
     }
+    gtk_window_destroy (GTK_WINDOW(dialog));
     return response;
+}
+
+gint
+gnc_dialog_run (GtkDialog *dialog)
+{
+    gint response = 0;
+
+    // stop other interactions
+    gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
+
+    g_signal_connect (G_OBJECT(dialog), "response",
+                      G_CALLBACK(response_cb),
+                      &response);
+
+   gtk_widget_set_visible (GTK_WIDGET(dialog), TRUE);
+
+//FIXME gtk4 this may need changing
+    while (response == 0)
+        g_main_context_iteration (NULL, FALSE);
+
+    if ((response == GTK_RESPONSE_NONE) || (response == GTK_RESPONSE_DELETE_EVENT))
+    {
+        return GTK_RESPONSE_CANCEL;
+    }
+    gtk_window_destroy (GTK_WINDOW(dialog));
+    return response;
+}
+
+gboolean
+gnc_ok_to_close_window (GtkWidget *parent)
+{
+    return gnc_verify_dialog (GTK_WINDOW(parent), FALSE, "\n%s", _("Close Window ?"));
 }
 
 /* If this is a new book, this function can be used to display book options
@@ -814,7 +878,9 @@ gnc_new_book_option_display (GtkWidget *parent)
         /* close dialog and proceed unless help button selected */
         while (result == GTK_RESPONSE_HELP)
         {
-            result = gtk_dialog_run(GTK_DIALOG(window));
+//FIXME gtk4            result = gtk_dialog_run(GTK_DIALOG(window));
+gtk_window_set_modal (GTK_WINDOW(window), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
         }
         return FALSE;
     }
@@ -828,7 +894,7 @@ gnc_get_negative_color (void)
     GtkWidget *label = gtk_label_new ("Color");
     GtkStyleContext *context = gtk_widget_get_style_context (GTK_WIDGET(label));
     gtk_style_context_add_class (context, "gnc-class-negative-numbers");
-    gtk_style_context_get_color (context, GTK_STATE_FLAG_NORMAL, &color);
+    gtk_style_context_get_color (context, &color);
 
     return gdk_rgba_to_string (&color);
 }
@@ -837,11 +903,11 @@ void
 gnc_owner_window_set_title (GtkWindow *window, const char *header,
                             GtkWidget *owner_entry, GtkWidget *id_entry)
 {
-    const char *name = gtk_entry_get_text (GTK_ENTRY (owner_entry));
+    const char *name = gnc_entry_get_text (GTK_ENTRY (owner_entry));
     if (!name || *name == '\0')
         name = _("<No name>");
 
-    const char *id = gtk_entry_get_text (GTK_ENTRY (id_entry));
+    const char *id = gnc_entry_get_text (GTK_ENTRY (id_entry));
 
     char *title = (id && *id) ?
         g_strdup_printf ("%s - %s (%s)", header, name, id) :
@@ -850,4 +916,46 @@ gnc_owner_window_set_title (GtkWindow *window, const char *header,
     gtk_window_set_title (window, title);
 
     g_free (title);
+}
+
+void
+gnc_entry_set_text (GtkEntry *entry, const gchar *text)
+{
+    g_return_if_fail (GTK_IS_ENTRY(entry));
+    g_return_if_fail (text != NULL);
+    
+    GtkEntryBuffer *buffer = gtk_entry_get_buffer (entry);
+    gtk_entry_buffer_set_text (buffer, text, -1);
+}
+
+const gchar *
+gnc_entry_get_text (GtkEntry *entry)
+{
+    g_return_val_if_fail (GTK_IS_ENTRY(entry), NULL);
+
+    GtkEntryBuffer *buffer = gtk_entry_get_buffer (entry);
+
+    return gtk_entry_buffer_get_text (buffer);
+}
+
+void
+gnc_box_set_all_margins (GtkBox *box, gint margin)
+{
+    g_return_if_fail (GTK_IS_BOX(box));
+
+    gtk_widget_set_margin_start (GTK_WIDGET(box), margin);
+    gtk_widget_set_margin_end (GTK_WIDGET(box), margin);
+    gtk_widget_set_margin_top (GTK_WIDGET(box), margin);
+    gtk_widget_set_margin_bottom (GTK_WIDGET(box), margin);
+}
+
+void
+gnc_builder_set_current_object (GtkBuilder *builder, gpointer user_data)
+{
+    g_return_if_fail (GTK_IS_BUILDER(builder));
+
+    GObject *user_data_object = g_object_new (G_TYPE_OBJECT, NULL);
+    g_object_set_data (user_data_object, "user-data", (gpointer)user_data);
+
+    gtk_builder_set_current_object (builder, G_OBJECT(user_data_object));
 }

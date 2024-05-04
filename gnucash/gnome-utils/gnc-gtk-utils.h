@@ -55,17 +55,15 @@ void gnc_cbwe_require_list_item (GtkComboBox *cbwe);
 
 gboolean gnc_is_dark_theme (GdkRGBA *fg_color);
 void gnc_style_context_get_background_color (GtkStyleContext *context,
-                                             GtkStateFlags    state,
                                              GdkRGBA         *color);
 void gnc_style_context_get_border_color (GtkStyleContext *context,
-                                         GtkStateFlags    state,
                                          GdkRGBA         *color);
 
 GtkWidget *gnc_get_dialog_widget_from_id (GtkDialog *dialog, const gchar *id);
 
 void gnc_disable_all_actions_in_group (GSimpleActionGroup *action_group);
 
-void gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GMenuModel *model, GtkAccelGroup *accel_group);
+void gnc_add_accelerator_keys_for_menu (GtkWidget *menu, GMenuModel *model, GtkEventController *shortcut_controller);
 
 GtkWidget *gnc_find_menu_item_by_action_name (GtkWidget *menu, const gchar *action_name);
 GtkWidget *gnc_find_menu_item_by_action_label (GtkWidget *menu, const gchar *action_label);

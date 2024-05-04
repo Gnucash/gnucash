@@ -106,9 +106,12 @@ static GncPluginPage *gnc_plugin_page_owner_tree_recreate_page (GtkWidget *windo
 static void set_menu_and_toolbar_qualifier (GncPluginPage *plugin_page);
 
 /* Callbacks */
-static gboolean gnc_plugin_page_owner_tree_button_press_cb (GtkWidget *widget,
-                                                            GdkEventButton *event,
-                                                            GncPluginPage *page);
+static gboolean gnc_plugin_page_owner_tree_button_press_cb (GtkGestureClick *gesture,
+                                                            int n_press,
+                                                            double x,
+                                                            double y,
+                                                            gpointer user_data);
+
 static void gnc_plugin_page_owner_tree_double_click_cb (GtkTreeView *treeview,
                                                         GtkTreePath *path,
                                                         GtkTreeViewColumn  *col,
@@ -515,17 +518,16 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
 
     priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
-    gtk_widget_show (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), true);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-owner-page");
 
-    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    scrolled_window = gtk_scrolled_window_new ();
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_widget_show (scrolled_window);
-    gtk_box_pack_start (GTK_BOX (priv->widget), scrolled_window,
-                        TRUE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(scrolled_window));
 
     tree_view = gnc_tree_view_owner_new(priv->owner_type);
 
@@ -587,15 +589,21 @@ gnc_plugin_page_owner_tree_create_widget (GncPluginPage *plugin_page)
     selection = gtk_tree_view_get_selection(tree_view);
     g_signal_connect (G_OBJECT (selection), "changed",
                       G_CALLBACK (gnc_plugin_page_owner_tree_selection_changed_cb), page);
-    g_signal_connect (G_OBJECT (tree_view), "button-press-event",
-                      G_CALLBACK (gnc_plugin_page_owner_tree_button_press_cb), page);
+
+    GtkGesture *event_gesture = gtk_gesture_click_new ();
+    gtk_widget_add_controller (GTK_WIDGET(tree_view), GTK_EVENT_CONTROLLER(event_gesture));
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), 3);
+    g_signal_connect (G_OBJECT(event_gesture), "pressed",
+                      G_CALLBACK(gnc_plugin_page_owner_tree_button_press_cb), page);
+
     g_signal_connect (G_OBJECT (tree_view), "row-activated",
                       G_CALLBACK (gnc_plugin_page_owner_tree_double_click_cb), page);
 
     gtk_tree_view_set_headers_visible(tree_view, TRUE);
     gnc_plugin_page_owner_tree_selection_changed_cb (NULL, page);
-    gtk_widget_show (GTK_WIDGET (tree_view));
-    gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
+    gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(tree_view));
 
     priv->fd.tree_view = GNC_TREE_VIEW_OWNER(priv->tree_view);
     gnc_tree_view_owner_set_filter (
@@ -772,21 +780,42 @@ static void gnc_ui_owner_edit (GtkWindow *parent, GncOwner *owner)
  *  Button presses on all other pages are caught by the signal
  *  registered in gnc-main-window.c. */
 static gboolean
-gnc_plugin_page_owner_tree_button_press_cb (GtkWidget *widget,
-                                            GdkEventButton *event,
-                                            GncPluginPage *page)
+gnc_plugin_page_owner_tree_button_press_cb  (GtkGestureClick *gesture,
+                                             int n_press,
+                                             double x,
+                                             double y,
+                                             gpointer user_data)
 {
-    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+    GncPluginPage *page = (GncPluginPage*)user_data;
 
-    ENTER("widget %p, event %p, page %p", widget, event, page);
-    gnc_main_window_button_press_cb(widget, event, page);
-    LEAVE(" ");
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
+
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(gesture)); //tree view
+
+    ENTER("widget %p, x %f, y %f, page %p",  widget, x, y, page);
+
+    GtkRoot *root = gtk_widget_get_root (GTK_WIDGET(widget));
+    graphene_matrix_t matrix;
+    float x_translation = 0.0;
+    float y_translation = 0.0;
+
+    if (gtk_widget_compute_transform (GTK_WIDGET(widget), GTK_WIDGET(root), &matrix))
+    {
+        x_translation = graphene_matrix_get_x_translation (&matrix);
+        y_translation = graphene_matrix_get_y_translation (&matrix);
+    }
+    gnc_main_window_button_press_cb (gesture, n_press,
+                                     x + x_translation,
+                                     y + y_translation,
+                                     page);
+
+    LEAVE("x_translation %f, y_translation %f", x_translation, y_translation);
 
     /* Always return FALSE.  This will let the tree view callback run as
      * well which will select the item under the cursor.  By the time
      * the user sees the menu both callbacks will have run and the menu
      * actions will operate on the just-selected owner. */
-    return FALSE;
+    return false;
 }
 
 static void
@@ -1062,8 +1091,7 @@ gnc_plugin_page_owner_tree_cmd_delete_owner (GSimpleAction *simple,
                                _("_Delete"), GTK_RESPONSE_ACCEPT,
                                (gchar *)NULL);
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        response = gnc_dialog_run (GTK_DIALOG(dialog));
 
         if (GTK_RESPONSE_ACCEPT == response)
         {

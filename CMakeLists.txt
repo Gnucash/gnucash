@@ -171,7 +171,8 @@ if (WIN32)
   #
   set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "")
   set(CMAKE_FRAMEWORK_PATH_TMP ${CMAKE_PREFIX_PATH})
-  set(DEV_SUBDIRS aqbanking gnome guile gwenhywfar libgsf libofx libsoup libxslt webkit)
+#  set(DEV_SUBDIRS aqbanking gnome guile gwenhywfar libgsf libofx libsoup libxslt webkit)
+  set(DEV_SUBDIRS aqbanking gnome guile gwenhywfar libgsf libofx libsoup libxslt)
   foreach(subdir ${DEV_SUBDIRS})
     list(APPEND CMAKE_FRAMEWORK_PATH_TMP ${CMAKE_PREFIX_PATH}/${subdir})
   endforeach()
@@ -199,7 +200,7 @@ if (NOT PKG_CONFIG_FOUND)
 
 # glib et al.
 set(GLIB_MIN_VERSION 2.56.1)
-set(GTK_MIN_VERSION 3.22.30)
+set(GTK_MIN_VERSION 4.8.3)
 
 pkg_check_modules (GLIB2 REQUIRED IMPORTED_TARGET glib-2.0>=${GLIB_MIN_VERSION})
 pkg_check_modules (GIO REQUIRED gio-2.0)
@@ -210,18 +211,18 @@ pkg_check_modules (GTHREAD REQUIRED gthread-2.0)
 pkg_check_modules (LIBXML2 REQUIRED libxml-2.0>=2.9.4)
 pkg_check_modules (LIBXSLT REQUIRED libxslt)
 if (WITH_GNUCASH)
-  if (WIN32)
-    pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkitgtk-3.0)
-    set(WEBKIT1 1 CACHE INTERNAL "WebKitGtk")
-  else()
-    pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0>=2.14.0)
-    if (NOT WEBKIT_FOUND)
-      pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkit2gtk-4.1)
-    endif()
-    set(WEBKIT2 1 CACHE INTERNAL "WebKit2Gtk4")
-  endif()
+#  if (WIN32)
+#    pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkitgtk-3.0)
+#    set(WEBKIT1 1 CACHE INTERNAL "WebKitGtk")
+#  else()
+#    pkg_check_modules (WEBKIT IMPORTED_TARGET webkit2gtk-4.0>=2.14.0)
+#    if (NOT WEBKIT_FOUND)
+#      pkg_check_modules (WEBKIT REQUIRED IMPORTED_TARGET webkit2gtk-4.1)
+#    endif()
+#    set(WEBKIT2 1 CACHE INTERNAL "WebKit2Gtk4")
+#  endif()
 
-  pkg_check_modules (GTK3 REQUIRED IMPORTED_TARGET gtk+-3.0>=${GTK_MIN_VERSION})
+  pkg_check_modules (GTK4 REQUIRED IMPORTED_TARGET gtk4>=${GTK_MIN_VERSION})
 endif()
 
 pkg_check_modules (ZLIB REQUIRED zlib)
@@ -390,7 +391,7 @@ if (WITH_AQBANKING)
   set(CMAKE_REQUIRED_INCLUDES)
   set(CMAKE_REQUIRED_LIBRARIES)
   if(WITH_GNUCASH)
-    pkg_check_modules (GWEN_GTK3 REQUIRED gwengui-gtk3)
+    pkg_check_modules (GWEN_GTK4 REQUIRED gwengui-gtk4)
   endif()
 endif()
 
@@ -604,12 +605,12 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
 if (UNIX)
-  set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
-  set( CMAKE_CXX_FLAGS "-Werror -Wall -Wmissing-declarations ${CMAKE_CXX_FLAGS}")
+  set( CMAKE_C_FLAGS "-Werror  -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED ${CMAKE_C_FLAGS}")
+  set( CMAKE_CXX_FLAGS "-Werror -DGDK_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED ${CMAKE_CXX_FLAGS}")
   set( CMAKE_C_FLAGS_RELEASE "-O3 -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 ${CMAKE_C_FLAGS}")
 endif()
 if (MINGW)
-  set( CMAKE_C_FLAGS "-Werror -Wall -Wmissing-prototypes -Wmissing-declarations ${CMAKE_C_FLAGS}")
+  set( CMAKE_C_FLAGS "-Werror ${CMAKE_C_FLAGS}")
   set( CMAKE_CXX_FLAGS "-DWINVER=0x0500 -D_EMULATE_GLIBC=0 ${CMAKE_CXX_FLAGS}") # Workaround for bug in gtest on mingw, see https://github.com/google/googletest/issues/893 and https://github.com/google/googletest/issues/920
 endif()
 
@@ -728,7 +729,6 @@ set(gnucash_DOCS
     ChangeLog.2023
     DOCUMENTERS
     HACKING
-    LICENSE
     NEWS
     README.dependencies
 )
@@ -833,7 +833,7 @@ set_property(TARGET PkgConfig::GLIB2 PROPERTY INTERFACE_COMPILE_DEFINITIONS
 if (WITH_GNUCASH)
 string(REGEX MATCH "^([0-9]+)\.([0-9]+)" GTK_MIN_MATCH ${GTK_MIN_VERSION})
 set(GTK_API ${CMAKE_MATCH_1}_${CMAKE_MATCH_2})
-set_property(TARGET PkgConfig::GTK3 PROPERTY INTERFACE_COMPILE_DEFINITIONS
+set_property(TARGET PkgConfig::GTK4 PROPERTY INTERFACE_COMPILE_DEFINITIONS
   GDK_VERSION_MIN_REQUIRED=GDK_VERSION_${GTK_API}
   GDK_VERSION_MAX_ALLOWED=GDK_VERSION_${GTK_API})
 endif()
@@ -983,21 +983,6 @@ if (WIN32)
   )
 endif()
 
-#Link LICENSE to COPYING so that people expecting to find it,
-#will. COPYING is normally linked by autogen.sh to the latest
-#automake-provided version.
-set (_CMD create_symlink)
-if (WIN32)
-  set(_CMD copy)
-endif()
-
-install(CODE
-" execute_process(
-      COMMAND ${CMAKE_COMMAND} -E ${_CMD} LICENSE COPYING
-      WORKING_DIRECTORY ${CMAKE_INSTALL_DOCDIR}
-  )"
-)
-
 #For windows, copy in some DLLs from Mingw
 
 if (WIN32)
@@ -1024,3 +1009,14 @@ if(UNIX)
 endif()
 
 include (CPack)
+
+message(STATUS "<<< Gentoo configuration >>>
+Build type      ${CMAKE_BUILD_TYPE}
+Install path    ${CMAKE_INSTALL_PREFIX}
+Compiler flags:
+C               ${CMAKE_C_FLAGS}
+C++             ${CMAKE_CXX_FLAGS}
+Linker flags:
+Executable      ${CMAKE_EXE_LINKER_FLAGS}
+Module          ${CMAKE_MODULE_LINKER_FLAGS}
+Shared          ${CMAKE_SHARED_LINKER_FLAGS}\n")

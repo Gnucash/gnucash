@@ -446,7 +446,7 @@ gnc_plugin_page_invoice_action_update (GncPluginPage *plugin_page,
 
         if (tool_item)
         {
-            gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(action_list[i].label));
+//FIXME gtk4            gtk_tool_button_set_label (GTK_TOOL_BUTTON(tool_item), _(action_list[i].label));
             gtk_widget_set_tooltip_text (GTK_WIDGET(tool_item), _(action_list[i].tooltip));
             g_object_set (G_OBJECT(tool_item), "has-tooltip", FALSE, NULL);
         }
@@ -656,14 +656,14 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-invoice-page");
 
-    gtk_widget_show (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), true);
 
     widget = gnc_invoice_create_page(priv->iw, page);
-    gtk_widget_show (widget);
-    gtk_box_pack_start(GTK_BOX (priv->widget), widget, TRUE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(widget), true);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(widget));
 
     plugin_page->summarybar = gnc_invoice_window_create_summary_bar(priv->iw);
-    gtk_box_pack_start(GTK_BOX (priv->widget), plugin_page->summarybar, FALSE, FALSE, 0);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(plugin_page->summarybar));
     gnc_plugin_page_invoice_summarybar_position_changed(NULL, NULL, page);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_SUMMARYBAR_POSITION_TOP,
@@ -731,7 +731,7 @@ gnc_plugin_page_invoice_destroy_widget (GncPluginPage *plugin_page)
         priv->component_manager_id = 0;
     }
 
-    gtk_widget_hide(priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), false);
     gnc_invoice_window_destroy_cb(priv->widget, priv->iw);
     priv->widget = NULL;
     LEAVE("");
@@ -834,9 +834,9 @@ gnc_plugin_page_invoice_summarybar_position_changed (gpointer prefs,
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
         position = GTK_POS_TOP;
 
-    gtk_box_reorder_child(GTK_BOX(priv->widget),
-                          plugin_page->summarybar,
-                          (position == GTK_POS_TOP ? 0 : -1) );
+//FIXME gtk4    gtk_box_reorder_child(GTK_BOX(priv->widget),
+//                          plugin_page->summarybar,
+//                          (position == GTK_POS_TOP ? 0 : -1) );
 }
 
 
@@ -1238,17 +1238,61 @@ gnc_plugin_page_invoice_cmd_reset_layout (GSimpleAction *simple,
 }
 
 static void
+update_invoice_uri_gui_destroy_cb (GtkWidget *object, gpointer user_data)
+{
+    DoclinkReturn *dlr = (DoclinkReturn*)user_data;
+
+    if (dlr->response != GTK_RESPONSE_CANCEL)
+    {
+        auto plugin_page = GNC_PLUGIN_PAGE_INVOICE(dlr->user_data);
+        GncPluginPageInvoicePrivate *priv = GNC_PLUGIN_PAGE_INVOICE_GET_PRIVATE(plugin_page);
+        GtkWindow *parent;
+        GncInvoice *invoice = gnc_invoice_window_get_invoice (priv->iw);
+        gboolean has_uri = true;
+
+        if (dlr->updated_uri && g_strcmp0 (dlr->existing_uri, dlr->updated_uri) != 0)
+        {
+            GtkWidget *doclink_button =
+                gnc_invoice_window_get_doclink_button (priv->iw);
+
+            if (g_strcmp0 (dlr->updated_uri, "") == 0)
+            {
+                has_uri = false;
+                if (doclink_button)
+                    gtk_widget_set_visible (GTK_WIDGET(doclink_button), false);
+            }
+            else
+            {
+                if (doclink_button)
+                {
+                    gchar *display_uri =
+                        gnc_doclink_get_unescaped_just_uri (dlr->updated_uri);
+                    gtk_link_button_set_uri (GTK_LINK_BUTTON(doclink_button),
+                                             display_uri);
+                    gtk_widget_set_visible (GTK_WIDGET(doclink_button), true);
+                    g_free (display_uri);
+                }
+            }
+            gncInvoiceSetDocLink (invoice, dlr->updated_uri);
+        }
+        // update the menu actions
+        update_doclink_actions (GNC_PLUGIN_PAGE(plugin_page), has_uri);
+    }
+    g_free (dlr->existing_uri);
+    g_free (dlr->updated_uri);
+    g_free (dlr);
+}
+
+static void
 gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple,
                                   GVariant *paramter,
                                   gpointer user_data)
 {
-    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE (user_data);
+    auto plugin_page = GNC_PLUGIN_PAGE_INVOICE(user_data);
     GncPluginPageInvoicePrivate *priv;
     GtkWindow *parent;
     GncInvoice *invoice;
     const gchar *uri;
-    gchar *ret_uri;
-    gboolean has_uri = FALSE;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(plugin_page));
     ENTER("(action %p, plugin_page %p)", simple, plugin_page);
@@ -1258,40 +1302,16 @@ gnc_plugin_page_invoice_cmd_link (GSimpleAction *simple,
     invoice = gnc_invoice_window_get_invoice (priv->iw);
     uri = gncInvoiceGetDocLink (invoice);
 
-    ret_uri = gnc_doclink_get_uri_dialog (parent, _("Manage Document Link"), uri);
+    DoclinkReturn *dlr = g_new0 (DoclinkReturn, 1);
+    dlr->existing_uri = g_strdup (uri);
+    dlr->updated_uri = nullptr;
+    dlr->user_data = plugin_page;
 
-    if (ret_uri)
-        has_uri = TRUE;
+    GtkWidget *win = gnc_doclink_get_uri_dialog (GTK_WINDOW(parent),
+                                                 _("Manage Document Link"), dlr);
 
-    if (ret_uri && g_strcmp0 (uri, ret_uri) != 0)
-    {
-        GtkWidget *doclink_button =
-            gnc_invoice_window_get_doclink_button (priv->iw);
-
-        if (g_strcmp0 (ret_uri, "") == 0)
-        {
-            has_uri = FALSE;
-            if (doclink_button)
-                gtk_widget_hide (GTK_WIDGET(doclink_button));
-        }
-        else
-        {
-            if (doclink_button)
-            {
-                gchar *display_uri =
-                    gnc_doclink_get_unescaped_just_uri (ret_uri);
-                gtk_link_button_set_uri (GTK_LINK_BUTTON(doclink_button),
-                                         display_uri);
-                gtk_widget_show (GTK_WIDGET(doclink_button));
-                g_free (display_uri);
-            }
-        }
-        gncInvoiceSetDocLink (invoice, ret_uri);
-    }
-    // update the menu actions
-    update_doclink_actions (GNC_PLUGIN_PAGE(plugin_page), has_uri);
-
-    g_free (ret_uri);
+    g_signal_connect (G_OBJECT(win), "destroy",
+                      G_CALLBACK(update_invoice_uri_gui_destroy_cb), dlr);
     LEAVE(" ");
 }
 

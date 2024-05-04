@@ -1034,7 +1034,7 @@ gnc_tree_view_account_new_with_root (Account *root, gboolean show_root)
     g_signal_connect (G_OBJECT(view), "query-tooltip",
                       G_CALLBACK(gnc_tree_view_tooltip_cb), NULL);
 
-    gtk_widget_show(GTK_WIDGET(view));
+    gtk_widget_set_visible (GTK_WIDGET(view), TRUE);
     LEAVE("%p", view);
     return GTK_TREE_VIEW(view);
 }
@@ -1489,8 +1489,8 @@ gnc_tree_view_account_set_selected_account (GncTreeViewAccount *view,
 
     /* give gtk+ a chance to resize the tree view first by handling pending
      * configure events */
-    while (gtk_events_pending ())
-        gtk_main_iteration ();
+//FIXME gtk4    while (gtk_events_pending ())
+//        gtk_main_iteration ();
     gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), s_path, NULL, FALSE, 0.0, 0.0);
     debug_path(LEAVE, s_path);
     gtk_tree_path_free(s_path);
@@ -2265,7 +2265,7 @@ gppat_filter_response_cb (GtkWidget *dialog,
     g_atomic_pointer_compare_and_exchange(&gptemp,
                                           (gpointer)dialog, NULL);
     fd->dialog = gptemp;
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     LEAVE("types 0x%x", fd->visible_types);
 }
 
@@ -2289,6 +2289,7 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
 
     /* Create the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(fd));
     gnc_builder_add_from_file (builder, "dialog-account.glade", "account_filter_by_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "account_filter_by_dialog"));
     fd->dialog = dialog;
@@ -2338,11 +2339,11 @@ account_filter_dialog_create(AccountFilterDialog *fd, GncPluginPage *page)
             "text", GNC_TREE_MODEL_ACCOUNT_TYPES_COL_NAME, NULL);
 
     /* Wire up the rest of the callbacks */
-    gtk_builder_connect_signals(builder, fd);
+//FIXME gtk4    gtk_builder_connect_signals(builder, fd);
     g_object_unref(G_OBJECT(builder));
 
     /* Show it */
-    gtk_widget_show_all(dialog);
+//FIXME gtk4    gtk_widget_show_all(dialog);
     LEAVE(" ");
 }
 

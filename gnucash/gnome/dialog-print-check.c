@@ -361,11 +361,11 @@ gchar *
 get_check_address( PrintCheckDialog *pcd)
 {
     gchar *address;
-    address = g_strconcat(gtk_entry_get_text(GTK_ENTRY(pcd->check_address_name)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_1)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_2)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_3)), "\n",
-                          gtk_entry_get_text(GTK_ENTRY(pcd->check_address_4)),
+    address = g_strconcat(gnc_entry_get_text(GTK_ENTRY(pcd->check_address_name)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_1)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_2)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_3)), "\n",
+                          gnc_entry_get_text(GTK_ENTRY(pcd->check_address_4)),
                           NULL);
     return address;
 }
@@ -863,8 +863,8 @@ pcd_save_custom_data(PrintCheckDialog *pcd, const gchar *title)
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                                                  _("Cannot open file %s"),
                                                  _(error->message));
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         g_error_free(error);
     }
     g_free(pathname);
@@ -880,7 +880,7 @@ gnc_check_format_title_changed (GtkEditable *editable, GtkWidget *ok_button)
     const gchar *text;
     gboolean sensitive;
 
-    text = gtk_entry_get_text(GTK_ENTRY(editable));
+    text = gnc_entry_get_text(GTK_ENTRY(editable));
     sensitive = text && *text;
     gtk_widget_set_sensitive(ok_button, sensitive);
 }
@@ -898,6 +898,7 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
     gchar *title;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(pcd));
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "format_title_dialog");
 
     /* Get a title for the new check format. */
@@ -905,18 +906,20 @@ gnc_print_check_save_button_clicked(GtkButton *unused, PrintCheckDialog *pcd)
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "format_title"));
     button = GTK_WIDGET(gtk_builder_get_object (builder, "ok_button"));
     gnc_check_format_title_changed(GTK_EDITABLE(entry), button);
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
 
     gtk_window_set_transient_for(GTK_WINDOW(dialog), GTK_WINDOW(pcd->dialog));
-    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
-    {
-        gtk_widget_destroy(dialog);
-        g_object_unref(G_OBJECT(builder));
-        return;
-    }
+//FIXME gtk4    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+//    if (gtk_dialog_run (GTK_DIALOG (dialog)) != GTK_RESPONSE_OK)
+//    {
+//        gtk_window_destroy (GTK_WINDOW(dialog));
+//        g_object_unref(G_OBJECT(builder));
+//        return;
+//    }
 
-    title = g_strdup(gtk_entry_get_text(GTK_ENTRY(entry)));
-    gtk_widget_destroy (dialog);
+    title = g_strdup(gnc_entry_get_text(GTK_ENTRY(entry)));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     g_object_unref(G_OBJECT(builder));
 
@@ -1562,8 +1565,9 @@ read_one_check_directory(PrintCheckDialog *pcd, GtkListStore *store,
                "the %s check format file '%s' match."),
              existing->group, existing->filename,
              format->group, format->filename);
-            gtk_dialog_run(GTK_DIALOG(dialog));
-            gtk_widget_destroy(dialog);
+
+             gnc_dialog_run (GTK_DIALOG(dialog));
+
             free_check_format (format);
         }
         else
@@ -1665,6 +1669,7 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     pcd->account = account;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(pcd));
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment1");
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment2");
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "adjustment3");
@@ -1694,7 +1699,7 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "liststore3");
     gnc_builder_add_from_file (builder, "dialog-print-check.glade", "print_check_dialog");
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, pcd);
 
     pcd->builder = builder;
     pcd->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "print_check_dialog"));
@@ -1768,25 +1773,25 @@ gnc_ui_print_check_dialog_create(GtkWidget *parent,
             gncOwnerCopy (gncOwnerGetEndOwner (&txn_owner), &owner);
 
             /* Got a business owner, get the address */
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), gncOwnerGetName(&owner));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_1), gncAddressGetAddr1 (gncOwnerGetAddr(&owner)));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_2), gncAddressGetAddr2 (gncOwnerGetAddr(&owner)));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_3), gncAddressGetAddr3 (gncOwnerGetAddr(&owner)));
-            gtk_entry_set_text(GTK_ENTRY(pcd->check_address_4), gncAddressGetAddr4 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_name), gncOwnerGetName(&owner));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_1), gncAddressGetAddr1 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_2), gncAddressGetAddr2 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_3), gncAddressGetAddr3 (gncOwnerGetAddr(&owner)));
+            gnc_entry_set_text(GTK_ENTRY(pcd->check_address_4), gncAddressGetAddr4 (gncOwnerGetAddr(&owner)));
         }
     }
 
     /* Use transaction description as address name if no better address has been found */
     if ( trans && (0 == gtk_entry_get_text_length (GTK_ENTRY(pcd->check_address_name))) )
-        gtk_entry_set_text(GTK_ENTRY(pcd->check_address_name), xaccTransGetDescription(trans));
+        gnc_entry_set_text(GTK_ENTRY(pcd->check_address_name), xaccTransGetDescription(trans));
 
-    gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "lower_left")));
+//FIXME gtk4    gtk_widget_destroy(GTK_WIDGET(gtk_builder_get_object (builder, "lower_left")));
 
     gnc_ui_print_restore_dialog(pcd);
     gnc_restore_window_size(GNC_PREFS_GROUP, GTK_WINDOW(pcd->dialog), GTK_WINDOW (parent));
 
     g_object_unref(G_OBJECT(builder));
-    gtk_widget_show_all(pcd->dialog);
+//FIXME gtk4    gtk_widget_show_all(pcd->dialog);
 }
 
 
@@ -1969,6 +1974,8 @@ read_image (const gchar *filename)
 static void
 draw_picture(GtkPrintContext *context, check_item_t *data)
 {
+//FIXME gtk4
+#ifdef skip
     cairo_t *cr;
     GdkPixbuf *pixbuf, *scaled_pixbuf;
     GtkImage *image;
@@ -2044,7 +2051,8 @@ draw_picture(GtkPrintContext *context, check_item_t *data)
 
     /* Clean up after ourselves */
     cairo_restore(cr);
-    gtk_widget_destroy(GTK_WIDGET(image));
+//FIXME gtk4    gtk_widget_destroy(GTK_WIDGET(image));
+#endif
 }
 
 
@@ -2661,9 +2669,9 @@ gnc_print_check_format_changed (GtkComboBox *widget,
        entry in the position combo box since gnc_print_check_position_changed
        will adjust these settings in some cases. */
     sensitive = (!separator && !format);
-    gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
-                          gnc_print_check_set_sensitive,
-                          GINT_TO_POINTER(sensitive));
+//FIXME gtk4    gtk_container_foreach(GTK_CONTAINER(pcd->custom_table),
+//                          gnc_print_check_set_sensitive,
+//                          GINT_TO_POINTER(sensitive));
 
     /* Set the active entry in the position combo box, this will trigger a
        call to gnc_print_check_position_changed */
@@ -2733,7 +2741,7 @@ gnc_ui_print_check_response_cb(GtkDialog *dialog,
         break;
     }
 
-    gtk_widget_destroy(pcd->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(pcd->dialog));
     g_free(pcd->default_font);
     g_list_free(pcd->splits);
     g_free(pcd);

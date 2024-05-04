@@ -27,6 +27,14 @@
 extern "C" {
 #endif
 
+typedef struct
+{
+    gchar   *existing_uri;
+    gchar   *updated_uri;
+    gpointer user_data;
+    int      response;
+}DoclinkReturn;
+
 /** Present the right edit dialog for the uri.
  *
  *  The function allocates memory for the uri. The calling function should
@@ -34,12 +42,11 @@ extern "C" {
  *
  *  @param parent The GtkWindow for the parent widget
  *  @param title The dialog title to be used for the dialog
- *  @param uri The old uri to be amended in the dialog
  *
  *  @return The ammeded uri, can be NULL if deletion required.
  */
-gchar * gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
-                                    const gchar *uri);
+GtkWidget* gnc_doclink_get_uri_dialog (GtkWindow *parent, const gchar *title,
+                                       DoclinkReturn *ret_uri);
 
 /** Open the doclink uri.
  *

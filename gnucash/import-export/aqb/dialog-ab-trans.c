@@ -191,29 +191,29 @@ gnc_ab_trans_dialog_fill_values(GncABTransDialog *td)
     if (gnc_ab_trans_isSEPA(td->trans_type))
     {
         AB_Transaction_SetRemoteBic(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
         AB_Transaction_SetRemoteIban(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
         AB_Transaction_SetLocalName(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->orig_name_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->orig_name_entry)));
     }
     else
     {
         AB_Transaction_SetRemoteBankCode(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)));
         AB_Transaction_SetRemoteAccountNumber(
-                    trans, gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
+                    trans, gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry)));
     }
     AB_Transaction_SetRemoteCountry(trans, "DE");
     AB_Transaction_SetRemoteName(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
 
     AB_Transaction_AddPurposeLine(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->purpose_entry)));
     AB_Transaction_AddPurposeLine(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->purpose_cont_entry)));
     AB_Transaction_AddPurposeLine(
-        trans, gtk_entry_get_text(GTK_ENTRY(td->purpose_cont2_entry)));
+        trans, gnc_entry_get_text(GTK_ENTRY(td->purpose_cont2_entry)));
     value = AB_Value_fromDouble(gnc_amount_edit_get_damount(
                                     GNC_AMOUNT_EDIT(td->amount_edit)));
     /* FIXME: Replace "EUR" by account-dependent string here. */
@@ -286,6 +286,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     td->trans_type = trans_type;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(td));
     gnc_builder_add_from_file (builder, "dialog-ab.glade", "aqbanking_transaction_dialog");
     td->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "aqbanking_transaction_dialog"));
 
@@ -328,7 +329,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
 
     /* Amount edit */
     td->amount_edit = gnc_amount_edit_new();
-    gtk_box_pack_start(GTK_BOX(amount_hbox), td->amount_edit, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(amount_hbox), GTK_WIDGET(td->amount_edit));
     gnc_amount_edit_make_mnemonic_target(GNC_AMOUNT_EDIT(td->amount_edit), amount_label);
     gnc_amount_edit_set_evaluate_on_enter(GNC_AMOUNT_EDIT(td->amount_edit),
                                           TRUE);
@@ -437,7 +438,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
         gtk_entry_set_max_length(GTK_ENTRY(td->recp_account_entry), 34);
     }
 
-    gtk_entry_set_text(GTK_ENTRY(td->orig_name_entry), ab_ownername);
+    gnc_entry_set_text(GTK_ENTRY(td->orig_name_entry), ab_ownername);
     gtk_label_set_text(GTK_LABEL(orig_bankname_label), ab_bankname);
     if (gnc_ab_trans_isSEPA(trans_type))
     {
@@ -471,7 +472,7 @@ gnc_ab_trans_dialog_new(GtkWidget *parent, GNC_AB_ACCOUNT_SPEC *ab_acc,
     gtk_tree_view_append_column(td->template_gtktreeview, column);
 
     /* Connect the Signals */
-    gtk_builder_connect_signals_full(builder, gnc_builder_connect_full_func, td);
+//FIXME gtk4    gtk_builder_connect_signals_full(builder, gnc_builder_connect_full_func, td);
 
     g_object_unref(G_OBJECT(builder));
 
@@ -696,10 +697,12 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
     }
 
     /* Show the dialog */
-    gtk_widget_show(td->dialog);
+    gtk_widget_set_visible (GTK_WIDGET(td->dialog), TRUE);
 
     /* Now run the dialog until it gets closed by a button press */
-    result = gtk_dialog_run (GTK_DIALOG (td->dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG (td->dialog));
+gtk_window_set_modal (GTK_WINDOW(td->dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
     /* Was cancel pressed or dialog closed?
      *  GNC_RESPONSE_NOW == execute now
@@ -708,7 +711,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
      *  GTK_RESPONSE_DELETE_EVENT == window destroyed */
     if (result != GNC_RESPONSE_NOW && result != GNC_RESPONSE_LATER)
     {
-        gtk_widget_destroy(td->dialog);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(td->dialog));
         td->dialog = NULL;
         return result;
     }
@@ -724,7 +727,7 @@ gnc_ab_trans_dialog_run_until_ok(GncABTransDialog *td)
 
     /* Hide the dialog */
     if (td->dialog)
-        gtk_widget_hide(td->dialog);
+        gtk_widget_set_visible (GTK_WIDGET(td->dialog), FALSE);
 
     return result;
 }
@@ -751,8 +754,8 @@ gnc_ab_trans_dialog_free(GncABTransDialog *td)
     if (!td) return;
     if (td->ab_trans)
         AB_Transaction_free(td->ab_trans);
-    if (td->dialog)
-        gtk_widget_destroy(td->dialog);
+//FIXME gtk4    if (td->dialog)
+//        gtk_window_destroy (GTK_WINDOW(td->dialog));
 
 #if (AQBANKING_VERSION_INT >= 60400)
     if (td->template_list_store)
@@ -932,11 +935,11 @@ gnc_ab_trans_dialog_templ_list_row_activated_cb(GtkTreeView *view,
     if (!new_purpose_cont) new_purpose_cont = "";
 
     /* Fill in */
-    gtk_entry_set_text(GTK_ENTRY(td->recp_name_entry), new_name);
-    gtk_entry_set_text(GTK_ENTRY(td->recp_account_entry), new_account);
-    gtk_entry_set_text(GTK_ENTRY(td->recp_bankcode_entry), new_bankcode);
-    gtk_entry_set_text(GTK_ENTRY(td->purpose_entry), new_purpose);
-    gtk_entry_set_text(GTK_ENTRY(td->purpose_cont_entry), new_purpose_cont);
+    gnc_entry_set_text(GTK_ENTRY(td->recp_name_entry), new_name);
+    gnc_entry_set_text(GTK_ENTRY(td->recp_account_entry), new_account);
+    gnc_entry_set_text(GTK_ENTRY(td->recp_bankcode_entry), new_bankcode);
+    gnc_entry_set_text(GTK_ENTRY(td->purpose_entry), new_purpose);
+    gnc_entry_set_text(GTK_ENTRY(td->purpose_cont_entry), new_purpose_cont);
     gnc_amount_edit_set_amount(GNC_AMOUNT_EDIT(td->amount_edit), new_amount);
     LEAVE(" ");
 }
@@ -1005,16 +1008,19 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
     entry = GTK_WIDGET(gtk_builder_get_object (builder, "template_name"));
 
     /* Suggest recipient name as name of the template */
-    gtk_entry_set_text(GTK_ENTRY(entry),
-                       gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
+    gnc_entry_set_text(GTK_ENTRY(entry),
+                       gnc_entry_get_text(GTK_ENTRY(td->recp_name_entry)));
 
     do
     {
-        retval = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        retval = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
+retval = GTK_RESPONSE_CANCEL; //FIXME gtk4
+
         if (retval != GTK_RESPONSE_OK)
             break;
 
-        name = gtk_entry_get_text(GTK_ENTRY(entry));
+        name = gnc_entry_get_text(GTK_ENTRY(entry));
         if (!*name)
             break;
 
@@ -1033,12 +1039,12 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
         /* Create a new template */
         templ = gnc_ab_trans_templ_new_full(
                     name,
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_name_entry)),
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry)),
-                    gtk_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)),
+                    gnc_entry_get_text(GTK_ENTRY(td->recp_name_entry)),
+                    gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry)),
+                    gnc_entry_get_text(GTK_ENTRY(td->recp_bankcode_entry)),
                     gnc_amount_edit_get_amount(GNC_AMOUNT_EDIT(td->amount_edit)),
-                    gtk_entry_get_text(GTK_ENTRY(td->purpose_entry)),
-                    gtk_entry_get_text (GTK_ENTRY(td->purpose_cont_entry)));
+                    gnc_entry_get_text(GTK_ENTRY(td->purpose_entry)),
+                    gnc_entry_get_text (GTK_ENTRY(td->purpose_cont_entry)));
 
         /* Insert it, either after the selected one or at the end */
         selection = gtk_tree_view_get_selection(td->template_gtktreeview);
@@ -1063,7 +1069,7 @@ gnc_ab_trans_dialog_add_templ_cb(GtkButton *button, gpointer user_data)
 
     g_object_unref(G_OBJECT(builder));
 
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
 
     LEAVE(" ");
 }
@@ -1213,7 +1219,7 @@ gnc_ab_trans_dialog_ibanentry_filter_cb (GtkEditable *editable,
             // SEPA: The rest depends on the country code: Either Alpha-numeric or numeric only
             else
             {
-                const gchar* acct_text = gtk_entry_get_text(GTK_ENTRY(td->recp_account_entry));
+                const gchar* acct_text = gnc_entry_get_text(GTK_ENTRY(td->recp_account_entry));
                 // Special case for German ("DE") IBAN: Numeric only. Otherwise allow alpha-numeric
                 if (acct_text[0] == 'D' && acct_text[1] == 'E')
                 {

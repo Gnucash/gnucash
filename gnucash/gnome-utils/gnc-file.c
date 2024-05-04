@@ -129,8 +129,11 @@ gnc_file_dialog_int (GtkWindow *parent,
                               okbutton, GTK_RESPONSE_ACCEPT);
 
     if (starting_dir)
-        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER (file_box),
-                                            starting_dir);
+    {
+        GFile *file = g_file_new_for_path (starting_dir);
+        gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(file_box), file, NULL);
+        g_object_unref (file);
+    }
 
     gtk_window_set_modal(GTK_WINDOW(file_box), TRUE);
 
@@ -159,7 +162,9 @@ gnc_file_dialog_int (GtkWindow *parent,
         g_list_free (filters);
     }
 
-    response = gtk_dialog_run(GTK_DIALOG(file_box));
+//FIXME gtk4    response = gtk_dialog_run(GTK_DIALOG(file_box));
+gtk_window_set_modal (GTK_WINDOW(file_box), TRUE); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
     // Set the name for this dialog so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(file_box), "gnc-id-file");
@@ -168,25 +173,30 @@ gnc_file_dialog_int (GtkWindow *parent,
     {
         if (multi)
         {
-            file_name_list = gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (file_box));
+//FIXME gtk4            file_name_list = gtk_file_chooser_get_filenames (GTK_FILE_CHOOSER (file_box));
         }
         else
         {
             /* look for constructs like postgres://foo */
-            file_name = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER (file_box));
+            GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(file_box));
+            file_name = g_file_get_path (file);
+            g_object_unref (file);
+
             if (file_name != NULL)
             {
                 if (strstr (file_name, "file://") == file_name)
                 {
                     g_free (file_name);
                     /* nope, a local file name */
-                    file_name = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER (file_box));
+                    GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(file_box));
+                    file_name = g_file_get_path (file);
+                    g_object_unref (file);
                 }
                 file_name_list = g_slist_append (file_name_list, file_name);
             }
         }
     }
-    gtk_widget_destroy(GTK_WIDGET(file_box));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(file_box));
     LEAVE("%s", file_name ? file_name : "(null)");
     return file_name_list;
 }
@@ -368,10 +378,10 @@ show_session_error (GtkWindow *parent,
                                _("_Cancel"), GTK_RESPONSE_CANCEL,
                                label, GTK_RESPONSE_YES,
                                NULL);
-        if (!parent)
-            gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+//FIXME gtk4        if (!parent)
+//            gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+        response = gnc_dialog_run (GTK_DIALOG(dialog));
+
         uh_oh = (response != GTK_RESPONSE_YES);
         break;
 
@@ -669,8 +679,7 @@ gnc_file_query_save (GtkWindow *parent, gboolean can_cancel)
 
         gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_YES);
 
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        response = gnc_dialog_run (GTK_DIALOG(dialog));
 
         switch (response)
         {
@@ -903,7 +912,7 @@ RESTART:
                                         fmt1, displayname);
         gtk_message_dialog_format_secondary_text(GTK_MESSAGE_DIALOG(dialog),
                 "%s", fmt2);
-        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
+//FIXME gtk4        gtk_window_set_skip_taskbar_hint(GTK_WINDOW(dialog), FALSE);
 
         gnc_gtk_dialog_add_button(dialog, _("Open _Read-Only"),
                                   "emblem-readonly", RESPONSE_READONLY);
@@ -926,8 +935,8 @@ RESTART:
         else
             gtk_dialog_set_default_response (GTK_DIALOG(dialog), RESPONSE_FILE);
 
-        rc = gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        rc = gnc_dialog_run (GTK_DIALOG(dialog));
+
         g_free (displayname);
 
         if (rc == GTK_RESPONSE_DELETE_EVENT)

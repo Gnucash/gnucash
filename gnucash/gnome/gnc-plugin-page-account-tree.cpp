@@ -134,7 +134,11 @@ static GncPluginPage *gnc_plugin_page_account_tree_recreate_page (GtkWidget *win
 
 /* Callbacks */
 static void gnc_plugin_page_account_tree_summarybar_position_changed(gpointer prefs, gchar* pref, gpointer user_data);
-static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget, GdkEventButton *event, GncPluginPage *page);
+static gboolean gnc_plugin_page_account_tree_button_press_cb (GtkGestureClick *gesture,
+                                                              int n_press,
+                                                              double x,
+                                                              double y,
+                                                              gpointer user_data);
 static void gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
                                                           GtkTreePath *path,
                                                           GtkTreeViewColumn *col,
@@ -624,17 +628,19 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
 
     priv->widget = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (priv->widget), FALSE);
-    gtk_widget_show (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), true);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-account-page");
 
-    scrolled_window = gtk_scrolled_window_new (NULL, NULL);
+    scrolled_window = gtk_scrolled_window_new ();
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_window),
                                     GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-    gtk_widget_show (scrolled_window);
-    gtk_box_pack_start (GTK_BOX (priv->widget), scrolled_window,
-                        TRUE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(scrolled_window));
+
+    gtk_widget_set_vexpand (GTK_WIDGET(scrolled_window), true);
+    gtk_widget_set_hexpand (GTK_WIDGET(scrolled_window), true);
 
     tree_view = gnc_tree_view_account_new(FALSE);
     col = gnc_tree_view_find_column_by_name(
@@ -668,15 +674,24 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
     selection = gtk_tree_view_get_selection(tree_view);
     g_signal_connect (G_OBJECT (selection), "changed",
                       G_CALLBACK (gnc_plugin_page_account_tree_selection_changed_cb), page);
-    g_signal_connect (G_OBJECT (tree_view), "button-press-event",
-                      G_CALLBACK (gnc_plugin_page_account_tree_button_press_cb), page);
+
+    GtkGesture *event_gesture = gtk_gesture_click_new ();
+    gtk_widget_add_controller (GTK_WIDGET(tree_view), GTK_EVENT_CONTROLLER(event_gesture));
+    gtk_gesture_single_set_button (GTK_GESTURE_SINGLE(event_gesture), 3);
+    g_signal_connect (G_OBJECT(event_gesture), "pressed",
+                      G_CALLBACK(gnc_plugin_page_account_tree_button_press_cb), page);
+
     g_signal_connect (G_OBJECT (tree_view), "row-activated",
                       G_CALLBACK (gnc_plugin_page_account_tree_double_click_cb), page);
 
     gtk_tree_view_set_headers_visible(tree_view, TRUE);
     gnc_plugin_page_account_tree_selection_changed_cb (NULL, page);
-    gtk_widget_show (GTK_WIDGET (tree_view));
-    gtk_container_add (GTK_CONTAINER (scrolled_window), GTK_WIDGET(tree_view));
+    gtk_widget_set_visible (GTK_WIDGET(tree_view), true);
+    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                   GTK_WIDGET(tree_view));
+
+    gtk_widget_set_vexpand (GTK_WIDGET(tree_view), true);
+    gtk_widget_set_hexpand (GTK_WIDGET(tree_view), true);
 
     priv->fd.tree_view = GNC_TREE_VIEW_ACCOUNT(priv->tree_view);
     gnc_tree_view_account_set_filter (
@@ -692,9 +707,8 @@ gnc_plugin_page_account_tree_create_widget (GncPluginPage *plugin_page)
                                    gnc_get_current_session());
 
     plugin_page->summarybar = gnc_main_window_summary_new();
-    gtk_box_pack_start (GTK_BOX (priv->widget), plugin_page->summarybar,
-                        FALSE, FALSE, 0);
-    gtk_widget_show(plugin_page->summarybar);
+    gtk_box_append (GTK_BOX(priv->widget), GTK_WIDGET(plugin_page->summarybar));
+    gtk_widget_set_visible (GTK_WIDGET(plugin_page->summarybar), true);
     gnc_plugin_page_account_tree_summarybar_position_changed(NULL, NULL, page);
     gnc_prefs_register_cb (GNC_PREFS_GROUP_GENERAL,
                            GNC_PREF_SUMMARYBAR_POSITION_TOP,
@@ -862,8 +876,6 @@ gnc_plugin_page_account_tree_save_page (GncPluginPage *plugin_page,
     LEAVE(" ");
 }
 
-
-
 /** Create a new account tree page based on the information saved
  *  during a previous instantiation of gnucash.
  *
@@ -922,9 +934,9 @@ gnc_plugin_page_account_tree_summarybar_position_changed (gpointer prefs,
     if (gnc_prefs_get_bool (GNC_PREFS_GROUP_GENERAL, GNC_PREF_SUMMARYBAR_POSITION_TOP))
         position = GTK_POS_TOP;
 
-    gtk_box_reorder_child(GTK_BOX(priv->widget),
-                          plugin_page->summarybar,
-                          (position == GTK_POS_TOP ? 0 : -1) );
+//FIXME gtk4    gtk_box_reorder_child(GTK_BOX(priv->widget),
+//                          plugin_page->summarybar,
+//                          (position == GTK_POS_TOP ? 0 : -1) );
 }
 
 /** This button press handler calls the common button press handler
@@ -935,22 +947,42 @@ gnc_plugin_page_account_tree_summarybar_position_changed (gpointer prefs,
  *  Button presses on all other pages are caught by the signal
  *  registered in gnc-main-window.c. */
 static gboolean
-gnc_plugin_page_account_tree_button_press_cb (GtkWidget *widget,
-                                              GdkEventButton *event,
-                                              GncPluginPage *page)
+gnc_plugin_page_account_tree_button_press_cb (GtkGestureClick *gesture,
+                                              int n_press,
+                                              double x,
+                                              double y,
+                                              gpointer user_data)
 {
+    GncPluginPage *page = (GncPluginPage*)user_data;
 
-    g_return_val_if_fail(GNC_IS_PLUGIN_PAGE(page), FALSE);
+    g_return_val_if_fail (GNC_IS_PLUGIN_PAGE(page), false);
 
-    ENTER("widget %p, event %p, page %p", widget, event, page);
-    gnc_main_window_button_press_cb(widget, event, page);
-    LEAVE(" ");
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(gesture)); //tree view
+
+    ENTER("widget %p, x %f, y %f, page %p",  widget, x, y, page);
+
+    GtkRoot *root = gtk_widget_get_root (GTK_WIDGET(widget));
+    graphene_matrix_t matrix;
+    float x_translation = 0.0;
+    float y_translation = 0.0;
+
+    if (gtk_widget_compute_transform (GTK_WIDGET(widget), GTK_WIDGET(root), &matrix))
+    {
+        x_translation = graphene_matrix_get_x_translation (&matrix);
+        y_translation = graphene_matrix_get_y_translation (&matrix);
+    }
+    gnc_main_window_button_press_cb (gesture, n_press,
+                                     x + x_translation,
+                                     y + y_translation,
+                                     page);
+
+    LEAVE("x_translation %f, y_translation %f", x_translation, y_translation);
 
     /* Always return FALSE.  This will let the tree view callback run as
      * well which will select the item under the cursor.  By the time
      * the user sees the menu both callbacks will have run and the menu
      * actions will operate on the just-selected account. */
-    return FALSE;
+    return false;
 }
 
 static void
@@ -1250,7 +1282,7 @@ gppat_populate_trans_mas_list(GtkToggleButton *sa_mrb,
 void
 gppat_set_insensitive_iff_rb_active(GtkWidget *widget, GtkToggleButton *b)
 {
-    GtkWidget *dialog = gtk_widget_get_toplevel(widget);
+    GtkRoot *dialog = gtk_widget_get_root (widget);
     auto subaccount_trans = GTK_WIDGET(g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_TRANS));
     auto sa_mas = GTK_WIDGET(g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_MAS));
     auto have_splits = g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_SPLITS) != nullptr;
@@ -1263,7 +1295,7 @@ gppat_set_insensitive_iff_rb_active(GtkWidget *widget, GtkToggleButton *b)
     else
         gtk_widget_set_sensitive(subaccount_trans, FALSE);
 
-    set_ok_sensitivity(dialog);
+    set_ok_sensitivity(GTK_WIDGET(dialog));
 }
 
 static GtkWidget *
@@ -1273,7 +1305,7 @@ gppat_setup_account_selector (GtkBuilder *builder, GtkWidget *dialog,
     GtkWidget *selector = gnc_account_sel_new();
     GtkWidget *box = GTK_WIDGET(gtk_builder_get_object (builder, hbox));
 
-    gtk_box_pack_start (GTK_BOX(box), selector, TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(selector));
 
     // placeholder accounts are OK for this GAS
     if (g_strcmp0 (sel_name, DELETE_DIALOG_SA_MAS) == 0)
@@ -1282,7 +1314,7 @@ gppat_setup_account_selector (GtkBuilder *builder, GtkWidget *dialog,
     g_object_set_data(G_OBJECT(dialog), sel_name, selector);
 
     gppat_populate_gas_list(dialog, GNC_ACCOUNT_SEL(selector), TRUE);
-    gtk_widget_show_all(box);
+    gtk_widget_set_visible (GTK_WIDGET(box), true);
 
     return selector;
 }
@@ -1304,8 +1336,8 @@ commodity_mismatch_dialog (const Account* account, GtkWindow* parent)
                             _("_Pick another account"), GTK_RESPONSE_CANCEL,
                             _("_Do it anyway"), GTK_RESPONSE_ACCEPT,
                             (gchar *)NULL);
-    response = gtk_dialog_run (GTK_DIALOG (error_dialog));
-    gtk_widget_destroy (error_dialog);
+    response = gnc_dialog_run (GTK_DIALOG (error_dialog));
+
     g_free (message);
     return response;
 }
@@ -1420,17 +1452,17 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
         delete_account_helper(account, &delete_res2);
         if (delete_res2.has_ro_splits)
         {
-            gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "trans_rw")));
+            gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "trans_rw")), false);
             widget = GTK_WIDGET(gtk_builder_get_object (builder, "trans_drb"));
             gtk_widget_set_sensitive(widget, FALSE);
         }
         else
-            gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")));
+            gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")), false);
     }
     else
     {
         gtk_widget_set_sensitive (GTK_WIDGET(gtk_builder_get_object (builder, "transactions")), FALSE);
-        gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")));
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "trans_ro")), false);
     }
 
     // setup subaccount account selector
@@ -1458,12 +1490,12 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
         {
             if (adopt->delete_res.has_ro_splits)
             {
-                gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_rw")));
+                gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_rw")), false);
                 widget = GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_drb"));
                 gtk_widget_set_sensitive(widget, FALSE);
             }
             else
-                gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")));
+                gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")), false);
 
             g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_SA_SPLITS, GINT_TO_POINTER(1));
         }
@@ -1471,20 +1503,20 @@ account_delete_dialog (Account *account, GtkWindow *parent, Adopters* adopt)
         {
             g_object_set_data(G_OBJECT(dialog), DELETE_DIALOG_SA_SPLITS, GINT_TO_POINTER(0));
             gtk_widget_set_sensitive (GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_trans")), FALSE);
-            gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")));
+            gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")), false);
         }
     }
     else
     {
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object (builder, "subaccounts")), FALSE);
         gtk_widget_set_sensitive(GTK_WIDGET(gtk_builder_get_object (builder, "subaccount_trans")), FALSE);
-        gtk_widget_hide(GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")));
+        gtk_widget_set_visible (GTK_WIDGET(gtk_builder_get_object (builder, "sa_trans_ro")), false);
     }
 
     /* default to cancel */
     gtk_dialog_set_default_response (GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
-    gtk_builder_connect_signals(builder, dialog);
+//FIXME gtk4    gtk_builder_connect_signals(builder, dialog);
     g_object_unref(G_OBJECT(builder));
 
     return dialog;
@@ -1544,11 +1576,13 @@ gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple,
 
     while (TRUE)
     {
-        response = gtk_dialog_run(GTK_DIALOG(dialog));
+//FIXME gtk4        response = gtk_dialog_run(GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), true); //FIXME gtk4
+response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
         if (response != GTK_RESPONSE_ACCEPT)
         {
-            gtk_widget_destroy(dialog);
+//FIXME gtk4            gtk_window_destroy (GTK_WINDOW(dialog));
             return;
         }
         adopter_set_account_and_match (&adopt.trans);
@@ -1560,7 +1594,7 @@ gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple,
             adopter_match (&adopt.subtrans, GTK_WINDOW (window)))
             break;
     }
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     if (confirm_delete_account (simple, page, adopt.trans.new_account,
                                 adopt.subtrans.new_account,
                                 adopt.subacct.new_account,
@@ -1651,8 +1685,8 @@ confirm_delete_account (GSimpleAction *simple, GncPluginPageAccountTree *page,
                            _("_Delete"), GTK_RESPONSE_ACCEPT,
                            (gchar *)NULL);
     gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
-    response = gtk_dialog_run(GTK_DIALOG(dialog));
-    gtk_widget_destroy(dialog);
+    response = gnc_dialog_run(GTK_DIALOG(dialog));
+
     return response;
 }
 
@@ -1889,26 +1923,28 @@ gnc_plugin_page_account_tree_cmd_lots (GSimpleAction *simple,
 }
 
 static gboolean
-scrub_kp_handler (GtkWidget *widget, GdkEventKey *event, gpointer data)
+scrub_kp_handler (GtkEventControllerKey *key, guint keyval,
+                  guint keycode, GdkModifierType state,
+                  gpointer user_data)
 {
-    if (event->length == 0) return FALSE;
-
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Escape:
         {
+            GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
+
             gboolean abort_scrub = gnc_verify_dialog (GTK_WINDOW(widget), FALSE,
                                                       "%s", _(check_repair_abort_YN));
 
             if (abort_scrub)
-                gnc_set_abort_scrub (TRUE);
+                gnc_set_abort_scrub (true);
 
-            return TRUE;
+            return true;
         }
     default:
         break;
     }
-    return FALSE;
+    return false;
 }
 
 static void
@@ -1926,8 +1962,11 @@ gnc_plugin_page_account_tree_cmd_scrub (GSimpleAction *simple,
     prepare_scrubbing ();
 
     window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
-    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(window), "key-press-event",
-                                            G_CALLBACK(scrub_kp_handler), NULL);
+
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(window), event_controller);
+    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(event_controller), "key-press-event",
+                                            G_CALLBACK(scrub_kp_handler), nullptr);
     gnc_window_set_progressbar_window (window);
 
     xaccAccountScrubOrphans (account, gnc_window_show_progress);
@@ -1957,7 +1996,10 @@ gnc_plugin_page_account_tree_cmd_scrub_sub (GSimpleAction *simple,
     prepare_scrubbing ();
 
     window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
-    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(window), "key-press-event",
+
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(window), event_controller);
+    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(event_controller), "key-press-event",
                                             G_CALLBACK(scrub_kp_handler), NULL);
     gnc_window_set_progressbar_window (window);
 
@@ -1986,7 +2028,9 @@ gnc_plugin_page_account_tree_cmd_scrub_all (GSimpleAction *simple,
     prepare_scrubbing ();
 
     window = GNC_WINDOW(GNC_PLUGIN_PAGE (page)->window);
-    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(window), "key-press-event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(window), event_controller);
+    scrub_kp_handler_ID = g_signal_connect (G_OBJECT(event_controller), "key-press-event",
                                             G_CALLBACK(scrub_kp_handler), NULL);
     gnc_window_set_progressbar_window (window);
 

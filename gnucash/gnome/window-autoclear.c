@@ -167,7 +167,7 @@ gnc_autoclear_window_ok_cb (GtkWidget *widget,
         g_list_free (toclear_list);
 
         /* Close window */
-        gtk_widget_destroy (data->window);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(data->window));
         g_free (data);
     }
 }
@@ -177,7 +177,7 @@ gnc_autoclear_window_cancel_cb (GtkWidget *widget,
                                 AutoClearWindow *data)
 {
     /* Close window */
-    gtk_widget_destroy(data->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(data->window));
     g_free(data);
 }
 
@@ -212,6 +212,7 @@ autoClearWindow (GtkWidget *parent, Account *account)
 
     /* Create the dialog box */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(data));
     gnc_builder_add_from_file (builder, "window-autoclear.glade", "auto_clear_start_dialog");
     data->window = GTK_WIDGET(gtk_builder_get_object (builder, "auto_clear_start_dialog"));
     title = gnc_autoclear_make_window_name (account);
@@ -237,7 +238,7 @@ autoClearWindow (GtkWidget *parent, Account *account)
                      G_CALLBACK(gnc_autoclear_window_ok_cb), data);
 
     box   = GTK_BOX(gtk_builder_get_object (builder, "end_value_box"));
-    gtk_box_pack_start(box, GTK_WIDGET(data->end_value), TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(data->end_value));
 
     label = GTK_WIDGET(gtk_builder_get_object (builder, "end_label"));
     gnc_amount_edit_make_mnemonic_target (GNC_AMOUNT_EDIT(data->end_value), label);
@@ -258,7 +259,7 @@ autoClearWindow (GtkWidget *parent, Account *account)
     if (parent != NULL)
         gtk_window_set_transient_for (GTK_WINDOW (data->window), GTK_WINDOW (parent));
 
-    gtk_builder_connect_signals(builder, data);
+//FIXME gtk4    gtk_builder_connect_signals(builder, data);
     g_object_unref(G_OBJECT(builder));
 
     return data;

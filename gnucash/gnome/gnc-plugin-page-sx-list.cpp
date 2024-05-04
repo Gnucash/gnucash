@@ -381,14 +381,17 @@ gppsl_model_populated_cb (GtkTreeModel *tree_model, GncPluginPageSxList *page)
 
 
 static void
-treeview_popup (GtkTreeView *treeview, GdkEvent *event, GncPluginPageSxList *page)
+treeview_popup (GtkTreeView *treeview, const GdkEvent *event, GncPluginPageSxList *page)
 {
+//FIXME gtk4
+#ifdef skip
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE (page);
-    GtkWidget *menu, *menuitem;
+    GMenu *menu;
+    GMenuItem *menuitem;
     gchar *full_action_name;
     const gchar *group_name = gnc_plugin_page_get_simple_action_group_name (GNC_PLUGIN_PAGE(page));
 
-    menu = gtk_menu_new();
+    menu = g_menu_new();
 
     menuitem = gtk_menu_item_new_with_mnemonic (_("_New Schedule"));
     full_action_name = g_strconcat (group_name, ".SxListNewAction", NULL);
@@ -409,47 +412,55 @@ treeview_popup (GtkTreeView *treeview, GdkEvent *event, GncPluginPageSxList *pag
     gtk_menu_shell_append (GTK_MENU_SHELL(menu), menuitem);
 
     gtk_menu_attach_to_widget (GTK_MENU (menu), GTK_WIDGET (priv->tree_view), NULL);
-    gtk_widget_show_all (menu);
+    gtk_widget_set_visible (GTK_WIDGET(menu), true);
     gtk_menu_popup_at_pointer (GTK_MENU (menu), event);
+#endif
 }
 
+//FIXME gtk4
+#ifdef skip
 static gboolean
-treeview_button_press (GtkTreeView *treeview, GdkEvent *event,
+treeview_button_press (GtkTreeView *treeview, const GdkEvent *event,
                        GncPluginPageSxList *page)
 {
     GncPluginPageSxListPrivate *priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE (page);
     GtkTreeView *tree_view = GTK_TREE_VIEW (priv->tree_view);
 
-    if (event->type == GDK_BUTTON_PRESS)
+    if (gdk_event_get_event_type (event) == GDK_BUTTON_PRESS)
     {
-        GdkEventButton *event_button = (GdkEventButton*)event;
-        if (event_button->button == GDK_BUTTON_SECONDARY)
+        guint button;
+
+        if (gdk_event_get_button (event, &button) && button == GDK_BUTTON_SECONDARY)
         {
-            GtkTreePath *path = NULL;
-            if (gtk_tree_view_get_path_at_pos (priv->tree_view, event_button->x, event_button->y,
-                                               &path, NULL, NULL, NULL))
+            gdouble x_win, y_win;
+            if (gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
             {
-                GtkTreeSelection *selection = gtk_tree_view_get_selection (priv->tree_view);
+                GtkTreePath *path = nullptr;
 
-                if (!gtk_tree_selection_path_is_selected (selection, path))
+                if (gtk_tree_view_get_path_at_pos (priv->tree_view, x_win, y_win,
+                                                   &path, nullptr, nullptr, nullptr))
                 {
-                    gtk_tree_selection_unselect_all (selection);
-                    gtk_tree_selection_select_path (selection, path);
-                }
-            }
-            gtk_tree_path_free (path);
+                    GtkTreeSelection *selection = gtk_tree_view_get_selection (priv->tree_view);
 
+                    if (!gtk_tree_selection_path_is_selected (selection, path))
+                    {
+                        gtk_tree_selection_unselect_all (selection);
+                        gtk_tree_selection_select_path (selection, path);
+                    }
+                }
+                gtk_tree_path_free (path);
+            }
             treeview_popup (tree_view, event, page);
             return TRUE;
         }
     }
     return FALSE;
 }
-
+#endif
 static gboolean
 treeview_popup_menu (GtkTreeView *treeview, GncPluginPageSxList *page)
 {
-    treeview_popup (treeview, NULL, page);
+    treeview_popup (treeview, nullptr, page);
     return TRUE;
 }
 
@@ -461,7 +472,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     GtkWidget *widget;
     GtkWidget *vbox;
     GtkWidget *label;
-    GtkWidget *swin;
+    GtkWidget *scrolled_window;
     GtkWindow *window;
 
     page = GNC_PLUGIN_PAGE_SX_LIST(plugin_page);
@@ -474,7 +485,7 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     /* Create Vpaned widget for top level */
     widget = gtk_paned_new (GTK_ORIENTATION_VERTICAL);
     priv->widget = widget;
-    gtk_widget_show (priv->widget);
+    gtk_widget_set_visible (GTK_WIDGET(priv->widget), true);
 
     // Set the name for this widget so it can be easily manipulated with css
     gtk_widget_set_name (GTK_WIDGET(priv->widget), "gnc-id-sx-page");
@@ -482,23 +493,25 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     /* Add vbox and label */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
-    gtk_paned_pack1 (GTK_PANED(widget), vbox, TRUE, FALSE);
+//FIXME gtk4    gtk_paned_pack1 (GTK_PANED(widget), vbox, TRUE, FALSE);
+    gtk_paned_set_start_child (GTK_PANED(widget), GTK_WIDGET(vbox));
 
     label = gtk_label_new (_("Transactions"));
     gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-strong");
     gtk_widget_set_margin_start (GTK_WIDGET(label), 6);
     gnc_label_set_alignment (label, 0.0, 0);
-    gtk_widget_show (label);
-    gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
-    gtk_widget_show (vbox);
+    gtk_widget_set_visible (GTK_WIDGET(label), true);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(label));
+    gtk_widget_set_visible (GTK_WIDGET(vbox), true);
 
     /* Create scrolled window for top area */
-    swin = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(swin),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
-    gtk_box_pack_start (GTK_BOX(vbox), swin, TRUE, TRUE, 5);
-    gtk_widget_show (swin);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
+    gtk_box_set_spacing (GTK_BOX(vbox), 5);
+    gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
 
     {
         // gint half_way;
@@ -532,7 +545,9 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
                       "state-section", STATE_SECTION,
                       "show-column-menu", TRUE,
                       NULL);
-        gtk_container_add (GTK_CONTAINER( swin ), GTK_WIDGET(priv->tree_view));
+
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                       GTK_WIDGET(priv->tree_view));
 
         selection = gtk_tree_view_get_selection (priv->tree_view);
         gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
@@ -546,32 +561,34 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         gtk_tree_path_free (path);
     }
 
-    g_signal_connect (G_OBJECT(priv->tree_view), "button-press-event",
-                      G_CALLBACK(treeview_button_press), page);
+//FIXME gtk4    g_signal_connect (G_OBJECT(priv->tree_view), "button-press-event",
+//                      G_CALLBACK(treeview_button_press), page);
     g_signal_connect (G_OBJECT(priv->tree_view), "popup-menu",
                       G_CALLBACK(treeview_popup_menu), page);
 
     /* Add vbox and label */
     vbox = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX(vbox), FALSE);
-    gtk_paned_pack2 (GTK_PANED(widget), vbox, TRUE, FALSE);
+//FIXME gtk4    gtk_paned_pack2 (GTK_PANED(widget), vbox, TRUE, FALSE);
+    gtk_paned_set_end_child (GTK_PANED(widget), GTK_WIDGET(vbox));
 
     label = gtk_label_new (_("Upcoming Transactions"));
     gnc_widget_style_context_add_class (GTK_WIDGET(label), "gnc-class-strong");
     gtk_widget_set_margin_start (GTK_WIDGET(label), 6);
     gnc_label_set_alignment (label, 0.0, 0);
-    gtk_widget_show (label);
+    gtk_widget_set_visible (GTK_WIDGET(label), true);
 
-    gtk_box_pack_start (GTK_BOX(vbox), label, FALSE, FALSE, 0);
-    gtk_widget_show (vbox);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(label));
+    gtk_widget_set_visible (GTK_WIDGET(vbox), true);
 
     /* Create scrolled window for bottom area */
-    swin = gtk_scrolled_window_new (NULL, NULL);
-    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(swin),
+    scrolled_window = gtk_scrolled_window_new ();
+    gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
                                     GTK_POLICY_AUTOMATIC,
                                     GTK_POLICY_AUTOMATIC);
-    gtk_box_pack_start (GTK_BOX(vbox), swin, TRUE, TRUE, 5);
-    gtk_widget_show (swin);
+    gtk_box_append (GTK_BOX(vbox), GTK_WIDGET(scrolled_window));
+    gtk_box_set_spacing (GTK_BOX(vbox), 5);
+    gtk_widget_set_visible (GTK_WIDGET(scrolled_window), true);
 
     {
         priv->dense_cal_model = gnc_sx_instance_dense_cal_adapter_new (GNC_SX_INSTANCE_MODEL(priv->instances));
@@ -581,7 +598,8 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         gnc_dense_cal_set_months_per_col (priv->gdcal, 4);
         gnc_dense_cal_set_num_months (priv->gdcal, 12);
 
-        gtk_container_add (GTK_CONTAINER(swin), GTK_WIDGET(priv->gdcal));
+        gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(scrolled_window),
+                                       GTK_WIDGET(priv->gdcal));
     }
 
     priv->gnc_component_id = gnc_register_gui_component ("plugin-page-sx-list",

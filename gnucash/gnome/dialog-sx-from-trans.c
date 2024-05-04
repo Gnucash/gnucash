@@ -179,7 +179,7 @@ sxftd_get_end_info(SXFromTransInfo *sxfti)
     {
         guint n_occs;
 
-        const gchar *text = gtk_entry_get_text (GTK_ENTRY(sxfti->n_occurences));
+        const gchar *text = gnc_entry_get_text (GTK_ENTRY(sxfti->n_occurences));
         if (!text || !text[0])
         {
             n_occs = 0;
@@ -386,7 +386,7 @@ sxftd_init( SXFromTransInfo *sxfti )
         g_assert(sxfti->example_cal);
         gnc_dense_cal_set_num_months( sxfti->example_cal, SXFTD_EXCAL_NUM_MONTHS );
         gnc_dense_cal_set_months_per_col( sxfti->example_cal, SXFTD_EXCAL_MONTHS_PER_COL );
-        gtk_container_add( GTK_CONTAINER(w), GTK_WIDGET(sxfti->example_cal) );
+        gtk_box_prepend (GTK_BOX(w), GTK_WIDGET(sxfti->example_cal));
     }
 
     /* Setup the start and end dates as GNCDateEdits */
@@ -410,9 +410,7 @@ sxftd_init( SXFromTransInfo *sxfti )
         sxfti->endDateGDE =
             GNC_DATE_EDIT( gnc_date_edit_new (gnc_time (NULL),
                                               FALSE, FALSE));
-        gtk_box_pack_start( GTK_BOX( endDateBox ),
-                            GTK_WIDGET( sxfti->endDateGDE ),
-                            TRUE, TRUE, 0 );
+        gtk_box_append (GTK_BOX(endDateBox), GTK_WIDGET(sxfti->endDateGDE));
         g_signal_connect( sxfti->endDateGDE, "date-changed",
                           G_CALLBACK( sxftd_update_excal_adapt ),
                           sxfti );
@@ -454,7 +452,7 @@ sxftd_compute_sx(SXFromTransInfo *sxfti)
     SchedXaction *sx = sxfti->sx;
 
     /* get the name */
-    xaccSchedXactionSetName(sx, gtk_entry_get_text (sxfti->name));
+    xaccSchedXactionSetName(sx, gnc_entry_get_text (sxfti->name));
 
     gnc_gdate_set_time64( &date, gnc_date_edit_get_date( sxfti->startDateGDE ) );
 
@@ -529,7 +527,7 @@ sxftd_close(SXFromTransInfo *sxfti, gboolean delete_sx)
     }
     sxfti->sx = NULL;
 
-    gtk_widget_destroy (GTK_WIDGET (sxfti->dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(sxfti->dialog));
 }
 
 
@@ -603,7 +601,7 @@ sxftd_advanced_clicked(SXFromTransInfo *sxfti)
         g_warning("something bad happened in sxftd_compute_sx [%d]", sx_error);
         return;
     }
-    gtk_widget_hide( sxfti->dialog );
+    gtk_widget_set_visible (GTK_WIDGET(sxfti->dialog), FALSE);
     /* force a gui update. */
     context = g_main_context_default();
     while (g_main_context_iteration(context, FALSE));
@@ -691,7 +689,7 @@ sxftd_update_example_cal( SXFromTransInfo *sxfti )
     recurrenceListNextInstance(schedule, &date, &nextDate);
 
     gnc_dense_cal_store_update_name (sxfti->dense_cal_model,
-                                     gtk_entry_get_text (sxfti->name));
+                                     gnc_entry_get_text (sxfti->name));
 
     {
         gchar *schedule_desc;
@@ -751,7 +749,7 @@ gnc_sx_create_from_trans( GtkWindow *parent, Transaction *trans )
     GtkWidget *dialog;
 
     builder = gtk_builder_new();
-
+    gtk_builder_set_current_object (builder, G_OBJECT(sxfti));
     gnc_builder_add_from_file  (builder , "dialog-sx.glade", "freq_liststore");
 
     gnc_builder_add_from_file  (builder , "dialog-sx.glade", "sx_from_real_trans_dialog");
@@ -787,8 +785,8 @@ gnc_sx_create_from_trans( GtkWindow *parent, Transaction *trans )
         }
     }
 
-    gtk_widget_show_all(GTK_WIDGET(sxfti->dialog));
+//FIXME gtk4    gtk_widget_show_all(GTK_WIDGET(sxfti->dialog));
 
-    gtk_builder_connect_signals(builder, sxfti);
+//FIXME gtk4    gtk_builder_connect_signals(builder, sxfti);
     g_object_unref(G_OBJECT(builder));
 }

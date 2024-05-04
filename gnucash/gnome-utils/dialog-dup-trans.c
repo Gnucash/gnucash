@@ -101,7 +101,7 @@ gnc_dup_inc_dec (GtkWidget *widget, const gchar *text, gint inc_dec)
 
         out = g_strdup_printf (format, num);
 
-        gtk_entry_set_text (GTK_ENTRY(widget), out);
+        gnc_entry_set_text (GTK_ENTRY(widget), out);
         g_free (format);
         g_free (out);
         return TRUE;
@@ -110,24 +110,28 @@ gnc_dup_inc_dec (GtkWidget *widget, const gchar *text, gint inc_dec)
 }
 
 static gboolean
-gnc_dup_key_press_event_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gnc_dup_key_press_event_cb (GtkEventControllerKey *key, guint keyval,
+                            guint keycode, GdkModifierType state,
+                            gpointer user_data)
 {
-    const gchar *text = gtk_entry_get_text (GTK_ENTRY(widget));
+    GtkWidget *widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER(key));
+    const gchar *text = gnc_entry_get_text (GTK_ENTRY(widget));
 
     if (gnc_strisnum (text))
     {
         GdkModifierType modifiers = gtk_accelerator_get_default_mod_mask ();
         gint increment;
+        guint keyval;
+        GdkModifierType state;
 
-        if ((event->state & modifiers) == GDK_CONTROL_MASK ||
-            (event->state & modifiers) == GDK_MOD1_MASK)
+        if ((state & modifiers) == GDK_CONTROL_MASK ||
+            (state & modifiers) == GDK_ALT_MASK)
             return FALSE;
 
         /* See https://bugs.gnucash.org/show_bug.cgi?id=798386 for semicolon */
-        if (event->keyval == GDK_KEY_plus || event->keyval == GDK_KEY_KP_Add ||
-            event->keyval == GDK_KEY_semicolon)
+        if (keyval == GDK_KEY_plus || keyval == GDK_KEY_KP_Add || keyval == GDK_KEY_semicolon)
             increment = 1;
-        else if (event->keyval == GDK_KEY_minus || event->keyval == GDK_KEY_KP_Subtract)
+        else if (keyval == GDK_KEY_minus || keyval == GDK_KEY_KP_Subtract)
             increment = -1;
         else
             return FALSE;
@@ -149,6 +153,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     const gchar *tt = _("You can type '+' or '-' to increment or decrement the number.");
 
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(dt_dialog));
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "num_adjustment");
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "tnum_adjustment");
     gnc_builder_add_from_file (builder, "gnc-plugin-page-register.glade", "duplicate_transaction_dialog");
@@ -174,11 +179,11 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
         date_edit = gnc_date_edit_new (date, FALSE, FALSE);
         gnc_date_activates_default (GNC_DATE_EDIT(date_edit), TRUE);
         hbox = GTK_WIDGET(gtk_builder_get_object (builder, "date_hbox"));
-        gtk_widget_show (date_edit);
+        gtk_widget_set_visible (GTK_WIDGET(date_edit), TRUE);
 
         gnc_date_make_mnemonic_target (GNC_DATE_EDIT(date_edit), dt_dialog->date_label);
 
-        gtk_box_pack_end (GTK_BOX(hbox), date_edit, TRUE, TRUE, 0);
+        gtk_box_prepend (GTK_BOX(hbox), GTK_WIDGET(date_edit));
         dt_dialog->date_edit = date_edit;
     }
     else
@@ -197,15 +202,21 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
     dt_dialog->tnum_edit = GTK_WIDGET(gtk_builder_get_object (builder, "tnum_entry"));
 
     if (num_str)
-        gtk_entry_set_text (GTK_ENTRY(dt_dialog->num_edit), num_str);
+        gnc_entry_set_text (GTK_ENTRY(dt_dialog->num_edit), num_str);
     if (tnum_str)
-        gtk_entry_set_text (GTK_ENTRY(dt_dialog->tnum_edit), tnum_str);
+        gnc_entry_set_text (GTK_ENTRY(dt_dialog->tnum_edit), tnum_str);
 
-    g_signal_connect (dt_dialog->num_edit, "key-press-event",
+//FIXME in Gtk4 this may need changing to use  GtkEditable::insert-text
+
+    GtkEventController *event_controller1 = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(dt_dialog->num_edit), event_controller1);
+    g_signal_connect (G_OBJECT(event_controller1), "key-press-event",
                       G_CALLBACK(gnc_dup_key_press_event_cb),
                       dt_dialog);
 
-    g_signal_connect (dt_dialog->tnum_edit, "key-press-event",
+    GtkEventController *event_controller2 = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(dt_dialog->tnum_edit), event_controller2);
+    g_signal_connect (G_OBJECT(event_controller2), "key-press-event",
                       G_CALLBACK(gnc_dup_key_press_event_cb),
                       dt_dialog);
 
@@ -226,7 +237,7 @@ gnc_dup_trans_dialog_create (GtkWidget * parent, DupTransDialog *dt_dialog,
         dt_dialog->link_edit = GTK_WIDGET(gtk_builder_get_object (builder, "link_check_button"));
     }
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dt_dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dt_dialog);
 
     g_object_unref (G_OBJECT(builder));
 }
@@ -314,8 +325,9 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
         gtk_widget_set_visible (dt_dialog->link_label, FALSE);
         gtk_widget_set_visible (dt_dialog->link_edit, FALSE);
     }
-
-    result = gtk_dialog_run (GTK_DIALOG(dt_dialog->dialog));
+//FIXME gtk4    result = gtk_dialog_run (GTK_DIALOG(dt_dialog->dialog));
+gtk_window_set_modal (GTK_WINDOW(dt_dialog->dialog), TRUE); //FIXME gtk4
+result = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
     if (result == GTK_RESPONSE_OK)
     {
@@ -324,9 +336,9 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
         if (gdate_p)
             gnc_date_edit_get_gdate (GNC_DATE_EDIT(dt_dialog->date_edit), gdate_p);
         if (out_num)
-            *out_num = g_strdup (gtk_entry_get_text (GTK_ENTRY(dt_dialog->num_edit)));
+            *out_num = g_strdup (gnc_entry_get_text (GTK_ENTRY(dt_dialog->num_edit)));
         if (tnum)
-            *out_tnum = g_strdup (gtk_entry_get_text (GTK_ENTRY(dt_dialog->tnum_edit)));
+            *out_tnum = g_strdup (gnc_entry_get_text (GTK_ENTRY(dt_dialog->tnum_edit)));
         if (tlink)
         {
             if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(dt_dialog->link_edit)))
@@ -337,7 +349,7 @@ gnc_dup_trans_dialog_internal (GtkWidget * parent,
     else
         ok = FALSE;
 
-    gtk_widget_destroy (GTK_WIDGET(dt_dialog->dialog));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dt_dialog->dialog));
     g_free (dt_dialog);
 
     return ok;

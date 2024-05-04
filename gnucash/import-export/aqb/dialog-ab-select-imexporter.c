@@ -91,8 +91,8 @@ gnc_ab_select_imex_dlg_new (GtkWidget* parent, AB_BANKING* abi)
     imexd->parent = parent;
     imexd->abi = abi;
 
-    g_signal_connect (parent, "destroy",
-                      G_CALLBACK (gtk_widget_destroyed), &imexd->parent);
+//FIXME gtk4    g_signal_connect (parent, "destroy",
+//                      G_CALLBACK (gtk_widget_destroyed), &imexd->parent);
     builder = gtk_builder_new();
     gnc_builder_add_from_file (builder, "dialog-ab.glade", "imexporter-list");
     gnc_builder_add_from_file (builder, "dialog-ab.glade", "profile-list");
@@ -101,8 +101,8 @@ gnc_ab_select_imex_dlg_new (GtkWidget* parent, AB_BANKING* abi)
     imexd->dialog =
         GTK_WIDGET (gtk_builder_get_object (builder,
                                             "aqbanking-select-imexporter-dialog"));
-    g_signal_connect (imexd->dialog, "destroy",
-                      G_CALLBACK (gtk_widget_destroyed), &imexd->dialog);
+//FIXME gtk4    g_signal_connect (imexd->dialog, "destroy",
+//                      G_CALLBACK (gtk_widget_destroyed), &imexd->dialog);
     imexd->imexporter_list =
         GTK_LIST_STORE (gtk_builder_get_object (builder, "imexporter-list"));
     imexd->profile_list =
@@ -142,8 +142,8 @@ gnc_ab_select_imex_dlg_destroy (GncABSelectImExDlg* imexd)
     if (imexd->profile_list)
         gtk_list_store_clear (imexd->profile_list);
 
-    if (imexd->dialog)
-        gtk_widget_destroy (imexd->dialog);
+//FIXME gtk4    if (imexd->dialog)
+//        gtk_window_destroy (GTK_WINDOW(imexd->dialog));
 
     g_free (imexd);
 }
@@ -213,8 +213,10 @@ profile_changed (GtkTreeSelection* sel, gpointer data)
 gboolean
 gnc_ab_select_imex_dlg_run (GncABSelectImExDlg* imexd)
 {
+//FIXME gtk4    int response = gtk_dialog_run (GTK_DIALOG (imexd->dialog));
+gtk_window_set_modal (GTK_WINDOW(imexd->dialog), TRUE); //FIXME gtk4
+int response = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
-    int response = gtk_dialog_run (GTK_DIALOG (imexd->dialog));
     return response == GTK_RESPONSE_OK ? TRUE : FALSE;
 }
 

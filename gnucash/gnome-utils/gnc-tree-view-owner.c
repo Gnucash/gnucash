@@ -480,7 +480,7 @@ gnc_tree_view_owner_new (GncOwnerType owner_type)
                                          GNC_TREE_MODEL_OWNER_COL_NAME,
                                          GTK_SORT_ASCENDING);
 
-    gtk_widget_show(GTK_WIDGET(view));
+    gtk_widget_set_visible (GTK_WIDGET(view), TRUE);
     LEAVE("%p", view);
     return GTK_TREE_VIEW(view);
 }
@@ -821,8 +821,8 @@ gnc_tree_view_owner_set_selected_owner (GncTreeViewOwner *view,
 
     /* give gtk+ a chance to resize the tree view first by handling pending
      * configure events */
-    while (gtk_events_pending ())
-        gtk_main_iteration ();
+//FIXME gtk4    while (gtk_events_pending ())
+//        gtk_main_iteration ();
     gtk_tree_view_scroll_to_cell (GTK_TREE_VIEW(view), s_path, NULL, FALSE, 0.0, 0.0);
     debug_path(LEAVE, s_path);
     gtk_tree_path_free(s_path);
@@ -1117,7 +1117,7 @@ gppot_filter_response_cb (GtkWidget *dialog,
     g_atomic_pointer_compare_and_exchange(&gptemp,
                                           (gpointer)dialog, NULL);
     fd->dialog = gptemp;
-    gtk_widget_destroy(dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dialog));
     LEAVE("");
 }
 
@@ -1139,6 +1139,7 @@ owner_filter_dialog_create(OwnerFilterDialog *fd, GncPluginPage *page)
 
     /* Create the dialog */
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(fd));
     gnc_builder_add_from_file (builder, "gnc-tree-view-owner.glade", "filter_by_dialog");
     dialog = GTK_WIDGET(gtk_builder_get_object (builder, "filter_by_dialog"));
     fd->dialog = dialog;
@@ -1163,11 +1164,11 @@ owner_filter_dialog_create(OwnerFilterDialog *fd, GncPluginPage *page)
                                   fd->show_zero_total);
 
     /* Wire up the rest of the callbacks */
-    gtk_builder_connect_signals (builder, fd);
+//FIXME gtk4    gtk_builder_connect_signals (builder, fd);
     g_object_unref(G_OBJECT(builder));
 
     /* Show it */
-    gtk_widget_show_all (dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog);
     LEAVE(" ");
 }
 

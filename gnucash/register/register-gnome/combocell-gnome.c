@@ -202,24 +202,27 @@ activate_item_cb (GncItemList* item_list, char* item_string, gpointer data)
     box->list_popped = FALSE;
 }
 
-static void
-key_press_item_cb (GncItemList* item_list, GdkEventKey* event, gpointer data)
+static gboolean
+key_press_item_cb (GtkEventControllerKey *key, guint keyval,
+                   guint keycode, GdkModifierType state,
+                   gpointer user_data)
 {
-    ComboCell* cell = data;
+    ComboCell* cell = user_data;
     PopBox* box = cell->cell.gui_private;
+    gboolean ret_val = FALSE;
 
-    switch (event->keyval)
+    switch (keyval)
     {
     case GDK_KEY_Escape:
         gnc_item_edit_hide_popup (box->item_edit);
         box->list_popped = FALSE;
+        ret_val = TRUE;
         break;
 
     default:
-        gtk_widget_event (GTK_WIDGET (box->sheet),
-                          (GdkEvent*) event);
         break;
     }
+    return ret_val;
 }
 
 static void
@@ -254,8 +257,11 @@ combo_connect_signals (ComboCell* cell)
     g_signal_connect (G_OBJECT (box->item_list), "activate_item",
                       G_CALLBACK (activate_item_cb), cell);
 
-    g_signal_connect (G_OBJECT (box->item_list), "key_press_event",
-                      G_CALLBACK (key_press_item_cb), cell);
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(box->item_list), event_controller);
+    g_signal_connect (event_controller,
+                      "key-pressed",
+                      G_CALLBACK(key_press_item_cb), cell);
 
     box->signals_connected = TRUE;
 }
@@ -720,7 +726,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
 {
     ComboCell* cell = (ComboCell*) bcell;
     PopBox* box = cell->cell.gui_private;
-    GdkEventKey* event = gui_data;
+    GdkEvent* event = (GdkEvent*)gui_data; //FIXME gtk4
     gboolean keep_on_going = FALSE;
     gboolean extra_colon;
     gunichar unicode_value;
@@ -730,14 +736,17 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     int find_pos;
     int new_pos;
 
-    if (event->type != GDK_KEY_PRESS)
+    if (gdk_event_get_event_type (event) != GDK_KEY_PRESS)
         return FALSE;
 
-    unicode_value = gdk_keyval_to_unicode (event->keyval);
-    switch (event->keyval)
+    guint keyval = gdk_key_event_get_keyval (event);
+    GdkModifierType state = gdk_key_event_get_consumed_modifiers (event);
+
+    unicode_value = gdk_keyval_to_unicode (keyval);
+    switch (keyval)
     {
     case GDK_KEY_slash:
-        if (! (event->state & GDK_MOD1_MASK))
+        if (! (state & GDK_ALT_MASK))
         {
             if (unicode_value == box->complete_char)
                 break;
@@ -756,7 +765,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
             g_free (string);
             return FALSE;
         }
-        if (! (event->state & GDK_CONTROL_MASK) &&
+        if (! (state & GDK_CONTROL_MASK) &&
             !keep_on_going)
             return FALSE;
 
@@ -798,7 +807,7 @@ gnc_combo_cell_direct_update (BasicCell* bcell,
     if (unicode_value != box->complete_char)
         return FALSE;
 
-    if (event->state & (GDK_CONTROL_MASK | GDK_MOD1_MASK))
+    if (state & (GDK_CONTROL_MASK | GDK_ALT_MASK))
         return FALSE;
 
     if ((*cursor_position < bcell->value_chars) &&
@@ -893,7 +902,7 @@ gnc_combo_cell_gui_realize (BasicCell* bcell, gpointer data)
         box->item_list = GNC_ITEM_LIST (gnc_item_list_new (cell->shared_store));
     else
         box->item_list = GNC_ITEM_LIST (gnc_item_list_new (box->tmp_store));
-    gtk_widget_show_all (GTK_WIDGET (box->item_list));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET (box->item_list));
     g_object_ref_sink (box->item_list);
 
     /* to mark cell as realized, remove the realize method */

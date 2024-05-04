@@ -895,9 +895,10 @@ gnc_ui_sx_creation_error_dialog (GList **creation_errors)
                                      "\t%s\t", _("Invalid Transactions"));
     gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
                                               "%s", message);
-    g_signal_connect_swapped (dialog, "response",
-                              G_CALLBACK(gtk_widget_destroy), dialog);
-    gtk_dialog_run (GTK_DIALOG(dialog));
+//FIXME gtk4    g_signal_connect_swapped (dialog, "response",
+//                              G_CALLBACK(gtk_window_destroy), GTK_WINDOW(dialog));
+//FIXME gtk4    gtk_dialog_run (GTK_DIALOG(dialog));
+gtk_window_set_modal (GTK_WINDOW(dialog), TRUE); //FIXME gtk4
     g_free (message);
 }
 
@@ -1248,16 +1249,16 @@ finish_editing_before_ok_cb (GtkWidget *button, GdkEvent *event,
     return FALSE;
 }
 
-static gboolean
-scroll_event (GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
-{
-    GncSxSinceLastRunDialog *dialog = user_data;
+//FIXME gtk4 static gboolean
+//scroll_event (GtkWidget *widget, GdkEventScroll *event, gpointer user_data)
+//{
+//    GncSxSinceLastRunDialog *dialog = user_data;
 
-    if (dialog->temp_ce)
-        return TRUE;
-    else
-        return FALSE;
-}
+//    if (dialog->temp_ce)
+//        return TRUE;
+//    else
+//        return FALSE;
+//}
 
 static void
 set_transaction_sort_column_tooltip (GncSxSinceLastRunDialog *dialog)
@@ -1329,6 +1330,7 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
     dialog = g_new0 (GncSxSinceLastRunDialog, 1);
 
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(dialog));
     gnc_builder_add_from_file (builder, "dialog-sx.glade", "since_last_run_dialog");
 
     dialog->dialog = GTK_WIDGET(gtk_builder_get_object (builder, "since_last_run_dialog"));
@@ -1372,8 +1374,8 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
         gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE(sort_model),
                                               sort_column, sort_type);
 
-        g_signal_connect (G_OBJECT(dialog->instance_view), "scroll-event",
-                          G_CALLBACK(scroll_event), dialog);
+//FIXME gtk4        g_signal_connect (G_OBJECT(dialog->instance_view), "scroll-event",
+//                          G_CALLBACK(scroll_event), dialog);
 
         renderer = gtk_cell_renderer_text_new ();
         col = gtk_tree_view_column_new_with_attributes (_("Transaction"), renderer,
@@ -1465,9 +1467,9 @@ gnc_ui_sx_since_last_run_dialog (GtkWindow *parent, GncSxInstanceModel *sx_insta
     gnc_gui_component_set_session (dialog->component_id,
                                    gnc_get_current_session ());
 
-    gtk_widget_show_all (dialog->dialog);
+//FIXME gtk4    gtk_widget_show_all (dialog->dialog);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, dialog);
 
     g_object_unref (G_OBJECT(builder));
 
@@ -1524,7 +1526,7 @@ close_handler (gpointer user_data)
     }
 
     gnc_save_window_size (GNC_PREFS_GROUP_STARTUP, GTK_WINDOW(app_dialog->dialog));
-    gtk_widget_destroy (app_dialog->dialog);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(app_dialog->dialog));
     g_free (app_dialog);
 }
 

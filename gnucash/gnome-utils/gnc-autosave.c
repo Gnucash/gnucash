@@ -128,8 +128,7 @@ static gboolean autosave_confirm(GtkWidget *toplevel)
     gtk_dialog_set_default_response( GTK_DIALOG(dialog), NO_NOT_THIS_TIME);
 
     /* Run the modal dialog */
-    response = gtk_dialog_run( GTK_DIALOG( dialog ) );
-    gtk_widget_destroy( dialog );
+    response = gnc_dialog_run (GTK_DIALOG(dialog));
 
     /* Evaluate the response */
     switch (response)

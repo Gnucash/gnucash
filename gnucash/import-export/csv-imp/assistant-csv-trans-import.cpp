@@ -187,7 +187,7 @@ public:
     void preview_update_date_format ();
     void preview_update_currency_format ();
     void preview_update_col_type (GtkComboBox* cbox);
-    void preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event);
+    void preview_update_fw_columns (GtkTreeView* treeview, const GdkEvent* event);
 
     void preview_populate_settings_combo();
     void preview_handle_save_del_sensitivity (GtkComboBox* combo);
@@ -197,7 +197,7 @@ public:
     void preview_validate_settings ();
 
     void acct_match_via_button ();
-    bool acct_match_via_view_dblclick (GdkEventButton *event);
+    bool acct_match_via_view_dblclick (const GdkEvent *event);
     void acct_match_select(GtkTreeModel *model, GtkTreeIter* iter);
     void acct_match_set_accounts ();
 
@@ -207,7 +207,7 @@ public:
 private:
     /* helper functions to manage the context menu for fixed with columns */
     uint32_t get_new_col_rel_pos (GtkTreeViewColumn *tcol, int dx);
-    void fixed_context_menu (GdkEventButton *event, int col, int dx);
+    void fixed_context_menu (const GdkEvent *event, int col, int dx);
     /* helper function to calculate row colors for the preview table (to visualize status) */
     void preview_row_fill_state_cells (GtkListStore *store, GtkTreeIter *iter,
             ErrMap& err_msg, bool skip);
@@ -306,7 +306,7 @@ void csv_tximp_preview_acct_sel_cb (GtkWidget* widget, CsvImpTransAssist* info);
 void csv_tximp_preview_enc_sel_cb (GOCharmapSel* selector, const char* encoding,
                               CsvImpTransAssist* info);
 void csv_tximp_acct_match_button_clicked_cb (GtkWidget *widget, CsvImpTransAssist* info);
-bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, GdkEventButton *event, CsvImpTransAssist* info);
+bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, const GdkEvent *event, CsvImpTransAssist* info);
 }
 
 void
@@ -442,8 +442,8 @@ static void csv_tximp_preview_col_type_changed_cb (GtkComboBox* cbox, CsvImpTran
 }
 
 static bool
-csv_tximp_preview_treeview_clicked_cb (GtkTreeView* treeview, GdkEventButton* event,
-                                        CsvImpTransAssist* info)
+csv_tximp_preview_treeview_clicked_cb (GtkTreeView* treeview, const GdkEvent* event,
+                                       CsvImpTransAssist* info)
 {
     info->preview_update_fw_columns(treeview, event);
     return false;
@@ -455,7 +455,7 @@ void csv_tximp_acct_match_button_clicked_cb (GtkWidget *widget, CsvImpTransAssis
     info->acct_match_via_button();
 }
 
-bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, GdkEventButton *event, CsvImpTransAssist* info)
+bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, const GdkEvent *event, CsvImpTransAssist* info)
 {
     return info->acct_match_via_view_dblclick(event);
 }
@@ -467,6 +467,7 @@ bool csv_tximp_acct_match_view_clicked_cb (GtkWidget *widget, GdkEventButton *ev
 CsvImpTransAssist::CsvImpTransAssist ()
 {
     auto builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(this));
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "start_row_adj");
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "end_row_adj");
     gnc_builder_add_from_file  (builder , "assistant-csv-trans-import.glade", "account_match_store");
@@ -509,8 +510,9 @@ CsvImpTransAssist::CsvImpTransAssist ()
                       G_CALLBACK(csv_tximp_file_activated_cb), this);
 
     auto box = GTK_WIDGET(gtk_builder_get_object (builder, "file_page"));
-    gtk_box_pack_start (GTK_BOX(box), file_chooser, TRUE, TRUE, 6);
-    gtk_widget_show (file_chooser);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(file_chooser));
+    gtk_box_set_spacing (GTK_BOX(box), 6);
+    gtk_widget_set_visible (GTK_WIDGET(file_chooser), true);
 
     /* Preview Settings Page */
     {
@@ -524,14 +526,15 @@ CsvImpTransAssist::CsvImpTransAssist ()
         gtk_combo_box_set_active (GTK_COMBO_BOX(settings_combo), 0);
 
         combo_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "combo_hbox"));
-        gtk_box_pack_start (GTK_BOX(combo_hbox), GTK_WIDGET(settings_combo), true, true, 6);
-        gtk_widget_show (GTK_WIDGET(settings_combo));
-
+        gtk_box_append (GTK_BOX(combo_hbox), GTK_WIDGET(settings_combo));
+        gtk_box_set_spacing (GTK_BOX(combo_hbox), 6);
+        gtk_widget_set_visible (GTK_WIDGET(settings_combo), true);
+    
         g_signal_connect (G_OBJECT(settings_combo), "changed",
                          G_CALLBACK(csv_tximp_preview_settings_sel_changed_cb), this);
 
         // Additionally connect to the changed signal of the embedded GtkEntry
-        auto emb_entry = gtk_bin_get_child (GTK_BIN (settings_combo));
+        auto emb_entry = gtk_combo_box_get_child (GTK_COMBO_BOX(settings_combo));
         g_signal_connect (G_OBJECT(emb_entry), "changed",
                          G_CALLBACK(csv_tximp_preview_settings_text_changed_cb), this);
         g_signal_connect (G_OBJECT(emb_entry), "insert-text",
@@ -578,8 +581,9 @@ CsvImpTransAssist::CsvImpTransAssist ()
         /* Add account selection widget */
         acct_selector = gnc_account_sel_new();
         auto account_hbox = GTK_WIDGET(gtk_builder_get_object (builder, "account_hbox"));
-        gtk_box_pack_start (GTK_BOX(account_hbox), acct_selector, TRUE, TRUE, 6);
-        gtk_widget_show (acct_selector);
+        gtk_box_append (GTK_BOX(account_hbox), GTK_WIDGET(acct_selector));
+        gtk_box_set_spacing (GTK_BOX(account_hbox), 6);
+        gtk_widget_set_visible (GTK_WIDGET(acct_selector), true);
 
         g_signal_connect(G_OBJECT(acct_selector), "account_sel_changed",
                          G_CALLBACK(csv_tximp_preview_acct_sel_cb), this);
@@ -591,10 +595,10 @@ CsvImpTransAssist::CsvImpTransAssist ()
         g_signal_connect (G_OBJECT(encselector), "charmap_changed",
                          G_CALLBACK(csv_tximp_preview_enc_sel_cb), this);
 
-        auto encoding_container = GTK_CONTAINER(gtk_builder_get_object (builder, "encoding_container"));
-        gtk_container_add (encoding_container, GTK_WIDGET(encselector));
+        auto encoding_box = GTK_BOX(gtk_builder_get_object (builder, "encoding_container"));
+        gtk_box_prepend (GTK_BOX(encoding_box), GTK_WIDGET(encselector));
         gtk_widget_set_hexpand (GTK_WIDGET(encselector), true);
-        gtk_widget_show_all (GTK_WIDGET(encoding_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(encoding_box));
 
         /* The instructions label and image */
         instructions_label = GTK_LABEL(gtk_builder_get_object (builder, "instructions_label"));
@@ -609,10 +613,10 @@ CsvImpTransAssist::CsvImpTransAssist ()
                          G_CALLBACK(csv_tximp_preview_date_fmt_sel_cb), this);
 
         /* Add it to the assistant. */
-        auto date_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "date_format_container"));
-        gtk_container_add (date_format_container, GTK_WIDGET(date_format_combo));
+        auto date_format_box = GTK_BOX(gtk_builder_get_object (builder, "date_format_container"));
+        gtk_box_prepend (GTK_BOX(date_format_box), GTK_WIDGET(date_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(date_format_combo), true);
-        gtk_widget_show_all (GTK_WIDGET(date_format_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(date_format_box));
 
         /* Add in the currency format combo box and hook it up to an event handler. */
         currency_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
@@ -626,10 +630,10 @@ CsvImpTransAssist::CsvImpTransAssist ()
                          G_CALLBACK(csv_tximp_preview_currency_fmt_sel_cb), this);
 
         /* Add it to the assistant. */
-        auto currency_format_container = GTK_CONTAINER(gtk_builder_get_object (builder, "currency_format_container"));
-        gtk_container_add (currency_format_container, GTK_WIDGET(currency_format_combo));
+        auto currency_format_box = GTK_BOX(gtk_builder_get_object (builder, "currency_format_container"));
+        gtk_box_prepend (GTK_BOX(currency_format_box), GTK_WIDGET(currency_format_combo));
         gtk_widget_set_hexpand (GTK_WIDGET(currency_format_combo), true);
-        gtk_widget_show_all (GTK_WIDGET(currency_format_container));
+//FIXME gtk4        gtk_widget_show_all (GTK_WIDGET(currency_format_box));
 
         /* Connect the CSV/Fixed-Width radio button event handler. */
         csv_button = GTK_WIDGET(gtk_builder_get_object (builder, "csv_button"));
@@ -671,10 +675,10 @@ CsvImpTransAssist::CsvImpTransAssist ()
     gnc_restore_window_size (GNC_PREFS_GROUP,
                              GTK_WINDOW(csv_imp_asst), gnc_ui_get_main_window(nullptr));
 
-    gtk_builder_connect_signals (builder, this);
+//FIXME gtk4    gtk_builder_connect_signals (builder, this);
     g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_show_all (GTK_WIDGET(csv_imp_asst));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(csv_imp_asst));
     gnc_window_adjust_for_screen (GTK_WINDOW(csv_imp_asst));
 
     /* In order to trigger a book options display on the creation of a new book,
@@ -693,7 +697,7 @@ CsvImpTransAssist::~CsvImpTransAssist ()
     /* The call above frees gnc_csv_importer_gui but can't nullify it.
      * Do it here so no one accidentally can access it still */
     gnc_csv_importer_gui = nullptr;
-    gtk_widget_destroy (GTK_WIDGET(csv_imp_asst));
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(csv_imp_asst));
 }
 
 
@@ -706,7 +710,10 @@ CsvImpTransAssist::~CsvImpTransAssist ()
 bool
 CsvImpTransAssist::check_for_valid_filename ()
 {
-    auto file_name = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER(file_chooser));
+    GFile *file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER(file_chooser));
+    auto file_name = g_file_get_path (file);
+    g_object_unref (file);
+
     if (!file_name || g_file_test (file_name, G_FILE_TEST_IS_DIR))
     {
         g_free (file_name);
@@ -795,8 +802,8 @@ void CsvImpTransAssist::preview_handle_save_del_sensitivity (GtkComboBox* combo)
     GtkTreeIter iter;
     auto can_delete = false;
     auto can_save = false;
-    auto entry = gtk_bin_get_child (GTK_BIN(combo));
-    auto entry_text = gtk_entry_get_text (GTK_ENTRY(entry));
+    auto entry = gtk_combo_box_get_child (GTK_COMBO_BOX(combo));
+    auto entry_text = gnc_entry_get_text (GTK_ENTRY(entry));
     /* Handle sensitivity of the delete and save button */
     if (gtk_combo_box_get_active_iter (combo, &iter))
     {
@@ -823,7 +830,7 @@ void CsvImpTransAssist::preview_handle_save_del_sensitivity (GtkComboBox* combo)
 void
 CsvImpTransAssist::preview_settings_name (GtkEntry* entry)
 {
-    auto text = gtk_entry_get_text (entry);
+    auto text = gnc_entry_get_text (entry);
     if (text)
         tx_imp->settings_name(text);
 
@@ -1010,7 +1017,7 @@ void CsvImpTransAssist::preview_update_separators (GtkWidget* widget)
     /* Add the custom separator if the user checked its button. */
     if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(custom_cbutton)))
     {
-        auto custom_sep = gtk_entry_get_text (custom_entry);
+        auto custom_sep = gnc_entry_get_text (custom_entry);
         if (custom_sep[0] != '\0') /* Don't add a blank separator (bad things will happen!). */
             checked_separators += custom_sep;
     }
@@ -1038,7 +1045,7 @@ void CsvImpTransAssist::preview_update_separators (GtkWidget* widget)
             return;
         /* If the user changed the custom separator, erase that custom separator. */
         if (widget == GTK_WIDGET(custom_entry))
-            gtk_entry_set_text (GTK_ENTRY(widget), "");
+            gnc_entry_set_text (GTK_ENTRY(widget), "");
         /* If the user checked a checkbutton, toggle that checkbutton back. */
         else
             gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(widget),
@@ -1321,8 +1328,8 @@ fixed_context_menu_handler (GnumericPopupMenuElement const *element,
 }
 
 void
-CsvImpTransAssist::fixed_context_menu (GdkEventButton *event,
-                    int col, int offset)
+CsvImpTransAssist::fixed_context_menu (const GdkEvent *event,
+                                       int col, int offset)
 {
     auto fwtok = dynamic_cast<GncFwTokenizer*>(tx_imp->m_tokenizer.get());
     fixed_context_col = col;
@@ -1371,17 +1378,23 @@ CsvImpTransAssist::preview_split_column (int col, int offset)
  * @param event The event that happened (where the user clicked)
  */
 void
-CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, GdkEventButton* event)
+CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, const GdkEvent* event)
 {
+//FIXME gtk4
+#ifdef skip
     /* Nothing to do if this was not triggered on our treeview body */
-    if (event->window != gtk_tree_view_get_bin_window (treeview))
+    if (gdk_event_get_window (event) != gtk_tree_view_get_bin_window (treeview))
+        return;
+
+    gdouble x_win, y_win;
+    if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
         return;
 
     /* Find the column that was clicked. */
     GtkTreeViewColumn *tcol = nullptr;
     int cell_x = 0;
     auto success = gtk_tree_view_get_path_at_pos (treeview,
-            (int)event->x, (int)event->y,
+            (int)x_win, (int)y_win,
             nullptr, &tcol, &cell_x, nullptr);
     if (!success)
         return;
@@ -1399,12 +1412,17 @@ CsvImpTransAssist::preview_update_fw_columns (GtkTreeView* treeview, GdkEventBut
      */
     auto dcol = tcol_num - 1;
     auto offset = get_new_col_rel_pos (tcol, cell_x);
-    if (event->type == GDK_2BUTTON_PRESS && event->button == 1)
-        /* Double clicks can split columns. */
-        preview_split_column (dcol, offset);
-    else if (event->type == GDK_BUTTON_PRESS && event->button == 3)
-        /* Right clicking brings up a context menu. */
-        fixed_context_menu (event, dcol, offset);
+    guint button;
+    if (gdk_event_get_button (event, &button))
+    {
+        if ((gdk_event_get_event_type (event) == GDK_2BUTTON_PRESS) && (button == 1))
+            /* Double clicks can split columns. */
+            preview_split_column (dcol, offset);
+        else if ((gdk_event_get_event_type (event) == GDK_BUTTON_PRESS) && (button == 3))
+            /* Right clicking brings up a context menu. */
+            fixed_context_menu (event, dcol, offset);
+    }
+#endif
 }
 
 
@@ -1484,7 +1502,7 @@ CsvImpTransAssist::preview_cbox_factory (GtkTreeModel* model, uint32_t colnum)
     g_signal_connect (G_OBJECT(cbox), "changed",
                      G_CALLBACK(csv_tximp_preview_col_type_changed_cb), (gpointer)this);
 
-    gtk_widget_show (cbox);
+    gtk_widget_set_visible (GTK_WIDGET(cbox), true);
     return cbox;
 }
 
@@ -1499,7 +1517,7 @@ CsvImpTransAssist::preview_style_column (uint32_t col_num, GtkTreeModel* model)
         gtk_tree_view_column_set_attributes (col, renderer,
                 "icon-name", PREV_COL_ERR_ICON,
                 "cell-background", PREV_COL_BCOLOR, nullptr);
-        g_object_set (G_OBJECT(renderer), "stock-size", GTK_ICON_SIZE_MENU, nullptr);
+//FIXME gtk4        g_object_set (G_OBJECT(renderer), "stock-size", GTK_ICON_SIZE_MENU, nullptr);
         g_object_set (G_OBJECT(col), "sizing", GTK_TREE_VIEW_COLUMN_FIXED,
                 "fixed-width", 20, nullptr);
         gtk_tree_view_column_set_resizable (col, false);
@@ -1644,7 +1662,7 @@ void CsvImpTransAssist::preview_refresh_table ()
     }
 
     /* Make the things actually appear. */
-    gtk_widget_show_all (GTK_WIDGET(treeview));
+//FIXME gtk4    gtk_widget_show_all (GTK_WIDGET(treeview));
 }
 
 /* Update the preview page based on the current state of the importer.
@@ -1724,7 +1742,7 @@ CsvImpTransAssist::preview_refresh ()
         g_signal_handlers_block_by_func (custom_entry, (gpointer) csv_tximp_preview_sep_button_cb, this);
         gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(custom_cbutton),
                                       !separators.empty());
-        gtk_entry_set_text (GTK_ENTRY(custom_entry), separators.c_str());
+        gnc_entry_set_text (GTK_ENTRY(custom_entry), separators.c_str());
         g_signal_handlers_unblock_by_func (custom_cbutton, (gpointer) csv_tximp_preview_sep_button_cb, this);
         g_signal_handlers_unblock_by_func (custom_entry, (gpointer) csv_tximp_preview_sep_button_cb, this);
         try
@@ -1947,22 +1965,33 @@ CsvImpTransAssist::acct_match_via_button ()
 
 /* This is the callback for the mouse click */
 bool
-CsvImpTransAssist::acct_match_via_view_dblclick (GdkEventButton *event)
+CsvImpTransAssist::acct_match_via_view_dblclick (const GdkEvent *event)
 {
+//FIXME
+#ifdef skip
+    guint button;
+
+    if (!gdk_event_get_button (event, &button))
+        return false;
+
     /* This is for a double click */
-    if (event->button == 1 && event->type == GDK_2BUTTON_PRESS)
+    if (button == 1 && (gdk_event_get_event_type (event) == GDK_2BUTTON_PRESS))
     {
         auto window = gtk_tree_view_get_bin_window (GTK_TREE_VIEW (account_match_view));
-        if (event->window != window)
+        if (gdk_event_get_window (event) != window)
+            return false;
+
+        gdouble x_win, y_win;
+        if (!gdk_event_get_position ((GdkEvent*)event, &x_win, &y_win))
             return false;
 
         /* Get tree path for row that was clicked, true if row exists */
         GtkTreePath *path;
-        if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW (account_match_view), (gint) event->x, (gint) event->y,
-                                             &path, nullptr, nullptr, nullptr))
-        {
-            DEBUG("event->x is %d and event->y is %d", (gint)event->x, (gint)event->y);
 
+        if (gtk_tree_view_get_path_at_pos (GTK_TREE_VIEW(account_match_view), (gint)x_win, (gint)y_win,
+                                           &path, nullptr, nullptr, nullptr))
+        {
+            DEBUG("event x_win is %d and y_win is %d", (gint)x_win, (gint)y_win);
             auto model = gtk_tree_view_get_model (GTK_TREE_VIEW(account_match_view));
             GtkTreeIter iter;
             if (gtk_tree_model_get_iter (model, &iter, path))
@@ -1971,6 +2000,7 @@ CsvImpTransAssist::acct_match_via_view_dblclick (GdkEventButton *event)
         }
         return true;
     }
+#endif
     return false;
 }
 
@@ -1984,14 +2014,19 @@ CsvImpTransAssist::assist_file_page_prepare ()
 {
     /* Set the default directory */
     if (!m_final_file_name.empty())
-        gtk_file_chooser_set_filename (GTK_FILE_CHOOSER(file_chooser),
-                                       m_final_file_name.c_str());
+    {
+        GFile *file = g_file_new_for_path (m_final_file_name.c_str());
+        gtk_file_chooser_set_file (GTK_FILE_CHOOSER(file_chooser), file, nullptr);
+        g_object_unref (file);
+    }
     else
     {
         auto starting_dir = gnc_get_default_directory (GNC_PREFS_GROUP);
         if (starting_dir)
         {
-            gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(file_chooser), starting_dir);
+            GFile *file = g_file_new_for_path (starting_dir);
+            gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER(file_chooser), file, NULL);
+            g_object_unref (file);
             g_free (starting_dir);
         }
     }
@@ -2102,15 +2137,15 @@ CsvImpTransAssist::assist_doc_page_prepare ()
     gtk_assistant_add_action_widget (csv_imp_asst, cancel_button);
     auto button_area = gtk_widget_get_parent (cancel_button);
 
-    if (GTK_IS_HEADER_BAR(button_area))
-        gtk_container_child_set (GTK_CONTAINER(button_area),
-                                 cancel_button,
-                                 "pack-type", GTK_PACK_START,
-                                 nullptr);
+//FIXME gtk4    if (GTK_IS_HEADER_BAR(button_area))
+//        gtk_container_child_set (GTK_CONTAINER(button_area),
+//                                 cancel_button,
+//                                 "pack-type", GTK_PACK_START,
+//                                 nullptr);
 
     g_signal_connect (cancel_button, "clicked",
                      G_CALLBACK(csv_tximp_assist_close_cb), this);
-    gtk_widget_show (GTK_WIDGET(cancel_button));
+    gtk_widget_set_visible (GTK_WIDGET(cancel_button), true);
 }
 
 
@@ -2153,23 +2188,23 @@ CsvImpTransAssist::assist_match_page_prepare ()
 
     if (GTK_IS_HEADER_BAR(button_area))
     {
-        gtk_container_child_set (GTK_CONTAINER(button_area),
-                                 help_button,
-                                 "pack-type", GTK_PACK_START,
-                                 nullptr);
+//FIXME gtk4        gtk_container_child_set (GTK_CONTAINER(button_area),
+//                                 help_button,
+//                                 "pack-type", GTK_PACK_START,
+//                                 nullptr);
     }
     else
     {
         // align the help button on the left side
         gtk_widget_set_halign (GTK_WIDGET(button_area), GTK_ALIGN_FILL);
         gtk_widget_set_hexpand (GTK_WIDGET(button_area), TRUE);
-        gtk_box_set_child_packing (GTK_BOX(button_area), help_button,
-                                   FALSE, FALSE, 0, GTK_PACK_START);
+//FIXME gtk4        gtk_box_set_child_packing (GTK_BOX(button_area), help_button,
+//                                   FALSE, FALSE, 0, GTK_PACK_START);
     }
     g_signal_connect (help_button, "clicked",
                      G_CALLBACK(on_matcher_help_clicked), gnc_csv_importer_gui);
 
-    gtk_widget_show (GTK_WIDGET(help_button));
+    gtk_widget_set_visible (GTK_WIDGET(help_button), true);
 
     /* Copy all of the transactions to the importer GUI. */
     for (auto trans_it : tx_imp->m_transactions)

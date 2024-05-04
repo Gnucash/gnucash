@@ -377,7 +377,7 @@ ap_assistant_book_prepare (GtkAssistant *assistant, gpointer user_data)
     gtk_label_set_text (GTK_LABEL(info->book_details), str);
     g_free (str);
 
-    gtk_widget_show (GTK_WIDGET (info->book_details));
+    gtk_widget_set_visible (GTK_WIDGET(info->book_details), TRUE);
 
     /* Create default settings for the title, notes fields */
     qof_print_date_dmy_buff (prev_close_date_str, MAX_DATE_LENGTH,
@@ -386,7 +386,7 @@ ap_assistant_book_prepare (GtkAssistant *assistant, gpointer user_data)
                              g_date_get_year(&info->prev_closing_date));
 
     str = g_strdup_printf (_("Period %s - %s"), prev_close_date_str, close_date_str);
-    gtk_entry_set_text (GTK_ENTRY(info->book_title), str);
+    gnc_entry_set_text (GTK_ENTRY(info->book_title), str);
 
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(info->book_notes));
     gtk_text_buffer_set_text(buffer, str, -1);
@@ -407,7 +407,7 @@ ap_assistant_apply_prepare (GtkAssistant *assistant, gpointer user_data)
           "click on \"Apply\". Click on \"Back\" to adjust, "
 	  "or \"Cancel\" to not create any book.");
 
-    btitle = gtk_entry_get_text (GTK_ENTRY(info->book_title));
+    btitle = gnc_entry_get_text (GTK_ENTRY(info->book_title));
     str = g_strdup_printf (apply_text, btitle);
     gtk_label_set_text (GTK_LABEL(info->apply_label), str);
     g_free (str);
@@ -472,7 +472,7 @@ ap_assistant_finish (GtkAssistant *assistant, gpointer user_data)
 
     ENTER("info=%p", info);
 
-    btitle = gtk_entry_get_text (GTK_ENTRY(info->book_title));
+    btitle = gnc_entry_get_text (GTK_ENTRY(info->book_title));
     buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(info->book_notes));
     len = gtk_text_buffer_get_char_count (buffer);
     gtk_text_buffer_get_iter_at_offset(buffer, &startiter, 0);
@@ -541,6 +541,7 @@ ap_assistant_create (AcctPeriodInfo *info)
     gchar *earliest_str;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(info));
     gnc_builder_add_from_file  (builder , "assistant-acct-period.glade", "account_period_assistant");
     window = GTK_WIDGET(gtk_builder_get_object (builder, "account_period_assistant"));
     info->window = window;
@@ -597,7 +598,7 @@ ap_assistant_create (AcctPeriodInfo *info)
     /* Reparent to the correct location */
 
     box = GTK_WIDGET(gtk_builder_get_object(builder, "period_hbox"));
-    gtk_box_pack_start (GTK_BOX (box), GTK_WIDGET (info->period_menu), TRUE, TRUE, 0);
+    gtk_box_append (GTK_BOX(box), GTK_WIDGET(info->period_menu));
     g_signal_connect (info->period_menu, "changed",
                       G_CALLBACK (ap_assistant_menu_changed_cb), info);
 
@@ -619,7 +620,7 @@ ap_assistant_create (AcctPeriodInfo *info)
     g_signal_connect (G_OBJECT(window), "destroy",
                       G_CALLBACK (ap_assistant_destroy_cb), info);
 
-    gtk_builder_connect_signals(builder, info);
+//FIXME gtk4    gtk_builder_connect_signals(builder, info);
     g_object_unref(G_OBJECT(builder));
     return window;
 }
@@ -631,7 +632,7 @@ ap_close_handler (gpointer user_data)
 {
     AcctPeriodInfo *info = user_data;
 
-    gtk_widget_destroy (info->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(info->window));
 }
 
 /********************************************************************\
@@ -654,7 +655,7 @@ gnc_acct_period_dialog (void)
     gnc_register_gui_component (ASSISTANT_ACCT_PERIOD_CM_CLASS,
 				NULL, ap_close_handler, info);
 
-    gtk_widget_show_all (info->window);
+//FIXME gtk4    gtk_widget_show_all (info->window);
 
     gnc_window_adjust_for_screen (GTK_WINDOW(info->window));
 }

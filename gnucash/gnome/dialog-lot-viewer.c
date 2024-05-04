@@ -254,7 +254,7 @@ lv_save_current_lot (GNCLotViewer *lv)
         gnc_lot_begin_edit(lot);
 
         /* Get the title, save_the_title */
-        str = gtk_entry_get_text (lv->title_entry);
+        str = gnc_entry_get_text (lv->title_entry);
         gnc_lot_set_title (lot, str);
 
         /* Get the notes, save the notes */
@@ -276,7 +276,7 @@ lv_unset_lot (GNCLotViewer *lv)
     lv->selected_lot = NULL;
 
     /* Blank the title widget */
-    gtk_entry_set_text (lv->title_entry, "");
+    gnc_entry_set_text (lv->title_entry, "");
     gtk_editable_set_editable (GTK_EDITABLE(lv->title_entry), FALSE);
 
     /* Blank the notes area */
@@ -306,7 +306,7 @@ lv_select_row (GNCLotViewer *lv,
 
     str = gnc_lot_get_title (lot);
     if (!str) str = "";
-    gtk_entry_set_text (lv->title_entry, str);
+    gnc_entry_set_text (lv->title_entry, str);
     gtk_editable_set_editable (GTK_EDITABLE(lv->title_entry), TRUE);
 
     /* Set the notes field */
@@ -634,7 +634,7 @@ lv_close_handler (gpointer user_data)
     lv_save_current_lot (lv);
 
     gnc_save_window_size(GNC_PREFS_GROUP, GTK_WINDOW(lv->window));
-    gtk_widget_destroy (lv->window);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(lv->window));
 }
 
 /* ===========================    Callbacks    ============================ */
@@ -649,7 +649,7 @@ lv_title_entry_changed_cb (GtkEntry *ent, gpointer user_data)
     GtkTreeIter iter;
     GtkTreeSelection *selection;
     const char * title;
-    title = gtk_entry_get_text (lv->title_entry);
+    title = gnc_entry_get_text (lv->title_entry);
 
     selection = gtk_tree_view_get_selection(lv->lot_view);
     if (gtk_tree_selection_get_selected (selection, &model, &iter))
@@ -1068,7 +1068,7 @@ window_realize_set_split_paned_position_cb (GtkWidget *widget, gpointer user_dat
     GNCLotViewer *lv = user_data;
     gint width;
 
-    gtk_window_get_size (GTK_WINDOW(lv->window), &width, NULL);
+    gtk_window_get_default_size (GTK_WINDOW(lv->window), &width, NULL);
     gtk_paned_set_position (GTK_PANED(lv->split_hpaned), width / 2);
 }
 
@@ -1079,6 +1079,7 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
     GtkBuilder *builder;
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(lv));
     gnc_builder_add_from_file (builder, "dialog-lot-viewer.glade", "lot_viewer_dialog");
 
     lv->window = GTK_WIDGET(gtk_builder_get_object (builder, "lot_viewer_dialog"));
@@ -1142,7 +1143,7 @@ lv_create (GNCLotViewer *lv, GtkWindow *parent)
                       G_CALLBACK(window_realize_set_split_paned_position_cb), lv);
 
     /* Setup signals */
-    gtk_builder_connect_signals(builder, lv);
+//FIXME gtk4    gtk_builder_connect_signals(builder, lv);
     g_object_unref(G_OBJECT(builder));
 
     lv_update_split_buttons(lv);
@@ -1175,7 +1176,7 @@ gnc_lot_viewer_dialog (GtkWindow *parent, Account *account)
                                          GNC_ID_LOT,
                                          QOF_EVENT_CREATE | QOF_EVENT_ADD | QOF_EVENT_REMOVE | QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    gtk_widget_show_all (lv->window);
+//FIXME gtk4    gtk_widget_show_all (lv->window);
     gnc_window_adjust_for_screen (GTK_WINDOW(lv->window));
 
     return lv;

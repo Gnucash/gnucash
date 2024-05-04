@@ -91,9 +91,9 @@ struct _GncEmbeddedWindow
      *  plugins. */
     GSimpleActionGroup *simple_action_group;
 
-    /** The accelerator group of all actions provided by the embedded
+    /** The shortcut controller of all actions provided by the embedded
      *  window. */
-    GtkAccelGroup *accel_group;
+    GtkEventController *shortcut_controller;
 
     /** The currently selected page. */
     GncPluginPage *page;
@@ -124,7 +124,9 @@ gnc_embedded_window_open_page (GncEmbeddedWindow *window,
     page->window = GTK_WIDGET(window);
     page->notebook_page = gnc_plugin_page_create_widget (page);
 
-    gtk_box_pack_end(GTK_BOX(window), page->notebook_page, TRUE, TRUE, 2);
+    gtk_box_prepend (GTK_BOX(window), GTK_WIDGET(page->notebook_page));
+    gtk_box_set_spacing (GTK_BOX(window), 2);
+
     gnc_plugin_page_inserted (page);
     LEAVE(" ");
 }
@@ -147,7 +149,7 @@ gnc_embedded_window_close_page (GncEmbeddedWindow *window,
         return;
     }
 
-    gtk_container_remove (GTK_CONTAINER(window), GTK_WIDGET(page->notebook_page));
+    gtk_box_remove (GTK_BOX(window), GTK_WIDGET(page->notebook_page));
     window->page = NULL;
     gnc_plugin_page_removed (page);
 
@@ -294,16 +296,16 @@ gnc_embedded_window_setup_window (GncEmbeddedWindow *window)
     ENTER("window %p", window);
 
     /* Create widgets and add them to the window */
-    gtk_widget_show (GTK_WIDGET(window));
+    gtk_widget_set_visible (GTK_WIDGET(window), TRUE);
 
     window->menu_dock = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
     gtk_box_set_homogeneous (GTK_BOX (window->menu_dock), FALSE);
-    gtk_widget_show (window->menu_dock);
-    gtk_box_pack_start (GTK_BOX (window), window->menu_dock, FALSE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(window->menu_dock), TRUE);
+    gtk_box_append (GTK_BOX(window), GTK_WIDGET(window->menu_dock));
 
     window->statusbar = gtk_statusbar_new ();
-    gtk_widget_show (window->statusbar);
-    gtk_box_pack_end (GTK_BOX (window), window->statusbar, FALSE, TRUE, 0);
+    gtk_widget_set_visible (GTK_WIDGET(window->statusbar), TRUE);
+    gtk_box_prepend (GTK_BOX(window), GTK_WIDGET(window->statusbar));
 
     window->simple_action_group = NULL;
     LEAVE(" ");
@@ -347,14 +349,13 @@ gnc_embedded_window_new (const gchar *action_group_name,
 
     window->menubar_model = (GMenuModel *)gtk_builder_get_object (builder, "embeddedwin-menu");
 
-    window->menubar = gtk_menu_bar_new_from_model (window->menubar_model);
-    gtk_container_add (GTK_CONTAINER(window->menu_dock), window->menubar);
-    gtk_widget_show (GTK_WIDGET(window->menubar));
+    window->menubar = gtk_popover_menu_bar_new_from_model (window->menubar_model);
+    gtk_box_append (GTK_BOX(window->menu_dock), GTK_WIDGET(window->menubar));
+    gtk_widget_set_visible (GTK_WIDGET(window->menubar), TRUE);
 
     window->toolbar = (GtkWidget *)gtk_builder_get_object (builder, "embeddedwin-toolbar");
-    g_object_set (window->toolbar, "toolbar-style", GTK_TOOLBAR_BOTH, NULL);
-    gtk_container_add (GTK_CONTAINER(window->menu_dock), GTK_WIDGET(window->toolbar));
-    gtk_widget_show (GTK_WIDGET(window->toolbar));
+    gtk_box_append (GTK_BOX(window->menu_dock), GTK_WIDGET(window->toolbar));
+    gtk_widget_set_visible (GTK_WIDGET(window->toolbar), TRUE);
 
     g_object_unref (builder);
 
@@ -371,9 +372,10 @@ gnc_embedded_window_new (const gchar *action_group_name,
     window->parent_window = enclosing_win;
 
     // need to add the accelerator keys
-    window->accel_group = gtk_accel_group_new ();
-    gtk_window_add_accel_group (GTK_WINDOW(enclosing_win), window->accel_group);
-    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(window->menubar), window->menubar_model, window->accel_group);
+    window->shortcut_controller = gtk_shortcut_controller_new ();
+    gtk_widget_add_controller (GTK_WIDGET(enclosing_win), GTK_EVENT_CONTROLLER(window->shortcut_controller));
+
+    gnc_add_accelerator_keys_for_menu (GTK_WIDGET(window->menubar), window->menubar_model, window->shortcut_controller);
 
     g_free (ui_fullname);
     LEAVE("window %p", window);
@@ -459,12 +461,12 @@ gnc_embedded_window_get_menubar_model (GncWindow *window)
  *  interface.
  *
  *  @param window_in A pointer to a generic window. */
-static GtkAccelGroup *
-gnc_embedded_window_get_accel_group (GncWindow *window)
+static GtkEventController *
+gnc_embedded_window_get_accel_group (GncWindow *window) //FIXME gtk4 rename
 {
     g_return_val_if_fail (GNC_IS_EMBEDDED_WINDOW(window), NULL);
 
-    return GNC_EMBEDDED_WINDOW (window)->accel_group;
+    return GNC_EMBEDDED_WINDOW (window)->shortcut_controller;
 }
 
 /** Initialize the generic window interface for an embedded window.

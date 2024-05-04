@@ -133,7 +133,7 @@ gnc_frequency_class_init( GncFrequencyClass *klass )
                       0);
 
     /* GtkWidget signals */
-    gtkwidget_class->destroy = gnc_frequency_destroy;
+//FIXME gtk4    gtkwidget_class->destroy = gnc_frequency_destroy;
 }
 
 
@@ -181,6 +181,7 @@ gnc_frequency_init(GncFrequency *gf)
     gtk_widget_set_name (GTK_WIDGET(gf), "gnc-id-frequency");
 
     builder = gtk_builder_new();
+    gtk_builder_set_current_object (builder, G_OBJECT(gf));
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment1");
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment2");
     gnc_builder_add_from_file  (builder , "gnc-frequency.glade", "adjustment3");
@@ -212,7 +213,7 @@ gnc_frequency_init(GncFrequency *gf)
     }
     vb = GTK_BOX(gtk_builder_get_object (builder, "gncfreq_vbox"));
     gf->vb = vb;
-    gtk_container_add(GTK_CONTAINER(&gf->widget), GTK_WIDGET(gf->vb));
+    gtk_box_prepend (GTK_BOX(&gf->widget), GTK_WIDGET(gf->vb));
 
     /* initialize the combo boxes */
     for (i = 0; comboBoxes[i].name != NULL; i++)
@@ -244,12 +245,12 @@ gnc_frequency_init(GncFrequency *gf)
                          G_CALLBACK(weekly_days_changed), gf);
     }
 
-    gtk_widget_show_all(GTK_WIDGET(&gf->widget));
+//FIXME gtk4    gtk_widget_show_all(GTK_WIDGET(&gf->widget));
 
     /* respond to start date changes */
     g_signal_connect(gf->startDate, "date_changed", G_CALLBACK(start_date_changed), gf);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gf);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, gf);
 
 }
 
@@ -279,7 +280,7 @@ gnc_frequency_destroy (GtkWidget *widget)
         gf->builder = NULL;
     }
 
-    GTK_WIDGET_CLASS (gnc_frequency_parent_class)->destroy (widget);
+//FIXME gtk4    GTK_WIDGET_CLASS (gnc_frequency_parent_class)->destroy (widget);
     LEAVE(" ");
 }
 

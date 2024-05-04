@@ -123,8 +123,8 @@ gnc_style_sheet_options_apply_cb (GncOptionsDialog * propertybox,
                                                    GTK_BUTTONS_OK,
                                                    "%s",
                                                    (char*)iter->data);
-        gtk_dialog_run(GTK_DIALOG(dialog));
-        gtk_widget_destroy(dialog);
+        gnc_dialog_run (GTK_DIALOG(dialog));
+
         g_free (iter->data);
     }
     g_list_free (results);
@@ -165,7 +165,7 @@ gnc_style_sheet_dialog_create (StyleSheetDialog * ss,
     SCM            scm_dispatch = scm_call_1 (get_options, sheet_info);
     ss_info        * ssinfo = g_new0 (ss_info, 1);
     gchar          * title;
-    GtkWindow      * parent = GTK_WINDOW(gtk_widget_get_toplevel (GTK_WIDGET(ss->list_view)));
+    GtkWindow      * parent = GTK_WINDOW(gtk_widget_get_root (GTK_WIDGET(ss->list_view)));
 
     title = g_strdup_printf(_("HTML Style Sheet Properties: %s"), name);
     ssinfo->odialog = new GncOptionsDialog(title, parent);
@@ -245,13 +245,16 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
 
     /* get the name */
     gtk_window_set_transient_for (GTK_WINDOW(dlg), GTK_WINDOW(ssd->toplevel));
-    dialog_retval = gtk_dialog_run (GTK_DIALOG(dlg));
+
+//FIXME gtk4    dialog_retval = gtk_dialog_run (GTK_DIALOG(dlg));
+gtk_window_set_modal (GTK_WINDOW(dlg), true); //FIXME gtk4
+dialog_retval = GTK_RESPONSE_CANCEL; //FIXME gtk4
 
     if (dialog_retval == GTK_RESPONSE_OK)
     {
         gint choice = gtk_combo_box_get_active (GTK_COMBO_BOX(template_combo));
         auto template_str{static_cast<const char *>(g_list_nth_data (template_names, choice))};
-        const char *name_str     = gtk_entry_get_text(GTK_ENTRY(name_entry));
+        const char *name_str     = gnc_entry_get_text(GTK_ENTRY(name_entry));
         if (name_str && strlen(name_str) == 0)
         {
             /* If the name is empty, we display an error dialog but
@@ -271,7 +274,7 @@ gnc_style_sheet_new (StyleSheetDialog * ssd)
 
     g_object_unref (G_OBJECT(builder));
 
-    gtk_widget_destroy (dlg);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(dlg));
     return (new_ss);
 }
 
@@ -327,7 +330,7 @@ gnc_style_sheet_select_dialog_fill (StyleSheetDialog * ss)
 
 static void
 gnc_style_sheet_select_dialog_event_cb (GtkWidget *widget,
-                                        GdkEvent *event,
+                                        const GdkEvent *event,
                                         gpointer user_data)
 {
     StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
@@ -335,8 +338,8 @@ gnc_style_sheet_select_dialog_event_cb (GtkWidget *widget,
     g_return_if_fail (event != NULL);
     g_return_if_fail (ss != NULL);
 
-    if (event->type != GDK_2BUTTON_PRESS)
-        return;
+//FIXME gtk4    if (gdk_event_get_event_type (event) != GDK_2BUTTON_PRESS)
+//        return;
 
     /* Synthesize a click of the edit button */
     gnc_style_sheet_select_dialog_edit_cb (NULL, ss);
@@ -428,9 +431,9 @@ gnc_style_sheet_select_dialog_close_cb (GtkWidget *widget, gpointer user_data)
 }
 
 static gboolean
-gnc_style_sheet_select_dialog_delete_event_cb (GtkWidget *widget,
-                                               GdkEvent  *event,
-                                               gpointer   user_data)
+gnc_style_sheet_select_dialog_delete_event_cb (GtkWidget       *widget,
+                                               const GdkEvent  *event,
+                                               gpointer         user_data)
 {
     auto ss{static_cast<StyleSheetDialog*>(user_data)};
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ss->toplevel));
@@ -450,7 +453,7 @@ gnc_style_sheet_select_dialog_destroy_cb (GtkWidget *widget, gpointer user_data)
     g_object_unref (ss->list_store);
     if (ss->toplevel)
     {
-        gtk_widget_destroy (ss->toplevel);
+//FIXME gtk4        gtk_window_destroy (GTK_WINDOW(ss->toplevel));
         ss->toplevel = NULL;
     }
     gnc_style_sheet_dialog = NULL;
@@ -464,21 +467,21 @@ gnc_style_sheet_window_close_handler (gpointer user_data)
     g_return_if_fail (ss);
 
     gnc_save_window_size (GNC_PREFS_GROUP, GTK_WINDOW(ss->toplevel));
-    gtk_widget_destroy (ss->toplevel);
+//FIXME gtk4    gtk_window_destroy (GTK_WINDOW(ss->toplevel));
 }
 
 static gboolean
-gnc_style_sheet_select_dialog_check_escape_cb (GtkWidget *widget,
-                                               GdkEventKey *event,
+gnc_style_sheet_select_dialog_check_escape_cb (GtkEventControllerKey *key, guint keyval,
+                                               guint keycode, GdkModifierType state,
                                                gpointer user_data)
 {
-    if (event->keyval == GDK_KEY_Escape)
+    if (keyval == GDK_KEY_Escape)
     {
         StyleSheetDialog  * ss = (StyleSheetDialog *)user_data;
         gnc_close_gui_component (ss->component_id);
-        return TRUE;
+        return true;
     }
-    return FALSE;
+    return false;
 }
 
 static StyleSheetDialog *
@@ -490,6 +493,7 @@ gnc_style_sheet_select_dialog_create (GtkWindow *parent)
     GtkTreeSelection  * selection;
 
     builder = gtk_builder_new ();
+    gtk_builder_set_current_object (builder, G_OBJECT(ss));
     gnc_builder_add_from_file (builder, "dialog-report.glade", "select_style_sheet_window");
 
     ss->toplevel = GTK_WIDGET(gtk_builder_get_object (builder, "select_style_sheet_window"));
@@ -522,12 +526,14 @@ gnc_style_sheet_select_dialog_create (GtkWindow *parent)
     g_signal_connect (ss->toplevel, "delete-event",
                       G_CALLBACK(gnc_style_sheet_select_dialog_delete_event_cb), ss);
 
-    g_signal_connect (ss->toplevel, "key-press-event",
+    GtkEventController *event_controller = gtk_event_controller_key_new ();
+    gtk_widget_add_controller (GTK_WIDGET(ss->toplevel), event_controller);
+    g_signal_connect (G_OBJECT(event_controller), "key-press-event",
                       G_CALLBACK(gnc_style_sheet_select_dialog_check_escape_cb), ss);
 
     gnc_style_sheet_select_dialog_fill (ss);
 
-    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ss);
+//FIXME gtk4    gtk_builder_connect_signals_full (builder, gnc_builder_connect_full_func, ss);
     g_object_unref (G_OBJECT(builder));
     return ss;
 }
@@ -555,6 +561,6 @@ gnc_style_sheet_dialog_open (GtkWindow *parent)
         gnc_restore_window_size (GNC_PREFS_GROUP,
                                  GTK_WINDOW(gnc_style_sheet_dialog->toplevel),
                                  GTK_WINDOW(parent));
-        gtk_widget_show_all (gnc_style_sheet_dialog->toplevel);
+//FIXME gtk4        gtk_widget_show_all (gnc_style_sheet_dialog->toplevel);
     }
 }
