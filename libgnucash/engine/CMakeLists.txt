@@ -160,7 +160,7 @@ set (engine_SOURCES
   gnc-date.cpp
   gnc-datetime.cpp
   gnc-engine.cpp
-  gnc-euro.c
+  gnc-euro.cpp
   gnc-event.c
   gnc-features.cpp
   gnc-hooks.c

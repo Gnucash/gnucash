@@ -66,8 +66,8 @@ static gnc_euro_rate_struct gnc_euro_rates[] =
 static int
 gnc_euro_rate_compare (const void * key, const void * value)
 {
-    const gnc_commodity * curr = key;
-    const gnc_euro_rate_struct * euro = value;
+    auto curr = static_cast<const gnc_commodity*>(key);
+    auto euro = static_cast<const gnc_euro_rate_struct*>(value);
 
     if (!key || !value)
         return -1;
@@ -102,11 +102,11 @@ gnc_is_euro_currency(const gnc_commodity * currency)
     if (!gnc_commodity_is_iso(currency))
         return FALSE;
 
-    result = bsearch(currency,
-                     gnc_euro_rates,
-                     sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
-                     sizeof(gnc_euro_rate_struct),
-                     gnc_euro_rate_compare);
+    result = (gnc_euro_rate_struct*)bsearch(currency,
+                                            gnc_euro_rates,
+                                            sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
+                                            sizeof(gnc_euro_rate_struct),
+                                            gnc_euro_rate_compare);
 
     if (result == NULL)
         return FALSE;
@@ -127,11 +127,11 @@ gnc_convert_to_euro(const gnc_commodity * currency, gnc_numeric value)
     if (!gnc_commodity_is_iso(currency))
         return gnc_numeric_zero ();
 
-    result = bsearch(currency,
-                     gnc_euro_rates,
-                     sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
-                     sizeof(gnc_euro_rate_struct),
-                     gnc_euro_rate_compare);
+    result = (gnc_euro_rate_struct*)bsearch(currency,
+                                            gnc_euro_rates,
+                                            sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
+                                            sizeof(gnc_euro_rate_struct),
+                                            gnc_euro_rate_compare);
 
     if (result == NULL)
         return gnc_numeric_zero ();
@@ -162,11 +162,11 @@ gnc_convert_from_euro(const gnc_commodity * currency, gnc_numeric value)
     if (!gnc_commodity_is_iso(currency))
         return gnc_numeric_zero ();
 
-    result = bsearch(currency,
-                     gnc_euro_rates,
-                     sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
-                     sizeof(gnc_euro_rate_struct),
-                     gnc_euro_rate_compare);
+    result = (gnc_euro_rate_struct*)bsearch(currency,
+                                            gnc_euro_rates,
+                                            sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
+                                            sizeof(gnc_euro_rate_struct),
+                                            gnc_euro_rate_compare);
 
     if (result == NULL)
         return gnc_numeric_zero ();
@@ -196,11 +196,11 @@ gnc_euro_currency_get_rate (const gnc_commodity *currency)
     if (!gnc_commodity_is_iso(currency))
         return gnc_numeric_zero ();
 
-    result = bsearch(currency,
-                     gnc_euro_rates,
-                     sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
-                     sizeof(gnc_euro_rate_struct),
-                     gnc_euro_rate_compare);
+    result = (gnc_euro_rate_struct*)bsearch(currency,
+                                            gnc_euro_rates,
+                                            sizeof(gnc_euro_rates) / sizeof(gnc_euro_rate_struct),
+                                            sizeof(gnc_euro_rate_struct),
+                                            gnc_euro_rate_compare);
 
     if (result == NULL)
         return gnc_numeric_zero ();
