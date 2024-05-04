@@ -162,8 +162,8 @@ public:
                         const char* username, const char* int_name)
         : m_supported{supported}
         , m_type{type}
-        , m_user_name{username}
-        , m_internal_name{int_name} { };
+        , m_user_name{username ? username : ""}
+        , m_internal_name{int_name ? int_name: ""} { };
 };
 
 using QuoteSourceVec = std::vector<gnc_quote_source>;
