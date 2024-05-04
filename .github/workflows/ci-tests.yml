@@ -33,7 +33,7 @@ jobs:
           ninja distcheck
         env:
           CTEST_OUTPUT_ON_FAILURE: On
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: TestLog
@@ -70,7 +70,7 @@ jobs:
           ninja check
         env:
           CTEST_OUTPUT_ON_FAILURE: On
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: TestLog

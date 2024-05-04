@@ -46,7 +46,7 @@ jobs:
             echo "::warning title=Invalid file permissions automatically fixed::$line"
           done
       - name: Upload pages
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         if: success()
         with:
           path: ${{ github.workspace }}/build/github-pages
@@ -64,4 +64,4 @@ jobs:
     steps:
       - name: Publish
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v3
