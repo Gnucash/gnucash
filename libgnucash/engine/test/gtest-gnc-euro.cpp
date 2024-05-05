@@ -96,6 +96,13 @@ TEST_F(Currencies, convert_to_euro)
     ASSERT_NE(eur, nullptr);
     EXPECT_TRUE(gnc_numeric_equal(value,
                                gnc_convert_to_euro(eur, value)));
+
+    // test euro rounding strategy ROUND_HALF_UP. this cyp_val will
+    // convert to 0.005 exactly, rounded to 0.01 eur
+    gnc_numeric cyp_val{585274, 200000000};
+    auto eur_val{gnc_convert_to_euro(cyp, cyp_val)};
+    EXPECT_EQ (eur_val.num, 1);
+    EXPECT_EQ (eur_val.denom, 100);
 }
 
 TEST_F(Currencies, convert_from_euro)
