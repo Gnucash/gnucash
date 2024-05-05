@@ -985,7 +985,7 @@ void gnc_commodity_commit_edit (gnc_commodity *cm);
 /** Get the internal KVP from of the currency.
  * You should rather use the individual accessors for individual properties
  */
-#define gnc_commodity_get_kvp_frame (cm) \
+#define gnc_commodity_get_kvp_frame(cm) \
     qof_instance_get_slots(QOF_INSTANCE(cm))
 
 /** @} */
