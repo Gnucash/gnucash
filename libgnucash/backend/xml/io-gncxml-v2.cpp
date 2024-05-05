@@ -51,7 +51,7 @@
 #include "SX-book.h"
 #include "SX-book-p.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "TransLog.h"
 #if PLATFORM(WINDOWS)
 #ifdef __STRICT_ANSI_UNSET__

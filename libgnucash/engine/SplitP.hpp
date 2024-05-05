@@ -1,5 +1,5 @@
 /********************************************************************\
- * SplitP.h -- private header for splits                            *
+ * SplitP.hpp -- private header for splits                            *
  * Copyright (C) 1997 Robin D. Clark                                *
  * Copyright (C) 1997-2000 Linas Vepstas <linas@linas.org>          *
  * Copyright (C) 2000 Bill Gribble                                  *
@@ -25,7 +25,7 @@
 
 /*
  * FILE:
- * SplitP.h
+ * SplitP.hpp
  *
  * FUNCTION:
  * The is the *private* split header file.  Code outside of
@@ -51,10 +51,6 @@
 #include "gnc-engine.h"   /* for typedefs */
 #include "qof.h"
 
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 /** STRUCTS *********************************************************/
 /* A "split" is more commonly referred to as an "entry" in a "transaction".
@@ -235,10 +231,6 @@ typedef struct
 } SplitTestFunctions;
 
 SplitTestFunctions* _utest_split_fill_functions (void);
-
-#ifdef __cplusplus
-}
-#endif
 
 
 /*@}*/

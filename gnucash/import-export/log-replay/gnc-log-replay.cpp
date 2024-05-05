@@ -34,19 +34,17 @@
 
 #include "Account.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "TransLog.h"
 #include "Scrub.h"
 #include "gnc-log-replay.h"
 #include "gnc-file.h"
 #include "qof.h"
+#include "qofinstance-p.h"
 #include "gnc-ui-util.h"
 #include "gnc-gui-query.h"
 
 #define GNC_PREFS_GROUP "dialogs.log-replay"
-
-/* EFFECTIVE FRIEND FUNCTION */
-void qof_instance_set_guid (gpointer inst, const GncGUID *guid);
 
 /* NW: If you want a new log_module, just define
 a unique string either in gnc-engine.h or
@@ -152,16 +150,16 @@ static split_record interpret_split_record( char *record_line)
         switch (tok_ptr[0])
         {
         case 'B':
-            record.log_action = LOG_BEGIN_EDIT;
+            record.log_action = split_record::_enum_action::LOG_BEGIN_EDIT;
             break;
         case 'D':
-            record.log_action = LOG_DELETE;
+            record.log_action = split_record::_enum_action::LOG_DELETE;
             break;
         case 'C':
-            record.log_action = LOG_COMMIT;
+            record.log_action = split_record::_enum_action::LOG_COMMIT;
             break;
         case 'R':
-            record.log_action = LOG_ROLLBACK;
+            record.log_action = split_record::_enum_action::LOG_ROLLBACK;
             break;
         }
         record.log_action_present = TRUE;
@@ -265,16 +263,16 @@ static void dump_split_record(split_record record)
     {
         switch (record.log_action)
         {
-        case LOG_BEGIN_EDIT:
+        case split_record::_enum_action::LOG_BEGIN_EDIT:
             DEBUG("Log action: LOG_BEGIN_EDIT");
             break;
-        case LOG_DELETE:
+        case split_record::_enum_action::LOG_DELETE:
             DEBUG("Log action: LOG_DELETE");
             break;
-        case LOG_COMMIT:
+        case split_record::_enum_action::LOG_COMMIT:
             DEBUG("Log action: LOG_COMMIT");
             break;
-        case LOG_ROLLBACK:
+        case split_record::_enum_action::LOG_ROLLBACK:
             DEBUG("Log action: LOG_ROLLBACK");
             break;
         }
@@ -387,13 +385,13 @@ static void  process_trans_record(  FILE *log_file)
             {
                 switch (record.log_action)
                 {
-                case LOG_BEGIN_EDIT:
+                case split_record::_enum_action::LOG_BEGIN_EDIT:
                     DEBUG("process_trans_record():Ignoring log action: LOG_BEGIN_EDIT"); /*Do nothing, there is no point*/
                     break;
-                case LOG_ROLLBACK:
+                case split_record::_enum_action::LOG_ROLLBACK:
                     DEBUG("process_trans_record():Ignoring log action: LOG_ROLLBACK");/*Do nothing, since we didn't do the begin_edit either*/
                     break;
-                case LOG_DELETE:
+                case split_record::_enum_action::LOG_DELETE:
                     DEBUG("process_trans_record(): Playing back LOG_DELETE");
                     if ((trans = xaccTransLookup (&(record.trans_guid), book)) != NULL
                             && first_record == TRUE)
@@ -414,7 +412,7 @@ static void  process_trans_record(  FILE *log_file)
                     else
                         xaccTransDestroy(trans);
                     break;
-                case LOG_COMMIT:
+                case split_record::_enum_action::LOG_COMMIT:
                     DEBUG("process_trans_record(): Playing back LOG_COMMIT");
                     if (record.trans_guid_present == TRUE
                             && first_record == TRUE)
@@ -549,18 +547,18 @@ void gnc_file_log_replay (GtkWindow *parent)
     char *read_retval;
     GtkFileFilter *filter;
     FILE *log_file;
-    char * record_start_str = "===== START";
+    const char * record_start_str = "===== START";
     /* NOTE: This string must match src/engine/TransLog.c (sans newline) */
-    char * expected_header_orig = "mod\ttrans_guid\tsplit_guid\ttime_now\t"
-                                  "date_entered\tdate_posted\tacc_guid\tacc_name\tnum\tdescription\t"
-                                  "notes\tmemo\taction\treconciled\tamount\tvalue\tdate_reconciled";
+    const char * expected_header_orig = "mod\ttrans_guid\tsplit_guid\ttime_now\t"
+        "date_entered\tdate_posted\tacc_guid\tacc_name\tnum\tdescription\t"
+        "notes\tmemo\taction\treconciled\tamount\tvalue\tdate_reconciled";
     static char *expected_header = NULL;
 
     /* Use g_strdup_printf so we don't get accidental tab -> space conversion */
     if (!expected_header)
         expected_header = g_strdup(expected_header_orig);
 
-    qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
+    // qof_log_set_level(GNC_MOD_IMPORT, QOF_LOG_DEBUG);
     ENTER(" ");
 
     /* Don't log the log replay. This would only result in redundant logs */

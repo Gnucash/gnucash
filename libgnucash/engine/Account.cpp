@@ -37,7 +37,7 @@
 #include "Account.hpp"
 #include "Split.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "gnc-event.h"
 #include "gnc-glib-utils.h"
 #include "gnc-lot.h"

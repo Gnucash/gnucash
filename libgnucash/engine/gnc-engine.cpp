@@ -30,7 +30,7 @@
 #include "AccountP.hpp"
 #include "SX-book-p.h"
 #include "gnc-budget.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "gnc-commodity.h"
 #include "gnc-pricedb-p.h"
 

@@ -49,7 +49,7 @@
 #include "Split.h"
 #include "AccountP.hpp"
 #include "Scrub.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "TransLog.h"
 #include "cap-gains.h"
 #include "gnc-commodity.h"

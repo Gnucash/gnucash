@@ -28,10 +28,10 @@
 #include <unittest-support.h>
 /* Add specific headers for this class */
 #include <Split.h>
-#include <SplitP.h>
+#include <SplitP.hpp>
 #include <Account.h>
 #include <Transaction.h>
-#include <TransactionP.h>
+#include <TransactionP.hpp>
 #include <gnc-lot.h>
 #include <gnc-event.h>
 

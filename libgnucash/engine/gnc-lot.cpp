@@ -51,7 +51,7 @@
 #include "gnc-lot-p.h"
 #include "cap-gains.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "gncInvoice.h"
 
 /* This static indicates the debugging module that this .o belongs to.  */

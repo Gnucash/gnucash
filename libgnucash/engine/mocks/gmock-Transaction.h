@@ -4,7 +4,7 @@
 #include <gmock/gmock.h>
 
 #include <Transaction.h>
-#include <TransactionP.h>
+#include <TransactionP.hpp>
 
 #include "gmock-gobject.h"
 

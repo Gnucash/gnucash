@@ -1,6 +1,6 @@
 
 set(log_replay_SOURCES
-  gnc-log-replay.c
+  gnc-log-replay.cpp
   gnc-plugin-log-replay.c
 )
 

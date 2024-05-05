@@ -30,7 +30,7 @@
 #include "cashobjects.h"
 #include "gnc-engine.h"
 #include "AccountP.hpp"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "SchedXaction.h"
 #include "SX-book-p.h"
 #include "gnc-pricedb-p.h"

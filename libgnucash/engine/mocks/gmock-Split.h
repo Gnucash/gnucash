@@ -4,7 +4,7 @@
 #include <gmock/gmock.h>
 
 #include <Split.h>
-#include <SplitP.h>
+#include <SplitP.hpp>
 
 #include "gmock-qofbook.h"
 #include "gmock-gobject.h"

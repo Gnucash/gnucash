@@ -39,7 +39,7 @@
 #include "AccountP.hpp"
 #include "Account.hpp"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "Scrub2.h"
 #include "cap-gains.h"
 #include "gnc-engine.h"

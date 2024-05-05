@@ -43,7 +43,7 @@
 #include "Account.h"
 #include "Query.h"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 
 static QofLogModule log_module = GNC_MOD_QUERY;
 

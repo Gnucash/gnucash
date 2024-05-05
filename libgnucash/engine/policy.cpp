@@ -36,7 +36,7 @@
 #include "Account.h"
 #include "Account.hpp"
 #include "Transaction.h"
-#include "TransactionP.h"
+#include "TransactionP.hpp"
 #include "cap-gains.h"
 #include "gnc-engine.h"
 #include "gnc-lot.h"
