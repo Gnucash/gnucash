@@ -532,9 +532,23 @@ gnc_prices_dialog_add_clicked (GtkWidget *widget, gpointer data)
     {
         if (!gnc_list_length_cmp (comm_list, 1)) // make sure it is only one parent
         {
-            price = gnc_price_create (pdb_dialog->book);
-            auto comm = static_cast<gnc_commodity *> (comm_list->data);
-            gnc_price_set_commodity (price, comm);
+            auto comm = GNC_COMMODITY (comm_list->data);
+            auto latest_price = gnc_pricedb_lookup_latest_any_currency (pdb_dialog->price_db, comm);
+
+            if (latest_price)
+            {
+                price = GNC_PRICE (latest_price->data);
+                gnc_price_ref (price);
+
+                gnc_price_list_destroy (latest_price);
+            }
+
+            if (!price)
+            {
+                price = gnc_price_create (pdb_dialog->book);
+                gnc_price_set_commodity (price, comm);
+            }
+
             unref_price = TRUE;
         }
         g_list_free (comm_list);
