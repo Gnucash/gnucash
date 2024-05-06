@@ -64,6 +64,7 @@
 #include "gnc-main-window.h"
 #include "gnc-plugin.h"
 #include "gnc-plugin-page-sx-list.h"
+#include "gnc-prefs.h"
 #include "gnc-session.h"
 #include "gnc-sx-instance-dense-cal-adapter.h"
 #include "gnc-sx-instance-model.h"
@@ -80,6 +81,7 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 
 #define PLUGIN_PAGE_SX_LIST_CM_CLASS "plugin-page-sx-list"
 #define STATE_SECTION "SX Transaction List"
+#define GNC_PREF_DIVIDER_POS "divider-position"
 
 typedef struct GncPluginPageSxListPrivate
 {
@@ -120,6 +122,7 @@ static void gnc_plugin_page_sx_list_cmd_new (GSimpleAction *simple, GVariant *pa
 static void gnc_plugin_page_sx_list_cmd_edit (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_sx_list_cmd_delete (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_sx_list_cmd_refresh (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
+static void gnc_plugin_page_sx_list_cmd_save_layout (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 static void gnc_plugin_page_sx_list_cmd_edit_tax_options (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 
 /* Command callbacks */
@@ -130,6 +133,7 @@ static GActionEntry gnc_plugin_page_sx_list_actions [] =
     { "SxListEditAction", gnc_plugin_page_sx_list_cmd_edit, NULL, NULL, NULL },
     { "SxListDeleteAction", gnc_plugin_page_sx_list_cmd_delete, NULL, NULL, NULL },
     { "ViewRefreshAction", gnc_plugin_page_sx_list_cmd_refresh, NULL, NULL, NULL },
+    { "ViewSaveLayoutAction", gnc_plugin_page_sx_list_cmd_save_layout, NULL, NULL, NULL },
     { "EditTaxOptionsAction", gnc_plugin_page_sx_list_cmd_edit_tax_options, NULL, NULL, NULL },
 };
 /** The number of actions provided by this plugin. */
@@ -500,12 +504,10 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
     gtk_box_pack_start (GTK_BOX(vbox), swin, TRUE, TRUE, 5);
     gtk_widget_show (swin);
 
-    {
-        // gint half_way;
-        // half_way = plugin_page->notebook_page->allocation.height * 0.5;
-        // fixme; get a real value:
-        gtk_paned_set_position (GTK_PANED(priv->widget), 160);
-    }
+    /* Set the paned position from the preferences, default 160 */
+    gtk_paned_set_position (GTK_PANED(priv->widget),
+                            gnc_prefs_get_float (GNC_PREFS_GROUP_SXED,
+                                                 GNC_PREF_DIVIDER_POS));
 
     {
         GDate end;
@@ -749,6 +751,25 @@ gnc_plugin_page_sx_list_cmd_refresh (GSimpleAction *simple,
 
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
     gtk_widget_queue_draw (priv->widget);
+}
+
+static void
+gnc_plugin_page_sx_list_cmd_save_layout (GSimpleAction *simple,
+                                         GVariant      *parameter,
+                                         gpointer       user_data)
+{
+    auto plugin_page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
+    GncPluginPageSxListPrivate *priv;
+    gint paned_position;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(plugin_page));
+
+    priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
+
+    paned_position = gtk_paned_get_position (GTK_PANED(priv->widget));
+
+    gnc_prefs_set_float (GNC_PREFS_GROUP_SXED, GNC_PREF_DIVIDER_POS,
+                         paned_position);
 }
 
 static void

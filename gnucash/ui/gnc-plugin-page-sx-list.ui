@@ -34,6 +34,12 @@
 
   <menu id="ViewPlaceholder4">
     <item>
+      <attribute name="label" translatable="yes">_Save layout as default</attribute>
+      <attribute name="action">GncPluginPageSxListActions.ViewSaveLayoutAction</attribute>
+      <attribute name="tooltip" translatable="yes">Save current layout as default</attribute>
+      <attribute name="temp" translatable="no">yes</attribute>
+    </item>
+    <item>
       <attribute name="label" translatable="yes">_Refresh</attribute>
       <attribute name="action">GncPluginPageSxListActions.ViewRefreshAction</attribute>
       <attribute name="accel">&lt;Primary&gt;r</attribute>

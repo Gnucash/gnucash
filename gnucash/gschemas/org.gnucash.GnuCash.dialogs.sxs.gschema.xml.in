@@ -54,6 +54,11 @@
       <summary>How many days in advance to notify the user.</summary>
       <description>How many days in advance to notify the user.</description>
     </key>
+    <key name="divider-position" type="d">
+      <default>160</default>
+      <summary>The horizontal position of the editor divider.</summary>
+      <description>The horizontal position of the editor divider.</description>
+    </key>
     <key name="last-geometry" type="(iiii)">
       <default>(-1,-1,-1,-1)</default>
       <summary>Last window position and size</summary>
