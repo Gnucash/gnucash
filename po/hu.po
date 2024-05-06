@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-05-02 01:07+0000\n"
+"PO-Revision-Date: 2024-05-06 02:07+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.3-dev\n"
+"X-Generator: Weblate 5.5.3\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -13227,7 +13227,7 @@ msgstr "_Kiegyenlítés"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1862
 msgid "_Use equity 'Opening Balances' account"
-msgstr "_Saját tőke \"Nyitóegyenlegek\" számlájáról"
+msgstr "A _saját tőke \"Nyitóegyenlegek\" számlájáról"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1879
 msgid "_Select transfer account"
@@ -13366,7 +13366,7 @@ msgstr "3. Válasszon import opciót"
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:349
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:353
 msgid "4. Preview"
-msgstr "Előnézet"
+msgstr "4. Előnézet"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:374
 msgid "Open imported documents in tabs"
@@ -14985,11 +14985,11 @@ msgstr "<b>Időformátum</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1081
 msgid "U_se 24-hour clock"
-msgstr "24 órá_s időalak használata"
+msgstr "24 órás időformátum ha_sználata"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1087
 msgid "Use a 24 hour (instead of a 12 hour) time format."
-msgstr "24 órás (12 órás helyett) időalak használata."
+msgstr "24 órás időformátum használata (12 órás helyett)."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1102
 msgid "<b>Date Completion</b>"
@@ -15024,7 +15024,7 @@ msgstr "<b>Számok</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1225
 msgid "Force P_rices to display as decimals"
-msgstr ""
+msgstr "Az á_rak megjelenítésénél a tizedesjegyek kényszerítése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1243
 msgid "Display ne_gative amounts in red"
@@ -15117,11 +15117,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1633
 msgid "Show splash scree_n"
-msgstr "Indítóa_blak mutatása"
+msgstr "_Nyitókép megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1639
 msgid "Show splash screen at startup."
-msgstr "Indítóablak megjelenítése a GnuCash indításakor."
+msgstr "Nyitókép megjelenítése a GnuCash indításakor."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1654
 msgid "Auto-save time _interval"
@@ -16828,115 +16828,115 @@ msgstr "A következő munkanapon"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:325
 msgid "1st Mon"
-msgstr "1. hétfőn"
+msgstr "Az első hétfőn"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:328
 msgid "1st Tue"
-msgstr "1. kedden"
+msgstr "Az első kedden"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:331
 msgid "1st Wed"
-msgstr "1. szerdán"
+msgstr "Az első szerdán"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:334
 msgid "1st Thu"
-msgstr "1. csütörtökön"
+msgstr "Az első csütörtökön"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:337
 msgid "1st Fri"
-msgstr "1. pénteken"
+msgstr "Az első pénteken"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:340
 msgid "1st Sat"
-msgstr "1. szombaton"
+msgstr "Az első szombaton"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:343
 msgid "1st Sun"
-msgstr "1. vasárnapon"
+msgstr "Az első vasárnapon"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:346
 msgid "2nd Mon"
-msgstr "2. hétfőn"
+msgstr "A második hétfőn"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:349
 msgid "2nd Tue"
-msgstr "2. kedden"
+msgstr "A második kedden"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:352
 msgid "2nd Wed"
-msgstr "2. szerdán"
+msgstr "A második szerdán"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:355
 msgid "2nd Thu"
-msgstr "2. csütörtökön"
+msgstr "A második csütörtökön"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:358
 msgid "2nd Fri"
-msgstr "2. pénteken"
+msgstr "A második pénteken"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:361
 msgid "2nd Sat"
-msgstr "2. szombaton"
+msgstr "A második szombaton"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:364
 msgid "2nd Sun"
-msgstr "2. vasárnapon"
+msgstr "A második vasárnapon"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:367
 msgid "3rd Mon"
-msgstr "3. hétfőn"
+msgstr "A harmadik hétfőn"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:370
 msgid "3rd Tue"
-msgstr "3. kedden"
+msgstr "A harmadik kedden"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:373
 msgid "3rd Wed"
-msgstr "3. szerdán"
+msgstr "A harmadik szerdán"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:376
 msgid "3rd Thu"
-msgstr "3. csütörtökön"
+msgstr "A harmadik csütörtökön"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:379
 msgid "3rd Fri"
-msgstr "3. pénteken"
+msgstr "A harmadik pénteken"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:382
 msgid "3rd Sat"
-msgstr "3. szombaton"
+msgstr "A harmadik szombaton"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:385
 msgid "3rd Sun"
-msgstr "3. vasárnapon"
+msgstr "A harmadik vasárnapon"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:388
 msgid "4th Mon"
-msgstr "4. hétfőn"
+msgstr "A negyedik hétfőn"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:391
 msgid "4th Tue"
-msgstr "4. kedden"
+msgstr "A negyedik kedden"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:394
 msgid "4th Wed"
-msgstr "4. szerdán"
+msgstr "A negyedik szerdán"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:397
 msgid "4th Thu"
-msgstr "4. csütörtökön"
+msgstr "A negyedik csütörtökön"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:400
 msgid "4th Fri"
-msgstr "4. pénteken"
+msgstr "A negyedik pénteken"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:403
 msgid "4th Sat"
-msgstr "4. szombaton"
+msgstr "A negyedik szombaton"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:406
 msgid "4th Sun"
-msgstr "4. vasárnapon"
+msgstr "A negyedik vasárnapon"
 
 #: gnucash/gtkbuilder/gnc-frequency.glade:649
 msgid "Not scheduled"
@@ -17375,7 +17375,7 @@ msgstr "hó vége"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:148
 msgid "Always use the last day (or day of week) in the month?"
-msgstr "Mindig a hónap (vagy hét) utolsó napját használja?"
+msgstr "Mindig a hónap utolsó napját (vagy a hét napját) használja?"
 
 #: gnucash/gtkbuilder/gnc-recurrence.glade:160
 msgid "same week & day"
@@ -17386,6 +17386,8 @@ msgid ""
 "Match the \"day of week\" and \"week of month\"? (for example, the \"second "
 "Tuesday\" of every month)"
 msgstr ""
+"Egyezik a \"hét napja\" és a \"hónap hete\"? (például minden hónap \"második "
+"keddje\")"
 
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:62
 msgid "Only show _active owners"
@@ -30067,7 +30069,7 @@ msgstr "i"
 #: libgnucash/app-utils/gnc-ui-util.cpp:478
 msgctxt "Reconciled flag 'frozen'"
 msgid "f"
-msgstr ""
+msgstr "f"
 
 #: libgnucash/app-utils/gnc-ui-util.cpp:480
 msgctxt "Reconciled flag 'void'"
