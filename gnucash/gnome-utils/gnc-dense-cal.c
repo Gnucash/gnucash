@@ -189,6 +189,7 @@ struct _GncDenseCal
 
     guint month_side_bar_width; // month side bar width
     guint day_top_bar_height; // day top bar height
+    guint bar_label_padding; // padding used in top and side bar
 
     GncDenseCalModel *model;
 
@@ -424,6 +425,7 @@ gnc_dense_cal_init (GncDenseCal *dcal)
     /* Compute initial scaling factors; will be increased when we're
      * allocated enough space to scale up. */
     {
+        GtkBorder padding;
         PangoLayout *layout;
         int width_88, height_88;
         int width_XXX, height_XXX;
@@ -439,14 +441,19 @@ gnc_dense_cal_init (GncDenseCal *dcal)
         dcal->min_x_scale = dcal->x_scale = width_88 + 2;
         dcal->min_y_scale = dcal->y_scale = MAX(floor ((float)width_XXX / 3.), height_88 + 2);
 
-        dcal->month_side_bar_width = height_88;
-        dcal->day_top_bar_height = height_88;
+        gtk_style_context_get_padding (context, GTK_STATE_FLAG_NORMAL, &padding);
+        if ((padding.top + padding.bottom) == 0)
+            dcal->bar_label_padding = 2; // px
+        else
+            dcal->bar_label_padding = (padding.top + padding.bottom) / 2;
+
+        dcal->month_side_bar_width = height_88 + (dcal->bar_label_padding * 2);
+        dcal->day_top_bar_height = height_88 + (dcal->bar_label_padding * 2);
 
         g_object_unref (layout);
     }
 
     dcal->initialized = TRUE;
-
 
     dcal->week_starts_monday = 0;
     {
@@ -927,8 +934,8 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
     /* lets confirm text height size */
     pango_layout_set_text (layout, "S", -1);
     pango_layout_get_pixel_size (layout, NULL, &dcal->label_height);
-    dcal->month_side_bar_width = dcal->label_height;
-    dcal->day_top_bar_height = dcal->label_height;
+    dcal->month_side_bar_width = dcal->label_height + (dcal->bar_label_padding * 2);
+    dcal->day_top_bar_height = dcal->label_height + (dcal->bar_label_padding * 2);
 
     /* Fill in alternating month colors. */
     {
@@ -1082,7 +1089,7 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
                                  + (j * day_width (dcal))
                                  + (day_width (dcal) / 2)
                                  - (day_label_width / 2);
-                label_y_offset = y - dcal->day_top_bar_height;
+                label_y_offset = y - dcal->day_top_bar_height + dcal->bar_label_padding;
                 pango_layout_set_text (layout, day_label_str, -1);
                 gtk_render_layout (stylectxt, cr, label_x_offset, label_y_offset, layout);
             }
@@ -1120,7 +1127,7 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
             cairo_save (cr);
             cairo_translate (cr, dcal->monthPositions[i].x + x_offset, dcal->monthPositions[i].y);
             cairo_rotate (cr, -G_PI / 2.);
-            gtk_render_layout (stylectxt, cr, 0, 0, layout);
+            gtk_render_layout (stylectxt, cr, 0, dcal->bar_label_padding, layout);
             cairo_restore (cr);
         }
         gtk_style_context_restore (stylectxt);
