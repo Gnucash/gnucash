@@ -1277,6 +1277,39 @@ populate_hover_window (GncDenseCal *dcal)
     }
 }
 
+static const int POPUP_OFFSET = 5; // offset for popup window
+
+static void
+popup_window_move (GncDenseCal *dcal, GdkEvent *event)
+{
+    GtkAllocation alloc;
+    gdouble x_root, y_root;
+    gint win_xpos, win_ypos;
+
+    if (event->type == GDK_BUTTON_PRESS)
+    {
+        x_root = ((GdkEventButton*)event)->x_root;
+        y_root = ((GdkEventButton*)event)->y_root;
+    }
+    else
+    {
+        x_root = ((GdkEventMotion*)event)->x_root;
+        y_root = ((GdkEventMotion*)event)->y_root;
+    }
+    win_xpos = x_root + POPUP_OFFSET;
+    win_ypos = y_root + POPUP_OFFSET;
+
+    gtk_widget_get_allocation (GTK_WIDGET(dcal->transPopup), &alloc);
+
+    if (x_root + POPUP_OFFSET + alloc.width > dcal->screen_width)
+        win_xpos = x_root - 2 - alloc.width;
+
+    if (y_root + POPUP_OFFSET + alloc.height > dcal->screen_height)
+        win_ypos = y_root - 2 - alloc.height;
+
+    gtk_window_move (GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
+}
+
 static gint
 gnc_dense_cal_button_press (GtkWidget *widget,
                             GdkEventButton *evt)
@@ -1284,10 +1317,7 @@ gnc_dense_cal_button_press (GtkWidget *widget,
     GdkWindow *win = gdk_screen_get_root_window (gtk_widget_get_screen (widget));
     GdkMonitor *mon = gdk_display_get_monitor_at_window (gtk_widget_get_display (widget), win);
     GdkRectangle work_area_size;
-    GtkAllocation alloc;
     GncDenseCal *dcal = GNC_DENSE_CAL(widget);
-    gint win_xpos = evt->x_root + 5;
-    gint win_ypos = evt->y_root + 5;
 
     gdk_monitor_get_workarea (mon, &work_area_size);
 
@@ -1304,21 +1334,14 @@ gnc_dense_cal_button_press (GtkWidget *widget,
         // strategy, but hopefully it'll listen to us.  Certainly the
         // second move after show_all'ing the window should do the
         // trick with a bit of flicker.
-        gtk_window_move (GTK_WINDOW(dcal->transPopup), evt->x_root + 5, evt->y_root + 5);
+        gtk_window_move (GTK_WINDOW(dcal->transPopup), evt->x_root + POPUP_OFFSET,
+                                                       evt->y_root + POPUP_OFFSET);
 
         populate_hover_window (dcal);
         gtk_widget_queue_resize (GTK_WIDGET(dcal->transPopup));
         gtk_widget_show_all (GTK_WIDGET(dcal->transPopup));
 
-        gtk_widget_get_allocation (GTK_WIDGET(dcal->transPopup), &alloc);
-
-        if (evt->x_root + 5 + alloc.width > dcal->screen_width)
-            win_xpos = evt->x_root - 2 - alloc.width;
-
-        if (evt->y_root + 5 + alloc.height > dcal->screen_height)
-            win_ypos = evt->y_root - 2 - alloc.height;
-
-        gtk_window_move (GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
+        popup_window_move (dcal, (GdkEvent*)evt);
     }
     else
     {
@@ -1333,12 +1356,9 @@ gnc_dense_cal_motion_notify (GtkWidget *widget,
                              GdkEventMotion *event)
 {
     GncDenseCal *dcal;
-    GtkAllocation alloc;
     gint doc;
     int unused;
     GdkModifierType unused2;
-    gint win_xpos = event->x_root + 5;
-    gint win_ypos = event->y_root + 5;
 
     dcal = GNC_DENSE_CAL(widget);
     if (!dcal->showPopup)
@@ -1363,15 +1383,7 @@ gnc_dense_cal_motion_notify (GtkWidget *widget,
             gtk_widget_queue_resize (GTK_WIDGET(dcal->transPopup));
             gtk_widget_show_all (GTK_WIDGET(dcal->transPopup));
         }
-        gtk_widget_get_allocation (GTK_WIDGET(dcal->transPopup), &alloc);
-
-        if (event->x_root + 5 + alloc.width > dcal->screen_width)
-            win_xpos = event->x_root - 2 - alloc.width;
-
-        if (event->y_root + 5 + alloc.height > dcal->screen_height)
-            win_ypos = event->y_root - 2 - alloc.height;
-
-        gtk_window_move (GTK_WINDOW(dcal->transPopup), win_xpos, win_ypos);
+        popup_window_move (dcal, (GdkEvent*)event);
     }
     else
     {
