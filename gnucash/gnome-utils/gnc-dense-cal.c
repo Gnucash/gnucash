@@ -186,8 +186,10 @@ struct _GncDenseCal
     gdc_month_coords monthPositions[12];
 
     guint label_width;
-    guint label_height;
-    gint dayLabelHeight;
+    gint label_height; // dense cal label height
+
+    guint month_side_bar_width; // month side bar width
+    guint day_top_bar_height; // day top bar height
 
     GncDenseCalModel *model;
 
@@ -448,6 +450,9 @@ gnc_dense_cal_init (GncDenseCal *dcal)
         dcal->label_width = maxWidth;
         dcal->label_height = maxHeight;
 
+        dcal->month_side_bar_width = dcal->label_height;
+        dcal->day_top_bar_height = dcal->label_height;
+
         g_object_unref (layout);
     }
 
@@ -488,7 +493,8 @@ gnc_dense_cal_init (GncDenseCal *dcal)
         dcal->min_x_scale = dcal->x_scale = width_88 + 2;
         dcal->min_y_scale = dcal->y_scale = MAX(floor ((float)width_XXX / 3.), height_88 + 2);
 
-        dcal->dayLabelHeight = height_88;
+        dcal->month_side_bar_width = height_88;
+        dcal->day_top_bar_height = height_88;
 
         g_object_unref (layout);
     }
@@ -778,7 +784,7 @@ _gdc_compute_min_size (GncDenseCal *dcal, guint *min_width, guint *min_height)
         *min_width =
             (dcal->leftPadding * 2)
             + (num_cols (dcal) * (col_width_at (dcal, dcal->min_x_scale)
-                                 + dcal->label_width))
+                                 + dcal->month_side_bar_width))
             + ((num_cols (dcal) - 1) * COL_BORDER_SIZE);
     }
 
@@ -787,7 +793,7 @@ _gdc_compute_min_size (GncDenseCal *dcal, guint *min_width, guint *min_height)
         *min_height =
             (dcal->topPadding * 2)
             + MINOR_BORDER_SIZE
-            + dcal->dayLabelHeight
+            + dcal->day_top_bar_height
             + (num_weeks_per_col (dcal)
                * week_height_at (dcal, dcal->min_y_scale));
     }
@@ -816,7 +822,7 @@ recompute_x_y_scales (GncDenseCal *dcal)
     dcal->x_scale = ((gint)(width
                             - (dcal->leftPadding * 2)
                             - (num_cols (dcal) * ((8 * MINOR_BORDER_SIZE)
-                                    + dcal->label_width))
+                                    + dcal->month_side_bar_width))
                             - ((num_cols (dcal) - 1) * COL_BORDER_SIZE))
                      / denom);
     dcal->x_scale = MAX(dcal->x_scale, dcal->min_x_scale);
@@ -826,7 +832,7 @@ recompute_x_y_scales (GncDenseCal *dcal)
     dcal->y_scale = ((gint)(height
                             - (dcal->topPadding * 2)
                             - MINOR_BORDER_SIZE
-                            - dcal->dayLabelHeight
+                            - dcal->day_top_bar_height
                             - (num_weeks_per_col (dcal) - 1
                                * MINOR_BORDER_SIZE))
                      / denom);
@@ -974,7 +980,9 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
 
     /* lets confirm text height size */
     pango_layout_set_text (layout, "S", -1);
-    pango_layout_get_pixel_size (layout, NULL, &dcal->dayLabelHeight);
+    pango_layout_get_pixel_size (layout, NULL, &dcal->label_height);
+    dcal->month_side_bar_width = dcal->label_height;
+    dcal->day_top_bar_height = dcal->label_height;
 
     /* Fill in alternating month colors. */
     {
@@ -1064,9 +1072,9 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
 
         x = dcal->leftPadding
             + (i * (col_width (dcal) + COL_BORDER_SIZE))
-            + dcal->label_height + 1;
-        y = dcal->topPadding + dcal->dayLabelHeight;
-        w = col_width (dcal) - COL_BORDER_SIZE - dcal->label_width;
+            + dcal->month_side_bar_width + 1;
+        y = dcal->topPadding + dcal->day_top_bar_height;
+        w = col_width (dcal) - COL_BORDER_SIZE - dcal->month_side_bar_width;
         h = col_height (dcal);
 
         gtk_style_context_save (stylectxt);
@@ -1111,9 +1119,9 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
             gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_HEADER);
 
             gtk_render_background (stylectxt, cr, x,
-                                                  y - dcal->dayLabelHeight,
+                                                  y - dcal->day_top_bar_height,
                                                   (day_width(dcal) * 7) + 1,
-                                                  dcal->dayLabelHeight);
+                                                  dcal->day_top_bar_height);
 
             for (j = 0; j < 7; j++)
             {
@@ -1128,7 +1136,7 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
                                  + (j * day_width (dcal))
                                  + (day_width (dcal) / 2)
                                  - (day_label_width / 2);
-                label_y_offset = y - dcal->dayLabelHeight;
+                label_y_offset = y - dcal->day_top_bar_height;
                 pango_layout_set_text (layout, day_label_str, -1);
                 gtk_render_layout (stylectxt, cr, label_x_offset, label_y_offset, layout);
             }
@@ -1151,8 +1159,8 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
 
             gtk_render_background (stylectxt, cr, dcal->monthPositions[i].x + x_offset,
                                                   dcal->topPadding,
-                                                  dcal->dayLabelHeight + 1,
-                                                  col_height(dcal) + dcal->dayLabelHeight + 1);
+                                                  dcal->month_side_bar_width + 1,
+                                                  col_height(dcal) + dcal->day_top_bar_height + 1);
         }
 
         for (i = 0; i < 12; i++)
@@ -1445,7 +1453,7 @@ static inline int
 col_width_at (GncDenseCal *dcal, guint xScale)
 {
     return (week_width_at (dcal, xScale)
-            + dcal->label_width
+            + dcal->month_side_bar_width
             + COL_BORDER_SIZE);
 }
 
@@ -1596,10 +1604,10 @@ month_coords (GncDenseCal *dcal, int monthOfCal, GList **outList)
         rect->x = dcal->leftPadding
                   + MINOR_BORDER_SIZE
                   + (colNum * (col_width (dcal) + COL_BORDER_SIZE))
-                  + dcal->label_height
+                  + dcal->month_side_bar_width
                   + (start * day_width (dcal));
         rect->y = dcal->topPadding
-                  + dcal->dayLabelHeight
+                  + dcal->day_top_bar_height
                   + MINOR_BORDER_SIZE
                   + (weekRow * week_height (dcal));
         rect->width = (7 - start) * day_width (dcal);
@@ -1623,10 +1631,10 @@ month_coords (GncDenseCal *dcal, int monthOfCal, GList **outList)
             rect = g_new0 (GdkRectangle, 1);
             rect->x = dcal->leftPadding
                       + MINOR_BORDER_SIZE
-                      + dcal->label_height
+                      + dcal->month_side_bar_width
                       + (colNum * (col_width (dcal) + COL_BORDER_SIZE));
             rect->y = dcal->topPadding
-                      + dcal->dayLabelHeight
+                      + dcal->day_top_bar_height
                       + MINOR_BORDER_SIZE
                       + ((weekRow + (i - weekStart) + 1) * week_height (dcal));
             rect->width  = week_width (dcal);
@@ -1650,11 +1658,11 @@ month_coords (GncDenseCal *dcal, int monthOfCal, GList **outList)
         rect = g_new0 (GdkRectangle, 1);
         rect->x = dcal->leftPadding
                   + MINOR_BORDER_SIZE
-                  + dcal->label_height
+                  + dcal->month_side_bar_width
                   + (colNum * (col_width (dcal) + COL_BORDER_SIZE));
         rect->y = dcal->topPadding
                   + MINOR_BORDER_SIZE
-                  + dcal->dayLabelHeight
+                  + dcal->day_top_bar_height
                   + ((weekRow
                       + (end_week_of_year - start_week_of_year))
                      * week_height (dcal));
@@ -1716,13 +1724,13 @@ doc_coords (GncDenseCal *dcal, int dayOfCal,
      * which it shouldn't. */
     *x1 = dcal->leftPadding
           + MINOR_BORDER_SIZE
-          + dcal->label_height
+          + dcal->month_side_bar_width
           + (colNum * (col_width (dcal) + COL_BORDER_SIZE))
           + (dayCol * day_width (dcal))
           + (day_width (dcal) / 4);
     *y1 = dcal->topPadding
           + MINOR_BORDER_SIZE
-          + dcal->dayLabelHeight
+          + dcal->day_top_bar_height
           + (weekRow * week_height (dcal))
           + (day_height (dcal) / 4);
 
@@ -1760,7 +1768,7 @@ wheres_this (GncDenseCal *dcal, int x, int y)
     {
         return -1;
     }
-    if (y >= dcal->dayLabelHeight + col_height (dcal))
+    if (y >= dcal->day_top_bar_height + col_height (dcal))
     {
         return -1;
     }
@@ -1769,7 +1777,7 @@ wheres_this (GncDenseCal *dcal, int x, int y)
     colNum = floor (x / (col_width (dcal) + COL_BORDER_SIZE));
 
     x %= (col_width (dcal) + COL_BORDER_SIZE);
-    x -= dcal->label_width;
+    x -= dcal->month_side_bar_width;
     if (x < 0)
     {
         return -1;
@@ -1779,7 +1787,7 @@ wheres_this (GncDenseCal *dcal, int x, int y)
         return -1;
     }
 
-    y -= dcal->dayLabelHeight;
+    y -= dcal->day_top_bar_height;
     if (y < 0)
     {
         return -1;
