@@ -35,7 +35,7 @@
 #include "dialog-utils.h"
 #include <qoflog.h>
 
-static const QofLogModule log_module = G_LOG_DOMAIN;
+static const QofLogModule log_module = "gnc.gui.dense-cal";
 
 /**
  * Marking ...
@@ -72,9 +72,6 @@ static const int DENSE_CAL_DEFAULT_WIDTH = 15;
 static const int DENSE_CAL_DEFAULT_HEIGHT = 105;
 static const int MINOR_BORDER_SIZE = 1;
 static const int COL_BORDER_SIZE = 3;
-
-#undef G_LOG_DOMAIN
-#define G_LOG_DOMAIN "gnc.gui.dense-cal"
 
 static void gnc_dense_cal_finalize (GObject *object);
 static void gnc_dense_cal_dispose (GObject *object);
