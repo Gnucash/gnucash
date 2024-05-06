@@ -1141,6 +1141,11 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
         gint numW, numH;
         gint x1, y1, x2, y2, w, h;
 
+        GDate now;
+        g_date_clear (&now, 1);
+        gnc_gdate_set_today (&now);
+        gboolean today_found = FALSE;
+
         gtk_style_context_save (stylectxt);
         gtk_style_context_add_class (stylectxt, "day-number");
 
@@ -1157,6 +1162,44 @@ gnc_dense_cal_draw_to_buffer (GncDenseCal *dcal)
             pango_layout_get_pixel_size (layout, &numW, &numH);
             w = (x2 - x1) + 1;
             h = (y2 - y1) + 1;
+
+            if (!today_found && g_date_compare (&d, &now) == 0)
+            {
+                GtkBorder border;
+
+                gtk_style_context_save (stylectxt);
+                gtk_style_context_add_class (stylectxt, marker_color_class);
+                gtk_style_context_add_class (stylectxt, GTK_STYLE_CLASS_FRAME);
+
+                gtk_style_context_get_border (stylectxt, GTK_STATE_FLAG_NORMAL, &border);
+
+                today_found = TRUE;
+
+                if (border.left + border.right != 0)
+                {
+                    GtkCssProvider *provider = gtk_css_provider_new ();
+                    gchar *frame_css = ".marker-border {\n  border-color:black;\n}\n";
+
+                    gint dayw = day_width (dcal);
+                    gint dayh = day_height (dcal);
+                    gint bw = (border.left + border.right) / 2;
+
+                    gtk_css_provider_load_from_data (provider, frame_css, -1, NULL);
+                    gtk_style_context_add_provider (stylectxt, GTK_STYLE_PROVIDER(provider),
+                                                    GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+                    g_object_unref (provider);
+
+                    gtk_style_context_add_class (stylectxt, "marker-border");
+
+                    gtk_render_frame (stylectxt, cr, x1 - (dayw / 4) + 3,
+                                                     y1 - (dayh / 4) + 2,
+                                                     dayw - 4 - bw,
+                                                     dayh - 4 - bw);
+
+                    gtk_style_context_remove_class (stylectxt, "marker-border");
+                }
+                gtk_style_context_restore (stylectxt);
+            }
             gtk_render_layout (stylectxt, cr, x1 + (w / 2) - (numW / 2), y1 + (h / 2) - (numH / 2), layout);
         }
         cairo_restore (cr);
