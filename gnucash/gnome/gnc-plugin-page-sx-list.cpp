@@ -82,6 +82,7 @@ G_GNUC_UNUSED static QofLogModule log_module = GNC_MOD_GUI_SX;
 #define PLUGIN_PAGE_SX_LIST_CM_CLASS "plugin-page-sx-list"
 #define STATE_SECTION "SX Transaction List"
 #define GNC_PREF_DIVIDER_POS "divider-position"
+#define GNC_PREF_NUM_OF_MONTHS "number-of-months"
 
 typedef struct GncPluginPageSxListPrivate
 {
@@ -580,8 +581,10 @@ gnc_plugin_page_sx_list_create_widget (GncPluginPage *plugin_page)
         priv->gdcal = GNC_DENSE_CAL(gnc_dense_cal_new_with_model (window, GNC_DENSE_CAL_MODEL(priv->dense_cal_model)));
         g_object_ref_sink (priv->gdcal);
 
-        gnc_dense_cal_set_months_per_col (priv->gdcal, 4);
-        gnc_dense_cal_set_num_months (priv->gdcal, 12);
+        /* Set number of months from preference, default 12 */
+        gchar *num_months = gnc_prefs_get_string (GNC_PREFS_GROUP_SXED, GNC_PREF_NUM_OF_MONTHS);
+        gnc_dense_cal_set_num_months (priv->gdcal, atoi (num_months));
+        g_free (num_months);
 
         gtk_container_add (GTK_CONTAINER(swin), GTK_WIDGET(priv->gdcal));
     }
@@ -760,16 +763,23 @@ gnc_plugin_page_sx_list_cmd_save_layout (GSimpleAction *simple,
 {
     auto plugin_page = GNC_PLUGIN_PAGE_SX_LIST(user_data);
     GncPluginPageSxListPrivate *priv;
+    gchar *num_of_months;
     gint paned_position;
 
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_SX_LIST(plugin_page));
 
     priv = GNC_PLUGIN_PAGE_SX_LIST_GET_PRIVATE(plugin_page);
 
+    num_of_months = g_strdup_printf ("%d", gnc_dense_cal_get_num_months (priv->gdcal));
     paned_position = gtk_paned_get_position (GTK_PANED(priv->widget));
 
     gnc_prefs_set_float (GNC_PREFS_GROUP_SXED, GNC_PREF_DIVIDER_POS,
                          paned_position);
+
+    gnc_prefs_set_string (GNC_PREFS_GROUP_SXED, GNC_PREF_NUM_OF_MONTHS,
+                          num_of_months);
+
+    g_free (num_of_months);
 }
 
 static void
