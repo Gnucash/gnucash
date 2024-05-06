@@ -277,7 +277,8 @@ gnc_dense_cal_class_init (GncDenseCalClass *klass)
 enum _GdcViewOptsColumns
 {
     VIEW_OPTS_COLUMN_LABEL = 0,
-    VIEW_OPTS_COLUMN_NUM_MONTHS
+    VIEW_OPTS_COLUMN_NUM_MONTHS,
+    VIEW_OPTS_COLUMN_NUM_MONTHS_PER_COLUMN
 };
 
 static GtkListStore *_cal_view_options = NULL;
@@ -286,13 +287,13 @@ _gdc_get_view_options (void)
 {
     if (_cal_view_options == NULL)
     {
-        _cal_view_options = gtk_list_store_new (2, G_TYPE_STRING, G_TYPE_INT);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("12 months"), 1, 12, -1);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("6 months"), 1, 6, -1);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("4 months"), 1, 4, -1);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("3 months"), 1, 3, -1);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("2 months"), 1, 2, -1);
-        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("1 month"), 1, 1, -1);
+        _cal_view_options = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_INT, G_TYPE_INT);
+        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("12 months"), 1, 12, 2, 3, -1);
+        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("6 months"), 1, 6, 2, 2, -1);
+        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("4 months"), 1, 4, 2, 2, -1);
+        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("3 months"), 1, 3, 2, 2, -1);
+        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("2 months"), 1, 2, 2, 1, -1);
+        gtk_list_store_insert_with_values (_cal_view_options, NULL, G_MAXINT, 0, _("1 month"), 1, 1, 2, 1, -1);
     }
 
     return _cal_view_options;
@@ -572,39 +573,44 @@ _gnc_dense_cal_set_year (GncDenseCal *dcal, guint year, gboolean redraw)
 void
 gnc_dense_cal_set_num_months (GncDenseCal *dcal, guint num_months)
 {
+    GtkListStore *options = _gdc_get_view_options ();
+    GtkTreeIter view_opts_iter, iter_closest_to_req;
+    int months_per_column = 0;
+    int closest_index_distance = G_MAXINT;
+
+    // find closest list value to num_months
+    if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL(options), &view_opts_iter))
     {
-        GtkListStore *options = _gdc_get_view_options ();
-        GtkTreeIter view_opts_iter, iter_closest_to_req;
-        int closest_index_distance = G_MAXINT;
-
-        // find closest list value to num_months
-        if (!gtk_tree_model_get_iter_first (GTK_TREE_MODEL(options), &view_opts_iter))
-        {
-            g_critical("no view options?");
-            return;
-        }
-
-        do
-        {
-            gint months_val, delta_months;
-
-            gtk_tree_model_get (GTK_TREE_MODEL(options), &view_opts_iter,
-                                VIEW_OPTS_COLUMN_NUM_MONTHS, &months_val, -1);
-            delta_months = abs (months_val - (int)num_months);
-            if (delta_months < closest_index_distance)
-            {
-                iter_closest_to_req = view_opts_iter;
-                closest_index_distance = delta_months;
-            }
-        }
-        while (closest_index_distance != 0
-                && (gtk_tree_model_iter_next (GTK_TREE_MODEL(options), &view_opts_iter)));
-
-        // set iter on view
-        g_signal_handlers_block_by_func (dcal->view_options, _gdc_view_option_changed, dcal);
-        gtk_combo_box_set_active_iter (GTK_COMBO_BOX(dcal->view_options), &iter_closest_to_req);
-        g_signal_handlers_unblock_by_func (dcal->view_options, _gdc_view_option_changed, dcal);
+        g_critical ("no view options?");
+        return;
     }
+
+    do
+    {
+        gint months_val, delta_months;
+        gtk_tree_model_get (GTK_TREE_MODEL(options), &view_opts_iter,
+                            VIEW_OPTS_COLUMN_NUM_MONTHS, &months_val,
+                            VIEW_OPTS_COLUMN_NUM_MONTHS_PER_COLUMN, &months_per_column,
+                            -1);
+
+        delta_months = abs (months_val - (int)num_months);
+        if (delta_months < closest_index_distance)
+        {
+            iter_closest_to_req = view_opts_iter;
+            closest_index_distance = delta_months;
+        }
+    }
+    while (closest_index_distance != 0
+            && (gtk_tree_model_iter_next (GTK_TREE_MODEL(options), &view_opts_iter)));
+
+    // set iter on view
+    g_signal_handlers_block_by_func (dcal->view_options, _gdc_view_option_changed, dcal);
+    gtk_combo_box_set_active_iter (GTK_COMBO_BOX(dcal->view_options), &iter_closest_to_req);
+    g_signal_handlers_unblock_by_func (dcal->view_options, _gdc_view_option_changed, dcal);
+
+    // set the number of months per column if found in model
+    if (months_per_column != 0)
+        dcal->monthsPerCol = months_per_column;
 
     dcal->numMonths = num_months;
     recompute_extents (dcal);
