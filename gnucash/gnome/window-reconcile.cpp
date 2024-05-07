@@ -1943,7 +1943,7 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
             ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
 
         // find an already reconciled split whose statement date
-        // precedes *this* reconciliation statement date.
+        // is after *this* reconciliation statement date.
         auto has_later_recn_statement_date = [statement_date](const Split *split)
         { return (xaccSplitGetReconcile (split) == YREC &&
                   xaccSplitGetDateReconciled (split) > statement_date); };
