@@ -1942,11 +1942,13 @@ recnWindowWithBalance (GtkWidget *parent, Account *account, gnc_numeric new_endi
         GtkWidget *image = gtk_image_new_from_icon_name
             ("dialog-warning", GTK_ICON_SIZE_SMALL_TOOLBAR);
 
-        auto find_split = [statement_date](const Split *split)
+        // find an already reconciled split whose statement date
+        // precedes *this* reconciliation statement date.
+        auto has_later_recn_statement_date = [statement_date](const Split *split)
         { return (xaccSplitGetReconcile (split) == YREC &&
                   xaccSplitGetDateReconciled (split) > statement_date); };
 
-        if (auto split = gnc_account_find_split (account, find_split, true))
+        if (auto split = gnc_account_find_split (account, has_later_recn_statement_date, true))
         {
             auto datestr = qof_print_date (xaccTransGetDate (xaccSplitGetParent (split)));
             auto recnstr = qof_print_date (xaccSplitGetDateReconciled (split));
