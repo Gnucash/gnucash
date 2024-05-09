@@ -23,6 +23,7 @@
  *  02110-1301, USA.
  */
 #include <glib.h>
+#include <string>
 
 #include <config.h>
 #include "gnc-commodity.h"
@@ -53,6 +54,17 @@ test_quote_sources ()
 
     // internal name:
     do_test (gnc_quote_source_lookup_by_internal("treasure") == nullptr, "lookup_by_internal: treasure doesn't exist");
+
+    auto first = gnc_quote_source_lookup_by_ti (SOURCE_UNKNOWN, 0);
+    g_assert (first != nullptr);
+
+    auto name = gnc_quote_source_get_user_name (first);
+    do_test (!g_strcmp0 (name, "test-source"), "get_user_name: name is as expected");
+
+    for (auto i = 0; i < 20; ++i)
+        gnc_quote_source_add_new (std::string(std::to_string(i)).c_str(), false);
+
+    do_test (gnc_quote_source_get_user_name (first) == name, "get_user_name hasn't moved");
 }
 
 static void
