@@ -42,6 +42,7 @@
 #include "guid.h"
 #include "qofinstance.h"
 
+#include <list>
 #include <unordered_map>
 
 static QofLogModule log_module = GNC_MOD_COMMODITY;
@@ -166,7 +167,7 @@ public:
         , m_internal_name{int_name ? int_name: ""} { };
 };
 
-using QuoteSourceVec = std::vector<gnc_quote_source>;
+using QuoteSourceList = std::list<gnc_quote_source>;
 
 /* To update the following lists scan
  * from github.com/finance-quote/finance-quote
@@ -176,7 +177,7 @@ using QuoteSourceVec = std::vector<gnc_quote_source>;
  *
  * Apply changes here also to the FQ appendix of help.
  */
-static QuoteSourceVec currency_quote_sources =
+static QuoteSourceList currency_quote_sources =
 {
     { true, SOURCE_CURRENCY, "Currency", "currency" }
 };
@@ -185,7 +186,7 @@ static QuoteSourceVec currency_quote_sources =
  * sometimes it gets the suffix "_direct"
  * and the failover method is without suffix.
  */
-static QuoteSourceVec single_quote_sources =
+static QuoteSourceList single_quote_sources =
 {
     { false, SOURCE_SINGLE, "Alphavantage, US", "alphavantage" },
     { false, SOURCE_SINGLE, "Amsterdam Euronext eXchange, NL", "aex" },
@@ -218,7 +219,7 @@ static QuoteSourceVec single_quote_sources =
     { false, SOURCE_SINGLE, "Yahoo Web", "yahooweb" },
 };
 
-static QuoteSourceVec multiple_quote_sources =
+static QuoteSourceList multiple_quote_sources =
 {
     { false, SOURCE_MULTI, "Australia (ASX, ...)", "australia" },
     { false, SOURCE_MULTI, "Canada (Alphavantage, TSX, ...)", "canada" },
@@ -236,10 +237,10 @@ static QuoteSourceVec multiple_quote_sources =
     { false, SOURCE_MULTI, "USA (alphavantage, yahoo_json, ...)", "usa" },
 };
 
-static QuoteSourceVec new_quote_sources;
+static QuoteSourceList new_quote_sources;
 
 // cannot use map or unordered_map because order must be preserved
-static const std::vector<std::pair<QuoteSourceType,QuoteSourceVec&>> quote_sources_map =
+static const std::vector<std::pair<QuoteSourceType,QuoteSourceList&>> quote_sources_map =
     {
         { SOURCE_CURRENCY, currency_quote_sources },
         { SOURCE_SINGLE, single_quote_sources },
@@ -272,7 +273,7 @@ gnc_quote_source_fq_version (void)
     return fq_version.c_str();
 }
 
-static QuoteSourceVec&
+static QuoteSourceList&
 get_quote_source_from_type (QuoteSourceType type)
 {
     auto quote_sources_it = std::find_if (quote_sources_map.begin(), quote_sources_map.end(),
@@ -292,7 +293,8 @@ get_quote_source_from_type (QuoteSourceType type)
  ********************************************************************/
 gint gnc_quote_source_num_entries(QuoteSourceType type)
 {
-    return get_quote_source_from_type(type).size();
+    auto source{get_quote_source_from_type(type)};
+    return std::distance(source.begin(), source.end());
 }
 
 
@@ -329,9 +331,9 @@ gnc_quote_source_lookup_by_ti (QuoteSourceType type, gint index)
     auto& sources = get_quote_source_from_type (type);
     if ((size_t) index < sources.size())
     {
-        auto& source = sources[index];
-        LEAVE("found %s", source.get_user_name());
-        return &source;
+        auto it = std::next(sources.begin(), index);
+        LEAVE("found %s", it->get_user_name());
+        return &*it;
     }
 
     LEAVE("not found");
@@ -1041,7 +1043,7 @@ gnc_commodity_get_quote_source(const gnc_commodity *cm)
     if (!cm) return nullptr;
     priv = GET_PRIVATE(cm);
     if (!priv->quote_source && gnc_commodity_is_iso(cm))
-        return &currency_quote_sources[0];
+        return &currency_quote_sources.front();
     return priv->quote_source;
 }
 
@@ -1049,7 +1051,7 @@ gnc_quote_source*
 gnc_commodity_get_default_quote_source(const gnc_commodity *cm)
 {
     if (cm && gnc_commodity_is_iso(cm))
-        return &currency_quote_sources[0];
+        return &currency_quote_sources.front();
     /* Should make this a user option at some point. */
     return gnc_quote_source_lookup_by_internal("alphavantage");
 }
