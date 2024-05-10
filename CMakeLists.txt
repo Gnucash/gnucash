@@ -510,7 +510,7 @@ if (WITH_PYTHON)
 
   # Determine where to install the python libraries.
   execute_process(
-    COMMAND ${Python3_EXECUTABLE} -c "from sysconfig import get_path; print(get_path('platlib', 'posix_user', {'userbase': '${CMAKE_INSTALL_PREFIX}'}))"
+    COMMAND ${Python3_EXECUTABLE} -c "from sysconfig import get_path; print(get_path('platlib', 'posix_prefix', {'platbase': '${CMAKE_INSTALL_PREFIX}'}))"
     RESULT_VARIABLE PYTHON_SYSCONFIG_RESULT
     OUTPUT_VARIABLE PYTHON_SYSCONFIG_OUTPUT
     ERROR_VARIABLE PYTHON_SYSCONFIG_ERROR

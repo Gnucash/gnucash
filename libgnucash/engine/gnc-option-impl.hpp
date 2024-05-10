@@ -396,13 +396,13 @@ template <typename ValueType>
 class GncOptionRangeValue : public OptionClassifier
 {
 public:
-    GncOptionRangeValue<ValueType>(const char* section, const char* name,
+    GncOptionRangeValue(const char* section, const char* name,
                                    const char* key, const char* doc_string,
                                    ValueType value, ValueType min,
                                    ValueType max, ValueType step) :
         GncOptionRangeValue<ValueType>{section, name, key, doc_string, value, min,
                                        max, step, GncOptionUIType::NUMBER_RANGE} {}
-    GncOptionRangeValue<ValueType>(const char* section, const char* name,
+    GncOptionRangeValue(const char* section, const char* name,
                                    const char* key, const char* doc_string,
                                    ValueType value, ValueType min,
                                    ValueType max, ValueType step, GncOptionUIType ui) :
@@ -412,8 +412,8 @@ public:
         m_min{min}, m_max{max}, m_step{step} {
            if constexpr(is_same_decayed_v<ValueType, int>)
                 set_alternate(true);}
-    GncOptionRangeValue<ValueType>(const GncOptionRangeValue<ValueType>&) = default;
-    GncOptionRangeValue<ValueType>(GncOptionRangeValue<ValueType>&&) = default;
+    GncOptionRangeValue(const GncOptionRangeValue<ValueType>&) = default;
+    GncOptionRangeValue(GncOptionRangeValue<ValueType>&&) = default;
     GncOptionRangeValue<ValueType>& operator=(const GncOptionRangeValue<ValueType>&) = default;
     GncOptionRangeValue<ValueType>& operator=(GncOptionRangeValue<ValueType>&&) = default;
     ValueType get_value() const { return m_value; }
