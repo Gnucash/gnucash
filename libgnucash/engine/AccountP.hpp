@@ -120,6 +120,7 @@ typedef struct AccountPrivate
     gboolean balance_dirty;     /* balances in splits incorrect */
 
     std::vector<Split*> splits;              /* list of split pointers */
+    GHashTable* splits_hash;
     gboolean sort_dirty;        /* sort order of splits is bad */
 
     LotList   *lots;		/* list of lot pointers */

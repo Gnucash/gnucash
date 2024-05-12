@@ -333,6 +333,7 @@ gnc_account_init(Account* acc)
     priv->include_sub_account_balances = {};
 
     new (&priv->splits) SplitsVec ();
+    priv->splits_hash = g_hash_table_new (g_direct_hash, g_direct_equal);
     priv->sort_dirty = FALSE;
 }
 
@@ -1470,6 +1471,7 @@ xaccFreeAccount (Account *acc)
     priv->balance_dirty = FALSE;
     priv->sort_dirty = FALSE;
     priv->splits.~SplitsVec();
+    g_hash_table_destroy (priv->splits_hash);
 
     /* qof_instance_release (&acc->inst); */
     g_object_unref(acc);
@@ -1556,6 +1558,7 @@ xaccAccountCommitEdit (Account *acc)
         else
         {
             priv->splits.clear();
+            g_hash_table_remove_all (priv->splits_hash);
         }
 
         /* It turns out there's a case where this assertion does not hold:
@@ -1966,8 +1969,8 @@ gnc_account_insert_split (Account *acc, Split *s)
     g_return_val_if_fail(GNC_IS_SPLIT(s), FALSE);
 
     priv = GET_PRIVATE(acc);
-    if (std::find (priv->splits.begin(), priv->splits.end(), s) != priv->splits.end())
-        return FALSE;
+    if (!g_hash_table_add (priv->splits_hash, s))
+        return false;
 
     priv->splits.push_back (s);
 
@@ -1997,10 +2000,9 @@ gnc_account_remove_split (Account *acc, Split *s)
 
     priv = GET_PRIVATE(acc);
 
+    if (!g_hash_table_remove (priv->splits_hash, s))
+        return false;
     auto it = std::remove (priv->splits.begin(), priv->splits.end(), s);
-    if (it == priv->splits.end())
-        return FALSE;
-
     priv->splits.erase (it, priv->splits.end());
     //FIXME: find better event type
     qof_event_gen(&acc->inst, QOF_EVENT_MODIFY, nullptr);
