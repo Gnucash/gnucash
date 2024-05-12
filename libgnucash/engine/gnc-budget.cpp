@@ -29,7 +29,6 @@
 #include <optional>
 #include <unordered_map>
 #include <vector>
-#include <memory>
 
 #include "Account.h"
 
@@ -84,7 +83,7 @@ typedef struct GncBudgetPrivate
     /* Recurrence (period info) for the budget */
     Recurrence recurrence;
 
-    std::unique_ptr<AcctMap> acct_map;
+    AcctMap acct_map;
 
     /* Number of periods */
     guint  num_periods;
@@ -110,7 +109,7 @@ gnc_budget_init(GncBudget* budget)
     priv = GET_PRIVATE(budget);
     priv->name = CACHE_INSERT(_("Unnamed Budget"));
     priv->description = CACHE_INSERT("");
-    priv->acct_map = std::make_unique<AcctMap>();
+    new (&priv->acct_map) AcctMap ();
 
     priv->num_periods = 12;
     date = gnc_g_date_new_today ();
@@ -280,7 +279,7 @@ gnc_budget_free(QofInstance *inst)
 
     CACHE_REMOVE(priv->name);
     CACHE_REMOVE(priv->description);
-    priv->acct_map = nullptr;   // nullify to ensure unique_ptr is freed.
+    priv->acct_map.~AcctMap();
 
     /* qof_instance_release (&budget->inst); */
     g_object_unref(budget);
@@ -477,12 +476,8 @@ gnc_budget_set_num_periods(GncBudget* budget, guint num_periods)
 
     gnc_budget_begin_edit(budget);
     priv->num_periods = num_periods;
-    std::for_each (priv->acct_map->begin(),
-                   priv->acct_map->end(),
-                   [num_periods](auto& it)
-                   {
-                       it.second.resize(num_periods);
-                   });
+    std::for_each (priv->acct_map.begin(), priv->acct_map.end(),
+                   [num_periods](auto& it){ it.second.resize(num_periods); });
     qof_instance_set_dirty(&budget->inst);
     gnc_budget_commit_edit(budget);
 
@@ -681,7 +676,7 @@ get_perioddata (const GncBudget *budget, const Account *account, guint period_nu
     if (period_num >= priv->num_periods)
         throw std::out_of_range("period_num >= num_periods");
 
-    auto& vec = priv->acct_map->operator[](account);
+    auto& vec = priv->acct_map[account];
 
     if (vec.empty())
     {

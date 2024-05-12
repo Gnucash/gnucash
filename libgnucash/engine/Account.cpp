@@ -332,7 +332,7 @@ gnc_account_init(Account* acc)
     priv->lower_balance_limit = {};
     priv->include_sub_account_balances = {};
 
-    priv->splits.clear();
+    new (&priv->splits) SplitsVec ();
     priv->sort_dirty = FALSE;
 }
 
