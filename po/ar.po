@@ -12,14 +12,15 @@
 # ltai0001 <yltaief@gmail.com>, 2022.
 # Sherif ElGamal <selgamal0@gmail.com>, 2022.
 # BL <ghostzeko@gmail.com>, 2023.
+# Abdulla Alhosani <ama1029@nyu.edu>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2023-09-17 14:59+0000\n"
-"Last-Translator: BL <ghostzeko@gmail.com>\n"
+"PO-Revision-Date: 2024-05-12 22:06+0000\n"
+"Last-Translator: Abdulla Alhosani <ama1029@nyu.edu>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "ar/>\n"
 "Language: ar\n"
@@ -28,7 +29,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.5.4\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -60,7 +61,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: libgnucash/engine/gnc-option-date.cpp:263
 msgid "Start of this year"
-msgstr "بداية من هذا العام"
+msgstr "بداية هذا العام"
 
 #: bindings/guile/date-utilities.scm:720
 #: libgnucash/engine/gnc-option-date.cpp:264
