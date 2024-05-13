@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-05-06 02:07+0000\n"
+"PO-Revision-Date: 2024-05-11 22:00+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.3\n"
+"X-Generator: Weblate 5.5.4\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -11930,16 +11930,16 @@ msgstr "Kölcsön-visszafizetés"
 #: gnucash/gtkbuilder/assistant-loan.glade:727
 msgid "All enabled option pages must contain valid entries to continue."
 msgstr ""
-"Az összes engedélyezett opciós oldalnak érvényes bejegyzéseket kell "
-"tartalmaznia a folytatáshoz."
+"A folytatáshoz az összes engedélyezett beállító oldalnak érvényes "
+"bejegyzéseket kell tartalmaznia."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:798
 msgid "Payment To (Escrow)"
-msgstr "Fizetés ide (letét)"
+msgstr "Fizetés ide (Letét)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:811
 msgid "Payment From (Escrow)"
-msgstr "Fizetés innen (letét)"
+msgstr "Fizetés innen (Letét)"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:834
 msgid "Specify Source Account"
@@ -16166,13 +16166,12 @@ msgid "Account Deletion"
 msgstr "Azonosító törlése"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:55
-#, fuzzy
 msgid ""
 "The following Scheduled Transactions reference the deleted account and must "
 "now be corrected. Press OK to edit them."
 msgstr ""
-"A következő időzített tranzakciók törölt számlára hivatkoznak. Javítani kell "
-"őket. Nyomjon OK-t, a szerekesztésükhöz."
+"A következő ütemezett tranzakciók törölt számlára hivatkoznak, és ki kell "
+"javítani ezt. A szerkesztésükhöz nyomja meg az OK gombot."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:123
 #: gnucash/gtkbuilder/gnc-frequency.glade:171
@@ -16323,7 +16322,7 @@ msgstr "Ismétlések:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1243
 msgid "Until"
-msgstr "Amíg"
+msgstr "Eddig"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
 #, fuzzy
