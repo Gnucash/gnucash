@@ -143,8 +143,11 @@ static void gnc_plugin_page_account_tree_double_click_cb (GtkTreeView *treeview,
 static void gnc_plugin_page_account_tree_selection_changed_cb (GtkTreeSelection *selection,
                                                                GncPluginPageAccountTree *page);
 static void accounting_period_changed_cb(gpointer prefs, gchar *pref, gpointer user_data);
+
+extern "C" {
 void gppat_populate_trans_mas_list(GtkToggleButton *sa_mrb, GtkWidget *dialog);
 void gppat_set_insensitive_iff_rb_active(GtkWidget *widget, GtkToggleButton *b);
+}
 
 /* Command callbacks */
 static void gnc_plugin_page_account_tree_cmd_new_account (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
