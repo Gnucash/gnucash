@@ -2251,8 +2251,8 @@ xaccAccountMoveAllSplits (Account *accfrom, Account *accto)
      * Convert each split's amount to accto's commodity.
      * Commit to editing each transaction.
      */
-    std::for_each (from_priv->splits.begin(), from_priv->splits.end(),
-                   [accto](Split *s){ xaccPostSplitMove (s, accto); });
+    auto splits = from_priv->splits;
+    std::for_each (splits.begin(), splits.end(), [accto](auto s){ xaccPostSplitMove (s, accto); });
 
     /* Finally empty accfrom. */
     g_assert(from_priv->splits.empty());
