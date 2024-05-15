@@ -4674,6 +4674,15 @@ gnc_plugin_page_register_cmd_blank_transaction (GSimpleAction *simple,
     LEAVE (" ");
 }
 
+static bool
+find_after_date (Split *split, time64* find_date)
+{
+    auto trans = xaccSplitGetParent (split);
+    return !(xaccSplitGetAccount (split) != nullptr && 
+             xaccTransGetDate (trans) >= *find_date &&
+             xaccTransCountSplits (trans) != 1);
+}
+
 static void
 gnc_plugin_page_register_cmd_goto_date (GSimpleAction *simple,
                                         GVariant      *paramter,
@@ -4689,6 +4698,7 @@ gnc_plugin_page_register_cmd_goto_date (GSimpleAction *simple,
     g_return_if_fail (GNC_IS_PLUGIN_PAGE_REGISTER (page));
 
     auto date = input_date (window, _("Go to Date"), _("Go to Date"));
+
     if (!date)
     {
         LEAVE ("goto_date cancelled");
@@ -4700,14 +4710,14 @@ gnc_plugin_page_register_cmd_goto_date (GSimpleAction *simple,
     splits = g_list_copy (qof_query_run (query));
     splits = g_list_sort (splits, (GCompareFunc)xaccSplitOrder);
 
-    for (GList *lp = splits; lp; lp = lp->next)
-    {
-        if (xaccTransGetDate (xaccSplitGetParent (GNC_SPLIT(lp->data))) >= date.value())
-        {
-            gnc_split_reg_jump_to_split (gsr, GNC_SPLIT(lp->data));
-            break;
-        }
-    }
+    // if gl register, there could be blank splits from other open registers
+    // included in split list so check for and ignore them
+    auto it = g_list_find_custom (splits, &date.value(), (GCompareFunc)find_after_date);
+
+    if (it)
+        gnc_split_reg_jump_to_split (gsr, GNC_SPLIT(it->data));
+    else
+        gnc_split_reg_jump_to_blank (gsr);
 
     g_list_free (splits);
     LEAVE (" ");
