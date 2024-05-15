@@ -1738,8 +1738,12 @@ gnc_split_reg_jump_to_blank (GNCSplitReg *gsr)
     }
 
     if (gnc_split_register_get_split_virt_loc (reg, blank, &vcell_loc))
-        gnucash_register_goto_virt_cell (gsr->reg, vcell_loc);
+    {
+        if ((vcell_loc.virt_row > 1) && (reg->style == REG_STYLE_JOURNAL))
+            vcell_loc.virt_row--; // highlight the date field
 
+        gnucash_register_goto_virt_cell (gsr->reg, vcell_loc);
+    }
     gnc_ledger_display_refresh (gsr->ledger);
     LEAVE(" ");
 }
