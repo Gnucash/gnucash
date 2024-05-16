@@ -647,8 +647,8 @@ StrVec GncPreSplit::verify_essentials()
         err_msg.emplace_back (_("Transfer split is reconciled but transfer reconcile date column is missing or invalid."));
 
 
-    /* In multisplit mode and where current account selections imply multi-
-     * currency transactions, we require extra columns to ensure each split is
+    /* When current account selections imply multi-currency
+     * transactions, we require extra columns to ensure each split is
      * fully defined.
      * Note this check only involves splits created by the csv importer
      * code. The generic import matcher may add a balancing split
@@ -662,7 +662,7 @@ StrVec GncPreSplit::verify_essentials()
             err_msg.emplace_back( _("Choice of accounts makes this a multi-currency transaction but price or (negated) value column is missing or invalid."));
         else if (!m_pre_trans->m_multi_split &&
             !m_price && !m_value && !m_value_neg && !m_tamount && !m_tamount_neg )
-            err_msg.emplace_back( _("Choice of account makes this a multi-currency transaction but price, (negated) value or (negated) transfer column is missing or invalid."));
+            err_msg.emplace_back( _("Choice of accounts makes this a multi-currency transaction but price, (negated) value or (negated) transfer amount column is missing or invalid."));
     }
 
     return err_msg;
