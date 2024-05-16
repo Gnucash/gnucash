@@ -1462,15 +1462,27 @@ gnc_gen_trans_onButtonPressed_cb (GtkTreeView *treeview,
         GdkEventButton *event_button = (GdkEventButton *) event;
         if (event_button->button == GDK_BUTTON_SECONDARY)
         {
-            DEBUG("Right mouseClick detected- popup the menu.");
-            // Only pop up the menu if there's more than 1 selected transaction,
-            // or the selected transaction is an ADD.
-            GtkTreeSelection *selection = gtk_tree_view_get_selection (treeview);
+            DEBUG("Right mouseClick detected - popup the menu.");
+
+            auto selection = gtk_tree_view_get_selection (treeview);
+            auto selected_rows = gtk_tree_selection_count_selected_rows (selection);
+            /* If no rows are selected yet, select the row that was clicked on
+             * before proceeding */
+            if (!selected_rows)
+            {
+                GtkTreePath* path = nullptr;
+                if (gtk_tree_view_get_path_at_pos (treeview, event_button->x,
+                    event_button->y, &path, nullptr, nullptr, nullptr))
+                {
+                    gtk_tree_selection_select_path (selection, path);
+                    selected_rows++;
+                    gtk_tree_path_free (path);
+                }
+            }
             if (gtk_tree_selection_count_selected_rows (selection) > 0)
             {
-                GList* selected;
                 GtkTreeModel *model;
-                selected = gtk_tree_selection_get_selected_rows (selection, &model);
+                auto selected = gtk_tree_selection_get_selected_rows (selection, &model);
                 if (get_action_for_path (static_cast<GtkTreePath*>(selected->data), model) == GNCImport_ADD)
                     gnc_gen_trans_view_popup_menu (treeview, event, info);
                 g_list_free_full (selected, (GDestroyNotify)gtk_tree_path_free);
