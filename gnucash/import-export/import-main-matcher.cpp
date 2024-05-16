@@ -1138,8 +1138,17 @@ gnc_gen_trans_set_price_to_selection_cb (GtkMenuItem *menuitem,
         if (!gnc_xfer_dialog_run_until_done(xfer))
             break; /* If the user cancels, return to the payment dialog without changes */
 
-        gnc_import_TransInfo_set_price (row.get_trans_info (), exch);
-        refresh_model_row (info, model, row.get_iter(), row.get_trans_info());
+
+        /* Note the exchange rate we received is backwards from what we really need:
+         * it converts value to amount, but the remainder of the code expects
+         * an exchange rate that converts from amount to value. So let's invert
+         * the result (though only if that doesn't result in a division by 0). */
+        if (!gnc_numeric_zero_p(exch))
+        {
+            gnc_import_TransInfo_set_price (row.get_trans_info (),
+                                            gnc_numeric_invert(exch));
+            refresh_model_row (info, model, row.get_iter(), row.get_trans_info());
+        }
     }
     g_list_free_full (selected_rows, (GDestroyNotify)gtk_tree_path_free);
     LEAVE("");
