@@ -411,7 +411,7 @@ void GncTxImport::tokenize (bool guessColTypes)
             auto presplit = std::make_shared<GncPreSplit>(date_format(), currency_format());
             presplit->set_pre_trans (std::move (pretrans));
             m_parsed_lines.push_back (std::make_tuple (tokenized_line, ErrMap(),
-                                      std::move (presplit), false));
+                                      presplit->get_pre_trans(), std::move (presplit), false));
         }
         if (length > max_cols)
             max_cols = length;
@@ -606,7 +606,7 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
 {
     auto created_trans = false;
     std::shared_ptr<GncPreSplit> split_props;
-    std::tie(std::ignore, std::ignore, split_props, std::ignore) = *parsed_line;
+    std::tie(std::ignore, std::ignore, std::ignore, split_props, std::ignore) = *parsed_line;
     auto trans_props = split_props->get_pre_trans();
     auto account = split_props->get_account();
 
@@ -655,11 +655,10 @@ std::shared_ptr<DraftTransaction> GncTxImport::trans_properties_to_trans (std::v
 
 void GncTxImport::create_transaction (std::vector<parse_line_t>::iterator& parsed_line)
 {
-    StrVec line;
     ErrMap errors;
     std::shared_ptr<GncPreSplit> split_props = nullptr;
     bool skip_line = false;
-    std::tie(line, errors, split_props, skip_line) = *parsed_line;
+    std::tie(std::ignore, errors, std::ignore, split_props, skip_line) = *parsed_line;
     auto trans_props = split_props->get_pre_trans();
 
     if (skip_line)
@@ -752,15 +751,9 @@ GncTxImport::check_for_column_type (GncTransPropType type)
 /* A helper function intended to be called only from set_column_type */
 void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncTransPropType old_type, GncTransPropType new_type)
 {
-    /* Deliberately make a copy of the GncPreTrans. It may be the original one was shared
-     * with a previous line and should no longer be after the transprop is changed.
-     * This doesn't apply for the GncPreSplit so we just get a pointer to it for easier processing.
-     */
-    auto split_props = std::get<PL_PRESPLIT>(m_parsed_lines[row]);
-    auto trans_props = std::make_shared<GncPreTrans> (*(split_props->get_pre_trans()).get());
-
     /* Deal with trans properties first as this may change the trans->split relationships
-        * in case of multi-split imports */
+     * in case of multi-split imports */
+    auto trans_props = std::get<PL_PRETRANS> (m_parsed_lines[row]);
     if ((old_type > GncTransPropType::NONE) && (old_type <= GncTransPropType::TRANS_PROPS))
         trans_props->reset (old_type);
     if ((new_type > GncTransPropType::NONE) && (new_type <= GncTransPropType::TRANS_PROPS))
@@ -790,6 +783,7 @@ void GncTxImport::update_pre_trans_split_props (uint32_t row, uint32_t col, GncT
      * In all other cases our new GncPreTrans should be used for this line
      * and be marked as the new potential m_parent for subsequent lines.
      */
+    auto split_props = std::get<PL_PRESPLIT> (m_parsed_lines[row]);
     if (m_settings.m_multi_split && trans_props->is_part_of( m_parent))
         split_props->set_pre_trans (m_parent);
     else

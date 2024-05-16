@@ -52,12 +52,15 @@ extern const gchar* currency_format_user[];
 /** An enum describing the columns found in a parse_line_t. Currently these are:
  *  - a tokenized line of input
  *  - an optional error string
- *  - a struct to hold user selected properties for a transaction
+ *  - a struct to hold user selected properties for a transaction as found on the current line
  *  - a struct to hold user selected properties for one or two splits in the above transaction
+ *    this split struct also contains a trans props struct like above, but the included one
+ *    may be shared by several split lines that comprise a single transaction
  *  - a boolean to mark the line as skipped by error and/or user or not */
 enum parse_line_cols {
     PL_INPUT,
     PL_ERROR,
+    PL_PRETRANS,
     PL_PRESPLIT,
     PL_SKIP
 };
@@ -69,6 +72,7 @@ using StrVec = std::vector<std::string>;
  * with std::get to access the columns. */
 using parse_line_t = std::tuple<StrVec,
                                 ErrMap,
+                                std::shared_ptr<GncPreTrans>,
                                 std::shared_ptr<GncPreSplit>,
                                 bool>;
 
