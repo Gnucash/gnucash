@@ -49,6 +49,7 @@
 #include "gnc-glib-utils.h"
 #include "gnc-prefs.h"
 #include "gnc-ui.h"
+#include "gnc-window.h"
 #include "dialog-account.h"
 #include "dialog-utils.h"
 #include "window-reconcile.h"
@@ -1303,6 +1304,9 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
      * create duplicate entries.
      */
     info->num_trans_processed = 0;
+
+    gnc_window_show_progress (_("Removing duplicate transactions…"), 100);
+
     // Add transactions, but verify that there isn't one that was
     // already added with identical amounts and date, and a different
     // account. To do that, create a hash table whose key is a hash of
@@ -1346,6 +1350,8 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
     info->trans_list = g_list_reverse (trans_list_remain);
     DEBUG("%d transactions remaining to process in file %s\n", g_list_length (info->trans_list),
           selected_filename);
+
+    gnc_window_show_progress (nullptr, -1);
 
     // See whether the view has anything in it and warn the user if not.
     if (gnc_gen_trans_list_empty (info->gnc_ofx_importer_gui))
