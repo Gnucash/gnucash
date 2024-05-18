@@ -53,6 +53,10 @@
 #include "dialog-utils.h"
 #include "window-reconcile.h"
 
+#include <string>
+#include <sstream>
+#include <unordered_map>
+
 #define GNC_PREFS_GROUP "dialogs.import.ofx"
 #define GNC_PREF_AUTO_COMMODITY "auto-create-commodity"
 
@@ -1278,13 +1282,13 @@ reconcile_when_close_toggled_cb (GtkToggleButton *togglebutton, ofx_info* info)
     info->run_reconcile = gtk_toggle_button_get_active (togglebutton);
 }
 
-static gchar* make_date_amount_key (time64 date, gnc_numeric amount)
+static std::string
+make_date_amount_key (const Split* split)
 {
-    // Create a string that combines date and amount, we'll use that for our hash
-    gchar buf[64];
-    gnc_numeric _amount = gnc_numeric_reduce(amount);
-    g_snprintf (buf, sizeof(buf), "%" PRId64 "%" PRId64 "%" PRId64, _amount.num , _amount.denom, date);
-    return g_strdup (buf);
+    std::ostringstream ss;
+    auto _amount = gnc_numeric_reduce (gnc_numeric_abs (xaccSplitGetAmount (split)));
+    ss << _amount.num << '/' <<  _amount.denom << ' ' << xaccTransGetDate (xaccSplitGetParent (split));
+    return ss.str();
 }
 
 static void
@@ -1292,13 +1296,12 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
 {
     GtkWindow *parent = info->parent;
     GList* trans_list_remain = NULL;
+    std::unordered_map <std::string,Account*> trans_map;
 
     /* If we have multiple accounts in the ofx file, we need to
      * avoid processing transfers between accounts together because this will
      * create duplicate entries.
      */
-    GHashTable* trans_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
-                                                    g_free, NULL);
     info->num_trans_processed = 0;
     // Add transactions, but verify that there isn't one that was
     // already added with identical amounts and date, and a different
@@ -1310,11 +1313,10 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
         auto trans = static_cast<Transaction*>(node->data);
         Split* split = xaccTransGetSplit (trans, 0);
         Account* account = xaccSplitGetAccount (split);
-        gchar *date_amount_key = make_date_amount_key (xaccTransGetDate (trans),
-                                                      gnc_numeric_abs (xaccSplitGetAmount (split)));
-        // Test if date_amount_key is already in trans_hash.
-        auto _account = static_cast<Account*>(g_hash_table_lookup (trans_hash, date_amount_key));
-        if (_account && _account != account)
+        auto date_amount_key = make_date_amount_key (split);
+
+        auto it = trans_map.find (date_amount_key);
+        if (it != trans_map.end() && it->second != account)
         {
             if (qof_log_check (G_LOG_DOMAIN, QOF_LOG_DEBUG))
             {
@@ -1322,7 +1324,7 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
                 // dates, but a different account.  That's a potential
                 // transfer so process this transaction in a later call.
                 gchar *name1 = gnc_account_get_full_name (account);
-                gchar *name2 = gnc_account_get_full_name (_account);
+                gchar *name2 = gnc_account_get_full_name (it->second);
                 gchar *amtstr = gnc_numeric_to_string (xaccSplitGetAmount (split));
                 gchar *datestr = qof_print_date (xaccTransGetDate (trans));
                 DEBUG ("Potential transfer %s %s %s %s\n", name1, name2, amtstr, datestr);
@@ -1332,17 +1334,15 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
                 g_free (datestr);
             }
             trans_list_remain = g_list_prepend (trans_list_remain, trans);
-            g_free (date_amount_key);
         }
         else
         {
-            g_hash_table_insert (trans_hash, date_amount_key, account);
+            trans_map[date_amount_key] = account;
             gnc_gen_trans_list_add_trans (info->gnc_ofx_importer_gui, trans);
             info->num_trans_processed ++;
         }
     }
     g_list_free (info->trans_list);
-    g_hash_table_destroy (trans_hash);
     info->trans_list = g_list_reverse (trans_list_remain);
     DEBUG("%d transactions remaining to process in file %s\n", g_list_length (info->trans_list),
           selected_filename);
