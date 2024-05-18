@@ -1300,9 +1300,11 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
     GHashTable* trans_hash = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                     g_free, NULL);
     info->num_trans_processed = 0;
-    // Add transactions, but verify that there isn't one that was already added with identical
-    // amounts and date, and a different account. To do that, create a hash table whose key is
-    // a hash of amount and date, and whose value is the account in which they appear.
+    // Add transactions, but verify that there isn't one that was
+    // already added with identical amounts and date, and a different
+    // account. To do that, create a hash table whose key is a hash of
+    // amount and date, and whose value is the account in which they
+    // appear.
     for(GList* node = info->trans_list; node; node=node->next)
     {
         auto trans = static_cast<Transaction*>(node->data);
@@ -1342,7 +1344,8 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
     g_list_free (info->trans_list);
     g_hash_table_destroy (trans_hash);
     info->trans_list = g_list_reverse (trans_list_remain);
-    DEBUG("%d transactions remaining to process in file %s\n", g_list_length (info->trans_list), selected_filename);
+    DEBUG("%d transactions remaining to process in file %s\n", g_list_length (info->trans_list),
+          selected_filename);
 
     // See whether the view has anything in it and warn the user if not.
     if (gnc_gen_trans_list_empty (info->gnc_ofx_importer_gui))
@@ -1351,7 +1354,8 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
         if (info->num_trans_processed)
         {
             gnc_info_dialog (parent, _("While importing transactions from OFX file '%s' found %d previously imported transactions, no new transactions."),
-                             selected_filename, info->num_trans_processed);
+                             selected_filename,
+                             info->num_trans_processed);
             // This is required to ensure we don't mistakenly assume the user canceled.
             info->response = GTK_RESPONSE_OK;
             gnc_ofx_match_done (NULL, info);
@@ -1360,24 +1364,38 @@ runMatcher (ofx_info* info, char * selected_filename, gboolean go_to_next_file)
     }
     else
     {
-        /* Show the match dialog and connect to the "destroy" signal so we can trigger a reconcile when
-         the user clicks OK when done matching transactions if required. Connecting to response isn't enough
-         because only when the matcher is destroyed do imported transactions get recorded */
-        g_signal_connect (G_OBJECT (gnc_gen_trans_list_widget (info->gnc_ofx_importer_gui)), "destroy",
-                          G_CALLBACK (gnc_ofx_match_done), info);
+        /* Show the match dialog and connect to the "destroy" signal
+         so we can trigger a reconcile when the user clicks OK when
+         done matching transactions if required. Connecting to
+         response isn't enough because only when the matcher is
+         destroyed do imported transactions get recorded */
+        g_signal_connect (G_OBJECT (gnc_gen_trans_list_widget (info->gnc_ofx_importer_gui)),
+                          "destroy",
+                          G_CALLBACK (gnc_ofx_match_done),
+                          info);
         
         // Connect to response so we know if the user pressed "cancel".
-        g_signal_connect (G_OBJECT (gnc_gen_trans_list_widget (info->gnc_ofx_importer_gui)), "response",
-                          G_CALLBACK (gnc_ofx_on_match_click), info);
+        g_signal_connect (G_OBJECT (gnc_gen_trans_list_widget (info->gnc_ofx_importer_gui)),
+                          "response",
+                          G_CALLBACK (gnc_ofx_on_match_click),
+                          info);
         
         gnc_gen_trans_list_show_all (info->gnc_ofx_importer_gui);
         
-        // Show or hide the check box for reconciling after match, depending on whether a statement was received.
-        gnc_gen_trans_list_show_reconcile_after_close_button (info->gnc_ofx_importer_gui, info->statement != NULL, info->run_reconcile);
+        // Show or hide the check box for reconciling after match,
+        // depending on whether a statement was received.
+        gnc_gen_trans_list_show_reconcile_after_close_button (info->gnc_ofx_importer_gui,
+                                                              info->statement != NULL,
+                                                              info->run_reconcile);
         
-        // Finally connect to the reconcile after match check box so we can be notified if the user wants/does not want to reconcile.
-        g_signal_connect (G_OBJECT (gnc_gen_trans_list_get_reconcile_after_close_button (info->gnc_ofx_importer_gui)), "toggled",
-                          G_CALLBACK (reconcile_when_close_toggled_cb), info);
+        // Finally connect to the reconcile after match check box so
+        // we can be notified if the user wants/does not want to
+        // reconcile.
+        g_signal_connect (G_OBJECT (gnc_gen_trans_list_get_reconcile_after_close_button
+                                    (info->gnc_ofx_importer_gui)),
+                          "toggled",
+                          G_CALLBACK (reconcile_when_close_toggled_cb),
+                          info);
     }
 }
 
