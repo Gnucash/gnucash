@@ -48,7 +48,7 @@ struct _gncBillTerm
     gint            cutoff;
 
     /* Internal management fields */
-    /* See src/doc/business.txt for an explanation of the following */
+    /* See libgnucash/engine/TaxTableBillTermImmutability.txt for an explanation of the following */
     /* Code that handles this is *identical* to that in gncTaxTable */
     gint64          refcount;
     GncBillTerm *   parent;      /* if non-null, we are an immutable child */

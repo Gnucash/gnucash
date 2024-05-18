@@ -22,27 +22,30 @@
 /** @addtogroup Business
     @{ */
 /** @addtogroup Address
+    An address is a helper object used by the ::GncOwner object (and
+    its actual implementations ::GncCustomer, ::GncVendor and ::GncEmployee).
 
-An address belongs to another object, determined by the ::GncOwner.
-It is the owner that assigns a name and identifier to the address.
-In effect, an address is just a building - to make it useful to
-GnuCash, it needs to be tied to a person. After all, you cannot
-invoice a building, you invoice a person working / living in the
-building.
+    An address stores the physical address, phone, fax and email properties
+    of a ::GncOwner. The owner's name itself is stored in ::GncOwner.
 
-QOF needs to handle all objects generically and to tie the address
-to an owner, QOF must be able to find each - as entities.
+    @note an address is not a separate entity. It is meant to be embedded in other
+    objects (that is, there is no addressbook; there is no address database that
+    is separate from the objects that use addresses; there is no 'foreach'
+    that can be used to iterate over all addresses.)
 
-This allows QOF to follow the hierarchy of objects without having
-to call any application-specific routines.
+    QOF needs to handle all objects generically and to tie the address
+    to an owner, QOF must be able to find each - as entities.
 
-To achieve this, new GncAddress routines have been added. An address
-is now created with a NULL parent and the parent set explicitly using
-the QOF object declaration. Whilst this adds functionality, it is
-important that a valid ::GncOwner entity is always set as a parent.
-This is an API issue - QOF will always set the parent provided that
-a suitable entity is passed to the qofAddressSetOwner routine. It is
-up to you to pass a suitable entity.
+    This allows QOF to follow the hierarchy of objects without having
+    to call any application-specific routines.
+
+    To achieve this, new GncAddress routines have been added. An address
+    is now created with a NULL parent and the parent set explicitly using
+    the QOF object declaration. Whilst this adds functionality, it is
+    important that a valid ::GncOwner entity is always set as a parent.
+    This is an API issue - QOF will always set the parent provided that
+    a suitable entity is passed to the qofAddressSetOwner routine. It is
+    up to you to pass a suitable entity.
 
     @{ */
 /** @file gncAddress.h

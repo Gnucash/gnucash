@@ -20,8 +20,7 @@
 /** @addtogroup Engine
     @{ */
 /** @addtogroup Business
-    The Business Engine provides a set of structures for
-    that provide small-business accounting features.
+    This module implements a number of basic small-business accounting functions.
     @{ */
 
 /** @file gncBusiness.h -- Business Helper Functions

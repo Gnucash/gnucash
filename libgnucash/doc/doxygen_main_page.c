@@ -32,7 +32,6 @@ in relation to existing code.
 
 - \ref backuppolicy
 - \ref bookperiods
-- \ref business1
 - \ref currencies
 - \ref deprecated
 - \ref engine

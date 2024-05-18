@@ -7,7 +7,6 @@ set(doc_FILES
         backup.txt
         books.txt
         budget.txt
-#        business.txt
         callgrind.txt
         constderv.html
 #        constraints.txt

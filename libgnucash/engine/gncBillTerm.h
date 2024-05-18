@@ -21,7 +21,44 @@
 \********************************************************************/
 /** @addtogroup Business
     @{ */
-/** @addtogroup BillTerm
+/** @addtogroup BillTerm Billing Terms
+    Describes billing terms, that is when a bill is due, and what sort of
+    discount is applied (if any).  The BillTerm object currently supports:
+    * the discount applied to a bill (absolute numeric value)
+    * the number of days until a discount expires
+    * information about the invoice due date
+
+    This last one can be defined in multiple ways:
+    * using a simple number of days value: the due date is posted date
+      incremented with this number of days
+    * using the "proximo" method which is explained below:
+
+    A proximo billing term has two parameters:
+    * due day: day of the month the invoice/bill will be due
+    * cutoff: day of the month used to decide if the due date will be
+              in the next month or in the month thereafter. This can be
+              a negative number in which case the cutoff date is relative
+              to the end of the month and counting backwards.
+              Eg: cutoff = -3 would mean 25 in February or 28 in June
+
+    How does it work:
+    Assume cutoff = 19 and due day = 20
+
+    * Example 1 post date = 14-06-2010 (European date format)
+      14 is less than the cutoff of 19, so the due date will be in the next
+      month. Since the due day is set to 20, the due date will be
+      20-07-2010
+
+    * Example 2 post date = 22-06-2010 (European date format)
+      22 is more than the cutoff of 19, so the due date will be in the month
+      after next month. Since the due day is set to 20, the due date will be
+      20-02-2010
+
+    @note A billing term added to an invoice is immutable, that is it
+    can't change any more. To achieve that a billing term is copied when
+    added to an invoice. This uses some internal fields to track this which
+    are explained in @ref ImmutableTaxTableBillTerm.
+
     @{ */
 /** @file gncBillTerm.h
     @brief Billing Term interface

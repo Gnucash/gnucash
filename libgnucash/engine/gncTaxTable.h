@@ -38,7 +38,7 @@ extern "C" {
 /** @struct GncTaxTable
 
 modtime is the internal date of the last modtime\n
-See src/doc/business.txt for an explanation of the following\n
+See libgnucash/engine/TaxTableBillTermImmutability.txt for an explanation of the following\n
 Code that handles refcount, parent, child, invisible and children
 is *identical* to that in ::GncBillTerm
 

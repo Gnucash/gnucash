@@ -41,7 +41,7 @@ struct _gncTaxTable
     GncTaxTableEntryList*  entries;
     time64          modtime;      /* internal date of last modtime */
 
-    /* See src/doc/business.txt for an explanation of the following */
+    /* See libgnucash/engine/TaxTableBillTermImmutability.txt for an explanation of the following */
     /* Code that handles this is *identical* to that in gncBillTerm */
     gint64          refcount;
     GncTaxTable *   parent;       /* if non-null, we are an immutable child */
@@ -924,7 +924,7 @@ gboolean gncTaxTableEqual(const GncTaxTable *a, const GncTaxTable *b)
     }
 
 #if 0
-    /* See src/doc/business.txt for an explanation of the following */
+    /* See libgnucash/engine/TaxTableBillTermImmutability.txt for an explanation of the following */
     /* Code that handles this is *identical* to that in gncBillTerm */
     gint64          refcount;
     GncTaxTable *   parent;       /* if non-null, we are an immutable child */
