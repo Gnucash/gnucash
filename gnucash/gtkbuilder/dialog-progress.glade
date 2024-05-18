@@ -24,7 +24,10 @@
           <object class="GtkLabel" id="primary_label">
             <property name="visible">True</property>
             <property name="can-focus">False</property>
-            <property name="label">&lt;span weight="bold" size="larger"&gt;Primary text&lt;/span&gt;</property>
+            <property name="label">Primary text</property>
+            <style>
+              <class name="gnc-class-title"/>
+            </style>
             <property name="use-markup">True</property>
             <property name="wrap">True</property>
           </object>
@@ -68,7 +71,10 @@
               <object class="GtkLabel" id="sub_label">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label">&lt;span style="italic"&gt;Sub-operation text&lt;/span&gt;</property>
+                <property name="label">Sub-operation text</property>
+                <style>
+                  <class name="gnc-class-emphasis"/>
+                </style>
                 <property name="use-markup">True</property>
                 <property name="wrap">True</property>
               </object>
