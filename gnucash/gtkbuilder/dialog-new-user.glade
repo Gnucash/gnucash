@@ -101,7 +101,7 @@
                 <property name="can-focus">False</property>
                 <property name="halign">start</property>
                 <property name="valign">start</property>
-                <property name="label" translatable="yes">If you press the &lt;i&gt;Yes&lt;/i&gt; button, the &lt;i&gt;Welcome to GnuCash&lt;/i&gt; dialog will be displayed again next time you start GnuCash. If you press the &lt;i&gt;No&lt;/i&gt; button, it will not be displayed again.</property>
+                <property name="label" translatable="yes">If you press the "Yes" button, the "Welcome to GnuCash" dialog will be displayed again next time you start GnuCash. If you press the "No" button, it will not be displayed again.</property>
                 <property name="use-markup">True</property>
                 <property name="wrap">True</property>
                 <property name="width-chars">40</property>
@@ -233,7 +233,7 @@
                   <object class="GtkLabel" id="label3">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="label" translatable="yes">There are some predefined actions available that most new users prefer to get started with GnuCash. Select one of these actions from below and click the &lt;i&gt;OK&lt;/i&gt; button or press the &lt;i&gt;Cancel&lt;/i&gt; button if you don't want to perform any of them.</property>
+                    <property name="label" translatable="yes">There are some predefined actions available that most new users prefer to get started with GnuCash. Select one of these actions from below and click the "OK" button or press the "Cancel" button if you don't want to perform any of them.</property>
                     <property name="use-markup">True</property>
                     <property name="wrap">True</property>
                     <property name="width-chars">50</property>
