@@ -146,6 +146,9 @@ QofInstance * qof_collection_lookup_entity (const QofCollection *, const GncGUID
 typedef void (*QofInstanceForeachCB) (QofInstance *, gpointer user_data);
 
 /** Call the callback for each entity in the collection. */
+void qof_collection_foreach_sorted (const QofCollection *col, QofInstanceForeachCB cb_func,
+                                    gpointer user_data, GCompareFunc sort_fn);
+
 void qof_collection_foreach (const QofCollection *, QofInstanceForeachCB,
                              gpointer user_data);
 
