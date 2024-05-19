@@ -276,8 +276,6 @@ install(TARGETS gnc-engine
 install(FILES ${engine_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
 set(engine_EXTRA_DIST
-        design.txt
-        extensions.txt
         iso-4217-currencies.xml
         iso-currencies-to-c.xsl
         kvp_doc.txt

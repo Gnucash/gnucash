@@ -30,28 +30,12 @@ src/doc/design, but this is even more outdated.
 Where possible, each overview is dated - take care to review older texts
 in relation to existing code.
 
-- \ref backuppolicy
-- \ref bookperiods
-- \ref currencies
 - \ref deprecated
-- \ref engine
-- \ref backendold
-- \ref financeconstraints
-- \ref druidframework
-- \ref guid
-- \ref gnome2
 - \ref loanhandling
 - \ref kvpvalues
 - \ref lotsoverview
-- \ref multicurrency
-- \ref pricedocs
-- \ref gnucashextension
 - \ref python_bindings_page
-- \ref qif
-- \ref budgetplan
-- \ref taxnotes
 - \ref todo
-- \ref userprefs
 
 Each overview in this section is generated directly from the
 source files using Doxygen but some topics need updating.

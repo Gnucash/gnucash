@@ -36,8 +36,6 @@
     addition and multiplication, but 64-bit rationals do not have
     the dynamic range of floating point numbers.
 
-See \ref gncnumericexample
-
 @{ */
 /** @file gnc-numeric.h
     @brief An exact-rational-number library for gnucash.

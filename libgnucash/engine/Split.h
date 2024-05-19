@@ -62,6 +62,8 @@ GType gnc_split_get_type(void);
 
 /** @name Split Reconciled field values
 
+    These define the various reconciliations states a split can be in.
+
     If you change these
     be sure to change gnc-ui-util.c:gnc_get_reconciled_str() and
     associated functions
