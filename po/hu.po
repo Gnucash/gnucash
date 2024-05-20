@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-05-11 22:00+0000\n"
+"PO-Revision-Date: 2024-05-20 03:01+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5.4\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1159,6 +1159,10 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
+"Ha az összes tranzakció között szeretne keresni, akkor a számlahierarchia "
+"főoldaláról indítsa el a keresést (Szerkesztés -> Keresés…). Ha a keresést "
+"egyetlen számlára szeretné korlátozni, akkor az adott számla regiszteréből "
+"indítsa el a keresést."
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -16318,17 +16322,16 @@ msgstr "Utolsó előfordulás: "
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1208
 msgid "Repeats:"
-msgstr "Ismétlések:"
+msgstr "Ismétlés:"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1243
 msgid "Until"
-msgstr "Eddig"
+msgstr "Megadott dátumig"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1259
-#, fuzzy
 msgctxt "repeat"
 msgid "For"
-msgstr "Űrlap"
+msgstr "Megadott számú ismétlődésig"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1278
 msgid "occurrences"
