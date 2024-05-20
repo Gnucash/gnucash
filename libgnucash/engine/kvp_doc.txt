@@ -6,8 +6,45 @@ API: \ref KVP
 
 This file documents the use of keys in the key-value pair system
 used by the GnuCash Application (both the engine, and non-engine, GUI
-pieces).  Before assigning keys for use, please read the Key-Value
-Policy in the GnuCash Design Document located under src/doc/design.
+pieces).
+
+\section kvppolicy KVP Policy
+
+This section defines the policy that programmers should follow
+when using key-value pairs to store information. Because of the
+large amount of information which can potentially be stored using
+this mechanism, it is important to follow these guidelines so
+that order will be maintained.
+
+The following rules should be followed for using key-value pairs:
+
+- This should be used to document the use of keys and values.
+Please consult it before planning any use of new keys.
+
+- Key strings should be in all lower case with the '-' character
+separating words. If possible, use only alphanumeric characters and
+'-'. Example: `bank-info`. Because the '/' character is useful for
+describing keys in sub-frames (`bank-info/routing-number`), do not
+use the '/' character in key names.
+
+- Favor longer, descriptive key strings over short ones. Example:
+`online-banking-info` is better than `onln-bnk`.
+
+- Make use of the fact that frames can be stored in frames. If a group
+of keys are used for a related purpose, consider storing them together
+in a sub-frame.
+
+- Values should generally not be accessed directly through keys, but
+should rather be accessed through specific API calls. The API calls
+do not necessarily need to part a part of the Engine API. For example,
+the GUI would probably define keys that the Engine does not need to
+know about.
+
+- The same key should not be used for different engine structures (Accounts,
+Transactions, Splits), unless the key's value has the same type and the
+same basic purpose.
+
+\section kvpdocformat KVP Documentation format
 
 The format of the data below is:
 

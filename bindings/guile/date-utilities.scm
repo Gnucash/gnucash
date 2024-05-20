@@ -690,9 +690,7 @@ Defaulting to today."))
   (current-time))
 
 
-;; There is no GNC:RELATIVE-DATES list like the one mentioned in
-;; gnucash-design.info, is there? Here are the currently defined
-;; items, loosely grouped.
+;; Here are the currently defined items, loosely grouped.
 ;;today
 ;;start-cal-year end-cal-year start-prev-year end-prev-year
 ;;start-this-month end-this-month start-prev-month end-prev-month

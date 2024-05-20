@@ -105,13 +105,6 @@ Libraries/Deps
                                                  to the main menu bar instead
                                                  of one on the window.
 
-  makeinfo                                       Not really needed, it
-                                                 just builds the
-                                                 mostly obsolete
-                                                 design documentation
-                                                 (superceded for the
-                                                 most part in Doxygen
-                                                 docs).
   doxygen                                        For building the Doxygen API
                                                  documentation.
 

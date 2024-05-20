@@ -1,6 +1,3 @@
-if (NOT WIN32)
-  add_subdirectory(design)
-endif()
 add_subdirectory(xml)
 
 set(doc_FILES

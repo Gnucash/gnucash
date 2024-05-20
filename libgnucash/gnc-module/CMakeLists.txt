@@ -38,6 +38,5 @@ install(TARGETS gnc-module
 
 install(FILES ${gnc_module_HEADERS} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/gnucash)
 
-set_local_dist(gnc_module_DIST_local CMakeLists.txt ${gnc_module_SOURCES} ${gnc_module_HEADERS}
-        README)
+set_local_dist(gnc_module_DIST_local CMakeLists.txt ${gnc_module_SOURCES} ${gnc_module_HEADERS})
 set(gnc_module_DIST ${gnc_module_DIST_local} ${test_gnc_module_DIST} ${example_DIST} PARENT_SCOPE)

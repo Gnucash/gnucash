@@ -7,7 +7,6 @@ This is the new developer and design manual for GnuCash.
 The documentation is organised in a rough sequence:
 
 -# \ref manualguide Start with the main GnuCash manual.
--# \ref texihtml Design overview.
 -# \ref doxylist Individual topic overviews, linked into the
 	full API reference for each topic, generated from source code.
 -# \ref maingeneral How to work with Doxygen in your own code.
@@ -18,12 +17,6 @@ Please refer to the main
 <a href="https://www.gnucash.org/docs.phtml">documentation
 page</a> on the gnucash website which includes links to the
 GnuCash Manual and the Concepts Guide in various formats.
-
-\subsection texihtml Documentation elsewhere in the source tree.
-
-There is also the "GnuCash Design Overview" which can be generated
-from the source using texi2html from the texinfo files in
-src/doc/design, but this is even more outdated.
 
 \section doxylist Doxygen overviews.
 

@@ -96,11 +96,6 @@ libgnucash/core-utils/test/test-gnc-uri-utils
 libgnucash/core-utils/test/test-resolve-file-path
 libgnucash/doc/doxygen.cfg
 libgnucash/doc/doxygen.log
-libgnucash/doc/design/gnucash-design.info
-libgnucash/doc/design/mdate-sh
-libgnucash/doc/design/stamp-vti
-libgnucash/doc/design/texinfo.tex
-libgnucash/doc/design/version.texi
 libgnucash/doc/html/
 libgnucash/engine/gncla-dir.h
 libgnucash/engine/gnucash

@@ -10,11 +10,6 @@ In addition to this file, you should read the README file, which
 explains the details of getting the git source, building GnuCash,
 and creating patches for submission.
 
-The src/doc/design directory contains a preliminary design document
-which you should read as well. You should also feel free to hack on
-the design document.
-
-
 Coding Style Conventions
 ------------------------
 Please refer to https://wiki.gnucash.org/wiki/CodingStandard.
