@@ -3070,6 +3070,12 @@ destroy_tx_on_book_close(QofInstance *ent, gpointer data)
     xaccTransDestroy(tx);
 }
 
+static int
+trans_reverse_order (const Transaction* a, const Transaction* b)
+{
+    return xaccTransOrder (b, a);
+}
+
 /** Handles book end - frees all transactions from the book
  *
  * @param book Book being closed
@@ -3080,7 +3086,12 @@ gnc_transaction_book_end(QofBook* book)
     QofCollection *col;
 
     col = qof_book_get_collection(book, GNC_ID_TRANS);
-    qof_collection_foreach(col, destroy_tx_on_book_close, nullptr);
+
+    // destroy all transactions from latest to earliest, because
+    // accounts' splits are stored chronologically and removing from
+    // the end is faster than from the middle.
+    qof_collection_foreach_sorted (col, destroy_tx_on_book_close, nullptr,
+                                   (GCompareFunc)trans_reverse_order);
 }
 
 #ifdef _MSC_VER
