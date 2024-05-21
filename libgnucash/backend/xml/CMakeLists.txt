@@ -1,5 +1,6 @@
 # CMakeLists.txt for libgnucash/backend/xml
 
+add_subdirectory(DTD)
 add_subdirectory(test)
 
 set (backend_xml_utils_noinst_HEADERS
@@ -72,7 +73,7 @@ set (backend_xml_utils_SOURCES
 set_local_dist(backend_xml_DIST_local ${backend_xml_utils_SOURCES}
   ${backend_xml_utils_noinst_HEADERS} gnc-backend-xml.cpp CMakeLists.txt
   )
-set(backend_xml_DIST ${backend_xml_DIST_local} ${test_backend_xml_DIST} PARENT_SCOPE)
+set(backend_xml_DIST ${backend_xml_DIST_local} ${test_backend_xml_DIST} ${backend_xml_DTD_DIST} PARENT_SCOPE)
 
 # Add dependency on config.h
 set_source_files_properties (${backend_xml_utils_SOURCES} PROPERTIES OBJECT_DEPENDS ${CONFIG_H})
