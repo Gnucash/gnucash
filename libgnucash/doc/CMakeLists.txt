@@ -1,5 +1,4 @@
 set(doc_FILES
-        callgrind.txt
         constderv.html
         doxygen.cfg.in
         doxygen_main_page.c
