@@ -2002,8 +2002,11 @@ gnc_account_remove_split (Account *acc, Split *s)
 
     if (!g_hash_table_remove (priv->splits_hash, s))
         return false;
-    auto it = std::remove (priv->splits.begin(), priv->splits.end(), s);
-    priv->splits.erase (it, priv->splits.end());
+
+    // search splits in reverse, because removing the latest split is
+    // more common (e.g. from UI or during book shutdown)
+    auto rit = std::remove(priv->splits.rbegin(), priv->splits.rend(), s);
+    priv->splits.erase(rit.base(), priv->splits.end());
     //FIXME: find better event type
     qof_event_gen(&acc->inst, QOF_EVENT_MODIFY, nullptr);
     // And send the account-based event, too
