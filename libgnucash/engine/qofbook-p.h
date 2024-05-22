@@ -59,11 +59,6 @@ void qof_book_set_backend (QofBook *book, QofBackend *be);
 /* Register books with the engine */
 gboolean qof_book_register (void);
 
-/** @deprecated use qof_instance_set_guid instead but only in
-backends (when reading the GncGUID from the data source). */
-#define qof_book_set_guid(book,guid)    \
-         qof_instance_set_guid(QOF_INSTANCE(book), guid)
-
 /** Validate a counter format string with a given format specifier.
  *    If valid, returns a normalized format string,
  *    that is whatever long int specifier was used will be replaced with the value of

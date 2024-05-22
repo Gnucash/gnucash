@@ -427,25 +427,3 @@ gchar *gnc_uri_add_extension ( const gchar *uri, const gchar *extension )
     /* Ok, all tests passed, let's add the extension */
     return g_strconcat( uri, extension, NULL );
 }
-
-
-/* Deprecated functions
- * ********************/
-
-/* replaced with gnc_uri_get_scheme */
-gchar *gnc_uri_get_protocol (const gchar *uri)
-{
-    return gnc_uri_get_scheme (uri);
-}
-
-/* replaced with gnc_uri_is_known_scheme */
-gboolean gnc_uri_is_known_protocol (const gchar *protocol)
-{
-    return gnc_uri_is_known_scheme(protocol);
-}
-
-/* replaced with gnc_uri_is_file_scheme */
-gboolean gnc_uri_is_file_protocol (const gchar *protocol)
-{
-    return gnc_uri_is_file_scheme (protocol);
-}

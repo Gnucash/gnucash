@@ -802,8 +802,6 @@ void xaccTransRecordPrice (Transaction *trans, PriceSource source);
 #define xaccTransGetBook(X)      qof_instance_get_book (QOF_INSTANCE(X))
 /** \deprecated */
 #define xaccTransGetGUID(X)      qof_entity_get_guid(QOF_INSTANCE(X))
-/** \deprecated */
-#define xaccTransReturnGUID(X) (X ? *(qof_entity_get_guid(QOF_INSTANCE(X))) : *(guid_null()))
 
 #ifdef __cplusplus
 } /* extern "C" */

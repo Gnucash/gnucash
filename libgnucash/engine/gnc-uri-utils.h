@@ -266,54 +266,6 @@ gboolean gnc_uri_targets_local_fs (const gchar *uri);
  */
 gchar *gnc_uri_add_extension ( const gchar *uri, const gchar *extension );
 
-
-/** @name Deprecated functions
- * @{
- */
-
-/** Extracts the protocol from a uri
- *
- *  @deprecated This function has been deprecated in gnucash 3.4. Please use gnc_uri_get_scheme instead.
- *
- *  The function allocates memory for the protocol. The calling function should
- *  free this memory with g_free if it no longer needs the string.
- *
- *  @param uri The uri to extract the protocol from
- *
- *  @return The protocol for this uri. If the uri didn't have an
- *  explicit protocol, NULL will be returned.
- */
-
-gchar *gnc_uri_get_protocol (const gchar *uri)
-    GNC_DEPRECATED("Please use gnc_uri_get_scheme instead (since 3.4)");
-
-/** Checks if there is a backend that explicitly stated to handle the given protocol.
- *
- *  @deprecated This function has been deprecated in gnucash 3.4. Please use gnc_uri_is_known_scheme instead.
- *
- *  @param protocol The protocol to check
- *
- *  @return TRUE if at least one backend explicitly handles this protocol, otherwise FALSE
- */
-gboolean gnc_uri_is_known_protocol (const gchar *protocol)
-    GNC_DEPRECATED("Please use gnc_uri_known_scheme instead (since 3.4)");
-
-
-/** Checks if the given protocol is used to refer to a file
- *  (as opposed to a network service like a database or web url)
- *
- *  @deprecated This function has been deprecated in gnucash 3.4. Please use gnc_uri_is_file_scheme instead.
- *
- *  @param protocol The protocol to check
- *
- *  @return TRUE if the protocol is used with files, FALSE of the protocol
- *  is normally used with network services (database, web url,...)
- */
-gboolean gnc_uri_is_file_protocol (const gchar *protocol)
-    GNC_DEPRECATED("Please use gnc_uri_is_file_scheme instead (since 3.4)");
-
-/** @} */
-
 #ifdef __cplusplus
 }
 #endif

@@ -228,7 +228,7 @@ test_gnc_uri_get_components()
     }
 }
 
-/* TEST: gnc_uri_get_protocol */
+/* TEST: gnc_uri_get_scheme */
 static void
 test_gnc_uri_get_scheme()
 {
@@ -291,7 +291,7 @@ test_gnc_uri_normalize_uri()
     }
 }
 
-/* TEST: gnc_uri_is_file_protocol */
+/* TEST: gnc_uri_is_file_scheme */
 static void
 test_gnc_uri_is_file_scheme()
 {

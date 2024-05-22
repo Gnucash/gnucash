@@ -368,13 +368,6 @@ void qof_query_set_max_results (QofQuery *q, int n);
  */
 gboolean qof_query_equal (const QofQuery *q1, const QofQuery *q2);
 
-/** Log the Query
- *
- * \deprecated Do not call directly, use the standard log
- * module code: ::qof_log_set_level(QOF_MOD_QUERY, QOF_LOG_DEBUG);
- */
-void qof_query_print (QofQuery *query);
-
 /** Return the type of data we're querying for */
 /*@ dependent @*/
 QofIdType qof_query_get_search_for (const QofQuery *q);

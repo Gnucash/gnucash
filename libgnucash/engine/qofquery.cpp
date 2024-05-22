@@ -110,6 +110,25 @@ typedef struct _QofQueryCB
     gint              count;
 } QofQueryCB;
 
+/* Query Print functions for use with qof_log_set_level, static prototypes */
+static GList *qof_query_printSearchFor (QofQuery * query, GList * output);
+static GList *qof_query_printTerms (QofQuery * query, GList * output);
+static GList *qof_query_printSorts (QofQuerySort *s[], const gint numSorts,
+                                    GList * output);
+static GList *qof_query_printAndTerms (GList * terms, GList * output);
+static const char *qof_query_printStringForHow (QofQueryCompare how);
+static const char *qof_query_printStringMatch (QofStringMatch s);
+static const char *qof_query_printDateMatch (QofDateMatch d);
+static const char *qof_query_printNumericMatch (QofNumericMatch n);
+static const char *qof_query_printGuidMatch (QofGuidMatch g);
+static const char *qof_query_printCharMatch (QofCharMatch c);
+static GList *qof_query_printPredData (QofQueryPredData *pd, GList *lst);
+static GString *qof_query_printParamPath (QofQueryParamList * parmList);
+static void qof_query_printValueForParam (QofQueryPredData *pd, GString * gs);
+static void qof_query_printOutput (GList * output);
+static void qof_query_print (QofQuery * query);
+
+
 /* initial_term will be owned by the new Query */
 static void query_init (QofQuery *q, QofQueryTerm *initial_term)
 {
@@ -1493,30 +1512,6 @@ gboolean qof_query_equal (const QofQuery *q1, const QofQuery *q2)
 /* Query Print functions for use with qof_log_set_level.
 */
 
-/* Static prototypes */
-static GList *qof_query_printSearchFor (QofQuery * query, GList * output);
-static GList *qof_query_printTerms (QofQuery * query, GList * output);
-static GList *qof_query_printSorts (QofQuerySort *s[], const gint numSorts,
-                                    GList * output);
-static GList *qof_query_printAndTerms (GList * terms, GList * output);
-static const char *qof_query_printStringForHow (QofQueryCompare how);
-static const char *qof_query_printStringMatch (QofStringMatch s);
-static const char *qof_query_printDateMatch (QofDateMatch d);
-static const char *qof_query_printNumericMatch (QofNumericMatch n);
-static const char *qof_query_printGuidMatch (QofGuidMatch g);
-static const char *qof_query_printCharMatch (QofCharMatch c);
-static GList *qof_query_printPredData (QofQueryPredData *pd, GList *lst);
-static GString *qof_query_printParamPath (QofQueryParamList * parmList);
-static void qof_query_printValueForParam (QofQueryPredData *pd, GString * gs);
-static void qof_query_printOutput (GList * output);
-
-/** \deprecated access via qof_log instead.
- The query will be logged automatically if
- qof_log_set_level(QOF_MOD_QUERY, ...) is set to QOF_LOG_DEBUG.
-
- This function cycles through a QofQuery object, and
- prints out the values of the various members of the query
-*/
 void
 qof_query_print (QofQuery * query)
 {

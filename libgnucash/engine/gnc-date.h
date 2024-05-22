@@ -141,10 +141,6 @@ typedef enum
     QOF_DATE_COMPLETION_SLIDING,  /**< use sliding 12-month window */
 } QofDateCompletion;
 
-/** \deprecated qof_date_format_get_format has been replaced
-by qof_date_text_format_get_string */
-#define qof_date_format_get_format qof_date_text_format_get_string
-
 /**
  * This is how to format the month, as a number, an abbreviated string,
  * or the full name.

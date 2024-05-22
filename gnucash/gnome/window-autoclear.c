@@ -105,7 +105,7 @@ show_cleared_splits (GList *splits)
 
     for (GList *iter = splits; iter; iter = iter->next)
     {
-        GncGUID guid = xaccSplitReturnGUID (iter->data);
+        GncGUID guid = iter->data ? *xaccSplitGetGUID (iter->data) : *guid_null() ;
         xaccQueryAddGUIDMatch (guid_query, &guid, GNC_ID_SPLIT, QOF_QUERY_OR);
     }
     book_query = qof_query_merge (book_query, guid_query, QOF_QUERY_AND);
