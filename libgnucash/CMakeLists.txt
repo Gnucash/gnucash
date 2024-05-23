@@ -4,7 +4,6 @@
 add_subdirectory (app-utils)
 add_subdirectory (backend)
 add_subdirectory (core-utils)
-add_subdirectory (doc)
 add_subdirectory (engine)
 add_subdirectory (gnc-module)
 add_subdirectory (quotes)
