@@ -4,9 +4,6 @@ set(doc_FILES
         doxygen_main_page.c
         finderv.html
         finutil.html
-        loans.txt
-        lots.txt
-        python-bindings-doxygen.py
         README
         )
 

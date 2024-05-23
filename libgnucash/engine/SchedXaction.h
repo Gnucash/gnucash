@@ -335,3 +335,293 @@ gboolean SXRegister (void);
 
 /** @} */
 /** @} */
+
+/** \page loanhandling Handling loan repayment in GnuCash::Scheduled Transactions
+ * \sa The original email thread at <https://lists.gnucash.org/pipermail/gnucash-devel/2002-July/006438.html>.
+ *
+ * July, 2002 - jsled@asynchronous.org
+ *
+ * API: \ref SchedXaction
+ *
+ * We define loan repayment values in the following terms:
+ *
+ * Identifiers:\n
+ * P  : the original principal.  This is the overall principal afforded by the
+ *     loan at the time of it's creation.\n
+ * P' : The beginning principal.  This is the principal at the time of entry
+ *     into GnuCash.\n
+ * I :  The interest rate associated with the loan.  Note that this may change
+ *     over time [based on an addition to the Prime rate, for instance], at
+ *     various frequencies [yearly, monthly, quarterly...].  Ideally, we can
+ *     use the FreqSpec mechanism to facilitate the interest rate adjustment.\n
+ * N  : The length of the loan in periods.\n
+ * m  : The minimum periodic payment.\n
+ * n  : The current period of the repayment.
+ *
+ * Functions:\n
+ * PMT  : Total equal periodic payment, as per Gnumeric/Excel's definitions
+ *       [see end for more detail].\n
+ * IPMT : Monthly payment interest portion,  ""\n
+ * PPMT : Monthly payment principal portion, ""
+ *
+ * [ NOTE: 'PMT(I,N,P) = IPMT(I, n, N, P) + PPMT(I, n, N, P)' for 0 <= n < N ]
+ *
+ *
+ * The formula entered into the SX template for a loan may then look like:
+ *
+ * Example 1:
+ * \verbatim
+ * Desc/Memo |                     Account |         Credit |           Debit
+ * ----------+-----------------------------+----------------+-------------------
+ * Repayment | Assets:Bank:Checking        |                | =PMT(I,n,N,P)
+ *          |                             |                |  + fixed_amt
+ * Interest  | Expenses:Loan_Name:Interest | =IPMT(I,n,N,P) |
+ * PMI       | Expenses:Loan_Name:Misc     | fixed_amt      |
+ * Principal | Liabilities:Loan_Name       | =PPMT(I,n,N,P) |
+ * -----------------------------------------------------------------------------
+ * \endverbatim
+ *
+ * Or, in the case where an escrow account is involved [with thanks to warlord
+ * for the review and fixes]:
+ *
+ * Example 2:
+ * \verbatim
+ * Desc/Memo      |             Account         |       Credit   |       Debit
+ * ---------------+-----------------------------+----------------+--------------
+ * Repayment      | Assets:Bank:Checking        |                | =PMT(I,n,N,P)
+ *               |                             |                | + escrow_amt
+ *               |                             |                | + fixed_amt
+ *               |                             |                | + pre_payment
+ * Escrow         | Assets:Loan_Escrow_acct     | escrow_amt     |
+ * Interest       | Expenses:Loan_Name:Interest | =IPMT(I,n,N,P) |
+ * PMI            | Expenses:Loan_Name:Misc     | fixed_amt      |
+ * Principal      | Liabilities:Loan_Name       | =PPMT(I,n,N,P) |
+ *               |                             | + pre_payment  |
+ * \endverbatim
+ *
+ * FreqSpec = 1 month
+ * \verbatim
+ * -----------------------------------------------------------------------------
+ *
+ * Desc/Memo      |             Account         |       Credit   |       Debit
+ * ---------------+-----------------------------+----------------+--------------
+ * Insurance      | Assets:Loan_Escrow_acct     |                | insurance_amt
+ * Insurance      | Expenses:Home_Insurance     | insurance_amt  |
+ * \endverbatim
+ *
+ * FreqSpec = 1 year
+ * \verbatim
+ * -----------------------------------------------------------------------------
+ * Desc/Memo      |             Account         |       Credit   |       Debit
+ * ---------------+-----------------------------+----------------+--------------
+ * Taxes          | Assets:Loan_Escrow_acct     |                | taxes_amt
+ * Taxes          | Expenses:Property_Taxes     | taxes_amt      |
+ * FreqSpec = Quarterly
+ * -----------------------------------------------------------------------------
+ * \endverbatim
+ *
+ *
+ * \section guidpractical Practical questions regarding the implementation of this facility are:
+ *
+ * | 1. The transactions as in Example 2 are not going to be scheduled for the\n
+ * |    same day; are their values linked at all / do they need to share the\n
+ * |    same var bindings?
+ *
+ * Yes, they would want to be linked.  More precisely, the insurance/tax amounts
+ * are very likely linked to the escrow_amt in Ex.2.  Unfortunately, these are
+ * very likely separate SXes...
+ *
+ * -----
+ * | 2. How does this effect the SX implementation of variables?
+ *
+ * Vastly.
+ *
+ * It becomes clear that multiple SXes will be related.  While they'll have
+ * separate FreqSpecs and template transactions, they'll share some state.  For
+ * both visualization [i.e., the SX list] and processing [credit/debit cell
+ * value computation] we'll want some manner of dealing with this.
+ *
+ * It becomes clear as well that the nature of variables and functions needs to
+ * be more clearly defined with respect to these issues.  We probably want to
+ * institute a clear policy for the scoping of variables.  As well, since the
+ * SXes will have different instantiation dates, we'll need a method and
+ * implementation for the relation of SXes to each other.
+ *
+ * A substantial hurdle is that if a set of SXes are [strongly] related, there
+ * is no-longer a single instantiation date for a set of related SXes.  In fact,
+ * there may be different frequencies of recurrence.
+ *
+ * One option -- on the surface -- to relate them would be to maintain an
+ * instance variable-binding frame cache, which would store user-entered and
+ * computed variable bindings.  The first instantiated SX of the set would create
+ * the frame, and the "last" instance would clean it up.  First "last" instance
+ * is defined by the last-occurring SX in a related set, in a given time range.
+ *
+ * For example: a loan SX-set is defined by two monthly SXes ["repayment" and
+ * "insurance"], and a quarterly "tax" SX.  The first monthly SX would create a
+ * frame, which would be passed two the second monthly SX.  This would occur for
+ * the 3 months of interest.  The Quarterly SX would get all 3 frames for it's
+ * creation, and use them in an /appropriate/ [read: to be defined through a lot
+ * of pain] way.  As the time-based dependency relationship between the frames
+ * plays out, the frame can be removed from the system.
+ *
+ * Another option is to toss this idea entirely and instead let the user DTRT
+ * manually.
+ *
+ * A related option is to add the necessary grouping mechanism to the SX
+ * storage/data structure: immediately allowing visual grouping of related SXes,
+ * and potentially allowing a storage place for such frame data in the future
+ * with less file-versioning headache.  This is the option that will be pursued.
+ *
+ * Another element implicit in the original requirements to support
+ * loans/repayment calculations is implicit variables.  These are symbolic names
+ * which can be used and are automagically bound to values.  The known implicit
+ * variables to support loan/repayment are:
+ *
+ * P [loan principal amount], N [loan repayment periods], I [interest], m
+ * [minimum payment] and n [current period].  Some of these [P, N, I, m] are
+ * fixed over many instances; some [n] are rebound specific to the instance.
+ * See the 'variable-scope-frame' below for a method of handling these
+ * variables.
+ *
+ * And yet-another element implicit in the original requirement is support for
+ * detecting and computing the result of functions in the template transaction's
+ * credit/debit cells.  Changes to the src/app-utils/gnc-exp-parser.[hc] and
+ * src/calculation/expression_parser.[ch] to support functions would be
+ * necessitated.  It is conceivable that after parsing, the parsed expression
+ * could be passed to scheme for evaluation.  Hopefully this would make it
+ * easier to add support for new functions to the SX code via Scheme.
+ *
+ *
+ * | 3. How do we deal with periodic [yearly, semi-yearly] updating of various\n
+ * |    "fixed" variables?
+ *
+ * Another change in the way variables are used is that some SXes -- especially
+ * loan-repayment -- may involve variables which are not tied to the instance of
+ * the SX, but rather to variables which:
+ * - are also involved in another SX
+ * - change with a frequency different than the SX
+ * - are represented by a relationship to the outside world ["prime + 1.7"]
+ *
+ * A partial fix for this problem is to provide multiple levels of scope for
+ * variable bindings, and expose this to the user by a method of assigning
+ * [perhaps time-dependent] values to these variables.  Variables bound in this
+ * manner would absolve the user of the need to bind them at SX-creation time.
+ *
+ * An added benefit of this would be to allow some users [see Bug#85707] have
+ * "fixed variable" values for a group of SXes.
+ *
+ * In combination with the SX Grouping, this would provide most of a fix for the
+ * problem described in #2, above.  The variable_frame could be used to provide
+ * the shared-state between related SXes, without imposing quite the same
+ * burden.  This approach is slightly less flexible, but that allows it to be
+ * implemented more readily, and understood more easily.
+ *
+ * A question which comes up when thinking about yearly-changing values such as
+ * interest rates is if the historical information needs to be versioned.  For
+ * now, we punt on this issue, but hopefully will provide enough of a framework
+ * for this to be reasonably added in the future.
+ *
+ * We define four types of variables supported by this scheme:
+ *
+ * implicit  : provided only by the system
+ *            e.g.: 'n', the current index of the repayment
+ *
+ * transient : have user-defined values, bound at instantiation time.
+ *            e.g.: existing ad-hoc variables in SXes.
+ *
+ * static    : have a user-defined values, and are not expected to change with
+ *            any measurable frequency.  The user may change these at their
+ *            leisure, but no facility to assist or encourage this is
+ *            provided.
+ *            e.g.: paycheck amount, loan principal amount
+ *
+ * periodic  : have user-defined values which change at specific points in
+ *            time [July 1, yearly].  After the expiration of a variable value,
+ *            it's re-binding will prevent any dependent SXes from being
+ *            created.
+ *            e.g.: loan tax amount, loan interest rate
+ *
+ * | 4. From where do we get the dollar amount against which to do the [PI]PMT\n
+ * |    calculation?
+ *
+ * The user will specify the parameters of the Loan via some UI... then where
+ * does the data go?
+ *
+ * - KVP data for that account?
+ * - KVP data for the SX?
+ * - Do we have a different top-level "Loan" object?
+ * - Present only in the SX template transactions/variable-frames?
+ *
+ * I believe that the only location of the data after Druid creation is in the
+ * variable-binding frames and the formulae in the template transactions.  The
+ * Druid would thus simply assist the user in creating the following SX-related
+ * structures:
+ *
+ * - SXGroup: Loan Repayment
+ *	- variable_frame
+ *		 - P [static]
+ *		 - N [static]
+ *		 - n [implicit]
+ *		 - I [periodic]
+ *		 - pmi_amount [periodic]
+ *		 - tax_amount [periodic]
+ *		 - pre_payment [periodic]
+ *		 - insurance_amount [periodic]
+ * - SX: Payment
+ *	 - Bank -> { Escrow,
+ *                Liability:Loan:Principal,
+ *                Expense:Loan:Interest,
+ *                Expense:Loan:Insurance }
+ * - SX: Tax
+ *	 - Escrow -> Expense:Tax
+ * - SX: Insurance
+ *	 - Escrow -> Expense:Insurance
+ *
+ *
+ * \section loansreference Reference
+ *
+ *
+ * \subsection loanssoftware Other software:
+ *
+ * Gnumeric supports the following functions WRT payment calculation:
+ *
+ * - PMT( rate, nper, pv [, fv, type] )
+ *  PMT returns the amount of payment for a loan based on a constant interest
+ *  rate and constant payments (ea. payment equal).
+ *  @rate : constant interest rate
+ *  @nper : overall number of payments
+ *  @pv   : present value
+ *  @fv   : future value
+ *  @type : payment type
+ *	 - 0 : end of period
+ *	 - 1 : beginning of period
+ *
+ * - IPMT( rate, per, nper, pv, fv, type )
+ *  IPMT calculates the amount of a payment of an annuity going towards
+ *  interest. Formula for IPMT is:
+ *  IPMT(per) = - principal(per-1) * interest_rate
+ *  where:
+ *  principal(per-1) = amount of the remaining principal from last period.
+ *
+ * - ISPMT( rate, per, nper, pv )
+ *  ISPMT returns the interest paid on a given period.
+ *  If @per < 1 or @per > @nper, returns #NUM! err.
+ *
+ * - PPMT(rate, per, nper, pv [, fv, type] )
+ *  PPMT calculates the amount of a payment of an annuity going towards
+ *  principal.
+ *  PPMT(per) = PMT - IPMT(per)
+ *  where: PMT is payment
+ *	- IPMT is interest for period per
+ *
+ * - PV( rate, nper, pmt [, fv, type] )
+ *  Calculates the present value of an investment
+ *  @rate : periodic interest rate
+ *  @nper : number of compounding periods
+ *  @pmt  : payment made each period
+ *  @fv   : future value
+ *
+ *
+ */
+

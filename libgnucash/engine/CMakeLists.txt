@@ -282,7 +282,6 @@ set(engine_EXTRA_DIST
         README
         README.query-api
         SX-book-p.h
-        TaxTableBillTermImmutability.txt
         )
 
 if (NOT WIN32)
