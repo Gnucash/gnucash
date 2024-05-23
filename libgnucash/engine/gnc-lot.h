@@ -102,82 +102,92 @@ QofBook * gnc_lot_get_book (GNCLot *);
 void gnc_lot_begin_edit (GNCLot *lot);
 void gnc_lot_commit_edit (GNCLot *lot);
 
-/** The gnc_lot_add_split() routine adds a split to this lot.  Note
- *    that *all* splits in a lot must also be in the same account.
- *    Note that this routine adds the split unconditionally, with
+/** Adds a split to this lot.
+ *
+ *  @note
+ *  - *All* splits in a lot must be in the same account.
+ *  - Splits are added unconditionally, with
  *    no regard for the accounting policy.  To enforce a particular
  *    accounting policy, use the xaccSplitAssignToLot() routine
  *    instead.
  */
 void gnc_lot_add_split (GNCLot *, Split *);
+
+/** Adds a split from this lot.
+ */
 void gnc_lot_remove_split (GNCLot *, Split *);
 
-/** The gnc_lot_get_split_list() routine returns a GList of all the
- *    splits in this lot.  Do *not* free this list when done;
- *    it is a pointer straight into the lots internal list.  Do
- *    *not* add to or remove from this list directly.  Calling
- *    either gnc_lot_add_split() or gnc_lot_remove_split() will
- *    invalidate the returned pointer.
+/** Returns a list of all the splits in this lot.
+ *
+ *   @returns GList
+ *
+ *   This GList is owned and managed by the lot.
+ *   - Do *not* free it when done.
+ *   - Do *not* modify it directly
+ *   - Calls to either gnc_lot_add_split() or gnc_lot_remove_split()
+ *     will invalidate the returned pointer
  */
 SplitList * gnc_lot_get_split_list (const GNCLot *);
 gint gnc_lot_count_splits (const GNCLot *);
 
-/** The gnc_lot_get_account() routine returns the account with which
- *    this lot is associated. */
+/** Returns the account with which this lot is associated.
+ */
 /*@ dependent @*/
 Account * gnc_lot_get_account (const GNCLot *);
 void gnc_lot_set_account(GNCLot*, Account*);
 
-/** The gnc_lot_get_cached_invoice() routine returns the invoice with
- *    which this lot is associated. */
+/** Returns the invoice with which this lot is associated.
+ */
 /*@ dependent @*/
 GncInvoice * gnc_lot_get_cached_invoice (const GNCLot *lot);
 void gnc_lot_set_cached_invoice(GNCLot* lot, GncInvoice *invoice);
 
-/** The gnc_lot_get_balance() routine returns the balance of the lot.
- *    The commodity in which this balance is expressed is the commodity
- *    of the account. */
+/** Returns the lot balance.
+ *  This balance will be expressed in the lot account's commodity.
+ */
 gnc_numeric gnc_lot_get_balance (GNCLot *);
 
-/** The gnc_lot_get_balance_before routine computes both the balance and
- *  value in the lot considering only splits in transactions prior to the
- *  one containing the given split or other splits in the same transaction.
+/** Computes both the balance and value in the lot considering only splits
+ *  in transactions prior to the one containing the given split or other
+ *  splits in the same transaction.
  *  The first return value is the amount and the second is the value. */
 void gnc_lot_get_balance_before (const GNCLot *, const Split *,
                                  gnc_numeric *, gnc_numeric *);
 
-/** The gnc_lot_is_closed() routine returns a boolean flag: is this
- *    lot closed?  A lot is closed if its balance is zero.  This
- *    routine is faster than using gnc_lot_get_balance() because
- *    once the balance goes to zero, this fact is cached.
+/** Returns closed status of the given lot.
+ *  A lot is closed if its balance is zero.  This
+ *  routine is faster than using gnc_lot_get_balance() because
+ *  once the balance goes to zero, this fact is cached.
+ *
+ *  @returns boolean
  */
 gboolean gnc_lot_is_closed (GNCLot *);
 
-/** The gnc_lot_get_earliest_split() routine is a convenience routine
- *    that helps identify the earliest date in the lot.   It simply
- *    loops over all of the splits in the lot, and returns the split
- *    with the earliest split->transaction->date_posted.  It may not
- *    necessarily identify the lot opening split.
+/** Convenience routine to identify the earliest date in the lot.
+ *  It loops over all of the splits in the lot, and returns the split
+ *  with the earliest split->transaction->date_posted.  It may not
+ *  necessarily identify the lot opening split.
  */
 Split * gnc_lot_get_earliest_split (GNCLot *lot);
 
-/** The gnc_lot_get_latest_split() routine is a convenience routine
- *    that helps identify the date this lot was closed.   It simply
- *    loops over all of the splits in the lot, and returns the split
- *    with the latest split->transaction->date_posted.
+/** Convenience routineto identify the date this lot was closed.
+ *  It simply loops over all of the splits in the lot, and returns
+ *  the split with the latest split->transaction->date_posted.
  */
 Split * gnc_lot_get_latest_split (GNCLot *lot);
 
 /** Reset closed flag so that it will be recalculated. */
 void gnc_lot_set_closed_unknown(GNCLot*);
 
-/** Get and set the account title, or the account notes, or the marker. */
+/** @name Get/set the account title and notes.
+    @{ */
 const char * gnc_lot_get_title (const GNCLot *);
 const char * gnc_lot_get_notes (const GNCLot *);
 void gnc_lot_set_title (GNCLot *, const char *);
 void gnc_lot_set_notes (GNCLot *, const char *);
+/** @} */
 
-/** XXX: Document? */
+/** @todo Document this function ? */
 GNCLot * gnc_lot_make_default (Account * acc);
 
 #define gnc_lot_get_guid(X)  qof_entity_get_guid(QOF_INSTANCE(X))
