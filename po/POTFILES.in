@@ -621,7 +621,6 @@ libgnucash/core-utils/gnc-locale-utils.cpp
 libgnucash/core-utils/gnc-path.c
 libgnucash/core-utils/gnc-prefs.c
 libgnucash/core-utils/gnc-version.c
-libgnucash/doc/doxygen_main_page.c
 libgnucash/engine/Account.cpp
 libgnucash/engine/cap-gains.cpp
 libgnucash/engine/cashobjects.cpp

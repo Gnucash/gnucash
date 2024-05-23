@@ -843,6 +843,13 @@ add_definitions (-DHAVE_CONFIG_H)
 set (CONFIG_H ${CMAKE_CURRENT_BINARY_DIR}/common/config.h)
 configure_file (${CMAKE_CURRENT_SOURCE_DIR}/common/config.h.cmake.in ${CONFIG_H})
 
+# The doxygen developer documentation
+find_program(DOXYGEN doxygen)
+if (NOT ${DOXYGEN} STREQUAL "DOXYGEN-NOTFOUND")
+  configure_file(doxygen.cfg.in doxygen.cfg)
+  add_custom_target(doc ${DOXYGEN} doxygen.cfg)
+endif()
+
 # The subdirectories
 add_subdirectory (borrowed)
 add_subdirectory (data)
@@ -884,7 +891,10 @@ endif()
 set(DIST_FILE "${PACKAGE_PREFIX}.tar")
 
 set(toplvl_DIST_local ${gnucash_DOCS}
-  CMakeLists.txt README)
+    doxygen.cfg.in
+    doxygen_main_page.c
+    CMakeLists.txt
+    README)
 
 
 set_local_dist(toplvl_DIST ${toplvl_DIST_local})
