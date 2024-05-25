@@ -933,7 +933,8 @@ WARN_LOGFILE           = doxygen.log
 # spaces. See also FILE_PATTERNS and EXTENSION_MAPPING
 # Note: If this tag is empty the current directory is searched.
 
-INPUT                  = ${CMAKE_SOURCE_DIR}/libgnucash \
+INPUT                  = ${CMAKE_SOURCE_DIR}/doxygen_main_page.c \
+                         ${CMAKE_SOURCE_DIR}/libgnucash \
                          ${CMAKE_SOURCE_DIR}/gnucash \
                          ${CMAKE_SOURCE_DIR}/common \
                          ${CMAKE_SOURCE_DIR}/bindings \
