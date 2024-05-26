@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-05-20 03:01+0000\n"
+"PO-Revision-Date: 2024-05-26 02:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -9644,17 +9644,19 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:65
 msgid "Number of automatic decimal places"
-msgstr "Az automatikus tizedes helyek száma"
+msgstr "Az automatikus tizedesjegyek száma"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:66
 msgid ""
 "This field specifies the number of automatic decimal places that will be "
 "filled in."
-msgstr "E mező határozza meg az automatikusan kitöltött tizedes helyek számát."
+msgstr "E mező határozza meg az automatikusan kitöltött tizedesjegyek számát."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:70
 msgid "Force prices to display as decimals even if they must be rounded."
 msgstr ""
+"Az árak tizedesszámként való megjelenítésének kényszerítése akkor is, ha "
+"emiatt kerekíteni kell őket."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:71
 #: gnucash/gtkbuilder/dialog-preferences.glade:1231
@@ -9663,6 +9665,9 @@ msgid ""
 "decimals instead of displaying the exact fraction if the fractional part "
 "cannot be exactly represented as a decimal."
 msgstr ""
+"Ha aktív, a GnuCash szükség szerint kerekíti az árakat, hogy tizedesszámként "
+"jelenítse meg azokat a pontos törtszám megjelenítése helyett, ha a törtrész "
+"nem fejezhető ki pontos tizedesszámként."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:75
 #: gnucash/gtkbuilder/dialog-preferences.glade:1743
@@ -15028,7 +15033,7 @@ msgstr "<b>Számok</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1225
 msgid "Force P_rices to display as decimals"
-msgstr "Az á_rak megjelenítésénél a tizedesjegyek kényszerítése"
+msgstr "Az á_rak megjelenítésénél a tizedesszámok kényszerítése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1243
 msgid "Display ne_gative amounts in red"
@@ -15052,11 +15057,11 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1282
 msgid "_Decimal places"
-msgstr "_Tizedeshelyek"
+msgstr "_Tizedesjegyek"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1297
 msgid "How many automatic decimal places will be filled in."
-msgstr "Az automatikusan kitöltött tizedes helyek száma."
+msgstr "Az automatikusan kitöltött tizedesjegyek száma."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1389
 msgid "Numbers, Date, Time"
@@ -15072,7 +15077,7 @@ msgstr "Számlakategóriák létrehozásának felajánlása a Fájl->Új menüpo
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1458
 msgid "Display \"_tip of the day\" dialog"
-msgstr "„A nap _tippje” megjelenítése"
+msgstr "A nap _tippjének megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1464
 msgid "Display hints for using GnuCash at startup."
@@ -18772,8 +18777,9 @@ msgstr ""
 "csak egyszer lesz exportálva. Az első olyan feldolgozott számla alatt fog "
 "megjelenni, amelyben felosztása van.\n"
 "\n"
-"Az árak/árfolyamok formátumát a Beállítások -> \"Numbers, Date, Time\" ->\n"
-"\"Force Prices to display as decimals\" kapcsoló határozza meg.\n"
+"Az árak/árfolyamok formátumát a Beállítások -> \"Számok, Dátum, Idő\" ->\n"
+"\"Az árak megjelenítésénél a tizedesszámok kényszerítése\" kapcsoló "
+"határozza meg.\n"
 "\n"
 "Alább végezze el a fájlformátum beállítását, majd kattintson a \"Következő\" "
 "gombra, vagy a \"Mégse\" gombra az exportálás megszakításához.\n"
@@ -28377,7 +28383,7 @@ msgstr "Ütemezett tranzakciók létrehozása az utolsó futás óta"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:94
 msgid "_Mortgage & Loan Repayment…"
-msgstr "_Jelzálogkölcsön és Kölcsön visszafizetése…"
+msgstr "_Jelzálogkölcsön és kölcsön visszafizetése…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:96
 msgid "Setup scheduled transactions for repayment of a loan"
