@@ -2002,8 +2002,15 @@ gnc_account_remove_split (Account *acc, Split *s)
 
     if (!g_hash_table_remove (priv->splits_hash, s))
         return false;
-    auto it = std::remove (priv->splits.begin(), priv->splits.end(), s);
-    priv->splits.erase (it, priv->splits.end());
+
+    // shortcut pruning the last element. this is the most common
+    // remove_split operation during UI or book shutdown.
+    if (s == priv->splits.back())
+        priv->splits.pop_back();
+    else
+        priv->splits.erase (std::remove (priv->splits.begin(), priv->splits.end(), s),
+                            priv->splits.end());
+
     //FIXME: find better event type
     qof_event_gen(&acc->inst, QOF_EVENT_MODIFY, nullptr);
     // And send the account-based event, too
