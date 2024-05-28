@@ -149,7 +149,11 @@ function(gnc_add_scheme_test _TARGET _SOURCE_FILE)
                   (format #t \"%load-compiled-path = ~s~%\" %load-compiled-path)
                   (error \"Loading guile/site file from outside build tree!\" filename))))
       (load-from-path \"${_TARGET}\")
-      (exit (run-test))"
+      (let ((result (run-test)))
+           (if (boolean? result)
+             (exit result)
+             (exit (test-runner-fail-count result))))
+"
     )
   endif()
   get_guile_env()
