@@ -27,6 +27,74 @@
 #include <glib/gi18n.h>
 #include "gnucash-locale-platform.h"
 
+static void
+rectify_utf(const char* envvar, const char* locale,
+            const char* dot, const char* rest)
+{
+  char *new_locale;
+  if (rest && *rest)
+    new_locale = g_strdup_printf ("%s.UTF-%s@%s",
+                                  locale, dot + 3, rest);
+  else
+    new_locale = g_strdup_printf ("%s.UTF-%s", locale, dot + 3);
+
+  _putenv_s (envvar, new_locale);
+  g_free(new_locale);
+}
+
+static void
+rectify_iso(const char* envvar, const char* locale,
+            const char* dot, const char* rest)
+{
+
+  char *eefn = strstr (dot, "8859");
+
+  if (!(eefn && *eefn))
+    return;
+
+  char* isonum = (*(eefn + 4) == '-') ? eefn + 5 : eefn + 4;
+
+  if (*isonum == '\0')
+    return;
+
+  char *new_locale;
+  if (rest && *rest)
+    new_locale = g_strdup_printf ("%s.ISO-8859-%s@%s", locale, isonum, rest);
+  else
+    new_locale = g_strdup_printf ("%s.ISO-8859-%s", locale, isonum);
+
+  _putenv_s (envvar, new_locale);
+  g_free (new_locale);
+}
+
+static void
+rectify_environment_charset(const char* envvar)
+{
+  if (!(envvar && *envvar))
+    return;
+  if (strcmp (envvar, "LANG") && strncmp (envvar, "LC_", 3))
+    return;
+  char* saveptr;
+  char* varval = getenv (envvar);
+  char* locale = strtok_r (varval, ".", &saveptr);
+  char* dot = strtok_r (NULL, "@", &saveptr);
+
+  if (!dot) //strsep didn't find a .
+    return;
+
+  char* rest = strtok_r (NULL, "@", &saveptr);
+
+  if ((strncasecmp (dot, "utf", 3) == 0 || strncasecmp (dot, "ucs", 3) == 0) &&
+      dot[3] != '-')
+    return rectify_utf (envvar, locale, dot, rest);
+
+  if (strncasecmp (dot, "iso", 3) == 0 && strlen (dot) >= 8 &&
+      dot[3] != '-' && dot[8] != '-')
+    return rectify_iso (envvar, locale, dot, rest);
+
+  //Otherwise do nothing
+}
+
 /* If one of the Unix locale variables LC_ALL, LC_MESSAGES, or LANG is
  * set in the environment check to see if it's a valid locale and if
  * it is set both the Windows and POSIX locales to that. If not
@@ -37,6 +105,17 @@ set_platform_locale(void)
 {
     WCHAR lpLocaleName[LOCALE_NAME_MAX_LENGTH];
     char *locale = NULL;
+    /* Prevent Bug 799320 by ensuring that the localization
+       environment variables of interest have well-formed UTF or
+       ISO-8859 specifiers for GnuLib's interpretation of well-formed,
+       which means having minuses in the right places. This only
+       protects agains missing hyphens, it won't help if you specify
+       utf42 as a charset when you meant utf32.
+     */
+    rectify_environment_charset ("LANG");
+    rectify_environment_charset ("LC_ALL");
+    rectify_environment_charset ("LC_MESSAGES");
+    rectify_environment_charset ("LC_CTYPE");
 
     if (((locale = getenv ("LC_ALL")) != NULL && locale[0] != '\0') ||
       ((locale = getenv ("LC_MESSAGES")) != NULL && locale[0] != '\0') ||
