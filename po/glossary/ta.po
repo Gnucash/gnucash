@@ -3,256 +3,259 @@
 # Copyright (C) 2023 by the GnuCash developers and the translators:
 # Automatically generated, 2023.
 #
+# தமிழ்நேரம் <anishprabu.t@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.4\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2023-09-25 08:00+0200\n"
-"PO-Revision-Date: 2023-09-21 00:29+0200\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-05-28 18:09+0000\n"
+"Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
+"Language-Team: Tamil <https://hosted.weblate.org/projects/gnucash/glossary/"
+"ta/>\n"
 "Language: ta\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
-msgstr ""
+msgstr "கால"
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
-msgstr ""
+msgstr "கணக்கு"
 
 #. "An alphanumerical code applied to accounts for sorting. Some jurisdictions mandate codes and some GnuCash book templates include codes as part of the tree structure. Account codes can be set and changed in the Edit Account dialog."
 msgid "account code"
-msgstr ""
+msgstr "கணக்கு குறியீடு"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr ""
+msgstr "கணக்கு வரிசைமுறை"
 
 #. "-"
 msgid "account name"
-msgstr ""
+msgstr "கணக்கின் பெயர்"
 
 #. "The grouping of accounts whose balance increases with a debit (left side of the balance sheet in T account form). Complement: Passive. See also: Report Form"
 msgid "account type: Active"
-msgstr ""
+msgstr "கணக்கு வகை: செயலில்"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr ""
+msgstr "கணக்கு வகை: சொத்து"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
 msgid "account type: Assets & Liabilities"
-msgstr ""
+msgstr "கணக்கு வகை: சொத்துக்கள் மற்றும் பொறுப்புகள்"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr ""
+msgstr "கணக்கு வகை: சோதனை"
 
 #. "-"
 msgid "account type: currency"
-msgstr ""
+msgstr "கணக்கு வகை: நாணயம்"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr ""
+msgstr "கணக்கு வகை: பங்கு"
 
 #. "-"
 msgid "account type: Expense"
-msgstr ""
+msgstr "கணக்கு வகை: செலவு"
 
 #. "-"
 msgid "account type: Income"
-msgstr ""
+msgstr "கணக்கு வகை: வருமானம்"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr ""
+msgstr "கணக்கு வகை: பொறுப்பு"
 
 #. "-"
 msgid "account type: money-market"
-msgstr ""
+msgstr "கணக்கு வகை: பணம்-சந்தை"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr ""
+msgstr "கணக்கு வகை: பரச்பர பொருள்"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr ""
+msgstr "கணக்கு வகை: செயலற்ற"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr ""
+msgstr "கணக்கு வகை: லாபம் மற்றும் இழப்பு"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr ""
+msgstr "கணக்கு வகை: சேமிப்பு"
 
 #. "-"
 msgid "account type: Stock"
-msgstr ""
+msgstr "கணக்கு வகை: பங்கு"
 
 #. "This account type is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
-msgstr ""
+msgstr "கணக்கு வகை: வணிகம்"
 
 #. "-"
 msgid "account: parent account"
-msgstr ""
+msgstr "கணக்கு: பெற்றோர் கணக்கு"
 
 #. "-"
 msgid "account: subaccount"
-msgstr ""
+msgstr "கணக்கு: துணைப்பிரிவு"
 
 #. "-"
 msgid "account: top level account"
-msgstr ""
+msgstr "கணக்கு: உயர் நிலை கணக்கு"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
-msgstr ""
+msgstr "செயல் (பதிவு)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr ""
+msgstr "செயல்: ஏடிஎம்"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr ""
+msgstr "செயல்: ஆட்டோடெப்"
 
 #. "-"
 msgid "action: buy"
-msgstr ""
+msgstr "செயல்: வாங்க"
 
 #. "-"
 msgid "action: deposit"
-msgstr ""
+msgstr "நடவடிக்கை: வைப்பு"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr ""
+msgstr "செயல்: நேரடி பற்று"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr ""
+msgstr "செயல்: மாவட்டம்"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr ""
+msgstr "செயல்: div"
 
 #. "-"
 msgid "action: fee"
-msgstr ""
+msgstr "செயல்: கட்டணம்"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr ""
+msgstr "செயல்: எண்ணாக"
 
 #. "-"
 msgid "action: loan"
-msgstr ""
+msgstr "செயல்: கடன்"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr ""
+msgstr "செயல்: கட்டணம்"
 
 #. "Point of sale"
 msgid "action: POS"
-msgstr ""
+msgstr "செயல்: போச்"
 
 #. "-"
 msgid "action: rebate"
-msgstr ""
+msgstr "செயல்: தள்ளுபடி"
 
 #. "-"
 msgid "action: sell"
-msgstr ""
+msgstr "செயல்: விற்க"
 
 #. "-"
 msgid "action: Teller"
-msgstr ""
+msgstr "செயல்: சொல்பவர்"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
-msgstr ""
+msgstr "செயல்: பரிமாற்றம்"
 
 #. "-"
 msgid "action: wire"
-msgstr ""
+msgstr "செயல்: கம்பி"
 
 #. "-"
 msgid "action: withdraw"
-msgstr ""
+msgstr "செயல்: திரும்பப் பெறுங்கள்"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "வயதான"
 
 #. "A sum of money"
 msgid "amount"
-msgstr ""
+msgstr "தொகை"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
 msgid "amount due"
-msgstr ""
+msgstr "செலுத்த வேண்டிய தொகை"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
-msgstr ""
+msgstr "சராசரி"
 
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr ""
+msgstr "சமநிலை (பெயர்ச்சொல்)"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
 msgid "balance b/f"
-msgstr ""
+msgstr "இருப்பு b/f"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
 msgid "balance c/f"
-msgstr ""
+msgstr "சமநிலை c/f"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
-msgstr ""
+msgstr "ஐந்தொகை, இருப்புநிலைக் குறிப்பு"
 
 #. "To arrange for income and spending to be equal"
 msgid "balance, to"
-msgstr ""
+msgstr "இருப்பு, க்கு"
 
 #. "-"
 msgid "bank"
-msgstr ""
+msgstr "வைப்பகம்"
 
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr ""
+msgstr "சட்டகம்"
 
 #. "see invoice owner"
 msgid "bill owner"
-msgstr ""
+msgstr "பில் உரிமையாளர்"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
-msgstr ""
+msgstr "பட்டியலிடல் விதிமுறைகள்"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
-msgstr ""
+msgstr "நூல்"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr ""
+msgstr "புத்தக நிறைவு"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -260,59 +263,59 @@ msgstr "பட்ஜெட்"
 
 #. "-"
 msgid "business (adjective)"
-msgstr ""
+msgstr "வணிகம் (பெயரடை)"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
-msgstr ""
+msgstr "வணிகம் (பெயர்ச்சொல்)"
 
 #. "Profits made from the sale of investments or property"
 msgid "capital gains"
-msgstr ""
+msgstr "முதலீட்டு வரவுகள்"
 
 #. "Distinguishing the uppercase and lowercase letters"
 msgid "case sensitive"
-msgstr ""
+msgstr "வழக்கு உணர்திறன்"
 
 #. "Money in coins or notes"
 msgid "cash"
-msgstr ""
+msgstr "பணம்"
 
 #. "(esp. US) (= cheque) A special printed form on which one writes an order to a bank to pay a sum of money from one's account to another person"
 msgid "check"
-msgstr ""
+msgstr "சரிபார்"
 
 #. "To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Formerly known as 'to scrub'."
 msgid "check and repair, to"
-msgstr ""
+msgstr "சரிபார்த்து, பழுதுபார்ப்பது"
 
 #. "To end an application's relationship with an open file so that the application will no longer be able to access the file without opening it again. "
 msgid "close, to"
-msgstr ""
+msgstr "மூடு, க்கு"
 
 #. "An article that is bought and sold. The most general term of what an account keeps track of, e.g. a currency or a stock."
 msgid "commodity"
-msgstr ""
+msgstr "பொருள்"
 
 #. "e.g. NASDAQ"
 msgid "commodity listing"
-msgstr ""
+msgstr "பொருட்கள் பட்டியல்"
 
 #. "the smallest amount of a commodity that's traded (e.g. 1/100 for USD, 1 for most stocks)"
 msgid "commodity option: fraction"
-msgstr ""
+msgstr "பொருட்களின் விருப்பம்: பின்னம்"
 
 #. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
-msgstr ""
+msgstr "பொருட்களின் விருப்பம்: அடையாளம்"
 
 #. "interest which is earned on both the initial deposit and on any interest that has already been earned but left on deposit."
 msgid "compound interests"
-msgstr ""
+msgstr "கூட்டு வட்டி"
 
 #. "(a) A sum of money paid into an account. (b) A record of such a payment. (c) The state of having money in one's bank account."
 msgid "Credit (column in register)"
-msgstr ""
+msgstr "கடன் (பதிவேட்டில் நெடுவரிசை)"
 
 #. "-"
 msgid "Credit Card"
@@ -320,15 +323,15 @@ msgstr "கடன் அட்டை"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
-msgstr ""
+msgstr "கடன் பரிமாற்றம்"
 
 #. "A document that you give to a client that says you owe money to the client, i.e. the opposite of an invoice"
 msgid "credit note"
-msgstr ""
+msgstr "வரவுக் குறிப்பு"
 
 #. "The system of money used in a country"
 msgid "currency"
-msgstr ""
+msgstr "நாணயம்"
 
 #. "Custom print format (i.e. according to the user's wishes) as opposed to a template choice."
 msgid "Custom"
@@ -336,11 +339,11 @@ msgstr "தனிபயன்"
 
 #. "Compact, well-structured presentation of informations. See https://en.wikipedia.org/wiki/Dashboard_(business)"
 msgid "dashboard"
-msgstr ""
+msgstr "முகப்புப்பெட்டி"
 
 #. "The backend where the data is stored."
 msgid "database"
-msgstr ""
+msgstr "தரவுத்தளம்"
 
 #. "A specific numbered day of the month"
 msgid "Date"
@@ -348,151 +351,151 @@ msgstr "தேதி"
 
 #. "DD/MM/YY or MM/DD/YY or something else"
 msgid "date format"
-msgstr ""
+msgstr "தேதி வடிவம்"
 
 #. "A range in time that is delimited by two distinct dates."
 msgid "date range"
-msgstr ""
+msgstr "தேதி வரம்பு"
 
 #. "(a) A written note in an account of a sum owed or paid out. (b) A sum withdrawn from an account."
 msgid "Debit (column in register)"
-msgstr ""
+msgstr "பற்று (பதிவேட்டில் நெடுவரிசை)"
 
 #. "Each option has a default setting that it is shipped with, until the user changes the setting."
 msgid "default"
-msgstr ""
+msgstr "இயல்புநிலை"
 
 #. "see credit"
 msgid "deposit (in the reconcile dialog)"
-msgstr ""
+msgstr "வைப்பு (உகந்த உரையாடலில்)"
 
 #. "The process of something becoming less valuable"
 msgid "depreciation"
-msgstr ""
+msgstr "தேய்மானம்"
 
 #. "1. One textfield per transaction. The text in it should describe what the transaction was about. A short descriptive phrase (up to 40 chars) 2. One textfield per account. It is intended to be a longer, 1-5 sentence description of what this account is all about."
 msgid "Description (column in register)"
-msgstr ""
+msgstr "விளக்கம் (பதிவேட்டில் நெடுவரிசை)"
 
 #. "Reductions to a basic price of goods or services. Your language might distinguish between discounts dealing with payments (billing terms) and others (invoice)."
 msgid "discount"
-msgstr ""
+msgstr "தள்ளுபடி"
 
 #. "Important Buzzword :)"
 msgid "double entry"
-msgstr ""
+msgstr "இரட்டை பதிவு"
 
 #. "Transactions or bills/invoices can contain a document link which links either to some file on the local disk or to some arbitrary URL."
 msgid "document link"
-msgstr ""
+msgstr "ஆவண இணைப்பு"
 
 #. "The last day to pay an invoice in time."
 msgid "due date"
-msgstr ""
+msgstr "உரிய தேதி"
 
 #. "Electronic mail. Some languages allow different writings, but each team should use only one. https://en.wikipedia.org/wiki/Email"
 msgid "email"
-msgstr ""
+msgstr "மின்னஞ்சல்"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr ""
+msgstr "பணியாளர்"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
-msgstr ""
+msgstr "பங்கு"
 
 #. "Report that ... FIXME: Add description."
 msgid "equity statement"
-msgstr ""
+msgstr "பங்கு அறிக்கை"
 
 #. "A trusted third party that holds a payment or deposit until a transaction is completed. In the US, many mortgage companies set up an escrow account when you get a mortgage.  You pay into the account every month and they disburse amounts out of the escrow to pay for hazard insurance and property taxes. So they are holding funds 'in escrow' to complete the transactions (paying insurance and taxes)."
 msgid "escrow (account)"
-msgstr ""
+msgstr "எச்க்ரோ (கணக்கு)"
 
 #. "The relation in value between the money used in different countries"
 msgid "exchange rate"
-msgstr ""
+msgstr "பரிமாற்ற வீதம்"
 
 #. "in the account creation dialog??"
 msgid "field"
-msgstr ""
+msgstr "புலம்"
 
 #. "Any piece of information (text, graphics, executable) put together and given a name. All the information you have on the hard drive is arranged as a collection of  files."
 msgid "file"
-msgstr ""
+msgstr "கோப்பு"
 
 #. "-"
 msgid "file type"
-msgstr ""
+msgstr "கோப்பு வகை"
 
 #. "-"
 msgid "financial calculator: interest rate"
-msgstr ""
+msgstr "பொருள் கால்குலேட்டர்: வட்டி விகிதம்"
 
 #. "see: payment"
 msgid "financial calculator: payments"
-msgstr ""
+msgstr "பொருள் கால்குலேட்டர்: கொடுப்பனவுகள்"
 
 #. "formal records of the financial activities and position of a business, person, or other entity. See https://en.wikipedia.org/wiki/Financial_statement for a list."
 msgid "financial statement"
-msgstr ""
+msgstr "பொருள் அறிக்கை"
 
 #. "Free software is a matter of liberty, not price … see https://en.wikipedia.org/wiki/Free_software"
 msgid "free software"
-msgstr ""
+msgstr "இலவச மென்பொருள்"
 
 #. "An increase in wealth; profit; advantage (See also: capital gains)"
 msgid "gain"
-msgstr ""
+msgstr "பெருக்கம்"
 
 #. "Name of an automatically created account to get imbalanced transactions back in balance"
 msgid "imbalance"
-msgstr ""
+msgstr "ஏற்றத்தாழ்வு"
 
 #. "Process of extracting data from a non-Gnucash format into a Gnucash file. E.g. QIF Import."
 msgid "import"
-msgstr ""
+msgstr "இறக்குமதி"
 
 #. "Report that ... FIXME: add description. This report used to be called the 'Profit & Loss', but it was renamed on 2004-07-13."
 msgid "income statement"
-msgstr ""
+msgstr "வருமான அறிக்கை"
 
 #. "Money charged for borrowing money, or paid to somebody who invests money"
 msgid "interest"
-msgstr ""
+msgstr "ஆர்வம்"
 
 #. "A list of goods sold or services provided together with the prices charged; see also: a bill. In Gnucash, an 'invoice' is a statement that we sent out (to a customer), whereas a 'bill' is one that we received (from a vendor)."
 msgid "invoice"
-msgstr ""
+msgstr "விலைப்பட்டியல்"
 
 #. "In business accounting: Jobs are a mechanism by which you can group multiple invoices or bills that belong to the same customer or vendor. The job describes a (larger) piece of work or a task undertaken on order, for which one or many invoices or bills will be issued."
 msgid "job"
-msgstr ""
+msgstr "பணி"
 
 #. "A book in which a bank, business firm, etc. records its financial accounts"
 msgid "ledger"
-msgstr ""
+msgstr "பேரேடு"
 
 #. "The heading for the right side of the balance sheet. See also: Equity."
 msgid "liabilities/equity"
-msgstr ""
+msgstr "பொறுப்புகள்/பங்கு"
 
 #. "A sum of money that is lent (by a bank), see also: financial calculator, Mortgage"
 msgid "loan"
-msgstr ""
+msgstr "கடன்"
 
 #. "Annual Percentage Rate, includes in contrast to the Nominal Rate some of the various costs to obtain a loan."
 msgid "loan: APR"
-msgstr ""
+msgstr "கடன்: ஏப்ரல்"
 
 #. "The money lost in business activity"
 msgid "loss"
-msgstr ""
+msgstr "இழப்பு"
 
 #. "name of an automatically created account"
 msgid "Lost Accounts"
-msgstr ""
+msgstr "இழந்த கணக்குகள்"
 
 #. "A particular collection of items that were bought in one transaction. A lot is typically formed when the item is bought, and is closed when the item is sold out. Needed e.g. for U.S. tax purposes."
 msgid "Lot"
@@ -500,19 +503,19 @@ msgstr "தொகுப்பு"
 
 #. "Combine two books into one (see book)."
 msgid "merge, to"
-msgstr ""
+msgstr "ஒன்றிணைக்க, க்கு"
 
 #. "The thing that the scatter plot uses to mark each data point"
 msgid "marker"
-msgstr ""
+msgstr "மார்க்கர்"
 
 #. "1. Some text annotation, but this meaning is rarely used inside gnucash. 2. In the Customer summary report: The ratio of profit vs. sales, i.e. the profit amount divided by the sales amount, shown in percent."
 msgid "markup"
-msgstr ""
+msgstr "மார்க்அப்"
 
 #. "The way how more than one window is displayed in GnuCash at the same time. MDI = Multiple Document Interface."
 msgid "MDI modus"
-msgstr ""
+msgstr "எம்.டி.ஐ மோடச்"
 
 #. "One textfield per split that should help you remember what this split was about."
 msgid "Memo"
@@ -520,127 +523,127 @@ msgstr "மெமொ"
 
 #. "(a) An agreement by which money is lent by a bank for buying a house or other property, the property being the security. (b) A sum of money lent in this way."
 msgid "Mortgage"
-msgstr ""
+msgstr "அடமானம்"
 
 #. "Adjustable Rate Mortgage"
 msgid "mortgage: ARM"
-msgstr ""
+msgstr "அடமானம்: கை"
 
 #. "Fixed Rate Mortgage"
 msgid "mortgage: FRM"
-msgstr ""
+msgstr "அடமானம்: FRM"
 
 #. "e.g. USD, EUR, see Currency."
 msgid "national currency"
-msgstr ""
+msgstr "தேசிய நாணயம்"
 
 #. "(of money) remaining when nothing more is to be taken away"
 msgid "net"
-msgstr ""
+msgstr "வலைமம்"
 
 #. "net total of all assets"
 msgid "net assets"
-msgstr ""
+msgstr "நிகர சொத்துக்கள்"
 
 #. "The total income minus the total expenses of a given time period."
 msgid "net profit"
-msgstr ""
+msgstr "நிகர லாபம்"
 
 #. "Your net worth is your assets minus your liabilities. If your accounts are balanced, your net worth should equal your equity plus your net profit."
 msgid "net worth"
-msgstr ""
+msgstr "நிகர மதிப்பு"
 
 #. "One textfield per transaction that can hold explanatory text about the transaction."
 msgid "notes (register)"
-msgstr ""
+msgstr "குறிப்புகள் (பதிவு)"
 
 #. "Abbreviation for: number; Field in a transaction. If this transaction was done by check, then the check number should be noted in this field."
 msgid "Num (column in register)"
-msgstr ""
+msgstr "எண் (பதிவேட்டில் நெடுவரிசை)"
 
 #. "to make accessible"
 msgid "open, to"
-msgstr ""
+msgstr "திறந்த, க்கு"
 
 #. "If an account starts with a non-zero balance, then this amount is called the opening balance."
 msgid "opening balance"
-msgstr ""
+msgstr "ஆரம்ப இருப்பு"
 
 #. "A menu choice in the graphical user interface that allows the user to specify how the application will act each time it is used. "
 msgid "options"
-msgstr ""
+msgstr "விருப்பங்கள்"
 
 #. "Watch out: Although this word exists in gnucash program code, all that program code in gnucash is currently not activated. In the future, it will be used in business accounting as follows: A particular request to make or supply goods, but belonging to a (larger) job. Such a request can come from a customer or be sent to a vendor. An order will probably generate one invoice or bill."
 msgid "order"
-msgstr ""
+msgstr "ஒழுங்கு"
 
 #. "Name of an automatically created account that holds splits that have no account."
 msgid "orphan"
-msgstr ""
+msgstr "அனாதை"
 
 #. "The customer to (or employee or vendor from) which this invoice is sent - or short your business partner."
 msgid "owner (of bill, invoice or expense voucher)"
-msgstr ""
+msgstr "உரிமையாளர் (பில், விலைப்பட்டியல் அல்லது செலவு வவுச்சர்)"
 
 #. "A secret phrase that one needs to know in order to get access to a user account "
 msgid "passphrase"
-msgstr ""
+msgstr "கடவுச்சொல்"
 
 #. "An amount that must be paid / An amount for which money has not yet been received"
 msgid "Payables/Receivables"
-msgstr ""
+msgstr "செலுத்த வேண்டிய/பெறத்தக்கவைகள்"
 
 #. "A person to whom sth is paid"
 msgid "payee"
-msgstr ""
+msgstr "பணம் செலுத்துபவர்"
 
 #. "A person who pays or who has to pay for sth"
 msgid "payer"
-msgstr ""
+msgstr "பணம் செலுத்துபவர்"
 
 #. "1. The action of paying sb/sth or of being paid. 2. A sum of money paid."
 msgid "payment"
-msgstr ""
+msgstr "கட்டணம்"
 
 #. "An account where no transactions may be posted to; transactions can only be posted to subaccounts of this account, so this account serves as a placeholder in the hierarchy"
 msgid "placeholder"
-msgstr ""
+msgstr "இடம் வைத்திருப்பவர்"
 
 #. "A set of investments owned by a person"
 msgid "portfolio"
-msgstr ""
+msgstr "போர்ட்ஃபோலியோ"
 
 #. "Register invoice, voucher in account register"
 msgid "post, to"
-msgstr ""
+msgstr "இடுகை, க்கு"
 
 #. "A menu choice in many graphical user interface applications that allows the user to specify how the application will act each time it is used. "
 msgid "preferences"
-msgstr ""
+msgstr "விருப்பத்தேர்வுகள்"
 
 #. "Loan repayment calculator: your payments are split in interests payment and principal payment"
 msgid "principal payment"
-msgstr ""
+msgstr "முதன்மை கட்டணம்"
 
 #. "An amount of money for which sth may be bought or sold"
 msgid "price (in a split)"
-msgstr ""
+msgstr "விலை (ஒரு பிளவு)"
 
 #. "An ask is an offer to sell, and the price you want to sell at."
 msgid "price type: ask"
-msgstr ""
+msgstr "விலை வகை: கேளுங்கள்"
 
 #. "A bid is an offer to buy, and the price you want to buy at."
 msgid "price type: bid"
-msgstr ""
+msgstr "விலை வகை: ஏலம்"
 
 #. "online quotes (rather: quotation!?) A statement of the current price of stocks or commodities"
 msgid "price: quotes"
-msgstr ""
+msgstr "விலை: மேற்கோள்கள்"
 
 #. "Money gained in business, esp. the difference between the amount earned (sales) and the amount spent (expenses/cost): Profit is sales minus expenses/cost."
 msgid "profit"
-msgstr ""
+msgstr "லாபம்"
 
 #. "OBSOLETE. This report was renamed to 'income statement' on 2004-07-13. Old definition: A list that shows the amount of money spent compared with the amount earned by a business in a particular period"
 msgid "Profit & Loss"
@@ -648,59 +651,59 @@ msgstr "இலாபம் & நஷ்டம்"
 
 #. "-"
 msgid "quick-fill"
-msgstr ""
+msgstr "விரைவான நிரப்பு"
 
 #. "-"
 msgid "rebalance, to (a transaction)"
-msgstr ""
+msgstr "மறுசீரமைப்பு, (ஒரு பரிவர்த்தனை)"
 
 #. "reconcile an account, a reconciled split. To find a way to make the bank's account statement agree with the user's recorded transactions in an account."
 msgid "reconcile, to"
-msgstr ""
+msgstr "வேறுபாடின்மை, க்கு"
 
 #. "-"
 msgid "record keeping"
-msgstr ""
+msgstr "பதிவு பேணல்"
 
 #. "A list of items; a book containing such a list"
 msgid "register"
-msgstr ""
+msgstr "பதிவு"
 
 #. "A transaction that is divided into two or more parts"
 msgid "register entry: split transaction"
-msgstr ""
+msgstr "பதிவுசெய்தல்: பிளவு பரிவர்த்தனை"
 
 #. "-"
 msgid "register entry: stock split"
-msgstr ""
+msgstr "பதிவுசெய்தல்: பங்கு பிளவு"
 
 #. "one form of register"
 msgid "register: auto-split ledger"
-msgstr ""
+msgstr "பதிவு: தானாக பிளவு பேரேடு"
 
 #. "another form of register"
 msgid "register: basic ledger"
-msgstr ""
+msgstr "பதிவு: அடிப்படை பேரேடு"
 
 #. "another form of register"
 msgid "register: general ledger"
-msgstr ""
+msgstr "பதிவு: செனரல் பேரேடு"
 
 #. "another form of register"
 msgid "register: transaction journal"
-msgstr ""
+msgstr "பதிவு: பரிவர்த்தனை இதழ்"
 
 #. "reload the current document"
 msgid "reload, to"
-msgstr ""
+msgstr "மீண்டும் ஏற்றவும், க்கு"
 
 #. "aka 'two-sided form' is in Europe often used for the balance sheet. Complement: report form: Vertical Form"
 msgid "report form: T Account Form"
-msgstr ""
+msgstr "அறிக்கை படிவம்: டி கணக்கு படிவம்"
 
 #. "aka 'running form' is in english speaking countries usually used for the balance sheet in one column. Complement: report form: T Account Form"
 msgid "report form: Vertical Form"
-msgstr ""
+msgstr "அறிக்கை படிவம்: செங்குத்து வடிவம்"
 
 #. "name of an equity account (?); to be distinguished from the opening balance."
 msgid "Retained Earnings"
@@ -708,162 +711,160 @@ msgstr "வைத்திருக்கும் சம்பாத்தி�
 
 #. "Create a new transaction that is the inverse of the old one.  When you add the two together they completely cancel out.  Accounts use this instead of voiding transactions, usually because the prior month has been closed and can no longer be changed, or the entire accounting system is 'write only'."
 msgid "reverse transaction, to (Action in the register)"
-msgstr ""
+msgstr "தலைகீழ் பரிவர்த்தனை, (பதிவேட்டில் நடவடிக்கை)"
 
 #. "(In the customer summary report) The total amount of money received because something was sold."
 msgid "sales"
-msgstr ""
+msgstr "விற்பனை"
 
 #. "To write data (typically a file) to a storage medium, such as a disk or tape."
 msgid "save, to (to a file)"
-msgstr ""
+msgstr "சேமி, (ஒரு கோப்பிற்கு)"
 
 #. "A transaction or reminder of a transaction that can be automatically executed at a specific time. It can be executed either once, or several times at regular intervals."
 msgid "Scheduled Transaction"
-msgstr ""
+msgstr "திட்டமிடப்பட்ட பரிவர்த்தனை"
 
 #. "DEPRECATED. To repair unbalanced transactions and orphan splits in an account tree. Any transactions that have debits != credits will get a balancing split added (pointing to a special new account called 'Imbalance'). Any splits that do not have accounts are put into another special account called 'Orphan'. Deprecated - use the term 'to check and repair' now."
 msgid "scrub, to"
-msgstr ""
+msgstr "ச்க்ரப், க்கு"
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
-msgstr ""
+msgstr "பாதுகாப்பு"
 
 #. "-"
 msgid "Share Balance (register)"
-msgstr ""
+msgstr "பகிர்வு இருப்பு (பதிவு)"
 
 #. "Any of the equal parts into which the money of a business company is divided, giving the holder a right to a portion of the profits"
 msgid "shares"
-msgstr ""
+msgstr "பங்குகள்"
 
 #. "(often: of a quote) A place from which something comes or is obtained."
 msgid "source"
-msgstr ""
+msgstr "மூலம்"
 
 #. "One of the two or several parts a transaction is divided into"
-#, fuzzy
-#| msgid "(split)"
 msgid "split"
-msgstr "(பிரிப்பு)"
+msgstr "பிளவு"
 
 #. "Alias of 'shares'"
 msgid "stocks"
-msgstr ""
+msgstr "பங்குகள்"
 
 #. "Sometimes one old share gets replaced by multiple new like 1 OLD @100¤ by 2 NEW @50¤"
 msgid "stock split"
-msgstr ""
+msgstr "பங்கு பிளவு"
 
 #. "This sets the particular design or shape of a report."
 msgid "style sheet"
-msgstr ""
+msgstr "பாணி சீட்"
 
 #. "The total of a set of figures that are part of a larger group of figures"
 msgid "subtotal"
-msgstr ""
+msgstr "கூட்டுத்தொகை"
 
 #. "On the government's tax forms, the tax code identifies the given line or place on the form where certain amounts must be specified according to the current country's legislation"
 msgid "tax code"
-msgstr ""
+msgstr "வரி குறியீடு"
 
 #. "field of an account"
 msgid "tax info"
-msgstr ""
+msgstr "வரி செய்தி"
 
 #. "Amost everybody has to declare and probably pay it. See https://en.wikipedia.org/wiki/Income_tax"
 msgid "tax type: income tax"
-msgstr ""
+msgstr "வரி வகை: வருமான வரி"
 
 #. "Usually only business users have to handle it, see https://en.wikipedia.org/wiki/Sales_tax."
 msgid "tax type: sales tax"
-msgstr ""
+msgstr "வரி வகை: விற்பனை வரி"
 
 #. "'Goods and Service Tax' is one form of sales tax."
 msgid "tax type: GST"
-msgstr ""
+msgstr "வரி வகை: சிஎச்டி"
 
 #. "'Value Added Tax' is the other form of sales tax."
 msgid "tax type: VAT"
-msgstr ""
+msgstr "வரி வகை: வாட்"
 
 #. "If you create a new e.g. style sheet, you can start from a template."
 msgid "template"
-msgstr ""
+msgstr "வார்ப்புரு"
 
 #. "see: date range"
 msgid "time period"
-msgstr ""
+msgstr "கால கட்டம்"
 
 #. "as abbreviation for Total"
 msgid "Tot"
-msgstr ""
+msgstr "மொத்தம்"
 
 #. "The full number or amount: total of some balances, of any account's running balance etc."
 msgid "total"
-msgstr ""
+msgstr "மொத்தம்"
 
 #. "A piece of business done; the transfer of money from one account to one or more other accounts. (see also: Scheduled Transaction)"
 msgid "transaction"
-msgstr ""
+msgstr "பரிவர்த்தனை"
 
 #. "A transaction whose amount has actually been moved. The word comes from checks: a check is issued, but several steps have to be done until the amount is actually retrieved from the bank account, which is the point in time where that transaction (check) gets cleared."
 msgid "transaction state: cleared"
-msgstr ""
+msgstr "பரிவர்த்தனை நிலை: அழிக்கப்பட்டது"
 
 #. "-"
 msgid "transaction state: frozen"
-msgstr ""
+msgstr "பரிவர்த்தனை நிலை: உறைந்த"
 
 #. "A transaction that was reconciled with the bank's statement."
 msgid "transaction state: reconciled"
-msgstr ""
+msgstr "பரிவர்த்தனை நிலை: வேறுபாடின்மை"
 
 #. "A transaction that is void i.e. not valid (anymore)."
 msgid "transaction state: voided"
-msgstr ""
+msgstr "பரிவர்த்தனை நிலை: ரத்து செய்யப்பட்டது"
 
 #. "1. The action of transferring sth. 2. see: credit transfer"
 msgid "transfer (noun)"
-msgstr ""
+msgstr "இடமாற்றம் (பெயர்ச்சொல்)"
 
 #. "The account where an amount is transferred to"
 msgid "transfer account"
-msgstr ""
+msgstr "பரிமாற்றக் கணக்கு"
 
 #. "To move money from one account to another. Will create a transaction."
 msgid "transfer, to (register toolbar)"
-msgstr ""
+msgstr "இடமாற்றம், (கருவிப்பட்டியை பதிவு செய்யுங்கள்)"
 
 #. "The trial balance is a worksheet on which you list all your general ledger accounts and their debit or credit balance. It is a tool that is used to alert you to errors in your books. The total debits must equal the total credits. If they don't equal, you know you have an error that must be tracked down."
 msgid "trial balance (report)"
-msgstr ""
+msgstr "சோதனை இருப்பு (அறிக்கை)"
 
 #. "A class or things that have characteristics in common; type of an account, of a commodity etc."
 msgid "type"
-msgstr ""
+msgstr "வகை"
 
 #. "A fixed amount or number used as a standard of measurement; e.g. millimeters, inch; for absolute positioning in the custom check format."
 msgid "units"
-msgstr ""
+msgstr "அலகுகள்"
 
 #. "Uniform Resource Locator, https://en.wikipedia.org/wiki/URL"
 msgid "URL"
-msgstr ""
+msgstr "முகவரி"
 
 #. "The worth of sth in terms of money or other commodities for which it can be exchanged"
 msgid "value (in a split)"
-msgstr ""
+msgstr "மதிப்பு (ஒரு பிளவு)"
 
 #. "In small business accounting: A person or company that sells items and is supplying goods"
 msgid "vendor"
-msgstr ""
+msgstr "விற்பனையாளர்"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
 msgid "voucher"
-msgstr ""
+msgstr "சான்றுச்சீட்டு"
 
 #. "see debit"
 msgid "withdraw (in the reconcile dialog)"
-msgstr ""
+msgstr "திரும்பப் பெறுங்கள் (மறுசீரமைப்பு உரையாடலில்)"
