@@ -86,7 +86,7 @@ gnucash/gnome/dialog-progress.c
 gnucash/gnome/dialog-report-column-view.cpp
 gnucash/gnome/dialog-report-style-sheet.cpp
 gnucash/gnome/dialog-sx-editor.c
-gnucash/gnome/dialog-sx-from-trans.c
+gnucash/gnome/dialog-sx-from-trans.cpp
 gnucash/gnome/dialog-sx-since-last-run.c
 gnucash/gnome/dialog-tax-info.c
 gnucash/gnome/dialog-vendor.c

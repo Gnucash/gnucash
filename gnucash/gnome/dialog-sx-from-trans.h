@@ -27,6 +27,14 @@
 
 #include "Transaction.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 void gnc_sx_create_from_trans(GtkWindow *parent, Transaction *trans);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

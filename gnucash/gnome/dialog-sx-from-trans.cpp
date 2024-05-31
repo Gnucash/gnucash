@@ -107,12 +107,12 @@ typedef struct
 static void sxftd_update_example_cal( SXFromTransInfo *sxfti );
 static void sxftd_update_excal_adapt( GObject *o, gpointer ud );
 
-typedef struct
+struct widgetSignalHandlerTuple
 {
-    gchar *name;
-    gchar *signal;
-    void (*handlerFn)();
-} widgetSignalHandlerTuple;
+    const gchar *name;
+    const gchar *signal;
+    void (*handlerFn)(GObject*,gpointer);
+};
 
 static void sxftd_ok_clicked(SXFromTransInfo *sxfti);
 static void sxftd_advanced_clicked(SXFromTransInfo *sxfti);
@@ -211,7 +211,6 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
     GList *splits, *template_splits = NULL;
     TTInfo *tti = gnc_ttinfo_malloc();
     TTSplitInfo *ttsi;
-    Split *sp;
     gnc_numeric runningBalance;
     gnc_numeric split_value;
     const char *tmpStr;
@@ -225,7 +224,7 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 
     for (splits = xaccTransGetSplitList(tr); splits; splits = splits->next)
     {
-        sp = splits->data;
+        auto sp = GNC_SPLIT(splits->data);
         ttsi = gnc_ttsplitinfo_malloc();
         gnc_ttsplitinfo_set_action(ttsi, gnc_get_num_action(NULL, sp));
         split_value = xaccSplitGetValue(sp);

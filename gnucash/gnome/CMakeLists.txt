@@ -98,7 +98,7 @@ set (gnc_gnome_SOURCES
   dialog-report-column-view.cpp
   dialog-report-style-sheet.cpp
   dialog-sx-editor.c
-  dialog-sx-from-trans.c
+  dialog-sx-from-trans.cpp
   dialog-sx-since-last-run.c
   dialog-tax-info.c
   dialog-vendor.c
