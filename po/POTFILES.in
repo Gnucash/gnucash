@@ -691,7 +691,7 @@ libgnucash/engine/ScrubBudget.c
 libgnucash/engine/ScrubBusiness.c
 libgnucash/engine/Scrub.cpp
 libgnucash/engine/Split.cpp
-libgnucash/engine/SX-book.c
+libgnucash/engine/SX-book.cpp
 libgnucash/engine/SX-ttinfo.c
 libgnucash/engine/Transaction.cpp
 libgnucash/engine/TransLog.cpp
