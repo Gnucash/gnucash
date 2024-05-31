@@ -16,7 +16,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-05-02 21:07+0000\n"
+"PO-Revision-Date: 2024-05-31 22:09+0000\n"
 "Last-Translator: Kaligula <kaligula.dev@gmail.com>\n"
 "Language-Team: Polish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "pl/>\n"
@@ -26,7 +26,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.5.3-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 "X-Poedit-Bookmarks: 2255,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -23839,9 +23839,8 @@ msgstr "Dodatkowe uwagi"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:176
 #: gnucash/report/reports/standard/taxinvoice.scm:221
-#, fuzzy
 msgid "Notes added at end of invoice -- may contain HTML markup."
-msgstr "Notatki dodawane na końcu faktury -- mogą zawierać wstawki HTML"
+msgstr "Notatki dodawane na końcu faktury -- mogą zawierać wstawki HTML."
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:219
 #, fuzzy
@@ -24873,7 +24872,7 @@ msgstr "Numer klienta"
 
 #: gnucash/report/reports/standard/customer-summary.scm:108
 msgid "Markup (which is profit amount divided by sales)"
-msgstr ""
+msgstr "Marża (zysk podzielony przez sprzedaż)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:109
 #: gnucash/report/reports/standard/customer-summary.scm:284
@@ -24893,7 +24892,7 @@ msgstr "Brak zaznaczonych kont"
 
 #: gnucash/report/reports/standard/customer-summary.scm:283
 msgid "Markup"
-msgstr "Znacznik"
+msgstr "Marża"
 
 #: gnucash/report/reports/standard/customer-summary.scm:362
 #, fuzzy
@@ -27335,7 +27334,7 @@ msgstr "Inwestycje: "
 #: gnucash/report/reports/standard/taxinvoice.scm:328
 #: gnucash/report/reports/standard/taxinvoice.scm:330
 msgid "Australian Tax Invoice"
-msgstr "Australijska faktura VAT"
+msgstr "Faktura VAT (australijska)"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:331
 msgid ""
