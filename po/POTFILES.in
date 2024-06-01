@@ -684,7 +684,7 @@ libgnucash/engine/qofutil.cpp
 libgnucash/engine/qof-win32.cpp
 libgnucash/engine/Query.cpp
 libgnucash/engine/Recurrence.cpp
-libgnucash/engine/SchedXaction.c
+libgnucash/engine/SchedXaction.cpp
 libgnucash/engine/Scrub2.cpp
 libgnucash/engine/Scrub3.cpp
 libgnucash/engine/ScrubBudget.c

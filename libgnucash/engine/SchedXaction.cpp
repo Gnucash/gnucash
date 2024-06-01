@@ -208,25 +208,25 @@ gnc_schedxaction_set_property (GObject         *object,
         /* Note: when passed through a boxed gvalue, the julian value of the date is copied.
            The date may appear invalid until a function requiring for dmy calculation is
            called. */
-        xaccSchedXactionSetStartDate(sx, g_value_get_boxed(value));
+        xaccSchedXactionSetStartDate(sx, static_cast<const GDate*>(g_value_get_boxed(value)));
         break;
     case PROP_END_DATE:
         /* Note: when passed through a boxed gvalue, the julian value of the date is copied.
            The date may appear invalid until a function requiring for dmy calculation is
            called. */
-        xaccSchedXactionSetEndDate(sx, g_value_get_boxed(value));
+        xaccSchedXactionSetEndDate(sx, static_cast<const GDate*>(g_value_get_boxed(value)));
         break;
     case PROP_LAST_OCCURANCE_DATE:
         /* Note: when passed through a boxed gvalue, the julian value of the date is copied.
            The date may appear invalid until a function requiring for dmy calculation is
            called. */
-        xaccSchedXactionSetLastOccurDate(sx, g_value_get_boxed(value));
+        xaccSchedXactionSetLastOccurDate(sx, static_cast<const GDate*>(g_value_get_boxed(value)));
         break;
     case PROP_INSTANCE_COUNT:
         gnc_sx_set_instance_count(sx, g_value_get_int(value));
         break;
     case PROP_TEMPLATE_ACCOUNT:
-        sx_set_template_account(sx, g_value_get_object(value));
+        sx_set_template_account(sx, GNC_ACCOUNT(g_value_get_object(value)));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -409,7 +409,7 @@ xaccSchedXactionMalloc(QofBook *book)
 
     g_return_val_if_fail (book, NULL);
 
-    sx = g_object_new(GNC_TYPE_SCHEDXACTION, NULL);
+    sx = GNC_SX(g_object_new(GNC_TYPE_SCHEDXACTION, NULL));
     xaccSchedXactionInit( sx, book );
     qof_event_gen( &sx->inst, QOF_EVENT_CREATE , NULL);
 
@@ -483,8 +483,6 @@ xaccSchedXactionDestroy( SchedXaction *sx )
 static void
 xaccSchedXactionFree( SchedXaction *sx )
 {
-    GList *l;
-
     if ( sx == NULL ) return;
 
     qof_event_gen( &sx->inst, QOF_EVENT_DESTROY , NULL);
@@ -502,16 +500,7 @@ xaccSchedXactionFree( SchedXaction *sx )
     xaccAccountBeginEdit( sx->template_acct );
     xaccAccountDestroy( sx->template_acct );
 
-    for ( l = sx->deferredList; l; l = l->next )
-    {
-        gnc_sx_destroy_temporal_state( l->data );
-        l->data = NULL;
-    }
-    if ( sx->deferredList )
-    {
-        g_list_free( sx->deferredList );
-        sx->deferredList = NULL;
-    }
+    g_list_free_full (sx->deferredList, g_free);
 
     /* a GList of Recurrences */
     g_list_free_full (sx->schedule, g_free);
@@ -799,7 +788,7 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
         gnc_sx_incr_temporal_state (sx, tmpState);
         if (xaccSchedXactionHasOccurDef(sx) && tmpState->num_occur_rem < 0)
         {
-            gnc_sx_destroy_temporal_state (tmpState);
+            g_free (tmpState);
             return result;
         }
     }
@@ -812,7 +801,7 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
         gnc_sx_incr_temporal_state (sx, tmpState);
         if (xaccSchedXactionHasOccurDef(sx) && tmpState->num_occur_rem < 0)
         {
-            gnc_sx_destroy_temporal_state (tmpState);
+            g_free (tmpState);
             return result;
         }
     }
@@ -840,7 +829,7 @@ gint gnc_sx_get_num_occur_daterange(const SchedXaction *sx, const GDate* start_d
     if (!countFirstDate && result > 0)
         --result;
 
-    gnc_sx_destroy_temporal_state (tmpState);
+    g_free (tmpState);
     return result;
 }
 
@@ -1036,8 +1025,6 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
                                  QofBook *book)
 {
     Transaction *new_trans;
-    TTInfo *tti;
-    TTSplitInfo *s_info;
     Split *new_split;
     GList *split_list;
 
@@ -1048,7 +1035,7 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
 
     for (; t_t_list != NULL; t_t_list = t_t_list->next)
     {
-        tti = t_t_list->data;
+        auto tti = static_cast<TTInfo*>(t_t_list->data);
 
         new_trans = xaccMallocTransaction(book);
 
@@ -1071,7 +1058,7 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
                 split_list;
                 split_list = split_list->next)
         {
-            s_info = split_list->data;
+            auto s_info = static_cast<TTSplitInfo*>(split_list->data);
             new_split = pack_split_info(s_info, sx->template_acct,
                                         new_trans, book);
             xaccTransAppendSplit(new_trans, new_split);
@@ -1083,12 +1070,11 @@ xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
 SXTmpStateData*
 gnc_sx_create_temporal_state(const SchedXaction *sx )
 {
-    SXTmpStateData *toRet =
-	 g_new0( SXTmpStateData, 1 );
+    auto toRet = g_new0 (SXTmpStateData, 1);
     if (g_date_valid (&(sx->last_date)))
-	 toRet->last_date       = sx->last_date;
+        toRet->last_date       = sx->last_date;
     else
-	g_date_set_dmy (&(toRet->last_date), 1, 1, 1970);
+        g_date_set_dmy (&toRet->last_date, 1, static_cast<GDateMonth>(1), 1970);
     toRet->num_occur_rem   = sx->num_occurances_remain;
     toRet->num_inst   = sx->instance_num;
     return toRet;
@@ -1173,7 +1159,7 @@ gnc_sx_remove_defer_instance( SchedXaction *sx, void *deferStateData )
         return;
     }
 
-    gnc_sx_destroy_temporal_state(found_by_value->data);
+    g_free (found_by_value->data);
     sx->deferredList = g_list_delete_link(sx->deferredList, found_by_value);
 }
 
@@ -1230,7 +1216,7 @@ static QofObject SXDesc =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) GNC_SX_ID,
     DI(.type_label        = ) "Scheduled Transaction",
-    DI(.create            = ) (gpointer)xaccSchedXactionMalloc,
+    DI(.create            = ) (void* (*)(QofBook*))xaccSchedXactionMalloc,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) gnc_sx_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
