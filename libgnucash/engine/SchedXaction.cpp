@@ -31,6 +31,7 @@
 #include "qof.h"
 
 #include "Account.h"
+#include "Account.hpp"
 #include "SX-book.h"
 #include "SX-book-p.h"
 #include "SX-ttinfo.h"
@@ -39,6 +40,8 @@
 #include "gnc-engine.h"
 #include "engine-helpers.h"
 #include "qofinstance-p.h"
+
+#include <unordered_set>
 
 #undef G_LOG_DOMAIN
 #define G_LOG_DOMAIN "gnc.engine.sx"
@@ -417,45 +420,19 @@ xaccSchedXactionMalloc(QofBook *book)
 }
 
 static void
-sxprivTransMapDelete( gpointer data, gpointer user_data )
-{
-    Transaction *t = (Transaction *) data;
-    xaccTransBeginEdit( t );
-    xaccTransDestroy( t );
-    xaccTransCommitEdit( t );
-    return;
-}
-
-static void
 delete_template_trans(SchedXaction *sx)
 {
-    GList *templ_acct_splits, *curr_split_listref;
-    Split *curr_split;
-    Transaction *split_trans;
-    GList *templ_acct_transactions = NULL;
-
-    templ_acct_splits
-    = xaccAccountGetSplitList(sx->template_acct);
-
-    for (curr_split_listref = templ_acct_splits;
-            curr_split_listref;
-            curr_split_listref = curr_split_listref->next)
-    {
-        curr_split = (Split *) curr_split_listref->data;
-        split_trans = xaccSplitGetParent(curr_split);
-        if (! (g_list_find(templ_acct_transactions, split_trans)))
-        {
-            templ_acct_transactions
-            = g_list_prepend(templ_acct_transactions, split_trans);
-        }
-    }
-
-    g_list_foreach(templ_acct_transactions,
-                   sxprivTransMapDelete,
-                   NULL);
-
-    g_list_free (templ_acct_splits);
-    g_list_free (templ_acct_transactions);
+    std::unordered_set<Transaction*> txns;
+    auto& splits{xaccAccountGetSplits (sx->template_acct)};
+    std::for_each (splits.begin(), splits.end(),
+                   [&txns](auto s){ txns.insert (xaccSplitGetParent (s)); });
+    std::for_each (txns.begin(), txns.end(),
+                   [](auto t)
+                   {
+                       xaccTransBeginEdit (t);
+                       xaccTransDestroy (t);
+                       xaccTransCommitEdit (t);
+                   });
     return;
 }
 
