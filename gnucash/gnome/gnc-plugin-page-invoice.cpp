@@ -92,6 +92,7 @@ static void gnc_plugin_page_invoice_cmd_entryDown (GSimpleAction *simple, GVaria
 static void gnc_plugin_page_invoice_cmd_edit_tax (GSimpleAction *simple, GVariant *paramter, gpointer user_data);
 
 static void gnc_plugin_page_redraw_help_cb (GnucashRegister *gsr, GncPluginPageInvoice *invoice_page);
+static void gnc_plugin_page_show_popup_cb (GnucashRegister *gsr, GncPluginPageInvoice *invoice_page);
 static void gnc_plugin_page_invoice_refresh_cb (GHashTable *changes, gpointer user_data);
 
 /************************************************************
@@ -679,6 +680,9 @@ gnc_plugin_page_invoice_create_widget (GncPluginPage *plugin_page)
     {
         g_signal_connect (G_OBJECT (regWidget), "redraw-help",
                           G_CALLBACK (gnc_plugin_page_redraw_help_cb), page);
+
+        g_signal_connect (G_OBJECT(regWidget), "show-popup-menu",
+                          G_CALLBACK(gnc_plugin_page_show_popup_cb), page);
     }
 
     priv->component_manager_id =
@@ -1363,6 +1367,25 @@ gnc_plugin_page_redraw_help_cb (GnucashRegister *g_reg,
     g_free(help);
 }
 
+static void
+gnc_plugin_page_show_popup_cb (GnucashRegister *g_reg,
+                               GncPluginPageInvoice *invoice_page)
+{
+    GncWindow *window;
+
+    g_return_if_fail (GNC_IS_PLUGIN_PAGE_INVOICE(invoice_page));
+
+    window = GNC_WINDOW(GNC_PLUGIN_PAGE(invoice_page)->window);
+
+    if (!window)
+    {
+        // This routine can be called before the page is added to a
+        // window.
+        return;
+    }
+    gnc_main_window_popup_menu_cb (GTK_WIDGET(window),
+                                   GNC_PLUGIN_PAGE(invoice_page));
+}
 
 void
 gnc_plugin_page_invoice_update_title (GncPluginPage *plugin_page)
