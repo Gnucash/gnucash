@@ -43,7 +43,7 @@
 #include "Recurrence.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
-#include "SX-ttinfo.h"
+#include "SX-ttinfo.hpp"
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>

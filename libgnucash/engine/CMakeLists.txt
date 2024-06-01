@@ -8,7 +8,7 @@ set(engine_noinst_HEADERS
   AccountP.hpp
   SplitP.hpp
   SX-book.h
-  SX-ttinfo.h
+  SX-ttinfo.hpp
   TransactionP.hpp
   gnc-backend-prov.hpp
   gnc-date-p.h
@@ -37,7 +37,7 @@ set (engine_HEADERS
   Recurrence.h
   SchedXaction.h
   SX-book.h
-  SX-ttinfo.h
+  SX-ttinfo.hpp
   Query.h
   Scrub.h
   Scrub2.h

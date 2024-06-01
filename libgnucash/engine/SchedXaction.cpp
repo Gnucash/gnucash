@@ -34,7 +34,7 @@
 #include "Account.hpp"
 #include "SX-book.h"
 #include "SX-book-p.h"
-#include "SX-ttinfo.h"
+#include "SX-ttinfo.hpp"
 #include "SchedXaction.h"
 #include "Transaction.h"
 #include "gnc-engine.h"

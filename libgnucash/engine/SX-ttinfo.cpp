@@ -25,7 +25,7 @@
 
 #include <config.h>
 
-#include "SX-ttinfo.h"
+#include "SX-ttinfo.hpp"
 
 struct TTInfo_s
 {

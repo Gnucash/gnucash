@@ -24,7 +24,7 @@
 
 #include <stdlib.h>
 #include "SX-book.h"
-#include "SX-ttinfo.h"
+#include "SX-ttinfo.hpp"
 #include "gnc-date.h"
 #include "gnc-session.h"
 #include "gnc-sx-instance-model.h"

@@ -34,7 +34,7 @@
 #include "assistant-loan.h"
 #include "SchedXaction.h"
 #include "SX-book.h"
-#include "SX-ttinfo.h"
+#include "SX-ttinfo.hpp"
 #include "gnc-amount-edit.h"
 #include "gnc-account-sel.h"
 #include "gnc-date.h"
