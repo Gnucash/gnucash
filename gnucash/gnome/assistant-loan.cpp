@@ -33,6 +33,7 @@
 #include <math.h>
 #include "assistant-loan.h"
 #include "SchedXaction.h"
+#include "SchedXaction.hpp"
 #include "SX-book.h"
 #include "SX-ttinfo.hpp"
 #include "gnc-amount-edit.h"
@@ -309,9 +310,9 @@ typedef struct toCreateSX_
     /** The current 'instance-num' count. */
     gint instNum;
     /** The main/source transaction being created. */
-    TTInfo *mainTxn;
+    TTInfoPtr mainTxn;
     /** The optional escrow transaction being created. */
-    TTInfo *escrowTxn;
+    TTInfoPtr escrowTxn;
 } toCreateSX;
 
 /**************************************************************************/
@@ -369,7 +370,6 @@ static void loan_get_ipmt_formula( LoanAssistantData *ldd, GString *gstr );
 static float loan_apr_to_simple_formula (float rate, float compounding_periods);
 
 static void loan_create_sxes( LoanAssistantData *ldd );
-static gint loan_find_ttsplit_with_acct( gconstpointer elt, gconstpointer crit );
 static void loan_create_sx_from_tcSX( LoanAssistantData *ldd, toCreateSX *tcSX );
 static void loan_tcSX_free( gpointer data, gpointer user_data );
 
@@ -2494,27 +2494,9 @@ loan_tcSX_free( gpointer data, gpointer user_data )
 {
     toCreateSX *tcSX = (toCreateSX*)data;
     g_free( tcSX->name );
-    if ( tcSX->mainTxn )
-        gnc_ttinfo_free( tcSX->mainTxn );
-    if ( tcSX->escrowTxn )
-        gnc_ttinfo_free( tcSX->escrowTxn );
+    tcSX->mainTxn.~TTInfoPtr();
+    tcSX->escrowTxn.~TTInfoPtr();
     g_free( tcSX );
-}
-
-
-/**
- * Custom GCompareFunc to find the element of a GList of TTSplitInfo's which
- * has the given [Account*] criteria.
- * @return 0 if match, as per GCompareFunc in the g_list_find_custom context.
- **/
-static
-gint
-loan_find_ttsplit_with_acct( gconstpointer elt,
-                             gconstpointer crit )
-{
-    TTSplitInfo *ttsi = (TTSplitInfo*)elt;
-    return ( (gnc_ttsplitinfo_get_account( ttsi )
-              == (Account*)crit) ? 0 : 1 );
 }
 
 
@@ -2527,7 +2509,7 @@ loan_create_sx_from_tcSX( LoanAssistantData *ldd, toCreateSX *tcSX )
 {
     SchedXaction *sx;
     SchedXactions *sxes;
-    GList *ttxnList;
+    TTInfoVec ttxn_vec;
 
     sx = xaccSchedXactionMalloc( gnc_get_current_book() );
     xaccSchedXactionSetName( sx, tcSX->name );
@@ -2537,23 +2519,28 @@ loan_create_sx_from_tcSX( LoanAssistantData *ldd, toCreateSX *tcSX )
     xaccSchedXactionSetEndDate( sx, &tcSX->end );
     gnc_sx_set_instance_count( sx, tcSX->instNum );
 
-    ttxnList = NULL;
     if ( tcSX->mainTxn )
-        ttxnList = g_list_append( ttxnList, tcSX->mainTxn );
+        ttxn_vec.push_back (tcSX->mainTxn);
     if ( tcSX->escrowTxn )
-        ttxnList = g_list_append( ttxnList, tcSX->escrowTxn );
+        ttxn_vec.push_back (tcSX->escrowTxn);
 
-    g_assert( ttxnList != NULL );
+    g_assert (!ttxn_vec.empty());
 
-    xaccSchedXactionSetTemplateTrans( sx, ttxnList,
-                                      gnc_get_current_book() );
+    xaccSchedXactionSetTemplateTrans (sx, ttxn_vec, gnc_get_current_book());
 
     sxes = gnc_book_get_schedxactions(gnc_get_current_book());
     gnc_sxes_add_sx(sxes, sx);
-    g_list_free( ttxnList );
-    ttxnList = NULL;
 }
 
+
+static TTSplitInfoPtr
+find_account_from_template_splits (const TTInfoPtr& txn, const Account* account)
+{
+    auto& splits{txn->get_template_splits ()};
+    auto has_acct = [account](auto ttinfo){ return ttinfo->get_account() == account; };
+    auto it = std::find_if (splits.begin(), splits.end(), has_acct);
+    return it == splits.end() ? nullptr : *it;
+}
 
 /**
  * Does the work to setup the given toCreateSX structure for a specific
@@ -2632,10 +2619,9 @@ ld_setup_repayment_sx( LoanAssistantData *ldd,
     /** Now, the actual implementation... */
 
     GString *gstr;
-    GList *elt;
-    TTSplitInfo *fromSplit = NULL;
-    TTSplitInfo *ttsi;
-    TTInfo *toTxn = NULL;
+    TTSplitInfoPtr fromSplit;
+    TTSplitInfoPtr ttsi;
+    TTInfoPtr toTxn;
     GNCPrintAmountInfo pricePAI = gnc_default_price_print_info(NULL);
 #define AMTBUF_LEN 64
     gchar amtBuf[AMTBUF_LEN];
@@ -2654,16 +2640,11 @@ ld_setup_repayment_sx( LoanAssistantData *ldd,
         /* Add the repayment amount into the string of the existing
          * ttsplit. */
         {
-            elt = g_list_find_custom(
-                      gnc_ttinfo_get_template_splits( paymentSX->mainTxn ),
-                      ldd->ld.escrowAcct,
-                      loan_find_ttsplit_with_acct );
-            g_assert( elt );
-            ttsi = (TTSplitInfo*)elt->data;
-            g_assert( ttsi );
-            gstr = g_string_new( gnc_ttsplitinfo_get_debit_formula( ttsi ) );
+            auto ttsi = find_account_from_template_splits (paymentSX->mainTxn, ldd->ld.escrowAcct);
+            g_assert (ttsi);
+            gstr = g_string_new (ttsi->get_debit_formula());
             g_string_append_printf( gstr, " + %s", amtBuf );
-            gnc_ttsplitinfo_set_debit_formula( ttsi, gstr->str );
+            ttsi->set_debit_formula (gstr->str);
             g_string_free( gstr, TRUE );
             gstr = NULL;
             ttsi = NULL;
@@ -2676,24 +2657,16 @@ ld_setup_repayment_sx( LoanAssistantData *ldd,
             fromSplit = NULL;
 
             /* tcSX.escrow.split( rep->escrow ).debCred += repAmt */
-            elt = g_list_find_custom(
-                      gnc_ttinfo_get_template_splits( tcSX->escrowTxn ),
-                      ldd->ld.escrowAcct,
-                      loan_find_ttsplit_with_acct );
-            ttsi = NULL;
-            if ( elt )
-            {
-                ttsi = (TTSplitInfo*)elt->data;
-            }
+            auto ttsi = find_account_from_template_splits (tcSX->escrowTxn, ldd->ld.escrowAcct);
             if ( !ttsi )
             {
                 /* create split */
-                ttsi = gnc_ttsplitinfo_malloc();
-                gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
-                gnc_ttsplitinfo_set_account( ttsi, ldd->ld.escrowAcct );
-                gnc_ttinfo_append_template_split( tcSX->escrowTxn, ttsi );
+                ttsi = std::make_shared<TTSplitInfo>();
+                ttsi->set_memo (rod->txnMemo);
+                ttsi->set_account (ldd->ld.escrowAcct);
+                tcSX->escrowTxn->append_template_split (ttsi);
             }
-            if ( (str = (gchar*)gnc_ttsplitinfo_get_credit_formula( ttsi ))
+            if ( (str = (gchar*)ttsi->get_credit_formula ())
                     == NULL )
             {
                 gstr = g_string_sized_new( 16 );
@@ -2707,7 +2680,7 @@ ld_setup_repayment_sx( LoanAssistantData *ldd,
                 g_string_append_printf( gstr, " + " );
             }
             g_string_append_printf( gstr, "%s", amtBuf );
-            gnc_ttsplitinfo_set_credit_formula( ttsi, gstr->str );
+            ttsi->set_credit_formula (gstr->str);
             g_string_free( gstr, TRUE );
             gstr = NULL;
             ttsi = NULL;
@@ -2715,19 +2688,15 @@ ld_setup_repayment_sx( LoanAssistantData *ldd,
         else
         {
             /* (fromSplit = paymentSX.main.split( ldd->ld.repFromAcct )) */
-            elt = g_list_find_custom(
-                      gnc_ttinfo_get_template_splits( paymentSX->mainTxn ),
-                      ldd->ld.repFromAcct,
-                      loan_find_ttsplit_with_acct );
-            g_assert( elt );
-            fromSplit = (TTSplitInfo*)elt->data;
+            fromSplit = find_account_from_template_splits (paymentSX->mainTxn, ldd->ld.repFromAcct);
+            g_assert (fromSplit);
 
             /* tcSX.escrow.splits += split( rep->escrow, -repAmt ) */
-            ttsi = gnc_ttsplitinfo_malloc();
-            gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
-            gnc_ttsplitinfo_set_account( ttsi, ldd->ld.escrowAcct );
-            gnc_ttsplitinfo_set_credit_formula( ttsi, amtBuf );
-            gnc_ttinfo_append_template_split( tcSX->escrowTxn, ttsi );
+            ttsi = std::make_shared<TTSplitInfo>();
+            ttsi->set_memo (rod->txnMemo);
+            ttsi->set_account (ldd->ld.escrowAcct);
+            ttsi->set_credit_formula (amtBuf);
+            tcSX->escrowTxn->append_template_split (ttsi);
             ttsi = NULL;
         }
     }
@@ -2741,63 +2710,45 @@ ld_setup_repayment_sx( LoanAssistantData *ldd,
         }
         else
         {
-            /* (fromSplit = paymentSX.main.split( ldd->ld.repFromAcct )) */
-            elt = g_list_find_custom(
-                      gnc_ttinfo_get_template_splits( tcSX->mainTxn ),
-                      ldd->ld.repFromAcct,
-                      loan_find_ttsplit_with_acct );
-            fromSplit = NULL;
-            if ( elt )
-            {
-                /* This is conditionally true in the case of
-                 * a repayment on it's own schedule. */
-                fromSplit = (TTSplitInfo*)elt->data;
-            }
+            fromSplit = find_account_from_template_splits (tcSX->mainTxn, ldd->ld.repFromAcct);
         }
     }
 
     if ( fromSplit != NULL )
     {
         /* Update the existing from-split. */
-        gstr = g_string_new( gnc_ttsplitinfo_get_credit_formula( fromSplit ) );
+        gstr = g_string_new (fromSplit->get_credit_formula ());
         g_string_append_printf( gstr, " + %s", amtBuf );
-        gnc_ttsplitinfo_set_credit_formula( fromSplit, gstr->str );
+        fromSplit->set_credit_formula (gstr->str);
         g_string_free( gstr, TRUE );
         gstr = NULL;
 
     }
     else
     {
-        TTInfo *tti;
+        TTInfoPtr tti;
         /* Create a new from-split. */
-        ttsi = gnc_ttsplitinfo_malloc();
-        gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
-        if ( rod->from )
-        {
-            gnc_ttsplitinfo_set_account( ttsi, rod->from );
-        }
-        else
-        {
-            gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repFromAcct );
-        }
-        gnc_ttsplitinfo_set_credit_formula( ttsi, amtBuf );
+        ttsi = std::make_shared<TTSplitInfo>();
+        ttsi->set_memo (rod->txnMemo);
+        ttsi->set_account (rod->from ? rod->from : ldd->ld.repFromAcct);
+        ttsi->set_credit_formula (amtBuf);
         tti = tcSX->mainTxn;
         if ( rod->throughEscrowP )
         {
             tti = paymentSX->mainTxn;
         }
-        gnc_ttinfo_append_template_split( tti, ttsi );
+        tti->append_template_split (ttsi);
         ttsi = NULL;
         tti  = NULL;
     }
 
     /* Add to-account split. */
     {
-        ttsi = gnc_ttsplitinfo_malloc();
-        gnc_ttsplitinfo_set_memo( ttsi, rod->txnMemo );
-        gnc_ttsplitinfo_set_account( ttsi, rod->to );
-        gnc_ttsplitinfo_set_debit_formula( ttsi, amtBuf );
-        gnc_ttinfo_append_template_split( toTxn, ttsi );
+        ttsi = std::make_shared<TTSplitInfo>();
+        ttsi->set_memo (rod->txnMemo);
+        ttsi->set_account (rod->to);
+        ttsi->set_debit_formula (amtBuf);
+        toTxn->append_template_split (ttsi);
         ttsi = NULL;
     }
 }
@@ -2828,8 +2779,8 @@ loan_create_sxes( LoanAssistantData *ldd )
     /* The currently-being-referenced toCreateSX. */
     toCreateSX *tcSX;
     int i;
-    TTInfo *ttxn;
-    TTSplitInfo *ttsi;
+    TTInfoPtr ttxn;
+    TTSplitInfoPtr ttsi;
     GString *gstr;
 
     paymentSX = g_new0( toCreateSX, 1 );
@@ -2849,9 +2800,8 @@ loan_create_sxes( LoanAssistantData *ldd )
         (ldd->ld.numPer * ( ldd->ld.perSize == GNC_YEARS ? 12 : 1 ))
         - ldd->ld.numMonRemain + 1;
 
-    paymentSX->mainTxn = gnc_ttinfo_malloc();
-    gnc_ttinfo_set_currency( paymentSX->mainTxn,
-                             gnc_default_currency() );
+    paymentSX->mainTxn = std::make_shared<TTInfo>();
+    paymentSX->mainTxn->set_currency (gnc_default_currency());
 
     {
         GString *payMainTxnDesc = g_string_sized_new( 32 );
@@ -2863,8 +2813,7 @@ loan_create_sxes( LoanAssistantData *ldd )
                            : _("Escrow Payment") )
                        );
 
-        gnc_ttinfo_set_description( paymentSX->mainTxn,
-                                    payMainTxnDesc->str );
+        paymentSX->mainTxn->set_description(payMainTxnDesc->str);
         g_string_free( payMainTxnDesc, TRUE );
     }
 
@@ -2896,94 +2845,92 @@ loan_create_sxes( LoanAssistantData *ldd )
             loan_get_pmt_formula( ldd, gstr );
             /* ttxn.splits += split( realSrcAcct, -pmt ); */
             {
-                ttsi = gnc_ttsplitinfo_malloc();
-                gnc_ttsplitinfo_set_memo( ttsi, ldd->ld.repMemo );
-                gnc_ttsplitinfo_set_account( ttsi, realSrcAcct );
-                gnc_ttsplitinfo_set_credit_formula( ttsi, gstr->str );
-                gnc_ttinfo_append_template_split( ttxn, ttsi );
+                ttsi = std::make_shared<TTSplitInfo>();
+                ttsi->set_memo (ldd->ld.repMemo);
+                ttsi->set_account (realSrcAcct);
+                ttsi->set_credit_formula (gstr->str);
+                ttxn->append_template_split (ttsi);
                 ttsi = NULL;
             }
             /* ttxn.splits += split( escrowAcct, +pmt ); */
             {
-                ttsi = gnc_ttsplitinfo_malloc();
-                gnc_ttsplitinfo_set_memo( ttsi, ldd->ld.repMemo );
-                gnc_ttsplitinfo_set_account( ttsi, ldd->ld.escrowAcct );
-                gnc_ttsplitinfo_set_debit_formula( ttsi, gstr->str );
-                gnc_ttinfo_append_template_split( ttxn, ttsi );
+                ttsi = std::make_shared<TTSplitInfo>();
+                ttsi->set_memo (ldd->ld.repMemo);
+                ttsi->set_account (ldd->ld.escrowAcct);
+                ttsi->set_debit_formula (gstr->str);
+                ttxn->append_template_split (ttsi);
                 ttsi = NULL;
             }
             g_string_free( gstr, TRUE );
             gstr = NULL;
-            paymentSX->escrowTxn = gnc_ttinfo_malloc();
-            gnc_ttinfo_set_currency( paymentSX->escrowTxn,
-                                     gnc_default_currency() );
+            paymentSX->escrowTxn = std::make_shared<TTInfo>();
+            paymentSX->escrowTxn->set_currency (gnc_default_currency());
 
             {
                 GString *escrowTxnDesc;
                 escrowTxnDesc = g_string_new( ldd->ld.repMemo );
                 g_string_append_printf( escrowTxnDesc, " - %s", _("Payment") );
-                gnc_ttinfo_set_description( paymentSX->escrowTxn,
-                                            escrowTxnDesc->str );
+                paymentSX->escrowTxn->set_description (escrowTxnDesc->str);
                 g_string_free( escrowTxnDesc, TRUE );
             }
             ttxn = paymentSX->escrowTxn;
         }
         /* ttxn.splits += split( srcAcct, -pmt ); */
         {
-            ttsi = gnc_ttsplitinfo_malloc();
+            ttsi = std::make_shared<TTSplitInfo>();
             {
                 gstr = g_string_new( ldd->ld.repMemo );
                 g_string_append_printf( gstr, " - %s",
                                         _("Payment") );
-                gnc_ttsplitinfo_set_memo( ttsi, gstr->str );
+                ttsi->set_memo (gstr->str);
                 g_string_free( gstr, TRUE );
                 gstr = NULL;
             }
-            gnc_ttsplitinfo_set_account( ttsi, srcAcct );
+            ttsi->set_account (srcAcct);
             gstr = g_string_sized_new( 32 );
             loan_get_pmt_formula( ldd, gstr );
-            gnc_ttsplitinfo_set_credit_formula( ttsi, gstr->str );
-            gnc_ttinfo_append_template_split( ttxn, ttsi );
+            ttsi->set_credit_formula (gstr->str);
+            ttxn->append_template_split (ttsi);
             g_string_free( gstr, TRUE );
             gstr = NULL;
             ttsi = NULL;
         }
         /* ttxn.splits += split( ldd->ld.repPriAcct, +ppmt ); */
         {
-            ttsi = gnc_ttsplitinfo_malloc();
+            ttsi = std::make_shared<TTSplitInfo>();
             {
                 gstr = g_string_new( ldd->ld.repMemo );
                 g_string_append_printf( gstr, " - %s",
                                         _("Principal") );
-                gnc_ttsplitinfo_set_memo( ttsi, gstr->str );
+                ttsi->set_memo (gstr->str);
                 g_string_free( gstr, TRUE );
                 gstr = NULL;
             }
-            gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repPriAcct );
+            ttsi->set_account (ldd->ld.repPriAcct);
             gstr = g_string_sized_new( 32 );
             loan_get_ppmt_formula( ldd, gstr );
-            gnc_ttsplitinfo_set_debit_formula( ttsi, gstr->str );
-            gnc_ttinfo_append_template_split( ttxn, ttsi );
+            ttsi->set_debit_formula (gstr->str);
+            ttxn->append_template_split (ttsi);
             g_string_free( gstr, TRUE );
             gstr = NULL;
             ttsi = NULL;
         }
         /* ttxn.splits += split( ldd->ld.repIntAcct, +ipmt ); */
         {
-            ttsi = gnc_ttsplitinfo_malloc();
+            ttsi = std::make_shared<TTSplitInfo>();
             {
                 gstr = g_string_new( ldd->ld.repMemo );
                 g_string_append_printf( gstr, " - %s",
                                         _("Interest") );
-                gnc_ttsplitinfo_set_memo( ttsi, gstr->str );
+                ttsi->set_memo (gstr->str);
                 g_string_free( gstr, TRUE );
                 gstr = NULL;
             }
-            gnc_ttsplitinfo_set_account( ttsi, ldd->ld.repIntAcct );
+            ttsi->set_account (ldd->ld.repIntAcct);
             gstr = g_string_sized_new( 32 );
             loan_get_ipmt_formula( ldd, gstr );
-            gnc_ttsplitinfo_set_debit_formula( ttsi, gstr->str );
-            gnc_ttinfo_append_template_split( ttxn, ttsi );
+            ttsi->set_debit_formula (gstr->str);
+            ttxn->append_template_split (ttsi);
             g_string_free( gstr, TRUE );
             gstr = NULL;
             ttsi = NULL;
@@ -3015,16 +2962,12 @@ loan_create_sxes( LoanAssistantData *ldd )
             tcSX->instNum =
                 ld_calc_sx_instance_num(&tcSX->start, rod->schedule);
             rod->schedule = NULL;
-            tcSX->mainTxn = gnc_ttinfo_malloc();
-            gnc_ttinfo_set_currency( tcSX->mainTxn,
-                                     gnc_default_currency() );
-            gnc_ttinfo_set_description( tcSX->mainTxn,
-                                        gstr->str );
-            tcSX->escrowTxn = gnc_ttinfo_malloc();
-            gnc_ttinfo_set_currency( tcSX->escrowTxn,
-                                     gnc_default_currency() );
-            gnc_ttinfo_set_description( tcSX->escrowTxn,
-                                        gstr->str );
+            tcSX->mainTxn = std::make_shared<TTInfo>();
+            tcSX->mainTxn->set_currency(gnc_default_currency());
+            tcSX->mainTxn->set_description (gstr->str);
+            tcSX->escrowTxn = std::make_shared<TTInfo>();
+            tcSX->escrowTxn->set_currency (gnc_default_currency());
+            tcSX->escrowTxn->set_description(gstr->str);
 
             g_string_free( gstr, TRUE );
             gstr = NULL;

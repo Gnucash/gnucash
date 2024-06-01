@@ -29,6 +29,7 @@
 #include "gnc-session.h"
 #include "gnc-sx-instance-model.h"
 #include "gnc-ui-util.h"
+#include "SchedXaction.hpp"
 
 #include "test-stuff.h"
 #include "test-engine-stuff.h"
@@ -222,13 +223,13 @@ test_state_changes()
 }
 
 static void
-make_one_transaction_begin(TTInfo **tti, Account **account1, Account **account2)
+make_one_transaction_begin (TTInfoPtr& tti, Account **account1, Account **account2)
 {
     QofBook *book = qof_session_get_book(gnc_get_current_session());
 
     *account1 = get_random_account(book);
     *account2 = get_random_account(book);
-    *tti = gnc_ttinfo_malloc();
+    tti = std::make_shared<TTInfo>();
 
     // Both accounts need to have the same currency
     xaccAccountBeginEdit(*account2);
@@ -238,41 +239,37 @@ make_one_transaction_begin(TTInfo **tti, Account **account1, Account **account2)
 }
 
 static void
-make_one_transaction_end(TTInfo **tti, SchedXaction *sx)
+make_one_transaction_end(TTInfoPtr& tti, SchedXaction *sx)
 {
     QofBook *book = qof_session_get_book(gnc_get_current_session());
-    GList *txns = g_list_append(NULL, *tti);
-    xaccSchedXactionSetTemplateTrans(sx, txns, book);
-    gnc_ttinfo_free(*tti);
-    *tti = NULL;
-    g_list_free (txns);
+    xaccSchedXactionSetTemplateTrans (sx, { tti }, book);
 }
 
 static void
 make_one_transaction_with_two_splits(SchedXaction *sx, const char *value1,
                                      const char *value2, int set_txcurr)
 {
-    TTInfo *tti;
+    TTInfoPtr tti;
     Account *account1;
     Account *account2;
 
-    make_one_transaction_begin(&tti, &account1, &account2);
+    make_one_transaction_begin (tti, &account1, &account2);
 
     if (set_txcurr)
-        gnc_ttinfo_set_currency(tti, xaccAccountGetCommodity(account1));
+        tti->set_currency (xaccAccountGetCommodity(account1));
 
-    TTSplitInfo *split1 = gnc_ttsplitinfo_malloc();
-    TTSplitInfo *split2 = gnc_ttsplitinfo_malloc();
+    TTSplitInfoPtr split1 = std::make_shared<TTSplitInfo>();
+    TTSplitInfoPtr split2 = std::make_shared<TTSplitInfo>();
 
-    gnc_ttsplitinfo_set_account(split1, account1);
-    gnc_ttsplitinfo_set_debit_formula(split1, value1);
-    gnc_ttinfo_append_template_split(tti, split1);
+    split1->set_account (account1);
+    split1->set_debit_formula (value1);
+    tti->append_template_split (split1);
 
-    gnc_ttsplitinfo_set_account(split2, account2);
-    gnc_ttsplitinfo_set_credit_formula(split2, value2);
-    gnc_ttinfo_append_template_split(tti, split2);
+    split2->set_account (account2);
+    split2->set_credit_formula (value2);
+    tti->append_template_split (split2);
 
-    make_one_transaction_end(&tti, sx);
+    make_one_transaction_end (tti, sx);
 }
 
 static void

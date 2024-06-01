@@ -36,6 +36,7 @@ set (engine_HEADERS
   FreqSpec.h
   Recurrence.h
   SchedXaction.h
+  SchedXaction.hpp
   SX-book.h
   SX-ttinfo.hpp
   Query.h
@@ -141,7 +142,6 @@ set (engine_SOURCES
   Query.cpp
   SchedXaction.cpp
   SX-book.cpp
-  SX-ttinfo.cpp
   Scrub.cpp
   Scrub2.cpp
   Scrub3.cpp

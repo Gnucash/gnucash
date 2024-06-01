@@ -30,61 +30,91 @@
 #include "SchedXaction.h"
 #include "Account.h"
 #include "gnc-commodity.h"
+#include "gnc-numeric.hpp"
 
-typedef struct TTInfo_s TTInfo;
-typedef struct TTSplitInfo_s TTSplitInfo;
+#include <vector>
+#include <optional>
+#include <string>
+#include <algorithm>
+#include <memory>
 
-TTInfo *gnc_ttinfo_malloc(void);
+struct OptionalString
+{
+    const char* operator* () const { return m_str ? m_str->c_str() : nullptr; };
+    void operator= (const char* str) { if (str) m_str = str; else reset(); };
+    void reset () { m_str = std::nullopt; };
+protected:
+    std::optional<std::string> m_str;
+};
 
-void gnc_ttinfo_free(TTInfo *info);
+struct OptionalStringFromNumeric : public OptionalString
+{
+    using OptionalString::operator=;
+    void operator= (std::optional<gnc_numeric> num)
+    { if (num) m_str = GncNumeric (*num).to_string(); else reset(); }
+};
 
-/* these two deep-copy their arguments */
-void gnc_ttinfo_set_description(TTInfo *tti, const char *description);
-void gnc_ttinfo_set_num(TTInfo *tti, const char *num);
-void gnc_ttinfo_set_notes (TTInfo *tti, const char *notes);
+struct TTSplitInfo
+{
+    OptionalString m_action;
+    OptionalString m_memo;
+    OptionalStringFromNumeric m_credit_formula, m_debit_formula;
+    Account *m_acc = nullptr;
 
-/* this one points to a persistent pointer so ownership isn't relevant */
-void gnc_ttinfo_set_currency(TTInfo *tti, gnc_commodity *common_currency);
+    const char* get_action () const { return *m_action; };
+    const char* get_memo () const { return *m_memo; };
+    const Account* get_account () const { return m_acc; };
+    const char* get_credit_formula () const { return *m_credit_formula; };
+    const char* get_debit_formula () const { return *m_debit_formula; };
 
+    void set_action (const char *action) { m_action = action; };
+    void set_memo (const char *memo) { m_memo = memo; };
+    void set_account (Account *acc) { m_acc = acc; };
+    void set_credit_formula (const char *credit_formula) { set_formulas (nullptr, credit_formula); };
+    void set_debit_formula (const char *debit_formula) { set_formulas (debit_formula, nullptr); };
+    void set_credit_formula_numeric (gnc_numeric num) { set_formulas_numeric ({}, num); };
+    void set_debit_formula_numeric (gnc_numeric num) { set_formulas_numeric (num, {}); };
 
-/* no deep copy occurs - if you want a deep copy make one yourself ! */
-void gnc_ttinfo_set_template_splits(TTInfo *tti, GList *splits);
+private:
+    void set_formulas (const char* debit, const char *credit)
+    {
+        m_debit_formula = debit;
+        m_credit_formula = credit;
+    }
+    void set_formulas_numeric (std::optional<gnc_numeric> debit, std::optional<gnc_numeric> credit)
+    {
+        m_debit_formula = debit;
+        m_credit_formula = credit;
+    }
+};
 
-const char    * gnc_ttinfo_get_description(TTInfo *tti);
-const char    * gnc_ttinfo_get_num(TTInfo *tti);
-const char *gnc_ttinfo_get_notes (TTInfo *tti);
-gnc_commodity * gnc_ttinfo_get_currency(TTInfo *tti);
-GList         * gnc_ttinfo_get_template_splits(TTInfo *tti);
+using TTSplitInfoPtr = std::shared_ptr<TTSplitInfo>;
+using TTSplitInfoVec = std::vector<TTSplitInfoPtr>;
 
-/* split_i IS NOT deep copied and becomes owned by TTI */
-void gnc_ttinfo_append_template_split(TTInfo *tti, TTSplitInfo *split_i);
+struct TTInfo
+{
+    OptionalString m_description;
+    OptionalString m_num;
+    OptionalString m_notes;
+    gnc_commodity *m_common_currency = nullptr;
+    TTSplitInfoVec m_splits;
 
-TTSplitInfo * gnc_ttsplitinfo_malloc(void);
-void gnc_ttsplitinfo_free(TTSplitInfo *split_i);
+    const char* get_description () const { return *m_description; };
+    const char* get_num () const { return *m_num; };
+    const char* get_notes () const { return *m_notes; };
+    gnc_commodity* get_currency () const { return m_common_currency; };
+    const TTSplitInfoVec& get_template_splits () const { return m_splits; };
 
-void gnc_ttsplitinfo_set_action(TTSplitInfo *split_i, const char *action);
-const char * gnc_ttsplitinfo_get_action(TTSplitInfo *split_i);
+    void set_description (const char *description) { m_description = description; };
+    void set_num (const char *num) { m_num = num; };
+    void set_notes (const char *notes) { m_notes = notes; };
+    void set_currency (gnc_commodity *currency) { m_common_currency = currency; };
+    void clear_template_splits () { m_splits.clear(); };
+    void append_template_split (TTSplitInfoPtr& ttsi) { m_splits.push_back (ttsi); };
+;
+};
 
-void gnc_ttsplitinfo_set_memo(TTSplitInfo *split_i, const char *memo);
-const char *gnc_ttsplitinfo_get_memo(TTSplitInfo *split_i);
-
-void gnc_ttsplitinfo_set_credit_formula(TTSplitInfo *split_i,
-                                        const char *credit_formula);
-
-void gnc_ttsplitinfo_set_credit_formula_numeric(TTSplitInfo *split_i,
-        gnc_numeric credit_formula);
-
-const char *gnc_ttsplitinfo_get_credit_formula(TTSplitInfo *split_i);
-
-void gnc_ttsplitinfo_set_debit_formula(TTSplitInfo *split_i,
-                                       const char *debit_formula);
-
-void gnc_ttsplitinfo_set_debit_formula_numeric(TTSplitInfo *split_i,
-        gnc_numeric debit_formula);
-
-const char *gnc_ttsplitinfo_get_debit_formula(TTSplitInfo *split_i);
-
-void gnc_ttsplitinfo_set_account(TTSplitInfo *split_i, Account *acc);
-Account *gnc_ttsplitinfo_get_account(TTSplitInfo *split_i);
+using TTInfoPtr = std::shared_ptr<TTInfo>;
+using TTInfoVec = std::vector<TTInfoPtr>;
 
 #endif

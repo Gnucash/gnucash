@@ -42,6 +42,7 @@
 #include "qof.h"
 #include "Recurrence.h"
 #include "SchedXaction.h"
+#include "SchedXaction.hpp"
 #include "SX-book.h"
 #include "SX-ttinfo.hpp"
 #include <glib/gi18n.h>
@@ -207,28 +208,29 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
 {
 
     Transaction *tr = sxfti->trans;
-    GList *tt_list = NULL;
-    GList *splits, *template_splits = NULL;
-    TTInfo *tti = gnc_ttinfo_malloc();
-    TTSplitInfo *ttsi;
+    GList *splits = NULL;
+    TTInfoPtr tti = std::make_shared<TTInfo>();
+    TTSplitInfoPtr ttsi;
     gnc_numeric runningBalance;
     gnc_numeric split_value;
     const char *tmpStr;
 
     runningBalance = gnc_numeric_zero();
 
-    gnc_ttinfo_set_description(tti, xaccTransGetDescription(tr));
-    gnc_ttinfo_set_num(tti, gnc_get_num_action(tr, NULL));
-    gnc_ttinfo_set_notes (tti, xaccTransGetNotes (tr));
-    gnc_ttinfo_set_currency(tti, xaccTransGetCurrency(tr));
+    tti->set_description(xaccTransGetDescription(tr));
+    tti->set_num(gnc_get_num_action(tr, NULL));
+    tti->set_notes (xaccTransGetNotes (tr));
+    tti->set_currency(xaccTransGetCurrency(tr));
+
+    tti->clear_template_splits ();
 
     for (splits = xaccTransGetSplitList(tr); splits; splits = splits->next)
     {
         auto sp = GNC_SPLIT(splits->data);
-        ttsi = gnc_ttsplitinfo_malloc();
-        gnc_ttsplitinfo_set_action(ttsi, gnc_get_num_action(NULL, sp));
+        ttsi = std::make_shared<TTSplitInfo>();
+        ttsi->set_action (gnc_get_num_action(NULL, sp));
         split_value = xaccSplitGetValue(sp);
-        gnc_ttsplitinfo_set_memo(ttsi, xaccSplitGetMemo(sp));
+        ttsi->set_memo (xaccSplitGetMemo(sp));
 
         runningBalance = gnc_numeric_add( runningBalance, split_value,
                                           100, (GNC_DENOM_AUTO | GNC_HOW_DENOM_LCD) );
@@ -237,20 +239,20 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
         {
             tmpStr = xaccPrintAmount( split_value,
                                       gnc_default_print_info(FALSE) );
-            gnc_ttsplitinfo_set_debit_formula( ttsi, tmpStr );
+            ttsi->set_debit_formula (tmpStr);
         }
         else
         {
             /* Negate the numeric so it prints w/o the sign at the front. */
             tmpStr = xaccPrintAmount( gnc_numeric_neg( split_value ),
                                       gnc_default_print_info(FALSE) );
-            gnc_ttsplitinfo_set_credit_formula( ttsi, tmpStr );
+            ttsi->set_credit_formula (tmpStr);
         }
 
         /* Copy over per-split account info */
-        gnc_ttsplitinfo_set_account( ttsi, xaccSplitGetAccount( sp ) );
+        ttsi->set_account (xaccSplitGetAccount (sp));
 
-        template_splits = g_list_append(template_splits, ttsi);
+        tti->append_template_split (ttsi);
     }
 
     if ( ! gnc_numeric_zero_p( runningBalance )
@@ -265,13 +267,8 @@ sxftd_add_template_trans(SXFromTransInfo *sxfti)
         return SXFTD_ERRNO_UNBALANCED_XACTION;
     }
 
-    gnc_ttinfo_set_template_splits(tti, template_splits);
-
-    tt_list = g_list_append(tt_list, tti);
-
     gnc_suspend_gui_refresh ();
-    xaccSchedXactionSetTemplateTrans(sxfti->sx, tt_list,
-                                     gnc_get_current_book ());
+    xaccSchedXactionSetTemplateTrans (sxfti->sx, { tti }, gnc_get_current_book ());
     gnc_resume_gui_refresh ();
 
     return 0;

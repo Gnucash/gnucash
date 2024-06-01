@@ -36,6 +36,7 @@
 #include "SX-book-p.h"
 #include "SX-ttinfo.hpp"
 #include "SchedXaction.h"
+#include "SchedXaction.hpp"
 #include "Transaction.h"
 #include "gnc-engine.h"
 #include "engine-helpers.h"
@@ -963,7 +964,7 @@ xaccSchedXactionGetSplits( const SchedXaction *sx )
 }
 
 static Split *
-pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
+pack_split_info (TTSplitInfoPtr s_info, Account *parent_acct,
                  Transaction *parent_trans, QofBook *book)
 {
     Split *split;
@@ -973,20 +974,18 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
 
     split = xaccMallocSplit(book);
 
-    xaccSplitSetMemo(split,
-                     gnc_ttsplitinfo_get_memo(s_info));
+    xaccSplitSetMemo(split, s_info->get_memo());
 
     /* Set split-action with gnc_set_num_action which is the same as
      * xaccSplitSetAction with these arguments */
-    gnc_set_num_action(NULL, split, NULL,
-                       gnc_ttsplitinfo_get_action(s_info));
+    gnc_set_num_action(NULL, split, NULL, s_info->get_action());
 
     xaccAccountInsertSplit(parent_acct,
                            split);
 
-    credit_formula = gnc_ttsplitinfo_get_credit_formula(s_info);
-    debit_formula = gnc_ttsplitinfo_get_debit_formula(s_info);
-    acc_guid = qof_entity_get_guid(QOF_INSTANCE(gnc_ttsplitinfo_get_account(s_info)));
+    credit_formula = s_info->get_credit_formula ();
+    debit_formula = s_info->get_debit_formula ();
+    acc_guid = qof_entity_get_guid(QOF_INSTANCE(s_info->get_account ()));
     qof_instance_set (QOF_INSTANCE (split),
 		      "sx-credit-formula", credit_formula,
 		      "sx-debit-formula", debit_formula,
@@ -998,46 +997,31 @@ pack_split_info (TTSplitInfo *s_info, Account *parent_acct,
 
 
 void
-xaccSchedXactionSetTemplateTrans(SchedXaction *sx, GList *t_t_list,
-                                 QofBook *book)
+xaccSchedXactionSetTemplateTrans (SchedXaction *sx, const TTInfoVec& tt_vec, QofBook *book)
 {
     Transaction *new_trans;
-    Split *new_split;
-    GList *split_list;
 
     g_return_if_fail (book);
 
     /* delete any old transactions, if there are any */
     delete_template_trans( sx );
 
-    for (; t_t_list != NULL; t_t_list = t_t_list->next)
+    for (auto tti : tt_vec)
     {
-        auto tti = static_cast<TTInfo*>(t_t_list->data);
-
         new_trans = xaccMallocTransaction(book);
 
         xaccTransBeginEdit(new_trans);
-
-        xaccTransSetDescription(new_trans,
-                                gnc_ttinfo_get_description(tti));
-
+        xaccTransSetDescription(new_trans, tti->get_description());
         xaccTransSetDatePostedSecsNormalized(new_trans, gnc_time (NULL));
-
         /* Set tran-num with gnc_set_num_action which is the same as
          * xaccTransSetNum with these arguments */
-        gnc_set_num_action(new_trans, NULL,
-                        gnc_ttinfo_get_num(tti), NULL);
-        xaccTransSetNotes (new_trans, gnc_ttinfo_get_notes (tti));
-        xaccTransSetCurrency( new_trans,
-                              gnc_ttinfo_get_currency(tti) );
+        gnc_set_num_action (new_trans, NULL, tti->get_num(), NULL);
+        xaccTransSetNotes (new_trans, tti->get_notes ());
+        xaccTransSetCurrency (new_trans, tti->get_currency ());
 
-        for (split_list = gnc_ttinfo_get_template_splits(tti);
-                split_list;
-                split_list = split_list->next)
+        for (auto s_info : tti->get_template_splits())
         {
-            auto s_info = static_cast<TTSplitInfo*>(split_list->data);
-            new_split = pack_split_info(s_info, sx->template_acct,
-                                        new_trans, book);
+            auto new_split = pack_split_info(s_info, sx->template_acct, new_trans, book);
             xaccTransAppendSplit(new_trans, new_split);
         }
         xaccTransCommitEdit(new_trans);
