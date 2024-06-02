@@ -175,9 +175,9 @@ KvpValueImpl::set(T val) noexcept
 /** @internal @{ */
 /** Convert a kvp_value into a GValue. Frames aren't converted.
  * @param kval: A KvpValue.
- * @return GValue*. Must be freed with g_free().
+ * @param val: The GValue in which to store the converted value.
  */
-GValue* gvalue_from_kvp_value (const KvpValue *kval, GValue* val = nullptr);
+void gvalue_from_kvp_value (const KvpValue *kval, GValue* val);
 
 /** Convert a gvalue into a kvpvalue.
  * @param gval: A GValue of a type KvpValue can digest.

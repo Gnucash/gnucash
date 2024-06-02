@@ -1317,11 +1317,11 @@ static void
 wrap_gvalue_function (const char* key, KvpValue *val, wrap_param & param)
 {
     GValue *gv;
+    gv = g_slice_new0 (GValue);
     if (val->get_type() != KvpValue::Type::FRAME)
-        gv = gvalue_from_kvp_value(val);
+        gvalue_from_kvp_value(val, gv);
     else
     {
-        gv = g_slice_new0 (GValue);
         g_value_init (gv, G_TYPE_STRING);
         g_value_set_string (gv, nullptr);
     }

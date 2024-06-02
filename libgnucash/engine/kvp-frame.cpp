@@ -232,14 +232,11 @@ int compare(const KvpFrameImpl & one, const KvpFrameImpl & two) noexcept
     return 0;
 }
 
-GValue*
+void
 gvalue_from_kvp_value (const KvpValue *kval, GValue* val)
 {
-    if (kval == NULL) return NULL;
-    if (!val)
-        val = g_slice_new0 (GValue);
-    else
-        g_value_unset(val);
+    if (kval == NULL) return;
+    g_value_unset(val);
 
     switch (kval->get_type())
     {
@@ -274,11 +271,8 @@ gvalue_from_kvp_value (const KvpValue *kval, GValue* val)
         default:
 /* No transfer outside of QofInstance-derived classes! */
             PWARN ("Error! Invalid attempt to transfer Kvp type %d", kval->get_type());
-            g_slice_free (GValue, val);
-            val = NULL;
             break;
     }
-    return val;
 }
 
 KvpValue*
