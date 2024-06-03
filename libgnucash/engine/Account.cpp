@@ -1845,26 +1845,13 @@ xaccAccountEqual(const Account *aa, const Account *ab, gboolean check_guids)
 
     /* no parent; always compare downwards. */
 
+    if (!std::equal (priv_aa->splits.begin(), priv_aa->splits.end(),
+                     priv_ab->splits.begin(), priv_ab->splits.end(),
+                     [check_guids](auto sa, auto sb)
+                     { return xaccSplitEqual(sa, sb, check_guids, true, false); }))
     {
-        if (priv_aa->splits.size() != priv_ab->splits.size())
-        {
-            PWARN ("number of splits differs");
-            return false;
-        }
-
-        for (auto it_a = priv_aa->splits.begin(), it_b = priv_ab->splits.begin();
-             it_a != priv_aa->splits.end() && it_b != priv_ab->splits.end();
-             ++it_a, ++it_b)
-        {
-            Split *sa = *it_a;
-            Split *sb = *it_b;
-
-            if (!xaccSplitEqual(sa, sb, check_guids, TRUE, FALSE))
-            {
-                PWARN ("splits differ");
-                return false;
-            }
-        }
+        PWARN ("splits differ");
+        return false;
     }
 
     if (!xaccAcctChildrenEqual(priv_aa->children, priv_ab->children, check_guids))
