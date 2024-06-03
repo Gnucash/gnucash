@@ -41,7 +41,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-27 20:07+0000\n"
+"PO-Revision-Date: 2024-06-01 16:09+0000\n"
 "Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "de/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5.1\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -21259,7 +21259,7 @@ msgstr "Inkl. USt.?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:112
 msgid "Invoiced?"
-msgstr "Abgerechnet?"
+msgstr "Erfasst?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:117
 #: gnucash/report/reports/standard/invoice.scm:450
