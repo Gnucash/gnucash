@@ -808,11 +808,11 @@ test_xaccFreeAccountChildren (Fixture *fixture, gconstpointer pData)
 {
     Account *root = gnc_account_get_root (fixture->acct);
     AccountPrivate *priv = fixture->func->get_private (root);
-    g_assert_cmpuint (g_list_length (priv->children), > , 0);
+    g_assert_cmpuint (priv->children.size(), > , 0);
     fixture->func->xaccFreeAccountChildren (root);
     /* We'd like to check for the child actually having been freed, but
      * there's not good way to do that. */
-    g_assert_cmpuint (g_list_length (priv->children), == , 0);
+    g_assert_cmpuint (priv->children.size(), == , 0);
     qof_book_destroy (gnc_account_get_book (root));
     /* No need to unref the root account, qof_book_destroy did that. */
     g_free (fixture->func);
@@ -880,7 +880,7 @@ test_xaccFreeAccount (Fixture *fixture, gconstpointer pData)
     }
     xaccAccountSetCommodity (parent, commodity);
     /* Check that we've got children, lots, and splits to remove */
-    g_assert_true (p_priv->children != NULL);
+    g_assert_true (!p_priv->children.empty());
     g_assert_true (p_priv->lots != NULL);
     g_assert_true (p_priv->splits.size());
     g_assert_true (p_priv->parent != NULL);
@@ -981,7 +981,7 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     }
     xaccAccountSetCommodity (parent, commodity);
     /* Check that we've got children, lots, and splits to remove */
-    g_assert_true (p_priv->children != NULL);
+    g_assert_true (!p_priv->children.empty());
     g_assert_true (p_priv->lots != NULL);
     g_assert_true (p_priv->splits.size());
     g_assert_true (p_priv->parent != NULL);
@@ -996,7 +996,7 @@ test_xaccAccountCommitEdit (Fixture *fixture, gconstpointer pData)
     /* Make sure that the account didn't get destroyed */
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 0);
-    g_assert_true (p_priv->children != NULL);
+    g_assert_true (!p_priv->children.empty());
     g_assert_true (p_priv->lots != NULL);
     g_assert_true (p_priv->splits.size());
     g_assert_true (p_priv->parent != NULL);
@@ -1737,6 +1737,12 @@ test_qofAccountSetParent (Fixture *fixture, gconstpointer pData)
     g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (root)));
     g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (old_parent)));
 }
+
+static bool has_child (const std::vector<Account*>& children, Account* child)
+{
+    return std::any_of (children.begin(), children.end(), [child](auto a){ return a == child; });
+}
+
 /* gnc_account_append_child
 void
 gnc_account_append_child (Account *new_parent, Account *child)// C: 29 in 18 SCM: 7 in 4*/
@@ -1776,7 +1782,7 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
     g_assert_cmpint (check_err->hits, ==, 0);
     g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (froot)));
     g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (account)));
-    g_assert_true (g_list_find (frpriv->children, account));
+    g_assert_true (has_child (frpriv->children, account));
     g_assert_true (qof_collection_lookup_entity (
                   qof_book_get_collection (fbook, GNC_ID_ACCOUNT),
                   acct_guid));
@@ -1802,8 +1808,8 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
                   qof_book_get_collection (book, GNC_ID_ACCOUNT),
                   acct_guid));
     g_assert_true (qof_instance_get_dirty (QOF_INSTANCE (fixture->acct)));
-    g_assert_true (g_list_find (frpriv->children, account) == NULL);
-    g_assert_true (g_list_find (apriv->children, account));
+    g_assert_true (has_child (frpriv->children, account) == false);
+    g_assert_true (has_child (apriv->children, account));
 
     test_signal_free (sig1);
     test_signal_free (sig2);
@@ -1823,7 +1829,7 @@ test_gnc_account_append_remove_child (Fixture *fixture, gconstpointer pData)
 
     gnc_account_remove_child (fixture->acct, account);
     g_assert_true (gnc_account_get_parent (account) == NULL);
-    g_assert_true (g_list_find (apriv->children, account) == NULL);
+    g_assert_true (has_child (apriv->children, account) == false);
     test_signal_assert_hits (sig1, 1);
     test_signal_assert_hits (sig2, 1);
     g_assert_cmpint (check_warn->hits, ==, 1);

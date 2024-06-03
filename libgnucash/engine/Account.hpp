@@ -38,6 +38,7 @@
 #include <Account.h>
 
 using SplitsVec = std::vector<Split*>;
+using AccountVec = std::vector<Account*>;
 
 const SplitsVec xaccAccountGetSplits (const Account*);
 
