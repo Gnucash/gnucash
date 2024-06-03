@@ -7710,7 +7710,9 @@ msgstr "தனிப்பட்ட மற்றும் சிறு வணி
 #. contributors.
 #: gnucash/gnome-utils/gnc-main-window.cpp:5268
 msgid "translator-credits"
-msgstr "தமிழ்நேரம் <anishprabu.t@gmail.com>, தமிழ்நாடு, 2024"
+msgstr ""
+"தமிழ்நேரம் <anishprabu.t@gmail.com>, தமிழ்நாடு, 2024\n"
+"Shanmugam R., C-DAC, GIST, Pune, India, 2014"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5271
 msgid "Visit the GnuCash website."
