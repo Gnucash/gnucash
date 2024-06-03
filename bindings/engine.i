@@ -54,6 +54,8 @@
 #include "gncTaxTable.h"
 #include "gncVendor.h"
 
+#include <numeric>
+#include <unordered_set>
 %}
 #if defined(SWIGGUILE) //Always C++
 %{
@@ -63,6 +65,8 @@ using AccountVec = std::vector<Account*>;
 
 SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date,
                                           time64 end_date, gnc_commodity *comm, bool sort);
+
+AccountVec gnc_accounts_and_all_descendants (AccountVec accounts);
 
 extern "C"
 {
@@ -153,6 +157,22 @@ SplitsVec gnc_get_match_commodity_splits (AccountVec accounts, bool use_end_date
     if (sort)
         std::sort (rv.begin(), rv.end(), [](auto a, auto b){ return xaccSplitOrder (a, b) < 0; });
     return rv;
+}
+
+using AccountSet = std::unordered_set<Account*>;
+static void maybe_add_descendants (Account* acc, AccountSet* accset)
+{
+    if (accset->insert (acc).second)
+        gnc_account_foreach_child (acc, (AccountCb)maybe_add_descendants, accset);
+};
+
+AccountVec
+gnc_accounts_and_all_descendants (AccountVec accounts)
+{
+    AccountSet accset;
+    for (auto a : accounts)
+        maybe_add_descendants (a, &accset);
+    return AccountVec (accset.begin(), accset.end());
 }
 
 %}

@@ -6383,24 +6383,6 @@ gboolean xaccAccountRegister (void)
     return qof_object_register (&account_object_def);
 }
 
-using AccountSet = std::unordered_set<Account*>;
-static void maybe_add_descendants (Account* acc, gpointer arg)
-{
-    g_return_if_fail (acc);
-
-    if (static_cast <AccountSet*> (arg)->insert (acc).second)
-        std::for_each (GET_PRIVATE(acc)->children.begin(), GET_PRIVATE(acc)->children.end(),
-                       [&](auto acc){ maybe_add_descendants (acc, arg); });
-};
-
-GList *
-gnc_accounts_and_all_descendants (GList *accounts)
-{
-    AccountSet accset;
-    g_list_foreach (accounts, (GFunc) maybe_add_descendants, &accset);
-    return std::accumulate (accset.begin(), accset.end(), (GList*) nullptr, g_list_prepend);
-}
-
 /* ======================= UNIT TESTING ACCESS =======================
  * The following functions are for unit testing use only.
  */
