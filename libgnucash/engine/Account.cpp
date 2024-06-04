@@ -2881,16 +2881,10 @@ gnc_account_get_parent (const Account *acc)
 Account *
 gnc_account_get_root (Account *acc)
 {
-    AccountPrivate *priv;
-
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), nullptr);
 
-    priv = GET_PRIVATE(acc);
-    while (priv->parent)
-    {
-        acc = priv->parent;
-        priv = GET_PRIVATE(acc);
-    }
+    while (auto parent = gnc_account_get_parent (acc))
+        acc = parent;
 
     return acc;
 }
@@ -3403,34 +3397,12 @@ xaccAccountGetCommodity (const Account *acc)
 
 gnc_commodity * gnc_account_get_currency_or_parent(const Account* account)
 {
-    gnc_commodity * commodity;
-    g_return_val_if_fail (account, nullptr);
+    g_return_val_if_fail (GNC_IS_ACCOUNT (account), nullptr);
 
-    commodity = xaccAccountGetCommodity (account);
-    if (gnc_commodity_is_currency(commodity))
-        return commodity;
-    else
-    {
-        const Account *parent_account = account;
-        /* Account commodity is not a currency, walk up the tree until
-         * we find a parent account that is a currency account and use
-         * it's currency.
-         */
-        do
-        {
-            parent_account = gnc_account_get_parent (parent_account);
-            if (parent_account)
-            {
-                commodity = xaccAccountGetCommodity (parent_account);
-                if (gnc_commodity_is_currency(commodity))
-                {
-                    return commodity;
-                    //break;
-                }
-            }
-        }
-        while (parent_account);
-    }
+    for (auto acc = account; acc; acc = gnc_account_get_parent (acc))
+        if (auto comm = xaccAccountGetCommodity (acc); gnc_commodity_is_currency (comm))
+            return comm;
+
     return nullptr; // no suitable commodity found.
 }
 
@@ -4016,19 +3988,14 @@ gpointer
 xaccAccountForEachLot(const Account *acc,
                       gpointer (*proc)(GNCLot *lot, void *data), void *data)
 {
-    AccountPrivate *priv;
-    LotList *node;
-    gpointer result = nullptr;
-
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), nullptr);
     g_return_val_if_fail(proc, nullptr);
 
-    priv = GET_PRIVATE(acc);
-    for (node = priv->lots; node; node = node->next)
-        if ((result = proc((GNCLot *)node->data, data)))
-            break;
+    for (auto node = GET_PRIVATE(acc)->lots; node; node = node->next)
+        if (auto result = proc(GNC_LOT(node->data), data))
+            return result;
 
-    return result;
+    return nullptr;
 }
 
 static void
@@ -4223,22 +4190,11 @@ xaccAccountSetIsOpeningBalance (Account *acc, gboolean val)
 GNCPlaceholderType
 xaccAccountGetDescendantPlaceholder (const Account *acc)
 {
-    GList *descendants, *node;
-    GNCPlaceholderType ret = PLACEHOLDER_NONE;
-
     g_return_val_if_fail(GNC_IS_ACCOUNT(acc), PLACEHOLDER_NONE);
     if (xaccAccountGetPlaceholder(acc)) return PLACEHOLDER_THIS;
 
-    descendants = gnc_account_get_descendants(acc);
-    for (node = descendants; node; node = node->next)
-        if (xaccAccountGetPlaceholder((Account *) node->data))
-        {
-            ret = PLACEHOLDER_CHILD;
-            break;
-        }
-
-    g_list_free(descendants);
-    return ret;
+    return gnc_account_foreach_descendant_until (acc, (AccountCb2)xaccAccountGetPlaceholder, nullptr)
+        ? PLACEHOLDER_CHILD : PLACEHOLDER_NONE;
 }
 
 /********************************************************************\
@@ -5434,22 +5390,13 @@ xaccTransactionTraverse (Transaction *trans, int stage)
     return FALSE;
 }
 
-static void do_one_account (Account *account, gpointer data)
-{
-    AccountPrivate *priv = GET_PRIVATE(account);
-    std::for_each (priv->splits.begin(), priv->splits.end(),
-                   [](auto s){ s->parent->marker = 0; });
-}
-
 /* Replacement for xaccGroupBeginStagedTransactionTraversals */
 void
 gnc_account_tree_begin_staged_transaction_traversals (Account *account)
 {
-    GList *descendants;
-
-    descendants = gnc_account_get_descendants(account);
-    g_list_foreach(descendants, (GFunc)do_one_account, nullptr);
-    g_list_free(descendants);
+    auto do_one_account = [](auto acc)
+    { gnc_account_foreach_split (acc, [](auto s){ s->parent->marker = 0; }, false); };
+    gnc_account_foreach_descendant (account, do_one_account);
 }
 
 int
