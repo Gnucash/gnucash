@@ -175,7 +175,7 @@ install(TARGETS gnc-gnome
 # No headers to install
 
 set (GNC_APPDATA_IN ${CMAKE_CURRENT_BINARY_DIR}/gnucash.appdata.xml.in)
-if (NOT BUILDING_FROM_VCS)
+if (NOT GENERATE_VCS_INFO)
     # We're building from a dist tarball.
     # As a convenience to packagers we have included a pretranslated
     # intermediate appdata file in the dist tarball.
@@ -255,7 +255,7 @@ set_local_dist(gnome_DIST_local
         CMakeLists.txt gnome.i gnucash.appdata.xml.in.in gnucash.desktop.in.in
         gnucash.releases.xml ${gnc_gnome_noinst_HEADERS} ${gnc_gnome_SOURCES} ${gnome_SCHEME})
 
-dist_add_generated(${BUILDING_FROM_VCS} gnucash.appdata.xml.in)
+dist_add_generated(${GENERATE_VCS_INFO} gnucash.appdata.xml.in)
 add_dependencies(gnucash-appdata dist-gnucash-gnome-gnucash-appdata-xml-in)
 
 set(gnome_DIST ${gnome_DIST_local} ${test_gnome_DIST} PARENT_SCOPE)

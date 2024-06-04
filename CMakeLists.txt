@@ -154,14 +154,23 @@ if (GNC_VCS_INFO_RESULT EQUAL 0)
   if (NOT GIT_FOUND)
     message(SEND_ERROR "Looks like we're building from version control, but can't find git executable. Please install git or set GIT_EXECUTABLE.")
   endif()
+endif()
+
+# Determine whether or not we have to generate a gnc-vcs-info.h file
+# Distribution tarballs have this file in the source tree
+# Git checkouts or zipfiles downloaded straight from github won't have it
+# and require us to build it.
+if (BUILDING_FROM_VCS OR NOT EXISTS "${CMAKE_SOURCE_DIR}/libgnucash/core-utilsgnc-vcs-info.h")
   set(VCS_INFO_BASE_DIR ${CMAKE_BINARY_DIR})
+  set(GENERATE_VCS_INFO "Yes")
 else()
   set(VCS_INFO_BASE_DIR ${CMAKE_SOURCE_DIR})
+  set(GENERATE_VCS_INFO "No")
 endif()
-# The location of gnc-vcs-info.h depends on whether we build from VCS or not
-# And this file is needed in several other build rules, so we define its
-# location once here.
-set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h)
+# As the file's path is needed by several other build rules, we already define
+# that here. The actual build rules (if needed) are in libgnucash/core-utils.
+set(VCS_INFO_FILE ${VCS_INFO_BASE_DIR}/libgnucash/core-utils/gnc-vcs-info.h CACHE STRING "path to gnc-vcs-info.h file")
+
 
 if (WIN32)
   # Help Windows find the various dependencies. We assume here that the standard advice for building
