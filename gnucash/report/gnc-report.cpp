@@ -241,6 +241,7 @@ gnc_run_report_with_error_handling (gint report_id, gchar ** data, gchar **errms
             *errmsg = g_strdup_printf (without_err, gnc_report_name (report));
 
         *data = nullptr;
+        g_free (scm_err);
         return FALSE;
     }
 }
