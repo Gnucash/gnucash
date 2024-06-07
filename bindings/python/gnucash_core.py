@@ -797,6 +797,14 @@ class GncCommodityTable(GnuCashCoreClass):
     which includes most of the world's currencies.
     """
 
+    def get_quotable_commodities (self):
+        print ("hello from get_quotable_commodities")
+        return
+
+    def get_commodities(self):
+        print ("hello from get_commodities")
+        return
+
     def _get_namespaces_py(self):
         return [ns.get_name() for ns in self.get_namespaces_list()]
 
