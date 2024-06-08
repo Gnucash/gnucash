@@ -150,7 +150,6 @@ gnucash/gnome/gnucash
 gnucash/gnome/gnucash.desktop
 gnucash/gnome/gnucash.desktop.in
 gnucash/gnome-utils/gnucash
-gnucash/gnome-utils/gnc-svninfo.h
 gnucash/gnome-utils/gnc-version.h
 gnucash/gnome-utils/gnucash
 gnucash/gnome-utils/test/test-gnc-dialog

@@ -59,7 +59,7 @@ static QofLogModule log_module = GNC_MOD_GUI;
 #include <locale.h>
 #include <gnc-locale-utils.hpp>
 
-/* GNC_VCS is defined whenever we're building from an svn/svk/git/bzr tree */
+/* GNC_VCS is defined whenever we're building from a git work tree */
 #ifdef GNC_VCS
 constexpr int is_development_version = TRUE;
 #else
