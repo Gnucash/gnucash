@@ -231,15 +231,6 @@ void qof_class_register (QofIdTypeConst obj_name,
  * qof_class_register ("myObjectName", myObjectCompare, &myParams);
  */
 
-/** Return true if the the indicated type is registered,
- *  else return FALSE.
- */
-gboolean qof_class_is_registered (QofIdTypeConst obj_name);
-
-/** Return the core datatype of the specified object's parameter */
-QofType qof_class_get_parameter_type (QofIdTypeConst obj_name,
-                                      const char *param_name);
-
 /** Return the registered Parameter Definition for the requested parameter */
 const QofParam * qof_class_get_parameter (QofIdTypeConst obj_name,
         const char *parameter);
@@ -251,31 +242,6 @@ QofAccessFunc qof_class_get_parameter_getter (QofIdTypeConst obj_name,
 /** Return the object's parameter setter function */
 QofSetterFunc qof_class_get_parameter_setter (QofIdTypeConst obj_name,
         const char *parameter);
-
-/** Type definition for the class callback function. */
-typedef void (*QofClassForeachCB) (QofIdTypeConst, gpointer);
-
-/** Call the callback once for each object class that is registered
- *  with the system.  The 'user_data' is passed back to the callback.
- */
-void qof_class_foreach (QofClassForeachCB, gpointer user_data);
-
-/** Type definition for the parameter callback function. */
-typedef void (*QofParamForeachCB) (QofParam *, gpointer user_data);
-
-/** Call the callback once for each parameter on the indicated
- *  object class.  The 'user_data' is passed back to the callback.
- */
-void qof_class_param_foreach (QofIdTypeConst obj_name,
-                              QofParamForeachCB, gpointer user_data);
-
-/** \brief List of the parameters that could be references.
-
-Simple check to return a GList of all parameters
-of this object type that are not known QOF data types.
-Used for partial QofBook support, see ::QofInstanceReference
-*/
-GList* qof_class_get_referenceList(QofIdTypeConst type);
 
 
 #ifdef __cplusplus

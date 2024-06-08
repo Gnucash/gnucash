@@ -1361,13 +1361,11 @@ void qof_query_init (void)
 {
     ENTER (" ");
     qof_query_core_init ();
-    qof_class_init ();
     LEAVE ("Completed initialization of QofQuery");
 }
 
 void qof_query_shutdown (void)
 {
-    qof_class_shutdown ();
     qof_query_core_shutdown ();
 }
 
