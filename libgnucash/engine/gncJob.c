@@ -591,15 +591,6 @@ gboolean gncJobRegister (void)
         { NULL },
     };
 
-    if (!qof_choice_create(GNC_ID_JOB))
-    {
-        return FALSE;
-    }
-    if (!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_JOB, INVOICE_OWNER))
-    {
-        return FALSE;
-    }
-
     qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncJobCompare, params);
     qofJobGetOwner(NULL);
     qofJobSetOwner(NULL, NULL);

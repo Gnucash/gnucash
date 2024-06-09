@@ -669,7 +669,6 @@ libgnucash/engine/policy.cpp
 libgnucash/engine/qof-backend.cpp
 libgnucash/engine/qofbook.cpp
 libgnucash/engine/qofbookslots.h
-libgnucash/engine/qofchoice.cpp
 libgnucash/engine/qofclass.cpp
 libgnucash/engine/qofevent.cpp
 libgnucash/engine/qofid.cpp

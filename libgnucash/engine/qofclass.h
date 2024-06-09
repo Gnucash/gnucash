@@ -98,6 +98,7 @@ single reference between two known objects.
 #define QOF_TYPE_BOOLEAN   "boolean"
 #define QOF_TYPE_KVP       "kvp"
 #define QOF_TYPE_CHAR      "character"
+#define QOF_TYPE_CHOICE    "choice"     /* was moved from (deleted) qofchoice.h */
 #define QOF_TYPE_COLLECT   "collection" /**< secondary collections
 are used for one-to-many references between entities and are
 implemented using ::QofCollection.

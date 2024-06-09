@@ -50,7 +50,6 @@
 
 #include "qofbook.h"
 #include "qofid.h"
-#include "qofchoice.h"
 
 #ifdef __cplusplus
 extern "C"

@@ -108,7 +108,6 @@ set (engine_HEADERS
   qofbook.h
   qofbook.hpp
   qofbookslots.h
-  qofchoice.h
   qofclass.h
   qofevent.h
   qofid-p.h
@@ -196,7 +195,6 @@ set (engine_SOURCES
   kvp-value.cpp
   qof-backend.cpp
   qofbook.cpp
-  qofchoice.cpp
   qofclass.cpp
   qofevent.cpp
   qofid.cpp

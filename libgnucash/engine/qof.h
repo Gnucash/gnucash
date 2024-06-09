@@ -85,7 +85,6 @@
 #include "qofquery.h"
 #include "qofquerycore.h"
 #include "qofsession.h"
-#include "qofchoice.h"
 #include "qof-string-cache.h"
 
 #endif /* QOF_H_ */

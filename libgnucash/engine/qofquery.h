@@ -77,7 +77,6 @@ probably optimize.
 #include "guid.h"
 #include "qofbook.h"
 #include "qofquerycore.h"
-#include "qofchoice.h"
 
 #ifdef __cplusplus
 extern "C"

@@ -951,19 +951,7 @@ gboolean gncCustomerRegister (void)
         { NULL },
     };
 
-    if (!qof_choice_add_class(GNC_ID_INVOICE, GNC_ID_CUSTOMER, INVOICE_OWNER))
-    {
-        return FALSE;
-    }
-    if (!qof_choice_add_class(GNC_ID_JOB, GNC_ID_CUSTOMER, JOB_OWNER))
-    {
-        return FALSE;
-    }
     qof_class_register (_GNC_MOD_NAME, (QofSortFunc)gncCustomerCompare, params);
-    if (!qof_choice_create(GNC_ID_CUSTOMER))
-    {
-        return FALSE;
-    }
     /* temp */
     _gncCustomerPrintable(NULL);
     return qof_object_register (&gncCustomerDesc);
