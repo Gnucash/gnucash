@@ -34,6 +34,7 @@
 # Xavier Gandillot (aka xavier268), 2023.
 # Laurent Aufrere <lecture@cbol.org>, 2024.
 # aleksej0R <omolice@hotmail.fr>, 2024.
+# Over_score <wablate@lorang.net>, 2024.
 #
 # Please follow the guidelines you'll find here: https://wiki.gnucash.org/wiki/Translation
 #
@@ -43,8 +44,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-04-05 13:01+0000\n"
-"Last-Translator: aleksej0R <omolice@hotmail.fr>\n"
+"PO-Revision-Date: 2024-06-08 09:45+0000\n"
+"Last-Translator: Over_score <wablate@lorang.net>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "fr/>\n"
 "Language: fr\n"
@@ -52,7 +53,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -5513,8 +5514,9 @@ msgstr "Supprime la répartition courante"
 # src/gnome/glade-gnc-dialogs.c:635
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.cpp:389
+#, fuzzy
 msgid "Show Splits"
-msgstr "Voir les fractionnements"
+msgstr "Voir la ventilation"
 
 # messages-i18n.c:144
 #: gnucash/gnome/gnc-plugin-page-register.cpp:390
