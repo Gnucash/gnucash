@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-04 23:09+0000\n"
+"PO-Revision-Date: 2024-06-11 00:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -866,8 +866,8 @@ msgid ""
 "The GnuCash online manual has lots of helpful information. You can access "
 "the manual under the Help menu."
 msgstr ""
-"A GnuCash online kézikönyv sok hasznos tudnivalót tartalmaz. A kézikönyvet a "
-"Súgó menüből érheti el."
+"A GnuCash kézikönyv sok hasznos tudnivalót tartalmaz. A kézikönyvet a Súgó "
+"menüből érheti el."
 
 #. Translators: You can replace the link, if a translated page exists.
 #: doc/tip_of_the_day.list.c:7
@@ -876,9 +876,9 @@ msgid ""
 "community. For announcements of new releases, user groups etc. see the table "
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
-"A GNUCash közössége első sorban levelezési listákon keresztül kommunikál. Az "
-"új verziók bejelentése, a felhasználói csoportok stb. a https://wiki.gnucash."
-"org/wiki/Mailing_Lists oldalon találhatók."
+"A GnuCash közössége elsősorban levelezési listákon keresztül kommunikál. Az "
+"új verziók bejelentése, a felhasználói csoportok, stb. megtalálhatók a "
+"https://wiki.gnucash.org/wiki/Mailing_Lists oldalon."
 
 #: doc/tip_of_the_day.list.c:11
 msgid ""
@@ -924,7 +924,7 @@ msgstr ""
 "Ha ismer más pénzügyi programokat, mint például a Quicken, figyelje meg, "
 "hogy GnuCash a bevételek és a költségek nyomonkövetésére számlákat használ "
 "kategóriák helyett. A bevétel- és költségszámlákról bővebb információt a "
-"GnuCash online kézikönyvében talál."
+"GnuCash kézikönyvében talál."
 
 #: doc/tip_of_the_day.list.c:29
 msgid ""
@@ -932,9 +932,9 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
-"Megváltoztathatja, hogy a számlatükörben, melyik oszlopok jelenjenek meg. "
-"Csak keresse meg a háromszöget az oszlop tetejének jobb oldalán, és "
-"rákattintva láthatja az elérhető különböző oszlopokat."
+"Megváltoztathatja, hogy a számlatükörben, mely oszlopok jelenjenek meg. Csak "
+"keresse meg a háromszöget az oszlop tetejének jobb oldalán, és rákattintva "
+"láthatja az elérhető különböző oszlopokat."
 
 #: doc/tip_of_the_day.list.c:33
 msgid ""
@@ -955,10 +955,10 @@ msgid ""
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
 msgstr ""
-"Hozzon létre új számlákat a főablak eszköztárában az „Új” gombra "
-"kattintással! Ez megjelenít egy dialógust, ahol megadhatja a számla "
-"részleteit. További tájékoztatás a számlatípus kiválasztása, vagy a "
-"számlakészlet beállítása témakörben a GnuCash online kézikönyvben található."
+"A főablak eszköztárában található Új gombra kattintással új számlákat hozhat "
+"létre. Ekkor megjelenik egy dialógus, ahol megadhatja a számla részleteit. "
+"További tájékoztatás a számlatípus kiválasztása, vagy a számlakészlet "
+"beállítása témakörben a GnuCash kézikönyvben található."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -969,13 +969,13 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line View\" in Preferences:Register Defaults."
 msgstr ""
-"Minden tranzakcióhoz tartozik egy „Megjegyzések” mező ahol hasznos "
+"Minden tranzakcióhoz tartozik egy Megjegyzések mező ahol hasznos "
 "információkat tárolhat.\n"
 "\n"
 "Láthatóvá tételéhez\n"
-"a „Nézet” menüben jelölje be a „Kétsoros” lehetőséget,\n"
-"vagy a Beállítások:Regiszter alapbeállítások oldalon jelölje be a „Kétsoros "
-"nézet” lehetőséget."
+"a Nézet menüben jelölje be a Kétsoros lehetőséget,\n"
+"vagy a Beállítások: Regiszter-alapbeállítások oldalon jelölje be a Kétsoros "
+"nézet lehetőséget."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -1032,8 +1032,8 @@ msgid ""
 "Edit->Open Subaccounts from the menu."
 msgstr ""
 "Egyetlen főkönyvben szeretné látni egy számla összes alszámlájának "
-"tranzakcióit? A számlák fülön jelölje ki a főszámlát, majd válassza a "
-"„Szerkesztés” -> „Alszámlák megnyitása” menüpontot."
+"tranzakcióit? A Számlák lapon jelölje ki a főszámlát, majd válassza a "
+"Szerkesztés -> Alszámlák megnyitása menüpontot."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -1049,7 +1049,7 @@ msgstr ""
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
-msgstr "A főablak fülei között a Control+Page Up/Down billentyűkkel válthat."
+msgstr "A főablak lapjai között a Control + Page Up/Down billentyűkkel válthat."
 
 #: doc/tip_of_the_day.list.c:82
 msgid ""
@@ -1058,8 +1058,8 @@ msgid ""
 "and withdrawals."
 msgstr ""
 "Az egyeztető ablakban a szóközbillentyű megnyomásával a tranzakciók "
-"egyeztetettnek jelölhetők. Tab ill. Shift-tab megnyomásával a jóváírások és "
-"a terhelések között mozoghat."
+"egyeztetettnek jelölhetők. A Tab illetve a Shift-Tab megnyomásával a "
+"jóváírások és a terhelések között mozoghat."
 
 #: doc/tip_of_the_day.list.c:86
 msgid ""
@@ -1082,7 +1082,7 @@ msgid ""
 msgstr ""
 "Az Értékpapír-szerkesztő ablakban külön oszlopban megjelenítheti az "
 "árfolyamforrásokat, így könnyedén áttekintheti, az egyes értékpapírok "
-"árfolyama mely online forrásból lesz letöltve. Ezt az oszlopot az "
+"árfolyama mely internetes forrásból lesz letöltve. Ezt az oszlopot az "
 "oszlopfejlécek jobb szélén található háromszögre kattintva adhatja hozzá."
 
 #: doc/tip_of_the_day.list.c:96
@@ -1093,7 +1093,7 @@ msgid ""
 msgstr ""
 "Több jelentést egyetlen ablakba helyezhet, biztosítva ezzel azokat a "
 "pénzügyi információkat, amelyeket egyszerre szeretne látni. Ehez használja a "
-"„Minta” -> „Egyéni” -> „Egyénitöbboszlopos-jelentés”-t."
+"Minta -> Egyéni -> Egyénitöbboszlopos-jelentést."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -1103,7 +1103,7 @@ msgid ""
 msgstr ""
 "Stíluslapok határozzák meg a jelentések megjelenését. A beállításokban "
 "válasszon ki a jelentése számára egy stíluslapot, a testreszabásához "
-"használja a „Szerkesztés” -> „Stíluslapok” menüt."
+"használja a Szerkesztés -> Stíluslapok menüt."
 
 #: doc/tip_of_the_day.list.c:105
 msgid ""
@@ -1196,7 +1196,7 @@ msgstr ""
 "szolgáltatásokat. Az Eszközök menüben találja az internetbanki hozzáférés "
 "beállítására szolgáló menüpontot. Az internetbanki hozzáférés beállítása "
 "után a számlaablakban használhatók a Műveletek -> Internetes műveletek "
-"menüpontok.\n"
+"menüpontjai.\n"
 "\n"
 "És végül utolsó tippként egy kis angol humor:\n"
 "Van egy elmélet, miszerint ha valaki rájön, mire való a világegyetem, és "
@@ -2763,7 +2763,7 @@ msgstr "Új alkalmazott"
 
 #: gnucash/gnome/dialog-employee.c:668
 msgid "View/Edit Employee"
-msgstr "Alkalmazott szerkesztése/megtekintése"
+msgstr "Alkalmazott megtekintése/szerkesztése"
 
 #: gnucash/gnome/dialog-employee.c:669
 msgid "Expense Vouchers"
@@ -3979,7 +3979,7 @@ msgstr "Ez az ütemezett tranzakció megváltozott. Biztosan elveti?"
 
 #: gnucash/gnome/dialog-sx-editor.c:489
 msgid "Please name the Scheduled Transaction."
-msgstr "Nevezze el az időzített tranzakciót."
+msgstr "Nevezze el az ütemzett tranzakciót."
 
 #: gnucash/gnome/dialog-sx-editor.c:513
 #, c-format
@@ -3987,12 +3987,12 @@ msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
 msgstr ""
-"A \"%s\" nevű időzített tranzakció már létezik. Biztosan ugyanígy kívánja "
-"nevezni ezt is?"
+"Egy \"%s\" nevű ütemezett tranzakció már létezik. Biztosan ugyanígy kívánja "
+"elnevezni ezt is?"
 
 #: gnucash/gnome/dialog-sx-editor.c:533
 msgid "Please provide a valid end selection."
-msgstr "Adjon meg érvényes végződési dátumot."
+msgstr "Adjon meg egy érvényes befejezési dátumot."
 
 #: gnucash/gnome/dialog-sx-editor.c:548
 msgid "There must be some number of occurrences."
@@ -4012,16 +4012,16 @@ msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
 msgstr ""
-"Megpróbált olyan időzített tranzakciót létrehozni, amely soha sem fordul "
-"elő. Biztosan ezt akarja?"
+"Olyan ütemezett tranzakciót próbált létrehozni, amely soha nem fog "
+"megtörténni. Biztosan ezt akarja?"
 
 #: gnucash/gnome/dialog-sx-editor.c:607
-#, fuzzy
 msgid ""
 "Scheduled Transactions with variables or involving more than one commodity "
 "cannot be automatically created."
 msgstr ""
-"Nem lehet automatikusan létrehozni időzített tranzakciókat változókkal."
+"A változókat tartalmazó vagy egynél több árut érintő ütemezett tranzakciók "
+"nem hozhatók létre automatikusan."
 
 #: gnucash/gnome/dialog-sx-editor.c:618
 msgid ""
@@ -4132,9 +4132,8 @@ msgid "(Need Value)"
 msgstr "(Érték)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:895
-#, fuzzy
 msgid "Invalid Transactions"
-msgstr "Tranzakció érvényesítése"
+msgstr "Érvénytelen tranzakciók"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:946
 #, c-format
@@ -4145,16 +4144,18 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Jelenleg nincs ütemezett tranzakció amelyet meg kell adni. (%d tranzakció "
-"automatikusan létrejött)"
+"Jelenleg nincsenek megadandó ütemezett tranzakciók. (%d tranzakció lett "
+"automatikusan létrehozva)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1266
 msgid "Highlight a date first to sort by occurrence date."
 msgstr ""
+"Először jelöljön ki egy dátumot az előfordulási dátum szerinti rendezéshez."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
 msgid "Highlight a schedule first to sort by schedule name."
 msgstr ""
+"Először jelöljön ki egy ütemezést az ütemezés neve szerinti rendezéshez."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1379
 #: gnucash/gnome-search/dialog-search.c:1105
@@ -15022,22 +15023,26 @@ msgstr "24 órás időformátum használata (12 órás helyett)."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1102
 msgid "<b>Date Completion</b>"
-msgstr "<b>Dátum kiegészítése</b>"
+msgstr "<b>Dátumkiegészítés</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1115
 msgid "When a date is entered without year, it should be taken"
 msgstr ""
+"Ha egy dátumot évszám nélkül ad meg, akkor a következőképpen kell "
+"kiegészíteni"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1131
 msgid ""
 "Dates will be completed so that they are within the current calendar year."
-msgstr ""
+msgstr "A hiányos dátumokat az aktuális naptári év számával kell kiegészíteni."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1144
 msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month"
 msgstr ""
+"A tizenkét hónapos időablakban\n"
+"a tárgyhónap előtti hónapok száma"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1168
 msgid "Enter number of months."
@@ -15105,7 +15110,8 @@ msgstr "A GnuCash használatára vonatkozó tanácsok megjelenítése indításk
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1485
 msgid "How many days to keep old log/backup files."
-msgstr "Ennyi napig tárolódnak a naplók és biztonsági mentések."
+msgstr ""
+"Ennyi napig kell megőrizni a régi naplófájlokat és a biztonsági mentéseket."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1504
 #: gnucash/gtkbuilder/dialog-sx.glade:615
@@ -15113,7 +15119,7 @@ msgstr "Ennyi napig tárolódnak a naplók és biztonsági mentések."
 #: gnucash/gtkbuilder/dialog-sx.glade:1011
 #: gnucash/gtkbuilder/dialog-sx.glade:1071
 msgid "days"
-msgstr "napig"
+msgstr "nap"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1523
 msgid "<b>_Retain log/backup files</b>"
@@ -15175,7 +15181,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
 msgctxt "keep"
 msgid "For"
-msgstr "Korlátozottan"
+msgstr "A megadott ideig"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1773
 #: gnucash/gtkbuilder/dialog-sx.glade:1227
@@ -16265,12 +16271,12 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-sx.glade:575
 msgid "_Auto-create new transactions"
-msgstr "Tranzakciók _automatikus-létrehozása"
+msgstr "Tranzakciók _automatikus létrehozása"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:579
 msgid "Set the 'auto-create' flag on newly created scheduled transactions."
 msgstr ""
-"Az újonnan létrehozott, ütemezett tranzakciók megjelölése 'automatikusan-"
+"Az újonnan létrehozott, ütemezett tranzakciók megjelölése 'automatikusan "
 "létrehozandó' -ként."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:599
@@ -16288,8 +16294,7 @@ msgstr "Értesítés a tra_nzakció létrehozása előtt"
 #: gnucash/gtkbuilder/dialog-sx.glade:675
 msgid "Set the 'notify' flag on newly created scheduled transactions."
 msgstr ""
-"Az újonnan létrehozott, ütemezett tranzakciók megjelölése 'figyelmeztetés'-"
-"ként."
+"Az újonnan létrehozott ütemezett tranzakciókhoz 'értesítés' jelző beállítása."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:694
 msgid "Crea_te in advance"
@@ -16360,7 +16365,7 @@ msgstr "Megadott számú ismétlődésig"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1278
 msgid "occurrences"
-msgstr "előfordulások"
+msgstr "előfordulás"
 
 #: gnucash/gtkbuilder/dialog-sx.glade:1290
 msgid "remaining"
@@ -17522,9 +17527,8 @@ msgid "There was an error accessing %s."
 msgstr "A %s URL elérése során hiba történt."
 
 #: gnucash/html/gnc-html-webkit1.c:1211
-#, fuzzy
 msgid "Export to PDF File"
-msgstr "Jelentés címe"
+msgstr "Exportálás PDF fájlba"
 
 #. Translators: Strings are 1. Bank code, 2. Bank name,
 #. 3. Account Number, 4. Subaccount ID
@@ -18380,19 +18384,19 @@ msgstr ""
 #: gnucash/import-export/aqb/gnc-gwen-gui.c:1637
 msgid ""
 "The Online Banking job is still running; are you sure you want to cancel?"
-msgstr "Az Online Banking feladat még fut. Biztosan megszakítja?"
+msgstr "Az internetbanki feladat még fut. Biztosan megszakítja?"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:6
 msgid "Import using AQBanking"
-msgstr ""
+msgstr "AQBanking importálás"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
 msgid "Import into GnuCash any file format supported by AQBanking"
-msgstr ""
+msgstr "Importáljon bármilyen, az AQBanking által támogatott fájlformátumot"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
-msgstr "_Online műveletek"
+msgstr "_Internetbanki műveletek"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:18
 msgid "Get _Balance"
@@ -18401,7 +18405,7 @@ msgstr "Számla_egyenleg lekérése"
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:20
 #: gnucash/ui/gnc-plugin-basic-commands.ui:86
 msgid "The list of Scheduled Transactions"
-msgstr "Az ütemezett tranzakciók felsorolása"
+msgstr "Ütemezett tranzakciók listája"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:23
 msgid "Get _Transactions…"
@@ -18409,7 +18413,7 @@ msgstr "_Tranzakciók lekérése…"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:25
 msgid "Get the transactions online through Online Banking"
-msgstr "Az átutalások online lekérdezése HBCI/AqBanking útján"
+msgstr "Számlatranzakciók internetbanki lekérése"
 
 #. Translators: https://en.wikipedia.org/wiki/Single_Euro_Payments_Area
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:31
@@ -20972,7 +20976,7 @@ msgstr "Egy tranzakció leírása"
 #: gnucash/report/trep-engine.scm:1198 gnucash/report/trep-engine.scm:1199
 msgctxt "Column header for 'Document Link'"
 msgid "L"
-msgstr "K"
+msgstr "H"
 
 #: gnucash/register/ledger-core/split-register-layout.c:713
 #: gnucash/register/ledger-core/split-register-layout.c:753
@@ -21685,7 +21689,7 @@ msgstr "Megjelenítés"
 
 #: gnucash/report/report-core.scm:165
 msgid "Report name"
-msgstr "Jelentés címe"
+msgstr "Jelentés neve"
 
 #: gnucash/report/report-core.scm:166
 msgid "Stylesheet"
@@ -24311,9 +24315,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/category-barchart.scm:275
-#, fuzzy
 msgid "Invalid dates"
-msgstr "Tranzakció érvényesítése"
+msgstr "Érvénytelen dátumok"
 
 #: gnucash/report/reports/standard/category-barchart.scm:276
 msgid "Start date must be earlier than End date"
@@ -29317,9 +29320,8 @@ msgstr "Kifizetés szerkesztése…"
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:452
 #: gnucash/ui/gnc-plugin-page-register.ui:564
-#, fuzzy
 msgid "Edit the payment this transaction is a part of."
-msgstr "A jelenlegi tranzakció szerkesztése"
+msgstr "A kifizetés szerkesztése, amelynek része e tranzakció."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:35
 msgid "Edit the selected account."
