@@ -7,14 +7,15 @@
 # Allan Nordhøy <epost@anotheragency.no>, 2020, 2021, 2022, 2024.
 # Petter Reinholdtsen <pere-weblate@hungry.com>, 2022, 2023.
 # Rune Osnes <osnes.rune@gmail.com>, 2023.
+# Tor Berg <tob@samfundet.no>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-03-27 13:02+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2024-06-13 18:09+0000\n"
+"Last-Translator: Tor Berg <tob@samfundet.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
 "Language: nb\n"
@@ -22,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.6-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -26122,7 +26123,7 @@ msgstr "Kontonotater"
 #: gnucash/report/reports/standard/taxinvoice.scm:107
 #: gnucash/report/reports/standard/taxinvoice.scm:193
 msgid "Tax Amount"
-msgstr "MVA-beløp"
+msgstr "MVA"
 
 #: gnucash/report/reports/standard/invoice.scm:157
 msgid "REF"
@@ -26448,7 +26449,7 @@ msgstr "MVA"
 #: gnucash/report/reports/standard/taxinvoice.scm:105
 #: gnucash/report/reports/standard/taxinvoice.scm:189
 msgid "Net Price"
-msgstr "Nettopris"
+msgstr "Nettobeløp"
 
 #: gnucash/report/reports/standard/invoice.scm:719
 #: gnucash/report/reports/standard/receipt.scm:60
