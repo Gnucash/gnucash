@@ -286,7 +286,7 @@
           (sxml->table-row-col sxml 1 4 #f))
 
         (test-equal "Return Capital $2500"
-          '("04/16/20" "Return of Capital" "0 SPY" "325 SPY" "Return of Capital"
+          '("04/16/20" "Return of Capital" "0 SPY" "325 SPY" "Return of capital"
             "CAD" "C$1.0000" "-C$2,500.00" "-C$2,500.00" "C$57,519.90"
             "C$184.68" "-C$6,009.95" "-C$6,019.90" "-C$6,019.90")
           (sxml->table-row-col sxml 1 5 #f))
