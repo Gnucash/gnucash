@@ -140,13 +140,13 @@ the split action field to detect capitalized fees on stock activity")
   (case-lambda
     (() (error "M- needs at least 1 arg"))
     ((n) (and n (- n)))
-    ((minuend head . tail) (M+ minuend (M- (fold M+ head tail))))))
+    ((head . tail) (M+ head (M- (apply M+ tail))))))
 
 (define M/
   (case-lambda
     (() (error "M/ needs at least 1 arg"))
     ((n) (and n (not (zero? n)) (/ n)))
-    ((divisor head . tail) (M* divisor (M/ (fold M* head tail))))))
+    ((head . tail) (M* head (M/ (apply M* tail))))))
 
 (define-record-type :txn-info
   (make-txn-info stock-amt stock-val proceeds-val
