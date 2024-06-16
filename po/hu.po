@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-11 00:09+0000\n"
+"PO-Revision-Date: 2024-06-15 23:56+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -877,7 +877,7 @@ msgid ""
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
 "A GnuCash közössége elsősorban levelezési listákon keresztül kommunikál. Az "
-"új verziók bejelentése, a felhasználói csoportok, stb. megtalálhatók a "
+"új verziók bejelentése, a felhasználói csoportok stb. megtalálhatók a "
 "https://wiki.gnucash.org/wiki/Mailing_Lists oldalon."
 
 #: doc/tip_of_the_day.list.c:11
@@ -3764,7 +3764,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-account.c:858
 #: gnucash/report/trep-engine.scm:158
 msgid "Cleared"
-msgstr "Elszámolt"
+msgstr "Kiegyenlített (elszámolt)"
 
 #: gnucash/gnome/dialog-payment.c:1576
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3248
@@ -6685,7 +6685,7 @@ msgid ""
 "Exchange code (ISIN, CUSIP or similar): "
 msgstr ""
 "\n"
-"Tőzsdei kód (ISIN, SEDOL, CUSIP, stb.): "
+"Tőzsdei kód (ISIN, SEDOL, CUSIP stb.): "
 
 #: gnucash/gnome-utils/dialog-commodity.c:176
 msgid ""
@@ -6932,20 +6932,20 @@ msgid ""
 "You must provide a unique name for this Tax Table. Your choice \"%s\" is "
 "already in use."
 msgstr ""
-"Egyedi nevet kell adni az adótáblázatnak. Ez \"%s\" már használatban van."
+"Egyedi nevet kell adjon ennek az adótáblázatnak. Az Ön által választott „%s”"
+", már használatban van."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:190
 msgid "Percentage amount must be between -100 and 100."
-msgstr "Százalékos öszegnek 100 és 100 között kell lennie."
+msgstr "Százalékos öszegnek -100 és 100 között kell lennie."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:199
 msgid "You must choose a Tax Account."
-msgstr "Adó folyószámlát kell választania."
+msgstr "Adószámlát kell választania."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:697
-#, fuzzy
 msgid "Rename"
-msgstr "Felhasználónév"
+msgstr "Átnevezés"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:698
 msgid "Please enter new name"
@@ -6953,26 +6953,25 @@ msgstr "Kérjük, adjon meg új nevet"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:699
 #: gnucash/gtkbuilder/dialog-tax-table.glade:73
-#, fuzzy
 msgid "_Rename"
-msgstr "_Újra számozás"
+msgstr "_Átnevezés"
 
 #: gnucash/gnome-utils/dialog-tax-table.c:705
 #, c-format
 msgid "Tax table name \"%s\" already exists."
-msgstr "Az adó táblában ez a név \"%s\" már létezik."
+msgstr "Már létezik „%s” nevű adótáblázat."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:729
 #, c-format
 msgid "Tax table \"%s\" is in use. You cannot delete it."
-msgstr "\"%s\" adótáblázat használatban van. Nem törölhető."
+msgstr "„%s” adótáblázat használatban van. Nem törölhető."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:777
 msgid ""
 "You cannot remove the last entry from the tax table. Try deleting the tax "
 "table if you want to do that."
 msgstr ""
-"Nem törölheti az adótáblázat utolsó tételét.Ehhez az egész adótáblázatot "
+"Nem törölheti az adótáblázat utolsó tételét. Ehhez az egész adótáblázatot "
 "kellene törölni."
 
 #: gnucash/gnome-utils/dialog-tax-table.c:784
@@ -6993,6 +6992,8 @@ msgid ""
 "Retrieve the current online quote. This will fail if there is a manually-"
 "created price for today."
 msgstr ""
+"Az aktuális internetes árfolyam lekérése. Ha van kézzel létrehozott ár a mai "
+"napra, akkor ez nem fog sikerülni."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1296
 msgid "Finance::Quote must be installed to enable this button."
@@ -12211,8 +12212,8 @@ msgstr ""
 "A következő oldalon a QIF fájljaiban lévő számlák és a tulajdonában lévő "
 "részvények vagy befektetési alapok össze lesznek egyeztetve a GnuCash "
 "számlákkal. Ha már létezik egy GnuCash számla azonos névvel vagy hasonló "
-"névvel és kompatibilis típussal, akkor azt a számlát használja a rendszer "
-"egyezésként. Ellenkező esetben a GnuCash új számlát hoz létre a QIF "
+"névvel és kompatibilis típussal, akkor azt a számlát használja a rendszer, "
+"mint egyező számlát. Ellenkező esetben a GnuCash új számlát hoz létre a QIF "
 "számlával azonos néven és típussal. Ha nem tetszik a javasolt GnuCash "
 "számla, kattintson duplán a módosításhoz.\n"
 "\n"
@@ -12221,7 +12222,7 @@ msgstr ""
 "számlát minden egyes tulajdonában lévő részvényhez, külön számlákat a "
 "közvetítői jutalékokhoz, speciális részvény számlákat (alapértelmezés "
 "szerint a felhalmozott nyereség alszámlái), amelyek a nyitó egyenlegek "
-"forrásai, stb. Ezek a számlák mindegyike megjelenik a következő oldalon, így "
+"forrásai stb.. Ezek a számlák mindegyike megjelenik a következő oldalon, így "
 "ha akarja, módosíthatja őket, de nyugodtan hagyhatja is őket.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:524
@@ -12829,8 +12830,8 @@ msgid ""
 "If checked, each invoice will be opened in its own top level window. If "
 "clear, the invoice will be opened in the current window."
 msgstr ""
-"Bejelölve,minden számla külön ablakban nyílik meg. Üresen hagyva a számlák "
-"új lapon nyílnak meg."
+"Ha be van jelölve, minden számla külön ablakban nyílik meg. Egyébként a "
+"számlák új lapon nyílnak meg az aktuális ablakban."
 
 #: gnucash/gtkbuilder/business-prefs.glade:84
 msgid "_Accumulate splits on post"
@@ -13269,7 +13270,7 @@ msgstr "Alszámlák újraszámozása"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2020
 msgid "_Renumber"
-msgstr "_Újra számozás"
+msgstr "_Újraszámozás"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2053
 msgid "Prefix"
@@ -13295,7 +13296,7 @@ msgid ""
 "This will replace the account code field of each child account with a newly "
 "generated code"
 msgstr ""
-"Ez minden egyes alszámla számlakód mezőjét egy újonnan generált kóddal "
+"Ez minden egyes alszámlának a számlakód mezőjét egy újonnan generált kóddal "
 "helyettesíti"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:34
@@ -13470,7 +13471,7 @@ msgid ""
 "are applied to the following month. Negative values count backwards from the "
 "end of the month."
 msgstr ""
-"Fordulónap,a \"számlák következő havi könyveléséhez. A fordulónap után a "
+"Fordulónap a számlák következő havi könyveléséhez. A fordulónap után a "
 "számlák a következő hónapra vonatkoznak. Negatív értékek a hónap végétől "
 "visszafelé számítanak."
 
@@ -13501,7 +13502,7 @@ msgstr "Feltételek"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:482
 msgid "Delete the current Billing Term"
-msgstr "A jelenlegi Fizetési feltétel törlése"
+msgstr "A jelenlegi fizetési feltétel törlése"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:494
 #: gnucash/gtkbuilder/dialog-commodity.glade:650
@@ -13515,7 +13516,7 @@ msgstr "_Új"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:500
 msgid "Create a new Billing Term"
-msgstr "Új Fizetési feltétel létrehozása"
+msgstr "Új fizetési feltétel létrehozása"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:546
 #: gnucash/gtkbuilder/dialog-billterms.glade:844
@@ -13541,7 +13542,7 @@ msgstr "_Típus"
 #: gnucash/gtkbuilder/dialog-billterms.glade:859
 #: gnucash/gtkbuilder/dialog-billterms.glade:1041
 msgid "The description of the Billing Term, printed on invoices"
-msgstr "A Fizetési feltétel leírása, ami a számlára kerül"
+msgstr "A számlákra nyomtatott fizetési feltétel leírása"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:679
 #: gnucash/gtkbuilder/dialog-commodities.glade:156
@@ -13558,7 +13559,7 @@ msgstr "Sz_erkesztés"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:685
 msgid "Edit the current Billing Term"
-msgstr "A jelenlegi Fizetési feltétel szerkesztése"
+msgstr "A jelenlegi fizetési feltétel szerkesztése"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:738
 msgid "Close this window"
@@ -13580,7 +13581,7 @@ msgstr "A fizetési feltétel belső használatú neve."
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:1072
 msgid "<b>New Billing Term</b>"
-msgstr "<b>Új Fizetési Feltétel</b>"
+msgstr "<b>Új fizetési feltétel</b>"
 
 #: gnucash/gtkbuilder/dialog-billterms.glade:1120
 #: gnucash/gtkbuilder/dialog-report.glade:780
@@ -13627,7 +13628,7 @@ msgid ""
 "Enter the full name of the commodity. Example: Cisco Systems Inc., or Apple "
 "Computer, Inc."
 msgstr ""
-"Adja meg az értékpapír teljes nevét. Pl. OTP Bank Nyrt vagy Optimum Trend "
+"Adja meg az értékpapír teljes nevét. Pl. OTP Bank Nyrt. vagy Optimum Trend "
 "abszolút hozamú alap."
 
 #: gnucash/gtkbuilder/dialog-commodity.glade:138
@@ -14801,7 +14802,7 @@ msgstr "Csekk nyomtatása"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:640
 msgid "(USD)"
-msgstr ""
+msgstr "(USD)"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:698
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
@@ -15181,7 +15182,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-preferences.glade:1755
 msgctxt "keep"
 msgid "For"
-msgstr "A megadott ideig"
+msgstr "Megadott ideig"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1773
 #: gnucash/gtkbuilder/dialog-sx.glade:1227
@@ -15552,6 +15553,8 @@ msgid ""
 "Show a second line with Action, Notes, and Linked Document fields for each "
 "transaction."
 msgstr ""
+"Minden tranzakcióhoz megjelenít egy második sort a Művelet, a Megjegyzések "
+"és a Kapcsolódó dokumentum mezőkkel."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2955
 msgid "Register opens in a new _window"
@@ -15603,9 +15606,8 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3155
 #: gnucash/gtkbuilder/dialog-preferences.glade:3235
-#, fuzzy
 msgid "Default zoom level"
-msgstr "<b>Alapértelmezett stílus</b>"
+msgstr "Alapértelmezett nagyítási szint"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3270
 msgid "Reports"
@@ -20976,7 +20978,7 @@ msgstr "Egy tranzakció leírása"
 #: gnucash/report/trep-engine.scm:1198 gnucash/report/trep-engine.scm:1199
 msgctxt "Column header for 'Document Link'"
 msgid "L"
-msgstr "H"
+msgstr "K.d."
 
 #: gnucash/register/ledger-core/split-register-layout.c:713
 #: gnucash/register/ledger-core/split-register-layout.c:753
