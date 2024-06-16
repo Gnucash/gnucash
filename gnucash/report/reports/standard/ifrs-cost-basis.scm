@@ -140,13 +140,13 @@ the split action field to detect capitalized fees on stock activity")
   (case-lambda
     (() (error "M- needs at least 1 arg"))
     ((n) (and n (- n)))
-    ((minuend head . tail) (M+ minuend (M- (fold M+ head tail))))))
+    ((head . tail) (M+ head (M- (apply M+ tail))))))
 
 (define M/
   (case-lambda
     (() (error "M/ needs at least 1 arg"))
     ((n) (and n (not (zero? n)) (/ n)))
-    ((divisor head . tail) (M* divisor (M/ (fold M* head tail))))))
+    ((head . tail) (M* head (M/ (apply M* tail))))))
 
 (define-record-type :txn-info
   (make-txn-info stock-amt stock-val proceeds-val
@@ -160,49 +160,55 @@ the split action field to detect capitalized fees on stock activity")
   (dividend-val get-dividend-val set-dividend-val!)
   (capgains-val get-capgains-val set-capgains-val!))
 
-;; "bitfield" Nabc a=neg b=zero c=pos
-(define (N001 x) (if (number? x) (>  x 0) #f))
-(define (N100 x) (if (number? x) (<  x 0) #f))
-(define (N010 x) (if (number? x) (=  x 0) #t))
-(define (N011 x) (if (number? x) (>= x 0) #t))
-(define (N110 x) (if (number? x) (<= x 0) #t))
-(define (N111 x) #t)
-;; N000 should be (not x) however we can accept a zero-amount split too
-(define (N000 x) (if (number? x) (=  x 0) #t))
+;; these functions test the various account values/amounts' signs
+(define (Dr>0 x) (if (number? x) (>  x 0) #f))
+(define (Cr>0 x) (if (number? x) (<  x 0) #f))
+(define (Dr≥0 x) (if (number? x) (>= x 0) #t))
+(define (Cr≥0 x) (if (number? x) (<= x 0) #t))
+(define (DrCr x) #t)
+(define (.... x) (if (number? x) (=  x 0) #t))
 
 ;;       <-- bitfield masks to identify ->  purchase?
 ;;       <---- the transaction type ----->  |  sale?
-;;       --stock-- cash cap  exp  divi capg |  |  narrative
-;;       amt  val       fees fees
 
 (define open-types
   (list
-   (list N001 N001 N100 N011 N000 N000 N000 #t #f "Open Long")
-   (list N100 N100 N001 N011 N000 N000 N000 #t #f "Open Short")))
+   ;;    --stock-- cash cap  exp  divi capg |  |   narrative
+   ;;    amt  val       fees fees
+   (list Dr>0 Dr>0 Cr>0 Dr≥0 .... .... .... #t #f "Open Long")
+   (list Cr>0 Cr>0 Dr>0 Dr≥0 .... .... .... #t #f "Open Short")))
 
 (define long-types
   (list
-   (list N001 N001 N100 N011 N000 N000 N000 #t #f "Buy")
-   (list N100 N100 N011 N000 N011 N000 N111 #f #t "Sell")
-   (list N000 N000 N001 N000 N011 N100 N000 #f #f "Dividend")
-   (list N001 N001 N001 N011 N000 N100 N000 #t #f "Dividend reinvestment (w/ remainder)")
-   (list N001 N001 N110 N011 N000 N100 N000 #t #f "Dividend reinvestment (w/o remainder)")
-   (list N000 N100 N001 N011 N000 N000 N000 #t #f "Return of Capital")
-   (list N000 N001 N000 N000 N011 N100 N000 #t #f "Notional distribution")
-   (list N001 N000 N110 N011 N000 N000 N000 #f #f "Stock split")
-   (list N100 N000 N110 N011 N000 N000 N000 #f #f "Reverse split")
-   (list N100 N100 N001 N000 N011 N000 N111 #f #t "Reverse split w/ cash in lieu for fractionals")))
+   ;;    --stock-- cash cap  exp  divi capg |  |   narrative
+   ;;    amt  val       fees fees
+   (list Dr>0 Dr>0 Cr>0 Dr≥0 .... .... .... #t #f "Buy")
+   (list Cr>0 Cr>0 Dr≥0 .... Dr≥0 .... DrCr #f #t "Sell")
+   (list .... .... Dr>0 .... Dr≥0 Cr>0 .... #f #f "Dividend")
+   (list Dr>0 Dr>0 Dr>0 Dr≥0 .... Cr>0 .... #t #f "Dividend reinvestment (w/ remainder)")
+   (list Dr>0 Dr>0 Cr≥0 Dr≥0 .... Cr>0 .... #t #f "Dividend reinvestment (w/o remainder)")
+   (list .... Cr>0 Dr>0 Dr≥0 .... .... .... #t #f "Return of capital")
+   (list .... Cr>0 .... Dr≥0 .... Dr>0 .... #t #f "Return of capital (reclassification)")
+   (list .... Dr>0 .... .... Dr≥0 Cr>0 .... #t #f "Notional distribution (dividend)")
+   (list .... Dr>0 .... .... Dr≥0 .... Cr>0 #t #f "Notional distribution (capital gain)")
+   (list Dr>0 .... Cr≥0 Dr≥0 .... .... .... #f #f "Stock split")
+   (list Cr>0 .... Cr≥0 Dr≥0 .... .... .... #f #f "Reverse split")
+   (list Cr>0 Cr>0 Dr>0 .... Dr≥0 .... DrCr #f #t "Reverse split w/ cash in lieu for fractionals")))
 
 (define short-types
   (list
-   (list N100 N100 N001 N011 N000 N000 N000 #t #f "Short Sell")
-   (list N001 N001 N110 N000 N011 N000 N111 #f #t "Cover Buy")
-   (list N000 N000 N100 N000 N011 N001 N000 #f #f "Compensatory dividend")
-   (list N000 N001 N100 N011 N000 N000 N000 #t #f "Compensatory return of capital")
-   (list N000 N100 N000 N000 N011 N001 N000 #t #f "Compensatory notional distribution")
-   (list N100 N000 N110 N011 N000 N000 N000 #f #f "Stock split")
-   (list N001 N000 N110 N011 N000 N000 N000 #f #f "Reverse split")
-   (list N001 N001 N100 N000 N011 N000 N111 #f #t "Reverse split w/ cash in lieu for fractionals")))
+   ;;    --stock-- cash cap  exp  divi capg |  |   narrative
+   ;;    amt  val       fees fees
+   (list Cr>0 Cr>0 Dr>0 Dr≥0 .... .... .... #t #f "Short Sell")
+   (list Dr>0 Dr>0 Cr≥0 .... Dr≥0 .... DrCr #f #t "Cover Buy")
+   (list .... .... Cr>0 .... Dr≥0 Dr>0 .... #f #f "Compensatory dividend")
+   (list .... Dr>0 Cr>0 Dr≥0 .... .... .... #t #f "Compensatory return of capital")
+   (list .... Dr>0 .... Dr≥0 .... Cr>0 .... #t #f "Compensatory return of capital (reclassification)")
+   (list .... Cr>0 .... .... Dr≥0 Dr>0 .... #t #f "Compensatory notional distribution (dividend)")
+   (list .... Cr>0 .... .... Dr≥0 .... Dr>0 #t #f "Compensatory notional distribution (capital gain)")
+   (list Cr>0 .... Cr≥0 Dr≥0 .... .... .... #f #f "Stock split")
+   (list Dr>0 .... Cr≥0 Dr≥0 .... .... .... #f #f "Reverse split")
+   (list Dr>0 Dr>0 Cr>0 .... Dr≥0 .... DrCr #f #t "Reverse split w/ cash in lieu for fractionals")))
 
 (define (cmp amt neg zero pos)
   (cond ((< amt 0) neg)
