@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-15 23:56+0000\n"
+"PO-Revision-Date: 2024-06-16 23:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -5000,30 +5000,27 @@ msgstr "Új költségbizonylat"
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:860
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:125
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:527
-#, fuzzy
 msgid "Vendor Listing"
-msgstr "Felsorolás"
+msgstr "Beszállítólista"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:229
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:866
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:372
 msgid "Customer Listing"
-msgstr "Ügyfél lista"
+msgstr "Ügyféllista"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:359
-#, fuzzy
 msgid "Owners"
-msgstr "Tulajdonos neve"
+msgstr "Tulajdonosok"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:556
-#, fuzzy
 msgid "Customers"
-msgstr "Ügyfél"
+msgstr "Ügyfelek"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:561
 msgid "Jobs"
-msgstr "Állások"
+msgstr "Megbízások"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:566
 msgid "Vendors"
@@ -6608,7 +6605,7 @@ msgstr "<Névtelen>"
 
 #: gnucash/gnome-utils/dialog-account.c:1775
 msgid "Edit Account"
-msgstr "Folyószámla szerkesztése"
+msgstr "Számla szerkesztése"
 
 #: gnucash/gnome-utils/dialog-account.c:1778
 #, c-format
@@ -9797,7 +9794,7 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:125
 msgid "Show close buttons on notebook tabs"
-msgstr "Bezárás gomb feltüntetése a füleken"
+msgstr "Bezárás gomb feltüntetése a lapok fülein"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:126
 msgid ""
@@ -9806,10 +9803,14 @@ msgid ""
 "this setting, pages can always be closed via the \"close\" menu item or the "
 "\"close\" button on toolbar."
 msgstr ""
+"Ha aktív, a Bezárás gomb minden bezárható lap fülén megjelenik. Ellenkező "
+"esetben nem jelenik meg ilyen gomb a lapok fülein. Ettől a beállítástól "
+"függetlenül a lapok mindig bezárhatók a Bezárás menüponttal vagy az "
+"eszköztár Bezárás gombjával."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:130
 msgid "Width of notebook tabs"
-msgstr "Fülek szélessége"
+msgstr "Lapok füleinek szélessége"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:131
 msgid ""
@@ -10001,7 +10002,7 @@ msgstr "Az összegzősor a lap alján jelenjen meg."
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:225
 #: gnucash/gtkbuilder/dialog-preferences.glade:3335
 msgid "Closing a tab moves to the most recently visited tab."
-msgstr "Fül bezárásakor a legutóbb használt fül aktiválódik."
+msgstr "Egy lap bezárásakor a legutóbb használt lapra vált."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:226
 msgid ""
@@ -15623,15 +15624,15 @@ msgstr "Az ablak méretének é_s helyzetének elmentése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3316
 msgid "Save window size and location when it is closed."
-msgstr "Ablakméret és hely elmentése bezáráskor."
+msgstr "Az ablak bezárásakor elmenti annak méretét és a helyzetét."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3329
 msgid "Bring the most _recent tab to the front"
-msgstr "Váltás a _legutóbb használt fülre"
+msgstr "Váltás a _legutóbb használt lapra"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3361
 msgid "<b>Tab Position</b>"
-msgstr "<b>Fülek helye</b>"
+msgstr "<b>Lapok füleinek helye</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3371
 #: gnucash/ui/gnc-main-window.ui:195
@@ -15655,7 +15656,7 @@ msgstr "_Jobboldalon"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3450
 msgid "<b>Summary Bar Position</b>"
-msgstr "<b>Összegzősor elhelyezése</b>"
+msgstr "<b>Összegzősor helye</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3479
 #: gnucash/gtkbuilder/dialog-print-check.glade:267
@@ -15665,18 +15666,18 @@ msgstr "Alul"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3511
 msgid "<b>Tabs</b>"
-msgstr "<b>Fülek</b>"
+msgstr "<b>Lapok fülei</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3521
 msgid "Show close button on _notebook tabs"
-msgstr "Bezárás gomb feltü_ntetése a füleken"
+msgstr "Bezárás gomb megjelenítése a lapok fülei_n"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3527
 msgid ""
 "Show a close button on each notebook tab. These function identically to the "
 "'Close' menu item."
 msgstr ""
-"Bezárás gomb megjelenítése az egyes füleken, ami a \"Bezárás\" menüponttal "
+"Bezárás gomb megjelenítése minden lap fülén, ami a Bezárás menüponttal "
 "azonos módon működik."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3548
@@ -15684,8 +15685,8 @@ msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
 msgstr ""
-"Ha a fül neve a megadott számnál hosszabb (a szám hozzávetőleges), akkor a "
-"név közepét három ponttal helyettesítjük."
+"Ha a lap fülének a neve hosszabb a megadott értéknél (a teszt szöveg "
+"hozzávetőleges), akkor a név közepe három ponttal lesz helyettesítve."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3568
 msgid "characters"
@@ -15697,11 +15698,11 @@ msgstr "_Szélesség"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3598
 msgid "Open new tabs _adjacent to current tab"
-msgstr "Az új fül az aktív fül _mellett nyíljon meg"
+msgstr "Az új lap az aktuális lap _mellett nyíljon meg"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3604
 msgid "Opens new tab adjacent to current tab instead of at the end."
-msgstr "Az új fül nem a jobb szélen, hanem az aktív fül mellett nyílik meg."
+msgstr "Az új lap nem a jobb szélen, hanem az aktuális lap mellett nyílik meg."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3643
 msgid "Windows"
@@ -15714,16 +15715,15 @@ msgstr "Internetes árfolyamok"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
-msgstr ""
+msgstr "Vételi árfolyam (Ön az eladó)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:15
 msgid "Ask"
-msgstr ""
+msgstr "Eladási árfolyam (Ön a vevő)"
 
 #: gnucash/gtkbuilder/dialog-price.glade:18
-#, fuzzy
 msgid "Last"
-msgstr "Utolsó szám"
+msgstr "Utolsó"
 
 #: gnucash/gtkbuilder/dialog-price.glade:21
 msgid "Net Asset Value"
@@ -15731,7 +15731,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-price.glade:43
 msgid "Price Editor"
-msgstr "Ár-szerkesztő"
+msgstr "Árfolyamszerkesztő"
 
 #: gnucash/gtkbuilder/dialog-price.glade:195
 msgid "S_ource"
@@ -18360,7 +18360,7 @@ msgstr ""
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1051
 msgid "Reconcile account now?"
-msgstr "Folyószámla egyeztetése most?"
+msgstr "Most egyezteti a számlát?"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:1127
 msgid "The bank has sent a message in its response."
@@ -19565,19 +19565,16 @@ msgid "Shipping Email"
 msgstr "Szállítási cím"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:172
-#, fuzzy
 msgid "Import Customers from csv"
-msgstr "Exportáljon ügyfeleket XML-be"
+msgstr "Ügyfelek importálása CSV szöveges fájlból"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:188
-#, fuzzy
 msgid "customers"
-msgstr "Ügyfél"
+msgstr "ügyfelek"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:189
-#, fuzzy
 msgid "vendors"
-msgstr "Beszállító"
+msgstr "beszállítók"
 
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:197
 #, c-format
@@ -24384,9 +24381,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/customer-summary.scm:72
-#, fuzzy
 msgid "Show Inactive Customers"
-msgstr "Vevőjelentés"
+msgstr "Inaktív ügyfelek megjelenítése"
 
 #: gnucash/report/reports/standard/customer-summary.scm:73
 msgid "Include customers that have been marked inactive."
@@ -26139,13 +26135,13 @@ msgstr "Nincs megfelelő tranzakció"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:104
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:164
 msgid "Customer Report"
-msgstr "Vevőjelentés"
+msgstr "Ügyféljelentés"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1174
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:119
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:198
 msgid "Vendor Report"
-msgstr "Eladó jelentés"
+msgstr "Beszállító-jelentés"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1183
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:134
@@ -28535,7 +28531,7 @@ msgstr "Nyisson meg egy ügyféláttekintő ablakot"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:23
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:317
 msgid "_New Customer…"
-msgstr "Új _ügyfél…"
+msgstr "_Új ügyfél…"
 
 #: gnucash/ui/gnc-plugin-business.ui:16
 msgid "Open the New Customer dialog"
@@ -28796,7 +28792,7 @@ msgstr "GnuCash naplófájl visszajátszása összeomlás után. Vissza nem vonh
 #: gnucash/ui/gnc-plugin-page-register.ui:32
 #: gnucash/ui/gnc-reconcile-window.ui:37
 msgid "_Edit Account"
-msgstr "Folyószámla sz_erkesztése"
+msgstr "Számla sz_erkesztése"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:19
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:26
@@ -29251,9 +29247,8 @@ msgstr "Új alkalmazott létrehozása"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:106
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:166
-#, fuzzy
 msgid "Show customer report"
-msgstr "Vevőjelentés"
+msgstr "Ügyféljelentés megjelenítése"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:112
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:374
@@ -29810,7 +29805,7 @@ msgstr "A kiválasztott tranzakció törlése"
 
 #: gnucash/ui/gnc-reconcile-window.ui:218
 msgid "Open the account"
-msgstr "Folyószámla megnyitása"
+msgstr "Számla megnyitása"
 
 #: gnucash/ui/gnc-reconcile-window.ui:245
 msgid "Finish the reconciliation of this account"
@@ -30720,11 +30715,11 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1338
 msgid "Default Customer TaxTable"
-msgstr "Alapértelmezett vevői adótáblázat"
+msgstr "Alapértelmezett ügyfél-adótáblázat"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1339
 msgid "The default tax table to apply to customers."
-msgstr "A vevőkre alapértelmezésként alkalmazandó adótáblázat."
+msgstr "Az ügyfelekre alapértelmezésként alkalmazandó adótáblázat."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1342
 msgid "Default Vendor TaxTable"
