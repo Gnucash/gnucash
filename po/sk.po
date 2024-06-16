@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-05 08:09+0000\n"
+"PO-Revision-Date: 2024-06-16 18:09+0000\n"
 "Last-Translator: Zdenko Podobný <zdenop@gmail.com>\n"
 "Language-Team: Slovak <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "sk/>\n"
@@ -10667,6 +10667,8 @@ msgid ""
 "This dialog is presented before allowing you to remove a split from a "
 "transaction."
 msgstr ""
+"Toto dialógové okno sa zobrazí predtým, ako vám umožní odstrániť rozdelenie "
+"z transakcie."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:84
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:207
@@ -10680,6 +10682,9 @@ msgid ""
 "from a transaction. Doing so will throw off the reconciled value of the "
 "register and can make it hard to perform future reconciliations."
 msgstr ""
+"Toto dialógové okno sa zobrazí predtým, ako vám umožní odstrániť "
+"vysporiadané rozdelenie z transakcie. Ak tak urobíte, stratí sa vysporiadaná "
+"hodnota registra a môže sa sťažiť vykonávanie budúcich vysporiadaní."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:89
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:94
@@ -10694,6 +10699,8 @@ msgid ""
 "This dialog is presented before allowing you to remove all splits from a "
 "transaction."
 msgstr ""
+"Toto dialógové okno sa zobrazí predtým, ako vám umožní odstrániť všetky "
+"rozdelenia z transakcie."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:95
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:218
@@ -10703,6 +10710,10 @@ msgid ""
 "reconciled value of the register and can make it hard to perform future "
 "reconciliations."
 msgstr ""
+"Toto dialógové okno sa zobrazí predtým, ako vám umožní odstrániť všetky "
+"rozdelenia (vrátane niektorých vysporiadaných rozdelení) z transakcie. Ak "
+"tak urobíte, stratí sa vysporiadaná hodnota registra a môže sa sťažiť "
+"vykonávanie budúcich vysporiadaní."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:99
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:222
@@ -10713,6 +10724,7 @@ msgstr "Vystrihnúť transakciu"
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:223
 msgid "This dialog is presented before allowing you to cut a transaction."
 msgstr ""
+"Toto dialógové okno sa zobrazí predtým, ako vám umožní vystrihnúť transakciu."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:104
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:227
@@ -10726,6 +10738,10 @@ msgid ""
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
+"Toto dialógové okno sa zobrazí predtým, ako vám umožní vystrihnúť "
+"transakciu, ktorá obsahuje vysporiadané rozdelenia. Ak tak urobíte, stratí "
+"sa vysporiadaná hodnota registra a môže sa sťažiť vykonávanie budúcich "
+"zosúlaďovaní."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:109
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:232
@@ -10736,6 +10752,7 @@ msgstr "Odstránenie transakcie"
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:233
 msgid "This dialog is presented before allowing you to delete a transaction."
 msgstr ""
+"Toto dialógové okno sa zobrazí predtým, ako vám umožní vymazať transakciu."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:114
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:237
@@ -10749,6 +10766,10 @@ msgid ""
 "contains reconciled splits. Doing so will throw off the reconciled value of "
 "the register and can make it hard to perform future reconciliations."
 msgstr ""
+"Toto dialógové okno sa zobrazí predtým, ako vám umožní vymazať transakciu, "
+"ktorá obsahuje vysporiadané rozdelenia. Ak tak urobíte, stratí sa "
+"vysporiadaná hodnota registra a môže sa sťažiť vykonávanie budúcich "
+"vysporiadaní."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:119
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:242
@@ -10761,6 +10782,8 @@ msgid ""
 "This dialog is presented when you attempt to duplicate a modified "
 "transaction. The changed data must be saved or the duplication canceled."
 msgstr ""
+"Toto dialógové okno sa zobrazí, keď sa pokúsite duplikovať upravenú "
+"transakciu. Zmenené údaje je potrebné uložiť alebo duplikáciu zrušiť."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:124
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:247
@@ -10773,6 +10796,8 @@ msgid ""
 "This dialog is presented when you attempt to move out of a modified "
 "transaction. The changed data must be either saved or discarded."
 msgstr ""
+"Toto dialógové okno sa zobrazí, keď sa pokúsite opustiť upravenú transakciu. "
+"Zmenené údaje sa musia buď uložiť alebo zahodiť."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:5
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:6
@@ -10790,6 +10815,8 @@ msgid ""
 "If active, non currency commodities (stocks) will be shown. Otherwise they "
 "will be hidden."
 msgstr ""
+"Ak je aktívna, zobrazia sa nemenové komodity (akcie). V opačnom prípade budú "
+"skryté."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:15
 msgid "Use relative profit/loss starting date"
@@ -10803,6 +10830,10 @@ msgid ""
 "date specified by the start-date key. If set to anything else, GnuCash will "
 "retrieve the starting date specified by the start-period key."
 msgstr ""
+"Toto nastavenie riadi typ počiatočného dátumu používaného pri výpočtoch "
+"zisku/straty. Ak je nastavené na „absolútne“, GnuCash získa počiatočný dátum "
+"určený kľúčom počiatočného dátumu. Ak je nastavené na čokoľvek iné, GnuCash "
+"získa počiatočný dátum určený kľúčom počiatočného obdobia."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:20
 msgid "Use absolute profit/loss starting date"
@@ -10810,7 +10841,7 @@ msgstr "Použiť absolútny dátum začiatku zisku/straty"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:25
 msgid "Starting date (in seconds from Jan 1, 1970)"
-msgstr ""
+msgstr "Dátum začiatku (v sekundách od 1. januára 1970)"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:26
 msgid ""
@@ -10818,10 +10849,13 @@ msgid ""
 "the start-choice setting is set to \"absolute\". This field should contain a "
 "date as represented in seconds from January 1st, 1970."
 msgstr ""
+"Toto nastavenie riadi počiatočný dátum nastavený vo výpočtoch zisku/straty, "
+"ak je nastavenie voľby začiatku nastavené na „absolútne“. Toto pole by malo "
+"obsahovať dátum v sekundách od 1. januára 1970."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:30
 msgid "Starting time period identifier"
-msgstr ""
+msgstr "Identifikátor počiatočného časového obdobia"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:31
 msgid ""
