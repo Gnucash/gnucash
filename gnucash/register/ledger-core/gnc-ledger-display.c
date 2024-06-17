@@ -59,6 +59,7 @@ struct gnc_ledger_display
     GncGUID leader;
 
     Query* query;
+    Query* pre_filter_query;
 
     GNCLedgerDisplayType ld_type;
 
@@ -655,6 +656,9 @@ close_handler (gpointer user_data)
     qof_query_destroy (ld->query);
     ld->query = NULL;
 
+    qof_query_destroy (ld->pre_filter_query);
+    ld->pre_filter_query = NULL;
+
     g_free (ld);
 }
 
@@ -834,6 +838,8 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
     else
         gnc_ledger_display_make_query (ld, limit, reg_type);
 
+    ld->pre_filter_query = qof_query_copy (ld->query);
+
     ld->component_id = gnc_register_gui_component (klass,
                                                    refresh_handler,
                                                    close_handler, ld);
@@ -854,7 +860,7 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
      * the query when we're not in focus yet.
      */
     ld->loading = TRUE;
-    gnc_split_register_load (ld->reg, NULL, gnc_ledger_display_leader (ld));
+    gnc_split_register_load (ld->reg, NULL, NULL, gnc_ledger_display_leader (ld));
     ld->loading = FALSE;
     return ld;
 }
@@ -888,6 +894,7 @@ static void
 gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld)
 {
     GList* splits;
+    GList* pre_filter_splits = NULL;
 
     if (ld->loading)
         return;
@@ -899,6 +906,9 @@ gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld)
      */
     splits = qof_query_run (ld->query);
 
+    if (!qof_query_equal (ld->query, ld->pre_filter_query))
+        pre_filter_splits = qof_query_run (ld->pre_filter_query);
+
     gnc_ledger_display_set_watches (ld, splits);
 
     if (!gnc_split_register_full_refresh_ok (ld->reg))
@@ -906,7 +916,7 @@ gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld)
 
     ld->loading = TRUE;
 
-    gnc_split_register_load (ld->reg, splits,
+    gnc_split_register_load (ld->reg, splits, pre_filter_splits,
                              gnc_ledger_display_leader (ld));
 
     ld->needs_refresh = FALSE;

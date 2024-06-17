@@ -530,10 +530,12 @@ void gnc_split_register_cancel_cursor_trans_changes (SplitRegister* reg);
  *
  *  @param slist a list of splits
  *
+ *  @param pre_filter_slist the list of splits before applying filter
+ *
  *  @param default_account an account to provide defaults for the blank split
  */
 void gnc_split_register_load (SplitRegister* reg, GList* slist,
-                              Account* default_account);
+                              GList* pre_filter_slist, Account* default_account);
 
 /** Copy the contents of the current cursor to a split. The split and
  *    transaction that are updated are the ones associated with the

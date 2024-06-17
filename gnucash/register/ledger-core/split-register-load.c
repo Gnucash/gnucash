@@ -256,8 +256,9 @@ _find_split_with_parent_txn (gconstpointer a, gconstpointer b)
     return xaccSplitGetParent (split) == txn ? 0 : 1;
 }
 
-static void add_quickfill_completions (TableLayout* layout, Transaction* trans,
-                                       Split* split, gboolean has_last_num)
+static void
+add_quickfill_completions (TableLayout* layout, Transaction* trans,
+                           Split* split, gboolean has_last_num)
 {
     gnc_quickfill_cell_add_completion (
         (QuickFillCell*) gnc_table_layout_get_cell (layout, NOTES_CELL),
@@ -365,9 +366,30 @@ update_info (SRInfo* info, SplitRegister* reg)
     info->reg_loaded = TRUE;
 }
 
+static void
+add_completions_from_pre_filter_slist (TableLayout* layout, GList *pre_filter_slist,
+                                       gboolean first_pass, gboolean quickfill_setup,
+                                       gboolean has_last_num)
+{
+    GList *node;
+
+    for (node = pre_filter_slist; node; node = node->next)
+    {
+        Split *split = node->data;
+        Transaction *trans = xaccSplitGetParent (split);
+
+        gnc_completion_cell_add_menu_item (
+            (CompletionCell*) gnc_table_layout_get_cell (layout, DESC_CELL),
+             xaccTransGetDescription (trans));
+
+        if (!first_pass && !quickfill_setup)
+            add_quickfill_completions (layout, trans, split, has_last_num);
+    }
+}
+
 void
 gnc_split_register_load (SplitRegister* reg, GList* slist,
-                         Account* default_account)
+                         GList* pre_filter_slist, Account* default_account)
 {
     SRInfo* info;
     Transaction* pending_trans;
@@ -635,6 +657,13 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
         (CompletionCell*) gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
           table->model->reverse_sort);
 
+    if (!info->first_pass && pre_filter_slist)
+    {
+        add_completions_from_pre_filter_slist (reg->table->layout, pre_filter_slist,
+                                               info->first_pass, info->quickfill_setup,
+                                               has_last_num);
+    }
+
     /* populate the table */
     for (node = slist; node; node = node->next)
     {
@@ -752,12 +781,15 @@ gnc_split_register_load (SplitRegister* reg, GList* slist,
 
         /* On first load the split list is empty so fill up the quickfill cells
          * only on the next load. */
-        if (!info->first_pass && !info->quickfill_setup)
+        if (!info->first_pass && !pre_filter_slist && !info->quickfill_setup)
             add_quickfill_completions (reg->table->layout, trans, split, has_last_num);
 
-        gnc_completion_cell_add_menu_item (
-            (CompletionCell*) gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
-             xaccTransGetDescription (trans));
+        if (!info->first_pass && !pre_filter_slist)
+        {
+            gnc_completion_cell_add_menu_item (
+                (CompletionCell*) gnc_table_layout_get_cell (reg->table->layout, DESC_CELL),
+                 xaccTransGetDescription (trans));
+        }
 
         if (trans == find_trans)
             new_trans_row = vcell_loc.virt_row;
