@@ -184,6 +184,8 @@ void qof_query_core_predicate_free (QofQueryPredData *pdata);
 
 /** Retrieve a predicate. */
 gboolean qof_query_date_predicate_get_date (const QofQueryPredData *pd, time64 *date);
+gboolean qof_query_char_predicate_get_char (const QofQueryPredData *pd, char **chars);
+
 /** Return a printable string for a core data object.  Caller needs
  *  to g_free() the returned string.
  */

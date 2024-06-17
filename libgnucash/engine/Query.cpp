@@ -502,6 +502,44 @@ xaccQueryAddClearedMatch(QofQuery * q, cleared_match_t how, QofQueryOp op)
     qof_query_add_term (q, param_list, pred_data, op);
 }
 
+cleared_match_t
+xaccQueryGetClearedMatch(QofQuery * q)
+{
+    QofQueryPredData *term_data;
+    cleared_match_t cleared_match = CLEARED_ALL;
+    GSList *param_list;
+    GSList *terms, *tmp;
+    char *chars = nullptr;
+
+    param_list = qof_query_build_param_list (SPLIT_RECONCILE, nullptr);
+    terms = qof_query_get_term_type (q, param_list);
+    g_slist_free (param_list);
+
+    for (tmp = terms; tmp; tmp = g_slist_next (tmp))
+    {
+        term_data = static_cast<QofQueryPredData*>(tmp->data);
+
+        if (qof_query_char_predicate_get_char (term_data, &chars))
+        {
+             cleared_match = CLEARED_NONE;
+
+            if (strstr (chars, "c"))
+                cleared_match = (cleared_match_t)(cleared_match | CLEARED_CLEARED);
+            if (strstr (chars, "y"))
+                cleared_match = (cleared_match_t)(cleared_match | CLEARED_RECONCILED);
+            if (strstr (chars, "f"))
+                cleared_match = (cleared_match_t)(cleared_match | CLEARED_FROZEN);
+            if (strstr (chars, "n"))
+                cleared_match = (cleared_match_t)(cleared_match | CLEARED_NO);
+            if (strstr (chars, "v"))
+                cleared_match = (cleared_match_t)(cleared_match | CLEARED_VOIDED);
+        }
+    }
+    g_slist_free (terms);
+
+    return cleared_match;
+}
+
 void
 xaccQueryAddGUIDMatch(QofQuery * q, const GncGUID *guid,
                       QofIdType id_type, QofQueryOp op)
@@ -532,8 +570,8 @@ xaccQueryAddGUIDMatch(QofQuery * q, const GncGUID *guid,
 void
 xaccQueryAddClosingTransMatch(QofQuery *q, gboolean value, QofQueryOp op)
 {
-    GSList *param_list; 
-    
+    GSList *param_list;
+
     param_list = qof_query_build_param_list(SPLIT_TRANS, TRANS_IS_CLOSING, nullptr);
     qof_query_add_boolean_match(q, param_list, value, op);
 }

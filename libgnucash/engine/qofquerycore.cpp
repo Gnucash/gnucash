@@ -1205,6 +1205,18 @@ qof_query_char_predicate (QofCharMatch options, const char *chars)
     return ((QofQueryPredData*)pdata);
 }
 
+gboolean
+qof_query_char_predicate_get_char (const QofQueryPredData *pd, char **chars)
+{
+    const query_char_t pdata = (const query_char_t)pd;
+
+    if (pdata->pd.type_name != query_char_type)
+        return FALSE;
+
+    *chars = g_strdup (pdata->char_list);
+    return TRUE;
+}
+
 static char *
 char_to_string (gpointer object, QofParam *getter)
 {
