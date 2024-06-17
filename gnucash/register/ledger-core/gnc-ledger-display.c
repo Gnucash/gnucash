@@ -445,7 +445,6 @@ gnc_ledger_display_gl (void)
 {
     Query* query;
     time64 start;
-    struct tm tm;
     GNCLedgerDisplay* ld;
     GHashTable *exclude_template_accounts_hash;
 
@@ -464,11 +463,12 @@ gnc_ledger_display_gl (void)
      * See Gnome Bug 86302.
      *         -- jsled */
     // Exclude any template accounts for search register and gl
-     exclude_template_accounts (query, exclude_template_accounts_hash);
+    exclude_template_accounts (query, exclude_template_accounts_hash);
 
-    gnc_tm_get_today_start (&tm);
-    tm.tm_mon--; /* Default the register to the last month's worth of transactions. */
-    start = gnc_mktime (&tm);
+    // the default is to show last 30 days
+    static const time64 secs_per_thirty_days = 2592000;
+    start = gnc_time64_get_today_start () - secs_per_thirty_days;
+
     xaccQueryAddDateMatchTT (query,
                              TRUE, start,
                              FALSE, 0,
