@@ -435,13 +435,16 @@ gnc_main_window_foreach_page (GncMainWindowPageFunc fn, gpointer user_data)
  *  installed.
  *
  *  @param data A data structure containing state about the
- *  window/page restoration process. */
-static void
+ *  window/page restoration process.
+ * 
+ *  @return true if page was added else false.
+ *  */
+static gboolean
 gnc_main_window_restore_page (GncMainWindow *window,
                               GncMainWindowSaveData *data)
 {
     GncMainWindowPrivate *priv;
-    GncPluginPage *page;
+    GncPluginPage *page = nullptr;
     gchar *page_group, *page_type = nullptr, *name = nullptr;
     const gchar *class_type;
     GError *error = nullptr;
@@ -514,6 +517,8 @@ cleanup:
     if (page_type)
         g_free(page_type);
     g_free(page_group);
+
+    return (page ? true : false);
 }
 
 static bool
@@ -634,6 +639,8 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     gsize length;
     gsize page_start, page_count, i;
     GError *error = nullptr;
+    GSList *added_page_offsets = nullptr;
+    gint offset = 0;
 
     /* Setup */
     ENTER("window %p, data %p (key file %p, window %d)",
@@ -777,7 +784,12 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
     {
         data->page_offset = page_start;
         data->page_num = i;
-        gnc_main_window_restore_page(window, data);
+        gboolean page_added = gnc_main_window_restore_page (window, data);
+
+        added_page_offsets = g_slist_append (added_page_offsets, GINT_TO_POINTER(offset));
+
+        if (!page_added) // if page not added, increase offset to compensate
+            offset ++;
 
         /* give the page a chance to display */
         while (gtk_events_pending ())
@@ -809,14 +821,15 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
         /* Now rebuild the list from the key file. */
         for (i = 0; i < length; i++)
         {
-            gpointer page = g_list_nth_data(priv->installed_pages, order[i] - 1);
+            gint offset = GPOINTER_TO_INT(g_slist_nth_data (added_page_offsets, order[i] - 1));
+            gpointer page = g_list_nth_data (priv->installed_pages, order[i] - 1 - offset);
             if (page)
             {
                 priv->usage_order = g_list_append(priv->usage_order, page);
             }
         }
         gtk_notebook_set_current_page (GTK_NOTEBOOK(priv->notebook),
-                                       order[0] - 1);
+                                       order[0] - 1 - offset);
 
         g_signal_emit_by_name (window, "page_changed",
                                g_list_nth_data (priv->usage_order, 0));
@@ -828,6 +841,7 @@ gnc_main_window_restore_window (GncMainWindow *window, GncMainWindowSaveData *da
 
     LEAVE("window %p", window);
 cleanup:
+    g_slist_free (added_page_offsets);
     if (error)
         g_error_free(error);
     g_free(window_group);
