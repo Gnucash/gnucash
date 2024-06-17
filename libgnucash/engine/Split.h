@@ -360,11 +360,6 @@ gboolean xaccSplitEqual(const Split *sa, const Split *sb,
 Split      * xaccSplitLookup (const GncGUID *guid, QofBook *book);
 #define      xaccSplitLookupDirect(g,b) xaccSplitLookup(&(g),b)
 
-/*################## Added for Reg2 #################*/
-/* Get a GList of unique transactions containing the given list of Splits. */
-GList *xaccSplitListGetUniqueTransactionsReversed (const GList *splits);
-GList *xaccSplitListGetUniqueTransactions(const GList *splits);
-/*################## Added for Reg2 #################*/
 /** Add a peer split to this split's lot-split list.
  * @param other_split: The split whose guid to add
  * @param timestamp: The time to be recorded for the split.

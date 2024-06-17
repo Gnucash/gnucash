@@ -1171,38 +1171,7 @@ test_xaccTransGetAccountAmount (Fixture *fixture, gconstpointer pData)
     g_assert_true (gnc_numeric_eq (xaccTransGetAccountAmount (fixture->txn, fixture->acc2), amt2));
 
 }
-/* xaccTransGetRateForCommodity
-gboolean
-xaccTransGetRateForCommodity(const Transaction *trans,
-                             const gnc_commodity *split_com,
-                             const Split *split, gnc_numeric *rate)
-*/
-static void
-test_xaccTransGetRateForCommodity (Fixture *fixture, gconstpointer pData)
-{
-    gnc_numeric rate = gnc_numeric_zero ();
-    QofBook *book = qof_instance_get_book (QOF_INSTANCE (fixture->txn));
-    auto split0 = xaccMallocSplit (book);
-    auto split1 = xaccTransFindSplitByAccount(fixture->txn, fixture->acc1);
-    g_assert_true (!xaccTransGetRateForCommodity (NULL, fixture->comm,
-              split0, &rate));
-    g_assert_true (!xaccTransGetRateForCommodity (fixture->txn, NULL,
-              split0, &rate));
-    g_assert_true (!xaccTransGetRateForCommodity (fixture->txn, fixture->comm,
-              NULL, &rate));
-    g_assert_true (xaccTransGetRateForCommodity (fixture->txn, fixture->curr,
-                                            split0, &rate));
-    g_assert_true (gnc_numeric_equal (rate, gnc_numeric_create (1, 1)));
-    rate = gnc_numeric_zero ();
-    g_assert_true (!xaccTransGetRateForCommodity (fixture->txn, fixture->comm,
-              split0, &rate));
-    g_assert_true (gnc_numeric_zero_p (rate));
 
-    g_assert_true (xaccTransGetRateForCommodity (fixture->txn, fixture->comm,
-                                            split1, &rate));
-    g_assert_true (gnc_numeric_equal (rate, gnc_numeric_create (1800, 240)));
-
-}
 /* xaccTransGetAccountConvRate
 gnc_numeric
 xaccTransGetAccountConvRate(const Transaction *txn, const Account *acc)// C: 5 in 4  Local: 0:0:0
@@ -2063,7 +2032,6 @@ test_suite_transaction (void)
     GNC_TEST_ADD (suitename, "xaccTransIsBalanced", Fixture, NULL, setup, test_xaccTransIsBalanced, teardown);
     GNC_TEST_ADD (suitename, "xaccTransIsBalanced Trading Accounts", Fixture, NULL, setup, test_xaccTransIsBalanced_trading, teardown);
     GNC_TEST_ADD (suitename, "xaccTransGetAccountValue", Fixture, NULL, setup, test_xaccTransGetAccountValue, teardown);
-    GNC_TEST_ADD (suitename, "xaccTransGetRateForCommodity", Fixture, NULL, setup, test_xaccTransGetRateForCommodity, teardown);
     GNC_TEST_ADD (suitename, "xaccTransGetAccountAmount", Fixture, NULL, setup, test_xaccTransGetAccountAmount, teardown);
     GNC_TEST_ADD (suitename, "xaccTransGetAccountConvRate", Fixture, NULL, setup, test_xaccTransGetAccountConvRate, teardown);
     GNC_TEST_ADD (suitename, "xaccTransGetAccountBalance", Fixture, NULL, setup, test_xaccTransGetAccountBalance, teardown);

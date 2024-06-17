@@ -452,13 +452,6 @@ const char *  xaccTransGetReadOnly (Transaction *trans);
  * qof_book_uses_autofreeze() and qof_book_get_autofreeze_gdate(). */
 gboolean xaccTransIsReadonlyByPostedDate(const Transaction *trans);
 
-/*################## Added for Reg2 #################*/
-
-/** Returns TRUE if this Transaction's posted-date is in the future */
-gboolean xaccTransInFutureByPostedDate (const Transaction *trans);
-
-/*################## Added for Reg2 #################*/
-
 /** Returns the number of splits in this transaction. */
 int           xaccTransCountSplits (const Transaction *trans);
 
@@ -530,15 +523,6 @@ gnc_numeric xaccTransGetAccountValue (const Transaction *trans,
 /** Same as xaccTransGetAccountValue, but uses the Account's commodity. */
 gnc_numeric xaccTransGetAccountAmount (const Transaction *trans,
                                        const Account *account);
-
-/*################## Added for Reg2 #################*/
-/* Gets the amt/val rate, i.e. rate from the transaction currency to
-   the 'split_com' */
-gboolean
-xaccTransGetRateForCommodity(const Transaction *trans,
-                             const gnc_commodity *split_com,
-                             const Split *split_to_exclude, gnc_numeric *rate);
-/*################## Added for Reg2 #################*/
 
 /* Compute the conversion rate for the transaction to this account.
  * Any "split value" (which is in the transaction currency),
