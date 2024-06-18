@@ -5550,7 +5550,8 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
 {
     if (!acc) return 0;
 
-    auto& splits = GET_PRIVATE(acc)->splits;
+    // iterate on copy of splits. some callers modify the splitsvec.
+    auto splits = GET_PRIVATE(acc)->splits;
     for (auto s : splits)
     {
         auto trans = s->parent;
