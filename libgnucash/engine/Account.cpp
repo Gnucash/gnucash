@@ -2752,23 +2752,35 @@ DxaccAccountSetCurrency (Account * acc, gnc_commodity * currency)
 /********************************************************************\
 \********************************************************************/
 
-static void
-account_foreach_descendant (const Account *acc, AccountCb thunk,
-                            void* user_data, bool sort)
+void
+gnc_account_foreach_descendant (const Account *acc, std::function<void(Account*)> account_cb)
 {
     g_return_if_fail (GNC_IS_ACCOUNT(acc));
-    g_return_if_fail (thunk);
 
-    auto priv{GET_PRIVATE(acc)};
-    auto children = priv->children;
-    if (sort)
-        std::sort (children.begin(), children.end(),
-                   [](auto a, auto b) { return xaccAccountOrder (a, b) < 0; });
+    // children must be a vector copy instead of reference because
+    // some callers e.g. xaccAccountTreeScrubLots will modify the
+    // children
+    auto children = GET_PRIVATE(acc)->children;
+    for (auto child : children)
+    {
+        account_cb (child);
+        gnc_account_foreach_descendant (child, account_cb);
+    }
+}
+
+static void
+account_foreach_descendant_sorted (const Account *acc, std::function<void(Account*)> account_cb)
+{
+    g_return_if_fail (GNC_IS_ACCOUNT(acc));
+
+    auto children = GET_PRIVATE(acc)->children;
+    std::sort (children.begin(), children.end(),
+               [](auto a, auto b) { return xaccAccountOrder (a, b) < 0; });
 
     for (auto child : children)
     {
-        thunk (child, user_data);
-        account_foreach_descendant (child, thunk, user_data, sort);
+        account_cb (child);
+        account_foreach_descendant_sorted (child, account_cb);
     }
 }
 
@@ -2945,18 +2957,11 @@ gnc_account_nth_child (const Account *parent, gint num)
     return static_cast<Account*>(GET_PRIVATE(parent)->children.at (num));
 }
 
-static void
-count_acct (Account *account, gpointer user_data)
-{
-    auto count {static_cast<int*>(user_data)};
-    ++*count;
-}
-
 gint
 gnc_account_n_descendants (const Account *account)
 {
     int count {0};
-    account_foreach_descendant (account, count_acct, &count, FALSE);
+    gnc_account_foreach_descendant (account, [&count](auto acc){ count++; });
     return count;
 }
 
@@ -2994,18 +2999,11 @@ gnc_account_get_tree_depth (const Account *account)
                                 { return std::max (a, gnc_account_get_tree_depth (b)); });
 }
 
-static void
-collect_acct (Account *account, gpointer user_data)
-{
-    auto listptr{static_cast<GList**>(user_data)};
-    *listptr = g_list_prepend (*listptr, account);
-}
-
 GList *
 gnc_account_get_descendants (const Account *account)
 {
     GList* list = nullptr;
-    account_foreach_descendant (account, collect_acct, &list, FALSE);
+    gnc_account_foreach_descendant (account, [&list](auto a){ list = g_list_prepend (list, a); });
     return g_list_reverse (list);
 }
 
@@ -3013,7 +3011,7 @@ GList *
 gnc_account_get_descendants_sorted (const Account *account)
 {
     GList* list = nullptr;
-    account_foreach_descendant (account, collect_acct, &list, TRUE);
+    account_foreach_descendant_sorted (account, [&list](auto a){ list = g_list_prepend (list, a); });
     return g_list_reverse (list);
 }
 
@@ -3198,7 +3196,7 @@ gnc_account_foreach_descendant (const Account *acc,
                                 AccountCb thunk,
                                 gpointer user_data)
 {
-    account_foreach_descendant (acc, thunk, user_data, FALSE);
+    gnc_account_foreach_descendant (acc, [&](auto acc){ thunk (acc, user_data); });
 }
 
 gpointer
