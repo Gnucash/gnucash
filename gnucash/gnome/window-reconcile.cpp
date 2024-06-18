@@ -2244,66 +2244,45 @@ recn_key_press_cb(GtkWidget *widget, GdkEventKey *event, gpointer data)
 static Account *
 find_payment_account(Account *account)
 {
-    if (account == NULL)
-        return NULL;
+    if (account == nullptr)
+        return nullptr;
 
-    GList *list = xaccAccountGetSplitList (account);
-    Account *rv = nullptr;
+    const auto& splits = xaccAccountGetSplits (account);
 
     /* Search backwards to find the latest payment */
-    for (GList *node = g_list_last (list); !rv && node; node = node->prev)
+    for (auto it = splits.rbegin(); it != splits.rend(); it++)
     {
-        Transaction *trans;
-        GList *n;
-
-        auto split = GNC_SPLIT(node->data);
-        if (split == NULL)
-            continue;
+        auto split = *it;
 
         /* ignore 'purchases' */
         if (!gnc_numeric_positive_p (xaccSplitGetAmount(split)))
             continue;
 
-        trans = xaccSplitGetParent(split);
-        if (trans == NULL)
-            continue;
-
-        for (n = xaccTransGetSplitList (trans); n; n = n->next)
+        for (auto n = xaccTransGetSplitList (xaccSplitGetParent(split)); n; n = n->next)
         {
-            GNCAccountType type;
-            Account *a;
-
             auto s = GNC_SPLIT(n->data);
-            if ((s == NULL) || (s == split))
+            if (s == split)
                 continue;
 
-            a = xaccSplitGetAccount(s);
-            if ((a == NULL) || (a == account))
+            auto a = xaccSplitGetAccount(s);
+            if (a == account)
                 continue;
 
-            type = xaccAccountGetType(a);
-            if ((type == ACCT_TYPE_BANK) || (type == ACCT_TYPE_CASH) ||
-                    (type == ACCT_TYPE_ASSET))
-                rv = a;
+            auto type = xaccAccountGetType(a);
+            if (type == ACCT_TYPE_BANK || type == ACCT_TYPE_CASH || type == ACCT_TYPE_ASSET)
+                return a;
         }
     }
 
-    g_list_free (list);
-    return rv;
-}
-
-typedef void (*AccountProc) (Account *a);
-static void traverse_fn (Account *acct, AccountProc fn)
-{
-    fn (acct);
+    return nullptr;
 }
 
 static void
-acct_traverse_descendants (Account *acct, AccountProc fn)
+acct_traverse_descendants (Account *acct, std::function<void(Account*)> fn)
 {
     fn (acct);
     if (xaccAccountGetReconcileChildrenStatus (acct))
-        gnc_account_foreach_descendant (acct, (AccountCb)traverse_fn, (gpointer)fn);
+        gnc_account_foreach_descendant (acct, fn);
 }
 
 /********************************************************************\
