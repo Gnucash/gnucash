@@ -1145,7 +1145,7 @@ gnc_account_foreach_split (const Account *acc, std::function<void(Split*)> func,
     if (!GNC_IS_ACCOUNT (acc))
         return;
 
-    auto splits{GET_PRIVATE(acc)->splits};
+    auto& splits{GET_PRIVATE(acc)->splits};
     if (reverse)
         std::for_each(splits.rbegin(), splits.rend(), func);
     else
@@ -1162,7 +1162,7 @@ gnc_account_foreach_split_until_date (const Account *acc, time64 end_date,
     auto after_date = [](time64 end_date, auto s) -> bool
     { return (xaccTransGetDate (xaccSplitGetParent (s)) > end_date); };
 
-    auto splits{GET_PRIVATE(acc)->splits};
+    auto& splits{GET_PRIVATE(acc)->splits};
     auto after_date_iter = std::upper_bound (splits.begin(), splits.end(), end_date, after_date);
     std::for_each (splits.begin(), after_date_iter, f);
 }
@@ -1175,7 +1175,7 @@ gnc_account_find_split (const Account *acc, std::function<bool(const Split*)> pr
     if (!GNC_IS_ACCOUNT (acc))
         return nullptr;
 
-    auto splits{GET_PRIVATE(acc)->splits};
+    const auto& splits{GET_PRIVATE(acc)->splits};
     if (reverse)
     {
         auto latest = std::find_if(splits.rbegin(), splits.rend(), predicate);
@@ -5550,7 +5550,7 @@ xaccAccountStagedTransactionTraversal (const Account *acc,
 {
     if (!acc) return 0;
 
-    auto splits = GET_PRIVATE(acc)->splits;
+    auto& splits = GET_PRIVATE(acc)->splits;
     for (auto s : splits)
     {
         auto trans = s->parent;
