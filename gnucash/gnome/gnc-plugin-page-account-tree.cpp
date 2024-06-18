@@ -34,6 +34,8 @@
 
 #include <config.h>
 
+#include <algorithm>
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include "gnc-plugin-page-account-tree.h"
@@ -1149,21 +1151,11 @@ static gpointer
 delete_account_helper (Account * account, gpointer data)
 {
     auto helper_res = static_cast<delete_helper_t*>(data);
-    auto splits{xaccAccountGetSplits (account)};
+    auto& splits{xaccAccountGetSplits (account)};
+    auto split_ro = [](auto s) -> bool { return xaccTransGetReadOnly (xaccSplitGetParent (s)); };
 
-    if (!splits.empty())
-    {
-        helper_res->has_splits = TRUE;
-        for (auto s : splits)
-        {
-            Transaction *txn = xaccSplitGetParent (s);
-            if (xaccTransGetReadOnly (txn))
-            {
-                helper_res->has_ro_splits = TRUE;
-                break;
-            }
-        }
-    }
+    helper_res->has_splits = !splits.empty();
+    helper_res->has_ro_splits = std::any_of (splits.begin(), splits.end(), split_ro);
 
     return GINT_TO_POINTER (helper_res->has_splits || helper_res->has_ro_splits);
 }
