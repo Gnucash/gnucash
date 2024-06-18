@@ -26,6 +26,7 @@
 #include <glib.h>
 #include <glib/gi18n.h>
 
+#include "Account.hpp"
 #include "Scrub.h"
 #include "combocell.h"
 #include "gnc-component-manager.h"
@@ -668,23 +669,14 @@ static Split *
 gnc_find_split_in_account_by_memo (Account *account, const char *memo,
                                    gboolean unit_price)
 {
-    if (account == NULL) return NULL;
+    if (account == nullptr) return nullptr;
 
-    Split *rv = nullptr;
-    auto splits = xaccAccountGetSplitList (account);
-    for (auto slp = g_list_last (splits); !rv && slp; slp = slp->prev)
-    {
-        auto split = GNC_SPLIT(slp->data);
-        Transaction *trans = xaccSplitGetParent (split);
+    const auto& splits = xaccAccountGetSplits (account);
+    for (auto it = splits.rbegin(); it != splits.rend(); it++)
+        if (auto split = gnc_find_split_in_trans_by_memo (xaccSplitGetParent (*it), memo, unit_price))
+            return split;
 
-        split = gnc_find_split_in_trans_by_memo (trans, memo, unit_price);
-
-        if (split)
-            rv = split;
-    }
-
-    g_list_free (splits);
-    return rv;
+    return nullptr;
 }
 
 static Split *
