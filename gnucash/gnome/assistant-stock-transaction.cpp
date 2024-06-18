@@ -516,6 +516,13 @@ Logger::report()
     return summary.str();
 }
 
+/* StockTransactionEntry QofEventHandler for accounts.
+ * Nulls the tranaction entry's account member if the account gets destroyed on
+ * us.
+ */
+static void account_destroyed_handler(QofInstance *inst, QofEventId event,
+                                      void* handler_data, [[maybe_unused]]void* event_data);
+
 /** @class StockTransactionEntry
  *
  * Holds the configuration information from the fieldmask and the data
@@ -538,17 +545,18 @@ protected:
     const char* m_action;
     gnc_numeric m_balance = gnc_numeric_zero();
     const char* m_kvp_tag;
+    int m_qof_event_handler;
 public:
     StockTransactionEntry() :
         m_enabled{false}, m_debit_side{false}, m_allow_zero{false},  m_account{nullptr},
         m_value{gnc_numeric_error(GNC_ERROR_ARG)}, m_memo{nullptr}, m_action{nullptr},
-        m_kvp_tag{nullptr} {}
+        m_kvp_tag{nullptr}, m_qof_event_handler{qof_event_register_handler(account_destroyed_handler, this)} {}
     StockTransactionEntry(const char* action, const char* kvp_tag) :
         m_enabled{false}, m_debit_side{false}, m_allow_zero{false},  m_account{nullptr},
         m_value{gnc_numeric_error(GNC_ERROR_ARG)}, m_memo{nullptr}, m_action{action},
-        m_kvp_tag{kvp_tag} {}
+        m_kvp_tag{kvp_tag}, m_qof_event_handler{qof_event_register_handler(account_destroyed_handler, this)} {}
     StockTransactionEntry(const StockTransactionEntry&) = default;
-    virtual ~StockTransactionEntry() = default;
+    virtual ~StockTransactionEntry() { qof_event_unregister_handler(m_qof_event_handler); }
     /** Set up the state variables from the FieldMask.
      *
      * @param A Fieldmast to configure the StockTransactionEntry.
@@ -615,6 +623,16 @@ public:
      */
     virtual  const char* print_price() const;
 };
+
+static void
+account_destroyed_handler(QofInstance *inst, QofEventId event,
+                          void* handler_data, [[maybe_unused]]void* event_data)
+{
+    auto entry{static_cast<StockTransactionEntry*>(handler_data)};
+    if ((inst && inst != QOF_INSTANCE(entry->account())) || (event & QOF_EVENT_DESTROY) == 0)
+        return;
+    entry->set_account(nullptr);
+}
 
 using StockTransactionEntryPtr = std::unique_ptr<StockTransactionEntry>;
 
@@ -2591,7 +2609,6 @@ public:
 };
 
 static void stock_assistant_window_destroy_cb(GtkWidget *object, gpointer user_data);
-static void refresh_handler (GHashTable *changes, gpointer user_data);
 static void close_handler (gpointer user_data);
 
 StockAssistantController::~StockAssistantController()
@@ -2610,7 +2627,7 @@ StockAssistantController::connect_signals (GtkBuilder *builder)
 
 
     auto component_id = gnc_register_gui_component
-        (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, refresh_handler, close_handler, this);
+        (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, nullptr, close_handler, this);
     gnc_gui_component_watch_entity_type (component_id, GNC_ID_ACCOUNT,
                                          QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 }
@@ -2673,30 +2690,6 @@ stock_assistant_cancel_cb (GtkAssistant *assistant, gpointer user_data)
     gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, controller);
 }
 
-
-static void
-refresh_handler (GHashTable *changes, gpointer user_data)
-{
-    if (!changes) // None of our watches fired, we don't need to do anything.
-        return;
-
-/* We have only one watch so we don't need to check GUIDs. There
- * should be only one entry, so just get the value and see if it
- * matches QOF_EVENT_DESTROY.
- */
-    auto list = g_hash_table_get_values(changes);
-    for (auto node = list; node; node = g_list_next(node))
-    {
-        auto change{static_cast<EventInfo*>(node->data)};
-        if (change->event_mask & QOF_EVENT_DESTROY)
-        {
-            PWARN ("Stock account destroyed, cancelling assistant.");
-            auto controller = static_cast<StockAssistantController*>(user_data);
-            gnc_close_gui_component_by_data(ASSISTANT_STOCK_TRANSACTION_CM_CLASS, controller);
-        }
-    }
-    g_list_free (list);
-}
 
 static void
 close_handler (gpointer user_data)
