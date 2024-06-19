@@ -1090,7 +1090,7 @@ StockTransactionFeesEntry::create_split(Transaction* trans,  AccountVec& commits
 using EntryVec = std::vector<StockTransactionEntry*>;
 
 static void stock_assistant_model_date_changed_cb(GtkWidget*, void*);
-static void stock_assistant_model_description_changed_cb(GtkWidget*, void*);
+static void stock_assistant_model_description_changed_cb(GtkWidget *, void *);
 
 /** @class StockAssistantModel Manages the available transaction types
  * based on the state of the account, the collection and validation of
@@ -1122,15 +1122,20 @@ class StockAssistantModel
     EntryVec m_list_of_splits;
 
 public:
-    StockAssistantModel (Account *account) :
-        m_acct{account},
-        m_currency{gnc_account_get_currency_or_parent(account)},
-        m_stock_entry{std::make_unique<StockTransactionStockEntry>(NC_ ("Stock Assistant: Page name","Stock"))},
-        m_cash_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Cash"), PROCEEDS_KVP_TAG)},
-        m_fees_entry{std::make_unique<StockTransactionFeesEntry>(NC_ ("Stock Assistant: Page name","Fees"), FEES_KVP_TAG)},
-        m_dividend_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Dividend"), DIVIDEND_KVP_TAG)},
-        m_capgains_entry{std::make_unique<StockTransactionEntry>(NC_ ("Stock Assistant: Page name","Capital Gains"), CAPGAINS_KVP_TAG)}
-    {
+  StockAssistantModel(Account *account)
+      : m_acct{account}, m_currency{gnc_account_get_currency_or_parent(
+                             account)},
+        m_stock_entry{std::make_unique<StockTransactionStockEntry>(
+            NC_("Stock Assistant: Page name", "Stock"))},
+        m_cash_entry{std::make_unique<StockTransactionEntry>(
+            NC_("Stock Assistant: Page name", "Cash"), PROCEEDS_KVP_TAG)},
+        m_fees_entry{std::make_unique<StockTransactionFeesEntry>(
+            NC_("Stock Assistant: Page name", "Fees"), FEES_KVP_TAG)},
+        m_dividend_entry{std::make_unique<StockTransactionEntry>(
+            NC_("Stock Assistant: Page name", "Dividend"), DIVIDEND_KVP_TAG)},
+        m_capgains_entry{std::make_unique<StockTransactionEntry>(
+            NC_("Stock Assistant: Page name", "Capital Gains"),
+            CAPGAINS_KVP_TAG)} {
         DEBUG ("StockAssistantModel constructor\n");
         m_stock_entry->set_account(m_acct);
     };
@@ -1230,6 +1235,7 @@ public:
      * transaction was created and a pointer to the new transaction.
      */
     std::tuple<bool, Transaction*> create_transaction ();
+    Account* account() { return m_acct; }
 private:
     /** Private function that adds the calculated price to the book's
      * price database.
@@ -2588,15 +2594,21 @@ StockAssistantView::prepare(int page, StockAssistantModel* model)
  * objects and is responsible for creating, connecting, and destroying
  * both.
  */
+
+static void stock_account_destroyed_handler(QofInstance *inst, QofEventId event,
+                                            void* handler_data, [[maybe_unused]]void* event_data);
+
 class StockAssistantController
 {
     std::unique_ptr<StockAssistantModel> m_model;
     StockAssistantView m_view;
     bool m_destroying = false;
+    int m_qof_event_handler;
 public:
     StockAssistantController (GtkWidget *parent, GtkBuilder* builder, Account* acct)
         : m_model{std::make_unique<StockAssistantModel>(acct)},
-          m_view{builder, acct, parent}
+          m_view{builder, acct, parent},
+          m_qof_event_handler{qof_event_register_handler(stock_account_destroyed_handler, this)}
     {
         connect_signals (builder);
         DEBUG ("StockAssistantController constructor\n");
@@ -2606,6 +2618,7 @@ public:
     void prepare(GtkAssistant* assistant, GtkWidget *page);
     void finish();
     bool destroying() { return m_destroying; }
+    Account* model_account() { return m_model->account(); }
 };
 
 static void stock_assistant_window_destroy_cb(GtkWidget *object, gpointer user_data);
@@ -2615,6 +2628,7 @@ StockAssistantController::~StockAssistantController()
 {
     m_destroying = true;
     gnc_unregister_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, this);
+    qof_event_unregister_handler(m_qof_event_handler);
 }
 
 void
@@ -2649,6 +2663,17 @@ StockAssistantController::finish()
     gnc_resume_gui_refresh ();
 
     gnc_close_gui_component_by_data (ASSISTANT_STOCK_TRANSACTION_CM_CLASS, this);
+}
+
+static void
+stock_account_destroyed_handler(QofInstance *inst, QofEventId event,
+                          void* handler_data, [[maybe_unused]]void* event_data)
+{
+    auto controller{static_cast<StockAssistantController*>(handler_data)};
+    if ((inst && inst != QOF_INSTANCE(controller->model_account())) || (event & QOF_EVENT_DESTROY) == 0 ||
+        controller->destroying())
+        return;
+    delete controller;
 }
 
 // These callbacks must be registered with the GtkAssistant so they can't be member functions.
