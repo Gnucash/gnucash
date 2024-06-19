@@ -337,7 +337,7 @@
 ;; Make a row list based on the visible columns
 ;;
 (define (add-row table odd-row? column-vector date due-date ref type-str
-                 desc doclink-invoice currency amt debit credit sale tax lhs-class
+                 desc doclink currency amt debit credit sale tax lhs-class
                  link-option link-rows)
   (define nrows (if link-rows (length link-rows) 1))
   (define (link-data->cols link-data)
@@ -429,11 +429,7 @@
               (addif (ref-col column-vector)    ref)
               (addif (type-col column-vector)   type-str)
               (addif (desc-col column-vector)   desc)
-              (addif (doclink-col column-vector)
-                     (and doclink-invoice
-                          (gnc:html-invoice-doclink-anchor
-                           doclink-invoice
-                           (C_ "Column header for 'Document Link'" "L"))))))
+              (addif (doclink-col column-vector) doclink)))
             (map
              (lambda (str)
                (let ((cell (gnc:make-html-table-cell/size/markup
@@ -799,7 +795,9 @@ and do not match the transaction."))))))))
          (split->reference split)
          (split->type-str split payable?)
          (splits->desc (list split))
-         (and (not (string-null? (gncInvoiceGetDocLink invoice))) invoice)
+         (and (not (string-null? (gncInvoiceGetDocLink invoice)))
+              (gnc:html-invoice-doclink-anchor
+               invoice (C_ "Column header for 'Document Link'" "L")))
          currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
          (and (< orig-value 0) (amount->anchor split (- orig-value)))
@@ -837,7 +835,10 @@ and do not match the transaction."))))))))
          (split->reference split)
          (split->type-str split payable?)
          (splits->desc (xaccTransGetAPARAcctSplitList txn #t) #t)
-         #f currency (+ total value)
+         (and (not (string-null? (xaccTransGetDocLink txn)))
+              (gnc:html-transaction-doclink-anchor
+               txn (C_ "Column header for 'Document Link'" "L")))
+         currency (+ total value)
          (and (>= orig-value 0) (amount->anchor split orig-value))
          (and (< orig-value 0) (amount->anchor split (- orig-value)))
          #f #f
