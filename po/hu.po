@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-18 01:09+0000\n"
+"PO-Revision-Date: 2024-06-19 07:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -9887,7 +9887,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:165
 #: gnucash/gtkbuilder/dialog-preferences.glade:1125
 msgid "In the current calendar year"
-msgstr "Idei naptári évben"
+msgstr "Kiegészítés az aktuális évszámmal"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:166
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:171
@@ -9896,16 +9896,22 @@ msgid ""
 "within the current calendar year or close to the current date based on a "
 "sliding window starting a set number of months backwards in time."
 msgstr ""
+"Ha egy dátumot évszám nélkül ad meg, akkor azt ki lehet egészíteni úgy, hogy "
+"az aktuális naptári éven belül legyen, vagy az aktuális dátumhoz közel - egy "
+"12 hónapos, csúszó időablakban - legyen, amely megadott számú hónappal az "
+"aktuális hónap előtt kezdődik."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:170
 msgid ""
 "In a sliding 12-month window starting a configurable number of months before "
 "the current month"
 msgstr ""
+"A dátum kiegészítése úgy, hogy beilleszkedjen egy 12 hónapos, csúszó "
+"időablakba, amely megadott számú hónappal az aktuális hónap előtt kezdődik"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:175
 msgid "Maximum number of months to go back."
-msgstr "Az hónapok maximális száma visszafelé haladáshoz."
+msgstr "Legfeljebb ennyi hónapot lehet visszafelé haladni."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:176
 #: gnucash/gtkbuilder/dialog-preferences.glade:1151
@@ -9913,6 +9919,9 @@ msgid ""
 "Dates will be completed so that they are close to the current date. Enter "
 "the maximum number of months to go backwards in time when completing dates."
 msgstr ""
+"A dátumok úgy lesznek kiiegészítve, hogy az aktuális dátum közelében - egy "
+"12 hónapos, csúszó időablakban - legyenek. Adja meg, hogy a dátumok "
+"kiiegészítésekor legfeljebb hány hónapot lehet visszafelé haladni az időben."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:180
 #, fuzzy
@@ -9944,13 +9953,15 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:190
 msgid "Show splash screen"
-msgstr "Mutassa a nyitó ablakot"
+msgstr "Nyitókép megjelenítése"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:191
 msgid ""
 "If active, a splash screen will be shown at startup. Otherwise no splash "
 "screen will be shown."
 msgstr ""
+"Ha aktív, nyitókép jelenik meg indításkor. Ellenkező esetben nem jelenik meg "
+"a nyitókép."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:195
 #: gnucash/gtkbuilder/dialog-preferences.glade:3377
@@ -15044,8 +15055,8 @@ msgid ""
 "In a sliding 12-month window starting this\n"
 "many months before the current month"
 msgstr ""
-"A dátum beillesztése egy tizenkét hónapos időablakba\n"
-"ahol a tárgyhónap előtti hónapok száma"
+"Kiegészítés úgy, hogy beilleszkedjen egy 12 hónapos, csúszó időablakba,\n"
+"amely ennyi hónappal az aktuális hónap előtt kezdődik"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1168
 msgid "Enter number of months."
