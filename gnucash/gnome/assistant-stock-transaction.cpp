@@ -196,7 +196,7 @@ static const TxnTypeVec long_types
         // sale of stock, and recording capital gain/loss
         N_("Sell"),
         N_("Selling stock long, and record capital gain/loss."
-           "\n\nIf you are unable to calculate capital gains you can enter a"
+           "\n\nIf you are unable to calculate capital gains you can enter a "
            "placeholder amount and correct it in the transaction later.")
     },
     {
