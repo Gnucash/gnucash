@@ -62,13 +62,6 @@ SCM    gnc_scm_call_1_to_procedure(SCM func, SCM arg);
 SCM    gnc_scm_call_1_to_list(SCM func, SCM arg);
 SCM    gnc_scm_call_1_to_vector(SCM func, SCM arg);
 
-/* Deprecated functions, will be removed soon */
-#define gnc_guile_call1_to_string gnc_scm_call_1_to_string
-#define gnc_guile_call1_symbol_to_string gnc_scm_call_1_symbol_to_string
-#define gnc_guile_call1_to_procedure gnc_scm_call_1_to_procedure
-#define gnc_guile_call1_to_list gnc_scm_call_1_to_list
-#define gnc_guile_call1_to_vector gnc_scm_call_1_to_vector
-
 /** Clean up a scheme options string for use in a key/value file.
  *  This function removes all full line comments, removes all blank
  *  lines, and removes all leading/trailing white space.
