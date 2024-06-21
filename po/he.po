@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-19 07:09+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2024-06-21 18:09+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.6-rc\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -4738,7 +4738,7 @@ msgstr "רשימת ספקים"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:372
 msgid "Customer Listing"
-msgstr "רשימות לקוח"
+msgstr "רשימת לקוחות"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:359
 msgid "Owners"
