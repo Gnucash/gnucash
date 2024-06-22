@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.4\n"
+"Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-25 08:00+0200\n"
+"POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2023-09-21 00:29+0200\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -729,6 +729,10 @@ msgstr ""
 
 #. "A document or certificate showing who owns shares"
 msgid "security"
+msgstr ""
+
+#. "Selling borrowed units in the hope that when you buy them back later it will be at a lower price."
+msgid "Sell short"
 msgstr ""
 
 #. "-"

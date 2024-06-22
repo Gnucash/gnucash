@@ -5,10 +5,10 @@
 # Marco Zietzling <marco.zietzling@gmail.com>, 2020, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.4\n"
+"Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2023-09-25 02:33+0200\n"
+"POT-Creation-Date: 2024-06-22 06:24+0200\n"
 "PO-Revision-Date: 2022-01-02 22:54+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: German (Switzerland) <https://hosted.weblate.org/projects/"
@@ -307,7 +307,7 @@ msgstr "Börsenplatzkürzel"
 msgid "commodity option: fraction"
 msgstr "Stückelung"
 
-#. "e.g. USD, DEM"
+#. "e.g. USD, EUR"
 msgid "commodity option: Symbol"
 msgstr "Symbol"
 
@@ -751,6 +751,10 @@ msgstr "überprüfen (bis 1.6: ausbuchen)"
 #. "A document or certificate showing who owns shares"
 msgid "security"
 msgstr "Wertpapier"
+
+#. "Selling borrowed units in the hope that when you buy them back later it will be at a lower price."
+msgid "Sell short"
+msgstr ""
 
 #. "-"
 msgid "Share Balance (register)"
