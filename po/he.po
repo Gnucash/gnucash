@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-21 18:09+0000\n"
+"PO-Revision-Date: 2024-06-22 09:18+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -1366,10 +1366,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:170
-#, fuzzy
-#| msgid "Open _Folder"
 msgid "Open short"
-msgstr "פתיחת _תיקייה"
+msgstr "פתיחת טווח קצר"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:171
 msgid "Initial stock short sale."
@@ -1463,10 +1461,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:245
-#, fuzzy
-#| msgid "No description provided."
 msgid "Notional distribution (dividend)"
-msgstr "ללא תיאור."
+msgstr "חלוקה רעיונית (דיבידנד)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:246
 msgid ""
@@ -1492,8 +1488,6 @@ msgstr ""
 #. split when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:269
 #: gnucash/gnome/assistant-stock-transaction.cpp:395
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock split"
 msgstr "פיצול ניר ערך"
 
@@ -1512,10 +1506,8 @@ msgstr ""
 #. reverse split when shorting stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:282
 #: gnucash/gnome/assistant-stock-transaction.cpp:409
-#, fuzzy
-#| msgid "_Review cleared splits"
 msgid "Reverse split"
-msgstr "_סקירת פיצולים שהותאמו"
+msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
 msgid ""
@@ -1530,10 +1522,8 @@ msgstr ""
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:300
-#, fuzzy
-#| msgid "Sort Order"
 msgid "Short sell"
-msgstr "סדר מיון"
+msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:301
 msgid "Selling stock short."
@@ -1650,18 +1640,12 @@ msgid "No errors found. Click Apply to create transaction."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:507
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following errors must be fixed:"
-msgstr "מסמך הספק הבא הגיע לפרעון:"
+msgstr "נדרש לתקן את השגיאות הבאות:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:512
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following warnings exist:"
-msgstr "מסמך הספק הבא הגיע לפרעון:"
+msgstr "השגיאות הבאות קיימות:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:636
 #: gnucash/gnome/assistant-stock-transaction.cpp:697
@@ -1689,47 +1673,38 @@ msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:686
 #: gnucash/gnome/assistant-stock-transaction.cpp:1036
-#, fuzzy, c-format
-#| msgid "Include sub-accounts of all selected accounts."
+#, c-format
 msgid "The %s amount has no associated account."
-msgstr "לכלול את כל חשבונות המשנה לחשבונות שנבחרו."
+msgstr "אין חשבונות משויכים לסכום %s."
 
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
 #: gnucash/gnome/assistant-stock-transaction.cpp:752
 msgid "N/A"
-msgstr ""
+msgstr "אין ערך תקין"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:844
-#, fuzzy
-#| msgid "Accounts in %s"
 msgid "Amount for stock value is missing."
-msgstr "חשבונות ב־'%s'"
+msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:856
-#, fuzzy
-#| msgid "Invalid option value"
 msgid "Invalid stock new balance."
-msgstr "ערך אפשרות לא תקין"
+msgstr "יתרת מניות חדשה לא תקינה."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:858
 msgid "New balance must be higher than old balance."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:860
-#, fuzzy
-#| msgid "Start date must be earlier than End date"
 msgid "New balance must be lower than old balance."
-msgstr "תאריך התחלה חייב להיות מוקדם מתאריך סיום"
+msgstr "יתרה חדשה חייבת להיות נמוכה מהיתרה הישנה."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:867
-#, fuzzy
-#| msgid "Stock Accounts to report on."
 msgid "Stock amount must be positive."
-msgstr "חשבונות נירות ערך לדיווח."
+msgstr "כמות מניות חייב להיות ערך חיובי."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:871
 msgid "Cannot sell more units than owned."
-msgstr ""
+msgstr "לא ניתן למכור יותר יחידות ממה שקיים."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:873
 msgid "Cannot cover buy more units than owed."
@@ -1752,21 +1727,17 @@ msgstr "מזומן"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1111
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
-msgstr ""
+msgstr "דמים"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1112
-#, fuzzy
-#| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "Dividend"
-msgstr "דיוידנד"
+msgstr "דיבידנד"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1113
-#, fuzzy
-#| msgid "Capital"
 msgctxt "Stock Assistant: Page name"
 msgid "Capital Gains"
-msgstr "הון"
+msgstr "רווח הון"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1276
 #, c-format
@@ -1787,7 +1758,7 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:1388
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
-msgstr ""
+msgstr "לא ניתן לאזן תנועה, %s הוא ערך שגוי %s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1394
 #, c-format
@@ -1795,10 +1766,8 @@ msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1899
-#, fuzzy
-#| msgid "Net Balance"
 msgid "Ne_w Balance"
-msgstr "יתרה נטו"
+msgstr "יתרה _חדשה"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1899
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
@@ -1809,30 +1778,22 @@ msgid "_Shares"
 msgstr "_מניות"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1902
-#, fuzzy
-#| msgid "_Rotation"
 msgid "Ratio"
-msgstr "_סיבוב"
+msgstr "יחס"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1902
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
-#, fuzzy
-#| msgid "Net Balance"
 msgid "Next Balance"
-msgstr "יתרה נטו"
+msgstr "יתרה הבאה"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1906
-#, fuzzy
-#| msgid "Enter the value of shares bought or sold"
 msgid "Enter the new balance of shares after the stock split."
-msgstr "נא להזין ערך המניות שנקנו או נמכרו"
+msgstr "הזנת יתרת מניות חדשה לאחר פיצול המניות"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1907
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
-#, fuzzy
-#| msgid "Enter the number of shares bought or sold"
 msgid "Enter the number of shares you gained or lost in the transaction."
-msgstr "נא להזין כמות (מספר) המניות שנקנו או נמכרו"
+msgstr "הזנת כמות (יחידות) שהוספדו או הורווחו בעסקה"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2308
 #: gnucash/gnome/dialog-find-transactions.c:153
@@ -1895,17 +1856,13 @@ msgstr "יחידות"
 #: gnucash/gnome/business-gnome-utils.c:392 gnucash/gnome/dialog-invoice.c:1676
 #: gnucash/gnome/dialog-invoice.c:1754
 #: gnucash/gnome-utils/gnc-general-select.c:179
-#, fuzzy
-#| msgid "Select"
 msgid "Select…"
-msgstr "בחירה"
+msgstr "בחירה…"
 
 #: gnucash/gnome/business-gnome-utils.c:199
 #: gnucash/gnome-utils/gnc-general-select.c:181
-#, fuzzy
-#| msgid "Edit"
 msgid "Edit…"
-msgstr "עריכה"
+msgstr "עריכה…"
 
 #: gnucash/gnome/business-gnome-utils.c:351 gnucash/gnome/dialog-doclink.c:813
 #: gnucash/gnome/dialog-invoice.c:2803 gnucash/gnome/dialog-invoice.c:3028
@@ -2399,15 +2356,13 @@ msgid "_OK"
 msgstr "_אישור"
 
 #: gnucash/gnome/dialog-doclink.c:241
-#, fuzzy
-#| msgid "Amend URL:"
 msgid "Amend the URL"
-msgstr "תיקון מען URL:"
+msgstr "תיקון מען URL"
 
 #: gnucash/gnome/dialog-doclink.c:246
 #, c-format
 msgid "Enter an URL like \"%s\""
-msgstr ""
+msgstr "הזנת URL כמו \"%s\""
 
 #: gnucash/gnome/dialog-doclink.c:264
 msgid "Existing Document Link is"
@@ -2913,16 +2868,12 @@ msgid "Do you really want to post the invoice?"
 msgstr "האם לרשום את החשבונית?"
 
 #: gnucash/gnome/dialog-invoice.c:1168
-#, fuzzy
-#| msgid ""
-#| "One or more of the entries are for accounts different from the invoice/"
-#| "bill currency. You will be asked a conversion rate for each."
 msgid ""
 "One or more of the entries are for accounts different from the invoice/bill "
 "currency. You will be asked to enter a conversion rate for each."
 msgstr ""
 "אחת הרשומות או יותר הם עבור חשבונות שהמטבע שלהם שונה ממטבע החשבונית/חשבונית "
-"ספק. תוצג בקשה לשער המרה עבור כל אחד."
+"ספק. תוצג בקשה להזנת לשער המרה עבור כל אחד."
 
 #: gnucash/gnome/dialog-invoice.c:1301
 msgid "The post action was canceled because not all exchange rates were given."
@@ -6544,10 +6495,8 @@ msgid "Action/Number"
 msgstr "פעולה/סימוכין"
 
 #: gnucash/gnome-utils/dialog-file-access.c:323
-#, fuzzy
-#| msgid "Open"
 msgid "Open…"
-msgstr "פתיחה"
+msgstr "פתיחה…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:324
 #: gnucash/gnome-utils/gnc-file.c:90
@@ -6559,10 +6508,8 @@ msgid "_Open"
 msgstr "_פתיחה"
 
 #: gnucash/gnome-utils/dialog-file-access.c:330
-#, fuzzy
-#| msgid "_Save As"
 msgid "Save As…"
-msgstr "_שמירה בשם"
+msgstr "שמירה בשם…"
 
 #: gnucash/gnome-utils/dialog-file-access.c:331
 #: gnucash/gnome-utils/dialog-file-access.c:340
@@ -6854,7 +6801,7 @@ msgstr ""
 #.
 #: gnucash/gnome-utils/gnc-account-sel.c:982
 msgid "New…"
-msgstr ""
+msgstr "חדש…"
 
 #: gnucash/gnome-utils/gnc-amount-edit.c:433
 #: gnucash/register/register-core/formulacell.c:121
@@ -6874,10 +6821,9 @@ msgid "Account is already at Auto-Clear Balance."
 msgstr "החשבון כבר במצב התאמה אוטומטית."
 
 #: gnucash/gnome-utils/gnc-autoclear.c:155
-#, fuzzy, c-format
-#| msgid "Too many uncleared splits"
+#, c-format
 msgid "No uncleared splits found."
-msgstr "יותר מדי פיצולים בלתי מותאמים"
+msgstr "לא נמצאו פיצולים בלתי מותאמים."
 
 #: gnucash/gnome-utils/gnc-autoclear.c:171
 #, c-format
@@ -7328,11 +7274,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:754
-#, fuzzy
-#| msgid "The following vendor document is due:"
-#| msgid_plural "The following %d vendor documents are due:"
 msgid "The following are noted in this file:"
-msgstr "מסמך הספק הבא הגיע לפרעון:"
+msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:880
 #, c-format
@@ -7421,10 +7364,8 @@ msgid "<unknown>"
 msgstr "<לא ידוע>"
 
 #: gnucash/gnome-utils/gnc-general-select.c:183
-#, fuzzy
-#| msgid "View"
 msgid "View…"
-msgstr "מצג"
+msgstr "מצג…"
 
 #: gnucash/gnome-utils/gnc-gnome-utils.c:69
 msgid "GnuCash could not find the files of the help documentation."
@@ -7692,10 +7633,9 @@ msgstr " חסר בדוח מזהה ייחודי אוניברסלי."
 
 #. Translators: %s is the report name.
 #: gnucash/gnome-utils/gnc-report-combo.c:300
-#, fuzzy, c-format
-#| msgid "missing"
+#, c-format
 msgid "'%s' is missing"
-msgstr "חסר"
+msgstr "."
 
 #. Translators: %s is the internal report guid.
 #: gnucash/gnome-utils/gnc-report-combo.c:304
@@ -7817,10 +7757,8 @@ msgstr "ק"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:953
 #: gnucash/gnome-utils/gnc-tree-view-account.c:956
 #: gnucash/gtkbuilder/dialog-account.glade:1705
-#, fuzzy
-#| msgid "Balance"
 msgid "Balance Limit"
-msgstr "יתרה"
+msgstr "מגבלת יתרה"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:966
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:63
@@ -8111,7 +8049,7 @@ msgid ""
 "unless the source is \"currency\" in which case it must be followed with two "
 "or more symbols, the first of which is the currency in which exchange rates "
 "for the rest will be quoted.\n"
-msgstr ""
+msgstr "‌\n"
 
 #: gnucash/gnucash-cli.cpp:103
 #, fuzzy
