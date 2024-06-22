@@ -12,14 +12,15 @@
 # Tobias Mohr <tobias_mohr_1991@gmx.de>, 2021.
 # Christian Wehling <christian.wehling@web.de>, 2022, 2023.
 # Joachim Wetzig <jo.wetzig@web.de>, 2023.
+# "Frank H. Ellenberger" <frank.h.ellenberger@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2023-08-14 16:53+0000\n"
-"Last-Translator: Christian Wehling <christian.wehling@web.de>\n"
+"PO-Revision-Date: 2024-06-22 21:57+0000\n"
+"Last-Translator: \"Frank H. Ellenberger\" <frank.h.ellenberger@gmail.com>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/gnucash/glossary/"
 "de/>\n"
 "Language: de\n"
@@ -27,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0-dev\n"
+"X-Generator: Weblate 5.6-rc\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -776,7 +777,7 @@ msgstr "Wertpapier"
 
 #. "Selling borrowed units in the hope that when you buy them back later it will be at a lower price."
 msgid "Sell short"
-msgstr ""
+msgstr "Leerverkauf"
 
 #. "-"
 msgid "Share Balance (register)"
