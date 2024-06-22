@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-22 09:18+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2024-06-22 14:09+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -1727,7 +1727,7 @@ msgstr "מזומן"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1111
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
-msgstr "דמים"
+msgstr "עמלות"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1112
 msgctxt "Stock Assistant: Page name"
@@ -1793,7 +1793,7 @@ msgstr "הזנת יתרת מניות חדשה לאחר פיצול המניות"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1907
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
 msgid "Enter the number of shares you gained or lost in the transaction."
-msgstr "הזנת כמות (יחידות) שהוספדו או הורווחו בעסקה"
+msgstr "הזנת כמות (יחידות) שהופסדו או הורווחו בעסקה"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2308
 #: gnucash/gnome/dialog-find-transactions.c:153
