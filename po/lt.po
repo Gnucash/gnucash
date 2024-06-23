@@ -7,10 +7,10 @@
 # Kornelijus Tvarijanavičius <kornelitvari@protonmail.com>, 2021.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.6\n"
+"Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-03-23 03:13+0100\n"
+"POT-Creation-Date: 2024-06-23 12:23-0700\n"
 "PO-Revision-Date: 2023-06-06 21:50+0000\n"
 "Last-Translator: Tadas Masiulionis <tadzikaz@gmail.com>\n"
 "Language-Team: Lithuanian <https://hosted.weblate.org/projects/gnucash/"
@@ -28,7 +28,7 @@ msgstr ""
 #: gnucash/report/reports/example/daily-reports.scm:260
 #: gnucash/report/reports/standard/account-piecharts.scm:514
 #: gnucash/report/reports/standard/balance-forecast.scm:274
-#: gnucash/report/reports/standard/balsheet-pnl.scm:870
+#: gnucash/report/reports/standard/balsheet-pnl.scm:862
 #: gnucash/report/reports/standard/budget.scm:468
 #: gnucash/report/reports/standard/cashflow-barchart.scm:259
 #: gnucash/report/reports/standard/cash-flow.scm:183
@@ -49,167 +49,167 @@ msgstr ""
 "Bandyta surasti neapibrėžto datos simbolio '~a'. Šią ataskaitą tikriausiai "
 "išsaugojo vėlesnė GnuCash versija. Numatytoji iki šiandien."
 
-#: bindings/guile/date-utilities.scm:717
+#: bindings/guile/date-utilities.scm:715
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: libgnucash/engine/gnc-option-date.cpp:263
 msgid "Start of this year"
 msgstr "Šių metų pradžia"
 
-#: bindings/guile/date-utilities.scm:720
+#: bindings/guile/date-utilities.scm:718
 #: libgnucash/engine/gnc-option-date.cpp:264
 msgid "First day of the current calendar year."
 msgstr "Dabartinių kalendorinių metų pirma diena."
 
-#: bindings/guile/date-utilities.scm:724
+#: bindings/guile/date-utilities.scm:722
 #: gnucash/gnome-utils/gnc-period-select.c:86
 #: libgnucash/engine/gnc-option-date.cpp:271
 msgid "End of this year"
 msgstr "Šių metų pabaiga"
 
-#: bindings/guile/date-utilities.scm:727
+#: bindings/guile/date-utilities.scm:725
 #: libgnucash/engine/gnc-option-date.cpp:272
 msgid "Last day of the current calendar year."
 msgstr "Dabartinių kalendorinių metų paskutinė diena."
 
-#: bindings/guile/date-utilities.scm:731
+#: bindings/guile/date-utilities.scm:729
 #: gnucash/gnome-utils/gnc-period-select.c:71
 #: libgnucash/engine/gnc-option-date.cpp:279
 msgid "Start of previous year"
 msgstr "Praėjusių metų pradžia"
 
-#: bindings/guile/date-utilities.scm:734
+#: bindings/guile/date-utilities.scm:732
 #: libgnucash/engine/gnc-option-date.cpp:280
 msgid "First day of the previous calendar year."
 msgstr "Praėjusių kalendorinių metų pirma diena."
 
-#: bindings/guile/date-utilities.scm:738
+#: bindings/guile/date-utilities.scm:736
 #: gnucash/gnome-utils/gnc-period-select.c:87
 #: libgnucash/engine/gnc-option-date.cpp:287
 msgid "End of previous year"
 msgstr "Praėjusių metų pabaiga"
 
-#: bindings/guile/date-utilities.scm:741
+#: bindings/guile/date-utilities.scm:739
 #: libgnucash/engine/gnc-option-date.cpp:288
 msgid "Last day of the previous calendar year."
 msgstr "Praėjusių kalendorinių metų paskutinė diena."
 
-#: bindings/guile/date-utilities.scm:745
+#: bindings/guile/date-utilities.scm:743
 #: libgnucash/engine/gnc-option-date.cpp:311
 msgid "Start of accounting period"
 msgstr "Ataskaitinio laikotarpio pradžia"
 
-#: bindings/guile/date-utilities.scm:748
+#: bindings/guile/date-utilities.scm:746
 #: libgnucash/engine/gnc-option-date.cpp:312
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr ""
 "Pirma ataskaitinio laikotarpio diena, kaip nustatyta globaliose nuostatose."
 
-#: bindings/guile/date-utilities.scm:752
+#: bindings/guile/date-utilities.scm:750
 #: libgnucash/engine/gnc-option-date.cpp:319
 msgid "End of accounting period"
 msgstr "Ataskaitinio laikotarpio pabaiga"
 
-#: bindings/guile/date-utilities.scm:755
+#: bindings/guile/date-utilities.scm:753
 #: libgnucash/engine/gnc-option-date.cpp:320
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr ""
 "Paskutinė ataskaitinio laikotarpio diena, kaip nustatyta globaliose "
 "nuostatose."
 
-#: bindings/guile/date-utilities.scm:759
+#: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
 #: libgnucash/engine/gnc-option-date.cpp:167
 msgid "Start of this month"
 msgstr "Šio mėnesio pradžia"
 
-#: bindings/guile/date-utilities.scm:762
+#: bindings/guile/date-utilities.scm:760
 #: libgnucash/engine/gnc-option-date.cpp:168
 msgid "First day of the current month."
 msgstr "Dabartinio mėnesio pirma diena."
 
-#: bindings/guile/date-utilities.scm:766
+#: bindings/guile/date-utilities.scm:764
 #: gnucash/gnome-utils/gnc-period-select.c:82
 #: libgnucash/engine/gnc-option-date.cpp:175
 msgid "End of this month"
 msgstr "Šio mėnesio pabaiga"
 
-#: bindings/guile/date-utilities.scm:769
+#: bindings/guile/date-utilities.scm:767
 #: libgnucash/engine/gnc-option-date.cpp:176
 msgid "Last day of the current month."
 msgstr "Dabartinio mėnesio paskutinė diena."
 
-#: bindings/guile/date-utilities.scm:773
+#: bindings/guile/date-utilities.scm:771
 #: gnucash/gnome-utils/gnc-period-select.c:67
 #: libgnucash/engine/gnc-option-date.cpp:183
 msgid "Start of previous month"
 msgstr "Praėjusio mėnesio pradžia"
 
-#: bindings/guile/date-utilities.scm:776
+#: bindings/guile/date-utilities.scm:774
 #: libgnucash/engine/gnc-option-date.cpp:184
 msgid "First day of the previous month."
 msgstr "Praėjusio mėnesio pirma diena."
 
-#: bindings/guile/date-utilities.scm:780
+#: bindings/guile/date-utilities.scm:778
 #: gnucash/gnome-utils/gnc-period-select.c:83
 #: libgnucash/engine/gnc-option-date.cpp:191
 msgid "End of previous month"
 msgstr "Praėjusio mėnesio pabaiga"
 
-#: bindings/guile/date-utilities.scm:783
+#: bindings/guile/date-utilities.scm:781
 #: libgnucash/engine/gnc-option-date.cpp:192
 msgid "Last day of previous month."
 msgstr "Praėjusio mėnesio paskutinė diena."
 
-#: bindings/guile/date-utilities.scm:787
+#: bindings/guile/date-utilities.scm:785
 #: libgnucash/engine/gnc-option-date.cpp:215
 msgid "Start of current quarter"
 msgstr "Šio ketvirčio pradžia"
 
-#: bindings/guile/date-utilities.scm:790
+#: bindings/guile/date-utilities.scm:788
 #: libgnucash/engine/gnc-option-date.cpp:216
 msgid "First day of the current quarterly accounting period."
 msgstr "Pirma dabartinio ketvirtinio ataskaitinio laikotarpio diena."
 
-#: bindings/guile/date-utilities.scm:794
+#: bindings/guile/date-utilities.scm:792
 #: libgnucash/engine/gnc-option-date.cpp:223
 msgid "End of current quarter"
 msgstr "Šio ketvirčio pabaiga"
 
-#: bindings/guile/date-utilities.scm:797
+#: bindings/guile/date-utilities.scm:795
 #: libgnucash/engine/gnc-option-date.cpp:224
 msgid "Last day of the current quarterly accounting period."
 msgstr "Paskutinė dabartinio ketvirtinio ataskaitinio laikotarpio diena."
 
-#: bindings/guile/date-utilities.scm:801
+#: bindings/guile/date-utilities.scm:799
 #: gnucash/gnome-utils/gnc-period-select.c:69
 #: libgnucash/engine/gnc-option-date.cpp:231
 msgid "Start of previous quarter"
 msgstr "Praėjusio ketvirčio pradžia"
 
-#: bindings/guile/date-utilities.scm:804
+#: bindings/guile/date-utilities.scm:802
 #: libgnucash/engine/gnc-option-date.cpp:232
 msgid "First day of the previous quarterly accounting period."
 msgstr "Pirma praėjusio ketvirtinio ataskaitinio laikotarpio diena."
 
-#: bindings/guile/date-utilities.scm:808
+#: bindings/guile/date-utilities.scm:806
 #: gnucash/gnome-utils/gnc-period-select.c:85
 #: libgnucash/engine/gnc-option-date.cpp:239
 msgid "End of previous quarter"
 msgstr "Praėjusio ketvirčio pabaiga"
 
-#: bindings/guile/date-utilities.scm:811
+#: bindings/guile/date-utilities.scm:809
 #: libgnucash/engine/gnc-option-date.cpp:240
 msgid "Last day of previous quarterly accounting period."
 msgstr "Paskutinė praėjusio ketvirtinio ataskaitinio laikotarpio diena."
 
-#: bindings/guile/date-utilities.scm:815
+#: bindings/guile/date-utilities.scm:813
 #: gnucash/gnome-utils/gnc-period-select.c:65
 #: gnucash/gnome-utils/gnc-period-select.c:81
 #: libgnucash/engine/gnc-option-date.cpp:79
 msgid "Today"
 msgstr "Šiandien"
 
-#: bindings/guile/date-utilities.scm:817
+#: bindings/guile/date-utilities.scm:815
 #: libgnucash/engine/gnc-option-date.cpp:80
 msgid "The current date."
 msgstr "Dabartinė data."
@@ -1089,8 +1089,8 @@ msgstr ""
 
 #: gnucash/gnome/assistant-acct-period.c:594
 #: gnucash/gtkbuilder/dialog-fincalc.glade:650
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1208
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1213
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1200
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1205
 #: gnucash/report/reports/standard/budget-flow.scm:44
 msgid "Period"
 msgstr "Laikotarpis"
@@ -1173,36 +1173,36 @@ msgstr "Pasirinkite valiutą, kuri bus naudojama naujoms sąskaitoms."
 msgid "New Book Options"
 msgstr "Naujos knygos parinktys"
 
-#: gnucash/gnome/assistant-loan.cpp:125
+#: gnucash/gnome/assistant-loan.cpp:126
 msgid "Taxes"
 msgstr "Mokesčiai"
 
-#: gnucash/gnome/assistant-loan.cpp:125
+#: gnucash/gnome/assistant-loan.cpp:126
 msgid "Tax Payment"
 msgstr "Mokesčių įmoka"
 
-#: gnucash/gnome/assistant-loan.cpp:126
+#: gnucash/gnome/assistant-loan.cpp:127
 msgid "Insurance"
 msgstr "Draudimas"
 
-#: gnucash/gnome/assistant-loan.cpp:126
+#: gnucash/gnome/assistant-loan.cpp:127
 msgid "Insurance Payment"
 msgstr "Draudimo mokėjimas"
 
 #. Translators: PMI stands for Private Mortgage Insurance.
-#: gnucash/gnome/assistant-loan.cpp:128
+#: gnucash/gnome/assistant-loan.cpp:129
 msgid "PMI"
 msgstr "PPD"
 
-#: gnucash/gnome/assistant-loan.cpp:128
+#: gnucash/gnome/assistant-loan.cpp:129
 msgid "PMI Payment"
 msgstr "PPD mokėjimas"
 
-#: gnucash/gnome/assistant-loan.cpp:129
+#: gnucash/gnome/assistant-loan.cpp:130
 msgid "Other Expense"
 msgstr "Kitos sąnaudos"
 
-#: gnucash/gnome/assistant-loan.cpp:129
+#: gnucash/gnome/assistant-loan.cpp:130
 msgid "Miscellaneous Payment"
 msgstr "Įvairūs mokėjimai"
 
@@ -1218,7 +1218,7 @@ msgid "via Escrow account?"
 msgstr "per sąlyginio įsipareigojimo sąskaitą?"
 
 #: gnucash/gnome/assistant-loan.cpp:925
-#: gnucash/register/ledger-core/split-register.c:2587
+#: gnucash/register/ledger-core/split-register.c:2598
 msgid "Loan"
 msgstr "Paskola"
 
@@ -1228,7 +1228,7 @@ msgstr "Paskola"
 msgid "Loan Repayment Option: \"%s\""
 msgstr "Paskolos grąžinimo nuostata: „%s“"
 
-#: gnucash/gnome/assistant-loan.cpp:1877 gnucash/gnome/dialog-lot-viewer.c:984
+#: gnucash/gnome/assistant-loan.cpp:1877 gnucash/gnome/dialog-lot-viewer.c:985
 #: gnucash/gnome/gnc-split-reg.c:654 gnucash/gnome/reconcile-view.c:453
 #: gnucash/gnome-utils/gnc-tree-view-price.c:398
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:67
@@ -1242,7 +1242,7 @@ msgstr "Paskolos grąžinimo nuostata: „%s“"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:374
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:52
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:59
-#: gnucash/import-export/import-main-matcher.cpp:1572
+#: gnucash/import-export/import-main-matcher.cpp:1593
 #: gnucash/import-export/import-match-picker.cpp:313
 #: gnucash/import-export/import-match-picker.cpp:353
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3823
@@ -1251,8 +1251,8 @@ msgstr "Paskolos grąžinimo nuostata: „%s“"
 #: gnucash/register/ledger-core/split-register-model.c:233
 #: gnucash/report/reports/standard/account-summary.scm:77
 #: gnucash/report/reports/standard/advanced-portfolio.scm:68
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1041
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1046
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1033
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1038
 #: gnucash/report/reports/standard/cashflow-barchart.scm:319
 #: gnucash/report/reports/standard/category-barchart.scm:646
 #: gnucash/report/reports/standard/category-barchart.scm:666
@@ -1271,46 +1271,46 @@ msgstr "Paskolos grąžinimo nuostata: „%s“"
 #: gnucash/report/reports/support/receipt.eguile.scm:143
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:268
 #: gnucash/report/trep-engine.scm:191 gnucash/report/trep-engine.scm:911
-#: gnucash/report/trep-engine.scm:1082 gnucash/report/trep-engine.scm:2236
+#: gnucash/report/trep-engine.scm:1082 gnucash/report/trep-engine.scm:2231
 msgid "Date"
 msgstr "Data"
 
-#: gnucash/gnome/assistant-loan.cpp:1883 gnucash/gnome/assistant-loan.cpp:2862
-#: gnucash/gnome/assistant-loan.cpp:2924 gnucash/gnome/assistant-loan.cpp:2937
+#: gnucash/gnome/assistant-loan.cpp:1883 gnucash/gnome/assistant-loan.cpp:2812
+#: gnucash/gnome/assistant-loan.cpp:2872 gnucash/gnome/assistant-loan.cpp:2884
 #: gnucash/gtkbuilder/dialog-payment.glade:445
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
-#: gnucash/register/ledger-core/split-register.c:2548
-#: gnucash/register/ledger-core/split-register.c:2589
-#: gnucash/register/ledger-core/split-register.c:2594
+#: gnucash/register/ledger-core/split-register.c:2559
+#: gnucash/register/ledger-core/split-register.c:2600
 #: gnucash/register/ledger-core/split-register.c:2605
+#: gnucash/register/ledger-core/split-register.c:2616
 #: gnucash/report/reports/standard/new-owner-report.scm:282
-#: libgnucash/engine/Account.cpp:151 libgnucash/engine/Account.cpp:159
-#: libgnucash/engine/Account.cpp:180 libgnucash/engine/gncOwner.c:836
+#: libgnucash/engine/Account.cpp:150 libgnucash/engine/Account.cpp:158
+#: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncOwner.c:836
 #: libgnucash/engine/gncOwner.c:859
 msgid "Payment"
 msgstr "Mokėjimas"
 
-#: gnucash/gnome/assistant-loan.cpp:1889 gnucash/gnome/assistant-loan.cpp:2957
+#: gnucash/gnome/assistant-loan.cpp:1889 gnucash/gnome/assistant-loan.cpp:2904
 msgid "Principal"
 msgstr "Pagrindinė suma"
 
-#: gnucash/gnome/assistant-loan.cpp:1895 gnucash/gnome/assistant-loan.cpp:2977
+#: gnucash/gnome/assistant-loan.cpp:1895 gnucash/gnome/assistant-loan.cpp:2924
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:77
-#: gnucash/register/ledger-core/split-register.c:2543
-#: gnucash/register/ledger-core/split-register.c:2580
-#: gnucash/register/ledger-core/split-register.c:2588
-#: gnucash/register/ledger-core/split-register.c:2595
-#: gnucash/register/ledger-core/split-register.c:2604
-#: gnucash/register/ledger-core/split-register.c:2631
+#: gnucash/register/ledger-core/split-register.c:2554
+#: gnucash/register/ledger-core/split-register.c:2591
+#: gnucash/register/ledger-core/split-register.c:2599
+#: gnucash/register/ledger-core/split-register.c:2606
+#: gnucash/register/ledger-core/split-register.c:2615
+#: gnucash/register/ledger-core/split-register.c:2642
 msgid "Interest"
 msgstr "Palūkanos"
 
-#: gnucash/gnome/assistant-loan.cpp:2863
+#: gnucash/gnome/assistant-loan.cpp:2813
 msgid "Escrow Payment"
 msgstr "Sąlyginio įsipareigojimo mokėjimas"
 
 #: gnucash/gnome/assistant-stock-split.c:391
-#: gnucash/register/ledger-core/split-register.c:2639
+#: gnucash/register/ledger-core/split-register.c:2650
 #, fuzzy
 msgctxt "Action Column"
 msgid "Split"
@@ -1321,12 +1321,12 @@ msgid "Error adding price."
 msgstr "Įvyko klaida pridedant kainą."
 
 #: gnucash/gnome/assistant-stock-split.c:582
-#: gnucash/gnome/assistant-stock-transaction.cpp:2302
+#: gnucash/gnome/assistant-stock-transaction.cpp:2325
 #: gnucash/gnome/dialog-find-transactions.c:109
 #: gnucash/import-export/aqb/gnc-ab-utils.c:476
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:147
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:66
-#: gnucash/import-export/import-main-matcher.cpp:1573
+#: gnucash/import-export/import-main-matcher.cpp:1594
 #: gnucash/import-export/import-match-picker.cpp:312
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:433
 #: gnucash/register/ledger-core/split-register-model.c:346
@@ -1336,10 +1336,11 @@ msgstr "Įvyko klaida pridedant kainą."
 #: gnucash/report/reports/standard/cash-flow.scm:47
 #: gnucash/report/reports/standard/general-journal.scm:97
 #: gnucash/report/reports/standard/lot-viewer.scm:37
-#: gnucash/report/reports/standard/new-owner-report.scm:1097
+#: gnucash/report/reports/standard/new-owner-report.scm:1098
 #: gnucash/report/reports/standard/portfolio.scm:244
 #: gnucash/report/reports/standard/register.scm:142
 #: gnucash/report/reports/standard/register.scm:366
+#: gnucash/report/reports/standard/txn-columns.scm:36
 #: gnucash/report/trep-engine.scm:1154
 msgid "Account"
 msgstr "Sąskaita"
@@ -1363,7 +1364,7 @@ msgstr "Simbolis"
 #: gnucash/report/reports/standard/register.scm:145
 #: gnucash/report/reports/standard/register.scm:370
 #: gnucash/report/trep-engine.scm:926 gnucash/report/trep-engine.scm:1178
-#: gnucash/report/trep-engine.scm:2247
+#: gnucash/report/trep-engine.scm:2242
 msgid "Shares"
 msgstr "Akcijos"
 
@@ -1373,82 +1374,82 @@ msgstr "Neturite akcijų sąskaitų su likučiu!"
 
 #. Translators: this is a stock transaction describing an
 #. Initial stock long purchase
-#: gnucash/gnome/assistant-stock-transaction.cpp:159
+#: gnucash/gnome/assistant-stock-transaction.cpp:160
 #, fuzzy
 #| msgid "Open"
 msgid "Open buy"
 msgstr "Atverti"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:160
+#: gnucash/gnome/assistant-stock-transaction.cpp:161
 msgid "Initial stock long purchase."
 msgstr ""
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
-#: gnucash/gnome/assistant-stock-transaction.cpp:170
+#: gnucash/gnome/assistant-stock-transaction.cpp:171
 #, fuzzy
 #| msgid "placeholder"
 msgid "Open short"
 msgstr "aplankas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:171
+#: gnucash/gnome/assistant-stock-transaction.cpp:172
 msgid "Initial stock short sale."
 msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:185
-#: gnucash/register/ledger-core/split-register.c:2566
-#: gnucash/register/ledger-core/split-register.c:2570
+#: gnucash/gnome/assistant-stock-transaction.cpp:186
 #: gnucash/register/ledger-core/split-register.c:2577
-#: gnucash/register/ledger-core/split-register.c:2585
-#: gnucash/register/ledger-core/split-register.c:2602
+#: gnucash/register/ledger-core/split-register.c:2581
+#: gnucash/register/ledger-core/split-register.c:2588
+#: gnucash/register/ledger-core/split-register.c:2596
 #: gnucash/register/ledger-core/split-register.c:2613
-#: gnucash/register/ledger-core/split-register.c:2618
-#: gnucash/register/ledger-core/split-register.c:2645
-#: libgnucash/engine/Account.cpp:154 libgnucash/engine/Account.cpp:155
-#: libgnucash/engine/Account.cpp:156
+#: gnucash/register/ledger-core/split-register.c:2624
+#: gnucash/register/ledger-core/split-register.c:2629
+#: gnucash/register/ledger-core/split-register.c:2656
+#: libgnucash/engine/Account.cpp:153 libgnucash/engine/Account.cpp:154
+#: libgnucash/engine/Account.cpp:155
 msgid "Buy"
 msgstr "Pirkimas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:186
+#: gnucash/gnome/assistant-stock-transaction.cpp:187
 msgid "Buying stock long."
 msgstr ""
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
-#: gnucash/gnome/assistant-stock-transaction.cpp:196
-#: gnucash/register/ledger-core/split-register.c:2567
-#: gnucash/register/ledger-core/split-register.c:2571
+#: gnucash/gnome/assistant-stock-transaction.cpp:197
+#: gnucash/register/ledger-core/split-register.c:2578
 #: gnucash/register/ledger-core/split-register.c:2582
-#: gnucash/register/ledger-core/split-register.c:2586
-#: gnucash/register/ledger-core/split-register.c:2603
+#: gnucash/register/ledger-core/split-register.c:2593
+#: gnucash/register/ledger-core/split-register.c:2597
 #: gnucash/register/ledger-core/split-register.c:2614
-#: gnucash/register/ledger-core/split-register.c:2619
-#: gnucash/register/ledger-core/split-register.c:2646
-#: libgnucash/engine/Account.cpp:174 libgnucash/engine/Account.cpp:175
-#: libgnucash/engine/Account.cpp:176
+#: gnucash/register/ledger-core/split-register.c:2625
+#: gnucash/register/ledger-core/split-register.c:2630
+#: gnucash/register/ledger-core/split-register.c:2657
+#: libgnucash/engine/Account.cpp:173 libgnucash/engine/Account.cpp:174
+#: libgnucash/engine/Account.cpp:175
 msgid "Sell"
 msgstr "Pardavimas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:197
+#: gnucash/gnome/assistant-stock-transaction.cpp:198
 msgid ""
 "Selling stock long, and record capital gain/loss.\n"
 "\n"
-"If you are unable to calculate capital gains you can enter aplaceholder "
+"If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
-#: gnucash/gnome/assistant-stock-transaction.cpp:209
+#: gnucash/gnome/assistant-stock-transaction.cpp:210
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:733
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:778
-#: gnucash/register/ledger-core/split-register.c:2630
+#: gnucash/register/ledger-core/split-register.c:2641
 msgid "Dividend"
 msgstr "Dividendai"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:210
+#: gnucash/gnome/assistant-stock-transaction.cpp:211
 msgid ""
 "Company issues cash dividends to holder.\n"
 "\n"
@@ -1462,11 +1463,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital
-#: gnucash/gnome/assistant-stock-transaction.cpp:221
+#: gnucash/gnome/assistant-stock-transaction.cpp:222
 msgid "Return of capital"
 msgstr "Kapitalo grąža"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:222
+#: gnucash/gnome/assistant-stock-transaction.cpp:223
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
@@ -1474,13 +1475,13 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
-#: gnucash/gnome/assistant-stock-transaction.cpp:232
+#: gnucash/gnome/assistant-stock-transaction.cpp:233
 #, fuzzy
 #| msgid "Return of capital"
 msgid "Return of capital (reclassification)"
 msgstr "Kapitalo grąža"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:233
+#: gnucash/gnome/assistant-stock-transaction.cpp:234
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units. "
 "A distribution previously recorded as a dividend is reclassified to return "
@@ -1489,13 +1490,13 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
-#: gnucash/gnome/assistant-stock-transaction.cpp:245
+#: gnucash/gnome/assistant-stock-transaction.cpp:246
 #, fuzzy
 #| msgid "Notional distribution"
 msgid "Notional distribution (dividend)"
 msgstr "Sąlyginis paskirstymas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:246
+#: gnucash/gnome/assistant-stock-transaction.cpp:247
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
@@ -1505,13 +1506,13 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
-#: gnucash/gnome/assistant-stock-transaction.cpp:257
+#: gnucash/gnome/assistant-stock-transaction.cpp:258
 #, fuzzy
 #| msgid "Notional distribution"
 msgid "Notional distribution (capital gain)"
 msgstr "Sąlyginis paskirstymas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:258
+#: gnucash/gnome/assistant-stock-transaction.cpp:259
 #, fuzzy
 #| msgid ""
 #| "Company issues a notional distribution, which is recorded as dividend "
@@ -1527,12 +1528,12 @@ msgstr ""
 #. split
 #. Translators: this is a stock transaction describing a stock
 #. split when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:269
-#: gnucash/gnome/assistant-stock-transaction.cpp:395
+#: gnucash/gnome/assistant-stock-transaction.cpp:270
+#: gnucash/gnome/assistant-stock-transaction.cpp:396
 msgid "Stock split"
 msgstr "Akcijos skaidymas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:270
+#: gnucash/gnome/assistant-stock-transaction.cpp:271
 #, fuzzy
 #| msgid ""
 #| "Company redeems units, thereby increasing the stock price by a multiple, "
@@ -1560,12 +1561,12 @@ msgstr ""
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
 #. reverse split when shorting stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:282
-#: gnucash/gnome/assistant-stock-transaction.cpp:409
+#: gnucash/gnome/assistant-stock-transaction.cpp:283
+#: gnucash/gnome/assistant-stock-transaction.cpp:410
 msgid "Reverse split"
 msgstr "Atvirkštinis skaidymas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:283
+#: gnucash/gnome/assistant-stock-transaction.cpp:284
 msgid ""
 "Company redeems units, thereby increasing the stock price by a multiple, "
 "while keeping the total monetary value of the overall investment constant.\n"
@@ -1583,23 +1584,23 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
-#: gnucash/gnome/assistant-stock-transaction.cpp:300
+#: gnucash/gnome/assistant-stock-transaction.cpp:301
 #, fuzzy
 #| msgid "Sort Order"
 msgid "Short sell"
 msgstr "Rikiavimo tvarka"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:301
+#: gnucash/gnome/assistant-stock-transaction.cpp:302
 msgid "Selling stock short."
 msgstr ""
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
-#: gnucash/gnome/assistant-stock-transaction.cpp:311
+#: gnucash/gnome/assistant-stock-transaction.cpp:312
 msgid "Buy to cover short"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:312
+#: gnucash/gnome/assistant-stock-transaction.cpp:313
 msgid ""
 "Buy back stock to cover short position, and record capital gain/loss. \n"
 "\n"
@@ -1609,11 +1610,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:324
+#: gnucash/gnome/assistant-stock-transaction.cpp:325
 msgid "Compensatory dividend"
 msgstr "Kompensacinis dividendas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:325
+#: gnucash/gnome/assistant-stock-transaction.cpp:326
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
@@ -1623,11 +1624,11 @@ msgstr ""
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:336
+#: gnucash/gnome/assistant-stock-transaction.cpp:337
 msgid "Compensatory return of capital"
 msgstr "Kompensacinė kapitalo grąža"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:337
+#: gnucash/gnome/assistant-stock-transaction.cpp:338
 msgid ""
 "Company returns capital, and the short stock holder must make a compensatory "
 "payment for the returned capital. This reduces the cost basis (less "
@@ -1640,13 +1641,13 @@ msgstr ""
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:350
+#: gnucash/gnome/assistant-stock-transaction.cpp:351
 #, fuzzy
 #| msgid "Compensatory return of capital"
 msgid "Compensatory return of capital (reclassification)"
 msgstr "Kompensacinė kapitalo grąža"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:351
+#: gnucash/gnome/assistant-stock-transaction.cpp:352
 #, fuzzy
 #| msgid ""
 #| "Company returns capital, and the short stock holder must make a "
@@ -1666,13 +1667,13 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:366
+#: gnucash/gnome/assistant-stock-transaction.cpp:367
 #, fuzzy
 #| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (dividend)"
 msgstr "Kompensacinis sąlyginis paskirstymas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:367
+#: gnucash/gnome/assistant-stock-transaction.cpp:368
 msgid ""
 "Company issues a notional distribution, and the short stock holder must make "
 "a compensatory payment for the notional distribution. This is recorded as a "
@@ -1687,13 +1688,13 @@ msgstr ""
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
-#: gnucash/gnome/assistant-stock-transaction.cpp:381
+#: gnucash/gnome/assistant-stock-transaction.cpp:382
 #, fuzzy
 #| msgid "Compensatory notional distribution"
 msgid "Compensatory notional distribution (capital gain)"
 msgstr "Kompensacinis sąlyginis paskirstymas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:382
+#: gnucash/gnome/assistant-stock-transaction.cpp:383
 #, fuzzy
 #| msgid ""
 #| "Company issues a notional distribution, and the short stock holder must "
@@ -1712,7 +1713,7 @@ msgstr ""
 "nuostolių / neigiamų dividendų pajamų suma ir padidina sąnaudų bazę (labiau "
 "neigiamą, nuo 0,00 vertės), nepaveikdama # vienetų."
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:396
+#: gnucash/gnome/assistant-stock-transaction.cpp:397
 #, fuzzy
 #| msgid ""
 #| "Company redeems units, thereby increasing the stock price by a multiple, "
@@ -1738,7 +1739,7 @@ msgstr ""
 "pinigai, pirmiausia užrašykite padengimo pirkimą naudodami akcijų sandorių "
 "asistentą, tada įrašykite atvirkštinį padalijimą."
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:410
+#: gnucash/gnome/assistant-stock-transaction.cpp:411
 msgid ""
 "Company redeems units, thereby increasing the stock price by a multiple, "
 "while keeping the total monetary value of the overall investment constant.\n"
@@ -1754,124 +1755,124 @@ msgstr ""
 "pinigai, pirmiausia užrašykite padengimo pirkimą naudodami akcijų sandorių "
 "asistentą, tada įrašykite atvirkštinį padalijimą."
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:502
+#: gnucash/gnome/assistant-stock-transaction.cpp:503
 msgid "No errors found. Click Apply to create transaction."
 msgstr "Klaidų nerasta. Spauskite Taikyti, kad sukurtumėte sandorį."
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:507
+#: gnucash/gnome/assistant-stock-transaction.cpp:508
 #, fuzzy
 msgid "The following errors must be fixed:"
 msgstr "%d gauta sąskaita apmokėtina:"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:512
+#: gnucash/gnome/assistant-stock-transaction.cpp:513
 #, fuzzy
 msgid "The following warnings exist:"
 msgstr "%d gauta sąskaita apmokėtina:"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:636
-#: gnucash/gnome/assistant-stock-transaction.cpp:697
-#: gnucash/report/reports/standard/balsheet-pnl.scm:807
+#: gnucash/gnome/assistant-stock-transaction.cpp:655
+#: gnucash/gnome/assistant-stock-transaction.cpp:716
+#: gnucash/report/reports/standard/balsheet-pnl.scm:799
 #, fuzzy
 msgid "missing"
 msgstr "Komisiniai"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:675
-#: gnucash/gnome/assistant-stock-transaction.cpp:1025
+#: gnucash/gnome/assistant-stock-transaction.cpp:694
+#: gnucash/gnome/assistant-stock-transaction.cpp:1044
 #, c-format
 msgid "Amount for %s is missing."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:680
-#: gnucash/gnome/assistant-stock-transaction.cpp:1030
+#: gnucash/gnome/assistant-stock-transaction.cpp:699
+#: gnucash/gnome/assistant-stock-transaction.cpp:1049
 #, c-format
 msgid "Amount for %s must not be negative."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:683
-#: gnucash/gnome/assistant-stock-transaction.cpp:1033
+#: gnucash/gnome/assistant-stock-transaction.cpp:702
+#: gnucash/gnome/assistant-stock-transaction.cpp:1052
 #, c-format
 msgid "Amount for %s must be positive."
 msgstr "%s suma turi būti teigiama."
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:686
-#: gnucash/gnome/assistant-stock-transaction.cpp:1036
+#: gnucash/gnome/assistant-stock-transaction.cpp:705
+#: gnucash/gnome/assistant-stock-transaction.cpp:1055
 #, fuzzy, c-format
 #| msgid "Include sub-accounts of all selected accounts."
 msgid "The %s amount has no associated account."
 msgstr "Įtraukti visų pasirinktų sąskaitų antrines sąskaitas."
 
 #. Translators: "N/A" here means that a commodity doesn't have a valid price.
-#: gnucash/gnome/assistant-stock-transaction.cpp:752
+#: gnucash/gnome/assistant-stock-transaction.cpp:771
 msgid "N/A"
 msgstr "Netaikoma"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:844
+#: gnucash/gnome/assistant-stock-transaction.cpp:863
 #, fuzzy
 #| msgid "Accounts in '%s'"
 msgid "Amount for stock value is missing."
 msgstr "Sąskaitos iš „%s“"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:856
+#: gnucash/gnome/assistant-stock-transaction.cpp:875
 #, fuzzy
 msgid "Invalid stock new balance."
 msgstr "Pasirinkta neteisinga koduotė"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:858
+#: gnucash/gnome/assistant-stock-transaction.cpp:877
 msgid "New balance must be higher than old balance."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:860
+#: gnucash/gnome/assistant-stock-transaction.cpp:879
 msgid "New balance must be lower than old balance."
 msgstr "Naujasis likutis privalo būti mažesnis nei senasis."
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:867
+#: gnucash/gnome/assistant-stock-transaction.cpp:886
 #, fuzzy
 #| msgid "Stock Accounts to report on."
 msgid "Stock amount must be positive."
 msgstr "Akcijų sąskaitos ataskaitai."
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:871
+#: gnucash/gnome/assistant-stock-transaction.cpp:890
 msgid "Cannot sell more units than owned."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:873
+#: gnucash/gnome/assistant-stock-transaction.cpp:892
 msgid "Cannot cover buy more units than owed."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1109
+#: gnucash/gnome/assistant-stock-transaction.cpp:1129
 #, fuzzy
 #| msgid "Stock"
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
 msgstr "Akcija"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1110
+#: gnucash/gnome/assistant-stock-transaction.cpp:1131
 #, fuzzy
 #| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "Grynieji"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1111
+#: gnucash/gnome/assistant-stock-transaction.cpp:1133
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1112
+#: gnucash/gnome/assistant-stock-transaction.cpp:1135
 #, fuzzy
 #| msgid "Dividend"
 msgctxt "Stock Assistant: Page name"
 msgid "Dividend"
 msgstr "Dividendai"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1113
+#: gnucash/gnome/assistant-stock-transaction.cpp:1137
 #, fuzzy
 #| msgid "Capital"
 msgctxt "Stock Assistant: Page name"
 msgid "Capital Gains"
 msgstr "Kapitalas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1276
+#: gnucash/gnome/assistant-stock-transaction.cpp:1300
 #, c-format
 msgid ""
 "You will enter a transaction with date %s which is earlier than the latest "
@@ -1882,67 +1883,67 @@ msgstr ""
 
 #. Translators: %s refer to: stock mnemonic, broker currency,
 #. date of transaction.
-#: gnucash/gnome/assistant-stock-transaction.cpp:1318
+#: gnucash/gnome/assistant-stock-transaction.cpp:1341
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1388
+#: gnucash/gnome/assistant-stock-transaction.cpp:1411
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1394
+#: gnucash/gnome/assistant-stock-transaction.cpp:1417
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
 msgstr ""
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1899
+#: gnucash/gnome/assistant-stock-transaction.cpp:1922
 #, fuzzy
 msgid "Ne_w Balance"
 msgstr "Gauti _likutį"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1899
+#: gnucash/gnome/assistant-stock-transaction.cpp:1922
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:234
-#: gnucash/register/ledger-core/split-register.c:2091
-#: gnucash/register/ledger-core/split-register.c:2094
+#: gnucash/register/ledger-core/split-register.c:2102
+#: gnucash/register/ledger-core/split-register.c:2105
 msgid "_Shares"
 msgstr "_Akcijos"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1902
+#: gnucash/gnome/assistant-stock-transaction.cpp:1925
 #, fuzzy
 #| msgid "_Rotation"
 msgid "Ratio"
 msgstr "Pasu_kimas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1902
+#: gnucash/gnome/assistant-stock-transaction.cpp:1925
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:277
 #, fuzzy
 msgid "Next Balance"
 msgstr "Gauti _likutį"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1906
+#: gnucash/gnome/assistant-stock-transaction.cpp:1929
 #, fuzzy
 #| msgid "Enter the value of shares bought or sold"
 msgid "Enter the new balance of shares after the stock split."
 msgstr "Įveskite įsigytų ar parduotų akcijų vertę"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:1907
+#: gnucash/gnome/assistant-stock-transaction.cpp:1930
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
 #, fuzzy
 #| msgid "Enter the number of shares bought or sold"
 msgid "Enter the number of shares you gained or lost in the transaction."
 msgstr "Įveskite įsigytų ar parduotų akcijų skaičių"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2308
+#: gnucash/gnome/assistant-stock-transaction.cpp:2331
 #: gnucash/gnome/dialog-find-transactions.c:153
 #: gnucash/gnome/gnc-split-reg.c:669
 #: gnucash/gtkbuilder/dialog-payment.glade:495
 #: gnucash/gtkbuilder/dialog-transfer.glade:205
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:382
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:72
-#: gnucash/import-export/import-main-matcher.cpp:1577
+#: gnucash/import-export/import-main-matcher.cpp:1598
 #: gnucash/import-export/import-match-picker.cpp:316
 #: gnucash/import-export/import-match-picker.cpp:356
 #: gnucash/register/ledger-core/split-register-model.c:360
@@ -1952,38 +1953,38 @@ msgstr "Įveskite įsigytų ar parduotų akcijų skaičių"
 #: gnucash/report/reports/standard/register.scm:362
 #: gnucash/report/trep-engine.scm:263 gnucash/report/trep-engine.scm:942
 #: gnucash/report/trep-engine.scm:1143 gnucash/report/trep-engine.scm:1144
-#: gnucash/report/trep-engine.scm:2255
+#: gnucash/report/trep-engine.scm:2250
 msgid "Memo"
 msgstr "Užrašas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2316
+#: gnucash/gnome/assistant-stock-transaction.cpp:2339
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3410
 #: gnucash/gtkbuilder/dialog-payment.glade:300
-#: gnucash/register/ledger-core/split-register.c:2441
+#: gnucash/register/ledger-core/split-register.c:2452
 #: gnucash/report/reports/standard/general-journal.scm:82
 #: gnucash/report/reports/standard/register.scm:336
 #: gnucash/report/reports/standard/trial-balance.scm:555
 #: gnucash/report/trep-engine.scm:1343 gnucash/report/trep-engine.scm:1447
-#: libgnucash/engine/Account.cpp:164
+#: libgnucash/engine/Account.cpp:163
 msgid "Debit"
 msgstr "Debetas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2323
+#: gnucash/gnome/assistant-stock-transaction.cpp:2346
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3406
 #: gnucash/gtkbuilder/dialog-payment.glade:316
-#: gnucash/register/ledger-core/split-register.c:2464
-#: gnucash/register/ledger-core/split-register.c:2559
-#: gnucash/register/ledger-core/split-register.c:2578
-#: gnucash/register/ledger-core/split-register.c:2596
+#: gnucash/register/ledger-core/split-register.c:2475
+#: gnucash/register/ledger-core/split-register.c:2570
+#: gnucash/register/ledger-core/split-register.c:2589
+#: gnucash/register/ledger-core/split-register.c:2607
 #: gnucash/report/reports/standard/general-journal.scm:83
 #: gnucash/report/reports/standard/register.scm:338
 #: gnucash/report/reports/standard/trial-balance.scm:558
 #: gnucash/report/trep-engine.scm:1350 gnucash/report/trep-engine.scm:1454
-#: libgnucash/engine/Account.cpp:184
+#: libgnucash/engine/Account.cpp:183
 msgid "Credit"
 msgstr "Kreditas"
 
-#: gnucash/gnome/assistant-stock-transaction.cpp:2330
+#: gnucash/gnome/assistant-stock-transaction.cpp:2353
 #: gnucash/report/reports/standard/portfolio.scm:247
 #: gnucash/report/reports/standard/receipt.scm:52
 #: gnucash/report/reports/standard/receipt.scm:114
@@ -2010,7 +2011,7 @@ msgstr "Taisa…"
 #: gnucash/gnome-search/dialog-search.c:1077
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:147
 #: gnucash/report/reports/standard/invoice.scm:774
-#: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncInvoice.c:1098
+#: libgnucash/engine/Account.cpp:178 libgnucash/engine/gncInvoice.c:1098
 msgid "Bill"
 msgstr "Gauta sąskaita"
 
@@ -2022,7 +2023,7 @@ msgstr "Sąnaudų kvitas"
 
 #: gnucash/gnome/business-gnome-utils.c:357 gnucash/gnome/dialog-doclink.c:821
 #: gnucash/gnome/dialog-invoice.c:3764
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:396
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:397
 #: gnucash/gnome/gnc-plugin-page-register.cpp:397
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1920
 #: gnucash/gnome-search/dialog-search.c:1093
@@ -2031,14 +2032,14 @@ msgstr "Sąnaudų kvitas"
 #: gnucash/gtkbuilder/dialog-invoice.glade:195
 #: gnucash/gtkbuilder/dialog-invoice.glade:935
 #: gnucash/gtkbuilder/dialog-invoice.glade:959
-#: gnucash/register/ledger-core/split-register.c:2593
+#: gnucash/register/ledger-core/split-register.c:2604
 #: gnucash/report/reports/standard/invoice.scm:765
 #: gnucash/report/reports/standard/invoice.scm:782
 #: gnucash/report/reports/standard/receipt.scm:112
 #: gnucash/report/reports/standard/taxinvoice.scm:177
 #: gnucash/report/reports/support/receipt.eguile.scm:91
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
-#: libgnucash/engine/Account.cpp:160 libgnucash/engine/gncInvoice.c:1096
+#: libgnucash/engine/Account.cpp:159 libgnucash/engine/gncInvoice.c:1096
 msgid "Invoice"
 msgstr "Sąskaita faktūra"
 
@@ -2177,7 +2178,7 @@ msgstr "Pašalinti prekę?"
 #: gnucash/gnome/dialog-price-edit-db.cpp:214
 #: gnucash/gnome/dialog-price-editor.c:238 gnucash/gnome/dialog-tax-info.c:1189
 #: gnucash/gnome/gnc-plugin-budget.c:321
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1655
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1653
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1061
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1875
 #: gnucash/gnome/gnc-split-reg.c:939 gnucash/gnome/gnc-split-reg.c:977
@@ -2262,7 +2263,7 @@ msgstr "Pašalinti prekę?"
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2101
 #: gnucash/register/ledger-core/gncEntryLedger.c:921
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:896
-#: gnucash/register/ledger-core/split-register-control.c:1543
+#: gnucash/register/ledger-core/split-register-control.cpp:1543
 #: gnucash/ui/gnc-plugin-page-invoice.ui:141
 #: gnucash/ui/gnc-plugin-page-invoice.ui:230
 #: gnucash/ui/gnc-plugin-page-invoice.ui:422
@@ -2272,7 +2273,7 @@ msgstr "_Atsisakyti"
 
 #: gnucash/gnome/dialog-commodities.c:218
 #: gnucash/gnome/dialog-price-edit-db.cpp:215
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1656
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1654
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1062
 #: gnucash/gtkbuilder/dialog-account.glade:396
 #: gnucash/gtkbuilder/dialog-billterms.glade:476
@@ -2285,7 +2286,7 @@ msgstr "_Atsisakyti"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:147
 #: gnucash/ui/gnc-plugin-page-invoice.ui:235
 #: gnucash/ui/gnc-plugin-page-invoice.ui:437
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:187
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:193
 #: gnucash/ui/gnc-reconcile-window.ui:78 gnucash/ui/gnc-reconcile-window.ui:114
 #: gnucash/ui/gnc-reconcile-window.ui:193
 msgid "_Delete"
@@ -2545,10 +2546,10 @@ msgid "Business item can not be modified."
 msgstr "Verslo elemento keisti negalima."
 
 #: gnucash/gnome/dialog-doclink.c:668 gnucash/gnome/dialog-doclink.c:769
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:223
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:248
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:1261
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:199
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:224
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:249
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:1265
 #: gnucash/gnome/gnc-plugin-page-register.cpp:395
 msgid "Manage Document Link"
 msgstr "Valdyti dokumento nuorodą"
@@ -2569,7 +2570,7 @@ msgstr "Sandorio dokumento nuorodos"
 
 #: gnucash/gnome/dialog-doclink.c:1086
 #: gnucash/gnome/dialog-find-transactions.c:157
-#: gnucash/gnome/dialog-lot-viewer.c:1000 gnucash/gnome/dialog-tax-info.c:1397
+#: gnucash/gnome/dialog-lot-viewer.c:1001 gnucash/gnome/dialog-tax-info.c:1397
 #: gnucash/gnome/gnc-split-reg.c:672 gnucash/gnome/reconcile-view.c:441
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:102
 #: gnucash/gnome-utils/gnc-tree-view-account.c:811
@@ -2585,7 +2586,7 @@ msgstr "Sandorio dokumento nuorodos"
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:377
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:61
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:61
-#: gnucash/import-export/import-main-matcher.cpp:1576
+#: gnucash/import-export/import-main-matcher.cpp:1597
 #: gnucash/import-export/import-match-picker.cpp:315
 #: gnucash/import-export/import-match-picker.cpp:355
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3833
@@ -2604,7 +2605,7 @@ msgstr "Sandorio dokumento nuorodos"
 #: gnucash/report/reports/standard/register.scm:358
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:270
 #: gnucash/report/trep-engine.scm:238 gnucash/report/trep-engine.scm:917
-#: gnucash/report/trep-engine.scm:1132 gnucash/report/trep-engine.scm:2242
+#: gnucash/report/trep-engine.scm:1132 gnucash/report/trep-engine.scm:2237
 msgid "Description"
 msgstr "Aprašas"
 
@@ -2667,8 +2668,8 @@ msgstr "Darbuotojo vardas"
 msgid "Username"
 msgstr "Naudotojo vardas"
 
-#: gnucash/gnome/dialog-employee.c:694 gnucash/gnome/dialog-sx-editor.c:1818
-#: gnucash/gnome/dialog-tax-info.c:1200 gnucash/gnome-utils/gnc-dense-cal.c:390
+#: gnucash/gnome/dialog-employee.c:694 gnucash/gnome/dialog-sx-editor.c:1820
+#: gnucash/gnome/dialog-tax-info.c:1200 gnucash/gnome-utils/gnc-dense-cal.c:391
 #: gnucash/gnome-utils/gnc-tree-model-budget.c:96
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:357
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:332
@@ -2774,7 +2775,7 @@ msgstr "Uždarantys įrašai"
 
 #: gnucash/gnome/dialog-find-transactions.c:118
 #: gnucash/gnome/gnc-plugin-page-register.cpp:393
-#: gnucash/gnome/window-reconcile.c:1444
+#: gnucash/gnome/window-reconcile.cpp:1447
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:364
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:389
 msgid "Reconcile"
@@ -2785,7 +2786,7 @@ msgid "Share Price"
 msgstr "Akcijų kaina"
 
 #: gnucash/gnome/dialog-find-transactions.c:124
-#: gnucash/gnome/dialog-lot-viewer.c:1020
+#: gnucash/gnome/dialog-lot-viewer.c:1021
 #: gnucash/gnome/dialog-sx-since-last-run.c:1446
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:79
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:69
@@ -2810,7 +2811,7 @@ msgstr "Registravimo data"
 #: gnucash/report/reports/standard/general-ledger.scm:88
 #: gnucash/report/trep-engine.scm:197 gnucash/report/trep-engine.scm:540
 #: gnucash/report/trep-engine.scm:912 gnucash/report/trep-engine.scm:1102
-#: gnucash/report/trep-engine.scm:2237
+#: gnucash/report/trep-engine.scm:2232
 msgid "Reconciled Date"
 msgstr "Suderinimo data"
 
@@ -2901,7 +2902,7 @@ msgstr "Aprašas, pastabos, užrašai"
 #: gnucash/report/reports/standard/taxinvoice.scm:69
 #: gnucash/report/trep-engine.scm:269 gnucash/report/trep-engine.scm:901
 #: gnucash/report/trep-engine.scm:918 gnucash/report/trep-engine.scm:1143
-#: gnucash/report/trep-engine.scm:2256
+#: gnucash/report/trep-engine.scm:2251
 msgid "Notes"
 msgstr "Pastabos"
 
@@ -3008,14 +3009,14 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:446
 #: gnucash/report/reports/standard/new-aging.scm:112
 #: gnucash/report/reports/standard/new-owner-report.scm:50
-#: gnucash/report/reports/standard/new-owner-report.scm:936
+#: gnucash/report/reports/standard/new-owner-report.scm:937
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:233
 msgid "Due Date"
 msgstr "Terminas"
 
 #: gnucash/gnome/dialog-invoice.c:1036
 #: gnucash/report/reports/standard/new-aging.scm:113
-#: gnucash/report/reports/standard/new-owner-report.scm:937
+#: gnucash/report/reports/standard/new-owner-report.scm:938
 msgid "Post Date"
 msgstr "Registravimo data"
 
@@ -3080,7 +3081,7 @@ msgid "PAID"
 msgstr "SUMOKĖTA"
 
 #: gnucash/gnome/dialog-invoice.c:2269
-#: gnucash/report/reports/standard/new-owner-report.scm:574
+#: gnucash/report/reports/standard/new-owner-report.scm:570
 msgid "UNPAID"
 msgstr "NESUMOKĖTA"
 
@@ -3184,7 +3185,7 @@ msgstr "Peržiūrėti/redaguoti sąskaitą faktūrą"
 
 #: gnucash/gnome/dialog-invoice.c:3517 gnucash/gnome/dialog-invoice.c:3526
 #: gnucash/gnome/dialog-invoice.c:3537
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:284
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:285
 #: gnucash/gnome/gnc-plugin-page-register.cpp:386
 #: gnucash/ui/gnc-embedded-register-window.ui:155
 msgid "Duplicate"
@@ -3192,7 +3193,7 @@ msgstr "Dublikatas"
 
 #: gnucash/gnome/dialog-invoice.c:3518 gnucash/gnome/dialog-invoice.c:3527
 #: gnucash/gnome/dialog-invoice.c:3538
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:288
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:289
 msgid "Post"
 msgstr "Registruoti"
 
@@ -3273,7 +3274,7 @@ msgid "Voucher Notes"
 msgstr "Sąnaudų kvito pastabos"
 
 #: gnucash/gnome/dialog-invoice.c:3654 gnucash/gnome/dialog-invoice.c:3813
-#: gnucash/gnome/dialog-lot-viewer.c:907 gnucash/gnome/dialog-tax-info.c:1235
+#: gnucash/gnome/dialog-lot-viewer.c:908 gnucash/gnome/dialog-tax-info.c:1235
 #: gnucash/gnome-utils/gnc-tree-view-account.c:794
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:383
 #: gnucash/gnome-utils/gnc-tree-view-price.c:410
@@ -3296,7 +3297,7 @@ msgstr "Tipas"
 
 #: gnucash/gnome/dialog-invoice.c:3656
 #: gnucash/register/ledger-core/split-register-model.c:314
-#: gnucash/report/reports/standard/new-owner-report.scm:810
+#: gnucash/report/reports/standard/new-owner-report.scm:808
 msgid "Paid"
 msgstr "Apmokėta"
 
@@ -3308,13 +3309,13 @@ msgstr "Registruota"
 msgid "Due"
 msgstr "Apmokėtina"
 
-#: gnucash/gnome/dialog-invoice.c:3666 gnucash/gnome/dialog-lot-viewer.c:913
+#: gnucash/gnome/dialog-invoice.c:3666 gnucash/gnome/dialog-lot-viewer.c:914
 #: gnucash/gnome/dialog-order.c:892
 #: gnucash/report/reports/standard/investment-lots.scm:102
 msgid "Opened"
 msgstr "Atidaryta"
 
-#: gnucash/gnome/dialog-invoice.c:3668 gnucash/gnome/dialog-lot-viewer.c:994
+#: gnucash/gnome/dialog-invoice.c:3668 gnucash/gnome/dialog-lot-viewer.c:995
 #: gnucash/gnome/dialog-order.c:894 gnucash/gnome/reconcile-view.c:445
 #: gnucash/gnome/reconcile-view.c:449
 #: gnucash/gtkbuilder/dialog-payment.glade:482
@@ -3326,7 +3327,7 @@ msgstr "Atidaryta"
 #: gnucash/report/reports/standard/register.scm:135
 #: gnucash/report/reports/standard/register.scm:354
 #: gnucash/report/trep-engine.scm:916 gnucash/report/trep-engine.scm:1116
-#: gnucash/report/trep-engine.scm:2241
+#: gnucash/report/trep-engine.scm:2236
 msgid "Num"
 msgstr "Numeris"
 
@@ -3348,7 +3349,7 @@ msgstr "Sąnaudų kvitas"
 msgid "Find Invoice"
 msgstr "Ieškoti sąskaitos faktūros"
 
-#: gnucash/gnome/dialog-invoice.c:3810 gnucash/gnome/dialog-lot-viewer.c:1014
+#: gnucash/gnome/dialog-invoice.c:3810 gnucash/gnome/dialog-lot-viewer.c:1015
 #: gnucash/gnome/gnc-split-reg.c:666 gnucash/gnome/reconcile-view.c:437
 #: gnucash/gtkbuilder/assistant-loan.glade:191
 #: gnucash/gtkbuilder/assistant-loan.glade:610
@@ -3357,7 +3358,7 @@ msgstr "Ieškoti sąskaitos faktūros"
 #: gnucash/gtkbuilder/dialog-transfer.glade:102
 #: gnucash/import-export/csv-imp/gnc-imp-props-price.cpp:53
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:67
-#: gnucash/import-export/import-main-matcher.cpp:1575
+#: gnucash/import-export/import-main-matcher.cpp:1596
 #: gnucash/import-export/import-match-picker.cpp:314
 #: gnucash/import-export/import-match-picker.cpp:354
 #: gnucash/import-export/qif-imp/assistant-qif-import.c:3844
@@ -3370,7 +3371,7 @@ msgstr "Ieškoti sąskaitos faktūros"
 #: gnucash/report/reports/standard/register.scm:627
 #: gnucash/report/trep-engine.scm:231 gnucash/report/trep-engine.scm:975
 #: gnucash/report/trep-engine.scm:1333 gnucash/report/trep-engine.scm:1436
-#: gnucash/report/trep-engine.scm:2188 gnucash/report/trep-engine.scm:2208
+#: gnucash/report/trep-engine.scm:2183 gnucash/report/trep-engine.scm:2203
 msgid "Amount"
 msgstr "Suma"
 
@@ -3463,30 +3464,30 @@ msgstr "Užduoties pavadinimas"
 msgid "Find Job"
 msgstr "Ieškoti užduoties"
 
-#: gnucash/gnome/dialog-lot-viewer.c:817
+#: gnucash/gnome/dialog-lot-viewer.c:818
 msgid "Empty"
 msgstr "Tuščias"
 
-#: gnucash/gnome/dialog-lot-viewer.c:829
+#: gnucash/gnome/dialog-lot-viewer.c:830
 #, fuzzy
 #| msgid "Open"
 msgctxt "Adjective"
 msgid "Open"
 msgstr "Atverti"
 
-#: gnucash/gnome/dialog-lot-viewer.c:923 gnucash/gnome/dialog-order.c:890
+#: gnucash/gnome/dialog-lot-viewer.c:924 gnucash/gnome/dialog-order.c:890
 #: gnucash/report/reports/standard/investment-lots.scm:103
 msgid "Closed"
 msgstr "Uždaryta"
 
-#: gnucash/gnome/dialog-lot-viewer.c:933
+#: gnucash/gnome/dialog-lot-viewer.c:934
 #: gnucash/gtkbuilder/assistant-acct-period.glade:131
 #: gnucash/report/html-fonts.scm:106
 #: gnucash/report/reports/standard/register.scm:341
 msgid "Title"
 msgstr "Pavadinimas"
 
-#: gnucash/gnome/dialog-lot-viewer.c:940 gnucash/gnome/dialog-lot-viewer.c:1032
+#: gnucash/gnome/dialog-lot-viewer.c:941 gnucash/gnome/dialog-lot-viewer.c:1033
 #: gnucash/gnome-utils/gnc-tree-view-account.c:837
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:439
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:447
@@ -3495,21 +3496,21 @@ msgstr "Pavadinimas"
 #: gnucash/report/reports/standard/account-summary.scm:393
 #: gnucash/report/reports/standard/balance-forecast.scm:246
 #: gnucash/report/reports/standard/new-owner-report.scm:58
-#: gnucash/report/reports/standard/new-owner-report.scm:555
+#: gnucash/report/reports/standard/new-owner-report.scm:551
 #: gnucash/report/reports/standard/register.scm:163
 msgid "Balance"
 msgstr "Likutis"
 
-#: gnucash/gnome/dialog-lot-viewer.c:946
+#: gnucash/gnome/dialog-lot-viewer.c:947
 msgid "Gains"
 msgstr "Pelnas"
 
-#: gnucash/gnome/dialog-lot-viewer.c:1026
+#: gnucash/gnome/dialog-lot-viewer.c:1027
 #: gnucash/report/reports/example/average-balance.scm:118
 msgid "Gain/Loss"
 msgstr "Pelnas/nuostolis"
 
-#: gnucash/gnome/dialog-lot-viewer.c:1090
+#: gnucash/gnome/dialog-lot-viewer.c:1091
 #, c-format
 msgid "Lots in Account %s"
 msgstr "Partijos sąskaitoje „%s“"
@@ -3594,7 +3595,7 @@ msgstr ""
 #: gnucash/gnome/dialog-payment.c:541 gnucash/gnome/dialog-payment.c:1353
 #: gnucash/report/reports/standard/new-aging.scm:177
 #: gnucash/report/reports/standard/new-owner-report.scm:305
-#: gnucash/report/reports/standard/new-owner-report.scm:703
+#: gnucash/report/reports/standard/new-owner-report.scm:699
 msgid "Pre-Payment"
 msgstr "Išankstinis apmokėjimas"
 
@@ -3699,7 +3700,7 @@ msgid "Continue"
 msgstr "Tęsti"
 
 #: gnucash/gnome/dialog-payment.c:1634
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:282
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:283
 #: gnucash/gnome/gnc-plugin-page-register.cpp:384
 #: gnucash/ui/gnc-embedded-register-window.ui:210
 msgid "Cancel"
@@ -3738,7 +3739,7 @@ msgstr[2] "Ar tikrai norite pašalinti %d pasirinktų kainų?"
 msgid "Delete prices?"
 msgstr "Pašalinti kainas?"
 
-#: gnucash/gnome/dialog-price-edit-db.cpp:416
+#: gnucash/gnome/dialog-price-edit-db.cpp:414
 #: gnucash/gtkbuilder/dialog-invoice.glade:609
 #: gnucash/report/reports/standard/equity-statement.scm:83
 #: gnucash/report/reports/standard/income-statement.scm:110
@@ -3746,12 +3747,12 @@ msgstr "Pašalinti kainas?"
 msgid "Entries"
 msgstr "Įrašai"
 
-#: gnucash/gnome/dialog-price-edit-db.cpp:446
+#: gnucash/gnome/dialog-price-edit-db.cpp:444
 msgid "Are you sure you want to delete these prices?"
 msgstr "Ar tikrai norite ištrinti šias kainas?"
 
-#: gnucash/gnome/dialog-price-edit-db.cpp:572
-#: gnucash/gnome-utils/dialog-transfer.cpp:1797
+#: gnucash/gnome/dialog-price-edit-db.cpp:584
+#: gnucash/gnome-utils/dialog-transfer.cpp:1796
 #, c-format
 msgid "Price retrieval failed: %s"
 msgstr "Kainos nuskaityti nepavyko: %s"
@@ -3777,7 +3778,7 @@ msgid "You must select a Currency."
 msgstr "Privalote pasirinkti valiutą."
 
 #: gnucash/gnome/dialog-price-editor.c:289
-#: gnucash/gnome-utils/dialog-transfer.cpp:1679
+#: gnucash/gnome-utils/dialog-transfer.cpp:1678
 msgid "You must enter a valid amount."
 msgstr "Privalote įvesti teisingą sumą."
 
@@ -3855,7 +3856,7 @@ msgstr "Turinys"
 
 #: gnucash/gnome/dialog-report-column-view.cpp:383
 #: gnucash/report/reports/standard/customer-summary.scm:251
-#: gnucash/report/reports/standard/new-owner-report.scm:1030
+#: gnucash/report/reports/standard/new-owner-report.scm:1031
 msgid "Report"
 msgstr "Ataskaita"
 
@@ -3867,16 +3868,16 @@ msgstr "Eilutės"
 msgid "Cols"
 msgstr "Stulpeliai"
 
-#: gnucash/gnome/dialog-report-style-sheet.cpp:174
+#: gnucash/gnome/dialog-report-style-sheet.cpp:170
 #, c-format
 msgid "HTML Style Sheet Properties: %s"
 msgstr "HTML stiliaus savybės: „%s“"
 
-#: gnucash/gnome/dialog-report-style-sheet.cpp:263
+#: gnucash/gnome/dialog-report-style-sheet.cpp:259
 msgid "You must provide a name for the new style sheet."
 msgstr "Privalote suteikti pavadinimą naujam stiliui."
 
-#: gnucash/gnome/dialog-report-style-sheet.cpp:513
+#: gnucash/gnome/dialog-report-style-sheet.cpp:509
 msgid "Style Sheet Name"
 msgstr "Stiliaus pavadinimas"
 
@@ -3966,8 +3967,8 @@ msgstr "Nesuprantama formulė padalijime"
 msgid "Split with memo %s has an unparsable Debit Formula."
 msgstr ""
 
-#: gnucash/gnome/dialog-sx-editor.c:873
-#: gnucash/gnome/dialog-sx-from-trans.c:260
+#: gnucash/gnome/dialog-sx-editor.c:874
+#: gnucash/gnome/dialog-sx-from-trans.cpp:261
 msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
@@ -3975,28 +3976,28 @@ msgstr ""
 "Planinių operacijų tvarkytuvė negali automatiškai subalansuoti šios "
 "operacijos. Ar vis tiek ją įvesti?"
 
-#: gnucash/gnome/dialog-sx-editor.c:1407
+#: gnucash/gnome/dialog-sx-editor.c:1408
 msgid "(never)"
 msgstr "(niekada)"
 
-#: gnucash/gnome/dialog-sx-editor.c:1569
+#: gnucash/gnome/dialog-sx-editor.c:1571
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr "Dabartinė šabloninė operacija pakeista. Ar norit įrašyti pakeitimus?"
 
-#: gnucash/gnome/dialog-sx-editor.c:1845
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:228
+#: gnucash/gnome/dialog-sx-editor.c:1847
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:233
 msgid "Scheduled Transactions"
 msgstr "Planinės operacijos"
 
-#: gnucash/gnome/dialog-sx-from-trans.c:553
+#: gnucash/gnome/dialog-sx-from-trans.cpp:549
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
 msgstr "Planinė operacija nesubalansuota. Raginame ištaisyti šią situaciją."
 
-#: gnucash/gnome/dialog-sx-from-trans.c:777
+#: gnucash/gnome/dialog-sx-from-trans.cpp:773
 msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
@@ -4162,13 +4163,13 @@ msgstr "Ieškoti tiekėjo"
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:91
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:97
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
-#: gnucash/register/ledger-core/split-register.c:2636
+#: gnucash/register/ledger-core/split-register.c:2647
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1062
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1219
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1211
 #: gnucash/report/reports/standard/net-charts.scm:332
 #: gnucash/report/reports/standard/net-charts.scm:401
-#: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:177
-#: libgnucash/engine/Account.cpp:4507
+#: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:176
+#: libgnucash/engine/Account.cpp:4495
 msgid "Income"
 msgstr "Pajamos"
 
@@ -4183,7 +4184,7 @@ msgstr "Sąnaudos"
 
 #: gnucash/gnome/gnc-budget-view.c:506
 #: gnucash/gnome/gnc-plugin-page-register.cpp:382
-#: gnucash/register/ledger-core/split-register.c:2561
+#: gnucash/register/ledger-core/split-register.c:2572
 #: gnucash/register/ledger-core/split-register-layout.c:721
 #: gnucash/register/ledger-core/split-register-model.c:353
 #: gnucash/report/reports/standard/register.scm:143
@@ -4194,7 +4195,7 @@ msgstr "Pervesti"
 msgid "Remaining to Budget"
 msgstr "Liko biudžete"
 
-#: gnucash/gnome/gnc-budget-view.c:1604 gnucash/gnome/window-reconcile.c:1166
+#: gnucash/gnome/gnc-budget-view.c:1604 gnucash/gnome/window-reconcile.cpp:1169
 #: gnucash/gnome-utils/gnc-tree-view-account.c:906
 #: gnucash/report/html-acct-table.scm:789
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:279
@@ -4212,7 +4213,7 @@ msgstr "Liko biudžete"
 #: gnucash/report/reports/standard/new-owner-report.scm:311
 #: gnucash/report/reports/standard/portfolio.scm:269
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
-#: gnucash/report/trep-engine.scm:2086
+#: gnucash/report/trep-engine.scm:2081
 msgid "Total"
 msgstr "Iš viso"
 
@@ -4244,21 +4245,21 @@ msgstr[2] ""
 msgid "Select a Budget"
 msgstr "Pasirinkti biudžetą"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:288
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:292
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:177
 #: gnucash/gnome-utils/gnc-file.c:92 gnucash/gnome-utils/gnc-file.c:329
-#: gnucash/gnome-utils/gnc-file.c:1182
+#: gnucash/gnome-utils/gnc-file.c:1183
 msgid "Open"
 msgstr "Atverti"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:289
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:293
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:219
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:220
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:221
 msgid "Edit"
 msgstr "Redaguoti"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:290
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:294
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:222
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:223
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:224
@@ -4266,20 +4267,20 @@ msgstr "Redaguoti"
 msgid "New"
 msgstr "Nauja"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:291
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:295
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:178
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:283
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:284
 #: gnucash/gnome/gnc-plugin-page-register.cpp:385
 #: gnucash/ui/gnc-embedded-register-window.ui:170
 msgid "Delete"
 msgstr "Šalinti"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:326
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:330
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1813
 msgid "'Check & Repair' is currently running, do you want to abort it?"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:400
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:404
 #: gnucash/gtkbuilder/assistant-csv-export.glade:270
 #: gnucash/gtkbuilder/dialog-preferences.glade:1002
 #: gnucash/report/report-core.scm:163
@@ -4309,7 +4310,7 @@ msgstr ""
 msgid "Accounts"
 msgstr "Sąskaitos"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1298
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1299
 #, fuzzy, c-format
 msgid ""
 "Account %s does not have the same currency as the one you're moving "
@@ -4318,12 +4319,12 @@ msgid ""
 msgstr ""
 "Ketinate perrašyti egzistuojančią operaciją. Ar tikrai tą norite padaryti?"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1306
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1307
 #, fuzzy
 msgid "_Pick another account"
 msgstr "_Parinkti pervedimo sąskaitą"
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1307
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1308
 msgid "_Do it anyway"
 msgstr ""
 
@@ -4355,40 +4356,40 @@ msgid ""
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1594
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1592
 #, c-format
 msgid "The account %s will be deleted."
 msgstr "Sąskaita „%s“ bus pašalinta."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1603
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1601
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
 msgstr "Visos operacijos šioje sąskaitoje bus perkeltos į sąskaitą „%s“."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1610
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1608
 msgid "All transactions in this account will be deleted."
 msgstr "Visos operacijos šioje sąskaitoje bus pašalintos."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1619
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1617
 #, fuzzy, c-format
 msgid "Its sub-account will be moved to the account %s."
 msgstr "Visos šios sąskaitos antrinės sąskaitos bus perkeltos į sąskaitą „%s“."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1625
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1623
 #, fuzzy
 msgid "Its subaccount will be deleted."
 msgstr "Visos šios sąskaitos antrinės sąskaitos bus pašalintos."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1629
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1627
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
 msgstr "Visos antrinių sąskaitų operacijos bus perkeltos į sąskaitą „%s“."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1636
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1634
 msgid "All sub-account transactions will be deleted."
 msgstr "Visos antrinių sąskaitų operacijos bus pašalintos."
 
-#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1642
+#: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1640
 msgid "Are you sure you want to do this?"
 msgstr "Ar tikrai norite tai padaryti?"
 
@@ -4433,7 +4434,7 @@ msgid "Budget"
 msgstr "Biudžetas"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:935
-#: libgnucash/engine/gnc-budget.cpp:111
+#: libgnucash/engine/gnc-budget.cpp:110
 msgid "Unnamed Budget"
 msgstr "Biudžetas be pavadinimo"
 
@@ -4456,109 +4457,109 @@ msgstr "Turite pasirinkti mažiausiai vieną sąskaitą apytikriam apskaičiavim
 msgid "You must select one budget cell to edit."
 msgstr "Turite pasirinkti mažiausiai vieną sąskaitą apytikriam apskaičiavimui."
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:189
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:287
 #, fuzzy
 msgid "_Print Invoice"
 msgstr "Spausdinti sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:189
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:289
 msgid "Make a printable invoice"
 msgstr "Sukurti spausdinamą sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:191
 #: gnucash/ui/gnc-plugin-page-invoice.ui:367
 msgid "_Edit Invoice"
 msgstr "_Redaguoti sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:191
 #: gnucash/ui/gnc-plugin-page-invoice.ui:18
 #: gnucash/ui/gnc-plugin-page-invoice.ui:369
 msgid "Edit this invoice"
 msgstr "Redaguoti šią sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:191
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:382
 msgid "_Duplicate Invoice"
 msgstr "_Dubliuoti sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:191
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:24
 #: gnucash/ui/gnc-plugin-page-invoice.ui:384
 msgid "Create a new invoice as a duplicate of the current one"
 msgstr "Sukurti naują sąskaitą faktūrą kaip dabartinės dublikatą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:522
 msgid "_Post Invoice"
 msgstr "_Registruoti sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:30
 #: gnucash/ui/gnc-plugin-page-invoice.ui:524
 #, fuzzy
 msgid "Post this invoice to your Chart of Accounts"
 msgstr "Registruoti šią sąskaitą faktūrą į sąskaitų planą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:537
 msgid "_Unpost Invoice"
 msgstr "_Išregistruoti sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:36
 #: gnucash/ui/gnc-plugin-page-invoice.ui:539
 #, fuzzy
 msgid "Unpost this invoice and make it editable"
 msgstr "Išregistruoti šią sąskaitą faktūrą ir padaryti ją redaguojama"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:194
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
 #: gnucash/ui/gnc-plugin-page-invoice.ui:352
 msgid "New _Invoice"
 msgstr "Nauja _sąskaita faktūra"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:194
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
 #: gnucash/ui/gnc-plugin-page-invoice.ui:354
 msgid "Create a new invoice for the same owner as the current one"
 msgstr "Sukurti naują sąskaitą faktūrą tam pačiam gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:270
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:287
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:271
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:288
 #: gnucash/gnome/gnc-plugin-page-register.cpp:392
 #: gnucash/ui/gnc-embedded-register-window.ui:225
 msgid "Blank"
 msgstr "Tuščia"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
 #, fuzzy
 msgid "Move to the blank entry at the bottom of the invoice"
 msgstr "Pereiti į tuščią įrašą sąskaitos faktūros apačioje"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:197
 #: gnucash/ui/gnc-plugin-page-invoice.ui:552
 msgid "_Pay Invoice"
 msgstr "_Apmokėti sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:197
 #: gnucash/ui/gnc-plugin-page-invoice.ui:200
 #: gnucash/ui/gnc-plugin-page-invoice.ui:554
 #, fuzzy
 msgid "Enter a payment for the owner of this invoice"
 msgstr "Įvesti mokėjimą šios sąskaitos faktūros gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:197
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:222
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:272
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:223
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:248
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
 #: gnucash/ui/gnc-plugin-page-invoice.ui:207
 msgid "_Company Report"
 msgstr "Į_monės ataskaita"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:197
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
 #, fuzzy
 msgid "Open a customer report window for the owner of this invoice"
 msgstr "Atverti įmonės ataskaitos langą šios sąskaitos faktūros gavėjui"
@@ -4566,10 +4567,10 @@ msgstr "Atverti įmonės ataskaitos langą šios sąskaitos faktūros gavėjui"
 #. Translators: This is a menu item that opens a dialog for linking an
 #. external file or URL with the bill, invoice, transaction, or voucher or
 #. removing such an link.
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:223
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:248
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:199
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:224
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:249
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
 #: gnucash/gnome/gnc-plugin-page-register.cpp:262
 #: gnucash/ui/gnc-plugin-page-register.ui:205
 #: gnucash/ui/gnc-plugin-page-register.ui:393
@@ -4582,10 +4583,10 @@ msgstr "Atverti importuotus dokumentus kortelėse"
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
 #. the operating system's default application for the file or URI mime type.
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:199
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:224
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:249
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:200
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:225
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:250
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:275
 #: gnucash/gnome/gnc-plugin-page-register.cpp:266
 #: gnucash/ui/gnc-plugin-page-register.ui:211
 #: gnucash/ui/gnc-plugin-page-register.ui:398
@@ -4594,336 +4595,336 @@ msgstr "Atverti importuotus dokumentus kortelėse"
 msgid "_Open Linked Document"
 msgstr "Nauja sąskaita"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:199
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:224
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:249
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:200
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:225
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:250
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:275
 #: gnucash/gnome/gnc-plugin-page-register.cpp:396
 #, fuzzy
 msgid "Open Linked Document"
 msgstr "Nauja sąskaita"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:205
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:206
 msgid "_Use as Default Layout for Customer Documents"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:206
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:207
 #: gnucash/ui/gnc-plugin-page-invoice.ui:66
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:207
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:208
 msgid "_Reset Default Layout for Customer Documents"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:208
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:209
 #: gnucash/ui/gnc-plugin-page-invoice.ui:72
 msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:214
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
 #, fuzzy
 msgid "_Print Bill"
 msgstr "Spausdinti"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:214
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
 #, fuzzy
 msgid "Make a printable bill"
 msgstr "Sukurti spausdinamą sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
 #, fuzzy
 msgid "_Edit Bill"
 msgstr "Redaguoti gautą sąskaitą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
 #, fuzzy
 msgid "Edit this bill"
 msgstr "Redaguoti šią sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
 #, fuzzy
 msgid "_Duplicate Bill"
 msgstr "Dublikatas"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
 #, fuzzy
 msgid "Create a new bill as a duplicate of the current one"
 msgstr "Sukurti naują sąskaitą faktūrą kaip dabartinės dublikatą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
 #, fuzzy
 msgid "_Post Bill"
 msgstr "Apmokėti gautą sąskaitą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
 #, fuzzy
 msgid "Post this bill to your Chart of Accounts"
 msgstr "Registruoti šią sąskaitą faktūrą į sąskaitų planą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:219
 #, fuzzy
 msgid "_Unpost Bill"
 msgstr "_Išregistruoti sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:219
 #, fuzzy
 msgid "Unpost this bill and make it editable"
 msgstr "Išregistruoti šią sąskaitą faktūrą ir padaryti ją redaguojama"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:219
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
 #, fuzzy
 msgid "New _Bill"
 msgstr "Nauja gauta sąskaita"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:219
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
 #, fuzzy
 msgid "Create a new bill for the same owner as the current one"
 msgstr "Sukurti naują sąskaitą faktūrą tam pačiam gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
 #, fuzzy
 msgid "Move to the blank entry at the bottom of the bill"
 msgstr "Pereiti į tuščią įrašą sąskaitos faktūros apačioje"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:222
 #, fuzzy
 msgid "_Pay Bill"
 msgstr "Apmokėti gautą sąskaitą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:222
 #, fuzzy
 msgid "Enter a payment for the owner of this bill"
 msgstr "Įvesti mokėjimą šios sąskaitos faktūros gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:222
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:223
 #, fuzzy
 msgid "Open a vendor report window for the owner of this bill"
 msgstr "Atverti įmonės ataskaitos langą šios sąskaitos faktūros gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:230
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:231
 msgid "_Use as Default Layout for Vendor Documents"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:231
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:232
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:232
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:233
 msgid "_Reset Default Layout for Vendor Documents"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:233
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:234
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:239
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
 #, fuzzy
 msgid "_Print Voucher"
 msgstr "S_pausdinti čekius"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:239
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
 #, fuzzy
 msgid "Make a printable voucher"
 msgstr "Sukurti spausdinamą sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
 #, fuzzy
 msgid "_Edit Voucher"
 msgstr "Peržiūrėti/redaguoti sąnaudų kvitą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
 #, fuzzy
 msgid "Edit this voucher"
 msgstr "Redaguoti šią sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
 #, fuzzy
 msgid "_Duplicate Voucher"
 msgstr "_Dubliuoti sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
 #, fuzzy
 msgid "Create a new voucher as a duplicate of the current one"
 msgstr "Sukurti naują sąskaitą faktūrą kaip dabartinės dublikatą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
 #, fuzzy
 msgid "_Post Voucher"
 msgstr "Sąnaudų kvitas"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
 #, fuzzy
 msgid "Post this voucher to your Chart of Accounts"
 msgstr "Registruoti šią sąskaitą faktūrą į sąskaitų planą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
 #, fuzzy
 msgid "_Unpost Voucher"
 msgstr "_Išregistruoti sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
 #, fuzzy
 msgid "Unpost this voucher and make it editable"
 msgstr "Išregistruoti šią sąskaitą faktūrą ir padaryti ją redaguojama"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
 #, fuzzy
 msgid "New _Voucher"
 msgstr "Naujas sąnaudų kvitas"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
 #, fuzzy
 msgid "Create a new voucher for the same owner as the current one"
 msgstr "Sukurti naują sąskaitą faktūrą tam pačiam gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
 #, fuzzy
 msgid "Move to the blank entry at the bottom of the voucher"
 msgstr "Pereiti į tuščią įrašą sąskaitos faktūros apačioje"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
 #, fuzzy
 msgid "_Pay Voucher"
 msgstr "Sąnaudų kvitas"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
 #, fuzzy
 msgid "Enter a payment for the owner of this voucher"
 msgstr "Įvesti mokėjimą šios sąskaitos faktūros gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:248
 #, fuzzy
 msgid "Open a employee report window for the owner of this voucher"
 msgstr "Atverti įmonės ataskaitos langą šios sąskaitos faktūros gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:255
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:256
 msgid "_Use as Default Layout for Employee Documents"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:256
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 msgid "_Reset Default Layout for Employee Documents"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:259
 msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:264
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
 #, fuzzy
 msgid "_Print Credit Note"
 msgstr "Redaguoti kreditinę sąskaitą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:264
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
 #, fuzzy
 msgid "Make a printable credit note"
 msgstr "Sukurti spausdinamą sąskaitą faktūrą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
 #, fuzzy
 msgid "_Edit Credit Note"
 msgstr "Redaguoti kreditinę sąskaitą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
 #, fuzzy
 msgid "Edit this credit note"
 msgstr "Redaguoti kreditinę sąskaitą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:267
 #, fuzzy
 msgid "_Duplicate Credit Note"
 msgstr "Redaguoti kreditinę sąskaitą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:267
 #, fuzzy
 msgid "Create a new credit note as a duplicate of the current one"
 msgstr "Sukurti naują sąskaitą faktūrą kaip dabartinės dublikatą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:267
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
 #, fuzzy
 msgid "_Post Credit Note"
 msgstr "Redaguoti kreditinę sąskaitą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:267
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
 #, fuzzy
 msgid "Post this credit note to your Chart of Accounts"
 msgstr "Registruoti šią sąskaitą faktūrą į sąskaitų planą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:269
 #, fuzzy
 msgid "_Unpost Credit Note"
 msgstr "Redaguoti kreditinę sąskaitą"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:269
 #, fuzzy
 msgid "Unpost this credit note and make it editable"
 msgstr "Išregistruoti šią sąskaitą faktūrą ir padaryti ją redaguojama"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:269
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:270
 #, fuzzy
 msgid "New _Credit Note"
 msgstr "Nauja kreditinė sąskaita"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:269
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:270
 #, fuzzy
 msgid "Create a new credit note for the same owner as the current one"
 msgstr "Sukurti naują sąskaitą faktūrą tam pačiam gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:270
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:271
 #, fuzzy
 msgid "Move to the blank entry at the bottom of the credit note"
 msgstr "Pereiti į tuščią įrašą sąskaitos faktūros apačioje"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:271
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:272
 #, fuzzy
 msgid "_Pay Credit Note"
 msgstr "Kreditinė sąskaita"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:271
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:272
 #, fuzzy
 msgid "Enter a payment for the owner of this credit note"
 msgstr "Įvesti mokėjimą šios sąskaitos faktūros gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:272
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
 #, fuzzy
 msgid "Open a company report window for the owner of this credit note"
 msgstr "Atverti įmonės ataskaitos langą šios sąskaitos faktūros gavėjui"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
 msgid "Manage Document Link…"
 msgstr "Valdyti dokumento ryšius…"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:281
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:282
 #: gnucash/gnome/gnc-plugin-page-register.cpp:383
 #: gnucash/ui/gnc-embedded-register-window.ui:195
 msgid "Enter"
 msgstr "Įvesti"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:285
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:286
 msgid "Up"
 msgstr "Aukštyn"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:286
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:287
 msgid "Down"
 msgstr "Žemyn"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:289
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:290
 msgid "Unpost"
 msgstr "Išregistruoti"
 
-#: gnucash/gnome/gnc-plugin-page-invoice.cpp:290
+#: gnucash/gnome/gnc-plugin-page-invoice.cpp:291
 msgid "Pay"
 msgstr "Mokėti"
 
@@ -5334,11 +5335,11 @@ msgstr "Su šiuo sandoriu yra susieti keli dokumentai. Pasirinkite vieną:"
 msgid "Select"
 msgstr "Pasirinkti"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4691
+#: gnucash/gnome/gnc-plugin-page-register.cpp:4700
 msgid "Go to Date"
 msgstr "Pasirinkti datą"
 
-#: gnucash/gnome/gnc-plugin-page-register.cpp:4994
+#: gnucash/gnome/gnc-plugin-page-register.cpp:5004
 #, c-format
 msgid "Checking splits in current register: %u of %u"
 msgstr "Dabartinio registro perskyrimų tikrinimas: %u iš %u"
@@ -5438,7 +5439,7 @@ msgid "You cannot save to that file."
 msgstr "Negalite išsaugoti į šį failą."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1644
-#: gnucash/gnome-utils/gnc-file.c:1362 gnucash/gnome-utils/gnc-file.c:1609
+#: gnucash/gnome-utils/gnc-file.c:1363 gnucash/gnome-utils/gnc-file.c:1610
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:739
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
@@ -5484,34 +5485,34 @@ msgstr "Paprasta sąskaita faktūra"
 msgid "Fancy Invoice"
 msgstr "Įmantri sąskaita faktūra"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:393
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:47
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:398
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:53
 #, fuzzy
 msgid "_New Schedule"
 msgstr "_Suplanuota"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:399
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:53
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:404
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:59
 #, fuzzy
 msgid "_Edit Schedule"
 msgstr "_Suplanuota"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:405
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:59
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:410
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:65
 #, fuzzy
 msgid "_Delete Schedule"
 msgstr "_Suplanuota"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:487
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:492
 #: gnucash/gtkbuilder/dialog-account.glade:553
 msgid "Transactions"
 msgstr "Operacijos"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:559
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:562
 msgid "Upcoming Transactions"
 msgstr "Operacijos ateityje"
 
-#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:896
+#: gnucash/gnome/gnc-plugin-page-sx-list.cpp:927
 #, fuzzy
 #| msgid "Do you really want to delete this scheduled transaction?"
 msgid "Do you really want to delete this scheduled transaction?"
@@ -5551,7 +5552,7 @@ msgstr "_Įprasta tvarka"
 msgid "Date of Entry"
 msgstr "Į_vedimo data"
 
-#: gnucash/gnome/gnc-split-reg.c:660 gnucash/gnome/window-reconcile.c:2059
+#: gnucash/gnome/gnc-split-reg.c:660 gnucash/gnome/window-reconcile.cpp:2059
 msgid "Statement Date"
 msgstr "Išrašo data"
 
@@ -5724,63 +5725,63 @@ msgid ""
 "otherwise the last active cell will be selected."
 msgstr ""
 
-#: gnucash/gnome/gnc-split-reg.c:1815
+#: gnucash/gnome/gnc-split-reg.c:1819
 msgid "Balancing entry from reconciliation"
 msgstr ""
 
-#: gnucash/gnome/gnc-split-reg.c:2305
+#: gnucash/gnome/gnc-split-reg.c:2309
 #, fuzzy
 msgid "Present:"
 msgstr "Esamas:"
 
-#: gnucash/gnome/gnc-split-reg.c:2306
+#: gnucash/gnome/gnc-split-reg.c:2310
 #, fuzzy
 msgid "Future:"
 msgstr "Būsimas:"
 
-#: gnucash/gnome/gnc-split-reg.c:2307
+#: gnucash/gnome/gnc-split-reg.c:2311
 msgid "Cleared:"
 msgstr "Apmokėta:"
 
-#: gnucash/gnome/gnc-split-reg.c:2308
+#: gnucash/gnome/gnc-split-reg.c:2312
 msgid "Reconciled:"
 msgstr "Suderinta:"
 
-#: gnucash/gnome/gnc-split-reg.c:2309
+#: gnucash/gnome/gnc-split-reg.c:2313
 #, fuzzy
 msgid "Projected Minimum:"
 msgstr "Projektuojamas minimumas:"
 
-#: gnucash/gnome/gnc-split-reg.c:2313
+#: gnucash/gnome/gnc-split-reg.c:2317
 msgid "Shares:"
 msgstr "Akcijos:"
 
-#: gnucash/gnome/gnc-split-reg.c:2314
+#: gnucash/gnome/gnc-split-reg.c:2318
 msgid "Current Value:"
 msgstr "Dabartinė vertė:"
 
-#: gnucash/gnome/gnc-split-reg.c:2320
+#: gnucash/gnome/gnc-split-reg.c:2324
 #, fuzzy
 msgid "Sort By:"
 msgstr "Rikiuoti pagal"
 
-#: gnucash/gnome/gnc-split-reg.c:2396
+#: gnucash/gnome/gnc-split-reg.c:2400
 msgid "This account register is read-only."
 msgstr "Šis sąskaitos registras yra tik skaitymui."
 
-#: gnucash/gnome/gnc-split-reg.c:2397
+#: gnucash/gnome/gnc-split-reg.c:2401
 #, c-format
 msgid "The '%s' account register is read-only."
 msgstr "Sąskaitos registras „%s“ yra tik skaitymui."
 
-#: gnucash/gnome/gnc-split-reg.c:2456
+#: gnucash/gnome/gnc-split-reg.c:2460
 msgid ""
 "The transactions of this account may not be edited because its subaccounts "
 "have mismatched commodities or currencies.\n"
 "You need to open each account individually to edit transactions."
 msgstr ""
 
-#: gnucash/gnome/gnc-split-reg.c:2471
+#: gnucash/gnome/gnc-split-reg.c:2475
 #, fuzzy
 msgid ""
 "The transactions of this account may not be edited.\n"
@@ -5790,7 +5791,7 @@ msgstr ""
 "Ši sąskaita negali būti redaguojama. Jei norite redaguoti operacijas šiame "
 "registre, atverkite sąskaitos nuostatas ir atžymėkite langelį „Aplankas“."
 
-#: gnucash/gnome/gnc-split-reg.c:2478
+#: gnucash/gnome/gnc-split-reg.c:2482
 #, fuzzy
 msgid ""
 "The transactions in one of the selected sub-accounts may not be edited.\n"
@@ -5958,7 +5959,7 @@ msgid "Cleared Transactions"
 msgstr "Sukurtos operacijos"
 
 #. Translators: %d is the number of days in the future
-#: gnucash/gnome/window-reconcile.c:380
+#: gnucash/gnome/window-reconcile.cpp:383
 #, c-format
 msgid "Statement Date is %d day after today."
 msgid_plural "Statement Date is %d days after today."
@@ -5967,7 +5968,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 #. Translators: %d is the number of days in the future
-#: gnucash/gnome/window-reconcile.c:387
+#: gnucash/gnome/window-reconcile.cpp:390
 #, c-format
 msgid "The statement date you have chosen is %d day in the future."
 msgid_plural "The statement date you have chosen is %d days in the future."
@@ -5975,63 +5976,64 @@ msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
-#: gnucash/gnome/window-reconcile.c:392
+#: gnucash/gnome/window-reconcile.cpp:395
 msgid ""
 "This may cause issues for future reconciliation actions on this account. "
 "Please double-check this is the date you intended."
 msgstr ""
 
-#: gnucash/gnome/window-reconcile.c:481
+#: gnucash/gnome/window-reconcile.cpp:484
 msgid "Interest Payment"
 msgstr "Palūkanų mokėjimas"
 
-#: gnucash/gnome/window-reconcile.c:484
+#: gnucash/gnome/window-reconcile.cpp:487
 #, fuzzy
 msgid "Interest Charge"
 msgstr "Procentinės išmokos"
 
-#: gnucash/gnome/window-reconcile.c:492
+#: gnucash/gnome/window-reconcile.cpp:495
 #: gnucash/gtkbuilder/dialog-vendor.glade:630
 #: gnucash/gtkbuilder/dialog-vendor.glade:652
 msgid "Payment Information"
 msgstr "Mokėjimo informacija"
 
-#: gnucash/gnome/window-reconcile.c:502
+#: gnucash/gnome/window-reconcile.cpp:505
 #: gnucash/gtkbuilder/assistant-loan.glade:571
 #: gnucash/gtkbuilder/assistant-loan.glade:772
 msgid "Payment From"
 msgstr "Mokėjimas iš"
 
-#: gnucash/gnome/window-reconcile.c:508 gnucash/gnome/window-reconcile.c:518
+#: gnucash/gnome/window-reconcile.cpp:511
+#: gnucash/gnome/window-reconcile.cpp:521
 msgid "Reconcile Account"
 msgstr "Suderinti sąskaitą"
 
-#: gnucash/gnome/window-reconcile.c:523
+#: gnucash/gnome/window-reconcile.cpp:526
 #: gnucash/gtkbuilder/assistant-loan.glade:824
 msgid "Payment To"
 msgstr "Mokėjimas kam"
 
-#: gnucash/gnome/window-reconcile.c:785
+#: gnucash/gnome/window-reconcile.cpp:788
 #: gnucash/gtkbuilder/window-reconcile.glade:215
 msgid "Enter _Interest Payment…"
 msgstr "Įvesti palūkanų _mokėjimą…"
 
-#: gnucash/gnome/window-reconcile.c:787
+#: gnucash/gnome/window-reconcile.cpp:790
 #, fuzzy
 msgid "Enter _Interest Charge…"
 msgstr "Įvesti palūkanų išmokas…"
 
-#: gnucash/gnome/window-reconcile.c:1389
+#: gnucash/gnome/window-reconcile.cpp:1392
 msgid "Are you sure you want to delete the selected transaction?"
 msgstr "Ar tikrai norite pašalinti pasirinktą operaciją?"
 
-#: gnucash/gnome/window-reconcile.c:1959
+#: gnucash/gnome/window-reconcile.cpp:1957
 msgid ""
 "WARNING! Account contains splits whose reconcile date is after statement "
 "date. Reconciliation may be difficult."
 msgstr ""
 
-#: gnucash/gnome/window-reconcile.c:1963
+#: gnucash/gnome/window-reconcile.cpp:1961
 msgid ""
 "This account has splits whose Reconciled Date is after this reconciliation "
 "statement date. These splits may make reconciliation difficult. If this is "
@@ -6039,36 +6041,36 @@ msgid ""
 "reconcile."
 msgstr ""
 
-#: gnucash/gnome/window-reconcile.c:2069
+#: gnucash/gnome/window-reconcile.cpp:2069
 #: gnucash/gtkbuilder/window-reconcile.glade:106
 msgid "Starting Balance"
 msgstr "Pradžios likutis"
 
-#: gnucash/gnome/window-reconcile.c:2079
+#: gnucash/gnome/window-reconcile.cpp:2079
 msgid "Ending Balance"
 msgstr "Pabaigos likutis"
 
-#: gnucash/gnome/window-reconcile.c:2089
+#: gnucash/gnome/window-reconcile.cpp:2089
 msgid "Reconciled Balance"
 msgstr "Suderintas likutis"
 
-#: gnucash/gnome/window-reconcile.c:2099
+#: gnucash/gnome/window-reconcile.cpp:2099
 #: gnucash/report/reports/standard/cash-flow.scm:305
 msgid "Difference"
 msgstr "Skirtumas"
 
-#: gnucash/gnome/window-reconcile.c:2212
+#: gnucash/gnome/window-reconcile.cpp:2212
 msgid ""
 "You have made changes to this reconcile window. Are you sure you want to "
 "cancel?"
 msgstr ""
 "Padarėte pakeitimų šiame suderinimo lange. Ar tikrai norite atsisakyti?"
 
-#: gnucash/gnome/window-reconcile.c:2346
+#: gnucash/gnome/window-reconcile.cpp:2343
 msgid "The account is not balanced. Are you sure you want to finish?"
 msgstr "Ši sąskaita nesubalansuota. Ar tikrai norite baigti?"
 
-#: gnucash/gnome/window-reconcile.c:2406
+#: gnucash/gnome/window-reconcile.cpp:2403
 msgid "Do you want to postpone this reconciliation and finish it later?"
 msgstr "Ar norite atidėti šį suderinimą ir baigti jį vėliau?"
 
@@ -6479,7 +6481,7 @@ msgid "There was an error parsing the file."
 msgstr "Įvyko klaida nagrinėjant failą."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:1149
-#: gnucash/gnome-utils/gnc-file.c:1451 gnucash/gnome-utils/gnc-file.c:1690
+#: gnucash/gnome-utils/gnc-file.c:1452 gnucash/gnome-utils/gnc-file.c:1691
 msgid "Writing file…"
 msgstr "Rašomas failas…"
 
@@ -6631,7 +6633,7 @@ msgstr "Pasirinkite nuosavybės sąskaitą visoms laikotarpio pajamoms laikyti."
 msgid "Please select an Equity account to hold the total Period Expense."
 msgstr "Pasirinkite nuosavybės sąskaitą visoms laikotarpio sąnaudoms laikyti."
 
-#: gnucash/gnome-utils/dialog-commodity.c:160
+#: gnucash/gnome-utils/dialog-commodity.cpp:162
 #, fuzzy
 msgid ""
 "\n"
@@ -6640,7 +6642,7 @@ msgstr ""
 "\n"
 "Pasirinkite prekę atitikimui:"
 
-#: gnucash/gnome-utils/dialog-commodity.c:167
+#: gnucash/gnome-utils/dialog-commodity.cpp:169
 msgid ""
 "\n"
 "Commodity: "
@@ -6653,7 +6655,7 @@ msgstr ""
 #. like gb:SEDOL, de:WKN, ch:Valorennummer, fr:SICOVAM ...
 #. See https://en.wikipedia.org/wiki/ISIN and
 #. https://en.wikipedia.org/wiki/National_numbering_agency for hints.
-#: gnucash/gnome-utils/dialog-commodity.c:174
+#: gnucash/gnome-utils/dialog-commodity.cpp:176
 msgid ""
 "\n"
 "Exchange code (ISIN, CUSIP or similar): "
@@ -6661,7 +6663,7 @@ msgstr ""
 "\n"
 "Biržos kodas (ISIN ar panašus): "
 
-#: gnucash/gnome-utils/dialog-commodity.c:176
+#: gnucash/gnome-utils/dialog-commodity.cpp:178
 msgid ""
 "\n"
 "Mnemonic (Ticker symbol or similar): "
@@ -6669,35 +6671,35 @@ msgstr ""
 "\n"
 "Mnemonika (Trumpinys ar panašiai): "
 
-#: gnucash/gnome-utils/dialog-commodity.c:275
+#: gnucash/gnome-utils/dialog-commodity.cpp:277
 #: gnucash/gtkbuilder/dialog-commodity.glade:634
 msgid "Select security/currency"
 msgstr "Pasirinkite vertybinį popierių/valiutą"
 
-#: gnucash/gnome-utils/dialog-commodity.c:276
+#: gnucash/gnome-utils/dialog-commodity.cpp:278
 #: gnucash/gtkbuilder/dialog-account.glade:1260
 msgid "_Security/currency"
 msgstr "_Vertybinis popierius/valiuta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:280
+#: gnucash/gnome-utils/dialog-commodity.cpp:282
 msgid "Select security"
 msgstr "Pasirinkite vertybinį popierių"
 
-#: gnucash/gnome-utils/dialog-commodity.c:281
+#: gnucash/gnome-utils/dialog-commodity.cpp:283
 #: gnucash/gtkbuilder/dialog-price.glade:153
 msgid "_Security"
 msgstr "_Vertybinis popierius"
 
-#: gnucash/gnome-utils/dialog-commodity.c:285
+#: gnucash/gnome-utils/dialog-commodity.cpp:287
 msgid "Select currency"
 msgstr "Pasirinkite valiutą"
 
-#: gnucash/gnome-utils/dialog-commodity.c:286
+#: gnucash/gnome-utils/dialog-commodity.cpp:288
 #: gnucash/gtkbuilder/dialog-price.glade:168
 msgid "Cu_rrency"
 msgstr "_Valiuta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:762
+#: gnucash/gnome-utils/dialog-commodity.cpp:765
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:394
 #: gnucash/gnome-utils/gnc-tree-view-price.c:392
 #: gnucash/gtkbuilder/dialog-customer.glade:506
@@ -6705,49 +6707,49 @@ msgstr "_Valiuta"
 #: gnucash/gtkbuilder/dialog-transfer.glade:418
 #: gnucash/gtkbuilder/dialog-transfer.glade:431
 #: gnucash/gtkbuilder/dialog-vendor.glade:502
-#: gnucash/report/trep-engine.scm:110 libgnucash/engine/Account.cpp:4506
+#: gnucash/report/trep-engine.scm:110 libgnucash/engine/Account.cpp:4494
 msgid "Currency"
 msgstr "Valiuta"
 
-#: gnucash/gnome-utils/dialog-commodity.c:857
+#: gnucash/gnome-utils/dialog-commodity.cpp:860
 msgid "Use local time"
 msgstr "Naudoti vietinį laiką"
 
-#: gnucash/gnome-utils/dialog-commodity.c:987
+#: gnucash/gnome-utils/dialog-commodity.cpp:990
 msgid "Edit currency"
 msgstr "Redaguoti valiutą"
 
-#: gnucash/gnome-utils/dialog-commodity.c:988
+#: gnucash/gnome-utils/dialog-commodity.cpp:991
 msgid "Currency Information"
 msgstr "Valiutos informacija"
 
-#: gnucash/gnome-utils/dialog-commodity.c:993
+#: gnucash/gnome-utils/dialog-commodity.cpp:996
 msgid "Edit security"
 msgstr "Redaguoti vertybinį popierių"
 
-#: gnucash/gnome-utils/dialog-commodity.c:993
+#: gnucash/gnome-utils/dialog-commodity.cpp:996
 msgid "New security"
 msgstr "Naujas vertybinis popierius"
 
-#: gnucash/gnome-utils/dialog-commodity.c:994
+#: gnucash/gnome-utils/dialog-commodity.cpp:997
 #: gnucash/gtkbuilder/dialog-commodity.glade:229
 msgid "Security Information"
 msgstr "Vertybinio popieriaus informacija"
 
-#: gnucash/gnome-utils/dialog-commodity.c:1271
+#: gnucash/gnome-utils/dialog-commodity.cpp:1274
 msgid "You may not create a new national currency."
 msgstr "Negalite sukurti naujos nacionalinės valiutos."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1281
+#: gnucash/gnome-utils/dialog-commodity.cpp:1284
 #, c-format
 msgid "%s is a reserved commodity type. Please use something else."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-commodity.c:1296
+#: gnucash/gnome-utils/dialog-commodity.cpp:1299
 msgid "That commodity already exists."
 msgstr "Tokia prekė jau yra."
 
-#: gnucash/gnome-utils/dialog-commodity.c:1347
+#: gnucash/gnome-utils/dialog-commodity.cpp:1350
 msgid ""
 "You must enter a non-empty \"Full name\", \"Symbol/abbreviation\", and "
 "\"Type\" for the commodity."
@@ -6858,7 +6860,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:577
 #: gnucash/ui/gnc-plugin-page-register.ui:672
 #: gnucash/ui/gnc-plugin-page-report.ui:120
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:97
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:103
 msgid "_Close"
 msgstr "_Užverti"
 
@@ -6963,44 +6965,44 @@ msgstr ""
 msgid "Are you sure you want to delete this entry?"
 msgstr "Ar tikrai norite pašalinti šį įrašą?"
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:572
+#: gnucash/gnome-utils/dialog-transfer.cpp:571
 msgid "Show the income and expense accounts"
 msgstr "Rodyti pajamų ir sąnaudų sąskaitas"
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:674
-#: gnucash/report/trep-engine.scm:2437 gnucash/report/trep-engine.scm:2443
+#: gnucash/gnome-utils/dialog-transfer.cpp:673
+#: gnucash/report/trep-engine.scm:2432 gnucash/report/trep-engine.scm:2438
 msgid "Error"
 msgstr "Klaida"
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1292
+#: gnucash/gnome-utils/dialog-transfer.cpp:1291
 msgid ""
 "Retrieve the current online quote. This will fail if there is a manually-"
 "created price for today."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1296
+#: gnucash/gnome-utils/dialog-transfer.cpp:1295
 #, fuzzy
 msgid "Finance::Quote must be installed to enable this button."
 msgstr "Įspėjimas: Finance::Quote nėra tinkamai įdiegtas."
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1398
+#: gnucash/gnome-utils/dialog-transfer.cpp:1397
 msgid ""
 "You must specify an account to transfer from, or to, or both, for this "
 "transaction. Otherwise, it will not be recorded."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1408
+#: gnucash/gnome-utils/dialog-transfer.cpp:1407
 msgid "You can't transfer from and to the same account!"
 msgstr "Negalite pervesti tarp tos pačios sąskaitos!"
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1419
+#: gnucash/gnome-utils/dialog-transfer.cpp:1418
 #: gnucash/register/ledger-core/gncEntryLedger.c:85
-#: gnucash/register/ledger-core/split-register.c:1979
+#: gnucash/register/ledger-core/split-register.c:1990
 #, c-format
 msgid "The account %s does not allow transactions."
 msgstr "Sąskaita „%s“ neleidžia operacijų."
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1435
+#: gnucash/gnome-utils/dialog-transfer.cpp:1434
 msgid ""
 "You can't transfer from a non-currency account. Try reversing the \"from\" "
 "and \"to\" accounts and making the \"amount\" negative."
@@ -7008,42 +7010,42 @@ msgstr ""
 "Negalite pervesti iš nevaliutinės sąskaitos. Mėginkite sukeisti „iš“ ir „į“ "
 "sąskaitas ir padarykite „sumą“ neigiamą."
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1453
+#: gnucash/gnome-utils/dialog-transfer.cpp:1452
 msgid "You must enter a valid price."
 msgstr "Privalote įvesti teisingą kainą."
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1465
+#: gnucash/gnome-utils/dialog-transfer.cpp:1464
 msgid "You must enter a valid 'to' amount."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1688
+#: gnucash/gnome-utils/dialog-transfer.cpp:1687
 msgid "You must enter an amount to transfer."
 msgstr ""
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1914
+#: gnucash/gnome-utils/dialog-transfer.cpp:1913
 #: gnucash/gtkbuilder/dialog-employee.glade:629
 msgid "Credit Account"
 msgstr "Kredito sąskaita"
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1918
+#: gnucash/gnome-utils/dialog-transfer.cpp:1917
 msgid "Debit Account"
 msgstr "Debeto sąskaita"
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1936
+#: gnucash/gnome-utils/dialog-transfer.cpp:1935
 #: gnucash/gtkbuilder/dialog-transfer.glade:273
 msgid "Transfer From"
 msgstr "Pervesti iš"
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1940
+#: gnucash/gnome-utils/dialog-transfer.cpp:1939
 #: gnucash/gtkbuilder/dialog-transfer.glade:334
 msgid "Transfer To"
 msgstr "Pervesti į"
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:1997
+#: gnucash/gnome-utils/dialog-transfer.cpp:1996
 msgid "Debit Amount"
 msgstr "Debeto suma"
 
-#: gnucash/gnome-utils/dialog-transfer.cpp:2002
+#: gnucash/gnome-utils/dialog-transfer.cpp:2001
 #: gnucash/gtkbuilder/dialog-transfer.glade:560
 msgid "To Amount"
 msgstr "Į sumą"
@@ -7114,28 +7116,28 @@ msgstr "Įvyko klaida apdorojant „%s“."
 msgid "An error occurred while processing '%s'"
 msgstr "Įvyko klaida apdorojant „%s“."
 
-#: gnucash/gnome-utils/gnc-autoclear.c:149
+#: gnucash/gnome-utils/gnc-autoclear.c:151
 #, c-format
 msgid "Account is already at Auto-Clear Balance."
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-autoclear.c:155
+#: gnucash/gnome-utils/gnc-autoclear.c:157
 #, fuzzy, c-format
 #| msgid "_Review created transactions"
 msgid "No uncleared splits found."
 msgstr "_Peržiūrėti sukurtas operacijas"
 
-#: gnucash/gnome-utils/gnc-autoclear.c:171
+#: gnucash/gnome-utils/gnc-autoclear.c:173
 #, c-format
 msgid "Too many uncleared splits"
 msgstr ""
 
-#: gnucash/gnome-utils/gnc-autoclear.c:177
+#: gnucash/gnome-utils/gnc-autoclear.c:179
 #, c-format
 msgid "Cannot uniquely clear splits. Found multiple possibilities."
 msgstr "Nepavyko unikaliai apmokėti skaidymų. Rastos kelios galimybės."
 
-#: gnucash/gnome-utils/gnc-autoclear.c:188
+#: gnucash/gnome-utils/gnc-autoclear.c:190
 #, c-format
 msgid "The selected amount cannot be cleared."
 msgstr "Nurodyta suma negali būti apmokėta."
@@ -7216,41 +7218,41 @@ msgstr ""
 msgid "Calendar"
 msgstr "Kalendorius"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:292
+#: gnucash/gnome-utils/gnc-dense-cal.c:291
 msgid "12 months"
 msgstr "12 mėnesių"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:293
+#: gnucash/gnome-utils/gnc-dense-cal.c:292
 msgid "6 months"
 msgstr "6 mėnesiai"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:294
+#: gnucash/gnome-utils/gnc-dense-cal.c:293
 msgid "4 months"
 msgstr "4 mėnesiai"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:295
+#: gnucash/gnome-utils/gnc-dense-cal.c:294
 msgid "3 months"
 msgstr "3 mėnesiai"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:296
+#: gnucash/gnome-utils/gnc-dense-cal.c:295
 msgid "2 months"
 msgstr "2 mėnesiai"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:297
+#: gnucash/gnome-utils/gnc-dense-cal.c:296
 msgid "1 month"
 msgstr "1 mėnuo"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:333
+#: gnucash/gnome-utils/gnc-dense-cal.c:331
 #, fuzzy
 msgid "View"
 msgstr "_Rodymas"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:378
+#: gnucash/gnome-utils/gnc-dense-cal.c:379
 #: gnucash/report/stylesheets/footer.scm:344
 msgid "Date: "
 msgstr "Data: "
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:391
+#: gnucash/gnome-utils/gnc-dense-cal.c:393
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:129
 #: gnucash/gtkbuilder/dialog-fincalc.glade:754
 #: gnucash/gtkbuilder/dialog-fincalc.glade:767
@@ -7260,7 +7262,7 @@ msgstr "Data: "
 msgid "Frequency"
 msgstr "Dažnumas"
 
-#: gnucash/gnome-utils/gnc-dense-cal.c:1281
+#: gnucash/gnome-utils/gnc-dense-cal.c:1330
 msgid "(unnamed)"
 msgstr "(be pavadinimo)"
 
@@ -7287,12 +7289,12 @@ msgstr "Importuoti"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:562
 #: gnucash/ui/gnc-plugin-page-register.ui:657
 #: gnucash/ui/gnc-plugin-page-report.ui:105
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:82
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:88
 msgid "_Save"
 msgstr "Iš_saugoti"
 
 #: gnucash/gnome-utils/gnc-file.c:104 gnucash/gnome-utils/gnc-file.c:345
-#: gnucash/gnome-utils/gnc-file.c:1236 gnucash/gnome-utils/gnc-file.c:1508
+#: gnucash/gnome-utils/gnc-file.c:1237 gnucash/gnome-utils/gnc-file.c:1509
 msgid "Save"
 msgstr "Išsaugoti"
 
@@ -7659,11 +7661,11 @@ msgstr "Įkeliami naudotojo duomenys…"
 msgid "Re-saving user data…"
 msgstr "Iš naujo išsaugomi naudotojo duomenys…"
 
-#: gnucash/gnome-utils/gnc-file.c:1391
+#: gnucash/gnome-utils/gnc-file.c:1392
 msgid "Exporting file…"
 msgstr "Eksportuojamas failas…"
 
-#: gnucash/gnome-utils/gnc-file.c:1404
+#: gnucash/gnome-utils/gnc-file.c:1405
 #, c-format
 msgid ""
 "There was an error saving the file.\n"
@@ -7674,21 +7676,21 @@ msgstr ""
 "\n"
 "%s"
 
-#: gnucash/gnome-utils/gnc-file.c:1439
+#: gnucash/gnome-utils/gnc-file.c:1440
 msgid ""
 "The database was opened read-only. Do you want to save it to a different "
 "place?"
 msgstr ""
 "Duomenų bazė atverta tik skaitymui. Ar norite ją išsaugoti kitoje vietoje?"
 
-#: gnucash/gnome-utils/gnc-file.c:1734
+#: gnucash/gnome-utils/gnc-file.c:1735
 #, fuzzy, c-format
 msgid ""
 "Reverting will discard all unsaved changes to %s. Are you sure you want to "
 "proceed?"
 msgstr "Failas „%s“ jau egzistuoja. Ar tikrai norite jį perrašyti?"
 
-#: gnucash/gnome-utils/gnc-file.c:1742
+#: gnucash/gnome-utils/gnc-file.c:1743
 #: gnucash/gnome-utils/gnc-main-window.cpp:1194
 msgid "<unknown>"
 msgstr "<nežinomas>"
@@ -8012,7 +8014,7 @@ msgstr "Nauja aukščiausiojo lygio sąskaita"
 #: gnucash/report/reports/standard/general-ledger.scm:92
 #: gnucash/report/reports/standard/trial-balance.scm:561
 #: gnucash/report/trep-engine.scm:179 gnucash/report/trep-engine.scm:950
-#: gnucash/report/trep-engine.scm:2243
+#: gnucash/report/trep-engine.scm:2238
 msgid "Account Name"
 msgstr "Sąskaitos pavadinimas"
 
@@ -8028,7 +8030,7 @@ msgstr "Prekė"
 #: gnucash/report/reports/standard/general-ledger.scm:74
 #: gnucash/report/reports/standard/general-ledger.scm:94
 #: gnucash/report/trep-engine.scm:185 gnucash/report/trep-engine.scm:921
-#: gnucash/report/trep-engine.scm:2257
+#: gnucash/report/trep-engine.scm:2252
 msgid "Account Code"
 msgstr "Sąskaitos kodas"
 
@@ -8268,7 +8270,7 @@ msgstr "Adresas 4"
 #: gnucash/gtkbuilder/dialog-employee.glade:247
 #: gnucash/gtkbuilder/dialog-vendor.glade:265
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:130
-#: gnucash/register/ledger-core/split-register.c:2554
+#: gnucash/register/ledger-core/split-register.c:2565
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:175
 msgid "Phone"
 msgstr "Telefonas"
@@ -8312,7 +8314,7 @@ msgstr "Vertybinis popierius"
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:390
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
-#: gnucash/register/ledger-core/split-register.c:2627
+#: gnucash/register/ledger-core/split-register.c:2638
 #: gnucash/register/ledger-core/split-register-model.c:407
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1050
 #: gnucash/report/reports/standard/general-journal.scm:99
@@ -8326,7 +8328,7 @@ msgstr "Vertybinis popierius"
 #: gnucash/report/reports/standard/register.scm:149
 #: gnucash/report/reports/standard/register.scm:378
 #: gnucash/report/trep-engine.scm:928 gnucash/report/trep-engine.scm:1202
-#: gnucash/report/trep-engine.scm:2248
+#: gnucash/report/trep-engine.scm:2243
 msgid "Price"
 msgstr "Kaina"
 
@@ -8451,7 +8453,6 @@ msgid "Not enough information for quotes dump"
 msgstr "Per mažai informacijos tuščiai operacijai?"
 
 #: gnucash/gnucash-cli.cpp:170
-#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8460,7 +8461,6 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
-#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8471,7 +8471,6 @@ msgstr "Tai spalvos parinktis."
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
-#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
@@ -8494,14 +8493,14 @@ msgstr ""
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
-#, fuzzy, c++-format
+#, fuzzy
 msgid "You can also lookup and file bug reports at {1}"
 msgstr ""
 "Taip pat galite ieškoti ir pranešti apie klaidas https://bugs.gnucash.org"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
-#, fuzzy, c++-format
+#, fuzzy
 msgid "To find the last stable version, please refer to {1}"
 msgstr ""
 "Jei norite surasti paskutinę stabilią versiją, kreipkitės į http://www."
@@ -8522,7 +8521,6 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "– GnuCash asmeninių ir smulkaus verslo finansų valdymas"
 
 #: gnucash/gnucash-core-app.cpp:208
-#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8532,12 +8530,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, fuzzy, c++-format
+#, fuzzy
 msgid "GnuCash {1}"
 msgstr "GnuCash"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy, c++-format
+#, fuzzy
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s kūrimo stadijos versija"
 
@@ -8664,7 +8662,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:41
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:25
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:10
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:59
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:69
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:10
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:6
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:5
@@ -8709,7 +8707,7 @@ msgstr "Paskutinė lango padėtis ir dydis"
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.import.qif.gschema.xml.in:42
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:26
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:11
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:60
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:70
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.totd.gschema.xml.in:11
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.flicker.gschema.xml.in:7
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:6
@@ -9571,11 +9569,25 @@ msgstr ""
 msgid "How many days in advance to notify the user."
 msgstr "Prieš kiek dienų įspėti naudotoją."
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:66
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:59
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:60
+#, fuzzy
+#| msgid "The number of payments cannot be zero."
+msgid "The number of months to be shown in editor."
+msgstr "Mokėjimų skaičius negali būti lygus nuliui."
+
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:64
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:65
+#, fuzzy
+#| msgid "Position of the vertical pane divider."
+msgid "The horizontal position of the editor divider."
+msgstr "Vertikalaus polangių skirtuko padėtis."
+
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:76
 msgid "Set the \"notify\" flag by default"
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:67
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:77
 msgid ""
 "If active, any newly created scheduled transaction will have its 'notify' "
 "flag set by default. The user can change this flag during transaction "
@@ -9583,8 +9595,8 @@ msgid ""
 "setting only has meaning if the create-auto setting is active."
 msgstr ""
 
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:71
-#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:72
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:81
+#: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:82
 msgid "How many days in advance to remind the user."
 msgstr "Prieš kiek dienų priminti naudotojui."
 
@@ -10421,6 +10433,7 @@ msgid "PDF export file name format"
 msgstr "PDF eksporto failo vardo formatas"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
+#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11214,7 +11227,7 @@ msgstr "Pažymėti _visas"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:426
 #: gnucash/gtkbuilder/assistant-loan.glade:1205
-#: gnucash/report/reports/standard/new-owner-report.scm:1130
+#: gnucash/report/reports/standard/new-owner-report.scm:1131
 msgid "Date Range"
 msgstr "Datos intervalas"
 
@@ -11746,7 +11759,7 @@ msgstr "<b>Kategorijos aprašas</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, fuzzy
+#, fuzzy, c-format
 #| msgid "Accounts in '%s'"
 msgid "Accounts in %s"
 msgstr "Sąskaitos iš „%s“"
@@ -11957,6 +11970,7 @@ msgstr ""
 #: gnucash/report/reports/standard/lot-viewer.scm:35
 #: gnucash/report/reports/standard/net-charts.scm:39
 #: gnucash/report/reports/standard/price-scatter.scm:36
+#: gnucash/report/reports/standard/txn-columns.scm:34
 #: gnucash/report/trep-engine.scm:103
 msgid "Start Date"
 msgstr "Pradžios data"
@@ -12134,6 +12148,7 @@ msgstr "Intervalas: "
 #: gnucash/report/reports/standard/lot-viewer.scm:36
 #: gnucash/report/reports/standard/net-charts.scm:40
 #: gnucash/report/reports/standard/price-scatter.scm:37
+#: gnucash/report/reports/standard/txn-columns.scm:35
 #: gnucash/report/trep-engine.scm:104
 msgid "End Date"
 msgstr "Pabaigos data"
@@ -12781,7 +12796,7 @@ msgstr ""
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:130
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:530
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1090
-#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4500
+#: gnucash/report/report-utilities.scm:198 libgnucash/engine/Account.cpp:4488
 msgid "Cash"
 msgstr "Grynieji"
 
@@ -13669,7 +13684,7 @@ msgstr "Pašalinti į atsiskaitymo terminą"
 #: gnucash/gtkbuilder/dialog-report.glade:638
 #: gnucash/gtkbuilder/dialog-tax-table.glade:103
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:768
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:147
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:153
 msgid "_New"
 msgstr "_Nauja"
 
@@ -13710,7 +13725,7 @@ msgstr "Atsiskaitymo termino, spausdinamo ant sąskaitos faktūros, aprašas"
 #: gnucash/gtkbuilder/dialog-tax-info.glade:141
 #: gnucash/gtkbuilder/dialog-tax-table.glade:182
 #: gnucash/ui/gnc-embedded-register-window.ui:5
-#: gnucash/ui/gnc-main-window.ui:93 gnucash/ui/gnc-plugin-page-sx-list.ui:162
+#: gnucash/ui/gnc-main-window.ui:93 gnucash/ui/gnc-plugin-page-sx-list.ui:168
 #: gnucash/ui/gnc-reconcile-window.ui:63 gnucash/ui/gnc-reconcile-window.ui:102
 #: gnucash/ui/gnc-reconcile-window.ui:145
 msgid "_Edit"
@@ -14411,8 +14426,8 @@ msgid "Non-Bayesian"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:156
-#: gnucash/register/ledger-core/split-register.c:2555
-#: gnucash/register/ledger-core/split-register.c:2581
+#: gnucash/register/ledger-core/split-register.c:2566
+#: gnucash/register/ledger-core/split-register.c:2592
 #, fuzzy
 msgid "Online"
 msgstr "Internetu"
@@ -15972,8 +15987,8 @@ msgid "S_ource"
 msgstr "_Šaltinis"
 
 #: gnucash/gtkbuilder/dialog-price.glade:225
-#: gnucash/register/ledger-core/split-register.c:2098
-#: gnucash/register/ledger-core/split-register.c:2101
+#: gnucash/register/ledger-core/split-register.c:2109
+#: gnucash/register/ledger-core/split-register.c:2112
 #: gnucash/ui/gnc-plugin-page-invoice.ui:108
 msgid "_Price"
 msgstr "_Kaina"
@@ -16727,8 +16742,8 @@ msgid "<b>Tax Table Entry</b>"
 msgstr "<b>Mokesčių lentelės įrašas</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:491
-#: gnucash/register/ledger-core/split-register.c:2105
-#: gnucash/register/ledger-core/split-register.c:2108
+#: gnucash/register/ledger-core/split-register.c:2116
+#: gnucash/register/ledger-core/split-register.c:2119
 msgid "_Value"
 msgstr "_Reikšmė"
 
@@ -17426,7 +17441,7 @@ msgstr "Biudžeto laikotarpis"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-budget.glade:620
 #: gnucash/report/reports/standard/general-ledger.scm:126
-#: gnucash/report/trep-engine.scm:91 gnucash/report/trep-engine.scm:2286
+#: gnucash/report/trep-engine.scm:91 gnucash/report/trep-engine.scm:2281
 msgid "Show Account Code"
 msgstr "Rodyti sąskaitos kodą"
 
@@ -18566,7 +18581,7 @@ msgid "Unspecified"
 msgstr "Neapibrėžta"
 
 #: gnucash/import-export/aqb/gnc-ab-utils.c:478
-#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4499
+#: gnucash/report/report-utilities.scm:197 libgnucash/engine/Account.cpp:4487
 msgid "Bank"
 msgstr "Bankas"
 
@@ -19166,9 +19181,9 @@ msgid "File exported successfully!\n"
 msgstr "Failas išeksportuotas sėkmingai!\n"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:135
-#: gnucash/import-export/import-main-matcher.cpp:1874
+#: gnucash/import-export/import-main-matcher.cpp:1895
 #: gnucash/report/reports/standard/register.scm:217
-#: libgnucash/engine/Split.cpp:1644 libgnucash/engine/Split.cpp:1661
+#: libgnucash/engine/Split.cpp:1611 libgnucash/engine/Split.cpp:1628
 msgid "-- Split Transaction --"
 msgstr "-- Skaidyta operacija --"
 
@@ -19431,7 +19446,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy, c++-format
+#, fuzzy
 msgid "The transactions were imported from file '{1}'."
 msgstr "Operacijos importuotos iš failo „%s“."
 
@@ -19567,25 +19582,25 @@ msgid ""
 "(negated) transfer amount."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:671
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:670
 msgid ""
 "Current line still has parse errors.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:682
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:681
 msgid ""
 "No account column selected and no base account specified either.\n"
 "This should never happen. Please report this as a bug."
 msgstr ""
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:686
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:685
 #, fuzzy
 #| msgid "Error"
 msgid "Parse Error"
 msgstr "Klaida"
 
-#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:702
+#: gnucash/import-export/csv-imp/gnc-import-tx.cpp:701
 #, fuzzy
 #| msgid "Pre-select cleared transactions"
 msgid "Problem creating preliminary transaction"
@@ -19651,7 +19666,6 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
-#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -19788,8 +19802,8 @@ msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:665
 msgid ""
-"Choice of account makes this a multi-currency transaction but price, "
-"(negated) value or (negated) transfer column is missing or invalid."
+"Choice of accounts makes this a multi-currency transaction but price, "
+"(negated) value or (negated) transfer amount column is missing or invalid."
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
@@ -19920,131 +19934,131 @@ msgstr "M/m/d"
 msgid "y/d/m"
 msgstr "M/d/m"
 
-#: gnucash/import-export/import-main-matcher.cpp:503
+#: gnucash/import-export/import-main-matcher.cpp:502
 #, fuzzy
 msgid "No new transactions were found in this import."
 msgstr "Ši operacija nėra susieta su URI."
 
-#: gnucash/import-export/import-main-matcher.cpp:775
+#: gnucash/import-export/import-main-matcher.cpp:774
 msgid "Destination account for the auto-balance split."
 msgstr "Paskirties sąskaita automatinio balansavimo skaidymui."
 
-#: gnucash/import-export/import-main-matcher.cpp:1004
+#: gnucash/import-export/import-main-matcher.cpp:1003
 msgid "Click Edit to modify"
 msgstr ""
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1413
+#: gnucash/import-export/import-main-matcher.cpp:1422
 #, fuzzy
 #| msgid "_Select transfer account"
 msgid "_Assign transfer account"
 msgstr "_Parinkti pervedimo sąskaitą"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1418
+#: gnucash/import-export/import-main-matcher.cpp:1427
 #, fuzzy
 #| msgid "Exchange rate"
 msgid "Assign e_xchange rate"
 msgstr "Konvertavimo kursas"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1423
+#: gnucash/import-export/import-main-matcher.cpp:1432
 #, fuzzy
 msgid "_Edit description, notes, or memo"
 msgstr "Aprašas / pastabos / užrašas"
 
 #. Translators: Menu entry, no full stop
-#: gnucash/import-export/import-main-matcher.cpp:1428
+#: gnucash/import-export/import-main-matcher.cpp:1437
 #, fuzzy
 #| msgid "Reset defaults"
 msgid "_Reset all edits"
 msgstr "Atkurti numatytąsias"
 
-#: gnucash/import-export/import-main-matcher.cpp:1578
+#: gnucash/import-export/import-main-matcher.cpp:1599
 #, fuzzy
 #| msgid "A"
 msgctxt "Column header for 'Adding transaction'"
 msgid "A"
 msgstr "P"
 
-#: gnucash/import-export/import-main-matcher.cpp:1582
+#: gnucash/import-export/import-main-matcher.cpp:1603
 #, fuzzy
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
 msgstr "A+S"
 
-#: gnucash/import-export/import-main-matcher.cpp:1586
+#: gnucash/import-export/import-main-matcher.cpp:1607
 #, fuzzy
 #| msgid "C"
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
 msgstr "S"
 
-#: gnucash/import-export/import-main-matcher.cpp:1593
+#: gnucash/import-export/import-main-matcher.cpp:1614
 msgid "Info"
 msgstr "Informacija"
 
-#: gnucash/import-export/import-main-matcher.cpp:1600
+#: gnucash/import-export/import-main-matcher.cpp:1621
 #: gnucash/report/stylesheets/head-or-tail.scm:91
 msgid "Additional Comments"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.cpp:1985
+#: gnucash/import-export/import-main-matcher.cpp:2006
 msgid "New, already balanced"
 msgstr "Nauja, jau subalansuota"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2007
+#: gnucash/import-export/import-main-matcher.cpp:2028
 #, c-format
 msgid "New, transfer %s to (manual) \"%s\""
 msgstr ""
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
-#: gnucash/import-export/import-main-matcher.cpp:2015
+#: gnucash/import-export/import-main-matcher.cpp:2036
 #, c-format
 msgid "New, transfer %s to (auto) \"%s\""
 msgstr ""
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2028
+#: gnucash/import-export/import-main-matcher.cpp:2049
 #, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
 msgstr ""
 
 #. Translators: %s is the amount to be transferred.
-#: gnucash/import-export/import-main-matcher.cpp:2044
+#: gnucash/import-export/import-main-matcher.cpp:2065
 #, c-format
 msgid "New, UNBALANCED (need acct to transfer %s)!"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.cpp:2062
+#: gnucash/import-export/import-main-matcher.cpp:2083
 #, fuzzy, c-format
 msgid "Reconcile (manual) match to %s"
 msgstr "Suderinimo data"
 
-#: gnucash/import-export/import-main-matcher.cpp:2067
+#: gnucash/import-export/import-main-matcher.cpp:2088
 #, fuzzy, c-format
 msgid "Reconcile (auto) match to %s"
 msgstr "Suderinimo data"
 
-#: gnucash/import-export/import-main-matcher.cpp:2076
-#: gnucash/import-export/import-main-matcher.cpp:2105
+#: gnucash/import-export/import-main-matcher.cpp:2097
+#: gnucash/import-export/import-main-matcher.cpp:2126
 msgid "Match missing!"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.cpp:2091
+#: gnucash/import-export/import-main-matcher.cpp:2112
 #, c-format
 msgid "Update and reconcile (manual) match to %s"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.cpp:2096
+#: gnucash/import-export/import-main-matcher.cpp:2117
 #, c-format
 msgid "Update and reconcile (auto) match to %s"
 msgstr ""
 
-#: gnucash/import-export/import-main-matcher.cpp:2113
+#: gnucash/import-export/import-main-matcher.cpp:2134
 msgid "Do not import (no action selected)"
 msgstr "Neimportuoti (nepasirinktas veiksmas)"
 
@@ -20058,7 +20072,7 @@ msgid "Pending Action"
 msgstr "Veiksmai _internete"
 
 #: gnucash/import-export/import-pending-matches.cpp:191
-#: libgnucash/engine/policy.c:61
+#: libgnucash/engine/policy.cpp:62
 #, fuzzy
 msgid "Manual"
 msgstr "Kas metus"
@@ -20067,85 +20081,91 @@ msgstr "Kas metus"
 msgid "Auto"
 msgstr "Automatiškai"
 
-#: gnucash/import-export/log-replay/gnc-log-replay.c:575
+#: gnucash/import-export/log-replay/gnc-log-replay.cpp:573
 msgid "Select a .log file to replay"
 msgstr "Pasirinkite .log failą pakartojimui"
 
 #. Translators: %s is the file name.
-#: gnucash/import-export/log-replay/gnc-log-replay.c:595
+#: gnucash/import-export/log-replay/gnc-log-replay.cpp:593
 #, c-format
 msgid "Cannot open the current log file: %s"
 msgstr "Neįmanoma atverti dabartinio žurnalo failo: „%s“"
 
-#: gnucash/import-export/log-replay/gnc-log-replay.c:610
+#: gnucash/import-export/log-replay/gnc-log-replay.cpp:608
 #, c-format
 msgid "Failed to open log file: %s: %s"
 msgstr "Atveriant žurnalo failą „%s“ įvyko klaida „%s“"
 
-#: gnucash/import-export/log-replay/gnc-log-replay.c:620
+#: gnucash/import-export/log-replay/gnc-log-replay.cpp:618
 msgid "The log file you selected was empty."
 msgstr "Žurnalo failas, kurį pasirinkote, tuščias."
 
-#: gnucash/import-export/log-replay/gnc-log-replay.c:629
+#: gnucash/import-export/log-replay/gnc-log-replay.cpp:627
 msgid ""
 "The log file you selected cannot be read. The file header was not recognized."
 msgstr ""
 "Pasirinktas žurnalo failas neperskaitomas. Failo antraštė neatpažinta. "
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:712
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:717
 #, c-format
 msgid "Stock account for security \"%s\""
 msgstr "Akcijų sąskaita vertybiniam popieriui „%s“"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:750
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:755
 #, c-format
 msgid "Income account for security \"%s\""
 msgstr "Pajamų sąskaita vertybiniam popieriui „%s“"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1040
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1045
 msgid "Unknown OFX account"
 msgstr "Nežinoma OFX sąskaita"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1063
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1068
 msgid "Unknown OFX checking account"
 msgstr "Nežinoma OFX einamoji sąskaita"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1067
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1072
 msgid "Unknown OFX savings account"
 msgstr "Nežinoma OFX taupomoji sąskaita"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1071
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1076
 msgid "Unknown OFX money market account"
 msgstr "Nežinoma OFX pinigų rinkos sąskaita"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1075
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1080
 msgid "Unknown OFX credit line account"
 msgstr "Nežinoma OFX kredito linijos sąskaita"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1080
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1085
 msgid "Unknown OFX CMA account"
 msgstr "Nežinoma OFX CMA sąskaita"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1084
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1089
 msgid "Unknown OFX credit card account"
 msgstr "Nežinoma OFX kreditinės kortelės sąskaita"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1088
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1093
 msgid "Unknown OFX investment account"
 msgstr "Nežinoma OFX investavimo sąskaita"
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1353
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1308
+#, fuzzy
+#| msgid "Finding duplicate transactions"
+msgid "Removing duplicate transactions…"
+msgstr "Ieškoma dubliuotų operacijų"
+
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1362
 #, c-format
 msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1454
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1478
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
 msgstr ""
 
-#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1459
+#: gnucash/import-export/ofx/gnc-ofx-import.cpp:1483
 #, fuzzy
 msgid "Select one or multiple OFX/QFX file(s) to process"
 msgstr "Pasirinkite OFX/QFX failą apdorojimui"
@@ -20391,19 +20411,19 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:109
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:113
-#: gnucash/register/ledger-core/split-register.c:2620
+#: gnucash/register/ledger-core/split-register.c:2631
 #: gnucash/report/reports/standard/balance-sheet.scm:468
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1059
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1051
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:685
-#: libgnucash/app-utils/gnc-ui-util.cpp:637 libgnucash/engine/Account.cpp:4509
+#: libgnucash/app-utils/gnc-ui-util.cpp:637 libgnucash/engine/Account.cpp:4497
 msgid "Equity"
 msgstr "Nuosavybė"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:110
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:114
 #: gnucash/report/reports/standard/balance-sheet.scm:475
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1068
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1083
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1060
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1075
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:189
 #: libgnucash/app-utils/gnc-ui-util.cpp:554
 msgid "Retained Earnings"
@@ -20619,7 +20639,7 @@ msgstr "Pridėti naują kainą."
 msgid "Missing transaction date."
 msgstr "Trūksta operacijos datos."
 
-#: gnucash/import-export/qif-imp/qif-to-gnc.scm:601
+#: gnucash/import-export/qif-imp/qif-to-gnc.scm:741
 #, fuzzy, scheme-format
 #| msgid "Missing transaction date."
 msgid "Missing QIF investment action for transaction dated ~a."
@@ -20646,7 +20666,7 @@ msgid "Welcome to GnuCash %s Shell"
 msgstr "Jus sveikina GnuCash %s!"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:86
-#: gnucash/register/ledger-core/split-register.c:1980
+#: gnucash/register/ledger-core/split-register.c:1991
 #, c-format
 msgid "The account %s does not exist. Would you like to create it?"
 msgstr "Sąskaitos „%s“ nėra. Ar norėtumėte ją sukurti?"
@@ -20678,7 +20698,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:922
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:897
-#: gnucash/register/ledger-core/split-register.c:477
+#: gnucash/register/ledger-core/split-register.c:491
 msgid "_Record"
 msgstr "Į_rašyti"
 
@@ -20838,8 +20858,8 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:133
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:532
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1092
-#: gnucash/register/ledger-core/split-register.c:2547
-#: libgnucash/engine/Account.cpp:157 libgnucash/engine/Account.cpp:171
+#: gnucash/register/ledger-core/split-register.c:2558
+#: libgnucash/engine/Account.cpp:156 libgnucash/engine/Account.cpp:170
 #, fuzzy
 msgid "Charge"
 msgstr "Pavedimas"
@@ -21006,7 +21026,7 @@ msgstr "Ar šis įrašas apmokėtinas kliento ar pagal užduotį?"
 msgid "How did you pay for this item?"
 msgstr "Kaip sumokėjote už šį daiktą?"
 
-#: gnucash/register/ledger-core/split-register.c:195
+#: gnucash/register/ledger-core/split-register.c:209
 msgid ""
 "This transaction is already being edited in another register. Please finish "
 "editing it there first."
@@ -21014,11 +21034,11 @@ msgstr ""
 "Ši operacija jau redaguojama kitame registre. Iš pradžių baikite jos "
 "redagavimą ten."
 
-#: gnucash/register/ledger-core/split-register.c:462
+#: gnucash/register/ledger-core/split-register.c:476
 msgid "Save transaction before duplicating?"
 msgstr "Išsaugoti operaciją prieš dubliavimą?"
 
-#: gnucash/register/ledger-core/split-register.c:464
+#: gnucash/register/ledger-core/split-register.c:478
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating the transaction, or cancel the duplication?"
@@ -21026,16 +21046,16 @@ msgstr ""
 "Dabartinė operacija pakeista. Ar norite įrašyti pakeitimus prieš šios "
 "operacijos dubliavimą, ar atsisakyti dubliavimo?"
 
-#: gnucash/register/ledger-core/split-register.c:518
+#: gnucash/register/ledger-core/split-register.c:532
 msgid "New Split Information"
 msgstr "Naujo skaidymo informacija"
 
-#: gnucash/register/ledger-core/split-register.c:627
+#: gnucash/register/ledger-core/split-register.c:641
 #: gnucash/register/register-gnome/datecell-gnome.c:108
 msgid "Cannot store a transaction at this date"
 msgstr "Negalima išsaugoti operacijos šiai datai"
 
-#: gnucash/register/ledger-core/split-register.c:629
+#: gnucash/register/ledger-core/split-register.c:643
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
 "Threshold\" set for this book. This setting can be changed in File-"
@@ -21045,14 +21065,14 @@ msgstr ""
 "nustatytą šiai knygai. Ši nuostata gali būti pakeista per Failas->Savybės-"
 ">Sąskaitos."
 
-#: gnucash/register/ledger-core/split-register.c:948
+#: gnucash/register/ledger-core/split-register.c:959
 msgid ""
 "You are about to overwrite an existing split. Are you sure you want to do "
 "that?"
 msgstr ""
 "Ketinate perrašyti egzistuojantį skaidymą. Ar tikrai tą norite padaryti?"
 
-#: gnucash/register/ledger-core/split-register.c:950
+#: gnucash/register/ledger-core/split-register.c:961
 #, fuzzy
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
@@ -21064,18 +21084,18 @@ msgstr ""
 "lango arba pereiti į registrą, kuris rodo šios operacijos kitą pusę, ir "
 "pašalinti skaidymą iš to registro."
 
-#: gnucash/register/ledger-core/split-register.c:1008
+#: gnucash/register/ledger-core/split-register.c:1019
 msgid ""
 "You are about to overwrite an existing transaction. Are you sure you want to "
 "do that?"
 msgstr ""
 "Ketinate perrašyti egzistuojančią operaciją. Ar tikrai tą norite padaryti?"
 
-#: gnucash/register/ledger-core/split-register.c:2084
+#: gnucash/register/ledger-core/split-register.c:2095
 msgid "Recalculate Transaction"
 msgstr "Perskaičiuoti operaciją"
 
-#: gnucash/register/ledger-core/split-register.c:2085
+#: gnucash/register/ledger-core/split-register.c:2096
 msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
@@ -21083,46 +21103,46 @@ msgstr ""
 "Reikšmės įvestos šioje operacijoje yra prieštaringos. Kuri reikšmė, "
 "norėtumėte, kad būtų perskaičiuota?"
 
-#: gnucash/register/ledger-core/split-register.c:2092
-#: gnucash/register/ledger-core/split-register.c:2099
-#: gnucash/register/ledger-core/split-register.c:2106
+#: gnucash/register/ledger-core/split-register.c:2103
+#: gnucash/register/ledger-core/split-register.c:2110
+#: gnucash/register/ledger-core/split-register.c:2117
 msgid "Changed"
 msgstr "Pakeista"
 
-#: gnucash/register/ledger-core/split-register.c:2117
+#: gnucash/register/ledger-core/split-register.c:2128
 msgid "_Recalculate"
 msgstr "_Perskaičiuoti"
 
-#: gnucash/register/ledger-core/split-register.c:2540
+#: gnucash/register/ledger-core/split-register.c:2551
 #, fuzzy
 msgctxt "Action Column"
 msgid "Deposit"
 msgstr "Įdėjimas"
 
-#: gnucash/register/ledger-core/split-register.c:2541
+#: gnucash/register/ledger-core/split-register.c:2552
 #, fuzzy
 msgid "Withdraw"
 msgstr "Išimti"
 
-#: gnucash/register/ledger-core/split-register.c:2542
+#: gnucash/register/ledger-core/split-register.c:2553
 msgid "Check"
 msgstr "Čekis"
 
-#: gnucash/register/ledger-core/split-register.c:2544
-#: gnucash/register/ledger-core/split-register.c:2575
+#: gnucash/register/ledger-core/split-register.c:2555
+#: gnucash/register/ledger-core/split-register.c:2586
 msgid "ATM Deposit"
 msgstr "Indėlis bankomate"
 
-#: gnucash/register/ledger-core/split-register.c:2545
-#: gnucash/register/ledger-core/split-register.c:2576
+#: gnucash/register/ledger-core/split-register.c:2556
+#: gnucash/register/ledger-core/split-register.c:2587
 msgid "ATM Draw"
 msgstr "Išėmimas bankomate"
 
-#: gnucash/register/ledger-core/split-register.c:2546
+#: gnucash/register/ledger-core/split-register.c:2557
 msgid "Teller"
 msgstr "Kasininkas"
 
-#: gnucash/register/ledger-core/split-register.c:2549
+#: gnucash/register/ledger-core/split-register.c:2560
 #: gnucash/report/reports/standard/receipt.scm:201
 #: gnucash/report/reports/standard/receipt.scm:203
 #: gnucash/report/reports/support/receipt.eguile.scm:276
@@ -21131,135 +21151,135 @@ msgstr "Kasininkas"
 msgid "Receipt"
 msgstr "Pajamos"
 
-#: gnucash/register/ledger-core/split-register.c:2550
-#: gnucash/register/ledger-core/split-register.c:2564
-#: gnucash/register/ledger-core/split-register.c:2600
+#: gnucash/register/ledger-core/split-register.c:2561
+#: gnucash/register/ledger-core/split-register.c:2575
 #: gnucash/register/ledger-core/split-register.c:2611
-#: gnucash/register/ledger-core/split-register.c:2643
-#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:173
-#: libgnucash/engine/Account.cpp:181 libgnucash/engine/Account.cpp:182
+#: gnucash/register/ledger-core/split-register.c:2622
+#: gnucash/register/ledger-core/split-register.c:2654
+#: libgnucash/engine/Account.cpp:151 libgnucash/engine/Account.cpp:172
+#: libgnucash/engine/Account.cpp:180 libgnucash/engine/Account.cpp:181
 #, fuzzy
 msgid "Increase"
 msgstr "Padidinti"
 
-#: gnucash/register/ledger-core/split-register.c:2551
-#: gnucash/register/ledger-core/split-register.c:2565
-#: gnucash/register/ledger-core/split-register.c:2601
+#: gnucash/register/ledger-core/split-register.c:2562
+#: gnucash/register/ledger-core/split-register.c:2576
 #: gnucash/register/ledger-core/split-register.c:2612
-#: gnucash/register/ledger-core/split-register.c:2644
-#: libgnucash/engine/Account.cpp:153 libgnucash/engine/Account.cpp:161
-#: libgnucash/engine/Account.cpp:162 libgnucash/engine/Account.cpp:172
+#: gnucash/register/ledger-core/split-register.c:2623
+#: gnucash/register/ledger-core/split-register.c:2655
+#: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:160
+#: libgnucash/engine/Account.cpp:161 libgnucash/engine/Account.cpp:171
 #, fuzzy
 msgid "Decrease"
 msgstr "Sumažinti"
 
-#: gnucash/register/ledger-core/split-register.c:2553
+#: gnucash/register/ledger-core/split-register.c:2564
 msgid "POS"
 msgstr "EKA"
 
-#: gnucash/register/ledger-core/split-register.c:2557
+#: gnucash/register/ledger-core/split-register.c:2568
 msgid "AutoDep"
 msgstr "Aut. indėlis"
 
-#: gnucash/register/ledger-core/split-register.c:2558
+#: gnucash/register/ledger-core/split-register.c:2569
 msgid "Wire"
 msgstr "Elektroninis"
 
-#: gnucash/register/ledger-core/split-register.c:2560
+#: gnucash/register/ledger-core/split-register.c:2571
 msgid "Direct Debit"
 msgstr "Tiesioginis debetas"
 
-#: gnucash/register/ledger-core/split-register.c:2572
-#: gnucash/register/ledger-core/split-register.c:2579
-#: gnucash/register/ledger-core/split-register.c:2628
+#: gnucash/register/ledger-core/split-register.c:2583
+#: gnucash/register/ledger-core/split-register.c:2590
+#: gnucash/register/ledger-core/split-register.c:2639
 msgid "Fee"
 msgstr "Mokestis"
 
-#: gnucash/register/ledger-core/split-register.c:2606
-#: libgnucash/engine/Account.cpp:178
+#: gnucash/register/ledger-core/split-register.c:2617
+#: libgnucash/engine/Account.cpp:177
 msgid "Rebate"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register.c:2607
+#: gnucash/register/ledger-core/split-register.c:2618
 msgid "Paycheck"
 msgstr "Atlyginimas"
 
-#: gnucash/register/ledger-core/split-register.c:2633
+#: gnucash/register/ledger-core/split-register.c:2644
 msgid "LTCG"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register.c:2635
+#: gnucash/register/ledger-core/split-register.c:2646
 msgid "STCG"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register.c:2638
+#: gnucash/register/ledger-core/split-register.c:2649
 msgid "Dist"
 msgstr ""
 
-#: gnucash/register/ledger-core/split-register-control.c:60
+#: gnucash/register/ledger-core/split-register-control.cpp:60
 msgid "Rebalance Transaction"
 msgstr "Perbalansuoti operaciją"
 
-#: gnucash/register/ledger-core/split-register-control.c:61
+#: gnucash/register/ledger-core/split-register-control.cpp:61
 msgid "The current transaction is not balanced."
 msgstr "Dabartinė operacija yra nesubalansuota."
 
-#: gnucash/register/ledger-core/split-register-control.c:139
+#: gnucash/register/ledger-core/split-register-control.cpp:139
 msgid "Balance it _manually"
 msgstr "Balansuoti _rankiniu būdu"
 
-#: gnucash/register/ledger-core/split-register-control.c:141
+#: gnucash/register/ledger-core/split-register-control.cpp:141
 msgid "Let GnuCash _add an adjusting split"
 msgstr "Leisti GnuCash _pridėti koreguojantį skaidymą"
 
-#: gnucash/register/ledger-core/split-register-control.c:146
+#: gnucash/register/ledger-core/split-register-control.cpp:146
 msgid "Adjust current account _split total"
 msgstr "Koreguoti dabartinės sąskaitos _skaidymo sumą"
 
-#: gnucash/register/ledger-core/split-register-control.c:152
+#: gnucash/register/ledger-core/split-register-control.cpp:152
 msgid "Adjust _other account split total"
 msgstr "Koreguoti _kitos sąskaitos skaidymo sumą"
 
-#: gnucash/register/ledger-core/split-register-control.c:163
+#: gnucash/register/ledger-core/split-register-control.cpp:163
 msgid "_Rebalance"
 msgstr "_Perbalansuoti"
 
-#: gnucash/register/ledger-core/split-register-control.c:1313
-#: gnucash/register/ledger-core/split-register-control.c:1326
+#: gnucash/register/ledger-core/split-register-control.cpp:1313
+#: gnucash/register/ledger-core/split-register-control.cpp:1326
 msgid "This register does not support editing exchange rates."
 msgstr "Šis registras nepalaiko konvertavimo kursų redagavimo."
 
-#: gnucash/register/ledger-core/split-register-control.c:1352
+#: gnucash/register/ledger-core/split-register-control.cpp:1352
 msgid "You need to select a split in order to modify its exchange rate."
 msgstr ""
 "Turite pasirinkti skaidymą, kad galėtumėte modifikuoti jo konvertavimo kursą."
 
-#: gnucash/register/ledger-core/split-register-control.c:1367
-#: gnucash/register/ledger-core/split-register-control.c:1442
+#: gnucash/register/ledger-core/split-register-control.cpp:1367
+#: gnucash/register/ledger-core/split-register-control.cpp:1442
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
 msgstr ""
 "Turite išskleisti operaciją, kad galėtumėte modifikuoti jos konvertavimo "
 "kursus."
 
-#: gnucash/register/ledger-core/split-register-control.c:1379
+#: gnucash/register/ledger-core/split-register-control.cpp:1379
 msgid "The entered account could not be found."
 msgstr "Nepavyko rasti įvestos sąskaitos."
 
-#: gnucash/register/ledger-core/split-register-control.c:1414
-#: gnucash/register/ledger-core/split-register-control.c:1427
+#: gnucash/register/ledger-core/split-register-control.cpp:1414
+#: gnucash/register/ledger-core/split-register-control.cpp:1427
 msgid "The two currencies involved equal each other."
 msgstr "Naudojamos dvi tos pačios valiutos."
 
-#: gnucash/register/ledger-core/split-register-control.c:1478
+#: gnucash/register/ledger-core/split-register-control.cpp:1478
 msgid "The split's amount is zero, so no exchange rate is needed."
 msgstr "Skaidymo suma yra nulis, todėl konvertavimo kursas nereikalingas."
 
-#: gnucash/register/ledger-core/split-register-control.c:1527
+#: gnucash/register/ledger-core/split-register-control.cpp:1527
 msgid "Save the changed transaction?"
 msgstr "Išsaugoti pakeistą operaciją?"
 
-#: gnucash/register/ledger-core/split-register-control.c:1529
+#: gnucash/register/ledger-core/split-register-control.cpp:1529
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before moving to a new transaction, discard the changes, or return "
@@ -21268,19 +21288,19 @@ msgstr ""
 "Dabartinė operacija pakeista. Ar norite įrašyti pakeitimus prieš pereidami "
 "prie naujos operacijos, atsisakyti pakeitimų, ar grįžti į pakeistą operaciją?"
 
-#: gnucash/register/ledger-core/split-register-control.c:1542
+#: gnucash/register/ledger-core/split-register-control.cpp:1542
 msgid "_Discard Changes"
 msgstr "_Atmesti pakeitimus"
 
-#: gnucash/register/ledger-core/split-register-control.c:1544
+#: gnucash/register/ledger-core/split-register-control.cpp:1544
 msgid "_Record Changes"
 msgstr "Į_rašyti pakeitimus"
 
-#: gnucash/register/ledger-core/split-register-control.c:1831
+#: gnucash/register/ledger-core/split-register-control.cpp:1831
 msgid "Mark split as unreconciled?"
 msgstr "Pažymėti skaidymą kaip nesuderintą?"
 
-#: gnucash/register/ledger-core/split-register-control.c:1833
+#: gnucash/register/ledger-core/split-register-control.cpp:1833
 msgid ""
 "You are about to mark a reconciled split as unreconciled. Doing so might "
 "make future reconciliation difficult! Continue with this change?"
@@ -21288,7 +21308,7 @@ msgstr ""
 "Ketinate pažymėti suderintą skaidymą kaip nesuderintą. Tai padarius gali "
 "būti sunku atlikti suderinimą ateityje! Tęsti šį pakeitimą?"
 
-#: gnucash/register/ledger-core/split-register-control.c:1850
+#: gnucash/register/ledger-core/split-register-control.cpp:1850
 msgid "_Unreconcile"
 msgstr "_Nesuderinti"
 
@@ -21321,7 +21341,8 @@ msgstr "sample:Operacijos aprašas"
 #: gnucash/register/ledger-core/split-register-layout.c:705
 #: gnucash/register/ledger-core/split-register-model.c:339
 #: gnucash/report/reports/standard/new-owner-report.scm:209
-#: gnucash/report/reports/standard/new-owner-report.scm:436
+#: gnucash/report/reports/standard/new-owner-report.scm:800
+#: gnucash/report/reports/standard/new-owner-report.scm:840
 #: gnucash/report/trep-engine.scm:1198 gnucash/report/trep-engine.scm:1199
 msgctxt "Column header for 'Document Link'"
 msgid "L"
@@ -21742,7 +21763,7 @@ msgstr "Redaguoti ataskaitos parinktis"
 
 #: gnucash/report/html-utilities.scm:309
 #: gnucash/report/reports/standard/balsheet-pnl.scm:143
-#: gnucash/report/reports/standard/new-owner-report.scm:924
+#: gnucash/report/reports/standard/new-owner-report.scm:925
 #, fuzzy
 msgid "Disabled"
 msgstr "Įjungta"
@@ -22268,7 +22289,7 @@ msgstr "Kuriamo grafiko tipas."
 
 #: gnucash/report/reports/example/average-balance.scm:116
 #: gnucash/report/reports/example/average-balance.scm:136
-#: gnucash/report/trep-engine.scm:2087 libgnucash/engine/policy.c:58
+#: gnucash/report/trep-engine.scm:2082 libgnucash/engine/policy.cpp:59
 msgid "Average"
 msgstr "Vidurkis"
 
@@ -23758,8 +23779,8 @@ msgid "Trading Losses"
 msgstr "Prekybos nuostolis"
 
 #: gnucash/report/reports/standard/balance-sheet.scm:485
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1063
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1078
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1055
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1070
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:725
 #: gnucash/report/reports/standard/trial-balance.scm:697
 msgid "Unrealized Gains"
@@ -23922,12 +23943,12 @@ msgstr ""
 "paslėpti) "
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:376
-#: libgnucash/engine/Scrub.c:470
+#: libgnucash/engine/Scrub.cpp:470
 msgid "Imbalance"
 msgstr "Disbalansas"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:379
-#: libgnucash/engine/Scrub.c:127
+#: libgnucash/engine/Scrub.cpp:128
 msgid "Orphan"
 msgstr "Apleistas"
 
@@ -24084,61 +24105,62 @@ msgstr ""
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:437
 #: gnucash/report/reports/standard/balsheet-pnl.scm:595
+#: gnucash/report/reports/standard/txn-columns.scm:185
 #: gnucash/report/trep-engine.scm:1737
 msgid "Total For "
 msgstr "Iš viso "
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1052
-#: libgnucash/engine/Account.cpp:4501
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1044
+#: libgnucash/engine/Account.cpp:4489
 msgid "Asset"
 msgstr "Turtas"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1055
-#: libgnucash/engine/Account.cpp:4503
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1047
+#: libgnucash/engine/Account.cpp:4491
 msgid "Liability"
 msgstr "Įsipareigojimas"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1073
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1065
 #, fuzzy
 msgid "Liability and Equity"
 msgstr "_Įsipareigojimai/Nuosavybė"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1091
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1234
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1083
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1226
 #, fuzzy
 msgid "Exchange Rates"
 msgstr "Konvertavimo kursas:"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1101
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1093
 #, fuzzy
 msgid "Barchart"
 msgstr "Turto histograma"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1164
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1156
 msgid " to "
 msgstr " iki "
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1223
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1215
 #: gnucash/report/reports/standard/customer-summary.scm:110
 #: gnucash/report/reports/standard/customer-summary.scm:286
 #: gnucash/report/reports/standard/net-charts.scm:353
 #: gnucash/report/reports/standard/net-charts.scm:401
-#: libgnucash/engine/Account.cpp:158 libgnucash/engine/Account.cpp:4508
+#: libgnucash/engine/Account.cpp:157 libgnucash/engine/Account.cpp:4496
 #: libgnucash/engine/gncInvoice.c:1100
 msgid "Expense"
 msgstr "Sąnaudos"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1227
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1219
 #: gnucash/report/reports/standard/trial-balance.scm:823
 msgid "Net Income"
 msgstr "Grynosios pajamos"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1260
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1252
 #, fuzzy
 msgid "Balance Sheet (Multicolumn)"
 msgstr "Balansas (eguile)"
 
-#: gnucash/report/reports/standard/balsheet-pnl.scm:1261
+#: gnucash/report/reports/standard/balsheet-pnl.scm:1253
 #, fuzzy
 msgid "Income Statement (Multicolumn)"
 msgstr "Pajamų deklaracija"
@@ -24852,8 +24874,8 @@ msgstr "Likučiai nuo ~a iki ~a"
 #: gnucash/report/reports/standard/category-barchart.scm:654
 #: gnucash/report/reports/standard/category-barchart.scm:674
 #: gnucash/report/reports/standard/investment-lots.scm:132
-#: gnucash/report/trep-engine.scm:77 gnucash/report/trep-engine.scm:1804
-#: gnucash/report/trep-engine.scm:2072
+#: gnucash/report/trep-engine.scm:77 gnucash/report/trep-engine.scm:1799
+#: gnucash/report/trep-engine.scm:2067
 msgid "Grand Total"
 msgstr "Bendra suma"
 
@@ -25065,7 +25087,7 @@ msgstr "Kapitalo sumažėjimas"
 #: gnucash/report/reports/standard/general-ledger.scm:68
 #: gnucash/report/reports/standard/register.scm:134
 #: gnucash/report/reports/standard/register.scm:351
-#: gnucash/report/trep-engine.scm:915 gnucash/report/trep-engine.scm:2240
+#: gnucash/report/trep-engine.scm:915 gnucash/report/trep-engine.scm:2235
 msgid "Num/Action"
 msgstr "Num/Veiksmas"
 
@@ -25095,42 +25117,42 @@ msgid "Sorting"
 msgstr "Rikiavimas"
 
 #: gnucash/report/reports/standard/general-ledger.scm:69
-#: gnucash/report/trep-engine.scm:936 gnucash/report/trep-engine.scm:2265
+#: gnucash/report/trep-engine.scm:936 gnucash/report/trep-engine.scm:2260
 msgid "Trans Number"
 msgstr "Op. numeris"
 
 #: gnucash/report/reports/standard/general-ledger.scm:73
 #: gnucash/report/reports/standard/general-ledger.scm:93
 #: gnucash/report/trep-engine.scm:873 gnucash/report/trep-engine.scm:920
-#: gnucash/report/trep-engine.scm:2254
+#: gnucash/report/trep-engine.scm:2249
 msgid "Use Full Account Name"
 msgstr "Naudoti pilną sąskaitos pavadinimą"
 
 #: gnucash/report/reports/standard/general-ledger.scm:75
 #: gnucash/report/reports/standard/general-ledger.scm:95
 #: gnucash/report/trep-engine.scm:219 gnucash/report/trep-engine.scm:877
-#: gnucash/report/trep-engine.scm:958 gnucash/report/trep-engine.scm:2246
+#: gnucash/report/trep-engine.scm:958 gnucash/report/trep-engine.scm:2241
 msgid "Other Account Name"
 msgstr "Kitos sąskaitos pavadinimas"
 
 #: gnucash/report/reports/standard/general-ledger.scm:76
 #: gnucash/report/reports/standard/general-ledger.scm:96
 #: gnucash/report/trep-engine.scm:893 gnucash/report/trep-engine.scm:923
-#: gnucash/report/trep-engine.scm:2263
+#: gnucash/report/trep-engine.scm:2258
 msgid "Use Full Other Account Name"
 msgstr "Naudoti visą kitos sąskaitos pavadinimą"
 
 #: gnucash/report/reports/standard/general-ledger.scm:77
 #: gnucash/report/reports/standard/general-ledger.scm:97
 #: gnucash/report/trep-engine.scm:225 gnucash/report/trep-engine.scm:897
-#: gnucash/report/trep-engine.scm:924 gnucash/report/trep-engine.scm:2260
+#: gnucash/report/trep-engine.scm:924 gnucash/report/trep-engine.scm:2255
 msgid "Other Account Code"
 msgstr "Kitos sąskaitos kodas"
 
 #: gnucash/report/reports/standard/general-ledger.scm:84
 #: gnucash/report/reports/standard/general-ledger.scm:104
 #: gnucash/report/trep-engine.scm:881 gnucash/report/trep-engine.scm:991
-#: gnucash/report/trep-engine.scm:2189
+#: gnucash/report/trep-engine.scm:2184
 msgid "Sign Reverses"
 msgstr "Ženklo pakeitimai"
 
@@ -25145,7 +25167,7 @@ msgid "Primary Key"
 msgstr "Pirminis raktas"
 
 #: gnucash/report/reports/standard/general-ledger.scm:125
-#: gnucash/report/trep-engine.scm:90 gnucash/report/trep-engine.scm:2288
+#: gnucash/report/trep-engine.scm:90 gnucash/report/trep-engine.scm:2283
 msgid "Show Full Account Name"
 msgstr "Rodyti visą sąskaitos pavadinimą"
 
@@ -25392,7 +25414,7 @@ msgid ""
 msgstr "Ar įtraukti eilutę, rodančią bendrąją prekybos sąskaitų sumą."
 
 #: gnucash/report/reports/standard/income-statement.scm:477
-#: libgnucash/engine/Account.cpp:4513 libgnucash/engine/Scrub.c:538
+#: libgnucash/engine/Account.cpp:4501 libgnucash/engine/Scrub.cpp:538
 msgid "Trading"
 msgstr "Prekybos"
 
@@ -26053,18 +26075,18 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:434
 #: gnucash/report/reports/standard/invoice.scm:438
 #: gnucash/report/reports/standard/invoice.scm:442
-#: gnucash/report/reports/standard/new-owner-report.scm:874
-#: gnucash/report/reports/standard/new-owner-report.scm:878
-#: gnucash/report/reports/standard/new-owner-report.scm:882
-#: gnucash/report/reports/standard/new-owner-report.scm:886
-#: gnucash/report/reports/standard/new-owner-report.scm:890
-#: gnucash/report/reports/standard/new-owner-report.scm:894
-#: gnucash/report/reports/standard/new-owner-report.scm:898
-#: gnucash/report/reports/standard/new-owner-report.scm:902
-#: gnucash/report/reports/standard/new-owner-report.scm:906
-#: gnucash/report/reports/standard/new-owner-report.scm:910
-#: gnucash/report/reports/standard/new-owner-report.scm:914
-#: gnucash/report/reports/standard/new-owner-report.scm:929
+#: gnucash/report/reports/standard/new-owner-report.scm:875
+#: gnucash/report/reports/standard/new-owner-report.scm:879
+#: gnucash/report/reports/standard/new-owner-report.scm:883
+#: gnucash/report/reports/standard/new-owner-report.scm:887
+#: gnucash/report/reports/standard/new-owner-report.scm:891
+#: gnucash/report/reports/standard/new-owner-report.scm:895
+#: gnucash/report/reports/standard/new-owner-report.scm:899
+#: gnucash/report/reports/standard/new-owner-report.scm:903
+#: gnucash/report/reports/standard/new-owner-report.scm:907
+#: gnucash/report/reports/standard/new-owner-report.scm:911
+#: gnucash/report/reports/standard/new-owner-report.scm:915
+#: gnucash/report/reports/standard/new-owner-report.scm:930
 msgid "Display Columns"
 msgstr "Rodyti stulpelius"
 
@@ -26516,7 +26538,7 @@ msgid "Show all vendors/customers even if they have a zero balance."
 msgstr "Rodyti visus tiekėjus/klientus, net jei jie turi nulinį likutį."
 
 #: gnucash/report/reports/standard/new-aging.scm:109
-#: gnucash/report/reports/standard/new-owner-report.scm:934
+#: gnucash/report/reports/standard/new-owner-report.scm:935
 msgid "Leading date."
 msgstr "Data priekyje."
 
@@ -26559,7 +26581,7 @@ msgid "91+ days"
 msgstr ">90 dienų"
 
 #: gnucash/report/reports/standard/new-aging.scm:321
-#: gnucash/report/reports/standard/new-owner-report.scm:537
+#: gnucash/report/reports/standard/new-owner-report.scm:533
 #, fuzzy
 msgid "Please note some transactions were not processed"
 msgstr "Operacijų datos intervalas gavimui:"
@@ -26668,7 +26690,7 @@ msgid "Partial Amount"
 msgstr "_Pirminė sąskaita"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:283
-#: gnucash/report/trep-engine.scm:927 gnucash/report/trep-engine.scm:2249
+#: gnucash/report/trep-engine.scm:927 gnucash/report/trep-engine.scm:2244
 #, fuzzy
 msgid "Link"
 msgstr "Partijos nuoroda"
@@ -26685,144 +26707,144 @@ msgstr ""
 msgid "Linked Details"
 msgstr "Paskolos informacija"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:496
+#: gnucash/report/reports/standard/new-owner-report.scm:492
 #, fuzzy
 msgid "Period Totals"
 msgstr "Laikotarpio sumos"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:509
+#: gnucash/report/reports/standard/new-owner-report.scm:505
 msgid ""
 "* Amounts denoted thus are derived from, and do not match the transaction."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:521
+#: gnucash/report/reports/standard/new-owner-report.scm:517
 #, fuzzy
 msgid "Total Credit"
 msgstr "Iš viso kredito"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:522
+#: gnucash/report/reports/standard/new-owner-report.scm:518
 msgid "Total Due"
 msgstr "Visa priklausanti suma"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:862
+#: gnucash/report/reports/standard/new-owner-report.scm:863
 msgid "The company for this report."
 msgstr "Šios ataskaitos įmonė."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:875
-#: gnucash/report/reports/standard/new-owner-report.scm:879
+#: gnucash/report/reports/standard/new-owner-report.scm:876
+#: gnucash/report/reports/standard/new-owner-report.scm:880
 msgid "Display the transaction date?"
 msgstr "Rodyti operacijos datą?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:883
+#: gnucash/report/reports/standard/new-owner-report.scm:884
 msgid "Display the transaction reference?"
 msgstr "Rodyti operacijos nuorodą?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:887
+#: gnucash/report/reports/standard/new-owner-report.scm:888
 msgid "Display the transaction type?"
 msgstr "Rodyti operacijos tipą?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:891
+#: gnucash/report/reports/standard/new-owner-report.scm:892
 msgid "Display the transaction description?"
 msgstr "Rodyti operacijos aprašą?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:895
+#: gnucash/report/reports/standard/new-owner-report.scm:896
 #, fuzzy
 msgid "Display the sale amount column?"
 msgstr "Rodyti sumą?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:899
+#: gnucash/report/reports/standard/new-owner-report.scm:900
 #, fuzzy
 msgid "Display the tax column?"
 msgstr "Rodyti sąskaitą?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:903
+#: gnucash/report/reports/standard/new-owner-report.scm:904
 #, fuzzy
 msgid "Display the period debits column?"
 msgstr "Rodyti įrašo nuolaidą"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:907
+#: gnucash/report/reports/standard/new-owner-report.scm:908
 #, fuzzy
 msgid "Display the period credits column?"
 msgstr "Rodyti įrašo nuolaidą"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:911
+#: gnucash/report/reports/standard/new-owner-report.scm:912
 #: gnucash/report/reports/standard/register.scm:395
 msgid "Display a running balance?"
 msgstr "Rodyti einamąjį balansą?"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:918
+#: gnucash/report/reports/standard/new-owner-report.scm:919
 #, fuzzy
 msgid "Show linked transactions"
 msgstr "Rodyti tik anuliuotas operacijas."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:919
+#: gnucash/report/reports/standard/new-owner-report.scm:920
 #, fuzzy
 msgid "Linked transactions are hidden."
 msgstr "Ieškoti operacijų per paiešką"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:920
+#: gnucash/report/reports/standard/new-owner-report.scm:921
 msgid "Invoices show if paid, payments show invoice numbers."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:921
+#: gnucash/report/reports/standard/new-owner-report.scm:922
 msgid ""
 "Invoices show list of payments, payments show list of invoices and amounts."
 msgstr ""
 
-#: gnucash/report/reports/standard/new-owner-report.scm:925
+#: gnucash/report/reports/standard/new-owner-report.scm:926
 #, fuzzy
 msgid "Simple"
 msgstr "Pavyzdys:"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:926
+#: gnucash/report/reports/standard/new-owner-report.scm:927
 #, fuzzy
 msgid "Detailed"
 msgstr "Nepavyko"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:930
+#: gnucash/report/reports/standard/new-owner-report.scm:931
 #, fuzzy
 msgid "Display document link?"
 msgstr "Rodyti sąskaitas kaip nuorodas"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1045
+#: gnucash/report/reports/standard/new-owner-report.scm:1046
 #, fuzzy
 msgid "No valid account found"
 msgstr "Atitinkančių operacijų nerasta"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1046
+#: gnucash/report/reports/standard/new-owner-report.scm:1047
 #, fuzzy
 msgid "This report requires a valid AP/AR account to be available."
 msgstr "Šiai ataskaitai būtina pasirinkti tinkamą sąskaitą."
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1069
+#: gnucash/report/reports/standard/new-owner-report.scm:1070
 #, fuzzy
 msgid "No transactions found."
 msgstr "Atitinkančių operacijų nerasta"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1070
+#: gnucash/report/reports/standard/new-owner-report.scm:1071
 #: gnucash/report/trep-engine.scm:141
 msgid "No matching transactions found"
 msgstr "Atitinkančių operacijų nerasta"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1165
+#: gnucash/report/reports/standard/new-owner-report.scm:1166
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:104
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:164
 msgid "Customer Report"
 msgstr "Kliento ataskaita"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1174
+#: gnucash/report/reports/standard/new-owner-report.scm:1175
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:119
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:198
 msgid "Vendor Report"
 msgstr "Tiekėjo ataskaita"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1183
+#: gnucash/report/reports/standard/new-owner-report.scm:1184
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:232
 msgid "Employee Report"
 msgstr "Darbuotojo ataskaita"
 
-#: gnucash/report/reports/standard/new-owner-report.scm:1192
+#: gnucash/report/reports/standard/new-owner-report.scm:1193
 msgid "Job Report"
 msgstr "Užduoties ataskaita"
 
@@ -27134,12 +27156,12 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/reconcile-report.scm:85
-#: libgnucash/engine/Account.cpp:148
+#: libgnucash/engine/Account.cpp:147
 msgid "Funds In"
 msgstr "Įeinančios lėšos"
 
 #: gnucash/report/reports/standard/reconcile-report.scm:92
-#: libgnucash/engine/Account.cpp:168
+#: libgnucash/engine/Account.cpp:167
 msgid "Funds Out"
 msgstr "Išeinančios lėšos"
 
@@ -27603,6 +27625,34 @@ msgstr "Koreguotas bandomasis balansas"
 #: gnucash/report/reports/standard/trial-balance.scm:823
 msgid "Net Loss"
 msgstr "Grynasis nuostolis"
+
+#: gnucash/report/reports/standard/txn-columns.scm:33
+#, fuzzy
+#| msgid "Transaction Report"
+msgid "Transaction Breakdown Report"
+msgstr "Sandorių ataskaita"
+
+#: gnucash/report/reports/standard/txn-columns.scm:37
+#, fuzzy
+#| msgid "Number of columns"
+msgid "Limit for number of columns"
+msgstr "Stulpelių skaičius"
+
+#: gnucash/report/reports/standard/txn-columns.scm:38
+msgid "Set the upper limit for number of columns"
+msgstr ""
+
+#: gnucash/report/reports/standard/txn-columns.scm:154
+#, fuzzy
+msgid "Too many accounts"
+msgstr "Mokesčio suma"
+
+#: gnucash/report/reports/standard/txn-columns.scm:155
+msgid ""
+"The number of accounts linked by the transactions found exceeds the limit. "
+"Select a different subset of transactions, or increase the limit in the "
+"options."
+msgstr ""
 
 #: gnucash/report/reports/standard/view-column.scm:45
 #: gnucash/report/reports/standard/view-column.scm:56
@@ -28168,7 +28218,7 @@ msgstr "Tarpinė suma"
 msgid "Running Totals"
 msgstr "Einamasis balansas"
 
-#: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2290
+#: gnucash/report/trep-engine.scm:92 gnucash/report/trep-engine.scm:2285
 #, fuzzy
 msgid "Show Account Description"
 msgstr "Sąskaitos aprašas"
@@ -28344,7 +28394,7 @@ msgid "Specify date to filter by…"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:541 gnucash/report/trep-engine.scm:913
-#: gnucash/report/trep-engine.scm:1093 gnucash/report/trep-engine.scm:2238
+#: gnucash/report/trep-engine.scm:1093 gnucash/report/trep-engine.scm:2233
 msgid "Date Entered"
 msgstr "Įvedimo data"
 
@@ -28676,12 +28726,12 @@ msgstr "Likutis"
 msgid "Split Transaction"
 msgstr "Skaidyta operacija"
 
-#: gnucash/report/trep-engine.scm:2006
+#: gnucash/report/trep-engine.scm:2001
 msgid "CSV disabled for double column amounts"
 msgstr ""
 
 #. Translators: Both ~a's are dates
-#: gnucash/report/trep-engine.scm:2552
+#: gnucash/report/trep-engine.scm:2547
 #, scheme-format
 msgid "From ~a to ~a"
 msgstr "Nuo ~a iki ~a"
@@ -28846,7 +28896,7 @@ msgstr "Redaguoti dabartinio failo savybes"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:579
 #: gnucash/ui/gnc-plugin-page-register.ui:674
 #: gnucash/ui/gnc-plugin-page-report.ui:122
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:99
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:105
 msgid "Close the currently active page"
 msgstr "Užverti dabar aktyvų puslapį"
 
@@ -29034,7 +29084,7 @@ msgstr "Apie GnuCash"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:564
 #: gnucash/ui/gnc-plugin-page-register.ui:659
 #: gnucash/ui/gnc-plugin-page-report.ui:107
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:84
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:90
 msgid "Save the current file"
 msgstr "Išsaugoti dabartinį failą"
 
@@ -29047,7 +29097,7 @@ msgstr "Išsaugoti dabartinį failą"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:604
 #: gnucash/ui/gnc-plugin-page-register.ui:699
 #: gnucash/ui/gnc-plugin-page-report.ui:147
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:124
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:130
 msgid "Open the New Invoice dialog"
 msgstr "Atverti naujos sąskaitos faktūros dialogo langą"
 
@@ -29062,7 +29112,7 @@ msgstr "Atverti naujos sąskaitos faktūros dialogo langą"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:602
 #: gnucash/ui/gnc-plugin-page-register.ui:697
 #: gnucash/ui/gnc-plugin-page-report.ui:145
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:122
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:128
 #, fuzzy
 #| msgid "New _Invoice"
 msgid "New _Invoice…"
@@ -29714,7 +29764,7 @@ msgstr "Filtruoti pagal…"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:94
 #: gnucash/ui/gnc-plugin-page-register.ui:120
 #: gnucash/ui/gnc-plugin-page-report.ui:46
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:37
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:43
 msgid "_Refresh"
 msgstr "At_naujinti"
 
@@ -29723,7 +29773,7 @@ msgstr "At_naujinti"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:128
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:97
 #: gnucash/ui/gnc-plugin-page-report.ui:49
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:40
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:46
 msgid "Refresh this window"
 msgstr "Atnaujinti šį langą"
 
@@ -30675,18 +30725,26 @@ msgstr "Atsisakyti dar neatliktų HTML užklausų"
 msgid "Export _Report"
 msgstr "_Eksportuoti ataskaitą"
 
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:49
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:149
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:37
+msgid "_Save layout as default"
+msgstr ""
+
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:39
+msgid "Save current layout as default"
+msgstr ""
+
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:55
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:155
 msgid "Create a new scheduled transaction"
 msgstr "Sukurti naują planinę operaciją"
 
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:55
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:164
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:61
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:170
 msgid "Edit the selected scheduled transaction"
 msgstr "Redaguoti pasirinktą planinę operaciją"
 
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:61
-#: gnucash/ui/gnc-plugin-page-sx-list.ui:189
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:67
+#: gnucash/ui/gnc-plugin-page-sx-list.ui:195
 msgid "Delete the selected scheduled transaction"
 msgstr "Pašalinti pasirinktas planines operacijas"
 
@@ -31135,7 +31193,6 @@ msgstr "Naujo skaidymo informacija"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
-#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -31146,7 +31203,7 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, fuzzy, c++-format
+#, fuzzy
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "Ši koduotė jau pridėta į sąrašą."
@@ -31154,7 +31211,6 @@ msgstr[1] "Ši koduotė jau pridėta į sąrašą."
 msgstr[2] "Ši koduotė jau pridėta į sąrašą."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
-#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -31166,32 +31222,32 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, fuzzy, c++-format
+#, fuzzy
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Failas negali būti pakartotinai atvertas."
 msgstr[1] "Failas negali būti pakartotinai atvertas."
 msgstr[2] "Failas negali būti pakartotinai atvertas."
 
-#: libgnucash/engine/Account.cpp:149
+#: libgnucash/engine/Account.cpp:148
 msgid "Deposit"
 msgstr "Įdėjimas"
 
-#: libgnucash/engine/Account.cpp:150
+#: libgnucash/engine/Account.cpp:149
 #, fuzzy
 msgid "Receive"
 msgstr "Pajamos"
 
-#: libgnucash/engine/Account.cpp:169
+#: libgnucash/engine/Account.cpp:168
 msgid "Withdrawal"
 msgstr "Išėmimas"
 
-#: libgnucash/engine/Account.cpp:170
+#: libgnucash/engine/Account.cpp:169
 #, fuzzy
 msgid "Spend"
 msgstr "Išlaidos"
 
-#: libgnucash/engine/Account.cpp:248
+#: libgnucash/engine/Account.cpp:247
 #, c-format
 msgid ""
 "The separator character \"%s\" is used in one or more account names.\n"
@@ -31210,40 +31266,40 @@ msgstr ""
 "Žemiau rasite netinkamų sąskaitų pavadinimų sąrašą:\n"
 "%s"
 
-#: libgnucash/engine/Account.cpp:4502
+#: libgnucash/engine/Account.cpp:4490
 msgid "Credit Card"
 msgstr "Kreditinė kortelė"
 
-#: libgnucash/engine/Account.cpp:4504
+#: libgnucash/engine/Account.cpp:4492
 msgid "Stock"
 msgstr "Akcija"
 
-#: libgnucash/engine/Account.cpp:4505
+#: libgnucash/engine/Account.cpp:4493
 msgid "Mutual Fund"
 msgstr "Investicinis fondas"
 
-#: libgnucash/engine/Account.cpp:4510
+#: libgnucash/engine/Account.cpp:4498
 msgid "A/Receivable"
 msgstr "Gautinos sumos"
 
-#: libgnucash/engine/Account.cpp:4511
+#: libgnucash/engine/Account.cpp:4499
 msgid "A/Payable"
 msgstr "Mokėtinos sumos"
 
-#: libgnucash/engine/Account.cpp:4512
+#: libgnucash/engine/Account.cpp:4500
 msgid "Root"
 msgstr "Pirminė"
 
-#: libgnucash/engine/Account.cpp:5224
+#: libgnucash/engine/Account.cpp:5204
 msgid "Orphaned Gains"
 msgstr "Apleistas pelnas"
 
-#: libgnucash/engine/Account.cpp:5238 libgnucash/engine/cap-gains.c:806
-#: libgnucash/engine/cap-gains.c:811 libgnucash/engine/cap-gains.c:812
+#: libgnucash/engine/Account.cpp:5218 libgnucash/engine/cap-gains.cpp:804
+#: libgnucash/engine/cap-gains.cpp:809 libgnucash/engine/cap-gains.cpp:810
 msgid "Realized Gain/Loss"
 msgstr "Patirtas pelnas/nuostolis"
 
-#: libgnucash/engine/Account.cpp:5240
+#: libgnucash/engine/Account.cpp:5220
 msgid ""
 "Realized Gains or Losses from Commodity or Trading Accounts that haven't "
 "been recorded elsewhere."
@@ -31762,27 +31818,27 @@ msgstr ""
 msgid "Lot Link"
 msgstr "Partijos nuoroda"
 
-#: libgnucash/engine/policy.c:52
+#: libgnucash/engine/policy.cpp:53
 msgid "First In, First Out"
 msgstr "Pirmas įėjęs, pirmas išeina"
 
-#: libgnucash/engine/policy.c:53
+#: libgnucash/engine/policy.cpp:54
 msgid "Use oldest lots first."
 msgstr "Pirmiausia naudoti seniausias partijas."
 
-#: libgnucash/engine/policy.c:55
+#: libgnucash/engine/policy.cpp:56
 msgid "Last In, First Out"
 msgstr "Paskutinis įėjęs, pirmas išeina"
 
-#: libgnucash/engine/policy.c:56
+#: libgnucash/engine/policy.cpp:57
 msgid "Use newest lots first."
 msgstr "Pirmiausia naudoti naujausias partijas."
 
-#: libgnucash/engine/policy.c:59
+#: libgnucash/engine/policy.cpp:60
 msgid "Average cost of open lots."
 msgstr "Atvertos partijos vidutinė kaina."
 
-#: libgnucash/engine/policy.c:62
+#: libgnucash/engine/policy.cpp:63
 msgid "Manually select lots."
 msgstr "Rankiniu būdu pasirinkti partijas."
 
@@ -31849,7 +31905,7 @@ msgstr "%s %s"
 msgid "Unknown, %d-size list."
 msgstr "Nežinomas, %d-dydžio sąrašas."
 
-#: libgnucash/engine/ScrubBusiness.c:557
+#: libgnucash/engine/ScrubBusiness.c:558
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#Double_posting"
@@ -31857,7 +31913,7 @@ msgstr ""
 "Ištrinkite šį sandorį. Paaiškinimas nuorodoje https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#Double_posting"
 
-#: libgnucash/engine/ScrubBusiness.c:573
+#: libgnucash/engine/ScrubBusiness.c:574
 msgid ""
 "Please delete this transaction. Explanation at https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
@@ -31865,38 +31921,38 @@ msgstr ""
 "Ištrinkite šį sandorį. Paaiškinimas nuorodoje https://wiki.gnucash.org/wiki/"
 "Business_Features_Issues#I_can.27t_delete_a_transaction_of_type_.22I.22_from_the_AR.2FAP_account"
 
-#: libgnucash/engine/ScrubBusiness.c:625
+#: libgnucash/engine/ScrubBusiness.c:626
 #, c-format
 msgid "Checking business lots in account %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/ScrubBusiness.c:679
+#: libgnucash/engine/ScrubBusiness.c:680
 #, c-format
 msgid "Checking business splits in account %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/Scrub.c:148
+#: libgnucash/engine/Scrub.cpp:149
 #, c-format
 msgid "Looking for orphans in transaction: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/Scrub.c:362
+#: libgnucash/engine/Scrub.cpp:362
 #, c-format
 msgid "Looking for imbalances in transaction date %s: %u of %u"
 msgstr ""
 
-#: libgnucash/engine/Split.cpp:1677
+#: libgnucash/engine/Split.cpp:1644
 #, fuzzy
 msgctxt ""
 "Displayed account code of the other account in a multi-split transaction"
 msgid "Split"
 msgstr "Skaidymas"
 
-#: libgnucash/engine/Transaction.cpp:2734
+#: libgnucash/engine/Transaction.cpp:2664
 msgid "Voided transaction"
 msgstr "Anuliuota operacija"
 
-#: libgnucash/engine/Transaction.cpp:2747
+#: libgnucash/engine/Transaction.cpp:2677
 msgid "Transaction Voided"
 msgstr "Operacija anuliuota"
 
