@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-19 07:09+0000\n"
+"PO-Revision-Date: 2024-06-23 19:04+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6-dev\n"
+"X-Generator: Weblate 5.6-rc\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -8285,7 +8285,7 @@ msgstr "Engedélyezve"
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:123
 msgctxt "Single-character short column-title form of 'Enabled'"
 msgid "E"
-msgstr ""
+msgstr "Eng."
 
 #: gnucash/gnome-utils/gnc-tree-view-sx-list.c:134
 msgid "Last Occur"
@@ -8321,7 +8321,7 @@ msgstr "Nettó eszközök:"
 
 #: gnucash/gnome-utils/window-main-summarybar.c:424
 msgid "Profits:"
-msgstr "Haszon:"
+msgstr "Nyereség:"
 
 #: gnucash/gnucash-cli.cpp:94
 msgid "Price Quotes Retrieval Options"
@@ -14316,7 +14316,7 @@ msgstr "Új s_zámla…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
-msgstr "Válasszon vagy hozzon létre GnuCash számlát ehhez:"
+msgstr "Válasszon ki, vagy hozzon létre egy GnuCash számlát ehhez:"
 
 #: gnucash/gtkbuilder/dialog-import.glade:99
 msgid "Online account ID here…"
@@ -18072,9 +18072,8 @@ msgid "Enter a SEPA Internal Transfer"
 msgstr "Online tranzakció bevitele"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:398
-#, fuzzy
 msgid "Target Accounts"
-msgstr "egy folyószámla"
+msgstr "Célszámla"
 
 #: gnucash/import-export/aqb/dialog-ab-trans.c:409
 msgid "Enter a SEPA Online Direct Debit Note"
@@ -18591,7 +18590,7 @@ msgstr ""
 #: gnucash/import-export/bi-import/dialog-bi-import.c:475
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
-msgstr "%d. sor, %s/%u számla: %s folyószámla nem létezik.\n"
+msgstr "%d. sor, %s/%u bejövő számla: %s számla nem létezik.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:416
 #, c-format
@@ -19612,7 +19611,7 @@ msgstr ""
 
 #: gnucash/import-export/import-account-matcher.cpp:419
 msgid "(Full account ID: "
-msgstr "(Teljes folyószámla azonosító: "
+msgstr "(Teljes számla azonosító: "
 
 #: gnucash/import-export/import-commodity-matcher.cpp:92
 msgid ""
@@ -19813,7 +19812,7 @@ msgstr "Ismeretlen OFX számla"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1063
 msgid "Unknown OFX checking account"
-msgstr "Ismeretlen OFX folyószámla"
+msgstr "Ismeretlen OFX csekkszámla"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1067
 msgid "Unknown OFX savings account"
@@ -20520,11 +20519,11 @@ msgstr "Terhelés"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:47
 msgid "Income Account"
-msgstr "Bevételi folyószámla"
+msgstr "Bevételszámla"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:52
 msgid "Expense Account"
-msgstr "Költség folyószámla"
+msgstr "Költségszámla"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:77
 msgid "Discount Type"
@@ -24748,9 +24747,8 @@ msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:118
 #: gnucash/report/reports/standard/income-gst-statement.scm:353
-#, fuzzy
 msgid "Net Balance"
-msgstr "HBCI-_egyenleg lehívása"
+msgstr "Nettó egyenleg"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:119
 msgid "Display the net balance (sales without tax - purchases without tax)"
@@ -24771,9 +24769,8 @@ msgid "Purchases"
 msgstr ""
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:142
-#, fuzzy
 msgid "Tax Accounts"
-msgstr "egy folyószámla"
+msgstr "Adóvonatkozású számlák"
 
 #: gnucash/report/reports/standard/income-gst-statement.scm:143
 msgid ""
@@ -29183,16 +29180,15 @@ msgstr "Bejegyzés mozgatása _lefelé"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:254
 #: gnucash/ui/gnc-plugin-page-invoice.ui:484
 msgid "Move the current entry one row downwards"
-msgstr "A kiválasztott bejegyzés mozgatása egy sort le"
+msgstr "A kiválasztott bejegyzés mozgatása lefelé egy sorral"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:185
 msgid "Manage link of an external document to this item"
-msgstr ""
+msgstr "Ehhez a tételhez kapcsolódó külső dokumentum kezelése"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:191
-#, fuzzy
 msgid "Open the linked document"
-msgstr "Új folyószámla"
+msgstr "Kaocsolódó dokumentum megnyitása"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
 #, fuzzy
@@ -29220,9 +29216,8 @@ msgstr "A kiválasztott ügyfél szerkesztése"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:25
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:319
-#, fuzzy
 msgid "Create a new customer"
-msgstr "Új folyószámla létrehozása"
+msgstr "Új ügyfél létrehozása"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:32
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:186
@@ -29239,7 +29234,7 @@ msgstr "A kiválasztott beszállító szerkesztése"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:41
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:474
 msgid "Create a new vendor"
-msgstr ""
+msgstr "Új beszállító létrehozása"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:48
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:220
