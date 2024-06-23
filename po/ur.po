@@ -4,14 +4,15 @@
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2021.
 # Abdul Quddos (AQN) <yousufi81@gmail.com>, 2022.
 # Adil Ishaq <adilishaq.cc@hotmail.com>, 2024.
+# Adil Ishaq <ishaqadil@aol.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-23 06:09+0000\n"
-"Last-Translator: Adil Ishaq <adilishaq.cc@hotmail.com>\n"
+"PO-Revision-Date: 2024-06-23 08:09+0000\n"
+"Last-Translator: Adil Ishaq <ishaqadil@aol.com>\n"
 "Language-Team: Urdu <https://hosted.weblate.org/projects/gnucash/gnucash/ur/>"
 "\n"
 "Language: ur\n"
@@ -35,10 +36,10 @@ msgstr ""
 #: gnucash/report/reports/standard/price-scatter.scm:186
 #, scheme-format
 msgid "~a to ~a"
-msgstr ""
+msgstr "~a سے ~a"
 
 #: bindings/guile/date-utilities.scm:519
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
@@ -99,7 +100,7 @@ msgstr "اكاؤنٹینگ میعاد كی شروعات"
 #: bindings/guile/date-utilities.scm:748
 #: libgnucash/engine/gnc-option-date.cpp:312
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr "اکاؤنٹنگ مدت کا پہلا دن، عالمی ترجیحات میں جیسے سیٹ كیا ہے"
+msgstr "اکاؤنٹنگ مدت کا پہلا دن، عالمی ترجیحات میں جیسے سیٹ كیا ہے۔"
 
 #: bindings/guile/date-utilities.scm:752
 #: libgnucash/engine/gnc-option-date.cpp:319
@@ -109,7 +110,7 @@ msgstr "اكاؤنٹینگ میعاد كا اختتام"
 #: bindings/guile/date-utilities.scm:755
 #: libgnucash/engine/gnc-option-date.cpp:320
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr "اکاؤنٹنگ مدت کا آخری دن، عالمی ترجیحات میں جیسے سیٹ كیا ہے"
+msgstr "اکاؤنٹنگ مدت کا آخری دن، عالمی ترجیحات میں جیسے سیٹ كیا ہے۔"
 
 #: bindings/guile/date-utilities.scm:759
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -422,27 +423,27 @@ msgstr "آسان چینی (جی بی کے)"
 
 #: borrowed/goffice/go-charmap-sel.c:139
 msgid "Chinese Simplified (HZ)"
-msgstr ""
+msgstr "چینی آسان (ایچ زیڈ)"
 
 #: borrowed/goffice/go-charmap-sel.c:140
 msgid "Chinese Simplified (Windows-936)"
-msgstr ""
+msgstr "چینی آسان (ونڈوز -936)"
 
 #: borrowed/goffice/go-charmap-sel.c:142
 msgid "Chinese Traditional (Big5)"
-msgstr ""
+msgstr "چینی روایتی (بگ 5)"
 
 #: borrowed/goffice/go-charmap-sel.c:143
 msgid "Chinese Traditional (Big5-HKSCS)"
-msgstr ""
+msgstr "چینی روایتی (بگ 5-ایچ کے ایس سی ایس)"
 
 #: borrowed/goffice/go-charmap-sel.c:145
 msgid "Chinese Traditional (EUC-TW)"
-msgstr ""
+msgstr "چینی روایتی (ای یو سی-ٹی ڈبلیو)"
 
 #: borrowed/goffice/go-charmap-sel.c:147
 msgid "Croatian (MacCroatian)"
-msgstr ""
+msgstr "کروشیائی (میک کروٹیئن)"
 
 #: borrowed/goffice/go-charmap-sel.c:149
 #, fuzzy
@@ -451,11 +452,11 @@ msgstr "سریلیك"
 
 #: borrowed/goffice/go-charmap-sel.c:150
 msgid "Cyrillic (ISO-8859-5)"
-msgstr ""
+msgstr "سیریلک (آئی ایس او-8859-5)"
 
 #: borrowed/goffice/go-charmap-sel.c:152
 msgid "Cyrillic (ISO-IR-111)"
-msgstr ""
+msgstr "سیریلک (آئی ایس او-آئی آر-111)"
 
 #: borrowed/goffice/go-charmap-sel.c:154
 #, fuzzy
@@ -464,7 +465,7 @@ msgstr "سریلیك"
 
 #: borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr ""
+msgstr "سیریلک (میک سیریلک)"
 
 #: borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
