@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2024-06-22 14:09+0000\n"
+"PO-Revision-Date: 2024-06-23 06:09+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -7635,7 +7635,7 @@ msgstr " חסר בדוח מזהה ייחודי אוניברסלי."
 #: gnucash/gnome-utils/gnc-report-combo.c:300
 #, c-format
 msgid "'%s' is missing"
-msgstr "."
+msgstr "'%s' חסר"
 
 #. Translators: %s is the internal report guid.
 #: gnucash/gnome-utils/gnc-report-combo.c:304
