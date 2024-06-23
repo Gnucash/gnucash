@@ -3,22 +3,23 @@
 # Atiur Rahman Khan <ciil_khan@yahoo.co.in>, 2014.
 # Frank H. Ellenberger <frank.h.ellenberger@gmail.com>, 2021.
 # Abdul Quddos (AQN) <yousufi81@gmail.com>, 2022.
+# Adil Ishaq <adilishaq.cc@hotmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-03-23 03:13+0100\n"
-"PO-Revision-Date: 2022-10-17 18:53+0000\n"
-"Last-Translator: Abdul Quddos (AQN) <yousufi81@gmail.com>\n"
-"Language-Team: Urdu <https://hosted.weblate.org/projects/gnucash/gnucash/ur/"
-">\n"
+"PO-Revision-Date: 2024-06-23 06:09+0000\n"
+"Last-Translator: Adil Ishaq <adilishaq.cc@hotmail.com>\n"
+"Language-Team: Urdu <https://hosted.weblate.org/projects/gnucash/gnucash/ur/>"
+"\n"
 "Language: ur\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15-dev\n"
+"X-Generator: Weblate 5.6-rc\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -37,11 +38,14 @@ msgid "~a to ~a"
 msgstr ""
 
 #: bindings/guile/date-utilities.scm:519
-#, scheme-format
+#, fuzzy, scheme-format
 msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
+"ایک غیر متعین تاریخ کی علامت '~a' کو تلاش کرنے کی کوشش کی. یہ رپورٹ شاید جی "
+"این یو کیش کے بعد کے ورژن کے ذریعہ محفوظ کی گئی تھی۔ آج کے لئے پہلے سے طے "
+"شدہ ہے۔"
 
 #: bindings/guile/date-utilities.scm:717
 #: gnucash/gnome-utils/gnc-period-select.c:70
@@ -95,7 +99,7 @@ msgstr "اكاؤنٹینگ میعاد كی شروعات"
 #: bindings/guile/date-utilities.scm:748
 #: libgnucash/engine/gnc-option-date.cpp:312
 msgid "First day of the accounting period, as set in the global preferences."
-msgstr "اکاؤنٹنگ مدت کا پہلا دن، عالمی ترجیحات میں جیسے سیٹ كیا ہے "
+msgstr "اکاؤنٹنگ مدت کا پہلا دن، عالمی ترجیحات میں جیسے سیٹ كیا ہے"
 
 #: bindings/guile/date-utilities.scm:752
 #: libgnucash/engine/gnc-option-date.cpp:319
@@ -105,7 +109,7 @@ msgstr "اكاؤنٹینگ میعاد كا اختتام"
 #: bindings/guile/date-utilities.scm:755
 #: libgnucash/engine/gnc-option-date.cpp:320
 msgid "Last day of the accounting period, as set in the global preferences."
-msgstr "اکاؤنٹنگ مدت کا آخری دن، عالمی ترجیحات میں جیسے سیٹ كیا ہے "
+msgstr "اکاؤنٹنگ مدت کا آخری دن، عالمی ترجیحات میں جیسے سیٹ كیا ہے"
 
 #: bindings/guile/date-utilities.scm:759
 #: gnucash/gnome-utils/gnc-period-select.c:66
@@ -240,7 +244,7 @@ msgstr "كمپنی كا فیكس نمبر"
 
 #: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1323
 msgid "Company Website URL"
-msgstr "كمپنی كی ویب سائٹ كا URL "
+msgstr "كمپنی كی ویب سائٹ كا URL"
 
 #: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1319
 msgid "Company Email Address"
@@ -312,7 +316,7 @@ msgstr "جاپانی"
 
 #: borrowed/goffice/go-charmap-sel.c:79
 msgid "Korean"
-msgstr "کورین"
+msgstr "کوريئن"
 
 #: borrowed/goffice/go-charmap-sel.c:80
 msgid "Turkish"
@@ -341,27 +345,27 @@ msgstr "دیگر"
 
 #: borrowed/goffice/go-charmap-sel.c:115
 msgid "Arabic (IBM-864)"
-msgstr ""
+msgstr "عربی (آئی بی ایم-864)"
 
 #: borrowed/goffice/go-charmap-sel.c:116
 msgid "Arabic (IBM-864-I)"
-msgstr ""
+msgstr "عربی (آئی بی ایم-864-آئی)"
 
 #: borrowed/goffice/go-charmap-sel.c:117
 msgid "Arabic (ISO-8859-6)"
-msgstr ""
+msgstr "عربی (آئی ایس او-8859-6)"
 
 #: borrowed/goffice/go-charmap-sel.c:118
 msgid "Arabic (ISO-8859-6-E)"
-msgstr ""
+msgstr "عربی (آئی ایس او-8859-6-ای)"
 
 #: borrowed/goffice/go-charmap-sel.c:120
 msgid "Arabic (ISO-8859-6-I)"
-msgstr ""
+msgstr "عربی (آئی ایس او-8859-6-1)"
 
 #: borrowed/goffice/go-charmap-sel.c:121
 msgid "Arabic (MacArabic)"
-msgstr ""
+msgstr "عربی (میک عربی)"
 
 #: borrowed/goffice/go-charmap-sel.c:122
 msgid "Arabic (Windows-1256)"
