@@ -1246,6 +1246,16 @@ test_gnc_account_kvp_setters_getters (Fixture *fixture, gconstpointer pData)
 
     xaccAccountSetIncludeSubAccountBalances (account, false);
 
+    // try setting invalid numbers: these are ignored
+    xaccAccountSetHigherBalanceLimit (account, gnc_numeric_create (1, 0));
+    xaccAccountSetLowerBalanceLimit (account, gnc_numeric_create (0, 0));
+
+    g_assert_true (xaccAccountGetHigherBalanceLimit (account, &balance_limit) == true);
+    g_assert_cmpint (gnc_numeric_compare (h_balance, balance_limit), ==, 0);
+
+    g_assert_true (xaccAccountGetLowerBalanceLimit (account, &balance_limit) == true);
+    g_assert_cmpint (gnc_numeric_compare (l_balance, balance_limit), ==, 0);
+
     xaccAccountClearHigherBalanceLimit (account);
     xaccAccountClearLowerBalanceLimit (account);
 
