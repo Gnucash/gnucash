@@ -7,11 +7,11 @@
 # Avi Markovitz <avi.markovitz@gmail.com>, 2020, 2021, 2022, 2023, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.7 \n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.7\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-23 12:23-0700\n"
-"PO-Revision-Date: 2024-06-23 06:09+0000\n"
+"PO-Revision-Date: 2024-06-24 13:09+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -2874,7 +2874,7 @@ msgid ""
 "currency. You will be asked to enter a conversion rate for each."
 msgstr ""
 "אחת הרשומות או יותר הם עבור חשבונות שהמטבע שלהם שונה ממטבע החשבונית/חשבונית "
-"ספק. תוצג בקשה להזנת לשער המרה עבור כל אחד."
+"ספק. תוצג בקשה להזנת שער המרה עבור כל אחד."
 
 #: gnucash/gnome/dialog-invoice.c:1301
 msgid "The post action was canceled because not all exchange rates were given."
@@ -7277,7 +7277,7 @@ msgstr ""
 
 #: gnucash/gnome-utils/gnc-file.c:754
 msgid "The following are noted in this file:"
-msgstr ""
+msgstr "הבאים מצוינים בקובץ הזה:"
 
 #: gnucash/gnome-utils/gnc-file.c:880
 #, c-format
@@ -9228,17 +9228,13 @@ msgstr "כמה ימים מראש לידע את המשתמש."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:59
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:60
-#, fuzzy
-#| msgid "The number of payments cannot be zero."
 msgid "The number of months to be shown in editor."
-msgstr "מספר התשלומים לא יכול להיות אפס."
+msgstr "מספר החודשים שיופיעו בעורך."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:64
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:65
-#, fuzzy
-#| msgid "Position of the vertical pane divider."
 msgid "The horizontal position of the editor divider."
-msgstr "מיקום חלונית הפרדה אנחית."
+msgstr "המיקום האופקי של מחלק העורך."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:76
 msgid "Set the \"notify\" flag by default"
@@ -19804,10 +19800,8 @@ msgid "Unknown OFX investment account"
 msgstr "חשבון השקעות OFX לא ידוע"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1308
-#, fuzzy
-#| msgid "Finding duplicate transactions"
 msgid "Removing duplicate transactions…"
-msgstr "חיפוש תנועות כפולות"
+msgstr "תנועות כפולות מוסרות…"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1362
 #, c-format
@@ -26920,26 +26914,20 @@ msgid "Net Loss"
 msgstr "הפסד נטו"
 
 #: gnucash/report/reports/standard/txn-columns.scm:33
-#, fuzzy
-#| msgid "Transaction Report"
 msgid "Transaction Breakdown Report"
-msgstr "דוח תנועות"
+msgstr "דוח פירוט תנועות"
 
 #: gnucash/report/reports/standard/txn-columns.scm:37
-#, fuzzy
-#| msgid "Number of columns"
 msgid "Limit for number of columns"
-msgstr "מספר עמודות"
+msgstr "הגבלת מספר עמודות"
 
 #: gnucash/report/reports/standard/txn-columns.scm:38
 msgid "Set the upper limit for number of columns"
 msgstr ""
 
 #: gnucash/report/reports/standard/txn-columns.scm:154
-#, fuzzy
-#| msgid "Income summary accounts"
 msgid "Too many accounts"
-msgstr "תמצית חשבונות הכנסה"
+msgstr "יותר מדי חשבונות"
 
 #: gnucash/report/reports/standard/txn-columns.scm:155
 msgid ""
@@ -26947,6 +26935,8 @@ msgid ""
 "Select a different subset of transactions, or increase the limit in the "
 "options."
 msgstr ""
+"מספר החשבונות שמקושרים לתנועות שנמצאו חורגים מהמגבלה. נא לבחור הרכב שונה של "
+"תנועות או להגדיל את המגבלה באפשרויות."
 
 #: gnucash/report/reports/standard/view-column.scm:45
 #: gnucash/report/reports/standard/view-column.scm:56
