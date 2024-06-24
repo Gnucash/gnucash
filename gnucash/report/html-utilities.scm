@@ -315,7 +315,7 @@
                                    (qof-print-date (cdr d))
                                    (disp (cdr d)))))
         (try gnc-commodity-get-mnemonic)
-        (try xaccAccountGetName)
+        (try gnc-account-get-full-name)
         (try gnc-budget-get-name)
         (format #f "~a" d)))
   (let ((render-list '())
