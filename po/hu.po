@@ -11,11 +11,11 @@
 # Geza Kiss <geza.openstreetmap@reallymymail.com>, 2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.7 \n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.7\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-23 12:23-0700\n"
-"PO-Revision-Date: 2024-06-23 19:04+0000\n"
+"PO-Revision-Date: 2024-06-23 23:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -2546,7 +2546,7 @@ msgstr "Adja meg a beállítás elérési útját"
 
 #: gnucash/gnome/dialog-date-close.c:75
 msgid "No Account selected. Please try again."
-msgstr "Nincs folyószámla kiválasztva. Próbálja újra."
+msgstr "Nincs számla kiválasztva. Próbálja újra."
 
 #: gnucash/gnome/dialog-date-close.c:82
 msgid "Placeholder account selected. Please try again."
@@ -2844,9 +2844,8 @@ msgid "The number of payments cannot be negative."
 msgstr "A törlesztések száma nem lehet negatív."
 
 #: gnucash/gnome/dialog-find-account.c:378
-#, fuzzy
 msgid "Find Account"
-msgstr "egy folyószámla"
+msgstr "Számla keresése"
 
 #: gnucash/gnome/dialog-find-account.c:415
 msgid "Place Holder"
@@ -2878,11 +2877,11 @@ msgstr "Adóvonatkozású"
 #: gnucash/gnome/dialog-find-account.c:491
 #, c-format
 msgid "Su_b-accounts of '%s'"
-msgstr ""
+msgstr "%s _alszámlái"
 
 #: gnucash/gnome/dialog-find-transactions.c:105
 msgid "All Accounts"
-msgstr "Minden folyószámla"
+msgstr "Minden számla"
 
 #: gnucash/gnome/dialog-find-transactions.c:112
 #: gnucash/import-export/import-match-picker.cpp:317
@@ -3679,7 +3678,7 @@ msgstr "Rendelés keresése"
 #: gnucash/gnome/dialog-payment.c:237
 #, fuzzy
 msgid "You must enter a valid account name for posting."
-msgstr "Meg kell adni a folyószámla nevét a rögzítéshez."
+msgstr "Meg kell adni a számla nevét a rögzítéshez."
 
 #: gnucash/gnome/dialog-payment.c:246
 msgid "You must select a company for payment processing."
@@ -6620,7 +6619,7 @@ msgstr "(%d) új számla"
 #: gnucash/gtkbuilder/dialog-account.glade:1104
 #: gnucash/gtkbuilder/dialog-account-picker.glade:176
 msgid "New Account"
-msgstr "Új folyószámla"
+msgstr "Új számla"
 
 #: gnucash/gnome-utils/dialog-account.c:2355
 #, c-format
@@ -7017,7 +7016,7 @@ msgstr "Egy számla nem lehet forrás és egyben cél is!"
 #: gnucash/register/ledger-core/split-register.c:1990
 #, c-format
 msgid "The account %s does not allow transactions."
-msgstr "A %s folyószámla nem enged meg tranzakciókat."
+msgstr "A %s számla nem enged meg tranzakciókat."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1434
 msgid ""
@@ -7043,7 +7042,7 @@ msgstr "Meg kell adni az átutalandó összeget."
 #: gnucash/gnome-utils/dialog-transfer.cpp:1913
 #: gnucash/gtkbuilder/dialog-employee.glade:629
 msgid "Credit Account"
-msgstr "Kedvezményezett folyószámla"
+msgstr "Kedvezményezett számla"
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1917
 msgid "Debit Account"
@@ -8462,19 +8461,16 @@ msgid "{1} [options] [datafile]"
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:236
-#, fuzzy
 msgid "GnuCash Paths"
-msgstr "GnuCash %s"
+msgstr "Gnucash fájlok elérési útvonalai"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, fuzzy
 msgid "GnuCash {1}"
-msgstr "GnuCash %s"
+msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy
 msgid "GnuCash {1} development version"
-msgstr "GnuCash %s fejlesztői változat"
+msgstr "GnuCash {1} fejlesztői változat"
 
 #: gnucash/gnucash-core-app.cpp:275
 #, fuzzy
@@ -9830,6 +9826,9 @@ msgid ""
 "tab is longer than this value (the test is approximate) then the tab label "
 "will have the middle cut and replaced with an ellipsis."
 msgstr ""
+"Ez az érték határozza meg a lapok füleinek maximális szélességét. Ha a lap "
+"fülén megjelenő szöveg hosszabb ennél az értéknél (a teszt közelítő jellegű)"
+", akkor a szöveg közepét kivágja, és három ponttal helyettesíti."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
@@ -14497,7 +14496,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-import.glade:1100
 msgid "Show _Account column"
-msgstr "_Számla oszlop megjelenítése"
+msgstr "_Számlaoszlop megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-import.glade:1116
 msgid "Show _Memo column"
@@ -14543,7 +14542,7 @@ msgstr "(tulajdonos)"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:412
 msgid "Open Document Link"
-msgstr ""
+msgstr "Hivatkozás megnyitása"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:529
 #: gnucash/gtkbuilder/dialog-invoice.glade:1234
@@ -15647,7 +15646,7 @@ msgstr "<b>Ablakgeometria</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3310
 msgid "_Save window size and position"
-msgstr "Az ablak méretének é_s helyzetének elmentése"
+msgstr "Az ablak méretének és helyzetének _mentése"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3316
 msgid "Save window size and location when it is closed."
@@ -15712,8 +15711,8 @@ msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
 msgstr ""
-"Ha a lap fülének a neve hosszabb a megadott értéknél (a teszt szöveg "
-"hozzávetőleges), akkor a név közepe három ponttal lesz helyettesítve."
+"Ha a lap fülének a neve hosszabb a megadott értéknél (a teszt hozzávetőleges)"
+", akkor a név közepe három ponttal lesz helyettesítve."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3568
 msgid "characters"
@@ -20068,7 +20067,7 @@ msgstr ""
 
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:235
 msgid "Enter a name for the account"
-msgstr "Adjon meg egy folyószámlanevet"
+msgstr "Adjon meg egy számlanevet"
 
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:299
 #, c-format
@@ -20352,7 +20351,7 @@ msgstr "Üdvözöljük a GnuCash %s Shellben"
 #: gnucash/register/ledger-core/split-register.c:1991
 #, c-format
 msgid "The account %s does not exist. Would you like to create it?"
-msgstr "A %s folyószámla nem létezik. Kívánja létrehozni?"
+msgstr "A %s számla nem létezik. Kívánja létrehozni?"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:251
 msgid "Hours"
@@ -20930,7 +20929,7 @@ msgstr "A tranzakciók kibontása szükséges az árfolyamok változtatásához.
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1379
 msgid "The entered account could not be found."
-msgstr "A megadott folyószámla nem található."
+msgstr "A megadott számla nem található."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1414
 #: gnucash/register/ledger-core/split-register-control.cpp:1427
@@ -28979,7 +28978,7 @@ msgstr "_Egyeztetés…"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
 #: gnucash/ui/gnc-plugin-page-register.ui:889
 msgid "Reconcile the selected account"
-msgstr "A kiválasztott folyószámla egyeztetése"
+msgstr "A kiválasztott számla egyeztetése"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:138
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:239
@@ -29134,7 +29133,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-budget.ui:36
 #: gnucash/ui/gnc-plugin-page-budget.ui:272
 msgid "Edit note for the selected account and period"
-msgstr "A kiválasztott folyószámla és időszak megjegyzésének szerkesztése"
+msgstr "A kiválasztott számla és időszak megjegyzésének szerkesztése"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:42
 #: gnucash/ui/gnc-plugin-page-budget.ui:287
