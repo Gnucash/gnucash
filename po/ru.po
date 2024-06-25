@@ -23,7 +23,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2023-12-06 20:05+0000\n"
 "Last-Translator: Xangel2Net <xangel1@mail.ru>\n"
 "Language-Team: Russian <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -8399,6 +8399,7 @@ msgid "Not enough information for quotes dump"
 msgstr "Недостаточно информации для пустой проводки?"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8407,6 +8408,7 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8417,6 +8419,7 @@ msgstr "Это параметр выбора цвета."
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
@@ -8440,7 +8443,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
-#, fuzzy
+#, fuzzy, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr ""
 "Также вы можете искать и создавать сообщения об ошибках по адресу: http://"
@@ -8448,7 +8451,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
-#, fuzzy
+#, fuzzy, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr ""
 "Последнюю стабильную версию вы можете найти на сайте http://www.gnucash.org"
@@ -8468,6 +8471,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash управление финансами для частных лиц и малого бизнеса"
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8477,12 +8481,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s (разрабатываемая версия)"
 
@@ -9660,9 +9664,9 @@ msgid ""
 msgstr ""
 "Этот параметр определяет символ, который используется для отделения "
 "составляющих частей имени счета. Возможные значения - любой юникодовый "
-"символ отличный от букв и цифр или одно из ключевых слов: "
-"\"colon\" (двоеточие), \"slash\" (дробь), \"backslash\" (обратная дробь), "
-"\"dash\" (дефис) и \"period\" (точка)."
+"символ отличный от букв и цифр или одно из ключевых слов: \"colon\" "
+"(двоеточие), \"slash\" (дробь), \"backslash\" (обратная дробь), \"dash\" "
+"(дефис) и \"period\" (точка)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:25
 #, fuzzy
@@ -10522,7 +10526,7 @@ msgid "PDF export file name format"
 msgstr "Формат названия файла при экспорте в PDF"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, fuzzy, c-format
+#, fuzzy
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11869,7 +11873,7 @@ msgstr "<b>Описание категории</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Accounts in '%s'"
 msgid "Accounts in %s"
 msgstr "Счета в '%s'"
@@ -12464,8 +12468,8 @@ msgstr ""
 "\n"
 "Примечание: GnuCash создаст множество счетов, которые отсутствовали в другой "
 "вашей программе, включая раздельные счета для каждого пакета акций, "
-"комиссионных вознаграждений, специальных счетов \"Собственных "
-"средств\" (субсчета \"Нераспределённой прибыли\", по умолчанию), являющихся "
+"комиссионных вознаграждений, специальных счетов \"Собственных средств\" "
+"(субсчета \"Нераспределённой прибыли\", по умолчанию), являющихся "
 "источниками начальных сальдо, и т.п. Все эти счета будут указаны на "
 "следующей странице, таким образом будет возможность их изменить так, как "
 "хочется, но вы можете оставить всё как есть.\n"
@@ -19699,7 +19703,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "Проводки были импортированы из файла '%s'."
 
@@ -19917,6 +19921,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -31404,6 +31409,7 @@ msgstr "Информация по новой части"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -31414,7 +31420,7 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "Эта кодировка уже была внесена в список."
@@ -31422,6 +31428,7 @@ msgstr[1] "Эта кодировка уже была внесена в спис�
 msgstr[2] "Эта кодировка уже была внесена в список."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -31433,7 +31440,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Файл не может быть переоткрыт."

@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2023-08-03 22:45+0000\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <https://hosted.weblate.org/projects/gnucash/"
@@ -8428,6 +8428,7 @@ msgid "Not enough information for quotes dump"
 msgstr "Недостатньо даних для дампу курсів"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr "Невідома команда отримання курсів «{1}»"
 
@@ -8436,6 +8437,7 @@ msgid "Missing --name parameter"
 msgstr "Пропущено параметр --name"
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr "Невідома команда звітування «{1}»"
 
@@ -8445,6 +8447,7 @@ msgstr "Пропущено команду або параметр"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr "Знайдено версію Finance::Quote {1}."
 
@@ -8469,11 +8472,13 @@ msgstr ""
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
+#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "Ви можете скласти звіт про помилку за адресою {1}"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "Найсвіжішу стабільну версію можна знайти на {1}"
 
@@ -8492,6 +8497,7 @@ msgstr ""
 "- GnuCash, керування фінансами на особистому рівні та на рівні малого бізнесу"
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr "{1} [параметри] [файл_даних]"
 
@@ -8500,10 +8506,12 @@ msgid "GnuCash Paths"
 msgstr "Шляхи GnuCash"
 
 #: gnucash/gnucash-core-app.cpp:249
+#, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
+#, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1}, нестабільна версія"
 
@@ -10201,8 +10209,8 @@ msgid ""
 "\"bottom\"."
 msgstr ""
 "Цей параметр визначає край, уздовж якого буде намальовано смужку резюме для "
-"різноманітних сторінок. Можливими значеннями є «top» (згори) та "
-"«bottom» (знизу). Типовим значенням є «bottom»."
+"різноманітних сторінок. Можливими значеннями є «top» (згори) та «bottom» "
+"(знизу). Типовим значенням є «bottom»."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:220
 #: gnucash/gtkbuilder/dialog-preferences.glade:3485
@@ -10579,7 +10587,6 @@ msgid "PDF export file name format"
 msgstr "Формат назви експортованого файла PDF"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -12001,7 +12008,6 @@ msgstr "<b>Опис категорії</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, c-format
 msgid "Accounts in %s"
 msgstr "Рахунки у %s"
 
@@ -19732,6 +19738,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
+#, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "Транзакції імпортовано з файла «{1}»."
 
@@ -19968,6 +19975,7 @@ msgstr "Дані оброблено до некоректної валюти д�
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr "{1}: {2}"
 
@@ -30936,6 +30944,7 @@ msgstr "Нове розташування:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -30948,6 +30957,7 @@ msgid "In addition:"
 msgstr "Крім того:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "Замість цього, вказані нижче файли було скопійовано до {1}:"
@@ -30956,6 +30966,7 @@ msgstr[2] "Замість цього, вказані нижче файли бу�
 msgstr[3] "Замість цього, вказаний нижче файл було скопійовано до {1}:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr "Вказаний файл у {1} було перейменовано:"
 
@@ -30968,6 +30979,7 @@ msgstr[2] "Вказані нижче файли є непотрібними, ї�
 msgstr[3] "Вказаний нижче файл є непотрібним, його буде проігноровано:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Вказані нижче файли не вдалося пересунути до {1}:"

@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2024-04-18 09:03+0000\n"
 "Last-Translator: Simon Arlott <weblate.simon@arlott.org>\n"
 "Language-Team: English (New Zealand) <https://hosted.weblate.org/projects/"
@@ -8288,6 +8288,7 @@ msgid "Not enough information for quotes dump"
 msgstr "Not enough information for quotes dump"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr "Unknown quotes command '{1}'"
 
@@ -8296,6 +8297,7 @@ msgid "Missing --name parameter"
 msgstr "Missing --name parameter"
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr "Unknown report command '{1}'"
 
@@ -8305,6 +8307,7 @@ msgstr "Missing command or option"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr "Found Finance::Quote version {1}."
 
@@ -8326,11 +8329,13 @@ msgstr "Report bugs and other problems to gnucash-devel@gnucash.org"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
+#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "You can also lookup and file bug reports at {1}"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "To find the last stable version, please refer to {1}"
 
@@ -8348,6 +8353,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash, accounting for personal and small business finance"
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr "{1} [options] [datafile]"
 
@@ -8356,10 +8362,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash Paths"
 
 #: gnucash/gnucash-core-app.cpp:249
+#, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
+#, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1} development version"
 
@@ -10354,7 +10362,6 @@ msgid "PDF export file name format"
 msgstr "PDF export file name format"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11739,7 +11746,6 @@ msgstr "<b>Category Description</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, c-format
 msgid "Accounts in %s"
 msgstr "Accounts in %s"
 
@@ -19361,6 +19367,7 @@ msgstr "Double click on rows to change, then click on Apply to Import"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
+#, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "The transactions were imported from file '{1}'."
 
@@ -19593,6 +19600,7 @@ msgstr "Value parsed into an invalid currency for a currency column type."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr "{1}: {2}"
 
@@ -30375,6 +30383,7 @@ msgstr "New location:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -30387,12 +30396,14 @@ msgid "In addition:"
 msgstr "In addition:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "The following file has been copied to {1} instead:"
 msgstr[1] "The following files have been copied to {1} instead:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr "The following file in {1} has been renamed:"
 
@@ -30403,6 +30414,7 @@ msgstr[0] "The following file has become obsolete and will be ignored:"
 msgstr[1] "The following files have become obsolete and will be ignored:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "The following file could not be moved to {1}:"

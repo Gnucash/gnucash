@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2021-03-05 11:50+0000\n"
 "Last-Translator: bruh <quangtrung02hn16@gmail.com>\n"
 "Language-Team: Vietnamese <https://hosted.weblate.org/projects/gnucash/"
@@ -809,9 +809,9 @@ msgid ""
 "Transaction Journal."
 msgstr ""
 "Để nhập giao dịch đa phân tách như một séc phát lương có nhiều mục khấu đi, "
-"nhấn vào cái nút « Phân tách » trên thanh công cụ. Hoặc, trong trình đơn « "
-"Xem », bạn có thể chọn kiểu dáng sổ cái « Sổ cái tự động phân tách » hay « "
-"Nhật ký giao dịch »."
+"nhấn vào cái nút « Phân tách » trên thanh công cụ. Hoặc, trong trình đơn "
+"« Xem », bạn có thể chọn kiểu dáng sổ cái « Sổ cái tự động phân tách » hay "
+"« Nhật ký giao dịch »."
 
 #: doc/tip_of_the_day.list.c:55
 #, fuzzy
@@ -846,11 +846,11 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
-"Gõ vài chữ thứ nhất của một tên tài khoản đã tồn tại vào cột sổ cái « Chuyển "
-"», rồi GnuCash sẽ gõ xong tên tùy theo danh sách các tài khoản. Đối với tài "
-"khoản con, gõ vài chữ thứ nhất của tài khoản cha, rồi dấu hai chấm « : » và "
-"vài chữ thứ nhất của tài khoản con (v.d. Tà:Ti cho « Tài sản:Tiền mật », "
-"chọn tên đúng khi nó xuất hiện)."
+"Gõ vài chữ thứ nhất của một tên tài khoản đã tồn tại vào cột sổ cái "
+"« Chuyển », rồi GnuCash sẽ gõ xong tên tùy theo danh sách các tài khoản. Đối "
+"với tài khoản con, gõ vài chữ thứ nhất của tài khoản cha, rồi dấu hai chấm "
+"« : » và vài chữ thứ nhất của tài khoản con (v.d. Tà:Ti cho « Tài sản:Tiền "
+"mật », chọn tên đúng khi nó xuất hiện)."
 
 #: doc/tip_of_the_day.list.c:71
 #, fuzzy
@@ -898,9 +898,9 @@ msgid ""
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
-"Để chuyển tiền giữa hai tài khoản có tiền tệ khác nhau, nhấn vào cái nút « "
-"Chuyển » trên thanh công cụ của sổ cái, chọn hai tài khoản. Cũng có thể đặt "
-"các tùy chọn về « Chuyển tiền tệ » để gõ tỷ lệ hội suất hay số tiền theo "
+"Để chuyển tiền giữa hai tài khoản có tiền tệ khác nhau, nhấn vào cái nút "
+"« Chuyển » trên thanh công cụ của sổ cái, chọn hai tài khoản. Cũng có thể "
+"đặt các tùy chọn về « Chuyển tiền tệ » để gõ tỷ lệ hội suất hay số tiền theo "
 "tiền tệ khác."
 
 #: doc/tip_of_the_day.list.c:91
@@ -6277,8 +6277,8 @@ msgstr ""
 "nạp lại vào ứng dụng chính. Bằng cách đó, bạn có một tập tin hoạt động làm "
 "bản sao lưu tron cùng thư mục.\n"
 "\n"
-"Bạn cũng có thể lùi lại và thẩm tra các vùng chọn bằng cách nhấn vào nút « "
-"Lùi »."
+"Bạn cũng có thể lùi lại và thẩm tra các vùng chọn bằng cách nhấn vào nút "
+"« Lùi »."
 
 #: gnucash/gnome-utils/assistant-xml-encoding.c:226
 msgid "European"
@@ -8341,6 +8341,7 @@ msgid "Not enough information for quotes dump"
 msgstr "Hiển thị hai dòng thông tin về mỗi giao dịch"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8349,6 +8350,7 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8359,6 +8361,7 @@ msgstr "Đây là một tùy chọn màu sắc"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
@@ -8382,12 +8385,13 @@ msgstr "Hãy thông báo lỗi cho <gnucash-devel@gnucash.org>.\n"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
-#, fuzzy
+#, fuzzy, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "Cũng có thể tra tìm và thông báo lỗi ở « https://bugs.gnucash.org »\n"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr ""
 
@@ -8405,6 +8409,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8414,12 +8419,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash %s"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash %s"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s phiên bản phát triển"
 
@@ -8670,9 +8675,9 @@ msgid ""
 "Otherwise GnuCash does not check for due invoices."
 msgstr ""
 "Bật thì khi khởi chạy, GnuCash sẽ kiểm tra có hoá đơn sớm đến hạn không. Có "
-"thì nó hiển thị hộp thoại nhắc nhở. Thiết lập « Ngày trước » thì xác định « "
-"sớm » trong trường hợp này. Không bật thì GnuCash không kiểm tra có hoá đơn "
-"đến hạn."
+"thì nó hiển thị hộp thoại nhắc nhở. Thiết lập « Ngày trước » thì xác định "
+"« sớm » trong trường hợp này. Không bật thì GnuCash không kiểm tra có hoá "
+"đơn đến hạn."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:122
 #, fuzzy
@@ -8759,9 +8764,9 @@ msgid ""
 "Otherwise GnuCash does not check for due bills."
 msgstr ""
 "Bật thì khi khởi chạy, GnuCash sẽ kiểm tra có hoá đơn sớm đến hạn không. Có "
-"thì nó hiển thị hộp thoại nhắc nhở. Thiết lập « Ngày trước » thì xác định « "
-"sớm » trong trường hợp này. Không bật thì GnuCash không kiểm tra có hoá đơn "
-"đến hạn."
+"thì nó hiển thị hộp thoại nhắc nhở. Thiết lập « Ngày trước » thì xác định "
+"« sớm » trong trường hợp này. Không bật thì GnuCash không kiểm tra có hoá "
+"đơn đến hạn."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.business.gschema.xml.in:164
 msgid "Show bills due within this many days"
@@ -8835,8 +8840,8 @@ msgstr ""
 "Nếu « date_format » (định dạng ngày tháng) được đặt thành định dạng ngày "
 "tháng riêng. giá trị nảy được dùng như đối số với strftime để xuất ngày "
 "tháng cần in. Nó có thể là bất cứ chuỗi strftime hợp lệ nào ; để tìm thêm "
-"thông tin về định dạng này, đọc trang hướng dẫn về hàm strftime, dùng lệnh « "
-"man 3 strftime »."
+"thông tin về định dạng này, đọc trang hướng dẫn về hàm strftime, dùng lệnh "
+"« man 3 strftime »."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.checkprinting.gschema.xml.in:30
 msgid "Units in which the custom coordinates are expressed"
@@ -9124,8 +9129,8 @@ msgid ""
 "If active, the \"New Hierarchy\" window will be shown whenever the \"New "
 "File\" menu item is chosen. Otherwise it will not be shown."
 msgstr ""
-"Bật thì hiển thị hộp thoại phân cấp mới khi nào mục trình đơn « Tập tin mới "
-"» được chọn. Không thì không hiển thị."
+"Bật thì hiển thị hộp thoại phân cấp mới khi nào mục trình đơn « Tập tin "
+"mới » được chọn. Không thì không hiển thị."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:238
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.gschema.xml.in:239
@@ -9902,9 +9907,9 @@ msgid ""
 "three letter ISO 4217 code for a currency (e.g. USD, GBP, RUB)."
 msgstr ""
 "Thiết lập này ghi rõ tiền tệ mặc định được dùng cho các tài khoản mới nếu "
-"giá trị của « currency_choice » (chọn tiền tệ) được đặt thành « other "
-"» (khác). Trường này phải chứa mã ISO 4217 ba chữ của tiền tệ (v.d. VND, "
-"AUD, EUR, USD)."
+"giá trị của « currency_choice » (chọn tiền tệ) được đặt thành « other » "
+"(khác). Trường này phải chứa mã ISO 4217 ba chữ của tiền tệ (v.d. VND, AUD, "
+"EUR, USD)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:155
 msgid "Use 24 hour time format"
@@ -10412,7 +10417,6 @@ msgid "PDF export file name format"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -10943,8 +10947,8 @@ msgid ""
 "field should contain a value between 0 and 8."
 msgstr ""
 "Thiết lập này điều khiển ngày tháng bắt đầu được đặt trong phép tính lợi/lỗ "
-"nếu biến « end_choice » (chọn kết thúc) không được đặt thành « absolute "
-"» (tuyệt đối). Trường này nên chứa một giá trị giữa 0 và 8."
+"nếu biến « end_choice » (chọn kết thúc) không được đặt thành « absolute » "
+"(tuyệt đối). Trường này nên chứa một giá trị giữa 0 và 8."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.account.tree.gschema.xml.in:35
 #, fuzzy
@@ -10998,8 +11002,8 @@ msgid ""
 "should contain a value between 0 and 8."
 msgstr ""
 "Thiết lập này điều khiển ngày tháng kết thúc được đặt trong phép tính lợi/lỗ "
-"nếu biến « end_choice » (chọn kết thúc) không được đặt thành « absolute "
-"» (tuyệt đối). Trường này nên chứa một giá trị giữa 0 và 8."
+"nếu biến « end_choice » (chọn kết thúc) không được đặt thành « absolute » "
+"(tuyệt đối). Trường này nên chứa một giá trị giữa 0 và 8."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:5
 #, fuzzy
@@ -11745,7 +11749,7 @@ msgstr "<b>Mô tả loại</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Accounts in '%s'"
 msgid "Accounts in %s"
 msgstr "Tài khoản trong « %s »"
@@ -16136,8 +16140,8 @@ msgid ""
 "format\" selector of the Print Check dialog. Using the title of an existing "
 "custom format will cause that format to be overwritten."
 msgstr ""
-"Hãy gõ tên cho định dạng riêng này. Tên này sẽ xuất hiện trong hộp chọn « "
-"Định dạng séc » của hộp thoại « In Séc ». Dùng tên của định dạng riêng đã "
+"Hãy gõ tên cho định dạng riêng này. Tên này sẽ xuất hiện trong hộp chọn "
+"« Định dạng séc » của hộp thoại « In Séc ». Dùng tên của định dạng riêng đã "
 "tồn tại thì ghi đè lên định dạng đó."
 
 #: gnucash/gtkbuilder/dialog-print-check.glade:241
@@ -18902,8 +18906,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Thiết lập này ghi rõ định dạng dữ liệu khi nhập khẩu tập tin DTAUS. Thư viện "
-"AqBanking cung cấp các định dạng nhập khẩu khác nhau (tên « hồ sơ "
-"» [profiles]) trong chúng bạn có thể chọn một điều ở đây"
+"AqBanking cung cấp các định dạng nhập khẩu khác nhau (tên « hồ sơ » "
+"[profiles]) trong chúng bạn có thể chọn một điều ở đây"
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:40
 msgid "CSV import data format"
@@ -18916,8 +18920,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Thiết lập này ghi rõ định dạng dữ liệu khi nhập khẩu tập tin CSV. Thư viện "
-"AqBanking cung cấp các định dạng nhập khẩu khác nhau (tên « hồ sơ "
-"» [profiles]) trong chúng bạn có thể chọn một điều ở đây."
+"AqBanking cung cấp các định dạng nhập khẩu khác nhau (tên « hồ sơ » "
+"[profiles]) trong chúng bạn có thể chọn một điều ở đây."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:45
 msgid "SWIFT MT940 import data format"
@@ -18930,8 +18934,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Thiết lập này ghi rõ định dạng dữ liệu khi nhập khẩu tập tin SWIFT MT940. "
-"Thư viện AqBanking cung cấp các định dạng nhập khẩu khác nhau (tên « hồ sơ "
-"» [profiles]) trong chúng bạn có thể chọn một điều ở đây."
+"Thư viện AqBanking cung cấp các định dạng nhập khẩu khác nhau (tên « hồ sơ » "
+"[profiles]) trong chúng bạn có thể chọn một điều ở đây."
 
 #: gnucash/import-export/aqb/gschemas/org.gnucash.GnuCash.dialogs.import.hbci.gschema.xml.in:50
 msgid "SWIFT MT942 import data format"
@@ -18944,8 +18948,8 @@ msgid ""
 "which you can choose one here."
 msgstr ""
 "Thiết lập này ghi rõ định dạng dữ liệu khi nhập khẩu tập tin SWIFT MT942. "
-"Thư viện AqBanking cung cấp các định dạng nhập khẩu khác nhau (tên « hồ sơ "
-"» [profiles]) trong chúng bạn có thể chọn một điều ở đây."
+"Thư viện AqBanking cung cấp các định dạng nhập khẩu khác nhau (tên « hồ sơ » "
+"[profiles]) trong chúng bạn có thể chọn một điều ở đây."
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:297
 #, fuzzy, c-format
@@ -19499,7 +19503,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "Gặp lỗi khi phân tích tập tin %s."
 
@@ -19717,6 +19721,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -31466,6 +31471,7 @@ msgstr "<b>Thông tin phân tách</b>"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -31476,12 +31482,13 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "Bảng mã này đã được thêm vào danh sách."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -31491,7 +31498,7 @@ msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Không thể mở tập tin."

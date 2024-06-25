@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2017-11-05 08:54+0200\n"
 "Last-Translator: Мирослав Николић <miroslavnikolic@rocketmail.com>\n"
 "Language-Team: Serbian <(nothing)>\n"
@@ -8391,6 +8391,7 @@ msgid "Not enough information for quotes dump"
 msgstr "Нема довољно података за празну трансакцију?"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8399,6 +8400,7 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8409,6 +8411,7 @@ msgstr "Ово је опција боје."
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
@@ -8430,7 +8433,7 @@ msgstr "Пријавите грешке и друге проблеме на „g
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
-#, fuzzy
+#, fuzzy, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr ""
 "Такође можете потражити и попунити извештаје о грешкама на „http://bugzilla."
@@ -8438,7 +8441,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
-#, fuzzy
+#, fuzzy, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr ""
 "Да нађете последње стабилно издање, погледајте на „http://www.gnucash.org“"
@@ -8459,6 +8462,7 @@ msgstr ""
 "— Гнуов новчић је програм за управљање личним и финансијама малог пословања"
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8468,12 +8472,12 @@ msgid "GnuCash Paths"
 msgstr "Гнуов новчић"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1}"
 msgstr "Гнуов новчић"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1} development version"
 msgstr "Гнуов новчић %s развојно издање"
 
@@ -9784,11 +9788,11 @@ msgid ""
 "days'"
 msgstr ""
 "Ово подешавање одређује шта ће да се ради са старим датотекама дневника/"
-"резерви. „forever“ (заувек) значи задржавање свих старих датотека. "
-"„never“ (никада) значи да ниједна стара датотека дневника/резерве неће бити "
-"задржана. Сваки пут када сачувате, стара издања датотеке се уклањају. "
-"„days“ (дани) значи задржавање старих датотека за одређени број дана. Број "
-"дана се одређује у кључу „retain-days“ (дани-задржавања)."
+"резерви. „forever“ (заувек) значи задржавање свих старих датотека. „never“ "
+"(никада) значи да ниједна стара датотека дневника/резерве неће бити "
+"задржана. Сваки пут када сачувате, стара издања датотеке се уклањају. „days“ "
+"(дани) значи задржавање старих датотека за одређени број дана. Број дана се "
+"одређује у кључу „retain-days“ (дани-задржавања)."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:80
 #: gnucash/gtkbuilder/dialog-preferences.glade:1761
@@ -9831,11 +9835,11 @@ msgid ""
 "balances."
 msgstr ""
 "Ово подешавање омогућава одређеним рачунима да могу да промене знак својих "
-"салда из позитивног у негативно, или обрнуто. Подешавање „income-"
-"expense“ (приход-расход) је за кориснике који воле да виде негативне расходе "
-"а позитвне приходе. Подешавање „credit“ (кредит) је за кориснике који желе "
-"да виде да салда одражавају стања дуга/кредита рачуна. Подешавање "
-"„none“ (ништа) не преокреће знак ни у једном од салда."
+"салда из позитивног у негативно, или обрнуто. Подешавање „income-expense“ "
+"(приход-расход) је за кориснике који воле да виде негативне расходе а "
+"позитвне приходе. Подешавање „credit“ (кредит) је за кориснике који желе да "
+"виде да салда одражавају стања дуга/кредита рачуна. Подешавање „none“ "
+"(ништа) не преокреће знак ни у једном од салда."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:100
 #: gnucash/gtkbuilder/dialog-preferences.glade:675
@@ -10094,8 +10098,8 @@ msgid ""
 "\"right\". It defaults to \"top\"."
 msgstr ""
 "Ово подешавање одређује ивицу на којој се језичци за пребацивање страница у "
-"књижицама цртају. Могуће вредности су „top“ (горе), „left“ (лево), "
-"„bottom“ (доле) и „right“ (десно). Основно је „top“."
+"књижицама цртају. Могуће вредности су „top“ (горе), „left“ (лево), „bottom“ "
+"(доле) и „right“ (десно). Основно је „top“."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3396
@@ -10503,7 +10507,6 @@ msgid "PDF export file name format"
 msgstr "Запис назива датотеке ПДФ извоза"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11097,8 +11100,8 @@ msgid ""
 "This setting controls whether the given column will be visible in the view. "
 "TRUE means visible, FALSE means hidden."
 msgstr ""
-"Ово подешавање управља да ли ће дата колона бити видљива у прегледу. "
-"„TRUE“ (изабрано) значи видљива, „FALSE“ (поништено) значи скривена."
+"Ово подешавање управља да ли ће дата колона бити видљива у прегледу. „TRUE“ "
+"(изабрано) значи видљива, „FALSE“ (поништено) значи скривена."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.window.pages.gschema.xml.in:10
 msgid "Width of this column"
@@ -11857,7 +11860,7 @@ msgstr "<b>Опис категорије</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Accounts in '%s'"
 msgid "Accounts in %s"
 msgstr "Налози у „%s“"
@@ -15365,9 +15368,9 @@ msgid ""
 "\"period\"."
 msgstr ""
 "Знак који ће се користити између делова назива налога. Дозвољена вредност је "
-"сваки знак осим слова и бројева, или било која од следећих ниски: "
-"„colon“ (двотачка), „slash“ (коса црта), „backslash“ (контра коса црта), "
-"„dash“ (црта) и „period“ (тачка)."
+"сваки знак осим слова и бројева, или било која од следећих ниски: „colon“ "
+"(двотачка), „slash“ (коса црта), „backslash“ (контра коса црта), „dash“ "
+"(црта) и „period“ (тачка)."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:916
 #: gnucash/gtkbuilder/dialog-preferences.glade:3177
@@ -19641,7 +19644,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "Трансакције су увезене из датотеке „%s“."
 
@@ -19860,6 +19863,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -31347,6 +31351,7 @@ msgstr "Подаци о новој подели"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -31357,7 +31362,7 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "Ово кодирање је већ додато на списак."
@@ -31365,6 +31370,7 @@ msgstr[1] "Ово кодирање је већ додато на списак."
 msgstr[2] "Ово кодирање је већ додато на списак."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -31376,7 +31382,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Датотека не може бити поново отворена."

@@ -6,7 +6,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2022-10-23 08:02+0000\n"
 "Last-Translator: 이정희 <daemul72@gmail.com>\n"
 "Language-Team: Korean <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -8114,6 +8114,7 @@ msgid "Not enough information for quotes dump"
 msgstr "공백 표시 거래에 대한 정보가 충분하지 않습니까?"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8122,6 +8123,7 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8132,7 +8134,7 @@ msgstr "이것은 색상 설정입니다"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "Found Finance::Quote version ~A."
 msgid "Found Finance::Quote version {1}."
 msgstr "Finance::Quote ~A 버전을 찾았습니다."
@@ -8157,11 +8159,13 @@ msgstr "버그 및 기타 문제를 gnucash-devel@gnucash.org에 보고하십시
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
+#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "{1}에서 버그 보고서를 조회하고 제출할 수도 있습니다"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr ""
 
@@ -8179,6 +8183,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8188,12 +8193,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash %s"
 
 #: gnucash/gnucash-core-app.cpp:249
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash %s"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s 개발 버전"
 
@@ -10000,7 +10005,6 @@ msgid "PDF export file name format"
 msgstr "PDF 내보내기 파일 이름 형식"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11370,7 +11374,6 @@ msgstr "<b>범주 세부 항목</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, c-format
 msgid "Accounts in %s"
 msgstr "%s의 계정과목"
 
@@ -18892,7 +18895,7 @@ msgstr "변경할 행을 두 번 클릭한 다음, 가져오기에 적용하기�
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "파일 %s를 파싱 중 오류입니다."
 
@@ -19110,6 +19113,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -30530,6 +30534,7 @@ msgstr "새 위치:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -30540,12 +30545,14 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] ""
 msgstr[1] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -30556,6 +30563,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "다음 파일을 {1}(으)로 이동할 수 없습니다."

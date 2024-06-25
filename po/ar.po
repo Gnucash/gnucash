@@ -18,7 +18,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2024-05-12 22:06+0000\n"
 "Last-Translator: Abdulla Alhosani <ama1029@nyu.edu>\n"
 "Language-Team: Arabic <https://hosted.weblate.org/projects/gnucash/gnucash/"
@@ -8393,6 +8393,7 @@ msgid "Not enough information for quotes dump"
 msgstr "لا معلومات كافية عن عملية فارغة؟"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8401,6 +8402,7 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8411,6 +8413,7 @@ msgstr "هذا خيار اللون."
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
@@ -8432,12 +8435,13 @@ msgstr "أرسل الأخطاء وغيرها من المشاكل لgnucash-devel
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
+#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "يمكنك أيضا بحث وتقديم التقارير الأخطاء في {1}"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
-#, fuzzy
+#, fuzzy, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "للعثور على أحدث نسخة مستقرة، يرجى الرجوع إلى http://www.gnucash.org"
 
@@ -8456,6 +8460,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- جنوكاش للإدارة المالية الشخصية والتجارية الصغيرة "
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8466,12 +8471,12 @@ msgid "GnuCash Paths"
 msgstr "جنوكاش "
 
 #: gnucash/gnucash-core-app.cpp:249
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1}"
 msgstr "جنوكاش"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy
+#, fuzzy, c++-format
 msgid "GnuCash {1} development version"
 msgstr "تطوير نسخة GnuCash %s"
 
@@ -10434,7 +10439,6 @@ msgid "PDF export file name format"
 msgstr "اسم ملف التصدير بنسق PDF"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11749,7 +11753,7 @@ msgstr "<b>وصف التصنيفات</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Accounts in '%s'"
 msgid "Accounts in %s"
 msgstr "حسابات في '%s'"
@@ -19503,7 +19507,7 @@ msgstr "انقر نقراً مزدوجاً فوق الصفوف للتغيير، 
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "المعاملات تم استيرادها من الملف '%s'."
 
@@ -19740,6 +19744,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -31193,6 +31198,7 @@ msgstr "معلومات جديدة للتقسيم"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -31203,7 +31209,7 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "تمت إضافة هذا الترميز إلى القائمة بالفعل."
@@ -31214,6 +31220,7 @@ msgstr[4] "تمت إضافة هذا الترميز إلى القائمة بال�
 msgstr[5] "تمت إضافة هذا الترميز إلى القائمة بالفعل."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -31228,7 +31235,7 @@ msgstr[4] ""
 msgstr[5] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "لا ينبغي إعادة فتح الملف."

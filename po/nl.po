@@ -19,7 +19,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2024-03-17 12:01+0000\n"
 "Last-Translator: Stephan Paternotte <stephan@paternottes.net>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/gnucash/gnucash/nl/"
@@ -8403,6 +8403,7 @@ msgid "Not enough information for quotes dump"
 msgstr "Onvoldoende gegevens voor het leveren van koersen"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr "Onbekende koers-opdracht '{1}'"
 
@@ -8411,6 +8412,7 @@ msgid "Missing --name parameter"
 msgstr "Ontbreekt [--name] parameter"
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr "Onbekende rapport-opdracht '{1}'"
 
@@ -8420,6 +8422,7 @@ msgstr "Ontbrekend commando of optie"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr "Finance::Quote versie {1} gevonden."
 
@@ -8443,11 +8446,13 @@ msgstr ""
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
+#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "U kunt fouten ook opzoeken en melden via {1}"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "Ga naar {1} voor de laatste stabiele versie"
 
@@ -8465,6 +8470,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- GnuCash boekhoudsoftware voor thuis en voor kleine ondernemingen"
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr "{1} [opties] [databestand]"
 
@@ -8473,10 +8479,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash bestandspaden"
 
 #: gnucash/gnucash-core-app.cpp:249
+#, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
+#, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1} ontwikkelversie"
 
@@ -10339,11 +10347,11 @@ msgid ""
 msgstr ""
 "Dit veld bepaalt de standaard weergavestijl wanneer een grootboekkaart wordt "
 "geopend. De mogelijke waarden zijn “Basic ledger” (eenvoudig dagboek), “Auto-"
-"split ledger” (automatisch dagboek) en “Transaction "
-"journal” (journaalposten). De optie “Basic ledger” toont elke boeking in een "
-"of twee regels, afhankelijk van of de dubbele regelweergave is ingesteld. De "
-"optie “Auto-split ledger” doet hetzelfde, maar klapt de geselecteerde regel "
-"uit tot de volledige boeking. Bij de optie “Transaction journal” worden alle "
+"split ledger” (automatisch dagboek) en “Transaction journal” "
+"(journaalposten). De optie “Basic ledger” toont elke boeking in een of twee "
+"regels, afhankelijk van of de dubbele regelweergave is ingesteld. De optie "
+"“Auto-split ledger” doet hetzelfde, maar klapt de geselecteerde regel uit "
+"tot de volledige boeking. Bij de optie “Transaction journal” worden alle "
 "regels automatisch uitgeklapt."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
@@ -10531,7 +10539,6 @@ msgid "PDF export file name format"
 msgstr "Sjabloon bestandsnaam PDF-export"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11945,7 +11952,6 @@ msgstr "<b>Omschrijving van deze categorie</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, c-format
 msgid "Accounts in %s"
 msgstr "Rekeningen in %s"
 
@@ -19691,6 +19697,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
+#, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "De boekingen zijn geïmporteerd vanuit het bestand ‘{1}’."
 
@@ -19929,6 +19936,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr "{1}: {2}"
 
@@ -30889,6 +30897,7 @@ msgstr "Nieuwe locatie:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -30901,12 +30910,14 @@ msgid "In addition:"
 msgstr "Bovendien:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "Het volgende bestand werd gekopieerd naar {1}:"
 msgstr[1] "De volgende bestanden werden gekopieerd naar {1}:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr "Het volgende bestand in {1} is hernoemd:"
 
@@ -30917,6 +30928,7 @@ msgstr[0] "Het volgende bestand is nu overbodig en zal genegeerd worden:"
 msgstr[1] "De volgende bestanden zijn nu overbodig en zullen genegeerd worden:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "Het volgende bestand kon niet worden verplaatst naar {1}:"

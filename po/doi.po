@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2014-04-28 20:16-0500\n"
 "Last-Translator: Chandrakant Dhutadmal <chandrakantd@cdac.in>\n"
 "Language-Team: NONE\n"
@@ -8381,6 +8381,7 @@ msgid "Not enough information for quotes dump"
 msgstr "हर इक लैन-देन आस्तै जानकारी दियां दो लाइनां दस्सो"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8389,6 +8390,7 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8399,6 +8401,7 @@ msgstr "एह् इक रंग आप्शन ऐ"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
@@ -8422,13 +8425,13 @@ msgstr "बगें ते होर दूइयें समस्याए�
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
-#, fuzzy
+#, fuzzy, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "तुस https://bugs.gnucash.org पर बग रिपोटां दिक्खी ते दर्ज करी सकदे ओ.\n"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
-#, fuzzy
+#, fuzzy, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "खीरी स्थाई सरूप हा"
 
@@ -8446,6 +8449,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8455,10 +8459,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash "
 
 #: gnucash/gnucash-core-app.cpp:249
+#, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
+#, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1} विकास सरूप"
 
@@ -10430,7 +10436,6 @@ msgid "PDF export file name format"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11745,7 +11750,7 @@ msgstr "</b> कैटेगरी दा ब्यौरा</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, fuzzy, c-format
+#, fuzzy
 #| msgid "Accounts in '%s'"
 msgid "Accounts in %s"
 msgstr "'%s' च खाते"
@@ -19612,7 +19617,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "%s फ़ाइल गी पढ़ने च इक गल्ती दरपेश ऐ."
 
@@ -19830,6 +19835,7 @@ msgstr ""
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -31480,6 +31486,7 @@ msgstr "<b> स्प्लिट दी जानकारी</b>"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -31490,13 +31497,14 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "इस कोडिंङ गी सूची च पैह्‌लें गै शामल करी लैता गेदा ऐ ."
 msgstr[1] "इस कोडिंङ गी सूची च पैह्‌लें गै शामल करी लैता गेदा ऐ ."
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -31507,7 +31515,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
-#, fuzzy
+#, fuzzy, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "इस फ़ाइल गी परतियै खोह्‌लेआ नेईं जाई सकेआ."

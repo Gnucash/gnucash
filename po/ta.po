@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2024-06-04 16:09+0000\n"
 "Last-Translator: தமிழ்நேரம் <anishprabu.t@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/gnucash/gnucash/ta/"
@@ -8239,6 +8239,7 @@ msgid "Not enough information for quotes dump"
 msgstr "மேற்கோள்களுக்கு போதுமான தகவல்கள் இல்லை"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr "அறியப்படாத மேற்கோள்கள் கட்டளை '{1}'"
 
@@ -8247,6 +8248,7 @@ msgid "Missing --name parameter"
 msgstr "காணவில்லை -பெயர் அளவுரு"
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr "அறியப்படாத அறிக்கை கட்டளை '{1}'"
 
@@ -8256,6 +8258,7 @@ msgstr "கட்டளை அல்லது விருப்பம் இல
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr "பொருள் கிடைத்தது::மேற்கோள் பதிப்பு {1}."
 
@@ -8277,11 +8280,13 @@ msgstr "gnucash-devel@gnucash.org-இல் பிழைகள் மற்ற�
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
+#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "{1} இல் நீங்கள் பார்க்கும் மற்றும் கோப்பு பிழை அறிக்கைகளையும் செய்யலாம்"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "கடைசி நிலையான பதிப்பைக் கண்டுபிடிக்க, தயவுசெய்து {1} ஐப் பார்க்கவும்"
 
@@ -8299,6 +8304,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "- குனுபணம், தனிப்பட்ட மற்றும் சிறு வணிக நிதிக்கான கணக்கியல்"
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr "{1} [விருப்பங்கள்] [டேட்டாஃபைல்]"
 
@@ -8307,10 +8313,12 @@ msgid "GnuCash Paths"
 msgstr "குனுபணம் பாதைகள்"
 
 #: gnucash/gnucash-core-app.cpp:249
+#, c++-format
 msgid "GnuCash {1}"
 msgstr "Gnucash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
+#, c++-format
 msgid "GnuCash {1} development version"
 msgstr "குனுபணம் {1} மேம்பாட்டு பதிப்பு"
 
@@ -10293,7 +10301,6 @@ msgid "PDF export file name format"
 msgstr "PDF ஏற்றுமதி கோப்புப்பெயர் வடிவம்"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11646,7 +11653,6 @@ msgstr "<b>வகை விளக்கம்</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, c-format
 msgid "Accounts in %s"
 msgstr "%s இல் கணக்குகள்"
 
@@ -19233,6 +19239,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
+#, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "பரிவர்த்தனைகள் '{1}' கோப்பிலிருந்து இறக்குமதி செய்யப்பட்டன."
 
@@ -19466,6 +19473,7 @@ msgstr "மதிப்பு நாணய நெடுவரிசை வகை
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr "{1}: {2}"
 
@@ -30268,6 +30276,7 @@ msgstr "புதிய இடம்:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -30280,12 +30289,14 @@ msgid "In addition:"
 msgstr "கூடுதலாக:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "அதற்கு பதிலாக பின்வரும் கோப்பு {1} க்கு க்கு நகலெடுக்கப்பட்டுள்ளது:"
 msgstr[1] "அதற்கு பதிலாக பின்வரும் கோப்புகள் {1} க்கு நகலெடுக்கப்பட்டுள்ளன:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr "{1} in இல் பின்வரும் கோப்பு மறுபெயரிடப்பட்டது:"
 
@@ -30296,6 +30307,7 @@ msgstr[0] "பின்வரும் கோப்பு வழக்கற்�
 msgstr[1] "பின்வரும் கோப்புகள் வழக்கற்றுப் போய்விட்டன, அவை புறக்கணிக்கப்படும்:"
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "பின்வரும் கோப்பை {1} பெறுநர் க்கு நகர்த்த முடியவில்லை:"

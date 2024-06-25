@@ -36,7 +36,7 @@ msgstr ""
 "Project-Id-Version: GnuCash 5.7 \n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2023-11-16 08:03+0000\n"
 "Last-Translator: derxi <happycxin@163.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
@@ -8071,6 +8071,7 @@ msgid "Not enough information for quotes dump"
 msgstr "没有足够的信息来进行报价导出"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr "未知报价命令\"{1}\""
 
@@ -8079,6 +8080,7 @@ msgid "Missing --name parameter"
 msgstr "缺少--名称参数"
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr "未知的报表命令'{1}'"
 
@@ -8088,6 +8090,7 @@ msgstr "这是一个颜色选项"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr "已找到 Finance::Quote 版本 {1}。"
 
@@ -8109,11 +8112,13 @@ msgstr "请将程序错误或其它的问题反馈给 gnucash-devel@gnucash.org"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
+#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr "当然，也可以在 {1} 查询、报告错误"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr "对于最新的稳定版本，请参阅{1}"
 
@@ -8131,6 +8136,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr "-Gnucash，个人和小企业财务管理"
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr "{1} [选项] [数据文件]"
 
@@ -8139,11 +8145,12 @@ msgid "GnuCash Paths"
 msgstr "GnuCash 路径"
 
 #: gnucash/gnucash-core-app.cpp:249
+#, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
-#, fuzzy
+#, fuzzy, c++-format
 #| msgid "GnuCash {1} development version"
 msgid "GnuCash {1} development version"
 msgstr "GnuCash %s 开发版本"
@@ -9990,7 +9997,6 @@ msgid "PDF export file name format"
 msgstr "PDF导出文件名格式"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11283,7 +11289,6 @@ msgstr "<b>描述</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, c-format
 msgid "Accounts in %s"
 msgstr "“%s”的科目"
 
@@ -18585,6 +18590,7 @@ msgstr "双击要改变的行，然后点击应用导入"
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
+#, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "交易从文件'{1}'中导入。"
 
@@ -18798,6 +18804,7 @@ msgstr "无法将类型为货币的列中的数值解析为有效的货币。"
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr "{1}: {2}"
 
@@ -29488,6 +29495,7 @@ msgstr "新文件位置："
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -29499,11 +29507,13 @@ msgid "In addition:"
 msgstr "更多："
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] "以下文件已被复制至 {1} 作为替代："
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr "{1}中的下一个文件更改了名称："
 
@@ -29513,6 +29523,7 @@ msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] "不再使用以下文件："
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] "以下文件无法移动至 {1}："

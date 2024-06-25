@@ -12,9 +12,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-06-23 12:23-0700\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
+"POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2024-06-23 23:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
@@ -8394,6 +8394,7 @@ msgid "Not enough information for quotes dump"
 msgstr "Kevés az információ az árfolyamok kiírásához"
 
 #: gnucash/gnucash-cli.cpp:170
+#, c++-format
 msgid "Unknown quotes command '{1}'"
 msgstr ""
 
@@ -8402,6 +8403,7 @@ msgid "Missing --name parameter"
 msgstr ""
 
 #: gnucash/gnucash-cli.cpp:214
+#, c++-format
 msgid "Unknown report command '{1}'"
 msgstr ""
 
@@ -8412,6 +8414,7 @@ msgstr "Ez egy szín extra"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
+#, c++-format
 msgid "Found Finance::Quote version {1}."
 msgstr ""
 
@@ -8434,12 +8437,14 @@ msgstr ""
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:80
+#, c++-format
 msgid "You can also lookup and file bug reports at {1}"
 msgstr ""
 "Kereshet a hibajelentések között vagy újat is küldhet a következő címen: {1}"
 
 #. Translators: {1} will be replaced with an URL
 #: gnucash/gnucash-core-app.cpp:82
+#, c++-format
 msgid "To find the last stable version, please refer to {1}"
 msgstr ""
 
@@ -8457,6 +8462,7 @@ msgid "- GnuCash, accounting for personal and small business finance"
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:208
+#, c++-format
 msgid "{1} [options] [datafile]"
 msgstr ""
 
@@ -8465,10 +8471,12 @@ msgid "GnuCash Paths"
 msgstr "Gnucash fájlok elérési útvonalai"
 
 #: gnucash/gnucash-core-app.cpp:249
+#, c++-format
 msgid "GnuCash {1}"
 msgstr "GnuCash {1}"
 
 #: gnucash/gnucash-core-app.cpp:250
+#, c++-format
 msgid "GnuCash {1} development version"
 msgstr "GnuCash {1} fejlesztői változat"
 
@@ -9827,8 +9835,8 @@ msgid ""
 "will have the middle cut and replaced with an ellipsis."
 msgstr ""
 "Ez az érték határozza meg a lapok füleinek maximális szélességét. Ha a lap "
-"fülén megjelenő szöveg hosszabb ennél az értéknél (a teszt közelítő jellegű)"
-", akkor a szöveg közepét kivágja, és három ponttal helyettesíti."
+"fülén megjelenő szöveg hosszabb ennél az értéknél (a teszt közelítő "
+"jellegű), akkor a szöveg közepét kivágja, és három ponttal helyettesíti."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
@@ -10345,7 +10353,6 @@ msgid "PDF export file name format"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:375
-#, c-format
 msgid ""
 "This setting chooses the file name for PDF export. This is a sprintf(3) "
 "string with three arguments: \"%1$s\" is the report name such as "
@@ -11695,7 +11702,6 @@ msgstr "<b>Kategória-leírás</b>"
 
 #. %s is an account template
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:376
-#, c-format
 msgid "Accounts in %s"
 msgstr "%s számlái"
 
@@ -15711,8 +15717,8 @@ msgid ""
 "If the text in the tab is longer than this value (the test is approximate) "
 "then the tab label will have the middle cut and replaced with an ellipsis."
 msgstr ""
-"Ha a lap fülének a neve hosszabb a megadott értéknél (a teszt hozzávetőleges)"
-", akkor a név közepe három ponttal lesz helyettesítve."
+"Ha a lap fülének a neve hosszabb a megadott értéknél (a teszt "
+"hozzávetőleges), akkor a név közepe három ponttal lesz helyettesítve."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:3568
 msgid "characters"
@@ -19184,6 +19190,7 @@ msgstr ""
 
 #. Translators: {1} will be replaced with a filename
 #: gnucash/import-export/csv-imp/assistant-csv-trans-import.cpp:2210
+#, c++-format
 msgid "The transactions were imported from file '{1}'."
 msgstr "{1} fájlból megtörtént a tranzakciók importálása."
 
@@ -19410,6 +19417,7 @@ msgstr "Egy pénznem oszlop érvénytelen pénznemszimbólumot tartalmaz."
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:290
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:549
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:629
+#, c++-format
 msgid "{1}: {2}"
 msgstr ""
 
@@ -30212,6 +30220,7 @@ msgstr "Új hely:"
 
 #. Translators {1} will be replaced with the package name (typically Gnucash) at runtime
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:684
+#, c++-format
 msgid ""
 "If you no longer intend to run {1} 2.6.x or older on this system you can "
 "safely remove the old directory."
@@ -30222,11 +30231,13 @@ msgid "In addition:"
 msgstr ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:697
+#, c++-format
 msgid "The following file has been copied to {1} instead:"
 msgid_plural "The following files have been copied to {1} instead:"
 msgstr[0] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:701
+#, c++-format
 msgid "The following file in {1} has been renamed:"
 msgstr ""
 
@@ -30236,6 +30247,7 @@ msgid_plural "The following files have become obsolete and will be ignored:"
 msgstr[0] ""
 
 #: libgnucash/core-utils/gnc-filepath-utils.cpp:721
+#, c++-format
 msgid "The following file could not be moved to {1}:"
 msgid_plural "The following files could not be moved to {1}:"
 msgstr[0] ""
