@@ -262,6 +262,10 @@ find_library (REGEX_LIBRARY NAMES regex)
 set (BUILD_GNUCASH_POT ${BUILDING_FROM_VCS})
 
 find_package (Gettext 0.19.6 REQUIRED)
+if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.22)
+    message (WARNING "Gettext version 0.22 or more recent is required to detect c++-formats. Do not use pot files from older versions in official msgmerges.")
+endif()
+
 if (${GETTEXT_VERSION_STRING} VERSION_LESS 0.20)
     message (WARNING "Gettext version 0.20 or more recent is required to translate the 'developer_name' tag in gnucash.appdata.xml. All but that tag will be translated in the generated file.")
     if(BUILD_GNUCASH_POT)
