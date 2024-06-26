@@ -8,11 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-06-24 13:09+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2024-06-26 08:09+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -1434,6 +1434,9 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"חברה מנפיקה דיבידנדים במזומן למחזיקים.\n"
+"\n"
+"כל דיבידנד שמושקע מחדש חייב להירשם כרכישת מניות רגילה."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
@@ -1445,6 +1448,7 @@ msgstr "החזר הון"
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"חברה משיבה לעצמה הון, ומפחיתה את בסיס העלות מבלי להשפיע על מספר היחידות."
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
@@ -1458,6 +1462,9 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"חברה משיבה לעצמה הון, ומפחיתה את בסיס העלות מבלי להשפיע על מספר היחידות. "
+"חלוקה שנרשמה בעבר כדיבידנד מסווגת מחדש כהחזר הון, לעתים קרובות עקב מידע מסוי "
+"לסוף שנה."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
@@ -1482,6 +1489,8 @@ msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"חברה מנפיקה חלוקה רעיונית, שנרשמת כהכנסה מדיבידנד ומגדילה את בסיס העלות מבלי "
+"להשפיע על מספר היחידות."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1501,6 +1510,11 @@ msgid ""
 "If the split results in a cash in lieu for remainder units, please record "
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
+"חברה מנפיקה יחידות נוספות, ובכך מפחיתה את מחיר המניה על ידי מחלק, תוך שמירה "
+"על הערך הכספי הכולל של ההשקעה הכוללת, קבועה.\n"
+"\n"
+"אם תוצת הפיצול תניב מזומנים בתמורה לשארית היחידות, נא לרשום את המכירה תחילה "
+"באמצעות סייען עסקאות מניות, ולאחר מכן לרשום את הפיצול."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1508,7 +1522,7 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
 #: gnucash/gnome/assistant-stock-transaction.cpp:410
 msgid "Reverse split"
-msgstr ""
+msgstr "איחוד מניות"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
 msgid ""
@@ -1519,22 +1533,27 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"חברה פודה יחידות, ובכך מגדילה את מחיר המניה במכפיל, תוך שמירת הערך הכספי "
+"הכולל של ההשקעה הכוללת, קבועה.\n"
+"\n"
+"אם תוצאת האיחוד תניב מזומנים בתמורה לשארית היחידות, נא לרשום את המכירה תחילה "
+"באמצעות סייען עסקאות מניות , ולאחר מכן לרשום את האיחוד."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:301
 msgid "Short sell"
-msgstr ""
+msgstr "מכירה בחסר"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:302
 msgid "Selling stock short."
-msgstr ""
+msgstr "מכירת מניות בחסר."
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
 #: gnucash/gnome/assistant-stock-transaction.cpp:312
 msgid "Buy to cover short"
-msgstr ""
+msgstr "קניה לכיסוי מכירה בחסר"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:313
 msgid ""
@@ -1543,24 +1562,28 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"קנית מניה בחזרה כדי לכסות פוזיציית שורט, ורישום רווח/הפסד הון.\n"
+"\n"
+"אם חישוב רווחי הון מורכב מדי, ניתן להזין סכום כמציין מקום ולתקן אותו בתנועה "
+"מאוחר יותר."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:325
 msgid "Compensatory dividend"
-msgstr ""
+msgstr "פיצוי דיבידנד"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:326
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
-msgstr ""
+msgstr "חברה מנפיקה דיבידנדים, ועל בעל המניות בחסר לשלם פיצוי בגין הדיבידנד."
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:337
 msgid "Compensatory return of capital"
-msgstr ""
+msgstr "פיצוי החזר הון"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:338
 msgid ""
@@ -1568,13 +1591,15 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
+"חברה מחזירה הון, ועל בעל המניות בחסר לשלם פיצוי בגין ההון המוחזר. דבר שמקטין "
+"את בסיס העלות (הפחתה שלילית, לכיוון ערך 0.00 ) מבלי להשפיע על מספר היחידות."
 
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:351
 msgid "Compensatory return of capital (reclassification)"
-msgstr ""
+msgstr "פיצוי החזר הון (סיווג מחדש)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:352
 msgid ""
@@ -1685,7 +1710,7 @@ msgstr "אין ערך תקין"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:863
 msgid "Amount for stock value is missing."
-msgstr ""
+msgstr "סכום ערך מניה חסר."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:875
 msgid "Invalid stock new balance."
@@ -1712,15 +1737,11 @@ msgid "Cannot cover buy more units than owed."
 msgstr ""
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1129
-#, fuzzy
-#| msgid "Stock"
 msgctxt "Stock Assistant: Page name"
 msgid "Stock"
-msgstr "נייר ערך"
+msgstr "מניות"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1131
-#, fuzzy
-#| msgid "Cash"
 msgctxt "Stock Assistant: Page name"
 msgid "Cash"
 msgstr "מזומן"
@@ -1789,12 +1810,12 @@ msgstr "יתרה הבאה"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1929
 msgid "Enter the new balance of shares after the stock split."
-msgstr "הזנת יתרת מניות חדשה לאחר פיצול המניות"
+msgstr "הזנת יתרת מניות חדשה לאחר פיצול המניות."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1930
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
 msgid "Enter the number of shares you gained or lost in the transaction."
-msgstr "הזנת כמות (יחידות) שהופסדו או הורווחו בעסקה"
+msgstr "הזנת כמות (יחידות) שהפסדו או הרוחו בעסקה"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2331
 #: gnucash/gnome/dialog-find-transactions.c:153
@@ -3569,10 +3590,9 @@ msgstr "האם למחוק מחירים אלו?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:584
 #: gnucash/gnome-utils/dialog-transfer.cpp:1796
-#, fuzzy, c-format
-#| msgid "Price Quotes Retrieval Options"
+#, c-format
 msgid "Price retrieval failed: %s"
-msgstr "אפשרויות אחזור שערים"
+msgstr "שדה אחזור מחיר: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
@@ -4363,10 +4383,8 @@ msgstr "פתיחת חלון דוח לקוח עבור נמען חשבונית ז�
 #: gnucash/ui/gnc-plugin-page-register.ui:205
 #: gnucash/ui/gnc-plugin-page-register.ui:393
 #: gnucash/ui/gnc-plugin-page-register.ui:505
-#, fuzzy
-#| msgid "Manage Document Link"
 msgid "_Manage Document Link…"
-msgstr "ניהול צרופות"
+msgstr "_ניהול קישורי מסמכים…"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4647,10 +4665,8 @@ msgid "Open a company report window for the owner of this credit note"
 msgstr "פתיחת חלון דוח ספק עבור נמען הודעת זיכוי זו"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
-#, fuzzy
-#| msgid "Manage Document Link"
 msgid "Manage Document Link…"
-msgstr "ניהול צרופות"
+msgstr "ניהול קישורי מסמכים…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:282
 #: gnucash/gnome/gnc-plugin-page-register.cpp:383
@@ -4854,10 +4870,8 @@ msgstr "מחיקת הפיצול הנוכחי"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.cpp:389
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Show Splits"
-msgstr "פיצול ניר ערך"
+msgstr "הצגת פיצולים"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:390
 msgid "Jump"
@@ -8137,10 +8151,8 @@ msgid "Found Finance::Quote version {1}."
 msgstr "נמצאה גרסת Finance::Quote‏~A."
 
 #: gnucash/gnucash-commands.cpp:318
-#, fuzzy
-#| msgid "Found Finance::Quote version ~A."
 msgid "Finance::Quote sources:\n"
-msgstr "נמצאה גרסת Finance::Quote‏~A."
+msgstr "Finance::Quote sources:\n"
 
 #: gnucash/gnucash-commands.cpp:372 gnucash/gnucash-commands.cpp:396
 msgid "Price retrieval failed: "
@@ -10706,22 +10718,13 @@ msgid "Setup Account Period"
 msgstr "הגדרת תקופת חשבון"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:38
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Select an accounting period and the closing date which must not be in the "
-#| "future and is greater than the closing date of the previous book.\n"
-#| "\n"
-#| "Books will be closed at midnight on the selected date."
 msgid ""
 "Select an accounting period and a closing date that is between the date of "
 "the previous close and today.\n"
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
-"\n"
-"בחירת תקופה חשבונאית ותאריך סגירה (לא חייב להיות בעתיד), אך תאריך הסגירה "
-"חייב להיות גדול מתאריך הסגירה של הספרים הקודמים.\n"
+"בחירת תקופה חשבונאית ותאריך סגירה שבין תאריך סגירה קודם להיום.\n"
 "\n"
 "הספרים יסגרו בחצות בתאריך שנבחר."
 
@@ -10784,14 +10787,8 @@ msgid "Import Account Assistant"
 msgstr "סייען יבוא חשבונות"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Enter file name and location for the Import...\n"
 msgid "Enter file name and location for the Import…"
-msgstr ""
-"\n"
-"ליבוא נא להזין שם קובץ ונתיב...\n"
+msgstr "לייבוא נא להזין שם קובץ ומיקום…"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:77
 msgid "Choose File to Import"
@@ -10971,14 +10968,8 @@ msgid "Account Selection"
 msgstr "בחירת חשבון"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:687
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Enter file name and location for the Export...\n"
 msgid "Enter file name and location for the Export…"
-msgstr ""
-"\n"
-"ליצוא נא להזין שם קובץ ונתיב...\n"
+msgstr "ליצוא נא להזין שם קובץ ומיקום…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:698
 msgid "Choose File Name for Export"
@@ -11562,23 +11553,6 @@ msgid "Choose accounts to create"
 msgstr "בחירת חשבונות ליצירה"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:530
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "If you would like to change an account's name, click on the row "
-#| "containing the account, then click on the account name and change it.\n"
-#| "\n"
-#| "Some accounts are marked as \"Placeholder\". Placeholder accounts are "
-#| "used to create a hierarchy of accounts and normally do not have "
-#| "transactions or opening balances. If you would like an account to be a "
-#| "placeholder account, click the checkbox for that account.\n"
-#| "\n"
-#| "If you would like an account to have an opening balance, click on the row "
-#| "containing the account, then click on the opening balance field and enter "
-#| "the starting balance.\n"
-#| "\n"
-#| "<b>Note:</b> all accounts except Equity and placeholder accounts may have "
-#| "an opening balance.\n"
 msgid ""
 "If you would like to change an account's name, click on the row containing "
 "the account, then click on the account name and change it.\n"
@@ -11595,7 +11569,6 @@ msgid ""
 "<b>Note:</b> all accounts except Equity and placeholder accounts may have an "
 "opening balance."
 msgstr ""
-"\n"
 "לשינוי שם חשבון, נא להקיש על השורה המכילה את החשבון, ולאחר מכן להקיש על שם "
 "החשבון לשינויו.\n"
 "\n"
@@ -11607,7 +11580,7 @@ msgstr ""
 "להקיש על שדה יתרת הפתיחה ולהזין את היתרה ההתחלתית.\n"
 "\n"
 "<b>הערה:</b> לכל החשבונות, למעט חשבונות הוצאות ושומרי מקום, עשויה להיות יתרת "
-"פתיחה.\n"
+"פתיחה."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:563
 msgid "Setup selected accounts"
@@ -11796,14 +11769,8 @@ msgid "Loan Details"
 msgstr "פרטי הלוואה"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:451
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Do you utilise an escrow account, if so an account must be specified..."
 msgid "Do you utilize an escrow account, if so an account must be specified…"
-msgstr ""
-"\n"
-"האם להשתמש בחשבון נאמנות? אם כן יש להגדיר חשבון..."
+msgstr "האם נעשה שימוש בחשבון נאמנות? אם כן יש להגדיר חשבון…"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:470
 #, fuzzy
@@ -11820,14 +11787,8 @@ msgid "Loan Repayment Options"
 msgstr "אפשרויות פרעון הלוואה"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:544
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "All accounts must have valid entries to continue.\n"
 msgid "All accounts must have valid entries to continue."
-msgstr ""
-"\n"
-"על מנת להמשיך, על כל החשבונות להכיל רשומות תקניות.\n"
+msgstr "על מנת להמשיך, על כל החשבונות להכיל רשומות תקניות."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:584
 msgid "Principal To"
@@ -11846,14 +11807,8 @@ msgid "Loan Repayment"
 msgstr "פרעון הלוואה"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:727
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "All enabled option pages must contain valid entries to continue.\n"
 msgid "All enabled option pages must contain valid entries to continue."
-msgstr ""
-"\n"
-"על מנת להמשיך, על כל האפשרויות שהוגדרו להכיל מידע תקין.\n"
+msgstr "על מנת להמשיך, על כל האפשרויות שאופשרו להכיל רשומות תקינות."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:798
 msgid "Payment To (Escrow)"
@@ -11892,17 +11847,10 @@ msgid "Loan Payment"
 msgstr "תשלום הלוואה"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1081
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Review the details below and if correct press Apply to create the "
-#| "schedule."
 msgid ""
 "Review the details below and if correct press \"Apply\"\" to create the "
 "schedule."
-msgstr ""
-"\n"
-"לאחר סקירת ואימות הפרטים מטה, נא להקיש על החלה כדי לייצר את התזמון."
+msgstr "לאחר סקירת ואימות הפרטים מטה, נא להקיש על 'החלה' כדי לייצר את התזמון."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1108
 msgid "Range"
@@ -12278,20 +12226,6 @@ msgstr "QIF יבוא"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1211
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "If you are importing a QIF file from a bank or other financial "
-#| "institution, some of the transactions may already exist in your GnuCash "
-#| "accounts. To avoid duplication, GnuCash has tried to identify matches and "
-#| "needs your help to review them.\n"
-#| "\n"
-#| "On the next page you will be shown a list of imported transactions. As "
-#| "you select each one, a list of possible matches will be shown below it. "
-#| "If you find a correct match, click on it. Your selection will be "
-#| "confirmed by a check mark in the \"Match?\" column.\n"
-#| "\n"
-#| "Click \"Next\" to review the possible matches."
 msgid ""
 "If you are importing a QIF file from a bank or other financial institution, "
 "some of the transactions may already exist in your GnuCash accounts. To "
@@ -12305,7 +12239,6 @@ msgid ""
 "\n"
 "Click \"Next\" to review the possible matches."
 msgstr ""
-"\n"
 "ביבוא קובץ QIF מבנק או ממוסד פיננסי אחר, יתכן וחלק מהתנועות כבר נמצאות "
 "בחשבונות גנוקאש. כדי למנוע כפילויות, גנוקאש ינסה לזהות את אותן תנועות, אך "
 "נזקק לעזרה לסקור אותן.\n"
@@ -12543,28 +12476,20 @@ msgid "Previous Balance"
 msgstr "יתרה ברוטו"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:312
-#, fuzzy
-#| msgid "To Amount"
 msgid "Stock Amount"
-msgstr "סכום ל"
+msgstr "כמות מניות"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:329
-#, fuzzy
-#| msgid "Enter the name of the Customer"
 msgid "Enter the value of the shares."
-msgstr "נא להזין שם לקוח"
+msgstr "הזנת ערך המניות."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:404
-#, fuzzy
-#| msgid "_Value"
 msgid "_Stock Value"
-msgstr "_ערך"
+msgstr "_ערך מניות"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:425
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stock Value"
-msgstr "פיצול ניר ערך"
+msgstr "ערך מניות"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:442
 msgid ""
@@ -12583,10 +12508,8 @@ msgid "Cash"
 msgstr "מזומן"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:516
-#, fuzzy
-#| msgid "Raise Accounts"
 msgid "Cash Account"
-msgstr "חשבונות גיוס"
+msgstr "חשבון מזומנים"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:555
 msgid ""
@@ -12600,7 +12523,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:606
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:665
 msgid "Fees"
-msgstr ""
+msgstr "דמים"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:629
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1065
@@ -12616,10 +12539,8 @@ msgid "In this page, input any dividend income received in this transaction."
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:756
-#, fuzzy
-#| msgid "Find Account"
 msgid "Dividend Account"
-msgstr "חיפוש חשבון"
+msgstr "חשבון דיבידנד"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:795
 msgid ""
@@ -12628,22 +12549,16 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:846
-#, fuzzy
-#| msgid "Capital"
 msgid "Capital Gain"
-msgstr "הון"
+msgstr "רווח הון"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:869
-#, fuzzy
-#| msgid "Splits Account"
 msgid "Capital Gains Account"
-msgstr "חשבון פיצולים"
+msgstr "חשבון רווחי הון"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:891
-#, fuzzy
-#| msgid "Capital"
 msgid "Capital Gains"
-msgstr "הון"
+msgstr "רווחי הון"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:908
 #, fuzzy
@@ -12660,10 +12575,8 @@ msgstr ""
 "לסקירת הבחירות שנעשו, או על 'סיום' ליציאה מבלי לשמור את השינויים."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:956
-#, fuzzy
-#| msgid "_Finish"
 msgid "Finish"
-msgstr "_סיום"
+msgstr "סיום"
 
 #: gnucash/gtkbuilder/assistant-xml-encoding.glade:16
 msgid "Introduction placeholder"
@@ -12949,10 +12862,8 @@ msgstr "חשבון משנה אחד או יותר מכיל תנועות לקרי�
 #: gnucash/gtkbuilder/dialog-account.glade:801
 #: gnucash/gtkbuilder/gnc-tree-view-owner.glade:8
 #: gnucash/report/trep-engine.scm:71
-#, fuzzy
-#| msgid "Filter By:"
 msgid "Filter By…"
-msgstr "סינון לפי:"
+msgstr "סינון לפי…"
 
 #: gnucash/gtkbuilder/dialog-account.glade:922
 msgid "_Default"
@@ -13058,10 +12969,8 @@ msgid "_Parent Account"
 msgstr "חשבון _אב"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1464
-#, fuzzy
-#| msgid "Account Type"
 msgid "Acco_unt Type"
-msgstr "סוג החשבון"
+msgstr "סוג _חשבון"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1514
 msgid "Placeholde_r"
@@ -13130,10 +13039,8 @@ msgstr ""
 "&larr; אפשרויות מיסוי'."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1636
-#, fuzzy
-#| msgid "_Ending Balance"
 msgid "_Higher Balance Limit"
-msgstr "_יתרת סגירה"
+msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1649
 msgid ""
@@ -13166,16 +13073,12 @@ msgid "_Lower Balance Limit"
 msgstr "הצגת פריטים ביתרת אפס"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1718
-#, fuzzy
-#| msgid "Include _subaccounts"
 msgid "_Include sub accounts"
-msgstr "הכללת _חשבונות משנה"
+msgstr "_הכללת חשבונות משנה"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1755
-#, fuzzy
-#| msgid "Proper_ties"
 msgid "More Properties"
-msgstr "מאפיי_נים"
+msgstr "מאפיינים נוספים"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1781
 msgid "<b>Balance Information</b>"
@@ -13777,14 +13680,8 @@ msgid "Exit the saved report configurations dialog"
 msgstr "יציאה מדו שיח הגדרת דוחות שמורים"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:100
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Currently you have no saved reports.\n"
 msgid "Currently you have no saved reports."
-msgstr ""
-"\n"
-"אין דוחות שמורים.\n"
+msgstr "אין כעת דוחות שמורים."
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:112
 #, fuzzy
@@ -13848,10 +13745,8 @@ msgid "(none)"
 msgstr "(ללא)"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:409
-#, fuzzy
-#| msgid "Enter URL like http://www.gnucash.org"
 msgid "Enter an URL like \"https://www.gnucash.org\""
-msgstr "נא להזין מען URL כגון http://www.gnucash.org"
+msgstr "הזנת מען URL כגון 'http://www.gnucash.org'"
 
 #: gnucash/gtkbuilder/dialog-doclink.glade:454
 msgid "Location does not start with a valid scheme"
@@ -14221,10 +14116,8 @@ msgstr "ניתן לבחור מספר שורות ולמחוק אותן בהקשה
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:266
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:412
-#, fuzzy
-#| msgid "New Account"
 msgid "New _Account…"
-msgstr "חשבון חדש"
+msgstr "חשבון _חדש…"
 
 #: gnucash/gtkbuilder/dialog-import.glade:86
 msgid "Please select or create an appropriate GnuCash account for:"
@@ -14457,10 +14350,8 @@ msgid "Extra Payments"
 msgstr "תשלומים נוספים"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:625
-#, fuzzy
-#| msgid "Report Title"
 msgid "Report template"
-msgstr "כותרת דוח"
+msgstr "תבנית דוח"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:687
 #, fuzzy
@@ -14469,10 +14360,8 @@ msgid "Use template report"
 msgstr "הצגת דוח עובד"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:715
-#, fuzzy
-#| msgid "Choose the export format for this report:"
 msgid "Choose a different report template before timeout"
-msgstr "בחירת תבניות יצוא לדוח זה:"
+msgstr "בחירת תבניות דוח שונה לפני פסק הזמן"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:907
 msgid ""
@@ -17899,10 +17788,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
-#, fuzzy
-#| msgid "Profits:"
 msgid "Profiles"
-msgstr "רווחים:"
+msgstr "פרופילים"
 
 #: gnucash/import-export/aqb/dialog-ab-pref.glade:22
 #: gnucash/import-export/aqb/gncmod-aqbanking.c:70
@@ -18571,14 +18458,8 @@ msgid "Error(s) in invoice without id, all rows of this invoice ignored.\n"
 msgstr "שגיאה(אות) בחשבונית ללא מזהה, המערכת תתעלם מכל השורות בחשבונית זו.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:645
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Processing...\n"
 msgid "Processing…"
-msgstr ""
-"\n"
-"עיבוד...\n"
+msgstr "מתבצע עיבוד…"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:714
 #, c-format
@@ -19682,10 +19563,9 @@ msgstr "חדש, העברת %s ל '%s' (אוטומטי)"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.cpp:2049
-#, fuzzy, c-format
-#| msgid "New, UNBALANCED (need acct to transfer %s)!"
+#, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
-msgstr "חדש, סכום חוסר איזון (נדרש חשבון להעברת %s)!"
+msgstr "חדש, חוסר איזון (נדרש חשבון להעברת %s לחשבו %s)!"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.cpp:2065
@@ -20816,7 +20696,7 @@ msgstr "חיוב ישיר"
 #: gnucash/register/ledger-core/split-register.c:2590
 #: gnucash/register/ledger-core/split-register.c:2639
 msgid "Fee"
-msgstr "עמלה"
+msgstr "דמים"
 
 #: gnucash/register/ledger-core/split-register.c:2617
 #: libgnucash/engine/Account.cpp:177
@@ -24878,10 +24758,8 @@ msgid "Chart type"
 msgstr "סוג תרשים"
 
 #: gnucash/report/reports/standard/investment-lots.scm:52
-#, fuzzy
-#| msgid "Old location:"
 msgid "Chart location"
-msgstr "מיקום ישן:"
+msgstr "מיקום תרשים"
 
 #: gnucash/report/reports/standard/investment-lots.scm:53
 #, fuzzy
@@ -28113,7 +27991,7 @@ msgstr "_קובץ"
 
 #: gnucash/ui/gnc-main-window.ui:40
 msgid "Pa_ge Setup"
-msgstr "הג_דרת עמוד..."
+msgstr "הג_דרת עמוד"
 
 #: gnucash/ui/gnc-main-window.ui:43
 msgid "Specify the page size and orientation for printing"
@@ -28985,10 +28863,8 @@ msgstr "פתיחת החשבון שנבחר ואת כל חשבונות המשנה
 #: gnucash/ui/gnc-plugin-page-register.ui:112
 #: gnucash/ui/gnc-plugin-page-register.ui:353
 #: gnucash/ui/gnc-plugin-page-register.ui:465
-#, fuzzy
-#| msgid "Filter By:"
 msgid "_Filter By…"
-msgstr "סינון לפי:"
+msgstr "_סינון לפי…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:98
 #: gnucash/ui/gnc-plugin-page-budget.ui:87
@@ -29779,7 +29655,7 @@ msgstr "דוח כרטיס חשבון - תנועה בודדת"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:340
 msgid "Open a register report for the selected Transaction."
-msgstr "פתיחת דוח יומן לתנועה שנבחרה/"
+msgstr "פתיחת דוח יומן לתנועה שנבחרה."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:359
 #: gnucash/ui/gnc-plugin-page-register.ui:471
