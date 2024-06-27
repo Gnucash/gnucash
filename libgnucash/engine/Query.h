@@ -180,6 +180,8 @@ typedef enum
 } cleared_match_t;
 
 void xaccQueryAddClearedMatch(QofQuery * q, cleared_match_t how, QofQueryOp op);
+cleared_match_t xaccQueryGetClearedMatch(QofQuery * q);
+
 void xaccQueryAddGUIDMatch(QofQuery * q, const GncGUID *guid,
                            QofIdType id_type, QofQueryOp op);
 

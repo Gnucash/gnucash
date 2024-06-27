@@ -59,6 +59,7 @@ struct gnc_ledger_display
     GncGUID leader;
 
     Query* query;
+    Query* pre_filter_query;
 
     GNCLedgerDisplayType ld_type;
 
@@ -444,7 +445,6 @@ gnc_ledger_display_gl (void)
 {
     Query* query;
     time64 start;
-    struct tm tm;
     GNCLedgerDisplay* ld;
     GHashTable *exclude_template_accounts_hash;
 
@@ -463,11 +463,12 @@ gnc_ledger_display_gl (void)
      * See Gnome Bug 86302.
      *         -- jsled */
     // Exclude any template accounts for search register and gl
-     exclude_template_accounts (query, exclude_template_accounts_hash);
+    exclude_template_accounts (query, exclude_template_accounts_hash);
 
-    gnc_tm_get_today_start (&tm);
-    tm.tm_mon--; /* Default the register to the last month's worth of transactions. */
-    start = gnc_mktime (&tm);
+    // the default is to show last 30 days
+    static const time64 secs_per_thirty_days = 2592000;
+    start = gnc_time64_get_today_start () - secs_per_thirty_days;
+
     xaccQueryAddDateMatchTT (query,
                              TRUE, start,
                              FALSE, 0,
@@ -655,6 +656,9 @@ close_handler (gpointer user_data)
     qof_query_destroy (ld->query);
     ld->query = NULL;
 
+    qof_query_destroy (ld->pre_filter_query);
+    ld->pre_filter_query = NULL;
+
     g_free (ld);
 }
 
@@ -834,6 +838,8 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
     else
         gnc_ledger_display_make_query (ld, limit, reg_type);
 
+    ld->pre_filter_query = qof_query_copy (ld->query);
+
     ld->component_id = gnc_register_gui_component (klass,
                                                    refresh_handler,
                                                    close_handler, ld);
@@ -854,7 +860,7 @@ gnc_ledger_display_internal (Account* lead_account, Query* q,
      * the query when we're not in focus yet.
      */
     ld->loading = TRUE;
-    gnc_split_register_load (ld->reg, NULL, gnc_ledger_display_leader (ld));
+    gnc_split_register_load (ld->reg, NULL, NULL, gnc_ledger_display_leader (ld));
     ld->loading = FALSE;
     return ld;
 }
@@ -888,6 +894,7 @@ static void
 gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld)
 {
     GList* splits;
+    GList* pre_filter_splits = NULL;
 
     if (ld->loading)
         return;
@@ -899,6 +906,9 @@ gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld)
      */
     splits = qof_query_run (ld->query);
 
+    if (!qof_query_equal (ld->query, ld->pre_filter_query))
+        pre_filter_splits = qof_query_run (ld->pre_filter_query);
+
     gnc_ledger_display_set_watches (ld, splits);
 
     if (!gnc_split_register_full_refresh_ok (ld->reg))
@@ -906,7 +916,7 @@ gnc_ledger_display_refresh_internal (GNCLedgerDisplay* ld)
 
     ld->loading = TRUE;
 
-    gnc_split_register_load (ld->reg, splits,
+    gnc_split_register_load (ld->reg, splits, pre_filter_splits,
                              gnc_ledger_display_leader (ld));
 
     ld->needs_refresh = FALSE;
@@ -938,10 +948,30 @@ gnc_ledger_display_refresh (GNCLedgerDisplay* ld)
         GList* accounts = gnc_account_get_descendants (leader);
 
         if (g_list_length (accounts) != ld->number_of_subaccounts)
+        {
+            time64 start_time, end_time;
+            xaccQueryGetDateMatchTT (ld->query, &start_time, &end_time);
+
+            cleared_match_t cleared_match = xaccQueryGetClearedMatch (ld->query);
+
             gnc_ledger_display_make_query (ld,
                                         gnc_prefs_get_float (GNC_PREFS_GROUP_GENERAL_REGISTER, GNC_PREF_MAX_TRANS),
                                         gnc_get_reg_type (leader, ld->ld_type));
 
+            qof_query_destroy (ld->pre_filter_query);
+            ld->pre_filter_query = qof_query_copy (ld->query);
+
+            if (cleared_match != CLEARED_ALL)
+                xaccQueryAddClearedMatch (ld->query, cleared_match, QOF_QUERY_AND);
+
+            if (start_time || end_time)
+            {
+                xaccQueryAddDateMatchTT (ld->query,
+                                         start_time != 0, start_time,
+                                         end_time != 0, end_time,
+                                         QOF_QUERY_AND);
+            }
+        }
         g_list_free (accounts);
     }
 
@@ -953,8 +983,12 @@ gnc_ledger_display_refresh (GNCLedgerDisplay* ld)
      *         -- jsled */
     // Exclude any template accounts for search register and gl
     if (!ld->reg->is_template && (ld->reg->type == SEARCH_LEDGER || ld->ld_type == LD_GL))
+    {
         exclude_template_accounts (ld->query, ld->excluded_template_acc_hash);
 
+        qof_query_destroy (ld->pre_filter_query);
+        ld->pre_filter_query = qof_query_copy (ld->query);
+    }
     gnc_ledger_display_refresh_internal (ld);
     LEAVE (" ");
 }

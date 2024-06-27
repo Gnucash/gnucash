@@ -1509,7 +1509,7 @@ schedXact_editor_populate (GncSxEditorDialog *sxed)
         if (splitList)
         {
             splitReg = gnc_ledger_display_get_split_register (sxed->ledger);
-            gnc_split_register_load (splitReg, splitList, NULL);
+            gnc_split_register_load (splitReg, splitList, NULL, NULL);
         } /* otherwise, use the existing stuff. */
         g_list_free (splitList);
     }
