@@ -99,7 +99,7 @@ typedef struct AccountPrivate
      * hierarchy, of accounts that have sub-accounts ("detail accounts").
      */
     Account *parent;    /* back-pointer to parent */
-    GList *children;    /* list of sub-accounts */
+    std::vector<Account*> children;    /* list of sub-accounts */
 
     /* protected data - should only be set by backends */
     gnc_numeric starting_balance;

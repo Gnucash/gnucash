@@ -1687,8 +1687,6 @@ typedef enum
     const char * dxaccAccountGetQuoteTZ (const Account *account);
     /** @} */
 
-    GList * gnc_accounts_and_all_descendants (GList *accounts);
-
     /** @name Account parameter names
      @{
     */
