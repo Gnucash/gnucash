@@ -12,10 +12,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-06-23 23:09+0000\n"
+"PO-Revision-Date: 2024-06-27 07:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -19865,10 +19865,8 @@ msgid "Unknown OFX investment account"
 msgstr "Ismeretlen OFX befektetési számla"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1308
-#, fuzzy
-#| msgid "Finding duplicate transactions"
 msgid "Removing duplicate transactions…"
-msgstr "Duplikált tranzakciók keresése"
+msgstr "Duplikált tranzakciók eltávolítása…"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1362
 #, c-format
@@ -26957,20 +26955,16 @@ msgid "Transaction Breakdown Report"
 msgstr "Tranzakciókimutatás"
 
 #: gnucash/report/reports/standard/txn-columns.scm:37
-#, fuzzy
-#| msgid "Number of columns"
 msgid "Limit for number of columns"
-msgstr "Oszlopok száma"
+msgstr "Az oszlopok számának korlátozása"
 
 #: gnucash/report/reports/standard/txn-columns.scm:38
 msgid "Set the upper limit for number of columns"
 msgstr ""
 
 #: gnucash/report/reports/standard/txn-columns.scm:154
-#, fuzzy
-#| msgid "Income summary accounts"
 msgid "Too many accounts"
-msgstr "Bevétel összesítő számlái"
+msgstr "Túl sok a számla"
 
 #: gnucash/report/reports/standard/txn-columns.scm:155
 msgid ""
