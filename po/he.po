@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-06-26 08:09+0000\n"
+"PO-Revision-Date: 2024-06-28 17:09+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Poedit-Basepath: .\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -1769,13 +1769,16 @@ msgid ""
 "and therefore capital gains, of transactions dated after the new entry. "
 "Please review all transactions to ensure proper recording."
 msgstr ""
+"תוזן תנועה עם תאריך %s מוקדם מהתנועה האחרונה בחשבון זה, מתאריך %s. פעולה זו "
+"עשויה להשפיע על בסיס העלות, ולכן רווחי ההון, של תנועות שמתוארכות לאחר הרשומה "
+"החדשה. נא לבדוק את כל התנועות כדי להבטיח רישום נאות."
 
 #. Translators: %s refer to: stock mnemonic, broker currency,
 #. date of transaction.
 #: gnucash/gnome/assistant-stock-transaction.cpp:1341
 #, c-format
 msgid "A price of 1 %s = %s on %s will be recorded."
-msgstr ""
+msgstr "מחיר של 1 %s = %s ב־%s יירשם."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1411
 #, c-format
@@ -1785,7 +1788,7 @@ msgstr "לא ניתן לאזן תנועה, %s הוא ערך שגוי %s"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1417
 #, c-format
 msgid "Total Debits of %s does not balance with total Credits of %s."
-msgstr ""
+msgstr "סך החיובים של %s לא מתאזן עם סך הזיכויים של %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1922
 msgid "Ne_w Balance"
@@ -2852,7 +2855,7 @@ msgstr "רשומה זאת מקושרת להזמנה ותימחק גם כן!"
 
 #: gnucash/gnome/dialog-invoice.c:921
 msgid "Choose a different report template or Printable Invoice will be used"
-msgstr ""
+msgstr "בחירת תבנית דוח אחרת או שיעשה שימוש בחשבונית להדפסה"
 
 #: gnucash/gnome/dialog-invoice.c:1035 gnucash/gnome/dialog-invoice.c:3570
 #: gnucash/gnome/dialog-invoice.c:3604 gnucash/gnome/dialog-invoice.c:3638
@@ -3563,6 +3566,12 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
+"לתנועה זו יש פיצולים במספר חשבונות עסקיים:\n"
+"\n"
+"%s\n"
+"גנוקאש יכול לטפל רק בתנועות שנרשמות לחשבון בודד.\n"
+"\n"
+"נא לתקן זאת באופן ידני על ידי עריכת התנועה ישירות ולאחר מכן לנסות שוב."
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.cpp:201
@@ -3883,11 +3892,11 @@ msgstr[1] "אין תנועות מחזוריות לרישום עתה. (נוצרו
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1266
 msgid "Highlight a date first to sort by occurrence date."
-msgstr ""
+msgstr "נא לסמן תאריך תחילה כדי למיין לפי תאריך היקרות."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
 msgid "Highlight a schedule first to sort by schedule name."
-msgstr ""
+msgstr "נא לסמן זמנן תחילה כדי למיין לפי שם זמנן."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1379
 #: gnucash/gnome-search/dialog-search.c:1105
@@ -6279,11 +6288,11 @@ msgstr "נא לבחור סחורה."
 
 #: gnucash/gnome-utils/dialog-account.c:1039
 msgid "Balance limits must be different unless they are both zero."
-msgstr ""
+msgstr "מגבלות יתרה חייבות להיות שונות אלא אם שתיהן אפס."
 
 #: gnucash/gnome-utils/dialog-account.c:1046
 msgid "The lower balance limit must be less than the higher limit."
-msgstr ""
+msgstr "גבול יתרה תחתון חייב להיות נמוך מהגבול העליון."
 
 #: gnucash/gnome-utils/dialog-account.c:1102
 msgid "You must enter a valid opening balance or leave it blank."
@@ -6542,13 +6551,13 @@ msgstr "כל הקבצים"
 #. be translated
 #: gnucash/gnome-utils/dialog-file-access.c:366
 msgid "Datafiles only (*.gnucash, *.xac)"
-msgstr ""
+msgstr "קובצי נתונים בלבד (*.gnucash, *.xac)"
 
 #. Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
 #. patterns and must not be translated
 #: gnucash/gnome-utils/dialog-file-access.c:376
 msgid "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
-msgstr ""
+msgstr "קובצי גיבוי בלבד (*.gnucash.*.gnucash, *.xac.*.xac)"
 
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
