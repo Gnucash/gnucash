@@ -1,5 +1,101 @@
 Version history:
 ------- -------
+5.7  - 20 June 2024
+The following bugs have been fixed:
+
+
+    Bug 669031 - Save the Scheduled Transactions number of months
+    Bug 669035 - Save the Scheduled Transaction divider position
+    Bug 798822 - Move to blank transaction
+    Bug 799047 - AutoComplete Only Considers Visible Transactions
+    Bug 799258 - Reports calculating net worth incorrectly after stock split
+    Bug 799262 - Failed import QIF investment
+    Bug 799264 - option account selector fails to include appropriate hidden accounts.
+    Bug 799268 - Cannot write a check over $1000
+    Bug 799272 - Crashes when pasting a copied transaction
+    Bug 799279 - Import Matcher (CSV) does not compute correctly the share amount based
+                 on security price
+    Bug 799281 - Deleting a transaction may trigger a crash
+    Bug 799290 - Invoice register context menu issue
+    Bug 799298 - Shortcut Ctrl-G does not work in the General Journal register for the
+                 default date value
+    Bug 799300 - Nullpointer exception in gnc_quote_source_s
+    Bug 799305 - Crash when there is more than one unknown quote source for commodities
+    Bug 799309 - Import Multi-split CSV can duplicate 'Notes' field from one transaction to next
+    Bug 799320 - GNUCash Immediately Exits on Startup
+    Bug 799324 - Invalid free in gvalue_from_kvp_value()
+    Bug 799334 - GnuCash re-opens to incorrect account window if there are transient tabs
+                 present when closed.
+    Bug 799336 - Stock Assistant closes with its New Account dialog
+    Bug 799339 - RFE: Add Document Link for Payments to Owner Report
+
+Other repairs or enhancements not marked as bugs:
+
+
+    New Report: Exprimental>Transaction Breakdown Report
+
+        Retrieves transactions from an account, distributes the splits into accounts
+        - note if a transaction has 2 or more splits into 1 account, the transaction
+          account cell will show the sum of the 2 splits
+        - note if a transaction's currency is different from the account's currency,
+          both amounts will be shown into the appropriate currency.
+        [txn-columns] multilevel sorting - type then name.
+    Add ability for the dense calendar to start from any week day.
+    In the dense calendar, add a default number of months per column entry to the view
+        model to get a better layout when the function gnc_dense_cal_set_num_months is
+        solely used.
+    Add today indication on the dense calendar
+    Updated the Quote Sources list in the Security Editor to match F::Q v1.59
+    Import Matcher - select row if none is selected yet when right-clicking the
+        list of matches
+    Change the default visible period for General Ledger from 1 calendar month to 30 days.
+    Fix Failing SRFI-64 tests being reported as pass by ctest with guile-3.
+    Ensure that filters are re-applied to multi-account registers when the number of
+        included sub-accounts changes.
+    Copy the latest price when creating a new entry in the Price Editor from a
+        commodity selection
+    New function gnc_account_foreach_until_date uses binary search to find first split
+        after date, then for_each from earliest split to (but excluding) that split.
+    New function gnc_reports_foreach to abstract GHashTable-base implementation.
+    Cleanup - remove deprecated function (re-)defines that were deprected 11 years ago.
+    [engine.i] move gnc_accounts_and_all_descendants to engine.i
+    [Account.cpp] Convert children from GList to std::vector.
+    [html-utilities.scm] show acct full names in gnc:html-render-options-changed
+    [ifrs-cost-basis.scm] amend truth table as per bug 797796 comment 241 further
+        amendments to match updated truth table.
+    Clean up some obsolete tools and references to non-git VCS's
+    Rework version-info rules to allow building from github downloaded zip archives
+    Remove account splits in reverse crono order, speeds up book shutdown.
+    Move libgnucash/doc/xml to libgnucash/backend/xml/DTD
+    Remove libgnucash/docs, ensuring all of the content is available either in Doxygen
+        comments or in the Wiki.
+    Remove XCode info from HACKING, obsolete. Move valgrind/callgrind instructions to
+        the Wiki.
+    Move doxygen target and related files to toplevel. Note: this also means the target
+        directory changes from libgnucash/docs/html to [toplevel]/doxygen/html and the
+        main page is specified directly in doxygen.cfg.
+    Drop old migration script to split qof from engine
+    Update doxygen.cfg file to more recent release
+    Doxygen - Clean up obsolete files and comments.
+    [gnc-ofx-import.cpp] show message while deduplicating download
+    Replace more GLib containers with C++ containers.
+    Change python install path to be compatible with distro installations.
+    Update some C++ template override signatures to be C++20 compliant.
+    [gnc-log-replay.cpp] don't set import to DEBUG because it'll spew too many debug
+        messages when gnc-log-replay completes.
+    Fix transaction report sorting/show-account-description and display.
+    [test-commodity-utils.scm] don't test TZ-sensitive datetimes
+    [engine.i] gnc_get_match_commodity_splits from scheme to c++ for better efficiency.
+    [utest-Account] add more balance limit tests
+    Convert more C files to C++
+    Fix more memory leaks and use-after-frees.
+    [Transaction|Split.cpp] Remove Reg2 unused functions
+
+New and Updated Translations: Arabic, Croatian, Dutch, English (Australia),
+    English (New Zealand), English (United Kingdom), French, German, Hebrew, Hungarian,
+    Italian, Japanese, Macedonian, Norwegian Bokmål, Polish, Portuguese (Brazil), Slovak,
+    Tamil, Turkish, Urdu
+
 5.6  - 31 March 2024
 The following bugs have been fixed:
 
