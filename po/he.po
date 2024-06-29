@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-06-29 13:09+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2024-06-29 15:09+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -3916,6 +3916,7 @@ msgid "Highlight a date first to sort by occurrence date."
 msgstr "נא לסמן תאריך תחילה כדי למיין לפי תאריך היקרות."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
+#, fuzzy
 msgid "Highlight a schedule first to sort by schedule name."
 msgstr "נא לסמן זמנן תחילה כדי למיין לפי שם זמנן."
 
@@ -6563,13 +6564,13 @@ msgstr "כל הקבצים"
 #. be translated
 #: gnucash/gnome-utils/dialog-file-access.c:366
 msgid "Datafiles only (*.gnucash, *.xac)"
-msgstr "קובצי נתונים בלבד (*.gnucash, *.xac)"
+msgstr "קובצי נתונים בלבד (‎*.gnucash,‏ ‎*.xac)"
 
 #. Translators: *.gnucash.*.gnucash, *.xac.*.xac are file
 #. patterns and must not be translated
 #: gnucash/gnome-utils/dialog-file-access.c:376
 msgid "Backups only (*.gnucash.*.gnucash, *.xac.*.xac)"
-msgstr "קובצי גיבוי בלבד (*.gnucash.*.gnucash, *.xac.*.xac)"
+msgstr "קובצי גיבוי בלבד (‎*.gnucash.*.gnucash,‏ ‎*.xac.*.xac)"
 
 #: gnucash/gnome-utils/dialog-options.cpp:114
 #: gnucash/gtkbuilder/dialog-billterms.glade:731
@@ -27899,7 +27900,7 @@ msgstr "שיצוב מצב כל הודעות האזהרה כך שההודעות �
 #: gnucash/ui/gnc-plugin-page-register.ui:357
 #: gnucash/ui/gnc-plugin-page-register.ui:469
 msgid "Re_name Page"
-msgstr "שנ_וי שם עמוד"
+msgstr "שינ_וי שם עמוד"
 
 #: gnucash/ui/gnc-main-window.ui:351
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:202
