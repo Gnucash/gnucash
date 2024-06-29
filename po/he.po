@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-06-28 17:09+0000\n"
+"PO-Revision-Date: 2024-06-29 11:09+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -964,7 +964,7 @@ msgid ""
 "not necessary to restart GnuCash."
 msgstr ""
 "עבודה בלילה דורשת את סגירת ופתיחת יומני העבודה מחדש, לעדכון תאריך ברירת "
-"המחדל לתנועות החדשות. אין צורך להפעיל את גנוקאש מחדש."
+"המחדל לתנועות החדשות. אין צורך לשתחל את גנוקאש."
 
 #: doc/tip_of_the_day.list.c:121
 msgid ""
@@ -1362,7 +1362,7 @@ msgstr "פתיחת רכישה"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:161
 msgid "Initial stock long purchase."
-msgstr ""
+msgstr "רכישת מניות תקנית (לונג) ראשונית."
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
@@ -1372,7 +1372,7 @@ msgstr "פתיחת טווח קצר"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:172
 msgid "Initial stock short sale."
-msgstr ""
+msgstr "מכירת מניות בחסר (שורט) ראשונית."
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
@@ -1392,7 +1392,7 @@ msgstr "קניה"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:187
 msgid "Buying stock long."
-msgstr ""
+msgstr "רכישת מניות תקנית (לונג)."
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
@@ -1417,6 +1417,10 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"מכירת מניות (לונג), ורישום רווח/הפסד הון.\n"
+"\n"
+"אם קיים קושי בחישוב רווחי הון ניתן להזין סכום כשומר מקום ולתקן אותו בעת "
+"רישום התנועה מאוחר יותר."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1477,12 +1481,14 @@ msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"חברה מנפיקה חלוקה רעיונית, שנרשמת כהכנסה מדיבידנד ומגדילה את בסיס העלות מבלי "
+"להשפיע על מספר היחידות."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:258
 msgid "Notional distribution (capital gain)"
-msgstr ""
+msgstr "חלוקה רעיונית (רווח הון)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:259
 msgid ""
@@ -1609,13 +1615,17 @@ msgid ""
 "previously recorded as a compensatory dividend is reclassified to "
 "compensatory return of capital,often due to end-of-year tax information."
 msgstr ""
+"חברה מחזירה הון, ועל בעל המניות בחסר לשלם תשלום פיצוי עבור ההון המוחזר. מה "
+"שמקטין את בסיס העלות (פחות שלילי, לכיוון 0.00) מבלי להשפיע על מספר היחידות. "
+"חלוקה שנרשמה בעבר כדיבידנד מפצה מסווגת מחדש להחזר הון מפצה, לעתים קרובות עקב "
+"מידע מיסוי בסוף שנה."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:367
 msgid "Compensatory notional distribution (dividend)"
-msgstr ""
+msgstr "חלוקה רעיונית מפצה (דיבידנד)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:368
 msgid ""
@@ -1624,13 +1634,16 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
+"חברה מנפיקה חלוקה רעיונית, ועל בעל המניות בחסר לשלם תשלום פיצוי עבור החלוקה "
+"הרעיונית. מה שנרשם כסכום הפסד/הכנסה שלילית מדיבידנד, ומגדילה את בסיס העלות ("
+"שלילי יותר, מרחק מערך 0.00) מבלי להשפיע על מספר היחידות."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:382
 msgid "Compensatory notional distribution (capital gain)"
-msgstr ""
+msgstr "חלוקה רעיונית מפצה (דיבידנד)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:383
 msgid ""
@@ -1639,6 +1652,9 @@ msgid ""
 "capital loss amount, and increases the cost basis (more negative, away from "
 "0.00 value) without affecting # units."
 msgstr ""
+"החברה מנפיקה חלוקה רעיונית, ועל בעל המניות בחסר לשלם פיצוי עבור החלוקה "
+"הרעיונית. יירשם כסכום הפסד הון, ומגדיל את בסיס העלות (שלילי יותר, מתרחק מערך "
+"0.00) מבלי להשפיע על מספר היחידות."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:397
 msgid ""
@@ -1650,6 +1666,11 @@ msgid ""
 "the cover buy using the Stock Transaction Assistant first, then record the "
 "split."
 msgstr ""
+"חברה מנפיקה יחידות נוספות, ובכך מפחיתה את מחיר המניה על ידי מחלק, תוך שמירה "
+"על הערך הכספי הכולל של ההשקעה הכוללת, קבועה.\n"
+"\n"
+"אם תוצאת הפיצול תניב מזומנים בתורה לשארית היחידות, נא רשום תחילה את קניית "
+"הכיסוי באמצעות סייען תנועות מניה, ולאחר מכן לרשום את הפיצול."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:411
 msgid ""
@@ -1660,10 +1681,15 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"חברה פודה יחידות, ובכך מגדילה את מחיר המניה במכפיל, תוך שמירה על הערך הכספי "
+"הכולל של ההשקעה הכוללת, קבועה.\n"
+"\n"
+"אם איחוד המניות מניב תשלום מזומנים במקום שארית יחידות, נא לרשום תחילה את "
+"קניית הכיסוי באמצעות סייען תנועות מניה, ולאחר מכן לרשום את האיחוד."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:503
 msgid "No errors found. Click Apply to create transaction."
-msgstr ""
+msgstr "לא נמצאו שגיאות נא להקיש על 'החלה' ליצירת תנועה."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:508
 msgid "The following errors must be fixed:"
@@ -1683,19 +1709,19 @@ msgstr "חסר"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1044
 #, c-format
 msgid "Amount for %s is missing."
-msgstr ""
+msgstr "חסר סכום עבור %s."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:699
 #: gnucash/gnome/assistant-stock-transaction.cpp:1049
 #, c-format
 msgid "Amount for %s must not be negative."
-msgstr ""
+msgstr "סכום עבור %s לא יכול להיות שלילי."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:702
 #: gnucash/gnome/assistant-stock-transaction.cpp:1052
 #, c-format
 msgid "Amount for %s must be positive."
-msgstr ""
+msgstr "סכום עבור %s חייב להיות חיובי."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:705
 #: gnucash/gnome/assistant-stock-transaction.cpp:1055
@@ -1718,7 +1744,7 @@ msgstr "יתרת מניות חדשה לא תקינה."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:877
 msgid "New balance must be higher than old balance."
-msgstr ""
+msgstr "יתרה חדשה חייבת להיות גבוהה מהיתרה הישנה."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:879
 msgid "New balance must be lower than old balance."
@@ -1734,7 +1760,7 @@ msgstr "לא ניתן למכור יותר יחידות ממה שקיים."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:892
 msgid "Cannot cover buy more units than owed."
-msgstr ""
+msgstr "לא ניתן לכסות 'קניה' ביותר יחידות ממה שקיים."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1129
 msgctxt "Stock Assistant: Page name"
@@ -3947,8 +3973,8 @@ msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
-"זהירות: אם הוגדר סוג־אב TXF ולאחר מכן ישתנה ה'סוג ', יידרש לאפס באופן ידני "
-"סוגי־אב אלה, אחד בכל פעם"
+"זהירות: אם הוגדר סוג־אב TXF ולאחר מכן ה'סוג ' שונה, נדרש יהיה לשצב סוגי־אב "
+"אלה באופן ידני , אחד בכל פעם"
 
 #: gnucash/gnome/dialog-tax-info.c:1393
 msgid "Form"
@@ -4425,11 +4451,11 @@ msgstr "_שימוש בפריסת ברירת מחדל למסמכי לקוח"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:66
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
-msgstr "שימוש בפריסה נוכחית כברירת מחדל לחשבוניות לקוח והודעות זיכוי"
+msgstr "שימוש בעימוד נוכחי כברירת מחדל לחשבוניות לקוח והודעות זיכוי"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:208
 msgid "_Reset Default Layout for Customer Documents"
-msgstr "_איפוס לפריסת ברירת מחדל של מסמכי לקוח"
+msgstr "_שיצוב לפריסת ברירת מחדל של מסמכי לקוח"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:209
 #: gnucash/ui/gnc-plugin-page-invoice.ui:72
@@ -4437,7 +4463,7 @@ msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
-"איפוס פריסת ברירת מחדל לכל חשבוניות הלקוח והודעות הזיכוי לברירת המחדל "
+"שיצוב פריסת ברירת מחדל לכל חשבוניות הלקוח והודעות הזיכוי לברירת המחדל "
 "המובנית ועדכון העמוד הנוכחי בהתאם"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
@@ -4510,18 +4536,18 @@ msgstr "_שימוש בפריסת ברירת מחדל למסמכי ספק"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:232
 msgid "Use the current layout as default for all vendor bills and credit notes"
-msgstr "שימוש בפריסה נוכחית כברירת מחדל לכל חשבוניות הספק והודעות הזיכוי"
+msgstr "שימוש בעימוד נוכחי כברירת מחדל לכל חשבוניות הספק והודעות הזיכוי"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:233
 msgid "_Reset Default Layout for Vendor Documents"
-msgstr "_איפוס לפריסת ברירת מחדל של מסמכי ספק"
+msgstr "_שיצוב לפריסת ברירת מחדל של מסמכי ספק"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:234
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
-"איפוס פריסת ברירת מחדל לכל חשבוניות הספק והודעות הזיכוי לברירת המחדל המובנית "
+"שיצוב פריסת ברירת מחדל לכל חשבוניות הספק והודעות הזיכוי לברירת המחדל המובנית "
 "ועדכון העמוד הנוכחי בהתאם"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
@@ -4595,18 +4621,18 @@ msgstr "_שימוש בפריסת ברירת מחדל למסמכי עובד"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
-msgstr "שימוש בפריסה נוכחית כברירת מחדל לכל שוברי העובד והודעות הזיכוי"
+msgstr "שימוש בעימוד נוכחי כברירת מחדל לכל שוברי העובד והודעות הזיכוי"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 msgid "_Reset Default Layout for Employee Documents"
-msgstr "_איפוס לפריסת ברירת מחדל של מסמכי עובד"
+msgstr "_שיצוב לפריסת ברירת מחדל של מסמכי עובד"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:259
 msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
-"איפוס פריסת ברירת מחדל לכל שוברי העובד והודעות הזיכוי לברירת המחדל המובנית "
+"שיצוב פריסת ברירת מחדל לכל שוברי העובד והודעות הזיכוי לברירת המחדל המובנית "
 "ועדכון העמוד הנוכחי בהתאם"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
@@ -6596,11 +6622,11 @@ msgstr "_סגירה"
 
 #: gnucash/gnome-utils/dialog-options.cpp:306
 msgid "Reset defaults"
-msgstr "איפוס לברירת מחדל"
+msgstr "שיצוב לברירת מחדל"
 
 #: gnucash/gnome-utils/dialog-options.cpp:308
 msgid "Reset all values to their defaults."
-msgstr "איפוס כל הערכים לברירות המחדל."
+msgstr "שיצוב כל הערכים לברירות המחדל."
 
 #: gnucash/gnome-utils/dialog-options.cpp:560
 msgid "Page"
@@ -6782,7 +6808,7 @@ msgstr "סכום ל"
 msgid ""
 "The entered date is out of the range 01/01/1400 - 31/12/9999, resetting to "
 "this year"
-msgstr "התאריך שהוזן נמצא מחוץ לטווח 01/01/1400־31/12/9999, איפוס לשנה השוטפת"
+msgstr "התאריך שהוזן נמצא מחוץ לטווח 01/01/1400־31/12/9999, שיצוב לשנה השוטפת"
 
 #: gnucash/gnome-utils/dialog-utils.c:437
 msgid "Date out of range"
@@ -6818,7 +6844,7 @@ msgstr "הצגת חשבונות מוסתרים"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:700
 msgid "Set the visibility of placeholder and hidden accounts."
-msgstr ""
+msgstr "קביעת הנראות של שומרי מקום וחשבונות מוסתרים."
 
 #. Translators: This is a button label displayed in the account selector
 #. * control used in several dialogs. When pressed it opens the New Account
@@ -7297,6 +7323,8 @@ msgid ""
 "longer depends on the Reverse Balanced Accounts preference. Please review "
 "the budgets and amend signs if necessary."
 msgstr ""
+"לספר זה קיימים תקציבים. הייצוג הפנימי של סכומי תקציב אינו תלוי עוד בהעדפת "
+"חשבונות נגדיים מאוזנים. נא לסקור את התקציבים ולתקן סימנים (-+) במידת הצורך."
 
 #: gnucash/gnome-utils/gnc-file.c:754
 msgid "The following are noted in this file:"
@@ -10886,7 +10914,7 @@ msgstr "שימוש בשערים"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:80
 msgid "Simple Layout"
-msgstr "פריסה פשוטה"
+msgstr "עימוד פשוט"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:230
 msgid "Choose Export Settings"
@@ -13049,7 +13077,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-account.glade:1636
 msgid "_Higher Balance Limit"
-msgstr ""
+msgstr "_מגבלת יתרה גבוהה יותר"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1649
 msgid ""
@@ -13062,6 +13090,14 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"אם קיים ערך, ניתן להציג הוריה בתרשים החשבונות כאשר היתרה של 'היום' גבוהה "
+"מערך זה.\n"
+"\n"
+"כְּלוֹמַר\n"
+"יוצג סמל ליד היתרה של היום שעומדת על 90- אם הוגדרה מגבלה על סך 100-\n"
+"יוצג סמל ליד היתרה של היום שעומדת על 100 אם הוגדרה מגבלה על סך 90\n"
+"\n"
+"יש לנקות את הערך כדי שלא תופיה אזהרה."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1670
 msgid ""
@@ -13074,6 +13110,14 @@ msgid ""
 "\n"
 "Clear the entry to have no warning."
 msgstr ""
+"אם קיים ערך, ניתן להציג הוריה בתרשים החשבונות כאשר היתרה של 'היום' נמוכה "
+"מערך זה.\n"
+"\n"
+"כְּלוֹמַר\n"
+"יוצג סמל ליד היתרה של היום שעומדת על 100- אם הוגדרה מגבלה על סך 90-\n"
+"יוצג סמל ליד היתרה של היום שעומדת על 90 אם הוגדרה מגבלה על סך 100\n"
+"\n"
+"יש לנקות את הערך כדי שלא תופיה אזהרה."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1692
 #, fuzzy
@@ -14396,7 +14440,7 @@ msgstr "לא, להשאיר אותם כמו שהם"
 
 #: gnucash/gtkbuilder/dialog-invoice.glade:1450
 msgid "Reset Tax Tables to present Values?"
-msgstr "איפוס טבלאות מס לערכים נוכחיים?"
+msgstr "שיצוב טבלאות מס לערכים נוכחיים?"
 
 #: gnucash/gtkbuilder/dialog-job.glade:7
 msgid "Job Dialog"
@@ -14666,7 +14710,7 @@ msgstr "מקומי"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:140
 msgid "_Reset"
-msgstr "_איפוס"
+msgstr "_שיצוב"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:185
 #: gnucash/gtkbuilder/dialog-preferences.glade:599
@@ -14679,7 +14723,7 @@ msgid ""
 "window\n"
 "Press 'Close' to return to the preference window\n"
 msgstr ""
-"לחיצה על 'איפוס' על מנת להשתמש במפריד החשבון המקורי וסגירת חלון ההעדפות\n"
+"לחיצה על 'שיצוב' על מנת להשתמש במפריד החשבון המקורי וסגירת חלון ההעדפות\n"
 "לחיצה על 'סגירה' כדי לחזרה לחלון ההעדפות\n"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:254
@@ -15321,7 +15365,7 @@ msgstr "הצגת קווי סבכה אנכיים בתאים."
 #: gnucash/report/reports/standard/invoice.scm:543
 #: gnucash/report/reports/standard/invoice.scm:549
 msgid "Layout"
-msgstr "פריסה"
+msgstr "עימוד"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2765
 #, fuzzy
@@ -15957,7 +16001,7 @@ msgstr "_מבנה"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:8
 msgid "Reset Warnings"
-msgstr "איפוס אזהרות"
+msgstr "שיצוב אזהרות"
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:86
 msgid ""
@@ -17783,6 +17827,8 @@ msgid ""
 "profile list contains specializations and is populated according to which "
 "format you select in this list."
 msgstr ""
+"רשימה זו מכילה את תסדירי הקבצים ש־AQBanking יודעת לייבא. רשימת הפרופילים "
+"מכילה פירוט ותתאכלס לפי התסדיר שיבחר מרשימה זו."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1733
 #, fuzzy
@@ -23288,7 +23334,7 @@ msgstr "הערות בתחתית החשבונית -- עשוי להכיל תווי
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:219
 msgid "Adjust the layout to fit the width of the screen or page"
-msgstr "התאמת הפריסה לרוחב המסך או העמוד"
+msgstr "התאמת העימוד לרוחב המסך או העמוד"
 
 #: gnucash/report/reports/standard/balsheet-eg.scm:220
 msgid "Display liabilities and equity below assets"
@@ -28105,13 +28151,13 @@ msgstr "_פעולות"
 #, fuzzy
 #| msgid "Reset Warnings"
 msgid "Reset _Warnings…"
-msgstr "איפוס אזהרות"
+msgstr "שיצוב אזהרות"
 
 #: gnucash/ui/gnc-main-window.ui:346
 #, fuzzy
 #| msgid "Reset the state of all warning messages so they will be shown again."
 msgid "Reset the state of all warning messages so they will be shown again"
-msgstr "איפוס מצב כל הודעות האזהרה כך שההודעות יוצגו שוב."
+msgstr "שיצוב מצב כל הודעות האזהרה כך שההודעות יוצגו שוב."
 
 #: gnucash/ui/gnc-main-window.ui:349
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:200
