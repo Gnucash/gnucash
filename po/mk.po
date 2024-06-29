@@ -3,23 +3,23 @@
 # This file is distributed under the same license as the GnuCash package.
 # Automatically generated, 2022.
 #
-# Vesna Micajkova <vmicajkova@institutpraktikum.mk>, 2022, 2023.
+# Vesna Micajkova <vmicajkova@institutpraktikum.mk>, 2022, 2023, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.7 \n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.7\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2023-03-04 14:39+0000\n"
+"PO-Revision-Date: 2024-06-29 15:09+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
-"program-beta/mk/>\n"
+"gnucash/mk/>\n"
 "Language: mk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n==1 || n%10==1 ? 0 : 1;\n"
-"X-Generator: Weblate 4.16.2-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -35,7 +35,7 @@ msgstr ""
 #: gnucash/report/reports/standard/price-scatter.scm:186
 #, scheme-format
 msgid "~a to ~a"
-msgstr ""
+msgstr "~a до ~a"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -43,173 +43,179 @@ msgid ""
 "Tried to look up an undefined date symbol '~a'. This report was probably "
 "saved by a later version of GnuCash. Defaulting to today."
 msgstr ""
+"Се обидов да побарам недефиниран симбол за датум „~a“. Овој извештај "
+"веројатно е зачуван од подоцнежна верзија на GnuCash. Стандардно до денес."
 
 #: bindings/guile/date-utilities.scm:715
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: libgnucash/engine/gnc-option-date.cpp:263
 msgid "Start of this year"
-msgstr ""
+msgstr "Почеток на годината"
 
 #: bindings/guile/date-utilities.scm:718
 #: libgnucash/engine/gnc-option-date.cpp:264
 msgid "First day of the current calendar year."
-msgstr ""
+msgstr "Првиот ден од тековната календарска година."
 
 #: bindings/guile/date-utilities.scm:722
 #: gnucash/gnome-utils/gnc-period-select.c:86
 #: libgnucash/engine/gnc-option-date.cpp:271
 msgid "End of this year"
-msgstr ""
+msgstr "Крај на оваа година"
 
 #: bindings/guile/date-utilities.scm:725
 #: libgnucash/engine/gnc-option-date.cpp:272
 msgid "Last day of the current calendar year."
-msgstr ""
+msgstr "Последен ден од тековната календарска година."
 
 #: bindings/guile/date-utilities.scm:729
 #: gnucash/gnome-utils/gnc-period-select.c:71
 #: libgnucash/engine/gnc-option-date.cpp:279
 msgid "Start of previous year"
-msgstr ""
+msgstr "Почеток на претходната година"
 
 #: bindings/guile/date-utilities.scm:732
 #: libgnucash/engine/gnc-option-date.cpp:280
 msgid "First day of the previous calendar year."
-msgstr ""
+msgstr "Првиот ден од претходната календарска година."
 
 #: bindings/guile/date-utilities.scm:736
 #: gnucash/gnome-utils/gnc-period-select.c:87
 #: libgnucash/engine/gnc-option-date.cpp:287
 msgid "End of previous year"
-msgstr ""
+msgstr "Крај на претходната година"
 
 #: bindings/guile/date-utilities.scm:739
 #: libgnucash/engine/gnc-option-date.cpp:288
 msgid "Last day of the previous calendar year."
-msgstr ""
+msgstr "Последен ден од претходната календарска година."
 
 #: bindings/guile/date-utilities.scm:743
 #: libgnucash/engine/gnc-option-date.cpp:311
 msgid "Start of accounting period"
-msgstr ""
+msgstr "Почеток на пресметковниот период"
 
 #: bindings/guile/date-utilities.scm:746
 #: libgnucash/engine/gnc-option-date.cpp:312
 msgid "First day of the accounting period, as set in the global preferences."
 msgstr ""
+"Прв ден од пресметковниот период, како што е поставено во глобалните "
+"преференции."
 
 #: bindings/guile/date-utilities.scm:750
 #: libgnucash/engine/gnc-option-date.cpp:319
 msgid "End of accounting period"
-msgstr ""
+msgstr "Крај на пресметковниот период"
 
 #: bindings/guile/date-utilities.scm:753
 #: libgnucash/engine/gnc-option-date.cpp:320
 msgid "Last day of the accounting period, as set in the global preferences."
 msgstr ""
+"Последен ден од пресметковниот период, како што е поставено во глобалните "
+"преференции."
 
 #: bindings/guile/date-utilities.scm:757
 #: gnucash/gnome-utils/gnc-period-select.c:66
 #: libgnucash/engine/gnc-option-date.cpp:167
 msgid "Start of this month"
-msgstr ""
+msgstr "Почеток на овој месец"
 
 #: bindings/guile/date-utilities.scm:760
 #: libgnucash/engine/gnc-option-date.cpp:168
 msgid "First day of the current month."
-msgstr ""
+msgstr "Првиот ден од тековниот месец."
 
 #: bindings/guile/date-utilities.scm:764
 #: gnucash/gnome-utils/gnc-period-select.c:82
 #: libgnucash/engine/gnc-option-date.cpp:175
 msgid "End of this month"
-msgstr ""
+msgstr "Крај на овој месец"
 
 #: bindings/guile/date-utilities.scm:767
 #: libgnucash/engine/gnc-option-date.cpp:176
 msgid "Last day of the current month."
-msgstr ""
+msgstr "Последен ден од тековниот месец."
 
 #: bindings/guile/date-utilities.scm:771
 #: gnucash/gnome-utils/gnc-period-select.c:67
 #: libgnucash/engine/gnc-option-date.cpp:183
 msgid "Start of previous month"
-msgstr ""
+msgstr "Почеток на претходниот месец"
 
 #: bindings/guile/date-utilities.scm:774
 #: libgnucash/engine/gnc-option-date.cpp:184
 msgid "First day of the previous month."
-msgstr ""
+msgstr "Првиот ден од претходниот месец."
 
 #: bindings/guile/date-utilities.scm:778
 #: gnucash/gnome-utils/gnc-period-select.c:83
 #: libgnucash/engine/gnc-option-date.cpp:191
 msgid "End of previous month"
-msgstr ""
+msgstr "Крај на претходниот месец"
 
 #: bindings/guile/date-utilities.scm:781
 #: libgnucash/engine/gnc-option-date.cpp:192
 msgid "Last day of previous month."
-msgstr ""
+msgstr "Последен ден од претходниот месец."
 
 #: bindings/guile/date-utilities.scm:785
 #: libgnucash/engine/gnc-option-date.cpp:215
 msgid "Start of current quarter"
-msgstr ""
+msgstr "Почеток на тековниот квартал"
 
 #: bindings/guile/date-utilities.scm:788
 #: libgnucash/engine/gnc-option-date.cpp:216
 msgid "First day of the current quarterly accounting period."
-msgstr ""
+msgstr "Прв ден од тековниот квартален пресметковен период."
 
 #: bindings/guile/date-utilities.scm:792
 #: libgnucash/engine/gnc-option-date.cpp:223
 msgid "End of current quarter"
-msgstr ""
+msgstr "Крај на тековниот квартал"
 
 #: bindings/guile/date-utilities.scm:795
 #: libgnucash/engine/gnc-option-date.cpp:224
 msgid "Last day of the current quarterly accounting period."
-msgstr ""
+msgstr "Последен ден од тековниот квартален пресметковен период."
 
 #: bindings/guile/date-utilities.scm:799
 #: gnucash/gnome-utils/gnc-period-select.c:69
 #: libgnucash/engine/gnc-option-date.cpp:231
 msgid "Start of previous quarter"
-msgstr ""
+msgstr "Почеток на претходниот квартал"
 
 #: bindings/guile/date-utilities.scm:802
 #: libgnucash/engine/gnc-option-date.cpp:232
 msgid "First day of the previous quarterly accounting period."
-msgstr ""
+msgstr "Прв ден од претходниот квартален пресметковен период."
 
 #: bindings/guile/date-utilities.scm:806
 #: gnucash/gnome-utils/gnc-period-select.c:85
 #: libgnucash/engine/gnc-option-date.cpp:239
 msgid "End of previous quarter"
-msgstr ""
+msgstr "Крај на претходниот квартал"
 
 #: bindings/guile/date-utilities.scm:809
 #: libgnucash/engine/gnc-option-date.cpp:240
 msgid "Last day of previous quarterly accounting period."
-msgstr ""
+msgstr "Последен ден од претходниот квартален пресметковен период."
 
 #: bindings/guile/date-utilities.scm:813
 #: gnucash/gnome-utils/gnc-period-select.c:65
 #: gnucash/gnome-utils/gnc-period-select.c:81
 #: libgnucash/engine/gnc-option-date.cpp:79
 msgid "Today"
-msgstr ""
+msgstr "Денес"
 
 #: bindings/guile/date-utilities.scm:815
 #: libgnucash/engine/gnc-option-date.cpp:80
 msgid "The current date."
-msgstr ""
+msgstr "Тековниот датум."
 
 #: bindings/guile/options.scm:388 gnucash/gnome/top-level.c:462
 #: libgnucash/engine/gnc-optiondb.cpp:1200 libgnucash/engine/qofbookslots.h:72
 msgid "Business"
-msgstr ""
+msgstr "Бизнис"
 
 #: bindings/guile/options.scm:389 gnucash/gnome/dialog-customer.c:892
 #: gnucash/gnome/dialog-invoice.c:3573 gnucash/gnome/dialog-invoice.c:3607
@@ -221,45 +227,45 @@ msgstr ""
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:149
 #: libgnucash/engine/gnc-optiondb.cpp:1300
 msgid "Company Name"
-msgstr ""
+msgstr "Име на претпријатието"
 
 #: bindings/guile/options.scm:390 libgnucash/engine/gnc-optiondb.cpp:1303
 msgid "Company Address"
-msgstr ""
+msgstr "Адреса на претпријатието"
 
 #: bindings/guile/options.scm:391 libgnucash/engine/gnc-optiondb.cpp:1326
 msgid "Company ID"
-msgstr ""
+msgstr "ИБ на претпријатието"
 
 #: bindings/guile/options.scm:392 libgnucash/engine/gnc-optiondb.cpp:1311
 msgid "Company Phone Number"
-msgstr ""
+msgstr "Телефонски број на претпријатието"
 
 #: bindings/guile/options.scm:393 libgnucash/engine/gnc-optiondb.cpp:1315
 msgid "Company Fax Number"
-msgstr ""
+msgstr "Факс број на претпријатието"
 
 #: bindings/guile/options.scm:394 libgnucash/engine/gnc-optiondb.cpp:1323
 msgid "Company Website URL"
-msgstr ""
+msgstr "Веб страница на претријатието"
 
 #: bindings/guile/options.scm:395 libgnucash/engine/gnc-optiondb.cpp:1319
 msgid "Company Email Address"
-msgstr ""
+msgstr "Email адреса на претпријатието"
 
 #: bindings/guile/options.scm:396 libgnucash/engine/gnc-optiondb.cpp:1307
 msgid "Company Contact Person"
-msgstr ""
+msgstr "Контакт лице на претпријатието"
 
 #: bindings/guile/options.scm:397
 #: gnucash/gtkbuilder/dialog-preferences.glade:1021
 #: libgnucash/engine/gnc-optiondb.cpp:1347
 msgid "Fancy Date Format"
-msgstr ""
+msgstr "Фенси формат на датум"
 
 #: bindings/guile/options.scm:398
 msgid "custom"
-msgstr ""
+msgstr "прилагоден"
 
 #: bindings/guile/options.scm:399
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:122
@@ -267,11 +273,11 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:55
 #: libgnucash/engine/gnc-optiondb.cpp:1353
 msgid "Tax"
-msgstr ""
+msgstr "Данок"
 
 #: bindings/guile/options.scm:400 libgnucash/engine/gnc-optiondb.cpp:1353
 msgid "Tax Number"
-msgstr ""
+msgstr "Даночен број"
 
 #: borrowed/goffice/go-charmap-sel.c:70
 msgid "Arabic"
@@ -509,7 +515,7 @@ msgstr "Гурмукхи (MacGurmukhi)"
 
 #: borrowed/goffice/go-charmap-sel.c:174
 msgid "Hebrew (IBM-862)"
-msgstr "еврејски  (IBM-862)"
+msgstr "еврејски (IBM-862)"
 
 #: borrowed/goffice/go-charmap-sel.c:175
 msgid "Hebrew (ISO-8859-8-E)"
@@ -565,7 +571,7 @@ msgstr "корејски (UHC)"
 
 #: borrowed/goffice/go-charmap-sel.c:194
 msgid "Nordic (ISO-8859-10)"
-msgstr "нордиски  (ISO-8859-10)"
+msgstr "нордиски (ISO-8859-10)"
 
 #: borrowed/goffice/go-charmap-sel.c:195
 msgid "Romanian (MacRomanian)"
@@ -736,7 +742,7 @@ msgid ""
 "The full path is displayed in the status bar."
 msgstr ""
 "Ако сакате да знаете во кој директориум се сочувани вашите скорешни GnuCash "
-"датотеки, погледнете под елеметот ДАТОТЕКА од главното мени. \n"
+"датотеки, погледнете под елеметот ДАТОТЕКА од главното мени.\n"
 "Таму е забележена целата патека на датотеките."
 
 #: doc/tip_of_the_day.list.c:24
@@ -757,6 +763,9 @@ msgid ""
 "Just locate the triangle at the far right of the column headings, and click "
 "it to see the different columns available."
 msgstr ""
+"Можно е да се смени кои колони ќе се прикажуваат во Контниот план. Само "
+"лоцирајте го триаголникот на десната страна од насловите на колоните и "
+"кликнете на него за да ги видите различните достапни колони."
 
 #: doc/tip_of_the_day.list.c:33
 msgid ""
@@ -765,6 +774,10 @@ msgid ""
 "register, clicking the right mouse button brings up the transaction menu "
 "options."
 msgstr ""
+"Кликнете на десното копче на глувчето (контрола-кликнете во Mac OS X) во "
+"делот Сметки на главниот прозорец за да се појават опциите од менито за "
+"сметки. Во секој регистар, со кликнување на десното копче на глувчето се "
+"појавуваат опциите од менито за трансакции."
 
 #: doc/tip_of_the_day.list.c:38
 msgid ""
@@ -773,6 +786,11 @@ msgid ""
 "more information on choosing an account type or setting up a chart of "
 "accounts, please see the GnuCash online manual."
 msgstr ""
+"Креирајте нови сметки со кликнување на копчето Ново во лентата со алатки на "
+"главниот прозорец. Ова ќе појави дијалог-кутија каде што можете да внесете "
+"детали за сметката. За повеќе информации за избор на тип на сметка или за "
+"поставување на сметководствен план, погледнете го онлајн прирачникот за "
+"GnuCash."
 
 #: doc/tip_of_the_day.list.c:44
 msgid ""
@@ -783,6 +801,13 @@ msgid ""
 "select \"View\" in the menu bar and check \"Double Line\" or\n"
 "check \"Double Line View\" in Preferences:Register Defaults."
 msgstr ""
+"Секоја трансакција има поле „Забелешки“ каде што можете да ставите корисни "
+"информации.\n"
+"\n"
+"За да биде видливо\n"
+"изберете „Преглед“ во лентата со мени и проверете „Двојна линија“ или\n"
+"проверете „Преглед на двојна линија“ во Преференци: Регистрирајте ги "
+"стандардните."
 
 #: doc/tip_of_the_day.list.c:50
 msgid ""
@@ -791,6 +816,10 @@ msgid ""
 "View menu, you can choose the register style Auto-Split Ledger or "
 "Transaction Journal."
 msgstr ""
+"За да внесете трансакции со повеќекратна поделба, како што е плата со "
+"повеќекратни одбитоци, кликнете на копчето Сплит во лентата со алатки. "
+"Алтернативно, во менито Прикажи, можете да го изберете стилот на регистар "
+"Автоматско раздвојување на книгата или весник на трансакции."
 
 #: doc/tip_of_the_day.list.c:55
 msgid ""
@@ -799,6 +828,10 @@ msgid ""
 "'+', '-','*', or '/'. Type the second value and press Enter to record the "
 "calculated amount."
 msgstr ""
+"Додека внесувате износи во регистарот, можете да го користите калкулаторот "
+"GnuCash за собирање, одземање, множење и делење. Едноставно напишете ја "
+"првата вредност, а потоа изберете „+“, „-“, „*“ или „/“. Внесете ја втората "
+"вредност и притиснете Enter (Внеси) за да ја запишете пресметаната сума."
 
 #: doc/tip_of_the_day.list.c:60
 msgid ""
@@ -807,6 +840,10 @@ msgid ""
 "GnuCash will automatically complete the remainder of the transaction as it "
 "was last entered."
 msgstr ""
+"Брзото пополнување го олеснува внесувањето вообичаени трансакции. Кога ќе ги "
+"напишете првите букви(и) од описот на заедничка трансакција, потоа "
+"притиснете го копчето Tab, GnuCash автоматски ќе го заврши остатокот од "
+"трансакцијата како што е последен пат внесено."
 
 #: doc/tip_of_the_day.list.c:65
 msgid ""
@@ -816,6 +853,11 @@ msgid ""
 "followed by ':' and the first letter(s) of the subaccount (e.g. A:C for "
 "Assets:Cash)."
 msgstr ""
+"Внесете ја првата буква(и) од постоечкото име на сметката во колоната "
+"Регистар за трансфери и GnuCash ќе го комплетира името од вашата листа на "
+"сметки. За подсметки, напишете ја првата буква(и) од матичната сметка, "
+"проследена со „:“ и првата буква(и) од потсметка (на пр. С:П за "
+"Средства:ПаричниСредства)."
 
 #: doc/tip_of_the_day.list.c:71
 msgid ""
@@ -823,6 +865,9 @@ msgid ""
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
 msgstr ""
+"Сакате да ги видите сите трансакции на вашата подсметка во еден регистар? Од "
+"картичката Сметки во главниот прозорец, означете ја матичната сметка и "
+"изберете Уреди->Отвори подсметки од менито."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -830,12 +875,17 @@ msgid ""
 "selected date. You can use '+' and '-' to increment and decrement check "
 "numbers as well."
 msgstr ""
+"Кога внесувате датуми, можете да напишете „+“ или „-“ за да го зголемите или "
+"намалите избраниот датум. Можете да ги користите „+“ и „-“ и за да ги "
+"зголемувате и намалувате броевите за проверка."
 
 #: doc/tip_of_the_day.list.c:79
 msgid ""
 "To switch between multiple tabs in the main window, press Control+Page Up/"
 "Down."
 msgstr ""
+"За да се префрлате помеѓу повеќе јазичиња во главниот прозорец, притиснете "
+"Control+Page Up/Down."
 
 #: doc/tip_of_the_day.list.c:82
 msgid ""
@@ -843,6 +893,9 @@ msgid ""
 "reconciled. You can also press Tab and Shift-Tab to move between deposits "
 "and withdrawals."
 msgstr ""
+"Во прозорецот за усогласување, можете да притиснете на празно место за да ги "
+"означите трансакциите како усогласени. Можете исто така да притиснете Tab и "
+"Shift-Tab за да се движите помеѓу депозитите и повлекувањата."
 
 #: doc/tip_of_the_day.list.c:86
 msgid ""
@@ -851,6 +904,10 @@ msgid ""
 "Currency Transfer options for entering the exchange rate or the other "
 "currency's amount will be available."
 msgstr ""
+"За да префрлите средства помеѓу сметки со различни валути, кликнете на "
+"копчето Трансфер во лентата со алатки за регистрација, изберете ги сметките "
+"и ќе бидат достапни опциите за трансфер на валута за внесување на курсот или "
+"износот на другата валута."
 
 #: doc/tip_of_the_day.list.c:91
 msgid ""
@@ -859,6 +916,11 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
+"Може да го поставите екранот на Уредувачот за безбедност да го прикажува "
+"изворот на понуда на хартија од вредност, што го олеснува гледањето кои "
+"онлајн извори ги користат вашите хартии од вредност. Кликнете на "
+"триаголникот на крајната десница од насловите на колоните за да го промените "
+"приказот."
 
 #: doc/tip_of_the_day.list.c:96
 msgid ""
@@ -866,6 +928,9 @@ msgid ""
 "financial information you want at a glance. To do so, use the Sample & "
 "Custom->\"Custom Multicolumn Report\" report."
 msgstr ""
+"Можете да спакувате повеќе извештаи во еден прозорец, обезбедувајќи ги сите "
+"финансиски информации што ги сакате на прв поглед. За да го направите тоа, "
+"користете го извештајот Sample & Custom-> „Custom Multicolumn Report“."
 
 #: doc/tip_of_the_day.list.c:101
 msgid ""
@@ -873,12 +938,18 @@ msgid ""
 "report as a report option, and use the Edit->Style Sheets menu to customize "
 "style sheets."
 msgstr ""
+"Листовите со стилови влијаат на тоа како се прикажуваат извештаите. Изберете "
+"стилски лист за вашиот извештај како опција за извештај и користете го "
+"менито Уреди->Стилски листови за да ги приспособите листовите со стилови."
 
 #: doc/tip_of_the_day.list.c:105
 msgid ""
 "To raise the accounts menu in the transfer field of a register page, press "
 "the Menu key or the Ctrl-Down key combination."
 msgstr ""
+"За да го подигнете менито за сметки во полето за пренос на страница за "
+"регистрација, притиснете го копчето Мени или комбинацијата на копчиња Ctrl-"
+"Down."
 
 #: doc/tip_of_the_day.list.c:108
 msgid ""
@@ -893,6 +964,16 @@ msgid ""
 "To schedule a transaction every year you can choose the monthly basic "
 "frequency and then set 'Every 12 months'."
 msgstr ""
+"Уредникот за закажани трансакции доаѓа со многу флексибилен конфигуратор на "
+"фреквенција. Основните фреквенции за закажување трансакција вклучуваат "
+"дневни, неделни и месечни. Но, може да се постават и понапредни шеми. Некои "
+"примери:\n"
+"\n"
+"За да закажете трансакција на секои три недели, можете да ја изберете "
+"неделната основна фреквенција и потоа да поставите „На секои 3 недели“.\n"
+"\n"
+"За да закажете трансакција секоја година, можете да ја изберете месечната "
+"основна фреквенција и потоа да поставите „На секои 12 месеци“."
 
 #: doc/tip_of_the_day.list.c:117
 msgid ""
@@ -900,6 +981,9 @@ msgid ""
 "after midnight, to get the new date as default for new transactions. It is "
 "not necessary to restart GnuCash."
 msgstr ""
+"Ако работите преку ноќ, треба да ги затворите и повторно да ги отворите "
+"работните регистри по полноќ, за да го добиете новиот датум како стандарден "
+"за нови трансакции. Не е неопходно да се рестартира GnuCash."
 
 #: doc/tip_of_the_day.list.c:121
 msgid ""
@@ -907,6 +991,10 @@ msgid ""
 "the main accounts hierarchy page. To limit your search to a single account, "
 "start the search from that account's register."
 msgstr ""
+"За да пребарувате низ сите ваши трансакции, започнете пребарување "
+"(Уреди->Најди…) од главната страница за хиерархија на сметките. За да го "
+"ограничите вашето пребарување на една сметка, започнете го пребарувањето од "
+"регистарот на таа сметка."
 
 #: doc/tip_of_the_day.list.c:125
 msgid ""
@@ -914,12 +1002,17 @@ msgid ""
 "select Window->New Window with Page from the menu to duplicate that tab in a "
 "new window."
 msgstr ""
+"За визуелно да ја споредите содржината на 2 јазичиња на екранот, во едно од "
+"табовите, изберете Window->New Window with Page од менито за да го дуплирате "
+"табот во нов прозорец."
 
 #: doc/tip_of_the_day.list.c:129
 msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 msgstr ""
+"Можете да доделите или менувате кратенки на тастатурата за многу дејства на "
+"GnuCash. Видете https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 
 #: doc/tip_of_the_day.list.c:132
 msgid ""
@@ -930,10 +1023,16 @@ msgid ""
 "\n"
 "Douglas Adams, \"The Restaurant at the End of the Universe\""
 msgstr ""
+"Постои теорија дека ако некогаш некој открие за што служи Универзумот и "
+"зошто е тука, тој веднаш ќе исчезне и ќе биде заменет со нешто уште "
+"побизарно и необјасниво.\n"
+"Постои уште една теорија дека тоа веќе се случило.\n"
+"\n"
+"Даглас Адамс, „Ресторан на крајот на универзумот“"
 
 #: gnucash/gnome/assistant-acct-period.c:188
 msgid "The book was closed successfully."
-msgstr ""
+msgstr "Книгата беше успешно затворена."
 
 #. Translators: %s is a date string. %d is the number of books
 #. that will be created. This is a ngettext(3) message (but
@@ -947,7 +1046,11 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
+"Најраниот датум на трансакција пронајден во оваа книга е %s. Врз основа на "
+"изборот направен погоре, оваа книга ќе се подели на %d книга."
 msgstr[1] ""
+"Најраниот датум на трансакција пронајден во оваа книга е %s. Врз основа на "
+"изборот направен погоре, оваа книга ќе биде поделена на %d книги."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
@@ -960,11 +1063,16 @@ msgid ""
 "Amend the Title and Notes or Click on \"Next\" to proceed.\n"
 "Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
+"Побаравте да се создаде книга. Оваа книга ќе ги содржи сите трансакции до "
+"полноќ %s (за вкупно %d трансакции распоредени на %d сметки).\n"
+"\n"
+"Изменете го насловот и белешките или кликнете на „Следно“ за да продолжите.\n"
+"Кликнете на „Назад“ за да ги прилагодите датумите или „Откажи“."
 
 #: gnucash/gnome/assistant-acct-period.c:388
 #, c-format
 msgid "Period %s - %s"
-msgstr ""
+msgstr "Период %s - %s"
 
 #: gnucash/gnome/assistant-acct-period.c:406
 #, c-format
@@ -972,6 +1080,9 @@ msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
+"Книгата ќе биде креирана со наслов %s кога ќе кликнете на „Примени“. "
+"Кликнете на „Назад“ за да се приспособите или „Откажи“ за да не креирате "
+"книга."
 
 #: gnucash/gnome/assistant-acct-period.c:525
 #, c-format
@@ -979,6 +1090,8 @@ msgid ""
 "%s\n"
 "Congratulations! You are done closing books!\n"
 msgstr ""
+"%s\n"
+"Секоја чест! Завршивте со затворање книги!\n"
 
 #: gnucash/gnome/assistant-acct-period.c:594
 #: gnucash/gtkbuilder/dialog-fincalc.glade:650
@@ -986,62 +1099,62 @@ msgstr ""
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1205
 #: gnucash/report/reports/standard/budget-flow.scm:44
 msgid "Period"
-msgstr ""
+msgstr "Период"
 
 #: gnucash/gnome/assistant-acct-period.c:595
 #: gnucash/gtkbuilder/dialog-book-close.glade:86
 msgid "Closing Date"
-msgstr ""
+msgstr "Датум на затворање"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:760
 msgid "Selected"
-msgstr ""
+msgstr "Избрани"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:772
 #: gnucash/gnome-utils/gnc-tree-view-account.c:2337
 msgid "Account Types"
-msgstr ""
+msgstr "Видови на сметки"
 
 #. Translators: '%s' is the name of the selected account hierarchy template.
 #: gnucash/gnome/assistant-hierarchy.cpp:873
 #, c-format
 msgid "Accounts in '%s'"
-msgstr ""
+msgstr "Сметки во „%s“"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:881
 msgid "No description provided."
-msgstr ""
+msgstr "Не е обезбеден опис."
 
 #: gnucash/gnome/assistant-hierarchy.cpp:896
 msgid "Accounts in Category"
-msgstr ""
+msgstr "Сметки во категорија"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1108
 msgid "zero"
-msgstr ""
+msgstr "нула"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1121
 msgid "existing account"
-msgstr ""
+msgstr "постоечка сметка"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1259
 #: gnucash/gnome/business-gnome-utils.c:696
 msgid "Yes"
-msgstr ""
+msgstr "Да"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1262
 #: gnucash/gnome/business-gnome-utils.c:698
 #: gnucash/report/reports/standard/investment-lots.scm:265
 #: gnucash/report/reports/standard/investment-lots.scm:382
 msgid "No"
-msgstr ""
+msgstr "Не"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1339
 #: gnucash/gnome-utils/gnc-tree-view-account.c:987
 #: gnucash/gtkbuilder/dialog-account.glade:273
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:63
 msgid "Placeholder"
-msgstr ""
+msgstr "Главна сметка"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1356
 #: gnucash/gnome-utils/dialog-account.c:429
@@ -1049,77 +1162,77 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-account.glade:1945
 #: libgnucash/app-utils/gnc-ui-util.cpp:693
 msgid "Opening Balance"
-msgstr ""
+msgstr "Почетно салдо"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1370
 msgid "Use Existing"
-msgstr ""
+msgstr "Користете Постоечки"
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1487
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:44
 msgid "Please choose the currency to use for new accounts."
-msgstr ""
+msgstr "Изберете ја валутата што ќе ја користите за нови сметки."
 
 #: gnucash/gnome/assistant-hierarchy.cpp:1531
 #: gnucash/gnome/assistant-hierarchy.cpp:1550
 #: gnucash/gnome-utils/dialog-utils.c:810
 msgid "New Book Options"
-msgstr ""
+msgstr "Нови опции за книги"
 
 #: gnucash/gnome/assistant-loan.cpp:126
 msgid "Taxes"
-msgstr ""
+msgstr "Даноци"
 
 #: gnucash/gnome/assistant-loan.cpp:126
 msgid "Tax Payment"
-msgstr ""
+msgstr "Плаќање данок"
 
 #: gnucash/gnome/assistant-loan.cpp:127
 msgid "Insurance"
-msgstr ""
+msgstr "Осигурување"
 
 #: gnucash/gnome/assistant-loan.cpp:127
 msgid "Insurance Payment"
-msgstr ""
+msgstr "Исплата на осигурување"
 
 #. Translators: PMI stands for Private Mortgage Insurance.
 #: gnucash/gnome/assistant-loan.cpp:129
 msgid "PMI"
-msgstr ""
+msgstr "PMI"
 
 #: gnucash/gnome/assistant-loan.cpp:129
 msgid "PMI Payment"
-msgstr ""
+msgstr "PMI Плаќање"
 
 #: gnucash/gnome/assistant-loan.cpp:130
 msgid "Other Expense"
-msgstr ""
+msgstr "Други трошоци"
 
 #: gnucash/gnome/assistant-loan.cpp:130
 msgid "Miscellaneous Payment"
-msgstr ""
+msgstr "Разно плаќање"
 
 #. Translators: %s is "Taxes",
 #. "Insurance", or similar.
 #: gnucash/gnome/assistant-loan.cpp:766
 #, c-format
 msgid "… pay \"%s\"?"
-msgstr ""
+msgstr "… плати „%s“?"
 
 #: gnucash/gnome/assistant-loan.cpp:778
 msgid "via Escrow account?"
-msgstr ""
+msgstr "преку Escrow сметка?"
 
 #: gnucash/gnome/assistant-loan.cpp:925
 #: gnucash/register/ledger-core/split-register.c:2598
 msgid "Loan"
-msgstr ""
+msgstr "Кредит"
 
 #. Translators: %s is "Taxes", or "Insurance", or similar
 #: gnucash/gnome/assistant-loan.cpp:1475
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
-msgstr ""
+msgstr "Опција за отплата на кредитот: „%s“"
 
 #: gnucash/gnome/assistant-loan.cpp:1877 gnucash/gnome/dialog-lot-viewer.c:985
 #: gnucash/gnome/gnc-split-reg.c:654 gnucash/gnome/reconcile-view.c:453
@@ -1181,11 +1294,11 @@ msgstr "Датум"
 #: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncOwner.c:836
 #: libgnucash/engine/gncOwner.c:859
 msgid "Payment"
-msgstr ""
+msgstr "плаќање"
 
 #: gnucash/gnome/assistant-loan.cpp:1889 gnucash/gnome/assistant-loan.cpp:2904
 msgid "Principal"
-msgstr ""
+msgstr "Главен"
 
 #: gnucash/gnome/assistant-loan.cpp:1895 gnucash/gnome/assistant-loan.cpp:2924
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:77
@@ -1196,21 +1309,21 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register.c:2615
 #: gnucash/register/ledger-core/split-register.c:2642
 msgid "Interest"
-msgstr ""
+msgstr "Камата"
 
 #: gnucash/gnome/assistant-loan.cpp:2813
 msgid "Escrow Payment"
-msgstr ""
+msgstr "Зачувано плаќање"
 
 #: gnucash/gnome/assistant-stock-split.c:391
 #: gnucash/register/ledger-core/split-register.c:2650
 msgctxt "Action Column"
 msgid "Split"
-msgstr ""
+msgstr "Подели"
 
 #: gnucash/gnome/assistant-stock-split.c:417
 msgid "Error adding price."
-msgstr ""
+msgstr "Грешка при додавање цена."
 
 #: gnucash/gnome/assistant-stock-split.c:582
 #: gnucash/gnome/assistant-stock-transaction.cpp:2325
@@ -1235,7 +1348,7 @@ msgstr ""
 #: gnucash/report/reports/standard/txn-columns.scm:36
 #: gnucash/report/trep-engine.scm:1154
 msgid "Account"
-msgstr ""
+msgstr "Конто"
 
 #: gnucash/gnome/assistant-stock-split.c:588
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:351
@@ -1243,7 +1356,7 @@ msgstr ""
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1038
 #: gnucash/report/reports/standard/portfolio.scm:245
 msgid "Symbol"
-msgstr ""
+msgstr "Симбол"
 
 #. Translators: The number of units of any kind of investment (shares, fonds, bonds, …)
 #: gnucash/gnome/assistant-stock-split.c:594
@@ -1258,31 +1371,31 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:926 gnucash/report/trep-engine.scm:1178
 #: gnucash/report/trep-engine.scm:2242
 msgid "Shares"
-msgstr ""
+msgstr "Акции"
 
 #: gnucash/gnome/assistant-stock-split.c:787
 msgid "You don't have any stock accounts with balances!"
-msgstr ""
+msgstr "Немате сметки за акции со салда!"
 
 #. Translators: this is a stock transaction describing an
 #. Initial stock long purchase
 #: gnucash/gnome/assistant-stock-transaction.cpp:160
 msgid "Open buy"
-msgstr ""
+msgstr "Отвори купување"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:161
 msgid "Initial stock long purchase."
-msgstr ""
+msgstr "Почетна залиха долго купување."
 
 #. Translators: this is a stock transaction describing an
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:171
 msgid "Open short"
-msgstr ""
+msgstr "Отворете кратко"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:172
 msgid "Initial stock short sale."
-msgstr ""
+msgstr "Почетна кратка продажба на акции."
 
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
@@ -1298,11 +1411,11 @@ msgstr ""
 #: libgnucash/engine/Account.cpp:153 libgnucash/engine/Account.cpp:154
 #: libgnucash/engine/Account.cpp:155
 msgid "Buy"
-msgstr ""
+msgstr "Купи"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:187
 msgid "Buying stock long."
-msgstr ""
+msgstr "Долго купување на акции."
 
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
@@ -1318,7 +1431,7 @@ msgstr ""
 #: libgnucash/engine/Account.cpp:173 libgnucash/engine/Account.cpp:174
 #: libgnucash/engine/Account.cpp:175
 msgid "Sell"
-msgstr ""
+msgstr "Продај"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:198
 msgid ""
@@ -1327,6 +1440,10 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Продажба на акции долго и рекордна капитална добивка/загуба.\n"
+"\n"
+"Ако не можете да ги пресметате капиталните добивки, можете да внесете износ "
+"на застапник и да го поправите во трансакцијата подоцна."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1335,7 +1452,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:778
 #: gnucash/register/ledger-core/split-register.c:2641
 msgid "Dividend"
-msgstr ""
+msgstr "Дивиденди"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:211
 msgid ""
@@ -1344,23 +1461,29 @@ msgid ""
 "Any dividend being reinvested must be subsequently recorded as a regular "
 "stock purchase."
 msgstr ""
+"Компанијата издава парични дивиденди на сопственикот.\n"
+"\n"
+"Секоја дивиденда што се реинвестира мора последователно да се евидентира "
+"како редовно купување на акции."
 
 #. Translators: this is a stock transaction describing return
 #. of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:222
 msgid "Return of capital"
-msgstr ""
+msgstr "Поврат на капитал"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:223
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
+"Компанијата враќа капитал, намалувајќи ја основата на трошоците без да "
+"влијае на # единици."
 
 #. Translators: this is a stock transaction describing return
 #. of capital, reclassifying a dividend into return of capital
 #: gnucash/gnome/assistant-stock-transaction.cpp:233
 msgid "Return of capital (reclassification)"
-msgstr ""
+msgstr "Поврат на капитал (рекласификација)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:234
 msgid ""
@@ -1368,30 +1491,38 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"Компанијата враќа капитал, намалувајќи ја основата на трошоците без да "
+"влијае на # единици. Распределбата претходно евидентирана како дивиденда се "
+"рекласифицира во поврат на капиталот, често поради даночните информации на "
+"крајот на годината."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
 #: gnucash/gnome/assistant-stock-transaction.cpp:246
 msgid "Notional distribution (dividend)"
-msgstr ""
+msgstr "Замислена распределба (дивиденда)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:247
 msgid ""
 "Company issues a notional distribution, which is recorded as dividend income "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Компанијата издава замислена распределба, која се евидентира како приход од "
+"дивиденда и ја зголемува основата на трошоците без да влијае на # единици."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain
 #: gnucash/gnome/assistant-stock-transaction.cpp:258
 msgid "Notional distribution (capital gain)"
-msgstr ""
+msgstr "Замислена распределба (капитална добивка)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:259
 msgid ""
 "Company issues a notional distribution, which is recorded as capital gain "
 "and increases the cost basis without affecting # units."
 msgstr ""
+"Компанијата издава замислена распределба, која се евидентира како капитална "
+"добивка и ја зголемува основата на трошоците без да влијае на # единици."
 
 #. Translators: this is a stock transaction describing a stock
 #. split
@@ -1400,7 +1531,7 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:270
 #: gnucash/gnome/assistant-stock-transaction.cpp:396
 msgid "Stock split"
-msgstr ""
+msgstr "Поделба на акции"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:271
 msgid ""
@@ -1411,6 +1542,13 @@ msgid ""
 "If the split results in a cash in lieu for remainder units, please record "
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
+"Компанијата издава дополнителни единици, со што се намалува цената на "
+"акциите со делител, додека вкупната монетарна вредност на вкупната "
+"инвестиција се одржува константна. \n"
+"\n"
+"Ако поделбата резултира со готовина наместо преостанатите единици, снимете "
+"ја продажбата со помош на Асистентот за трансакции на акции прво, а потоа "
+"запишете го делењето."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1418,7 +1556,7 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:283
 #: gnucash/gnome/assistant-stock-transaction.cpp:410
 msgid "Reverse split"
-msgstr ""
+msgstr "Обратна поделба"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:284
 msgid ""
@@ -1429,22 +1567,29 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
+"Компанијата откупува удели, со што ја зголемува цената на акциите за "
+"повеќекратно, додека ја одржува константна вкупната монетарна вредност на "
+"вкупната инвестиција.\n"
+"\n"
+"Ако обратното делење резултира со готовина наместо преостанатите единици, "
+"снимете ја продажбата со помош на Асистентот за трансакции со акции прво, а "
+"потоа запишете го обратното делење."
 
 #. Translators: this is a stock transaction describing
 #. shorting of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:301
 msgid "Short sell"
-msgstr ""
+msgstr "Кратка продажба"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:302
 msgid "Selling stock short."
-msgstr ""
+msgstr "Продажба на акции кратко."
 
 #. Translators: this is a stock transaction describing cover
 #. buying stock, and recording capital gain/loss
 #: gnucash/gnome/assistant-stock-transaction.cpp:312
 msgid "Buy to cover short"
-msgstr ""
+msgstr "Купи за покривање кратко"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:313
 msgid ""
@@ -1453,24 +1598,31 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Купете назад акции за покривање на кратки позиции и регистрирајте капитална "
+"добивка/загуба. \n"
+"\n"
+"Ако не можете да ги пресметате капиталните добивки, можете да внесете износ "
+"на застапник и да го поправите во трансакцијата подоцна."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:325
 msgid "Compensatory dividend"
-msgstr ""
+msgstr "Компензаторна дивиденда"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:326
 msgid ""
 "Company issues dividends, and the short stock holder must make a "
 "compensatory payment for the dividend."
 msgstr ""
+"Компанијата издава дивиденди, а сопственикот на кратки акции мора да изврши "
+"компензаторна исплата на дивидендата."
 
 #. Translators: this is a stock transaction describing return
 #. of capital retrieved from holder when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:337
 msgid "Compensatory return of capital"
-msgstr ""
+msgstr "Компензаторно враќање на капиталот"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:338
 msgid ""
@@ -1478,13 +1630,17 @@ msgid ""
 "payment for the returned capital. This reduces the cost basis (less "
 "negative, towards 0.00 value) without affecting # units."
 msgstr ""
+"Компанијата враќа капитал, а сопственикот на кратки акции мора да изврши "
+"компензаторно плаќање за вратениот капитал. Ова ја намалува основата на "
+"трошоците (помалку негативни, кон вредност од 0,00) без да влијае на # "
+"единици."
 
 #. Translators: this is a stock transaction describing
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:351
 msgid "Compensatory return of capital (reclassification)"
-msgstr ""
+msgstr "Компензаторно враќање на капиталот (рекласификација)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:352
 msgid ""
@@ -1494,13 +1650,19 @@ msgid ""
 "previously recorded as a compensatory dividend is reclassified to "
 "compensatory return of capital,often due to end-of-year tax information."
 msgstr ""
+"Компанијата враќа капитал, а сопственикот на кратки акции мора да изврши "
+"компензаторно плаќање за вратениот капитал. Ова ја намалува основата на "
+"трошоците (помалку негативни, кон вредност од 0,00) без да влијае на # "
+"единици. Распределбата претходно евидентирана како компензаторна дивиденда "
+"се рекласифицира во компензаторен поврат на капиталот, често поради даночни "
+"информации на крајот на годината."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend when shorting
 #. stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:367
 msgid "Compensatory notional distribution (dividend)"
-msgstr ""
+msgstr "Компензаторна поимна распределба (дивиденда)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:368
 msgid ""
@@ -1509,13 +1671,18 @@ msgid ""
 "loss/negative dividend income amount, and increases the cost basis (more "
 "negative, away from 0.00 value) without affecting # units."
 msgstr ""
+"Друштвото издава замислена распределба, а имателот на кратки акции мора да "
+"изврши компензаторна исплата за замислената распределба. Ова се евидентира "
+"како загуба/негативен износ на приход од дивиденда и ја зголемува основата "
+"на трошоците (понегативна, далеку од вредност од 0,00) без да влијае на # "
+"единици."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as capital gain when
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:382
 msgid "Compensatory notional distribution (capital gain)"
-msgstr ""
+msgstr "Компензаторна ноционална распределба (капитална добивка)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:383
 msgid ""
@@ -1524,6 +1691,10 @@ msgid ""
 "capital loss amount, and increases the cost basis (more negative, away from "
 "0.00 value) without affecting # units."
 msgstr ""
+"Друштвото издава замислена распределба, а имателот на кратки акции мора да "
+"изврши компензаторна исплата за замислената распределба. Ова се евидентира "
+"како износ на капитална загуба и ја зголемува основата на трошоците ("
+"понегативна, далеку од вредноста 0,00) без да влијае на # единици."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:397
 msgid ""
@@ -1535,6 +1706,13 @@ msgid ""
 "the cover buy using the Stock Transaction Assistant first, then record the "
 "split."
 msgstr ""
+"Компанијата издава дополнителни единици, со што се намалува цената на "
+"акциите со делител, додека вкупната монетарна вредност на вкупната "
+"инвестиција се одржува константна. \n"
+"\n"
+"Ако поделбата резултира со готовина наместо преостанатите единици, снимете "
+"го купувањето на капакот прво со помош на Асистентот за трансакции со акции, "
+"а потоа запишете го делењето."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:411
 msgid ""
@@ -1545,14 +1723,21 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
+"Компанијата откупува удели, со што ја зголемува цената на акциите за "
+"повеќекратно, додека ја одржува константна вкупната монетарна вредност на "
+"вкупната инвестиција.\n"
+"\n"
+"Ако обратното разделување резултира со готовина наместо за преостанатите "
+"единици, снимете го купувањето на капакот прво со помош на Асистентот за "
+"трансакции со акции, а потоа запишете го обратното делење."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:503
 msgid "No errors found. Click Apply to create transaction."
-msgstr ""
+msgstr "Не се пронајдени грешки. Кликнете Примени за да креирате трансакција."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:508
 msgid "The following errors must be fixed:"
-msgstr ""
+msgstr "Следниве грешки мора да се поправат:"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:513
 msgid "The following warnings exist:"
