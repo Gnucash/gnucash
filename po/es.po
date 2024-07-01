@@ -13,7 +13,7 @@
 # Cow <javier.fserrador@gmail.com>, 2022.
 # Eduardo Malaspina <vaio0@swismail.com>, 2022.
 # Luis D. Lafaurie <luis.lafaurie@tecnativa.com>, 2022.
-# Guille Lopez <willelopz@gmail.com>, 2022, 2023.
+# Guille Lopez <willelopz@gmail.com>, 2022, 2023, 2024.
 # gallegonovato <fran-carro@hotmail.es>, 2023, 2024.
 # Jaime Marquínez Ferrándiz <jaime.marquinez.ferrandiz@fastmail.net>, 2023.
 # Francisco <fhiegom@outlook.es>, 2023.
@@ -82,12 +82,12 @@
 # Comentarios extraídos:
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.7 \n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.7\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-03-17 12:01+0000\n"
-"Last-Translator: gallegonovato <fran-carro@hotmail.es>\n"
+"PO-Revision-Date: 2024-06-30 21:09+0000\n"
+"Last-Translator: Guille Lopez <willelopz@gmail.com>\n"
 "Language-Team: Spanish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "es/>\n"
 "Language: es\n"
@@ -95,11 +95,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\">;</"
-"span>;<span size=\"larger\" weight=\"bold\">\n"
+"X-Poedit-KeywordsList: <b>;</b>;<span weight=\"bold\" size=\"larger\""
+">;</span>;<span size=\"larger\" weight=\"bold\">\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -27786,7 +27786,7 @@ msgstr "Número de columnas"
 
 #: gnucash/report/reports/standard/txn-columns.scm:38
 msgid "Set the upper limit for number of columns"
-msgstr ""
+msgstr "Establece el límite superior para el número de columnas"
 
 #: gnucash/report/reports/standard/txn-columns.scm:154
 #, fuzzy
@@ -30632,11 +30632,11 @@ msgstr "Exportar _boletín"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:37
 msgid "_Save layout as default"
-msgstr ""
+msgstr "_Guardar disposición como predeterminada"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:39
 msgid "Save current layout as default"
-msgstr ""
+msgstr "Guardar disposición actual como predeterminada"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:55
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:155
