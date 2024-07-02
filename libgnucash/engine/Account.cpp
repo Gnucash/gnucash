@@ -2859,11 +2859,13 @@ gnc_account_remove_child (Account *parent, Account *child)
     ed.node = parent;
     ed.idx = gnc_account_child_index (parent, child);
 
+    // First send the event before we invalidate everything in children.
+    qof_event_gen(&child->inst, QOF_EVENT_REMOVE, &ed);
+
+    // Then remove the child and release its memory.
     ppriv->children.erase (std::remove (ppriv->children.begin(), ppriv->children.end(), child),
                            ppriv->children.end());
 
-    /* Now send the event. */
-    qof_event_gen(&child->inst, QOF_EVENT_REMOVE, &ed);
 
     /* clear the account's parent pointer after REMOVE event generation. */
     cpriv->parent = nullptr;
