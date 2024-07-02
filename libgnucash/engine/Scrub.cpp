@@ -44,6 +44,7 @@
 #include <string.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <unordered_set>
 
 #include "Account.h"
 #include "AccountP.hpp"
@@ -90,22 +91,18 @@ gnc_get_ongoing_scrub (void)
 
 /* ================================================================ */
 
-static void add_transactions (const Account *account, GHashTable **ht)
-{
-    for (auto s : xaccAccountGetSplits (account))
-        g_hash_table_add (*ht, xaccSplitGetParent (s));
-}
+using TransSet = std::unordered_set<Transaction*>;
 
-static GList*
+static TransSet
 get_all_transactions (Account *account, bool descendants)
 {
-    GHashTable *ht = g_hash_table_new (g_direct_hash, g_direct_equal);
-    add_transactions (account, &ht);
+    TransSet set;
+    auto add_transactions = [&set](auto a)
+    { gnc_account_foreach_split (a, [&set](auto s){ set.insert (xaccSplitGetParent (s)); }, false); };
+    add_transactions (account);
     if (descendants)
-        gnc_account_foreach_descendant (account, (AccountCb)add_transactions, &ht);
-    GList *rv = g_hash_table_get_keys (ht);
-    g_hash_table_destroy (ht);
-    return rv;
+        gnc_account_foreach_descendant (account, add_transactions);
+    return set;
 }
 
 /* ================================================================ */
@@ -144,14 +141,13 @@ AccountScrubOrphans (Account *acc, bool descendants, QofPercentageFunc percentag
     if (!acc) return;
     scrub_depth++;
 
-    GList *transactions = get_all_transactions (acc, descendants);
-    gint total_trans = g_list_length (transactions);
-    const char *message = _( "Looking for orphans in transaction: %u of %u");
+    auto transactions = get_all_transactions (acc, descendants);
+    auto total_trans = transactions.size();
+    const char *message = _("Looking for orphans in transaction: %u of %zu");
     guint current_trans = 0;
 
-    for (GList *node = transactions; node; current_trans++, node = node->next)
+    for (auto trans : transactions)
     {
-        Transaction *trans = GNC_TRANSACTION(node->data);
         if (current_trans % 10 == 0)
         {
             char *progress_msg = g_strdup_printf (message, current_trans, total_trans);
@@ -161,11 +157,10 @@ AccountScrubOrphans (Account *acc, bool descendants, QofPercentageFunc percentag
         }
 
         TransScrubOrphansFast (trans, gnc_account_get_root (acc));
+        current_trans++;
     }
     (percentagefunc)(nullptr, -1.0);
     scrub_depth--;
-
-    g_list_free (transactions);
 }
 
 void
@@ -359,22 +354,22 @@ static void
 AccountScrubImbalance (Account *acc, bool descendants,
                        QofPercentageFunc percentagefunc)
 {
-    const char *message = _( "Looking for imbalances in transaction date %s: %u of %u");
+    const char *message = _("Looking for imbalances in transaction date %s: %u of %zu");
 
     if (!acc) return;
 
     QofBook *book = qof_session_get_book (gnc_get_current_session ());
     Account *root = gnc_book_get_root_account (book);
-    GList *transactions = get_all_transactions (acc, descendants);
-    guint count = g_list_length (transactions), curr_trans = 0;
+    auto transactions = get_all_transactions (acc, descendants);
+    auto count = transactions.size();
+    auto curr_trans = 0;
 
     scrub_depth++;
-    for (GList *node = transactions; node; node = node->next, curr_trans++)
+    for (auto trans : transactions)
     {
-        Transaction *trans = GNC_TRANSACTION(node->data);
         if (abort_now) break;
 
-        PINFO("Start processing transaction %d of %d", curr_trans + 1, count);
+        PINFO("Start processing transaction %d of %zu", curr_trans + 1, count);
 
         if (curr_trans % 10 == 0)
         {
@@ -389,12 +384,11 @@ AccountScrubImbalance (Account *acc, bool descendants,
         xaccTransScrubCurrency(trans);
         xaccTransScrubImbalance (trans, root, nullptr);
 
-        PINFO("Finished processing transaction %d of %d", curr_trans + 1, count);
+        PINFO("Finished processing transaction %d of %zu", curr_trans + 1, count);
+        curr_trans++;
     }
     (percentagefunc)(nullptr, -1.0);
     scrub_depth--;
-
-    g_list_free (transactions);
 }
 
 void
