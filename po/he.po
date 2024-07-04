@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-06-29 15:09+0000\n"
+"PO-Revision-Date: 2024-07-03 19:09+0000\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -1505,7 +1505,7 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:270
 #: gnucash/gnome/assistant-stock-transaction.cpp:396
 msgid "Stock split"
-msgstr "פיצול ניר ערך"
+msgstr "פיצול נייר ערך"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:271
 msgid ""
@@ -17700,7 +17700,7 @@ msgid ""
 "format you select in this list."
 msgstr ""
 "רשימה זו מכילה את תסדירי הקבצים ש־AQBanking יודעת לייבא. רשימת הפרופילים "
-"מכילה פירוט ותתאכלס לפי התסדיר שיבחר מרשימה זו."
+"מכילה פירוט ותתאכלס לפי התסדיר שייבחר מרשימה זו."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1733
 msgid "File Format"
