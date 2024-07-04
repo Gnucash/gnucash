@@ -12,7 +12,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2024-07-03 19:09+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -1368,7 +1368,7 @@ msgstr "רכישת מניות תקנית (לונג) ראשונית."
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:171
 msgid "Open short"
-msgstr "פתיחת טווח קצר"
+msgstr "פתיחת מניה בחסר"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:172
 msgid "Initial stock short sale."
@@ -1519,8 +1519,8 @@ msgstr ""
 "חברה מנפיקה יחידות נוספות, ובכך מפחיתה את מחיר המניה על ידי מחלק, תוך שמירה "
 "על הערך הכספי הכולל של ההשקעה הכוללת, קבועה.\n"
 "\n"
-"אם תוצת הפיצול תניב מזומנים בתמורה לשארית היחידות, נא לרשום את המכירה תחילה "
-"באמצעות סייען עסקאות מניות, ולאחר מכן לרשום את הפיצול."
+"אם תוצאת הפיצול תניב מזומנים בתמורה לשארית היחידות, נא לרשום את המכירה תחילה "
+"באמצעות סייען תנועות מניות, ולאחר מכן לרשום את הפיצול."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1752,7 +1752,7 @@ msgstr "יתרה חדשה חייבת להיות נמוכה מהיתרה הישנ
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:886
 msgid "Stock amount must be positive."
-msgstr "כמות מניות חייב להיות ערך חיובי."
+msgstr "כמות מניות חייבת להיות ערך חיובי."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:890
 msgid "Cannot sell more units than owned."
@@ -6795,7 +6795,7 @@ msgstr "סכום ל"
 msgid ""
 "The entered date is out of the range 01/01/1400 - 31/12/9999, resetting to "
 "this year"
-msgstr "התאריך שהוזן נמצא מחוץ לטווח 01/01/1400־31/12/9999, שיצוב לשנה השוטפת"
+msgstr "התאריך שהוזן נמצא מחוץ לטווח 01/01/1400 – 31/12/9999, ישוצב לשנה השוטפת"
 
 #: gnucash/gnome-utils/dialog-utils.c:437
 msgid "Date out of range"
@@ -13012,10 +13012,10 @@ msgstr ""
 "מערך זה.\n"
 "\n"
 "כְּלוֹמַר\n"
-"יוצג סמל ליד היתרה של היום שעומדת על 100- אם הוגדרה מגבלה על סך 90-\n"
-"יוצג סמל ליד היתרה של היום שעומדת על 90 אם הוגדרה מגבלה על סך 100\n"
+"יוצג סמל ליד היתרה של 'היום' שעומדת על 100- אם הוגדרה מגבלה על סך 90-\n"
+"יוצג סמל ליד היתרה של 'היום' שעומדת על 90 אם הוגדרה מגבלה על סך 100\n"
 "\n"
-"יש לנקות את הערך כדי שלא תופיה אזהרה."
+"יש לנקות את הערך כדי שלא תופיע אזהרה."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1692
 #, fuzzy
