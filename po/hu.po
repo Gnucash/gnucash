@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-04 00:09+0000\n"
+"PO-Revision-Date: 2024-07-04 09:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -997,9 +997,9 @@ msgid ""
 "calculated amount."
 msgstr ""
 "Miközben összegeket ír be a könyvelésbe, a GnuCash kalkulátorral összeadhat, "
-"kivonhat, szorozhat és oszthat. Egyszerűen írja be az első értéket, majd a  "
-"+,  -,  * és  / billentyűk közül nyomja meg a kívánt művelethez tartozót. "
-"Írja be a második értéket, és nyomja meg az Entert a számított összeg "
+"kivonhat, szorozhat és oszthat. Egyszerűen írja be az első értéket, majd a +"
+", -, * és / billentyűk közül nyomja meg a kívánt művelethez tartozót. Írja "
+"be a második értéket, és nyomja meg az Entert a számított összeg "
 "rögzítéséhez."
 
 #: doc/tip_of_the_day.list.c:60
@@ -1257,6 +1257,9 @@ msgid ""
 "The book will be created with the title %s when you click on \"Apply\". "
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
+"Az Alkalmaz gombra kattintva a könyv %s címmel létrejön. Kattintson a Vissza "
+"gombra a módosításhoz, vagy a Mégse gombra, ha nem szeretne könyvet "
+"létrehozni."
 
 #: gnucash/gnome/assistant-acct-period.c:525
 #, c-format
@@ -3676,7 +3679,6 @@ msgid "Find Order"
 msgstr "Rendelés keresése"
 
 #: gnucash/gnome/dialog-payment.c:237
-#, fuzzy
 msgid "You must enter a valid account name for posting."
 msgstr "Meg kell adni a számla nevét a rögzítéshez."
 
@@ -9493,17 +9495,13 @@ msgstr "Hány nappal előtte figyelmeztessen."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:59
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:60
-#, fuzzy
-#| msgid "The number of payments cannot be zero."
 msgid "The number of months to be shown in editor."
-msgstr "A törlesztések száma nem lehet nulla."
+msgstr "A szerkesztőben megjelenítendő hónapok száma."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:64
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:65
-#, fuzzy
-#| msgid "Position of the vertical pane divider."
 msgid "The horizontal position of the editor divider."
-msgstr "A függőleges panelosztó helyzete."
+msgstr "A szerkesztő elválasztó vízszintes helyzete."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.sxs.gschema.xml.in:76
 msgid "Set the \"notify\" flag by default"
@@ -19538,16 +19536,12 @@ msgstr ""
 "Árfolyam vagy a (negált) Érték oszlop hiányzik vagy hibás."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:665
-#, fuzzy
-#| msgid ""
-#| "Choice of accounts makes this a multi-currency transaction but price or "
-#| "(negated) value column is missing or invalid."
 msgid ""
 "Choice of accounts makes this a multi-currency transaction but price, "
 "(negated) value or (negated) transfer amount column is missing or invalid."
 msgstr ""
 "A kiválasztott számlák miatt ez egy több sorba felosztott tranzakció, de az "
-"Árfolyam vagy a (negált) Érték oszlop hiányzik vagy hibás."
+"árfolyam vagy a (negált) átutalási összeg oszlop hiányzik vagy érvénytelen."
 
 #: gnucash/import-export/csv-imp/gnc-imp-settings-csv.cpp:46
 msgid "No Settings"
@@ -19704,12 +19698,12 @@ msgstr "Ú"
 #: gnucash/import-export/import-main-matcher.cpp:1603
 msgctxt "Column header for 'Updating plus Clearing transaction'"
 msgid "U+C"
-msgstr "F+E"
+msgstr "F+K"
 
 #: gnucash/import-export/import-main-matcher.cpp:1607
 msgctxt "Column header for 'Clearing transaction'"
 msgid "C"
-msgstr "E"
+msgstr "K"
 
 #: gnucash/import-export/import-main-matcher.cpp:1614
 msgid "Info"
@@ -19722,7 +19716,7 @@ msgstr "További megjegyzések"
 
 #: gnucash/import-export/import-main-matcher.cpp:2006
 msgid "New, already balanced"
-msgstr "Új, kiegyenlített"
+msgstr "Új, kiegyensúlyozott"
 
 #. Translators: %1$s is the amount to be transferred,
 #. %2$s the destination account.
@@ -19874,10 +19868,12 @@ msgid ""
 "While importing transactions from OFX file '%s' found %d previously imported "
 "transactions, no new transactions."
 msgstr ""
+"'%s' OFX fájlból történő tranzakciók importálása során %d korábban importált "
+"tranzakciót találtunk, új tranzakciót nem."
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1478
 msgid "Open/Quicken Financial Exchange file (*.ofx, *.qfx)"
-msgstr ""
+msgstr "Open/Quicken Financial Exchange fájl (*.ofx, *.qfx)"
 
 #: gnucash/import-export/ofx/gnc-ofx-import.cpp:1483
 msgid "Select one or multiple OFX/QFX file(s) to process"
@@ -19885,7 +19881,7 @@ msgstr "Feldolgozandó OFX/QFX fájl(ok) kiválasztása"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:6
 msgid "Import _OFX/QFX…"
-msgstr "_OFX/QFX fájl…"
+msgstr "_OFX/QFX fájl importálás…"
 
 #: gnucash/import-export/ofx/gnc-plugin-ofx.ui:8
 msgid "Process an OFX/QFX response file"
@@ -20431,51 +20427,48 @@ msgstr "A jelenlegi tétel megváltozott. El kívánja menteni?"
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:77
 msgctxt "sample for a checkbox"
 msgid "X"
-msgstr ""
+msgstr "X"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:81
 msgctxt "sample for 'Date'"
 msgid "12/12/2000"
-msgstr "2000.12.12"
+msgstr "2000.12.12."
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:86
 msgctxt "sample for 'Description'"
 msgid "Description of an Entry"
-msgstr ""
+msgstr "Egy bejegyzés leírása"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:92
-#, fuzzy
 msgctxt "sample"
 msgid "Action"
 msgstr "Művelet"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:96
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:104
-#, fuzzy
 msgctxt "sample"
 msgid "9,999.00"
-msgstr "sample:9.999,00"
+msgstr "9.999,00"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:100
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:145
-#, fuzzy
 msgctxt "sample"
 msgid "999,999.00"
-msgstr "sample:999.999,000"
+msgstr "999.999,000"
 
 #. Translators: Header for Discount Type
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:110
-#, fuzzy, no-c-format
+#, no-c-format
 msgctxt "sample for 'Discount Type'"
 msgid "+%"
-msgstr "%"
+msgstr "+%"
 
 #. Translators: Header for Discount How
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:116
-#, fuzzy, no-c-format
+#, no-c-format
 msgctxt "sample for Discount How'"
 msgid "+%"
-msgstr "%"
+msgstr "+%"
 
 #. Translators: Enter the longest expected path of an Account
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:122
@@ -20491,14 +20484,13 @@ msgstr "sample:Költségek:Autó:Üzemanyag"
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:132
 msgctxt "sample for 'Taxable'"
 msgid "T?"
-msgstr ""
+msgstr "A?"
 
 #. Translators: Abbreviation sample for Tax Included
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:137
-#, fuzzy
 msgctxt "sample for 'Tax Included'"
 msgid "TI"
-msgstr "A"
+msgstr "A.t."
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:141
 msgctxt "sample for 'Tax Table'"
@@ -20506,19 +20498,17 @@ msgid "Tax Table 1"
 msgstr "1. adótáblázat"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:149
-#, fuzzy
 msgctxt "sample"
 msgid "999.00"
-msgstr "sample:999,00"
+msgstr "999,00"
 
 #. Translators: Abbreviation sample for Billable
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:154
 msgctxt "sample for 'Billable'"
 msgid "BI"
-msgstr ""
+msgstr "Szá"
 
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:158
-#, fuzzy
 msgctxt "sample"
 msgid "Payment"
 msgstr "Fizetés"
@@ -20653,15 +20643,15 @@ msgstr "Az adózott értékre vonatkozó engedmény kiszámítva"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:659
 msgid "Select how to compute the Discount and Taxes"
-msgstr "Válassza ki az engedmény- és adószámítás módját"
+msgstr "Válassza ki az engedmény- és az adószámítás módját"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:672
 msgid "Enter the unit-Price for this Entry"
-msgstr "Adjon meg egy egységárat A tételhez"
+msgstr "Adja meg ennek a tételnek az egységárát"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:684
 msgid "Enter the Quantity of units for this Entry"
-msgstr "Adja meg az egységek mennyiségét a tételhez"
+msgstr "Adja meg a tételhez tartozó egységek mennyiségét"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:696
 msgid "Enter the Tax Table to apply to this entry"
@@ -20669,33 +20659,31 @@ msgstr "Adja meg a tételre vonatkozó adótáblázatot"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:705
 msgid "Is this entry taxable?"
-msgstr "Adóköteles tétel?"
+msgstr "Ez a tétel adóköteles?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:714
 msgid "Is the tax already included in the price of this entry?"
-msgstr "Tartalmazza az adót,a tétel ára?"
+msgstr "Tartalmazza az adót a tétel ára?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:732
-#, fuzzy
 msgid "Is this entry invoiced?"
 msgstr "Kiszámlázták ezt a tételt?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:738
-#, fuzzy
 msgid "Is this entry credited?"
-msgstr "Kiszámlázták ezt a tételt?"
+msgstr "Jóváírták ezt a tételt?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:742
 msgid "Include this entry on this invoice?"
-msgstr "Hozzáveszi a tételt a számlához?"
+msgstr "Hozzáveszi a tételt a kimenőszámlához?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:746
 msgid "Include this entry on this credit note?"
-msgstr ""
+msgstr "Ezt a tételt hozzáveszi ehez a jóváíráshoz?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:749
 msgid "Unknown EntryLedger Type"
-msgstr "Ismeretlen tétel-főkönyv típus"
+msgstr "Ismeretlen könyvelésitétel-típus"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:762
 msgid "The subtotal value of this entry"
@@ -26949,10 +26937,8 @@ msgid "Net Loss"
 msgstr "Nettó veszteség"
 
 #: gnucash/report/reports/standard/txn-columns.scm:33
-#, fuzzy
-#| msgid "Transaction Report"
 msgid "Transaction Breakdown Report"
-msgstr "Tranzakciókimutatás"
+msgstr "Tranzakcióbontási jelentés"
 
 #: gnucash/report/reports/standard/txn-columns.scm:37
 msgid "Limit for number of columns"
@@ -27175,7 +27161,7 @@ msgstr "Lábléc"
 
 #: gnucash/report/stylesheets/footer.scm:75
 msgid "String to be placed as a footer."
-msgstr ""
+msgstr "Láblécként elhelyezendő karakterlánc."
 
 #: gnucash/report/stylesheets/footer.scm:79
 #: gnucash/report/stylesheets/footer.scm:84
@@ -27191,19 +27177,19 @@ msgstr "Képek"
 #: gnucash/report/stylesheets/footer.scm:80
 #: gnucash/report/stylesheets/head-or-tail.scm:122
 msgid "Background Tile"
-msgstr "Háttér-minta"
+msgstr "Háttérminta"
 
 #: gnucash/report/stylesheets/footer.scm:80
 #: gnucash/report/stylesheets/head-or-tail.scm:122
 #: gnucash/report/stylesheets/plain.scm:46
 msgid "Background tile for reports."
-msgstr "A háttér mintázata a reportokban."
+msgstr "Háttérminta a jentésekhez."
 
 #. Translators: Banner is an image like Logo.
 #: gnucash/report/stylesheets/footer.scm:86
 #: gnucash/report/stylesheets/head-or-tail.scm:127
 msgid "Heading Banner"
-msgstr "Fejléc-sáv"
+msgstr "Fejléc sáv"
 
 #: gnucash/report/stylesheets/footer.scm:86
 #: gnucash/report/stylesheets/footer.scm:91
