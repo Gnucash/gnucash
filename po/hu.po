@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-06-27 07:09+0000\n"
+"PO-Revision-Date: 2024-07-04 00:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.6-rc\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -5612,7 +5612,7 @@ msgstr "Bevitel dátuma"
 
 #: gnucash/gnome/gnc-split-reg.c:660 gnucash/gnome/window-reconcile.cpp:2059
 msgid "Statement Date"
-msgstr "Kimutatás dátuma"
+msgstr "Számlakivonat dátuma"
 
 #: gnucash/gnome/gnc-split-reg.c:683
 #: gnucash/report/reports/standard/customer-summary.scm:118
@@ -6075,7 +6075,7 @@ msgid ""
 "date. Reconciliation may be difficult."
 msgstr ""
 "FIGYELEM! A számlán egyes felosztások egyeztetési dátuma későbbi, mint a "
-"kimutatás dátuma. Emiatt az egyeztetés nehézségekbe ütközhet."
+"számlakivonat dátuma. Emiatt az egyeztetés nehézségekbe ütközhet."
 
 #: gnucash/gnome/window-reconcile.cpp:1961
 msgid ""
@@ -6085,18 +6085,18 @@ msgid ""
 "reconcile."
 msgstr ""
 "Ezen a számlán egyes felosztások egyeztetési dátuma későbbi, mint a "
-"kimutatás dátuma. Emiatt az egyeztetés nehézségekbe ütközhet. Ilyen esetben "
-"a Tranzakciók keresésével megkeresheti a felosztásokat, visszavonhatja az "
-"egyeztetésüket, majd újra próbálkozhat az egyeztetéssel."
+"számlakivonat dátuma. Emiatt az egyeztetés nehézségekbe ütközhet. Ilyen "
+"esetben a Tranzakciók keresésével megkeresheti a felosztásokat, "
+"visszavonhatja az egyeztetésüket, majd újra próbálkozhat az egyeztetéssel."
 
 #: gnucash/gnome/window-reconcile.cpp:2069
 #: gnucash/gtkbuilder/window-reconcile.glade:106
 msgid "Starting Balance"
-msgstr "Nyitóegyenleg"
+msgstr "Nyitó egyenleg"
 
 #: gnucash/gnome/window-reconcile.cpp:2079
 msgid "Ending Balance"
-msgstr "Záróegyenleg"
+msgstr "Záró egyenleg"
 
 #: gnucash/gnome/window-reconcile.cpp:2089
 msgid "Reconciled Balance"
@@ -13084,9 +13084,9 @@ msgid "Show _unused accounts"
 msgstr "Rej_tett számlák megjelenítése"
 
 #: gnucash/gtkbuilder/dialog-account.glade:990
-#, fuzzy
 msgid "Show accounts which do not have any transactions."
-msgstr "A %s folyószámla nem enged meg tranzakciókat."
+msgstr ""
+"Azoknak a számláknak a megtekintése, amelyek nem tartalmaznak tranzakciókat."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1004
 msgid "Show _zero total accounts"
@@ -14840,7 +14840,7 @@ msgstr "(USD)"
 #: gnucash/gtkbuilder/dialog-payment.glade:698
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:76
 msgid "Transfer Account"
-msgstr "Származási folyószámla"
+msgstr "Származási számla"
 
 #. Date format label for 07/31/2013
 #: gnucash/gtkbuilder/dialog-preferences.glade:50
@@ -15469,7 +15469,7 @@ msgid ""
 "After reconciling a credit card statement, prompt the user to enter a credit "
 "card payment."
 msgstr ""
-"Egy hitelkártya-kimutatás egyeztetése után megkéri a felhasználót egy "
+"Egy hitelkártya-számlakivonat egyeztetése után megkéri a felhasználót egy "
 "hitelkártya-törlesztés megadására."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2627
@@ -15510,19 +15510,19 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2704
 msgid "Draw hori_zontal lines between rows"
-msgstr "Ví_zszintes vonalak sorok között"
+msgstr "Sorok közötti _vízszintes vonalak"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2710
 msgid "Show horizontal borders on the cells."
-msgstr "Vízszintes keretek megjelenítése cellákon."
+msgstr "Vízszintes keretek megjelenítése a cellákon."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2722
 msgid "Draw _vertical lines between columns"
-msgstr "Függőleges _vonalak oszlopok között"
+msgstr "Oszlopok közötti _függőleges vonalak"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2728
 msgid "Show vertical borders on the cells."
-msgstr "Függőleges keretek megjelenítése cellákon."
+msgstr "Függőleges keretek megjelenítése a cellákon."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2753
 #: gnucash/report/reports/standard/invoice.scm:401
@@ -17332,7 +17332,7 @@ msgstr "Bankszámlakivona_t dátuma"
 msgid ""
 "Sort by the statement date (and group by cleared, unreconciled, reconciled)."
 msgstr ""
-"Rendezés a kimutatás dátuma szerint (és csoportosítás az elszámolt, "
+"Rendezés a számlakivonat dátuma szerint (és csoportosítás az kiegyenlített, "
 "egyeztetett és nem egyeztetett állapot alapján)."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:919
@@ -17527,7 +17527,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/window-reconcile.glade:258
 msgid "Statement Date is after today"
-msgstr "A kimutatás dátuma a mai nap után van"
+msgstr "A számlakivonat dátuma a mai nap után van"
 
 #: gnucash/html/gnc-html-webkit1.c:78 gnucash/html/gnc-html-webkit2.c:87
 msgid "Not found"
@@ -20992,7 +20992,7 @@ msgstr "Nem e_gyeztet"
 #: gnucash/register/ledger-core/split-register-layout.c:654
 msgctxt "sample"
 msgid "22/02/2000"
-msgstr "2000.02.22"
+msgstr "2000.02.22."
 
 #. Translators: The 'sample' items are
 #. strings which are not displayed, but only
@@ -21036,7 +21036,7 @@ msgstr "999.999,000"
 #: gnucash/register/ledger-core/split-register-layout.c:745
 msgctxt "sample"
 msgid "Memo field sample text string"
-msgstr "Feljegyzés mező mintaszövege"
+msgstr "Feljegyzésmező mintaszövege"
 
 #: gnucash/register/ledger-core/split-register-layout.c:819
 msgctxt "Column header for 'Type'"
@@ -21138,8 +21138,8 @@ msgid ""
 "Enter a reference, such as an invoice or check number, unique to each entry "
 "line (split)"
 msgstr ""
-"Adjon meg egy hivatkozást, például egy számla- vagy csekkszámot, minden "
-"felosztáshoz külön-külön"
+"Adjon meg egy hivatkozást, például egy számla- vagy csekkszámot, amely "
+"minden egyes beviteli sorhoz (felosztáshoz) egyedi"
 
 #: gnucash/register/ledger-core/split-register-model.c:1069
 msgid ""
@@ -29536,7 +29536,7 @@ msgstr "Pénz átvezetése egyik számláról a másikra."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:238
 msgid "Reconcile the selected account."
-msgstr "A kiválasztott folyószámla egyeztetése."
+msgstr "A kiválasztott számla egyeztetése."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:244
 msgid ""
