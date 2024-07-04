@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-03 19:09+0000\n"
+"PO-Revision-Date: 2024-07-04 11:09+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -3916,7 +3916,6 @@ msgid "Highlight a date first to sort by occurrence date."
 msgstr "נא לסמן תאריך תחילה כדי למיין לפי תאריך היקרות."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
-#, fuzzy
 msgid "Highlight a schedule first to sort by schedule name."
 msgstr "נא לסמן זמנן תחילה כדי למיין לפי שם זמנן."
 
@@ -8167,7 +8166,7 @@ msgstr "Finance::Quote sources:\n"
 
 #: gnucash/gnucash-commands.cpp:372 gnucash/gnucash-commands.cpp:396
 msgid "Price retrieval failed: "
-msgstr ""
+msgstr "אחזור מחירים כשל: "
 
 #: gnucash/gnucash-core-app.cpp:77
 msgid "This is a development version. It may or may not work."
@@ -12385,6 +12384,10 @@ msgid ""
 "transaction currency will be offered for cash, capital gains, dividends, and "
 "fees."
 msgstr ""
+"סייען זה יעזור ברישום תנועת מניות. סוג התנועה (רכישה, מכירה, דיבידנד, חלוקה, "
+"החזר הון, פיצול מניות) יקבע את פיצולי התנועה הכרוכים בעסקה. לתשומת לב, מטבע "
+"התנועה ייגזר מחשבון המניות, כמו כן אין תמיכה בתנועה עם מטבעות מרובים: רק "
+"חשבונות במטבע התנועה יוצעו עבור מזומנים, רווחי הון, דיבידנדים ועמלות."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
 #, fuzzy
@@ -12403,6 +12406,9 @@ msgid ""
 "negative (i.e. when shorting stock). The type will determine the component "
 "splits."
 msgstr ""
+"בחירת סוג פעילות מניה שיש לרשום. הסוגים הזמינים תלויים ביתרת מספר המניות "
+"הנוכחית: חיובית, אפס או שלילית (כלומר בעת עסקת מניה בחסר). הסוג יקבע את "
+"פיצול הרכיבים בתנועה."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:195
 #, fuzzy
@@ -12477,11 +12483,11 @@ msgstr "עמלות ניהול תיקים"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:641
 msgid "Capitalize brokerage fees into stock account?"
-msgstr ""
+msgstr "האם להוון עמלות תיווך לחשבון המניה?"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:682
 msgid "In this page, input any dividend income received in this transaction."
-msgstr ""
+msgstr "בעמוד זה, נא להזין כל דיבידנד שהתקבל בעסקה זו."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:756
 msgid "Dividend Account"
