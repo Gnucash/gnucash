@@ -12,7 +12,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2024-07-05 19:09+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -3622,7 +3622,7 @@ msgstr "האם למחוק מחירים אלו?"
 #: gnucash/gnome-utils/dialog-transfer.cpp:1796
 #, c-format
 msgid "Price retrieval failed: %s"
-msgstr "אחזור מחיר נכשל: %s"
+msgstr "אחזור מחיר כשל: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
