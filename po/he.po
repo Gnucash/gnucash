@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-05 17:10+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2024-07-05 19:09+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -3622,7 +3622,7 @@ msgstr "האם למחוק מחירים אלו?"
 #: gnucash/gnome-utils/dialog-transfer.cpp:1796
 #, c-format
 msgid "Price retrieval failed: %s"
-msgstr "שדה אחזור מחיר: %s"
+msgstr "אחזור מחיר נכשל: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
@@ -10938,7 +10938,7 @@ msgstr "בחירת חשבון"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:687
 msgid "Enter file name and location for the Export…"
-msgstr "ליצוא נא להזין שם קובץ ומיקום…"
+msgstr "לייצוא נא להזין שם קובץ ומיקום…"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:698
 msgid "Choose File Name for Export"
@@ -19465,7 +19465,7 @@ msgstr "חדש, העברת %s ל '%s' (אוטומטי)"
 #: gnucash/import-export/import-main-matcher.cpp:2049
 #, c-format
 msgid "New, UNBALANCED (need price to transfer %s to acct %s)!"
-msgstr "חדש, חוסר איזון (נדרש חשבון להעברת %s לחשבו %s)!"
+msgstr "חדש, חוסר איזון (נדרש חשבון להעברת %s לחשבון %s)!"
 
 #. Translators: %s is the amount to be transferred.
 #: gnucash/import-export/import-main-matcher.cpp:2065
@@ -21764,7 +21764,7 @@ msgstr "כותרת דוח זה."
 #: gnucash/report/reports/example/sample-report.scm:119
 #: gnucash/report/reports/example/sample-report.scm:131
 msgid "Tab B"
-msgstr "לשונית ב'"
+msgstr "לשונית ב׳"
 
 #: gnucash/report/reports/example/sample-report.scm:61
 msgid "Boolean Option"
@@ -21857,7 +21857,7 @@ msgstr "זוהי אפשרות צבע."
 #: gnucash/report/reports/example/sample-report.scm:147
 #: gnucash/report/reports/example/sample-report.scm:158
 msgid "Tab A"
-msgstr "לשונית א'"
+msgstr "לשונית א׳"
 
 #: gnucash/report/reports/example/sample-report.scm:147
 msgid "An account list option"
