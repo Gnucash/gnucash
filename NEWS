@@ -1,8 +1,14 @@
 Version history:
 ------- -------
-5.7  - 20 June 2024
+5.8  - 7 July 2024
 The following bugs have been fixed:
 
+    Bug 799347 - Edit account to make it sub account under other account
+
+There were no other changes.
+New and Updated Translations: Macedonian, Spanish
+5.7  - 20 June 2024
+The following bugs have been fixed:
 
     Bug 669031 - Save the Scheduled Transactions number of months
     Bug 669035 - Save the Scheduled Transaction divider position
