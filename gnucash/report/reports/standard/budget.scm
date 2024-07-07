@@ -35,21 +35,11 @@
 
 (use-modules (srfi srfi-1))
 (use-modules (ice-9 match))
+(use-modules (ice-9 receive))
 
 (define trep-uuid "2fe3b9833af044abb929a88d5a59620f")
 
 (define reportname (N_ "Budget Report"))
-
-
-;; TEMP: debug logging
-(define (debug-log message)
-  (let* ((out (open-file
-                (string-append "/home/reese/.local/share/gnucash/report-logs/custom-budget-report-" current-time-string ".log")
-                "a")))
-    (display message out)
-    (newline out)
-    (close-output-port out)))
-
 
 ;; define all option's names so that they are properly defined
 ;; in *one* place.
@@ -78,7 +68,6 @@
 (define optname-show-zb-accounts (N_ "Include accounts with zero total balances and budget values"))
 (define opthelp-show-zb-accounts (N_ "Include accounts with zero total (recursive) balances and budget values in this report."))
 
-
 (define optname-use-budget-period-range
   (N_ "Report for range of budget periods"))
 (define opthelp-use-budget-period-range
@@ -106,6 +95,9 @@
 (define optname-bottom-behavior (N_ "Flatten list to depth limit"))
 (define opthelp-bottom-behavior
   (N_ "Displays accounts which exceed the depth limit at the depth limit."))
+
+(define optname-selected-only (N_ "Exclude unselected amounts"))
+(define opthelp-selected-only (N_ "Accounts not displayed will not be counted in their parent account values."))
 
 (define optname-budget (N_ "Budget"))
 
@@ -225,6 +217,10 @@
       gnc:pagename-accounts optname-bottom-behavior
       "c" opthelp-bottom-behavior #f)
 
+    (gnc-register-simple-boolean-option options
+      gnc:pagename-accounts optname-selected-only
+      "d" opthelp-selected-only #f)
+
     ;; columns to display
     (gnc-register-complex-boolean-option options
       gnc:pagename-display optname-show-budget
@@ -301,6 +297,8 @@
          (rollover? (get-val params 'rollover))
          (show-totalcol? (get-val params 'show-totalcol))
          (use-ranges? (get-val params 'use-ranges))
+         (accounts (get-val params 'accounts))
+         (selected-only? (get-val params 'selected-only))
          (num-rows (gnc:html-acct-table-num-rows acct-table))
          (numcolumns (gnc:html-table-num-columns html-table))
          ;; WARNING: we implicitly depend here on the details of
@@ -310,8 +308,8 @@
          ;; assumption.
          (colnum (quotient numcolumns 2)))
 
-    ;; Calculate the value to use for the budget of an account for a
-    ;; specific set of periods.  If there is 1 period, use that
+    ;; Calculate the naive value to use for the budget of an account for
+    ;; a specific set of periods.  If there is 1 period, use that
     ;; period's budget value.  Otherwise, sum the budgets for all of
     ;; the periods.
     ;;
@@ -322,15 +320,54 @@
     ;;
     ;; Return value:
     ;;   Budget sum
-    (define (gnc:get-account-periodlist-budget-value budget acct periodlist)
+    (define (gnc:get-single-account-periodlist-budget-value budget acct periodlist)
       (apply +
              (map
               (lambda (period)
                 (gnc:get-account-period-rolledup-budget-value budget acct period))
               periodlist)))
+
+    ;; Calculate the value to use for the budget of an account for
+    ;; a specific set of periods, including offsets for any
+    ;; unselected accounts if 'selected-only?' is true.
+    ;;
+    ;; Parameters:
+    ;;   budget - budget to use
+    ;;   acct - account
+    ;;   periodlist - list of budget periods to use
+    ;;
+    ;; Return value:
+    ;;   Budget sum
+    (define (gnc:get-account-periodlist-budget-value budget acct periodlist)
+      (receive
+        (subtract-accts add-accts) (descendant-additions-subtractions acct accounts)
+        (let
+          ((acct-budget-val
+             (gnc:get-single-account-periodlist-budget-value
+               budget acct periodlist))
+            (subtract-budget-offset-val
+              (if selected-only?
+                (apply +
+                  (map
+                    (lambda (sub-acct)
+                      (gnc:get-single-account-periodlist-budget-value
+                        budget sub-acct periodlist))
+                    subtract-accts))
+                0))
+            (add-budget-offset-val
+              (if selected-only?
+                (apply +
+                  (map
+                    (lambda (add-acct)
+                      (gnc:get-single-account-periodlist-budget-value
+                        budget add-acct periodlist))
+                    add-accts))
+                0)))
+          (+ (- acct-budget-val subtract-budget-offset-val)
+            add-budget-offset-val))))
     
-    ;; Calculate the value to use for the actual of an account for a
-    ;; specific set of periods.  This is the sum of the actuals for
+    ;; Calculate the naive value to use for the actual of an account for
+    ;; a specific set of periods.  This is the sum of the actuals for
     ;; each of the periods.
     ;;
     ;; Parameters:
@@ -340,11 +377,152 @@
     ;;
     ;; Return value:
     ;;   Budget sum
-    (define (gnc:get-account-periodlist-actual-value budget acct periodlist)
+    (define (gnc:get-single-account-periodlist-actual-value budget acct periodlist)
       (apply + (map
                 (lambda (period)
-                  (gnc-budget-get-account-period-actual-value budget acct period))
+                  (gnc-budget-get-account-period-actual-value
+                    budget acct period))
                 periodlist)))
+
+    ;; Calculate the value to use for the actual of an account for
+    ;; a specific set of periods, including offsets for any
+    ;; unselected accounts if 'selected-only?' is true.
+    ;;
+    ;; Parameters:
+    ;;   budget - budget to use
+    ;;   acct - account
+    ;;   periodlist - list of budget periods to use
+    ;;
+    ;; Return value:
+    ;;   Budget sum
+    (define (gnc:get-account-periodlist-actual-value budget acct periodlist)
+      (receive
+        (subtract-accts add-accts) (descendant-additions-subtractions acct accounts)
+        (let
+          ((acct-actual-val
+             (gnc:get-single-account-periodlist-actual-value
+               budget acct periodlist))
+            (subtract-actual-offset-val
+              (if selected-only?
+                (apply +
+                  (map
+                    (lambda (sub-acct)
+                      (gnc:get-single-account-periodlist-actual-value
+                        budget sub-acct periodlist))
+                    subtract-accts))
+                0))
+            (add-actual-offset-val
+              (if selected-only?
+                (apply +
+                  (map
+                    (lambda (add-acct)
+                      (gnc:get-single-account-periodlist-actual-value
+                        budget add-acct periodlist))
+                    add-accts))
+                0)))
+          (+ (- acct-actual-val subtract-actual-offset-val)
+            add-actual-offset-val))))
+
+
+    ;; Get descendant accounts to add or subtract
+    ;; If we want to exclude the amounts in unselected accounts from their parent totals,
+    ;; this function will return lists of accounts whose totals need to be subtracted from
+    ;; and added to the ancestor account balance.
+    ;;
+    ;; Consider the following account structure and display selections:
+    ;; [x] Expenses
+    ;;   [ ] Education
+    ;;     [ ] Tuition
+    ;;   [x] Bills
+    ;;     [ ] Utilities
+    ;;       [x] Phone
+    ;;       [ ] Internet
+    ;;     [x] House
+    ;;       [x] Mortgage
+    ;;       [ ] HOA
+    ;;
+    ;; We want to display a total for Expenses, but without Education or HOA, and without
+    ;; Utilities except for Phone. To determine our add/subtract account lists we walk the
+    ;; account structure, building the lists according to the following rules:
+    ;;   1. If the account is selected and its parent is selected, its value is already
+    ;;      included in its parent so it doesn't go on either list
+    ;;   2. If the account is not selected but its parent is, we need to subtract it to
+    ;;      offset its amount in the parent
+    ;;   3. If the account is not selected and neither is its parent, its value has already
+    ;;      been offset so it doesn't go on either list
+    ;;   4. If the account is selected but its parent is not selected, then the total of its
+    ;;      parent account was subtracted, so we need to add its amount
+    ;;
+    ;; In the above example, we would subtract Education, Utilities, and HOA; and we would
+    ;; add Phone.
+    ;;
+    ;; Parameters:
+    ;;   acct - account to compute additions and subtractions in descendant accounts for
+    ;;   selected-accts - list of all accounts that are selected
+    ;;
+    ;; Return value:
+    ;;   Two lists: (1) accounts to subtract balances of, and (2) accounts to add balances of
+    (define (descendant-additions-subtractions acct selected-accts)
+      ;; construct is-selected-acct function for efficient lookup from selected-accts
+      (define (map-accts-by-guid acct-list)
+        (define accts-map (make-hash-table (length acct-list)))
+        (for-each
+          (lambda (acct)
+            (hash-set! accts-map (gncAccountGetGUID acct) acct))
+          acct-list)
+        accts-map)
+      (define selected-accts-map (map-accts-by-guid selected-accts))
+      (define (is-selected acct)
+        (not (eq? (hash-ref selected-accts-map
+                    (gncAccountGetGUID acct) 'not-found) 'not-found)))
+
+      (define (get-add-subtract-descendants-helper cur-acct is-root)
+        (define result '())
+        (let ((parent-acct (gnc-account-get-parent cur-acct))
+               (children-accts (gnc-account-get-children-sorted cur-acct)))
+          (cond
+            ;; if this account is selected and its parent is (or we're on the root
+            ;;   account, ignoring parent) no need to do anything, this account is
+            ;;   already included in its parent total
+            ((and (is-selected cur-acct) (or (is-selected parent-acct) is-root)) #f)
+            ;; same deal if neither this one or its parent are selected: we've
+            ;;   already subtracted the total of the parent account including this
+            ;;   one so no need to do anything
+            ((and (not (is-selected cur-acct)) (not (is-selected parent-acct))) #f)
+            ;; if this account is selected but its parent is not we need to add this
+            ;;   account to the 'add-accts' list since its value is not included in
+            ;    its parent
+            ((and (is-selected cur-acct) (not (is-selected parent-acct)))
+              (set! result (cons (list 'add-acct cur-acct) result)))
+            ;; if this account is not selected but its parent is, we need to add it
+            ;;   to the 'subtract-accts' list since its value needs to be subtracted
+            ;;   from the parent total
+            ((and (not (is-selected cur-acct)) (is-selected parent-acct))
+              (set! result (cons (list 'subtract-acct cur-acct) result))))
+          ;; recurse into children
+          (for-each
+            (lambda (child)
+              (set! result (append result
+                             (get-add-subtract-descendants-helper child #f))))
+            children-accts))
+        result)
+
+      ;; call main logic in get-add-subtract-descendants-helper, then build list
+      ;; of lists into flat subtract-accts and add-accts lists
+      (define acct-actions (get-add-subtract-descendants-helper acct #t ))
+      (define subtract-accts '())
+      (define add-accts '())
+      (for-each
+        (lambda (item)
+          (cond
+            ((eq? (car item) 'add-acct)
+              (set! add-accts (cons (second item) add-accts)))
+            ((eq? (car item) 'subtract-acct)
+              (set! subtract-accts (cons (second item) subtract-accts)))))
+        acct-actions)
+
+      (values subtract-accts add-accts))
+
 
     ;; Adds a line to the budget report.
     ;;
@@ -437,43 +615,50 @@
                                bgt-total act-total dif-total #f))))
 
            (else
-            (let* ((period-list (cond
-                                 ;; if this column is a range of periods, use that list
-                                 ;; TODO: is it a bug or intended behavior to not include previous periods here when accumulate is true?
-                                 ((list? (car column-list)) (car column-list))
-                                 ;; if we're accumulating or rolling over budget, use all periods up until the indicated one
-                                 ((or accumulate? rollover?) (iota (1+ (car column-list))))
-                                  ;; otherwise our period list has a single element: the indicated period
-                                 (else (list (car column-list)))))
-                    ;; build a list of all previous periods to use in rollover offset if we're rolling over
-                    (period-list-prev (cond
-                                       ((and rollover? (list? (car column-list))) (iota (car (car column-list))))
-                                       (rollover? (iota (car column-list)))
-                                       (else '())))
-                    (note (and (= 1 (length period-list))
-                               (gnc-budget-get-account-period-note
-                                budget acct (car period-list))))
-                    ;; total budget for all periods in period-list
-                    (bgt-val-all (gnc:get-account-periodlist-budget-value
-                                   budget acct period-list))
-                    ;; total actuals for any periods being used in a rollover offset
-                    (act-val-prev (gnc:get-account-periodlist-actual-value
-                                    budget acct period-list-prev))
-                    ;; budget value: total for period-list minus any offset
-                    (bgt-val (maybe-negate
-                               (- bgt-val-all act-val-prev)))
-                    ;; total actual for period-list
-                    (act-val-all (gnc:get-account-periodlist-actual-value
-                                  budget acct period-list))
-                    ;; actual value: total for period-list minus any offset
-                    (act-val (maybe-negate
-                              (- act-val-all act-val-prev)))
-                    (dif-val (- bgt-val act-val)))
-              (loop (cdr column-list)
-                    (disp-cols "number-cell" current-col acct
-                               (gnc-budget-get-period-start-date budget (car period-list))
-                               (gnc-budget-get-period-end-date budget (car period-list))
-                               bgt-val act-val dif-val note))))))))
+            (let*
+              ((period-list
+                 (cond
+                  ;; if this column is a range of periods, use that list
+                  ;; TODO: is it a bug or intended behavior to not include previous periods here when accumulate is true?
+                  ((list? (car column-list)) (car column-list))
+                  ;; if we're accumulating or rolling over budget, use all periods up
+                  ;; until the indicated one
+                  ((or accumulate? rollover?) (iota (1+ (car column-list))))
+                  ;; otherwise our period list has a single element: the indicated period
+                  (else (list (car column-list)))))
+                ;; build a list of all previous periods to use in rollover offset if
+                ;; we're rolling over
+                (period-list-prev
+                  (cond
+                    ((and rollover?
+                       (list? (car column-list))) (iota (car (car column-list))))
+                    (rollover? (iota (car column-list)))
+                    (else '())))
+                (note (and (= 1 (length period-list))
+                           (gnc-budget-get-account-period-note
+                            budget acct (car period-list))))
+                ;; total budget for all periods in period-list
+                (bgt-val-all (gnc:get-account-periodlist-budget-value
+                               budget acct period-list))
+                ;; total actuals for any periods being used in a rollover offset
+                (act-val-prev (gnc:get-account-periodlist-actual-value
+                                budget acct period-list-prev))
+                ;; budget value: total for period-list minus any offset
+                (bgt-val (maybe-negate
+                           (- bgt-val-all act-val-prev)))
+                ;; total actual for period-list
+                (act-val-all (gnc:get-account-periodlist-actual-value
+                              budget acct period-list))
+                ;; actual value: total for period-list minus any offset
+                (act-val (maybe-negate
+                          (- act-val-all act-val-prev)))
+                (dif-val (- bgt-val act-val)))
+              (loop
+                (cdr column-list)
+                (disp-cols "number-cell" current-col acct
+                  (gnc-budget-get-period-start-date budget (car period-list))
+                  (gnc-budget-get-period-end-date budget (car period-list))
+                  bgt-val act-val dif-val note))))))))
 
     ;; Adds header rows to the budget report.  The columns are
     ;; specified by the column-list parameter.
@@ -729,6 +914,7 @@
                    (list 'report-budget budget)))
              (accounts (sort accounts gnc:account-full-name<?))
              (accumulate? (get-option gnc:pagename-general optname-accumulate))
+             (rollover? (get-option gnc:pagename-general optname-rollover))
              (acct-table (gnc:make-html-acct-table/env/accts env accounts))
              (footnotes (make-footnote-collector))
              (paramsBudget
@@ -746,7 +932,7 @@
                           (get-option gnc:pagename-display optname-show-notes)))
                (list 'footnotes footnotes)
                (list 'use-envelope accumulate?)
-               (list 'rollover (get-option gnc:pagename-general optname-rollover))
+               (list 'rollover rollover?)
                (list 'show-totalcol
                      (get-option gnc:pagename-display optname-show-totalcol))
                (list 'use-ranges use-ranges?)
@@ -761,11 +947,13 @@
                (list 'user-start-period-exact
                      (to-period-val optname-budget-period-start-exact))
                (list 'user-end-period-exact
-                     (to-period-val optname-budget-period-end-exact))))
+                     (to-period-val optname-budget-period-end-exact))
+               (list 'accounts accounts)
+               (list 'selected-only
+                     (get-option gnc:pagename-accounts optname-selected-only))))
              (report-name (get-option gnc:pagename-general
                                       gnc:optname-reportname)))
 
-        ;; TODO: add this for rollover
         (gnc:html-document-set-title!
          doc (format #f "~a: ~a ~a"
                      report-name (gnc-budget-get-name budget)
@@ -773,8 +961,10 @@
                      ;; budget will report on budgeted and actual
                      ;; amounts from the beginning of budget, instead
                      ;; of only using the budget-period amounts.
-                     (if accumulate? (G_ "using accumulated amounts")
-                         "")))
+                     (cond
+                       (accumulate? (G_ "using accumulated amounts"))
+                       (rollover? (G_ "using budget rollover"))
+                       (else ""))))
 
         ;; We do this in two steps: First the account names...  the
         ;; add-account-balances will actually compute and add a
