@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-05 19:09+0000\n"
+"PO-Revision-Date: 2024-07-07 11:34+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -1368,7 +1368,7 @@ msgstr "רכישת מניות תקנית (לונג) ראשונית."
 #. initial stock short sale
 #: gnucash/gnome/assistant-stock-transaction.cpp:171
 msgid "Open short"
-msgstr "פתיחת מניה בחסר"
+msgstr "פתיחת מניה למכירה בחסר"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:172
 msgid "Initial stock short sale."
@@ -1844,7 +1844,7 @@ msgstr "הזנת יתרת מניות חדשה לאחר פיצול המניות."
 #: gnucash/gnome/assistant-stock-transaction.cpp:1930
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:212
 msgid "Enter the number of shares you gained or lost in the transaction."
-msgstr "הזנת כמות (יחידות) שהפסדו או הרוחו בעסקה"
+msgstr "הזנת כמות (יחידות) מניות שהיוו רווחים או הפסדים בעסקה."
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:2331
 #: gnucash/gnome/dialog-find-transactions.c:153
@@ -7662,9 +7662,8 @@ msgid "_Custom"
 msgstr "_מותאם אישית"
 
 #: gnucash/gnome-utils/gnc-report-combo.c:247
-#, fuzzy
 msgid "Selected Report is Missing"
-msgstr " חסר בדוח מזהה ייחודי אוניברסלי."
+msgstr "דוח שנבחר חסר"
 
 #. Translators: %s is the report name.
 #: gnucash/gnome-utils/gnc-report-combo.c:300
@@ -8082,7 +8081,17 @@ msgid ""
 "unless the source is \"currency\" in which case it must be followed with two "
 "or more symbols, the first of which is the currency in which exchange rates "
 "for the rest will be quoted.\n"
-msgstr "‌\n"
+msgstr ""
+"ביציע פקודות שקשורות בציטוט מחירים. הפקודות הבאות נתמכות.\n"
+"\n"
+"   info: \t  הצגת גרסת Finance::Quote ומקורות ציטוט גלויים.\n"
+"   get: \t  אחזר ציטוט מחיר נוכחי לכל המניות והמטבעות הזרים בקובץ הנתונים "
+"הנתון של גנוקאש.\n"
+"   dump: אחזר ציטוט מחיר נוכחי למטבעות זרים או מניות שצוינו ממרחב שמות מוגדר "
+"ולהדפיס את התוצאות למסוף.\n"
+"                  צריך להיות מלווה במקור וסמל אחד או יותר, אלא אם המקור הוא "
+"\"מטבע\" ובמקרה זה מלווה בשני סמלים או יותר, שהראשון שבהם הוא המטבע שבו "
+"יוצגו שערי החליפין של השאר הבטבעות.\n"
 
 #: gnucash/gnucash-cli.cpp:103
 #, fuzzy
@@ -8134,9 +8143,8 @@ msgid "Missing data file parameter"
 msgstr "חסר מְאַפְיֵן קובץ נתונים"
 
 #: gnucash/gnucash-cli.cpp:160
-#, fuzzy
 msgid "Not enough information for quotes dump"
-msgstr "אין מספיק מידע לתנועה ריקה?"
+msgstr "אין די מידע לשפיכת ציטוטים"
 
 #: gnucash/gnucash-cli.cpp:170
 msgid "Unknown quotes command '{1}'"
@@ -8162,7 +8170,7 @@ msgstr "נמצאה גרסת Finance::Quote‏~A."
 
 #: gnucash/gnucash-commands.cpp:318
 msgid "Finance::Quote sources:\n"
-msgstr "Finance::Quote sources:\n"
+msgstr "מקורות Finance::Quote:\n"
 
 #: gnucash/gnucash-commands.cpp:372 gnucash/gnucash-commands.cpp:396
 msgid "Price retrieval failed: "
@@ -9948,14 +9956,12 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:286
 #: gnucash/gtkbuilder/dialog-preferences.glade:2850
-#, fuzzy
 msgid "Hide splits in all transactions."
-msgstr "מחיקת כל _התנועות"
+msgstr "הסתרת פיצולים בכול התנועות."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:287
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:297
-#, fuzzy
 msgid ""
 "This field specifies the default view style when opening a new register "
 "window. Possible values are \"Basic ledger\", \"Auto-split ledger\" and "
@@ -9973,7 +9979,6 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:291
 #: gnucash/gtkbuilder/dialog-preferences.glade:2869
-#, fuzzy
 msgid ""
 "Automatically expand the current transaction to show all splits. All other "
 "transactions are shown on one or two lines depending on whether Double line "
@@ -11335,12 +11340,10 @@ msgid "Select a row to change the mappings"
 msgstr "נא לבחור שורה לשינוי המיפוי"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:960
-#, fuzzy
 msgid ""
 "To change mapping, double click on a row or select a row and press the "
 "button…"
-msgstr ""
-"כדי לשנות מיפוי, יש להקיש פעמיים על שורה או לבחור שורה ולהקיש על הלחצן..."
+msgstr "כדי לשנות מיפוי, יש להקיש פעמיים על שורה או לבחור שורה ולהקיש על הלחצן…"
 
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:971
 #: gnucash/import-export/import-account-matcher.cpp:166
@@ -11881,9 +11884,8 @@ msgstr ""
 "ניתן לטעון מספר קבצים ככל שידרש, אז לא לדאוג אם הנתונים נמצאים במספר קבצים.\n"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:86
-#, fuzzy
 msgid "_Select…"
-msgstr "בחירה"
+msgstr "_בחירה…"
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:109
 msgid "Select a QIF file to load"
@@ -12390,9 +12392,8 @@ msgstr ""
 "חשבונות במטבע התנועה יוצעו עבור מזומנים, רווחי הון, דיבידנדים ועמלות."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
-#, fuzzy
 msgid "Select the date and description for your records."
-msgstr "הצגת תיאור חשבון בכותרות משנה?"
+msgstr "בחירת התאריך והתיאור לרשומות."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:109
 #: gnucash/gtkbuilder/dialog-payment.glade:662
@@ -12512,14 +12513,14 @@ msgid "Capital Gains"
 msgstr "רווחי הון"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:908
-#, fuzzy
 msgid ""
 "A summary of splits is shown as follows. If the summary is correct, and "
 "there are no errors, please press \"Apply\". You may also press \"Back\" to "
 "review your choices, or \"Cancel\" to quit without making any changes. "
 msgstr ""
-"בסיום יצירת פיצול או מיזוג המניות יש להקיש על 'החלה'. ניתן להקיש על 'הקודם' "
-"לסקירת הבחירות שנעשו, או על 'סיום' ליציאה מבלי לשמור את השינויים."
+"סיכום פיצולים מוצג כדלקמן. אם הסיכום נכון, ואין שגיאות, נא ללחוץ על \"החלה\""
+". ניתן גם ללחוץ על \"הקודם\" כדי לסקור את הבחירה שנעשתה, או \"ביטול\" כדי "
+"לצאת מבלי לבצע שינויים. "
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:956
 msgid "Finish"
@@ -13126,7 +13127,7 @@ msgstr "מצב תנועה ברירת מחדל (יידרס על־ידי המצב 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:159
 #: gnucash/gtkbuilder/dialog-import.glade:12
 msgid "Select Account"
-msgstr "בחירת חשבון"
+msgstr "לבחור חשבון"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:237
 msgid "_Select or add a GnuCash account:"
@@ -13188,9 +13189,8 @@ msgid "Open imported documents in tabs"
 msgstr "פתיחת מסמכים שיובאו בלשונית"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:392
-#, fuzzy
 msgid "Open not yet posted documents in tabs"
-msgstr "פתיחת מסמכים שטרם נרשמו בלשונית "
+msgstr "פתיחת מסמכים שטרם נרשמו בלשוניות"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:410
 msgid "Don't open imported documents in tabs"
@@ -13639,7 +13639,6 @@ msgid "Currently you have no saved reports."
 msgstr "אין כעת דוחות שמורים."
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:112
-#, fuzzy
 msgid ""
 "Saved report configurations are created by\n"
 "1. opening a report from the Reports menu,\n"
@@ -13647,9 +13646,11 @@ msgid ""
 "3. selecting \"Save Report Configuration [As…]\" from the Reports menu\n"
 " or pressing a \"Save Config [As…]\" button on the tool bar."
 msgstr ""
-"לתצור דוחות שמורים, תחילה יש לפתוח דוח מתפריט הדוחות,\n"
-"לשנות את אפשרויות הדוח. לסיום, בחירה ב'שמירת תצורת־דוח' מתפריט\n"
-"הדוחות או מסרגל הכלים."
+"תצורות דוחות שמורים נוצרים על ידי\n"
+"1. פתיחת דוח מתפריט הדוחות,\n"
+"2. שינוי אפשרויות הדוח לפי הצורך,\n"
+"3. בחירת \"שמירת תצורת דו\"ח [בשם...]\" מתפריט הדוחות\n"
+" או לחיצה על לחצן \"שמירת תצורה [בשם...]\" בסרגל הכלים."
 
 #: gnucash/gtkbuilder/dialog-date-close.glade:7
 #: gnucash/gtkbuilder/dialog-date-close.glade:261
@@ -15913,9 +15914,8 @@ msgid "Temporary Warnings"
 msgstr "אזהרות זמניות"
 
 #: gnucash/gtkbuilder/dialog-search.glade:37
-#, fuzzy
 msgid "_New item…"
-msgstr "פריט חדש"
+msgstr "_פריט חדש…"
 
 #: gnucash/gtkbuilder/dialog-search.glade:82
 msgid "_Find"
@@ -18160,9 +18160,8 @@ msgid "Import using AQBanking"
 msgstr "ייבוא תוך שימוש ב־AQBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:8
-#, fuzzy
 msgid "Import into GnuCash any file format supported by AQBanking"
-msgstr "יבוא קובץ DTAUS לגנוקאש ושידור ההזמנות דרך בנקאות מקוונת."
+msgstr "ייבא לגנוקאש כל תסדיר קובץ שנתמך על ידי AQBanking"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:14
 msgid "_Online Actions"
@@ -18230,9 +18229,8 @@ msgid "Show _log window"
 msgstr "חלון _התחברות"
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:55
-#, fuzzy
 msgid "Show the online banking log window"
-msgstr "הצגת חלון התחברות לבנקאות מקוונת."
+msgstr "הצגת חלון יומן הפעולות לבנקאות מקוונת."
 
 #: gnucash/import-export/aqb/gnc-plugin-aqbanking.ui:63
 msgid "_Online Banking Setup…"
@@ -18684,9 +18682,8 @@ msgstr "סכום עם סמל"
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:368
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:388
-#, fuzzy
 msgid "Value Num."
-msgstr "ערך $"
+msgstr "מספר ערך."
 
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:369
 #: gnucash/import-export/csv-exp/csv-transactions-export.cpp:391
@@ -18754,7 +18751,7 @@ msgstr ""
 "אחר' להציג חשבונות שלא בשימוש.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:458
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Import completed but with errors!\n"
 "\n"
@@ -18766,7 +18763,7 @@ msgstr ""
 "\n"
 "נוספו %u חשבונות ו־%u עודכנו.\n"
 "\n"
-"נתן לצפות בשגיאות מטה..."
+"נתן לצפות בשגיאות מטה…"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:466
 #, c-format
@@ -19216,9 +19213,8 @@ msgid "Description field can not be empty if 'Multi-split' option is unset.\n"
 msgstr ""
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:311
-#, fuzzy
 msgid "No valid date."
-msgstr "לא תקין"
+msgstr "לא תאריך תקין."
 
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:314
 #, fuzzy
@@ -19916,9 +19912,8 @@ msgid "Ignoring security line"
 msgstr "המערכת תתעלם משורת בטוחה"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:532
-#, fuzzy
 msgid "Could not parse price line"
-msgstr "לא ניתן ליצור יתרת פתיחה."
+msgstr "לא ניתן לפרק שורת מחיר"
 
 #: gnucash/import-export/qif-imp/qif-file.scm:540
 msgid "File does not appear to be in QIF format"
@@ -20055,23 +20050,21 @@ msgid "Discarding duplicate prices"
 msgstr "%d שיכפול מחיר"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:516
-#, fuzzy
 msgid "Adding prices"
-msgstr "הוספת מחיר חדש."
+msgstr "הוספת מחירים"
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:589
 msgid "Missing transaction date."
 msgstr "תאריך תנועה חסר."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:741
-#, fuzzy, scheme-format
+#, scheme-format
 msgid "Missing QIF investment action for transaction dated ~a."
-msgstr "תאריך תנועה חסר."
+msgstr "פעולת השקעה QIF חסרה לתנועה מתאריך ~a."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1426
-#, fuzzy
 msgid "Invalid transaction date."
-msgstr "תנועה לא תקינה"
+msgstr "תאריך תנועה לא תקין."
 
 #: gnucash/python/init.py:18
 msgid "Welcome to GnuCash"
@@ -21897,14 +21890,14 @@ msgid "Report Title Default"
 msgstr "כותרת דוח"
 
 #: gnucash/report/reports/example/sample-report.scm:285
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ""
 "This is a sample GnuCash ~a report. See the guile (scheme) source code in "
 "the scm/report directory for details on writing your own reports, or "
 "extending existing reports."
 msgstr ""
-"זהו דוח גנוקאש לדוגמה. נא לעיין בקוד המקור של גויל (תרשים) בספרית scm/"
-"rapport לקבלת פרטים על כתיבת דוחות באופן עצמאי או הרחבת דוחות קיימים."
+"זוהי דוגמת דוח ~a גנוקאש. לפרטים על כתיבת דוחות באופן עצמאי, או הרחבת דוחות "
+"קיימים, נא לעיין ב (סכמת) קוד המקור של guile בספריית scm/rapport."
 
 #: gnucash/report/reports/example/sample-report.scm:292
 #, scheme-format
@@ -21916,19 +21909,20 @@ msgstr ""
 "הדיוור ~a."
 
 #: gnucash/report/reports/example/sample-report.scm:297
-#, fuzzy
 msgid ""
 " For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
-msgstr "לפרטים בדבר הרשמה לרשימה זו, ראו &lt;https://www.gnucash.org/&gt;."
+msgstr ""
+" לפרטים בדבר הרשמה לרשימה זו, נא לעיין בעמוד &lt;https://www.gnucash.org/"
+"&gt;."
 
 #: gnucash/report/reports/example/sample-report.scm:298
-#, fuzzy
 msgid ""
 " You can learn more about writing scheme at &lt;https://www.scheme.com/"
 "tspl2d/&gt;."
 msgstr ""
-"ניתן ללימוד עוד אודות כתיבת תרשים ב &lt;https://www.scheme.com/tspl2d/&gt;."
+" ניתן ללימוד עוד אודות כתיבת תרשים בעמוד &lt;https://www.scheme.com/tspl2d/"
+"&gt;."
 
 #: gnucash/report/reports/example/sample-report.scm:302
 #, scheme-format
@@ -22015,9 +22009,8 @@ msgid "Sample Report"
 msgstr "דוח עובד"
 
 #: gnucash/report/reports/example/sample-report.scm:457
-#, fuzzy
 msgid "An options example report."
-msgstr "הצגת דוח עובד"
+msgstr "דוח אפשרויות לדוגמה."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:79
 msgid "Tax Report / TXF Export"
@@ -23676,9 +23669,8 @@ msgid "Reporting range end period cannot be less than start period."
 msgstr "תקופת הסיום של טווח הדיווח לא יכולה להיות קטן מתקופת ההתחלה."
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:410
-#, fuzzy
 msgid "Reporting range end period cannot exceed number of periods in budget"
-msgstr "תקופת הסיום של טווח הדיווח לא יכולה להיות קטן מתקופת ההתחלה."
+msgstr "תקופת סיום טווח הדיווח לא יכולה לחרוג ממספר התקופות בתקציב"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:482
 #: gnucash/report/reports/standard/income-statement.scm:461
@@ -25063,9 +25055,9 @@ msgid ""
 msgstr ""
 
 #: gnucash/report/reports/standard/investment-lots.scm:1425
-#, fuzzy, scheme-format
+#, scheme-format
 msgid ": amount ~a, value ~a"
-msgstr "חשבון/ערך"
+msgstr "חשבון ~a, ערך~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1445
 #, scheme-format
@@ -27759,9 +27751,8 @@ msgstr "שורה _כפולה"
 #: gnucash/ui/gnc-plugin-page-register.ui:229
 #: gnucash/ui/gnc-plugin-page-register.ui:872
 #: gnucash/ui/gnc-reconcile-window.ui:43
-#, fuzzy
 msgid "_Transfer…"
-msgstr "העברה"
+msgstr "_העברה…"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:95
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:128
@@ -28018,9 +28009,8 @@ msgstr "פתיחת דו־שיח חשבונית חדשה"
 #: gnucash/ui/gnc-plugin-page-register.ui:697
 #: gnucash/ui/gnc-plugin-page-report.ui:145
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:128
-#, fuzzy
 msgid "New _Invoice…"
-msgstr "_חשבונית נוספת"
+msgstr "_חשבונית חדשה…"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:6
 msgid "New Accounts _Page"
@@ -28039,18 +28029,16 @@ msgid "Create a new file"
 msgstr "יצירת קובץ חדש"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:12
-#, fuzzy
 msgid "_Open…"
-msgstr "_פתיחה"
+msgstr "_פתיחה…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:15
 msgid "Open an existing GnuCash file"
 msgstr "פתיחת קובץ גנוקאש קיים"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:27
-#, fuzzy
 msgid "Save _As…"
-msgstr "_שמירה בשם"
+msgstr "_שמירה בשם…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:30
 msgid "Save this file with a different name"
@@ -28089,9 +28077,8 @@ msgstr "ייצוא תרשים החשבונות לקובץ נתונים גנוק�
 #: gnucash/ui/gnc-plugin-page-register.ui:49
 #: gnucash/ui/gnc-plugin-page-report.ui:16
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:16
-#, fuzzy
 msgid "_Find…"
-msgstr "_חיפוש"
+msgstr "_חיפוש…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:62
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:70
@@ -28175,9 +28162,8 @@ msgid "Use the loan/mortgage repayment calculator"
 msgstr "שימוש במחשבון פרעון הלוואה/משכנתא"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:119
-#, fuzzy
 msgid "_Close Book…"
-msgstr "_סגירת ספרים"
+msgstr "_סגירת ספרים…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:121
 msgid "Close the Book at the end of the Period"
@@ -28249,9 +28235,8 @@ msgid "_Delete Budget"
 msgstr "_מיחקת תקציב"
 
 #: gnucash/ui/gnc-plugin-budget.ui:27
-#, fuzzy
 msgid "Delete an existing Budget"
-msgstr "מחיקת תקציב קיים."
+msgstr "מחיקת תקציב קיים"
 
 #: gnucash/ui/gnc-plugin-business.ui:6
 msgid "_Customer"
@@ -28268,45 +28253,40 @@ msgstr "פתיחת עמוד רשימת לקוח"
 #: gnucash/ui/gnc-plugin-business.ui:14
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:23
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:317
-#, fuzzy
 msgid "_New Customer…"
-msgstr "לקוח חדש"
+msgstr "_לקוח חדש…"
 
 #: gnucash/ui/gnc-plugin-business.ui:16
 msgid "Open the New Customer dialog"
 msgstr "פתיחת דו־שיח לקוח חדש"
 
 #: gnucash/ui/gnc-plugin-business.ui:19
-#, fuzzy
 msgid "_Find Customer…"
-msgstr "חיפוש לקוח"
+msgstr "_חיפוש לקוח…"
 
 #: gnucash/ui/gnc-plugin-business.ui:21
 msgid "Open the Find Customer dialog"
 msgstr "פתיחת דו־שיח חיפוש לקוח"
 
 #: gnucash/ui/gnc-plugin-business.ui:29
-#, fuzzy
 msgid "Find In_voice…"
-msgstr "חיפוש חשבונית"
+msgstr "_חיפוש חשבונית…"
 
 #: gnucash/ui/gnc-plugin-business.ui:31
 msgid "Open the Find Invoice dialog"
 msgstr "פתיחת דו שיחן חיפוש חשבונית"
 
 #: gnucash/ui/gnc-plugin-business.ui:34 gnucash/ui/gnc-plugin-business.ui:83
-#, fuzzy
 msgid "New _Job…"
-msgstr "ריכוז חדש"
+msgstr "_ריכוז חדש…"
 
 #: gnucash/ui/gnc-plugin-business.ui:36 gnucash/ui/gnc-plugin-business.ui:85
 msgid "Open the New Job dialog"
 msgstr "פתיחת דו־שיח ריכוז חדש"
 
 #: gnucash/ui/gnc-plugin-business.ui:39 gnucash/ui/gnc-plugin-business.ui:88
-#, fuzzy
 msgid "Find Jo_b…"
-msgstr "חיפוש ריכוז"
+msgstr "חיפוש רי_כוז…"
 
 #: gnucash/ui/gnc-plugin-business.ui:41 gnucash/ui/gnc-plugin-business.ui:90
 msgid "Open the Find Job dialog"
@@ -28314,9 +28294,8 @@ msgstr "פתיחת דו־שיח חיפוש ריכוז"
 
 #: gnucash/ui/gnc-plugin-business.ui:44 gnucash/ui/gnc-plugin-business.ui:93
 #: gnucash/ui/gnc-plugin-business.ui:132
-#, fuzzy
 msgid "_Process Payment…"
-msgstr "עיבוד תשלום"
+msgstr "_עיבוד תשלום…"
 
 #: gnucash/ui/gnc-plugin-business.ui:46 gnucash/ui/gnc-plugin-business.ui:95
 #: gnucash/ui/gnc-plugin-business.ui:134
@@ -28346,18 +28325,16 @@ msgstr "פתיחת עמוד רשימת ספקים"
 #: gnucash/ui/gnc-plugin-business.ui:63
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:472
-#, fuzzy
 msgid "_New Vendor…"
-msgstr "ספק חדש"
+msgstr "_ספק חדש…"
 
 #: gnucash/ui/gnc-plugin-business.ui:65
 msgid "Open the New Vendor dialog"
 msgstr "פתיחת דו־שיח ספק חדש"
 
 #: gnucash/ui/gnc-plugin-business.ui:68
-#, fuzzy
 msgid "_Find Vendor…"
-msgstr "חיפוש ספק"
+msgstr "_חיפוש ספק…"
 
 #: gnucash/ui/gnc-plugin-business.ui:70
 msgid "Open the Find Vendor dialog"
@@ -28366,18 +28343,16 @@ msgstr "פתיחת דו־שיח חיפוש ספק"
 #: gnucash/ui/gnc-plugin-business.ui:73
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:193
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:512
-#, fuzzy
 msgid "New _Bill…"
-msgstr "חשבונית _ספק חדשה"
+msgstr "חשבונית _ספק חדשה…"
 
 #: gnucash/ui/gnc-plugin-business.ui:75
 msgid "Open the New Bill dialog"
 msgstr "פתיחת דו־שיח חשבונית ספק חדשה"
 
 #: gnucash/ui/gnc-plugin-business.ui:78
-#, fuzzy
 msgid "Find Bi_ll…"
-msgstr "חיפוש חשבונית ספק"
+msgstr "חיפוש ח_שבונית ספק…"
 
 #: gnucash/ui/gnc-plugin-business.ui:80
 msgid "Open the Find Bill dialog"
@@ -28406,27 +28381,24 @@ msgstr "פתיחת עמוד רשימת עובדים"
 #: gnucash/ui/gnc-plugin-business.ui:112
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:55
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:627
-#, fuzzy
 msgid "_New Employee…"
-msgstr "עובד חדש"
+msgstr "_עובד חדש…"
 
 #: gnucash/ui/gnc-plugin-business.ui:114
 msgid "Open the New Employee dialog"
 msgstr "פתיחת דו־שיח עובד חדש"
 
 #: gnucash/ui/gnc-plugin-business.ui:117
-#, fuzzy
 msgid "_Find Employee…"
-msgstr "חיפוש עובד"
+msgstr "_חיפוש עובד…"
 
 #: gnucash/ui/gnc-plugin-business.ui:119
 msgid "Open the Find Employee dialog"
 msgstr "פתיחת דו־שיח חיפוש עובד"
 
 #: gnucash/ui/gnc-plugin-business.ui:122
-#, fuzzy
 msgid "New _Expense Voucher…"
-msgstr "שובר הוצאות חדש"
+msgstr "_שובר הוצאות חדש…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
 #, fuzzy
@@ -28434,9 +28406,8 @@ msgid "Open the New Voucher dialog"
 msgstr "פתיחת דו־שיח שובר הוצאות חדש"
 
 #: gnucash/ui/gnc-plugin-business.ui:127
-#, fuzzy
 msgid "Find Expense _Voucher…"
-msgstr "חיפוש שובר הוצאות"
+msgstr "_חיפוש שובר הוצאות…"
 
 #: gnucash/ui/gnc-plugin-business.ui:129
 msgid "Open the Find Expense Voucher dialog"
@@ -28515,9 +28486,8 @@ msgid "Import Transactions from a CSV file"
 msgstr "יבוא תנועות מקובץ CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
-#, fuzzy
 msgid "Import _Prices from a CSV file…"
-msgstr "יבוא מחירים מקובץ CSV"
+msgstr "יבוא _מחירים מקובץ ...CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
@@ -28528,19 +28498,17 @@ msgid "Import _Customers & Vendors…"
 msgstr "יבוא _לקוחות וספקים…"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:8
-#, fuzzy
 msgid "Import Customers and Vendors from a CSV text file"
-msgstr "יבוא לקוחות או ספקים מקובץ מלל CSV."
+msgstr "יבוא לקוחות וספקים מקובץ מלל CSV"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
 msgid "_Replay GnuCash .log file…"
 msgstr "_הרצה מחודשת של קובץ log. גנוקאש…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
-#, fuzzy
 msgid "Replay a GnuCash log file after a crash. This cannot be undone"
 msgstr ""
-"ביצוע חוזר של קובץ יומן־רישום גנוקאש, אחרי קריסה. פעולה זו היא בלתי הפיכה."
+"ביצוע חוזר של קובץ יומן־רישום גנוקאש, לאחר קריסה. פעולה זו היא בלתי הפיכה"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:16
 #: gnucash/ui/gnc-plugin-page-register.ui:32
@@ -28661,9 +28629,8 @@ msgstr "הרחבת ספר החשבונות הנוכחי על־ידי מיזוג�
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:234
 #: gnucash/ui/gnc-plugin-page-register.ui:236
 #: gnucash/ui/gnc-plugin-page-register.ui:887
-#, fuzzy
 msgid "_Reconcile…"
-msgstr "_התאמה"
+msgstr "_התאמה…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
@@ -28674,9 +28641,8 @@ msgstr "התאמת החשבון שנבחר"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:138
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:239
 #: gnucash/ui/gnc-plugin-page-register.ui:242
-#, fuzzy
 msgid "_Auto-clear…"
-msgstr "התאמה אוטומטית"
+msgstr "התאמה _אוטומטית…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
 msgid ""
@@ -28688,16 +28654,14 @@ msgstr "התאמה אוטומטית של תנועות פרטניות, כדי ל�
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:249
 #: gnucash/ui/gnc-plugin-page-register.ui:248
 #: gnucash/ui/gnc-plugin-page-register.ui:902
-#, fuzzy
 msgid "Stock Ass_istant…"
-msgstr "סייען ניירות _ערך"
+msgstr "סייען ניירות _ערך…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:150
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
 #: gnucash/ui/gnc-plugin-page-register.ui:254
-#, fuzzy
 msgid "Stoc_k Split…"
-msgstr "פיצול ניר ערך"
+msgstr "פיצול ניר ערך…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
@@ -28761,9 +28725,8 @@ msgid ""
 msgstr "בדיקה ותיקון תנועות לא מותאמות ופיצולים יתומים בכל החשבונות"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
-#, fuzzy
 msgid "Filter accounts"
-msgstr "סינון חשבון."
+msgstr "סינון חשבונות."
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:217
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:387
@@ -28776,9 +28739,8 @@ msgstr "סגירה אוטומטית של תנועות פרטניות, עם סכ�
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:271
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:427
-#, fuzzy
 msgid "_Delete Account…"
-msgstr "מחקית חשבון"
+msgstr "_מחיקת חשבון…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:273
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:429
@@ -28792,28 +28754,24 @@ msgstr "אמ_דן תקציב…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
-#, fuzzy
 msgid "_All Periods…"
-msgstr "כל התקופות"
+msgstr "כל ה_תקופות…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:24
 #: gnucash/ui/gnc-plugin-page-budget.ui:227
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
-msgstr "אמדן ערכי תקציב לחשבון שנבחר על בסיס תנועות עבר."
+msgstr "אמדן ערכי תקציב לחשבון שנבחר על בסיס תנועות עבר"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
-#, fuzzy
 msgid "_Delete Budget…"
-msgstr "_מיחקת תקציב"
+msgstr "_מחיקת תקציב…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:30
 #: gnucash/ui/gnc-plugin-page-budget.ui:257
-#, fuzzy
 msgid "Select this or another budget and delete it"
-msgstr "נא לבחור תקציב זה או תקציב אחר למחיקה."
+msgstr "בחירת תקציב זה או תקציב אחר למחיקה"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:34
 #: gnucash/ui/gnc-plugin-page-budget.ui:270
@@ -28822,32 +28780,27 @@ msgstr "עריכת הערה"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:36
 #: gnucash/ui/gnc-plugin-page-budget.ui:272
-#, fuzzy
 msgid "Edit note for the selected account and period"
-msgstr "עריכת הערה לחשבון ולתקופה שנבחרו."
+msgstr "עריכת הערה לחשבון ולתקופה שנבחרו"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:42
 #: gnucash/ui/gnc-plugin-page-budget.ui:287
-#, fuzzy
 msgid "Run the budget report"
-msgstr "הפקת דוח תקציב."
+msgstr "הפקת דוח תקציב"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:70
 #: gnucash/ui/gnc-plugin-page-budget.ui:200
-#, fuzzy
 msgid "Budget _Options…"
-msgstr "אפשרויות התקציב"
+msgstr "אפשרויות _תקציב…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:72
 #: gnucash/ui/gnc-plugin-page-budget.ui:202
-#, fuzzy
 msgid "Edit this budget's options"
-msgstr "עריכת אפשרויות לתקציב זה."
+msgstr "עריכת אפשרויות לתקציב זה"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:242
-#, fuzzy
 msgid "Edit budget for all periods for the selected accounts"
-msgstr "עריכת תקציב לכל התקופות לחשבון שנבחר."
+msgstr "עריכת תקציב לכל התקופות לחשבונות שנבחרו"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:79
 msgid "Sort _Order"
@@ -29040,9 +28993,8 @@ msgstr "יצרת חשבונית ספק חדשה"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:227
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:667
-#, fuzzy
 msgid "New _Voucher…"
-msgstr "שובר _הוצאה חדש"
+msgstr "שובר _הוצאה חדש…"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:229
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:669
@@ -29050,9 +29002,8 @@ msgid "Create a new voucher"
 msgstr "יצירת שובר חדש"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
 msgid "_Print Checks…"
-msgstr "_הדפסת המחאות"
+msgstr "_הדפסת המחאות…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:444
@@ -29063,9 +29014,8 @@ msgstr "הקצאת תשלום…"
 #: gnucash/ui/gnc-plugin-page-register.ui:17
 #: gnucash/ui/gnc-plugin-page-register.ui:446
 #: gnucash/ui/gnc-plugin-page-register.ui:558
-#, fuzzy
 msgid "Assign the selected transaction as payment."
-msgstr "יעוד התנועה שנבחרה כתשלום"
+msgstr "יעוד התנועה שנבחרה כתשלום."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:22
 #: gnucash/ui/gnc-plugin-page-register.ui:450
@@ -29076,9 +29026,8 @@ msgstr "עריכת תשלום…"
 #: gnucash/ui/gnc-plugin-page-register.ui:24
 #: gnucash/ui/gnc-plugin-page-register.ui:452
 #: gnucash/ui/gnc-plugin-page-register.ui:564
-#, fuzzy
 msgid "Edit the payment this transaction is a part of."
-msgstr "עריכת התשלום המהווה חלק מתנועה זו"
+msgstr "עריכת התשלום המהווה חלק מתנועה זו."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:35
 msgid "Edit the selected account."
@@ -29112,22 +29061,19 @@ msgid "_Auto-Split Ledger"
 msgstr "_כרטסת מפוצלת אוטומטית"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:82
-#, fuzzy
 msgid ""
 "Show transactions on one or two lines and expand the current transaction."
-msgstr "הצגת תנועות בשורה אחת או שתיים והרחבת התנועה הנוכחית"
+msgstr "הצגת תנועות בשורה אחת או שתיים והרחבת התנועה הנוכחית."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:90
-#, fuzzy
 msgid "Show expanded transactions with all splits."
-msgstr "הצגת תנועה מורחבת עם כל הפיצולים"
+msgstr "הצגת תנועות מורחבת עם כל הפיצולים."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:107
 #: gnucash/ui/gnc-plugin-page-register.ui:349
 #: gnucash/ui/gnc-plugin-page-register.ui:461
-#, fuzzy
 msgid "_Sort By…"
-msgstr "מיון לפי"
+msgstr "_מיון לפי…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:123
 msgid "Refresh this window."
@@ -29186,85 +29132,73 @@ msgid "_Void Transaction"
 msgstr "_ביטול תנועה"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:186
-#, fuzzy
 msgid "Void the current transaction."
-msgstr "רישום התנועה הנוכחית"
+msgstr "ביטול התנועה הנוכחית."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:190
 msgid "_Unvoid Transaction"
 msgstr "_ביטול תנועה מבוטלת"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:192
-#, fuzzy
 msgid "Unvoid the current transaction."
-msgstr "רישום התנועה הנוכחית"
+msgstr "הסרת ביטול התנועה הנוכחית."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:196
 msgid "Add _Reversing Transaction"
 msgstr "הוספת _תנועת יומן מתקנת"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:198
-#, fuzzy
 msgid "Add a reversing transaction."
-msgstr "הוספת _תנועת יומן מתקנת"
+msgstr "הוספת _תנועת יומן מתקנת."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:207
 #: gnucash/ui/gnc-plugin-page-register.ui:395
 #: gnucash/ui/gnc-plugin-page-register.ui:507
-#, fuzzy
 msgid ""
 "Add, change, or unlink the document linked with the current transaction."
-msgstr "הוספה, שינוי או ביטול קישור לצרופה לתנועה הנוכחית"
+msgstr "הוספת, שינוי או ביטול קישור המסמך המקושר לתנועה הנוכחית."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:213
 #: gnucash/ui/gnc-plugin-page-register.ui:400
 #: gnucash/ui/gnc-plugin-page-register.ui:512
-#, fuzzy
 msgid "Open the linked document for the current transaction."
-msgstr "פתיחת הצרופה המקושרת לתנועה הנוכחית"
+msgstr "פתיחת המסמך המקושר לתנועה הנוכחית."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:222
 #: gnucash/ui/gnc-plugin-page-register.ui:407
 #: gnucash/ui/gnc-plugin-page-register.ui:519
-#, fuzzy
 msgid "Jump to the linked bill, invoice, or voucher."
-msgstr "דילוג להודעת החיוב, החשבונית או השובר המקושרים"
+msgstr "דילוג להודעת החיוב, החשבונית או השובר המקושרים."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:232
-#, fuzzy
 msgid "Transfer funds from one account to another."
-msgstr "העברת כספים מחשבון אחד למשנהו"
+msgstr "העברת כספים מחשבון אחד למשנהו."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:238
-#, fuzzy
 msgid "Reconcile the selected account."
-msgstr "התאמת החשבון שנבחר"
+msgstr "התאמת החשבון שנבחר."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:244
-#, fuzzy
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount."
-msgstr "התאמה אוטומטית של תנועות פרטניות, כדי להגיע לסכום התאמה מסוים"
+msgstr "התאמה אוטומטית של תנועות פרטניות, כדי להגיע לסכום התאמה מסוים."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:256
-#, fuzzy
 msgid "Record a stock split or a stock merger."
-msgstr "פיצול/מיזוג מניות"
+msgstr "רישום פיצול או מיזוג מניות."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:262
-#, fuzzy
 msgid "Bring up the lot viewer/editor window."
-msgstr "פתיחת חלון עריכת/הצגת דבוקה"
+msgstr "פתיחת חלון עריכת/הצגת דבוקה."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:272
 #: gnucash/ui/gnc-plugin-page-register.ui:414
 #: gnucash/ui/gnc-plugin-page-register.ui:526
 #: gnucash/ui/gnc-plugin-page-register.ui:605
 #: gnucash/ui/gnc-plugin-page-register.ui:644
-#, fuzzy
 msgid "Move to the blank transaction in the register."
-msgstr "מעבר לתנועה הריקה בסוף היומן"
+msgstr "מעבר לתנועה הריקה בסוף יומן התנועות."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:276
 #: gnucash/ui/gnc-plugin-page-register.ui:417
@@ -29288,9 +29222,8 @@ msgstr "פ_יצול תנועה"
 #: gnucash/ui/gnc-plugin-page-register.ui:285
 #: gnucash/ui/gnc-plugin-page-register.ui:424
 #: gnucash/ui/gnc-plugin-page-register.ui:536
-#, fuzzy
 msgid "Show all splits in the current transaction."
-msgstr "הצגת כל הפיצולים בתנועה הנוכחית"
+msgstr "הצגת כל הפיצולים בתנועה הנוכחית."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:289
 #: gnucash/ui/gnc-plugin-page-register.ui:427
@@ -29390,10 +29323,9 @@ msgid "Show all splits in the current transaction"
 msgstr "הצגת כל הפיצולים בתנועה הנוכחית"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:834
-#, fuzzy
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
-msgstr "פתיחת לשונית יומן לחשבון האחר ממוקד לתנועה זו."
+msgstr "פתיחת לשונית יומן־תנועות חדשה לחשבון האחר ממוקד על תנועה זו"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
@@ -29426,9 +29358,8 @@ msgid "Export the current report as a PDF document"
 msgstr "יצוא דוח נוכחי כקובץ PDF"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:65
-#, fuzzy
 msgid "Export _Report…"
-msgstr "יצוא _דוח"
+msgstr "יצוא _דוח…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:67
 #: gnucash/ui/gnc-plugin-page-report.ui:287
@@ -29443,13 +29374,10 @@ msgstr "מחיקת תצורת־דוח"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:84
 #: gnucash/ui/gnc-plugin-page-report.ui:272
-#, fuzzy
 msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu"
-msgstr ""
-"הוספת תצורת־הדוח הנוכחי לתפריט 'דוחות&larr;תצורות־דוחות שמורים'. תצורת־הדוח "
-"תישמר לקובץ %s."
+msgstr "הוספת תצורת־הדוח הנוכחי לתפריט 'דוחות&larr;תצורות־דוחות שמורים'"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:170
 msgid "Back"
@@ -29493,7 +29421,7 @@ msgstr "_שמירת תסדיר כברירת מחדל"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:39
 msgid "Save current layout as default"
-msgstr "שמירת תסדיר נוכחי  כברירת מחדל"
+msgstr "שמירת תסדיר נוכחי כברירת מחדל"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:55
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:155
@@ -29649,9 +29577,8 @@ msgid "Finance::Quote check returned error "
 msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:175
-#, fuzzy
 msgid "No Finance::Quote Version"
-msgstr "נמצאה גרסת Finance::Quote‏~A."
+msgstr "איו גרסת Finance::Quote‏"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:302
 msgid "GncQuotes::Fetch called with no book."
@@ -29741,10 +29668,9 @@ msgstr ""
 
 #. Translators: Means that the preceding element is required
 #: libgnucash/app-utils/gnc-quotes.cpp:805
-#, fuzzy
 msgctxt "Finance::Quote"
 msgid "required"
-msgstr "נדרש תאריך."
+msgstr "רכיב נדרש"
 
 #. Translators: Means that the quote will work best if the preceding element is provided
 #: libgnucash/app-utils/gnc-quotes.cpp:807
@@ -29773,10 +29699,9 @@ msgstr ""
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
 #: libgnucash/app-utils/gnc-quotes.cpp:820
-#, fuzzy
 msgctxt "Finance::Quote"
 msgid "symbol: "
-msgstr "סמל"
+msgstr "סמל: "
 
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:822
@@ -29787,17 +29712,15 @@ msgstr "תאריך: "
 
 #. Translators: The quote currency
 #: libgnucash/app-utils/gnc-quotes.cpp:824
-#, fuzzy
 msgctxt "Finance::Quote"
 msgid "currency: "
-msgstr "מטבע"
+msgstr "מטבע: "
 
 #. Translators: The quote is for the most recent trade on the exchange
 #: libgnucash/app-utils/gnc-quotes.cpp:830
-#, fuzzy
 msgctxt "Finance::Quote"
 msgid "last: "
-msgstr "%s האחרון"
+msgstr "אחרון: "
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
 #: libgnucash/app-utils/gnc-quotes.cpp:832
@@ -29807,10 +29730,9 @@ msgstr ""
 
 #. Translators: The quote is neither a last trade nor an NAV.
 #: libgnucash/app-utils/gnc-quotes.cpp:834
-#, fuzzy
 msgctxt "Finance::Quote"
 msgid "price: "
-msgstr "מחיר"
+msgstr "מחיר: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:854
 msgid "Finance::Quote reported a failure for symbol "
@@ -29832,9 +29754,8 @@ msgid ""
 msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:932
-#, fuzzy
 msgid "Unrecognized Finance::Quote Error: "
-msgstr "נמצאה גרסת Finance::Quote‏~A."
+msgstr "שגיאת Finance::Quote‏ לא מזוהה: "
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".
