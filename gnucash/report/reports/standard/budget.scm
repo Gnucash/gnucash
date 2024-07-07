@@ -40,6 +40,17 @@
 
 (define reportname (N_ "Budget Report"))
 
+
+;; TEMP: debug logging
+(define (debug-log message)
+  (let* ((out (open-file
+                (string-append "/home/reese/.local/share/gnucash/report-logs/custom-budget-report-" current-time-string ".log")
+                "a")))
+    (display message out)
+    (newline out)
+    (close-output-port out)))
+
+
 ;; define all option's names so that they are properly defined
 ;; in *one* place.
 
@@ -60,6 +71,8 @@
 (define opthelp-show-difference (N_ "Display the difference as budget - actual."))
 (define optname-accumulate (N_ "Use accumulated amounts"))
 (define opthelp-accumulate (N_ "Values are accumulated across periods."))
+(define optname-rollover (N_ "Roll over difference"))
+(define opthelp-rollover (N_ "Budget period surplus or deficit is rolled over to next period."))
 (define optname-show-totalcol (N_ "Show Column with Totals"))
 (define opthelp-show-totalcol (N_ "Display a column with the row totals."))
 (define optname-show-zb-accounts (N_ "Include accounts with zero total balances and budget values"))
@@ -123,9 +136,17 @@
       "a" (N_ "Budget to use.")
       (gnc-budget-get-default (gnc-get-current-book)))
 
-    (gnc-register-simple-boolean-option options
+    (gnc-register-complex-boolean-option options
       gnc:pagename-general optname-accumulate
-      "b" opthelp-accumulate #f)
+      "b1" opthelp-accumulate #f
+      (lambda (new-val)
+        (set-option-enabled options gnc:pagename-general optname-rollover (eqv? new-val #f))))
+
+    (gnc-register-complex-boolean-option options
+      gnc:pagename-general optname-rollover
+      "b2" opthelp-rollover #f
+      (lambda (new-val)
+        (set-option-enabled options gnc:pagename-general optname-accumulate (eqv? new-val #f))))
 
     (gnc-register-complex-boolean-option options
       gnc:pagename-general optname-use-budget-period-range
@@ -277,6 +298,7 @@
          (show-note? (get-val params 'show-note))
          (footnotes (get-val params 'footnotes))
          (accumulate? (get-val params 'use-envelope))
+         (rollover? (get-val params 'rollover))
          (show-totalcol? (get-val params 'show-totalcol))
          (use-ranges? (get-val params 'use-ranges))
          (num-rows (gnc:html-acct-table-num-rows acct-table))
@@ -340,7 +362,7 @@
              (reverse-balance? (gnc-reverse-balance acct))
              (maybe-negate (lambda (amt) (if reverse-balance? (- amt) amt)))
              (allperiods (filter number? (gnc:list-flatten column-list)))
-             (total-periods (if (and accumulate? (not (null? allperiods)))
+             (total-periods (if (and (or accumulate? rollover?) (not (null? allperiods)))
                                 (iota (1+ (apply max allperiods)))
                                 allperiods))
              (income-acct? (eqv? (xaccAccountGetType acct) ACCT-TYPE-INCOME)))
@@ -416,19 +438,37 @@
 
            (else
             (let* ((period-list (cond
+                                 ;; if this column is a range of periods, use that list
+                                 ;; TODO: is it a bug or intended behavior to not include previous periods here when accumulate is true?
                                  ((list? (car column-list)) (car column-list))
-                                 (accumulate? (iota (1+ (car column-list))))
+                                 ;; if we're accumulating or rolling over budget, use all periods up until the indicated one
+                                 ((or accumulate? rollover?) (iota (1+ (car column-list))))
+                                  ;; otherwise our period list has a single element: the indicated period
                                  (else (list (car column-list)))))
-                   (note (and (= 1 (length period-list))
-                              (gnc-budget-get-account-period-note
-                               budget acct (car period-list))))
-                   (bgt-val (maybe-negate
-                             (gnc:get-account-periodlist-budget-value
-                              budget acct period-list)))
-                   (act-val (maybe-negate
-                             (gnc:get-account-periodlist-actual-value
-                              budget acct period-list)))
-                   (dif-val (- bgt-val act-val)))
+                    ;; build a list of all previous periods to use in rollover offset if we're rolling over
+                    (period-list-prev (cond
+                                       ((and rollover? (list? (car column-list))) (iota (car (car column-list))))
+                                       (rollover? (iota (car column-list)))
+                                       (else '())))
+                    (note (and (= 1 (length period-list))
+                               (gnc-budget-get-account-period-note
+                                budget acct (car period-list))))
+                    ;; total budget for all periods in period-list
+                    (bgt-val-all (gnc:get-account-periodlist-budget-value
+                                   budget acct period-list))
+                    ;; total actuals for any periods being used in a rollover offset
+                    (act-val-prev (gnc:get-account-periodlist-actual-value
+                                    budget acct period-list-prev))
+                    ;; budget value: total for period-list minus any offset
+                    (bgt-val (maybe-negate
+                               (- bgt-val-all act-val-prev)))
+                    ;; total actual for period-list
+                    (act-val-all (gnc:get-account-periodlist-actual-value
+                                  budget acct period-list))
+                    ;; actual value: total for period-list minus any offset
+                    (act-val (maybe-negate
+                              (- act-val-all act-val-prev)))
+                    (dif-val (- bgt-val act-val)))
               (loop (cdr column-list)
                     (disp-cols "number-cell" current-col acct
                                (gnc-budget-get-period-start-date budget (car period-list))
@@ -706,6 +746,7 @@
                           (get-option gnc:pagename-display optname-show-notes)))
                (list 'footnotes footnotes)
                (list 'use-envelope accumulate?)
+               (list 'rollover (get-option gnc:pagename-general optname-rollover))
                (list 'show-totalcol
                      (get-option gnc:pagename-display optname-show-totalcol))
                (list 'use-ranges use-ranges?)
@@ -724,6 +765,7 @@
              (report-name (get-option gnc:pagename-general
                                       gnc:optname-reportname)))
 
+        ;; TODO: add this for rollover
         (gnc:html-document-set-title!
          doc (format #f "~a: ~a ~a"
                      report-name (gnc-budget-get-name budget)
