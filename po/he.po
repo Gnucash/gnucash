@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-08 12:09+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2024-07-08 12:15+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -9952,7 +9952,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:286
 #: gnucash/gtkbuilder/dialog-preferences.glade:2850
 msgid "Hide splits in all transactions."
-msgstr "הסתרת פיצולים בכול התנועות."
+msgstr "הסתרת פיצולים בכל התנועות."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:287
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:292
@@ -18755,7 +18755,7 @@ msgid ""
 "\n"
 "See below for errors…"
 msgstr ""
-"היבוא הושלם אבל עם שגיאות!\n"
+"הייבוא הושלם אבל עם שגיאות!\n"
 "\n"
 "נוספו %u חשבונות ו־%u עודכנו.\n"
 "\n"
@@ -21893,7 +21893,7 @@ msgid ""
 "extending existing reports."
 msgstr ""
 "זוהי דוגמת דוח ~a גנוקאש. לפרטים על כתיבת דוחות באופן עצמאי, או הרחבת דוחות "
-"קיימים, נא לעיין ב (סכמת) קוד המקור של guile בספריית scm/rapport."
+"קיימים, נא לעיין ב(סכמת) קוד המקור של guile בספריית scm/report."
 
 #: gnucash/report/reports/example/sample-report.scm:292
 #, scheme-format
@@ -21917,8 +21917,7 @@ msgid ""
 " You can learn more about writing scheme at &lt;https://www.scheme.com/"
 "tspl2d/&gt;."
 msgstr ""
-" ניתן ללימוד עוד אודות כתיבת תרשים בעמוד &lt;https://www.scheme.com/tspl2d/"
-"&gt;."
+" ניתן ללמוד עוד על כתיבת תרשים בעמוד &lt;https://www.scheme.com/tspl2d/&gt;."
 
 #: gnucash/report/reports/example/sample-report.scm:302
 #, scheme-format
@@ -25049,7 +25048,7 @@ msgstr ""
 #: gnucash/report/reports/standard/investment-lots.scm:1425
 #, scheme-format
 msgid ": amount ~a, value ~a"
-msgstr "חשבון ~a, ערך~a"
+msgstr ": סכום ~a, ערך~a"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1445
 #, scheme-format
@@ -25057,7 +25056,8 @@ msgid ""
 "Warning: End amount ~a is not equal to actual account balance ~a. "
 "Difference: ~a. Do lots need to be scrubbed?"
 msgstr ""
-"אזהרה: סכום הסיום ~a שונה מיתרת החשבון בפועל ~a. פער: ~a. צריך לקרצף הרבה?"
+"אזהרה: סכום הסיום ~a שונה מיתרת החשבון בפועל ~a. פער: ~a. צריך לבדוק ולתקן "
+"לעומק?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1963
 #, fuzzy, scheme-format
@@ -27745,7 +27745,7 @@ msgstr "שורה _כפולה"
 #: gnucash/ui/gnc-plugin-page-register.ui:872
 #: gnucash/ui/gnc-reconcile-window.ui:43
 msgid "_Transfer…"
-msgstr "_העברה…"
+msgstr "ה_עברה…"
 
 #: gnucash/ui/gnc-embedded-register-window.ui:95
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:128
@@ -28150,7 +28150,7 @@ msgstr "שימוש במחשבון פרעון הלוואה/משכנתא"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:119
 msgid "_Close Book…"
-msgstr "_סגירת ספרים…"
+msgstr "_סגירת ספר…"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:121
 msgid "Close the Book at the end of the Period"
@@ -28471,7 +28471,7 @@ msgstr "יבוא תנועות מקובץ CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
 msgid "Import _Prices from a CSV file…"
-msgstr "יבוא _מחירים מקובץ CSV…"
+msgstr "ייבוא מ_חירים מקובץ CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
@@ -28750,7 +28750,7 @@ msgstr "אמדן ערכי תקציב לחשבון שנבחר על בסיס תנ�
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
 msgid "_Delete Budget…"
-msgstr "_מחיקת תקציב…"
+msgstr "מ_חיקת תקציב…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:30
 #: gnucash/ui/gnc-plugin-page-budget.ui:257
@@ -28987,7 +28987,7 @@ msgstr "יצירת שובר חדש"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
 msgid "_Print Checks…"
-msgstr "_הדפסת המחאות…"
+msgstr "ה_דפסת המחאות…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:444
@@ -29343,7 +29343,7 @@ msgstr "יצוא דוח נוכחי כקובץ PDF"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:65
 msgid "Export _Report…"
-msgstr "יצוא _דוח…"
+msgstr "ייצוא _דוח…"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:67
 #: gnucash/ui/gnc-plugin-page-report.ui:287
@@ -29561,7 +29561,7 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:175
 msgid "No Finance::Quote Version"
-msgstr "איו גרסת Finance::Quote‏"
+msgstr "אין גרסת Finance::Quote‏"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:302
 msgid "GncQuotes::Fetch called with no book."
