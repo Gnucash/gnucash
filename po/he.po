@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-08 13:20+0000\n"
+"PO-Revision-Date: 2024-07-08 15:09+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -7509,7 +7509,7 @@ msgstr "מאפייני ספר חשבונות"
 msgid ""
 "The maximum number of window menu entries reached, no more entries will be "
 "added."
-msgstr "הגעת לכמות הרשומות המרבית לחלון, לא תתווספנה עוד רשומות."
+msgstr "כמות הרשומות המרבית לחלון הושגה, לא תתווספנה עוד רשומות."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5213
 #: gnucash/gnucash-core-app.cpp:241
@@ -8140,7 +8140,7 @@ msgstr "חסר מְאַפְיֵן קובץ נתונים"
 
 #: gnucash/gnucash-cli.cpp:160
 msgid "Not enough information for quotes dump"
-msgstr "אין די מידע לשפיכת ציטוטים"
+msgstr "אין די מידע להטלת ציטוטים"
 
 #: gnucash/gnucash-cli.cpp:170
 msgid "Unknown quotes command '{1}'"
@@ -12495,6 +12495,8 @@ msgid ""
 "In this page, input any capital gains or losses incurred, and the associated "
 "income account. Capital gains are positive, and capital losses are negative."
 msgstr ""
+"בעמוד זה, יש להזין את כל רווחי או הפסדי ההון שנוצרו ואת חשבון ההכנסה המשויך. "
+"רווחי הון חיוביים והפסדי הון שליליים."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:846
 msgid "Capital Gain"
@@ -17713,6 +17715,8 @@ msgid ""
 "This lists one or more specialization templates that adjust the import for "
 "different banks' uses of fields in the selected import format."
 msgstr ""
+"פירוט תבנית התמחות אחת או יותר להתאמת שדות הייבוא שבשימוש בנקים שונים בתסדיר "
+"הייבוא שנבחר."
 
 #: gnucash/import-export/aqb/dialog-ab.glade:1787
 msgid "Profiles"
@@ -19043,6 +19047,8 @@ msgid ""
 "The current account selections will generate multi-currency transactions. "
 "Please select one of the following columns: price, (negated) value."
 msgstr ""
+"הבחירות שבוצעו בחשבון הנוכחי ייצרו תנועות עם מטבעות מרובות. נא לבחור באחת "
+"מהעמודות הבאות: מחיר, ערך (שלילי)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:531
 msgid ""
@@ -19050,6 +19056,8 @@ msgid ""
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
 msgstr ""
+"הבחירות בחשבון הנוכחי ייצרו תנועות עם מטבעות מרובות. נא בחר באחת מהעמודות "
+"הבאות: מחיר, ערך (שלילי), סכום העברה (שלילי)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:670
 #, fuzzy
