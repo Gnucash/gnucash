@@ -970,7 +970,7 @@ typedef struct
 {
     GtkWidget *entry;
     GObject *override_widget;
-    bool *can_edit;
+    bool& can_edit;
     GHashTable *hash;
     const char *initial;
 } EntryInfo;
@@ -981,17 +981,17 @@ static void override_widget_clicked (GtkWidget *widget, EntryInfo *entryinfo)
     gtk_widget_set_sensitive (entryinfo->entry, true);
     gtk_entry_set_text (GTK_ENTRY (entryinfo->entry), "");
     gtk_widget_grab_focus (entryinfo->entry);
-    *entryinfo->can_edit = true;
+    entryinfo->can_edit = true;
 }
 
 static void
-setup_entry (EntryInfo *entryinfo)
+setup_entry (EntryInfo& entryinfo)
 {
-    bool sensitive = *entryinfo->can_edit;
-    GtkWidget *entry = entryinfo->entry;
-    GtkWidget *override_widget = GTK_WIDGET (entryinfo->override_widget);
-    GHashTable *hash = entryinfo->hash;
-    const char *initial = entryinfo->initial;
+    auto sensitive = entryinfo.can_edit;
+    auto entry = entryinfo.entry;
+    auto override_widget = GTK_WIDGET (entryinfo.override_widget);
+    auto hash = entryinfo.hash;
+    auto initial = entryinfo.initial;
 
     gtk_widget_set_sensitive (entry, sensitive);
     gtk_widget_set_visible (override_widget, !sensitive);
@@ -1002,7 +1002,7 @@ setup_entry (EntryInfo *entryinfo)
     {
         gtk_entry_set_text (GTK_ENTRY (entry), _("Click Edit to modify"));
         g_signal_connect (override_widget, "clicked", G_CALLBACK (override_widget_clicked),
-                          entryinfo);
+                          &entryinfo);
     }
 
     GtkListStore *list = gtk_list_store_new (NUM_COMPLETION_COLS, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
@@ -1043,22 +1043,18 @@ input_new_fields (GNCImportMainMatcher *info, RowInfo& rowinfo,
     auto split = gnc_import_TransInfo_get_fsplit (rowinfo.get_trans_info ());
 
     std::vector<EntryInfo> entries = {
-        { desc_entry, gtk_builder_get_object (builder, "desc_override"), &info->can_edit_desc, info->desc_hash, xaccTransGetDescription (trans) },
-        { notes_entry, gtk_builder_get_object (builder, "notes_override"), &info->can_edit_notes, info->notes_hash, xaccTransGetNotes (trans) },
-        { memo_entry, gtk_builder_get_object (builder, "memo_override"), &info->can_edit_memo, info->memo_hash, xaccSplitGetMemo (split) },
+        { desc_entry, gtk_builder_get_object (builder, "desc_override"), info->can_edit_desc, info->desc_hash, xaccTransGetDescription (trans) },
+        { notes_entry, gtk_builder_get_object (builder, "notes_override"), info->can_edit_notes, info->notes_hash, xaccTransGetNotes (trans) },
+        { memo_entry, gtk_builder_get_object (builder, "memo_override"), info->can_edit_memo, info->memo_hash, xaccSplitGetMemo (split) },
     };
 
-    for (auto& entryinfo : entries)
-        setup_entry (&entryinfo);
+    std::for_each (entries.begin(), entries.end(), setup_entry);
 
     /* ensure that an override button doesn't have focus. find the
        first available entry and give it focus. */
-    for (const auto& entryinfo : entries)
-        if (entryinfo.can_edit)
-        {
-            gtk_widget_grab_focus (entryinfo.entry);
-            break;
-        }
+    auto it = std::find_if (entries.begin(), entries.end(), [](auto info){ return info.can_edit; });
+    if (it != entries.end())
+        gtk_widget_grab_focus (it->entry);
 
     gtk_window_set_transient_for (GTK_WINDOW (dialog), GTK_WINDOW (info->main_widget));
 
