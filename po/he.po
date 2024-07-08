@@ -12,7 +12,7 @@ msgstr ""
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2024-07-08 12:15+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -25056,8 +25056,8 @@ msgid ""
 "Warning: End amount ~a is not equal to actual account balance ~a. "
 "Difference: ~a. Do lots need to be scrubbed?"
 msgstr ""
-"אזהרה: סכום הסיום ~a שונה מיתרת החשבון בפועל ~a. פער: ~a. צריך לבדוק ולתקן "
-"לעומק?"
+"אזהרה: סכום הסיום ~a שונה מיתרת החשבון בפועל ~a. פער: ~a. האם צריך לבדוק "
+"ולתקן דבוקות לעומק?"
 
 #: gnucash/report/reports/standard/investment-lots.scm:1963
 #, fuzzy, scheme-format
@@ -28645,7 +28645,7 @@ msgstr "סייען ניירות _ערך…"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
 #: gnucash/ui/gnc-plugin-page-register.ui:254
 msgid "Stoc_k Split…"
-msgstr "פיצול נייר ערך…"
+msgstr "פיצול נייר _ערך…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
