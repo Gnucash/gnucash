@@ -8,11 +8,11 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
-"cgi?product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
+"product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
 "PO-Revision-Date: 2024-07-08 12:15+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -7509,7 +7509,7 @@ msgstr "מאפייני ספר חשבונות"
 msgid ""
 "The maximum number of window menu entries reached, no more entries will be "
 "added."
-msgstr "מספר הערכים המרבי בתפריט החלון הוסג, לא ניתן להוסיף ערכים נוספים."
+msgstr "הגעת לכמות הרשומות המרבית לחלון, לא תתווספנה עוד רשומות."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5213
 #: gnucash/gnucash-core-app.cpp:241
@@ -28645,7 +28645,7 @@ msgstr "סייען ניירות _ערך…"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
 #: gnucash/ui/gnc-plugin-page-register.ui:254
 msgid "Stoc_k Split…"
-msgstr "פיצול נייר _ערך…"
+msgstr "פיצול נייר ערך…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
