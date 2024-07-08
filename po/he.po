@@ -8,10 +8,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.7\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-07 13:09+0000\n"
+"PO-Revision-Date: 2024-07-08 12:09+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -902,9 +902,9 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
-"ניתן להגדיר את מסך עורך ניירות הערך כך שיציג את מקור המחיר של הנייר, דבר "
-"המאפשר לראות מהם המקורות המקוונים לשערי ניירות הערך. לשינוי המצג ניתן להקיש "
-"על המשולש בקצה השמאלי העליון של כותרות העמודות."
+"ניתן להגדיר את מסך עורך הבטוחות כך שיציג את מקור ציטוט מחיר של בטוחה, דבר "
+"שמאפשר בקלות לראות מהם המקורות המקוונים לשערי הבטוחות. לשינוי המצג ניתן "
+"להקיש על המשולש בקצה השמאלי העליון של כותרות העמודות."
 
 #: doc/tip_of_the_day.list.c:96
 msgid ""
@@ -2066,7 +2066,9 @@ msgstr "סחורה זו משמשת לפחות באחד מהחשבונות. לא 
 msgid ""
 "This commodity has price quotes. Are you sure you want to delete the "
 "selected commodity and its price quotes?"
-msgstr "לסחורה זו קיימים מחירים. האם למחוק את הסחורה שנבחרה ואת המחירים שלה?"
+msgstr ""
+"לסחורה זו קיימים ציטוטי מחירים. האם למחוק את הסחורה שנבחרה ואת ציטוטי "
+"המחירים?"
 
 #: gnucash/gnome/dialog-commodities.c:204
 msgid "Are you sure you want to delete the selected commodity?"
@@ -3549,16 +3551,15 @@ msgid ""
 msgstr "לתנועה שנבחרה אין פיצולים שניתן להקצות כתשלום"
 
 #: gnucash/gnome/dialog-payment.c:1626
-#, fuzzy
 msgid ""
 "While this transaction has multiple splits that can be considered\n"
 "as 'the payment split', GnuCash only knows how to handle one.\n"
 "Please select one, the others will be discarded.\n"
 "\n"
 msgstr ""
-"בעוד שלתנועה זו יש מספר פיצולים שנחשבים\n"
+"בעוד שלתנועה זו יש מספר פיצולים שמשמשים\n"
 "כ 'פיצולי תשלום', גנוקאש יודעת להתמודד רק עם פיצול אחד.\n"
-"נא לבחור פיצול אחד, גנוקאש תתעלם מהאחרים.\n"
+"נא לבחור פיצול אחד, גנוקאש יתעלם מהאחרים.\n"
 "\n"
 
 #: gnucash/gnome/dialog-payment.c:1630
@@ -5270,21 +5271,18 @@ msgstr "חשבונית מהודרת"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:398
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
-#, fuzzy
 msgid "_New Schedule"
-msgstr "_מחזורי"
+msgstr "_זמנן חדש"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:404
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
-#, fuzzy
 msgid "_Edit Schedule"
-msgstr "_מחזורי"
+msgstr "_עריכת זמנן"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:410
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:65
-#, fuzzy
 msgid "_Delete Schedule"
-msgstr "_מחזורי"
+msgstr "_מחיקת זמנן"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:492
 #: gnucash/gtkbuilder/dialog-account.glade:553
@@ -5296,11 +5294,10 @@ msgid "Upcoming Transactions"
 msgstr "תנועות צפויות"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:927
-#, fuzzy
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
-msgstr[0] "האם למחוק תנועה מחזורית זו?"
-msgstr[1] "האם למחוק %d תנועות המחזורית?"
+msgstr[0] "האם למחוק תנועה מתוזמנת זו?"
+msgstr[1] "האם למחוק %d תנועות מתוזמנות?"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:163
 #: gnucash/report/reports/standard/view-column.scm:95
@@ -5884,7 +5881,6 @@ msgid "New Split"
 msgstr "פיצול חדש"
 
 #: gnucash/gnome-search/dialog-search.c:1120
-#, fuzzy
 msgctxt ""
 "Item represents an unknown object type (in the sense of bill, customer, "
 "invoice, transaction, split,…)!"
@@ -6716,7 +6712,8 @@ msgid ""
 "Retrieve the current online quote. This will fail if there is a manually-"
 "created price for today."
 msgstr ""
-"אחזור מקוון של שערים נוכחיים. האחזור ייכשל אם הוזן שער באופן ידני עבור היום."
+"אחזור שערים נוכחיים באופן מקוון. האחזור ייכשל אם הוזן שער 'היום' הוזן באופן "
+"ידני."
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1295
 msgid "Finance::Quote must be installed to enable this button."
@@ -6818,14 +6815,12 @@ msgid "Don't tell me again this _session."
 msgstr "לא להציג שוב בסבב _זה."
 
 #: gnucash/gnome-utils/gnc-account-sel.c:521
-#, fuzzy
 msgid "Hide _Placeholder Accounts"
-msgstr "חשבונות מסומנים"
+msgstr "הסתרת _חשבונות שמשמשים כשומרי מקום"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:523
-#, fuzzy
 msgid "Hide _Hidden Accounts"
-msgstr "הצגת חשבונות מוסתרים"
+msgstr "הסתרת חשבונות _מוסתרים"
 
 #: gnucash/gnome-utils/gnc-account-sel.c:700
 msgid "Set the visibility of placeholder and hidden accounts."
@@ -7511,11 +7506,10 @@ msgid "Book Options"
 msgstr "מאפייני ספר חשבונות"
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:4975
-#, fuzzy
 msgid ""
 "The maximum number of window menu entries reached, no more entries will be "
 "added."
-msgstr "מספר מזערי של רשומות חשבונית לתצוגה."
+msgstr "מספר הערכים המרבי בתפריט החלון הוסג, לא ניתן להוסיף ערכים נוספים."
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:5213
 #: gnucash/gnucash-core-app.cpp:241
@@ -7782,10 +7776,9 @@ msgid "Account Color"
 msgstr "צבע חשבון"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:944
-#, fuzzy
 msgctxt "Column header for 'Balance Limit'"
 msgid "L"
-msgstr "ק"
+msgstr "א"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:953
 #: gnucash/gnome-utils/gnc-tree-view-account.c:956
@@ -7887,7 +7880,7 @@ msgstr "שבר"
 
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:395
 msgid "Get Quotes"
-msgstr "אחזור שערים"
+msgstr "אחזור ציטוט שערים"
 
 # ב=שערי בורסה
 #: gnucash/gnome-utils/gnc-tree-view-commodity.c:396
@@ -8067,7 +8060,7 @@ msgstr "רווחים:"
 
 #: gnucash/gnucash-cli.cpp:94
 msgid "Price Quotes Retrieval Options"
-msgstr "אפשרויות אחזור שערים"
+msgstr "אפשרויות אחזור ציטוט שערים"
 
 #: gnucash/gnucash-cli.cpp:97
 msgid ""
@@ -8083,7 +8076,7 @@ msgid ""
 "or more symbols, the first of which is the currency in which exchange rates "
 "for the rest will be quoted.\n"
 msgstr ""
-"ביציע פקודות שקשורות בציטוט מחירים. הפקודות הבאות נתמכות.\n"
+"ביצוע פקודות שקשורות בציטוט מחירים. הפקודות הבאות נתמכות.\n"
 "\n"
 "   info: \t  הצגת גרסת Finance::Quote ומקורות ציטוט גלויים.\n"
 "   get: \t  אחזר ציטוט מחיר נוכחי לכל המניות והמטבעות הזרים בקובץ הנתונים "
@@ -8106,6 +8099,8 @@ msgid ""
 "When using the dump command list all of the parameters Finance::Quote "
 "returns for the symbol instead of the ones that Gnucash requires."
 msgstr ""
+"בעת שימוש בפקודות רשימת dump כל הפרמטרי Finance::Quote יחזירו רשומות עבור "
+"הסמל במקום אלה שגנוקאש דורש."
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
@@ -8149,7 +8144,7 @@ msgstr "אין די מידע לשפיכת ציטוטים"
 
 #: gnucash/gnucash-cli.cpp:170
 msgid "Unknown quotes command '{1}'"
-msgstr "פקודת שערים לא ידועה '{1}'"
+msgstr "פקודת ציטוט שערים לא ידועה '{1}'"
 
 #: gnucash/gnucash-cli.cpp:206
 msgid "Missing --name parameter"
@@ -8165,9 +8160,8 @@ msgstr "חסרה אפשרות או פקודה"
 
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
-#, fuzzy
 msgid "Found Finance::Quote version {1}."
-msgstr "נמצאה גרסת Finance::Quote‏~A."
+msgstr "נמצאה גרסת Finance::Quote‏{1}."
 
 #: gnucash/gnucash-commands.cpp:318
 msgid "Finance::Quote sources:\n"
@@ -28252,7 +28246,7 @@ msgstr "פתיחת דו־שיח לקוח חדש"
 
 #: gnucash/ui/gnc-plugin-business.ui:19
 msgid "_Find Customer…"
-msgstr "_חיפוש לקוח…"
+msgstr "חיפוש _לקוח…"
 
 #: gnucash/ui/gnc-plugin-business.ui:21
 msgid "Open the Find Customer dialog"
@@ -28477,7 +28471,7 @@ msgstr "יבוא תנועות מקובץ CSV"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
 msgid "Import _Prices from a CSV file…"
-msgstr "יבוא _מחירים מקובץ ...CSV"
+msgstr "יבוא _מחירים מקובץ CSV…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
@@ -28651,7 +28645,7 @@ msgstr "סייען ניירות _ערך…"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
 #: gnucash/ui/gnc-plugin-page-register.ui:254
 msgid "Stoc_k Split…"
-msgstr "פיצול ניר ערך…"
+msgstr "פיצול נייר ערך…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
