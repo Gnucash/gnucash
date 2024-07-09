@@ -77,6 +77,7 @@ typedef struct _gncTaxTableClass GncTaxTableClass;
  */
 typedef enum
 {
+    GNC_AMT_TYPE_DISABLED = 0,        /**  no tax */
     GNC_AMT_TYPE_VALUE = 1, 	/**< tax is a number */
     GNC_AMT_TYPE_PERCENT		/**< tax is a percentage */
 } GncAmountType;
