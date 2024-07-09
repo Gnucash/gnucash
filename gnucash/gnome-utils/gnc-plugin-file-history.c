@@ -684,6 +684,8 @@ gnc_plugin_file_history_cmd_open_file (GSimpleAction *simple,
     g_return_if_fail (G_IS_SIMPLE_ACTION(simple));
     g_return_if_fail (data != NULL);
 
+    if (!gnc_main_window_finish_pending(data->window))
+      return;
     // action name will be of the form 'RecentFile1Action'
     action_name =  g_action_get_name (G_ACTION(simple));
 
