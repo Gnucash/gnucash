@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-09 04:25+0000\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
+"PO-Revision-Date: 2024-07-09 09:09+0000\n"
+"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -2517,8 +2517,8 @@ msgid ""
 "link."
 msgstr ""
 "הקשה כפולה על עמודת המזהה לדילוג לפריט העסקי.\n"
-"הקשה כפולה על עמודת הקישור לפתיחת הצרופה.\n"
-"הקשה כפולה על עמודת זמינות כדי לשינוי צרופה."
+"הקשה כפולה על עמודת הקישור לפתיחת קישור למסמך.\n"
+"הקשה כפולה על עמודת זמינות לשינוי קישור למסמך."
 
 #: gnucash/gnome/dialog-doclink.c:1106
 msgid "Business Document Links"
@@ -4193,8 +4193,8 @@ msgid ""
 "modify them so they make use\n"
 "of another account"
 msgstr ""
-"הרשימה שלהלן מציגה אובייקטים שעושים שימוש בחשבון שנבחר למחיקה.\n"
-"לפני שניתן יהיה למחוק אותו, יש למחוק אובייקטים אלה או לשנותם כך שישתמשו\n"
+"הרשימה שלהלן מציגה עצמים שמשתמשים בחשבון שמיועד למחיקה.\n"
+"לפני שניתן יהיה למחוק אותו, יש למחוק עצמים אלה או לשנותם כך שישתמשו\n"
 "בחשבון אחר"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1532
@@ -5407,7 +5407,7 @@ msgstr "_גזירת תנועה"
 
 #: gnucash/gnome/gnc-split-reg.c:1122
 msgid "Cannot modify or delete this transaction."
-msgstr "לא ניתן להסגיל או למחוק את התנועה."
+msgstr "לא ניתן לשנות או למחוק את התנועה."
 
 #: gnucash/gnome/gnc-split-reg.c:1136
 msgid ""
@@ -5426,7 +5426,7 @@ msgid ""
 "This transaction contains reconciled splits. Modifying it is not a good idea "
 "because that will cause your reconciled balance to be off."
 msgstr ""
-"תנועה זו מכילה פיצולים שהותאמו. לא מומלץ לבצע שינויים לתנועה מה שיגרום "
+"תנועה זו מכילה פיצולים שהותאמו. לא מומלץ לבצע שינויים לתנועה כי זה יגרום "
 "ליתרות מותאמות לצאת מאיזון."
 
 #. Translators: This is the confirmation button in a warning dialog
@@ -11108,7 +11108,7 @@ msgstr "הקשה כפולה במקום כלשהו בטבלה מטה להוספת
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:487
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:477
 msgid "Right-click anywhere in a column to modify it (widen, narrow, merge)"
-msgstr "הקשה ימנית על גבי העמודה לצורך הסגלה (הרחבה, הצרה, מיזוג)"
+msgstr "הקשה ימנית בכל אזור בעמודה כדי להתאימה (הרחבה, הצרה, מיזוג)"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:530
 msgid "Allow existing prices to be over written."
@@ -13740,9 +13740,9 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"הקשה כפולה על עמודת התיאור לדילוג אל התנועה.\n"
-"הקשה כפולה על עמודת הקישור לפתיחת המסמך המקושר.\n"
-"הקשה כפולה על עמודת הזמינות לשינוי הצרופה."
+"הקשה כפולה על עמודת התיאור כדי לדילוג אל העתנועה.\n"
+"הקשה כפולה על עמודת הקישור כדי לפתוח את המסמך המקושר.\n"
+"הקשה כפולה על עמודת הזמינות כדי לשנות את קישור המסמך."
 
 #: gnucash/gtkbuilder/dialog-employee.glade:168
 msgid ""
@@ -19393,7 +19393,7 @@ msgstr "חשבון היעד עבור פיצול איזון אוטומטי."
 
 #: gnucash/import-export/import-main-matcher.cpp:1003
 msgid "Click Edit to modify"
-msgstr ""
+msgstr "הקשה על עריכה כדי לשנות"
 
 #. Translators: Menu entry, no full stop
 #: gnucash/import-export/import-main-matcher.cpp:1422
@@ -20644,13 +20644,13 @@ msgstr "יומן זה אינו תומך בעריכת שערי מטבע."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1352
 msgid "You need to select a split in order to modify its exchange rate."
-msgstr "נא לבחור בפיצול בכדי לסגל את שער החליפין."
+msgstr "יש לבחור פיצול כדי לשנות את שער החליפין בו."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1367
 #: gnucash/register/ledger-core/split-register-control.cpp:1442
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
-msgstr "נא להרחיב את התנועה על מנת לסגל את שער החליפין."
+msgstr "יש להרחיב את התנועה כדי לשנות את שער החליפין בו."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1379
 msgid "The entered account could not be found."
@@ -20944,7 +20944,7 @@ msgid ""
 "\n"
 "'%s'"
 msgstr ""
-"לא ניתן להסגיל או למחוק תנועה זו. תנועה זו מסומנת לקריאה בלבד עקב:\n"
+"לא ניתן לשנות או למחוק תנועה זו. תנועה זו מסומנת לקריאה בלבד עקב:\n"
 "\n"
 "'%s'"
 
