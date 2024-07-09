@@ -188,7 +188,7 @@ set (engine_SOURCES
   gncInvoice.c
   gncJob.c
   gncOrder.c
-  gncOwner.c
+  gncOwner.cpp
   gncTaxTable.c
   gncVendor.c
   kvp-frame.cpp
