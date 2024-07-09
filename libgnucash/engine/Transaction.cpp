@@ -1618,9 +1618,6 @@ xaccTransCommitEdit (Transaction *trans)
     LEAVE ("(trans=%p)", trans);
 }
 
-#define SWAP_STR(a, b) do { const char *tmp = (a); (a) = (b); (b) = tmp; } while (0);
-#define SWAP(a, b)     do { gpointer tmp = (a); (a) = (b); (b) = tmp; } while (0);
-
 /* Ughhh. The Rollback function is terribly complex, and, what's worse,
  * it only rolls back the basics.  The TransCommit functions did a bunch
  * of Lot/Cap-gains scrubbing that don't get addressed/undone here, and
@@ -1658,8 +1655,8 @@ xaccTransRollbackEdit (Transaction *trans)
     /* copy the original values back in. */
 
     orig = trans->orig;
-    SWAP_STR(trans->num, orig->num);
-    SWAP_STR(trans->description, orig->description);
+    std::swap (trans->num, orig->num);
+    std::swap (trans->description, orig->description);
     trans->date_entered = orig->date_entered;
     trans->date_posted = orig->date_posted;
     std::swap (trans->common_currency, orig->common_currency);
@@ -1686,8 +1683,8 @@ xaccTransRollbackEdit (Transaction *trans)
             Split *so = GNC_SPLIT(onode->data);
 
             xaccSplitRollbackEdit(s);
-            SWAP_STR(s->action, so->action);
-            SWAP_STR(s->memo, so->memo);
+            std::swap (s->action, so->action);
+            std::swap (s->memo, so->memo);
             qof_instance_copy_kvp (QOF_INSTANCE (s), QOF_INSTANCE (so));
             s->reconciled = so->reconciled;
             s->amount = so->amount;
