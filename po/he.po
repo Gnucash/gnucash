@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-08 15:09+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2024-07-09 04:25+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -8104,7 +8104,7 @@ msgstr ""
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
-msgstr "_אפשרויות חילול דוח"
+msgstr "אפשרויות חילול דוח"
 
 #: gnucash/gnucash-cli.cpp:113
 msgid ""
