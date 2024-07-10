@@ -417,7 +417,7 @@ GncEntry *gncEntryCreate (QofBook *book)
 
     if (!book) return NULL;
 
-    entry = g_object_new (GNC_TYPE_ENTRY, NULL);
+    entry = GNC_ENTRY(g_object_new (GNC_TYPE_ENTRY, NULL));
     qof_instance_init_data (&entry->inst, _GNC_MOD_NAME, book);
 
     entry->desc = CACHE_INSERT ("");
@@ -977,13 +977,13 @@ gnc_numeric gncEntryGetInvDiscount (const GncEntry *entry)
 
 GncAmountType gncEntryGetInvDiscountType (const GncEntry *entry)
 {
-    if (!entry) return 0;
+    if (!entry) return GNC_AMT_TYPE_DISABLED;
     return entry->i_disc_type;
 }
 
 GncDiscountHow gncEntryGetInvDiscountHow (const GncEntry *entry)
 {
-    if (!entry) return 0;
+    if (!entry) return GNC_DISC_DISABLED;
     return entry->i_disc_how;
 }
 
@@ -1069,7 +1069,7 @@ GncOwner * gncEntryGetBillTo (GncEntry *entry)
 
 GncEntryPaymentType gncEntryGetBillPayment (const GncEntry* entry)
 {
-    if (!entry) return 0;
+    if (!entry) return GNC_PAYMENT_NONE;
     return entry->b_payment;
 }
 
@@ -1158,7 +1158,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
     /* First, compute the aggregate tpercent and tvalue numbers */
     for (node = entries; node; node = node->next)
     {
-        GncTaxTableEntry *entry = node->data;
+        auto entry = static_cast<GncTaxTableEntry*>(node->data);
         gnc_numeric amount = gncTaxTableEntryGetAmount (entry);
 
         switch (gncTaxTableEntryGetType (entry))
@@ -1296,7 +1296,7 @@ static void gncEntryComputeValueInt (gnc_numeric qty, gnc_numeric price,
         PINFO("Computing tax value list");
         for (node = entries; node; node = node->next)
         {
-            GncTaxTableEntry *entry = node->data;
+            auto entry = static_cast<GncTaxTableEntry*>(node->data);
             Account *acc = gncTaxTableEntryGetAccount (entry);
             gnc_numeric amount = gncTaxTableEntryGetAmount (entry);
 
@@ -1436,7 +1436,7 @@ gncEntryRecomputeValues (GncEntry *entry)
     entry->i_tax_value_rounded = gnc_numeric_zero();
     for (tv_iter = entry->i_tax_values; tv_iter; tv_iter=tv_iter->next)
     {
-        GncAccountValue *acc_val = tv_iter->data;
+        auto acc_val = static_cast<GncAccountValue*>(tv_iter->data);
         entry->i_tax_value_rounded = gnc_numeric_add (entry->i_tax_value_rounded, acc_val->value,
                                      denom, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
     }
@@ -1447,7 +1447,7 @@ gncEntryRecomputeValues (GncEntry *entry)
     entry->b_tax_value_rounded = gnc_numeric_zero();
     for (tv_iter = entry->b_tax_values; tv_iter; tv_iter=tv_iter->next)
     {
-        GncAccountValue *acc_val = tv_iter->data;
+        auto acc_val = static_cast<GncAccountValue*>(tv_iter->data);
         entry->b_tax_value_rounded = gnc_numeric_add (entry->b_tax_value_rounded, acc_val->value,
                                                       denom, GNC_HOW_DENOM_EXACT | GNC_HOW_RND_ROUND_HALF_UP);
     }
@@ -1553,7 +1553,7 @@ AccountValueList * gncEntryGetDocTaxValues (GncEntry *entry, gboolean is_cust_do
     /* Make a copy of the list with negated values if necessary. */
     for (node = int_values; node; node = node->next)
     {
-        GncAccountValue *acct_val = node->data;
+        auto acct_val = static_cast<GncAccountValue*>(node->data);
         values = gncAccountValueAdd (values, acct_val->account,
                                      (is_cn ? gnc_numeric_neg (acct_val->value)
                                       : acct_val->value));
@@ -1589,7 +1589,7 @@ AccountValueList * gncEntryGetBalTaxValues (GncEntry *entry, gboolean is_cust_do
     /* Make a copy of the list with negated values if necessary. */
     for (node = int_values; node; node = node->next)
     {
-        GncAccountValue *acct_val = node->data;
+        auto acct_val = static_cast<GncAccountValue*>(node->data);
         values = gncAccountValueAdd (values, acct_val->account,
                                      (is_cust_doc ? gnc_numeric_neg (acct_val->value)
                                       : acct_val->value));
@@ -1723,7 +1723,7 @@ static QofObject gncEntryDesc =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) _GNC_MOD_NAME,
     DI(.type_label        = ) "Order/Invoice/Bill Entry",
-    DI(.create            = ) (gpointer)gncEntryCreate,
+    DI(.create            = ) (void* (*)(QofBook*))gncEntryCreate,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) gnc_entry_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
