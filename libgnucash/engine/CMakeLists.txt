@@ -182,7 +182,7 @@ set (engine_SOURCES
   gncBillTerm.c
   gncBusiness.c
   gncCustomer.cpp
-  gncEmployee.c
+  gncEmployee.cpp
   gncEntry.c
   gncIDSearch.c
   gncInvoice.cpp
