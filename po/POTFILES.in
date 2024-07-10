@@ -633,7 +633,7 @@ libgnucash/engine/gnc-budget.cpp
 libgnucash/engine/gncBusiness.c
 libgnucash/engine/gnc-commodity.cpp
 libgnucash/engine/gnc-commodity.h
-libgnucash/engine/gncCustomer.c
+libgnucash/engine/gncCustomer.cpp
 libgnucash/engine/gnc-date.cpp
 libgnucash/engine/gnc-datetime.cpp
 libgnucash/engine/gncEmployee.c
