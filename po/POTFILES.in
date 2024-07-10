@@ -626,7 +626,7 @@ libgnucash/engine/cap-gains.cpp
 libgnucash/engine/cashobjects.cpp
 libgnucash/engine/engine-helpers.c
 libgnucash/engine/gnc-accounting-period.c
-libgnucash/engine/gncAddress.c
+libgnucash/engine/gncAddress.cpp
 libgnucash/engine/gnc-aqbanking-templates.cpp
 libgnucash/engine/gncBillTerm.c
 libgnucash/engine/gnc-budget.cpp
