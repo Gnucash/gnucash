@@ -312,7 +312,7 @@ gncAddressCreate (QofBook *book, QofInstance *prnt)
 
     if (!book) return NULL;
 
-    addr = g_object_new (GNC_TYPE_ADDRESS, NULL);
+    addr = GNC_ADDRESS(g_object_new (GNC_TYPE_ADDRESS, NULL));
     qof_instance_init_data(&addr->inst, GNC_ID_ADDRESS, book);
     addr->book = book;
     addr->dirty = FALSE;
@@ -631,7 +631,7 @@ static QofObject GncAddressDesc =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) GNC_ID_ADDRESS,
     DI(.type_label        = ) "Address",
-    DI(.create            = ) (gpointer)qofAddressCreate,
+    DI(.create            = ) (void* (*)(QofBook*))qofAddressCreate,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) NULL,
     DI(.is_dirty          = ) qof_collection_is_dirty,
