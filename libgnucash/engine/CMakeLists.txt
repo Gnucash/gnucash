@@ -181,7 +181,7 @@ set (engine_SOURCES
   gncAddress.c
   gncBillTerm.c
   gncBusiness.c
-  gncCustomer.c
+  gncCustomer.cpp
   gncEmployee.c
   gncEntry.c
   gncIDSearch.c
