@@ -661,7 +661,7 @@ libgnucash/engine/gnc-session.c
 libgnucash/engine/gncTaxTable.c
 libgnucash/engine/gnc-timezone.cpp
 libgnucash/engine/gnc-uri-utils.c
-libgnucash/engine/gncVendor.c
+libgnucash/engine/gncVendor.cpp
 libgnucash/engine/guid.cpp
 libgnucash/engine/kvp-frame.cpp
 libgnucash/engine/kvp-value.cpp

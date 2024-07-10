@@ -218,7 +218,7 @@ gnc_vendor_set_property (GObject         *object,
         gncVendorSetNotes(vendor, g_value_get_string(value));
         break;
     case PROP_CURRENCY:
-        gncVendorSetCurrency(vendor, g_value_get_object(value));
+        gncVendorSetCurrency(vendor, GNC_COMMODITY(g_value_get_object(value)));
         break;
     case PROP_ACTIVE:
         gncVendorSetActive(vendor, g_value_get_boolean(value));
@@ -227,13 +227,13 @@ gnc_vendor_set_property (GObject         *object,
         gncVendorSetTaxTableOverride(vendor, g_value_get_boolean(value));
         break;
     case PROP_BILLTERMS:
-        gncVendorSetTerms(vendor, g_value_get_object(value));
+        gncVendorSetTerms(vendor, GNC_BILLTERM(g_value_get_object(value)));
         break;
     case PROP_TAXTABLE:
-        gncVendorSetTaxTable(vendor, g_value_get_object(value));
+        gncVendorSetTaxTable(vendor, GNC_TAXTABLE(g_value_get_object(value)));
         break;
     case PROP_ADDRESS:
-        qofVendorSetAddr(vendor, g_value_get_object(value));
+        qofVendorSetAddr(vendor, QOF_INSTANCE(g_value_get_object(value)));
         break;
     case PROP_TAX_INCLUDED:
         gncVendorSetTaxIncluded(vendor, (GncTaxIncluded)g_value_get_int(value));
@@ -456,7 +456,7 @@ GncVendor *gncVendorCreate (QofBook *book)
 
     if (!book) return NULL;
 
-    vendor = g_object_new (GNC_TYPE_VENDOR, NULL);
+    vendor = GNC_VENDOR(g_object_new (GNC_TYPE_VENDOR, NULL));
     qof_instance_init_data (&vendor->inst, _GNC_MOD_NAME, book);
 
     vendor->id = CACHE_INSERT ("");
@@ -943,7 +943,7 @@ vend_handle_qof_events (QofInstance *entity, QofEventId event_type,
 
 static const char * _gncVendorPrintable (gpointer item)
 {
-    GncVendor *v = item;
+    GncVendor *v = GNC_VENDOR(item);
     if (!item) return NULL;
     return v->name;
 }
@@ -975,7 +975,7 @@ static QofObject gncVendorDesc =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) _GNC_MOD_NAME,
     DI(.type_label        = ) "Vendor",
-    DI(.create            = ) (gpointer)gncVendorCreate,
+    DI(.create            = ) (void* (*)(QofBook*))gncVendorCreate,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) gnc_vendor_book_end,
     DI(.is_dirty          = ) qof_collection_is_dirty,
