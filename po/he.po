@@ -11,7 +11,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-09 09:09+0000\n"
+"PO-Revision-Date: 2024-07-14 09:45+0000\n"
 "Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
@@ -2516,9 +2516,9 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"הקשה כפולה על עמודת המזהה לדילוג לפריט העסקי.\n"
-"הקשה כפולה על עמודת הקישור לפתיחת קישור למסמך.\n"
-"הקשה כפולה על עמודת זמינות לשינוי קישור למסמך."
+"הקשה כפולה על רשומה בעמודת ה'מזהה' לדילוג ל'פריט עסקי'.\n"
+"הקשה כפולה על רשומה בעמודת ה'קישור' לפתיחת 'מסמך מקשור'.\n"
+"הקשה כפולה על רשומה בעמודת ה'זמינות' לשינוי 'קישור מסמך'."
 
 #: gnucash/gnome/dialog-doclink.c:1106
 msgid "Business Document Links"
@@ -4910,7 +4910,7 @@ msgstr "דילוג"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:391
 msgid "Schedule"
-msgstr "תזמון"
+msgstr "זמנן"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:394
 #: gnucash/gnome/window-autoclear.c:88
