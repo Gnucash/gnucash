@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-14 09:45+0000\n"
-"Last-Translator: Avi Markovitz <avi.markovitz@gmail.com>\n"
+"PO-Revision-Date: 2024-07-14 13:09+0000\n"
+"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "he/>\n"
 "Language: he\n"
@@ -8079,13 +8079,13 @@ msgstr ""
 "ביצוע פקודות שקשורות בציטוט מחירים. הפקודות הבאות נתמכות.\n"
 "\n"
 "   info: \t  הצגת גרסת Finance::Quote ומקורות ציטוט גלויים.\n"
-"   get: \t  אחזר ציטוט מחיר נוכחי לכל המניות והמטבעות הזרים בקובץ הנתונים "
+"   get: \t  אחזור ציטוט מחיר נוכחי לכל המניות והמטבעות הזרים בקובץ הנתונים "
 "הנתון של גנוקאש.\n"
-"   dump: אחזר ציטוט מחיר נוכחי למטבעות זרים או מניות שצוינו ממרחב שמות מוגדר "
-"ולהדפיס את התוצאות למסוף.\n"
+"   dump: אחזור ציטוט מחיר נוכחי למטבעות זרים או מניות שצוינו ממרחב שמות "
+"מוגדר ולהדפיס את התוצאות למסוף.\n"
 "                  צריך להיות מלווה במקור וסמל אחד או יותר, אלא אם המקור הוא "
-"\"מטבע\" ובמקרה זה מלווה בשני סמלים או יותר, שהראשון שבהם הוא המטבע שבו "
-"יוצגו שערי החליפין של השאר הבטבעות.\n"
+"\"מטבע\" ובמקרה שכזה מלווה בשני סמלים או יותר, שהראשון שבהם הוא המטבע שבו "
+"יוצגו שערי החליפין של שאר המטבעות.\n"
 
 #: gnucash/gnucash-cli.cpp:103
 #, fuzzy
@@ -8099,8 +8099,8 @@ msgid ""
 "When using the dump command list all of the parameters Finance::Quote "
 "returns for the symbol instead of the ones that Gnucash requires."
 msgstr ""
-"בעת שימוש בפקודות רשימת dump כל הפרמטרי Finance::Quote יחזירו רשומות עבור "
-"הסמל במקום אלה שגנוקאש דורש."
+"בעת שימוש בפקודות dump (היטל) להציג את כל משתני Finance::Quote שמחזירים "
+"רשומות עבור הסמל במקום אלה שגנוקאש דורש."
 
 #: gnucash/gnucash-cli.cpp:110
 msgid "Report Generation Options"
@@ -8161,7 +8161,7 @@ msgstr "חסרה אפשרות או פקודה"
 #: gnucash/gnucash-commands.cpp:317 gnucash/gnucash-commands.cpp:363
 #: gnucash/gnucash.cpp:179
 msgid "Found Finance::Quote version {1}."
-msgstr "נמצאה גרסת Finance::Quote‏{1}."
+msgstr "נמצאה גרסה {1} של Finance::Quote‏."
 
 #: gnucash/gnucash-commands.cpp:318
 msgid "Finance::Quote sources:\n"
@@ -11108,7 +11108,7 @@ msgstr "הקשה כפולה במקום כלשהו בטבלה מטה להוספת
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:487
 #: gnucash/gtkbuilder/assistant-csv-trans-import.glade:477
 msgid "Right-click anywhere in a column to modify it (widen, narrow, merge)"
-msgstr "הקשה ימנית בכל אזור בעמודה כדי להתאימה (הרחבה, הצרה, מיזוג)"
+msgstr "הקשה ימנית בכל מקום בעמודה תאפשר לשנות אותה (הרחבה, הצרה, מיזוג)"
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:530
 msgid "Allow existing prices to be over written."
@@ -13740,9 +13740,9 @@ msgid ""
 "Double click on the entry in the Available column to modify the document "
 "link."
 msgstr ""
-"הקשה כפולה על עמודת התיאור כדי לדילוג אל העתנועה.\n"
-"הקשה כפולה על עמודת הקישור כדי לפתוח את המסמך המקושר.\n"
-"הקשה כפולה על עמודת הזמינות כדי לשנות את קישור המסמך."
+"הקשה כפולה על הרשומה בעמודת התיאור תדלג אל התנועה.\n"
+"הקשה כפולה על הרשומה בעמודת הקישור תפתח את המסמך המקושר.\n"
+"הקשה כפולה על הרשומה בעמודת הזמינות תאפשר לערוך את קישור המסמך."
 
 #: gnucash/gtkbuilder/dialog-employee.glade:168
 msgid ""
@@ -19056,7 +19056,7 @@ msgid ""
 "Please select one of the following columns: price, (negated) value, "
 "(negated) transfer amount."
 msgstr ""
-"הבחירות בחשבון הנוכחי ייצרו תנועות עם מטבעות מרובות. נא בחר באחת מהעמודות "
+"הבחירות בחשבון הנוכחי ייצרו תנועות עם מטבעות מרובים. נא לבחור באחת מהעמודות "
 "הבאות: מחיר, ערך (שלילי), סכום העברה (שלילי)."
 
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:670
@@ -20644,13 +20644,13 @@ msgstr "יומן זה אינו תומך בעריכת שערי מטבע."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1352
 msgid "You need to select a split in order to modify its exchange rate."
-msgstr "יש לבחור פיצול כדי לשנות את שער החליפין בו."
+msgstr "נא לבחור פיצול כדי לשנות בו את שער החליפין."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1367
 #: gnucash/register/ledger-core/split-register-control.cpp:1442
 msgid ""
 "You need to expand the transaction in order to modify its exchange rates."
-msgstr "יש להרחיב את התנועה כדי לשנות את שער החליפין בו."
+msgstr "יש להרחיב את התנועה כדי לשנות בה את שער החליפין."
 
 #: gnucash/register/ledger-core/split-register-control.cpp:1379
 msgid "The entered account could not be found."
@@ -28753,7 +28753,7 @@ msgstr "כל ה_תקופות…"
 #: gnucash/ui/gnc-plugin-page-budget.ui:227
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
-msgstr "אמדן ערכי תקציב לחשבון שנבחר על בסיס תנועות עבר"
+msgstr "אומדן ערכי תקציב לחשבון שנבחר על בסיס תנועות עבר"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
@@ -28986,7 +28986,7 @@ msgstr "יצרת חשבונית ספק חדשה"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:227
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:667
 msgid "New _Voucher…"
-msgstr "שובר _הוצאה חדש…"
+msgstr "שובר הו_צאה חדש…"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:229
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:669
