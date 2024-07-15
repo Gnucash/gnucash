@@ -1429,11 +1429,6 @@ gnc_tree_model_account_event_handler (QofInstance *entity,
         return;
     }
 
-    /* clear the cached model values for account */
-    if (event_type != QOF_EVENT_ADD)
-        gnc_tree_model_account_clear_cached_values (model, account);
-
-    /* What to do, that to do. */
     switch (event_type)
     {
     case QOF_EVENT_ADD:
@@ -1475,7 +1470,10 @@ gnc_tree_model_account_event_handler (QofInstance *entity,
 
     case QOF_EVENT_MODIFY:
         DEBUG("modify  account %p (%s)", account, xaccAccountGetName (account));
-        path = gnc_tree_model_account_get_path_from_account (model, account);
+        /* clear the cached model values for account */
+        gnc_tree_model_account_clear_cached_values(model, account);
+
+        path = gnc_tree_model_account_get_path_from_account(model, account);
         if (!path)
         {
             DEBUG("can't generate path");

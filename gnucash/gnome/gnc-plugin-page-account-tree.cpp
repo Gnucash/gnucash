@@ -1510,6 +1510,9 @@ gnc_plugin_page_account_tree_cmd_delete_account (GSimpleAction *simple,
     if (account == NULL)
         return;
 
+    if (!gnc_main_window_all_finish_pending())
+        return;
+
     memset (&adopt, 0, sizeof (adopt));
     /* If the account has objects referring to it, show the list - the account can't be deleted until these
        references are dealt with. */

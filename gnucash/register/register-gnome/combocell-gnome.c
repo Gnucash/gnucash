@@ -916,6 +916,8 @@ gnc_combo_cell_gui_move (BasicCell* bcell)
     gnc_item_edit_set_popup (box->item_edit, NULL, NULL,
                              NULL, NULL, NULL, NULL, NULL);
 
+    gnc_item_list_select (box->item_list, NULL);
+
     box->list_popped = FALSE;
 }
 
