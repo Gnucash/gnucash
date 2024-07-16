@@ -1489,6 +1489,8 @@ gnc_tree_model_account_event_handler (QofInstance *entity,
         break;
 
     default:
+        gnc_tree_model_account_clear_cached_values(model, account);
+
         LEAVE("unknown event type");
         return;
     }
