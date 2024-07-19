@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-04 09:09+0000\n"
+"PO-Revision-Date: 2024-07-19 14:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1258,7 +1258,7 @@ msgid ""
 "Click on \"Back\" to adjust, or \"Cancel\" to not create any book."
 msgstr ""
 "Az Alkalmaz gombra kattintva a könyv %s címmel létrejön. Kattintson a Vissza "
-"gombra a módosításhoz, vagy a Mégse gombra, ha nem szeretne könyvet "
+"gombra a módosításhoz, vagy a Mégsem gombra, ha nem szeretne könyvet "
 "létrehozni."
 
 #: gnucash/gnome/assistant-acct-period.c:525
@@ -7207,6 +7207,8 @@ msgstr "_Nem, most nem"
 #: gnucash/gnome-utils/gnc-cell-view.c:74
 msgid "Use Shift combined with Return or Keypad Enter to finish editing"
 msgstr ""
+"A szerkesztés befejezéséhez használja a Shift+Return billentyűkombinációt "
+"vagy a számblokk Enter billentyűjét"
 
 #: gnucash/gnome-utils/gnc-date-edit.c:842
 msgid "Calendar"
@@ -7439,20 +7441,23 @@ msgid ""
 "\n"
 "The file is in the history list, do you want to remove it?"
 msgstr ""
+"A(z) %s fájl/URI nem található.\n"
+"\n"
+"A fájl az előzmények listájában van, el akarja távolítani?"
 
 #: gnucash/gnome-utils/gnc-file.c:442
-#, fuzzy, c-format
+#, c-format
 msgid "The file/URI %s could not be found."
-msgstr "%s fájl nem található."
+msgstr "A(z) %s fájl/URI nem található."
 
 #: gnucash/gnome-utils/gnc-file.c:449
 msgid "This file is from an older version of GnuCash. Do you want to continue?"
-msgstr "Ez a fájl egy régebbi GnuCash-verzióhoz tartozik. Akarja folytatni?"
+msgstr "Ez a fájl egy régebbi GnuCash verzióból származik. Akarja folytatni?"
 
 #: gnucash/gnome-utils/gnc-file.c:458
 #, c-format
 msgid "The file type of file %s is unknown."
-msgstr "A %s fájltípus ismeretlen."
+msgstr "%s fájl fájltípusa ismeretlen."
 
 #: gnucash/gnome-utils/gnc-file.c:463
 #, c-format
@@ -7485,15 +7490,21 @@ msgid ""
 "\n"
 "Please try again in a different directory."
 msgstr ""
+"Menteni próbált a\n"
+"%s könyvtárba\n"
+"vagy annak egyik alkönyvtárába. Ez nem megengedett, mivel %s ezt a "
+"könyvtárat belső használatra tartja fenn.\n"
+"\n"
+"Kérjük, próbálja meg újra egy másik könyvtárba."
 
 #: gnucash/gnome-utils/gnc-file.c:489
 msgid ""
 "This database is from an older version of GnuCash. Select OK to upgrade it "
 "to the current version, Cancel to mark it read-only."
 msgstr ""
-"Ez az adatbázis a GnuCash egy régebbi változatából való. Nyomjon OK -t ha "
-"frissíti az adatbázist a jelenlegi verzióra, vagy Megszakítást, ha megjelöli "
-"csak olvashatónak."
+"Ez az adatbázis a GnuCash egy régebbi változatából való. Kattintson a "
+"Rendben gombra, ha az adatbázist frissíti a jelenlegi verzióra, vagy a "
+"Mégsem gombra ha csak olvashatónak jelöli meg."
 
 #: gnucash/gnome-utils/gnc-file.c:498
 msgid ""
@@ -7501,6 +7512,10 @@ msgid ""
 "but cannot safely save to it. It will be marked read-only until you do File-"
 ">Save As, but data may be lost in writing to the old version."
 msgstr ""
+"Ez az adatbázis a GnuCash egy újabb verziójából származik. Ez a verzió tudja "
+"olvasni, de nem tud biztonságosan menteni ebbe. Csak olvashatónak lesz "
+"jelölve, amíg nem ad egy Fájl -> Mentés másként parancsot, de egy régebbi "
+"verzióba írás során adatok veszhetnek el."
 
 #: gnucash/gnome-utils/gnc-file.c:507
 msgid ""
@@ -7508,9 +7523,9 @@ msgid ""
 "performed until they logoff. If there are currently no other users, consult "
 "the documentation to learn how to clear out dangling login sessions."
 msgstr ""
-"Az SQL adatbázist mások használják, és a felfejlesztést nem lehet "
-"végrehajtani, amíg ki nem jelentkeznek. Ha jelenleg nincs más felhasználó a "
-"rendszerben, nézze meg a dokumentációban, hogyan kell félbeszakadt "
+"Az SQL adatbázist más felhasználók használják, és a frissítést nem lehet "
+"végrehajtani amíg ki nem jelentkeznek. Ha jelenleg nincs más felhasználó a "
+"rendszerben, nézze meg a dokumentációban, hogyan kell a félbeszakadt "
 "bejelentkezésektől megszabadulni."
 
 #: gnucash/gnome-utils/gnc-file.c:517
@@ -7545,7 +7560,7 @@ msgstr "Ismeretlen I/O hiba (%d) történt."
 
 #: gnucash/gnome-utils/gnc-file.c:645
 msgid "Save changes to the file?"
-msgstr "Menti a változásokat?"
+msgstr "Menti a változtatásokat?"
 
 #: gnucash/gnome-utils/gnc-file.c:658
 #: gnucash/gnome-utils/gnc-main-window.cpp:1226
@@ -8514,10 +8529,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnucash-core-app.cpp:288
-#, fuzzy
-#| msgid "Show plot"
 msgid "Show paths"
-msgstr "Rajz megjelenítése"
+msgstr "Útvonalak megjelenítése"
 
 #: gnucash/gnucash-core-app.cpp:290
 msgid ""
@@ -8533,15 +8546,15 @@ msgstr "Rejtett beállítások"
 
 #: gnucash/gnucash-core-app.cpp:295
 msgid "[datafile]"
-msgstr ""
+msgstr "[adatfájl]"
 
 #: gnucash/gnucash.cpp:176
 msgid "Checking Finance::Quote…"
-msgstr "Pénzügyek ellenőrzése::Árfolyam…"
+msgstr "A Finance::Quote modul ellenőrzése…"
 
 #: gnucash/gnucash.cpp:186
 msgid "Unable to load Finance::Quote."
-msgstr "Nem sikerült betölteni, Pénzügyek::Árfolyam..."
+msgstr "Nem sikerült betölteni a Finance::Quote modult..."
 
 #: gnucash/gnucash.cpp:197
 msgid "Loading data…"
@@ -10965,11 +10978,11 @@ msgstr ""
 "Amelyik számla még nem létezik, az a teljes számlanév által megadott helyen "
 "és névvel létre fog jönni, feltéve, hogy a hozzá tartozó értékpapír vagy "
 "pénznem is létezik. Amelyik számla már létezik, annak négy mezője megkapja a "
-"fájlban szereplő értékeket: ezek a „Számlaszám”, a „Leírás”, a "
-"„Megjegyzések” és a „Szín”.\n"
+"fájlban szereplő értékeket: ezek a „Számlaszám”, a „Leírás”, a „Megjegyzések”"
+" és a „Szín”.\n"
 "\n"
 "A folytatáshoz kattintson a „Következő” gombra, az importálás "
-"megszakításához pedig a „Mégse” gombra.\n"
+"megszakításához pedig a „Mégsem” gombra.\n"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:51
 msgid "Import Account Assistant"
@@ -11214,8 +11227,8 @@ msgstr ""
 "A fájlnak tartalmaznia kell legalább a következő oszlopokat: Dátum, Ár, "
 "Névtér, Szimbólum és Pénznem. Ha minden sor ugyanarra az értékpapírra vagy "
 "pénznemre vonatkozik, akkor elég, ha a fájl csak a Dátum és Árfolyam "
-"oszlopokat tartalmazza, a szimbólumot pedig kiválasztja a legördülő "
-"menüből.\n"
+"oszlopokat tartalmazza, a szimbólumot pedig kiválasztja a legördülő menüből."
+"\n"
 "\n"
 "A fájl oszlopai lehetnek fix szélességűek vagy tagoltak. Utóbbihoz többféle "
 "határolójelet is beállíthat. Fix szélesség beállításához kattintson duplán a "
@@ -11235,8 +11248,8 @@ msgstr ""
 "Az importálás nem vonható vissza, ezért fontos, hogy előtte készítsen "
 "biztonsági másolatot.\n"
 "\n"
-"A folytatáshoz kattintson a „Következő” gombra, a kilépéshez pedig a „Mégse” "
-"gombra."
+"A folytatáshoz kattintson a „Következő” gombra, a kilépéshez pedig a „Mégsem”"
+" gombra."
 
 #: gnucash/gtkbuilder/assistant-csv-price-import.glade:72
 msgid "Price Import Assistant"
@@ -11655,8 +11668,8 @@ msgid ""
 msgstr ""
 "Ebben az ablakban a GnuCash segít Önnek a különböző eszközei (pl. "
 "befektetések, bankszámlák, megtakarítások), kötelezettségei (pl. kölcsönök), "
-"bevételei és költségei nyilvántartásához használható számlák "
-"létrehozásában.\n"
+"bevételei és költségei nyilvántartásához használható számlák létrehozásában."
+"\n"
 "\n"
 "Kiválaszthatja azokat az előre elkészített számlakészleteket, amik "
 "megfelelnek az Ön pénzügyeinek. Természetesen a kiválasztás befejezése után "
@@ -11665,7 +11678,7 @@ msgstr ""
 "áthelyezhet számlákat (az alszámláikkal együtt) egy másik szülő számla alá.\n"
 "\n"
 "Ha most mégsem akar létrehozni új számlakészletet, akkor kattintson a "
-"\"Mégse\" gombra."
+"\"Mégsem\" gombra."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:30
 msgid "New Account Hierarchy Setup"
@@ -11780,7 +11793,7 @@ msgstr ""
 "\n"
 "Ha szeretne visszatérni az előző oldalakra, kattintson a 'Vissza' gombra.\n"
 "\n"
-"A 'Mégse' gombbal új számlák létrehozása nélkül bezárhatja az ablakot."
+"A 'Mégsem' gombbal új számlák létrehozása nélkül bezárhatja az ablakot."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:582
 msgid "Finish Account Setup"
@@ -12591,7 +12604,7 @@ msgid ""
 "without making any changes."
 msgstr ""
 "Ha elégedett a rögzített adatokkal, kattintson az \"Alkalmaz\" gombra. A "
-"\"Vissza\" gombbal még egyszer áttekintheti az előző oldalakat, a \"Mégse\" "
+"\"Vissza\" gombbal még egyszer áttekintheti az előző oldalakat, a \"Mégsem\" "
 "gombbal pedig az adatok rögzítése nélkül kiléphet."
 
 #: gnucash/gtkbuilder/assistant-stock-split.glade:418
@@ -12752,7 +12765,7 @@ msgid ""
 msgstr ""
 "Alább látható a felosztások összesítése. Ha az adatok helyesek, kattintson "
 "az \"Alkalmaz\" gombra. A \"Vissza\" gombbal még egyszer áttekintheti a "
-"választásait, a \"Mégse\" gombbal pedig a változtatások rögzítése nélkül "
+"választásait, a \"Mégsem\" gombbal pedig a változtatások rögzítése nélkül "
 "kiléphet. "
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:956
@@ -14712,10 +14725,10 @@ msgid ""
 "the <i>OK</i> button or press the <i>Cancel</i> button if you don't want to "
 "perform any of them."
 msgstr ""
-"Az új felhasználók rendszerint az alábbi műveletek egyikével kezdnek bele a "
-"GnuCash használatába. Válassza ki a kívánt műveletet majd kattintson a "
+"Az új felhasználók rendszerint az alábbi műveletek egyikével kezdik el a "
+"GnuCash használatát. Válassza ki a kívánt műveletet majd kattintson a "
 "<i>Rendben</i> gombra. Ha egyiket sem akarja választani, kattintson a "
-"<i>Megszakítás</i> gombra."
+"<i>Mégsem</i> gombra."
 
 #: gnucash/gtkbuilder/dialog-new-user.glade:244
 msgid "C_reate a new set of accounts"
@@ -14739,15 +14752,15 @@ msgstr "Magyarázat"
 
 #: gnucash/gtkbuilder/dialog-options.glade:44
 msgid "Close dialog and make no changes."
-msgstr ""
+msgstr "A párbeszédpanel bezárása változtatások nélkül."
 
 #: gnucash/gtkbuilder/dialog-options.glade:61
 msgid "Apply changes but do not close dialog."
-msgstr ""
+msgstr "Változtatások alkalmazása a párbeszédpanel bezárása nélkül."
 
 #: gnucash/gtkbuilder/dialog-options.glade:78
 msgid "Apply changes and close dialog."
-msgstr ""
+msgstr "Változtatások alkalmazása és a párbeszédpanel bezárása."
 
 #: gnucash/gtkbuilder/dialog-order.glade:8
 msgid "Order Entry"
@@ -15030,6 +15043,9 @@ msgid ""
 "the following strings: \"colon\" \"slash\", \"backslash\", \"dash\" and "
 "\"period\"."
 msgstr ""
+"Az a karakter, amelyet a teljes számlanév összetevői között használnak. "
+"Bármilyen karaktert választhat, amely nem betű vagy szám, például a pont, a "
+"kötőjel, a / és a \\ vagy a kettőspont."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:916
 #: gnucash/gtkbuilder/dialog-preferences.glade:3177
@@ -16154,9 +16170,9 @@ msgid ""
 "re-enable any of these dialogs, select the check box next to the dialog, "
 "then click OK."
 msgstr ""
-"Azt kérte, hogy a következő figyelmeztető dialógus ne jelenjen meg. E "
-"dialógusok újra engedélyezéséhez válassza a mellette levő ellenőrző dobozt, "
-"majd kattintson OK-ra."
+"Azt kérte, hogy a következő figyelmeztető párbeszédpanelek ne jelenjenek "
+"meg. E párbeszédpanelek újraengedélyezéséhez, jelölje be a párbeszédpanel "
+"melletti jelölőnégyzetet, majd kattintson a Rendben gombra."
 
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:120
 msgid "_Unselect All"
@@ -18802,7 +18818,7 @@ msgstr ""
 "kiválasztott elválasztójel használatával.\n"
 "\n"
 "Alább végezze el a fájlformátum beállítását, majd kattintson a \"Következő\" "
-"gombra, vagy a \"Mégse\" gombra az exportálás megszakításához.\n"
+"gombra, vagy a \"Mégsem\" gombra az exportálás megszakításához.\n"
 
 #. Translators: %s is one of the following paragraphs about rows/transaction.
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:87
@@ -18832,12 +18848,13 @@ msgstr ""
 "csak egyszer lesz exportálva. Az első olyan feldolgozott számla alatt fog "
 "megjelenni, amelyben felosztása van.\n"
 "\n"
-"Az árak/árfolyamok formátumát a Beállítások -> \"Számok, Dátum, Idő\" ->\n"
-"\"Az árak megjelenítésénél a tizedesszámok kényszerítése\" kapcsoló "
-"határozza meg.\n"
+"Az árak/árfolyamok formátumát a Beállítások\n"
+"-> Számok, Dátum, Idő -> Az árak megjelenítésénél a tizedesszámok "
+"kényszerítése kapcsoló határozza meg.\n"
 "\n"
 "Alább végezze el a fájlformátum beállítását, majd kattintson a \"Következő\" "
-"gombra, vagy a \"Mégse\" gombra az exportálás megszakításához.\n"
+"gombra a folytatáshoz, vagy a \"Mégsem\" gombra az exportálás "
+"megszakításához.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:99
 msgid ""
@@ -18868,7 +18885,7 @@ msgstr ""
 "Az \"Alkalmaz\" gombra kattintva megtörténik a teljes számlakészlet "
 "exportálása a \"%s\" fájlba.\n"
 "\n"
-"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégse\" gombbal "
+"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégsem\" gombbal "
 "pedig megszakíthatja az importálást.\n"
 
 #. Translators: %s is the file name and %u the number of accounts.
@@ -18881,10 +18898,10 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Az \"Alkalmaz\" gombra kattintva megtörténik a tranzakciók exportálása a "
-"\"%s\" fájlba, összesen %u számláról.\n"
+"Az \"Alkalmaz\" gombra kattintva megtörténik a tranzakciók exportálása a \"%"
+"s\" fájlba, összesen %u számláról.\n"
 "\n"
-"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégse\" gombbal "
+"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégsem\" gombbal "
 "pedig megszakíthatja az importálást.\n"
 
 #. Translators: %s is the file name.
@@ -18897,10 +18914,10 @@ msgid ""
 "You can also verify your selections by clicking on \"Back\" or \"Cancel\" to "
 "abort the export.\n"
 msgstr ""
-"Az \"Alkalmaz\" gombra kattintva megtörténik a tranzakciók exportálása a "
-"\"%s\" fájlba.\n"
+"Az \"Alkalmaz\" gombra kattintva megtörténik a tranzakciók exportálása a \"%"
+"s\" fájlba.\n"
 "\n"
-"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégse\" gombbal "
+"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégsem\" gombbal "
 "pedig megszakíthatja az importálást.\n"
 
 #: gnucash/import-export/csv-exp/assistant-csv-export.c:760
@@ -18990,7 +19007,7 @@ msgstr ""
 "Az \"Alkalmaz\" gombra kattintva megtörténik a \"%s\" fájlban lévő számlák "
 "importálása.\n"
 "\n"
-"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégse\" gombbal "
+"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégsem\" gombbal "
 "pedig megszakíthatja az importálást.\n"
 
 #: gnucash/import-export/csv-imp/assistant-csv-account-import.c:73
@@ -19010,7 +19027,7 @@ msgstr ""
 "Az \"Alkalmaz\" gombra kattintva megtörténik a \"%s\" fájlban lévő számlák "
 "importálása.\n"
 "\n"
-"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégse\" gombbal "
+"A \"Vissza\" gombbal visszatérhet az előző oldalakra, a \"Mégsem\" gombbal "
 "pedig megszakíthatja az importálást.\n"
 "\n"
 "Ha üres fájlba importálja a számlákat, akkor meg fog nyílni a Könyv "
@@ -29618,7 +29635,8 @@ msgstr "_Ugrás a másik számlára"
 #: gnucash/ui/gnc-plugin-page-register.ui:551
 msgid ""
 "Open a new register tab for the other account with focus on this transaction."
-msgstr "A másik számla megnyitása új fülön és ugrás erre a tranzakcióra."
+msgstr ""
+"A másik számla megnyitása új regiszterlapon és ugrás erre a tranzakcióra."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:318
 msgid "All Transactions"
@@ -29670,7 +29688,8 @@ msgstr "A jelenlegi tranzakció összes felosztásának megjelenítése"
 #: gnucash/ui/gnc-plugin-page-register.ui:834
 msgid ""
 "Open a new register tab for the other account with focus on this transaction"
-msgstr "A másik számla megnyitása új fülön és ugrás erre a tranzakcióra"
+msgstr ""
+"A másik számla megnyitása új regiszterlapon és ugrás erre a tranzakcióra"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:6
 #: gnucash/ui/gnc-plugin-page-report.ui:300
