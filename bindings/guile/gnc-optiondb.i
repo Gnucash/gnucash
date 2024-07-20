@@ -981,6 +981,8 @@ wrap_unique_ptr(GncOptionDBPtr, GncOptionDB);
                                                   GncMultichoiceOptionChoices&&,
                                                   SCM);
 
+    void gnc_option_set_changed_callback (GncOptionDBPtr& db, const char* section,
+                                          const char* name, SCM widget_changed_cb);
 
 %} //%header
 
@@ -1676,6 +1678,25 @@ void gnc_register_complex_boolean_option(GncOptionDBPtr& db,
     db->register_option(section, std::move(option));
 }
 
+ /**
+ * Make an option sensitive to change
+ *
+ * @param db A GncOptionDB* for calling from C. Caller retains ownership.
+ * @param section The database section for the option.
+ * @param name The option name.
+ * @param widget_changed_cb A Scheme callback to run from the UIItem's "changed" signal.
+ */
+ void gnc_option_set_changed_callback (GncOptionDBPtr& db, const char* section,
+                                       const char* name, SCM widget_changed_cb)
+{
+    auto option{db->find_option(section, name)};
+    if (!option)
+    {
+        PWARN ("option not found: %s/%s", section, name);
+        return;
+    }
+    option->set_widget_changed(std::make_any<SCMCallbackWrapper>(widget_changed_cb));
+}
 /**
  * Create a new multichoice option and register it in the options database.
  *
