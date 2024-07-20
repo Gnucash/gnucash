@@ -89,6 +89,19 @@ the split action field to detect capitalized fees on stock activity")
       gnc:pagename-general optname-stock-acct "b" "Stock Account"
       '() (list ACCT-TYPE-STOCK ACCT-TYPE-MUTUAL))
 
+    (gnc-option-set-changed-callback
+     options gnc:pagename-general optname-stock-acct
+     (lambda (new-acct)
+       (define (set-acct name tag)
+         (let ((assoc-acct (xaccAccountGetAssociatedAccount new-acct tag)))
+           (unless (null? assoc-acct)
+             (gnc-option-set-value options gnc:pagename-general name assoc-acct))))
+       (gnc:pk 'new-account-selected new-acct)
+       (set-acct "Proceeds Account" "stock-cash-proceeds")
+       (set-acct "Dividend Account" "stock-dividends")
+       (set-acct "Cap Gains Account" "stock-capgains")
+       (set-acct "Fees Account" "stock-broker-fees")))
+
     (gnc-register-account-sel-limited-option options
       gnc:pagename-general optname-proceeds-acct "c" "Proceeds Account"
       '() (list ACCT-TYPE-ASSET ACCT-TYPE-BANK))
