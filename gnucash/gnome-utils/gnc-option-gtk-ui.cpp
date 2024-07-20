@@ -1085,6 +1085,11 @@ public:
 // Must cast it to const Account* to get the template specialization to recognize it.
         option.set_value(static_cast<const Account*>(gnc_account_sel_get_account(widget)));
     }
+    SCM get_widget_scm_value(const GncOption& option) const override
+    {
+        auto widget{GNC_ACCOUNT_SEL(get_widget())};
+        return scm_from_value (gnc_account_sel_get_account(widget));
+    }
 };
 
 template<> void
