@@ -31,6 +31,7 @@
 #include <gnc-commodity.h> // for GNC_COMMODITY
 #include "gnc-account-sel.h" // for GNC_ACCOUNT_SEL
 #include "gnc-currency-edit.h" //for GNC_CURRENCY_EDIT
+#include "gnc-engine-guile.h" // for gnc_account_to_scm
 #include "gnc-commodity-edit.h" //for gnc_commodity_get_string
 #include "gnc-date-edit.h" // for gnc_date_edit
 #include "gnc-date-format.h" //for GNC_DATE_FORMAT
@@ -1085,6 +1086,11 @@ public:
         auto widget{GNC_ACCOUNT_SEL(get_widget())};
 // Must cast it to const Account* to get the template specialization to recognize it.
         option.set_value(static_cast<const Account*>(gnc_account_sel_get_account(widget)));
+    }
+    SCM get_widget_scm_value(const GncOption& option) const override
+    {
+        auto widget{GNC_ACCOUNT_SEL(get_widget())};
+        return gnc_account_to_scm (gnc_account_sel_get_account (widget));
     }
 };
 
