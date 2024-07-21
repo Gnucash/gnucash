@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-21 03:09+0000\n"
+"PO-Revision-Date: 2024-07-21 09:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -366,7 +366,7 @@ msgstr "Unicode"
 # src/trans.h:270
 #: borrowed/goffice/go-charmap-sel.c:82
 msgid "Vietnamese"
-msgstr "Vietnami"
+msgstr "Vietnámi"
 
 #: borrowed/goffice/go-charmap-sel.c:83
 msgid "Western"
@@ -784,25 +784,25 @@ msgstr "Felhasználó által megadott"
 # src/trans.h:268
 #: borrowed/goffice/go-charmap-sel.c:215
 msgid "Vietnamese (TCVN)"
-msgstr "Vietnami (TCVN)"
+msgstr "Vietnámi (TCVN)"
 
 # #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
 # src/trans.h:269
 #: borrowed/goffice/go-charmap-sel.c:217
 msgid "Vietnamese (VISCII)"
-msgstr "Vietnami (VISCII)"
+msgstr "Vietnámi (VISCII)"
 
 # #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
 # src/trans.h:270
 #: borrowed/goffice/go-charmap-sel.c:218
 msgid "Vietnamese (VPS)"
-msgstr "Vietnami (VPS)"
+msgstr "Vietnámi (VPS)"
 
 # #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
 # src/trans.h:271
 #: borrowed/goffice/go-charmap-sel.c:219
 msgid "Vietnamese (Windows-1258)"
-msgstr "Vietnami (Windows-1258)"
+msgstr "Vietnámi (Windows-1258)"
 
 # #-#-#-#-#  galeon.HEAD.hu.po-new.po (Galeon 1.2)  #-#-#-#-#
 # src/trans.h:272
@@ -1617,6 +1617,11 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Adjon el részvényeket long pozícióban, és könyvelje el a tőkenyereséget/"
+"veszteséget.\n"
+"\n"
+"Ha nem tudja kiszámítani a tőkenyereséget, akkor beírhat egy töltelék "
+"(helyőrző) összeget, és később korrigálhatja azt a tranzakcióban."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1649,7 +1654,7 @@ msgstr "Tőkekifizetés"
 msgid ""
 "Company returns capital, reducing the cost basis without affecting # units."
 msgstr ""
-"A vállalat tőkét szolgáltat vissza, ezzel csökkentve a bekerülési értéket, "
+"A társaság tőkét szolgáltat vissza, ezzel csökkentve a bekerülési értéket, "
 "miközben a részvények száma nem változik."
 
 #. Translators: this is a stock transaction describing return
@@ -1664,6 +1669,10 @@ msgid ""
 "A distribution previously recorded as a dividend is reclassified to return "
 "of capital, often due to end-of-year tax information."
 msgstr ""
+"A társaság a befektetett tőkét a részvények számának megváltoztatása nélkül "
+"adja vissza a részvényeseknek. A korábban osztalékként teljesített "
+"kifizetést gyakran az éves pénzügyi kimutatásokban szereplő adózói "
+"információk alapján tőkevisszatérítésnek minősítik át."
 
 #. Translators: this is a stock transaction describing a
 #. notional distribution recorded as dividend
@@ -1737,7 +1746,7 @@ msgid ""
 "record the sale using the Stock Transaction Assistant first, then record the "
 "reverse split."
 msgstr ""
-"A vállalat visszavonja részvényeinek egy részét, ezáltal egy szorzóval "
+"A társaság visszavonja részvényeinek egy részét, ezáltal egy szorzóval "
 "növeli a részvényárfolyamot, miközben a teljes befektetés pénzbeli értéke "
 "nem változik.\n"
 "\n"
@@ -1768,6 +1777,11 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Vásároljon vissza részvényt a short pozíció fedezésére, és könyvelje el a "
+"tőkenyereséget/veszteséget.\n"
+"\n"
+"Ha nem tudja kiszámítani a tőkenyereséget, akkor beírhat egy töltelék "
+"(helyőrző) összeget, és később korrigálhatja azt a tranzakcióban."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
@@ -2831,8 +2845,8 @@ msgid ""
 "GnuCash cannot determine the value in one of the fields. You must enter a "
 "valid expression."
 msgstr ""
-"GnuCash nem tudja kiértékelni az egyik megadott értéket. Adjon meg érvényes "
-"szám-kifejezést."
+"A GnuCash nem tudja meghatározni az értéket az egyik mezőben. Érvényes "
+"kifejezést kell megadnia."
 
 #: gnucash/gnome/dialog-fincalc.c:383
 msgid "The interest rate cannot be zero."
@@ -4872,7 +4886,7 @@ msgstr "Költségbizonylat _kifizetése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
 msgid "Enter a payment for the owner of this voucher"
-msgstr ""
+msgstr "Adja meg a költségbizonylat tulajdonosa számára történő kifizetést"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:248
 msgid "Open a employee report window for the owner of this voucher"
@@ -4907,19 +4921,19 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
 msgid "_Print Credit Note"
-msgstr ""
+msgstr "Jóváírás _nyomtatása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
 msgid "Make a printable credit note"
-msgstr ""
+msgstr "Nyomtatható jóváírás készítése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
 msgid "_Edit Credit Note"
-msgstr "Jóváírás s_zerkesztése"
+msgstr "Jóváírás szerkesztés_e"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
 msgid "Edit this credit note"
-msgstr ""
+msgstr "E jóváírás szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:267
 msgid "_Duplicate Credit Note"
@@ -4931,7 +4945,7 @@ msgstr "Új jóváírás létrehozása a jelenlegi másolataként"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
 msgid "_Post Credit Note"
-msgstr ""
+msgstr "Jóváírás _könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
 msgid "Post this credit note to your Chart of Accounts"
