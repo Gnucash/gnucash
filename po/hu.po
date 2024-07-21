@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-19 14:09+0000\n"
+"PO-Revision-Date: 2024-07-21 03:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1023,7 +1023,7 @@ msgid ""
 msgstr ""
 "Írja be egy létező számlanév első betűjét (betűit) az Átutalás oszlopba és a "
 "GnuCash kiegészíti a nevet a létező számlák alapján. Alszámlák esetén írja "
-"be a szülő számla első betűjét/betűit, majd a „:” karaktert és az alszámla "
+"be a szülő számla első betűjét (betűit), majd a kettőspontot és az alszámla "
 "első betűjét (pl. E:K az Eszközök:Készpénz beviteléhez)."
 
 #: doc/tip_of_the_day.list.c:71
@@ -1043,7 +1043,7 @@ msgid ""
 "numbers as well."
 msgstr ""
 "A dátumok megadásakor a kiválasztott dátum növeléséhez vagy csökkentéséhez "
-"nyomja meg a „+” vagy a „-” billentyűket. Használhatja a „+” és a „-” "
+"nyomja meg a plusz vagy a mínusz billentyűket. Használhatja a + és a - "
 "billentyűket a csekkszámok növelésére és csökkentésére is."
 
 #: doc/tip_of_the_day.list.c:79
@@ -1240,11 +1240,11 @@ msgid ""
 "Click on \"Back\" to adjust the dates or \"Cancel\"."
 msgstr ""
 "Egy könyv létrehozását választotta. Az új könyv %s éjfélig terjedően minden "
-"tranzakciót tartalmazni fog (összesen %d tranzakció a %d számlán). \n"
+"tranzakciót tartalmazni fog (összesen %d tranzakció a %d számlán).\n"
 "\n"
-"Módosítsa a címet és a megjegyzéseket, vagy kattintson a „Következő” gombra "
-"a könyv létrehozásához.\n"
-"Kattintson a „Vissza” gombra a dátumok beállításához."
+"Módosítsa a címet és a megjegyzéseket, vagy kattintson a Következő gombra a "
+"könyv létrehozásához.\n"
+"Kattintson a Vissza gombra a dátumok módosításához."
 
 #: gnucash/gnome/assistant-acct-period.c:388
 #, c-format
@@ -9851,13 +9851,15 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:135
 msgid "Opens new tab adjacent to current tab instead of at the end"
-msgstr ""
+msgstr "Az új lap füle az aktuális lap füle mellett legyen, nem a sor végén"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:136
 msgid ""
 "If active, new tabs are opened adjacent to current tab. If inactive, the new "
 "tabs are opened instead at the end."
 msgstr ""
+"Ha aktív, az új lapok az aktuális lap mellett nyílnak meg. Ha inaktív, akkor "
+"az új lapok a sor végén nyílnak meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:140
 #: gnucash/gtkbuilder/dialog-preferences.glade:942
@@ -9995,7 +9997,7 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:195
 #: gnucash/gtkbuilder/dialog-preferences.glade:3377
 msgid "Display the notebook tabs at the top of the window."
-msgstr "Fülek megjelenítése az ablak tetején."
+msgstr "A lapok füleit az ablak tetején jeleníti meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:196
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:201
@@ -10010,17 +10012,17 @@ msgstr ""
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:200
 #: gnucash/gtkbuilder/dialog-preferences.glade:3396
 msgid "Display the notebook tabs at the bottom of the window."
-msgstr "Fülek megjelenítése az ablak alján."
+msgstr "A lapok füleit az ablak alján jeleníti meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:205
 #: gnucash/gtkbuilder/dialog-preferences.glade:3415
 msgid "Display the notebook tabs at the left of the window."
-msgstr "Fülek megjelenítése az ablak bal oldalán."
+msgstr "A lapok füleit az ablak bal oldalán jeleníti meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:210
 #: gnucash/gtkbuilder/dialog-preferences.glade:3434
 msgid "Display the notebook tabs at the right of the window."
-msgstr "Fülek megjelenítése az ablak jobb oldalán."
+msgstr "A lapok füleit az ablak jobb oldalán jeleníti meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:215
 #: gnucash/gtkbuilder/dialog-preferences.glade:3466
@@ -10127,8 +10129,8 @@ msgid ""
 "If active, each new register will be opened in a new window. Otherwise each "
 "new register will be opened as a tab in the main window."
 msgstr ""
-"Aktiválva minden új regiszter új ablakban nyílik meg. Különben minden új "
-"regiszter fülként nyílik a főablakban."
+"Ha aktív, akkor minden új regiszter egy új ablakban nyílik meg. Különben "
+"minden új regiszter a főablak lapjaként nyílik meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:266
 msgid "Color all lines of a transaction the same"
@@ -10140,8 +10142,8 @@ msgid ""
 "color for their background. Otherwise the background colors are alternated "
 "on each line."
 msgstr ""
-"Aktiválva egy tranzakció minden egyes sora azonos színt használ hátteréül. "
-"Különben a háttérszínek váltakoznak minden egyes sorban."
+"Ha akív, akkor egy tranzakció minden sora azonos háttérszínű lesz. Különben "
+"a háttérszínek váltakoznak a sorokban."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:271
 msgid "Show horizontal borders in a register"
@@ -10320,8 +10322,8 @@ msgid ""
 "If active, each new report will be opened in its own window. Otherwise new "
 "reports will be opened as tabs in the main window."
 msgstr ""
-"Aktiválva minden új jelentés saját ablakban nyílik meg. Különben minden új "
-"jelentés fülként nyílik a főablakban."
+"Ha aktív, akkor minden új jelentés egy új ablakban nyílik meg. Különben "
+"minden új jelentés a főablak lapjaként nyílik meg."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:349
 #: gnucash/gtkbuilder/dialog-preferences.glade:3203
@@ -15030,11 +15032,11 @@ msgstr "A számlanév háttere a számlaszín legyen."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:856
 msgid "Show the Account Color on tabs"
-msgstr "Számlaszín megjelenítése a füleken"
+msgstr "Számlaszín megjelenítése a lapok fülein"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:862
 msgid "Show the Account Color as tab background."
-msgstr "A számlaszín legyen a fül háttere."
+msgstr "A számlaszín legyen a lapok füleinek a háttere."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:896
 msgid ""
@@ -16254,7 +16256,7 @@ msgid ""
 "now be corrected. Press OK to edit them."
 msgstr ""
 "A következő ütemezett tranzakciók törölt számlára hivatkoznak, és ki kell "
-"javítani ezt. A szerkesztésükhöz nyomja meg az OK gombot."
+"javítani ezt. A szerkesztésükhöz kattintson a Rendben gombra."
 
 #: gnucash/gtkbuilder/dialog-sx.glade:123
 #: gnucash/gtkbuilder/gnc-frequency.glade:171
@@ -19224,7 +19226,7 @@ msgstr "%u. sorban használt %s / %s áru nem található\n"
 #: gnucash/import-export/csv-imp/csv-account-import.c:314
 #, c-format
 msgid "Row %u, account %s not in %s\n"
-msgstr "%u. sorban %s folyószámla nincs itt: %s\n"
+msgstr "%u. sorban %s számla nincs itt: %s\n"
 
 #: gnucash/import-export/csv-imp/gnc-import-price.cpp:58
 #: gnucash/import-export/csv-imp/gnc-import-tx.cpp:58
@@ -28196,23 +28198,23 @@ msgstr "Állapotsor megjelenítése/elrejtése ezen az ablakon"
 
 #: gnucash/ui/gnc-main-window.ui:193
 msgid "Tab P_osition"
-msgstr "_Fülek helye"
+msgstr "Lapok füleinek _helye"
 
 #: gnucash/ui/gnc-main-window.ui:198
 msgid "Display the notebook tabs at the top of the window"
-msgstr "Fülek megjelenítése az ablak tetején"
+msgstr "Lapok füleinek megjelenítése az ablak tetején"
 
 #: gnucash/ui/gnc-main-window.ui:204
 msgid "Display the notebook tabs at the bottom of the window"
-msgstr "Fülek megjelenítése az ablak alján"
+msgstr "Lapok füleinek megjelenítése az ablak alján"
 
 #: gnucash/ui/gnc-main-window.ui:210
 msgid "Display the notebook tabs at the left of the window"
-msgstr "Fülek megjelenítése az ablak bal oldalán"
+msgstr "Lapok füleinek megjelenítése az ablak bal oldalán"
 
 #: gnucash/ui/gnc-main-window.ui:216
 msgid "Display the notebook tabs at the right of the window"
-msgstr "Fülek megjelenítése az ablak jobb oldalán"
+msgstr "Lapok füleinek megjelenítése az ablak jobb oldalán"
 
 #: gnucash/ui/gnc-main-window.ui:256
 msgid "Tra_nsaction"
@@ -28358,7 +28360,7 @@ msgstr "_Új számlák fül"
 
 #: gnucash/ui/gnc-plugin-account-tree.ui:8
 msgid "Open a new Account Tree page"
-msgstr "Új számlafa(számlahierarchia) oldal megnyitása"
+msgstr "Új számlafa (számlahierarchia) oldal megnyitása"
 
 #: gnucash/ui/gnc-plugin-basic-commands.ui:6
 msgid "New _File"
@@ -28565,7 +28567,7 @@ msgid ""
 "Open an existing Budget in a new tab. If none exists a new budget will be "
 "created"
 msgstr ""
-"Egy meglévő költségvetés megnyitása új fülön. Ha még nincs költségvetés, "
+"Egy meglévő költségvetés megnyitása új lapon. Ha még nincs költségvetés, "
 "akkor újat hoz létre"
 
 #: gnucash/ui/gnc-plugin-budget.ui:20
@@ -28667,9 +28669,8 @@ msgid "Vendors Overview"
 msgstr "Beszállítók áttekintése"
 
 #: gnucash/ui/gnc-plugin-business.ui:60
-#, fuzzy
 msgid "Open a Vendor overview page"
-msgstr "Új folyószámla-nézet oldal nyitása"
+msgstr "Beszállítóáttekintő oldal megnyitása"
 
 #: gnucash/ui/gnc-plugin-business.ui:63
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:39
@@ -28771,11 +28772,11 @@ msgstr "Az összes kapcsolódó üzleti dokumentum megnyitása"
 
 #: gnucash/ui/gnc-plugin-business.ui:146
 msgid "Sales _Tax Table"
-msgstr "Eladások Adó_táblázat"
+msgstr "Eladási adó_táblázat"
 
 #: gnucash/ui/gnc-plugin-business.ui:148
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "Eladási adótáblák listájának szerkesztése/megtekintése"
+msgstr "Eladási adótáblák listájának (ÁFA) megtekintése/szerkesztése"
 
 #: gnucash/ui/gnc-plugin-business.ui:151
 msgid "_Billing Terms Editor"
@@ -28783,7 +28784,7 @@ msgstr "_Fizetésifeltétel-szerkesztő"
 
 #: gnucash/ui/gnc-plugin-business.ui:153
 msgid "View and edit the list of Billing Terms"
-msgstr "Fizetésifeltétel listájának szerkesztése/megtekintése"
+msgstr "Fizetésifeltétel listájának megtekintése/szerkesztése"
 
 #: gnucash/ui/gnc-plugin-business.ui:163 gnucash/ui/gnc-plugin-business.ui:165
 msgid "Test Search Dialog"
