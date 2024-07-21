@@ -31,14 +31,15 @@
 # yuht <yuht@qq.com>, 2023.
 # Ral Hole <ral-hole@outlook.com>, 2023.
 # derxi <happycxin@163.com>, 2023.
+# fleefar <825272947@qq.com>, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.7 \n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.7\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2023-11-16 08:03+0000\n"
-"Last-Translator: derxi <happycxin@163.com>\n"
+"PO-Revision-Date: 2024-07-20 07:34+0000\n"
+"Last-Translator: fleefar <825272947@qq.com>\n"
 "Language-Team: Chinese (Simplified) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hans/>\n"
 "Language: zh_CN\n"
@@ -46,7 +47,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.2\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 
 #: bindings/guile/date-utilities.scm:173
@@ -959,7 +960,8 @@ msgstr "主窗口比较2个标签页，\"查看 -> 账簿多开\"。"
 msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
-msgstr ""
+msgstr "你可以修改或设置快捷键，详见 https://wiki.gnucash.org/wiki/"
+"Keyboard_Shortcuts 。"
 
 #: doc/tip_of_the_day.list.c:132
 msgid ""
