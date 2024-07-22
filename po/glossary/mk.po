@@ -3,7 +3,7 @@
 # Copyright (C) 2022 by the GnuCash developers and the translators:
 # Automatically generated, 2022.
 #
-# Vesna Micajkova <vmicajkova@institutpraktikum.mk>, 2022.
+# Vesna Micajkova <vmicajkova@institutpraktikum.mk>, 2022, 2024.
 # Bojan Topalovski <3dcncinfo@gmail.com>, 2024.
 msgid ""
 msgstr ""
@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2024-07-21 23:56+0000\n"
-"Last-Translator: Bojan Topalovski <3dcncinfo@gmail.com>\n"
+"PO-Revision-Date: 2024-07-22 15:09+0000\n"
+"Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "glossary/mk/>\n"
 "Language: mk\n"
@@ -32,7 +32,7 @@ msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
-msgstr "Корисничко име"
+msgstr "Сметка"
 
 #. "An alphanumerical code applied to accounts for sorting. Some jurisdictions mandate codes and some GnuCash book templates include codes as part of the tree structure. Account codes can be set and changed in the Edit Account dialog."
 msgid "account code"

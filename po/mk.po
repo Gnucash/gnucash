@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-01 18:10+0000\n"
+"PO-Revision-Date: 2024-07-22 15:09+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/mk/>\n"
@@ -3061,78 +3061,80 @@ msgstr "Уреди ја излезната фактура"
 #: gnucash/gnome/dialog-invoice.c:2327 gnucash/gnome/dialog-invoice.c:2346
 #: gnucash/gnome/dialog-invoice.c:2365
 msgid "View Credit Note"
-msgstr ""
+msgstr "Погледни Конфирмација за долг"
 
 #: gnucash/gnome/dialog-invoice.c:2328
 msgid "View Invoice"
-msgstr ""
+msgstr "Погледни излезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:2337
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:225
 #: gnucash/gnome-search/dialog-search.c:1079
 msgid "New Bill"
-msgstr ""
+msgstr "Нова Влезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:2343
 msgid "Edit Bill"
-msgstr ""
+msgstr "Уреди Влезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:2347
 msgid "View Bill"
-msgstr ""
+msgstr "Погледни Влезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:2356
 #: gnucash/gnome-search/dialog-search.c:1091
 msgid "New Expense Voucher"
-msgstr ""
+msgstr "Нов Ваучер за трошоци"
 
 #: gnucash/gnome/dialog-invoice.c:2362
 msgid "Edit Expense Voucher"
-msgstr ""
+msgstr "Уреди Ваучер за трошоци"
 
 #: gnucash/gnome/dialog-invoice.c:2366
 msgid "View Expense Voucher"
-msgstr ""
+msgstr "Погледни Ваучер за трошоци"
 
 #: gnucash/gnome/dialog-invoice.c:2688
 msgid "Open Linked Document:"
-msgstr ""
+msgstr "Отвори го поврзаниот документ:"
 
 #: gnucash/gnome/dialog-invoice.c:2802 gnucash/gnome/dialog-invoice.c:3027
 msgid "Bill Information"
-msgstr ""
+msgstr "Информации за Влезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:2804 gnucash/gnome/dialog-invoice.c:3030
 #: gnucash/gnome/dialog-invoice.c:3611
 msgid "Bill ID"
-msgstr ""
+msgstr "ИБ на Влезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:2808 gnucash/gnome/dialog-invoice.c:3034
 msgid "Voucher Information"
-msgstr ""
+msgstr "Иформации за ваучерот"
 
 #: gnucash/gnome/dialog-invoice.c:2810 gnucash/gnome/dialog-invoice.c:3037
 #: gnucash/gnome/dialog-invoice.c:3645
 msgid "Voucher ID"
-msgstr ""
+msgstr "ИБ на Ваучер"
 
 #: gnucash/gnome/dialog-invoice.c:3368
 msgid "Date of duplicated entries"
-msgstr ""
+msgstr "Датум на дуплираните записи"
 
 #: gnucash/gnome/dialog-invoice.c:3423
 msgid ""
 "One or more selected invoices have already been posted.\n"
 "Re-check your selection."
 msgstr ""
+"Една или повеќе избрани фактури се веќе прокнижени.\n"
+"Повторно проверете го вашиот избор."
 
 #: gnucash/gnome/dialog-invoice.c:3427
 msgid "Do you really want to post these invoices?"
-msgstr ""
+msgstr "Дали навистина сакате да ги прокнижите овие фактури?"
 
 #: gnucash/gnome/dialog-invoice.c:3515 gnucash/gnome/dialog-invoice.c:3796
 msgid "View/Edit Invoice"
-msgstr ""
+msgstr "Прикажи/Уреди фактура"
 
 #: gnucash/gnome/dialog-invoice.c:3517 gnucash/gnome/dialog-invoice.c:3526
 #: gnucash/gnome/dialog-invoice.c:3537
@@ -3140,37 +3142,37 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.cpp:386
 #: gnucash/ui/gnc-embedded-register-window.ui:155
 msgid "Duplicate"
-msgstr ""
+msgstr "Дуплицирај"
 
 #: gnucash/gnome/dialog-invoice.c:3518 gnucash/gnome/dialog-invoice.c:3527
 #: gnucash/gnome/dialog-invoice.c:3538
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:289
 msgid "Post"
-msgstr ""
+msgstr "Прокнижи"
 
 #: gnucash/gnome/dialog-invoice.c:3519 gnucash/gnome/dialog-invoice.c:3528
 #: gnucash/gnome/dialog-invoice.c:3539
 msgid "Printable Report"
-msgstr ""
+msgstr "Извештај за печатење"
 
 #: gnucash/gnome/dialog-invoice.c:3524 gnucash/gnome/dialog-invoice.c:3790
 msgid "View/Edit Bill"
-msgstr ""
+msgstr "Прикажи/Уреди влезна фактура"
 
 #. Translators: The terms 'Voucher' and 'Expense Voucher' are used
 #. interchangeably in gnucash and mean the same thing.
 #: gnucash/gnome/dialog-invoice.c:3535
 msgid "View/Edit Voucher"
-msgstr ""
+msgstr "Прикажи/Уреди Ваучер"
 
 #: gnucash/gnome/dialog-invoice.c:3549
 msgid "Invoice Owner"
-msgstr ""
+msgstr "Сопственик на излезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:3552
 #: gnucash/report/reports/standard/invoice.scm:502
 msgid "Invoice Notes"
-msgstr ""
+msgstr "Белешки за фактура"
 
 #: gnucash/gnome/dialog-invoice.c:3555 gnucash/gnome/dialog-invoice.c:3589
 #: gnucash/gnome/dialog-invoice.c:3623 gnucash/gnome/dialog-invoice.c:3652
@@ -3180,17 +3182,17 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-job.glade:219
 #: gnucash/report/reports/standard/invoice.scm:494
 msgid "Billing ID"
-msgstr ""
+msgstr "ИБ за наплата"
 
 #: gnucash/gnome/dialog-invoice.c:3558 gnucash/gnome/dialog-invoice.c:3592
 #: gnucash/gnome/dialog-invoice.c:3626
 msgid "Is Paid?"
-msgstr ""
+msgstr "Дали е платено?"
 
 #: gnucash/gnome/dialog-invoice.c:3564 gnucash/gnome/dialog-invoice.c:3598
 #: gnucash/gnome/dialog-invoice.c:3632
 msgid "Is Posted?"
-msgstr ""
+msgstr "Дали е прокнижено?"
 
 #: gnucash/gnome/dialog-invoice.c:3567 gnucash/gnome/dialog-invoice.c:3601
 #: gnucash/gnome/dialog-invoice.c:3635 gnucash/gnome/dialog-order.c:874
@@ -3200,29 +3202,29 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-order.glade:548
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:139
 msgid "Date Opened"
-msgstr ""
+msgstr "Датум на отворање"
 
 #: gnucash/gnome/dialog-invoice.c:3577
 #: gnucash/gtkbuilder/dialog-invoice.glade:42
 #: gnucash/gtkbuilder/dialog-invoice.glade:868
 msgid "Invoice ID"
-msgstr ""
+msgstr "ИБ на фактура"
 
 #: gnucash/gnome/dialog-invoice.c:3583
 msgid "Bill Owner"
-msgstr ""
+msgstr "Сопственик на влезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:3586
 msgid "Bill Notes"
-msgstr ""
+msgstr "Белешки за влезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:3617
 msgid "Voucher Owner"
-msgstr ""
+msgstr "Сопственик на ваучер"
 
 #: gnucash/gnome/dialog-invoice.c:3620
 msgid "Voucher Notes"
-msgstr ""
+msgstr "Белешки за ваучер"
 
 #: gnucash/gnome/dialog-invoice.c:3654 gnucash/gnome/dialog-invoice.c:3813
 #: gnucash/gnome/dialog-lot-viewer.c:908 gnucash/gnome/dialog-tax-info.c:1235
@@ -3244,27 +3246,27 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:52
 #: gnucash/report/reports/standard/new-owner-report.scm:227
 msgid "Type"
-msgstr ""
+msgstr "Вид"
 
 #: gnucash/gnome/dialog-invoice.c:3656
 #: gnucash/register/ledger-core/split-register-model.c:314
 #: gnucash/report/reports/standard/new-owner-report.scm:808
 msgid "Paid"
-msgstr ""
+msgstr "Платено"
 
 #: gnucash/gnome/dialog-invoice.c:3659
 msgid "Posted"
-msgstr ""
+msgstr "Прокнижено"
 
 #: gnucash/gnome/dialog-invoice.c:3664 gnucash/gnome/dialog-invoice.c:3817
 msgid "Due"
-msgstr ""
+msgstr "Доспеано"
 
 #: gnucash/gnome/dialog-invoice.c:3666 gnucash/gnome/dialog-lot-viewer.c:914
 #: gnucash/gnome/dialog-order.c:892
 #: gnucash/report/reports/standard/investment-lots.scm:102
 msgid "Opened"
-msgstr ""
+msgstr "Отворено"
 
 #: gnucash/gnome/dialog-invoice.c:3668 gnucash/gnome/dialog-lot-viewer.c:995
 #: gnucash/gnome/dialog-order.c:894 gnucash/gnome/reconcile-view.c:445
@@ -3280,25 +3282,25 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:916 gnucash/report/trep-engine.scm:1116
 #: gnucash/report/trep-engine.scm:2236
 msgid "Num"
-msgstr ""
+msgstr "Број"
 
 #: gnucash/gnome/dialog-invoice.c:3749
 msgid "Find Bill"
-msgstr ""
+msgstr "Најди Влезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:3756
 msgid "Find Expense Voucher"
-msgstr ""
+msgstr "Најди Ваучер за трошоци"
 
 #: gnucash/gnome/dialog-invoice.c:3757
 #: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/report/reports/standard/invoice.scm:776
 msgid "Expense Voucher"
-msgstr ""
+msgstr "Ваучер за трошоци"
 
 #: gnucash/gnome/dialog-invoice.c:3763
 msgid "Find Invoice"
-msgstr ""
+msgstr "Најди Излезна фактура"
 
 #: gnucash/gnome/dialog-invoice.c:3810 gnucash/gnome/dialog-lot-viewer.c:1015
 #: gnucash/gnome/gnc-split-reg.c:666 gnucash/gnome/reconcile-view.c:437
@@ -3324,7 +3326,7 @@ msgstr ""
 #: gnucash/report/trep-engine.scm:1333 gnucash/report/trep-engine.scm:1436
 #: gnucash/report/trep-engine.scm:2183 gnucash/report/trep-engine.scm:2203
 msgid "Amount"
-msgstr ""
+msgstr "Износ"
 
 #. Translators: %d is the number of bills/credit notes due. This is a
 #. ngettext(3) message.
@@ -3332,12 +3334,12 @@ msgstr ""
 #, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Следниот документ за добавувачот е доспеан:"
+msgstr[1] "Следните %d документи за добавувачите се доспеани:"
 
 #: gnucash/gnome/dialog-invoice.c:3901
 msgid "Due Bills Reminder"
-msgstr ""
+msgstr "Потсетник за доспеани влезни фактури"
 
 #. Translators: %d is the number of invoices/credit notes due. This is a
 #. ngettext(3) message.
@@ -3345,90 +3347,91 @@ msgstr ""
 #, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Следниот документ на купувачот е доспеан:"
+msgstr[1] "Следните %d документи на купувачите се доспеани:"
 
 #: gnucash/gnome/dialog-invoice.c:3912
 msgid "Due Invoices Reminder"
-msgstr ""
+msgstr "Потсетник за доспеани излезни фактури"
 
 #: gnucash/gnome/dialog-job.c:136
 msgid "The Job must be given a name."
-msgstr ""
+msgstr "Работата мора да добие име."
 
 #: gnucash/gnome/dialog-job.c:146
 msgid "You must choose an owner for this job."
-msgstr ""
+msgstr "Мора да изберете сопственик за оваа работа."
 
 #: gnucash/gnome/dialog-job.c:154
 msgid "The rate amount must be valid or you must leave it blank."
 msgstr ""
+"Износот на стапката мора да биде валиден или полето да го оставите празно."
 
 #: gnucash/gnome/dialog-job.c:245
 msgid "Edit Job"
-msgstr ""
+msgstr "Уреди Работа"
 
 #: gnucash/gnome/dialog-job.c:245 gnucash/gnome-search/dialog-search.c:1099
 msgid "New Job"
-msgstr ""
+msgstr "Нова Работа"
 
 #: gnucash/gnome/dialog-job.c:549
 msgid "View/Edit Job"
-msgstr ""
+msgstr "Прикажи/Уреди Работа"
 
 #: gnucash/gnome/dialog-job.c:550
 msgid "View Invoices"
-msgstr ""
+msgstr "Погледни Излезни фактури"
 
 #: gnucash/gnome/dialog-job.c:560
 msgid "Owner's Name"
-msgstr ""
+msgstr "Име на сопственикот"
 
 #: gnucash/gnome/dialog-job.c:562
 msgid "Only Active?"
-msgstr ""
+msgstr "Само активен?"
 
 #: gnucash/gnome/dialog-job.c:566 gnucash/gnome/dialog-job.c:579
 #: gnucash/gtkbuilder/dialog-job.glade:206
 #: gnucash/register/ledger-core/split-register-model.c:374
 msgid "Rate"
-msgstr ""
+msgstr "Стапка"
 
 #: gnucash/gnome/dialog-job.c:568 gnucash/gnome-utils/gnc-tree-view-owner.c:341
 #: gnucash/gtkbuilder/dialog-job.glade:103
 msgid "Job Number"
-msgstr ""
+msgstr "Број на Работа"
 
 #: gnucash/gnome/dialog-job.c:570 gnucash/gnome/dialog-job.c:583
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:340
 #: gnucash/gtkbuilder/dialog-job.glade:116
 msgid "Job Name"
-msgstr ""
+msgstr "Име на Работа"
 
 #: gnucash/gnome/dialog-job.c:634
 msgid "Find Job"
-msgstr ""
+msgstr "Најди Работа"
 
 #: gnucash/gnome/dialog-lot-viewer.c:818
 msgid "Empty"
-msgstr ""
+msgstr "Празно"
 
 #: gnucash/gnome/dialog-lot-viewer.c:830
 msgctxt "Adjective"
 msgid "Open"
-msgstr ""
+msgstr "Отворен"
 
 #: gnucash/gnome/dialog-lot-viewer.c:924 gnucash/gnome/dialog-order.c:890
 #: gnucash/report/reports/standard/investment-lots.scm:103
 msgid "Closed"
-msgstr ""
+msgstr "Затворен"
 
 #: gnucash/gnome/dialog-lot-viewer.c:934
 #: gnucash/gtkbuilder/assistant-acct-period.glade:131
 #: gnucash/report/html-fonts.scm:106
 #: gnucash/report/reports/standard/register.scm:341
 msgid "Title"
-msgstr ""
+msgstr "Наслов"
 
 #: gnucash/gnome/dialog-lot-viewer.c:941 gnucash/gnome/dialog-lot-viewer.c:1033
 #: gnucash/gnome-utils/gnc-tree-view-account.c:837
@@ -3442,16 +3445,16 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:551
 #: gnucash/report/reports/standard/register.scm:163
 msgid "Balance"
-msgstr ""
+msgstr "Биланс"
 
 #: gnucash/gnome/dialog-lot-viewer.c:947
 msgid "Gains"
-msgstr ""
+msgstr "Добивки"
 
 #: gnucash/gnome/dialog-lot-viewer.c:1027
 #: gnucash/report/reports/example/average-balance.scm:118
 msgid "Gain/Loss"
-msgstr ""
+msgstr "Добивка/Загуба"
 
 #: gnucash/gnome/dialog-lot-viewer.c:1091
 #, c-format
@@ -3460,89 +3463,95 @@ msgstr ""
 
 #: gnucash/gnome/dialog-order.c:170
 msgid "The Order must be given an ID."
-msgstr ""
+msgstr "На нарачката мора да и се додели ИБ."
 
 #: gnucash/gnome/dialog-order.c:277
 msgid "The Order must have at least one Entry."
-msgstr ""
+msgstr "Нарачката мора да има најмалку еден запис."
 
 #: gnucash/gnome/dialog-order.c:299
 msgid ""
 "This order contains entries that have not been invoiced. Are you sure you "
 "want to close it out before you invoice all the entries?"
 msgstr ""
+"Оваа нарачка содржи записи кои не се фактурирани. Дали сте сигурни дека "
+"сакате да ја затворите пред да ги фактурирате сите записи?"
 
 #: gnucash/gnome/dialog-order.c:308
 msgid "Do you really want to close the order?"
-msgstr ""
+msgstr "Дали навистина сакате да ја затворите нарачката?"
 
 #: gnucash/gnome/dialog-order.c:309
 msgid "Close Date"
-msgstr ""
+msgstr "Датум на затворање"
 
 #: gnucash/gnome/dialog-order.c:859
 msgid "View/Edit Order"
-msgstr ""
+msgstr "Прикажи/Уреди Нарачка"
 
 #: gnucash/gnome/dialog-order.c:868
 msgid "Order Notes"
-msgstr ""
+msgstr "Белешки за Нарачка"
 
 #: gnucash/gnome/dialog-order.c:870 gnucash/gtkbuilder/dialog-order.glade:149
 msgid "Date Closed"
-msgstr ""
+msgstr "Датум на затворање"
 
 #: gnucash/gnome/dialog-order.c:872
 msgid "Is Closed?"
-msgstr ""
+msgstr "Затворено е?"
 
 #: gnucash/gnome/dialog-order.c:876
 msgid "Owner Name"
-msgstr ""
+msgstr "Име на сопственикот"
 
 #: gnucash/gnome/dialog-order.c:878 gnucash/gtkbuilder/dialog-order.glade:123
 #: gnucash/gtkbuilder/dialog-order.glade:517
 msgid "Order ID"
-msgstr ""
+msgstr "ИБ на Нарачка"
 
 #: gnucash/gnome/dialog-order.c:948
 msgid "Find Order"
-msgstr ""
+msgstr "Најди Нарачка"
 
 #: gnucash/gnome/dialog-payment.c:237
 msgid "You must enter a valid account name for posting."
-msgstr ""
+msgstr "Мора да внесете важечко име на сметка за книжење."
 
 #: gnucash/gnome/dialog-payment.c:246
 msgid "You must select a company for payment processing."
-msgstr ""
+msgstr "Мора да изберете компанија за процесирање на плаќање."
 
 #: gnucash/gnome/dialog-payment.c:260
 msgid "There is a problem with the Payment or Refund amount."
-msgstr ""
+msgstr "Има проблем со износот за плаќање или поврат."
 
 #: gnucash/gnome/dialog-payment.c:281
 msgid "You must select a transfer account from the account tree."
-msgstr ""
+msgstr "Мора да изберете сметка за пренос од дрвото на сметките."
 
 #: gnucash/gnome/dialog-payment.c:292
 msgid ""
 "No documents were selected to assign this payment to. This may create an "
 "unattached payment."
 msgstr ""
+"Не беа избрани документи за да се доделат на оваа исплата. Ова може да "
+"создаде неповрзано плаќање."
 
 #: gnucash/gnome/dialog-payment.c:541 gnucash/gnome/dialog-payment.c:1353
 #: gnucash/report/reports/standard/new-aging.scm:177
 #: gnucash/report/reports/standard/new-owner-report.scm:305
 #: gnucash/report/reports/standard/new-owner-report.scm:699
 msgid "Pre-Payment"
-msgstr ""
+msgstr "Пред-Плаќање"
 
 #: gnucash/gnome/dialog-payment.c:1002
 msgid ""
 "The transfer and post accounts are associated with different currencies. "
 "Please specify the conversion rate."
 msgstr ""
+"Сметките за трансфер и книжење се поврзани со различни валути. Ве молиме "
+"наведете ја стапката на конверзија."
 
 #: gnucash/gnome/dialog-payment.c:1288 gnucash/gnome/search-owner.c:196
 #: gnucash/gnome-search/dialog-search.c:1081
@@ -3557,7 +3566,7 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:89
 #: libgnucash/engine/gncOwner.c:216
 msgid "Customer"
-msgstr ""
+msgstr "Клиент"
 
 #: gnucash/gnome/dialog-payment.c:1292 gnucash/gnome/search-owner.c:197
 #: gnucash/gnome-search/dialog-search.c:1113
@@ -3568,7 +3577,7 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:104
 #: libgnucash/engine/gncOwner.c:220
 msgid "Vendor"
-msgstr ""
+msgstr "Добавувач"
 
 #: gnucash/gnome/dialog-payment.c:1296 gnucash/gnome/search-owner.c:198
 #: gnucash/gnome-search/dialog-search.c:1085
@@ -3577,7 +3586,7 @@ msgstr ""
 #: gnucash/report/reports/standard/new-owner-report.scm:94
 #: libgnucash/engine/gncOwner.c:222
 msgid "Employee"
-msgstr ""
+msgstr "Вработен"
 
 #: gnucash/gnome/dialog-payment.c:1449
 #, c-format
@@ -3586,6 +3595,9 @@ msgid ""
 "\"%s\" before you continue to process this payment. Perhaps you want to "
 "create an Invoice or Bill first?"
 msgstr ""
+"Немате валидни „Прокнижи на“ сметки . Ве молиме креирајте сметка од типот "
+"„%s“ пред да продолжите да ја обработувате оваа исплата. Можеби прво сакате "
+"да креирате влезна или излезна фактура?"
 
 #: gnucash/gnome/dialog-payment.c:1574
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3246
@@ -3593,7 +3605,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-tree-view-account.c:858
 #: gnucash/report/trep-engine.scm:158
 msgid "Cleared"
-msgstr ""
+msgstr "Расчистено"
 
 #: gnucash/gnome/dialog-payment.c:1576
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3248
@@ -3603,13 +3615,13 @@ msgstr ""
 #: gnucash/import-export/import-match-picker.cpp:357
 #: gnucash/report/trep-engine.scm:159
 msgid "Reconciled"
-msgstr ""
+msgstr "Усогласено"
 
 #: gnucash/gnome/dialog-payment.c:1614
 msgid ""
 "The selected transaction doesn't have splits that can be assigned as a "
 "payment"
-msgstr ""
+msgstr "Избраната трансакција нема поделби што може да се доделат како плаќање"
 
 #: gnucash/gnome/dialog-payment.c:1626
 msgid ""
@@ -3618,21 +3630,25 @@ msgid ""
 "Please select one, the others will be discarded.\n"
 "\n"
 msgstr ""
+"Иако а оваа трансакција има повеќе поделби што може да се земат предвид\n"
+"како „поделба на плаќање“, GnuCash знае само како да се справи со еден.\n"
+"Ве моломе изберете една, другите ќе бидат отфрлени.\n"
+"\n"
 
 #: gnucash/gnome/dialog-payment.c:1630
 msgid "Warning"
-msgstr ""
+msgstr "Предупредување"
 
 #: gnucash/gnome/dialog-payment.c:1633
 msgid "Continue"
-msgstr ""
+msgstr "Продолжи"
 
 #: gnucash/gnome/dialog-payment.c:1634
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:283
 #: gnucash/gnome/gnc-plugin-page-register.cpp:384
 #: gnucash/ui/gnc-embedded-register-window.ui:210
 msgid "Cancel"
-msgstr ""
+msgstr "Откажи"
 
 #: gnucash/gnome/dialog-payment.c:1758
 #, c-format
@@ -3645,14 +3661,21 @@ msgid ""
 "Please correct this manually by editing the transaction directly and then "
 "try again."
 msgstr ""
+"Оваа трансакција се дели на повеќе бизнис сметки:\n"
+"\n"
+"%s\n"
+"GnuCash може да се справи само со трансакции што се книжат на една сметка.\n"
+"\n"
+"Поправете го ова рачно со директно уредување на трансакцијата и потоа "
+"обидете се повторно."
 
 #. Translators: %d is the number of prices. This is a ngettext(3) message.
 #: gnucash/gnome/dialog-price-edit-db.cpp:201
 #, c-format
 msgid "Are you sure you want to delete the selected price?"
 msgid_plural "Are you sure you want to delete the %d selected prices?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Дали сте сигурни дека сакате да ја избришете избраната цена?"
+msgstr[1] "Дали сте сигурни дека сакате да ги избришете %d избраните цени?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:209
 msgid "Delete prices?"
