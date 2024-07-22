@@ -779,7 +779,7 @@ void GncTxImport::update_pre_trans_props (parse_line_t& parsed_line, uint32_t co
     auto input_vec = std::get<PL_INPUT>(parsed_line);
     auto trans_props = std::get<PL_PRETRANS> (parsed_line);
 
-    /* Reset date and currency formats for each trans/split props object
+    /* Reset date format for each trans props object
      * to ensure column updates use the most recent one */
     trans_props->set_date_format (m_settings.m_date_format);
     trans_props->set_multi_split (m_settings.m_multi_split);
@@ -818,6 +818,9 @@ void GncTxImport::update_pre_split_props (parse_line_t& parsed_line, uint32_t co
      */
     auto split_props = std::get<PL_PRESPLIT> (parsed_line);
     auto trans_props = std::get<PL_PRETRANS> (parsed_line);
+    /* Reset date format for each split props object
+     * to ensure column updates use the most recent one */
+    split_props->set_date_format (m_settings.m_date_format);
     if (m_settings.m_multi_split && trans_props->is_part_of( m_parent))
         split_props->set_pre_trans (m_parent);
     else
