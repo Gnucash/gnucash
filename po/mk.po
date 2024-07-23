@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-22 15:09+0000\n"
+"PO-Revision-Date: 2024-07-23 14:09+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/mk/>\n"
@@ -50,7 +50,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: libgnucash/engine/gnc-option-date.cpp:263
 msgid "Start of this year"
-msgstr "Почеток на годината"
+msgstr "Почеток на оваа година"
 
 #: bindings/guile/date-utilities.scm:718
 #: libgnucash/engine/gnc-option-date.cpp:264
@@ -463,7 +463,7 @@ msgstr "кирилица (KOI8-R)"
 
 #: borrowed/goffice/go-charmap-sel.c:155
 msgid "Cyrillic (MacCyrillic)"
-msgstr "кирилица  (MacCyrillic)"
+msgstr "кирилица (MacCyrillic)"
 
 #: borrowed/goffice/go-charmap-sel.c:157
 msgid "Cyrillic (Windows-1251)"
@@ -1682,7 +1682,7 @@ msgstr ""
 #. shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:382
 msgid "Compensatory notional distribution (capital gain)"
-msgstr "Компензаторна ноционална распределба (капитална добивка)"
+msgstr "Компензаторна нaционална распределба (капитална добивка)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:383
 msgid ""
@@ -3679,7 +3679,7 @@ msgstr[1] "Дали сте сигурни дека сакате да ги изб
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:209
 msgid "Delete prices?"
-msgstr ""
+msgstr "Да се избришат цените?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:414
 #: gnucash/gtkbuilder/dialog-invoice.glade:609
@@ -3687,11 +3687,11 @@ msgstr ""
 #: gnucash/report/reports/standard/income-statement.scm:110
 #: gnucash/report/reports/standard/trial-balance.scm:85
 msgid "Entries"
-msgstr ""
+msgstr "Записи"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:444
 msgid "Are you sure you want to delete these prices?"
-msgstr ""
+msgstr "Дали сте сигурни дека сакате да ги избришете овие цени?"
 
 #: gnucash/gnome/dialog-price-edit-db.cpp:584
 #: gnucash/gnome-utils/dialog-transfer.cpp:1796
@@ -3701,15 +3701,15 @@ msgstr ""
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
-msgstr ""
+msgstr "Дали сте сигурни дека сакате да ја замените постоечката цена?"
 
 #: gnucash/gnome/dialog-price-editor.c:233
 msgid "Replace price?"
-msgstr ""
+msgstr "Промена на цена?"
 
 #: gnucash/gnome/dialog-price-editor.c:239
 msgid "_Replace"
-msgstr ""
+msgstr "_Промени"
 
 #: gnucash/gnome/dialog-price-editor.c:270
 msgid "You must select a Security."
@@ -3717,25 +3717,25 @@ msgstr ""
 
 #: gnucash/gnome/dialog-price-editor.c:275
 msgid "You must select a Currency."
-msgstr ""
+msgstr "Мора да изберете Валута."
 
 #: gnucash/gnome/dialog-price-editor.c:289
 #: gnucash/gnome-utils/dialog-transfer.cpp:1678
 msgid "You must enter a valid amount."
-msgstr ""
+msgstr "Мора да внесете валиден износ."
 
 #: gnucash/gnome/dialog-print-check.c:862
 msgid "Cannot save check format file."
-msgstr ""
+msgstr "Не може да се зачува датотеката за чек формат."
 
 #: gnucash/gnome/dialog-print-check.c:864
 #, c-format
 msgid "Cannot open file %s"
-msgstr ""
+msgstr "Не може да се отвори датотеката %s"
 
 #: gnucash/gnome/dialog-print-check.c:1552
 msgid "There is a duplicate check format file."
-msgstr ""
+msgstr "Постои дупликат датотека за чек формат."
 
 #. Translators:
 #. %1$s is the type of the first check format
@@ -3755,14 +3755,14 @@ msgstr ""
 #. * gnucash application.
 #: gnucash/gnome/dialog-print-check.c:1603
 msgid "application"
-msgstr ""
+msgstr "апликација"
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by a
 #. * user herself.
 #: gnucash/gnome/dialog-print-check.c:1611
 msgid "user"
-msgstr ""
+msgstr "корисник"
 
 #: gnucash/gnome/dialog-print-check.c:1635
 #: gnucash/gnome/dialog-print-check.c:2653
@@ -3781,29 +3781,29 @@ msgstr "Прилагодена"
 #: gnucash/gtkbuilder/dialog-print-check.glade:261
 #: gnucash/report/reports/standard/investment-lots.scm:197
 msgid "Top"
-msgstr ""
+msgstr "Врв"
 
 #: gnucash/gnome/dialog-progress.c:484 gnucash/gnome/dialog-progress.c:533
 msgid "(paused)"
-msgstr ""
+msgstr "(паузирано)"
 
 #: gnucash/gnome/dialog-progress.c:768 gnucash/gnome/dialog-progress.c:771
 msgid "Complete"
-msgstr ""
+msgstr "Завршено"
 
 #: gnucash/gnome/dialog-report-column-view.cpp:355
 msgid "Contents"
-msgstr ""
+msgstr "Содржини"
 
 #: gnucash/gnome/dialog-report-column-view.cpp:383
 #: gnucash/report/reports/standard/customer-summary.scm:251
 #: gnucash/report/reports/standard/new-owner-report.scm:1031
 msgid "Report"
-msgstr ""
+msgstr "Извештај"
 
 #: gnucash/gnome/dialog-report-column-view.cpp:389
 msgid "Rows"
-msgstr ""
+msgstr "Редови"
 
 #: gnucash/gnome/dialog-report-column-view.cpp:395
 msgid "Cols"
