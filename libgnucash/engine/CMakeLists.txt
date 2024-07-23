@@ -179,7 +179,7 @@ set (engine_SOURCES
   guid.cpp
   policy.cpp
   gncAddress.cpp
-  gncBillTerm.c
+  gncBillTerm.cpp
   gncBusiness.c
   gncCustomer.cpp
   gncEmployee.cpp

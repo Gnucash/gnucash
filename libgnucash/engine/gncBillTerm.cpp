@@ -95,14 +95,14 @@ static inline void maybe_resort_list (GncBillTerm *term)
     struct _book_info *bi;
 
     if (term->parent || term->invisible) return;
-    bi = qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME);
+    bi = static_cast<_book_info*>(qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME));
     bi->terms = g_list_sort (bi->terms, (GCompareFunc)gncBillTermCompare);
 }
 
 static inline void addObj (GncBillTerm *term)
 {
     struct _book_info *bi;
-    bi = qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME);
+    bi = static_cast<_book_info*>(qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME));
     bi->terms = g_list_insert_sorted (bi->terms, term,
                                       (GCompareFunc)gncBillTermCompare);
 }
@@ -110,7 +110,7 @@ static inline void addObj (GncBillTerm *term)
 static inline void remObj (GncBillTerm *term)
 {
     struct _book_info *bi;
-    bi = qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME);
+    bi = static_cast<_book_info*>(qof_book_get_data (qof_instance_get_book(term), _GNC_MOD_NAME));
     bi->terms = g_list_remove (bi->terms, term);
 }
 
@@ -250,7 +250,7 @@ GncBillTerm * gncBillTermCreate (QofBook *book)
     GncBillTerm *term;
     if (!book) return NULL;
 
-    term = g_object_new (GNC_TYPE_BILLTERM, NULL);
+    term = GNC_BILLTERM(g_object_new (GNC_TYPE_BILLTERM, NULL));
     qof_instance_init_data(&term->inst, _GNC_MOD_NAME, book);
     term->name = CACHE_INSERT ("");
     term->desc = CACHE_INSERT ("");
@@ -293,7 +293,7 @@ static void gncBillTermFree (GncBillTerm *term)
     /* disconnect from the children */
     for (list = term->children; list; list = list->next)
     {
-        child = list->data;
+        child = GNC_BILLTERM(list->data);
         gncBillTermSetParent(child, NULL);
     }
     g_list_free(term->children);
@@ -334,7 +334,18 @@ void gncBillTermSetType (GncBillTerm *term, GncBillTermType type)
 }
 
 /** \brief Convert bill term types from text. */
-FROM_STRING_FUNC(GncBillTermType, ENUM_TERMS_TYPE)
+GncBillTermType GncBillTermTypefromString (const char *str)
+{
+    if (str)
+    {
+        if (!strcmp (str, "GNC_TERM_TYPE_DAYS"))
+            return GNC_TERM_TYPE_DAYS;
+        else if (!strcmp (str, "GNC_TERM_TYPE_PROXIMO"))
+            return GNC_TERM_TYPE_PROXIMO;
+    }
+    PERR ("str cannot be %s", str);
+    return GNC_TERM_TYPE_DAYS;
+}
 
 static
 void qofBillTermSetType (GncBillTerm *term, const char *type_label)
@@ -497,9 +508,9 @@ GncBillTerm *gncBillTermLookupByName (QofBook *book, const char *name)
 
     for ( ; list; list = list->next)
     {
-        GncBillTerm *term = list->data;
+        GncBillTerm *term = GNC_BILLTERM(list->data);
         if (!g_strcmp0 (term->name, name))
-            return list->data;
+            return term;
     }
     return NULL;
 }
@@ -509,7 +520,7 @@ GList * gncBillTermGetTerms (QofBook *book)
     struct _book_info *bi;
     if (!book) return NULL;
 
-    bi = qof_book_get_data (book, _GNC_MOD_NAME);
+    bi = static_cast<_book_info*>(qof_book_get_data (book, _GNC_MOD_NAME));
     return bi->terms;
 }
 
@@ -527,7 +538,7 @@ const char *gncBillTermGetDescription (const GncBillTerm *term)
 
 GncBillTermType gncBillTermGetType (const GncBillTerm *term)
 {
-    if (!term) return 0;
+    if (!term) return GncBillTermType(0);
     return term->type;
 }
 
@@ -856,7 +867,7 @@ static void _gncBillTermDestroy (QofBook *book)
 
     if (!book) return;
 
-    bi = qof_book_get_data (book, _GNC_MOD_NAME);
+    bi = static_cast<_book_info*>(qof_book_get_data (book, _GNC_MOD_NAME));
 
     col = qof_book_get_collection (book, GNC_ID_BILLTERM);
     qof_collection_foreach (col, destroy_billterm_on_book_close, NULL);
@@ -870,7 +881,7 @@ static QofObject gncBillTermDesc =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) _GNC_MOD_NAME,
     DI(.type_label        = ) "Billing Term",
-    DI(.create            = ) (gpointer)gncBillTermCreate,
+    DI(.create            = ) (void* (*)(QofBook*))gncBillTermCreate,
     DI(.book_begin        = ) _gncBillTermCreate,
     DI(.book_end          = ) _gncBillTermDestroy,
     DI(.is_dirty          = ) qof_collection_is_dirty,
