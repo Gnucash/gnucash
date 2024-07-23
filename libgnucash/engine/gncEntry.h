@@ -42,14 +42,12 @@ typedef struct _gncEntryClass GncEntryClass;
 
 typedef enum
 {
-    GNC_PAYMENT_NONE = 0,
     GNC_PAYMENT_CASH = 1,
     GNC_PAYMENT_CARD
 } GncEntryPaymentType;
 
 typedef enum
 {
-    GNC_DISC_DISABLED = 0,
     GNC_DISC_PRETAX = 1,
     GNC_DISC_SAMETIME,
     GNC_DISC_POSTTAX
