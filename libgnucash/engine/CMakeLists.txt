@@ -189,7 +189,7 @@ set (engine_SOURCES
   gncJob.c
   gncOrder.c
   gncOwner.cpp
-  gncTaxTable.c
+  gncTaxTable.cpp
   gncVendor.cpp
   kvp-frame.cpp
   kvp-value.cpp
