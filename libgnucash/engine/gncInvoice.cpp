@@ -47,6 +47,8 @@
 #include "gncOwnerP.h"
 #include "engine-helpers.h"
 
+#include <optional>
+
 struct _gncInvoice
 {
     QofInstance   inst;
@@ -917,8 +919,7 @@ static gnc_numeric gncInvoiceSumTaxesInternal (AccountValueList *taxes)
 
 static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboolean use_value,
                                                      AccountValueList **taxes,
-                                                     gboolean use_payment_type,
-                                                     GncEntryPaymentType type)
+                                                     std::optional<GncEntryPaymentType> type)
 {
     GList *node;
     gnc_numeric net_total = gnc_numeric_zero ();
@@ -941,7 +942,7 @@ static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboole
         auto entry = GNC_ENTRY(node->data);
         gnc_numeric value;
 
-        if (use_payment_type && gncEntryGetBillPayment (entry) != type)
+        if (type.has_value() && gncEntryGetBillPayment (entry) != type.value())
             continue;
 
         if (use_value)
@@ -983,7 +984,7 @@ static gnc_numeric gncInvoiceGetNetAndTaxesInternal (GncInvoice *invoice, gboole
 
 static gnc_numeric gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use_value,
                                                gboolean use_tax,
-                                               gboolean use_payment_type, GncEntryPaymentType type)
+                                               std::optional<GncEntryPaymentType> type)
 {
     AccountValueList *taxes;
     gnc_numeric total;
@@ -991,7 +992,7 @@ static gnc_numeric gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use
     if (!invoice) return gnc_numeric_zero ();
 
     ENTER ("");
-    total = gncInvoiceGetNetAndTaxesInternal (invoice, use_value, use_tax? &taxes : NULL, use_payment_type, type);
+    total = gncInvoiceGetNetAndTaxesInternal (invoice, use_value, use_tax? &taxes : NULL, type);
 
     if (use_tax)
     {
@@ -1009,25 +1010,25 @@ static gnc_numeric gncInvoiceGetTotalInternal (GncInvoice *invoice, gboolean use
 gnc_numeric gncInvoiceGetTotal (GncInvoice *invoice)
 {
     if (!invoice) return gnc_numeric_zero ();
-    return gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, FALSE, GNC_PAYMENT_NONE);
+    return gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, {});
 }
 
 gnc_numeric gncInvoiceGetTotalSubtotal (GncInvoice *invoice)
 {
     if (!invoice) return gnc_numeric_zero ();
-    return gncInvoiceGetTotalInternal (invoice, TRUE, FALSE, FALSE, GNC_PAYMENT_NONE);
+    return gncInvoiceGetTotalInternal (invoice, TRUE, FALSE, {});
 }
 
 gnc_numeric gncInvoiceGetTotalTax (GncInvoice *invoice)
 {
     if (!invoice) return gnc_numeric_zero ();
-    return gncInvoiceGetTotalInternal (invoice, FALSE, TRUE, FALSE, GNC_PAYMENT_NONE);
+    return gncInvoiceGetTotalInternal (invoice, FALSE, TRUE, {});
 }
 
 gnc_numeric gncInvoiceGetTotalOf (GncInvoice *invoice, GncEntryPaymentType type)
 {
     if (!invoice) return gnc_numeric_zero ();
-    return gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, TRUE, type);
+    return gncInvoiceGetTotalInternal (invoice, TRUE, TRUE, type);
 }
 
 AccountValueList *gncInvoiceGetTotalTaxList (GncInvoice *invoice)
@@ -1035,7 +1036,7 @@ AccountValueList *gncInvoiceGetTotalTaxList (GncInvoice *invoice)
     AccountValueList *taxes;
     if (!invoice) return NULL;
 
-    gncInvoiceGetNetAndTaxesInternal (invoice, FALSE, &taxes, FALSE, GNC_PAYMENT_NONE);
+    gncInvoiceGetNetAndTaxesInternal (invoice, FALSE, &taxes, {});
     return taxes;
 }
 
