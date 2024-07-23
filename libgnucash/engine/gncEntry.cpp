@@ -977,13 +977,21 @@ gnc_numeric gncEntryGetInvDiscount (const GncEntry *entry)
 
 GncAmountType gncEntryGetInvDiscountType (const GncEntry *entry)
 {
-    if (!entry) return GNC_AMT_TYPE_DISABLED;
+    if (!entry)
+    {
+        PERR ("entry must not be null");
+        return GNC_AMT_TYPE_VALUE;
+    }
     return entry->i_disc_type;
 }
 
 GncDiscountHow gncEntryGetInvDiscountHow (const GncEntry *entry)
 {
-    if (!entry) return GNC_DISC_DISABLED;
+    if (!entry)
+    {
+        PERR ("entry must not be null");
+        return GNC_DISC_PRETAX;
+    }
     return entry->i_disc_how;
 }
 
@@ -1069,7 +1077,11 @@ GncOwner * gncEntryGetBillTo (GncEntry *entry)
 
 GncEntryPaymentType gncEntryGetBillPayment (const GncEntry* entry)
 {
-    if (!entry) return GNC_PAYMENT_NONE;
+    if (!entry)
+    {
+        PERR ("entry must not be null");
+        return GNC_PAYMENT_CASH;
+    }
     return entry->b_payment;
 }
 
