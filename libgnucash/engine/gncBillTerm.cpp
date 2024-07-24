@@ -538,7 +538,11 @@ const char *gncBillTermGetDescription (const GncBillTerm *term)
 
 GncBillTermType gncBillTermGetType (const GncBillTerm *term)
 {
-    if (!term) return GncBillTermType(0);
+    if (!term)
+    {
+        PERR ("term cannot be null");
+        return GNC_TERM_TYPE_DAYS;
+    }
     return term->type;
 }
 
