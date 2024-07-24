@@ -66,7 +66,7 @@ gboolean gnc_uri_is_known_scheme (const gchar *scheme)
 
     for ( node = known_scheme_list; node != NULL; node = node->next )
     {
-        gchar *known_scheme = node->data;
+        gchar *known_scheme = (char*)node->data;
         if ( !g_ascii_strcasecmp (scheme, known_scheme) )
         {
             is_known_scheme = TRUE;
