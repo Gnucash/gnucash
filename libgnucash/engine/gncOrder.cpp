@@ -284,7 +284,7 @@ GncOrder *gncOrderCreate (QofBook *book)
 
     if (!book) return NULL;
 
-    order = g_object_new (GNC_TYPE_ORDER, NULL);
+    order = GNC_ORDER(g_object_new (GNC_TYPE_ORDER, NULL));
     qof_instance_init_data (&order->inst, _GNC_MOD_NAME, book);
 
     order->id = CACHE_INSERT ("");
@@ -533,7 +533,7 @@ int gncOrderCompare (const GncOrder *a, const GncOrder *b)
 static const char *
 _gncOrderPrintable (gpointer obj)
 {
-    GncOrder *order = obj;
+    GncOrder *order = GNC_ORDER(obj);
 
     g_return_val_if_fail (order, NULL);
 
@@ -554,7 +554,7 @@ static QofObject gncOrderDesc =
     DI(.interface_version = ) QOF_OBJECT_VERSION,
     DI(.e_type            = ) _GNC_MOD_NAME,
     DI(.type_label        = ) "Order",
-    DI(.create            = ) (gpointer)gncOrderCreate,
+    DI(.create            = ) (void* (*)(QofBook*))gncOrderCreate,
     DI(.book_begin        = ) NULL,
     DI(.book_end          = ) NULL,
     DI(.is_dirty          = ) qof_collection_is_dirty,
