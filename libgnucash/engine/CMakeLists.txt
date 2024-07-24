@@ -186,7 +186,7 @@ set (engine_SOURCES
   gncEntry.cpp
   gncIDSearch.c
   gncInvoice.cpp
-  gncJob.c
+  gncJob.cpp
   gncOrder.c
   gncOwner.cpp
   gncTaxTable.cpp
