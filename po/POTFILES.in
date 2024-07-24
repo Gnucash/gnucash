@@ -660,7 +660,7 @@ libgnucash/engine/gnc-rational.cpp
 libgnucash/engine/gnc-session.c
 libgnucash/engine/gncTaxTable.cpp
 libgnucash/engine/gnc-timezone.cpp
-libgnucash/engine/gnc-uri-utils.c
+libgnucash/engine/gnc-uri-utils.cpp
 libgnucash/engine/gncVendor.cpp
 libgnucash/engine/guid.cpp
 libgnucash/engine/kvp-frame.cpp

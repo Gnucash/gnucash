@@ -174,7 +174,7 @@ set (engine_SOURCES
   gnc-rational.cpp
   gnc-session.c
   gnc-timezone.cpp
-  gnc-uri-utils.c
+  gnc-uri-utils.cpp
   engine-helpers.c
   guid.cpp
   policy.cpp
