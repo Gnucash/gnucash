@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-23 14:09+0000\n"
+"PO-Revision-Date: 2024-07-25 07:09+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/mk/>\n"
@@ -3459,7 +3459,7 @@ msgstr "Добивка/Загуба"
 #: gnucash/gnome/dialog-lot-viewer.c:1091
 #, c-format
 msgid "Lots in Account %s"
-msgstr ""
+msgstr "Позиции во Сметка %s"
 
 #: gnucash/gnome/dialog-order.c:170
 msgid "The Order must be given an ID."
@@ -3807,29 +3807,30 @@ msgstr "Редови"
 
 #: gnucash/gnome/dialog-report-column-view.cpp:395
 msgid "Cols"
-msgstr ""
+msgstr "Колони"
 
 #: gnucash/gnome/dialog-report-style-sheet.cpp:170
 #, c-format
 msgid "HTML Style Sheet Properties: %s"
-msgstr ""
+msgstr "Својства на HTML дизајн на извештај: %s"
 
 #: gnucash/gnome/dialog-report-style-sheet.cpp:259
 msgid "You must provide a name for the new style sheet."
-msgstr ""
+msgstr "Мора да наведете име за новиот дизајн на извештај."
 
 #: gnucash/gnome/dialog-report-style-sheet.cpp:509
 msgid "Style Sheet Name"
-msgstr ""
+msgstr "Име на дизајн на извештај"
 
 #: gnucash/gnome/dialog-sx-editor.c:203
 msgid ""
 "This Scheduled Transaction has changed; are you sure you want to cancel?"
 msgstr ""
+"Оваа закажана трансакција е променета; Дали си сигурен дека сакаш да откажеш?"
 
 #: gnucash/gnome/dialog-sx-editor.c:489
 msgid "Please name the Scheduled Transaction."
-msgstr ""
+msgstr "Ве молиме именувајте ја закажаната трансакција."
 
 #: gnucash/gnome/dialog-sx-editor.c:513
 #, c-format
@@ -3837,14 +3838,16 @@ msgid ""
 "A Scheduled Transaction with the name \"%s\" already exists. Are you sure "
 "you want to name this one the same?"
 msgstr ""
+"Закажана трансакција со името „%s“ веќе постои. Дали сте сигурни дека сакате "
+"да ја именувате и оваа исто?"
 
 #: gnucash/gnome/dialog-sx-editor.c:533
 msgid "Please provide a valid end selection."
-msgstr ""
+msgstr "Ве молиме наведете валиден крајен избор."
 
 #: gnucash/gnome/dialog-sx-editor.c:548
 msgid "There must be some number of occurrences."
-msgstr ""
+msgstr "Мора да има одреден број на појави."
 
 #: gnucash/gnome/dialog-sx-editor.c:556
 #, c-format
@@ -3852,52 +3855,59 @@ msgid ""
 "The number of remaining occurrences (%d) is greater than the number of total "
 "occurrences (%d)."
 msgstr ""
+"Бројот на преостанати појави (%d) е поголем од бројот на вкупни појави (%d)."
 
 #: gnucash/gnome/dialog-sx-editor.c:585
 msgid ""
 "You have attempted to create a Scheduled Transaction which will never run. "
 "Do you really want to do this?"
 msgstr ""
+"Се обидовте да креирате закажана трансакција која никогаш нема да се изврши. "
+"Дали навистина сакате да го направите ова?"
 
 #: gnucash/gnome/dialog-sx-editor.c:607
 msgid ""
 "Scheduled Transactions with variables or involving more than one commodity "
 "cannot be automatically created."
 msgstr ""
+"Закажаните трансакции со променливи или кои вклучуваат повеќе од една стока "
+"не може автоматски да се креираат."
 
 #: gnucash/gnome/dialog-sx-editor.c:618
 msgid ""
 "Scheduled Transactions without a template transaction cannot be "
 "automatically created."
 msgstr ""
+"Закажаните трансакции без шаблон на трансакција не може автоматски да се "
+"креираат."
 
 #: gnucash/gnome/dialog-sx-editor.c:670
 #, c-format
 msgid "Couldn't parse %s for split \"%s\"."
-msgstr ""
+msgstr "Не може да се анлиизира%s за поделба „%s“."
 
 #: gnucash/gnome/dialog-sx-editor.c:736
 #, c-format
 msgid "Split with memo %s has an invalid account."
-msgstr ""
+msgstr "Поделбата со потсетник%s има неважечка сметка."
 
 #: gnucash/gnome/dialog-sx-editor.c:739
 msgid "Invalid Account in Split"
-msgstr ""
+msgstr "Неважечка сметка во Подели"
 
 #: gnucash/gnome/dialog-sx-editor.c:751
 #, c-format
 msgid "Split with memo %s has an unparsable Credit Formula."
-msgstr ""
+msgstr "Поделбата со потсетник%s има необработлива кредитна формула."
 
 #: gnucash/gnome/dialog-sx-editor.c:754 gnucash/gnome/dialog-sx-editor.c:770
 msgid "Unparsable Formula in Split"
-msgstr ""
+msgstr "Необработлива формула во Подели"
 
 #: gnucash/gnome/dialog-sx-editor.c:767
 #, c-format
 msgid "Split with memo %s has an unparsable Debit Formula."
-msgstr ""
+msgstr "Поделбата со потсетник%s има необработлива дебитна формула."
 
 #: gnucash/gnome/dialog-sx-editor.c:874
 #: gnucash/gnome/dialog-sx-from-trans.cpp:261
@@ -3905,69 +3915,77 @@ msgid ""
 "The Scheduled Transaction Editor cannot automatically balance this "
 "transaction. Should it still be entered?"
 msgstr ""
+"Уредникот на закажани трансакции не може автоматски да ја балансира оваа "
+"трансакција. Дали сепак треба да се внесе?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1408
 msgid "(never)"
-msgstr ""
+msgstr "(никогаш)"
 
 #: gnucash/gnome/dialog-sx-editor.c:1571
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
 msgstr ""
+"Тековната шаблон на трансакција е променет. Дали сакате да ги снимите "
+"промените?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1847
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:233
 msgid "Scheduled Transactions"
-msgstr ""
+msgstr "Закажани трансакции"
 
 #: gnucash/gnome/dialog-sx-from-trans.cpp:549
 msgid ""
 "The Scheduled Transaction is unbalanced. You are strongly encouraged to "
 "correct this situation."
 msgstr ""
+"Закажаната трансакција е неурамнотежена. Силно сте охрабрени да ја поправите "
+"оваа ситуација."
 
 #: gnucash/gnome/dialog-sx-from-trans.cpp:773
 msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
 msgstr ""
+"Не може да се создаде закажана трансакција од трансакција што моментално се "
+"уредува. Ве молиме внесете ја трансакцијата пред да закажете."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:369
 msgid "Ignored"
-msgstr ""
+msgstr "Игнорирано"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:370
 msgid "Postponed"
-msgstr ""
+msgstr "Одложено"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:371
 msgid "To-Create"
-msgstr ""
+msgstr "Да-создаде"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:372
 msgid "Reminder"
-msgstr ""
+msgstr "Потсетник"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:373
 #: gnucash/gnome/gnc-plugin-budget.c:192
 msgid "Created"
-msgstr ""
+msgstr "Создаден"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:436
 #: gnucash/gtkbuilder/dialog-preferences.glade:1737
 #: gnucash/report/reports/standard/balsheet-pnl.scm:195
 #: gnucash/report/trep-engine.scm:578
 msgid "Never"
-msgstr ""
+msgstr "Никогаш"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:522
 msgid "(Need Value)"
-msgstr ""
+msgstr "(Потребна е вредност)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:895
 msgid "Invalid Transactions"
-msgstr ""
+msgstr "Невалидни трансакции"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:946
 #, c-format
@@ -3978,51 +3996,55 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
+"Во моментов нема закажани трансакции што треба да се внесат. (%d трансакции "
+"се создадени автоматски)"
 msgstr[1] ""
+"Во моментов нема закажани трансакции што треба да се внесат. (%d трансакции "
+"се создадени автоматски)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1266
 msgid "Highlight a date first to sort by occurrence date."
-msgstr ""
+msgstr "Прво означете датум за да сортирате по датум на појава."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
 msgid "Highlight a schedule first to sort by schedule name."
-msgstr ""
+msgstr "Прво означете распоред за да сортирате по име на распоред."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1379
 #: gnucash/gnome-search/dialog-search.c:1105
 msgid "Transaction"
-msgstr ""
+msgstr "Трансакција"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1402
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:512
 msgid "Status"
-msgstr ""
+msgstr "Статус"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1497
 msgid "Created Transactions"
-msgstr ""
+msgstr "Создадени трансакции"
 
 #: gnucash/gnome/dialog-tax-info.c:287
 msgid "Last Valid Year: "
-msgstr ""
+msgstr "Последна валидна година: "
 
 #: gnucash/gnome/dialog-tax-info.c:288
 msgid "Form Line Data: "
-msgstr ""
+msgstr "Податоци за линијата на формуларот: "
 
 #. Translators: Tax Code
 #: gnucash/gnome/dialog-tax-info.c:290
 msgid "Code"
-msgstr ""
+msgstr "Код"
 
 #: gnucash/gnome/dialog-tax-info.c:365
 msgid "now"
-msgstr ""
+msgstr "сега"
 
 #: gnucash/gnome/dialog-tax-info.c:1185
 #: gnucash/gtkbuilder/dialog-tax-info.glade:89
 msgid "Income Tax Identity"
-msgstr ""
+msgstr "Идентитет на данокот на приход"
 
 #: gnucash/gnome/dialog-tax-info.c:1191
 #: gnucash/gtkbuilder/dialog-options.glade:55
@@ -4030,50 +4052,52 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-reset-warnings.glade:40
 #: gnucash/gtkbuilder/dialog-tax-info.glade:43
 msgid "_Apply"
-msgstr ""
+msgstr "_Примени"
 
 #: gnucash/gnome/dialog-tax-info.c:1240
 msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
+"ВНИМАНИЕ: Ако поставите TXF категории, а подоцна промените „Вид“, ќе треба "
+"рачно да ги ресетирате тие категории една по една"
 
 #: gnucash/gnome/dialog-tax-info.c:1393
 msgid "Form"
-msgstr ""
+msgstr "Форма"
 
 #: gnucash/gnome/dialog-vendor.c:276
 msgid "Edit Vendor"
-msgstr ""
+msgstr "Уреди Добавувач"
 
 #: gnucash/gnome/dialog-vendor.c:276 gnucash/gnome-search/dialog-search.c:1115
 #: gnucash/gtkbuilder/dialog-vendor.glade:31
 msgid "New Vendor"
-msgstr ""
+msgstr "Нов Добавувач"
 
 #: gnucash/gnome/dialog-vendor.c:676
 msgid "View/Edit Vendor"
-msgstr ""
+msgstr "Прикажи/Уреди Добавувач"
 
 #: gnucash/gnome/dialog-vendor.c:677
 msgid "Vendor's Jobs"
-msgstr ""
+msgstr "Работи на Добавувач"
 
 #: gnucash/gnome/dialog-vendor.c:679
 msgid "Vendor's Bills"
-msgstr ""
+msgstr "Фактури од добавувачите"
 
 #: gnucash/gnome/dialog-vendor.c:680
 msgid "Pay Bill"
-msgstr ""
+msgstr "Плати Фактура"
 
 #: gnucash/gnome/dialog-vendor.c:692
 msgid "Vendor ID"
-msgstr ""
+msgstr "ИБ на добавувач"
 
 #: gnucash/gnome/dialog-vendor.c:727
 msgid "Find Vendor"
-msgstr ""
+msgstr "Најди Добавувач"
 
 #: gnucash/gnome/gnc-budget-view.c:500
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:70
@@ -4090,7 +4114,7 @@ msgstr ""
 #: gnucash/report/report-utilities.scm:205 libgnucash/engine/Account.cpp:176
 #: libgnucash/engine/Account.cpp:4495
 msgid "Income"
-msgstr ""
+msgstr "Приходи"
 
 #: gnucash/gnome/gnc-budget-view.c:503
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:117
@@ -4099,7 +4123,7 @@ msgstr ""
 #: gnucash/report/reports/standard/income-statement.scm:469
 #: gnucash/report/report-utilities.scm:206
 msgid "Expenses"
-msgstr ""
+msgstr "Трошоци"
 
 #: gnucash/gnome/gnc-budget-view.c:506
 #: gnucash/gnome/gnc-plugin-page-register.cpp:382
@@ -4108,11 +4132,11 @@ msgstr ""
 #: gnucash/register/ledger-core/split-register-model.c:353
 #: gnucash/report/reports/standard/register.scm:143
 msgid "Transfer"
-msgstr ""
+msgstr "Трансфер"
 
 #: gnucash/gnome/gnc-budget-view.c:509
 msgid "Remaining to Budget"
-msgstr ""
+msgstr "Остануваат во буџетот"
 
 #: gnucash/gnome/gnc-budget-view.c:1604 gnucash/gnome/window-reconcile.cpp:1169
 #: gnucash/gnome-utils/gnc-tree-view-account.c:906
@@ -4134,11 +4158,11 @@ msgstr ""
 #: gnucash/report/reports/support/balsheet-eg.eguile.scm:113
 #: gnucash/report/trep-engine.scm:2081
 msgid "Total"
-msgstr ""
+msgstr "Вкупно"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:480
 msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr ""
+msgstr "Во моментов нема закажани трансакции што треба да се внесат."
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -4151,25 +4175,29 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
+"Во моментов нема закажани трансакции што треба да се внесат. (%d трансакција "
+"е создадена автоматски)"
 msgstr[1] ""
+"Во моментов нема закажани трансакции што треба да се внесат. (%d трансакции "
+"се создадени автоматски)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:320
 msgid "Select a Budget"
-msgstr ""
+msgstr "Изберете буџет"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:292
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:177
 #: gnucash/gnome-utils/gnc-file.c:92 gnucash/gnome-utils/gnc-file.c:329
 #: gnucash/gnome-utils/gnc-file.c:1183
 msgid "Open"
-msgstr ""
+msgstr "Отвори"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:293
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:219
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:220
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:221
 msgid "Edit"
-msgstr ""
+msgstr "Уреди"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:294
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:222
@@ -4177,7 +4205,7 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:224
 #: gnucash/gnome-utils/dialog-doclink-utils.c:426
 msgid "New"
-msgstr ""
+msgstr "Нов"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:295
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:178
@@ -4185,12 +4213,12 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.cpp:385
 #: gnucash/ui/gnc-embedded-register-window.ui:170
 msgid "Delete"
-msgstr ""
+msgstr "Избриши"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:330
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1813
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr ""
+msgstr "„Провери& Поправи“ моментално работи, дали сакате да го прекинете?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:404
 #: gnucash/gtkbuilder/assistant-csv-export.glade:270
@@ -4220,7 +4248,7 @@ msgstr ""
 #: gnucash/report/reports/standard/trial-balance.scm:70
 #: gnucash/report/trep-engine.scm:70 libgnucash/engine/qofbookslots.h:64
 msgid "Accounts"
-msgstr ""
+msgstr "Сметки"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1299
 #, c-format
@@ -4229,25 +4257,28 @@ msgid ""
 "transactions from.\n"
 "Are you sure you want to do this?"
 msgstr ""
+"Сметката %s ја нема истата валута како онаа од која ги преместувате "
+"трансакциите.\n"
+"Дали сте сигурни дека сакате да го направите ова?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1307
 msgid "_Pick another account"
-msgstr ""
+msgstr "_Изберете друга сметка"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1308
 msgid "_Do it anyway"
-msgstr ""
+msgstr "_Направете го во секој случај"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1390
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1529
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1044
 msgid "(no name)"
-msgstr ""
+msgstr "(нема име)"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1402
 #, c-format
 msgid "Deleting account %s"
-msgstr ""
+msgstr "Се брише сметката %s"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1519
 msgid ""
@@ -4257,6 +4288,11 @@ msgid ""
 "modify them so they make use\n"
 "of another account"
 msgstr ""
+"Списокот подолу покажува објекти кои ја користат сметката што сакате да ја "
+"избришете.\n"
+"Пред да можете да го избришете, мора или да ги избришете тие објекти или да "
+"ја измените \n"
+"сметката која ја користат"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1532
 #, c-format
@@ -4265,42 +4301,46 @@ msgid ""
 "\n"
 "Move the subaccounts or delete them before attempting to delete this account."
 msgstr ""
+"Сметката „%s“ има повеќе од една подсметка.\n"
+"\n"
+"Преместете ги подсметките или избришете ги пред да се обидете да ја "
+"избришете оваа сметка."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1592
 #, c-format
 msgid "The account %s will be deleted."
-msgstr ""
+msgstr "Сметката %s ќе биде избришана."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1601
 #, c-format
 msgid "All transactions in this account will be moved to the account %s."
-msgstr ""
+msgstr "Сите трансакции на оваа сметка ќе бидат преместени на сметката %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1608
 msgid "All transactions in this account will be deleted."
-msgstr ""
+msgstr "Сите трансакции на оваа сметка ќе бидат избришани."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1617
 #, c-format
 msgid "Its sub-account will be moved to the account %s."
-msgstr ""
+msgstr "Нејзината подсметка ќе биде преместена на сметката %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1623
 msgid "Its subaccount will be deleted."
-msgstr ""
+msgstr "Нејзината потсметка ќе биде избришана."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1627
 #, c-format
 msgid "All sub-account transactions will be moved to the account %s."
-msgstr ""
+msgstr "Сите трансакции со подсметка ќе бидат преместени на сметката %s."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1634
 msgid "All sub-account transactions will be deleted."
-msgstr ""
+msgstr "Сите трансакции со подсметка ќе бидат избришани."
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:1640
 msgid "Are you sure you want to do this?"
-msgstr ""
+msgstr "Дали сте сигурни дека сакате да го направите ова?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:179
 #: gnucash/gnome/gnc-plugin-page-report.cpp:236
@@ -4308,23 +4348,23 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-print-check.glade:641
 #: gnucash/gtkbuilder/dialog-sx.glade:932
 msgid "Options"
-msgstr ""
+msgstr "Опции"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:180
 msgid "Estimate"
-msgstr ""
+msgstr "Проценете"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:181
 msgid "All Periods"
-msgstr ""
+msgstr "Сите периоди"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:182
 msgid "Note"
-msgstr ""
+msgstr "Белешка"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:183
 msgid "Run Report"
-msgstr ""
+msgstr "Пушти извештај"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:263
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:302
@@ -4341,88 +4381,88 @@ msgstr "Буџет/План"
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:935
 #: libgnucash/engine/gnc-budget.cpp:110
 msgid "Unnamed Budget"
-msgstr ""
+msgstr "Неименуван буџет"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:937
 #, c-format
 msgid "Delete %s?"
-msgstr ""
+msgstr "Да се избрише %s?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:1037
 msgid "You must select at least one account to estimate."
-msgstr ""
+msgstr "Мора да изберете барем една сметка за проценка."
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:1168
 msgid "You must select at least one account to edit."
-msgstr ""
+msgstr "Мора да изберете барем една сметка за уредување."
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:1269
 msgid "You must select one budget cell to edit."
-msgstr ""
+msgstr "Мора да изберете една буџетска ќелија за уредување."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:287
 msgid "_Print Invoice"
-msgstr ""
+msgstr "_Печати фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:289
 msgid "Make a printable invoice"
-msgstr ""
+msgstr "Направи фактура за печатење"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:191
 #: gnucash/ui/gnc-plugin-page-invoice.ui:367
 msgid "_Edit Invoice"
-msgstr ""
+msgstr "_Уреди фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:191
 #: gnucash/ui/gnc-plugin-page-invoice.ui:18
 #: gnucash/ui/gnc-plugin-page-invoice.ui:369
 msgid "Edit this invoice"
-msgstr ""
+msgstr "Уреди ја оваа фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:382
 msgid "_Duplicate Invoice"
-msgstr ""
+msgstr "_Дупликат фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:24
 #: gnucash/ui/gnc-plugin-page-invoice.ui:384
 msgid "Create a new invoice as a duplicate of the current one"
-msgstr ""
+msgstr "Направи нова фактура како дупликат на тековната"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:522
 msgid "_Post Invoice"
-msgstr ""
+msgstr "_Прокнижи фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:30
 #: gnucash/ui/gnc-plugin-page-invoice.ui:524
 msgid "Post this invoice to your Chart of Accounts"
-msgstr ""
+msgstr "Објавете ја оваа фактура во вашиот Контен план"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:537
 msgid "_Unpost Invoice"
-msgstr ""
+msgstr "_Поништи објавување на фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:36
 #: gnucash/ui/gnc-plugin-page-invoice.ui:539
 msgid "Unpost this invoice and make it editable"
-msgstr ""
+msgstr "Поништете објавување на оваа фактура и направете ја уредлива"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
 #: gnucash/ui/gnc-plugin-page-invoice.ui:352
 msgid "New _Invoice"
-msgstr ""
+msgstr "Нова _фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
 #: gnucash/ui/gnc-plugin-page-invoice.ui:354
 msgid "Create a new invoice for the same owner as the current one"
-msgstr ""
+msgstr "Создадете нова фактура за истиот сопственик како и тековната"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
@@ -4432,22 +4472,22 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.cpp:392
 #: gnucash/ui/gnc-embedded-register-window.ui:225
 msgid "Blank"
-msgstr ""
+msgstr "Бланко"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
 msgid "Move to the blank entry at the bottom of the invoice"
-msgstr ""
+msgstr "Префрлете се на празниот запис на дното на фактурата"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:197
 #: gnucash/ui/gnc-plugin-page-invoice.ui:552
 msgid "_Pay Invoice"
-msgstr ""
+msgstr "_Плати фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:197
 #: gnucash/ui/gnc-plugin-page-invoice.ui:200
 #: gnucash/ui/gnc-plugin-page-invoice.ui:554
 msgid "Enter a payment for the owner of this invoice"
-msgstr ""
+msgstr "Внесете плаќање за сопственикот на оваа фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:223
@@ -4455,11 +4495,11 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
 #: gnucash/ui/gnc-plugin-page-invoice.ui:207
 msgid "_Company Report"
-msgstr ""
+msgstr "_Извештај на компанијата"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
 msgid "Open a customer report window for the owner of this invoice"
-msgstr ""
+msgstr "Отворете прозорец за извештај за клиент за сопственикот на оваа фактура"
 
 #. Translators: This is a menu item that opens a dialog for linking an
 #. external file or URL with the bill, invoice, transaction, or voucher or
@@ -4473,7 +4513,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:393
 #: gnucash/ui/gnc-plugin-page-register.ui:505
 msgid "_Manage Document Link…"
-msgstr ""
+msgstr "_Управувајте со врската со документот…"
 
 #. Translators: This is a menu item that opens an external file or URI that may
 #. be linked to the current bill, invoice, transaction, or voucher using
@@ -4487,7 +4527,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:398
 #: gnucash/ui/gnc-plugin-page-register.ui:510
 msgid "_Open Linked Document"
-msgstr ""
+msgstr "_Отвори поврзан документ"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:200
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:225
@@ -4495,21 +4535,23 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:275
 #: gnucash/gnome/gnc-plugin-page-register.cpp:396
 msgid "Open Linked Document"
-msgstr ""
+msgstr "Отворете го поврзаниот документ"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:206
 msgid "_Use as Default Layout for Customer Documents"
-msgstr ""
+msgstr "_Користете го како стандарден распоред за документите на клиентите"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:207
 #: gnucash/ui/gnc-plugin-page-invoice.ui:66
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
 msgstr ""
+"Користете го тековниот распоред како стандарден за сите фактури на клиентите "
+"и кредитни белешки"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:208
 msgid "_Reset Default Layout for Customer Documents"
-msgstr ""
+msgstr "_Ресетирајте го стандардниот распоред за документите на клиентите"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:209
 #: gnucash/ui/gnc-plugin-page-invoice.ui:72
@@ -4517,50 +4559,53 @@ msgid ""
 "Reset default layout for all customer invoices and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
+"Ресетирајте го стандардниот распоред за сите фактури на клиентите и кредитни "
+"белешки назад на вградените стандардни вредности и соодветно ажурирајте ја "
+"тековната страница"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
 msgid "_Print Bill"
-msgstr ""
+msgstr "_Испечати влезна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
 msgid "Make a printable bill"
-msgstr ""
+msgstr "Направете влезна фактура за печатење"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
 msgid "_Edit Bill"
-msgstr ""
+msgstr "_Уреди Влезна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
 msgid "Edit this bill"
-msgstr ""
+msgstr "Уредете ја оваа влезна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
 msgid "_Duplicate Bill"
-msgstr ""
+msgstr "_Дуплицирај Влезна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
 msgid "Create a new bill as a duplicate of the current one"
-msgstr ""
+msgstr "Направете нова влезна фактура како дупликат на тековната"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
 msgid "_Post Bill"
-msgstr ""
+msgstr "_Прокнижи влезна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
 msgid "Post this bill to your Chart of Accounts"
-msgstr ""
+msgstr "Прокнижи ја оваа влезна фактура во Контниот план"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:219
 msgid "_Unpost Bill"
-msgstr ""
+msgstr "_Откнижи ја Влезната фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:219
 msgid "Unpost this bill and make it editable"
-msgstr ""
+msgstr "Откнижи ја оваа влезна фактура и направи ја да може да се уредува"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
 msgid "New _Bill"
-msgstr ""
+msgstr "Нова _Влезна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
 msgid "Create a new bill for the same owner as the current one"
