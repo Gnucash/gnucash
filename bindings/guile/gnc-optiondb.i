@@ -294,6 +294,7 @@ scm_from_value<GncOptionAccountList>(GncOptionAccountList value)
     for (auto guid : value)
     {
         auto acct{xaccAccountLookup(&guid, book)};
+        if (!GNC_IS_ACCOUNT(acct)) continue;
         s_list = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
                           s_list);
     }
@@ -661,7 +662,7 @@ gnc_option_test_book_destroy(QofBook* book)
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
         Account* acct = (Account*)SWIG_MustGetPtr(s_account,
                                                   SWIGTYPE_p_Account, 1, 0);
-        if (acct)
+        if (GNC_IS_ACCOUNT(acct))
             $1.push_back(*qof_entity_get_guid(acct));
     }
 }
@@ -698,7 +699,7 @@ gnc_option_test_book_destroy(QofBook* book)
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
         Account* acct = (Account*)SWIG_MustGetPtr(s_account,
                                                   SWIGTYPE_p_Account, 1, 0);
-        if (acct)
+        if (GNC_IS_ACCOUNT(acct))
             alist.push_back(*qof_entity_get_guid(acct));
     }
     $1 = &alist;
@@ -713,6 +714,7 @@ gnc_option_test_book_destroy(QofBook* book)
         SCM s_account = scm_list_ref($input, scm_from_size_t(i));
         Account* acct = (Account*)SWIG_MustGetPtr(s_account,
                                                   SWIGTYPE_p_Account, 1, 0);
+        if (!GNC_IS_ACCOUNT(acct)) continue;
         acclist.push_back(*qof_entity_get_guid(acct));
     }
     $1 = &acclist;
@@ -731,6 +733,7 @@ gnc_option_test_book_destroy(QofBook* book)
     for (auto guid : $1)
     {
         auto acct{xaccAccountLookup(&guid, book)};
+        if (!GNC_IS_ACCOUNT(acct)) continue;
         $result = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
                            $result);
     }
@@ -744,6 +747,7 @@ gnc_option_test_book_destroy(QofBook* book)
     for (auto guid : *$1)
     {
         auto acct{xaccAccountLookup(&guid, book)};
+        if (!GNC_IS_ACCOUNT(acct)) continue;
         $result = scm_cons(SWIG_NewPointerObj(acct, SWIGTYPE_p_Account, 0),
                            $result);
     }
