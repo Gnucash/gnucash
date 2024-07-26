@@ -1621,29 +1621,15 @@ recn_set_watches_one_account (gpointer data, gpointer user_data)
                                     xaccAccountGetGUID (account),
                                     QOF_EVENT_MODIFY | QOF_EVENT_DESTROY);
 
-    /* add a watch on each unreconciled or cleared split for the account */
+    /* add a watch on each split for the account */
     for (auto split : xaccAccountGetSplits (account))
     {
-        Transaction *trans;
-        char recn;
-
-        recn = xaccSplitGetReconcile (split);
-        switch (recn)
-        {
-        case NREC:
-        case CREC:
-            trans = xaccSplitGetParent (split);
-
-            gnc_gui_component_watch_entity (recnData->component_id,
-                                            xaccTransGetGUID (trans),
-                                            QOF_EVENT_MODIFY
-                                            | QOF_EVENT_DESTROY
-                                            | GNC_EVENT_ITEM_CHANGED);
-            break;
-
-        default:
-            break;
-        }
+        auto trans = xaccSplitGetParent (split);
+        gnc_gui_component_watch_entity (recnData->component_id,
+                                        xaccTransGetGUID (trans),
+                                        QOF_EVENT_MODIFY
+                                        | QOF_EVENT_DESTROY
+                                        | GNC_EVENT_ITEM_CHANGED);
     }
 }
 
