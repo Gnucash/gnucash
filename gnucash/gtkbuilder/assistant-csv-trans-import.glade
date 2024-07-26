@@ -46,13 +46,13 @@
 For a successful import three columns have to be available in the import data:
 • a Date column
 • a Description column
-• a Deposit or Withdrawal column
+• an Amount or Amount (Negated) column
 
 If there is no Account data available, a base account can be selected to which all data will be imported.
 
 Apart from a choice of delimiter, there are several options to tweak the importer. For example a number of lines can be skipped at the start or the end of the data, as well as odd rows. Several date and number formats are supported. The file encoding can be defined.
 
-The importer can handle files where transactions are split over multiple lines, with each line representing one split.
+The importer can handle files where transactions are split over multiple lines, with each line representing one split. A new transaction is started each time any of the transaction related columns' value differs from the one in a previous, non-empty one. Those columns are Transaction ID, Date, Number, Description, Notes, Transaction Commodity and Void Reason.
 
 Lastly, for repeated imports the preview page has buttons to Load and Save the settings. You can save your adjusted settings to reuse them on later imports. After loading your settings you can also tweak them again for similar imports and save them under another name.</property>
         <property name="wrap">True</property>
@@ -416,7 +416,7 @@ There are two reserved names which can't be used to save custom settings:
                             <property name="halign">start</property>
                             <property name="valign">start</property>
                             <property name="icon-name">dialog-information</property>
-                            <property name="icon-size">3</property>
+                            <property name="icon_size">3</property>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -864,7 +864,7 @@ For example
                 <property name="halign">start</property>
                 <property name="valign">start</property>
                 <property name="icon-name">dialog-information</property>
-                <property name="icon-size">3</property>
+                <property name="icon_size">3</property>
               </object>
               <packing>
                 <property name="expand">False</property>
@@ -1145,6 +1145,9 @@ More information can be displayed by using the help button.</property>
       <object class="GtkBox">
         <property name="can-focus">False</property>
       </object>
+      <packing>
+        <property name="has-padding">False</property>
+      </packing>
     </child>
   </object>
 </interface>
