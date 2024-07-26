@@ -41,14 +41,14 @@
 //    GncTxImport* parse_data;
 //} Fixture;
 
-typedef struct
+struct parse_date_data
 {
     int          date_fmt;
     const gchar *date_str;
     int          exp_year;
     int          exp_month;
     int          exp_day;
-} parse_date_data;
+};
 
 class GncTxImportTest : public ::testing::Test
 {

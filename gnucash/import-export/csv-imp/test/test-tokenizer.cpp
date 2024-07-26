@@ -36,20 +36,20 @@
 #include <stdlib.h>     /* getenv */
 
 
-typedef struct
+struct tokenize_csv_test_data
 {
     const char *csv_line;
     uint        num_fields;
     const char *fields [8];
-} tokenize_csv_test_data;
+};
 
-typedef struct
+struct tokenize_fw_test_data
 {
     const char *fw_line;
     uint        num_fields;
     uint        field_widths[8];
     const char *fields [8];
-} tokenize_fw_test_data;
+};
 
 class GncTokenizerTest : public ::testing::Test
 {
@@ -68,7 +68,7 @@ protected:
     void set_utf8_contents(std::unique_ptr<GncTokenizer> &tokenizer, const std::string& newcontents)
     { tokenizer->m_utf8_contents = newcontents; }
     void test_gnc_tokenize_helper (const std::string& separators, tokenize_csv_test_data* test_data); // for csv tokenizer
-    void test_gnc_tokenize_helper (tokenize_fw_test_data* test_data); // for csv tokenizer
+    void test_gnc_tokenize_helper (tokenize_fw_test_data* test_data); // for fw tokenizer
 
     std::unique_ptr<GncTokenizer> fw_tok;
     std::unique_ptr<GncTokenizer> csv_tok;
