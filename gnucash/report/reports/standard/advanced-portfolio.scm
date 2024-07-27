@@ -100,7 +100,7 @@ by preventing negative stock balances.<br/>")
     (gnc-register-simple-boolean-option options
         gnc:pagename-display optname-show-long-account-names "a"
         (N_ "Show long (instead of short) account names.")
-        #t)
+        #f)
 
     (gnc-register-simple-boolean-option options
         gnc:pagename-display optname-show-symbol "b"
