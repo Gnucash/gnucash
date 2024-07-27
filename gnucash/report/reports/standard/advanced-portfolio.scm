@@ -387,7 +387,8 @@ by preventing negative stock balances.<br/>")
                  (unit-collector (gnc:account-get-comm-balance-at-date
                                   current to-date #f))
                  (units (cadr (unit-collector 'getpair commodity #f)))
-                 (show-long-account-names (get-option gnc:pagename-display optname-show-long-account-names))
+                 (show-long-account-names (get-option gnc:pagename-display
+                                            optname-show-long-account-names))
 
                  ;; Counter to keep track of stuff
                  (brokeragecoll (gnc:make-commodity-collector))
@@ -879,7 +880,9 @@ by preventing negative stock balances.<br/>")
                                                                                     (gnc:gnc-monetary-amount income)
                                                                                 currency-frac GNC-RND-ROUND)))
 
-                  (activecols (list (if show-long-account-names (gnc:html-long-account-anchor current) (gnc:html-account-anchor current))))
+                  (activecols (list (if show-long-account-names
+                                      (gnc:html-long-account-anchor current)
+                                      (gnc:html-account-anchor current))))
                   )
 
               ;; If we're using the txn, warn the user
