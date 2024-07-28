@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-22 08:09+0000\n"
+"PO-Revision-Date: 2024-07-28 09:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -13259,8 +13259,8 @@ msgid ""
 "Use Edit->Tax Report Options to set the tax-related flag and assign a tax "
 "code to this account."
 msgstr ""
-"Az adórelevancia bekapcsolása és az adónem számlához rendelése a Szerkesztés-"
-">Adójelentés beállítások menüpontban végezhető el."
+"Az adórelevancia bekapcsolása és az adónem számlához rendelése a Szerkesztés "
+"-> Adójelentés beállítások menüpontban végezhető el."
 
 #: gnucash/gtkbuilder/dialog-account.glade:1636
 msgid "_Higher Balance Limit"
@@ -13346,10 +13346,8 @@ msgid "Interval"
 msgstr "Lépésköz"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2190
-#, fuzzy
-#| msgid "Number of Periods"
 msgid "Number of Digits"
-msgstr "Időszakok száma"
+msgstr "Számjegyek száma"
 
 #: gnucash/gtkbuilder/dialog-account.glade:2204
 msgid ""
@@ -13370,34 +13368,34 @@ msgstr "_Egyeztetett"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:72
 msgid "_Cleared"
-msgstr "_Elszámolt"
+msgstr "_Kiegyenlített (elszámolt)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:78
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as cleared."
 msgstr ""
-"Ha a QIF fájlban nincs megadva a státusz, a tranzakció elszámoltnak lesz "
-"jelölve."
+"Ha a QIF fájlban nincs megadva a státusz, a tranzakció kiegyelítettnek "
+"(elszámoltnak) lesz jelölve."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:91
 msgid "_Not cleared"
-msgstr "Nem els_zámolt"
+msgstr "_Nem kiegyenlített (nem elszámolt)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:97
 msgid ""
 "When the status is not specified in a QIF file, the transactions are marked "
 "as not cleared."
 msgstr ""
-"Ha a QIF fájlban nincs megadva a státusz, a tranzakció nem elszámoltnak lesz "
-"jelölve."
+"Ha a QIF fájlban nincs megadva a státusz, a tranzakció nem kiegyenlítettnek "
+"lesz jelölve."
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:113
 msgid ""
 "Default transaction status (overridden by the status given by the QIF file)"
 msgstr ""
-"A tranzakció alapértelmezett státusza (ha a QIF fájlban nincs megadva a "
-"státusz)"
+"A tranzakció alapértelmezett státusza (felülírja a QIF fájlban megadott a "
+"státuszt)"
 
 #: gnucash/gtkbuilder/dialog-account-picker.glade:159
 #: gnucash/gtkbuilder/dialog-import.glade:12
@@ -13432,7 +13430,7 @@ msgstr "2. Válassza ki az import típusát"
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:216
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:217
 msgid "Semicolon separated"
-msgstr "Pontos vesszővel elválasztva"
+msgstr "Pontosvesszővel elválasztott"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:234
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:234
@@ -13442,12 +13440,12 @@ msgstr "Vesszővel elválasztott"
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:252
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:252
 msgid "Semicolon separated with quotes"
-msgstr ""
+msgstr "Pontosvesszővel elválasztott, idézőjelekkel"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:270
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:270
 msgid "Comma separated with quotes"
-msgstr ""
+msgstr "Vesszővel elválasztott, idézőjelekkel"
 
 #: gnucash/gtkbuilder/dialog-bi-import-gui.glade:310
 #: gnucash/gtkbuilder/dialog-customer-import-gui.glade:310
