@@ -4,14 +4,15 @@
 # Automatically generated, 2022.
 #
 # Vesna Micajkova <vmicajkova@institutpraktikum.mk>, 2022, 2023, 2024.
+# Bojan Topalovski <3dcncinfo@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-30 16:09+0000\n"
-"Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
+"PO-Revision-Date: 2024-07-31 15:09+0000\n"
+"Last-Translator: Bojan Topalovski <3dcncinfo@gmail.com>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/mk/>\n"
 "Language: mk\n"
@@ -1999,7 +2000,7 @@ msgstr "Ваучер"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
 #: libgnucash/engine/Account.cpp:159 libgnucash/engine/gncInvoice.c:1096
 msgid "Invoice"
-msgstr "Излезна фактура"
+msgstr "Фактура"
 
 #: gnucash/gnome/business-gnome-utils.c:580 gnucash/gnome/gnc-split-reg.c:648
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
@@ -17438,7 +17439,7 @@ msgstr ""
 #: gnucash/report/reports/standard/invoice.scm:93
 #: gnucash/report/reports/standard/invoice.scm:422
 msgid "Quantity"
-msgstr ""
+msgstr "Количина"
 
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:150
 msgid "Disc-type"
