@@ -10,7 +10,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-25 07:09+0000\n"
+"PO-Revision-Date: 2024-07-30 16:09+0000\n"
 "Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/mk/>\n"
@@ -4609,252 +4609,267 @@ msgstr "Нова _Влезна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
 msgid "Create a new bill for the same owner as the current one"
-msgstr ""
+msgstr "Создадете нова влезна фактура за истиот сопственик како и тековната"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
 msgid "Move to the blank entry at the bottom of the bill"
-msgstr ""
+msgstr "Префрлете се на празниот запис на дното на влезната фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:222
 msgid "_Pay Bill"
-msgstr ""
+msgstr "_Плати Влезна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:222
 msgid "Enter a payment for the owner of this bill"
-msgstr ""
+msgstr "Внесете плаќање за сопственикот на оваа влезна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:223
 msgid "Open a vendor report window for the owner of this bill"
 msgstr ""
+"Отворете прозорец со извештај за добавувачот за сопственикот на оваа влезна "
+"фактура"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:231
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr ""
+msgstr "_Користете го како стандарден облик за документите на добавувачите"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:232
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
+"Користете го тековниот облик како стандарден за сите влезни фактури и "
+"кредитни белешки на добавувачот"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:233
 msgid "_Reset Default Layout for Vendor Documents"
-msgstr ""
+msgstr "_Ресетирајте го стандардниот облик за документите на добавувачот"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:234
 msgid ""
 "Reset default layout for all vendor bills and credit notes back to built-in "
 "defaults and update the current page accordingly"
 msgstr ""
+"Ресетирајте го стандардниот облик за сите сметки и кредитни белешки на "
+"добавувачот назад на вградените стандардни поставки и соодветно ажурирајте "
+"ја тековната страница"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
 msgid "_Print Voucher"
-msgstr ""
+msgstr "_Печати Ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
 msgid "Make a printable voucher"
-msgstr ""
+msgstr "Направете ваучер за печатење"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
 msgid "_Edit Voucher"
-msgstr ""
+msgstr "_Уреди Ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
 msgid "Edit this voucher"
-msgstr ""
+msgstr "Уреди го овој ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
 msgid "_Duplicate Voucher"
-msgstr ""
+msgstr "_Дуплицирај Ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr ""
+msgstr "Направете нов ваучер како дупликат на тековниот"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
 msgid "_Post Voucher"
-msgstr ""
+msgstr "_Прокнижи ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
 msgid "Post this voucher to your Chart of Accounts"
-msgstr ""
+msgstr "Објавете го овој ваучер на вашиот Контен план"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
 msgid "_Unpost Voucher"
-msgstr ""
+msgstr "_Отповикај Ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
 msgid "Unpost this voucher and make it editable"
-msgstr ""
+msgstr "Отстранете го овој ваучер и направете го да може да се уредува"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
 msgid "New _Voucher"
-msgstr ""
+msgstr "Нов _Ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
 msgid "Create a new voucher for the same owner as the current one"
-msgstr ""
+msgstr "Создадете нов ваучер за истиот сопственик како и тековниот"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
 msgid "Move to the blank entry at the bottom of the voucher"
-msgstr ""
+msgstr "Префрлете се на празниот запис на дното на ваучерот"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
 msgid "_Pay Voucher"
-msgstr ""
+msgstr "_Плати Ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
 msgid "Enter a payment for the owner of this voucher"
-msgstr ""
+msgstr "Внесете плаќање за сопственикот на овој ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:248
 msgid "Open a employee report window for the owner of this voucher"
 msgstr ""
+"Отворете прозорец за извештај за вработениот за сопственикот на овој ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:256
 msgid "_Use as Default Layout for Employee Documents"
-msgstr ""
+msgstr "_Користете го како стандарден облик за документите на вработените"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:257
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
+"Користете го тековниот облик како стандарден за сите ваучери и кредитни "
+"белешки на вработените"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 msgid "_Reset Default Layout for Employee Documents"
-msgstr ""
+msgstr "_Ресетирање на стандардниот облик за документите на вработените"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:259
 msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
+"Ресетирајте го стандардниот распоред за сите ваучери и кредитни белешкина "
+"вработените назад на вградените стандардни вредности и соодветно ажурирајте "
+"ја тековната страница"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
 msgid "_Print Credit Note"
-msgstr ""
+msgstr "_Печати кредитна белешка"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
 msgid "Make a printable credit note"
-msgstr ""
+msgstr "Направете кредитна белешка за печатење"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
 msgid "_Edit Credit Note"
-msgstr ""
+msgstr "_Уреди кредитна белешка"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
 msgid "Edit this credit note"
-msgstr ""
+msgstr "Уредете ја оваа кредитна белешка"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:267
 msgid "_Duplicate Credit Note"
-msgstr ""
+msgstr "_Дуплицирај кредитна белешка"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:267
 msgid "Create a new credit note as a duplicate of the current one"
-msgstr ""
+msgstr "Направете нова кредитна белешка како дупликат на тековната"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
 msgid "_Post Credit Note"
-msgstr ""
+msgstr "_Прокнижи кредитна белешка"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
 msgid "Post this credit note to your Chart of Accounts"
-msgstr ""
+msgstr "Прокнижете ја оваа кредитна белешка во вашиот Контен план"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:269
 msgid "_Unpost Credit Note"
-msgstr ""
+msgstr "_Отповикај кредитна белешка"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:269
 msgid "Unpost this credit note and make it editable"
-msgstr ""
+msgstr "Отповикај го книжново одобрение и направи го уредливо"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:270
 msgid "New _Credit Note"
-msgstr ""
+msgstr "Ново_Книжно Одобрение"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:270
 msgid "Create a new credit note for the same owner as the current one"
-msgstr ""
+msgstr "Создадете нова книжно одобрение за истиот сопственик како и тековното"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:271
 msgid "Move to the blank entry at the bottom of the credit note"
-msgstr ""
+msgstr "Префрлете се на празниот запис на дното на кредитното одобрение"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:272
 msgid "_Pay Credit Note"
-msgstr ""
+msgstr "_Плати книжно одобрение"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:272
 msgid "Enter a payment for the owner of this credit note"
-msgstr ""
+msgstr "Внесете исплата за сопственикот на ова книжно одобрение"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
 msgid "Open a company report window for the owner of this credit note"
 msgstr ""
+"Отворете прозорец со извештај за компанијата за сопственикот на оваа книжно "
+"одобрение"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
 msgid "Manage Document Link…"
-msgstr ""
+msgstr "Управувајте со врската на документот…"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:282
 #: gnucash/gnome/gnc-plugin-page-register.cpp:383
 #: gnucash/ui/gnc-embedded-register-window.ui:195
 msgid "Enter"
-msgstr ""
+msgstr "Внеси"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:286
 msgid "Up"
-msgstr ""
+msgstr "Горе"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:287
 msgid "Down"
-msgstr ""
+msgstr "Долу"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:290
 msgid "Unpost"
-msgstr ""
+msgstr "Одкнижи"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:291
 msgid "Pay"
-msgstr ""
+msgstr "Плати"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:227
 msgid "New Voucher"
-msgstr ""
+msgstr "Нов Ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:228
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:860
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:125
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:527
 msgid "Vendor Listing"
-msgstr ""
+msgstr "Листа на добавувачи"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:229
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:866
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:110
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:372
 msgid "Customer Listing"
-msgstr ""
+msgstr "Листа на клиенти"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:359
 msgid "Owners"
-msgstr ""
+msgstr "Сопственици"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:556
 msgid "Customers"
-msgstr ""
+msgstr "Клиенти"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:561
 msgid "Jobs"
-msgstr ""
+msgstr "Работи"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:566
 msgid "Vendors"
-msgstr ""
+msgstr "Добавувачи"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:571
 msgid "Employees"
-msgstr ""
+msgstr "Вработени"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:1052
 #, c-format
@@ -4862,21 +4877,23 @@ msgid ""
 "The owner %s will be deleted.\n"
 "Are you sure you want to do this?"
 msgstr ""
+"Сопственикот %s ќе биде избришан.\n"
+"Дали сте сигурни дека сакате да го направите ова?"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:254
 #: gnucash/ui/gnc-plugin-page-register.ui:130
 msgid "Cu_t Transaction"
-msgstr ""
+msgstr "Трансакција Cu_t"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:255
 #: gnucash/ui/gnc-plugin-page-register.ui:136
 msgid "_Copy Transaction"
-msgstr ""
+msgstr "_Копирај трансакција"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:256
 #: gnucash/ui/gnc-plugin-page-register.ui:142
 msgid "_Paste Transaction"
-msgstr ""
+msgstr "_Залепи трансакција"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:257
 #: gnucash/ui/gnc-embedded-register-window.ui:111
@@ -4885,7 +4902,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:574
 #: gnucash/ui/gnc-plugin-page-register.ui:722
 msgid "Dup_licate Transaction"
-msgstr ""
+msgstr "Трансакција Дуп_лицирај"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:258
 #: gnucash/gnome/gnc-split-reg.c:1507
@@ -4895,7 +4912,7 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:579
 #: gnucash/ui/gnc-plugin-page-register.ui:737
 msgid "_Delete Transaction"
-msgstr ""
+msgstr "_Избриши трансакција"
 
 #. Translators: This is a menu item that will open the bill, invoice, or voucher
 #. that is posted to the current transaction if there is one.
@@ -4904,47 +4921,47 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:405
 #: gnucash/ui/gnc-plugin-page-register.ui:517
 msgid "Jump to Invoice"
-msgstr ""
+msgstr "Скокни до излезна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:270
 msgid "Cu_t Split"
-msgstr ""
+msgstr "Пре_сечи Поделба"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:271
 msgid "_Copy Split"
-msgstr ""
+msgstr "_Копирај Поделба"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:272
 msgid "_Paste Split"
-msgstr ""
+msgstr "_Залепи Поделба"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:273
 #: gnucash/ui/gnc-plugin-page-register.ui:476
 #: gnucash/ui/gnc-plugin-page-register.ui:613
 msgid "Dup_licate Split"
-msgstr ""
+msgstr "Дуп_лицирај Поделба"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:274
 #: gnucash/gnome/gnc-split-reg.c:1467
 #: gnucash/ui/gnc-plugin-page-register.ui:481
 #: gnucash/ui/gnc-plugin-page-register.ui:618
 msgid "_Delete Split"
-msgstr ""
+msgstr "_Избриши Поделба"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:275
 #: gnucash/ui/gnc-embedded-register-window.ui:35
 msgid "Cut the selected transaction into clipboard"
-msgstr ""
+msgstr "Исечете ја избраната трансакција во таблата со исечоци"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:276
 #: gnucash/ui/gnc-embedded-register-window.ui:40
 msgid "Copy the selected transaction into clipboard"
-msgstr ""
+msgstr "Копирајте ја избраната трансакција во таблата со исечоци"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:277
 #: gnucash/ui/gnc-embedded-register-window.ui:45
 msgid "Paste the transaction from the clipboard"
-msgstr ""
+msgstr "Залепете ја трансакцијата од таблата со исечоци"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:278
 #: gnucash/ui/gnc-embedded-register-window.ui:50
@@ -4952,7 +4969,7 @@ msgstr ""
 #: gnucash/ui/gnc-embedded-register-window.ui:157
 #: gnucash/ui/gnc-plugin-page-register.ui:724
 msgid "Make a copy of the current transaction"
-msgstr ""
+msgstr "Направете копија од тековната трансакција"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:279
 #: gnucash/ui/gnc-embedded-register-window.ui:55
@@ -4960,57 +4977,59 @@ msgstr ""
 #: gnucash/ui/gnc-embedded-register-window.ui:172
 #: gnucash/ui/gnc-plugin-page-register.ui:739
 msgid "Delete the current transaction"
-msgstr ""
+msgstr "Избришете ја тековната трансакција"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:280
 msgid "Add, change, or unlink the document linked with the current transaction"
 msgstr ""
+"Додајте, променете или откачете го документот поврзан со тековната "
+"трансакција"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:281
 msgid "Open the linked document for the current transaction"
-msgstr ""
+msgstr "Отворете го поврзаниот документ за тековната трансакција"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:282
 msgid "Jump to the linked bill, invoice, or voucher"
-msgstr ""
+msgstr "Префрлете се на поврзаната фактура или ваучер"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:283
 msgid "Cut the selected split into clipboard"
-msgstr ""
+msgstr "Исечете ја избраната поделба на таблата со исечоци"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:284
 msgid "Copy the selected split into clipboard"
-msgstr ""
+msgstr "Копирајте ја избраната поделба во таблата со исечоци"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:285
 msgid "Paste the split from the clipboard"
-msgstr ""
+msgstr "Залепете ја поделбата од таблата со исечоци"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:286
 msgid "Make a copy of the current split"
-msgstr ""
+msgstr "Направете копија од тековната поделба"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:287
 msgid "Delete the current split"
-msgstr ""
+msgstr "Избришете ја тековната поделба"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.cpp:389
 msgid "Show Splits"
-msgstr ""
+msgstr "Прикажи Поделби"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:390
 msgid "Jump"
-msgstr ""
+msgstr "Скокни"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:391
 msgid "Schedule"
-msgstr ""
+msgstr "Распоред"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:394
 #: gnucash/gnome/window-autoclear.c:88
 msgid "Auto-clear"
-msgstr ""
+msgstr "Автоматско бришење"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:398
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:146
@@ -5025,14 +5044,14 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3341
 #: gnucash/report/reports/standard/general-journal.scm:36
 msgid "General Journal"
-msgstr ""
+msgstr "Дневник на книжење"
 
 #. Translators: %s is the name
 #. of the tab page
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1864
 #, c-format
 msgid "Save changes to %s?"
-msgstr ""
+msgstr "Зачувај ги промените на %s?"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1869
 msgid ""
