@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-28 09:09+0000\n"
+"PO-Revision-Date: 2024-07-30 14:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -15775,11 +15775,11 @@ msgstr "Internetes árfolyamok"
 
 #: gnucash/gtkbuilder/dialog-price.glade:12
 msgid "Bid"
-msgstr "Vételi árfolyam (Ön az eladó)"
+msgstr "Vételi árfolyam"
 
 #: gnucash/gtkbuilder/dialog-price.glade:15
 msgid "Ask"
-msgstr "Eladási árfolyam (Ön a vevő)"
+msgstr "Eladási árfolyam"
 
 #: gnucash/gtkbuilder/dialog-price.glade:18
 msgid "Last"
@@ -15787,7 +15787,7 @@ msgstr "Utolsó"
 
 #: gnucash/gtkbuilder/dialog-price.glade:21
 msgid "Net Asset Value"
-msgstr ""
+msgstr "Nettó eszközérték"
 
 #: gnucash/gtkbuilder/dialog-price.glade:43
 msgid "Price Editor"
