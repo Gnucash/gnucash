@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gnucash-happy-new-year"
+version = "0.0.2-dev"
+dynamic = ["dependencies"]
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.txt"]}
+
+[tool.pylint.'MESSAGES CONTROL']
+disable=[
+  "import-error",
+  "protected-access",
+  ]

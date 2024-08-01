@@ -1,0 +1,41 @@
+# CI pipeline for happy new year.
+
+stages:
+  - build
+  - test
+
+variables:
+  # Define the name of the Docker image
+  DOCKER_IMAGE: happy-new-year
+  # # Define the Docker registry (for example, GitLab registry)
+  # REGISTRY: registry.gitlab.com/wiese28/gnucash-happy-new-year
+  REG_REF: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
+  REG_SHA: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+
+build_image:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - cd .docker
+    - |
+        echo -e "
+        CI_REGISTRY:       $CI_REGISTRY
+        CI_REGISTRY_IMAGE: $CI_REGISTRY_IMAGE
+        REG_REF:           $REG_REF"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker pull $REG_REF || true
+    # Cache does not seem to work: https://gitlab.com/gitlab-org/gitlab/-/issues/439974
+    - DOCKER_BUILDKIT=0 docker build --build-arg BUILDKIT_INLINE_CACHE=1 --cache-from $REG_REF
+      -t $DOCKER_IMAGE .
+    - docker tag $DOCKER_IMAGE $REG_REF
+    - docker push $REG_REF
+    - docker tag $DOCKER_IMAGE $REG_SHA
+    - docker push $REG_SHA
+
+unit_tests:
+  stage: test
+  image: $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
+  script:
+    - pytest tests
