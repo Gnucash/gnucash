@@ -1,0 +1,9 @@
+# -*- mode:conf; -*-
+
+# development and caches
+__pycache__
+.venv
+
+# output files
+*.log
+new.gnucash

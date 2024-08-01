@@ -1,0 +1,8 @@
+# -*- mode:conf; -*-
+
+# Unfortunately, gnucash comes only with the full gnucash + python3-gnucash packages, not as a
+# single pypi package.
+#gnucash  
+
+# Testing
+pytest
