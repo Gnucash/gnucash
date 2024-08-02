@@ -20,7 +20,6 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \********************************************************************/
 
-#include <__nullptr>
 #include <gnc-option.hpp>
 #include <gnc-option-impl.hpp>
 #include "gnc-option-gtk-ui.hpp"

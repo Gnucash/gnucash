@@ -217,7 +217,7 @@ create_options_box(GtkBox* content_box)
     gtk_grid_set_column_homogeneous (GTK_GRID(options_box), FALSE);
     gtk_grid_set_row_spacing (GTK_GRID(options_box), 6);
     gtk_grid_set_column_spacing (GTK_GRID(options_box), 6);
-    git_widget_set_halign (GTK_WIDGET(options_box), GTK_ALIGN_START);
+    gtk_widget_set_halign (GTK_WIDGET(options_box), GTK_ALIGN_START);
     
     gtk_container_set_border_width(GTK_CONTAINER(options_box), 0);
     gtk_container_add (GTK_CONTAINER(options_scrolled_win),
