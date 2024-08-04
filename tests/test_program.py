@@ -94,3 +94,32 @@ def test_call_new_year(tmp_path, datadir):
             entity = cls.get_all(book)[0]  # Only consider first entry at the moment.
             for name, value in properties.items():
                 assert getattr(entity._base, "Get" + name)() == value
+
+
+def test_call_none_acct_type(tmp_path, datadir):
+    """Calling the main function on a file with empty account types."""
+    oldfile = datadir / "very_small.gnucash"
+    newfile = tmp_path / "new.gnucash"
+    target_accounts = {  # Testing None as account type, for issue #4
+        "asset": "Opening:Assets",
+        "liability": None,
+    }
+    duplicate_with_opening_balance(old=str(oldfile), target=str(newfile),
+                                   balance_accounts=target_accounts)
+
+    expected_balances = {
+        "Assets": 200.00,
+        "Assets:Current Assets:Cash in Wallet": 200.00,
+        "top level account": -200.00,
+        "top level account:sub account": -200.00,
+    }
+
+    with Session("sqlite3://" + str(newfile), SessionOpenMode.SESSION_READ_ONLY) as session:
+        book = session.get_book()
+        # Test balances
+        accounts = utils.get_all_accounts(book)
+        for fullname, expected in expected_balances.items():
+            assert fullname in accounts
+            acct = accounts[fullname]
+            balance = float(acct.GetBalanceInCurrency(acct.GetCommodity(), include_children=True))
+            assert balance == expected, f"Account: {fullname}, balance {balance} != {expected}"

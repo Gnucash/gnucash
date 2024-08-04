@@ -36,7 +36,7 @@ import os
 import sys
 from datetime import date
 from enum import IntEnum
-from typing import Optional
+from typing import Optional, Union
 
 # import piecash
 
@@ -345,7 +345,7 @@ opening_balances : dict[AcctType, dict[tuple, tuple]]
             print(f"== {mnemonic} ==")
             print(f"{float(balance)}")
             if float(balance) and a_type != "*" and a_type.shortname() in opening_balance_accounts:
-                bal_acct_names = opening_balance_accounts.get(a_type.shortname()).split(":")
+                bal_acct_names = opening_balance_accounts[a_type.shortname()].split(":")
                 balance_account = get_account_recursively(target_book, bal_acct_names,
                                                           default_type=a_type,
                                                           default_commodity=(ns, mnemonic))
@@ -539,6 +539,33 @@ target: gnucash.Book
             entity.clone_to(other=target)
 
 
+def clean_balance_accounts(balance_accounts: dict[str, Union[str, None]]) -> dict[str, str]:
+    """Remove None-valued or empty entries from the ``balance_accounts`` dict.
+
+Removed entries are:
+- None
+- empty string
+- other values which evaluate as False
+
+Parameters
+----------
+balance_accounts : dict[str, Union[str, None]]
+  The input dict to be cleaned.  This dict is cleaned in place.
+
+Returns
+-------
+cleaned : dict[str, str]
+  The cleaned dict
+    """
+    to_delete_keys = []
+    for key, value in balance_accounts.items():
+        if not value:
+            to_delete_keys.append(key)
+    for key in to_delete_keys:
+        del balance_accounts[key]
+    return balance_accounts
+
+
 def duplicate_with_opening_balance(old: str, target: str,
                                    balance_accounts: Optional[dict] = None) -> None:
     """Create a target Gnucash file.
@@ -555,6 +582,8 @@ balance_accounts: dict, optional
     """
     target = os.path.abspath(target)
     target_sqlite = "sqlite3://" + target
+
+    clean_balance_accounts(balance_accounts)
 
     # Create target if it does not exist yet.
     if not os.path.exists(target):

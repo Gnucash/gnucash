@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed ###
 
 - More complete business entity cloning.
+- [#4](https://gitlab.com/wiese28/gnucash-happy-new-year/-/issues/4) "None" target account leads to exception.
 
 ### Security ###
 
