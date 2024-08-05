@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-14 23:09+0000\n"
+"PO-Revision-Date: 2024-08-05 15:09+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -22496,7 +22496,7 @@ msgstr "Opcija broja je ~a."
 #: gnucash/report/reports/example/sample-report.scm:353
 #, scheme-format
 msgid "The number option formatted as currency is ~a."
-msgstr "Opcija broja, formatirana kao valuta je ~a."
+msgstr "Opcija broja formatirana kao valuta je ~a."
 
 #: gnucash/report/reports/example/sample-report.scm:365
 msgid "Items you selected:"
@@ -29383,7 +29383,8 @@ msgstr "_Sva razdoblja …"
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
 msgstr ""
-"Procijeni vrijednost proračuna za odabrana konta od prijašnjih transakcija"
+"Procijeni vrijednost proračuna za odabrana konta na osnovi prijašnjih "
+"transakcija"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:28
 #: gnucash/ui/gnc-plugin-page-budget.ui:255
@@ -29430,7 +29431,7 @@ msgstr "Redoslijed _razvrstavanja"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:84
 msgid "_Standard"
-msgstr "_Standard"
+msgstr "_Standardno"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:102
 msgid "_Quantity"
@@ -29468,7 +29469,7 @@ msgstr "_Prazno"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:155
 msgid "Move to the blank entry at the bottom"
-msgstr "Premjesti u prazno polje na dnu"
+msgstr "Prijeđi na prazno polje na dnu"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:162
 #: gnucash/ui/gnc-plugin-page-invoice.ui:242
@@ -29520,10 +29521,8 @@ msgstr "Otvori prozor izvještaja o poduzeću za vlasnika ovog izlaznog računa"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
 #: gnucash/ui/gnc-plugin-page-invoice.ui:499
-#, fuzzy
-#| msgid "Move to the blank entry at the bottom of the invoice"
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr "Premjesti u prazno polje na dnu izlaznog računa"
+msgstr "Premjesti se u prazno polje na dnu izlaznog računa"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:16
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:152
@@ -29938,10 +29937,8 @@ msgid "Delete the current split."
 msgstr "Izbriši trenutačnu stavku."
 
 #: gnucash/ui/gnc-plugin-page-register.ui:804
-#, fuzzy
-#| msgid "Move to the blank transaction at the bottom of the register"
 msgid "Move to the blank transaction in the register"
-msgstr "Premjesti na praznu transakciju na dnu registra"
+msgstr "Pomakni se na praznu transakciju u registru"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:819
 msgid "Show all splits in the current transaction"
@@ -29976,7 +29973,7 @@ msgstr "Uredi stilske predloške izvještaja"
 #: gnucash/ui/gnc-plugin-page-report.ui:56
 #: gnucash/ui/gnc-plugin-page-report.ui:315
 msgid "Export as P_DF…"
-msgstr "Izvezi kao _PDF …"
+msgstr "Izvezi kao P_DF …"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:58
 #: gnucash/ui/gnc-plugin-page-report.ui:317
@@ -29985,12 +29982,12 @@ msgstr "Izvezi trenutačni izvještaj kao PDF dokument"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:65
 msgid "Export _Report…"
-msgstr "Izvezi _izvještaj …"
+msgstr "I_zvezi izvještaj …"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:67
 #: gnucash/ui/gnc-plugin-page-report.ui:287
 msgid "Export HTML-formatted report to file"
-msgstr "Izvezi HTML-oblikovani izvještaj u datoteku"
+msgstr "Izvezi HTML-formatirani izvještaj u datoteku"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:77
 #: gnucash/ui/gnc-plugin-page-report.ui:257
@@ -30003,8 +30000,8 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu"
 msgstr ""
-"Dodaj konfiguraciju trenutačnog izvještaja u izbornik "
-"„Izvještaji→Konfiguracije spremljenih izvještaja”"
+"Dodaj konfiguraciju trenutačnog izvještaja u izbornik „Izvještaji→"
+"Konfiguracije spremljenih izvještaja”"
 
 #: gnucash/ui/gnc-plugin-page-report.ui:170
 msgid "Back"
@@ -30044,11 +30041,11 @@ msgstr "Izvezi _izvještaj"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:37
 msgid "_Save layout as default"
-msgstr ""
+msgstr "_Spremi raspored kao standardni"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:39
 msgid "Save current layout as default"
-msgstr ""
+msgstr "Spremi trenutačni raspored kao standardni"
 
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:55
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:155
@@ -30083,11 +30080,11 @@ msgstr "Otvori prozor općeg dnevnika"
 
 #: gnucash/ui/gnc-plugin-report-system.ui:6
 msgid "St_yle Sheets"
-msgstr "Stilski _predlošci"
+msgstr "Sti_lski predlošci"
 
 #: gnucash/ui/gnc-reconcile-window.ui:5
 msgid "_Reconcile"
-msgstr "_Usklađivanje"
+msgstr "_Uskladi"
 
 #: gnucash/ui/gnc-reconcile-window.ui:8
 msgid "_Reconcile Information…"
@@ -30111,7 +30108,7 @@ msgstr "_Uskladi odabir"
 
 #: gnucash/ui/gnc-reconcile-window.ui:73 gnucash/ui/gnc-reconcile-window.ui:110
 msgid "_Unreconcile Selection"
-msgstr "Poništi _usklađenost odabira"
+msgstr "Po_ništi usklađenost odabira"
 
 #: gnucash/ui/gnc-reconcile-window.ui:127
 msgid "Add a new balancing entry to the account"
@@ -30275,7 +30272,7 @@ msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:488
 msgid "Currency quotes requires at least two currencies"
-msgstr ""
+msgstr "Tečajevi valuta zahtijevaju barem dvije valute"
 
 #: libgnucash/app-utils/gnc-quotes.cpp:747
 #: libgnucash/app-utils/gnc-quotes.cpp:757
