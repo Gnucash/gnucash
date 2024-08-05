@@ -7,14 +7,15 @@
 # cjh <cjh@cjh0613.com>, 2021.
 # Newson Parker <2434843612@qq.com>, 2023.
 # Ricky From Hong Kong <lamricky11@hotmail.com>, 2024.
+# toddchou <toddchou@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-08 09:09+0000\n"
-"Last-Translator: Ricky From Hong Kong <lamricky11@hotmail.com>\n"
+"PO-Revision-Date: 2024-08-04 05:10+0000\n"
+"Last-Translator: toddchou <toddchou@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/gnucash/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -974,6 +975,8 @@ msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 msgstr ""
+"您可以指定或修改GnuCash鍵盤快速功能鍵。請參閱https://wiki.gnucash.org/wiki/"
+"Keyboard_Shortcuts。"
 
 #: doc/tip_of_the_day.list.c:132
 msgid ""

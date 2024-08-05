@@ -4,14 +4,15 @@
 # Kuang-che Wu <kcwu@csie.org>, 2007, 2011.
 # 01qwasa10 <a090889eric@gmail.com>, 2021.
 # Brian Hsu <brianhsu.hsu@gmail.com>, 2021, 2023.
+# toddchou <toddchou@gmail.com>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2023-05-15 09:50+0000\n"
-"Last-Translator: Brian Hsu <brianhsu.hsu@gmail.com>\n"
+"PO-Revision-Date: 2024-08-04 05:10+0000\n"
+"Last-Translator: toddchou <toddchou@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://hosted.weblate.org/projects/"
 "gnucash/glossary/zh_Hant/>\n"
 "Language: zh_TW\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -735,7 +736,7 @@ msgstr "證券"
 
 #. "Selling borrowed units in the hope that when you buy them back later it will be at a lower price."
 msgid "Sell short"
-msgstr ""
+msgstr "融券"
 
 #. "-"
 msgid "Share Balance (register)"
