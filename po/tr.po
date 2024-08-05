@@ -11,11 +11,11 @@
 # Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.7 \n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Project-Id-Version: GnuCash 5.7\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-04-23 18:07+0000\n"
+"PO-Revision-Date: 2024-08-05 23:09+0000\n"
 "Last-Translator: Bora Atıcı <boratici.acc@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.5-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 "X-Bugs: Report translation errors to the Language-Team address.\n"
 "X-POOTLE-MTIME: 1497808015.000000\n"
 
@@ -42,7 +42,7 @@ msgstr ""
 #: gnucash/report/reports/standard/price-scatter.scm:186
 #, scheme-format
 msgid "~a to ~a"
-msgstr ""
+msgstr "~a'dan ~a'ya"
 
 #: bindings/guile/date-utilities.scm:519
 #, scheme-format
@@ -60,7 +60,7 @@ msgstr "Bu yıl başı"
 #: bindings/guile/date-utilities.scm:718
 #: libgnucash/engine/gnc-option-date.cpp:264
 msgid "First day of the current calendar year."
-msgstr "Mevcut takvim yılının ilk günü."
+msgstr "Geçerli takvim yılının ilk günü."
 
 #: bindings/guile/date-utilities.scm:722
 #: gnucash/gnome-utils/gnc-period-select.c:86
@@ -71,7 +71,7 @@ msgstr "Bu yıl sonu"
 #: bindings/guile/date-utilities.scm:725
 #: libgnucash/engine/gnc-option-date.cpp:272
 msgid "Last day of the current calendar year."
-msgstr "Mevcut takvim yılının son günü."
+msgstr "Geçerli takvim yılının son günü."
 
 #: bindings/guile/date-utilities.scm:729
 #: gnucash/gnome-utils/gnc-period-select.c:71
@@ -124,7 +124,7 @@ msgstr "Bu ay başı"
 #: bindings/guile/date-utilities.scm:760
 #: libgnucash/engine/gnc-option-date.cpp:168
 msgid "First day of the current month."
-msgstr "Mevcut ayın ilk günü."
+msgstr "Geçerli ayın ilk günü."
 
 #: bindings/guile/date-utilities.scm:764
 #: gnucash/gnome-utils/gnc-period-select.c:82
@@ -135,7 +135,7 @@ msgstr "Bu ay sonu"
 #: bindings/guile/date-utilities.scm:767
 #: libgnucash/engine/gnc-option-date.cpp:176
 msgid "Last day of the current month."
-msgstr "Mevcut ayın son günü."
+msgstr "Geçerli ayın son günü."
 
 #: bindings/guile/date-utilities.scm:771
 #: gnucash/gnome-utils/gnc-period-select.c:67
@@ -167,7 +167,7 @@ msgstr "Cari çeyrek başı"
 #: bindings/guile/date-utilities.scm:788
 #: libgnucash/engine/gnc-option-date.cpp:216
 msgid "First day of the current quarterly accounting period."
-msgstr "Mevcut üç aylık hesap döneminin ilk günü."
+msgstr "Cari üç aylık hesap döneminin ilk günü."
 
 #: bindings/guile/date-utilities.scm:792
 #: libgnucash/engine/gnc-option-date.cpp:223
@@ -177,7 +177,7 @@ msgstr "Cari çeyrek sonu"
 #: bindings/guile/date-utilities.scm:795
 #: libgnucash/engine/gnc-option-date.cpp:224
 msgid "Last day of the current quarterly accounting period."
-msgstr "Mevcut üç aylık hesap döneminin son günü."
+msgstr "Cari üç aylık hesap döneminin son günü."
 
 #: bindings/guile/date-utilities.scm:799
 #: gnucash/gnome-utils/gnc-period-select.c:69
@@ -710,8 +710,8 @@ msgid ""
 "at https://wiki.gnucash.org/wiki/Mailing_Lists"
 msgstr ""
 "Posta listeleri GnuCash topluluğunda tercih edilen iletişim şeklidir. Yeni "
-"sürümlerin duyuruları, kullanıcı grupları vb için bknz .https://wiki.gnucash."
-"org/wiki/Mailing_Lists."
+"sürümler, kullanıcı grupları vb. ile ilgili duyurular için https://wiki."
+"gnucash.org/wiki/Mailing_Lists adresindeki tabloya bakın"
 
 #: doc/tip_of_the_day.list.c:11
 msgid ""
@@ -1049,8 +1049,8 @@ msgid_plural ""
 "The earliest transaction date found in this book is %s. Based on the "
 "selection made above, this book will be split into %d books."
 msgstr[0] ""
-"Bu defterde bulunan en erken işlem tarihi %s'dir. Yukarıdaki seçime bağlı "
-"olarak, bu defter %d defter olarak bölünecektir."
+"Bu defterde bulunan en erken işlem tarihi %s'dir. Yukarıda yapılan seçime "
+"göre bu defter %d deftere bölünecek."
 
 #. Translators: Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gnome/assistant-acct-period.c:371
@@ -2437,7 +2437,7 @@ msgstr ""
 
 #: gnucash/gnome/dialog-doclink.c:264
 msgid "Existing Document Link is"
-msgstr "Mevcut Belge Bağlantısı:"
+msgstr "Mevcut Belge Bağlantısı"
 
 #: gnucash/gnome/dialog-doclink.c:535 gnucash/gnome/dialog-doclink.c:580
 msgid "File Found"
@@ -3077,7 +3077,7 @@ msgstr "Fatura Bilgisi"
 #: gnucash/gnome/dialog-invoice.c:2804 gnucash/gnome/dialog-invoice.c:3030
 #: gnucash/gnome/dialog-invoice.c:3611
 msgid "Bill ID"
-msgstr "Takip No."
+msgstr "Fatura Nu"
 
 #: gnucash/gnome/dialog-invoice.c:2808 gnucash/gnome/dialog-invoice.c:3034
 msgid "Voucher Information"
@@ -3159,12 +3159,12 @@ msgstr "Takip No"
 #: gnucash/gnome/dialog-invoice.c:3558 gnucash/gnome/dialog-invoice.c:3592
 #: gnucash/gnome/dialog-invoice.c:3626
 msgid "Is Paid?"
-msgstr "Ödenmiş"
+msgstr "Ödenmiş mi?"
 
 #: gnucash/gnome/dialog-invoice.c:3564 gnucash/gnome/dialog-invoice.c:3598
 #: gnucash/gnome/dialog-invoice.c:3632
 msgid "Is Posted?"
-msgstr "İşlenmiş"
+msgstr "Gönderildi?"
 
 #: gnucash/gnome/dialog-invoice.c:3567 gnucash/gnome/dialog-invoice.c:3601
 #: gnucash/gnome/dialog-invoice.c:3635 gnucash/gnome/dialog-order.c:874
@@ -3363,7 +3363,7 @@ msgstr "Sahibi"
 
 #: gnucash/gnome/dialog-job.c:562
 msgid "Only Active?"
-msgstr "Aktif"
+msgstr "Sadece Aktif mi?"
 
 #: gnucash/gnome/dialog-job.c:566 gnucash/gnome/dialog-job.c:579
 #: gnucash/gtkbuilder/dialog-job.glade:206
@@ -3904,7 +3904,8 @@ msgstr "(hiç)"
 msgid ""
 "The current template transaction has been changed. Would you like to record "
 "the changes?"
-msgstr "Mevcut şablon işlem değişti. Değişiklikler kayıt edilsin mi?"
+msgstr ""
+"Geçerli şablon işlemi değiştirildi. Değişiklikleri kaydetmek ister misiniz?"
 
 #: gnucash/gnome/dialog-sx-editor.c:1847
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:233
@@ -4030,8 +4031,8 @@ msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
-"DİKKAT: TXF kategorilerini ayarlar ve daha sonra 'Tür' değiştirirseniz, bu "
-"kategorileri birer birer manuel olarak sıfırlamanız gerekir"
+"DİKKAT: TXF kategorilerini ayarlarsanız ve daha sonra 'Tür'ü "
+"değiştirirseniz, bu kategorileri teker teker el ile sıfırlamanız gerekecektir"
 
 #: gnucash/gnome/dialog-tax-info.c:1393
 msgid "Form"
@@ -4187,7 +4188,7 @@ msgstr "Sil"
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:330
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1813
 msgid "'Check & Repair' is currently running, do you want to abort it?"
-msgstr ""
+msgstr "'Kontrol ve Onarım' şu anda çalışıyor, iptal etmek istiyor musunuz?"
 
 #: gnucash/gnome/gnc-plugin-page-account-tree.cpp:404
 #: gnucash/gtkbuilder/assistant-csv-export.glade:270
@@ -4398,7 +4399,7 @@ msgstr "_Faturayı Çiftle"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:24
 #: gnucash/ui/gnc-plugin-page-invoice.ui:384
 msgid "Create a new invoice as a duplicate of the current one"
-msgstr "Mevcut faturanın aynısı olacak şekilde yeni bir fatura oluştur"
+msgstr "Geçerli faturanın kopyası olarak yeni bir fatura oluşturun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:522
@@ -4432,7 +4433,7 @@ msgstr "Yeni _Satış Faturası"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
 #: gnucash/ui/gnc-plugin-page-invoice.ui:354
 msgid "Create a new invoice for the same owner as the current one"
-msgstr "Mevcut sahibiyle aynı kişi için yeni bir fatura oluşturun"
+msgstr "Geçerli faturayla aynı sahip için yeni bir fatura oluşturun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
@@ -4523,6 +4524,8 @@ msgstr ""
 msgid ""
 "Use the current layout as default for all customer invoices and credit notes"
 msgstr ""
+"Tüm müşteri faturaları ve alacak dekontları için geçerli düzeni varsayılan "
+"olarak kullan"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:208
 msgid "_Reset Default Layout for Customer Documents"
@@ -4561,9 +4564,8 @@ msgid "_Duplicate Bill"
 msgstr "Sureti"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
-#, fuzzy
 msgid "Create a new bill as a duplicate of the current one"
-msgstr "Mevcut faturanın aynısı olacak şekilde yeni bir fatura oluştur"
+msgstr "Geçerli faturanın kopyası olarak yeni bir fatura oluşturun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
 #, fuzzy
@@ -4591,9 +4593,8 @@ msgid "New _Bill"
 msgstr "Yeni Alış"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
-#, fuzzy
 msgid "Create a new bill for the same owner as the current one"
-msgstr "Mevcut sahibiyle aynı kişi için yeni bir fatura oluşturun"
+msgstr "Geçerli faturayla aynı sahip için yeni bir fatura oluşturun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
 #, fuzzy
@@ -4689,9 +4690,8 @@ msgid "New _Voucher"
 msgstr "Yeni Fatura"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
-#, fuzzy
 msgid "Create a new voucher for the same owner as the current one"
-msgstr "Mevcut sahibiyle aynı kişi için yeni bir fatura oluşturun"
+msgstr "Geçerli makbuzla aynı sahip için yeni bir makbuz oluşturun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
 #, fuzzy
@@ -4977,7 +4977,7 @@ msgstr "Panodan işlemi yapıştır"
 #: gnucash/ui/gnc-embedded-register-window.ui:157
 #: gnucash/ui/gnc-plugin-page-register.ui:724
 msgid "Make a copy of the current transaction"
-msgstr "Cari işlemin kopyasını ekle"
+msgstr "Geçerli işlemin bir kopyasını oluştur"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:279
 #: gnucash/ui/gnc-embedded-register-window.ui:55
@@ -4985,18 +4985,16 @@ msgstr "Cari işlemin kopyasını ekle"
 #: gnucash/ui/gnc-embedded-register-window.ui:172
 #: gnucash/ui/gnc-plugin-page-register.ui:739
 msgid "Delete the current transaction"
-msgstr "Cari işlemi sil"
+msgstr "Geçerli işlemi sil"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:280
-#, fuzzy
-#| msgid "Associate a file with the current transaction"
 msgid "Add, change, or unlink the document linked with the current transaction"
-msgstr "Dosyayı geçerli işlemle ilişkilendir"
+msgstr ""
+"Geçerli işleme bağlı belgeyi ekleyin, değiştirin veya bağlantısını kaldırın"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:281
-#, fuzzy
 msgid "Open the linked document for the current transaction"
-msgstr "Bir konumu mevcut işlemle ilişkilendirin"
+msgstr "Geçerli işlem için bağlantılı belgeyi açın"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:282
 msgid "Jump to the linked bill, invoice, or voucher"
@@ -5020,7 +5018,7 @@ msgstr "Geçerli bölünmenin bir kopyasını oluştur"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:287
 msgid "Delete the current split"
-msgstr "Geçerli bölmeyi sil"
+msgstr "Geçerli bölümü sil"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.cpp:389
@@ -5212,9 +5210,8 @@ msgid "A reversing entry has already been created for this transaction."
 msgstr "Bu işlem için ters kayıt zaten oluşturuldu."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3910
-#, fuzzy
 msgid "Jump to the transaction?"
-msgstr "Cari işlemi düzenle"
+msgstr "İşleme geçilsin mi?"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3919
 #, fuzzy
@@ -5266,7 +5263,7 @@ msgstr "Gönderme Tarihi"
 #: gnucash/gnome/gnc-plugin-page-register.cpp:5004
 #, c-format
 msgid "Checking splits in current register: %u of %u"
-msgstr "Mevcut kayıttaki bölümler denetleniyor: %u, %u'nun"
+msgstr "Geçerli kayıttaki bölünmeler kontrol ediliyor: %u / %u"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:234
 msgid "Print"
@@ -5544,9 +5541,8 @@ msgid "_Cut Split"
 msgstr "Bölümü Ke_s"
 
 #: gnucash/gnome/gnc-split-reg.c:954
-#, fuzzy
 msgid "Cut the current transaction?"
-msgstr "Cari işlemi düzenle"
+msgstr "Mevcut işlem kesilsin mi?"
 
 #: gnucash/gnome/gnc-split-reg.c:955
 #, fuzzy
@@ -5627,7 +5623,7 @@ msgstr ""
 
 #: gnucash/gnome/gnc-split-reg.c:1483
 msgid "Delete the current transaction?"
-msgstr "Cari işlem silinsin mi?"
+msgstr "Geçerli işlem silinsin mi?"
 
 #: gnucash/gnome/gnc-split-reg.c:1484
 msgid ""
@@ -6512,10 +6508,9 @@ msgid "New Account"
 msgstr "Yeni Hesap"
 
 #: gnucash/gnome-utils/dialog-account.c:2355
-#, fuzzy, c-format
-#| msgid "Renumber sub-accounts"
+#, c-format
 msgid "Renumber the immediate sub-accounts of '%s'?"
-msgstr "Alt hesapları yeniden kodla"
+msgstr "'%s'in alt hesapları yeniden numaralandırılsın mı?"
 
 #: gnucash/gnome-utils/dialog-account.c:2461
 #, c-format
@@ -7668,10 +7663,8 @@ msgid "This window is closing and will not be restored."
 msgstr ""
 
 #: gnucash/gnome-utils/gnc-main-window.cpp:1384
-#, fuzzy
-#| msgid "Close this window"
 msgid "Close Window?"
-msgstr "Bu pencereyi kapat"
+msgstr "Pencereyi kapat?"
 
 #. Translators: This string is shown in the window title if this
 #. document is, well, read-only.
@@ -10681,9 +10674,9 @@ msgid ""
 "accounts receivable account. These account types are reserved for the "
 "business features and should rarely be manipulated manually."
 msgstr ""
-"Bu iletişim kutusu, borçlu bir hesap/hesap alacak hesabı düzenlemenize izin "
-"vermeden önce sunulmuştur. Bu hesap türleri işletme özellikleri için "
-"ayrılmıştır ve nadiren manuel olarak manipüle edilmelidir."
+"Bu iletişim kutusu, bir borç/alacak hesabını düzenlemenize izin verilmeden "
+"önce gösterilir. Bu hesap türleri iş özelliklerine ayrılmıştır ve nadiren "
+"elle değiştirilmelidir."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:54
 #: gnucash/gschemas/org.gnucash.GnuCash.warnings.gschema.xml.in:177
@@ -11078,24 +11071,16 @@ msgid "Setup Account Period"
 msgstr "Hesap Dönemi Oluştur"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:38
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Select an accounting period and the closing date which must not be in the "
-#| "future and is greater than the closing date of the previous book.\n"
-#| "\n"
-#| "Books will be closed at midnight on the selected date."
 msgid ""
 "Select an accounting period and a closing date that is between the date of "
 "the previous close and today.\n"
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
+"Önceki kapanış tarihi ile bugün arasında olan bir hesap dönemi ve kapanış "
+"tarihi seçin.\n"
 "\n"
-"Gelecekte olmayan ve bir önceki defterin kapanış tarihinden daha büyük bir "
-"hesap dönemi ve kapanış tarihi seçin.\n"
-"\n"
-"Defterler, seçilen tarihte gece yarısı kapanacaktır."
+"Kitaplar seçilen tarihte gece yarısı kapatılacaktır."
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:81
 msgid "Book Closing Dates"
@@ -11814,7 +11799,6 @@ msgid "Choose accounts to create"
 msgstr "Açılacak hesapların seçimi"
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:530
-#, fuzzy
 msgid ""
 "If you would like to change an account's name, click on the row containing "
 "the account, then click on the account name and change it.\n"
@@ -11831,20 +11815,19 @@ msgid ""
 "<b>Note:</b> all accounts except Equity and placeholder accounts may have an "
 "opening balance."
 msgstr ""
+"Bir hesabın adını değiştirmek isterseniz, hesabın bulunduğu satıra tıklayın, "
+"ardından hesap adına tıklayın ve değiştirin.\n"
 "\n"
-"Bir hesabın adını değiştirmek isterseniz, hesabı içeren satırı tıklayın, "
-"ardından hesap adını tıklayın ve değiştirin.\n"
+"Bazı hesaplar \"Yer tutucu\" olarak işaretlenir. Yer tutucu hesaplar, bir "
+"hesap hiyerarşisi oluşturmak için kullanılır ve normalde işlem veya açılış "
+"bakiyesi yoktur. Bir hesabın yer tutucu hesap olmasını istiyorsanız o "
+"hesabın onay kutusunu tıklayın.\n"
 "\n"
-"Bazı hesaplar \"Yer tutucu\" olarak işaretlenmiştir. Yer tutucu hesaplar, "
-"bir hesap hiyerarşisi oluşturmak için kullanılır ve normal olarak işlemler "
-"veya açılış bakiyeleri içermez. Bir hesabın yer tutucu bir hesap olmasını "
-"istiyorsanız, o hesaba ait onay kutusunu tıklayın.\n"
+"Bir hesapta açılış bakiyesi olmasını istiyorsanız, hesabın bulunduğu satıra "
+"tıklayıp açılış bakiyesi alanına tıklayıp başlangıç bakiyesini giriniz.\n"
 "\n"
-"Bir hesabın açılış bakiyesi olması için hesabın bulunduğu satırı tıklayın, "
-"ardından açılış bakiyesi alanını tıklayın ve başlangıç bakiyesini girin.\n"
-"\n"
-"Not: Hisse senedi ve yer tutucu hesapları dışındaki tüm hesapların açılış "
-"bakiyesi olabilir.\n"
+"<b>Not:</b> Öz sermaye ve yer tutucu hesaplar dışındaki tüm hesaplarda "
+"açılış bakiyesi olabilir."
 
 #: gnucash/gtkbuilder/assistant-hierarchy.glade:563
 msgid "Setup selected accounts"
@@ -12036,14 +12019,9 @@ msgid "Loan Details"
 msgstr "Kredi Ayrıntıları"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:451
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Do you utilise an escrow account, if so an account must be specified..."
 msgid "Do you utilize an escrow account, if so an account must be specified…"
 msgstr ""
-"\n"
-"Bir emanet hesabı kullanıyor musunuz? Öyle ise bir hesap belirtilmelidir..."
+"Emanet hesabı kullanıyor musunuz, eğer kullanıyorsanız hesap belirtilmeli…"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:470
 #, fuzzy
@@ -12060,14 +12038,8 @@ msgid "Loan Repayment Options"
 msgstr "Kredi Geri Ödeme Seçenekleri"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:544
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "All accounts must have valid entries to continue.\n"
 msgid "All accounts must have valid entries to continue."
-msgstr ""
-"\n"
-"Devam etmek için tüm hesaplar geçerli girdiler içermelidir.\n"
+msgstr "Devam etmek için tüm hesapların geçerli girdileri olmalıdır."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:584
 #, fuzzy
@@ -12088,15 +12060,10 @@ msgid "Loan Repayment"
 msgstr "Borç Geri Ödemesi"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:727
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "All enabled option pages must contain valid entries to continue.\n"
 msgid "All enabled option pages must contain valid entries to continue."
 msgstr ""
-"\n"
-"Devam etmek için etkin tüm seçenek sayfalarında geçerli girdiler "
-"bulunmalıdır.\n"
+"Devam etmek için tüm etkin seçenek sayfalarının geçerli girdiler içermesi "
+"gerekir."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:798
 #, fuzzy
@@ -12137,18 +12104,12 @@ msgid "Loan Payment"
 msgstr "Borç Ödeme"
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1081
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Review the details below and if correct press Apply to create the "
-#| "schedule."
 msgid ""
 "Review the details below and if correct press \"Apply\"\" to create the "
 "schedule."
 msgstr ""
-"\n"
-"Aşağıdaki ayrıntıları inceleyin ve doğruysa, zamanlamayı oluşturmak için "
-"Uygula'ya basın."
+"Aşağıdaki ayrıntıları inceleyin ve doğruysa programı oluşturmak için \"Uygula"
+"\"ya basın."
 
 #: gnucash/gtkbuilder/assistant-loan.glade:1108
 msgid "Range"
@@ -12195,7 +12156,6 @@ msgstr "QIF İçe Aktarma Yardımcısı"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:26
-#, fuzzy
 msgid ""
 "GnuCash can import financial data from QIF (Quicken Interchange Format) "
 "files written by Quicken/QuickBooks, MS Money, Moneydance, and many other "
@@ -12215,7 +12175,7 @@ msgstr ""
 "tıklamadan GnuCash hesaplarınız değiştirilmez.\n"
 "\n"
 "QIF verilerinizi yüklemeye başlamak için \"İleri\"ye tıklayın, işlemi iptal "
-"etmek için \"İptal\" düğmesine tıklayın. "
+"etmek için \"İptal\" düğmesine tıklayın."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:35
 msgid "Import QIF files"
@@ -12545,7 +12505,6 @@ msgstr "QIF içe aktar"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1211
-#, fuzzy
 msgid ""
 "If you are importing a QIF file from a bank or other financial institution, "
 "some of the transactions may already exist in your GnuCash accounts. To "
@@ -12559,18 +12518,17 @@ msgid ""
 "\n"
 "Click \"Next\" to review the possible matches."
 msgstr ""
-"\n"
-"Bir bankadan veya başka bir finansal kuruluştan bir QIF dosyasını içeri "
+"Bir bankadan veya başka bir finans kuruluşundan bir QIF dosyası "
 "aktarıyorsanız, bazı işlemler GnuCash hesaplarınızda zaten mevcut olabilir. "
-"Kopyalamayı önlemek için, GnuCash eşleşmeleri belirlemeye çalıştı ve onları "
-"incelemek için yardımınıza ihtiyacı var.\n"
+"Tekrarlardan kaçınmak için GnuCash eşleşmeleri belirlemeye çalıştı ve "
+"bunları incelemek için yardımınıza ihtiyacı var.\n"
 "\n"
-"Bir sonraki sayfada ithal edilen işlemlerin bir listesi gösterilecektir. Her "
-"birini seçerken, olası eşlemelerin bir listesi aşağıda gösterilecektir. "
-"Doğru bir eşleşme bulursanız üzerine tıklayın. Seçiminiz \"Eşleştir?\" "
-"sütununda bir onay işaretiyle onaylanacaktır.\n"
+"Bir sonraki sayfada içe aktarılan işlemlerin bir listesi gösterilecektir. "
+"Her birini seçtiğinizde, altında olası eşleşmelerin bir listesi "
+"gösterilecektir. Doğru eşleşmeyi bulursanız üzerine tıklayın. Seçiminiz "
+"\"Eşleşsin mi?\" sütunundaki onay işaretiyle onaylanacaktır.\n"
 "\n"
-"Olası eşleşmeleri gözden geçirmek için \"İleri\"yi tıklayın."
+"Olası eşleşmeleri gözden geçirmek için \"İleri\"ye tıklayın."
 
 #: gnucash/gtkbuilder/assistant-qif-import.glade:1226
 msgid "Match existing transactions"
@@ -12777,9 +12735,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:45
-#, fuzzy
 msgid "Select the date and description for your records."
-msgstr "Ara toplam ve ara başlıklarda hesap kodu görünsün mü?"
+msgstr "Kayıtlarınız için tarih ve açıklamayı seçin."
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:109
 #: gnucash/gtkbuilder/dialog-payment.glade:662
@@ -14073,14 +14030,8 @@ msgid "Exit the saved report configurations dialog"
 msgstr "Kaydedilen yapılandırmalar penceresinden çık"
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:100
-#, fuzzy
-#| msgid ""
-#| "\n"
-#| "Currently you have no saved reports.\n"
 msgid "Currently you have no saved reports."
-msgstr ""
-"\n"
-"Mevcutta kaydedilmiş raporunuz yok.\n"
+msgstr "Şu anda kaydedilmiş raporunuz yok."
 
 #: gnucash/gtkbuilder/dialog-custom-report.glade:112
 #, fuzzy
@@ -15392,7 +15343,7 @@ msgstr "gün"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1523
 msgid "<b>_Retain log/backup files</b>"
-msgstr "<b>_Günlük/yedekleme dosyala_rını sakla</b>"
+msgstr "<b>Günlük/yedekleme dosyala_rını sakla</b>"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1535
 msgid "Com_press files"
@@ -17956,10 +17907,8 @@ msgstr ""
 "başlatmak için lütfen aşağıdaki butona basınız."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:170
-#, fuzzy
-#| msgid "_Start AqBanking Wizard"
 msgid "_Start AqBanking Setup"
-msgstr "AqBanking _Sihirbazını Göster"
+msgstr "AqBa_nking Kurulumunu Başlat"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:186
 #, fuzzy
@@ -17979,13 +17928,12 @@ msgstr ""
 "\"İleri\"yi tıklayın."
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:242
-#, fuzzy
 msgid "_Delete selected matches"
-msgstr "Seçili hesabı sil"
+msgstr "Seç_ili eşleşmeleri sil"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:265
 msgid "Match Online accounts with GnuCash accounts"
-msgstr "Çevrim İçi hesapları GnuCash hesaplarıyla eşleştir"
+msgstr "Çevrimiçi hesapları GnuCash hesaplarıyla eşleştirin"
 
 #: gnucash/import-export/aqb/assistant-ab-initial.glade:280
 msgid ""
@@ -18015,9 +17963,8 @@ msgid "Online Banking Connection Window"
 msgstr "Çevrim İçi Bankacılık Bağlantı Penceresi"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:26
-#, fuzzy
 msgid "_Abort"
-msgstr "_Hakkında"
+msgstr "_İptal"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:82
 #: gnucash/import-export/aqb/dialog-ab.glade:148
@@ -18025,19 +17972,16 @@ msgid "Progress"
 msgstr "İlerleme"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:106
-#, fuzzy
 msgid "Current _Job"
-msgstr "Mevcut İş"
+msgstr "Me_vcut İş"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:162
-#, fuzzy
 msgid "Current _Action"
-msgstr "Mevcut Eylem"
+msgstr "Geçer_li Eylem"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:211
-#, fuzzy
 msgid "<b>_Log Messages</b>"
-msgstr "<b>Günlük Mesajları</b>"
+msgstr "<b>Gü_nlük Mesajlar</b>"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:254
 #, fuzzy
@@ -18098,10 +18042,8 @@ msgid "Enter your password"
 msgstr "Parolanızı girin"
 
 #: gnucash/import-export/aqb/dialog-ab.glade:649
-#, fuzzy
-#| msgid "_Width"
 msgid "Bar_width"
-msgstr "_Genişlik"
+msgstr "Çubuk _genişliği"
 
 #. TAN generator with flicker interface common in DE only
 #: gnucash/import-export/aqb/dialog-ab.glade:666
@@ -20478,9 +20420,8 @@ msgstr ""
 "bir hesap seçin."
 
 #: gnucash/import-export/qif-imp/dialog-account-picker.c:443
-#, fuzzy
 msgid "Placeholder?"
-msgstr "Toplu Hesap"
+msgstr "Yer tutucu?"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:71
 msgid "Dividends"
@@ -20896,10 +20837,9 @@ msgstr "örnek:Giderler:Otomobil:Benzin"
 
 #. Translators: Abbreviation sample for Taxable?
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:132
-#, fuzzy
 msgctxt "sample for 'Taxable'"
 msgid "T?"
-msgstr "V"
+msgstr "T?"
 
 #. Translators: Abbreviation sample for Tax Included
 #: gnucash/register/ledger-core/gncEntryLedgerLayout.c:137
@@ -20982,15 +20922,15 @@ msgstr "Birim Fiyat"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:102
 msgid "Taxable?"
-msgstr "Vergiye Tabi"
+msgstr "Vergiye tabi?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:107
 msgid "Tax Included?"
-msgstr "KDV Dahil"
+msgstr "Vergi dahil?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:112
 msgid "Invoiced?"
-msgstr "Fatura edilmiş"
+msgstr "Faturalı mı?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:117
 #: gnucash/report/reports/standard/invoice.scm:450
@@ -20999,7 +20939,7 @@ msgstr "Ara toplam"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:127
 msgid "Billable?"
-msgstr "Faturalanacak"
+msgstr "Faturalandırılabilir mi?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:548
 msgid ""
@@ -22665,22 +22605,20 @@ msgstr ""
 "katkıda bulunmak için, %s posta listesine bakın."
 
 #: gnucash/report/reports/example/sample-report.scm:297
-#, fuzzy
 msgid ""
 " For details on subscribing to that list, see &lt;https://www.gnucash.org/"
 "&gt;."
 msgstr ""
-"Listeye abone olma ile ilgili ayrıntılar için &lt;http: //www.gnucash.org/"
-"&gt; adresini ziyaret edin."
+" Bu listeye abone olmayla ilgili ayrıntılar için bkz. &lt;https://www.gnucash"
+".org/&gt;."
 
 #: gnucash/report/reports/example/sample-report.scm:298
-#, fuzzy
 msgid ""
 " You can learn more about writing scheme at &lt;https://www.scheme.com/"
 "tspl2d/&gt;."
 msgstr ""
-"Şema yazma hakkında daha çok bilgiyi şuradan edinebilirsiniz &lt;http://www."
-"scheme.com/tspl2d/&gt;."
+" &lt;https://www.scheme.com/tspl2d/&gt; adresinden yazma şeması hakkında "
+"daha fazla bilgi edinebilirsiniz."
 
 #: gnucash/report/reports/example/sample-report.scm:302
 #, fuzzy, scheme-format
@@ -24138,9 +24076,8 @@ msgstr "Asıl döviz miktarını göster"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:117
 #: gnucash/report/trep-engine.scm:556
-#, fuzzy
 msgid "Also show original currency amounts"
-msgstr "Hesabın yabancı para birimi miktarını görüntüle?"
+msgstr "Asıl para birimi tutarlarını da göster"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:119
 msgid "If more than 1 period column, include overall period?"
@@ -26045,21 +25982,18 @@ msgid "Reference:"
 msgstr "Referans:"
 
 #: gnucash/report/reports/standard/invoice.scm:278
-#, fuzzy
 msgid "Terms:"
-msgstr "Koşullar: "
+msgstr "Koşullar:"
 
 #: gnucash/report/reports/standard/invoice.scm:288
 #: gnucash/report/reports/standard/taxinvoice.scm:214
-#, fuzzy
 msgid "Job number:"
-msgstr "İş numarası: "
+msgstr "İş numarası:"
 
 #: gnucash/report/reports/standard/invoice.scm:293
 #: gnucash/report/reports/standard/taxinvoice.scm:217
-#, fuzzy
 msgid "Job name:"
-msgstr "İş adı: "
+msgstr "İş adı:"
 
 #: gnucash/report/reports/standard/invoice.scm:317
 msgid "Client or vendor name, address and ID"
@@ -26836,9 +26770,8 @@ msgid "Detailed"
 msgstr "Başarısız"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:931
-#, fuzzy
 msgid "Display document link?"
-msgstr "Eksi tutarları kırmızı renkte göster"
+msgstr "Belge bağlantısı görüntülensin mi?"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:1046
 #, fuzzy
@@ -27514,9 +27447,8 @@ msgid "Reference: "
 msgstr "Referans: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:322
-#, fuzzy
 msgid "Engagement: "
-msgstr "Ögeler"
+msgstr ""
 
 #: gnucash/report/reports/standard/taxinvoice.scm:328
 #: gnucash/report/reports/standard/taxinvoice.scm:330
@@ -28504,18 +28436,16 @@ msgid "Show the account description for subheadings?"
 msgstr "Ara toplam ve ara başlıklarda hesap kodu görünsün mü?"
 
 #: gnucash/report/trep-engine.scm:790
-#, fuzzy
 msgid "Show the informal headers for debit/credit accounts?"
-msgstr "Gelir ve gider hesaplarını göster"
+msgstr "Borç/alacak hesapları için resmi olmayan başlıklar gösterilsin mi?"
 
 #: gnucash/report/trep-engine.scm:796
 msgid "Add indenting columns with grouping and subtotals?"
 msgstr ""
 
 #: gnucash/report/trep-engine.scm:802
-#, fuzzy
 msgid "Show subtotals only, hiding transactional detail?"
-msgstr "İşlem detayını görüntüleme"
+msgstr "İşlem ayrıntıları gizlenerek yalnızca alt toplamlar gösterilsin mi?"
 
 #: gnucash/report/trep-engine.scm:808
 msgid "Subtotal according to the primary key?"
@@ -28568,15 +28498,12 @@ msgid "Display the other account code?"
 msgstr "Diğer hesap kodu görüntülensin mi?"
 
 #: gnucash/report/trep-engine.scm:927
-#, fuzzy
-#| msgid "Display the transaction amount?"
 msgid "Display the transaction linked document"
-msgstr "İşlem tutarı gösterilsin mi?"
+msgstr "İşlem bağlantılı belgeyi görüntüle"
 
 #: gnucash/report/trep-engine.scm:930
-#, fuzzy
 msgid "Display a subtotal summary table."
-msgstr "Alt toplamları görüntüle?"
+msgstr "Ara toplam özet tablosunu görüntüleyin."
 
 #: gnucash/report/trep-engine.scm:931
 #, fuzzy
@@ -29674,10 +29601,8 @@ msgid "Edit the selected account"
 msgstr "Seçili hesabı düzenle"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:23
-#, fuzzy
-#| msgid "Delete Account"
 msgid "_Delete Account"
-msgstr "Hesap Sil"
+msgstr "_Hesabı sil"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:30
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:227
@@ -29697,9 +29622,8 @@ msgstr "_Kademeli Hesap Özellikleri…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:224
-#, fuzzy
 msgid "Cascade selected properties for account"
-msgstr "Bir hesap türü seçin."
+msgstr "Hesap için seçilen özellikleri basamakla"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
 msgid "_Renumber Subaccounts…"
@@ -29714,7 +29638,7 @@ msgstr "Seçili hesabın alt hesaplarını yeniden kodla"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:372
 #: gnucash/ui/gnc-plugin-page-budget.ui:175
 msgid "Open _Account"
-msgstr "He_sabı Aç"
+msgstr "Hes_abı Aç"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:54
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:209
@@ -29740,9 +29664,8 @@ msgstr "Seçili hesap ve tüm alt hesaplarını aç"
 #: gnucash/ui/gnc-plugin-page-register.ui:112
 #: gnucash/ui/gnc-plugin-page-register.ui:353
 #: gnucash/ui/gnc-plugin-page-register.ui:465
-#, fuzzy
 msgid "_Filter By…"
-msgstr "Süz…"
+msgstr "_Süz…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:98
 #: gnucash/ui/gnc-plugin-page-budget.ui:87
@@ -29752,7 +29675,7 @@ msgstr "Süz…"
 #: gnucash/ui/gnc-plugin-page-report.ui:46
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:43
 msgid "_Refresh"
-msgstr "_Tazele"
+msgstr "_Yenile"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:101
 #: gnucash/ui/gnc-plugin-page-budget.ui:90
@@ -29781,10 +29704,8 @@ msgstr "Mevcut defteri yeni bir plandan hesaplarla genişlet"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:234
 #: gnucash/ui/gnc-plugin-page-register.ui:236
 #: gnucash/ui/gnc-plugin-page-register.ui:887
-#, fuzzy
-#| msgid "_Reconcile"
 msgid "_Reconcile…"
-msgstr "_Mutabakat"
+msgstr "_Mutabakat…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:134
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:236
@@ -29795,10 +29716,8 @@ msgstr "Seçili hesaba mutabakata sok"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:138
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:239
 #: gnucash/ui/gnc-plugin-page-register.ui:242
-#, fuzzy
-#| msgid "Auto-clear"
 msgid "_Auto-clear…"
-msgstr "Oto-temizle"
+msgstr "O_to temizle…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
 msgid ""
@@ -29813,15 +29732,13 @@ msgstr ""
 #: gnucash/ui/gnc-plugin-page-register.ui:248
 #: gnucash/ui/gnc-plugin-page-register.ui:902
 msgid "Stock Ass_istant…"
-msgstr "Stok Yardımcısı…"
+msgstr "Stok _Yardımcısı…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:150
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:254
 #: gnucash/ui/gnc-plugin-page-register.ui:254
-#, fuzzy
-#| msgid "Stock Split"
 msgid "Stoc_k Split…"
-msgstr "Stok Payı"
+msgstr "St_ok Payı…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:256
@@ -29890,10 +29807,8 @@ msgstr ""
 "gerekiyorsa düzelt"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:197
-#, fuzzy
-#| msgid "Filter account."
 msgid "Filter accounts"
-msgstr "Hesapları filtrele."
+msgstr "Hesapları süz"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:217
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:387
@@ -29943,15 +29858,13 @@ msgstr ""
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:34
 #: gnucash/ui/gnc-plugin-page-budget.ui:270
-#, fuzzy
 msgid "Edit Note"
-msgstr "Kredi Notu"
+msgstr "Notu Düzenle"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:36
 #: gnucash/ui/gnc-plugin-page-budget.ui:272
-#, fuzzy
 msgid "Edit note for the selected account and period"
-msgstr "Seçili hesabı düzenle"
+msgstr "Seçilen hesap ve döneme ilişkin notu düzenleyin"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:42
 #: gnucash/ui/gnc-plugin-page-budget.ui:287
@@ -29963,18 +29876,16 @@ msgstr "Cari raporu yazdır"
 #: gnucash/ui/gnc-plugin-page-budget.ui:70
 #: gnucash/ui/gnc-plugin-page-budget.ui:200
 msgid "Budget _Options…"
-msgstr "Bütçe _Seçenekleri…"
+msgstr "B_ütçe Seçenekleri…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:72
 #: gnucash/ui/gnc-plugin-page-budget.ui:202
-#, fuzzy
 msgid "Edit this budget's options"
-msgstr "Bu bütçenin seçeneklerini düzenle"
+msgstr "Bu bütçenin seçeneklerini düzenleyin"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:242
-#, fuzzy
 msgid "Edit budget for all periods for the selected accounts"
-msgstr "Seçili hesabı düzenle"
+msgstr "Seçilen hesapların tüm dönemlerine ait bütçeyi düzenleyin"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:79
 msgid "Sort _Order"
@@ -29982,11 +29893,11 @@ msgstr "Sı_ralama Şekli"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:84
 msgid "_Standard"
-msgstr "_Standart"
+msgstr "Sta_ndart"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:102
 msgid "_Quantity"
-msgstr "_Adet"
+msgstr "A_det"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:135
 #: gnucash/ui/gnc-plugin-page-invoice.ui:225
@@ -30016,18 +29927,17 @@ msgstr "Mevcut girdiyi sil"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:257
 #: gnucash/ui/gnc-plugin-page-invoice.ui:497
 msgid "_Blank"
-msgstr "_Boş"
+msgstr "Bo_ş"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:155
-#, fuzzy
 msgid "Move to the blank entry at the bottom"
-msgstr "Yeni kalem girişi için son satıra git"
+msgstr "Alttaki boş girişe git"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:162
 #: gnucash/ui/gnc-plugin-page-invoice.ui:242
 #: gnucash/ui/gnc-plugin-page-invoice.ui:452
 msgid "Dup_licate Entry"
-msgstr "Çi_ft Girdi"
+msgstr "_Yinelenen Girdi"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:164
 #: gnucash/ui/gnc-plugin-page-invoice.ui:244
@@ -30061,24 +29971,20 @@ msgstr "Mevcut girdiyi bir satır aşağı taşı"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:185
 msgid "Manage link of an external document to this item"
-msgstr ""
+msgstr "Harici bir belgenin bu öğeye olan bağlantısını yönetin"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:191
-#, fuzzy
-#| msgid "No Linked Account"
 msgid "Open the linked document"
-msgstr "Bağlı Hesap Yok"
+msgstr "Bağlantılı belgeyi aç"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
-#, fuzzy
 msgid "Open a company report window for the owner of this invoice"
-msgstr "Fatura sahibi için bir firma raporu penceresi aç"
+msgstr "Fatura sahibi için bir firma raporu penceresini açın"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
 #: gnucash/ui/gnc-plugin-page-invoice.ui:499
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr "Yeni kalem girişi için son satıra git"
+msgstr "Faturanın altındaki boş girişe git"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:16
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:152
@@ -30168,9 +30074,8 @@ msgstr "Yeni bir fatura oluştur"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:227
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:667
-#, fuzzy
 msgid "New _Voucher…"
-msgstr "Yeni Fatura"
+msgstr "Yeni Makb_uz…"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:229
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:669
@@ -30178,10 +30083,8 @@ msgid "Create a new voucher"
 msgstr "Yeni bir fiş oluştur"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
-#, fuzzy
-#| msgid "_Print checks"
 msgid "_Print Checks…"
-msgstr "Çek _yazdır"
+msgstr "Çek Ya_zdır…"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:15
 #: gnucash/ui/gnc-plugin-page-register.ui:444
@@ -30513,10 +30416,8 @@ msgstr "Cari işlemi şablon alarak ileri tarihli bir işlem oluştur"
 #: gnucash/ui/gnc-plugin-page-register.ui:437
 #: gnucash/ui/gnc-plugin-page-register.ui:549
 #: gnucash/ui/gnc-plugin-page-register.ui:832
-#, fuzzy
-#| msgid "Display the other account code?"
 msgid "_Jump to the other account"
-msgstr "Diğer hesap kodu görüntülensin mi?"
+msgstr "_Diğer hesaba atla"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:306
 #: gnucash/ui/gnc-plugin-page-register.ui:439
@@ -30986,11 +30887,9 @@ msgstr ""
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
 #: libgnucash/app-utils/gnc-quotes.cpp:820
-#, fuzzy
-#| msgid "Symbol"
 msgctxt "Finance::Quote"
 msgid "symbol: "
-msgstr "Sembol"
+msgstr "sembol: "
 
 #. Translators: The date of the quote.
 #: libgnucash/app-utils/gnc-quotes.cpp:822
@@ -31020,11 +30919,9 @@ msgstr ""
 
 #. Translators: The quote is neither a last trade nor an NAV.
 #: libgnucash/app-utils/gnc-quotes.cpp:834
-#, fuzzy
-#| msgid "Price"
 msgctxt "Finance::Quote"
 msgid "price: "
-msgstr "Fiyat"
+msgstr "fiyat: "
 
 #: libgnucash/app-utils/gnc-quotes.cpp:854
 msgid "Finance::Quote reported a failure for symbol "
@@ -31046,10 +30943,8 @@ msgid ""
 msgstr ""
 
 #: libgnucash/app-utils/gnc-quotes.cpp:932
-#, fuzzy
-#| msgid "Unrecognized or inconsistent format."
 msgid "Unrecognized Finance::Quote Error: "
-msgstr "Tanımlanamayan veya tutarsız biçim."
+msgstr "Tanınmayan Finans::Alıntı Hatası: "
 
 #. Translators: A list of error messages from the Scheduled Transactions (SX).
 #. They might appear in their editor or in "Since last run".
@@ -31952,7 +31847,7 @@ msgstr "Geçersiz kod %s vergi tipi %s için"
 #: libgnucash/tax/gnc-locale-tax.c:182
 #, c-format
 msgid "Not tax-related; invalid code %s for tax type %s"
-msgstr "Vergi ile alakalı olmayan; geçersiz kod %s vergi tipi %s için "
+msgstr "Vergiyle ilgili değil; %s vergi türü için geçersiz %s kodu"
 
 #: libgnucash/tax/gnc-locale-tax.c:200
 #, c-format
