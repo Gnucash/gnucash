@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-08-05 23:09+0000\n"
+"PO-Revision-Date: 2024-08-08 21:09+0000\n"
 "Last-Translator: Bora Atıcı <boratici.acc@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "tr/>\n"
@@ -55,7 +55,7 @@ msgstr ""
 #: gnucash/gnome-utils/gnc-period-select.c:70
 #: libgnucash/engine/gnc-option-date.cpp:263
 msgid "Start of this year"
-msgstr "Bu yıl başı"
+msgstr "Bu DÖNEM başı"
 
 #: bindings/guile/date-utilities.scm:718
 #: libgnucash/engine/gnc-option-date.cpp:264
@@ -1942,7 +1942,7 @@ msgstr "Alış"
 #: gnucash/gnome/dialog-invoice.c:2809 gnucash/gnome/dialog-invoice.c:3035
 #: gnucash/gnome/dialog-invoice.c:3036
 msgid "Voucher"
-msgstr "G.Pusulası"
+msgstr "Alındı"
 
 #: gnucash/gnome/business-gnome-utils.c:357 gnucash/gnome/dialog-doclink.c:821
 #: gnucash/gnome/dialog-invoice.c:3764
@@ -2572,7 +2572,7 @@ msgstr "İncele/Düzenle"
 
 #: gnucash/gnome/dialog-employee.c:669
 msgid "Expense Vouchers"
-msgstr "Gider Pusulaları"
+msgstr "Gider Alındıları"
 
 #: gnucash/gnome/dialog-employee.c:679
 msgid "Employee ID"
@@ -3054,15 +3054,15 @@ msgstr "Fatura Görüntüle"
 #: gnucash/gnome/dialog-invoice.c:2356
 #: gnucash/gnome-search/dialog-search.c:1091
 msgid "New Expense Voucher"
-msgstr "Yeni Gider Pusulası"
+msgstr "Yeni Gider Alındısı"
 
 #: gnucash/gnome/dialog-invoice.c:2362
 msgid "Edit Expense Voucher"
-msgstr "Gider Pusulası Düzenle"
+msgstr "Gider Alındısı Düzenle"
 
 #: gnucash/gnome/dialog-invoice.c:2366
 msgid "View Expense Voucher"
-msgstr "Gider Pusulası Görüntüle"
+msgstr "Gider Alındısı Görüntüle"
 
 #: gnucash/gnome/dialog-invoice.c:2688
 #, fuzzy
@@ -3081,12 +3081,12 @@ msgstr "Fatura Nu"
 
 #: gnucash/gnome/dialog-invoice.c:2808 gnucash/gnome/dialog-invoice.c:3034
 msgid "Voucher Information"
-msgstr "Satış Bilgisi"
+msgstr "Alındı Bilgisi"
 
 #: gnucash/gnome/dialog-invoice.c:2810 gnucash/gnome/dialog-invoice.c:3037
 #: gnucash/gnome/dialog-invoice.c:3645
 msgid "Voucher ID"
-msgstr "Pusula No"
+msgstr "Alındı Nu"
 
 #: gnucash/gnome/dialog-invoice.c:3368
 msgid "Date of duplicated entries"
@@ -3135,7 +3135,7 @@ msgstr "İncele/Düzenle"
 #. interchangeably in gnucash and mean the same thing.
 #: gnucash/gnome/dialog-invoice.c:3535
 msgid "View/Edit Voucher"
-msgstr "İncele/Düzenle"
+msgstr "Alındı Görüntüle/Düzenle"
 
 #: gnucash/gnome/dialog-invoice.c:3549
 msgid "Invoice Owner"
@@ -3192,11 +3192,11 @@ msgstr "Notlar"
 
 #: gnucash/gnome/dialog-invoice.c:3617
 msgid "Voucher Owner"
-msgstr "Sahibi"
+msgstr "Alındı Sahibi"
 
 #: gnucash/gnome/dialog-invoice.c:3620
 msgid "Voucher Notes"
-msgstr "Notlar"
+msgstr "Alındı Notları"
 
 #: gnucash/gnome/dialog-invoice.c:3654 gnucash/gnome/dialog-invoice.c:3813
 #: gnucash/gnome/dialog-lot-viewer.c:908 gnucash/gnome/dialog-tax-info.c:1235
@@ -3262,13 +3262,13 @@ msgstr "Alış Ara"
 
 #: gnucash/gnome/dialog-invoice.c:3756
 msgid "Find Expense Voucher"
-msgstr "Gider Pusulası Ara"
+msgstr "Gider Alındısı Bul"
 
 #: gnucash/gnome/dialog-invoice.c:3757
 #: gnucash/gnome-search/dialog-search.c:1089
 #: gnucash/report/reports/standard/invoice.scm:776
 msgid "Expense Voucher"
-msgstr "Gider Pusulası"
+msgstr "Gider Alındısı"
 
 #: gnucash/gnome/dialog-invoice.c:3763
 msgid "Find Invoice"
@@ -4635,83 +4635,68 @@ msgid ""
 msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
-#, fuzzy
 msgid "_Print Voucher"
-msgstr "Çek _yazdır"
+msgstr "Alındı _Yazdır"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
-#, fuzzy
 msgid "Make a printable voucher"
-msgstr "Baskıya uygun fatura oluştur"
+msgstr "Baskıya uygun alındı oluştur"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
-#, fuzzy
 msgid "_Edit Voucher"
-msgstr "İncele/Düzenle"
+msgstr "Alındı Düzenle"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
-#, fuzzy
 msgid "Edit this voucher"
-msgstr "Bu faturayı düzenle"
+msgstr "Bu alındıyı düzenle"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
-#, fuzzy
 msgid "_Duplicate Voucher"
-msgstr "_Faturayı Çiftle"
+msgstr "_Alındıyı Çoğalt"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
-#, fuzzy
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Mevcut faturanın aynısı olacak şekilde yeni bir fatura oluştur"
+msgstr "Mevcut alındının kopyası olarak yeni bir alındı oluşturun"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
-#, fuzzy
 msgid "_Post Voucher"
-msgstr "G.Pusulası"
+msgstr "Alı_ndı Gönder"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
-#, fuzzy
 msgid "Post this voucher to your Chart of Accounts"
-msgstr "Bu faturayı Hesap Tablosuna yapıştır"
+msgstr "Bu alındıyı Hesap Tablosuna gönderin"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
-#, fuzzy
 msgid "_Unpost Voucher"
-msgstr "_Faturayı Çıkar"
+msgstr "Alın_dıyı Gönderme"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
-#, fuzzy
 msgid "Unpost this voucher and make it editable"
-msgstr "Bu faturayı geri çek"
+msgstr "Bu alındıyı gönderme ve düzenlenebilir hale getir"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
-#, fuzzy
 msgid "New _Voucher"
-msgstr "Yeni Fatura"
+msgstr "Yeni Alın_dı"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
 msgid "Create a new voucher for the same owner as the current one"
-msgstr "Geçerli makbuzla aynı sahip için yeni bir makbuz oluşturun"
+msgstr "Geçerli alındıyla aynı sahip için yeni bir alındı oluştur"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the voucher"
-msgstr "Yeni kalem girişi için son satıra git"
+msgstr "Alındının altındaki boş girişe git"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
-#, fuzzy
 msgid "_Pay Voucher"
-msgstr "G.Pusulası"
+msgstr "_Ödeme Alındısı"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
-#, fuzzy
 msgid "Enter a payment for the owner of this voucher"
-msgstr "Faturayı öde"
+msgstr "Bu alındının sahibi için bir ödeme girin"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:248
-#, fuzzy
 msgid "Open a employee report window for the owner of this voucher"
-msgstr "Fatura sahibi için bir firma raporu penceresi aç"
+msgstr "Bu alındının sahibi için çalışan raporu penceresini açın"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:256
 msgid "_Use as Default Layout for Employee Documents"
@@ -4721,6 +4706,8 @@ msgstr ""
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
+"Tüm çalışan alındıları ve alacak dekontları için geçerli düzeni varsayılan "
+"olarak kullan"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 msgid "_Reset Default Layout for Employee Documents"
@@ -4841,7 +4828,7 @@ msgstr "Gün"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:227
 msgid "New Voucher"
-msgstr "Yeni Fatura"
+msgstr "Yeni Alındı"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:228
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:860
@@ -29406,10 +29393,8 @@ msgid "Open the New Bill dialog"
 msgstr "Yeni Alış ekranını aç"
 
 #: gnucash/ui/gnc-plugin-business.ui:78
-#, fuzzy
-#| msgid "Find Bill"
 msgid "Find Bi_ll…"
-msgstr "Alış Ara"
+msgstr "Fatu_ra Bul…"
 
 #: gnucash/ui/gnc-plugin-business.ui:80
 msgid "Open the Find Bill dialog"
@@ -29425,7 +29410,7 @@ msgstr "Fatura Zamanı Hatırlatıcı penceresini aç"
 
 #: gnucash/ui/gnc-plugin-business.ui:104
 msgid "_Employee"
-msgstr "_Personel"
+msgstr "_Çalışan"
 
 #: gnucash/ui/gnc-plugin-business.ui:107
 msgid "Employees Overview"
@@ -29438,55 +29423,44 @@ msgstr "Çalışan genel bakış sayfasını aç"
 #: gnucash/ui/gnc-plugin-business.ui:112
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:55
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:627
-#, fuzzy
-#| msgid "New Employee"
 msgid "_New Employee…"
-msgstr "Yeni Personel"
+msgstr "Yeni çalı_şan…"
 
 #: gnucash/ui/gnc-plugin-business.ui:114
 msgid "Open the New Employee dialog"
-msgstr "Yeni Personel kutusunu göster"
+msgstr "Yeni Çalışan iletişim kutusunu aç"
 
 #: gnucash/ui/gnc-plugin-business.ui:117
-#, fuzzy
-#| msgid "Find Employee"
 msgid "_Find Employee…"
-msgstr "Personel Ara"
+msgstr "Çalışa_n Bul…"
 
 #: gnucash/ui/gnc-plugin-business.ui:119
 msgid "Open the Find Employee dialog"
-msgstr "Personel Arama kutusunu göster"
+msgstr "Çalışan Bul iletişim kutusunu aç"
 
 #: gnucash/ui/gnc-plugin-business.ui:122
-#, fuzzy
-#| msgid "New Expense Voucher"
 msgid "New _Expense Voucher…"
-msgstr "Yeni Gider Pusulası"
+msgstr "Yeni _Gider Alındısı…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
-#, fuzzy
-#| msgid "Open the New Expense Voucher dialog"
 msgid "Open the New Voucher dialog"
-msgstr "Yeni Gider Pusulası kutusunu göster"
+msgstr "Yeni gider alındısı iletişim kutusunu aç"
 
 #: gnucash/ui/gnc-plugin-business.ui:127
-#, fuzzy
-#| msgid "Find Expense Voucher"
 msgid "Find Expense _Voucher…"
-msgstr "Gider Pusulası Ara"
+msgstr "Gide_r Alındısı Bul…"
 
 #: gnucash/ui/gnc-plugin-business.ui:129
 msgid "Open the Find Expense Voucher dialog"
-msgstr "Gider Pusulası Arama kutusunu göster"
+msgstr "Gider Alındısı Bul iletişim kutusunu aç"
 
 #: gnucash/ui/gnc-plugin-business.ui:138
 msgid "Business Linked Documents"
 msgstr ""
 
 #: gnucash/ui/gnc-plugin-business.ui:140
-#, fuzzy
 msgid "View all Linked Business Documents"
-msgstr "İşlem Bilgisi"
+msgstr "Tüm Bağlantılı İşletme Belgelerini Görüntüle"
 
 #: gnucash/ui/gnc-plugin-business.ui:146
 msgid "Sales _Tax Table"
@@ -29555,36 +29529,30 @@ msgid "Import Transactions from a CSV file"
 msgstr "İşlemleri bir CSV dosyasından içe aktar"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:16
-#, fuzzy
-#| msgid "Import Prices from a CSV file"
 msgid "Import _Prices from a CSV file…"
-msgstr "Fiyatları CSV dosyasından içe aktar"
+msgstr "Fi_yatları CSV dosyasından içe aktar…"
 
 #: gnucash/ui/gnc-plugin-csv-import.ui:18
 msgid "Import Prices from a CSV file"
 msgstr "Fiyatları CSV dosyasından içe aktar"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:6
-#, fuzzy
 msgid "Import _Customers & Vendors…"
-msgstr "Müşterileri ve Satıcıları İçe Aktar"
+msgstr "Müşteri_leri ve Satıcıları İçe Aktar…"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:8
-#, fuzzy
 msgid "Import Customers and Vendors from a CSV text file"
-msgstr "Müşterileri ve satıcıları metin dosyasından içe aktar"
+msgstr "Müşterileri ve Satıcıları CSV metin dosyasından içe aktarın"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
 msgid "_Replay GnuCash .log file…"
 msgstr "_GnuCash .log dosyasını yeniden oynat…"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:8
-#, fuzzy
-#| msgid "Replay a GnuCash log file after a crash. This cannot be undone."
 msgid "Replay a GnuCash log file after a crash. This cannot be undone"
 msgstr ""
-"Bir çökmeden sonra bir GnuCash günlük dosyasını yeniden oynat. Bu işlem geri "
-"alınamaz."
+"Bir çökme sonrasında GnuCash günlük dosyasını yeniden oynatın. Bu geri "
+"alınamaz"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:16
 #: gnucash/ui/gnc-plugin-page-register.ui:32
@@ -29832,7 +29800,7 @@ msgstr "Seçili hesabı sil"
 #: gnucash/ui/gnc-plugin-page-budget.ui:16
 #: gnucash/ui/gnc-plugin-page-budget.ui:225
 msgid "Esti_mate Budget…"
-msgstr "Tahmini Bütçe…"
+msgstr "Tah_mini Bütçe…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:22
 #: gnucash/ui/gnc-plugin-page-budget.ui:240
@@ -29841,7 +29809,6 @@ msgstr "_Tüm Dönemler…"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:24
 #: gnucash/ui/gnc-plugin-page-budget.ui:227
-#, fuzzy
 msgid ""
 "Estimate a budget value for the selected accounts from past transactions"
 msgstr "Geçmiş işlemlerden seçilen hesaplar için bir bütçe değeri tahmin et"
@@ -29854,7 +29821,7 @@ msgstr "_Bütçeyi Sil…"
 #: gnucash/ui/gnc-plugin-page-budget.ui:30
 #: gnucash/ui/gnc-plugin-page-budget.ui:257
 msgid "Select this or another budget and delete it"
-msgstr ""
+msgstr "Bu veya başka bir bütçeyi seçin ve silin"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:34
 #: gnucash/ui/gnc-plugin-page-budget.ui:270
@@ -29868,10 +29835,8 @@ msgstr "Seçilen hesap ve döneme ilişkin notu düzenleyin"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:42
 #: gnucash/ui/gnc-plugin-page-budget.ui:287
-#, fuzzy
-#| msgid "Print the current report"
 msgid "Run the budget report"
-msgstr "Cari raporu yazdır"
+msgstr "Bütçe raporunu çalıştır"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:70
 #: gnucash/ui/gnc-plugin-page-budget.ui:200
@@ -30075,12 +30040,12 @@ msgstr "Yeni bir fatura oluştur"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:227
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:667
 msgid "New _Voucher…"
-msgstr "Yeni Makb_uz…"
+msgstr "Ye_ni Alındı…"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:229
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:669
 msgid "Create a new voucher"
-msgstr "Yeni bir fiş oluştur"
+msgstr "Yeni alındı oluştur"
 
 #: gnucash/ui/gnc-plugin-page-register.ui:6
 msgid "_Print Checks…"
@@ -31502,27 +31467,27 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1265
 msgid "Expense voucher number"
-msgstr "Harcama çeki numarası"
+msgstr "Gider alındı numarası"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1266
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
 msgstr ""
-"Önceki harcama çeki numarası oluşturuldu. Bu sayı bir sonraki harcama çeki "
-"numarasını oluşturmak için arttırılacak."
+"Oluşturulan önceki gider alındı numarası. Bir sonraki alındı numarasını "
+"oluşturmak için bu sayı artırılacaktır."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1269
 msgid "Expense voucher number format"
-msgstr "Harcama çeki numara biçimi"
+msgstr "Gider alındı numarası biçimi"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1271
 msgid ""
 "The format string to use for generating expense voucher numbers. This is a "
 "printf-style format string."
 msgstr ""
-"Harcama çeki numaralarını oluşturmak için kullanılacak formak karakter "
-"dizisi. Bu bir printf-tip biçim karakter dizisidir."
+"Gider alındı numaralarını oluşturmak için kullanılacak biçim dizesi. Bu, "
+"printf-style biçimi dizesidir."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1274
 msgid "Job number"

@@ -8,14 +8,14 @@
 # udo pton <udopton@gmail.com>, 2021.
 # T. E. Kalaycı <tekrei@gmail.com>, 2021.
 # Tur <tur+translate@simplelogin.fr>, 2021.
-# Bora Atıcı <boratici.acc@gmail.com>, 2023.
+# Bora Atıcı <boratici.acc@gmail.com>, 2023, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2023-04-02 17:39+0000\n"
+"PO-Revision-Date: 2024-08-08 16:09+0000\n"
 "Last-Translator: Bora Atıcı <boratici.acc@gmail.com>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/gnucash/glossary/"
 "tr/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17-dev\n"
+"X-Generator: Weblate 5.7-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -409,7 +409,7 @@ msgstr "e-posta"
 
 #. "a person who works for somebody or a company in return for wages"
 msgid "employee"
-msgstr ""
+msgstr "çalışan"
 
 #. "1. The money value of a property after all charges on it have been paid. Equity isn't debt, it's a representation of long-term capital (So combining it with liability isn't really very meaningful, except in the balance sheet. 2. (a) The value of the shares issued by  a company. (b) Ordinary stocks and shares that carry no fixed interest."
 msgid "equity"
@@ -878,9 +878,8 @@ msgid "vendor"
 msgstr "satıcı"
 
 #. "The terms 'Voucher' and 'Expense Voucher' are used interchangeably in gnucash. The 'Expense Voucher' is also a bit of a misnomer -- it's more like an 'Expense Report' in gnucash.  The phrase is meant to be a list of expenses incurred by an employee for which the company will reminburse them."
-#, fuzzy
 msgid "voucher"
-msgstr "makbuz"
+msgstr "alındı"
 
 #. "see debit"
 #, fuzzy
