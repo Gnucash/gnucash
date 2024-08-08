@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-30 14:09+0000\n"
+"PO-Revision-Date: 2024-08-08 23:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1082,7 +1082,7 @@ msgid ""
 "use. Click the triangle at the far right of the column headings to change "
 "the display."
 msgstr ""
-"Az Értékpapír-szerkesztő ablakban külön oszlopban megjelenítheti az "
+"Az értékpapír-szerkesztő ablakban külön oszlopban megjelenítheti az "
 "árfolyamforrásokat, így könnyedén áttekintheti, az egyes értékpapírok "
 "árfolyama mely internetes forrásból lesz letöltve. Ezt az oszlopot az "
 "oszlopfejlécek jobb szélén található háromszögre kattintva adhatja hozzá."
@@ -23719,7 +23719,7 @@ msgstr "Mérleg (Többoszlopos)"
 
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1253
 msgid "Income Statement (Multicolumn)"
-msgstr "Bevételkimutatás (Többoszlopos)"
+msgstr "Eredménykimutatás (Többoszlopos)"
 
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:38
 msgid "Budget Balance Sheet"
@@ -24924,11 +24924,11 @@ msgstr "Összes kereskedés"
 #: gnucash/report/reports/standard/income-statement.scm:552
 #: gnucash/report/reports/standard/trial-balance.scm:535
 msgid "Income Statement"
-msgstr "Bevételkimutatás"
+msgstr "Eredménykimutatás"
 
 #: gnucash/report/reports/standard/income-statement.scm:553
 msgid "Profit & Loss"
-msgstr "Eredménykimutatás"
+msgstr "Eredménykimutatás (elavult, átnevezték 2004-ben)"
 
 #: gnucash/report/reports/standard/investment-lots.scm:40
 msgid "Chart"
@@ -26900,9 +26900,9 @@ msgid ""
 "Adjustments, Adjusted Trial Balance, and Income Statement columns. Mostly "
 "useful for merchandising businesses."
 msgstr ""
-"A korrekciók ezen számlákon bruttók (lásd fent) a Korrekciók, Korrigált "
-"próbaegyenleg és a Bevételkimutatás oszlopokban. Leginkább kereskedelmi "
-"vállalatoknak hasznos."
+"Az ezeken a számlákon végzett korrekciók bruttó korrekciók (lásd fent) a "
+"Korrekciók, Korrigált próbaegyenleg és Eredménykimutatás oszlopokban. "
+"Leginkább kereskedelmi vállalatoknak hasznos."
 
 #: gnucash/report/reports/standard/trial-balance.scm:86
 msgid "Adjusting Entries pattern"
