@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-08-08 23:09+0000\n"
+"PO-Revision-Date: 2024-08-11 04:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1999,7 +1999,7 @@ msgstr "Készpénz"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1133
 msgctxt "Stock Assistant: Page name"
 msgid "Fees"
-msgstr "Díj"
+msgstr "Díjak"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1135
 msgctxt "Stock Assistant: Page name"
@@ -3773,8 +3773,9 @@ msgid ""
 "\"%s\" before you continue to process this payment. Perhaps you want to "
 "create an Invoice or Bill first?"
 msgstr ""
-"Nincs használható \"Könyvelés ide\"folyószámlája. Egy \"%s\" típusú számlát "
-"kellene létrehoznia mielőtt folytatná.Szeretne egy számlát kiállítani előbb?"
+"Nincs érvényes „Könyvelés ide” számlája. Egy \"%s\" típusú számlát kellene "
+"létrehoznia mielőtt folytatja a fizetés feldolgozását. Lehet, hogy egy "
+"kimenőszámlát vagy egy bejövőszámlát szeretne létrehozni?"
 
 #: gnucash/gnome/dialog-payment.c:1574
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3246
@@ -4546,23 +4547,20 @@ msgstr "%s törlés?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:1037
 msgid "You must select at least one account to estimate."
-msgstr "Legalább egy folyószámlát ki kell választani a becsléshez."
+msgstr "Legalább egy számlát ki kell választani a becsléshez."
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:1168
-#, fuzzy
 msgid "You must select at least one account to edit."
-msgstr "Legalább egy folyószámlát ki kell választani a becsléshez."
+msgstr "Legalább egy számlát ki kell választani a szerkesztéshez."
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:1269
-#, fuzzy
 msgid "You must select one budget cell to edit."
-msgstr "Legalább egy folyószámlát ki kell választani a becsléshez."
+msgstr "Ki kell választania egy költségvetési cellát a szerkesztéshez."
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:287
-#, fuzzy
 msgid "_Print Invoice"
-msgstr "Számla nyomtatása"
+msgstr "Kimenőszámla _nyomtatása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:289
@@ -9418,14 +9416,14 @@ msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:15
 msgid "Prompt for credit card payment"
-msgstr "Kérés hitelkártya-törlesztésre"
+msgstr "Felkérés hitelkártya-törlesztésre"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:16
 msgid ""
 "If active, after reconciling a credit card account, prompt the user to enter "
 "a credit card payment. Otherwise do not prompt the user for this."
 msgstr ""
-"Ha aktív, a hitelkártya-számla egyeztetése után kéri a felhasználót, egy "
+"Ha aktív, a hitelkártya-számla egyeztetése után megkéri a felhasználót, egy "
 "hitelkártya-törlesztés megadására. Egyébként nem kéri meg erre."
 
 #: gnucash/gschemas/org.gnucash.GnuCash.dialogs.reconcile.gschema.xml.in:20
@@ -12733,7 +12731,7 @@ msgstr ""
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:606
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:665
 msgid "Fees"
-msgstr "Díj"
+msgstr "Díjak"
 
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:629
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1065
@@ -16475,7 +16473,7 @@ msgstr "_Eszköz"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:318
 msgid "_Liability/Equity"
-msgstr "_Kötelezettség"
+msgstr "_Kötelezettség/Tőke"
 
 #: gnucash/gtkbuilder/dialog-tax-info.glade:472
 msgid "<b>Account Tax Information</b>"
@@ -16516,12 +16514,11 @@ msgstr "_Törlés"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:212
 msgid "Ne_w"
-msgstr ""
+msgstr "_Új"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:286
-#, fuzzy
 msgid "Value $"
-msgstr "Érték"
+msgstr "Érték Ft."
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:289
 msgid "Percent %"
@@ -20425,18 +20422,16 @@ msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:184
 msgid "This account should usually be of type income."
-msgstr "Ennek a számlának lehetőség szerint bevételinek kellene lennie."
+msgstr "Ennek a számlának általában jövedelem típusúnak kell lennie."
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:192
 msgid "This account should usually be of type expense or asset."
-msgstr ""
-"Ennek a számlának lehetőség szerint kötség vagy Saját tőke számlának kellene "
-"lennie."
+msgstr "Ennek a számlának általában költség vagy eszköz típusúnak kell lennie."
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:760
 #, c-format
 msgid "The tax table %s does not exist. Would you like to create it?"
-msgstr "Az %s adótáblázat nem létezik. Kívánja létrehozni?"
+msgstr "A(z) %s adótáblázat nem létezik. Kívánja létrehozni?"
 
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:877
 msgid ""
@@ -21065,12 +21060,12 @@ msgstr "T"
 #: gnucash/register/ledger-core/split-register-layout.c:827
 msgctxt "sample"
 msgid "Notes field sample text string"
-msgstr "Megjegyzésekmező mintaszövege"
+msgstr "A megjegyzések mezőjének mintaszövege"
 
 #: gnucash/register/ledger-core/split-register-layout.c:835
 msgctxt "sample"
 msgid "No Particular Reason"
-msgstr "Nincs különösebb ok"
+msgstr "Nincs különösebb oka"
 
 #: gnucash/register/ledger-core/split-register-layout.c:843
 #: gnucash/register/ledger-core/split-register-layout.c:851
@@ -21083,6 +21078,8 @@ msgid ""
 "Could not determine the account currency. Using the default currency "
 "provided by your system."
 msgstr ""
+"Nem sikerült meghatározni a számla pénznemét. A rendszer alapértelmezett "
+"pénzneme lesz használva."
 
 #. Translators: Ref is the column header in Accounts Payable and
 #. * Accounts Receivable ledgers for the number of the invoice or bill
@@ -21094,12 +21091,12 @@ msgstr "Hiv"
 
 #: gnucash/register/ledger-core/split-register-model.c:274
 msgid "T-Ref"
-msgstr ""
+msgstr "Tr. hiv"
 
 #: gnucash/register/ledger-core/split-register-model.c:283
 #: gnucash/report/reports/standard/register.scm:133
 msgid "T-Num"
-msgstr "Tr. Szám"
+msgstr "Tr. szám"
 
 #: gnucash/register/ledger-core/split-register-model.c:409
 msgid "Exch. Rate"
@@ -21107,13 +21104,13 @@ msgstr "Árfolyam"
 
 #: gnucash/register/ledger-core/split-register-model.c:426
 msgid "Oth. Curr."
-msgstr ""
+msgstr "Egyéb pénznem"
 
 #: gnucash/register/ledger-core/split-register-model.c:443
 #: gnucash/register/ledger-core/split-register-model.c:467
 #, c-format
 msgid "Tot %s"
-msgstr "Össz %s"
+msgstr "Össz. %s"
 
 #: gnucash/register/ledger-core/split-register-model.c:449
 msgid "Tot Credit"
@@ -21125,7 +21122,7 @@ msgstr "Össz. tartozás"
 
 #: gnucash/register/ledger-core/split-register-model.c:482
 msgid "Tot Shares"
-msgstr "Rész össz"
+msgstr "Össz. részvény"
 
 #: gnucash/register/ledger-core/split-register-model.c:503
 msgid "Debit Formula"
@@ -23855,32 +23852,32 @@ msgstr "Válassza ki a jelentéstartomány pontos befejező időszakát."
 #: gnucash/report/reports/standard/budget-barchart.scm:65
 #: gnucash/report/reports/standard/budget.scm:111
 msgid "First budget period"
-msgstr ""
+msgstr "Első költségvetési időszak"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:66
 #: gnucash/report/reports/standard/budget.scm:112
 msgid "Previous budget period"
-msgstr ""
+msgstr "Előző költségvetési időszak"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:67
 #: gnucash/report/reports/standard/budget.scm:113
 msgid "Current budget period"
-msgstr ""
+msgstr "Jelenlegi költségvetési időszak"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:68
 #: gnucash/report/reports/standard/budget.scm:114
 msgid "Next budget period"
-msgstr ""
+msgstr "Következő költségvetési időszak"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:69
 #: gnucash/report/reports/standard/budget.scm:115
 msgid "Last budget period"
-msgstr ""
+msgstr "Utolsó költségvetési időszak"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:70
 #: gnucash/report/reports/standard/budget.scm:116
 msgid "Manual period selection"
-msgstr ""
+msgstr "Időszak kézi kiválasztása"
 
 #: gnucash/report/reports/standard/budget-barchart.scm:127
 msgid "Calculate as running sum?"
@@ -24067,11 +24064,11 @@ msgstr "Nettó veszteség"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:577
 msgid "Budget Income Statement"
-msgstr "Költségvetés-bevételkimutatás"
+msgstr "Költségvetési eredménykimutatás"
 
 #: gnucash/report/reports/standard/budget-income-statement.scm:578
 msgid "Budget Profit & Loss"
-msgstr ""
+msgstr "Költségvetési nyereség és veszteség"
 
 #: gnucash/report/reports/standard/budget.scm:41
 #: gnucash/ui/gnc-plugin-page-budget.ui:40
@@ -24091,7 +24088,7 @@ msgstr "Alszámlák megjelenítése mindig"
 
 #: gnucash/report/reports/standard/budget.scm:51
 msgid "Show Budget"
-msgstr ""
+msgstr "Költségvetés megjelenítése"
 
 #: gnucash/report/reports/standard/budget.scm:52
 msgid "Display a column for the budget values."
@@ -24928,7 +24925,7 @@ msgstr "Eredménykimutatás"
 
 #: gnucash/report/reports/standard/income-statement.scm:553
 msgid "Profit & Loss"
-msgstr "Eredménykimutatás (elavult, átnevezték 2004-ben)"
+msgstr "Nyereség és veszteség"
 
 #: gnucash/report/reports/standard/investment-lots.scm:40
 msgid "Chart"
