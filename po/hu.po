@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-08-11 04:09+0000\n"
+"PO-Revision-Date: 2024-08-11 18:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1032,9 +1032,9 @@ msgid ""
 "Accounts tab in the main window, highlight the parent account and select "
 "Edit->Open Subaccounts from the menu."
 msgstr ""
-"Egyetlen főkönyvben szeretné látni egy számla összes alszámlájának "
-"tranzakcióit? A Számlák lapon jelölje ki a főszámlát, majd válassza a "
-"Szerkesztés -> Alszámlák megnyitása menüpontot."
+"Egyetlen regiszterben szeretné látni egy számla összes alszámlájának "
+"tranzakcióit? A főablak számlák lapján jelölje ki a főszámlát, majd válassza "
+"a Szerkesztés -> Alszámlák megnyitása menüpontot."
 
 #: doc/tip_of_the_day.list.c:75
 msgid ""
@@ -1617,7 +1617,7 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
-"Adjon el részvényeket long pozícióban, és könyvelje el a tőkenyereséget/"
+"Adjon el részvényt long pozícióban, és könyvelje el a tőkenyereséget/"
 "veszteséget.\n"
 "\n"
 "Ha nem tudja kiszámítani a tőkenyereséget, akkor beírhat egy töltelék "
@@ -5235,8 +5235,8 @@ msgid ""
 "the changes to this transaction, discard the transaction, or cancel the "
 "operation?"
 msgstr ""
-"A főkönyvben egy tranzakciónak vannak függő változásai. Akarja menteni e "
-"tranzakció változásait, ejteni a tranzakciót, vagy elvetni a műveletet?"
+"A regiszterben egy tranzakciónak függő változásai vannak. Kívánja menteni a "
+"tranzakció változásait, elvetni a tranzakciót, vagy törölni a műveletet?"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1872
 msgid "_Discard Transaction"
@@ -7548,6 +7548,12 @@ msgid ""
 "installing a different version of \"libdbi\". Please see https://bugs."
 "gnucash.org/show_bug.cgi?id=611936 for more information."
 msgstr ""
+"A rendszere „libdbi” könyvtára nem tárolja megfelelően a nagy számokat. Ez "
+"azt jelenti, hogy a GnuCash nem tudja helyesen használni az SQL "
+"adatbázisokat. A Gnucash nem fog SQL adatbázisokat megnyitni vagy menteni, "
+"amíg ezt a hibát nem javítja ki egy másik verziójú „libdbi” könyvtár "
+"telepítésével. További információt talál a https://bugs.gnucash.org/"
+"show_bug.cgi?id=611936 oldalon."
 
 #: gnucash/gnome-utils/gnc-file.c:529
 msgid ""
@@ -9808,10 +9814,8 @@ msgid ""
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:115
-#, fuzzy
 msgid "Use account colors in the tabs of open account registers"
-msgstr ""
-"Minden számla a főkönyvi ablakára mutató hiperhivatkozásként jelenik meg"
+msgstr "Számlaszínek használata a megnyitott számlaregiszterek lapjain"
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:116
 msgid ""
@@ -10923,11 +10927,14 @@ msgid ""
 "development. It will probably damage your data in such a way that it cannot "
 "be repaired!"
 msgstr ""
+"Ez a segéd segít az elszámolási időszakok beállításában és használatában.\n"
+"\n"
+"Veszély: ez a funkció jelenleg nem működik megfelelően; még fejlesztés alatt "
+"áll. Valószínűleg kijavíthatatlanul károsítja az adatait!"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:24
-#, fuzzy
 msgid "Setup Account Period"
-msgstr "Számlázási időszakok beállítása"
+msgstr "Elszámolási időszakok beállítása"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:38
 msgid ""
@@ -10936,23 +10943,23 @@ msgid ""
 "\n"
 "Books will be closed at midnight on the selected date."
 msgstr ""
-"Válasszon számlázási időszakot és egy záró napot, ami az előző záró nap és a "
-"mai nap közé esik.\n"
+"Válasszon elszámolási időszakot és egy záró napot, ami az előző záró nap és "
+"a mai nap közé esik.\n"
 "\n"
 "A könyvek a választott záró napon éjfélkor lesznek lezárva."
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:81
 msgid "Book Closing Dates"
-msgstr "Főkönyvzárási dátumok"
+msgstr "Könyvzárási dátumok"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:196
 #: gnucash/gtkbuilder/dialog-book-close.glade:7
 msgid "Close Book"
-msgstr "Főönyv zárása"
+msgstr "Könyv zárása"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:210
 msgid "Account Period Finish"
-msgstr "Számlázási időszak vége"
+msgstr "Elszámolási időszak vége"
 
 #: gnucash/gtkbuilder/assistant-acct-period.glade:237
 msgid "Press 'Close' to Exit."
@@ -17400,21 +17407,19 @@ msgstr "Rendezés művelet szerint."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1018
 msgid "Sort by notes field."
-msgstr "Rendezés megjegyzés szerint."
+msgstr "Rendezés a megjegyzésmező szerint."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1049
-#, fuzzy
 msgid "Sa_ve Sort Order"
-msgstr "Sorrend"
+msgstr "Rendezési sorrend _mentése"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1053
 msgid "Save the sort order for this register."
-msgstr "Rendezés mentése ehhez a regiszterhez."
+msgstr "Rendezési sorrend mentése ehhez a regiszterhez."
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1069
-#, fuzzy
 msgid "_Reverse Order"
-msgstr "Főkönyvi sorrend"
+msgstr "_Fordított sorrend"
 
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:1073
 msgid "Sort in descending order."
@@ -20613,7 +20618,7 @@ msgstr "Számlázható?"
 msgid ""
 "Enter the income/expense account for the Entry, or choose one from the list"
 msgstr ""
-"Adja meg a bevétel/költség folyószámlát a tételhez, vagy válasszon egyet a "
+"Adja meg a bevétel/költség számlát a tételhez, vagy válasszon egyet a "
 "listából"
 
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:561
@@ -21275,7 +21280,7 @@ msgid ""
 "Are you sure you want to continue with this change?"
 msgstr ""
 "A módosítani kívánt tranzakció egyeztetett felosztásokat tartalmaz a "
-"következő folyószámlákon:\n"
+"következő számlákon:\n"
 "%s\n"
 "\n"
 "Biztosan folytatni szeretné ezt a változtatást?"
@@ -29826,7 +29831,6 @@ msgid "_General Journal"
 msgstr "_Általános naplófőkönyv"
 
 #: gnucash/ui/gnc-plugin-register.ui:8
-#, fuzzy
 msgid "Open general journal window"
 msgstr "Főkönyvablak megnyitása"
 
@@ -29864,7 +29868,7 @@ msgstr "Kiválasztott _nem egyezik"
 
 #: gnucash/ui/gnc-reconcile-window.ui:127
 msgid "Add a new balancing entry to the account"
-msgstr "Új kiegyenlítő tranzakció felvétele a folyószámlára"
+msgstr "Új kiegyenlítő tranzakció felvétele a számlára"
 
 #: gnucash/ui/gnc-reconcile-window.ui:144
 msgid "Edit the current transaction"
