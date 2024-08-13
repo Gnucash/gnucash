@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-08-05 15:09+0000\n"
+"PO-Revision-Date: 2024-08-13 01:09+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -30346,7 +30346,7 @@ msgstr "zadnja: "
 #: libgnucash/app-utils/gnc-quotes.cpp:832
 msgctxt "Finance::Quote"
 msgid "nav: "
-msgstr "neto vrijednost: "
+msgstr "neto vrijednost imovine: "
 
 #. Translators: The quote is neither a last trade nor an NAV.
 #: libgnucash/app-utils/gnc-quotes.cpp:834
