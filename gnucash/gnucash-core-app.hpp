@@ -25,8 +25,13 @@
 #define GNUCASH_CORE_APP_HPP
 
 #ifdef __MINGW32__
-#undef _GLIBCXX_USE_C99_MATH_TR1 // Avoid cmath missing function decl.
+// Avoid cmath missing function decl.
+#undef _GLIBCXX_USE_C99_MATH_TR1
+#if (__GNUC__ > 14) || (__GNUC__ == 14 && __GNUC_MINOR__ >= 1)
+#undef _GLIBCXX_USE_C99_MATH_FUNCS
 #endif
+#endif
+
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 #include <string>
