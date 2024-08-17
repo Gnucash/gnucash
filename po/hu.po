@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-08-11 18:09+0000\n"
+"PO-Revision-Date: 2024-08-17 22:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -24,7 +24,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -1023,8 +1023,8 @@ msgid ""
 msgstr ""
 "Írja be egy létező számlanév első betűjét (betűit) az Átutalás oszlopba és a "
 "GnuCash kiegészíti a nevet a létező számlák alapján. Alszámlák esetén írja "
-"be a szülő számla első betűjét (betűit), majd a kettőspontot és az alszámla "
-"első betűjét (pl. E:K az Eszközök:Készpénz beviteléhez)."
+"be a főszámla első betűjét (betűit), majd a kettőspontot és az alszámla első "
+"betűjét (pl. E:K az Eszközök:Készpénz beviteléhez)."
 
 #: doc/tip_of_the_day.list.c:71
 msgid ""
@@ -1383,7 +1383,7 @@ msgstr "Hitelfedezeti biztosítás fizetése"
 
 #: gnucash/gnome/assistant-loan.cpp:130
 msgid "Other Expense"
-msgstr "Egyéb Költség"
+msgstr "Egyéb költség"
 
 #: gnucash/gnome/assistant-loan.cpp:130
 msgid "Miscellaneous Payment"
@@ -3340,7 +3340,7 @@ msgstr "Bejövőszámla megtekintése/szerkesztése"
 #. interchangeably in gnucash and mean the same thing.
 #: gnucash/gnome/dialog-invoice.c:3535
 msgid "View/Edit Voucher"
-msgstr "Utalvány megtekintése/szerkesztése"
+msgstr "Bizonylat megtekintése/szerkesztése"
 
 #: gnucash/gnome/dialog-invoice.c:3549
 msgid "Invoice Owner"
@@ -6562,7 +6562,7 @@ msgstr "Ilyen nevű számla már van."
 
 #: gnucash/gnome-utils/dialog-account.c:989
 msgid "You must choose a valid parent account."
-msgstr "Ki kell választani egy érvényes szülő számlát."
+msgstr "Ki kell választani egy érvényes főszámlát."
 
 #: gnucash/gnome-utils/dialog-account.c:998
 msgid "You must select an account type."
@@ -11696,7 +11696,7 @@ msgstr ""
 "megfelelnek az Ön pénzügyeinek. Természetesen a kiválasztás befejezése után "
 "később is bármikor átnevezheti, módosíthatja vagy eltávolíthatja a "
 "létrehozott számlákat. Új számlákat vagy alszámlákat is hozzáadhat, valamint "
-"áthelyezhet számlákat (az alszámláikkal együtt) egy másik szülő számla alá.\n"
+"áthelyezhet számlákat (az alszámláikkal együtt) egy másik főszámla alá.\n"
 "\n"
 "Ha most mégsem akar létrehozni új számlakészletet, akkor kattintson a "
 "\"Mégsem\" gombra."
@@ -13201,7 +13201,7 @@ msgstr "Az áru legkisebb egysége, amit használni lehet."
 #: gnucash/gtkbuilder/dialog-account.glade:1451
 #: gnucash/gtkbuilder/dialog-tax-info.glade:646
 msgid "_Parent Account"
-msgstr "_Szülő számla"
+msgstr "_Főszámla"
 
 #: gnucash/gtkbuilder/dialog-account.glade:1464
 msgid "Acco_unt Type"
@@ -14336,8 +14336,8 @@ msgid ""
 "Filter will be applied to 'Match String' and 'Mapped to Account Name' "
 "fields, case sensitive."
 msgstr ""
-"Kis- és nagybetű érzékeny szűrés alkalmazása az „Egyező karakterláncok” és a "
-"„Számla nevének megfelelő” mezőkön."
+"Kis- és nagybetűérzékeny szűrés alkalmazása az „Egyező karakterláncok” és a „"
+"Számla nevének megfelelő” mezőkön."
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:335
 #, fuzzy
@@ -21642,15 +21642,15 @@ msgstr "Összeg szerint csökkenő"
 
 #: gnucash/report/options-utilities.scm:212
 msgid "How to show the balances of parent accounts."
-msgstr "Hogyan jelenjenek meg a szülő számlák egyenlegei."
+msgstr "Hogyan jelenjenek meg a főszámlák egyenlegei."
 
 #: gnucash/report/options-utilities.scm:213
 msgid "Account Balance in the parent account, excluding any subaccounts."
-msgstr "Szülő számla egyenlege, alszámlák nélkül."
+msgstr "A főszámla egyenlege az alszámlák nélkül."
 
 #: gnucash/report/options-utilities.scm:214
 msgid "Do not show any balances of parent accounts."
-msgstr "Szülő számlák egyenlegeinek elrejtése."
+msgstr "A főszámlák egyenlegeinek elrejtése."
 
 #: gnucash/report/options-utilities.scm:217
 #: gnucash/report/reports/standard/account-summary.scm:112
@@ -21670,17 +21670,17 @@ msgstr "Elrejtés"
 
 #: gnucash/report/options-utilities.scm:228
 msgid "How to show account subtotals for parent accounts."
-msgstr "Hogyan jelenjenek meg a szülő számlák részösszegei."
+msgstr "Hogyan jelenjenek meg a főszámlák részösszegei."
 
 #: gnucash/report/options-utilities.scm:229
 msgid "Show subtotals for selected parent accounts which have subaccounts."
 msgstr ""
-"Részösszegek feltüntetése a kiválasztott, alszámlákkal rendelkező szülő "
-"számlákhoz."
+"Részösszegek feltüntetése a kiválasztott, alszámlákkal rendelkező "
+"főszámlákhoz."
 
 #: gnucash/report/options-utilities.scm:230
 msgid "Do not show any subtotals for parent accounts."
-msgstr "Minden szülő számla részösszegeinek elrejtése."
+msgstr "Minden főszámla részösszegeinek elrejtése."
 
 #: gnucash/report/options-utilities.scm:233
 msgid "Show subtotals"
@@ -22438,7 +22438,7 @@ msgstr "Teljes számlanevek nyomtatása"
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:173
 msgid "Print all Parent account names."
-msgstr "Összes szülő számlanév nyomtatása."
+msgstr "Az összes főszámla nevének nyomtatása."
 
 #: gnucash/report/reports/locale-specific/de_DE/taxtxf.scm:251
 msgid ""
@@ -22493,7 +22493,7 @@ msgstr "Teljes számlaneveket ne nyomtassa"
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:208
 msgid "Do not print all Parent account names."
-msgstr "Egyik szülő számlanevet se nyomtassa ki."
+msgstr "Ne nyomtassa ki a főszámlák neveit."
 
 #: gnucash/report/reports/locale-specific/us/taxtxf.scm:211
 msgid "Print all Transfer To/From Accounts"
@@ -24207,9 +24207,8 @@ msgstr "Pénzforgalmi oszlopdiagram"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:46
 #: gnucash/report/reports/standard/cash-flow.scm:53
-#, fuzzy
 msgid "Include Trading Accounts in report"
-msgstr "Include trading accounts total"
+msgstr "A jelentés tartalmazza a kereskedelmi számlákat"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:48
 msgid "Show Money In"
@@ -24220,12 +24219,10 @@ msgid "Show Money Out"
 msgstr "Pénz kiáramlás megjelenítése"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:50
-#, fuzzy
 msgid "Show Net Flow"
-msgstr "Nettó érték oszlopok megjelenítése"
+msgstr "Nettó pénzforgalom megjelenítése"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:51
-#, fuzzy
 msgid "Show Table"
 msgstr "Táblázat megjelenítése"
 
@@ -24233,24 +24230,25 @@ msgstr "Táblázat megjelenítése"
 #: gnucash/report/reports/standard/cash-flow.scm:96
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr ""
+"A jelentés tartalmazza a kereskedési számlákra érkező és az onnan induló "
+"átutalásokat."
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:97
 msgid "Show money in?"
-msgstr ""
+msgstr "Pénz beáramlás megjelenítése?"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:101
 msgid "Show money out?"
-msgstr ""
+msgstr "Pénz kiáramlás megjelenítése?"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:105
 msgid "Show net money flow?"
-msgstr "Nettó pénzáramlás megjelenítése?"
+msgstr "Nettó pénzforgalom megjelenítése?"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:286
 #: gnucash/report/reports/standard/cashflow-barchart.scm:322
-#, fuzzy
 msgid "Net Flow"
-msgstr "Nettó veszteség"
+msgstr "Nettó pénzforgalom"
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:325
 msgid "Overview:"
@@ -24271,12 +24269,12 @@ msgstr "Teljes számlanevek megjelenítése"
 
 #: gnucash/report/reports/standard/cash-flow.scm:79
 msgid "Show full account names (including parent accounts)."
-msgstr "Teljes számlanevek megjelenítése (szülő számlákat beleértve)."
+msgstr "Teljes számlanevek megjelenítése (főszámlákat beleértve)."
 
 #: gnucash/report/reports/standard/cash-flow.scm:198
 #, scheme-format
 msgid "~a and subaccounts"
-msgstr "~a és alszámlák"
+msgstr "~a és az alszámlák"
 
 #: gnucash/report/reports/standard/cash-flow.scm:199
 #, scheme-format
@@ -24432,7 +24430,7 @@ msgstr "Cég címének mutatása"
 
 #: gnucash/report/reports/standard/customer-summary.scm:66
 msgid "Show your own company's address and the date of printing."
-msgstr ""
+msgstr "Megjeleníti a saját cégének a címét és a nyomtatás dátumát."
 
 #: gnucash/report/reports/standard/customer-summary.scm:70
 msgid "Show Lines with All Zeros"
@@ -24443,6 +24441,8 @@ msgid ""
 "Show the table lines with customers which did not have any transactions in "
 "the reporting period, hence would show all zeros in the columns."
 msgstr ""
+"Azon ügyfelek táblázatsorainak megjelenítése, akiknek nem volt tranzakciója "
+"a jelentési időszakban, így azokban az oszlopokban csak nulla szerepel."
 
 #: gnucash/report/reports/standard/customer-summary.scm:72
 msgid "Show Inactive Customers"
@@ -24450,7 +24450,7 @@ msgstr "Inaktív ügyfelek megjelenítése"
 
 #: gnucash/report/reports/standard/customer-summary.scm:73
 msgid "Include customers that have been marked inactive."
-msgstr ""
+msgstr "Tartalmazza az inaktívként megjelölt ügyfeleket."
 
 #: gnucash/report/reports/standard/customer-summary.scm:75
 msgid "Sort Column"
@@ -24464,30 +24464,30 @@ msgstr ""
 #: gnucash/report/reports/standard/customer-summary.scm:77
 #: gnucash/report/reports/standard/new-aging.scm:41
 msgid "Sort Order"
-msgstr "Sorrend"
+msgstr "Rendezési sorrend"
 
 #: gnucash/report/reports/standard/customer-summary.scm:78
 msgid "Choose the ordering of the column sort."
-msgstr ""
+msgstr "Válassza ki az oszloprendezés sorrendjét."
 
 #: gnucash/report/reports/standard/customer-summary.scm:106
 msgid "Customer Name"
-msgstr "Ügyfél Neve"
+msgstr "Ügyfél neve"
 
 #: gnucash/report/reports/standard/customer-summary.scm:108
 msgid "Markup (which is profit amount divided by sales)"
-msgstr ""
+msgstr "Felár (a nyereség összege osztva az értékesítéssel)"
 
 #: gnucash/report/reports/standard/customer-summary.scm:109
 #: gnucash/report/reports/standard/customer-summary.scm:284
 #: gnucash/report/reports/standard/income-gst-statement.scm:130
 msgid "Sales"
-msgstr "Eladások"
+msgstr "Értékesítés"
 
 #: gnucash/report/reports/standard/customer-summary.scm:254
 #, scheme-format
 msgid "~a ~a - ~a"
-msgstr ""
+msgstr "~a ~a - ~a"
 
 #: gnucash/report/reports/standard/customer-summary.scm:274
 msgid "No valid customer found."
@@ -24495,15 +24495,15 @@ msgstr "Nem található érvényes ügyfél."
 
 #: gnucash/report/reports/standard/customer-summary.scm:283
 msgid "Markup"
-msgstr "Jelölés"
+msgstr "Árrés"
 
 #: gnucash/report/reports/standard/customer-summary.scm:362
 msgid "No Customer"
-msgstr "Nincs Ügyfél"
+msgstr "Nincs ügyfél"
 
 #: gnucash/report/reports/standard/customer-summary.scm:476
 msgid "Customer Summary"
-msgstr "Ügyfél eredmény"
+msgstr "Ügyfél-összefoglaló"
 
 #. Translators: This statement is about a range of time
 #: gnucash/report/reports/standard/equity-statement.scm:56
@@ -24556,7 +24556,7 @@ msgstr "A záró tételek azonosítóját reguláris kifejezésként fogjuk keze
 #: gnucash/report/reports/standard/income-statement.scm:442
 #: gnucash/report/reports/standard/trial-balance.scm:365
 msgid "for Period"
-msgstr "időszak"
+msgstr "időszakra"
 
 #: gnucash/report/reports/standard/equity-statement.scm:429
 #: gnucash/report/reports/standard/equity-statement.scm:465
@@ -24627,9 +24627,8 @@ msgstr "Rendezés"
 
 #: gnucash/report/reports/standard/general-ledger.scm:69
 #: gnucash/report/trep-engine.scm:936 gnucash/report/trep-engine.scm:2260
-#, fuzzy
 msgid "Trans Number"
-msgstr "Adószám"
+msgstr "Tr. szám"
 
 #: gnucash/report/reports/standard/general-ledger.scm:73
 #: gnucash/report/reports/standard/general-ledger.scm:93
@@ -24643,33 +24642,33 @@ msgstr "Teljes számlanév használata"
 #: gnucash/report/trep-engine.scm:219 gnucash/report/trep-engine.scm:877
 #: gnucash/report/trep-engine.scm:958 gnucash/report/trep-engine.scm:2241
 msgid "Other Account Name"
-msgstr "Másik számlanév"
+msgstr "Ellenszámla neve"
 
 #: gnucash/report/reports/standard/general-ledger.scm:76
 #: gnucash/report/reports/standard/general-ledger.scm:96
 #: gnucash/report/trep-engine.scm:893 gnucash/report/trep-engine.scm:923
 #: gnucash/report/trep-engine.scm:2258
 msgid "Use Full Other Account Name"
-msgstr ""
+msgstr "Teljes ellenszámla-név használata"
 
 #: gnucash/report/reports/standard/general-ledger.scm:77
 #: gnucash/report/reports/standard/general-ledger.scm:97
 #: gnucash/report/trep-engine.scm:225 gnucash/report/trep-engine.scm:897
 #: gnucash/report/trep-engine.scm:924 gnucash/report/trep-engine.scm:2255
 msgid "Other Account Code"
-msgstr "Másik számlakód"
+msgstr "Az ellenszámla számlakódja"
 
 #: gnucash/report/reports/standard/general-ledger.scm:84
 #: gnucash/report/reports/standard/general-ledger.scm:104
 #: gnucash/report/trep-engine.scm:881 gnucash/report/trep-engine.scm:991
 #: gnucash/report/trep-engine.scm:2184
 msgid "Sign Reverses"
-msgstr ""
+msgstr "A jelek megfordítása"
 
 #: gnucash/report/reports/standard/general-ledger.scm:111
 #: gnucash/report/trep-engine.scm:75
 msgid "Detail Level"
-msgstr ""
+msgstr "Részletességi szint"
 
 #: gnucash/report/reports/standard/general-ledger.scm:124
 #: gnucash/report/trep-engine.scm:86
@@ -25392,7 +25391,7 @@ msgstr "Referencia"
 #: gnucash/report/reports/standard/invoice.scm:258
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
 msgid "Invoice in progress…"
-msgstr "Számla folyamatban …"
+msgstr "Számla folyamatban…"
 
 #: gnucash/report/reports/standard/invoice.scm:266
 msgid "Reference:"
@@ -25414,58 +25413,59 @@ msgstr "Megbízás neve:"
 
 #: gnucash/report/reports/standard/invoice.scm:317
 msgid "Client or vendor name, address and ID"
-msgstr ""
+msgstr "Ügyfél vagy beszállító neve, címe és azonosítója"
 
 #: gnucash/report/reports/standard/invoice.scm:321
 msgid "Company name, address and tax-ID"
-msgstr "Cégnév, cím és adószám"
+msgstr "Cég neve, címe és adószáma"
 
 #: gnucash/report/reports/standard/invoice.scm:325
 msgid "Invoice date, due date, billing ID, terms, job details"
-msgstr ""
+msgstr "Számla dátuma, esedékesség, számlaszám, fizetési módok, megbízás adatai"
 
 #: gnucash/report/reports/standard/invoice.scm:329
-#, fuzzy
 msgid "Today's date"
-msgstr "Mai dátum alakja"
+msgstr "Mai dátum"
 
 #: gnucash/report/reports/standard/invoice.scm:333
 msgid "Picture"
-msgstr ""
+msgstr "Kép"
 
 #: gnucash/report/reports/standard/invoice.scm:338
-#, fuzzy
 msgid "Empty space"
-msgstr "Névtér"
+msgstr "Üres hely"
 
 #: gnucash/report/reports/standard/invoice.scm:396
 msgid "Custom Title"
-msgstr "Saját Cím"
+msgstr "Egyéni cím"
 
 #: gnucash/report/reports/standard/invoice.scm:397
 msgid "A custom string to replace Invoice, Bill or Expense Voucher."
 msgstr ""
+"Egyéni karakterlánc a kimenőszámla, bejövőszámla vagy költségbizonylat "
+"helyett."
 
 #: gnucash/report/reports/standard/invoice.scm:401
 #: gnucash/report/stylesheets/css.scm:118
 #: gnucash/report/stylesheets/css.scm:224
 msgid "CSS"
-msgstr ""
+msgstr "CSS"
 
 #: gnucash/report/reports/standard/invoice.scm:401
 msgid ""
 "CSS code. This field specifies the CSS code for styling the invoice. Please "
 "see the exported report for the CSS class names."
 msgstr ""
+"CSS kód. Ez a mező adja meg a számla stíluslapjának CSS kódját. Tekintse meg "
+"az exportált jelentés CSS osztály nevét."
 
 #: gnucash/report/reports/standard/invoice.scm:406
-#, fuzzy
 msgid "Picture Location"
-msgstr "Jelenlegi akció"
+msgstr "Kép helye"
 
 #: gnucash/report/reports/standard/invoice.scm:406
 msgid "Location for Picture"
-msgstr ""
+msgstr "A kép helye"
 
 #: gnucash/report/reports/standard/invoice.scm:410
 #: gnucash/report/reports/standard/invoice.scm:414
@@ -25518,7 +25518,7 @@ msgstr "Elemenkénti ár megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:431
 msgid "Display the entry's discount?"
-msgstr ""
+msgstr "A tétel kedvezményének megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:435
 msgid "Display the entry's taxable status?"
@@ -25659,34 +25659,31 @@ msgstr "Köszönjük a támogatását!"
 
 #: gnucash/report/reports/standard/invoice.scm:519
 msgid "Row 1 Left"
-msgstr ""
+msgstr "1. sor balra"
 
 #: gnucash/report/reports/standard/invoice.scm:525
-#, fuzzy
 msgid "Row 1 Right"
-msgstr "Jobb"
+msgstr "1. sor jobbra"
 
 #: gnucash/report/reports/standard/invoice.scm:531
 msgid "Row 2 Left"
-msgstr ""
+msgstr "2. sor balra"
 
 #: gnucash/report/reports/standard/invoice.scm:537
-#, fuzzy
 msgid "Row 2 Right"
-msgstr "Jobb"
+msgstr "2. sor jobbra"
 
 #: gnucash/report/reports/standard/invoice.scm:543
 msgid "Row 3 Left"
-msgstr ""
+msgstr "3. sor balra"
 
 #: gnucash/report/reports/standard/invoice.scm:549
-#, fuzzy
 msgid "Row 3 Right"
-msgstr "Jobb"
+msgstr "3. sor jobbra"
 
 #: gnucash/report/reports/standard/invoice.scm:599
 msgid "Payment, thank you!"
-msgstr "Fizetés, köszönjük!"
+msgstr "Köszönjük a fizetést!"
 
 #. Translators: This "T" is displayed in the taxable column, if this entry contains tax
 #: gnucash/report/reports/standard/invoice.scm:656
@@ -25722,8 +25719,8 @@ msgid ""
 "No valid invoice selected. Click on the Options button and select the "
 "invoice to use."
 msgstr ""
-"Nincs érvényesen kiválasztott kimenő számla. Kattintson a Beállítások gombra "
-"és válassza ki a használandó kimenőszámlát."
+"Nincs kiválasztva érvényes kimenőszámla. Kattintson a Beállítások gombra és "
+"válassza ki a használandó kimenőszámlát."
 
 #. Translators: This is the format of the invoice
 #. title.  The first ~a is one of "Invoice", "Credit
@@ -25836,22 +25833,24 @@ msgid ""
 "Display Address Name. This, and other fields, may be useful if copying this "
 "report to a spreadsheet for use in a mail merge."
 msgstr ""
+"Megjelenített cím neve. Ez a mező, más mezőkkel együtt hasznos lehet, ha a "
+"jelentést egy táblázatba másolja a további feldolgozáshoz."
 
 #: gnucash/report/reports/standard/new-aging.scm:52
 msgid "Display Address 1."
-msgstr ""
+msgstr "1. címsor megjelenítése."
 
 #: gnucash/report/reports/standard/new-aging.scm:53
 msgid "Display Address 2."
-msgstr ""
+msgstr "2. címsor megjelenítése."
 
 #: gnucash/report/reports/standard/new-aging.scm:54
 msgid "Display Address 3."
-msgstr ""
+msgstr "3. címsor megjelenítése."
 
 #: gnucash/report/reports/standard/new-aging.scm:55
 msgid "Display Address 4."
-msgstr ""
+msgstr "4. címsor megjelenítése."
 
 #: gnucash/report/reports/standard/new-aging.scm:56
 msgid "Address Phone"
@@ -25859,7 +25858,7 @@ msgstr "Telefon"
 
 #: gnucash/report/reports/standard/new-aging.scm:56
 msgid "Display Phone."
-msgstr "Telefonszám."
+msgstr "Telefonszám megjelenítése."
 
 #: gnucash/report/reports/standard/new-aging.scm:57
 msgid "Address Fax"
@@ -25867,7 +25866,7 @@ msgstr "Fax"
 
 #: gnucash/report/reports/standard/new-aging.scm:57
 msgid "Display Fax."
-msgstr "Faxszám."
+msgstr "Faxszám megjelenítése."
 
 #: gnucash/report/reports/standard/new-aging.scm:58
 msgid "Address Email"
@@ -25875,11 +25874,11 @@ msgstr "E-mail-cím"
 
 #: gnucash/report/reports/standard/new-aging.scm:58
 msgid "Display Email."
-msgstr "E-mail."
+msgstr "E-mail-cím megjelenítése."
 
 #: gnucash/report/reports/standard/new-aging.scm:59
 msgid "Display Active status."
-msgstr ""
+msgstr "Az aktív állapot megjelenítése."
 
 #: gnucash/report/reports/standard/new-aging.scm:61
 msgid ""
@@ -25908,7 +25907,7 @@ msgstr "Összes tartozás a cég felé/-től"
 
 #: gnucash/report/reports/standard/new-aging.scm:94
 msgid "Bracket Total Owed"
-msgstr "Összes tartozás (bracket)"
+msgstr "Záró teljes tartozás"
 
 #: gnucash/report/reports/standard/new-aging.scm:97
 msgid "Sort order."
@@ -25931,10 +25930,9 @@ msgid "Y"
 msgstr "Y"
 
 #: gnucash/report/reports/standard/new-aging.scm:145
-#, fuzzy
 msgctxt "One-letter indication for 'no'"
 msgid "N"
-msgstr "Nem"
+msgstr "N"
 
 #: gnucash/report/reports/standard/new-aging.scm:178
 #: gnucash/report/reports/standard/new-owner-report.scm:306
@@ -25972,9 +25970,8 @@ msgid "Invalid Txn Type ~a"
 msgstr ""
 
 #: gnucash/report/reports/standard/new-aging.scm:364
-#, fuzzy
 msgid "Payment has no owner"
-msgstr "Fizetés, köszönöm"
+msgstr "A kifizetésnek nincs tulajdonosa"
 
 #: gnucash/report/reports/standard/new-aging.scm:392
 msgid "Address source."
@@ -26015,23 +26012,20 @@ msgid "Debits"
 msgstr "Jóváírások"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:59
-#, fuzzy
 msgid "Document Links"
-msgstr "Korrekciók"
+msgstr "Dokumentum hivatkozások"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:60
-#, fuzzy
 msgid "Transaction Links"
-msgstr "Tranzakciók"
+msgstr "Tranzakció hivathozások"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:90
 msgid "No valid customer selected."
 msgstr "Nincs kiválasztva érvényes ügyfél."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:91
-#, fuzzy
 msgid "This report requires a customer to be selected."
-msgstr "E jelentéshez ki kell választani számlákat."
+msgstr "Ehez a jelentéshez ki kell választani egy ügyfelet."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:95
 msgid "No valid employee selected."
@@ -26039,25 +26033,23 @@ msgstr "Nincs kijelölve érvényes alkalmazott."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:96
 msgid "This report requires a employee to be selected."
-msgstr "Ehhez a jelentéshez ki kell választani egy alkalmazottat."
+msgstr "Ehez a jelentéshez ki kell választani egy alkalmazottat."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:100
 msgid "No valid job selected."
-msgstr ""
+msgstr "Nincs kiválasztva érvényes megbízás."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:101
-#, fuzzy
 msgid "This report requires a job to be selected."
-msgstr "E jelentéshez ki kell választani számlákat."
+msgstr "Ehhez a jelentéshez ki kell választani egy megbízást."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:105
 msgid "No valid vendor selected."
 msgstr "Nincs kiválasztva érvényes beszállító."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:106
-#, fuzzy
 msgid "This report requires a vendor to be selected."
-msgstr "E jelentéshez ki kell választani számlákat."
+msgstr "Ehez a jelentéshez ki kell választani egy beszállítót."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:230
 #, fuzzy
@@ -26101,7 +26093,7 @@ msgstr "Esedékes összesen"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:863
 msgid "The company for this report."
-msgstr ""
+msgstr "A cég ehhez a jelentéshez."
 
 #: gnucash/report/reports/standard/new-owner-report.scm:876
 #: gnucash/report/reports/standard/new-owner-report.scm:880
@@ -26163,12 +26155,11 @@ msgstr ""
 
 #: gnucash/report/reports/standard/new-owner-report.scm:926
 msgid "Simple"
-msgstr ""
+msgstr "Egyszerű"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:927
-#, fuzzy
 msgid "Detailed"
-msgstr "Sikertelen"
+msgstr "Részletes"
 
 #: gnucash/report/reports/standard/new-owner-report.scm:931
 msgid "Display document link?"
@@ -26225,7 +26216,7 @@ msgstr "Az áru ára"
 
 #: gnucash/report/reports/standard/price-scatter.scm:44
 msgid "Invert prices"
-msgstr ""
+msgstr "Fordított árak"
 
 #: gnucash/report/reports/standard/price-scatter.scm:46
 msgid "Marker"
@@ -26250,6 +26241,8 @@ msgstr "Aktuális tranzakciók"
 #: gnucash/report/reports/standard/price-scatter.scm:81
 msgid "Plot commodity per currency rather than currency per commodity."
 msgstr ""
+"Az áruk pénznemenkénti ábrázolása a pénznemek árucikkenkénti ábrázolása "
+"helyett."
 
 #: gnucash/report/reports/standard/price-scatter.scm:96
 msgid "Color of the marker."
@@ -26613,7 +26606,7 @@ msgstr "Nettó változás"
 
 #: gnucash/report/reports/standard/register.scm:549
 msgid "Value Change"
-msgstr "Érték változás"
+msgstr "Értékváltozás"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:53
 msgid "n/a"
@@ -26636,31 +26629,27 @@ msgstr "Adó mértéke"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:75
 msgid "column: Units"
-msgstr ""
+msgstr "oszlop: Egység"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:76
 msgid "row: Address"
 msgstr "sor: Cím"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:77
-#, fuzzy
 msgid "row: Contact"
-msgstr "Kapcsolat"
+msgstr "sor: Kapcsolattartási cím"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:78
-#, fuzzy
 msgid "row: Invoice Number"
-msgstr "Számlaszám"
+msgstr "sor: Kimenőszámla száma"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:79
-#, fuzzy
 msgid "row: Company Name"
-msgstr "Cégnév"
+msgstr "sor: Cég neve"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:80
-#, fuzzy
 msgid "Invoice number text"
-msgstr "Számlaszám"
+msgstr "Számlaszám szövege"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:81
 msgid "To text"
@@ -26844,15 +26833,16 @@ msgstr "Előjegyzés: "
 
 #: gnucash/report/reports/standard/taxinvoice.scm:328
 #: gnucash/report/reports/standard/taxinvoice.scm:330
-#, fuzzy
 msgid "Australian Tax Invoice"
-msgstr "Adó"
+msgstr "Ausztrál kimenőszámla adóadatokkal"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:331
 msgid ""
 "Display an Australian customer invoice with tax columns (using eguile "
 "template)"
 msgstr ""
+"Ausztrál ügyfél-kimenőszámla megjelenítése adóoszlopokkal (eguile sablon "
+"használatával)"
 
 #: gnucash/report/reports/standard/trial-balance.scm:58
 #: gnucash/report/reports/standard/trial-balance.scm:532
@@ -26861,7 +26851,7 @@ msgstr "Próbaegyenleg"
 
 #: gnucash/report/reports/standard/trial-balance.scm:65
 msgid "Start of Adjusting/Closing"
-msgstr "Zárás/igazítás kezdete"
+msgstr "Korrekció/zárás kezdete"
 
 #: gnucash/report/reports/standard/trial-balance.scm:66
 msgid "Date of Report"
@@ -26917,7 +26907,7 @@ msgstr ""
 
 #: gnucash/report/reports/standard/trial-balance.scm:90
 msgid "Adjusting Entries pattern is case-sensitive"
-msgstr "A korrigáló tételek mintája nagybetű-érzékeny"
+msgstr "A korrigáló tételek mintája kis- és nagybetűérzékeny"
 
 #: gnucash/report/reports/standard/trial-balance.scm:92
 msgid "Causes the Adjusting Entries Pattern match to be case-sensitive."
