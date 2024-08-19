@@ -1167,18 +1167,17 @@ delete_account_helper (Account * account, gpointer data)
 static void
 set_ok_sensitivity(GtkWidget *dialog)
 {
-    gint sa_mas_cnt, trans_mas_cnt;
     gboolean sensitive;
 
     auto sa_mas = GTK_WIDGET(g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_SA_MAS));
     auto trans_mas = GTK_WIDGET(g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_TRANS_MAS));
-    sa_mas_cnt = gnc_account_sel_get_visible_account_num(GNC_ACCOUNT_SEL(sa_mas));
-    trans_mas_cnt = gnc_account_sel_get_visible_account_num(GNC_ACCOUNT_SEL(trans_mas));
 
-    sensitive = (((NULL == sa_mas) ||
-                  (!gtk_widget_is_sensitive(sa_mas) || sa_mas_cnt)) &&
-                 ((NULL == trans_mas) ||
-                  (!gtk_widget_is_sensitive(trans_mas) || trans_mas_cnt)));
+    sensitive = ((!sa_mas ||
+                  !gtk_widget_is_sensitive (sa_mas) ||
+                  gnc_account_sel_get_visible_account_num (GNC_ACCOUNT_SEL (sa_mas))) &&
+                 (!trans_mas ||
+                  !gtk_widget_is_sensitive (trans_mas) ||
+                  gnc_account_sel_get_visible_account_num (GNC_ACCOUNT_SEL (trans_mas))));
 
     auto button = GTK_WIDGET(g_object_get_data(G_OBJECT(dialog), DELETE_DIALOG_OK_BUTTON));
     gtk_widget_set_sensitive(button, sensitive);
