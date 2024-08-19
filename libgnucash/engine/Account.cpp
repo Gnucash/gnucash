@@ -1546,8 +1546,9 @@ xaccAccountCommitEdit (Account *acc)
            themselves will be destroyed by the transaction code */
         if (!qof_book_shutting_down(book))
         {
-            for (auto s : priv->splits)
-                xaccSplitDestroy (s);
+            // We need to delete in reverse order so that the vector's iterators aren't invalidated.
+            for_each(priv->splits.rbegin(), priv->splits.rend(), [](Split *s) {
+                xaccSplitDestroy (s); });
         }
         else
         {
