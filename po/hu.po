@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-08-17 22:09+0000\n"
+"PO-Revision-Date: 2024-08-20 11:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3063,19 +3063,19 @@ msgid_plural ""
 "\n"
 "Would you like to remove them now?"
 msgstr[0] ""
-"Hibás a %d összerendelése,\n"
+"%d érvénytelen hozzárendelés történt.\n"
 "\n"
-"Szeretné törölni most?"
+"Szeretné törölni?"
 
 #: gnucash/gnome/dialog-imap-editor.c:368
 #, c-format
 msgid "To see the invalid mappings, use a filter of '%s'"
-msgstr ""
+msgstr "%s szűrő használatával megjelenítheti az érvénytelen hozzárendeléseket"
 
 #: gnucash/gnome/dialog-imap-editor.c:368
 #: gnucash/gnome/dialog-imap-editor.c:589
 msgid "Map Account NOT found"
-msgstr ""
+msgstr "Nem található hozzárendelt számla"
 
 #: gnucash/gnome/dialog-imap-editor.c:370
 msgid "(Note, if there is a large number, it may take a while)"
@@ -8083,13 +8083,13 @@ msgstr "Számlaszín"
 #: gnucash/gnome-utils/gnc-tree-view-account.c:944
 msgctxt "Column header for 'Balance Limit'"
 msgid "L"
-msgstr "K"
+msgstr "Korl."
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:953
 #: gnucash/gnome-utils/gnc-tree-view-account.c:956
 #: gnucash/gtkbuilder/dialog-account.glade:1705
 msgid "Balance Limit"
-msgstr "Egyenleg korlát"
+msgstr "Egyenlegkorlát"
 
 #: gnucash/gnome-utils/gnc-tree-view-account.c:966
 #: gnucash/import-export/csv-exp/csv-tree-export.cpp:63
@@ -21036,7 +21036,7 @@ msgstr "Egy tranzakció leírása"
 #: gnucash/report/trep-engine.scm:1198 gnucash/report/trep-engine.scm:1199
 msgctxt "Column header for 'Document Link'"
 msgid "L"
-msgstr "K.d."
+msgstr "Hiv."
 
 #: gnucash/register/ledger-core/split-register-layout.c:713
 #: gnucash/register/ledger-core/split-register-layout.c:753
@@ -24230,7 +24230,7 @@ msgstr "Táblázat megjelenítése"
 #: gnucash/report/reports/standard/cash-flow.scm:96
 msgid "Include transfers to and from Trading Accounts in the report."
 msgstr ""
-"A jelentés tartalmazza a kereskedési számlákra érkező és az onnan induló "
+"A jelentés tartalmazza a kereskedelmi számlákra érkező és az onnan induló "
 "átutalásokat."
 
 #: gnucash/report/reports/standard/cashflow-barchart.scm:97
@@ -24572,16 +24572,12 @@ msgid "Withdrawals"
 msgstr "Kivétek"
 
 #: gnucash/report/reports/standard/equity-statement.scm:451
-#, fuzzy
-#| msgid "Unrealized Gains"
 msgid "Unrealized Gains for Period"
-msgstr "Nem realizált nyereségek"
+msgstr "Az időszak nem realizált nyereségei"
 
 #: gnucash/report/reports/standard/equity-statement.scm:452
-#, fuzzy
-#| msgid "Unrealized Losses"
 msgid "Unrealized Losses for Period"
-msgstr "Nem realizált veszteségek"
+msgstr "Az időszak nem realizált veszteségei"
 
 #: gnucash/report/reports/standard/equity-statement.scm:458
 msgid "Increase in capital"
@@ -25386,7 +25382,7 @@ msgstr "Adó"
 
 #: gnucash/report/reports/standard/invoice.scm:157
 msgid "REF"
-msgstr "Referencia"
+msgstr "REF"
 
 #: gnucash/report/reports/standard/invoice.scm:258
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:225
@@ -25514,7 +25510,7 @@ msgstr "Mennyiség megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:427
 msgid "Display the price per item?"
-msgstr "Elemenkénti ár megjelenítése?"
+msgstr "Tételenkénti ár megjelenítése?"
 
 #: gnucash/report/reports/standard/invoice.scm:431
 msgid "Display the entry's discount?"
@@ -26649,7 +26645,7 @@ msgstr "sor: Cég neve"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:80
 msgid "Invoice number text"
-msgstr "Számlaszám szövege"
+msgstr "Kimenőszámla számának szövege"
 
 #: gnucash/report/reports/standard/taxinvoice.scm:81
 msgid "To text"
