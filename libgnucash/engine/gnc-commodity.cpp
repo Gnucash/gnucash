@@ -110,6 +110,8 @@ static void gnc_commodity_set_default_symbol(gnc_commodity *, const char *);
 
 using StringCommodityMap = std::unordered_map<std::string, gnc_commodity*>;
 using CommodityVec = std::vector<gnc_commodity*>;
+using StringCommNSMap = std::unordered_map<std::string, gnc_commodity_namespace*>;
+using CommNSVec = std::vector<gnc_commodity_namespace*>;
 
 struct gnc_commodity_namespace_s
 {
@@ -128,8 +130,8 @@ struct _GncCommodityNamespaceClass
 
 struct gnc_commodity_table_s
 {
-    GHashTable * ns_table;
-    GList      * ns_list;
+    StringCommNSMap ns_table;
+    CommNSVec ns_vec;
 };
 
 static const std::unordered_map<std::string,std::string> gnc_new_iso_codes =
@@ -1597,8 +1599,8 @@ gnc_commodity_table *
 gnc_commodity_table_new(void)
 {
     gnc_commodity_table * retval = g_new0(gnc_commodity_table, 1);
-    retval->ns_table = g_hash_table_new(&g_str_hash, &g_str_equal);
-    retval->ns_list = nullptr;
+    new (&retval->ns_table) StringCommNSMap ();
+    new (&retval->ns_vec) CommNSVec ();
     return retval;
 }
 
@@ -1640,12 +1642,12 @@ gnc_commodity_obtain_twin (const gnc_commodity *from, QofBook *book)
  ********************************************************************/
 
 static void
-count_coms(gpointer key, gpointer value, gpointer user_data)
+count_coms (const std::string& key, gpointer value, gpointer user_data)
 {
     auto& tbl = ((gnc_commodity_namespace*)value)->cm_table;
     guint *count = (guint*)user_data;
 
-    if (g_strcmp0((char*)key, GNC_COMMODITY_NS_CURRENCY) == 0)
+    if (key == GNC_COMMODITY_NS_CURRENCY)
     {
         /* don't count default commodities */
         return;
@@ -1661,9 +1663,9 @@ gnc_commodity_table_get_size(const gnc_commodity_table* tbl)
 {
     guint count = 0;
     g_return_val_if_fail(tbl, 0);
-    g_return_val_if_fail(tbl->ns_table, 0);
 
-    g_hash_table_foreach(tbl->ns_table, count_coms, (gpointer)&count);
+    std::for_each (tbl->ns_table.begin(), tbl->ns_table.end(),
+                   [&count](auto& str_ns){ count_coms (str_ns.first, str_ns.second, &count); });
 
     return count;
 }
@@ -1902,21 +1904,6 @@ gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
     }
 }
 
-static void
-hash_keys_helper(gpointer key, gpointer value, gpointer data)
-{
-    auto l = (GList**)data;
-    *l = g_list_prepend(*l, key);
-}
-
-static GList *
-g_hash_table_keys(GHashTable * table)
-{
-    GList * l = nullptr;
-    g_hash_table_foreach(table, &hash_keys_helper, (gpointer) &l);
-    return l;
-}
-
 /********************************************************************
  * gnc_commodity_table_get_namespaces
  * see if any commodities in the namespace exist
@@ -1928,7 +1915,10 @@ gnc_commodity_table_get_namespaces(const gnc_commodity_table * table)
     if (!table)
         return nullptr;
 
-    return g_hash_table_keys(table->ns_table);
+    return std::accumulate (table->ns_table.begin(), table->ns_table.end(),
+                            static_cast<GList*>(nullptr),
+                            [](GList *acc, auto& str_ns)
+                            { return g_list_prepend (acc, (gpointer)str_ns.first.c_str()); });
 }
 
 GList *
@@ -1937,7 +1927,8 @@ gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * table)
     if (!table)
         return nullptr;
 
-    return g_list_copy (table->ns_list);
+    return std::accumulate (table->ns_vec.rbegin(), table->ns_vec.rend(),
+                            static_cast<GList*>(nullptr), g_list_prepend);
 }
 
 /* Because gnc_commodity_table_add_namespace maps GNC_COMMODITY_NS_ISO to
@@ -2132,11 +2123,8 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
         ns->iso4217 = gnc_commodity_namespace_is_iso(name_space);
         qof_instance_init_data (&ns->inst, GNC_ID_COMMODITY_NAMESPACE, book);
         qof_event_gen (&ns->inst, QOF_EVENT_CREATE, nullptr);
-
-        g_hash_table_insert(table->ns_table,
-                            (gpointer) ns->name,
-                            (gpointer) ns);
-        table->ns_list = g_list_append(table->ns_list, ns);
+        table->ns_table[ns->name] = ns;
+        table->ns_vec.push_back (ns);
         qof_event_gen (&ns->inst, QOF_EVENT_ADD, nullptr);
     }
     return ns;
@@ -2151,7 +2139,9 @@ gnc_commodity_table_find_namespace(const gnc_commodity_table * table,
         return nullptr;
 
     name_space = gnc_commodity_table_map_namespace(name_space);
-    return static_cast<gnc_commodity_namespace*>(g_hash_table_lookup(table->ns_table, (gpointer)name_space));
+
+    auto it = table->ns_table.find (name_space);
+    return (it == table->ns_table.end()) ? nullptr : it->second;
 }
 
 
@@ -2182,8 +2172,8 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
         return;
 
     qof_event_gen (&ns->inst, QOF_EVENT_REMOVE, nullptr);
-    g_hash_table_remove(table->ns_table, name_space);
-    table->ns_list = g_list_remove(table->ns_list, ns);
+    table->ns_table.erase (name_space);
+    table->ns_vec.erase (std::remove (table->ns_vec.begin(), table->ns_vec.end(), ns));
 
     ns->cm_vec.~CommodityVec ();
     ns->cm_table.~StringCommodityMap ();
@@ -2220,9 +2210,9 @@ iter_commodity (const std::string& key, gnc_commodity* cm, gpointer user_data)
 }
 
 static void
-iter_namespace (gpointer key, gpointer value, gpointer user_data)
+iter_namespace (const std::string& key, gnc_commodity_namespace* value, gpointer user_data)
 {
-    auto namespace_hash = ((gnc_commodity_namespace *) value)->cm_table;
+    auto& namespace_hash = value->cm_table;
     std::for_each (namespace_hash.begin(), namespace_hash.end(),
                    [user_data](auto n){ iter_commodity (n.first, n.second, user_data); });
 }
@@ -2240,7 +2230,9 @@ gnc_commodity_table_foreach_commodity (const gnc_commodity_table * tbl,
     iter_data.func = f;
     iter_data.user_data = user_data;
 
-    g_hash_table_foreach(tbl->ns_table, iter_namespace, (gpointer)&iter_data);
+    std::for_each (tbl->ns_table.begin(), tbl->ns_table.end(),
+                   [&iter_data](auto& str_ns)
+                   { iter_namespace (str_ns.first, str_ns.second, &iter_data); });
 
     return iter_data.ok;
 }
@@ -2253,23 +2245,18 @@ gnc_commodity_table_foreach_commodity (const gnc_commodity_table * tbl,
 void
 gnc_commodity_table_destroy(gnc_commodity_table * t)
 {
-    gnc_commodity_namespace * ns;
-    GList *item, *next;
-
     if (!t) return;
     ENTER ("table=%p", t);
 
-    for (item = t->ns_list; item; item = next)
+    for (auto it = t->ns_vec.rbegin(); it != t->ns_vec.rend(); ++it)
     {
-        next = g_list_next(item);
-        ns = static_cast<gnc_commodity_namespace*>(item->data);
+        auto ns{*it};
         gnc_commodity_table_delete_namespace(t, ns->name);
     }
 
-    g_list_free(t->ns_list);
-    t->ns_list = nullptr;
-    g_hash_table_destroy(t->ns_table);
-    t->ns_table = nullptr;
+    t->ns_vec.~CommNSVec ();
+    t->ns_table.~StringCommNSMap ();
+
     LEAVE ("table=%p", t);
     g_free(t);
 }
