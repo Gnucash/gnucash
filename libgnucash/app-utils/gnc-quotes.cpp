@@ -1008,6 +1008,7 @@ gnc_quotes_get_quotable_commodities (const gnc_commodity_table * table)
                 {
                     auto cm_list = gnc_commodity_namespace_get_commodity_list (ns);
                     g_list_foreach (cm_list, &get_quotables_helper1, (gpointer) &l);
+                    g_list_free (cm_list);
                 }
             }
         }

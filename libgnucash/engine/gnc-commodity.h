@@ -814,7 +814,7 @@ const char * gnc_commodity_namespace_get_gui_name (const gnc_commodity_namespace
  *  @return A pointer to the list of structures.  NULL if an invalid
  *  argument was supplied.
  *
- *  @note This list is owned by the engine.  The caller must not free the list. */
+ *  @note This list is owned by the caller who must free the list. */
 GList * gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace * ns);
 
 
@@ -844,7 +844,7 @@ GList * gnc_commodity_table_get_namespaces(const gnc_commodity_table * t);
  *  @return A pointer to the list of structures.  NULL if an invalid
  *  argument was supplied.
  *
- *  @note This list is owned by the engine.  The caller must not free the list. */
+ *  @note This list is owned by the caller who must free the list. */
 GList * gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * t);
 
 /** This function adds a new string to the list of commodity namespaces.

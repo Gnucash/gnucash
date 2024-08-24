@@ -635,15 +635,17 @@ gnc_price_dialog_filter_ns_func (gnc_commodity_namespace *name_space,
 
     /* See if this namespace has commodities */
     auto cm_list = gnc_commodity_namespace_get_commodity_list (name_space);
-    for (auto item = cm_list; item; item = g_list_next (item))
+    auto rv = false;
+    for (auto item = cm_list; !rv && item; item = g_list_next (item))
     {
         /* For each commodity, see if there are prices */
         auto comm = static_cast<gnc_commodity *> (item->data);
         if (gnc_pricedb_has_prices (pdb_dialog->price_db, comm, nullptr))
-            return TRUE;
+            rv = true;
     }
 
-    return FALSE;
+    g_list_free (cm_list);
+    return rv;
 }
 
 

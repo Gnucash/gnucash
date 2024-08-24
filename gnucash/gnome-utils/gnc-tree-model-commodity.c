@@ -422,6 +422,7 @@ gnc_tree_model_commodity_get_iter (GtkTreeModel *tree_model,
     list = gnc_commodity_table_get_namespaces_list(ct);
     i = gtk_tree_path_get_indices (path)[0];
     name_space = g_list_nth_data (list, i);
+    g_list_free (list);
     if (!name_space)
     {
         LEAVE("invalid path at namespace");
@@ -443,6 +444,7 @@ gnc_tree_model_commodity_get_iter (GtkTreeModel *tree_model,
     list = gnc_commodity_namespace_get_commodity_list(name_space);
     i = gtk_tree_path_get_indices (path)[1];
     commodity = g_list_nth_data (list, i);
+    g_list_free (list);
     if (!commodity)
     {
         LEAVE("invalid path at commodity");
@@ -503,6 +505,7 @@ gnc_tree_model_commodity_get_path (GtkTreeModel *tree_model,
     gtk_tree_path_append_index (path, g_list_index (ns_list, name_space));
     gtk_tree_path_append_index (path, GPOINTER_TO_INT(iter->user_data3));
     debug_path(LEAVE, path);
+    g_list_free (ns_list);
     return path;
 }
 
@@ -671,6 +674,7 @@ gnc_tree_model_commodity_iter_next (GtkTreeModel *tree_model,
 
     n = GPOINTER_TO_INT(iter->user_data3) + 1;
     iter->user_data2 = g_list_nth_data(list, n);
+    g_list_free (list);
     if (iter->user_data2 == NULL)
     {
         LEAVE("no next iter");
@@ -713,6 +717,7 @@ gnc_tree_model_commodity_iter_children (GtkTreeModel *tree_model,
         iter->user_data2 = g_list_nth_data(list, 0);
         iter->user_data3 = GINT_TO_POINTER(0);
         LEAVE("ns iter %p (%s)", iter, iter_to_string(iter));
+        g_list_free (list);
         return TRUE;
     }
 
@@ -731,6 +736,7 @@ gnc_tree_model_commodity_iter_children (GtkTreeModel *tree_model,
         iter->user_data2 = g_list_nth_data(list, 0);
         iter->user_data3 = GINT_TO_POINTER(0);
         LEAVE("cm iter %p (%s)", iter, iter_to_string(iter));
+        g_list_free (list);
         return TRUE;
     }
 
@@ -758,7 +764,9 @@ gnc_tree_model_commodity_iter_has_child (GtkTreeModel *tree_model,
     name_space = (gnc_commodity_namespace *)iter->user_data2;
     list = gnc_commodity_namespace_get_commodity_list(name_space);
     LEAVE("%s children", list ? "has" : "no");
-    return list != NULL;
+    gboolean rv = (list != NULL);
+    g_list_free (list);
+    return rv;
 }
 
 static int
@@ -780,7 +788,9 @@ gnc_tree_model_commodity_iter_n_children (GtkTreeModel *tree_model,
         ct = model->commodity_table;
         list = gnc_commodity_table_get_namespaces_list(ct);
         LEAVE("ns list length %d", g_list_length(list));
-        return g_list_length (list);
+        guint rv = g_list_length (list);
+        g_list_free (list);
+        return rv;
     }
 
     if (iter->user_data == ITER_IS_NAMESPACE)
@@ -788,7 +798,9 @@ gnc_tree_model_commodity_iter_n_children (GtkTreeModel *tree_model,
         name_space = (gnc_commodity_namespace *)iter->user_data2;
         list = gnc_commodity_namespace_get_commodity_list(name_space);
         LEAVE("cm list length %d", g_list_length(list));
-        return g_list_length (list);
+        guint rv = g_list_length (list);
+        g_list_free (list);
+        return rv;
     }
 
     LEAVE("0");
@@ -823,6 +835,7 @@ gnc_tree_model_commodity_iter_nth_child (GtkTreeModel *tree_model,
         iter->user_data2 = g_list_nth_data(list, n);
         iter->user_data3 = GINT_TO_POINTER(n);
         LEAVE("ns iter %p (%s)", iter, iter_to_string(iter));
+        g_list_free (list);
         return iter->user_data2 != NULL;
     }
 
@@ -836,6 +849,7 @@ gnc_tree_model_commodity_iter_nth_child (GtkTreeModel *tree_model,
         iter->user_data2 = g_list_nth_data(list, n);
         iter->user_data3 = GINT_TO_POINTER(n);
         LEAVE("cm iter %p (%s)", iter, iter_to_string(iter));
+        g_list_free (list);
         return iter->user_data2 != NULL;
     }
 
@@ -877,6 +891,7 @@ gnc_tree_model_commodity_iter_parent (GtkTreeModel *tree_model,
     iter->user_data2 = name_space;
     iter->user_data3 = GINT_TO_POINTER(g_list_index(list, name_space));
     LEAVE("ns iter %p (%s)", iter, iter_to_string(iter));
+    g_list_free (list);
     return TRUE;
 }
 
@@ -919,6 +934,7 @@ gnc_tree_model_commodity_get_iter_from_commodity (GncTreeModelCommodity *model,
     }
 
     n = g_list_index(list, commodity);
+    g_list_free (list);
     if (n == -1)
     {
         LEAVE("not in list");
@@ -996,6 +1012,7 @@ gnc_tree_model_commodity_get_iter_from_namespace (GncTreeModelCommodity *model,
     }
 
     n = g_list_index(list, name_space);
+    g_list_free (list);
     if (n == -1)
     {
         LEAVE("");

@@ -306,7 +306,9 @@ gnc_commodities_dialog_filter_ns_func (gnc_commodity_namespace *name_space,
 
     /* Show any other namespace that has commodities */
     list = gnc_commodity_namespace_get_commodity_list(name_space);
-    return (list != NULL);
+    gboolean rv = (list != NULL);
+    g_list_free (list);
+    return rv;
 }
 
 static gboolean

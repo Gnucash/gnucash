@@ -1565,7 +1565,7 @@ gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace *name_s
     if (!name_space)
         return nullptr;
 
-    return name_space->cm_list;
+    return g_list_copy (name_space->cm_list);
 }
 
 gboolean
@@ -1950,7 +1950,7 @@ gnc_commodity_table_get_namespaces_list(const gnc_commodity_table * table)
     if (!table)
         return nullptr;
 
-    return table->ns_list;
+    return g_list_copy (table->ns_list);
 }
 
 /* Because gnc_commodity_table_add_namespace maps GNC_COMMODITY_NS_ISO to
