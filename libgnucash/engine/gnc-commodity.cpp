@@ -44,6 +44,7 @@
 
 #include <list>
 #include <unordered_map>
+#include <numeric>
 
 static QofLogModule log_module = GNC_MOD_COMMODITY;
 
@@ -107,14 +108,17 @@ struct _GncCommodityClass
 static void commodity_free(gnc_commodity * cm);
 static void gnc_commodity_set_default_symbol(gnc_commodity *, const char *);
 
+using StringCommodityMap = std::unordered_map<std::string, gnc_commodity*>;
+using CommodityVec = std::vector<gnc_commodity*>;
+
 struct gnc_commodity_namespace_s
 {
     QofInstance inst;
 
     const gchar *name;
     gboolean     iso4217;
-    GHashTable * cm_table;
-    GList      * cm_list;
+    StringCommodityMap cm_table;
+    CommodityVec cm_vec;
 };
 
 struct _GncCommodityNamespaceClass
@@ -1565,7 +1569,8 @@ gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace *name_s
     if (!name_space)
         return nullptr;
 
-    return g_list_copy (name_space->cm_list);
+    return std::accumulate (name_space->cm_vec.rbegin(), name_space->cm_vec.rend(),
+                            static_cast<GList*>(nullptr), g_list_prepend);
 }
 
 gboolean
@@ -1637,7 +1642,7 @@ gnc_commodity_obtain_twin (const gnc_commodity *from, QofBook *book)
 static void
 count_coms(gpointer key, gpointer value, gpointer user_data)
 {
-    GHashTable *tbl = ((gnc_commodity_namespace*)value)->cm_table;
+    auto& tbl = ((gnc_commodity_namespace*)value)->cm_table;
     guint *count = (guint*)user_data;
 
     if (g_strcmp0((char*)key, GNC_COMMODITY_NS_CURRENCY) == 0)
@@ -1648,7 +1653,7 @@ count_coms(gpointer key, gpointer value, gpointer user_data)
 
     if (!value) return;
 
-    *count += g_hash_table_size(tbl);
+    *count += tbl.size();
 }
 
 guint
@@ -1690,7 +1695,7 @@ gnc_commodity_table_lookup(const gnc_commodity_table * table,
             if (it != gnc_new_iso_codes.end())
                 mnemonic = it->second.c_str();
         }
-        return GNC_COMMODITY(g_hash_table_lookup(nsp->cm_table, (gpointer)mnemonic));
+        return nsp->cm_table[mnemonic];
     }
     else
     {
@@ -1830,11 +1835,9 @@ gnc_commodity_table_insert(gnc_commodity_table * table,
     nsp = gnc_commodity_table_add_namespace(table, ns_name, book);
 
     PINFO ("insert %p %s into nsp=%p %s", priv->mnemonic, priv->mnemonic,
-           nsp->cm_table, nsp->name);
-    g_hash_table_insert(nsp->cm_table,
-                        (gpointer)CACHE_INSERT(priv->mnemonic),
-                        (gpointer)comm);
-    nsp->cm_list = g_list_append(nsp->cm_list, comm);
+           &nsp->cm_table, nsp->name);
+    nsp->cm_table[priv->mnemonic] = comm;
+    nsp->cm_vec.push_back (comm);
 
     qof_event_gen (&comm->inst, QOF_EVENT_ADD, nullptr);
     LEAVE ("(table=%p, comm=%p)", table, comm);
@@ -1868,9 +1871,8 @@ gnc_commodity_table_remove(gnc_commodity_table * table,
     nsp = gnc_commodity_table_find_namespace(table, ns_name);
     if (!nsp) return;
 
-    nsp->cm_list = g_list_remove(nsp->cm_list, comm);
-    g_hash_table_remove (nsp->cm_table, priv->mnemonic);
-    /* XXX minor mem leak, should remove the key as well */
+    nsp->cm_vec.erase (std::remove (nsp->cm_vec.begin(), nsp->cm_vec.end(),  comm));
+    nsp->cm_table.erase (priv->mnemonic);
 }
 
 /********************************************************************
@@ -1912,21 +1914,6 @@ g_hash_table_keys(GHashTable * table)
 {
     GList * l = nullptr;
     g_hash_table_foreach(table, &hash_keys_helper, (gpointer) &l);
-    return l;
-}
-
-static void
-hash_values_helper(gpointer key, gpointer value, gpointer data)
-{
-    auto l = (GList**)data;
-    *l = g_list_prepend(*l, value);
-}
-
-static GList *
-g_hash_table_values(GHashTable * table)
-{
-    GList * l = nullptr;
-    g_hash_table_foreach(table, &hash_values_helper, (gpointer) &l);
     return l;
 }
 
@@ -2001,7 +1988,8 @@ commodity_table_get_all_noncurrency_commodities(const gnc_commodity_table* table
         ns = gnc_commodity_table_find_namespace(table, (char*)(node->data));
         if (!ns)
             continue;
-        retval = g_list_concat(g_hash_table_values(ns->cm_table), retval);
+        for (auto n : ns->cm_table)
+            retval = g_list_prepend (retval, n.second);
     }
     g_list_free(nslist);
     return retval;
@@ -2021,7 +2009,9 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
     if (!ns)
         return nullptr;
 
-    return g_hash_table_values(ns->cm_table);
+    return std::accumulate (ns->cm_table.begin(), ns->cm_table.end(),
+                            static_cast<GList*>(nullptr),
+                            [](auto acc, auto ns){ return g_list_prepend (acc, ns.second); });
 }
 
 /********************************************************************
@@ -2030,15 +2020,13 @@ gnc_commodity_table_get_commodities(const gnc_commodity_table * table,
  ********************************************************************/
 
 static void
-get_quotables_helper1(gpointer key, gpointer value, gpointer data)
+get_quotables_helper1 (const std::string& key, gnc_commodity* comm, GList **l)
 {
-    auto comm = GNC_COMMODITY(value);
     gnc_commodityPrivate* priv = GET_PRIVATE(comm);
-    auto l = static_cast<GList**>(data);
 
     if (!priv->quote_flag || !priv->quote_source || !priv->quote_source->get_supported())
         return;
-    *l = g_list_prepend(*l, value);
+    *l = g_list_prepend(*l, comm);
 }
 
 static gboolean
@@ -2085,7 +2073,8 @@ gnc_commodity_table_get_quotable_commodities(const gnc_commodity_table * table)
                 ns = gnc_commodity_table_find_namespace(table, name_space);
                 if (ns)
                 {
-                    g_hash_table_foreach(ns->cm_table, &get_quotables_helper1, (gpointer) &l);
+                    std::for_each (ns->cm_table.begin(), ns->cm_table.end(),
+                                   [&l](auto cm){ get_quotables_helper1 (cm.first, cm.second, &l); });
                 }
             }
         }
@@ -2138,7 +2127,7 @@ gnc_commodity_table_add_namespace(gnc_commodity_table * table,
     if (!ns)
     {
         ns = static_cast<gnc_commodity_namespace*>(g_object_new(GNC_TYPE_COMMODITY_NAMESPACE, nullptr));
-        ns->cm_table = g_hash_table_new(g_str_hash, g_str_equal);
+        new (&ns->cm_table) StringCommodityMap ();
         ns->name = CACHE_INSERT(static_cast<const char*>(name_space));
         ns->iso4217 = gnc_commodity_namespace_is_iso(name_space);
         qof_instance_init_data (&ns->inst, GNC_ID_COMMODITY_NAMESPACE, book);
@@ -2180,15 +2169,6 @@ gnc_commodity_find_commodity_by_guid(const GncGUID *guid, QofBook *book)
  * delete a namespace
  ********************************************************************/
 
-static int
-ns_helper(gpointer key, gpointer value, gpointer user_data)
-{
-    auto c = GNC_COMMODITY(value);
-    gnc_commodity_destroy(c);
-    CACHE_REMOVE(static_cast<char*>(key));  /* key is commodity mnemonic */
-    return TRUE;
-}
-
 void
 gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
                                      const char * name_space)
@@ -2205,11 +2185,9 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
     g_hash_table_remove(table->ns_table, name_space);
     table->ns_list = g_list_remove(table->ns_list, ns);
 
-    g_list_free(ns->cm_list);
-    ns->cm_list = nullptr;
+    ns->cm_vec.~CommodityVec ();
+    ns->cm_table.~StringCommodityMap ();
 
-    g_hash_table_foreach_remove(ns->cm_table, ns_helper, nullptr);
-    g_hash_table_destroy(ns->cm_table);
     CACHE_REMOVE(ns->name);
 
     qof_event_gen (&ns->inst, QOF_EVENT_DESTROY, nullptr);
@@ -2231,10 +2209,9 @@ typedef struct
 } IterData;
 
 static void
-iter_commodity (gpointer key, gpointer value, gpointer user_data)
+iter_commodity (const std::string& key, gnc_commodity* cm, gpointer user_data)
 {
     IterData *iter_data = (IterData *) user_data;
-    gnc_commodity *cm = (gnc_commodity *) value;
 
     if (iter_data->ok)
     {
@@ -2245,8 +2222,9 @@ iter_commodity (gpointer key, gpointer value, gpointer user_data)
 static void
 iter_namespace (gpointer key, gpointer value, gpointer user_data)
 {
-    GHashTable *namespace_hash = ((gnc_commodity_namespace *) value)->cm_table;
-    g_hash_table_foreach (namespace_hash, iter_commodity, user_data);
+    auto namespace_hash = ((gnc_commodity_namespace *) value)->cm_table;
+    std::for_each (namespace_hash.begin(), namespace_hash.end(),
+                   [user_data](auto n){ iter_commodity (n.first, n.second, user_data); });
 }
 
 gboolean
