@@ -2191,50 +2191,18 @@ gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
  * namespace
  ********************************************************************/
 
-typedef struct
-{
-    gboolean ok;
-    gboolean (*func)(gnc_commodity *, gpointer);
-    gpointer user_data;
-} IterData;
-
-static void
-iter_commodity (const std::string& key, gnc_commodity* cm, gpointer user_data)
-{
-    IterData *iter_data = (IterData *) user_data;
-
-    if (iter_data->ok)
-    {
-        iter_data->ok = (iter_data->func)(cm, iter_data->user_data);
-    }
-}
-
-static void
-iter_namespace (const std::string& key, gnc_commodity_namespace* value, gpointer user_data)
-{
-    auto& namespace_hash = value->cm_table;
-    std::for_each (namespace_hash.begin(), namespace_hash.end(),
-                   [user_data](auto n){ iter_commodity (n.first, n.second, user_data); });
-}
-
 gboolean
 gnc_commodity_table_foreach_commodity (const gnc_commodity_table * tbl,
                                        gboolean (*f)(gnc_commodity *, gpointer),
                                        gpointer user_data)
 {
-    IterData iter_data;
-
     if (!tbl || !f) return FALSE;
 
-    iter_data.ok = TRUE;
-    iter_data.func = f;
-    iter_data.user_data = user_data;
-
-    std::for_each (tbl->ns_table.begin(), tbl->ns_table.end(),
-                   [&iter_data](auto& str_ns)
-                   { iter_namespace (str_ns.first, str_ns.second, &iter_data); });
-
-    return iter_data.ok;
+    return std::all_of (tbl->ns_table.begin(), tbl->ns_table.end(),
+                        [&](const auto& str_ns)
+                        { return std::all_of(str_ns.second->cm_table.begin(), str_ns.second->cm_table.end(),
+                                             [&](const auto& n){ return f(n.second, user_data); });
+                        });
 }
 
 /********************************************************************
