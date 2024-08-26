@@ -1641,33 +1641,15 @@ gnc_commodity_obtain_twin (const gnc_commodity *from, QofBook *book)
  * get the size of the commodity table
  ********************************************************************/
 
-static void
-count_coms (const std::string& key, gpointer value, gpointer user_data)
-{
-    auto& tbl = ((gnc_commodity_namespace*)value)->cm_table;
-    guint *count = (guint*)user_data;
-
-    if (key == GNC_COMMODITY_NS_CURRENCY)
-    {
-        /* don't count default commodities */
-        return;
-    }
-
-    if (!value) return;
-
-    *count += tbl.size();
-}
-
 guint
 gnc_commodity_table_get_size(const gnc_commodity_table* tbl)
 {
-    guint count = 0;
     g_return_val_if_fail(tbl, 0);
 
-    std::for_each (tbl->ns_table.begin(), tbl->ns_table.end(),
-                   [&count](auto& str_ns){ count_coms (str_ns.first, str_ns.second, &count); });
-
-    return count;
+    return std::accumulate (tbl->ns_table.begin(), tbl->ns_table.end(), 0,
+                            [](guint acc, const auto& str_ns)
+                            { return str_ns.first == GNC_COMMODITY_NS_CURRENCY ? acc
+                                    : acc + str_ns.second->cm_table.size(); });
 }
 
 /********************************************************************
