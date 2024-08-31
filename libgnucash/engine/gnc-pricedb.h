@@ -463,22 +463,6 @@ PriceList * gnc_pricedb_get_prices(GNCPriceDB *db,
                                    const gnc_commodity *commodity,
                                    const gnc_commodity *currency);
 
-/** @brief Find the price between two commodities at a time64.
- *
- * The returned GNCPrice may be in either direction so check to ensure that its
- * value is correctly applied.
- * @param db The pricedb
- * @param commodity The first commodity
- * @param currency The second commodity
- * @param t The time64 at which to retrieve the price.
- * @return A GNCPrice or NULL if none matches.
- */
-/* NOT USED */
-GNCPrice * gnc_pricedb_lookup_at_time64(GNCPriceDB *db,
-                                        const gnc_commodity *commodity,
-                                        const gnc_commodity *currency,
-                                        time64 t);
-
 /** @brief Return the price between the two commodities on the indicated
  * day. Note that the notion of day might be distorted by changes in timezone.
  *

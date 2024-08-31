@@ -2178,33 +2178,6 @@ gnc_pricedb_lookup_day_t64(GNCPriceDB *db,
     return lookup_nearest_in_time(db, c, currency, t, TRUE);
 }
 
-// return 0 if price's time matches exactly
-static int price_same_time (GNCPrice *p, time64 *time)
-{
-    return !(gnc_price_get_time64 (p) == *time);
-}
-
-GNCPrice *
-gnc_pricedb_lookup_at_time64(GNCPriceDB *db,
-                             const gnc_commodity *c,
-                             const gnc_commodity *currency,
-                             time64 t)
-{
-    GNCPrice *rv = nullptr;
-    if (!db || !c || !currency) return nullptr;
-    ENTER ("db=%p commodity=%p currency=%p", db, c, currency);
-    auto price_list = pricedb_get_prices_internal (db, c, currency, TRUE);
-    auto p = g_list_find_custom (price_list, &t, (GCompareFunc) price_same_time);
-    if (p)
-    {
-        rv = GNC_PRICE (p->data);
-        gnc_price_ref (rv);
-    }
-    g_list_free (price_list);
-    LEAVE (" ");
-    return rv;
-}
-
 static GNCPrice *
 lookup_nearest_in_time(GNCPriceDB *db,
                        const gnc_commodity *c,

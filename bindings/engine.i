@@ -191,7 +191,6 @@ functions. */
 %newobject gnc_pricedb_lookup_latest_before_any_currency_t64;
 %newobject gnc_pricedb_get_prices;
 %newobject gnc_pricedb_lookup_at_time;
-%newobject gnc_pricedb_lookup_at_time64;
 %newobject gnc_pricedb_lookup_day;
 %newobject gnc_pricedb_lookup_day_t64;
 

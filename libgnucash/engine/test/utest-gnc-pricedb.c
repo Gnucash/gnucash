@@ -1149,11 +1149,6 @@ test_gnc_pricedb_lookup_day_t64 (PriceDBFixture *fixture, gconstpointer pData)
     g_log_set_default_handler (hdlr, 0);
 }
 
-// Not Used
-/* gnc_pricedb_lookup_at_time64
-GNCPrice *
-gnc_pricedb_lookup_at_time64(GNCPriceDB *db,// Local: 0:0:0
-*/
 /* lookup_nearest_in_time
 static GNCPrice *
 lookup_nearest_in_time(GNCPriceDB *db,// Local: 2:0:0
