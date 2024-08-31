@@ -2744,66 +2744,6 @@ gnc_pricedb_foreach_price(GNCPriceDB *db,
     return unstable_price_traversal(db, f, user_data);
 }
 
-/* ==================================================================== */
-/* commodity substitution */
-
-typedef struct
-{
-    gnc_commodity *old_c;
-    gnc_commodity *new_c;
-} GNCPriceFixupData;
-
-static gboolean
-add_price_to_list (GNCPrice *p, gpointer data)
-{
-    auto list = static_cast<GList**>(data);
-
-    *list = g_list_prepend (*list, p);
-
-    return TRUE;
-}
-
-static void
-gnc_price_fixup_legacy_commods(gpointer data, gpointer user_data)
-{
-    auto p = static_cast<GNCPrice*>(data);
-    auto fixup_data = static_cast<GNCPriceFixupData*>(user_data);
-    gnc_commodity *price_c;
-
-    if (!p) return;
-
-    price_c = gnc_price_get_commodity(p);
-    if (gnc_commodity_equiv(price_c, fixup_data->old_c))
-    {
-        gnc_price_set_commodity (p, fixup_data->new_c);
-    }
-    price_c = gnc_price_get_currency(p);
-    if (gnc_commodity_equiv(price_c, fixup_data->old_c))
-    {
-        gnc_price_set_currency (p, fixup_data->new_c);
-    }
-}
-
-void
-gnc_pricedb_substitute_commodity(GNCPriceDB *db,
-                                 gnc_commodity *old_c,
-                                 gnc_commodity *new_c)
-{
-    GNCPriceFixupData data;
-    GList *prices = nullptr;
-
-    if (!db || !old_c || !new_c) return;
-
-    data.old_c = old_c;
-    data.new_c = new_c;
-
-    gnc_pricedb_foreach_price (db, add_price_to_list, &prices, FALSE);
-
-    g_list_foreach (prices, gnc_price_fixup_legacy_commods, &data);
-
-    g_list_free (prices);
-}
-
 /***************************************************************************/
 
 /* Semi-lame debugging code */

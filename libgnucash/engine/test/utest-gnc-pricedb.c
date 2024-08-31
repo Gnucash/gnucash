@@ -1587,11 +1587,6 @@ gnc_price_fixup_legacy_commods(gpointer data, gpointer user_data)// Local: 0:1:0
 test_gnc_price_fixup_legacy_commods (Fixture *fixture, gconstpointer pData)
 {
 }*/
-// Not Used
-/* gnc_pricedb_substitute_commodity
-void
-gnc_pricedb_substitute_commodity(GNCPriceDB *db,// Local: 0:0:0
-*/
 /* gnc_price_print
 void
 gnc_price_print(GNCPrice *p, FILE *f, int indent)// Local: 1:0:0

@@ -91,9 +91,6 @@ typedef struct gnc_price_lookup_helper_s
 } GNCPriceLookupHelper;
 
 #define  gnc_price_set_guid(P,G)  qof_instance_set_guid(QOF_INSTANCE(P),(G))
-void     gnc_pricedb_substitute_commodity(GNCPriceDB *db,
-        gnc_commodity *old_c,
-        gnc_commodity *new_c);
 
 /** register the pricedb object with the gncObject system */
 gboolean gnc_pricedb_register (void);
