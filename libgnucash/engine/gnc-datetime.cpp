@@ -549,6 +549,8 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string locale_str) :
 {
     UErrorCode status = U_ZERO_ERROR;
 
+    std::cout << locale_str << '|' << str << ": ";
+
     icu::Locale locale = icu::Locale::createCanonical (locale_str.c_str());
     std::unique_ptr<icu::DateFormat> formatter(icu::DateFormat::createDateInstance(icu::DateFormat::kDefault, locale));
     if (formatter == nullptr)
@@ -559,23 +561,36 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string locale_str) :
 
     UDate date = formatter->parse(input, parsePos);
     if (parsePos.getErrorIndex() != -1)
+    {
+        std::cout << "1\n";
         throw std::invalid_argument ("Cannot parse string");
+    }
 
     std::unique_ptr<icu::Calendar> calendar(icu::Calendar::createInstance(locale, status));
     if (U_FAILURE(status))
+    {
+        std::cout << "2\n";
         throw std::invalid_argument ("Cannot parse string");
+    }
 
     calendar->setTime(date, status);
     if (U_FAILURE(status))
+    {
+        std::cout << "3\n";
         throw std::invalid_argument ("Cannot parse string");
+    }
 
     int32_t day = calendar->get(UCAL_DATE, status);
     int32_t month = calendar->get(UCAL_MONTH, status) + 1;
     int32_t year = calendar->get(UCAL_YEAR, status);
 
     if (U_FAILURE(status))
+    {
+        std::cout << "4\n";
         throw std::invalid_argument ("Cannot parse string");
+    }
 
+    std::cout << day << '/' << month << '/' << year << std::endl;
     m_greg = Date(year, month, day);
 }
 
