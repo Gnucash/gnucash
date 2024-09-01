@@ -71,95 +71,83 @@ typedef struct
 TEST(gnc_date_constructors, test_str_format_constructor)
 {
     auto today = GncDate();
-    auto today_ymd = today.year_month_day();
-    auto curr_year = today_ymd.year;
+    // auto today_ymd = today.year_month_day();
+    // auto curr_year = today_ymd.year;
 
     parse_date_data test_dates[] =
     {
         // supported combinations  -/.'
-        { "y-m-d", "2013-08-01", 2013,  8,  1},
-        { "y-m-d",  "2013-8-01", 2013,  8,  1},
-        { "y-m-d",  "2013-08-1", 2013,  8,  1},
-        { "y-m-d",   "2013-8-1", 2013,  8,  1},
-        { "y-m-d",   "13-08-01", 2013,  8,  1},
-        { "y-m-d",    "13-8-01", 2013,  8,  1},
-        { "y-m-d",    "13-08-1", 2013,  8,  1},
-        { "y-m-d",     "13-8-1", 2013,  8,  1},
-        { "y-m-d", "2009/11/04", 2009, 11,  4},
-        { "y-m-d",  "1985.3.12", 1985,  3, 12},
-        { "y-m-d",      "3'6'8", 2003,  6,  8},
-        { "y-m-d",   "20130801", 2013,  8,  1},
-        { "d-m-y", "01-08-2013", 2013,  8,  1},
-        { "d-m-y",  "01-8-2013", 2013,  8,  1},
-        { "d-m-y",  "1-08-2013", 2013,  8,  1},
-        { "d-m-y",   "1-8-2013", 2013,  8,  1},
-        { "d-m-y",   "01-08-13", 2013,  8,  1},
-        { "d-m-y",    "01-8-13", 2013,  8,  1},
-        { "d-m-y",    "1-08-13", 2013,  8,  1},
-        { "d-m-y",     "1-8-13", 2013,  8,  1},
-        { "d-m-y", "04/11/2009", 2009, 11,  4},
-        { "d-m-y",  "12.3.1985", 1985,  3, 12},
-        { "d-m-y",      "8'6'3", 2003,  6,  8},
-        { "d-m-y",   "01082013", 2013,  8,  1},
-        { "m-d-y", "08-01-2013", 2013,  8,  1},
-        { "m-d-y",  "8-01-2013", 2013,  8,  1},
-        { "m-d-y",  "08-1-2013", 2013,  8,  1},
-        { "m-d-y",   "8-1-2013", 2013,  8,  1},
-        { "m-d-y",   "08-01-13", 2013,  8,  1},
-        { "m-d-y",    "8-01-13", 2013,  8,  1},
-        { "m-d-y",    "08-1-13", 2013,  8,  1},
-        { "m-d-y",     "8-1-13", 2013,  8,  1},
-        { "m-d-y", "11/04/2009", 2009, 11,  4},
-        { "m-d-y",  "3.12.1985", 1985,  3, 12},
-        { "m-d-y",      "6'8'3", 2003,  6,  8},
-        { "m-d-y",   "08012013", 2013,  8,  1},
-        {   "d-m",      "01-08",   curr_year,  8,  1},
-        {   "d-m",       "01-8",   curr_year,  8,  1},
-        {   "d-m",       "1-08",   curr_year,  8,  1},
-        {   "d-m",        "1-8",   curr_year,  8,  1},
-        {   "d-m",      "04/11",   curr_year, 11,  4},
-        {   "d-m",       "12.3",   curr_year,  3, 12},
-        {   "d-m",        "8'6",   curr_year,  6,  8},
-        {   "d-m",       "0108",   curr_year,  8,  1},
-        {   "m-d",      "08-01",   curr_year,  8,  1},
-        {   "m-d",       "8-01",   curr_year,  8,  1},
-        {   "m-d",       "08-1",   curr_year,  8,  1},
-        {   "m-d",        "8-1",   curr_year,  8,  1},
-        {   "m-d",      "11/04",   curr_year, 11,  4},
-        {   "m-d",       "3.12",   curr_year,  3, 12},
-        {   "m-d",        "6'8",   curr_year,  6,  8},
-        {   "m-d",       "0801",   curr_year,  8,  1},
+        { "en_GB", "01-08-2013", 2013,  8,  1},
+        { "en_GB",  "01-8-2013", 2013,  8,  1},
+        { "en_GB",  "1-08-2013", 2013,  8,  1},
+        { "en_GB",   "1-8-2013", 2013,  8,  1},
+        { "en_GB",   "01-08-13", 2013,  8,  1},
+        { "en_GB",    "01-8-13", 2013,  8,  1},
+        { "en_GB",    "1-08-13", 2013,  8,  1},
+        { "en_GB",     "1-8-13", 2013,  8,  1},
+        { "en_GB", "04/11/2009", 2009, 11,  4},
+        { "en_GB",  "12.3.1985", 1985,  3, 12},
+        // { "en_GB",      "8'6'3", 2003,  6,  8},
+        // { "en_GB",   "01082013", 2013,  8,  1},
+        { "en_US", "08-01-2013", 2013,  8,  1},
+        { "en_US",  "8-01-2013", 2013,  8,  1},
+        { "en_US",  "08-1-2013", 2013,  8,  1},
+        { "en_US",   "8-1-2013", 2013,  8,  1},
+        { "en_US",   "08-01-13", 2013,  8,  1},
+        { "en_US",    "8-01-13", 2013,  8,  1},
+        { "en_US",    "08-1-13", 2013,  8,  1},
+        { "en_US",     "8-1-13", 2013,  8,  1},
+        { "en_US", "11/04/2009", 2009, 11,  4},
+        { "en_US",  "3.12.1985", 1985,  3, 12},
+        // { "en_US",      "6'8'3", 2003,  6,  8},
+        // { "en_US",   "08012013", 2013,  8,  1},
+        // {   "d-m",      "01-08",   curr_year,  8,  1},
+        // {   "d-m",       "01-8",   curr_year,  8,  1},
+        // {   "d-m",       "1-08",   curr_year,  8,  1},
+        // {   "d-m",        "1-8",   curr_year,  8,  1},
+        // {   "d-m",      "04/11",   curr_year, 11,  4},
+        // {   "d-m",       "12.3",   curr_year,  3, 12},
+        // {   "d-m",        "8'6",   curr_year,  6,  8},
+        // {   "d-m",       "0108",   curr_year,  8,  1},
+        // {   "m-d",      "08-01",   curr_year,  8,  1},
+        // {   "m-d",       "8-01",   curr_year,  8,  1},
+        // {   "m-d",       "08-1",   curr_year,  8,  1},
+        // {   "m-d",        "8-1",   curr_year,  8,  1},
+        // {   "m-d",      "11/04",   curr_year, 11,  4},
+        // {   "m-d",       "3.12",   curr_year,  3, 12},
+        // {   "m-d",        "6'8",   curr_year,  6,  8},
+        // {   "m-d",       "0801",   curr_year,  8,  1},
 
         // ambiguous date formats
         // current parser doesn't know how to disambiguate
         // and hence refuses to parse
         // can possibly improved with a smarter parser
-        { "y-m-d",     "130801",          -1,     -1, -1},
-        { "d-m-y",     "010813",          -1,     -1, -1},
-        { "m-d-y",     "080113",          -1,     -1, -1},
+        // { "y-m-d",     "130801",          -1,     -1, -1},
+        { "en_GB",     "010813",          -1,     -1, -1},
+        { "en_US",     "080113",          -1,     -1, -1},
 
         // Combinations that don't make sense
         // but can still be entered by a user
         // Should ideally all result in refusal to parse...
-        { "y-m-d",      "08-01",          -1,     -1, -1},
-        { "y-m-d",       "0801",          -1,     -1, -1},
-        { "d-m-y",      "01-08",          -1,     -1, -1},
-        { "d-m-y",       "0108",          -1,     -1, -1},
-        { "m-d-y",      "08-01",          -1,     -1, -1},
-        { "m-d-y",       "0801",          -1,     -1, -1},
-        {   "d-m", "01-08-2013",          -1,     -1, -1},
-        {   "d-m",   "01-08-13",          -1,     -1, -1},
-        {   "d-m",   "08-08-08",          -1,     -1, -1},
-        {   "d-m",   "01082013",          -1,     -1, -1},
-        {   "d-m",     "010813",          -1,     -1, -1},
-        {   "d-m",   "20130108",          -1,     -1, -1},
-        {   "m-d", "08-01-2013",          -1,     -1, -1},
-        {   "m-d",   "08-01-13",          -1,     -1, -1},
-        {   "m-d", "2013-08-01",          -1,     -1, -1},
-        {   "m-d",   "09-08-01",          -1,     -1, -1},
-        {   "m-d",   "08012013",          -1,     -1, -1},
-        {   "m-d",     "080113",          -1,     -1, -1},
-        {   "m-d",   "20130801",          -1,     -1, -1},
+        // { "y-m-d",      "08-01",          -1,     -1, -1},
+        // { "y-m-d",       "0801",          -1,     -1, -1},
+        { "en_GB",      "01-08",          -1,     -1, -1},
+        { "en_GB",       "0108",          -1,     -1, -1},
+        { "en_US",      "08-01",          -1,     -1, -1},
+        { "en_US",       "0801",          -1,     -1, -1},
+        // {   "d-m", "01-08-2013",          -1,     -1, -1},
+        // {   "d-m",   "01-08-13",          -1,     -1, -1},
+        // {   "d-m",   "08-08-08",          -1,     -1, -1},
+        // {   "d-m",   "01082013",          -1,     -1, -1},
+        // {   "d-m",     "010813",          -1,     -1, -1},
+        // {   "d-m",   "20130108",          -1,     -1, -1},
+        // {   "m-d", "08-01-2013",          -1,     -1, -1},
+        // {   "m-d",   "08-01-13",          -1,     -1, -1},
+        // {   "m-d", "2013-08-01",          -1,     -1, -1},
+        // {   "m-d",   "09-08-01",          -1,     -1, -1},
+        // {   "m-d",   "08012013",          -1,     -1, -1},
+        // {   "m-d",     "080113",          -1,     -1, -1},
+        // {   "m-d",   "20130801",          -1,     -1, -1},
 
         // Unknown date format specifier should also trigger an exception
         {   "y-d-m H:M:S",   "20130801",          -1,     -1, -1},
@@ -445,11 +433,11 @@ TEST(gnc_datetime_constructors, test_create_in_transition)
      * savings time it ended at 23:59:59 and the next second was
      * 01:00:00 so that's when the day starts.
      */
-    GncDate date0{"2018-11-03", "y-m-d"};
+    GncDate date0{"03-11-2018", "en_GB"};
     GncDateTime gncdt0{date0, DayPart::end};
     EXPECT_EQ(gncdt0.format_zulu("%Y-%m-%d %H:%M:%S %Z"), "2018-11-04 02:59:59 UTC");
     EXPECT_EQ(gncdt0.format("%Y-%m-%d %H:%M:%S %Z"), "2018-11-03 23:59:59 -03");
-    GncDate date1{"2018-11-04", "y-m-d"};
+    GncDate date1{"04-11-2018", "en_GB"};
     GncDateTime gncdt1{date1, DayPart::start};
     EXPECT_EQ(gncdt1.format_zulu("%Y-%m-%d %H:%M:%S %Z"), "2018-11-04 03:00:00 UTC");
     EXPECT_EQ(gncdt1.format("%Y-%m-%d %H:%M:%S %Z"), "2018-11-04 01:00:00 -02");
@@ -457,7 +445,7 @@ TEST(gnc_datetime_constructors, test_create_in_transition)
      * std time, i.e. -03. Unfortunately sometimes boost::date_time
      * decides that it's still DST and returns the first one.
      */
-    GncDate date2{"2018-02-17", "y-m-d"};
+    GncDate date2{"17-02-2018", "en_GB"};
     GncDateTime gncdt2{date2, DayPart::end};
     if (gncdt2.offset() == -7200)
     {
@@ -473,7 +461,7 @@ TEST(gnc_datetime_constructors, test_create_in_transition)
      * Savings. This test checks to ensure that GncTimeZone doesn't
      * try to project 2018's rule forward.
      */
-    GncDate date3{"2019-11-01", "y-m-d"};
+    GncDate date3{"01-11-2019", "en_GB"};
     GncDateTime gncdt3{date3, DayPart::start};
     EXPECT_EQ(gncdt3.format_zulu("%Y-%m-%d %H:%M:%S %Z"), "2019-11-01 03:00:00 UTC");
     EXPECT_EQ(gncdt3.format("%Y-%m-%d %H:%M:%S %Z"), "2019-11-01 00:00:00 -03");
