@@ -50,7 +50,7 @@ enum SETTINGS_COL {SET_GROUP, SET_NAME};
 struct CsvImportSettings
 {
     CsvImportSettings() : m_file_format (GncImpFileFormat::CSV), m_encoding {"UTF-8"},
-            m_date_format {0}, m_currency_format {0},
+            m_date_locale {"en_AU"}, m_currency_format {0},
             m_skip_start_lines{0}, m_skip_end_lines{0}, m_skip_alt_lines (false),
             m_separators {","}, m_load_error {false} { }
     virtual ~CsvImportSettings() = default;
@@ -75,7 +75,7 @@ void remove (void);
 std::string   m_name;                         // Name given to this preset by the user
 GncImpFileFormat m_file_format;               // CSV import Format
 std::string   m_encoding;                     // File encoding
-int           m_date_format;                  // Date Active id
+std::string   m_date_locale;                  // Date Active id
 int           m_currency_format;              // Currency Active id
 uint32_t      m_skip_start_lines;             // Number of header rows to skip
 uint32_t      m_skip_end_lines;               // Number of footer rows to skip

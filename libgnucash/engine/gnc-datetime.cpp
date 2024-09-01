@@ -45,6 +45,11 @@
 #include <gnc-locale-utils.hpp>
 #include "gnc-timezone.hpp"
 #include "gnc-datetime.hpp"
+#include <unicode/smpdtfmt.h>
+#include <unicode/locid.h>
+#include <unicode/udat.h>
+#include <unicode/parsepos.h>
+#include <unicode/calendar.h>
 
 #define N_(string) string //So that xgettext will find it
 
@@ -76,77 +81,6 @@ static constexpr auto ticks_per_second = INT64_C(1000000);
 #else
 static constexpr auto ticks_per_second = INT64_C(1000000000);
 #endif
-
-/* Vector of date formats understood by gnucash and corresponding regex
- * to parse each from an external source
- * Note: while the format names are using a "-" as separator, the
- * regexes will accept any of "-/.' " and will also work for dates
- * without separators.
- */
-const std::vector<GncDateFormat> GncDate::c_formats ({
-    GncDateFormat {
-        N_("y-m-d"),
-        "(?:"                                   // either y-m-d
-        "(?<YEAR>[0-9]+)[-/.' ]+"
-        "(?<MONTH>[0-9]+)[-/.' ]+"
-        "(?<DAY>[0-9]+)"
-        "|"                                     // or CCYYMMDD
-        "(?<YEAR>[0-9]{4})"
-        "(?<MONTH>[0-9]{2})"
-        "(?<DAY>[0-9]{2})"
-        ")"
-    },
-    GncDateFormat {
-        N_("d-m-y"),
-        "(?:"                                   // either d-m-y
-        "(?<DAY>[0-9]+)[-/.' ]+"
-        "(?<MONTH>[0-9]+)[-/.' ]+"
-        "(?<YEAR>[0-9]+)"
-        "|"                                     // or DDMMCCYY
-        "(?<DAY>[0-9]{2})"
-        "(?<MONTH>[0-9]{2})"
-        "(?<YEAR>[0-9]{4})"
-        ")"
-    },
-    GncDateFormat {
-        N_("m-d-y"),
-        "(?:"                                   // either m-d-y
-        "(?<MONTH>[0-9]+)[-/.' ]+"
-        "(?<DAY>[0-9]+)[-/.' ]+"
-        "(?<YEAR>[0-9]+)"
-        "|"                                     // or MMDDCCYY
-        "(?<MONTH>[0-9]{2})"
-        "(?<DAY>[0-9]{2})"
-        "(?<YEAR>[0-9]{4})"
-        ")"
-    },
-    // Note year is still checked for in the regexes below
-    // This is to be able to raise an error if one is found for a yearless date format
-    GncDateFormat {
-        (N_("d-m")),
-        "(?:"                                   // either d-m(-y)
-        "(?<DAY>[0-9]+)[-/.' ]+"
-        "(?<MONTH>[0-9]+)(?:[-/.' ]+"
-        "(?<YEAR>[0-9]+))?"
-        "|"                                     // or DDMM(CCYY)
-        "(?<DAY>[0-9]{2})"
-        "(?<MONTH>[0-9]{2})"
-        "(?<YEAR>[0-9]+)?"
-        ")"
-    },
-    GncDateFormat {
-        (N_("m-d")),
-        "(?:"                                   // either m-d(-y)
-        "(?<MONTH>[0-9]+)[-/.' ]+"
-        "(?<DAY>[0-9]+)(?:[-/.' ]+"
-        "(?<YEAR>[0-9]+))?"
-        "|"                                     // or MMDD(CCYY)
-        "(?<MONTH>[0-9]{2})"
-        "(?<DAY>[0-9]{2})"
-        "(?<YEAR>[0-9]+)?"
-        ")"
-    }
-});
 
 /** Private implementation of GncDateTime. See the documentation for that class.
  */
@@ -609,42 +543,40 @@ GncDateTimeImpl::timestamp()
 
 /* Member function definitions for GncDateImpl.
  */
-GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
-    m_greg(boost::gregorian::day_clock::local_day()) /* Temporarily initialized to today, will be used and adjusted in the code below */
+GncDateImpl::GncDateImpl(const std::string str, const std::string locale_str) :
+    /* Temporarily initialized to today, will be used and adjusted in the code below */
+    m_greg(boost::gregorian::day_clock::local_day())
 {
-    auto iter = std::find_if(GncDate::c_formats.cbegin(), GncDate::c_formats.cend(),
-                             [&fmt](const GncDateFormat& v){ return (v.m_fmt == fmt); } );
-    if (iter == GncDate::c_formats.cend())
-        throw std::invalid_argument(N_("Unknown date format specifier passed as argument."));
+    UErrorCode status = U_ZERO_ERROR;
 
-    boost::regex r(iter->m_re);
-    boost::smatch what;
-    if(!boost::regex_search(str, what, r))  // regex didn't find a match
-        throw std::invalid_argument (N_("Value can't be parsed into a date using the selected date format."));
+    icu::Locale locale = icu::Locale::createCanonical (locale_str.c_str());
+    std::unique_ptr<icu::DateFormat> formatter(icu::DateFormat::createDateInstance(icu::DateFormat::kDefault, locale));
+    if (formatter == nullptr)
+        throw std::invalid_argument ("Cannot parse string");
 
-    // Bail out if a year was found with a yearless format specifier
-    auto fmt_has_year = (fmt.find('y') != std::string::npos);
-    if (!fmt_has_year && (what.length("YEAR") != 0))
-        throw std::invalid_argument (N_("Value appears to contain a year while the selected format forbids this."));
+    icu::UnicodeString input = icu::UnicodeString::fromUTF8(str);
+    icu::ParsePosition parsePos;
 
-    int year;
-    if (fmt_has_year)
-    {
-        /* The input dates have a year, so use that one */
-        year = std::stoi (what.str("YEAR"));
+    UDate date = formatter->parse(input, parsePos);
+    if (parsePos.getErrorIndex() != -1)
+        throw std::invalid_argument ("Cannot parse string");
 
-        /* We assume two-digit years to be in the range 1969 - 2068. */
-        if (year < 69)
-                year += 2000;
-        else if (year < 100)
-                year += 1900;
-    }
-    else /* The input dates have no year, so use current year */
-        year = m_greg.year(); // Can use m_greg here as it was already initialized in the initializer list earlier
+    std::unique_ptr<icu::Calendar> calendar(icu::Calendar::createInstance(locale, status));
+    if (U_FAILURE(status))
+        throw std::invalid_argument ("Cannot parse string");
 
-    m_greg = Date(year,
-                  static_cast<Month>(std::stoi (what.str("MONTH"))),
-                  std::stoi (what.str("DAY")));
+    calendar->setTime(date, status);
+    if (U_FAILURE(status))
+        throw std::invalid_argument ("Cannot parse string");
+
+    int32_t day = calendar->get(UCAL_DATE, status);
+    int32_t month = calendar->get(UCAL_MONTH, status) + 1;
+    int32_t year = calendar->get(UCAL_YEAR, status);
+
+    if (U_FAILURE(status))
+        throw std::invalid_argument ("Cannot parse string");
+
+    m_greg = Date(year, month, day);
 }
 
 gnc_ymd

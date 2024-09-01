@@ -154,11 +154,11 @@ struct DraftTransaction
 class GncPreTrans
 {
 public:
-    GncPreTrans(int date_format, bool multi_split)
-        : m_date_format{date_format}, m_multi_split{multi_split}, m_currency{nullptr} {};
+    GncPreTrans(const std::string date_locale, bool multi_split)
+        : m_date_locale{date_locale}, m_multi_split{multi_split}, m_currency{nullptr} {};
 
     void set (GncTransPropType prop_type, const std::string& value);
-    void set_date_format (int date_format) { m_date_format = date_format ;}
+    void set_date_locale (const std::string date_locale) { m_date_locale = date_locale ;}
     void set_multi_split (bool multi_split) { m_multi_split = multi_split ;}
     void reset (GncTransPropType prop_type);
     StrVec verify_essentials (void);
@@ -190,7 +190,7 @@ public:
 
 
 private:
-    int m_date_format;
+    std::string m_date_locale;
     bool m_multi_split;
     std::optional<std::string> m_differ;
     std::optional<GncDate> m_date;
@@ -221,12 +221,12 @@ private:
 class GncPreSplit
 {
 public:
-    GncPreSplit (int date_format, int currency_format) : m_date_format{date_format},
+    GncPreSplit (const std::string date_locale, int currency_format) : m_date_locale{date_locale},
         m_currency_format{currency_format} {};
     void set (GncTransPropType prop_type, const std::string& value);
     void reset (GncTransPropType prop_type);
     void add (GncTransPropType prop_type, const std::string& value);
-    void set_date_format (int date_format) { m_date_format = date_format ;}
+    void set_date_locale (const std::string date_locale) { m_date_locale = date_locale ;}
     void set_currency_format (int currency_format) { m_currency_format = currency_format; }
     void set_pre_trans (std::shared_ptr<GncPreTrans> pre_trans) { m_pre_trans = pre_trans; }
     std::shared_ptr<GncPreTrans> get_pre_trans (void) { return m_pre_trans; }
@@ -241,7 +241,7 @@ private:
     void UpdateCrossSplitCounters ();
 
     std::shared_ptr<GncPreTrans> m_pre_trans;
-    int m_date_format;
+    std::string m_date_locale;
     int m_currency_format;
     std::optional<std::string> m_action;
     std::optional<Account*> m_account;

@@ -162,7 +162,7 @@ void GncImportPrice::set (GncPricePropType prop_type, const std::string& value, 
         {
             case GncPricePropType::DATE:
                 m_date.reset();
-                m_date = GncDate(value, GncDate::c_formats[m_date_format].m_fmt); // Throws if parsing fails
+                m_date = GncDate(value, m_date_locale); // Throws if parsing fails
                 break;
 
             case GncPricePropType::AMOUNT:

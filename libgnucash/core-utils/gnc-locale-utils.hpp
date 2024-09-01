@@ -23,6 +23,7 @@
 #define GNC_LOCALE_UTILS_HPP
 
 #include <locale>
+#include <vector>
 #include <string>
 
 /** Get the default application locale.
@@ -62,5 +63,7 @@ void gnc_init_boost_locale(const std::string& messages_path);
  *  setlocale() in main(), but generated from boost::locale.
  */
 const std::locale& gnc_get_boost_locale();
+
+std::vector<std::string> gnc_get_available_locales ();
 
 #endif /* GNC_LOCALE_UTILS_HPP */

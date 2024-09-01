@@ -36,6 +36,7 @@ set(gtest_core_utils_INCLUDES
 set(gtest_core_utils_LIBS
   PkgConfig::GLIB2
   ${Boost_LIBRARIES}
+  ${ICU4C_I18N_LDFLAGS}
   ${GTHREAD_LDFLAGS}
   gtest)
 

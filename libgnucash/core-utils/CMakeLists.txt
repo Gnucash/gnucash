@@ -52,6 +52,7 @@ target_link_libraries(gnc-core-utils
 	PkgConfig::GLIB2
     PRIVATE
         ${Boost_LIBRARIES}
+        ${ICU4C_I18N_LDFLAGS}
         ${GOBJECT_LDFLAGS}
         ${GTK_MAC_LDFLAGS}
         "$<$<BOOL:${MAC_INTEGRATION}>:${OSX_EXTRA_LIBRARIES}>")

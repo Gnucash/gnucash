@@ -228,9 +228,9 @@ void GncTxImport::currency_format (int currency_format)
 }
 int GncTxImport::currency_format () { return m_settings.m_currency_format; }
 
-void GncTxImport::date_format (int date_format)
+void GncTxImport::date_locale (std::string date_locale)
 {
-    m_settings.m_date_format = date_format;
+    m_settings.m_date_locale = date_locale;
 
     /* Reparse all date related columns */
     std::vector<GncTransPropType> dates = { GncTransPropType::DATE,
@@ -238,7 +238,7 @@ void GncTxImport::date_format (int date_format)
             GncTransPropType::TREC_DATE};
     reset_formatted_column (dates);
 }
-int GncTxImport::date_format () { return m_settings.m_date_format; }
+std::string GncTxImport::date_locale () { return m_settings.m_date_locale; }
 
 /** Converts raw file data using a new encoding. This function must be
  * called after load_file only if load_file guessed
@@ -407,8 +407,8 @@ void GncTxImport::tokenize (bool guessColTypes)
         auto length = tokenized_line.size();
         if (length > 0)
         {
-            auto pretrans = std::make_shared<GncPreTrans>(date_format(), m_settings.m_multi_split);
-            auto presplit = std::make_shared<GncPreSplit>(date_format(), currency_format());
+            auto pretrans = std::make_shared<GncPreTrans>(date_locale(), m_settings.m_multi_split);
+            auto presplit = std::make_shared<GncPreSplit>(date_locale(), currency_format());
             presplit->set_pre_trans (std::move (pretrans));
             m_parsed_lines.push_back (std::make_tuple (tokenized_line, ErrMap(),
                                       presplit->get_pre_trans(), std::move (presplit), false));
@@ -781,7 +781,7 @@ void GncTxImport::update_pre_trans_props (parse_line_t& parsed_line, uint32_t co
 
     /* Reset date format for each trans props object
      * to ensure column updates use the most recent one */
-    trans_props->set_date_format (m_settings.m_date_format);
+    trans_props->set_date_locale (m_settings.m_date_locale);
     trans_props->set_multi_split (m_settings.m_multi_split);
 
     if ((old_type > GncTransPropType::NONE) && (old_type <= GncTransPropType::TRANS_PROPS))
@@ -820,7 +820,7 @@ void GncTxImport::update_pre_split_props (parse_line_t& parsed_line, uint32_t co
     auto trans_props = std::get<PL_PRETRANS> (parsed_line);
     /* Reset date format for each split props object
      * to ensure column updates use the most recent one */
-    split_props->set_date_format (m_settings.m_date_format);
+    split_props->set_date_locale (m_settings.m_date_locale);
     if (m_settings.m_multi_split && trans_props->is_part_of( m_parent))
         split_props->set_pre_trans (m_parent);
     else

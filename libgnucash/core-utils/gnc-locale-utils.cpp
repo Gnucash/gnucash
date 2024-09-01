@@ -22,6 +22,7 @@
 #include <glib.h>
 #include <clocale>
 #include <boost/locale.hpp>
+#include <unicode/uloc.h>
 #include "gnc-locale-utils.hpp"
 #include <config.h>
 
@@ -115,3 +116,14 @@ gnc_get_boost_locale()
 }
 
 
+std::vector<std::string>
+gnc_get_available_locales ()
+{
+    std::vector<std::string> rv;
+    auto num_locales{uloc_countAvailable()};
+    rv.reserve (num_locales);
+    for (int32_t i = 0; i < num_locales; ++i)
+        if (auto localeID = uloc_getAvailable (i))
+            rv.push_back (localeID);
+    return rv;
+}

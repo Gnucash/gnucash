@@ -35,6 +35,7 @@
 #include <glib/gi18n.h>
 #include <stdlib.h>
 
+#include "gnc-locale-utils.hpp"
 #include "gnc-ui.h"
 #include "gnc-uri-utils.h"
 #include "gnc-ui-util.h"
@@ -659,8 +660,8 @@ CsvImpPriceAssist::CsvImpPriceAssist ()
 
         /* Add in the date format combo box and hook it up to an event handler. */
         date_format_combo = GTK_COMBO_BOX_TEXT(gtk_combo_box_text_new());
-        for (auto& date_fmt : GncDate::c_formats)
-            gtk_combo_box_text_append_text (date_format_combo, _(date_fmt.m_fmt.c_str()));
+        for (auto locale : gnc_get_available_locales())
+            gtk_combo_box_text_append_text (date_format_combo, _(locale.c_str()));
         gtk_combo_box_set_active (GTK_COMBO_BOX(date_format_combo), 0);
         g_signal_connect (G_OBJECT(date_format_combo), "changed",
                          G_CALLBACK(csv_price_imp_preview_date_fmt_sel_cb), this);
@@ -1159,7 +1160,11 @@ CsvImpPriceAssist::preview_update_encoding (const char* encoding)
 void
 CsvImpPriceAssist::preview_update_date_format ()
 {
-    price_imp->date_format (gtk_combo_box_get_active (GTK_COMBO_BOX(date_format_combo)));
+    if (char *text = gtk_combo_box_text_get_active_text(date_format_combo))
+    {
+        price_imp->date_locale (text);
+        g_free (text);
+    }
     preview_refresh_table ();
 }
 
@@ -1764,8 +1769,12 @@ CsvImpPriceAssist::preview_refresh ()
             (price_imp->file_format() != GncImpFileFormat::CSV));
 
     // This section deals with the combo's and character encoding
-    gtk_combo_box_set_active (GTK_COMBO_BOX(date_format_combo),
-            price_imp->date_format());
+    auto locales = gnc_get_available_locales();
+    auto locale_it = std::find (locales.begin(), locales.end(), price_imp->date_locale());
+    if (locale_it != locales.end())
+        gtk_combo_box_set_active (GTK_COMBO_BOX(date_format_combo),
+                                  std::distance (locales.begin(), locale_it));
+
     gtk_combo_box_set_active (GTK_COMBO_BOX(currency_format_combo),
             price_imp->currency_format());
     go_charmap_sel_set_encoding (encselector, price_imp->encoding().c_str());

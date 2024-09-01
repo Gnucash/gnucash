@@ -34,6 +34,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include "gnc-locale-utils.hpp"
 #include "Account.h"
 #include "gnc-state.h"
 #include "gnc-ui-util.h"
@@ -150,7 +151,7 @@ CsvImportSettings::load (void)
     if (key_char)
         g_free (key_char);
 
-    m_date_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_DATE, &key_error);
+    m_date_locale = g_key_file_get_string (keyfile, group.c_str(), CSV_DATE, &key_error);
     m_load_error |= handle_load_error (&key_error, group);
 
     m_currency_format = g_key_file_get_integer (keyfile, group.c_str(), CSV_CURRENCY, &key_error);
@@ -203,13 +204,12 @@ CsvImportSettings::save (void)
         (m_file_format == GncImpFileFormat::CSV) ? true : false);
 
     g_key_file_set_string (keyfile, group.c_str(), CSV_SEP, m_separators.c_str());
-    g_key_file_set_integer (keyfile, group.c_str(), CSV_DATE, m_date_format);
+    g_key_file_set_string (keyfile, group.c_str(), CSV_DATE, m_date_locale.c_str());
     std::ostringstream cmt_ss;
     cmt_ss << "Supported date formats: ";
     int fmt_num = 0;
-    std::for_each (GncDate::c_formats.cbegin(), GncDate::c_formats.cend(),
-                    [&cmt_ss, &fmt_num](const GncDateFormat& fmt)
-                        { cmt_ss << fmt_num++ << ": '" << fmt.m_fmt << "', "; });
+    for (auto loc : gnc_get_available_locales())
+        cmt_ss << fmt_num++ << ": '" << loc << "', ";
     auto cmt = cmt_ss.str().substr(0, static_cast<long>(cmt_ss.tellp()) - 2);
     g_key_file_set_comment (keyfile, group.c_str(), CSV_DATE, cmt.c_str(), nullptr);
     g_key_file_set_integer (keyfile, group.c_str(), CSV_CURRENCY, m_currency_format);

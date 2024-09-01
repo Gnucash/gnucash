@@ -83,11 +83,11 @@ GncNumeric parse_amount_price (const std::string &str, int currency_format);
 struct GncImportPrice
 {
 public:
-    GncImportPrice (int date_format, int currency_format) : m_date_format{date_format},
+    GncImportPrice (std::string date_locale, int currency_format) : m_date_locale{date_locale},
         m_currency_format{currency_format}{};
 
     void set (GncPricePropType prop_type, const std::string& value, bool enable_test_empty);
-    void set_date_format (int date_format) { m_date_format = date_format ;}
+    void set_date_locale (std::string date_locale) { m_date_locale = date_locale ;}
     void set_currency_format (int currency_format) { m_currency_format = currency_format ;}
     void reset (GncPricePropType prop_type);
     std::string verify_essentials (void);
@@ -102,7 +102,7 @@ public:
     std::string errors();
 
 private:
-    int m_date_format;
+    std::string m_date_locale;
     int m_currency_format;
     std::optional<GncDate> m_date;
     std::optional<GncNumeric> m_amount;

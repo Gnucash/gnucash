@@ -100,8 +100,8 @@ public:
     void currency_format (int currency_format);
     int currency_format ();
 
-    void date_format (int date_format);
-    int date_format ();
+    void date_locale (std::string date_locale);
+    std::string date_locale ();
 
     void encoding (const std::string& encoding);
     std::string encoding ();

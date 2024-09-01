@@ -213,15 +213,15 @@ void GncPriceImport::currency_format (int currency_format)
 }
 int GncPriceImport::currency_format () { return m_settings.m_currency_format; }
 
-void GncPriceImport::date_format (int date_format)
+void GncPriceImport::date_locale (std::string date_locale)
 {
-    m_settings.m_date_format = date_format;
+    m_settings.m_date_locale = date_locale;
 
     /* Reparse all date related columns */
     std::vector<GncPricePropType> dates = { GncPricePropType::DATE };
     reset_formatted_column (dates);
 }
-int GncPriceImport::date_format () { return m_settings.m_date_format; }
+std::string GncPriceImport::date_locale () { return m_settings.m_date_locale; }
 
 /** Converts raw file data using a new encoding. This function must be
  * called after load_file only if load_file guessed
@@ -385,7 +385,7 @@ void GncPriceImport::tokenize (bool guessColTypes)
         auto length = tokenized_line.size();
         if (length > 0)
             m_parsed_lines.push_back (std::make_tuple (tokenized_line, std::string(),
-                    std::make_shared<GncImportPrice>(date_format(), currency_format()),
+                    std::make_shared<GncImportPrice>(date_locale(), currency_format()),
                     false));
         if (length > max_cols)
             max_cols = length;
@@ -750,7 +750,7 @@ GncPriceImport::set_column_type_price (uint32_t position, GncPricePropType type,
         /* Reset date and currency formats for each price props object
          * to ensure column updates use the most recent one
          */
-        std::get<PL_PREPRICE>(*parsed_lines_it)->set_date_format (m_settings.m_date_format);
+        std::get<PL_PREPRICE>(*parsed_lines_it)->set_date_locale (m_settings.m_date_locale);
         std::get<PL_PREPRICE>(*parsed_lines_it)->set_currency_format (m_settings.m_currency_format);
 
         uint32_t row = parsed_lines_it - m_parsed_lines.begin();
