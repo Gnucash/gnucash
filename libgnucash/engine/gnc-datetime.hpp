@@ -29,6 +29,10 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <functional>
+#include <optional>
+
+#include <boost/date_time/gregorian/gregorian.hpp>
 
 typedef struct
 {
@@ -172,6 +176,8 @@ private:
  * GncDate::c_formats class variable and work with those.
  */
 
+using StringToDate = std::function<boost::gregorian::date(const std::string&)>;
+
 class GncDateFormat
 {
 public:
@@ -182,6 +188,10 @@ public:
      */
     GncDateFormat (const char* fmt, const char* re) :
     m_fmt(fmt), m_re(re) {}
+    GncDateFormat (const char* fmt, StringToDate str_to_date, const char* re) :
+        m_fmt(fmt), m_re(re), m_str_to_date(str_to_date) {}
+    GncDateFormat (const char* fmt, StringToDate str_to_date) :
+        m_fmt(fmt), m_str_to_date(str_to_date) {}
     /** A string representing the format. */
     const std::string m_fmt;
 private:
@@ -189,6 +199,7 @@ private:
      * only be used internally by the gnc-datetime code.
      */
     const std::string m_re;
+    std::optional<StringToDate> m_str_to_date;
 
     friend class GncDateImpl;
 };

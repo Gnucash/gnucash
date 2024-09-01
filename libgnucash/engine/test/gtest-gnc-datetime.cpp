@@ -89,6 +89,12 @@ TEST(gnc_date_constructors, test_str_format_constructor)
         { "y-m-d",  "1985.3.12", 1985,  3, 12},
         { "y-m-d",      "3'6'8", 2003,  6,  8},
         { "y-m-d",   "20130801", 2013,  8,  1},
+        { "y-m-d", "2013 Aug 1", 2013,  8,  1},
+        { "y-m-d", "2013 Aug 01",2013,  8,  1},
+        { "y-m-d", "2013 August 01",    2013,  8,  1},
+        { "y-m-d", "2013-August-1",     2013,  8,  1},
+        { "y-m-d", "2009/Nov/04",2009, 11,  4},
+        { "y-m-d","1985.Mar.12", 1985,  3, 12},
         { "d-m-y", "01-08-2013", 2013,  8,  1},
         { "d-m-y",  "01-8-2013", 2013,  8,  1},
         { "d-m-y",  "1-08-2013", 2013,  8,  1},
@@ -101,6 +107,9 @@ TEST(gnc_date_constructors, test_str_format_constructor)
         { "d-m-y",  "12.3.1985", 1985,  3, 12},
         { "d-m-y",      "8'6'3", 2003,  6,  8},
         { "d-m-y",   "01082013", 2013,  8,  1},
+        { "d-m-y", "1 Aug 2013", 2013,  8,  1},
+        { "d-m-y", "1 Sep 2013", 2013,  9,  1},
+        { "d-m-y", "1 September 2013",  2013,  9,  1},
         { "m-d-y", "08-01-2013", 2013,  8,  1},
         { "m-d-y",  "8-01-2013", 2013,  8,  1},
         { "m-d-y",  "08-1-2013", 2013,  8,  1},
@@ -113,6 +122,8 @@ TEST(gnc_date_constructors, test_str_format_constructor)
         { "m-d-y",  "3.12.1985", 1985,  3, 12},
         { "m-d-y",      "6'8'3", 2003,  6,  8},
         { "m-d-y",   "08012013", 2013,  8,  1},
+        { "m-d-y", "November 4, 2009",  2009, 11,  4},
+        { "m-d-y", "Nov 4, 2009",       2009, 11,  4},
         {   "d-m",      "01-08",   curr_year,  8,  1},
         {   "d-m",       "01-8",   curr_year,  8,  1},
         {   "d-m",       "1-08",   curr_year,  8,  1},
@@ -129,6 +140,29 @@ TEST(gnc_date_constructors, test_str_format_constructor)
         {   "m-d",       "3.12",   curr_year,  3, 12},
         {   "m-d",        "6'8",   curr_year,  6,  8},
         {   "m-d",       "0801",   curr_year,  8,  1},
+
+        // invalid dates
+        { "d-m-y", "0 Aug 2013",          -1, -1, -1},
+        { "d-m-y", "31 Sep 2013",         -1, -1, -1},
+        { "d-m-y", "31 September 2013",   -1, -1, -1},
+        { "d-m-y", "31/11/2009",          -2, -2, -2},
+        { "d-m-y",  "34.3.1985",          -2, -2, -2},
+        { "m-d-y", "November 41, 2009",   -1, -1, -1},
+        { "m-d-y", "Nov 31, 2009",        -1, -1, -1},
+        { "y-m-d", "2013 Aug 0",          -1, -1, -1},
+        { "y-m-d", "2013 Feb 30",         -1, -1, -1},
+        { "y-m-d", "2013 August 0",       -1, -1, -1},
+        { "y-m-d", "2013-June-31",        -1, -1, -1},
+        { "y-m-d", "2009/Nov/0",          -1, -1, -1},
+        { "y-m-d",  "1985.Mar.32",        -1, -1, -1},
+
+        // 2-digit dates are not parsable with months as words
+        { "d-m-y", "1 Sep 13",            -1, -1, -1},
+        { "d-m-y", "1 September 13",      -1, -1, -1},
+        { "m-d-y", "November 4, 24",      -1, -1, -1},
+        { "m-d-y", "Nov 4, 23",           -1, -1, -1},
+        { "m-d-y", "Nov 29, 24",          -1, -1, -1},
+        { "y-m-d", "13-June-11",          -1, -1, -1},
 
         // ambiguous date formats
         // current parser doesn't know how to disambiguate
@@ -185,6 +219,10 @@ TEST(gnc_date_constructors, test_str_format_constructor)
         catch (const std::invalid_argument& e)
         {
             got_year = got_month = got_day = -1;
+        }
+        catch (const std::out_of_range&)
+        {
+            got_year = got_month = got_day = -2;
         }
 
         EXPECT_TRUE ((got_year  == test_dates[i].exp_year) &&

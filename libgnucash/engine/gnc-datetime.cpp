@@ -29,6 +29,11 @@
 #include <boost/date_time/local_time/local_time.hpp>
 #include <boost/locale.hpp>
 #include <boost/regex.hpp>
+#include <unicode/smpdtfmt.h>
+#include <unicode/locid.h>
+#include <unicode/udat.h>
+#include <unicode/parsepos.h>
+#include <unicode/calendar.h>
 #include <libintl.h>
 #include <locale.h>
 #include <map>
@@ -70,6 +75,8 @@ static const TZ_Ptr utc_zone(new boost::local_time::posix_time_zone("UTC-0"));
 void _set_tzp(TimeZoneProvider& tz);
 void _reset_tzp();
 
+static Date gregorian_date_from_locale_string (const std::string& str);
+
 /* To ensure things aren't overly screwed up by setting the nanosecond clock for boost::date_time. Don't do it, though, it doesn't get us anything and slows down the date/time library. */
 #ifndef BOOST_DATE_TIME_HAS_NANOSECONDS
 static constexpr auto ticks_per_second = INT64_C(1000000);
@@ -78,7 +85,7 @@ static constexpr auto ticks_per_second = INT64_C(1000000000);
 #endif
 
 /* Vector of date formats understood by gnucash and corresponding regex
- * to parse each from an external source
+ * and/or string->gregorian_date to parse each from an external source
  * Note: while the format names are using a "-" as separator, the
  * regexes will accept any of "-/.' " and will also work for dates
  * without separators.
@@ -86,6 +93,7 @@ static constexpr auto ticks_per_second = INT64_C(1000000000);
 const std::vector<GncDateFormat> GncDate::c_formats ({
     GncDateFormat {
         N_("y-m-d"),
+        boost::gregorian::from_string,
         "(?:"                                   // either y-m-d
         "(?<YEAR>[0-9]+)[-/.' ]+"
         "(?<MONTH>[0-9]+)[-/.' ]+"
@@ -98,6 +106,7 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
     },
     GncDateFormat {
         N_("d-m-y"),
+        boost::gregorian::from_uk_string,
         "(?:"                                   // either d-m-y
         "(?<DAY>[0-9]+)[-/.' ]+"
         "(?<MONTH>[0-9]+)[-/.' ]+"
@@ -110,6 +119,7 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
     },
     GncDateFormat {
         N_("m-d-y"),
+        boost::gregorian::from_us_string,
         "(?:"                                   // either m-d-y
         "(?<MONTH>[0-9]+)[-/.' ]+"
         "(?<DAY>[0-9]+)[-/.' ]+"
@@ -145,7 +155,8 @@ const std::vector<GncDateFormat> GncDate::c_formats ({
         "(?<DAY>[0-9]{2})"
         "(?<YEAR>[0-9]+)?"
         ")"
-    }
+    },
+    GncDateFormat { N_("Locale"), gregorian_date_from_locale_string },
 });
 
 /** Private implementation of GncDateTime. See the documentation for that class.
@@ -607,6 +618,65 @@ GncDateTimeImpl::timestamp()
     return str.substr(0, 8) + str.substr(9, 15);
 }
 
+struct ICUResources
+{
+    std::unique_ptr<icu::DateFormat> formatter;
+    std::unique_ptr<icu::Calendar> calendar;
+};
+
+static ICUResources&
+get_icu_resources()
+{
+    static ICUResources rv;
+
+    if (!rv.formatter)
+    {
+        icu::Locale locale;
+        if (auto lc_time_locale = setlocale (LC_TIME, nullptr))
+        {
+            std::string localeStr(lc_time_locale);
+            if (size_t dotPos = localeStr.find('.'); dotPos != std::string::npos)
+                localeStr = localeStr.substr(0, dotPos);
+
+            locale = icu::Locale::createCanonical (localeStr.c_str());
+        }
+
+        rv.formatter.reset(icu::DateFormat::createDateInstance(icu::DateFormat::kDefault, locale));
+        if (!rv.formatter)
+            throw std::invalid_argument("Cannot create date formatter.");
+
+        UErrorCode status = U_ZERO_ERROR;
+        rv.calendar.reset(icu::Calendar::createInstance(locale, status));
+        if (U_FAILURE(status))
+            throw std::invalid_argument("Cannot create calendar instance.");
+
+        rv.calendar->setLenient(false);
+    }
+
+    return rv;
+}
+
+static Date
+gregorian_date_from_locale_string (const std::string& str)
+{
+    ICUResources& resources = get_icu_resources();
+
+    icu::UnicodeString input = icu::UnicodeString::fromUTF8(str);
+    icu::ParsePosition parsePos;
+    UDate date = resources.formatter->parse(input, parsePos);
+    if (parsePos.getErrorIndex() != -1 || parsePos.getIndex() != input.length())
+        throw std::invalid_argument ("Cannot parse string");
+
+    UErrorCode status = U_ZERO_ERROR;
+    resources.calendar->setTime(date, status);
+    if (U_FAILURE(status))
+        throw std::invalid_argument ("Cannot set calendar time");
+
+    return Date (resources.calendar->get(UCAL_YEAR, status),
+                 resources.calendar->get(UCAL_MONTH, status) + 1,
+                 resources.calendar->get(UCAL_DATE, status));
+}
+
 /* Member function definitions for GncDateImpl.
  */
 GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
@@ -616,6 +686,19 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
                              [&fmt](const GncDateFormat& v){ return (v.m_fmt == fmt); } );
     if (iter == GncDate::c_formats.cend())
         throw std::invalid_argument(N_("Unknown date format specifier passed as argument."));
+
+    if (iter->m_str_to_date)
+    {
+        try
+        {
+            m_greg = (*iter->m_str_to_date)(str);
+            return;
+        }
+        catch (...) {}          // with any string->date exception, try regex
+    }
+
+    if (iter->m_re.empty())
+        throw std::invalid_argument ("No regex pattern available");
 
     boost::regex r(iter->m_re);
     boost::smatch what;
