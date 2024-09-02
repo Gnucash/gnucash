@@ -11,8 +11,8 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-07-31 15:09+0000\n"
-"Last-Translator: Bojan Topalovski <3dcncinfo@gmail.com>\n"
+"PO-Revision-Date: 2024-08-21 09:45+0000\n"
+"Last-Translator: Vesna Micajkova <vmicajkova@institutpraktikum.mk>\n"
 "Language-Team: Macedonian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/mk/>\n"
 "Language: mk\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n==1 || n%10==1 ? 0 : 1;\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -3698,7 +3698,7 @@ msgstr "Дали сте сигурни дека сакате да ги избр�
 #: gnucash/gnome-utils/dialog-transfer.cpp:1796
 #, c-format
 msgid "Price retrieval failed: %s"
-msgstr ""
+msgstr "Обновувањето на цената не успеа: %s"
 
 #: gnucash/gnome/dialog-price-editor.c:227
 msgid "Are you sure you want to replace the existing price?"
@@ -3750,6 +3750,8 @@ msgid ""
 "The GUIDs in the %s check format file '%s' and the %s check format file '%s' "
 "match."
 msgstr ""
+"GUID-ите во датотеката со формат за проверка на %s „%s“ и датотеката со "
+"формат за проверка на %s „%s“ се совпаѓаат."
 
 #. Translators: This is a directory name. It may be presented to
 #. * the user to indicate that some data file was defined by the
@@ -5038,7 +5040,7 @@ msgstr "Автоматско бришење"
 #: gnucash/ui/gnc-plugin-page-register.ui:250
 #: gnucash/ui/gnc-plugin-page-register.ui:904
 msgid "Stock Assistant"
-msgstr ""
+msgstr "Асистент за акции"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:647
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1930
@@ -5060,14 +5062,17 @@ msgid ""
 "the changes to this transaction, discard the transaction, or cancel the "
 "operation?"
 msgstr ""
+"Овој регистар има промени во трансакцијата што чекаат. Дали сакате да ги "
+"зачувате промените на оваа трансакција, да ја отфрлите трансакцијата или да "
+"ја откажете операцијата?"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1872
 msgid "_Discard Transaction"
-msgstr ""
+msgstr "_Отфрлете ја трансакцијата"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1876
 msgid "_Save Transaction"
-msgstr ""
+msgstr "_Зачувај трансакција"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1909
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1944
@@ -5076,143 +5081,148 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2112
 #: gnucash/gnome/gnc-plugin-page-register.cpp:2235
 msgid "unknown"
-msgstr ""
+msgstr "непознатo"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1932
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3347
 msgid "Portfolio"
-msgstr ""
+msgstr "Портфолио"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1934
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3353
 msgid "Search Results"
-msgstr ""
+msgstr "Резултати од пребарувањето"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3219
 msgid "Start Date:"
-msgstr ""
+msgstr "Датум на започнување:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3226
 msgid "Show previous number of days:"
-msgstr ""
+msgstr "Прикажи го претходниот број на денови:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3234
 msgid "End Date:"
-msgstr ""
+msgstr "Датум на завршување:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3244
 #: gnucash/report/trep-engine.scm:157
 msgid "Unreconciled"
-msgstr ""
+msgstr "Неусогласен"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3250
 #: gnucash/gnome-search/search-reconciled.c:222
 #: gnucash/report/trep-engine.scm:160
 msgid "Frozen"
-msgstr ""
+msgstr "Замрзнати"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3252
 #: gnucash/gnome-search/search-reconciled.c:225
 #: gnucash/report/trep-engine.scm:161
 msgid "Voided"
-msgstr ""
+msgstr "Поништено"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3262
 msgid "Show:"
-msgstr ""
+msgstr "Прикажи:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3270
 msgid "Hide:"
-msgstr ""
+msgstr "Сокриј:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3281
 msgid "Filter By:"
-msgstr ""
+msgstr "Филтрирај според:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3343
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3361
 #: gnucash/report/reports/standard/transaction.scm:33
 msgid "Transaction Report"
-msgstr ""
+msgstr "Извештај за трансакција"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3349
 msgid "Portfolio Report"
-msgstr ""
+msgstr "Извештај за портфолио"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3355
 msgid "Search Results Report"
-msgstr ""
+msgstr "Извештај за резултатите од пребарувањето"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3359
 #: gnucash/gtkbuilder/dialog-preferences.glade:2791
 #: gnucash/report/reports/standard/general-journal.scm:37
 #: gnucash/report/reports/standard/register.scm:64
 msgid "Register"
-msgstr ""
+msgstr "Регистар"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3377
 msgid "and subaccounts"
-msgstr ""
+msgstr "и подсметки"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3554
 msgid "Print checks from multiple accounts?"
-msgstr ""
+msgstr "Испечати чекови од повеќе сметки?"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3556
 msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
 msgstr ""
+"Овој резултат од пребарувањето содржи поделби од повеќе од една сметка. Дали "
+"сакате да ги испечатите чековите иако не се сите од иста сметка?"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3566
 msgid "_Print checks"
-msgstr ""
+msgstr "_Печати чекови"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3585
 msgid ""
 "You can only print checks from a bank account register or search results."
 msgstr ""
+"Може да печатите чекови само од регистар на банкарска сметка или резултати "
+"од пребарување."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3801
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
+"Не можете да поништите трансакција со усогласени или расчистени поделби."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3808
 #: gnucash/gnome/gnc-split-reg.c:1124
 #, c-format
 msgid "This transaction is marked read-only with the comment: '%s'"
-msgstr ""
+msgstr "Оваа трансакција е означена само за читање со коментарот: „%s“"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3909
 #: gnucash/gnome/gnc-split-reg.c:1095
 msgid "A reversing entry has already been created for this transaction."
-msgstr ""
+msgstr "За оваа трансакција веќе е создаден обратен запис."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3910
 msgid "Jump to the transaction?"
-msgstr ""
+msgstr "Скокни до трансакцијата?"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3919
 msgid "Reverse Transaction"
-msgstr ""
+msgstr "Обратна трансакција"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3919
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
 msgid "New Transaction Information"
-msgstr ""
+msgstr "Податоци за нова трансакција"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.cpp:4010
 #, c-format
 msgid "Sort %s by…"
-msgstr ""
+msgstr "Подреди %s по…"
 
 #. Translators: The %s is the name of the plugin page
 #: gnucash/gnome/gnc-plugin-page-register.cpp:4100
 #: gnucash/gnome-utils/gnc-tree-view-owner.c:1148
 #, c-format
 msgid "Filter %s by…"
-msgstr ""
+msgstr "Филтрирај %s по…"
 
 #. Translators: %s refer to the following in
 #. order: invoice type, invoice ID, owner name,
@@ -5220,56 +5230,57 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.cpp:4627
 #, c-format
 msgid "%s %s from %s, posted %s, amount %s"
-msgstr ""
+msgstr "%s %s од %s, објавени %s, износ %s"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:4637
 msgid "Several documents are linked with this transaction. Please choose one:"
 msgstr ""
+"Неколку документи се поврзани со оваа трансакција. Ве молиме изберете еден:"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:4638
 #: gnucash/gnome-search/dialog-search.c:323
 msgid "Select"
-msgstr ""
+msgstr "Изберете"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:4700
 msgid "Go to Date"
-msgstr ""
+msgstr "Одете на Датум"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:5004
 #, c-format
 msgid "Checking splits in current register: %u of %u"
-msgstr ""
+msgstr "Проверка на поделби во тековниот регистар: %u од %u"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:234
 msgid "Print"
-msgstr ""
+msgstr "Печати"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:235
 #: gnucash/gnome-utils/dialog-file-access.c:339
 #: gnucash/gnome-utils/gnc-file.c:111 gnucash/gnome-utils/gnc-file.c:353
 msgid "Export"
-msgstr ""
+msgstr "Извоз"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:239
 msgid "Save Config"
-msgstr ""
+msgstr "Зачувај конфигурација"
 
 #. Translators: This string is meant to be a short alternative for "Save Report Configuration As…"
 #. to be used as toolbar button label.
 #: gnucash/gnome/gnc-plugin-page-report.cpp:242
 msgid "Save Config As…"
-msgstr ""
+msgstr "Зачувај ја конфигурацијата како…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:243
 msgid "Make Pdf"
-msgstr ""
+msgstr "Направете Pdf"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:377
 #: gnucash/gnome/gnc-plugin-page-report.cpp:378
 msgid "The numeric ID of the report."
-msgstr ""
+msgstr "Нумеричкиот ID на извештајот."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1260
 #, c-format
@@ -5277,6 +5288,8 @@ msgid ""
 "Update the current report's saved configuration. The report configuration "
 "will be saved in the file %s."
 msgstr ""
+"Ажурирајте ја зачуваната конфигурација на тековниот извештај. "
+"Конфигурацијата на извештајот ќе биде зачувана во датотеката %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1263
 #, c-format
@@ -5284,36 +5297,39 @@ msgid ""
 "Add the current report's configuration to the 'Reports->Saved Report "
 "Configurations' menu. The report configuration will be saved in the file %s."
 msgstr ""
+"Додајте ја конфигурацијата на тековниот извештај во менито „Извештаи-> "
+"Конфигурации за зачувани извештаи“. Конфигурацијата на извештајот ќе биде "
+"зачувана во датотеката %s."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1271
 #: gnucash/ui/gnc-plugin-page-report.ui:74
 #: gnucash/ui/gnc-plugin-page-report.ui:255
 msgid "Save _Report Configuration"
-msgstr ""
+msgstr "Сочувај_Конфигурација на извештај"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1272
 #: gnucash/ui/gnc-plugin-page-report.ui:81
 #: gnucash/ui/gnc-plugin-page-report.ui:270
 msgid "Save Report Configuration As…"
-msgstr ""
+msgstr "Зачувај ја конфигурацијата на извештајот како…"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1552
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1585
 msgid "HTML"
-msgstr ""
+msgstr "HTML"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1555
 msgid "Choose export format"
-msgstr ""
+msgstr "Изберете формат за извоз"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1556
 msgid "Choose the export format for this report:"
-msgstr ""
+msgstr "Изберете го форматот за извоз за овој извештај:"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1596
 #, c-format
 msgid "Save %s To File"
-msgstr ""
+msgstr "Зачувајте %s во датотека"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1625
 #, c-format
@@ -5322,10 +5338,13 @@ msgid ""
 "\n"
 "%s"
 msgstr ""
+"Не можете да зачувате во тоа име на датотека.\n"
+"\n"
+"%s"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1635
 msgid "You cannot save to that file."
-msgstr ""
+msgstr "Не можете да зачувате во таа датотека."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1644
 #: gnucash/gnome-utils/gnc-file.c:1363 gnucash/gnome-utils/gnc-file.c:1610
@@ -5333,6 +5352,7 @@ msgstr ""
 #, c-format
 msgid "The file %s already exists. Are you sure you want to overwrite it?"
 msgstr ""
+"Датотеката %s веќе постои. Дали сте сигурни дека сакате да ја презапишете?"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1781
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1807
@@ -5341,20 +5361,22 @@ msgid ""
 "This report must be upgraded to return a document object with export-string "
 "or export-error."
 msgstr ""
+"Овој извештај мора да се надгради за да се врати објект на документ со низа "
+"за извоз или грешка со извоз."
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1818
 #, c-format
 msgid "Could not open the file %s. The error is: %s"
-msgstr ""
+msgstr "Не може да се отвори датотеката %s. Грешката е: %s"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1863
 msgid "GnuCash-Report"
-msgstr ""
+msgstr "GnuCash-Извештај"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1912
 #: gnucash/report/reports/standard/invoice.scm:877
 msgid "Printable Invoice"
-msgstr ""
+msgstr "Фактура за печатење"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1913
 #: gnucash/report/reports/standard/taxinvoice.scm:301
@@ -5362,113 +5384,115 @@ msgstr ""
 #: gnucash/report/reports/standard/taxinvoice.scm:315
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:423
 msgid "Tax Invoice"
-msgstr ""
+msgstr "Даночна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1914
 #: gnucash/report/reports/standard/invoice.scm:887
 msgid "Easy Invoice"
-msgstr ""
+msgstr "Лесна фактура"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1915
 #: gnucash/report/reports/standard/invoice.scm:897
 msgid "Fancy Invoice"
-msgstr ""
+msgstr "Фенси фактура"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:398
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:53
 msgid "_New Schedule"
-msgstr ""
+msgstr "_Нов Распоред"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:404
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:59
 msgid "_Edit Schedule"
-msgstr ""
+msgstr "_Уреди распоред"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:410
 #: gnucash/ui/gnc-plugin-page-sx-list.ui:65
 msgid "_Delete Schedule"
-msgstr ""
+msgstr "_Избриши распоред"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:492
 #: gnucash/gtkbuilder/dialog-account.glade:553
 msgid "Transactions"
-msgstr ""
+msgstr "Трансакции"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:562
 msgid "Upcoming Transactions"
-msgstr ""
+msgstr "Претстојни трансакции"
 
 #: gnucash/gnome/gnc-plugin-page-sx-list.cpp:927
 msgid "Do you really want to delete this scheduled transaction?"
 msgid_plural "Do you really want to delete these scheduled transactions?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Дали навистина сакате да ја избришете оваа закажана трансакција?"
+msgstr[1] "Дали навистина сакате да ги избришете овие закажани трансакции?"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:163
 #: gnucash/report/reports/standard/view-column.scm:95
 msgid "Report error"
-msgstr ""
+msgstr "Пријавете грешка"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:164
 #: gnucash/report/reports/standard/view-column.scm:96
 msgid "An error occurred while running the report."
-msgstr ""
+msgstr "Се појави грешка при извршувањето на извештајот."
 
 #: gnucash/gnome/gnc-plugin-report-system.c:200
 #: gnucash/gnome/gnc-plugin-report-system.c:222
 #, c-format
 msgid "Badly formed options URL: %s"
-msgstr ""
+msgstr "Лошо формирани URL на опции: %s"
 
 #: gnucash/gnome/gnc-plugin-report-system.c:210
 #, c-format
 msgid "Badly-formed report id: %s"
-msgstr ""
+msgstr "Лошо формиран ID на извештај: %s"
 
 #: gnucash/gnome/gnc-split-reg.c:651
 msgid "Standard Order"
-msgstr ""
+msgstr "Стандардна нарачка"
 
 #: gnucash/gnome/gnc-split-reg.c:657
 msgid "Date of Entry"
-msgstr ""
+msgstr "Датум на внес"
 
 #: gnucash/gnome/gnc-split-reg.c:660 gnucash/gnome/window-reconcile.cpp:2059
 msgid "Statement Date"
-msgstr ""
+msgstr "Датум на извод"
 
 #: gnucash/gnome/gnc-split-reg.c:683
 #: gnucash/report/reports/standard/customer-summary.scm:118
 #: gnucash/report/reports/standard/new-aging.scm:101
 #: gnucash/report/trep-engine.scm:414
 msgid "Descending"
-msgstr ""
+msgstr "Опаѓачки"
 
 #: gnucash/gnome/gnc-split-reg.c:685
 #: gnucash/report/reports/standard/customer-summary.scm:117
 #: gnucash/report/reports/standard/new-aging.scm:100
 #: gnucash/report/trep-engine.scm:412
 msgid "Ascending"
-msgstr ""
+msgstr "Растечки"
 
 #: gnucash/gnome/gnc-split-reg.c:711
 msgid "Filtered"
-msgstr ""
+msgstr "Филтрирано"
 
 #: gnucash/gnome/gnc-split-reg.c:877
 #, c-format
 msgid "Cut the split '%s' from the transaction '%s'?"
-msgstr ""
+msgstr "Да се намали поделбата „%s“ од трансакцијата „%s“?"
 
 #: gnucash/gnome/gnc-split-reg.c:878
 msgid ""
 "You would be removing a reconciled split! This is not a good idea as it will "
 "cause your reconciled balance to be off."
 msgstr ""
+"Ќе ја отстраните усогласената подела! Ова не е добра идеја бидејќи ќе "
+"предизвика вашата нарушување на усогласената рамнотежа."
 
 #: gnucash/gnome/gnc-split-reg.c:881
 msgid "You cannot cut this split."
-msgstr ""
+msgstr "Не можете да ја исечете оваа поделба."
 
 #: gnucash/gnome/gnc-split-reg.c:882
 msgid ""
@@ -5477,28 +5501,35 @@ msgid ""
 "from this window, or you may navigate to a register that shows another side "
 "of this same transaction and remove the split from that register."
 msgstr ""
+"Ова е поделбата што ја прицврстува оваа трансакција во регистарот. Не можете "
+"да го отстраните од овој прозорец за регистрација. Може да ја отстраните "
+"целата трансакција од овој прозорец или да отидете до регистарот што "
+"прикажува друга страна на истата трансакција и да го отстраните "
+"разделувањето од тој регистар."
 
 #: gnucash/gnome/gnc-split-reg.c:912 gnucash/gnome/gnc-split-reg.c:1439
 msgid "(no memo)"
-msgstr ""
+msgstr "(без белешка)"
 
 #: gnucash/gnome/gnc-split-reg.c:915 gnucash/gnome/gnc-split-reg.c:1442
 msgid "(no description)"
-msgstr ""
+msgstr "(без опис)"
 
 #: gnucash/gnome/gnc-split-reg.c:940
 msgid "_Cut Split"
-msgstr ""
+msgstr "_Исечете Поделба"
 
 #: gnucash/gnome/gnc-split-reg.c:954
 msgid "Cut the current transaction?"
-msgstr ""
+msgstr "Да се исече тековната трансакција?"
 
 #: gnucash/gnome/gnc-split-reg.c:955
 msgid ""
 "You would be removing a transaction with reconciled splits! This is not a "
 "good idea as it will cause your reconciled balance to be off."
 msgstr ""
+"Ќе отстраните трансакција со усогласени поделби! Ова не е добра идеја "
+"бидејќи ќе предизвика вашата усогласена рамнотежа да биде нарушена."
 
 #: gnucash/gnome/gnc-split-reg.c:978
 msgid "_Cut Transaction"
