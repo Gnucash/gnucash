@@ -29,6 +29,7 @@
 (use-modules (gnucash core-utils))
 (use-modules (gnucash json builder))            ;for building JSON options
 (use-modules (gnucash report html-utilities))
+(use-modules (gnucash report report-utilities))
 (use-modules (srfi srfi-9))
 (use-modules (ice-9 match))
 
@@ -274,10 +275,10 @@
   (gnc:html-chart-get chart '(options title text)))
 
 (define (gnc:html-chart-set-title! chart title)
-  (gnc:html-chart-set! chart '(options title text) title))
+  (gnc:html-chart-set! chart '(options title text) (list-to-vec title)))
 
 (define (gnc:html-chart-set-data-labels! chart labels)
-  (gnc:html-chart-set! chart '(data labels) labels))
+  (gnc:html-chart-set! chart '(data labels) (list-to-vec labels)))
 
 (define (gnc:html-chart-set-axes-display! chart display?)
   (gnc:html-chart-set! chart '(options scales xAxes (0) display) display?)
@@ -337,9 +338,8 @@
     (nested-alist-get options path)))
 
 (define (gnc:html-chart-set! chart path val)
-  (let ((options (gnc:html-chart-get-options-internal chart))
-        (val-vec (list-to-vec val)))
-    (nested-alist-set! options path val-vec)
+  (let ((options (gnc:html-chart-get-options-internal chart)))
+    (nested-alist-set! options path val)
     (gnc:html-chart-set-options-internal! chart options)))
 
 (define JS-Number-to-String "

@@ -14,7 +14,10 @@
 
 (define (test-html-chart)
 
-  (let ((chart (gnc:make-html-chart)))
+  (let ((chart (gnc:make-html-chart))
+        (a-list-of-pairs '((unit . day)
+                           (displayFormats (day . "DD-MM-YYYY"))
+                           (tooltipFormat . "DD-MM-YYYY"))))
 
     (gnc:html-chart-add-data-series! chart "label" '(2 3 4) "red")
 
@@ -56,6 +59,16 @@
     (test-equal "root option setter & getter"
       'abc
       (gnc:html-chart-get chart '(options maintainAspectRatio)))
+
+    (test-equal "path doesn't exist"
+      #f
+      (gnc:html-chart-get chart '(options scales xAxes (0) time)))
+
+    (gnc:html-chart-set! chart '(options scales xAxes (0) time) a-list-of-pairs)
+
+    (test-equal "path exists and the list-of-pairs is intact"
+      a-list-of-pairs
+      (gnc:html-chart-get chart '(options scales xAxes (0) time)))
 
     (gnc:html-chart-set! chart '(options legend position) 'de)
     (test-equal "1st level option setter & getter"
