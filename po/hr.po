@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-08-13 01:09+0000\n"
+"PO-Revision-Date: 2024-08-26 22:09+0000\n"
 "Last-Translator: Milo Ivir <mail@milotype.de>\n"
 "Language-Team: Croatian <https://hosted.weblate.org/projects/gnucash/gnucash/"
 "hr/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Weblate 5.7-dev\n"
+"X-Generator: Weblate 5.7.1-dev\n"
 
 #: bindings/guile/date-utilities.scm:173
 #: gnucash/report/reports/example/daily-reports.scm:260
@@ -16657,11 +16657,11 @@ msgstr "Savjet dana za GnuCash"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:26
 msgid "_Previous"
-msgstr "_Prethodni"
+msgstr "_Natrag"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:41
 msgid "_Next"
-msgstr "_Sljedeći"
+msgstr "_Dalje"
 
 #: gnucash/gtkbuilder/dialog-totd.glade:95
 msgid "<b>Tip of the Day</b>"
@@ -31051,7 +31051,7 @@ msgstr "Adresa tvog poduzeća."
 #: libgnucash/engine/gnc-optiondb.cpp:1308
 #: libgnucash/engine/gnc-optiondb.cpp:1312
 msgid "The contact person to print on invoices."
-msgstr "Kontakt osoba, za ispis na izlaznim računima."
+msgstr "Kontakt osoba na izlaznim računima."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1316
 msgid "The fax number of your business."
