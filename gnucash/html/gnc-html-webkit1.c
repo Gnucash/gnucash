@@ -474,7 +474,7 @@ load_to_stream( GncHtmlWebkit* self, URLType type,
     DEBUG( "type %s, location %s, label %s", type ? type : "(null)",
            location ? location : "(null)", label ? label : "(null)");
 
-    g_return_if_fail( self != NULL );
+    g_return_val_if_fail( self != NULL, FALSE );
 
     if ( gnc_html_stream_handlers != NULL )
     {
