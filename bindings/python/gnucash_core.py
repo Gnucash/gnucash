@@ -356,15 +356,6 @@ class Session(GnuCashCoreClass):
                 if mode is None:
                     mode = SessionOpenMode.SESSION_NORMAL_OPEN
                 self.begin(book_uri, mode)
-                # Take care of backend inconsistency
-                # New xml file can't be loaded, new sql store
-                # has to be loaded before it can be altered
-                # Any existing store obviously has to be loaded
-                # More background: https://bugs.gnucash.org/show_bug.cgi?id=726891
-                is_new = mode in (SessionOpenMode.SESSION_NEW_STORE, SessionOpenMode.SESSION_NEW_OVERWRITE)
-                scheme = urlparse(book_uri).scheme
-                if not (is_new and scheme == 'xml'):
-                    self.load()
             except GnuCashBackendException as backend_exception:
                 self.end()
                 self.destroy()
