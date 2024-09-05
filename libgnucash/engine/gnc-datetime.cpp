@@ -541,54 +541,62 @@ GncDateTimeImpl::timestamp()
     return str.substr(0, 8) + str.substr(9, 15);
 }
 
+using DateFormatPtr = std::shared_ptr<icu::DateFormat>;
+using CalendarPtr = std::shared_ptr<icu::Calendar>;
+
+static std::tuple<DateFormatPtr, CalendarPtr>
+locale_to_formatter_and_calendar (const std::string locale_str)
+{
+    static std::map<std::string, std::optional<std::tuple<DateFormatPtr, CalendarPtr>>> cache;
+    auto& tuple = cache[locale_str];
+    if (!tuple)
+    {
+        auto locale = icu::Locale::createCanonical (locale_str.c_str());
+        std::shared_ptr<icu::DateFormat> formatter(icu::DateFormat::createDateInstance(icu::DateFormat::kDefault, locale));
+        if (formatter == nullptr)
+            throw std::invalid_argument ("Cannot parse string");
+
+        UErrorCode status = U_ZERO_ERROR;
+        std::shared_ptr<icu::Calendar> calendar(icu::Calendar::createInstance(locale, status));
+        if (U_FAILURE(status))
+            throw std::invalid_argument ("Cannot parse string");
+
+        tuple = std::make_tuple<DateFormatPtr, CalendarPtr>(std::move(formatter), std::move(calendar));
+    }
+
+    return *tuple;
+}
+
 /* Member function definitions for GncDateImpl.
  */
 GncDateImpl::GncDateImpl(const std::string str, const std::string locale_str) :
     /* Temporarily initialized to today, will be used and adjusted in the code below */
     m_greg(boost::gregorian::day_clock::local_day())
 {
-    UErrorCode status = U_ZERO_ERROR;
-
     std::cout << locale_str << '|' << str << ": ";
 
-    icu::Locale locale = icu::Locale::createCanonical (locale_str.c_str());
-    std::unique_ptr<icu::DateFormat> formatter(icu::DateFormat::createDateInstance(icu::DateFormat::kDefault, locale));
-    if (formatter == nullptr)
-        throw std::invalid_argument ("Cannot parse string");
-
+    auto [formatter, calendar] = locale_to_formatter_and_calendar (locale_str);
     icu::UnicodeString input = icu::UnicodeString::fromUTF8(str);
     icu::ParsePosition parsePos;
 
     UDate date = formatter->parse(input, parsePos);
     if (parsePos.getErrorIndex() != -1)
     {
-        std::cout << "1\n";
+        std::cout << "cannot parse " << std::endl;
         throw std::invalid_argument ("Cannot parse string");
     }
 
-    std::unique_ptr<icu::Calendar> calendar(icu::Calendar::createInstance(locale, status));
-    if (U_FAILURE(status))
-    {
-        std::cout << "2\n";
-        throw std::invalid_argument ("Cannot parse string");
-    }
-
+    UErrorCode status = U_ZERO_ERROR;
     calendar->setTime(date, status);
     if (U_FAILURE(status))
-    {
-        std::cout << "3\n";
         throw std::invalid_argument ("Cannot parse string");
-    }
 
     int32_t day = calendar->get(UCAL_DATE, status);
     int32_t month = calendar->get(UCAL_MONTH, status) + 1;
     int32_t year = calendar->get(UCAL_YEAR, status);
 
     if (U_FAILURE(status))
-    {
-        std::cout << "4\n";
         throw std::invalid_argument ("Cannot parse string");
-    }
 
     std::cout << day << '/' << month << '/' << year << std::endl;
     m_greg = Date(year, month, day);
