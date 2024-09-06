@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-09-02 00:09+0000\n"
+"PO-Revision-Date: 2024-09-06 23:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -2034,7 +2034,7 @@ msgstr "Könyvelésre kerül, hogy 1 %s ára %s, %s napján."
 #: gnucash/gnome/assistant-stock-transaction.cpp:1411
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
-msgstr ""
+msgstr "A tranzakciót nem lehet kiegyensúlyozni: %s hibaértéke %s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1417
 #, c-format
@@ -3280,16 +3280,16 @@ msgstr "Bejövőszámla adatai"
 #: gnucash/gnome/dialog-invoice.c:2804 gnucash/gnome/dialog-invoice.c:3030
 #: gnucash/gnome/dialog-invoice.c:3611
 msgid "Bill ID"
-msgstr "Bejövőszámla-szám"
+msgstr "Bejövőszámla száma"
 
 #: gnucash/gnome/dialog-invoice.c:2808 gnucash/gnome/dialog-invoice.c:3034
 msgid "Voucher Information"
-msgstr "Bizonylat adatai"
+msgstr "Költségbizonylat adatai"
 
 #: gnucash/gnome/dialog-invoice.c:2810 gnucash/gnome/dialog-invoice.c:3037
 #: gnucash/gnome/dialog-invoice.c:3645
 msgid "Voucher ID"
-msgstr "Bizonylatszám"
+msgstr "Költségbizonylat száma"
 
 #: gnucash/gnome/dialog-invoice.c:3368
 msgid "Date of duplicated entries"
@@ -3327,9 +3327,8 @@ msgstr "Rögzítés"
 
 #: gnucash/gnome/dialog-invoice.c:3519 gnucash/gnome/dialog-invoice.c:3528
 #: gnucash/gnome/dialog-invoice.c:3539
-#, fuzzy
 msgid "Printable Report"
-msgstr "Egyetlen report"
+msgstr "Nyomtatható jelentés"
 
 #: gnucash/gnome/dialog-invoice.c:3524 gnucash/gnome/dialog-invoice.c:3790
 msgid "View/Edit Bill"
@@ -3339,7 +3338,7 @@ msgstr "Bejövőszámla megtekintése/szerkesztése"
 #. interchangeably in gnucash and mean the same thing.
 #: gnucash/gnome/dialog-invoice.c:3535
 msgid "View/Edit Voucher"
-msgstr "Bizonylat megtekintése/szerkesztése"
+msgstr "Költségbizonylat megtekintése/szerkesztése"
 
 #: gnucash/gnome/dialog-invoice.c:3549
 msgid "Invoice Owner"
@@ -3384,7 +3383,7 @@ msgstr "Létrehozás dátuma"
 #: gnucash/gtkbuilder/dialog-invoice.glade:42
 #: gnucash/gtkbuilder/dialog-invoice.glade:868
 msgid "Invoice ID"
-msgstr "Számlaszám"
+msgstr "Kimenőszámla száma"
 
 #: gnucash/gnome/dialog-invoice.c:3583
 msgid "Bill Owner"
@@ -3396,11 +3395,11 @@ msgstr "Bejövőszámla-megjegyzések"
 
 #: gnucash/gnome/dialog-invoice.c:3617
 msgid "Voucher Owner"
-msgstr "Bizonylat tulajdonosa"
+msgstr "Költségbizonylat tulajdonosa"
 
 #: gnucash/gnome/dialog-invoice.c:3620
 msgid "Voucher Notes"
-msgstr "Bizonylatmegjegyzések"
+msgstr "Költségbizonylat megjegyzései"
 
 #: gnucash/gnome/dialog-invoice.c:3654 gnucash/gnome/dialog-invoice.c:3813
 #: gnucash/gnome/dialog-lot-viewer.c:908 gnucash/gnome/dialog-tax-info.c:1235
@@ -3462,7 +3461,7 @@ msgstr "Szám"
 
 #: gnucash/gnome/dialog-invoice.c:3749
 msgid "Find Bill"
-msgstr "Számla keresése"
+msgstr "Bejövőszámla keresése"
 
 #: gnucash/gnome/dialog-invoice.c:3756
 msgid "Find Expense Voucher"
@@ -3476,7 +3475,7 @@ msgstr "Költségbizonylat"
 
 #: gnucash/gnome/dialog-invoice.c:3763
 msgid "Find Invoice"
-msgstr "Számla keresése"
+msgstr "Kimenőszámla keresése"
 
 #: gnucash/gnome/dialog-invoice.c:3810 gnucash/gnome/dialog-lot-viewer.c:1015
 #: gnucash/gnome/gnc-split-reg.c:666 gnucash/gnome/reconcile-view.c:437
@@ -3511,11 +3510,11 @@ msgstr "Mennyiség"
 #, c-format
 msgid "The following vendor document is due:"
 msgid_plural "The following %d vendor documents are due:"
-msgstr[0] "Az alábbi %d számla esedékes:"
+msgstr[0] "Az alábbi %d beszállítói dokumentum esedékes:"
 
 #: gnucash/gnome/dialog-invoice.c:3901
 msgid "Due Bills Reminder"
-msgstr "Esedékes számlák emlékeztetője"
+msgstr "Az esedékes bejövőszámlák emlékeztetője"
 
 # msgid_plural "The following %d bills are due:"
 #. Translators: %d is the number of invoices/credit notes due. This is a
@@ -3524,12 +3523,11 @@ msgstr "Esedékes számlák emlékeztetője"
 #, c-format
 msgid "The following customer document is due:"
 msgid_plural "The following %d customer documents are due:"
-msgstr[0] "Az alábbi %d számla esedékes:"
+msgstr[0] "Az alábbi %d ügyféldokumentum esedékes:"
 
 #: gnucash/gnome/dialog-invoice.c:3912
-#, fuzzy
 msgid "Due Invoices Reminder"
-msgstr "Esedékes számlák emlékeztetője"
+msgstr "Az esedékes kimenőszámlák emlékeztetője"
 
 #: gnucash/gnome/dialog-job.c:136
 msgid "The Job must be given a name."
@@ -4031,7 +4029,7 @@ msgid ""
 "Do you really want to do this?"
 msgstr ""
 "Olyan ütemezett tranzakciót próbált létrehozni, amely soha nem fog "
-"megtörténni. Biztosan ezt akarja?"
+"megtörténni. Biztos, hogy ezt akarja?"
 
 #: gnucash/gnome/dialog-sx-editor.c:607
 msgid ""
@@ -4114,7 +4112,7 @@ msgid ""
 "Cannot create a Scheduled Transaction from a Transaction currently being "
 "edited. Please Enter the Transaction before Scheduling."
 msgstr ""
-"Nem lehet ütemezett tranzakciót létrehozni jelenleg szerkesztés alatt levő "
+"Nem lehet ütemezett tranzakciót létrehozni a jelenleg szerkesztés alatt levő "
 "tranzakcióból. Előbb fejezze be a tranzakció szerkesztését."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:369
@@ -4162,7 +4160,7 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Jelenleg nincsenek megadandó ütemezett tranzakciók. (%d tranzakció lett "
+"Jelenleg nincsenek rögzítendő ütemezett tranzakciók. (%d tranzakció lett "
 "automatikusan létrehozva)"
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1266
@@ -4224,6 +4222,8 @@ msgid ""
 "CAUTION: If you set TXF categories, and later change 'Type', you will need "
 "to manually reset those categories one at a time"
 msgstr ""
+"FIGYELEM: Ha TXF kategóriákat állít be, és később megváltoztatja a 'Típus'-"
+"t, akkor ezeket a kategóriákat egyesével, kézzel kell visszaállítania."
 
 #: gnucash/gnome/dialog-tax-info.c:1393
 msgid "Form"
@@ -4298,9 +4298,8 @@ msgid "Transfer"
 msgstr "Átutalás"
 
 #: gnucash/gnome/gnc-budget-view.c:509
-#, fuzzy
 msgid "Remaining to Budget"
-msgstr "Meglévő költségvetés kinyitása"
+msgstr "A költségvetésből fennmaradó összeg"
 
 #: gnucash/gnome/gnc-budget-view.c:1604 gnucash/gnome/window-reconcile.cpp:1169
 #: gnucash/gnome-utils/gnc-tree-view-account.c:906
@@ -4326,7 +4325,7 @@ msgstr "Összesen"
 
 #: gnucash/gnome/gnc-plugin-basic-commands.c:480
 msgid "There are no Scheduled Transactions to be entered at this time."
-msgstr "Most nincsenek rögzítendő ütemezett tranzakciók."
+msgstr "Jelenleg nincsenek rögzítendő ütemezett tranzakciók."
 
 #. Translators: %d is the number of transactions. This is a
 #. ngettext(3) message.
@@ -4339,8 +4338,8 @@ msgid_plural ""
 "There are no Scheduled Transactions to be entered at this time. (%d "
 "transactions automatically created)"
 msgstr[0] ""
-"Nincs létrehozandó ütemezett tranzakció. (a %d tranzakció automatikusan "
-"létrehozva)"
+"Jelenleg nincsenek rögzítendő ütemezett tranzakciók. (%d tranzakció lett "
+"automatikusan létrehozva)"
 
 #: gnucash/gnome/gnc-plugin-budget.c:320
 msgid "Select a Budget"
@@ -4515,9 +4514,8 @@ msgid "Estimate"
 msgstr "Becslés"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:181
-#, fuzzy
 msgid "All Periods"
-msgstr "Időszak"
+msgstr "Az összes időszak"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:182
 msgid "Note"
@@ -4547,7 +4545,7 @@ msgstr "Névtelen költségvetés"
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:937
 #, c-format
 msgid "Delete %s?"
-msgstr "%s törlés?"
+msgstr "%s törlése?"
 
 #: gnucash/gnome/gnc-plugin-page-budget.cpp:1037
 msgid "You must select at least one account to estimate."
@@ -4569,23 +4567,23 @@ msgstr "Kimenőszámla _nyomtatása"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:190
 #: gnucash/ui/gnc-plugin-page-invoice.ui:289
 msgid "Make a printable invoice"
-msgstr "Nyomtatható számla készítése"
+msgstr "Nyomtatható kimenőszámla készítése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:191
 #: gnucash/ui/gnc-plugin-page-invoice.ui:367
 msgid "_Edit Invoice"
-msgstr "Számla s_zerkesztése"
+msgstr "Kimenőszámla s_zerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:191
 #: gnucash/ui/gnc-plugin-page-invoice.ui:18
 #: gnucash/ui/gnc-plugin-page-invoice.ui:369
 msgid "Edit this invoice"
-msgstr "E számla szerkesztése"
+msgstr "Ennek a kimenőszámlának a szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:382
 msgid "_Duplicate Invoice"
-msgstr "Számla meg_kettőzése"
+msgstr "Kimenőszámla meg_kettőzése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:192
 #: gnucash/ui/gnc-plugin-page-invoice.ui:24
@@ -4596,37 +4594,35 @@ msgstr "Új kimenőszámla létrehozása a jelenlegi mintájára"
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:522
 msgid "_Post Invoice"
-msgstr "_Számla könyvelése"
+msgstr "Kimenő_számla könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:193
 #: gnucash/ui/gnc-plugin-page-invoice.ui:30
 #: gnucash/ui/gnc-plugin-page-invoice.ui:524
-#, fuzzy
 msgid "Post this invoice to your Chart of Accounts"
-msgstr "Számla könyvelése az ön folyószámláira"
+msgstr "Ennek a kimenőszámlának a számlatükörbe (számlafába) könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:537
 msgid "_Unpost Invoice"
-msgstr "Számla könyvelésének _visszavonása"
+msgstr "Kimenőszámla könyvelésének _visszavonása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:194
 #: gnucash/ui/gnc-plugin-page-invoice.ui:36
 #: gnucash/ui/gnc-plugin-page-invoice.ui:539
-#, fuzzy
 msgid "Unpost this invoice and make it editable"
-msgstr "Számla könyvelésének törlése és szerkeszthetővé tétele"
+msgstr "A kimenőszámla könyvelésének visszavonása és szerkeszthetővé tétele"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
 #: gnucash/ui/gnc-plugin-page-invoice.ui:352
 msgid "New _Invoice"
-msgstr "Új _számla"
+msgstr "Új kimenő_számla"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:195
 #: gnucash/ui/gnc-plugin-page-invoice.ui:354
 msgid "Create a new invoice for the same owner as the current one"
 msgstr ""
-"Egy új kimenőszámla létrehozása ugyanannak a tulajdonosnak, mint a jelenlegi"
+"Egy új kimenőszámla létrehozása ugyanannak az ügyfélnek, mint a jelenlegi"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:221
@@ -4639,21 +4635,19 @@ msgid "Blank"
 msgstr "Üres"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:196
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the invoice"
-msgstr "Ugrás a számla alján lévő üres bejegyzésre"
+msgstr "Ugrás a kimenőszámla alján lévő üres bejegyzésre"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:197
 #: gnucash/ui/gnc-plugin-page-invoice.ui:552
 msgid "_Pay Invoice"
-msgstr "S_zámla kifizetése"
+msgstr "A kimenőszámla _fizetése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:197
 #: gnucash/ui/gnc-plugin-page-invoice.ui:200
 #: gnucash/ui/gnc-plugin-page-invoice.ui:554
-#, fuzzy
 msgid "Enter a payment for the owner of this invoice"
-msgstr "Adjon meg egy fizetési módot a számla tulajdonosának"
+msgstr "Fizetési mód megadása az ügyfélnek akinek a kimenőszámlát készíti"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:223
@@ -4664,9 +4658,8 @@ msgid "_Company Report"
 msgstr "_Cégjelentés"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:198
-#, fuzzy
 msgid "Open a customer report window for the owner of this invoice"
-msgstr "Cégjelentés megnyitása a számla tulajdonosához"
+msgstr "Ügyféljelentés-ablak megnyitása a kimenőszámla címzettjének"
 
 #. Translators: This is a menu item that opens a dialog for linking an
 #. external file or URL with the bill, invoice, transaction, or voucher or
@@ -4693,18 +4686,16 @@ msgstr "Dokumentum_hivatkozás kezelése…"
 #: gnucash/ui/gnc-plugin-page-register.ui:211
 #: gnucash/ui/gnc-plugin-page-register.ui:398
 #: gnucash/ui/gnc-plugin-page-register.ui:510
-#, fuzzy
 msgid "_Open Linked Document"
-msgstr "Új folyószámla"
+msgstr "Kapcsolódó _dokumentum megnyitása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:200
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:225
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:250
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:275
 #: gnucash/gnome/gnc-plugin-page-register.cpp:396
-#, fuzzy
 msgid "Open Linked Document"
-msgstr "Új folyószámla"
+msgstr "A kapcsolódó dokumentum megnyitása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:206
 msgid "_Use as Default Layout for Customer Documents"
@@ -4733,12 +4724,10 @@ msgstr ""
 "jelenlegi oldalt"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
-#, fuzzy
 msgid "_Print Bill"
-msgstr "Nyomtatás"
+msgstr "Számla_nyomtatás"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
-#, fuzzy
 msgid "Make a printable bill"
 msgstr "Nyomtatható számla készítése"
 
@@ -4747,37 +4736,32 @@ msgid "_Edit Bill"
 msgstr "Számla s_zerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
-#, fuzzy
 msgid "Edit this bill"
-msgstr "E számla szerkesztése"
+msgstr "Ennek a számlának a szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
 msgid "_Duplicate Bill"
-msgstr "Számla meg_kettőzése"
+msgstr "Bejövőszámla meg_kettőzése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
 msgid "Create a new bill as a duplicate of the current one"
-msgstr "Új bejövőszámla létrehozása a jelenlegi mintájára"
+msgstr "Új bejövőszámla létrehozása a jelenlegi másolataként"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
-#, fuzzy
 msgid "_Post Bill"
-msgstr "Számla kifizetése"
+msgstr "Bejövőszámla könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
-#, fuzzy
 msgid "Post this bill to your Chart of Accounts"
-msgstr "Számla könyvelése az ön folyószámláira"
+msgstr "Ennek a bejövőszámlának a számlatükörbe (számlafába) könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:219
-#, fuzzy
 msgid "_Unpost Bill"
-msgstr "Számla könyvelésének _visszavonása"
+msgstr "Bejövőszámla könyvelésének _visszavonása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:219
-#, fuzzy
 msgid "Unpost this bill and make it editable"
-msgstr "Számla könyvelésének törlése és szerkeszthetővé tétele"
+msgstr "A bejövőszámla könyvelésének visszavonása és szerkeszthetővé tétele"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:220
 msgid "New _Bill"
@@ -4794,31 +4778,30 @@ msgstr "Ugrás a bejövőszámla alján lévő üres bejegyzésre"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:222
 msgid "_Pay Bill"
-msgstr "Bejövőszámla ki_fizetése"
+msgstr "Bejövőszámla _fizetése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:222
-#, fuzzy
 msgid "Enter a payment for the owner of this bill"
-msgstr "Adjon meg egy fizetési módot a számla tulajdonosának"
+msgstr "Adjon meg egy fizetési módot a bejövőszámla tulajdonosának"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:223
 msgid "Open a vendor report window for the owner of this bill"
-msgstr "Beszállítójelentés megnyitása a számla tulajdonosa számára"
+msgstr "Beszállítójelentés-ablak megnyitása a bejövőszámla tulajdonosának"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:231
 msgid "_Use as Default Layout for Vendor Documents"
-msgstr "_Használja alapértelmezett elrendezésként a beszállítódokumentumokhoz"
+msgstr "_Használja alapértelmezett elrendezésként a beszállítói dokumentumokhoz"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:232
 msgid "Use the current layout as default for all vendor bills and credit notes"
 msgstr ""
-"Alapértelmezett elrendezésként használja az összes beszállítódokumentumhoz "
-"és jóváíráshoz"
+"Alapértelmezett elrendezésként használja az összes bejövőszámlához és "
+"jóváíráshoz"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:233
 msgid "_Reset Default Layout for Vendor Documents"
 msgstr ""
-"A beszállítódokumentumok alapértelmezett elrendezésének _visszaállítása"
+"A beszállítói dokumentumok alapértelmezett elrendezésének _visszaállítása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:234
 msgid ""
@@ -4831,19 +4814,19 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
 msgid "_Print Voucher"
-msgstr "_Költségbizonylat nyomtatása"
+msgstr "Költségbizonylat _nyomtatása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:240
 msgid "Make a printable voucher"
-msgstr "Nyomtatható bizonylat készítése"
+msgstr "Nyomtatható költségbizonylat készítése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
 msgid "_Edit Voucher"
-msgstr "Költségbizonylat s_zerkesztése"
+msgstr "Költségbizonylat sz_erkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:241
 msgid "Edit this voucher"
-msgstr "E bizonylat szerkesztése"
+msgstr "Ennek a költségbizonylatnak a szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
 msgid "_Duplicate Voucher"
@@ -4851,24 +4834,23 @@ msgstr "Költségbizonylat meg_kettőzése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:242
 msgid "Create a new voucher as a duplicate of the current one"
-msgstr "Új bizonylat létrehozása a jelenlegi másolataként"
+msgstr "Új költségbizonylat létrehozása a jelenlegi másolataként"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
 msgid "_Post Voucher"
-msgstr "Bizonylat _könyvelése"
+msgstr "Költségbizonylat _könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:243
-#, fuzzy
 msgid "Post this voucher to your Chart of Accounts"
-msgstr "Számla könyvelése az ön folyószámláira"
+msgstr "Ennek a költségbizonylatnak a számlatükörbe (számlafába) könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
 msgid "_Unpost Voucher"
-msgstr "Bizonylat könyvelésének _visszavonása"
+msgstr "Költségbizonylat könyvelésének _visszavonása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:244
 msgid "Unpost this voucher and make it editable"
-msgstr "Bizonylat könyvelésének visszavonása és szerkeszthetővé tétele"
+msgstr "Költségbizonylat könyvelésének visszavonása és szerkeszthetővé tétele"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
 msgid "New _Voucher"
@@ -4876,15 +4858,15 @@ msgstr "Új _költségbizonylat"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:245
 msgid "Create a new voucher for the same owner as the current one"
-msgstr "Új költségbizonylat készítése a jelenlegi bizonylat tulajdonosának"
+msgstr "Új költségbizonylat készítése a jelenlegi tulajdonosának"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:246
 msgid "Move to the blank entry at the bottom of the voucher"
-msgstr "Ugrás a bizonylat alján lévő üres bejegyzésre"
+msgstr "Ugrás a költségbizonylat alján lévő üres bejegyzésre"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
 msgid "_Pay Voucher"
-msgstr "Költségbizonylat _kifizetése"
+msgstr "Költségbizonylat ki_fizetése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:247
 msgid "Enter a payment for the owner of this voucher"
@@ -4904,8 +4886,8 @@ msgstr ""
 msgid ""
 "Use the current layout as default for all employee vouchers and credit notes"
 msgstr ""
-"Alapértelmezett elrendezésként használja az alkalmazotti dokumentumokhoz és "
-"jóváírásokhoz"
+"Alapértelmezett elrendezésként használja az alkalmazotti "
+"költségbizonylatokhoz és jóváírásokhoz"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:258
 msgid "_Reset Default Layout for Employee Documents"
@@ -4917,9 +4899,9 @@ msgid ""
 "Reset default layout for all employee vouchers and credit notes back to "
 "built-in defaults and update the current page accordingly"
 msgstr ""
-"Visszaállítja az összes alkalmazotti utalvány és jóváírás alapértelmezett "
-"elrendezését a beépített alapértelmezettre, és ennek megfelelően frissíti a "
-"jelenlegi oldalt"
+"Visszaállítja az összes alkalmazotti költségbizonylat és jóváírás "
+"alapértelmezett elrendezését a beépített alapértelmezettre, és ennek "
+"megfelelően frissíti a jelenlegi oldalt"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:265
 msgid "_Print Credit Note"
@@ -4931,11 +4913,11 @@ msgstr "Nyomtatható jóváírás készítése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
 msgid "_Edit Credit Note"
-msgstr "Jóváírás szerkesztés_e"
+msgstr "Jóváírás sz_erkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:266
 msgid "Edit this credit note"
-msgstr "E jóváírás szerkesztése"
+msgstr "Ennek a jóváírásnak a szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:267
 msgid "_Duplicate Credit Note"
@@ -4951,39 +4933,39 @@ msgstr "Jóváírás _könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:268
 msgid "Post this credit note to your Chart of Accounts"
-msgstr ""
+msgstr "Ennek a jóváírásnak a számlatükörbe (számlafába) könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:269
 msgid "_Unpost Credit Note"
-msgstr ""
+msgstr "Jóváírás könyvelésének _visszavonása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:269
 msgid "Unpost this credit note and make it editable"
-msgstr ""
+msgstr "Jóváírás könyvelésének visszavonása és szerkeszthetővé tétele"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:270
 msgid "New _Credit Note"
-msgstr ""
+msgstr "Új _jóváírás"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:270
 msgid "Create a new credit note for the same owner as the current one"
-msgstr ""
+msgstr "Új jóváírás készítése a jelenlegi tulajdonosának"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:271
 msgid "Move to the blank entry at the bottom of the credit note"
-msgstr ""
+msgstr "Ugrás a jóváírás alján lévő üres bejegyzésre"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:272
 msgid "_Pay Credit Note"
-msgstr ""
+msgstr "Jóváírás ki_fizetése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:272
 msgid "Enter a payment for the owner of this credit note"
-msgstr ""
+msgstr "Adja meg a jóváírás tulajdonosa számára történő kifizetést"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:273
 msgid "Open a company report window for the owner of this credit note"
-msgstr ""
+msgstr "Cégjelentés-ablak megnyitása ennek a jóváírásnak a tulajdonosa számára"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:274
 msgid "Manage Document Link…"
@@ -5005,12 +4987,11 @@ msgstr "Le"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:290
 msgid "Unpost"
-msgstr "Visszavonás"
+msgstr "Könyvelés visszavonása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:291
-#, fuzzy
 msgid "Pay"
-msgstr "Nap"
+msgstr "Fizetés"
 
 #: gnucash/gnome/gnc-plugin-page-owner-tree.cpp:227
 msgid "New Voucher"
@@ -5100,7 +5081,7 @@ msgstr "Tranzakció _törlése"
 #: gnucash/ui/gnc-plugin-page-register.ui:405
 #: gnucash/ui/gnc-plugin-page-register.ui:517
 msgid "Jump to Invoice"
-msgstr ""
+msgstr "Ugrás a számlára"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:270
 msgid "Cu_t Split"
@@ -5159,14 +5140,14 @@ msgid "Delete the current transaction"
 msgstr "A jelenlegi tranzakció törlése"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:280
-#, fuzzy
 msgid "Add, change, or unlink the document linked with the current transaction"
-msgstr "A jelenlegi tranzakció törlése"
+msgstr ""
+"A jelenlegi tranzakcióhoz egy kapcsolódó dokumentum hozzáadása, annak "
+"módosítása vagy a hivatkozás törlése"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:281
-#, fuzzy
 msgid "Open the linked document for the current transaction"
-msgstr "Másolat létrehozása a jelenlegi tranzakcióról"
+msgstr "A jelenlegi tranzakcióhoz kapcsolódó dokumentum megnyitása"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:282
 msgid "Jump to the linked bill, invoice, or voucher"
@@ -5187,16 +5168,16 @@ msgstr "Felosztás beillesztése a vágólapról"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:286
 msgid "Make a copy of the current split"
-msgstr ""
+msgstr "Másolat készítése a jelenlegi felosztásról"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:287
 msgid "Delete the current split"
-msgstr ""
+msgstr "A jelenlegi felosztás törlése"
 
 #. Translators: This is the label of a toolbar button. So keep it short.
 #: gnucash/gnome/gnc-plugin-page-register.cpp:389
 msgid "Show Splits"
-msgstr "Felosztás"
+msgstr "Felosztások"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:390
 msgid "Jump"
@@ -5209,7 +5190,7 @@ msgstr "Ütemezés"
 #: gnucash/gnome/gnc-plugin-page-register.cpp:394
 #: gnucash/gnome/window-autoclear.c:88
 msgid "Auto-clear"
-msgstr "Auto-törlés"
+msgstr "Automatikus kiegyenlítés"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:398
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:146
@@ -5217,7 +5198,7 @@ msgstr "Auto-törlés"
 #: gnucash/ui/gnc-plugin-page-register.ui:250
 #: gnucash/ui/gnc-plugin-page-register.ui:904
 msgid "Stock Assistant"
-msgstr "Részvény segéd"
+msgstr "Részvénysegéd"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:647
 #: gnucash/gnome/gnc-plugin-page-register.cpp:1930
@@ -5322,7 +5303,7 @@ msgstr "Portfólió-jelentés"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3355
 msgid "Search Results Report"
-msgstr "Keresési jelentés"
+msgstr "Keresésieredmények-jelentés"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3359
 #: gnucash/gtkbuilder/dialog-preferences.glade:2791
@@ -5344,10 +5325,13 @@ msgid ""
 "This search result contains splits from more than one account. Do you want "
 "to print the checks even though they are not all from the same account?"
 msgstr ""
+"Ez a keresési eredmény egynél több számlából származó felosztásokat "
+"tartalmaz. Akkor is ki szeretné nyomtatni a csekkeket, ha nem mind ugyanahoz "
+"a számlához tartozik?"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3566
 msgid "_Print checks"
-msgstr "Csekk _nyomtatása"
+msgstr "Csekkek _nyomtatása"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3585
 msgid ""
@@ -5359,8 +5343,8 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3801
 msgid "You cannot void a transaction with reconciled or cleared splits."
 msgstr ""
-"Egyeztetett vagy elszámolt felosztásokkal rendelkező tranzakciót nem lehet "
-"sztornózni."
+"Egyeztetett vagy kiegyenlített (elszámolt) felosztásokkal rendelkező "
+"tranzakciót nem lehet sztornózni."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3808
 #: gnucash/gnome/gnc-split-reg.c:1124
@@ -5372,16 +5356,15 @@ msgstr ""
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3909
 #: gnucash/gnome/gnc-split-reg.c:1095
 msgid "A reversing entry has already been created for this transaction."
-msgstr "Már van egy fordított(stornó) bejegyzés e tranzakcióhoz."
+msgstr "Már van egy fordított (sztornó) bejegyzés ehez a tranzakcióhoz."
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3910
 msgid "Jump to the transaction?"
 msgstr "Ugorjunk a tranzakcióra?"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3919
-#, fuzzy
 msgid "Reverse Transaction"
-msgstr "Fo_rdított tranzakció felvétele(Storno)"
+msgstr "Fordított tranzakció (sztornó)"
 
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3919
 #: gnucash/gtkbuilder/gnc-plugin-page-register.glade:625
@@ -28758,7 +28741,7 @@ msgstr "Alkalmazott keresési párbeszédpanel megnyitása"
 
 #: gnucash/ui/gnc-plugin-business.ui:122
 msgid "New _Expense Voucher…"
-msgstr "Új költség_bizonylat…"
+msgstr "Új _költségbizonylat…"
 
 #: gnucash/ui/gnc-plugin-business.ui:124
 msgid "Open the New Voucher dialog"
@@ -28782,11 +28765,11 @@ msgstr "Az összes kapcsolódó üzleti dokumentum megnyitása"
 
 #: gnucash/ui/gnc-plugin-business.ui:146
 msgid "Sales _Tax Table"
-msgstr "Eladási adó_táblázat"
+msgstr "ÁFA adó_táblázat"
 
 #: gnucash/ui/gnc-plugin-business.ui:148
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "Eladási adótáblák listájának (ÁFA) megtekintése/szerkesztése"
+msgstr "ÁFA adótáblák megtekintése/szerkesztése"
 
 #: gnucash/ui/gnc-plugin-business.ui:151
 msgid "_Billing Terms Editor"
@@ -28794,7 +28777,7 @@ msgstr "_Fizetésifeltétel-szerkesztő"
 
 #: gnucash/ui/gnc-plugin-business.ui:153
 msgid "View and edit the list of Billing Terms"
-msgstr "Fizetésifeltétel listájának megtekintése/szerkesztése"
+msgstr "Fizetési feltételek listájának megtekintése/szerkesztése"
 
 #: gnucash/ui/gnc-plugin-business.ui:163 gnucash/ui/gnc-plugin-business.ui:165
 msgid "Test Search Dialog"
@@ -30671,19 +30654,19 @@ msgstr ""
 
 #: libgnucash/engine/gnc-optiondb.cpp:1265
 msgid "Expense voucher number"
-msgstr "Költségbizonylatszám"
+msgstr "Költségbizonylat száma"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1266
 msgid ""
 "The previous expense voucher number generated. This number will be "
 "incremented to generate the next voucher number."
 msgstr ""
-"Adja meg az utoljára használt költségbizonylatszámot. Ez lesz megnövelve a "
+"Adja meg az utoljára használt költségbizonylat számát. Ez lesz megnövelve a "
 "következő szám előállításához."
 
 #: libgnucash/engine/gnc-optiondb.cpp:1269
 msgid "Expense voucher number format"
-msgstr "Költségbizonylatszám formátuma"
+msgstr "Költségbizonylat számának formátuma"
 
 #: libgnucash/engine/gnc-optiondb.cpp:1271
 msgid ""
