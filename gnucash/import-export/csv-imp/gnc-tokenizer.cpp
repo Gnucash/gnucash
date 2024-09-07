@@ -125,3 +125,25 @@ GncTokenizer::get_tokens()
 {
     return m_tokenized_contents;
 }
+
+
+
+using StrVec = std::vector<std::string>;
+#include "gnc-datetime.hpp"
+
+void
+gnc_filter_locales (StrVec& candidate_locales, const StrVec dates)
+{
+    StrVec new_candidate_locales;
+    new_candidate_locales.reserve (candidate_locales.size());
+
+    for (const auto& date : dates)
+    {
+        new_candidate_locales.clear ();
+        for (const auto& locale : candidate_locales)
+            try { GncDate (date, locale); new_candidate_locales.push_back (locale); }
+            catch (const std::exception&) {};
+
+        std::swap (candidate_locales, new_candidate_locales);
+    }
+}

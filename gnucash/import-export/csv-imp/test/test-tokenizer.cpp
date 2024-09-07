@@ -245,7 +245,35 @@ static tokenize_fw_test_data fixed_width [] = {
                 { NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL } },
 };
 
+#include <ctime> // time_t
+#include "gnc-locale-utils.hpp"
+
+static void test_filter_locales ()
+{
+    std::vector<std::string> dates;
+
+    for (auto i = 0; i < 500; ++i)
+        dates.push_back ("09/22/2021");
+
+    auto locales = gnc_get_available_locales ();
+    std::cout << locales.size() << " locales available. Testing "
+              << dates.size() << " dates.\n";
+
+    auto start = clock();
+    gnc_filter_locales (locales, dates);
+    auto end = clock();
+
+    double duration_sec = double(end-start)/CLOCKS_PER_SEC;
+
+    std::cout << locales.size() << " locales left, checked in "
+              << duration_sec << " seconds:\n";
+    for (auto locale : locales)
+        std::cout << ' ' << locale;
+    std::cout << '\n';
+}
+
 TEST_F (GncTokenizerTest, tokenize_fw)
 {
     test_gnc_tokenize_helper (fixed_width);
+    test_filter_locales ();
 }

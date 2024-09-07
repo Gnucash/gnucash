@@ -59,4 +59,6 @@ private:
     std::string m_sep_str = ",";
 };
 
+void gnc_filter_locales (StrVec& candidate_locales, const StrVec dates);
+
 #endif
