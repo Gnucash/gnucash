@@ -397,7 +397,7 @@ gnc_reconcile_view_new (Account *account, GNCReconcileViewType type,
             /* Just an extra verification that our query is correct ;) */
             g_assert (recn == NREC || recn == CREC);
 
-            if (recn == CREC && gnc_difftime (trans_date, statement_date_day_end) <= 0)
+            if (recn == CREC && trans_date <= statement_date_day_end)
                 g_hash_table_insert (view->reconciled, split, split);
         }
     }
@@ -973,9 +973,8 @@ gnc_reconcile_view_postpone (GNCReconcileView *view)
 
         // Don't change splits past reconciliation date that haven't been
         // set to be reconciled
-        if (gnc_difftime (view->statement_date,
-              xaccTransGetDate (xaccSplitGetParent (entry))) >= 0 ||
-                g_hash_table_lookup (view->reconciled, entry))
+        if (view->statement_date >= xaccTransGetDate (xaccSplitGetParent (entry)) ||
+            g_hash_table_lookup (view->reconciled, entry))
         {
             recn = g_hash_table_lookup (view->reconciled, entry) ? CREC : NREC;
             xaccSplitSetReconcile (entry, recn);

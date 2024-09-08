@@ -603,7 +603,6 @@ gnc_save_reconcile_interval(Account *account, time64 statement_date)
 {
     time64 prev_statement_date;
     int days = 0, months = 0;
-    double seconds;
 
     if (!xaccAccountGetReconcileLastDate (account, &prev_statement_date))
         return;
@@ -611,8 +610,8 @@ gnc_save_reconcile_interval(Account *account, time64 statement_date)
     /*
      * Compute the number of days difference.
      */
-    seconds = gnc_difftime (statement_date, prev_statement_date);
-    days = (int)(seconds / 60 / 60 / 24);
+    auto seconds = statement_date - prev_statement_date;
+    days = seconds / 60 / 60 / 24;
 
     /*
      * See if we need to remember days(weeks) or months.  The only trick
