@@ -77,13 +77,16 @@ static constexpr auto ticks_per_second = INT64_C(1000000);
 static constexpr auto ticks_per_second = INT64_C(1000000000);
 #endif
 
-/* Vector of date formats understood by gnucash and corresponding regex
- * to parse each from an external source
+/* Vector of date formats understood by gnucash and corresponding
+ * boost string->date or regex to parse each from an external source
  * Note: while the format names are using a "-" as separator, the
  * regexes will accept any of "-/.' " and will also work for dates
  * without separators.
  */
 const std::vector<GncDateFormat> GncDate::c_formats ({
+    GncDateFormat { N_("UK date"), boost::gregorian::from_uk_string },
+    GncDateFormat { N_("US date"), boost::gregorian::from_us_string },
+    GncDateFormat { N_("ISO date"), boost::gregorian::from_string },
     GncDateFormat {
         N_("y-m-d"),
         "(?:"                                   // either y-m-d
@@ -616,6 +619,12 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string fmt) :
                              [&fmt](const GncDateFormat& v){ return (v.m_fmt == fmt); } );
     if (iter == GncDate::c_formats.cend())
         throw std::invalid_argument(N_("Unknown date format specifier passed as argument."));
+
+    if (iter->m_str_to_date)
+    {
+        m_greg = (*iter->m_str_to_date)(str);
+        return;
+    }
 
     boost::regex r(iter->m_re);
     boost::smatch what;
