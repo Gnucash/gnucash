@@ -3,20 +3,24 @@
 # Copyright (C) 2023 by the GnuCash developers and the translators:
 # Automatically generated, 2023.
 #
+# Itsmechinmoy <itsmechinmoy@users.noreply.hosted.weblate.org>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2023-09-21 00:29+0200\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2024-09-08 15:09+0000\n"
+"Last-Translator: Itsmechinmoy <itsmechinmoy@users.noreply.hosted.weblate.org>"
+"\n"
+"Language-Team: Assamese <https://hosted.weblate.org/projects/gnucash/"
+"glossary/as/>\n"
 "Language: as\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -24,235 +28,235 @@ msgstr ""
 
 #. "Opening and closing quote symbols and optionally their key combos like [altgr]+[Y]/[X]. Define the preferred style of quotation, see https://en.wikipedia.org/wiki/Quotation_mark#Summary_table"
 msgid "\"\""
-msgstr ""
+msgstr "\"\""
 
 #. "A detailed record of money spent and received"
 msgid "account"
-msgstr ""
+msgstr "একাউণ্ট"
 
 #. "An alphanumerical code applied to accounts for sorting. Some jurisdictions mandate codes and some GnuCash book templates include codes as part of the tree structure. Account codes can be set and changed in the Edit Account dialog."
 msgid "account code"
-msgstr ""
+msgstr "একাউণ্ট ক'ড"
 
 #. "the tree view of all accounts"
 msgid "account hierarchy"
-msgstr ""
+msgstr "একাউণ্ট বৰ্ণনাক্ৰম"
 
 #. "-"
 msgid "account name"
-msgstr ""
+msgstr "একাউণ্ট নাম"
 
 #. "The grouping of accounts whose balance increases with a debit (left side of the balance sheet in T account form). Complement: Passive. See also: Report Form"
 msgid "account type: Active"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: সক্ৰিয়"
 
 #. "A thing, esp. owned by a person or company, that has value and can be used or sold to pay debts. Dependent on the context you might use 'account type: Active' instead."
 msgid "account type: Asset"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: সম্পত্তি"
 
 #. "in fact: 'Active & Passive', group aka 'Balance Sheet accounts'; complement of 'Profit & Loss'"
 msgid "account type: Assets & Liabilities"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: সম্পত্তি আৰু দায়"
 
 #. "(esp. US) (Brit = current account) a bank account from which money can be withdrawn without previous notice"
 msgid "account type: checking"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: পৰীক্ষা"
 
 #. "-"
 msgid "account type: currency"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: মুদ্ৰা"
 
 #. "see: Equity, but see also 'account type: Passive'"
 msgid "account type: Equity"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: সমানুপাতিক মুলধন"
 
 #. "-"
 msgid "account type: Expense"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: ব্যয়"
 
 #. "-"
 msgid "account type: Income"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: আয়"
 
 #. "A debt, a financial obligation, but see also 'account type: Passive'"
 msgid "account type: Liability"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: দায়"
 
 #. "-"
 msgid "account type: money-market"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: অৰ্থ-বজাৰ"
 
 #. "-"
 msgid "account type: Mutual fund"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: মিউচুৱেল ফাণ্ড"
 
 #. "The right side of the balance sheet in T account form shows the source of funds and contains equity & liability. While not common in english, most languages would translate 'equity & liability' with 'passive'. Complement: Active. See also: Report Form Implementation: https://bugs.gnucash.org/show_bug.cgi?id=421766"
 msgid "account type: Passive"
-msgstr ""
+msgstr "একাউণ্ট প্ৰকাৰ: নিৰ্জীৱ"
 
 #. "Group of accounts tracking your success, complement of 'Assets & Liabilities'"
 msgid "account type: Profit & Loss"
-msgstr ""
+msgstr "একাউণ্টৰ ধৰণ: লাভ আৰু ক্ষতি"
 
 #. "1. (US) any type of account that earns interest 2. (Brit) any type of bank account that earns a higher level of interest than a current account or deposit account"
 msgid "account type: saving"
-msgstr ""
+msgstr "একাউণ্টৰ ধৰণ: সাঁচয়"
 
 #. "-"
 msgid "account type: Stock"
-msgstr ""
+msgstr "একাউণ্টৰ ধৰণ: ষ্টক"
 
 #. "This account type is used when exchanging or trading amounts from one currency into another"
 msgid "account type: trading"
-msgstr ""
+msgstr "একাউণ্টৰ ধৰণ: বেহা-বেপাৰ"
 
 #. "-"
 msgid "account: parent account"
-msgstr ""
+msgstr "একাউণ্ট: মূৰ একাউণ্ট"
 
 #. "-"
 msgid "account: subaccount"
-msgstr ""
+msgstr "একাউণ্ট: উপ-একাউণ্ট"
 
 #. "-"
 msgid "account: top level account"
-msgstr ""
+msgstr "একাউণ্ট: শীৰ্ষ স্তৰৰ একাউণ্ট"
 
 #. "The process of doing something that caused a transaction to happen"
 msgid "Action (register)"
-msgstr ""
+msgstr "কাৰ্য (পঞ্জীয়ন)"
 
 #. "Automated teller machine"
 msgid "action: ATM"
-msgstr ""
+msgstr "কাৰ্য: এটিএম"
 
 #. "Transaction was an auto deposit"
 msgid "action: autoDep"
-msgstr ""
+msgstr "কাৰ্য: স্বয়ংক্ৰিয় জমা"
 
 #. "-"
 msgid "action: buy"
-msgstr ""
+msgstr "কাৰ্য: ক্ৰয়"
 
 #. "-"
 msgid "action: deposit"
-msgstr ""
+msgstr "কাৰ্য: জমা"
 
 #. "When people can automatically deduct money straight from your account. The reverse of Direct Deposit."
 msgid "action: direct debit"
-msgstr ""
+msgstr "কাৰ্য: সিধা কাঢ়া"
 
 #. "transaction is a distribution (???)"
 msgid "action: dist"
-msgstr ""
+msgstr "কাৰ্য: বিতৰণ"
 
 #. "transaction is a dividend"
 msgid "action: div"
-msgstr ""
+msgstr "কাৰ্য: ডিভিডেণ্ড"
 
 #. "-"
 msgid "action: fee"
-msgstr ""
+msgstr "কাৰ্য: মাচুল"
 
 #. "transaction comes from interest"
 msgid "action: int"
-msgstr ""
+msgstr "কাৰ্য: সূদ"
 
 #. "-"
 msgid "action: loan"
-msgstr ""
+msgstr "কাৰ্য: ঋণ"
 
 #. "see: payment 1."
 msgid "action: payment"
-msgstr ""
+msgstr "কাৰ্য: পেমেণ্ট/অর্থ প্ৰদান"
 
 #. "Point of sale"
 msgid "action: POS"
-msgstr ""
+msgstr "কাৰ্য: পইণ্ট অফ চেল"
 
 #. "-"
 msgid "action: rebate"
-msgstr ""
+msgstr "কাৰ্য: ৰিবেট"
 
 #. "-"
 msgid "action: sell"
-msgstr ""
+msgstr "কাৰ্য: বিক্ৰী"
 
 #. "-"
 msgid "action: Teller"
-msgstr ""
+msgstr "কাৰ্য: টেলাৰ"
 
 #. "see: transfer 2. (=credit transfer)"
 msgid "action: transfer"
-msgstr ""
+msgstr "কাৰ্য: স্থানান্তৰ"
 
 #. "-"
 msgid "action: wire"
-msgstr ""
+msgstr "কাৰ্য: মণিজাৰী"
 
 #. "-"
 msgid "action: withdraw"
-msgstr ""
+msgstr "কাৰ্য: প্ৰত্যাহাৰ"
 
 #. "As in: payable aging, or: receivable aging. The aging report categorizes payables or receivables based on time buckets. This gives an overview of which bills or invoices are overdue at which time in the future. "
 msgid "aging"
-msgstr ""
+msgstr "বয়স হোৱা"
 
 #. "A sum of money"
 msgid "amount"
-msgstr ""
+msgstr "পৰিমাণ"
 
 #. "The amount finally to pay, respecting discounts, billing terms…"
 msgid "amount due"
-msgstr ""
+msgstr "বাকী পৰিমাণ"
 
 #. "The result of adding several amounts together and then dividing this total by the number of amounts"
 msgid "average"
-msgstr ""
+msgstr "গড়"
 
 #. "The amount of money that is in one's account"
 msgid "balance (noun)"
-msgstr ""
+msgstr "মাচুল / বেলেঞ্চ"
 
 #. "Balance brought forward - usually the first entry of an account statement containing the 'balance c/f' of the previous billing period or page"
 msgid "balance b/f"
-msgstr ""
+msgstr "আগৰ বেলেঞ্চ"
 
 #. "Balance carried forward - usually the last entry of an account statement to be used as 'balance b/f' on the next billing period or page"
 msgid "balance c/f"
-msgstr ""
+msgstr "পৰৱৰ্তী বেলেঞ্চ"
 
 #. "A written record of money received and paid out, showing the difference between the two total amounts"
 msgid "balance sheet"
-msgstr ""
+msgstr "বেলেঞ্চ পত্রিকা"
 
 #. "To arrange for income and spending to be equal"
 msgid "balance, to"
-msgstr ""
+msgstr "সমীকৰণ কৰা"
 
 #. "-"
 msgid "bank"
-msgstr ""
+msgstr "বেংক"
 
 #. "A written statement of money owed for goods or services supplied. In Gnucash, a 'bill' is a statement that we received (from a vendor), whereas an 'invoice' is one that we sent out (to a customer)."
 msgid "bill"
-msgstr ""
+msgstr "বিল"
 
 #. "see invoice owner"
 msgid "bill owner"
-msgstr ""
+msgstr "বিলৰ মালিক"
 
 #. "Conditions on paying a bill. Both an invoice and a bill have billing terms. For example, you can have 'terms' of 'Net-30', where the bill is due in full in 30 days."
 msgid "billing terms"
-msgstr ""
+msgstr "বিলিংৰ চৰ্তাবলী"
 
 #. "The dataset that encapsulates all the collections of entities (accounts etc.) in gnucash. The written records of the financial affairs of a business."
 msgid "Book"
-msgstr ""
+msgstr "পুথি / কিতাপ"
 
 #. "Completing the records of financial affairs for a specific time period, e.g. at the end of the year."
 msgid "book closing"
-msgstr ""
+msgstr "কিতাপ বন্ধ"
 
 #. "An estimate or plan of the money available to somebody and how it will be spent over a period of time."
 msgid "Budget"
@@ -260,7 +264,7 @@ msgstr "বাজেট"
 
 #. "-"
 msgid "business (adjective)"
-msgstr ""
+msgstr "ব্যৱসায়িক"
 
 #. "as Menu Item: Headline for features that are related to small business accounting"
 msgid "business (noun)"
@@ -316,7 +320,7 @@ msgstr ""
 
 #. "-"
 msgid "Credit Card"
-msgstr "পাবলগীয়াৰ পত্ৰ"
+msgstr "ঋণপত্ৰ"
 
 #. "A transfer of money direct from one bank account to another, without using a cheque"
 msgid "credit transfer"
