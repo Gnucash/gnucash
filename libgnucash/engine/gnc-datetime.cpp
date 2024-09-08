@@ -544,25 +544,29 @@ GncDateTimeImpl::timestamp()
 using DateFormatPtr = std::shared_ptr<icu::DateFormat>;
 using CalendarPtr = std::shared_ptr<icu::Calendar>;
 
-static std::tuple<DateFormatPtr, CalendarPtr>
+static std::tuple<DateFormatPtr, DateFormatPtr, CalendarPtr>
 locale_to_formatter_and_calendar (const std::string locale_str)
 {
-    static std::map<std::string, std::optional<std::tuple<DateFormatPtr, CalendarPtr>>> cache;
+    static std::unordered_map<std::string, std::optional<std::tuple<DateFormatPtr, DateFormatPtr, CalendarPtr>>> cache;
     auto& tuple = cache[locale_str];
     if (!tuple)
     {
         auto locale = icu::Locale::createCanonical (locale_str.c_str());
-        std::shared_ptr<icu::DateFormat> formatter(icu::DateFormat::createDateInstance(icu::DateFormat::kShort, locale));
-        if (formatter == nullptr)
+        std::shared_ptr<icu::DateFormat> formatter_short (icu::DateFormat::createDateInstance(icu::DateFormat::kShort, locale));
+        if (formatter_short == nullptr)
             throw std::invalid_argument ("Cannot parse string");
+        formatter_short->setLenient (false);
 
-        formatter->setLenient (false);
+        std::shared_ptr<icu::DateFormat> formatter_med (icu::DateFormat::createDateInstance(icu::DateFormat::kMedium, locale));
+        formatter_med->setLenient (false);
+
         UErrorCode status = U_ZERO_ERROR;
         std::shared_ptr<icu::Calendar> calendar(icu::Calendar::createInstance(locale, status));
         if (U_FAILURE(status))
             throw std::invalid_argument ("Cannot parse string");
 
-        tuple = std::make_tuple<DateFormatPtr, CalendarPtr>(std::move(formatter), std::move(calendar));
+        tuple = std::make_tuple<DateFormatPtr, DateFormatPtr, CalendarPtr>
+            (std::move(formatter_short), std::move(formatter_med), std::move(calendar));
     }
 
     return *tuple;
@@ -576,16 +580,17 @@ GncDateImpl::GncDateImpl(const std::string str, const std::string locale_str) :
 {
     // std::cout << locale_str << '|' << str << ": ";
 
-    auto [formatter, calendar] = locale_to_formatter_and_calendar (locale_str);
+    auto [formatter_short, formatter_med, calendar] = locale_to_formatter_and_calendar (locale_str);
     icu::UnicodeString input = icu::UnicodeString::fromUTF8(str);
     icu::ParsePosition parsePos;
 
-    UDate date = formatter->parse(input, parsePos);
+    UDate date = formatter_short->parse(input, parsePos); // 1st attempt
+
     if (parsePos.getErrorIndex() != -1)
-    {
-        // std::cout << "cannot parse " << std::endl;
+        date = formatter_med->parse(input, parsePos); // 2nd attempt
+
+    if (parsePos.getErrorIndex() != -1)
         throw std::invalid_argument ("Cannot parse string");
-    }
 
     UErrorCode status = U_ZERO_ERROR;
     calendar->setTime(date, status);
