@@ -270,6 +270,7 @@ gnc_time (time64 *tbuf)
 gdouble
 gnc_difftime (const time64 secs1, const time64 secs2)
 {
+    PWARN ("gnc_difftime is deprecated");
     return (double)secs1 - (double)secs2;
 }
 

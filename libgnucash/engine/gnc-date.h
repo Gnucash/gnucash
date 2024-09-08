@@ -224,6 +224,7 @@ gchar* gnc_ctime (const time64 *secs);
 time64 gnc_time (time64 *tbuf);
 
 /** \brief Find the difference in seconds between two time values
+ *         (deprecated)
  *  \param secs1: The first time value, in Seconds since
  * 00:00:00 UTC 01 January 1970 (negative values are seconds before that moment)
  *  \param secs2: The second time value, in Seconds since
