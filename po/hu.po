@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-09-06 23:09+0000\n"
+"PO-Revision-Date: 2024-09-08 17:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -2149,7 +2149,7 @@ msgstr "Szerkesztés…"
 #: gnucash/report/reports/standard/invoice.scm:774
 #: libgnucash/engine/Account.cpp:178 libgnucash/engine/gncInvoice.c:1098
 msgid "Bill"
-msgstr "Bejövő számla"
+msgstr "Bejövőszámla"
 
 #: gnucash/gnome/business-gnome-utils.c:354 gnucash/gnome/dialog-doclink.c:817
 #: gnucash/gnome/dialog-invoice.c:2809 gnucash/gnome/dialog-invoice.c:3035
@@ -2177,7 +2177,7 @@ msgstr "Költségbizonylat"
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:106
 #: libgnucash/engine/Account.cpp:159 libgnucash/engine/gncInvoice.c:1096
 msgid "Invoice"
-msgstr "Kimenő számla"
+msgstr "Kimenőszámla"
 
 #: gnucash/gnome/business-gnome-utils.c:580 gnucash/gnome/gnc-split-reg.c:648
 #: gnucash/gtkbuilder/gnc-frequency.glade:165
@@ -2264,28 +2264,29 @@ msgstr "Ismeretlen"
 #: gnucash/gnome/dialog-billterms.c:672
 #, c-format
 msgid "Term \"%s\" is in use. You cannot delete it."
-msgstr "?%s? Fizetési feltétel használatban van. Nem törölhető."
+msgstr "„%s” fizetési feltétel használatban van. Nem törölhető."
 
 #: gnucash/gnome/dialog-billterms.c:678
 #: gnucash/gnome-utils/dialog-tax-table.c:737
 #, c-format
 msgid "Are you sure you want to delete \"%s\"?"
-msgstr "Biztosan törölni kívánja ezt: \"%s\"?"
+msgstr "\"%s\", biztosan törölni kívánja?"
 
 #: gnucash/gnome/dialog-choose-owner.c:78
 msgid ""
 "This transaction needs to be assigned to a Customer. Please choose the "
 "Customer below."
 msgstr ""
-"E tranzakciót hozzá kell rendelni egy ügyfélhez. Válasszon ügyfelet alul."
+"Ezt a tranzakciót hozzá kell rendelni egy ügyfélhez. Válassza ki az ügyfelet "
+"alul."
 
 #: gnucash/gnome/dialog-choose-owner.c:85
 msgid ""
 "This transaction needs to be assigned to a Vendor. Please choose the Vendor "
 "below."
 msgstr ""
-"E tranzakciót hozzá kell rendelni egy beszállítóhoz. Válasszon beszállítót "
-"alul."
+"Ezt a tranzakciót hozzá kell rendelni egy beszállítóhoz. Válassza ki a "
+"beszállítót alul."
 
 #: gnucash/gnome/dialog-commodities.c:183
 msgid ""
@@ -2308,7 +2309,7 @@ msgstr "Biztosan törölni kívánja a kiválasztott pénznemet?"
 
 #: gnucash/gnome/dialog-commodities.c:213
 msgid "Delete commodity?"
-msgstr "Pénznem törlése?"
+msgstr "Törli az árut?"
 
 #: gnucash/gnome/dialog-commodities.c:217 gnucash/gnome/dialog-doclink.c:164
 #: gnucash/gnome/dialog-price-edit-db.cpp:214
@@ -4749,7 +4750,7 @@ msgstr "Új bejövőszámla létrehozása a jelenlegi másolataként"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
 msgid "_Post Bill"
-msgstr "Bejövőszámla könyvelése"
+msgstr "Bejövőszámla _könyvelése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:218
 msgid "Post this bill to your Chart of Accounts"
@@ -5718,9 +5719,8 @@ msgid "_Remove Splits"
 msgstr "Felosztások tö_rlése"
 
 #: gnucash/gnome/gnc-split-reg.c:1263
-#, fuzzy
 msgid "Change a Transaction Linked Document"
-msgstr "<b>Új tranzakció-információ</b>"
+msgstr "Tranzakcióhoz kapcsolódó dokumentum módosítása"
 
 #: gnucash/gnome/gnc-split-reg.c:1403
 #, c-format
@@ -18630,7 +18630,7 @@ msgstr ""
 #: gnucash/import-export/bi-import/dialog-bi-import.c:475
 #, c-format
 msgid "Row %d, invoice %s/%u: account %s does not exist.\n"
-msgstr "%d. sor, %s/%u bejövő számla: %s számla nem létezik.\n"
+msgstr "%d. sor, %s/%u bejövőszámla: %s számla nem létezik.\n"
 
 #: gnucash/import-export/bi-import/dialog-bi-import.c:416
 #, c-format
@@ -28765,11 +28765,11 @@ msgstr "Az összes kapcsolódó üzleti dokumentum megnyitása"
 
 #: gnucash/ui/gnc-plugin-business.ui:146
 msgid "Sales _Tax Table"
-msgstr "ÁFA adó_táblázat"
+msgstr "Forgalmi_adó-táblázat (áfa)"
 
 #: gnucash/ui/gnc-plugin-business.ui:148
 msgid "View and edit the list of Sales Tax Tables (GST/VAT)"
-msgstr "ÁFA adótáblák megtekintése/szerkesztése"
+msgstr "Forgalmi adó (áfa) táblázatának megtekintése/szerkesztése"
 
 #: gnucash/ui/gnc-plugin-business.ui:151
 msgid "_Billing Terms Editor"
@@ -28785,7 +28785,7 @@ msgstr "A kereső párbeszédablak tesztelése"
 
 #: gnucash/ui/gnc-plugin-business.ui:168 gnucash/ui/gnc-plugin-business.ui:170
 msgid "Initialize Test Data"
-msgstr "Tesztadat inicializálás"
+msgstr "Tesztadat előkészítése"
 
 #: gnucash/ui/gnc-plugin-csv-export.ui:6
 msgid "Export Account T_ree to CSV…"
@@ -28841,7 +28841,7 @@ msgstr "Ü_gyfelek és Beszállítók…"
 
 #: gnucash/ui/gnc-plugin-customer-import.ui:8
 msgid "Import Customers and Vendors from a CSV text file"
-msgstr ""
+msgstr "Ügyfelek és Beszállítók importálása egy CSV szöveges fájlból"
 
 #: gnucash/ui/gnc-plugin-log-replay.ui:6
 msgid "_Replay GnuCash .log file…"
@@ -28887,9 +28887,8 @@ msgstr "Számlatulajdonságok tovább_örökítése…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:39
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:224
-#, fuzzy
 msgid "Cascade selected properties for account"
-msgstr "Válasszon ki egy érvényes kölcsönszámlát"
+msgstr "A kiválasztott számlatulajdonságokat öröklik az alszámlák"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:43
 msgid "_Renumber Subaccounts…"
@@ -28983,15 +28982,15 @@ msgstr "A kiválasztott számla egyeztetése"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:239
 #: gnucash/ui/gnc-plugin-page-register.ui:242
 msgid "_Auto-clear…"
-msgstr "_Automatikus igazolás(elszámolás)…"
+msgstr "_Automatikus kiegyenlítés(elszámolás)…"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:140
 msgid ""
 "Automatically clear individual transactions, so as to reach a certain "
 "cleared amount"
 msgstr ""
-"Automatikusan elszámol egyes tranzakciókat, hogy elérjen egy meghatározott "
-"elszámolt összeget"
+"Automatikusan kiegyenlít(elszámol) egyes tranzakciókat, hogy elérjen egy "
+"meghatározott kiegyenlített(elszámolt) összeget"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:144
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:249
@@ -29033,7 +29032,7 @@ msgstr "_Ellenőrzés és javítás"
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:169
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:281
 msgid "Check & Repair A_ccount"
-msgstr "Folyós_zámla ellenőrzése és javítása"
+msgstr "S_zámla ellenőrzése és javítása"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:171
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:283
@@ -29055,8 +29054,8 @@ msgid ""
 "Check for and repair unbalanced transactions and orphan splits in this "
 "account and its subaccounts"
 msgstr ""
-"Kiegyenlítetlen tranzakciók és árva felosztások ellenőrzése és kijavítása e "
-"számlán és alszámláin"
+"Kiegyenlítetlen tranzakciók és árva felosztások ellenőrzése és kijavítása "
+"ezen a számlán és az alszámláin"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:181
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:291
@@ -29084,7 +29083,9 @@ msgstr "_Számla szerkesztése"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:241
 msgid "Automatically clear individual transactions, given a cleared amount"
-msgstr "Egyedi tranzakciók automatikus törlése egy elszámolt összeg alapján"
+msgstr ""
+"Egyes tranzakciók automatikus kiegyenlítése (elszámolása) egy kiegyenlített "
+"(elszámolt) összeg alapján"
 
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:271
 #: gnucash/ui/gnc-plugin-page-account-tree.ui:427
@@ -29127,7 +29128,7 @@ msgstr "Válassza ki ezt vagy egy másik költségvetést és törölje"
 #: gnucash/ui/gnc-plugin-page-budget.ui:34
 #: gnucash/ui/gnc-plugin-page-budget.ui:270
 msgid "Edit Note"
-msgstr ""
+msgstr "Megjegyzés szerkesztése"
 
 #: gnucash/ui/gnc-plugin-page-budget.ui:36
 #: gnucash/ui/gnc-plugin-page-budget.ui:272
@@ -29152,10 +29153,11 @@ msgstr "A költségvetés beállításainak szerkesztése"
 #: gnucash/ui/gnc-plugin-page-budget.ui:242
 msgid "Edit budget for all periods for the selected accounts"
 msgstr ""
+"A kiválasztott számlák összes időszakára vonatkozó költségvetés szerkesztése"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:79
 msgid "Sort _Order"
-msgstr "Rendezési S_orrend"
+msgstr "Rendezési s_orrend"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:84
 msgid "_Standard"
@@ -29175,19 +29177,19 @@ msgstr "B_evitel"
 #: gnucash/ui/gnc-plugin-page-invoice.ui:227
 #: gnucash/ui/gnc-plugin-page-invoice.ui:409
 msgid "Record the current entry"
-msgstr "Bejegyzés rögzítése"
+msgstr "Jelenlegi bejegyzés rögzítése"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:143
 #: gnucash/ui/gnc-plugin-page-invoice.ui:232
 #: gnucash/ui/gnc-plugin-page-invoice.ui:424
 msgid "Cancel the current entry"
-msgstr "Bejegyzés megszakítása"
+msgstr "Jelenlegi bejegyzés megszakítása"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:149
 #: gnucash/ui/gnc-plugin-page-invoice.ui:237
 #: gnucash/ui/gnc-plugin-page-invoice.ui:439
 msgid "Delete the current entry"
-msgstr "Bejegyzés törlése"
+msgstr "Jelenlegi bejegyzés törlése"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:153
 #: gnucash/ui/gnc-plugin-page-invoice.ui:257
@@ -29196,21 +29198,20 @@ msgid "_Blank"
 msgstr "_Üres"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:155
-#, fuzzy
 msgid "Move to the blank entry at the bottom"
-msgstr "Ugrás a számla alján lévő üres bejegyzésre"
+msgstr "Ugrás a lenti üres bejegyzésre"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:162
 #: gnucash/ui/gnc-plugin-page-invoice.ui:242
 #: gnucash/ui/gnc-plugin-page-invoice.ui:452
 msgid "Dup_licate Entry"
-msgstr "Tétel meg_kettőzése"
+msgstr "Bejegyzés meg_kettőzése"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:164
 #: gnucash/ui/gnc-plugin-page-invoice.ui:244
 #: gnucash/ui/gnc-plugin-page-invoice.ui:454
 msgid "Make a copy of the current entry"
-msgstr "Tétel másolata"
+msgstr "Másolat készítés a jelenlegi bejegyzésről"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:168
 #: gnucash/ui/gnc-plugin-page-invoice.ui:247
@@ -29245,21 +29246,19 @@ msgid "Open the linked document"
 msgstr "Kaocsolódó dokumentum megnyitása"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
-#, fuzzy
 msgid "Open a company report window for the owner of this invoice"
-msgstr "Cégjelentés megnyitása a számla tulajdonosához"
+msgstr "Cégjelentés megnyitása a kimenőszámla címzettjének"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
 #: gnucash/ui/gnc-plugin-page-invoice.ui:499
-#, fuzzy
 msgid "Move to the blank entry at the bottom of the Invoice"
-msgstr "Ugrás a számla alján lévő üres bejegyzésre"
+msgstr "Ugrás a kimenőszámla alján lévő üres bejegyzésre"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:16
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:152
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:332
 msgid "E_dit Customer"
-msgstr "Ügyfél s_zerkesztése"
+msgstr "Ügyfél sz_erkesztése"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:19
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:154
@@ -29277,7 +29276,7 @@ msgstr "Új ügyfél létrehozása"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:186
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:487
 msgid "E_dit Vendor"
-msgstr "Beszállító s_zerkesztése"
+msgstr "Beszállító sz_erkesztése"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:35
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:188
@@ -29294,12 +29293,12 @@ msgstr "Új beszállító létrehozása"
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:220
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:642
 msgid "E_dit Employee"
-msgstr "Alkalmazott s_zerkesztése"
+msgstr "Alkalmazott sz_erkesztése"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:51
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:644
 msgid "Edit the selected employee"
-msgstr "Kijelölt alkalmazott szerkesztése"
+msgstr "A kijelölt alkalmazott szerkesztése"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:57
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:629
