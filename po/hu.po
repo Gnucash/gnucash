@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-09-08 17:09+0000\n"
+"PO-Revision-Date: 2024-09-09 23:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -3771,9 +3771,10 @@ msgid ""
 "\"%s\" before you continue to process this payment. Perhaps you want to "
 "create an Invoice or Bill first?"
 msgstr ""
-"Nincs érvényes „Könyvelés ide” számlája. Egy \"%s\" típusú számlát kellene "
-"létrehoznia mielőtt folytatja a fizetés feldolgozását. Lehet, hogy egy "
-"kimenőszámlát vagy egy bejövőszámlát szeretne létrehozni?"
+"Nincs érvényes számlája amit a „Könyvelés ide” résznél meg kell adnia. Egy \""
+"%s\" típusú számlát kellene létrehoznia mielőtt folytatja a fizetés "
+"feldolgozását. Lehet, hogy először egy kimenőszámlát vagy egy bejövőszámlát "
+"szeretne létrehozni?"
 
 #: gnucash/gnome/dialog-payment.c:1574
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3246
@@ -3808,6 +3809,11 @@ msgid ""
 "Please select one, the others will be discarded.\n"
 "\n"
 msgstr ""
+"Bár ez a tranzakcó több felosztást tartalmaz, amelyek figyelembe vehetők "
+"fizetési felosztásként,\n"
+"a GnuCash csak az egyiket tudja kezelni.\n"
+"Kérjük, válasszon ki egyet, a többi figyelmen kívül lesz hagyva.\n"
+"\n"
 
 #: gnucash/gnome/dialog-payment.c:1630
 msgid "Warning"
@@ -5485,7 +5491,7 @@ msgstr "Exportformátum kiválasztása"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1556
 msgid "Choose the export format for this report:"
-msgstr "Válasszon exportformátumot a jelentéshez :"
+msgstr "Válasszon exportformátumot a jelentéshez:"
 
 #: gnucash/gnome/gnc-plugin-page-report.cpp:1596
 #, c-format
@@ -14677,7 +14683,7 @@ msgstr "Adjon nevet a kiválasztott tételnek."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:174
 msgid "Enter any notes you want to make about this lot."
-msgstr ""
+msgstr "Írja be a tételhez elmenteni kívánt megjegyzést."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:193
 msgid "<b>_Title</b>"
@@ -14822,9 +14828,8 @@ msgid "Post To"
 msgstr "Könyvelés ide"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:335
-#, fuzzy
 msgid "Documents"
-msgstr "Korrekciók"
+msgstr "Dokumentumok"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:412
 #: gnucash/gtkbuilder/dialog-payment.glade:439
@@ -14848,7 +14853,7 @@ msgstr ""
 #: gnucash/gtkbuilder/dialog-payment.glade:469
 #: gnucash/report/reports/standard/new-owner-report.scm:282
 msgid "Refund"
-msgstr ""
+msgstr "Visszatérítés"
 
 #: gnucash/gtkbuilder/dialog-payment.glade:623
 #: gnucash/gtkbuilder/dialog-print-check.glade:296
@@ -25708,7 +25713,7 @@ msgid ""
 "No valid invoice selected. Click on the Options button and select the "
 "invoice to use."
 msgstr ""
-"Nincs kiválasztva érvényes kimenőszámla. Kattintson a Beállítások gombra és "
+"Nincs kiválasztva érvényes kimenőszámla. Kattintson a beállítások gombra és "
 "válassza ki a használandó kimenőszámlát."
 
 #. Translators: This is the format of the invoice
@@ -29243,11 +29248,11 @@ msgstr "Ehhez a tételhez kapcsolódó külső dokumentum kezelése"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:191
 msgid "Open the linked document"
-msgstr "Kaocsolódó dokumentum megnyitása"
+msgstr "Kapcsolódó dokumentum megnyitása"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
 msgid "Open a company report window for the owner of this invoice"
-msgstr "Cégjelentés megnyitása a kimenőszámla címzettjének"
+msgstr "Ügyféljelentés-ablak megnyitása a kimenőszámla címzettjének"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
 #: gnucash/ui/gnc-plugin-page-invoice.ui:499
@@ -29317,9 +29322,8 @@ msgstr "Az ügyfelek öregedésének áttekintése az összes ügyfél számára
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:121
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:200
-#, fuzzy
 msgid "Show vendor report"
-msgstr "Eladó jelentés"
+msgstr "Beszállítójelentés megjelenítése"
 
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:127
 #: gnucash/ui/gnc-plugin-page-owner-tree.ui:529
