@@ -600,7 +600,6 @@ gnc_tree_model_price_get_path (GtkTreeModel *tree_model,
         return path;
     }
 
-    g_list_free (ns_list);
     /* Create a path to the price. */
     commodity = gnc_price_get_commodity((GNCPrice*)iter->user_data2);
     name_space = gnc_commodity_get_namespace_ds(commodity);
@@ -611,6 +610,7 @@ gnc_tree_model_price_get_path (GtkTreeModel *tree_model,
     gtk_tree_path_append_index (path, GPOINTER_TO_INT(iter->user_data3));
     debug_path(LEAVE, path);
     g_list_free (cm_list);
+    g_list_free (ns_list);
     return path;
 }
 
