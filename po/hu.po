@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-09-09 23:09+0000\n"
+"PO-Revision-Date: 2024-09-12 13:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1721,7 +1721,7 @@ msgid ""
 "If the split results in a cash in lieu for remainder units, please record "
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
-"A vállalat további részvényeket bocsát ki, ezáltal egy osztóval csökkenti a "
+"A társaság további részvényeket bocsát ki, ezáltal egy osztóval csökkenti a "
 "részvényárfolyamot, miközben a teljes befektetés pénzbeli értéke nem "
 "változik. \n"
 "\n"
@@ -1884,7 +1884,7 @@ msgid ""
 "the cover buy using the Stock Transaction Assistant first, then record the "
 "split."
 msgstr ""
-"A vállalat további részvényeket bocsát ki, ezáltal egy osztóval csökkenti a "
+"A társaság további részvényeket bocsát ki, ezáltal egy osztóval csökkenti a "
 "részvényárfolyamot, miközben a teljes befektetés pénzbeli értéke nem "
 "változik. \n"
 "\n"
@@ -1901,7 +1901,7 @@ msgid ""
 "record the cover buy using the Stock Transaction Assistant first, then "
 "record the reverse split."
 msgstr ""
-"A vállalat visszavonja részvényeinek egy részét, ezáltal egy szorzóval "
+"A társaság visszavonja részvényeinek egy részét, ezáltal egy szorzóval "
 "növeli a részvényárfolyamot, miközben a teljes befektetés pénzbeli értéke "
 "nem változik.\n"
 "\n"
@@ -10964,7 +10964,7 @@ msgstr "Összefoglaló oldal"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:13
 msgid "CSV Import Assistant"
-msgstr "CSV Importáló Segéd"
+msgstr "CSV importálási segéd"
 
 #. Run the assistant in your language to see GTK's translation of the button labels.
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:30
@@ -11075,7 +11075,7 @@ msgstr "Importálás eredménye"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:8
 msgid "CSV Export Assistant"
-msgstr "CSV exportálássegéd"
+msgstr "CSV exportálási segéd"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:25
 msgid ""
@@ -14683,7 +14683,7 @@ msgstr "Adjon nevet a kiválasztott tételnek."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:174
 msgid "Enter any notes you want to make about this lot."
-msgstr "Írja be a tételhez elmenteni kívánt megjegyzést."
+msgstr "Írja be a tétellel kapcsolatos megjegyzését."
 
 #: gnucash/gtkbuilder/dialog-lot-viewer.glade:193
 msgid "<b>_Title</b>"
@@ -16138,7 +16138,7 @@ msgstr "HTML stíluslapok"
 
 #: gnucash/gtkbuilder/dialog-report.glade:302
 msgid "<b>Available style sheets</b>"
-msgstr "u<b>Elérhető stíluslapok</b>"
+msgstr "<b>Elérhető stíluslapok</b>"
 
 #: gnucash/gtkbuilder/dialog-report.glade:382
 msgid "<b>Style sheet options</b>"
@@ -29252,7 +29252,7 @@ msgstr "Kapcsolódó dokumentum megnyitása"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:209
 msgid "Open a company report window for the owner of this invoice"
-msgstr "Ügyféljelentés-ablak megnyitása a kimenőszámla címzettjének"
+msgstr "Cégjelentés-ablak megnyitása a kimenőszámla címzettjének"
 
 #: gnucash/ui/gnc-plugin-page-invoice.ui:259
 #: gnucash/ui/gnc-plugin-page-invoice.ui:499
