@@ -8,14 +8,15 @@
 # Petter Reinholdtsen <pere-weblate@hungry.com>, 2022, 2023.
 # Rune Osnes <osnes.rune@gmail.com>, 2023.
 # Tor Berg <tob@samfundet.no>, 2024.
+# Morten Cools <morten@cools.no>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.7\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-09-02 08:09+0000\n"
-"Last-Translator: Allan Nordhøy <epost@anotheragency.no>\n"
+"PO-Revision-Date: 2024-09-11 23:09+0000\n"
+"Last-Translator: Morten Cools <morten@cools.no>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/nb_NO/>\n"
 "Language: nb\n"
@@ -1001,6 +1002,8 @@ msgid ""
 "You can assign or modify keyboard shortcuts for many GnuCash actions. See "
 "https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 msgstr ""
+"Du kan tilordne eller endre tastatursnarveier for mange handlinger i "
+"GnuCash. Se https://wiki.gnucash.org/wiki/Keyboard_Shortcuts."
 
 #: doc/tip_of_the_day.list.c:132
 msgid ""
@@ -1429,6 +1432,10 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Selge aksjer long, og registrere kapitalgevinst/tap.\n"
+"\n"
+"Hvis du ikke kan beregne kapitalgevinst, kan du skrive inn et midlertidig "
+"beløp her og korrigere det i transaksjonen senere."
 
 #. Translators: this is a stock transaction describing
 #. dividends issued to holder
@@ -1518,15 +1525,6 @@ msgid "Stock split"
 msgstr "Aksjesplitt"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:271
-#, fuzzy
-#| msgid ""
-#| "Company redeems units, thereby increasing the stock price by a multiple, "
-#| "while keeping the total monetary value of the overall investment "
-#| "constant.\n"
-#| "\n"
-#| "If the reverse split results in a cash in lieu for remainder units, "
-#| "please record the sale using the Stock Transaction Assistant first, then "
-#| "record the reverse split."
 msgid ""
 "Company issues additional units, thereby reducing the stock price by a "
 "divisor , while keeping the total monetary value of the overall investment "
@@ -1535,13 +1533,13 @@ msgid ""
 "If the split results in a cash in lieu for remainder units, please record "
 "the sale using the Stock Transaction Assistant first, then record the split."
 msgstr ""
-"Selskapet innløser andeler, derved øker aksjeprisen basert på en "
-"multiplikator samtidig som den totale pengeverdien av investeringen holdes "
-"konstant.\n"
+"Selskapet utsteder ytterligere andeler, og reduserer dermed aksjeprisen "
+"basert på en divisor, samtidig som den totale pengeverdien av investeringen "
+"holdes konstant.\n"
 "\n"
-"Hvis en aksjespleis resulterer i en cash in lieu/ kontanter i stedet for "
+"Hvis en aksjesplitt resulterer i en cash in lieu/ kontanter i stedet for "
 "gjenværende andeler, vennligst bokfør salget under "
-"Aksjetransaksjonsassistenten først og deretter bokfør aksjespleisen."
+"Aksjetransaksjonsassistenten først og deretter bokfør aksjesplitten."
 
 #. Translators: this is a stock transaction describing a reverse split
 #. Translators: this is a stock transaction describing a
@@ -1591,6 +1589,10 @@ msgid ""
 "If you are unable to calculate capital gains you can enter a placeholder "
 "amount and correct it in the transaction later."
 msgstr ""
+"Kjøpe aksjer for å dekke en shortposisjon, og bokføre kapitalgevinst/tap.\n"
+"\n"
+"Dersom du ikke kan beregne kapitalgevinst, kan du skrive inn et midlertidig "
+"beløp og korrigere det i transaksjonen senere."
 
 #. Translators: this is a stock transaction describing
 #. dividends retrieved from holder when shorting stock
@@ -1627,9 +1629,8 @@ msgstr ""
 #. reclassifying a compensatory dividend into compensatory
 #. return of capital when shorting stock
 #: gnucash/gnome/assistant-stock-transaction.cpp:351
-#, fuzzy
 msgid "Compensatory return of capital (reclassification)"
-msgstr "Kompenserende avkastning av kapital"
+msgstr "Kompenserende tilbakebetaling av kapital (reklassifisering)"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:352
 #, fuzzy
@@ -1867,7 +1868,7 @@ msgstr "En pris på 1 %s = %s på %s vil bli registrert."
 #: gnucash/gnome/assistant-stock-transaction.cpp:1411
 #, c-format
 msgid "Transaction can't balance, %s is error value %s"
-msgstr ""
+msgstr "Transaksjonen kan ikke avstemmes, %s er feilverdi %s"
 
 #: gnucash/gnome/assistant-stock-transaction.cpp:1417
 #, c-format
@@ -2266,6 +2267,8 @@ msgid ""
 "The Company Name field cannot be left blank, please enter a company name or "
 "a person's name."
 msgstr ""
+"Feltet Firmanavn kan ikke stå tomt. Vennligst skriv inn et firmanavn eller "
+"en persons navn."
 
 #: gnucash/gnome/dialog-customer.c:323
 msgid "Discount percentage must be between 0-100 or you must leave it blank."
@@ -4010,7 +4013,7 @@ msgstr[1] ""
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1266
 msgid "Highlight a date first to sort by occurrence date."
-msgstr ""
+msgstr "For å sortere på hendelsesdato, må du først merke en dato."
 
 #: gnucash/gnome/dialog-sx-since-last-run.c:1267
 msgid "Highlight a schedule first to sort by schedule name."
@@ -15310,7 +15313,7 @@ msgstr "Sett inn komma automatisk der beløp er ført uten."
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1282
 msgid "_Decimal places"
-msgstr "_Desimalplasser:"
+msgstr "_Desimalplasser"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:1297
 msgid "How many automatic decimal places will be filled in."
@@ -20811,7 +20814,7 @@ msgstr "Mangler transaksjonsdato."
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:741
 #, scheme-format
 msgid "Missing QIF investment action for transaction dated ~a."
-msgstr "Mangler QIF-investeringshandling for transaksjon datert -a.."
+msgstr "Mangler QIF-investeringshandling for transaksjon datert ~a."
 
 #: gnucash/import-export/qif-imp/qif-to-gnc.scm:1426
 #, fuzzy
@@ -22758,7 +22761,7 @@ msgid ""
 " You can learn more about writing scheme at &lt;https://www.scheme.com/"
 "tspl2d/&gt;."
 msgstr ""
-" Du kan lære mer om å skrive skjema på &lt;https://www.scheme.com/tspl2d/"
+" Du kan lære mer om å skrive Scheme på &lt;https://www.scheme.com/tspl2d/"
 "&gt;."
 
 #: gnucash/report/reports/example/sample-report.scm:302
@@ -27814,7 +27817,7 @@ msgstr "Antall spalter"
 
 #: gnucash/report/reports/standard/txn-columns.scm:38
 msgid "Set the upper limit for number of columns"
-msgstr ""
+msgstr "Sett en øvre grense for antall kolonner"
 
 #: gnucash/report/reports/standard/txn-columns.scm:154
 #, fuzzy
@@ -31061,7 +31064,7 @@ msgstr "Kunne ikke analysere resultatet som ble returnert av Finans::Tilbud."
 #: libgnucash/app-utils/gnc-quotes.cpp:750
 #: libgnucash/app-utils/gnc-quotes.cpp:765
 msgid "Result:"
-msgstr ""
+msgstr "Resultat:"
 
 #. Translators: This is the error message reported by the Online Quotes processing code.
 #: libgnucash/app-utils/gnc-quotes.cpp:760
