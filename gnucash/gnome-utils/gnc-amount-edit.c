@@ -278,11 +278,6 @@ gnc_amount_edit_key_press (GtkWidget *widget, GdkEventKey *event, gpointer user_
         gtk_widget_set_tooltip_text (GTK_WIDGET(gae->image), NULL);
     }
 
-#ifdef G_OS_WIN32
-    /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
-    if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KEY_KP_Decimal;
-#endif
     if (event->keyval == GDK_KEY_KP_Decimal)
     {
         gchar *decimal;

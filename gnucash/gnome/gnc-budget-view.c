@@ -773,12 +773,6 @@ gbv_key_press_cb (GtkWidget *widget, GdkEventKey *event, gpointer user_data)
     if (event->type != GDK_KEY_PRESS || !priv->temp_cr)
         return FALSE;
 
-#ifdef G_OS_WIN32
-    /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
-    if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KEY_KP_Decimal;
-#endif
-
     switch (event->keyval)
     {
     case GDK_KEY_KP_Decimal:

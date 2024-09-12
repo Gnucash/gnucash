@@ -71,11 +71,7 @@ gnc_formula_cell_direct_update( BasicCell *bcell,
      * this after fixing a bug where one copy was kept up to date, and the
      * other not.  So, fix this.
      */
-#ifdef G_OS_WIN32
-    /* gdk never sends GDK_KEY_KP_Decimal on win32. See #486658 */
-    if (event->hardware_keycode == VK_DECIMAL)
-        event->keyval = GDK_KEY_KP_Decimal;
-#endif
+
     switch (event->keyval)
     {
     case GDK_KEY_Return:
