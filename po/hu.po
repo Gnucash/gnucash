@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-25 05:24+0200\n"
-"PO-Revision-Date: 2024-09-12 13:09+0000\n"
+"PO-Revision-Date: 2024-09-14 23:09+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -11000,7 +11000,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:51
 msgid "Import Account Assistant"
-msgstr "Számla Importáló Segéd"
+msgstr "Számlaimportálási segéd"
 
 #: gnucash/gtkbuilder/assistant-csv-account-import.glade:66
 msgid "Enter file name and location for the Import…"
@@ -11082,6 +11082,8 @@ msgid ""
 "\n"
 "Select the type of Export required and the separator that will be used.\n"
 msgstr ""
+"\n"
+"Válassza ki az exportálás típusát és a kívánt elválasztójelet.\n"
 
 #: gnucash/gtkbuilder/assistant-csv-export.glade:65
 msgid "Use Quotes"
@@ -15492,7 +15494,7 @@ msgstr ""
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2609
 msgid "Automatic credit card _payment"
-msgstr "Automatikus hitelkártya-_törlesztések"
+msgstr "Automatikus hitelkártya-_törlesztés"
 
 #: gnucash/gtkbuilder/dialog-preferences.glade:2615
 msgid ""
