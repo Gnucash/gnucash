@@ -43,6 +43,9 @@
 #include <gnc-engine.h>
 #include "gnc-report.h"
 
+#include "unicode/dtitvfmt.h"
+#include "unicode/smpdtfmt.h"
+
 extern "C" SCM scm_init_sw_report_module(void);
 
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -428,3 +431,71 @@ gnc_get_optiondb_from_dispatcher(SCM dispatcher)
     return u_ptr->get();
 }
 
+static icu::DateIntervalFormat*
+get_date_interval_format ()
+{
+    static std::unique_ptr<icu::DateIntervalFormat> difmt;
+    if (!difmt)
+    {
+        icu::Locale locale;
+        if (auto lc_time_locale = setlocale (LC_TIME, nullptr))
+        {
+            std::string localeStr(lc_time_locale);
+            if (size_t dotPos = localeStr.find('.'); dotPos != std::string::npos)
+                localeStr = localeStr.substr(0, dotPos);
+
+            locale = icu::Locale::createCanonical (localeStr.c_str());
+        }
+        UErrorCode status = U_ZERO_ERROR;
+        difmt.reset(icu::DateIntervalFormat::createInstance(UDAT_YEAR_NUM_MONTH_DAY, locale, status));
+        if (U_FAILURE(status))
+            return nullptr;
+    }
+    return difmt.get();
+}
+
+static gchar*
+date_interval_format (time64 from_date, time64 to_date)
+{
+    auto difmt = get_date_interval_format();
+    if (!difmt)
+    {
+        PWARN("couldn't create DateIntervalFormat");
+        return nullptr;
+    }
+
+    auto interval = new icu::DateInterval (from_date * 1000, to_date * 1000);
+    icu::UnicodeString result;
+    UErrorCode status = U_ZERO_ERROR;
+    difmt->format(interval, result, status);
+    if (U_FAILURE(status))
+    {
+        PWARN("Error formatting interval");
+        return nullptr;
+    }
+
+    std::string interval_string;
+    result.toUTF8String(interval_string);
+
+    return g_strdup (interval_string.c_str());
+}
+
+gchar*
+gnc_date_interval_format (time64 from_date, time64 to_date)
+{
+    gchar* rv = nullptr;
+
+    if (qof_date_format_get() == QOF_DATE_FORMAT_LOCALE)
+        rv = date_interval_format (from_date, to_date);
+
+    // not using locale, or icu failure
+    if (!rv)
+    {
+        gchar from_buff[MAX_DATE_LENGTH+1], to_buff[MAX_DATE_LENGTH+1];
+        qof_print_date_buff (from_buff, MAX_DATE_LENGTH, from_date);
+        qof_print_date_buff (to_buff, MAX_DATE_LENGTH, to_date);
+        rv = g_strdup_printf (_("%s to %s"), from_buff, to_buff);
+    }
+
+    return rv;
+}
