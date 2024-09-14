@@ -510,10 +510,7 @@ balance at a given time"))
                 chart (list report-title
                             (string-append
                              (if do-intervals?
-                                 (format #f
-                                         (G_ "~a to ~a")
-                                         (qof-print-date from-date)
-                                         (qof-print-date to-date))
+                                 (gnc-date-interval-format from-date to-date)
                                  (format #f
                                          (G_ "Balance at ~a")
                                          (qof-print-date to-date)))

@@ -182,10 +182,7 @@
            (string-append
             (gnc-commodity-get-mnemonic base-commodity)
             " - "
-            (format #f
-                    (G_ "~a to ~a")
-                    (qof-print-date from-date)
-                    (qof-print-date to-date)))))
+            (gnc-date-interval-format from-date to-date))))
     (gnc:html-chart-set-width! chart width)
     (gnc:html-chart-set-height! chart height)
     (gnc:html-chart-set! chart

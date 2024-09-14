@@ -518,12 +518,8 @@ Please deselect the accounts with negative balances."))
 
             (gnc:html-chart-set-title!
              chart (list report-title
-                         (format #f
-                                 (if do-intervals?
-                                     (G_ "~a to ~a")
-                                     (G_ "Balances ~a to ~a"))
-                                 (qof-print-date from-date-t64)
-                                 (qof-print-date to-date-t64))))
+                         (format #f (if do-intervals? "~a" (G_ "Balances ~a"))
+                                 (gnc-date-interval-format from-date-t64 to-date-t64))))
 
             (gnc:html-chart-set-width! chart width)
             (gnc:html-chart-set-height! chart height)
