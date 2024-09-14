@@ -4,14 +4,15 @@
 # Tiago Neiva <tneiva@gmail.com>, 2018.
 # Pedro Albuquerque <pmra@gmx.com>, 2021, 2022, 2023.
 # Hugo Carvalho <hugokarvalho@hotmail.com>, 2022, 2023.
+# Henrique Oliveira <ho.henrique@proton.me>, 2024.
 msgid ""
 msgstr ""
 "Project-Id-Version: GnuCash 5.6\n"
-"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
-"product=GnuCash&component=Translations\n"
+"Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
+"cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-06-22 06:24+0200\n"
-"PO-Revision-Date: 2023-11-07 08:32+0000\n"
-"Last-Translator: Pedro Albuquerque <pmra@gmx.com>\n"
+"PO-Revision-Date: 2024-09-14 23:09+0000\n"
+"Last-Translator: Henrique Oliveira <ho.henrique@proton.me>\n"
 "Language-Team: Portuguese <https://hosted.weblate.org/projects/gnucash/"
 "glossary/pt/>\n"
 "Language: pt\n"
@@ -19,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.2-dev\n"
+"X-Generator: Weblate 5.8-dev\n"
 
 #. "English Definition (Dear translators: This file will never be visible to normal users! It should only serve as a tool for translators. E.g. matching terms from this file are displayed in Weblate's Translation pages of other GnuCash components like the program.)"
 msgid "Term"
@@ -735,7 +736,7 @@ msgstr "título"
 
 #. "Selling borrowed units in the hope that when you buy them back later it will be at a lower price."
 msgid "Sell short"
-msgstr ""
+msgstr "Vender a descoberto"
 
 #. "-"
 msgid "Share Balance (register)"
