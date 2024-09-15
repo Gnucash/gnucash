@@ -98,6 +98,7 @@ clear_copied_item()
         gnc_float_txn_free (copied_item.ft);
     copied_item.ftype = 0;
     copied_item.fs = NULL;
+    copied_item.ft = NULL;
     copied_class = CURSOR_CLASS_NONE;
     copied_leader_guid = *guid_null();
 }
@@ -785,6 +786,9 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
         return;
     }
 
+    /* unprotect the old object, if any */
+    clear_copied_item();
+
     /* Ok, we are now ready to make the copy. */
 
     if (cursor_class == CURSOR_CLASS_SPLIT)
@@ -833,9 +837,6 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
         LEAVE ("copy failed");
         return;
     }
-
-    /* unprotect the old object, if any */
-    clear_copied_item();
 
     if (new_fs)
     {
