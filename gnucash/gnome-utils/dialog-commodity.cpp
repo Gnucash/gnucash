@@ -42,11 +42,14 @@
 
 #include "dialog-commodity.h"
 #include "dialog-utils.h"
+#include "gnc-commodity.hpp"
 #include "gnc-engine.h"
 #include "gnc-gtk-utils.h"
 #include "gnc-gui-query.h"
 #include "gnc-ui-util.h"
 #include "gnc-ui.h"
+
+#include <algorithm>
 
 /* This static indicates the debugging module that this .o belongs to.  */
 static QofLogModule log_module = GNC_MOD_GUI;
@@ -426,15 +429,6 @@ gnc_ui_select_commodity_namespace_changed_cb (GtkComboBox *cbwe,
 /********************************************************************
  * gnc_ui_update_commodity_picker
  ********************************************************************/
-static int
-collate(gconstpointer a, gconstpointer b)
-{
-    if (!a)
-        return -1;
-    if (!b)
-        return 1;
-    return g_utf8_collate (static_cast<const char*>(a), static_cast<const char*>(b));
-}
 
 
 void
@@ -442,16 +436,13 @@ gnc_ui_update_commodity_picker (GtkWidget *cbwe,
                                 const gchar * name_space,
                                 const gchar * init_string)
 {
-    GList      * commodities;
-    GList      * iterator = nullptr;
-    GList      * commodity_items = nullptr;
+    std::vector<std::string> commodity_items;
     GtkComboBox *combo_box;
     GtkEntry *entry;
     GtkTreeModel *model;
     GtkTreeIter iter;
     gnc_commodity_table *table;
     gint current = 0, match = 0;
-    gchar *name;
 
     g_return_if_fail(GTK_IS_COMBO_BOX(cbwe));
     g_return_if_fail(name_space);
@@ -468,29 +459,23 @@ gnc_ui_update_commodity_picker (GtkWidget *cbwe,
     gtk_combo_box_set_active(combo_box, -1);
 
     table = gnc_commodity_table_get_table (gnc_get_current_book ());
-    commodities = gnc_commodity_table_get_commodities(table, name_space);
-    for (iterator = commodities; iterator; iterator = iterator->next)
-    {
-        commodity_items =
-            g_list_prepend (commodity_items,
-                            (gpointer) gnc_commodity_get_printname(GNC_COMMODITY(iterator->data)));
-    }
-    g_list_free(commodities);
 
-    commodity_items = g_list_sort(commodity_items, collate);
-    for (iterator = commodity_items; iterator; iterator = iterator->next)
+    for (auto comm : gnc_commodity_table_get_commodities(table, name_space))
+        commodity_items.push_back (gnc_commodity_get_printname(comm));
+
+    std::sort (commodity_items.end(), commodity_items.begin());
+
+    for (auto name : commodity_items)
     {
-        name = (char *)iterator->data;
         gtk_list_store_append(GTK_LIST_STORE(model), &iter);
-        gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, name, -1);
+        gtk_list_store_set (GTK_LIST_STORE(model), &iter, 0, name.c_str(), -1);
 
-        if (init_string && g_utf8_collate(name, init_string) == 0)
+        if (init_string && name == init_string)
             match = current;
         current++;
     }
 
     gtk_combo_box_set_active(combo_box, match);
-    g_list_free(commodity_items);
 }
 
 
@@ -560,7 +545,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
     GtkComboBox *combo_box;
     GtkTreeModel *model;
     GtkTreeIter iter, match;
-    GList *namespaces, *node;
+    std::vector<std::string> namespaces;
     gboolean matched = FALSE;
 
     g_return_if_fail(GTK_IS_COMBO_BOX (cbwe));
@@ -582,12 +567,10 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
     case DIAG_COMM_NON_CURRENCY_SELECT:
         namespaces =
             gnc_commodity_table_get_namespaces (gnc_get_current_commodities());
-        node = g_list_find_custom (namespaces, GNC_COMMODITY_NS_CURRENCY, collate);
-        if (node)
-        {
-            namespaces = g_list_remove_link (namespaces, node);
-            g_list_free_1 (node);
-        }
+
+        if (auto it = std::find (namespaces.begin(), namespaces.end(), GNC_COMMODITY_NS_CURRENCY);
+            it != namespaces.end())
+            namespaces.erase (it);
 
         if (gnc_commodity_namespace_is_iso (init_string))
             init_string = nullptr;
@@ -595,7 +578,7 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
 
     case DIAG_COMM_CURRENCY:
     default:
-        namespaces = g_list_prepend (nullptr, (gpointer)GNC_COMMODITY_NS_CURRENCY);
+        namespaces = { GNC_COMMODITY_NS_CURRENCY };
         break;
     }
 
@@ -623,10 +606,10 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
     }
 
     /* add all others to the combobox */
-    namespaces = g_list_sort(namespaces, collate);
-    for (node = namespaces; node; node = node->next)
+    std::sort (namespaces.begin(), namespaces.end());
+    for (const auto& ns_str : namespaces)
     {
-        auto ns = static_cast<const char*>(node->data);
+        auto ns = ns_str.c_str();
         /* Skip template, legacy and currency namespaces.
            The latter was added as first entry earlier */
         if ((g_utf8_collate(ns, GNC_COMMODITY_NS_LEGACY) == 0) ||
@@ -650,7 +633,6 @@ gnc_ui_update_namespace_picker (GtkWidget *cbwe,
 
     if (matched)
         gtk_combo_box_set_active_iter (combo_box, &match);
-    g_list_free(namespaces);
 }
 
 

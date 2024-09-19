@@ -34,6 +34,7 @@
 #define GNC_COMMODITY_HPP
 
 #include <vector>
+#include <string>
 
 #include <gnc-commodity.h>
 
@@ -50,6 +51,48 @@ using CommVec = std::vector<gnc_commodity*>;
  */
 void gnc_quote_source_set_fq_installed (const char* version_string,
                                         const std::vector<std::string>& sources_list);
+
+
+/** Return a list of all namespaces in the commodity table.  This
+ *  returns both system and user defined namespaces.
+ *
+ *  @return A vector to the list of names. An empty vector if an
+ *  invalid argument was supplied. */
+std::vector<std::string> gnc_commodity_table_get_namespaces (const gnc_commodity_table * t);
+
+
+/** Return a vector of all commodities in the commodity table that are
+ *  in the given namespace.
+ *
+ *  @param table A pointer to the commodity table
+ *
+ *  @param commodity_namespace A string indicating which commodities should be
+ *  returned. It is a required argument.
+ *
+ *  @return A pointer to the list of commodities.  NULL if an invalid
+ *  argument was supplied, or the namespace could not be found.
+ */
+
+CommVec gnc_commodity_table_get_commodities (const gnc_commodity_table *, const char *);
+
+/** This function returns a vector of commodities for which price
+ *  quotes should be retrieved.  It will scan the entire commodity
+ *  table (or a subset) and check each commodity to see if the
+ *  price_quote_flag field has been set.  All matching commodities are
+ *  queued onto a list, and the head of that list is returned.  Use
+ *  the command-line given expression as a filter on the commodities
+ *  to be returned. If non-null, only commodities in namespace that
+ *  match the specified regular expression are checked.  If none was
+ *  given, all commodities are checked.
+ *
+ *  @param table A pointer to the commodity table
+ *
+ *  @return A pointer to a list of commodities.  NULL if invalid
+ *  arguments were supplied or if there no commodities are flagged for
+ *  quote retrieval.
+ */
+
+CommVec gnc_commodity_table_get_quotable_commodities (const gnc_commodity_table*);
 
 #endif /* GNC_COMMODITY_HPP */
 /** @} */

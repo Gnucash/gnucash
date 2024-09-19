@@ -48,6 +48,8 @@
 
 #include <config.h>
 
+#include <algorithm>
+
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 #include <string.h>
@@ -56,6 +58,7 @@
 
 #include "gnc-currency-edit.h"
 #include "gnc-commodity.h"
+#include "gnc-commodity.hpp"
 #include "gnc-gtk-utils.h"
 #include "gnc-ui-util.h"
 #include "gnc-engine.h"
@@ -311,12 +314,10 @@ add_item(gnc_commodity *commodity, GNCCurrencyEdit *gce)
 static void
 fill_currencies(GNCCurrencyEdit *gce)
 {
-    GList *currencies;
-
-    currencies = gnc_commodity_table_get_commodities
+    auto currencies = gnc_commodity_table_get_commodities
                  (gnc_get_current_commodities (), GNC_COMMODITY_NS_CURRENCY);
-    g_list_foreach(currencies, (GFunc)add_item, gce);
-    g_list_free(currencies);
+    std::for_each (currencies.begin(), currencies.end(),
+                   [gce](auto comm){ add_item (comm, gce); });
 }
 
 

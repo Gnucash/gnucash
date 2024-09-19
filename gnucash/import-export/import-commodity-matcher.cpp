@@ -24,6 +24,7 @@
   @author Copyright (C) 2002 Benoit Grégoire <bock@step.polymtl.ca>
  */
 #include <config.h>
+#include <algorithm>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -34,6 +35,7 @@
 #include "Account.h"
 #include "Transaction.h"
 #include "dialog-commodity.h"
+#include "gnc-commodity.hpp"
 #include "gnc-engine.h"
 #include "gnc-ui-util.h"
 
@@ -64,27 +66,22 @@ gnc_commodity * gnc_import_select_commodity(const char * cusip,
     DEBUG("Looking for commodity with exchange_code: %s", cusip);
 
     g_assert(commodity_table);
-    GList *namespace_list = gnc_commodity_table_get_namespaces(commodity_table);
 
-    for (GList *n = namespace_list; !retval && n; n = g_list_next (n))
+    for (const auto& ns_str : gnc_commodity_table_get_namespaces(commodity_table))
     {
-        auto ns = static_cast<const char*>(n->data);
+        auto ns = ns_str.c_str();
         DEBUG("Looking at namespace %s", ns);
-        GList *comm_list = gnc_commodity_table_get_commodities (commodity_table, ns);
-        for (GList *m = comm_list; !retval && m; m = g_list_next (m))
+        auto commodities{gnc_commodity_table_get_commodities (commodity_table, ns)};
+        auto it = std::find_if (commodities.begin(), commodities.end(),
+                                [cusip](auto com)
+                                { return !g_strcmp0 (gnc_commodity_get_cusip (com), cusip); });
+        if (it != commodities.end())
         {
-            auto com = static_cast<gnc_commodity*>(m->data);
-            DEBUG("Looking at commodity %s", gnc_commodity_get_fullname (com));
-            if (!g_strcmp0 (gnc_commodity_get_cusip (com), cusip))
-            {
-                retval = com;
-                DEBUG("Commodity %s matches.", gnc_commodity_get_fullname (com));
-            }
-        }
-        g_list_free (comm_list);
+            retval = *it;
+            DEBUG("Commodity %s matches.", gnc_commodity_get_fullname (*it));
+            break;
+        };
     }
-
-    g_list_free(namespace_list);
 
     if (retval == NULL && ask_on_unknown != 0)
     {

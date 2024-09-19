@@ -115,8 +115,6 @@ GType gnc_commodity_namespace_get_type(void);
  */
 #define GNC_COMMODITY_MAX_FRACTION 1000000000
 
-typedef GList CommodityList;
-
 /** @name Commodity Quote Source functions
  @{
 */
@@ -829,15 +827,6 @@ GList * gnc_commodity_namespace_get_commodity_list(const gnc_commodity_namespace
 int gnc_commodity_table_has_namespace(const gnc_commodity_table * table,
                                       const char * commodity_namespace);
 
-/** Return a list of all namespaces in the commodity table.  This
- *  returns both system and user defined namespaces.
- *
- *  @return A pointer to the list of names.  NULL if an invalid
- *  argument was supplied.
- *
- *  @note It is the callers responsibility to free the list. */
-GList * gnc_commodity_table_get_namespaces(const gnc_commodity_table * t);
-
 /** Return a list of all namespace data structures in the commodity table.  This
  *  returns both system and user defined namespace structures.
  *
@@ -896,41 +885,6 @@ void      gnc_commodity_table_delete_namespace(gnc_commodity_table * table,
  *  @return The number of commodities in the table. 0 if there are no
  *  commodities, or the routine was passed a bad argument. */
 guint gnc_commodity_table_get_size(const gnc_commodity_table* tbl);
-
-/** Return a list of all commodities in the commodity table that are
- *  in the given namespace.
- *
- *  @param table A pointer to the commodity table
- *
- *  @param commodity_namespace A string indicating which commodities should be
- *  returned. It is a required argument.
- *
- *  @return A pointer to the list of commodities.  NULL if an invalid
- *  argument was supplied, or the namespace could not be found.
- *
- *  @note It is the callers responsibility to free the list. */
-CommodityList * gnc_commodity_table_get_commodities(
-    const gnc_commodity_table * table, const char * commodity_namespace);
-
-/** This function returns a list of commodities for which price quotes
- *  should be retrieved.  It will scan the entire commodity table (or
- *  a subset) and check each commodity to see if the price_quote_flag
- *  field has been set.  All matching commodities are queued onto a
- *  list, and the head of that list is returned.  Use the command-line
- *  given expression as a filter on the commodities to be returned. If
- *  non-null, only commodities in namespace that match the specified
- *  regular expression are checked.  If none was given, all
- *  commodities are checked.
- *
- *  @param table A pointer to the commodity table
- *
- *  @return A pointer to a list of commodities.  NULL if invalid
- *  arguments were supplied or if there no commodities are flagged for
- *  quote retrieval.
- *
- *  @note It is the callers responsibility to free the list. */
-CommodityList * gnc_commodity_table_get_quotable_commodities(
-    const gnc_commodity_table * table);
 
 /** Call a function once for each commodity in the commodity table.
  *  This table walk returns whenever the end of the table is reached,
