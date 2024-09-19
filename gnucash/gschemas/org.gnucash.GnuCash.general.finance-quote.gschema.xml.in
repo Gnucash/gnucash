@@ -3,7 +3,12 @@
     <key name="alphavantage-api-key" type="s">
       <default>''</default>
       <summary>Alpha Vantage API key</summary>
-      <description>To retrieve online quotes from Alphavantage, this key needs to be set. A key can be retrieved from the Alpha Vantage website.</description>
+      <description>Alpha Vantage requires an API key to use their service. You can obtain a key by registering for a free account at the Alpha Vantage website, https://alphavantage.co/support/#api-key.</description>
+    </key>
+    <key name="yhfinance-api-key" type="s">
+      <default>''</default>
+      <summary>YH Finance (FinanceAPI) API key</summary>
+      <description>YH Finance requires an API key to use their FinanceAPI service. You can obtain a key by registering for a free account at the YH Finance website, https://financeapi.net/pricing.</description>
     </key>
   </schema>
 </schemalist>

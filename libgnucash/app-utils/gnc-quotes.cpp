@@ -20,6 +20,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \ *******************************************************************/
 
+#include <boost/process/environment.hpp>
 #include <config.h>
 #include <qoflog.h>
 
@@ -61,6 +62,8 @@
 #include <qofbook.h>
 
 static const QofLogModule log_module = "gnc.price-quotes";
+static const char* av_api_env = "ALPHAVANTAGE_API_KEY";
+static const char* yh_api_env = "FINANCEAPI_API_KEY";
 
 namespace bl = boost::locale;
 namespace bp = boost::process;
@@ -128,7 +131,8 @@ class GncFQQuoteSource final : public GncQuoteSource
     std::string c_fq_wrapper;
     std::string m_version;
     StrVec m_sources;
-    std::string m_api_key;
+    std::string m_av_api_key;
+    std::string m_yh_api_key;
 public:
     GncFQQuoteSource();
     ~GncFQQuoteSource() = default;
@@ -146,9 +150,28 @@ static std::string parse_quotesource_error(const std::string& line);
 
 static const std::string empty_string{};
 
+static inline std::string
+get_api_key(const char* prefskey, const char* envvar)
+{
+    std::string keyval{};
+    auto key = gnc_prefs_get_string ("general.finance-quote", prefskey);
+    if (!(key && *key))
+    {
+        g_free (key);
+        key = g_strdup(getenv(envvar));
+    }
+
+    if (key)
+    {
+        keyval = std::string(key);
+        g_free (key);
+    }
+    return keyval;
+}
+
 GncFQQuoteSource::GncFQQuoteSource() :
 c_cmd{bp::search_path("perl")},
-m_version{}, m_sources{}, m_api_key{}
+m_version{}, m_sources{}, m_av_api_key{}, m_yh_api_key{}
 {
     char *bindir = gnc_path_get_bindir();
     c_fq_wrapper = std::string(bindir) + "/finance-quote-wrapper";
@@ -180,20 +203,10 @@ m_version{}, m_sources{}, m_api_key{}
     m_sources = std::move(sources);
     std::sort (m_sources.begin(), m_sources.end());
 
-    auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
-    if (!(av_key && *av_key))
-    {
-        g_free (av_key);
-        av_key = g_strdup(getenv("ALPHAVANTAGE_API_KEY"));
-    }
-
-    if (av_key)
-    {
-        m_api_key = std::string(av_key);
-        g_free (av_key);
-    }
-    else
+    m_av_api_key = get_api_key("alphavantage-api-key", av_api_env);
+    if (m_av_api_key.empty())
         PWARN("No Alpha Vantage API key set, currency quotes and other AlphaVantage based quotes won't work.");
+    m_yh_api_key = get_api_key("yhfinance-api-key", yh_api_env);
 }
 
 QuoteResult
@@ -215,26 +228,22 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
         boost::asio::io_service svc;
 
         auto input_buf = bp::buffer (json_string);
+        auto curr_env{boost::this_process::environment()};
+        bp::environment new_env{curr_env};
 	bp::child process;
-	if (m_api_key.empty())
-	    process = bp::child(c_cmd, args,
-				bp::std_out > out_buf,
-				bp::std_err > err_buf,
-				bp::std_in < input_buf,
+	if (!m_av_api_key.empty())
+            new_env[av_api_env] = m_av_api_key;
+	if (!m_yh_api_key.empty())
+            new_env[yh_api_env] = m_yh_api_key;
+        process = bp::child(c_cmd, args,
+                            bp::std_out > out_buf,
+                            bp::std_err > err_buf,
+                            bp::std_in < input_buf,
 #ifdef BOOST_WINDOWS_API
-                                bp::windows::create_no_window,
+                            bp::windows::create_no_window,
 #endif
-				svc);
-	else
-	    process = bp::child(c_cmd, args,
-				bp::std_out > out_buf,
-				bp::std_err > err_buf,
-				bp::std_in < input_buf,
-#ifdef BOOST_WINDOWS_API
-                                bp::windows::create_no_window,
-#endif
-				bp::env["ALPHAVANTAGE_API_KEY"] = m_api_key,
-				svc);
+                            new_env,
+                            svc);
 
 	svc.run();
 	process.wait();

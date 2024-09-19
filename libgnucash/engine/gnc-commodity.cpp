@@ -217,6 +217,7 @@ static QuoteSourceList single_quote_sources =
     { false, SOURCE_SINGLE, "US Govt. Thrift Savings Plan", "tsp" },
     { false, SOURCE_SINGLE, "Yahoo as JSON", "yahoo_json" },
     { false, SOURCE_SINGLE, "Yahoo Web", "yahooweb" },
+    { false, SOURCE_SINGLE, "YH Finance (FinanceAPI)", "financeapi" },
 };
 
 static QuoteSourceList multiple_quote_sources =
