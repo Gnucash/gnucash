@@ -73,6 +73,7 @@ typedef struct
     };
     CursorClass cursor_class;
     GncGUID leader_guid;
+    gint anchor_split_index;
 } ft_fs_store;
 
 static ft_fs_store copied_item = { 0, { NULL } };
@@ -101,6 +102,7 @@ clear_copied_item()
     copied_item.ft = NULL;
     copied_item.cursor_class = CURSOR_CLASS_NONE;
     copied_item.leader_guid = *guid_null();
+    copied_item.anchor_split_index = 0;
 }
 
 static void
@@ -828,6 +830,7 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
             }
 
             copied_item.leader_guid = info->default_account;
+            copied_item.anchor_split_index = xaccTransGetSplitIndex (trans, split);
         }
     }
 
@@ -1082,7 +1085,11 @@ gnc_split_register_paste_current (SplitRegister* reg)
         if (trans == blank_trans)
         {
             /* In pasting, the blank split is deleted. Pick a new one. */
-            blank_split = xaccTransGetSplit (trans, 0);
+            gint anchor_split_index = copied_item.anchor_split_index;
+            if (anchor_split_index > num_splits)
+                anchor_split_index = 0;
+
+            blank_split = xaccTransGetSplit (trans, anchor_split_index);
             info->blank_split_guid = *xaccSplitGetGUID (blank_split);
             info->blank_split_edited = TRUE;
             info->auto_complete = FALSE;
