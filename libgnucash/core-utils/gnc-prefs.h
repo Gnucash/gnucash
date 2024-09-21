@@ -254,8 +254,10 @@ void gnc_prefs_remove_group_cb_by_func (const gchar *group,
  *
  *  @param group This string contains the group name of the preference to bind to.
  *
- *  @param preference This string is the name of the particular preference to
+ *  @param pref_name This string is the name of the particular preference to
  *  bind to.
+ *
+ *  @param pref_value This string is the enum value of the preference to bind to.
  *
  *  @param object The object to be bound.
  *
@@ -263,6 +265,7 @@ void gnc_prefs_remove_group_cb_by_func (const gchar *group,
  */
 void gnc_prefs_bind (const gchar *group,
                      /*@ null @*/ const gchar *pref_name,
+                     /*@ null @*/ const gchar *pref_value,
                      gpointer object,
                      const gchar *property);
 

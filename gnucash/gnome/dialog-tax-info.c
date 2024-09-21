@@ -1510,7 +1510,7 @@ gnc_tax_info_dialog_create (GtkWidget * parent, TaxInfoDialog *ti_dialog)
     if (gnc_prefs_get_bool(GNC_PREFS_GROUP_GENERAL, GNC_PREF_SAVE_GEOMETRY))
     {
         GObject *object = gtk_builder_get_object (builder, "paned");
-        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_PANED_POS, object, "position");
+        gnc_prefs_bind (GNC_PREFS_GROUP, GNC_PREF_PANED_POS, NULL, object, "position");
     }
     g_object_unref (builder);
 }

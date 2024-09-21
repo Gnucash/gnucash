@@ -968,7 +968,7 @@ bind_extra_toolbuttons_visibility (GncMainWindow *mainwindow)
         {
             gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE,
                             GNC_PREF_EXTRA_TOOLBUTTONS,
-                            G_OBJECT(tool_item), "visible");
+                            NULL, G_OBJECT(tool_item), "visible");
         }
     }
 
@@ -984,7 +984,7 @@ bind_extra_toolbuttons_visibility (GncMainWindow *mainwindow)
             {
                 gnc_prefs_bind (GNC_PREFS_GROUP_INVOICE,
                                 GNC_PREF_EXTRA_TOOLBUTTONS,
-                                G_OBJECT(tool_item), "visible");
+                                NULL, G_OBJECT(tool_item), "visible");
             }
         }
     }

@@ -781,14 +781,18 @@ gnc_prefs_sort_pages (GtkNotebook *notebook)
 /*******************************/
 
 static void
-gnc_prefs_split_widget_name (const gchar *name, gchar **group, gchar **pref)
+gnc_prefs_split_widget_name (const gchar *name, gchar **group, gchar **pref, gchar **value)
 {
     const gchar *group_with_pref = name + PREF_PREFIX_LEN;
     gchar **splits = g_strsplit (group_with_pref, "/", 0);
+    gchar **value_splits = g_strsplit (splits[1], "=", 0);
 
     *group = g_strdup (splits[0]);
-    *pref = g_strdup (splits[1]);
+    *pref = g_strdup (value_splits[0]);
+    if (value)
+        *value = g_strdup (value_splits[1]); /* may be NULL */
     g_strfreev (splits);
+    g_strfreev (value_splits);
 }
 
 /****************************************************************************/
@@ -806,8 +810,8 @@ gnc_prefs_connect_font_button (GtkFontButton *fb)
 
     g_return_if_fail (GTK_IS_FONT_BUTTON(fb));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fb)), &group, &pref);
-    gnc_prefs_bind (group, pref, G_OBJECT (fb), "font-name");
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fb)), &group, &pref, NULL);
+    gnc_prefs_bind (group, pref, NULL, G_OBJECT (fb), "font-name");
 
     g_free (group);
     g_free (pref);
@@ -873,9 +877,9 @@ gnc_prefs_connect_file_chooser_button (GtkFileChooserButton *fcb, const gchar *b
     g_return_if_fail (GTK_FILE_CHOOSER_BUTTON(fcb));
 
     if (boxname == NULL)
-        gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fcb)), &group, &pref);
+        gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(fcb)), &group, &pref, NULL);
     else
-        gnc_prefs_split_widget_name (boxname, &group, &pref);
+        gnc_prefs_split_widget_name (boxname, &group, &pref, NULL);
 
     uri = gnc_prefs_get_string (group, pref);
 
@@ -990,16 +994,17 @@ file_chooser_clear_cb (GtkButton *button, gpointer user_data)
 static void
 gnc_prefs_connect_radio_button (GtkRadioButton *button)
 {
-    gchar *group, *pref;
+    gchar *group, *pref, *value;
 
     g_return_if_fail (GTK_IS_RADIO_BUTTON(button));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref, &value);
 
-    gnc_prefs_bind (group, pref, G_OBJECT(button), "active");
+    gnc_prefs_bind (group, pref, value, G_OBJECT(button), "active");
 
     g_free (group);
     g_free (pref);
+    g_free (value);
 }
 
 /****************************************************************************/
@@ -1014,16 +1019,17 @@ gnc_prefs_connect_radio_button (GtkRadioButton *button)
 static void
 gnc_prefs_connect_check_button (GtkCheckButton *button)
 {
-    gchar *group, *pref;
+    gchar *group, *pref, *value;
 
     g_return_if_fail (GTK_IS_CHECK_BUTTON(button));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(button)), &group, &pref, &value);
 
-    gnc_prefs_bind (group, pref, G_OBJECT(button), "active");
+    gnc_prefs_bind (group, pref, NULL, G_OBJECT(button), "active");
 
     g_free (group);
     g_free (pref);
+    g_free (value);
 }
 
 /****************************************************************************/
@@ -1042,9 +1048,9 @@ gnc_prefs_connect_spin_button (GtkSpinButton *spin)
 
     g_return_if_fail (GTK_IS_SPIN_BUTTON(spin));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(spin)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(spin)), &group, &pref, NULL);
 
-    gnc_prefs_bind (group, pref, G_OBJECT(spin), "value");
+    gnc_prefs_bind (group, pref, NULL, G_OBJECT(spin), "value");
 
     g_free (group);
     g_free (pref);
@@ -1065,9 +1071,9 @@ gnc_prefs_connect_combo_box (GtkComboBox *box)
 
     g_return_if_fail (GTK_IS_COMBO_BOX(box));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(box)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(box)), &group, &pref, NULL);
 
-    gnc_prefs_bind (group, pref, G_OBJECT(box), "active");
+    gnc_prefs_bind (group, pref, NULL, G_OBJECT(box), "active");
 
     g_free (group);
     g_free (pref);
@@ -1088,9 +1094,9 @@ gnc_prefs_connect_currency_edit (GNCCurrencyEdit *gce, const gchar *boxname )
 
     g_return_if_fail (GNC_IS_CURRENCY_EDIT(gce));
 
-    gnc_prefs_split_widget_name (boxname, &group, &pref);
+    gnc_prefs_split_widget_name (boxname, &group, &pref, NULL);
 
-    gnc_prefs_bind (group, pref, G_OBJECT(gce), "mnemonic");
+    gnc_prefs_bind (group, pref, NULL, G_OBJECT(gce), "mnemonic");
 
     g_free (group);
     g_free (pref);
@@ -1113,9 +1119,9 @@ gnc_prefs_connect_entry (GtkEntry *entry)
 
     g_return_if_fail (GTK_IS_ENTRY(entry));
 
-    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(entry)), &group, &pref);
+    gnc_prefs_split_widget_name (gtk_buildable_get_name (GTK_BUILDABLE(entry)), &group, &pref, NULL);
 
-    gnc_prefs_bind (group, pref, G_OBJECT(entry), "text");
+    gnc_prefs_bind (group, pref, NULL, G_OBJECT(entry), "text");
 
     g_free (group);
     g_free (pref);
@@ -1136,9 +1142,9 @@ gnc_prefs_connect_period_select (GncPeriodSelect *period, const gchar *boxname )
 
     g_return_if_fail (GNC_IS_PERIOD_SELECT(period));
 
-    gnc_prefs_split_widget_name (boxname, &group, &pref);
+    gnc_prefs_split_widget_name (boxname, &group, &pref, NULL);
 
-    gnc_prefs_bind (group, pref, G_OBJECT(period), "active");
+    gnc_prefs_bind (group, pref, NULL, G_OBJECT(period), "active");
 
     g_free (group);
     g_free (pref);
@@ -1159,9 +1165,9 @@ gnc_prefs_connect_date_edit (GNCDateEdit *gde , const gchar *boxname )
 
     g_return_if_fail (GNC_IS_DATE_EDIT(gde));
 
-    gnc_prefs_split_widget_name (boxname, &group, &pref);
+    gnc_prefs_split_widget_name (boxname, &group, &pref, NULL);
 
-    gnc_prefs_bind (group, pref, G_OBJECT(gde), "time");
+    gnc_prefs_bind (group, pref, NULL, G_OBJECT(gde), "time");
 
     g_free (group);
     g_free (pref);

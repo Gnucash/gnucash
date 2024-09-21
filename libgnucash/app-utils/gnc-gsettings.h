@@ -199,12 +199,15 @@ void gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
  *  @param key This string is the name of the particular key within
  *  the named schema of gsettings.
  *
+ *  @param value This string is the enum value of the particular setting.
+ *
  *  @param object The object to be bound.
  *
  *  @param property The property of the object to bind to.
  */
 void gnc_gsettings_bind (const gchar *schema,
                          /*@ null @*/ const gchar *key,
+                         /*@ null @*/ const gchar *value,
                          gpointer object,
                          const gchar *property);
 

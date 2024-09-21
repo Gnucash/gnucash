@@ -279,18 +279,52 @@ gnc_gsettings_remove_any_cb_by_func (const gchar *schema,
 }
 
 
+static gboolean gnc_gsettings_enum_bool_mapping_get (GValue *value,
+                                                     GVariant *variant,
+                                                     gpointer user_data)
+{
+    g_value_set_boolean (value,
+        !g_strcmp0 ((const gchar *)user_data,
+            g_variant_get_string (variant, nullptr)));
+
+    return true;
+}
+
+static GVariant* gnc_gsettings_enum_bool_mapping_set (const GValue *value,
+                                                      const GVariantType *expected_type,
+                                                      gpointer user_data)
+{
+    if (g_value_get_boolean (value)) {
+        return g_variant_new_string ((const gchar *)user_data);
+    } else {
+        /* GtkRadioButtons will set the value to false when another option is
+         * selected, just ignore this. */
+        return nullptr;
+    }
+}
+
 void gnc_gsettings_bind (const gchar *schema,
                          /*@ null @*/ const gchar *key,
+                         /*@ null @*/ const gchar *value,
                          gpointer object,
                          const gchar *property)
 {
     auto gs_obj = gnc_gsettings_get_settings_obj (schema);
     g_return_if_fail (G_IS_SETTINGS (gs_obj));
 
-    if (gnc_gsettings_is_valid_key (gs_obj, key))
-        g_settings_bind (gs_obj, key, object, property, G_SETTINGS_BIND_DEFAULT);
-    else
+    if (gnc_gsettings_is_valid_key (gs_obj, key)) {
+        if (value) {
+            g_settings_bind_with_mapping (gs_obj, key, object, property,
+                                          G_SETTINGS_BIND_DEFAULT,
+                                          gnc_gsettings_enum_bool_mapping_get,
+                                          gnc_gsettings_enum_bool_mapping_set,
+                                          g_strdup (value), g_free);
+        } else {
+            g_settings_bind (gs_obj, key, object, property, G_SETTINGS_BIND_DEFAULT);
+        }
+    } else {
         PERR ("Invalid key %s for schema %s", key, schema);
+    }
 }
 
 
