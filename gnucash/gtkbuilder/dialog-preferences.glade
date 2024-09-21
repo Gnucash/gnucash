@@ -3656,10 +3656,10 @@ many months before the current month</property>
                 <property name="row-spacing">3</property>
                 <property name="column-spacing">6</property>
                 <child>
-                  <object class="GtkLabel" id="apilabel">
+                  <object class="GtkLabel" id="avapilabel">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
-                    <property name="tooltip-text" translatable="yes">To retrieve online quotes from Alphavantage, this key needs to be set. A key can be retrieved from the Alpha Vantage website.</property>
+                    <property name="tooltip-text" translatable="yes">Alpha Vantage requires an API key to use their service. You can obtain a key by registering for a free account at the Alpha Vantage website, https://www.alphavantage.co/support/#api-key.</property>
                     <property name="label" translatable="yes">Alpha Vantage API key</property>
                   </object>
                   <packing>
@@ -3671,12 +3671,36 @@ many months before the current month</property>
                   <object class="GtkEntry" id="pref/general.finance-quote/alphavantage-api-key">
                     <property name="visible">True</property>
                     <property name="can-focus">True</property>
-                    <property name="tooltip-text" translatable="yes">To retrieve online quotes from Alphavantage, this key needs to be set. A key can be retrieved from the Alpha Vantage website.</property>
+                    <property name="tooltip-text" translatable="yes">Alpha Vantage requires an API key to use their service. You can obtain a key by registering for a free account at the Alpha Vantage website, https://alphavantage.co/support/#api-key.</property>
                     <property name="hexpand">True</property>
                   </object>
                   <packing>
                     <property name="left-attach">1</property>
                     <property name="top-attach">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="yhapilabel">
+                    <property name="visible">True</property>
+                    <property name="can-focus">False</property>
+                    <property name="tooltip-text" translatable="yes">YH Finance requires an API key to use their FinanceAPI service. You can obtain a key by registering for a free account at the YH Finance website, https://financeapi.net/pricing.</property>
+                    <property name="label" translatable="yes">YH Finance (FinanceAPI) API key</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">0</property>
+                    <property name="top-attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="pref/general.finance-quote/yhfinance-api-key">
+                    <property name="visible">True</property>
+                    <property name="can-focus">True</property>
+                    <property name="tooltip-text" translatable="yes">YH Finance requires an API key to use their FinanceAPI service. You can obtain a key by registering for a free account at the YH Finance website, https://financeapi.net/pricing.</property>
+                    <property name="hexpand">True</property>
+                  </object>
+                  <packing>
+                    <property name="left-attach">1</property>
+                    <property name="top-attach">2</property>
                   </packing>
                 </child>
                 <child>

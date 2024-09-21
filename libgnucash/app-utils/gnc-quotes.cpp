@@ -20,6 +20,7 @@
  * Boston, MA  02110-1301,  USA       gnu@gnu.org                   *
 \ *******************************************************************/
 
+#include <boost/process/environment.hpp>
 #include <config.h>
 #include <qoflog.h>
 
@@ -61,6 +62,10 @@
 #include <qofbook.h>
 
 static const QofLogModule log_module = "gnc.price-quotes";
+static const char* av_api_env = "ALPHAVANTAGE_API_KEY";
+static const char* av_api_key = "alphavantage-api-key";
+static const char* yh_api_env = "FINANCEAPI_API_KEY";
+static const char* yh_api_key = "yhfinance-api-key";
 
 namespace bl = boost::locale;
 namespace bp = boost::process;
@@ -128,7 +133,7 @@ class GncFQQuoteSource final : public GncQuoteSource
     std::string c_fq_wrapper;
     std::string m_version;
     StrVec m_sources;
-    std::string m_api_key;
+    bp::environment m_env;
 public:
     GncFQQuoteSource();
     ~GncFQQuoteSource() = default;
@@ -137,7 +142,7 @@ public:
     QuoteResult get_quotes(const std::string&) const override;
 private:
     QuoteResult run_cmd (const StrVec& args, const std::string& json_string) const;
-
+    void set_api_key(const char* api_pref, const char* api_env);
 };
 
 static void show_quotes(const bpt::ptree& pt, const StrVec& commodities, bool verbose);
@@ -148,7 +153,7 @@ static const std::string empty_string{};
 
 GncFQQuoteSource::GncFQQuoteSource() :
 c_cmd{bp::search_path("perl")},
-m_version{}, m_sources{}, m_api_key{}
+m_version{}, m_sources{}, m_env{boost::this_process::environment()}
 {
     char *bindir = gnc_path_get_bindir();
     c_fq_wrapper = std::string(bindir) + "/finance-quote-wrapper";
@@ -180,20 +185,8 @@ m_version{}, m_sources{}, m_api_key{}
     m_sources = std::move(sources);
     std::sort (m_sources.begin(), m_sources.end());
 
-    auto av_key = gnc_prefs_get_string ("general.finance-quote", "alphavantage-api-key");
-    if (!(av_key && *av_key))
-    {
-        g_free (av_key);
-        av_key = g_strdup(getenv("ALPHAVANTAGE_API_KEY"));
-    }
-
-    if (av_key)
-    {
-        m_api_key = std::string(av_key);
-        g_free (av_key);
-    }
-    else
-        PWARN("No Alpha Vantage API key set, currency quotes and other AlphaVantage based quotes won't work.");
+    set_api_key(av_api_key, av_api_env);
+    set_api_key(yh_api_key, yh_api_env);
 }
 
 QuoteResult
@@ -216,25 +209,15 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
 
         auto input_buf = bp::buffer (json_string);
 	bp::child process;
-	if (m_api_key.empty())
-	    process = bp::child(c_cmd, args,
-				bp::std_out > out_buf,
-				bp::std_err > err_buf,
-				bp::std_in < input_buf,
+        process = bp::child(c_cmd, args,
+                            bp::std_out > out_buf,
+                            bp::std_err > err_buf,
+                            bp::std_in < input_buf,
 #ifdef BOOST_WINDOWS_API
-                                bp::windows::create_no_window,
+                            bp::windows::create_no_window,
 #endif
-				svc);
-	else
-	    process = bp::child(c_cmd, args,
-				bp::std_out > out_buf,
-				bp::std_err > err_buf,
-				bp::std_in < input_buf,
-#ifdef BOOST_WINDOWS_API
-                                bp::windows::create_no_window,
-#endif
-				bp::env["ALPHAVANTAGE_API_KEY"] = m_api_key,
-				svc);
+                            m_env,
+                            svc);
 
 	svc.run();
 	process.wait();
@@ -270,6 +253,24 @@ GncFQQuoteSource::run_cmd (const StrVec& args, const std::string& json_string) c
     };
 
     return QuoteResult (cmd_result, std::move(out_vec), std::move(err_vec));
+}
+
+void
+GncFQQuoteSource::set_api_key(const char* api_key, const char* api_env)
+{
+    auto key = gnc_prefs_get_string("general.finance-quote", api_key);
+    if (key && *key)
+    {
+        m_env[api_env] = key;
+        g_free(key);
+    }
+    else
+    {
+        if (api_key == av_api_key && m_env.find(api_env) == m_env.end())
+            PWARN("No Alpha Vantage API key set, currency quotes and other "
+                  "AlphaVantage based quotes won't work.");
+        g_free(key);
+    }
 }
 
 /* GncQuotes implementation */
@@ -1031,9 +1032,7 @@ GncQuotes::GncQuotes ()
     try
     {
         m_impl = std::make_unique<GncQuotesImpl>();
-    }
-    catch (const GncQuoteSourceError& err)
-    {
+    } catch (const GncQuoteSourceError &err) {
         throw(GncQuoteException(err.what()));
     }
 }
