@@ -71,11 +71,11 @@ typedef struct
         FloatingSplit *fs;
         FloatingTxn *ft;
     };
+    CursorClass cursor_class;
+    GncGUID leader_guid;
 } ft_fs_store;
 
 static ft_fs_store copied_item = { 0, { NULL } };
-static CursorClass copied_class = CURSOR_CLASS_NONE;
-static GncGUID copied_leader_guid;
 
 /** static prototypes *****************************************************/
 
@@ -99,8 +99,8 @@ clear_copied_item()
     copied_item.ftype = 0;
     copied_item.fs = NULL;
     copied_item.ft = NULL;
-    copied_class = CURSOR_CLASS_NONE;
-    copied_leader_guid = *guid_null();
+    copied_item.cursor_class = CURSOR_CLASS_NONE;
+    copied_item.leader_guid = *guid_null();
 }
 
 static void
@@ -802,7 +802,7 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
                 gnc_split_register_save_to_copy_buffer (reg, NULL, new_fs,
                                                         use_cut_semantics);
 
-            copied_leader_guid = *guid_null ();
+            copied_item.leader_guid = *guid_null ();
         }
     }
     else
@@ -827,7 +827,7 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
                                                         use_cut_semantics);
             }
 
-            copied_leader_guid = info->default_account;
+            copied_item.leader_guid = info->default_account;
         }
     }
 
@@ -849,7 +849,7 @@ gnc_split_register_copy_current_internal (SplitRegister* reg,
         copied_item.ftype = GNC_TYPE_TRANSACTION;
     }
 
-    copied_class = cursor_class;
+    copied_item.cursor_class = cursor_class;
     gnc_hook_add_dangler (HOOK_BOOK_CLOSED, clear_copied_item, NULL, NULL);
     LEAVE ("%s %s", use_cut_semantics ? "cut" : "copied",
            cursor_class == CURSOR_CLASS_SPLIT ? "split" : "transaction");
@@ -917,7 +917,7 @@ gnc_split_register_paste_current (SplitRegister* reg)
 
     ENTER ("reg=%p", reg);
 
-    if (copied_class == CURSOR_CLASS_NONE)
+    if (copied_item.cursor_class == CURSOR_CLASS_NONE)
     {
         LEAVE ("no copied cursor class");
         return;
@@ -965,7 +965,7 @@ gnc_split_register_paste_current (SplitRegister* reg)
                                         "you navigate to a register that shows another "
                                         "side of this same transaction.");
 
-        if (copied_class == CURSOR_CLASS_TRANS)
+        if (copied_item.cursor_class == CURSOR_CLASS_TRANS)
         {
             /* An entire transaction was copied, but we're just on a split. */
             LEAVE ("can't copy trans to split");
@@ -1026,7 +1026,7 @@ gnc_split_register_paste_current (SplitRegister* reg)
         int split_index;
         int num_splits;
 
-        if (copied_class == CURSOR_CLASS_SPLIT)
+        if (copied_item.cursor_class == CURSOR_CLASS_SPLIT)
         {
             LEAVE ("can't copy split to transaction");
             return;
@@ -1063,7 +1063,7 @@ gnc_split_register_paste_current (SplitRegister* reg)
         split_index = xaccTransGetSplitIndex (trans, split);
         trans_split_index = xaccTransGetSplitIndex (trans, trans_split);
 
-        copied_leader = xaccAccountLookup (&copied_leader_guid,
+        copied_leader = xaccAccountLookup (&copied_item.leader_guid,
                                            gnc_get_current_book ());
         default_account = gnc_split_register_get_default_account (reg);
         if (copied_leader && default_account)
