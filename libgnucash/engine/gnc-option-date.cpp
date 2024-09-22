@@ -23,6 +23,7 @@
 #include "gnc-option-date.hpp"
 #include <array>
 #include "gnc-datetime.hpp"
+#include <gnc-prefs.h>
 #include <iostream>
 #include <cassert>
 #include <algorithm>
@@ -496,14 +497,10 @@ gnc_relative_date_to_time64(RelativeDatePeriod period)
     if (period == RelativeDatePeriod::TODAY)
         return static_cast<time64>(now_t);
     auto now{static_cast<tm>(now_t)};
-    auto acct_per{static_cast<tm>(GncDateTime(gnc_accounting_period_fiscal_start()))};
-
-    if (acct_per.tm_mon == now.tm_mon && acct_per.tm_mday == now.tm_mday)
-    {
-        //No set accounting period, use the calendar year
-        acct_per.tm_mon = 0;
-        acct_per.tm_mday = 0;
-    }
+    struct tm acct_per{};
+    if (gnc_prefs_get_bool (GNC_PREFS_GROUP_ACCT_SUMMARY,
+                            GNC_PREF_START_CHOICE_ABS))
+        acct_per = static_cast<tm>(GncDateTime(gnc_accounting_period_fiscal_start()));
 
     switch(reldate_offset(period))
     {
