@@ -6,10 +6,10 @@
 # Carsten Hütter <Carsten.Huetter@gmx.de>, 2023.
 msgid ""
 msgstr ""
-"Project-Id-Version: GnuCash 5.9\n"
+"Project-Id-Version: GnuCash 5.9-pot2\n"
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug.cgi?"
 "product=GnuCash&component=Translations\n"
-"POT-Creation-Date: 2024-09-15 14:24-0700\n"
+"POT-Creation-Date: 2024-09-22 14:30-0700\n"
 "PO-Revision-Date: 2023-04-15 15:51+0000\n"
 "Last-Translator: Carsten Hütter <Carsten.Huetter@gmx.de>\n"
 "Language-Team: Hindi <https://hosted.weblate.org/projects/gnucash/gnucash/hi/"
@@ -1235,7 +1235,7 @@ msgid "via Escrow account?"
 msgstr "एस्क्रो खाता के माध्यम से?"
 
 #: gnucash/gnome/assistant-loan.cpp:925
-#: gnucash/register/ledger-core/split-register.c:2598
+#: gnucash/register/ledger-core/split-register.c:2606
 msgid "Loan"
 msgstr "ऋण"
 
@@ -1296,10 +1296,10 @@ msgstr "तिथि"
 #: gnucash/gnome/assistant-loan.cpp:2872 gnucash/gnome/assistant-loan.cpp:2884
 #: gnucash/gtkbuilder/dialog-payment.glade:445
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:132
-#: gnucash/register/ledger-core/split-register.c:2559
-#: gnucash/register/ledger-core/split-register.c:2600
-#: gnucash/register/ledger-core/split-register.c:2605
-#: gnucash/register/ledger-core/split-register.c:2616
+#: gnucash/register/ledger-core/split-register.c:2567
+#: gnucash/register/ledger-core/split-register.c:2608
+#: gnucash/register/ledger-core/split-register.c:2613
+#: gnucash/register/ledger-core/split-register.c:2624
 #: gnucash/report/reports/standard/new-owner-report.scm:282
 #: libgnucash/engine/Account.cpp:150 libgnucash/engine/Account.cpp:158
 #: libgnucash/engine/Account.cpp:179 libgnucash/engine/gncOwner.c:836
@@ -1313,12 +1313,12 @@ msgstr "मूलधन"
 
 #: gnucash/gnome/assistant-loan.cpp:1895 gnucash/gnome/assistant-loan.cpp:2924
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:77
-#: gnucash/register/ledger-core/split-register.c:2554
-#: gnucash/register/ledger-core/split-register.c:2591
+#: gnucash/register/ledger-core/split-register.c:2562
 #: gnucash/register/ledger-core/split-register.c:2599
-#: gnucash/register/ledger-core/split-register.c:2606
-#: gnucash/register/ledger-core/split-register.c:2615
-#: gnucash/register/ledger-core/split-register.c:2642
+#: gnucash/register/ledger-core/split-register.c:2607
+#: gnucash/register/ledger-core/split-register.c:2614
+#: gnucash/register/ledger-core/split-register.c:2623
+#: gnucash/register/ledger-core/split-register.c:2650
 msgid "Interest"
 msgstr "ब्याज"
 
@@ -1327,7 +1327,7 @@ msgid "Escrow Payment"
 msgstr "एस्क्रो भुगतान"
 
 #: gnucash/gnome/assistant-stock-split.c:391
-#: gnucash/register/ledger-core/split-register.c:2650
+#: gnucash/register/ledger-core/split-register.c:2658
 #, fuzzy
 msgctxt "Action Column"
 msgid "Split"
@@ -1416,14 +1416,14 @@ msgstr ""
 #. Translators: this is a stock transaction describing
 #. new purchase of stock.
 #: gnucash/gnome/assistant-stock-transaction.cpp:186
-#: gnucash/register/ledger-core/split-register.c:2577
-#: gnucash/register/ledger-core/split-register.c:2581
-#: gnucash/register/ledger-core/split-register.c:2588
+#: gnucash/register/ledger-core/split-register.c:2585
+#: gnucash/register/ledger-core/split-register.c:2589
 #: gnucash/register/ledger-core/split-register.c:2596
-#: gnucash/register/ledger-core/split-register.c:2613
-#: gnucash/register/ledger-core/split-register.c:2624
-#: gnucash/register/ledger-core/split-register.c:2629
-#: gnucash/register/ledger-core/split-register.c:2656
+#: gnucash/register/ledger-core/split-register.c:2604
+#: gnucash/register/ledger-core/split-register.c:2621
+#: gnucash/register/ledger-core/split-register.c:2632
+#: gnucash/register/ledger-core/split-register.c:2637
+#: gnucash/register/ledger-core/split-register.c:2664
 #: libgnucash/engine/Account.cpp:153 libgnucash/engine/Account.cpp:154
 #: libgnucash/engine/Account.cpp:155
 msgid "Buy"
@@ -1436,14 +1436,14 @@ msgstr ""
 #. Translators: this is a stock transaction describing new
 #. sale of stock, and recording capital gain/loss
 #: gnucash/gnome/assistant-stock-transaction.cpp:197
-#: gnucash/register/ledger-core/split-register.c:2578
-#: gnucash/register/ledger-core/split-register.c:2582
-#: gnucash/register/ledger-core/split-register.c:2593
-#: gnucash/register/ledger-core/split-register.c:2597
-#: gnucash/register/ledger-core/split-register.c:2614
-#: gnucash/register/ledger-core/split-register.c:2625
-#: gnucash/register/ledger-core/split-register.c:2630
-#: gnucash/register/ledger-core/split-register.c:2657
+#: gnucash/register/ledger-core/split-register.c:2586
+#: gnucash/register/ledger-core/split-register.c:2590
+#: gnucash/register/ledger-core/split-register.c:2601
+#: gnucash/register/ledger-core/split-register.c:2605
+#: gnucash/register/ledger-core/split-register.c:2622
+#: gnucash/register/ledger-core/split-register.c:2633
+#: gnucash/register/ledger-core/split-register.c:2638
+#: gnucash/register/ledger-core/split-register.c:2665
 #: libgnucash/engine/Account.cpp:173 libgnucash/engine/Account.cpp:174
 #: libgnucash/engine/Account.cpp:175
 msgid "Sell"
@@ -1462,7 +1462,7 @@ msgstr ""
 #: gnucash/gnome/assistant-stock-transaction.cpp:210
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:733
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:778
-#: gnucash/register/ledger-core/split-register.c:2641
+#: gnucash/register/ledger-core/split-register.c:2649
 msgid "Dividend"
 msgstr "डिविडेंड"
 
@@ -1836,8 +1836,8 @@ msgstr "बैलेंस_प्राप्त करें"
 #: gnucash/gnome/assistant-stock-transaction.cpp:1922
 #: gnucash/gtkbuilder/assistant-stock-split.glade:129
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:234
-#: gnucash/register/ledger-core/split-register.c:2102
-#: gnucash/register/ledger-core/split-register.c:2105
+#: gnucash/register/ledger-core/split-register.c:2110
+#: gnucash/register/ledger-core/split-register.c:2113
 msgid "_Shares"
 msgstr "_शेयर "
 
@@ -1890,7 +1890,7 @@ msgstr "मेमो"
 #: gnucash/gnome/assistant-stock-transaction.cpp:2339
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3410
 #: gnucash/gtkbuilder/dialog-payment.glade:300
-#: gnucash/register/ledger-core/split-register.c:2452
+#: gnucash/register/ledger-core/split-register.c:2460
 #: gnucash/report/reports/standard/general-journal.scm:82
 #: gnucash/report/reports/standard/register.scm:336
 #: gnucash/report/reports/standard/trial-balance.scm:555
@@ -1902,10 +1902,10 @@ msgstr "डेबिट"
 #: gnucash/gnome/assistant-stock-transaction.cpp:2346
 #: gnucash/gnome/gnc-plugin-page-register.cpp:3406
 #: gnucash/gtkbuilder/dialog-payment.glade:316
-#: gnucash/register/ledger-core/split-register.c:2475
-#: gnucash/register/ledger-core/split-register.c:2570
-#: gnucash/register/ledger-core/split-register.c:2589
-#: gnucash/register/ledger-core/split-register.c:2607
+#: gnucash/register/ledger-core/split-register.c:2483
+#: gnucash/register/ledger-core/split-register.c:2578
+#: gnucash/register/ledger-core/split-register.c:2597
+#: gnucash/register/ledger-core/split-register.c:2615
 #: gnucash/report/reports/standard/general-journal.scm:83
 #: gnucash/report/reports/standard/register.scm:338
 #: gnucash/report/reports/standard/trial-balance.scm:558
@@ -1966,7 +1966,7 @@ msgstr "रसीद"
 #: gnucash/gtkbuilder/dialog-invoice.glade:195
 #: gnucash/gtkbuilder/dialog-invoice.glade:935
 #: gnucash/gtkbuilder/dialog-invoice.glade:959
-#: gnucash/register/ledger-core/split-register.c:2604
+#: gnucash/register/ledger-core/split-register.c:2612
 #: gnucash/report/reports/standard/invoice.scm:765
 #: gnucash/report/reports/standard/invoice.scm:782
 #: gnucash/report/reports/standard/receipt.scm:112
@@ -4085,7 +4085,7 @@ msgstr "विक्रेता को खोजें "
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:91
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:97
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:103
-#: gnucash/register/ledger-core/split-register.c:2647
+#: gnucash/register/ledger-core/split-register.c:2655
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1062
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1211
 #: gnucash/report/reports/standard/net-charts.scm:332
@@ -4106,7 +4106,7 @@ msgstr "खर्चे"
 
 #: gnucash/gnome/gnc-budget-view.c:506
 #: gnucash/gnome/gnc-plugin-page-register.cpp:382
-#: gnucash/register/ledger-core/split-register.c:2572
+#: gnucash/register/ledger-core/split-register.c:2580
 #: gnucash/register/ledger-core/split-register-layout.c:721
 #: gnucash/register/ledger-core/split-register-model.c:353
 #: gnucash/report/reports/standard/register.scm:143
@@ -6911,7 +6911,7 @@ msgstr "आप एक ही खाते से या खाते में �
 
 #: gnucash/gnome-utils/dialog-transfer.cpp:1418
 #: gnucash/register/ledger-core/gncEntryLedger.c:85
-#: gnucash/register/ledger-core/split-register.c:1990
+#: gnucash/register/ledger-core/split-register.c:1998
 #, c-format
 msgid "The account %s does not allow transactions."
 msgstr "यह खाता %s लेन-देन की अनुमति नहीं देता है."
@@ -8162,7 +8162,7 @@ msgstr "पता 4"
 #: gnucash/gtkbuilder/dialog-employee.glade:247
 #: gnucash/gtkbuilder/dialog-vendor.glade:265
 #: gnucash/import-export/customer-import/dialog-customer-import-gui.c:130
-#: gnucash/register/ledger-core/split-register.c:2565
+#: gnucash/register/ledger-core/split-register.c:2573
 #: gnucash/report/reports/support/taxinvoice.eguile.scm:175
 msgid "Phone"
 msgstr "फोन"
@@ -8206,7 +8206,7 @@ msgstr "सिक्योरिटी "
 #: gnucash/gtkbuilder/assistant-stock-transaction.glade:390
 #: gnucash/import-export/bi-import/dialog-bi-import-gui.c:149
 #: gnucash/import-export/csv-imp/gnc-imp-props-tx.cpp:71
-#: gnucash/register/ledger-core/split-register.c:2638
+#: gnucash/register/ledger-core/split-register.c:2646
 #: gnucash/register/ledger-core/split-register-model.c:407
 #: gnucash/report/reports/standard/advanced-portfolio.scm:1050
 #: gnucash/report/reports/standard/general-journal.scm:99
@@ -9546,11 +9546,25 @@ msgid "Alpha Vantage API key"
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:6
-#: gnucash/gtkbuilder/dialog-preferences.glade:3662
 #: gnucash/gtkbuilder/dialog-preferences.glade:3674
 msgid ""
-"To retrieve online quotes from Alphavantage, this key needs to be set. A key "
-"can be retrieved from the Alpha Vantage website."
+"Alpha Vantage requires an API key to use their service. You can obtain a key "
+"by registering for a free account at the Alpha Vantage website, https://"
+"alphavantage.co/support/#api-key."
+msgstr ""
+
+#: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:10
+#: gnucash/gtkbuilder/dialog-preferences.glade:3687
+msgid "YH Finance (FinanceAPI) API key"
+msgstr ""
+
+#: gnucash/gschemas/org.gnucash.GnuCash.general.finance-quote.gschema.xml.in:11
+#: gnucash/gtkbuilder/dialog-preferences.glade:3686
+#: gnucash/gtkbuilder/dialog-preferences.glade:3698
+msgid ""
+"YH Finance requires an API key to use their FinanceAPI service. You can "
+"obtain a key by registering for a free account at the YH Finance website, "
+"https://financeapi.net/pricing."
 msgstr ""
 
 #: gnucash/gschemas/org.gnucash.GnuCash.gschema.xml.in:10
@@ -14463,8 +14477,8 @@ msgid "Non-Bayesian"
 msgstr ""
 
 #: gnucash/gtkbuilder/dialog-imap-editor.glade:156
-#: gnucash/register/ledger-core/split-register.c:2566
-#: gnucash/register/ledger-core/split-register.c:2592
+#: gnucash/register/ledger-core/split-register.c:2574
+#: gnucash/register/ledger-core/split-register.c:2600
 msgid "Online"
 msgstr "ऑनलाइन "
 
@@ -15967,8 +15981,15 @@ msgstr ""
 msgid "Windows"
 msgstr "विंडो"
 
-#: gnucash/gtkbuilder/dialog-preferences.glade:3687
-#: gnucash/gtkbuilder/dialog-preferences.glade:3710
+#: gnucash/gtkbuilder/dialog-preferences.glade:3662
+msgid ""
+"Alpha Vantage requires an API key to use their service. You can obtain a key "
+"by registering for a free account at the Alpha Vantage website, https://www."
+"alphavantage.co/support/#api-key."
+msgstr ""
+
+#: gnucash/gtkbuilder/dialog-preferences.glade:3711
+#: gnucash/gtkbuilder/dialog-preferences.glade:3734
 #, fuzzy
 msgid "Online Quotes"
 msgstr "_ऑनलाइन कोट प्राप्त करें "
@@ -15999,8 +16020,8 @@ msgid "S_ource"
 msgstr "स्रो_त "
 
 #: gnucash/gtkbuilder/dialog-price.glade:225
-#: gnucash/register/ledger-core/split-register.c:2109
-#: gnucash/register/ledger-core/split-register.c:2112
+#: gnucash/register/ledger-core/split-register.c:2117
+#: gnucash/register/ledger-core/split-register.c:2120
 #: gnucash/ui/gnc-plugin-page-invoice.ui:108
 msgid "_Price"
 msgstr "_मूल्य "
@@ -16760,8 +16781,8 @@ msgid "<b>Tax Table Entry</b>"
 msgstr "<b>कर तालिका प्रविष्टि</b>"
 
 #: gnucash/gtkbuilder/dialog-tax-table.glade:491
-#: gnucash/register/ledger-core/split-register.c:2116
-#: gnucash/register/ledger-core/split-register.c:2119
+#: gnucash/register/ledger-core/split-register.c:2124
+#: gnucash/register/ledger-core/split-register.c:2127
 msgid "_Value"
 msgstr "_मान "
 
@@ -20488,7 +20509,7 @@ msgstr "कैप. प्राप्ति (छोटी)"
 
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:109
 #: gnucash/import-export/qif-imp/qif-dialog-utils.scm:113
-#: gnucash/register/ledger-core/split-register.c:2631
+#: gnucash/register/ledger-core/split-register.c:2639
 #: gnucash/report/reports/standard/balance-sheet.scm:468
 #: gnucash/report/reports/standard/balsheet-pnl.scm:1051
 #: gnucash/report/reports/standard/budget-balance-sheet.scm:685
@@ -20741,7 +20762,7 @@ msgid "Welcome to GnuCash %s Shell"
 msgstr "GnuCash ~a में आपका स्वागत है!"
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:86
-#: gnucash/register/ledger-core/split-register.c:1991
+#: gnucash/register/ledger-core/split-register.c:1999
 #, c-format
 msgid "The account %s does not exist. Would you like to create it?"
 msgstr "यह खाता %s मौजूद नहीं है. क्या आप इसे बनाना पसंद करेंगे?"
@@ -20773,7 +20794,7 @@ msgstr ""
 
 #: gnucash/register/ledger-core/gncEntryLedger.c:922
 #: gnucash/register/ledger-core/gncEntryLedgerControl.c:897
-#: gnucash/register/ledger-core/split-register.c:491
+#: gnucash/register/ledger-core/split-register.c:494
 msgid "_Record"
 msgstr "_रिकॉर्ड"
 
@@ -20932,7 +20953,7 @@ msgstr ">"
 #: gnucash/register/ledger-core/gncEntryLedgerLoad.c:133
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:532
 #: gnucash/register/ledger-core/gncEntryLedgerModel.c:1092
-#: gnucash/register/ledger-core/split-register.c:2558
+#: gnucash/register/ledger-core/split-register.c:2566
 #: libgnucash/engine/Account.cpp:156 libgnucash/engine/Account.cpp:170
 msgid "Charge"
 msgstr "प्रभार"
@@ -21099,7 +21120,7 @@ msgstr "क्या यह प्रविष्टि एक ग्राह�
 msgid "How did you pay for this item?"
 msgstr "आपने इस आइटम के लिए भुगतान कैसे किया था?"
 
-#: gnucash/register/ledger-core/split-register.c:209
+#: gnucash/register/ledger-core/split-register.c:212
 msgid ""
 "This transaction is already being edited in another register. Please finish "
 "editing it there first."
@@ -21107,11 +21128,11 @@ msgstr ""
 "इस लेनदेन को दूसरे रजिस्टर में पहले से संपादित किया जा रहा है. कृपया पहले वहाँ इसका संपादन "
 "पूरा करें."
 
-#: gnucash/register/ledger-core/split-register.c:476
+#: gnucash/register/ledger-core/split-register.c:479
 msgid "Save transaction before duplicating?"
 msgstr "प्रतिलिपि बनाने से पहले लेनदेनों को सहेज लें?"
 
-#: gnucash/register/ledger-core/split-register.c:478
+#: gnucash/register/ledger-core/split-register.c:481
 msgid ""
 "The current transaction has been changed. Would you like to record the "
 "changes before duplicating the transaction, or cancel the duplication?"
@@ -21119,16 +21140,16 @@ msgstr ""
 "वर्तमान लेनदेन को बदल दिया गया है. क्या आप लेनदेन की प्रतिलिपि बनाने से पहले बदलावों को "
 "रिकार्ड करना, या प्रतिलिपि बनाने की प्रक्रिया को रद्द करना पसंद करेंगे?"
 
-#: gnucash/register/ledger-core/split-register.c:532
+#: gnucash/register/ledger-core/split-register.c:535
 msgid "New Split Information"
 msgstr "नए विभाजन की जानकारी"
 
-#: gnucash/register/ledger-core/split-register.c:641
+#: gnucash/register/ledger-core/split-register.c:644
 #: gnucash/register/register-gnome/datecell-gnome.c:108
 msgid "Cannot store a transaction at this date"
 msgstr "इस दिनांक को लेनदेन संग्रहित नहीं किया जा सकता"
 
-#: gnucash/register/ledger-core/split-register.c:643
+#: gnucash/register/ledger-core/split-register.c:646
 msgid ""
 "The entered date of the duplicated transaction is older than the \"Read-Only "
 "Threshold\" set for this book. This setting can be changed in File-"
@@ -21138,13 +21159,13 @@ msgstr ""
 "Threshold\" से अधिक पुराना है. 'फ़ाइल->प्रोपर्टीज->खाते' में इस सेटिंग को बदला जा सकता "
 "है."
 
-#: gnucash/register/ledger-core/split-register.c:959
+#: gnucash/register/ledger-core/split-register.c:963
 msgid ""
 "You are about to overwrite an existing split. Are you sure you want to do "
 "that?"
 msgstr "आप एक मौजूदा विभाजन मिटाकर लिखने जा रहे हैं. क्या आप वाकई ऐसा करना चाहते हैं?"
 
-#: gnucash/register/ledger-core/split-register.c:961
+#: gnucash/register/ledger-core/split-register.c:965
 #, fuzzy
 msgid ""
 "This is the split anchoring this transaction to the register. You may not "
@@ -21155,62 +21176,62 @@ msgstr ""
 "सकते हैं. आप इस विंडो से संपूर्ण लेनदेन को हटा सकते हैं या आप एक ऐसी पंजी में नेविगेट कर सकते हैं "
 "जो इसी लेनदेन के दूसरे पक्ष को दर्शाता है और उस पंजी से विभाजन को हटा सकते हैं."
 
-#: gnucash/register/ledger-core/split-register.c:1019
+#: gnucash/register/ledger-core/split-register.c:1023
 msgid ""
 "You are about to overwrite an existing transaction. Are you sure you want to "
 "do that?"
 msgstr "आप एक मौजूदा लेनदेन को मिटाकर लिखने जा रहे हैं. क्या आप वाकई ऐसा करना चाहते हैं?"
 
-#: gnucash/register/ledger-core/split-register.c:2095
+#: gnucash/register/ledger-core/split-register.c:2103
 msgid "Recalculate Transaction"
 msgstr "लेनदेन की पुनः गणना करें"
 
-#: gnucash/register/ledger-core/split-register.c:2096
+#: gnucash/register/ledger-core/split-register.c:2104
 msgid ""
 "The values entered for this transaction are inconsistent. Which value would "
 "you like to have recalculated?"
 msgstr ""
 "इस लेनदेन के लिए दर्ज किये गए मान असंगत हैं. आप किस मान की पुनः गणना करवाना चाहते हैं?"
 
-#: gnucash/register/ledger-core/split-register.c:2103
-#: gnucash/register/ledger-core/split-register.c:2110
-#: gnucash/register/ledger-core/split-register.c:2117
+#: gnucash/register/ledger-core/split-register.c:2111
+#: gnucash/register/ledger-core/split-register.c:2118
+#: gnucash/register/ledger-core/split-register.c:2125
 msgid "Changed"
 msgstr "बदल दिया गया "
 
-#: gnucash/register/ledger-core/split-register.c:2128
+#: gnucash/register/ledger-core/split-register.c:2136
 msgid "_Recalculate"
 msgstr "_पुनः गणना करें "
 
-#: gnucash/register/ledger-core/split-register.c:2551
+#: gnucash/register/ledger-core/split-register.c:2559
 #, fuzzy
 msgctxt "Action Column"
 msgid "Deposit"
 msgstr "जमा"
 
-#: gnucash/register/ledger-core/split-register.c:2552
+#: gnucash/register/ledger-core/split-register.c:2560
 msgid "Withdraw"
 msgstr "निकासी"
 
-#: gnucash/register/ledger-core/split-register.c:2553
+#: gnucash/register/ledger-core/split-register.c:2561
 msgid "Check"
 msgstr "चेक"
 
-#: gnucash/register/ledger-core/split-register.c:2555
-#: gnucash/register/ledger-core/split-register.c:2586
+#: gnucash/register/ledger-core/split-register.c:2563
+#: gnucash/register/ledger-core/split-register.c:2594
 msgid "ATM Deposit"
 msgstr "ATM जमा "
 
-#: gnucash/register/ledger-core/split-register.c:2556
-#: gnucash/register/ledger-core/split-register.c:2587
+#: gnucash/register/ledger-core/split-register.c:2564
+#: gnucash/register/ledger-core/split-register.c:2595
 msgid "ATM Draw"
 msgstr "ATM ड्रा "
 
-#: gnucash/register/ledger-core/split-register.c:2557
+#: gnucash/register/ledger-core/split-register.c:2565
 msgid "Teller"
 msgstr "टेलर"
 
-#: gnucash/register/ledger-core/split-register.c:2560
+#: gnucash/register/ledger-core/split-register.c:2568
 #: gnucash/report/reports/standard/receipt.scm:201
 #: gnucash/report/reports/standard/receipt.scm:203
 #: gnucash/report/reports/support/receipt.eguile.scm:276
@@ -21218,66 +21239,66 @@ msgstr "टेलर"
 msgid "Receipt"
 msgstr "प्राप्ति"
 
-#: gnucash/register/ledger-core/split-register.c:2561
-#: gnucash/register/ledger-core/split-register.c:2575
-#: gnucash/register/ledger-core/split-register.c:2611
-#: gnucash/register/ledger-core/split-register.c:2622
-#: gnucash/register/ledger-core/split-register.c:2654
+#: gnucash/register/ledger-core/split-register.c:2569
+#: gnucash/register/ledger-core/split-register.c:2583
+#: gnucash/register/ledger-core/split-register.c:2619
+#: gnucash/register/ledger-core/split-register.c:2630
+#: gnucash/register/ledger-core/split-register.c:2662
 #: libgnucash/engine/Account.cpp:151 libgnucash/engine/Account.cpp:172
 #: libgnucash/engine/Account.cpp:180 libgnucash/engine/Account.cpp:181
 msgid "Increase"
 msgstr "वृद्धि"
 
-#: gnucash/register/ledger-core/split-register.c:2562
-#: gnucash/register/ledger-core/split-register.c:2576
-#: gnucash/register/ledger-core/split-register.c:2612
-#: gnucash/register/ledger-core/split-register.c:2623
-#: gnucash/register/ledger-core/split-register.c:2655
+#: gnucash/register/ledger-core/split-register.c:2570
+#: gnucash/register/ledger-core/split-register.c:2584
+#: gnucash/register/ledger-core/split-register.c:2620
+#: gnucash/register/ledger-core/split-register.c:2631
+#: gnucash/register/ledger-core/split-register.c:2663
 #: libgnucash/engine/Account.cpp:152 libgnucash/engine/Account.cpp:160
 #: libgnucash/engine/Account.cpp:161 libgnucash/engine/Account.cpp:171
 msgid "Decrease"
 msgstr "कमी "
 
-#: gnucash/register/ledger-core/split-register.c:2564
+#: gnucash/register/ledger-core/split-register.c:2572
 msgid "POS"
 msgstr "POS"
 
-#: gnucash/register/ledger-core/split-register.c:2568
+#: gnucash/register/ledger-core/split-register.c:2576
 msgid "AutoDep"
 msgstr "AutoDep"
 
-#: gnucash/register/ledger-core/split-register.c:2569
+#: gnucash/register/ledger-core/split-register.c:2577
 msgid "Wire"
 msgstr "वायर"
 
-#: gnucash/register/ledger-core/split-register.c:2571
+#: gnucash/register/ledger-core/split-register.c:2579
 msgid "Direct Debit"
 msgstr "डायरेक्ट डेबिट"
 
-#: gnucash/register/ledger-core/split-register.c:2583
-#: gnucash/register/ledger-core/split-register.c:2590
-#: gnucash/register/ledger-core/split-register.c:2639
+#: gnucash/register/ledger-core/split-register.c:2591
+#: gnucash/register/ledger-core/split-register.c:2598
+#: gnucash/register/ledger-core/split-register.c:2647
 msgid "Fee"
 msgstr "शुल्क"
 
-#: gnucash/register/ledger-core/split-register.c:2617
+#: gnucash/register/ledger-core/split-register.c:2625
 #: libgnucash/engine/Account.cpp:177
 msgid "Rebate"
 msgstr "छूट "
 
-#: gnucash/register/ledger-core/split-register.c:2618
+#: gnucash/register/ledger-core/split-register.c:2626
 msgid "Paycheck"
 msgstr "पेचेक "
 
-#: gnucash/register/ledger-core/split-register.c:2644
+#: gnucash/register/ledger-core/split-register.c:2652
 msgid "LTCG"
 msgstr "LTCG"
 
-#: gnucash/register/ledger-core/split-register.c:2646
+#: gnucash/register/ledger-core/split-register.c:2654
 msgid "STCG"
 msgstr "STCG"
 
-#: gnucash/register/ledger-core/split-register.c:2649
+#: gnucash/register/ledger-core/split-register.c:2657
 msgid "Dist"
 msgstr "वितरण"
 
@@ -30848,108 +30869,108 @@ msgstr "मेमरी खत्म हो गयी है "
 msgid "Numeric error"
 msgstr "सांख्यिक त्रुटि"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:160
+#: libgnucash/app-utils/gnc-quotes.cpp:165
 msgid "Failed to initialize Finance::Quote: "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:167
+#: libgnucash/app-utils/gnc-quotes.cpp:172
 msgid "Finance::Quote check returned error "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:175
+#: libgnucash/app-utils/gnc-quotes.cpp:180
 msgid "No Finance::Quote Version"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:302
+#: libgnucash/app-utils/gnc-quotes.cpp:303
 msgid "GncQuotes::Fetch called with no book."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:320
+#: libgnucash/app-utils/gnc-quotes.cpp:321
 msgid "GncQuotes::Fetch called with no commodities."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:331
+#: libgnucash/app-utils/gnc-quotes.cpp:332
 msgid "GncQuotes::Report called with no source."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:337
+#: libgnucash/app-utils/gnc-quotes.cpp:338
 #, fuzzy
 #| msgid "There are no options for this report."
 msgid "There were no commodities for which to retrieve quotes."
 msgstr "इस रिपोर्ट के लिए कोई विकल्प नहीं है."
 
-#: libgnucash/app-utils/gnc-quotes.cpp:351
+#: libgnucash/app-utils/gnc-quotes.cpp:352
 msgid "Finance::Quote retrieval failed with error "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:369
-#: libgnucash/app-utils/gnc-quotes.cpp:845
+#: libgnucash/app-utils/gnc-quotes.cpp:370
+#: libgnucash/app-utils/gnc-quotes.cpp:846
 msgid "Finance::Quote returned no data and set no error."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:371
+#: libgnucash/app-utils/gnc-quotes.cpp:372
 msgid "Finance::Quote returned an error: "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:375
+#: libgnucash/app-utils/gnc-quotes.cpp:376
 msgid "Finance::Quote reported failure set no error."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:377
+#: libgnucash/app-utils/gnc-quotes.cpp:378
 msgid "Finance::Quote reported failure with error: "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:380
+#: libgnucash/app-utils/gnc-quotes.cpp:381
 msgid "Finance::Quote returned a quote with no currency."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:383
+#: libgnucash/app-utils/gnc-quotes.cpp:384
 msgid ""
 "Finance::Quote returned a quote with a currency GnuCash doesn't know about."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:386
+#: libgnucash/app-utils/gnc-quotes.cpp:387
 msgid "Finance::Quote returned a quote with no price element."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:389
+#: libgnucash/app-utils/gnc-quotes.cpp:390
 msgid ""
 "Finance::Quote returned a quote with a price that GnuCash was unable to "
 "covert to a number."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:393
+#: libgnucash/app-utils/gnc-quotes.cpp:394
 #, fuzzy
 #| msgid "There was an error accessing %s."
 msgid "The quote has no error set."
 msgstr "%s तक पहुंचने में एक त्रुटि उत्पन्न हुई. "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:402
+#: libgnucash/app-utils/gnc-quotes.cpp:403
 msgid "Quotes for the following commodities were unavailable or unusable:\n"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:488
+#: libgnucash/app-utils/gnc-quotes.cpp:489
 msgid "Currency quotes requires at least two currencies"
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:747
-#: libgnucash/app-utils/gnc-quotes.cpp:757
+#: libgnucash/app-utils/gnc-quotes.cpp:748
+#: libgnucash/app-utils/gnc-quotes.cpp:758
 msgid "Failed to parse result returned by Finance::Quote."
 msgstr ""
 
 #. Translators: This labels the return value of a query to Finance::Quote written in an error.
-#: libgnucash/app-utils/gnc-quotes.cpp:750
-#: libgnucash/app-utils/gnc-quotes.cpp:765
+#: libgnucash/app-utils/gnc-quotes.cpp:751
+#: libgnucash/app-utils/gnc-quotes.cpp:766
 msgid "Result:"
 msgstr ""
 
 #. Translators: This is the error message reported by the Online Quotes processing code.
-#: libgnucash/app-utils/gnc-quotes.cpp:760
+#: libgnucash/app-utils/gnc-quotes.cpp:761
 msgid "Error message:"
 msgstr ""
 
 #. Translators: Means that the preceding element is required
-#: libgnucash/app-utils/gnc-quotes.cpp:805
+#: libgnucash/app-utils/gnc-quotes.cpp:806
 #, fuzzy
 #| msgid "Date required."
 msgctxt "Finance::Quote"
@@ -30957,14 +30978,14 @@ msgid "required"
 msgstr "आवश्यक तिथि."
 
 #. Translators: Means that the quote will work best if the preceding element is provided
-#: libgnucash/app-utils/gnc-quotes.cpp:807
+#: libgnucash/app-utils/gnc-quotes.cpp:808
 #, fuzzy
 msgctxt "Finance::Quote"
 msgid "recommended"
 msgstr "_असंगत "
 
 #. Translators: Means that one of the indicated elements is required
-#: libgnucash/app-utils/gnc-quotes.cpp:809
+#: libgnucash/app-utils/gnc-quotes.cpp:810
 #, fuzzy
 #| msgid "End of this year"
 msgctxt "Finance::Quote"
@@ -30972,18 +30993,18 @@ msgid "one of these"
 msgstr "इस वर्ष की समाप्ति"
 
 #. Translators: Means that a required element wasn't reported. The *s are for emphasis.
-#: libgnucash/app-utils/gnc-quotes.cpp:811
+#: libgnucash/app-utils/gnc-quotes.cpp:812
 #, fuzzy
 msgctxt "Finance::Quote"
 msgid "**missing**"
 msgstr "कमीशन "
 
-#: libgnucash/app-utils/gnc-quotes.cpp:818
+#: libgnucash/app-utils/gnc-quotes.cpp:819
 msgid "Finance::Quote fields GnuCash uses:"
 msgstr ""
 
 #. Translators: The stock or Mutual Fund symbol, ISIN, CUSIP, etc.
-#: libgnucash/app-utils/gnc-quotes.cpp:820
+#: libgnucash/app-utils/gnc-quotes.cpp:821
 #, fuzzy
 #| msgid "Symbol"
 msgctxt "Finance::Quote"
@@ -30991,7 +31012,7 @@ msgid "symbol: "
 msgstr "संकेत"
 
 #. Translators: The date of the quote.
-#: libgnucash/app-utils/gnc-quotes.cpp:822
+#: libgnucash/app-utils/gnc-quotes.cpp:823
 #, fuzzy
 #| msgid "Date: "
 msgctxt "Finance::Quote"
@@ -30999,7 +31020,7 @@ msgid "date: "
 msgstr "तिथि:"
 
 #. Translators: The quote currency
-#: libgnucash/app-utils/gnc-quotes.cpp:824
+#: libgnucash/app-utils/gnc-quotes.cpp:825
 #, fuzzy
 #| msgid "Currency"
 msgctxt "Finance::Quote"
@@ -31007,7 +31028,7 @@ msgid "currency: "
 msgstr "मुद्रा"
 
 #. Translators: The quote is for the most recent trade on the exchange
-#: libgnucash/app-utils/gnc-quotes.cpp:830
+#: libgnucash/app-utils/gnc-quotes.cpp:831
 #, fuzzy
 #| msgid "last %s"
 msgctxt "Finance::Quote"
@@ -31015,39 +31036,39 @@ msgid "last: "
 msgstr "अंतिम %s"
 
 #. Translators: The quote is for an open-ended mutual fund and represents the net asset value of one unit of the fund at the previous close of trading.
-#: libgnucash/app-utils/gnc-quotes.cpp:832
+#: libgnucash/app-utils/gnc-quotes.cpp:833
 msgctxt "Finance::Quote"
 msgid "nav: "
 msgstr ""
 
 #. Translators: The quote is neither a last trade nor an NAV.
-#: libgnucash/app-utils/gnc-quotes.cpp:834
+#: libgnucash/app-utils/gnc-quotes.cpp:835
 #, fuzzy
 #| msgid "Price"
 msgctxt "Finance::Quote"
 msgid "price: "
 msgstr "मूल्य"
 
-#: libgnucash/app-utils/gnc-quotes.cpp:854
+#: libgnucash/app-utils/gnc-quotes.cpp:855
 msgid "Finance::Quote reported a failure for symbol "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:857
+#: libgnucash/app-utils/gnc-quotes.cpp:858
 msgid "Finance::Quote failed silently to retrieve a quote for symbol "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:920
+#: libgnucash/app-utils/gnc-quotes.cpp:921
 msgid ""
 "GnuCash submitted invalid json to Finance::Quote. The details were logged."
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:926
+#: libgnucash/app-utils/gnc-quotes.cpp:927
 msgid ""
 "Perl is missing the following modules. Please see https://wiki.gnucash.org/"
 "wiki/Online_Quotes#Finance::Quote for detailed corrective action. "
 msgstr ""
 
-#: libgnucash/app-utils/gnc-quotes.cpp:932
+#: libgnucash/app-utils/gnc-quotes.cpp:933
 #, fuzzy
 #| msgid "Unrecognized or inconsistent format."
 msgid "Unrecognized Finance::Quote Error: "
