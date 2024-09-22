@@ -15,7 +15,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://bugs.gnucash.org/enter_bug."
 "cgi?product=GnuCash&component=Translations\n"
 "POT-Creation-Date: 2024-09-15 14:24-0700\n"
-"PO-Revision-Date: 2024-09-21 21:40+0000\n"
+"PO-Revision-Date: 2024-09-22 19:15+0000\n"
 "Last-Translator: Szia Tomi <sziatomi01@gmail.com>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/gnucash/"
 "gnucash/hu/>\n"
@@ -1398,7 +1398,7 @@ msgstr "... %s fizetése"
 
 #: gnucash/gnome/assistant-loan.cpp:778
 msgid "via Escrow account?"
-msgstr "Letéti számlán keresztül"
+msgstr "letéti számlán keresztül"
 
 #: gnucash/gnome/assistant-loan.cpp:925
 #: gnucash/register/ledger-core/split-register.c:2598
@@ -1409,7 +1409,7 @@ msgstr "Kölcsön"
 #: gnucash/gnome/assistant-loan.cpp:1475
 #, c-format
 msgid "Loan Repayment Option: \"%s\""
-msgstr "Kölcsön-visszafizetés beállítása: %s"
+msgstr "Kölcsön-visszafizetési beállítás: %s"
 
 #: gnucash/gnome/assistant-loan.cpp:1877 gnucash/gnome/dialog-lot-viewer.c:985
 #: gnucash/gnome/gnc-split-reg.c:654 gnucash/gnome/reconcile-view.c:453
@@ -4732,19 +4732,19 @@ msgstr ""
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
 msgid "_Print Bill"
-msgstr "Számla_nyomtatás"
+msgstr "Bejövőszámla _nyomtatása"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:215
 msgid "Make a printable bill"
-msgstr "Nyomtatható számla készítése"
+msgstr "Nyomtatható bejövőszámla készítése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
 msgid "_Edit Bill"
-msgstr "Számla s_zerkesztése"
+msgstr "Bejövőszámla s_zerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:216
 msgid "Edit this bill"
-msgstr "Ennek a számlának a szerkesztése"
+msgstr "Ennek a bejövőszámlának a szerkesztése"
 
 #: gnucash/gnome/gnc-plugin-page-invoice.cpp:217
 msgid "_Duplicate Bill"
